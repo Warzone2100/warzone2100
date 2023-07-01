@@ -18,8 +18,11 @@ layout(set = 1, binding = 6) uniform sampler2DArray decalNormal;
 layout(set = 1, binding = 7) uniform sampler2DArray decalSpecular;
 layout(set = 1, binding = 8) uniform sampler2DArray decalHeight;
 
+// depth map
+layout(set = 1, binding = 9) uniform sampler2DShadow shadowMap;
+
 layout(location = 0) in FragData frag;
-layout(location = 9) flat in FragFlatData fragf;
+layout(location = 12) flat in FragFlatData fragf;
 
 layout(location = 0) out vec4 FragColor;
 

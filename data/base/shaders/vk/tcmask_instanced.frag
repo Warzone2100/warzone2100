@@ -2,11 +2,13 @@
 //#pragma debug(on)
 
 layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
+layout (constant_id = 1) const uint WZ_EXTRA_SHADOW_TAPS = 4;
 
 layout(set = 2, binding = 0) uniform sampler2D Texture; // diffuse
 layout(set = 2, binding = 1) uniform sampler2D TextureTcmask; // tcmask
 layout(set = 2, binding = 2) uniform sampler2D TextureNormal; // normal map
 layout(set = 2, binding = 3) uniform sampler2D TextureSpecular; // specular map
+layout(set = 2, binding = 4) uniform sampler2DShadow shadowMap; // shadow map
 
 layout(std140, set = 0, binding = 0) uniform globaluniforms
 {
@@ -41,8 +43,44 @@ layout(location = 4) in mat4 NormalMatrix;
 layout(location = 8) in vec4 colour;
 layout(location = 9) in vec4 teamcolour;
 layout(location = 10) in vec4 packed_ecmState_alphaTest;
+// For Shadows
+layout(location = 11) in vec4 shadowPos;
+layout(location = 12) in vec3 fragPos;
+//layout(location = 13) in vec3 fragNormal;
 
 layout(location = 0) out vec4 FragColor;
+
+float getShadowVisibility()
+{
+	vec4 pos = shadowPos / shadowPos.w;
+
+	if (pos.z > 1.0f)
+	{
+		return 1.0;
+	}
+
+	float bias = 0.0002f;
+
+	float visibility = texture( shadowMap, vec3(pos.xy, (pos.z+bias)) );
+
+	// PCF
+	const float edgeVal = 0.5+float((WZ_EXTRA_SHADOW_TAPS-1)/2);
+	const float startVal = -edgeVal;
+	const float endVal = edgeVal + 0.5;
+	const float texelIncrement = 1.0/float(4096);
+	const float visibilityIncrement = 0.1; //0.5 / WZ_EXTRA_SHADOW_TAPS;
+	for (float y=startVal; y<endVal; y+=1.0)
+	{
+		for (float x=startVal; x<endVal; x+=1.0)
+		{
+			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec3(pos.xy + vec2(x*texelIncrement, y*texelIncrement), (pos.z+bias)) ));
+		}
+	}
+
+	visibility = clamp(visibility, 0.3, 1.0);
+
+	return visibility;
+}
 
 void main()
 {
@@ -81,6 +119,7 @@ void main()
 	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
+	float visibility = getShadowVisibility();
 
 	if (lambertTerm > 0.0)
 	{
@@ -113,11 +152,11 @@ void main()
 		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply color using grain merge with tcmask
-		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;
+		fragColour = visibility * (light + (teamcolour - 0.5) * maskAlpha) * colour;
 	}
 	else
 	{
-		fragColour = light * colour;
+		fragColour = visibility * light * colour;
 	}
 
 	if (ecmEffect)

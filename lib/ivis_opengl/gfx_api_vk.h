@@ -621,6 +621,7 @@ struct VkRoot final : gfx_api::context
 	VkhInfo debugInfo;
 	gfx_api::context::swap_interval_mode swapMode = gfx_api::context::swap_interval_mode::vsync;
 	optional<float> mipLodBias;
+	uint32_t extraShadowTaps = 4;
 
 	std::vector<VkExtensionProperties> supportedInstanceExtensionProperties;
 	std::vector<const char*> instanceExtensions;

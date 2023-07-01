@@ -160,7 +160,7 @@ const glm::mat4& pie_UIPerspectiveGet()
 
 void pie_Begin3DScene()
 {
-	gfx_api::context::get().set_depth_range(0.1f, 1.f);
+	gfx_api::context::get().set_depth_range(0.f, 1.f);
 }
 
 void pie_BeginInterface()

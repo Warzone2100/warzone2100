@@ -5,12 +5,14 @@
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #define WZ_MIP_LOAD_BIAS 0.f
+#define WZ_EXTRA_SHADOW_TAPS 4
 //
 
 uniform sampler2D Texture; // diffuse map
 uniform sampler2D TextureTcmask; // tcmask
 uniform sampler2D TextureNormal; // normal map
 uniform sampler2D TextureSpecular; // specular map
+uniform sampler2DShadow shadowMap; // shadow map
 
 uniform int tcmask; // whether a tcmask texture exists for the model
 uniform int normalmap; // whether a normal map exists for the model
@@ -45,11 +47,46 @@ FRAGMENT_INPUT vec4 colour;
 FRAGMENT_INPUT vec4 teamcolour;
 FRAGMENT_INPUT vec4 packed_ecmState_alphaTest;
 
+// For Shadows
+FRAGMENT_INPUT vec4 shadowPos;
+FRAGMENT_INPUT vec3 fragPos;
+FRAGMENT_INPUT vec3 fragNormal;
+
 #ifdef NEWGL
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
 #endif
+
+float getShadowVisibility()
+{
+	if (shadowPos.z > 1.0f)
+	{
+		return 1.0;
+	}
+
+	float bias = 0.0002f;
+
+	float visibility = texture( shadowMap, vec3(shadowPos.xy, (shadowPos.z+bias)/shadowPos.w) );
+
+	// PCF
+	const float edgeVal = 0.5+float((WZ_EXTRA_SHADOW_TAPS-1)/2);
+	const float startVal = -edgeVal;
+	const float endVal = edgeVal + 0.5;
+	const float texelIncrement = 1.0/float(4096);
+	const float visibilityIncrement = 0.1; //0.5 / WZ_EXTRA_SHADOW_TAPS;
+	for (float y=startVal; y<endVal; y+=1.0)
+	{
+		for (float x=startVal; x<endVal; x+=1.0)
+		{
+			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec3(shadowPos.xy + vec2(x*texelIncrement, y*texelIncrement), (shadowPos.z+bias)/shadowPos.w) ));
+		}
+	}
+
+	visibility = clamp(visibility, 0.3, 1.0);
+
+	return visibility;
+}
 
 void main()
 {
@@ -88,6 +125,7 @@ void main()
 	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
+	float visibility = getShadowVisibility();
 
 	if (lambertTerm > 0.0)
 	{
@@ -120,11 +158,11 @@ void main()
 		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply color using grain merge with tcmask
-		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;
+		fragColour = visibility * (light + (teamcolour - 0.5) * maskAlpha) * colour;
 	}
 	else
 	{
-		fragColour = light * colour;
+		fragColour = visibility * light * colour;
 	}
 
 	if (ecmEffect)
