@@ -1686,6 +1686,7 @@ VkPSO::VkPSO(vk::Device _dev,
 		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + sizeof(uint32_t));
 		memcpy(&specializationConstantsDataBuffer[copyIdx], &extraShadowTaps, sizeof(uint32_t));
 		specializationEntries.emplace_back(1, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(uint32_t));
+		hasSpecializationConstant_ExtraShadowTaps = true;
 	}
 	if (!specializationEntries.empty())
 	{
@@ -5801,6 +5802,40 @@ bool VkRoot::supportsIntVertexAttributes() const
 size_t VkRoot::maxFramesInFlight() const
 {
 	return MAX_FRAMES_IN_FLIGHT;
+}
+
+bool VkRoot::setExtraShadowTaps(uint32_t val)
+{
+	if (val == extraShadowTaps)
+	{
+		return true;
+	}
+
+	extraShadowTaps = val;
+
+	// Must rebuild any shaders that used this value
+	for (auto& pipelineInfo : createdPipelines)
+	{
+		for (size_t renderPassId = 0; renderPassId < pipelineInfo.renderPassPSO.size(); ++renderPassId)
+		{
+			auto pipeline = pipelineInfo.renderPassPSO[renderPassId];
+			if (pipeline == nullptr)
+			{
+				continue;
+			}
+
+			auto& renderPass = renderPasses[renderPassId];
+
+			ASSERT(pipeline->renderpass_compat, "Pipeline has no associated renderpass compat structure");
+			if (pipeline->hasSpecializationConstant_ExtraShadowTaps)
+			{
+				buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(pipeline);
+				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);
+			}
+		}
+	}
+
+	return true;
 }
 
 #endif // defined(WZ_VULKAN_ENABLED)

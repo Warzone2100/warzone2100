@@ -486,6 +486,11 @@ size_t null_context::maxFramesInFlight() const
 	return 1;
 }
 
+bool null_context::setExtraShadowTaps(uint32_t val)
+{
+	return true;
+}
+
 bool null_context::supportsInstancedRendering()
 {
 	return false;
