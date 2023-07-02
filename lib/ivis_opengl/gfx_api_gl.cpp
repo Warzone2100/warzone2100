@@ -1344,6 +1344,36 @@ static std::tuple<std::string, std::unordered_map<std::string, std::string>> ren
 	return std::tuple<std::string, std::unordered_map<std::string, std::string>>(modifiedFragmentShaderSource, duplicateFragmentUniformNameMap);
 }
 
+static bool regex_replace_wrapper(std::string& input, const std::regex& re, const std::string& replace, std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
+{
+	std::string result;
+	auto m = std::sregex_iterator(input.begin(), input.end(), re, flags);
+	auto end = std::sregex_iterator();
+	auto last_m = m;
+	size_t num_replacements = 0;
+
+	auto out = std::back_inserter(result);
+
+	for (; m != end; ++m)
+	{
+		out = std::copy(m->prefix().first, m->prefix().second, out);
+		out = m->format(out, replace, flags);
+		last_m = m;
+		++num_replacements;
+	}
+
+	if (num_replacements == 0)
+	{
+		return false;
+	}
+
+	out = std::copy(last_m->suffix().first, last_m->suffix().second, out);
+
+	input = std::move(result);
+
+	return true;
+}
+
 static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, float mipLodBias)
 {
 	// Look for:
@@ -1366,13 +1396,15 @@ static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, fl
 	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_MIP_LOAD_BIAS %s", floatAsString.c_str()));
 }
 
-static void patchFragmentShaderExtraShadowTaps(std::string& fragmentShaderStr, uint32_t extraShadowTaps)
+static bool patchFragmentShaderExtraShadowTaps(std::string& fragmentShaderStr, uint32_t extraShadowTaps)
 {
 	// Look for:
 	// #define WZ_EXTRA_SHADOW_TAPS 4
 	const auto re = std::regex("#define WZ_EXTRA_SHADOW_TAPS .*", std::regex_constants::ECMAScript);
 
-	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_EXTRA_SHADOW_TAPS %u", extraShadowTaps));
+	bool foundAndReplaced = regex_replace_wrapper(fragmentShaderStr, re, astringf("#define WZ_EXTRA_SHADOW_TAPS %u", extraShadowTaps));
+
+	return foundAndReplaced;
 }
 
 void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
@@ -1504,7 +1536,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 			{
 				patchFragmentShaderTextureLodBias(fragmentShaderStr, mipLodBias.value());
 			}
-			patchFragmentShaderExtraShadowTaps(fragmentShaderStr, extraShadowTaps);
+			hasSpecializationConstant_ExtraShadowTaps = patchFragmentShaderExtraShadowTaps(fragmentShaderStr, extraShadowTaps);
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
 
@@ -3752,6 +3784,29 @@ bool gl_context::supportsIntVertexAttributes() const
 size_t gl_context::maxFramesInFlight() const
 {
 	return 2;
+}
+
+bool gl_context::setExtraShadowTaps(uint32_t val)
+{
+	if (val == extraShadowTaps)
+	{
+		return true;
+	}
+
+	extraShadowTaps = val;
+
+	// Must recompile any shaders that used this value
+	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
+	for (auto& pipelineInfo : createdPipelines)
+	{
+		if (pipelineInfo.pso && pipelineInfo.pso->hasSpecializationConstant_ExtraShadowTaps)
+		{
+			delete pipelineInfo.pso;
+			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, extraShadowTaps);
+		}
+	}
+
+	return true;
 }
 
 static const char *cbframebuffererror(GLenum err)

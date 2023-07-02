@@ -170,6 +170,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	std::vector<gfx_api::vertex_buffer> vertex_buffer_desc;
 	std::vector<GLint> locations;
 	std::vector<GLint> duplicateFragmentUniformLocations;
+	bool hasSpecializationConstant_ExtraShadowTaps = false;
 
 	std::vector<std::function<void(const void*, size_t)>> uniform_bind_functions;
 
@@ -321,6 +322,7 @@ struct gl_context final : public gfx_api::context
 	virtual bool supports2DTextureArrays() const override;
 	virtual bool supportsIntVertexAttributes() const override;
 	virtual size_t maxFramesInFlight() const override;
+	virtual bool setExtraShadowTaps(uint32_t val) override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;

@@ -369,6 +369,7 @@ struct VkPSO final
 	std::vector<vk::Sampler> samplers;
 
 	std::shared_ptr<VkhRenderPassCompat> renderpass_compat;
+	bool hasSpecializationConstant_ExtraShadowTaps = false;
 
 private:
 	// Read shader into text buffer
@@ -854,6 +855,7 @@ public:
 	virtual bool supports2DTextureArrays() const override;
 	virtual bool supportsIntVertexAttributes() const override;
 	virtual size_t maxFramesInFlight() const override;
+	virtual bool setExtraShadowTaps(uint32_t val) override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;
