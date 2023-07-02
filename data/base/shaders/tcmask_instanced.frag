@@ -60,6 +60,7 @@ out vec4 FragColor;
 
 float getShadowVisibility()
 {
+#if WZ_EXTRA_SHADOW_TAPS > 0
 	if (shadowPos.z > 1.0f)
 	{
 		return 1.0;
@@ -86,6 +87,9 @@ float getShadowVisibility()
 	visibility = clamp(visibility, 0.3, 1.0);
 
 	return visibility;
+#else
+	return 1.0;
+#endif
 }
 
 void main()
