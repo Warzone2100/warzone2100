@@ -1511,6 +1511,30 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 		}
 		return result;
 	}
+	case gfx_api::sampler_type::bilinear_border:
+	{
+		vk::SamplerCreateInfo result = vk::SamplerCreateInfo()
+			.setMinFilter(vk::Filter::eLinear)
+			.setMagFilter(vk::Filter::eLinear)
+			.setMipmapMode(vk::SamplerMipmapMode::eNearest)
+			.setMaxAnisotropy(1.f)
+			.setMinLod(0.f)
+			.setMaxLod(0.f)
+			.setAddressModeU(vk::SamplerAddressMode::eClampToBorder)
+			.setAddressModeV(vk::SamplerAddressMode::eClampToBorder)
+			.setAddressModeW(vk::SamplerAddressMode::eClampToBorder)
+			.setBorderColor(to_vk(border))
+		;
+		switch (target)
+		{
+			case gfx_api::pixel_format_target::depth_map:
+				result.setCompareOp(vk::CompareOp::eLessOrEqual);
+				result.setCompareEnable(true);
+			default:
+				break;
+		}
+		return result;
+	}
 	}
 	debug(LOG_FATAL, "Unsupported sampler_type");
 	return vk::SamplerCreateInfo();
