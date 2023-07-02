@@ -355,28 +355,6 @@ public:
 	~VkPSOId() {}
 };
 
-struct gfxapi_PipelineCreateInfo
-{
-	gfx_api::state_description state_desc;
-	SHADER_MODE shader_mode;
-	gfx_api::primitive_type primitive;
-	std::vector<std::type_index> uniform_blocks;
-	std::vector<gfx_api::texture_input> texture_desc;
-	std::vector<gfx_api::vertex_buffer> attribute_descriptions;
-
-	gfxapi_PipelineCreateInfo(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
-							  const std::vector<std::type_index>& uniform_blocks,
-							  const std::vector<gfx_api::texture_input>& texture_desc,
-							  const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
-	: state_desc(state_desc)
-	, shader_mode(shader_mode)
-	, primitive(primitive)
-	, uniform_blocks(uniform_blocks)
-	, texture_desc(texture_desc)
-	, attribute_descriptions(attribute_descriptions)
-	{}
-};
-
 struct VkPSO final
 {
 	vk::Pipeline object;
@@ -417,7 +395,7 @@ private:
 public:
 	VkPSO(vk::Device _dev,
 		  const vk::PhysicalDeviceLimits& limits,
-		  const gfxapi_PipelineCreateInfo& createInfo,
+		  const gfx_api::pipeline_create_info& createInfo,
 		  vk::RenderPass rp,
 		  const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 		  vk::SampleCountFlagBits rasterizationSamples,
@@ -732,10 +710,10 @@ struct VkRoot final : gfx_api::context
 
 	struct BuiltPipelineRegistry
 	{
-		const gfxapi_PipelineCreateInfo createInfo;
+		const gfx_api::pipeline_create_info createInfo;
 		std::vector<VkPSO *> renderPassPSO;
 
-		BuiltPipelineRegistry(const gfxapi_PipelineCreateInfo& _createInfo, size_t numRenderPasses)
+		BuiltPipelineRegistry(const gfx_api::pipeline_create_info& _createInfo, size_t numRenderPasses)
 		: createInfo(_createInfo)
 		{
 			renderPassPSO.resize(numRenderPasses, nullptr);
@@ -759,11 +737,7 @@ public:
 	VkRoot(bool _debug);
 	~VkRoot();
 
-	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-															const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
-															const std::vector<std::type_index>& uniform_blocks,
-															const std::vector<gfx_api::texture_input>& texture_desc,
-															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions) override;
+	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo) override;
 
 	virtual void draw(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&) override;
 	virtual void draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&) override;

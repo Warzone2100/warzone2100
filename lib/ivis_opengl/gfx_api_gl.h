@@ -179,7 +179,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<typename T>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
-	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc, optional<float> mipLodBias, uint32_t extraShadowTaps);
+	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, uint32_t extraShadowTaps);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
@@ -270,13 +270,7 @@ struct gl_context final : public gfx_api::context
 	virtual gfx_api::texture_array* create_texture_array(const size_t& mipmap_count, const size_t& layer_count, const size_t& width, const size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename) override;
 	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw, const std::string& debugName = "") override;
 
-	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-															const gfx_api::state_description &state_desc,
-															const SHADER_MODE& shader_mode,
-															const gfx_api::primitive_type& primitive,
-															const std::vector<std::type_index>& uniform_blocks,
-															const std::vector<gfx_api::texture_input>& texture_desc,
-															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions) override;
+	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo) override;
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
 	virtual void bind_index_buffer(gfx_api::buffer&, const gfx_api::index_type&) override;
 	virtual void unbind_index_buffer(gfx_api::buffer&) override;
@@ -360,7 +354,18 @@ private:
 	int32_t maxArrayTextureLayers = 0;
 	GLfloat maxTextureAnisotropy = 0.f;
 	GLuint vaoId = 0;
-	std::vector<gl_pipeline_state_object *> createdPipelines;
+
+	struct BuiltPipelineRegistry
+	{
+		const gfx_api::pipeline_create_info createInfo;
+		gl_pipeline_state_object * pso = nullptr;
+
+		BuiltPipelineRegistry(const gfx_api::pipeline_create_info& _createInfo)
+		: createInfo(_createInfo)
+		{ }
+	};
+	std::vector<BuiltPipelineRegistry> createdPipelines;
+
 	gl_texture *pDefaultTexture = nullptr;
 	gl_texture_array *pDefaultArrayTexture = nullptr;
 

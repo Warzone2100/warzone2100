@@ -292,6 +292,28 @@ namespace gfx_api
 		bool broken = false;
 	};
 
+	struct pipeline_create_info
+	{
+		gfx_api::state_description state_desc;
+		SHADER_MODE shader_mode;
+		gfx_api::primitive_type primitive;
+		std::vector<std::type_index> uniform_blocks;
+		std::vector<gfx_api::texture_input> texture_desc;
+		std::vector<gfx_api::vertex_buffer> attribute_descriptions;
+
+		pipeline_create_info(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+								  const std::vector<std::type_index>& uniform_blocks,
+								  const std::vector<gfx_api::texture_input>& texture_desc,
+								  const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
+		: state_desc(state_desc)
+		, shader_mode(shader_mode)
+		, primitive(primitive)
+		, uniform_blocks(uniform_blocks)
+		, texture_desc(texture_desc)
+		, attribute_descriptions(attribute_descriptions)
+		{}
+	};
+
 	struct context
 	{
 		enum class buffer_storage_hint
@@ -326,12 +348,7 @@ namespace gfx_api
 		virtual texture_array* create_texture_array(const size_t& mipmap_count, const size_t& layer_count, const size_t& width, const size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename = "") = 0;
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw, const std::string& debugName = "") = 0;
 		virtual pipeline_state_object* build_pipeline(pipeline_state_object* existing_pso,
-													  const state_description&,
-													  const SHADER_MODE&,
-													  const gfx_api::primitive_type& primitive,
-													  const std::vector<std::type_index>& uniform_blocks,
-													  const std::vector<gfx_api::texture_input>& texture_desc,
-													  const std::vector<vertex_buffer>& attribute_descriptions) = 0;
+													  const pipeline_create_info& createInfo) = 0;
 		virtual void bind_pipeline(pipeline_state_object*, bool notextures) = 0;
 		virtual void bind_index_buffer(buffer&, const index_type&) = 0;
 		virtual void unbind_index_buffer(buffer&) = 0;
@@ -547,7 +564,7 @@ namespace gfx_api
 
 		bool recompile()
 		{
-			nextpso = gfx_api::context::get().build_pipeline(pso, rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
+			nextpso = gfx_api::context::get().build_pipeline(pso, pipeline_create_info(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{})));
 			return nextpso != nullptr && !nextpso->broken;
 		}
 
