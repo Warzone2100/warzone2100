@@ -260,6 +260,7 @@ namespace gfx_api
 	{
 		bilinear,
 		bilinear_repeat,
+		bilinear_border,
 		anisotropic,
 		nearest_clamped,
 		nearest_border,
