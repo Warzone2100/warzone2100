@@ -193,15 +193,9 @@ gfx_api::buffer * null_context::create_buffer_object(const gfx_api::buffer::usag
 	return new null_buffer(usage, hint);
 }
 
-gfx_api::pipeline_state_object * null_context::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-															  const gfx_api::state_description &state_desc,
-															const SHADER_MODE& shader_mode,
-															const gfx_api::primitive_type& primitive,
-															const std::vector<std::type_index>& uniform_blocks,
-															const std::vector<gfx_api::texture_input>& texture_desc,
-															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
+gfx_api::pipeline_state_object * null_context::build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo)
 {
-	return new null_pipeline_state_object(state_desc, attribute_descriptions);
+	return new null_pipeline_state_object(createInfo.state_desc, createInfo.attribute_descriptions);
 }
 
 void null_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)

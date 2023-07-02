@@ -1538,7 +1538,7 @@ vk::PrimitiveTopology VkPSO::to_vk(const gfx_api::primitive_type& primitive)
 
 VkPSO::VkPSO(vk::Device _dev,
 	const vk::PhysicalDeviceLimits& limits,
-	const gfxapi_PipelineCreateInfo& createInfo,
+	const gfx_api::pipeline_create_info& createInfo,
 	vk::RenderPass rp,
 	const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 	vk::SampleCountFlagBits rasterizationSamples,
@@ -2459,11 +2459,7 @@ const VkRoot::RenderPassDetails& VkRoot::currentRenderPass()
 	return renderPasses[currentRenderPassId];
 }
 
-gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-														const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
-	const std::vector<std::type_index>& uniform_blocks,
-	const std::vector<gfx_api::texture_input>& texture_desc,
-	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
+gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo)
 {
 	optional<size_t> psoID;
 	if (existing_pso)
@@ -2473,7 +2469,6 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	}
 
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
-	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, uniform_blocks, texture_desc, attribute_descriptions);
 	VkPSO* pipeline = nullptr;
 	try {
 		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, currentRenderPass().rp, currentRenderPass().rp_compat_info, msaaSamples, vkDynLoader, *this);

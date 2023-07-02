@@ -954,8 +954,8 @@ typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_
 	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc, optional<float> mipLodBias, uint32_t extraShadowTaps) :
-desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
+gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, /*const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc,*/ optional<float> mipLodBias, uint32_t extraShadowTaps) :
+desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
 	std::string fragmentShaderHeader;
@@ -988,13 +988,13 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 	}
 
 	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
-				  shader_to_file_table.at(shader).friendly_name,
+				  shader_to_file_table.at(createInfo.shader_mode).friendly_name,
 				  vertexShaderHeader.c_str(),
-				  shader_to_file_table.at(shader).vertex_file,
+				  shader_to_file_table.at(createInfo.shader_mode).vertex_file,
 				  fragmentShaderHeader.c_str(),
-				  shader_to_file_table.at(shader).fragment_file,
-				  shader_to_file_table.at(shader).uniform_names,
-				  shader_to_file_table.at(shader).additional_samplers,
+				  shader_to_file_table.at(createInfo.shader_mode).fragment_file,
+				  shader_to_file_table.at(createInfo.shader_mode).uniform_names,
+				  shader_to_file_table.at(createInfo.shader_mode).additional_samplers,
 				  mipLodBias, extraShadowTaps);
 
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
@@ -1023,7 +1023,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_WORLD_TO_SCREEN>()
 	};
 
-	for (auto& uniform_block : uniform_blocks)
+	for (auto& uniform_block : createInfo.uniform_blocks)
 	{
 		auto it = uniforms_bind_table.find(uniform_block);
 		if (it == uniforms_bind_table.end())
@@ -2124,13 +2124,7 @@ gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage 
 	return new gl_buffer(usage, hint);
 }
 
-gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-								  const gfx_api::state_description &state_desc,
-								  const SHADER_MODE& shader_mode,
-								  const gfx_api::primitive_type& primitive,
-								  const std::vector<std::type_index>& uniform_blocks,
-								  const std::vector<gfx_api::texture_input>& texture_desc,
-								  const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
+gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo)
 {
 	optional<size_t> psoID;
 	if (existing_pso)
@@ -2140,17 +2134,21 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 	}
 
 	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
-	auto pipeline = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, state_desc, shader_mode, uniform_blocks, attribute_descriptions, mipLodBias, extraShadowTaps);
+	auto pipeline = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, extraShadowTaps);
 	if (!psoID.has_value())
 	{
-		createdPipelines.emplace_back(pipeline);
+		createdPipelines.emplace_back(createInfo);
 		psoID = createdPipelines.size() - 1;
+		createdPipelines[psoID.value()].pso = pipeline;
 	}
 	else
 	{
-		gl_pipeline_state_object* old_program = createdPipelines[psoID.value()];
-		delete old_program;
-		createdPipelines[psoID.value()] = pipeline;
+		auto& builtPipelineRegistry = createdPipelines[psoID.value()];
+		if (builtPipelineRegistry.pso != nullptr)
+		{
+			delete builtPipelineRegistry.pso;
+		}
+		builtPipelineRegistry.pso = pipeline;
 	}
 
 	return new gl_pipeline_id(psoID.value(), pipeline->broken); // always return a new indirect reference
@@ -2160,7 +2158,8 @@ void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextu
 {
 	gl_pipeline_id* newPSOId = static_cast<gl_pipeline_id*>(pso);
 	// lookup pipeline
-	gl_pipeline_state_object* new_program = createdPipelines[newPSOId->psoID];
+	auto& pipelineInfo = createdPipelines[newPSOId->psoID];
+	gl_pipeline_state_object* new_program = pipelineInfo.pso;
 	if (current_program != new_program)
 	{
 		current_program = new_program;
@@ -3671,9 +3670,12 @@ void gl_context::shutdown()
 		}
 	}
 
-	for (auto& pipeline : createdPipelines)
+	for (auto& pipelineInfo : createdPipelines)
 	{
-		delete pipeline;
+		if (pipelineInfo.pso)
+		{
+			delete pipelineInfo.pso;
+		}
 	}
 	createdPipelines.clear();
 
