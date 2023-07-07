@@ -48,7 +48,7 @@ void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &mo
 
 void pie_GetResetCounts(size_t *pPieCount, size_t *pPolyCount);
 
-/** Setup stencil shadows and OpenGL lighting. */
+/** Setup shadows and OpenGL lighting. */
 void pie_BeginLighting(const Vector3f &light);
 void pie_setShadows(bool drawShadows);
 
@@ -63,5 +63,13 @@ void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMat
 
 void pie_InitializeInstancedRenderer();
 void pie_CleanUp();
+
+enum class ShadowMode
+{
+	Fallback_Stencil_Shadows,
+	Shadow_Mapping
+};
+void pie_setShadowMode(ShadowMode mode);
+ShadowMode pie_getShadowMode();
 
 #endif // _piedef_h

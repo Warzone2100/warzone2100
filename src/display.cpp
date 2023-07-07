@@ -79,6 +79,7 @@
 #include "input/manager.h"
 #include "input/keyconfig.h"
 #include "mapgrid.h"
+#include "main.h"
 
 InputManager gInputManager;
 KeyFunctionConfiguration gKeyFuncConfig;

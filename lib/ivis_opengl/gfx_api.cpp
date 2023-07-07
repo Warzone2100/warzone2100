@@ -84,6 +84,11 @@ gfx_api::context& gfx_api::context::get()
 	return *current_backend_context;
 }
 
+bool gfx_api::context::isInitialized()
+{
+	return current_backend_context != nullptr;
+}
+
 // MARK: - Per-texture compression overrides
 
 #include "lib/framework/file.h"
