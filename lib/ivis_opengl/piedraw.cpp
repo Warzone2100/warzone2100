@@ -65,6 +65,7 @@ static size_t pieCount = 0;
 static size_t polyCount = 0;
 static size_t drawCallsCount = 0;
 static bool shadows = false;
+static ShadowMode shadowMode = ShadowMode::Shadow_Mapping;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 static gfx_api::gfxFloat lightingDefault[LIGHT_MAX][4];
 
@@ -100,9 +101,33 @@ void pie_Lighting0(LIGHTING_TYPE entry, const float value[4])
 	lighting0[entry][3] = value[3];
 }
 
+static void refreshShadowShaders()
+{
+	if (gfx_api::context::isInitialized())
+	{
+		gfx_api::context::get().setExtraShadowTaps((shadows && shadowMode == ShadowMode::Shadow_Mapping) ? /* TODO: Get this value from settings */ 2 : 0);
+	}
+}
+
 void pie_setShadows(bool drawShadows)
 {
 	shadows = drawShadows;
+	refreshShadowShaders();
+}
+
+void pie_setShadowMode(ShadowMode mode)
+{
+	if (mode == shadowMode)
+	{
+		return;
+	}
+	shadowMode = mode;
+	refreshShadowShaders();
+}
+
+ShadowMode pie_getShadowMode()
+{
+	return shadowMode;
 }
 
 static Vector3f currentSunPosition(0.f, 0.f, 0.f);
@@ -799,7 +824,7 @@ public:
 		TranslucentShapes = 0x2,
 		OldShadows = 0x4
 	};
-	static constexpr int DrawParts_All = DrawParts::ShadowCastingShapes | DrawParts::TranslucentShapes | DrawParts::OldShadows;
+	static constexpr int DrawParts_All = DrawParts::ShadowCastingShapes | DrawParts::TranslucentShapes;
 
 	// Draws all queued meshes, given a projection + view matrix
 	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const glm::mat4& shadowMVPMatrix, int drawParts = DrawParts_All, bool depthPass = false);
@@ -808,7 +833,6 @@ public:
 	void Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, int drawParts = DrawParts_All, bool depthPass = false);
 	// Old, non-instanced rendering
 	void Draw3DShapes_Old(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, int drawParts = DrawParts_All);
-	templatedState Draw3DShapeInstance_Old(const templatedState &lastState, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix, float stretchDepth);
 public:
 	bool initialize();
 	void clear();
@@ -962,7 +986,7 @@ bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT te
 	}
 	else
 	{
-		if (shadows && (pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW))
+		if (shadows && (pieFlag & pie_SHADOW || pieFlag & pie_STATIC_SHADOW) && (shadowMode == ShadowMode::Fallback_Stencil_Shadows))
 		{
 			float distance;
 
@@ -1136,9 +1160,22 @@ void pie_FinalizeMeshes(uint64_t currentGameFrame)
 void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const glm::mat4& shadowMVPMatrix, bool depthPass)
 {
 	int drawParts = InstancedMeshRenderer::DrawParts_All;
+	if (shadowMode == ShadowMode::Fallback_Stencil_Shadows)
+	{
+		drawParts |= InstancedMeshRenderer::DrawParts::OldShadows;
+	}
 	if (depthPass)
 	{
-		drawParts = InstancedMeshRenderer::DrawParts::ShadowCastingShapes;
+		drawParts = 0;
+		if (shadows)
+		{
+			drawParts |= InstancedMeshRenderer::DrawParts::ShadowCastingShapes;
+		}
+	}
+
+	if (drawParts == 0)
+	{
+		return;
 	}
 	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix, viewMatrix, shadowMVPMatrix, drawParts, depthPass);
 }

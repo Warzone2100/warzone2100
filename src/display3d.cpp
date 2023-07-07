@@ -1290,6 +1290,8 @@ static void drawTiles(iView *player)
 {
 	// draw terrain
 
+	auto currShadowMode = pie_getShadowMode();
+
 	/* ---------------------------------------------------------------- */
 	/* Do boundary and extent checking                                  */
 	/* ---------------------------------------------------------------- */
@@ -1448,7 +1450,10 @@ static void drawTiles(iView *player)
 	for (size_t i = 0; i < numShadowCascades; ++i)
 	{
 		gfx_api::context::get().beginDepthPass(i);
-		pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, glm::mat4(1.f), true);
+		if (currShadowMode == ShadowMode::Shadow_Mapping)
+		{
+			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, glm::mat4(1.f), true);
+		}
 		gfx_api::context::get().endCurrentDepthPass();
 	}
 	// start main render pass
