@@ -1,7 +1,6 @@
 #ifndef __INCLUDED_SRC_PROFILING_H__
 #define __INCLUDED_SRC_PROFILING_H__
 
-#include <ctime>
 #include <cstdint>
 
 namespace profiling {
@@ -42,7 +41,6 @@ public:
 	double elapsed() const;
 
 private:
-	timespec m_startTimeStamp;
 	const Domain* m_domain = nullptr;
 };
 
