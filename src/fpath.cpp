@@ -116,7 +116,7 @@ bool fpathInitialise()
 		fpathMutex = wzMutexCreate();
 		fpathSemaphore = wzSemaphoreCreate(0);
 		waitingForResultSemaphore = wzSemaphoreCreate(0);
-		fpathThread = wzThreadCreate(fpathThreadFunc, nullptr);
+		fpathThread = wzThreadCreate(fpathThreadFunc, nullptr, "wzPath");
 		wzThreadStart(fpathThread);
 	}
 

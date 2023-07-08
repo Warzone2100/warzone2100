@@ -901,11 +901,11 @@ void WzInfoManager::initialize()
 		}
 	}
 
-	WZ_THREAD* updateManagerThread = wzThreadCreate(updateManagerThreadFunc, nullptr);
+	WZ_THREAD* updateManagerThread = wzThreadCreate(updateManagerThreadFunc, nullptr, "updateManager");
 	wzThreadStart(updateManagerThread);
 	wzThreadDetach(updateManagerThread);
 
-	WZ_THREAD* compatManagerThread = wzThreadCreate(compatManagerThreadFunc, nullptr);
+	WZ_THREAD* compatManagerThread = wzThreadCreate(compatManagerThreadFunc, nullptr, "compatManager");
 	wzThreadStart(compatManagerThread);
 	wzThreadDetach(compatManagerThread);
 }

@@ -811,9 +811,12 @@ void wzDelay(unsigned int delay)
 /**************************/
 /***    Thread support  ***/
 /**************************/
-WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data)
+WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data, const char* name)
 {
-	return (WZ_THREAD *)SDL_CreateThread(threadFunc, "wzThread", data);
+	const char* defaultName = "wzThread";
+	if (name == nullptr)
+		name = defaultName;
+	return (WZ_THREAD *)SDL_CreateThread(threadFunc, name, data);
 }
 
 unsigned long wzThreadID(WZ_THREAD *thread)
