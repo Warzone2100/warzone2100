@@ -2106,7 +2106,7 @@ void mapInit()
 		lastDangerPlayer = 0;
 		dangerSemaphore = wzSemaphoreCreate(0);
 		dangerDoneSemaphore = wzSemaphoreCreate(0);
-		dangerThread = wzThreadCreate(dangerThreadFunc, nullptr);
+		dangerThread = wzThreadCreate(dangerThreadFunc, nullptr, "wzDanger");
 		wzThreadStart(dangerThread);
 	}
 }

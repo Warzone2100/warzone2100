@@ -142,7 +142,7 @@ bool wzBackendAttemptOpenURL(const char *url);
 uint64_t wzGetCurrentSystemRAM(); // gets the system RAM in MiB
 
 // Thread related
-WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
+WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data, const char* name = nullptr);
 unsigned long wzThreadID(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) int wzThreadJoin(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) void wzThreadDetach(WZ_THREAD *thread);
