@@ -19,10 +19,9 @@ public:
 	const Internal* getInternal() const {
 		return m_internal;
 	}
+
 private:
 	Internal* m_internal;
-	// Some additional opaque data for implementation.
-	void* m_domain = nullptr;
 };
 
 /// Profiling scope.
@@ -35,14 +34,23 @@ public:
 	Scope(const Domain* domain, const char* object, const char* name);
 	~Scope();
 
+	/// Get a domain.
+	const Domain* domain() const {
+		return m_domain;
+	}
+	/// Get time from scope start, in seconds.
 	double elapsed() const;
+
 private:
-	timespec m_prevTimeStamp;
+	timespec m_startTimeStamp;
 	const Domain* m_domain = nullptr;
-	uint64_t m_backendRangeId = 0;
 };
 
 extern Domain wzRootDomain;
+
+void mark(const Domain *domain, const char *mark);
+void mark(const Domain *domain, const char *object, const char *mark);
+
 }
 
 #define WZ_PROFILE_SCOPE(name) profiling::Scope mark_##name(&profiling::wzRootDomain, #name);
