@@ -55,17 +55,24 @@ Domain::~Domain()
 {
 	if (m_internal)
 	{
+#ifdef WZ_PROFILING_NVTX
+		nvtxDomainDestroy(m_internal->nvtxDomain);
+		m_internal->nvtxDomain = nullptr;
+#endif
 		delete m_internal;
 		m_internal = nullptr;
 	}
 }
 
+// Global domain for warzone.
 Domain wzRootDomain{"warzone2100"};
 
 Scope::Scope(const Domain *domain, const char *name)
 	:m_domain(domain)
 {
-	if (domain && name)
+	timespec_get(&m_startTimeStamp, TIME_UTC);
+
+	if (m_domain && name)
 	{
 		#ifdef WZ_PROFILING_NVTX
 		{
@@ -85,6 +92,8 @@ Scope::Scope(const Domain *domain, const char *name)
 Scope::Scope(const Domain *domain, const char *object, const char *name)
 	:m_domain(domain)
 {
+	timespec_get(&m_startTimeStamp, TIME_UTC);
+
 	if (m_domain && object && name)
 	{
 		static char tmpBuffer[255];
@@ -115,6 +124,16 @@ Scope::~Scope()
 		__itt_task_end(ittDomain);
 #endif
 	}
+}
+
+double deltaTimeSec(timespec from, timespec to) {
+	return (to.tv_sec - from.tv_sec) + 0.000000001 * (to.tv_nsec - from.tv_nsec);
+}
+
+double Scope::elapsed() const {
+	timespec currentTime;
+	timespec_get(&currentTime, TIME_UTC);
+	return deltaTimeSec(m_startTimeStamp, currentTime);
 }
 
 void mark(const Domain *domain, const char *mark)
