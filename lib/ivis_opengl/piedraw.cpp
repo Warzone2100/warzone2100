@@ -24,6 +24,7 @@
 #include <unordered_map>
 #include <string.h>
 
+#include "lib/ivis_opengl/piedraw.h"
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
@@ -827,10 +828,10 @@ public:
 	static constexpr int DrawParts_All = DrawParts::ShadowCastingShapes | DrawParts::TranslucentShapes;
 
 	// Draws all queued meshes, given a projection + view matrix
-	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const glm::mat4& shadowMVPMatrix, int drawParts = DrawParts_All, bool depthPass = false);
+	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const ShadowCascadesInfo& shadowMVPMatrix, int drawParts = DrawParts_All, bool depthPass = false);
 public:
 	// New, instanced rendering
-	void Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, int drawParts = DrawParts_All, bool depthPass = false);
+	void Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, int drawParts = DrawParts_All, bool depthPass = false);
 	// Old, non-instanced rendering
 	void Draw3DShapes_Old(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, int drawParts = DrawParts_All);
 public:
@@ -1157,7 +1158,7 @@ void pie_FinalizeMeshes(uint64_t currentGameFrame)
 	instancedMeshRenderer.FinalizeInstances();
 }
 
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const glm::mat4& shadowMVPMatrix, bool depthPass)
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const ShadowCascadesInfo& shadowMVPMatrix, bool depthPass)
 {
 	int drawParts = InstancedMeshRenderer::DrawParts_All;
 	if (shadowMode == ShadowMode::Fallback_Stencil_Shadows)
@@ -1235,7 +1236,7 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	return true;
 }
 
-bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, const glm::mat4& shadowMVPMatrix, int drawParts, bool depthPass)
+bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, const ShadowCascadesInfo& shadowCascades, int drawParts, bool depthPass)
 {
 	perFrameUniformsShaderOnce.reset();
 
@@ -1253,18 +1254,24 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 		renderState.fogColour.vector[3] / 255.f
 	) : glm::vec4(0.f);
 
-	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
-		projectionMatrix, viewMatrix, shadowMVPMatrix,
-		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
-		renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
-	};
 
 	if (useInstancedRendering)
 	{
+		gfx_api::Draw3DShapeInstancedGlobalUniforms globalUniforms {
+			projectionMatrix, viewMatrix, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
+			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
+			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
+		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts, depthPass);
 	}
 	else
 	{
+		gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
+			projectionMatrix, viewMatrix, shadowCascades.shadowMVPMatrix[0],
+			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
+		};
 		Draw3DShapes_Old(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts);
 	}
 
@@ -1272,13 +1279,13 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 }
 
 template<SHADER_MODE shader, typename Draw3DInstancedPSO>
-static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
 	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
 	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
 	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
 
-	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
+	gfx_api::Draw3DShapeInstancedPerMeshUniforms meshUniforms {
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
 	};
 
@@ -1303,7 +1310,7 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 //	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 }
 
-static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
 	if (pieFlag & pie_NODEPTHWRITE)
 	{
@@ -1331,7 +1338,7 @@ static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api
 }
 
 template<SHADER_MODE shader, typename AdditivePSO, typename AdditiveNoDepthWRTPSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename OpaquePSO>
-static void drawInstanced3dShapeTemplated(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+static void drawInstanced3dShapeTemplated(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
@@ -1366,7 +1373,7 @@ static void drawInstanced3dShapeTemplated(ShaderOnce& globalsOnce, const gfx_api
 	}
 }
 
-static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, const iIMDShape *shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, bool depthPass)
+static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape *shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, bool depthPass)
 {
 	bool light = true;
 
@@ -1420,7 +1427,7 @@ static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::D
 	polyCount += shape->polys.size();
 }
 
-void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeGlobalUniforms& globalUniforms, int drawParts, bool depthPass)
+void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, int drawParts, bool depthPass)
 {
 	if (finalizedDrawCalls.empty())
 	{

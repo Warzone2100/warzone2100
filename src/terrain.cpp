@@ -44,6 +44,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/piedraw.h"
 #include <glm/mat4x4.hpp>
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -1760,7 +1761,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 }
 
 template<typename PSO>
-static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const glm::mat4& shadowMapMVP)
+static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
 	const auto &renderState = getCurrentRenderState();
 	PSO::get().bind();
@@ -1775,10 +1776,11 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
 	gfx_api::TerrainCombinedUniforms uniforms = {
-		ModelViewProjection, ModelUVLightmap, shadowMapMVP, groundScale,
+		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality
+		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
+		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality
 	};
 	PSO::get().set_uniforms(uniforms);
 
@@ -1811,18 +1813,18 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 	PSO::get().unbind_vertex_buffers(terrainDecalVBO);
 }
 
-static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const glm::mat4& shadowMapMVP)
+static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
 	switch (terrainShaderQuality)
 	{
 		case TerrainShaderQuality::CLASSIC:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos, shadowMapMVP);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Classic>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades);
 			break;
 		case TerrainShaderQuality::MEDIUM:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos, shadowMapMVP);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_Medium>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades);
 			break;
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ModelUVLightmap, cameraPos, sunPos, shadowMapMVP);
+			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades);
 			break;
 	}
 
@@ -1859,7 +1861,7 @@ void drawTerrainDepthOnly(const glm::mat4 &mvp)
  * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
  * on it one by one. Finally the decals are drawn.
  */
-void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos, const glm::mat4& shadowMapMVP)
+void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
 	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
 	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
@@ -1895,7 +1897,7 @@ void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f
 	case TerrainShaderType::SINGLE_PASS:
 		///////////////////////////////////
 		// terrain + decals
-		drawTerrainCombined(mvp, ModelUVLightmap, cameraPos, sunPos, shadowMapMVP);
+		drawTerrainCombined(mvp, viewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades);
 		break;
 	}
 }

@@ -57,10 +57,6 @@ void pie_InitLighting();
 void pie_Lighting0(LIGHTING_TYPE entry, const float value[4]);
 glm::vec4 pie_GetLighting0(LIGHTING_TYPE entry);
 
-void pie_StartMeshes();
-void pie_FinalizeMeshes(uint64_t currentGameFrame);
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const glm::mat4& shadowMVPMatrix, bool depthPass);
-
 void pie_InitializeInstancedRenderer();
 void pie_CleanUp();
 

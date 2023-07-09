@@ -157,6 +157,10 @@ const glm::mat4& pie_UIPerspectiveGet()
 	});
 }
 
+float pie_getPerspectiveZFar()
+{
+	return perspectiveZFar;
+}
 
 void pie_Begin3DScene()
 {

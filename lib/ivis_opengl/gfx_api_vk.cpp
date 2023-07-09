@@ -1978,7 +1978,6 @@ VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_c
 {
 	ASSERT(size > 0, "0 width/height textures are unsupported");
 	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", size);
-	ASSERT(layer_count == 1, "Currently only support layer count of 1..."); // TODO: FIXME
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	debugName = filename;
@@ -2016,7 +2015,7 @@ VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_c
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
-		.setViewType(vk::ImageViewType::e2D) // TODO: Once layer_count > 1, use e2DArray
+		.setViewType(vk::ImageViewType::e2DArray)
 		.setFormat(depthMapFormat)
 		.setComponents(vk::ComponentMapping())
 		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, 0, static_cast<uint32_t>(layer_count)));
@@ -2850,8 +2849,7 @@ void VkRoot::createDepthPasses(vk::Format depthFormat)
 	}
 
 	// Create depth map image + view
-	// For now, this is just a 2d texture (in the future, for cascades, use a 2d array texture)
-	size_t numCascadeLayers = 1;
+	size_t numCascadeLayers = depthPassCount;
 	pDepthMapImage = new VkDepthMapImage(*this, numCascadeLayers, depthMapSize, depthBufferFormat, "<depth map>");
 
 	// For each depth pass (cascade)
@@ -2860,7 +2858,7 @@ void VkRoot::createDepthPasses(vk::Format depthFormat)
 		// Image view for just this layer
 		const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 			.setImage(pDepthMapImage->object)
-			.setViewType(vk::ImageViewType::e2D) // TODO: Once layer_count > 1, use e2DArray
+			.setViewType(vk::ImageViewType::e2DArray)
 			.setFormat(depthBufferFormat)
 			.setComponents(vk::ComponentMapping())
 			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, static_cast<uint32_t>(i), 1));
@@ -5126,9 +5124,9 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 			switch (attribute_descriptions.at(i).target)
 			{
 				case gfx_api::pixel_format_target::texture_2d:
-				case gfx_api::pixel_format_target::depth_map:
 					imageView = pDefaultTexture->view.get();
 					break;
+				case gfx_api::pixel_format_target::depth_map:
 				case gfx_api::pixel_format_target::texture_2d_array:
 					imageView = pDefaultArrayTexture->view.get();
 					break;
@@ -5602,7 +5600,7 @@ void VkRoot::startRenderPass()
 
 size_t VkRoot::numDepthPasses()
 {
-	return 1;
+	return depthPassCount;
 }
 
 void VkRoot::beginDepthPass(size_t idx)

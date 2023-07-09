@@ -9,7 +9,6 @@
 
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUVLightmapMatrix;
-uniform mat4 ShadowMapMVPMatrix;
 
 uniform vec4 cameraPos; // in modelSpace
 uniform vec4 sunPos; // in modelSpace, normalized
@@ -34,7 +33,6 @@ out vec3 groundLightDir;
 out vec3 groundHalfVec;
 out mat2 decal2groundMat2;
 // for Shadows
-out vec4 shadowPos;
 out vec3 fragPos;
 out vec3 fragNormal;
 
@@ -71,7 +69,6 @@ void main()
 		);
 	}
 
-	shadowPos = ShadowMapMVPMatrix * vec4(vertex.xyz, 1.f);
 	fragPos = vertex.xyz;
 	fragNormal = vertexNormal;
 

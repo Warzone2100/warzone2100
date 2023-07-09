@@ -1,30 +1,7 @@
 #version 450
 //#pragma debug(on)
 
-layout(std140, set = 0, binding = 0) uniform globaluniforms
-{
-	mat4 ProjectionMatrix;
-	mat4 ViewMatrix;
-	mat4 ShadowMapMVPMatrix;
-	vec4 lightPosition;
-	vec4 sceneColor;
-	vec4 ambient;
-	vec4 diffuse;
-	vec4 specular;
-	vec4 fogColor;
-	float fogEnd;
-	float fogStart;
-	float graphicsCycle;
-	int fogEnabled;
-};
-
-layout(std140, set = 1, binding = 0) uniform meshuniforms
-{
-	int tcmask;
-	int normalmap;
-	int specularmap;
-	int hasTangents;
-};
+#include "tcmask_instanced.glsl"
 
 layout(location = 0) in vec4 vertex;
 layout(location = 3) in vec3 vertexNormal;
@@ -44,8 +21,7 @@ layout(location = 8) out vec4 colour;
 layout(location = 9) out vec4 teamcolour;
 layout(location = 10) out vec4 packed_ecmState_alphaTest;
 // For Shadows
-layout(location = 11) out vec4 shadowPos;
-layout(location = 12) out vec3 fragPos;
+layout(location = 11) out vec3 fragPos;
 //layout(location = 13) out vec3 fragNormal;
 
 void main()
@@ -95,7 +71,6 @@ void main()
 	}
 
 	vec4 positionModelSpace = instanceModelMatrix * position;
-	shadowPos = ShadowMapMVPMatrix * vec4(positionModelSpace.xyz, 1.f);
 	fragPos = positionModelSpace.xyz;
 //	fragNormal = vertexNormal;
 

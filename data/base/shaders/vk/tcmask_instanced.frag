@@ -1,39 +1,17 @@
 #version 450
 //#pragma debug(on)
 
+#include "tcmask_instanced.glsl"
+
 layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
 layout (constant_id = 1) const uint WZ_EXTRA_SHADOW_TAPS = 4;
+layout (constant_id = 2) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 
 layout(set = 2, binding = 0) uniform sampler2D Texture; // diffuse
 layout(set = 2, binding = 1) uniform sampler2D TextureTcmask; // tcmask
 layout(set = 2, binding = 2) uniform sampler2D TextureNormal; // normal map
 layout(set = 2, binding = 3) uniform sampler2D TextureSpecular; // specular map
-layout(set = 2, binding = 4) uniform sampler2DShadow shadowMap; // shadow map
-
-layout(std140, set = 0, binding = 0) uniform globaluniforms
-{
-	mat4 ProjectionMatrix;
-	mat4 ViewMatrix;
-	mat4 ShadowMapMVPMatrix;
-	vec4 lightPosition;
-	vec4 sceneColor;
-	vec4 ambient;
-	vec4 diffuse;
-	vec4 specular;
-	vec4 fogColor;
-	float fogEnd;
-	float fogStart;
-	float graphicsCycle;
-	int fogEnabled;
-};
-
-layout(std140, set = 1, binding = 0) uniform meshuniforms
-{
-	int tcmask;
-	int normalmap;
-	int specularmap;
-	int hasTangents;
-};
+layout(set = 2, binding = 4) uniform sampler2DArrayShadow shadowMap; // shadow map
 
 layout(location = 0) in vec4 texCoord_vertexDistance; // vec(2) texCoord, float vertexDistance, (unused float)
 layout(location = 1) in vec3 normal;
@@ -44,8 +22,7 @@ layout(location = 8) in vec4 colour;
 layout(location = 9) in vec4 teamcolour;
 layout(location = 10) in vec4 packed_ecmState_alphaTest;
 // For Shadows
-layout(location = 11) in vec4 shadowPos;
-layout(location = 12) in vec3 fragPos;
+layout(location = 11) in vec3 fragPos;
 //layout(location = 13) in vec3 fragNormal;
 
 layout(location = 0) out vec4 FragColor;
@@ -58,7 +35,43 @@ if (WZ_EXTRA_SHADOW_TAPS == 0)
 }
 else
 {
-	vec4 pos = shadowPos / shadowPos.w;
+	vec4 fragPosViewSpace = ViewMatrix * vec4(fragPos, 1.0);
+	float depthValue = abs(fragPosViewSpace.z);
+
+	int cascadeIndex = 0;
+//	for (int i = 0; i < WZ_SHADOW_CASCADES_COUNT - 1; ++i)
+//	{
+//		if (depthValue >= ShadowMapCascadeSplits[i])
+//		{
+//			cascadeIndex = i + 1;
+//		}
+//	}
+	// unrolled loop, using vec4 swizzles
+if (WZ_SHADOW_CASCADES_COUNT > 1)
+{
+	if (depthValue >= ShadowMapCascadeSplits.x)
+	{
+		cascadeIndex = 1;
+	}
+}
+if (WZ_SHADOW_CASCADES_COUNT > 2)
+{
+	if (depthValue >= ShadowMapCascadeSplits.y)
+	{
+		cascadeIndex = 2;
+	}
+}
+if (WZ_SHADOW_CASCADES_COUNT > 3)
+{
+	if (depthValue >= ShadowMapCascadeSplits.z)
+	{
+		cascadeIndex = 3;
+	}
+}
+
+	vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(fragPos, 1.0);
+	vec3 pos = shadowPos.xyz / shadowPos.w;
+
 	if (pos.z > 1.0f)
 	{
 		return 1.0;
@@ -66,7 +79,7 @@ else
 
 	float bias = 0.0002f;
 
-	float visibility = texture( shadowMap, vec3(pos.xy, (pos.z+bias)) );
+	float visibility = texture( shadowMap, vec4(pos.xy, cascadeIndex, (pos.z+bias)) );
 
 	// PCF
 	const float edgeVal = 0.5+float((WZ_EXTRA_SHADOW_TAPS-1)/2);
@@ -78,7 +91,7 @@ else
 	{
 		for (float x=startVal; x<endVal; x+=1.0)
 		{
-			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec3(pos.xy + vec2(x*texelIncrement, y*texelIncrement), (pos.z+bias)) ));
+			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec4(pos.xy + vec2(x*texelIncrement, y*texelIncrement), cascadeIndex, (pos.z+bias)) ));
 		}
 	}
 

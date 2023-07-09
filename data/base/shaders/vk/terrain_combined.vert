@@ -11,7 +11,7 @@ layout(location = 6) in uvec4 grounds;		// ground types for splatting
 layout(location = 7) in vec4 groundWeights;	// ground weights for splatting
 
 layout(location = 0) out FragData frag;
-layout(location = 12) out flat FragFlatData fragf;
+layout(location = 11) out flat FragFlatData fragf;
 
 void main()
 {
@@ -47,7 +47,6 @@ void main()
 		);
 	}
 
-	frag.shadowPos = ShadowMapMVPMatrix * vec4(vertex.xyz, 1.f);
 	frag.fragPos = vertex.xyz;
 	frag.fragNormal = vertexNormal;
 

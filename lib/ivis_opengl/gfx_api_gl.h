@@ -222,11 +222,15 @@ private:
 	void setUniforms(size_t uniformIdx, const int32_t &v);
 	void setUniforms(size_t uniformIdx, const float &v);
 
+	void setUniforms(size_t uniformIdx, const ::glm::mat4 *m, size_t count);
+	void setUniforms(size_t uniformIdx, const float *v, size_t count);
 
 	// Wish there was static reflection in C++...
 	void set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf);
 	void set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf);
 	void set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf);
+	void set_constants(const gfx_api::Draw3DShapeInstancedGlobalUniforms& cbuf);
+	void set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf);
 	void set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf);
 
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf);
@@ -375,7 +379,7 @@ private:
 	gl_gpurendered_texture* depthTexture = nullptr;
 	std::vector<GLuint> depthFBO;
 	size_t depthBufferResolution = 4096;
-	size_t depthPassCount = 1;
+	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
 
 	GLenum multiSampledBufferInternalFormat = GL_INVALID_ENUM;
 	GLenum multiSampledBufferBaseFormat = GL_INVALID_ENUM;
