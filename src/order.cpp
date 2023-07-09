@@ -1900,7 +1900,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 	       "orderUnit: Invalid order");
 
 	DROID_ORDER_DATA sOrder(order);
-	if (mode == ModeQueue && bMultiPlayer)
+	if (mode == ModeQueue)
 	{
 		sendDroidInfo(psDroid, sOrder, false);
 	}
@@ -2113,7 +2113,7 @@ void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS *p
 	ASSERT(order == DORDER_BUILD, "Invalid order for location");
 
 	DroidOrder sOrder(order, psStats, Vector2i(x, y), direction);
-	if (mode == ModeQueue && bMultiPlayer)
+	if (mode == ModeQueue)
 	{
 		sendDroidInfo(psDroid, sOrder, false);
 		return;  // Wait for our order before changing the droid.
@@ -2148,7 +2148,7 @@ void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS
 	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
 
 	DroidOrder sOrder(order, psStats, Vector2i(x1, y1), Vector2i(x2, y2), direction);
-	if (mode == ModeQueue && bMultiPlayer)
+	if (mode == ModeQueue)
 	{
 		sendDroidInfo(psDroid, sOrder, false);
 		return;  // Wait for our order before changing the droid.
