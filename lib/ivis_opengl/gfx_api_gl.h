@@ -227,6 +227,7 @@ private:
 	void set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf);
 	void set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf);
 	void set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf);
+	void set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf);
 
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf);
