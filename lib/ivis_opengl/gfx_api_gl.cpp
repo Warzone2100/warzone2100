@@ -653,7 +653,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, program_data{ "Component program", "shaders/tcmask_depth_instanced.vert", "shaders/tcmask_depth_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			"ProjectionMatrix", "ViewMatrix"
 		} }),
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{
@@ -1759,6 +1759,12 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstan
 	setUniforms(22, cbuf.animFrameNumber);
 	setUniforms(23, cbuf.ecmState);
 	setUniforms(24, cbuf.alphaTest);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
+{
+	setUniforms(0, cbuf.ProjectionMatrix);
+	setUniforms(1, cbuf.ViewMatrix);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)

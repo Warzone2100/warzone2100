@@ -821,9 +821,15 @@ namespace gfx_api
 	using Draw3DShapeAdditiveNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ADDITIVE, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeNoLightAdditiveNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ADDITIVE, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 
+	struct Draw3DShapeInstancedDepthOnlyGlobalUniforms
+	{
+		glm::mat4 ProjectionMatrix;
+		glm::mat4 ViewMatrix;
+	};
+
 	using Draw3DShapeDepthOnly_Instanced = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::shadow_mapping>, primitive_type::triangles, index_type::u16,
 	std::tuple<
-	Draw3DShapeGlobalUniforms
+	Draw3DShapeInstancedDepthOnlyGlobalUniforms
 	>,
 	std::tuple<
 	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,

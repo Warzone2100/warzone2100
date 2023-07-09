@@ -1313,7 +1313,8 @@ static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api
 	gfx_api::Draw3DShapeDepthOnly_Instanced::get().bind();
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 	globalsOnce.perform_once<gfx_api::Draw3DShapeDepthOnly_Instanced>([&globalUniforms]{
-		gfx_api::Draw3DShapeDepthOnly_Instanced::get().set_uniforms_at(0, globalUniforms);
+		gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms depthGlobals = {globalUniforms.ProjectionMatrix, globalUniforms.ViewMatrix};
+		gfx_api::Draw3DShapeDepthOnly_Instanced::get().set_uniforms_at(0, depthGlobals);
 	});
 
 //	gfx_api::Draw3DShapeDepthOnly_Instanced::get().set_uniforms_at(1, meshUniforms);
