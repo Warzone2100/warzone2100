@@ -29,6 +29,7 @@
 
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piedraw.h"
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
@@ -1316,9 +1317,12 @@ static void drawTiles(iView *player)
 
 	// Calculate shadow mapping cascades
 	glm::vec3 lightInvDir = getTheSun();
-	size_t numShadowCascades = gfx_api::context::get().numDepthPasses();
+	size_t numShadowCascades = std::min<size_t>(gfx_api::context::get().numDepthPasses(), WZ_MAX_SHADOW_CASCADES);
 	std::vector<Cascade> shadowCascades;
-	calculateShadowCascades(player, distance, baseViewMatrix, lightInvDir, numShadowCascades, shadowCascades);
+	if (currShadowMode == ShadowMode::Shadow_Mapping)
+	{
+		calculateShadowCascades(player, distance, baseViewMatrix, lightInvDir, numShadowCascades, shadowCascades);
+	}
 
 	// Incorporate all the view transforms into viewMatrix
 	const glm::mat4 viewMatrix = baseViewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z));
@@ -1447,25 +1451,32 @@ static void drawTiles(iView *player)
 	pie_FinalizeMeshes(currentGameFrame);
 
 	// shadow/depth-mapping passes
-	for (size_t i = 0; i < numShadowCascades; ++i)
+	ShadowCascadesInfo shadowCascadesInfo;
+	shadowCascadesInfo.shadowMapSize = gfx_api::context::get().getDepthPassDimensions(0); // Note: Currently assumes that every depth pass has the same dimensions
+	for (size_t i = 0; i < std::min<size_t>(shadowCascades.size(), WZ_MAX_SHADOW_CASCADES); ++i)
 	{
-		gfx_api::context::get().beginDepthPass(i);
-		if (currShadowMode == ShadowMode::Shadow_Mapping)
+		shadowCascadesInfo.shadowMVPMatrix[i] = getBiasedShadowMapMVPMatrix(shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix);
+		shadowCascadesInfo.shadowCascadeSplit[i] = shadowCascades[i].splitDepth;
+	}
+
+	if (currShadowMode == ShadowMode::Shadow_Mapping)
+	{
+		for (size_t i = 0; i < numShadowCascades; ++i)
 		{
-			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, glm::mat4(1.f), true);
+			gfx_api::context::get().beginDepthPass(i);
+			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, shadowCascadesInfo, true);
+			gfx_api::context::get().endCurrentDepthPass();
 		}
-		gfx_api::context::get().endCurrentDepthPass();
 	}
 	// start main render pass
 
-	const glm::mat4 shadowMVPMatrix = getBiasedShadowMapMVPMatrix(shadowCascades[0].projectionMatrix, shadowCascades[0].viewMatrix); // NOTE: Currently only works with a single depth pass
 
 	gfx_api::context::get().beginSceneRenderPass();
 
 	// now we are about to draw the terrain
 	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
 	pie_SetFogStatus(true);
-	drawTerrain(perspectiveViewMatrix, cameraPos, -getTheSun(), shadowMVPMatrix);
+	drawTerrain(perspectiveViewMatrix, viewMatrix, cameraPos, -getTheSun(), shadowCascadesInfo);
 	wzPerfEnd(PERF_TERRAIN);
 
 	// draw skybox
@@ -1482,7 +1493,7 @@ static void drawTiles(iView *player)
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
-	pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowMVPMatrix, false);
+	pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowCascadesInfo, false);
 	wzPerfEnd(PERF_MODELS);
 
 	if (!gamePaused())

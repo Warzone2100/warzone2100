@@ -36,6 +36,8 @@
 
 #include <glm/glm.hpp>
 
+#include "shadows.h"
+
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -761,6 +763,35 @@ namespace gfx_api
 	using Draw3DShapeAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_COMPONENT, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeNoLightAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_NOLIGHT, DEPTH_CMP_LEQ_WRT_OFF>;
 
+	// Only change once per frame
+	struct Draw3DShapeInstancedGlobalUniforms
+	{
+		glm::mat4 ProjectionMatrix;
+		glm::mat4 ViewMatrix;
+		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+		glm::vec4 sunPos;
+		glm::vec4 sceneColor;
+		glm::vec4 ambient;
+		glm::vec4 diffuse;
+		glm::vec4 specular;
+		glm::vec4 fogColour;
+		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
+		int ShadowMapSize;
+		float fogEnd;
+		float fogBegin;
+		float timeState; // graphicsCycle
+		int fogEnabled;
+	};
+
+	// Only change per mesh
+	struct Draw3DShapeInstancedPerMeshUniforms
+	{
+		int tcmask;
+		int normalMap;
+		int specularMap;
+		int hasTangents;
+	};
+
 	// interleaved vertex data
 	struct Draw3DShapePerInstanceInterleavedData
 	{
@@ -780,8 +811,8 @@ namespace gfx_api
 	template<REND_MODE render_mode, SHADER_MODE shader, DEPTH_MODE depth_mode>
 	using Draw3DShapeInstanced = typename gfx_api::pipeline_state_helper<rasterizer_state<render_mode, depth_mode, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
 	std::tuple<
-	Draw3DShapeGlobalUniforms,
-	Draw3DShapePerMeshUniforms
+	Draw3DShapeInstancedGlobalUniforms,
+	Draw3DShapeInstancedPerMeshUniforms
 	>,
 	std::tuple<
 	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
@@ -979,11 +1010,13 @@ namespace gfx_api
 		PIELIGHT groundWeights; // weights of corresponding ground textures. encoded as rgba floats
 	};
 
+	static_assert(WZ_MAX_SHADOW_CASCADES <= 4, "Packing the ShadowMapCascadeSplits into a vec4 won't work...");
 	struct TerrainCombinedUniforms
 	{
 		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
-		glm::mat4 ShadowMapMVPMatrix;
+		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 		glm::mat4 groundScale; // array of scales for ground textures, encoded in mat4. scale_i = groundScale[i/4][i%4]
 		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos; // in modelSpace
@@ -992,6 +1025,8 @@ namespace gfx_api
 		glm::vec4 diffuseLight;
 		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
+		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
+		int ShadowMapSize;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;

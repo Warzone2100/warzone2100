@@ -1,9 +1,12 @@
 // common parts of terrainDecails.vert and .frag shaders
 
+#define WZ_MAX_SHADOW_CASCADES 3
+
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
+	mat4 ViewMatrix;
 	mat4 ModelUVLightmapMatrix;
-	mat4 ShadowMapMVPMatrix;
+	mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 	mat4 groundScale; // array of scales for ground textures, encoded in mat4. scale_i = groundScale[i/4][i%4]
 	vec4 cameraPos; // in modelSpace
 	vec4 sunPos; // in modelSpace, normalized
@@ -12,13 +15,15 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 diffuseLight;
 	vec4 specularLight;
 	vec4 fogColor;
+	vec4 ShadowMapCascadeSplits;
+	int ShadowMapSize;
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
 	float fogStart;
 	int quality;
 };
 
-// interpolated data. location count = 12
+// interpolated data. location count = 11
 struct FragData {
 	vec2 uvLightmap;
 	vec2 uvGround;
@@ -30,7 +35,6 @@ struct FragData {
 	vec3 groundHalfVec;
 	mat2 decal2groundMat2;
 	// for Shadows
-	vec4 shadowPos;
 	vec3 fragPos;
 	vec3 fragNormal;
 };

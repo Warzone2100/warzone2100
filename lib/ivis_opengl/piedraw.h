@@ -1,7 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2023  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,20 +17,14 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef _pieMatrix_h
-#define _pieMatrix_h
+#pragma once
 
-#include "lib/ivis_opengl/piedef.h"
-#include <glm/fwd.hpp>
+#include "lib/framework/frame.h"
+#include "lib/framework/vector.h"
+#include <glm/mat4x4.hpp>
+#include "pietypes.h"
+#include "shadows.h"
 
-int32_t pie_RotateProjectWithPerspective(const Vector3i *v3d, const glm::mat4 &perspectiveViewMatrix, Vector2i *v2d);
-const glm::mat4& pie_PerspectiveGet();
-const glm::mat4& pie_SkyboxPerspectiveGet();
-const glm::mat4& pie_UIPerspectiveGet();
-glm::mat4 pie_PerspectiveGetConstrained(float zNear, float zFar);
-void pie_SetGeometricOffset(int x, int y);
-void pie_Begin3DScene();
-void pie_BeginInterface();
-float pie_getPerspectiveZFar();
-
-#endif
+void pie_StartMeshes();
+void pie_FinalizeMeshes(uint64_t currentGameFrame);
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const ShadowCascadesInfo& shadowMVPMatrix, bool depthPass);

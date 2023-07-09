@@ -1,30 +1,7 @@
 #version 450
 //#pragma debug(on)
 
-layout(std140, set = 0, binding = 0) uniform globaluniforms
-{
-	mat4 ProjectionMatrix;
-	mat4 ViewMatrix;
-	mat4 ShadowMapMVPMatrix;
-	vec4 lightPosition;
-	vec4 sceneColor;
-	vec4 ambient;
-	vec4 diffuse;
-	vec4 specular;
-	vec4 fogColor;
-	float fogEnd;
-	float fogStart;
-	float graphicsCycle;
-	int fogEnabled;
-};
-
-layout(std140, set = 1, binding = 0) uniform meshuniforms
-{
-	int tcmask;
-	int normalmap;
-	int specularmap;
-	int hasTangents;
-};
+#include "tcmask_instanced.glsl"
 
 layout(location = 0) in vec4 vertex;
 layout(location = 1) in vec4 vertexTexCoordAndTexAnim;

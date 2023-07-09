@@ -13,7 +13,6 @@
 
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
-uniform mat4 ShadowMapMVPMatrix;
 uniform int hasTangents; // whether tangents were calculated for model
 uniform vec4 lightPosition;
 
@@ -48,7 +47,6 @@ VERTEX_OUTPUT vec4 teamcolour;
 VERTEX_OUTPUT vec4 packed_ecmState_alphaTest;
 
 // for Shadows
-VERTEX_OUTPUT vec4 shadowPos;
 VERTEX_OUTPUT vec3 fragPos;
 VERTEX_OUTPUT vec3 fragNormal;
 
@@ -99,7 +97,6 @@ void main()
 	}
 
 	vec4 positionModelSpace = instanceModelMatrix * position;
-	shadowPos = ShadowMapMVPMatrix * vec4(positionModelSpace.xyz, 1.f);
 	fragPos = positionModelSpace.xyz;
 	fragNormal = vertexNormal;
 

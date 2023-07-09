@@ -14,7 +14,10 @@
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #define WZ_MIP_LOAD_BIAS 0.f
 #define WZ_EXTRA_SHADOW_TAPS 4
+#define WZ_SHADOW_CASCADES_COUNT 3
 //
+
+#define WZ_MAX_SHADOW_CASCADES 3
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -41,7 +44,12 @@ uniform sampler2DArray decalSpecular;
 uniform sampler2DArray decalHeight;
 
 // shadow map
-uniform sampler2DShadow shadowMap;
+uniform sampler2DArrayShadow shadowMap;
+
+uniform mat4 ViewMatrix;
+uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+uniform vec4 ShadowMapCascadeSplits;
+uniform int ShadowMapSize;
 
 // sun light colors/intensity:
 uniform vec4 emissiveLight;
@@ -69,7 +77,6 @@ in vec3 groundLightDir;
 in vec3 groundHalfVec;
 in mat2 decal2groundMat2;
 // For Shadows
-in vec4 shadowPos;
 in vec3 fragPos;
 in vec3 fragNormal;
 
@@ -82,7 +89,41 @@ out vec4 FragColor;
 float getShadowVisibility()
 {
 #if WZ_EXTRA_SHADOW_TAPS > 0
-	vec4 pos = shadowPos / shadowPos.w;
+
+	vec4 fragPosViewSpace = ViewMatrix * vec4(fragPos, 1.0);
+	float depthValue = abs(fragPosViewSpace.z);
+
+	int cascadeIndex = 0;
+//	for (int i = 0; i < WZ_SHADOW_CASCADES_COUNT - 1; ++i)
+//	{
+//		if (depthValue >= ShadowMapCascadeSplits[i])
+//		{
+//			cascadeIndex = i + 1;
+//		}
+//	}
+	// unrolled loop, using vec4 swizzles
+#if WZ_SHADOW_CASCADES_COUNT > 1
+	if (depthValue >= ShadowMapCascadeSplits.x)
+	{
+		cascadeIndex = 1;
+	}
+#endif
+#if WZ_SHADOW_CASCADES_COUNT > 2
+	if (depthValue >= ShadowMapCascadeSplits.y)
+	{
+		cascadeIndex = 2;
+	}
+#endif
+#if WZ_SHADOW_CASCADES_COUNT > 3
+	if (depthValue >= ShadowMapCascadeSplits.z)
+	{
+		cascadeIndex = 3;
+	}
+#endif
+
+	vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(fragPos, 1.0);
+	vec3 pos = shadowPos.xyz / shadowPos.w;
+
 	if (pos.z > 1.0f)
 	{
 		return 1.0;
@@ -93,19 +134,19 @@ float getShadowVisibility()
 //	float bias = max(0.0002 * (1.0 - dot(normal, lightDir)), 0.0002);
 	float bias = 0.0001f;
 
-	float visibility = texture( shadowMap, vec3(pos.xy, (pos.z+bias)) );
+	float visibility = texture( shadowMap, vec4(pos.xy, cascadeIndex, (pos.z+bias)) );
 
 	// PCF
 	const float edgeVal = 0.5+float((WZ_EXTRA_SHADOW_TAPS-1)/2);
 	const float startVal = -edgeVal;
 	const float endVal = edgeVal + 0.5;
-	const float texelIncrement = 1.0/float(4096);
+	float texelIncrement = 1.0/float(ShadowMapSize);
 	const float visibilityIncrement = 0.1; //0.5 / WZ_EXTRA_SHADOW_TAPS;
 	for (float y=startVal; y<endVal; y+=1.0)
 	{
 		for (float x=startVal; x<endVal; x+=1.0)
 		{
-			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec3(pos.xy + vec2(x*texelIncrement, y*texelIncrement), (pos.z+bias)) ));
+			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec4(pos.xy + vec2(x*texelIncrement, y*texelIncrement), cascadeIndex, (pos.z+bias)) ));
 		}
 	}
 

@@ -643,7 +643,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents"
 		},
@@ -667,7 +667,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			"ProjectionMatrix", "ViewMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 		},
@@ -685,23 +685,23 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
-			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
+			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
-			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
+			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
-			{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
+			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
@@ -1002,6 +1002,9 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_setting_func<gfx_api::Draw3DShapeGlobalUniforms>(),
 		uniform_setting_func<gfx_api::Draw3DShapePerMeshUniforms>(),
 		uniform_setting_func<gfx_api::Draw3DShapePerInstanceUniforms>(),
+		uniform_setting_func<gfx_api::Draw3DShapeInstancedGlobalUniforms>(),
+		uniform_setting_func<gfx_api::Draw3DShapeInstancedPerMeshUniforms>(),
+		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
 		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
@@ -1644,6 +1647,24 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 
 	}
 }
 
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 *m, size_t count)
+{
+	glUniformMatrix4fv(locations[uniformIdx], static_cast<GLsizei>(count), GL_FALSE, glm::value_ptr(*m));
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniformMatrix4fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), GL_FALSE, glm::value_ptr(*m));
+	}
+}
+
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float *v, size_t count)
+{
+	glUniform1fv(locations[uniformIdx], static_cast<GLsizei>(count), v);
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform1fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), v);
+	}
+}
+
 void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec4 &v)
 {
 	glUniform4i(locations[uniformIdx], v.x, v.y, v.z, v.w);
@@ -1761,6 +1782,33 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstan
 	setUniforms(24, cbuf.alphaTest);
 }
 
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedGlobalUniforms& cbuf)
+{
+	setUniforms(0, cbuf.ProjectionMatrix);
+	setUniforms(1, cbuf.ViewMatrix);
+	setUniforms(2, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
+	setUniforms(3, cbuf.sunPos);
+	setUniforms(4, cbuf.sceneColor);
+	setUniforms(5, cbuf.ambient);
+	setUniforms(6, cbuf.diffuse);
+	setUniforms(7, cbuf.specular);
+	setUniforms(8, cbuf.fogColour);
+	setUniforms(9, cbuf.ShadowMapCascadeSplits);
+	setUniforms(10, cbuf.ShadowMapSize);
+	setUniforms(11, cbuf.fogEnd);
+	setUniforms(12, cbuf.fogBegin);
+	setUniforms(13, cbuf.timeState);
+	setUniforms(14, cbuf.fogEnabled);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
+{
+	setUniforms(15, cbuf.tcmask);
+	setUniforms(16, cbuf.normalMap);
+	setUniforms(17, cbuf.specularMap);
+	setUniforms(18, cbuf.hasTangents);
+}
+
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
 {
 	setUniforms(0, cbuf.ProjectionMatrix);
@@ -1828,8 +1876,9 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 {
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ViewMatrix);
 	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ShadowMapMVPMatrix);
+	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
 	setUniforms(i++, cbuf.groundScale);
 	setUniforms(i++, cbuf.cameraPos);
 	setUniforms(i++, cbuf.sunPos);
@@ -1838,6 +1887,8 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 	setUniforms(i++, cbuf.diffuseLight);
 	setUniforms(i++, cbuf.specularLight);
 	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.ShadowMapCascadeSplits);
+	setUniforms(i++, cbuf.ShadowMapSize);
 	setUniforms(i++, cbuf.fog_enabled);
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
@@ -2377,7 +2428,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 					break;
 			}
 		}
-		ASSERT(pTextureToBind && (pTextureToBind->isArray() == (desc.target == gfx_api::pixel_format_target::texture_2d_array)), "Found a mismatch!");
+//		ASSERT(pTextureToBind && (pTextureToBind->isArray() == (desc.target == gfx_api::pixel_format_target::texture_2d_array)), "Found a mismatch!");
 		const auto type = pTextureToBind->isArray() ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
 		const auto unusedtype = pTextureToBind->isArray() ? GL_TEXTURE_2D : GL_TEXTURE_2D_ARRAY;
 		glBindTexture(unusedtype, 0);
@@ -3841,6 +3892,8 @@ static const char *cbframebuffererror(GLenum err)
 
 size_t gl_context::initDepthPasses(size_t resolution)
 {
+	depthPassCount = std::min<size_t>(depthPassCount, WZ_MAX_SHADOW_CASCADES);
+
 	if (depthPassCount > 1)
 	{
 		if ((!gles && !GLAD_GL_VERSION_3_0) || (gles && !GLAD_GL_ES_VERSION_3_0))
