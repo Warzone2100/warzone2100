@@ -64,7 +64,7 @@ void calculateShadowCascades(const iView *player, float terrainDistance, const g
 
 	float pitch = UNDEG(-player->r.x);
 
-	float adjustedZFar = (pow((1.57f - pitch) / 1.57f, 2.f) * 3500.f) + 1500.f + terrainDistance;
+	float adjustedZFar = (pow((1.57f - pitch) / 1.57f, 0.9f) * 4000.f) + 2000.f + terrainDistance;
 
 	std::vector<float> cascadeSplits(SHADOW_MAP_CASCADE_COUNT, 0.f);
 
@@ -141,7 +141,7 @@ void calculateShadowCascades(const iView *player, float terrainDistance, const g
 		glm::mat4 lightProjectionMatrix = glm::ortho(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, minExtents.z, maxExtents.z) * glm::scale(glm::vec3(1.f, 1.f, -1.f));
 
 		// Store split distance and matrix in cascade
-		output[iSplit].splitDepth = (nearClip + splitDist * clipRange);
+		output[iSplit].splitDepth = (-nearClip + splitDist * clipRange);
 		output[iSplit].viewMatrix = lightViewMatrix;
 		output[iSplit].projectionMatrix = lightProjectionMatrix;
 
