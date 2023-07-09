@@ -30,6 +30,12 @@ layout(location = 0) out vec4 FragColor;
 
 float getShadowVisibility()
 {
+if (WZ_EXTRA_SHADOW_TAPS == 0)
+{
+	return 1.0;
+}
+else
+{
 	vec4 pos = frag.shadowPos / frag.shadowPos.w;
 	if (pos.z > 1.0f)
 	{
@@ -57,6 +63,7 @@ float getShadowVisibility()
 	visibility = clamp(visibility, 0.3, 1.0);
 
 	return visibility;
+}
 }
 
 vec3 getGroundUv(int i) {
