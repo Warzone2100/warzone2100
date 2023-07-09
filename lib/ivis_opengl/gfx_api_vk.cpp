@@ -1701,11 +1701,6 @@ VkPSO::VkPSO(vk::Device _dev,
 	if (shaderInfo.specializationConstant_1_extraShadowTaps)
 	{
 		uint32_t extraShadowTaps = root->extraShadowTaps;
-		if (extraShadowTaps == 0)
-		{
-			// This may cause a crash! - use 1 instead for now
-			extraShadowTaps = 1;
-		}
 		size_t copyIdx = specializationConstantsDataBuffer.size();
 		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + sizeof(uint32_t));
 		memcpy(&specializationConstantsDataBuffer[copyIdx], &extraShadowTaps, sizeof(uint32_t));
