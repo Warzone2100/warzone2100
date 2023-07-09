@@ -1169,11 +1169,11 @@ void gl_pipeline_state_object::bind()
 
 	switch (desc.cull)
 	{
-		case gfx_api::cull_mode::shadow_mapping:
 		case gfx_api::cull_mode::back:
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_FRONT);
 			break;
+		case gfx_api::cull_mode::shadow_mapping:
 		case gfx_api::cull_mode::front:
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);

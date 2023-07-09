@@ -1358,11 +1358,11 @@ vk::PipelineRasterizationStateCreateInfo VkPSO::to_vk(const bool& offset, const 
 	}
 	switch (cull)
 	{
+	case gfx_api::cull_mode::shadow_mapping:
 	case gfx_api::cull_mode::back:
 		result = result.setCullMode(vk::CullModeFlagBits::eBack)
 			.setFrontFace(vk::FrontFace::eClockwise);
 		break;
-	case gfx_api::cull_mode::shadow_mapping:
 	case gfx_api::cull_mode::front:
 		result = result.setCullMode(vk::CullModeFlagBits::eFront)
 			.setFrontFace(vk::FrontFace::eClockwise);
