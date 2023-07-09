@@ -730,6 +730,11 @@ static bool fetchProgramPath(char *const output_programPath, size_t const bufSiz
 	 * output in output_programPath.
 	 */
 	whichProgramStream = popen(whichProgramCommand, "r");
+	if(!whichProgramStream)
+	{
+		debug(LOG_WARNING, "failed to popen which");
+		return false;
+	}
 	bytesRead = fread(output_programPath, 1, bufSize, whichProgramStream);
 	pclose(whichProgramStream);
 
