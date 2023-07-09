@@ -137,8 +137,8 @@ void calculateShadowCascades(const iView *player, float terrainDistance, const g
 		glm::vec3 minExtents = -maxExtents;
 
 		glm::vec3 lightDir = normalize(lightInvDir); //normalize(-lightPos);
-		glm::mat4 lightViewMatrix = glm::lookAt(frustumCenter - lightDir * -minExtents.z, frustumCenter, glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::mat4 lightProjectionMatrix = glm::ortho(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, 300.0f, maxExtents.z - minExtents.z) * glm::translate(glm::vec3(0.f, 0.f, -1.f * 500.f));
+		glm::mat4 lightViewMatrix = glm::lookAt(frustumCenter + lightDir, frustumCenter, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 lightProjectionMatrix = glm::ortho(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, minExtents.z, maxExtents.z) * glm::scale(glm::vec3(1.f, 1.f, -1.f));
 
 		// Store split distance and matrix in cascade
 		output[iSplit].splitDepth = (nearClip + splitDist * clipRange) * -1.0f;
