@@ -231,7 +231,15 @@ function checkMissileSilos()
 
 	if (capturedSilos)
 	{
-		return true;
+		const Y_SCROLL_LIMIT = 140; // About the same number as the one in the Gamma 8 script.
+		let safeToWinObjs = enumArea(0, Y_SCROLL_LIMIT, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+			((obj.type === DROID && obj.droidType === DROID_CONSTRUCT) || (obj.type === STRUCTURE && obj.stattype === FACTORY && obj.status === BUILT))
+		));
+
+		if (safeToWinObjs.length > 0)
+		{
+			return true;
+		}
 	}
 
 	var siloArea = camMakePos(getObject("missileSilos"));
@@ -246,7 +254,7 @@ function checkMissileSilos()
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Secure a missile silo"));
+	camSetExtraObjectiveMessage(_("Build a forward base at the silos"));
 
 	var siloZone = getObject("missileSilos");
 	var startpos = getObject("startPosition");
