@@ -4258,6 +4258,47 @@ bool VkRoot::createSwapchain()
 	return true;
 }
 
+static uint32_t getVKSuggestedDefaultDepthBufferResolution(const vk::PhysicalDeviceMemoryProperties& memprops)
+{
+	optional<uint32_t> largestDeviceLocalMemoryHeap;
+	for (uint32_t i = 0; i < memprops.memoryTypeCount; ++i)
+	{
+		if ((memprops.memoryTypes[i].propertyFlags & vk::MemoryPropertyFlagBits::eDeviceLocal) == vk::MemoryPropertyFlagBits::eDeviceLocal)
+		{
+			auto currHeapIndex = memprops.memoryTypes[i].heapIndex;
+			if (currHeapIndex >= memprops.memoryHeapCount)
+			{
+				continue;
+			}
+			if (largestDeviceLocalMemoryHeap.has_value())
+			{
+				if (currHeapIndex != largestDeviceLocalMemoryHeap.value()
+					&& (memprops.memoryHeaps[currHeapIndex].size > memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size))
+				{
+					largestDeviceLocalMemoryHeap = currHeapIndex;
+				}
+			}
+			else
+			{
+				largestDeviceLocalMemoryHeap = currHeapIndex;
+			}
+		}
+	}
+
+	ASSERT_OR_RETURN(2048, largestDeviceLocalMemoryHeap.has_value(), "Couldn't find the largest device local memory heap?");
+
+	auto largestDeviceLocalMemoryHeapSize = memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size;
+
+	if ((largestDeviceLocalMemoryHeapSize / 1048576) >= 4096) // If >= 4GB device-local memory
+	{
+		return 4096;
+	}
+	else
+	{
+		return 2048;
+	}
+}
+
 bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion) const
 {
 	ASSERT(inst, "Instance is null");
@@ -4575,7 +4616,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	if (depthMapSize == 0)
 	{
-		depthMapSize = 2048; // Future TODO: Could try various heuristics to determine whether the default depthMapSize should be 2048 or 4096 (perhaps based on available graphics memory, if it's a dedicated GPU, etc)
+		depthMapSize = getVKSuggestedDefaultDepthBufferResolution(memprops);
 	}
 
 	createDepthPasses(depthBufferFormat); // TODO: Handle failures?

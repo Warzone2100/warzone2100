@@ -2976,7 +2976,7 @@ optional<uint32_t> gl_context::getSuggestedDefaultDepthBufferResolution() const
 		GLint total_graphics_mem_kb = 0;
 		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_graphics_mem_kb);
 
-		if ((total_graphics_mem_kb / 1024) > 4096) // If > 4GB graphics memory
+		if ((total_graphics_mem_kb / 1024) >= 4096) // If >= 4GB graphics memory
 		{
 			return 4096;
 		}
@@ -2996,7 +2996,7 @@ optional<uint32_t> gl_context::getSuggestedDefaultDepthBufferResolution() const
 		}
 		uint32_t currentFreeTextureMemory_mb = static_cast<uint32_t>(stats_kb[0] / 1024);
 
-		if (currentFreeTextureMemory_mb > 4096) // If > 4 GB free texture memory
+		if (currentFreeTextureMemory_mb >= 4096) // If >= 4 GB free texture memory
 		{
 			return 4096;
 		}
