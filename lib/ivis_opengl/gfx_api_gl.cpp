@@ -2499,7 +2499,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 					break;
 			}
 		}
-//		ASSERT(pTextureToBind && (pTextureToBind->isArray() == (desc.target == gfx_api::pixel_format_target::texture_2d_array)), "Found a mismatch!");
+		ASSERT(pTextureToBind && (pTextureToBind->isArray() == (desc.target == gfx_api::pixel_format_target::texture_2d_array || desc.target == gfx_api::pixel_format_target::depth_map)), "Found a mismatch!");
 		const auto type = pTextureToBind->isArray() ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D;
 		const auto unusedtype = pTextureToBind->isArray() ? GL_TEXTURE_2D : GL_TEXTURE_2D_ARRAY;
 		glBindTexture(unusedtype, 0);
