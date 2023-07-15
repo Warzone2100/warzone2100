@@ -955,6 +955,129 @@ static std::shared_ptr<WIDGET> makeTerrainQualityDropdown()
 	return Margin(0, 10).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeShadowMapResolutionDropdown()
+{
+	std::vector<std::tuple<WzString, uint32_t>> dropDownChoices = {
+		{WzString::fromUtf8(_("Normal")) + " (2048)", 2048},
+		{WzString::fromUtf8(_("High")) + " (4096)", 4096}
+	};
+
+	// If current value is not one of the presets in dropDownChoices, add a "Custom" entry
+	size_t currentSettingIdx = 0;
+	uint32_t currValue = pie_getShadowMapResolution();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, uint32_t>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+	else
+	{
+		dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %" PRIu32 ")", currValue)), currValue});
+		currentSettingIdx = dropDownChoices.size() - 1;
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_SHADOWMAP_RESOLUTION_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const auto paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		bool supportedShadowMapResolution = pie_supportsShadowMapping().value_or(false);
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), supportedShadowMapResolution ? 0 : WBUT_DISABLE);
+		if (!supportedShadowMapResolution)
+		{
+			item->setTip(_("Shadow mapping not available on this system."));
+		}
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+		ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+		auto newResolution = std::get<1>(dropDownChoices.at(newIndex));
+		if (!pie_supportsShadowMapping().value_or(false))
+		{
+			return false;
+		}
+		if (!pie_setShadowMapResolution(newResolution))
+		{
+			debug(LOG_ERROR, "Failed to set map resolution: %" PRIu32, newResolution);
+			return false;
+		}
+		war_setShadowMapResolution(newResolution);
+		return true;
+	});
+
+	return Margin(0, 10).wrap(dropdown);
+}
+
+static std::shared_ptr<WIDGET> makeShadowFilterSizeDropdown()
+{
+	std::vector<std::tuple<WzString, uint32_t>> dropDownChoices = {
+		{WzString::fromUtf8(_("Low")), 3},
+		{WzString::fromUtf8(_("High")), 5},
+		{WzString::fromUtf8(_("Ultra")), 7}
+	};
+
+	// If current value (from config) is not one of the presets in dropDownChoices, add a "Custom" entry
+	size_t currentSettingIdx = 0;
+	uint32_t currValue = gfx_api::context::get().getShadowConstants().shadowFilterSize;
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, uint32_t>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+	else
+	{
+		dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+		currentSettingIdx = dropDownChoices.size() - 1;
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_SHADOW_FILTER_SIZE_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const auto paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		bool supportedFilterSize = pie_supportsShadowMapping().value_or(false);
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), supportedFilterSize ? 0 : WBUT_DISABLE);
+		if (!supportedFilterSize)
+		{
+			item->setTip(_("Shadow filtering not available on this system."));
+		}
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+		ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+		auto newFilterSize = std::get<1>(dropDownChoices.at(newIndex));
+		if (!pie_supportsShadowMapping().value_or(false))
+		{
+			return false;
+		}
+		auto shadowConstants = gfx_api::context::get().getShadowConstants();
+		shadowConstants.shadowFilterSize = newFilterSize;
+		if (!gfx_api::context::get().setShadowConstants(shadowConstants))
+		{
+			debug(LOG_ERROR, "Failed to set shadow filter size: %" PRIu32, newFilterSize);
+			return false;
+		}
+		war_setShadowFilterSize(newFilterSize);
+		return true;
+	});
+
+	return Margin(0, 10).wrap(dropdown);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
 void startGraphicsOptionsMenu()
@@ -996,6 +1119,21 @@ void startGraphicsOptionsMenu()
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SHADOWS, _("Shadows"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SHADOWS_R, graphicsOptionsShadowsString(), WBUT_SECONDARY)));
 	row.start++;
+
+	bool bShadowMappingSupported = pie_supportsShadowMapping().value_or(false);
+
+	if (bShadowMappingSupported)
+	{
+		// shadow resolution
+		grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SHADOWMAP_RESOLUTION, _("Shadow Resolution"), (!bShadowMappingSupported) ? WBUT_DISABLE : 0)));
+		grid->place({1, 1, false}, row, makeShadowMapResolutionDropdown());
+		row.start++;
+
+		// shadow filtering
+		grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SHADOW_FILTER_SIZE, _("Shadow Filtering"), (!bShadowMappingSupported) ? WBUT_DISABLE : 0)));
+		grid->place({1, 1, false}, row, makeShadowFilterSizeDropdown());
+		row.start++;
+	}
 
 	// fog
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FOG, _("Fog"), WBUT_SECONDARY)));

@@ -2053,7 +2053,7 @@ int realmain(int argc, char *argv[])
 	{
 		gfxbackend = war_getGfxBackend();
 	}
-	if (!wzMainScreenSetup(gfxbackend, war_getAntialiasing(), war_getWindowMode(), war_GetVsync(), war_getLODDistanceBiasPercentage()))
+	if (!wzMainScreenSetup(gfxbackend, war_getAntialiasing(), war_getWindowMode(), war_GetVsync(), war_getLODDistanceBiasPercentage(), war_getShadowMapResolution()))
 	{
 		saveConfig(); // ensure any setting changes are persisted on failure
 		return EXIT_FAILURE;

@@ -390,7 +390,7 @@ bool null_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)>
 	return false;
 }
 
-bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias)
+bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution)
 {
 	// obtain backend_Null_Impl from impl
 	backend_impl = impl.createNullBackendImpl();
@@ -486,7 +486,12 @@ size_t null_context::maxFramesInFlight() const
 	return 1;
 }
 
-bool null_context::setExtraShadowTaps(uint32_t val)
+gfx_api::shadow_constants null_context::getShadowConstants()
+{
+	return gfx_api::shadow_constants();
+}
+
+bool null_context::setShadowConstants(gfx_api::shadow_constants newValues)
 {
 	return true;
 }

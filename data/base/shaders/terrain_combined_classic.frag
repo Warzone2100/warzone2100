@@ -13,7 +13,12 @@
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #define WZ_MIP_LOAD_BIAS 0.f
+#define WZ_SHADOW_MODE 1
+#define WZ_SHADOW_FILTER_SIZE 3
+#define WZ_SHADOW_CASCADES_COUNT 3
 //
+
+#define WZ_MAX_SHADOW_CASCADES 3
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -40,13 +45,20 @@ uniform sampler2DArray decalSpecular;
 uniform sampler2DArray decalHeight;
 
 // shadow map
-uniform sampler2D shadowMap;
+uniform sampler2DArrayShadow shadowMap;
+
+uniform mat4 ViewMatrix;
+uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+uniform vec4 ShadowMapCascadeSplits;
+uniform int ShadowMapSize;
 
 // sun light colors/intensity:
 uniform vec4 emissiveLight;
 uniform vec4 ambientLight;
 uniform vec4 diffuseLight;
 uniform vec4 specularLight;
+
+uniform vec4 sunPos; // in modelSpace, normalized
 
 // fog
 uniform int fogEnabled; // whether fog is enabled
@@ -66,7 +78,8 @@ in vec3 groundLightDir;
 in vec3 groundHalfVec;
 in mat2 decal2groundMat2;
 // For Shadows
-in vec4 shadowPos;
+in vec3 fragPos;
+in vec3 fragNormal;
 
 #ifdef NEWGL
 out vec4 FragColor;
@@ -74,13 +87,10 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
+#include "terrain_combined_frag.glsl"
+
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
-}
-
-float getShadowVisibility() {
-	float visibility = 1.0;
-	return visibility;
 }
 
 vec4 main_classic() {

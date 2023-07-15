@@ -2971,7 +2971,7 @@ bool wzMainScreenSetup_VerifyWindow()
 	return true;
 }
 
-bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, int lodDistanceBiasPercentage, bool highDPI)
+bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, int lodDistanceBiasPercentage, uint32_t depthMapResolution, bool highDPI)
 {
 	// Output linked SDL version
 	char buf[512];
@@ -3119,7 +3119,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		lodDistanceBias = static_cast<float>(lodDistanceBiasPercentage) / 100.f;
 	}
 
-	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, sdl_impl_config), antialiasing, vsyncMode, lodDistanceBias, gfxapi_backend))
+	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, sdl_impl_config), antialiasing, vsyncMode, lodDistanceBias, depthMapResolution, gfxapi_backend))
 	{
 		// Failed to initialize desired backend / renderer settings
 		if (backend.has_value())
@@ -3147,6 +3147,11 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	if (backend.has_value())
 	{
 		wzMainScreenSetup_VerifyWindow();
+
+		// initialize gfx context shadow constants
+		auto shadowConstants = gfx_api::context::get().getShadowConstants();
+		shadowConstants.shadowFilterSize = war_getShadowFilterSize();
+		gfx_api::context::get().setShadowConstants(shadowConstants);
 	}
 
 #if defined(WZ_OS_WIN)

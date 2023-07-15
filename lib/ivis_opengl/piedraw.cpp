@@ -102,11 +102,30 @@ void pie_Lighting0(LIGHTING_TYPE entry, const float value[4])
 	lighting0[entry][3] = value[3];
 }
 
+static inline bool isShadowMappingEnabled()
+{
+	return (shadows && shadowMode == ShadowMode::Shadow_Mapping);
+}
+
 static void refreshShadowShaders()
 {
 	if (gfx_api::context::isInitialized())
 	{
-		gfx_api::context::get().setExtraShadowTaps((shadows && shadowMode == ShadowMode::Shadow_Mapping) ? /* TODO: Get this value from settings */ 2 : 0);
+		auto shadowConstants = gfx_api::context::get().getShadowConstants();
+		bool bShadowMappingEnabled = isShadowMappingEnabled();
+		if (bShadowMappingEnabled)
+		{
+			shadowConstants.shadowMode = 1; // Possible future TODO: Could get this from the config file to allow testing alternative filter methods
+		}
+		else
+		{
+			shadowConstants.shadowMode = 0; // Disable shader-drawn / shadow-mapping shadows
+		}
+		// Preserve existing shadowFilterSize and shadowCascadesCount
+		gfx_api::context::get().setShadowConstants(shadowConstants);
+
+		// Trigger depth pass buffer free / rebuild if needed
+		gfx_api::context::get().setDepthPassProperties((bShadowMappingEnabled) ? WZ_MAX_SHADOW_CASCADES : 0, gfx_api::context::get().getDepthPassDimensions(0));
 	}
 }
 
@@ -116,14 +135,57 @@ void pie_setShadows(bool drawShadows)
 	refreshShadowShaders();
 }
 
-void pie_setShadowMode(ShadowMode mode)
+optional<bool> pie_supportsShadowMapping()
+{
+	if (!gfx_api::context::isInitialized())
+	{
+		// can't determine support yet
+		return nullopt;
+	}
+
+	// double-check that current system supports instanced rendering - *only* if instanced rendering is possible does WZ support shadow mapping
+	return gfx_api::context::get().supportsInstancedRendering();
+}
+
+bool pie_setShadowMapResolution(uint32_t resolution)
+{
+	ASSERT_OR_RETURN(false, resolution && !(resolution & (resolution - 1)), "Expecting power-of-2 resolution, received: %" PRIu32, resolution);
+	bool bShadowMappingEnabled = isShadowMappingEnabled();
+	return gfx_api::context::get().setDepthPassProperties((bShadowMappingEnabled) ? WZ_MAX_SHADOW_CASCADES : 0, resolution);
+}
+
+uint32_t pie_getShadowMapResolution()
+{
+	return gfx_api::context::get().getDepthPassDimensions(0);
+}
+
+bool pie_setShadowMode(ShadowMode mode)
 {
 	if (mode == shadowMode)
 	{
-		return;
+		return true;
+	}
+	bool successfulChangeToInputMode = true;
+	if (mode == ShadowMode::Shadow_Mapping)
+	{
+		if (gfx_api::context::isInitialized())
+		{
+			// double-check that current system supports instanced rendering - *only* if instanced rendering is possible does WZ support shadow mapping
+			if (!pie_supportsShadowMapping().value_or(false))
+			{
+				// for now, only the fallback stencil shadows are supported
+				mode = ShadowMode::Fallback_Stencil_Shadows;
+				successfulChangeToInputMode = false;
+			}
+		}
+		else
+		{
+			// TODO: Need to queue a check once the gfx backend is initialized
+		}
 	}
 	shadowMode = mode;
 	refreshShadowShaders();
+	return successfulChangeToInputMode;
 }
 
 ShadowMode pie_getShadowMode()
