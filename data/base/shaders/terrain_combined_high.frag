@@ -103,10 +103,10 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	float lambertTerm = max(dot(b.N, L), 0.0); // diffuse lighting
 	// Gaussian specular term computation
 	vec3 H = normalize(halfVec);
-	float exponent = acos(dot(H, b.N)) / b.gloss*2 + 0.001;
+	float exponent = acos(dot(H, b.N)) / 0.33;
 	float gaussianTerm = exp(-(exponent * exponent));
 
-	vec4 res = b.color*(ambientLight + diffuseLight*lambertTerm) + b.gloss*specularLight*gaussianTerm;
+	vec4 res = b.color*(ambientLight + diffuseLight*lambertTerm) + b.gloss*b.gloss*specularLight*gaussianTerm*lambertTerm;
 
 	return vec4(res.rgb, b.color.a);
 }
