@@ -236,6 +236,7 @@ struct perFrameResources_t
 	std::vector<WZ_vk::UniqueImageView> image_view_to_delete;
 	std::vector<VmaAllocation> vmamemory_to_free;
 	std::vector<VkPSO*> pso_to_delete;
+	std::vector<vk::Framebuffer> fbo_to_delete;
 
 	BlockBufferAllocator stagingBufferAllocator;
 	BlockBufferAllocator streamedVertexBufferAllocator;
@@ -369,7 +370,7 @@ struct VkPSO final
 	std::vector<vk::Sampler> samplers;
 
 	std::shared_ptr<VkhRenderPassCompat> renderpass_compat;
-	bool hasSpecializationConstant_ExtraShadowTaps = false;
+	bool hasSpecializationConstant_ShadowConstants = false;
 
 private:
 	// Read shader into text buffer
@@ -600,7 +601,7 @@ struct VkRoot final : gfx_api::context
 	VkhInfo debugInfo;
 	gfx_api::context::swap_interval_mode swapMode = gfx_api::context::swap_interval_mode::vsync;
 	optional<float> mipLodBias;
-	uint32_t extraShadowTaps = 4;
+	gfx_api::shadow_constants shadowConstants;
 
 	std::vector<VkExtensionProperties> supportedInstanceExtensionProperties;
 	std::vector<const char*> instanceExtensions;
@@ -681,7 +682,7 @@ struct VkRoot final : gfx_api::context
 	vk::Format depthBufferFormat = vk::Format::eUndefined;
 	uint32_t depthMapSize = 4096;
 	VkDepthMapImage* pDepthMapImage = nullptr;
-	std::vector<vk::ImageView> depthMapCascadeView;
+	std::vector<WZ_vk::UniqueImageView> depthMapCascadeView;
 
 	// scene render pass
 	vk::Format sceneImageFormat = vk::Format::eUndefined;
@@ -696,6 +697,7 @@ struct VkRoot final : gfx_api::context
 	// default textures
 	VkTexture* pDefaultTexture = nullptr;
 	VkTextureArray* pDefaultArrayTexture = nullptr;
+	VkDepthMapImage* pDefaultDepthMapTexture = nullptr;
 
 	// Debug_Utils
 	PFN_vkCreateDebugUtilsMessengerEXT CreateDebugUtilsMessenger = nullptr;
@@ -778,6 +780,7 @@ private:
 
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
 	void createDepthPasses(vk::Format depthFormat);
+	void createDepthPassImagesAndFBOs(vk::Format depthFormat);
 	void createSceneRenderpass(vk::Format sceneFormat, vk::Format depthFormat);
 	void destroySceneRenderpass();
 	void setupSwapchainImages();
@@ -801,6 +804,7 @@ public:
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
 
 	virtual size_t numDepthPasses() override;
+	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual void beginDepthPass(size_t idx) override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual void endCurrentDepthPass() override;
@@ -826,6 +830,7 @@ private:
 	AcquireNextSwapchainImageResult acquireNextSwapchainImage();
 
 	bool handleSurfaceLost();
+	void waitForAllIdle();
 	void destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain);
 	bool createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason);
 
@@ -855,13 +860,14 @@ public:
 	virtual bool supports2DTextureArrays() const override;
 	virtual bool supportsIntVertexAttributes() const override;
 	virtual size_t maxFramesInFlight() const override;
-	virtual bool setExtraShadowTaps(uint32_t val) override;
+	virtual gfx_api::shadow_constants getShadowConstants() override;
+	virtual bool setShadowConstants(gfx_api::shadow_constants values) override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;
 	virtual void draw_elements_instanced(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type& primitive, const gfx_api::index_type& index, std::size_t instance_count) override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	void initPixelFormatsSupport();
 	gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport(gfx_api::pixel_format format) const;
 	std::string calculateFormattedRendererInfoString() const;

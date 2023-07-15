@@ -85,6 +85,10 @@ struct WARZONE_GLOBALS
 	int fullscreenModeScreen = -1;
 	int toggleFullscreenMode = 0; // 0 = the backend default
 	unsigned int cursorScale = 100;
+	// shadow mapping settings
+	uint32_t shadowFilteringMode = 1;
+	uint32_t shadowFilterSize = 5;
+	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -607,3 +611,37 @@ int war_getToggleFullscreenMode()
 {
 	return warGlobs.toggleFullscreenMode;
 }
+
+uint32_t war_getShadowFilterSize()
+{
+	return warGlobs.shadowFilterSize;
+}
+
+void war_setShadowFilterSize(uint32_t filterSize)
+{
+	if (filterSize > 7)
+	{
+		debug(LOG_INFO, "Shadow filter size %" PRIu32 " may not have the desired effect", filterSize);
+	}
+	warGlobs.shadowFilterSize = filterSize;
+}
+
+uint32_t war_getShadowMapResolution()
+{
+	return warGlobs.shadowMapResolution;
+}
+
+void war_setShadowMapResolution(uint32_t resolution)
+{
+	if (resolution > 0 && ((resolution & (resolution - 1)) != 0))
+	{
+		debug(LOG_ERROR, "Shadow map resolution %" PRIu32 " is unsupported: must be a power of 2", resolution);
+		return;
+	}
+	if (resolution < 2048 || resolution > 4096)
+	{
+		debug(LOG_INFO, "Shadow map resolution %" PRIu32 " may not have the desired effect", resolution);
+	}
+	warGlobs.shadowMapResolution = resolution;
+}
+

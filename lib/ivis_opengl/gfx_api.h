@@ -317,6 +317,20 @@ namespace gfx_api
 		{}
 	};
 
+	struct shadow_constants
+	{
+		uint32_t shadowMode = 1;
+		uint32_t shadowFilterSize = 5;
+		uint32_t shadowCascadesCount = WZ_MAX_SHADOW_CASCADES;
+
+		bool operator==(const shadow_constants& rhs) const
+		{
+			return shadowMode == rhs.shadowMode
+			&& shadowFilterSize == rhs.shadowFilterSize
+			&& shadowCascadesCount == rhs.shadowCascadesCount;
+		}
+	};
+
 	struct context
 	{
 		enum class buffer_storage_hint
@@ -368,9 +382,10 @@ namespace gfx_api
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
-		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, gfx_api::backend_type backend);
+		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backend);
 		static bool isInitialized();
 		virtual size_t numDepthPasses() { return 0; }
+		virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) { return false; }
 		virtual void beginDepthPass(size_t idx) { }
 		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
 		virtual void endCurrentDepthPass() { }
@@ -404,7 +419,8 @@ namespace gfx_api
 		virtual bool supports2DTextureArrays() const = 0;
 		virtual bool supportsIntVertexAttributes() const = 0;
 		virtual size_t maxFramesInFlight() const = 0;
-		virtual bool setExtraShadowTaps(uint32_t val) = 0;
+		virtual shadow_constants getShadowConstants() = 0;
+		virtual bool setShadowConstants(shadow_constants values) = 0;
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
 		virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const primitive_type &primitive, std::size_t instance_count) = 0;
@@ -425,7 +441,7 @@ namespace gfx_api
 
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 	private:
-		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) = 0;
+		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
 	// High-level API for getting an uncompressed image (iV_Image) from a file

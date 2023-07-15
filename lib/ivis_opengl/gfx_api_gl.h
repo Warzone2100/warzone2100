@@ -170,7 +170,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	std::vector<gfx_api::vertex_buffer> vertex_buffer_desc;
 	std::vector<GLint> locations;
 	std::vector<GLint> duplicateFragmentUniformLocations;
-	bool hasSpecializationConstant_ExtraShadowTaps = false;
+	bool hasSpecializationConstant_ShadowConstants = false;
 
 	std::vector<std::function<void(const void*, size_t)>> uniform_bind_functions;
 
@@ -180,7 +180,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<typename T>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
-	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, uint32_t extraShadowTaps);
+	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::shadow_constants& shadowConstants);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
@@ -207,7 +207,7 @@ private:
 					   const char * fragment_header, const std::string& fragmentPath,
 					   const std::vector<std::string> &uniformNames,
 					   const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-					   optional<float> mipLodBias, uint32_t extraShadowTaps);
+					   optional<float> mipLodBias, const gfx_api::shadow_constants& shadowConstants);
 
 	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms, const std::string& programName);
 
@@ -265,7 +265,7 @@ struct gl_context final : public gfx_api::context
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
 	optional<float> mipLodBias;
-	uint32_t extraShadowTaps = 4;
+	gfx_api::shadow_constants shadowConstants;
 
 	bool gles = false;
 	bool fragmentHighpFloatAvailable = true;
@@ -296,6 +296,7 @@ struct gl_context final : public gfx_api::context
 	virtual int32_t get_context_value(const context_value property) override;
 
 	virtual size_t numDepthPasses() override;
+	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual void beginDepthPass(size_t idx) override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual void endCurrentDepthPass() override;
@@ -329,13 +330,14 @@ struct gl_context final : public gfx_api::context
 	virtual bool supports2DTextureArrays() const override;
 	virtual bool supportsIntVertexAttributes() const override;
 	virtual size_t maxFramesInFlight() const override;
-	virtual bool setExtraShadowTaps(uint32_t val) override;
+	virtual gfx_api::shadow_constants getShadowConstants() override;
+	virtual bool setShadowConstants(gfx_api::shadow_constants values) override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;
 	virtual void draw_elements_instanced(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type& primitive, const gfx_api::index_type& index, std::size_t instance_count) override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	void initPixelFormatsSupport();
 	bool initInstancedFunctions();
 	size_t initDepthPasses(size_t resolution);
@@ -351,6 +353,7 @@ private:
 	void disableVertexAttribArray(GLuint index);
 	std::string calculateFormattedRendererInfoString() const;
 	bool isBlocklistedGraphicsDriver() const;
+	optional<uint32_t> getSuggestedDefaultDepthBufferResolution() const;
 
 	uint32_t viewportWidth = 0;
 	uint32_t viewportHeight = 0;

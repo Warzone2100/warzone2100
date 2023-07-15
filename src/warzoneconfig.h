@@ -157,6 +157,11 @@ void war_setMinimizeOnFocusLoss(int val);
 void war_setCursorScale(unsigned int scale);
 unsigned int war_getCursorScale();
 
+uint32_t war_getShadowFilterSize();
+void war_setShadowFilterSize(uint32_t filterSize);
+uint32_t war_getShadowMapResolution();
+void war_setShadowMapResolution(uint32_t resolution);
+
 /**
  * Enable or disable sound initialization
  *

@@ -955,7 +955,7 @@ typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_
 	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, /*const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc,*/ optional<float> mipLodBias, uint32_t extraShadowTaps) :
+gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::shadow_constants& shadowConstants) :
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
@@ -996,7 +996,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 				  shader_to_file_table.at(createInfo.shader_mode).fragment_file,
 				  shader_to_file_table.at(createInfo.shader_mode).uniform_names,
 				  shader_to_file_table.at(createInfo.shader_mode).additional_samplers,
-				  mipLodBias, extraShadowTaps);
+				  mipLodBias, shadowConstants);
 
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
 	{
@@ -1473,15 +1473,21 @@ static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, fl
 	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_MIP_LOAD_BIAS %s", floatAsString.c_str()));
 }
 
-static bool patchFragmentShaderExtraShadowTaps(std::string& fragmentShaderStr, uint32_t extraShadowTaps)
+static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, const gfx_api::shadow_constants& shadowConstants)
 {
-	// Look for:
-	// #define WZ_EXTRA_SHADOW_TAPS 4
-	const auto re = std::regex("#define WZ_EXTRA_SHADOW_TAPS .*", std::regex_constants::ECMAScript);
+	// #define WZ_SHADOW_MODE <number>
+	const auto re_1 = std::regex("#define WZ_SHADOW_MODE .*", std::regex_constants::ECMAScript);
+	bool foundAndReplaced_shadowMode = regex_replace_wrapper(fragmentShaderStr, re_1, astringf("#define WZ_SHADOW_MODE %u", shadowConstants.shadowMode));
 
-	bool foundAndReplaced = regex_replace_wrapper(fragmentShaderStr, re, astringf("#define WZ_EXTRA_SHADOW_TAPS %u", extraShadowTaps));
+	// #define WZ_SHADOW_FILTER_SIZE <number>
+	const auto re_2 = std::regex("#define WZ_SHADOW_FILTER_SIZE .*", std::regex_constants::ECMAScript);
+	bool foundAndReplaced_shadowFilterSize = regex_replace_wrapper(fragmentShaderStr, re_2, astringf("#define WZ_SHADOW_FILTER_SIZE %u", shadowConstants.shadowFilterSize));
 
-	return foundAndReplaced;
+	// #define WZ_SHADOW_CASCADES_COUNT <number>
+	const auto re_3 = std::regex("#define WZ_SHADOW_CASCADES_COUNT .*", std::regex_constants::ECMAScript);
+	bool foundAndReplaced_shadowCascadesCount = regex_replace_wrapper(fragmentShaderStr, re_3, astringf("#define WZ_SHADOW_CASCADES_COUNT %u", shadowConstants.shadowCascadesCount));
+
+	return foundAndReplaced_shadowMode || foundAndReplaced_shadowFilterSize || foundAndReplaced_shadowCascadesCount;
 }
 
 void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
@@ -1491,7 +1497,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 											 const char * fragment_header, const std::string& fragmentPath,
 											 const std::vector<std::string> &uniformNames,
 											 const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-											 optional<float> mipLodBias, uint32_t extraShadowTaps)
+											 optional<float> mipLodBias, const gfx_api::shadow_constants& shadowConstants)
 {
 	GLint status;
 	bool success = true; // Assume overall success
@@ -1610,7 +1616,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 			{
 				patchFragmentShaderTextureLodBias(fragmentShaderStr, mipLodBias.value());
 			}
-			hasSpecializationConstant_ExtraShadowTaps = patchFragmentShaderExtraShadowTaps(fragmentShaderStr, extraShadowTaps);
+			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, shadowConstants);
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
 
@@ -2288,7 +2294,7 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 	}
 
 	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
-	auto pipeline = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, extraShadowTaps);
+	auto pipeline = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, shadowConstants);
 	if (!psoID.has_value())
 	{
 		createdPipelines.emplace_back(createInfo);
@@ -2485,10 +2491,10 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 			switch (desc.target)
 			{
 				case gfx_api::pixel_format_target::texture_2d_array:
+				case gfx_api::pixel_format_target::depth_map:
 					pTextureToBind = pDefaultArrayTexture;
 					break;
 				case gfx_api::pixel_format_target::texture_2d:
-				case gfx_api::pixel_format_target::depth_map:
 					pTextureToBind = pDefaultTexture;
 					break;
 			}
@@ -2961,7 +2967,52 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	debug(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), (message != nullptr) ? message : "");
 }
 
-bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias)
+optional<uint32_t> gl_context::getSuggestedDefaultDepthBufferResolution() const
+{
+	// Use a (very simple) heuristic, that may or may not be useful - but basically try to find graphics cards that have lots of memory...
+	if (GLAD_GL_NVX_gpu_memory_info)
+	{
+		// If GL_NVX_gpu_memory_info is available, get the total graphics memory (in kB)
+		GLint total_graphics_mem_kb = 0;
+		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_graphics_mem_kb);
+
+		if ((total_graphics_mem_kb / 1024) > 4096) // If > 4GB graphics memory
+		{
+			return 4096;
+		}
+		else
+		{
+			return 2048;
+		}
+	}
+	else if (GLAD_GL_ATI_meminfo)
+	{
+		// For GL_ATI_meminfo, get the current free texture memory (stats_kb[0])
+		GLint stats_kb[4] = {0, 0, 0, 0};
+		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, stats_kb);
+		if (stats_kb[0] <= 0)
+		{
+			return nullopt;
+		}
+		uint32_t currentFreeTextureMemory_mb = static_cast<uint32_t>(stats_kb[0] / 1024);
+
+		if (currentFreeTextureMemory_mb > 4096) // If > 4 GB free texture memory
+		{
+			return 4096;
+		}
+		else
+		{
+			return 2048;
+		}
+	}
+	else
+	{
+		// don't currently have a good way of checking on this system
+		return nullopt;
+	}
+}
+
+bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
 {
 	// obtain backend_OpenGL_Impl from impl
 	backend_impl = impl.createOpenGLBackendImpl();
@@ -3025,6 +3076,11 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	}
 
 	mipLodBias = _mipLodBias;
+	depthBufferResolution = _depthMapResolution;
+	if (depthBufferResolution == 0)
+	{
+		depthBufferResolution = getSuggestedDefaultDepthBufferResolution().value_or(2048);
+	}
 
 	createSceneRenderpass();
 	initDepthPasses(depthBufferResolution);
@@ -3338,6 +3394,24 @@ bool gl_context::initGLContext()
 size_t gl_context::numDepthPasses()
 {
 	return depthFBO.size();
+}
+
+bool gl_context::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferResolution)
+{
+	if (depthPassCount == _numDepthPasses
+		&& depthBufferResolution == _depthBufferResolution)
+	{
+		// nothing to do
+		return true;
+	}
+
+	depthPassCount = _numDepthPasses;
+	depthBufferResolution = _depthBufferResolution;
+
+	// reinitialize depth passes
+	initDepthPasses(depthBufferResolution);
+
+	return true;
 }
 
 void gl_context::beginDepthPass(size_t idx)
@@ -3915,23 +3989,29 @@ size_t gl_context::maxFramesInFlight() const
 	return 2;
 }
 
-bool gl_context::setExtraShadowTaps(uint32_t val)
+gfx_api::shadow_constants gl_context::getShadowConstants()
 {
-	if (val == extraShadowTaps)
+	return shadowConstants;
+}
+
+bool gl_context::setShadowConstants(gfx_api::shadow_constants newValues)
+{
+	if (shadowConstants == newValues)
 	{
 		return true;
 	}
 
-	extraShadowTaps = val;
+	shadowConstants = newValues;
 
 	// Must recompile any shaders that used this value
 	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
 	for (auto& pipelineInfo : createdPipelines)
 	{
-		if (pipelineInfo.pso && pipelineInfo.pso->hasSpecializationConstant_ExtraShadowTaps)
+		if (pipelineInfo.pso &&
+			pipelineInfo.pso->hasSpecializationConstant_ShadowConstants)
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, extraShadowTaps);
+			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
 		}
 	}
 
@@ -3980,6 +4060,11 @@ size_t gl_context::initDepthPasses(size_t resolution)
 	{
 		delete depthTexture;
 		depthTexture = nullptr;
+	}
+
+	if (depthPassCount == 0)
+	{
+		return 0;
 	}
 
 	auto pNewDepthTexture = create_depthmap_texture(depthPassCount, resolution, resolution, "<depth map>");

@@ -36,6 +36,10 @@
 #include <glm/fwd.hpp>
 #include "pietypes.h"
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 struct iIMDShape;
 
 /***************************************************************************/
@@ -65,7 +69,10 @@ enum class ShadowMode
 	Fallback_Stencil_Shadows,
 	Shadow_Mapping
 };
-void pie_setShadowMode(ShadowMode mode);
+bool pie_setShadowMode(ShadowMode mode);
 ShadowMode pie_getShadowMode();
+optional<bool> pie_supportsShadowMapping();
+bool pie_setShadowMapResolution(uint32_t resolution);
+uint32_t pie_getShadowMapResolution();
 
 #endif // _piedef_h

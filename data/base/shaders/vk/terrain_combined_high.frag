@@ -3,6 +3,9 @@
 #include "terrain_combined.glsl"
 
 layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
+layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
+layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
+layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 
 layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -19,12 +22,14 @@ layout(set = 1, binding = 7) uniform sampler2DArray decalSpecular;
 layout(set = 1, binding = 8) uniform sampler2DArray decalHeight;
 
 // depth map
-layout(set = 1, binding = 9) uniform sampler2DShadow shadowMap;
+layout(set = 1, binding = 9) uniform sampler2DArrayShadow shadowMap;
 
 layout(location = 0) in FragData frag;
 layout(location = 11) flat in FragFlatData fragf;
 
 layout(location = 0) out vec4 FragColor;
+
+#include "terrain_combined_frag.glsl"
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fragf.grounds[i];
@@ -62,8 +67,9 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	vec3 H = normalize(halfVec);
 	float exponent = acos(dot(H, b.N)) / 0.33;
 	float gaussianTerm = exp(-(exponent * exponent));
+	float visibility = getShadowVisibility();
 
-	vec4 res = b.color*(ambientLight + diffuseLight*lambertTerm) + b.gloss*b.gloss*specularLight*gaussianTerm*lambertTerm;
+	vec4 res = b.color*(ambientLight + visibility*diffuseLight*lambertTerm) + visibility*b.gloss*b.gloss*specularLight*gaussianTerm*lambertTerm;
 
 	return vec4(res.rgb, b.color.a);
 }

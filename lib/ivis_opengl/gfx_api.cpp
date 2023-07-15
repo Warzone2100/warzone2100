@@ -30,7 +30,7 @@ static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
 static gfx_api::context* current_backend_context = nullptr;
 
-bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, gfx_api::backend_type backendType)
+bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backendType)
 {
 	if (current_backend_context != nullptr && backend == backendType)
 	{
@@ -62,7 +62,7 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 			break;
 	}
 	ASSERT(current_backend_context != nullptr, "Failed to initialize gfx backend context");
-	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias);
+	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias, depthMapResolution);
 	if (!result)
 	{
 		return false;

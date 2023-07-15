@@ -841,6 +841,11 @@ void perFrameResources_t::clean()
 	streamedVertexBufferAllocator.clean();
 	uniformBufferAllocator.clean();
 
+	for (auto fbo : fbo_to_delete)
+	{
+		dev.destroyFramebuffer(fbo, nullptr, *pVkDynLoader);
+	}
+	fbo_to_delete.clear();
 	for (auto buffer : buffer_to_delete)
 	{
 		dev.destroyBuffer(buffer, nullptr, *pVkDynLoader);
@@ -1097,13 +1102,15 @@ struct shader_infos
 	std::string vertexSpv;
 	std::string fragmentSpv;
 	bool specializationConstant_0_mipLoadBias = false;
-	bool specializationConstant_1_extraShadowTaps = false;
+	bool specializationConstant_1_shadowMode = false;
+	bool specializationConstant_2_shadowFilterSize = false;
+	bool specializationConstant_3_shadowCascadesCount = false;
 };
 
 static const std::map<SHADER_MODE, shader_infos> spv_files
 {
 	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv", true }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true }),
+	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true }),
 	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
 	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv", true }),
@@ -1111,9 +1118,9 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
 	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv", true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true }),
 	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv", true }),
 	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv", true }),
 	std::make_pair(SHADER_WATER_CLASSIC, shader_infos{ "shaders/vk/terrain_water_classic.vert.spv", "shaders/vk/terrain_water_classic.frag.spv", true }),
@@ -1698,14 +1705,26 @@ VkPSO::VkPSO(vk::Device _dev,
 		memcpy(&specializationConstantsDataBuffer[copyIdx], &cpyMipLodBias, sizeof(float));
 		specializationEntries.emplace_back(0, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(float));
 	}
-	if (shaderInfo.specializationConstant_1_extraShadowTaps)
-	{
-		uint32_t extraShadowTaps = root->extraShadowTaps;
+	auto appendSpecializationConstant_uint32 = [&specializationConstantsDataBuffer, &specializationEntries](uint32_t constantID, uint32_t value) {
 		size_t copyIdx = specializationConstantsDataBuffer.size();
 		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + sizeof(uint32_t));
-		memcpy(&specializationConstantsDataBuffer[copyIdx], &extraShadowTaps, sizeof(uint32_t));
-		specializationEntries.emplace_back(1, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(uint32_t));
-		hasSpecializationConstant_ExtraShadowTaps = true;
+		memcpy(&specializationConstantsDataBuffer[copyIdx], &value, sizeof(uint32_t));
+		specializationEntries.emplace_back(constantID, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(uint32_t));
+	};
+	if (shaderInfo.specializationConstant_1_shadowMode)
+	{
+		appendSpecializationConstant_uint32(1, root->shadowConstants.shadowMode);
+		hasSpecializationConstant_ShadowConstants = true;
+	}
+	if (shaderInfo.specializationConstant_2_shadowFilterSize)
+	{
+		appendSpecializationConstant_uint32(2, root->shadowConstants.shadowFilterSize);
+		hasSpecializationConstant_ShadowConstants = true;
+	}
+	if (shaderInfo.specializationConstant_3_shadowCascadesCount)
+	{
+		appendSpecializationConstant_uint32(3, root->shadowConstants.shadowCascadesCount);
+		hasSpecializationConstant_ShadowConstants = true;
 	}
 	if (!specializationEntries.empty())
 	{
@@ -2781,6 +2800,97 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 	}
 }
 
+void VkRoot::createDepthPassImagesAndFBOs(vk::Format depthFormat)
+{
+	// destroy depth pass objects
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	for (auto f : renderPasses[DEPTH_RENDER_PASS_ID].fbo)
+	{
+		// Queue for future deletion
+		frameResources.fbo_to_delete.emplace_back(f);
+	}
+	renderPasses[DEPTH_RENDER_PASS_ID].fbo.clear();
+	for (auto& imageView : depthMapCascadeView)
+	{
+		if (buffering_mechanism::isInitialized())
+		{
+			// Queue for future deletion
+			frameResources.image_view_to_delete.emplace_back(std::move(imageView));
+		}
+		else
+		{
+			imageView.reset();
+		}
+	}
+	depthMapCascadeView.clear();
+	if (pDepthMapImage)
+	{
+		// Destructor will automatically queue resources for future deletion once they are unused
+		delete pDepthMapImage;
+		pDepthMapImage = nullptr;
+	}
+
+	if (depthPassCount == 0)
+	{
+		return;
+	}
+
+	// Create depth map image + view
+	size_t numCascadeLayers = depthPassCount;
+	pDepthMapImage = new VkDepthMapImage(*this, numCascadeLayers, depthMapSize, depthFormat, "<depth map>");
+
+	// For each depth pass (cascade)
+	for (size_t i = 0; i < numCascadeLayers; ++i)
+	{
+		// Image view for just this layer
+		const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
+			.setImage(pDepthMapImage->object)
+			.setViewType(vk::ImageViewType::e2DArray)
+			.setFormat(depthFormat)
+			.setComponents(vk::ComponentMapping())
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, static_cast<uint32_t>(i), 1));
+
+		auto cascade_view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, vkDynLoader);
+
+		vk::ImageView non_unique_imageview_ref = cascade_view.get();
+
+		if (debugUtilsExtEnabled)
+		{
+			std::string imageViewName = "<depth cascade image view: " + std::to_string(i) + ">";
+			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+			objectNameInfo.setObjectType(vk::ObjectType::eImageView);
+			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImageView>(non_unique_imageview_ref)));
+			objectNameInfo.setPObjectName(imageViewName.c_str());
+			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+		}
+
+		// FBO for this image view + layer
+		auto cascade_fbo = dev.createFramebuffer(
+			vk::FramebufferCreateInfo()
+			.setAttachmentCount(1)
+			.setPAttachments(&non_unique_imageview_ref)
+			.setLayers(1)
+			.setWidth(depthMapSize)
+			.setHeight(depthMapSize)
+			.setRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp)
+			, nullptr, vkDynLoader);
+
+		depthMapCascadeView.push_back(std::move(cascade_view));
+
+		if (debugUtilsExtEnabled)
+		{
+			std::string framebufferName = "<depth cascade frame buffer: " + std::to_string(i) + ">";
+			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+			objectNameInfo.setObjectType(vk::ObjectType::eFramebuffer);
+			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkFramebuffer>(cascade_fbo)));
+			objectNameInfo.setPObjectName(framebufferName.c_str());
+			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+		}
+
+		renderPasses[DEPTH_RENDER_PASS_ID].fbo.push_back(cascade_fbo);
+	}
+}
+
 void VkRoot::createDepthPasses(vk::Format depthFormat)
 {
 	auto attachments =
@@ -2848,58 +2958,7 @@ void VkRoot::createDepthPasses(vk::Format depthFormat)
 		dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
 	}
 
-	// Create depth map image + view
-	size_t numCascadeLayers = depthPassCount;
-	pDepthMapImage = new VkDepthMapImage(*this, numCascadeLayers, depthMapSize, depthBufferFormat, "<depth map>");
-
-	// For each depth pass (cascade)
-	for (size_t i = 0; i < numCascadeLayers; ++i)
-	{
-		// Image view for just this layer
-		const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
-			.setImage(pDepthMapImage->object)
-			.setViewType(vk::ImageViewType::e2DArray)
-			.setFormat(depthBufferFormat)
-			.setComponents(vk::ComponentMapping())
-			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, static_cast<uint32_t>(i), 1));
-
-		auto cascade_view = dev.createImageView(imageViewCreateInfo, nullptr, vkDynLoader);
-
-		if (debugUtilsExtEnabled)
-		{
-			std::string imageViewName = "<depth cascade image view: " + std::to_string(i) + ">";
-			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
-			objectNameInfo.setObjectType(vk::ObjectType::eImageView);
-			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImageView>(cascade_view)));
-			objectNameInfo.setPObjectName(imageViewName.c_str());
-			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
-		}
-
-		depthMapCascadeView.push_back(cascade_view);
-
-		// FBO for this image view + layer
-		auto cascade_fbo = dev.createFramebuffer(
-			vk::FramebufferCreateInfo()
-			.setAttachmentCount(1)
-			.setPAttachments(&cascade_view)
-			.setLayers(1)
-			.setWidth(depthMapSize)
-			.setHeight(depthMapSize)
-			.setRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp)
-			, nullptr, vkDynLoader);
-
-		if (debugUtilsExtEnabled)
-		{
-			std::string framebufferName = "<depth cascade frame buffer: " + std::to_string(i) + ">";
-			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
-			objectNameInfo.setObjectType(vk::ObjectType::eFramebuffer);
-			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkFramebuffer>(cascade_fbo)));
-			objectNameInfo.setPObjectName(framebufferName.c_str());
-			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
-		}
-
-		renderPasses[DEPTH_RENDER_PASS_ID].fbo.push_back(cascade_fbo);
-	}
+	createDepthPassImagesAndFBOs(depthFormat);
 }
 
 void VkRoot::destroySceneRenderpass()
@@ -3516,10 +3575,6 @@ void VkRoot::shutdown()
 		dev.destroyFramebuffer(f, nullptr, vkDynLoader);
 	}
 	renderPasses[DEPTH_RENDER_PASS_ID].fbo.clear();
-	for (auto imageView : depthMapCascadeView)
-	{
-		dev.destroyImageView(imageView, nullptr, vkDynLoader);
-	}
 	depthMapCascadeView.clear();
 	if (pDepthMapImage)
 	{
@@ -3530,6 +3585,12 @@ void VkRoot::shutdown()
 	{
 		dev.destroyRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
 		renderPasses[DEPTH_RENDER_PASS_ID].rp = vk::RenderPass();
+	}
+
+	// destroy default depth map texture
+	if (pDefaultDepthMapTexture)
+	{
+		pDefaultDepthMapTexture->destroy(dev, allocator, vkDynLoader);
 	}
 
 	// destroy allocator
@@ -3584,7 +3645,8 @@ void VkRoot::shutdown()
 	}
 }
 
-void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
+// Generally-speaking, this should only be used in very specific cases where whole chunks of the swapchain etc setup are being torn down / recreated
+void VkRoot::waitForAllIdle()
 {
 	if (!dev)
 	{
@@ -3601,6 +3663,17 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 		presentQueue.waitIdle(vkDynLoader);
 	}
 	dev.waitIdle(vkDynLoader);
+}
+
+void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
+{
+	if (!dev)
+	{
+		// Logical device is null - return
+		return;
+	}
+
+	waitForAllIdle();
 
 	if (pDefaultTexture)
 	{
@@ -4197,13 +4270,14 @@ bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const
 	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion) && VK_VERSION_GREATER_THAN_OR_EQUAL(physDeviceProps.apiVersion, minVulkanAPICoreVersion);
 }
 
-bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode, optional<float> _mipLodBias)
+bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
 
 	frameNum = 1;
 	swapMode = requestedSwapMode;
 	mipLodBias = _mipLodBias;
+	depthMapSize = _depthMapResolution;
 
 	SetVKImplicitLayerEnvironmentVariables();
 
@@ -4499,7 +4573,25 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		return false;
 	}
 
+	if (depthMapSize == 0)
+	{
+		depthMapSize = 2048; // Future TODO: Could try various heuristics to determine whether the default depthMapSize should be 2048 or 4096 (perhaps based on available graphics memory, if it's a dedicated GPU, etc)
+	}
+
 	createDepthPasses(depthBufferFormat); // TODO: Handle failures?
+
+	pDefaultDepthMapTexture = new VkDepthMapImage(*this, 1, 4, depthBufferFormat, "<default depth map>");
+	const auto imageMemoryBarriers_TransitionDefaultDepthImage = std::array<vk::ImageMemoryBarrier, 1> {
+		vk::ImageMemoryBarrier()
+			.setImage(pDefaultDepthMapTexture->object)
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil, 0, 1, 0, 1))
+			.setOldLayout(vk::ImageLayout::eUndefined)
+			.setNewLayout(vk::ImageLayout::eDepthStencilReadOnlyOptimal)
+			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
+	};
+	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
+	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eAllGraphics,
+		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_TransitionDefaultDepthImage, vkDynLoader);
 
 	return true;
 }
@@ -5127,6 +5219,8 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 					imageView = pDefaultTexture->view.get();
 					break;
 				case gfx_api::pixel_format_target::depth_map:
+					imageView = pDefaultDepthMapTexture->view.get();
+					break;
 				case gfx_api::pixel_format_target::texture_2d_array:
 					imageView = pDefaultArrayTexture->view.get();
 					break;
@@ -5603,6 +5697,23 @@ size_t VkRoot::numDepthPasses()
 	return depthPassCount;
 }
 
+bool VkRoot::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferResolution)
+{
+	if (depthPassCount == _numDepthPasses
+		&& depthMapSize == _depthBufferResolution)
+	{
+		// nothing to do
+		return true;
+	}
+
+	depthPassCount = _numDepthPasses;
+	depthMapSize = _depthBufferResolution;
+
+	createDepthPassImagesAndFBOs(depthBufferFormat);
+
+	return true;
+}
+
 void VkRoot::beginDepthPass(size_t idx)
 {
 	auto& depthRenderPass = renderPasses[DEPTH_RENDER_PASS_ID];
@@ -5821,16 +5932,21 @@ size_t VkRoot::maxFramesInFlight() const
 	return MAX_FRAMES_IN_FLIGHT;
 }
 
-bool VkRoot::setExtraShadowTaps(uint32_t val)
+gfx_api::shadow_constants VkRoot::getShadowConstants()
 {
-	if (val == extraShadowTaps)
+	return shadowConstants;
+}
+
+bool VkRoot::setShadowConstants(gfx_api::shadow_constants newValues)
+{
+	if (shadowConstants == newValues)
 	{
 		return true;
 	}
 
-	extraShadowTaps = val;
+	shadowConstants = newValues;
 
-	// Must rebuild any shaders that used this value
+	// Must rebuild any shaders that used these values
 	for (auto& pipelineInfo : createdPipelines)
 	{
 		for (size_t renderPassId = 0; renderPassId < pipelineInfo.renderPassPSO.size(); ++renderPassId)
@@ -5844,7 +5960,7 @@ bool VkRoot::setExtraShadowTaps(uint32_t val)
 			auto& renderPass = renderPasses[renderPassId];
 
 			ASSERT(pipeline->renderpass_compat, "Pipeline has no associated renderpass compat structure");
-			if (pipeline->hasSpecializationConstant_ExtraShadowTaps)
+			if (pipeline->hasSpecializationConstant_ShadowConstants)
 			{
 				buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(pipeline);
 				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);

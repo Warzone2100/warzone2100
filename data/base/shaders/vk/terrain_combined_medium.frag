@@ -3,8 +3,9 @@
 #include "terrain_combined.glsl"
 
 layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
-layout (constant_id = 1) const uint WZ_EXTRA_SHADOW_TAPS = 4;
-layout (constant_id = 2) const uint WZ_SHADOW_CASCADES_COUNT = 3;
+layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
+layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
+layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 
 layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -28,80 +29,7 @@ layout(location = 11) flat in FragFlatData fragf;
 
 layout(location = 0) out vec4 FragColor;
 
-
-float getShadowVisibility()
-{
-if (WZ_EXTRA_SHADOW_TAPS == 0)
-{
-	return 1.0;
-}
-else
-{
-	vec4 fragPosViewSpace = ViewMatrix * vec4(frag.fragPos, 1.0);
-	float depthValue = abs(fragPosViewSpace.z);
-
-	int cascadeIndex = 0;
-//	for (int i = 0; i < WZ_SHADOW_CASCADES_COUNT - 1; ++i)
-//	{
-//		if (depthValue >= ShadowMapCascadeSplits[i])
-//		{
-//			cascadeIndex = i + 1;
-//		}
-//	}
-	// unrolled loop, using vec4 swizzles
-if (WZ_SHADOW_CASCADES_COUNT > 1)
-{
-	if (depthValue >= ShadowMapCascadeSplits.x)
-	{
-		cascadeIndex = 1;
-	}
-}
-if (WZ_SHADOW_CASCADES_COUNT > 2)
-{
-	if (depthValue >= ShadowMapCascadeSplits.y)
-	{
-		cascadeIndex = 2;
-	}
-}
-if (WZ_SHADOW_CASCADES_COUNT > 3)
-{
-	if (depthValue >= ShadowMapCascadeSplits.z)
-	{
-		cascadeIndex = 3;
-	}
-}
-
-	vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(frag.fragPos, 1.0);
-	vec3 pos = shadowPos.xyz / shadowPos.w;
-
-	if (pos.z > 1.0f)
-	{
-		return 1.0;
-	}
-
-	float bias = 0.0001f;
-
-	float visibility = texture( shadowMap, vec4(pos.xy, cascadeIndex, (pos.z+bias)) );
-
-	// PCF
-	const float edgeVal = 0.5+float((WZ_EXTRA_SHADOW_TAPS-1)/2);
-	const float startVal = -edgeVal;
-	const float endVal = edgeVal + 0.5;
-	const float texelIncrement = 1.0/float(4096);
-	const float visibilityIncrement = 0.1; //0.5 / WZ_EXTRA_SHADOW_TAPS;
-	for (float y=startVal; y<endVal; y+=1.0)
-	{
-		for (float x=startVal; x<endVal; x+=1.0)
-		{
-			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec4(pos.xy + vec2(x*texelIncrement, y*texelIncrement), cascadeIndex, (pos.z+bias)) ));
-		}
-	}
-
-	visibility = clamp(visibility, 0.3, 1.0);
-
-	return visibility;
-}
-}
+#include "terrain_combined_frag.glsl"
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fragf.grounds[i];
