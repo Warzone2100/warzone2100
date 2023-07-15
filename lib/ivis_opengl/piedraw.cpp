@@ -165,22 +165,16 @@ bool pie_setShadowMode(ShadowMode mode)
 	{
 		return true;
 	}
+	ASSERT_OR_RETURN(false, gfx_api::context::isInitialized(), "Can't set shadow mode until gfx backend is initialized");
 	bool successfulChangeToInputMode = true;
 	if (mode == ShadowMode::Shadow_Mapping)
 	{
-		if (gfx_api::context::isInitialized())
+		// double-check that current system supports instanced rendering - *only* if instanced rendering is possible does WZ support shadow mapping
+		if (!pie_supportsShadowMapping().value_or(false))
 		{
-			// double-check that current system supports instanced rendering - *only* if instanced rendering is possible does WZ support shadow mapping
-			if (!pie_supportsShadowMapping().value_or(false))
-			{
-				// for now, only the fallback stencil shadows are supported
-				mode = ShadowMode::Fallback_Stencil_Shadows;
-				successfulChangeToInputMode = false;
-			}
-		}
-		else
-		{
-			// TODO: Need to queue a check once the gfx backend is initialized
+			// for now, only the fallback stencil shadows are supported
+			mode = ShadowMode::Fallback_Stencil_Shadows;
+			successfulChangeToInputMode = false;
 		}
 	}
 	shadowMode = mode;
