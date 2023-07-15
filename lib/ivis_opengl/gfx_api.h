@@ -652,60 +652,6 @@ namespace gfx_api
 	// NOTE: Be very careful changing these constant_buffer_type structs;
 	//		 they must match std140 layout rules (see: the Vulkan shaders)
 
-	template<>
-	struct constant_buffer_type<SHADER_COMPONENT>
-	{
-		glm::vec4 colour;
-		glm::vec4 teamcolour;
-		float shaderStretch;
-		int tcmask;
-		int fogEnabled;
-		int normalMap;
-		int specularMap;
-		int ecmState;
-		int alphaTest;
-		float timeState;
-		glm::mat4 ModelViewMatrix;
-		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 NormalMatrix;
-		glm::vec4 sunPos;
-		glm::vec4 sceneColor;
-		glm::vec4 ambient;
-		glm::vec4 diffuse;
-		glm::vec4 specular;
-		glm::vec4 fogColour;
-		float fogEnd;
-		float fogBegin;
-		int hasTangents;
-	};
-
-	template<>
-	struct constant_buffer_type<SHADER_NOLIGHT>
-	{
-		glm::vec4 colour;
-		glm::vec4 teamcolour;
-		float shaderStretch;
-		int tcmask;
-		int fogEnabled;
-		int normalMap;
-		int specularMap;
-		int ecmState;
-		int alphaTest;
-		float timeState;
-		glm::mat4 ModelViewMatrix;
-		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 NormalMatrix;
-		glm::vec4 sunPos;
-		glm::vec4 sceneColor;
-		glm::vec4 ambient;
-		glm::vec4 diffuse;
-		glm::vec4 specular;
-		glm::vec4 fogColour;
-		float fogEnd;
-		float fogBegin;
-		int hasTangents;
-	};
-
 	// Only change once per frame
 	struct Draw3DShapeGlobalUniforms
 	{
