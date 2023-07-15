@@ -22,6 +22,7 @@
 #include "gfx_api_gl.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/wzpaths.h"
 #include "piemode.h"
 
 #include <vector>
@@ -1188,15 +1189,15 @@ void gl_pipeline_state_object::bind()
 }
 
 // Read shader into text buffer
-char *gl_pipeline_state_object::readShaderBuf(const std::string& name)
+std::string gl_pipeline_state_object::readShaderBuf(const std::string& name, std::vector<std::string> ancestorIncludePaths)
 {
 	PHYSFS_file	*fp;
 	int	filesize;
 	char *buffer;
 
 	fp = PHYSFS_openRead(name.c_str());
-	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(name.c_str()), name.c_str());
 	ASSERT_OR_RETURN(nullptr, fp != nullptr, "Could not open %s", name.c_str());
+	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(name.c_str()), name.c_str());
 	filesize = PHYSFS_fileLength(fp);
 	buffer = (char *)malloc(filesize + 1);
 	if (buffer)
@@ -1206,7 +1207,80 @@ char *gl_pipeline_state_object::readShaderBuf(const std::string& name)
 	}
 	PHYSFS_close(fp);
 
-	return buffer;
+	std::string strResult;
+	if (buffer)
+	{
+		strResult = buffer;
+		free(buffer);
+	}
+
+	std::vector<std::string> ancestorIncludesPlusMe = ancestorIncludePaths;
+	ancestorIncludesPlusMe.push_back(name);
+	patchShaderHandleIncludes(strResult, ancestorIncludesPlusMe);
+
+	return strResult;
+}
+
+static bool regex_replace_func(std::string& input, const std::regex& re, const std::function<std::string (const std::smatch& match)>& replaceFunc, std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
+{
+	std::string result;
+	auto m = std::sregex_iterator(input.begin(), input.end(), re, flags);
+	auto end = std::sregex_iterator();
+	auto last_m = m;
+	size_t num_replacements = 0;
+
+	auto out = std::back_inserter(result);
+
+	for (; m != end; ++m)
+	{
+		out = std::copy(m->prefix().first, m->prefix().second, out);
+		out = m->format(out, replaceFunc(*m), flags);
+		last_m = m;
+		++num_replacements;
+	}
+
+	if (num_replacements == 0)
+	{
+		return false;
+	}
+
+	out = std::copy(last_m->suffix().first, last_m->suffix().second, out);
+
+	input = std::move(result);
+
+	return true;
+}
+
+void gl_pipeline_state_object::patchShaderHandleIncludes(std::string& shaderStr, std::vector<std::string> ancestorIncludePaths)
+{
+	ASSERT_OR_RETURN(, !ancestorIncludePaths.empty(), "No ancestors?");
+
+	const auto re = std::regex("\\s*#include\\s+(\\\".*\\\")\\s*", std::regex_constants::ECMAScript);
+
+	// compute parent path basedir
+	auto parentPathInfo = WzPathInfo::fromPlatformIndependentPath(ancestorIncludePaths.back());
+
+	regex_replace_func(shaderStr, re, [&parentPathInfo, &ancestorIncludePaths](const std::smatch& match) -> std::string {
+		std::string relativeIncludePath = match.str(1);
+
+		// remove any surrounding " "
+		relativeIncludePath.erase(relativeIncludePath.begin(), std::find_if(relativeIncludePath.begin(), relativeIncludePath.end(), [](char ch) {
+			return ch != '"';
+		}));
+		relativeIncludePath.erase(std::find_if(relativeIncludePath.rbegin(), relativeIncludePath.rend(), [](char ch) {
+			return ch != '"';
+		}).base(), relativeIncludePath.end());
+
+		std::string fullIncludePath = parentPathInfo.path() + "/" + relativeIncludePath;
+
+		if (ancestorIncludePaths.size() > 5)
+		{
+			debug(LOG_ERROR, "Nested includes depth > 5 - not loading: %s", fullIncludePath.c_str());
+			return "\n";
+		}
+
+		return "\n" + readShaderBuf(fullIncludePath, ancestorIncludePaths) + "\n";
+	});
 }
 
 // Retrieve shader compilation errors
@@ -1319,11 +1393,11 @@ static std::unordered_set<std::string> getUniformNamesFromSource(const char* sha
 	return uniformNames;
 }
 
-static std::tuple<std::string, std::unordered_map<std::string, std::string>> renameDuplicateFragmentShaderUniforms(const char * vertexShaderContents, const std::string& fragmentShaderContents)
+static std::tuple<std::string, std::unordered_map<std::string, std::string>> renameDuplicateFragmentShaderUniforms(const std::string& vertexShaderContents, const std::string& fragmentShaderContents)
 {
 	std::unordered_map<std::string, std::string> duplicateFragmentUniformNameMap;
 
-	const auto vertexUniformNames = getUniformNamesFromSource(vertexShaderContents);
+	const auto vertexUniformNames = getUniformNamesFromSource(vertexShaderContents.c_str());
 	const auto fragmentUniformNames = getUniformNamesFromSource(fragmentShaderContents.c_str());
 
 	std::string modifiedFragmentShaderSource = fragmentShaderContents;
@@ -1456,18 +1530,19 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 	bindVertexAttribLocationIfUsed(program, gfx_api::terrain_grounds, "grounds");
 	bindVertexAttribLocationIfUsed(program, gfx_api::terrain_groundWeights, "groundWeights");
 
-	char* vertexShaderContents = nullptr;
+	std::string vertexShaderContents;
 
 	if (!vertexPath.empty())
 	{
 		success = false; // Assume failure before reading shader file
 
-		if ((vertexShaderContents = readShaderBuf(vertexPath)))
+		vertexShaderContents = readShaderBuf(vertexPath);
+		if (!vertexShaderContents.empty())
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
 			vertexShader = shader;
 
-			const char* ShaderStrings[2] = { vertex_header, vertexShaderContents };
+			const char* ShaderStrings[2] = { vertex_header, vertexShaderContents.c_str() };
 
 			glShaderSource(shader, 2, ShaderStrings, nullptr);
 			glCompileShader(shader);
@@ -1498,15 +1573,11 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 	{
 		success = false; // Assume failure before reading shader file
 
-		char* fragmentShaderContents = nullptr;
-		if ((fragmentShaderContents = readShaderBuf(fragmentPath)))
+		std::string fragmentShaderStr = readShaderBuf(fragmentPath);
+		if (!fragmentShaderStr.empty())
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
 			fragmentShader = shader;
-
-			std::string fragmentShaderStr = fragmentShaderContents;
-			free(fragmentShaderContents);
-			fragmentShaderContents = nullptr;
 
 			if (!fragmentHighpFloatAvailable || !fragmentHighpIntAvailable)
 			{
@@ -1564,12 +1635,6 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 				glObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
 			}
 		}
-	}
-
-	if (vertexShaderContents != nullptr)
-	{
-		free(vertexShaderContents);
-		vertexShaderContents = nullptr;
 	}
 
 	if (success)

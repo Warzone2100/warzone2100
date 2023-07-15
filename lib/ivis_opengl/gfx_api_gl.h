@@ -189,7 +189,9 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 
 private:
 	// Read shader into text buffer
-	static char *readShaderBuf(const std::string& name);
+	static std::string readShaderBuf(const std::string& name,  std::vector<std::string> ancestorIncludePaths = {});
+
+	static void patchShaderHandleIncludes(std::string& shaderStr, std::vector<std::string> ancestorIncludePaths);
 
 	// Retrieve shader compilation errors
 	static void printShaderInfoLog(code_part part, GLuint shader);
