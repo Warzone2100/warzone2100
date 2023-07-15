@@ -638,7 +638,7 @@ void war_setShadowMapResolution(uint32_t resolution)
 		debug(LOG_ERROR, "Shadow map resolution %" PRIu32 " is unsupported: must be a power of 2", resolution);
 		return;
 	}
-	if (resolution < 2048 || resolution > 4096)
+	if (resolution > 0 && (resolution < 2048 || resolution > 4096)) // 0 is a special case that maps to "figure out a decent default for this system"
 	{
 		debug(LOG_INFO, "Shadow map resolution %" PRIu32 " may not have the desired effect", resolution);
 	}
