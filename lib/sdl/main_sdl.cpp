@@ -3147,11 +3147,6 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	if (backend.has_value())
 	{
 		wzMainScreenSetup_VerifyWindow();
-
-		// initialize gfx context shadow constants
-		auto shadowConstants = gfx_api::context::get().getShadowConstants();
-		shadowConstants.shadowFilterSize = war_getShadowFilterSize();
-		gfx_api::context::get().setShadowConstants(shadowConstants);
 	}
 
 #if defined(WZ_OS_WIN)

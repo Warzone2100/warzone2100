@@ -119,9 +119,19 @@ void pie_FreeShaders()
 //static float fogEnd;
 
 // Run from screen.c on init.
-bool pie_LoadShaders()
+bool pie_LoadShaders(uint32_t shadowFilterSize)
 {
 	// note: actual loading of shaders now occurs in gfx_api
+
+	// initialize gfx context shadow constants (must happen after context is initialized)
+	auto shadowConstants = gfx_api::context::get().getShadowConstants();
+	shadowConstants.shadowFilterSize = shadowFilterSize;
+	gfx_api::context::get().setShadowConstants(shadowConstants);
+
+	if (!pie_supportsShadowMapping().value_or(false))
+	{
+		pie_setShadowMode(ShadowMode::Fallback_Stencil_Shadows);
+	}
 
 	gfx_api::gfxUByte rect[] {
 		0, 255, 0, 255,
