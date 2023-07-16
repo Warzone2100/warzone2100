@@ -458,8 +458,8 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 // Thread local to prevent a race condition on read and write to this buffer if multiple
 // threads log errors. This means we will not be reporting any errors to console from threads
 // other than main. If we want to fix this, make sure accesses are protected by a mutex.
-static WZ_DECL_THREAD char errorStore[512];
-static WZ_DECL_THREAD bool errorWaiting = false;
+static thread_local char errorStore[512];
+static thread_local bool errorWaiting = false;
 const char *debugLastError()
 {
 	if (errorWaiting)
