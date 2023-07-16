@@ -35,6 +35,7 @@
 #include <map>
 #include <string>
 #include <regex>
+#include <array>
 
 #if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -115,11 +116,11 @@ static const char *code_part_names[] =
 	"last"
 };
 
-static char inputBuffer[2][MAX_LEN_LOG_LINE];
 static bool useInputBuffer1 = false;
 static bool debug_flush_stderr = false;
 
 static std::map<std::string, int> warning_list;	// only used for LOG_WARNING
+static std::mutex warning_list_mutex;
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -349,8 +350,6 @@ void debug_init()
 	enabled_debug[LOG_INFO] = true;
 	enabled_debug[LOG_FATAL] = true;
 	enabled_debug[LOG_POPUP] = true;
-	inputBuffer[0][0] = '\0';
-	inputBuffer[1][0] = '\0';
 #ifdef DEBUG
 	enabled_debug[LOG_WARNING] = true;
 #endif
@@ -371,7 +370,10 @@ void debug_exit()
 		free(curCallback);
 		curCallback = tmpCallback;
 	}
-	warning_list.clear();
+	{
+		std::lock_guard<std::mutex> guard(warning_list_mutex);
+		warning_list.clear();
+	}
 	callbackRegistry = nullptr;
 }
 
@@ -475,23 +477,28 @@ const char *debugLastError()
 
 void _debug(int line, code_part part, const char *function, const char *str, ...)
 {
-	va_list ap;
-	static char outputBuffer[MAX_LEN_LOG_LINE];
-	static unsigned int repeated = 0; /* times current message repeated */
-	static unsigned int next = 2;     /* next total to print update */
-	static unsigned int prev = 0;     /* total on last update */
+	thread_local std::vector<char> outputBuffer(MAX_LEN_LOG_LINE, 0);
+	thread_local std::array<std::vector<char>, 2> inputBuffer = {std::vector<char>(MAX_LEN_LOG_LINE, 0), std::vector<char>(MAX_LEN_LOG_LINE, 0)};
+	thread_local unsigned int repeated = 0; /* times current message repeated */
+	thread_local unsigned int next = 2;     /* next total to print update */
+	thread_local unsigned int prev = 0;     /* total on last update */
 
+	va_list ap;
 	va_start(ap, str);
-	vssprintf(outputBuffer, str, ap);
+	vsnprintf(outputBuffer.data(), outputBuffer.size(), str, ap);
 	va_end(ap);
 
 	if (part == LOG_WARNING)
 	{
-		std::pair<std::map<std::string, int>::iterator, bool> ret;
-		ret = warning_list.insert(std::pair<std::string, int>(std::string(function) + "-" + std::string(outputBuffer), line));
-		if (ret.second)
+		bool addedNew = false;
 		{
-			ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s:%d] %s (**Further warnings of this type are suppressed.)", function, line, outputBuffer);
+			std::lock_guard<std::mutex> guard(warning_list_mutex);
+			addedNew = warning_list.insert(std::pair<std::string, int>(std::string(function) + "-" + std::string(outputBuffer.data()), line)).second;
+		}
+		if (addedNew)
+		{
+			auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
+			snprintf(currInputBuffer.data(), currInputBuffer.size(), "[%s:%d] %s (**Further warnings of this type are suppressed.)", function, line, outputBuffer.data());
 		}
 		else
 		{
@@ -500,10 +507,11 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 	}
 	else
 	{
-		ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s:%d] %s", function, line, outputBuffer);
+		auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
+		snprintf(currInputBuffer.data(), currInputBuffer.size(), "[%s:%d] %s", function, line, outputBuffer.data());
 	}
 
-	if (sstrcmp(inputBuffer[0], inputBuffer[1]) == 0)
+	if (strncmp(inputBuffer[0].data(), inputBuffer[1].data(), std::min(inputBuffer[0].size(), inputBuffer[1].size())) == 0)
 	{
 		// Received again the same line
 		repeated++;
@@ -511,13 +519,13 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		{
 			if (repeated > 2)
 			{
-				ssprintf(outputBuffer, "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
+				snprintf(outputBuffer.data(), outputBuffer.size(), "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
 			}
 			else
 			{
-				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
+				snprintf(outputBuffer.data(), outputBuffer.size(), "last message repeated %u times", repeated - prev);
 			}
-			printToDebugCallbacks(outputBuffer, part);
+			printToDebugCallbacks(outputBuffer.data(), part);
 			prev = repeated;
 			next *= 2;
 		}
@@ -530,13 +538,13 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			/* just repeat the previous message when only one repeat occurred */
 			if (repeated > 2)
 			{
-				ssprintf(outputBuffer, "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
+				snprintf(outputBuffer.data(), outputBuffer.size(), "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
 			}
 			else
 			{
-				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
+				snprintf(outputBuffer.data(), outputBuffer.size(), "last message repeated %u times", repeated - prev);
 			}
-			printToDebugCallbacks(outputBuffer, part);
+			printToDebugCallbacks(outputBuffer.data(), part);
 		}
 		repeated = 0;
 		next = 2;
@@ -553,15 +561,17 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		timeinfo = getLocalTime(rawtime);
 		strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
 
-		// Assemble the outputBuffer:
-		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+		auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
 
-		printToDebugCallbacks(outputBuffer, part);
+		// Assemble the outputBuffer:
+		snprintf(outputBuffer.data(), outputBuffer.size(), "%-8s|%s: %s", code_part_names[part], ourtime, currInputBuffer.data());
+
+		printToDebugCallbacks(outputBuffer.data(), part);
 
 		if (part == LOG_ERROR)
 		{
 			// used to signal user that there was a error condition, and to check the logs.
-			sstrcpy(errorStore, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			sstrcpy(errorStore, currInputBuffer.data());
 			errorWaiting = true;
 		}
 
@@ -575,11 +585,11 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 #if defined(WZ_OS_WIN)
 			char wbuf[MAX_LEN_LOG_LINE+512];
 			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
-				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
+				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", currInputBuffer.data(), WZ_DBGFile, WZ_DBGFile);
 			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
 #elif defined(WZ_OS_MAC)
 			char wbuf[MAX_LEN_LOG_LINE+128];
-			ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", currInputBuffer.data());
 			int clickedIndex = \
 			                   cocoaShowAlert("Warzone has quit unexpectedly.",
 			                                  wbuf,
@@ -610,7 +620,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 				cocoaOpenUserCrashReportFolder();
 			}
 #else
-			const char *popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
+			const char *popupBuf = currInputBuffer.data();
 			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", popupBuf);
 #endif
 		}
@@ -619,7 +629,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		// This is a popup dialog used for times when the error isn't fatal, but we still need to notify user what is going on.
 		if (part == LOG_POPUP)
 		{
-			wzDisplayDialog(Dialog_Information, "Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0]);
+			wzDisplayDialog(Dialog_Information, "Warzone has detected a problem.", currInputBuffer.data());
 		}
 
 	}
