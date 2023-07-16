@@ -59,6 +59,7 @@ using nonstd::nullopt;
 #define pie_STATIC_SHADOW       0x100
 #define pie_PREMULTIPLIED       0x200
 #define pie_NODEPTHWRITE        0x400
+#define pie_FORCELIGHT          0x800
 
 #define pie_RAISE_SCALE			256
 
