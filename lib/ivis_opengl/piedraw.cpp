@@ -1006,6 +1006,11 @@ bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT te
 		light = true;
 	}
 
+	if (pieFlag & pie_FORCELIGHT)
+	{
+		light = true;
+	}
+
 	frame %= std::max<int>(1, shape->numFrames);
 
 	templatedState currentState = templatedState((light) ? ((useInstancedRendering) ? SHADER_COMPONENT_INSTANCED : SHADER_COMPONENT) : ((useInstancedRendering) ? SHADER_NOLIGHT_INSTANCED : SHADER_NOLIGHT), shape, pieFlag);
@@ -1464,6 +1469,10 @@ static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::D
 		light = true;
 	}
 
+	if (pieFlag & pie_FORCELIGHT)
+	{
+		light = true;
+	}
 
 //	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 
