@@ -6843,7 +6843,7 @@ static bool loadWzMapFeature(WzMap::Map &wzMap)
 		// Create the Feature
 		FEATURE *pFeature = nullptr;
 		//restore values && create Feature
-		if (feature.id.has_value())
+		if (feature.id.has_value() && feature.id.value() > 0)
 		{
 			pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true, feature.id.value());
 		} else
