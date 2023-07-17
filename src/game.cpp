@@ -3018,7 +3018,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			if (loadWzMapDroidInit(*(data.get()), fixedMapIdToGeneratedId))
 			{
 				debug(LOG_SAVE, "Loaded new style droids");
-				droidMap[aFileName] = apsDroidLists;	// load pointers later
+				// *maps* should not be added to droidMap to have loadSaveDroidPointers called later
 			}
 			else
 			{
@@ -3136,12 +3136,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			resetFactoryNumFlag();	//reset flags into the masks
 		}
 	}
-	else if (!loadSaveStructure2(aFileName))
+	else
 	{
-		debug(LOG_ERROR, "Failed with: %s", aFileName);
-		goto error;
+		if (!loadSaveStructure2(aFileName))
+		{
+			debug(LOG_ERROR, "Failed with: %s", aFileName);
+			goto error;
+		}
+		structMap[aFileName] = apsStructLists;
 	}
-	structMap[aFileName] = apsStructLists;
 
 	//if user save game then load up the current level for structs and components
 	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
@@ -3237,6 +3240,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	if (!keepObjects)//only reset the pointers if they were set
 	{
 		// Reset the object pointers in the droid target lists
+		// Should only be called for savegames
 		for (auto it = droidMap.begin(); it != droidMap.end(); ++it)
 		{
 			const WzString& key = it->first;
