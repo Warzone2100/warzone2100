@@ -982,6 +982,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 	{
 		/* This needs fixing - it's an arse effect! */
 		const Vector2i size = psStruct->size() * TILE_UNITS / 4;
+		ASSERT_OR_RETURN(, size.x > 0 && size.y > 0, "Zero-size building?: %s", (psStruct && psStruct->pStructureType) ? psStruct->pStructureType->id.toUtf8().c_str() : "<null>");
 		Vector3i temp;
 		temp.x = psStruct->pos.x + ((rand() % (2 * size.x)) - size.x);
 		temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)) + (psStruct->sDisplay.imd->max.y / 6);
