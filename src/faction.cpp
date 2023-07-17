@@ -37,6 +37,8 @@ std::array<FACTION, NUM_FACTIONS> getInitialFactionsMappingTable()
 			{
 				{"blwallc1.pie", "blwallc_nex.pie"},
 				{"blwallh.pie", "blwallh_nex.pie"},
+				{"blwallh_t.pie", "blwallh_t_nex.pie"},
+				{"blwallh_l.pie", "blwallh_l_nex.pie"},
 				{"blhq.pie", "blhq_nex.pie"},
 				{"blguard1.pie", "blguard_nex.pie"},
 				{"blguardr.pie", "blguardr_nex.pie"},
