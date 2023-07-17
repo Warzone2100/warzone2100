@@ -1,4 +1,7 @@
-#include "config.h"
+#include "profiling.h"
+
+#if defined(WZ_PROFILING_INSTRUMENTATION)
+
 #include <cstdio>
 #include <string>
 
@@ -9,8 +12,6 @@
 #ifdef WZ_PROFILING_VTUNE
 #include <ittnotify.h>
 #endif
-
-#include "profiling.h"
 
 namespace profiling
 {
@@ -172,3 +173,5 @@ void mark(const Domain *domain, const char *object, const char *mark)
 }
 
 }
+
+#endif // defined(WZ_PROFILING_INSTRUMENTATION)
