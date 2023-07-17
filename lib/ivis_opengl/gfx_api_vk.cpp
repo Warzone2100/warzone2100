@@ -5748,7 +5748,7 @@ bool VkRoot::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferR
 	}
 
 	depthPassCount = _numDepthPasses;
-	depthMapSize = _depthBufferResolution;
+	depthMapSize = static_cast<uint32_t>(_depthBufferResolution);
 
 	createDepthPassImagesAndFBOs(depthBufferFormat);
 
