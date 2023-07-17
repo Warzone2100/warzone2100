@@ -2387,6 +2387,8 @@ static void getIniDroidOrder(WzConfig &ini, WzString const &key, DroidOrder &ord
 	order.pos = ini.vector2i(key + "/pos");
 	order.pos2 = ini.vector2i(key + "/pos2");
 	order.direction = ini.value(key + "/direction").toInt();
+	order.index = ini.value(key + "/index").toUInt();
+	order.rtrType = (RTR_DATA_TYPE)ini.value(key + "/rtrType", RTR_TYPE_NO_RESULT).toInt();
 	getIniBaseObject(ini, key + "/obj", order.psObj);
 	getIniStructureStats(ini, key + "/stats", order.psStats);
 }
@@ -2421,6 +2423,8 @@ static inline void setIniDroidOrder(nlohmann::json &jsonObj, WzString const &key
 	jsonObj[keyStr + "/pos"] = order.pos;
 	jsonObj[keyStr + "/pos2"] = order.pos2;
 	jsonObj[keyStr + "/direction"] = order.direction;
+	jsonObj[keyStr + "/index"] = order.index;
+	jsonObj[keyStr + "/rtrType"] = order.rtrType;
 	setIniBaseObject(jsonObj, key + "/obj", order.psObj);
 	setIniStructureStats(jsonObj, key + "/stats", order.psStats);
 }
