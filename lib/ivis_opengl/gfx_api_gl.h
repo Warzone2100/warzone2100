@@ -380,6 +380,7 @@ private:
 
 	gl_texture *pDefaultTexture = nullptr;
 	gl_texture_array *pDefaultArrayTexture = nullptr;
+	gl_gpurendered_texture *pDefaultDepthTexture = nullptr;
 
 	gl_gpurendered_texture* depthTexture = nullptr;
 	std::vector<GLuint> depthFBO;
