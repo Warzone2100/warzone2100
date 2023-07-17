@@ -18,6 +18,7 @@
 */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "screen.h"
 #include "gfx_api_gl.h"
 #include "lib/exceptionhandler/dumpinfo.h"
@@ -60,6 +61,8 @@ static std::unordered_set<const gl_texture*> debugLiveTextures;
 PFNGLDRAWARRAYSINSTANCEDPROC wz_dyn_glDrawArraysInstanced = nullptr;
 PFNGLDRAWELEMENTSINSTANCEDPROC wz_dyn_glDrawElementsInstanced = nullptr;
 PFNGLVERTEXATTRIBDIVISORPROC wz_dyn_glVertexAttribDivisor = nullptr;
+
+static const GLubyte* wzSafeGlGetString(GLenum name);
 
 static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gles)
 {
@@ -2968,7 +2971,7 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	debug(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), (message != nullptr) ? message : "");
 }
 
-optional<uint32_t> gl_context::getSuggestedDefaultDepthBufferResolution() const
+uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 {
 	// Use a (very simple) heuristic, that may or may not be useful - but basically try to find graphics cards that have lots of memory...
 	if (GLAD_GL_NVX_gpu_memory_info)
@@ -2991,25 +2994,39 @@ optional<uint32_t> gl_context::getSuggestedDefaultDepthBufferResolution() const
 		// For GL_ATI_meminfo, get the current free texture memory (stats_kb[0])
 		GLint stats_kb[4] = {0, 0, 0, 0};
 		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, stats_kb);
-		if (stats_kb[0] <= 0)
+		if (stats_kb[0] > 0)
 		{
-			return nullopt;
-		}
-		uint32_t currentFreeTextureMemory_mb = static_cast<uint32_t>(stats_kb[0] / 1024);
+			uint32_t currentFreeTextureMemory_mb = static_cast<uint32_t>(stats_kb[0] / 1024);
 
-		if (currentFreeTextureMemory_mb >= 4096) // If >= 4 GB free texture memory
-		{
-			return 4096;
+			if (currentFreeTextureMemory_mb >= 4096) // If >= 4 GB free texture memory
+			{
+				return 4096;
+			}
+			else
+			{
+				return 2048;
+			}
 		}
-		else
+	}
+
+	// don't currently have a good way of checking video memory on this system
+	// instead, check system RAM
+	auto systemRAMinMiB = wzGetSystemRAM();
+	if (systemRAMinMiB >= 16384) // If >= 16 GB of system RAM
+	{
+#if defined(WZ_OS_WIN)
+		WzString openGL_renderer = (const char*)wzSafeGlGetString(GL_RENDERER);
+		if (openGL_renderer.startsWith("Intel(R) HD Graphics"))
 		{
+			// always default to 2048 on Intel HD Graphics...
 			return 2048;
 		}
+#endif
+		return 4096;
 	}
 	else
 	{
-		// don't currently have a good way of checking on this system
-		return nullopt;
+		return 2048;
 	}
 }
 
@@ -3080,7 +3097,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	depthBufferResolution = _depthMapResolution;
 	if (depthBufferResolution == 0)
 	{
-		depthBufferResolution = getSuggestedDefaultDepthBufferResolution().value_or(2048);
+		depthBufferResolution = getSuggestedDefaultDepthBufferResolution();
 	}
 
 	createSceneRenderpass();

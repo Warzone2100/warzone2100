@@ -123,6 +123,7 @@ enum DialogType {
 WZ_DECL_NONNULL(2, 3) void wzDisplayDialog(DialogType type, const char *title, const char *message);	///< Throw up a modal warning dialog - title & message are UTF-8 text
 
 WzString wzGetPlatform();
+uint32_t wzGetSystemRAM(); // in MiB
 std::vector<screeninfo> wzAvailableResolutions();
 screeninfo wzGetCurrentFullscreenDisplayMode();
 std::vector<unsigned int> wzAvailableDisplayScales();
