@@ -2219,7 +2219,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType);
 static bool writeGameFile(const char *fileName, SDWORD saveType);
 static bool writeMapFile(const char *fileName);
 
-static bool loadWzMapDroidInit(WzMap::Map &wzMap);
+static bool loadWzMapDroidInit(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists);
 static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentDroidLists);
@@ -2227,7 +2227,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
 static bool loadSaveStructure2(const char *pFileName);
-static bool loadWzMapStructure(WzMap::Map& wzMap);
+static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 static bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList);
 static bool writeStructFile(const char *pFileName);
 
@@ -2237,7 +2237,7 @@ static bool writeTemplateFile(const char *pFileName);
 static bool loadSaveFeature(char *pFileData, UDWORD filesize);
 static bool writeFeatureFile(const char *pFileName);
 static bool loadSaveFeature2(const char *pFileName);
-static bool loadWzMapFeature(WzMap::Map &wzMap);
+static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 
 static bool writeTerrainTypeMapFile(char *pFileName);
 
@@ -2480,6 +2480,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	std::shared_ptr<WzMap::Map> data;
 	std::map<WzString, DROID **> droidMap;
 	std::map<WzString, STRUCTURE **> structMap;
+	std::unordered_map<UDWORD, UDWORD> fixedMapIdToGeneratedId; // only populated when loading maps, *not* savegames
 	char			aFileName[256];
 	size_t			fileExten;
 	UDWORD			fileSize;
@@ -3014,7 +3015,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		if (!UserSaveGame)
 		{
 			ASSERT(data != nullptr, "Expecting WzMap::Map instance");
-			if (loadWzMapDroidInit(*(data.get())))
+			if (loadWzMapDroidInit(*(data.get()), fixedMapIdToGeneratedId))
 			{
 				debug(LOG_SAVE, "Loaded new style droids");
 				droidMap[aFileName] = apsDroidLists;	// load pointers later
@@ -3096,7 +3097,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	if (!UserSaveGame)
 	{
 		ASSERT(data != nullptr, "Expecting WzMap::Map instance");
-		if (!loadWzMapFeature(*(data.get())))
+		if (!loadWzMapFeature(*(data.get()), fixedMapIdToGeneratedId))
 		{
 			debug(LOG_ERROR, "Failed to load map feature init from map directory: %s", aFileName);
 			goto error;
@@ -3124,7 +3125,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			freeAllFlagPositions();		//clear any flags put in during level loads
 		}
-		if (!loadWzMapStructure(*(data.get())))
+		if (!loadWzMapStructure(*(data.get()), fixedMapIdToGeneratedId))
 		{
 			aFileName[fileExten] = '\0';
 			debug(LOG_ERROR, "Failed to load map structure init from map directory: %s", aFileName);
@@ -3253,7 +3254,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	// Load labels
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "labels.json");
-	loadLabels(aFileName);
+	loadLabels(aFileName, fixedMapIdToGeneratedId);
 
 	//if user save game then reset the time - BEWARE IF YOU USE IT
 	if ((gameType == GTYPE_SAVE_START) ||
@@ -5157,7 +5158,7 @@ static uint32_t RemapWzMapPlayerNumber(int8_t oldNumber)
 	return 0;
 }
 
-static bool loadWzMapDroidInit(WzMap::Map &wzMap)
+static bool loadWzMapDroidInit(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
 {
 	uint32_t NumberOfSkippedDroids = 0;
 	auto pDroids = wzMap.mapDroids();
@@ -5179,13 +5180,16 @@ static bool loadWzMapDroidInit(WzMap::Map &wzMap)
 		}
 		turnOffMultiMsg(true);
 		DROID *psDroid = nullptr;
+		uint32_t newID = generateSynchronisedObjectId();
 		if (droid.id.has_value() && droid.id.value() > 0)
 		{
-			psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0}, droid.id.value());
-		} else
-		{
-			psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0});
+			bool addedMapping = fixedMapIdToGeneratedId.insert(std::unordered_map<UDWORD, UDWORD>::value_type(droid.id.value(), newID)).second;
+			if (!addedMapping)
+			{
+				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", droid.id.value());
+			}
 		}
+		psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0}, newID);
 		turnOffMultiMsg(false);
 		if (psDroid == nullptr)
 		{
@@ -6070,7 +6074,7 @@ static UDWORD getResearchIdFromName(const WzString &name)
 	return NULL_ID;
 }
 
-static bool loadWzMapStructure(WzMap::Map& wzMap)
+static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
 {
 	uint32_t NumberOfSkippedStructures = 0;
 	auto pStructures = wzMap.mapStructures();
@@ -6112,15 +6116,17 @@ static bool loadWzMapStructure(WzMap::Map& wzMap)
 		STRUCTURE *psStructure = nullptr;
 		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", (structure.id.has_value()) ? structure.id.value() : -1, player, 
 				structure.name.c_str(), map_coord(structure.position.x), map_coord(structure.position.y));
+
+		uint32_t newID = generateSynchronisedObjectId();
 		if (structure.id.has_value() && structure.id.value() > 0)
 		{
-			psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true, structure.id.value());
-		} else
-		{
-			// generate new synchronised id
-			psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true);
+			bool addedMapping = fixedMapIdToGeneratedId.insert(std::unordered_map<UDWORD, UDWORD>::value_type(structure.id.value(), newID)).second;
+			if (!addedMapping)
+			{
+				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", structure.id.value());
+			}
 		}
-		
+		psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true, newID);
 		if (psStructure == nullptr)
 		{
 			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.c_str());
@@ -6824,7 +6830,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 	return true;
 }
 
-static bool loadWzMapFeature(WzMap::Map &wzMap)
+static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
 {
 	auto pFeatures = wzMap.mapFeatures();
 	if (!pFeatures)
@@ -6843,13 +6849,16 @@ static bool loadWzMapFeature(WzMap::Map &wzMap)
 		// Create the Feature
 		FEATURE *pFeature = nullptr;
 		//restore values && create Feature
+		uint32_t newID = generateSynchronisedObjectId();
 		if (feature.id.has_value() && feature.id.value() > 0)
 		{
-			pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true, feature.id.value());
-		} else
-		{
-			pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true);
+			bool addedMapping = fixedMapIdToGeneratedId.insert(std::unordered_map<UDWORD, UDWORD>::value_type(feature.id.value(), newID)).second;
+			if (!addedMapping)
+			{
+				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", feature.id.value());
+			}
 		}
+		pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true, newID);
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", feature.name.c_str());

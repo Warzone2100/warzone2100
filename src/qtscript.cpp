@@ -1985,13 +1985,13 @@ bool scripting_engine::saveGroups(nlohmann::json &result, wzapi::scripting_insta
 // Label system (function defined in qtscript.h header)
 //
 
-bool loadLabels(const char *filename)
+bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
 {
-	return scripting_engine::instance().loadLabels(filename);
+	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId);
 }
 
 // Load labels
-bool scripting_engine::loadLabels(const char *filename)
+bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
 {
 	int groupidx = -1;
 
@@ -2050,13 +2050,22 @@ bool scripting_engine::loadLabels(const char *filename)
 		else if (list[i].startsWith("object"))
 		{
 			auto id = ini.value("id").toInt();
+			ASSERT(id > 0, "Unexpected id %d for object label", id);
+			auto it = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
+			if (it != fixedMapIdToGeneratedId.end())
+			{
+				// replace fixed hard-coded map-load id with its new generated (synchronized) id
+				// note: must come *before* the moduleToBuilding call below
+				debug(LOG_NEVER, "replaced fixed map id %d with %d", id, it->second);
+				id = it->second;
+			}
 			const auto player = ini.value("player").toInt();
-			const auto it = moduleToBuilding[player].find(id);
-			if (it != moduleToBuilding[player].end())
+			const auto it_modulemap = moduleToBuilding[player].find(id);
+			if (it_modulemap != moduleToBuilding[player].end())
 			{
 				// replace moduleId with its building id
-				debug(LOG_NEVER, "replaced with %i;%i", id, it->second);
-				id = it->second;
+				debug(LOG_NEVER, "replaced with %i;%i", id, it_modulemap->second);
+				id = it_modulemap->second;
 			}
 			p.id = id;
 			p.type = ini.value("type").toInt();
@@ -2074,6 +2083,14 @@ bool scripting_engine::loadLabels(const char *filename)
 			for (WzString const &j : memberList)
 			{
 				int id = j.toInt();
+				ASSERT(id > 0, "Unexpected id %d for group member", id);
+				auto it = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
+				if (it != fixedMapIdToGeneratedId.end())
+				{
+					// replace fixed hard-coded map-load id with its new generated (synchronized) id
+					debug(LOG_NEVER, "replaced fixed map id %d with %d", id, it->second);
+					id = it->second;
+				}
 				BASE_OBJECT *psObj = IdToPointer(id, p.player);
 				ASSERT(psObj, "Unit %d belonging to player %d not found from label %s",
 				       id, p.player, list[i].toUtf8().c_str());
