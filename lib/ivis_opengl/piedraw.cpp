@@ -156,7 +156,7 @@ bool pie_setShadowMapResolution(uint32_t resolution)
 
 uint32_t pie_getShadowMapResolution()
 {
-	return gfx_api::context::get().getDepthPassDimensions(0);
+	return static_cast<uint32_t>(gfx_api::context::get().getDepthPassDimensions(0));
 }
 
 bool pie_setShadowMode(ShadowMode mode)
