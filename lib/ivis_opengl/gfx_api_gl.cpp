@@ -3075,7 +3075,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	const size_t defaultTexture_height = 2;
 	pDefaultTexture = dynamic_cast<gl_texture*>(create_texture(1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_texture>"));
 	pDefaultArrayTexture = dynamic_cast<gl_texture_array*>(create_texture_array(1, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_array_texture>"));
-	pDefaultDepthTexture = create_depthmap_texture(1, 2, 2, "<default_depth_map>");
+	pDefaultDepthTexture = create_depthmap_texture(WZ_MAX_SHADOW_CASCADES, 2, 2, "<default_depth_map>");
 	if (!pDefaultDepthTexture)
 	{
 		debug(LOG_INFO, "Failed to create default depth texture??");
