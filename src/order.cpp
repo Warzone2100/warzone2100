@@ -1525,16 +1525,19 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_BUILDMODULE:
-		//build a module onto the structure
-		if (!isConstructionDroid(psDroid) || psOrder->index < nextModuleToBuild((STRUCTURE *)psOrder->psObj, -1))
 		{
-			break;
+			//build a module onto the structure
+			if (!isConstructionDroid(psDroid) || psOrder->index < nextModuleToBuild((STRUCTURE *)psOrder->psObj, -1))
+			{
+				break;
+			}
+			STRUCTURE_STATS *psStats = getModuleStat((STRUCTURE *)psOrder->psObj);
+			ASSERT_OR_RETURN(, psStats != nullptr, "should have found a module stats");
+			psDroid->order = DroidOrder(DORDER_BUILD, psStats, psOrder->psObj->pos.xy(), 0);
+			ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
+			actionDroid(psDroid, DACTION_BUILD, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
+			objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		}
-		psDroid->order = DroidOrder(DORDER_BUILD, getModuleStat((STRUCTURE *)psOrder->psObj), psOrder->psObj->pos.xy(), 0);
-		ASSERT_OR_RETURN(, psDroid->order.psStats != nullptr, "should have found a module stats");
-		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
-		actionDroid(psDroid, DACTION_BUILD, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
-		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
