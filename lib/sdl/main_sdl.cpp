@@ -223,6 +223,13 @@ WzString wzGetPlatform()
 	return WzString::fromUtf8(SDL_GetPlatform());
 }
 
+// Get system RAM (in MiB)
+uint32_t wzGetSystemRAM()
+{
+	auto systemRAMResult = SDL_GetSystemRAM();
+	return (systemRAMResult > 0) ? static_cast<uint32_t>(systemRAMResult) : 0;
+}
+
 // See if we have TEXT in the clipboard
 bool has_scrap(void)
 {

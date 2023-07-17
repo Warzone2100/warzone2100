@@ -353,7 +353,7 @@ private:
 	void disableVertexAttribArray(GLuint index);
 	std::string calculateFormattedRendererInfoString() const;
 	bool isBlocklistedGraphicsDriver() const;
-	optional<uint32_t> getSuggestedDefaultDepthBufferResolution() const;
+	uint32_t getSuggestedDefaultDepthBufferResolution() const;
 
 	uint32_t viewportWidth = 0;
 	uint32_t viewportHeight = 0;
