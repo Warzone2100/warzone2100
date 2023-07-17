@@ -2494,12 +2494,14 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 		{
 			switch (desc.target)
 			{
-				case gfx_api::pixel_format_target::texture_2d_array:
-				case gfx_api::pixel_format_target::depth_map:
-					pTextureToBind = pDefaultArrayTexture;
-					break;
 				case gfx_api::pixel_format_target::texture_2d:
 					pTextureToBind = pDefaultTexture;
+					break;
+				case gfx_api::pixel_format_target::texture_2d_array:
+					pTextureToBind = pDefaultArrayTexture;
+					break;
+				case gfx_api::pixel_format_target::depth_map:
+					pTextureToBind = pDefaultDepthTexture;
 					break;
 			}
 		}
@@ -3073,6 +3075,11 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	const size_t defaultTexture_height = 2;
 	pDefaultTexture = dynamic_cast<gl_texture*>(create_texture(1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_texture>"));
 	pDefaultArrayTexture = dynamic_cast<gl_texture_array*>(create_texture_array(1, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_array_texture>"));
+	pDefaultDepthTexture = create_depthmap_texture(1, 2, 2, "<default_depth_map>");
+	if (!pDefaultDepthTexture)
+	{
+		debug(LOG_INFO, "Failed to create default depth texture??");
+	}
 
 	iV_Image defaultTexture;
 	defaultTexture.allocate(defaultTexture_width, defaultTexture_height, 4, true);
@@ -3897,6 +3904,12 @@ void gl_context::shutdown()
 	{
 		delete pDefaultArrayTexture;
 		pDefaultArrayTexture = nullptr;
+	}
+
+	if (pDefaultDepthTexture)
+	{
+		delete pDefaultDepthTexture;
+		pDefaultDepthTexture = nullptr;
 	}
 
 	if (glDeleteBuffers) // glDeleteBuffers might be NULL (if initializing the OpenGL loader library fails)
