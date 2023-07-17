@@ -216,7 +216,7 @@ public:
 };
 
 /// Load map labels
-bool loadLabels(const char *filename);
+bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 
 /// Write map labels to savegame
 bool writeLabels(const char *filename);
@@ -314,7 +314,7 @@ public:
 // MARK: LABELS
 public:
 	/// Load map labels
-	bool loadLabels(const char *filename);
+	bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 
 	/// Write map labels to savegame
 	bool writeLabels(const char *filename);
