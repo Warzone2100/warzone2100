@@ -158,6 +158,7 @@ enum RTR_DATA_TYPE
 	RTR_TYPE_REPAIR_FACILITY,
 	RTR_TYPE_DROID,
 	RTR_TYPE_HQ,
+	// If modifying, only *add* entries at end! (or savegame loading will break)
 };
 
 /** Struct that stores data of an order.
