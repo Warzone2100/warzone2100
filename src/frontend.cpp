@@ -1104,18 +1104,7 @@ void startGraphicsOptionsMenu()
 	row.start++;
 
 	////////////
-	//FMV mode.
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FMVMODE, _("Video Playback"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_FMVMODE_R, graphicsOptionsFmvmodeString(), WBUT_SECONDARY)));
-	row.start++;
-
-	// Scanlines
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SCANLINES, _("Scanlines"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SCANLINES_R, graphicsOptionsScanlinesString(), WBUT_SECONDARY)));
-	row.start++;
-
-	////////////
-	//shadows
+	// Shadows
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SHADOWS, _("Shadows"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SHADOWS_R, graphicsOptionsShadowsString(), WBUT_SECONDARY)));
 	row.start++;
@@ -1135,6 +1124,14 @@ void startGraphicsOptionsMenu()
 		row.start++;
 	}
 
+	// LOD Distance
+	// TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
+	std::string lodDistanceString = _("LOD Distance");
+	lodDistanceString += "*"; // takes effect on game restart
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_LOD_DISTANCE, lodDistanceString.c_str(), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, makeLODDistanceDropdown());
+	row.start++;
+
 	// fog
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FOG, _("Fog"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_FOG_R, graphicsOptionsFogString(), WBUT_SECONDARY)));
@@ -1150,12 +1147,15 @@ void startGraphicsOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_RADAR_JUMP_R, graphicsOptionsRadarJumpString(), WBUT_SECONDARY)));
 	row.start++;
 
-	// LOD Distance
-	// TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
-	std::string lodDistanceString = _("LOD Distance");
-	lodDistanceString += "*"; // takes effect on game restart
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_LOD_DISTANCE, lodDistanceString.c_str(), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, makeLODDistanceDropdown());
+	////////////
+	//FMV mode.
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FMVMODE, _("Video Playback"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_FMVMODE_R, graphicsOptionsFmvmodeString(), WBUT_SECONDARY)));
+	row.start++;
+
+	// Scanlines
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SCANLINES, _("Scanlines"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SCANLINES_R, graphicsOptionsScanlinesString(), WBUT_SECONDARY)));
 	row.start++;
 
 	// screenshake
