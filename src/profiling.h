@@ -1,5 +1,8 @@
-#ifndef __INCLUDED_SRC_PROFILING_H__
-#define __INCLUDED_SRC_PROFILING_H__
+#pragma once
+
+#include "lib/framework/wzglobal.h" // required for config.h
+
+#if defined(WZ_PROFILING_INSTRUMENTATION)
 
 #include <cstdint>
 
@@ -54,4 +57,9 @@ void mark(const Domain *domain, const char *object, const char *mark);
 #define WZ_PROFILE_SCOPE(name) profiling::Scope mark_##name(&profiling::wzRootDomain, #name);
 #define WZ_PROFILE_SCOPE2(object, name) profiling::Scope mark_##name(&profiling::wzRootDomain, #object, #name);
 
-#endif // __INCLUDED_SRC_PROFILING_H__
+#else // !defined(WZ_PROFILING_INSTRUMENTATION)
+
+#define WZ_PROFILE_SCOPE(name)
+#define WZ_PROFILE_SCOPE2(object, name)
+
+#endif // defined(WZ_PROFILING_INSTRUMENTATION)

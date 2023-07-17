@@ -23,6 +23,7 @@ OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
 OPTION(WZ_DEBUG_GFX_API_LEAKS "Enable debugging for graphics API leaks" ON)
 OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
 
+# Dev options
 OPTION(WZ_PROFILING_NVTX "Add NVTX-based profiling instrumentation to the code" OFF)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -745,6 +746,12 @@ cmake_reset_check_state()
 include(CheckCXXStdThread)
 CHECK_CXX_STD_THREAD(HAVE_STD_THREAD)
 cmake_reset_check_state()
+
+if(WZ_PROFILING_NVTX)
+	set(WZ_PROFILING_INSTRUMENTATION ON)
+else()
+	unset(WZ_PROFILING_INSTRUMENTATION)
+endif()
 
 set(WZ_BINDIR "${CMAKE_INSTALL_BINDIR}")
 set(WZ_LOCALEDIR "${CMAKE_INSTALL_LOCALEDIR}")
