@@ -349,6 +349,13 @@ function eventStartLevel()
 		}
 	});
 
+	//In the event they put all trucks into Gamma 2 and have no completed factories on map...
+	if (enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter((obj) => (obj.status === BUILT)).length === 0 && enumDroid(CAM_HUMAN_PLAYER, DROID_CONSTRUCT).length === 0)
+	{
+		let failSafeTruck = addDroid(GAMMA, lz.x, lz.y, "Truck Python Tracks", "Body11ABT", "tracked01", "", "", "Spade1Mk1");
+		donateObject(failSafeTruck, CAM_HUMAN_PLAYER); //So the reticules update for the next tick.
+	}
+
 	if (difficulty >= HARD)
 	{
 		addDroid(GAMMA, 28, 5, "Truck Python Tracks", "Body11ABT", "tracked01", "", "", "Spade1Mk1");
