@@ -7684,12 +7684,23 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
+		const PLAYERSTATS& stat = getMultiStats(j);
+		auto ar = stat.autorating;
+
 		std::string name = NetPlay.players[j].name;
+		if (ar.name != "")
+		{
+			name = ar.name;
+		}
 
 		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
 
 		PIELIGHT colour;
-		if (ingame.PingTimes[j] >= PING_LIMIT)
+		if (ar.nameTextColorOverride[0] != 255 || ar.nameTextColorOverride[1] != 255 || ar.nameTextColorOverride[2] != 255)
+		{
+			colour = pal_Colour(ar.nameTextColorOverride[0], ar.nameTextColorOverride[1], ar.nameTextColorOverride[2]);
+		}
+		else if (ingame.PingTimes[j] >= PING_LIMIT)
 		{
 			colour = WZCOL_FORM_PLAYER_NOPING;
 		}
@@ -7743,8 +7754,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			subText += buf;
 		}
 
-		const PLAYERSTATS& stat = getMultiStats(j);
-		auto ar = stat.autorating;
 		if (!ar.valid)
 		{
 			ar.dummy = stat.played < 5;
@@ -7810,8 +7819,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 		if (!ar.elo.empty())
 		{
+			PIELIGHT eloColour = WZCOL_TEXT_BRIGHT;
+			if (ar.eloTextColorOverride[0] != 255 || ar.eloTextColorOverride[1] != 255 || ar.eloTextColorOverride[2] != 255)
+			{
+				eloColour = pal_Colour(ar.eloTextColorOverride[0], ar.eloTextColorOverride[1], ar.eloTextColorOverride[2]);
+			}
 			cache.wzEloText.setText(WzString::fromUtf8(ar.elo), font_small);
-			cache.wzEloText.render(x + nameX, y + 28 + H*!subText.isEmpty(), WZCOL_TEXT_BRIGHT);
+			cache.wzEloText.render(x + nameX, y + 28 + H*!subText.isEmpty(), eloColour);
 		}
 	}
 	else	// AI
