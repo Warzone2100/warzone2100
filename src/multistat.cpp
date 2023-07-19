@@ -71,6 +71,9 @@ static void NETauto(PLAYERSTATS::Autorating &ar)
 		NETauto(ar.elo);
 		NETauto(ar.autohoster);
 		NETauto(ar.details);
+		NETauto(ar.name);
+		NETauto(ar.nameTextColorOverride);
+		NETauto(ar.eloTextColorOverride);
 	}
 }
 
@@ -86,6 +89,22 @@ PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
 		elo = json["elo"].get<std::string>();
 		autohoster = json["autohoster"].get<bool>();
 		details = json["details"].get<std::string>();
+		if (json.contains("name"))
+		{
+			name = json["name"].get<std::string>();
+		}
+		if (json.contains("nameTextColorOverride"))
+		{
+			nameTextColorOverride[0] = json["nameTextColorOverride"][0].get<uint8_t>();
+			nameTextColorOverride[1] = json["nameTextColorOverride"][1].get<uint8_t>();
+			nameTextColorOverride[2] = json["nameTextColorOverride"][2].get<uint8_t>();
+		}
+		if (json.contains("eloTextColorOverride"))
+		{
+			eloTextColorOverride[0] = json["eloTextColorOverride"][0].get<uint8_t>();
+			eloTextColorOverride[1] = json["eloTextColorOverride"][1].get<uint8_t>();
+			eloTextColorOverride[2] = json["eloTextColorOverride"][2].get<uint8_t>();
+		}
 		valid = true;
 	} catch (const std::exception &e) {
 		debug(LOG_WARNING, "Error parsing rating JSON: %s", e.what());
@@ -165,7 +184,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 			debug(LOG_WARNING, "Failure fetching \"%s\".", urlCopy.c_str());
 		});
 	};
-	req.maxDownloadSizeLimit = 4096;
+	req.maxDownloadSizeLimit = 4096*4;
 	urlRequestData(req);
 }
 
