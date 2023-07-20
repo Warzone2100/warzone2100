@@ -1326,19 +1326,37 @@ void actionUpdateDroid(DROID *psDroid)
 							chaseBloke = true;
 						}
 
-						if (actionIsInRange && !chaseBloke)
+						if (actionIsInRange)
 						{
 							/* init vtol attack runs count if necessary */
 							if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 							{
 								psDroid->action = DACTION_VTOLATTACK;
 							}
+							else if (chaseBloke || !actionInRange(psDroid, psDroid->psActionTarget[0], i, false))
+							{
+								// fire while closing range
+								// do this either when trying to run over a bloke or close the distance into optimum range
+								if ((blockingWall = visGetBlockingWall(psDroid, psDroid->psActionTarget[0])) && proj_Direct(psWeapStats))
+								{
+									WEAPON_EFFECT weapEffect = psWeapStats->weaponEffect;
+
+									if (!aiCheckAlliances(psDroid->player, blockingWall->player)
+										&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
+									{
+										//Shoot at wall if the weapon is good enough against them
+										combFire(&psDroid->asWeaps[i], psDroid, (BASE_OBJECT*)blockingWall, i);
+									}
+								}
+								else
+								{
+									combFire(&psDroid->asWeaps[i], psDroid, psDroid->psActionTarget[0], i);
+								}
+							}
 							else
 							{
-								if (actionInRange(psDroid, psDroid->psActionTarget[0], i, false))
-								{
-									moveStopDroid(psDroid);
-								}
+								// stop and shoot
+								moveStopDroid(psDroid);
 
 								if (psWeapStats->rotate)
 								{
@@ -1349,25 +1367,6 @@ void actionUpdateDroid(DROID *psDroid)
 									psDroid->action = DACTION_ROTATETOATTACK;
 									moveTurnDroid(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
 								}
-							}
-						}
-						else if (actionIsInRange)
-						{
-							// fire while closing range
-							if ((blockingWall = visGetBlockingWall(psDroid, psDroid->psActionTarget[0])) && proj_Direct(psWeapStats))
-							{
-								WEAPON_EFFECT weapEffect = psWeapStats->weaponEffect;
-
-								if (!aiCheckAlliances(psDroid->player, blockingWall->player)
-									&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
-								{
-									//Shoot at wall if the weapon is good enough against them
-									combFire(&psDroid->asWeaps[i], psDroid, (BASE_OBJECT *)blockingWall, i);
-								}
-							}
-							else
-							{
-								combFire(&psDroid->asWeaps[i], psDroid, psDroid->psActionTarget[0], i);
 							}
 						}
 					}
