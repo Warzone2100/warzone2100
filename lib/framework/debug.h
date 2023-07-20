@@ -328,4 +328,7 @@ bool debugPartEnabled(code_part codePart);
 
 void debugDisableAssert();
 
+/** Issue breakpoint in the debugger. */
+void debugBreak();
+
 #endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__

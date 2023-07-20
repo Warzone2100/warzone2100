@@ -56,6 +56,19 @@
 # include <stdio.h>
 #endif
 
+#ifdef _MSC_VER
+#define DEBUG_BREAK __debugbreak()
+#elif defined(WZ_OS_UNIX)
+#include <signal.h>
+#ifdef SIGTRAP
+#define DEBUG_BREAK raise(SIGTRAP)
+#else
+#define DEBUG_BREAK raise(SIGABRT)
+#endif
+#else
+#define DEBUG_BREAK
+#endif
+
 #define MAX_LEN_LOG_LINE 1024
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
@@ -685,6 +698,10 @@ bool debugPartEnabled(code_part codePart)
 void debugDisableAssert()
 {
 	assertEnabled = false;
+}
+
+void debugBreak() {
+	DEBUG_BREAK;
 }
 
 #include <sstream>
