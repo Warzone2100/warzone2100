@@ -183,4 +183,11 @@
 /* Enables usage of VTune-based instrumentation backend. */
 #cmakedefine WZ_PROFILING_VTUNE
 
+/* Enables additional debug code. */
+#cmakedefine WZ_MORE_DEBUG
+#ifdef WZ_MORE_DEBUG
+// Remapping cmake variable into internal one. DEBUG is too popular name to be used as a variable in cmake.
+#define DEBUG
+#endif
+
 #endif // __INCLUDED_WZ_GENERATED_CONFIG_H__

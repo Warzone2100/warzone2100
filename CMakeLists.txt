@@ -22,6 +22,8 @@ OPTION(WZ_ENABLE_BACKEND_VULKAN "Enable Vulkan backend" ON)
 OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
 OPTION(WZ_DEBUG_GFX_API_LEAKS "Enable debugging for graphics API leaks" ON)
 OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
+OPTION(WZ_MORE_DEBUG "Enable additional debug code" OFF)
+mark_as_advanced(WZ_MORE_DEBUG)
 
 # Dev options
 OPTION(WZ_PROFILING_NVTX "Add NVTX-based profiling instrumentation to the code" OFF)

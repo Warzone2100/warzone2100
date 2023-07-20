@@ -115,10 +115,19 @@ void console(const char *pFormat, ...); /// Print always to the ingame console
 	CONPRINTF("Hello %d", 123);
 */
 template <typename... P>
-static inline void CONPRINTF(P &&... params)
+static inline void CONPRINTF(const char* format, P &&... params)
 {
-	snprintf(ConsoleString, sizeof(ConsoleString), std::forward<P>(params)...);
+	/** Modern compilers can issue a warning/error if format is not string literal and there are no arguments.
+	 * CONPRINTF overload with a single argument prevents that.
+	 */
+	std::snprintf(ConsoleString, sizeof(ConsoleString), format, std::forward<P>(params)...);
 	addConsoleMessage(ConsoleString, DEFAULT_JUSTIFY, INFO_MESSAGE);
+}
+
+
+static inline void CONPRINTF(const char* string)
+{
+	addConsoleMessage(string, DEFAULT_JUSTIFY, INFO_MESSAGE);
 }
 
 
