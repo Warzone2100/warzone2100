@@ -27,18 +27,24 @@ The server must return a response code 200 and some data json format. Otherwise 
 * `elo` (string): the text to display under the player's name.
 * `autohoster` (boolean): if the player is a dedicated hoster. It will have an hoster icon instead of a medal and no stars.
 * `details` (string): notes to display in the player's tooltip.
+* `name` (string): overrides name of the player in lobby (optional) (ignored if empty).
+* `nameTextColorOverride` (array of three integers): overrides name color in lobby (rgb 0-255) ([255,255,255] will result in default coloring) (optional).
+* `eloTextColorOverride` (array of three integers): overrides elo text color in lobby (rgb 0-255) (optional).
 
 ### Response sample
 
 ```
 {
-"dummy": false,
-"star": [3,2,1],
-"medal": 2,
-"level": 4,
-"elo": "ELO: 1283",
-"autohoster": false,
-"details": "Played 264 games, win rate: 53%"
+  "dummy": false,
+  "star": [3,2,1],
+  "medal": 2,
+  "level": 4,
+  "elo": "ELO: 1283",
+  "autohoster": false,
+  "details": "Played 264 games, win rate: 53%",
+  "name": "Flex seal",
+  "nameTextColorOverride": [51,255,51],
+  "eloTextColorOverride": [255,255,255]
 }
 ```
 
