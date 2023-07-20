@@ -75,6 +75,8 @@ static int fpathThreadFunc(void *)
 {
 	wzMutexLock(fpathMutex);
 
+	std::list<packagedPathJob> localPathJobs;
+
 	while (!fpathQuit)
 	{
 		if (pathJobs.empty())
@@ -85,15 +87,19 @@ static int fpathThreadFunc(void *)
 			wzMutexLock(fpathMutex);
 			continue;
 		}
-
-		// Copy the first job from the queue.
-		packagedPathJob job = std::move(pathJobs.front());
-		pathJobs.pop_front();
-
+		// Take batch of jobs to process them without additional synchronizations.
+		localPathJobs = std::move(pathJobs);
 		wzMutexUnlock(fpathMutex);
-		job();
+		{
+			WZ_PROFILE_SCOPE(fpathJob);
+			while(!localPathJobs.empty()) {
+				// Process jobs one by one
+				packagedPathJob job = std::move(localPathJobs.front());
+				localPathJobs.pop_front();
+				job();
+			}
+		}
 		wzMutexLock(fpathMutex);
-
 		waitingForResult = false;
 		objTrace(waitingForResultId, "These are the droids you are looking for.");
 		wzSemaphorePost(waitingForResultSemaphore);
@@ -120,7 +126,6 @@ bool fpathInitialise()
 
 	return true;
 }
-
 
 void fpathShutdown()
 {
