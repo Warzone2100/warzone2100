@@ -1731,13 +1731,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			}
 			droidSetPosition(psDroid, world_coord(droidX), world_coord(droidY));
 			updateDroidOrientation(psDroid);
-			// a commander needs to get it's group back
-			if (psDroid->droidType == DROID_COMMAND)
-			{
-				psGroup = grpCreate();
-				psGroup->add(psDroid);
-				clearCommandDroidFactory(psDroid);
-			}
 
 			//reset droid orders
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
@@ -1764,6 +1757,14 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 		     && psDroid != psTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
+			// a commander needs to get it's group back
+			if (psDroid->droidType == DROID_COMMAND)
+			{
+				psGroup = grpCreate();
+				psGroup->add(psDroid);
+				clearCommandDroidFactory(psDroid);
+				continue;
+			}
 			psTransporter->psGroup->remove(psDroid);
 		}
 	}
