@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 
 namespace WzMap {
 
@@ -180,6 +181,18 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			{
 				incrementPlayerEntityCount(playerStructCounts, structure.player, structure.name);
 			}
+			if (statsConfig.hqStructs.count(structure.name) > 0)
+			{
+				// found an HQ
+				std::pair<int32_t, int32_t> newHQMapPos = { map_coord(structure.position.x), map_coord(structure.position.y) };
+				auto& structPlayerHQPositions = results.playerHQPositions[structure.player];
+				if (std::none_of(structPlayerHQPositions.begin(), structPlayerHQPositions.end(), [newHQMapPos](const std::pair<int32_t, int32_t>& existingHQPos) -> bool {
+					return existingHQPos == newHQMapPos;
+				}))
+				{
+					structPlayerHQPositions.push_back(newHQMapPos);
+				}
+			}
 			if (structure.modules > 0)
 			{
 				if (statsConfig.powerGenerators.count(structure.name) > 0)
@@ -329,7 +342,7 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 	return results;
 }
 
-MapStatsConfiguration::MapStatsConfiguration()
+MapStatsConfiguration::MapStatsConfiguration(MapType mapType)
 {
 	// Default values extracted from WZ 4.3 stats files:
 
@@ -355,6 +368,17 @@ MapStatsConfiguration::MapStatsConfiguration()
 	// the names (ids) of research structs
 	//	- "type": "RESEARCH"
 	researchCenters = {"A0ResearchFacility"};
+	// the names (ids) of the HQ struct(s)
+	//  - "type": "HQ"
+	if (mapType == MapType::CAMPAIGN)
+	{
+		// There are some campaign-only additional ids (A0CommandCentreNP, A0CommandCentreCO, A0CommandCentreNE)
+		hqStructs = {"A0CommandCentre", "A0CommandCentreNP", "A0CommandCentreCO", "A0CommandCentreNE"};
+	}
+	else
+	{
+		hqStructs = {"A0CommandCentre"};
+	}
 
 	// [STRUCT MODULES]:
 	//	- "type": "FACTORY MODULE"
@@ -436,6 +460,7 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 	std::unordered_set<std::string> vtolFactories_loaded;
 	std::unordered_set<std::string> cyborgFactories_loaded;
 	std::unordered_set<std::string> researchCenters_loaded;
+	std::unordered_set<std::string> hqStructs_loaded;
 
 	// [STRUCT MODULES]:
 	std::unordered_set<std::string> factoryModules_loaded;
@@ -450,6 +475,7 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 		{ "VTOL FACTORY", &vtolFactories_loaded },
 		{ "CYBORG FACTORY", &cyborgFactories_loaded },
 		{ "RESEARCH", &researchCenters_loaded },
+		{ "HQ", &hqStructs_loaded },
 		{ "FACTORY MODULE", &factoryModules_loaded },
 		{ "RESEARCH MODULE", &researchModules_loaded },
 		{ "POWER MODULE", &powerModules_loaded }
@@ -489,6 +515,7 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 		vtolFactories = std::move(vtolFactories_loaded);
 		cyborgFactories = std::move(cyborgFactories_loaded);
 		researchCenters = std::move(researchCenters_loaded);
+		hqStructs = std::move(hqStructs_loaded);
 		factoryModules = std::move(factoryModules_loaded);
 		researchModules = std::move(researchModules_loaded);
 		powerModules = std::move(powerModules_loaded);
