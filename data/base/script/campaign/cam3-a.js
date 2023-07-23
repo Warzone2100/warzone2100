@@ -58,13 +58,13 @@ camAreaEvent ("middleTrigger", function(droid)
 
 function setUnitRank(transport)
 {
-	const DROID_EXP = [1024, 128, 64, 32]; //Can make Hero Commanders if recycled.
+	const DROID_EXP = [1024, 256, 128, 64]; //Can make Hero Commanders if recycled.
 	var droids = enumCargo(transport);
 
 	for (let i = 0, len = droids.length; i < len; ++i)
 	{
 		var droid = droids[i];
-		if (!camIsSystemDroid(droid))
+		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
 			setDroidExperience(droid, DROID_EXP[transporterIndex - 1]);
 		}
@@ -136,13 +136,22 @@ function sendPlayerTransporter()
 		return;
 	}
 
-	var droids = [];
-	var list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaawwt, cTempl.prtruck];
+	let droids = [];
+	let bodyList = ["Body9REC", "Body9REC", "Body9REC", "Body11ABT", "Body12SUP"];
+	let propulsionList = ["tracked01", "tracked01", "hover01"];
+	let weaponList = ["Cannon5VulcanMk1", "Cannon5VulcanMk1", "Flame2", "Flame2", "MG4ROTARYMk1", "MG4ROTARYMk1", "Cannon4AUTOMk1", "Rocket-HvyA-T"];
+	let specialList = ["Spade1Mk1", "Spade1Mk1", "CommandBrain01", "CommandBrain01"];
 
-	// send 4 Assault Guns, 2 Hyper Velocity Cannons, 2 Whirlwind AA Turrets and 2 Trucks
-	for (let i = 0, d = list.length; i < 10; ++i)
+	for (let i = 0; i < 10; ++i)
 	{
-		droids.push(i < d * 2 ? list[i % 4] : list[0]);
+		let body = bodyList[camRand(bodyList.length)];
+		let weap = (!transporterIndex && (i < specialList.length)) ? specialList[i] : weaponList[camRand(weaponList.length)];
+		if (transporterIndex === 1 && i < 4)
+		{
+			weap = "QuadRotAAGun";
+		}
+		let prop = propulsionList[camRand(propulsionList.length)];
+		droids.push({ body: body, prop: prop, weap: weap });
 	}
 
 	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids,
