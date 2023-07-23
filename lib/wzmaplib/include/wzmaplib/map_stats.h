@@ -25,6 +25,7 @@
 
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -90,6 +91,9 @@ namespace WzMap {
 		PerPlayerCounts perPlayerCounts;
 		// An analysis of the starting balance for all players
 		StartEquality playerBalance;
+		// Player startPos (i.e. HQ position) in _map_ coords
+		typedef std::unordered_map<int8_t, std::vector<std::pair<int32_t, int32_t>>> PlayerHQPositionMap;
+		PlayerHQPositionMap playerHQPositions; // player hq position(s) as pixel location in map preview / map coords
 	public:
 		inline bool hasScavengers() const { return scavengerUnits > 0 || scavengerStructs > 0; }
 	};
@@ -98,7 +102,7 @@ namespace WzMap {
 	{
 	public:
 		// Construct a MapStatsConfiguration with hard-coded defaults that map to WZ 4.3+ (currently)
-		MapStatsConfiguration();
+		MapStatsConfiguration(MapType mapType = MapType::SKIRMISH);
 
 		// Load stats configuration for droid templates from a `templates.json` file
 		// Returns: `true` if the `templates.json` file was loaded, and overwrote the existing droid stats configuration
@@ -134,6 +138,9 @@ namespace WzMap {
 		// the names (ids) of research structs
 		//	- "type": "RESEARCH"
 		std::unordered_set<std::string> researchCenters;
+		// the names (ids) of the HQ struct(s)
+		//  - "type": "HQ"
+		std::unordered_set<std::string> hqStructs;
 
 		// [STRUCT MODULES]:
 		//	- "type": "FACTORY MODULE"

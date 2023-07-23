@@ -171,7 +171,8 @@ public:
 	bool modTypesEnumerate(std::function<void (ModTypes modType)> func);
 
 	// Extract various map stats / info
-	optional<MapStats> calculateMapStats(MapStatsConfiguration statsConfig = MapStatsConfiguration());
+	optional<MapStats> calculateMapStats();
+	optional<MapStats> calculateMapStats(MapStatsConfiguration statsConfig);
 
 private:
 	bool loadGamInfo();

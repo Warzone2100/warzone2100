@@ -1928,6 +1928,11 @@ bool MapPackage::loadGamInfo()
 }
 
 // Extract various map stats / info
+optional<MapStats> MapPackage::calculateMapStats()
+{
+	return calculateMapStats(MapStatsConfiguration(m_mapType));
+}
+
 optional<MapStats> MapPackage::calculateMapStats(MapStatsConfiguration statsConfig)
 {
 	LoggingProtocol* pCustomLogger = m_logger.get();
