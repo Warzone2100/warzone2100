@@ -111,12 +111,18 @@ function sendPlayerTransporter()
 		return;
 	}
 
-	var droids = [];
-	var list = [cTempl.prhct, cTempl.prhct, cTempl.prhct, cTempl.prltat, cTempl.prltat, cTempl.npcybr, cTempl.prrept];
+	let droids = [];
+	let bodyList = ["Body11ABT", "Body11ABT", "Body12SUP"];
+	let propulsionList = ["tracked01", "tracked01", "tracked01", "hover01", "HalfTrack"];
+	let weaponList = ["Cannon375mmMk1", "Cannon375mmMk1", "Cannon375mmMk1", "Rocket-LtA-T", "Rocket-LtA-T", "Mortar2Mk1", "Rocket-MRL"];
+	let specialList = ["SensorTurret1Mk1", "CommandBrain01"];
 
 	for (let i = 0; i < 10; ++i)
 	{
-		droids.push(list[camRand(list.length)]);
+		let body = bodyList[camRand(bodyList.length)];
+		let weap = (!transporterIndex && (i < specialList.length)) ? specialList[i] : weaponList[camRand(weaponList.length)];
+		let prop = propulsionList[camRand(propulsionList.length - ((weap === "Cannon375mmMk1") ? 1 : 0))]; //Ignore halftracks for Heavy Cannon.
+		droids.push({ body: body, prop: prop, weap: weap });
 	}
 
 	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids,
@@ -223,8 +229,8 @@ function cam2Setup()
 function setUnitRank(transport)
 {
 	const DROID_EXP = [128, 64, 32, 16];
-	var droids;
-	var mapRun = false;
+	let droids;
+	let mapRun = false;
 
 	if (transport)
 	{
@@ -239,10 +245,11 @@ function setUnitRank(transport)
 
 	for (let i = 0, len = droids.length; i < len; ++i)
 	{
-		var droid = droids[i];
-		if (!camIsSystemDroid(droid))
+		let droid = droids[i];
+		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
-			setDroidExperience(droid, DROID_EXP[mapRun ? 0 : (transporterIndex - 1)]);
+			let mod = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR) ? 2 : 1;
+			setDroidExperience(droid, mod * DROID_EXP[mapRun ? 0 : (transporterIndex - 1)]);
 		}
 	}
 }
