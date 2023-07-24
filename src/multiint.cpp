@@ -1049,13 +1049,14 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 {
 	// oldUI may get captured for use in the password dialog, among other things.
 	PLAYERSTATS	playerStats;
+	loadMultiStats(sPlayer, &playerStats);
 
 	if (ingame.localJoiningInProgress)
 	{
 		return JoinGameResult::FAILED;
 	}
 
-	if (!NETjoinGame(host, port, (char *)sPlayer, asSpectator))	// join
+	if (!NETjoinGame(host, port, (char *)sPlayer, playerStats.identity, asSpectator))	// join
 	{
 		switch (getLobbyError())
 		{
@@ -1084,7 +1085,6 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 	}
 	ingame.localJoiningInProgress	= true;
 
-	loadMultiStats(sPlayer, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 
