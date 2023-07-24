@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2023-07-24 04:37\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -8356,7 +8356,7 @@ msgstr "Mortir EMP"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[2]
 #: po/custom/fromJson.txt:1887
 msgid "Enables Hardcrete gates"
-msgstr ""
+msgstr "Menyediakan Gerbang Hardcrete"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
