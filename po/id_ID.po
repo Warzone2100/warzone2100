@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-07-24 04:37\n"
+"PO-Revision-Date: 2023-07-24 16:49\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -5885,7 +5885,7 @@ msgstr "Salin JSON ke clipboard"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
-msgstr "Buang JSON ke StdOut"
+msgstr "Masukkan JSON ke StdOut"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -13829,7 +13829,7 @@ msgstr "Tiger"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[1]
 #: po/custom/fromJson.txt:5634
 msgid "Titanium-reinforced concrete gate"
-msgstr ""
+msgstr "Gerbang beton yang diperkuat dengan titanium"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -15853,7 +15853,7 @@ msgstr ""
 
 #: src/frontend.cpp:856
 msgid "Default"
-msgstr ""
+msgstr "Default"
 
 #: src/frontend.cpp:913
 #: src/frontend.cpp:1859
@@ -15893,7 +15893,7 @@ msgstr "Lompatan Radar"
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 #: src/frontend.cpp:953
 msgid "LOD Distance"
-msgstr ""
+msgstr "Jarak tingkat detail (LOD)"
 
 #: src/frontend.cpp:960
 msgid "Screen Shake"
@@ -16094,7 +16094,7 @@ msgstr "Kursor Berwarna"
 
 #: src/frontend.cpp:2245
 msgid "Cursor Size"
-msgstr ""
+msgstr "Ukuran Kursor"
 
 #: src/frontend.cpp:2257
 msgid "MOUSE OPTIONS"
@@ -17601,7 +17601,7 @@ msgstr "Daya tidak terbatas dinyalakan"
 
 #: src/keybind.cpp:798
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "Nilai pencahayaan untuk semua ubin telah dihitung ulang"
 
 #: src/keybind.cpp:828
 msgid "All items made available"
@@ -17609,7 +17609,7 @@ msgstr "Semua item disediakan"
 
 #: src/keybind.cpp:853
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "Info ubin dimasukkan kedalam log"
 
 #: src/keybind.cpp:868
 msgid "Fog on"
@@ -18412,7 +18412,7 @@ msgstr "(tidak ada)"
 
 #: src/multiint.cpp:4269
 msgid "Player rating:"
-msgstr ""
+msgstr "Rating pemain:"
 
 #: src/multiint.cpp:4272
 msgid "Host provided"
@@ -18461,7 +18461,7 @@ msgstr "Untuk Pemain:"
 
 #: src/multiint.cpp:4561
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "Pilih Slot Pemain"
 
 #: src/multiint.cpp:4632
 msgid "PLAYERS"
@@ -18469,7 +18469,7 @@ msgstr "PEMAIN"
 
 #: src/multiint.cpp:4736
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Tambahkan slot penonton"
 
 #: src/multiint.cpp:4813
 msgid "Kicked from game"
@@ -18820,7 +18820,7 @@ msgstr ""
 
 #: src/multiopt.cpp:314
 msgid "Limits were reset to default."
-msgstr ""
+msgstr "Batas-batas telah diatur ulang ke nilai default."
 
 #: src/multiopt.cpp:322
 #, c-format
@@ -18861,7 +18861,7 @@ msgstr "Mengeluarkan pemain %s secara otomatis, perintah tidak valid diterima: %
 
 #: src/multiplay.cpp:1160
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Perintah jaringan tidak diizinkan"
 
 #: src/multiplay.cpp:1260
 msgid "REPLAY HAS ENDED"
@@ -19287,7 +19287,7 @@ msgstr ""
 #: src/structure.cpp:5362
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "ubin %d,%d - target %s"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5371
@@ -19514,7 +19514,7 @@ msgstr "Versi baru Warzone 2100 (%s) tersedia!"
 
 #: src/updatemanager.cpp:365
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "Versi baru ini menyediakan perbaikan bug dan perbaruan, dan Anda disarankan untuk melakukan pembaruan sekarang."
 
 #: src/updatemanager.cpp:370
 msgid "A new build of Warzone 2100 is available!"
