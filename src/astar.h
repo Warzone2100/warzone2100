@@ -118,11 +118,25 @@ struct PathBlockingMap
 	int tileShift = 0;
 
 	PathCoord worldToMap(int x, int y) const;
+
+	PathCoord mapToWorld(int x, int y) const;
+
+	/// Returns size of map tile in world coordinates.
+	int tileSize() const {
+		return 1<<tileShift;
+	}
+
 	bool operator ==(PathBlockingType const &z) const;
 	bool isBlocked(int x, int y) const {
-		if (x < 0 || y < 0 || x >= width || y >= width)
+		if (x < 0 || y < 0 || x >= width || y >= height)
 			return true;
 		return map[x + y*width];
+	}
+
+	bool isDangerous(int x, int y) const {
+		if (x < 0 || y < 0 || x >= width || y >= height)
+			return true;
+		return dangerMap[x + y*width];
 	}
 };
 
@@ -219,6 +233,9 @@ struct PathfindContext
 	std::shared_ptr<PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
+
+/** Fills in blocking map according to requested blocking type. */
+void fillBlockingMap(PathBlockingMap& blockMap, PathBlockingType type);
 
 /** Use the A* algorithm to find a path
  *
