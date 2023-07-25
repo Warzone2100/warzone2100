@@ -87,6 +87,10 @@ PathCoord PathBlockingMap::worldToMap(int x, int y) const{
 	return PathCoord(x >> tileShift, y >> tileShift);
 }
 
+PathCoord PathBlockingMap::mapToWorld(int x, int y) const {
+	return PathCoord(x << tileShift, y << tileShift);
+}
+
 bool PathfindContext::matches(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_, bool reverse_) const
 {
 	// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
@@ -164,7 +168,7 @@ struct CostLayer {
 			return false;  // The path is actually blocked here by a structure, but ignore it since it's where we want to go (or where we came from).
 		}
 		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
-		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || pBlockingMap->map[x + y * mapWidth];
+		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || pBlockingMap->isBlocked(x, y);
 	}
 
 	bool isNonblocking(int x, int y) const {
@@ -173,7 +177,7 @@ struct CostLayer {
 
 	bool isDangerous(int x, int y) const
 	{
-		return !pBlockingMap->dangerMap.empty() && pBlockingMap->dangerMap[x + y * mapWidth];
+		return !pBlockingMap->dangerMap.empty() && pBlockingMap->isDangerous(x, y);
 	}
 
 	const PathfindContext& pfc;
@@ -188,7 +192,7 @@ bool fpathNewNode(PathfindContext &context, Predicate& predicate,
 	const CostLayer& costLayer,
 	PathCoord pos, cost_t prevDist, PathCoord prevPos)
 {
-	ASSERT_OR_RETURN(false, (unsigned)pos.x < (unsigned)mapWidth && (unsigned)pos.y < (unsigned)mapHeight, "X (%d) or Y (%d) coordinate for path finding node is out of range!", pos.x, pos.y);
+	ASSERT_OR_RETURN(false, (unsigned)pos.x < (unsigned)context.width && (unsigned)pos.y < (unsigned)context.height, "X (%d) or Y (%d) coordinate for path finding node is out of range!", pos.x, pos.y);
 
 	unsigned estimateCost = predicate.estimateCost(pos);
 	// Create the node.
@@ -201,7 +205,7 @@ bool fpathNewNode(PathfindContext &context, Predicate& predicate,
 	Vector2i delta = Vector2i(pos.x - prevPos.x, pos.y - prevPos.y) * 64;
 	bool isDiagonal = delta.x && delta.y;
 
-	PathExploredTile &expl = context.map[pos.x + pos.y * mapWidth];
+	PathExploredTile &expl = context.map[pos.x + pos.y * context.width];
 	if (expl.iteration == context.iteration)
 	{
 		if (expl.visited)
@@ -333,11 +337,10 @@ static ExplorationReport fpathAStarExplore(PathfindContext &context, Predicate& 
 		report.tilesExplored++;
 		report.cost = node.dist;
 
-		if (context.map[node.p.x + node.p.y * mapWidth].visited)
-		{
-			continue;  // Already been here.
-		}
-		context.map[node.p.x + node.p.y * mapWidth].visited = true;
+		PathExploredTile& tile = context.tile(node.p);
+		if (context.isTileVisited(tile))
+			continue;
+		tile.visited = true;
 
 		if (predicate.isGoal(node)) {
 			report.success = true;
@@ -353,7 +356,7 @@ static ExplorationReport fpathAStarExplore(PathfindContext &context, Predicate& 
 		   odd:orthogonal-adjacent tiles even:non-orthogonal-adjacent tiles
 		*/
 
-		// Cached state from blocking map.
+		// Cache adjacent states from blocking map. Saves some cycles for diagonal checks for corners.
 		bool blocking[adjacency];
 		bool ignoreBlocking[adjacency];
 		for (unsigned dir = 0; dir < adjacency; ++dir) {
@@ -395,9 +398,9 @@ static ExplorationReport fpathAStarExplore(PathfindContext &context, Predicate& 
 	return report;
 }
 
-// Traces path from search tree.
-// @param src - starting point of a search
-// @param dst - final point, when tracing stops.
+/// Traces path from search tree.
+/// @param src - starting point of a search
+/// @param dst - final point, when tracing stops.
 static ASR_RETVAL fpathTracePath(const PathfindContext& context, PathCoord src, PathCoord dst, std::vector<Vector2i>& path) {
 	ASR_RETVAL retval = ASR_OK;
 	path.clear();
@@ -620,10 +623,10 @@ void fillBlockingMap(PathBlockingMap& blockMap, PathBlockingType type) {
 		for (int x = 0; x < mapWidth; ++x)
 			map[x + y * mapWidth] = fpathBaseBlockingTile(x, y, type.propulsion, type.owner, moveType);
 	}
+	std::vector<bool> &dangerMap = blockMap.dangerMap;
+	dangerMap.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));
 	if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
 	{
-		std::vector<bool> &dangerMap = blockMap.dangerMap;
-		dangerMap.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));
 		for (int y = 0; y < mapHeight; ++y) {
 			for (int x = 0; x < mapWidth; ++x)
 				dangerMap[x + y * mapWidth] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
