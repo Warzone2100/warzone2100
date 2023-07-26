@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-28 03:50\n"
+"PO-Revision-Date: 2023-07-26 02:52\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -160,7 +160,7 @@ msgstr "MISSIONE BASE ALFA: stabilisci una base avanzata"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr "Stabilisci una base avanzata sull'altopiano e difendi il Nuovo Paradigma."
+msgstr "Stabilisci una base avanzata sull'altopiano e respingi il Nuovo Paradigma."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
@@ -1302,19 +1302,19 @@ msgstr "Cyborg con Lancer JetPack"
 
 #: data/base/messages/strings/names.txt:292
 msgid "Jump Assault Gunner"
-msgstr "Mitragliere d'assalto con JetPack"
+msgstr "Cyborg con mitragliatrice d'assalto"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
-msgstr "Cybrog con cannone ad ago jetpack"
+msgstr "Cyborg con cannone ad ago"
 
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
-msgstr "Cyborg con Scourge JetPack"
+msgstr "Cyborg con Scourge"
 
 #: data/base/messages/strings/names.txt:295
 msgid "Jump Flashlight Gunner"
-msgstr "Cyborg con Flashlight JetPack"
+msgstr "Cyborg con Torcia"
 
 #: data/base/messages/strings/names.txt:297
 msgid "Cyborg Jump Pack"
@@ -1582,12 +1582,12 @@ msgstr "Sensore agganciato"
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:529
 msgid "Improved Laser Focusing Mk2"
-msgstr "Focalizzatore Laser Migliorato Mk2"
+msgstr "Localizzatore Laser Migliorato Mk2"
 
 #: data/base/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:530
 msgid "Improved Laser Focusing Mk3"
-msgstr "Focalizzatore Laser Migliorato Mk3"
+msgstr "Localizzatore Laser Migliorato Mk3"
 
 #: data/base/messages/strings/names.txt:429
 #: data/mp/messages/strings/names.txt:542
@@ -1637,7 +1637,7 @@ msgstr "Ponte"
 #: data/base/messages/strings/names.txt:469
 #: data/mp/messages/strings/names.txt:597
 msgid "Wrecked Tank"
-msgstr "Carro distrutto"
+msgstr "Carro armato distrutto"
 
 #: data/base/messages/strings/names.txt:487
 #: data/base/messages/strings/names.txt:503
@@ -1649,7 +1649,7 @@ msgstr "Laboratorio cyborg"
 #: data/base/messages/strings/names.txt:488
 #: data/mp/messages/strings/names.txt:616
 msgid "Advanced Warfare Laboratory"
-msgstr "Laboratorio per la guerra avanzata"
+msgstr "Laboratorio avanzato per la guerra"
 
 #: data/base/messages/strings/names.txt:489
 #: data/base/messages/strings/names.txt:505
@@ -1692,7 +1692,7 @@ msgstr "Guerra avanzata"
 #: data/base/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:705
 msgid "Bunker Blaster"
-msgstr "Bunker Blaster"
+msgstr "Distruttore di Bunker"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[0]
@@ -1850,7 +1850,7 @@ msgstr "Richiede la Fabbrica di Cyborg per essere prodotto"
 #: data/mp/messages/strings/resstrings.txt:17
 #: po/custom/fromJson.txt:546
 msgid "Armed with Cyborg Assault Gun"
-msgstr "Armato con mitragliatrice d'assalto Cyborg"
+msgstr "Cyborg armato con mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_ATM.text[0]
@@ -2448,7 +2448,7 @@ msgstr "Aumenta la velocità di produzione dei cyborg"
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:297
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Tutte le fabbriche di cyborg sono state aggiornate automaticamente"
+msgstr "Tutte le fabbriche di cyborg sono aggiornate automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
@@ -2669,7 +2669,7 @@ msgstr "Riduce i tempi di riarmo"
 #: data/mp/messages/strings/resstrings.txt:209
 #: po/custom/fromJson.txt:385
 msgid "All rearming pads upgraded automatically"
-msgstr "Tutti le piattaforme di riarmo sono state aggiornate automaticamente"
+msgstr "Tutti le piattaforme di riarmo sono aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
@@ -6050,7 +6050,7 @@ msgstr "Tempo di ricarica delle antiaeree -15%"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:119
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "Sito AA con torretta Stormbringer"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6542,7 +6542,7 @@ msgstr "Armato con cannone a iper velocità"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:587
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Cannone automatico ad alta velocità a 4 canne da 76mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
@@ -8356,7 +8356,7 @@ msgstr "Mortaio EMP"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[2]
 #: po/custom/fromJson.txt:1887
 msgid "Enables Hardcrete gates"
-msgstr ""
+msgstr "Permette di costruire Muri di Cementitan"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
@@ -13307,7 +13307,7 @@ msgstr "Ruba tecnologie dalle strutture e prende il controllo delle armi"
 #. data/base/stats/structure.json: $.GuardTower3.name
 #: po/custom/fromJson.txt:5288
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Torre di Guardia con Mitragliatrice Pesante Rinforzata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
@@ -13829,7 +13829,7 @@ msgstr "Tigre"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[1]
 #: po/custom/fromJson.txt:5634
 msgid "Titanium-reinforced concrete gate"
-msgstr ""
+msgstr "Cancello in cemento armato rinforzato in titanio"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -15191,7 +15191,7 @@ msgstr "ospita automaticamente"
 
 #: src/clparse.cpp:419
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "Interroga le valutazioni da un determinato url del server, quando sì ospita"
 
 #: src/clparse.cpp:419
 msgid "autorating"
@@ -15413,12 +15413,12 @@ msgstr "%s - Punti vita %d/%d - Esperienza %.1f, %s, Uccisioni %d"
 #: src/display.cpp:1618
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - Punti Salute %d/%d - ID %d - %s"
 
 #: src/display.cpp:1634
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(Nemico!) %s - Punti Vita %d/%d - ID %d - esperienza %f, %s - ordine %s - azione %s - raggio sensore %d - ECM %d - piazzola %.0f"
 
 #: src/display.cpp:1778
 #, c-format
@@ -15429,7 +15429,7 @@ msgstr "%s - Alleato - Punti Vita %d/%d - Esperienza %d, %s"
 #: src/display.cpp:1802
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(Nemico!) %s, ref: %d. ID: %d Punti salute: %d/%d"
 
 #: src/display3d.cpp:751
 msgid "Player left"
@@ -15899,7 +15899,7 @@ msgstr "Salto Radar"
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 #: src/frontend.cpp:953
 msgid "LOD Distance"
-msgstr ""
+msgstr "Distanza livello di dettagli"
 
 #: src/frontend.cpp:960
 msgid "Screen Shake"
@@ -16036,7 +16036,7 @@ msgstr "Motore grafico*"
 #. An option describing when / whether WZ will auto-minimize the window when it loses focus.
 #: src/frontend.cpp:1931
 msgid "Min on Focus Loss"
-msgstr ""
+msgstr "Minimizza la schermata se perso il Focus"
 
 #: src/frontend.cpp:1932
 msgid "Whether the window should auto-minimize on focus loss"
@@ -16049,7 +16049,7 @@ msgstr "Alt+Invio attiva/disattiva"
 
 #: src/frontend.cpp:1943
 msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
+msgstr "Usa la modalità a schermo intero usando la combinazione di tasti Alt + Invio"
 
 #: src/frontend.cpp:1957
 msgid "VIDEO OPTIONS"
@@ -16219,7 +16219,7 @@ msgstr "Timeout d'Inattività"
 
 #: src/frontend.cpp:2995
 msgid "Lag Kick"
-msgstr ""
+msgstr "Lag Kick"
 
 #: src/frontend.cpp:3000
 msgid "Spectator Slots"
@@ -17489,11 +17489,11 @@ msgstr "Attenzione! Questo trucco è difettoso. Raccomandiamo di NON usarlo."
 
 #: src/keybind.cpp:160
 msgid "Gateways toggled."
-msgstr ""
+msgstr "Gateway attivati."
 
 #: src/keybind.cpp:166
 msgid "Path display toggled."
-msgstr ""
+msgstr "Mostra tracciato attivato."
 
 #: src/keybind.cpp:194
 #, c-format
@@ -17607,7 +17607,7 @@ msgstr "Energia infinita abilitata"
 
 #: src/keybind.cpp:798
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "Valori di illuminazione per tutte le piastrelle ricalcolate"
 
 #: src/keybind.cpp:828
 msgid "All items made available"
@@ -17615,7 +17615,7 @@ msgstr "Tutti gli oggetti resi disponibili"
 
 #: src/keybind.cpp:853
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "Informazioni della piastrella salvate nel file di log"
 
 #: src/keybind.cpp:868
 msgid "Fog on"
@@ -17841,7 +17841,7 @@ msgstr "Il radar mostra l'altitudine"
 
 #: src/keybind.cpp:2522
 msgid "Asserts turned off"
-msgstr ""
+msgstr "Assert disattivati"
 
 #: src/keybind.cpp:2570
 msgid "QuickSave not allowed for multiplayer or tutorial games"
@@ -17865,7 +17865,7 @@ msgstr "<not bound>"
 
 #: src/keyedit.cpp:170
 msgid "<Fixed Key>"
-msgstr ""
+msgstr "<Fixed Key>"
 
 #: src/keyedit.cpp:550
 msgid "KEY MAPPING"
@@ -18493,7 +18493,7 @@ msgstr "Silenzia il giocatore: %s"
 #: src/multiint.cpp:5079
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "Riattiva chat con il giocatore: %s"
 
 #: src/multiint.cpp:5173
 msgid "CHAT"
@@ -18775,7 +18775,7 @@ msgstr "Invia energia al giocatore"
 
 #: src/multimenu.cpp:944
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "Attiva/Disattiva Silenzia Chat"
 
 #: src/multimenu.cpp:1139
 msgid "Sent/Received per sec —"
@@ -18823,7 +18823,7 @@ msgstr "[%d] Limite [%s]: %u (predefinito: nessun limite)"
 #: src/multiopt.cpp:307
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%d] Limite maggiore di numStructureStats (%u): %u"
 
 #: src/multiopt.cpp:314
 msgid "Limits were reset to default."
@@ -18832,7 +18832,7 @@ msgstr "I limiti sono stati ripristinati ai predefiniti."
 #: src/multiopt.cpp:322
 #, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
-msgstr ""
+msgstr "L'host ha impostato dei limiti %u, impossibile mostrarli a causa della presenza di mods"
 
 #: src/multiopt.cpp:403
 msgid "MAP REQUESTED!"
@@ -19188,7 +19188,7 @@ msgstr "Potenza Corrente / Potenza Per Secondo"
 
 #: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
-msgstr ""
+msgstr "Potenza persa"
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
@@ -19284,7 +19284,7 @@ msgstr "ID %u - Moltiplicatore: %u"
 #: src/structure.cpp:5344
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr ""
+msgstr "ID %u - Risultato di Output: %u - Punti vita rimanenti struttura: %u - Resistenza: %d / %d"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5354
@@ -19296,13 +19296,13 @@ msgstr "ID %u - punti ricerca: %u"
 #: src/structure.cpp:5362
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "piastrella %d. %d - obiettivo %s"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5371
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %u - portata sensore %d - ECM %d"
 
 #: src/structure.cpp:5489
 #: src/structure.cpp:5534
