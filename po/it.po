@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-07-26 02:52\n"
+"PO-Revision-Date: 2023-07-26 14:52\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1298,7 +1298,7 @@ msgstr "Cannoniere Pesante con JetPack"
 
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
-msgstr "Cyborg con Lancer JetPack"
+msgstr "Cyborg con Lancer Jet pack"
 
 #: data/base/messages/strings/names.txt:292
 msgid "Jump Assault Gunner"
@@ -1649,7 +1649,7 @@ msgstr "Laboratorio cyborg"
 #: data/base/messages/strings/names.txt:488
 #: data/mp/messages/strings/names.txt:616
 msgid "Advanced Warfare Laboratory"
-msgstr "Laboratorio avanzato per la guerra"
+msgstr "Laboratorio avanzato di guerra"
 
 #: data/base/messages/strings/names.txt:489
 #: data/base/messages/strings/names.txt:505
@@ -2341,7 +2341,7 @@ msgstr "Postazione corazzata con lanciafiamme"
 #: data/mp/messages/strings/resstrings.txt:157
 #: po/custom/fromJson.txt:754
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Postazione corazzata con missile Tank Killer anticarro"
+msgstr "Postazione corazzata con missile anticarro Tank Killer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[1]
@@ -8961,28 +8961,28 @@ msgstr "Semicingoli"
 #. data/mp/stats/structure.json: $.A0HardcreteMk1CWall.name
 #: po/custom/fromJson.txt:2288
 msgid "Hardcrete Corner Wall"
-msgstr "Angolo di Cementitan"
+msgstr "Muro ad angolo in cemento"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HardcreteGate.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Gate.name
 #: po/custom/fromJson.txt:2292
 msgid "Hardcrete Gate"
-msgstr "Cancello di Cementitan"
+msgstr "Cancello di Cemento"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1Wall.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Wall.name
 #: po/custom/fromJson.txt:2296
 msgid "Hardcrete Wall"
-msgstr "Muro di Cementitan"
+msgstr "Muro di Cemento"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HardcreteWall.name
 #. data/mp/stats/research.json: $.R-Defense-HardcreteWall.name
 #: po/custom/fromJson.txt:2300
 msgid "Hardcrete"
-msgstr "Cementitan"
+msgstr "Cemento"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials05.name
@@ -9080,13 +9080,13 @@ msgstr "Postazione con doppia mitragliatrice d'assalto disponibile"
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text[0]
 #: po/custom/fromJson.txt:2359
 msgid "Hardpoint Vindicator SAM Site Available"
-msgstr "Postazione Corazzata con SAM Vindicator disponbile"
+msgstr "Postazione Corazzata con SAM Vindicator disponibile"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text[0]
 #: po/custom/fromJson.txt:2362
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr "Postazione Corazzata con Cannone AA Whirlwind disponbile"
+msgstr "Postazione Corazzata con Cannone AA Whirlwind disponibile"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb-Damage01.name
@@ -9970,7 +9970,7 @@ msgstr "Miglioramento Mitragliatrice a Fuoco Iper Rapido"
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2961
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Fortificazione con cannone a iper velocità"
+msgstr "Fortificazione con cannone ad altissima velocità"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
@@ -9979,19 +9979,19 @@ msgstr "Fortificazione con cannone a iper velocità"
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2967
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Postazione con Cannone ad Iper Velocità"
+msgstr "Postazione con Cannone ad altissima Velocità"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
 #: po/custom/fromJson.txt:2970
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Cannone ad Ipervelocità Python Hover"
+msgstr "Cannone ad altissima velocità Python Hover"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2973
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Cannone a iper velocità Python cingolato"
+msgstr "Cannone ad altissima velocità Python cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
@@ -10000,14 +10000,14 @@ msgstr "Cannone a iper velocità Python cingolato"
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
 #: po/custom/fromJson.txt:2979
 msgid "Hyper Velocity Cannon"
-msgstr "Cannone ad Iper Velocità"
+msgstr "Cannone ad altissima Velocità"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2983
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "Proiettile Iper-Veloce Perforante ad Abbandono d'Involucro con Pinne Stabilizzanti"
+msgstr "Proiettile ultra veloce Perforante ad Abbandono d'Involucro con Pinne Stabilizzanti"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -10066,21 +10066,21 @@ msgstr "Sistemi di rilevamento del fuoco migliorati"
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade02.name
 #: po/custom/fromJson.txt:3026
 msgid "Improved Hardcrete Mk2"
-msgstr "Cementitan Migliorato Mk2"
+msgstr "Cemento Migliorato Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade03.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade03.name
 #: po/custom/fromJson.txt:3030
 msgid "Improved Hardcrete Mk3"
-msgstr "Cementitan Migliorato Mk3"
+msgstr "Cemento Migliorato Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade01.name
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade01.name
 #: po/custom/fromJson.txt:3034
 msgid "Improved Hardcrete"
-msgstr "Cementitan Migliorato"
+msgstr "Cemento Migliorato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[1]
@@ -10094,7 +10094,7 @@ msgstr "Colpi ad alto esplosivo migliorati"
 #. data/mp/stats/research.json: $.R-Wpn-Energy-Accuracy01.name
 #: po/custom/fromJson.txt:3042
 msgid "Improved Laser Focusing"
-msgstr "Focalizzatore Laser Migliorato"
+msgstr "Localizzatore Laser Migliorato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[1]
@@ -10119,7 +10119,7 @@ msgstr "Prestazioni del generatore di corrente migliorate"
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
 #: po/custom/fromJson.txt:3058
 msgid "Improved Rocket Wire Guidance"
-msgstr "Filoguida per Razzi Migliorata"
+msgstr "Filo guida per Razzi Migliorata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[1]
@@ -10162,7 +10162,7 @@ msgstr "Cemento rinforzato con anima di titanio migliorato"
 #. data/mp/messages/resmessages23.json: $.RES_W_BDMG2.text[1]
 #: po/custom/fromJson.txt:3087
 msgid "Improved trinitramine explosive formula"
-msgstr "Formula esplosiva di trinitrammine migliorata"
+msgstr "Formula esplosiva di trinitramina migliorata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text[1]
@@ -10387,7 +10387,7 @@ msgstr "Aumenta la cadenza di tiro dei razzi"
 #. data/base/stats/features.json: $.Indirectlab.name
 #: po/custom/fromJson.txt:3336
 msgid "Indirectweaponslab"
-msgstr "Lastraarmiindiretta"
+msgstr "Laboratorioarmiindirette"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[1]
@@ -10693,7 +10693,7 @@ msgstr "Aggiornamento dei laser"
 #. data/base/stats/features.json: $.Laseropticslab.name
 #: po/custom/fromJson.txt:3518
 msgid "Laseropticslab"
-msgstr "Piastralaserottico"
+msgstr "Laboratoriolaserottico"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.LasSat.name
@@ -11392,7 +11392,7 @@ msgstr "Deve essere costruito per produrre dei comandanti"
 #. data/base/stats/features.json: $.Nanolab.name
 #: po/custom/fromJson.txt:3987
 msgid "Nanolab"
-msgstr "Nanolaboratorio"
+msgstr "Laboratorionanocelle"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[3]
@@ -11596,7 +11596,7 @@ msgstr "Nuova propulsione disponibile per la progettazione"
 #. ... + 5 refs
 #: po/custom/fromJson.txt:4168
 msgid "New Propulsion Available"
-msgstr "Nuova propulsione disponbile"
+msgstr "Nuova propulsione disponibile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text[0]
@@ -11751,14 +11751,14 @@ msgstr "Corpo leggero di NEXUS"
 #. data/mp/stats/structure.json: $.Sys-SpyTower.name
 #: po/custom/fromJson.txt:4290
 msgid "Nexus Link Tower"
-msgstr "Torre di Collegamento NEXUS"
+msgstr "Torre Collegamento Nexus"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-SpyTurret.name
 #. data/mp/stats/weapons.json: $.SpyTurret01.name
 #: po/custom/fromJson.txt:4294
 msgid "Nexus Link Turret"
-msgstr "Torretta di collegamento NEXUS"
+msgstr "Torretta collegamento Nexus"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B07.text[0]
