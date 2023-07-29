@@ -198,6 +198,26 @@ void iV_Lines(const std::vector<glm::ivec4> &lines, PIELIGHT colour)
 	gfx_api::LinePSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
 }
 
+void iV_PolyLine(const std::vector<Vector3i> &points, const glm::mat4 &mvp, PIELIGHT colour)
+{
+	std::vector<glm::ivec4> lines;
+	Vector2i result;
+	Vector2i lastPoint(0, 0);
+
+	for(auto i = 0; i < points.size(); i++){
+		Vector3i source = points[i];
+		pie_RotateProjectWithPerspective(&source, mvp, &result);
+
+		if(i > 0){
+			lines.push_back({ lastPoint.x, lastPoint.y, result.x, result.y });
+		}
+
+		lastPoint = result;
+	}
+
+	iV_Lines(lines, colour);
+}
+
 /**
  *	Assumes render mode set up externally, draws filled rectangle.
  */
