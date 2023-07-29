@@ -72,7 +72,7 @@ static uint32_t         waitingForResultId;
 static WZ_SEMAPHORE     *waitingForResultSemaphore = nullptr;
 
 /// Last recently used list of contexts.
-static std::list<PathfindContext> fpathContexts;
+std::list<PathfindContext> fpathContexts;
 
 static PATHRESULT fpathExecute(PATHJOB psJob);
 

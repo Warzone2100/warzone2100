@@ -86,6 +86,7 @@
 #include "animation.h"
 #include "faction.h"
 #include "wzcrashhandlingproviders.h"
+#include "drawPath.h"
 
 /********************  Prototypes  ********************/
 
@@ -1429,6 +1430,7 @@ static void drawTiles(iView *player)
 	drawTerrain(perspectiveViewMatrix, cameraPos, -getTheSun());
 	wzPerfEnd(PERF_TERRAIN);
 
+	drawPathCostLayer(selectedPlayer, *player, viewMatrix, perspectiveViewMatrix);
 	// draw skybox
 	// NOTE: Must come *after* drawTerrain *if* using the fallback (old) terrain shaders
 	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
