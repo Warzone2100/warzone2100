@@ -185,6 +185,44 @@ struct CostLayer {
 	PathBlockingMap* pBlockingMap = nullptr;
 };
 
+struct IgnoreGoalCostLayer {
+	IgnoreGoalCostLayer(const PathfindContext& pfc, PathCoord goal) : pfc(pfc)
+	{
+		assert(pfc.blockingMap);
+		pBlockingMap = pfc.blockingMap.get();
+	}
+
+	cost_t cost(int x, int y) const {
+		return isDangerous(x, y) ? 5 : 1;
+	}
+
+	bool isBlocked(int x, int y) const
+	{
+		if (pfc.dstIgnore.isNonblocking(x, y))
+		{
+			return false;  // The path is actually blocked here by a structure, but ignore it since it's where we want to go (or where we came from).
+		}
+		if (goal.x == x && goal.y == y)
+			return false;
+		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
+		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || pBlockingMap->isBlocked(x, y);
+	}
+
+	bool isNonblocking(int x, int y) const {
+		return pfc.dstIgnore.isNonblocking(x, y);
+	}
+
+	bool isDangerous(int x, int y) const
+	{
+		return !pBlockingMap->dangerMap.empty() && pBlockingMap->isDangerous(x, y);
+	}
+
+	const PathfindContext& pfc;
+	PathCoord goal;
+	/// Direct pointer to blocking map.
+	PathBlockingMap* pBlockingMap = nullptr;
+};
+
 /** Generate a new node
  */
 template <class Predicate, class CostLayer>
@@ -450,8 +488,9 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 		debug(LOG_NEVER, "Initial tile blocked (%d;%d)", tileOrig.x, tileOrig.y);
 	}
 	if (psJob->blockingMap->isBlocked(tileDest.x, tileDest.y)) {
-		debug(LOG_NEVER, "Destination tile blocked (%d;%d)", tileOrig.x, tileOrig.y);
+		debug(LOG_NEVER, "Destination tile blocked (%d;%d)", tileDest.x, tileDest.y);
 	}
+
 	const PathNonblockingArea dstIgnore(psJob->dstStructure);
 
 	NearestSearchPredicate pred(tileOrig);
@@ -483,7 +522,7 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 		}
 		else
 		{
-			CostLayer costLayer(pfContext);
+			IgnoreGoalCostLayer costLayer(pfContext, pred.goal);
 			// Need to find the path from orig to dest, continue previous exploration.
 			fpathAStarReestimate(pfContext, pred.goal);
 			pred.clear();
@@ -511,7 +550,7 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 		pfContext.assign(psJob->blockingMap, tileDest, dstIgnore, true);
 		pred.clear();
 
-		CostLayer costLayer(pfContext);
+		IgnoreGoalCostLayer costLayer(pfContext, pred.goal);
 		// Add the start point to the open list
 		bool started = fpathNewNode(pfContext, pred, costLayer, tileDest, 0, tileDest);
 		ASSERT(started, "fpathNewNode failed to add node.");
