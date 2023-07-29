@@ -79,6 +79,7 @@
 #include "input/manager.h"
 #include "input/keyconfig.h"
 #include "mapgrid.h"
+#include "profiling.h"
 
 InputManager gInputManager;
 KeyFunctionConfiguration gKeyFuncConfig;
@@ -1194,6 +1195,7 @@ void displayWorld()
 	{
 		return;
 	}
+	WZ_PROFILE_SCOPE(displayWorld);
 
 	Vector3i pos;
 
