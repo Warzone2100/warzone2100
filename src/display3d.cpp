@@ -86,6 +86,7 @@
 #include "animation.h"
 #include "faction.h"
 #include "wzcrashhandlingproviders.h"
+#include "drawPath.h"
 
 /********************  Prototypes  ********************/
 
