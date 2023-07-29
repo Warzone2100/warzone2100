@@ -85,6 +85,7 @@
 #include "spectatorwidgets.h"
 #include "challenge.h"
 #include "multilobbycommands.h"
+#include "profiling.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -298,6 +299,7 @@ bool multiplayerWinSequence(bool firstCall)
 // MultiPlayer main game loop code.
 bool multiPlayerLoop()
 {
+	WZ_PROFILE_SCOPE(multiPlayerLoop);
 	UDWORD		i;
 	UBYTE		joinCount;
 

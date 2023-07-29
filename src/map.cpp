@@ -52,6 +52,7 @@
 #include "fpath.h"
 #include "levels.h"
 #include "lib/framework/wzapp.h"
+#include "profiling.h"
 
 #define GAME_TICKS_FOR_DANGER (GAME_TICKS_PER_SEC * 2)
 
@@ -941,6 +942,7 @@ void WzMapDebugLogger::printLog(WzMap::LoggingProtocol::LogLevel level, const ch
 /* Initialise the map structure */
 bool mapLoad(char const *filename)
 {
+	WZ_PROFILE_SCOPE(mapLoad);
 	WzMapPhysFSIO mapIO;
 	WzMapDebugLogger debugLoggerInstance;
 
@@ -1837,6 +1839,7 @@ static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits, uint1
 
 void mapFloodFillContinents()
 {
+	WZ_PROFILE_SCOPE(mapFloodFillContinents);
 	int x, y, limitedContinents = 0, hoverContinents = 0;
 
 	/* Clear continents */
