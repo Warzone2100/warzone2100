@@ -427,9 +427,8 @@ static Vector3f getGridNormal(int x, int y, bool center = false)
 		return -glm::normalize(res);
 	};
 	if (center) {
-		return calcNormal(getGridPosf(x, y, true), {
-			getGridPosf(x,y), getGridPosf(x+1, y), getGridPosf(x+1, y+1), getGridPosf(x, y+1)
-		});
+		// avg nearest normals provide better results
+		return (getGridNormal(x, y) + getGridNormal(x+1, y) + getGridNormal(x+1, y+1) + getGridNormal(x, y+1)) / 4.f;
 	} else {
 		return calcNormal(getGridPosf(x, y), {
 			getGridPosf(x+1, y), getGridPosf(x, y, true),     getGridPosf(x, y+1), getGridPosf(x-1, y, true),
