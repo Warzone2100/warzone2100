@@ -46,7 +46,7 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 			for (let i = 0, l = templates.length; i < l; ++i)
 			{
 				var template = templates[i];
-				var prop = __camChangePropulsionOnDiff(template.prop);
+				var prop = __camChangePropulsion(template.prop, playerId);
 				var droid = addDroid(playerId, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap);
 				camSetDroidExperience(droid);
 				droids.push(droid);

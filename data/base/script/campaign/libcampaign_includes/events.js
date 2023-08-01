@@ -53,6 +53,10 @@ function cam_eventChat(from, to, message)
 		camSetExpLevel(Number(message.substring(5)));
 		camSetOnMapEnemyUnitExp();
 	}
+	if (message.lastIndexOf("prop ", 0) === 0)
+	{
+		camSetPropulsionTypeLimit(Number(message.substring(5)));
+	}
 	if (!camIsCheating())
 	{
 		return;

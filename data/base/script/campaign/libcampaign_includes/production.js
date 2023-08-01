@@ -151,9 +151,8 @@ function camQueueDroidProduction(playerId, template)
 
 //;; ## camSetPropulsionTypeLimit([limit])
 //;;
-//;; On hard and insane the propulsion type can be limited with this.
-//;; For type II pass in `2`, and for type III pass in `3`. Hard defaults to type II and insane defaults to type III.
-//;; If nothing is passed in then the type limit will match what is in templates.json.
+//;; This function can automatically augment units to use Type I/II/III propulsions.
+//;; If nothing or zero is passed in then the type limit will match what is in templates.json.
 //;;
 //;; @param {number} [limit]
 //;; @returns {void}
@@ -164,6 +163,10 @@ function camSetPropulsionTypeLimit(limit)
 	{
 		__camPropulsionTypeLimit = "NO_USE";
 	}
+	else if (limit === 1)
+	{
+		__camPropulsionTypeLimit = "01";
+	}
 	else if (limit === 2)
 	{
 		__camPropulsionTypeLimit = "02";
@@ -171,6 +174,10 @@ function camSetPropulsionTypeLimit(limit)
 	else if (limit === 3)
 	{
 		__camPropulsionTypeLimit = "03";
+	}
+	else
+	{
+		camTrace("Unknown propulsion level specified. Use 1 - 3 to force the propulsion type, 0 to disable.");
 	}
 }
 
@@ -238,7 +245,7 @@ function camUpgradeOnMapTemplates(template1, template2, playerId, excluded)
 			let droidInfo = {x: dr.x, y: dr.y, name: dr.name};
 			camSafeRemoveObject(dr, false);
 			let droid = addDroid(playerId, droidInfo.x, droidInfo.y, droidInfo.name, template2.body,
-				__camChangePropulsionOnDiff(template2.prop), "", "", template2.weap);
+				__camChangePropulsion(template2.prop, playerId), "", "", template2.weap);
 			camSetDroidExperience(droid);
 		}
 	}
@@ -297,19 +304,18 @@ function __camAddDroidToFactoryGroup(droid, structure)
 	__camFactoryUpdateTactics(flabel);
 }
 
-function __camChangePropulsionOnDiff(propulsion)
+function __camChangePropulsion(propulsion, playerId)
 {
-	if (__camPropulsionTypeLimit === "NO_USE")
+	if (__camPropulsionTypeLimit === "NO_USE" || playerId === CAM_HUMAN_PLAYER)
 	{
-		return propulsion; //this mission don't want this feature then
+		return propulsion;
 	}
 
-	var name = propulsion;
-	const VALID_PROPS = [
-		"CyborgLegs", "HalfTrack", "V-Tol", "hover", "tracked", "wheeled",
-	];
+	let name = propulsion;
+	const VALID_PROPS = ["CyborgLegs", "HalfTrack", "V-Tol", "hover", "tracked", "wheeled"];
+	const SPECPROPS = ["CyborgLegs", "HalfTrack", "V-Tol"]; //Some have "01" at the end and others don't for the base ones.
 
-	var lastTwo = name.substring(name.length - 2);
+	let lastTwo = name.substring(name.length - 2);
 	if (lastTwo === "01" || lastTwo === "02" || lastTwo === "03")
 	{
 		name = name.substring(0, name.length - 2);
@@ -317,20 +323,14 @@ function __camChangePropulsionOnDiff(propulsion)
 
 	for (let i = 0, l = VALID_PROPS.length; i < l; ++i)
 	{
-		var currentProp = VALID_PROPS[i];
+		let currentProp = VALID_PROPS[i];
 		if (name === currentProp)
 		{
-			var typeModifier;
-			//if a future template has a type III and the limit is type II then this will ensure it stays type III.
-			if (__camPropulsionTypeLimit === "02" && lastTwo === "03")
+			if ((__camPropulsionTypeLimit === "01") && (SPECPROPS.indexOf(currentProp) !== -1))
 			{
-				typeModifier = "03";
+				return currentProp;
 			}
-			else
-			{
-				typeModifier = __camPropulsionTypeLimit;
-			}
-			return currentProp.concat(typeModifier);
+			return currentProp.concat(__camPropulsionTypeLimit);
 		}
 	}
 
@@ -350,7 +350,7 @@ function __camBuildDroid(template, structure)
 	{
 		return false;
 	}
-	var prop = __camChangePropulsionOnDiff(template.prop);
+	var prop = __camChangePropulsion(template.prop, structure.player);
 	makeComponentAvailable(template.body, structure.player);
 	makeComponentAvailable(prop, structure.player);
 	makeComponentAvailable(template.weap, structure.player);
