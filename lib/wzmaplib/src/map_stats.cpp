@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2022  Warzone 2100 Project
+	Copyright (C) 2022-2023  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -660,6 +660,13 @@ optional<MapStatsConfiguration::StructureSize> MapStatsConfiguration::getStructu
 		return nullopt;
 	}
 	return it->second;
+}
+
+bool MapStatsConfiguration::isStructExpansionModule(const std::string& struct_id) const
+{
+	return powerModules.count(struct_id)
+		|| factoryModules.count(struct_id)
+		|| researchModules.count(struct_id);
 }
 
 } // namespace WzMap

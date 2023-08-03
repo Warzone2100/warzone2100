@@ -169,6 +169,9 @@ namespace WzMap {
 		//	- "type": "OIL DRUM"
 		std::unordered_set<std::string> oilDrums;
 
+	public:
+		bool isStructExpansionModule(const std::string& struct_id) const;
+
 	private:
 		// [STRUCT SIZES]:
 		typedef std::unordered_map<std::string, StructureSize> StructSizesMap;
