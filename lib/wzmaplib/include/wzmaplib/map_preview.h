@@ -23,6 +23,7 @@
 #include <memory>
 #include <cinttypes>
 #include "map.h"
+#include "map_stats.h"
 
 namespace WzMap {
 
@@ -78,6 +79,6 @@ struct MapPreviewImage
 	uint32_t channels; // ex. 3 for RGB
 };
 
-std::unique_ptr<MapPreviewImage> generate2DMapPreview(WzMap::Map& wzMap, const MapPreviewColorScheme& colorScheme, WzMap::LoggingProtocol* pCustomLogger = nullptr);
+std::unique_ptr<MapPreviewImage> generate2DMapPreview(WzMap::Map& wzMap, const MapPreviewColorScheme& colorScheme, const MapStatsConfiguration& statsConfig = MapStatsConfiguration(), WzMap::LoggingProtocol* pCustomLogger = nullptr);
 
 } // namespace WzMap
