@@ -7570,37 +7570,32 @@ bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType)
 							int sender = ini.value("sender").toInt();
 							psViewData = CreateBeaconViewData(sender, pos.x, pos.y);
 							ASSERT(psViewData, "Could not create view data for message %d", id);
-							if (psViewData == nullptr)
-							{
-								// Skip this message
-								removeMessage(psMessage, player);
-								continue;
-							}
+
 						}
 						else if (ini.contains("name"))
 						{
 							psViewData = getViewData(ini.value("name").toWzString());
 							ASSERT(psViewData, "Failed to find view data for proximity position - skipping message %d", id);
-							if (psViewData == nullptr)
-							{
-								// Skip this message
-								removeMessage(psMessage, player);
-								continue;
-							}
 						}
 						else
 						{
 							debug(LOG_ERROR, "Proximity position with empty name skipped (message %d)", id);
-							removeMessage(psMessage, player);
-							continue;
 						}
 
-						psMessage->pViewData = psViewData;
-						// Check the z value is at least the height of the terrain
-						const int terrainHeight = map_Height(((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
-						if (((VIEW_PROXIMITY*)psViewData->pData)->z < terrainHeight)
+						if (psViewData != nullptr)
 						{
-							((VIEW_PROXIMITY*)psViewData->pData)->z = terrainHeight;
+							psMessage->pViewData = psViewData;
+							// Check the z value is at least the height of the terrain
+							const int terrainHeight = map_Height(((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
+							if (((VIEW_PROXIMITY*)psViewData->pData)->z < terrainHeight)
+							{
+								((VIEW_PROXIMITY*)psViewData->pData)->z = terrainHeight;
+							}
+						}
+						else
+						{
+							// Skip this message
+							removeMessage(psMessage, player);
 						}
 					}
 					else
@@ -7621,6 +7616,11 @@ bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType)
 				{
 					psMessage->pViewData = getViewData(ini.value("name").toWzString());
 					ASSERT(psMessage->pViewData, "Failed to find view data for message %d", id);
+					if (psMessage->pViewData == nullptr)
+					{
+						// Skip this message
+						removeMessage(psMessage, player);
+					}
 				}
 			}
 		}
