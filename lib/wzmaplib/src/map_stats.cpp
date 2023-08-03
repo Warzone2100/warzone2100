@@ -393,6 +393,59 @@ MapStatsConfiguration::MapStatsConfiguration(MapType mapType)
 	oilResources = {"OilResource"};
 	//	- "type": "OIL DRUM"
 	oilDrums = {"OilDrum"};
+
+	// [STRUCT SIZES]:
+	// only the data for structures that have a size != 1x1
+	// extracted from the appropriate base/stats/structure.json or mp/stats/structure.json file using:
+	// cat structure.json | jq 'keys[] as $k | select(.[$k].width!=1 or .[$k].breadth!=1) | "{\"" + $k + "\", StructureSize(" + (.[$k].width | tostring) + ", " + (.[$k].breadth | tostring) + ")},"' -r
+	if (mapType == MapType::CAMPAIGN)
+	{
+		structSizes = {
+			{"A0BaBaFactory", StructureSize(2, 1)},
+			{"A0ComDroidControl", StructureSize(2, 2)},
+			{"A0CommandCentre", StructureSize(2, 2)},
+			{"A0CommandCentreCO", StructureSize(2, 2)},
+			{"A0CommandCentreNE", StructureSize(2, 2)},
+			{"A0CommandCentreNP", StructureSize(2, 2)},
+			{"A0CyborgFactory", StructureSize(1, 2)},
+			{"A0FacMod1", StructureSize(3, 3)},
+			{"A0LightFactory", StructureSize(3, 3)},
+			{"A0PowMod1", StructureSize(2, 2)},
+			{"A0PowerGenerator", StructureSize(2, 2)},
+			{"A0ResearchFacility", StructureSize(2, 2)},
+			{"A0ResearchModule1", StructureSize(2, 2)},
+			{"A0VTolFactory1", StructureSize(3, 3)},
+			{"NuclearReactor", StructureSize(2, 2)},
+			{"UplinkCentre", StructureSize(2, 2)},
+			{"WreckedTransporter", StructureSize(3, 3)}
+		};
+	}
+	else
+	{
+		structSizes = {
+			{"A0BaBaFactory", StructureSize(2, 1)},
+			{"A0BaBaVtolFactory", StructureSize(2, 2)},
+			{"A0ComDroidControl", StructureSize(2, 2)},
+			{"A0CommandCentre", StructureSize(2, 2)},
+			{"A0CyborgFactory", StructureSize(1, 2)},
+			{"A0FacMod1", StructureSize(3, 3)},
+			{"A0LasSatCommand", StructureSize(2, 2)},
+			{"A0LightFactory", StructureSize(3, 3)},
+			{"A0PowMod1", StructureSize(2, 2)},
+			{"A0PowerGenerator", StructureSize(2, 2)},
+			{"A0ResearchFacility", StructureSize(2, 2)},
+			{"A0ResearchModule1", StructureSize(2, 2)},
+			{"A0Sat-linkCentre", StructureSize(2, 2)},
+			{"A0VTolFactory1", StructureSize(3, 3)},
+			{"NuclearReactor", StructureSize(2, 2)},
+			{"UplinkCentre", StructureSize(2, 2)},
+			{"WreckedTransporter", StructureSize(3, 3)},
+			{"X-Super-Cannon", StructureSize(2, 2)},
+			{"X-Super-MassDriver", StructureSize(2, 2)},
+			{"X-Super-Missile", StructureSize(2, 2)},
+			{"X-Super-Rocket", StructureSize(2, 2)}
+		};
+	}
 }
 
 // Load stats configuration for droid templates from a `templates.json` file
@@ -462,6 +515,9 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 	std::unordered_set<std::string> researchCenters_loaded;
 	std::unordered_set<std::string> hqStructs_loaded;
 
+	// [STRUCT SIZES]:
+	std::unordered_map<std::string, StructureSize> structSizes_loaded;
+
 	// [STRUCT MODULES]:
 	std::unordered_set<std::string> factoryModules_loaded;
 	std::unordered_set<std::string> researchModules_loaded;
@@ -483,31 +539,50 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 
 	for (const auto& it : mRoot.items())
 	{
-		auto type_it = it.value().find("type");
-		if (type_it == it.value().end())
+		const auto& structId = it.key();
+		StructureSize sizeInfo(1, 1);
+		auto width_it = it.value().find("width");
+		if (width_it != it.value().end() && width_it->is_number())
 		{
-			continue;
-		}
-		if (!type_it->is_string())
-		{
-			// Invalid type value - should be a string!
-			continue;
-		}
-		try {
-			auto typeStr = type_it->get<std::string>();
-			auto map_it = typeInsertionMap.find(typeStr);
-			if (map_it != typeInsertionMap.end())
-			{
-				map_it->second->insert(it.key());
+			try {
+				sizeInfo.baseWidth = width_it->get<uint32_t>();
+			} catch (std::exception&) {
+				continue;
 			}
-		} catch (std::exception&) {
-			continue;
+		}
+		auto breadth_it = it.value().find("breadth");
+		if (breadth_it != it.value().end() && breadth_it->is_number())
+		{
+			try {
+				sizeInfo.baseBreadth = breadth_it->get<uint32_t>();
+			} catch (std::exception&) {
+				continue;
+			}
+		}
+		structSizes_loaded.insert(StructSizesMap::value_type(structId, sizeInfo));
+
+		auto type_it = it.value().find("type");
+		if (type_it != it.value().end())
+		{
+			if (type_it->is_string())
+			{
+				try {
+					auto typeStr = type_it->get<std::string>();
+					auto map_it = typeInsertionMap.find(typeStr);
+					if (map_it != typeInsertionMap.end())
+					{
+						map_it->second->insert(it.key());
+					}
+				} catch (std::exception&) {
+					continue;
+				}
+			}
 		}
 	}
 
 	if (std::any_of(typeInsertionMap.begin(), typeInsertionMap.end(), [](const decltype(typeInsertionMap)::value_type & kvp) -> bool {
 		return !kvp.second->empty();
-	}))
+	}) || !structSizes_loaded.empty())
 	{
 		resourceExtractors = std::move(resourceExtractors_loaded);
 		powerGenerators = std::move(powerGenerators_loaded);
@@ -519,6 +594,7 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 		factoryModules = std::move(factoryModules_loaded);
 		researchModules = std::move(researchModules_loaded);
 		powerModules = std::move(powerModules_loaded);
+		structSizes = std::move(structSizes_loaded);
 		return true;
 	}
 
@@ -574,6 +650,16 @@ bool MapStatsConfiguration::loadFromFeaturesJSON(const std::string& featuresJSON
 	}
 
 	return false;
+}
+
+optional<MapStatsConfiguration::StructureSize> MapStatsConfiguration::getStructureSize(const std::string& struct_id) const
+{
+	auto it = structSizes.find(struct_id);
+	if (it == structSizes.end())
+	{
+		return nullopt;
+	}
+	return it->second;
 }
 
 } // namespace WzMap

@@ -101,6 +101,16 @@ namespace WzMap {
 	class MapStatsConfiguration
 	{
 	public:
+		struct StructureSize {
+			uint32_t baseWidth = 0;   /*The width of the base in tiles*/
+			uint32_t baseBreadth = 0; /*The breadth of the base in tiles*/
+
+			StructureSize(uint32_t baseWidth, uint32_t baseBreadth)
+			: baseWidth(baseWidth)
+			, baseBreadth(baseBreadth)
+			{ }
+		};
+	public:
 		// Construct a MapStatsConfiguration with hard-coded defaults that map to WZ 4.3+ (currently)
 		MapStatsConfiguration(MapType mapType = MapType::SKIRMISH);
 
@@ -142,6 +152,9 @@ namespace WzMap {
 		//  - "type": "HQ"
 		std::unordered_set<std::string> hqStructs;
 
+		// [STRUCT SIZES]:
+		optional<StructureSize> getStructureSize(const std::string& struct_id) const;
+
 		// [STRUCT MODULES]:
 		//	- "type": "FACTORY MODULE"
 		std::unordered_set<std::string> factoryModules;
@@ -155,6 +168,11 @@ namespace WzMap {
 		std::unordered_set<std::string> oilResources;
 		//	- "type": "OIL DRUM"
 		std::unordered_set<std::string> oilDrums;
+
+	private:
+		// [STRUCT SIZES]:
+		typedef std::unordered_map<std::string, StructureSize> StructSizesMap;
+		StructSizesMap structSizes;
 	};
 
 } // namespace WzMap
