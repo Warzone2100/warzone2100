@@ -775,6 +775,7 @@ Get the limits of the scrollable area of the map as an area object. (3.2+ only)
 Create a structure on the given position. Returns the structure on success, null otherwise.
 Position uses world coordinates, if you want use position based on Map Tiles, then
 use as addStructure(structureName, players, x*128, y*128)
+Direction is optional, and is specified in degrees.
 
 ## getStructureLimit(structureName[, player])
 

@@ -2981,8 +2981,9 @@ scr_area wzapi::getScrollLimits(WZAPI_NO_PARAMS)
 //-- Create a structure on the given position. Returns the structure on success, null otherwise.
 //-- Position uses world coordinates, if you want use position based on Map Tiles, then
 //-- use as addStructure(structureName, players, x*128, y*128)
+//-- Direction is optional, and is specified in degrees.
 //--
-wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y, optional<float> _direction))
+wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y, optional<int> _direction))
 {
 	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
 	SCRIPT_ASSERT(nullptr, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
