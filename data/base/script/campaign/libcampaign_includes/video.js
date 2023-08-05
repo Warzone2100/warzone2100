@@ -62,7 +62,7 @@ function __camEnqueueVideos()
 	}
 
 	const SOUND_IDENTIFER = ".ogg";
-	var what = __camVideoSequences[0];
+	let what = __camVideoSequences[0];
 
 	// Check if this is a sound to play before some sequence.
 	if (typeof what === "string" && what.indexOf(SOUND_IDENTIFER) !== -1)
@@ -72,7 +72,7 @@ function __camEnqueueVideos()
 	}
 	else if (typeof what === "object")
 	{
-		var play = true;
+		let play = true;
 
 		if (!camDef(what.video) || !camIsString(what.video))
 		{

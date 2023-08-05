@@ -27,7 +27,7 @@ var switchLZ; //Counter for incrementing index every third landing
 //Check if all enemies are gone and win after 15 transports
 function extraVictoryCondition()
 {
-	var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
+	let enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 	if (index === 5 && enemies.length === 0)
 	{
 		return true;
@@ -43,9 +43,9 @@ function checkForGroundForces()
 		const maxTanks = 16;
 		const firstAmount = 10;
 
-		var droidGroup1 = []; //Heavy cannon mantis track units
-		var droidGroup2 = []; //Sensor and heavy mortar units
-		var templates = [ cTempl.nphct, cTempl.npmsens, cTempl.npmorb ];
+		let droidGroup1 = []; //Heavy cannon mantis track units
+		let droidGroup2 = []; //Sensor and heavy mortar units
+		let templates = [ cTempl.nphct, cTempl.npmsens, cTempl.npmorb ];
 
 		for (let i = 0; i <= maxTanks; ++i)
 		{
@@ -64,7 +64,7 @@ function checkForGroundForces()
 		}
 
 		//What part of map to appear at
-		var pos = (index === 0) ? camMakePos("reinforceSouthEast") : camMakePos("reinforceNorth");
+		let pos = (index === 0) ? camMakePos("reinforceSouthEast") : camMakePos("reinforceNorth");
 		camSendReinforcement(NEW_PARADIGM, pos, droidGroup1, CAM_REINFORCE_GROUND, {
 			data: {regroup: false, count: -1,},
 		});
@@ -76,19 +76,19 @@ function checkForGroundForces()
 //New Paradigm transport appears fifteen times before mission win
 function sendTransport()
 {
-	var position = camMakePos(landingZoneList[index]);
+	let position = camMakePos(landingZoneList[index]);
 	switchLZ += 1;
 
 	// (2 or 3 or 4) pairs of each droid template.
 	// This emulates wzcam's droid count distribution.
-	var count = [ 2, 3, 4, 4, 4, 4, 4, 4, 4 ][camRand(9)];
+	let count = [ 2, 3, 4, 4, 4, 4, 4, 4, 4 ][camRand(9)];
 
-	var templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
+	let templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
 
-	var droids = [];
+	let droids = [];
 	for (let i = 0; i < count; ++i)
 	{
-		var t = templates[camRand(templates.length)];
+		let t = templates[camRand(templates.length)];
 		// two droids of each template
 		droids[droids.length] = t;
 		droids[droids.length] = t;
@@ -141,8 +141,8 @@ function eventStartLevel()
 		callback: "extraVictoryCondition"
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
@@ -151,7 +151,7 @@ function eventStartLevel()
 	// make sure player doesn't build on enemy LZs
 	for (let i = 6; i <= 10; ++i)
 	{
-		var ph = getObject("NPLZ" + i);
+		let ph = getObject("NPLZ" + i);
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i - 4);
 	}
 

@@ -20,8 +20,8 @@ const startpos = {x: 92, y: 99};
 //Remove enemy vtols when in the remove zone area.
 function checkEnemyVtolArea()
 {
-	var pos = {x: 127, y: 64};
-	var vtols = enumRange(pos.x, pos.y, 2, THE_COLLECTIVE, false).filter((obj) => (isVTOL(obj)));
+	let pos = {x: 127, y: 64};
+	let vtols = enumRange(pos.x, pos.y, 2, THE_COLLECTIVE, false).filter((obj) => (isVTOL(obj)));
 
 	for (let i = 0, l = vtols.length; i < l; ++i)
 	{
@@ -43,11 +43,11 @@ function eventTransporterLaunch(transporter)
 {
 	if (!allowWin && transporter.player === CAM_HUMAN_PLAYER)
 	{
-		var cargoDroids = enumCargo(transporter);
+		let cargoDroids = enumCargo(transporter);
 
 		for (let i = 0, len = cargoDroids.length; i < len; ++i)
 		{
-			var virDroid = cargoDroids[i];
+			let virDroid = cargoDroids[i];
 
 			if (virDroid && virDroid.droidType === DROID_CONSTRUCT)
 			{
@@ -62,8 +62,8 @@ function eventTransporterLaunch(transporter)
 function randomTemplates(list, transporterAmount, useWhirlwinds)
 {
 	const WHIRLWIND_AMOUNT = 2;
-	var droids = [];
-	var size;
+	let droids = [];
+	let size;
 
 	if (camDef(transporterAmount) && transporterAmount)
 	{
@@ -94,24 +94,24 @@ function randomTemplates(list, transporterAmount, useWhirlwinds)
 //Attack every 30 seconds.
 function vtolAttack()
 {
-	var vtolPositions = [
+	let vtolPositions = [
 		{x: 99, y: 1},
 		{x: 127, y: 65},
 		{x: 127, y: 28},
 		{x: 36, y: 1},
 		{x: 1, y: 28},
 	];
-	var vtolRemovePos = {x: 127, y: 64};
+	let vtolRemovePos = {x: 127, y: 64};
 
 	if (difficulty === INSANE)
 	{
 		vtolPositions = undefined; //to randomize the spawns each time
 	}
 
-	var list = [
+	let list = [
 		cTempl.commorv, cTempl.commorv, cTempl.comhvat, cTempl.commorvt
 	];
-	var extras = {
+	let extras = {
 		minVTOLs: (difficulty >= HARD) ? 5 : 4,
 		maxRandomVTOLs: (difficulty >= HARD) ? 2 : 1
 	};
@@ -122,8 +122,8 @@ function vtolAttack()
 //SouthEast attackers which are mostly cyborgs.
 function cyborgAttack()
 {
-	var southCyborgAssembly = {x: 123, y: 125};
-	var list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.comhltat, cTempl.cohhpv];
+	let southCyborgAssembly = {x: 123, y: 125};
+	let list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.comhltat, cTempl.cohhpv];
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(southCyborgAssembly), randomTemplates(list, false, true), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
@@ -132,7 +132,7 @@ function cyborgAttack()
 
 function cyborgAttackRandom()
 {
-	var list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.npcybc, cTempl.comrotm]; //favor cannon cyborg
+	let list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.npcybc, cTempl.comrotm]; //favor cannon cyborg
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(camGenerateRandomMapEdgeCoordinate(startpos)), randomTemplates(list, false, true).concat(cTempl.comsens), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
@@ -142,8 +142,8 @@ function cyborgAttackRandom()
 //North road attacker consisting of powerful weaponry.
 function tankAttack()
 {
-	var northTankAssembly = {x: 95, y: 3};
-	var list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
+	let northTankAssembly = {x: 95, y: 3};
+	let list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(northTankAssembly), randomTemplates(list, false, true), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1, },
@@ -152,8 +152,8 @@ function tankAttack()
 
 function tankAttackWest()
 {
-	var westTankAssembly = {x: 3, y: 112}; //This was unused. Now part of Hard/Insane playthroughs.
-	var list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
+	let westTankAssembly = {x: 3, y: 112}; //This was unused. Now part of Hard/Insane playthroughs.
+	let list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(westTankAssembly), randomTemplates(list, true, true), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1, },
@@ -162,7 +162,7 @@ function tankAttackWest()
 
 function transporterAttack()
 {
-	var droids = [cTempl.cohact, cTempl.comhltat, cTempl.cohbbt, cTempl.cohhpv];
+	let droids = [cTempl.cohact, cTempl.comhltat, cTempl.cohbbt, cTempl.cohhpv];
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(camGenerateRandomMapCoordinate(startpos, 10, 1)), randomTemplates(droids, true, false),
 		CAM_REINFORCE_TRANSPORT, {
@@ -175,7 +175,7 @@ function transporterAttack()
 //NOTE: this is only called once from the library's eventMissionTimeout().
 function checkIfLaunched()
 {
-	var transporters = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+	let transporters = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID && camIsTransporter(obj)
 	));
 	if (transporters.length > 0)
@@ -203,8 +203,8 @@ function eventStartLevel()
 		camSetExtraObjectiveMessage(_("Send off as many transporters as you can and bring at least one truck"));
 	}
 
-	var lz = {x: 86, y: 99, x2: 88, y2: 101};
-	var tCoords = {xStart: 87, yStart: 100, xOut: 0, yOut: 55};
+	let lz = {x: 86, y: 99, x2: 88, y2: 101};
+	let tCoords = {xStart: 87, yStart: 100, xOut: 0, yOut: 55};
 
 	camSetStandardWinLossConditions(CAM_VICTORY_TIMEOUT, "CAM_3A", {
 		reinforcements: camMinutesToSeconds(7), //Duration the transport "leaves" map.
@@ -214,7 +214,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	camSetupTransporter(tCoords.xStart, tCoords.yStart, tCoords.xOut, tCoords.yOut);
 
-	var enemyLz = {x: 49, y: 83, x2: 51, y2: 85};
+	let enemyLz = {x: 49, y: 83, x2: 51, y2: 85};
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	setMissionTime(camMinutesToSeconds(30));

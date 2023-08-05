@@ -36,7 +36,7 @@ camAreaEvent("crashSite", function(droid)
 
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	var droids = enumDroid(TRANSPORT_TEAM);
+	let droids = enumDroid(TRANSPORT_TEAM);
 	for (let i = 0; i < droids.length; ++i)
 	{
 		donateObject(droids[i], CAM_HUMAN_PLAYER);
@@ -51,7 +51,7 @@ camAreaEvent("crashSite", function(droid)
 function preDamageUnits()
 {
 	setHealth(getObject("transporter"), 40);
-	var droids = enumDroid(TRANSPORT_TEAM);
+	let droids = enumDroid(TRANSPORT_TEAM);
 	for (let j = 0; j < droids.length; ++j)
 	{
 		setHealth(droids[j], 40 + camRand(20));
@@ -80,13 +80,13 @@ function setupCyborgGroups()
 function setCrashedTeamExp()
 {
 	const DROID_EXP = 32;
-	var droids = enumDroid(TRANSPORT_TEAM).filter((dr) => (
+	let droids = enumDroid(TRANSPORT_TEAM).filter((dr) => (
 		!camIsSystemDroid(dr) && !camIsTransporter(dr)
 	));
 
 	for (let i = 0; i < droids.length; ++i)
 	{
-		var droid = droids[i];
+		let droid = droids[i];
 		setDroidExperience(droid, DROID_EXP);
 	}
 
@@ -118,16 +118,16 @@ function eventStartLevel()
 		callback: "checkCrashedTeam"
 	});
 
-	var subLandingZone = getObject("landingZone");
-	var startpos = getObject("startingPosition");
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let subLandingZone = getObject("landingZone");
+	let startpos = getObject("startingPosition");
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	let enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	//Add crash site blip and from an alliance with the crashed team.

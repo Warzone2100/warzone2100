@@ -24,10 +24,10 @@ function vtolAttack()
 
 function setupLandGroups()
 {
-	var hovers = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => (
+	let hovers = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && obj.propulsion === "hover01"
 	));
-	var tanks = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => (
+	let tanks = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && obj.propulsion !== "hover01"
 	));
 
@@ -81,7 +81,7 @@ function truckDefense()
 		return;
 	}
 
-	var list = ["Emplacement-Rocket06-IDF", "Emplacement-Howitzer150", "CO-Tower-HvATRkt", "CO-Tower-HVCan", "Sys-CB-Tower01"];
+	let list = ["Emplacement-Rocket06-IDF", "Emplacement-Howitzer150", "CO-Tower-HvATRkt", "CO-Tower-HVCan", "Sys-CB-Tower01"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos3"));
@@ -95,16 +95,16 @@ function eventStartLevel()
 		annihilate: true
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone"); //player lz
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	let enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	camSetArtifacts({

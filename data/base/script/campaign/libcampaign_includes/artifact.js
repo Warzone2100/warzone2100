@@ -27,8 +27,8 @@ function camSetArtifacts(artifacts)
 	__camArtifacts = artifacts;
 	for (const alabel in __camArtifacts)
 	{
-		var ai = __camArtifacts[alabel];
-		var pos = camMakePos(alabel);
+		let ai = __camArtifacts[alabel];
+		let pos = camMakePos(alabel);
 		if (camDef(pos.id))
 		{
 			// will place when object with this id is destroyed
@@ -38,7 +38,7 @@ function camSetArtifacts(artifacts)
 		else
 		{
 			// received position or area, place immediately
-			var acrate = addFeature("Crate", pos.x, pos.y);
+			let acrate = addFeature("Crate", pos.x, pos.y);
 			addLabel(acrate, __camGetArtifactLabel(alabel));
 			ai.placed = true;
 		}
@@ -65,11 +65,11 @@ function camAllArtifactsPickedUp()
 //;;
 function camGetArtifacts()
 {
-	var camArti = [];
+	let camArti = [];
 	for (const alabel in __camArtifacts)
 	{
-		var artifact = __camArtifacts[alabel];
-		var libLabel = __camGetArtifactLabel(alabel);
+		let artifact = __camArtifacts[alabel];
+		let libLabel = __camGetArtifactLabel(alabel);
 		//libcampaign managed artifact that was placed on the map.
 		if (artifact.placed && getObject(libLabel) !== null)
 		{
@@ -77,7 +77,7 @@ function camGetArtifacts()
 		}
 		//Label for artifacts that will drop after an object gets destroyed. Or is manually managed.
 		//NOTE: Must check for ID since "alabel" could be a AREA/POSITION label.
-		var obj = getObject(alabel);
+		let obj = getObject(alabel);
 		if (obj !== null && camDef(obj.id))
 		{
 			camArti.push(alabel);
@@ -102,12 +102,12 @@ function __camGetArtifactKey(objlabel)
 function __camCheckPlaceArtifact(obj)
 {
 	// FIXME: O(n) lookup here
-	var alabel = getLabel(obj);
+	let alabel = getLabel(obj);
 	if (!camDef(alabel) || !alabel)
 	{
 		return;
 	}
-	var ai = __camArtifacts[alabel];
+	let ai = __camArtifacts[alabel];
 	if (!camDef(ai))
 	{
 		return;
@@ -122,7 +122,7 @@ function __camCheckPlaceArtifact(obj)
 		camTrace("Placing multi-tech granting artifact");
 		for (let i = 0; i < ai.tech.length; ++i)
 		{
-			var techString = ai.tech[i];
+			let techString = ai.tech[i];
 			camTrace(i, ":", techString);
 		}
 	}
@@ -130,7 +130,7 @@ function __camCheckPlaceArtifact(obj)
 	{
 		camTrace("Placing", ai.tech);
 	}
-	var acrate = addFeature("Crate", obj.x, obj.y);
+	let acrate = addFeature("Crate", obj.x, obj.y);
 	addLabel(acrate, __camGetArtifactLabel(alabel));
 	ai.placed = true;
 }
@@ -143,8 +143,8 @@ function __camPickupArtifact(artifact)
 		return;
 	}
 	// FIXME: O(n) lookup here
-	var alabel = __camGetArtifactKey(getLabel(artifact));
-	var ai = __camArtifacts[alabel];
+	let alabel = __camGetArtifactKey(getLabel(artifact));
+	let ai = __camArtifacts[alabel];
 	if (!camDef(alabel) || !alabel || !camDef(ai))
 	{
 		camTrace("Artifact", artifact.id, "is not managed");
@@ -159,7 +159,7 @@ function __camPickupArtifact(artifact)
 	{
 		for (let i = 0; i < ai.tech.length; ++i)
 		{
-			var techString = ai.tech[i];
+			let techString = ai.tech[i];
 			enableResearch(techString);
 		}
 	}
@@ -170,7 +170,7 @@ function __camPickupArtifact(artifact)
 	// bump counter before the callback, so that it was
 	// actual during the callback
 	++__camNumArtifacts;
-	var callback = __camGlobalContext()["camArtifactPickup_" + alabel];
+	let callback = __camGlobalContext()["camArtifactPickup_" + alabel];
 	if (camDef(callback))
 	{
 		callback();
@@ -183,11 +183,11 @@ function __camLetMeWinArtifacts()
 {
 	for (const alabel in __camArtifacts)
 	{
-		var ai = __camArtifacts[alabel];
+		let ai = __camArtifacts[alabel];
 		if (ai.placed)
 		{
-			var label = __camGetArtifactLabel(alabel);
-			var artifact = getObject(label);
+			let label = __camGetArtifactLabel(alabel);
+			let artifact = getObject(label);
 			if (!camDef(artifact) || !artifact)
 			{
 				continue;
@@ -200,7 +200,7 @@ function __camLetMeWinArtifacts()
 			{
 				for (let i = 0; i < ai.tech.length; ++i)
 				{
-					var techString = ai.tech[i];
+					let techString = ai.tech[i];
 					enableResearch(techString);
 				}
 			}

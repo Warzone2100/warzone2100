@@ -59,11 +59,11 @@ camAreaEvent ("middleTrigger", function(droid)
 function setUnitRank(transport)
 {
 	const DROID_EXP = [1024, 256, 128, 64]; //Can make Hero Commanders if recycled.
-	var droids = enumCargo(transport);
+	let droids = enumCargo(transport);
 
 	for (let i = 0, len = droids.length; i < len; ++i)
 	{
-		var droid = droids[i];
+		let droid = droids[i];
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
 			setDroidExperience(droid, DROID_EXP[transporterIndex - 1]);
@@ -103,8 +103,8 @@ function truckDefense()
 		return;
 	}
 
-	var list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit", "Emplacement-RotHow"];
-	var position;
+	let list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit", "Emplacement-RotHow"];
+	let position;
 
 	if (truckLocCounter === 0)
 	{
@@ -167,7 +167,7 @@ function sendPlayerTransporter()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
+	let list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
 	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
 }
 
@@ -242,7 +242,7 @@ function cam3Setup()
 //Normal and lower difficulties has Nexus start off a little bit weaker
 function improveNexusAlloys()
 {
-	var alloys = [
+	let alloys = [
 		"R-Vehicle-Metals07", "R-Cyborg-Metals07",
 		"R-Vehicle-Armor-Heat04", "R-Cyborg-Armor-Heat04"
 	];
@@ -252,10 +252,10 @@ function improveNexusAlloys()
 function eventStartLevel()
 {
 	const PLAYER_POWER = 16000;
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_1S");
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
@@ -265,7 +265,7 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("NXlandingZone");
+	let enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camSetArtifacts({

@@ -9,7 +9,7 @@ const SCAVENGER_RES = [
 //Ambush player from scav base - triggered from middle path
 camAreaEvent("scavBaseTrigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("eastScavsNorth", SCAV_7, false));
+	let ambushGroup = camMakeGroup(enumArea("eastScavsNorth", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_ATTACK, {
 		count: -1,
 		regroup: false
@@ -35,7 +35,7 @@ camAreaEvent("factoryTrigger", function()
 
 function westScavAction()
 {
-	var ambushGroup = camMakeGroup(enumArea("westScavs", SCAV_7, false));
+	let ambushGroup = camMakeGroup(enumArea("westScavs", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush1")
 	});
@@ -43,7 +43,7 @@ function westScavAction()
 
 function northwestScavAction()
 {
-	var ambushGroup = camMakeGroup(enumArea("northWestScavs", SCAV_7, false));
+	let ambushGroup = camMakeGroup(enumArea("northWestScavs", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush2")
 	});
@@ -79,7 +79,7 @@ function checkFrontBunkers()
 {
 	if (getObject("frontBunkerLeft") === null && getObject("frontBunkerRight") === null)
 	{
-		var ambushGroup = camMakeGroup(enumArea("eastScavsSouth", SCAV_7, false));
+		let ambushGroup = camMakeGroup(enumArea("eastScavsSouth", SCAV_7, false));
 		camManageGroup(ambushGroup, CAM_ORDER_ATTACK, {
 			count: -1,
 			regroup: false
@@ -101,10 +101,10 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone"); //player lz
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);

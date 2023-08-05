@@ -90,8 +90,8 @@ function truckDefense()
 		return;
 	}
 
-	var list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit"];
-	var position;
+	let list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit"];
+	let position;
 
 	if (truckLocCounter === 0)
 	{
@@ -111,8 +111,8 @@ function truckDefense()
 //when no target is found in the area.
 function vaporizeTarget()
 {
-	var target;
-	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
+	let target;
+	let targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID || obj.type === STRUCTURE
 	));
 
@@ -126,9 +126,9 @@ function vaporizeTarget()
 	}
 	else
 	{
-		var dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
-		var vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
-		var st = targets.filter((obj) => (obj.type === STRUCTURE));
+		let dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
+		let vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
+		let st = targets.filter((obj) => (obj.type === STRUCTURE));
 
 		if (dr.length)
 		{
@@ -165,14 +165,14 @@ function laserSatFuzzyStrike(obj)
 {
 	const LOC = camMakePos(obj);
 	//Initially lock onto target
-	var xCoord = LOC.x;
-	var yCoord = LOC.y;
+	let xCoord = LOC.x;
+	let yCoord = LOC.y;
 
 	//Introduce some randomness
 	if (camRand(101) < 67)
 	{
-		var xRand = camRand(3);
-		var yRand = camRand(3);
+		let xRand = camRand(3);
+		let yRand = camRand(3);
 		xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
 		yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
 	}
@@ -242,10 +242,10 @@ function checkMissileSilos()
 		}
 	}
 
-	var siloArea = camMakePos(getObject("missileSilos"));
-	var safe = enumRange(siloArea.x, siloArea.y, 10, ALL_PLAYERS, false);
-	var enemies = safe.filter((obj) => (obj.player === NEXUS));
-	var player = safe.filter((obj) => (obj.player === CAM_HUMAN_PLAYER));
+	let siloArea = camMakePos(getObject("missileSilos"));
+	let safe = enumRange(siloArea.x, siloArea.y, 10, ALL_PLAYERS, false);
+	let enemies = safe.filter((obj) => (obj.player === NEXUS));
+	let player = safe.filter((obj) => (obj.player === CAM_HUMAN_PLAYER));
 	if (!enemies.length && player.length)
 	{
 		camCallOnce("allySiloWithPlayer");
@@ -256,10 +256,10 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Build a forward base at the silos"));
 
-	var siloZone = getObject("missileSilos");
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
-	var lz2 = getObject("landingZone2"); //LZ for cam3-4s.
+	let siloZone = getObject("missileSilos");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
+	let lz2 = getObject("landingZone2"); //LZ for cam3-4s.
 	mapLimit = 1.0;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D2", {

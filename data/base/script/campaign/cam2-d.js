@@ -35,14 +35,14 @@ function truckDefense()
 		return;
 	}
 
-	var list = ["AASite-QuadBof", "CO-WallTower-HvCan", "CO-Tower-RotMG", "CO-Tower-HvFlame"];
+	let list = ["AASite-QuadBof", "CO-WallTower-HvCan", "CO-Tower-RotMG", "CO-Tower-HvFlame"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("uplinkPos"));
 }
 
 //Attacks every 2 minutes until HQ is destroyed.
 function vtolAttack()
 {
-	var list = [cTempl.colatv, cTempl.commorvt];
+	let list = [cTempl.colatv, cTempl.commorvt];
 	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "COCommandCenter");
 }
 
@@ -82,16 +82,16 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone"); //player lz
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	let enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	camSetArtifacts({

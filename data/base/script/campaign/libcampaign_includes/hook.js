@@ -18,7 +18,7 @@
 //;;
 function camAreaEvent(label, callback)
 {
-	var eventName = "eventArea" + label;
+	let eventName = "eventArea" + label;
 	camMarkTiles(label);
 	__camPreHookEvent(eventName, function(droid)
 	{

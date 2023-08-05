@@ -79,8 +79,8 @@ function truckDefense()
 		return;
 	}
 
-	var list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit"];
-	var position;
+	let list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit"];
+	let position;
 
 	if (truckLocCounter === 0)
 	{
@@ -99,7 +99,7 @@ function truckDefense()
 function discoverGammaBase()
 {
 	reunited = true;
-	var lz = getObject("landingZone");
+	let lz = getObject("landingZone");
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
@@ -122,7 +122,7 @@ function discoverGammaBase()
 
 function findBetaUnitIds()
 {
-	var droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter((obj) => (
+	let droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID
 	));
 
@@ -139,8 +139,8 @@ function betaAlive()
 		return true; //Don't need to see if Beta is still alive if reunited with base.
 	}
 
-	var alive = false;
-	var myDroids = enumDroid(CAM_HUMAN_PLAYER);
+	let alive = false;
+	let myDroids = enumDroid(CAM_HUMAN_PLAYER);
 
 	for (let i = 0, l = betaUnitIds.length; i < l; ++i)
 	{
@@ -169,8 +169,8 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Reunite a part of Beta team with a Gamma team outpost"));
 
-	var startpos = getObject("startPosition");
-	var limboLZ = getObject("limboDroidLZ");
+	let startpos = getObject("startPosition");
+	let limboLZ = getObject("limboDroidLZ");
 	reunited = false;
 	betaUnitIds = [];
 	truckLocCounter = 0;
@@ -185,7 +185,7 @@ function eventStartLevel()
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10)));
 
-	var enemyLz = getObject("NXlandingZone");
+	let enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);

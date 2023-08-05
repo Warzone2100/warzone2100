@@ -35,13 +35,13 @@ camAreaEvent("vtolRemoveZone", function(droid)
 
 function sendEdgeMapDroids()
 {
-	var unitCount = 16 + camRand(5); // 16 - 20.
+	let unitCount = 16 + camRand(5); // 16 - 20.
 	if (difficulty === INSANE)
 	{
 		unitCount = 14 + camRand(3); // 14 - 16.
 	}
 	const EDGE = ["SWPhantomFactory", "NWPhantomFactory"];
-	var list = [
+	let list = [
 		cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,
 		cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh,
 		cTempl.nxmscouh, cTempl.nxmsamh,
@@ -50,7 +50,7 @@ function sendEdgeMapDroids()
 	{
 		list = list.concat(cTempl.nxmangel);
 	}
-	var droids = [];
+	let droids = [];
 
 	if (!camDef(edgeMapCounter))
 	{
@@ -76,8 +76,8 @@ function sendEdgeMapDroids()
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
 function vtolAttack()
 {
-	var list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv, cTempl.nxmheapv];
-	var ext = {
+	let list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv, cTempl.nxmheapv];
+	let ext = {
 		limit: [2, 4, 2, 4],
 		alternate: true,
 		altIdx: 0
@@ -88,19 +88,19 @@ function vtolAttack()
 // Order any absorbed trucks to start building defenses near themselves.
 function truckDefense()
 {
-	var droids = enumDroid(NEXUS, DROID_CONSTRUCT);
-	var defenses = [
+	let droids = enumDroid(NEXUS, DROID_CONSTRUCT);
+	let defenses = [
 		"Sys-NEXUSLinkTOW", "P0-AASite-SAM2", "Emplacement-PrisLas",
 		"NX-Tower-ATMiss", "Sys-NX-CBTower",
 	];
 
 	for (let i = 0, len = droids.length; i < len; ++i)
 	{
-		var truck = droids[i];
+		let truck = droids[i];
 		if (truck.order !== DORDER_BUILD)
 		{
-			var defense = defenses[camRand(defenses.length)];
-			var loc = pickStructLocation(truck, defense, truck.x, truck.y);
+			let defense = defenses[camRand(defenses.length)];
+			let loc = pickStructLocation(truck, defense, truck.x, truck.y);
 			enableStructure(defense, NEXUS);
 			if (camDef(loc))
 			{
@@ -124,7 +124,7 @@ function nexusManufacture()
 	{
 		return;
 	}
-	var factoryType = [
+	let factoryType = [
 		{structure: FACTORY, temps: [cTempl.nxmrailh, cTempl.nxmlinkh, cTempl.nxmscouh, cTempl.nxlflash,]},
 		{structure: CYBORG_FACTORY, temps: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,]},
 		{structure: VTOL_FACTORY, temps: [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxmheapv,]},
@@ -132,12 +132,12 @@ function nexusManufacture()
 
 	for (let i = 0; i < factoryType.length; ++i)
 	{
-		var factories = enumStruct(NEXUS, factoryType[i].structure);
-		var templs = factoryType[i].temps;
+		let factories = enumStruct(NEXUS, factoryType[i].structure);
+		let templs = factoryType[i].temps;
 
 		for (let j = 0, len = factories.length; j < len; ++j)
 		{
-			var fac = factories[j];
+			let fac = factories[j];
 			if (fac.status !== BUILT || !structureIdle(fac))
 			{
 				return;
@@ -151,8 +151,8 @@ function nexusManufacture()
 
 function manualGrouping()
 {
-	var vtols = enumDroid(NEXUS).filter((obj) => (obj.group === null && isVTOL(obj)));
-	var nonVtols = enumDroid(NEXUS).filter((obj) => (obj.group === null && !isVTOL(obj)));
+	let vtols = enumDroid(NEXUS).filter((obj) => (obj.group === null && isVTOL(obj)));
+	let nonVtols = enumDroid(NEXUS).filter((obj) => (obj.group === null && !isVTOL(obj)));
 	if (vtols.length)
 	{
 		camManageGroup(camMakeGroup(vtols), CAM_ORDER_ATTACK, { regroup: false, count: -1 });
@@ -240,8 +240,8 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Research resistance circuits and survive the assault from Nexus"));
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3C", {
 		callback: "resistanceResearched"
@@ -254,7 +254,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
-	var enemyLz = getObject("NXlandingZone");
+	let enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);

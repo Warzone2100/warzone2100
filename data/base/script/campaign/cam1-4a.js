@@ -51,7 +51,7 @@ camAreaEvent("LandingZoneTrigger", function()
 	camPlayVideos(["pcv456.ogg", {video: "SB1_4_B", type: MISS_MSG}]);
 	hackRemoveMessage("C1-4_LZ", PROX_MSG, CAM_HUMAN_PLAYER); //Remove LZ 2 blip.
 
-	var lz = getObject("LandingZone2"); // will override later
+	let lz = getObject("LandingZone2"); // will override later
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// Give extra 40 minutes.
@@ -113,10 +113,10 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	var startpos = getObject("StartPosition");
-	var lz = getObject("LandingZone1"); // will override later
-	var tent = getObject("TransporterEntry");
-	var text = getObject("TransporterExit");
+	let startpos = getObject("StartPosition");
+	let lz = getObject("LandingZone1"); // will override later
+	let tent = getObject("TransporterEntry");
+	let text = getObject("TransporterExit");
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);

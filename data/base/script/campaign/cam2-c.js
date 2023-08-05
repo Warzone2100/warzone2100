@@ -50,7 +50,7 @@ camAreaEvent("base3Trigger", function(droid)
 //Send idle droids in this base to attack when the player spots the base
 function camEnemyBaseDetected_COAirBase()
 {
-	var droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter((obj) => (
+	let droids = enumArea("airBaseCleanup", THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && obj.group === null
 	));
 
@@ -134,35 +134,34 @@ function truckDefense()
 //when all of the shepard group members are destroyed).
 function captureCivilians()
 {
-	var wayPoints = [
+	let wayPoints = [
 		"civPoint1", "civPoint2", "civPoint3", "civPoint4",
 		"civPoint5", "civPoint6", "civPoint7", "civCapturePos"
 	];
-	var currPos = getObject(wayPoints[civilianPosIndex]);
-	var shepardDroids = enumGroup(shepardGroup);
+	let currPos = getObject(wayPoints[civilianPosIndex]);
+	let shepardDroids = enumGroup(shepardGroup);
 
 	if (shepardDroids.length > 0)
 	{
 		//add some civs
-		var i = 0;
-		var num = 1 + camRand(3);
-		for (i = 0; i < num; ++i)
+		let num = 1 + camRand(3);
+		for (let i = 0; i < num; ++i)
 		{
 			addDroid(SCAV_7, currPos.x, currPos.y, "Civilian",
 					"B1BaBaPerson01", "BaBaLegs", "", "", "BabaMG");
 		}
 
 		//Only count civilians that are not in the the transporter base.
-		var civs = enumArea(0, 0, 35, mapHeight, SCAV_7, false);
+		let civs = enumArea(0, 0, 35, mapHeight, SCAV_7, false);
 		//Move them
-		for (i = 0; i < civs.length; ++i)
+		for (let i = 0; i < civs.length; ++i)
 		{
 			orderDroidLoc(civs[i], DORDER_MOVE, currPos.x, currPos.y);
 		}
 
 		if (civilianPosIndex <= 5)
 		{
-			for (i = 0; i < shepardDroids.length; ++i)
+			for (let i = 0; i < shepardDroids.length; ++i)
 			{
 				orderDroidLoc(shepardDroids[i], DORDER_MOVE, currPos.x, currPos.y);
 			}
@@ -184,15 +183,15 @@ function captureCivilians()
 //before removal.
 function civilianOrders()
 {
-	var lz = getObject("startPosition");
-	var rescueSound = "pcv612.ogg";	//"Civilian Rescued".
-	var civs = enumDroid(SCAV_7);
-	var rescued = false;
+	let lz = getObject("startPosition");
+	let rescueSound = "pcv612.ogg";	//"Civilian Rescued".
+	let civs = enumDroid(SCAV_7);
+	let rescued = false;
 
 	//Check if a civilian is close to a player droid.
 	for (let i = 0; i < civs.length; ++i)
 	{
-		var objs = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false);
+		let objs = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false);
 		for (let j = 0; j < objs.length; ++j)
 		{
 			if (objs[j].type === DROID)
@@ -215,9 +214,9 @@ function civilianOrders()
 //Capture civilans.
 function eventTransporterLanded(transport)
 {
-	var escaping = "pcv632.ogg"; //"Enemy escaping".
-	var position = getObject("COTransportPos");
-	var civs = enumRange(position.x, position.y, 15, SCAV_7, false);
+	let escaping = "pcv632.ogg"; //"Enemy escaping".
+	let position = getObject("COTransportPos");
+	let civs = enumRange(position.x, position.y, 15, SCAV_7, false);
 
 	if (civs.length)
 	{
@@ -233,9 +232,9 @@ function eventTransporterLanded(transport)
 //Send Collective transport as long as the player has not entered the base.
 function sendCOTransporter()
 {
-	var list = [cTempl.npcybr, cTempl.npcybr];
-	var tPos = getObject("COTransportPos");
-	var pDroid = enumRange(tPos.x, tPos.y, 6, CAM_HUMAN_PLAYER, false);
+	let list = [cTempl.npcybr, cTempl.npcybr];
+	let tPos = getObject("COTransportPos");
+	let pDroid = enumRange(tPos.x, tPos.y, 6, CAM_HUMAN_PLAYER, false);
 
 	if (!pDroid.length)
 	{
@@ -260,8 +259,8 @@ function extraVictoryCondition()
 	}
 	else
 	{
-		var lz = getObject("startPosition");
-		var civs = enumRange(lz.x, lz.y, 30, SCAV_7, false);
+		let lz = getObject("startPosition");
+		let civs = enumRange(lz.x, lz.y, 30, SCAV_7, false);
 
 		for (let i = 0; i < civs.length; ++i)
 		{
@@ -279,12 +278,12 @@ function eventStartLevel()
 		callback: "extraVictoryCondition"
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone"); //player lz
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	let enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, 5);
 
 	camSetArtifacts({

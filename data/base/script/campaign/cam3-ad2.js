@@ -41,18 +41,17 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Return a random assortment of droids with the given templates.
 function randomTemplates(list)
 {
-	var i = 0;
-	var extras = [cTempl.nxmsens, cTempl.nxmsamh];
-	var droids = [];
-	var size = 12 + camRand(4); //Max of 15.
+	let extras = [cTempl.nxmsens, cTempl.nxmsamh];
+	let droids = [];
+	let size = 12 + camRand(4); //Max of 15.
 
-	for (i = 0; i < size; ++i)
+	for (let i = 0; i < size; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
 
 	//Sensor and vindicator hovers.
-	for (i = 0; i < 4; ++i)
+	for (let i = 0; i < 4; ++i)
 	{
 		droids.push(extras[camRand(extras.length)]);
 	}
@@ -63,15 +62,15 @@ function randomTemplates(list)
 //Chose a random spawn point for the VTOLs.
 function vtolAttack()
 {
-	var list = [cTempl.nxmheapv, cTempl.nxlpulsev];
+	let list = [cTempl.nxmheapv, cTempl.nxlpulsev];
 	camSetVtolData(NEXUS, VTOL_POSITIONS, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
 
 //Chose a random spawn point to send ground reinforcements.
 function phantomFactorySpawn()
 {
-	var list;
-	var chosenFactory;
+	let list;
+	let chosenFactory;
 
 	switch (camRand(3))
 	{
@@ -104,8 +103,8 @@ function phantomFactorySpawn()
 //when no target is found in the area.
 function vaporizeTarget()
 {
-	var target;
-	var targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
+	let target;
+	let targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID || obj.type === STRUCTURE
 	));
 
@@ -124,9 +123,9 @@ function vaporizeTarget()
 	}
 	else
 	{
-		var dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
-		var vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
-		var st = targets.filter((obj) => (obj.type === STRUCTURE));
+		let dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
+		let vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
+		let st = targets.filter((obj) => (obj.type === STRUCTURE));
 
 		if (dr.length)
 		{
@@ -172,14 +171,14 @@ function laserSatFuzzyStrike(obj)
 {
 	const LOC = camMakePos(obj);
 	//Initially lock onto target
-	var xCoord = LOC.x;
-	var yCoord = LOC.y;
+	let xCoord = LOC.x;
+	let yCoord = LOC.y;
 
 	//Introduce some randomness. More accurate than last mission.
 	if (camRand(101) < 33)
 	{
-		var xRand = camRand(2);
-		var yRand = camRand(2);
+		let xRand = camRand(2);
+		let yRand = camRand(2);
 		xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
 		yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
 	}
@@ -278,8 +277,8 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Protect the missile silos and research for the missile codes"));
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
 	mapLimit = 137.0;
 	winFlag = false;
 	videoInfo = [
@@ -296,7 +295,7 @@ function eventStartLevel()
 	setScrollLimits(0, Y_SCROLL_LIMIT, 64, 256);
 
 	//Destroy everything above limits
-	var destroyZone = enumArea(0, 0, 64, Y_SCROLL_LIMIT, CAM_HUMAN_PLAYER, false);
+	let destroyZone = enumArea(0, 0, 64, Y_SCROLL_LIMIT, CAM_HUMAN_PLAYER, false);
 	for (let i = 0, l = destroyZone.length; i < l; ++i)
 	{
 		camSafeRemoveObject(destroyZone[i], false);

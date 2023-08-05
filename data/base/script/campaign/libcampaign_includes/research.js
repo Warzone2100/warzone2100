@@ -15,7 +15,7 @@ function camEnableRes(researchIds, playerId)
 {
 	for (let i = 0, l = researchIds.length; i < l; ++i)
 	{
-		var researchId = researchIds[i];
+		let researchId = researchIds[i];
 		enableResearch(researchId, playerId);
 		completeResearch(researchId, playerId);
 	}
@@ -35,9 +35,9 @@ function camCompleteRequiredResearch(researchIds, playerId)
 
 	for (let i = 0, l = researchIds.length; i < l; ++i)
 	{
-		var researchId = researchIds[i];
+		let researchId = researchIds[i];
 		dump("Searching for required research of item: " + researchId);
-		var reqRes = findResearch(researchId, playerId).reverse();
+		let reqRes = findResearch(researchId, playerId).reverse();
 
 		if (reqRes.length === 0)
 		{
@@ -52,7 +52,7 @@ function camCompleteRequiredResearch(researchIds, playerId)
 		reqRes = camRemoveDuplicates(reqRes);
 		for (let s = 0, r = reqRes.length; s < r; ++s)
 		{
-			var researchReq = reqRes[s].name;
+			let researchReq = reqRes[s].name;
 			dump("	Found: " + researchReq);
 			enableResearch(researchReq, playerId);
 			completeResearch(researchReq, playerId);
