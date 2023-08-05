@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-07-24 16:49\n"
+"PO-Revision-Date: 2023-08-05 14:25\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -15829,7 +15829,7 @@ msgstr "Hitam"
 #: src/frontend.cpp:3006
 #: src/frontend.cpp:3047
 msgid "On"
-msgstr "Di"
+msgstr "Nyala"
 
 #: src/frontend.cpp:844
 msgid "Rotating"
