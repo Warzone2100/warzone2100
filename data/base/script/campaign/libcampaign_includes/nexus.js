@@ -39,21 +39,21 @@ function camAbsorbPlayer(who, to)
 		to = NEXUS;
 	}
 
-	var units = enumDroid(who);
+	let units = enumDroid(who);
 
 	for (let i = 0, len = units.length; i < len; ++i)
 	{
-		var droid = units[i];
+		let droid = units[i];
 		if (!donateObject(droid, to))
 		{
 			camSafeRemoveObject(droid, false);
 		}
 	}
 
-	var structs = enumStruct(who);
+	let structs = enumStruct(who);
 	for (let i = 0, len = structs.length; i < len; ++i)
 	{
-		var structure = structs[i];
+		let structure = structs[i];
 		if (!donateObject(structure, to))
 		{
 			camSafeRemoveObject(structure, false);
@@ -81,8 +81,8 @@ function camHackIntoPlayer(player, to)
 	}
 
 	const GIFT_CHANCE = 70; //Else neutralized
-	var target;
-	var objects;
+	let target;
+	let objects;
 
 	if (!camDef(player))
 	{
@@ -97,7 +97,7 @@ function camHackIntoPlayer(player, to)
 		__camLastNexusAttack = 0;
 	}
 
-	var objects = __camChooseNexusTarget(player);
+	objects = __camChooseNexusTarget(player);
 	if (objects.length === 0)
 	{
 		return;
@@ -120,7 +120,7 @@ function camHackIntoPlayer(player, to)
 		camTrace("Neutralized " + target.name + " at (x,y): " + target.x + " " + target.y);
 		if (target.player === CAM_HUMAN_PLAYER)
 		{
-			var sound;
+			let sound;
 			//Nexus neutralize sounds
 			if (target.type === STRUCTURE)
 			{
@@ -189,7 +189,7 @@ function __camChooseNexusTarget(player)
 	}
 
 	const TARGET_UNIT_CHANCE = (getResearch("R-Sys-Resistance-Upgrade01").done) ? 40 : 20;
-	var objects = [];
+	let objects = [];
 
 	if (camRand(100) < TARGET_UNIT_CHANCE)
 	{

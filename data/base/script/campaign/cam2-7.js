@@ -24,7 +24,7 @@ function camEnemyBaseDetected_COBase2()
 {
 	hackRemoveMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	var vt = enumArea("COBase2Cleanup", THE_COLLECTIVE, false).filter((obj) => (
+	let vt = enumArea("COBase2Cleanup", THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && isVTOL(obj)
 	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -44,7 +44,7 @@ function camEnemyBaseDetected_COBase4()
 
 function baseThreeVtolAttack()
 {
-	var vt = enumArea("vtolGroupBase3", THE_COLLECTIVE, false).filter((obj) => (
+	let vt = enumArea("vtolGroupBase3", THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && isVTOL(obj)
 	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -54,7 +54,7 @@ function baseThreeVtolAttack()
 
 function baseFourVtolAttack()
 {
-	var vt = enumArea("vtolGroupBase4", THE_COLLECTIVE, false).filter((obj) => (
+	let vt = enumArea("vtolGroupBase4", THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && isVTOL(obj)
 	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -92,7 +92,7 @@ function truckDefense()
 		return;
 	}
 
-	var list = ["Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-CB-Tower01", "Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-SensoTower02"];
+	let list = ["Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-CB-Tower01", "Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-SensoTower02"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
 }
@@ -106,16 +106,16 @@ function eventStartLevel()
 		reinforcements: camMinutesToSeconds(3)
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone"); //player lz
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	let enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	camSetArtifacts({

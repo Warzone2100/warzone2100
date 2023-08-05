@@ -54,7 +54,7 @@ camAreaEvent("NPTransportTrigger", function(droid)
 {
 	if (enemyHasArtifact && droid.group === artiGroup)
 	{
-		var list = [cTempl.npmrl, cTempl.npmrl];
+		let list = [cTempl.npmrl, cTempl.npmrl];
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 39, y: 2 },
 			exit: { x: 32, y: 60 }
@@ -81,7 +81,7 @@ function eventTransporterLanded(transport)
 	if (transport.player === NEW_PARADIGM && enemyHasArtifact)
 	{
 		enemyStoleArtifact = true;
-		var crew = enumRange(transport.x, transport.y, 6, NEW_PARADIGM, false).filter((obj) => (
+		let crew = enumRange(transport.x, transport.y, 6, NEW_PARADIGM, false).filter((obj) => (
 			obj.type === DROID && obj.group === artiGroup
 		));
 		for (let i = 0, l = crew.length; i < l; ++i)
@@ -98,7 +98,7 @@ function eventGroupLoss(obj, group, newsize)
 	{
 		if (obj.id === droidWithArtiID)
 		{
-			var acrate = addFeature("Crate", obj.x, obj.y);
+			let acrate = addFeature("Crate", obj.x, obj.y);
 			addLabel(acrate, "newArtiLabel");
 
 			camSetArtifacts({
@@ -127,15 +127,15 @@ function getArtifact()
 	}
 
 	const GRAB_RADIUS = 2;
-	var artifact = camGetArtifacts().filter((label) => (
+	let artifact = camGetArtifacts().filter((label) => (
 		enemyCanTakeArtifact(label) && getObject(label) !== null
 	));
-	var artiLoc = artiMovePos;
+	let artiLoc = artiMovePos;
 
 	if (!enemyHasArtifact && !enemyStoleArtifact && artifact.length > 0)
 	{
 		//Go to the artifact instead.
-		var realCrate = artifact[0];
+		let realCrate = artifact[0];
 		artiLoc = camMakePos(realCrate);
 		if (!camDef(artiLoc))
 		{
@@ -143,13 +143,13 @@ function getArtifact()
 		}
 
 		//Find the one closest to the artifact so that one can "hold" it
-		var artiMembers = enumGroup(artiGroup);
-		var idx = 0;
-		var dist = Infinity;
+		let artiMembers = enumGroup(artiGroup);
+		let idx = 0;
+		let dist = Infinity;
 
 		for (let i = 0, l = artiMembers.length; i < l; ++i)
 		{
-			var drDist = camDist(artiMembers[i], artiLoc);
+			let drDist = camDist(artiMembers[i], artiLoc);
 			if (drDist < dist)
 			{
 				idx = i;
@@ -190,7 +190,7 @@ function buildLancers()
 //Must destroy all of the New Paradigm droids and make sure the artifact is safe.
 function extraVictory()
 {
-	var npTransportFound = false;
+	let npTransportFound = false;
 	enumDroid(NEW_PARADIGM).forEach((dr) => {
 		if (camIsTransporter(dr))
 		{
@@ -244,10 +244,10 @@ function eventStartLevel()
 	enemyHasArtifact = false;
 	enemyStoleArtifact = false;
 	artiMovePos = "NPWayPoint";
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone"); //player lz
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);

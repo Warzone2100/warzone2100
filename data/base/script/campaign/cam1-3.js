@@ -34,11 +34,11 @@ camAreaEvent("NorthConvoyTrigger", function(droid)
 
 camAreaEvent("SouthConvoyTrigger", function(droid)
 {
-	var scout = getObject("ScoutDroid");
+	let scout = getObject("ScoutDroid");
 	if (camDef(scout) && scout)
 	{
 		camTrace("New Paradigm sensor scout retreating");
-		var pos = camMakePos("ScoutDroidTarget");
+		let pos = camMakePos("ScoutDroidTarget");
 		orderDroidLoc(scout, DORDER_MOVE, pos.x, pos.y);
 	}
 });
@@ -86,9 +86,9 @@ function NPReinforce()
 {
 	if (getObject("NPHQ") !== null)
 	{
-		var list = [];
-		var count = 5 + camRand(5);
-		var scouts = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
+		let list = [];
+		let count = 5 + camRand(5);
+		let scouts = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
 
 		for (let i = 0; i < count; ++i)
 		{
@@ -130,7 +130,7 @@ function eventAttacked(victim, attacker) {
 	if (victim.player === NEW_PARADIGM)
 	{
 		camCallOnce("enableNP");
-		var commander = getObject("NPCommander");
+		let commander = getObject("NPCommander");
 		if (camDef(attacker) && attacker && camDef(commander) && commander &&
 			commander.order !== DORDER_SCOUT && commander.order !== DORDER_RTR)
 		{
@@ -210,10 +210,10 @@ function eventStartLevel()
 		annihilate: true
 	});
 
-	var startpos = getObject("StartPosition");
-	var lz = getObject("LandingZone");
-	var tent = getObject("TransporterEntry");
-	var text = getObject("TransporterExit");
+	let startpos = getObject("StartPosition");
+	let lz = getObject("LandingZone");
+	let tent = getObject("TransporterEntry");
+	let text = getObject("TransporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);

@@ -34,7 +34,7 @@ function camEnemyBaseEliminated_COEastBase()
 //Tell everything not grouped on map to attack
 function camEnemyBaseDetected_COEastBase()
 {
-	var droids = enumArea(0, 0, mapWidth, mapHeight, THE_COLLECTIVE, false).filter((obj) => (
+	let droids = enumArea(0, 0, mapWidth, mapHeight, THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && obj.group === null && obj.canHitGround
 	));
 
@@ -96,16 +96,16 @@ function eventStartLevel()
 		reinforcements: camMinutesToSeconds(3)
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone"); //player lz
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	let enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	camSetArtifacts({

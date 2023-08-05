@@ -105,7 +105,7 @@ function camMakePos(x, y)
 	{
 		return undefined;
 	}
-	var obj = x;
+	let obj = x;
 	if (camIsString(x))
 	{
 		obj = getObject(x);
@@ -162,7 +162,7 @@ function camDist(x1, y1, x2, y2)
 	{
 		return distBetweenTwoPoints(x1.x, x1.y, y1.x, y1.y);
 	}
-	var pos2 = camMakePos(x2);
+	let pos2 = camMakePos(x2);
 	if (camDef(pos2.x)) // x2 is pos2
 	{
 		return distBetweenTwoPoints(x1, y1, pos2.x, pos2.y);
@@ -204,11 +204,11 @@ function camPlayerMatchesFilter(playerId, playerFilter)
 //;;
 function camRemoveDuplicates(items)
 {
-	var prims = {"boolean":{}, "number":{}, "string":{}};
-	var objs = [];
+	let prims = {"boolean":{}, "number":{}, "string":{}};
+	let objs = [];
 
 	return items.filter((item) => {
-		var type = typeof item;
+		let type = typeof item;
 		if (type in prims)
 		{
 			return prims[type].hasOwnProperty(item) ? false : (prims[type][item] = true);
@@ -234,11 +234,11 @@ function camCountStructuresInArea(label, playerFilter)
 	{
 		playerFilter = CAM_HUMAN_PLAYER;
 	}
-	var list = enumArea(label, playerFilter, false);
-	var ret = 0;
+	let list = enumArea(label, playerFilter, false);
+	let ret = 0;
 	for (let i = 0, l = list.length; i < l; ++i)
 	{
-		var object = list[i];
+		let object = list[i];
 		if (object.type === STRUCTURE && object.stattype !== WALL && object.status === BUILT)
 		{
 			++ret;
@@ -256,7 +256,7 @@ function camCountStructuresInArea(label, playerFilter)
 //;;
 function camChangeOnDiff(numericValue)
 {
-	var modifier = 0;
+	let modifier = 0;
 
 	switch (difficulty)
 	{
@@ -323,8 +323,8 @@ function camMakeGroup(what, playerFilter)
 	{
 		playerFilter = ENEMIES;
 	}
-	var array;
-	var obj;
+	let array;
+	let obj;
 	if (camIsString(what)) // label
 	{
 		obj = getObject(what);
@@ -363,10 +363,10 @@ function camMakeGroup(what, playerFilter)
 	}
 	if (camDef(array))
 	{
-		var group = camNewGroup();
+		let group = camNewGroup();
 		for (let i = 0, l = array.length; i < l; ++i)
 		{
-			var o = array[i];
+			let o = array[i];
 			if (!camDef(o) || !o)
 			{
 				camDebug("Trying to add", o);
@@ -579,13 +579,13 @@ function __camGlobalContext()
 function __camFindClusters(list, size)
 {
 	// The good old cluster analysis algorithm taken from NullBot AI.
-	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
+	let ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
 	for (let i = list.length - 1; i >= 0; --i)
 	{
-		var x = list[i].x;
-		var y = list[i].y;
-		var found = false;
-		var n = 0;
+		let x = list[i].x;
+		let y = list[i].y;
+		let found = false;
+		let n = 0;
 		for (let j = 0; j < ret.clusters.length; ++j)
 		{
 			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)

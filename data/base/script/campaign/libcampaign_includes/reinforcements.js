@@ -28,9 +28,9 @@
 //;;
 function camSendReinforcement(playerId, position, templates, kind, data)
 {
-	var pos = camMakePos(position);
-	var order = CAM_ORDER_ATTACK;
-	var order_data = { regroup: false, count: -1 };
+	let pos = camMakePos(position);
+	let order = CAM_ORDER_ATTACK;
+	let order_data = { regroup: false, count: -1 };
 	if (camDef(data) && camDef(data.order))
 	{
 		order = data.order;
@@ -42,18 +42,21 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 	switch (kind)
 	{
 		case CAM_REINFORCE_GROUND:
-			var droids = [];
+		{
+			let droids = [];
 			for (let i = 0, l = templates.length; i < l; ++i)
 			{
-				var template = templates[i];
-				var prop = __camChangePropulsion(template.prop, playerId);
-				var droid = addDroid(playerId, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap);
+				let template = templates[i];
+				let prop = __camChangePropulsion(template.prop, playerId);
+				let droid = addDroid(playerId, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap);
 				camSetDroidExperience(droid);
 				droids.push(droid);
 			}
 			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;
+		}
 		case CAM_REINFORCE_TRANSPORT:
+		{
 			__camTransporterQueue.push({
 				player: playerId,
 				position: position,
@@ -64,9 +67,12 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 			});
 			__camDispatchTransporterSafe();
 			break;
+		}
 		default:
+		{
 			camTrace("Unknown reinforcement type");
 			break;
+		}
 	}
 }
 
@@ -91,7 +97,7 @@ function camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 	{
 		camDebug("Callback name must be a string (received", callbackName, ")");
 	}
-	var bi = __camEnemyBases[baseLabel];
+	let bi = __camEnemyBases[baseLabel];
 	bi.reinforce_kind = kind;
 	bi.reinforce_interval = interval;
 	bi.reinforce_callback = callbackName;

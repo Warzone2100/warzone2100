@@ -78,7 +78,7 @@ function camDebug(...args)
 //;;
 function camDebugOnce(...args)
 {
-	var str = debugGetCallerFuncName() + ": " + args.join(" ");
+	let str = debugGetCallerFuncName() + ": " + args.join(" ");
 	if (camDef(__camDebuggedOnce[str]))
 	{
 		return;
@@ -117,7 +117,7 @@ function camTraceOnce(...args)
 	{
 		return;
 	}
-	var str = debugGetCallerFuncName() + ": " + args.join(" ");
+	let str = debugGetCallerFuncName() + ": " + args.join(" ");
 	if (camDef(__camTracedOnce[str]))
 	{
 		return;
@@ -171,7 +171,7 @@ function __camGenericDebug(flag, functionName, args, err, backtrace)
 	{
 		functionName = "<anonymous>";
 	}
-	var str = flag + ": " + functionName + ": " + Array.prototype.join.call(args, " ");
+	let str = flag + ": " + functionName + ": " + Array.prototype.join.call(args, " ");
 	debug(str);
 	if (camDef(err) && err)
 	{

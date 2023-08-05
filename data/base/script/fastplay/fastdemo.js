@@ -137,8 +137,8 @@ function activateDefenders()
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, undefined);
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 

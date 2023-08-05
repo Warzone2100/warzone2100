@@ -34,7 +34,7 @@ function camEnemyBaseDetected_COMiddleBase()
 {
 	hackRemoveMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	var droids = enumArea("base4Cleanup", THE_COLLECTIVE, false).filter((obj) => (
+	let droids = enumArea("base4Cleanup", THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && obj.group === null
 	));
 
@@ -84,8 +84,8 @@ function ambushPlayer()
 
 function vtolAttack()
 {
-	var list = [cTempl.colcbv, cTempl.colatv];
-	var ext = {
+	let list = [cTempl.colcbv, cTempl.colatv];
+	let ext = {
 		limit: [4, 4], //paired with list array
 		alternate: true,
 		altIdx: 0
@@ -116,12 +116,12 @@ function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_2S");
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone"); //player lz
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	let enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));

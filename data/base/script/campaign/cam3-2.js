@@ -67,13 +67,13 @@ camAreaEvent("phantomFacTrigger", function(droid)
 function setAlphaExp()
 {
 	const DROID_EXP = 512; //Hero rank.
-	var alphaDroids = enumArea("alphaPit", ALPHA, false).filter((obj) => (
+	let alphaDroids = enumArea("alphaPit", ALPHA, false).filter((obj) => (
 		obj.type === DROID
 	));
 
 	for (let i = 0, l = alphaDroids.length; i < l; ++i)
 	{
-		var dr = alphaDroids[i];
+		let dr = alphaDroids[i];
 		if (!camIsSystemDroid(dr))
 		{
 			setDroidExperience(dr, DROID_EXP);
@@ -85,13 +85,13 @@ function setAlphaExp()
 function getAlphaUnitIDs()
 {
 	alphaUnitIDs = [];
-	var alphaDroids = enumArea("alphaPit", CAM_HUMAN_PLAYER, false).filter((obj) => (
+	let alphaDroids = enumArea("alphaPit", CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID && obj.experience === 512
 	));
 
 	for (let i = 0, l = alphaDroids.length; i < l; ++i)
 	{
-		var dr = alphaDroids[i];
+		let dr = alphaDroids[i];
 		alphaUnitIDs.push(dr.id);
 	}
 	startExtraLoss = true;
@@ -99,25 +99,25 @@ function getAlphaUnitIDs()
 
 function phantomFactoryNE()
 {
-	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
+	let list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
 	sendEdgeMapDroids(6, "NE-PhantomFactory", list);
 }
 
 function phantomFactorySW()
 {
-	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
+	let list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
 	sendEdgeMapDroids(8, "SW-PhantomFactory", list);
 }
 
 function phantomFactorySE()
 {
-	var list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh];
+	let list = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh];
 	sendEdgeMapDroids(10 + camRand(6), "SE-PhantomFactory", list); //10-15 units
 }
 
 function sendEdgeMapDroids(droidCount, location, list)
 {
-	var droids = [];
+	let droids = [];
 	for (let i = 0; i < droidCount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
@@ -200,8 +200,8 @@ function setupPatrolGroups()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list = [cTempl.nxlscouv, cTempl.nxmtherv];
-	var ext = {
+	let list = [cTempl.nxlscouv, cTempl.nxmtherv];
+	let ext = {
 		limit: [2, 4], //paired with template list
 		alternate: true,
 		altIdx: 0
@@ -226,8 +226,8 @@ function alphaTeamAlive()
 {
 	if (camDef(alphaUnitIDs) && startExtraLoss)
 	{
-		var alphaAlive = false;
-		var alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+		let alphaAlive = false;
+		let alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
 			obj.type === DROID
 		));
 
@@ -259,10 +259,10 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Rescue Alpha team from Nexus"));
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
+	let tent = getObject("transporterEntry");
+	let text = getObject("transporterExit");
 	startExtraLoss = false;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM3A-B", {
@@ -282,7 +282,7 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("NXlandingZone");
+	let enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);

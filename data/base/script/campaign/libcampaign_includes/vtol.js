@@ -177,8 +177,8 @@ function __camSpawnVtols()
 		}
 		else
 		{
-			var lim = amount;
-			var alternate = false;
+			let lim = amount;
+			let alternate = false;
 			if (camDef(__camVtolDataSystem[idx].extras.alternate))
 			{
 				alternate = __camVtolDataSystem[idx].extras.alternate; //Only use one template type

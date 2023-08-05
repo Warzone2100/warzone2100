@@ -29,8 +29,8 @@ camAreaEvent("launchScavAttack", function(droid)
 
 function runAway()
 {
-	var oilPatch = getObject("oilPatch");
-	var droids = enumRange(oilPatch.x, oilPatch.y, 7, SCAV_7, false);
+	let oilPatch = getObject("oilPatch");
+	let droids = enumRange(oilPatch.x, oilPatch.y, 7, SCAV_7, false);
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		pos: camMakePos("scavAttack1"),
 		fallback: camMakePos("retreat1"),
@@ -88,10 +88,10 @@ function eventStructureBuilt(structure, droid)
 	if (structure.player === CAM_HUMAN_PLAYER && structure.stattype === RESOURCE_EXTRACTOR)
 	{
 		// Is it in the base two area?
-		var objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
+		let objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
 		for (let i = 0, l = objs.length; i < l; ++i)
 		{
-			var obj = objs[i];
+			let obj = objs[i];
 			if (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
 			{
 				camCallOnce("raidAttack");
@@ -132,8 +132,8 @@ function enableBaseStructures()
 function eventStartLevel()
 {
 	const PLAYER_POWER = 1300;
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1B");
 

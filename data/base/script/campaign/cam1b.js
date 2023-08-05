@@ -37,7 +37,7 @@ camAreaEvent("AttackArea2", function(droid)
 
 function doNPRetreat()
 {
-	var pos = camMakePos("NPSensorTurn");
+	let pos = camMakePos("NPSensorTurn");
 	if (NPScout)
 	{
 		camTrace("New Paradigm sensor droid is retreating");
@@ -61,7 +61,7 @@ function eventDestroyed(obj)
 
 camAreaEvent("NPSensorTurn", function(droid)
 {
-	var pos = camMakePos("NPSensorRemove");
+	let pos = camMakePos("NPSensorRemove");
 	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
 });
 
@@ -73,8 +73,8 @@ camAreaEvent("NPSensorRemove", function(droid)
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_1S");
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	let startpos = getObject("startPosition");
+	let lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
@@ -175,6 +175,6 @@ function eventStartLevel()
 	// New Paradigm sensor scout. Now comes with the map!
 	NPScout = getObject("npscout");
 	camNeverGroupDroid(NPScout);
-	var pos = getObject("NPSensorWatch");
+	let pos = getObject("NPSensorWatch");
 	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
 }

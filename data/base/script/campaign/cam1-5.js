@@ -25,10 +25,10 @@ var useHeavyReinforcement;
 //Get some droids for the New Paradigm transport
 function getDroidsForNPLZ(args)
 {
-	var lightAttackerLimit = 8;
-	var heavyAttackerLimit = 3;
-	var unitTemplates;
-	var list = [];
+	let lightAttackerLimit = 8;
+	let heavyAttackerLimit = 3;
+	let unitTemplates;
+	let list = [];
 
 	if (difficulty === HARD)
 	{
@@ -43,8 +43,8 @@ function getDroidsForNPLZ(args)
 
 	if (useHeavyReinforcement)
 	{
-		var artillery = [cTempl.npmor];
-		var other = [cTempl.npmmct];
+		let artillery = [cTempl.npmor];
+		let other = [cTempl.npmmct];
 		if (camRand(2) > 0)
 		{
 			//Add a sensor if artillery was chosen for the heavy units
@@ -61,7 +61,7 @@ function getDroidsForNPLZ(args)
 		unitTemplates = [cTempl.nppod, cTempl.npmrl, cTempl.nphmgt];
 	}
 
-	var lim = useHeavyReinforcement ? heavyAttackerLimit : lightAttackerLimit;
+	let lim = useHeavyReinforcement ? heavyAttackerLimit : lightAttackerLimit;
 	for (let i = 0; i < lim; ++i)
 	{
 		list.push(unitTemplates[camRand(unitTemplates.length)]);
@@ -123,13 +123,13 @@ function activateNPLZTransporter()
 
 function sendNPTransport()
 {
-	var nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter((obj) => (
+	let nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter((obj) => (
 		obj.type === STRUCTURE && obj.stattype === DEFENSE
 	));
 
 	if (nearbyDefense.length > 0)
 	{
-		var list = getDroidsForNPLZ();
+		let list = getDroidsForNPLZ();
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 2, y: 42 },
 			exit: { x: 2, y: 42 },
@@ -181,17 +181,17 @@ function eventStartLevel()
 	});
 
 	useHeavyReinforcement = false; //Start with a light unit reinforcement first
-	var lz = getObject("LandingZone1"); //player lz
-	var lz2 = getObject("LandingZone2"); //new paradigm lz
-	var tent = getObject("TransporterEntry");
-	var text = getObject("TransporterExit");
+	let lz = getObject("LandingZone1"); //player lz
+	let lz2 = getObject("LandingZone2"); //new paradigm lz
+	let tent = getObject("TransporterEntry");
+	let text = getObject("TransporterExit");
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, 5);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	//Transporter is the only droid of the player's on the map
-	var transporter = enumDroid();
+	let transporter = enumDroid();
 	cameraTrack(transporter[0]);
 
 	//Make sure the New Paradigm and Scavs are allies
