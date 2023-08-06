@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-05 14:25\n"
+"PO-Revision-Date: 2023-08-06 03:12\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -1306,7 +1306,7 @@ msgstr "Cyborg Pelompat Penembak Senapan Serbu"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
-msgstr "Cyborg Pelompat Penembak Senapan Jarum"
+msgstr "Cyborg Pelompat Penembak Meriam Jarum"
 
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
@@ -2258,7 +2258,7 @@ msgstr "Menara penjaga dengan Senapan Mesin Serbu"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:117
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Menara penjaga lapis baja dengan Senapan Mesin Berat"
+msgstr "Menara penjaga lapis baja dengan senapan mesin berat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[2]
@@ -2295,7 +2295,7 @@ msgstr "Menara penjaga lapis baja dengan penyembur api"
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Menara penjaga lapis baja dengan Roket Anti-Tank \"Lancer\""
+msgstr "Menara penjaga lapis baja dengan roket anti-tank \"Lancer\""
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
@@ -6578,7 +6578,7 @@ msgstr "Dipersenjatai dengan Meriam Sedang"
 #. data/mp/messages/resmessages3.json: $.RES_CYW_RL1.text[1]
 #: po/custom/fromJson.txt:608
 msgid "Armed with Needle Gun"
-msgstr "Dipersenjatai dengan Senapan Jarum"
+msgstr "Dipersenjatai dengan meriam jarum"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_ATM.text[1]
@@ -6665,13 +6665,13 @@ msgstr "Parit lapis baja dengan Mortir EMP"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text[1]
 #: po/custom/fromJson.txt:671
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Menara penjaga lapis baja dengan Meriam EMP"
+msgstr "Menara penjaga lapis baja dengan meriam EMP"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
 #: po/custom/fromJson.txt:674
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Menara penjaga lapis baja dengan Roket Anti-Tank \"Lancer\""
+msgstr "Menara penjaga lapis baja dengan roket anti-tank \"Lancer\""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
@@ -6690,7 +6690,7 @@ msgstr "Menara penjaga lapis baja dengan Pod Roket Mini"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_RL1TOW.text[1]
 #: po/custom/fromJson.txt:684
 msgid "Armored guard tower with Needle Gun"
-msgstr "Menara penjaga lapis baja dengan Senapan Jarum"
+msgstr "Menara penjaga lapis baja dengan meriam jarum"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPYT.text[1]
@@ -6702,14 +6702,14 @@ msgstr "Menara penjaga lapis baja dengan Penghubung Nexus"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
 #: po/custom/fromJson.txt:690
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Menara penjaga lapis baja dengan Laser Pulsa"
+msgstr "Menara penjaga lapis baja dengan laser pulsa"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_ATMTOW.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_EMP_ATMTOW.text[1]
 #: po/custom/fromJson.txt:694
 msgid "Armored guard tower with Scourge Missile"
-msgstr "Menara penjaga lapis baja dengan Rudal \"Scourge\""
+msgstr "Menara penjaga lapis baja dengan rudal \"Scourge\""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_HALFT1.text[1]
@@ -6969,7 +6969,7 @@ msgstr "Assault Gun Python Tracks"
 #. data/mp/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:886
 msgid "Assault Gun Tower"
-msgstr "Menara Senapan Mesin Serbu"
+msgstr "Menara Senapan Serbu"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG4.name
@@ -11170,7 +11170,7 @@ msgstr "Mini-Rocket Cobra Tracks"
 #. data/base/stats/structure.json: $.GuardTower6.name
 #: po/custom/fromJson.txt:3836
 msgid "Mini-Rocket Guard Tower"
-msgstr "Menara Penjaga Dengan Pod Roket Mini"
+msgstr "Menara Penjaga dengan Pod Roket Mini"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
@@ -11419,7 +11419,7 @@ msgstr "Needle Gun Tiger Tracks"
 #. data/mp/stats/structure.json: $.GuardTower-Rail1.name
 #: po/custom/fromJson.txt:4005
 msgid "Needle Gun Tower"
-msgstr "Menara Senapan Jarum"
+msgstr "Menara Meriam Jarum"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Needle.name
@@ -11434,7 +11434,7 @@ msgstr "Needle Gun Vengeance Tracks"
 #. data/mp/stats/weapons.json: $.RailGun1Mk1.name
 #: po/custom/fromJson.txt:4014
 msgid "Needle Gun"
-msgstr "Senapan Jarum"
+msgstr "Meriam Jarum"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Rail1.name
@@ -11443,7 +11443,7 @@ msgstr "Senapan Jarum"
 #. data/mp/stats/templates.json: $.MP-Cyb-Needle-GRD.name
 #: po/custom/fromJson.txt:4020
 msgid "Needle Gunner Cyborg"
-msgstr "Cyborg Penembak Senapan Jarum"
+msgstr "Cyborg Penembak Meriam Jarum"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade08.name
@@ -12405,7 +12405,7 @@ msgstr "Sistem Senjata Rantai Tembak-cepat"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
 #: po/custom/fromJson.txt:4691
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "Senapan rel tembak-cepat, menembakkan panah jarum"
+msgstr "Senapan rel penembak panah jarum secara beruntun"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
@@ -14547,7 +14547,7 @@ msgstr "Roket Mini VTOL"
 #. data/mp/stats/weapons.json: $.RailGun1-VTOL.name
 #: po/custom/fromJson.txt:6089
 msgid "VTOL Needle Gun"
-msgstr "Senapan Jarum VTOL"
+msgstr "Meriam Jarum VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
@@ -15849,7 +15849,7 @@ msgstr "Terlacak"
 
 #: src/frontend.cpp:855
 msgid "High"
-msgstr ""
+msgstr "Tinggi"
 
 #: src/frontend.cpp:856
 msgid "Default"
