@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-06 03:12\n"
+"PO-Revision-Date: 2023-08-06 16:02\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -15905,7 +15905,7 @@ msgstr "OPSI GRAFIK"
 
 #: src/frontend.cpp:1080
 msgid "Disabled"
-msgstr "Dinonaktifkan"
+msgstr "Mati"
 
 #: src/frontend.cpp:1083
 msgid "Enabled"
