@@ -161,12 +161,6 @@ void	kf_ToggleShowGateways()
 	showGateways = !showGateways;
 }
 
-void	kf_ToggleShowPath()
-{
-	addConsoleMessage(_("Path display toggled."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-	showPath = !showPath;
-}
-
 void kf_PerformanceSample()
 {
 	wzPerfStart();
@@ -751,7 +745,6 @@ void kf_ListDroids()
 	}
 	
 }
-
 
 // --------------------------------------------------------------------------
 
