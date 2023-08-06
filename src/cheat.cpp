@@ -91,6 +91,8 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"autogame off", kf_AutoGame},
 	{"shakey", kf_ToggleShakeStatus}, //shakey
 	{"list droids", kf_ListDroids},
+	{"showpath", kf_ToggleShowPath},
+	{"showpathstat", kf_ShowPathStat},
 
 };
 

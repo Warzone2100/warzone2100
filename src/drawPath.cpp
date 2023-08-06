@@ -191,8 +191,9 @@ void drawContext(const PathfindContext& context, const glm::mat4 &mvp)
 		drawLines(mvp, pts, WZCOL_LGREEN);
 }
 
-static bool _drawImpassableTiles = true;
+static bool _drawImpassableTiles = false;
 static bool _drawContextTree = false;
+static bool _drawDroidPath = false;
 
 extern std::list<PathfindContext> fpathContexts;
 
@@ -210,11 +211,14 @@ void drawPathCostLayer(int player, const iView& playerViewPos, const glm::mat4& 
 		debugDrawImpassableTiles(bmap, playerViewPos, perspectiveViewMatrix, 6);
 	}
 
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	if (_drawDroidPath)
 	{
-		if (psDroid->selected)
+		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 		{
-			drawDroidPath(psDroid, viewMatrix, perspectiveViewMatrix);
+			if (psDroid->selected)
+			{
+				drawDroidPath(psDroid, viewMatrix, perspectiveViewMatrix);
+			}
 		}
 	}
 
@@ -222,4 +226,18 @@ void drawPathCostLayer(int player, const iView& playerViewPos, const glm::mat4& 
 	{
 		drawContext(fpathContexts.back(), perspectiveViewMatrix);
 	}
+}
+
+void kf_ToggleShowPath()
+{
+	addConsoleMessage(_("Path display toggled."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	_drawDroidPath = !_drawDroidPath;
+}
+
+void kf_ShowPathStat() {
+	_drawContextTree = !_drawContextTree;
+}
+
+void kf_ShowPathBlocking() {
+	_drawImpassableTiles = !_drawImpassableTiles;
 }

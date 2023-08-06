@@ -149,7 +149,6 @@ void kf_SetHardLevel();
 MappableFunction kf_SelectCommander_N(const unsigned int n);
 
 void kf_ToggleShowGateways();
-void kf_ToggleShowPath();
 
 void kf_FaceNorth();
 void kf_FaceSouth();
@@ -198,6 +197,14 @@ void kf_QuickLoad();
 void kf_ToggleFullscreen();
 
 void kf_ToggleSpecOverlays();
+
+/// These are defined at drawPath.
+/// Toggle debug rendering of droid paths.
+void kf_ToggleShowPath();
+/// Toggle debug rendering of a path context.
+void kf_ShowPathStat();
+
+void kf_ShowPathGrid();
 
 void enableGodMode();
 
