@@ -268,8 +268,9 @@ looks, or to add variety to the looks of droids in campaign missions. (3.2+ only
 
 ## changePlayerColour(player, colour)
 
-Change a player's colour slot. The current player colour can be read from the ```playerData``` array. There are as many
-colour slots as the maximum number of players. (3.2.3+ only)
+Change a player's colour slot. The current player colour can be read from the ```playerData``` array. Available colours
+are green, orange, gray, black, red, blue, pink, cyan, yellow, purple, white, bright blue, neon green, infrared,
+ultraviolet, and brown, represented by the integers 0 - 15 respectively.
 
 ## setHealth(object, health)
 
@@ -769,11 +770,12 @@ Limit the scrollable area of the map to the given rectangle. (3.2+ only)
 
 Get the limits of the scrollable area of the map as an area object. (3.2+ only)
 
-## addStructure(structureName, player, x, y)
+## addStructure(structureName, player, x, y[, direction])
 
 Create a structure on the given position. Returns the structure on success, null otherwise.
 Position uses world coordinates, if you want use position based on Map Tiles, then
 use as addStructure(structureName, players, x*128, y*128)
+Direction is optional, and is specified in degrees.
 
 ## getStructureLimit(structureName[, player])
 
