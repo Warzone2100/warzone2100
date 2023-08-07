@@ -34,6 +34,8 @@
 
 #include "astar.h"
 
+bool fpathGetAsyncMode();
+
 // alpha fully opaque
 static constexpr PIELIGHT WZ_WHITE {0xFF, 0xFF, 0xFF, 0xFF};
 
@@ -211,20 +213,23 @@ void drawPathCostLayer(int player, const iView& playerViewPos, const glm::mat4& 
 		debugDrawImpassableTiles(bmap, playerViewPos, perspectiveViewMatrix, 6);
 	}
 
-	if (_drawDroidPath)
-	{
-		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	// Accessing path contexts or droid's path is not thread safe now.
+	if (!fpathGetAsyncMode()) {
+		if (_drawDroidPath)
 		{
-			if (psDroid->selected)
+			for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 			{
-				drawDroidPath(psDroid, viewMatrix, perspectiveViewMatrix);
+				if (psDroid->selected)
+				{
+					drawDroidPath(psDroid, viewMatrix, perspectiveViewMatrix);
+				}
 			}
 		}
-	}
 
-	if (_drawContextTree && !fpathContexts.empty())
-	{
-		drawContext(fpathContexts.back(), perspectiveViewMatrix);
+		if (_drawContextTree && !fpathContexts.empty())
+		{
+			drawContext(fpathContexts.back(), perspectiveViewMatrix);
+		}
 	}
 }
 
