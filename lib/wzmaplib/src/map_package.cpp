@@ -1548,6 +1548,11 @@ const LevelDetails& MapPackage::levelDetails() const
 	return m_levelDetails;
 }
 
+void MapPackage::updateLevelDetails(const LevelDetails& newLevelDetails)
+{
+	m_levelDetails = newLevelDetails;
+}
+
 // Get the loaded level details format
 // Note: Returns a value only if the MapPackage was loaded (i.e. via loadPackage)
 optional<LevelFormat> MapPackage::loadedLevelDetailsFormat() const

@@ -130,6 +130,9 @@ public:
 	// Obtain the LevelDetails
 	const LevelDetails& levelDetails() const;
 
+	// Update the LevelDetails
+	void updateLevelDetails(const LevelDetails& newLevelDetails);
+
 	// Get the loaded level details format
 	// Note: Returns a value only if the MapPackage was loaded (i.e. via loadPackage)
 	optional<LevelFormat> loadedLevelDetailsFormat() const;
