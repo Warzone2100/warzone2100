@@ -575,7 +575,10 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 				continue;
 			}
 		}
-		structSizes_loaded.insert(StructSizesMap::value_type(structId, sizeInfo));
+		if (sizeInfo.baseWidth > 1 || sizeInfo.baseBreadth > 1)
+		{
+			structSizes_loaded.insert(StructSizesMap::value_type(structId, sizeInfo));
+		}
 
 		auto type_it = it.value().find("type");
 		if (type_it != it.value().end())
