@@ -53,6 +53,8 @@ namespace WzMap {
 			bool cyborgFactories = true;
 			// Whether all players have equal starting research centers
 			bool researchCenters = true;
+			// Whether all players have equal starting "defense" structs (quantity and type) (i.e. bunkers, towers, hardpoints, etc)
+			bool defenseStructures = true;
 		};
 
 		struct PerPlayerCounts
@@ -73,6 +75,7 @@ namespace WzMap {
 			MinMax cyborgFactoriesPerPlayer;
 			MinMax researchCentersPerPlayer;
 			MinMax researchCenterModulesPerPlayer;
+			MinMax defenseStructuresPerPlayer;
 		};
 
 	public:
@@ -151,6 +154,9 @@ namespace WzMap {
 		// the names (ids) of the HQ struct(s)
 		//  - "type": "HQ"
 		std::unordered_set<std::string> hqStructs;
+		// the names (ids) of defense structs (i.e. bunkers, towers, hardpoints, etc)
+		//  - "type": "DEFENSE"
+		std::unordered_set<std::string> defenseStructs;
 
 		// [STRUCT SIZES]:
 		optional<StructureSize> getStructureSize(const std::string& struct_id) const;

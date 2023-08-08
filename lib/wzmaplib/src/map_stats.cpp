@@ -262,7 +262,9 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			{&statsConfig.cyborgFactories, {&results.playerBalance.cyborgFactories, &results.perPlayerCounts.cyborgFactoriesPerPlayer}},
 			// research centers
 			{&statsConfig.researchCenters, {&results.playerBalance.researchCenters, &results.perPlayerCounts.researchCentersPerPlayer}},
-			{&statsConfig.researchModules, {&results.playerBalance.researchCenters,  &results.perPlayerCounts.researchCenterModulesPerPlayer}}
+			{&statsConfig.researchModules, {&results.playerBalance.researchCenters,  &results.perPlayerCounts.researchCenterModulesPerPlayer}},
+			// defense structures
+			{&statsConfig.defenseStructs, {&results.playerBalance.defenseStructures,  &results.perPlayerCounts.defenseStructuresPerPlayer}}
 		};
 		for (const auto& structureTypeCheck : structureTypeChecks)
 		{
@@ -378,6 +380,18 @@ MapStatsConfiguration::MapStatsConfiguration(MapType mapType)
 	else
 	{
 		hqStructs = {"A0CommandCentre"};
+	}
+	// the names (ids) of defense structs (i.e. bunkers, towers, hardpoints)
+	//  - "type": "DEFENSE"
+	// extracted from the appropriate base/stats/structure.json or mp/stats/structure.json file using:
+	// cat structure.json | jq '[keys[] as $k | select(.[$k].type=="DEFENSE") | $k ] | join("\", \"") as $j | "{\"" + $j + "\"}"' -r
+	if (mapType == MapType::CAMPAIGN)
+	{
+		defenseStructs = {"A0BaBaBunker", "A0BaBaFlameTower", "A0BaBaGunTower", "A0BaBaGunTowerEND", "A0BaBaMortarPit", "A0BaBaRocketPit", "A0BaBaRocketPitAT", "A0CannonTower", "AASite-QuadBof", "AASite-QuadMg1", "AASite-QuadRotMg", "CO-Tower-HVCan", "CO-Tower-HvATRkt", "CO-Tower-HvFlame", "CO-Tower-LtATRkt", "CO-Tower-MG3", "CO-Tower-MdCan", "CO-Tower-RotMG", "CO-WallTower-HvCan", "CO-WallTower-RotCan", "CoolingTower", "Emplacement-HPVcannon", "Emplacement-Howitzer105", "Emplacement-Howitzer150", "Emplacement-HvART-pit", "Emplacement-HvyATrocket", "Emplacement-MRL-pit", "Emplacement-MdART-pit", "Emplacement-MortarPit01", "Emplacement-MortarPit02", "Emplacement-PrisLas", "Emplacement-PulseLaser", "Emplacement-Rail2", "Emplacement-Rail3", "Emplacement-Rocket06-IDF", "Emplacement-RotHow", "Emplacement-RotMor", "GuardTower-ATMiss", "GuardTower-BeamLas", "GuardTower-Rail1", "GuardTower-RotMg", "GuardTower1", "GuardTower1MG", "GuardTower2", "GuardTower3", "GuardTower3H", "GuardTower4", "GuardTower4H", "GuardTower5", "GuardTower6", "NX-CruiseSite", "NX-Emp-MedArtMiss-Pit", "NX-Emp-MultiArtMiss-Pit", "NX-Emp-Plasma-Pit", "NX-Tower-ATMiss", "NX-Tower-PulseLas", "NX-Tower-Rail1", "NX-WallTower-BeamLas", "NX-WallTower-Rail2", "NX-WallTower-Rail3", "NuclearReactor", "P0-AASite-SAM1", "P0-AASite-SAM2", "PillBox1", "PillBox2", "PillBox3", "PillBox4", "PillBox5", "PillBox6", "Pillbox-RotMG", "Sys-CB-Tower01", "Sys-NEXUSLinkTOW", "Sys-NX-CBTower", "Sys-NX-SensorTower", "Sys-NX-VTOL-CB-Tow", "Sys-NX-VTOL-RadTow", "Sys-SensoTower01", "Sys-SensoTower02", "Sys-VTOL-CB-Tower01", "Sys-VTOL-RadarTower01", "Tower-Projector", "Tower-RotMg", "Tower-VulcanCan", "UplinkCentre", "Wall-RotMg", "Wall-VulcanCan", "WallTower-Atmiss", "WallTower-HPVcannon", "WallTower-HvATrocket", "WallTower-Projector", "WallTower-PulseLas", "WallTower-Rail2", "WallTower-Rail3", "WallTower01", "WallTower02", "WallTower03", "WallTower04", "WallTower05", "WallTower06", "WreckedTransporter"};
+	}
+	else
+	{
+		defenseStructs = {"A0BaBaBunker", "A0BaBaFlameTower", "A0BaBaGunTower", "A0BaBaGunTowerEND", "A0BaBaMortarPit", "A0BaBaRocketPit", "A0BaBaRocketPitAT", "A0CannonTower", "AASite-QuadBof", "AASite-QuadBof02", "AASite-QuadMg1", "AASite-QuadRotMg", "CO-Tower-HVCan", "CO-Tower-HvATRkt", "CO-Tower-HvFlame", "CO-Tower-LtATRkt", "CO-Tower-MG3", "CO-Tower-MdCan", "CO-Tower-RotMG", "CO-WallTower-HvCan", "CO-WallTower-RotCan", "CoolingTower", "ECM1PylonMk1", "Emplacement-HPVcannon", "Emplacement-HeavyLaser", "Emplacement-HeavyPlasmaLauncher", "Emplacement-Howitzer-Incendiary", "Emplacement-Howitzer-Incenediary", "Emplacement-Howitzer105", "Emplacement-Howitzer150", "Emplacement-HvART-pit", "Emplacement-HvyATrocket", "Emplacement-MRL-pit", "Emplacement-MRLHvy-pit", "Emplacement-MdART-pit", "Emplacement-MortarEMP", "Emplacement-MortarPit-Incendiary", "Emplacement-MortarPit-Incenediary", "Emplacement-MortarPit01", "Emplacement-MortarPit02", "Emplacement-PlasmaCannon", "Emplacement-PrisLas", "Emplacement-PulseLaser", "Emplacement-Rail2", "Emplacement-Rail3", "Emplacement-Rocket06-IDF", "Emplacement-RotHow", "Emplacement-RotMor", "GuardTower-ATMiss", "GuardTower-BeamLas", "GuardTower-Rail1", "GuardTower-RotMg", "GuardTower1", "GuardTower2", "GuardTower3", "GuardTower4", "GuardTower5", "GuardTower6", "NX-CruiseSite", "NX-Emp-MedArtMiss-Pit", "NX-Emp-MultiArtMiss-Pit", "NX-Emp-Plasma-Pit", "NX-Tower-ATMiss", "NX-Tower-PulseLas", "NX-Tower-Rail1", "NX-WallTower-BeamLas", "NX-WallTower-Rail2", "NX-WallTower-Rail3", "NuclearReactor", "P0-AASite-Laser", "P0-AASite-SAM1", "P0-AASite-SAM2", "P0-AASite-Sunburst", "PillBox-Cannon6", "PillBox1", "PillBox2", "PillBox3", "PillBox4", "PillBox5", "PillBox6", "Pillbox-RotMG", "Plasmite-flamer-bunker", "Sys-CB-Tower01", "Sys-NEXUSLinkTOW", "Sys-NX-CBTower", "Sys-NX-SensorTower", "Sys-NX-VTOL-CB-Tow", "Sys-NX-VTOL-RadTow", "Sys-RadarDetector01", "Sys-SensoTower01", "Sys-SensoTower02", "Sys-SensoTowerWS", "Sys-SpyTower", "Sys-VTOL-CB-Tower01", "Sys-VTOL-RadarTower01", "Tower-Projector", "Tower-RotMg", "Tower-VulcanCan", "UplinkCentre", "Wall-RotMg", "Wall-VulcanCan", "WallTower-Atmiss", "WallTower-DoubleAAGun", "WallTower-DoubleAAGun02", "WallTower-EMP", "WallTower-HPVcannon", "WallTower-HvATrocket", "WallTower-Projector", "WallTower-PulseLas", "WallTower-QuadRotAAGun", "WallTower-Rail2", "WallTower-Rail3", "WallTower-SamHvy", "WallTower-SamSite", "WallTower-TwinAssaultGun", "WallTower01", "WallTower02", "WallTower03", "WallTower04", "WallTower05", "WallTower06", "WreckedTransporter", "bbaatow"};
 	}
 
 	// [STRUCT MODULES]:
@@ -514,6 +528,7 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 	std::unordered_set<std::string> cyborgFactories_loaded;
 	std::unordered_set<std::string> researchCenters_loaded;
 	std::unordered_set<std::string> hqStructs_loaded;
+	std::unordered_set<std::string> defenseStructs_loaded;
 
 	// [STRUCT SIZES]:
 	std::unordered_map<std::string, StructureSize> structSizes_loaded;
@@ -532,6 +547,7 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 		{ "CYBORG FACTORY", &cyborgFactories_loaded },
 		{ "RESEARCH", &researchCenters_loaded },
 		{ "HQ", &hqStructs_loaded },
+		{ "DEFENSE", &defenseStructs_loaded },
 		{ "FACTORY MODULE", &factoryModules_loaded },
 		{ "RESEARCH MODULE", &researchModules_loaded },
 		{ "POWER MODULE", &powerModules_loaded }
@@ -591,6 +607,7 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 		cyborgFactories = std::move(cyborgFactories_loaded);
 		researchCenters = std::move(researchCenters_loaded);
 		hqStructs = std::move(hqStructs_loaded);
+		defenseStructs = std::move(defenseStructs_loaded);
 		factoryModules = std::move(factoryModules_loaded);
 		researchModules = std::move(researchModules_loaded);
 		powerModules = std::move(powerModules_loaded);
