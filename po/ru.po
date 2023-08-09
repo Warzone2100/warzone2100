@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-09 05:11\n"
+"PO-Revision-Date: 2023-08-09 18:54\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -25,7 +25,7 @@ msgstr "ЦЕЛЬ: Найти и вернуть технологию нейрос
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Основать базу, затем найти Доядерные сооружения."
+msgstr "Основать базу, затем найти доядерные сооружения."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -364,7 +364,7 @@ msgstr "Поздравляем! Новая Парадигма повержена
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "В Системе новой Парадигмы была обнаружена программа вторжения НЕКСУС."
+msgstr "В системе Новой Парадигмы была обнаружена программа вторжения НЕКСУС."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -676,7 +676,7 @@ msgstr "Как только зона безопасности будет уст�
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr "BETA BASE MISSION: Выжить, и эвакуировать! Не забудь строительный грузовик"
+msgstr "BETA BASE MISSION: Выжить, и эвакуировать! Не забудьте строительный грузовик"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
