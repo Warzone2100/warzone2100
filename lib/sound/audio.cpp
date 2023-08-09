@@ -411,7 +411,7 @@ void audio_QueueTrackMinDelay(SDWORD iTrack, UDWORD iMinDelay)
 
 	// Determine if at least iMinDelay time has passed since the last time this track was played
 	iDelay = sound_GetGameTime() - sound_GetTrackTimeLastFinished(iTrack);
-	if (!(iDelay > iMinDelay))
+	if (iDelay < iMinDelay)
 	{
 		return;
 	}
