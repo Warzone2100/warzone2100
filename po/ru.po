@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-09 18:54\n"
+"PO-Revision-Date: 2023-08-10 19:26\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1238,7 +1238,7 @@ msgstr "Установка гаубицы"
 #: data/mp/messages/strings/names.txt:252
 #: po/custom/fromJson.txt:2263
 msgid "Ground Shaker Emplacement"
-msgstr "Установка сотрясателя"
+msgstr "Установка Сотрясателя"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotHow.name
@@ -1290,7 +1290,7 @@ msgstr "Киборг-антибункер"
 
 #: data/base/messages/strings/names.txt:289
 msgid "Jump Bunker Blaster"
-msgstr "Прыгун Антибункер"
+msgstr "Прыгун-антибункер"
 
 #: data/base/messages/strings/names.txt:290
 msgid "Jump Heavy Gunner"
@@ -1824,7 +1824,7 @@ msgstr "Вооружён ракетой Антибункер"
 #: data/mp/messages/strings/resstrings.txt:334
 #: po/custom/fromJson.txt:1198
 msgid "Body Points: Medium"
-msgstr "Прочность корпуса: Среднея"
+msgstr "Прочность корпуса: Средняя"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[3]
@@ -1892,7 +1892,7 @@ msgstr "Защита улучшена"
 #: data/mp/messages/strings/resstrings.txt:32
 #: po/custom/fromJson.txt:2849
 msgid "High-tensile concrete reinforced with boron"
-msgstr "Высокоэластичный бетон, укреплённый Бором"
+msgstr "Высокоэластичный бетон, укреплённый бором"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[2]
@@ -2332,7 +2332,7 @@ msgstr "Укреплённая оборонительная точка со шт
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Укреплённая  точка с огнемётом Инферно"
+msgstr "Укреплённая точка с огнемётом Инферно"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -2605,7 +2605,7 @@ msgstr "Производство улучшено"
 #: data/mp/messages/strings/resstrings.txt:202
 #: po/custom/fromJson.txt:4918
 msgid "Robotic VTOL Production"
-msgstr "Роботопроизводство ВВС"
+msgstr "Производство роботизированных ВВС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[2]
