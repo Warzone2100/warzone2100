@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-10 19:26\n"
+"PO-Revision-Date: 2023-08-11 07:31\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2332,7 +2332,7 @@ msgstr "Укреплённая оборонительная точка со шт
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Укреплённая точка с огнемётом Инферно"
+msgstr "Укреплённая  точка с огнемётом Инферно"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -4069,7 +4069,7 @@ msgstr "Вернуться к зоне высадки"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:532
 msgid "Hard / Insane difficulty hint:"
-msgstr "Подсказка для сложности Сложно / Безумие"
+msgstr "Подсказка для сложности Сложно / Безумие:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:533
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
@@ -4709,7 +4709,7 @@ msgstr "Все ядерное оружие, направленное на Сев
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr "Мы знаем, что НЕКСУС ищет Центральный НАСДА в Восточном секторе. Это была одна из наземных центров управления для спутников."
+msgstr "Мы знаем, что НЕКСУС ищет Центральный НАСДА в Восточном секторе. Это был один из наземных центров управления для спутников."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
