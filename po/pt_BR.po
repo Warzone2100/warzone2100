@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2023-08-11 19:45\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -164,7 +164,7 @@ msgstr "Estabeleça uma base avançada no platô e se defenda do Novo Paradigma.
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Construa estruturas defensivas até que o pontinho verde de objetivo mude."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -4025,11 +4025,11 @@ msgstr "Proteja a Uplink contra a Coletividade"
 
 #: data/base/script/campaign/cam2-end.js:199
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Envie pelo menos um transporte com um caminhão e sobreviva ao ataque coletivo até o tempo terminar"
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Envie o maior número possível de transportes e traga pelo menos um caminhão"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4069,7 +4069,7 @@ msgstr "Retorne à AP"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:532
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Dica de dificuldade Difícil / Insana:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:533
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
