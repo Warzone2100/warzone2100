@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-11 07:31\n"
+"PO-Revision-Date: 2023-08-11 19:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -4777,7 +4777,7 @@ msgstr "Группа Гамма посылает команду для расс�
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr "Мы можем только предположить, что Нексус получил контроль над этим объектом. Мы не можем определить, является ли ракета ядерным оружием и когда она нацелена. Вам рекомендуется начать подготовку к эвакуации вашей базы."
+msgstr "Мы можем только предположить, что Нексус получил контроль над этим объектом. Мы не можем определить, является ли ракета ядерным оружием и куда она нацелена. Вам рекомендуется начать подготовку к эвакуации вашей базы."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
