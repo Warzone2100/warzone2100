@@ -53,6 +53,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "intimage.h"
+#include "loop.h" //for prevMissionType
 
 #include "activity.h"
 #include "multistat.h"
@@ -294,6 +295,7 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 	{
 		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
 		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
+		if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { for (DROID *psDroid = apsLimboDroids[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {} }
 	}
 
 	return fullStats;
