@@ -56,6 +56,7 @@ extern LOOP_MISSION_STATE		loopMissionState;
 
 // this is set by scrStartMission to say what type of new level is to be started
 extern LEVEL_TYPE nextMissionType;
+extern LEVEL_TYPE prevMissionType;
 
 extern size_t loopPieCount;
 extern size_t loopPolyCount;

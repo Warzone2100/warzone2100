@@ -134,6 +134,7 @@ LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
 // this is set by scrStartMission to say what type of new level is to be started
 LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
+LEVEL_TYPE prevMissionType = LEVEL_TYPE::LDS_NONE;
 
 static GAMECODE renderLoop()
 {

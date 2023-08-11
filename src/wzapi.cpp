@@ -3094,6 +3094,7 @@ wzapi::no_return_value wzapi::loadLevel(WZAPI_PARAMS(std::string levelName))
 	SCRIPT_ASSERT({}, context, psNewLevel, "Could not find level data for %s", levelName.c_str());
 
 	// Get the mission rolling...
+	prevMissionType = mission.type;
 	nextMissionType = psNewLevel->type;
 	loopMissionState = LMS_CLEAROBJECTS;
 	return {};
