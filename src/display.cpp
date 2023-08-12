@@ -1982,7 +1982,7 @@ debugOuput:
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (dbgInputManager.debugMappingsAllowed())
 	{
-		console("(Feature) %s ID: %d ref: %d Hitpoints: %d/%d", getID(psFeature->psStats), psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body);
+		console("(Feature) %s ID: %d ref: %d Hitpoints: %d/%d", getID(psFeature->psStats), psFeature->id, psFeature->psStats->ref, psFeature->body, psFeature->psStats->body);
 	}
 }
 
