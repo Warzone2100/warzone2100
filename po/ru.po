@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-11 19:45\n"
+"PO-Revision-Date: 2023-08-12 07:59\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -7521,7 +7521,7 @@ msgstr "Автозарядка Пушки Mk3"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF01.name
 #: po/custom/fromJson.txt:1320
 msgid "Cannon Autoloader"
-msgstr "Автозарядка Пушки"
+msgstr "Автоматический досылатель Пушки"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[2]
