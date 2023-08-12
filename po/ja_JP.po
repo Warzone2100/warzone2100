@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-11 19:45\n"
+"PO-Revision-Date: 2023-08-12 07:59\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -34,7 +34,7 @@ msgstr "このストラクチャーには、プロジェクトの成功に不可
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "アルファ基地・ミッション：スカベンジャー・レイダース"
+msgstr "アルファ基地ミッション：スカベンジャー・レイダース"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
@@ -47,7 +47,7 @@ msgstr "基地を守り、スカベンジャー・キャンプを破壊せよ。
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "アルファ基地・ミッション：電力サージを感知"
+msgstr "アルファ基地ミッション：電力サージを感知"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
@@ -59,7 +59,7 @@ msgstr "調査し、安全を確保してください。"
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "アルファ基地・ミッション：新しいパラダイム"
+msgstr "アルファ基地ミッション：新しいパラダイム"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
@@ -156,7 +156,7 @@ msgstr "基地を根絶やしにし、このエリアを確保する。"
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "アルファ基地・ミッション：前線基地の設置"
+msgstr "アルファ基地ミッション：前線基地の設置"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
@@ -168,7 +168,7 @@ msgstr "緑の目標ブリップが消えるまで、防衛施設を建設せよ
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "アルファ基地・ミッション：カウンターアタック"
+msgstr "アルファ基地ミッション：カウンターアタック"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -180,7 +180,7 @@ msgstr "基地を守り、攻撃を跳ね返せ。"
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "アルファ基地・ミッション：通信あり"
+msgstr "アルファ基地ミッション：通信あり"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
@@ -200,7 +200,7 @@ msgstr "ここで、さらなる課題があります。"
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "アルファ基地・ミッション：アーティファクトの発見と回収"
+msgstr "アルファ基地ミッション：アーティファクトの発見と回収"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
@@ -264,7 +264,7 @@ msgstr "この着陸地帯を破壊し、敵の着陸を阻止せよ。"
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr "アルファ基地 インテリジェンスレポート：NEXUS"
+msgstr "アルファ基地 インテリジェンス レポート：NEXUS"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
@@ -4933,7 +4933,7 @@ msgstr "協力を要請する。"
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:3
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr "司令官、アルファ基地の核攻撃から、チーム・アルファの部隊が逃げました。"
+msgstr "司令官、チームアルファの部隊がアルファ基地での核攻撃から無事脱出しました。"
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
