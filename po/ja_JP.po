@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-12 07:59\n"
+"PO-Revision-Date: 2023-08-12 19:57\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -55,11 +55,11 @@ msgstr "現在位置の南側で電力サージが検出されました。"
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr "調査し、安全を確保してください。"
+msgstr "このエリアを調査し、安全を確保してください。"
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "アルファ基地ミッション：新しいパラダイム"
+msgstr "アルファ基地ミッション：ニューパラダイム"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
@@ -67,7 +67,7 @@ msgstr "ニューパラダイムは優れた兵器技術を支配しています
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "シナプスリンクの技術を持っているかもしれません、それを回収することが重要です。"
+msgstr "彼らはシナプスリンク技術を持っているかもしれない、 それを我々が手に入れることが重要です。"
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -192,7 +192,7 @@ msgstr "ニューパラダイムを倒し、その基地を破壊するチャン
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr "おめでとうございます、コマンダー。"
+msgstr "おめでとうございます、司令官。"
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
@@ -364,7 +364,7 @@ msgstr "ニューパラダイム討伐おめでとうございます！このセ
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "NEXUS侵入プログラムは、ニューパラダイム・システムにあった。"
+msgstr "NEXUS侵入プログラムは、ニューパラダイムのシステムにありました。"
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -409,7 +409,7 @@ msgstr "周囲を固め、対空防御を確立しておくこと。"
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr "新しい技術もあります。"
+msgstr "新しい技術が利用可能です。"
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
@@ -427,7 +427,7 @@ msgstr "輸送ミッション：トランスポーター撃墜"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr "アルファ基地からの輸送部隊が撃墜された。"
+msgstr "アルファ基地からの輸送部隊が撃墜されました。"
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
@@ -566,15 +566,15 @@ msgstr "セカンダリーミッション：敵輸送機の破壊または撃退
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr "コレクティブ軍はこの地域の民間人を一網打尽にしている。"
+msgstr "コレクティブ軍はこの地域の民間人を集めています。"
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr "そして、不明な場所に飛ばしているのです。"
+msgstr "その後、彼らは不明な場所へ輸送するようだ。"
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr "コレクティブ軍の輸送機関を破壊または追い払う。"
+msgstr "コレクティブ軍の輸送機を破壊または追い払う。"
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
@@ -587,11 +587,11 @@ msgstr "輸送ミッション：原子炉を破壊せよ"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr "コレクティブ軍は原子炉の知識を求めている。"
+msgstr "コレクティブ軍は原子炉の知識を探し求めている。"
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr "彼らを止めなければならない。"
+msgstr "彼らを阻止しなければならない。"
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
@@ -599,11 +599,11 @@ msgstr "着陸地帯から原子炉に進み、原子炉を破壊せよ。"
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr "コレクティブ軍に原子炉をオンラインにさせないでください。"
+msgstr "コレクティブ軍に原子炉を稼働させないでください。"
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr "ベータ基地ミッション：NASDAセントラル攻略"
+msgstr "ベータ基地ミッション：NASDA中枢の攻略"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
