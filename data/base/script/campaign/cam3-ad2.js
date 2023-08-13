@@ -1,9 +1,8 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const Y_SCROLL_LIMIT = 137;
-const LASSAT_FIRING = "pcv650.ogg"; // LASER SATELLITE FIRING!!!
-const NEXUS_RES = [
+const MIS_Y_SCROLL_LIMIT = 137;
+const mis_nexusRes = [
 	"R-Sys-Engineering03", "R-Defense-WallUpgrade10", "R-Struc-Materials10",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
@@ -17,7 +16,7 @@ const NEXUS_RES = [
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03",
 ];
-const VTOL_POSITIONS = [
+const mis_vtolPositions = [
 	"vtolAppearPosW", "vtolAppearPosE",
 ];
 var winFlag;
@@ -35,17 +34,17 @@ camAreaEvent("vtolRemoveZone", function(droid)
 		}
 	}
 
-	resetLabel("vtolRemoveZone", NEXUS);
+	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
 //Return a random assortment of droids with the given templates.
 function randomTemplates(list)
 {
-	let extras = [cTempl.nxmsens, cTempl.nxmsamh];
-	let droids = [];
-	let size = 12 + camRand(4); //Max of 15.
+	const extras = [cTempl.nxmsens, cTempl.nxmsamh];
+	const droids = [];
+	const SIZE = 12 + camRand(4); //Max of 15.
 
-	for (let i = 0; i < size; ++i)
+	for (let i = 0; i < SIZE; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -62,8 +61,8 @@ function randomTemplates(list)
 //Chose a random spawn point for the VTOLs.
 function vtolAttack()
 {
-	let list = [cTempl.nxmheapv, cTempl.nxlpulsev];
-	camSetVtolData(NEXUS, VTOL_POSITIONS, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)));
+	const list = [cTempl.nxmheapv, cTempl.nxlpulsev];
+	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
 
 //Chose a random spawn point to send ground reinforcements.
@@ -91,9 +90,9 @@ function phantomFactorySpawn()
 			chosenFactory = "phantomFacWest";
 	}
 
-	if (countDroid(DROID_ANY, NEXUS) < 80)
+	if (countDroid(DROID_ANY, CAM_NEXUS) < 80)
 	{
-		camSendReinforcement(NEXUS, camMakePos(chosenFactory), randomTemplates(list), CAM_REINFORCE_GROUND, {
+		camSendReinforcement(CAM_NEXUS, camMakePos(chosenFactory), randomTemplates(list), CAM_REINFORCE_GROUND, {
 			data: { regroup: false, count: -1, },
 		});
 	}
@@ -104,7 +103,7 @@ function phantomFactorySpawn()
 function vaporizeTarget()
 {
 	let target;
-	let targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
+	const targets = enumArea(0, MIS_Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID || obj.type === STRUCTURE
 	));
 
@@ -113,7 +112,7 @@ function vaporizeTarget()
 		//Choose random coordinate within the limits.
 		target = {
 			x: camRand(mapWidth),
-			y: Y_SCROLL_LIMIT + camRand(mapHeight - Math.floor(mapLimit)),
+			y: MIS_Y_SCROLL_LIMIT + camRand(mapHeight - Math.floor(mapLimit)),
 		};
 
 		if (target.y > Math.floor(mapLimit))
@@ -123,9 +122,9 @@ function vaporizeTarget()
 	}
 	else
 	{
-		let dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
-		let vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
-		let st = targets.filter((obj) => (obj.type === STRUCTURE));
+		const dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
+		const vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
+		const st = targets.filter((obj) => (obj.type === STRUCTURE));
 
 		if (dr.length)
 		{
@@ -169,18 +168,18 @@ function vaporizeTarget()
 //A simple way to fire the LasSat with a chance of missing.
 function laserSatFuzzyStrike(obj)
 {
-	const LOC = camMakePos(obj);
+	const loc = camMakePos(obj);
 	//Initially lock onto target
-	let xCoord = LOC.x;
-	let yCoord = LOC.y;
+	let xCoord = loc.x;
+	let yCoord = loc.y;
 
 	//Introduce some randomness. More accurate than last mission.
 	if (camRand(101) < 33)
 	{
-		let xRand = camRand(2);
-		let yRand = camRand(2);
-		xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
-		yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
+		const X_RAND = camRand(2);
+		const Y_RAND = camRand(2);
+		xCoord = camRand(2) ? loc.x - X_RAND : loc.x + X_RAND;
+		yCoord = camRand(2) ? loc.y - Y_RAND : loc.y + Y_RAND;
 	}
 
 	if (xCoord < 0)
@@ -205,11 +204,12 @@ function laserSatFuzzyStrike(obj)
 	{
 		if (camRand(101) < 40)
 		{
+			const LASSAT_FIRING = "pcv650.ogg"; // LASER SATELLITE FIRING!!!
 			playSound(LASSAT_FIRING, xCoord, yCoord);
 		}
 
 		//Missed it so hit close to target
-		if (LOC.x !== xCoord || LOC.y !== yCoord || !camDef(obj.id))
+		if (loc.x !== xCoord || loc.y !== yCoord || !camDef(obj.id))
 		{
 			fireWeaponAtLoc("LasSat", xCoord, yCoord, CAM_HUMAN_PLAYER);
 		}
@@ -277,8 +277,8 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Protect the missile silos and research for the missile codes"));
 
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone");
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
 	mapLimit = 137.0;
 	winFlag = false;
 	videoInfo = [
@@ -292,21 +292,21 @@ function eventStartLevel()
 		callback: "checkMissileSilos"
 	});
 
-	setScrollLimits(0, Y_SCROLL_LIMIT, 64, 256);
+	setScrollLimits(0, MIS_Y_SCROLL_LIMIT, 64, 256);
 
 	//Destroy everything above limits
-	let destroyZone = enumArea(0, 0, 64, Y_SCROLL_LIMIT, CAM_HUMAN_PLAYER, false);
+	const destroyZone = enumArea(0, 0, 64, MIS_Y_SCROLL_LIMIT, CAM_HUMAN_PLAYER, false);
 	for (let i = 0, l = destroyZone.length; i < l; ++i)
 	{
 		camSafeRemoveObject(destroyZone[i], false);
 	}
 
-	centreView(startpos.x, startpos.y);
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camMinutesToSeconds(5));
 	enableResearch("R-Sys-Resistance", CAM_HUMAN_PLAYER);
 
-	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
+	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 	camPlayVideos({video: "MB3_AD2_MSG", type: MISS_MSG});
 
 	setTimer("checkTime", camSecondsToMilliseconds(0.2));

@@ -1,7 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const COLLECTIVE_RES = [
+const mis_collectiveRes = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
 	"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage06", "R-Wpn-Cannon-ROF03",
@@ -24,7 +24,7 @@ function camEnemyBaseDetected_COBase2()
 {
 	hackRemoveMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	let vt = enumArea("COBase2Cleanup", THE_COLLECTIVE, false).filter((obj) => (
+	const vt = enumArea("COBase2Cleanup", CAM_THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && isVTOL(obj)
 	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -44,7 +44,7 @@ function camEnemyBaseDetected_COBase4()
 
 function baseThreeVtolAttack()
 {
-	let vt = enumArea("vtolGroupBase3", THE_COLLECTIVE, false).filter((obj) => (
+	const vt = enumArea("vtolGroupBase3", CAM_THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && isVTOL(obj)
 	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -54,7 +54,7 @@ function baseThreeVtolAttack()
 
 function baseFourVtolAttack()
 {
-	let vt = enumArea("vtolGroupBase4", THE_COLLECTIVE, false).filter((obj) => (
+	const vt = enumArea("vtolGroupBase4", CAM_THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && isVTOL(obj)
 	));
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -86,15 +86,15 @@ function enableFactoriesAndHovers()
 
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
+	if (enumDroid(CAM_THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
 		removeTimer("truckDefense");
 		return;
 	}
 
-	let list = ["Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-CB-Tower01", "Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-SensoTower02"];
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
+	const list = ["Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-CB-Tower01", "Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-SensoTower02"];
+	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
+	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
 }
 
 function eventStartLevel()
@@ -106,17 +106,17 @@ function eventStartLevel()
 		reinforcements: camMinutesToSeconds(3)
 	});
 
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone"); //player lz
-	let tent = getObject("transporterEntry");
-	let text = getObject("transporterExit");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	let enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	const enemyLz = getObject("COLandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_THE_COLLECTIVE);
 
 	camSetArtifacts({
 		"COHeavyFac-Arti-b2": { tech: "R-Wpn-Cannon5" },
@@ -124,9 +124,9 @@ function eventStartLevel()
 		"COVtolFactory-b4": { tech: "R-Wpn-Bomb-Damage02" },
 	});
 
-	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
-	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohact, THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohact, CAM_THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COBase1": {
@@ -239,9 +239,9 @@ function eventStartLevel()
 
 	if (difficulty >= MEDIUM)
 	{
-		addDroid(THE_COLLECTIVE, 55, 25, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
+		addDroid(CAM_THE_COLLECTIVE, 55, 25, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
 
-		camManageTrucks(THE_COLLECTIVE);
+		camManageTrucks(CAM_THE_COLLECTIVE);
 
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}

@@ -1,8 +1,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const SCAVENGER_PLAYER = 7;
-
 camAreaEvent("removeObjectiveBlip", function()
 {
 	hackRemoveMessage("FAST_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -47,18 +45,18 @@ camAreaEvent("factory3TriggerInstant", function()
 
 function grantStartTech()
 {
-	const TECH = [
+	const tech = [
 		"R-Wpn-MG1Mk1","R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels"
 	];
-	const STRUCTS = [
+	const structs = [
 		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
 		"A0ResearchFacility", "A0LightFactory"
 	];
 
-	camCompleteRequiredResearch(TECH, CAM_HUMAN_PLAYER);
-	for (let i = 0, l = STRUCTS.length; i < l; ++i)
+	camCompleteRequiredResearch(tech, CAM_HUMAN_PLAYER);
+	for (let i = 0, l = structs.length; i < l; ++i)
 	{
-		enableStructure(STRUCTS[i], CAM_HUMAN_PLAYER);
+		enableStructure(structs[i], CAM_HUMAN_PLAYER);
 	}
 
 	enableResearch("R-Wpn-MG-Damage01", CAM_HUMAN_PLAYER);
@@ -137,9 +135,9 @@ function activateDefenders()
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, undefined);
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setReinforcementTime(-1);

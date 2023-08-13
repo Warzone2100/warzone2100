@@ -61,11 +61,11 @@ function __camEnqueueVideos()
 		return; //Nothing to play
 	}
 
-	const SOUND_IDENTIFER = ".ogg";
-	let what = __camVideoSequences[0];
+	const __SOUND_IDENTIFER = ".ogg";
+	const what = __camVideoSequences[0];
 
 	// Check if this is a sound to play before some sequence.
-	if (typeof what === "string" && what.indexOf(SOUND_IDENTIFER) !== -1)
+	if (typeof what === "string" && what.indexOf(__SOUND_IDENTIFER) !== -1)
 	{
 		playSound(what);
 		queue("__camEnqueueVideos", camSecondsToMilliseconds(3.2)); //more than enough for most sounds.

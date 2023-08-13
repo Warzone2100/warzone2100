@@ -14,7 +14,7 @@ function eventStartLevel()
 	centreView(88, 101);
 	//Setup Landing Zone
 	setNoGoArea(86, 99, 88, 101, CAM_HUMAN_PLAYER);
-	setNoGoArea(49, 83, 51, 85, THE_COLLECTIVE);
+	setNoGoArea(49, 83, 51, 85, CAM_THE_COLLECTIVE);
 	//Set Mission Time
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 	//Give player briefings

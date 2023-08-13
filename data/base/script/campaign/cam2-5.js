@@ -1,7 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const COLLECTIVE_RES = [
+const mis_collectiveRes = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05", "R-Wpn-Cannon-ROF02",
@@ -34,7 +34,7 @@ function camEnemyBaseEliminated_COEastBase()
 //Tell everything not grouped on map to attack
 function camEnemyBaseDetected_COEastBase()
 {
-	let droids = enumArea(0, 0, mapWidth, mapHeight, THE_COLLECTIVE, false).filter((obj) => (
+	const droids = enumArea(0, 0, mapWidth, mapHeight, CAM_THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && obj.group === null && obj.canHitGround
 	));
 
@@ -96,17 +96,17 @@ function eventStartLevel()
 		reinforcements: camMinutesToSeconds(3)
 	});
 
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone"); //player lz
-	let tent = getObject("transporterEntry");
-	let text = getObject("transporterExit");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	let enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	const enemyLz = getObject("COLandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_THE_COLLECTIVE);
 
 	camSetArtifacts({
 		"NuclearReactor": { tech: "R-Struc-Power-Upgrade01" },
@@ -115,11 +115,11 @@ function eventStartLevel()
 		"COTankKillerHardpoint": { tech: "R-Wpn-RocketSlow-ROF02" },
 	});
 
-	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
 	if (difficulty >= MEDIUM)
 	{
-		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
 	}
 
 	camSetEnemyBases({

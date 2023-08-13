@@ -17,7 +17,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 		}
 	}
 
-	resetLabel("vtolRemoveZone", NEXUS);
+	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
 //Order base three groups to do stuff and enable cyborg factories in the north
@@ -58,15 +58,15 @@ camAreaEvent ("middleTrigger", function(droid)
 
 function setUnitRank(transport)
 {
-	const DROID_EXP = [1024, 256, 128, 64]; //Can make Hero Commanders if recycled.
-	let droids = enumCargo(transport);
+	const droidExp = [1024, 256, 128, 64]; //Can make Hero Commanders if recycled.
+	const droids = enumCargo(transport);
 
 	for (let i = 0, len = droids.length; i < len; ++i)
 	{
-		let droid = droids[i];
+		const droid = droids[i];
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
-			setDroidExperience(droid, DROID_EXP[transporterIndex - 1]);
+			setDroidExperience(droid, droidExp[transporterIndex - 1]);
 		}
 	}
 }
@@ -82,13 +82,13 @@ function eventTransporterLanded(transport)
 //Enable all factories.
 function enableAllFactories()
 {
-	const FACTORY_NAMES = [
+	const factoryNames = [
 		"NXcybFac-b3", "NXcybFac-b2-1", "NXcybFac-b2-2", "NXHvyFac-b2", "NXcybFac-b4",
 	];
 
-	for (let j = 0, i = FACTORY_NAMES.length; j < i; ++j)
+	for (let j = 0, i = factoryNames.length; j < i; ++j)
 	{
-		camEnableFactory(FACTORY_NAMES[j]);
+		camEnableFactory(factoryNames[j]);
 	}
 
 	//If they go really fast, adapt the alloy research to come sooner
@@ -97,13 +97,13 @@ function enableAllFactories()
 
 function truckDefense()
 {
-	if (enumDroid(NEXUS, DROID_CONSTRUCT).length === 0)
+	if (enumDroid(CAM_NEXUS, DROID_CONSTRUCT).length === 0)
 	{
 		removeTimer("truckDefense");
 		return;
 	}
 
-	let list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit", "Emplacement-RotHow"];
+	const list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit", "Emplacement-RotHow"];
 	let position;
 
 	if (truckLocCounter === 0)
@@ -117,7 +117,7 @@ function truckDefense()
 		truckLocCounter = 0;
 	}
 
-	camQueueBuilding(NEXUS, list[camRand(list.length)], position);
+	camQueueBuilding(CAM_NEXUS, list[camRand(list.length)], position);
 }
 
 //Extra transport units are only awarded to those who start Gamma campaign
@@ -136,22 +136,22 @@ function sendPlayerTransporter()
 		return;
 	}
 
-	let droids = [];
-	let bodyList = ["Body9REC", "Body9REC", "Body9REC", "Body11ABT", "Body12SUP"];
-	let propulsionList = ["tracked01", "tracked01", "hover01"];
-	let weaponList = ["Cannon5VulcanMk1", "Cannon5VulcanMk1", "Flame2", "Flame2", "MG4ROTARYMk1", "MG4ROTARYMk1", "Cannon4AUTOMk1", "Rocket-HvyA-T"];
-	let specialList = ["Spade1Mk1", "Spade1Mk1", "CommandBrain01", "CommandBrain01"];
+	const droids = [];
+	const bodyList = ["Body9REC", "Body9REC", "Body9REC", "Body11ABT", "Body12SUP"];
+	const propulsionList = ["tracked01", "tracked01", "hover01"];
+	const weaponList = ["Cannon5VulcanMk1", "Cannon5VulcanMk1", "Flame2", "Flame2", "MG4ROTARYMk1", "MG4ROTARYMk1", "Cannon4AUTOMk1", "Rocket-HvyA-T"];
+	const specialList = ["Spade1Mk1", "Spade1Mk1", "CommandBrain01", "CommandBrain01"];
 
 	for (let i = 0; i < 10; ++i)
 	{
-		let body = bodyList[camRand(bodyList.length)];
+		const BODY = bodyList[camRand(bodyList.length)];
 		let weap = (!transporterIndex && (i < specialList.length)) ? specialList[i] : weaponList[camRand(weaponList.length)];
 		if (transporterIndex === 1 && i < 4)
 		{
 			weap = "QuadRotAAGun";
 		}
-		let prop = propulsionList[camRand(propulsionList.length)];
-		droids.push({ body: body, prop: prop, weap: weap });
+		const PROP = propulsionList[camRand(propulsionList.length)];
+		droids.push({ body: BODY, prop: PROP, weap: weap });
 	}
 
 	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids,
@@ -167,8 +167,8 @@ function sendPlayerTransporter()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	let list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
+	const list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
 }
 
 //These groups are active immediately.
@@ -207,7 +207,7 @@ function groupPatrolNoTrigger()
 //Gives starting tech and research.
 function cam3Setup()
 {
-	const NEXUS_RES = [
+	const nexusRes = [
 		"R-Sys-Engineering03", "R-Defense-WallUpgrade07", "R-Struc-Materials07",
 		"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 		"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
@@ -221,14 +221,14 @@ function cam3Setup()
 		"R-Wpn-Energy-Damage02", "R-Wpn-Energy-ROF01", "R-Wpn-Energy-Accuracy01",
 	];
 
-	for (let x = 0, l = STRUCTS_ALPHA.length; x < l; ++x)
+	for (let x = 0, l = mis_structsAlpha.length; x < l; ++x)
 	{
-		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
+		enableStructure(mis_structsAlpha[x], CAM_HUMAN_PLAYER);
 	}
 
-	camCompleteRequiredResearch(GAMMA_ALLY_RES, CAM_HUMAN_PLAYER);
-	camCompleteRequiredResearch(GAMMA_ALLY_RES, NEXUS);
-	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
+	camCompleteRequiredResearch(mis_gammaAllyRes, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(mis_gammaAllyRes, CAM_NEXUS);
+	camCompleteRequiredResearch(nexusRes, CAM_NEXUS);
 
 	if (difficulty >= HARD)
 	{
@@ -242,31 +242,31 @@ function cam3Setup()
 //Normal and lower difficulties has Nexus start off a little bit weaker
 function improveNexusAlloys()
 {
-	let alloys = [
+	const alloys = [
 		"R-Vehicle-Metals07", "R-Cyborg-Metals07",
 		"R-Vehicle-Armor-Heat04", "R-Cyborg-Armor-Heat04"
 	];
-	camCompleteRequiredResearch(alloys, NEXUS);
+	camCompleteRequiredResearch(alloys, CAM_NEXUS);
 }
 
 function eventStartLevel()
 {
 	const PLAYER_POWER = 16000;
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone");
-	let tent = getObject("transporterEntry");
-	let text = getObject("transporterExit");
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_1S");
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
-	centreView(startpos.x, startpos.y);
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	let enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+	const enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_NEXUS);
 
 	camSetArtifacts({
 		"NXPowerGenArti": { tech: "R-Struc-Power-Upgrade02" },
@@ -382,9 +382,9 @@ function eventStartLevel()
 
 	if (difficulty >= HARD)
 	{
-		addDroid(NEXUS, 8, 112, "Truck Retribution Hover", "Body7ABT", "hover02", "", "", "Spade1Mk1");
+		addDroid(CAM_NEXUS, 8, 112, "Truck Retribution Hover", "Body7ABT", "hover02", "", "", "Spade1Mk1");
 
-		camManageTrucks(NEXUS);
+		camManageTrucks(CAM_NEXUS);
 
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}

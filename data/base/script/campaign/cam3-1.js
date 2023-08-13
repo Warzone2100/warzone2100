@@ -1,7 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const NEXUS_RES = [
+const mis_nexusRes = [
 	"R-Sys-Engineering03", "R-Defense-WallUpgrade07", "R-Struc-Materials07",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
@@ -28,7 +28,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 		}
 	}
 
-	resetLabel("vtolRemoveZone", NEXUS);
+	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
 camAreaEvent("hillTriggerZone", function(droid)
@@ -63,8 +63,8 @@ camAreaEvent("hillTriggerZone", function(droid)
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	let list = [cTempl.nxlscouv, cTempl.nxmtherv];
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
+	const list = [cTempl.nxlscouv, cTempl.nxmtherv];
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
 }
 
 //These groups are active immediately.
@@ -119,22 +119,22 @@ function missileSilosDestroyed()
 function nukeAndCountSurvivors()
 {
 	//Avoid destroying the one base if the player opted not to destroy it themselves.
-	let nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter((obj) => (
+	const nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter((obj) => (
 		obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null)
 	));
-	let safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
+	const safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
 	let foundUnit = false;
 
 	//Make em' explode!
 	for (let i = 0, len = nuked.length; i < len; ++i)
 	{
 		let nukeIt = true;
-		let obj1 = nuked[i];
+		const obj1 = nuked[i];
 
 		//Check if it's in the safe area.
 		for (let j = 0, len2 = safeZone.length; j < len2; ++j)
 		{
-			let obj2 = safeZone[j];
+			const obj2 = safeZone[j];
 
 			if (obj1.id === obj2.id)
 			{
@@ -181,16 +181,16 @@ function setupNextMission()
 function getCountdown()
 {
 	const ACCEPTABLE_TIME_DIFF = 2;
-	let silosDestroyed = missileSilosDestroyed();
-	let countdownObject = silosDestroyed ? detonateInfo : launchInfo;
+	const SILOS_DESTROYED = missileSilosDestroyed();
+	const countdownObject = SILOS_DESTROYED ? detonateInfo : launchInfo;
 	let skip = false;
 
 	for (let i = 0, len = countdownObject.length; i < len; ++i)
 	{
-		let currentTime = getMissionTime();
-		if (currentTime <= countdownObject[0].time)
+		const CURRENT_TIME = getMissionTime();
+		if (CURRENT_TIME <= countdownObject[0].time)
 		{
-			if (currentTime < (countdownObject[0].time - ACCEPTABLE_TIME_DIFF))
+			if (CURRENT_TIME < (countdownObject[0].time - ACCEPTABLE_TIME_DIFF))
 			{
 				skip = true; //Huge time jump?
 			}
@@ -199,7 +199,7 @@ function getCountdown()
 				playSound(countdownObject[0].sound, CAM_HUMAN_PLAYER);
 			}
 
-			if (silosDestroyed)
+			if (SILOS_DESTROYED)
 			{
 				detonateInfo.shift();
 			}
@@ -223,10 +223,10 @@ function enableAllFactories()
 //For now just make sure we have all the droids in the canyon.
 function unitsInValley()
 {
-	let safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter((obj) => (
+	const safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID
 	));
-	let allDroids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+	const allDroids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID
 	));
 
@@ -247,10 +247,10 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Destroy the missile silos"));
 
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone");
-	let tent = getObject("transporterEntry");
-	let text = getObject("transporterExit");
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
 
 	//Time is in seconds.
 	launchInfo = [
@@ -293,16 +293,16 @@ function eventStartLevel()
 		callback: "unitsInValley"
 	});
 
-	centreView(startpos.x, startpos.y);
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 	setScrollLimits(0, 32, 64, 64);
 
-	let enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+	const enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_NEXUS);
 
-	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
+	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 
 	camSetArtifacts({
 		"NXMediumFac": { tech: "R-Wpn-MG-Damage09" },

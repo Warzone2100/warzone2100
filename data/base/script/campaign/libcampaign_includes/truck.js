@@ -31,7 +31,7 @@ function camManageTrucks(playerId)
 //;;
 function camQueueBuilding(playerId, stat, position)
 {
-	let ti = __camTruckInfo[playerId];
+	const ti = __camTruckInfo[playerId];
 	ti.queue.push({ stat: stat, pos: camMakePos(position) });
 }
 
@@ -39,11 +39,11 @@ function camQueueBuilding(playerId, stat, position)
 
 function __camEnumFreeTrucks(player)
 {
-	let rawDroids = enumDroid(player, DROID_CONSTRUCT);
-	let droids = [];
+	const rawDroids = enumDroid(player, DROID_CONSTRUCT);
+	const droids = [];
 	for (let i = 0, l = rawDroids.length; i < l; ++i)
 	{
-		let droid = rawDroids[i];
+		const droid = rawDroids[i];
 		if (droid.order !== DORDER_BUILD && droid.order !== DORDER_HELPBUILD && droid.order !== DORDER_LINEBUILD)
 		{
 			droids.push(droid);
@@ -54,7 +54,7 @@ function __camEnumFreeTrucks(player)
 
 function __camGetClosestTruck(player, pos)
 {
-	let droids = __camEnumFreeTrucks(player);
+	const droids = __camEnumFreeTrucks(player);
 	if (droids.length <= 0)
 	{
 		return undefined;
@@ -65,15 +65,15 @@ function __camGetClosestTruck(player, pos)
 	let minDist = camDist(minDroid, pos);
 	for (let i = 1, l = droids.length; i < l; ++i)
 	{
-		let droid = droids[i];
+		const droid = droids[i];
 		if (!droidCanReach(droid, pos.x, pos.y))
 		{
 			continue;
 		}
-		let dist = camDist(droid, pos);
-		if (dist < minDist)
+		const __DIST = camDist(droid, pos);
+		if (__DIST < minDist)
 		{
-			minDist = dist;
+			minDist = __DIST;
 			minDroid = droid;
 		}
 	}
@@ -86,22 +86,22 @@ function __camTruckTick()
 	// See comments inside the loop to understand priority.
 	for (const playerObj in __camTruckInfo)
 	{
-		let ti = __camTruckInfo[playerObj];
-		let player = ti.player;
+		const ti = __camTruckInfo[playerObj];
+		const __PLAYER = ti.player;
 		let truck;
 
 		// First, build things that were explicitly ordered.
 		while (ti.queue.length > 0)
 		{
-			let qi = ti.queue[0];
-			let pos = qi.pos;
+			const __QI = ti.queue[0];
+			let pos = __QI.pos;
 			let randx = 0;
 			let randy = 0;
 
 			if (camDef(pos))
 			{
 				// Find the truck most suitable for the job.
-				truck = __camGetClosestTruck(player, pos);
+				truck = __camGetClosestTruck(__PLAYER, pos);
 				if (!camDef(truck))
 				{
 					break;
@@ -110,7 +110,7 @@ function __camTruckTick()
 			else
 			{
 				// Build near any truck if pos was not specified.
-				let droids = __camEnumFreeTrucks(player);
+				const droids = __camEnumFreeTrucks(__PLAYER);
 				if (droids.length <= 0)
 				{
 					break;
@@ -121,11 +121,11 @@ function __camTruckTick()
 				randy = (camRand(100) < 50) ? -camRand(2) : camRand(2);
 			}
 
-			enableStructure(qi.stat, player);
-			let loc = pickStructLocation(truck, qi.stat, pos.x, pos.y);
+			enableStructure(__QI.stat, __PLAYER);
+			const loc = pickStructLocation(truck, __QI.stat, pos.x, pos.y);
 			if (camDef(loc) && camDef(truck))
 			{
-				if (orderDroidBuild(truck, DORDER_BUILD, qi.stat, loc.x + randx, loc.y + randy))
+				if (orderDroidBuild(truck, DORDER_BUILD, __QI.stat, loc.x + randx, loc.y + randy))
 				{
 					ti.queue.shift(); // consider it handled
 				}
@@ -133,16 +133,16 @@ function __camTruckTick()
 		}
 
 		// Then, capture free oils.
-		let oils = enumFeature(ALL_PLAYERS, "OilResource");
+		const oils = enumFeature(ALL_PLAYERS, "OilResource");
 		if (oils.length === 0)
 		{
 			continue;
 		}
-		let oil = oils[0];
-		truck = __camGetClosestTruck(player, oil);
-		if (camDef(truck) && player !== NEXUS)
+		const oil = oils[0];
+		truck = __camGetClosestTruck(__PLAYER, oil);
+		if (camDef(truck) && __PLAYER !== CAM_NEXUS)
 		{
-			enableStructure("A0ResourceExtractor", player);
+			enableStructure("A0ResourceExtractor", __PLAYER);
 			orderDroidBuild(truck, DORDER_BUILD, "A0ResourceExtractor", oil.x, oil.y);
 			continue;
 		}

@@ -11,18 +11,18 @@
 //;;
 function camNexusLaugh()
 {
-	const LAUGH_CHANCE = 45;
-	if (camRand(100) < LAUGH_CHANCE)
+	const __LAUGH_CHANCE = 45;
+	if (camRand(100) < __LAUGH_CHANCE)
 	{
-		const LAUGHS = [LAUGH1, LAUGH2, LAUGH3];
-		playSound(LAUGHS[camRand(LAUGHS.length)]);
+		const laughs = [CAM_LAUGH1_SND, CAM_LAUGH2_SND, CAM_LAUGH3_SND];
+		playSound(laughs[camRand(laughs.length)]);
 	}
 }
 
 //;; ## camAbsorbPlayer([who[, to]])
 //;;
 //;; Completely give all of player `who` droids and structures to player `to`.
-//;; Will default to `CAM_HUMAN_PLAYER` and `NEXUS` respectively.
+//;; Will default to `CAM_HUMAN_PLAYER` and `CAM_NEXUS` respectively.
 //;;
 //;; @param {number} [who]
 //;; @param {number} [to]
@@ -36,24 +36,24 @@ function camAbsorbPlayer(who, to)
 	}
 	if (!camDef(to))
 	{
-		to = NEXUS;
+		to = CAM_NEXUS;
 	}
 
-	let units = enumDroid(who);
+	const units = enumDroid(who);
 
 	for (let i = 0, len = units.length; i < len; ++i)
 	{
-		let droid = units[i];
+		const droid = units[i];
 		if (!donateObject(droid, to))
 		{
 			camSafeRemoveObject(droid, false);
 		}
 	}
 
-	let structs = enumStruct(who);
+	const structs = enumStruct(who);
 	for (let i = 0, len = structs.length; i < len; ++i)
 	{
-		let structure = structs[i];
+		const structure = structs[i];
 		if (!donateObject(structure, to))
 		{
 			camSafeRemoveObject(structure, false);
@@ -67,7 +67,7 @@ function camAbsorbPlayer(who, to)
 //;; ## camHackIntoPlayer([player[, to]])
 //;;
 //;; Steal a droid or structure from a player if the NEXUS hack state is active.
-//;; Will default to `CAM_HUMAN_PLAYER` and `NEXUS` respectively.
+//;; Will default to `CAM_HUMAN_PLAYER` and `CAM_NEXUS` respectively.
 //;;
 //;; @param {number} [player]
 //;; @param {number} [to]
@@ -80,7 +80,7 @@ function camHackIntoPlayer(player, to)
 		return;
 	}
 
-	const GIFT_CHANCE = 70; //Else neutralized
+	const __GIFT_CHANCE = 70; //Else neutralized
 	let target;
 	let objects;
 
@@ -90,7 +90,7 @@ function camHackIntoPlayer(player, to)
 	}
 	if (!camDef(to))
 	{
-		to = NEXUS;
+		to = CAM_NEXUS;
 	}
 	if (!camDef(__camLastNexusAttack))
 	{
@@ -106,7 +106,7 @@ function camHackIntoPlayer(player, to)
 	__camLastNexusAttack = gameTime;
 	target = objects[camRand(objects.length)];
 
-	if ((camRand(100) < GIFT_CHANCE) && !(target.type === STRUCTURE && target.stattype === WALL))
+	if ((camRand(100) < __GIFT_CHANCE) && !(target.type === STRUCTURE && target.stattype === WALL))
 	{
 		camTrace("Hacking " + target.name + " at (x,y): " + target.x + " " + target.y);
 		//Gift sounds are done in eventObjectTransfer.
@@ -126,16 +126,16 @@ function camHackIntoPlayer(player, to)
 			{
 				if (target.stattype === DEFENSE)
 				{
-					sound = DEFENSE_NEUTRALIZE;
+					sound = CAM_DEFENSE_NEUTRALIZE_SND;
 				}
 				else
 				{
-					sound = STRUCTURE_NEUTRALIZE;
+					sound = CAM_STRUCTURE_NEUTRALIZE_SND;
 				}
 			}
 			else if (target.type === DROID)
 			{
-				sound = UNIT_NEUTRALIZE;
+				sound = CAM_UNIT_NEUTRALIZE_SND;
 			}
 
 			if (camDef(sound))
@@ -188,14 +188,14 @@ function __camChooseNexusTarget(player)
 		return enumStruct(player, HQ);
 	}
 
-	const TARGET_UNIT_CHANCE = (getResearch("R-Sys-Resistance-Upgrade01").done) ? 40 : 20;
+	const __TARGET_UNIT_CHANCE = (getResearch("R-Sys-Resistance-Upgrade01").done) ? 40 : 20;
 	let objects = [];
 
-	if (camRand(100) < TARGET_UNIT_CHANCE)
+	if (camRand(100) < __TARGET_UNIT_CHANCE)
 	{
 		objects = enumDroid(player).filter((d) => (!camIsTransporter(d)));
 
-		const EXP = {
+		const exp = {
 			rookie: 0,
 			green: 4,
 			trained: 8,
@@ -224,7 +224,7 @@ function __camChooseNexusTarget(player)
 				{
 					return false;
 				}
-				return d.experience < EXP.regular;
+				return d.experience < exp.regular;
 			}
 			else if (getResearch("R-Sys-Resistance-Upgrade02").done)
 			{
@@ -232,7 +232,7 @@ function __camChooseNexusTarget(player)
 				{
 					return false;
 				}
-				return d.experience < EXP.veteran;
+				return d.experience < exp.veteran;
 			}
 			else if (getResearch("R-Sys-Resistance-Upgrade01").done)
 			{
@@ -240,7 +240,7 @@ function __camChooseNexusTarget(player)
 				{
 					return false;
 				}
-				return d.experience < EXP.special;
+				return d.experience < exp.special;
 			}
 			else
 			{

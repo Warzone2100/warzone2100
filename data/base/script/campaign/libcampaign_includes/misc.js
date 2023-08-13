@@ -162,7 +162,7 @@ function camDist(x1, y1, x2, y2)
 	{
 		return distBetweenTwoPoints(x1.x, x1.y, y1.x, y1.y);
 	}
-	let pos2 = camMakePos(x2);
+	const pos2 = camMakePos(x2);
 	if (camDef(pos2.x)) // x2 is pos2
 	{
 		return distBetweenTwoPoints(x1, y1, pos2.x, pos2.y);
@@ -189,7 +189,7 @@ function camPlayerMatchesFilter(playerId, playerFilter)
 		case ALLIES:
 			return playerId === CAM_HUMAN_PLAYER;
 		case ENEMIES:
-			return playerId >= 0 && playerId < CAM_MAX_PLAYERS && playerId !== CAM_HUMAN_PLAYER;
+			return playerId >= 0 && playerId < __CAM_MAX_PLAYERS && playerId !== CAM_HUMAN_PLAYER;
 		default:
 			return playerId === playerFilter;
 	}
@@ -205,10 +205,10 @@ function camPlayerMatchesFilter(playerId, playerFilter)
 function camRemoveDuplicates(items)
 {
 	let prims = {"boolean":{}, "number":{}, "string":{}};
-	let objs = [];
+	const objs = [];
 
 	return items.filter((item) => {
-		let type = typeof item;
+		const type = typeof item;
 		if (type in prims)
 		{
 			return prims[type].hasOwnProperty(item) ? false : (prims[type][item] = true);
@@ -234,11 +234,11 @@ function camCountStructuresInArea(label, playerFilter)
 	{
 		playerFilter = CAM_HUMAN_PLAYER;
 	}
-	let list = enumArea(label, playerFilter, false);
+	const list = enumArea(label, playerFilter, false);
 	let ret = 0;
 	for (let i = 0, l = list.length; i < l; ++i)
 	{
-		let object = list[i];
+		const object = list[i];
 		if (object.type === STRUCTURE && object.stattype !== WALL && object.status === BUILT)
 		{
 			++ret;
@@ -363,10 +363,10 @@ function camMakeGroup(what, playerFilter)
 	}
 	if (camDef(array))
 	{
-		let group = camNewGroup();
+		const group = camNewGroup();
 		for (let i = 0, l = array.length; i < l; ++i)
 		{
-			let o = array[i];
+			const o = array[i];
 			if (!camDef(o) || !o)
 			{
 				camDebug("Trying to add", o);
@@ -390,9 +390,9 @@ function camMakeGroup(what, playerFilter)
 //;;
 function camBreakAlliances()
 {
-	for (let i = 0; i < CAM_MAX_PLAYERS; ++i)
+	for (let i = 0; i < __CAM_MAX_PLAYERS; ++i)
 	{
-		for (let c = 0; c < CAM_MAX_PLAYERS; ++c)
+		for (let c = 0; c < __CAM_MAX_PLAYERS; ++c)
 		{
 			if (i !== c && allianceExistsBetween(i, c) === true)
 			{
@@ -411,12 +411,12 @@ function camBreakAlliances()
 //;;
 function camGenerateRandomMapEdgeCoordinate(reachPosition)
 {
-	let limits = getScrollLimits();
+	const limits = getScrollLimits();
 	let loc;
 
 	do
 	{
-		let location = {x: 0, y: 0};
+		const location = {x: 0, y: 0};
 		let xWasRandom = false;
 
 		if (camRand(100) < 50)
@@ -478,7 +478,7 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 		scanObjectRadius = 2;
 	}
 
-	let limits = getScrollLimits();
+	const limits = getScrollLimits();
 	let pos;
 
 	do
@@ -521,29 +521,29 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 //;;
 function camDiscoverCampaign()
 {
-	for (let i = 0, len = ALPHA_LEVELS.length; i < len; ++i)
+	for (let i = 0, len = __cam_alphaLevels.length; i < len; ++i)
 	{
-		if (__camNextLevel === ALPHA_LEVELS[i] || __camNextLevel === BETA_LEVELS[0])
+		if (__camNextLevel === __cam_alphaLevels[i] || __camNextLevel === __cam_betaLevels[0])
 		{
-			return ALPHA_CAMPAIGN_NUMBER;
+			return __CAM_ALPHA_CAMPAIGN_NUMBER;
 		}
 	}
-	for (let i = 0, len = BETA_LEVELS.length; i < len; ++i)
+	for (let i = 0, len = __cam_betaLevels.length; i < len; ++i)
 	{
-		if (__camNextLevel === BETA_LEVELS[i] || __camNextLevel === GAMMA_LEVELS[0])
+		if (__camNextLevel === __cam_betaLevels[i] || __camNextLevel === __cam_gammaLevels[0])
 		{
-			return BETA_CAMPAIGN_NUMBER;
+			return __CAM_BETA_CAMPAIGN_NUMBER;
 		}
 	}
-	for (let i = 0, len = GAMMA_LEVELS.length; i < len; ++i)
+	for (let i = 0, len = __cam_gammaLevels.length; i < len; ++i)
 	{
-		if (__camNextLevel === GAMMA_LEVELS[i] || __camNextLevel === CAM_GAMMA_OUT)
+		if (__camNextLevel === __cam_gammaLevels[i] || __camNextLevel === CAM_GAMMA_OUT)
 		{
-			return GAMMA_CAMPAIGN_NUMBER;
+			return __CAM_GAMMA_CAMPAIGN_NUMBER;
 		}
 	}
 
-	return UNKNOWN_CAMPAIGN_NUMBER;
+	return __CAM_UNKNOWN_CAMPAIGN_NUMBER;
 }
 
 function camSetExpLevel(number)
@@ -553,11 +553,11 @@ function camSetExpLevel(number)
 
 function camSetOnMapEnemyUnitExp()
 {
-	enumDroid(NEW_PARADIGM)
-	.concat(enumDroid(THE_COLLECTIVE))
-	.concat(enumDroid(NEXUS))
-	.concat(enumDroid(SCAV_6))
-	.concat(enumDroid(SCAV_7))
+	enumDroid(CAM_NEW_PARADIGM)
+	.concat(enumDroid(CAM_THE_COLLECTIVE))
+	.concat(enumDroid(CAM_NEXUS))
+	.concat(enumDroid(CAM_SCAV_6))
+	.concat(enumDroid(CAM_SCAV_7))
 	.forEach(function(obj) {
 		if (!allianceExistsBetween(CAM_HUMAN_PLAYER, obj.player) && //may have friendly units as other player
 			!camIsTransporter(obj) &&
@@ -579,21 +579,21 @@ function __camGlobalContext()
 function __camFindClusters(list, size)
 {
 	// The good old cluster analysis algorithm taken from NullBot AI.
-	let ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
+	const ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
 	for (let i = list.length - 1; i >= 0; --i)
 	{
-		let x = list[i].x;
-		let y = list[i].y;
+		const __X = list[i].x;
+		const __Y = list[i].y;
 		let found = false;
 		let n = 0;
 		for (let j = 0; j < ret.clusters.length; ++j)
 		{
-			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)
+			if (camDist(ret.xav[j], ret.yav[j], __X, __Y) < size)
 			{
 				n = ret.clusters[j].length;
 				ret.clusters[j][n] = list[i];
-				ret.xav[j] = Math.floor((n * ret.xav[j] + x) / (n + 1));
-				ret.yav[j] = Math.floor((n * ret.yav[j] + y) / (n + 1));
+				ret.xav[j] = Math.floor((n * ret.xav[j] + __X) / (n + 1));
+				ret.yav[j] = Math.floor((n * ret.yav[j] + __Y) / (n + 1));
 				if (ret.clusters[j].length > ret.maxCount)
 				{
 					ret.maxIdx = j;
@@ -607,8 +607,8 @@ function __camFindClusters(list, size)
 		{
 			n = ret.clusters.length;
 			ret.clusters[n] = [list[i]];
-			ret.xav[n] = x;
-			ret.yav[n] = y;
+			ret.xav[n] = __X;
+			ret.yav[n] = __Y;
 			if (1 > ret.maxCount)
 			{
 				ret.maxIdx = n;
@@ -632,15 +632,15 @@ function __camTick()
 //Reset AI power back to highest storage possible.
 function __camAiPowerReset()
 {
-	for (let i = 1; i < CAM_MAX_PLAYERS; ++i)
+	for (let i = 1; i < __CAM_MAX_PLAYERS; ++i)
 	{
-		setPower(AI_POWER, i);
+		setPower(__CAM_AI_POWER, i);
 	}
 }
 
 function __camGetExpRangeLevel()
 {
-	let ranks = {
+	const ranks = {
 		rookie: 0,
 		green: 4,
 		trained: 8,
@@ -702,7 +702,7 @@ function camSetDroidExperience(droid)
 		return;
 	}
 
-	let expRange = __camGetExpRangeLevel();
+	const expRange = __camGetExpRangeLevel();
 	let exp = expRange[camRand(expRange.length)];
 
 	if (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR)
