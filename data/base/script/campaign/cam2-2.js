@@ -2,8 +2,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const warning = "pcv632.ogg"; // Collective commander escaping
-const COLLEVTIVE_RES = [
+const mis_collectiveRes = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals04", "R-Cyborg-Metals04",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
@@ -23,7 +22,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 		camSafeRemoveObject(droid, false);
 	}
 
-	resetLabel("vtolRemoveZone", THE_COLLECTIVE);
+	resetLabel("vtolRemoveZone", CAM_THE_COLLECTIVE);
 });
 
 camAreaEvent("group1Trigger", function(droid)
@@ -42,7 +41,7 @@ camAreaEvent("wayPoint1Rad", function(droid)
 {
 	if (isVTOL(droid))
 	{
-		resetLabel("wayPoint1Rad", THE_COLLECTIVE);
+		resetLabel("wayPoint1Rad", CAM_THE_COLLECTIVE);
 		return;
 	}
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
@@ -58,12 +57,12 @@ camAreaEvent("wayPoint2Rad", function(droid)
 {
 	if (droid.droidType !== DROID_COMMAND)
 	{
-		resetLabel("wayPoint2Rad", THE_COLLECTIVE);
+		resetLabel("wayPoint2Rad", CAM_THE_COLLECTIVE);
 		return;
 	}
 
-	let point = getObject("wayPoint3");
-	let defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter((obj) => (
+	const point = getObject("wayPoint3");
+	const defGroup = enumRange(point.x, point.y, 10, CAM_THE_COLLECTIVE, false).filter((obj) => (
 		obj.droidType === DROID_WEAPON
 	));
 
@@ -80,7 +79,8 @@ camAreaEvent("wayPoint2Rad", function(droid)
 		repair: 67,
 	});
 
-	playSound(warning);
+	const WARN_MESSAGE = "pcv632.ogg"; // Collective commander escaping
+	playSound(WARN_MESSAGE);
 });
 
 camAreaEvent("failZone", function(droid)
@@ -92,32 +92,32 @@ camAreaEvent("failZone", function(droid)
 	}
 	else
 	{
-		resetLabel("failZone", THE_COLLECTIVE);
+		resetLabel("failZone", CAM_THE_COLLECTIVE);
 	}
 });
 
 function vtolAttack()
 {
-	let list = [cTempl.colatv, cTempl.colatv];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter");
+	const list = [cTempl.colatv, cTempl.colatv];
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter");
 }
 
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
+	if (enumDroid(CAM_THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
 		removeTimer("truckDefense");
 		return;
 	}
 
 	const list = ["CO-Tower-LtATRkt", "PillBox1", "CO-WallTower-HvCan"];
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
+	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
 function showGameOver()
 {
-	let arti = camGetArtifacts();
+	const arti = camGetArtifacts();
 	camSafeRemoveObject(arti[0], false);
 	gameOverMessage(false);
 }
@@ -141,7 +141,7 @@ function retreatCommander()
 function eventAttacked(victim, attacker)
 {
 	if (camDef(victim) &&
-		victim.player === THE_COLLECTIVE &&
+		victim.player === CAM_THE_COLLECTIVE &&
 		victim.y > Math.floor(mapHeight / 3) && //only if the commander is escaping to the south
 		victim.group === commandGroup)
 	{
@@ -158,27 +158,27 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone"); //player lz
-	let tent = getObject("transporterEntry");
-	let text = getObject("transporterExit");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	let enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	const enemyLz = getObject("COLandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_THE_COLLECTIVE);
 
 	camSetArtifacts({
 		"COCommander": { tech: "R-Wpn-RocketSlow-Accuracy03" },
 	});
 
-	camCompleteRequiredResearch(COLLEVTIVE_RES, THE_COLLECTIVE);
+	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
 	if (difficulty >= MEDIUM)
 	{
-		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
 	}
 
 	camSetEnemyBases({
@@ -226,7 +226,7 @@ function eventStartLevel()
 	});
 
 	commandGroup = camMakeGroup("group1NBase");
-	camManageTrucks(THE_COLLECTIVE);
+	camManageTrucks(CAM_THE_COLLECTIVE);
 	camEnableFactory("COFactoryWest");
 
 	hackAddMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);

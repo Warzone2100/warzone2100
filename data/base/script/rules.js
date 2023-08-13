@@ -14,13 +14,13 @@ const TRANSFER_LIKE_EVENT = 2;
 function reticuleManufactureCheck()
 {
 	let structureComplete = false;
-	let facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
+	const facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
 	for (let i = 0, len = facs.length; i < len; ++i)
 	{
-		let facType = facs[i];
-		let offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
-		let onMapFacs = enumStruct(selectedPlayer, facType);
+		const facType = facs[i];
+		const offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
+		const onMapFacs = enumStruct(selectedPlayer, facType);
 
 		if (offWorldFacs !== null)
 		{
@@ -64,13 +64,13 @@ function reticuleManufactureCheck()
 function reticuleResearchCheck()
 {
 	let structureComplete = false;
-	let labs = [RESEARCH_LAB,];
+	const labs = [RESEARCH_LAB,];
 
 	for (let i = 0, len = labs.length; i < len; ++i)
 	{
-		let resType = labs[i];
-		let offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
-		let onMapLabs = enumStruct(selectedPlayer, resType);
+		const resType = labs[i];
+		const offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
+		const onMapLabs = enumStruct(selectedPlayer, resType);
 
 		if (offWorldLabs !== null)
 		{
@@ -126,13 +126,13 @@ function reticuleBuildCheck()
 function reticuleDesignCheck()
 {
 	let structureComplete = false;
-	let hqs = [HQ,];
+	const hqs = [HQ,];
 
 	for (let i = 0, len = hqs.length; i < len; ++i)
 	{
-		let hqType = hqs[i];
-		let offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
-		let onMapHq = enumStruct(selectedPlayer, hqType);
+		const hqType = hqs[i];
+		const offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
+		const onMapHq = enumStruct(selectedPlayer, hqType);
 
 		if (offWorldHq !== null)
 		{

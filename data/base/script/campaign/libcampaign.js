@@ -22,8 +22,24 @@
 //;;
 
 /*
-	Private vars and functions are prefixed with `__cam'.
+	Private vars and functions are prefixed with `__cam`.
+	Private consts are prefixed with `__CAM_` or `__cam_`.
+	Public vars/functions are prefixed with `cam`, consts with `CAM_` or `cam_`.
 	Please do not use private stuff in scenario code, use only public API.
+
+	It is encouraged to prefix any local consts with `__` in any function in the
+	library if they are not objects/arrays. Mission scripts may use a `_` but
+	only if the name seems like it could clash with a JS API global.
+
+	Please CAPITALIZE const names for consistency for most of everything.
+	The only exception to these rules is when the const is declared in a loop
+	initialization or will be assigned as a global-context callback function,
+	or if it will be a JS object/array as these aren't truly immutable. Follow
+	standard camel case style as usual.
+
+	Also, in the event you want a top level const for a mission script
+	(and any include file) please prefix it with `MIS_` or `mis_` depending on
+	if it's an object/array or not.
 
 	We CANNOT put our private vars into an anonymous namespace, even though
 	it's a common JS trick -
@@ -77,34 +93,34 @@ namespace("cam_");
 //////////global vars start
 //These are campaign player numbers.
 const CAM_HUMAN_PLAYER = 0;
-const NEW_PARADIGM = 1;
-const THE_COLLECTIVE = 2;
-const NEXUS = 3;
-const SCAV_6 = 6;
-const SCAV_7 = 7;
+const CAM_NEW_PARADIGM = 1;
+const CAM_THE_COLLECTIVE = 2;
+const CAM_NEXUS = 3;
+const CAM_SCAV_6 = 6;
+const CAM_SCAV_7 = 7;
 
-const CAM_MAX_PLAYERS = 8;
-const CAM_TICKS_PER_FRAME = 100;
-const AI_POWER = 999999;
-const INCLUDE_PATH = "script/campaign/libcampaign_includes/";
+const __CAM_MAX_PLAYERS = 8;
+const __CAM_TICKS_PER_FRAME = 100;
+const __CAM_AI_POWER = 999999;
+const __CAM_INCLUDE_PATH = "script/campaign/libcampaign_includes/";
 
 //level load codes here for reference. Might be useful for later code.
-const ALPHA_CAMPAIGN_NUMBER = 1;
-const BETA_CAMPAIGN_NUMBER = 2;
-const GAMMA_CAMPAIGN_NUMBER = 3;
 const CAM_GAMMA_OUT = "GAMMA_OUT"; //Fake next level for the final Gamma mission.
-const UNKNOWN_CAMPAIGN_NUMBER = 1000;
-const ALPHA_LEVELS = [
+const __CAM_ALPHA_CAMPAIGN_NUMBER = 1;
+const __CAM_BETA_CAMPAIGN_NUMBER = 2;
+const __CAM_GAMMA_CAMPAIGN_NUMBER = 3;
+const __CAM_UNKNOWN_CAMPAIGN_NUMBER = 1000;
+const __cam_alphaLevels = [
 	"CAM_1A", "CAM_1B", "SUB_1_1S", "SUB_1_1", "SUB_1_2S", "SUB_1_2", "SUB_1_3S",
 	"SUB_1_3", "CAM_1C", "CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
 	"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "SUB_1_D", "CAM_1END"
 ];
-const BETA_LEVELS = [
+const __cam_betaLevels = [
 	"CAM_2A", "SUB_2_1S", "SUB_2_1", "CAM_2B", "SUB_2_2S", "SUB_2_2", "CAM_2C",
 	"SUB_2_5S", "SUB_2_5", "SUB_2DS", "SUB_2D", "SUB_2_6S", "SUB_2_6", "SUB_2_7S",
 	"SUB_2_7", "SUB_2_8S", "SUB_2_8", "CAM_2END"
 ];
-const GAMMA_LEVELS = [
+const __cam_gammaLevels = [
 	"CAM_3A", "SUB_3_1S", "SUB_3_1", "CAM_3B", "SUB_3_2S", "SUB_3_2", "CAM3A-B",
 	"CAM3C", "CAM3A-D1", "CAM3A-D2", "CAM_3_4S", "CAM_3_4"
 ];
@@ -143,18 +159,18 @@ var __camCalledOnce = {};
 var __camExpLevel;
 
 //nexus
-const DEFENSE_ABSORBED = "defabsrd.ogg";
-const DEFENSE_NEUTRALIZE = "defnut.ogg";
-const LAUGH1 = "laugh1.ogg";
-const LAUGH2 = "laugh2.ogg";
-const LAUGH3 = "laugh3.ogg";
-const PRODUCTION_COMPLETE = "pordcomp.ogg";
-const RES_ABSORBED = "resabsrd.ogg";
-const STRUCTURE_ABSORBED = "strutabs.ogg";
-const STRUCTURE_NEUTRALIZE = "strutnut.ogg";
-const SYNAPTICS_ACTIVATED = "synplnk.ogg";
-const UNIT_ABSORBED = "untabsrd.ogg";
-const UNIT_NEUTRALIZE = "untnut.ogg";
+const CAM_DEFENSE_ABSORBED_SND = "defabsrd.ogg";
+const CAM_DEFENSE_NEUTRALIZE_SND = "defnut.ogg";
+const CAM_LAUGH1_SND = "laugh1.ogg";
+const CAM_LAUGH2_SND = "laugh2.ogg";
+const CAM_LAUGH3_SND = "laugh3.ogg";
+const CAM_PRODUCTION_COMPLETE_SND = "pordcomp.ogg";
+const CAM_RES_ABSORBED_SND = "resabsrd.ogg";
+const CAM_STRUCTURE_ABSORBED_SND = "strutabs.ogg";
+const CAM_STRUCTURE_NEUTRALIZE_SND = "strutnut.ogg";
+const CAM_SYNAPTICS_ACTIVATED_SND = "synplnk.ogg";
+const CAM_UNIT_ABSORBED_SND = "untabsrd.ogg";
+const CAM_UNIT_NEUTRALIZE_SND = "untnut.ogg";
 var __camLastNexusAttack;
 var __camNexusActivated;
 
@@ -179,9 +195,9 @@ const __CAM_FALLBACK_TIME_ON_REGROUP = 5000;
 var __camGroupAvgCoord = {x: 0, y: 0};
 
 //time
-const MILLISECONDS_IN_SECOND = 1000;
-const SECONDS_IN_MINUTE = 60;
-const MINUTES_IN_HOUR = 60;
+const CAM_MILLISECONDS_IN_SECOND = 1000;
+const CAM_SECONDS_IN_MINUTE = 60;
+const CAM_MINUTES_IN_HOUR = 60;
 
 //transport
 var __camNumTransporterExits;
@@ -224,22 +240,22 @@ var __camVtolDataSystem;
 // yet at the time scripts are loaded. (Yes, function name needs to be quoted.)
 hackDoNotSave("__camOriginalEvents");
 
-include(INCLUDE_PATH + "misc.js");
-include(INCLUDE_PATH + "debug.js");
-include(INCLUDE_PATH + "hook.js");
-include(INCLUDE_PATH + "events.js");
+include(__CAM_INCLUDE_PATH + "misc.js");
+include(__CAM_INCLUDE_PATH + "debug.js");
+include(__CAM_INCLUDE_PATH + "hook.js");
+include(__CAM_INCLUDE_PATH + "events.js");
 
-include(INCLUDE_PATH + "time.js");
-include(INCLUDE_PATH + "research.js");
-include(INCLUDE_PATH + "artifact.js");
-include(INCLUDE_PATH + "base.js");
-include(INCLUDE_PATH + "reinforcements.js");
-include(INCLUDE_PATH + "tactics.js");
-include(INCLUDE_PATH + "production.js");
-include(INCLUDE_PATH + "truck.js");
-include(INCLUDE_PATH + "victory.js");
-include(INCLUDE_PATH + "transport.js");
-include(INCLUDE_PATH + "vtol.js");
-include(INCLUDE_PATH + "nexus.js");
-include(INCLUDE_PATH + "group.js");
-include(INCLUDE_PATH + "video.js");
+include(__CAM_INCLUDE_PATH + "time.js");
+include(__CAM_INCLUDE_PATH + "research.js");
+include(__CAM_INCLUDE_PATH + "artifact.js");
+include(__CAM_INCLUDE_PATH + "base.js");
+include(__CAM_INCLUDE_PATH + "reinforcements.js");
+include(__CAM_INCLUDE_PATH + "tactics.js");
+include(__CAM_INCLUDE_PATH + "production.js");
+include(__CAM_INCLUDE_PATH + "truck.js");
+include(__CAM_INCLUDE_PATH + "victory.js");
+include(__CAM_INCLUDE_PATH + "transport.js");
+include(__CAM_INCLUDE_PATH + "vtol.js");
+include(__CAM_INCLUDE_PATH + "nexus.js");
+include(__CAM_INCLUDE_PATH + "group.js");
+include(__CAM_INCLUDE_PATH + "video.js");

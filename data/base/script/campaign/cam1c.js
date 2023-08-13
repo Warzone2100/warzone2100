@@ -2,7 +2,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const NEW_PARADIGM_RES = [
+const mis_newParadigmRes = [
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
 	"R-Sys-Engineering01", "R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Wpn-Cannon-Damage02",
 	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
@@ -11,7 +11,7 @@ const NEW_PARADIGM_RES = [
 	"R-Vehicle-Metals01", "R-Wpn-Mortar-Damage02", "R-Wpn-Rocket-Accuracy01",
 	"R-Wpn-RocketSlow-Damage01", "R-Wpn-Mortar-ROF01",
 ];
-const SCAVENGER_RES = [
+const mis_scavengerRes = [
 	"R-Wpn-Flamer-Damage02", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
 	"R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Wpn-Rocket-Damage01",
 	"R-Wpn-Cannon-Damage02", "R-Wpn-Mortar-Damage02", "R-Wpn-Mortar-ROF01",
@@ -120,15 +120,14 @@ function camEnemyBaseEliminated_NPCentralFactory()
 
 function getDroidsForNPLZ(args)
 {
-	let scouts = [ cTempl.nppod, cTempl.nphmg ];
-	let heavies = [ cTempl.npslc, cTempl.npsmct ];
-	let useArtillery = (camRand(100) < 50);
-
+	const scouts = [ cTempl.nppod, cTempl.nphmg ];
+	const heavies = [ cTempl.npslc, cTempl.npsmct ];
+	const USE_ARTILLERY = (camRand(100) < 50);
+	const list = [];
 	let numScouts = camRand(5) + 1;
 	let heavy = heavies[camRand(heavies.length)];
-	let list = [];
 
-	if (useArtillery)
+	if (USE_ARTILLERY)
 	{
 		list[list.length] = cTempl.npsens; //sensor will count towards scout total
 		numScouts -= 1;
@@ -180,15 +179,15 @@ camAreaEvent("NPLZ2Trigger", function()
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1CA");
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// make sure player doesn't build on enemy LZs of the next level
 	for (let i = 1; i <= 5; ++i)
 	{
-		let ph = getObject("PhantomLZ" + i);
+		const ph = getObject("PhantomLZ" + i);
 		// HACK: set LZs of bad players, namely 2...6,
 		// note: player 1 is NP, player 7 is scavs
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
@@ -207,14 +206,14 @@ function eventStartLevel()
 		setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 	}
 
-	setAlliance(NEW_PARADIGM, SCAV_7, true);
-	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
-	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
+	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
+	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 
-	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
 
 	camSetEnemyBases({
 		"ScavSouthDerrickGroup": {
@@ -246,7 +245,7 @@ function eventStartLevel()
 			detectMsg: "C1C_BASE5",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv391.ogg",
-			player: SCAV_7 // hence discriminate by player filter
+			player: CAM_SCAV_7 // hence discriminate by player filter
 		},
 		"NPEastBaseGroup": {
 			cleanup: "NPEastBase",
@@ -271,19 +270,19 @@ function eventStartLevel()
 			detectMsg: "C1C_BASE10",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv394.ogg",
-			player: NEW_PARADIGM // hence discriminate by player filter
+			player: CAM_NEW_PARADIGM // hence discriminate by player filter
 		},
 		"NPLZ1Group": {
 			cleanup: "NPLZ1", // kill the four towers to disable LZ
 			detectMsg: "C1C_LZ1",
 			eliminateSnd: "pcv394.ogg",
-			player: NEW_PARADIGM // required for LZ-type bases
+			player: CAM_NEW_PARADIGM // required for LZ-type bases
 		},
 		"NPLZ2Group": {
 			cleanup: "NPLZ2", // kill the four towers to disable LZ
 			detectMsg: "C1C_LZ2",
 			eliminateSnd: "pcv394.ogg",
-			player: NEW_PARADIGM // required for LZ-type bases
+			player: CAM_NEW_PARADIGM // required for LZ-type bases
 		},
 	});
 
@@ -345,7 +344,7 @@ function eventStartLevel()
 		},
 	});
 
-	camManageTrucks(NEW_PARADIGM);
+	camManageTrucks(CAM_NEW_PARADIGM);
 	replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-kevlar.png");
 
 	camEnableFactory("ScavSouthFactory");

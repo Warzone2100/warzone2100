@@ -1,7 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const NEXUS_RES = [
+const mis_nexusRes = [
 	"R-Sys-Engineering03", "R-Defense-WallUpgrade09", "R-Struc-Materials09",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
@@ -30,7 +30,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 		}
 	}
 
-	resetLabel("vtolRemoveZone", NEXUS);
+	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
 function sendEdgeMapDroids()
@@ -40,7 +40,7 @@ function sendEdgeMapDroids()
 	{
 		unitCount = 14 + camRand(3); // 14 - 16.
 	}
-	const EDGE = ["SWPhantomFactory", "NWPhantomFactory"];
+	const edge = ["SWPhantomFactory", "NWPhantomFactory"];
 	let list = [
 		cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,
 		cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh,
@@ -64,7 +64,7 @@ function sendEdgeMapDroids()
 
 	droids = droids.concat(cTempl.nxmsens);
 
-	camSendReinforcement(NEXUS, camMakePos(EDGE[camRand(EDGE.length)]), droids,
+	camSendReinforcement(CAM_NEXUS, camMakePos(edge[camRand(edge.length)]), droids,
 		CAM_REINFORCE_GROUND, {
 			data: {regroup: false, count: -1}
 		}
@@ -76,35 +76,35 @@ function sendEdgeMapDroids()
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
 function vtolAttack()
 {
-	let list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv, cTempl.nxmheapv];
-	let ext = {
+	const list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv, cTempl.nxmheapv];
+	const ext = {
 		limit: [2, 4, 2, 4],
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
+	camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
 }
 
 // Order any absorbed trucks to start building defenses near themselves.
 function truckDefense()
 {
-	let droids = enumDroid(NEXUS, DROID_CONSTRUCT);
-	let defenses = [
+	const droids = enumDroid(CAM_NEXUS, DROID_CONSTRUCT);
+	const defenses = [
 		"Sys-NEXUSLinkTOW", "P0-AASite-SAM2", "Emplacement-PrisLas",
 		"NX-Tower-ATMiss", "Sys-NX-CBTower",
 	];
 
 	for (let i = 0, len = droids.length; i < len; ++i)
 	{
-		let truck = droids[i];
+		const truck = droids[i];
 		if (truck.order !== DORDER_BUILD)
 		{
-			let defense = defenses[camRand(defenses.length)];
-			let loc = pickStructLocation(truck, defense, truck.x, truck.y);
-			enableStructure(defense, NEXUS);
+			const _DEFENSE = defenses[camRand(defenses.length)];
+			const loc = pickStructLocation(truck, _DEFENSE, truck.x, truck.y);
+			enableStructure(_DEFENSE, CAM_NEXUS);
 			if (camDef(loc))
 			{
-				orderDroidBuild(truck, DORDER_BUILD, defense, truck.x, truck.y);
+				orderDroidBuild(truck, DORDER_BUILD, _DEFENSE, truck.x, truck.y);
 			}
 		}
 	}
@@ -120,11 +120,11 @@ function hackManufacture(structure, template)
 
 function nexusManufacture()
 {
-	if (countDroid(DROID_ANY, NEXUS) > 100)
+	if (countDroid(DROID_ANY, CAM_NEXUS) > 100)
 	{
 		return;
 	}
-	let factoryType = [
+	const factoryType = [
 		{structure: FACTORY, temps: [cTempl.nxmrailh, cTempl.nxmlinkh, cTempl.nxmscouh, cTempl.nxlflash,]},
 		{structure: CYBORG_FACTORY, temps: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,]},
 		{structure: VTOL_FACTORY, temps: [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxmheapv,]},
@@ -132,12 +132,12 @@ function nexusManufacture()
 
 	for (let i = 0; i < factoryType.length; ++i)
 	{
-		let factories = enumStruct(NEXUS, factoryType[i].structure);
-		let templs = factoryType[i].temps;
+		const factories = enumStruct(CAM_NEXUS, factoryType[i].structure);
+		const templs = factoryType[i].temps;
 
 		for (let j = 0, len = factories.length; j < len; ++j)
 		{
-			let fac = factories[j];
+			const fac = factories[j];
 			if (fac.status !== BUILT || !structureIdle(fac))
 			{
 				return;
@@ -151,8 +151,8 @@ function nexusManufacture()
 
 function manualGrouping()
 {
-	let vtols = enumDroid(NEXUS).filter((obj) => (obj.group === null && isVTOL(obj)));
-	let nonVtols = enumDroid(NEXUS).filter((obj) => (obj.group === null && !isVTOL(obj)));
+	const vtols = enumDroid(CAM_NEXUS).filter((obj) => (obj.group === null && isVTOL(obj)));
+	const nonVtols = enumDroid(CAM_NEXUS).filter((obj) => (obj.group === null && !isVTOL(obj)));
 	if (vtols.length)
 	{
 		camManageGroup(camMakeGroup(vtols), CAM_ORDER_ATTACK, { regroup: false, count: -1 });
@@ -165,7 +165,7 @@ function manualGrouping()
 
 function eventObjectTransfer(obj, from)
 {
-	if (obj.player === NEXUS && from === CAM_HUMAN_PLAYER)
+	if (obj.player === CAM_NEXUS && from === CAM_HUMAN_PLAYER)
 	{
 		if (obj.type === STRUCTURE)
 		{
@@ -217,20 +217,20 @@ function hackPlayer()
 		return;
 	}
 
-	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS);
+	camHackIntoPlayer(CAM_HUMAN_PLAYER, CAM_NEXUS);
 }
 
 function synapticsSound()
 {
-	playSound(SYNAPTICS_ACTIVATED);
-	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS);
+	playSound(CAM_SYNAPTICS_ACTIVATED_SND);
+	camHackIntoPlayer(CAM_HUMAN_PLAYER, CAM_NEXUS);
 }
 
 //winFlag is set in eventResearched.
 function resistanceResearched()
 {
-	let mapEdgeCount = (difficulty >= MEDIUM) ? 15 : 8;
-	if (winFlag && edgeMapCounter >= mapEdgeCount)
+	const MAP_EDGE_COUNT = (difficulty >= MEDIUM) ? 15 : 8;
+	if (winFlag && edgeMapCounter >= MAP_EDGE_COUNT)
 	{
 		return true;
 	}
@@ -240,8 +240,8 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Research resistance circuits and survive the assault from Nexus"));
 
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone");
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3C", {
 		callback: "resistanceResearched"
@@ -250,14 +250,14 @@ function eventStartLevel()
 	camSetNexusState(true);
 	camPlayVideos([{video: "MB3_AB_MSG", type: CAMP_MSG}, {video: "MB3_AB_MSG2", type: CAMP_MSG}, {video: "MB3_AB_MSG3", type: MISS_MSG}]);
 
-	centreView(startpos.x, startpos.y);
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
-	let enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+	const enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_NEXUS);
 
-	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
+	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 
 	enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);
 	winFlag = false;

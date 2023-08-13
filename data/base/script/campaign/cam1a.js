@@ -1,11 +1,11 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const PLAYER_RES = [
+const mis_playerRes = [
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
 ];
 
-const SCAVENGER_RES = [
+const mis_scavengerRes = [
 	"R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01", "R-Wpn-Flamer-Range01-ScavReduce",
 ];
 
@@ -29,8 +29,8 @@ camAreaEvent("launchScavAttack", function(droid)
 
 function runAway()
 {
-	let oilPatch = getObject("oilPatch");
-	let droids = enumRange(oilPatch.x, oilPatch.y, 7, SCAV_7, false);
+	const oilPatch = getObject("oilPatch");
+	const droids = enumRange(oilPatch.x, oilPatch.y, 7, CAM_SCAV_7, false);
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		pos: camMakePos("scavAttack1"),
 		fallback: camMakePos("retreat1"),
@@ -88,10 +88,10 @@ function eventStructureBuilt(structure, droid)
 	if (structure.player === CAM_HUMAN_PLAYER && structure.stattype === RESOURCE_EXTRACTOR)
 	{
 		// Is it in the base two area?
-		let objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
+		const objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
 		for (let i = 0, l = objs.length; i < l; ++i)
 		{
-			let obj = objs[i];
+			const obj = objs[i];
 			if (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
 			{
 				camCallOnce("raidAttack");
@@ -118,26 +118,26 @@ function camEnemyBaseEliminated_scavGroup2()
 
 function enableBaseStructures()
 {
-	const STRUCTS = [
+	const structs = [
 		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
 		"A0ResearchFacility", "A0LightFactory",
 	];
 
-	for (let i = 0; i < STRUCTS.length; ++i)
+	for (let i = 0; i < structs.length; ++i)
 	{
-		enableStructure(STRUCTS[i], CAM_HUMAN_PLAYER);
+		enableStructure(structs[i], CAM_HUMAN_PLAYER);
 	}
 }
 
 function eventStartLevel()
 {
 	const PLAYER_POWER = 1300;
-	let startpos = getObject("startPosition");
-	let lz = getObject("landingZone");
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1B");
 
-	centreView(startpos.x, startpos.y);
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	if (difficulty === HARD)
@@ -153,16 +153,16 @@ function eventStartLevel()
 		setPower(PLAYER_POWER, CAM_HUMAN_PLAYER);
 	}
 
-	setAlliance(SCAV_6, SCAV_7, true);
+	setAlliance(CAM_SCAV_6, CAM_SCAV_7, true);
 
 	enableBaseStructures();
-	camCompleteRequiredResearch(PLAYER_RES, CAM_HUMAN_PLAYER);
-	camCompleteRequiredResearch(SCAVENGER_RES, 6);
-	camCompleteRequiredResearch(SCAVENGER_RES, 7);
+	camCompleteRequiredResearch(mis_playerRes, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(mis_scavengerRes, 6);
+	camCompleteRequiredResearch(mis_scavengerRes, 7);
 	if (difficulty === INSANE)
 	{
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_6);
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_7);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
 	}
 
 	// Give player briefing.

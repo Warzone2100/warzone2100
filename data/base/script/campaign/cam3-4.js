@@ -1,7 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const NEXUS_RES = [
+const mis_nexusRes = [
 	"R-Sys-Engineering03", "R-Defense-WallUpgrade11", "R-Struc-Materials11",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
@@ -18,7 +18,7 @@ const NEXUS_RES = [
 
 function eventDestroyed(obj)
 {
-	if (obj.player === NEXUS && obj.type === STRUCTURE && obj.stattype === HQ)
+	if (obj.player === CAM_NEXUS && obj.type === STRUCTURE && obj.stattype === HQ)
 	{
 		camSetNexusState(false);
 		removeTimer("nexusHackFeature");
@@ -60,27 +60,27 @@ function nexusHackFeature()
 		return;
 	}
 
-	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS);
+	camHackIntoPlayer(CAM_HUMAN_PLAYER, CAM_NEXUS);
 }
 
 // A little suprise absorbption attack when discovering the SW base.
 function takeoverChanceAttack()
 {
-	let chance = (difficulty === INSANE) ? 10 : 5;
-	let objects = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+	const CHANCE = (difficulty === INSANE) ? 10 : 5;
+	const objects = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
 		(obj.type !== DROID) || (obj.type === DROID && obj.droidType !== DROID_SUPERTRANSPORTER)
 	));
 
 	for (let i = 0, len = objects.length; i < len; ++i)
 	{
-		let obj = objects[i];
-		if (camRand(100) < chance)
+		const obj = objects[i];
+		if (camRand(100) < CHANCE)
 		{
 			if (obj.type === STRUCTURE && obj.stattype === WALL)
 			{
 				camSafeRemoveObject(obj, true); // Just remove walls and tank traps.
 			}
-			else if (!donateObject(obj, NEXUS))
+			else if (!donateObject(obj, CAM_NEXUS))
 			{
 				camSafeRemoveObject(obj, true); // If can't transfer then get rid of it too.
 			}
@@ -92,7 +92,7 @@ function takeoverChanceAttack()
 function destroyPlayerVtols()
 {
 	let vtolBlowupAmount = 0;
-	let vtols = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+	const vtols = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
 		(obj.type === DROID) && (obj.droidType !== DROID_SUPERTRANSPORTER) && isVTOL(obj)
 	));
 
@@ -106,7 +106,7 @@ function destroyPlayerVtols()
 
 	for (let i = 0, len = Math.floor(vtolBlowupAmount * vtols.length); i < len; ++i)
 	{
-		let vtol = vtols[i];
+		const vtol = vtols[i];
 		camSafeRemoveObject(vtol, true);
 	}
 }
@@ -114,7 +114,7 @@ function destroyPlayerVtols()
 function activateNexus()
 {
 	camSetExtraObjectiveMessage(_("Destroy the Nexus HQ to disable the Nexus Intruder Program"));
-	playSound(SYNAPTICS_ACTIVATED);
+	playSound(CAM_SYNAPTICS_ACTIVATED_SND);
 	camSetNexusState(true);
 	setTimer("nexusHackFeature", camSecondsToMilliseconds((difficulty <= MEDIUM) ? 20 : 10));
 }
@@ -185,15 +185,15 @@ function setupNexusPatrols()
 
 function enableAllFactories()
 {
-	const FACTORY_LIST = [
+	const factoryList = [
 		"NX-NWFactory1", "NX-NWFactory2", "NX-NEFactory", "NX-SWFactory",
 		"NX-SEFactory", "NX-VtolFactory1", "NX-NWCyborgFactory",
 		"NX-VtolFactory2", "NX-SWCyborgFactory1", "NX-SWCyborgFactory2",
 	];
 
-	for (let i = 0, l = FACTORY_LIST.length; i < l; ++i)
+	for (let i = 0, l = factoryList.length; i < l; ++i)
 	{
-		camEnableFactory(FACTORY_LIST[i]);
+		camEnableFactory(factoryList[i]);
 	}
 
 	//Set the already placed VTOL fighters into action
@@ -204,18 +204,18 @@ function enableAllFactories()
 
 function truckDefense()
 {
-	let truckNum = countDroid(NEXUS, DROID_CONSTRUCT);
-	if (truckNum > 0)
+	const TRUCK_NUM = countDroid(CAM_NEXUS, DROID_CONSTRUCT);
+	if (TRUCK_NUM > 0)
 	{
-		let list = [
+		const list = [
 			"Sys-NEXUSLinkTOW", "P0-AASite-SAM2", "Emplacement-PrisLas",
 			"NX-Tower-ATMiss", "Sys-NX-CBTower", "Emplacement-HvART-pit",
 			"Sys-SensoTower02"
 		];
 
-		for (let i = 0; i < truckNum; ++i)
+		for (let i = 0; i < TRUCK_NUM; ++i)
 		{
-			camQueueBuilding(NEXUS, list[camRand(list.length)]);
+			camQueueBuilding(CAM_NEXUS, list[camRand(list.length)]);
 		}
 	}
 	else
@@ -226,9 +226,9 @@ function truckDefense()
 
 function eventStartLevel()
 {
-	let startpos = getObject("startPosition");
-	let tpos = getObject("transportEntryExit");
-	let lz = getObject("landingZone");
+	const startPos = getObject("startPosition");
+	const tpos = getObject("transportEntryExit");
+	const lz = getObject("landingZone");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, CAM_GAMMA_OUT, {
 		area: "RTLZ",
@@ -236,18 +236,18 @@ function eventStartLevel()
 		annihilate: true
 	});
 
-	centreView(startpos.x, startpos.y);
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
 	setMissionTime(-1); //Infinite time
 
-	let enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
+	const enemyLz = getObject("NXlandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_NEXUS);
 
-	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
+	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 	setupNexusPatrols();
-	camManageTrucks(NEXUS);
+	camManageTrucks(CAM_NEXUS);
 
 	camSetArtifacts({
 		"NX-NWCyborgFactory": { tech: "R-Wpn-RailGun03" },

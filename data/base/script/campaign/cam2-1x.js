@@ -8,8 +8,8 @@ include("script/campaign/transitionTech.js");
 
 var victoryFlag;
 
-const TRANSPORT_TEAM = 1;
-const COLLECTIVE_RES = [
+const MIS_TRANSPORT_TEAM_PLAYER = 1;
+const mis_collectiveRes = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
 	"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
@@ -25,7 +25,7 @@ const COLLECTIVE_RES = [
 camAreaEvent("crashSite", function(droid)
 {
 	//Unlikely to happen.
-	if (!enumDroid(TRANSPORT_TEAM).length)
+	if (!enumDroid(MIS_TRANSPORT_TEAM_PLAYER).length)
 	{
 		gameOverMessage(false);
 		return;
@@ -36,7 +36,7 @@ camAreaEvent("crashSite", function(droid)
 
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	let droids = enumDroid(TRANSPORT_TEAM);
+	const droids = enumDroid(MIS_TRANSPORT_TEAM_PLAYER);
 	for (let i = 0; i < droids.length; ++i)
 	{
 		donateObject(droids[i], CAM_HUMAN_PLAYER);
@@ -51,7 +51,7 @@ camAreaEvent("crashSite", function(droid)
 function preDamageUnits()
 {
 	setHealth(getObject("transporter"), 40);
-	let droids = enumDroid(TRANSPORT_TEAM);
+	const droids = enumDroid(MIS_TRANSPORT_TEAM_PLAYER);
 	for (let j = 0; j < droids.length; ++j)
 	{
 		setHealth(droids[j], 40 + camRand(20));
@@ -80,13 +80,13 @@ function setupCyborgGroups()
 function setCrashedTeamExp()
 {
 	const DROID_EXP = 32;
-	let droids = enumDroid(TRANSPORT_TEAM).filter((dr) => (
+	const droids = enumDroid(MIS_TRANSPORT_TEAM_PLAYER).filter((dr) => (
 		!camIsSystemDroid(dr) && !camIsTransporter(dr)
 	));
 
 	for (let i = 0; i < droids.length; ++i)
 	{
-		let droid = droids[i];
+		const droid = droids[i];
 		setDroidExperience(droid, DROID_EXP);
 	}
 
@@ -118,32 +118,32 @@ function eventStartLevel()
 		callback: "checkCrashedTeam"
 	});
 
-	let subLandingZone = getObject("landingZone");
-	let startpos = getObject("startingPosition");
-	let tent = getObject("transporterEntry");
-	let text = getObject("transporterExit");
-	centreView(startpos.x, startpos.y);
+	const subLandingZone = getObject("landingZone");
+	const startPos = getObject("startingPosition");
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	let enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	const enemyLz = getObject("COLandingZone");
+	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_THE_COLLECTIVE);
 
 	//Add crash site blip and from an alliance with the crashed team.
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, false);
-	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
+	setAlliance(CAM_HUMAN_PLAYER, MIS_TRANSPORT_TEAM_PLAYER, true);
 
 	//set downed transport team colour to be Project Green.
-	changePlayerColour(TRANSPORT_TEAM, 0);
+	changePlayerColour(MIS_TRANSPORT_TEAM_PLAYER, 0);
 
-	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, TRANSPORT_TEAM);
-	camCompleteRequiredResearch(PLAYER_RES_BETA, TRANSPORT_TEAM);
+	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+	camCompleteRequiredResearch(mis_alphaResearchNew, MIS_TRANSPORT_TEAM_PLAYER);
+	camCompleteRequiredResearch(mis_playerResBeta, MIS_TRANSPORT_TEAM_PLAYER);
 
 	if (difficulty >= HARD)
 	{
-		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
 	}
 
 	camSetEnemyBases({
