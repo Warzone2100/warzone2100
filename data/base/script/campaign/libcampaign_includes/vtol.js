@@ -68,7 +68,6 @@ function camSetVtolSpawnState(state, identifier)
 			if (__camVtolDataSystem[idx].spawnStopObject === identifier)
 			{
 				__camVtolDataSystem[idx].active = state;
-				break;
 			}
 		}
 	}
