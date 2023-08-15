@@ -443,6 +443,7 @@ nlohmann::ordered_json componentToString(const COMPONENT_STATS *psStats, int pla
 			const WEAPON_STATS *psWeap = (const WEAPON_STATS *)psStats;
 			key["Max range"] = psWeap->upgrade[player].maxRange;
 			key["Min range"] = psWeap->upgrade[player].minRange;
+			key["EMP Radius"] = psWeap->upgrade[player].empRadius;
 			key["Radius"] = psWeap->upgrade[player].radius;
 			key["Number of Rounds"] = psWeap->upgrade[player].numRounds;
 			key["Damage"] = psWeap->upgrade[player].damage;

@@ -400,7 +400,7 @@ int objArmour(const BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
-int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage)
+int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int level = 1;
 	int armour = objArmour(psObj, weaponClass);
@@ -415,8 +415,8 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		psObj->lastHitWeapon = weaponSubClass;
 	}
 
-	// EMP cannons do no damage, if we are one return now
-	if (weaponSubClass == WSC_EMP)
+	// EMP weapon radius should not do actual damage
+	if (weaponSubClass == WSC_EMP && empRadiusHit)
 	{
 		return 0;
 	}
@@ -507,12 +507,6 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 	}
 
 	damage = calcDamage(weaponDamage(psStats, player), psStats->weaponEffect, psTarget);
-
-	// EMP cannons do no damage, if we are one return now
-	if (psStats->weaponSubClass == WSC_EMP)
-	{
-		return 0;
-	}
 
 	// apply game difficulty setting
 	damage = modifyForDifficultyLevel(damage, psTarget->player != selectedPlayer);

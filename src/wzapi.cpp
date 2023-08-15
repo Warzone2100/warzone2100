@@ -3602,6 +3602,10 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 		{
 			psStats->upgrade[player].minimumDamage = value;
 		}
+		else if (name == "EmpRadius")
+		{
+			psStats->upgrade[player].empRadius = value;
+		}
 		else if (name == "Radius")
 		{
 			psStats->upgrade[player].radius = value;
@@ -3923,6 +3927,10 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 		{
 			return psStats->upgrade[player].minimumDamage;
 		}
+		else if (name == "EmpRadius")
+		{
+			return psStats->upgrade[player].empRadius;
+		}
 		else if (name == "Radius")
 		{
 			return psStats->upgrade[player].radius;
@@ -4149,6 +4157,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 				{"RepeatRadius", COMP_WEAPON},
 				{"HitPoints", COMP_WEAPON},
 				{"HitPointPct", COMP_WEAPON},
+				{"EmpRadius", COMP_WEAPON},
 			});
 			wbase.addRules(psStats->name.toUtf8(), std::move(weap));
 		}
@@ -4326,6 +4335,7 @@ nlohmann::json wzapi::constructStatsObject()
 			weap["RepeatRadius"] = psStats->base.periodicalDamageRadius;
 			weap["RepeatTime"] = psStats->base.periodicalDamageTime;
 			weap["Radius"] = psStats->base.radius;
+			weap["EmpRadius"] = psStats->base.empRadius;
 			weap["ImpactType"] = psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
 			weap["RepeatType"] = psStats->periodicalDamageWeaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
 			weap["ImpactClass"] = getWeaponSubClass(psStats->weaponSubClass);
