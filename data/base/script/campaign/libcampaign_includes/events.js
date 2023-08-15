@@ -163,6 +163,11 @@ function cam_eventDroidBuilt(droid, structure)
 	{
 		return;
 	}
+	if (camGetNexusState() && droid.player === CAM_NEXUS && __camNextLevel === "CAM3C" && camRand(100) < 7)
+	{
+		// Occasionally hint that NEXUS is producing units on Gamma 5.
+		playSound(CAM_PRODUCTION_COMPLETE_SND);
+	}
 	if (!camDef(__camFactoryInfo))
 	{
 		return;
@@ -364,7 +369,7 @@ function cam_eventGameLoaded()
 //Plays Nexus sounds if nexusActivated is true.
 function cam_eventObjectTransfer(obj, from)
 {
-	if (from === CAM_HUMAN_PLAYER && obj.player === CAM_NEXUS && __camNexusActivated === true)
+	if (camGetNexusState() && from === CAM_HUMAN_PLAYER && obj.player === CAM_NEXUS)
 	{
 		let snd;
 		if (obj.type === STRUCTURE)

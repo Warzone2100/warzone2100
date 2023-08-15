@@ -75,7 +75,7 @@ function camAbsorbPlayer(who, to)
 //;;
 function camHackIntoPlayer(player, to)
 {
-	if (__camNexusActivated === false)
+	if (!camGetNexusState())
 	{
 		return;
 	}
