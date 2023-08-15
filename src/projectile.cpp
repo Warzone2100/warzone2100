@@ -88,6 +88,7 @@ struct DAMAGE
 	unsigned impactTime;
 	bool isDamagePerSecond;
 	int minDamage;
+	bool empRadiusHit;
 };
 
 // Watermelon:they are from droid.c
@@ -962,6 +963,86 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 
 /***************************************************************************/
 
+static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, DROID *destDroid, Vector3i &targetPos, bool empRadius)
+{
+	static GridList gridList;  // static to avoid allocations.
+	gridList = gridStartIterate(targetPos.x, targetPos.y, (empRadius) ? psStats->upgrade[psObj->player].empRadius : psStats->upgrade[psObj->player].radius);
+
+	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+	{
+		BASE_OBJECT *psCurr = *gi;
+		if (psCurr->died)
+		{
+			ASSERT(psCurr->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psCurr->type);
+			continue;  // Do not damage dead objects further.
+		}
+
+		if (psCurr == psObj->psDest)
+		{
+			continue;  // Don't hit main target twice.
+		}
+
+		if (psObj->psSource && psObj->psSource->player == psCurr->player && psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE))
+		{
+			continue; // this weapon does not do friendly damage
+		}
+
+		bool bTargetInAir = false;
+		bool useSphere = false;
+		bool damageable = true;
+		switch (psCurr->type)
+		{
+		case OBJ_DROID:
+			bTargetInAir = asPropulsionTypes[asPropulsionStats[((DROID *)psCurr)->asBits[COMP_PROPULSION]].propulsionType].travel == AIR && ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE;
+			useSphere = true;
+			break;
+		case OBJ_STRUCTURE:
+			break;
+		case OBJ_FEATURE:
+			damageable = ((FEATURE *)psCurr)->psStats->damageable;
+			break;
+		default: ASSERT(false, "Bad type."); continue;
+		}
+
+		if (!damageable)
+		{
+			continue;  // Ignore features that are not damageable.
+		}
+		unsigned targetInFlag = bTargetInAir ? SHOOT_IN_AIR : SHOOT_ON_GROUND;
+		if ((psStats->surfaceToAir & targetInFlag) == 0)
+		{
+			continue;  // Target in air, and can't shoot at air, or target on ground, and can't shoot at ground.
+		}
+		if (useSphere && !Vector3i_InSphere(psCurr->pos, targetPos, (empRadius) ? psStats->upgrade[psObj->player].empRadius : psStats->upgrade[psObj->player].radius))
+		{
+			continue;  // Target out of range.
+		}
+		// The psCurr will get damaged, at this point.
+		unsigned damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, psCurr);
+		debug(LOG_ATTACK, "Damage to object %d, player %d : %u", psCurr->id, psCurr->player, damage);
+		if (bMultiPlayer && psObj->psSource != nullptr && psCurr->type != OBJ_FEATURE)
+		{
+			updateMultiStatsDamage(psObj->psSource->player, psCurr->player, damage);
+		}
+
+		struct DAMAGE sDamage = {
+			psObj,
+			psCurr,
+			damage,
+			psStats->weaponClass,
+			psStats->weaponSubClass,
+			psObj->time,
+			false,
+			(int)psStats->upgrade[psObj->player].minimumDamage,
+			empRadius
+		};
+
+		objectDamage(&sDamage);
+	}
+}
+
+/***************************************************************************/
+
 static void proj_ImpactFunc(PROJECTILE *psObj)
 {
 	WEAPON_STATS    *psStats;
@@ -970,6 +1051,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	Vector3i        position, scatter;
 	iIMDShape       *imd;
 	BASE_OBJECT     *temp;
+	bool            hasRadius, hasEMPRadius;
 
 	ASSERT_OR_RETURN(, psObj != nullptr, "Invalid pointer");
 	CHECK_PROJECTILE(psObj);
@@ -1152,7 +1234,8 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 				psStats->weaponSubClass,
 				psObj->time,
 				false,
-				(int)psStats->upgrade[psObj->player].minimumDamage
+				(int)psStats->upgrade[psObj->player].minimumDamage,
+				false
 			};
 
 			// Damage the object
@@ -1178,7 +1261,9 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		return;
 	}
 
-	if (psStats->upgrade[psObj->player].radius != 0)
+	hasRadius = psStats->upgrade[psObj->player].radius != 0;
+	hasEMPRadius = psStats->upgrade[psObj->player].empRadius != 0;
+	if (hasRadius || hasEMPRadius)
 	{
 		/* An area effect bullet */
 		psObj->state = PROJ_POSTIMPACT;
@@ -1187,81 +1272,16 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		psObj->born = gameTime;
 
 		// If projectile impacts a droid start the splash damage from the center of it, else use whatever location the projectile impacts at as the splash center.
-		auto destDroid = castDroid(psObj->psDest);
+		DROID *destDroid = castDroid(psObj->psDest);
 		Vector3i targetPos = (destDroid != nullptr) ? destDroid->pos : psObj->pos;
 
-		static GridList gridList;  // static to avoid allocations.
-		gridList = gridStartIterate(targetPos.x, targetPos.y, psStats->upgrade[psObj->player].radius);
-
-		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+		if (hasEMPRadius && psStats->weaponSubClass == WSC_EMP)
 		{
-			BASE_OBJECT *psCurr = *gi;
-			if (psCurr->died)
-			{
-				ASSERT(psCurr->type < OBJ_NUM_TYPES, "Bad pointer! type=%u", psCurr->type);
-				continue;  // Do not damage dead objects further.
-			}
-
-			if (psCurr == psObj->psDest)
-			{
-				continue;  // Don't hit main target twice.
-			}
-
-			if (psObj->psSource && psObj->psSource->player == psCurr->player && psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE))
-			{
-				continue; // this weapon does not do friendly damage
-			}
-
-			bool bTargetInAir = false;
-			bool useSphere = false;
-			bool damageable = true;
-			switch (psCurr->type)
-			{
-			case OBJ_DROID:
-				bTargetInAir = asPropulsionTypes[asPropulsionStats[((DROID *)psCurr)->asBits[COMP_PROPULSION]].propulsionType].travel == AIR && ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE;
-				useSphere = true;
-				break;
-			case OBJ_STRUCTURE:
-				break;
-			case OBJ_FEATURE:
-				damageable = ((FEATURE *)psCurr)->psStats->damageable;
-				break;
-			default: ASSERT(false, "Bad type."); continue;
-			}
-
-			if (!damageable)
-			{
-				continue;  // Ignore features that are not damageable.
-			}
-			unsigned targetInFlag = bTargetInAir ? SHOOT_IN_AIR : SHOOT_ON_GROUND;
-			if ((psStats->surfaceToAir & targetInFlag) == 0)
-			{
-				continue;  // Target in air, and can't shoot at air, or target on ground, and can't shoot at ground.
-			}
-			if (useSphere && !Vector3i_InSphere(psCurr->pos, targetPos, psStats->upgrade[psObj->player].radius))
-			{
-				continue;  // Target out of range.
-			}
-			// The psCurr will get damaged, at this point.
-			unsigned damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, psCurr);
-			debug(LOG_ATTACK, "Damage to object %d, player %d : %u", psCurr->id, psCurr->player, damage);
-			if (bMultiPlayer && psObj->psSource != nullptr && psCurr->type != OBJ_FEATURE)
-			{
-				updateMultiStatsDamage(psObj->psSource->player, psCurr->player, damage);
-			}
-
-			struct DAMAGE sDamage = {
-				psObj,
-				psCurr,
-				damage,
-				psStats->weaponClass,
-				psStats->weaponSubClass,
-				psObj->time,
-				false,
-				(int)psStats->upgrade[psObj->player].minimumDamage
-			};
-
-			objectDamage(&sDamage);
+			proj_radiusSweep(psObj, psStats, destDroid, targetPos, true);
+		}
+		if (hasRadius)
+		{
+			proj_radiusSweep(psObj, psStats, destDroid, targetPos, false);
 		}
 	}
 
@@ -1436,7 +1456,8 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 			psStats->periodicalDamageWeaponSubClass,
 			gameTime - deltaGameTime / 2 + 1,
 			true,
-			(int)psStats->upgrade[psProj->player].minimumDamage
+			(int)psStats->upgrade[psProj->player].minimumDamage,
+			false
 		};
 
 		objectDamage(&sDamage);
@@ -1581,15 +1602,15 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
+		return droidDamage((DROID *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_STRUCTURE:
-		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
+		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_FEATURE:
-		return featureDamage((FEATURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
+		return featureDamage((FEATURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_PROJECTILE:

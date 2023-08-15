@@ -405,6 +405,7 @@ struct WEAPON_STATS : public COMPONENT_STATS
 		uint8_t numRounds = 0;               ///< The number of rounds per salvo
 		unsigned reloadTime = 0;             ///< Time to reload the round of ammo
 		unsigned damage = 0;
+		unsigned empRadius = 0;              ///< EMP blast radius -- does no damage
 		unsigned radius = 0;                 ///< Basic blast radius of weapon
 		unsigned radiusDamage = 0;           ///< "Splash damage"
 		unsigned periodicalDamage = 0;       ///< Repeat damage each second after hit
