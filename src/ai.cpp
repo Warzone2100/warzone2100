@@ -819,12 +819,17 @@ void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage, bool isDire
 // see if an object is a wall
 static bool aiObjIsWall(BASE_OBJECT *psObj)
 {
+	if (psObj == nullptr)
+	{
+		return false;
+	}
 	if (psObj->type != OBJ_STRUCTURE)
 	{
 		return false;
 	}
 
-	if (((STRUCTURE *)psObj)->pStructureType->type != REF_WALL &&
+	if (((STRUCTURE *)psObj)->pStructureType &&
+	    ((STRUCTURE *)psObj)->pStructureType->type != REF_WALL &&
 	    ((STRUCTURE *)psObj)->pStructureType->type != REF_WALLCORNER)
 	{
 		return false;
@@ -1025,6 +1030,10 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 		{
 			BASE_OBJECT *psCurr = *gi;
+			if (psCurr == nullptr)
+			{
+				continue;
+			}
 			// Don't target features or doomed/dead objects
 			if (psCurr->type != OBJ_FEATURE && !psCurr->died && !aiObjectIsProbablyDoomed(psCurr, false))
 			{
