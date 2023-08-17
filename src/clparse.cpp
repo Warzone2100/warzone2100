@@ -45,6 +45,7 @@
 #include "wrappers.h"
 #include "multilobbycommands.h"
 #include "gamehistorylogger.h"
+#include "stdinreader.h"
 
 #include <cwchar>
 
@@ -89,7 +90,6 @@ static bool wz_autoratingEnable = false;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
-static WZ_Command_Interface wz_cmd_interface = WZ_Command_Interface::None;
 static int wz_min_autostart_players = -1;
 
 #if defined(WZ_OS_WIN)
@@ -435,7 +435,7 @@ static const struct poptOption *getOptionsTable()
 		{ "enablelobbyslashcmd", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS, N_("Enable lobby slash commands (for connecting clients)"), nullptr},
 		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
 		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
-		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin)")},
+		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin, unixsocket:path)")},
 		{ "startplayers", POPT_ARG_STRING, CLI_STARTPLAYERS, N_("Minimum required players to auto-start game"), N_("startplayers")},
 		{ "gamelog-output", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTMODES, N_("Game history log output mode(s)"), "(log,cmdinterface)"},
 		{ "gamelog-outputkey", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTKEY, N_("Game history log output key"), "[playerindex, playerposition]"},
@@ -1101,20 +1101,42 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_COMMAND_INTERFACE:
-			token = poptGetOptArg(poptCon);
-			if (token == nullptr || strlen(token) == 0)
 			{
-				// use default, which is currently "stdin"
-				token = "stdin";
-			}
-			if (strcmp(token, "stdin") == 0)
-			{
-				// enable stdin
-				wz_cmd_interface = WZ_Command_Interface::StdIn_Interface;
-			}
-			else
-			{
-				qFatal("Unsupported / invalid enablecmdinterface value");
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr || strlen(token) == 0)
+				{
+					// use default, which is currently "stdin"
+					token = "stdin";
+				}
+				WZ_Command_Interface mode = WZ_Command_Interface::None;
+				std::string value;
+				if (strcmp(token, "stdin") == 0)
+				{
+					mode = WZ_Command_Interface::StdIn_Interface;
+				}
+				else if (strncmp(token, "unixsocket", strlen("unixsocket")) == 0)
+				{
+					mode = WZ_Command_Interface::Unix_Socket;
+					// expected form is "unixsocket:path" - parse for the path
+					if (strlen(token) > strlen("unixsocket"))
+					{
+						size_t delimeterIdx = strlen("unixsocket");
+						if (token[delimeterIdx] == ':' && token[delimeterIdx+1] != '\0')
+						{
+							// grab the rest of the string as the path value
+							value = &token[delimeterIdx+1];
+						}
+						else
+						{
+							qFatal("Invalid enablecmdinterface unixsocket value (expecting unixsocket:path)");
+						}
+					}
+				}
+				else
+				{
+					qFatal("Unsupported / invalid enablecmdinterface value");
+				}
+				configSetCmdInterface(mode, value);
 			}
 			break;
 		case CLI_STARTPLAYERS:
@@ -1285,11 +1307,6 @@ bool streamer_spectator_mode()
 bool lobby_slashcommands_enabled()
 {
 	return wz_lobby_slashcommands;
-}
-
-WZ_Command_Interface wz_command_interface()
-{
-	return wz_cmd_interface;
 }
 
 int min_autostart_player_count()
