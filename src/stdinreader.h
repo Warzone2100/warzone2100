@@ -19,10 +19,21 @@
 
 #pragma once
 
-void stdInThreadInit();
-void stdInThreadShutdown();
-
+#include <string>
 #include "lib/framework/wzglobal.h"
+
+enum class WZ_Command_Interface
+{
+	None,
+	StdIn_Interface,
+	Unix_Socket,
+};
+
+// used from clparse:
+void configSetCmdInterface(WZ_Command_Interface mode, std::string value);
+
+void cmdInterfaceThreadInit();
+void cmdInterfaceThreadShutdown();
 
 bool wz_command_interface_enabled();
 

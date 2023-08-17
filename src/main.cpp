@@ -1685,19 +1685,15 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 
 static void wzCmdInterfaceInit()
 {
-	switch (wz_command_interface())
+	if (wz_command_interface_enabled())
 	{
-		case WZ_Command_Interface::None:
-			return;
-		case WZ_Command_Interface::StdIn_Interface:
-			stdInThreadInit();
-			break;
+		cmdInterfaceThreadInit();
 	}
 }
 
 static void wzCmdInterfaceShutdown()
 {
-	stdInThreadShutdown();
+	cmdInterfaceThreadShutdown();
 }
 
 static void cleanupOldLogFiles()
