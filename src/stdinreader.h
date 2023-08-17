@@ -43,3 +43,5 @@ void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(__MINGW_PR
 #else
 void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(printf, 1, 2);
 #endif
+
+void wz_command_interface_output_str(const char *str);

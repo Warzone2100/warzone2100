@@ -1097,6 +1097,33 @@ bool wz_command_interface_enabled()
 	return wz_command_interface() != WZ_Command_Interface::None;
 }
 
+void wz_command_interface_output_str(const char *str)
+{
+	if (wz_command_interface() == WZ_Command_Interface::None)
+	{
+		return;
+	}
+
+	size_t bufferLen = strlen(str);
+	if (bufferLen == 0)
+	{
+		return;
+	}
+
+	if (wz_command_interface() == WZ_Command_Interface::StdIn_Interface)
+	{
+		fwrite(str, sizeof(char), bufferLen, stderr);
+		fflush(stderr);
+	}
+	else
+	{
+		latestWriteBuffer.insert(latestWriteBuffer.end(), str, str + bufferLen);
+		cmdInterfaceOutputQueue->enqueue(std::move(latestWriteBuffer));
+		latestWriteBuffer = std::vector<char>();
+		latestWriteBuffer.reserve(maxReserveMessageBufferSize);
+	}
+}
+
 void wz_command_interface_output(const char *str, ...)
 {
 	if (wz_command_interface() == WZ_Command_Interface::None)
@@ -1105,27 +1132,40 @@ void wz_command_interface_output(const char *str, ...)
 	}
 	va_list ap;
 	static char outputBuffer[maxReserveMessageBufferSize];
+	int ret = -1;
 	va_start(ap, str);
-	vssprintf(outputBuffer, str, ap);
+	ret = vssprintf(outputBuffer, str, ap);
 	va_end(ap);
-
-	size_t outputBufferLen = strlen(outputBuffer);
-	if (outputBufferLen == 0)
+	if (ret >= 0 && ret < maxReserveMessageBufferSize)
 	{
-		return;
-	}
-
-	if (wz_command_interface() == WZ_Command_Interface::StdIn_Interface)
-	{
-		fwrite(outputBuffer, sizeof(char), outputBufferLen, stderr);
-		fflush(stderr);
+		// string was completely written
+		wz_command_interface_output_str(outputBuffer);
 	}
 	else
 	{
-		latestWriteBuffer.insert(latestWriteBuffer.end(), outputBuffer, outputBuffer + outputBufferLen);
-		cmdInterfaceOutputQueue->enqueue(std::move(latestWriteBuffer));
-		latestWriteBuffer = std::vector<char>();
-		latestWriteBuffer.reserve(maxReserveMessageBufferSize);
+		// string was truncated - try again but use a heap-allocated string
+		if (ret < 0)
+		{
+			// some ancient implementations of vsnprintf return -1 instead of the needed buffer length...
+			errlog("WZCMD ERROR: Failed to output truncated string - check vsnprintf implementation");
+			return;
+		}
+		size_t neededBufferSize = static_cast<size_t>(ret);
+		char* tmpBuffer = (char *)malloc(neededBufferSize + 1);
+		va_start(ap, str);
+		ret = vsnprintf(tmpBuffer, neededBufferSize + 1, str, ap);
+		va_end(ap);
+		if (ret < 0 || ret >= neededBufferSize + 1)
+		{
+			errlog("WZCMD ERROR: Failed to output truncated string");
+			free(tmpBuffer);
+			return;
+		}
+		if (tmpBuffer)
+		{
+			wz_command_interface_output_str(tmpBuffer);
+			free(tmpBuffer);
+		}
 	}
 }
 
