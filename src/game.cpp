@@ -6300,6 +6300,11 @@ static bool loadSaveStructure2(const char *pFileName)
 			}
 			if (player == productionPlayer)
 			{
+				if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+				{
+					asProductionRun[psFactory->psAssemblyPoint->factoryType].resize(psFactory->psAssemblyPoint->factoryInc + 1);
+				}
+
 				for (int runNum = 0; runNum < ini.value("Factory/productionRuns", 0).toInt(); runNum++)
 				{
 					ProductionRunEntry currentProd;
@@ -6309,12 +6314,12 @@ static bool loadSaveStructure2(const char *pFileName)
 					{
 						int tid = ini.value("Factory/Run/" + WzString::number(runNum) + "/template").toInt();
 						DROID_TEMPLATE *psTempl = getTemplateFromMultiPlayerID(tid);
+						if (!psTempl)
+						{
+							ASSERT(psTempl, "No template found for template ID %d for %s (%d)", tid, objInfo(psStructure), id);
+							continue;
+						}
 						currentProd.psTemplate = psTempl;
-						ASSERT(psTempl, "No template found for template ID %d for %s (%d)", tid, objInfo(psStructure), id);
-					}
-					if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
-					{
-						asProductionRun[psFactory->psAssemblyPoint->factoryType].resize(psFactory->psAssemblyPoint->factoryInc + 1);
 					}
 					asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].push_back(currentProd);
 				}
