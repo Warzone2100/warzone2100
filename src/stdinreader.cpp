@@ -274,7 +274,9 @@ bool getInputLine(int fd, bool isSocketFd, optional<std::string> &nextLine)
 	}
 	else
 	{
-		bytesRead = recv(fd, stdInReadBuffer.data() + actualAvailableBytes, readChunkSize, 0);
+		do {
+			bytesRead = recv(fd, stdInReadBuffer.data() + actualAvailableBytes, readChunkSize, 0);
+		} while (bytesRead == -1 && errno == EINTR);
 		if (bytesRead == 0)
 		{
 			// stream socket peers will cause a return of "0" when there is an orderly shutdown
@@ -889,11 +891,13 @@ bool cmdInterfaceCreateUnixSocket(const std::string& local_path)
 	struct sockaddr_storage ss;
 	socklen_t slen = sizeof(ss);
 	int cmdPeerFd = -1;
+	do {
 #if defined(SOCK_CLOEXEC)
-	cmdPeerFd = accept4(cmdSockFd,  (struct sockaddr*)&ss, &slen, SOCK_CLOEXEC);
+		cmdPeerFd = accept4(cmdSockFd,  (struct sockaddr*)&ss, &slen, SOCK_CLOEXEC);
 #else
-	cmdPeerFd = accept(cmdSockFd,  (struct sockaddr*)&ss, &slen);
+		cmdPeerFd = accept(cmdSockFd,  (struct sockaddr*)&ss, &slen);
 #endif
+	} while (cmdPeerFd == -1 && errno == EINTR);
 	if (cmdPeerFd == -1)
 	{
 		int errno_cpy = errno;
