@@ -37,7 +37,7 @@
 #include <algorithm>
 
 static float perspectiveZClose = 330.f;
-static float perspectiveZFar = 20000.f;
+static float perspectiveZFar = 45000.f;
 
 /***************************************************************************/
 /*
