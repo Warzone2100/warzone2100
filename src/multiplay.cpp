@@ -111,7 +111,7 @@ static bool sendDataCheck2();
 void startMultiplayerGame();
 
 // ////////////////////////////////////////////////////////////////////////////
-// Auto Lag Kick Handling
+// Auto Kick Handling
 
 #define LAG_INITIAL_LOAD_GRACEPERIOD 60
 #define LAG_CHECK_INTERVAL 1000
@@ -180,12 +180,77 @@ static void autoLagKickRoutine()
 			ingame.LagCounter[i] = 0;
 		}
 		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds.", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendTextMessage(msg.c_str());
 		}
 		else if (ingame.LagCounter[i] % 15 == 0) { // every 15 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds.", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+		}
+	}
+}
+
+#define DESYNC_CHECK_INTERVAL 1000
+const std::chrono::milliseconds DesyncCheckInterval(DESYNC_CHECK_INTERVAL);
+
+static void autoDesyncKickRoutine()
+{
+	if (!NetPlay.isHost)
+	{
+		return;
+	}
+
+	int DesyncAutoKickSeconds = war_getAutoDesyncKickSeconds();
+	if (DesyncAutoKickSeconds <= 0)
+	{
+		return;
+	}
+
+	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(now - ingame.lastDesyncCheck) < DesyncCheckInterval)
+	{
+		return;
+	}
+
+	ingame.lastDesyncCheck = now;
+	uint32_t playerCheckLimit = (!ingame.TimeEveryoneIsInGame.has_value()) ? MAX_CONNECTED_PLAYERS : MAX_PLAYERS;
+	for (uint32_t i = 0; i < playerCheckLimit; ++i)
+	{
+		if (!isHumanPlayer(i))
+		{
+			continue;
+		}
+		if (i > MAX_PLAYERS && !gtimeShouldWaitForPlayer(i))
+		{
+			continue;
+		}
+		if (NETcheckPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, i))
+		{
+			ingame.DesyncCounter[i]++;
+		}
+		else
+		{
+			ingame.DesyncCounter[i] = 0;
+			continue;
+		}
+		debug(LOG_INFO, "Player %d Status %d Counter %d", i, NETcheckPlayerConnectionStatus(CONNECTIONSTATUS_DESYNC, i), ingame.DesyncCounter[i]);
+		if (ingame.DesyncCounter[i] >= DesyncAutoKickSeconds) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i), DesyncAutoKickSeconds);
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+			wz_command_interface_output("WZEVENT: desync-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
+			kickPlayer(i, "Your timeline diviated too far.", ERROR_CONNECTION, false);
+			ingame.DesyncCounter[i] = 0;
+		}
+		else if (ingame.DesyncCounter[i] >= (DesyncAutoKickSeconds - 3)) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendTextMessage(msg.c_str());
+		}
+		else if (ingame.DesyncCounter[i] % 2 == 0) { // every 2 seconds
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendTextMessage(msg.c_str());
 		}
@@ -385,6 +450,7 @@ bool multiPlayerLoop()
 	if (NetPlay.isHost)
 	{
 		autoLagKickRoutine();
+		autoDesyncKickRoutine();
 	}
 
 	// if player has won then process the win effects...

@@ -189,6 +189,7 @@ void clearPlayer(UDWORD player, bool quietly)
 	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true" : "false");
 
 	ingame.LagCounter[player] = 0;
+	ingame.DesyncCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
@@ -396,6 +397,7 @@ void handlePlayerLeftInGame(UDWORD player)
 	debug(LOG_NET, "R.I.P. %s (%u).", getPlayerName(player), player);
 
 	ingame.LagCounter[player] = 0;
+	ingame.DesyncCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
@@ -718,6 +720,7 @@ void setupNewPlayer(UDWORD player)
 
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.LagCounter[player] = 0;
+	ingame.DesyncCounter[player] = 0;
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;

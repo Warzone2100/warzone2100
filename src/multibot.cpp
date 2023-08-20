@@ -43,6 +43,8 @@
 #include "mapgrid.h"
 #include "multirecv.h"
 #include "transporter.h"
+#include "warzoneconfig.h"
+#include "multiint.h"
 
 #include <vector>
 #include <algorithm>
