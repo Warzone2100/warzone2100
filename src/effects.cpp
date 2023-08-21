@@ -301,7 +301,53 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	return addEffect(pos, group, type, specified, imd, lit, graphicsTime);
 }
 
-void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime)
+static bool updateDroidDeathAnimationEffect(const EFFECT *psEffect)
+{
+	iIMDShape *imd = psEffect->imd;
+	if (!imd)
+	{
+		return false;
+	}
+	// NOTE: We actually store the timeAnimationStarted (in gameTime) in psEffect->lastFrame
+	UDWORD timeAnimationStarted = psEffect->lastFrame;
+	int objanimcycles = (imd->objanimcycles > 0) ? imd->objanimcycles : 1; // do not allow infinite looping for death animations
+	if (gameTime > timeAnimationStarted + imd->objanimtime * objanimcycles)
+	{
+		// Done animating (animation is defined by body - other components should follow suit)
+		/* Kill off effect */
+		return false;
+	}
+	return true;
+}
+
+static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
+{
+	glm::mat4 modelMatrix = positionEffect(psEffect);
+	modelMatrix *=
+		glm::rotate(UNDEG(psEffect->rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(psEffect->rotation.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(psEffect->rotation.z), glm::vec3(0.f, 0.f, 1.f));
+
+	// If original (psDroid->droidType == DROID_PERSON)
+	if (psEffect->type == DROID_ANIMEVENT_DYING_NORMAL_ST)
+	{
+		modelMatrix *= glm::scale(glm::vec3(.75f)); // FIXME - hideous....!!!!
+	}
+
+	PIELIGHT brightness = pal_SetBrightness(255); // NOTE: brightness is not preserved from the original droid that died - FIXME: ?
+	SDWORD pieFlag = pie_SHADOW;
+	SDWORD iPieData = 0;
+
+	iIMDShape *strImd = psEffect->imd;
+	UDWORD timeAnimationStarted = psEffect->lastFrame;
+	while (strImd)
+	{
+		drawShape(strImd, timeAnimationStarted, psEffect->player, brightness, pieFlag, iPieData, modelMatrix, viewMatrix);
+		strImd = strImd->next;
+	}
+}
+
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/)
 {
 	if (gamePaused())
 	{
@@ -315,6 +361,13 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	psEffect->position.x = pos->x;
 	psEffect->position.y = pos->y;
 	psEffect->position.z = pos->z;
+
+	if (rot)
+	{
+		psEffect->rotation.x = rot->x;
+		psEffect->rotation.y = rot->y;
+		psEffect->rotation.z = rot->z;
+	}
 
 	/* Now, note group and type */
 	psEffect->group = group;
@@ -386,6 +439,9 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 		break;
 	case EFFECT_FIREWORK:
 		effectSetupFirework(psEffect);
+		break;
+	case EFFECT_DROID_ANIMEVENT_DYING:
+		psEffect->lastFrame = gameTime; // store the timeAnimationStarted in lastFrame
 		break;
 	case EFFECT_FREED:
 		ASSERT(false, "Weirdy group type for an effect");
@@ -493,6 +549,8 @@ static bool updateEffect(EFFECT *psEffect)
 			return updateFirework(psEffect);
 		}
 		return true;
+	case EFFECT_DROID_ANIMEVENT_DYING:
+		return updateDroidDeathAnimationEffect(psEffect);
 	case EFFECT_FREED:
 		break;
 	}
@@ -1348,6 +1406,10 @@ void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 
 	case EFFECT_FIREWORK:
 		renderFirework(psEffect, viewMatrix);
+		return;
+
+	case EFFECT_DROID_ANIMEVENT_DYING:
+		renderDroidDeathAnimationEffect(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_FREED:

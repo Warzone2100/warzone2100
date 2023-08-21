@@ -48,6 +48,7 @@ enum EFFECT_GROUP
 	EFFECT_SAT_LASER,
 	EFFECT_FIRE,
 	EFFECT_FIREWORK,
+	EFFECT_DROID_ANIMEVENT_DYING,
 
 	EFFECT_FREED,
 };
@@ -108,6 +109,9 @@ enum EFFECT_TYPE
 
 	FIREWORK_TYPE_STARBURST,
 	FIREWORK_TYPE_LAUNCHER,
+
+	DROID_ANIMEVENT_DYING_NORMAL,
+	DROID_ANIMEVENT_DYING_NORMAL_ST,
 };
 
 
@@ -155,7 +159,7 @@ void	initEffectsSystem();
 void	shutdownEffectsSystem();
 void	processEffects(const glm::mat4 &perspectiveViewMatrix);
 void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit);
-void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime);
+void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot = nullptr);
 void    addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime);
 
 void	renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
