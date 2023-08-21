@@ -80,7 +80,7 @@ struct ImdObject
 	static ImdObject Feature(BASE_STATS *p)
 	{
 		FEATURE_STATS *fStat = (FEATURE_STATS *)p;
-		return ImdObject(fStat->psImd, IMDTYPE_FEATURE);
+		return ImdObject((fStat->psImd) ? fStat->psImd->displayModel() : nullptr, IMDTYPE_FEATURE);
 	}
 
 	bool empty() const
@@ -251,7 +251,7 @@ bool DroidIsBuilding(DROID *Droid);
 STRUCTURE *DroidGetBuildStructure(DROID *Droid);
 bool DroidGoingToBuild(DROID *Droid);
 BASE_STATS *DroidGetBuildStats(DROID *Droid);
-iIMDShape *DroidGetIMD(DROID *Droid);
+iIMDBaseShape *DroidGetIMD(DROID *Droid);
 
 bool StructureIsManufacturingPending(STRUCTURE *structure);   ///< Returns true iff the structure is either manufacturing or on hold (even if not yet synchronised). (But ignores research.)
 bool structureIsResearchingPending(STRUCTURE *structure);     ///< Returns true iff the structure is either researching or on hold (even if not yet synchronised). (But ignores manufacturing.)
@@ -262,7 +262,7 @@ RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure);
 FACTORY *StructureGetFactory(STRUCTURE *Structure);
 
 bool StatIsStructure(BASE_STATS const *Stat);
-iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player);
+iIMDBaseShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player);
 bool StatIsTemplate(BASE_STATS *Stat);
 bool StatIsFeature(BASE_STATS const *Stat);
 

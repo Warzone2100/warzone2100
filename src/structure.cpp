@@ -557,7 +557,7 @@ bool loadStructureStats(WzConfig &ini)
 		std::vector<WzString> models = ini.value("structureModel").toWzStringList();
 		for (size_t j = 0; j < models.size(); j++)
 		{
-			iIMDShape *imd = modelGet(models[j].trimmed());
+			iIMDBaseShape *imd = modelGet(models[j].trimmed());
 			ASSERT(imd != nullptr, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().c_str(), getID(psStats));
 			psStats->pIMD.push_back(imd);
 		}
@@ -566,7 +566,7 @@ bool loadStructureStats(WzConfig &ini)
 		WzString baseModel = ini.value("baseModel", "").toWzString();
 		if (baseModel.compare("") != 0)
 		{
-			iIMDShape *imd = modelGet(baseModel);
+			iIMDBaseShape *imd = modelGet(baseModel);
 			ASSERT(imd != nullptr, "Cannot find the PIE baseModel '%s' for structure '%s'", baseModel.toUtf8().c_str(), getID(psStats));
 			psStats->pBaseIMD = imd;
 		}
@@ -1332,8 +1332,9 @@ void alignStructure(STRUCTURE *psBuilding)
 	}
 	else
 	{
+		// TODO: Does this need iIMDBaseShape, or is this truly visual only?
 		// Sample points around the structure to find a good depth for the foundation
-		iIMDShape *s = psBuilding->sDisplay.imd;
+		iIMDBaseShape *s = psBuilding->sDisplay.imd;
 
 		psBuilding->pos.z = TILE_MIN_HEIGHT;
 		psBuilding->foundationDepth = TILE_MAX_HEIGHT;
@@ -1781,7 +1782,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 		if (bUpgraded)
 		{
-			std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
+			std::vector<iIMDBaseShape *> &IMDs = psBuilding->pStructureType->pIMD;
 			int imdIndex = std::min<int>(psBuilding->capacity * 2, IMDs.size() - 1) - 1;  // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules, and we want just the module since we cache the fully-built part of the building in psBuilding->prebuiltImd.
 			if (imdIndex < 0)
 			{
@@ -1842,7 +1843,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 	Rotation rot(direction, 0, 0);
 
 	int moduleNumber = 0;
-	std::vector<iIMDShape *> const *pIMD = &psStats->pIMD;
+	std::vector<iIMDBaseShape *> const *pIMD = &psStats->pIMD;
 	if (IsStatExpansionModule(psStats))
 	{
 		STRUCTURE *baseStruct = castStructure(worldTile(pos.xy())->psObject);
@@ -1853,7 +1854,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 				moduleIndex = nextModuleToBuild(baseStruct, 0);
 			}
 			int baseModuleNumber = moduleIndex * 2 - 1; // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
-			std::vector<iIMDShape *> const *basepIMD = &baseStruct->pStructureType->pIMD;
+			std::vector<iIMDBaseShape *> const *basepIMD = &baseStruct->pStructureType->pIMD;
 			if ((unsigned)baseModuleNumber < basepIMD->size())
 			{
 				// Draw the module.
@@ -2678,7 +2679,7 @@ void aiUpdateRepair_handleState(STRUCTURE &station)
 			iVecEffect.y = psDroid->pos.z + (10 - rand() % 20);
 			iVecEffect.z = psDroid->pos.y + (10 - rand() % 20);
 			effectSetSize(100);
-			addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_FLAME), 0, gameTime - deltaGameTime + 1);
+			addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getDisplayImdFromIndex(MI_FLAME), 0, gameTime - deltaGameTime + 1);
 		}
 		return;
 	};
@@ -3573,10 +3574,11 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 		{
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 
-			iIMDShape *strFirstImd = psBuilding->sDisplay.imd->objanimpie[psBuilding->animationEvent];
+			iIMDBaseShape *strFirstBaseImd = psBuilding->sDisplay.imd->displayModel()->objanimpie[psBuilding->animationEvent];
+			iIMDShape *strFirstImd = (strFirstBaseImd) ? strFirstBaseImd->displayModel() : nullptr;
 			if (strFirstImd != nullptr && strFirstImd->next != nullptr)
 			{
-				iIMDShape *strImd = strFirstImd->next; // first imd isn't animated
+				iIMDShape *strImd = strFirstImd->next.get(); // first imd isn't animated
 				psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
 			}
 			else
@@ -3733,8 +3735,10 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 				SDWORD	realY;
 				UDWORD	pointIndex;
 
-				pointIndex = rand() % (psBuilding->sDisplay.imd->points.size() - 1);
-				point = &(psBuilding->sDisplay.imd->points.at(pointIndex));
+				// since this is a visual effect, it should be based on the *display* model
+				iIMDShape *pDisplayModel = psBuilding->sDisplay.imd->displayModel();
+				pointIndex = rand() % (pDisplayModel->points.size() - 1);
+				point = &(pDisplayModel->points.at(pointIndex));
 				position.x = static_cast<int>(psBuilding->pos.x + point->x);
 				realY = static_cast<SDWORD>(structHeightScale(psBuilding) * point->y);
 				position.y = psBuilding->pos.z + realY;
@@ -3743,7 +3747,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 				if (tileIsClearlyVisible(psTile))
 				{
 					effectSetSize(30);
-					addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0, gameTime - deltaGameTime + rand() % deltaGameTime);
+					addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getDisplayImdFromIndex(MI_PLASMA), 0, gameTime - deltaGameTime + rand() % deltaGameTime);
 				}
 			}
 
@@ -4810,11 +4814,11 @@ void setLasSatExists(bool state, UDWORD player)
 /* calculate muzzle base location in 3d world */
 bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
-	const iIMDShape *psShape = psStructure->pStructureType->pIMD[0];
+	const iIMDBaseShape *psShape = psStructure->pStructureType->pIMD[0];
 
 	CHECK_STRUCTURE(psStructure);
 
-	if (psShape && psShape->nconnectors)
+	if (psShape && !psShape->connectors.empty())
 	{
 		Vector3i barrel(0, 0, 0);
 
@@ -4844,15 +4848,15 @@ bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muz
 /* calculate muzzle tip location in 3d world */
 bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
-	const iIMDShape *psShape = psStructure->pStructureType->pIMD[0];
+	const iIMDBaseShape *psShape = psStructure->pStructureType->pIMD[0];
 
 	CHECK_STRUCTURE(psStructure);
 
-	if (psShape && psShape->nconnectors)
+	if (psShape && !psShape->connectors.empty())
 	{
 		Vector3i barrel(0, 0, 0);
 		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
-		const iIMDShape *psWeaponImd = nullptr, *psMountImd = nullptr;
+		const iIMDBaseShape *psWeaponImd = nullptr, *psMountImd = nullptr;
 
 		if (nWeaponStat)
 		{
@@ -4875,24 +4879,24 @@ bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle,
 		af.RotY(psStructure->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
 
 		// process turret mount
-		if (psMountImd && psMountImd->nconnectors)
+		if (psMountImd && !psMountImd->connectors.empty())
 		{
-			af.Trans(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
+			af.Trans(psMountImd->connectors[0].x, -psMountImd->connectors[0].z, -psMountImd->connectors[0].y);
 		}
 
 		//matrix = the turret connector for the gun
 		af.RotX(psStructure->asWeaps[weapon_slot].rot.pitch);      // +ve up
 
 		//process the gun
-		if (psWeaponImd && psWeaponImd->nconnectors)
+		if (psWeaponImd && !psWeaponImd->connectors.empty())
 		{
 			unsigned int connector_num = 0;
 
 			// which barrel is firing if model have multiple muzzle connectors?
-			if (psStructure->asWeaps[weapon_slot].shotsFired && (psWeaponImd->nconnectors > 1))
+			if (psStructure->asWeaps[weapon_slot].shotsFired && (psWeaponImd->connectors.size() > 1))
 			{
 				// shoot first, draw later - substract one shot to get correct results
-				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
+				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (static_cast<uint32_t>(psWeaponImd->connectors.size()));
 			}
 
 			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].z, -psWeaponImd->connectors[connector_num].y);
@@ -5155,7 +5159,7 @@ void buildingComplete(STRUCTURE *psBuilding)
 	if (psBuilding->prebuiltImd != nullptr)
 	{
 		// We finished building a module, now use the combined IMD.
-		std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
+		std::vector<iIMDBaseShape *> &IMDs = psBuilding->pStructureType->pIMD;
 		int imdIndex = std::min<int>(numStructureModules(psBuilding) * 2, IMDs.size() - 1); // *2 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
 		psBuilding->prebuiltImd = nullptr;
 		psBuilding->sDisplay.imd = IMDs[imdIndex];

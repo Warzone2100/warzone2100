@@ -161,7 +161,7 @@ static void processParticle(ATPART *psPart)
 						pos.z = static_cast<int>(psPart->position.z);
 						pos.y = groundHeight;
 						effectSetSize(60);
-						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_SPLASH), 0);
+						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_SPLASH)->displayModel(), 0);
 					}
 				}
 				return;
@@ -318,7 +318,7 @@ static inline void renderParticleInternal(ATPART *psPart, const glm::mat4 &viewM
 	/* Make it face camera */
 	/* Scale it... */
 	const glm::mat4 modelMatrix = glm::translate(dv) * rotateScaleMatrix;
-	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
+	pie_Draw3DShape(psPart->imd->displayModel(), 0, 0, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
 	/* Draw it... */
 }
 

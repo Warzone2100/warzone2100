@@ -1427,7 +1427,7 @@ BASE_STATS *DroidGetBuildStats(DROID *Droid)
 	return nullptr;
 }
 
-iIMDShape *DroidGetIMD(DROID *Droid)
+iIMDBaseShape *DroidGetIMD(DROID *Droid)
 {
 	return Droid->sDisplay.imd;
 }
@@ -1524,7 +1524,7 @@ bool StatIsFeature(BASE_STATS const *Stat)
 	return Stat->hasType(STAT_FEATURE);
 }
 
-iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
+iIMDBaseShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
 {
 	(void)Player;
 	return ((STRUCTURE_STATS *)Stat)->pIMD[0];
@@ -1551,7 +1551,7 @@ COMPONENT_TYPE StatIsComponent(BASE_STATS *Stat)
 	}
 }
 
-bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD)
+bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD) // DISPLAY ONLY
 {
 	WEAPON_STATS		*psWStat;
 
@@ -1561,42 +1561,42 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 	switch (compID)
 	{
 	case COMP_BODY:
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
 		return true;
 
 	case COMP_BRAIN:
 		psWStat = ((BRAIN_STATS *)Stat)->psWeaponStat;
-		*MountIMD = psWStat->pMountGraphic;
-		*CompIMD = psWStat->pIMD;
+		*MountIMD = psWStat->pMountGraphic->displayModel();
+		*CompIMD = psWStat->pIMD->displayModel();
 		return true;
 
 	case COMP_WEAPON:
-		*MountIMD = ((WEAPON_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = ((WEAPON_STATS *)Stat)->pMountGraphic->displayModel();
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
 		return true;
 
 	case COMP_SENSOR:
-		*MountIMD = ((SENSOR_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = ((SENSOR_STATS *)Stat)->pMountGraphic->displayModel();
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
 		return true;
 
 	case COMP_ECM:
-		*MountIMD = ((ECM_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = ((ECM_STATS *)Stat)->pMountGraphic->displayModel();
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
 		return true;
 
 	case COMP_CONSTRUCT:
-		*MountIMD = ((CONSTRUCT_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = ((CONSTRUCT_STATS *)Stat)->pMountGraphic->displayModel();
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
 		return true;
 
 	case COMP_PROPULSION:
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
 		return true;
 
 	case COMP_REPAIRUNIT:
-		*MountIMD = ((REPAIR_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = ((REPAIR_STATS *)Stat)->pMountGraphic->displayModel();
+		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
 		return true;
 
 	case COMP_NUMCOMPONENTS:
@@ -1612,7 +1612,7 @@ bool StatIsResearch(BASE_STATS *Stat)
 	return Stat->hasType(STAT_RESEARCH);
 }
 
-static void StatGetResearchImage(BASE_STATS *psStat, AtlasImage *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon)
+static void StatGetResearchImage(BASE_STATS *psStat, AtlasImage *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon) // DISPLAY ONLY
 {
 	if (drawTechIcon && ((RESEARCH *)psStat)->iconID != NO_RESEARCH_ICON)
 	{
@@ -1628,7 +1628,7 @@ static void StatGetResearchImage(BASE_STATS *psStat, AtlasImage *image, iIMDShap
 	else
 	{
 		//no stat so just just the IMD associated with the research
-		*Shape = ((RESEARCH *)psStat)->pIMD;
+		*Shape = ((RESEARCH *)psStat)->pIMD->displayModel();
 		//make sure the stat is initialised
 		*ppGraphicData = nullptr;
 	}

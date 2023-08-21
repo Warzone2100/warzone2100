@@ -26,6 +26,8 @@
 #include "structuredef.h"
 #include <glm/fwd.hpp>
 
+struct iIMDShape;
+
 /*
 	Header file for component.c
 	Pumpkin Studios, EIDOS Interactive.

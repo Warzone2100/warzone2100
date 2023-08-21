@@ -1049,7 +1049,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	SDWORD          iAudioImpactID;
 	int32_t         relativeDamage;
 	Vector3i        position, scatter;
-	iIMDShape       *imd;
+	iIMDBaseShape   *imd;
 	BASE_OBJECT     *temp;
 	bool            hasRadius, hasEMPRadius;
 
@@ -1138,7 +1138,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 				imd = psStats->pTargetMissGraphic;
 			}
 
-			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize, psObj->time);
+			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, (imd) ? imd->displayModel() : nullptr, psStats->numExplosions, psStats->lightWorld, psStats->effectSize, psObj->time);
 
 			// If the target was a VTOL hit in the air add smoke
 			if ((psStats->surfaceToAir & SHOOT_IN_AIR)
@@ -1180,7 +1180,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 				imd = psStats->pTargetHitGraphic;
 			}
 
-			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, imd, psStats->numExplosions, psStats->lightWorld, psStats->effectSize, psObj->time);
+			addMultiEffect(&position, &scatter, EFFECT_EXPLOSION, facing, true, (imd) ? imd->displayModel() : nullptr, psStats->numExplosions, psStats->lightWorld, psStats->effectSize, psObj->time);
 		}
 
 		// Check for electronic warfare damage where we know the subclass and source

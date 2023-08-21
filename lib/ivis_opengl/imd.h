@@ -24,6 +24,7 @@
 #include <functional>
 
 struct iIMDShape;
+struct iIMDBaseShape;
 
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define PIE_VER				2
@@ -56,12 +57,12 @@ struct iIMDShape;
 void modelShutdown();
 
 // Enumerate over loaded models
-void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDShape& model)>& func);
+void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDBaseShape& model)>& func);
 
 /// Get filename of model pointer. This is really slow, so do not abuse for logging
 /// purposes, for example.
-const WzString &modelName(iIMDShape *model);
+const WzString &modelName(const iIMDShape *model);
 
-iIMDShape *modelGet(const WzString &filename);
+iIMDBaseShape *modelGet(const WzString &filename);
 
 #endif

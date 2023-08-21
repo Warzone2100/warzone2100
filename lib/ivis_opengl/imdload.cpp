@@ -47,13 +47,13 @@ using Vector4f = glm::vec4;
 // Scale animation numbers from int to float
 #define INT_SCALE       1000
 
-static std::unordered_map<std::string, iIMDShape> models;
+typedef std::unordered_map<std::string, std::unique_ptr<iIMDBaseShape>> ModelMap;
+static ModelMap models;
 
-static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd);
+static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd);
 
 iIMDShape::~iIMDShape()
 {
-	free(connectors);
 	free(shadowEdgeList);
 	for (auto* buffer : buffers)
 	{
@@ -61,20 +61,35 @@ iIMDShape::~iIMDShape()
 	}
 }
 
+iIMDBaseShape::iIMDBaseShape(std::unique_ptr<iIMDShape> a)
+: min(a->min)
+, max(a->max)
+, sradius(a->sradius)
+, radius(a->radius)
+, ocen(a->ocen)
+, connectors(a->connectors)
+, m_displayModel(std::move(a))
+{ }
+
+iIMDBaseShape::~iIMDBaseShape()
+{
+	// currently nothing else to do
+}
+
 void modelShutdown()
 {
 	models.clear();
 }
 
-void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDShape& model)>& func)
+void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDBaseShape& model)>& func)
 {
 	for (auto& keyvaluepair : models)
 	{
-		func(keyvaluepair.first, keyvaluepair.second);
+		func(keyvaluepair.first, *keyvaluepair.second.get());
 	}
 }
 
-static bool tryLoad(const WzString &path, const WzString &filename)
+static std::unique_ptr<iIMDShape> tryLoadDisplayModelInternal(const WzString &path, const WzString &filename)
 {
 	if (PHYSFS_exists(path + filename))
 	{
@@ -83,18 +98,45 @@ static bool tryLoad(const WzString &path, const WzString &filename)
 		if (!loadFile(WzString(path + filename).toUtf8().c_str(), &pFileData, &size))
 		{
 			debug(LOG_ERROR, "Failed to load model file: %s", WzString(path + filename).toUtf8().c_str());
-			return false;
+			return nullptr;
 		}
 		fileEnd = pFileData + size;
 		const char *pFileDataPt = pFileData;
-		bool success = iV_ProcessIMD(filename, (const char **)&pFileDataPt, fileEnd);
+		auto result = iV_ProcessIMD(filename, (const char **)&pFileDataPt, fileEnd);
 		free(pFileData);
-		return success;
+		return result;
 	}
-	return false;
+	return nullptr;
 }
 
-const WzString &modelName(iIMDShape *model)
+static bool tryLoad(const WzString &path, const WzString &filename)
+{
+	// try to load base model
+	auto baseModel = tryLoadDisplayModelInternal(path, filename);
+	if (!baseModel)
+	{
+		return false;
+	}
+
+	// create BaseShape from full (base) model (first level)
+	// the iIMDBaseShape then "owns" the display model iIMDShape
+	auto modelName = baseModel->modelName;
+	auto baseInsertResult = models.insert(ModelMap::value_type(modelName.toUtf8(), std::make_unique<iIMDBaseShape>(std::move(baseModel))));
+	ASSERT_OR_RETURN(false, baseInsertResult.second, "%s: Loaded duplicate model? (%s)", filename.toUtf8().c_str(), modelName.toUtf8().c_str());
+
+	// TODO: try to load a graphics override - at the same path but with a prefix
+	auto graphics_override_model = tryLoadDisplayModelInternal("graphics_override/curr/" + path, filename);
+	if (!graphics_override_model)
+	{
+		// no graphics override - just return the base model
+		return true;
+	}
+
+	// TODO: there *is* a graphics override version of this model - swap out the base model's displayModel for the graphics override model
+	return true;
+}
+
+const WzString &modelName(const iIMDShape *model)
 {
 	if (model != nullptr)
 	{
@@ -106,20 +148,20 @@ const WzString &modelName(iIMDShape *model)
 	return error;
 }
 
-iIMDShape *modelGet(const WzString &filename)
+iIMDBaseShape *modelGet(const WzString &filename)
 {
 	WzString name(filename.toLower());
 	auto it = models.find(name.toStdString());
 	if (it != models.end())
 	{
-		return &it->second; // cached
+		return it->second.get(); // cached
 	}
 	else if (tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
 	         || tryLoad("components/prop/", name) || tryLoad("components/weapons/", name)
 	         || tryLoad("components/bodies/", name) || tryLoad("features/", name)
 	         || tryLoad("misc/micnum/", name) || tryLoad("misc/minum/", name) || tryLoad("misc/mivnum/", name) || tryLoad("misc/researchimds/", name))
 	{
-		return &models.at(name.toStdString());
+		return models.at(name.toStdString()).get();
 	}
 	debug(LOG_ERROR, "Could not find: %s", name.toUtf8().c_str());
 	return nullptr;
@@ -599,7 +641,7 @@ static bool ReadPoints(const char **ppFileData, const char *FileDataEnd, iIMDSha
 	return true;
 }
 
-static void _imd_calc_bounds(iIMDShape &s)
+static void _imd_calc_bounds(iIMDShape &s, bool allLevels = false)
 {
 	int32_t xmax, ymax, zmax;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
@@ -615,78 +657,83 @@ static void _imd_calc_bounds(iIMDShape &s)
 	vxmin.x = vymin.y = vzmin.z = FP12_MULTIPLIER;
 
 	// set up bounding data for minimum number of vertices
-	for (const Vector3f &p : s.points)
-	{
-		if (p.x > s.max.x)
+	const iIMDShape *pShapeLevel = &s;
+	do {
+		for (const Vector3f &p : pShapeLevel->points)
 		{
-			s.max.x = static_cast<int>(p.x);
-		}
-		if (p.x < s.min.x)
-		{
-			s.min.x = static_cast<int>(p.x);
+			if (p.x > s.max.x)
+			{
+				s.max.x = static_cast<int>(p.x);
+			}
+			if (p.x < s.min.x)
+			{
+				s.min.x = static_cast<int>(p.x);
+			}
+
+			if (p.y > s.max.y)
+			{
+				s.max.y = static_cast<int>(p.y);
+			}
+			if (p.y < s.min.y)
+			{
+				s.min.y = static_cast<int>(p.y);
+			}
+
+			if (p.z > s.max.z)
+			{
+				s.max.z = static_cast<int>(p.z);
+			}
+			if (p.z < s.min.z)
+			{
+				s.min.z = static_cast<int>(p.z);
+			}
+
+			// for tight sphere calculations
+			if (p.x < vxmin.x)
+			{
+				vxmin.x = p.x;
+				vxmin.y = p.y;
+				vxmin.z = p.z;
+			}
+
+			if (p.x > vxmax.x)
+			{
+				vxmax.x = p.x;
+				vxmax.y = p.y;
+				vxmax.z = p.z;
+			}
+
+			if (p.y < vymin.y)
+			{
+				vymin.x = p.x;
+				vymin.y = p.y;
+				vymin.z = p.z;
+			}
+
+			if (p.y > vymax.y)
+			{
+				vymax.x = p.x;
+				vymax.y = p.y;
+				vymax.z = p.z;
+			}
+
+			if (p.z < vzmin.z)
+			{
+				vzmin.x = p.x;
+				vzmin.y = p.y;
+				vzmin.z = p.z;
+			}
+
+			if (p.z > vzmax.z)
+			{
+				vzmax.x = p.x;
+				vzmax.y = p.y;
+				vzmax.z = p.z;
+			}
 		}
 
-		if (p.y > s.max.y)
-		{
-			s.max.y = static_cast<int>(p.y);
-		}
-		if (p.y < s.min.y)
-		{
-			s.min.y = static_cast<int>(p.y);
-		}
-
-		if (p.z > s.max.z)
-		{
-			s.max.z = static_cast<int>(p.z);
-		}
-		if (p.z < s.min.z)
-		{
-			s.min.z = static_cast<int>(p.z);
-		}
-
-		// for tight sphere calculations
-		if (p.x < vxmin.x)
-		{
-			vxmin.x = p.x;
-			vxmin.y = p.y;
-			vxmin.z = p.z;
-		}
-
-		if (p.x > vxmax.x)
-		{
-			vxmax.x = p.x;
-			vxmax.y = p.y;
-			vxmax.z = p.z;
-		}
-
-		if (p.y < vymin.y)
-		{
-			vymin.x = p.x;
-			vymin.y = p.y;
-			vymin.z = p.z;
-		}
-
-		if (p.y > vymax.y)
-		{
-			vymax.x = p.x;
-			vymax.y = p.y;
-			vymax.z = p.z;
-		}
-
-		if (p.z < vzmin.z)
-		{
-			vzmin.x = p.x;
-			vzmin.y = p.y;
-			vzmin.z = p.z;
-		}
-
-		if (p.z > vzmax.z)
-		{
-			vzmax.x = p.x;
-			vzmax.y = p.y;
-			vzmax.z = p.z;
-		}
-	}
+		pShapeLevel = pShapeLevel->next.get();
+	} while (allLevels && pShapeLevel != nullptr);
 
 	// no need to scale an IMD shape (only FSD)
 	xmax = MAX(s.max.x, -s.min.x);
@@ -803,19 +850,18 @@ static bool _imd_load_points(const char **ppFileData, const char *FileDataEnd, i
  * \return false on error (memory allocation failure/bad file format), true otherwise
  * \pre ppFileData loaded
  * \pre s allocated
- * \pre s->nconnectors set
- * \post s->connectors allocated
+ * \post s->connectors populated
  */
-bool _imd_load_connectors(const char **ppFileData, const char *FileDataEnd, iIMDShape &s)
+bool _imd_load_connectors(const char **ppFileData, const char *FileDataEnd, unsigned int numConnectors, iIMDShape &s)
 {
 	const char *pFileData = *ppFileData;
 	int cnt;
 	IMD_Line lineToProcess;
 	lineToProcess.pNextLineBegin = pFileData;
-	Vector3i *p = nullptr, newVector(0, 0, 0);
+	Vector3i newVector(0, 0, 0);
 
-	s.connectors = (Vector3i *)malloc(sizeof(Vector3i) * s.nconnectors);
-	for (p = s.connectors; p < s.connectors + s.nconnectors; p++)
+	s.connectors.reserve(numConnectors);
+	for (unsigned int i = 0; i < numConnectors; ++i)
 	{
 		if (!_imd_get_next_line(pFileData, FileDataEnd, lineToProcess))
 		{
@@ -830,7 +876,7 @@ bool _imd_load_connectors(const char **ppFileData, const char *FileDataEnd, iIMD
 			return false;
 		}
 		pFileData = lineToProcess.pNextLineBegin;
-		*p = newVector;
+		s.connectors.push_back(newVector);
 	}
 
 	*ppFileData = pFileData;
@@ -1028,7 +1074,7 @@ void finishTangentsGeneration()
  * \post s allocated
  */
 static_assert(PATH_MAX >= 255, "PATH_MAX is insufficient!");
-static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileData, const char *FileDataEnd, int pieVersion, uint32_t level, const LevelSettings &globalLevelSettings)
+static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, const char **ppFileData, const char *FileDataEnd, int pieVersion, uint32_t level, const LevelSettings &globalLevelSettings)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'}; uint32_t value = 0;
@@ -1041,7 +1087,8 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		key += "_" + std::to_string(level);
 	}
 	ASSERT(models.count(key) == 0, "Duplicate model load for %s!", key.c_str());
-	iIMDShape &s = models[key]; // create entry and return reference
+	auto pAllocatedShape = std::make_unique<iIMDShape>();
+	iIMDShape &s = *pAllocatedShape;
 	s.modelName = WzString::fromUtf8(key);
 	s.modelLevel = level;
 	s.pShadowPoints = &s.points;
@@ -1176,8 +1223,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		else if (strcmp(buffer, "CONNECTORS") == 0)
 		{
 			//load connector stuff
-			s.nconnectors = value;
-			if (!_imd_load_connectors(&lineToProcess.pNextLineBegin, FileDataEnd, s))
+			if (!_imd_load_connectors(&lineToProcess.pNextLineBegin, FileDataEnd, value, s))
 			{
 				debug(LOG_ERROR, "_imd_load_level(5): file corrupt - invalid shadowpoints: %s", filename.toUtf8().c_str());
 				return nullptr;
@@ -1419,7 +1465,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		s.interpolate = (levelSettings.interpolate.has_value() ? levelSettings.interpolate.value() : globalLevelSettings.interpolate.value_or(true));
 	}
 
-	return &s;
+	return pAllocatedShape;
 }
 
 /*!
@@ -1429,7 +1475,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  * \return The shape, constructed from the data read
  */
 // ppFileData is incremented to the end of the file on exit!
-static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd)
+static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {};
@@ -1437,38 +1483,38 @@ static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	unsigned value = 0;
 	unsigned nlevels = 0;
 	int32_t imd_version;
-	iIMDShape *objanimpie[ANIM_EVENT_COUNT];
+	iIMDBaseShape *objanimpie[ANIM_EVENT_COUNT];
 
 	IMD_Line lineToProcess;
 	if (!_imd_get_next_line(pFileData, FileDataEnd, lineToProcess) || sscanf(lineToProcess.lineContents.c_str(), "%255s %d", buffer, &imd_version) != 2)
 	{
 		debug(LOG_ERROR, "%s: bad PIE version: (%s)", filename.toUtf8().c_str(), buffer);
 		assert(false);
-		return false;
+		return nullptr;
 	}
 	pFileData = lineToProcess.pNextLineBegin;
 
 	if (strcmp(PIE_NAME, buffer) != 0)
 	{
 		debug(LOG_ERROR, "%s: Not an IMD file (%s %d)", filename.toUtf8().c_str(), buffer, imd_version);
-		return false;
+		return nullptr;
 	}
 
 	//Now supporting version PIE_VER and PIE_FLOAT_VER files
 	if (imd_version < PIE_MIN_VER || imd_version > PIE_MAX_VER)
 	{
 		debug(LOG_ERROR, "%s: Version %d not supported", filename.toUtf8().c_str(), imd_version);
-		return false;
+		return nullptr;
 	}
 
 	LevelSettings globalLevelSettings;
 	if (!_imd_load_level_settings(filename, &pFileData, FileDataEnd, imd_version, true, globalLevelSettings))
 	{
 		debug(LOG_ERROR, "%s: Failed to load level settings", filename.toUtf8().c_str());
-		return false;
+		return nullptr;
 	}
 	// TYPE is required in the global scope
-	ASSERT_OR_RETURN(false, globalLevelSettings.imd_flags.has_value(), "%s: Missing TYPE line", filename.toUtf8().c_str());
+	ASSERT_OR_RETURN(nullptr, globalLevelSettings.imd_flags.has_value(), "%s: Missing TYPE line", filename.toUtf8().c_str());
 
 	auto getNextPossibleCommandLine = [&]() -> bool {
 		pFileData = lineToProcess.pNextLineBegin;
@@ -1491,7 +1537,7 @@ static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	if (!getNextPossibleCommandLine())
 	{
 		debug(LOG_ERROR, "%s: Expecting EVENT or LEVELS: %s", filename.toUtf8().c_str(), buffer);
-		return false;
+		return nullptr;
 	}
 
 	for (int i = 0; i < ANIM_EVENT_COUNT; i++)
@@ -1507,7 +1553,7 @@ static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (sscanf(pRestOfLine, "%255s%n", animpie, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s animation model corrupt: %s", filename.toUtf8().c_str(), buffer);
-			return false;
+			return nullptr;
 		}
 
 		objanimpie[value] = modelGet(animpie);
@@ -1516,18 +1562,18 @@ static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (!getNextPossibleCommandLine())
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().c_str(), buffer);
-			return false;
+			return nullptr;
 		}
 	}
 
 	if (strncmp(buffer, "LEVELS", 6) != 0)
 	{
 		debug(LOG_ERROR, "%s: Expecting 'LEVELS' directive (%s)", filename.toUtf8().c_str(), buffer);
-		return false;
+		return nullptr;
 	}
 	nlevels = value;
 
-	iIMDShape *firstLevel = nullptr;
+	std::unique_ptr<iIMDShape> firstLevel = nullptr;
 	iIMDShape *lastLevel = nullptr;
 	for (uint32_t level = 0; level < nlevels; ++level)
 	{
@@ -1535,41 +1581,42 @@ static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (!getNextPossibleCommandLine())
 		{
 			debug(LOG_ERROR, "(_load_level) file corrupt -J");
-			return false;
+			return nullptr;
 		}
 		if (strncmp(buffer, "LEVEL", 5) != 0)
 		{
 			debug(LOG_ERROR, "%s: Expecting 'LEVEL' directive (%s)", filename.toUtf8().c_str(), buffer);
-			return false;
+			return nullptr;
 		}
 		if (value != (level + 1))
 		{
 			debug(LOG_ERROR, "%s: LEVEL %" PRIu32 " is invalid - expecting LEVEL %" PRIu32 " (LEVELS must be sequential, starting at 1)", filename.toUtf8().c_str(), value, level);
-			return false;
+			return nullptr;
 		}
 
-		iIMDShape *shape = _imd_load_level(filename, &lineToProcess.pNextLineBegin, FileDataEnd, imd_version, level, globalLevelSettings);
+		std::unique_ptr<iIMDShape> shape = _imd_load_level(filename, &lineToProcess.pNextLineBegin, FileDataEnd, imd_version, level, globalLevelSettings);
 		if (shape == nullptr)
 		{
 			debug(LOG_ERROR, "%s: Unsuccessful loading level %" PRIu32, filename.toUtf8().c_str(), (level + 1));
-			return false;
+			return nullptr;
 		}
 
 		if (lastLevel)
 		{
-			lastLevel->next = shape;
+			lastLevel->next = std::move(shape);
+			lastLevel = lastLevel->next.get();
 		}
-
-		if (level == 0)
+		else
 		{
-			firstLevel = shape;
+			ASSERT(level == 0, "Invalid level");
+			firstLevel = std::move(shape);
+			lastLevel = firstLevel.get();
 		}
 
-		lastLevel = shape;
 		pFileData = lineToProcess.pNextLineBegin;
 	}
 
-	ASSERT_OR_RETURN(false, firstLevel != nullptr, "%s: Has no levels?", filename.toUtf8().c_str());
+	ASSERT_OR_RETURN(nullptr, firstLevel != nullptr, "%s: Has no levels?", filename.toUtf8().c_str());
 
 	// copy over model-wide animation information, stored only in the first level
 	for (int i = 0; i < ANIM_EVENT_COUNT; i++)
@@ -1577,6 +1624,8 @@ static bool iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		firstLevel->objanimpie[i] = objanimpie[i];
 	}
 
+	// TODO: once all levels have been loaded, re-calculate the bounds of the first level using all the levels' points?
+
 	*ppFileData = pFileData;
-	return true;
+	return firstLevel;
 }
