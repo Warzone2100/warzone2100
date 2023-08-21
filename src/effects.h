@@ -159,7 +159,7 @@ void	initEffectsSystem();
 void	shutdownEffectsSystem();
 void	processEffects(const glm::mat4 &perspectiveViewMatrix);
 void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit);
-void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot = nullptr);
+void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot = nullptr, Vector3f *velocity = nullptr);
 void    addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime);
 
 void	renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);

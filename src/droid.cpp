@@ -207,6 +207,13 @@ int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_sl
 
 void addDroidDeathAnimationEffect(DROID *psDroid)
 {
+	// DERIVED from moveCalcNormalSpeed and moveGetDroidPosDiffs:
+
+	uint16_t iDroidDir = psDroid->rot.direction;
+	uint16_t adiff = (uint16_t)(iDroidDir - psDroid->sMove.moveDir);  // Cast wrapping intended.
+	int move = iCosR(adiff, psDroid->sMove.speed);
+	Vector3f velocity(iSinR(iDroidDir, move), iCosR(iDroidDir, move), 0.f);
+
 	// DERIVED FROM displayComponentObject:
 
 	Vector3i position, rotation;
@@ -252,7 +259,7 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 
 			SetEffectForPlayer(psDroid->player);
 			effectSetSize(100);
-			addEffect(&position, EFFECT_DROID_ANIMEVENT_DYING, type, true, strImd, 0, graphicsTime, &rotation);
+			addEffect(&position, EFFECT_DROID_ANIMEVENT_DYING, type, true, strImd, 0, graphicsTime, &rotation, &velocity);
 		}
 	}
 }

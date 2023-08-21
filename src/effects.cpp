@@ -301,13 +301,20 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	return addEffect(pos, group, type, specified, imd, lit, graphicsTime);
 }
 
-static bool updateDroidDeathAnimationEffect(const EFFECT *psEffect)
+static bool updateDroidDeathAnimationEffect(EFFECT *psEffect)
 {
 	iIMDShape *imd = psEffect->imd;
 	if (!imd)
 	{
 		return false;
 	}
+
+	/* Move it */
+	auto deltaX = graphicsTimeAdjustedIncrement(psEffect->velocity.x);
+	auto deltaY = graphicsTimeAdjustedIncrement(psEffect->velocity.y);
+	psEffect->position.x += deltaX;
+	psEffect->position.z += deltaY;
+
 	// NOTE: We actually store the timeAnimationStarted (in gameTime) in psEffect->lastFrame
 	UDWORD timeAnimationStarted = psEffect->lastFrame;
 	int objanimcycles = (imd->objanimcycles > 0) ? imd->objanimcycles : 1; // do not allow infinite looping for death animations
@@ -347,7 +354,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 	}
 }
 
-void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/)
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/, Vector3f *velocity /*= nullptr*/)
 {
 	if (gamePaused())
 	{
@@ -367,6 +374,11 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 		psEffect->rotation.x = rot->x;
 		psEffect->rotation.y = rot->y;
 		psEffect->rotation.z = rot->z;
+	}
+
+	if (velocity)
+	{
+		psEffect->velocity = *velocity;
 	}
 
 	/* Now, note group and type */
