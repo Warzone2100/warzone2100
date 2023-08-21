@@ -829,7 +829,7 @@ static void sockBlockSIGPIPE(const int fd, bool block_sigpipe)
 
 	if (setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &no_sigpipe, sizeof(no_sigpipe)) != 0)
 	{
-		errlog("WZCMD INFO: Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connection gets broken.");
+		errlog("WZCMD INFO: Failed to set SO_NOSIGPIPE on socket, SIGPIPE might be raised when connection gets broken.\n");
 	}
 #else
 	// Prevent warnings
@@ -1151,7 +1151,7 @@ void wz_command_interface_output(const char *str, ...)
 		if (ret < 0)
 		{
 			// some ancient implementations of vsnprintf return -1 instead of the needed buffer length...
-			errlog("WZCMD ERROR: Failed to output truncated string - check vsnprintf implementation");
+			errlog("WZCMD ERROR: Failed to output truncated string - check vsnprintf implementation\n");
 			return;
 		}
 		size_t neededBufferSize = static_cast<size_t>(ret);
@@ -1161,7 +1161,7 @@ void wz_command_interface_output(const char *str, ...)
 		va_end(ap);
 		if (ret < 0 || ret >= neededBufferSize + 1)
 		{
-			errlog("WZCMD ERROR: Failed to output truncated string");
+			errlog("WZCMD ERROR: Failed to output truncated string\n");
 			free(tmpBuffer);
 			return;
 		}
