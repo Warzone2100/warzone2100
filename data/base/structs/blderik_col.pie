@@ -1,7 +1,7 @@
 PIE 2
 TYPE 10200
 TEXTURE 0 page-122-player-buildings_Collective.png 256 256
-EVENT 1 blderik_anim.pie
+EVENT 1 blderik_anim_col.pie
 LEVELS 3
 LEVEL 1
 POINTS 56
