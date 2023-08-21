@@ -236,10 +236,15 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 	if (psDroid->visibleForLocalDisplay() == UBYTE_MAX)
 	{
 		/* Get the body graphic now*/
-		iIMDShape *psShapeBody = BODY_IMD(psDroid, psDroid->player);
+		iIMDBaseShape *psBaseShapeBody = BODY_IMD(psDroid, psDroid->player);
+		if (!psBaseShapeBody)
+		{
+			return;
+		}
+		iIMDShape *psShapeBody = psBaseShapeBody->displayModel();
 		if ((psShapeBody->objanimpie[ANIM_EVENT_DYING]))
 		{
-			iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING];
+			iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING]->displayModel();
 			/* get propulsion stats */
 			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 			if (psPropStats && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
@@ -333,7 +338,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		}
 
 		// Do we have a dying animation?
-		if (psDroid->sDisplay.imd->objanimpie[ANIM_EVENT_DYING] && psDroid->animationEvent != ANIM_EVENT_DYING)
+		if (psDroid->sDisplay.imd->displayModel()->objanimpie[ANIM_EVENT_DYING] && psDroid->animationEvent != ANIM_EVENT_DYING)
 		{
 			bool useDeathAnimation = true;
 			//Babas should not burst into flames from non-heat weapons
@@ -775,7 +780,8 @@ void droidUpdate(DROID *psDroid)
 
 	if (psDroid->animationEvent != ANIM_EVENT_NONE)
 	{
-		iIMDShape *imd = psDroid->sDisplay.imd->objanimpie[psDroid->animationEvent];
+		iIMDBaseShape *baseImd = psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent];
+		iIMDShape *imd = (baseImd) ? baseImd->displayModel() : nullptr;
 		if (imd && imd->objanimcycles > 0 && gameTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
 		{
 			// Done animating (animation is defined by body - other components should follow suit)
@@ -2108,11 +2114,11 @@ void	groupConsoleInformOfCentering(UDWORD groupNumber)
  */
 bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 {
-	const iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
+	const iIMDBaseShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
 
 	CHECK_DROID(psDroid);
 
-	if (psBodyImd && psBodyImd->nconnectors)
+	if (psBodyImd && !psBodyImd->connectors.empty())
 	{
 		Vector3i barrel(0, 0, 0);
 
@@ -2145,16 +2151,16 @@ bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int wea
  */
 bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 {
-	const iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
+	const iIMDBaseShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
 
 	CHECK_DROID(psDroid);
 
-	if (psBodyImd && psBodyImd->nconnectors)
+	if (psBodyImd && !psBodyImd->connectors.empty())
 	{
 		char debugStr[250], debugLen = 0;  // Each "(%d,%d,%d)" uses up to 34 bytes, for very large values. So 250 isn't exaggerating.
 
 		Vector3i barrel(0, 0, 0);
-		const iIMDShape *psWeaponImd = nullptr, *psMountImd = nullptr;
+		const iIMDBaseShape *psWeaponImd = nullptr, *psMountImd = nullptr;
 
 		if (psDroid->asWeaps[weapon_slot].nStat)
 		{
@@ -2178,25 +2184,25 @@ bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_
 		af.RotY(psDroid->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
 
 		// process turret mount
-		if (psMountImd && psMountImd->nconnectors)
+		if (psMountImd && !psMountImd->connectors.empty())
 		{
-			af.Trans(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
-			debugLen += sprintf(debugStr + debugLen, ",turret=(%d,%d,%d)", psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
+			af.Trans(psMountImd->connectors[0].x, -psMountImd->connectors[0].z, -psMountImd->connectors[0].y);
+			debugLen += sprintf(debugStr + debugLen, ",turret=(%d,%d,%d)", psMountImd->connectors[0].x, -psMountImd->connectors[0].z, -psMountImd->connectors[0].y);
 		}
 
 		//matrix = the turret connector for the gun
 		af.RotX(psDroid->asWeaps[weapon_slot].rot.pitch);      // +ve up
 
 		//process the gun
-		if (psWeaponImd && psWeaponImd->nconnectors)
+		if (psWeaponImd && !psWeaponImd->connectors.empty())
 		{
 			unsigned int connector_num = 0;
 
 			// which barrel is firing if model have multiple muzzle connectors?
-			if (psDroid->asWeaps[weapon_slot].shotsFired && (psWeaponImd->nconnectors > 1))
+			if (psDroid->asWeaps[weapon_slot].shotsFired && (psWeaponImd->connectors.size() > 1))
 			{
 				// shoot first, draw later - substract one shot to get correct results
-				connector_num = (psDroid->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
+				connector_num = (psDroid->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->connectors.size());
 			}
 
 			barrel = Vector3i(psWeaponImd->connectors[connector_num].x,

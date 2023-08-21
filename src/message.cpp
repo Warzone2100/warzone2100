@@ -54,7 +54,7 @@ MESSAGE *apsMessages[MAX_PLAYERS];
 PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
 
 /* The IMD to use for the proximity messages */
-iIMDShape	*pProximityMsgIMD;
+iIMDBaseShape	*pProximityMsgIMD;
 
 bool releaseObjectives = true;
 

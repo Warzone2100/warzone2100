@@ -264,9 +264,9 @@ static optional<WzString> deprecatedModelUpgrade(WzString& filename)
 	return nullopt;
 }
 
-static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzString& key, const WzString& key2 = WzString())
+static iIMDBaseShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzString& key, const WzString& key2 = WzString())
 {
-	iIMDShape *retval = nullptr;
+	iIMDBaseShape *retval = nullptr;
 	if (json.contains(key))
 	{
 		auto value = json.json(key);

@@ -641,9 +641,9 @@ struct ShadowCache {
 	};
 
 	typedef std::unordered_map<ShadowDrawParameters, CachedShadowData> ShadowDrawParametersToCachedDataMap;
-	typedef std::unordered_map<iIMDShape *, ShadowDrawParametersToCachedDataMap, std::hash<iIMDShape *>> ShapeMap;
+	typedef std::unordered_map<const iIMDShape *, ShadowDrawParametersToCachedDataMap, std::hash<const iIMDShape *>> ShapeMap;
 
-	const CachedShadowData* findCacheForShadowDraw(iIMDShape *shape, int flag, int flag_data, const glm::vec4 &light)
+	const CachedShadowData* findCacheForShadowDraw(const iIMDShape *shape, int flag, int flag_data, const glm::vec4 &light)
 	{
 		auto it = shapeMap.find(shape);
 		if (it == shapeMap.end()) {
@@ -1131,7 +1131,7 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 			retVal = instancedMeshRenderer.Draw3DShape(pCurrShape, frame, teamcolour, colour, pieFlag, pieFlagData, modelMatrix, viewMatrix, stretchDepth);
 		}
 
-		pCurrShape = pCurrShape->next;
+		pCurrShape = pCurrShape->next.get();
 
 	} while (drawAllLevels && pCurrShape && retVal);
 

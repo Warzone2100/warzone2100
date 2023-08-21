@@ -70,8 +70,8 @@ struct VIEW_BASE
 // info required to view an object in Intelligence screen
 struct VIEW_RESEARCH : VIEW_BASE
 {
-	iIMDShape	*pIMD = nullptr;
-	iIMDShape	*pIMD2 = nullptr;	// allows base plates and turrets to be drawn as well
+	iIMDBaseShape	*pIMD = nullptr;
+	iIMDBaseShape	*pIMD2 = nullptr;	// allows base plates and turrets to be drawn as well
 	WzString		sequenceName;	// which windowed flic to display
 	WzString		audio;			// name of audio track to play (for this seq)
 };

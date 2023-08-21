@@ -114,8 +114,8 @@ struct STRUCTURE_STATS : public BASE_STATS
 	UDWORD buildPoints;             /*The number of build points required to build the structure*/
 	UDWORD height;                  /*The height above/below the terrain - negative values denote below the terrain*/
 	UDWORD powerToBuild;            /*How much power the structure requires to build*/
-	std::vector<iIMDShape *> pIMD;  // The IMDs to draw for this structure, for each possible number of modules.
-	iIMDShape *pBaseIMD;            /*The base IMD to draw for this structure */
+	std::vector<iIMDBaseShape *> pIMD;  // The IMDs to draw for this structure, for each possible number of modules.
+	iIMDBaseShape *pBaseIMD;            /*The base IMD to draw for this structure */
 	struct ECM_STATS *pECM;         /*Which ECM is standard for the structure -if any*/
 	struct SENSOR_STATS *pSensor;   /*Which Sensor is standard for the structure -if any*/
 	UDWORD weaponSlots;             /*Number of weapons that can be attached to the building*/
@@ -303,7 +303,7 @@ struct STRUCTURE : public BASE_OBJECT
 	uint8_t capacity;                ///< Lame name: current number of module upgrades (*not* maximum nb of upgrades)
 	STRUCT_ANIM_STATES	state;
 	UDWORD lastStateTime;
-	iIMDShape *prebuiltImd;
+	iIMDBaseShape *prebuiltImd;
 
 	inline Vector2i size() const { return pStructureType->size(rot.direction); }
 };

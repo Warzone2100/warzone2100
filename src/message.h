@@ -34,7 +34,7 @@
 extern MESSAGE		*apsMessages[MAX_PLAYERS];
 
 /** The IMD to use for the proximity messages. */
-extern iIMDShape	*pProximityMsgIMD;
+extern iIMDBaseShape	*pProximityMsgIMD;
 
 /** The list of proximity displays allocated. */
 extern PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];

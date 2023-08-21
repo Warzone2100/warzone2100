@@ -1724,7 +1724,7 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 	/* Get its absolute dimensions */
 	// NOTE: This only takes into account body, but is "good enough"
 	const BODY_STATS *psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
-	const iIMDShape * pIMD = (psBStats != nullptr) ? psBStats->pIMD : nullptr;
+	const iIMDShape * pIMD = (psBStats != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
 }
@@ -1827,7 +1827,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 	//the weapon stats holds the reference to which graphic to use
 	/*Need to draw the graphic depending on what the projectile is doing - hitting target,
 	missing target, in flight etc - JUST DO IN FLIGHT FOR NOW! */
-	pIMD = psStats->pInFlightGraphic;
+	pIMD = (psStats->pInFlightGraphic) ? psStats->pInFlightGraphic->displayModel() : nullptr;
 
 	if (!clipXYZ(st.pos.x, st.pos.y, st.pos.z, perspectiveViewMatrix))
 	{
@@ -1864,7 +1864,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 		glm::rotate(UNDEG(-st.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 
-	for (; pIMD != nullptr; pIMD = pIMD->next)
+	for (; pIMD != nullptr; pIMD = pIMD->next.get())
 	{
 		bool rollToCamera = false;
 		bool pitchToCamera = false;
@@ -2387,12 +2387,12 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 		/* these cast a shadow */
 		pieFlags = pie_SHADOW;
 	}
-	iIMDShape *imd = psFeature->sDisplay.imd;
+	iIMDBaseShape *imd = psFeature->sDisplay.imd;
 	if (imd)
 	{
 		/* Translate the feature  - N.B. We can also do rotations here should we require
 		buildings to face different ways - Don't know if this is necessary - should be IMO */
-		pie_Draw3DShape(imd, 0, 0, brightness, pieFlags, 0, modelMatrix, viewMatrix);
+		pie_Draw3DShape(imd->displayModel(), 0, 0, brightness, pieFlags, 0, modelMatrix, viewMatrix);
 	}
 
 	setScreenDispWithPerspective(&psFeature->sDisplay, perspectiveViewMatrix * modelMatrix);
@@ -2463,13 +2463,13 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 		switch (pViewProximity->proxType)
 		{
 		case PROX_ENEMY:
-			proxImd = getImdFromIndex(MI_BLIP_ENEMY);
+			proxImd = getDisplayImdFromIndex(MI_BLIP_ENEMY);
 			break;
 		case PROX_RESOURCE:
-			proxImd = getImdFromIndex(MI_BLIP_RESOURCE);
+			proxImd = getDisplayImdFromIndex(MI_BLIP_RESOURCE);
 			break;
 		case PROX_ARTEFACT:
-			proxImd = getImdFromIndex(MI_BLIP_ARTEFACT);
+			proxImd = getDisplayImdFromIndex(MI_BLIP_ARTEFACT);
 			break;
 		default:
 			ASSERT(!"unknown proximity display message type", "Buggered proximity message type");
@@ -2484,12 +2484,12 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 		if (castFeature(psProxDisp->psMessage->psObj)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			//resource
-			proxImd = getImdFromIndex(MI_BLIP_RESOURCE);
+			proxImd = getDisplayImdFromIndex(MI_BLIP_RESOURCE);
 		}
 		else
 		{
 			//artefact
-			proxImd = getImdFromIndex(MI_BLIP_ARTEFACT);
+			proxImd = getDisplayImdFromIndex(MI_BLIP_ARTEFACT);
 		}
 	}
 
@@ -2528,9 +2528,9 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag,
 	const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix)
 {
-	iIMDShape *mountImd[MAX_WEAPONS] = { nullptr };
-	iIMDShape *weaponImd[MAX_WEAPONS] = { nullptr };
-	iIMDShape *flashImd[MAX_WEAPONS] = { nullptr };
+	iIMDBaseShape *mountImd[MAX_WEAPONS] = { nullptr };
+	iIMDBaseShape *weaponImd[MAX_WEAPONS] = { nullptr };
+	iIMDBaseShape *flashImd[MAX_WEAPONS] = { nullptr };
 
 	int colour = getPlayerColour(psStructure->player);
 
@@ -2589,29 +2589,31 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			int recoilValue = noRecoil ? 0 : getRecoil(psStructure->asWeaps[i]);
 			if (mountImd[i] != nullptr)
 			{
+				iIMDShape *pMountDisplayIMD = mountImd[i]->displayModel();
 				matrix *= glm::translate(glm::vec3(0.f, 0.f, recoilValue / 3.f));
 				int animFrame = 0;
-				if (mountImd[i]->numFrames > 0)	// Calculate an animation frame
+				if (pMountDisplayIMD->numFrames > 0)	// Calculate an animation frame
 				{
-					animFrame = getModularScaledGraphicsTime(mountImd[i]->animInterval, mountImd[i]->numFrames);
+					animFrame = getModularScaledGraphicsTime(pMountDisplayIMD->animInterval, pMountDisplayIMD->numFrames);
 				}
-				pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix);
-				if (mountImd[i]->nconnectors)
+				pie_Draw3DShape(pMountDisplayIMD, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix);
+				if (!pMountDisplayIMD->connectors.empty())
 				{
-					matrix *= glm::translate(glm::vec3(mountImd[i]->connectors->xzy()));
+					matrix *= glm::translate(glm::vec3(pMountDisplayIMD->connectors[0].xzy()));
 				}
 			}
 			matrix *= glm::rotate(UNDEG(rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 			matrix *= glm::translate(glm::vec3(0, 0, recoilValue));
 
-			pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix);
+			iIMDShape *pWeaponDisplayIMD = weaponImd[i]->displayModel();
+			pie_Draw3DShape(pWeaponDisplayIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix);
 			if (psStructure->status == SS_BUILT && psStructure->visibleForLocalDisplay() > (UBYTE_MAX / 2))
 			{
 				if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 				{
 					REPAIR_FACILITY *psRepairFac = &psStructure->pFunctionality->repairFacility;
 					// draw repair flash if the Repair Facility has a target which it has started work on
-					if (weaponImd[i]->nconnectors && psRepairFac->psObj != nullptr
+					if (!pWeaponDisplayIMD->connectors.empty() && psRepairFac->psObj != nullptr
 					    && psRepairFac->psObj->type == OBJ_DROID)
 					{
 						DROID *psDroid = (DROID *)psRepairFac->psObj;
@@ -2620,11 +2622,9 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
 						if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2))
 						{
-							iIMDShape	*pRepImd;
-							pRepImd = getImdFromIndex(MI_FLAME);
+							iIMDShape	*pRepImd = getDisplayImdFromIndex(MI_FLAME);
 
-
-							matrix *= glm::translate(glm::vec3(weaponImd[i]->connectors->x, weaponImd[i]->connectors->z - 12, weaponImd[i]->connectors->y)) *
+							matrix *= glm::translate(glm::vec3(pWeaponDisplayIMD->connectors[0].x, pWeaponDisplayIMD->connectors[0].z - 12, pWeaponDisplayIMD->connectors[0].y)) *
 								glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 								glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 								glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
@@ -2634,7 +2634,8 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				}
 				else // we have a weapon so we draw a muzzle flash
 				{
-					drawMuzzleFlash(psStructure->asWeaps[i], weaponImd[i], flashImd[i], buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, colour);
+					iIMDShape *pFlashDisplayIMD = (flashImd[i]) ? flashImd[i]->displayModel() : nullptr;
+					drawMuzzleFlash(psStructure->asWeaps[i], pWeaponDisplayIMD, pFlashDisplayIMD, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, colour);
 				}
 			}
 		}
@@ -2651,6 +2652,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				// draw Weapon/ECM/Sensor for structure
 				if (flashImd[i] != nullptr)
 				{
+					iIMDShape *pFlashDisplayIMD = flashImd[i]->displayModel();
 					glm::mat4 matrix(1.f);
 					// horrendous hack
 					if (strImd->max.y > 80) // babatower
@@ -2667,20 +2669,20 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 					{
 						// animate for the duration of the flash only
 						// assume no clan colours for muzzle effects
-						if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
+						if (pFlashDisplayIMD->numFrames == 0 || pFlashDisplayIMD->animInterval <= 0)
 						{
 							// no anim so display one frame for a fixed time
 							if (graphicsTime >= psStructure->asWeaps[i].lastFired && graphicsTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 							{
-								pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0, modelMatrix * matrix, viewMatrix); //muzzle flash
+								pie_Draw3DShape(pFlashDisplayIMD, 0, colour, buildingBrightness, 0, 0, modelMatrix * matrix, viewMatrix); //muzzle flash
 							}
 						}
 						else
 						{
-							const int frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
-							if (frame < flashImd[i]->numFrames && frame >= 0)
+							const int frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / pFlashDisplayIMD->animInterval;
+							if (frame < pFlashDisplayIMD->numFrames && frame >= 0)
 							{
-								pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0, modelMatrix * matrix, viewMatrix); //muzzle flash
+								pie_Draw3DShape(pFlashDisplayIMD, 0, colour, buildingBrightness, 0, 0, modelMatrix * matrix, viewMatrix); //muzzle flash
 							}
 						}
 					}
@@ -2688,7 +2690,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			}
 		}
 		// if there is an unused connector, but not the first connector, add a light to it
-		else if (psStructure->sDisplay.imd->nconnectors > 1)
+		else if (psStructure->sDisplay.imd->displayModel()->connectors.size() > 1)
 		{
 			switch (psStructure->pStructureType->type)
 			{
@@ -2699,12 +2701,11 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				// don't do this
 				break;
 			default:
-				for (unsigned int cIdx = 1; cIdx < psStructure->sDisplay.imd->nconnectors; cIdx++)
+				for (size_t cIdx = 1; cIdx < psStructure->sDisplay.imd->displayModel()->connectors.size(); cIdx++)
 				{
-					iIMDShape *lImd;
-					lImd = getImdFromIndex(MI_LANDING);
+					iIMDShape *lImd = getDisplayImdFromIndex(MI_LANDING);
 					pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0,
-									modelMatrix * glm::translate(glm::vec3(psStructure->sDisplay.imd->connectors[cIdx].xzy())), viewMatrix);
+									modelMatrix * glm::translate(glm::vec3(psStructure->sDisplay.imd->displayModel()->connectors[cIdx].xzy())), viewMatrix);
 				}
 				break;
 			}
@@ -2721,7 +2722,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	bool bHitByElectronic = false;
 	bool defensive = false;
 	const FACTION *faction = getPlayerFaction(psStructure->player);
-	iIMDShape *strImd = getFactionIMD(faction, psStructure->sDisplay.imd);
+	iIMDShape *strImd = getFactionDisplayIMD(faction, psStructure->sDisplay.imd->displayModel());
 	MAPTILE *psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
@@ -2737,7 +2738,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	if (visibilityAmount < UBYTE_MAX && visibilityAmount > 0)
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
-		pie_Draw3DShape(getFactionIMD(faction, getImdFromIndex(MI_BLIP)), frame, 0, WZCOL_WHITE, pie_ADDITIVE, visibilityAmount / 2,
+		pie_Draw3DShape(getFactionDisplayIMD(faction, getDisplayImdFromIndex(MI_BLIP)), frame, 0, WZCOL_WHITE, pie_ADDITIVE, visibilityAmount / 2,
 			glm::translate(glm::vec3(dv)), viewMatrix);
 		return;
 	}
@@ -2785,7 +2786,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 				pieFlag = pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(getFactionIMD(faction, psStructure->pStructureType->pBaseIMD), 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT | pie_FORCELIGHT, pieFlagData,
+			pie_Draw3DShape(getFactionDisplayIMD(faction, psStructure->pStructureType->pBaseIMD->displayModel()), 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT | pie_FORCELIGHT, pieFlagData,
 				modelMatrix, viewMatrix);
 		}
 
@@ -2807,10 +2808,10 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		if (psStructure->prebuiltImd != nullptr)
 		{
 			// strImd is a module, so render the already-built part at full height.
-			iIMDShape *imd = psStructure->prebuiltImd;
+			iIMDBaseShape *imd = psStructure->prebuiltImd;
 			if (imd)
 			{
-				pie_Draw3DShape(getFactionIMD(faction, imd), 0, colour, buildingBrightness, pie_SHADOW, 0,
+				pie_Draw3DShape(getFactionDisplayIMD(faction, imd->displayModel()), 0, colour, buildingBrightness, pie_SHADOW, 0,
 					modelMatrix, viewMatrix);
 			}
 		}
@@ -2837,7 +2838,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	// check for animation model replacement - if none found, use animation in existing IMD
 	if (strImd->objanimpie[psStructure->animationEvent])
 	{
-		strImd = strImd->objanimpie[psStructure->animationEvent];
+		strImd = strImd->objanimpie[psStructure->animationEvent]->displayModel();
 	}
 
 	while (strImd)
@@ -2848,11 +2849,11 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 			stretch = psStructure->pos.z - psStructure->foundationDepth;
 		}
 		drawShape(strImd, psStructure->timeAnimationStarted, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
-		if (strImd->nconnectors > 0)
+		if (strImd->connectors.size() > 0)
 		{
 			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag, modelMatrix, viewMatrix);
 		}
-		strImd = strImd->next;
+		strImd = strImd->next.get();
 	}
 	setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
 }
@@ -2894,10 +2895,10 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 			colour = selectionBrightness();
 		}
 	}
-	iIMDShape *psIMD = pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc];
+	iIMDBaseShape *psIMD = pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc];
 	if (psIMD != nullptr)
 	{
-		pie_Draw3DShape(psIMD, 0, 0, colour, pieFlag, pieFlagData, modelMatrix, viewMatrix);
+		pie_Draw3DShape(psIMD->displayModel(), 0, 0, colour, pieFlag, pieFlagData, modelMatrix, viewMatrix);
 	}
 
 	//get the screen coords for the DP
@@ -2943,8 +2944,11 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	/* Actually render it */
 	if (psStructure->status == SS_BEING_BUILT)
 	{
-		pie_Draw3DShape(getFactionIMD(faction, psStructure->sDisplay.imd), 0, getPlayerColour(psStructure->player),
-		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), modelMatrix, viewMatrix, stretch);
+		if (psStructure->sDisplay.imd)
+		{
+			pie_Draw3DShape(getFactionDisplayIMD(faction, psStructure->sDisplay.imd->displayModel()), 0, getPlayerColour(psStructure->player),
+							brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), modelMatrix, viewMatrix, stretch);
+		}
 	}
 	else
 	{
@@ -2959,10 +2963,10 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 			pieFlag = pie_SHADOW;
 			pieFlagData = 0;
 		}
-		iIMDShape *imd = psStructure->sDisplay.imd;
+		iIMDBaseShape *imd = psStructure->sDisplay.imd;
 		if (imd)
 		{
-			pie_Draw3DShape(getFactionIMD(faction, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
+			pie_Draw3DShape(getFactionDisplayIMD(faction, imd->displayModel()), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
 		}
 	}
 	setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
@@ -4029,12 +4033,13 @@ static void structureEffectsPlayer(UDWORD player)
 					bFXSize = 30;
 				}
 				/* Then it's repairing...? */
-				radius = psStructure->sDisplay.imd->radius;
+				iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+				radius = pDisplayModel->radius;
 				xDif = iSinSR(effectTime, 720, radius);
 				yDif = iCosSR(effectTime, 720, radius);
 				pos.x = psStructure->pos.x + xDif;
 				pos.z = psStructure->pos.y + yDif;
-				pos.y = map_Height(pos.x, pos.z) + psStructure->sDisplay.imd->max.y;
+				pos.y = map_Height(pos.x, pos.z) + pDisplayModel->max.y;
 				effectGiveAuxVar(30 + bFXSize);	// half normal plasma size...
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 				pos.x = psStructure->pos.x - xDif;
@@ -4302,6 +4307,12 @@ static uint32_t randHash(std::initializer_list<uint32_t> data) {
 /// Draw the construction or demolish lines for one droid
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 {
+	if (!psStructure->sDisplay.imd)
+	{
+		return;
+	}
+	iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+
 	auto deltaPlayer = Vector3f(0,0,0);
 	auto pt0 = Vector3f(psDroid->pos.x, psDroid->pos.z + 24, -psDroid->pos.y) + deltaPlayer;
 
@@ -4312,10 +4323,10 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	auto getPoint = [&](uint32_t c) {
 		uint32_t t = (amount + c)/1000;
 		float s = (amount + c)%1000*.001f;
-		unsigned pointIndexA = randHash({psDroid->id, psStructure->id, psDroid->actionStarted, t, c}) % psStructure->sDisplay.imd->points.size();
-		unsigned pointIndexB = randHash({psDroid->id, psStructure->id, psDroid->actionStarted, t + 1, c}) % psStructure->sDisplay.imd->points.size();
-		auto &pointA = psStructure->sDisplay.imd->points[pointIndexA];
-		auto &pointB = psStructure->sDisplay.imd->points[pointIndexB];
+		unsigned pointIndexA = randHash({psDroid->id, psStructure->id, psDroid->actionStarted, t, c}) % pDisplayModel->points.size();
+		unsigned pointIndexB = randHash({psDroid->id, psStructure->id, psDroid->actionStarted, t + 1, c}) % pDisplayModel->points.size();
+		auto &pointA = pDisplayModel->points[pointIndexA];
+		auto &pointB = pDisplayModel->points[pointIndexB];
 		auto point = mix(pointA, pointB, s);
 
 		each = Vector3f(psStructure->pos.x, psStructure->pos.z, psStructure->pos.y)
@@ -4337,7 +4348,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	if (rand() % 250u < deltaGraphicsTime)
 	{
 		effectSetSize(30);
-		addEffect(&each, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0);
+		addEffect(&each, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getDisplayImdFromIndex(MI_PLASMA), 0);
 	}
 
 	PIELIGHT colour = psDroid->action == DACTION_DEMOLISH? WZCOL_DEMOLISH_BEAM : WZCOL_CONSTRUCTOR_BEAM;

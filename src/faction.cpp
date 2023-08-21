@@ -23,6 +23,7 @@
 #include "faction.h"
 #include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
+#include "lib/ivis_opengl/ivisdef.h"
 #include <array>
 
 std::array<FACTION, NUM_FACTIONS> getInitialFactionsMappingTable()
@@ -142,7 +143,7 @@ optional<WzString> getFactionModelName(const FactionID faction, const WzString& 
 	return getFactionModelName(getFactionByID(faction), normalFactionName);
 }
 
-iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd)
+iIMDShape* getFactionDisplayIMD(const FACTION *faction, iIMDShape* imd)
 {
 	auto factionModelName = getFactionModelName(faction, modelName(imd));
 	if (!factionModelName.has_value())
@@ -151,7 +152,8 @@ iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd)
 	}
 	else
 	{
-		return modelGet(factionModelName.value());
+		auto baseModel = modelGet(factionModelName.value());
+		return (baseModel) ? baseModel->displayModel() : imd;
 	}
 }
 

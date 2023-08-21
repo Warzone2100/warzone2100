@@ -108,7 +108,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		{
 
 			//the weapon stats holds the reference to which graphic to use
-			pImd = ((PROJECTILE *)pObject)->psWStats->pInFlightGraphic;
+			pImd = ((PROJECTILE *)pObject)->psWStats->pInFlightGraphic->displayModel();
 
 			psSimpObj = (SIMPLE_OBJECT *) pObject;
 			position.x = psSimpObj->pos.x;
@@ -239,7 +239,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		if (z > 0)
 		{
 			//particle use the image radius
-			pImd = getImdFromIndex(MI_BLIP_ENEMY);//use MI_BLIP_ENEMY as all are same radius
+			pImd = getDisplayImdFromIndex(MI_BLIP_ENEMY);//use MI_BLIP_ENEMY as all are same radius
 			radius = pImd->radius;
 			radius *= SCALE_DEPTH;
 			radius /= z;
@@ -348,20 +348,20 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 		}
 		break;
 	case RENDER_DROID:
-		pie = BODY_IMD(((DROID *)pObject), 0);
+		pie = BODY_IMD(((DROID *)pObject), 0)->displayModel();
 		z = INT32_MAX - pie->texpage;
 		break;
 	case RENDER_STRUCTURE:
-		pie = ((STRUCTURE *)pObject)->sDisplay.imd;
+		pie = ((STRUCTURE *)pObject)->sDisplay.imd->displayModel();
 		z = INT32_MAX - pie->texpage;
 		break;
 	case RENDER_FEATURE:
-		pie = ((FEATURE *)pObject)->sDisplay.imd;
+		pie = ((FEATURE *)pObject)->sDisplay.imd->displayModel();
 		z = INT32_MAX - pie->texpage;
 		break;
 	case RENDER_DELIVPOINT:
 		pie = pAssemblyPointIMDs[((FLAG_POSITION *)pObject)->
-		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc];
+		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc]->displayModel();
 		z = INT32_MAX - pie->texpage;
 		break;
 	case RENDER_PARTICLE:

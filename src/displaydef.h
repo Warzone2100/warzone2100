@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_DISPLAYDEF_H__
 #define __INCLUDED_DISPLAYDEF_H__
 
-struct iIMDShape;
+struct iIMDBaseShape;
 
 // for mouse scrolling. (how many pixels from the edge before pointer scrolls the screen in a direction)
 #define	BOUNDARY_X	(2)
@@ -32,10 +32,10 @@ struct iIMDShape;
 
 struct SCREEN_DISP_DATA
 {
-	iIMDShape	*imd;
-	UDWORD		frameNumber;		// last frame it was drawn
-	UDWORD		screenX, screenY;
-	UDWORD		screenR;
+	iIMDBaseShape	*imd;
+	UDWORD			frameNumber;		// last frame it was drawn
+	UDWORD			screenX, screenY;
+	UDWORD			screenR;
 };
 
 #endif // __INCLUDED_DISPLAYDEF_H__

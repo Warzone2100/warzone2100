@@ -37,6 +37,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 
 //*************************************************************************
@@ -109,32 +110,68 @@ enum ANIMATION_EVENTS
 	ANIM_EVENT_COUNT
 };
 
+// A game model will have (potentially) two sets of information:
+// 1. Information used for game state calculations (this is always from the "base" / core model file)
+// 2. Information used for display (this may be from the "base" / core model, or a graphics mod overlay display-only model replacement)
+
+struct iIMDShape;
+
+struct iIMDBaseShape
+{
+	iIMDBaseShape(std::unique_ptr<iIMDShape> baseModel);
+
+	~iIMDBaseShape();
+
+	// SAFE FOR USE IN GAME STATE CALCULATIONS
+
+	Vector3i min = Vector3i(0, 0, 0); // used by: establishTargetHeight (game state calculation), alignStructure (game state calculation), (and then a bunch of display only stuff in effects.cpp and component.cpp)
+	Vector3i max = Vector3i(0, 0, 0);
+	int sradius = 0; // seemingly? display only
+	int radius = 0; // used in game state calculations!!!
+
+	Vector3f ocen = Vector3f(0.f, 0.f, 0.f); // not actually used by anything right now...
+
+	// used by game state calculations! (muzzle base location, fire line, actionVisibleTarget, etc)
+	std::vector<Vector3i> connectors;
+
+	// the display shape used for rendering (*NOT* for any game state calculations!)
+	inline iIMDShape* displayModel() { return m_displayModel.get(); }
+protected:
+
+private:
+	std::unique_ptr<iIMDShape> m_displayModel = nullptr;  // the display shape used for rendering (*NOT* for any game state calculations!)
+};
+
 struct iIMDShape
 {
 	~iIMDShape();
 
-	Vector3i min = Vector3i(0, 0, 0);
+	Vector3i min = Vector3i(0, 0, 0); // used by: establishTargetHeight (game state calculation), alignStructure (game state calculation), (and then a bunch of display only stuff in effects.cpp and component.cpp)
 	Vector3i max = Vector3i(0, 0, 0);
-	unsigned int flags = 0;
+	int sradius = 0; // seemingly? display only
+	int radius = 0; // used in game state calculations!!!
+
+	Vector3f ocen = Vector3f(0.f, 0.f, 0.f); // not actually used by anything right now...
+
+	std::vector<Vector3i> connectors;
+
+	// DISPLAY-ONLY
+	// do not use any of these variables for game state calculations!
+
+	unsigned int flags = 0; // display only
 	size_t texpage = iV_TEX_INVALID;
 	size_t tcmaskpage = iV_TEX_INVALID;
 	size_t normalpage = iV_TEX_INVALID;
 	size_t specularpage = iV_TEX_INVALID;
-	int sradius = 0;
-	int radius = 0;
 
-	Vector3f ocen = Vector3f(0.f, 0.f, 0.f);
 	unsigned short numFrames = 0;
 	unsigned short animInterval = 0;
-
-	unsigned int nconnectors = 0;
-	Vector3i *connectors = 0;
 
 	EDGE *shadowEdgeList = nullptr;
 	size_t nShadowEdges = 0;
 
 	// The old rendering data
-	std::vector<Vector3f> points;
+	std::vector<Vector3f> points; // !!! NOTE: THIS IS USED TO *CALCULATE* some of the game state values above on imd load (in _imd_calc_bounds) !!!
 	std::vector<iIMDPoly> polys;
 
 	// Data used for stencil shadows
@@ -145,7 +182,6 @@ struct iIMDShape
 
 	// The new rendering data
 	gfx_api::buffer* buffers[VBO_COUNT] = { nullptr };
-	SHADER_MODE shaderProgram = SHADER_NONE; // if using specialized shader for this model
 	uint16_t vertexCount = 0;
 
 	// object animation (animating a level, rather than its texture)
@@ -155,14 +191,16 @@ struct iIMDShape
 	// more object animation, but these are only set for the first level
 	int objanimtime = 0; ///< total time to render all animation frames
 	int objanimcycles = 0; ///< Number of cycles to render, zero means infinitely many
-	iIMDShape *objanimpie[ANIM_EVENT_COUNT] = { nullptr };
+	iIMDBaseShape *objanimpie[ANIM_EVENT_COUNT] = { nullptr }; // non-owned pointer to loaded base shape
 
 	int interpolate = 1; // if the model wants to be interpolated
 
 	WzString modelName;
 	uint32_t modelLevel = 0;
 
-	iIMDShape *next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
+	// BOTH:
+
+	std::unique_ptr<iIMDShape> next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
 };
 
 

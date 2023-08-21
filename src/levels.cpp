@@ -974,22 +974,29 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	std::unordered_set<FactionID> enabledNonNormalFactions = getEnabledFactions(true);
 	if (!enabledNonNormalFactions.empty())
 	{
-		enumerateLoadedModels([enabledNonNormalFactions](const std::string &modelName, iIMDShape &s){
-			if (s.modelLevel != 0)
-			{
-				return; // skip
-			}
+		struct FactionModelInfo
+		{
+			WzString factionModel;
+			WzString normalModel;
+		};
+		std::vector<FactionModelInfo> factionModelsToLoad;
+		enumerateLoadedModels([enabledNonNormalFactions, &factionModelsToLoad](const std::string &modelName, iIMDBaseShape &s){
 			for (const auto& faction : enabledNonNormalFactions)
 			{
-				auto factionModel = getFactionModelName(faction, WzString::fromUtf8(modelName));
+				auto wzModelName = WzString::fromUtf8(modelName);
+				auto factionModel = getFactionModelName(faction, wzModelName);
 				if (factionModel.has_value())
 				{
-					iIMDShape *retval = modelGet(factionModel.value());
-					ASSERT(retval != nullptr, "Cannot find the faction PIE model %s (for normal model: %s)",
-						   factionModel.value().toUtf8().c_str(), modelName.c_str());
+					factionModelsToLoad.push_back({factionModel.value(), wzModelName});
 				}
 			}
 		});
+		for (const auto& factionModelInfo : factionModelsToLoad)
+		{
+			iIMDBaseShape *retval = modelGet(factionModelInfo.factionModel);
+			ASSERT(retval != nullptr, "Cannot find the faction PIE model %s (for normal model: %s)",
+				   factionModelInfo.factionModel.toUtf8().c_str(), factionModelInfo.normalModel.toUtf8().c_str());
+		}
 		resDoResLoadCallback();		// do callback.
 	}
 

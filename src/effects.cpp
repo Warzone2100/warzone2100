@@ -350,7 +350,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 	while (strImd)
 	{
 		drawShape(strImd, timeAnimationStarted, psEffect->player, brightness, pieFlag, iPieData, modelMatrix, viewMatrix);
-		strImd = strImd->next;
+		strImd = strImd->next.get();
 	}
 }
 
@@ -1212,11 +1212,11 @@ static bool updateDestruction(EFFECT *psEffect)
 		case 10:
 			if (psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
 			{
-				addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_ST, true, getRandomDebrisImd(), 0);
+				addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_ST, true, getRandomDebrisImd()->displayModel(), 0);
 			}
 			else
 			{
-				addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, getRandomDebrisImd(), 0);
+				addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, getRandomDebrisImd()->displayModel(), 0);
 			}
 			break;
 		case 11:
@@ -1460,7 +1460,7 @@ static void renderBloodEffect(const EFFECT *psEffect, const glm::mat4 &viewMatri
 	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
 	               * glm::scale(glm::vec3(psEffect->size / 100.f));
 
-	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_BLOOD_TRANSPARENCY, modelMatrix, viewMatrix);
+	pie_Draw3DShape(getDisplayImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT | pie_NODEPTHWRITE, EFFECT_BLOOD_TRANSPARENCY, modelMatrix, viewMatrix);
 }
 
 static void renderDestructionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
@@ -1738,7 +1738,7 @@ void	effectSetupFirework(EFFECT *psEffect)
 		psEffect->lifeSpan = GAME_TICKS_PER_SEC * 3;
 		psEffect->radius = 80 + rand() % 150;
 		psEffect->size = 300 + rand() % 300;	//height it goes off
-		psEffect->imd = getImdFromIndex(MI_FIREWORK); // not actually drawn
+		psEffect->imd = getDisplayImdFromIndex(MI_FIREWORK); // not actually drawn
 	}
 	else
 	{
@@ -1751,17 +1751,17 @@ void	effectSetupFirework(EFFECT *psEffect)
 		switch (rand() % 3)
 		{
 		case 0:
-			psEffect->imd = getImdFromIndex(MI_FIREWORK);
+			psEffect->imd = getDisplayImdFromIndex(MI_FIREWORK);
 			psEffect->size = 45;	//size of graphic
 			break;
 		case 1:
-			psEffect->imd = getImdFromIndex(MI_SNOW);
+			psEffect->imd = getDisplayImdFromIndex(MI_SNOW);
 			SET_CYCLIC(psEffect);
 			psEffect->size = 60;	//size of graphic
 
 			break;
 		default:
-			psEffect->imd = getImdFromIndex(MI_FLAME);
+			psEffect->imd = getDisplayImdFromIndex(MI_FLAME);
 			psEffect->size = 40;	//size of graphic
 
 
@@ -1802,35 +1802,35 @@ void	effectSetupSmoke(EFFECT *psEffect)
 	switch (psEffect->type)
 	{
 	case SMOKE_TYPE_DRIFTING:
-		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
+		psEffect->imd = getDisplayImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)NORMAL_SMOKE_LIFESPAN;
 		psEffect->velocity.y = (float)(35 + rand() % 30);
 		psEffect->baseScale = 40;
 		break;
 	case SMOKE_TYPE_DRIFTING_HIGH:
-		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
+		psEffect->imd = getDisplayImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)NORMAL_SMOKE_LIFESPAN;
 		psEffect->velocity.y = (float)(40 + rand() % 45);
 		psEffect->baseScale = 25;
 		break;
 	case SMOKE_TYPE_DRIFTING_SMALL:
-		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
+		psEffect->imd = getDisplayImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)SMALL_SMOKE_LIFESPAN;
 		psEffect->velocity.y = (float)(25 + rand() % 35);
 		psEffect->baseScale = 17;
 		break;
 	case SMOKE_TYPE_BILLOW:
-		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
+		psEffect->imd = getDisplayImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)SMALL_SMOKE_LIFESPAN;
 		psEffect->velocity.y = (float)(10 + rand() % 20);
 		psEffect->baseScale = 80;
 		break;
 	case SMOKE_TYPE_STEAM:
-		psEffect->imd = getImdFromIndex(MI_SMALL_STEAM);
+		psEffect->imd = getDisplayImdFromIndex(MI_SMALL_STEAM);
 		psEffect->velocity.y = (float)(rand() % 5);
 		break;
 	case SMOKE_TYPE_TRAIL:
-		psEffect->imd = getImdFromIndex(MI_TRAIL);
+		psEffect->imd = getDisplayImdFromIndex(MI_TRAIL);
 		psEffect->lifeSpan = TRAIL_SMOKE_LIFESPAN;
 		psEffect->velocity.y = (float)(5 + rand() % 10);
 		psEffect->baseScale = 25;
@@ -1918,61 +1918,61 @@ void effectSetupExplosion(EFFECT *psEffect)
 		switch (psEffect->type)
 		{
 		case EXPLOSION_TYPE_SMALL:
-			psEffect->imd = getImdFromIndex(MI_EXPLOSION_SMALL);
+			psEffect->imd = getDisplayImdFromIndex(MI_EXPLOSION_SMALL);
 			psEffect->size = (UBYTE)((6 * EXPLOSION_SIZE) / 5);
 			break;
 		case EXPLOSION_TYPE_VERY_SMALL:
-			psEffect->imd = getImdFromIndex(MI_EXPLOSION_SMALL);
+			psEffect->imd = getDisplayImdFromIndex(MI_EXPLOSION_SMALL);
 			psEffect->size = (UBYTE)(BASE_FLAME_SIZE + auxVar);
 			break;
 		case EXPLOSION_TYPE_MEDIUM:
-			psEffect->imd = getImdFromIndex(MI_EXPLOSION_MEDIUM);
+			psEffect->imd = getDisplayImdFromIndex(MI_EXPLOSION_MEDIUM);
 			psEffect->size = (UBYTE)EXPLOSION_SIZE;
 			break;
 		case EXPLOSION_TYPE_LARGE:
-			psEffect->imd = getImdFromIndex(MI_EXPLOSION_MEDIUM);
+			psEffect->imd = getDisplayImdFromIndex(MI_EXPLOSION_MEDIUM);
 			psEffect->size = (UBYTE)EXPLOSION_SIZE * 2;
 			break;
 		case EXPLOSION_TYPE_FLAMETHROWER:
-			psEffect->imd = getImdFromIndex(MI_FLAME);
+			psEffect->imd = getDisplayImdFromIndex(MI_FLAME);
 			psEffect->size = (UBYTE)(BASE_FLAME_SIZE + auxVar);
 			break;
 		case EXPLOSION_TYPE_LASER:
-			psEffect->imd = getImdFromIndex(MI_FLAME);	// change this
+			psEffect->imd = getDisplayImdFromIndex(MI_FLAME);	// change this
 			psEffect->size = (UBYTE)(BASE_LASER_SIZE + auxVar);
 			break;
 		case EXPLOSION_TYPE_DISCOVERY:
-			psEffect->imd = getImdFromIndex(MI_TESLA);	// change this
+			psEffect->imd = getDisplayImdFromIndex(MI_TESLA);	// change this
 			psEffect->size = DISCOVERY_SIZE;
 			break;
 		case EXPLOSION_TYPE_FLARE:
-			psEffect->imd = getImdFromIndex(MI_MFLARE);
+			psEffect->imd = getDisplayImdFromIndex(MI_MFLARE);
 			psEffect->size = FLARE_SIZE;
 			break;
 		case EXPLOSION_TYPE_TESLA:
-			psEffect->imd = getImdFromIndex(MI_TESLA);
+			psEffect->imd = getDisplayImdFromIndex(MI_TESLA);
 			psEffect->size = TESLA_SIZE;
 			psEffect->velocity.y = (float)TESLA_SPEED;
 			break;
 
 		case EXPLOSION_TYPE_KICKUP:
-			psEffect->imd = getImdFromIndex(MI_KICK);
+			psEffect->imd = getDisplayImdFromIndex(MI_KICK);
 			psEffect->size = 100;
 			break;
 		case EXPLOSION_TYPE_PLASMA:
-			psEffect->imd = getImdFromIndex(MI_PLASMA);
+			psEffect->imd = getDisplayImdFromIndex(MI_PLASMA);
 			psEffect->size = BASE_PLASMA_SIZE;
 			psEffect->velocity.y = 0.0f;
 			break;
 		case EXPLOSION_TYPE_LAND_LIGHT:
-			psEffect->imd = getImdFromIndex(MI_LANDING);
+			psEffect->imd = getDisplayImdFromIndex(MI_LANDING);
 			psEffect->size = 120;
 			psEffect->specific = ellSpec;
 			psEffect->velocity.y = 0.0f;
 			SET_ESSENTIAL(psEffect);		// Landing lights are permanent and cyclic
 			break;
 		case EXPLOSION_TYPE_SHOCKWAVE:
-			psEffect->imd = getImdFromIndex(MI_SHOCK);
+			psEffect->imd = getDisplayImdFromIndex(MI_SHOCK);
 			psEffect->size = 50;
 			psEffect->velocity.y = 0.0f;
 			break;
@@ -2042,7 +2042,7 @@ void	effectSetupConstruction(EFFECT *psEffect)
 	psEffect->velocity.z = 0.f;//(1-rand()%3);
 	psEffect->velocity.y = (float)(0 - rand() % 3);
 	psEffect->frameDelay = (UWORD)CONSTRUCTION_FRAME_DELAY;
-	psEffect->imd = getImdFromIndex(MI_CONSTRUCTION);
+	psEffect->imd = getDisplayImdFromIndex(MI_CONSTRUCTION);
 	psEffect->lifeSpan = CONSTRUCTION_LIFESPAN;
 
 	/* These effects always face you */
@@ -2074,7 +2074,7 @@ void	effectSetupFire(EFFECT *psEffect)
 
 void	effectSetupWayPoint(EFFECT *psEffect)
 {
-	psEffect->imd = pProximityMsgIMD;
+	psEffect->imd = (pProximityMsgIMD) ? pProximityMsgIMD->displayModel() : nullptr;
 
 	/* These effects musnt make way for others */
 	SET_ESSENTIAL(psEffect);
@@ -2085,7 +2085,7 @@ static void effectSetupBlood(EFFECT *psEffect)
 {
 	psEffect->frameDelay = BLOOD_FRAME_DELAY;
 	psEffect->velocity.y = (float)BLOOD_FALL_SPEED;
-	psEffect->imd = getImdFromIndex(MI_BLOOD);
+	psEffect->imd = getDisplayImdFromIndex(MI_BLOOD);
 	psEffect->size = (UBYTE)BLOOD_SIZE;
 }
 
@@ -2245,6 +2245,8 @@ static void effectStructureUpdates()
 				continue;
 			}
 
+			iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+
 			/* Factories puff out smoke, power stations puff out tesla stuff */
 			switch (psStructure->pStructureType->type)
 			{
@@ -2255,21 +2257,23 @@ static void effectStructureUpdates()
 					We're a factory, so better puff out a bit of steam
 					Complete hack with the magic numbers - just for IAN demo
 				*/
-				if (psStructure->sDisplay.imd->nconnectors > 0)
+				// Display only - use the display model
+				if (pDisplayModel->connectors.size() > 0)
 				{
-					unsigned int orderAdjustment = frameNumber % psStructure->sDisplay.imd->nconnectors;
-					for (unsigned int idx = 0; idx < psStructure->sDisplay.imd->nconnectors; ++idx)
+					unsigned int numConnectors = static_cast<unsigned int>(pDisplayModel->connectors.size());;
+					unsigned int orderAdjustment = frameNumber % numConnectors;
+					for (unsigned int idx = 0; idx < numConnectors; ++idx)
 					{
 						Vector3i eventPos = psStructure->pos.xzy() + Affine3F().RotY(psStructure->rot.direction)*Vector3i(
-												psStructure->sDisplay.imd->connectors[idx].x,
-												psStructure->sDisplay.imd->connectors[idx].z,
-												-psStructure->sDisplay.imd->connectors[idx].y
+												pDisplayModel->connectors[idx].x,
+												pDisplayModel->connectors[idx].z,
+												-pDisplayModel->connectors[idx].y
 											);
 
 						unsigned int orderIdx = idx + orderAdjustment;
-						if (orderIdx >= psStructure->sDisplay.imd->nconnectors)
+						if (orderIdx >= numConnectors)
 						{
-							orderIdx = orderIdx - psStructure->sDisplay.imd->nconnectors;
+							orderIdx = orderIdx - numConnectors;
 						}
 						unsigned effectStartTime = graphicsTime + static_cast<UDWORD>(150 * orderIdx);
 						addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, nullptr, 0, effectStartTime);
@@ -2385,7 +2389,8 @@ bool readFXData(const char *fileName)
 			WzString imd_name = ini.value("imd_name").toWzString();
 			if (!imd_name.isEmpty())
 			{
-				curEffect->imd = modelGet(imd_name);
+				auto baseImd = modelGet(imd_name);
+				curEffect->imd = (baseImd) ? baseImd->displayModel() : nullptr;
 			}
 		}
 		else
