@@ -217,17 +217,3 @@ const char* to_localized_string(FactionID faction)
 	}
 	return ""; // silence warning - switch above should be complete
 }
-
-void addFactionModelNameMapping(FACTION *faction, const WzString& normalFactionName, const WzString& mappedName)
-{
-	auto result = faction->replaceIMD.insert(FACTION::ReplaceIMDMap::value_type(normalFactionName, mappedName));
-	if (!result.second)
-	{
-		debug(LOG_INFO, "Already inserted this mapping (%s: %s -> %s)", faction->name.toUtf8().c_str(), normalFactionName.toUtf8().c_str(), mappedName.toUtf8().c_str());
-	}
-}
-
-void addFactionModelNameMapping(FactionID faction, const WzString& normalFactionName, const WzString& mappedName)
-{
-	addFactionModelNameMapping(&(factions[(uint8_t)faction]), normalFactionName, mappedName);
-}
