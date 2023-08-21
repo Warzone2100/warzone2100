@@ -505,7 +505,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 		}
 		while (strImd)
 		{
-			if (drawShape(psDroid, strImd, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix))
+			if (drawShape(strImd, psDroid->timeAnimationStarted, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix))
 			{
 				didDrawSomething = true;
 			}

@@ -589,7 +589,7 @@ float interpolateAngleDegrees(int a, int b, float t)
 	return a + d * t;
 }
 
-bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth)
+bool drawShape(iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth)
 {
 	glm::mat4 modifiedModelMatrix = modelMatrix;
 	int animFrame = 0; // for texture animation
@@ -599,7 +599,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 	}
 	if (strImd->objanimframes)
 	{
-		int elapsed = graphicsTime - psObj->timeAnimationStarted;
+		int elapsed = graphicsTime - timeAnimationStarted;
 		if (elapsed < 0)
 		{
 			elapsed = 0; // Animation hasn't started yet.
@@ -2847,7 +2847,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		{
 			stretch = psStructure->pos.z - psStructure->foundationDepth;
 		}
-		drawShape(psStructure, strImd, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
+		drawShape(strImd, psStructure->timeAnimationStarted, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
 		if (strImd->nconnectors > 0)
 		{
 			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag, modelMatrix, viewMatrix);
