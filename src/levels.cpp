@@ -987,15 +987,6 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					iIMDShape *retval = modelGet(factionModel.value());
 					ASSERT(retval != nullptr, "Cannot find the faction PIE model %s (for normal model: %s)",
 						   factionModel.value().toUtf8().c_str(), modelName.c_str());
-					for (const iIMDShape *pIMD = retval, *pNormalIMD = &s; pIMD != nullptr && pNormalIMD != nullptr; pIMD = pIMD->next, pNormalIMD = pNormalIMD->next)
-					{
-						if (pIMD->modelLevel <= 0)
-						{
-							continue;
-						}
-						// Must add mapping to faction IMD lookup table for all additional level modelNames (these have _<level> appended)
-						addFactionModelNameMapping(faction, pNormalIMD->modelName, pIMD->modelName);
-					}
 				}
 			}
 		});

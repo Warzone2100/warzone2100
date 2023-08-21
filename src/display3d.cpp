@@ -2670,9 +2670,9 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	const Vector3i dv = Vector3i(psStructure->pos.x, psStructure->pos.z, -(psStructure->pos.y));
 	bool bHitByElectronic = false;
 	bool defensive = false;
-	iIMDShape *strImd = psStructure->sDisplay.imd;
-	MAPTILE *psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 	const FACTION *faction = getPlayerFaction(psStructure->player);
+	iIMDShape *strImd = getFactionIMD(faction, psStructure->sDisplay.imd);
+	MAPTILE *psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
@@ -2766,7 +2766,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		}
 		if (strImd)
 		{
-			pie_Draw3DShape(getFactionIMD(faction, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), modelMatrix, viewMatrix);
+			pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), modelMatrix, viewMatrix);
 		}
 		setScreenDispWithPerspective(&psStructure->sDisplay, perspectiveViewMatrix * modelMatrix);
 		return;
@@ -2797,10 +2797,10 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		{
 			stretch = psStructure->pos.z - psStructure->foundationDepth;
 		}
-		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
-		if (psStructure->sDisplay.imd->nconnectors > 0)
+		drawShape(psStructure, strImd, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix, viewMatrix, stretch);
+		if (strImd->nconnectors > 0)
 		{
-			renderStructureTurrets(psStructure, getFactionIMD(faction, strImd), buildingBrightness, pieFlag, pieFlagData, ecmFlag, modelMatrix, viewMatrix);
+			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag, modelMatrix, viewMatrix);
 		}
 		strImd = strImd->next;
 	}
