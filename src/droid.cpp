@@ -205,6 +205,58 @@ int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_sl
 	return -1;
 }
 
+void addDroidDeathAnimationEffect(DROID *psDroid)
+{
+	// DERIVED FROM displayComponentObject:
+
+	Vector3i position, rotation;
+
+	/* Get the real position */
+	position = psDroid->pos.xzy();
+
+	if (isTransporter(psDroid))
+	{
+		position.y -= bobTransporterHeight();
+	}
+
+	/* Get all the pitch,roll,yaw info */
+	rotation.y = -psDroid->rot.direction;
+	rotation.x = psDroid->rot.pitch;
+	rotation.z = psDroid->rot.roll;
+
+	// ignore electronic damage shimmy
+
+	if (psDroid->visibleForLocalDisplay() == UBYTE_MAX)
+	{
+		/* Get the body graphic now*/
+		iIMDShape *psShapeBody = BODY_IMD(psDroid, psDroid->player);
+		if ((psShapeBody->objanimpie[ANIM_EVENT_DYING]))
+		{
+			iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING];
+			/* get propulsion stats */
+			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+			if (psPropStats && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
+			{
+				// FIXME: change when adding submarines to the game
+//				modifiedModelMatrix *= glm::translate(glm::vec3(0.f, -world_coord(1) / 2.3f, 0.f));
+				position.y += (world_coord(1) / 2.3f);
+			}
+
+			EFFECT_TYPE type = DROID_ANIMEVENT_DYING_NORMAL;
+			if (psDroid->droidType == DROID_PERSON)
+			{
+				type = DROID_ANIMEVENT_DYING_NORMAL_ST;
+				// Applies:
+				// modifiedModelMatrix *= glm::scale(glm::vec3(.75f)); // FIXME - hideous....!!!!
+			}
+
+			SetEffectForPlayer(psDroid->player);
+			effectSetSize(100);
+			addEffect(&position, EFFECT_DROID_ANIMEVENT_DYING, type, true, strImd, 0, graphicsTime, &rotation);
+		}
+	}
+}
+
 #define UNIT_LOST_DELAY	(5*GAME_TICKS_PER_SEC)
 /* Deals damage to a droid
  * \param psDroid droid to deal damage to
@@ -280,27 +332,27 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 			}
 			if (useDeathAnimation)
 			{
+				if (DrawnInLastFrame(psDroid->sDisplay.frameNumber))
+				{
+					addDroidDeathAnimationEffect(psDroid); // spawn an effect to handle drawing the death animation
+				}
 				debug(LOG_DEATH, "%s droid %d (%p) is starting death animation", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
-				psDroid->timeAnimationStarted = gameTime;
-				psDroid->animationEvent = ANIM_EVENT_DYING;
+				psDroid->animationEvent = ANIM_EVENT_DYING; // set this so that removeDroidFX (called by destroyDroid) knows not to do certain effects
 			}
 		}
-		// Otherwise use the default destruction animation
-		if (psDroid->animationEvent != ANIM_EVENT_DYING)
+		// Destroy the droid
+		debug(LOG_DEATH, "%s droid %d (%p) is toast", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
+		// This should be sent even if multi messages are turned off, as the group message that was
+		// sent won't contain the destroyed droid
+		if (bMultiPlayer && !bMultiMessages)
 		{
-			debug(LOG_DEATH, "%s droid %d (%p) is toast", objInfo(psDroid), (int)psDroid->id, static_cast<void *>(psDroid));
-			// This should be sent even if multi messages are turned off, as the group message that was
-			// sent won't contain the destroyed droid
-			if (bMultiPlayer && !bMultiMessages)
-			{
-				bMultiMessages = true;
-				destroyDroid(psDroid, impactTime);
-				bMultiMessages = false;
-			}
-			else
-			{
-				destroyDroid(psDroid, impactTime);
-			}
+			bMultiMessages = true;
+			destroyDroid(psDroid, impactTime);
+			bMultiMessages = false;
+		}
+		else
+		{
+			destroyDroid(psDroid, impactTime);
 		}
 	}
 
@@ -705,8 +757,8 @@ void droidUpdate(DROID *psDroid)
 			// Done animating (animation is defined by body - other components should follow suit)
 			if (psDroid->animationEvent == ANIM_EVENT_DYING)
 			{
+				// case theoretically should not happen anymore, as death animations are handled separately as effects now?
 				debug(LOG_DEATH, "%s (%d) died to burn anim (died=%d)", objInfo(psDroid), (int)psDroid->id, (int)psDroid->died);
-				destroyDroid(psDroid, gameTime);
 				return;
 			}
 			psDroid->animationEvent = ANIM_EVENT_NONE;
