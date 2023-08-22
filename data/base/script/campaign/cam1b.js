@@ -83,8 +83,8 @@ function eventStartLevel()
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 	setAlliance(CAM_SCAV_6, CAM_SCAV_7, true);
 
-	camCompleteRequiredResearch(mis_scavengerRes, 6);
-	camCompleteRequiredResearch(mis_scavengerRes, 7);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 	if (difficulty === HARD)
 	{
 		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);

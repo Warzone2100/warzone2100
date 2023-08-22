@@ -175,7 +175,7 @@ const mis_gammaResearchNew = [
 	"R-Wpn-Missile-Damage01", "R-Vehicle-Armor-Heat05", "R-Wpn-Rail-Accuracy01", "R-Wpn-Missile-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Wpn-Rail-ROF01", "R-Wpn-Missile2A-T",
 	"R-Cyborg-Wpn-ATMiss", "R-Defense-GuardTower-ATMiss", "R-Defense-WallTower-A-Tmiss", "R-Wpn-Missile-Damage02",
-	"R-Wpn-Missile-ROF01",
+	"R-Wpn-Missile-ROF01", "R-Cyborg-Metals08", "R-Cyborg-Armor-Heat05",
 
 	// 7
 	"R-Wpn-MdArtMissile", "R-Wpn-Laser02", "R-Wpn-RailGun02",
