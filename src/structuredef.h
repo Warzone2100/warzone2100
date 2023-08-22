@@ -299,7 +299,7 @@ struct STRUCTURE : public BASE_OBJECT
 	UDWORD expectedDamage;           ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
 	///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 	uint32_t prevTime;               ///< Time of structure's previous tick.
-	float foundationDepth;           ///< Depth of structure's foundation
+	float foundationDepth;           ///< Depth of structure's foundation		// DISPLAY-ONLY
 	uint8_t capacity;                ///< Lame name: current number of module upgrades (*not* maximum nb of upgrades)
 	STRUCT_ANIM_STATES	state;
 	UDWORD lastStateTime;
