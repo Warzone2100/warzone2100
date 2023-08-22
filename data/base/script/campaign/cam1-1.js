@@ -68,7 +68,8 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	if (victim.type === STRUCTURE && victim.id === 146)
+	const scavFactory = getObject("scavFactory1");
+	if (camDef(scavFactory) && scavFactory && victim.type === STRUCTURE && victim.id === scavFactory.id)
 	{
 		camCallOnce("westScavAction");
 	}

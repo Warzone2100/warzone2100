@@ -157,8 +157,8 @@ function eventStartLevel()
 
 	enableBaseStructures();
 	camCompleteRequiredResearch(mis_playerRes, CAM_HUMAN_PLAYER);
-	camCompleteRequiredResearch(mis_scavengerRes, 6);
-	camCompleteRequiredResearch(mis_scavengerRes, 7);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 	if (difficulty === INSANE)
 	{
 		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
