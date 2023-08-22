@@ -124,8 +124,10 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
 	std::vector<TILEPOS> watchedTiles;              ///< Variable size array of watched tiles, empty for features
 
+	// DISPLAY-ONLY (*NOT* for game state calculations)
 	UDWORD              timeAnimationStarted;       ///< Animation start time, zero for do not animate
 	UBYTE               animationEvent;             ///< If animation start time > 0, this points to which animation to run
+	//
 
 	unsigned            numWeaps;
 	WEAPON              asWeaps[MAX_WEAPONS];
