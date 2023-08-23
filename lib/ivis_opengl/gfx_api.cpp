@@ -221,13 +221,13 @@ optional<gfx_api::max_texture_compression_level> gfx_api::getMaxTextureCompressi
 
 #include "png_util.h"
 
-static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool quiet)
 {
 	iV_Image loadedUncompressedImage;
 
 	// 1.) Load the PNG into an iV_Image
 	bool forceRGB = (textureType == gfx_api::texture_type::game_texture) || (textureType == gfx_api::texture_type::user_interface);
-	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage, forceRGB))
+	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage, forceRGB, quiet))
 	{
 		// Failed to load the image
 		return nullptr;
@@ -301,7 +301,7 @@ bool gfx_api::checkImageFilesWouldLoadFromSameParentMountPath(const std::vector<
 
 // Load a texture from a file
 // (which loads straight to a texture based on the appropriate texture_type, handling mip_maps, compression, etc)
-gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool quiet /*= false*/)
 {
 	auto imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
 
@@ -314,7 +314,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gf
 #endif
 	if (imageLoadFilename.endsWith(".png"))
 	{
-		return loadImageTextureFromFile_PNG(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight);
+		return loadImageTextureFromFile_PNG(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight, quiet);
 	}
 	else
 	{

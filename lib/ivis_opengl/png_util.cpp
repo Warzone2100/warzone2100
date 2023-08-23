@@ -214,7 +214,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	return true;
 }
 
-bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*= false*/)
+bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*= false*/, bool quietOnOpenFail /*= false*/)
 {
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
 	PHYSFS_sint64 readSize;
@@ -234,7 +234,17 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 
 	// Open file
 	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
-	ASSERT_OR_RETURN(false, fileHandle != nullptr, "Could not open %s: %s", fileName, WZ_PHYSFS_getLastError());
+	if (fileHandle == nullptr)
+	{
+		if (!quietOnOpenFail)
+		{
+			ASSERT_OR_RETURN(false, fileHandle != nullptr, "Could not open %s: %s", fileName, WZ_PHYSFS_getLastError());
+		}
+		else
+		{
+			return false;
+		}
+	}
 	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
 
 	// Read PNG header from file

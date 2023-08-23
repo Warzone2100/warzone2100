@@ -207,14 +207,21 @@ optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textu
 		return it->second;
 	}
 
-	// Try to load it
-	std::string loadPath = "texpages/";
+	// First, try to load from the current graphics_overrides (if enabled)
+	std::string loadPath = WZ_CURRENT_GRAPHICS_OVERRIDES_PREFIX "/texpages/";
 	loadPath += filename;
-	gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromFile(loadPath.c_str(), textureType, maxWidth, maxHeight);
+	gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromFile(loadPath.c_str(), textureType, maxWidth, maxHeight, true);
 	if (!pTexture)
 	{
-		debug(LOG_ERROR, "Failed to load %s", loadPath.c_str());
-		return nullopt;
+		// Try to load it from the regular path
+		loadPath = "texpages/";
+		loadPath += filename;
+		pTexture = gfx_api::context::get().loadTextureFromFile(loadPath.c_str(), textureType, maxWidth, maxHeight);
+		if (!pTexture)
+		{
+			debug(LOG_ERROR, "Failed to load %s", loadPath.c_str());
+			return nullopt;
+		}
 	}
 
 	size_t page = pie_AddTexPage(pTexture, path.c_str(), textureType);
