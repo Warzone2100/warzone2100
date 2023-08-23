@@ -1795,6 +1795,17 @@ bool stageThreeInitialise()
 
 	loopMissionState = LMS_NORMAL;
 
+	// preload model textures for current tileset
+	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
+	modelUpdateTilesetIdx(modelTilesetIdx);
+	enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
+		for (iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		{
+			pDisplayShape->getTextures();
+		}
+	});
+	resDoResLoadCallback();		// do callback.
+
 	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
 		return false;

@@ -243,11 +243,12 @@ static gfx_api::buffer* getZeroedVertexBuffer(size_t size)
 	return pZeroedVertexBuffer;
 }
 
-void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix)
+void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix)
 {
-	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
-	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
-	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
+	const auto& textures = shape->getTextures();
+	auto* tcmask = textures.tcmaskpage != iV_TEX_INVALID ? &pie_Texture(textures.tcmaskpage) : nullptr;
+	auto* normalmap = textures.normalpage != iV_TEX_INVALID ? &pie_Texture(textures.normalpage) : nullptr;
+	auto* specularmap = textures.specularpage != iV_TEX_INVALID ? &pie_Texture(textures.specularpage) : nullptr;
 
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
 
@@ -280,7 +281,7 @@ void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &mo
 
 	gfx_api::Draw3DShapeOpaque::get().set_uniforms(globalUniforms, meshUniforms, instanceUniforms);
 
-	gfx_api::Draw3DShapeOpaque::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+	gfx_api::Draw3DShapeOpaque::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 	gfx_api::Draw3DShapeOpaque::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 	gfx_api::Draw3DShapeOpaque::get().draw_elements(shape->polys.size() * 3, 0);
@@ -370,9 +371,10 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 {
 	templatedState currentState = templatedState(shader, shape, pieFlag);
 
-	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
-	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
-	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
+	const auto& textures = shape->getTextures();
+	auto* tcmask = textures.tcmaskpage != iV_TEX_INVALID ? &pie_Texture(textures.tcmaskpage) : nullptr;
+	auto* normalmap = textures.normalpage != iV_TEX_INVALID ? &pie_Texture(textures.normalpage) : nullptr;
+	auto* specularmap = textures.specularpage != iV_TEX_INVALID ? &pie_Texture(textures.specularpage) : nullptr;
 
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
@@ -398,7 +400,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 		{
 			AdditivePSO::get().set_uniforms_at(1, meshUniforms);
 			AdditivePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
-			AdditivePSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			AdditivePSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 		}
 		AdditivePSO::get().set_uniforms_at(2, instanceUniforms);
 		AdditivePSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -416,7 +418,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 			{
 				AlphaPSO::get().set_uniforms_at(1, meshUniforms);
 				AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
-				AlphaPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+				AlphaPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 			}
 			AlphaPSO::get().set_uniforms_at(2, instanceUniforms);
 			AlphaPSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -432,7 +434,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 			{
 				AlphaNoDepthWRTPSO::get().set_uniforms_at(1, meshUniforms);
 				AlphaNoDepthWRTPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
-				AlphaNoDepthWRTPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+				AlphaNoDepthWRTPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 			}
 			AlphaNoDepthWRTPSO::get().set_uniforms_at(2, instanceUniforms);
 			AlphaNoDepthWRTPSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -449,7 +451,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 		{
 			PremultipliedPSO::get().set_uniforms_at(1, meshUniforms);
 			PremultipliedPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
-			PremultipliedPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			PremultipliedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 		}
 		PremultipliedPSO::get().set_uniforms_at(2, instanceUniforms);
 		PremultipliedPSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -465,7 +467,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 		{
 			OpaquePSO::get().set_uniforms_at(1, meshUniforms);
 			OpaquePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
-			OpaquePSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+			OpaquePSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 		}
 		OpaquePSO::get().set_uniforms_at(2, instanceUniforms);
 		OpaquePSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -1342,9 +1344,10 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 template<SHADER_MODE shader, typename Draw3DInstancedPSO>
 static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
-	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
-	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
-	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
+	const auto& textures = shape->getTextures();
+	auto* tcmask = textures.tcmaskpage != iV_TEX_INVALID ? &pie_Texture(textures.tcmaskpage) : nullptr;
+	auto* normalmap = textures.normalpage != iV_TEX_INVALID ? &pie_Texture(textures.normalpage) : nullptr;
+	auto* specularmap = textures.specularpage != iV_TEX_INVALID ? &pie_Texture(textures.specularpage) : nullptr;
 
 	gfx_api::Draw3DShapeInstancedPerMeshUniforms meshUniforms {
 		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
@@ -1365,7 +1368,7 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 		std::make_tuple(shape->buffers[VBO_TEXCOORD], 0),
 		std::make_tuple(pTangentBuffer, 0),
 		std::make_tuple(instanceDataBuffer, instanceBufferOffset) });
-	Draw3DInstancedPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap, gfx_api::context::get().getDepthTexture());
+	Draw3DInstancedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap, gfx_api::context::get().getDepthTexture());
 
 	Draw3DInstancedPSO::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
 //	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);

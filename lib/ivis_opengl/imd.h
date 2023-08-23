@@ -56,6 +56,8 @@ struct iIMDBaseShape;
 
 void modelShutdown();
 
+void modelUpdateTilesetIdx(size_t tilesetIdx);
+
 // Enumerate over loaded models
 void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDBaseShape& model)>& func);
 
