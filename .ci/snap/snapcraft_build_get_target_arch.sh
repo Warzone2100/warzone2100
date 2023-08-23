@@ -5,12 +5,12 @@
 echoerr() { echo "$@" 1>&2; }
 
 BUILDTIME_TARGET_ARCH=""
-if [ -n "${SNAPCRAFT_TARGET_ARCH}" ]; then
-  # SNAPCRAFT_TARGET_ARCH is available - use it!
-  BUILDTIME_TARGET_ARCH="${SNAPCRAFT_TARGET_ARCH}"
+if [ -n "${CRAFT_TARGET_ARCH}" ]; then
+  # CRAFT_TARGET_ARCH is available - use it!
+  BUILDTIME_TARGET_ARCH="${CRAFT_TARGET_ARCH}"
 else
-  # If SNAPCRAFT_TARGET_ARCH is not available, parse the SNAPCRAFT_ARCH_TRIPLET and convert it
-  case ${SNAPCRAFT_ARCH_TRIPLET%%-*} in
+  # If CRAFT_TARGET_ARCH is not available, parse the CRAFT_ARCH_TRIPLET and convert it
+  case ${CRAFT_ARCH_TRIPLET%%-*} in
   x86_64)
       BUILDTIME_TARGET_ARCH="amd64"
       ;;
