@@ -4082,13 +4082,29 @@ bool VkRoot::createSwapchain()
 	surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
 	debug(LOG_3D, "Using surface format: %s - %s", to_string(surfaceFormat.format).c_str(), to_string(surfaceFormat.colorSpace).c_str());
 
+	// pick compositeAlpha
+	vk::CompositeAlphaFlagBitsKHR compositeAlphaMode = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+	if (swapChainSupport.capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eOpaque)
+	{
+		compositeAlphaMode = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+	}
+	else if (swapChainSupport.capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eInherit)
+	{
+		compositeAlphaMode = vk::CompositeAlphaFlagBitsKHR::eInherit;
+	}
+	else
+	{
+		debug(LOG_INFO, "Unable to find expected supportedCompositeAlpha option (value is: %s) - will attempt opaque", to_string(swapChainSupport.capabilities.supportedCompositeAlpha).c_str());
+	}
+	debug(LOG_3D, "Using supportedCompositeAlpha: %s", to_string(compositeAlphaMode).c_str());
+
 	vk::SwapchainCreateInfoKHR createSwapchainInfo = vk::SwapchainCreateInfoKHR()
 		.setSurface(surface)
 		.setMinImageCount(swapchainDesiredImageCount)
 		.setPresentMode(presentMode)
 		.setImageUsage(vk::ImageUsageFlagBits::eColorAttachment)
 		.setImageArrayLayers(1)
-		.setCompositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque)
+		.setCompositeAlpha(compositeAlphaMode)
 		.setClipped(true)
 		.setImageExtent(swapchainSize)
 		.setImageFormat(surfaceFormat.format)
