@@ -38,6 +38,7 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
+#include <array>
 
 
 //*************************************************************************
@@ -114,6 +115,8 @@ enum ANIMATION_EVENTS
 // 1. Information used for game state calculations (this is always from the "base" / core model file)
 // 2. Information used for display (this may be from the "base" / core model, or a graphics mod overlay display-only model replacement)
 
+#define WZ_CURRENT_GRAPHICS_OVERRIDES_PREFIX "graphics_overrides/curr"
+
 struct iIMDShape;
 
 struct iIMDBaseShape
@@ -137,9 +140,27 @@ struct iIMDBaseShape
 	// the display shape used for rendering (*NOT* for any game state calculations!)
 	inline iIMDShape* displayModel() { return m_displayModel.get(); }
 protected:
-
+	friend bool tryLoad(const WzString &path, const WzString &filename);
+	void replaceDisplayModel(std::unique_ptr<iIMDShape> newDisplayModel);
 private:
 	std::unique_ptr<iIMDShape> m_displayModel = nullptr;  // the display shape used for rendering (*NOT* for any game state calculations!)
+};
+
+struct iIMDShapeTextures
+{
+	bool initialized = false;
+	size_t texpage = iV_TEX_INVALID;
+	size_t tcmaskpage = iV_TEX_INVALID;
+	size_t normalpage = iV_TEX_INVALID;
+	size_t specularpage = iV_TEX_INVALID;
+};
+
+struct TilesetTextureFiles
+{
+	std::string texfile;
+	std::string tcmaskfile;
+	std::string normalfile;
+	std::string specfile;
 };
 
 struct iIMDShape
@@ -159,10 +180,8 @@ struct iIMDShape
 	// do not use any of these variables for game state calculations!
 
 	unsigned int flags = 0; // display only
-	size_t texpage = iV_TEX_INVALID;
-	size_t tcmaskpage = iV_TEX_INVALID;
-	size_t normalpage = iV_TEX_INVALID;
-	size_t specularpage = iV_TEX_INVALID;
+
+	const iIMDShapeTextures& getTextures() const;
 
 	unsigned short numFrames = 0;
 	unsigned short animInterval = 0;
@@ -198,9 +217,18 @@ struct iIMDShape
 	WzString modelName;
 	uint32_t modelLevel = 0;
 
+	std::array<TilesetTextureFiles, 3> tilesetTextureFiles;
+
 	// BOTH:
 
 	std::unique_ptr<iIMDShape> next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
+
+protected:
+	friend void modelUpdateTilesetIdx(size_t tilesetIdx);
+	void reloadTexturesIfLoaded();
+
+private:
+	std::unique_ptr<iIMDShapeTextures> m_textures = std::make_unique<iIMDShapeTextures>();
 };
 
 

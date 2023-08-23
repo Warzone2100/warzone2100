@@ -339,7 +339,7 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 
 		case EFFECT_WAYPOINT:
 			pie = ((EFFECT *)pObject)->imd;
-			z = INT32_MAX - pie->texpage;
+			z = INT32_MAX - pie->getTextures().texpage;
 			break;
 
 		default:
@@ -349,20 +349,20 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 		break;
 	case RENDER_DROID:
 		pie = BODY_IMD(((DROID *)pObject), 0)->displayModel();
-		z = INT32_MAX - pie->texpage;
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_STRUCTURE:
 		pie = ((STRUCTURE *)pObject)->sDisplay.imd->displayModel();
-		z = INT32_MAX - pie->texpage;
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_FEATURE:
 		pie = ((FEATURE *)pObject)->sDisplay.imd->displayModel();
-		z = INT32_MAX - pie->texpage;
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_DELIVPOINT:
 		pie = pAssemblyPointIMDs[((FLAG_POSITION *)pObject)->
 		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc]->displayModel();
-		z = INT32_MAX - pie->texpage;
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_PARTICLE:
 		z = 0;
