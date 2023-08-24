@@ -549,7 +549,7 @@ static bool _imd_load_level_settings(const WzString &filename, const char **ppFi
  * \param s Pointer to shape level
  * \return false on error (memory allocation failure/bad file format), true otherwise
  */
-static bool _imd_load_polys(const WzString &filename, const char **ppFileData, const char *FileDataEnd, iIMDShape *s, int pieVersion, const uint32_t npoints)
+static bool _imd_load_polys(const WzString &filename, const char **ppFileData, const char *FileDataEnd, iIMDShape *s, int pieVersion, const uint32_t npoints, bool shadowPolys = false)
 {
 	const char *pFileData = *ppFileData;
 	IMD_Line lineToProcess;
@@ -576,6 +576,11 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, c
 			debug(LOG_ERROR, "(_load_polys) [poly %u] error loading flags and npoints", i);
 		}
 		pRestOfLine += cnt;
+
+		if (shadowPolys)
+		{
+			ASSERT_OR_RETURN(false, flags == 0, "Invalid polygon flags (%d) for SHADOWPOLYGONS", flags);
+		}
 
 		poly->flags = flags;
 		ASSERT_OR_RETURN(false, npnts == 3, "Invalid polygon size (%d)", npnts);
@@ -1466,7 +1471,6 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 			}
 
 			s.altShadowPoints = std::move(tmpShadowShape.points);
-			s.pShadowPoints = &s.altShadowPoints;
 		}
 		else if (strcmp(buffer, "SHADOWPOLYGONS") == 0)
 		{
@@ -1475,15 +1479,16 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 			uint32_t nShadowPolys = static_cast<uint32_t>(value);
 
 			iIMDShape tmpShadowShape;
+			tmpShadowShape.points = std::move(s.altShadowPoints);
 			tmpShadowShape.polys.resize(nShadowPolys);
-			if (!_imd_load_polys(filename, &lineToProcess.pNextLineBegin, FileDataEnd, &tmpShadowShape, PIE_FLOAT_VER, static_cast<uint32_t>(s.altShadowPoints.size())))
+			if (!_imd_load_polys(filename, &lineToProcess.pNextLineBegin, FileDataEnd, &tmpShadowShape, PIE_FLOAT_VER, static_cast<uint32_t>(tmpShadowShape.points.size()), true))
 			{
 				debug(LOG_ERROR, "_imd_load_level(8): file corrupt - invalid shadowpolygons: %s", filename.toUtf8().c_str());
 				return nullptr;
 			}
 
+			s.altShadowPoints = std::move(tmpShadowShape.points);
 			s.altShadowPolys = std::move(tmpShadowShape.polys);
-			s.pShadowPolys = &s.altShadowPolys;
 		}
 		else
 		{
@@ -1505,15 +1510,23 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
  	}
 	if (!s.altShadowPoints.empty())
 	{
-		if (s.altShadowPolys.empty())
+		if (!s.altShadowPolys.empty())
+		{
+			s.pShadowPoints = &s.altShadowPoints;
+			s.pShadowPolys = &s.altShadowPolys;
+		}
+		else
 		{
 			debug(LOG_ERROR, "imd[_load_level] = %zu SHADOWPOINTS specified, but there are no SHADOWPOLYGONS! Discarding shadow points...",
 				  s.altShadowPoints.size());
 			s.altShadowPoints.clear();
 			s.altShadowPolys.clear();
-			s.pShadowPoints = &s.points;
-			s.pShadowPolys = &s.polys;
 		}
+	}
+	else
+	{
+		s.altShadowPoints.clear();
+		s.altShadowPolys.clear();
 	}
 
 	// FINALLY, massage the data into what can stream directly to GPU buffers
