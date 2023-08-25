@@ -168,14 +168,17 @@ parts:
       # Include the icon's path in the desktop file, not just the name.
       # This needs to happen post-build or the build versioning will show as "modified locally"
       sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' $CRAFT_PART_INSTALL/usr/share/applications/net.wz2100.warzone2100.desktop
+    # Note: Some packages are provided by the gnome extension, and are commented out below
+    # See: https://snapcraft.io/docs/gnome-extension#heading--packages
+    # And: https://github.com/ubuntu/gnome-sdk/blob/gnome-42-2204-sdk/snapcraft.yaml, https://github.com/ubuntu/gnome-sdk/blob/gnome-42-2204/snapcraft.yaml
     build-packages:
       - asciidoctor
-      - g++
+      #- g++
       - gettext
-      - libfontconfig1-dev
+      #- libfontconfig1-dev
       - libfreetype-dev
-      - libfribidi-dev
-      - libharfbuzz-dev
+      #- libfribidi-dev
+      #- libharfbuzz-dev
       - libopenal-dev
       - libphysfs-dev
       - libpng-dev
@@ -192,10 +195,10 @@ parts:
       - wget
       - zip
     stage-packages:
-      - libfontconfig1
+      #- libfontconfig1
       - libfreetype6
-      - libfribidi0
-      - libharfbuzz0b
+      #- libfribidi0
+      #- libharfbuzz0b
       - libogg0
       - libopenal1
       - libopus0
@@ -235,3 +238,8 @@ parts:
       for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
+      # The following is required while using core18 + gnome-3-34
+      # See: https://forum.snapcraft.io/t/undefined-symbol-hb-buffer-set-invisible-glyph-with-gnome-3-34/24287
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libharfbuzz.so.0*
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgio-2.0.so.0*
+      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libglib-2.0.so.0*
