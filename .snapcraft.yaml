@@ -77,12 +77,14 @@ parts:
     - libdbus-1-dev
     - libudev-dev
     - fcitx-libs-dev
+    - libdecor-0-dev
     - libegl1-mesa-dev
     - libgl1-mesa-dev
     - libgles2-mesa-dev
     - libibus-1.0-dev
     - libjack-dev
     - libpulse-dev
+    - libpipewire-0.3-dev
     - libsamplerate0-dev
     - libsndfile1-dev
     - libts-dev
@@ -101,6 +103,8 @@ parts:
     - libxxf86vm-dev
     - libgbm-dev
     stage-packages:
+    - libdecor-0-0
+    - libdecor-0-plugin-1
     - libdbus-1-3
     - libudev1
     - fcitx-libs
@@ -112,6 +116,7 @@ parts:
     - libibus-1.0-5
     - libjack0
     - libpulse0
+    - libpipewire-0.3-0
     - libsamplerate0
     - libts0
     - libsndfile1
