@@ -16,18 +16,14 @@ architectures:
   - build-on: armhf
 
 layout:
-  /usr/share/vulkan:
-    symlink: $SNAP/usr/share/vulkan
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_intel.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_intel.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_radeon.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_radeon.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_broadcom.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_broadcom.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_freedreno.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_freedreno.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_lvp.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_lvp.so
+  /usr/share/libdrm:
+    bind: $SNAP/graphics/libdrm
+  /usr/share/drirc.d:
+    symlink: $SNAP/graphics/drirc.d
+  /usr/share/X11/XErrorDB:
+    symlink: $SNAP/graphics/X11/XErrorDB
+  /usr/share/X11/locale:
+    symlink: $SNAP/graphics/X11/locale
 
 plugs:
   wz2100-sequences:
@@ -35,10 +31,16 @@ plugs:
     content: wz2100-sequences
     target: $SNAP/usr/share/warzone2100/sequences
     default-provider: warzone2100-videos
+  graphics-core22:
+      interface: content
+      target: $SNAP/graphics
+      default-provider: mesa-core22
 
 apps:
   warzone2100:
     extensions: [gnome]
+    command-chain:
+      - bin/graphics-core22-wrapper
     command: usr/bin/warzone2100-launcher.sh warzone2100
     common-id: net.wz2100.warzone2100 # should match the appdata/metainfo file's <id> field
     desktop: usr/share/applications/net.wz2100.warzone2100.desktop
@@ -218,9 +220,19 @@ parts:
       - libsodium23
       - libsqlite3-0
       - libglu1-mesa
-      - mesa-vulkan-drivers
+      # - mesa-vulkan-drivers # provided by graphics-core22 / mesa-core22
       - unzip
       - zip
+
+  graphics-core22:
+    after: [warzone2100]
+    source: https://github.com/MirServer/graphics-core22.git
+    plugin: dump
+    override-prime: |
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/graphics-core22-cleanup mesa-core22 nvidia-core22
+    prime:
+    - bin/graphics-core22-wrapper
 
   # This part removes all the files in this snap which already exist in
   # connected content and base snaps. Since these files will be available
@@ -233,6 +245,7 @@ parts:
     after:  # Make this part run last; list all your other parts here
       - sdl
       - warzone2100
+      - graphics-core22
     plugin: nil
     build-snaps:  # List all content-snaps and base snaps you're using here
       - core22
