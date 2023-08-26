@@ -11,4 +11,9 @@ fi
 export XDG_DATA_HOME="${SNAP_USER_COMMON}"
 export XDG_CONFIG_HOME="${SNAP_USER_COMMON}"
 
+# default SDL_VIDEODRIVER if unset (prefer wayland)
+if [ -z "${SDL_VIDEODRIVER}" ]; then
+	export SDL_VIDEODRIVER="wayland,x11"
+fi
+
 exec "$@"
