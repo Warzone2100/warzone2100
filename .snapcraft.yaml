@@ -63,17 +63,16 @@ parts:
   sdl:
     source: https://github.com/libsdl-org/SDL/releases/download/release-2.26.4/SDL2-2.26.4.tar.gz
     source-checksum: sha512/138f52a23d796803c450722c8a4db8226214522e99f1e5ae657e2b28eb45abf0c81c9c3df9ab16f1a07d59722ed9415d64dd04332ff040cdfbbc0329f0d05ce4
-    plugin: autotools
-    autotools-configure-parameters:
-    - --prefix=/usr
-    - --disable-alsa
-    - --disable-arts
-    - --disable-esd
-    - --disable-nas
-    - --disable-oss
+    plugin: cmake
+    cmake-parameters:
+    - -DCMAKE_INSTALL_PREFIX=/usr
+    - -DSDL_ALSA=OFF
+    - -DSDL_ARTS=OFF
+    - -DSDL_ESD=OFF
+    - -DSDL_NAS=OFF
+    - -DSDL_OSS=OFF
     override-build: |
       craftctl default
-      sed -i 's|"/usr"|"'"$CRAFT_STAGE/usr"'"|g' "$CRAFT_PART_INSTALL/usr/lib/cmake/SDL2/sdl2-config.cmake"
     build-packages:
     - git
     - libdbus-1-dev
