@@ -47,6 +47,7 @@ apps:
     environment:
       XDG_DATA_HOME: $SNAP_USER_COMMON
       XDG_CONFIG_HOME: $SNAP_USER_COMMON
+      LIBDECOR_PLUGIN_DIR: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libdecor/plugins-1
     plugs:
       - audio-playback
       - desktop
