@@ -62,8 +62,8 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-2.26.4/SDL2-2.26.4.tar.gz
-    source-checksum: sha512/138f52a23d796803c450722c8a4db8226214522e99f1e5ae657e2b28eb45abf0c81c9c3df9ab16f1a07d59722ed9415d64dd04332ff040cdfbbc0329f0d05ce4
+    source: https://github.com/libsdl-org/SDL/releases/download/release-2.28.2/SDL2-2.28.2.tar.gz
+    source-checksum: sha512/2c5559c4ec2a71bb89b3fc6e9d0a2b206b8cc1021dfa4ad328aab9a931757ed5fac5ec76d4966dccf81bd861de20963e2013bac62be9ef75ebe1c08678999c39
     plugin: cmake
     cmake-parameters:
     - -DCMAKE_INSTALL_PREFIX=/usr
