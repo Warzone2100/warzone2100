@@ -8,4 +8,7 @@ if [ ! -d "$SNAP_USER_COMMON/warzone2100" ]; then
   fi
 fi
 
-exec env "XDG_DATA_HOME=$SNAP_USER_COMMON" env "XDG_CONFIG_HOME=$SNAP_USER_COMMON" "$@"
+export XDG_DATA_HOME="${SNAP_USER_COMMON}"
+export XDG_CONFIG_HOME="${SNAP_USER_COMMON}"
+
+exec "$@"
