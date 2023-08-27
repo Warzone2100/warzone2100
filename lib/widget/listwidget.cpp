@@ -23,6 +23,7 @@
 
 #include "listwidget.h"
 #include "button.h"
+#include "label.h"
 #include "lib/framework/math_ext.h"
 
 #include <algorithm>
@@ -333,6 +334,8 @@ void ListWidget::updateNumberOfPages()
 
 void ListTabWidget::initialize()
 {
+	attach(label = std::make_shared<W_LABEL>());
+	label->setFont(font_small, WZCOL_TEXT_MEDIUM);
 	attach(tabs = TabSelectionWidget::make());
 	attach(widgets = std::make_shared<ListWidget>());
 	tabs->addOnTabChangedHandler([](TabSelectionWidget& tabsWidget, size_t currentTab) {
@@ -353,19 +356,43 @@ void ListTabWidget::initialize()
 	tabs->setNumberOfTabs(widgets->pages());
 }
 
+#define LABEL_X_BETWEEN_PADDING 5
+#define LABEL_PADDING_Y 0
+
 void ListTabWidget::geometryChanged()
 {
+	int32_t label_width = static_cast<size_t>(std::max<int>(label->idealWidth(), 0));
+	int label_x0 = 0;
+	int label_y0 = LABEL_PADDING_Y;
+	int tabs_x0 = label_x0 + label_width + LABEL_X_BETWEEN_PADDING;
+	int tabs_width = width() - tabs_x0;
 	switch (tabPos)
 	{
 	case Top:
-		tabs->setGeometry(0, 0, width(), tabs->height());
-		widgets->setGeometry(0, tabs->height(), width(), height() - tabs->height());
+		{
+			label->setGeometry(label_x0, label_y0, label_width, label->height());
+			tabs->setGeometry(tabs_x0, 0, tabs_width, tabs->height());
+			int widgets_y0 = std::max(label->idealHeight(), tabs->height());
+			widgets->setGeometry(0, widgets_y0, width(), height() - widgets_y0);
+		}
 		break;
 	case Bottom:
-		tabs->setGeometry(0, height() - tabs->height(), width(), tabs->height());
-		widgets->setGeometry(0, 0, width(), height() - tabs->height());
+		{
+			int label_tabs_height = std::max(label->idealHeight() + (LABEL_PADDING_Y * 2), tabs->height());
+			label_y0 = height() - label_tabs_height + LABEL_PADDING_Y;
+			label->setGeometry(label_x0, label_y0, label_width, label->height());
+			tabs->setGeometry(tabs_x0, height() - label_tabs_height, tabs_width, tabs->height());
+			widgets->setGeometry(0, 0, width(), height() - tabs->height());
+		}
 		break;
 	}
+}
+
+void ListTabWidget::setTitle(const WzString& string)
+{
+	label->setString(string);
+	label->setGeometry(0, 0, label->idealWidth(), label->idealHeight());
+	geometryChanged();
 }
 
 void ListTabWidget::addWidgetToLayout(const std::shared_ptr<WIDGET> &widget)

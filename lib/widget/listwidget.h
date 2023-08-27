@@ -187,6 +187,8 @@ public:
 
 	void geometryChanged() override;
 
+	void setTitle(const WzString& string);
+
 	void setChildSize(int width, int height)
 	{
 		widgets->setChildSize(width, height);    ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
@@ -237,6 +239,7 @@ public:
 private:
 	std::shared_ptr<TabSelectionWidget> tabs;
 	std::shared_ptr<ListWidget> widgets;
+	std::shared_ptr<W_LABEL> label;
 	TabPosition tabPos;
 };
 
