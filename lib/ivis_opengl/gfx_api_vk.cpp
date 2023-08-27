@@ -5415,6 +5415,11 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 		}
 		return AcquireNextSwapchainImageResult::eUnhandledFailure;
 	}
+	catch (const vk::DeviceLostError& e)
+	{
+		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: DeviceLostError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+	}
 	catch (const vk::SystemError& e)
 	{
 		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: unhandled error: %s", e.what());
