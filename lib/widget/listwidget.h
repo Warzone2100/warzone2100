@@ -31,11 +31,16 @@
 #include <functional>
 #include <algorithm>
 
+enum class TabAlignment
+{
+	LeftAligned,
+	RightAligned
+};
 
 struct TabSelectionStyle
 {
 	TabSelectionStyle() {}
-	TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasImage tabHighlight, AtlasImage prev, AtlasImage prevDown, AtlasImage prevHighlight, AtlasImage next, AtlasImage nextDown, AtlasImage nextHighlight, int gap);
+	TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasImage tabHighlight, AtlasImage prev, AtlasImage prevDown, AtlasImage prevHighlight, AtlasImage next, AtlasImage nextDown, AtlasImage nextHighlight, int gap, TabAlignment tabAlignment = TabAlignment::LeftAligned);
 
 	WzSize tabSize;
 	WzSize scrollTabSize;
@@ -43,6 +48,7 @@ struct TabSelectionStyle
 	AtlasImage prevScrollTabImage, prevScrollTabImageDown, prevScrollTabImageHighlight;
 	AtlasImage nextScrollTabImage, nextScrollTabImageDown, nextScrollTabImageHighlight;
 	int tabGap;
+	TabAlignment tabAlignment = TabAlignment::LeftAligned;
 };
 
 class TabSelectionWidget : public WIDGET
