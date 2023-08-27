@@ -1982,6 +1982,13 @@
 				"class": "Building",
 				"parameter": "RepairPoints",
 				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 50
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -2000,6 +2007,13 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 50
 			}
@@ -2021,6 +2035,13 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 50
 			}
@@ -4186,6 +4207,13 @@
 				"class": "Building",
 				"parameter": "RepairPoints",
 				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 50
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -4204,6 +4232,13 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 50
 			}
@@ -4225,6 +4260,13 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 50
 			}

@@ -10,7 +10,7 @@
 		"model": "GNMREPAR.PIE",
 		"mountModel": "TRMECM1.PIE",
 		"name": "Repair Turret",
-		"repairPoints": 15,
+		"repairPoints": 20,
 		"time": 7,
 		"weight": 800
 	},
