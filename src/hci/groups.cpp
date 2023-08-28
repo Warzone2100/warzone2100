@@ -31,27 +31,66 @@ void setGroupButtonEnabled(bool bNewState)
 bool getGroupButtonEnabled()
 {
 	return groupButtonEnabled;
-
 }
+
+class GroupsUIController: public std::enable_shared_from_this<GroupsUIController>
+{
+public:
+	struct GroupDisplayInfo
+	{
+		size_t numberInGroup = 0;
+		DROID_TEMPLATE displayDroidTemplate;
+	};
+public:
+	GroupDisplayInfo* getGroupInfoAt(size_t index)
+	{
+		ASSERT_OR_RETURN(nullptr, index < groupInfo.size(), "Invalid group index (%zu); max: (%zu)", index, groupInfo.size());
+		return &groupInfo[index];
+	}
+
+	size_t size() const
+	{
+		return groupInfo.size();
+	}
+
+	void updateData();
+
+	void selectGroup(size_t groupNumber)
+	{
+		// select the group
+		kf_SelectGrouping(groupNumber);
+	}
+
+	void assignSelectedDroidsToGroup(size_t groupNumber)
+	{
+		assignDroidsToGroup(selectedPlayer, groupNumber, true);
+	}
+
+private:
+	std::array<GroupDisplayInfo, 10> groupInfo;
+};
 
 class GroupButton : public DynamicIntFancyButton
 {
 private:
 	typedef DynamicIntFancyButton BaseWidget;
+	std::shared_ptr<GroupsUIController> controller;
 	std::shared_ptr<W_LABEL> groupNumberLabel;
 	std::shared_ptr<W_LABEL> groupCountLabel;
 protected:
 	GroupButton() : DynamicIntFancyButton() { }
 public:
 	size_t groupNumber;
-	static std::shared_ptr<GroupButton> make(size_t groupNumber)
+	static std::shared_ptr<GroupButton> make(const std::shared_ptr<GroupsUIController>& controller, size_t groupNumber)
 	{
 		class make_shared_enabler: public GroupButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
+		widget->controller = controller;
 		widget->groupNumber = groupNumber;
 		widget->initialize();
 		return widget;
 	}
+
 	void initialize()
 	{
 		attach(groupNumberLabel = std::make_shared<W_LABEL>());
@@ -67,46 +106,31 @@ public:
 
 	void clickPrimary() override
 	{
-		// select the group
-		kf_SelectGrouping(groupNumber);
-
+		controller->selectGroup(groupNumber);
 	}
+
 	void clickSecondary() override
 	{
-		assignDroidsToGroup(selectedPlayer, groupNumber, true);
+		controller->assignSelectedDroidsToGroup(groupNumber);
 	}
 
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		DROID	*psDroid, *displayDroid = NULL;
-		size_t numberInGroup = 0;
-		std::map<std::vector<uint32_t>, size_t> unitcounter;
-		size_t most_droids_of_same_type_in_group = 0;
-
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+		auto groupInfo = controller->getGroupInfoAt(groupNumber);
+		if (!groupInfo)
 		{
-			// display whatever unit occurs the most in this group
-			if (psDroid->group == groupNumber)
-			{
-				// find the identifier for this droid
-				std::vector<uint32_t> components = buildComponentsFromDroid(psDroid);
-				if (++unitcounter[components] > most_droids_of_same_type_in_group)
-				{
-					most_droids_of_same_type_in_group = unitcounter[components];
-					displayDroid = psDroid;
-				}
-				numberInGroup++;
-			}
+			return;
 		}
-		if (!numberInGroup)
+		if (!groupInfo->numberInGroup)
 		{
 			groupCountLabel->setString("");
 			displayBlank(xOffset, yOffset, false);
-		} else
+		}
+		else
 		{
-			displayIMD(AtlasImage(), ImdObject::Droid(displayDroid), xOffset, yOffset);
-			groupCountLabel->setString(WzString::fromUtf8(astringf("%u", numberInGroup)));
+			displayIMD(AtlasImage(), ImdObject::DroidTemplate(&(groupInfo->displayDroidTemplate)), xOffset, yOffset);
+			groupCountLabel->setString(WzString::fromUtf8(astringf("%u", groupInfo->numberInGroup)));
 		}
 	}
 	std::string getTip() override
@@ -127,6 +151,8 @@ void GroupsForum::display(int xOffset, int yOffset)
 
 void GroupsForum::initialize()
 {
+	groupsUIController = std::make_shared<GroupsUIController>();
+
 	// the layout should be like this when the build menu is open
 	id = IDOBJ_GROUP;
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -145,6 +171,55 @@ void GroupsForum::initialize()
 	}
 }
 
+void GroupsUIController::updateData()
+{
+	struct AccumulatedGroupInfo
+	{
+		size_t numberInGroup = 0;
+		DROID *displayDroid = nullptr;
+		std::map<std::vector<uint32_t>, size_t> unitcounter;
+		size_t most_droids_of_same_type_in_group = 0;
+	};
+
+	std::array<AccumulatedGroupInfo, 10> calculatedGroupInfo;
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+	{
+		if (psDroid->group >= calculatedGroupInfo.size())
+		{
+			continue;
+		}
+
+		auto& currGroupInfo = calculatedGroupInfo[psDroid->group];
+
+		// display whatever unit occurs the most in this group
+		// find the identifier for this droid
+		std::vector<uint32_t> components = buildComponentsFromDroid(psDroid);
+		if (++currGroupInfo.unitcounter[components] > currGroupInfo.most_droids_of_same_type_in_group)
+		{
+			currGroupInfo.most_droids_of_same_type_in_group = currGroupInfo.unitcounter[components];
+			currGroupInfo.displayDroid = psDroid;
+		}
+		currGroupInfo.numberInGroup++;
+	}
+
+	for (size_t idx = 0; idx < calculatedGroupInfo.size(); ++idx)
+	{
+		const auto& calculatedInfo = calculatedGroupInfo[idx];
+		auto& storedGroupInfo = groupInfo[idx];
+		storedGroupInfo.numberInGroup = calculatedInfo.numberInGroup;
+		if (calculatedInfo.numberInGroup > 0)
+		{
+			// generate a DROID_TEMPLATE from the displayDroid
+			templateSetParts(calculatedInfo.displayDroid, &(storedGroupInfo.displayDroidTemplate));
+		}
+	}
+}
+
+void GroupsForum::updateData()
+{
+	groupsUIController->updateData();
+}
+
 void GroupsForum::addTabList()
 {
 	attach(groupsList = IntListTabWidget::make(TabAlignment::RightAligned));
@@ -160,7 +235,7 @@ void GroupsForum::addTabList()
 
 std::shared_ptr<GroupButton> GroupsForum::makeGroupButton(size_t groupNumber)
 {
-	return GroupButton::make(groupNumber);
+	return GroupButton::make(groupsUIController, groupNumber);
 }
 
 

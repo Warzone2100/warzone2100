@@ -1106,6 +1106,7 @@ void kf_SelectGrouping(UDWORD groupNumber)
 	{
 		Selected = activateGroup(selectedPlayer, groupNumber);
 	}
+	intGroupsChanged(true);
 
 	/* play group audio but only if they weren't already selected - AM */
 	if (Selected && !bAlreadySelected)

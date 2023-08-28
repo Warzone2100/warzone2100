@@ -288,6 +288,11 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 
 	relativeDamage = objDamage(psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
+	if (relativeDamage != 0 && psDroid->player == selectedPlayer && psDroid->group != UBYTE_MAX && psDroid->timeLastHit == gameTime)
+	{
+		intGroupDamaged(psDroid->group, (relativeDamage > 0) ? static_cast<uint64_t>(relativeDamage) : 0, (relativeDamage < 0)); // update UI information
+	}
+
 	if (relativeDamage > 0)
 	{
 		// reset the attack level
@@ -561,6 +566,11 @@ bool removeDroidBase(DROID *psDel)
 				kill3DBuilding();
 			}
 		}
+	}
+
+	if (psDel->group != UBYTE_MAX)
+	{
+		intGroupsChanged();
 	}
 
 	if (psDel->player == selectedPlayer)
@@ -1821,6 +1831,7 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 {
 	DROID	*psDroid;
 	bool	bAtLeastOne = false;
+	size_t  numCleared = 0;
 	FLAG_POSITION	*psFlagPos;
 
 	ASSERT_OR_RETURN(, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
@@ -1834,6 +1845,7 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 			if (clearGroup && psDroid->group == groupNumber)
 			{
 				psDroid->group = UBYTE_MAX;
+				++numCleared;
 			}
 
 			/* Only assign the currently selected ones */
@@ -1857,6 +1869,10 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 		groupConsoleInformOfCreation(groupNumber);
 		secondarySetAverageGroupState(selectedPlayer, groupNumber);
 	}
+	if (bAtLeastOne || numCleared > 0)
+	{
+		intGroupsChanged();
+	}
 }
 
 
@@ -1878,6 +1894,7 @@ void removeDroidsFromGroup(UDWORD playerNumber)
 	if (removedCount)
 	{
 		groupConsoleInformOfRemoval();
+		intGroupsChanged();
 	}
 }
 
@@ -1885,6 +1902,7 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 {
 	DROID	*psDroid, *psCentreDroid = nullptr;
 	bool selected = false;
+	size_t numDeselected = 0;
 	FLAG_POSITION	*psFlagPos;
 
 	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
@@ -1897,6 +1915,7 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 			if (psDroid->selected && psDroid->group != groupNumber)
 			{
 				DeSelectDroid(psDroid);
+				++numDeselected;
 			}
 			/* Get the right ones */
 			if (psDroid->group == groupNumber)
@@ -1940,6 +1959,11 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 		groupConsoleInformOfCentering(groupNumber);
 	}
 
+	if (selected || numDeselected > 0)
+	{
+		intGroupsChanged(true);
+	}
+
 	return selected;
 }
 
@@ -1974,6 +1998,7 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 			psFlagPos->selected = false;
 		}
 	}
+	intGroupsChanged(true);
 	CONPRINTF(ngettext("%u unit selected", "%u units selected", selectionCount), selectionCount);
 	return selected;
 }
@@ -1982,6 +2007,7 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 {
 	DROID	*psDroid;
 	bool selected = false;
+	size_t numDeselected = 0;
 	FLAG_POSITION	*psFlagPos;
 
 	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
@@ -1994,6 +2020,7 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 			if (psDroid->selected && psDroid->group != groupNumber)
 			{
 				DeSelectDroid(psDroid);
+				++numDeselected;
 			}
 			/* Get the right ones */
 			if (psDroid->group == groupNumber)
@@ -2014,6 +2041,10 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 			psFlagPos->selected = false;
 		}
 		groupConsoleInformOfSelection(groupNumber);
+	}
+	if (selected || numDeselected > 0)
+	{
+		intGroupsChanged(true);
 	}
 	return selected;
 }
