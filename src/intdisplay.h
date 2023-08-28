@@ -141,6 +141,7 @@ protected:
 		int rate;
 	} model;
 	ButtonType buttonType;  // TOPBUTTON is square, BTMBUTTON has a little up arrow.
+	bool buttonBackgroundEmpty = false;
 };
 
 class IntObjectButton : public IntFancyButton
