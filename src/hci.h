@@ -34,6 +34,10 @@ typedef std::function<void (const int)> playerCallbackFunc; // callback function
 
 #include "message.h"
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 class MultipleChoiceButton;
 class WIDGET;
 struct DROID;
@@ -305,7 +309,7 @@ void intResearchFinished(STRUCTURE *psBuilding);
 void intAlliedResearchChanged();
 
 /* Tell the interface that groups have changed */
-void intGroupsChanged(bool selectionOnly = false);
+void intGroupsChanged(optional<UBYTE> selectedGroup = nullopt);
 void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled);
 
 /* Sync the interface to an object */

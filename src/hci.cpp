@@ -2030,11 +2030,15 @@ void intAlliedResearchChanged()
 	}
 }
 
-void intGroupsChanged(bool selectionOnly)
+void intGroupsChanged(optional<UBYTE> selectedGroup)
 {
 	if (getGroupButtonEnabled())
 	{
 		intRefreshGroupsUI();
+		if (selectedGroup.has_value() && selectedGroup.value() != UBYTE_MAX)
+		{
+			groupsUI->updateSelectedGroup(selectedGroup.value());
+		}
 	}
 }
 

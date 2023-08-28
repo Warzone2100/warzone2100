@@ -286,6 +286,17 @@ void GroupsForum::updateData()
 	groupsUIController->updateData();
 }
 
+void GroupsForum::updateSelectedGroup(size_t group)
+{
+	size_t groupButtonIdx = (group > 0) ? group - 1 : 9;
+	if (groupButtonIdx >= groupsList->childrenSize())
+	{
+		return;
+	}
+	// ensure that the page that contains this group is displayed
+	groupsList->goToChildPage(groupButtonIdx);
+}
+
 void GroupsForum::addGroupDamageForCurrentTick(size_t group, uint64_t additionalDamage, bool unitKilled)
 {
 	groupsUIController->addGroupDamageForCurrentTick(group, additionalDamage, unitKilled);

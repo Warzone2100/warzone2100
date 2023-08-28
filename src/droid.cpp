@@ -1871,7 +1871,12 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	}
 	if (bAtLeastOne || numCleared > 0)
 	{
-		intGroupsChanged();
+		optional<UBYTE> newSelectedGroup;
+		if (bAtLeastOne)
+		{
+			newSelectedGroup = groupNumber;
+		}
+		intGroupsChanged(newSelectedGroup);
 	}
 }
 
@@ -1961,7 +1966,7 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 
 	if (selected || numDeselected > 0)
 	{
-		intGroupsChanged(true);
+		intGroupsChanged((selected) ? groupNumber : UBYTE_MAX);
 	}
 
 	return selected;
@@ -1998,7 +2003,7 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 			psFlagPos->selected = false;
 		}
 	}
-	intGroupsChanged(true);
+	intGroupsChanged(UBYTE_MAX);
 	CONPRINTF(ngettext("%u unit selected", "%u units selected", selectionCount), selectionCount);
 	return selected;
 }
@@ -2044,7 +2049,7 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 	}
 	if (selected || numDeselected > 0)
 	{
-		intGroupsChanged(true);
+		intGroupsChanged((selected) ? groupNumber : UBYTE_MAX);
 	}
 	return selected;
 }
