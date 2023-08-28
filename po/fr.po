@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:13\n"
+"PO-Revision-Date: 2023-08-28 04:29\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -16097,7 +16097,7 @@ msgstr "Curseurs colorés"
 
 #: src/frontend.cpp:2245
 msgid "Cursor Size"
-msgstr ""
+msgstr "Taille du curseur"
 
 #: src/frontend.cpp:2257
 msgid "MOUSE OPTIONS"
@@ -16208,7 +16208,7 @@ msgstr ""
 
 #: src/frontend.cpp:2985
 msgid "Enable UPnP"
-msgstr ""
+msgstr "Activer UPnP"
 
 #: src/frontend.cpp:2990
 msgid "Inactivity Timeout"
@@ -18424,7 +18424,7 @@ msgstr ""
 #: src/multiint.cpp:4276
 #, c-format
 msgid "From: %s"
-msgstr ""
+msgstr "De : %s"
 
 #: src/multiint.cpp:4349
 msgid "Click to change difficulty"
@@ -18833,7 +18833,7 @@ msgstr ""
 
 #: src/multiopt.cpp:403
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "CARTE REQUISE !"
 
 #: src/multiopt.cpp:428
 msgid "MOD REQUESTED!"
@@ -19165,7 +19165,7 @@ msgstr ""
 
 #: src/seqdisp.cpp:576
 msgid "Loading video"
-msgstr ""
+msgstr "Chargement de la vidéo"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
