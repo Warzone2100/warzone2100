@@ -423,19 +423,16 @@ int cmdOutputThreadFunc(void *)
 		bool successfullyWroteMsg = false;
 		do {
 			// Wait to be ready to write
-			auto result = cmdIOIsReady(nullopt, writeFd, quitSignalFd);
+			auto result = cmdIOIsReady(nullopt, writeFd, -1); // do not wait on the quit signal fd here - all messages must be sent!
 			if (result == CmdIOReadyStatus::Exit)
 			{
-				// quit thread
-				return 0;
+				// ignore, and retry
+				continue;
 			}
 			else if (result == CmdIOReadyStatus::NotReady)
 			{
-				if (cmdOutputThreadQuit.load())
-				{
-					// quit thread
-					return 0;
-				}
+				// retry
+				continue;
 			}
 			else if (result == CmdIOReadyStatus::ReadyWrite)
 			{
