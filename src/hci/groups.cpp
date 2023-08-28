@@ -40,6 +40,8 @@ private:
 	typedef DynamicIntFancyButton BaseWidget;
 	std::shared_ptr<W_LABEL> groupNumberLabel;
 	std::shared_ptr<W_LABEL> groupCountLabel;
+protected:
+	GroupButton() : DynamicIntFancyButton() { }
 public:
 	size_t groupNumber;
 	static std::shared_ptr<GroupButton> make(size_t groupNumber)
@@ -55,12 +57,13 @@ public:
 		attach(groupNumberLabel = std::make_shared<W_LABEL>());
 		groupNumberLabel->setGeometry(OBJ_TEXTX, OBJ_B1TEXTY - 5, 16, 16);
 		groupNumberLabel->setString(WzString::fromUtf8(astringf("%u", groupNumber)));
+		groupNumberLabel->setTransparentToMouse(true);
 
 		attach(groupCountLabel = std::make_shared<W_LABEL>());
 		groupCountLabel->setGeometry(OBJ_TEXTX + 40, OBJ_B1TEXTY + 20, 16, 16);
 		groupCountLabel->setString("");
+		groupCountLabel->setTransparentToMouse(true);
 	}
-	GroupButton() { }
 
 	void clickPrimary() override
 	{
@@ -71,8 +74,8 @@ public:
 	void clickSecondary() override
 	{
 		assignDroidsToGroup(selectedPlayer, groupNumber, true);
-
 	}
+
 protected:
 	void display(int xOffset, int yOffset) override
 	{
