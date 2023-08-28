@@ -38,9 +38,10 @@ class GroupsForum: public IntFormAnimated
 {
 private:
 	typedef IntFormAnimated BaseWidget;
+protected:
+	void initialize();
 public:
 	void display(int xOffset, int yOffset);
-	void initialize();
 	static std::shared_ptr<GroupsForum> make()
 	{
 		class make_shared_enabler: public GroupsForum {};
@@ -49,9 +50,11 @@ public:
 		widget->initialize();
 		return widget;
 	}
+private:
 	std::shared_ptr<GroupButton> makeGroupButton(size_t groupNumber);
-	std::shared_ptr<IntListTabWidget> groupsList;
 	void addTabList();
+private:
+	std::shared_ptr<IntListTabWidget> groupsList;
 };
 
 #endif // __INCLUDED_SRC_HCI_GROUPS_H__
