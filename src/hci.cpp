@@ -176,6 +176,7 @@ static enum _edit_pos_mode
 
 OBJECT_MODE objMode;
 std::shared_ptr<BaseObjectsController> interfaceController = nullptr;
+std::shared_ptr<GroupsForum> groupsUI = nullptr;
 
 /* The current stats list being used by the stats screen */
 static BASE_STATS		**ppsStatsList;
@@ -965,6 +966,8 @@ void interfaceShutDown()
 		replayOverlayScreen = nullptr;
 	}
 
+	groupsUI = nullptr;
+
 	psWScreen = nullptr;
 
 	free(apsStructStatsList);
@@ -1035,10 +1038,9 @@ void intDoScreenRefresh()
 {
 	if (IntGroupsRefreshPending && getGroupButtonEnabled())
 	{
-		GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
-		if (groupsForum)
+		if (groupsUI)
 		{
-			groupsForum->updateData();
+			groupsUI->updateData();
 		}
 		IntGroupsRefreshPending = false;
 	}
@@ -1493,6 +1495,7 @@ INT_RETVAL intRunWidgets()
 			addIntelScreen();
 			// remove the groups Menu
 			widgDelete(psWScreen, IDOBJ_GROUP);
+			groupsUI.reset();
 			reticuleCallback(RETBUT_INTELMAP);
 			break;
 
@@ -1507,6 +1510,7 @@ INT_RETVAL intRunWidgets()
 			intShowPowerBar();
 			// remove the groups Menu
 			widgDelete(psWScreen, IDOBJ_GROUP);
+			groupsUI.reset();
 			intAddDesign(false);
 			intMode = INT_DESIGN;
 			gInputManager.contexts().pushState();
@@ -2036,23 +2040,30 @@ void intGroupsChanged(bool selectionOnly)
 
 void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled)
 {
-	// FUTURE TODO: Could update the groups UI with group damage lastTime, severity, etc
+	if (getGroupButtonEnabled())
+	{
+		groupsUI->addGroupDamageForCurrentTick(group, additionalDamage, unitKilled);
+	}
 }
 
 bool intShowGroupSelectionMenu()
 {
 	if (getGroupButtonEnabled())
 	{
-		GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
-		if (!groupsForum)
+		GroupsForum* groupsUIFormWidg = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
+		if (!groupsUIFormWidg)
 		{
-			auto newGroupsForum = GroupsForum::make();
-			psWScreen->psForm->attach(newGroupsForum);
+			if (!groupsUI)
+			{
+				groupsUI = GroupsForum::make();
+			}
+			psWScreen->psForm->attach(groupsUI);
 		}
 	}
 	else
 	{
 		widgDelete(psWScreen, IDOBJ_GROUP);
+		groupsUI.reset();
 	}
 	return true;
 }
