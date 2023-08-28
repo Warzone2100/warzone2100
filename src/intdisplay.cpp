@@ -938,14 +938,24 @@ bool intInitialiseGraphics()
 // Clear a button bitmap. ( copy the button background ).
 void IntFancyButton::displayClear(int xOffset, int yOffset)
 {
-	if (isDown())
+	UWORD buttonId = 0;
+	switch (buttonType)
 	{
-		iV_DrawImage(IntImages, IMAGE_BUT0_DOWN + buttonType * 2, xOffset + x(), yOffset + y());
+		case IntFancyButton::ButtonType::TOPBUTTON:
+			if (buttonBackgroundEmpty)
+			{
+				buttonId = (isDown() ? IMAGE_BUT_EMPTY_DOWN : IMAGE_BUT_EMPTY_UP);
+			}
+			else
+			{
+				buttonId = (isDown() ? IMAGE_BUT0_DOWN : IMAGE_BUT0_UP);
+			}
+			break;
+		case IntFancyButton::ButtonType::BTMBUTTON:
+			buttonId = (isDown() ? IMAGE_BUTB0_DOWN : IMAGE_BUTB0_UP);
+			break;
 	}
-	else
-	{
-		iV_DrawImage(IntImages, IMAGE_BUT0_UP + buttonType * 2, xOffset + x(), yOffset + y());
-	}
+	iV_DrawImage(IntImages, buttonId, xOffset + x(), yOffset + y());
 }
 
 // Create a button by rendering an IMD object into it.
