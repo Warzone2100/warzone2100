@@ -50,13 +50,17 @@ protected:
 	virtual void initialize() override;
 
 public:
-	static std::shared_ptr<IntListTabWidget> make()
+	static std::shared_ptr<IntListTabWidget> make(TabAlignment tabAlignment = TabAlignment::LeftAligned)
 	{
 		class make_shared_enabler: public IntListTabWidget {};
 		auto widget = std::make_shared<make_shared_enabler>();
+		widget->tabAlignment = tabAlignment;
 		widget->initialize();
 		return widget;
 	}
+
+private:
+	TabAlignment tabAlignment = TabAlignment::LeftAligned;
 };
 
 extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.

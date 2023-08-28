@@ -249,7 +249,7 @@ void IntListTabWidget::initialize()
 {
 	ListTabWidget::initialize();
 	tabWidget()->setHeight(15);
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2));
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2));
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2));
+	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
+	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
+	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2, tabAlignment));
 }
