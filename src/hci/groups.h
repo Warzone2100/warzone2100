@@ -33,6 +33,7 @@ void setGroupButtonEnabled(bool bNewState);
 bool getGroupButtonEnabled();
 
 class GroupButton;
+class GroupsUIController;
 
 class GroupsForum: public IntFormAnimated
 {
@@ -50,11 +51,13 @@ public:
 		widget->initialize();
 		return widget;
 	}
+	void updateData();
 private:
 	std::shared_ptr<GroupButton> makeGroupButton(size_t groupNumber);
 	void addTabList();
 private:
 	std::shared_ptr<IntListTabWidget> groupsList;
+	std::shared_ptr<GroupsUIController> groupsUIController;
 };
 
 #endif // __INCLUDED_SRC_HCI_GROUPS_H__

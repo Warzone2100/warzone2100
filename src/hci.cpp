@@ -990,6 +990,7 @@ void interfaceShutDown()
 }
 
 static bool IntRefreshPending = false;
+static bool IntGroupsRefreshPending = false;
 
 // Set widget refresh pending flag.
 //
@@ -1001,6 +1002,11 @@ void intRefreshScreen()
 bool intIsRefreshing()
 {
 	return Refreshing;
+}
+
+void intRefreshGroupsUI()
+{
+	IntGroupsRefreshPending = true;
 }
 
 
@@ -1027,6 +1033,16 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 //
 void intDoScreenRefresh()
 {
+	if (IntGroupsRefreshPending && getGroupButtonEnabled())
+	{
+		GroupsForum* groupsForum = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
+		if (groupsForum)
+		{
+			groupsForum->updateData();
+		}
+		IntGroupsRefreshPending = false;
+	}
+
 	if (!IntRefreshPending)
 	{
 		return;
@@ -2010,6 +2026,19 @@ void intAlliedResearchChanged()
 	}
 }
 
+void intGroupsChanged(bool selectionOnly)
+{
+	if (getGroupButtonEnabled())
+	{
+		intRefreshGroupsUI();
+	}
+}
+
+void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled)
+{
+	// FUTURE TODO: Could update the groups UI with group damage lastTime, severity, etc
+}
+
 bool intShowGroupSelectionMenu()
 {
 	if (getGroupButtonEnabled())
@@ -2020,7 +2049,8 @@ bool intShowGroupSelectionMenu()
 			auto newGroupsForum = GroupsForum::make();
 			psWScreen->psForm->attach(newGroupsForum);
 		}
-	} else
+	}
+	else
 	{
 		widgDelete(psWScreen, IDOBJ_GROUP);
 	}

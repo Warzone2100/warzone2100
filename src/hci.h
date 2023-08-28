@@ -304,6 +304,10 @@ void intSetMapPos(UDWORD x, UDWORD y);
 void intResearchFinished(STRUCTURE *psBuilding);
 void intAlliedResearchChanged();
 
+/* Tell the interface that groups have changed */
+void intGroupsChanged(bool selectionOnly = false);
+void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled);
+
 /* Sync the interface to an object */
 void intObjectSelected(BASE_OBJECT *psObj);
 
