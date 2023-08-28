@@ -102,7 +102,7 @@ protected:
 		if (!numberInGroup)
 		{
 			groupCountLabel->setString("");
-			displayBlank(xOffset, yOffset);
+			displayBlank(xOffset, yOffset, false);
 		} else
 		{
 			displayIMD(AtlasImage(), ImdObject::Droid(displayDroid), xOffset, yOffset);
@@ -147,12 +147,15 @@ void GroupsForum::initialize()
 
 void GroupsForum::addTabList()
 {
-	attach(groupsList = IntListTabWidget::make());
+	attach(groupsList = IntListTabWidget::make(TabAlignment::RightAligned));
 	groupsList->id = IDOBJ_GROUP;
 	groupsList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	groupsList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int groupListWidth = OBJ_BUTWIDTH * 5 + STAT_GAP * 4;
 	groupsList->setGeometry((OBJ_BACKWIDTH - groupListWidth) / 2, OBJ_TABY, groupListWidth, OBJ_BACKHEIGHT - OBJ_TABY);
+	WzString unitGroupsStr = _("Unit Groups:");
+	unitGroupsStr += " ";
+	groupsList->setTitle(unitGroupsStr);
 }
 
 std::shared_ptr<GroupButton> GroupsForum::makeGroupButton(size_t groupNumber)
