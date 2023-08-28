@@ -130,7 +130,7 @@ protected:
 	void displayClear(int xOffset, int yOffset);
 	void displayIMD(AtlasImage image, ImdObject imdObject, int xOffset, int yOffset);
 	void displayImage(AtlasImage image, int xOffset, int yOffset);
-	void displayBlank(int xOffset, int yOffset);
+	void displayBlank(int xOffset, int yOffset, bool withQuestionMark = true);
 	void displayIfHighlight(int xOffset, int yOffset);
 
 	struct

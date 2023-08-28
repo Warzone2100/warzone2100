@@ -1258,7 +1258,7 @@ void IntFancyButton::displayImage(AtlasImage image, int xOffset, int yOffset)
 }
 
 // Create a blank button.
-void IntFancyButton::displayBlank(int xOffset, int yOffset)
+void IntFancyButton::displayBlank(int xOffset, int yOffset, bool withQuestionMark)
 {
 	UDWORD ox, oy;
 
@@ -1273,8 +1273,11 @@ void IntFancyButton::displayBlank(int xOffset, int yOffset)
 
 	displayClear(xOffset, yOffset);
 
-	// Draw a question mark, bit of quick hack this.
-	iV_DrawImage(IntImages, IMAGE_QUESTION_MARK, xOffset + x() + ox + 10, yOffset + y() + oy + 3);
+	if (withQuestionMark)
+	{
+		// Draw a question mark, bit of quick hack this.
+		iV_DrawImage(IntImages, IMAGE_QUESTION_MARK, xOffset + x() + ox + 10, yOffset + y() + oy + 3);
+	}
 }
 
 // Returns true if the droid is currently building something.
