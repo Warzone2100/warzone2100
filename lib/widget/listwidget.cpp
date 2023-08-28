@@ -168,7 +168,7 @@ void TabSelectionWidget::doLayoutAll()
 	for (size_t n = 0; n < tabButtons.size(); ++n)
 	{
 		int x0 = 0;
-		int tabPage = n / tabsAtOnce;
+		size_t tabPage = n / tabsAtOnce;
 		int tabPos = 0;
 		switch (tabStyle.tabAlignment)
 		{
