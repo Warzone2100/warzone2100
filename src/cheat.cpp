@@ -36,6 +36,7 @@
 #include "qtscript.h"
 #include "template.h"
 #include "activity.h"
+#include "warzoneconfig.h"
 
 struct CHEAT_ENTRY
 {
@@ -180,6 +181,10 @@ void sendProcessDebugMappings(bool val)
 		return;
 	}
 	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return;
+	}
+	if (war_getSaveRealism())
 	{
 		return;
 	}

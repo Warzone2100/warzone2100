@@ -185,6 +185,7 @@ char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
 char	FavoriteStructuresPath[PATH_MAX];
+static unsigned int realismSaveTime = 0;
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
@@ -986,6 +987,7 @@ static void startGameLoop()
 		addMissionTimerInterface();
 	}
 	triggerEvent(TRIGGER_START_LEVEL);
+	realismSaveTime = gameTime + 1000; //Really just to prevent Intel videos messages from not getting saved if run immediately.
 	screen_disableMapPreview();
 
 	GameStoryLogger::instance().logStartGame();
@@ -1084,6 +1086,7 @@ static void stopGameLoop()
 	GameStoryLogger::instance().reset();
 
 	gameInitialised = false;
+	realismSaveTime = 0;
 }
 
 
@@ -1314,6 +1317,12 @@ void mainLoop()
 				break;
 			}
 		realTimeUpdate(); // Update realTime.
+	}
+
+	if (!bMultiPlayer && war_getSaveRealism() && (realismSaveTime != 0) && (gameTime > realismSaveTime))
+	{
+		realismSaveTime = 0;
+		autoSave(true);
 	}
 
 	wzApplyCursor();

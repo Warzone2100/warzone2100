@@ -451,7 +451,7 @@ void kf_MakeMeHero()
 		if (psDroid->selected && psDroid->droidType == DROID_COMMAND)
 		{
 			psDroid->experience = 8 * 65536 * 128;
-		} 
+		}
 		else if (psDroid->selected)
 		{
 			psDroid->experience = 4 * 65536 * 128;
@@ -746,7 +746,7 @@ void kf_ListDroids()
 			debug(LOG_INFO, "droid %i;%s;%i;%i;%i", i, psDroid->aName, psDroid->droidType, x, y);
 		}
 	}
-	
+
 }
 
 
@@ -2543,6 +2543,11 @@ void kf_QuickSave()
 	{
 		return;
 	}
+	if (war_getSaveRealism())
+	{
+		console(_("QuickSave not allowed during realism mode"));
+		return;
+	}
 
 	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
 	const char *quickSaveFolder = bMultiPlayer ? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
@@ -2570,6 +2575,11 @@ void kf_QuickLoad()
 	}
 	if (InGameOpUp || isInGamePopupUp)
 	{
+		return;
+	}
+	if (war_getSaveRealism())
+	{
+		console(_("QuickLoad not allowed during realism mode"));
 		return;
 	}
 

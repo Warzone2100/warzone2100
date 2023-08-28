@@ -60,6 +60,7 @@
 #include "ingameop.h"
 #include "game.h"
 #include "version.h"
+#include "warzoneconfig.h"
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
 #define totalslotspace 64		// guessing 64 max chars for filename.
@@ -390,7 +391,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	ASSERT(latestTagResult.has_value(), "No extractable latest tag?? - Please try re-downloading the latest official source bundle");
 	const TagVer buildTagVer = latestTagResult.value_or(TagVer());
 	try
-	{		
+	{
 		WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [NewSaveGamePath, &buildTagVer, &saveGameNamesAndTimes](const char* dirName){
 			if (strcmp(dirName, "auto") == 0)
 			{
@@ -1132,11 +1133,15 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 	deleteSaveGame_classic(savefile);
 }
 
-bool autoSave()
+bool autoSave(bool forceRealismSaveIfPossible)
 {
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating/autogames
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (!autosaveEnabled || runningMultiplayer() || bInTutorial || dbgInputManager.debugMappingsAllowed() || Cheated || autogame_enabled())
+	{
+		return false;
+	}
+	if (war_getSaveRealism() && !forceRealismSaveIfPossible)
 	{
 		return false;
 	}
@@ -1152,7 +1157,7 @@ bool autoSave()
 		// no old .gam found: check for new saves
 		freeAutoSaveSlot(bMultiPlayer ? SAVEGAME_LOC_SKI_AUTO : SAVEGAME_LOC_CAM_AUTO);
 	}
-	
+
 	time_t now = time(nullptr);
 	struct tm timeinfo = getLocalTime(now);
 	char savedate[PATH_MAX];

@@ -92,6 +92,8 @@ struct WARZONE_GLOBALS
 	bool pointLightLighting = false;
 	// groups UI
 	bool groupsMenuEnabled = true;
+	// save realism
+	bool saveRealism = false;
 
 	// run-time only settings (not persisted to config!)
 	bool allowVulkanImplicitLayers = false;
@@ -679,4 +681,14 @@ void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed) // not persisted 
 bool war_getAllowVulkanImplicitLayers()
 {
 	return warGlobs.allowVulkanImplicitLayers;
+}
+
+bool war_getSaveRealism()
+{
+	return warGlobs.saveRealism;
+}
+
+void war_setSaveRealism(bool mode)
+{
+	 warGlobs.saveRealism = mode;
 }

@@ -171,6 +171,8 @@ void war_setGroupsMenuEnabled(bool enabled);
 void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed); // not persisted to config
 bool war_getAllowVulkanImplicitLayers();
 
+bool war_getSaveRealism();
+void war_setSaveRealism(bool mode);
 /**
  * Enable or disable sound initialization
  *

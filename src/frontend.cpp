@@ -2641,6 +2641,11 @@ static std::string gameOptionsCameraSpeedString()
 	return cameraSpeed;
 }
 
+char const *gameOptionsSaveRealism()
+{
+	return war_getSaveRealism() ? _("On") : _("Off");
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
 
@@ -2861,6 +2866,7 @@ static std::shared_ptr<WIDGET> makeLanguageDropdown()
 			widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));
 			widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"));
 			widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
+			widgSetString(psWScreen, FRONTEND_SAVEREALISM, _("Save Realism"));
 			widgSetString(psWScreen, FRONTEND_CAMERASPEED, _("Camera Speed"));
 			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 
@@ -2918,6 +2924,12 @@ void startGameOptionsMenu()
 	gridBuilder.addRow(
 		makeTextButton(FRONTEND_DIFFICULTY, _("Campaign Difficulty"), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_BUTTON_WIDTH),
 		makeTextButton(FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString(), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_RIGHT_BUTTON_WIDTH)
+	);
+
+	// Save Realism
+	gridBuilder.addRow(
+		makeTextButton(FRONTEND_SAVEREALISM, _("Save Realism"), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_BUTTON_WIDTH),
+		makeTextButton(FRONTEND_SAVEREALISM_R, gameOptionsSaveRealism(), WBUT_SECONDARY, MINIMUM_GAME_OPTIONS_RIGHT_BUTTON_WIDTH)
 	);
 
 	// Camera speed
@@ -3042,6 +3054,28 @@ bool runGameOptionsMenu()
 	case FRONTEND_CAMERASPEED_R:
 		war_SetCameraSpeed(seqCycle(war_GetCameraSpeed(), CAMERASPEED_MIN, CAMERASPEED_STEP, CAMERASPEED_MAX));
 		widgSetString(psWScreen, FRONTEND_CAMERASPEED_R, gameOptionsCameraSpeedString().c_str());
+		break;
+
+	case FRONTEND_SAVEREALISM:
+	case FRONTEND_SAVEREALISM_R:
+		war_setSaveRealism(!war_getSaveRealism());
+		widgSetString(psWScreen, FRONTEND_SAVEREALISM_R, gameOptionsSaveRealism());
+		if (war_getSaveRealism())
+		{
+			const std::string REAL_TAG = "Realism";
+
+			if (!hasNotificationsWithTag(REAL_TAG))
+			{
+				WZ_Notification notification;
+				notification.duration = 8 * GAME_TICKS_PER_SEC;
+				notification.contentTitle = _("Realism mode");
+				notification.contentText = _("One automatic save per mission and no cheats!");
+				notification.tag = REAL_TAG;
+				notification.largeIcon = WZ_Notification_Image("images/notifications/skull_crossbones.png");
+
+				addNotification(notification, WZ_Notification_Trigger::Immediate());
+			}
+		}
 		break;
 
 	case FRONTEND_QUIT:

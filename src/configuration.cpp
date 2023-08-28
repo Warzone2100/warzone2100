@@ -618,6 +618,7 @@ bool loadConfig()
 		war_setPointLightPerPixelLighting(value.value_or(false));
 	}
 
+	war_setSaveRealism(iniGetBool("saveRealism", war_getSaveRealism()).value());
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -779,6 +780,7 @@ bool saveConfig()
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
+	iniSetBool("saveRealism", war_getSaveRealism());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes
