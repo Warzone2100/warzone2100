@@ -39,7 +39,15 @@ public:
 	struct GroupDisplayInfo
 	{
 		size_t numberInGroup = 0;
+		uint64_t totalGroupMaxHealth = 0;
 		DROID_TEMPLATE displayDroidTemplate;
+		
+		uint8_t currAttackGlowAlpha = 0;
+
+		// used for calculating display info
+		uint32_t lastAttackedGameTime = 0;
+		uint64_t lastAccumulatedDamage = 0;
+		uint64_t lastUnitsKilled = 0;
 	};
 public:
 	GroupDisplayInfo* getGroupInfoAt(size_t index)
@@ -54,6 +62,18 @@ public:
 	}
 
 	void updateData();
+
+	void addGroupDamageForCurrentTick(size_t group, uint64_t additionalDamage, bool unitKilled)
+	{
+		auto& curr = groupInfo[group];
+		curr.lastAttackedGameTime = gameTime;
+		curr.lastAccumulatedDamage += additionalDamage;
+		if (unitKilled)
+		{
+			++curr.lastUnitsKilled;
+			curr.lastAccumulatedDamage = std::max<uint64_t>(curr.lastAccumulatedDamage, 1);
+		}
+	}
 
 	void selectGroup(size_t groupNumber)
 	{
@@ -77,10 +97,11 @@ private:
 	std::shared_ptr<GroupsUIController> controller;
 	std::shared_ptr<W_LABEL> groupNumberLabel;
 	std::shared_ptr<W_LABEL> groupCountLabel;
+	size_t groupNumber;
+	uint32_t lastUpdatedGlowAlphaTime = 0;
 protected:
 	GroupButton() : DynamicIntFancyButton() { }
 public:
-	size_t groupNumber;
 	static std::shared_ptr<GroupButton> make(const std::shared_ptr<GroupsUIController>& controller, size_t groupNumber)
 	{
 		class make_shared_enabler: public GroupButton {};
@@ -102,6 +123,8 @@ public:
 		groupCountLabel->setGeometry(OBJ_TEXTX + 40, OBJ_B1TEXTY + 20, 16, 16);
 		groupCountLabel->setString("");
 		groupCountLabel->setTransparentToMouse(true);
+
+		buttonBackgroundEmpty = true;
 	}
 
 	void clickPrimary() override
@@ -122,6 +145,29 @@ protected:
 		{
 			return;
 		}
+
+		if (groupInfo->lastAccumulatedDamage > 0)
+		{
+			groupInfo->currAttackGlowAlpha = std::max<uint8_t>(groupInfo->currAttackGlowAlpha, accumulatedDamageToTargetGlowAlpha(groupInfo->lastAccumulatedDamage, groupInfo->totalGroupMaxHealth, groupInfo->lastUnitsKilled));
+			lastUpdatedGlowAlphaTime = realTime;
+			// reset consumed values
+			groupInfo->lastAccumulatedDamage = 0;
+			groupInfo->lastUnitsKilled = 0;
+		}
+		else if (groupInfo->currAttackGlowAlpha > 0 && (realTime - lastUpdatedGlowAlphaTime) > 100)
+		{
+			auto fadeAmount = 50 * (realTime - lastUpdatedGlowAlphaTime) / GAME_TICKS_PER_SEC;
+			if (fadeAmount > static_cast<int32_t>(groupInfo->currAttackGlowAlpha))
+			{
+				groupInfo->currAttackGlowAlpha = 0;
+			}
+			else
+			{
+				groupInfo->currAttackGlowAlpha -= static_cast<uint8_t>(fadeAmount);
+			}
+			lastUpdatedGlowAlphaTime = realTime;
+		}
+
 		if (!groupInfo->numberInGroup)
 		{
 			groupCountLabel->setString("");
@@ -132,6 +178,12 @@ protected:
 			displayIMD(AtlasImage(), ImdObject::DroidTemplate(&(groupInfo->displayDroidTemplate)), xOffset, yOffset);
 			groupCountLabel->setString(WzString::fromUtf8(astringf("%u", groupInfo->numberInGroup)));
 		}
+
+		if (groupInfo->currAttackGlowAlpha > 0)
+		{
+			// Based on damage, display an inner glow (animated)
+			iV_DrawImageTint(IntImages, IMAGE_BUT_INNER_GLOW, xOffset + x(), yOffset + y(), pal_RGBA(170, 0, 0, groupInfo->currAttackGlowAlpha));
+		}
 	}
 	std::string getTip() override
 	{
@@ -140,6 +192,17 @@ protected:
 	bool isHighlighted() const override
 	{
 		return false;
+	}
+private:
+	#define MAX_DAMAGE_GLOW_ALPHA 100
+	inline uint8_t accumulatedDamageToTargetGlowAlpha(uint64_t accumulatedDamage, uint64_t totalGroupMaxHealth, uint64_t unitsKilled)
+	{
+		uint64_t damageVisualPercent = (accumulatedDamage * 100) / totalGroupMaxHealth;
+		if (unitsKilled > 0)
+		{
+			damageVisualPercent = 100;
+		}
+		return static_cast<uint8_t>((std::min<uint64_t>(damageVisualPercent, 100) * MAX_DAMAGE_GLOW_ALPHA) / 100);
 	}
 };
 
@@ -176,6 +239,7 @@ void GroupsUIController::updateData()
 	struct AccumulatedGroupInfo
 	{
 		size_t numberInGroup = 0;
+		uint64_t totalGroupMaxHealth = 0;
 		DROID *displayDroid = nullptr;
 		std::map<std::vector<uint32_t>, size_t> unitcounter;
 		size_t most_droids_of_same_type_in_group = 0;
@@ -200,6 +264,7 @@ void GroupsUIController::updateData()
 			currGroupInfo.displayDroid = psDroid;
 		}
 		currGroupInfo.numberInGroup++;
+		currGroupInfo.totalGroupMaxHealth += psDroid->originalBody;
 	}
 
 	for (size_t idx = 0; idx < calculatedGroupInfo.size(); ++idx)
@@ -207,6 +272,7 @@ void GroupsUIController::updateData()
 		const auto& calculatedInfo = calculatedGroupInfo[idx];
 		auto& storedGroupInfo = groupInfo[idx];
 		storedGroupInfo.numberInGroup = calculatedInfo.numberInGroup;
+		storedGroupInfo.totalGroupMaxHealth = calculatedInfo.totalGroupMaxHealth;
 		if (calculatedInfo.numberInGroup > 0)
 		{
 			// generate a DROID_TEMPLATE from the displayDroid
@@ -218,6 +284,11 @@ void GroupsUIController::updateData()
 void GroupsForum::updateData()
 {
 	groupsUIController->updateData();
+}
+
+void GroupsForum::addGroupDamageForCurrentTick(size_t group, uint64_t additionalDamage, bool unitKilled)
+{
+	groupsUIController->addGroupDamageForCurrentTick(group, additionalDamage, unitKilled);
 }
 
 void GroupsForum::addTabList()

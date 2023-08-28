@@ -52,6 +52,7 @@ public:
 		return widget;
 	}
 	void updateData();
+	void addGroupDamageForCurrentTick(size_t group, uint64_t additionalDamage, bool unitKilled);
 private:
 	std::shared_ptr<GroupButton> makeGroupButton(size_t groupNumber);
 	void addTabList();
