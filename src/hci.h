@@ -113,10 +113,10 @@ enum  				  // Reticule button indecies.
 
 // Object screen position. (aka where the factories, research builds show up) [right of command retile]
 #define BASE_GAP		6
-#define OBJ_BACKX		(RET_X + RET_FORMWIDTH + BASE_GAP + D_W)	// X coord of object screen back form.
-#define OBJ_BACKY		RET_Y	// Y coord of object screen back form.
 #define OBJ_BACKWIDTH	320	//316		// Width of object screen back form.
 #define OBJ_BACKHEIGHT	115		// Height of object screen back form.
+#define OBJ_BACKX		(RET_X + RET_FORMWIDTH + BASE_GAP + D_W)	// X coord of object screen back form.
+#define OBJ_BACKY		RET_Y	// Y coord of object screen back form.
 
 #define GROUP_BACKX OBJ_BACKX
 #define GROUP_BACKY OBJ_BACKY + 40
@@ -140,9 +140,9 @@ enum  				  // Reticule button indecies.
 #define STAT_SLDWIDTH		70	// Slider width.
 
 // Power bar position.
-#define POW_X			OBJ_BACKX + 12
-#define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
+#define POW_X			OBJ_BACKX + ((OBJ_BACKWIDTH - POW_BARWIDTH) / 4)
+#define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 
 /* close button data */
 #define CLOSE_WIDTH		15
