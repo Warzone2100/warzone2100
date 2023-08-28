@@ -733,6 +733,28 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 
 	}
 }
 
+void iV_DrawImageTint(IMAGEFILE *ImageFile, UWORD ID, int x, int y, PIELIGHT color, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
+{
+	if (!assertValidImage(ImageFile, ID))
+	{
+		return;
+	}
+
+	PIERECT dest;
+	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+
+	if (pBatchedRequests == nullptr)
+	{
+		gfx_api::DrawImagePSO::get().bind();
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, color, modelViewProjection);
+	}
+	else
+	{
+		pBatchedRequests->queuePieImageDraw(REND_ALPHA, ImageFile, ID, pieImage, dest, color, modelViewProjection);
+		pBatchedRequests->draw(); // draw only if not deferred
+	}
+}
+
 void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection, uint8_t alpha)
 {
 	if (!assertValidImage(ImageFile, ID))
