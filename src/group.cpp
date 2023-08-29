@@ -152,10 +152,7 @@ void DROID_GROUP::add(DROID *psDroid)
 		}
 	}
 
-	if (type == GT_COMMAND && psCommander)
-	{
-		intCommanderGroupChanged(psCommander);
-	}
+	intCommanderGroupChanged((type == GT_COMMAND && psCommander) ? psCommander : nullptr);
 }
 
 // remove a droid from a group
@@ -229,10 +226,7 @@ void DROID_GROUP::remove(DROID *psDroid)
 		delete this;
 	}
 
-	if (type == GT_COMMAND && psCommander)
-	{
-		intCommanderGroupChanged(psCommander);
-	}
+	intCommanderGroupChanged((type == GT_COMMAND && psCommander) ? psCommander : nullptr);
 }
 
 // count the members of a group

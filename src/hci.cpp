@@ -2044,7 +2044,7 @@ void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled)
 	}
 }
 
-void intCommanderGroupChanged(const DROID *psCommander)
+void intCommanderGroupChanged(const DROID *psCommander) // psCommander may be null!
 {
 	intGroupsChanged(); // just trigger full group change event
 }
