@@ -1493,9 +1493,6 @@ INT_RETVAL intRunWidgets()
 				psCurrentMsg = nullptr;
 			}
 			addIntelScreen();
-			// remove the groups Menu
-			widgDelete(psWScreen, IDOBJ_GROUP);
-			groupsUI.reset();
 			reticuleCallback(RETBUT_INTELMAP);
 			break;
 
@@ -1508,9 +1505,6 @@ INT_RETVAL intRunWidgets()
 			widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
 			/*add the power bar - for looks! */
 			intShowPowerBar();
-			// remove the groups Menu
-			widgDelete(psWScreen, IDOBJ_GROUP);
-			groupsUI.reset();
 			intAddDesign(false);
 			intMode = INT_DESIGN;
 			gInputManager.contexts().pushState();
@@ -2032,7 +2026,7 @@ void intAlliedResearchChanged()
 
 void intGroupsChanged(optional<UBYTE> selectedGroup)
 {
-	if (getGroupButtonEnabled())
+	if (groupsUI)
 	{
 		intRefreshGroupsUI();
 		if (selectedGroup.has_value() && selectedGroup.value() != UBYTE_MAX)
@@ -2044,7 +2038,7 @@ void intGroupsChanged(optional<UBYTE> selectedGroup)
 
 void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled)
 {
-	if (getGroupButtonEnabled())
+	if (groupsUI)
 	{
 		groupsUI->addGroupDamageForCurrentTick(group, additionalDamage, unitKilled);
 	}
@@ -2052,7 +2046,8 @@ void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled)
 
 bool intShowGroupSelectionMenu()
 {
-	if (getGroupButtonEnabled())
+	bool isSpectator = (bMultiPlayer && selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator);
+	if (getGroupButtonEnabled() && !isSpectator)
 	{
 		GroupsForum* groupsUIFormWidg = (GroupsForum*)widgGetFromID(psWScreen, IDOBJ_GROUP);
 		if (!groupsUIFormWidg)
@@ -2063,6 +2058,8 @@ bool intShowGroupSelectionMenu()
 			}
 			psWScreen->psForm->attach(groupsUI);
 		}
+
+		groupsUI->show();
 	}
 	else
 	{
@@ -2433,6 +2430,7 @@ static bool intAddCommand()
 void addIntelScreen()
 {
 	intResetScreen(false);
+	intHideGroupSelectionMenu();
 
 	intMode = INT_INTELMAP;
 
@@ -2553,6 +2551,20 @@ void intShowWidget(int buttonID)
 	}
 }
 
+void intHideGroupSelectionMenu()
+{
+	if (groupsUI)
+	{
+		groupsUI->hide();
+	}
+
+	if (bMultiPlayer && selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator)
+	{
+		// skip showing groups UI if selectedPlayer is spectator
+		widgDelete(psWScreen, IDOBJ_GROUP);
+		groupsUI.reset();
+	}
+}
 
 //displays the Power Bar
 void intShowPowerBar()

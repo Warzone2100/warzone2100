@@ -253,6 +253,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 		forceHidePowerBar();
 		intRemoveReticule();
+		intHideGroupSelectionMenu();
 	}
 
 	psRequestScreen = W_SCREEN::make();
@@ -515,6 +516,7 @@ bool closeLoadSave(bool goBack)
 
 		intAddReticule();
 		intShowPowerBar();
+		intShowGroupSelectionMenu();
 	}
 
 	psRequestScreen = nullptr;

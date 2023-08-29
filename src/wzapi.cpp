@@ -2826,6 +2826,7 @@ wzapi::no_return_value wzapi::hideInterface(WZAPI_NO_PARAMS)
 {
 	intRemoveReticule();
 	intHidePowerBar();
+	intHideGroupSelectionMenu();
 	return {};
 }
 
