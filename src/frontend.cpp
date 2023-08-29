@@ -331,6 +331,7 @@ bool runTutorialMenu()
 	case FRONTEND_TUTORIAL:
 		SPinit(LEVEL_TYPE::CAMPAIGN);
 		sstrcpy(aLevelName, TUTORIAL_LEVEL);
+		setGroupButtonEnabled(false); // hack to disable the groups UI for the tutorial
 		changeTitleMode(STARTGAME);
 		break;
 
@@ -1263,6 +1264,7 @@ bool runGraphicsOptionsMenu()
 	case FRONTEND_GROUPS:
 	case FRONTEND_GROUPS_R:
 		setGroupButtonEnabled(!getGroupButtonEnabled());
+		war_setGroupsMenuEnabled(getGroupButtonEnabled()); // persist
 		widgSetString(psWScreen, FRONTEND_GROUPS_R, graphicsOptionsGroupsMenuEnabled());
 		break;
 

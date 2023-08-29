@@ -390,7 +390,8 @@ bool loadConfig()
 		war_SetCameraSpeed((v % CAMERASPEED_STEP != 0) ? CAMERASPEED_DEFAULT : v);
 	}
 	setShakeStatus(iniGetBool("shake", false).value());
-	setGroupButtonEnabled(iniGetBool("groupmenu", true).value());
+	war_setGroupsMenuEnabled(iniGetBool("groupmenu", true).value());
+	setGroupButtonEnabled(war_getGroupsMenuEnabled());
 	setCameraAccel(iniGetBool("cameraAccel", true).value());
 	setDrawShadows(iniGetBool("shadows", true).value());
 	war_setSoundEnabled(iniGetBool("sound", true).value());
@@ -691,7 +692,7 @@ bool saveConfig()
 	iniSetInteger("lodDistanceBias", war_getLODDistanceBiasPercentage());
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
-	iniSetInteger("groupmenu", (int)getGroupButtonEnabled());		// screenshake
+	iniSetInteger("groupmenu", (int)war_getGroupsMenuEnabled());		// groups menu
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
@@ -930,6 +931,9 @@ bool reloadMPConfig()
 	game.inactivityMinutes = war_getMPInactivityMinutes();
 	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 	game.playerLeaveMode = war_getMPPlayerLeaveMode();
+
+	// restore group menus enabled setting (as tutorial may override it)
+	setGroupButtonEnabled(war_getGroupsMenuEnabled());
 
 	return true;
 }
