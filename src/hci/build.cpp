@@ -403,7 +403,7 @@ private:
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
@@ -495,7 +495,7 @@ private:
 		});
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto clickedStats = controller->getStatsAt(buildOptionIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);

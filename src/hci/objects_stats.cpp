@@ -156,8 +156,18 @@ void DynamicIntFancyButton::released(W_CONTEXT *context, WIDGET_KEY mouseButton)
 	}
 	else if (mouseButton == WKEY_SECONDARY)
 	{
-		clickSecondary();
+		clickSecondary(false);
 	}
+}
+
+bool DynamicIntFancyButton::clickHeld(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	if (key == WKEY_PRIMARY)
+	{
+		clickSecondary(true);
+		return true;
+	}
+	return false;
 }
 
 void StatsButton::addProgressBar()

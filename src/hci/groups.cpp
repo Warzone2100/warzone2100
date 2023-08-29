@@ -132,7 +132,7 @@ public:
 		controller->selectGroup(groupNumber);
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		controller->assignSelectedDroidsToGroup(groupNumber);
 	}
