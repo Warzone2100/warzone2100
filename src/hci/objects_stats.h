@@ -120,6 +120,8 @@ protected:
 	virtual void clickPrimary() {}
 	virtual void clickSecondary() {}
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override;
+public:
+	DynamicIntFancyButton();
 };
 
 class StatsButton: public DynamicIntFancyButton

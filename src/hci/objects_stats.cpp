@@ -128,6 +128,11 @@ void BaseStatsController::scheduleDisplayStatsForm(const std::shared_ptr<BaseSta
 	});
 }
 
+DynamicIntFancyButton::DynamicIntFancyButton()
+{
+	style |= WFORM_SECONDARY;
+}
+
 void DynamicIntFancyButton::updateLayout()
 {
 	updateHighlight();
@@ -136,7 +141,14 @@ void DynamicIntFancyButton::updateLayout()
 
 void DynamicIntFancyButton::released(W_CONTEXT *context, WIDGET_KEY mouseButton)
 {
+	bool clickAndReleaseOnThisButton = ((state & WBUT_DOWN) != 0); // relies on W_CLICKFORM handling to properly set WBUT_DOWN
+
 	IntFancyButton::released(context, mouseButton);
+
+	if (!clickAndReleaseOnThisButton)
+	{
+		return; // do nothing
+	}
 
 	if (mouseButton == WKEY_PRIMARY)
 	{
