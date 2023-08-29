@@ -312,6 +312,10 @@ void intAlliedResearchChanged();
 void intGroupsChanged(optional<UBYTE> selectedGroup = nullopt);
 void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled);
 
+/* Tell the interface that commander groups have changed */
+void intCommanderGroupChanged(const DROID *psCommander);
+void intCommanderGroupDamaged(const DROID *psCommander, uint64_t additionalDamage, bool unitKilled);
+
 /* Sync the interface to an object */
 void intObjectSelected(BASE_OBJECT *psObj);
 

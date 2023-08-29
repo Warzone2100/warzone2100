@@ -36,6 +36,7 @@
 #include "console.h"
 #include "objmem.h"
 #include "droid.h"
+#include "hci.h"
 
 /**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;
@@ -88,6 +89,8 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	ASSERT_OR_RETURN(false, psCommander != nullptr, "psCommander is null?");
 	ASSERT_OR_RETURN(false, psDroid != nullptr, "psDroid is null?");
 
+	auto initialDroidGroup = psDroid->group;
+
 	if (psCommander->psGroup == nullptr)
 	{
 		psGroup = grpCreate();
@@ -118,6 +121,11 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 			addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 			lastMaxCmdLimitMsgTime = gameTime;
 		}
+	}
+
+	if (initialDroidGroup != psDroid->group)
+	{
+		intGroupsChanged();
 	}
 
 	return addedToGroup;
