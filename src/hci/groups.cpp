@@ -20,6 +20,7 @@
 #include "../hci.h"
 #include "groups.h"
 #include "objects_stats.h"
+#include "../group.h"
 
 static bool groupButtonEnabled = true;
 
@@ -39,6 +40,7 @@ public:
 	struct GroupDisplayInfo
 	{
 		size_t numberInGroup = 0;
+		size_t numberCommandedByGroup = 0; // the number of droids commanded by commanders in this group
 		uint64_t totalGroupMaxHealth = 0;
 		DROID_TEMPLATE displayDroidTemplate;
 		
@@ -239,6 +241,7 @@ void GroupsUIController::updateData()
 	struct AccumulatedGroupInfo
 	{
 		size_t numberInGroup = 0;
+		size_t numberCommandedByGroup = 0; // the number of droids commanded by commanders in this group
 		uint64_t totalGroupMaxHealth = 0;
 		DROID *displayDroid = nullptr;
 		std::map<std::vector<uint32_t>, size_t> unitcounter;
@@ -248,12 +251,21 @@ void GroupsUIController::updateData()
 	std::array<AccumulatedGroupInfo, 10> calculatedGroupInfo;
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
+		auto groupIdx = psDroid->group;
 		if (psDroid->group >= calculatedGroupInfo.size())
 		{
-			continue;
+			if ((psDroid->psGroup) && (psDroid->psGroup->psCommander) && (psDroid->psGroup->psCommander->group < calculatedGroupInfo.size()))
+			{
+				groupIdx = psDroid->psGroup->psCommander->group; // accumulate in commander's group
+				++(calculatedGroupInfo[groupIdx].numberCommandedByGroup);
+			}
+			else
+			{
+				continue;
+			}
 		}
 
-		auto& currGroupInfo = calculatedGroupInfo[psDroid->group];
+		auto& currGroupInfo = calculatedGroupInfo[groupIdx];
 
 		// display whatever unit occurs the most in this group
 		// find the identifier for this droid
@@ -272,6 +284,7 @@ void GroupsUIController::updateData()
 		const auto& calculatedInfo = calculatedGroupInfo[idx];
 		auto& storedGroupInfo = groupInfo[idx];
 		storedGroupInfo.numberInGroup = calculatedInfo.numberInGroup;
+		storedGroupInfo.numberCommandedByGroup = calculatedInfo.numberCommandedByGroup;
 		storedGroupInfo.totalGroupMaxHealth = calculatedInfo.totalGroupMaxHealth;
 		if (calculatedInfo.numberInGroup > 0)
 		{
