@@ -2214,6 +2214,7 @@ static void missionResetInGameState()
 	forceHidePowerBar();
 	intRemoveReticule();
 	intRemoveMissionTimer();
+	intHideGroupSelectionMenu();
 }
 
 static void intDestroyMissionResultWidgets()
@@ -2412,6 +2413,7 @@ void intRemoveMissionResultNoAnim()
 	intAddReticule();
 
 	intShowPowerBar();
+	intShowGroupSelectionMenu();
 }
 
 void intRunMissionResult()

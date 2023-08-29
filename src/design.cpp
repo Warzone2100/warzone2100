@@ -3904,6 +3904,7 @@ static void setDesignPauseState()
 	{
 		//need to clear mission widgets from being shown on design screen
 		clearMissionWidgets();
+		intHideGroupSelectionMenu();
 		gameTimeStop();
 		setGameUpdatePause(true);
 		setScrollPause(true);
@@ -3918,6 +3919,7 @@ static void resetDesignPauseState()
 	{
 		//put any widgets back on for the missions
 		resetMissionWidgets();
+		intShowGroupSelectionMenu();
 		setGameUpdatePause(false);
 		setScrollPause(false);
 		gameTimeStart();
