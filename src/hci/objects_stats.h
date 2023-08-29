@@ -118,8 +118,9 @@ protected:
 	virtual void updateLayout();
 	void updateHighlight();
 	virtual void clickPrimary() {}
-	virtual void clickSecondary() {}
+	virtual void clickSecondary(bool synthesizedFromHold) {}
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override;
+	bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key) override;
 public:
 	DynamicIntFancyButton();
 };
@@ -156,7 +157,7 @@ protected:
 	virtual BaseObjectsController &getController() const = 0;
 	virtual void jump();
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		jump();
 	}
