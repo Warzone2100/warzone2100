@@ -1540,3 +1540,8 @@ std::weak_ptr<WIDGET> getMouseOverWidget()
 {
 	return psMouseOverWidget;
 }
+
+std::chrono::milliseconds widgGetClickHoldMS()
+{
+	return std::chrono::milliseconds(2000); // TODO: Make this configurable?
+}
