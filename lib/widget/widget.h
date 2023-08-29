@@ -34,6 +34,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "widgbase.h"
 #include <string>
+#include <chrono>
 
 /***********************************************************************************
  *
@@ -391,6 +392,8 @@ void setWidgetsStatus(bool var);
 bool getWidgetsStatus();
 
 std::weak_ptr<WIDGET> getMouseOverWidget();
+
+std::chrono::milliseconds widgGetClickHoldMS();
 
 /** @} */
 

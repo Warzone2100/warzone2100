@@ -89,9 +89,11 @@ public:
 	W_CLICKFORM();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	virtual bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key);
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
+	void run(W_CONTEXT *psContext) override;
 	void display(int xOffset, int yOffset) override;
 	std::string getTip() override
 	{
@@ -116,6 +118,8 @@ private:
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
+	optional<std::chrono::steady_clock::time_point> clickDownStart; // the start time of click down on this form
+	optional<WIDGET_KEY> clickDownKey;
 };
 
 class W_FULLSCREENOVERLAY_CLICKFORM : public W_CLICKFORM
