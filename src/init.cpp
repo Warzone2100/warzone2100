@@ -1879,6 +1879,9 @@ bool stageThreeInitialise()
 	// Start / randomize in-game music
 	cdAudio_PlayTrack(SONG_INGAME);
 
+	// always start off with a refresh of the groups UI data
+	intGroupsChanged();
+
 	return true;
 }
 
