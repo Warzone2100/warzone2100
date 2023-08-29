@@ -162,6 +162,9 @@ void war_setShadowFilterSize(uint32_t filterSize);
 uint32_t war_getShadowMapResolution();
 void war_setShadowMapResolution(uint32_t resolution);
 
+bool war_getGroupsMenuEnabled();
+void war_setGroupsMenuEnabled(bool enabled);
+
 /**
  * Enable or disable sound initialization
  *

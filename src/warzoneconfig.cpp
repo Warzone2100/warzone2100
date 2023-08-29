@@ -89,6 +89,8 @@ struct WARZONE_GLOBALS
 	uint32_t shadowFilteringMode = 1;
 	uint32_t shadowFilterSize = 5;
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
+	// groups UI
+	bool groupsMenuEnabled = true;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -645,3 +647,12 @@ void war_setShadowMapResolution(uint32_t resolution)
 	warGlobs.shadowMapResolution = resolution;
 }
 
+bool war_getGroupsMenuEnabled()
+{
+	return warGlobs.groupsMenuEnabled;
+}
+
+void war_setGroupsMenuEnabled(bool enabled)
+{
+	warGlobs.groupsMenuEnabled = enabled;
+}

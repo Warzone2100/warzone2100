@@ -711,6 +711,7 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 	case INTINGAMEOP_GROUPS:
 	case INTINGAMEOP_GROUPS_R:
 		setGroupButtonEnabled(!getGroupButtonEnabled());
+		war_setGroupsMenuEnabled(getGroupButtonEnabled()); // persist
 		widgSetString(psWScreen, INTINGAMEOP_GROUPS_R, graphicsOptionsGroupsMenuEnabled());
 		break;
 
