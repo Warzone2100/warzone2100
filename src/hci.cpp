@@ -2044,6 +2044,19 @@ void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled)
 	}
 }
 
+void intCommanderGroupChanged(const DROID *psCommander)
+{
+	intGroupsChanged(); // just trigger full group change event
+}
+
+void intCommanderGroupDamaged(const DROID *psCommander, uint64_t additionalDamage, bool unitKilled)
+{
+	if (groupsUI)
+	{
+		groupsUI->addCommanderGroupDamageForCurrentTick(psCommander, additionalDamage, unitKilled);
+	}
+}
+
 bool intShowGroupSelectionMenu()
 {
 	bool isSpectator = (bMultiPlayer && selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator);

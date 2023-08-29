@@ -288,9 +288,16 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 
 	relativeDamage = objDamage(psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
-	if (relativeDamage != 0 && psDroid->player == selectedPlayer && psDroid->group != UBYTE_MAX && psDroid->timeLastHit == gameTime)
+	if (relativeDamage != 0 && psDroid->player == selectedPlayer && psDroid->timeLastHit == gameTime)
 	{
-		intGroupDamaged(psDroid->group, (relativeDamage > 0) ? static_cast<uint64_t>(relativeDamage) : 0, (relativeDamage < 0)); // update UI information
+		if (psDroid->group != UBYTE_MAX)
+		{
+			intGroupDamaged(psDroid->group, (relativeDamage > 0) ? static_cast<uint64_t>(relativeDamage) : 0, (relativeDamage < 0)); // update UI information
+		}
+		else if (psDroid->psGroup && psDroid->psGroup->psCommander)
+		{
+			intCommanderGroupDamaged(psDroid->psGroup->psCommander, (relativeDamage > 0) ? static_cast<uint64_t>(relativeDamage) : 0, (relativeDamage < 0)); // update UI information
+		}
 	}
 
 	if (relativeDamage > 0)

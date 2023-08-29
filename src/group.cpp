@@ -31,6 +31,7 @@
 #include "group.h"
 #include "droid.h"
 #include "order.h"
+#include "hci.h"
 #include <map>
 
 // Group system variables: grpGlobalManager enables to remove all the groups to Shutdown the system
@@ -150,6 +151,11 @@ void DROID_GROUP::add(DROID *psDroid)
 			syncDebug("Droid %d joining command group %d", psDroid->id, psCommander != nullptr ? psCommander->id : 0);
 		}
 	}
+
+	if (type == GT_COMMAND && psCommander)
+	{
+		intCommanderGroupChanged(psCommander);
+	}
 }
 
 // remove a droid from a group
@@ -221,6 +227,11 @@ void DROID_GROUP::remove(DROID *psDroid)
 	{
 		grpGlobalManager.erase(id);
 		delete this;
+	}
+
+	if (type == GT_COMMAND && psCommander)
+	{
+		intCommanderGroupChanged(psCommander);
 	}
 }
 

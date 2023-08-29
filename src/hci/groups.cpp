@@ -77,6 +77,15 @@ public:
 		}
 	}
 
+	void addCommanderGroupDamageForCurrentTick(const DROID *psCommander, uint64_t additionalDamage, bool unitKilled)
+	{
+		if (psCommander->group >= groupInfo.size())
+		{
+			return;
+		}
+		addGroupDamageForCurrentTick(psCommander->group, additionalDamage, unitKilled);
+	}
+
 	void selectGroup(size_t groupNumber)
 	{
 		// select the group
@@ -313,6 +322,11 @@ void GroupsForum::updateSelectedGroup(size_t group)
 void GroupsForum::addGroupDamageForCurrentTick(size_t group, uint64_t additionalDamage, bool unitKilled)
 {
 	groupsUIController->addGroupDamageForCurrentTick(group, additionalDamage, unitKilled);
+}
+
+void GroupsForum::addCommanderGroupDamageForCurrentTick(const DROID *psCommander, uint64_t additionalDamage, bool unitKilled)
+{
+	groupsUIController->addCommanderGroupDamageForCurrentTick(psCommander, additionalDamage, unitKilled);
 }
 
 void GroupsForum::addTabList()
