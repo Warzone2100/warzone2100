@@ -55,6 +55,7 @@
 #include "mapgrid.h"
 #include "visibility.h"
 #include "multiplay.h"
+#include "hci/groups.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_CLOSE			9002	//The close button icon
@@ -188,7 +189,7 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 	parent->attach(transForm);
 	transForm->id = IDTRANS_FORM;
 	transForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(TRANS_X, TRANS_Y, TRANS_WIDTH, TRANS_HEIGHT);
+		psWidget->setGeometry(TRANS_X, TRANS_Y - (getGroupButtonEnabled() ? 80 : 0), TRANS_WIDTH, TRANS_HEIGHT);
 	}));
 
 	/* Add the close button */
