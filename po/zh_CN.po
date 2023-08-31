@@ -13409,7 +13409,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5359
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "超级轨道炮半机械人"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -13507,19 +13507,19 @@ msgstr "超热火焰凝胶一型"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5432
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "超热等离子凝胶二型"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5435
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "超热等离子凝胶三型"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5438
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "超热等离子凝胶一型"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -13786,13 +13786,13 @@ msgstr "热感火箭导引系统"
 #. data/mp/stats/research.json: $.R-Wpn-Bomb04.name
 #: po/custom/fromJson.txt:5609
 msgid "Thermite Bomb Bay"
-msgstr "铝热反应炸弹舱"
+msgstr "铝热剂炸弹舱"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5612
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "铝热剂火焰喷射型半机械人"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -13826,7 +13826,7 @@ msgstr "虎式"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[1]
 #: po/custom/fromJson.txt:5634
 msgid "Titanium-reinforced concrete gate"
-msgstr ""
+msgstr "钛钢筋混凝土闸门"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -13893,7 +13893,7 @@ msgstr "运输舰"
 #. data/mp/stats/templates.json: $.BarbarianTrike.name
 #: po/custom/fromJson.txt:5673
 msgid "Trike"
-msgstr "三轮脚踏车"
+msgstr "三轮车"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
@@ -13974,7 +13974,7 @@ msgstr "口径 7.62mm 双管机枪"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5728
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "双管80mm防空炮"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -14025,7 +14025,7 @@ msgstr "双管机枪防卫塔"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5762
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "双管机枪塔"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -14074,7 +14074,7 @@ msgstr "双管多膛快速击发的机枪"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5790
 msgid "Two-faced"
-msgstr ""
+msgstr "双面"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -14382,7 +14382,7 @@ msgstr "VTOL反炮兵雷达"
 #. data/mp/stats/templates.json: $.V-Bug-ClusterBomb.name
 #: po/custom/fromJson.txt:6002
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "飞虫 集束炸弹 战机"
+msgstr "飞虫型集束炸弹 战机"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-ClusterBomb.name
@@ -14429,7 +14429,7 @@ msgstr "VTOL 工厂"
 #. data/mp/stats/weapons.json: $.Laser3BEAM-VTOL.name
 #: po/custom/fromJson.txt:6028
 msgid "VTOL Flashlight"
-msgstr "VTOL激光激光"
+msgstr "VTOL激光"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
@@ -14442,7 +14442,7 @@ msgstr "VTOL（高爆性穿甲炸弹舱）"
 #. data/mp/stats/weapons.json: $.HeavyLaser-VTOL.name
 #: po/custom/fromJson.txt:6035
 msgid "VTOL Heavy Laser"
-msgstr "VTOL（高能激光）"
+msgstr "VTOL（重型激光）"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG3-VTOL.name
@@ -14461,7 +14461,7 @@ msgstr "VTOL（高速加农炮）"
 #. data/mp/stats/templates.json: $.V-Mantis-HPV.name
 #: po/custom/fromJson.txt:6045
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL（高速加农螳螂炮）"
+msgstr "VTOL（螳螂型高速加农炮）"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-HPV.name
@@ -14564,7 +14564,7 @@ msgstr "VTOL等离子炸弹舱"
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-VTOL.name
 #: po/custom/fromJson.txt:6103
 msgid "VTOL Propulsion"
-msgstr "推进动力：垂直起降飞行器（VTOL）"
+msgstr "VTOL推进系统"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser2PULSE-VTOL.name
@@ -14595,7 +14595,7 @@ msgstr "VTOL（轨道炮）"
 #. data/mp/stats/structure.json: $.A0VtolPad.name
 #: po/custom/fromJson.txt:6122
 msgid "VTOL Rearming Pad"
-msgstr "VTOL 补给站"
+msgstr "VTOL补给站"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text[2]
@@ -14616,7 +14616,7 @@ msgstr "VTOL（天谴导弹）"
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTW1.text[1]
 #: po/custom/fromJson.txt:6146
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr "VTOL 攻击雷达可侦测接近的敌军"
+msgstr "VTOL攻击雷达可侦测接近的敌军"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-VTOLStrike-Tower01.name
@@ -14631,7 +14631,7 @@ msgstr "VTOL攻击雷达"
 #. data/mp/messages/resmessages23.json: $.RES_SY_VSTU1.text[1]
 #: po/custom/fromJson.txt:6155
 msgid "VTOL Strike turret used to spot targets"
-msgstr "VTOL 攻击雷达用以侦查目标位置"
+msgstr "VTOL攻击雷达用以侦查目标位置"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-VTOLStrike-Turret01.name
@@ -14660,7 +14660,7 @@ msgstr "VTOL（坦克杀手）"
 #. data/mp/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
 #: po/custom/fromJson.txt:6172
 msgid "VTOL Thermite Bomb Bay"
-msgstr "VTOL（铝热反应炸弹舱）"
+msgstr "VTOL（铝热剂炸弹舱）"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG2-VTOL.name
@@ -14680,13 +14680,13 @@ msgstr "垂直起降"
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6189
 msgid "Wall"
-msgstr ""
+msgstr "墙"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
 #: po/custom/fromJson.txt:6192
 msgid "Wallcorner"
-msgstr ""
+msgstr "墙角"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbWarehouse1.name
@@ -14707,7 +14707,7 @@ msgstr "武器科技研发完成"
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Wheels.name
 #: po/custom/fromJson.txt:6207
 msgid "Wheeled Propulsion"
-msgstr "推进动力：轮"
+msgstr "轮式推进"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.wheeled02.name
@@ -14831,7 +14831,7 @@ msgstr "青涩"
 #: po/custom/fromJson.txt:6277
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "英雄"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -15024,11 +15024,11 @@ msgstr "以全萤幕模式运行"
 
 #: src/clparse.cpp:375
 msgid "Load a specific game mode"
-msgstr ""
+msgstr "加载特定游戏模式"
 
 #: src/clparse.cpp:375
 msgid "level name"
-msgstr ""
+msgstr "关卡名称"
 
 #: src/clparse.cpp:376
 msgid "Show options and exit"
@@ -15042,7 +15042,7 @@ msgstr "开启global mod"
 #: src/clparse.cpp:378
 #: src/clparse.cpp:379
 msgid "mod"
-msgstr ""
+msgstr "模组"
 
 #: src/clparse.cpp:378
 msgid "Enable a campaign only mod"
@@ -15103,7 +15103,7 @@ msgstr "开启影子"
 
 #: src/clparse.cpp:389
 msgid "Disable shadows"
-msgstr "关闭影子"
+msgstr "关闭阴影"
 
 #: src/clparse.cpp:390
 msgid "Enable sound"
@@ -15115,7 +15115,7 @@ msgstr "关闭声音"
 
 #: src/clparse.cpp:392
 msgid "Connect directly to IP/hostname"
-msgstr ""
+msgstr "直连到IP/主机名"
 
 #: src/clparse.cpp:392
 #: src/clparse.cpp:393
@@ -15188,7 +15188,7 @@ msgstr ""
 
 #: src/clparse.cpp:419
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "托管时从给定服务器URL查询评级"
 
 #: src/clparse.cpp:419
 msgid "autorating"
@@ -15228,7 +15228,7 @@ msgstr ""
 
 #: src/clparse.cpp:430
 msgid "Enable command interface"
-msgstr ""
+msgstr "启用命令接口"
 
 #: src/clparse.cpp:430
 msgid "(stdin)"
@@ -15970,7 +15970,7 @@ msgstr ""
 
 #: src/frontend.cpp:1314
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "您可以通过正常调整窗口大小来更改分辨率（尝试拖动角/边）。"
 
 #: src/frontend.cpp:1353
 msgid "Graphics Mode"
@@ -15986,7 +15986,7 @@ msgstr "缩放比例"
 
 #: src/frontend.cpp:1391
 msgid "Adaptive"
-msgstr ""
+msgstr "自适应"
 
 #: src/frontend.cpp:1615
 msgid "Windowed"
@@ -15999,7 +15999,7 @@ msgstr ""
 
 #: src/frontend.cpp:1742
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "开(全屏)"
 
 #: src/frontend.cpp:1892
 msgid "Texture size"
@@ -17014,7 +17014,7 @@ msgstr "选择所有半履带单位"
 
 #: src/input/keyconfig.cpp:174
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "选择没有组的所有半履带单位"
 
 #: src/input/keyconfig.cpp:175
 msgid "Select all Hovers"
@@ -17035,7 +17035,7 @@ msgstr "选择所有履带单位"
 
 #: src/input/keyconfig.cpp:179
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "选择没有组的所有履带单位"
 
 #: src/input/keyconfig.cpp:180
 msgid "Select EVERY unit"
@@ -17051,7 +17051,7 @@ msgstr "选择所有全副武装的 VTOLs"
 
 #: src/input/keyconfig.cpp:183
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "选择所有无组的全武装VTOL"
 
 #: src/input/keyconfig.cpp:184
 msgid "Select all Wheels"
@@ -17071,7 +17071,7 @@ msgstr "选择所有正在战斗的半机械人"
 
 #: src/input/keyconfig.cpp:189
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "选择所有没有组的战斗机器人"
 
 #: src/input/keyconfig.cpp:190
 msgid "Select all Engineers"
@@ -17083,7 +17083,7 @@ msgstr "选择所有战斗土地单位"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "选择所有没有组的陆地作战单位"
 
 #: src/input/keyconfig.cpp:193
 msgid "Select all Mechanics"
@@ -18455,7 +18455,7 @@ msgstr ""
 
 #: src/multiint.cpp:4561
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "选择玩家位置"
 
 #: src/multiint.cpp:4632
 msgid "PLAYERS"
@@ -18463,15 +18463,15 @@ msgstr "玩家"
 
 #: src/multiint.cpp:4736
 msgid "Add spectator slot"
-msgstr ""
+msgstr "添加观众槽位"
 
 #: src/multiint.cpp:4813
 msgid "Kicked from game"
-msgstr ""
+msgstr "被踢出游戏"
 
 #: src/multiint.cpp:5060
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "将文本复制到剪贴板"
 
 #: src/multiint.cpp:5075
 #, c-format
@@ -18626,11 +18626,11 @@ msgstr ""
 
 #: src/multiint.cpp:8341
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "重播可能无法成功播放，或者模拟可能存在差异。"
 
 #: src/multiint.cpp:8342
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "重播版本不匹配"
 
 #: src/multijoin.cpp:115
 msgid "Players Still Joining"
@@ -18648,7 +18648,7 @@ msgstr "由于%d，文件传输中断"
 
 #: src/multijoin.cpp:420
 msgid "The game is already full."
-msgstr ""
+msgstr "游戏已经满员了。"
 
 #: src/multijoin.cpp:500
 #: src/multiplay.cpp:821
@@ -18661,7 +18661,7 @@ msgstr "%s(%u)有一个不兼容的mod，已经被踢出"
 #: src/multiplay.cpp:825
 #: src/multiplay.cpp:1009
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "您的数据与主机的不匹配！"
 
 #: src/multijoin.cpp:539
 #, c-format
@@ -18884,7 +18884,7 @@ msgstr ""
 
 #: src/multiplay.cpp:2073
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "地图已下载"
 
 #: src/multiplay.cpp:2129
 #, c-format
@@ -18958,11 +18958,11 @@ msgstr "棕色"
 
 #: src/multiplay.cpp:2471
 msgid "Spectator Mode"
-msgstr ""
+msgstr "观战模式"
 
 #: src/multiplay.cpp:2472
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "你是一个旁观者。 享受观看比赛的乐趣！"
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"
@@ -18999,12 +18999,12 @@ msgstr "无法进行此项操作！在使用Cyborg运输时必需作为Cyborg单
 
 #: src/qtscript.cpp:900
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "无法加载选定的 AI！ 检查您的日志以了解原因。"
 
 #: src/qtscript.cpp:903
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "已为当前玩家加载 %s AI 脚本！"
 
 #: src/research.cpp:1043
 #, c-format
@@ -19058,13 +19058,13 @@ msgstr "全部建筑物： %u"
 #: src/scores.cpp:111
 #, c-format
 msgid "Rookie: %u"
-msgstr "菜鸟： %u"
+msgstr "初学者： %u"
 
 #: src/scores.cpp:112
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "青涩: %u"
+msgstr "初窥门径: %u"
 
 #: src/scores.cpp:113
 #, c-format
@@ -19089,12 +19089,12 @@ msgstr "老手：%u"
 #: src/scores.cpp:117
 #, c-format
 msgid "Elite: %u"
-msgstr "菁英：%u"
+msgstr "精英：%u"
 
 #: src/scores.cpp:118
 #, c-format
 msgid "Special: %u"
-msgstr "特务：%u"
+msgstr "特别出色：%u"
 
 #: src/scores.cpp:119
 #, c-format
@@ -19151,11 +19151,11 @@ msgstr "找不到任何指挥官车！"
 
 #: src/selection.cpp:511
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "找不到所需的建筑物！"
 
 #: src/seqdisp.cpp:576
 msgid "Loading video"
-msgstr ""
+msgstr "加载视频"
 
 #: src/spectatorwidgets.cpp:111
 msgid "Show Player Stats"
@@ -19175,11 +19175,11 @@ msgstr ""
 
 #: src/spectatorwidgets.cpp:806
 msgid "PowerLost"
-msgstr ""
+msgstr "断电"
 
 #: src/spectatorwidgets.cpp:808
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "动能装甲"
 
 #: src/spectatorwidgets.cpp:808
 #: src/spectatorwidgets.cpp:810
@@ -19188,7 +19188,7 @@ msgstr ""
 
 #: src/structure.cpp:2617
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "不能再建造任何部队了，已达限制--生产停止了"
+msgstr "无法再建造更多的单位，单位数量已达上限——生产已停止"
 
 #: src/structure.cpp:2625
 #, c-format
@@ -19275,13 +19275,13 @@ msgstr ""
 #: src/structure.cpp:5354
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "ID %u - 研究点数：%u"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5362
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "地图块 %d,%d - 目标 %s"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5371
@@ -19337,7 +19337,7 @@ msgstr "过滤游戏清单"
 
 #: src/titleui/gamefind.cpp:164
 msgid "Refreshing..."
-msgstr ""
+msgstr "重刷新"
 
 #: src/titleui/gamefind.cpp:172
 msgid "Searching"
@@ -19349,11 +19349,11 @@ msgstr "连接大厅服务器中..."
 
 #: src/titleui/gamefind.cpp:267
 msgid "Map Name"
-msgstr ""
+msgstr "地图名称"
 
 #: src/titleui/gamefind.cpp:273
 msgid "Status"
-msgstr ""
+msgstr "状态"
 
 #: src/titleui/gamefind.cpp:329
 msgid "Can't connect to lobby server!"
@@ -19375,11 +19375,11 @@ msgstr "版本：%s"
 
 #: src/titleui/gamefind.cpp:459
 msgid "Join as spectator"
-msgstr ""
+msgstr "以观众身份加入"
 
 #: src/titleui/gamefind.cpp:482
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "您的 Warzone 版本与该游戏不兼容。"
 
 #: src/titleui/gamefind.cpp:511
 msgid "[Password required]"
@@ -19453,7 +19453,7 @@ msgstr "连接错误"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
@@ -19499,16 +19499,16 @@ msgstr "援军已降落"
 
 #: src/updatemanager.cpp:358
 msgid "Update Available"
-msgstr ""
+msgstr "可用更新"
 
 #: src/updatemanager.cpp:361
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "Warzone 2100 (%s) 的新版本现已推出！"
 
 #: src/updatemanager.cpp:365
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "此新版本包含重要的错误修复和更新，建议您立即更新。"
 
 #: src/updatemanager.cpp:370
 msgid "A new build of Warzone 2100 is available!"
@@ -19537,7 +19537,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:506
 msgid "More Information"
-msgstr ""
+msgstr "更多信息"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
@@ -19559,11 +19559,11 @@ msgstr "版本: %s,%s 构建 %s%s"
 
 #: src/wrappers.cpp:368
 msgid "GAME OVER"
-msgstr ""
+msgstr "游戏结束"
 
 #: src/wrappers.cpp:369
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "战斗结束了——你可以离开房间了。"
 
 #: src/wzapi.cpp:2355
 msgid "YOU ARE VICTORIOUS!"
@@ -19575,5 +19575,5 @@ msgstr "你被打败了！"
 
 #: src/wzscriptdebug.cpp:1947
 msgid "Script Debugger"
-msgstr ""
+msgstr "脚本调试器"
 
