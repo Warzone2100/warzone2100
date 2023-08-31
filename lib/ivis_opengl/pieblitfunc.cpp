@@ -613,7 +613,7 @@ static inline void pie_DrawImageTemplate(IMAGEFILE *imageFile, int id, Vector2i 
 
 	glm::mat4 mvp = modelViewProjection * glm::translate(glm::vec3((float)dest->x, (float)dest->y, 0.f));
 
-	iv_DrawImageImpl<PSO>(pie_Texture(texPage), Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
+	iv_DrawImageImpl<PSO>(pie_Texture(texPage), Vector2i(0, 0), Vector2f(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
 }
 
 static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
@@ -685,6 +685,22 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, i
 	return pieImage;
 }
 
+static Vector2i makePieImagef(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, float x, float y)
+{
+	AtlasImageDef const &image = imageFile->imageDefs[id];
+	Vector2i pieImage;
+	pieImage.x = image.Width;
+	pieImage.y = image.Height;
+	if (dest != nullptr)
+	{
+		dest->x = x + static_cast<float>(image.XOffset);
+		dest->y = y + static_cast<float>(image.YOffset);
+		dest->w = static_cast<float>(image.Width);
+		dest->h = static_cast<float>(image.Height);
+	}
+	return pieImage;
+}
+
 void iV_DrawImage2(const WzString &filename, float x, float y, float width, float height)
 {
 	if (filename.isEmpty()) { return; }
@@ -733,7 +749,7 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 
 	}
 }
 
-void iV_DrawImageTint(IMAGEFILE *ImageFile, UWORD ID, int x, int y, PIELIGHT color, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
+void iV_DrawImageTint(IMAGEFILE *ImageFile, UWORD ID, float x, float y, PIELIGHT color, optional<Vector2f> size, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
 {
 	if (!assertValidImage(ImageFile, ID))
 	{
@@ -741,7 +757,12 @@ void iV_DrawImageTint(IMAGEFILE *ImageFile, UWORD ID, int x, int y, PIELIGHT col
 	}
 
 	PIERECT dest;
-	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
+	Vector2i pieImage = makePieImagef(ImageFile, ID, &dest, x, y);
+	if (size.has_value())
+	{
+		dest.w = size.value().x;
+		dest.h = size.value().y;
+	}
 
 	if (pBatchedRequests == nullptr)
 	{
