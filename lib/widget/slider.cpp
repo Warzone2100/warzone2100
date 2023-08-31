@@ -248,3 +248,8 @@ bool W_SLIDER::isEnabled() const
 {
 	return (state & SLD_DISABLED) == 0;
 }
+
+std::string W_SLIDER::getTip()
+{
+	return pTip;
+}
