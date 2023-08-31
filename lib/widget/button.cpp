@@ -107,6 +107,11 @@ void W_BUTTON::setTip(std::string string)
 	pTip = string;
 }
 
+void W_BUTTON::setHelp(optional<WidgetHelp> _help)
+{
+	help = _help;
+}
+
 void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
 	if ((minClickInterval > 0) && (realTime - lastClickTime < minClickInterval))

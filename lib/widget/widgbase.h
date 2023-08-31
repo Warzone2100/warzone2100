@@ -30,6 +30,7 @@
 #include <vector>
 #include <functional>
 #include <string>
+#include <set>
 #include <nonstd/optional.hpp>
 #include "lib/framework/geometry.h"
 #include "lib/framework/wzstring.h"
@@ -133,6 +134,56 @@ public:
 	WidgetGraphicsContext clippedBy(WzRect const &newRect) const;
 };
 
+struct WidgetHelp
+{
+public:
+	enum class InteractionTriggers: uint8_t
+	{
+		PrimaryClick,
+		SecondaryClick,
+		ClickAndHold,
+		Misc
+	};
+	static constexpr size_t NUM_WIDGET_INTERACTION_TRIGGERS = static_cast<size_t>(InteractionTriggers::Misc) + 1;
+	typedef std::set<InteractionTriggers> WidgetInteractionTriggerFlagSet;
+	struct InteractionDescription
+	{
+		WidgetInteractionTriggerFlagSet triggers;
+		WzString description;
+	};
+	struct KeybindingInfo
+	{
+		std::string keybindingName; // for lookup on display with the input manager
+	};
+public:
+	WzString title;
+	WzString description;
+	std::vector<InteractionDescription> interactions;
+	std::vector<KeybindingInfo> relatedKeybindings;
+public:
+	WidgetHelp() { }
+	WidgetHelp& setTitle(const WzString& newValue)
+	{
+		title = newValue;
+		return *this;
+	}
+	WidgetHelp& setDescription(const WzString& newValue)
+	{
+		description = newValue;
+		return *this;
+	}
+	WidgetHelp& addInteraction(WidgetInteractionTriggerFlagSet triggers, const WzString& effectDescription)
+	{
+		interactions.push_back({triggers, effectDescription});
+		return *this;
+	}
+	WidgetHelp& addRelatedKeybinding(const std::string& keybindingName)
+	{
+		relatedKeybindings.push_back({keybindingName});
+		return *this;
+	}
+};
+
 /* The base widget data type */
 class WIDGET: public std::enable_shared_from_this<WIDGET>
 {
@@ -154,6 +205,10 @@ public:
 	{
 		return "";
 	}
+	virtual WidgetHelp const * getHelp() const
+	{
+		return nullptr;
+	}
 
 protected:
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
@@ -171,7 +226,8 @@ public:
 	virtual void setFlash(bool enable);
 	virtual WzString getString() const;
 	virtual void setString(WzString string);
-	virtual void setTip(std::string string);
+	virtual void setTip(std::string string); // tooltip
+	virtual void setHelp(optional<WidgetHelp> help); // formatted help information for this UI element
 
 	virtual void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight); // used to handle screen resizing
 

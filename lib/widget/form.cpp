@@ -454,6 +454,11 @@ void W_CLICKFORM::setTip(std::string string)
 	pTip = string;
 }
 
+void W_CLICKFORM::setHelp(optional<WidgetHelp> _help)
+{
+	help = _help;
+}
+
 bool W_CLICKFORM::isDown() const
 {
 	return (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;

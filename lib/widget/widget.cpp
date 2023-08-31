@@ -934,6 +934,11 @@ void WIDGET::setTip(std::string)
 	ASSERT(false, "Can't set widget type %u's tip.", type);
 }
 
+void WIDGET::setHelp(optional<WidgetHelp> help)
+{
+	ASSERT(false, "Can't set widget type %u's help.", type);
+}
+
 /* Set tip string for a widget */
 void widgSetTip(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, std::string pTip)
 {

@@ -224,6 +224,11 @@ void W_SLIDER::setTip(std::string string)
 	pTip = string;
 }
 
+void W_SLIDER::setHelp(optional<WidgetHelp> _help)
+{
+	help = _help;
+}
+
 void W_SLIDER::display(int xOffset, int yOffset)
 {
 	ASSERT(false, "No default implementation exists for sliders");
@@ -252,4 +257,10 @@ bool W_SLIDER::isEnabled() const
 std::string W_SLIDER::getTip()
 {
 	return pTip;
+}
+
+WidgetHelp const * W_SLIDER::getHelp() const
+{
+	if (!help.has_value()) { return nullptr; }
+	return &(help.value());
 }
