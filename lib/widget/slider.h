@@ -44,6 +44,7 @@ public:
 	bool isHighlighted() const;
 	bool isEnabled() const;
 
+	std::string getTip() override;
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
 	UWORD		barSize;			// Thickness of slider bar
