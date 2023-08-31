@@ -402,7 +402,7 @@ int objArmour(const BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
  */
 int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
-	int level = 1;
+	int level = 0;
 	int armour = objArmour(psObj, weaponClass);
 	const int lastHit = psObj->timeLastHit;
 
@@ -499,7 +499,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget)
 {
 	unsigned int damage;
-	int actualDamage, armour, level = 1;
+	int actualDamage, armour, level = 0;
 
 	if (psTarget == nullptr)
 	{
