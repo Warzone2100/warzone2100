@@ -343,7 +343,7 @@ static inline void forEachOverlayScreenBottomUp(const std::function<bool (const 
 
 void widgOverlaysScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
 {
-	forEachOverlayScreen([oldWidth, oldHeight, newWidth, newHeight](const OverlayScreen& overlay) -> bool
+	forEachOverlayScreenBottomUp([oldWidth, oldHeight, newWidth, newHeight](const OverlayScreen& overlay) -> bool
 	{
 		overlay.psScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 		return true; // keep enumerating
