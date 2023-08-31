@@ -65,6 +65,7 @@ public:
 	WzString getString() const override;
 	void setString(WzString string) override;
 	void setTip(std::string string) override;
+	void setHelp(optional<WidgetHelp> help) override;
 	void unlock();
 
 	void setImages(Images const &images);
@@ -76,6 +77,11 @@ public:
 	std::string getTip() override
 	{
 		return pTip;
+	}
+	WidgetHelp const * getHelp() const override
+	{
+		if (!help.has_value()) { return nullptr; }
+		return &(help.value());
 	}
 
 	/* The optional "onClick" callback function */
@@ -153,6 +159,7 @@ private:
 	optional<ProgressBorder> progressBorder;
 	PIELIGHT				 progressBorderColour;
 	WIDGET_KEY				 lastClickButton = WKEY_NONE;
+	optional<WidgetHelp>	help;
 };
 
 class MultipleChoiceButton : public W_BUTTON
