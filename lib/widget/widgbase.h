@@ -283,6 +283,7 @@ public:
 		setGeometry(WzRect(x, y, w, h));
 	}
 	void setGeometry(WzRect const &r);
+	virtual void setGeometryFromScreenRect(WzRect const &r);
 
 	void attach(const std::shared_ptr<WIDGET> &widget);
 	/**
