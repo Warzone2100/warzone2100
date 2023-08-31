@@ -491,6 +491,16 @@ void WIDGET::setGeometry(WzRect const &r)
 	dirty = true;
 }
 
+void WIDGET::setGeometryFromScreenRect(WzRect const &r)
+{
+	auto strongParent = parent();
+	ASSERT_OR_RETURN(, strongParent != nullptr, "No parent - failed");
+	int xOffset = strongParent->screenPosX();
+	int yOffset = strongParent->screenPosY();
+	WzRect parentRelativeRect = WzRect(r.x() - xOffset, r.y() - yOffset, r.width(), r.height());
+	setGeometry(parentRelativeRect);
+}
+
 void WIDGET::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
 {
 	// Default implementation of screenSizeDidChange calls its own calcLayout callback function (if present)
