@@ -173,6 +173,14 @@ public:
 		};
 	}
 
+	WzRect minimumBoundingRect(const WzRect &other) const
+	{
+		return {
+			{std::min(_topLeft.x, other._topLeft.x), std::min(_topLeft.y, other._topLeft.y)},
+			{std::max(_bottomRight.x, other._bottomRight.x), std::max(_bottomRight.y, other._bottomRight.y)}
+		};
+	}
+
 	inline bool operator== (const WzRect &rhs) const
 	{
 		return (_topLeft == rhs._topLeft &&
