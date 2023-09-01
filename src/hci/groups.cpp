@@ -136,6 +136,20 @@ public:
 		groupCountLabel->setTransparentToMouse(true);
 
 		buttonBackgroundEmpty = true;
+
+		const std::string groupNumberStr = std::to_string(groupNumber);
+		setTip(_("Select / Assign Group Number: ") + groupNumberStr);
+
+		auto helpInfo = WidgetHelp()
+		  .setTitle(WzString::fromUtf8(astringf(_("Group %u"), groupNumber)))
+		  .addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, WzString::fromUtf8(astringf(_("Select the Units in Group %u"), groupNumber)))
+		  .addInteraction({WidgetHelp::InteractionTriggers::SecondaryClick, WidgetHelp::InteractionTriggers::ClickAndHold}, WzString::fromUtf8(astringf(_("Assign Selected Units to Group %u"), groupNumber)))
+		  .addInteraction({WidgetHelp::InteractionTriggers::Misc},  _("Center Camera on this Group by clicking or tapping twice"))
+		  .addRelatedKeybinding("SelectGrouping_" + groupNumberStr)
+		  .addRelatedKeybinding("AssignGrouping_" + groupNumberStr)
+		  .addRelatedKeybinding("AddGrouping_" + groupNumberStr);
+
+		setHelp(helpInfo);
 	}
 
 	void clickPrimary() override
@@ -196,10 +210,6 @@ protected:
 			iV_DrawImageTint(IntImages, IMAGE_BUT_INNER_GLOW, xOffset + x(), yOffset + y(), pal_RGBA(170, 0, 0, groupInfo->currAttackGlowAlpha));
 		}
 	}
-	std::string getTip() override
-	{
-		return "Select / Assign Group Number: " + std::to_string(groupNumber);
-	}
 	bool isHighlighted() const override
 	{
 		return false;
@@ -243,6 +253,16 @@ void GroupsForum::initialize()
 		buttonHolder->attach(groupButton);
 		groupButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	}
+
+	WzString descriptionStr = _("View and configure groups of units, which can be quickly selected and ordered.");
+	descriptionStr += "\n\n";
+	descriptionStr += _("Group buttons will glow red when units are lost (or taking lots of damage).");
+	setHelp(WidgetHelp()
+	  .setTitle(_("Unit Groups"))
+	  .setDescription(descriptionStr)
+	  .addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, _("Select a Group"))
+	  .addInteraction({WidgetHelp::InteractionTriggers::SecondaryClick, WidgetHelp::InteractionTriggers::ClickAndHold}, _("Assign Selected Units to a Group"))
+	  .addInteraction({WidgetHelp::InteractionTriggers::Misc},  _("Center Camera on a Group by clicking or tapping twice on the group button")));
 }
 
 void GroupsUIController::updateData()
@@ -332,7 +352,6 @@ void GroupsForum::addCommanderGroupDamageForCurrentTick(const DROID *psCommander
 void GroupsForum::addTabList()
 {
 	attach(groupsList = IntListTabWidget::make(TabAlignment::RightAligned));
-	groupsList->id = IDOBJ_GROUP;
 	groupsList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	groupsList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int groupListWidth = OBJ_BUTWIDTH * 5 + STAT_GAP * 4;
@@ -347,5 +366,7 @@ std::shared_ptr<GroupButton> GroupsForum::makeGroupButton(size_t groupNumber)
 	return GroupButton::make(groupsUIController, groupNumber);
 }
 
-
-
+void GroupsForum::setHelp(optional<WidgetHelp> _help)
+{
+	help = _help;
+}

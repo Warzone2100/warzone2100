@@ -1925,10 +1925,16 @@ bool intAddTransporterTimer()
 	sFormInit.pDisplay = intDisplayImageHilight;
 	sFormInit.UserData = PACKDWORD_TRI(0, IMAGE_TRANSETA_DOWN, IMAGE_TRANSETA_UP);
 
-	if (!widgAddForm(psWScreen, &sFormInit))
+	W_FORM * pForm = widgAddForm(psWScreen, &sFormInit);
+	if (!pForm)
 	{
 		return false;
 	}
+
+	pForm->setHelp(WidgetHelp()
+				   .setTitle(_("Load Transport"))
+				   .setDescription(_("Shows the number of units currently loaded into the mission transporter, and the total capacity."))
+				   .addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, _("Open the Transporter Load Menu")));
 
 	//add labels for the time display
 	W_LABINIT sLabInit;
