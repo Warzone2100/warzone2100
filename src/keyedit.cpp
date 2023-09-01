@@ -281,8 +281,7 @@ public:
 
 		// Select label text and color
 		PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
-		char sPrimaryKey[MAX_STR_LENGTH];
-		sPrimaryKey[0] = '\0';
+		std::string sPrimaryKey;
 		const nonstd::optional<KeyMapping> mapping = targetFunctionData.mappings[static_cast<unsigned int>(slot)];
 		if (mapping && !mapping->keys.input.isCleared())
 		{
@@ -292,14 +291,14 @@ public:
 			{
 				bindingTextColor = WZCOL_YELLOW;
 			}
-			mapping->toString(sPrimaryKey);
+			sPrimaryKey = mapping->toString();
 		}
 		else
 		{
-			sstrcpy(sPrimaryKey, info.type == KeyMappingType::ASSIGNABLE ? getNotBoundLabel().c_str() : getFixedKeyLabel().c_str());
+			sPrimaryKey = (info.type == KeyMappingType::ASSIGNABLE) ? getNotBoundLabel() : getFixedKeyLabel();
 		}
 
-		wzBindingText.setText(sPrimaryKey, iV_fonts::font_regular);
+		wzBindingText.setText(WzString::fromUtf8(sPrimaryKey), iV_fonts::font_regular);
 		wzBindingText.render(xPos, yPos + (h / 2) + 3, bindingTextColor);
 	}
 
@@ -514,10 +513,10 @@ static unsigned int getMaxKeyMapNameWidth(InputManager& inputManager)
 	if (maxKeyMapNameWidthDirty) {
 		max = static_cast<int>(iV_GetTextWidth(getNotBoundLabel().c_str(), iV_fonts::font_regular));
 
-		char sKey[MAX_STR_LENGTH];
+		std::string sKey;
 		for (const KeyMapping& mapping : getVisibleMappings(inputManager)) {
-			mapping.toString(sKey);
-			max = MAX(max, static_cast<int>(iV_GetTextWidth(sKey, iV_fonts::font_regular)));
+			sKey = mapping.toString();
+			max = MAX(max, static_cast<int>(iV_GetTextWidth(WzString::fromUtf8(sKey), iV_fonts::font_regular)));
 		}
 
 		maxKeyMapNameWidthDirty = false;
