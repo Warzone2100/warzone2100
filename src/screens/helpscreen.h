@@ -90,7 +90,11 @@ public:
 	const WidgetHelp* getHelpForWidget(const std::shared_ptr<WIDGET>& widget);
 
 private:
+	void closeHelpOverlayScreen();
+
+private:
 	std::shared_ptr<W_HELPSCREEN_CLICKFORM> rootHelpScreenForm;
+	OnCloseFunc onCloseFunc;
 
 private:
 	W_HELP_OVERLAY_SCREEN(W_HELP_OVERLAY_SCREEN const &) = delete;
