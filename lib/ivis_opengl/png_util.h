@@ -86,4 +86,7 @@ IMGSaveError iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image);
 
 void iV_saveImage_JPEG(const char *fileName, const iV_Image *image);
 
+// For loading and outputting multi-channel (ex. RGB) specular maps as WZ-converted single-channel luma grayscale PNGs
+bool iV_LoadAndSavePNG_AsLumaSingleChannel(const std::string &inputFilename, const std::string &outputFilename, bool check = false);
+
 #endif // _LIBIVIS_COMMON_PNG_H_
