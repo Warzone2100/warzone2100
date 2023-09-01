@@ -117,8 +117,8 @@ std::shared_ptr<W_HELP_OVERLAY_SCREEN> W_HELP_OVERLAY_SCREEN::make(const OnClose
 	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
 
 	// Add "Close Help Mode" button
-	const int CloseHelpPadding = 12;
-	const int CloseHelpMargin = 5;
+	#define CloseHelpPadding 12
+	#define CloseHelpMargin 5
 	auto button = std::make_shared<HelpOverlayCloseButton>();
 	button->setString(_("Close Help Mode"));
 	button->FontID = font_regular;
@@ -961,17 +961,17 @@ void W_HELPSCREEN_CLICKFORM::run(W_CONTEXT *psContext)
 	inputLoseFocus();	// clear the input buffer.
 }
 
-void W_HELPSCREEN_CLICKFORM::setHelpForWidget(const std::shared_ptr<WIDGET>& widget, const WidgetHelp& help)
+void W_HELPSCREEN_CLICKFORM::setHelpForWidget(const std::shared_ptr<WIDGET>& widget, const WidgetHelp& widgetHelp)
 {
 	if (!widget) { return; }
 	auto it = registeredWidgets.find(widget);
 	if (it != registeredWidgets.end())
 	{
 		// update help
-		it->second.help = help;
+		it->second.help = widgetHelp;
 		return;
 	}
-	WidgetInfo info(help);
+	WidgetInfo info(widgetHelp);
 	info.helpTriggerWidget = HelpTriggerWidget::make(std::dynamic_pointer_cast<W_HELPSCREEN_CLICKFORM>(shared_from_this()), widget);
 	attach(info.helpTriggerWidget);
 	registeredWidgets[widget] = info;
