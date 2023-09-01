@@ -303,10 +303,14 @@ bool intAddTransporterContents()
 
 		sButFInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
 
-		if (!widgAddForm(psWScreen, &sButFInit))
+		auto psForm = widgAddForm(psWScreen, &sButFInit);
+		if (!psForm)
 		{
 			return false;
 		}
+		psForm->setHelp(WidgetHelp()
+						.setTitle(_("Launch Transport"))
+						.addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, _("Launch the Transporter")));
 	}
 
 	if (!intAddTransContentsForm())
@@ -349,10 +353,14 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	sButInit.pTip = _("Launch Transport");
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LAUNCHDOWN, IMAGE_LAUNCHUP);
-	if (!widgAddForm(psWScreen, &sButInit))
+	auto psForm = widgAddForm(psWScreen, &sButInit);
+	if (!psForm)
 	{
 		return false;
 	}
+	psForm->setHelp(WidgetHelp()
+					.setTitle(_("Launch Transport"))
+					.addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, _("Launch the Transporter")));
 
 	//add the capacity label
 	W_LABINIT sLabInit;

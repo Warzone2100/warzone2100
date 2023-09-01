@@ -42,7 +42,7 @@ private:
 protected:
 	void initialize();
 public:
-	void display(int xOffset, int yOffset);
+	void display(int xOffset, int yOffset) override;
 	static std::shared_ptr<GroupsForum> make()
 	{
 		class make_shared_enabler: public GroupsForum {};
@@ -55,12 +55,20 @@ public:
 	void updateSelectedGroup(size_t group);
 	void addGroupDamageForCurrentTick(size_t group, uint64_t additionalDamage, bool unitKilled);
 	void addCommanderGroupDamageForCurrentTick(const DROID *psCommander, uint64_t additionalDamage, bool unitKilled);
+
+	WidgetHelp const * getHelp() const override
+	{
+		if (!help.has_value()) { return nullptr; }
+		return &(help.value());
+	}
+	void setHelp(optional<WidgetHelp> help) override;
 private:
 	std::shared_ptr<GroupButton> makeGroupButton(size_t groupNumber);
 	void addTabList();
 private:
 	std::shared_ptr<IntListTabWidget> groupsList;
 	std::shared_ptr<GroupsUIController> groupsUIController;
+	optional<WidgetHelp> help;
 };
 
 #endif // __INCLUDED_SRC_HCI_GROUPS_H__
