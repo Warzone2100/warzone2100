@@ -116,6 +116,12 @@ bool _attemptCheatCode(const char *cheat_name)
 		return true;
 	}
 
+	if (!strcasecmp("help", cheat_name))
+	{
+		intShowWidgetHelp();
+		return true;
+	}
+
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
 	{

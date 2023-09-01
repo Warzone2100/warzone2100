@@ -289,6 +289,9 @@ INT_RETVAL intRunWidgets();
 /* Display the widgets for the in game interface */
 void intDisplayWidgets();
 
+void intShowWidgetHelp();
+bool intHelpOverlayIsUp();
+
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule();
 bool intShowGroupSelectionMenu();
