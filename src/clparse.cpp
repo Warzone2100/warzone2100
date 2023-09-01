@@ -29,6 +29,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/png_util.h"
 
 #include "levels.h"
 #include "clparse.h"
@@ -355,7 +356,8 @@ typedef enum
 	CLI_GAMELOG_OUTPUTKEY,
 	CLI_GAMELOG_OUTPUTNAMING,
 	CLI_GAMELOG_FRAMEINTERVAL,
-	CLI_GAMETIMELIMITMINUTES
+	CLI_GAMETIMELIMITMINUTES,
+	CLI_CONVERT_SPECULAR_MAP
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -440,6 +442,7 @@ static const struct poptOption *getOptionsTable()
 		{ "gamelog-outputnaming", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTNAMING, N_("Game history log output naming"), "[default, autohosterclassic]"},
 		{ "gamelog-frameinterval", POPT_ARG_STRING, CLI_GAMELOG_FRAMEINTERVAL, N_("Game history log frame interval"), N_("interval in seconds")},
 		{ "gametimelimit", POPT_ARG_STRING, CLI_GAMETIMELIMITMINUTES, N_("Multiplayer game time limit (in minutes)"), N_("number of minutes")},
+		{ "convert-specular-map", POPT_ARG_STRING, CLI_CONVERT_SPECULAR_MAP, N_("Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"), "inputpath/filename.png:outputpath/filename.png" },
 
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
@@ -540,6 +543,30 @@ bool ParseCommandLineDebugFlags(int argc, const char * const *argv)
 	return true;
 }
 
+static std::string specialGetBaseDir(const std::string& platformSpecificPath, std::string& output_filename)
+{
+	std::string result = platformSpecificPath;
+	const std::string dirSeparator(PHYSFS_getDirSeparator());
+	while (!result.empty() && (result.rfind(dirSeparator, std::string::npos) == (result.length() - dirSeparator.length())))
+	{
+		result.resize(result.length() - dirSeparator.length()); // Remove trailing path separators
+	}
+	size_t lastSlash = result.rfind(dirSeparator, std::string::npos);
+	if (lastSlash != std::string::npos)
+	{
+		output_filename = result.substr(lastSlash + 1);
+		return result.substr(0, lastSlash); // Trim off the last path component
+	}
+	else
+	{
+		// no dir ahead of path
+		output_filename = platformSpecificPath;
+		// use PhysFS_BaseDir
+		const char* pBaseDir = PHYSFS_getBaseDir();
+		return (pBaseDir) ? pBaseDir : "";
+	}
+}
+
 //! Early parsing of the commandline
 /**
  * First half of the command line parsing. Also see ParseCommandLine()
@@ -603,6 +630,64 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 		case CLI_WZ_DEBUG_CRASH_HANDLER:
 			// this is currently a no-op because it must be parsed even earlier than ParseCommandLineEarly
 			break;
+		case CLI_CONVERT_SPECULAR_MAP:
+			{
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr || strlen(token) == 0)
+				{
+					qFatal("Missing convert-specular-map value");
+				}
+				// Should be a string with input and output filenames in the format:
+				// inputpath/filename.png:outputpath/filename.png
+				// (Where "/" is the platform path separator - on Windows, this would be "\")
+				std::string fullArg = token;
+				size_t firstDelimiter = fullArg.find(":");
+				if (firstDelimiter == std::string::npos || !(firstDelimiter + 1 < fullArg.size()))
+				{
+					std::string expectedInputPathExample = std::string("inputpath") + PHYSFS_getDirSeparator() + "filename.png";
+					std::string expectedOutputPathExample = std::string("outputpath") + PHYSFS_getDirSeparator() + "filename.png";
+					qFatal("Invalid convert-specular-map value - expecting format: %s:%s", expectedInputPathExample.c_str(), expectedOutputPathExample.c_str());
+				}
+
+				std::string inputPath = fullArg.substr(0, firstDelimiter);
+				std::string outputPath = fullArg.substr(firstDelimiter+1);
+
+				std::string inputFilename; std::string outputFilename;
+				std::string inputDir = specialGetBaseDir(inputPath, inputFilename);
+				std::string outputDir = specialGetBaseDir(outputPath, outputFilename);
+
+				// This is a bit of a hack, but set up PhysFS to use:
+				// - the path containing the inputFilename as the read path
+				// - the outputFilename path as the write path
+
+				if (inputDir.empty())
+				{
+					qFatal("convert-specular-map value does not seem to include the path to a file (including its directory)");
+				}
+				if (outputDir.empty())
+				{
+					qFatal("convert-specular-map value does not seem to include an output path");
+				}
+
+				if (!PHYSFS_setWriteDir(outputDir.c_str()))
+				{
+					qFatal("convert-specular-map - unable to configure output directory to: %s", outputDir.c_str());
+				}
+
+				// Output dir first so we can see what we write
+				PHYSFS_mount(PHYSFS_getWriteDir(), "", PHYSFS_PREPEND);
+
+				PHYSFS_mount(inputDir.c_str(), "input", PHYSFS_APPEND);
+
+				if (!iV_LoadAndSavePNG_AsLumaSingleChannel("input/" + inputFilename, outputFilename, true))
+				{
+					qFatal("convert-specular-map - failed to convert image: %s", inputDir.c_str());
+				}
+
+				PHYSFS_deinit();
+				exit(0);
+			}
+			break;
 		default:
 			break;
 		};
@@ -642,6 +727,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 #endif
 		case CLI_WZ_CRASH_RPT:
 		case CLI_WZ_DEBUG_CRASH_HANDLER:
+		case CLI_CONVERT_SPECULAR_MAP:
 			// These options are parsed in ParseCommandLineEarly() already, so ignore them
 			break;
 
