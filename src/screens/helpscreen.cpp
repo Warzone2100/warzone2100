@@ -223,6 +223,7 @@ std::string to_string(const WidgetHelp::InteractionTriggers& trigger)
 		case WidgetHelp::InteractionTriggers::Misc:
 			return _("Other");
 	}
+	return ""; // silence warning
 }
 
 std::string to_string(const std::set<WidgetHelp::InteractionTriggers>& triggers)
@@ -311,6 +312,11 @@ protected:
 		recalcLayout();
 	}
 
+#if !defined(__clang__) && defined(__GNUC__) && ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7))
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
 	void buildRelatedKeybindingsList(const WidgetHelp& help)
 	{
 		if (help.relatedKeybindings.empty())
@@ -333,26 +339,29 @@ protected:
 			auto primary_mapping = gInputManager.mappings().get(keybinding.keybindingName, KeyMappingSlot::PRIMARY);
 			auto secondary_mapping = gInputManager.mappings().get(keybinding.keybindingName, KeyMappingSlot::SECONDARY);
 			WzString keybindingsStr;
-			const std::string *pKeyDisplayName = nullptr;
+			WzString keyDisplayName;
 			if (primary_mapping.has_value())
 			{
 				if (!keybindingsStr.isEmpty()) { keybindingsStr.append("\n"); }
 				keybindingsStr.append(WzString::fromUtf8(primary_mapping.value().get().toString()));
-				pKeyDisplayName = &(primary_mapping.value().get().info.displayName);
+				keyDisplayName = WzString::fromUtf8(primary_mapping.value().get().info.displayName);
 			}
 			if (secondary_mapping.has_value())
 			{
 				if (!keybindingsStr.isEmpty()) { keybindingsStr.append("\n"); }
 				keybindingsStr.append(WzString::fromUtf8(secondary_mapping.value().get().toString()));
-				pKeyDisplayName = &(secondary_mapping.value().get().info.displayName);
+				if (keyDisplayName.isEmpty())
+				{
+					keyDisplayName = WzString::fromUtf8(secondary_mapping.value().get().info.displayName);
+				}
 			}
-			if (keybindingsStr.isEmpty() || !pKeyDisplayName)
+			if (keybindingsStr.isEmpty() || keyDisplayName.isEmpty())
 			{
 				continue;
 			}
 			auto interaction_type = std::make_shared<W_LABEL>();
 			interaction_type->setFont(font_regular_bold, WZCOL_TEXT_MEDIUM);
-			interaction_type->setString(WzString::fromUtf8(*pKeyDisplayName));
+			interaction_type->setString(keyDisplayName);
 			interaction_type->setGeometry(0, 0, std::min(interaction_type->getMaxLineWidth(), MaxWidth / 2), interaction_type->requiredHeight());
 
 			auto interaction_effect = std::make_shared<Paragraph>();
@@ -373,6 +382,11 @@ protected:
 		relatedKeybindings->addItem(grid);
 		attach(relatedKeybindings);
 	}
+
+#if !defined(__clang__) && defined(__GNUC__) && ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7))
+#pragma GCC diagnostic pop
+#endif
+
 public:
 	static std::shared_ptr<HelpDisplayForm> make(const WidgetHelp& help)
 	{
