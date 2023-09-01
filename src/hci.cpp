@@ -47,6 +47,7 @@
 #include "lib/widget/bar.h"
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
+#include "screens/helpscreen.h"
 #include "cheat.h"
 #include "console.h"
 #include "design.h"
@@ -164,6 +165,7 @@ static bool Refreshing = false;
 
 /* The widget screen */
 std::shared_ptr<W_SCREEN> psWScreen = nullptr;
+std::shared_ptr<W_HELP_OVERLAY_SCREEN> psUIHelpOverlayScreen = nullptr;
 
 INTMODE intMode;
 
@@ -1977,6 +1979,64 @@ void intDisplayWidgets()
 	{
 		displayLoadSave();
 	}
+}
+
+void intShowWidgetHelp()
+{
+	ASSERT_OR_RETURN(, psWScreen != nullptr, "psWScreen is null?");
+
+	if (!psUIHelpOverlayScreen)
+	{
+		// Initialize the help overlay screen
+		psUIHelpOverlayScreen = W_HELP_OVERLAY_SCREEN::make(
+			// close handler
+			[](std::shared_ptr<W_HELP_OVERLAY_SCREEN>){
+				psUIHelpOverlayScreen.reset();
+
+				if (!bMultiPlayer || !NetPlay.bComms)
+				{
+					if (gamePaused())
+					{
+						// unpause game
+
+						/* Get it going again */
+						setGamePauseStatus(false);
+						setConsolePause(false);
+						setScriptPause(false);
+						setAudioPause(false);
+						setScrollPause(false);
+
+						/* And start the clock again */
+						gameTimeStart();
+					}
+				}
+			}
+		);
+	}
+
+	if (!bMultiPlayer || !NetPlay.bComms)
+	{
+		if (!gamePaused())
+		{
+			// pause game
+			setGamePauseStatus(true);
+			setConsolePause(true);
+			setScriptPause(true);
+			setAudioPause(true);
+			setScrollPause(true);
+
+			/* And stop the clock */
+			gameTimeStop();
+		}
+	}
+
+	psUIHelpOverlayScreen->setHelpFromWidgets(psWScreen->psForm);
+	widgRegisterOverlayScreenOnTopOfScreen(psUIHelpOverlayScreen, psWScreen);
+}
+
+bool intHelpOverlayIsUp()
+{
+	return psUIHelpOverlayScreen != nullptr;
 }
 
 /* Tell the interface when the screen has been resized */

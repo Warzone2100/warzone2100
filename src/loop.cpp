@@ -222,7 +222,7 @@ static GAMECODE renderLoop()
 			displayRenderLoop();
 		}
 
-		if (InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
+		if (InGameOpUp || isInGamePopupUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
 		{
 			WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 			unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
