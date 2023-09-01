@@ -3240,6 +3240,11 @@ void emptyTransporters(bool bOffWorld)
 				//now kill off the Transporter
 				vanishDroid(psDroid);
 			}
+			else if (!bOffWorld && orderState(psTransporter, DORDER_TRANSPORTRETURN))
+			{
+				//also destroy transporters in the process of flying back and we're not offWorld
+				vanishDroid(psTransporter);
+			}
 		}
 	}
 	//deal with any transporters that are waiting to come over
