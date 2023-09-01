@@ -574,7 +574,7 @@ IMGSaveError iV_loadImage_PNG(const std::vector<unsigned char>& memoryBuffer, iV
 
 // Note: This function must be thread-safe.
 //       It does not call the debug() macro directly, but instead returns an IMGSaveError structure with the text of any error.
-static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
+static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type, bool bottom_up_write = true)
 {
 	unsigned char **volatile scanlines = nullptr;  // Must be volatile to reliably preserve value if modified between setjmp/longjmp.
 	png_infop info_ptr = nullptr;
@@ -665,9 +665,16 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 		unsigned char* bitmap_ptr = const_cast<unsigned char*>(image->bmp());
 		for (currentRow = 0; currentRow < image->height(); ++currentRow)
 		{
-			// We're filling the scanline from the bottom up here,
-			// otherwise we'd have a vertically mirrored image.
-			scanlines[currentRow] = &bitmap_ptr[row_stride * (image->height() - currentRow - 1)];
+			if (bottom_up_write)
+			{
+				// We're filling the scanline from the bottom up here,
+				// otherwise we'd have a vertically mirrored image.
+				scanlines[currentRow] = &bitmap_ptr[row_stride * (image->height() - currentRow - 1)];
+			}
+			else
+			{
+				scanlines[currentRow] = &bitmap_ptr[row_stride * currentRow];
+			}
 		}
 
 		png_set_rows(png_ptr, info_ptr, (png_bytepp)scanlines);
@@ -756,3 +763,38 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	PHYSFS_close(fileHandle);
 }
 
+// Note: This function is *NOT* thread-safe.
+bool iV_LoadAndSavePNG_AsLumaSingleChannel(const std::string &inputFilename, const std::string &outputFilename, bool check)
+{
+	iV_Image image;
+
+	// 1.) Load the PNG into an iV_Image
+	if (!iV_loadImage_PNG2(inputFilename.c_str(), image, false, false))
+	{
+		// Failed to load the input image
+		return false;
+	}
+
+	bool result = image.convert_to_luma();
+	ASSERT_OR_RETURN(false, result, "(%s): Failed to convert specular map", inputFilename.c_str());
+
+	auto saveResult = internal_saveImage_PNG(outputFilename.c_str(), &image, PNG_COLOR_TYPE_GRAY, false);
+	ASSERT_OR_RETURN(false, saveResult.noError(), "(%s): Failed to save specular map output, with error: %s", outputFilename.c_str(), saveResult.text.c_str());
+
+	if (check)
+	{
+		// Test round-trip - does loading the written image yield the same iV_Image bitmap data?
+		iV_Image outputImage;
+		if (!iV_loadImage_PNG2(outputFilename.c_str(), outputImage, false, false))
+		{
+			// Failed to load the output image
+			return false;
+		}
+
+		ASSERT_OR_RETURN(false, outputImage.channels() == 1, "Output image unexpectedly has %u channels", outputImage.channels());
+		ASSERT_OR_RETURN(false, image.compare_equal(outputImage), "Output image doesn't seem to match expected");
+		debug(LOG_INFO, "Validated that output image loads the same bitmap data that was saved.");
+	}
+
+	return true;
+}
