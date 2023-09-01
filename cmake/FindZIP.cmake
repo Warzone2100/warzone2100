@@ -12,13 +12,13 @@
 # specifying various options. COMPRESS_ZIP supports all of the above detected ZIP_EXECUTABLE possibilities.
 #
 #
-# Copyright © 2018-2020 pastdue ( https://github.com/past-due/ ) and contributors
+# Copyright © 2018-2023 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2020-06-03b
+# Script Version: 2023-09-01a
 #
 
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.5...3.24)
 
 set(_PF32BIT "ProgramFiles(x86)")
 

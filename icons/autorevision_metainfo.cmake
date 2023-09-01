@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.24)
 
 # Automatically update the Release and other info in the net.wz2100.warzone2100.appdata.xml.in file
 #
