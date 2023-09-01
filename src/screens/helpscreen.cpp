@@ -31,6 +31,7 @@
 #include "lib/widget/margin.h"
 #include "lib/widget/alignment.h"
 #include "lib/widget/scrollablelist.h"
+#include "lib/widget/button.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
 
@@ -39,31 +40,113 @@
 
 #include <array>
 
+const PIELIGHT WZCOL_HELP_UI_BACKGROUND = pal_RGBA(5,9,235,190);
+const PIELIGHT WZCOL_HELP_UI_BACKGROUND_DARK = pal_RGBA(2,5,173,255);
+const PIELIGHT WZCOL_HELP_UI_BORDER_LIGHT = pal_RGBA(255, 255, 255, 80);
+
+// MARK: - Custom Close Help UI button
+
+struct HelpOverlayCloseButton : public W_BUTTON
+{
+	HelpOverlayCloseButton() : W_BUTTON() {}
+
+	void display(int xOffset, int yOffset) override;
+
+	unsigned downStateMask = WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK;
+	unsigned greyStateMask = WBUT_DISABLE;
+private:
+	WzText text;
+};
+
+void HelpOverlayCloseButton::display(int xOffset, int yOffset)
+{
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
+
+	bool haveText = !pText.isEmpty();
+
+	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDisabled = (getState() & WBUT_DISABLE) != 0;
+	bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
+
+	// Display the button.
+	auto light_border = WZCOL_HELP_UI_BORDER_LIGHT;
+	auto fill_color = isDown || isDisabled ? WZCOL_HELP_UI_BACKGROUND_DARK : WZCOL_HELP_UI_BACKGROUND;
+	iV_ShadowBox(x0, y0, x1, y1, 0, isDown ? pal_RGBA(0,0,0,0) : light_border, isDisabled ? light_border : WZCOL_FORM_DARK, fill_color);
+	if (isHighlight)
+	{
+		iV_Box(x0 + 2, y0 + 2, x1 - 2, y1 - 2, WZCOL_FORM_HILITE);
+	}
+
+	if (haveText)
+	{
+		text.setText(pText, FontID);
+		int fw = text.width();
+		int fx = x0 + (width() - fw) / 2;
+		int fy = y0 + (height() - text.lineSize()) / 2 - text.aboveBase();
+		PIELIGHT textColor = WZCOL_TEXT_BRIGHT;
+		if (isDisabled)
+		{
+			textColor.byte.a = (textColor.byte.a / 2);
+		}
+		text.render(fx, fy, textColor);
+	}
+}
+
 // MARK: - Help overlay screen
 
-std::shared_ptr<W_HELP_OVERLAY_SCREEN> W_HELP_OVERLAY_SCREEN::make(const OnCloseFunc& onCloseFunction)
+std::shared_ptr<W_HELP_OVERLAY_SCREEN> W_HELP_OVERLAY_SCREEN::make(const OnCloseFunc& _onCloseFunc)
 {
 	class make_shared_enabler: public W_HELP_OVERLAY_SCREEN {};
 	auto newRootFrm = W_HELPSCREEN_CLICKFORM::make();
 	auto screen = std::make_shared<make_shared_enabler>();
 	screen->initialize(newRootFrm);
+	screen->onCloseFunc = _onCloseFunc;
 	screen->rootHelpScreenForm = newRootFrm;
 
 	std::weak_ptr<W_HELP_OVERLAY_SCREEN> psWeakHelpOverlayScreen(screen);
-	newRootFrm->onClickedFunc = [psWeakHelpOverlayScreen, onCloseFunction]() {
+	newRootFrm->onClickedFunc = [psWeakHelpOverlayScreen]() {
 		auto psOverlayScreen = psWeakHelpOverlayScreen.lock();
 		if (psOverlayScreen)
 		{
-			widgRemoveOverlayScreen(psOverlayScreen);
-		}
-		if (onCloseFunction)
-		{
-			onCloseFunction(psOverlayScreen);
+			psOverlayScreen->closeHelpOverlayScreen();
 		}
 	};
 	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
 
+	// Add "Close Help Mode" button
+	const int CloseHelpPadding = 12;
+	const int CloseHelpMargin = 5;
+	auto button = std::make_shared<HelpOverlayCloseButton>();
+	button->setString(_("Close Help Mode"));
+	button->FontID = font_regular;
+	int minButtonWidthForText = iV_GetTextWidth(button->pText, button->FontID);
+	button->setCalcLayout([minButtonWidthForText](WIDGET *psWidget) {
+		int width = minButtonWidthForText + CloseHelpPadding;
+		int height = iV_GetTextLineSize(font_regular) + CloseHelpPadding;
+		psWidget->setGeometry((screenWidth - width) / 2, CloseHelpMargin, width, height);
+	});
+	button->addOnClickHandler([psWeakHelpOverlayScreen](W_BUTTON& button) {
+		auto psOverlayScreen = psWeakHelpOverlayScreen.lock();
+		if (psOverlayScreen)
+		{
+			psOverlayScreen->closeHelpOverlayScreen();
+		}
+	});
+	newRootFrm->attach(button);
+
 	return screen;
+}
+
+void W_HELP_OVERLAY_SCREEN::closeHelpOverlayScreen()
+{
+	widgRemoveOverlayScreen(shared_from_this());
+	if (onCloseFunc)
+	{
+		onCloseFunc(std::dynamic_pointer_cast<W_HELP_OVERLAY_SCREEN>(shared_from_this()));
+	}
 }
 
 void W_HELP_OVERLAY_SCREEN::setHelpFromWidgets(const std::shared_ptr<WIDGET>& root)
@@ -308,8 +391,8 @@ public:
 			int x1 = x0 + width();
 			int y1 = y0 + height();
 
-			pie_UniTransBoxFill(x0, y0, x1, y1, pal_RGBA(5,9,235,190));
-			iV_Box(x0+1, y0+1, x1+1, y1+1, pal_RGBA(2,5,173,255));
+			pie_UniTransBoxFill(x0, y0, x1, y1, WZCOL_HELP_UI_BACKGROUND);
+			iV_Box(x0+1, y0+1, x1+1, y1+1, WZCOL_HELP_UI_BACKGROUND_DARK);
 		}
 	}
 	void geometryChanged() override
