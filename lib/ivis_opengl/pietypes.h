@@ -243,6 +243,8 @@ public:
 
 	bool convert_color_order(ColorOrder newOrder);
 
+	bool compare_equal(const iV_Image& other);
+
 private:
 	bool resizeInternal(const iV_Image& source, int output_w, int output_h, optional<int> alphaChannelOverride = nullopt);
 
