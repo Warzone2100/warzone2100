@@ -561,3 +561,22 @@ bool iV_Image::convert_color_order(ColorOrder newOrder)
 	m_colorOrder = newOrder;
 	return true;
 }
+
+bool iV_Image::compare_equal(const iV_Image& other)
+{
+	if (m_width != other.m_width || m_height != other.m_height || m_channels != other.m_channels)
+	{
+		return false;
+	}
+	if (m_colorOrder != other.m_colorOrder)
+	{
+		return false;
+	}
+	if ((m_bmp == nullptr || other.m_bmp == nullptr) && (m_bmp != other.m_bmp))
+	{
+		return false;
+	}
+
+	const size_t sizeOfBuffers = sizeof(unsigned char) * m_width * m_height * m_channels;
+	return memcmp(m_bmp, other.m_bmp, sizeOfBuffers) == 0;
+}
