@@ -690,13 +690,17 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// Add plain dir
 				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
-				if (terrainQualityOverrideBasePath.has_value())
+				if (terrainQualityOverrideBasePath.has_value() && !loadedTerrainTextureOverrides)
 				{
 					// Add terrain quality override files
 					tmpstr = curSearchPath->path + terrainQualityOverrideBasePath.value();
 					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
 					tmpstr += ".wz";
 					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					if (loadedTerrainTextureOverrides)
+					{
+						debug(LOG_INFO, "Loaded terrain overrides from: %s", curSearchPath->path.c_str());
+					}
 				}
 
 				// Add base files
@@ -775,13 +779,17 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// Add plain dir
 				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
-				if (terrainQualityOverrideBasePath.has_value())
+				if (terrainQualityOverrideBasePath.has_value() && !loadedTerrainTextureOverrides)
 				{
 					// Add terrain quality override files
 					tmpstr = curSearchPath->path + terrainQualityOverrideBasePath.value();
 					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
 					tmpstr += ".wz";
 					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					if (loadedTerrainTextureOverrides)
+					{
+						debug(LOG_INFO, "Loaded terrain overrides from: %s", curSearchPath->path.c_str());
+					}
 				}
 
 				// Add base files
