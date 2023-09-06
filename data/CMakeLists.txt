@@ -222,7 +222,7 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high")
 
 	set(high_texture_folders "texpages")
-	file(GLOB tertiles_dirs LIST_DIRECTORIES true RELATIVE "${_terrain_overrides_high_base_path}" CONFIGURE_DEPENDS "${_terrain_overrides_high_base_path}/texpages/tertilesc*hw-*")
+	file(GLOB tertiles_dirs LIST_DIRECTORIES true RELATIVE "${_terrain_overrides_high_base_path}" "${_terrain_overrides_high_base_path}/texpages/tertilesc*hw-*")
 	list(APPEND high_texture_folders ${tertiles_dirs})
 
 	foreach(tex_folder ${high_texture_folders})
@@ -252,7 +252,7 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	endforeach()
 
 	set(_base_output_dir "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high")
-	file(GLOB_RECURSE ALL_TEXPAGES LIST_DIRECTORIES false CONFIGURE_DEPENDS "${_terrain_overrides_high_base_path}/texpages/*.*" "${_terrain_overrides_high_base_path}/tileset/*.*")
+	file(GLOB_RECURSE ALL_TEXPAGES LIST_DIRECTORIES false "${_terrain_overrides_high_base_path}/texpages/*.*" "${_terrain_overrides_high_base_path}/tileset/*.*")
 	list(APPEND ALL_TEXPAGES_unprocessed ${ALL_TEXPAGES})
 	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${PROCESSED_TEXTURE_FILES})
 	foreach(TEXPAGE_FILE ${ALL_TEXPAGES_unprocessed})
