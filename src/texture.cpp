@@ -81,7 +81,7 @@ int getCurrentTileTextureSize()
 int getMaxTileTextureSize(std::string dir)
 {
 	int res = MIPMAP_MAX;
-	while (res > 0 && !PHYSFS_exists(WzString::fromUtf8(dir + "-" + std::to_string(res) + "/tile-00.png")))
+	while (res > 0 && !PHYSFS_exists(WzString::fromUtf8(dir + "-" + std::to_string(res) + "/tile-00.ktx2")) && !PHYSFS_exists(WzString::fromUtf8(dir + "-" + std::to_string(res) + "/tile-00.png")))
 		res /= 2;
 	return res;
 }
@@ -310,7 +310,7 @@ bool texLoad(const char *fileName)
 				std::vector<WzString> usedFilenames_tmp;
 				for (k = 0; k <= maxTileNo; ++k)
 				{
-					auto fullPath_base = WzString::fromUtf8(astringf("%s/tile-%02d.png", partialPath, k));
+					auto fullPath_base = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d.png", partialPath, k)));
 					tile_base_filepaths.push_back(fullPath_base);
 					usedFilenames_tmp.push_back(fullPath_base);
 
