@@ -99,6 +99,8 @@ endif()
 #########################################
 # Texture pages basis-universal encoding
 
+include(WZBasisEncode)
+
 # default texpages path
 set(_texpages_PATHS
 	PATHS
@@ -145,22 +147,8 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/texpages")
 	file(MAKE_DIRECTORY "${_output_dir}")
 	set(_terrain_max_size 1024)
-	foreach(TEXTURE ${TEXPAGES_TERRAIN})
-		get_filename_component(TEXTURE_FILE_PATH ${TEXTURE} DIRECTORY)
-		get_filename_component(TEXTURE_FILE_NAME_WE ${TEXTURE} NAME_WE)
-		set(_output_name "${TEXTURE_FILE_NAME_WE}.ktx2")
-		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
-			COMMAND "${BASIS_UNIVERSAL_CLI}"
-			ARGS -ktx2 -uastc -uastc_level 2 -uastc_rdo_l 1.0 -uastc_rdo_m -mipmap -resample ${_terrain_max_size} ${_terrain_max_size} -output_file "${_output_dir}/${_output_name}" -file "${TEXTURE}"
-			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages"
-			DEPENDS "${TEXTURE}"
-			VERBATIM
-		)
-		list(APPEND TEXTURE_LIST "${_output_dir}/${_output_name}")
-	endforeach()
-	add_custom_target(texture_encoding DEPENDS ${TEXTURE_LIST})
-	set_property(TARGET texture_encoding PROPERTY FOLDER "data")
 
+	WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "TEXTURE" RESIZE "${_terrain_max_size}" RDO ENCODING_TARGET texture_encoding TARGET_FOLDER data ALL FILES ${TEXPAGES_TERRAIN})
 	set(PROCESSED_TEXTURE_FILES ${TEXPAGES_TERRAIN})
 
 	file(GLOB_RECURSE ALL_TEXPAGES LIST_DIRECTORIES false CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.png" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/compression_overrides.txt" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.radar")
