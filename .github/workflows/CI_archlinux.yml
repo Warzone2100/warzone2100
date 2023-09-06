@@ -31,6 +31,9 @@ jobs:
     name: '${{ matrix.name }}'
     permissions:
       contents: read
+    env:
+      # Since this workflow doesn't build any artifacts for distribution, set WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES to speed up the job
+      WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES: ON
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -58,7 +61,7 @@ jobs:
         CXX: ${{ matrix.cxx }}
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e CC -e CXX -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" archlinux cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e CC -e CXX -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" archlinux cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build
       working-directory: '${{ github.workspace }}/build'
@@ -71,7 +74,7 @@ jobs:
         else
           echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/gcc.json"
         fi
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e CC -e CXX -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" archlinux cmake --build .
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e CC -e CXX -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" archlinux cmake --build .
         if [ "$WZ_COMPILER" == "clang" ]; then
           echo "::remove-matcher owner=clang::"
         else
