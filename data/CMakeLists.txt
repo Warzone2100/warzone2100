@@ -152,6 +152,7 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	set(PROCESSED_TEXTURE_FILES ${TEXPAGES_TERRAIN})
 
 	file(GLOB_RECURSE ALL_TEXPAGES LIST_DIRECTORIES false CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.png" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/compression_overrides.txt" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.radar")
+	unset(ALL_TEXPAGES_unprocessed)
 	list(APPEND ALL_TEXPAGES_unprocessed ${ALL_TEXPAGES})
 	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${PROCESSED_TEXTURE_FILES})
 	foreach(TEXPAGE_FILE ${ALL_TEXPAGES_unprocessed})
@@ -176,6 +177,11 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 			"texpages"
 		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/base"
 	)
+
+	unset(PROCESSED_TEXTURE_FILES)
+	unset(ALL_TEXPAGES)
+	unset(TEXTURE_UNPROCESSED_LIST)
+	unset(ALL_TEXPAGES_unprocessed)
 
 else()
 	if(WZ_ENABLE_BASIS_UNIVERSAL AND WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
@@ -203,6 +209,102 @@ COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/classic.wz"
 	QUIET
 )
 set_property(TARGET data_terrain_overrides_classic PROPERTY FOLDER "data")
+
+## High terrain overrides
+
+set(_terrain_overrides_high_base_path "${CMAKE_CURRENT_SOURCE_DIR}/terrain_overrides/high")
+
+if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
+	if(NOT DEFINED BASIS_UNIVERSAL_CLI)
+		message(FATAL_ERROR "No basisu tool has been provided - set BASIS_UNIVERSAL_CLI to the path to basisu or disable WZ_ENABLE_BASIS_UNIVERSAL!")
+	endif()
+
+	file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high")
+
+	set(high_texture_folders "texpages")
+	file(GLOB tertiles_dirs LIST_DIRECTORIES true RELATIVE "${_terrain_overrides_high_base_path}" CONFIGURE_DEPENDS "${_terrain_overrides_high_base_path}/texpages/tertilesc*hw-*")
+	list(APPEND high_texture_folders ${tertiles_dirs})
+
+	foreach(tex_folder ${high_texture_folders})
+
+		file(GLOB ALL_TEXPAGES LIST_DIRECTORIES false CONFIGURE_DEPENDS "${_terrain_overrides_high_base_path}/${tex_folder}/*.png")
+		# Split into _nm, _sm, and everything else (regular texpages)
+		file(GLOB TEXPAGES_NM LIST_DIRECTORIES false CONFIGURE_DEPENDS "${_terrain_overrides_high_base_path}/${tex_folder}/*_nm.png")
+		file(GLOB TEXPAGES_SM LIST_DIRECTORIES false CONFIGURE_DEPENDS "${_terrain_overrides_high_base_path}/${tex_folder}/*_sm.png")
+		unset(TEXPAGES_TEX)
+		list(APPEND TEXPAGES_TEX ${ALL_TEXPAGES})
+		list(REMOVE_ITEM TEXPAGES_TEX ${TEXPAGES_NM} ${TEXPAGES_SM})
+
+		set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high/${tex_folder}")
+		if (tex_folder STREQUAL "texpages")
+			set(_terrain_high_max_size 1024)
+		else()
+			set(_terrain_high_max_size 256) # decals are 256x256
+		endif()
+
+		WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "TEXTURE" RESIZE "${_terrain_high_max_size}" UASTC_LEVEL 3 ENCODING_TARGET texture_encoding_high TARGET_FOLDER data ALL FILES ${TEXPAGES_TEX})
+		list(APPEND PROCESSED_TEXTURE_FILES ${TEXPAGES_TEX})
+		WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "NORMALMAP" RESIZE "${_terrain_high_max_size}" UASTC_LEVEL 3 ENCODING_TARGET texture_encoding_high TARGET_FOLDER data ALL FILES ${TEXPAGES_NM})
+		list(APPEND PROCESSED_TEXTURE_FILES ${TEXPAGES_NM})
+		WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "SPECULARMAP" RESIZE "${_terrain_high_max_size}" UASTC_LEVEL 3 ENCODING_TARGET texture_encoding_high TARGET_FOLDER data ALL FILES ${TEXPAGES_SM})
+		list(APPEND PROCESSED_TEXTURE_FILES ${TEXPAGES_SM})
+
+	endforeach()
+
+	set(_base_output_dir "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high")
+	file(GLOB_RECURSE ALL_TEXPAGES LIST_DIRECTORIES false CONFIGURE_DEPENDS "${_terrain_overrides_high_base_path}/texpages/*.*" "${_terrain_overrides_high_base_path}/tileset/*.*")
+	list(APPEND ALL_TEXPAGES_unprocessed ${ALL_TEXPAGES})
+	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${PROCESSED_TEXTURE_FILES})
+	foreach(TEXPAGE_FILE ${ALL_TEXPAGES_unprocessed})
+		file(RELATIVE_PATH _output_name "${_terrain_overrides_high_base_path}" "${TEXPAGE_FILE}")
+		message(STATUS "Copy unprocessed image file: ${_output_name}")
+		add_custom_command(OUTPUT "${_base_output_dir}/${_output_name}"
+			COMMAND "${CMAKE_COMMAND}"
+			ARGS -E copy_if_different "${TEXPAGE_FILE}" "${_base_output_dir}/${_output_name}"
+			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages"
+			DEPENDS "${TEXPAGE_FILE}"
+			VERBATIM
+		)
+		list(APPEND TEXTURE_UNPROCESSED_LIST "${_base_output_dir}/${_output_name}")
+	endforeach()
+
+	add_custom_target(texture_staging_high DEPENDS ${TEXTURE_UNPROCESSED_LIST})
+	set_property(TARGET texture_staging_high PROPERTY FOLDER "data")
+
+	unset(PROCESSED_TEXTURE_FILES)
+	unset(ALL_TEXPAGES)
+	unset(TEXTURE_UNPROCESSED_LIST)
+	unset(ALL_TEXPAGES_unprocessed)
+
+	COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz"
+		COMPRESSION_LEVEL 0
+		PATHS
+			"texpages"
+			"tileset"
+		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high"
+		BUILD_ALWAYS_TARGET data_terrain_overrides_high
+		IGNORE_GIT
+		QUIET
+	)
+	add_dependencies(data_terrain_overrides_high texture_encoding_high texture_staging_high)
+
+else()
+	if(WZ_ENABLE_BASIS_UNIVERSAL AND WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
+		message(STATUS "WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES is set, textures will not be compressed as part of build. This should only be used for selected CI runs.")
+	endif()
+
+	COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz"
+		COMPRESSION_LEVEL 0
+		PATHS
+			"texpages"
+			"tileset"
+		WORKING_DIRECTORY "${_terrain_overrides_high_base_path}"
+		BUILD_ALWAYS_TARGET data_terrain_overrides_high
+		IGNORE_GIT
+		QUIET
+	)
+	set_property(TARGET data_terrain_overrides_high PROPERTY FOLDER "data")
+endif()
 
 #########################
 # Compress data archives
@@ -296,6 +398,9 @@ ADD_CUSTOM_TARGET(data ALL
 if(TARGET data_terrain_overrides_classic)
 	add_dependencies(data_base data_terrain_overrides_classic)
 endif()
+if(TARGET data_terrain_overrides_high)
+	add_dependencies(data_base data_terrain_overrides_high)
+endif()
 if(TARGET glsl_compilation)
 	add_dependencies(data_base glsl_compilation)
 endif()
@@ -334,6 +439,9 @@ install(FILES ${DATA_FILES}
 set(DATA_TERRAIN_OVERRIDES_FILES
 	"${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/classic.wz"
 )
+if(TARGET data_terrain_overrides_high)
+	list(APPEND DATA_TERRAIN_OVERRIDES_FILES "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz")
+endif()
 install(FILES ${DATA_TERRAIN_OVERRIDES_FILES}
 	DESTINATION "${WZ_DATADIR}/terrain_overrides"
 	COMPONENT Data
