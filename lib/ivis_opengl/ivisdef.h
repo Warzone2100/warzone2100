@@ -111,11 +111,13 @@ enum ANIMATION_EVENTS
 	ANIM_EVENT_COUNT
 };
 
+#define WZ_CURRENT_GRAPHICS_OVERRIDES_PREFIX "graphics_overrides/curr"
+
 // A game model will have (potentially) two sets of information:
 // 1. Information used for game state calculations (this is always from the "base" / core model file)
+//		- This is accessible in the `iIMDBaseShape`
 // 2. Information used for display (this may be from the "base" / core model, or a graphics mod overlay display-only model replacement)
-
-#define WZ_CURRENT_GRAPHICS_OVERRIDES_PREFIX "graphics_overrides/curr"
+//		- This is accessible in the `iIMDShape` that can be obtained via `iIMDBaseShape::displayModel()`
 
 struct iIMDShape;
 
@@ -127,15 +129,14 @@ struct iIMDBaseShape
 
 	// SAFE FOR USE IN GAME STATE CALCULATIONS
 
-	Vector3i min = Vector3i(0, 0, 0); // used by: establishTargetHeight (game state calculation), alignStructure (game state calculation), (and then a bunch of display only stuff in effects.cpp and component.cpp)
+	Vector3i min = Vector3i(0, 0, 0); // used by: establishTargetHeight (game state calculation), alignStructure (game state calculation), etc
 	Vector3i max = Vector3i(0, 0, 0);
-	int sradius = 0; // seemingly? display only
-	int radius = 0; // used in game state calculations!!!
+	int sradius = 0;
+	int radius = 0;
 
-	Vector3f ocen = Vector3f(0.f, 0.f, 0.f); // not actually used by anything right now...
+	Vector3f ocen = Vector3f(0.f, 0.f, 0.f);
 
-	// used by game state calculations! (muzzle base location, fire line, actionVisibleTarget, etc)
-	std::vector<Vector3i> connectors;
+	std::vector<Vector3i> connectors; // used by: muzzle base location, fire line, actionVisibleTarget, etc)
 
 	// the display shape used for rendering (*NOT* for any game state calculations!)
 	inline iIMDShape* displayModel() { return m_displayModel.get(); }
@@ -163,23 +164,22 @@ struct TilesetTextureFiles
 	std::string specfile;
 };
 
+// DISPLAY-ONLY
+// NOTE: Do *NOT* use any data from iIMDShape in game state calculations - instead, use the data in an iIMDBaseShape
 struct iIMDShape
 {
 	~iIMDShape();
 
-	Vector3i min = Vector3i(0, 0, 0); // used by: establishTargetHeight (game state calculation), alignStructure (game state calculation), (and then a bunch of display only stuff in effects.cpp and component.cpp)
+	Vector3i min = Vector3i(0, 0, 0);
 	Vector3i max = Vector3i(0, 0, 0);
-	int sradius = 0; // seemingly? display only
-	int radius = 0; // used in game state calculations!!!
+	int sradius = 0;
+	int radius = 0;
 
-	Vector3f ocen = Vector3f(0.f, 0.f, 0.f); // not actually used by anything right now...
+	Vector3f ocen = Vector3f(0.f, 0.f, 0.f);
 
 	std::vector<Vector3i> connectors;
 
-	// DISPLAY-ONLY
-	// do not use any of these variables for game state calculations!
-
-	unsigned int flags = 0; // display only
+	unsigned int flags = 0;
 
 	const iIMDShapeTextures& getTextures() const;
 
@@ -190,7 +190,7 @@ struct iIMDShape
 	size_t nShadowEdges = 0;
 
 	// The old rendering data
-	std::vector<Vector3f> points; // !!! NOTE: THIS IS USED TO *CALCULATE* some of the game state values above on imd load (in _imd_calc_bounds) !!!
+	std::vector<Vector3f> points; // NOTE: This is used to calculate some of the values above on imd load (in _imd_calc_bounds)
 	std::vector<iIMDPoly> polys;
 
 	// Data used for stencil shadows
@@ -218,8 +218,6 @@ struct iIMDShape
 	uint32_t modelLevel = 0;
 
 	std::array<TilesetTextureFiles, 3> tilesetTextureFiles;
-
-	// BOTH:
 
 	std::unique_ptr<iIMDShape> next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
 
