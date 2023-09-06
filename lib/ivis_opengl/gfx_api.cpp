@@ -854,7 +854,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadUncompressedImageWithMips(
 #if defined(BASIS_ENABLED)
 	if (strEndsWith(imageLoadFilename, ".ktx2"))
 	{
-		results = gfx_api::loadiVImagesFromFile_Basis(imageLoadFilename, textureType, gfx_api::pixel_format_target::texture_2d_array, WZ_BASIS_UNCOMPRESSED_FORMAT, std::max(0, maxWidth), std::max(0, maxHeight));
+		results = gfx_api::loadiVImagesFromFile_Basis(imageLoadFilename, textureType, gfx_api::pixel_format_target::texture_2d_array, (forceRGBA8) ? WZ_BASIS_UNCOMPRESSED_FORMAT : gfx_api::context::get().bestUncompressedPixelFormat(gfx_api::pixel_format_target::texture_2d_array, textureType), std::max(0, maxWidth), std::max(0, maxHeight));
 
 		if (forceRGBA8)
 		{
@@ -905,7 +905,7 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 		return imageLoadFilenameFromInputFilename(filename);
 	});
 
-	bool allFilesAreKTX2 = std::all_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".ktx2"); });
+	bool allFilesAreKTX2 = std::all_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.isEmpty() || imageLoadFilename.endsWith(".ktx2"); });
 	bool anyFileIsKTX2 = allFilesAreKTX2 || std::any_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".ktx2"); });
 
 #if !defined(BASIS_ENABLED)
