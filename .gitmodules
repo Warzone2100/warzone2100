@@ -62,3 +62,6 @@
 [submodule "data/terrain_overrides/classic"]
 	path = data/terrain_overrides/classic
 	url = https://github.com/Warzone2100/data-terrain-classic.git
+[submodule "data/terrain_overrides/high"]
+	path = data/terrain_overrides/high
+	url = https://github.com/Warzone2100/data-terrain-high.git
