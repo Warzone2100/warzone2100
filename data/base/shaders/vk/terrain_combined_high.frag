@@ -75,19 +75,19 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	float visibility = getShadowVisibility();
 	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap, 0.f);
 
-	vec4 light = (ambientLight + visibility*diffuseLight*lambertTerm) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
-	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb * 3.f)); // additive color (from environmental point lights / effects)
+	float adjustedTileBrightness = pow(lightmap_vec4.a, 1.5f); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+
+	vec4 light = (ambientLight + visibility*diffuseLight*lambertTerm) * adjustedTileBrightness;
+	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 
-	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm);
-	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb * 2.f)); // additive color (from environmental point lights / effects)
-	light_spec *= b.gloss*b.gloss;
+	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm) * adjustedTileBrightness;
+	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.f)); // additive color (from environmental point lights / effects)
+	light_spec *= b.gloss;
 
-	vec4 res = (b.color*light);
-	res += light_spec;
-	res *= lightmap_vec4.a;  // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+	vec4 res = (b.color*light) + light_spec;
 
-	return vec4(res.rgb, 1.0f);
+	return vec4(res.rgb, b.color.a);
 }
 
 vec4 main_bumpMapping() {
