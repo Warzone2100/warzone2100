@@ -905,8 +905,9 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 		return imageLoadFilenameFromInputFilename(filename);
 	});
 
-	bool allFilesAreKTX2 = std::all_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.isEmpty() || imageLoadFilename.endsWith(".ktx2"); });
+	bool allFilesAreKTX2 = std::all_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".ktx2"); });
 	bool anyFileIsKTX2 = allFilesAreKTX2 || std::any_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".ktx2"); });
+	bool anyFileIsPNG = !allFilesAreKTX2 && std::any_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".png"); });
 
 #if !defined(BASIS_ENABLED)
 	if (anyFileIsKTX2)
@@ -943,7 +944,7 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 			uploadFormat = bestAvailableCompressedFormat.value();
 			desiredImageExtractionFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8; // must extract to RGBA for run-time compression
 		}
-		if (anyFileIsKTX2)
+		if (anyFileIsKTX2 && anyFileIsPNG)
 		{
 			debug(LOG_INFO, "Performance info: Some files are .ktx2, but others are .png");
 		}
