@@ -130,7 +130,7 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	float blinnTerm = clamp(dot(b.N, H), 0.f, 1.f);
 	blinnTerm = lambertTerm != 0.0 ? blinnTerm : 0.0;
 	blinnTerm = pow(blinnTerm, 16.f);
-	float visibility = pow(getShadowVisibility(), 2.f);
+	float visibility = pow(getShadowVisibility(), 2.5f);
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
 
 	float adjustedTileBrightness = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
