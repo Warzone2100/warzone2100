@@ -60,6 +60,10 @@ void getGroundBM(int i, inout BumpData res) {
 	res.gloss += texture(groundSpecular, uv, WZ_MIP_LOAD_BIAS).r * w;
 }
 
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return min(a + b, vec3(1.0));
+}
+
 vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(b.N, L), 0.0); // diffuse lighting
@@ -69,14 +73,21 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	blinnTerm = lambertTerm != 0.0 ? blinnTerm : 0.0;
 	blinnTerm = pow(blinnTerm, 16.f);
 	float visibility = getShadowVisibility();
+	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap, 0.f);
 
-	vec4 res = b.color*(ambientLight + visibility*diffuseLight*lambertTerm) + visibility*b.gloss*b.gloss*specularLight*blinnTerm*lambertTerm;
+	vec4 light = (ambientLight + visibility*diffuseLight*lambertTerm) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb * 3.f)); // additive color (from environmental point lights / effects)
+	light.a = 1.f;
 
-	return vec4(res.rgb, b.color.a);
-}
+	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm);
+	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb * 2.f)); // additive color (from environmental point lights / effects)
+	light_spec *= b.gloss*b.gloss;
 
-vec3 blendAddEffectLighting(vec3 a, vec3 b) {
-	return min(a + b, vec3(1.0));
+	vec4 res = (b.color*light);
+	res += light_spec;
+	res *= lightmap_vec4.a;  // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+
+	return vec4(res.rgb, 1.0f);
 }
 
 vec4 main_bumpMapping() {
@@ -105,10 +116,7 @@ vec4 main_bumpMapping() {
 		bump.N = (1-a)*bump.N + a*n;
 		bump.gloss = (1-a)*bump.gloss + a*texture(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
 	}
-	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap);
-	vec4 color = doBumpMapping(bump, frag.groundLightDir, frag.groundHalfVec) * vec4(vec3(lightmap_vec4.a), 1.f); // ... * tile brightness / ambient occlusion (stored in lightmap.a);
-	color.rgb = blendAddEffectLighting(color.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
-	return color;
+	return doBumpMapping(bump, frag.groundLightDir, frag.groundHalfVec);
 }
 
 void main()
