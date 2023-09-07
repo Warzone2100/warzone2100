@@ -61,6 +61,8 @@ void	avUpdateTiles()
 
 	PlayerMask playerAllianceBits = (selectedPlayer < MAX_PLAYER_SLOTS) ? alliancebits[selectedPlayer] : 0;
 
+	auto currentTerrainQuality = getTerrainShaderQuality();
+
 	/* Go through the tiles */
 	for (; i < len; i++)
 	{
@@ -72,7 +74,15 @@ void	avUpdateTiles()
 			// If we are not omniscient, and we are not seeing the tile, and none of our allies see the tile...
 			if (!godMode && !(playerAllianceBits & (satuplinkbits | psTile->sensorBits)))
 			{
-				maxLevel /= 2;
+				switch (currentTerrainQuality)
+				{
+					case TerrainShaderQuality::NORMAL_MAPPING:
+						maxLevel -= (maxLevel / 3); // seems to work better for high quality terrain renderer...
+						break;
+					default:
+						maxLevel /= 2;
+						break;
+				}
 			}
 			if (psTile->level > maxLevel)
 			{
