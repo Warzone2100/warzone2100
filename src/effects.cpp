@@ -1609,7 +1609,7 @@ static void renderGravitonEffect(const EFFECT *psEffect, const glm::mat4 &viewMa
 		modelMatrix *= glm::scale(glm::vec3(psEffect->size / 100.f));
 	}
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, 0, 0, modelMatrix, viewMatrix);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, pie_SHADOW, 0, modelMatrix, viewMatrix);
 }
 
 /** Renders the standard construction effect */
