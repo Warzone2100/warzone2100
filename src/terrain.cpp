@@ -1465,6 +1465,7 @@ static void updateLightMap()
 		{
 			MAPTILE *psTile = mapTile(i, j);
 			PIELIGHT colour = psTile->colour;
+			UBYTE level = static_cast<UBYTE>(psTile->level);
 
 			if (psTile->tileInfoBits & BITS_GATEWAY && showGateways)
 			{
@@ -1474,6 +1475,7 @@ static void updateLightMap()
 			{
 				int m = getModularScaledGraphicsTime(2048, 255);
 				colour.byte.r = MAX(m, 255 - m);
+				level = std::max<UBYTE>(level, colour.byte.r / 2);
 			}
 
 			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 0] = colour.byte.r;
@@ -1482,7 +1484,7 @@ static void updateLightMap()
 			// store the "brightness" level in byte.a
 			// NOTE: This differs depending on whether using the single-pass terrain shader or the fallback terrain shaders
 			// (For more, see avUpdateTiles() and getTileIllumination())
-			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 3] = static_cast<UBYTE>(psTile->level);
+			lightMapWritePtr[(i + j * lightmapWidth) * lightmapChannels + 3] = level;
 
 			if (!pie_GetFogStatus())
 			{
