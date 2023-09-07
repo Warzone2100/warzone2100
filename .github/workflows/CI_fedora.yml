@@ -59,6 +59,9 @@ jobs:
     name: Fedora :LATEST [GCC -m32]
     permissions:
       contents: read
+    env:
+      # Since this workflow doesn't build any artifacts for distribution, set WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES to speed up the job
+      WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES: ON
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
