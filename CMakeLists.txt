@@ -546,7 +546,7 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 
 		# -Wshadow					(GCC 3.4+, Clang 3.2+)
 		# NOTE: -Wshadow on GCC is currently too noisy, but Clang 3.9+ is much more selective
-		if (CMAKE_C_COMPILER_ID MATCHES "Clang" AND (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.9))
+		if (CMAKE_C_COMPILER_ID MATCHES "Clang" AND (NOT CMAKE_C_COMPILER_VERSION VERSION_LESS 3.9))
 			check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 
 			# -Wno-shadow-field-in-constructor (Clang 3.9+)
@@ -645,6 +645,14 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Disable -Wformat-truncation (FIXME?) (Test with GCC 8.0+)
 		check_compiler_flags_output("-Werror -Wformat-truncation -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-format-truncation" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wformat-truncation -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-format-truncation" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		# Disable -Warray-bounds on GCC 11-13+
+		if (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND (NOT CMAKE_C_COMPILER_VERSION VERSION_LESS 11))
+			check_compiler_flags_output("-Werror -Wno-array-bounds -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-array-bounds" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		endif()
+		if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 11))
+			check_compiler_flags_output("-Werror -Wno-array-bounds -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-array-bounds" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		endif()
 
 		message( STATUS "Supported C compiler_flags=${_supported_c_compiler_flags}" )
 		message( STATUS "Supported CXX compiler_flags=${_supported_cxx_compiler_flags}" )
