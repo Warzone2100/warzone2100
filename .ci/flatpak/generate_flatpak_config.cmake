@@ -115,6 +115,11 @@ endif()
 unset(_sentry_dl_data_file)
 
 ##################################
+# Handle prebuilt-texture-packages
+
+include("${PROJECT_ROOT}/data/WZPrebuiltPackages.cmake")
+
+##################################
 # Debug output
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++TEMPLATE_FILE: ${TEMPLATE_FILE}")
