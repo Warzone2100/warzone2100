@@ -13,9 +13,7 @@ find_package(ZIP REQUIRED)
 ###########################
 # Prebuilt package DL info
 
-# terrain_overrides/high.wz
-set(PREBUILT_TERRAIN_HIGH_DL_URL "https://github.com/Warzone2100/data-terrain-high/releases/download/v1/high.wz")
-set(PREBUILT_TERRAIN_HIGH_DL_SHA512 "44a39e585344b25ab0fa4ed769f2b48bf23a0e4fc4b23e0fab4e68643cc6e3ebeabba790e8b1e6c96493ad01b6a2f09e92b893063013077dcac2475f0b5373d6")
+include("WZPrebuiltPackages.cmake")
 
 # Function to handle downloading package
 function(WZ_FETCH_PREBUILT_PACKAGE PACKAGE_URL PACKAGE_FILENAME PACKAGE_SHA512 OUTPUT_PATH STATUS)
@@ -281,7 +279,7 @@ if (WZ_INCLUDE_TERRAIN_HIGH)
 		set(_build_package "OFF")
 		if (WZ_DOWNLOAD_PREBUILT_PACKAGES)
 			# Try to download the prebuilt package
-			WZ_FETCH_PREBUILT_PACKAGE("${PREBUILT_TERRAIN_HIGH_DL_URL}" "high.wz" "${PREBUILT_TERRAIN_HIGH_DL_SHA512}" "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz" _dl_terrain_high_result)
+			WZ_FETCH_PREBUILT_PACKAGE("${WZ_PREBUILT_TERRAIN_HIGH_DL_URL}" "high.wz" "${WZ_PREBUILT_TERRAIN_HIGH_DL_SHA512}" "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz" _dl_terrain_high_result)
 			if (NOT _dl_terrain_high_result)
 				# Download failed - WZ_FETCH_PREBUILT_PACKAGE already handles logging a message
 				set(_build_package "ON")
