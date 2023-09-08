@@ -56,6 +56,21 @@
 		<content_attribute id="violence-bloodshed">mild</content_attribute>
 		<content_attribute id="social-chat">intense</content_attribute>
 	</content_rating>
+	<categories>
+		<category>Game</category>
+		<category>StrategyGame</category>
+	</categories>
+	<keywords>
+		<keyword>game</keyword>
+		<keyword>play</keyword>
+		<keyword>rts</keyword>
+		<keyword>real-time strategy</keyword>
+		<keyword>realtime strategy</keyword>
+		<keyword>strategy</keyword>
+		<keyword translate="no">warzone 2100</keyword>
+		<keyword translate="no">warzone2100</keyword>
+		<keyword translate="no">wz2100</keyword>
+	</keywords>
 	<custom>
 		<value key="flathub::manifest">https://github.com/Warzone2100/warzone2100/blob/master/.github/workflows/CI_flatpak.yml</value>
 	</custom>
