@@ -17,6 +17,55 @@ find_package(ZIP REQUIRED)
 set(PREBUILT_TERRAIN_HIGH_DL_URL "https://github.com/Warzone2100/data-terrain-high/releases/download/v1/high.wz")
 set(PREBUILT_TERRAIN_HIGH_DL_SHA512 "44a39e585344b25ab0fa4ed769f2b48bf23a0e4fc4b23e0fab4e68643cc6e3ebeabba790e8b1e6c96493ad01b6a2f09e92b893063013077dcac2475f0b5373d6")
 
+# Function to handle downloading package
+function(WZ_FETCH_PREBUILT_PACKAGE PACKAGE_URL PACKAGE_FILENAME PACKAGE_SHA512 OUTPUT_PATH STATUS)
+
+	if (DEFINED WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR)
+		# Try to copy the package from the supplied asset dir, if present (and it matches the expected hash)
+		if (EXISTS "${WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR}/${PACKAGE_FILENAME}")
+			file(SHA512 "${WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR}/${PACKAGE_FILENAME}" _dl_predownloaded_sha512)
+			if("${_dl_predownloaded_sha512}" STREQUAL "${PACKAGE_SHA512}")
+				# Copy the package to the desired output location
+				execute_process(
+					COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR}/${PACKAGE_FILENAME}" "${OUTPUT_PATH}"
+					RESULT_VARIABLE _copy_result
+				)
+				if (_copy_result EQUAL 0)
+					message(STATUS "Copied predownloaded package: ${WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR}/${PACKAGE_FILENAME}, with hash: ${PACKAGE_SHA512}")
+					set(${STATUS} TRUE PARENT_SCOPE)
+					return()
+				else()
+					message(WARNING "Failed to copy predownloaded package: ${WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR}/${PACKAGE_FILENAME}, with error: ${_copy_result} - falling back to download")
+				endif()
+			else()
+				message(WARNING "Found predownloaded package: ${WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR}/${PACKAGE_FILENAME}, with unexpected hash: ${_dl_predownloaded_sha512} - falling back to download")
+			endif()
+		else()
+			message(STATUS "WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR specified, but ${WZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR}/${PACKAGE_FILENAME} does not exist - falling back to download")
+		endif()
+	endif()
+
+	# Try to download the prebuilt package
+	file(DOWNLOAD "${PACKAGE_URL}" "${OUTPUT_PATH}" INACTIVITY_TIMEOUT 60 SHOW_PROGRESS STATUS _dl_status TLS_VERIFY ON)
+	list(GET _dl_status 0 _dl_status_code)
+	list(GET _dl_status 1 _dl_error_message)
+	if ((NOT _dl_status_code EQUAL 0) OR (NOT EXISTS "${OUTPUT_PATH}"))
+		# Download failed
+		message(WARNING "Failed to download prebuilt package: ${PACKAGE_URL}, with error: ${_dl_error_message}")
+		set(${STATUS} FALSE PARENT_SCOPE)
+	else()
+		# Download allegedly succeeded - check hash
+		file(SHA512 "${OUTPUT_PATH}" _dl_received_sha512)
+		if("${_dl_received_sha512}" STREQUAL "${PACKAGE_SHA512}")
+			message(STATUS "Downloaded prebuilt package: ${PACKAGE_URL}, with hash: ${PACKAGE_SHA512}")
+			set(${STATUS} TRUE PARENT_SCOPE)
+		else()
+			message(WARNING "Failed to download prebuilt package: ${PACKAGE_URL}, with unexpected hash: ${_dl_received_sha512}")
+			set(${STATUS} FALSE PARENT_SCOPE)
+		endif()
+	endif()
+endfunction()
+
 ###########################
 # GLSLC shader compilation
 
@@ -232,22 +281,10 @@ if (WZ_INCLUDE_TERRAIN_HIGH)
 		set(_build_package "OFF")
 		if (WZ_DOWNLOAD_PREBUILT_PACKAGES)
 			# Try to download the prebuilt package
-			file(DOWNLOAD "${PREBUILT_TERRAIN_HIGH_DL_URL}" "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz" INACTIVITY_TIMEOUT 60 SHOW_PROGRESS STATUS _dl_terrain_high_status TLS_VERIFY ON)
-			list(GET _dl_terrain_high_status 0 _dl_terrain_high_status_code)
-			list(GET _dl_terrain_high_status 1 _dl_terrain_high_error_message)
-			if ((NOT _dl_terrain_high_status_code EQUAL 0) OR (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz"))
-				# Download failed
-				message(WARNING "Failed to download prebuilt package: ${PREBUILT_TERRAIN_HIGH_DL_URL}, with error: ${_dl_terrain_high_error_message}")
+			WZ_FETCH_PREBUILT_PACKAGE("${PREBUILT_TERRAIN_HIGH_DL_URL}" "high.wz" "${PREBUILT_TERRAIN_HIGH_DL_SHA512}" "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz" _dl_terrain_high_result)
+			if (NOT _dl_terrain_high_result)
+				# Download failed - WZ_FETCH_PREBUILT_PACKAGE already handles logging a message
 				set(_build_package "ON")
-			else()
-				# Download allegedly succeeded - check hash
-				file(SHA512 "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz" _dl_terrain_high_sha512)
-				if("${_dl_terrain_high_sha512}" STREQUAL "${PREBUILT_TERRAIN_HIGH_DL_SHA512}")
-					message(STATUS "Downloaded prebuilt package: ${PREBUILT_TERRAIN_HIGH_DL_URL}, with hash: ${PREBUILT_TERRAIN_HIGH_DL_SHA512}")
-				else()
-					message(WARNING "Failed to download prebuilt package: ${PREBUILT_TERRAIN_HIGH_DL_URL}, with unexpected hash: ${_dl_terrain_high_sha512}")
-					set(_build_package "ON")
-				endif()
 			endif()
 		else()
 			set(_build_package "ON")
