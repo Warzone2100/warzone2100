@@ -130,7 +130,7 @@ UDWORD getComponentRadius(BASE_STATS *psComponent) // DISPLAY ONLY
 
 UDWORD getResearchRadius(BASE_STATS *Stat) // DISPLAY ONLY
 {
-	const iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD->displayModel();
+	const iIMDShape *ResearchIMD = safeGetDisplayModelFromBase(((RESEARCH *)Stat)->pIMD);
 
 	if (ResearchIMD)
 	{
@@ -183,10 +183,17 @@ void displayIMDButton(iIMDShape *IMDShape, const Vector3i *Rotation, const Vecto
 
 static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDBaseShape *strBaseImd, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
+	if (!strBaseImd) { return; }
+
 	iIMDBaseShape *baseImd, *mountImd[MAX_WEAPONS], *weaponImd[MAX_WEAPONS];
 	Vector3i pos = *Position;
 
 	iIMDShape *strImd = strBaseImd->displayModel();
+
+	if (!strImd)
+	{
+		return;
+	}
 
 	/* HACK HACK HACK!
 	if its a 'tall thin (ie tower)' structure stat with something on the top - offset the position to show the object on top */
