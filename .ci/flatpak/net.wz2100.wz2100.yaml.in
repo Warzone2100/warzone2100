@@ -63,13 +63,26 @@ modules:
       - '*'
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/prestaged-dl
+      - mkdir -p /app/prestaged-dl || echo "Directory already exists"
       - cp "sentry-native.zip" /app/prestaged-dl
     sources:
       - type: file
         url: @WZ_SENTRY_NATIVE_URL@
         sha512: @WZ_SENTRY_NATIVE_SHA512@
         dest-filename: sentry-native.zip
+
+  - name: prebuilt-texture-packages
+    cleanup:
+      - '*'
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/prestaged-dl || echo "Directory already exists"
+      - cp "high.wz" /app/prestaged-dl
+    sources:
+      - type: file
+        url: "https://github.com/Warzone2100/data-terrain-high/releases/download/v1/high.wz"
+        sha512: "44a39e585344b25ab0fa4ed769f2b48bf23a0e4fc4b23e0fab4e68643cc6e3ebeabba790e8b1e6c96493ad01b6a2f09e92b893063013077dcac2475f0b5373d6"
+        dest-filename: high.wz
 
   - name: glslc
     buildsystem: cmake-ninja
@@ -155,6 +168,7 @@ modules:
       - -DWZ_APPSTREAM_ID=net.wz2100.wz2100
       - -DWZ_BUILD_SENTRY:BOOL=ON
       - -DWZ_SENTRY_PREDOWNLOADED_SENTRY_ARCHIVE=/app/prestaged-dl/sentry-native.zip
+      - -DWZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR=/app/prestaged-dl
       # Have to use inproc for now - breakpad / crashpad do not work in the Flatpak sandbox
       - -DSENTRY_BACKEND=inproc
       @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
