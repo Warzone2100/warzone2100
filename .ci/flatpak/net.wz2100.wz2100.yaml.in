@@ -14,6 +14,13 @@ finish-args:
   - --device=dri
   - --socket=pulseaudio
   - --share=network
+  # Use features=devel to enable ptrace, which is needed for the crash reporter
+  # (breakpad and crashpad - only "inproc" works w/out this, and is much more limited).
+  # This same workaround is used by Firefox, and:
+  # > The application is still confined in a pid namespace, so that won't let us
+  # > escape the flatpak sandbox.
+  # Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=1653852#c23
+  - --allow=devel
 cleanup:
   - /include
   - /lib/cmake
@@ -169,8 +176,8 @@ modules:
       - -DWZ_BUILD_SENTRY:BOOL=ON
       - -DWZ_SENTRY_PREDOWNLOADED_SENTRY_ARCHIVE=/app/prestaged-dl/sentry-native.zip
       - -DWZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR=/app/prestaged-dl
-      # Have to use inproc for now - breakpad / crashpad do not work in the Flatpak sandbox
-      - -DSENTRY_BACKEND=inproc
+      # Crashpad works in the Flatpak sandbox *if* --allow=devel is set above. Otherwise, this must be: inproc
+      - -DSENTRY_BACKEND=crashpad
       @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     secret-opts:
       - -DWZ_DISTRIBUTOR:STRING=$WZ_DISTRIBUTOR
