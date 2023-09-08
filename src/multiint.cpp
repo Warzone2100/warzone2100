@@ -7202,6 +7202,11 @@ void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget)
 	);
 }
 
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (12 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wstringop-overflow" // Ignore on GCC 12+`
+#endif
+
 void WzMultiplayerOptionsTitleUI::start()
 {
 	const bool bReenter = performedFirstStart;
@@ -7319,6 +7324,10 @@ void WzMultiplayerOptionsTitleUI::start()
 		}
 	}
 }
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (12 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
 
 std::shared_ptr<WzTitleUI> WzMultiplayerOptionsTitleUI::getParentTitleUI()
 {
