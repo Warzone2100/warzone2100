@@ -229,6 +229,11 @@ private:
 	std::unique_ptr<iIMDShapeTextures> m_textures = std::make_unique<iIMDShapeTextures>();
 };
 
+inline iIMDShape *safeGetDisplayModelFromBase(iIMDBaseShape* pBaseIMD)
+{
+	return ((pBaseIMD) ? pBaseIMD->displayModel() : nullptr);
+}
+
 
 //*************************************************************************
 //

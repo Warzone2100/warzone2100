@@ -161,7 +161,7 @@ static void processParticle(ATPART *psPart)
 						pos.z = static_cast<int>(psPart->position.z);
 						pos.y = groundHeight;
 						effectSetSize(60);
-						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_SPLASH)->displayModel(), 0);
+						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getDisplayImdFromIndex(MI_SPLASH), 0);
 					}
 				}
 				return;

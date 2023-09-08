@@ -1561,42 +1561,42 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 	switch (compID)
 	{
 	case COMP_BODY:
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_BRAIN:
 		psWStat = ((BRAIN_STATS *)Stat)->psWeaponStat;
-		*MountIMD = psWStat->pMountGraphic->displayModel();
-		*CompIMD = psWStat->pIMD->displayModel();
+		*MountIMD = safeGetDisplayModelFromBase(psWStat->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(psWStat->pIMD);
 		return true;
 
 	case COMP_WEAPON:
-		*MountIMD = ((WEAPON_STATS *)Stat)->pMountGraphic->displayModel();
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
+		*MountIMD = safeGetDisplayModelFromBase(((WEAPON_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_SENSOR:
-		*MountIMD = ((SENSOR_STATS *)Stat)->pMountGraphic->displayModel();
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
+		*MountIMD = safeGetDisplayModelFromBase(((SENSOR_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_ECM:
-		*MountIMD = ((ECM_STATS *)Stat)->pMountGraphic->displayModel();
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
+		*MountIMD = safeGetDisplayModelFromBase(((ECM_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_CONSTRUCT:
-		*MountIMD = ((CONSTRUCT_STATS *)Stat)->pMountGraphic->displayModel();
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
+		*MountIMD = safeGetDisplayModelFromBase(((CONSTRUCT_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_PROPULSION:
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_REPAIRUNIT:
-		*MountIMD = ((REPAIR_STATS *)Stat)->pMountGraphic->displayModel();
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD->displayModel();
+		*MountIMD = safeGetDisplayModelFromBase(((REPAIR_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_NUMCOMPONENTS:
@@ -1628,7 +1628,7 @@ static void StatGetResearchImage(BASE_STATS *psStat, AtlasImage *image, iIMDShap
 	else
 	{
 		//no stat so just just the IMD associated with the research
-		*Shape = ((RESEARCH *)psStat)->pIMD->displayModel();
+		*Shape = safeGetDisplayModelFromBase(((RESEARCH *)psStat)->pIMD);
 		//make sure the stat is initialised
 		*ppGraphicData = nullptr;
 	}
