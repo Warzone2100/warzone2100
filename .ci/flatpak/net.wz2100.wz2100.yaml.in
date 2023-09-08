@@ -176,8 +176,8 @@ modules:
       - -DWZ_BUILD_SENTRY:BOOL=ON
       - -DWZ_SENTRY_PREDOWNLOADED_SENTRY_ARCHIVE=/app/prestaged-dl/sentry-native.zip
       - -DWZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR=/app/prestaged-dl
-      # Crashpad works in the Flatpak sandbox *if* --allow=devel is set above. Otherwise, this must be: inproc
-      - -DSENTRY_BACKEND=crashpad
+      # Crashpad/breakpad works in the Flatpak sandbox *if* --allow=devel is set above. Otherwise, this must be: inproc
+      - -DSENTRY_BACKEND=breakpad
       @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     secret-opts:
       - -DWZ_DISTRIBUTOR:STRING=$WZ_DISTRIBUTOR
