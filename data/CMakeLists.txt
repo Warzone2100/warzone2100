@@ -207,6 +207,8 @@ endif()
 
 ## Classic overrides
 
+file(REMOVE "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/classic.wz")
+
 COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/classic.wz"
 	COMPRESSION_LEVEL 0
 	PATHS
@@ -260,6 +262,7 @@ if (WZ_INCLUDE_TERRAIN_HIGH)
 
 			message(STATUS "Configuring to build high.wz package")
 
+			file(REMOVE "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz")
 			file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high")
 			file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high/texpages")
 			file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high/tileset")
@@ -336,6 +339,8 @@ if (WZ_INCLUDE_TERRAIN_HIGH)
 		if(WZ_ENABLE_BASIS_UNIVERSAL AND WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 			message(STATUS "WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES is set, textures will not be compressed as part of build. This should only be used for selected CI runs.")
 		endif()
+
+		file(REMOVE "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz")
 
 		COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz"
 			COMPRESSION_LEVEL 0
