@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-20 13:12\n"
+"PO-Revision-Date: 2023-09-09 02:13\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -4009,7 +4009,7 @@ msgstr "Tüm Yeni Paradigma takviyelerini yok et"
 
 #: data/base/script/campaign/cam1ca.js:147
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr "Belirlenen platoya en az 7 duvar olmayan yapı inşa et ve gelen New Paradigm takviye birliklerini imha et"
+msgstr "Belirlenen platoya en az 7 duvar olmayan yapı inşa et ve gelen Yeni Paradigma takviye birliklerini imha et"
 
 #: data/base/script/campaign/cam2-1x.js:112
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4338,7 +4338,7 @@ msgstr "Fabrikanı kurmak istediğin yeri seç"
 
 #: data/base/script/tutorial.js:69
 msgid "The delivery point is indicated by the number 1"
-msgstr "Fabrika teslim noktası sayısı 1 ile gösteriliyor"
+msgstr "Fabrika teslim noktası 1 sayısı ile gösteriliyor"
 
 #: data/base/script/tutorial.js:70
 msgid "All new units will drive to this location once built"
@@ -4362,7 +4362,7 @@ msgstr "Şimdi yanıp sönen ÜRETİM simgesine sol tıkla"
 
 #: data/base/script/tutorial.js:76
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr "Soldaki menüden üretmek istediğin birim(ler)i seç"
+msgstr "Soldaki menüden üretmek istediğin birimleri seç"
 
 #: data/base/script/tutorial.js:77
 msgid "Please wait whilst the factory manufactures the new unit(s)"
@@ -15976,7 +15976,7 @@ msgstr "SES / YAKINLAŞTIRMA Seçenekleri"
 #: src/frontend.cpp:1312
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr "Tam ekran masaüstü modunda, çözünürlük masaüstünüz ile eşleştirilir(veya pencere yöneticisinin çözünürlüğü ile)."
+msgstr "Tam ekran masaüstü modunda, çözünürlük masaüstünüz ile eşleştirilir (veya pencere yöneticisinin çözünürlüğü ile)."
 
 #: src/frontend.cpp:1314
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -16223,7 +16223,7 @@ msgstr "Gecikme Atması"
 
 #: src/frontend.cpp:3000
 msgid "Spectator Slots"
-msgstr "Gözlemci Slotları"
+msgstr "Gözlemci Yuvaları"
 
 #: src/frontend.cpp:3005
 msgid "Enable Rating"
@@ -16244,7 +16244,7 @@ msgstr "Oyun görüntü ölçeğini arttır?"
 
 #: src/frontend.cpp:3601
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr "Mevcut çözünürlük & görüntü ölçeği seçenekleri ile, oyun kullanıcı arayüzü küçük gözükebilir ve oyun perspektifi bozuk görüntülenebilir."
+msgstr "Mevcut çözünürlük ve görüntü ölçeği seçenekleri ile, oyun kullanıcı arayüzü küçük gözükebilir ve oyun perspektifi bozuk görüntülenebilir."
 
 #: src/frontend.cpp:3603
 msgid "You can fix this by increasing the game's Display Scale setting."
@@ -16253,7 +16253,7 @@ msgstr "Bunu düzeltmek için Görüntü Ölçeği ayarını arttırabilirsiniz.
 #: src/frontend.cpp:3605
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr "Oyunun Görüntü Ölçeğini %u%% olarak arttırmak ister misiniz?"
+msgstr "Oyunun Görüntü Ölçeğini %%%u olarak arttırmak ister misiniz?"
 
 #: src/frontend.cpp:3607
 msgid "Increase Display Scale"
@@ -17018,7 +17018,7 @@ msgstr "Tüm Ağır Hasarlı Birimleri seç"
 #: src/input/keyconfig.cpp:172
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "Sağlığı >%50 olan savaş kara birimlerini seçin ve grupları seçmeyin."
+msgstr "Sağlığı >%50 olan savaş kara birimlerini seç ve grupları seçme."
 
 #: src/input/keyconfig.cpp:173
 msgid "Select all Half-tracks"
@@ -17657,11 +17657,11 @@ msgstr "Görüntü Kuzeye sabitlendi"
 #: src/keybind.cpp:1366
 #, c-format
 msgid "Trap cursor %s"
-msgstr "İmleci Yakala %s"
+msgstr "İmleci yakala %s"
 
 #: src/keybind.cpp:1410
 msgid "CAMPAIGN"
-msgstr "KAMPANYA"
+msgstr "SEFERBERLİK"
 
 #: src/keybind.cpp:1414
 msgid "CHALLENGE"
@@ -17865,7 +17865,7 @@ msgstr "<atanmamış>"
 
 #: src/keyedit.cpp:170
 msgid "<Fixed Key>"
-msgstr ""
+msgstr "<Sabit Tuş>"
 
 #: src/keyedit.cpp:550
 msgid "KEY MAPPING"
@@ -18211,7 +18211,7 @@ msgstr "Bu yuvayı kapat"
 
 #: src/multiint.cpp:1868
 msgid "Allow spectators to join in this slot"
-msgstr "Bu slota gözlemcilerin katılabilmesine izin ver"
+msgstr "Bu yuvaya gözlemcilerin katılabilmesine izin ver"
 
 #: src/multiint.cpp:1952
 msgid "Click to change to this slot"
@@ -18230,7 +18230,7 @@ msgstr "Oyuncuyu bu slotla değiştirmek için tıkla"
 #: src/multiint.cpp:3109
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr "%s adlı gözlemci, oyuncu slotuna taşındı"
+msgstr "%s adlı gözlemci, oyuncu yuvasına taşındı"
 
 #: src/multiint.cpp:2039
 msgid "Cannot swap with host"
@@ -18406,7 +18406,7 @@ msgstr "YZ değiştirmek için tıklayın, seçimi dağıtmak için sağ tıklay
 
 #: src/multiint.cpp:4230
 msgid "Click to close spectator slot"
-msgstr "Gözlemci slotunu kapatmak için tıkla"
+msgstr "Gözlemci yuvasını kapatmak için tıkla"
 
 #: src/multiint.cpp:4249
 msgid "Player ID: "
@@ -18475,7 +18475,7 @@ msgstr "OYUNCULAR"
 
 #: src/multiint.cpp:4736
 msgid "Add spectator slot"
-msgstr "Gözlemci slotu ekleyiniz"
+msgstr "Gözlemci yuvası ekle"
 
 #: src/multiint.cpp:4813
 msgid "Kicked from game"
