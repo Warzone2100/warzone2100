@@ -936,6 +936,12 @@ void loadWaterTextures(int maxTerrainTextureSize)
 			ASSERT(waterTexturesHigh.tex_sm != nullptr, "Failed to load water specular maps");
 		}
 	}
+	else if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
+	{
+		// preload classic water texture
+		auto pWaterTexClassic = getWaterClassicTexture();
+		ASSERT_OR_RETURN(, pWaterTexClassic != nullptr, "Failed to load classic water texture?");
+	}
 	else
 	{
 		ASSERT_OR_RETURN(, false, "Unexpected terrainShaderQuality: %u", static_cast<unsigned>(terrainShaderQuality));
