@@ -2304,12 +2304,10 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force, bool for
 		auto priorNumGroundTypes = getNumGroundTypes();
 		reloadTileTextures();
 		mapReloadGroundTypes();
-		if (priorValue == TerrainShaderQuality::NORMAL_MAPPING
-			|| terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING
+		if (priorValue != terrainShaderQuality
 			|| priorNumGroundTypes != getNumGroundTypes()
 			|| forceReloadTextures)
 		{
-			// when switching to & from the High / Normal-mapping mode, reload base terrain / ground textures
 			reloadTerrainTextures();
 		}
 	}
