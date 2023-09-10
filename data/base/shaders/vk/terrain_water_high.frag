@@ -46,15 +46,14 @@ vec4 main_bumpMapping()
 
 	vec3 N1 = texture(tex_nm, vec3(uv2, 0.f), WZ_MIP_LOAD_BIAS).xzy; // y is up in modelSpace
 	vec3 N2 = texture(tex_nm, vec3(uv1, 1.f), WZ_MIP_LOAD_BIAS).xzy;
-	vec3 N; //use overlay blending to mix normal maps properly
-	N.x = N1.x < 0.5 ? (2.0 * N1.x * N2.x) : (1.0 - 2.0 * (1.0 - N1.x) * (1.0 - N2.x));
-	N.z = N1.z < 0.5 ? (2.0 * N1.z * N2.z) : (1.0 - 2.0 * (1.0 - N1.z) * (1.0 - N2.z));
-	N.y = N1.y < 0.5 ? (2.0 * N1.y * N2.y) : (1.0 - 2.0 * (1.0 - N1.y) * (1.0 - N2.y));
-	if (N == vec3(0.0,0.0,0.0)) {
-		N = vec3(0.0,1.0,0.0);
-	} else {
-		N = normalize(N * 2.0 - 1.0);
-	}
+	//use overlay blending to mix normal maps properly
+	bvec3 computedN_select = lessThan(N1, vec3(0.5));
+	vec3 computedN_multiply = 2.f * N1 * N2;
+	vec3 computedN_screen = vec3(1.f) - 2.f * (vec3(1.f) - N1) * (vec3(1.f) - N2);
+	vec3 N = mix(computedN_screen, computedN_multiply, vec3(computedN_select));
+
+	N = mix(normalize(N * 2.f - 1.f), vec3(0.f,1.f,0.f), vec3(float(N == vec3(0.f,0.f,0.f))));
+
 	float lambertTerm = max(dot(N, lightDir), 0.0); // diffuse lighting
 
 	// Gaussian specular term computation
