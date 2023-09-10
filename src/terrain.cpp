@@ -797,7 +797,20 @@ static gfx_api::texture_array* groundNormalArr = nullptr;
 static gfx_api::texture_array* groundSpecularArr = nullptr;
 static gfx_api::texture_array* groundHeightArr = nullptr;
 
-struct WaterTextures
+struct WaterTextures_Normal
+{
+	gfx_api::texture* tex1 = nullptr;
+	gfx_api::texture* tex2 = nullptr;
+
+public:
+	void clear()
+	{
+		delete tex1; tex1 = nullptr;
+		delete tex2; tex2 = nullptr;
+	}
+};
+
+struct WaterTextures_High
 {
 	gfx_api::texture* tex1 = nullptr;
 	gfx_api::texture* tex2 = nullptr;
@@ -818,7 +831,9 @@ public:
 		delete tex2_sm; tex2_sm = nullptr;
 	}
 };
-static WaterTextures waterTextures;
+
+static WaterTextures_Normal waterTexturesNormal;
+static WaterTextures_High waterTexturesHigh;
 static gfx_api::texture* waterClassicTexture = nullptr; // only used for classic mode
 
 gfx_api::texture* getWaterClassicTexture()
@@ -838,9 +853,9 @@ gfx_api::texture* getWaterClassicTexture()
 
 void loadWaterTextures(int maxTerrainTextureSize)
 {
-	waterTextures.clear();
+	waterTexturesNormal.clear();
+	waterTexturesHigh.clear();
 
-	// load water textures
 	auto checkTex = [maxTerrainTextureSize](const WzString &fileName, gfx_api::texture_type type) -> gfx_api::texture* {
 		WzString fullName = "texpages/" + fileName;
 		auto imageLoadFilename = gfx_api::imageLoadFilenameFromInputFilename(fullName);
@@ -850,13 +865,26 @@ void loadWaterTextures(int maxTerrainTextureSize)
 		}
 		return gfx_api::context::get().loadTextureFromFile(imageLoadFilename.toUtf8().c_str(), type, maxTerrainTextureSize, maxTerrainTextureSize);
 	};
-	waterTextures.tex1 = checkTex("page-80-water-1.png", gfx_api::texture_type::game_texture);
-	waterTextures.tex2 = checkTex("page-81-water-2.png", (terrainShaderQuality != TerrainShaderQuality::NORMAL_MAPPING) ? gfx_api::texture_type::specular_map : gfx_api::texture_type::game_texture);
-	// check water optional textures
-	waterTextures.tex1_nm = checkTex("page-80-water-1_nm.png", gfx_api::texture_type::normal_map);
-	waterTextures.tex2_nm = checkTex("page-81-water-2_nm.png", gfx_api::texture_type::normal_map);
-	waterTextures.tex1_sm = checkTex("page-80-water-1_sm.png", gfx_api::texture_type::specular_map);
-	waterTextures.tex2_sm = checkTex("page-81-water-2_sm.png", gfx_api::texture_type::specular_map);
+
+	if (terrainShaderQuality == TerrainShaderQuality::MEDIUM)
+	{
+		waterTexturesNormal.tex1 = checkTex("page-80-water-1.png", gfx_api::texture_type::game_texture);
+		waterTexturesNormal.tex2 = checkTex("page-81-water-2.png", gfx_api::texture_type::specular_map);
+	}
+	else if (terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING)
+	{
+		waterTexturesHigh.tex1 = checkTex("page-80-water-1.png", gfx_api::texture_type::game_texture);
+		waterTexturesHigh.tex2 = checkTex("page-81-water-2.png", gfx_api::texture_type::game_texture);
+		// check water optional textures
+		waterTexturesHigh.tex1_nm = checkTex("page-80-water-1_nm.png", gfx_api::texture_type::normal_map);
+		waterTexturesHigh.tex2_nm = checkTex("page-81-water-2_nm.png", gfx_api::texture_type::normal_map);
+		waterTexturesHigh.tex1_sm = checkTex("page-80-water-1_sm.png", gfx_api::texture_type::specular_map);
+		waterTexturesHigh.tex2_sm = checkTex("page-81-water-2_sm.png", gfx_api::texture_type::specular_map);
+	}
+	else
+	{
+		ASSERT_OR_RETURN(, false, "Unexpected terrainShaderQuality: %u", static_cast<unsigned>(terrainShaderQuality));
+	}
 }
 
 void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
@@ -1444,7 +1472,8 @@ void shutdownTerrain()
 	delete groundSpecularArr; groundSpecularArr = nullptr;
 	delete groundHeightArr; groundHeightArr = nullptr;
 
-	waterTextures.clear();
+	waterTexturesNormal.clear();
+	waterTexturesHigh.clear();
 	delete waterClassicTexture; waterClassicTexture = nullptr;
 
 	delete decalTexArr; decalTexArr = nullptr;
@@ -1908,7 +1937,7 @@ void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector
  * sunPos and cameraPos in Model=WorldSpace
  */
 template<typename PSO>
-void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
+void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	if (!waterIndexVBO)
 	{
@@ -1929,13 +1958,11 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 	const auto &renderState = getCurrentRenderState();
 
-	ASSERT_OR_RETURN(, waterTextures.tex1 && waterTextures.tex2, "Failed to load water texture");
+	ASSERT_OR_RETURN(, waterTexturesNormal.tex1 && waterTexturesNormal.tex2, "Failed to load water texture");
 	PSO::get().bind();
 
 	PSO::get().bind_textures(
-		waterTextures.tex1, waterTextures.tex2,
-		waterTextures.tex1_nm, waterTextures.tex2_nm,
-		waterTextures.tex1_sm, waterTextures.tex2_sm,
+		waterTexturesNormal.tex1, waterTexturesNormal.tex2,
 		lightmap_texture);
 	PSO::get().bind_vertex_buffers(waterVBO);
 	PSO::get().bind_constants({
@@ -1943,7 +1970,7 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
-		waterOffset*10, static_cast<int>(terrainShaderQuality)
+		waterOffset*10
 	});
 
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
@@ -1959,6 +1986,72 @@ void drawWaterImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraP
 				                     sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
 				                     sectors[x * ySectors + y].waterIndexSize,
 				                     sectors[x * ySectors + y].waterIndexOffset);
+			}
+		}
+	}
+	finishDrawRangeElements<PSO>();
+	PSO::get().unbind_vertex_buffers(waterVBO);
+	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
+
+	// move the water
+	if (!gamePaused())
+	{
+		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
+	}
+}
+
+template<typename PSO>
+void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
+{
+	if (!waterIndexVBO)
+	{
+		return; // no water
+	}
+
+	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
+	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
+	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
+	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
+	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+
+	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
+	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
+	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
+	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
+	const auto ModelUV1 = glm::translate(glm::vec3(waterOffset, 0.f, 0.f)) * glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+	const auto &renderState = getCurrentRenderState();
+
+	ASSERT_OR_RETURN(, waterTexturesHigh.tex1 && waterTexturesHigh.tex2, "Failed to load water texture");
+	PSO::get().bind();
+
+	PSO::get().bind_textures(
+		waterTexturesHigh.tex1, waterTexturesHigh.tex2,
+		waterTexturesHigh.tex1_nm, waterTexturesHigh.tex2_nm,
+		waterTexturesHigh.tex1_sm, waterTexturesHigh.tex2_sm,
+		lightmap_texture);
+	PSO::get().bind_vertex_buffers(waterVBO);
+	PSO::get().bind_constants({
+		ModelViewProjection, ModelUVLightmap, ModelUV1, ModelUV2,
+		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
+		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
+		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
+		waterOffset*10
+	});
+
+	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
+
+	for (int x = 0; x < xSectors; x++)
+	{
+		for (int y = 0; y < ySectors; y++)
+		{
+			if (sectors[x * ySectors + y].draw)
+			{
+				addDrawRangeElements<PSO>(
+									 sectors[x * ySectors + y].geometryOffset,
+									 sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+									 sectors[x * ySectors + y].waterIndexSize,
+									 sectors[x * ySectors + y].waterIndexOffset);
 			}
 		}
 	}
@@ -2039,10 +2132,10 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 			// already drawn
 			return;
 		case TerrainShaderQuality::MEDIUM:
-			drawWaterImpl<gfx_api::WaterPSO>(ModelViewProjection, cameraPos, sunPos);
+			drawWaterNormalImpl<gfx_api::WaterPSO>(ModelViewProjection, cameraPos, sunPos);
 			return;
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			drawWaterImpl<gfx_api::WaterHighPSO>(ModelViewProjection, cameraPos, sunPos);
+			drawWaterHighImpl<gfx_api::WaterHighPSO>(ModelViewProjection, cameraPos, sunPos);
 			return;
 	}
 }

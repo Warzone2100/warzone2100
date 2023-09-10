@@ -1043,7 +1043,6 @@ namespace gfx_api
 		float fog_begin;
 		float fog_end;
 		float timeSec;
-		int quality;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -1053,15 +1052,31 @@ namespace gfx_api
 	>, std::tuple<
 		texture_description<0, sampler_type::anisotropic_repeat>, // tex1
 		texture_description<1, sampler_type::anisotropic_repeat>, // tex2
-		texture_description<2, sampler_type::anisotropic_repeat>, // normal map1
-		texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
-		texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
-		texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
-		texture_description<6, sampler_type::bilinear> // lightmap
+		texture_description<2, sampler_type::bilinear> // lightmap
 	>, SHADER_WATER>;
 
+	template<>
+	struct constant_buffer_type<SHADER_WATER_HIGH>
+	{
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelUVLightmapMatrix;
+		glm::mat4 ModelUV1Matrix;
+		glm::mat4 ModelUV2Matrix;
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
+		glm::vec4 emissiveLight; // light colors/intensity
+		glm::vec4 ambientLight;
+		glm::vec4 diffuseLight;
+		glm::vec4 specularLight;
+		glm::vec4 fog_colour;
+		int fog_enabled;
+		float fog_begin;
+		float fog_end;
+		float timeSec;
+	};
+
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
-	std::tuple<constant_buffer_type<SHADER_WATER>>,
+	std::tuple<constant_buffer_type<SHADER_WATER_HIGH>>,
 	std::tuple<
 	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
 	>, std::tuple<
@@ -1072,7 +1087,7 @@ namespace gfx_api
 		texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
 		texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
 		texture_description<6, sampler_type::bilinear> // lightmap
-	>, SHADER_WATER>;
+	>, SHADER_WATER_HIGH>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER_CLASSIC>
