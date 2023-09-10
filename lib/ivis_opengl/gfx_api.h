@@ -1080,13 +1080,10 @@ namespace gfx_api
 	std::tuple<
 	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
 	>, std::tuple<
-		texture_description<0, sampler_type::anisotropic_repeat>, // tex1
-		texture_description<1, sampler_type::anisotropic_repeat>, // tex2
-		texture_description<2, sampler_type::anisotropic_repeat>, // normal map1
-		texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
-		texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
-		texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
-		texture_description<6, sampler_type::bilinear> // lightmap
+		texture_description<0, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // textures
+		texture_description<1, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // normal maps
+		texture_description<2, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // specular maps
+		texture_description<3, sampler_type::bilinear> // lightmap
 	>, SHADER_WATER_HIGH>;
 
 	template<>

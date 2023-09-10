@@ -720,7 +720,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm", "lightmap_tex" } }),
+			"tex", "tex_nm", "tex_sm", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "classic water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
@@ -2027,10 +2027,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, 0);
 	setUniforms(i++, 1);
 	setUniforms(i++, 2);
-	setUniforms(i++, 3);
-	setUniforms(i++, 4);
-	setUniforms(i++, 5);
-	setUniforms(i++, 6); // lightmap_tex
+	setUniforms(i++, 3); // lightmap_tex
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf)

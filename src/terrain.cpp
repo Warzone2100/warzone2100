@@ -812,23 +812,16 @@ public:
 
 struct WaterTextures_High
 {
-	gfx_api::texture* tex1 = nullptr;
-	gfx_api::texture* tex2 = nullptr;
-	// water optional textures. null if none
-	gfx_api::texture* tex1_nm = nullptr;
-	gfx_api::texture* tex2_nm = nullptr;
-	gfx_api::texture* tex1_sm = nullptr;
-	gfx_api::texture* tex2_sm = nullptr;
+	gfx_api::texture_array* tex = nullptr;
+	gfx_api::texture_array* tex_nm = nullptr;
+	gfx_api::texture_array* tex_sm = nullptr;
 
 public:
 	void clear()
 	{
-		delete tex1; tex1 = nullptr;
-		delete tex2; tex2 = nullptr;
-		delete tex1_nm; tex1_nm = nullptr;
-		delete tex2_nm; tex2_nm = nullptr;
-		delete tex1_sm; tex1_sm = nullptr;
-		delete tex2_sm; tex2_sm = nullptr;
+		delete tex; tex = nullptr;
+		delete tex_nm; tex_nm = nullptr;
+		delete tex_sm; tex_sm = nullptr;
 	}
 };
 
@@ -856,30 +849,92 @@ void loadWaterTextures(int maxTerrainTextureSize)
 	waterTexturesNormal.clear();
 	waterTexturesHigh.clear();
 
-	auto checkTex = [maxTerrainTextureSize](const WzString &fileName, gfx_api::texture_type type) -> gfx_api::texture* {
-		WzString fullName = "texpages/" + fileName;
-		auto imageLoadFilename = gfx_api::imageLoadFilenameFromInputFilename(fullName);
-		if (!PHYSFS_exists(imageLoadFilename))
-		{
-			return nullptr;
-		}
-		return gfx_api::context::get().loadTextureFromFile(imageLoadFilename.toUtf8().c_str(), type, maxTerrainTextureSize, maxTerrainTextureSize);
-	};
-
 	if (terrainShaderQuality == TerrainShaderQuality::MEDIUM)
 	{
+		auto checkTex = [maxTerrainTextureSize](const WzString &fileName, gfx_api::texture_type type) -> gfx_api::texture* {
+			WzString fullName = "texpages/" + fileName;
+			auto imageLoadFilename = gfx_api::imageLoadFilenameFromInputFilename(fullName);
+			if (!PHYSFS_exists(imageLoadFilename))
+			{
+				return nullptr;
+			}
+			return gfx_api::context::get().loadTextureFromFile(imageLoadFilename.toUtf8().c_str(), type, maxTerrainTextureSize, maxTerrainTextureSize);
+		};
+
 		waterTexturesNormal.tex1 = checkTex("page-80-water-1.png", gfx_api::texture_type::game_texture);
 		waterTexturesNormal.tex2 = checkTex("page-81-water-2.png", gfx_api::texture_type::specular_map);
 	}
 	else if (terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING)
 	{
-		waterTexturesHigh.tex1 = checkTex("page-80-water-1.png", gfx_api::texture_type::game_texture);
-		waterTexturesHigh.tex2 = checkTex("page-81-water-2.png", gfx_api::texture_type::game_texture);
-		// check water optional textures
-		waterTexturesHigh.tex1_nm = checkTex("page-80-water-1_nm.png", gfx_api::texture_type::normal_map);
-		waterTexturesHigh.tex2_nm = checkTex("page-81-water-2_nm.png", gfx_api::texture_type::normal_map);
-		waterTexturesHigh.tex1_sm = checkTex("page-80-water-1_sm.png", gfx_api::texture_type::specular_map);
-		waterTexturesHigh.tex2_sm = checkTex("page-81-water-2_sm.png", gfx_api::texture_type::specular_map);
+		std::vector<WzString> waterTextureFilenames;
+		std::vector<WzString> waterTextureFilenames_nm;
+		std::vector<WzString> waterTextureFilenames_sm;
+
+		auto optTexturenameToPath = [](const WzString& textureFilename) -> WzString {
+			if (textureFilename.isEmpty())
+			{
+				return WzString();
+			}
+			WzString fullName = "texpages/" + textureFilename;
+			auto imageLoadFilename = gfx_api::imageLoadFilenameFromInputFilename(fullName);
+			if (!PHYSFS_exists(imageLoadFilename))
+			{
+				return WzString();
+			}
+			return fullName;
+		};
+
+		// check water optional textures.push_back(optTexturenameToPath("page-80-water-1.png"));
+		waterTextureFilenames.push_back(optTexturenameToPath("page-81-water-2.png"));
+		waterTextureFilenames_nm.push_back(optTexturenameToPath("page-80-water-1_nm.png"));
+		waterTextureFilenames_nm.push_back(optTexturenameToPath("page-81-water-2_nm.png"));
+		waterTextureFilenames_sm.push_back(optTexturenameToPath("page-80-water-1_sm.png"));
+		waterTextureFilenames_sm.push_back(optTexturenameToPath("page-81-water-2_sm.png"));
+
+		if (!std::all_of(waterTextureFilenames.begin(), waterTextureFilenames.end(), [](const WzString& texturePath) -> bool { return !texturePath.isEmpty(); }))
+		{
+			debug(LOG_FATAL, "Missing one or more base water textures?");
+			return;
+		}
+
+		waterTexturesHigh.tex = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize, nullptr, []() { resDoResLoadCallback(); });
+		waterTexturesHigh.tex_nm = nullptr;
+		waterTexturesHigh.tex_sm = nullptr;
+
+		if (std::any_of(waterTextureFilenames_nm.begin(), waterTextureFilenames_nm.end(), [](const WzString& filename) {
+			return !filename.isEmpty();
+		}))
+		{
+			waterTexturesHigh.tex_nm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+				pDefaultNormalMap->allocate(width, height, channels, true);
+				// default normal map: (0,0,1)
+				unsigned char* pBmpWrite = pDefaultNormalMap->bmp_w();
+				memset(pBmpWrite, 0x7f, pDefaultNormalMap->data_size());
+				if (channels >= 3)
+				{
+					size_t pixelIncrement = static_cast<size_t>(channels);
+					for (size_t b = 0; b < pDefaultNormalMap->data_size(); b += pixelIncrement)
+					{
+						pBmpWrite[b+2] = 0xff; // blue=z
+					}
+				}
+				return pDefaultNormalMap;
+			}, []() { resDoResLoadCallback(); });
+			ASSERT(waterTexturesHigh.tex_nm != nullptr, "Failed to load water normals");
+		}
+		if (std::any_of(waterTextureFilenames_sm.begin(), waterTextureFilenames_sm.end(), [](const WzString& filename) {
+			return !filename.isEmpty();
+		}))
+		{
+			waterTexturesHigh.tex_sm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_sm, gfx_api::texture_type::specular_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
+				// default specular map: 0
+				pDefaultSpecularMap->allocate(width, height, channels, true);
+				return pDefaultSpecularMap;
+			}, []() { resDoResLoadCallback(); });
+			ASSERT(waterTexturesHigh.tex_sm != nullptr, "Failed to load water specular maps");
+		}
 	}
 	else
 	{
@@ -2022,13 +2077,13 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cam
 	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 	const auto &renderState = getCurrentRenderState();
 
-	ASSERT_OR_RETURN(, waterTexturesHigh.tex1 && waterTexturesHigh.tex2, "Failed to load water texture");
+	ASSERT_OR_RETURN(, waterTexturesHigh.tex, "Failed to load water textures");
 	PSO::get().bind();
 
 	PSO::get().bind_textures(
-		waterTexturesHigh.tex1, waterTexturesHigh.tex2,
-		waterTexturesHigh.tex1_nm, waterTexturesHigh.tex2_nm,
-		waterTexturesHigh.tex1_sm, waterTexturesHigh.tex2_sm,
+		waterTexturesHigh.tex,
+		waterTexturesHigh.tex_nm,
+		waterTexturesHigh.tex_sm,
 		lightmap_texture);
 	PSO::get().bind_vertex_buffers(waterVBO);
 	PSO::get().bind_constants({
