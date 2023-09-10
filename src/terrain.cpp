@@ -116,6 +116,15 @@ static size_t lightmapWidth;
 static size_t lightmapHeight;
 /// Lightmap image
 static std::unique_ptr<iV_Image> lightmapPixmap;
+/// Lightmap values
+struct LightmapCalculatedValues
+{
+	glm::vec4 paramsXLight = glm::vec4();
+	glm::vec4 paramsYLight = glm::vec4();
+	glm::mat4 lightMatrix = glm::mat4(); // shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
+	glm::mat4 ModelUVLightmap = glm::mat4();
+};
+static LightmapCalculatedValues lightmapValues;
 /// Ticks per lightmap refresh
 static const unsigned int LIGHTMAP_REFRESH = 80;
 
@@ -1467,6 +1476,13 @@ bool initTerrain()
 	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapWidth, mapHeight);
 	debug(LOG_TERRAIN, "lightmap texture size is %zu x %zu", lightmapWidth, lightmapHeight);
 
+	lightmapValues.paramsXLight = glm::vec4(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
+	lightmapValues.paramsYLight = glm::vec4(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
+
+	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
+	lightmapValues.lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
+	lightmapValues.ModelUVLightmap = lightmapValues.lightMatrix * glm::transpose(glm::mat4(lightmapValues.paramsXLight, lightmapValues.paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+
 	// Prepare the lightmap pixmap and texture
 	lightmapPixmap = std::unique_ptr<iV_Image>(new iV_Image());
 
@@ -1942,9 +1958,7 @@ void perFrameTerrainUpdates()
 
 void drawTerrainDepthOnly(const glm::mat4 &mvp)
 {
-	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
-	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
-	drawDepthOnlyForDepthMap(mvp, paramsXLight, paramsYLight, false);
+	drawDepthOnlyForDepthMap(mvp, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
 }
 
 /**
@@ -1954,12 +1968,10 @@ void drawTerrainDepthOnly(const glm::mat4 &mvp)
  */
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
-	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
-	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
-
-	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
-	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+	const glm::vec4& paramsXLight = lightmapValues.paramsXLight;
+	const glm::vec4& paramsYLight = lightmapValues.paramsYLight;
+	const glm::mat4& lightMatrix = lightmapValues.lightMatrix;
+	const glm::mat4& ModelUVLightmap = lightmapValues.ModelUVLightmap;
 
 	if (true)
 	{
@@ -2005,12 +2017,6 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 		return; // no water
 	}
 
-	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
-	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
-	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
-	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
-
 	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
 	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
@@ -2027,7 +2033,7 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 		lightmap_texture);
 	PSO::get().bind_vertex_buffers(waterVBO);
 	PSO::get().bind_constants({
-		ModelViewProjection, ModelUVLightmap, ModelUV1, ModelUV2,
+		ModelViewProjection, lightmapValues.ModelUVLightmap, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
@@ -2069,12 +2075,6 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cam
 		return; // no water
 	}
 
-	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
-	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
-	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
-	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
-
 	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
 	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
@@ -2093,7 +2093,7 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cam
 		lightmap_texture);
 	PSO::get().bind_vertex_buffers(waterVBO);
 	PSO::get().bind_constants({
-		ModelViewProjection, ModelUVLightmap, ModelUV1, ModelUV2,
+		ModelViewProjection, lightmapValues.ModelUVLightmap, ModelUV1, ModelUV2,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
