@@ -51,11 +51,7 @@ void getGroundBM(int i, inout BumpData res) {
 	float w = frag.groundWeights[i];
 	res.color += texture(groundTex, uv, WZ_MIP_LOAD_BIAS) * w;
 	vec3 N = texture(groundNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
-	if (N == vec3(0)) {
-		N = vec3(0,0,1);
-	} else {
-		N = normalize(N * 2 - 1);
-	}
+	N = mix(normalize(N * 2.f - 1.f), vec3(0.f,0.f,1.f), vec3(float(N == vec3(0.f,0.f,0.f))));
 	res.N += N * w;
 	res.gloss += texture(groundSpecular, uv, WZ_MIP_LOAD_BIAS).r * w;
 }
@@ -108,12 +104,8 @@ vec4 main_bumpMapping() {
 		// blend color, normal and gloss with ground ones based on alpha
 		bump.color = (1-a)*bump.color + a*vec4(decalColor.rgb, 1);
 		vec3 n = texture(decalNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
-		if (n == vec3(0)) {
-			n = vec3(0,0,1);
-		} else {
-			n = normalize(n * 2 - 1);
-			n = vec3(n.xy * frag.decal2groundMat2, n.z);
-		}
+		vec3 n_normalized = normalize(n * 2.f - 1.f);
+		n = mix(vec3(n_normalized.xy * frag.decal2groundMat2, n_normalized.z), vec3(0.f,0.f,1.f), vec3(float(n == vec3(0.f,0.f,0.f))));
 		bump.N = (1-a)*bump.N + a*n;
 		bump.gloss = (1-a)*bump.gloss + a*texture(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
 	}
