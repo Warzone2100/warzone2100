@@ -74,6 +74,8 @@
 #include "component.h"
 #include "radar.h"
 #include "cmddroid.h"
+#include "formationdef.h"
+#include "formation.h"
 #include "warzoneconfig.h"
 #include "multiplay.h"
 #include "frontend.h"
@@ -5668,6 +5670,43 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 			psDroid->rot.pitch = 0;
 		}
 
+		// recreate formation if present
+		auto formationInfo = ini.value("formation").jsonValue();
+		if (formationInfo.is_object())
+		{
+			auto it_direction = formationInfo.find("direction");
+			auto it_x = formationInfo.find("x");
+			auto it_y = formationInfo.find("y");
+			if (it_direction != formationInfo.end()
+				&& it_x != formationInfo.end()
+				&& it_y != formationInfo.end())
+			{
+				auto formationX = json_variant(it_x.value()).toInt();
+				auto formationY = json_variant(it_y.value()).toInt();
+
+				psDroid->sMove.psFormation = formationFind(formationX, formationY);
+				// join a formation if it exists at the destination
+				if (psDroid->sMove.psFormation)
+				{
+					formationJoin(psDroid->sMove.psFormation, psDroid);
+				}
+				else
+				{
+					// no formation so create a new one
+					auto formationDirection = json_variant(it_direction.value()).toUInt();
+					if (formationNew(&psDroid->sMove.psFormation, FT_LINE, formationX, formationY,
+							static_cast<uint16_t>(formationDirection)))
+					{
+						formationJoin(psDroid->sMove.psFormation, psDroid);
+					}
+				}
+			}
+			else
+			{
+				ASSERT(false, "Missing one or more expected formation details");
+			}
+		}
+
 		// Recreate path-finding jobs
 		if (psDroid->sMove.Status == MOVEWAITROUTE)
 		{
@@ -5823,6 +5862,17 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 	droidObj["lastBump"] = psCurr->sMove.lastBump;
 	droidObj["pauseTime"] = psCurr->sMove.pauseTime;
 	droidObj["bumpPosition"] = psCurr->sMove.bumpPos.xy();
+
+	// formation info
+	if (psCurr->sMove.psFormation != nullptr)
+	{
+		auto formationObj = nlohmann::json::object();
+		formationObj["direction"] = psCurr->sMove.psFormation->direction;
+		formationObj["x"] = psCurr->sMove.psFormation->x;
+		formationObj["y"] = psCurr->sMove.psFormation->y;
+		droidObj["formation"] = std::move(formationObj);
+	}
+
 	droidObj["onMission"] = onMission;
 	return droidObj;
 }

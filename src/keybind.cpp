@@ -76,6 +76,7 @@
 #include "loadsave.h"
 #include "game.h"
 #include "droid.h"
+#include "move.h"
 #include "spectatorwidgets.h"
 #include "campaigninfo.h"
 
@@ -2185,7 +2186,18 @@ void	kf_CentreOnBase()
 // --------------------------------------------------------------------------
 void kf_ToggleFormationSpeedLimiting()
 {
-	addConsoleMessage(_("Formation speed limiting has been removed from the game due to bugs."), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+	bool resultingValue = false;
+	if (moveToggleFormationSpeedLimiting(selectedPlayer, &resultingValue))
+	{
+		if (resultingValue)
+		{
+			addConsoleMessage(_("Formation speed limiting ON"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			addConsoleMessage(_("Formation speed limiting OFF"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
 }
 
 // --------------------------------------------------------------------------
