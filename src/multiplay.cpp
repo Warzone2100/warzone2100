@@ -65,6 +65,7 @@
 #include "design.h"
 #include "advvis.h"
 #include "lighting.h" // for reInitPaletteAndFog()
+#include "move.h"
 
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
@@ -1260,6 +1261,9 @@ bool recvMessage()
 				break;
 			case GAME_DEBUG_FINISH_RESEARCH:
 				recvResearch(queue);
+				break;
+			case GAME_SYNC_OPT_CHANGE:
+				recvSyncOptChange(queue);
 				break;
 			case REPLAY_ENDED:
 				if (!NETisReplay())

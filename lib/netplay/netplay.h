@@ -137,11 +137,17 @@ enum MESSAGE_TYPES
 	GAME_DEBUG_REMOVE_FEATURE,      ///< Remove feature.
 	GAME_DEBUG_FINISH_RESEARCH,     ///< Research has been completed.
 	// End of debug messages.
+	GAME_SYNC_OPT_CHANGE,			///< Change synchronized options for a player (ex formation options)
 	GAME_MAX_TYPE,                  ///< Maximum+1 valid GAME_ type, *MUST* be last.
 
 	// The following messages are used for playing back replays.
 	REPLAY_ENDED					///< A special message for signifying the end of the replay
 	// End of replay messages.
+};
+
+enum SYNC_OPT_TYPES
+{
+	SYNC_OPT_FORMATION_SPEED_LIMITING = 1
 };
 
 #define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)

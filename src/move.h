@@ -59,4 +59,11 @@ bool moveCheckDroidMovingAndVisible(void *psObj);
 
 const char *moveDescription(MOVE_STATUS status);
 
+bool moveSetFormationSpeedLimiting(uint32_t player, bool enabled);
+bool moveToggleFormationSpeedLimiting(uint32_t player, bool *pBoolResultingValue);
+bool moveFormationSpeedLimitingOn(uint32_t player);
+bool recvSyncOptChange(NETQUEUE queue);
+
+void moveInit();
+
 #endif // __INCLUDED_SRC_MOVE_H__
