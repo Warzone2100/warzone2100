@@ -38,11 +38,11 @@ bool formationInitialise();
 void formationShutDown();
 
 // Create a new formation
-bool formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
+bool formationNew(FORMATION **ppsFormation, uint32_t player, FORMATION_TYPE type,
 					SDWORD x, SDWORD y, uint16_t dir);
 
 // Try and find a formation near to a location
-FORMATION* formationFind(int x, int y);
+FORMATION* formationFind(uint32_t player, int x, int y);
 
 // Associate a unit with a formation
 void formationJoin(FORMATION *psFormation, const DROID* psDroid);

@@ -37,6 +37,7 @@
 
 #include "formationdef.h"
 #include "formation.h"
+#include "objmem.h"
 
 // radius for the different body sizes
 static SDWORD	fmLtRad = 80, fmMedRad = 100, fmHvyRad = 110;
@@ -59,7 +60,7 @@ static SDWORD	fmLtRad = 80, fmMedRad = 100, fmHvyRad = 110;
 #define FORMATION_SPEED_INIT	100000L
 
 // The list of allocated formations
-static FORMATION	*psFormationList = nullptr;
+static PerPlayerObjectLists<FORMATION, MAX_PLAYERS> psFormationLists;
 
 static SDWORD formationObjRadius(const DROID* psDroid);
 
@@ -67,7 +68,10 @@ static SDWORD formationObjRadius(const DROID* psDroid);
  */
 bool formationInitialise()
 {
-	psFormationList = nullptr;
+	for (auto &psFormationList : psFormationLists)
+	{
+		psFormationList.clear();
+	}
 
 	return true;
 }
@@ -76,22 +80,24 @@ bool formationInitialise()
  */
 void formationShutDown()
 {
-	FORMATION	*psNext;
-
-	while (psFormationList)
+	for (auto &psFormationList : psFormationLists)
 	{
-		debug(LOG_NEVER, "formation with %d units still attached", psFormationList->refCount);
-		psNext = psFormationList->psNext;
-		delete psFormationList;
-		psFormationList = psNext;
+		for (const auto& psCurr : psFormationList)
+		{
+			debug(LOG_NEVER, "formation with %d units still attached", psCurr->refCount);
+			delete psCurr;
+		}
+		psFormationList.clear();
 	}
 }
 
 /** Create a new formation
  */
-bool formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
+bool formationNew(FORMATION **ppsFormation, uint32_t player, FORMATION_TYPE type,
 					SDWORD x, SDWORD y, uint16_t dir)
 {
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
+
 	SDWORD		i;
 	FORMATION	*psNew = new FORMATION();
 
@@ -107,6 +113,7 @@ bool formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 	psNew->y = y;
 	psNew->free = 0;
 	psNew->iSpeed = FORMATION_SPEED_INIT;
+	psNew->player = player;
 	memset(psNew->asMembers, 0, sizeof(psNew->asMembers));
 	for(i=0; i<F_MAXMEMBERS; i++)
 	{
@@ -143,8 +150,7 @@ bool formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 		return false;
 	}
 
-	psNew->psNext = psFormationList;
-	psFormationList = psNew;
+	psFormationLists[player].push_front(psNew);
 
 	*ppsFormation = psNew;
 
@@ -154,11 +160,11 @@ bool formationNew(FORMATION **ppsFormation, FORMATION_TYPE type,
 
 /** Try to find a formation near a location
  */
-FORMATION* formationFind(int x, int y)
+FORMATION* formationFind(uint32_t player, int x, int y)
 {
-	FORMATION* psFormation;
+	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
 
-	for (psFormation = psFormationList; psFormation; psFormation = psFormation->psNext)
+	for (auto psFormation : psFormationLists[player])
 	{
 		// see if the position is close to the formation
 		const int xdiff = psFormation->x - x;
@@ -170,7 +176,7 @@ FORMATION* formationFind(int x, int y)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /** Find formation speed.
@@ -181,7 +187,7 @@ static void formationUpdateSpeed(FORMATION *psFormation, const DROID* psNew)
 	SDWORD		iUnit;
 	F_MEMBER	*asMembers = psFormation->asMembers;
 
-	if (psNew != NULL)
+	if (psNew != nullptr)
 	{
 		ASSERT(psNew->type == OBJ_DROID, "We've been passed a DROID that really isn't a DROID");
 		if ( psFormation->iSpeed > psNew->baseSpeed)
@@ -210,7 +216,8 @@ void formationJoin(FORMATION *psFormation, const DROID* psDroid)
 {
 	SDWORD	rankDist, size;
 
-	ASSERT_OR_RETURN(, psFormation != NULL, "Invalid formation");
+	ASSERT_OR_RETURN(, psFormation != nullptr, "Invalid formation");
+	ASSERT_OR_RETURN(, psFormation->player == psDroid->player, "Formation player (%d) does not match droid player (%d)", psFormation->player, psDroid->player);
 
 	psFormation->refCount += 1;
 
@@ -237,9 +244,8 @@ void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 	SDWORD		prev, curr, unit, line;
 	F_LINE		*asLines;
 	F_MEMBER	*asMembers;
-	FORMATION	*psCurr, *psPrev;
 
-	ASSERT_OR_RETURN(, psFormation != NULL, "Invalid formation");
+	ASSERT_OR_RETURN(, psFormation != nullptr, "Invalid formation");
 	if (!psDroid)
 	{
 		return;
@@ -279,28 +285,23 @@ void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 			asMembers[prev].next = asMembers[unit].next;
 		}
 		asMembers[unit].next = psFormation->free;
-		asMembers[unit].psDroid = NULL;
+		asMembers[unit].psDroid = nullptr;
 		psFormation->free = (SBYTE)unit;
 
 		/* update formation speed */
-		formationUpdateSpeed(psFormation, NULL);
+		formationUpdateSpeed(psFormation, nullptr);
 	}
 
 	psFormation->refCount -= 1;
 	if (psFormation->refCount == 0)
 	{
-		if (psFormation == psFormationList)
+		if (psFormation->player < MAX_PLAYERS)
 		{
-			psFormationList = psFormationList->psNext;
+			psFormationLists[psFormation->player].remove(psFormation);
 		}
 		else
 		{
-			psPrev = NULL;
-			for(psCurr=psFormationList; psCurr && psCurr!= psFormation; psCurr=psCurr->psNext)
-			{
-				psPrev = psCurr;
-			}
-			psPrev->psNext = psFormation->psNext;
+			ASSERT(psFormation->player < MAX_PLAYERS, "Formation->player is invalid?: %d", psFormation->player);
 		}
 		delete psFormation;
 	}
@@ -481,7 +482,7 @@ static void formationReorder(FORMATION *psFormation)
 	for(i=0; i<F_MAXMEMBERS; i++)
 	{
 		DROID* psDroid = asMembers[i].psDroid;
-		if (psDroid != NULL)
+		if (psDroid != nullptr)
 		{
 			asDroids[numObj].psDroid = psDroid;
 			xdiff = psDroid->pos.x - psFormation->x;
@@ -555,7 +556,7 @@ bool formationGetPos( FORMATION *psFormation, DROID* psDroid,
 	SDWORD		member, x,y;
 	F_MEMBER	*asMembers;
 
-	ASSERT_OR_RETURN(false, psFormation != NULL, "Invalid formation pointer");
+	ASSERT_OR_RETURN(false, psFormation != nullptr, "Invalid formation pointer");
 
 /*	if (psFormation->refCount == 1)
 	{

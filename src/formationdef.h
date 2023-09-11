@@ -72,5 +72,5 @@ struct FORMATION
 	// formation speed (currently speed of slowest member) - GJ - sorry.
 	UDWORD		iSpeed;
 
-	FORMATION	*psNext;
+	uint32_t	player;
 };
