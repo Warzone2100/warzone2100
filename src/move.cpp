@@ -267,7 +267,7 @@ static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation,
 		if (bFormation)
 		{
 			// join a formation if it exists at the destination
-			FORMATION* psFormation = formationFind(x, y);
+			FORMATION* psFormation = formationFind(psDroid->player, x, y);
 			SDWORD	fmx1, fmy1, fmx2, fmy2;
 
 			if (psFormation)
@@ -294,7 +294,7 @@ static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation,
 				}
 
 				// no formation so create a new one
-				if (formationNew(&psDroid->sMove.psFormation, FT_LINE, (SDWORD)x,(SDWORD)y,
+				if (formationNew(&psDroid->sMove.psFormation, psDroid->player, FT_LINE, (SDWORD)x,(SDWORD)y,
 						 calcDirection(fmx1,fmy1, fmx2,fmy2)))
 				{
 					formationJoin(psDroid->sMove.psFormation, psDroid);

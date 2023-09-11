@@ -5684,7 +5684,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 				auto formationX = json_variant(it_x.value()).toInt();
 				auto formationY = json_variant(it_y.value()).toInt();
 
-				psDroid->sMove.psFormation = formationFind(formationX, formationY);
+				psDroid->sMove.psFormation = formationFind(psDroid->player, formationX, formationY);
 				// join a formation if it exists at the destination
 				if (psDroid->sMove.psFormation)
 				{
@@ -5694,7 +5694,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 				{
 					// no formation so create a new one
 					auto formationDirection = json_variant(it_direction.value()).toUInt();
-					if (formationNew(&psDroid->sMove.psFormation, FT_LINE, formationX, formationY,
+					if (formationNew(&psDroid->sMove.psFormation, psDroid->player, FT_LINE, formationX, formationY,
 							static_cast<uint16_t>(formationDirection)))
 					{
 						formationJoin(psDroid->sMove.psFormation, psDroid);
