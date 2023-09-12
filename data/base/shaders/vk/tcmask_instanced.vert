@@ -20,9 +20,14 @@ layout(location = 4) out mat4 NormalMatrix;
 layout(location = 8) out vec4 colour;
 layout(location = 9) out vec4 teamcolour;
 layout(location = 10) out vec4 packed_ecmState_alphaTest;
+layout(location = 11) out vec3 uvLightmap; // uvLightmap in .xy, heightAboveTerrain in .z
 // For Shadows
-layout(location = 11) out vec3 fragPos;
+layout(location = 12) out vec3 fragPos;
 //layout(location = 13) out vec3 fragNormal;
+
+float when_gt(float x, float y) {
+  return max(sign(x - y), 0.0);
+}
 
 void main()
 {
@@ -67,12 +72,18 @@ void main()
 	vec4 position = vertex;
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
-		position.y -= stretch;
+		// NOTE: 'stretch' may be:
+		//	- if positive: building stretching
+		//	- if negative: the height above the terrain of the model intance overall
+		position.y -= (stretch * when_gt(stretch, 0.f));
 	}
 
 	vec4 positionModelSpace = instanceModelMatrix * position;
 	fragPos = positionModelSpace.xyz;
 //	fragNormal = vertexNormal;
+
+	float heightAboveTerrain = abs(clamp(sign(stretch), -1.f, 0.f)) * abs(stretch);
+	uvLightmap = vec3((ModelUVLightmapMatrix * positionModelSpace).xy, position.y + heightAboveTerrain);
 
 	// Translate every vertex according to the Model View and Projection Matrix
 	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;

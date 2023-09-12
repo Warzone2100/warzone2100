@@ -1448,6 +1448,7 @@ static void drawTiles(iView *player)
 	/* Actually render / draw everything                                */
 	/* ---------------------------------------------------------------- */
 
+	pie_UpdateLightmap(getTerrainLightmapTexture(), getModelUVLightmapMatrix());
 	pie_FinalizeMeshes(currentGameFrame);
 
 	// shadow/depth-mapping passes
@@ -2586,6 +2587,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 		if (weaponImd[i] != nullptr)
 		{
 			glm::mat4 matrix = glm::translate(glm::vec3(strImd->connectors[i].xzy())) * glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
+			float heightAboveTerrain = strImd->connectors[i].z;
 			int recoilValue = noRecoil ? 0 : getRecoil(psStructure->asWeaps[i]);
 			if (mountImd[i] != nullptr)
 			{
@@ -2596,7 +2598,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				{
 					animFrame = getModularScaledGraphicsTime(pMountDisplayIMD->animInterval, pMountDisplayIMD->numFrames);
 				}
-				pie_Draw3DShape(pMountDisplayIMD, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix);
+				pie_Draw3DShape(pMountDisplayIMD, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, -heightAboveTerrain);
 				if (!pMountDisplayIMD->connectors.empty())
 				{
 					matrix *= glm::translate(glm::vec3(pMountDisplayIMD->connectors[0].xzy()));
@@ -2606,7 +2608,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			matrix *= glm::translate(glm::vec3(0, 0, recoilValue));
 
 			iIMDShape *pWeaponDisplayIMD = weaponImd[i]->displayModel();
-			pie_Draw3DShape(pWeaponDisplayIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix);
+			pie_Draw3DShape(pWeaponDisplayIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, -heightAboveTerrain);
 			if (psStructure->status == SS_BUILT && psStructure->visibleForLocalDisplay() > (UBYTE_MAX / 2))
 			{
 				if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
@@ -2628,14 +2630,14 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 								glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
 								glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 								glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
-							pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(pRepImd->animInterval, pRepImd->numFrames), colour, buildingBrightness, pie_ADDITIVE, 192, modelMatrix * matrix, viewMatrix);
+							pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(pRepImd->animInterval, pRepImd->numFrames), colour, buildingBrightness, pie_ADDITIVE, 192, modelMatrix * matrix, viewMatrix, -heightAboveTerrain);
 						}
 					}
 				}
 				else // we have a weapon so we draw a muzzle flash
 				{
 					iIMDShape *pFlashDisplayIMD = (flashImd[i]) ? flashImd[i]->displayModel() : nullptr;
-					drawMuzzleFlash(psStructure->asWeaps[i], pWeaponDisplayIMD, pFlashDisplayIMD, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, colour);
+					drawMuzzleFlash(psStructure->asWeaps[i], pWeaponDisplayIMD, pFlashDisplayIMD, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, heightAboveTerrain, colour);
 				}
 			}
 		}

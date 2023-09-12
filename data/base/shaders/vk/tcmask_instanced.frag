@@ -13,6 +13,7 @@ layout(set = 2, binding = 1) uniform sampler2D TextureTcmask; // tcmask
 layout(set = 2, binding = 2) uniform sampler2D TextureNormal; // normal map
 layout(set = 2, binding = 3) uniform sampler2D TextureSpecular; // specular map
 layout(set = 2, binding = 4) uniform sampler2DArrayShadow shadowMap; // shadow map
+layout(set = 2, binding = 5) uniform sampler2D lightmap_tex;
 
 layout(location = 0) in vec4 texCoord_vertexDistance; // vec(2) texCoord, float vertexDistance, (unused float)
 layout(location = 1) in vec3 normal;
@@ -22,8 +23,9 @@ layout(location = 4) in mat4 NormalMatrix;
 layout(location = 8) in vec4 colour;
 layout(location = 9) in vec4 teamcolour;
 layout(location = 10) in vec4 packed_ecmState_alphaTest;
+layout(location = 11) in vec3 uvLightmap; // uvLightmap in .xy, heightAboveTerrain in .z
 // For Shadows
-layout(location = 11) in vec3 fragPos;
+layout(location = 12) in vec3 fragPos;
 //layout(location = 13) in vec3 fragNormal;
 
 layout(location = 0) out vec4 FragColor;
@@ -259,6 +261,10 @@ float getShadowVisibility()
 	}
 }
 
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return min(a + b, vec3(1.0));
+}
+
 void main()
 {
 	// unpack inputs
@@ -297,6 +303,9 @@ void main()
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
 	float visibility = getShadowVisibility();
+	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap.xy, 0.f);
+	float distanceAboveTerrain = uvLightmap.z;
+	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
 
 	if (lambertTerm > 0.0)
 	{
@@ -320,7 +329,10 @@ void main()
 		light += diffuse * lambertTerm * diffuseMap * vanillaFactor;
 	}
 	// ambient light maxed for classic models to keep results similar to original
-	light += ambient * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+	light += vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+
+	light.rgb *= visibility;
+	light.a = 1.0f;
 
 	vec4 fragColour;
 	if (tcmask != 0)
@@ -329,11 +341,11 @@ void main()
 		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply color using grain merge with tcmask
-		fragColour = visibility * (light + (teamcolour - 0.5) * maskAlpha) * colour;
+		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;
 	}
 	else
 	{
-		fragColour = visibility * light * colour;
+		fragColour = light * colour;
 	}
 
 	if (ecmEffect)

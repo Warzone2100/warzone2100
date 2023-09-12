@@ -35,6 +35,10 @@ VERTEX_INPUT vec4 instancePackedValues; // shaderStretch_ecmState_alphaTest_anim
 VERTEX_INPUT vec4 instanceColour;
 VERTEX_INPUT vec4 instanceTeamColour;
 
+float when_gt(float x, float y) {
+  return max(sign(x - y), 0.0);
+}
+
 void main()
 {
 	// unpack inputs
@@ -45,7 +49,10 @@ void main()
 	vec4 position = vertex;
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
-		position.y -= stretch;
+		// NOTE: 'stretch' may be:
+		//	- if positive: building stretching
+		//	- if negative: the height above the terrain of the model intance overall
+		position.y -= (stretch * when_gt(stretch, 0.f));
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix

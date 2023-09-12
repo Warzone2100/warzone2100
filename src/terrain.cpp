@@ -1956,6 +1956,16 @@ void perFrameTerrainUpdates()
 	cullTerrain();
 }
 
+gfx_api::texture* getTerrainLightmapTexture()
+{
+	return lightmap_texture;
+}
+
+const glm::mat4& getModelUVLightmapMatrix()
+{
+	return lightmapValues.ModelUVLightmap;
+}
+
 void drawTerrainDepthOnly(const glm::mat4 &mvp)
 {
 	drawDepthOnlyForDepthMap(mvp, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);

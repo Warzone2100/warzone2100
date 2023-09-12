@@ -156,6 +156,7 @@ struct DROID : public BASE_OBJECT
 	uint8_t         blockedBits;                    ///< Bit set telling which tiles block this type of droid (TODO)
 	/* anim data */
 	SDWORD          iAudioID;
+	int32_t			heightAboveMap;					///< Current calculated height above the terrain (set for VTOL-propulsion units)
 };
 
 #endif // __INCLUDED_DROIDDEF_H__
