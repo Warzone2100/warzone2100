@@ -372,7 +372,7 @@ static inline iIMDBaseShape *getRightPropulsionIMD(DROID *psDroid)
 	return asBodyStats[bodyStat].ppIMDList[propStat * NUM_PROP_SIDES + RIGHT_PROP];
 }
 
-void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int iPieData, glm::mat4 modelMatrix, const glm::mat4 &viewMatrix, UBYTE colour)
+void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int iPieData, glm::mat4 modelMatrix, const glm::mat4 &viewMatrix, float heightAboveTerrain, UBYTE colour)
 {
 	if (!weaponImd || !flashImd || weaponImd->connectors.empty() || graphicsTime < sWeap.lastFired)
 	{
@@ -390,6 +390,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 
 	/* Now we need to move to the end of the firing barrel */
 	modelMatrix *= glm::translate(glm::vec3(weaponImd->connectors[connector_num].xzy()));
+	heightAboveTerrain += weaponImd->connectors[connector_num].z;
 
 	// assume no clan colours for muzzle effects
 	if (flashImd->numFrames == 0 || flashImd->animInterval <= 0)
@@ -397,7 +398,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 		// no anim so display one frame for a fixed time
 		if (graphicsTime >= sWeap.lastFired && graphicsTime < sWeap.lastFired + BASE_MUZZLE_FLASH_DURATION)
 		{
-			pie_Draw3DShape(flashImd, 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, modelMatrix, viewMatrix);
+			pie_Draw3DShape(flashImd, 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, modelMatrix, viewMatrix, -heightAboveTerrain);
 		}
 	}
 	else if (graphicsTime >= sWeap.lastFired)
@@ -408,7 +409,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 		int frame = (graphicsTime - sWeap.lastFired) / animRate;
 		if (frame < flashImd->numFrames)
 		{
-			pie_Draw3DShape(flashImd, frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, modelMatrix, viewMatrix);
+			pie_Draw3DShape(flashImd, frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, modelMatrix, viewMatrix, -heightAboveTerrain);
 		}
 	}
 }
@@ -483,7 +484,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	iIMDBaseShape *psShapeProp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
 	if (psShapeProp)
 	{
-		if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix))
+		if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 		{
 			didDrawSomething = true;
 		}
@@ -517,7 +518,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 		}
 		while (strImd)
 		{
-			if (drawShape(strImd, psDroid->timeAnimationStarted, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix))
+			if (drawShape(strImd, psDroid->timeAnimationStarted, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 			{
 				didDrawSomething = true;
 			}
@@ -531,7 +532,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	if (!bButton && psMoveAnim && psDroid->sMove.Status != MOVEINACTIVE)
 	{
 		iIMDShape *displayModel = psMoveAnim->displayModel();
-		if (pie_Draw3DShape(displayModel, getModularScaledGraphicsTime(displayModel->animInterval, displayModel->numFrames), colour, brightness, pie_ADDITIVE, 200, modifiedModelMatrix, viewMatrix))
+		if (pie_Draw3DShape(displayModel, getModularScaledGraphicsTime(displayModel->animInterval, displayModel->numFrames), colour, brightness, pie_ADDITIVE, 200, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 		{
 			didDrawSomething = true;
 		}
@@ -539,7 +540,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	else if (!bButton && psStillAnim) // standing still
 	{
 		iIMDShape *displayModel = psStillAnim->displayModel();
-		if (pie_Draw3DShape(displayModel, getModularScaledGraphicsTime(displayModel->animInterval, displayModel->numFrames), colour, brightness, 0, 0, modifiedModelMatrix, viewMatrix))
+		if (pie_Draw3DShape(displayModel, getModularScaledGraphicsTime(displayModel->animInterval, displayModel->numFrames), colour, brightness, 0, 0, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 		{
 			didDrawSomething = true;
 		}
@@ -598,15 +599,18 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 					Rotation rot = getInterpolatedWeaponRotation(psDroid, i, graphicsTime);
 
 					glm::mat4 localModelMatrix = modifiedModelMatrix;
+					float localHeightAboveTerrain = psDroid->heightAboveMap;
 
 					//to skip number of VTOL_CONNECTOR_START ground unit connectors
 					if (iConnector < VTOL_CONNECTOR_START)
 					{
 						localModelMatrix *= glm::translate(glm::vec3(psShapeBody->connectors[i].xzy()));
+						localHeightAboveTerrain += psShapeBody->connectors[i].z;
 					}
 					else
 					{
 						localModelMatrix *= glm::translate(glm::vec3(psShapeBody->connectors[iConnector + i].xzy()));
+						localHeightAboveTerrain += (psShapeBody->connectors[iConnector + i]).z;
 					}
 					localModelMatrix *= glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
@@ -627,7 +631,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 					/* Draw it */
 					if (psShape)
 					{
-						if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix))
+						if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
 						{
 							didDrawSomething = true;
 						}
@@ -638,6 +642,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 					if (psShape && !psShape->connectors.empty())
 					{
 						localModelMatrix *= glm::translate(glm::vec3(psShape->connectors[0].xzy()));
+						localHeightAboveTerrain += psShape->connectors[0].z;
 					}
 
 					/* vtol weapons inverted */
@@ -659,13 +664,13 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 					// We have a weapon so we draw it and a muzzle flash from weapon connector
 					if (psShape)
 					{
-						if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix))
+						if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
 						{
 							didDrawSomething = true;
 						}
 						auto flashBaseModel = MUZZLE_FLASH_PIE(psDroid, i);
 						iIMDShape *pMuzzleFlash = (flashBaseModel) ? flashBaseModel->displayModel() : nullptr;
-						drawMuzzleFlash(psDroid->asWeaps[i], psShape, pMuzzleFlash, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix);
+						drawMuzzleFlash(psDroid->asWeaps[i], psShape, pMuzzleFlash, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix, localHeightAboveTerrain);
 					}
 				}
 			}
@@ -720,6 +725,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 				//sensor and cyborg and ecm uses connectors[0]
 
 				glm::mat4 localModelMatrix = modifiedModelMatrix;
+				float localHeightAboveTerrain = psDroid->heightAboveMap;
 				/* vtol weapons inverted */
 				if (iConnector >= VTOL_CONNECTOR_START)
 				{
@@ -728,12 +734,13 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 				}
 
 				localModelMatrix *= glm::translate(glm::vec3(psShapeBody->connectors[0].xzy()));
+				localHeightAboveTerrain += psShapeBody->connectors[0].z;
 
 				localModelMatrix *= glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
 				/* Draw it */
 				if (psMountShape)
 				{
-					if (pie_Draw3DShape(psMountShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix))
+					if (pie_Draw3DShape(psMountShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
 					{
 						didDrawSomething = true;
 					}
@@ -743,12 +750,13 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 				if (cyborgDroid(psDroid) && psMountShape && !psMountShape->connectors.empty())
 				{
 					localModelMatrix *= glm::translate(glm::vec3(psMountShape->connectors[0].xzy()));
+					localHeightAboveTerrain += psMountShape->connectors[0].z;
 				}
 
 				/* Draw it */
 				if (psShape)
 				{
-					if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix))
+					if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
 					{
 						didDrawSomething = true;
 					}
@@ -759,6 +767,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 					{
 						Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
 						localModelMatrix *= glm::translate(glm::vec3(psShape->connectors[0].xzy()));
+						localHeightAboveTerrain += psShape->connectors[0].z;
 						localModelMatrix *= glm::translate(glm::vec3(0.f, -20.f, 0.f));
 
 						psShape = getImdFromIndex(MI_FLAME)->displayModel();
@@ -773,7 +782,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 						localModelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f));
 						localModelMatrix *= glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
 
-						if (pie_Draw3DShape(psShape, getModularScaledGraphicsTime(psShape->animInterval, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140, localModelMatrix, viewMatrix))
+						if (pie_Draw3DShape(psShape, getModularScaledGraphicsTime(psShape->animInterval, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
 						{
 							didDrawSomething = true;
 						}
@@ -809,7 +818,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	psShapeProp = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
 	if (psShapeProp)
 	{
-		if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix))
+		if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 		{
 			didDrawSomething = true;
 		}

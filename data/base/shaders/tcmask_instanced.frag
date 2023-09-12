@@ -17,6 +17,7 @@ uniform sampler2D TextureTcmask; // tcmask
 uniform sampler2D TextureNormal; // normal map
 uniform sampler2D TextureSpecular; // specular map
 uniform sampler2DArrayShadow shadowMap; // shadow map
+uniform sampler2D lightmap_tex;
 
 uniform mat4 ViewMatrix;
 
@@ -56,6 +57,7 @@ FRAGMENT_INPUT mat4 NormalMatrix;
 FRAGMENT_INPUT vec4 colour;
 FRAGMENT_INPUT vec4 teamcolour;
 FRAGMENT_INPUT vec4 packed_ecmState_alphaTest;
+FRAGMENT_INPUT vec3 uvLightmap; // uvLightmap in .xy, heightAboveTerrain in .z
 
 // For Shadows
 FRAGMENT_INPUT vec3 fragPos;
@@ -289,6 +291,10 @@ float getShadowVisibility()
 #endif
 }
 
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return min(a + b, vec3(1.0));
+}
+
 void main()
 {
 	// unpack inputs
@@ -327,6 +333,9 @@ void main()
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
 	float visibility = getShadowVisibility();
+	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap.xy, 0.f);
+	float distanceAboveTerrain = uvLightmap.z;
+	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
 
 	if (lambertTerm > 0.0)
 	{
@@ -350,7 +359,10 @@ void main()
 		light += diffuse * lambertTerm * diffuseMap * vanillaFactor;
 	}
 	// ambient light maxed for classic models to keep results similar to original
-	light += ambient * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+	light += vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+
+	light.rgb *= visibility;
+	light.a = 1.0f;
 
 	vec4 fragColour;
 	if (tcmask != 0)
@@ -359,11 +371,11 @@ void main()
 		float maskAlpha = texture(TextureTcmask, texCoord, WZ_MIP_LOAD_BIAS).r;
 
 		// Apply color using grain merge with tcmask
-		fragColour = visibility * (light + (teamcolour - 0.5) * maskAlpha) * colour;
+		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;
 	}
 	else
 	{
-		fragColour = visibility * light * colour;
+		fragColour = light * colour;
 	}
 
 	if (ecmEffect)

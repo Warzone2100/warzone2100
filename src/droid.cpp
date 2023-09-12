@@ -393,6 +393,7 @@ DROID::DROID(uint32_t id, unsigned player)
 	, secondaryOrderPendingCount(0)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
+	, heightAboveMap(0)
 {
 	memset(aName, 0, sizeof(aName));
 	memset(asBits, 0, sizeof(asBits));
