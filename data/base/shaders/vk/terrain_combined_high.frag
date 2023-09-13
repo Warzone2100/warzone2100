@@ -57,7 +57,7 @@ void getGroundBM(int i, inout BumpData res) {
 }
 
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
-	return min(a + b, vec3(1.0));
+	return a + b;
 }
 
 vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
@@ -76,11 +76,10 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 
 	vec4 light = (ambientLight + visibility*diffuseLight*lambertTerm) * adjustedTileBrightness;
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
-	light.a = 1.f;
 
 	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm) * adjustedTileBrightness;
-	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.f)); // additive color (from environmental point lights / effects)
-	light_spec *= b.gloss;
+	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.5f)); // additive color (from environmental point lights / effects)
+	light_spec *= (b.gloss * b.gloss);
 
 	vec4 res = (b.color*light) + light_spec;
 
