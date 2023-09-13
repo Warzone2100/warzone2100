@@ -802,7 +802,7 @@ void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen)
 
 	if (len > maxLen)
 	{
-		debug(LOG_ERROR, "NETstring: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxLen);
+		debug(LOG_ERROR, "NETbytes: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxLen);
 	}
 
 	len = std::min<unsigned>(len, maxLen);  // Truncate length if necessary.
