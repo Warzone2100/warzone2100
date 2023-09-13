@@ -151,8 +151,21 @@ public:
 	{
 		rt = JS_NewRuntime();
 		ASSERT(rt != nullptr, "JS_NewRuntime failed?");
-		ctx = JS_NewContext(rt);
+
+		JSLimitedContextOptions ctxOptions;
+		ctxOptions.baseObjects = true;
+		ctxOptions.dateObject = true;
+		ctxOptions.eval = (game.type == LEVEL_TYPE::CAMPAIGN); // allow "eval" only for campaign (which currently has lots of implicit eval usage)
+		ctxOptions.stringNormalize = true;
+		ctxOptions.regExp = true;
+		ctxOptions.json = true;
+		ctxOptions.proxy = true;
+		ctxOptions.mapSet = true;
+		ctxOptions.typedArrays = true;
+		ctxOptions.promise = false; // disable promise, async, await
+		ctx = JS_NewLimitedContext(rt, &ctxOptions);
 		ASSERT(ctx != nullptr, "JS_NewContext failed?");
+
 		global_obj = JS_GetGlobalObject(ctx);
 
 		engineToInstanceMap.insert(std::pair<JSContext*, quickjs_scripting_instance*>(ctx, this));
@@ -2321,7 +2334,7 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
 		return JS_FALSE;
 	}
-	JSValue compiledFuncObj = JS_Eval(ctx, bytes, size, loadedFilePath.c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
+	JSValue compiledFuncObj = JS_Eval_BypassLimitedContext(ctx, bytes, size, loadedFilePath.c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
 	free(bytes);
 	if (JS_IsException(compiledFuncObj))
 	{
@@ -2668,7 +2681,7 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 		calcDataHash(reinterpret_cast<const uint8_t *>(bytes), size, DATA_SCRIPT);
 	}
 	m_path = path.toUtf8();
-	compiledScriptObj = JS_Eval(ctx, bytes, size, path.toUtf8().c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
+	compiledScriptObj = JS_Eval_BypassLimitedContext(ctx, bytes, size, path.toUtf8().c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
 	free(bytes);
 	if (JS_IsException(compiledScriptObj))
 	{
@@ -2833,7 +2846,7 @@ std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringTyp
 
 bool quickjs_scripting_instance::debugEvaluateCommand(const std::string &text)
 {
-	JSValue compiledFuncObj = JS_Eval(ctx, text.c_str(), text.length(), "<debug_evaluate_command>", JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
+	JSValue compiledFuncObj = JS_Eval_BypassLimitedContext(ctx, text.c_str(), text.length(), "<debug_evaluate_command>", JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
 	if (JS_IsException(compiledFuncObj))
 	{
 		// compilation error / syntax error
