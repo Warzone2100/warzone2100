@@ -843,9 +843,13 @@ bool loadPropulsionStats(WzConfig &ini)
 		psStats->maxSpeed = ini.value("speed").toInt();
 		psStats->ref = STAT_PROPULSION + i;
 		psStats->turnSpeed = ini.value("turnSpeed", DEG(1) / 3).toInt();
+		ASSERT(psStats->turnSpeed != 0, "\"%s\".\"turnSpeed\" is 0", psStats->id.toUtf8().c_str());
 		psStats->spinSpeed = ini.value("spinSpeed", DEG(3) / 4).toInt();
+		ASSERT(psStats->spinSpeed != 0, "\"%s\".\"spinSpeed\" is 0", psStats->id.toUtf8().c_str());
 		psStats->spinAngle = ini.value("spinAngle", 180).toInt();
+		ASSERT(psStats->spinAngle != 0, "\"%s\".\"spinAngle\" is 0", psStats->id.toUtf8().c_str());
 		psStats->acceleration = ini.value("acceleration", 250).toInt();
+		ASSERT(psStats->acceleration != 0, "\"%s\".\"acceleration\" is 0", psStats->id.toUtf8().c_str());
 		psStats->deceleration = ini.value("deceleration", 800).toInt();
 		psStats->skidDeceleration = ini.value("skidDeceleration", 600).toInt();
 		psStats->pIMD = nullptr;
