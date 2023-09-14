@@ -116,16 +116,25 @@ private:
 	pos_type seekoff(off_type pos, ios_base::seekdir dir, ios_base::openmode mode) {
 		if (dir == std::ios_base::beg)
 		{
-			PHYSFS_seek(file, pos);
+			if (PHYSFS_seek(file, pos) == 0)
+			{
+				return pos_type(-1);
+			}
 		}
 		else if (dir == std::ios_base::cur)
 		{
 			// subtract characters currently in buffer from seek position
-			PHYSFS_seek(file, (PHYSFS_tell(file) + pos) - (egptr() - gptr()));
+			if (PHYSFS_seek(file, (PHYSFS_tell(file) + pos) - (egptr() - gptr())) == 0)
+			{
+				return pos_type(-1);
+			}
 		}
 		else if (dir == std::ios_base::end)
 		{
-			PHYSFS_seek(file, PHYSFS_fileLength(file) + pos);
+			if (PHYSFS_seek(file, PHYSFS_fileLength(file) + pos) == 0)
+			{
+				return pos_type(-1);
+			}
 		}
 		else
 		{
@@ -142,7 +151,10 @@ private:
 	}
 
 	pos_type seekpos(pos_type pos, std::ios_base::openmode mode) {
-		PHYSFS_seek(file, pos);
+		if (PHYSFS_seek(file, pos) == 0)
+		{
+			return pos_type(-1);
+		}
 		if (mode & std::ios_base::in) {
 			setg(egptr(), egptr(), egptr());
 		}
