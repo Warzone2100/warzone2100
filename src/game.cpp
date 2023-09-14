@@ -5884,12 +5884,15 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 			mRoot[droidKey.toStdString()] = writeDroid(psCurr, onMission, counter);
 			if (isTransporter(psCurr))	// if transporter save any droids in the grp
 			{
-				for (DROID *psTrans = psCurr->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
+				if (psCurr->psGroup)
 				{
-					if (psTrans != psCurr)
+					for (DROID *psTrans = psCurr->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
 					{
-						droidKey = "droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10));  // Zero padded so that alphabetical sort works.
-						mRoot[droidKey.toStdString()] = writeDroid(psTrans, onMission, counter);
+						if (psTrans != psCurr)
+						{
+							droidKey = "droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10));  // Zero padded so that alphabetical sort works.
+							mRoot[droidKey.toStdString()] = writeDroid(psTrans, onMission, counter);
+						}
 					}
 				}
 				//always save transporter droids that are in the mission list with an invalid value
