@@ -500,6 +500,8 @@ bool intAddTransContentsForm()
 		return true;
 	}
 
+	ASSERT_OR_RETURN(false, psCurrTransporter->psGroup != nullptr, "Null transporter group");
+
 	for (DROID *psDroid = psCurrTransporter->psGroup->psList; psDroid != nullptr && psDroid != psCurrTransporter; psDroid = psDroid->psGrpNext)
 	{
 		if (psDroid->selected)
