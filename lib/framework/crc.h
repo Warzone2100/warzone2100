@@ -113,7 +113,7 @@ class SessionKeys
 public:
 	static constexpr size_t NonceSize = 24;
 public:
-	SessionKeys(EcKey const &me, EcKey const &other);
+	SessionKeys(EcKey const &me, uint32_t me_playerIdx, EcKey const &other, uint32_t other_playerIdx);
 
 public:
 	std::vector<uint8_t> encryptMessageForOther(void const *data, size_t dataLen); // not thread-safe

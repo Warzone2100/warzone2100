@@ -2215,6 +2215,9 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	case NET_SEND_TO_PLAYER:             ///< Non-host clients aren't directly connected to each other, so they talk via the host using these messages.
 		return false; // process normally (do *not* filter)
 
+	case NET_SECURED_NET_MESSAGE:        ///< This just wraps another message, so permit this wrapper message
+		return false; // process normally (do *not* filter)
+
 	case NET_PLAYER_SWAP_INDEX_ACK:
 		// **MUST** be permitted
 		return false; // process normally (do *not* filter)
@@ -2229,15 +2232,26 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 
 ///////////////////////////////////////////////////////////////////////////
 // Check if a message is a system message
-static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
+static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 {
-	if (NETFilterMessageWhileSwappingPlayer(playerQueue.index, type))
+	if (*type == NET_SECURED_NET_MESSAGE)
+	{
+		if (!NETdecryptSecuredNetMessage(playerQueue, *type) || *type == NET_SECURED_NET_MESSAGE) // nested secured messages are not supported
+		{
+			// remove the invalid secured message, and return true to say we "handled it"
+			debug(LOG_INFO, "Ignoring invalid secured message allegedly from player: %u", static_cast<unsigned>(playerQueue.index));
+			NETpop(playerQueue);
+			return true;
+		}
+	}
+
+	if (NETFilterMessageWhileSwappingPlayer(playerQueue.index, *type))
 	{
 		NETpop(playerQueue);
 		return true;
 	}
 
-	switch (type)
+	switch (*type)
 	{
 	case NET_SEND_TO_PLAYER:
 		{
@@ -2825,7 +2839,7 @@ checkMessages:
 		while (NETisMessageReady(*queue))
 		{
 			*type = NETgetMessage(*queue)->type;
-			if (!NETprocessSystemMessage(*queue, *type))
+			if (!NETprocessSystemMessage(*queue, type))
 			{
 				return true;  // We couldn't process the message, let the caller deal with it..
 			}
@@ -5334,6 +5348,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_PLAYER_SWAP_INDEX:         return "NET_PLAYER_SWAP_INDEX";
 	case NET_PLAYER_SWAP_INDEX_ACK:     return "NET_PLAYER_SWAP_INDEX_ACK";
 	case NET_DATA_CHECK2:               return "NET_DATA_CHECK2";
+	case NET_SECURED_NET_MESSAGE:		return "NET_SECURED_NET_MESSAGE";
 	case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

@@ -46,6 +46,7 @@ class NetMessage
 {
 public:
 	NetMessage(uint8_t type_ = 0xFF) : type(type_) {}
+	static bool tryFromRawData(const uint8_t* buffer, size_t bufferLen, NetMessage& output);
 	uint8_t *rawDataDup() const;  ///< Returns data compatible with NetQueue::writeRawData(). Must be delete[]d.
 	void rawDataAppendToVector(std::vector<uint8_t> &output) const;  ///< Appends data compatible with NetQueue::writeRawData() to the input vector.
 	size_t rawLen() const;        ///< Returns the length of the return value of rawDataDup().
@@ -117,6 +118,8 @@ public:
 	void setWillNeverGetMessages();                                    ///< Marks that we will not be reading any of the messages (only sending over the network).
 	bool haveMessage() const;                                          ///< Return true if we have a message ready to return.
 	const NetMessage &getMessage() const;                              ///< Returns a message.
+	bool currentMessageWasDecrypted() const;
+	bool replaceCurrentWithDecrypted(NetMessage &&decryptedMessage);
 	void popMessage();                                                 ///< Pops the last returned message.
 
 	inline size_t numPendingGameTimeUpdateMessages() const
@@ -138,7 +141,15 @@ private:
 		return *i;
 	};
 
-	inline const NetMessage &internal_getMessage() const
+	inline const NetMessage &internal_getConstMessage() const
+	{
+		// Return the message.
+		List::iterator i = messagePos;
+		--i;
+		return *i;
+	};
+
+	inline NetMessage &internal_getMessage()
 	{
 		// Return the message.
 		List::iterator i = messagePos;
@@ -152,6 +163,7 @@ private:
 	List                          messages;                            ///< List of messages. Messages are added to the front and read from the back.
 	std::vector<uint8_t>          incompleteReceivedMessageData;       ///< Data from network which has not yet formed an entire message.
 	size_t                        pendingGameTimeUpdateMessages;       ///< Pending GAME_GAME_TIME messages added to this queue
+	bool						  bCurrentMessageWasDecrypted;
 };
 
 /// A NetQueuePair is used for talking to a socket. We insert NetMessages in the send NetQueue, which converts the messages into a stream of bytes for the

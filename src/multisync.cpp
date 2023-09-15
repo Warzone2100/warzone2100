@@ -78,7 +78,7 @@ bool sendScoreCheck()
 			if (myResponsibility(i))
 			{
 				// Send score to everyone else
-				setMultiStats(i, getMultiStats(i), false);
+				sendMultiStatsScoreUpdates(i);
 			}
 		}
 	}
