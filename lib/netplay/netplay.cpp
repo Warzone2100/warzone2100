@@ -3872,9 +3872,8 @@ static void NETallowJoining()
 					NETbytes(&challengeResponse);
 					NETend();
 
-					identity.fromBytes(pkey, EcKey::Public);
 					// verify signature that player is joining with, reject him if he can not do that
-					if (!identity.verify(challengeResponse, tmp_challenges[i].data(), tmp_challenges[i].size()))
+					if (!identity.fromBytes(pkey, EcKey::Public) || !identity.verify(challengeResponse, tmp_challenges[i].data(), tmp_challenges[i].size()))
 					{
 						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
 

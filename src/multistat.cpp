@@ -271,7 +271,10 @@ void recvMultiStats(NETQUEUE queue)
 		playerStats[playerIndex].identity.clear();
 		if (!identity.empty())
 		{
-			playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public);
+			if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
+			{
+				debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+			}
 		}
 		else
 		{
@@ -364,7 +367,10 @@ static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, boo
 		free(pFileData);
 		if (identity[0] != '\0')
 		{
-			st->identity.fromBytes(base64Decode(identity), EcKey::Private);
+			if (!st->identity.fromBytes(base64Decode(identity), EcKey::Private))
+			{
+				debug(LOG_INFO, "Failed to load profile identity");
+			}
 		}
 	}
 
@@ -409,7 +415,7 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 		}
 	}
 
-	if (st->identity.empty())
+	if (st->identity.empty() || !st->identity.hasPrivate())
 	{
 		if (!currentIdentity.empty())
 		{
