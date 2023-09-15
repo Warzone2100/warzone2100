@@ -93,7 +93,7 @@ public:
 	//
 	// If supplied the exported public key, the EcKey object supports verify.
 	// If supplied the exported private key, the EcKey object supports sign & verify.
-	void fromBytes(Key const &key, Privacy privacy);
+	bool fromBytes(Key const &key, Privacy privacy);
 
 	static EcKey generate();
 

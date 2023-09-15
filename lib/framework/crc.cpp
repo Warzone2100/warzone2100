@@ -382,7 +382,7 @@ EcKey::Key EcKey::toBytes(Privacy privacy) const
 	}
 }
 
-void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
+bool EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 {
 	clear();
 
@@ -391,7 +391,7 @@ void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 		if (key.size() != crypto_sign_ed25519_PUBLICKEYBYTES)
 		{
 			debug(LOG_ERROR, "Invalid public key");
-			return;
+			return false;
 		}
 
 		vKey = new EC_KEY(std::vector<unsigned char>(0), key);
@@ -403,7 +403,7 @@ void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 		{
 			// Invalid input
 			debug(LOG_ERROR, "Invalid private key length");
-			return;
+			return false;
 		}
 
 		// Compute public key from private key
@@ -412,7 +412,7 @@ void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 		{
 			// Failed to compute public key from private key
 			debug(LOG_ERROR, "Invalid private key");
-			return;
+			return false;
 		}
 
 		vKey = new EC_KEY(key, publicKey);
@@ -420,7 +420,10 @@ void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 	else
 	{
 		debug(LOG_FATAL, "Unsupported privacy level");
+		return false;
 	}
+
+	return true;
 }
 
 EcKey EcKey::generate()
