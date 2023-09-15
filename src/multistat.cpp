@@ -169,6 +169,26 @@ void lookupRatingAsync(uint32_t playerIndex)
 	urlRequestData(req);
 }
 
+static bool generateSessionKeysWithPlayer(uint32_t playerIndex)
+{
+	if (playerStats[playerIndex].identity.empty())
+	{
+		NETclearSessionKeys(playerIndex);
+		return false;
+	}
+
+	// generate session keys
+	auto& localIdentity = playerStats[realSelectedPlayer].identity;
+	try {
+		NETsetSessionKeys(playerIndex, SessionKeys(localIdentity, realSelectedPlayer, playerStats[playerIndex].identity, playerIndex));
+	}
+	catch (const std::invalid_argument&) {
+		NETclearSessionKeys(playerIndex);
+		throw;
+	}
+	return true;
+}
+
 bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 {
 	if (playerIndexA >= MAX_CONNECTED_PLAYERS || playerIndexB >= MAX_CONNECTED_PLAYERS)
@@ -176,6 +196,56 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 		return false;
 	}
 	std::swap(playerStats[playerIndexA], playerStats[playerIndexB]);
+
+	// NOTE: We can't just swap session keys - we have to re-generate to be sure they are correct
+	// (since client / server determinism can also be based on the playerIdx relative to the realSelectedPlayer - see SessionKeys constructor)
+	if (playerIndexA < MAX_PLAYERS)
+	{
+		try {
+			generateSessionKeysWithPlayer(playerIndexA);
+		}
+		catch (const std::invalid_argument& e) {
+			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexA, NetPlay.players[playerIndexA].name, e.what());
+		}
+	}
+	if (playerIndexB < MAX_PLAYERS)
+	{
+		try {
+			generateSessionKeysWithPlayer(playerIndexB);
+		}
+		catch (const std::invalid_argument& e) {
+			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexB, NetPlay.players[playerIndexB].name, e.what());
+		}
+	}
+	return true;
+}
+
+static bool sendMultiStats(uint32_t playerIndex)
+{
+	// Now send it to all other players
+	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_STATS);
+	// Send the ID of the player's stats we're updating
+	NETuint32_t(&playerIndex);
+
+	NETauto(playerStats[playerIndex].autorating);
+
+	// Send over the actual stats
+	NETuint32_t(&playerStats[playerIndex].played);
+	NETuint32_t(&playerStats[playerIndex].wins);
+	NETuint32_t(&playerStats[playerIndex].losses);
+	NETuint32_t(&playerStats[playerIndex].totalKills);
+	NETuint32_t(&playerStats[playerIndex].totalScore);
+	NETuint32_t(&playerStats[playerIndex].recentKills);
+	NETuint32_t(&playerStats[playerIndex].recentScore);
+
+	EcKey::Key identity;
+	if (!playerStats[playerIndex].identity.empty())
+	{
+		identity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+	}
+	NETbytes(&identity);
+	NETend();
+
 	return true;
 }
 
@@ -194,35 +264,50 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 
 	if (!bLocal && (NetPlay.isHost || playerIndex == realSelectedPlayer))
 	{
-		// Now send it to all other players
-		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_STATS);
-		// Send the ID of the player's stats we're updating
-		NETuint32_t(&playerIndex);
+		sendMultiStats(playerIndex);
 
-		NETauto(playerStats[playerIndex].autorating);
-
-		// Send over the actual stats
-		NETuint32_t(&playerStats[playerIndex].played);
-		NETuint32_t(&playerStats[playerIndex].wins);
-		NETuint32_t(&playerStats[playerIndex].losses);
-		NETuint32_t(&playerStats[playerIndex].totalKills);
-		NETuint32_t(&playerStats[playerIndex].totalScore);
-		NETuint32_t(&playerStats[playerIndex].recentKills);
-		NETuint32_t(&playerStats[playerIndex].recentScore);
-
-		EcKey::Key identity;
-		if (!playerStats[playerIndex].identity.empty())
+		if (playerIndex == realSelectedPlayer)
 		{
-			identity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+			// need to clear and re-generate any session keys for communication between us and other players
+			NETclearSessionKeys();
+			auto& localIdentity = playerStats[realSelectedPlayer].identity;
+			if (localIdentity.hasPrivate())
+			{
+				for (uint8_t i = 0; i < MAX_PLAYERS; ++i)
+				{
+					if (i == realSelectedPlayer) { continue; }
+					if (playerStats[i].identity.empty())
+					{
+						continue;
+					}
+					try {
+						NETsetSessionKeys(i, SessionKeys(localIdentity, realSelectedPlayer, playerStats[i].identity, i));
+					}
+					catch (const std::invalid_argument& e) {
+						debug(LOG_INFO, "One or both identities can't be used for session keys (self: %u, other: %u), with error: %s", realSelectedPlayer, i, e.what());
+					}
+				}
+			}
+			else
+			{
+				ASSERT(false, "Local identity is missing key pair?");
+			}
 		}
-		NETbytes(&identity);
-		NETend();
 	}
 
 	return true;
 }
 
-void recvMultiStats(NETQUEUE queue)
+bool sendMultiStatsScoreUpdates(uint32_t playerIndex)
+{
+	if (NetPlay.isHost || playerIndex == realSelectedPlayer)
+	{
+		return sendMultiStats(playerIndex);
+	}
+	return false;
+}
+
+bool recvMultiStats(NETQUEUE queue)
 {
 	uint32_t playerIndex;
 
@@ -234,7 +319,7 @@ void recvMultiStats(NETQUEUE queue)
 	if (playerIndex >= MAX_CONNECTED_PLAYERS)
 	{
 		NETend();
-		return;
+		return false;
 	}
 
 
@@ -242,7 +327,7 @@ void recvMultiStats(NETQUEUE queue)
 	{
 		HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
 		NETend();
-		return;
+		return false;
 	}
 
 	PLAYERSTATS::Autorating receivedAutorating;
@@ -303,6 +388,24 @@ void recvMultiStats(NETQUEUE queue)
 				std::string sendername = NetPlay.players[playerIndex].name;
 				std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
 				wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
+
+				if (playerIndex < MAX_PLAYERS)
+				{
+					if (!playerStats[playerIndex].identity.empty())
+					{
+						// generate session keys
+						try {
+							generateSessionKeysWithPlayer(playerIndex);
+						}
+						catch (const std::invalid_argument& e) {
+							debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
+						}
+					}
+					else
+					{
+						NETclearSessionKeys(playerIndex);
+					}
+				}
 			}
 			else
 			{
@@ -333,6 +436,7 @@ void recvMultiStats(NETQUEUE queue)
 	}
 
 	NETend();
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

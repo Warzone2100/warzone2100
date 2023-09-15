@@ -90,6 +90,7 @@ bool saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTA
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 PLAYERSTATS const &getMultiStats(UDWORD player);									// get from net
 bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // send to net.
+bool sendMultiStatsScoreUpdates(uint32_t player);
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames();
 void updateMultiStatsWins();
@@ -99,7 +100,7 @@ void incrementMultiStatsResearchPotential(UDWORD player);
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void updateMultiStatsBuilt(BASE_OBJECT *psBuilt);
 void updateMultiStatsResearchComplete(RESEARCH *psResearch, UDWORD player);
-void recvMultiStats(NETQUEUE queue);
+bool recvMultiStats(NETQUEUE queue);
 void lookupRatingAsync(uint32_t playerIndex);
 
 bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB);

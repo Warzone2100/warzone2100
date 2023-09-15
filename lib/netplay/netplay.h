@@ -101,6 +101,7 @@ enum MESSAGE_TYPES
 	NET_PLAYER_SWAP_INDEX,			///< a host-only message to move a player to another index
 	NET_PLAYER_SWAP_INDEX_ACK,		///< an acknowledgement message from a player whose index is being swapped
 	NET_DATA_CHECK2,				///< Data2 integrity check
+	NET_SECURED_NET_MESSAGE,		///< A secured (+ authenticated) net message between two players
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

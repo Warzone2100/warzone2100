@@ -572,7 +572,7 @@ void genSecRandomBytes(void * const buf, const size_t size)
 
 static_assert(SessionKeys::NonceSize == crypto_aead_xchacha20poly1305_ietf_NPUBBYTES, "Mismatched nonce size");
 
-SessionKeys::SessionKeys(EcKey const &me, EcKey const &other)
+SessionKeys::SessionKeys(EcKey const &me, uint32_t me_playerIdx, EcKey const &other, uint32_t other_playerIdx)
 {
 	if (!me.hasPrivate())
 	{
@@ -581,7 +581,10 @@ SessionKeys::SessionKeys(EcKey const &me, EcKey const &other)
 
 	// The libsodium API expects a deterministic "client" and "server"
 	// To do so, sort the EcKeys by public key hex string
-	bool bIsClient = me.publicKeyHexString() < other.publicKeyHexString();
+	// If they are somehow both equal (probably someone testing locally with the same config dir), use the player index instead
+	auto me_publicKeyStr = me.publicKeyHexString();
+	auto other_publicKeyStr = other.publicKeyHexString();
+	bool bIsClient = (me_publicKeyStr != other_publicKeyStr) ? (me_publicKeyStr < other_publicKeyStr) : (me_playerIdx < other_playerIdx);
 
 	std::vector<unsigned char> ed25519_pk = me.toBytes(EcKey::Public);
 	std::vector<unsigned char> ed25519_sk = me.toBytes(EcKey::Private);
