@@ -24,6 +24,7 @@
 #include <limits>
 #include <memory>
 #include <algorithm>
+#include <array>
 
 #include <nlohmann/json.hpp>
 
@@ -563,4 +564,158 @@ void genSecRandomBytes(void * const buf, const size_t size)
 {
 	ASSERT_OR_RETURN(, buf != nullptr, "Null buffer!!");
 	randombytes_buf(buf, size);
+}
+
+//================================================================================
+// MARK: - SessionKeys
+//================================================================================
+
+static_assert(SessionKeys::NonceSize == crypto_aead_xchacha20poly1305_ietf_NPUBBYTES, "Mismatched nonce size");
+
+SessionKeys::SessionKeys(EcKey const &me, EcKey const &other)
+{
+	if (!me.hasPrivate())
+	{
+		throw std::invalid_argument("Invalid \"me\" key");
+	}
+
+	// The libsodium API expects a deterministic "client" and "server"
+	// To do so, sort the EcKeys by public key hex string
+	bool bIsClient = me.publicKeyHexString() < other.publicKeyHexString();
+
+	std::vector<unsigned char> ed25519_pk = me.toBytes(EcKey::Public);
+	std::vector<unsigned char> ed25519_sk = me.toBytes(EcKey::Private);
+	std::vector<unsigned char> me_pk(crypto_scalarmult_curve25519_BYTES, 0);
+	std::vector<unsigned char> me_sk(crypto_scalarmult_curve25519_BYTES, 0);
+	if (crypto_sign_ed25519_pk_to_curve25519(&me_pk[0], ed25519_pk.data()) != 0)
+	{
+		throw std::invalid_argument("Invalid public key");
+	}
+	if (crypto_sign_ed25519_sk_to_curve25519(&me_sk[0], ed25519_sk.data()) != 0)
+	{
+		throw std::invalid_argument("Invalid private key");
+	}
+	sodium_memzero(&ed25519_sk[0], ed25519_sk.size());
+	ed25519_sk.clear();
+
+	std::vector<unsigned char> other_ed25519_pk = other.toBytes(EcKey::Public);
+	std::vector<unsigned char> other_pk(crypto_scalarmult_curve25519_BYTES, 0);
+	if (crypto_sign_ed25519_pk_to_curve25519(&other_pk[0], other_ed25519_pk.data()) != 0)
+	{
+		throw std::invalid_argument("Invalid \"other\" public key");
+	}
+
+	receiveKey.resize(crypto_kx_SESSIONKEYBYTES);
+	sendKey.resize(crypto_kx_SESSIONKEYBYTES);
+
+	if (bIsClient)
+	{
+		if (crypto_kx_client_session_keys(&receiveKey[0], &sendKey[0],
+										  me_pk.data(), me_sk.data(), other_pk.data()) != 0)
+		{
+			// Suspicious other public key
+			throw std::invalid_argument("Invalid \"other\" public key");
+		}
+	}
+	else
+	{
+		if (crypto_kx_server_session_keys(&receiveKey[0], &sendKey[0],
+										  me_pk.data(), me_sk.data(), other_pk.data()) != 0)
+		{
+			// Suspicious other public key
+			throw std::invalid_argument("Invalid \"other\" public key");
+		}
+	}
+
+	sodium_memzero(&me_sk[0], me_sk.size());
+	me_sk.clear();
+}
+
+constexpr size_t sessionMessageBlockSize = 64;
+
+std::vector<uint8_t> SessionKeys::encryptMessageForOther(void const *data, size_t dataLen)
+{
+#if SIZE_MAX > UINT32_MAX
+	if (dataLen > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
+	{
+		debug(LOG_ERROR, "Attempting to encrypt message of data length (%zu) exceeding std::numeric_limits<uint32_t>::max()", dataLen);
+		return {};
+	}
+#endif
+	size_t bufferUnpaddedLen = dataLen;
+	size_t bufferPaddedLen = 0;
+	size_t bufferMaxLen = dataLen + (sessionMessageBlockSize - (dataLen % sessionMessageBlockSize));
+	buffer.clear();
+	buffer.reserve(bufferMaxLen);
+	std::copy((const unsigned char*)data, (const unsigned char*)data + dataLen, std::back_inserter(buffer));
+	buffer.resize(bufferMaxLen, 0);
+	// Round the length of the buffer to a multiple of `sessionMessageBlockSize` by appending padding data
+	if (sodium_pad(&bufferPaddedLen, &buffer[0], dataLen, sessionMessageBlockSize, buffer.size()) != 0)
+	{
+		ASSERT(false, "Not large enough output buffer for padding");
+		return {};
+	}
+	ASSERT(bufferPaddedLen >= bufferUnpaddedLen, "Should not be smaller?");
+	buffer.resize(bufferPaddedLen);
+
+	std::vector<unsigned char> ciphertext(bufferPaddedLen + crypto_aead_xchacha20poly1305_ietf_ABYTES, 0);
+	unsigned long long ciphertext_len = 0;
+
+	std::array<unsigned char, NonceSize> nonce;
+	randombytes_buf(&nonce[0], nonce.size());
+
+	if (crypto_aead_xchacha20poly1305_ietf_encrypt(&ciphertext[0], &ciphertext_len,
+												   buffer.data(), static_cast<unsigned long long>(buffer.size()),
+											   NULL, 0,
+											   NULL, nonce.data(), sendKey.data()) != 0)
+	{
+		// failed to encrypt
+		debug(LOG_INFO, "Encryption failed?");
+		return {};
+	}
+
+	// Return <nonce><ciphertext>
+	std::vector<uint8_t> fullResult;
+	fullResult.reserve(nonce.size() + ciphertext.size());
+	std::copy(nonce.begin(), nonce.end(), std::back_inserter(fullResult));
+	std::copy(ciphertext.begin(), ciphertext.end(), std::back_inserter(fullResult));
+	return fullResult;
+}
+
+bool SessionKeys::decryptMessageFromOther(void const *data, size_t dataLen, std::vector<uint8_t>& decrypted)
+{
+	ASSERT_OR_RETURN(false, dataLen > crypto_aead_xchacha20poly1305_ietf_NPUBBYTES, "Invalid dataLen");
+	ASSERT_OR_RETURN(false, dataLen < std::numeric_limits<uint32_t>::max(), "Invalid dataLen");
+
+	// Split data: <nonce><ciphertext>
+	const unsigned char *npub = (const unsigned char *)data;
+	const unsigned char *ciphertext = ((const unsigned char *)data) + crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
+	size_t ciphertextLen = dataLen - crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
+	ASSERT_OR_RETURN({}, ciphertextLen >= crypto_aead_xchacha20poly1305_ietf_ABYTES, "Invalid dataLen");
+
+	decrypted.resize(ciphertextLen, 0);
+	unsigned long long decryptedLen = 0;
+
+	if (crypto_aead_xchacha20poly1305_ietf_decrypt(&decrypted[0], &decryptedLen,
+												   NULL,
+												   ciphertext, static_cast<unsigned long long>(ciphertextLen),
+												   NULL, 0,
+												   npub, receiveKey.data()) != 0)
+	{
+		// Invalid / forged message
+		ASSERT(false, "Invalid encrypted message");
+		return false;
+	}
+
+	// Compute the original, unpadded length
+	size_t bufferPaddedLen = static_cast<size_t>(decryptedLen);
+	size_t bufferUnpaddedLen = 0;
+	if (sodium_unpad(&bufferUnpaddedLen, decrypted.data(), bufferPaddedLen, sessionMessageBlockSize) != 0)
+	{
+		ASSERT(false, "Incorrect padding");
+		return false;
+	}
+
+	decrypted.resize(bufferUnpaddedLen);
+	return true;
 }
