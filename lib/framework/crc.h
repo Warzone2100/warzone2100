@@ -108,6 +108,25 @@ private:
 	static const int curveId;
 };
 
+class SessionKeys
+{
+public:
+	static constexpr size_t NonceSize = 24;
+public:
+	SessionKeys(EcKey const &me, EcKey const &other);
+
+public:
+	std::vector<uint8_t> encryptMessageForOther(void const *data, size_t dataLen); // not thread-safe
+	bool decryptMessageFromOther(void const *data, size_t dataLen, std::vector<uint8_t>& outputDecrypted);
+
+private:
+	std::vector<unsigned char> receiveKey;
+	std::vector<unsigned char> sendKey;
+private:
+	// to avoid some repeated allocations
+	std::vector<unsigned char> buffer;
+};
+
 std::string base64Encode(std::vector<uint8_t> const &bytes);
 std::vector<uint8_t> base64Decode(std::string const &str);
 
