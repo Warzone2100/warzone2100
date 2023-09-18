@@ -267,6 +267,7 @@ static char externalIPAddress[40];
 #define NET_PING_TMP_PING_CHALLENGE_SIZE 128
 static std::array<std::vector<uint8_t>, MAX_TMP_SOCKETS> tmp_challenges{};
 static Socket *tmp_socket[MAX_TMP_SOCKETS] = { nullptr };  ///< Sockets used to talk to clients which have not yet been assigned a player number (host only).
+static std::array<std::chrono::steady_clock::time_point, MAX_TMP_SOCKETS> tmp_connectTime{};
 
 static SocketSet *tmp_socket_set = nullptr;
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
@@ -3689,6 +3690,10 @@ static void NETallowJoining()
 		{
 			challenge.clear();
 		}
+		for (auto& connectTime : tmp_connectTime)
+		{
+			connectTime = std::chrono::steady_clock::time_point();
+		}
 	}
 
 	// Find the first empty socket slot
@@ -3828,6 +3833,12 @@ static void NETallowJoining()
 			socketClose(tmp_socket[i]);
 			tmp_socket[i] = nullptr;
 			tmp_challenges[i].clear();
+			tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+		}
+		else
+		{
+			// on initial connect success...
+			tmp_connectTime[i] = std::chrono::steady_clock::now();
 		}
 	}
 
@@ -3835,8 +3846,12 @@ static void NETallowJoining()
 	{
 		for (i = 0; i < MAX_TMP_SOCKETS; ++i)
 		{
-			if (tmp_socket[i] != nullptr
-			    && socketReadReady(tmp_socket[i]))
+			if (tmp_socket[i] == nullptr)
+			{
+				continue;
+			}
+
+			if (socketReadReady(tmp_socket[i]))
 			{
 				uint8_t buffer[NET_BUFFER_SIZE];
 				ssize_t size = readNoInt(tmp_socket[i], buffer, sizeof(buffer));
@@ -3857,6 +3872,7 @@ static void NETallowJoining()
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 					socketClose(tmp_socket[i]);
 					tmp_socket[i] = nullptr;
+					tmp_connectTime[i] = std::chrono::steady_clock::time_point();
 					continue;
 				}
 
@@ -3902,11 +3918,13 @@ static void NETallowJoining()
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = nullptr;
 						tmp_challenges[i].clear();
+						tmp_connectTime[i] = std::chrono::steady_clock::time_point();
 						sync_counter.cantjoin++;
 						return;
 					}
 
 					tmp_challenges[i].clear();
+					tmp_connectTime[i] = std::chrono::steady_clock::time_point();
 
 					if ((playerType == NET_JOIN_SPECTATOR) || (int)NetPlay.playercount <= gamestruct.desc.dwMaxPlayers)
 					{
@@ -4065,6 +4083,36 @@ static void NETallowJoining()
 					}
 				}
 			}
+		}
+	}
+
+	auto currentSteadTime = std::chrono::steady_clock::now();
+
+	for (i = 0; i < MAX_TMP_SOCKETS; ++i)
+	{
+		if (tmp_socket[i] == nullptr)
+		{
+			continue;
+		}
+
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentSteadTime - tmp_connectTime[i]).count() > 5000)
+		{
+			debug(LOG_ERROR, "freeing temp socket %p due to timeout - couldn't create player!", static_cast<void *>(tmp_socket[i]));
+
+			uint8_t rejected = 0;
+			rejected = ERROR_WRONGDATA;
+			NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+			NETuint8_t(&rejected);
+			NETend();
+			NETflush();
+			NETpop(NETnetTmpQueue(i));
+
+			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
+			socketClose(tmp_socket[i]);
+			tmp_socket[i] = nullptr;
+			tmp_challenges[i].clear();
+			tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+			sync_counter.cantjoin++;
 		}
 	}
 }
