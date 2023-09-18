@@ -77,6 +77,8 @@
 #include "src/activity.h"
 #include "src/stdinreader.h"
 
+#include <LRUCache11/LRUCache11.hpp>
+
 #if defined (WZ_OS_MAC)
 # include "lib/framework/cocoa_wrapper.h"
 #endif
@@ -124,6 +126,7 @@ static void NETallowJoining();
 static void recvDebugSync(NETQUEUE queue);
 static bool onBanList(const char *ip);
 static void NETfixPlayerCount();
+static bool isLoopbackIP(const char *ip);
 /*
  * Network globals, these are part of the new network API
  */
@@ -269,6 +272,7 @@ static std::array<std::vector<uint8_t>, MAX_TMP_SOCKETS> tmp_challenges{};
 static Socket *tmp_socket[MAX_TMP_SOCKETS] = { nullptr };  ///< Sockets used to talk to clients which have not yet been assigned a player number (host only).
 static std::array<std::chrono::steady_clock::time_point, MAX_TMP_SOCKETS> tmp_connectTime{};
 static std::unordered_map<std::string, size_t> tmp_pendingIPs;
+static lru11::Cache<std::string, size_t> tmp_badIPs(512, 64);
 
 static SocketSet *tmp_socket_set = nullptr;
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
@@ -3630,6 +3634,32 @@ void NETfixPlayerCount()
 
 }
 
+static void NETaddSessionBanBadIP(const std::string& badIP)
+{
+	if (isLoopbackIP(badIP.c_str()))
+	{
+		return;
+	}
+	size_t *pNumBadIPAttempts = tmp_badIPs.tryGetPt(badIP);
+	if (pNumBadIPAttempts != nullptr)
+	{
+		if (*pNumBadIPAttempts < std::numeric_limits<size_t>::max())
+		{
+			(*pNumBadIPAttempts)++;
+		}
+
+		if (*pNumBadIPAttempts == 100)
+		{
+			// add to permanent ban list
+			addIPToBanList(badIP.c_str(), "BAD_USER");
+		}
+	}
+	else
+	{
+		tmp_badIPs.insert(badIP, 1);
+	}
+}
+
 static bool quickRejectConnection(const std::string& ip)
 {
 	auto it = tmp_pendingIPs.find(ip);
@@ -3639,6 +3669,11 @@ static bool quickRejectConnection(const std::string& ip)
 		{
 			return true;
 		}
+	}
+	if (tmp_badIPs.tryGetPt(ip) != nullptr)
+	{
+		NETaddSessionBanBadIP(ip);
+		return true;
 	}
 
 	return false;
@@ -3733,6 +3768,7 @@ static void NETallowJoining()
 			connectTime = std::chrono::steady_clock::time_point();
 		}
 		tmp_pendingIPs.clear();
+		// NOTE: Do *NOT* call tmp_badIPs.clear() here - we want to preserve it until quit
 	}
 
 	// Find the first empty socket slot
@@ -3781,7 +3817,7 @@ static void NETallowJoining()
 				debug(LOG_INFO, "An old client tried to connect, closing the socket.");
 				NETlogEntry("Dropping old client.", SYNC_FLAG, i);
 				NETlogEntry("Invalid (old)game version", SYNC_FLAG, i);
-				addIPToBanList(rIP.c_str(), "BAD_USER");
+				NETaddSessionBanBadIP(rIP.c_str());
 				connectFailed = true;
 			}
 			else
@@ -3846,7 +3882,7 @@ static void NETallowJoining()
 					memcpy(&buffer, &result, sizeof(result));
 					writeAll(tmp_socket[i], &buffer, sizeof(result));
 					NETlogEntry("Invalid game version", SYNC_FLAG, i);
-					addIPToBanList(rIP.c_str(), "BAD_USER");
+					NETaddSessionBanBadIP(rIP.c_str());
 					connectFailed = true;
 				}
 				if ((!connectFailed) && (!NET_HasAnyOpenSlots()))
@@ -4136,6 +4172,9 @@ static void NETallowJoining()
 			NETend();
 			NETflush();
 			NETpop(NETnetTmpQueue(i));
+
+			std::string rIP = getSocketTextAddress(tmp_socket[i]);
+			NETaddSessionBanBadIP(rIP);
 
 			NETcloseTempSocket(i);
 			sync_counter.cantjoin++;
