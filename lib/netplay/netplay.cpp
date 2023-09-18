@@ -268,6 +268,7 @@ static char externalIPAddress[40];
 static std::array<std::vector<uint8_t>, MAX_TMP_SOCKETS> tmp_challenges{};
 static Socket *tmp_socket[MAX_TMP_SOCKETS] = { nullptr };  ///< Sockets used to talk to clients which have not yet been assigned a player number (host only).
 static std::array<std::chrono::steady_clock::time_point, MAX_TMP_SOCKETS> tmp_connectTime{};
+static std::unordered_map<std::string, size_t> tmp_pendingIPs;
 
 static SocketSet *tmp_socket_set = nullptr;
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
@@ -3628,6 +3629,43 @@ void NETfixPlayerCount()
 	}
 
 }
+
+static bool quickRejectConnection(const std::string& ip)
+{
+	auto it = tmp_pendingIPs.find(ip);
+	if (it != tmp_pendingIPs.end())
+	{
+		if (it->second > 1)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+static void NETcloseTempSocket(unsigned int i)
+{
+	std::string rIP = getSocketTextAddress(tmp_socket[i]);
+	SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
+	socketClose(tmp_socket[i]);
+	tmp_socket[i] = nullptr;
+	tmp_challenges[i].clear();
+	tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+	auto it = tmp_pendingIPs.find(rIP);
+	if (it != tmp_pendingIPs.end())
+	{
+		if (it->second > 1)
+		{
+			it->second--;
+		}
+		else
+		{
+			tmp_pendingIPs.erase(it);
+		}
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 static void NETallowJoining()
@@ -3694,6 +3732,7 @@ static void NETallowJoining()
 		{
 			connectTime = std::chrono::steady_clock::time_point();
 		}
+		tmp_pendingIPs.clear();
 	}
 
 	// Find the first empty socket slot
@@ -3718,17 +3757,21 @@ static void NETallowJoining()
 		NETinitQueue(NETnetTmpQueue(i));
 		SocketSet_AddSocket(tmp_socket_set, tmp_socket[i]);
 
+		std::string rIP = getSocketTextAddress(tmp_socket[i]);
+		connectFailed = quickRejectConnection(rIP);
+		tmp_pendingIPs[rIP]++;
+
 		char buffer[10] = {'\0'};
 		char *p_buffer = buffer;
 
 		// We check for socket activity (connection), and then we check if we got data, since it is possible to have a connection
 		// and have no data waiting.
-		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
+		if (!connectFailed
+			&& checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && socketReadReady(tmp_socket[i])
 		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 8))
 		    && recv_result != SOCKET_ERROR)
 		{
-			std::string rIP = getSocketTextAddress(tmp_socket[i]);
 			std::string rIPLogEntry = "Incoming connection from:";
 			rIPLogEntry.append(rIP);
 			NETlogEntry(rIPLogEntry.c_str(), SYNC_FLAG, i);
@@ -3829,11 +3872,7 @@ static void NETallowJoining()
 		if (connectFailed)
 		{
 			debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
-			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-			socketClose(tmp_socket[i]);
-			tmp_socket[i] = nullptr;
-			tmp_challenges[i].clear();
-			tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+			NETcloseTempSocket(i);
 		}
 		else
 		{
@@ -3869,10 +3908,7 @@ static void NETallowJoining()
 					}
 					NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, i);
 					debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
-					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-					socketClose(tmp_socket[i]);
-					tmp_socket[i] = nullptr;
-					tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+					NETcloseTempSocket(i);
 					continue;
 				}
 
@@ -3914,11 +3950,7 @@ static void NETallowJoining()
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
 
-						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-						socketClose(tmp_socket[i]);
-						tmp_socket[i] = nullptr;
-						tmp_challenges[i].clear();
-						tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+						NETcloseTempSocket(i);
 						sync_counter.cantjoin++;
 						return;
 					}
@@ -3944,9 +3976,7 @@ static void NETallowJoining()
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
 
-						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-						socketClose(tmp_socket[i]);
-						tmp_socket[i] = nullptr;
+						NETcloseTempSocket(i);
 						sync_counter.cantjoin++;
 						return;
 					}
@@ -4107,11 +4137,7 @@ static void NETallowJoining()
 			NETflush();
 			NETpop(NETnetTmpQueue(i));
 
-			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-			socketClose(tmp_socket[i]);
-			tmp_socket[i] = nullptr;
-			tmp_challenges[i].clear();
-			tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+			NETcloseTempSocket(i);
 			sync_counter.cantjoin++;
 		}
 	}
