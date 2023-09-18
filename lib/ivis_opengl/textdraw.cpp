@@ -78,7 +78,7 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 # define USE_NEW_FRIBIDI_API (FRIBIDI_MAJOR_VERSION >= 1)
 #endif // defined(WZ_FRIBIDI_ENABLED)
 
-#include "3rdparty/LRUCache11.hpp"
+#include <LRUCache11/LRUCache11.hpp>
 
 float _horizScaleFactor = 1.0f;
 float _vertScaleFactor = 1.0f;

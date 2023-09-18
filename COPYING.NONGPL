@@ -15,6 +15,8 @@ data/base/texpages/page-25-sky-urban.png
 	- MIT, Copyright 2017 Discord, Inc.
 3rdparty/json/*
 	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
+3rdparty/LRUCache11/*
+	- ISC License, Copyright (c) 2012-22 SAURAV MOHAPATRA (https://github.com/mohaps/lrucache11)
 3rdparty/micro-ecc/*
 	- BSD, Copyright (c) 2014, Kenneth MacKay (https://github.com/kmackay/micro-ecc)
 3rdparty/sha/*
@@ -73,8 +75,6 @@ lib/exceptionhandler/3rdparty/StackWalker.*
 	- BSD 3-Clause License - Copyright (c) 2005 - 2017, Jochen Kalmbach (https://github.com/JochenKalmbach/StackWalker)
 lib/ivis_opengl/3rdparty/etcpak/*
 	- BSD 3-Clause License, Copyright (c) 2013-2021, Bartosz Taudul <wolf@nereid.pl> (https://github.com/wolfpld/etcpak)
-lib/ivis_opengl/3rdparty/LRUCache11.hpp
-	- ISC License, Copyright (c) 2012-22 SAURAV MOHAPATRA (https://github.com/mohaps/lrucache11)
 lib/ivis_opengl/3rdparty/ska_sort.hpp
 	- Boost Software License 1.0, Copyright Malte Skarupke 2016 (https://github.com/skarupke/ska_sort)
 lib/ivis_opengl/3rdparty/stb_image_resize.h
