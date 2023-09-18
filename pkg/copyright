@@ -67,10 +67,6 @@ Files: lib/ivis_opengl/3rdparty/etcpak/*
 Copyright: 2013-2021 Bartosz Taudul <wolf@nereid.pl>
 License: BSD-3-clause-etcpak
 
-Files: lib/ivis_opengl/3rdparty/LRUCache11.hpp
-Copyright: 2012-2022 SAURAV MOHAPATRA
-License: ISC
-
 Files: lib/ivis_opengl/3rdparty/ska_sort.hpp
 Copyright: 2016 Malte Skarupke
 License: BSL-1.0
@@ -158,6 +154,10 @@ License: Expat
 Files: 3rdparty/launchinfo/*
 Copyright: 2020 past-due
 License: Expat
+
+Files: 3rdparty/LRUCache11/*
+Copyright: 2012-2022 SAURAV MOHAPATRA
+License: ISC
 
 Files: 3rdparty/mINI/*
 Copyright: 2018 Danijel Durakovic
