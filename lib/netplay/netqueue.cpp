@@ -227,6 +227,11 @@ void NetQueue::writeRawData(const uint8_t *netData, size_t netLen)
 	buffer.erase(buffer.begin(), buffer.begin() + used);
 }
 
+size_t NetQueue::currentIncompleteDataBuffered() const
+{
+	return incompleteReceivedMessageData.size();
+}
+
 void NetQueue::setWillNeverGetMessagesForNet()
 {
 	canGetMessagesForNet = false;
