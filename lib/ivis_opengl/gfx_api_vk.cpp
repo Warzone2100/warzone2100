@@ -2515,7 +2515,7 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
 	VkPSO* pipeline = nullptr;
 	try {
-		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, currentRenderPass().rp, currentRenderPass().rp_compat_info, msaaSamples, vkDynLoader, *this);
+		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, currentRenderPass().rp, currentRenderPass().rp_compat_info, currentRenderPass().msaaSamples, vkDynLoader, *this);
 	}
 	catch (const std::exception& e)
 	{
@@ -2576,7 +2576,7 @@ void VkRoot::rebuildPipelinesIfNecessary()
 			if (!renderPass.rp_compat_info->isCompatibleWith(*pipeline->renderpass_compat))
 			{
 				delete pipeline;
-				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);
+				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
 			}
 		}
 	}
@@ -2777,6 +2777,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 
 	renderPasses[DEFAULT_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
 	renderPasses[DEFAULT_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+	renderPasses[DEFAULT_RENDER_PASS_ID].msaaSamples = msaaSamples;
 
 	// createFramebuffers for default render pass
 	ASSERT(!swapchainImageView.empty(), "No swapchain image views?");
@@ -2953,6 +2954,7 @@ void VkRoot::createDepthPasses(vk::Format depthFormat)
 
 	renderPasses[DEPTH_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
 	renderPasses[DEPTH_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+	renderPasses[DEPTH_RENDER_PASS_ID].msaaSamples = vk::SampleCountFlagBits::e1;
 
 	if (debugUtilsExtEnabled)
 	{
@@ -3131,6 +3133,7 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 
 	renderPasses[SCENE_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
 	renderPasses[SCENE_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+	renderPasses[SCENE_RENDER_PASS_ID].msaaSamples = msaaSamples;
 
 	if (debugUtilsExtEnabled)
 	{
@@ -5402,7 +5405,7 @@ void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notexture
 	{
 		// Must build this pipeline for a different render pass
 		auto& renderPass = renderPasses[currentRenderPassId];
-		newPSO = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);
+		newPSO = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
 		pipelineInfo.renderPassPSO[currentRenderPassId] = newPSO;
 	}
 	if (currentPSO != newPSO)
@@ -6031,7 +6034,7 @@ bool VkRoot::setShadowConstants(gfx_api::shadow_constants newValues)
 			if (pipeline->hasSpecializationConstant_ShadowConstants)
 			{
 				buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(pipeline);
-				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);
+				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
 			}
 		}
 	}

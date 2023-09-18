@@ -668,6 +668,7 @@ struct VkRoot final : gfx_api::context
 		vk::RenderPass rp;
 		std::shared_ptr<VkhRenderPassCompat> rp_compat_info;
 		std::vector<vk::Framebuffer> fbo;
+		vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1;
 		size_t identifier;
 
 		RenderPassDetails(size_t _identifier)
