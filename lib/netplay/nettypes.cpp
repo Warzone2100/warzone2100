@@ -430,6 +430,11 @@ bool NETisMessageReady(NETQUEUE queue)
 	return receiveQueue(queue)->haveMessage();
 }
 
+size_t NETincompleteMessageDataBuffered(NETQUEUE queue)
+{
+	return receiveQueue(queue)->currentIncompleteDataBuffered();
+}
+
 NetMessage const *NETgetMessage(NETQUEUE queue)
 {
 	return &receiveQueue(queue)->getMessage();

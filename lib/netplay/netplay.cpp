@@ -268,9 +268,35 @@ static char externalIPAddress[40];
  * Used for connections with clients.
  */
 #define NET_PING_TMP_PING_CHALLENGE_SIZE 128
-static std::array<std::vector<uint8_t>, MAX_TMP_SOCKETS> tmp_challenges{};
+
+struct TmpSocketInfo
+{
+	std::string ip;
+	std::chrono::steady_clock::time_point connectTime;
+	char buffer[10] = {'\0'};
+	size_t usedBuffer = 0;
+	std::vector<uint8_t> connectChallenge;
+	enum class TmpConnectState
+	{
+		None,
+		PendingInitialConnect,
+		PendingJoinRequest
+	};
+	TmpConnectState connectState;
+
+	void reset()
+	{
+		ip.clear();
+		connectTime = std::chrono::steady_clock::time_point();
+		memset(buffer, 0, sizeof(buffer));
+		usedBuffer = 0;
+		connectChallenge.clear();
+		connectState = TmpConnectState::None;
+	}
+};
+
 static Socket *tmp_socket[MAX_TMP_SOCKETS] = { nullptr };  ///< Sockets used to talk to clients which have not yet been assigned a player number (host only).
-static std::array<std::chrono::steady_clock::time_point, MAX_TMP_SOCKETS> tmp_connectTime{};
+static std::array<TmpSocketInfo, MAX_TMP_SOCKETS> tmp_connectState;
 static std::unordered_map<std::string, size_t> tmp_pendingIPs;
 static lru11::Cache<std::string, size_t> tmp_badIPs(512, 64);
 
@@ -3685,8 +3711,7 @@ static void NETcloseTempSocket(unsigned int i)
 	SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 	socketClose(tmp_socket[i]);
 	tmp_socket[i] = nullptr;
-	tmp_challenges[i].clear();
-	tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+	tmp_connectState[i].reset();
 	auto it = tmp_pendingIPs.find(rIP);
 	if (it != tmp_pendingIPs.end())
 	{
@@ -3709,7 +3734,6 @@ static void NETallowJoining()
 	int32_t result;
 	bool connectFailed = true;
 	uint32_t major, minor;
-	ssize_t recv_result = 0;
 
 	if (allow_joining == false)
 	{
@@ -3759,13 +3783,9 @@ static void NETallowJoining()
 			return;
 		}
 		// FIXME: I guess initialization of allowjoining is here now... - FlexCoral
-		for (auto& challenge : tmp_challenges)
+		for (auto& tmpState : tmp_connectState)
 		{
-			challenge.clear();
-		}
-		for (auto& connectTime : tmp_connectTime)
-		{
-			connectTime = std::chrono::steady_clock::time_point();
+			tmpState.reset();
 		}
 		tmp_pendingIPs.clear();
 		// NOTE: Do *NOT* call tmp_badIPs.clear() here - we want to preserve it until quit
@@ -3781,13 +3801,11 @@ static void NETallowJoining()
 	}
 	if (i == MAX_TMP_SOCKETS)
 	{
-		// this should *never* happen, it would mean we are going to reuse a socket already in use.
-		debug(LOG_ERROR, "all temp sockets are used up!");
-		return;
+		debug(LOG_NET, "all temp sockets are currently used up!");
 	}
 
-	// See if there's an incoming connection
-	if (tmp_socket[i] == nullptr // Make sure that we're not out of sockets
+	// See if there's an incoming connection (if we have space to handle it!)
+	if (i < MAX_TMP_SOCKETS && tmp_socket[i] == nullptr // Make sure that we're not out of sockets
 	    && (tmp_socket[i] = socketAccept(tcp_socket)) != nullptr)
 	{
 		NETinitQueue(NETnetTmpQueue(i));
@@ -3797,124 +3815,13 @@ static void NETallowJoining()
 		connectFailed = quickRejectConnection(rIP);
 		tmp_pendingIPs[rIP]++;
 
-		char buffer[10] = {'\0'};
-		char *p_buffer = buffer;
+		std::string rIPLogEntry = "Incoming connection from:";
+		rIPLogEntry.append(rIP);
+		NETlogEntry(rIPLogEntry.c_str(), SYNC_FLAG, i);
 
-		// We check for socket activity (connection), and then we check if we got data, since it is possible to have a connection
-		// and have no data waiting.
-		if (!connectFailed
-			&& checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
-		    && socketReadReady(tmp_socket[i])
-		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 8))
-		    && recv_result != SOCKET_ERROR)
-		{
-			std::string rIPLogEntry = "Incoming connection from:";
-			rIPLogEntry.append(rIP);
-			NETlogEntry(rIPLogEntry.c_str(), SYNC_FLAG, i);
-			// A 2.3.7 client sends a "list" command first, just drop the connection.
-			if (strcmp(buffer, "list") == 0)
-			{
-				debug(LOG_INFO, "An old client tried to connect, closing the socket.");
-				NETlogEntry("Dropping old client.", SYNC_FLAG, i);
-				NETlogEntry("Invalid (old)game version", SYNC_FLAG, i);
-				NETaddSessionBanBadIP(rIP.c_str());
-				connectFailed = true;
-			}
-			else
-			{
-				// New clients send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
-				// Check these numbers with our own.
-
-				memcpy(&major, p_buffer, sizeof(uint32_t));
-				major = ntohl(major);
-				p_buffer += sizeof(int32_t);
-				memcpy(&minor, p_buffer, sizeof(uint32_t));
-				minor = ntohl(minor);
-
-				if (major == 0 && minor == 0)
-				{
-					// special case for lobby server "alive" check
-					// expects a special response that includes the gameId
-					const char ResponseStart[] = "WZLR";
-					char buf[(sizeof(char) * 4) + sizeof(uint32_t) + sizeof(uint32_t)] = { 0 };
-					char *pLobbyRespBuffer = buf;
-					auto push32 = [&pLobbyRespBuffer](uint32_t value) {
-						uint32_t swapped = htonl(value);
-						memcpy(pLobbyRespBuffer, &swapped, sizeof(swapped));
-						pLobbyRespBuffer += sizeof(swapped);
-					};
-
-					// Copy response prefix chars ("WZLR")
-					memcpy(pLobbyRespBuffer, ResponseStart, sizeof(char) * strlen(ResponseStart));
-					pLobbyRespBuffer += sizeof(char) * strlen(ResponseStart);
-
-					// Copy version of response
-					const uint32_t response_version = 1;
-					push32(response_version);
-
-					// Copy gameId (as 32bit large big endian number)
-					push32(gamestruct.gameId);
-
-					writeAll(tmp_socket[i], buf, sizeof(buf));
-					connectFailed = true;
-				}
-				else if (NETisCorrectVersion(major, minor))
-				{
-					result = htonl(ERROR_NOERROR);
-					memcpy(&buffer, &result, sizeof(result));
-					writeAll(tmp_socket[i], &buffer, sizeof(result));
-					socketBeginCompression(tmp_socket[i]);
-
-					// Connection is successful.
-					connectFailed = false;
-
-					// Give client a challenge to solve before connecting
-					tmp_challenges[i].resize(NET_PING_TMP_PING_CHALLENGE_SIZE);
-					genSecRandomBytes(tmp_challenges[i].data(), tmp_challenges[i].size());
-					NETbeginEncode(NETnetTmpQueue(i), NET_PING);
-					NETbytes(&(tmp_challenges[i]));
-					NETend();
-				}
-				else
-				{
-					debug(LOG_ERROR, "Received an invalid version \"%" PRIu32 ".%" PRIu32 "\".", major, minor);
-					result = htonl(ERROR_WRONGVERSION);
-					memcpy(&buffer, &result, sizeof(result));
-					writeAll(tmp_socket[i], &buffer, sizeof(result));
-					NETlogEntry("Invalid game version", SYNC_FLAG, i);
-					NETaddSessionBanBadIP(rIP.c_str());
-					connectFailed = true;
-				}
-				if ((!connectFailed) && (!NET_HasAnyOpenSlots()))
-				{
-					// early player count test, in case they happen to get in before updates.
-					// Tell the player that we are completely full.
-					uint8_t rejected = ERROR_FULL;
-					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
-					NETuint8_t(&rejected);
-					NETend();
-					NETflush();
-					connectFailed = true;
-				}
-			}
-		}
-		else
-		{
-			debug(LOG_NET, "Failed to process joining, socket not ready or no data, recv_result is :%d", (int)recv_result);
-			connectFailed = true;
-		}
-
-		// Remove a failed connection.
-		if (connectFailed)
-		{
-			debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
-			NETcloseTempSocket(i);
-		}
-		else
-		{
-			// on initial connect success...
-			tmp_connectTime[i] = std::chrono::steady_clock::now();
-		}
+		tmp_connectState[i].ip = rIP;
+		tmp_connectState[i].connectTime = std::chrono::steady_clock::now();
+		tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::PendingInitialConnect;
 	}
 
 	if (checkSockets(tmp_socket_set, NET_READ_TIMEOUT) > 0)
@@ -3926,10 +3833,133 @@ static void NETallowJoining()
 				continue;
 			}
 
-			if (socketReadReady(tmp_socket[i]))
+			if (!socketReadReady(tmp_socket[i]))
+			{
+				continue;
+			}
+
+			if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingInitialConnect)
+			{
+				char *p_buffer = tmp_connectState[i].buffer;
+
+				ssize_t sizeRead = readNoInt(tmp_socket[i], p_buffer + tmp_connectState[i].usedBuffer, 8 - tmp_connectState[i].usedBuffer);
+				if (sizeRead != SOCKET_ERROR)
+				{
+					tmp_connectState[i].usedBuffer += sizeRead;
+				}
+
+				// A 2.3.7 client sends a "list" command first, just drop the connection.
+				if (tmp_connectState[i].usedBuffer >= 5 && (strcmp(tmp_connectState[i].buffer, "list") == 0))
+				{
+					debug(LOG_INFO, "An old client tried to connect, closing the socket.");
+					NETlogEntry("Dropping old client.", SYNC_FLAG, i);
+					NETlogEntry("Invalid (old)game version", SYNC_FLAG, i);
+					NETaddSessionBanBadIP(tmp_connectState[i].ip);
+					connectFailed = true;
+				}
+
+				if (tmp_connectState[i].usedBuffer >= 8)
+				{
+					// New clients send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
+					// Check these numbers with our own.
+
+					memcpy(&major, p_buffer, sizeof(uint32_t));
+					major = ntohl(major);
+					p_buffer += sizeof(int32_t);
+					memcpy(&minor, p_buffer, sizeof(uint32_t));
+					minor = ntohl(minor);
+
+					if (major == 0 && minor == 0)
+					{
+						// special case for lobby server "alive" check
+						// expects a special response that includes the gameId
+						const char ResponseStart[] = "WZLR";
+						char buf[(sizeof(char) * 4) + sizeof(uint32_t) + sizeof(uint32_t)] = { 0 };
+						char *pLobbyRespBuffer = buf;
+						auto push32 = [&pLobbyRespBuffer](uint32_t value) {
+							uint32_t swapped = htonl(value);
+							memcpy(pLobbyRespBuffer, &swapped, sizeof(swapped));
+							pLobbyRespBuffer += sizeof(swapped);
+						};
+
+						// Copy response prefix chars ("WZLR")
+						memcpy(pLobbyRespBuffer, ResponseStart, sizeof(char) * strlen(ResponseStart));
+						pLobbyRespBuffer += sizeof(char) * strlen(ResponseStart);
+
+						// Copy version of response
+						const uint32_t response_version = 1;
+						push32(response_version);
+
+						// Copy gameId (as 32bit large big endian number)
+						push32(gamestruct.gameId);
+
+						writeAll(tmp_socket[i], buf, sizeof(buf));
+						connectFailed = true;
+					}
+					else if (NETisCorrectVersion(major, minor))
+					{
+						result = htonl(ERROR_NOERROR);
+						memcpy(&tmp_connectState[i].buffer, &result, sizeof(result));
+						writeAll(tmp_socket[i], &tmp_connectState[i].buffer, sizeof(result));
+						socketBeginCompression(tmp_socket[i]);
+
+						// Connection is successful.
+						connectFailed = false;
+
+						// Give client a challenge to solve before connecting
+						tmp_connectState[i].connectChallenge.resize(NET_PING_TMP_PING_CHALLENGE_SIZE);
+						genSecRandomBytes(tmp_connectState[i].connectChallenge.data(), tmp_connectState[i].connectChallenge.size());
+						NETbeginEncode(NETnetTmpQueue(i), NET_PING);
+						NETbytes(&(tmp_connectState[i].connectChallenge));
+						NETend();
+					}
+					else
+					{
+						debug(LOG_ERROR, "Received an invalid version \"%" PRIu32 ".%" PRIu32 "\".", major, minor);
+						result = htonl(ERROR_WRONGVERSION);
+						memcpy(&tmp_connectState[i].buffer, &result, sizeof(result));
+						writeAll(tmp_socket[i], &tmp_connectState[i].buffer, sizeof(result));
+						NETlogEntry("Invalid game version", SYNC_FLAG, i);
+						NETaddSessionBanBadIP(tmp_connectState[i].ip);
+						connectFailed = true;
+					}
+					if ((!connectFailed) && (!NET_HasAnyOpenSlots()))
+					{
+						// early player count test, in case they happen to get in before updates.
+						// Tell the player that we are completely full.
+						uint8_t rejected = ERROR_FULL;
+						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+						NETuint8_t(&rejected);
+						NETend();
+						NETflush();
+						connectFailed = true;
+					}
+				}
+				else
+				{
+					// Continue to wait (until timeout) for the full initial connect message
+					continue;
+				}
+
+				// Remove a failed connection.
+				if (connectFailed)
+				{
+					debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
+					NETcloseTempSocket(i);
+				}
+				else
+				{
+					// on initial connect success...
+					tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::PendingJoinRequest;
+					tmp_connectState[i].connectTime = std::chrono::steady_clock::now(); // reset connect time
+				}
+				continue;
+			}
+			else if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingJoinRequest)
 			{
 				uint8_t buffer[NET_BUFFER_SIZE];
 				ssize_t size = readNoInt(tmp_socket[i], buffer, sizeof(buffer));
+				uint8_t rejected = 0;
 
 				if ((size == 0 && socketReadDisconnected(tmp_socket[i])) || size == SOCKET_ERROR)
 				{
@@ -3950,11 +3980,30 @@ static void NETallowJoining()
 
 				NETinsertRawData(NETnetTmpQueue(i), buffer, size);
 
-				if (NETisMessageReady(NETnetTmpQueue(i)) && NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
+				if (!NETisMessageReady(NETnetTmpQueue(i)))
+				{
+					// need to wait for a full and complete join message
+					// sanity check
+					if (NETincompleteMessageDataBuffered(NETnetTmpQueue(i)) > (NET_BUFFER_SIZE * 16))	// something definitely big enough to encompass the expected message(s) at this point
+					{
+						// client is sending data that doesn't appear to be a properly formatted message - cut it off
+						rejected = ERROR_WRONGDATA;
+						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+						NETuint8_t(&rejected);
+						NETend();
+						NETflush();
+						NETpop(NETnetTmpQueue(i));
+
+						NETcloseTempSocket(i);
+						sync_counter.cantjoin++;
+						continue;
+					}
+				}
+
+				if (NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
 				{
 					uint8_t j;
 					uint8_t index;
-					uint8_t rejected = 0;
 					optional<uint32_t> tmp = nullopt;
 
 					char name[64];
@@ -3975,7 +4024,7 @@ static void NETallowJoining()
 					NETend();
 
 					// verify signature that player is joining with, reject him if he can not do that
-					if (!identity.fromBytes(pkey, EcKey::Public) || !identity.verify(challengeResponse, tmp_challenges[i].data(), tmp_challenges[i].size()))
+					if (!identity.fromBytes(pkey, EcKey::Public) || !identity.verify(challengeResponse, tmp_connectState[i].connectChallenge.data(), tmp_connectState[i].connectChallenge.size()))
 					{
 						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
 
@@ -3988,11 +4037,10 @@ static void NETallowJoining()
 
 						NETcloseTempSocket(i);
 						sync_counter.cantjoin++;
-						return;
+						continue;
 					}
 
-					tmp_challenges[i].clear();
-					tmp_connectTime[i] = std::chrono::steady_clock::time_point();
+					tmp_connectState[i].reset();
 
 					if ((playerType == NET_JOIN_SPECTATOR) || (int)NetPlay.playercount <= gamestruct.desc.dwMaxPlayers)
 					{
@@ -4014,7 +4062,7 @@ static void NETallowJoining()
 
 						NETcloseTempSocket(i);
 						sync_counter.cantjoin++;
-						return;
+						continue;
 					}
 
 					NETpop(NETnetTmpQueue(i));
@@ -4081,7 +4129,7 @@ static void NETallowJoining()
 						SocketSet_DelSocket(socket_set, connected_bsocket[index]);
 						socketClose(connected_bsocket[index]);
 						connected_bsocket[index] = nullptr;
-						return;
+						continue;
 					}
 
 					NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
@@ -4161,9 +4209,11 @@ static void NETallowJoining()
 			continue;
 		}
 
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentSteadTime - tmp_connectTime[i]).count() > 5000)
+		std::chrono::milliseconds::rep timeout = (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingInitialConnect) ? 2500 : 3000;
+
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentSteadTime - tmp_connectState[i].connectTime).count() > timeout)
 		{
-			debug(LOG_ERROR, "freeing temp socket %p due to timeout - couldn't create player!", static_cast<void *>(tmp_socket[i]));
+			debug(LOG_INFO, "Freeing temp socket %p due to initial connection timeout (IP: %s)", static_cast<void *>(tmp_socket[i]), tmp_connectState[i].ip.c_str());
 
 			uint8_t rejected = 0;
 			rejected = ERROR_WRONGDATA;
@@ -4171,7 +4221,11 @@ static void NETallowJoining()
 			NETuint8_t(&rejected);
 			NETend();
 			NETflush();
-			NETpop(NETnetTmpQueue(i));
+			auto tmpQueue = NETnetTmpQueue(i);
+			if (NETisMessageReady(tmpQueue))
+			{
+				NETpop(tmpQueue);
+			}
 
 			std::string rIP = getSocketTextAddress(tmp_socket[i]);
 			NETaddSessionBanBadIP(rIP);

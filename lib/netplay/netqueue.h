@@ -122,6 +122,8 @@ public:
 	bool replaceCurrentWithDecrypted(NetMessage &&decryptedMessage);
 	void popMessage();                                                 ///< Pops the last returned message.
 
+	size_t currentIncompleteDataBuffered() const;
+
 	inline size_t numPendingGameTimeUpdateMessages() const
 	{
 		return pendingGameTimeUpdateMessages;
