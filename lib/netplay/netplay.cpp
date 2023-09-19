@@ -4075,7 +4075,10 @@ static void NETallowJoining()
 					// Copy player's IP address.
 					sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(connected_bsocket[index]));
 
-					if (onBanList(NetPlay.players[index].IPtextAddress))
+					auto connectPermissions = netPermissionsCheck_Connect(identity);
+
+					if ((connectPermissions.has_value() && connectPermissions.value() == ConnectPermissions::Blocked)
+						|| (!connectPermissions.has_value() && onBanList(NetPlay.players[index].IPtextAddress)))
 					{
 						char buf[256] = {'\0'};
 						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP: %s", NetPlay.players[index].IPtextAddress);
