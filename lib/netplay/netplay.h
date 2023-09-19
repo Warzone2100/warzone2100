@@ -346,18 +346,11 @@ struct NETPLAY
 	NETPLAY();
 };
 
-struct PLAYER_IP
-{
-	char	pname[40] = {};
-	char	IPAddress[40] = {};
-};
-#define MAX_BANS 1024
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
 extern NETPLAY NetPlay;
 extern SYNC_COUNTER sync_counter;
-std::vector<PLAYER_IP> NETgetIPBanList();
 // update flags
 extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
@@ -565,8 +558,5 @@ private:
 	std::unique_ptr<PLAYER> detached = nullptr;
 	uint32_t index;
 };
-
-void addIPToBanList(const char *ip, const char *name);
-bool removeIPFromBanList(const char *ip);
 
 #endif

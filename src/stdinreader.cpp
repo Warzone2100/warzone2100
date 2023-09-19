@@ -21,7 +21,7 @@
 
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/wzapp.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/netpermissions.h"
 #include "multiint.h"
 #include "multistat.h"
 #include "multilobbycommands.h"

@@ -28,6 +28,7 @@
 
 #include "netlog.h"
 #include "netplay.h"
+#include "netpermissions.h"
 
 // ////////////////////////////////////////////////////////////////////////
 // Logging for debug only
