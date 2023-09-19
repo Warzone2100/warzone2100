@@ -76,6 +76,15 @@ If state of interface buffer is unknown and/or corrupted, interface can send a f
 	Find and kick (with adding to ip banlist) player with specified ip
 	(result of `WZEVENT: bancheck:` from outside)
 
+* `permissions set connect:allow <pkey|hash>`\
+	Allows player with the specified identity to connect (bypassing any ip bans)
+
+* `permissions set connect:block <pkey|hash>`\
+	Blocks the specified identity from connecting. Kicks any already-connected player with this identity.
+
+* `permissions unset connect <pkey|hash>`\
+	Removes any previously-set connect permission (allow / block) for the specified identity
+
 * `chat bcast <message [^\n]>`\
 	Send system level message to the room from stdin.
 
