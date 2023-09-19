@@ -465,6 +465,59 @@ int cmdOutputThreadFunc(void *)
 	return 0;
 }
 
+static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& kickReasonStrCopy, bool banPlayer)
+{
+	bool foundActivePlayer = false;
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		auto player = NetPlay.players[i];
+		if (!isHumanPlayer(i))
+		{
+			continue;
+		}
+
+		bool kickThisPlayer = false;
+		auto& identity = getMultiStats(i).identity;
+		if (identity.empty())
+		{
+			if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
+			{
+				kickThisPlayer = true;
+			}
+			else
+			{
+				continue;
+			}
+		}
+
+		if (!kickThisPlayer)
+		{
+			// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
+			std::string checkIdentityHash = identity.publicHashString();
+			std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+			if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
+			{
+				kickThisPlayer = true;
+			}
+		}
+
+		if (kickThisPlayer)
+		{
+			if (i == NetPlay.hostPlayer)
+			{
+				wz_command_interface_output("WZCMD error: Can't kick host!\n");
+				continue;
+			}
+			kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
+			auto KickMessage = astringf("Player %s was kicked by the administrator.", player.name);
+			sendRoomSystemMessage(KickMessage.c_str());
+			foundActivePlayer = true;
+		}
+	}
+
+	return foundActivePlayer;
+}
+
 int cmdInputThreadFunc(void *)
 {
 	fseek(stdin, 0, SEEK_END);
@@ -607,57 +660,61 @@ int cmdInputThreadFunc(void *)
 				std::string kickReasonStrCopy = (r >= 2) ? kickreasonstr : "You have been kicked by the administrator.";
 				convertEscapedNewlines(kickReasonStrCopy);
 				wzAsyncExecOnMainThread([playerIdentityStrCopy, kickReasonStrCopy] {
-					bool foundActivePlayer = false;
-					for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-					{
-						auto player = NetPlay.players[i];
-						if (!isHumanPlayer(i))
-						{
-							continue;
-						}
-
-						bool kickThisPlayer = false;
-						auto& identity = getMultiStats(i).identity;
-						if (identity.empty())
-						{
-							if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
-							{
-								kickThisPlayer = true;
-							}
-							else
-							{
-								continue;
-							}
-						}
-
-						if (!kickThisPlayer)
-						{
-							// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
-							std::string checkIdentityHash = identity.publicHashString();
-							std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-							if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
-							{
-								kickThisPlayer = true;
-							}
-						}
-
-						if (kickThisPlayer)
-						{
-							if (i == NetPlay.hostPlayer)
-							{
-								wz_command_interface_output("WZCMD error: Can't kick host!\n");
-								continue;
-							}
-							kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, false);
-							auto KickMessage = astringf("Player %s was kicked by the administrator.", player.name);
-							sendRoomSystemMessage(KickMessage.c_str());
-							foundActivePlayer = true;
-						}
-					}
+					bool foundActivePlayer = kickActivePlayerWithIdentity(playerIdentityStrCopy, kickReasonStrCopy, false);
 					if (!foundActivePlayer)
 					{
 						wz_command_interface_output("WZCMD error: Failed to find currently-connected player with matching public key or hash?\n");
 					}
+				});
+			}
+		}
+		else if(!strncmpl(line, "permissions set connect:allow "))
+		{
+			char playeridentitystring[1024] = {0};
+			int r = sscanf(line, "permissions set connect:allow %1023[^\n]s", playeridentitystring);
+			if (r != 1 && r != 2)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get player public key or hash!\n");
+			}
+			else
+			{
+				std::string playerIdentityStrCopy(playeridentitystring);
+				wzAsyncExecOnMainThread([playerIdentityStrCopy] {
+					netPermissionsSet_Connect(playerIdentityStrCopy, ConnectPermissions::Allowed);
+				});
+			}
+		}
+		else if(!strncmpl(line, "permissions set connect:block "))
+		{
+			char playeridentitystring[1024] = {0};
+			int r = sscanf(line, "permissions set connect:block %1023[^\n]s", playeridentitystring);
+			if (r != 1 && r != 2)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get player public key or hash!\n");
+			}
+			else
+			{
+				std::string playerIdentityStrCopy(playeridentitystring);
+				std::string kickReasonStrCopy = "You have been kicked by the administrator.";
+				wzAsyncExecOnMainThread([playerIdentityStrCopy, kickReasonStrCopy] {
+					netPermissionsSet_Connect(playerIdentityStrCopy, ConnectPermissions::Blocked);
+					kickActivePlayerWithIdentity(playerIdentityStrCopy, kickReasonStrCopy, true);
+				});
+			}
+		}
+		else if(!strncmpl(line, "permissions unset connect "))
+		{
+			char playeridentitystring[1024] = {0};
+			int r = sscanf(line, "permissions unset connect %1023[^\n]s", playeridentitystring);
+			if (r != 1 && r != 2)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get player public key or hash!\n");
+			}
+			else
+			{
+				std::string playerIdentityStrCopy(playeridentitystring);
+				wzAsyncExecOnMainThread([playerIdentityStrCopy] {
+					netPermissionsUnset_Connect(playerIdentityStrCopy);
 				});
 			}
 		}
