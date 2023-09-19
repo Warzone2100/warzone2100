@@ -42,14 +42,13 @@
 #include <thread>
 #include <atomic>
 #include <limits>
-#include <deque>
 #include <sodium.h>
-#include <re2/re2.h>
 
 #include "netplay.h"
 #include "netlog.h"
 #include "netreplay.h"
 #include "netsocket.h"
+#include "netpermissions.h"
 
 #include <miniwget.h>
 #if (defined(__GNUC__) || defined(__clang__)) && !defined(__INTEL_COMPILER)
@@ -124,9 +123,7 @@ static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leavi
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETallowJoining();
 static void recvDebugSync(NETQUEUE queue);
-static bool onBanList(const char *ip);
 static void NETfixPlayerCount();
-static bool isLoopbackIP(const char *ip);
 /*
  * Network globals, these are part of the new network API
  */
@@ -233,7 +230,6 @@ private:
 // Variables
 
 NETPLAY	NetPlay;
-std::deque<PLAYER_IP> IPlist;
 static bool		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
@@ -1582,7 +1578,7 @@ int NETshutdown()
 		NetPlay.isUPNP_ERROR = false;
 	}
 	NETstopLogging();
-	IPlist.clear();
+	NETpermissionsShutdown();
 	if (NetPlay.MOTD)
 	{
 		free(NetPlay.MOTD);
@@ -4236,31 +4232,6 @@ static void NETallowJoining()
 	}
 }
 
-void NETloadBanList() {
-	char BanListPath[4096] = {0};
-	strncpy(BanListPath, PHYSFS_getWriteDir(), 4095);
-	size_t BanListAppendFname = strlen(BanListPath);
-	strncpy(BanListPath+BanListAppendFname, "/banlist.txt", 4095-BanListAppendFname);
-	FILE* f = fopen(BanListPath, "r");
-	if(f == NULL) {
-		return;
-	}
-	debug(LOG_INFO, "Reading banlist file: [%s]\n", BanListPath);
-	char BanStringBuf[2048] = {0};
-	char ToBanIP[256] = {0};
-	char ToBanName[256] = {0};
-	while(fgets(BanStringBuf, sizeof(BanStringBuf)-1, f)) {
-		if(sscanf(BanStringBuf, "%255s %255[^\n]", ToBanIP, ToBanName) != 2) {
-			if(strlen(BanStringBuf) > 2) {
-				debug(LOG_ERROR, "Error reading banlist file!\n");
-			}
-		} else {
-			addIPToBanList(ToBanIP, ToBanName);
-		}
-	}
-	return;
-}
-
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost,
                  uint32_t gameType, uint32_t two, uint32_t three, uint32_t four,
                  UDWORD plyrs)	// # of players.
@@ -4322,8 +4293,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 
 	NetPlay.isHost = true;
 	NETlogEntry("Hosting game, resetting ban list.", SYNC_FLAG, 0);
-	IPlist.clear();
-	NETloadBanList();
+	NETpermissionsInit();
 	playerManagementRecord.clear();
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
@@ -5550,91 +5520,4 @@ const char *messageTypeToString(unsigned messageType_)
 	// End of replay messages.
 	}
 	return "(UNUSED)";
-}
-
-static bool isLoopbackIP(const char *ip)
-{
-	if (!ip) return false;
-	if (strncmp(ip, "127.", 4) == 0)
-	{
-		return true;
-	}
-	if (strcmp(ip, "::1") == 0)
-	{
-		return true;
-	}
-	if (strcmp(ip, "0000:0000:0000:0000:0000:0000:0000:0001") == 0)
-	{
-		return true;
-	}
-	return false;
-}
-
-/**
- * Check if ip is on the banned list.
- * \param ip IP address converted to text
- */
-static bool onBanList(const char *ip)
-{
-	if (IPlist.empty())
-	{
-		return false;    //if no bans are added, then don't check.
-	}
-	if (isLoopbackIP(ip))
-	{
-		return false;	// ignore loopback IPs
-	}
-	for (const auto& entry : IPlist)
-	{
-		if (RE2::FullMatch(ip, entry.IPAddress))
-		{
-			return true;
-		}
-	}
-	wz_command_interface_output("WZEVENT: bancheck: %s\n", ip);
-	return false;
-}
-
-/**
- * Create the banned list.
- * \param ip IP address in text format
- * \param name Name of the player we are banning
- */
-void addIPToBanList(const char *ip, const char *name)
-{
-	if (isLoopbackIP(ip))
-	{
-		return;
-	}
-	PLAYER_IP newIP;
-	sstrcpy(newIP.IPAddress, ip);
-	sstrcpy(newIP.pname, name);
-	IPlist.push_back(newIP);
-	sync_counter.banned++;
-	if (IPlist.size() > MAX_BANS)
-	{
-		debug(LOG_INFO, "We have exceeded %d bans, clearing oldest", MAX_BANS);
-		IPlist.pop_front();
-	}
-}
-
-bool removeIPFromBanList(const char *ip)
-{
-	auto it = std::find_if(IPlist.begin(), IPlist.end(), [ip](const PLAYER_IP& ipInfo) -> bool {
-		return strcmp(ipInfo.IPAddress, ip) == 0;
-	});
-	if (it == IPlist.end())
-	{
-		return false;
-	}
-	IPlist.erase(it);
-	return true;
-}
-
-std::vector<PLAYER_IP> NETgetIPBanList()
-{
-	std::vector<PLAYER_IP> vecCopy;
-	vecCopy.reserve(IPlist.size());
-	vecCopy.assign(IPlist.begin(), IPlist.end());
-	return vecCopy;
 }

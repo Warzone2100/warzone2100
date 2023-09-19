@@ -53,6 +53,7 @@
 
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/netpermissions.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/button.h"
 #include "lib/widget/scrollablelist.h"
