@@ -27,6 +27,8 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+class EcKey;
+
 struct PLAYER_IP
 {
 	char	pname[40] = {};
@@ -42,5 +44,19 @@ bool removeIPFromBanList(const char *ip);
 bool onBanList(const char *ip);
 bool isLoopbackIP(const char *ip);
 std::vector<PLAYER_IP> NETgetIPBanList();
+
+enum class ConnectPermissions
+{
+	Blocked,
+	Allowed
+};
+
+// identityStr: Either the the (b64) public key (preferred) or the public hash
+void netPermissionsSet_Connect(const std::string& identityStr, ConnectPermissions perm);
+bool netPermissionsUnset_Connect(const std::string& identityStr);
+bool netPermissionsRemoveAll(const std::string& identityStr);
+
+optional<ConnectPermissions> netPermissionsCheck_Connect(const std::string& identityStr);
+optional<ConnectPermissions> netPermissionsCheck_Connect(const EcKey& identity);
 
 #endif // _netpermissions_h

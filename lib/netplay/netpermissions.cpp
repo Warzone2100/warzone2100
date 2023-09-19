@@ -37,7 +37,13 @@
 std::deque<PLAYER_IP> IPlist;
 bool loadedUserConfigBanList = false;
 
-std::unordered_map<std::string, IdentityListStatus> identityPermissions;
+struct IdentityPermissions
+{
+	optional<ConnectPermissions> connectPermissions;
+
+	bool hasAnyPermissionsSet();
+};
+std::unordered_map<std::string, IdentityPermissions> identityPermissions;
 
 // ////////////////////////////////////////////////////////////////////////
 
@@ -170,3 +176,65 @@ std::vector<PLAYER_IP> NETgetIPBanList()
 	return vecCopy;
 }
 
+// ////////////////////////////////////////////////////////////////////////
+
+bool IdentityPermissions::hasAnyPermissionsSet()
+{
+	return connectPermissions.has_value();
+}
+
+// identityStr: Either the the (b64) public key (preferred) or the public hash
+void netPermissionsSet_Connect(const std::string& identityStr, ConnectPermissions perm)
+{
+	if (identityStr.empty()) { return; }
+	identityPermissions[identityStr].connectPermissions = perm;
+}
+
+bool netPermissionsUnset_Connect(const std::string& identityStr)
+{
+	auto it = identityPermissions.find(identityStr);
+	if (it == identityPermissions.end())
+	{
+		return false;
+	}
+	if (!it->second.connectPermissions.has_value())
+	{
+		return false;
+	}
+	it->second.connectPermissions.reset();
+	if (!it->second.hasAnyPermissionsSet())
+	{
+		identityPermissions.erase(it);
+	}
+	return true;
+}
+
+bool netPermissionsRemoveAll(const std::string& identityStr)
+{
+	return identityPermissions.erase(identityStr) > 0;
+}
+
+optional<ConnectPermissions> netPermissionsCheck_Connect(const std::string& identityStr)
+{
+	auto it = identityPermissions.find(identityStr);
+	if (it == identityPermissions.end())
+	{
+		return nullopt;
+	}
+	return it->second.connectPermissions;
+}
+
+optional<ConnectPermissions> netPermissionsCheck_Connect(const EcKey& identity)
+{
+	// Check both the (b64) public key and the public hash
+	// (b64 public key always takes precedence)
+	std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+	auto result = netPermissionsCheck_Connect(checkPublicKeyB64);
+	if (result.has_value())
+	{
+		return result;
+	}
+	std::string checkIdentityHash = identity.publicHashString();
+	result = netPermissionsCheck_Connect(checkIdentityHash);
+	return result;
+}
