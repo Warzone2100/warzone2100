@@ -218,7 +218,7 @@ private:
 	#define MAX_DAMAGE_GLOW_ALPHA 100
 	inline uint8_t accumulatedDamageToTargetGlowAlpha(uint64_t accumulatedDamage, uint64_t totalGroupMaxHealth, uint64_t unitsKilled)
 	{
-		uint64_t damageVisualPercent = (accumulatedDamage * 100) / totalGroupMaxHealth;
+		uint64_t damageVisualPercent = (totalGroupMaxHealth > 0) ? ((accumulatedDamage * 100) / totalGroupMaxHealth) : 0;
 		if (unitsKilled > 0)
 		{
 			damageVisualPercent = 100;
