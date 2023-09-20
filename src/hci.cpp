@@ -3155,3 +3155,24 @@ bool intGetShouldShowRedundantDesign()
 {
 	return includeRedundantDesigns;
 }
+
+void intShowInterface()
+{
+	intAddReticule();
+	intShowPowerBar();
+	intShowGroupSelectionMenu();
+}
+
+void intHideInterface(bool forceHidePowerbar)
+{
+	intRemoveReticule();
+	if (forceHidePowerbar)
+	{
+		forceHidePowerBar();
+	}
+	else
+	{
+		intHidePowerBar();
+	}
+	intHideGroupSelectionMenu();
+}

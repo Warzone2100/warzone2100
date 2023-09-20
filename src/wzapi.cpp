@@ -2812,9 +2812,7 @@ wzapi::no_return_value wzapi::showReticuleWidget(WZAPI_PARAMS(int buttonId))
 //--
 wzapi::no_return_value wzapi::showInterface(WZAPI_NO_PARAMS)
 {
-	intAddReticule();
-	intShowPowerBar();
-	intShowGroupSelectionMenu();
+	intShowInterface();
 	return {};
 }
 
@@ -2824,9 +2822,7 @@ wzapi::no_return_value wzapi::showInterface(WZAPI_NO_PARAMS)
 //--
 wzapi::no_return_value wzapi::hideInterface(WZAPI_NO_PARAMS)
 {
-	intRemoveReticule();
-	intHidePowerBar();
-	intHideGroupSelectionMenu();
+	intHideInterface();
 	return {};
 }
 
