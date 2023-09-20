@@ -1788,82 +1788,8 @@ static const Vector2i aDirOffset[] =
 	Vector2i(1, 1),
 };
 
-// Flood fill a "continent".
-// TODO take into account scroll limits and update continents on scroll limit changes
-static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits, uint16_t MAPTILE::*varContinent)
-{
-	std::vector<Vector2i> open;
-	open.push_back(Vector2i(x, y));
-	mapTile(x, y)->*varContinent = continent;  // Set continent value
-
-	while (!open.empty())
-	{
-		// Pop the first open node off the list for this iteration
-		Vector2i pos = open.back();
-		open.pop_back();
-
-		// Add accessible neighbouring tiles to the open list
-		for (int i = 0; i < NUM_DIR; ++i)
-		{
-			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
-			Vector2i npos = pos + aDirOffset[i];
-
-			if (npos.x < 1 || npos.y < 1 || npos.x > mapWidth - 2 || npos.y > mapHeight - 2)
-			{
-				continue;
-			}
-			MAPTILE *psTile = mapTile(npos);
-
-			if (!(blockTile(npos.x, npos.y, AUX_MAP) & blockedBits) && psTile->*varContinent == 0)
-			{
-				open.push_back(npos);               // add to open list
-				psTile->*varContinent = continent;  // Set continent value
-			}
-		}
-	}
-}
-
-void mapFloodFillContinents()
-{
-	WZ_PROFILE_SCOPE(mapFloodFillContinents);
-	int x, y, limitedContinents = 0, hoverContinents = 0;
-
-	/* Clear continents */
-	for (y = 0; y < mapHeight; y++)
-	{
-		for (x = 0; x < mapWidth; x++)
-		{
-			MAPTILE *psTile = mapTile(x, y);
-
-			psTile->limitedContinent = 0;
-			psTile->hoverContinent = 0;
-		}
-	}
-
-	/* Iterate over the whole map, looking for unset continents */
-	for (y = 1; y < mapHeight - 2; y++)
-	{
-		for (x = 1; x < mapWidth - 2; x++)
-		{
-			MAPTILE *psTile = mapTile(x, y);
-
-			if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
-			{
-				mapFloodFill(x, y, 1 + limitedContinents++, WATER_BLOCKED | FEATURE_BLOCKED, &MAPTILE::limitedContinent);
-			}
-			else if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_PROPELLOR))
-			{
-				mapFloodFill(x, y, 1 + limitedContinents++, LAND_BLOCKED | FEATURE_BLOCKED, &MAPTILE::limitedContinent);
-			}
-
-			if (psTile->hoverContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_HOVER))
-			{
-				mapFloodFill(x, y, 1 + hoverContinents++, FEATURE_BLOCKED, &MAPTILE::hoverContinent);
-			}
-		}
-	}
-	debug(LOG_MAP, "Found %d limited and %d hover continents", limitedContinents, hoverContinents);
-}
+// Defined at fpath.cpp
+void mapFloodFillContinents();
 
 void tileSetFire(int32_t x, int32_t y, uint32_t duration)
 {

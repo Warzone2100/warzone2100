@@ -39,6 +39,8 @@
 #include "astar.h"
 
 #include "fpath.h"
+#include "path_continents.h"
+#include "profiling.h"
 
 // If the path finding system is shutdown or not
 static volatile bool fpathQuit = false;
@@ -81,6 +83,7 @@ std::list<PathfindContext> fpathContexts;
 static PATHRESULT fpathExecute(PATHJOB psJob);
 
 static PathMapCache pfMapCache;
+static PathContinents pathContinents;
 
 /** This runs in a separate thread */
 static int fpathThreadFunc(void *)
@@ -433,7 +436,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, unsigned id, int startX, in
 // Find a route for an DROID to a location in world coordinates
 FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
-	bool acceptNearest;
+	bool acceptNearest = true;
 	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 
 	// override for AI to blast our way through stuff
@@ -645,11 +648,19 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 		return false;
 	}
 
-	MAPTILE *origTile = worldTile(findNonblockingPosition(orig, propulsion).xy());
-	MAPTILE *destTile = worldTile(findNonblockingPosition(dest, propulsion).xy());
+	Position nonblockOrig = findNonblockingPosition(orig, propulsion);
+	Position nonblockDest = findNonblockingPosition(dest, propulsion);
+	MAPTILE *origTile = worldTile(nonblockOrig.xy());
+	MAPTILE *destTile = worldTile(nonblockDest.xy());
 
 	ASSERT_OR_RETURN(false, propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
 	ASSERT_OR_RETURN(false, origTile != nullptr && destTile != nullptr, "Bad tile parameter");
+
+	auto origLand = pathContinents.getLand(nonblockOrig);
+	auto destLand = pathContinents.getLand(nonblockDest);
+
+	auto origHover = pathContinents.getLand(nonblockOrig);
+	auto destHover = pathContinents.getLand(nonblockDest);
 
 	switch (propulsion)
 	{
@@ -658,9 +669,9 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 	case PROPULSION_TYPE_TRACKED:
 	case PROPULSION_TYPE_LEGGED:
 	case PROPULSION_TYPE_HALF_TRACKED:
-		return origTile->limitedContinent == destTile->limitedContinent;
+		return origLand == destLand;
 	case PROPULSION_TYPE_HOVER:
-		return origTile->hoverContinent == destTile->hoverContinent;
+		return origHover == destHover;
 	case PROPULSION_TYPE_LIFT:
 		return true;	// assume no map uses skyscrapers to isolate areas
 	default:
@@ -669,4 +680,19 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 
 	ASSERT(false, "Should never get here, unknown propulsion !");
 	return false;	// should never get here
+}
+
+/** Get land continent ID of specified tile coordinate. */
+uint16_t fpathGetLandContinent(int x, int y) {
+	return pathContinents.getLand(x, y);
+}
+
+/** Get hover continent ID of specified tile coordinate. */
+uint16_t fpathGetHoverContinent(int x, int y) {
+	return pathContinents.getHover(x, y);
+}
+
+void mapFloodFillContinents()
+{
+	pathContinents.generate();
 }

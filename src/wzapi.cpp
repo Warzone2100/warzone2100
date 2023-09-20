@@ -4528,8 +4528,8 @@ nlohmann::json wzapi::constructMapTilesArray()
 			nlohmann::json mapTile = nlohmann::json::object();
 			mapTile["terrainType"] = ::terrainType(psTile);
 			mapTile["height"] = psTile->height;
-			mapTile["hoverContinent"] = psTile->hoverContinent;
-			mapTile["limitedContinent"] = psTile->limitedContinent;
+			mapTile["hoverContinent"] = fpathGetHoverContinent(x, y);
+			mapTile["limitedContinent"] = fpathGetLandContinent(x, y);
 			mapRow.push_back(std::move(mapTile));
 		}
 		mapTileArray.push_back(std::move(mapRow));

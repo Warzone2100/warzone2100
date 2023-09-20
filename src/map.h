@@ -62,8 +62,6 @@ struct MAPTILE
 	float           level;                  ///< The visibility level of the top left of the tile, for this client.
 	BASE_OBJECT *   psObject;               // Any object sitting on the location (e.g. building)
 	PIELIGHT        colour;
-	uint16_t        limitedContinent;       ///< For land or sea limited propulsion types
-	uint16_t        hoverContinent;         ///< For hover type propulsions
 	uint8_t         ground;                 ///< The ground type used for the terrain renderer
 	uint16_t        fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	int32_t         waterLevel;             ///< At what height is the water for this tile
@@ -566,6 +564,10 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 }
 
 void mapInit();
+
+/**
+ * Updates danger and burning map.
+ */
 void mapUpdate();
 
 bool loadTerrainTypeMapOverride(MAP_TILESET tileSet);

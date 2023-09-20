@@ -124,6 +124,12 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion);
 /** Unit testing. */
 void fpathTest(int x, int y, int x2, int y2);
 
+/** Get land continent ID of specified tile coordinate. */
+uint16_t fpathGetLandContinent(int x, int y);
+
+/** Get hover continent ID of specified tile coordinate. */
+uint16_t fpathGetHoverContinent(int x, int y);
+
 /** @} */
 
 #endif // __INCLUDED_SRC_FPATH_H__
