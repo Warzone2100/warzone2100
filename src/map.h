@@ -63,8 +63,6 @@ struct MAPTILE
 	uint16_t        texture;                // Which graphics texture is on this tile
 	int32_t         height;                 ///< The height at the top left of the tile
 	BASE_OBJECT *   psObject;               // Any object sitting on the location (e.g. building)
-	uint16_t        limitedContinent;       ///< For land or sea limited propulsion types
-	uint16_t        hoverContinent;         ///< For hover type propulsions
 	uint16_t        fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	int32_t         waterLevel;             ///< At what height is the water for this tile
 	PlayerMask      jammerBits;             ///< bit per player, who is jamming tile
@@ -573,6 +571,10 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 }
 
 void mapInit();
+
+/**
+ * Updates danger and burning map.
+ */
 void mapUpdate();
 
 bool shouldLoadTerrainTypeOverrides(const char* name);

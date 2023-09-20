@@ -484,6 +484,9 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 	const PathCoord tileOrig = psJob->blockingMap->worldToMap(psJob->origX, psJob->origY);
 	const PathCoord tileDest = psJob->blockingMap->worldToMap(psJob->destX, psJob->destY);
 
+	int origContinent = fpathGetLandContinent(tileOrig.x, tileOrig.y);
+	int destContinent = fpathGetLandContinent(tileDest.x, tileDest.y);
+
 	if (psJob->blockingMap->isBlocked(tileOrig.x, tileOrig.y)) {
 		debug(LOG_NEVER, "Initial tile blocked (%d;%d)", tileOrig.x, tileOrig.y);
 	}
@@ -531,6 +534,13 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 				endCoord = pred.nearestCoord;
 				// Found the path! Don't search more contexts.
 				break;
+			} else {
+				if (origContinent == destContinent) {
+					debug(LOG_NEVER, "Failed to find cached path (%d;%d)-(%d;%d)", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y);
+				} else {
+					debug(LOG_NEVER, "Failed to find cached intercontinental path (%d;%d c%d)-(%d;%d c%d)", tileOrig.x, tileOrig.y, origContinent,
+						tileDest.x, tileDest.y, destContinent);
+				}
 			}
 		}
 	}
@@ -557,7 +567,12 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 
 		ExplorationReport report = fpathAStarExplore(pfContext, pred, costLayer);
 		if (!report) {
-			debug(LOG_NEVER, "Failed to find path (%d;%d)-(%d;%d)", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y);
+			if (origContinent == destContinent) {
+				debug(LOG_NEVER, "Failed to find path (%d;%d)-(%d;%d)", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y);
+			} else {
+				debug(LOG_NEVER, "Failed to find intercontinental path (%d;%d c%d)-(%d;%d c%d)", tileOrig.x, tileOrig.y, origContinent,
+					tileDest.x, tileDest.y, destContinent);
+			}
 		}
 		endCoord = pred.nearestCoord;
 	}

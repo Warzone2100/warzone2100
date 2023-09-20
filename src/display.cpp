@@ -2086,10 +2086,13 @@ void	dealWithLMB()
 			flipVal += 1;
 		}
 
+		int landContinent = fpathGetLandContinent(mouseTileX, mouseTileY);
+		int hoverContinent = fpathGetHoverContinent(mouseTileX, mouseTileY);
+
 		console("%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d ao %d col %x %s %s w=%d s=%d j=%d tile#%d (decal=%s, ground [#%d, size=%.3f], f%d r%d)",
 		        tileIsExplored(psTile) ? "Explored" : "Unexplored",
 		        mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
-		        (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
+		        landContinent, hoverContinent, psTile->level, (int)psTile->illumination,
 				(int)psTile->ambientOcclusion, psTile->colour.rgba,
 		        aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
 		        (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer],
