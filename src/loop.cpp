@@ -329,12 +329,6 @@ static GAMECODE renderLoop()
 		/* Display the in game interface */
 		pie_SetFogStatus(false);
 
-		if (bMultiPlayer && bDisplayMultiJoiningStatus)
-		{
-			intDisplayMultiJoiningStatus(bDisplayMultiJoiningStatus);
-			setWidgetsStatus(false);
-		}
-
 		if (getWidgetsStatus())
 		{
 			intDisplayWidgets();

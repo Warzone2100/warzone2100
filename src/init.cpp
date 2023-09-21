@@ -1904,6 +1904,10 @@ bool stageThreeInitialise()
 	if (bMultiPlayer)
 	{
 		playerResponding();			// say howdy!
+		if (NetPlay.bComms)
+		{
+			multiStartScreenInit();
+		}
 	}
 
 	return true;

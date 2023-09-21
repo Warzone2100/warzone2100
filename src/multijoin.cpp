@@ -77,98 +77,6 @@
 // Local Functions
 
 static void resetMultiVisibility(UDWORD player);
-
-// ////////////////////////////////////////////////////////////////////////////
-// Local Variables
-
-struct DisplayMultiJoiningStatusCache {
-	WzText wzMainProgressText;
-	WzText wzPlayerCountText;
-	std::vector<WzText> wzPlayerNameAndStatus;
-};
-
-DisplayMultiJoiningStatusCache textCache;
-
-// ////////////////////////////////////////////////////////////////////////////
-// Clear Local Display Caches
-
-void clearDisplayMultiJoiningStatusCache()
-{
-	textCache = DisplayMultiJoiningStatusCache();
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// Wait For Players
-
-bool intDisplayMultiJoiningStatus(UBYTE joinCount)
-{
-	UDWORD			x, y, w, h;
-	char			sTmp[6];
-
-	w = RET_FORMWIDTH;
-	h = RET_FORMHEIGHT;
-	x = RET_X;
-	y = RET_Y;
-
-	RenderWindowFrame(FRAME_NORMAL, x, y , w, h);		// draw a wee blue box.
-
-	// display how far done..
-	textCache.wzMainProgressText.setText(_("Players Still Joining"), font_regular);
-	textCache.wzMainProgressText.render(x + (w / 2) - (textCache.wzMainProgressText.width() / 2),
-										y + (h / 2) - 8, WZCOL_TEXT_BRIGHT);
-
-	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
-	unsigned numUsedPlayerSlots = 0;
-	for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
-	{
-		if (isHumanPlayer(player))
-		{
-			++playerCount;
-			++numUsedPlayerSlots;
-		}
-		else if (NetPlay.players[player].ai >= 0)
-		{
-			++numUsedPlayerSlots;
-		}
-	}
-	if (!playerCount)
-	{
-		return true;
-	}
-	sprintf(sTmp, "%d%%", PERCENT(playerCount - joinCount, playerCount));
-	textCache.wzPlayerCountText.setText(sTmp, font_large);
-	textCache.wzPlayerCountText.render(x + (w / 2) - 10, y + (h / 2) + 10, WZCOL_TEXT_BRIGHT);
-
-	int yStep = iV_GetTextLineSize(font_small);
-	int yPos = RET_Y - yStep * numUsedPlayerSlots;
-
-	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
-
-	for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
-	{
-		int status = -1;
-		if (isHumanPlayer(player))
-		{
-			status = ingame.JoiningInProgress[player] ? 0 : 1; // Human player, still joining or joined.
-		}
-		else if (NetPlay.players[player].ai >= 0)
-		{
-			status = 2;  // AI player (automatically joined).
-		}
-		if (status >= 0)
-		{
-			if (player >= textCache.wzPlayerNameAndStatus.size())
-			{
-				textCache.wzPlayerNameAndStatus.resize(player + 1);
-			}
-			textCache.wzPlayerNameAndStatus[player].setText((statusStrings[status] + getPlayerName(player)).c_str(), font_small);
-			textCache.wzPlayerNameAndStatus[player].render(x + 5, yPos + yStep * NetPlay.players[player].position, WZCOL_TEXT_BRIGHT);
-		}
-	}
-
-	return true;
-}
-
 void destroyPlayerResources(UDWORD player, bool quietly);
 
 //////////////////////////////////////////////////////////////////////////////
@@ -397,6 +305,7 @@ void handlePlayerLeftInGame(UDWORD player)
 
 	ingame.LagCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
+	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 
@@ -552,6 +461,17 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
 	{
 		sendPlayerLeft(playerIndex);
+
+		if (bDisplayMultiJoiningStatus) // if still waiting for players to load *or* waiting for game to start...
+		{
+			NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+			NETuint32_t(&playerIndex);
+			NETend();
+			// only set ingame.JoiningInProgress[player_id] to false
+			// when the game starts, it will handle the GAME_PLAYER_LEFT message in their queue properly
+			ingame.JoiningInProgress[playerIndex] = false;
+			ingame.PendingDisconnect[playerIndex] = true; // used as a UI indicator that a disconnect will be processed in the future
+		}
 	}
 
 	if (NetPlay.players[playerIndex].wzFiles && NetPlay.players[playerIndex].fileSendInProgress())
@@ -720,6 +640,7 @@ void setupNewPlayer(UDWORD player)
 	ingame.LagCounter[player] = 0;
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
+	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;

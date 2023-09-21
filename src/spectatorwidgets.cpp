@@ -85,6 +85,15 @@ static std::shared_ptr<SpectatorStatsView> globalStatsForm = nullptr;
 #define SPEC_STATS_BUTTON_X RET_X
 #define SPEC_STATS_BUTTON_Y 20
 
+void intDisplayImageHilightOnceStarted(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	if (bDisplayMultiJoiningStatus)
+	{
+		return;
+	}
+	intDisplayImageHilight(psWidget, xOffset, yOffset);
+}
+
 bool specLayerInit(bool showButton /*= true*/)
 {
 	if (selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator
@@ -107,13 +116,21 @@ bool specLayerInit(bool showButton /*= true*/)
 			ASSERT_OR_RETURN(true, width > 0 && height > 0, "Possibly missing specstats button image?");
 
 			specStatsButton = std::make_shared<W_BUTTON>();
-			specStatsButton->displayFunction = intDisplayImageHilight;
+			specStatsButton->displayFunction = intDisplayImageHilightOnceStarted;
 			specStatsButton->UserData = PACKDWORD_TRI(0, IMAGE_SPECSTATS_DOWN, IMAGE_SPECSTATS_UP);
 			specStatsButton->pTip = _("Show Player Stats");
 			specStatsButton->addOnClickHandler([](W_BUTTON& button){
 				widgScheduleTask([](){
 					specStatsViewCreate();
 				});
+			});
+			specStatsButton->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool {
+				if (bDisplayMultiJoiningStatus)
+				{
+					// effectively: make this unclickable until the game actually starts
+					return false;
+				}
+				return true; // revert back to default hit-testing behavior
 			});
 			specStatsButton->setGeometry(x, y, width, height);
 			statsOverlay->psForm->attach(specStatsButton);

@@ -604,6 +604,7 @@ static void initPlayerNetworkProps(int playerIndex)
 		ASSERT(false, "PLAYERS.wzFiles is uninitialized??");
 	}
 	ingame.JoiningInProgress[playerIndex] = false;
+	ingame.PendingDisconnect[playerIndex] = false;
 }
 
 void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpectator)
@@ -1930,6 +1931,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 	std::swap(ingame.LagCounter[playerIndexA], ingame.LagCounter[playerIndexB]);
 	std::swap(ingame.VerifiedIdentity[playerIndexA], ingame.VerifiedIdentity[playerIndexB]);
 	std::swap(ingame.JoiningInProgress[playerIndexA], ingame.JoiningInProgress[playerIndexB]);
+	std::swap(ingame.PendingDisconnect[playerIndexA], ingame.PendingDisconnect[playerIndexB]);
 	std::swap(ingame.DataIntegrity[playerIndexA], ingame.DataIntegrity[playerIndexB]);
 	std::swap(ingame.lastSentPlayerDataCheck2[playerIndexA], ingame.lastSentPlayerDataCheck2[playerIndexB]);
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);

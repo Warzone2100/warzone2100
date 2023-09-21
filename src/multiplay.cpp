@@ -311,28 +311,11 @@ bool multiPlayerLoop()
 	}
 	if (joinCount)
 	{
-		setWidgetsStatus(false);
-		bDisplayMultiJoiningStatus = joinCount;	// someone is still joining! say So
-
 		// deselect anything selected.
 		selDroidDeselect(selectedPlayer);
-
-		if (keyPressed(KEY_ESC))// check for cancel
-		{
-			bDisplayMultiJoiningStatus = 0;
-			clearDisplayMultiJoiningStatusCache();
-			setWidgetsStatus(true);
-			setPlayerHasLost(true);
-		}
 	}
 	else		//everyone is in the game now!
 	{
-		if (bDisplayMultiJoiningStatus)
-		{
-			bDisplayMultiJoiningStatus = 0;
-			clearDisplayMultiJoiningStatusCache();
-			setWidgetsStatus(true);
-		}
 		if (!ingame.TimeEveryoneIsInGame.has_value())
 		{
 			ingame.TimeEveryoneIsInGame = gameTime;
@@ -1272,7 +1255,7 @@ bool recvMessage()
 					break;
 				}
 
-				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
+				if (queue.index != NetPlay.hostPlayer) // only host should be sending this message
 				{
 					HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
 					break;
@@ -1280,11 +1263,12 @@ bool recvMessage()
 
 				debug(LOG_INFO, "** player %u has dropped!", player_id);
 
-				if (NetPlay.players[player_id].allocated)
+				if (NetPlay.players[player_id].allocated && ingame.JoiningInProgress[player_id])
 				{
-					MultiPlayerLeave(player_id);		// get rid of their stuff
-					NET_InitPlayer(player_id, false);
-					ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+					// only set ingame.JoiningInProgress[player_id] to false
+					// when the game starts, it will handle the GAME_PLAYER_LEFT message in their queue properly
+					ingame.JoiningInProgress[player_id] = false;
+					ingame.PendingDisconnect[player_id] = true; // used as a UI indicator that a disconnect will be processed in the future
 				}
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 				break;
