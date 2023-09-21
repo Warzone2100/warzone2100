@@ -65,6 +65,7 @@
 #include "template.h"
 #include "activity.h"
 #include "warzoneconfig.h"
+#include "screens/netpregamescreen.h"
 
 #define MAX_STRUCTURE_LIMITS 4096 // Set a high (but explicit) maximum for the number of structure limits supported
 
@@ -518,6 +519,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
+	ingame.PendingDisconnect[selectedPlayer] = false;
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 
@@ -561,7 +563,7 @@ bool multiShutdown()
 	debug(LOG_MAIN, "free game data (structure limits)");
 	ingame.structureLimits.clear();
 
-	clearDisplayMultiJoiningStatusCache();
+	shutdownGameStartScreen();
 
 	return true;
 }
@@ -662,11 +664,29 @@ bool multiGameInit()
 	return true;
 }
 
+bool multiStartScreenInit()
+{
+	bDisplayMultiJoiningStatus = 1; // always display this
+	gameTimeStop();
+	intHideInterface(true);
+	createGameStartScreen([] {
+		// on game start overlay screen close...
+		bDisplayMultiJoiningStatus = 0;
+		intShowInterface();
+		// restart gameTime
+		gameTimeStart();
+	});
+
+	return true;
+}
+
 ////////////////////////////////
 // at the end of every game.
 bool multiGameShutdown()
 {
 	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
+
+	shutdownGameStartScreen();	// make sure the start screen overlay is closed (in case the game shuts down before it fully starts)
 
 	sendLeavingMsg();							// say goodbye
 

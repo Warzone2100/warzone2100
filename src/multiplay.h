@@ -109,6 +109,7 @@ struct MULTIPLAYERINGAME
 	bool				localOptionsReceived;							// used to show if we have game options yet..
 	bool				localJoiningInProgress;							// used before we know our player number.
 	bool				JoiningInProgress[MAX_CONNECTED_PLAYERS];
+	bool				PendingDisconnect[MAX_CONNECTED_PLAYERS];		// used to mark players who have disconnected after the game has "fired up" but before it actually starts (i.e. pre-game / loading phase) - UI only
 	bool				DataIntegrity[MAX_CONNECTED_PLAYERS];
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
@@ -298,6 +299,7 @@ JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();
+bool multiStartScreenInit();
 
 // syncing.
 bool sendScoreCheck();							//score check only(frontend)

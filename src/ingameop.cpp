@@ -50,6 +50,7 @@
 #include "radar.h"
 #include "seqdisp.h"
 #include "hci/groups.h"
+#include "screens/netpregamescreen.h"
 
 bool hostQuitConfirmation = true;
 
@@ -420,6 +421,8 @@ void intAddInGamePopup()
 
 	intMode		= INT_POPUPMSG;			// change interface mode.
 	isInGamePopupUp = true;
+
+	shutdownGameStartScreen();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
