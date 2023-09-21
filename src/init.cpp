@@ -1901,6 +1901,11 @@ bool stageThreeInitialise()
 	// always start off with a refresh of the groups UI data
 	intGroupsChanged();
 
+	if (bMultiPlayer)
+	{
+		playerResponding();			// say howdy!
+	}
+
 	return true;
 }
 

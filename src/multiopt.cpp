@@ -626,8 +626,6 @@ static bool gameInit()
 	}
 	debug(LOG_NET, "Player count: %u", playerCount);
 
-	playerResponding();			// say howdy!
-
 	return true;
 }
 
