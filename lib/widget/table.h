@@ -145,6 +145,9 @@ public:
 
 	bool isUserDraggingColumnHeader() const;
 
+	void setColumnPadding(Vector2i padding);
+	const Vector2i& getColumnPadding();
+
 	virtual int32_t idealHeight() override;
 
 protected:
@@ -177,6 +180,7 @@ private:
 	std::vector<TableColumn> tableColumns;
 	std::vector<size_t> columnWidths;
 	std::vector<size_t> minColumnWidths;
+	Vector2i columnPadding;
 
 	std::shared_ptr<TableHeader> header;
 	std::shared_ptr<ScrollableListWidget> scrollableList;
