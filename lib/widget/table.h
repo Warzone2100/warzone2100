@@ -49,6 +49,9 @@ public:
 
 	// Get the total idealWidth() returned by all column widgets in this row (does not include padding)
 	int32_t getColumnTotalContentIdealWidth();
+
+	// Set whether the row draws an outer border
+	void setDrawBorder(optional<PIELIGHT> borderColor);
 protected:
 	virtual void display(int, int) override;
 public:
@@ -64,6 +67,7 @@ private:
 	bool highlightsOnMouseOver = false;
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 	optional<UDWORD> lastFrameMouseIsOverRowOrChildren = nullopt;
+	optional<PIELIGHT> borderColor = nullopt;
 };
 
 class TableHeader; // forward-declare
