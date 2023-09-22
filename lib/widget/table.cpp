@@ -392,7 +392,7 @@ std::shared_ptr<ScrollableTableWidget> ScrollableTableWidget::make(const std::ve
 	result->scrollableList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		if (auto psParent = std::dynamic_pointer_cast<ScrollableTableWidget>(psWidget->parent()))
 		{
-			int y0 = psParent->header->y() + psParent->header->height();
+			int y0 = psParent->header->y() + psParent->header->height() + psParent->scrollableList->getItemSpacing();
 			psWidget->setGeometry(0, y0, psParent->width(), psParent->height() - y0);
 		}
 	}));
@@ -696,4 +696,52 @@ void ScrollableTableWidget::setColumnPadding(Vector2i newPadding)
 const Vector2i& ScrollableTableWidget::getColumnPadding()
 {
 	return columnPadding;
+}
+
+void ScrollableTableWidget::setDrawColumnLines(bool bEnabled)
+{
+	drawColumnLines = bEnabled;
+}
+
+void ScrollableTableWidget::setItemSpacing(uint32_t value)
+{
+	scrollableList->setItemSpacing(value);
+}
+
+void ScrollableTableWidget::displayRecursive(WidgetGraphicsContext const& context)
+{
+	WIDGET::displayRecursive(context);
+
+	// *after* displaying all children, draw the column lines (if desired)
+	if (!drawColumnLines)
+	{
+		return;
+	}
+
+	if (!context.clipContains(geometry())) {
+		return;
+	}
+
+	int xOffset = context.getXOffset();
+	int yOffset = context.getYOffset();
+
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset + scrollableList->y();
+	int y1 = y0 + scrollableList->height();
+
+	lines.reserve(columnWidths.size());
+
+	// draw a line between every column widget
+	int lastColumnEndX = -columnPadding.x;
+	for (size_t colIdx = 0; colIdx < columnWidths.size(); ++colIdx)
+	{
+		// column lines
+		int columnXPos = lastColumnEndX + columnPadding.x + columnPadding.x;
+		int columRightLineXPos = columnXPos + static_cast<int>(columnWidths[colIdx]) + columnPadding.x;
+
+		lines.emplace_back(x0 + columRightLineXPos, y0, x0 + columRightLineXPos, y1);
+		lastColumnEndX = columnXPos + static_cast<int>(columnWidths[colIdx]);
+	}
+
+	iV_Lines(lines, WZCOL_MENU_SEPARATOR);
 }

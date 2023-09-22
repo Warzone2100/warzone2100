@@ -140,6 +140,11 @@ public:
 	// Change the table background color
 	void setBackgroundColor(PIELIGHT const &color);
 
+	// Configure whether to draw column lines for list rows
+	void setDrawColumnLines(bool bEnabled);
+
+	void setItemSpacing(uint32_t value);
+
 	uint16_t getScrollPosition() const;
 	void setScrollPosition(uint16_t newPosition);
 
@@ -156,6 +161,7 @@ protected:
 
 protected:
 	virtual void geometryChanged() override;
+	virtual void displayRecursive(WidgetGraphicsContext const& context) override;
 
 private:
 	size_t totalPaddingWidthFor(size_t numColumns) const;
@@ -186,6 +192,9 @@ private:
 	std::shared_ptr<ScrollableListWidget> scrollableList;
 
 	std::vector<std::shared_ptr<TableRow>> rows;
+
+	std::vector<glm::ivec4> lines;
+	bool drawColumnLines = false;
 
 	bool userDidResizeColumnWidths = false;
 };
