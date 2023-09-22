@@ -178,7 +178,12 @@ void ScrollableListWidget::setSnapOffset(bool value)
 
 void ScrollableListWidget::setItemSpacing(uint32_t value)
 {
+	if (value == itemSpacing)
+	{
+		return;
+	}
 	itemSpacing = value;
+	layoutDirty = true;
 }
 
 void ScrollableListWidget::display(int xOffset, int yOffset)

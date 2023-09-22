@@ -28,7 +28,7 @@
 #include "lib/framework/vector.h"
 #include <string>
 
-struct WzCheckboxButton : public W_BUTTON
+class WzCheckboxButton : public W_BUTTON
 {
 public:
 	WzCheckboxButton();

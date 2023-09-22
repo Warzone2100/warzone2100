@@ -54,6 +54,8 @@ public:
 
 protected:
     void geometryChanged() override;
+
+public:
     int32_t idealWidth() override;
     int32_t idealHeight() override;
 
