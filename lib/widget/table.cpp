@@ -170,12 +170,14 @@ public:
 	void addColumn(const TableColumn& column);
 	void changeColumnWidths(const std::vector<size_t>& newColumnWidths);
 	bool isUserDraggingColumnHeader() const;
+	void setColumnPadding(Vector2i padding);
 
 private:
 	int columnWidgetHeight() const;
 
 private:
 	bool userResizableHeaders = true;
+	Vector2i columnPadding;
 	std::vector<TableColumn> columns;
 	optional<size_t> colBeingResized = nullopt;
 	optional<Vector2i> dragStart = nullopt;
@@ -187,17 +189,18 @@ TableHeader::TableHeader(const std::shared_ptr<ScrollableTableWidget>& _parentTa
 {
 	ASSERT(_parentTable != nullptr, "Null parent table");
 	parentTable = _parentTable;
+	columnPadding = _parentTable->getColumnPadding();
 }
 
 void TableHeader::addColumn(const TableColumn& column)
 {
 	attach(column.columnWidget);
 	// Position it to the right of the prior column (child)
-	int columnX = TABLE_COL_PADDING;
+	int columnX = columnPadding.x;
 	int colHeaderY = 0;
 	if (columns.size() > 0)
 	{
-		columnX += columns.back().columnWidget->x() + columns.back().columnWidget->width() + TABLE_COL_PADDING;
+		columnX += columns.back().columnWidget->x() + columns.back().columnWidget->width() + columnPadding.x;
 	}
 	column.columnWidget->setGeometry(columnX, colHeaderY, column.columnWidget->width(), columnWidgetHeight());
 
@@ -217,7 +220,7 @@ void TableHeader::display(int xOffset, int yOffset)
 	for (auto& child : columns)
 	{
 		// column lines
-		int xPos = x0 + child.columnWidget->x() + child.columnWidget->width() + TABLE_COL_PADDING;
+		int xPos = x0 + child.columnWidget->x() + child.columnWidget->width() + columnPadding.x;
 		iV_Line(xPos, y0 + 5, xPos, y1 - 5, WZCOL_MENU_SEPARATOR);
 	}
 }
@@ -260,6 +263,25 @@ void TableHeader::released(W_CONTEXT *, WIDGET_KEY)
 bool TableHeader::isUserDraggingColumnHeader() const
 {
 	return userResizableHeaders && dragStart.has_value();
+}
+
+void TableHeader::setColumnPadding(Vector2i padding)
+{
+	columnPadding = padding;
+
+	// Reposition all column widgets
+	int lastColumnX = columnPadding.x;
+	for (size_t columnIdx = 0; columnIdx < columns.size(); ++columnIdx)
+	{
+		// Position it to the right of the prior column (child)
+		int columnX = lastColumnX;
+		int colHeaderY = 0;
+		if (columnIdx > 0)
+		{
+			columnX += columns[columnIdx-1].columnWidget->x() + columns[columnIdx-1].columnWidget->width() + columnPadding.x;
+		}
+		columns[columnIdx].columnWidget->setGeometry(columnX, colHeaderY, columns[columnIdx].columnWidget->width(), columnWidgetHeight());
+	}
 }
 
 void TableHeader::run(W_CONTEXT *psContext)
@@ -309,19 +331,19 @@ int TableHeader::columnWidgetHeight() const
 
 void TableHeader::changeColumnWidths(const std::vector<size_t>& newColumnWidths)
 {
-	int columnX = TABLE_COL_PADDING;
+	int columnX = columnPadding.x;
 	size_t i = 0;
 	for(; i < std::min(newColumnWidths.size(), columns.size()); i++)
 	{
 		auto& columnWidget = columns[i].columnWidget;
 		columnWidget->setGeometry(columnX, columnWidget->y(), static_cast<int>(newColumnWidths[i]), columnWidget->height());
-		columnX += TABLE_COL_PADDING + columnWidget->width() + TABLE_COL_PADDING;
+		columnX += columnPadding.x + columnWidget->width() + columnPadding.x;
 	}
 	for(; i < columns.size(); i++)
 	{
 		auto& columnWidget = columns[i].columnWidget;
 		columnWidget->setGeometry(columnX, columnWidget->y(), columnWidget->width(), columnWidget->height());
-		columnX += TABLE_COL_PADDING + columnWidget->width() + TABLE_COL_PADDING;
+		columnX += columnPadding.x + columnWidget->width() + columnPadding.x;
 	}
 }
 
@@ -329,6 +351,7 @@ void TableHeader::changeColumnWidths(const std::vector<size_t>& newColumnWidths)
 
 ScrollableTableWidget::ScrollableTableWidget()
 : WIDGET()
+, columnPadding(TABLE_COL_PADDING, 0)
 { }
 
 std::shared_ptr<ScrollableTableWidget> ScrollableTableWidget::make(const std::vector<TableColumn>& columns, int headerHeight /*= -1*/)
@@ -409,7 +432,7 @@ void ScrollableTableWidget::addRow(const std::shared_ptr<TableRow> &row)
 {
 	ASSERT_OR_RETURN(, row != nullptr, "row is null");
 	ASSERT_OR_RETURN(, row->numColumns() == columnWidths.size(), "Unexpected number of columns in row: %zu", row->numColumns());
-	row->resizeColumns(columnWidths, TABLE_COL_PADDING);
+	row->resizeColumns(columnWidths, columnPadding.x);
 	// Add row to internal ScrollableListWidget, and rows list
 	scrollableList->addItem(row);
 	rows.push_back(row);
@@ -515,7 +538,7 @@ void ScrollableTableWidget::updateColumnWidths()
 	header->changeColumnWidths(columnWidths);
 	for (auto& row : rows)
 	{
-		row->resizeColumns(columnWidths, TABLE_COL_PADDING);
+		row->resizeColumns(columnWidths, columnPadding.x);
 	}
 }
 
@@ -638,7 +661,7 @@ size_t ScrollableTableWidget::totalPaddingWidthFor(size_t numColumns) const
 {
 	// TABLE_COL_PADDING is on all sides of all columns
 	// also factor in scrollbar width
-	size_t totalPaddingWidth = TABLE_COL_PADDING + ((numColumns - 1) * 2 * TABLE_COL_PADDING) + TABLE_COL_PADDING + scrollableList->getScrollbarWidth();
+	size_t totalPaddingWidth = columnPadding.x + ((numColumns - 1) * 2 * columnPadding.x) + columnPadding.x + scrollableList->getScrollbarWidth();
 	return totalPaddingWidth;
 }
 
@@ -655,4 +678,22 @@ size_t ScrollableTableWidget::getTableWidthNeededForTotalColumnWidth(size_t numC
 bool ScrollableTableWidget::isUserDraggingColumnHeader() const
 {
 	return header->isUserDraggingColumnHeader();
+}
+
+void ScrollableTableWidget::setColumnPadding(Vector2i newPadding)
+{
+	if (newPadding == columnPadding)
+	{
+		return;
+	}
+	columnPadding = newPadding;
+
+	// Need to inform header + resize columns and also resize columns in list
+	header->setColumnPadding(newPadding);
+	updateColumnWidths();
+}
+
+const Vector2i& ScrollableTableWidget::getColumnPadding()
+{
+	return columnPadding;
 }
