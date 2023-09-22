@@ -53,9 +53,11 @@ public:
 	W_BUTTON();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	virtual bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key);
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
+	void run(W_CONTEXT *psContext) override;
 	void display(int xOffset, int yOffset) override;
 	void displayRecursive(WidgetGraphicsContext const &context) override; // for handling progress border overlay
 
@@ -160,6 +162,8 @@ private:
 	PIELIGHT				 progressBorderColour;
 	WIDGET_KEY				 lastClickButton = WKEY_NONE;
 	optional<WidgetHelp>	help;
+	optional<std::chrono::steady_clock::time_point> clickDownStart; // the start time of click down on this button
+	optional<WIDGET_KEY> clickDownKey;
 };
 
 class MultipleChoiceButton : public W_BUTTON
