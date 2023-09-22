@@ -54,6 +54,7 @@ public:
 	void setSnapOffset(bool value);
 	void setBackgroundColor(PIELIGHT const &color);
 	void setItemSpacing(uint32_t value);
+	uint32_t getItemSpacing() const { return itemSpacing; }
 	uint32_t calculateListViewHeight() const;
 	uint32_t calculateListViewWidth() const;
 	void display(int xOffset, int yOffset) override;
