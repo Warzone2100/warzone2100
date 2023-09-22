@@ -249,7 +249,7 @@ function checkEndConditions()
 		// (can be spectator-only slots who have not yet received a message,
 		// or previous losers who were converted to spectators who should now receive
 		// a new message that the game has fully ended)
-		if (isSpectator(-1) && !newlyLosingTeams.some((team) => (team.containsPlayer(selectedPlayer))))
+		if (isSpectator(-1))
 		{
 			gameOverMessage(false);
 		}
