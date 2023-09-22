@@ -89,6 +89,11 @@ void TableRow::setHighlightsOnMouseOver(bool value)
 	highlightsOnMouseOver = value;
 }
 
+void TableRow::setDrawBorder(optional<PIELIGHT> newBorderColor)
+{
+	borderColor = newBorderColor;
+}
+
 int32_t TableRow::getColumnTotalContentIdealWidth()
 {
 	int32_t totalContentIdealWidth = 0;
@@ -101,11 +106,17 @@ int32_t TableRow::getColumnTotalContentIdealWidth()
 
 void TableRow::display(int xOffset, int yOffset)
 {
-	if (!highlightsOnMouseOver || !isMouseOverRowOrChildren()) { return; }
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
 	int x1 = x0 + width();
 	int y1 = y0 + height();
+
+	if (borderColor.has_value())
+	{
+		iV_Box(x0, y0, x1, y1, borderColor.value());
+	}
+
+	if (!highlightsOnMouseOver || !isMouseOverRowOrChildren()) { return; }
 	iV_TransBoxFill(x0, y0, x1, y1);
 }
 
