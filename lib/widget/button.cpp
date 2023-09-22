@@ -112,6 +112,32 @@ void W_BUTTON::setHelp(optional<WidgetHelp> _help)
 	help = _help;
 }
 
+void W_BUTTON::run(W_CONTEXT *psContext)
+{
+	if (clickDownStart.has_value())
+	{
+		const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - clickDownStart.value()) >= widgGetClickHoldMS())
+		{
+			if (clickDownKey.has_value())
+			{
+				if (clickHeld(psContext, clickDownKey.value()))
+				{
+					// clear button down state, as the clickHeld event "consumed" this click
+					state &= ~WBUT_DOWN;
+				}
+			}
+			clickDownStart.reset();
+		}
+	}
+}
+
+// Returns true if "consumed" held click
+bool W_BUTTON::clickHeld(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	return false;
+}
+
 void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
 	if ((minClickInterval > 0) && (realTime - lastClickTime < minClickInterval))
@@ -135,6 +161,9 @@ void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 			}
 			state &= ~WBUT_FLASH;	// Stop it flashing
 			state |= WBUT_DOWN;
+
+			clickDownStart = std::chrono::steady_clock::now();
+			clickDownKey = key;
 		}
 	}
 }
@@ -170,6 +199,9 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 			dirty = true;
 		}
 	}
+
+	clickDownStart = nullopt;
+	clickDownKey = nullopt;
 }
 
 WIDGET_KEY W_BUTTON::getOnClickButtonPressed() const
@@ -202,6 +234,9 @@ void W_BUTTON::highlightLost()
 {
 	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
 	dirty = true;
+
+	clickDownStart = nullopt;
+	clickDownKey = nullopt;
 }
 
 void W_BUTTON::display(int xOffset, int yOffset)
