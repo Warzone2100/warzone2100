@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2022-12-15 08:14\n"
+"PO-Revision-Date: 2023-08-10 07:08\n"
 "Last-Translator: \n"
 "Language-Team: Burmese\n"
 "Language: my_MM\n"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "တပ်မှူး ဂုဏ်ပြုပါတယ်."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
