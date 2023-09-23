@@ -391,6 +391,8 @@ private:
 	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calc layout callback
 	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
 	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional hit-testing custom function
+protected:
+	friend struct W_SCREEN;
 	void setScreenPointer(const std::shared_ptr<W_SCREEN> &screen); ///< Set screen pointer for us and all children.
 public:
 	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);

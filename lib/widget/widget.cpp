@@ -633,7 +633,7 @@ void W_SCREEN::initialize(const std::shared_ptr<W_FORM>& customRootForm)
 			customRootFormParent->detach(customRootForm);
 		}
 		psForm = customRootForm;
-		psForm->screenPointer = shared_from_this();
+		psForm->setScreenPointer(shared_from_this());
 		return;
 	}
 
