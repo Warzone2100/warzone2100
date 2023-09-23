@@ -547,6 +547,12 @@ void NETclearSessionKeys(uint8_t player)
 	netSessionKeys[player].reset();
 }
 
+bool NETisExpectedSecuredMessageType(uint8_t type)
+{
+	// currently there are no expected secured messages
+	return false;
+}
+
 // For encoding a secured net message, for a *specific player*
 // Returns `false` on failure
 // Notes:
@@ -558,6 +564,7 @@ bool NETbeginEncodeSecured(NETQUEUE queue, uint8_t type)
 	ASSERT_OR_RETURN(false, queue.index != realSelectedPlayer, "Secured messages are for other players, not ourselves.");
 	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS, "Invalid recipient (queue.index == %u)", static_cast<unsigned>(queue.index));
 	ASSERT_OR_RETURN(false, netSessionKeys[queue.index] != nullptr, "Lacking session key for player: %u", static_cast<unsigned>(queue.index));
+	ASSERT(NETisExpectedSecuredMessageType(type), "Message type is not expected to be secured, and will be ignored on receipt");
 
 	NETbeginEncode(queue, type);
 	bSecretMessageWrap = true;
@@ -612,6 +619,13 @@ bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type)
 	if (!(decryptedMessage.type > NET_MIN_TYPE && decryptedMessage.type < NET_MAX_TYPE))
 	{
 		debug(LOG_NET, "Not a secured NET_* message? (type: %s) - ignoring", messageTypeToString(decryptedMessage.type));
+		return false;
+	}
+
+	if (!NETisExpectedSecuredMessageType(decryptedMessage.type))
+	{
+		// Ignore message types that aren't expected to be secured
+		debug(LOG_NET, "Not a message type that's expected to be secured: (type: %s) - ignoring", messageTypeToString(decryptedMessage.type));
 		return false;
 	}
 
