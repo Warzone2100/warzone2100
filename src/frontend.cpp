@@ -3703,13 +3703,13 @@ void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-W_LABEL *addSideText(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
+std::shared_ptr<W_LABEL> addSideText(WIDGET* psParent, UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
 {
-	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
+	ASSERT_OR_RETURN(nullptr, psParent != nullptr, "Invalid parent");
 
 	W_LABINIT sLabInit;
 
-	sLabInit.formID = formId;
+	sLabInit.formID = 0;
 	sLabInit.id = id;
 	sLabInit.x = (short) PosX;
 	sLabInit.y = (short) PosY;
@@ -3727,7 +3727,17 @@ W_LABEL *addSideText(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD formId, U
 		psWidget->pUserData = nullptr;
 	};
 
-	return widgAddLabel(psScreen, &sLabInit);
+	auto psLabel = std::make_shared<W_LABEL>(&sLabInit);
+	psParent->attach(psLabel);
+	return psLabel;
+}
+
+W_LABEL *addSideText(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
+{
+	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
+
+	WIDGET *psParent = widgGetFromID(psScreen, formId);
+	return addSideText(psParent, id, PosX, PosY, txt).get();
 }
 
 W_LABEL *addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
