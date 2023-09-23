@@ -1500,6 +1500,78 @@ const char *getWeaponSubClass(WEAPON_SUBCLASS wclass)
 	return "Bad weapon subclass";
 }
 
+/* returns the translated weapon sub class name - for local display purposes only */
+const char *getWeaponSubClassDisplayName(WEAPON_SUBCLASS wclass, bool shortForm)
+{
+	switch (wclass)
+	{
+	case WSC_CANNON:
+		return _("Cannons");
+	case WSC_MORTARS:
+		return _("Mortars");
+	case WSC_MISSILE:
+		return _("Missiles");
+	case WSC_ROCKET:
+		return _("Rockets");
+	case WSC_ENERGY:
+		return _("Energy");
+	case WSC_GAUSS:
+		return _("Gauss");
+	case WSC_FLAME:
+		// TRANSLATORS: "Flame" weapons class
+		return _("Flame");
+	case WSC_HOWITZERS:
+		return _("Howitzers");
+	case WSC_MGUN:
+		if (shortForm)
+		{
+			// TRANSLATORS: A short-form for "Machine Guns" (should be shorter than the translated full form - if not, just use the full translation for "Machine Guns")
+			return _("MG");
+		}
+		else
+		{
+			return _("Machine Guns");
+		}
+	case WSC_ELECTRONIC:
+		// TRANSLATORS: "Electronic" weapon class
+		return _("Electronic");
+	case WSC_AAGUN:
+		if (shortForm)
+		{
+			// TRANSLATORS: A short-form for "Anti-Air" weapons class (should be shorter than the translated full form - if not, just use the full translation for "Anti-Air")
+			return _("A-A");
+		}
+		else
+		{
+			return _("Anti-Air");
+		}
+	case WSC_SLOWMISSILE:
+		return _("Slow Missile");
+	case WSC_SLOWROCKET:
+		return _("Slow Rocket");
+	case WSC_LAS_SAT:
+		if (shortForm)
+		{
+			// TRANSLATORS: A short-form for "Laser Satellite" weapons class - some just use "Las-Sat" or "LasSat"
+			return _("Las-Sat");
+		}
+		else
+		{
+			return _("Laser Satellite");
+		}
+	case WSC_BOMB:
+		return _("Bombs");
+	case WSC_COMMAND:
+		return _("Command");
+	case WSC_EMP:
+		// TRANSLATORS: "EMP" (electromagnetic pulse) weapons class - probably should keep it as "EMP" (or the respective acronym in your language)
+		return _("EMP");
+	case WSC_NUM_WEAPON_SUBCLASSES: break;
+	}
+	ASSERT(false, "No such weapon subclass");
+	return "";
+}
+
 /*returns the movement model based on the string name passed in */
 bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model)
 {

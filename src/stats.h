@@ -175,6 +175,10 @@ BASE_STATS *getBaseStatsFromName(const WzString &name);
 /*returns the weapon sub class based on the string name passed in */
 bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
+
+/* returns the translated weapon sub class name - for local display purposes only */
+const char *getWeaponSubClassDisplayName(WEAPON_SUBCLASS wclass, bool shortForm);
+
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
 bool getBodySize(const WzString &size, BODY_SIZE *pStore);
