@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-09-24 11:08\n"
+"PO-Revision-Date: 2023-09-24 23:34\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -645,7 +645,7 @@ msgstr "МИССИЯ НА ВЫЛЕТЕ: Уничтожить вражескую 
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Если вам придётся отступать - уничтожьте ракетные системы земля-воздух вокруг вашей базы."
+msgstr "Если вам придётся отступать - уничтожьте системы ракетных ПВО вокруг вашей базы."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
@@ -1517,7 +1517,7 @@ msgstr "Улучшенная мобильная мастерская"
 #: data/base/messages/strings/names.txt:370
 #: data/mp/messages/strings/names.txt:472
 msgid "Mobile Repair Upgrade Mk2"
-msgstr "Улучшенный мобильный ремонт МК2"
+msgstr "Улучшенная мобильная мастерская МК2"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:475
@@ -1771,7 +1771,7 @@ msgstr "Тепловое сопротивление слоёв брони"
 #: data/mp/messages/strings/resstrings.txt:8
 #: po/custom/fromJson.txt:5585
 msgid "Thermal Armor increased"
-msgstr "Термоброня повышена"
+msgstr "Термоброня улучшена"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[0]
@@ -4541,11 +4541,11 @@ msgstr "Я уничтожу твой никчёмный Проект так же
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
-msgstr "Затем NEXUS удалился из системы, разрушив её банки памяти и удалив все следы своих внешних соединений."
+msgstr "Затем НЕКСУС удалил себя из системы, разрушив её банки памяти и удалив все следы своих внешних соединений."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr "Мы не уверены в том, что есть НЕКСУС и что или кто управляет им. Начальные исследования указывают на связь программы проникновения НЕКСУС с Корпорацией Рид, разработчиком нейросвязи."
+msgstr "Мы не уверены в том, что такое НЕКСУС и что или кто управляет им. Начальные исследования указывают на связь программы вторжения НЕКСУС с Корпорацией Рид, разработчиком нейросвязи."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
@@ -5166,11 +5166,11 @@ msgstr "Ядерная Зима ударила сильно. Болезни и �
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr "Мы бежали в Сиэтл в начале 86-го. Мы слышали, что Скалистые Горы были относительно чисты от радиации."
+msgstr "Мы бежали из Сиэтла в начале 86-го. Мы слышали, что Скалистые Горы были относительно чисты от радиации."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr "После борьбы с бандами мародёров, мы дошли до базы. Её персонал был мёртв. Мёртв от любой из множества заразных заболеваний."
+msgstr "Отбиваясь от банд мародеров, мы наткнулись на базу. Её персонал был мертв. Погибли от любого из множества заразных заболеваний."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
@@ -5265,11 +5265,11 @@ msgstr "Угловая стена Альянса"
 
 #: data/mp/messages/strings/names.txt:317
 msgid "Nexus Wall"
-msgstr "Стена НЕКСУСа"
+msgstr "Стена НЕКСУС"
 
 #: data/mp/messages/strings/names.txt:318
 msgid "Nexus Corner Wall"
-msgstr "Угловая стена НЕКСУСа"
+msgstr "Угловая стена НЕКСУС"
 
 #: data/mp/messages/strings/names.txt:336
 msgid "CAM1 RESEARCH"
@@ -5634,7 +5634,7 @@ msgstr "- постройка юнитов - завершение исследо�
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1453
 msgid "Ultimate Scavengers"
-msgstr "Падальщики"
+msgstr "Угнетатели"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1450
@@ -5980,7 +5980,7 @@ msgstr "Зенитная установка Циклон"
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:67
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr "Укрепточка с зенитной установкой Циклон"
+msgstr "Укрепточка с зениткой Циклон"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
@@ -5993,7 +5993,7 @@ msgstr "Циклон Питон Полугусеницы"
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:74
 msgid "AA Cyclone Flak Cannon"
-msgstr "ЗСУ Циклон"
+msgstr "Зенитка Циклон"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6083,14 +6083,14 @@ msgstr "Зенитная установка Торнадо"
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:144
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr "Укрепточка с зенитным орудием Торнадо"
+msgstr "Укрепточка с зениткой Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:148
 msgid "AA Tornado Flak Cannon"
-msgstr "ЗСУ Торнадо"
+msgstr "Зенитка Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -7507,14 +7507,14 @@ msgstr "Точность пушки +10%"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 #: po/custom/fromJson.txt:1312
 msgid "Cannon Autoloader Mk2"
-msgstr "Автозарядка Пушки Mk2"
+msgstr "Автозарядка пушки Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 #: po/custom/fromJson.txt:1316
 msgid "Cannon Autoloader Mk3"
-msgstr "Автозарядка Пушки Mk3"
+msgstr "Автозарядка пушки Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF01.name
@@ -9837,7 +9837,7 @@ msgstr "Ховер III"
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Hover.name
 #: po/custom/fromJson.txt:2869
 msgid "Hover Propulsion"
-msgstr "Движитель ховер"
+msgstr "Ховер движитель"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover01.name
@@ -10630,7 +10630,7 @@ msgstr "Лансер"
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[0]
 #: po/custom/fromJson.txt:3481
 msgid "Large Super Heavy Body"
-msgstr "Большой супертяжёлый корпус"
+msgstr "Большой сверхтяжёлый корпус"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Laser01.name
@@ -11891,7 +11891,7 @@ msgstr "Приказывает назначенным единицам непр�
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4380
 msgid "Original Campaign"
-msgstr "Оригинальная компания"
+msgstr "Оригинальная кампания"
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
@@ -15075,7 +15075,7 @@ msgstr "сохранение"
 
 #: src/clparse.cpp:383
 msgid "Load a saved campaign game"
-msgstr "Загрузить сохранённую игру кампании"
+msgstr "Загрузить сохранённую кампанию"
 
 #: src/clparse.cpp:384
 msgid "Load a replay"
@@ -16266,7 +16266,7 @@ msgstr "Вы можете исправить это, увеличив масшт
 #: src/frontend.cpp:3605
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr "Жалаете ли вы сейчас увеличить масштаб дисплея до %u%%?"
+msgstr "Желаете увеличить масштаб дисплея до %u%%?"
 
 #: src/frontend.cpp:3607
 msgid "Increase Display Scale"
@@ -16412,7 +16412,7 @@ msgstr "Внимание: Вы владелец этой игры. Если вы
 #: src/ingameop.cpp:131
 #: src/ingameop.cpp:266
 msgid "Host Quit"
-msgstr "Выход хоста"
+msgstr "Завершить хост"
 
 #: src/ingameop.cpp:176
 #: src/ingameop.cpp:1069
@@ -16451,7 +16451,7 @@ msgstr "Выход"
 
 #: src/ingameop.cpp:311
 msgid "Warning: Are you sure?"
-msgstr "Предупреждение: вы уверены?"
+msgstr "Предупреждение: Вы уверены?"
 
 #: src/ingameop.cpp:315
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
@@ -17340,7 +17340,7 @@ msgstr "Ссылка по которой вы переходите, ведёт �
 
 #: src/integrations/wzdiscordrpc.cpp:430
 msgid "It has not been vetted / verified by a lobby server."
-msgstr "Оно не было проверено лобби сервером."
+msgstr "Она не была верифицирована лобби сервером."
 
 #: src/integrations/wzdiscordrpc.cpp:432
 msgid "Do you wish to trust this direct connection invite?"
@@ -17399,7 +17399,7 @@ msgstr "В лобби"
 
 #: src/integrations/wzdiscordrpc.cpp:643
 msgid "In Multiplayer Game"
-msgstr "В многопользовательской игре"
+msgstr "В мультиплеере"
 
 #: src/integrations/wzdiscordrpc.cpp:844
 #, c-format
@@ -17723,7 +17723,7 @@ msgstr "Выбранные здания мгновенно перезаряжа�
 #: src/keybind.cpp:1587
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr "(Игрок %u) использует жульничество :%s %s"
+msgstr "(Игрок %u) использует чит :%s %s"
 
 #: src/keybind.cpp:1587
 msgid "Researched"
@@ -17735,11 +17735,11 @@ msgstr "Отображать панель прогресса только для
 
 #: src/keybind.cpp:1604
 msgid "Always displaying energy bars for units"
-msgstr "Всегда отображать полосы энергии для юнитов"
+msgstr "Всегда отображать индикаторы энергии для юнитов"
 
 #: src/keybind.cpp:1607
 msgid "Always displaying energy bars for units and structures"
-msgstr "Всегда отображать полосы энергии для юнитов и построек"
+msgstr "Всегда отображать индикаторы энергии для юнитов и построек"
 
 #: src/keybind.cpp:1618
 msgid "Debug menu is Open"
@@ -17767,7 +17767,7 @@ msgstr "Внимание! При неправильном использован
 
 #: src/keybind.cpp:1918
 msgid "All enemies destroyed by cheating!"
-msgstr "Враги уничтожены с помощью жульничества!"
+msgstr "Враги уничтожены с помощью читов!"
 
 #: src/keybind.cpp:1961
 msgid "Destroying selected droids and structures!"
@@ -18842,7 +18842,7 @@ msgstr "[%d] Лимит, который больше чем numStructureStats (%
 
 #: src/multiopt.cpp:314
 msgid "Limits were reset to default."
-msgstr "Значения лимитов вернулись к по-умолчанию."
+msgstr "Лимиты сброшены по умолчанию."
 
 #: src/multiopt.cpp:322
 #, c-format
