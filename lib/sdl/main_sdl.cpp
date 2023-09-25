@@ -3417,12 +3417,14 @@ static void handleActiveEvent(SDL_Event *event)
 			break;
 		case SDL_WINDOWEVENT_ENTER:
 			debug(LOG_WZ, "Mouse entered window %d", event->window.windowID);
+			wzQueueRefreshCursor();
 			break;
 		case SDL_WINDOWEVENT_LEAVE:
 			debug(LOG_WZ, "Mouse left window %d", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
 			mouseInWindow = SDL_TRUE;
+			wzQueueRefreshCursor();
 			debug(LOG_WZ, "Window %d gained keyboard focus", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_LOST:
