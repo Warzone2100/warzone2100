@@ -38,6 +38,7 @@
 
 TableRow::TableRow()
 : W_BUTTON()
+, disabledColor(WZCOL_FORM_DISABLE)
 {
 	AudioCallback = nullptr;
 }
@@ -94,6 +95,18 @@ void TableRow::setDrawBorder(optional<PIELIGHT> newBorderColor)
 	borderColor = newBorderColor;
 }
 
+// Set whether row is "disabled"
+void TableRow::setDisabled(bool disabled)
+{
+	disabledRow = disabled;
+}
+
+// Set row disable overlay color
+void TableRow::setDisabledColor(PIELIGHT newDisabledColor)
+{
+	disabledColor = newDisabledColor;
+}
+
 int32_t TableRow::getColumnTotalContentIdealWidth()
 {
 	int32_t totalContentIdealWidth = 0;
@@ -116,8 +129,37 @@ void TableRow::display(int xOffset, int yOffset)
 		iV_Box(x0, y0, x1, y1, borderColor.value());
 	}
 
-	if (!highlightsOnMouseOver || !isMouseOverRowOrChildren()) { return; }
+	if (!highlightsOnMouseOver || !isMouseOverRowOrChildren() || disabledRow) { return; }
 	iV_TransBoxFill(x0, y0, x1, y1);
+}
+
+void TableRow::displayRecursive(WidgetGraphicsContext const& context)
+{
+	WIDGET::displayRecursive(context);
+
+	// *after* displaying all children, draw the disabled overlay (if needed)
+	if (!disabledRow)
+	{
+		return;
+	}
+
+	if (!context.clipContains(geometry())) {
+		return;
+	}
+
+	int xOffset = context.getXOffset();
+	int yOffset = context.getYOffset();
+
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+
+	pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), disabledColor);
+}
+
+bool TableRow::hitTest(int x, int y)
+{
+	if (disabledRow) { return false; }
+	return W_BUTTON::hitTest(x, y);
 }
 
 bool TableRow::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
@@ -453,6 +495,12 @@ void ScrollableTableWidget::clearRows()
 {
 	scrollableList->clear();
 	rows.clear();
+}
+
+void ScrollableTableWidget::setRowDisabled(size_t row, bool disabled)
+{
+	ASSERT_OR_RETURN(, row < rows.size(), "Invalid row idx: %zu", row);
+	rows[row]->setDisabled(disabled);
 }
 
 bool ScrollableTableWidget::changeColumnWidths(const std::vector<size_t>& newColumnWidths, bool overrideUserColumnResizing /*= false*/)
