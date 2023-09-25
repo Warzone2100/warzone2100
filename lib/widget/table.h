@@ -52,8 +52,15 @@ public:
 
 	// Set whether the row draws an outer border
 	void setDrawBorder(optional<PIELIGHT> borderColor);
+
+	// Set whether row is "disabled"
+	void setDisabled(bool disabled);
+	// Set row disable overlay color
+	void setDisabledColor(PIELIGHT disabledColor);
 protected:
 	virtual void display(int, int) override;
+	virtual void displayRecursive(WidgetGraphicsContext const& context) override;
+	virtual bool hitTest(int x, int y) override;
 public:
 	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 protected:
@@ -65,9 +72,11 @@ private:
 	bool isMouseOverRowOrChildren() const;
 private:
 	bool highlightsOnMouseOver = false;
+	bool disabledRow = false;
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 	optional<UDWORD> lastFrameMouseIsOverRowOrChildren = nullopt;
 	optional<PIELIGHT> borderColor = nullopt;
+	PIELIGHT disabledColor;
 };
 
 class TableHeader; // forward-declare
@@ -101,6 +110,9 @@ public:
 	// See: ``TableRow``
 	void addRow(const std::shared_ptr<TableRow> &row);
 	void clearRows();
+
+	// Disable / enable a row
+	void setRowDisabled(size_t row, bool disabled);
 
 	// Get the maximum width that can be used by the column widths passed to changeColumnWidths, based on the current widget size (minus padding)
 	size_t getMaxColumnTotalWidth(size_t numColumns) const;
@@ -139,6 +151,7 @@ public:
 	// Get the maximum idealWidth() returned by any of the row widgets in the specified column
 	int32_t getColumnMaxContentIdealWidth(size_t col);
 
+	inline size_t getNumRows() const { return rows.size(); }
 	inline size_t getNumColumns() const { return tableColumns.size(); }
 
 	// Change the table background color
