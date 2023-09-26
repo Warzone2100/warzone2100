@@ -220,10 +220,19 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 	return true;
 }
 
-static bool sendMultiStats(uint32_t playerIndex)
+bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex /*= nullopt*/)
 {
+	NETQUEUE queue;
+	if (!recipientPlayerIndex.has_value())
+	{
+		queue = NETbroadcastQueue();
+	}
+	else
+	{
+		queue = NETnetQueue(recipientPlayerIndex.value());
+	}
 	// Now send it to all other players
-	NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_STATS);
+	NETbeginEncode(queue, NET_PLAYER_STATS);
 	// Send the ID of the player's stats we're updating
 	NETuint32_t(&playerIndex);
 
