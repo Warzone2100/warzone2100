@@ -230,6 +230,12 @@ namespace wzapi
 		//__
 		virtual bool handle_eventTransporterLanded(const BASE_OBJECT *psTransport) SCRIPTING_EVENT_NON_REQUIRED
 
+		//__ ## eventTransporterEmbarked(transport)
+		//__
+		//__ An event that is run when a unit embarks into a transporter.
+		//__
+		virtual bool handle_eventTransporterEmbarked(const BASE_OBJECT *psTransport) SCRIPTING_EVENT_NON_REQUIRED
+
 	public:
 		// MARK: UI-related events (intended for the tutorial)
 

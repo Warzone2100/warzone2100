@@ -339,6 +339,12 @@ public:
 	//__
 	virtual bool handle_eventTransporterLanded(const BASE_OBJECT *psTransport) override;
 
+	//__ ## eventTransporterEmbarked(transport)
+	//__
+	//__ An event that is run when a unit embarks into a transporter.
+	//__
+	virtual bool handle_eventTransporterEmbarked(const BASE_OBJECT *psTransport) override;
+
 public:
 	// MARK: UI-related events (intended for the tutorial)
 
@@ -2941,6 +2947,7 @@ IMPL_EVENT_HANDLER(eventTransporterArrived, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventTransporterExit, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventTransporterDone, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventTransporterLanded, const BASE_OBJECT *)
+IMPL_EVENT_HANDLER(eventTransporterEmbarked, const BASE_OBJECT *)
 
 // MARK: UI-related events (intended for the tutorial)
 IMPL_EVENT_HANDLER(eventDeliveryPointMoving, const BASE_OBJECT *)

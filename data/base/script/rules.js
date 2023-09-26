@@ -410,8 +410,17 @@ function eventObjectTransfer(obj, from)
 	}
 }
 
-//Could be the last remaining trucks are on it.
+//Could be the last remaining trucks/commanders are on it.
 function eventTransporterLanded(transport)
+{
+	if (transport.player === selectedPlayer)
+	{
+		reticuleUpdate(transport, TRANSFER_LIKE_EVENT);
+	}
+}
+
+//Maybe no more truck/commanders on the map.
+function eventTransporterEmbarked(transport)
 {
 	if (transport.player === selectedPlayer)
 	{
