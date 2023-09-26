@@ -199,7 +199,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 
 	// NOTE: We can't just swap session keys - we have to re-generate to be sure they are correct
 	// (since client / server determinism can also be based on the playerIdx relative to the realSelectedPlayer - see SessionKeys constructor)
-	if (playerIndexA < MAX_PLAYERS)
+	if (playerIndexA != realSelectedPlayer && (playerIndexA < MAX_PLAYERS || playerIndexA == NetPlay.hostPlayer))
 	{
 		try {
 			generateSessionKeysWithPlayer(playerIndexA);
@@ -208,7 +208,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexA, NetPlay.players[playerIndexA].name, e.what());
 		}
 	}
-	if (playerIndexB < MAX_PLAYERS)
+	if (playerIndexB != realSelectedPlayer && (playerIndexB < MAX_PLAYERS || playerIndexB == NetPlay.hostPlayer))
 	{
 		try {
 			generateSessionKeysWithPlayer(playerIndexB);
@@ -282,9 +282,14 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 			auto& localIdentity = playerStats[realSelectedPlayer].identity;
 			if (localIdentity.hasPrivate())
 			{
-				for (uint8_t i = 0; i < MAX_PLAYERS; ++i)
+				for (uint8_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 				{
 					if (i == realSelectedPlayer) { continue; }
+					if (i >= MAX_PLAYERS && i != NetPlay.hostPlayer)
+					{
+						// Don't bother creating SessionKeys with non-host spectator slots
+						continue;
+					}
 					if (playerStats[i].identity.empty())
 					{
 						continue;
@@ -397,28 +402,28 @@ bool recvMultiStats(NETQUEUE queue)
 				std::string sendername = NetPlay.players[playerIndex].name;
 				std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
 				wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
-
-				if (playerIndex < MAX_PLAYERS)
-				{
-					if (!playerStats[playerIndex].identity.empty())
-					{
-						// generate session keys
-						try {
-							generateSessionKeysWithPlayer(playerIndex);
-						}
-						catch (const std::invalid_argument& e) {
-							debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
-						}
-					}
-					else
-					{
-						NETclearSessionKeys(playerIndex);
-					}
-				}
 			}
 			else
 			{
 				wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
+			}
+
+			if (playerIndex < MAX_PLAYERS || playerIndex == NetPlay.hostPlayer)
+			{
+				if (!playerStats[playerIndex].identity.empty())
+				{
+					// generate session keys
+					try {
+						generateSessionKeysWithPlayer(playerIndex);
+					}
+					catch (const std::invalid_argument& e) {
+						debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
+					}
+				}
+				else
+				{
+					NETclearSessionKeys(playerIndex);
+				}
 			}
 
 			processAutoratingData = true;
