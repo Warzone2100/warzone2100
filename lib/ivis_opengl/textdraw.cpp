@@ -1256,9 +1256,9 @@ int iV_GetEllipsisWidth(iV_fonts fontID)
 	return iV_Internal_GetEllipsis(fontID).width();
 }
 
-void iV_DrawEllipsis(iV_fonts fontID, Vector2f position, PIELIGHT colour)
+void iV_DrawEllipsis(iV_fonts fontID, Vector2f position, PIELIGHT colour, float rotation /*= 0.0f*/)
 {
-	iV_Internal_GetEllipsis(fontID).render(position, colour);
+	iV_Internal_GetEllipsis(fontID).render(position, colour, rotation);
 }
 
 unsigned int width_pixelsToPoints(unsigned int widthInPixels)
