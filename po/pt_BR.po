@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-08-11 19:45\n"
+"PO-Revision-Date: 2023-09-26 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -676,7 +676,7 @@ msgstr "Assim que o refúgio for estabelecido, retorne à AP, e aguarde novas or
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "MISSÃO DA BASE BETA: Sobreviva e evacue o perímetro! Traga um caminhão"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -5625,7 +5625,7 @@ msgstr ""
 
 #: data/mp/multiplay/script/rules/endconditions.js:369
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Jogar passivamente levará à derrota. Ações consideradas:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:372
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
@@ -7962,13 +7962,13 @@ msgstr "Torrete de Anti-Baterias calcula a localização das baterias de artilha
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1591
 msgid "Crane1"
-msgstr ""
+msgstr "Guindaste1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1594
 msgid "Crane2"
-msgstr ""
+msgstr "Guindaste2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
