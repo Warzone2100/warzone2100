@@ -1904,7 +1904,7 @@ bool stageThreeInitialise()
 	if (bMultiPlayer)
 	{
 		playerResponding();			// say howdy!
-		if (NetPlay.bComms)
+		if (NetPlay.bComms && !NETisReplay())
 		{
 			multiStartScreenInit();
 		}
