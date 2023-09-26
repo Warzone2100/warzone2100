@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-09-24 23:34\n"
+"PO-Revision-Date: 2023-09-26 02:19\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -25,7 +25,7 @@ msgstr "ЦЕЛЬ: Найти и вернуть технологию нейрос
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Основать базу, затем найти доядерные сооружения."
+msgstr "Основать базу, затем найти доколлапсовые сооружения."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -17364,7 +17364,7 @@ msgstr "Discord: неподдерживаемое / недействительн
 
 #: src/integrations/wzdiscordrpc.cpp:540
 msgid "Playing: Campaign"
-msgstr "Играет: Кампания"
+msgstr "В игре: Кампания"
 
 #: src/integrations/wzdiscordrpc.cpp:565
 msgid "Playing: Challenge"
