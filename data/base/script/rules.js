@@ -428,6 +428,15 @@ function eventTransporterEmbarked(transport)
 	}
 }
 
+//Maybe no more truck/commanders on the map.
+function eventTransporterDisembarked(transport)
+{
+	if (transport.player === selectedPlayer)
+	{
+		reticuleUpdate(transport, TRANSFER_LIKE_EVENT);
+	}
+}
+
 function eventResearched(research, structure, player)
 {
 	// NOTE: Research upgrades are handled by the C++ core game engine since 4.1.0
