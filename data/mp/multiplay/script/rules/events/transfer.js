@@ -5,3 +5,11 @@ function eventObjectTransfer(obj, from)
 		reticuleUpdate(obj, TRANSFER_LIKE_EVENT);
 	}
 }
+
+function eventTransporterEmbarked(transport)
+{
+	if (transport.player === selectedPlayer)
+	{
+		reticuleUpdate(transport, TRANSFER_LIKE_EVENT);
+	}
+}
