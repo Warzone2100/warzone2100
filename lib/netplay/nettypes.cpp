@@ -69,7 +69,7 @@ static NETQUEUE queueInfo;    ///< Indicates which queue is currently being (de)
 static PACKETDIR NetDir;      ///< Indicates whether a message is being serialised (PACKET_ENCODE) or deserialised (PACKET_DECODE), or not doing anything (PACKET_INVALID).
 static bool bSecretMessageWrap = false;
 
-static std::array<std::unique_ptr<SessionKeys>, MAX_PLAYERS> netSessionKeys;
+static std::array<std::unique_ptr<SessionKeys>, MAX_CONNECTED_PLAYERS> netSessionKeys;
 
 static bool bIsReplay = false;
 
@@ -529,7 +529,7 @@ void NETbeginDecode(NETQUEUE queue, uint8_t type)
 
 void NETsetSessionKeys(uint8_t player, SessionKeys&& keys)
 {
-	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %u", static_cast<unsigned>(player));
+	ASSERT_OR_RETURN(, player < netSessionKeys.size(), "Invalid player: %u", static_cast<unsigned>(player));
 	netSessionKeys[player] = std::make_unique<SessionKeys>(std::move(keys));
 }
 
@@ -543,7 +543,7 @@ void NETclearSessionKeys()
 
 void NETclearSessionKeys(uint8_t player)
 {
-	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %u", static_cast<unsigned>(player));
+	ASSERT_OR_RETURN(, player < netSessionKeys.size(), "Invalid player: %u", static_cast<unsigned>(player));
 	netSessionKeys[player].reset();
 }
 
@@ -562,8 +562,8 @@ bool NETbeginEncodeSecured(NETQUEUE queue, uint8_t type)
 {
 	ASSERT_OR_RETURN(false, type < NET_MAX_TYPE, "Message type %u is >= NET_MAX_TYPE", static_cast<unsigned>(type));
 	ASSERT_OR_RETURN(false, queue.index != realSelectedPlayer, "Secured messages are for other players, not ourselves.");
-	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS, "Invalid recipient (queue.index == %u)", static_cast<unsigned>(queue.index));
-	ASSERT_OR_RETURN(false, netSessionKeys[queue.index] != nullptr, "Lacking session key for player: %u", static_cast<unsigned>(queue.index));
+	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS || queue.index == NetPlay.hostPlayer, "Invalid recipient (queue.index == %u)", static_cast<unsigned>(queue.index));
+	ASSERT_OR_RETURN(false, netSessionKeys[queue.index] != nullptr, "Lacking session key for recipient: %u", static_cast<unsigned>(queue.index));
 	ASSERT(NETisExpectedSecuredMessageType(type), "Message type is not expected to be secured, and will be ignored on receipt");
 
 	NETbeginEncode(queue, type);
@@ -581,7 +581,7 @@ bool NETbeginDecodeSecured(NETQUEUE queue, uint8_t type)
 {
 	ASSERT_OR_RETURN(false, type < NET_MAX_TYPE, "Message type %u is >= NET_MAX_TYPE", static_cast<unsigned>(type));
 	ASSERT_OR_RETURN(false, queue.index != realSelectedPlayer, "Secured messages are for other players, not ourselves.");
-	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS, "Invalid recipient (queue.index == %u)", static_cast<unsigned>(queue.index));
+	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS || queue.index == NetPlay.hostPlayer, "Invalid sender (queue.index == %u)", static_cast<unsigned>(queue.index));
 	ASSERT_OR_RETURN(false, receiveQueue(queue)->currentMessageWasDecrypted(), "Message was not sent secured (type: %s)", messageTypeToString(type));
 
 	NETbeginDecode(queue, type);
@@ -593,7 +593,7 @@ bool NETbeginDecodeSecured(NETQUEUE queue, uint8_t type)
 //	- Returns true, updates the current message in queue to be the decrypted message, updates `type`
 bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type)
 {
-	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS, "Invalid sender (queue.index == %u", static_cast<unsigned>(queue.index));
+	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS || queue.index == NetPlay.hostPlayer, "Invalid sender (queue.index == %u", static_cast<unsigned>(queue.index));
 	ASSERT_OR_RETURN(false, netSessionKeys[queue.index] != nullptr, "Lacking session key for player: %u", static_cast<unsigned>(queue.index));
 	ASSERT_OR_RETURN(false, type == NET_SECURED_NET_MESSAGE, "Not a secured message?");
 
@@ -664,8 +664,8 @@ bool NETend()
 		{
 			// Need to actually encrypt and wrap the current net message in a NET_SECURED_NET_MESSAGE message
 			ASSERT(message.type < NET_MAX_TYPE, "Message type %u is >= NET_MAX_TYPE", static_cast<unsigned>(message.type));
-			ASSERT(queueInfo.index < MAX_PLAYERS, "Invalid sender (queue.index == %u", static_cast<unsigned>(queueInfo.index));
-			ASSERT(netSessionKeys[queueInfo.index] != nullptr, "Lacking session key for player: %u", static_cast<unsigned>(queueInfo.index));
+			ASSERT(queueInfo.index < MAX_PLAYERS || queueInfo.index == NetPlay.hostPlayer, "Invalid recipient (queue.index == %u)", static_cast<unsigned>(queueInfo.index));
+			ASSERT(netSessionKeys[queueInfo.index] != nullptr, "Lacking session key for recipient: %u", static_cast<unsigned>(queueInfo.index));
 
 			// Decoded in NETprocessSystemMessage in netplay.cpp.
 			// Encrypt the serialized message (including type and size)
