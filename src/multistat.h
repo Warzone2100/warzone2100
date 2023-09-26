@@ -89,7 +89,8 @@ struct RESEARCH;
 bool saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 PLAYERSTATS const &getMultiStats(UDWORD player);									// get from net
-bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // send to net.
+bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // set + send to net.
+bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex = nullopt); // send to net
 bool sendMultiStatsScoreUpdates(uint32_t player);
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames();

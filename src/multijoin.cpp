@@ -542,7 +542,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 			{
 				if (NetPlay.players[i].allocated)
 				{
-					setMultiStats(i, getMultiStats(i), false);
+					sendMultiStats(i);
 				}
 			}
 		}
