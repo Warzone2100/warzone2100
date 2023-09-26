@@ -13,3 +13,11 @@ function eventTransporterEmbarked(transport)
 		reticuleUpdate(transport, TRANSFER_LIKE_EVENT);
 	}
 }
+
+function eventTransporterDisembarked(transport)
+{
+	if (transport.player === selectedPlayer)
+	{
+		reticuleUpdate(transport, TRANSFER_LIKE_EVENT);
+	}
+}

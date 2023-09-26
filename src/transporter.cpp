@@ -965,6 +965,11 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 		//make sure the button isn't flashing
 		stopMissionButtonFlash(IDTRANS_LAUNCH);
 	}
+
+	// Fire off disembark event
+	transporterSetScriptCurrent(psTransport);
+	triggerEvent(TRIGGER_TRANSPORTER_DISEMBARKED, psTransport);
+	transporterSetScriptCurrent(nullptr);
 }
 
 /*adds a droid to the current transporter via the interface*/

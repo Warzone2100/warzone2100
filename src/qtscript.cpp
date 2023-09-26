@@ -1079,6 +1079,9 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 		case TRIGGER_TRANSPORTER_EMBARKED:
 			instance->handle_eventTransporterEmbarked(psObj);
 			break;
+		case TRIGGER_TRANSPORTER_DISEMBARKED:
+			instance->handle_eventTransporterDisembarked(psObj);
+			break;
 		case TRIGGER_MISSION_TIMEOUT:
 			instance->handle_eventMissionTimeout();
 			break;
