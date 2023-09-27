@@ -85,6 +85,7 @@
 #include "spectatorwidgets.h"
 #include "challenge.h"
 #include "multilobbycommands.h"
+#include "hci/teamstrategy.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -1180,6 +1181,9 @@ bool recvMessage()
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon(queue);
+				break;
+			case NET_TEAM_STRATEGY:
+				recvStrategyPlanUpdate(queue);
 				break;
 			case GAME_SYNC_REQUEST:
 				recvSyncRequest(queue);

@@ -2239,6 +2239,7 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	case NET_SHARE_GAME_QUEUE:           ///< Message contains a game message, which should be inserted into a queue.
 	case NET_DEBUG_SYNC:                 ///< Synch error messages, so people don't have to use pastebin.
 	case NET_SPECTEXTMSG:                ///< chat between spectators
+	case NET_TEAM_STRATEGY:              ///< Player is sending an updated strategy notice to team members
 		break;
 
 	// just process normally
@@ -5491,6 +5492,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_PLAYER_SWAP_INDEX_ACK:     return "NET_PLAYER_SWAP_INDEX_ACK";
 	case NET_DATA_CHECK2:               return "NET_DATA_CHECK2";
 	case NET_SECURED_NET_MESSAGE:		return "NET_SECURED_NET_MESSAGE";
+	case NET_TEAM_STRATEGY:				return "NET_TEAM_STRATEGY";
 	case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 	// Game-state-related messages, must be processed by all clients at the same game time.
