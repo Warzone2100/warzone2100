@@ -39,6 +39,7 @@
 #include "lib/sound/audio_id.h"
 #include "projectile.h"
 #include "text.h"
+#include "notifications.h"
 #include <unordered_map>
 
 #define WEAPON_TIME		100
@@ -1869,4 +1870,69 @@ bool objRadarDetector(const BASE_OBJECT *psObj)
 		return (psSensor && psSensor->type == RADAR_DETECTOR_SENSOR);
 	}
 	return false;
+}
+
+gfx_api::texture* loadImageForWeapSubclass(WEAPON_SUBCLASS subClass)
+{
+	const char* imagePath = nullptr;
+	switch (subClass)
+	{
+		case WSC_MGUN:
+			imagePath = "images/intfac/wsc_mgun.png";
+			break;
+		case WSC_CANNON:
+			imagePath = "images/intfac/wsc_cannon.png";
+			break;
+		case WSC_MORTARS:
+			imagePath = "images/intfac/wsc_mortars.png";
+			break;
+		case WSC_MISSILE:
+			imagePath = "images/intfac/wsc_missile.png";
+			break;
+		case WSC_ROCKET:
+			imagePath = "images/intfac/wsc_rocket.png";
+			break;
+		case WSC_ENERGY:
+			imagePath = "images/intfac/wsc_energy.png";
+			break;
+		case WSC_GAUSS:
+			imagePath = "images/intfac/wsc_gauss.png";
+			break;
+		case WSC_FLAME:
+			imagePath = "images/intfac/wsc_flame.png";
+			break;
+		//case WSC_CLOSECOMBAT:
+		case WSC_HOWITZERS:
+			imagePath = "images/intfac/wsc_howitzers.png";
+			break;
+		case WSC_ELECTRONIC:
+			imagePath = "images/intfac/wsc_electronic.png";
+			break;
+		case WSC_AAGUN:
+			imagePath = "images/intfac/wsc_aagun.png";
+			break;
+		case WSC_SLOWMISSILE:
+			imagePath = "images/intfac/wsc_slowmissile.png";
+			break;
+		case WSC_SLOWROCKET:
+			imagePath = "images/intfac/wsc_slowrocket.png";
+			break;
+		case WSC_LAS_SAT:
+			imagePath = "images/intfac/wsc_las_sat.png";
+			break;
+		case WSC_BOMB:
+			imagePath = "images/intfac/wsc_bomb.png";
+			break;
+		case WSC_COMMAND:
+			imagePath = "images/intfac/wsc_command.png";
+			break;
+		case WSC_EMP:
+			imagePath = "images/intfac/wsc_emp.png";
+			break;
+		case WSC_NUM_WEAPON_SUBCLASSES:	/** The number of enumerators in this enum.	 */
+			break;
+	}
+	ASSERT_OR_RETURN(nullptr, imagePath != nullptr, "No image path");
+	WZ_Notification_Image img(imagePath);
+	return img.loadImageToTexture();
 }

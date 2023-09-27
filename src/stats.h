@@ -179,6 +179,12 @@ const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
 /* returns the translated weapon sub class name - for local display purposes only */
 const char *getWeaponSubClassDisplayName(WEAPON_SUBCLASS wclass, bool shortForm);
 
+namespace gfx_api
+{
+	struct texture; // forward-declare
+}
+gfx_api::texture* loadImageForWeapSubclass(WEAPON_SUBCLASS subClass);
+
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
 bool getBodySize(const WzString &size, BODY_SIZE *pStore);
