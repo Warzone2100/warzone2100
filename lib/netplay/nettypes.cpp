@@ -549,8 +549,13 @@ void NETclearSessionKeys(uint8_t player)
 
 bool NETisExpectedSecuredMessageType(uint8_t type)
 {
-	// currently there are no expected secured messages
-	return false;
+	switch (type)
+	{
+		case NET_TEAM_STRATEGY:
+			return true;
+		default:
+			return false;
+	}
 }
 
 // For encoding a secured net message, for a *specific player*

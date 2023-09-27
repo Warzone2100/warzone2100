@@ -97,6 +97,7 @@
 #include "spectatorwidgets.h"
 #include "seqdisp.h"
 #include "version.h"
+#include "hci/teamstrategy.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -1571,6 +1572,8 @@ bool stageOneInitialise()
 	gameTimeInit();
 	transitionInit();
 	resetScroll();
+
+	strategyPlansInit();
 
 	return true;
 }

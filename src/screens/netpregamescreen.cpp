@@ -34,6 +34,9 @@
 #include "../display.h"
 #include "../hci.h"
 #include "../multiplay.h"
+#include "../frontend.h"
+
+#include "../hci/teamstrategy.h"
 
 #include <array>
 #include <chrono>
@@ -43,6 +46,7 @@ enum class PregameWaitingState
 {
 	Uninitialized,
 	WaitingForPlayersToJoin,
+	WaitingForTeamPlanning,
 	WaitingForFinalCountdown
 };
 
@@ -477,6 +481,7 @@ int32_t WzCountdownLabel::idealHeight()
 
 // MARK: - WzGameStartOverlayScreen_CLICKFORM
 
+#define WZ_TEAMPLANNING_COUNTDOWN_MS 20000
 #define WZ_FINAL_COUNTDOWN_MS 3000
 
 class WzGameStartOverlayScreen_CLICKFORM : public W_CLICKFORM
@@ -501,6 +506,7 @@ public:
 
 private:
 	void updateData();
+	void transitionToNextState();
 
 public:
 	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 200);
@@ -510,8 +516,11 @@ private:
 	std::shared_ptr<W_LABEL> topLabel;
 	std::shared_ptr<WzCountdownLabel> countdownLabel;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
+	std::shared_ptr<WIDGET> teamStrategyView;
+	std::shared_ptr<W_LABEL> strategySideTextLabel;
 	std::shared_ptr<WzLoadingPlayersStatusForm> playersLoadingStatus;
 	optional<std::chrono::steady_clock::time_point> currentCountdownStart;
+	bool bHasTeamPlanningStage = false;
 	PregameWaitingState currentState = PregameWaitingState::Uninitialized;
 private:
 	struct CachedConsoleMessage
@@ -593,6 +602,19 @@ void WzGameStartOverlayScreen_CLICKFORM::initialize()
 		}
 	});
 
+	// Determine if any players will have a team to share strategy with
+	bHasTeamPlanningStage = gameHasTeamStrategyView();
+
+	// Create a team strategy view (if player is on a team) - may return null if there's no reason to display it
+	teamStrategyView = createTeamStrategyView();
+	if (teamStrategyView)
+	{
+		// Add side label
+		strategySideTextLabel = addSideText(this, 0, 0, 0, _("TEAM STRATEGY"));
+
+		attach(teamStrategyView);
+	}
+
 	// Create a PlayerConnectionStatusForm
 	playersLoadingStatus = WzLoadingPlayersStatusForm::make();
 	attach(playersLoadingStatus);
@@ -612,11 +634,37 @@ void WzGameStartOverlayScreen_CLICKFORM::recalcLayout()
 	int countdownLabelWidth = 30;
 	countdownLabel->setGeometry(width() - (INTERNAL_PADDING + countdownLabelWidth), INTERNAL_PADDING, countdownLabelWidth, countdownLabel->idealHeight());
 
-	// Bottom-aligned widget
+	int bottomOfLastElement = topLabel->y() + topLabel->height();
+
+	// Bottom-aligned widget (player loading status)
 	std::shared_ptr<WIDGET> bottomWidget = playersLoadingStatus;
 	int bottomWidgetWidth = bottomWidget->idealWidth();
 	int bottomWidgetHeight = bottomWidget->idealHeight();
 	bottomWidget->setGeometry((width() - bottomWidgetWidth) / 2, height() - (bottomWidgetHeight + INTERNAL_PADDING), bottomWidgetWidth, bottomWidgetHeight);
+
+	if (teamStrategyView)
+	{
+		// place the team strategy information in the middle, below the topLabel
+		int teamStrategyTopPadding = INTERNAL_PADDING * 2;
+		int teamStrategyViewWidth = std::min(maxChildWidth - strategySideTextLabel->requiredHeight(), teamStrategyView->idealWidth());
+		int maxAvailableHeightForTeamStrategyView = height() - (bottomWidget->visible() ? bottomWidgetHeight : 0) - (teamStrategyTopPadding * 2);
+		int teamStrategyViewHeight = std::min(maxAvailableHeightForTeamStrategyView, teamStrategyView->idealHeight());
+		int teamStrategyX0 = (width() - teamStrategyViewWidth) / 2;
+		int teamStrategyY0 = bottomOfLastElement + teamStrategyTopPadding;
+		teamStrategyView->setGeometry(teamStrategyX0, teamStrategyY0, teamStrategyViewWidth, teamStrategyViewHeight);
+
+		// place the side text... to the side
+		int strategySideTextX0 = std::max(teamStrategyX0 - strategySideTextLabel->requiredHeight(), 0);
+		if (strategySideTextX0 >= strategySideTextLabel->requiredHeight())
+		{
+			strategySideTextLabel->setGeometry(strategySideTextX0, teamStrategyY0, strategySideTextLabel->width(), strategySideTextLabel->height());
+			strategySideTextLabel->show();
+		}
+		else
+		{
+			strategySideTextLabel->hide();
+		}
+	}
 }
 
 void WzGameStartOverlayScreen_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
@@ -689,6 +737,55 @@ void WzGameStartOverlayScreen_CLICKFORM::run(W_CONTEXT *psContext)
 	updateData();
 }
 
+void WzGameStartOverlayScreen_CLICKFORM::transitionToNextState()
+{
+	auto transitionToFinalCountdown = [&]() {
+		currentState = PregameWaitingState::WaitingForFinalCountdown;
+		topLabel->setString(_("Game will start in ..."));
+		currentCountdownStart = std::chrono::steady_clock::now();
+		countdownLabel->setCountdown(currentCountdownStart.value(), WZ_FINAL_COUNTDOWN_MS / 1000);
+		recalcLayout();
+	};
+
+	switch (currentState)
+	{
+		case PregameWaitingState::Uninitialized:
+			currentState = PregameWaitingState::WaitingForPlayersToJoin;
+			topLabel->setString(_("Waiting for other players ..."));
+			recalcLayout();
+			break;
+		case PregameWaitingState::WaitingForPlayersToJoin:
+			if (bHasTeamPlanningStage)
+			{
+				currentState = PregameWaitingState::WaitingForTeamPlanning;
+				topLabel->setString(_("Team Planning"));
+				currentCountdownStart = std::chrono::steady_clock::now();
+				countdownLabel->setCountdown(currentCountdownStart.value(), WZ_TEAMPLANNING_COUNTDOWN_MS / 1000);
+				if (teamStrategyView)
+				{
+					transformTeamStrategyViewMode(teamStrategyView, true);
+				}
+
+				// if needed, hide playersLoadingStatus so the team planning can use the full height
+				if (true)
+				{
+					playersLoadingStatus->hide();
+				}
+				recalcLayout();
+			}
+			else
+			{
+				transitionToFinalCountdown();
+			}
+			break;
+		case PregameWaitingState::WaitingForTeamPlanning:
+			transitionToFinalCountdown();
+			break;
+		case PregameWaitingState::WaitingForFinalCountdown:
+			break;
+	}
+}
+
 void WzGameStartOverlayScreen_CLICKFORM::updateData()
 {
 	// Prune expired console messages
@@ -708,13 +805,10 @@ void WzGameStartOverlayScreen_CLICKFORM::updateData()
 	// Handle game start state
 	if (currentState == PregameWaitingState::Uninitialized)
 	{
-		currentState = PregameWaitingState::WaitingForPlayersToJoin;
-		topLabel->setString(_("Waiting for other players ..."));
-		recalcLayout();
+		transitionToNextState();
 	}
 	if (currentState == PregameWaitingState::WaitingForPlayersToJoin)
 	{
-		// check if all players have joined - if they have, transition to PregameWaitingState::WaitingForFinalCountdown
 		size_t playersWaitingToJoin = 0;
 		size_t playersJoined = 0;
 		for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
@@ -731,13 +825,25 @@ void WzGameStartOverlayScreen_CLICKFORM::updateData()
 				}
 			}
 		}
+		// if all players have joined, transition to the next state
 		if (playersWaitingToJoin == 0)
 		{
-			currentState = PregameWaitingState::WaitingForFinalCountdown;
-			topLabel->setString(_("Game will start in ..."));
+			transitionToNextState();
+		}
+	}
+	if (currentState == PregameWaitingState::WaitingForTeamPlanning)
+	{
+		if (currentCountdownStart.has_value())
+		{
+			auto currentTime = std::chrono::steady_clock::now();
+			if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - currentCountdownStart.value()).count() >= WZ_TEAMPLANNING_COUNTDOWN_MS)
+			{
+				transitionToNextState();
+			}
+		}
+		else
+		{
 			currentCountdownStart = std::chrono::steady_clock::now();
-			countdownLabel->setCountdown(currentCountdownStart.value(), WZ_FINAL_COUNTDOWN_MS / 1000);
-			recalcLayout();
 		}
 	}
 	if (currentState == PregameWaitingState::WaitingForFinalCountdown)
