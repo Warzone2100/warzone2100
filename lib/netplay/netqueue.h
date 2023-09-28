@@ -66,6 +66,14 @@ public:
 	{
 		message->data.push_back(v);
 	}
+	void bytes(uint8_t *pIn, size_t numBytes) const
+	{
+		message->data.insert(message->data.end(), pIn, pIn + numBytes);
+	}
+	void bytesVector(std::vector<uint8_t> &vIn, size_t numBytes) const
+	{
+		message->data.insert(message->data.end(), vIn.begin(), vIn.begin() + std::min(numBytes, vIn.size()));
+	}
 	bool valid() const
 	{
 		return true;
@@ -84,6 +92,30 @@ public:
 	{
 		v = index >= message->data.size() ? 0x00 : message->data[index];
 		++index;
+	}
+	void bytes(uint8_t *pOut, size_t numBytes) const
+	{
+		size_t numCopyBytes = (index >= message->data.size()) ? 0 : std::min<size_t>(message->data.size() - index, numBytes);
+		if (numCopyBytes > 0)
+		{
+			memcpy(pOut, &(message->data[index]), numCopyBytes);
+		}
+		if (numCopyBytes < numBytes)
+		{
+			memset(pOut + numCopyBytes, 0, numBytes - numCopyBytes);
+		}
+		index += numCopyBytes;
+	}
+	void bytesVector(std::vector<uint8_t> &vOut, size_t desiredBytes) const
+	{
+		size_t numCopyBytes = (index >= message->data.size()) ? 0 : std::min<size_t>(message->data.size() - index, desiredBytes);
+		if (numCopyBytes > 0)
+		{
+			size_t startIdx = vOut.size();
+			vOut.resize(vOut.size() + numCopyBytes);
+			memcpy(&(vOut[startIdx]), &(message->data[index]), numCopyBytes);
+		}
+		index += numCopyBytes;
 	}
 	bool valid() const
 	{
