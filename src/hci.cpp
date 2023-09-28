@@ -81,6 +81,7 @@
 #include "hci/commander.h"
 #include "notifications.h"
 #include "hci/groups.h"
+#include "screens/chatscreen.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -277,8 +278,6 @@ static void processProximityButtons(UDWORD id);
 
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
-
-static void parseChatMessageModifiers(InGameChatMessage &message);
 
 
 /***************************GAME CODE ****************************/
@@ -992,6 +991,11 @@ void interfaceShutDown()
 	{
 		i = RETBUTSTATS();
 	}
+
+	shutdownChatScreen();
+	ChatDialogUp = false;
+
+	bAllowOtherKeyPresses = true;
 }
 
 static bool IntRefreshPending = false;
@@ -1543,33 +1547,6 @@ INT_RETVAL intRunWidgets()
 			intResetScreen(false);
 			quitting = true;
 			break;
-
-		// process our chatbox
-		case CHAT_EDITBOX:
-			{
-				auto message = InGameChatMessage(selectedPlayer, widgGetString(psWScreen, CHAT_EDITBOX));
-				attemptCheatCode(message.text);		// parse the message
-
-				if ((int) widgGetUserData2(psWScreen, CHAT_EDITBOX) == CHAT_TEAM)
-				{
-					message.toAllies = true;
-				}
-				else
-				{
-					parseChatMessageModifiers(message);
-				}
-
-				if (strlen(message.text))
-				{
-					message.send();
-				}
-
-				inputLoseFocus();
-				bAllowOtherKeyPresses = true;
-				widgDelete(psWScreen, CHAT_CONSOLEBOX);
-				ChatDialogUp = false;
-				break;
-			}
 
 		/* Default case passes remaining IDs to appropriate function */
 		default:
@@ -3055,48 +3032,12 @@ void chatDialog(int mode)
 {
 	if (!ChatDialogUp)
 	{
-		auto const &parent = psWScreen->psForm;
-		W_CONTEXT sContext = W_CONTEXT::ZeroContext();
-
-		auto consoleBox = std::make_shared<IntFormAnimated>();
-		parent->attach(consoleBox);
-		consoleBox->id = CHAT_CONSOLEBOX;
-		consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
-		}));
-
-		auto chatBox = std::make_shared<W_EDITBOX>();
-		consoleBox->attach(chatBox);
-		chatBox->id = CHAT_EDITBOX;
-		chatBox->setGeometry(80, 2, 320, 16);
-		if (mode == CHAT_GLOB)
-		{
-			chatBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
-			widgSetUserData2(psWScreen, CHAT_EDITBOX, CHAT_GLOB);
-		}
-		else
-		{
-			chatBox->setBoxColours(WZCOL_YELLOW, WZCOL_YELLOW, WZCOL_MENU_BACKGROUND);
-			widgSetUserData2(psWScreen, CHAT_EDITBOX, CHAT_TEAM);
-		}
-
-		auto label = std::make_shared<W_LABEL>();
-		consoleBox->attach(label);
-		label->setGeometry(2, 2,60, 16);
-		if (mode == CHAT_GLOB)
-		{
-			label->setFontColour(WZCOL_TEXT_BRIGHT);
-			label->setString(_("Chat: All"));
-		}
-		else
-		{
-			label->setFontColour(WZCOL_YELLOW);
-			label->setString(_("Chat: Team"));
-		}
-		label->setTextAlignment(WLAB_ALIGNTOPLEFT);
 		ChatDialogUp = true;
-		// Auto-click it
-		widgGetFromID(psWScreen, CHAT_EDITBOX)->clicked(&sContext);
+
+		WzChatMode initialChatMode = (mode == CHAT_GLOB) ? WzChatMode::Glob : WzChatMode::Team;
+		createChatScreen([]() {
+			ChatDialogUp = false;
+		}, initialChatMode);
 	}
 	else
 	{
@@ -3119,31 +3060,6 @@ bool isSecondaryWindowUp()
 void setSecondaryWindowUp(bool value)
 {
 	secondaryWindowUp = true;
-}
-
-/**
- * Parse what the player types in the chat box.
- *
- * Messages prefixed with "." are interpreted as messages to allies.
- * Messages prefixed with 1 or more digits (0-9) are interpreted as private messages to players.
- *
- * Examples:
- * - ".hi allies" sends "hi allies" to all allies.
- * - "123hi there" sends "hi there" to players 1, 2 and 3.
- * - ".123hi there" sends "hi there" to allies and players 1, 2 and 3.
- **/
-static void parseChatMessageModifiers(InGameChatMessage &message)
-{
-	if (*message.text == '.')
-	{
-		message.toAllies = true;
-		message.text++;
-	}
-
-	for (; *message.text >= '0' && *message.text <= '9'; ++message.text)  // for each 0..9 numeric char encountered
-	{
-		message.addReceiverByPosition(*message.text - '0');
-	}
 }
 
 void intSetShouldShowRedundantDesign(bool value)

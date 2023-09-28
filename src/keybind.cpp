@@ -2006,14 +2006,9 @@ void kf_SendTeamMessage()
 
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
-		bAllowOtherKeyPresses = false;
 		sstrcpy(sCurrentConsoleText, "");			//for beacons
 		inputClearBuffer();
 		chatDialog(CHAT_TEAM);						// throw up the dialog
-	}
-	else
-	{
-		bAllowOtherKeyPresses = true;
 	}
 }
 
@@ -2027,14 +2022,9 @@ void kf_SendGlobalMessage()
 
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
-		bAllowOtherKeyPresses = false;
 		sstrcpy(sCurrentConsoleText, "");			//for beacons
 		inputClearBuffer();
 		chatDialog(CHAT_GLOB);						// throw up the dialog
-	}
-	else
-	{
-		bAllowOtherKeyPresses = true;
 	}
 }
 
