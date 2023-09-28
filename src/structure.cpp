@@ -79,6 +79,7 @@
 #include "scores.h"
 #include "gateway.h"
 #include "multistat.h"
+#include "keybind.h"
 
 #include "random.h"
 #include <functional>
@@ -4348,6 +4349,8 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 	{
 		//tell associated Power Gen
 		releaseResExtractor(psDel);
+		//tell keybind that this is going away (to prevent dangling pointer in kf_JumpToResourceExtractor)
+		keybindInformResourceExtractorRemoved(psDel);
 	}
 
 	if (psDel->pStructureType->type == REF_POWER_GEN)

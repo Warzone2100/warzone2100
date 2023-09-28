@@ -1653,6 +1653,14 @@ void	kf_JumpToResourceExtractor()
 
 }
 
+void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor)
+{
+	if (psOldRE == psResourceExtractor)
+	{
+		psOldRE = nullptr;
+	}
+}
+
 // --------------------------------------------------------------------------
 MappableFunction kf_JumpToUnits(const DROID_TYPE droidType)
 {
