@@ -450,6 +450,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			{
 				lockedScreen->setFocus(nullptr);
 			}
+			stopEditing();
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;
 			break;
@@ -467,12 +468,16 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			else
 			{
 				// hitting ESC while the editbox is empty ends editing mode
-				StopTextInput(this);
 				if (auto lockedScreen = screenPointer.lock())
 				{
 					lockedScreen->setFocus(nullptr);
 				}
 				inputLoseFocus();	// clear the input buffer.
+				stopEditing();
+				if (onEscHandler)
+				{
+					onEscHandler(*this);
+				}
 				return;
 			}
 			break;
@@ -609,24 +614,42 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 }
 
 
-/* Respond to loss of focus */
-void W_EDITBOX::focusLost()
+void W_EDITBOX::stopEditing()
 {
-	ASSERT(!(state & WEDBS_DISABLE), "editBoxFocusLost: disabled edit box");
+	if (state & WEDBS_DISABLE)  // disabled button.
+	{
+		return;
+	}
+
+	/* Note the edit state */
+	unsigned editState = state & WEDBS_MASK;
+
+	/* Only have anything to do if the widget is being edited */
+	if ((editState & WEDBS_MASK) == WEDBS_FIXED)
+	{
+		return;
+	}
 
 	/* Stop editing the widget */
 	state = WEDBS_FIXED;
 	printStart = 0;
 	fitStringStart();
 	StopTextInput(this);
+	dirty = true;
+}
+
+/* Respond to loss of focus */
+void W_EDITBOX::focusLost()
+{
+	ASSERT(!(state & WEDBS_DISABLE), "editBoxFocusLost: disabled edit box");
+
+	stopEditing();
 
 	if (auto lockedScreen = screenPointer.lock())
 	{
 		lockedScreen->setReturn(shared_from_this());
 	}
-	dirty = true;
 }
-
 
 /* Respond to a mouse moving over an edit box */
 void W_EDITBOX::highlight(W_CONTEXT *)
@@ -749,4 +772,9 @@ void W_EDITBOX::setState(unsigned newState)
 void W_EDITBOX::setOnReturnHandler(const OnReturnHandler& func)
 {
 	onRetHandler = func;
+}
+
+void W_EDITBOX::setOnEscapeHandler(const OnReturnHandler& func)
+{
+	onEscHandler = func;
 }

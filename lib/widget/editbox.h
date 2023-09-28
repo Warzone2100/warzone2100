@@ -59,6 +59,8 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void geometryChanged() override;
 
+	void stopEditing();
+
 	void setState(unsigned state) override;
 	WzString getString() const override;
 	void setString(WzString string) override;
@@ -69,6 +71,7 @@ public:
 
 	typedef std::function<void (W_EDITBOX&)> OnReturnHandler;
 	void setOnReturnHandler(const OnReturnHandler& func);
+	void setOnEscapeHandler(const OnReturnHandler& func);
 
 	UDWORD		state;						// The current edit box state
 	WzString	aText;						// The text in the edit box
@@ -100,6 +103,7 @@ private:
 	EditBoxDisplayCache displayCache;
 	bool suppressAudioCallback = false;
 	OnReturnHandler	onRetHandler = nullptr;
+	OnReturnHandler onEscHandler = nullptr;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__
