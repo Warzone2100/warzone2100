@@ -548,6 +548,7 @@ bool sendLeavingMsg()
 		NETbool(&host);
 	}
 	NETend();
+	NETflush();
 
 	return true;
 }
