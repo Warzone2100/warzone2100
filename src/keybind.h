@@ -202,4 +202,7 @@ void kf_ToggleSpecOverlays();
 void enableGodMode();
 
 void keybindShutdown();
+
+void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor);
+
 #endif // __INCLUDED_SRC_KEYBIND_H__
