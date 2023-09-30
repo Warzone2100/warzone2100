@@ -2763,6 +2763,27 @@
 				"class": "Building",
 				"parameter": "RepairPoints",
 				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "CyborgRepair",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "HeavyRepair",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 50
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -2784,6 +2805,27 @@
 				"class": "Building",
 				"parameter": "RepairPoints",
 				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "CyborgRepair",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "HeavyRepair",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 100
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -2802,6 +2844,27 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "CyborgRepair",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "HeavyRepair",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 100
 			}
