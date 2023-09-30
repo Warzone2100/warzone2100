@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-09-27 15:39\n"
+"PO-Revision-Date: 2023-09-30 05:06\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -13387,7 +13387,7 @@ msgstr "Ракетное ПВО Солнечные Лучи"
 #. data/mp/stats/structure.json: $.P0-AASite-Sunburst.name
 #: po/custom/fromJson.txt:5331
 msgid "Sunburst AA Site"
-msgstr "Ракетная установка ПВО Солнечные Лучи"
+msgstr "Установка ПВО Солнечные Лучи"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Rocket-Sunburst.name
