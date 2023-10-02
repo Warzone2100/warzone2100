@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2022-12-14 22:38+0000\n"
-"PO-Revision-Date: 2023-09-30 05:06\n"
+"PO-Revision-Date: 2023-10-02 12:16\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -7116,7 +7116,7 @@ msgstr "Автоматический механизм перезарядки з�
 #. data/mp/stats/structure.json: $.WallTower-SamSite.name
 #: po/custom/fromJson.txt:1015
 msgid "Avenger Hardpoint"
-msgstr "Укрепточка ПВО Мститель"
+msgstr "Укрепточка с ЗУР Мститель"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-SamSite1.name
@@ -7125,7 +7125,7 @@ msgstr "Укрепточка ПВО Мститель"
 #. data/mp/stats/structure.json: $.P0-AASite-SAM1.name
 #: po/custom/fromJson.txt:1021
 msgid "Avenger SAM Site"
-msgstr "Ракетная установка ПВО Мститель"
+msgstr "Установка ЗУР Мститель"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-LtSAM.name
@@ -7134,7 +7134,7 @@ msgstr "Ракетная установка ПВО Мститель"
 #. data/mp/stats/weapons.json: $.Missile-LtSAM.name
 #: po/custom/fromJson.txt:1027
 msgid "Avenger SAM"
-msgstr "ПВО Мститель"
+msgstr "ЗУР Мститель"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[3]
@@ -9057,7 +9057,7 @@ msgstr "Укреплённая радарная башня"
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[0]
 #: po/custom/fromJson.txt:2347
 msgid "Hardpoint Avenger SAM Site Available"
-msgstr "Доступна укреплённая точка с ПВО Мститель"
+msgstr "Доступна укреплённая точка с ЗУР Мститель"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[0]
@@ -9081,7 +9081,7 @@ msgstr "Доступна укреплённая точка со спаренны
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text[0]
 #: po/custom/fromJson.txt:2359
 msgid "Hardpoint Vindicator SAM Site Available"
-msgstr "Доступна укреплённая точка с ракетным ПВО Защитник"
+msgstr "Доступна укреплённая точка с ЗУР Защитник"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text[0]
@@ -11647,7 +11647,7 @@ msgstr "Доступны новые ракеты"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[0]
 #: po/custom/fromJson.txt:4214
 msgid "New SAM Turret Available"
-msgstr "Доступна новая турель ПВО"
+msgstr "Доступна новая турель с ЗУР"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[0]
@@ -12885,14 +12885,14 @@ msgstr "Разрушенный завод"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_SAM1.text[1]
 #: po/custom/fromJson.txt:5024
 msgid "SAM site with Avenger missiles"
-msgstr "Ракетная установка ПВО Мститель"
+msgstr "Зенитная ракетная установка Мститель"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_SAM2.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_EMP_SAM2.text[1]
 #: po/custom/fromJson.txt:5028
 msgid "SAM site with Vindicator missiles"
-msgstr "Ракетная установка ПВО Защитник"
+msgstr "Зенитная ракетная установка Защитник"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPitAT.name
@@ -14272,7 +14272,7 @@ msgstr "Очень медленная перезарядка"
 #. data/mp/stats/structure.json: $.WallTower-SamHvy.name
 #: po/custom/fromJson.txt:5926
 msgid "Vindicator Hardpoint"
-msgstr "Укрепточка ПВО Защитник"
+msgstr "Укрепточка с ЗУР Защитник"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-SamSite2.name
@@ -14281,7 +14281,7 @@ msgstr "Укрепточка ПВО Защитник"
 #. data/mp/stats/structure.json: $.P0-AASite-SAM2.name
 #: po/custom/fromJson.txt:5932
 msgid "Vindicator SAM Site"
-msgstr "Ракетная установка ПВО Защитник"
+msgstr "Установка ЗУР Защитник"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-HvSAM.name
@@ -14290,7 +14290,7 @@ msgstr "Ракетная установка ПВО Защитник"
 #. data/mp/stats/weapons.json: $.Missile-HvySAM.name
 #: po/custom/fromJson.txt:5938
 msgid "Vindicator SAM"
-msgstr "ПВО Защитник"
+msgstr "ЗУР Защитник"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body1REC.name
