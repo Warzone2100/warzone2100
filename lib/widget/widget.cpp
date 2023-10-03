@@ -588,10 +588,12 @@ void WIDGET::setScreenPointer(const std::shared_ptr<W_SCREEN> &screen)
 		if (lockedScreen->hasFocus(*this))
 		{
 			lockedScreen->psFocus.reset();
+			this->focusLost();
 		}
 		if (lockedScreen->isLastHighlight(*this))
 		{
 			lockedScreen->lastHighlight.reset();
+			this->highlightLost();
 		}
 	}
 
