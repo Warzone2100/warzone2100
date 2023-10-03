@@ -51,6 +51,8 @@ struct TabSelectionStyle
 	TabAlignment tabAlignment = TabAlignment::LeftAligned;
 };
 
+class ListWidget;
+
 class TabSelectionWidget : public WIDGET
 {
 protected:
@@ -87,8 +89,13 @@ private:
 	void prevTabPage();
 	void nextTabPage();
 
-private:
+protected:
+	void geometryChanged() override;
+
+protected:
+	friend class ListWidget;
 	void doLayoutAll();
+private:
 
 	std::vector<TabSelectionStyle> styles;
 	size_t currentTab;
@@ -126,6 +133,9 @@ public:
 	{
 		return myChildren.size();
 	}
+	size_t firstWidgetShownIndex() const;
+	size_t lastWidgetShownIndex() const;
+	std::shared_ptr<WIDGET> getWidgetAtIndex(size_t index) const;
 
 	/* The optional "onCurrentPageChanged" callback function */
 	typedef std::function<void (ListWidget& psWidget, size_t currentPage)> W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC;
@@ -135,6 +145,9 @@ public:
 
 	void addOnCurrentPageChangedHandler(const W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC& handlerFunc);
 	void addOnNumberOfPagesChangedHandler(const W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC& handlerFunc);
+
+protected:
+	void geometryChanged() override;
 
 public:
 	void setCurrentPage(size_t page);
@@ -230,6 +243,8 @@ public:
 	{
 		return widgets.get();
 	}
+
+	int32_t heightOfTabsLabel() const;
 
 	void goToChildPage(size_t childIndex)
 	{
