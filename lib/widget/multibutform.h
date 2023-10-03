@@ -45,8 +45,10 @@ public:
 public:
 	MultibuttonWidget(int value = -1);
 
-	virtual void display(int xOffset, int yOffset);
-	virtual void geometryChanged();
+	virtual void display(int xOffset, int yOffset) override;
+	virtual void geometryChanged() override;
+	virtual int32_t idealWidth() override;
+	virtual int32_t idealHeight() override;
 
 	void setLabel(char const *text);
 	void addButton(int value, const std::shared_ptr<W_BUTTON>& button);
@@ -73,6 +75,7 @@ public:
 
 private:
 	void stateChanged();
+	int32_t widthOfAllButtons() const;
 
 protected:
 	std::shared_ptr<W_LABEL> label;
