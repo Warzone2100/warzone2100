@@ -437,6 +437,13 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			break;
 		case INPBUF_TAB :
 			debug(LOG_INPUT, "EditBox cursor tab");
+			if (onTabHandler)
+			{
+				if (onTabHandler(*this))
+				{
+					done = true;
+				}
+			}
 			break;
 		case INPBUF_CR :
 		case KEY_KPENTER:					// either normal return key || keypad enter
@@ -636,6 +643,10 @@ void W_EDITBOX::stopEditing()
 	fitStringStart();
 	StopTextInput(this);
 	dirty = true;
+	if (onEditingStoppedHandler)
+	{
+		onEditingStoppedHandler(*this);
+	}
 }
 
 /* Respond to loss of focus */
@@ -774,7 +785,17 @@ void W_EDITBOX::setOnReturnHandler(const OnReturnHandler& func)
 	onRetHandler = func;
 }
 
+void W_EDITBOX::setOnTabHandler(const OnTabHandler& func)
+{
+	onTabHandler = func;
+}
+
 void W_EDITBOX::setOnEscapeHandler(const OnReturnHandler& func)
 {
 	onEscHandler = func;
+}
+
+void W_EDITBOX::setOnEditingStoppedHandler(const OnReturnHandler& func)
+{
+	onEditingStoppedHandler = func;
 }
