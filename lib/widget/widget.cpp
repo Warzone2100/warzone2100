@@ -1473,12 +1473,20 @@ void W_SCREEN::setFocus(const std::shared_ptr<WIDGET> &widget)
 {
 	if (auto locked = psFocus.lock())
 	{
+		if (locked == widget)
+		{
+			return; // do nothing - no change
+		}
+		psFocus = widget;
 		if (bWidgetsInitialized) // do not call focusLost if widgets have already shutdown / are not initialized
 		{
 			locked->focusLost();
 		}
 	}
-	psFocus = widget;
+	else
+	{
+		psFocus = widget;
+	}
 }
 
 void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID, SWORD ErrorID)
