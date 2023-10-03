@@ -66,6 +66,11 @@ void TabSelectionWidget::initialize()
 	setNumberOfTabs(1);
 }
 
+void TabSelectionWidget::geometryChanged()
+{
+	doLayoutAll();
+}
+
 void TabSelectionWidget::setHeight(int height)
 {
 	setGeometry(x(), y(), width(), height);
@@ -302,6 +307,22 @@ void ListWidget::doLayout(size_t num)
 	myChildren[num]->show(page == currentPage_);
 }
 
+size_t ListWidget::firstWidgetShownIndex() const
+{
+	return currentPage_ * widgetsPerPage();
+}
+
+size_t ListWidget::lastWidgetShownIndex() const
+{
+	return std::min(firstWidgetShownIndex() + widgetsPerPage() - 1, myChildren.size() - 1);
+}
+
+std::shared_ptr<WIDGET> ListWidget::getWidgetAtIndex(size_t index) const
+{
+	ASSERT_OR_RETURN(nullptr, index < myChildren.size(), "Invalid widget index: %zu", index);
+	return myChildren[index];
+}
+
 void ListWidget::addOnCurrentPageChangedHandler(const W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC& handlerFunc)
 {
 	onCurrentPageChangedHandlers.push_back(handlerFunc);
@@ -332,10 +353,17 @@ void ListWidget::updateNumberOfPages()
 	}
 }
 
+void ListWidget::geometryChanged()
+{
+	doLayoutAll();
+	updateNumberOfPages();
+}
+
 void ListTabWidget::initialize()
 {
 	attach(label = std::make_shared<W_LABEL>());
 	label->setFont(font_small, WZCOL_TEXT_MEDIUM);
+	label->setTransparentToMouse(true);
 	attach(tabs = TabSelectionWidget::make());
 	attach(widgets = std::make_shared<ListWidget>());
 	tabs->addOnTabChangedHandler([](TabSelectionWidget& tabsWidget, size_t currentTab) {
@@ -386,6 +414,12 @@ void ListTabWidget::geometryChanged()
 		}
 		break;
 	}
+}
+
+int32_t ListTabWidget::heightOfTabsLabel() const
+{
+	int widgets_y0 = std::max(LABEL_PADDING_Y + label->idealHeight(), tabs->height());
+	return widgets_y0;
 }
 
 void ListTabWidget::setTitle(const WzString& string)
