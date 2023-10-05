@@ -553,6 +553,7 @@
 #  undef NOMINMAX
 #  define NOMINMAX 1		// disable the min / max macros
 #  include <windows.h>
+#  include <algorithm>
 
 #  if defined(WZ_CC_MSVC)
 

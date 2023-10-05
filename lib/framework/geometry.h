@@ -22,6 +22,7 @@
 
 #include "frame.h"
 #include "vector.h"
+#include <algorithm>
 #include <limits>
 
 /**
