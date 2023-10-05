@@ -182,7 +182,7 @@ void Sha256::fromString(std::string const &s)
 	}
 }
 
-void to_json(nlohmann::json& j, const Sha256& k)
+inline void to_json(nlohmann::json& j, const Sha256& k)
 {
 	if (k.isZero())
 	{
