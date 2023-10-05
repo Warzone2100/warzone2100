@@ -730,7 +730,8 @@ static WzString suggestSaveName(const char *saveGamePath)
 
 	WzString saveName = WzString(saveNamePartial).trimmed();
 	int similarSaveGames = 0;
-	WZ_PHYSFS_enumerateFolders(saveGamePath, [&saveName, &similarSaveGames](const char *dirName) {
+	std::vector<int> suffixArr;
+	WZ_PHYSFS_enumerateFolders(saveGamePath, [&saveName, &similarSaveGames, &suffixArr](const char *dirName) {
 		std::string dirNameStr = WzString(dirName).toStdString();
 		std::string saveNameStr = saveName.toStdString();
 		size_t pos = dirNameStr.find(saveNameStr);
@@ -751,23 +752,29 @@ static WzString suggestSaveName(const char *saveGamePath)
 		size_t lastSpace = restOfSaveName.find_last_of(" ");
 		if (lastSpace != std::string::npos)
 		{
-			if (isdigit(restOfSaveName[lastSpace + 1]))
-			{
-				std::string tempStr = restOfSaveName.substr(0, lastSpace);
-				if (tempStr.compare(saveNameStr) == 0)
-				{
-					++similarSaveGames;
-					return true;
-				}
+			// Get the suffix number
+			int converted = atoi(restOfSaveName.substr(lastSpace).c_str());
+			if (converted != 0) {
+				// Suffix is a number
+				suffixArr.push_back(converted);
 			}
 		}
 
 		return true;
 	});
-
 	if (similarSaveGames > 0)
 	{
-		saveName += " " + WzString::number(similarSaveGames + 1);
+		// Sorting the suffix numbers and determining missing saves
+		int curSaveNum = 2;
+		std::sort(suffixArr.begin(), suffixArr.end());
+		bool foundStart = false;
+		for (auto it = suffixArr.begin(); it < suffixArr.end(); it++)
+		{
+			if (*it == 2) foundStart = true;
+			if (!foundStart && *it != 2) continue;
+			if (*it == curSaveNum) curSaveNum+=1;
+		}
+		saveName += " " + WzString::number(curSaveNum);
 	}
 
 	return saveName;
