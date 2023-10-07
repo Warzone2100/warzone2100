@@ -2753,6 +2753,15 @@ bool droidUnderRepair(const DROID *psDroid)
 				 DROID_CYBORG_REPAIR) && psCurr->action ==
 				DACTION_DROIDREPAIR && psCurr->order.psObj == psDroid)
 			{
+				BASE_OBJECT *psLeader = nullptr;
+				if (hasCommander(psCurr))
+				{
+					psLeader = (BASE_OBJECT *)psCurr->psGroup->psCommander;
+				}
+				if (psLeader && psLeader->id == psDroid->id)
+				{
+					continue;
+				}
 				return true;
 			}
 		}
