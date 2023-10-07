@@ -1264,6 +1264,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 				{
 					// sensors must observe, not attack
 					auto observeOrder = DroidOrder(DORDER_OBSERVE, psData->psObj);
+					debug(LOG_INFO, "group order: %i", psCurr->id);
 					orderDroidBase(psCurr, &observeOrder);
 				}
 				else
@@ -1280,6 +1281,9 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 						}
 					}
 				}
+			} else
+			{
+				debug(LOG_INFO, "ignoring order, because %i currently RTR", psCurr->id);
 			}
 		}
 	}

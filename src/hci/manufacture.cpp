@@ -184,6 +184,47 @@ void ManufactureController::clearData()
 	stats.clear();
 }
 
+UWORD groupNumImage (UDWORD groupNum)
+{
+	UWORD id = UWORD_MAX;
+	switch (groupNum)
+	{
+	case 0:
+		id = IMAGE_0;
+		break;
+	case 1:
+		id = IMAGE_1;
+		break;
+	case 2:
+		id = IMAGE_2;
+		break;
+	case 3:
+		id = IMAGE_3;
+		break;
+	case 4:
+		id = IMAGE_4;
+		break;
+	case 5:
+		id = IMAGE_5;
+		break;
+	case 6:
+		id = IMAGE_GN_6;
+		break;
+	case 7:
+		id = IMAGE_GN_7;
+		break;
+	case 8:
+		id = IMAGE_GN_8;
+		break;
+	case 9:
+		id = IMAGE_GN_9;
+		break;
+	default:
+		break;
+	}
+	return id;
+}
+
 void ManufactureController::setHighlightedObject(BASE_OBJECT *object)
 {
 	if (object == nullptr)
@@ -215,7 +256,19 @@ public:
 		widget->initialize();
 		return widget;
 	}
+	void drawFactoryGroup(int xOffset, int yOffset)
+	{
+		const auto factory = controller->getObjectAt(objectIndex);
+		if (factory)
+		{
+			UWORD img = groupNumImage(factory->group);
+			if (img != UWORD_MAX)
+			{
+				iV_DrawImage(IntImages, img, xOffset , yOffset );
+			}
+		}
 
+	}
 	void jump() override
 	{
 		if (!offWorldKeepLists)
@@ -253,6 +306,7 @@ protected:
 		}
 		displayIMD(AtlasImage(), ImdObject::Structure(factory), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
+		drawFactoryGroup(xOffset+45, yOffset+55);
 	}
 
 	void updateLayout() override
@@ -325,7 +379,6 @@ protected:
 		}
 		drawNextDroidRank(xOffset, yOffset);
 	}
-
 	// show a little icon on the bottom, indicating what rank next unit will be
 	// remember that when it's a commander, same rank will require twice experience
 	void drawNextDroidRank(int xOffset, int yOffset)
