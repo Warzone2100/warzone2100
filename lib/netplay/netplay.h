@@ -103,6 +103,7 @@ enum MESSAGE_TYPES
 	NET_DATA_CHECK2,				///< Data2 integrity check
 	NET_SECURED_NET_MESSAGE,		///< A secured (+ authenticated) net message between two players
 	NET_TEAM_STRATEGY,				///< Player is sending an updated strategy notice to team members
+	NET_QUICK_CHAT_MSG,				///< Quick chat message
 	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

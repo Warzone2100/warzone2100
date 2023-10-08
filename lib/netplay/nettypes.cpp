@@ -574,6 +574,8 @@ bool NETisExpectedSecuredMessageType(uint8_t type)
 	{
 		case NET_TEAM_STRATEGY:
 			return true;
+		case NET_QUICK_CHAT_MSG:
+			return true;
 		default:
 			return false;
 	}

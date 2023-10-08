@@ -118,7 +118,7 @@ std::array<WzPlayerStrategyPlan, MAX_PLAYERS> playerStrategyPlans; // NOTE: Only
 
 // MARK: -
 
-static int32_t checkedGetPlayerTeam(int32_t i)
+int32_t checkedGetPlayerTeam(int32_t i)
 {
 	return alliancesSetTeamsBeforeGame(game.alliance) ? NetPlay.players[i].team : i;
 }

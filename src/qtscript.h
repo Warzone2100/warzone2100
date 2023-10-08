@@ -37,6 +37,7 @@ struct DROID_TEMPLATE;
 struct FEATURE;
 struct RESEARCH;
 struct STRUCTURE;
+enum class WzQuickChatMessage: uint32_t;
 
 enum SCRIPT_TRIGGER_TYPE
 {
@@ -141,6 +142,7 @@ bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct);
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
+bool triggerEventQuickChatMessage(int from, int to, WzQuickChatMessage message, bool teamSpecific);
 bool triggerEventBeacon(int from, int to, const char *message, int x, int y);
 bool triggerEventBeaconRemoved(int from, int to);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);

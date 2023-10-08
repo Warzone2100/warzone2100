@@ -62,6 +62,7 @@
 #include "challenge.h"
 #include "multistat.h"
 #include "gamehistorylogger.h"
+#include "hci/quickchat.h"
 
 #include <set>
 #include <memory>
@@ -1490,6 +1491,33 @@ bool triggerEventChat(int from, int to, const char *message)
 		if (me == to || (receiveAll && to == from))
 		{
 			instance->handle_eventChat(from, to, message);
+		}
+	}
+	return true;
+}
+
+//__ ## eventQuickChat(from, to, messageEnum)
+//__
+//__ An event that is run whenever a quick chat message is received. The ```from``` parameter is the
+//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
+//__ player. ```messageEnum``` is the WzQuickChatMessage value (see the WzQuickChatMessages global
+//__ object for constants to match with it). The ```teamSpecific``` parameter is true if this message
+//__ was sent only to teammates, false otherwise.
+//__
+bool triggerEventQuickChatMessage(int from, int to, WzQuickChatMessage message, bool teamSpecific)
+{
+	if (!scriptsReady)
+	{
+		// just ignore chat messages before scripts are ready / initialized
+		return false;
+	}
+	for (auto *instance : scripts)
+	{
+		int me = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
+		if (me == to || (receiveAll && to == from))
+		{
+			instance->handle_eventQuickChat(from, to, static_cast<int>(message), teamSpecific);
 		}
 	}
 	return true;

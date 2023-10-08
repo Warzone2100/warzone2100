@@ -82,6 +82,7 @@
 #include "notifications.h"
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
+#include "hci/quickchat.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -953,6 +954,9 @@ bool intInitialise()
 			return true;
 		});
 	}, GAME_TICKS_PER_SEC + GAME_TICKS_PER_SEC);
+
+	// refresh defaults for quick chat
+	quickChatInitInGame();
 
 	return true;
 }

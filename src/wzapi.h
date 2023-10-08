@@ -470,6 +470,16 @@ namespace wzapi
 		//__
 		virtual bool handle_eventChat(int from, int to, const char *message) = 0;
 
+		//__ ## eventQuickChat(from, to, messageEnum)
+		//__
+		//__ An event that is run whenever a quick chat message is received. The ```from``` parameter is the
+		//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
+		//__ player. ```messageEnum``` is the WzQuickChatMessage value (see the WzQuickChatMessages global
+		//__ object for constants to match with it). The ```teamSpecific``` parameter is true if this message
+		//__ was sent only to teammates, false otherwise.
+		//__
+		virtual bool handle_eventQuickChat(int from, int to, int messageEnum, bool teamSpecific) = 0;
+
 		//__ ## eventBeacon(x, y, from, to[, message])
 		//__
 		//__ An event that is run whenever a beacon message is received. The ```from``` parameter is the
@@ -1046,6 +1056,7 @@ namespace wzapi
 	bool safeDest(WZAPI_PARAMS(int player, int x, int y));
 	bool activateStructure(WZAPI_PARAMS(STRUCTURE *psStruct, optional<BASE_OBJECT *> _psTarget));
 	bool chat(WZAPI_PARAMS(int playerFilter, std::string message));
+	bool quickChat(WZAPI_PARAMS(int playerFilter, int messageEnum));
 	bool addBeacon(WZAPI_PARAMS(int x, int y, int playerFilter, optional<std::string> _message));
 	bool removeBeacon(WZAPI_PARAMS(int playerFilter));
 	std::unique_ptr<const DROID> getDroidProduction(WZAPI_PARAMS(const STRUCTURE *_psFactory));

@@ -86,6 +86,7 @@
 #include "challenge.h"
 #include "multilobbycommands.h"
 #include "hci/teamstrategy.h"
+#include "hci/quickchat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -1184,6 +1185,9 @@ bool recvMessage()
 				break;
 			case NET_TEAM_STRATEGY:
 				recvStrategyPlanUpdate(queue);
+				break;
+			case NET_QUICK_CHAT_MSG:
+				recvQuickChat(queue);
 				break;
 			case GAME_SYNC_REQUEST:
 				recvSyncRequest(queue);

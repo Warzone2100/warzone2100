@@ -114,6 +114,7 @@
 #include "faction.h"
 #include "multilobbycommands.h"
 #include "stdinreader.h"
+#include "hci/quickchat.h"
 
 #include "activity.h"
 #include <algorithm>
@@ -6822,6 +6823,13 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 						cmdInterfaceLogChatMsg(message, "WZCHATLOB");
 					}
 				}
+			}
+			break;
+
+		case NET_QUICK_CHAT_MSG:
+			if (ingame.localOptionsReceived)
+			{
+				recvQuickChat(queue);
 			}
 			break;
 

@@ -356,6 +356,11 @@ static bool isScreenARegisteredOverlay(const std::shared_ptr<W_SCREEN> &psScreen
 	return overlaySet.count(psScreen) > 0;
 }
 
+bool isMouseOverScreen(const std::shared_ptr<W_SCREEN>& psScreen)
+{
+	return psMouseOverWidgetScreen == psScreen;
+}
+
 bool isMouseOverScreenOverlayChild(int mx, int my)
 {
 	if (psMouseOverWidgetScreen != nullptr)
