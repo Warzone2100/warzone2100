@@ -34,6 +34,7 @@
 #include "../hci.h"
 #include "../chat.h"
 #include "../cheat.h"
+#include "../hci/quickchat.h"
 
 class WzInGameChatScreen_CLICKFORM;
 struct WzInGameChatScreen;
@@ -74,14 +75,14 @@ class WzInGameChatBoxForm : public IntFormAnimated
 {
 protected:
 	WzInGameChatBoxForm(): IntFormAnimated(true) {}
-	void initialize(WzChatMode initialChatMode);
+	void initialize(WzChatMode initialChatMode, const W_EDITBOX::OnTabHandler& onTabHandler);
 
 public:
-	static std::shared_ptr<WzInGameChatBoxForm> make(WzChatMode initialChatMode)
+	static std::shared_ptr<WzInGameChatBoxForm> make(WzChatMode initialChatMode, const W_EDITBOX::OnTabHandler& onTabHandler)
 	{
 		class make_shared_enabler: public WzInGameChatBoxForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize(initialChatMode);
+		widget->initialize(initialChatMode, onTabHandler);
 		return widget;
 	}
 
@@ -123,11 +124,24 @@ void WzInGameChatBoxForm::startChatBoxEditing()
 	// Auto-click it
 	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 	chatBox->clicked(&sContext);
+	switch (chatMode)
+	{
+	case WzChatMode::Glob:
+		chatBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
+		label->setFontColour(WZCOL_TEXT_BRIGHT);
+		break;
+	case WzChatMode::Team:
+		chatBox->setBoxColours(WZCOL_YELLOW, WZCOL_YELLOW, WZCOL_MENU_BACKGROUND);
+		label->setFontColour(WZCOL_YELLOW);
+		break;
+	}
 }
 
 void WzInGameChatBoxForm::endChatBoxEditing()
 {
-	chatBox->focusLost();
+	chatBox->stopEditing();
+	label->setFontColour(WZCOL_TEXT_MEDIUM);
+	chatBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 }
 
 void WzInGameChatBoxForm::setChatMode(WzChatMode newMode)
@@ -174,7 +188,7 @@ static void parseChatMessageModifiers(InGameChatMessage &message)
 	}
 }
 
-void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode)
+void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode, const W_EDITBOX::OnTabHandler& onTabHandler)
 {
 	chatBox = std::make_shared<W_EDITBOX>();
 	attach(chatBox);
@@ -220,6 +234,17 @@ void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode)
 		strongParent->closeParentScreen();
 	});
 
+	chatBox->setOnEditingStoppedHandler([](W_EDITBOX& widg) {
+		auto strongParent = std::dynamic_pointer_cast<WzInGameChatBoxForm>(widg.parent());
+		ASSERT_OR_RETURN(, strongParent != nullptr, "No parent?");
+		strongParent->endChatBoxEditing();
+	});
+
+	if (onTabHandler)
+	{
+		chatBox->setOnTabHandler(onTabHandler);
+	}
+
 	label = std::make_shared<W_LABEL>();
 	attach(label);
 	label->setGeometry(2, 2, 60, 16);
@@ -252,6 +277,12 @@ public:
 
 private:
 	void clearFocusAndEditing();
+	void handleClickOnForm();
+
+protected:
+	friend struct WzInGameChatScreen;
+	void giveQuickChatFocus();
+	bool giveChatBoxFocus();
 
 public:
 	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 80);
@@ -259,6 +290,7 @@ public:
 	std::function<void ()> onCancelPressed;
 private:
 	std::shared_ptr<WzInGameChatBoxForm> consoleBox;
+	std::shared_ptr<W_FORM> quickChatForm;
 };
 
 WzInGameChatScreen_CLICKFORM::WzInGameChatScreen_CLICKFORM(W_FORMINIT const *init) : W_CLICKFORM(init) {}
@@ -289,15 +321,77 @@ std::shared_ptr<WzInGameChatScreen_CLICKFORM> WzInGameChatScreen_CLICKFORM::make
 	return widget;
 }
 
+void WzInGameChatScreen_CLICKFORM::giveQuickChatFocus()
+{
+	if (!quickChatForm)
+	{
+		giveChatBoxFocus();
+		return;
+	}
+	if (consoleBox)
+	{
+		consoleBox->endChatBoxEditing();
+	}
+	// Set the focus to the quickChatForm by simulating a click on it
+	W_CONTEXT context = W_CONTEXT::ZeroContext();
+	context.mx			= quickChatForm->screenPosX();
+	context.my			= quickChatForm->screenPosY();
+	quickChatForm->clicked(&context, WKEY_PRIMARY);
+	quickChatForm->released(&context, WKEY_PRIMARY);
+}
+
+bool WzInGameChatScreen_CLICKFORM::giveChatBoxFocus()
+{
+	if (!consoleBox)
+	{
+		return false;
+	}
+
+	consoleBox->startChatBoxEditing();
+	return true;
+}
+
 void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 {
-	consoleBox = WzInGameChatBoxForm::make(initialChatMode);
+	auto weakSelf = std::weak_ptr<WzInGameChatScreen_CLICKFORM>(std::dynamic_pointer_cast<WzInGameChatScreen_CLICKFORM>(shared_from_this()));
+	consoleBox = WzInGameChatBoxForm::make(initialChatMode, [weakSelf](W_EDITBOX&) -> bool {
+		// on tab handler
+		widgScheduleTask([weakSelf]() {
+			auto strongParentForm = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+			strongParentForm->giveQuickChatFocus();
+		});
+		return true;
+	});
 	attach(consoleBox);
 	consoleBox->id = CHAT_CONSOLEBOX;
 	consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
 	}));
-	consoleBox->startChatBoxEditing();
+
+	// for now, quick chat is only available in skirmish / multiplayer mode, for players
+	if (bMultiPlayer && selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
+	{
+		quickChatForm = createQuickChatForm(WzQuickChatContext::InGame, [weakSelf]() {
+				// on quick-chat sent
+				widgScheduleTask([weakSelf]() {
+					// click on the form so we ultimately close the chat screen
+					auto strongParentForm = weakSelf.lock();
+					ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+					auto parentScreen = std::dynamic_pointer_cast<WzInGameChatScreen>(strongParentForm->screenPointer.lock());
+					ASSERT_OR_RETURN(, parentScreen != nullptr, "No screen?");
+					parentScreen->closeScreen();
+				});
+			},
+			(initialChatMode == WzChatMode::Team) ? WzQuickChatMode::Team : WzQuickChatMode::Global);
+		attach(quickChatForm);
+		quickChatForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			constexpr int MAX_QUICKCHAT_WIDTH = 1200;
+			int quickChatWidth = std::min<int32_t>(screenWidth - 40, MAX_QUICKCHAT_WIDTH);
+			int x0 = std::max<int32_t>((screenWidth - quickChatWidth) / 2, 20);
+			psWidget->setGeometry(x0, CHAT_CONSOLEBOXY + CHAT_CONSOLEBOXH + 100, quickChatWidth, psWidget->idealHeight());
+		}));
+	}
 
 	recalcLayout();
 }
@@ -322,13 +416,18 @@ void WzInGameChatScreen_CLICKFORM::clearFocusAndEditing()
 	}
 }
 
-void WzInGameChatScreen_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+void WzInGameChatScreen_CLICKFORM::handleClickOnForm()
 {
 	clearFocusAndEditing();
 	if (onClickedFunc)
 	{
 		onClickedFunc();
 	}
+}
+
+void WzInGameChatScreen_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	handleClickOnForm();
 }
 
 void WzInGameChatScreen_CLICKFORM::display(int xOffset, int yOffset)
@@ -361,6 +460,34 @@ void WzInGameChatScreen_CLICKFORM::run(W_CONTEXT *psContext)
 		}
 	}
 
+	if (keyPressed(KEY_TAB))
+	{
+		// no child widget consumed the TAB keypress - swap focus between quick chat and chat box
+		bool currFocusOnChatbox = false;
+		if (auto lockedScreen = screenPointer.lock())
+		{
+			if (auto widgetWithFocus = lockedScreen->getWidgetWithFocus())
+			{
+				if (consoleBox)
+				{
+					if (widgetWithFocus == consoleBox || widgetWithFocus->hasAncestor(consoleBox.get()))
+					{
+						currFocusOnChatbox = true;
+					}
+				}
+			}
+		}
+
+		if (currFocusOnChatbox)
+		{
+			giveQuickChatFocus();
+		}
+		else
+		{
+			giveChatBoxFocus();
+		}
+	}
+
 	// while this is displayed, clear the input buffer
 	// (ensuring that subsequent screens / the main screen do not get the input to handle)
 	inputLoseFocus();
@@ -384,6 +511,17 @@ std::shared_ptr<WzInGameChatScreen> WzInGameChatScreen::make(const OnCloseFunc& 
 		}
 	};
 	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
+
+	// must select default element focus *after* adding the root form to the screen
+	bool chatBoxEnabled = true;
+	if (chatBoxEnabled)
+	{
+		newRootFrm->giveChatBoxFocus();
+	}
+	else
+	{
+		newRootFrm->giveQuickChatFocus();
+	}
 
 	return screen;
 }

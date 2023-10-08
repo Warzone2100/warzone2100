@@ -70,6 +70,7 @@
 #include "src/multijoin.h"
 #include "src/multiint.h"
 #include "src/multiplay.h"
+#include "src/hci/quickchat.h"
 #include "src/warzoneconfig.h"
 #include "src/version.h"
 #include "src/loadsave.h"
@@ -2173,11 +2174,12 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	switch (type)
 	{
 	case NET_TEXTMSG:
+	case NET_QUICK_CHAT_MSG:
 		// Just send a message to the player that this text message was undelivered and to try again - it's easier and this should be quite rare
 		{
-			const char* text = _("Message delivery failure - try again");
-			NetworkTextMessage message(NOTIFY_MESSAGE, text);
-			message.enqueue(NETnetQueue(sender));
+			WzQuickChatTargeting targeting;
+			targeting.specificPlayers.insert(sender);
+			sendQuickChat(WzQuickChatMessage::INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN, selectedPlayer, targeting);
 			return true; // filter / ignore
 		}
 	case NET_VOTE:
@@ -5493,6 +5495,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_DATA_CHECK2:               return "NET_DATA_CHECK2";
 	case NET_SECURED_NET_MESSAGE:		return "NET_SECURED_NET_MESSAGE";
 	case NET_TEAM_STRATEGY:				return "NET_TEAM_STRATEGY";
+	case NET_QUICK_CHAT_MSG:			return "NET_QUICK_CHAT_MSG";
 	case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

@@ -579,6 +579,16 @@ public:
 	//__
 	virtual bool handle_eventChat(int from, int to, const char *message) override;
 
+	//__ ## eventQuickChat(from, to, messageEnum)
+	//__
+	//__ An event that is run whenever a quick chat message is received. The ```from``` parameter is the
+	//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
+	//__ player. ```messageEnum``` is the WzQuickChatMessage value (see the WzQuickChatMessages global
+	//__ object for constants to match with it). The ```teamSpecific``` parameter is true if this message
+	//__ was sent only to teammates, false otherwise.
+	//__
+	virtual bool handle_eventQuickChat(int from, int to, int messageEnum, bool teamSpecific) override;
+
 	//__ ## eventBeacon(x, y, from, to[, message])
 	//__
 	//__ An event that is run whenever a beacon message is received. The ```from``` parameter is the
@@ -2991,6 +3001,7 @@ IMPL_EVENT_HANDLER(eventObjectSeen, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventGroupSeen, const BASE_OBJECT *, int)
 IMPL_EVENT_HANDLER(eventObjectTransfer, const BASE_OBJECT *, int)
 IMPL_EVENT_HANDLER(eventChat, int, int, const char *)
+IMPL_EVENT_HANDLER(eventQuickChat, int, int, int, bool)
 IMPL_EVENT_HANDLER(eventBeacon, int, int, int, int, optional<const char *>)
 IMPL_EVENT_HANDLER(eventBeaconRemoved, int, int)
 IMPL_EVENT_HANDLER(eventGroupLoss, const BASE_OBJECT *, int, int)
@@ -3176,6 +3187,7 @@ static JSValue js_removeBeacon(JSContext *ctx, JSValueConst this_val, int argc, 
 }
 
 IMPL_JS_FUNC(chat, wzapi::chat)
+IMPL_JS_FUNC(quickChat, wzapi::quickChat)
 IMPL_JS_FUNC(setAlliance, wzapi::setAlliance)
 IMPL_JS_FUNC(sendAllianceRequest, wzapi::sendAllianceRequest)
 IMPL_JS_FUNC(setAssemblyPoint, wzapi::setAssemblyPoint)
@@ -3446,6 +3458,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(safeDest, 3); // WZAPI
 	JS_REGISTER_FUNC2(activateStructure, 1, 2); // WZAPI
 	JS_REGISTER_FUNC(chat, 2); // WZAPI
+	JS_REGISTER_FUNC(quickChat, 2); // WZAPI
 	JS_REGISTER_FUNC2(addBeacon, 3, 4); // WZAPI
 	JS_REGISTER_FUNC(removeBeacon, 1); // WZAPI
 	JS_REGISTER_FUNC(getDroidProduction, 1); // WZAPI

@@ -52,4 +52,6 @@ bool recvStrategyPlanUpdate(NETQUEUE queue);
 // Called to inform all human players on an AI's team of the AI's (current) strategy
 void aiInformTeamOfStrategy(uint32_t aiPlayerIdx, const std::unordered_map<WEAPON_SUBCLASS, WzStrategyPlanningState>& weaponStrategy, const std::unordered_map<WzStrategyPlanningUnitTypes, WzStrategyPlanningState>& unitTypesStrategy);
 
+int32_t checkedGetPlayerTeam(int32_t i);
+
 void strategyPlansInit();

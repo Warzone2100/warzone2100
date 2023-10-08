@@ -78,6 +78,7 @@
 #include "scores.h"
 #include "data.h"
 #include "gamehistorylogger.h"
+#include "hci/quickchat.h"
 
 #include <list>
 
@@ -2047,6 +2048,40 @@ bool wzapi::chat(WZAPI_PARAMS(int playerFilter, std::string message))
 	}
 
 	chatMessage.send();
+	return true;
+}
+
+//-- ## quickChat(playerFilter, messageEnum)
+//--
+//-- Send a message to playerFilter. playerFilter may also be ```ALL_PLAYERS``` or ```ALLIES```.
+//-- ```messageEnum``` is the WzQuickChatMessage value. (See the WzQuickChatMessages global
+//-- object for constants to use. Pass in these constants directly, do not hard-code values!)
+//-- Returns a boolean that is true on success. (4.4+ only)
+//--
+bool wzapi::quickChat(WZAPI_PARAMS(int playerFilter, int messageEnum))
+{
+	int player = context.player();
+	SCRIPT_ASSERT(false, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES, "Message to invalid player %d", playerFilter);
+
+	WzQuickChatTargeting targeting;
+	if (playerFilter == ALLIES) // allies
+	{
+		targeting.humanTeammates = true;
+		targeting.aiTeammates = true;
+	}
+	else if (playerFilter == ALL_PLAYERS)
+	{
+		targeting.all = true;
+	}
+	else	// specific player
+	{
+		targeting.specificPlayers.insert(playerFilter);
+	}
+
+	WzQuickChatMessage message;
+	SCRIPT_ASSERT(false, context, to_WzQuickChatMessage(static_cast<uint32_t>(messageEnum), message), "Invalid messageEnum value: %d", messageEnum);
+
+	sendQuickChat(message, player, targeting);
 	return true;
 }
 
@@ -4505,6 +4540,8 @@ nlohmann::json wzapi::getUsefulConstants()
 	constants["MISS_MSG"] = MSG_MISSION;
 	constants["PROX_MSG"] = MSG_PROXIMITY;
 	constants["LDS_EXPAND_LIMBO"] = static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO);
+
+	constants["WzQuickChatMessages"] = getWzQuickChatMessageValueMap();
 
 	return constants;
 }
