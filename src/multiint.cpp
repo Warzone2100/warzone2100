@@ -290,6 +290,49 @@ struct AIDATA
 };
 static std::vector<AIDATA> aidata;
 
+class ChatBoxButton : public W_BUTTON
+{
+public:
+	void display(int xOffset, int yOffset) override
+	{
+		int x0 = x() + xOffset;
+		int y0 = y() + yOffset;
+		int x1 = x0 + width();
+		int y1 = y0 + height();
+
+		bool haveText = !pText.isEmpty();
+
+		bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+		bool isDisabled = (getState() & WBUT_DISABLE) != 0;
+		bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
+
+		// Display the button.
+		auto border_color = !isDisabled ? pal_RGBA(255, 255, 255, 120) : WZCOL_FORM_DARK;
+		auto fill_color = isDown || isDisabled ? pal_RGBA(10, 0, 70, 250) : pal_RGBA(25, 0, 110, 220);
+		iV_ShadowBox(x0, y0, x1, y1, 0, border_color, border_color, fill_color);
+		if (isHighlight)
+		{
+			iV_Box(x0 + 2, y0 + 2, x1 - 2, y1 - 2, WZCOL_FORM_HILITE);
+		}
+
+		if (haveText)
+		{
+			text.setText(pText, FontID);
+			int fw = text.width();
+			int fx = x0 + (width() - fw) / 2;
+			int fy = y0 + (height() - text.lineSize()) / 2 - text.aboveBase();
+			PIELIGHT textColor = WZCOL_FORM_TEXT;
+			if (isDisabled)
+			{
+				textColor.byte.a = (textColor.byte.a / 2);
+			}
+			text.render(fx, fy, textColor);
+		}
+	}
+private:
+	WzText text;
+};
+
 class ChatBoxWidget : public IntFormAnimated
 {
 protected:
@@ -311,11 +354,20 @@ public:
 
 protected:
 	void geometryChanged() override;
+	void display(int xOffset, int yOffset) override;
+
+private:
+	void openQuickChatOverlay();
+	void closeQuickChatOverlay();
+	int32_t calculateQuickChatScreenPosY();
 
 private:
 	std::shared_ptr<ScrollableListWidget> messages;
+	std::shared_ptr<ChatBoxButton> quickChatButton;
 	std::shared_ptr<W_EDITBOX> editBox;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
+	std::shared_ptr<W_SCREEN> quickChatOverlayScreen;
+	std::shared_ptr<W_FORM> quickChatForm;
 	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
 
 	void displayParagraphContextualMenu(const std::string& textToCopy, const std::shared_ptr<PlayerReference>& sender);
@@ -4858,6 +4910,7 @@ RoomMessage buildMessage(int32_t sender, const char *text)
 void ChatBoxWidget::initialize()
 {
 	id = MULTIOP_CHATBOX;
+	std::weak_ptr<ChatBoxWidget> weakSelf = std::weak_ptr<ChatBoxWidget>(std::dynamic_pointer_cast<ChatBoxWidget>(shared_from_this()));
 
 	attach(messages = ScrollableListWidget::make());
 	messages->setSnapOffset(true);
@@ -4870,6 +4923,19 @@ void ChatBoxWidget::initialize()
 		addMessage(buildMessage(message.sender, message.text));
 	});
 
+	attach(quickChatButton = std::make_shared<ChatBoxButton>());
+	quickChatButton->setString("+");
+	quickChatButton->setTip(_("Quick Chat"));
+	quickChatButton->FontID = font_regular_bold;
+	int minButtonWidthForText = iV_GetTextWidth(quickChatButton->pText, quickChatButton->FontID);
+	quickChatButton->setGeometry(0, 0, minButtonWidthForText + 20, iV_GetTextLineSize(quickChatButton->FontID));
+	quickChatButton->addOnClickHandler([weakSelf](W_BUTTON& widg) {
+		widgScheduleTask([weakSelf]() {
+			auto strongParentForm = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+			strongParentForm->openQuickChatOverlay();
+		});
+	});
 	W_EDBINIT sEdInit;
 	sEdInit.formID = MULTIOP_CHATBOX;
 	sEdInit.id = MULTIOP_CHATEDIT;
@@ -4888,13 +4954,86 @@ void ChatBoxWidget::initialize()
 		sendRoomChatMessage(str.toUtf8().c_str());
 		widg.setString("");
 	});
+	editBox->setOnTabHandler([weakSelf](W_EDITBOX& widg) -> bool {
+		// on tab handler
+		widgScheduleTask([weakSelf]() {
+			auto strongParentForm = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+			strongParentForm->openQuickChatOverlay();
+		});
+		return true;
+	});
 
 	consoleAddMessageListener(handleConsoleMessage);
+
+	// Initialize the overlay screen
+	quickChatOverlayScreen = W_SCREEN::make();
+	auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+	std::weak_ptr<ChatBoxWidget> psWeakChatBoxWidget = std::dynamic_pointer_cast<ChatBoxWidget>(shared_from_this());
+	newRootFrm->onClickedFunc = [psWeakChatBoxWidget]() {
+		widgScheduleTask([psWeakChatBoxWidget]{
+			auto psChatBoxWidget = psWeakChatBoxWidget.lock();
+			ASSERT_OR_RETURN(, psChatBoxWidget != nullptr, "ChatBoxWidget is null");
+			psChatBoxWidget->closeQuickChatOverlay();
+		});
+	};
+	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
+	quickChatOverlayScreen->psForm->attach(newRootFrm);
+
+	// Add the Quick Chat form to the overlay screen form
+	quickChatForm = createQuickChatForm(WzQuickChatContext::Lobby, [psWeakChatBoxWidget]() {
+		// on quick chat sent: close the overlay
+		widgScheduleTask([psWeakChatBoxWidget]{
+			auto psChatBoxWidget = psWeakChatBoxWidget.lock();
+			ASSERT_OR_RETURN(, psChatBoxWidget != nullptr, "ChatBoxWidget is null");
+			psChatBoxWidget->closeQuickChatOverlay();
+		});
+	});
+	newRootFrm->attach(quickChatForm);
+	quickChatForm->setCalcLayout([psWeakChatBoxWidget](WIDGET* psWidget){
+		auto psChatBoxWidget = psWeakChatBoxWidget.lock();
+		ASSERT_OR_RETURN(, psChatBoxWidget != nullptr, "ChatBoxWidget is null");
+		int quickChatWidth = psChatBoxWidget->width();
+		int x0 = psChatBoxWidget->screenPosX();
+		int y0 = psChatBoxWidget->calculateQuickChatScreenPosY();
+		psWidget->setGeometry(x0, y0, quickChatWidth, psWidget->idealHeight());
+	});
+}
+
+int32_t ChatBoxWidget::calculateQuickChatScreenPosY()
+{
+	int32_t idealQuickChatHeight = quickChatForm->idealHeight();
+	// Try to position it above the chat widget
+	int32_t screenY0 = screenPosY() - idealQuickChatHeight;
+	return std::max(screenY0, 0);
+}
+
+void ChatBoxWidget::openQuickChatOverlay()
+{
+	quickChatOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight); // trigger a screenSizeDidChange so it can relayout (if screen size changed since last time it was registered as an overlay screen)
+	widgRegisterOverlayScreen(quickChatOverlayScreen, 1);
+	editBox->stopEditing();
+
+	// Set the focus to the quickChatForm by simulating a click on it
+	W_CONTEXT context = W_CONTEXT::ZeroContext();
+	context.mx			= quickChatForm->screenPosX();
+	context.my			= quickChatForm->screenPosY();
+	quickChatForm->clicked(&context, WKEY_PRIMARY);
+	quickChatForm->released(&context, WKEY_PRIMARY);
+}
+
+void ChatBoxWidget::closeQuickChatOverlay()
+{
+	widgRemoveOverlayScreen(quickChatOverlayScreen);
+	// Auto-click edit box
+	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
+	editBox->clicked(&sContext);
 }
 
 ChatBoxWidget::~ChatBoxWidget()
 {
 	consoleRemoveMessageListener(handleConsoleMessage);
+	widgRemoveOverlayScreen(quickChatOverlayScreen);
 }
 
 
@@ -4966,11 +5105,39 @@ void ChatBoxWidget::addMessage(RoomMessage const &message)
 	displayMessage(message);
 }
 
+constexpr int MULTIOP_CHATEDITAREA_INSET = 5;
+constexpr int MULTIOP_CHATEDITAREA_INTERNAL_PADDING = 6;
+constexpr int MULTIOP_CHATEDITAREA_HEIGHT = MULTIOP_CHATEDITH + (MULTIOP_CHATEDITAREA_INSET * 2);
+
 void ChatBoxWidget::geometryChanged()
 {
-	auto messagesHeight = height() - MULTIOP_CHATEDITH - 1;
+	auto messagesHeight = height() - MULTIOP_CHATEDITAREA_HEIGHT - 1;
 	messages->setGeometry(1, 1, width() - 2, messagesHeight);
-	editBox->setGeometry(MULTIOP_CHATEDITX, messages->y() + messagesHeight, MULTIOP_CHATEDITW, MULTIOP_CHATEDITH);
+
+	int messageEditAreaY0 = messages->y() + messagesHeight + MULTIOP_CHATEDITAREA_INSET;
+
+	quickChatButton->setGeometry(MULTIOP_CHATEDITAREA_INSET, messageEditAreaY0, quickChatButton->width(), MULTIOP_CHATEDITH);
+	int buttonsWidth = quickChatButton->width();
+
+	int chatEditBoxWidth = width() - (MULTIOP_CHATEDITAREA_INSET * 2) - buttonsWidth - (MULTIOP_CHATEDITAREA_INTERNAL_PADDING * 2);
+	editBox->setGeometry(quickChatButton->x() + quickChatButton->width() + MULTIOP_CHATEDITAREA_INTERNAL_PADDING, messageEditAreaY0, chatEditBoxWidth, MULTIOP_CHATEDITH);
+}
+
+void ChatBoxWidget::display(int xOffset, int yOffset)
+{
+	IntFormAnimated::display(xOffset, yOffset);
+
+	int x0 = xOffset + x();
+	int y0 = yOffset + y();
+
+	// draws the line at the bottom of the multiplayer join dialog separating the chat
+	// box from the input area
+	int messageEditAreaY0 = y0 + messages->y() + messages->height();
+	int messageEditAreaX0 = x0;
+
+	pie_UniTransBoxFill(messageEditAreaX0 + 1, messageEditAreaY0, messageEditAreaX0 + width() - 2, y0 + height() - 1, pal_RGBA(0,0,100,80));
+
+	iV_Line(messageEditAreaX0 + 1, messageEditAreaY0, messageEditAreaX0 + width() - 2, messageEditAreaY0, WZCOL_FORM_DARK);
 }
 
 void ChatBoxWidget::initializeMessages(bool preserveOldChat)
@@ -6923,7 +7090,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	}
 
 	// if we don't have the focus, then autoclick in the chatbox.
-	if (psWScreen->psFocus.expired())
+	if (psWScreen->psFocus.expired() && !isMouseOverScreenOverlayChild(mouseX(), mouseY()))
 	{
 		W_CONTEXT context = W_CONTEXT::ZeroContext();
 		context.mx			= mouseX();
@@ -7349,12 +7516,17 @@ std::shared_ptr<WzTitleUI> WzMultiplayerOptionsTitleUI::getParentTitleUI()
 
 void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	auto psSelf = static_cast<W_EDITBOX*>(psWidget);
+
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
 
-	// draws the line at the bottom of the multiplayer join dialog separating the chat
-	// box from the input box
-	iV_Line(x, y, x + psWidget->width(), y, WZCOL_MENU_SEPARATOR);
+	PIELIGHT borderColor = WZCOL_MENU_SEPARATOR;
+	if (!psSelf->isEditing())
+	{
+		borderColor.byte.a = borderColor.byte.a / 2;
+	}
+	iV_Box(x, y, x + psWidget->width(), y + psWidget->height(), borderColor);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

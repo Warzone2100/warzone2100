@@ -256,7 +256,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 
 #define MULTIOP_CHATEDIT		10279
 #define MULTIOP_CHATEDITX		4
-#define MULTIOP_CHATEDITH		18
+#define MULTIOP_CHATEDITH		20
 #define	MULTIOP_CHATEDITW		(MULTIOP_CHATBOXW - 8)
 
 #define MULTIOP_COLCHOOSER_FORM         10280
