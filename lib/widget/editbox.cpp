@@ -321,7 +321,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		return;
 	}
 	dirty = true;
-	StartTextInput(this);
+	StartTextInput(this, {screenPosX(), screenPosY(), width(), height()});
 	/* If there is a mouse click outside of the edit box - stop editing */
 	int mx = psContext->mx;
 	int my = psContext->my;

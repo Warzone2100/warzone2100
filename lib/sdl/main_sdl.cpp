@@ -268,10 +268,16 @@ bool get_scrap(char **dst)
 	}
 }
 
-void StartTextInput(void* pTextInputRequester)
+void StartTextInput(void* pTextInputRequester, const WzTextInputRect& textInputRect)
 {
 	if (!GetTextEventsOwner)
 	{
+		SDL_Rect rect;
+		rect.x = textInputRect.x;
+		rect.y = textInputRect.y;
+		rect.w = textInputRect.width;
+		rect.h = textInputRect.height;
+		SDL_SetTextInputRect(&rect);
 		SDL_StartTextInput();	// enable text events
 		debug(LOG_INPUT, "SDL text events started");
 	}
@@ -280,6 +286,14 @@ void StartTextInput(void* pTextInputRequester)
 		debug(LOG_INPUT, "StartTextInput called by new input requester before old requester called StopTextInput");
 	}
 	GetTextEventsOwner = pTextInputRequester;
+
+	// on some platforms, it seems like we also need to call SDL_SetTextInputRect every frame to properly set the text input rect (?)
+	SDL_Rect rect;
+	rect.x = textInputRect.x;
+	rect.y = textInputRect.y;
+	rect.w = textInputRect.width;
+	rect.h = textInputRect.height;
+	SDL_SetTextInputRect(&rect);
 }
 
 void StopTextInput(void* pTextInputResigner)

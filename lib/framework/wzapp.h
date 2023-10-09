@@ -132,7 +132,14 @@ WzString wzGetSelection();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support
-void StartTextInput(void* pTextInputRequester);
+struct WzTextInputRect
+{
+	int x;
+	int y;
+	int width;
+	int height;
+};
+void StartTextInput(void* pTextInputRequester, const WzTextInputRect& textInputRect);
 void StopTextInput(void* pTextInputResigner);
 bool isInTextInputMode();
 bool wzSeemsLikeNonTouchPlatform();
