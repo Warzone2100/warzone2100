@@ -2854,8 +2854,10 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 {
 	ASSERT_OR_RETURN(, myResponsibility(fromPlayer), "We are not responsible for player: %" PRIu32, fromPlayer);
 
+	bool internalMessage = isInternalMessage(message);
+
 	auto mutedUntil = playerSpamMutedUntil(fromPlayer);
-	if (mutedUntil.has_value())
+	if (mutedUntil.has_value() && !internalMessage)
 	{
 		auto currentTime = std::chrono::steady_clock::now();
 		auto duration_until_send_allowed = std::chrono::duration_cast<std::chrono::seconds>(mutedUntil.value() - currentTime).count();
@@ -3011,7 +3013,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		}
 	}
 
-	if (!recipients.empty())
+	if (!recipients.empty() && !internalMessage)
 	{
 		recordPlayerMessageSent(fromPlayer);
 	}
