@@ -5135,9 +5135,9 @@ void ChatBoxWidget::display(int xOffset, int yOffset)
 	int messageEditAreaY0 = y0 + messages->y() + messages->height();
 	int messageEditAreaX0 = x0;
 
-	pie_UniTransBoxFill(messageEditAreaX0 + 1, messageEditAreaY0, messageEditAreaX0 + width() - 2, y0 + height() - 1, pal_RGBA(0,0,100,80));
+	pie_UniTransBoxFill(messageEditAreaX0 + 1, messageEditAreaY0, messageEditAreaX0 + width() - 1, y0 + height() - 1, pal_RGBA(0,0,100,80));
 
-	iV_Line(messageEditAreaX0 + 1, messageEditAreaY0, messageEditAreaX0 + width() - 2, messageEditAreaY0, WZCOL_FORM_DARK);
+	iV_Line(messageEditAreaX0 + 1, messageEditAreaY0, messageEditAreaX0 + width() - 1, messageEditAreaY0, WZCOL_FORM_DARK);
 }
 
 void ChatBoxWidget::initializeMessages(bool preserveOldChat)
