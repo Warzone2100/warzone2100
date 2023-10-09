@@ -176,9 +176,10 @@ static void runchatlink()
 	openURLInBrowser("https://wz2100.net/webchat/");
 }
 
+const char * VIDEO_TAG = "videoMissing";
+
 static void notifyAboutMissingVideos()
 {
-	const std::string VIDEO_TAG = "videoMissing";
 	if (!hasNotificationsWithTag(VIDEO_TAG))
 	{
 		WZ_Notification notification;
@@ -194,6 +195,11 @@ static void notifyAboutMissingVideos()
 
 		addNotification(notification, WZ_Notification_Trigger(GAME_TICKS_PER_SEC));
 	}
+}
+
+static void closeMissingVideosNotification()
+{
+	cancelOrDismissNotificationsWithTag(VIDEO_TAG);
 }
 
 void startTitleMenu()
@@ -383,7 +389,6 @@ void startSinglePlayerMenu()
 	if (!seq_hasVideos())
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
-		notifyAboutMissingVideos();
 	}
 }
 
@@ -608,6 +613,8 @@ bool runSinglePlayerMenu()
 // Multi Player Menu
 void startMultiPlayerMenu()
 {
+	closeMissingVideosNotification();
+	
 	addBackdrop();
 	addTopForm(false);
 	addBottomForm();
