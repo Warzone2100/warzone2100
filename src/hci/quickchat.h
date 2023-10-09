@@ -107,7 +107,6 @@
 	MSG(INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN) // This should always be the first internal message!
 
 #define GENERATE_ENUM(ENUM) ENUM,
-#define GENERATE_STRING(STRING) #STRING,
 
 enum class WzQuickChatMessage : uint32_t 
 {
@@ -117,12 +116,6 @@ enum class WzQuickChatMessage : uint32_t
 };
 
 constexpr uint32_t WzQuickChatMessage_FIRST_INTERNAL_MSG_VALUE = static_cast<uint32_t>(WzQuickChatMessage::INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN);
-
-static const char *WzQuickChatMessageEnumNames[] = {
-	FOREACH_QUICKCHATMSG(GENERATE_STRING)
-	// Always last
-	"MESSAGE_COUNT"
-};
 
 const char* to_display_string(WzQuickChatMessage msg);
 bool to_WzQuickChatMessage(uint32_t value, WzQuickChatMessage& output);
