@@ -7099,7 +7099,10 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		W_EDITBOX* pChatEdit = dynamic_cast<W_EDITBOX*>(widgGetFromID(psWScreen, MULTIOP_CHATEDIT));
 		if (pChatEdit)
 		{
-			pChatEdit->simulateClick(&context, true);
+			if (wzSeemsLikeNonTouchPlatform()) // only grab focus for chat edit box on non-touch platforms (i.e. platforms that ought to have a physical keyboard)
+			{
+				pChatEdit->simulateClick(&context, true);
+			}
 		}
 	}
 
