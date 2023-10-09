@@ -1994,10 +1994,13 @@ void kf_KillSelected()
 
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
-void kf_SendTeamMessage()
+static void OpenChatUI(int mode, bool startWithQuickChatFocused)
 {
-	/* not supported if a spectator */
-	SPECTATOR_NO_OP();
+	if (mode == CHAT_TEAM)
+	{
+		/* not supported if a spectator */
+		SPECTATOR_NO_OP();
+	}
 
 	if (!getWidgetsStatus())
 	{
@@ -2008,24 +2011,32 @@ void kf_SendTeamMessage()
 	{
 		sstrcpy(sCurrentConsoleText, "");			//for beacons
 		inputClearBuffer();
-		chatDialog(CHAT_TEAM);						// throw up the dialog
+		chatDialog(mode, startWithQuickChatFocused);	// throw up the dialog
 	}
+}
+
+// Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
+void kf_SendTeamMessage()
+{
+	OpenChatUI(CHAT_TEAM, false);
 }
 
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendGlobalMessage()
 {
-	if (!getWidgetsStatus())
-	{
-		return;
-	}
+	OpenChatUI(CHAT_GLOB, false);
+}
 
-	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
-	{
-		sstrcpy(sCurrentConsoleText, "");			//for beacons
-		inputClearBuffer();
-		chatDialog(CHAT_GLOB);						// throw up the dialog
-	}
+// Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
+void kf_SendTeamQuickChat()
+{
+	OpenChatUI(CHAT_TEAM, true);
+}
+
+// Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
+void kf_SendGlobalQuickChat()
+{
+	OpenChatUI(CHAT_GLOB, true);
 }
 
 // --------------------------------------------------------------------------

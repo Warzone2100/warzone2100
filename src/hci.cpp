@@ -3032,7 +3032,7 @@ bool CoordInBuild(int x, int y)
 
 // Our chat dialog for global & team communication
 // \mode sets if global or team communication is wanted
-void chatDialog(int mode)
+void chatDialog(int mode, bool startWithQuickChatFocused)
 {
 	if (!ChatDialogUp)
 	{
@@ -3041,7 +3041,7 @@ void chatDialog(int mode)
 		WzChatMode initialChatMode = (mode == CHAT_GLOB) ? WzChatMode::Glob : WzChatMode::Team;
 		createChatScreen([]() {
 			ChatDialogUp = false;
-		}, initialChatMode);
+		}, initialChatMode, startWithQuickChatFocused);
 	}
 	else
 	{

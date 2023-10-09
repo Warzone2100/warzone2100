@@ -399,7 +399,7 @@ void intDemolishCancel();
 
 void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent);  ///< Makes a button to toggle showing obsolete items.
 
-void chatDialog(int mode);
+void chatDialog(int mode, bool startWithQuickChatFocused);
 bool isChatUp();
 bool isSecondaryWindowUp();
 void setSecondaryWindowUp(bool value);

@@ -30,5 +30,5 @@ enum class WzChatMode
 	Glob
 };
 
-std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode);
+std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused);
 void shutdownChatScreen();
