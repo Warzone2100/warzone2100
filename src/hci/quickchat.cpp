@@ -2689,7 +2689,7 @@ std::shared_ptr<W_FORM> createQuickChatForm(WzQuickChatContext context, const st
 
 bool to_WzQuickChatMessage(uint32_t value, WzQuickChatMessage& output)
 {
-	if (value >= 0 && value < static_cast<uint32_t>(WzQuickChatMessage::MESSAGE_COUNT))
+	if (value < static_cast<uint32_t>(WzQuickChatMessage::MESSAGE_COUNT))
 	{
 		output = static_cast<WzQuickChatMessage>(value);
 		return true;

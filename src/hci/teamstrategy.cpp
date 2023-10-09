@@ -51,11 +51,18 @@ constexpr int MAX_TEAMSTRAT_COLUMN_HEADERS_HEIGHT = 120;
 
 bool to_WzStrategyPlanningState(uint8_t value, WzStrategyPlanningState& output)
 {
+#if defined(__GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wtype-limits"
+#endif
 	if (value >= static_cast<uint8_t>(WzStrategyPlanningState::NotSpecified) && value <= static_cast<uint8_t>(WzStrategyPlanningState::Never))
 	{
 		output = static_cast<WzStrategyPlanningState>(value);
 		return true;
 	}
+#if defined(__GNUC__)
+# pragma GCC diagnostic pop
+#endif
 	return false;
 }
 
@@ -733,6 +740,11 @@ private:
 	WzStrategyPlanningUnitTypes unitType;
 };
 
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__) && ( __GNUC__ < 9)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+
 std::shared_ptr<WzTeamStrategyWeaponButton> WzTeamStrategyWeaponButton::make(uint32_t playerIdx, WEAPON_SUBCLASS subClass, const std::shared_ptr<TeamStrategyView>& parentStrategyView)
 {
 	auto imageRef = parentStrategyView->getSharedColumnImagesManager()->getWeaponSubclassImageRef(subClass);
@@ -770,6 +782,10 @@ std::shared_ptr<WzTeamStrategyUnitTypeButton> WzTeamStrategyUnitTypeButton::make
 
 	return result;
 }
+
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__) && ( __GNUC__ < 9)
+# pragma GCC diagnostic pop
+#endif
 
 // MARK: - TeamStrategyView
 
