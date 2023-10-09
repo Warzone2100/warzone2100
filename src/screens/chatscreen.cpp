@@ -56,7 +56,7 @@ protected:
 
 public:
 	typedef std::function<void ()> OnCloseFunc;
-	static std::shared_ptr<WzInGameChatScreen> make(const OnCloseFunc& onCloseFunction, WzChatMode initialChatMode);
+	static std::shared_ptr<WzInGameChatScreen> make(const OnCloseFunc& onCloseFunction, WzChatMode initialChatMode, bool startWithQuickChatFocused);
 
 public:
 	void closeScreen();
@@ -495,7 +495,7 @@ void WzInGameChatScreen_CLICKFORM::run(W_CONTEXT *psContext)
 
 // MARK: - WzGameStartOverlayScreen
 
-std::shared_ptr<WzInGameChatScreen> WzInGameChatScreen::make(const OnCloseFunc& _onCloseFunc, WzChatMode initialChatMode)
+std::shared_ptr<WzInGameChatScreen> WzInGameChatScreen::make(const OnCloseFunc& _onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused)
 {
 	class make_shared_enabler: public WzInGameChatScreen {};
 	auto newRootFrm = WzInGameChatScreen_CLICKFORM::make(initialChatMode);
@@ -513,14 +513,21 @@ std::shared_ptr<WzInGameChatScreen> WzInGameChatScreen::make(const OnCloseFunc& 
 	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
 
 	// must select default element focus *after* adding the root form to the screen
-	bool chatBoxEnabled = true;
-	if (chatBoxEnabled)
+	if (startWithQuickChatFocused)
 	{
-		newRootFrm->giveChatBoxFocus();
+		newRootFrm->giveQuickChatFocus();
 	}
 	else
 	{
-		newRootFrm->giveQuickChatFocus();
+		bool chatBoxEnabled = true;
+		if (chatBoxEnabled)
+		{
+			newRootFrm->giveChatBoxFocus();
+		}
+		else
+		{
+			newRootFrm->giveQuickChatFocus();
+		}
 	}
 
 	return screen;
@@ -535,9 +542,9 @@ void WzInGameChatScreen::closeScreen()
 	}
 }
 
-std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode)
+std::shared_ptr<W_SCREEN> createChatScreen(std::function<void ()> onCloseFunc, WzChatMode initialChatMode, bool startWithQuickChatFocused)
 {
-	auto screen = WzInGameChatScreen::make(onCloseFunc, initialChatMode);
+	auto screen = WzInGameChatScreen::make(onCloseFunc, initialChatMode, startWithQuickChatFocused);
 	widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
 	psCurrentChatScreen = screen;
 	return screen;
