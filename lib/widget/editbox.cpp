@@ -616,6 +616,11 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 		{
 			lockedScreen->setFocus(shared_from_this());
 		}
+		else
+		{
+			// If the W_EDITBOX isn't currently attached to a screen when this is triggered, focus issues may occur
+			ASSERT(false, "W_EDITBOX is not attached to any screen?");
+		}
 	}
 	dirty = true;
 }
@@ -647,6 +652,12 @@ void W_EDITBOX::stopEditing()
 	{
 		onEditingStoppedHandler(*this);
 	}
+}
+
+bool W_EDITBOX::isEditing()
+{
+	unsigned editState = state & WEDBS_MASK;
+	return (editState & WEDBS_MASK) != WEDBS_FIXED;
 }
 
 /* Respond to loss of focus */

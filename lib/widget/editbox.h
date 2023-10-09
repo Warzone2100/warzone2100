@@ -60,6 +60,7 @@ public:
 	void geometryChanged() override;
 
 	void stopEditing();
+	bool isEditing();
 
 	void setState(unsigned state) override;
 	WzString getString() const override;
