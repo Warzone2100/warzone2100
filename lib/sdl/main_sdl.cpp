@@ -307,6 +307,16 @@ bool isInTextInputMode()
 	return result;
 }
 
+bool wzHasTouchInputDevices()
+{
+	return SDL_GetNumTouchDevices() > 0;
+}
+
+bool wzSeemsLikeNonTouchPlatform()
+{
+	return !wzHasTouchInputDevices() || (SDL_HasScreenKeyboardSupport() == SDL_FALSE);
+}
+
 /* Put a character into a text buffer overwriting any text under the cursor */
 WzString wzGetSelection()
 {

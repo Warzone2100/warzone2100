@@ -135,6 +135,7 @@ void wzDelay(unsigned int delay);	//delay in ms
 void StartTextInput(void* pTextInputRequester);
 void StopTextInput(void* pTextInputResigner);
 bool isInTextInputMode();
+bool wzSeemsLikeNonTouchPlatform();
 
 // NOTE: wzBackendAttemptOpenURL should *not* be called directly - instead, call openURLInBrowser() from urlhelpers.h
 bool wzBackendAttemptOpenURL(const char *url);
