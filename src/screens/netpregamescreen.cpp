@@ -764,13 +764,14 @@ void WzGameStartOverlayScreen_CLICKFORM::transitionToNextState()
 				if (teamStrategyView)
 				{
 					transformTeamStrategyViewMode(teamStrategyView, true);
+
+					// if needed, hide playersLoadingStatus so the team planning can use the full height
+					if (true)
+					{
+						playersLoadingStatus->hide();
+					}
 				}
 
-				// if needed, hide playersLoadingStatus so the team planning can use the full height
-				if (true)
-				{
-					playersLoadingStatus->hide();
-				}
 				recalcLayout();
 			}
 			else
@@ -810,7 +811,6 @@ void WzGameStartOverlayScreen_CLICKFORM::updateData()
 	if (currentState == PregameWaitingState::WaitingForPlayersToJoin)
 	{
 		size_t playersWaitingToJoin = 0;
-		size_t playersJoined = 0;
 		for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 		{
 			if (isHumanPlayer(i))
@@ -818,10 +818,6 @@ void WzGameStartOverlayScreen_CLICKFORM::updateData()
 				if (ingame.JoiningInProgress[i])
 				{
 					playersWaitingToJoin++;
-				}
-				else
-				{
-					playersJoined++;
 				}
 			}
 		}
