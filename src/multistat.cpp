@@ -367,66 +367,84 @@ bool recvMultiStats(NETQUEUE queue)
 		{
 			prevIdentity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
 		}
-		playerStats[playerIndex].identity.clear();
-		if (!identity.empty())
+
+		// If game hasn't actually started, process potential identity changes
+		if (!ingame.TimeEveryoneIsInGame.has_value())
 		{
-			if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
+			playerStats[playerIndex].identity.clear();
+			if (!identity.empty())
 			{
-				debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+				if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
+				{
+					debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+				}
+			}
+			else
+			{
+				debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+			}
+			if ((identity != prevIdentity) || identity.empty())
+			{
+				if (GetGameMode() == GS_NORMAL)
+				{
+					debug(LOG_INFO, "Unexpected identity change after NET_FIREUP for: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+				}
+
+				ingame.PingTimes[playerIndex] = PING_LIMIT;
+				ingame.VerifiedIdentity[playerIndex] = false;
+
+				if (!ingame.muteChat[playerIndex])
+				{
+					// check if the new identity was previously muted
+					auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
+					if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
+					{
+						ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
+					}
+				}
+
+				// Output to stdinterface, if enabled
+				if (!identity.empty())
+				{
+					std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
+					std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
+					std::string sendername = NetPlay.players[playerIndex].name;
+					std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
+					wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
+				}
+				else
+				{
+					wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
+				}
+
+				if (playerIndex < MAX_PLAYERS || playerIndex == NetPlay.hostPlayer)
+				{
+					if (!playerStats[playerIndex].identity.empty())
+					{
+						// generate session keys
+						try {
+							generateSessionKeysWithPlayer(playerIndex);
+						}
+						catch (const std::invalid_argument& e) {
+							debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
+						}
+					}
+					else
+					{
+						NETclearSessionKeys(playerIndex);
+					}
+				}
+
+				processAutoratingData = true;
 			}
 		}
 		else
 		{
-			debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
-		}
-		if ((identity != prevIdentity) || identity.empty())
-		{
-			ingame.PingTimes[playerIndex] = PING_LIMIT;
-			ingame.VerifiedIdentity[playerIndex] = false;
-
-			if (!ingame.muteChat[playerIndex])
+			// Changing an identity should not happen once a game starts
+			if ((identity != prevIdentity) || identity.empty())
 			{
-				// check if the new identity was previously muted
-				auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
-				if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
-				{
-					ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
-				}
+				ASSERT(false, "Cannot change identity for player %u after game has started", playerIndex);
 			}
-
-			// Output to stdinterface, if enabled
-			if (!identity.empty())
-			{
-				std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
-				std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
-				std::string sendername = NetPlay.players[playerIndex].name;
-				std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
-				wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
-			}
-			else
-			{
-				wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
-			}
-
-			if (playerIndex < MAX_PLAYERS || playerIndex == NetPlay.hostPlayer)
-			{
-				if (!playerStats[playerIndex].identity.empty())
-				{
-					// generate session keys
-					try {
-						generateSessionKeysWithPlayer(playerIndex);
-					}
-					catch (const std::invalid_argument& e) {
-						debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
-					}
-				}
-				else
-				{
-					NETclearSessionKeys(playerIndex);
-				}
-			}
-
-			processAutoratingData = true;
 		}
 	}
 	else
