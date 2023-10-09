@@ -111,6 +111,7 @@ void TabSelectionWidget::addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHAN
 
 void TabSelectionWidget::setNumberOfTabs(size_t tabs)
 {
+	tabs = std::max<size_t>(tabs, 1);
 	size_t previousSize = tabButtons.size();
 	for (size_t n = tabs; n < tabButtons.size(); ++n)
 	{
@@ -144,8 +145,12 @@ void TabSelectionWidget::doLayoutAll()
 {
 	TabSelectionStyle tabStyle;
 	int scrollSpace = 0;
-	tabsAtOnce = tabs();
-	tabStyle.tabSize = WzSize(width() / static_cast<int>(tabs()), height());
+	tabsAtOnce = std::max<size_t>(tabs(), 1);
+	if (tabs() == 0 || width() == 0 || height() == 0)
+	{
+		return;
+	}
+	tabStyle.tabSize = WzSize((tabs() > 0) ? (width() / static_cast<int>(tabs())) : 0, height());
 	tabStyle.scrollTabSize = WzSize(0, 0);
 	tabStyle.tabGap = 0;
 	tabStyle.tabAlignment = TabAlignment::LeftAligned;
@@ -167,8 +172,8 @@ void TabSelectionWidget::doLayoutAll()
 	prevTabPageButton->show(currentTab >= tabsAtOnce);
 	nextTabPageButton->setGeometry(width() - tabStyle.scrollTabSize.width(), 0, tabStyle.scrollTabSize.width(), tabStyle.scrollTabSize.height());
 	nextTabPageButton->setImages(tabStyle.nextScrollTabImage, tabStyle.nextScrollTabImageDown, tabStyle.nextScrollTabImageHighlight);
-	nextTabPageButton->show(currentTab / tabsAtOnce < (tabs() - 1) / tabsAtOnce);
-	size_t numPages = std::max<size_t>((tabs() + (tabsAtOnce - 1)) / tabsAtOnce, 1);
+	nextTabPageButton->show((tabsAtOnce > 0) ? currentTab / tabsAtOnce < (tabs() - 1) / tabsAtOnce : false);
+	size_t numPages = std::max<size_t>((tabsAtOnce > 0) ? (tabs() + (tabsAtOnce - 1)) / tabsAtOnce : 1, 1);
 	size_t numTabsOnLastPage = (tabs() > 0) ? ((tabs()-1) % tabsAtOnce) + 1 : 0;
 	for (size_t n = 0; n < tabButtons.size(); ++n)
 	{
