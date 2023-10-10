@@ -201,29 +201,38 @@ void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode, const W_EDITBOX
 		ASSERT_OR_RETURN(, strongParent != nullptr, "No parent?");
 
 		auto enteredText = widg.getString();
-		const char* pStr = enteredText.toUtf8().c_str();
-		auto message = InGameChatMessage(selectedPlayer, pStr);
-		attemptCheatCode(message.text);		// parse the message
-
-		switch (strongParent->chatMode)
-		{
-			case WzChatMode::Glob:
-				parseChatMessageModifiers(message);
-				break;
-			case WzChatMode::Team:
-				message.toAllies = true;
-				break;
-		}
-
-		if (strlen(message.text))
-		{
-			message.send();
-		}
-
+		WzChatMode currChatMode = strongParent->chatMode;
 		inputLoseFocus();
 
-		strongParent->endChatBoxEditing();
-		strongParent->closeParentScreen();
+		auto weakParent = std::weak_ptr<WzInGameChatBoxForm>(strongParent);
+		widgScheduleTask([enteredText, currChatMode, weakParent]() {
+
+			// must process the enteredText inside a scheduled task as side effects of attemptCheatCode may modify the overlay screens / widgets
+
+			const char* pStr = enteredText.toUtf8().c_str();
+			auto message = InGameChatMessage(selectedPlayer, pStr);
+			attemptCheatCode(message.text);		// parse the message
+
+			switch (currChatMode)
+			{
+				case WzChatMode::Glob:
+					parseChatMessageModifiers(message);
+					break;
+				case WzChatMode::Team:
+					message.toAllies = true;
+					break;
+			}
+
+			if (strlen(message.text))
+			{
+				message.send();
+			}
+
+			auto parent = weakParent.lock();
+			ASSERT_OR_RETURN(, parent != nullptr, "No parent?");
+			parent->endChatBoxEditing();
+			parent->closeParentScreen();
+		});
 	});
 
 	chatBox->setOnEscapeHandler([](W_EDITBOX& widg) {
@@ -231,13 +240,25 @@ void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode, const W_EDITBOX
 		ASSERT_OR_RETURN(, strongParent != nullptr, "No parent?");
 
 		inputLoseFocus();
-		strongParent->closeParentScreen();
+
+		auto weakParent = std::weak_ptr<WzInGameChatBoxForm>(strongParent);
+		widgScheduleTask([weakParent]() {
+			auto parent = weakParent.lock();
+			ASSERT_OR_RETURN(, parent != nullptr, "No parent?");
+			parent->closeParentScreen();
+		});
 	});
 
 	chatBox->setOnEditingStoppedHandler([](W_EDITBOX& widg) {
 		auto strongParent = std::dynamic_pointer_cast<WzInGameChatBoxForm>(widg.parent());
 		ASSERT_OR_RETURN(, strongParent != nullptr, "No parent?");
-		strongParent->endChatBoxEditing();
+
+		auto weakParent = std::weak_ptr<WzInGameChatBoxForm>(strongParent);
+		widgScheduleTask([weakParent]() {
+			auto parent = weakParent.lock();
+			ASSERT_OR_RETURN(, parent != nullptr, "No parent?");
+			parent->endChatBoxEditing();
+		});
 	});
 
 	if (onTabHandler)
