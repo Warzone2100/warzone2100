@@ -95,7 +95,7 @@ MSVC_PRAGMA(warning( pop ))
 #pragma GCC diagnostic pop
 #endif
 #include "3rdparty/gsl_finally.h"
-#include "3rdparty/integer_sequence.hpp"
+#include <utility>
 
 // Alternatives for C++ - can't use the JS_CFUNC_DEF / JS_CGETSET_DEF / etc defines
 // #define JS_CFUNC_DEF(name, length, func1) { name, JS_PROP_WRITABLE | JS_PROP_CONFIGURABLE, JS_DEF_CFUNC, 0, .u = { .func = { length, JS_CFUNC_generic, { .generic = func1 } } } }
@@ -2136,7 +2136,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 
 		template<typename...T> struct UnboxTupleIndex;
 		template<size_t...I, typename...T>
-		struct UnboxTupleIndex<tl::index_sequence<I...>, T...>
+		struct UnboxTupleIndex<std::index_sequence<I...>, T...>
 		{
 		public:
 			typedef std::tuple<const wzapi::execution_context&, T...> tuple_type;
@@ -2174,7 +2174,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			tuple_ref_type value;
 		};
 
-		template<typename...T> using UnboxTuple = UnboxTupleIndex<tl::make_index_sequence<sizeof...(T)>, T...>;
+		template<typename...T> using UnboxTuple = UnboxTupleIndex<std::make_index_sequence<sizeof...(T)>, T...>;
 
 		MSVC_PRAGMA(warning( push )) // see matching "pop" below
 		MSVC_PRAGMA(warning( disable : 4189 )) // disable "warning C4189: 'idx': local variable is initialized but not referenced"
