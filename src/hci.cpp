@@ -1341,7 +1341,6 @@ INT_RETVAL intRunWidgets()
 	{
 		if (bRequestLoad)
 		{
-			NET_InitPlayers();	// reinitialize starting positions
 			loopMissionState = LMS_LOADGAME;
 			sstrcpy(saveGameName, sRequestResult);
 		}
