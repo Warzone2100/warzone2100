@@ -110,10 +110,6 @@ Files: src/3rdparty/gsl_finally.h
 Copyright: 2015 Microsoft Corporation
 License: Expat
 
-Files: src/3rdparty/integer_sequence.hpp
-Copyright: 2017 by Simon Brand
-License: CC0
-
 Files: src/3rdparty/physfs.hpp
 Copyright: 2013 Kevin Howell and others
            2018 Arthur Brainville (Ybalrid)
