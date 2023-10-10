@@ -3349,25 +3349,33 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		}
 	}
 
-	// one of these lists is empty when on mission
-	DROID* psdroidList = apsDroidLists[psDroid->player] != nullptr ? apsDroidLists[psDroid->player] : mission.apsDroidLists[psDroid->player];
-	for (DROID* psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
+	// If we are repair droid ourselves that accept retreating units, don't consider 
+	// other repairs droids. Since this would cause traffic jams if we are attacked amongst
+	// other accepting repair droids. Thus causing chaos as repair units simply clump up
+	// instead of actually retreating.
+	if (!((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR)
+		&& secondaryGetState(psDroid, DSO_ACCEPT_RETREP)))
 	{
-		// Accept any repair droids that accept retreating units
-		if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
-			&& secondaryGetState(psCurr, DSO_ACCEPT_RETREP))
+		// one of these lists is empty when on mission
+		DROID* psdroidList = apsDroidLists[psDroid->player] != nullptr ? apsDroidLists[psDroid->player] : mission.apsDroidLists[psDroid->player];
+		for (DROID* psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
-			thisDistToRepair = droidSqDist(psDroid, psCurr);
-			if (thisDistToRepair <= 0)
+			// Accept any repair droids that accept retreating units
+			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
+				&& secondaryGetState(psCurr, DSO_ACCEPT_RETREP))
 			{
-				continue; // unreachable
-			}
-			vDroidPos.push_back(psCurr->pos);
-			vDroid.push_back(psCurr);
-			if (bestDistToRepairDroid > thisDistToRepair)
-			{
-				bestDistToRepairDroid = thisDistToRepair;
-				bestDroidPos = psCurr->pos;
+				thisDistToRepair = droidSqDist(psDroid, psCurr);
+				if (thisDistToRepair <= 0)
+				{
+					continue; // unreachable
+				}
+				vDroidPos.push_back(psCurr->pos);
+				vDroid.push_back(psCurr);
+				if (bestDistToRepairDroid > thisDistToRepair)
+				{
+					bestDistToRepairDroid = thisDistToRepair;
+					bestDroidPos = psCurr->pos;
+				}
 			}
 		}
 	}
