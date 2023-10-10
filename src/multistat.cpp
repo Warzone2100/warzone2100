@@ -595,6 +595,12 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 	}
 	char buffer[1000];
 
+	if (st->identity.empty())
+	{
+		debug(LOG_INFO, "Refusing to save profile with empty identity: %s", sFileName);
+		return false;
+	}
+
 	ssprintf(buffer, "WZ.STA.v3\n%u %u %u %u %u\n%s\n",
 	         st->wins, st->losses, st->totalKills, st->totalScore, st->played, base64Encode(st->identity.toBytes(EcKey::Private)).c_str());
 
