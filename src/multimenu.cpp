@@ -866,7 +866,30 @@ private:
 			sButInit.pTip	= _("Channel");
 			sButInit.pDisplay = displayChannelState;
 			sButInit.UserData = player;
-			alliancesGrid->place({0}, {0}, Margin(0, 1, 0, 0).wrap(std::make_shared<W_BUTTON>(&sButInit)));
+
+			auto channelButton = std::make_shared<W_BUTTON>(&sButInit);
+			channelButton->addOnClickHandler([player](W_BUTTON&) {
+				UBYTE i = (UBYTE)player;
+				openchannels[i] = !openchannels[i];
+
+				if (mouseDown(MOUSE_RMB) && NetPlay.isHost) // both buttons....
+				{
+					char buf[250];
+
+					// Allow the host to kick the AI only in a MP game, or if they activated cheats in a skirmish game
+					if ((NetPlay.bComms || Cheated) && (NetPlay.players[i].allocated || (NetPlay.players[i].allocated == false && NetPlay.players[i].ai != AI_OPEN)))
+					{
+						inputLoseFocus();
+						ssprintf(buf, _("The host has kicked %s from the game!"), getPlayerName((unsigned int) i));
+						sendInGameSystemMessage(buf);
+						ssprintf(buf, _("kicked %s : %s from the game, and added them to the banned list!"), getPlayerName((unsigned int) i), NetPlay.players[i].IPtextAddress);
+						NETlogEntry(buf, SYNC_FLAG, (unsigned int) i);
+						kickPlayer((unsigned int) i, _("The host has kicked you from the game."), ERROR_KICKED, false);
+						return;
+					}
+				}
+			});
+			alliancesGrid->place({0}, {0}, Margin(0, 1, 0, 0).wrap(channelButton));
 		}
 
 		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer && player < MAX_PLAYERS && !NetPlay.players[player].isSpectator)
@@ -883,7 +906,29 @@ private:
 			//can't break alliances in 'Locked Teams' mode
 			if (!alliancesFixed(game.alliance))
 			{
-				alliancesGrid->place({1}, {0}, Margin(0, 1, 0, 0).wrap(std::make_shared<W_BUTTON>(&sButInit)));
+				auto allianceButton = std::make_shared<W_BUTTON>(&sButInit);
+				allianceButton->addOnClickHandler([player](W_BUTTON& widg){
+					UBYTE i = (UBYTE)(player);
+
+					switch (alliances[selectedPlayer][i])
+					{
+					case ALLIANCE_BROKEN:
+						requestAlliance((UBYTE)selectedPlayer, i, true, true);			// request an alliance
+						break;
+					case ALLIANCE_INVITATION:
+						formAlliance((UBYTE)selectedPlayer, i, true, true, true);			// form an alliance
+						break;
+					case ALLIANCE_REQUESTED:
+						breakAlliance((UBYTE)selectedPlayer, i, true, true);		// break an alliance
+						break;
+					case ALLIANCE_FORMED:
+						breakAlliance((UBYTE)selectedPlayer, i, true, true);		// break an alliance
+						break;
+					default:
+						break;
+					}
+				});
+				alliancesGrid->place({1}, {0}, Margin(0, 1, 0, 0).wrap(allianceButton));
 			}
 
 			sButInit.pDisplay = intDisplayImageHilight;
@@ -897,23 +942,39 @@ private:
 				sButInit.id		= MULTIMENU_GIFT_RAD + player;
 				sButInit.pTip	= _("Give Visibility Report");
 				sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_VIS_HI, IMAGE_MULTI_VIS);
-				alliancesGrid->place({2}, {0}, wrapGift(std::make_shared<W_BUTTON>(&sButInit)));
+				auto visGiftButton = std::make_shared<W_BUTTON>(&sButInit);
+				visGiftButton->addOnClickHandler([player](W_BUTTON&) {
+					sendGift(RADAR_GIFT, static_cast<uint8_t>(player));
+				});
+				alliancesGrid->place({2}, {0}, wrapGift(visGiftButton));
 
 				sButInit.id		= MULTIMENU_GIFT_RES + player;
 				sButInit.pTip	= _("Leak Technology Documents");
 				sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_TEK_HI , IMAGE_MULTI_TEK);
-				alliancesGrid->place({3}, {0}, wrapGift(std::make_shared<W_BUTTON>(&sButInit)));
+				auto resGiftButton = std::make_shared<W_BUTTON>(&sButInit);
+				resGiftButton->addOnClickHandler([player](W_BUTTON&) {
+					sendGift(RESEARCH_GIFT, static_cast<uint8_t>(player));
+				});
+				alliancesGrid->place({3}, {0}, wrapGift(resGiftButton));
 			}
 
 			sButInit.id		= MULTIMENU_GIFT_DRO + player;
 			sButInit.pTip	= _("Hand Over Selected Units");
 			sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_DRO_HI , IMAGE_MULTI_DRO);
-			alliancesGrid->place({4}, {0}, wrapGift(std::make_shared<W_BUTTON>(&sButInit)));
+			auto droidGiftButton = std::make_shared<W_BUTTON>(&sButInit);
+			droidGiftButton->addOnClickHandler([player](W_BUTTON&) {
+				sendGift(DROID_GIFT, static_cast<uint8_t>(player));
+			});
+			alliancesGrid->place({4}, {0}, wrapGift(droidGiftButton));
 
 			sButInit.id		= MULTIMENU_GIFT_POW + player;
 			sButInit.pTip	= _("Give Power To Player");
 			sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_POW_HI , IMAGE_MULTI_POW);
-			alliancesGrid->place({5}, {0}, wrapGift(std::make_shared<W_BUTTON>(&sButInit)));
+			auto pwrGiftButton = std::make_shared<W_BUTTON>(&sButInit);
+			pwrGiftButton->addOnClickHandler([player](W_BUTTON&) {
+				sendGift(POWER_GIFT, static_cast<uint8_t>(player));
+			});
+			alliancesGrid->place({5}, {0}, wrapGift(pwrGiftButton));
 
 			giftsUp[player] = true;				// note buttons are up!
 		}
@@ -1211,6 +1272,11 @@ bool intAddMultiMenu()
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	auto closeButton = std::make_shared<W_BUTTON>(&sButInit);
+	closeButton->addOnClickHandler([](W_BUTTON&) {
+		widgScheduleTask([]() {
+			intCloseMultiMenu();
+		});
+	});
 	form->attach(closeButton);
 
 	auto grid = MultiMenuGrid::make();
@@ -1285,85 +1351,5 @@ bool intRunMultiMenu()
 // process clicks made by user.
 void intProcessMultiMenu(UDWORD id)
 {
-	UBYTE	i;
-
-	//close
-	if (id == MULTIMENU_CLOSE)
-	{
-		intCloseMultiMenu();
-	}
-
-	//alliance button
-	if (id >= MULTIMENU_ALLIANCE_BASE  &&  id < MULTIMENU_ALLIANCE_BASE + MAX_PLAYERS  &&  selectedPlayer < MAX_PLAYERS)
-	{
-		i = (UBYTE)(id - MULTIMENU_ALLIANCE_BASE);
-
-		switch (alliances[selectedPlayer][i])
-		{
-		case ALLIANCE_BROKEN:
-			requestAlliance((UBYTE)selectedPlayer, i, true, true);			// request an alliance
-			break;
-		case ALLIANCE_INVITATION:
-			formAlliance((UBYTE)selectedPlayer, i, true, true, true);			// form an alliance
-			break;
-		case ALLIANCE_REQUESTED:
-			breakAlliance((UBYTE)selectedPlayer, i, true, true);		// break an alliance
-			break;
-
-		case ALLIANCE_FORMED:
-			breakAlliance((UBYTE)selectedPlayer, i, true, true);		// break an alliance
-			break;
-		default:
-			break;
-		}
-	}
-
-
-	//channel opens.
-	if (id >= MULTIMENU_CHANNEL &&  id < MULTIMENU_CHANNEL + MAX_CONNECTED_PLAYERS)
-	{
-		i = id - MULTIMENU_CHANNEL;
-		openchannels[i] = !openchannels[i];
-
-		if (mouseDown(MOUSE_RMB) && NetPlay.isHost) // both buttons....
-		{
-			char buf[250];
-
-			// Allow the host to kick the AI only in a MP game, or if they activated cheats in a skirmish game
-			if ((NetPlay.bComms || Cheated) && (NetPlay.players[i].allocated || (NetPlay.players[i].allocated == false && NetPlay.players[i].ai != AI_OPEN)))
-			{
-				inputLoseFocus();
-				ssprintf(buf, _("The host has kicked %s from the game!"), getPlayerName((unsigned int) i));
-				sendInGameSystemMessage(buf);
-				ssprintf(buf, _("kicked %s : %s from the game, and added them to the banned list!"), getPlayerName((unsigned int) i), NetPlay.players[i].IPtextAddress);
-				NETlogEntry(buf, SYNC_FLAG, (unsigned int) i);
-				kickPlayer((unsigned int) i, _("The host has kicked you from the game."), ERROR_KICKED, false);
-				return;
-			}
-		}
-	}
-
-	//radar gifts
-	if (id >=  MULTIMENU_GIFT_RAD && id < MULTIMENU_GIFT_RAD + MAX_PLAYERS)
-	{
-		sendGift(RADAR_GIFT, id - MULTIMENU_GIFT_RAD);
-	}
-
-	// research gift
-	if (id >= MULTIMENU_GIFT_RES && id < MULTIMENU_GIFT_RES  + MAX_PLAYERS)
-	{
-		sendGift(RESEARCH_GIFT, id - MULTIMENU_GIFT_RES);
-	}
-
-	//droid gift
-	if (id >=  MULTIMENU_GIFT_DRO && id <  MULTIMENU_GIFT_DRO + MAX_PLAYERS)
-	{
-		sendGift(DROID_GIFT, id - MULTIMENU_GIFT_DRO);
-	}
-
-	//power gift
-	if (id >=  MULTIMENU_GIFT_POW && id <  MULTIMENU_GIFT_POW + MAX_PLAYERS)
-	{
-		sendGift(POWER_GIFT, id - MULTIMENU_GIFT_POW);
-	}
+	// currently, no-op (all clicks are handled by onClickHandlers for the appropriate buttons
 }
