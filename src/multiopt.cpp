@@ -724,5 +724,7 @@ bool multiGameShutdown()
 	bMultiMessages					= false;
 	selectedPlayer					= 0;		// Back to use player 0 (single player friendly)
 
+	NET_InitPlayers();
+
 	return true;
 }
