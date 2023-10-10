@@ -46,7 +46,10 @@ void CommanderController::updateCommandersList()
 		}
 	}
 
-	std::reverse(commanders.begin(), commanders.end());
+	// Sort the list of commanders from lowest to highest id (using a lambda function defined within the sort call)
+	std::sort(commanders.begin(), commanders.end(), [](DROID *droid1, DROID *droid2) {
+		return droid1->id < droid2->id;
+	});
 }
 
 STRUCTURE_STATS *CommanderController::getObjectStatsAt(size_t objectIndex) const
