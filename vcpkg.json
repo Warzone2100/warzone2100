@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "6d16cb553a82eb42548326769f0a16d74fbceec1",
+	"builtin-baseline": "51475feaccb720ab40e5a0e3f8da70a4510defc0",
 	"dependencies": [
 		"sdl2",
 		"physfs",
@@ -14,15 +14,7 @@
 		"libpng",
 		"freetype",
 		"gettext",
-		{
-			"name": "openal-soft",
-			"platform": "windows | mingw"
-		},
-		{
-			"name": "openal-soft",
-			"platform": "!windows & !mingw",
-			"version>=": "1.23.0"
-		},
+		"openal-soft",
 		"zlib",
 		"sqlite3",
 		"libsodium",
