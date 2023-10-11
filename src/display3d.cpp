@@ -1510,7 +1510,7 @@ static void drawTiles(iView *player)
 	gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
 	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
 	gfx_api::WorldToScreenPSO::get().bind_textures(gfx_api::context::get().getSceneTexture());
-	gfx_api::WorldToScreenPSO::get().draw(6, 0);
+	gfx_api::WorldToScreenPSO::get().draw(3, 0);
 	gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
 }
 
