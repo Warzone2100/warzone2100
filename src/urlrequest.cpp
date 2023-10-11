@@ -1270,7 +1270,7 @@ void urlSelectSSLBackend()
 		return;
 	}
 	// Note: Use CURLSSLBACKEND_DARWINSSL instead of CURLSSLBACKEND_SECURETRANSPORT to support older cURL versions
-	const std::vector<curl_sslbackend> backendPreferencesOrder = {CURLSSLBACKEND_SCHANNEL, CURLSSLBACKEND_DARWINSSL, CURLSSLBACKEND_GNUTLS, CURLSSLBACKEND_NSS};
+	const std::vector<curl_sslbackend> backendPreferencesOrder = {CURLSSLBACKEND_SCHANNEL, CURLSSLBACKEND_DARWINSSL, CURLSSLBACKEND_GNUTLS};
 	std::vector<curl_sslbackend> ignoredBackends;
 #if !defined(USE_OPENSSL_LOCKS_INIT) && !defined(CURL_OPENSSL_DOES_NOT_REQUIRE_LOCKS_INIT)
 	// Did not compile with support for thread-safety / locks for OpenSSL, so ignore it
