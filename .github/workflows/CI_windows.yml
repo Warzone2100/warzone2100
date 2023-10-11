@@ -381,10 +381,10 @@ jobs:
         $VerbosePreference = "Continue"
         . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
 
-        $LLVM_MINGW_RELEASE = "20220906";
+        $LLVM_MINGW_RELEASE = "20230614";
         $LLVM_MINGW_PKG = "llvm-mingw-${LLVM_MINGW_RELEASE}-ucrt-x86_64"
         $LLVM_MINGW_DL_URL = "https://github.com/mstorsjo/llvm-mingw/releases/download/${LLVM_MINGW_RELEASE}/${LLVM_MINGW_PKG}.zip"
-        $LLVM_MINGW_DL_SHA512 = "3c724dd0663558c7247d2cdde196b37dc54e49fb8c4065aef0274d69d92d2d023440505fe6f23e83476d56f4a39c105d551f998a4342e823a2d2705d7a73fe7c"
+        $LLVM_MINGW_DL_SHA512 = "880429f4ef91cb079d64bfb56ef02ca1170cecc082c229d7fb6b02f4ed70a70e64d18e7ca61e95c47e483a970fb3996c5265c95c2dc118bb2fc97e28fd36c2e7"
 
         $LLVM_MINGW_DL_BASEDIR = "${{ github.workspace }}\dl"
         $LLVM_MINGW_DL_PATH = "${LLVM_MINGW_DL_BASEDIR}\llvm-mingw.zip"
