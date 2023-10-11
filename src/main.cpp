@@ -1371,6 +1371,15 @@ bool getUTF8CmdLine(int *const _utfargc WZ_DECL_UNUSED, char *** const _utfargv 
 
 #if defined(WZ_OS_WIN)
 
+// Special exports to default to high-performance GPU on multi-GPU systems
+extern "C" {
+	// https://developer.download.nvidia.com/devzone/devcenter/gamegraphics/files/OptimusRenderingPolicies.pdf
+	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+
+	// https://gpuopen.com/learn/amdpowerxpressrequesthighperformance/
+	__declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x00000001;
+}
+
 typedef BOOL (WINAPI *SetDefaultDllDirectoriesFunction)(
   DWORD DirectoryFlags
 );
