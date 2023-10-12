@@ -411,6 +411,17 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		XCODE_ATTRIBUTE_DEPLOYMENT_POSTPROCESSING[variant=Release] YES
 	)
 
+	# Bundle the crashpad_handler (if enabled)
+	if(TARGET crashpad_handler)
+		message(FATAL_ERROR "crashpad_handler is not supported for macOS builds (it does not support sandboxed apps)")
+		# But if we *could* use it, we'd bundle it as follows:
+		# Use a post-build step to copy it to the executables folder in the app bundle
+		#add_custom_command(TARGET warzone2100 POST_BUILD
+		#	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		#	$<TARGET_FILE:crashpad_handler> $<TARGET_FILE_DIR:warzone2100>
+		#)
+	endif()
+
 	if(WZ_ENABLE_BACKEND_VULKAN)
 		# Vulkan / MoltenVK
 		find_package(Vulkan)
@@ -622,13 +633,12 @@ endif()
 
 # Support crashpad sentry backend - requires installation of helper binary to handle crashes
 if(TARGET crashpad_handler)
-	if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-		message(FATAL_ERROR "crashpad_handler is not currently supported for macOS builds")
-	endif()
-	install(TARGETS crashpad_handler COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
-	if(WIN32 AND TARGET crashpad_wer)
-		# On Windows, also install the crashpad_wer.dll (if built with support)
-		install(TARGETS crashpad_wer RUNTIME COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+	if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		install(TARGETS crashpad_handler COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+		if(WIN32 AND TARGET crashpad_wer)
+			# On Windows, also install the crashpad_wer.dll (if built with support)
+			install(TARGETS crashpad_wer RUNTIME COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+		endif()
 	endif()
 endif()
 
