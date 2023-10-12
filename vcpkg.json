@@ -53,9 +53,6 @@
 			"host": true
 		}
 	],
-	"overrides": [
-		{ "name": "sqlite3", "version": "3.40.1" }
-	],
 	"default-features": [
 		"vulkan"
 	],

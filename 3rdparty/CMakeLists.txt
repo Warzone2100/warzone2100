@@ -29,7 +29,6 @@ endif()
 
 find_package(SQLite3 3.14 REQUIRED)
 set(SQLITECPP_USE_STATIC_RUNTIME OFF CACHE BOOL "Use static runtime" FORCE)
-set(SQLITE_ENABLE_COLUMN_METADATA OFF CACHE BOOL "Enable Column::getColumnOriginName(). Require support from sqlite3 library." FORCE)
 set(SQLITE_HAS_CODEC OFF CACHE BOOL "Enable database encryption API. Not available in the public release of SQLite." FORCE)
 if(SQLite3_VERSION VERSION_LESS 3.19)
 	set(SQLITE_USE_LEGACY_STRUCT ON CACHE BOOL "Fallback to forward declaration of legacy struct sqlite3_value (pre SQLite 3.19)" FORCE)
