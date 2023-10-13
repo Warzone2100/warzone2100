@@ -1175,7 +1175,7 @@ void draw3DScene()
 # pragma GCC diagnostic pop
 #endif
 		}
-		exit(-1);	// will never reach this, but just in case...
+		exit(-1);	// should never reach this, but just in case...
 	}
 	//visualize radius if needed
 	if (bRangeDisplay)

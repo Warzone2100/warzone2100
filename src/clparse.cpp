@@ -739,6 +739,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_CRASH:
 			CauseCrash = true;
 			NetPlay.bComms = false;
+			SPinit(LEVEL_TYPE::CAMPAIGN);
 			sstrcpy(aLevelName, "CAM_3A");
 			SetGameMode(GS_NORMAL);
 			break;
