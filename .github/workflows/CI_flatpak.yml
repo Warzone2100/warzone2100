@@ -244,6 +244,20 @@ jobs:
           flatpak_app/files/lib/debug/bin
           flatpak_app/files/lib/debug/lib
         if-no-files-found: 'error'
+    - name: Collect additional debug dependency info
+      shell: bash
+      run: |
+        # Note: These libraries will be from the runtime that is installed at the time of the build
+        LD_LIBRARY_PATH=/var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/23.08/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/ ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-'
+        mkdir output_debug_dependency_snapshot
+        LD_LIBRARY_PATH=/var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/23.08/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/ ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-|=> not found' | awk 'NF == 4 { system("echo cp " $3 " output_debug_dependency_snapshot && cp " $3 " output_debug_dependency_snapshot") }'
+    - name: Upload additional debug dependency info
+      uses: actions/upload-artifact@v3
+      with:
+        name: 'debugdependencylibsnapshot_linux_flatpak_${{ matrix.arch }}'
+        path: |
+          output_debug_dependency_snapshot
+        if-no-files-found: 'error'
     ###############################################################
     # Package the ostree repo (for use in later publish-release-to-flathub job)
     - name: Tar ostree repo
@@ -287,19 +301,25 @@ jobs:
     steps:
       - name: Prep Environment
         run: |
-          mkdir dl-debug-symbols
-      - name: Download Artifacts
+          mkdir -p dl-debug/symbols
+          mkdir -p dl-debug/additional
+      - name: Download Debug Symbols
         uses: actions/download-artifact@v3
         with:
           name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
-          path: ./dl-debug-symbols
+          path: ./dl-debug/symbols
+      - name: Download Additional Debug Files
+        uses: actions/download-artifact@v3
+        with:
+          name: 'debugdependencylibsnapshot_linux_flatpak_${{ matrix.arch }}'
+          path: ./dl-debug/additional
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ./dl-debug-symbols
+        working-directory: ./dl-debug
       - name: 'Upload debug symbols'
         env:
           SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
-          WZ_ARCHIVE_DIR: './dl-debug-symbols'
+          WZ_ARCHIVE_DIR: './dl-debug'
           WZ_GITHUB_REF: ${{needs.build-flatpak.outputs.WZ_GITHUB_REF}}
         run: |
           echo "WZ_GITHUB_REF=${WZ_GITHUB_REF}"
