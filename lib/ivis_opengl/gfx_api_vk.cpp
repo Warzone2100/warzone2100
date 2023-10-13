@@ -228,6 +228,7 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	{
 		// FUTURE TODO: Output a bunch more debugging info to the debug log?
 	}
+	debug(LOG_ERROR, "Vulkan backend encountered error: %s", vk::to_string(reason).c_str());
 	// Display a message and prompt the user to try a different graphics backend next time
 	wzPromptToChangeGfxBackendOnFailure("Failed with error: " + vk::to_string(reason));
 	abort();
