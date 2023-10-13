@@ -57,6 +57,7 @@
 #include "display3d.h"
 #include "hci.h"
 #include "loop.h"
+#include "wzcrashhandlingproviders.h"
 
 // TODO: Fix and remove after merging terrain rendering changes
 #if defined(__clang__)
@@ -2301,6 +2302,10 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force, bool for
 
 	if (success)
 	{
+		uint32_t debugQualityUint = static_cast<uint32_t>(terrainShaderQuality);
+		std::string terrainQualityUintStr = std::to_string(debugQualityUint);
+		crashHandlingProviderSetTag("wz.terrain_quality", terrainQualityUintStr);
+
 		if (sectors)
 		{
 			// mark all tiles dirty
