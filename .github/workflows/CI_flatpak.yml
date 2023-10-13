@@ -248,10 +248,10 @@ jobs:
     - name: Collect additional debug dependency info
       shell: bash
       run: |
-        # Note: These libraries will be from the runtime that is installed at the time of the build
-        LD_LIBRARY_PATH=/var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FREEDESKTOP_RUNTIME_VERSION}/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/ ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-'
         mkdir output_debug_dependency_snapshot
-        LD_LIBRARY_PATH=/var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FREEDESKTOP_RUNTIME_VERSION}/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/ ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-|=> not found' | awk 'NF == 4 { system("echo cp " $3 " output_debug_dependency_snapshot && cp " $3 " output_debug_dependency_snapshot") }'
+        # Note: These libraries will be from the runtime that is installed at the time of the build
+        ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-' | awk 'NF == 4 { system("echo " $1) }'
+        ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-' | awk 'NF == 4 { system("cp /var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FREEDESKTOP_RUNTIME_VERSION}/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/" $1 " output_debug_dependency_snapshot") }'
     - name: Upload additional debug dependency info
       uses: actions/upload-artifact@v3
       with:
