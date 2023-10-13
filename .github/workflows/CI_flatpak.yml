@@ -239,6 +239,8 @@ jobs:
       with:
         name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
         path: |
+          flatpak_app/files/bin
+          flatpak_app/files/lib/*.so.*
           flatpak_app/files/lib/debug/bin
           flatpak_app/files/lib/debug/lib
         if-no-files-found: 'error'
@@ -306,7 +308,7 @@ jobs:
             exit 0
           fi
           docker pull getsentry/sentry-cli
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
 
   upload-release-builds:
     strategy:
