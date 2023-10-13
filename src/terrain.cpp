@@ -2379,12 +2379,16 @@ bool debugToggleTerrainShaderType()
 			break;
 		case TerrainShaderType::SINGLE_PASS:
 			terrainShaderType = TerrainShaderType::FALLBACK;
+			terrainShaderQuality = TerrainShaderQuality::MEDIUM;
 			break;
 	}
 
 	// have to reload many things (currently)
 	shutdownTerrain();
-	setTerrainShaderQuality(terrainShaderQuality, true, true);
+	if (!setTerrainShaderQuality(terrainShaderQuality, true, true))
+	{
+		debug(LOG_INFO, "setTerrainShaderQuality failed?");
+	}
 	initTerrain();
 	return true;
 }
