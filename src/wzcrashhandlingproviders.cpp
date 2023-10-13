@@ -475,7 +475,15 @@ bool crashHandlingProviderTestCrash()
 	RaiseException(0xE000DEAD, EXCEPTION_NONCONTINUABLE, 0, 0);
 	return false;
 # else
-	// future todo: implement for other platforms
+#  if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
+	static void *invalid_mem = (void *)1;
+	memset((char *)invalid_mem, 1, 100);
+#  if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+#   pragma GCC diagnostic pop
+#  endif
 	return false;
 # endif
 #else
