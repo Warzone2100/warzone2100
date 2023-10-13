@@ -1092,24 +1092,27 @@ static void handleCameraScrolling()
 
 	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
 	timeDiff = wzGetTicks() - scrollRefTime;
-	scrollRefTime += timeDiff;
-	timeDiff = std::min<unsigned>(timeDiff, 500);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
+	if (timeDiff >= 8) // throttle max update rate to avoid really jerky scrolling
+	{
+		scrollRefTime += timeDiff;
+		timeDiff = std::min<unsigned>(timeDiff, 500);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
 
-	scrollStepLeftRight = 0;
-	scrollStepUpDown = 0;
-	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
-	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+		scrollStepLeftRight = 0;
+		scrollStepUpDown = 0;
+		calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
 
-	/* Get x component of movement */
-	xDif = (int) (cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
-	/* Get y component of movement */
-	yDif = (int) (sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
+		/* Get x component of movement */
+		xDif = (int) (cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
+		/* Get y component of movement */
+		yDif = (int) (sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
 
-	/* Adjust player's position by these components */
-	playerPos.p.x += xDif;
-	playerPos.p.z += yDif;
+		/* Adjust player's position by these components */
+		playerPos.p.x += xDif;
+		playerPos.p.z += yDif;
 
-	CheckScrollLimits();
+		CheckScrollLimits();
+	}
 
 	// Reset scroll directions
 	scrollDirLeftRight = 0;
