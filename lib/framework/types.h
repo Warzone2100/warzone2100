@@ -31,10 +31,9 @@
 #define __STDC_LIMIT_MACROS
 #endif
 
-#if defined(HAVE_CONFIG_H)
-#  undef _XOPEN_SOURCE
-#  include "config.h"
-#endif
+// Always include generated config.h
+#undef _XOPEN_SOURCE
+#include "wz2100-generated-config.h"
 
 #include <stddef.h> // for size_t
 

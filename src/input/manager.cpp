@@ -27,7 +27,6 @@
 
 #include "manager.h"
 #include "context.h"
-#include "config.h"
 #include "mapping.h"
 
 #include "../keybind.h"
