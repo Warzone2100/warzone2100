@@ -3036,7 +3036,7 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 
 	// don't currently have a good way of checking video memory on this system
 	// instead, check system RAM
-	auto systemRAMinMiB = wzGetSystemRAM();
+	auto systemRAMinMiB = wzGetCurrentSystemRAM();
 	if (systemRAMinMiB >= 16384) // If >= 16 GB of system RAM
 	{
 #if defined(WZ_OS_WIN)

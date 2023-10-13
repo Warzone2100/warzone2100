@@ -223,13 +223,6 @@ WzString wzGetPlatform()
 	return WzString::fromUtf8(SDL_GetPlatform());
 }
 
-// Get system RAM (in MiB)
-uint32_t wzGetSystemRAM()
-{
-	auto systemRAMResult = SDL_GetSystemRAM();
-	return (systemRAMResult > 0) ? static_cast<uint32_t>(systemRAMResult) : 0;
-}
-
 // See if we have TEXT in the clipboard
 bool has_scrap(void)
 {
@@ -3596,6 +3589,5 @@ bool wzBackendAttemptOpenURL(const char *url)
 uint64_t wzGetCurrentSystemRAM()
 {
 	int value = SDL_GetSystemRAM();
-	if (value <= 0) { return 0; }
-	return static_cast<uint64_t>(value);
+	return (value > 0) ? static_cast<uint64_t>(value) : 0;
 }
