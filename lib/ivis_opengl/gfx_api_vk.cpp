@@ -2694,7 +2694,7 @@ static bool createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, co
 
 void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat)
 {
-	bool msaaEnabled = (msaaSamples != vk::SampleCountFlagBits::e1);
+	bool msaaEnabled = false; // default render pass doesn't get MSAA
 
 	auto attachments =
 		std::vector<vk::AttachmentDescription>{
@@ -2777,7 +2777,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 
 	renderPasses[DEFAULT_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
 	renderPasses[DEFAULT_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
-	renderPasses[DEFAULT_RENDER_PASS_ID].msaaSamples = msaaSamples;
+	renderPasses[DEFAULT_RENDER_PASS_ID].msaaSamples = (msaaEnabled) ? msaaSamples : vk::SampleCountFlagBits::e1;
 
 	// createFramebuffers for default render pass
 	ASSERT(!swapchainImageView.empty(), "No swapchain image views?");
