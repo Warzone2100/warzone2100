@@ -1675,6 +1675,11 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 		gfxBackendString = to_string(gfxbackend.value());
 	}
 	crashHandlingProviderSetTag("wz.gfx_backend", gfxBackendString);
+
+	auto systemRamMiB = wzGetCurrentSystemRAM();
+	std::string systemRamString = std::to_string(systemRamMiB);
+	crashHandlingProviderSetTag("wz.system_ram", systemRamString);
+
 	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
 	// Truncate absurdly long backend info values (if needed - common culprit is GL_EXTENSIONS)
 	const size_t MAX_BACKENDINFO_VALUE_LENGTH = 2048;
