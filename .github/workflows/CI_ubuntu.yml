@@ -28,13 +28,6 @@ jobs:
       matrix:
         include:
           # Builds with GCC (uploaded as artifacts, and published as release DEBs)
-          - name: "Ubuntu 18.04 [GCC]"
-            docker: "ubuntu-18.04"
-            arch: "amd64"
-            output-suffix: "ubuntu18.04"
-            compiler: gcc
-            publish_artifact: true
-            deploy_release: true
           - name: "Ubuntu 20.04 [GCC]"
             docker: "ubuntu-20.04"
             arch: "amd64"
@@ -42,22 +35,14 @@ jobs:
             output-suffix: "ubuntu20.04"
             publish_artifact: true
             deploy_release: true
-          # Newer builds with GCC (not currently uploaded)
           - name: "Ubuntu 22.04 [GCC]"
             docker: "ubuntu-22.04"
             arch: "amd64"
             output-suffix: "ubuntu22.04"
             compiler: gcc
-            publish_artifact: false
-            deploy_release: false
+            publish_artifact: true
+            deploy_release: true
           # Builds with Clang (not uploaded)
-          - name: "Ubuntu 18.04 [Clang]"
-            docker: "ubuntu-18.04"
-            arch: "amd64"
-            output-suffix: "ubuntu18.04"
-            compiler: clang
-            publish_artifact: false
-            deploy_release: false
           - name: "Ubuntu 20.04 [Clang]"
             docker: "ubuntu-20.04"
             arch: "amd64"
@@ -100,10 +85,6 @@ jobs:
     - name: Init Git Submodules
       working-directory: '${{ github.workspace }}/src'
       run: git submodule update --init --recursive
-    - name: Pull latest base image
-      if: success() && (matrix.docker == 'ubuntu-18.04')
-      run: |
-        docker pull ubuntu:18.04
     - name: Build the Docker image
       working-directory: '${{ github.workspace }}/src'
       run: |
