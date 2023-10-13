@@ -952,7 +952,7 @@ public:
 		// Begin transaction
 		SQLite::Transaction transaction(*db);
 
-		auto mutedTimeValue = mutedTime.has_value() ? mutedTime.value().time_since_epoch().count() : 0;
+		int64_t mutedTimeValue = static_cast<int64_t>(mutedTime.has_value() ? mutedTime.value().time_since_epoch().count() : 0);
 
 		query_insertNewPlayerOptions->bind(1, publicKeyb64);
 		query_insertNewPlayerOptions->bind(2, name);
