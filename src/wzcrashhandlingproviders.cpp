@@ -437,6 +437,29 @@ bool crashHandlingProviderSetContext(const std::string& key, const nlohmann::jso
 #endif
 }
 
+bool crashHandlingProviderCaptureException(const std::string& errorMessage, bool captureStackTrace)
+{
+#if !defined(WZ_CRASHHANDLING_PROVIDER)
+	return false;
+#elif defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
+	// Sentry crash-handling provider
+	if (!enabledSentryProvider) { return false; }
+
+	sentry_value_t event = sentry_value_new_event();
+	sentry_value_t exc = sentry_value_new_exception("Exception", errorMessage.c_str());
+	if (captureStackTrace)
+	{
+		sentry_value_set_stacktrace(exc, NULL, 0);
+	}
+	sentry_event_add_exception(event, exc);
+	auto event_id = sentry_capture_event(event);
+	return !sentry_uuid_is_nil(&event_id);
+#else
+	// Not available for crash handling provider
+	return false;
+#endif
+}
+
 bool useCrashHandlingProvider(int argc, const char * const *argv, bool& out_debugCrashHandler)
 {
 #if !defined(WZ_CRASHHANDLING_PROVIDER)
