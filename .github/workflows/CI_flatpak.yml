@@ -47,6 +47,7 @@ jobs:
       WZ_FLATPAK_BUILD_DIR: flatpak_app
       WZ_FLATPAK_TARGET_ARCH: ${{ matrix.flatpak-arch }}
       WZ_FLATPAK_BUILD_ARCH: x86_64
+      WZ_FREEDESKTOP_RUNTIME_VERSION: 23.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
     container:
       image: fedora:latest
       options: --privileged
@@ -200,15 +201,15 @@ jobs:
     - name: Install Flatpak manifest deps
       run: |
         # Build SDK
-        flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk//23.08
+        flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk//${WZ_FREEDESKTOP_RUNTIME_VERSION}
         # Target runtime
-        flatpak --system install -y --noninteractive flathub org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/23.08
+        flatpak --system install -y --noninteractive flathub org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FREEDESKTOP_RUNTIME_VERSION}
         
         if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
           # Cross compiler
-          flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk.Extension.toolchain-${WZ_FLATPAK_TARGET_ARCH}//23.08
+          flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk.Extension.toolchain-${WZ_FLATPAK_TARGET_ARCH}//${WZ_FREEDESKTOP_RUNTIME_VERSION}
           # SDK For target runtime
-          flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk.Compat.${WZ_FLATPAK_TARGET_ARCH}//23.08
+          flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk.Compat.${WZ_FLATPAK_TARGET_ARCH}//${WZ_FREEDESKTOP_RUNTIME_VERSION}
         fi
     - name: Build Flatpak
       id: build
@@ -248,9 +249,9 @@ jobs:
       shell: bash
       run: |
         # Note: These libraries will be from the runtime that is installed at the time of the build
-        LD_LIBRARY_PATH=/var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/23.08/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/ ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-'
+        LD_LIBRARY_PATH=/var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FREEDESKTOP_RUNTIME_VERSION}/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/ ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-'
         mkdir output_debug_dependency_snapshot
-        LD_LIBRARY_PATH=/var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/23.08/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/ ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-|=> not found' | awk 'NF == 4 { system("echo cp " $3 " output_debug_dependency_snapshot && cp " $3 " output_debug_dependency_snapshot") }'
+        LD_LIBRARY_PATH=/var/lib/flatpak/runtime/org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FREEDESKTOP_RUNTIME_VERSION}/active/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/ ldd flatpak_app/files/bin/warzone2100 | grep -E -v 'linux-vdso|ld-linux-|=> not found' | awk 'NF == 4 { system("echo cp " $3 " output_debug_dependency_snapshot && cp " $3 " output_debug_dependency_snapshot") }'
     - name: Upload additional debug dependency info
       uses: actions/upload-artifact@v3
       with:
