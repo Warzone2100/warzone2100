@@ -2560,11 +2560,8 @@ void wzSDLPreWindowCreate_InitOpenGLAttributes(int antialiasing, bool useOpenGLE
 	// Enable stencil buffer, needed for shadows to work.
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	if (antialiasing)
-	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
-	}
+	// Do *not* enable multisampling on the default framebuffer (i.e. setting SDL_GL_MULTISAMPLEBUFFERS)
+	// This is handled separately for the scene render buffer / frame buffer
 
 	if (!sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary))
 	{
