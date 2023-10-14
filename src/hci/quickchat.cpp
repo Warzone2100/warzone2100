@@ -3001,7 +3001,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		NETend();
 	}
 
-	if (fromPlayer == selectedPlayer && (!recipients.empty() || !isInGame))
+	if (fromPlayer == selectedPlayer && (!recipients.empty() || !isInGame) && !internalMessage)
 	{
 		if (isInGame)
 		{
