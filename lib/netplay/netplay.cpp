@@ -864,6 +864,13 @@ static void NET_DestroyPlayer(unsigned int index, bool suppressActivityUpdates =
 	}
 }
 
+bool NETplayerHasConnection(uint32_t index)
+{
+	ASSERT_HOST_ONLY(return false);
+	ASSERT_OR_RETURN(false, index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
+	return connected_bsocket[index] != nullptr;
+}
+
 /**
  * @note Connection dropped. Handle it gracefully.
  * \param index
@@ -2174,10 +2181,13 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	{
 		// this client did not acknowledge the player index change before the timeout - kick them
 		char msg[256] = {'\0'};
-		ssprintf(msg, "Auto-kicking player %u, did not ack player index change within required timeframe.", (unsigned int)sender);
-		sendInGameSystemMessage(msg);
-		debug(LOG_INFO, "Client (player: %u) failed to ack player index swap (ignoring message type: %" PRIu8 ")", sender, type);
-		kickPlayer(sender, _("Client failed to ack player index swap"), ERROR_INVALID, false);
+		if (NETplayerHasConnection(sender) || NetPlay.players[sender].allocated)
+		{
+			ssprintf(msg, "Auto-kicking player %u, did not ack player index change within required timeframe.", (unsigned int)sender);
+			sendInGameSystemMessage(msg);
+			debug(LOG_INFO, "Client (player: %u) failed to ack player index swap (ignoring message type: %" PRIu8 ")", sender, type);
+			kickPlayer(sender, _("Client failed to ack player index swap"), ERROR_INVALID, false);
+		}
 		return true; // filter original message, of course
 	}
 

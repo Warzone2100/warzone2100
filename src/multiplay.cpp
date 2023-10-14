@@ -1394,8 +1394,11 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 	NETlogEntry(buf, SYNC_FLAG, actual);
 	if (NetPlay.isHost)
 	{
-		ssprintf(buf, _("Auto kicking player %s, invalid command received."), NetPlay.players[actual].name);
-		sendInGameSystemMessage(buf);
+		if (NETplayerHasConnection(actual))
+		{
+			ssprintf(buf, _("Auto kicking player %s, invalid command received."), NetPlay.players[actual].name);
+			sendInGameSystemMessage(buf);
+		}
 		kickPlayer(actual, buf, KICK_TYPE, false);
 	}
 }

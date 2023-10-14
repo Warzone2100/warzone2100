@@ -392,6 +392,8 @@ size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false); 
 
 void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
+bool NETplayerHasConnection(uint32_t index);
+
 bool NETcanOpenNewSpectatorSlot();
 bool NETopenNewSpectatorSlot();
 bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride = false);
