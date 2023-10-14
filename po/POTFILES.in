@@ -264,6 +264,7 @@ lib/framework/frameresource.cpp
 lib/framework/geometry.cpp
 lib/framework/i18n.cpp
 lib/framework/lexer_input.cpp
+lib/framework/mac_wrapper.cpp
 lib/framework/physfs_ext.cpp
 lib/framework/stdio_ext.cpp
 lib/framework/strres.cpp
@@ -299,6 +300,7 @@ lib/ivis_opengl/tex.cpp
 lib/ivis_opengl/textdraw.cpp
 lib/netplay/netjoin_stub.cpp
 lib/netplay/netlog.cpp
+lib/netplay/netpermissions.cpp
 lib/netplay/netplay.cpp
 lib/netplay/netqueue.cpp
 lib/netplay/netreplay.cpp
@@ -397,15 +399,19 @@ src/feature.cpp
 src/fpath.cpp
 src/frontend.cpp
 src/game.cpp
+src/gamehistorylogger.cpp
 src/gateway.cpp
 src/geometry.cpp
 src/group.cpp
 src/hci.cpp
 src/hci/build.cpp
 src/hci/commander.cpp
+src/hci/groups.cpp
 src/hci/manufacture.cpp
 src/hci/objects_stats.cpp
+src/hci/quickchat.cpp
 src/hci/research.cpp
+src/hci/teamstrategy.cpp
 src/ingameop.cpp
 src/init.cpp
 src/input/context.cpp
@@ -455,6 +461,7 @@ src/oprint.cpp
 src/order.cpp
 src/pointtree.cpp
 src/power.cpp
+src/profiling.cpp
 src/projectile.cpp
 src/qtscript.cpp
 src/quickjs_backend.cpp
@@ -463,8 +470,12 @@ src/random.cpp
 src/raycast.cpp
 src/research.cpp
 src/scores.cpp
+src/screens/chatscreen.cpp
+src/screens/helpscreen.cpp
+src/screens/netpregamescreen.cpp
 src/selection.cpp
 src/seqdisp.cpp
+src/shadowcascades.cpp
 src/spectatorwidgets.cpp
 src/stats.cpp
 src/stdinreader.cpp
