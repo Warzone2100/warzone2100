@@ -1709,6 +1709,16 @@ size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal)
 	return nStatsLastSec.*statsType.*statisticType - nStatsSecondLastSec.*statsType.*statisticType;
 }
 
+static std::list<std::function<void()>> netSendDelayedActions;
+
+void NETsendProcessDelayedActions()
+{
+	for (auto action : netSendDelayedActions)
+	{
+		action();
+	}
+	netSendDelayedActions.clear();
+}
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
@@ -1774,8 +1784,10 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 					debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to %" PRIu8 ": %s", message->type, message->rawLen(), compressedRawLen, player, strSockError(getSockErr()));
 					if (!isTmpQueue)
 					{
-						NETlogEntry("client disconnect?", SYNC_FLAG, player);
-						NETplayerClientDisconnect(player);
+						netSendDelayedActions.push_back([player]() {
+							NETlogEntry("client disconnect?", SYNC_FLAG, player);
+							NETplayerClientDisconnect(player);
+						});
 					}
 				}
 			}
