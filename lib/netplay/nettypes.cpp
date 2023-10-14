@@ -727,6 +727,9 @@ bool NETend()
 		// We have ended the serialisation, so mark the direction invalid
 		NETsetPacketDir(PACKET_INVALID);
 
+		// Process any delayed actions from the NETsend call
+		NETsendProcessDelayedActions();
+
 		if (queueInfo.queueType == QUEUE_GAME_FORCED)  // If true, we must be the host, inserting a GAME_PLAYER_LEFT into the other player's game queue. Since they left, they're not around to complain about us messing with their queue, which would normally cause a desynch.
 		{
 			// Almost duplicate code from NETflushGameQueues() in here.

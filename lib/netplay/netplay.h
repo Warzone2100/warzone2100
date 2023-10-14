@@ -371,6 +371,7 @@ extern bool netGameserverPortOverride; // = false; (for cli override)
 // functions available to you.
 int NETinit(bool bFirstCall);
 WZ_DECL_NONNULL(2) bool NETsend(NETQUEUE queue, NetMessage const *message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+void NETsendProcessDelayedActions();
 WZ_DECL_NONNULL(1, 2) bool NETrecvNet(NETQUEUE *queue, uint8_t *type);        ///< recv a message from the net queues if possible.
 WZ_DECL_NONNULL(1, 2) bool NETrecvGame(NETQUEUE *queue, uint8_t *type);       ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 void NETflush();                                                              ///< Flushes any data stuck in compression buffers.
