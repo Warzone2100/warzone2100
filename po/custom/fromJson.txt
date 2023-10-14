@@ -537,13 +537,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-_("Armed with Cyborg assault gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 _("Armed with Cyborg Assault Gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+_("Armed with Cyborg assault gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -1087,17 +1087,17 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
-// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
-// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
-// ... + 4 refs
-_("Best Targets: Base Structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 // ... + 7 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
+// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
+// ... + 4 refs
+_("Best Targets: Base Structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -2686,10 +2686,18 @@ _("Heavy Repair Turret")
 // data/mp/messages/resmessagesall.json: $.RES_REPTUHVY.text[1]
 _("Heavy repair unit")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Rocket02-MRLHvy.name
+// data/mp/stats/weapons.json: $.Rocket-MRL-Hvy.name
+_("Heavy Rocket Array")  
+// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
 // data/mp/stats/structure.json: $.X-Super-Rocket.name
 // data/mp/stats/weapons.json: $.RocketSuper.name
 _("Heavy Rocket Bastion")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Defense-MRLHvy.name
+// data/mp/stats/structure.json: $.Emplacement-MRLHvy-pit.name
+_("Heavy Rocket Battery")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -4702,6 +4710,9 @@ _("Rearming speed +30%")
 // data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text[1]
 _("Recoil loaded AA ammunition hopper")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
+_("Reduce Scavenger Flamer Range")  
+// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
 // data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
 // data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[2]
@@ -5486,7 +5497,6 @@ _("Synaptic Link Scrambler technology")
 _("Synaptic Link technology breakthrough")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Comp-SynapticLink.name
-// data/mp/stats/research.json: $.R-Comp-SynapticLink.name
 _("Synaptic Link")  
 // TRANSLATORS: 
 // data/base/messages/messages.json: $.MSG5.text[0]
@@ -5788,6 +5798,9 @@ _("Twin Multi-barrel, rapid-fire machinegun")
 // TRANSLATORS: 
 // data/mp/challenges/two-faced.json: $.challenge.name
 _("Two-faced")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
+_("Undo Reduce Scavenger Flamer Range")  
 // TRANSLATORS: 
 // data/base/messages/messages.json: $.MSG4.text[0]
 _("Unit Research Completed")  
