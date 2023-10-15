@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-14 17:51\n"
+"PO-Revision-Date: 2023-10-15 06:09\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -148,7 +148,7 @@ msgstr "輸送ミッション：建設中の敵基地"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr "敵勢力はこの場所に前方基地を建設している。"
+msgstr "敵勢力はこの場所に前方基地を建設中です。"
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
@@ -4009,7 +4009,7 @@ msgstr "ニューパラダイスの援軍をすべて撃破せよ"
 
 #: data/base/script/campaign/cam1ca.js:146
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr "台地に壁以外のストラクチャー物を7つ以上建設し、ニューパラダイム増援をすべて破壊せよ"
+msgstr "高台に壁以外のストラクチャーを7つ以上建設し、ニューパラダイム増援をすべて破壊せよ"
 
 #: data/base/script/campaign/cam2-1x.js:112
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4053,7 +4053,7 @@ msgstr "抵抗回路を研究し、NEXUSからの襲撃を生き延びろ"
 
 #: data/base/script/campaign/cam3-ad1.js:257
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "サイロに前方基地を建設する"
 
 #: data/base/script/campaign/cam3-ad2.js:278
 msgid "Protect the missile silos and research for the missile codes"
@@ -4141,7 +4141,7 @@ msgstr "研究 - まずは研究施設の建設する"
 #: data/base/script/tutorial.js:361
 #: data/mp/multiplay/script/rules/reticule.js:60
 msgid "Build (F3)"
-msgstr "ビルド(F3)"
+msgstr "建設(F3)"
 
 #: data/base/script/rules.js:122
 #: data/base/script/tutorial.js:284
@@ -4151,7 +4151,7 @@ msgstr "ビルド(F3)"
 #: data/mp/multiplay/script/rules/reticule.js:64
 #: data/mp/multiplay/script/rules/reticule.js:116
 msgid "Build - manufacture constructor droids first"
-msgstr "ビルド - まずはコンストラクタのドロイドを製造する"
+msgstr "建設 - まずは建設ドロイドを生産する"
 
 #: data/base/script/rules.js:168
 #: data/base/script/tutorial.js:214
@@ -4165,7 +4165,7 @@ msgstr "設計(F4)"
 #: data/mp/multiplay/script/rules/reticule.js:92
 #: data/mp/multiplay/script/rules/reticule.js:117
 msgid "Design - construct HQ first"
-msgstr "設計 - まずは本部建設する"
+msgstr "設計 - 第一本部を建設する"
 
 #: data/base/script/rules.js:182
 #: data/mp/multiplay/script/rules/reticule.js:101
@@ -4225,19 +4225,19 @@ msgstr "レーダーパルスで示されたオイルプールを左クリック
 
 #: data/base/script/tutorial.js:33
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "採油機は現在休止中です。石油を電力に変換する発電機を建設します"
+msgstr "採油機は現在稼働していません。石油を電力に変換するために発電所を建設しましょう"
 
 #: data/base/script/tutorial.js:35
 msgid "Left click the flashing build icon"
-msgstr "点滅しているビルドアイコンを左クリック"
+msgstr "点滅している建設アイコンを左クリック"
 
 #: data/base/script/tutorial.js:36
 msgid "Now left click the power generator in the build menu on the left"
-msgstr "次に、左側のビルドメニューで発電機を左クリックします"
+msgstr "次に、左側の建設メニューで発電所を左クリックします"
 
 #: data/base/script/tutorial.js:37
 msgid "Position the square at your base and left click to start the build process"
-msgstr "正方形の場所をあなたの基地に合わせ、左クリックでビルドを開始します"
+msgstr "正方形の場所をあなたの基地に合わせ、左クリックで建設を開始します"
 
 #: data/base/script/tutorial.js:38
 msgid "To increase your build rate, select your second truck"
@@ -4249,7 +4249,7 @@ msgstr "次に、発電機の場所を左クリックします"
 
 #: data/base/script/tutorial.js:40
 msgid "The other truck will now help to build the power generator"
-msgstr "もう一台のトラックは、発電機のビルドを手伝います"
+msgstr "もう一台のトラックは、発電所の建設を手伝います"
 
 #: data/base/script/tutorial.js:42
 msgid "During missions you need to locate and recover technologies from before the Collapse"
@@ -4270,7 +4270,7 @@ msgstr "アーティファクトの調査には研究施設が必要です"
 #: data/base/script/tutorial.js:47
 #: data/base/script/tutorial.js:66
 msgid "Left click the flashing BUILD icon"
-msgstr "点滅しているビルド アイコンを左クリック"
+msgstr "点滅している建設アイコンを左クリック"
 
 #: data/base/script/tutorial.js:48
 msgid "Now left click the research facility and position it at your base"
@@ -4362,7 +4362,7 @@ msgstr "点滅している製造アイコンを左クリックする"
 
 #: data/base/script/tutorial.js:76
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr "ここで、左のメニューからビルドしたいユニットを左クリックします"
+msgstr "ここで、左のメニューから生産したいユニットを左クリックします"
 
 #: data/base/script/tutorial.js:77
 msgid "Please wait whilst the factory manufactures the new unit(s)"
@@ -4685,7 +4685,7 @@ msgstr "NASDAはNorth American Strategic Defense Agency（北米戦略防衛庁�
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr "NASDAは、通常攻撃と核攻撃から北米を防衛するために2076年に結成された。2081年に衛星防衛システムの建設が開始され、2082年に完成しました。"
+msgstr "NASDAは、通常攻撃と核攻撃から北米を防衛するために2076年に結成された。2081年に衛星防衛システムの構築が開始され、2082年に完成しました。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
@@ -5637,7 +5637,7 @@ msgstr "受動的なプレーは、敗北をもたらす。と考えて行動す
 
 #: data/mp/multiplay/script/rules/endconditions.js:399
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr "- ユニットビルド - 研究の完了 -基地ストラクチャー物（工場、発電所、研究所、モジュール、採油機）の構築 - ダメージの処理"
+msgstr "- ユニットビルド - 研究の完了 -基地ストラクチャー（工場、発電所、研究所、モジュール、採油機）の構築 - 被害を与える"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1509
@@ -15301,15 +15301,15 @@ msgstr ""
 
 #: src/clparse.cpp:443
 msgid "interval in seconds"
-msgstr ""
+msgstr "秒間隔"
 
 #: src/clparse.cpp:444
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "マルチプレイヤーゲームの制限時間(分)"
 
 #: src/clparse.cpp:444
 msgid "number of minutes"
-msgstr ""
+msgstr "分数"
 
 #: src/clparse.cpp:445
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
@@ -15418,7 +15418,7 @@ msgstr "ECM電力"
 #: src/design.cpp:1616
 #: src/design.cpp:1631
 msgid "Build Points"
-msgstr "ビルドポイント"
+msgstr "建設ポイント"
 
 #: src/design.cpp:1651
 #: src/design.cpp:1678
@@ -15940,15 +15940,15 @@ msgstr ""
 
 #: src/frontend.cpp:1006
 msgid "Shadow mapping not available on this system."
-msgstr ""
+msgstr "このシステムでは影のマッピングは使用できません。"
 
 #: src/frontend.cpp:1035
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 #: src/frontend.cpp:1037
 msgid "Ultra"
-msgstr ""
+msgstr "ウルトラ"
 
 #: src/frontend.cpp:1067
 msgid "Shadow filtering not available on this system."
@@ -16305,7 +16305,7 @@ msgstr "%u 分"
 #: src/frontend.cpp:3112
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s時間"
 
 #: src/frontend.cpp:3173
 #: src/frontend.cpp:3181
@@ -16466,7 +16466,7 @@ msgstr "コスト：%u"
 
 #: src/hci/build.cpp:312
 msgid "Build Progress"
-msgstr "ビルドプログレス"
+msgstr "建設の進捗状況"
 
 #: src/hci/build.cpp:613
 msgid "Showing All Tech\n"
@@ -17126,7 +17126,7 @@ msgstr "研究"
 
 #: src/input/keyconfig.cpp:41
 msgid "Build"
-msgstr "ビルド"
+msgstr "建設"
 
 #: src/input/keyconfig.cpp:42
 msgid "Design"
@@ -19821,27 +19821,27 @@ msgstr ""
 
 #: src/screens/helpscreen.cpp:220
 msgid "Right-Click"
-msgstr ""
+msgstr "右クリック"
 
 #: src/screens/helpscreen.cpp:222
 msgid "Click/Tap and Hold"
-msgstr ""
+msgstr "クリック/タップとホールド"
 
 #: src/screens/helpscreen.cpp:224
 msgid "Other"
-msgstr ""
+msgstr "その他"
 
 #: src/screens/helpscreen.cpp:277
 msgid "Interactions:"
-msgstr ""
+msgstr "操作:"
 
 #: src/screens/helpscreen.cpp:332
 msgid "Related Keymappings:"
-msgstr ""
+msgstr "関連キーマッピング:"
 
 #: src/screens/netpregamescreen.cpp:241
 msgid "Loading Status:"
-msgstr ""
+msgstr "読込中:"
 
 #: src/screens/netpregamescreen.cpp:613
 msgid "TEAM STRATEGY"
@@ -20009,22 +20009,22 @@ msgstr ""
 
 #: src/structure.cpp:2619
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "ユニット上限に達したため、これ以上ユニットをビルドできません — 生産停止"
+msgstr "ユニット上限に達したため、これ以上ユニットを生産できません — 生産停止"
 
 #: src/structure.cpp:2627
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "コマンドリレーセンターなしで \"%s\" をビルドできません — 生産停止"
+msgstr "コマンドリレーセンターなしで \"%s\" を生産できません — 生産停止"
 
 #: src/structure.cpp:2632
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "司令官の限界に到達したため、 \"%s \" をビルドできません ― 生産停止"
+msgstr "司令官の限界に到達したため、 \"%s \" を生産できません ― 生産停止"
 
 #: src/structure.cpp:2640
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "建設ユニット上限に達したため、これ以上 \"%s \" をビルドできません — 生産停止"
+msgstr "建設ユニット上限に達したため、これ以上 \"%s \" を建設できません — 建設停止"
 
 #: src/structure.cpp:5289
 #, c-format
@@ -20344,7 +20344,7 @@ msgstr "この新バージョンには、重要なバグフィックスとアッ
 
 #: src/updatemanager.cpp:370
 msgid "A new build of Warzone 2100 is available!"
-msgstr "Warzone 2100の新ビルドが登場！"
+msgstr "Warzone 2100の新ビルドが利用可能です！"
 
 #: src/updatemanager.cpp:372
 msgid "Get Update Now"
@@ -20387,7 +20387,7 @@ msgstr " - デバッグ"
 #: src/version.cpp:271
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr "Version: %s,%s ビルド: %s%s"
+msgstr "Version: %s,%s Build: %s%s"
 
 #: src/wrappers.cpp:368
 msgid "GAME OVER"
