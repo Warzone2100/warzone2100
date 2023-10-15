@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-14 17:51\n"
+"PO-Revision-Date: 2023-10-15 18:16\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -16535,7 +16535,7 @@ msgstr ""
 
 #: src/hci/groups.cpp:263
 msgid "Select a Group"
-msgstr ""
+msgstr "Выбрать группу"
 
 #: src/hci/groups.cpp:264
 msgid "Assign Selected Units to a Group"
@@ -16584,12 +16584,12 @@ msgstr "Команда"
 #: src/hci/quickchat.cpp:1020
 #: src/hci/quickchat.cpp:1227
 msgid "Human Teammates"
-msgstr ""
+msgstr "Игроки-союзники"
 
 #: src/hci/quickchat.cpp:1035
 #: src/hci/quickchat.cpp:1259
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Боты-союзники"
 
 #: src/hci/quickchat.cpp:1059
 #, c-format
@@ -16656,7 +16656,7 @@ msgstr ""
 
 #: src/hci/quickchat.cpp:2479
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрый чат?)"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2484
