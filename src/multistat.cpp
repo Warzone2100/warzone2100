@@ -71,8 +71,8 @@ static void NETauto(PLAYERSTATS::Autorating &ar)
 		NETauto(ar.elo);
 		NETauto(ar.autohoster);
 		NETauto(ar.details);
-		NETauto(ar.name);
-		NETauto(ar.nameTextColorOverride);
+		NETauto(ar.altName);
+		NETauto(ar.altNameTextColorOverride);
 		NETauto(ar.eloTextColorOverride);
 	}
 }
@@ -91,13 +91,13 @@ PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
 		details = json["details"].get<std::string>();
 		if (json.contains("name"))
 		{
-			name = json["name"].get<std::string>();
+			altName = json["name"].get<std::string>();
 		}
 		if (json.contains("nameTextColorOverride"))
 		{
-			nameTextColorOverride[0] = json["nameTextColorOverride"][0].get<uint8_t>();
-			nameTextColorOverride[1] = json["nameTextColorOverride"][1].get<uint8_t>();
-			nameTextColorOverride[2] = json["nameTextColorOverride"][2].get<uint8_t>();
+			altNameTextColorOverride[0] = json["nameTextColorOverride"][0].get<uint8_t>();
+			altNameTextColorOverride[1] = json["nameTextColorOverride"][1].get<uint8_t>();
+			altNameTextColorOverride[2] = json["nameTextColorOverride"][2].get<uint8_t>();
 		}
 		if (json.contains("eloTextColorOverride"))
 		{
