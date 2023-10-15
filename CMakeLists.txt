@@ -229,26 +229,6 @@ if (HAS_CXXFLAG_FSTACK_CLASH_PROTECTION AND NOT (MINGW OR APPLE))
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-clash-protection")
 endif()
 
-# Global floating-point compiler settings
-if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-	# Enable -ffp-contract=off (if supported)
-	check_c_compiler_flag(-ffp-contract=off HAS_CFLAG_FFP_CONTRACT_OFF)
-	if (HAS_CFLAG_FFP_CONTRACT_OFF)
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffp-contract=off")
-	endif()
-elseif (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-	# MSVC defaults to /fp:precise
-endif()
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-	check_cxx_compiler_flag(-ffp-contract=off HAS_CXXFLAG_FFP_CONTRACT_OFF)
-	if (HAS_CXXFLAG_FFP_CONTRACT_OFF)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffp-contract=off")
-	endif()
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-	# MSVC defaults to /fp:precise
-endif()
-
-
 include(CheckCompilerFlagsOutput)
 
 set(WZ_TARGET_ADDITIONAL_PROPERTIES) # Set below to any additional properties that should be added to Warzone targets (src/, lib/*/)
