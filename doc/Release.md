@@ -44,10 +44,10 @@ Wait for all CI builds to complete, and verify they have completed successfully.
 > To find the latest status, click on each image, or **view the Checks / Status for the commit on GitHub**.
 
 [![Ubuntu](https://github.com/Warzone2100/warzone2100/workflows/Ubuntu/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush)
-[![Fedora](https://github.com/Warzone2100/warzone2100/workflows/Fedora/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFedora+branch%3Amaster+event%3Apush)
+[![Snapcraft](https://github.com/Warzone2100/warzone2100/workflows/Snapcraft/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3ASnapcraft+branch%3Amaster+event%3Apush)
+[![Flatpak](https://github.com/Warzone2100/warzone2100/workflows/Flatpak/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFlatpak+branch%3Amaster+event%3Apush)
 [![Windows](https://github.com/Warzone2100/warzone2100/workflows/Windows/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
 [![macOS](https://github.com/Warzone2100/warzone2100/workflows/macOS/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush)
-[![Drone Cloud CI ARM64 Build Status](https://img.shields.io/drone/build/Warzone2100/warzone2100/master?label=ARM64%20Linux)](https://cloud.drone.io/Warzone2100/warzone2100)
 
 Can be flakey:
 - FreeBSD builds: [![FreeBSD Build Status](https://api.cirrus-ci.com/github/Warzone2100/warzone2100.svg?branch=master)](https://cirrus-ci.com/github/Warzone2100/warzone2100)
@@ -218,5 +218,3 @@ And, I am sure that people will spread the word about this new release at the fo
  * [Reddit](https://www.reddit.com/r/warzone2100)
  * [ModDb](https://www.moddb.com/games/warzone-2100)
  * [Softonic](https://warzone-2100.en.softonic.com/)
- * [Gamershell](http://www.gamershell.com/news)
- * [Gamedev](http://www.gamedev.net/community/forums/forum.asp?forum_id=6)
