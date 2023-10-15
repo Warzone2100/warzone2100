@@ -225,6 +225,9 @@ struct DisplayPlayerCache {
 	std::string	fullMainText;	// the “full” main text (used for storing the full player name when displaying a player)
 	WzText		wzMainText;		// the main text
 
+	std::string fullAltNameText;
+	WzText		wzAltNameText;
+
 	WzText		wzSubText;		// the sub text (used for players)
 	WzText		wzEloText;      // the elo text (used for players)
 };
@@ -4313,33 +4316,62 @@ public:
 				playerInfoTooltip += _("Player ID: ");
 				playerInfoTooltip += hash.empty()? _("(none)") : hash;
 			}
-			if (stats.autorating.valid && !stats.autorating.details.empty()
-				&& stats.autoratingFrom == RATING_SOURCE_LOCAL) // do not display host-provided details (for now)
+			std::string autoratingTooltipText;
+			if (stats.autorating.valid)
+			{
+				if (!stats.autorating.altName.empty())
+				{
+					if (!autoratingTooltipText.empty())
+					{
+						autoratingTooltipText += "\n";
+					}
+					std::string altnameStr = stats.autorating.altName;
+					if (altnameStr.size() > 128)
+					{
+						altnameStr = altnameStr.substr(0, 128);
+					}
+					size_t maxLinePos = nthOccurrenceOfChar(altnameStr, '\n', 1);
+					if (maxLinePos != std::string::npos)
+					{
+						altnameStr = altnameStr.substr(0, maxLinePos);
+					}
+					autoratingTooltipText += std::string(_("Alt Name:")) + " " + altnameStr;
+				}
+				if (!stats.autorating.details.empty()
+					&& stats.autoratingFrom == RATING_SOURCE_LOCAL) // do not display host-provided details (for now)
+				{
+					if (!autoratingTooltipText.empty())
+					{
+						autoratingTooltipText += "\n";
+					}
+					std::string detailsstr = stats.autorating.details;
+					if (detailsstr.size() > 512)
+					{
+						detailsstr = detailsstr.substr(0, 512);
+					}
+					size_t maxLinePos = nthOccurrenceOfChar(detailsstr, '\n', 10);
+					if (maxLinePos != std::string::npos)
+					{
+						detailsstr = detailsstr.substr(0, maxLinePos);
+					}
+					autoratingTooltipText += std::string(_("Player rating:")) + "\n" + detailsstr;
+				}
+			}
+			if (!autoratingTooltipText.empty())
 			{
 				if (!playerInfoTooltip.empty())
 				{
 					playerInfoTooltip += "\n\n";
 				}
-				std::string detailsstr = stats.autorating.details;
-				if (detailsstr.size() > 512)
-				{
-					detailsstr = detailsstr.substr(0, 512);
-				}
-				size_t maxLinePos = nthOccurrenceOfChar(detailsstr, '\n', 10);
-				if (maxLinePos != std::string::npos)
-				{
-					detailsstr = detailsstr.substr(0, maxLinePos);
-				}
-				playerInfoTooltip += std::string(_("Player rating:")) + "\n";
 				if (stats.autoratingFrom == RATING_SOURCE_HOST)
 				{
-					playerInfoTooltip += std::string("(") + _("Host provided") + ")";
+					playerInfoTooltip += std::string("[") + _("Host provided") + "]\n";
 				}
 				else
 				{
-					playerInfoTooltip += std::string("(") + astringf(_("From: %s"), getAutoratingUrl().c_str()) + ")";
+					playerInfoTooltip += std::string("[") + astringf(_("From: %s"), getAutoratingUrl().c_str()) + "]\n";
 				}
-				playerInfoTooltip += "\n" + detailsstr;
+				playerInfoTooltip += autoratingTooltipText;
 			}
 		}
 		playerInfo->setTip(playerInfoTooltip);
@@ -7657,6 +7689,28 @@ static bool isKnownPlayer(std::map<std::string, EcKey::Key> const &knownPlayers,
 	return i != knownPlayers.end() && key.toBytes(EcKey::Public) == i->second;
 }
 
+static void displayAltNameBox(int x, int y, WIDGET *psWidget, DisplayPlayerCache& cache, const PLAYERSTATS::Autorating& ar, bool isHighlight)
+{
+	int altNameBoxWidth = cache.wzAltNameText.width() + 4;
+	int altNameBoxHeight = cache.wzAltNameText.lineSize() + 2;
+	int altNameBoxX0 = (x + psWidget->width()) - altNameBoxWidth;
+	PIELIGHT altNameBoxColor = WZCOL_MENU_BORDER;
+	altNameBoxColor.byte.a = static_cast<uint8_t>(static_cast<float>(altNameBoxColor.byte.a) * (isHighlight ? 0.3f : 0.75f));
+	pie_UniTransBoxFill(altNameBoxX0, y, altNameBoxX0 + altNameBoxWidth, y + altNameBoxHeight, altNameBoxColor);
+
+	int altNameTextY0 = y + (altNameBoxHeight - cache.wzAltNameText.lineSize()) / 2 - cache.wzAltNameText.aboveBase();
+	PIELIGHT altNameTextColor = WZCOL_TEXT_MEDIUM;
+	if (ar.altNameTextColorOverride[0] != 255 || ar.altNameTextColorOverride[1] != 255 || ar.altNameTextColorOverride[2] != 255)
+	{
+		altNameTextColor = pal_Colour(ar.altNameTextColorOverride[0], ar.altNameTextColorOverride[1], ar.altNameTextColorOverride[2]);
+	}
+	if (isHighlight)
+	{
+		altNameTextColor.byte.a = static_cast<uint8_t>(static_cast<float>(altNameTextColor.byte.a) * 0.3f);
+	}
+	cache.wzAltNameText.render(altNameBoxX0 + 2, altNameTextY0, altNameTextColor);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -7667,6 +7721,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int const x = xOffset + psWidget->x();
 	int const y = yOffset + psWidget->y();
 	unsigned const j = psWidget->UserData;
+	bool isHighlight = (psWidget->getState() & WBUT_HIGHLIGHT) != 0;
 
 	const int nameX = 32;
 
@@ -7688,19 +7743,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		auto ar = stat.autorating;
 
 		std::string name = NetPlay.players[j].name;
-		if (ar.name != "")
-		{
-			name = ar.name;
-		}
 
 		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
 
 		PIELIGHT colour;
-		if (ar.nameTextColorOverride[0] != 255 || ar.nameTextColorOverride[1] != 255 || ar.nameTextColorOverride[2] != 255)
-		{
-			colour = pal_Colour(ar.nameTextColorOverride[0], ar.nameTextColorOverride[1], ar.nameTextColorOverride[2]);
-		}
-		else if (ingame.PingTimes[j] >= PING_LIMIT)
+		if (ingame.PingTimes[j] >= PING_LIMIT)
 		{
 			colour = WZCOL_FORM_PLAYER_NOPING;
 		}
@@ -7774,6 +7821,30 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			ar.elo.clear();
 		}
 
+		if (cache.fullAltNameText != ar.altName)
+		{
+			std::string altName = ar.altName;
+			int maxAltNameWidth = static_cast<int>(static_cast<float>(psWidget->width() - nameX) * 0.65f);
+			iV_fonts fontID = font_small;
+			cache.wzAltNameText.setText(WzString::fromUtf8(altName), fontID);
+			cache.fullAltNameText = altName;
+			if (cache.wzAltNameText.width() > maxAltNameWidth)
+			{
+				while (!altName.empty() && ((int)iV_GetTextWidth(altName.c_str(), cache.wzAltNameText.getFontID()) + iV_GetEllipsisWidth(cache.wzAltNameText.getFontID())) > maxAltNameWidth)
+				{
+					altName.resize(altName.size() - 1);  // Clip alt name.
+				}
+				altName += "\u2026";
+				cache.wzAltNameText.setText(WzString::fromUtf8(altName), fontID);
+			}
+		}
+
+		if (!ar.altName.empty() && isHighlight)
+		{
+			// display first, behind everything
+			displayAltNameBox(x, y, psWidget, cache, ar, isHighlight);
+		}
+
 		int H = 5;
 		cache.wzMainText.render(x + nameX, y + 22 - H*!subText.isEmpty() - H*(ar.valid && !ar.elo.empty()), colour);
 		if (!subText.isEmpty())
@@ -7826,6 +7897,12 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			}
 			cache.wzEloText.setText(WzString::fromUtf8(ar.elo), font_small);
 			cache.wzEloText.render(x + nameX, y + 28 + H*!subText.isEmpty(), eloColour);
+		}
+
+		if (!ar.altName.empty() && !isHighlight)
+		{
+			// display last, over top of everything
+			displayAltNameBox(x, y, psWidget, cache, ar, isHighlight);
 		}
 	}
 	else	// AI
