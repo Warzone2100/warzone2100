@@ -70,8 +70,8 @@ How to get the latest Ubuntu development builds:
 2. Select the latest workflow run in the table / list.
    This should display a list of **Artifacts** from the run.
 3. Download the appropriate `warzone2100_ubuntu<version>_amd64_deb` artifact.
-   - If you are running Ubuntu 18.04: `warzone2100_ubuntu18.04_amd64_deb`
    - If you are running Ubuntu 20.04: `warzone2100_ubuntu20.04_amd64_deb`
+   - If you are running Ubuntu 22.04: `warzone2100_ubuntu22.04_amd64_deb`
 > Note: A free GitHub account is currently required to download the artifacts.
 4. Extract the contents of the downloaded .zip (`warzone2100_ubuntu<version>_amd64.deb`) to your Desktop.
 5. Execute the following commands in Terminal:
@@ -334,18 +334,6 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       ```shell
       sudo ./get-dependencies_linux.sh ubuntu build-dependencies
       ```
-   * Manually (Ubuntu 18.04)+:
-     ```shell
-     sudo apt-get -u update
-     sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
-     sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev libfribidi-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
-     ```
-   * Manually (Fedora):
-     ```shell
-     sudo dnf -y update && dnf clean all
-     sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
-     sudo dnf -y install libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel fribidi harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel
-     ```
 * **Building from the command-line:**
    1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
       ```shell
@@ -369,10 +357,10 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
 ### Windows using MSVC
 
 * Prerequisites
-   * **Visual Studio 2019** (Visual Studio 2015-2017 may work, but 2019 is strongly encouraged)
+   * **Visual Studio 2022** (Visual Studio 2017-2019 may work, but 2022+ is strongly encouraged)
       - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
-   * **CMake 3.10+** (https://cmake.org/)
+   * **CMake 3.20+** (https://cmake.org/)
    * **Git** (if not building from a release source archive)
    * **7-Zip** (https://www.7-zip.org)
    * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
@@ -383,14 +371,14 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
 * **Building from the command-line:**
    * Change directory to the warzone2100 repo directory
    * Configure
+      * Visual Studio 2022: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 17 2022"`
       * Visual Studio 2019: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 16 2019"`
       * Visual Studio 2017: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 15 2017"`
-      * Visual Studio 2015: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 14 2015"`
    * Build
       * Release: `cmake --build build --config Release`
       * Debug: `cmake --build build --config Debug`
-* **Building using Visual Studio 2019:**
-   1. Open Visual Studio 2019
+* **Building using Visual Studio:**
+   1. Open Visual Studio
    2. Open the warzone2100 folder using **File** > **Open** > **Folder...**
       - Allow Visual Studio some time to load the project and retrieve information from CMake.
    3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**. You can also reach this dialog by clicking "Manage Configurations" in the configuration dropdown in the toolbar. Make sure the CMake components in Visual Studio are installed (by running the Visual Studio Installer).
