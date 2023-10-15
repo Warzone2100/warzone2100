@@ -4887,6 +4887,8 @@ bool VkRoot::createAllocator()
 	ASSERT(dev, "Logical device is null");
 
 	VmaVulkanFunctions vulkanFunctions;
+	vulkanFunctions.vkGetInstanceProcAddr = vkDynLoader.vkGetInstanceProcAddr;
+	vulkanFunctions.vkGetDeviceProcAddr = vkDynLoader.vkGetDeviceProcAddr;
 	vulkanFunctions.vkGetPhysicalDeviceProperties = vkDynLoader.vkGetPhysicalDeviceProperties;
 	vulkanFunctions.vkGetPhysicalDeviceMemoryProperties = vkDynLoader.vkGetPhysicalDeviceMemoryProperties;
 	vulkanFunctions.vkAllocateMemory = vkDynLoader.vkAllocateMemory;
@@ -4914,6 +4916,10 @@ bool VkRoot::createAllocator()
 #endif
 #if VMA_MEMORY_BUDGET || VMA_VULKAN_VERSION >= 1001000
 	vulkanFunctions.vkGetPhysicalDeviceMemoryProperties2KHR = vkDynLoader.vkGetPhysicalDeviceMemoryProperties2KHR;
+#endif
+#if VMA_VULKAN_VERSION >= 1003000
+	vulkanFunctions.vkGetDeviceBufferMemoryRequirements = vkDynLoader.vkGetDeviceBufferMemoryRequirements;
+	vulkanFunctions.vkGetDeviceImageMemoryRequirements = vkDynLoader.vkGetDeviceImageMemoryRequirements;
 #endif
 
 	VmaAllocatorCreateInfo allocatorInfo = {};
