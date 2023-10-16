@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-15 18:16\n"
+"PO-Revision-Date: 2023-10-16 18:20\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -16602,7 +16602,7 @@ msgstr ""
 
 #: src/hci/quickchat.cpp:2156
 msgid "Quick Chat:"
-msgstr ""
+msgstr "Быстрое сообщение:"
 
 #: src/hci/quickchat.cpp:2222
 msgid "Lobby Chat"
@@ -16611,40 +16611,40 @@ msgstr ""
 #: src/hci/quickchat.cpp:2224
 #: src/hci/quickchat.cpp:2332
 msgid "Requests"
-msgstr ""
+msgstr "Запросы"
 
 #: src/hci/quickchat.cpp:2234
 #: src/hci/quickchat.cpp:2338
 #: src/hci/quickchat.cpp:2390
 msgid "Notices"
-msgstr ""
+msgstr "Заметки"
 
 #: src/hci/quickchat.cpp:2242
 #: src/hci/quickchat.cpp:2353
 #: src/hci/quickchat.cpp:2419
 #: src/hci/quickchat.cpp:2457
 msgid "Reactions"
-msgstr ""
+msgstr "Реакции"
 
 #: src/hci/quickchat.cpp:2346
 msgid "Taunts"
-msgstr ""
+msgstr "Насмешки"
 
 #: src/hci/quickchat.cpp:2374
 msgid "Coordination"
-msgstr ""
+msgstr "Координация"
 
 #: src/hci/quickchat.cpp:2405
 msgid "Suggestions"
-msgstr ""
+msgstr "Предложение"
 
 #: src/hci/quickchat.cpp:2445
 msgid "Cheats"
-msgstr ""
+msgstr "Читы"
 
 #: src/hci/quickchat.cpp:2454
 msgid "End-Game"
-msgstr ""
+msgstr "Завершить игру"
 
 #: src/hci/quickchat.cpp:2475
 msgid "Can someone please transfer me some units?"
