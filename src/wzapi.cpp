@@ -2491,30 +2491,29 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time))
 	              "The transport timer cannot be set to more than 1 hour!");
 	SCRIPT_ASSERT({}, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
 	mission.ETA = time;
-	if (missionCanReEnforce())
-	{
-		addTransporterTimerInterface();
-	}
+	
 	if (time < 0)
 	{
-		DROID *psDroid;
-
 		intRemoveTransporterTimer();
-		/* Only remove the launch if haven't got a transporter droid since the scripts set the
-		 * time to -1 at the between stage if there are not going to be reinforcements on the submap  */
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+	}
+	DROID* psDroid;
+
+	/* Search for a transport that is idle; if we can't find any, remove the launch button
+	 * since there's no transport to launch */
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+	{
+		if (isTransporter(psDroid) && !transporterFlying(psDroid))
 		{
-			if (isTransporter(psDroid))
-			{
-				break;
-			}
-		}
-		// if not found a transporter, can remove the launch button
-		if (psDroid ==  nullptr)
-		{
-			intRemoveTransporterLaunch();
+			break;
 		}
 	}
+	// Didn't find an idle transporter, we can remove the launch button
+	if (psDroid == nullptr)
+	{
+		intRemoveTransporterLaunch();
+	}
+	resetMissionWidgets();
+	addTransporterTimerInterface();
 	return {};
 }
 

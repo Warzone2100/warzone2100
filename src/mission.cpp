@@ -543,8 +543,8 @@ void addTransporterTimerInterface()
 		{
 			bAddInterface = true;
 
-			//check timer is not already on the screen
-			if (!widgGetFromID(psWScreen, IDTRANTIMER_BUTTON))
+			// Check that neither the timer nor the launch button are on screen
+			if (!widgGetFromID(psWScreen, IDTRANTIMER_BUTTON) && !widgGetFromID(psWScreen, IDTRANS_LAUNCH))
 			{
 				intAddTransporterTimer();
 			}
@@ -3140,7 +3140,11 @@ void resetMissionWidgets()
 	{
 		if (auto transporter = find_transporter())
 		{
-			intAddTransporterLaunch(transporter);
+			// Show launch button if the transporter has not already been launched
+			if (!transporterFlying(transporter))
+			{
+				intAddTransporterLaunch(transporter);
+			}
 		}
 	}
 

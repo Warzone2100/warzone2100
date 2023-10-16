@@ -484,11 +484,11 @@ void orderUpdateDroid(DROID *psDroid)
 				}
 				else
 				{
-					//the script can call startMission for this callback for offworld missions
-					triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
 					/* clear order */
 					psDroid->order = DroidOrder(DORDER_NONE);
 				}
+				//the script can call startMission for this callback for offworld missions (if we want to change level)
+				triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
 
 				psDroid->sMove.speed = 0; // Prevent radical movement vector when adjusting from home to away map exit and entry coordinates.
 			}
@@ -525,6 +525,7 @@ void orderUpdateDroid(DROID *psDroid)
 			    missionDroidsRemaining(selectedPlayer))
 			{
 				resetTransporter();
+				triggerEvent(TRIGGER_TRANSPORTER_LANDED, psDroid);
 			}
 			else
 			{
