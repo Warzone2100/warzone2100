@@ -3087,7 +3087,7 @@ void clearMissionWidgets()
 		intRemoveMissionTimer();
 	}
 
-	if (missionCanReEnforce())
+	if (mission.ETA >= 0)
 	{
 		intRemoveTransporterTimer();
 	}
@@ -3131,21 +3131,17 @@ void resetMissionWidgets()
 		stopMissionButtonFlash(IDTIMER_FORM);
 	}
 
-	if (missionCanReEnforce())
+	DROID* transporter = find_transporter();
+
+	// Check if not a reinforcement type mission and we have an transporter
+	if (!missionForReInforcements() && transporter != nullptr && !transporterFlying(transporter))
+	{
+		// Show launch button if the transporter has not already been launched
+		intAddTransporterLaunch(transporter);
+	}
+	else if (mission.ETA >= 0)
 	{
 		addTransporterTimerInterface();
-	}
-	//check not a typical reinforcement mission
-	else if (!missionForReInforcements())
-	{
-		if (auto transporter = find_transporter())
-		{
-			// Show launch button if the transporter has not already been launched
-			if (!transporterFlying(transporter))
-			{
-				intAddTransporterLaunch(transporter);
-			}
-		}
 	}
 
 }

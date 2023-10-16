@@ -265,7 +265,8 @@ function cam_eventTransporterLanded(transport)
 	else
 	{
 		// Make the transporter timer on Beta End disappear, since the transporter has arrived.
-		if (__camWinLossCallback === CAM_VICTORY_TIMEOUT) {
+		if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
+		{
 			setReinforcementTime(-1);
 		}
 	}
