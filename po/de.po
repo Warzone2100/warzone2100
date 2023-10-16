@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-14 17:51\n"
+"PO-Revision-Date: 2023-10-16 06:15\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -4053,7 +4053,7 @@ msgstr "Erforsche die Resistenzschaltkreise und überlebe den Angriff von Nexus"
 
 #: data/base/script/campaign/cam3-ad1.js:257
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "Errichte eine vorgelagerte Basis bei den Silos"
 
 #: data/base/script/campaign/cam3-ad2.js:278
 msgid "Protect the missile silos and research for the missile codes"
@@ -4613,7 +4613,7 @@ msgstr "Dieses NEXUS-Eindringlingsprogramm ist ein selbstständig mutierender Co
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Wir konnten weder das ultimative Ziel noch die Funktion feststellen. In der anfänglichen Form werden Teile des Speichers aufgesucht und vom Rest des eingedrungenen Systems isoliert. Dann mutiert es selbst, verändert die Datenstrukturen und programmiert das System von innen heraus neu."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -5625,11 +5625,11 @@ msgstr "Verloren durch Inaktivität / passiv spielen."
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "Das Zeitlimit für das vom Spielleiter konfigurierte Spiel nähert sich. Wenn es innerhalb von 10 Minuten keinen Sieger gibt, wird das Spiel beendet."
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "Das vom Spielleiter konfigurierte Zeitlimit wurde überschritten. Das Spiel ist vorbei."
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
@@ -5795,7 +5795,7 @@ msgstr "Konnte benötigten Port (%s) auf (%s) nicht öffnen"
 #, c-format
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
-msgstr ""
+msgstr "Dein Router und deiner Firewall müssen manuell konfiguriert werden, um Port %d zu öffnen, bevor du ein Spiel leiten kannst."
 
 #: lib/netplay/netplay.cpp:1472
 #, c-format
@@ -5811,7 +5811,7 @@ msgstr "Client bestätigte nicht den Wechsel des Spieler-Indexes"
 #: lib/netplay/netplay.cpp:2790
 #, c-format
 msgid "No UPnP device found. Configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Kein UPnP-Gerät gefunden. Konfiguriere deinen Router / deine Firewall, damit Port %d geöffnet ist!"
 
 #: lib/netplay/netplay.cpp:3404
 #, c-format
@@ -9597,7 +9597,7 @@ msgstr "Schwerer Reparaturarm Cobra Hover"
 #. data/mp/stats/weapons.json: $.Rocket-MRL-Hvy.name
 #: po/custom/fromJson.txt:2691
 msgid "Heavy Rocket Array"
-msgstr ""
+msgstr "Schwere Raketenanordnung"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9612,7 +9612,7 @@ msgstr "Schwere Raketenbastion"
 #. data/mp/stats/structure.json: $.Emplacement-MRLHvy-pit.name
 #: po/custom/fromJson.txt:2700
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "Schwere Raketenbatterie"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -12444,7 +12444,7 @@ msgstr "Wiederbewaffnungsgeschwindigkeit +30%"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
 #: po/custom/fromJson.txt:4714
 msgid "Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Verringere die Flammenwerferreichweite der Scavenger"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -14107,7 +14107,7 @@ msgstr "In der Zange"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 #: po/custom/fromJson.txt:5803
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Mache die Reduktion der Flammenwerferreichweite von Scavanger rückgängig"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -15273,7 +15273,7 @@ msgstr "Command Interface aktivieren"
 
 #: src/clparse.cpp:438
 msgid "(stdin, unixsocket:path)"
-msgstr ""
+msgstr "(stdin, unixsocket:path)"
 
 #: src/clparse.cpp:439
 msgid "Minimum required players to auto-start game"
@@ -15285,35 +15285,35 @@ msgstr "Startspieler"
 
 #: src/clparse.cpp:440
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "Ausgabemodus/-modi für Spielverlaufsprotokoll"
 
 #: src/clparse.cpp:441
 msgid "Game history log output key"
-msgstr ""
+msgstr "Ausgabeschlüssel für Spielverlaufsprotokoll"
 
 #: src/clparse.cpp:442
 msgid "Game history log output naming"
-msgstr ""
+msgstr "Benennung für Ausgabe des Spielverlaufsprotokolls"
 
 #: src/clparse.cpp:443
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "Intervall für Spielverlauf-Protokollrahmen"
 
 #: src/clparse.cpp:443
 msgid "interval in seconds"
-msgstr ""
+msgstr "Intervall in Sekunden"
 
 #: src/clparse.cpp:444
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "Zeitlimit für Mehrspielerspiele (in Minuten)"
 
 #: src/clparse.cpp:444
 msgid "number of minutes"
-msgstr ""
+msgstr "Anzahl der Minuten"
 
 #: src/clparse.cpp:445
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "Konvertiere eine Specular-Map-PNG in eine Luma-Ein-Kanal-Graustufen-PNG (und Beenden)"
 
 #: src/cmddroid.cpp:121
 msgid "Commander needs a higher level to command more units"
@@ -15773,7 +15773,7 @@ msgstr "Aufzeichnung ansehen"
 #: src/frontend.cpp:632
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "Der TCP-Port %d muss in deiner Firewall oder deinem Router geöffnet sein, um Spiele leiten zu können!"
 
 #: src/frontend.cpp:678
 msgid "Load Multiplayer Replay"
@@ -15942,23 +15942,23 @@ msgstr "Standard"
 
 #: src/frontend.cpp:947
 msgid "Terrain quality mode not available."
-msgstr ""
+msgstr "Terrain-Qualitätsmodus nicht verfügbar."
 
 #: src/frontend.cpp:1006
 msgid "Shadow mapping not available on this system."
-msgstr ""
+msgstr "Shadow Mapping ist auf diesem System nicht verfügbar."
 
 #: src/frontend.cpp:1035
 msgid "Low"
-msgstr ""
+msgstr "Niedrig"
 
 #: src/frontend.cpp:1037
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 #: src/frontend.cpp:1067
 msgid "Shadow filtering not available on this system."
-msgstr ""
+msgstr "Schattenfilterung ist auf diesem System nicht verfügbar."
 
 #: src/frontend.cpp:1109
 #: src/frontend.cpp:2087
@@ -15967,7 +15967,7 @@ msgstr "* Wirkt sich bei Spielneustart aus"
 
 #: src/frontend.cpp:1116
 msgid "Terrain Quality"
-msgstr ""
+msgstr "Terrain-Qualität"
 
 #: src/frontend.cpp:1122
 #: src/ingameop.cpp:629
@@ -15976,11 +15976,11 @@ msgstr "Schatten"
 
 #: src/frontend.cpp:1131
 msgid "Shadow Resolution"
-msgstr ""
+msgstr "Schatten-Auflösung"
 
 #: src/frontend.cpp:1136
 msgid "Shadow Filtering"
-msgstr ""
+msgstr "Schatten-Filterung"
 
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 #: src/frontend.cpp:1143
@@ -16019,7 +16019,7 @@ msgstr "Bildschirmerschütterung"
 #: src/frontend.cpp:1181
 #: src/ingameop.cpp:659
 msgid "Groups Menu"
-msgstr ""
+msgstr "Gruppenmenü"
 
 #: src/frontend.cpp:1193
 msgid "GRAPHICS OPTIONS"
@@ -16312,7 +16312,7 @@ msgstr "%u Minuten"
 #: src/frontend.cpp:3112
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s Stunden"
 
 #: src/frontend.cpp:3173
 #: src/frontend.cpp:3181
@@ -16326,11 +16326,11 @@ msgstr "Keine"
 
 #: src/frontend.cpp:3247
 msgid "Distribute to Team"
-msgstr ""
+msgstr "An Team verteilen"
 
 #: src/frontend.cpp:3248
 msgid "Destroy (Classic)"
-msgstr ""
+msgstr "Zerstören (Klassisch)"
 
 #: src/frontend.cpp:3304
 msgid "Hosting Options:"
@@ -16358,11 +16358,11 @@ msgstr "Zuschauerplätze"
 
 #: src/frontend.cpp:3333
 msgid "On Player Leave"
-msgstr ""
+msgstr "Bei Verlassen von Spieler"
 
 #: src/frontend.cpp:3338
 msgid "Game Time Limit"
-msgstr ""
+msgstr "Spielzeitlimit"
 
 #: src/frontend.cpp:3343
 msgid "Enable Rating"
@@ -16489,54 +16489,54 @@ msgstr "Zeige nur Favoriten-Technologien\n"
 
 #: src/hci/groups.cpp:141
 msgid "Select / Assign Group Number: "
-msgstr ""
+msgstr "Gruppennummer auswählen / zuweisen: "
 
 #: src/hci/groups.cpp:144
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Gruppe %u"
 
 #: src/hci/groups.cpp:145
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "Wähle die Einheiten in Gruppe %u aus"
 
 #: src/hci/groups.cpp:146
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "Weise ausgewählte Einheiten zu Gruppe %u zu"
 
 #: src/hci/groups.cpp:147
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "Zentriere die Kamera auf diese Gruppe durch zweimaliges Klicken oder Antippen"
 
 #: src/hci/groups.cpp:257
 msgid "View and configure groups of units, which can be quickly selected and ordered."
-msgstr ""
+msgstr "Betrachte und konfiguriere Einheitengruppen für schnelle Auswahl und Anordnung."
 
 #: src/hci/groups.cpp:259
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
-msgstr ""
+msgstr "Die Gruppenknöpfe leuchten rot, wenn Einheiten zerstört werden (oder viel Schaden erleiden)."
 
 #: src/hci/groups.cpp:261
 msgid "Unit Groups"
-msgstr ""
+msgstr "Einheitengruppen"
 
 #: src/hci/groups.cpp:263
 msgid "Select a Group"
-msgstr ""
+msgstr "Wähle eine Gruppe"
 
 #: src/hci/groups.cpp:264
 msgid "Assign Selected Units to a Group"
-msgstr ""
+msgstr "Weise ausgewählte Einheiten einer Gruppe zu"
 
 #: src/hci/groups.cpp:265
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
-msgstr ""
+msgstr "Zentriere die Kamera auf eine Gruppe, per Klick oder doppeltes Antippen auf den Knopf der Gruppe"
 
 #: src/hci/groups.cpp:359
 msgid "Unit Groups:"
-msgstr ""
+msgstr "Einheitengruppen:"
 
 #: src/hci/manufacture.cpp:431
 msgid "Construction Progress"
@@ -16556,11 +16556,11 @@ msgstr "Fortschrittsbalken"
 
 #: src/hci/quickchat.cpp:898
 msgid "To:"
-msgstr ""
+msgstr "An:"
 
 #: src/hci/quickchat.cpp:997
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: src/hci/quickchat.cpp:1006
 #: src/hci/quickchat.cpp:1016
@@ -16573,372 +16573,372 @@ msgstr "Team"
 #: src/hci/quickchat.cpp:1020
 #: src/hci/quickchat.cpp:1227
 msgid "Human Teammates"
-msgstr ""
+msgstr "Menschliche Teammitglieder"
 
 #: src/hci/quickchat.cpp:1035
 #: src/hci/quickchat.cpp:1259
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Bot-Teammitglieder"
 
 #: src/hci/quickchat.cpp:1059
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u Spieler"
 
 #: src/hci/quickchat.cpp:1064
 msgid "Choose a recipient"
-msgstr ""
+msgstr "Wähle einen Empfänger"
 
 #: src/hci/quickchat.cpp:2156
 msgid "Quick Chat:"
-msgstr ""
+msgstr "Quickchat:"
 
 #: src/hci/quickchat.cpp:2222
 msgid "Lobby Chat"
-msgstr ""
+msgstr "Lobby-Chat"
 
 #: src/hci/quickchat.cpp:2224
 #: src/hci/quickchat.cpp:2332
 msgid "Requests"
-msgstr ""
+msgstr "Anfragen"
 
 #: src/hci/quickchat.cpp:2234
 #: src/hci/quickchat.cpp:2338
 #: src/hci/quickchat.cpp:2390
 msgid "Notices"
-msgstr ""
+msgstr "Mitteilungen"
 
 #: src/hci/quickchat.cpp:2242
 #: src/hci/quickchat.cpp:2353
 #: src/hci/quickchat.cpp:2419
 #: src/hci/quickchat.cpp:2457
 msgid "Reactions"
-msgstr ""
+msgstr "Reaktionen"
 
 #: src/hci/quickchat.cpp:2346
 msgid "Taunts"
-msgstr ""
+msgstr "Sticheleien"
 
 #: src/hci/quickchat.cpp:2374
 msgid "Coordination"
-msgstr ""
+msgstr "Koordination"
 
 #: src/hci/quickchat.cpp:2405
 msgid "Suggestions"
-msgstr ""
+msgstr "Vorschläge"
 
 #: src/hci/quickchat.cpp:2445
 msgid "Cheats"
-msgstr ""
+msgstr "Cheats"
 
 #: src/hci/quickchat.cpp:2454
 msgid "End-Game"
-msgstr ""
+msgstr "Endspiel"
 
 #: src/hci/quickchat.cpp:2475
 msgid "Can someone please transfer me some units?"
-msgstr ""
+msgstr "Kann mir bitte jemand einige Einheiten geben?"
 
 #: src/hci/quickchat.cpp:2477
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr ""
+msgstr "Kann mir bitte jemand LKWs für den Wiederaufbau geben?"
 
 #: src/hci/quickchat.cpp:2479
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Tut mir leid, ich verstehe das nicht. (Bitte benutze Quick Chat?)"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2484
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "Vorschlag: Mehr Einheiten bauen"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2487
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "Vorschlag: Andere Einheiten bauen"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2490
 msgid "I suggest: Checking the team strategy view"
-msgstr ""
+msgstr "Vorschlag: Teamstrategie-Ansicht prüfen"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2493
 msgid "I suggest: Researching different tech"
-msgstr ""
+msgstr "Vorschlag: Verschiedene Technologien erforschen"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2496
 msgid "I suggest: Keeping research centers busy"
-msgstr ""
+msgstr "Vorschlag: Forschungszentren auf Trab halten"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2499
 msgid "I suggest: Building anti-air"
-msgstr ""
+msgstr "Vorschlag: Luftabwehr bauen"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2502
 msgid "I suggest: Repairing your units"
-msgstr ""
+msgstr "Vorschlag: Repariere deine Einheiten"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2505
 msgid "I suggest: Building repair facilities"
-msgstr ""
+msgstr "Vorschlag: Reparatureinrichtungen bauen"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2508
 msgid "I suggest: Building power generators"
-msgstr ""
+msgstr "Vorschlag: Kraftwerke bauen"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2511
 msgid "I suggest: Capturing oil resources"
-msgstr ""
+msgstr "Vorschlag: Ölquellen einnehmen"
 
 #: src/hci/quickchat.cpp:2524
 msgid "Hey everyone!"
-msgstr ""
+msgstr "Hallo zusammen!"
 
 #: src/hci/quickchat.cpp:2526
 msgid "Welcome!"
-msgstr ""
+msgstr "Willkommen!"
 
 #: src/hci/quickchat.cpp:2528
 msgid "I want to spectate"
-msgstr ""
+msgstr "Ich möchte zuschauen"
 
 #: src/hci/quickchat.cpp:2530
 msgid "I want to play"
-msgstr ""
+msgstr "Ich möchte spielen"
 
 #: src/hci/quickchat.cpp:2532
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Ich möchte das Team wechseln"
 
 #: src/hci/quickchat.cpp:2534
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "Bitte aktiviere \"Bereit\", damit wir beginnen können"
 
 #: src/hci/quickchat.cpp:2539
 msgid "Please wait"
-msgstr ""
+msgstr "Bitte warten"
 
 #: src/hci/quickchat.cpp:2541
 msgid "Let's go!"
-msgstr ""
+msgstr "Los geht's!"
 
 #. TRANSLATORS: As in "I am almost ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2545
 msgid "Almost ready"
-msgstr ""
+msgstr "Fast bereit"
 
 #. TRANSLATORS: As in "I am ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2548
 msgid "Ready"
-msgstr ""
+msgstr "Bereit"
 
 #: src/hci/quickchat.cpp:2550
 msgid "Be right back"
-msgstr ""
+msgstr "Bin gleich zurück"
 
 #: src/hci/quickchat.cpp:2552
 msgid "I'm back"
-msgstr ""
+msgstr "Ich bin zurück"
 
 #: src/hci/quickchat.cpp:2555
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: src/hci/quickchat.cpp:2557
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: src/hci/quickchat.cpp:2559
 msgid "Maybe"
-msgstr ""
+msgstr "Vielleicht"
 
 #: src/hci/quickchat.cpp:2561
 msgid "Not yet"
-msgstr ""
+msgstr "Noch nicht"
 
 #: src/hci/quickchat.cpp:2563
 msgid "Soon"
-msgstr ""
+msgstr "Bald"
 
 #: src/hci/quickchat.cpp:2565
 msgid "Thank you"
-msgstr ""
+msgstr "Danke"
 
 #: src/hci/quickchat.cpp:2567
 msgid "No problem"
-msgstr ""
+msgstr "Kein Problem"
 
 #: src/hci/quickchat.cpp:2571
 msgid "Well-played"
-msgstr ""
+msgstr "Gut gespielt"
 
 #. TRANSLATORS: Should probably be left as-is, unless there is a better way of denoting a censored outburst in your language
 #: src/hci/quickchat.cpp:2574
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 #: src/hci/quickchat.cpp:2576
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "Tut mir leid, ich verstehe nicht. (Benutze Quick Chat?)"
 
 #: src/hci/quickchat.cpp:2580
 msgid "Get ready..."
-msgstr ""
+msgstr "Bereitmachen..."
 
 #: src/hci/quickchat.cpp:2582
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Das wirst du noch bereuen"
 
 #: src/hci/quickchat.cpp:2584
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "Kaum ein Kratzer!"
 
 #: src/hci/quickchat.cpp:2588
 msgid "Attack now?"
-msgstr ""
+msgstr "Jetzt angreifen?"
 
 #: src/hci/quickchat.cpp:2590
 msgid "Group up"
-msgstr ""
+msgstr "Gruppe bilden"
 
 #: src/hci/quickchat.cpp:2592
 msgid "Split up"
-msgstr ""
+msgstr "Aufteilen"
 
 #: src/hci/quickchat.cpp:2594
 msgid "Focus attacks where marked"
-msgstr ""
+msgstr "Angriffe bei Markierungen konzentrieren"
 
 #: src/hci/quickchat.cpp:2596
 msgid "Retreat!"
-msgstr ""
+msgstr "Rückzug!"
 
 #: src/hci/quickchat.cpp:2598
 msgid "I need help!"
-msgstr ""
+msgstr "Ich brauche Hilfe!"
 
 #: src/hci/quickchat.cpp:2600
 msgid "Left side"
-msgstr ""
+msgstr "Linke Seite"
 
 #: src/hci/quickchat.cpp:2602
 msgid "Right side"
-msgstr ""
+msgstr "Rechte Seite"
 
 #: src/hci/quickchat.cpp:2604
 msgid "Transfer Request: Units"
-msgstr ""
+msgstr "Transferanfrage: Einheiten"
 
 #: src/hci/quickchat.cpp:2606
 msgid "Transfer Request: Trucks"
-msgstr ""
+msgstr "Transferanfrage: LKWs"
 
 #. TRANSLATORS: As in "I am attacking now!" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2610
 msgid "Attacking now!"
-msgstr ""
+msgstr "Ich greife jetzt an!"
 
 #. TRANSLATORS: As in "I am on my way!" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2613
 msgid "On my way!"
-msgstr ""
+msgstr "Bin auf dem Weg!"
 
 #: src/hci/quickchat.cpp:2615
 msgid "They're coming!"
-msgstr ""
+msgstr "Sie kommen!"
 
 #: src/hci/quickchat.cpp:2617
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "Ich werde angegriffen!"
 
 #: src/hci/quickchat.cpp:2619
 msgid "I'm rushing oils"
-msgstr ""
+msgstr "Ich stürme Ölvorkommen"
 
 #: src/hci/quickchat.cpp:2621
 msgid "They're rushing oils!"
-msgstr ""
+msgstr "Sie stürmen Ölvorkommen!"
 
 #: src/hci/quickchat.cpp:2623
 msgid "I don't have enough power"
-msgstr ""
+msgstr "Ich habe nicht genug Energie"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2627
 msgid "Build more units"
-msgstr ""
+msgstr "Baue mehr Einheiten"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2630
 msgid "Build different units"
-msgstr ""
+msgstr "Baue andere Einheiten"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2633
 msgid "Check team strategy view"
-msgstr ""
+msgstr "Teamstrategie-Ansicht prüfen"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2636
 msgid "Research different tech"
-msgstr ""
+msgstr "Erforsche verschiedene Technologien"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2639
 msgid "Keep research centers busy"
-msgstr ""
+msgstr "Halte die Forschungszentren auf Trab"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2642
 msgid "Build anti-air"
-msgstr ""
+msgstr "Baue Luftabwehr"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2645
 msgid "Repair your units"
-msgstr ""
+msgstr "Repariere deine Einheiten"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2648
 msgid "Build repair facilities"
-msgstr ""
+msgstr "Reparatureinrichtungen bauen"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2651
 msgid "Build power generators"
-msgstr ""
+msgstr "Baue Kraftwerke"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2654
 msgid "Capture oil resources"
-msgstr ""
+msgstr "Nimm Ölquellen ein"
 
 #: src/hci/quickchat.cpp:2658
 msgid "That didn't go well..."
-msgstr ""
+msgstr "Das hat nicht gut geklappt..."
 
 #: src/hci/quickchat.cpp:2660
 msgid "I have another plan"
-msgstr ""
+msgstr "Ich habe einen anderen Plan"
 
 #: src/hci/quickchat.cpp:2664
 msgid "Good game"
-msgstr ""
+msgstr "Gutes Spiel"
 
 #: src/hci/quickchat.cpp:2666
 msgid "I give up"
-msgstr ""
+msgstr "Ich gebe auf"
 
 #: src/hci/quickchat.cpp:2668
 msgid "Sorry, I have to leave"
-msgstr ""
+msgstr "Tut mir leid, ich muss gehen"
 
 #: src/hci/quickchat.cpp:2672
 msgid "Message delivery failure - try again"
@@ -16946,15 +16946,15 @@ msgstr "Nachrichtenzustellung fehlgeschlagen - erneut versuchen"
 
 #: src/hci/quickchat.cpp:2782
 msgid "Bot Allies"
-msgstr ""
+msgstr "Bot-Verbündete"
 
 #: src/hci/quickchat.cpp:2794
 msgid "Human Allies"
-msgstr ""
+msgstr "Menschliche Verbündete"
 
 #: src/hci/quickchat.cpp:2864
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr ""
+msgstr "Zu viele Nachrichten in den letzten paar Sekunden abgeschickt. Bitte warten und später erneut versuchen."
 
 #: src/hci/research.cpp:443
 msgid "Research Progress"
@@ -16966,27 +16966,27 @@ msgstr "Fortschritt des Verbündeten"
 
 #: src/hci/teamstrategy.cpp:90
 msgid "Tanks"
-msgstr ""
+msgstr "Panzer"
 
 #: src/hci/teamstrategy.cpp:94
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cyborgs"
 
 #: src/hci/teamstrategy.cpp:820
 msgid "No teammates."
-msgstr ""
+msgstr "Keine Teammitglieder."
 
 #: src/hci/teamstrategy.cpp:824
 msgid "Waiting for other teams to finish planning."
-msgstr ""
+msgstr "Warte, bist andere Teams zuendeplanen."
 
 #: src/hci/teamstrategy.cpp:942
 msgid "Weapons:"
-msgstr ""
+msgstr "Waffen:"
 
 #: src/hci/teamstrategy.cpp:959
 msgid "Units:"
-msgstr ""
+msgstr "Einheiten:"
 
 #: src/ingameop.cpp:114
 #: src/ingameop.cpp:191
@@ -17574,11 +17574,11 @@ msgstr "Sende Teamtextnachricht"
 
 #: src/input/keyconfig.cpp:157
 msgid "Send Global Quick Chat"
-msgstr ""
+msgstr "Globalen Quickchat schicken"
 
 #: src/input/keyconfig.cpp:158
 msgid "Send Team Quick Chat"
-msgstr ""
+msgstr "Team-Quickchat schicken"
 
 #: src/input/keyconfig.cpp:159
 msgid "Drop a beacon"
@@ -18097,7 +18097,7 @@ msgstr "Umkreisen"
 
 #: src/intorder.cpp:191
 msgid "Accept Retreating Units"
-msgstr ""
+msgstr "Einheiten zurückziehen akzeptieren"
 
 #: src/keybind.cpp:121
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -18542,11 +18542,11 @@ msgstr "Transporter beladen"
 
 #: src/mission.cpp:1936
 msgid "Shows the number of units currently loaded into the mission transporter, and the total capacity."
-msgstr ""
+msgstr "Zeigt die Anzahl der Einheiten an, die derzeit in den Missionstransporter geladen sind, sowie die Gesamtkapazität."
 
 #: src/mission.cpp:1937
 msgid "Open the Transporter Load Menu"
-msgstr ""
+msgstr "Öffne das Transporter-Beladungsmenü"
 
 #: src/mission.cpp:2302
 msgid "OBJECTIVE ACHIEVED by cheating!"
@@ -18664,7 +18664,7 @@ msgstr "KI-Turnier: %3.1f%% gewinnt, %3.1f%% verliert, %3.1f%% unentschieden"
 
 #: src/multiint.cpp:1091
 msgid "Unable to join:"
-msgstr ""
+msgstr "Beitritt nicht möglich:"
 
 #: src/multiint.cpp:1091
 msgid "Error while joining."
@@ -18893,11 +18893,11 @@ msgstr "Der Spielleiter hat Dich aus dem Spiel geworfen."
 #: src/multiint.cpp:2377
 #, c-format
 msgid "The host has banned %s from the game!"
-msgstr ""
+msgstr "Der Spielleiter hat %s aus dem Spiel verbannt!"
 
 #: src/multiint.cpp:2378
 msgid "The host has banned you from the game."
-msgstr ""
+msgstr "Der Spielleiter hat dich aus dem Spiel verbannt."
 
 #: src/multiint.cpp:2413
 #, c-format
@@ -18979,7 +18979,7 @@ msgstr "Spieler %s ist zu den Zuschauern gewechselt"
 #: src/multiint.cpp:3197
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
-msgstr ""
+msgstr "Kann %s nicht zu den Spielern verschieben - kein freier Slot"
 
 #: src/multiint.cpp:3218
 msgid "Spectator would like to become a Player"
@@ -19126,7 +19126,7 @@ msgstr "Aus dem Spiel geworfen"
 
 #: src/multiint.cpp:4928
 msgid "Quick Chat"
-msgstr ""
+msgstr "Quickchat"
 
 #: src/multiint.cpp:5246
 msgid "Copy Text to Clipboard"
@@ -19183,12 +19183,12 @@ msgstr "Verschiebe %s zu den Zuschauern!"
 #: src/multiint.cpp:6584
 #, c-format
 msgid "Asking %s to move to Players..."
-msgstr ""
+msgstr "Bitte, %s sich zu den Spielern zu verschieben..."
 
 #: src/multiint.cpp:6712
 #: src/multiint.cpp:7036
 msgid "Disconnected from host:"
-msgstr ""
+msgstr "Verbindung zum Spielleiter unterbrochen:"
 
 #: src/multiint.cpp:6712
 msgid "Host supplied invalid options"
@@ -19201,7 +19201,7 @@ msgstr "Du wurdest hinausgeworfen: "
 #: src/multiint.cpp:6965
 #: src/multiint.cpp:7300
 msgid "Connection lost:"
-msgstr ""
+msgstr "Verbindung unterbrochen:"
 
 #: src/multiint.cpp:6965
 msgid "No connection to host."
@@ -19250,7 +19250,7 @@ msgstr "UPnP-Erkennung läuft....."
 #: src/multiint.cpp:7365
 #, c-format
 msgid "UPnP detection disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "UPnP-Erkennung vom Benutzer deaktiviert. Autokonfiguration von Port %d wird nicht durchgeführt."
 
 #: src/multiint.cpp:7604
 #: src/multiint.cpp:7846
@@ -19315,7 +19315,7 @@ msgstr "%s hat das Spiel verlassen"
 #: src/multijoin.cpp:391
 #, c-format
 msgid "%s joined the Game"
-msgstr ""
+msgstr "%s ist dem Spiel beigetreten"
 
 #: src/multijoin.cpp:481
 #, c-format
@@ -19821,51 +19821,51 @@ msgstr "Chat: Team"
 
 #: src/screens/helpscreen.cpp:123
 msgid "Close Help Mode"
-msgstr ""
+msgstr "Hilfsmodus schließen"
 
 #: src/screens/helpscreen.cpp:218
 msgid "Click/Tap"
-msgstr ""
+msgstr "Klicken/Tippen"
 
 #: src/screens/helpscreen.cpp:220
 msgid "Right-Click"
-msgstr ""
+msgstr "Rechtsklick"
 
 #: src/screens/helpscreen.cpp:222
 msgid "Click/Tap and Hold"
-msgstr ""
+msgstr "Klicken/Tippen und gedrückt Halten"
 
 #: src/screens/helpscreen.cpp:224
 msgid "Other"
-msgstr ""
+msgstr "Andere"
 
 #: src/screens/helpscreen.cpp:277
 msgid "Interactions:"
-msgstr ""
+msgstr "Interaktionen:"
 
 #: src/screens/helpscreen.cpp:332
 msgid "Related Keymappings:"
-msgstr ""
+msgstr "Verwandte Tastenkombinationen:"
 
 #: src/screens/netpregamescreen.cpp:241
 msgid "Loading Status:"
-msgstr ""
+msgstr "Ladestatus:"
 
 #: src/screens/netpregamescreen.cpp:613
 msgid "TEAM STRATEGY"
-msgstr ""
+msgstr "TEAMSTRATEGIE"
 
 #: src/screens/netpregamescreen.cpp:744
 msgid "Game will start in ..."
-msgstr ""
+msgstr "Spiel beginnt in ..."
 
 #: src/screens/netpregamescreen.cpp:754
 msgid "Waiting for other players ..."
-msgstr ""
+msgstr "Warten auf andere Spieler ..."
 
 #: src/screens/netpregamescreen.cpp:761
 msgid "Team Planning"
-msgstr ""
+msgstr "Teamplanung"
 
 #: src/selection.cpp:374
 #: src/selection.cpp:456
@@ -19910,15 +19910,15 @@ msgstr "Aktuelle Energie / Energie pro Sekunde"
 
 #: src/spectatorwidgets.cpp:787
 msgid "PwrLost"
-msgstr ""
+msgstr "EnergieVerloren"
 
 #: src/spectatorwidgets.cpp:788
 msgid "PwrWon"
-msgstr ""
+msgstr "EnergieGewonnen"
 
 #: src/spectatorwidgets.cpp:789
 msgid "Lab Use"
-msgstr ""
+msgstr "Labornutzung"
 
 #: src/spectatorwidgets.cpp:793
 msgid "Kinetic Armor"
@@ -19931,89 +19931,89 @@ msgstr "(Panzer / Cyborgs)"
 
 #: src/stats.cpp:1510
 msgid "Cannons"
-msgstr ""
+msgstr "Kanonen"
 
 #: src/stats.cpp:1512
 msgid "Mortars"
-msgstr ""
+msgstr "Mörser"
 
 #: src/stats.cpp:1514
 msgid "Missiles"
-msgstr ""
+msgstr "Lenkraketen"
 
 #: src/stats.cpp:1516
 msgid "Rockets"
-msgstr ""
+msgstr "Raketen"
 
 #: src/stats.cpp:1518
 msgid "Energy"
-msgstr ""
+msgstr "Energie"
 
 #: src/stats.cpp:1520
 msgid "Gauss"
-msgstr ""
+msgstr "Gauß"
 
 #. TRANSLATORS: "Flame" weapons class
 #: src/stats.cpp:1523
 msgid "Flame"
-msgstr ""
+msgstr "Flammenwerfer"
 
 #: src/stats.cpp:1525
 msgid "Howitzers"
-msgstr ""
+msgstr "Haubitzen"
 
 #. TRANSLATORS: A short-form for "Machine Guns" (should be shorter than the translated full form - if not, just use the full translation for "Machine Guns")
 #: src/stats.cpp:1530
 msgid "MG"
-msgstr ""
+msgstr "MG"
 
 #: src/stats.cpp:1534
 msgid "Machine Guns"
-msgstr ""
+msgstr "Maschinengewehre"
 
 #. TRANSLATORS: "Electronic" weapon class
 #: src/stats.cpp:1538
 msgid "Electronic"
-msgstr ""
+msgstr "Elektronisch"
 
 #. TRANSLATORS: A short-form for "Anti-Air" weapons class (should be shorter than the translated full form - if not, just use the full translation for "Anti-Air")
 #: src/stats.cpp:1543
 msgid "A-A"
-msgstr ""
+msgstr "Luftabwehr"
 
 #: src/stats.cpp:1547
 msgid "Anti-Air"
-msgstr ""
+msgstr "Luftabwehr"
 
 #: src/stats.cpp:1550
 msgid "Slow Missile"
-msgstr ""
+msgstr "Langsame Lenkrakete"
 
 #: src/stats.cpp:1552
 msgid "Slow Rocket"
-msgstr ""
+msgstr "Langsame Rakete"
 
 #. TRANSLATORS: A short-form for "Laser Satellite" weapons class - some just use "Las-Sat" or "LasSat"
 #: src/stats.cpp:1557
 msgid "Las-Sat"
-msgstr ""
+msgstr "LasSat"
 
 #: src/stats.cpp:1561
 msgid "Laser Satellite"
-msgstr ""
+msgstr "Lasersatellit"
 
 #: src/stats.cpp:1564
 msgid "Bombs"
-msgstr ""
+msgstr "Bomben"
 
 #: src/stats.cpp:1566
 msgid "Command"
-msgstr ""
+msgstr "Kommando"
 
 #. TRANSLATORS: "EMP" (electromagnetic pulse) weapons class - probably should keep it as "EMP" (or the respective acronym in your language)
 #: src/stats.cpp:1569
 msgid "EMP"
-msgstr ""
+msgstr "EMP"
 
 #: src/structure.cpp:2619
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -20156,7 +20156,7 @@ msgstr "Beute aus Reparatureinrichtung - Nichts"
 
 #: src/terrain.cpp:2406
 msgid "Classic"
-msgstr ""
+msgstr "Klassisch"
 
 #: src/titleui/gamefind.cpp:81
 msgid "GAMES"
@@ -20329,7 +20329,7 @@ msgstr "Transporter starten"
 #: src/transporter.cpp:313
 #: src/transporter.cpp:363
 msgid "Launch the Transporter"
-msgstr ""
+msgstr "Starte den Transporter"
 
 #: src/transporter.cpp:1023
 msgid "There is not enough room in the Transport!"
