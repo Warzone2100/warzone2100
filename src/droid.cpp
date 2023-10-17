@@ -2286,29 +2286,38 @@ const char *getDroidLevelName(const DROID *psDroid)
 
 UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 {
-	DROID	*psDroid;
-	UDWORD	count = 0;
+	unsigned int idx = 0;
+	unsigned int count = 0;
 
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	do
 	{
-		if (getDroidLevel(psDroid) == level)
+		DROID *psDroid = nullptr;
+		switch (idx)
 		{
-			count++;
+			case 0: psDroid = apsDroidLists[selectedPlayer]; break;
+			case 1: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { psDroid = apsLimboDroids[selectedPlayer]; } break;
+			default: psDroid = nullptr;
 		}
-	}
-
-	if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO)
-	{
-		for (psDroid = apsLimboDroids[player]; psDroid; psDroid = psDroid->psNext)
+		for (; psDroid; psDroid = psDroid->psNext)
 		{
 			if (getDroidLevel(psDroid) == level)
 			{
-				count++;
+				++count;
+			}
+			if (isTransporter(psDroid))
+			{
+				for (DROID *psCurr = psDroid->psGroup->psList; psCurr != nullptr; psCurr = psCurr->psGrpNext)
+				{
+					if (psCurr != psDroid && getDroidLevel(psCurr) == level)
+					{
+						++count;
+					}
+				}
 			}
 		}
-	}
+	} while (++idx < 2);
 
 	return count;
 }
