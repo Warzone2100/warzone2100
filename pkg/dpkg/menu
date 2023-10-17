@@ -1,7 +1,0 @@
-?package(warzone2100):\
-  needs="X11"\
-  section="Games/Strategy"\
-  title="Warzone 2100"\
-  longtitle="Post-nuclear 3D real-time strategy game"\
-  icon="/usr/share/icons/warzone2100.png"\
-  command="/usr/games/warzone2100"
