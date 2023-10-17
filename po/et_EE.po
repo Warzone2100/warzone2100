@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-14 17:52\n"
+"PO-Revision-Date: 2023-10-17 16:37\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "Language: et_EE\n"
@@ -4001,11 +4001,11 @@ msgstr "Kõik raketid uuendati automaatselt"
 
 #: data/base/script/campaign/cam1-7.js:242
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Hävita kõik Uue Paradigma üksused"
 
 #: data/base/script/campaign/cam1a-c.js:138
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Hävita kõik Uue Paradigma tugevdusüksused"
 
 #: data/base/script/campaign/cam1ca.js:146
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
@@ -4013,11 +4013,11 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-1x.js:112
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Määra asukoht ja päästa oma üksused allatulistatud transpordist"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Päästa tsiviilisikud Kollektiivi käest enne kui liiga palju on neid kinni püütud"
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
@@ -4037,11 +4037,11 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-1.js:248
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Hävita raketihoidlad"
 
 #: data/base/script/campaign/cam3-2.js:260
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Päästa Alfatiim Nexuse käest"
 
 #: data/base/script/campaign/cam3-4.js:116
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
@@ -4069,7 +4069,7 @@ msgstr "Naase Maandumis Tsooni"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:530
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Raske / Võimatu taseme soovitus:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:531
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
@@ -4077,31 +4077,31 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:536
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Hävita kõik vaenlase üksused ja ehitised"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:552
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefakt kogutud"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:553
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Baasid hävitatud"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:554
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Vaenlase üksusi järgi"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:555
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Vaenlase ehitisi järgi"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:561
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Naasnemine maandumistsooni nõutud"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:571
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Hävita kõik vaenlase üksused ja baasid"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:576
 msgid "Survive until the timer reaches zero"
@@ -4119,7 +4119,7 @@ msgstr "Tootmine (F1)"
 #: data/mp/multiplay/script/rules/reticule.js:25
 #: data/mp/multiplay/script/rules/reticule.js:114
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Tooda - ehita tehas esimesena"
 
 #: data/base/script/rules.js:106
 #: data/base/script/tutorial.js:156
@@ -4133,7 +4133,7 @@ msgstr "Uurimine (F2)"
 #: data/mp/multiplay/script/rules/reticule.js:52
 #: data/mp/multiplay/script/rules/reticule.js:115
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "Uuri - ehita uurimiskeskus esimesena"
 
 #: data/base/script/rules.js:118
 #: data/base/script/tutorial.js:148
@@ -4151,7 +4151,7 @@ msgstr "Ehitamine (F3)"
 #: data/mp/multiplay/script/rules/reticule.js:64
 #: data/mp/multiplay/script/rules/reticule.js:116
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "Ehita - tooda ehitusroboteid esimesena"
 
 #: data/base/script/rules.js:168
 #: data/base/script/tutorial.js:214
@@ -4177,7 +4177,7 @@ msgstr "Komandörid (F6)"
 #: data/mp/multiplay/script/rules/reticule.js:105
 #: data/mp/multiplay/script/rules/reticule.js:119
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "Komandörid - tooda komandöre esimesena"
 
 #: data/base/script/rules.js:192
 #: data/base/script/tutorial.js:258
@@ -7095,14 +7095,14 @@ msgstr "Automatiseeritud Remontimiskeskus"
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
 #: po/custom/fromJson.txt:963
 msgid "Automated VTOL Rearming Mk2"
-msgstr "Automatiseeritud VTOLite Laadimine Mk2"
+msgstr "Automatiseeritud VTOL-ide Laadimine Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 #. data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 #: po/custom/fromJson.txt:967
 msgid "Automated VTOL Rearming Mk3"
-msgstr "Automatiseeritud VTOLite Laadimine Mk3"
+msgstr "Automatiseeritud VTOL-ide Laadimine Mk3"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[1]
