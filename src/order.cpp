@@ -1046,7 +1046,11 @@ void orderUpdateDroid(DROID *psDroid)
 				bAttack = false;
 				if (isVtolDroid(psDroid))
 				{
-					if (!vtolEmpty(psDroid) &&
+					if (psDroid->action == DACTION_WAITDURINGREARM)
+					{
+						// Calm down. It's not that serious.
+					}
+					else if (!vtolEmpty(psDroid) &&
 					    ((psDroid->action == DACTION_MOVETOREARM) ||
 					     (psDroid->action == DACTION_WAITFORREARM)) &&
 					    (psDroid->sMove.Status != MOVEINACTIVE))
@@ -1055,7 +1059,7 @@ void orderUpdateDroid(DROID *psDroid)
 						// get them to attack the new target rather than returning to rearm
 						bAttack = true;
 					}
-					else if (allVtolsRearmed(psDroid))
+					else if (!vtolEmpty(psDroid))
 					{
 						bAttack = true;
 					}
