@@ -293,9 +293,31 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 	fullStats.numUnits = 0;
 	if (selectedPlayer < MAX_PLAYERS)
 	{
-		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
-		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
-		if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { for (DROID *psDroid = apsLimboDroids[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {} }
+		unsigned int idx = 0;
+		do
+		{
+			DROID *psDroid = nullptr;
+			switch (idx)
+			{
+				case 0: psDroid = apsDroidLists[selectedPlayer]; break;
+				case 1: psDroid = mission.apsDroidLists[selectedPlayer]; break;
+				case 2: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { psDroid = apsLimboDroids[selectedPlayer]; } break;
+				default: psDroid = nullptr;
+			}
+			for (; psDroid; psDroid = psDroid->psNext, ++fullStats.numUnits)
+			{
+				if (isTransporter(psDroid))
+				{
+					for (DROID *psCurr = psDroid->psGroup->psList; psCurr != nullptr; psCurr = psCurr->psGrpNext)
+					{
+						if (psCurr != psDroid)
+						{
+							++fullStats.numUnits;
+						}
+					}
+				}
+			}
+		} while (++idx < 3);
 	}
 
 	return fullStats;
