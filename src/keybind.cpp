@@ -973,6 +973,7 @@ MappableFunction kf_RadarZoom(const int multiplier)
 		{
 			CONPRINTF(_("Setting radar zoom to %u"), newZoomLevel);
 			SetRadarZoom(newZoomLevel);
+			war_SetRadarZoom(GetRadarZoom()); // persist changed setting to config
 			audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 		}
 	};
