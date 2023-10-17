@@ -53,6 +53,12 @@
 #include <psapi.h>
 #endif
 
+// Includes for Unix
+#if defined(WZ_OS_UNIX)
+#include <unistd.h>
+#include <cstdlib>
+#endif
+
 // MARK: - BuildPropertyProvider
 
 enum class BuildProperty {
@@ -160,6 +166,64 @@ static std::string Get_WinPackageFullName()
 }
 #endif
 
+enum class WZ_CONTAINER_TYPE
+{
+	NONE_DETECTED,
+	FLATPAK,
+	SNAP,
+	APPIMAGE,
+	WIN_PACKAGE		// ex. MSIX package
+};
+
+static std::string to_string(const WZ_CONTAINER_TYPE& type)
+{
+	switch (type)
+	{
+		case WZ_CONTAINER_TYPE::NONE_DETECTED:
+			return "";
+		case WZ_CONTAINER_TYPE::FLATPAK:
+			return "flatpak";
+		case WZ_CONTAINER_TYPE::SNAP:
+			return "snap";
+		case WZ_CONTAINER_TYPE::APPIMAGE:
+			return "appimage";
+		case WZ_CONTAINER_TYPE::WIN_PACKAGE:
+			return "winpackage";
+	}
+	return ""; // silence warning
+}
+
+static WZ_CONTAINER_TYPE GetCurrentContainerType()
+{
+#if defined(WZ_OS_WIN)
+	if (!Get_WinPackageFullName().empty())
+	{
+		return WZ_CONTAINER_TYPE::WIN_PACKAGE;
+	}
+#elif defined(WZ_OS_UNIX)
+	if (access("/.flatpak-info", F_OK) == 0)
+	{
+		return WZ_CONTAINER_TYPE::FLATPAK;
+	}
+	// Check multiple variables, as is done by both WebKit and SDL
+	// See: https://snapcraft.io/docs/environment-variables
+	if (std::getenv("SNAP") && std::getenv("SNAP_NAME") && std::getenv("SNAP_REVISION"))
+	{
+		return WZ_CONTAINER_TYPE::SNAP;
+	}
+	if (std::getenv("APPIMAGE"))
+	{
+		return WZ_CONTAINER_TYPE::APPIMAGE;
+	}
+#endif
+	return WZ_CONTAINER_TYPE::NONE_DETECTED;
+}
+
+static std::string GetCurrentContainerTypeStr()
+{
+	return to_string(GetCurrentContainerType());
+}
+
 static std::string GetCurrentBuildPropertyValue(const BuildProperty& property)
 {
 	using BP = BuildProperty;
@@ -251,6 +315,7 @@ static const std::unordered_map<std::string, EnvironmentPropertyProvider::Enviro
 	{"WIN_LOADEDMODULENAMES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_LOADEDMODULENAMES},
 	{"ENV_VAR_NAMES", EnvironmentPropertyProvider::EnvironmentProperty::ENV_VAR_NAMES},
 	{"SYSTEM_RAM", EnvironmentPropertyProvider::EnvironmentProperty::SYSTEM_RAM},
+	{"CONTAINER_TYPE", EnvironmentPropertyProvider::EnvironmentProperty::CONTAINER_TYPE}
 };
 
 #if defined(WZ_OS_WIN)
@@ -562,6 +627,8 @@ std::string EnvironmentPropertyProvider::GetCurrentEnvironmentPropertyValue(cons
 			return GetEnvironmentVariableNames();
 		case EP::SYSTEM_RAM:
 			return std::to_string(wzGetCurrentSystemRAM());
+		case EP::CONTAINER_TYPE:
+			return GetCurrentContainerTypeStr();
 	}
 	return ""; // silence warning
 }

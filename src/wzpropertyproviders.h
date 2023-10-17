@@ -43,6 +43,8 @@ public:
 		// WZ 4.3.3+
 		ENV_VAR_NAMES,
 		SYSTEM_RAM, // system RAM in MiB
+		// WZ 4.4.0+
+		CONTAINER_TYPE
 	};
 private:
 	std::string GetCurrentEnvironmentPropertyValue(const EnvironmentProperty& property);
