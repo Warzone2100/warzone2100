@@ -152,7 +152,7 @@ parts:
     parse-info:
       # Parse this appdata/metainfo file for summary, description,
       # and icon. Use the installed path relative to the Snap's root
-      - usr/share/metainfo/net.wz2100.warzone2100.appdata.xml
+      - usr/share/metainfo/net.wz2100.warzone2100.metainfo.xml
     override-pull: |
       craftctl default
       SNAP_VERSION_DESC=$(git describe --always | sed 's/[^a-zA-Z0-9\.\:\+\~\-]/~/g')
