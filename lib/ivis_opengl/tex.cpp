@@ -246,7 +246,7 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 		pie_AddTexPage(pTexture, tmpname.c_str(), existingTextureType, page);
 		return true;
 	}
-	debug(LOG_ERROR, "Nothing to replace!");
+	debug(LOG_TEXTURE, "Nothing to replace - old (not found): %s, new (not used): %s", oldfile.toUtf8().c_str(), newfile.toUtf8().c_str());
 	return false;
 }
 
