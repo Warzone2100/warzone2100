@@ -73,8 +73,9 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 
 	float adjustedTileBrightness = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 
-	vec4 light = (ambientLight*0.25f + visibility*ambientLight*0.75f + visibility*diffuseLight*lambertTerm) * adjustedTileBrightness;
-	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
+	vec4 adjustedAmbientLight = ambientLight*lightmap_vec4.a;
+	vec4 light = (ambientLight*0.30f + visibility*(adjustedAmbientLight*0.40f + adjustedAmbientLight*lambertTerm*0.30f + diffuseLight*lambertTerm)) * lightmap_vec4.a;
+	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.4f)); // additive color (from environmental point lights / effects)
 
 	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm) * adjustedTileBrightness;
 	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.5f)); // additive color (from environmental point lights / effects)
