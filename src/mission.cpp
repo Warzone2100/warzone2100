@@ -1434,11 +1434,8 @@ void endMission()
 		abort();
 	}
 
-	if (missionCanReEnforce()) //mission.type == LDS_MCLEAR || mission.type == LDS_MKEEP)
-	{
-		intRemoveMissionTimer();
-		intRemoveTransporterTimer();
-	}
+	intRemoveMissionTimer();
+	intRemoveTransporterTimer();
 
 	//at end of mission always do this
 	intRemoveTransporterLaunch();
