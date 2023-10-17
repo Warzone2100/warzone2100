@@ -32,7 +32,7 @@ void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set r
 
 #define MAX_RADARZOOM		(64)
 #define MIN_RADARZOOM		(8)
-#define DEFAULT_RADARZOOM	(32)
+#define DEFAULT_RADARZOOM	(24)
 #define RADARZOOM_STEP		(4)
 
 bool InitRadar();				///< Initialize minimap subsystem.
