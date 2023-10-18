@@ -1410,11 +1410,6 @@ INT_RETVAL intRunWidgets()
 		intRunOrder();
 	}
 
-	if (MultiMenuUp)
-	{
-		intRunMultiMenu();
-	}
-
 	/* Extra code for the design screen to deal with the shadow bar graphs */
 	if (intMode == INT_DESIGN)
 	{
@@ -1574,7 +1569,7 @@ INT_RETVAL intRunWidgets()
 				intProcessInGameOptions(retID);
 				break;
 			case INT_MULTIMENU:
-				intProcessMultiMenu(retID);
+				// no-op here
 				break;
 			case INT_DESIGN:
 				intProcessDesign(retID);

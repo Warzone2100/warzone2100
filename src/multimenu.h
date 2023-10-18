@@ -38,8 +38,6 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 // multimenu
-void intProcessMultiMenu(UDWORD id);
-bool intRunMultiMenu();
 bool intCloseMultiMenu();
 void intCloseMultiMenuNoAnim();
 bool intAddMultiMenu();
