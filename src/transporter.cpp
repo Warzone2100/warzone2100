@@ -336,8 +336,9 @@ bool intAddTransporterLaunch(DROID *psDroid)
 	//set up the static transporter
 	psCurrTransporter = psDroid;
 
-	//check the button is not already up
-	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != nullptr)
+	// Check that neither the launch button nor the transport timer are currently up
+	if (widgGetFromID(psWScreen, IDTRANS_LAUNCH) != nullptr
+		|| widgGetFromID(psWScreen, IDTRANTIMER_BUTTON) != nullptr)
 	{
 		return true;
 	}

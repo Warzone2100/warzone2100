@@ -236,6 +236,11 @@ function cam_eventTransporterExit(transport)
 				setReinforcementTime(__camVictoryData.reinforcements);
 			}
 		}
+		// Show how long until the transporter comes back on Beta End.
+		if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
+		{
+			setReinforcementTime(__camVictoryData.reinforcements);
+		}
 	}
 
 	if (transport.player !== CAM_HUMAN_PLAYER ||
@@ -256,6 +261,14 @@ function cam_eventTransporterLanded(transport)
 	if (transport.player !== CAM_HUMAN_PLAYER)
 	{
 		__camLandTransporter(transport.player, camMakePos(transport));
+	}
+	else
+	{
+		// Make the transporter timer on Beta End disappear, since the transporter has arrived.
+		if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
+		{
+			setReinforcementTime(-1);
+		}
 	}
 }
 
@@ -355,6 +368,13 @@ function cam_eventGameLoaded()
 			}
 			break;
 		}
+	}
+
+	if (__camWinLossCallback === CAM_VICTORY_TIMEOUT
+		&& enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER).length === 0)
+	{
+		// If the transport is gone on Beta End, put a timer up to show when it'll be back
+		setReinforcementTime(__camVictoryData.reinforcements);
 	}
 
 	//Subscribe to eventGroupSeen again.

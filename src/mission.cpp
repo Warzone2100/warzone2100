@@ -543,8 +543,8 @@ void addTransporterTimerInterface()
 		{
 			bAddInterface = true;
 
-			//check timer is not already on the screen
-			if (!widgGetFromID(psWScreen, IDTRANTIMER_BUTTON))
+			// Check that neither the timer nor the launch button are on screen
+			if (!widgGetFromID(psWScreen, IDTRANTIMER_BUTTON) && !widgGetFromID(psWScreen, IDTRANS_LAUNCH))
 			{
 				intAddTransporterTimer();
 			}
@@ -1434,11 +1434,8 @@ void endMission()
 		abort();
 	}
 
-	if (missionCanReEnforce()) //mission.type == LDS_MCLEAR || mission.type == LDS_MKEEP)
-	{
-		intRemoveMissionTimer();
-		intRemoveTransporterTimer();
-	}
+	intRemoveMissionTimer();
+	intRemoveTransporterTimer();
 
 	//at end of mission always do this
 	intRemoveTransporterLaunch();
@@ -3087,7 +3084,7 @@ void clearMissionWidgets()
 		intRemoveMissionTimer();
 	}
 
-	if (missionCanReEnforce())
+	if (mission.ETA >= 0)
 	{
 		intRemoveTransporterTimer();
 	}
@@ -3131,17 +3128,17 @@ void resetMissionWidgets()
 		stopMissionButtonFlash(IDTIMER_FORM);
 	}
 
-	if (missionCanReEnforce())
+	DROID* transporter = find_transporter();
+
+	// Check if not a reinforcement type mission and we have an transporter
+	if (!missionForReInforcements() && transporter != nullptr && !transporterFlying(transporter))
+	{
+		// Show launch button if the transporter has not already been launched
+		intAddTransporterLaunch(transporter);
+	}
+	else if (mission.ETA >= 0)
 	{
 		addTransporterTimerInterface();
-	}
-	//check not a typical reinforcement mission
-	else if (!missionForReInforcements())
-	{
-		if (auto transporter = find_transporter())
-		{
-			intAddTransporterLaunch(transporter);
-		}
 	}
 
 }
