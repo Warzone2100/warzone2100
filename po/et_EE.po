@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-17 16:37\n"
+"PO-Revision-Date: 2023-10-18 04:59\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "Language: et_EE\n"
@@ -20,12 +20,12 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "EESMÄRK: Leia ja saa neutraalse sünapsi tehnoloogja tagasi"
+msgstr "EESMÄRK: Leia ja saa neuroloogilise sünapsi tehnoloogia tagasi"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Raja baas, siis otsi Kollapsi-Eelseid ehitisi."
+msgstr "Raja baas, siis otsi Kollapsi-Eelset ehitist."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -59,27 +59,27 @@ msgstr "Uuri ja kindlusta piirkond."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "ALFA BAASI MISSIOON: Uus Paradigmid"
+msgstr "ALFA BAASI MISSIOON: Uus Paradigma"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Uus Paradigmid kontrollivad kõrgemat relvatehnoloogiat."
+msgstr "Uus Paradigma kontrollib paremat relvatehnoloogiat."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Neil võib olla sünaptilise liidese tehnoloogia, on eluliselt tähtis, et me selle leiaksime."
+msgstr "Neil võib olla sünaptilise lingi tehnoloogia, on eluliselt tähtis, et me selle leiaksime."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "TRANSPORDI MISSIOON: Leia ja Omanda Artefakt"
+msgstr "TRANSPORDI MISSIOON: Leia ja Omanda Artefaktid"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr "Laadi rünnakuvägi trantsporti."
+msgstr "Laadi rünnakuvägi transporti."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "Maandudes uuri varemeid ja Omanda mistahes artefaktid."
+msgstr "Maandudes uuri varemeid ja omanda mistahes artefaktid."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
@@ -87,7 +87,7 @@ msgstr "TRANSPORDI MISSIOON: Uuri Uurimiskeskust"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Uuri piirkonda ja omanda mistahes artefaktid."
+msgstr "Uuri piirkonda ja omanda mistahes kohalolevad artefaktid."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
@@ -104,7 +104,7 @@ msgstr "Võta luurerühm, et neid signaale uurida."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Kasuta veoautosid, et Maandumis Tsooni kaitseid ehitada."
+msgstr "Kasuta veoautosid, et maandumistsooni kaitseid ehitada."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -112,31 +112,31 @@ msgstr "TRANSPORDI MISSIOON: Vaenlase Ülekanne Tuvastatud"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Uuri määratud piirkonda, et leida vaenlase uurimiskeskus."
+msgstr "Uuri määratud piirkonda, et leida vaenlase uurimiskeskuseid."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Mine Teise Maandumis Tsooni. Ära sellel ajal vaenlasi ründa."
+msgstr "Mine teise maandumistsooni. Ära sellel ajal vaenlasi ründa."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "TRANSPORDI MISSIOON: Sünaptiline Liides Leitud"
+msgstr "TRANSPORDI MISSIOON: Sünaptiline Link Leitud"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr "Uus Paradigmid analüüsivad sünaptilise liidese tehnoloogiat selles asukohas."
+msgstr "Uus Paradigma analüüsib sünaptilise lingi tehnoloogiat selles asukohas."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Kogu kokku rünnakurühm ja omasta sünaptilise liidese tehnoloogia."
+msgstr "Pane kokku rünnakurühm ja omasta sünaptilise lingi tehnoloogia."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "TRANSPORDI MISSIOON: Uus Eesmärk"
+msgstr "TRANSPORDI MISSIOON: Uued Eesmärgid"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr "Uus Paradigmid otsivad selles naabruskonnas artefakte."
+msgstr "Uus Paradigma otsib selles piirkonnas artefakte."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
@@ -144,11 +144,11 @@ msgstr "Püüa nad kinni. Ära lase ühelgi vaenlasel sellelt alalt lahkuda."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "TRANSPORDI MISSIOON: Vaenlase Baas Ehitamisel"
+msgstr "TRANSPORDI MISSIOON: Vaenlase Baas Ehitusjärgus"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr "Vaenlase väed rajavad selles asukohas edasist baasi."
+msgstr "Vaenlase väed rajavad selles asukohas esioperatsioonibaasi."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
@@ -156,7 +156,7 @@ msgstr "Hävita baas ja kindlusta piirkond."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "ALFA BAASI MISSIOON: Raja Edaspidine Baas"
+msgstr "ALFA BAASI MISSIOON: Raja Esioperatsioonibaas"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
@@ -184,11 +184,11 @@ msgstr "ALFA BAASI MISIOON: Sissetulev Ülekanne"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr "Me tuvastasime vaenlase väed nendes asukohtades."
+msgstr "Me tuvastame vaenlase vägesid nendes asukohtades."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "See on meie võimalus lüüa Uus Paradigmid ja hävitada nende baas."
+msgstr "See on meie võimalus võita üle Uue Paradigma ja hävitada nende baas."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -212,7 +212,7 @@ msgstr "PROJEKTI RÜHMA UUENDUSED"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr "RÜHM BEETA UUENDUS"
+msgstr "BEETA TIIMI UUENDUS"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
@@ -224,7 +224,7 @@ msgstr "Selles piirkonnas asub paremini varustatud vägi."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr "RÜHM GAMMA UUENDUS"
+msgstr "GAMMA TIIMI UUENDUS"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
@@ -232,7 +232,7 @@ msgstr "Pole midagi ettekanda."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr "Me pole avastanud ühtegi artefakti ega kohanud ühtegi vaenlast."
+msgstr "Me pole avastanud ühtegi artefakti ega kohanud ühtegi vaenulikku."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
@@ -240,7 +240,7 @@ msgstr "ALFA BAASI LUURE RAPORT: Vaenlase Rünnak"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr "Me tuvastasime vaenlase rünnakurühma selles asukohas."
+msgstr "Me tuvastame vaenlase rünnakurühma selles asukohas."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
@@ -256,15 +256,15 @@ msgstr "Otsi ja omanda siin mistahes artefaktid."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr "Vaenlase Maandumis Tsoon"
+msgstr "VAENLASE MAANDUMISTSOON"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Hävita see Maandumis Tsoon takistamaks vaenlase maandumisi."
+msgstr "Hävita see maandumistsoon takistamaks vaenlase maandumisi."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr "ALFA bAASI LUURE RAPORT: NEXUS"
+msgstr "ALFA BAASI LUURE RAPORT: NEXUS"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
@@ -272,7 +272,7 @@ msgstr "Uus eesmärk."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr "Me avastasime ja isoleerisime sissetungiva programmi."
+msgstr "Me avastasime ja isoleerisime sissetungijaprogrammi."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
@@ -280,11 +280,11 @@ msgstr "Täiend"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr "Sünaptilise liidese tehnoloogia oli selles asukohas, aga eemaldati."
+msgstr "Sünaptilise lingi tehnoloogia oli selles asukohas, aga eemaldati."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Raja uus edasine baas ja jätka sünaptilise liidese otsinguid."
+msgstr "Raja esioperatsioonibaas ja jätka sünaptilise lingi otsinguid."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -300,7 +300,7 @@ msgstr "Komandör."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr "Me dekodeerisime sissetuleva sõnumi uuele Paradigmile..."
+msgstr "Me dekodeerisime sissetuleva sõnumi uuele Paradigmale..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
@@ -308,7 +308,7 @@ msgstr "Hävita Vaenlase Baas"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr "Kogu kokku rünnakurühm ja asu trantspordi pardale."
+msgstr "Kogu kokku rünnakurühm ja asu transpordi pardale."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
@@ -316,19 +316,19 @@ msgstr "Hävita baas ja omanda mistahes kohalolevad artefaktid."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr "Sünaptilise liidese tehnoloogia on omastatud!"
+msgstr "Sünaptilise lingi tehnoloogia on omastatud!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Esialgne uurimine kinnitab, et see on hea kasu Projektile."
+msgstr "Esialgne uurimine kinnitab, et sellest on suur kasu Projektile."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr "Baas Meeta on raske rünnaku all, nad võivad abi vajada."
+msgstr "Beeta Baas on suure rünnaku all, nad võivad abi vajada."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr "Me saadame edasised uuendused kui nad saabuvad."
+msgstr "Me saadame edasisi uuendusi kui nad saabuvad."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
@@ -360,11 +360,11 @@ msgstr "Hävita mässajad ja omanda mistahes artefaktid."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr "Õnnitlused Uus Paradigmi võitmise üle, see sector on nüüd turvaline."
+msgstr "Õnnitlused Uus Paradigma võitmise üle, see sektor on nüüd turvaline."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "Nexuse Sissetungija Programm oli Uus Paradigmi süsteemis."
+msgstr "Nexuse Sissetungija Programm oli Uue Paradigma süsteemis."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -372,18 +372,18 @@ msgstr "Me salvestasime sellest kaks vestlust, väljavõte järgneb..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr "Me hoiame sind edasiste saavutustega kursis"
+msgstr "Me hoiame sind edasiste arengutega kursis"
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr "Komandör, sa lähed abistama Rühm Beetat"
+msgstr "Komandör, sa pead aitama Beeta Tiimi"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr "BEETA BAASI MISSIOON: Ida Sector"
+msgstr "BEETA BAASI MISSIOON: Ida Sektor"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
@@ -409,29 +409,29 @@ msgstr "Kindlusta perimeeter ja raja õhutõrje kaitseid."
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr "Uued tehnoloogiad kasutatavad."
+msgstr "Uued tehnoloogiad saadaval."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Me tuvastame hetkel kodeeritud signaale."
+msgstr "Me tuvastame hetkel kodeeritud bitivoogude signaale."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr "Kodeerimine..."
+msgstr "Dekodeerimine..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "TRANSPORDI MISSIOON: Transport All"
+msgstr "TRANSPORDI MISSIOON: Transport Maas"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr "Meie transport, mis kandis üksusi Alfa Baasist lasti alla."
+msgstr "Meie transport, mis kandis üksusi Alfa Baasist, lasti alla."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr "See on selles asukohas Collectivite rünnaku all."
+msgstr "See on selles asukohas Kollektiivi rünnaku all."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
@@ -439,19 +439,19 @@ msgstr "Kogu kokku päästerühm et päästa transport ja selle laadung."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr "ÕHUS BRIIFING"
+msgstr "LENNUAEGNE BRIIFING"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "Rühm Beeta otsib Vertikaalse Õhkutõusu ja Maandumis (VTOL) tehnoloogiat."
+msgstr "Beeta TIim otsib VTOL (Vertikaalse Õhkutõusu ja Maandumise) tehnoloogiat."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr "See arvatakse olevat Kollapsieelsel lennuväljal selles piirkonnas."
+msgstr "Seda arvatakse olevat Kollapsieelsel lennuväljal selles piirkonnas."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr "Rühm Beeta on raske rünnaku all"
+msgstr "Beeta Tiim on suure rünnaku all"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
@@ -463,11 +463,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr "BEETA BAASI MISSIOON: Vastupidada iga hinnaga"
+msgstr "BEETA BAASI MISSIOON: Vastupidada Iga Hinnaga"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr "Me tuvastame põhja-pool maa-ja õhuvägesid."
+msgstr "Me tuvastame maa- ja õhuvägesid meist põhjas."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
@@ -479,7 +479,7 @@ msgstr "TRANSPORDI MISSIOON: Püüa konvoi kinni."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "Info Collectivite baasist näitab NEXUSe sissetungi programmi kohalolu."
+msgstr "Info Kollektiivi baasist näitab NEXUS'e sissetungija programmi kohalolu."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
@@ -487,19 +487,19 @@ msgstr "Enne kui NEXUS end välja lülitas, pääsesime me ligi järgnevale."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr "Vaenlase komandör kogub selles asukohas NEXUSe saadetist."
+msgstr "Vaenlase komandör kogub selles asukohas NEXUS'e saadetist."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr "Kord Maandumis Tsoonis, hävita vaenlase komandör ja omasta saadetis."
+msgstr "Kord maandumistsoonis, hävita vaenlase komandör ja omasta saadetis."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr "Seejärel naase Maandumis Tsooni."
+msgstr "Seejärel naase maandumistsooni."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr "Rahutukstegevad uudised mis puudutavad NASDAt."
+msgstr "Häirivad uudised mis puudutavad NASDA't."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
@@ -516,20 +516,20 @@ msgstr "Me avastasime teise konvoi liikudes pikki jõge."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr "Saa pead konvoi hävitama ja lasti omastama."
+msgstr "Sa pead konvoi hävitama ja lasti omastama."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Vaenlse VTOLidlendavad tõenäoliselt eskordi lähedal."
+msgstr "Vaenlse VTOL'id lendavad tõenäoliselt eskordi lähedal."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr "TRANSPORDI MISSIOON: Päästa tsiviilisikud Ohjeldamis Laagrist"
+msgstr "TRANSPORDI MISSIOON: Päästa tsiviilisikud Ohjeldamislaagrist"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "Collectivid hoiavad ja uurivad tsiviilisikuid Selles Baasis."
+msgstr "Kollektiiv hoiab ja uurib tsiviilisikuid selles baasis."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
@@ -541,15 +541,15 @@ msgstr "Siis hävita laager."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "BEETA BAASI MISSIOON: Hävita Vaenlase Õhu Baas ja Omasta VTOLid."
+msgstr "BEETA BAASI MISSIOON: Hävita Vaenlase Õhubaas ja Omasta VTOL'id."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Lennumasruudi analüüs näitab, et Collectivite VTOLid pärinevad siit."
+msgstr "Lennumarsruudi analüüs näitab, et Kollektiivi VTOL'id pärinevad siit."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "BEETA BAASI MISSIOON: Hävita vaenlase Õhu Baas ja Omasta VTOLid"
+msgstr "BEETA BAASI MISSIOON: Hävita Vaenlase Õhubaas ja Omasta VTOL'id"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -557,24 +557,24 @@ msgstr "Vaenlase lennuvälja asukoht on siin; see on sinu peamine eesmärk."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Hävita kõik Collectivite väed ja omasta kõik artefaktid."
+msgstr "Hävita kõik Kollektiivi väed ja omasta kõik artefaktid."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr "TEISEJÄRGULINE MISSIOON: Hävita või Kihuta Vaenlase Transport Minema"
+msgstr "TEISEJÄRGULINE MISSIOON: Hävita või Aja Vaenlase Transport Minema"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr "Collectivid ajavad kõiki selle piirkonna tsiviilisikud kokku."
+msgstr "Kollektiiv ajab kõik selle piirkonna tsiviilisikud kokku."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr "Siis lennutavad nad nad tundmatusse asukohta."
+msgstr "Siis lennutavad nad need isikud tundmatusse asukohta."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr "Hävita või aja Collectivite transport minema."
+msgstr "Hävita või aja Kollektiivi transport minema."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
@@ -583,11 +583,11 @@ msgstr "Päästa niipalju tsiviilisikuid kui võimalik."
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr "TRANSPORDI MISSIOON: Hävita Reactor"
+msgstr "TRANSPORDI MISSIOON: Hävita Reaktor"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr "Collectieid otsivad tuumareactorite kohta teadmisi."
+msgstr "Kollektiiv otsib tuumareaktorite kohta teadmisi."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
@@ -595,33 +595,33 @@ msgstr "Nad tuleb peatada."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr "Mine Maandumis Tsoonist reactorini ja hävita see."
+msgstr "Mine maandumistsoonist reaktorini ja hävita see."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr "Ära lase Collectivitel reactorit käivitada."
+msgstr "Ära lase Kollektiivil reaktorit käivitada."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr "BEETA BAASI MISSIOON: Valluta NASDA Keskjaam"
+msgstr "BEETA BAASI MISSIOON: Valluta NASDA Juhtjaam"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr "Valluta NASDA keskjaam enne kui NEXUS või Collectivid seda kasutada jõuavad."
+msgstr "Valluta NASDA keskjaam enne kui NEXUS või Kollektiiv seda kasutada jõuavad."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "TRANSPORDI MISSION: Satelliidi Üleslaadimis Jaam"
+msgstr "TRANSPORDI MISSION: Satelliidi Üleslaadimisjaam"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr "NEXUS otsib veel toimivaid mälu varusid."
+msgstr "NEXUS otsib veel toimivaid mälupanku."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr "Osa selle teadlikusest viidi üle kaugele NASDA kontroll-jaama."
+msgstr "Osa selle teadlikkusest viidi üle kaugele NASDA kontrolljaama."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
@@ -629,7 +629,7 @@ msgstr "Me tuvastame sellest jaamast ülekandeid mis jõuavad kõrgele orbiidile
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr "NEXUS on end nüüd NASDA satelliitidega taasühendanud."
+msgstr "NEXUS on end nüüd NASDA satelliitidega uuesti ühendanud."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
@@ -641,15 +641,15 @@ msgstr "Hävita jaam ja naase oma baasi."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr "TRANSPORDI MISSIOON: Hävita Vaenlase SAM Peasad"
+msgstr "TRANSPORDI MISSIOON: Hävita Vaenlase SAM Pesad"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Kui saa tahad pääseda, hävita oma baasi ümbert maa-õhk tüüpi rakettide pesad."
+msgstr "Kui sa tahad põgeneda, hävita oma baasi ümbert maa-õhk tüüpi rakettide pesad."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Lenda Mandumis Tsooni, seejärel hävita SAM pesad."
+msgstr "Lenda maandumistsooni, seejärel hävita SAM pesad."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
@@ -670,7 +670,7 @@ msgstr "Hävita mistahes vaenlased ja kindlusta piirkond."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr "Kui turvaline pelgupaik on rajatud, naase Maandumis Tsooni edasisteks käskudeks."
+msgstr "Kui turvaline pelgupaik on rajatud, naase maandumistsooni edasisteks käskudeks."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
@@ -688,7 +688,7 @@ msgstr "Alfa baas on tuumapommi poolt hävitatud."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr "Collectivid ei ole tuumarünnakust teadlikud ja nende õhuväed suunduvad su baasi poole."
+msgstr "Kollektiiv ei ole tuumarünnakust teadlik ja nende õhuväed suunduvad su baasi poole."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
@@ -707,7 +707,7 @@ msgstr "Head õnne, Komandör."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr "TRANSPORDI MISSION: Põhja Sector"
+msgstr "TRANSPORDI MISSION: Põhja Sektor"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
@@ -726,16 +726,16 @@ msgstr "Vii oma väed Põhja Sektorisse"
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr "Kord juba mägedes kindlusta Maandumis Tsoon. Siis raja edasine baas."
+msgstr "Kord mägedes, kindlusta maandumistsoon. Siis raja edasine baas."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr "Rühm Gamma võtab sinuga seal ühendust."
+msgstr "Gamma Tiim võtab sinuga seal ühendust."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr "TRANSPORDI MISSIOON: Raja Edasine Baas"
+msgstr "TRANSPORDI MISSIOON: Raja Esioperatsioonibaas"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:5
@@ -744,24 +744,24 @@ msgstr "Komandör, Projekti edukus sõltub sinust."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr "Kindlusta Mandumis Tsoon, siis raja edasine baas."
+msgstr "Kindlusta maandumistsoon, siis raja edasine baas."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr "TRANSPORDI NISSIOON: Rakettide Laskmis Jaama Kordinaadid"
+msgstr "TRANSPORDI MISSIOON: Rakettide Käivitusjaama Koordinaadid"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
-msgstr "Me oleme leidnud rakettide laskmis jaama."
+msgstr "Me oleme leidnud rakettide käivitujaama."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
-msgstr "Seal NASDA jaamas on üks või rohkem rakette."
+msgstr "Seal NASDA jaamas oli üks või rohkem rakette."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "Me saadame silode lähedal asuva Maandumis Tsooni kordinaadid."
+msgstr "Me saadame hoidlate lähedal asuva maandumistsooni koordinaadid."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
@@ -771,12 +771,12 @@ msgstr "Kordinaatide Allalaadimine Lõpetatud."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr "Kindlusta oma Maandumis Tsoon, siis hävita rakettide silod."
+msgstr "Kindlusta oma maandumistsoon, siis hävita raketihoidlad."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr "PÕHJA SEKTORI MISSIOON: Tuuma Plahvatus"
+msgstr "PÕHJAPOOLSE SEKTORI MISSIOON: Tuumaplahvatus"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
@@ -784,7 +784,7 @@ msgstr "Kõik üksused peavad piirkonnast põgenema enne kui lõhkepea plahvatab
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr "Õhuküüt transpordiga pole võimalik.Sa pead minema maadmõõda."
+msgstr "Õhkutõus transpordiga pole võimalik. Sa pead minema maad mööda."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
@@ -796,11 +796,11 @@ msgstr "Org on ainus võimalus pääsemiseks."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr "ÄRA RÜHMA UUENDUS"
+msgstr "VÕÕRSIL MEESKONNA UUENDUS"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "Kogu side kadus ära rühmaga pärast tuumaplahavatust."
+msgstr "Kogu side kadus võõrsil tiimiga pärast tuumaplahavatust."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
@@ -808,27 +808,27 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr "PÕHJA SEKTORI MISSIOON: Abista Rühm Gammat"
+msgstr "PÕHJA SEKTORI MISSIOON: Abista Gamma Tiimi"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr "Sa pead abistama Rühm Gammat."
+msgstr "Sa pead abistama Gamma Tiimi."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "Jõudes Gamma Baas, aita piirkonda edasiste NEXUSe rünnakute eest kindlustada."
+msgstr "Jõudes Gamma Baasi, aita piirkonda edasiste NEXUS'e rünnakute eest kindlustada."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
-msgstr "NEXUS VÕIDETUD"
+msgstr "NEXUS HÄVITATUD"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
-msgstr "Komandör, me oleme NEXUSe võitnud."
+msgstr "Komandör, me oleme NEXUS'e võitnud."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr "Kahjuks, meie süsteemide jõudlus on NEXUSe poolt mõjutatud. Me proovimeneid asju joonde ajada."
+msgstr "Kahjuks, meie süsteemide jõudlus on NEXUS'e poolt mõjutatud. Me proovime neid parandada."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
@@ -836,19 +836,19 @@ msgstr "Me saime hetkel selle ülekande."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr "TRANSPORDI MISSIOON: Rühm Alfa Avastatud"
+msgstr "TRANSPORDI MISSIOON: Alfa Tiim Avastatud"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Vii luurerühm nendele kordinaatidele ja evakueeri olukord."
+msgstr "Vii luurerühm nendele koordinaatidele ja evakueeri olukord."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr "Tuvasta kas nad on Rühm Alfa. Kui nii, päästa ja eskordi nad tagasi Maandumis Tsooni"
+msgstr "Tuvasta kas nad on Alfa Tiim. Kui nii, päästa ja eskordi nad tagasi maandumistsooni."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr "See grupp on osa Rühm Alfast, Päästa nad ja eskordi nad tagasi Maandumi Tsooni."
+msgstr "See grupp on osa Alfa Tiimist. Päästa nad ja eskordi nad tagasi maandumistsooni."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -856,7 +856,7 @@ msgstr "PÕHJA SEKTORI MISSIOON: Rühm Alfa Küsitlemine"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
-msgstr "Rühm Alfa energia trantsportimine käimas."
+msgstr "Alfa Tiimi jõuülekanne käimas."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
@@ -868,31 +868,31 @@ msgstr "Selle uurimise väärtus oleks tohutu."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr "Vaenlase väed on ....... nendel kordinaatidel"
+msgstr "Vaenlase väed on ....... nendel koordinaatidel."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr "Kaitse Baasi ja ............... "
+msgstr "Kaitse baasi ja......."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
-msgstr "Leia ja hävita .... "
+msgstr "Leia ja hävita...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr "TRANSPORDI MISSIOON: Varitse NEXUSe Vägesid"
+msgstr "TRANSPORDI MISSIOON: Varitse NEXUS'e Vägesid"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr "Komandör, teie määravad teod peatasid NEXUSe leviku."
+msgstr "Komandör, teie määravad teod peatasid NEXUS'e leviku."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr "Enne kui NEXUS välja tõrjuti, püüdsime me kinni selle sõnumi - Dekoteerimine Lõpetatud."
+msgstr "Enne kui NEXUS välja tõrjuti, püüdsime me kinni selle sõnumi - Dekodeerimine lõpetatud."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr "NEXUSe ülesanderühm suundub nendele kordinaatidele."
+msgstr "NEXUS'e ülesanderühm suundub nendele koordinaatidele."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
@@ -900,15 +900,15 @@ msgstr "Teil on võimalus hävitada NEXUS enne kui nad sinna jõuavad."
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr "Võta rünnakurühm ja varitse NEXUSe ülesanderühma  .............."
+msgstr "Võta rünnakurühm ja varitse NEXUS'e ülesanderühma......."
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr "TRANSPORDI MISSIOON: Ära Rühm"
+msgstr "TRANSPORDI MISSIOON: Võõrsil Tiim"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
-msgstr "Komandör, teie rünnak ...."
+msgstr "Komandör, teie rünnak...."
 
 #: data/base/messages/strings/cam3strings.txt:98
 msgid "NEXUS exiting system."
@@ -916,11 +916,11 @@ msgstr "NEXUS väljub süsteemist."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr "Sissetulev ülekanne ära rühmalt."
+msgstr "Sissetulev ülekanne võõrsil tiimilt."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
-msgstr "Komandör, me proovime baasi naasda."
+msgstr "Komandör, me proovime baasi naasta."
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
@@ -936,7 +936,7 @@ msgstr "Kontrolli ülekanne õnnestunud."
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
-msgstr "Sinenemine uude tsooni."
+msgstr "Sisenemine uude tsooni."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
@@ -944,31 +944,31 @@ msgstr "Sissetulev Ülekanne..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr "Rühm Gamma elemendid on meiega kontakteerunud."
+msgstr "Gamma Tiimi elemendid on meiega kontakteerunud."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr "Nad väidavad end NEXUSest vabad olema ja pakkuvad oma baasi operatsiooni kohana."
+msgstr "Nad väidavad end NEXUS'est vabad olema ja pakuvad oma baasi operatsiooni kohana."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr "Baasi kordinaatide allalaadimine käimas."
+msgstr "Baasi koordinaatide allalaadimine käimas."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr "PÕHJA SEKTORI MISSIOON: Laser Satelliit"
+msgstr "PÕHJA SEKTORI MISSIOON: Lasersatelliidid"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
-msgstr "Me tuvastame võimast energia purset orbiidilt."
+msgstr "Me tuvastame võimast energiapurset orbiidilt."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr "Laser Satelliidid on laetud ja liiguvad meie positsiooni suunas."
+msgstr "Lasersatelliidid on laetud ja liiguvad meie positsiooni suunas."
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
-msgstr "Teine Rühm Gamma baas asub siin."
+msgstr "Teine Gamma Tiimi baas asub siin."
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
@@ -976,11 +976,11 @@ msgstr "Meil on limiteeritud aeg, et see baas evakueerida ja liikuda Gamma Baasi
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr "Lasersatelliidid ei tööta korralikult, nad lasevad mõõda."
+msgstr "Lasersatelliidid ei tööta korralikult, nad lasevad mööda."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
-msgstr "Nad suunavad oma tule otse siia."
+msgstr "Nad suunavad oma tule sellele positsioonile."
 
 #: data/base/messages/strings/cam3strings.txt:132
 msgid "We will need to evacuate this base shortly."
@@ -988,32 +988,32 @@ msgstr "Me peame selle baasi varsti evakueerima."
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
-msgstr "Rühm Gamma raporteerib, et raketi silod on selles asukohas."
+msgstr "Gamma Tiim raporteerib, et raketihoidlad on selles asukohas."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr "Nad usuvad, et silodes on raketid, mis suudavad lennata orbiidile."
+msgstr "Nad usuvad, et hoidlates on raketid, mis suudavad lennata orbiidile."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
-msgstr "Valluta see silo iga hinnaga."
+msgstr "Hõiva see hoilda iga hinnaga."
 
 #: data/base/messages/strings/cam3strings.txt:140
 msgid "Missile silos captured."
-msgstr "Raketisilod vallutatud."
+msgstr "Raketisilod hõivatud."
 
 #: data/base/messages/strings/cam3strings.txt:143
 #: data/base/messages/strings/cam3strings.txt:161
 msgid "NORTHERN SECTOR MISSION: Missile Codes"
-msgstr "PÕHJA SEKTORI MISSIOON: Rakettide Koodid"
+msgstr "PÕHJA SEKTORI MISSIOON: Raketikoodid"
 
 #: data/base/messages/strings/cam3strings.txt:144
 msgid "Commander, there are missiles present at the silos."
-msgstr "Komandör, silodes on raketid."
+msgstr "Komandör, hoidlates on raketid."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr "Nexus takistab juuredpääsu raketikoodidele."
+msgstr "Nexus takistab juurdepääsu raketikoodidele."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
@@ -1021,7 +1021,7 @@ msgstr "NEXUS on meie süsteemis."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr "Et NEXUSt võita, peame me uurima Nexuse Sissetungi Programmi."
+msgstr "Et NEXUS't võita, peame me uurima Nexuse Sissetungija Programmi."
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
@@ -1029,7 +1029,7 @@ msgstr "Määra see ülesanne uurimiskeskusele."
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
-msgstr "NEXUSe väed avastatud nendes asukohtades."
+msgstr "NEXUS'e väed avastatud nendes asukohtades."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
@@ -1037,19 +1037,19 @@ msgstr "NEXUS on kõigist Projekti süsteemidest välja juuritud."
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
-msgstr "Me proovime raketikontroll koodidele juuredpääsu tagada."
+msgstr "Me proovime raketikontrolli koodidele juurdecpääsu leida."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr "Vaja on Uurimisjama, et coode murda. Reserveeri üks koheselt."
+msgstr "Vaja on uurimiskeskust, et koode murda. Määra üks koheselt."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr "Kaitse raketisilosid NEXUSe rünnakute eest."
+msgstr "Kaitse raketihoidlaid NEXUSe' rünnakute eest."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr "PROJEKTI UUENDUS: Esimese Leveli Raketikood Murtud."
+msgstr "PROJEKTI UUENDUS: Esimese Taseme Raketikood Murtud."
 
 #: data/base/messages/strings/cam3strings.txt:167
 msgid "Missile arming in progress."
@@ -1061,7 +1061,7 @@ msgstr "Veel uurimist on vaja, et jätkata."
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr "PROKEKTI UUENDUS: Teise Astme Raketikoodid Murtud."
+msgstr "PROJEKTI UUENDUS: Teise Astme Raketikood Murtud."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
@@ -1069,43 +1069,43 @@ msgstr "Rakettide sihtimisprogramm käivitatud."
 
 #: data/base/messages/strings/cam3strings.txt:173
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr "Kui Kolmanda astme koodid on murtud, siis alustame stardi protseduuridega."
+msgstr "Kui kolmanda astme koodid on murtud, siis alustame stardiprotseduuridega."
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr "PROJEKTI UUENDUS: Kolmanda Astme Raketikoodid Murtud."
+msgstr "PROJEKTI UUENDUS: Kolmanda Astme Raketikood Murtud."
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
-msgstr "Raketistardi tsükkel alganud."
+msgstr "Raketistardi tsükkel algatatud."
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
-msgstr "TRANSPORDI MISSIOON: Ründa NEXUSe Viimast Baasi"
+msgstr "TRANSPORDI MISSIOON: Ründa NEXUS'e Viimast Baasi"
 
 #: data/base/messages/strings/cam3strings.txt:181
 msgid "We have located NEXUS' base at this location."
-msgstr "Me oleme avastanud NEXUSe baasi selles asukohas."
+msgstr "Me oleme avastanud NEXUS'e baasi selles asukohas."
 
 #: data/base/messages/strings/cam3strings.txt:184
 msgid "This area contains numerous NEXUS structures."
-msgstr "See piirkond sisaldab arvukald NEXUSe ehitisi."
+msgstr "See piirkond sisaldab arvukaid NEXUS'e ehitisi."
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr "Me oleme kindlad, et NEXUSe tuumasüsteemid asuvad siin."
+msgstr "Me oleme kindlad, et NEXUS'e põhisüsteemid asuvad siin."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr "Raja Maandumis Tsoon."
+msgstr "Raja maandumistsoon."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
-msgstr "Alusta oma rünnakuid NEXUSe vastu. Sa pead hävitama ta tuumasüsteemi."
+msgstr "Alusta oma rünnakuid NEXUSe' vastu. Sa pead hävitama ta põhisüsteemi."
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
-msgstr "Sissetulev luureraport... Rühm Gamma"
+msgstr "Sissetulev luureraport... Gamma Tiim"
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
@@ -1129,7 +1129,7 @@ msgstr "Energiapurske Allikas"
 
 #: data/base/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
-msgstr "Maandumis Tsoon"
+msgstr "Maandumistsoon"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
@@ -1142,7 +1142,7 @@ msgstr "Kollapsieelne Uurimiskeskus"
 
 #: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
-msgstr "Suundu Missiooni Paika"
+msgstr "Teel Missiooni Saidile"
 
 #: data/base/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
@@ -1154,7 +1154,7 @@ msgstr "Missioon Õnnestunud"
 
 #: data/base/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
-msgstr "Vaenlase Maandumis Tsoon"
+msgstr "Vaenlase Maandumistsoon"
 
 #: data/base/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
@@ -1162,7 +1162,7 @@ msgstr "Vaenlase Baas"
 
 #: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
-msgstr "Sissetulev Ülekanne"
+msgstr "Sissetulev ülekanne"
 
 #: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
@@ -1175,12 +1175,12 @@ msgstr "Tuumareaktor"
 #: data/base/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr "Uus Konstruktsioon"
+msgstr "Uus Disain"
 
 #: data/base/messages/strings/names.txt:103
 #: data/mp/messages/strings/names.txt:160
 msgid "Cyborg Cannon"
-msgstr "Küborg Kahur"
+msgstr "Küborgi Kahur"
 
 #: data/base/messages/strings/names.txt:149
 #: data/base/messages/strings/names.txt:182
@@ -1201,13 +1201,13 @@ msgstr "Laevastik"
 #: data/mp/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:710
 msgid "Repair Center"
-msgstr "Remontimis Keskus"
+msgstr "Remontimiskeskus"
 
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:307
 #: data/mp/messages/strings/names.txt:389
 msgid "Tornado AA Flak Site"
-msgstr "Tornaado AA Õhutõrjekahur"
+msgstr "Tornaado AA Õhutõrjepatarei"
 
 #: data/base/messages/strings/names.txt:204
 #: data/base/messages/strings/names.txt:205
@@ -1216,7 +1216,7 @@ msgstr "Tornaado AA Õhutõrjekahur"
 #: data/mp/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:403
 msgid "Dragon's Teeth"
-msgstr "Draakoni hammas"
+msgstr ",,Dragon's Teeth''"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Howitzer.name
@@ -1264,7 +1264,7 @@ msgstr "Pommitaja Paigaldus"
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
 msgid "Pepperpot Emplacement"
-msgstr "Kiirtulemortiiri Paigaldus"
+msgstr ",,Pepperpot'' Paigaldus"
 
 #: data/base/messages/strings/names.txt:237
 #: data/base/messages/strings/names.txt:405
@@ -1276,17 +1276,17 @@ msgstr "Tornaado Õhutõrjetorn"
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:289
 msgid "Proximity Bomb Turret"
-msgstr "Läheduspommide torn"
+msgstr "Läheduspommide Torn"
 
 #: data/base/messages/strings/names.txt:248
 #: data/mp/messages/strings/names.txt:290
 msgid "Proximity Superbomb Turret"
-msgstr "lähedussupperpommide torn"
+msgstr "Lähedussupperpommide Torn"
 
 #: data/base/messages/strings/names.txt:287
 #: data/mp/messages/strings/names.txt:371
 msgid "Bunker Blaster Cyborg"
-msgstr "Punkripuhur Küborg"
+msgstr "Punkrihävitaja Küborg"
 
 #: data/base/messages/strings/names.txt:289
 msgid "Jump Bunker Blaster"
@@ -1298,7 +1298,7 @@ msgstr "Hüppav Raskekahuriväelane"
 
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
-msgstr "Hüppav Lancer"
+msgstr "Hüppav ,,Lancer''"
 
 #: data/base/messages/strings/names.txt:292
 msgid "Jump Assault Gunner"
@@ -1306,15 +1306,15 @@ msgstr "Hüppav Ründeväelane"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
-msgstr "Hüppav Nõelaväelane"
+msgstr "Hüppav ,,Needle'' -väelane"
 
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
-msgstr "Hüppav Scourge"
+msgstr "Hüppav ,,Scourge''"
 
 #: data/base/messages/strings/names.txt:295
 msgid "Jump Flashlight Gunner"
-msgstr "Hüppav Välkvalgusväelane"
+msgstr "Hüppav ,,Flashlight'' -väelane"
 
 #: data/base/messages/strings/names.txt:297
 msgid "Cyborg Jump Pack"
@@ -1362,7 +1362,7 @@ msgstr "Raskekuulipilduja Punker"
 #: data/mp/messages/strings/names.txt:398
 #: po/custom/fromJson.txt:2122
 msgid "Flashlight Emplacement"
-msgstr "Välkvalguse Paigaldus"
+msgstr ",,Flashlight'' Paigaldus"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower03.name
@@ -1385,7 +1385,7 @@ msgstr "Leegiheitja Valvetorn"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
-msgstr "Lancer Valvetorn"
+msgstr ",,Lancer'' Valvetorn"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.WallTower05.name
@@ -1394,7 +1394,7 @@ msgstr "Lancer Valvetorn"
 #: data/mp/messages/strings/names.txt:410
 #: po/custom/fromJson.txt:2090
 msgid "Flamer Hardpoint"
-msgstr "Leegiheitja Hardpoint"
+msgstr "Leegiheitja Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
@@ -1441,7 +1441,7 @@ msgstr "Arenenud Remontimiskeskuse Uuendus Mk3"
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:442
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Robootiline VTOLide Laadimine Mk4"
+msgstr "Robootiline VTOL'ide Laadimine Mk4"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:450
@@ -1567,17 +1567,17 @@ msgstr "VTOL Strike Uuendus Mk3"
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:487
 msgid "Improved Scrambler"
-msgstr "Täiustunud Skrambler"
+msgstr "Täiustatud ,,Scrambler''"
 
 #: data/base/messages/strings/names.txt:386
 #: data/mp/messages/strings/names.txt:488
 msgid "Scrambler Turret Mk2"
-msgstr "Skrambler Torn Mk2"
+msgstr ",,Scrambler'' Torn Mk2"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:495
 msgid "Sensor Lock"
-msgstr "Sensor Lukustatud"
+msgstr "Sensori Lukustus"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:529
@@ -1607,7 +1607,7 @@ msgstr "HEAP Rakettide Lõhkepea Mk3"
 #: data/base/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:545
 msgid "Improved Missile Loading System"
-msgstr "Täiustunud Rakettide Laadimis Süsteem"
+msgstr "Täiustunud Rakettide Laadimissüsteem"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:553
@@ -1649,26 +1649,26 @@ msgstr "Küborgi Laboratoorium"
 #: data/base/messages/strings/names.txt:488
 #: data/mp/messages/strings/names.txt:616
 msgid "Advanced Warfare Laboratory"
-msgstr "Arenenud Sõja Laboratoorium"
+msgstr "Arenenud Sõjanduse Laboratoorium"
 
 #: data/base/messages/strings/names.txt:489
 #: data/base/messages/strings/names.txt:505
 #: data/mp/messages/strings/names.txt:617
 #: data/mp/messages/strings/names.txt:633
 msgid "Engineering Laboratory"
-msgstr "Ehitus Laboratoorium"
+msgstr "Inseneerinduse Laboratoorium"
 
 #: data/base/messages/strings/names.txt:490
 #: data/base/messages/strings/names.txt:506
 #: data/mp/messages/strings/names.txt:618
 #: data/mp/messages/strings/names.txt:634
 msgid "Robotics Laboratory"
-msgstr "Robootiline Laboratoorium"
+msgstr "Robootika Laboratoorium"
 
 #: data/base/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:619
 msgid "Laser Optics Laboratory"
-msgstr "Laseri Optika Laboratoorium"
+msgstr "Laseroptika Laboratoorium"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:504
@@ -1687,12 +1687,12 @@ msgstr "Keemia Laboratoorium"
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:629
 msgid "Advanced Warfare"
-msgstr "Arenenud Lahingutegevus"
+msgstr "Arenenud Sõjandus"
 
 #: data/base/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:705
 msgid "Bunker Blaster"
-msgstr "Punkriõhkija"
+msgstr "Punkripurustaja"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[0]
@@ -1703,7 +1703,7 @@ msgstr "Punkriõhkija"
 #: data/mp/messages/strings/resstrings.txt:1
 #: po/custom/fromJson.txt:1657
 msgid "Cyborg Materials Improved"
-msgstr "Küborgi Materjalid Täiustunud"
+msgstr "Küborgi Täiustatud Materjalid"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYMET4.text[1]
@@ -1740,7 +1740,7 @@ msgstr "Suurendab Kineetilist Soomust ja Kere Punkte"
 #: data/mp/messages/strings/resstrings.txt:9
 #: po/custom/fromJson.txt:303
 msgid "All Cyborgs upgraded automatically"
-msgstr "Kõik Küborgid uuendati automaatslt"
+msgstr "Kõik Küborgid täiendatud automaatselt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[0]
@@ -1751,7 +1751,7 @@ msgstr "Kõik Küborgid uuendati automaatslt"
 #: data/mp/messages/strings/resstrings.txt:6
 #: po/custom/fromJson.txt:1708
 msgid "Cyborg Thermal Armor Improved"
-msgstr "Küborgide Soojus-Soomus Täiustunud"
+msgstr "Küborgite Soojus-Soomus Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[1]
@@ -1771,7 +1771,7 @@ msgstr "Kuumakindel soomustatud kiht"
 #: data/mp/messages/strings/resstrings.txt:8
 #: po/custom/fromJson.txt:5595
 msgid "Thermal Armor increased"
-msgstr "Soojus-Soomus suurenenud"
+msgstr "Soojus-Soomus suurendatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[0]
@@ -1784,7 +1784,7 @@ msgstr "Soojus-Soomus suurenenud"
 #: data/mp/messages/strings/resstrings.txt:16
 #: po/custom/fromJson.txt:4098
 msgid "New Cyborg Available"
-msgstr "Uus Küborg Kasutatv"
+msgstr "Uus Küborg Saadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
@@ -1795,7 +1795,7 @@ msgstr "Uus Küborg Kasutatv"
 #: data/mp/messages/strings/resstrings.txt:27
 #: po/custom/fromJson.txt:538
 msgid "Armed with Bunker Buster rocket"
-msgstr "Relvastatud PunkriHävitaja raketiga"
+msgstr "Relvastatud Punkrihävitaja raketiga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[3]
@@ -1824,7 +1824,7 @@ msgstr "Relvastatud PunkriHävitaja raketiga"
 #: data/mp/messages/strings/resstrings.txt:334
 #: po/custom/fromJson.txt:1198
 msgid "Body Points: Medium"
-msgstr "Kere Punktid: Keskmine"
+msgstr "Kere Punktid: Keskmine Tase"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[3]
@@ -1841,7 +1841,7 @@ msgstr "Kere Punktid: Keskmine"
 #: data/mp/messages/strings/resstrings.txt:29
 #: po/custom/fromJson.txt:4815
 msgid "Requires Cyborg factory to produce"
-msgstr "Vajab Küborgi tehast et toota"
+msgstr "Vajab Küborgitehast tootmiseks"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
@@ -1863,7 +1863,7 @@ msgstr "Relvastatud Küborgi Ründekuulipildujaga"
 #: data/mp/messages/strings/resstrings.txt:26
 #: po/custom/fromJson.txt:4129
 msgid "New Jump Cyborg Available"
-msgstr "Uus Hüppekübaorg Kasutatav"
+msgstr "Uus Hüppeküborg Saadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYW_MIS.text[1]
@@ -1872,7 +1872,7 @@ msgstr "Uus Hüppekübaorg Kasutatav"
 #: data/mp/messages/strings/resstrings.txt:22
 #: po/custom/fromJson.txt:612
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr "Relvastatud Kättemaksja Maa-Õhk rakettidega"
+msgstr "Relvastatud ,,Revenger'' Maa-Õhk rakettidega"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[0]
@@ -1883,7 +1883,7 @@ msgstr "Relvastatud Kättemaksja Maa-Õhk rakettidega"
 #: data/mp/messages/strings/resstrings.txt:31
 #: po/custom/fromJson.txt:1762
 msgid "Defenses Improved"
-msgstr "Kaitsed Täiustunud"
+msgstr "Kaitsed Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DF_WU4.text[1]
@@ -1892,7 +1892,7 @@ msgstr "Kaitsed Täiustunud"
 #: data/mp/messages/strings/resstrings.txt:32
 #: po/custom/fromJson.txt:2857
 msgid "High-tensile concrete reinforced with boron"
-msgstr "Kõrgeveniv betoon tugevntatud booriga"
+msgstr "Suure tõmbetugevusega betoon tugevdatud booriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[2]
@@ -1905,7 +1905,7 @@ msgstr "Kõrgeveniv betoon tugevntatud booriga"
 #: data/mp/messages/strings/resstrings.txt:198
 #: po/custom/fromJson.txt:3160
 msgid "Increases Armor and Body Points"
-msgstr "Suurendab Soomuse ja Kere Punkte"
+msgstr "Suurendab Soomuse ja Kere Elupuntke"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[3]
@@ -1977,7 +1977,7 @@ msgstr "Kõik kaitsed ja müürid uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:161
 #: po/custom/fromJson.txt:4108
 msgid "New Defensive Structure Available"
-msgstr "Uus Kaitsev Ehitis Kasutatav"
+msgstr "Uus Kaitseehitis Saadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA4.text[1]
@@ -1986,7 +1986,7 @@ msgstr "Uus Kaitsev Ehitis Kasutatav"
 #: data/mp/messages/strings/resstrings.txt:37
 #: po/custom/fromJson.txt:123
 msgid "AA Site with Tornado Flak Turret"
-msgstr "AA Plats Tornaado Õhutõrjetorniga"
+msgstr "AA Sait Tornaado Õhutõrjetorniga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[2]
@@ -2001,7 +2001,7 @@ msgstr "AA Plats Tornaado Õhutõrjetorniga"
 #: data/mp/messages/strings/resstrings.txt:53
 #: po/custom/fromJson.txt:1011
 msgid "Automatically targets VTOLs"
-msgstr "Sihib VTOLeid automaatselt"
+msgstr "Sihib VTOL'eid automaatselt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[3]
@@ -2053,7 +2053,7 @@ msgstr "Kaitseline Tugevus: Keskmine"
 #: data/mp/messages/strings/resstrings.txt:42
 #: po/custom/fromJson.txt:112
 msgid "AA Site with Cyclone Flak Turret"
-msgstr "AA Plats Tsükloni Õhutõrjetorniga"
+msgstr "AA Sait Tsükloni Õhutõrjetorniga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[1]
@@ -2062,7 +2062,7 @@ msgstr "AA Plats Tsükloni Õhutõrjetorniga"
 #: data/mp/messages/strings/resstrings.txt:47
 #: po/custom/fromJson.txt:116
 msgid "AA Site with Hurricane Gun Turret"
-msgstr "AA Plats Orkaani Relvatorniga"
+msgstr "AA Sait Orkaani Relvatorniga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[2]
@@ -2072,7 +2072,7 @@ msgstr "AA Plats Orkaani Relvatorniga"
 #: data/mp/messages/strings/resstrings.txt:48
 #: po/custom/fromJson.txt:1005
 msgid "Automatically targets VTOL"
-msgstr "Sihib VTOLit automaatselt"
+msgstr "Sihib VTOL'it automaatselt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA3.text[1]
@@ -2081,7 +2081,7 @@ msgstr "Sihib VTOLit automaatselt"
 #: data/mp/messages/strings/resstrings.txt:52
 #: po/custom/fromJson.txt:127
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr "AA Plats Keeristormi Relvatorniga"
+msgstr "AA Sait Keeristormi Relvatorniga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_IDFR.text[1]
@@ -2131,7 +2131,7 @@ msgstr "Soomustatud Pommitajapatarei kaevik"
 #: data/mp/messages/strings/resstrings.txt:67
 #: po/custom/fromJson.txt:775
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Soomustatud Kiirmortiiripatarei kaevik"
+msgstr "Soomustatud ,,Pepperpot'' patarei kaevik"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HOW.text[1]
@@ -2162,7 +2162,7 @@ msgstr "Soomustatud Maaväristajapaigaldus"
 #: data/mp/messages/strings/resstrings.txt:87
 #: po/custom/fromJson.txt:760
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr "Soomustatud Põrgutormi haubitsa paigaldus"
+msgstr "Soomustatud ,,Hellstorm'' haubitsa paigaldus"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVATR.text[1]
@@ -2171,7 +2171,7 @@ msgstr "Soomustatud Põrgutormi haubitsa paigaldus"
 #: data/mp/messages/strings/resstrings.txt:92
 #: po/custom/fromJson.txt:812
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr "Soomustatud kindlus TankiTapja raketiga"
+msgstr "Soomustatud kindlus Tankitapja raketiga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[2]
@@ -2199,7 +2199,7 @@ msgstr "Sihib ulatuses olevaid vaenlaseid automaatselt"
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:794
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Soomustatud kindlus Hüper-Kiire Kahuriga"
+msgstr "Soomustatud kindlus Hüperkiire Kahuriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[3]
@@ -2235,7 +2235,7 @@ msgstr "Kaitseline Tugevus: Suur"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:798
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Soomustatud kindlus Põrguleegiheitjaga"
+msgstr "Soomustatud kindlus ,,Inferno'' Leegiheitjaga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotCan.text[1]
@@ -2295,7 +2295,7 @@ msgstr "Soomustatud valvetorn Leegiheitjaga"
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Soomustatud valvetorn Lancer AT Raketiga"
+msgstr "Soomustatud valvetorn ,,Lancer AT'' Raketiga"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
@@ -2332,7 +2332,7 @@ msgstr "Soomustatud hardpoint Ründekahuriga"
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Soomustatud hardpoint Põrguleegiheitjaga"
+msgstr "Soomustatud hardpoint ,,Inferno'' Leegiheitjaga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -2341,7 +2341,7 @@ msgstr "Soomustatud hardpoint Põrguleegiheitjaga"
 #: data/mp/messages/strings/resstrings.txt:157
 #: po/custom/fromJson.txt:754
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Soomustatud hardpoint TankiTapja AT raketiga"
+msgstr "Soomustatud hardpoint Tankitapja AT raketiga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[1]
@@ -2350,7 +2350,7 @@ msgstr "Soomustatud hardpoint TankiTapja AT raketiga"
 #: data/mp/messages/strings/resstrings.txt:162
 #: po/custom/fromJson.txt:4744
 msgid "Reinforced concrete tank traps"
-msgstr "Kindluststud betoon tankilõksud"
+msgstr "Kindluststud betooniga tankilõksud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[2]
@@ -2413,7 +2413,7 @@ msgstr "Kõik parandamisekeskused uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:176
 #: po/custom/fromJson.txt:1663
 msgid "Cyborg Production Improved"
-msgstr "Küborgi Tootmine Täiustunud"
+msgstr "Küborgi Tootmine Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FCY4.text[1]
@@ -2422,7 +2422,7 @@ msgstr "Küborgi Tootmine Täiustunud"
 #: data/mp/messages/strings/resstrings.txt:172
 #: po/custom/fromJson.txt:4895
 msgid "Robotic Cyborg Production"
-msgstr "Robotiline Küborgi Tootmine"
+msgstr "Robotilise Küborgi Tootmine"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[2]
@@ -2448,7 +2448,7 @@ msgstr "Suurendab Küborgi tehase võimsust"
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:297
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Kõik Küborgi tehased uuentati automaatselt"
+msgstr "Kõik Küborgi tehased uuendati automaatselt"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
@@ -2465,7 +2465,7 @@ msgstr "Isekopeeriv Küborgi Tootmine"
 #: data/mp/messages/strings/resstrings.txt:186
 #: po/custom/fromJson.txt:5874
 msgid "Vehicle Production Improved"
-msgstr "Sõidukite Tootmine Täiustunud"
+msgstr "Sõidukite Tootmine Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[1]
@@ -2474,7 +2474,7 @@ msgstr "Sõidukite Tootmine Täiustunud"
 #: data/mp/messages/strings/resstrings.txt:182
 #: po/custom/fromJson.txt:4210
 msgid "New Robotic Techniques improve factory production"
-msgstr "Uus Robotilinetehnika täiustab tehasetootmist"
+msgstr "Uus Robottehnika täiustab tehasetootmist"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[2]
@@ -2494,7 +2494,7 @@ msgstr "Suurendab tehase tootmiskiirust"
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:426
 msgid "All vehicle factories upgraded automatically"
-msgstr "Kõik sõidukite tehased uuentati automaatselt"
+msgstr "Kõik sõidukite tehased uuendati automaatselt"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -2519,7 +2519,7 @@ msgstr "Suurendab tehase võimsust"
 #: data/mp/messages/strings/resstrings.txt:191
 #: po/custom/fromJson.txt:4839
 msgid "Research Improved"
-msgstr "Uurimine Täiustunud"
+msgstr "Uurimine Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_RU4.text[1]
@@ -2530,7 +2530,7 @@ msgstr "Uurimine Täiustunud"
 #: data/mp/messages/strings/resstrings.txt:192
 #: po/custom/fromJson.txt:1756
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr "Pühendunud Sünaptilise Liidese Andmete Analüüs"
+msgstr "Pühendatud Sünaptilise Lingi Andmete Analüüs"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[2]
@@ -2585,7 +2585,7 @@ msgstr "Karastatud Baasehitiste Materjalid"
 #: data/mp/messages/strings/resstrings.txt:199
 #: po/custom/fromJson.txt:273
 msgid "All base structures upgraded automatically"
-msgstr "Kõik baas ehitised uuendati automaatselt"
+msgstr "Kõik baasehitised uuendati automaatselt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[0]
@@ -2596,7 +2596,7 @@ msgstr "Kõik baas ehitised uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:201
 #: po/custom/fromJson.txt:4526
 msgid "Production Improved"
-msgstr "Tootmine Täiustunud"
+msgstr "Tootmine Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[1]
@@ -2638,7 +2638,7 @@ msgstr "Kõik VTOL tehased uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:206
 #: po/custom/fromJson.txt:6145
 msgid "VTOL Rearming Times Reduced"
-msgstr "VTOLite Laadimiseks Vajalik Aeg Vähendatud"
+msgstr "VTOL'ite Laadimiseks Vajalik Aeg Vähendatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[1]
@@ -2649,7 +2649,7 @@ msgstr "VTOLite Laadimiseks Vajalik Aeg Vähendatud"
 #: data/mp/messages/strings/resstrings.txt:207
 #: po/custom/fromJson.txt:973
 msgid "Automated VTOL Rearming"
-msgstr "Automaatne VTOLide Laadimine"
+msgstr "Automaatne VTOL'ide Laadimine"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -2682,7 +2682,7 @@ msgstr "Kõik laadimisplatvormid uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:226
 #: po/custom/fromJson.txt:4254
 msgid "New Systems Turret Available"
-msgstr "Uus süsteemitorn Kasutatav"
+msgstr "Uus Süsteemitorn Saadaval"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_REPTUHVY.text[1]
@@ -2700,7 +2700,7 @@ msgstr "Raskeremondi üksus"
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:988
 msgid "Automatically Repairs Damaged Units"
-msgstr "Parandab Kahjustunud Üksusu Automaatselt"
+msgstr "Parandab Kahjustunud Üksusi Automaatselt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
@@ -2715,12 +2715,12 @@ msgstr "Või kahjustatud üksusi võib valida kui sihtmärke"
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Research Breakthrough Improves Repair Speeds"
-msgstr "Uurimus Läbimurre Parandab Remontimis Kiirust"
+msgstr "Uuringute Läbimurre Parandab Remontimiskiirust"
 
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:218
 msgid "Increases repair speed"
-msgstr "Suurendab remontimis kirust"
+msgstr "Suurendab remontimiskirust"
 
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
@@ -2734,7 +2734,7 @@ msgstr "Kõik mobiilsed remondiüksused uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:221
 #: po/custom/fromJson.txt:3076
 msgid "Improved Sensor Tower Available"
-msgstr "Täiustunud Sensoritorn Kasutatav"
+msgstr "Täiustunud Sensoritorn Saadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[1]
@@ -2763,7 +2763,7 @@ msgstr "Asendab olemasoleva sensortorni"
 #: data/mp/messages/strings/resstrings.txt:224
 #: po/custom/fromJson.txt:3706
 msgid "May be assigned as spotter for indirect fire weapons"
-msgstr "Võib-olla määratud vaatlejana kaudsetulerelvade jaoks"
+msgstr "Võib-olla määratud vaatlejana kaudsete tulirelvade jaoks"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[1]
@@ -2772,7 +2772,7 @@ msgstr "Võib-olla määratud vaatlejana kaudsetulerelvade jaoks"
 #: data/mp/messages/strings/resstrings.txt:227
 #: po/custom/fromJson.txt:6008
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr "VTOL CB torn tuvastab vaenlase kaudsetulepatareid"
+msgstr "VTOL CB torn tuvastab vaenlase kaugtulepatareid"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[2]
@@ -2783,7 +2783,7 @@ msgstr "VTOL CB torn tuvastab vaenlase kaudsetulepatareid"
 #: data/mp/messages/strings/resstrings.txt:228
 #: po/custom/fromJson.txt:4385
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr "Käsib määratud VTOLidel vaenlase patareisid rünnata"
+msgstr "Käsib määratud VTOL'idel vaenlase patareisid rünnata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[3]
@@ -2794,7 +2794,7 @@ msgstr "Käsib määratud VTOLidel vaenlase patareisid rünnata"
 #: data/mp/messages/strings/resstrings.txt:229
 #: po/custom/fromJson.txt:6199
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "VTOLid ründavad kuni vaenlase patarei on hävitatud"
+msgstr "VTOL'id ründavad kuni vaenlase patarei on hävitatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[0]
@@ -2849,7 +2849,7 @@ msgstr "Kõik VTOL CB sensorid uuendati automaatelt"
 #: data/mp/messages/strings/resstrings.txt:236
 #: po/custom/fromJson.txt:6155
 msgid "VTOL Strike Improved"
-msgstr "VTOL Strike Täiustunud"
+msgstr "VTOL Strike Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[1]
@@ -2858,7 +2858,7 @@ msgstr "VTOL Strike Täiustunud"
 #: data/mp/messages/strings/resstrings.txt:237
 #: po/custom/fromJson.txt:4258
 msgid "New target recognition systems"
-msgstr "Uus sihtmärgi äratundmis süsteem"
+msgstr "Uus sihtmärgi äratundmissüsteem"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[2]
@@ -2885,22 +2885,22 @@ msgstr "Kõik VTOL Strike sensorid uuendati automaatselt"
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
 msgid "Scrambler Improved"
-msgstr "Skrambler Täiustunud"
+msgstr ",,Scrambler'' Täiustatud"
 
 #: data/base/messages/strings/resstrings.txt:512
 #: data/mp/messages/strings/resstrings.txt:242
 msgid "Improvement in synaptic link technology"
-msgstr "Täiustus sünaptilise liidese tehnoloogias"
+msgstr "Täiustus sünaptilise lingi tehnoloogias"
 
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
 msgid "Increases scrambler rate"
-msgstr "Suurendab skrambleri kiirust"
+msgstr "Suurendab ,,scrambler'' -i kiirust"
 
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "All scramblers upgraded automatically"
-msgstr "Kõik skramblerid uuendati automaatselt"
+msgstr "Kõik ,,scramber'' -id uuendati automaatselt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[0]
@@ -2909,7 +2909,7 @@ msgstr "Kõik skramblerid uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:246
 #: po/custom/fromJson.txt:1448
 msgid "Collective Light Body"
-msgstr "Collective Kerge Kere"
+msgstr "Kollektiivi Kerge Kere"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[1]
@@ -2947,7 +2947,7 @@ msgstr "Suur energiakulu ja aeglasem tootmine kui Viperil"
 #: data/mp/messages/strings/resstrings.txt:251
 #: po/custom/fromJson.txt:1452
 msgid "Collective Medium Body"
-msgstr "Collective Keskmine Kere"
+msgstr "Kollektiivi Keskmine Kere"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[1]
@@ -3057,7 +3057,7 @@ msgstr "Suurendab kineetilist soomust ja kerepunkte"
 #: data/mp/messages/strings/resstrings.txt:266
 #: po/custom/fromJson.txt:5902
 msgid "Vehicle Thermal Armor Improved"
-msgstr "Sõiduki Soojussoomus Täiustunud"
+msgstr "Sõiduki Soojussoomus Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[1]
@@ -3094,7 +3094,7 @@ msgstr "Suurendab Soojussoomust"
 #: data/mp/messages/strings/resstrings.txt:286
 #: po/custom/fromJson.txt:5880
 msgid "Vehicle Propulsion Improved"
-msgstr "Sõidukite Liikumissüsteem Täiustunud"
+msgstr "Sõidukite Liikumissüsteem Täiustatud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[1]
@@ -3139,7 +3139,7 @@ msgstr "Suurendab Kerepunkte"
 #: data/mp/messages/strings/resstrings.txt:274
 #: po/custom/fromJson.txt:325
 msgid "All half-tracks upgraded automatically"
-msgstr "Kõik pool-roomikud uuendati automaaatselt"
+msgstr "Kõik pool-roomikud uuendati automaatselt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_H2.text[3]
@@ -3189,7 +3189,7 @@ msgstr "Kõik rattad uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:306
 #: po/custom/fromJson.txt:4048
 msgid "New AA Turret Available"
-msgstr "Uus AA Torn Kasutatav"
+msgstr "Uus AA Torn Saadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[1]
@@ -3265,7 +3265,7 @@ msgstr "AA Uuendus"
 #: data/mp/messages/strings/resstrings.txt:312
 #: po/custom/fromJson.txt:1820
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr "Tuvastab ja lukustab VTOLid mootori emisiooni järgi"
+msgstr "Tuvastab ja lukustab VTOL'id mootori heidete järgi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[2]
@@ -3359,7 +3359,7 @@ msgstr "Suurendab AA Laskekiirust"
 #: data/mp/messages/strings/resstrings.txt:331
 #: po/custom/fromJson.txt:4182
 msgid "New Proximity Bomb Turret Available"
-msgstr "Uus Läheduspommi Torn Kasutatav"
+msgstr "Uus Läheduspommi Torn Saadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
@@ -3368,7 +3368,7 @@ msgstr "Uus Läheduspommi Torn Kasutatav"
 #: data/mp/messages/strings/resstrings.txt:327
 #: po/custom/fromJson.txt:1225
 msgid "Bomb turret explodes in proximity to enemy"
-msgstr "Pommitorn plahvatab vaenlaseläheduses"
+msgstr "Pommitorn plahvatab vaenlase läheduses"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[2]
@@ -3403,7 +3403,7 @@ msgstr "Supperpommitorn plahvatab vaenlase läheduses"
 #: data/mp/messages/strings/resstrings.txt:341
 #: po/custom/fromJson.txt:4083
 msgid "New Bomb Bay Available"
-msgstr "Uus pommisektsioon Kasutatav"
+msgstr "Uus pommisektsioon Saadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB1.text[1]
@@ -3412,7 +3412,7 @@ msgstr "Uus pommisektsioon Kasutatav"
 #: data/mp/messages/strings/resstrings.txt:337
 #: po/custom/fromJson.txt:1846
 msgid "Drops High Explosive Cluster bombs"
-msgstr "Kukutab Plahvatavade Pommide Parve"
+msgstr "Kukutab Suurte Lõhkeainetega Kobarpomme"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
@@ -3450,7 +3450,7 @@ msgstr "Kerepunktid: Madal"
 #: data/mp/messages/strings/resstrings.txt:342
 #: po/custom/fromJson.txt:1842
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr "Kukutab Plahvatavaid Soomustläbistavaid pomme"
+msgstr "Kukutab Plahvatavaid Soomust Läbistavaid pomme"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB2.text[2]
@@ -3463,7 +3463,7 @@ msgstr "Parimad Sihtmärgid: Kaitsed"
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:346
 msgid "Bombsight Upgrade"
-msgstr "Pommisihtimis Uuendus"
+msgstr "Pommisihtimisuuendus"
 
 #: data/base/messages/strings/resstrings.txt:714
 #: data/mp/messages/strings/resstrings.txt:347
@@ -3499,7 +3499,7 @@ msgstr "Kõik pommisektsioonid uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:361
 #: po/custom/fromJson.txt:4272
 msgid "New Weapon Turret Available"
-msgstr "Uus Relva Torn Kasutatav"
+msgstr "Uus Relva Torn Saadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN_4A.text[1]
@@ -3508,7 +3508,7 @@ msgstr "Uus Relva Torn Kasutatav"
 #: data/mp/messages/strings/resstrings.txt:352
 #: po/custom/fromJson.txt:2995
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "Hüper-kiire automaatne-kahur tulistab 88mm mürske"
+msgstr "Hüperkiire automaat-kahur tulistab 88mm mürske"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
@@ -3529,7 +3529,7 @@ msgstr "Parimad Sihtmärgid: Sõidukid"
 #: data/mp/messages/strings/resstrings.txt:354
 #: po/custom/fromJson.txt:4809
 msgid "Replaces Medium Cannon"
-msgstr "Asendab Keskkahuri"
+msgstr "Asendab Keskkahurit"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN5.text[1]
@@ -3538,7 +3538,7 @@ msgstr "Asendab Keskkahuri"
 #: data/mp/messages/strings/resstrings.txt:357
 #: po/custom/fromJson.txt:32
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "76mm hüper-kiire nelja-hülsiline automaatne-kahur"
+msgstr "76mm hüperkiire nelja-hülsiline automaat-kahur"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[3]
@@ -3558,7 +3558,7 @@ msgstr "Kere Punktid: Kõrge"
 #: data/mp/messages/strings/resstrings.txt:362
 #: po/custom/fromJson.txt:2559
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr "Raskeleegiheitja tulistab Propüleenioksiidi geeli"
+msgstr "Raskeleegiheitja tulistab Propüleenoksiid geeli"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[2]
@@ -3569,7 +3569,7 @@ msgstr "Raskeleegiheitja tulistab Propüleenioksiidi geeli"
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:1118
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Parimad Sihtmärgid: Punkrid, ratastega-ja hõljuksõidukid"
+msgstr "Parimad Sihtmärgid: Punkrid, ratastega- ja hõljuksõidukid"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -3627,7 +3627,7 @@ msgstr "Kõik leegiheitjad uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:411
 #: po/custom/fromJson.txt:4123
 msgid "New Indirect Fire Weapon Available"
-msgstr "Uus Kaudse Tule Relv Kasutatav"
+msgstr "Uus Kaudse Tule RelvSaadaval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HMK1.text[1]
@@ -3636,7 +3636,7 @@ msgstr "Uus Kaudse Tule Relv Kasutatav"
 #: data/mp/messages/strings/resstrings.txt:372
 #: po/custom/fromJson.txt:12
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr "105mm Haubits võib-olla määratud sensorile"
+msgstr "105mm Haubitsat saab määrata sensorile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
@@ -3649,7 +3649,7 @@ msgstr "105mm Haubits võib-olla määratud sensorile"
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1100
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr "Parimad Sihtmärgid: Baas Ehitised, jalavägi, ratastegasõidukid"
+msgstr "Parimad Sihtmärgid: Baas Ehitised, jalavägi, ratastega sõidukid"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3658,7 +3658,7 @@ msgstr "Parimad Sihtmärgid: Baas Ehitised, jalavägi, ratastegasõidukid"
 #: data/mp/messages/strings/resstrings.txt:377
 #: po/custom/fromJson.txt:20
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr "155mm Haubits võib-olla määratud sensoriga"
+msgstr "155mm Haubitsat saab määrata sensorile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_IHOW.text[1]
@@ -3667,7 +3667,7 @@ msgstr "155mm Haubits võib-olla määratud sensoriga"
 #: data/mp/messages/strings/resstrings.txt:382
 #: po/custom/fromJson.txt:8
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr "Süütepomme tulistav 105mm Haubits, võib-olla määratud sensoriga"
+msgstr "Süütepomme tulistav 105mm Haubits, saab määrata sensorile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -3702,7 +3702,7 @@ msgstr "Haubitsa Uuendus"
 #: data/mp/messages/strings/resstrings.txt:387
 #: po/custom/fromJson.txt:5169
 msgid "Self-guided rocket powered shells"
-msgstr "Ise-suunavad raketi mõjutavad mürsud"
+msgstr "Isejuhtiv raketijõul liikuvad mürsud"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
@@ -3757,7 +3757,7 @@ msgstr "Suurendab Haubitsa kahju"
 #: data/mp/messages/strings/resstrings.txt:397
 #: po/custom/fromJson.txt:983
 msgid "Automatic loading mechanism replaces manual loader"
-msgstr "Automaatne laadimis mehanism asendab käsitsi laadimise"
+msgstr "Automaatne laadimismehhanism asendab käsitsi laadimise"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
@@ -3821,7 +3821,7 @@ msgstr "Kõik kuulipildujad uuendati automaatselt"
 #: data/mp/messages/strings/resstrings.txt:407
 #: po/custom/fromJson.txt:3010
 msgid "Improved chaingun mechanism"
-msgstr "Täiustunud kettrelva mehanism"
+msgstr "Täiustatud kettrelva mehhanism"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -3842,7 +3842,7 @@ msgstr "Suurendab Kuulipilduja Laskekiirust"
 #: data/mp/messages/strings/resstrings.txt:412
 #: po/custom/fromJson.txt:3712
 msgid "May be assigned to a sensor"
-msgstr "Võib-olla määratud sensoriga"
+msgstr "Saab määrata sensorile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
@@ -3977,7 +3977,7 @@ msgstr "Raketi Uuendus"
 #: data/mp/messages/strings/resstrings.txt:432
 #: po/custom/fromJson.txt:2807
 msgid "High Explosive Squash Head warhead"
-msgstr "Plahavtavad Laiakslitsutudpeaga Lõhkepead"
+msgstr "Plahvatavad Laiakslitsutud peaga Lõhkepead"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[2]
@@ -4041,7 +4041,7 @@ msgstr "Hävita raketihoidlad"
 
 #: data/base/script/campaign/cam3-2.js:260
 msgid "Rescue Alpha team from Nexus"
-msgstr "Päästa Alfatiim Nexuse käest"
+msgstr "Päästa Alfa Tiim Nexuse käest"
 
 #: data/base/script/campaign/cam3-4.js:116
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
@@ -4065,7 +4065,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:447
 msgid "Return to LZ"
-msgstr "Naase Maandumis Tsooni"
+msgstr "Naase maandumistsooni"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:530
 msgid "Hard / Insane difficulty hint:"
@@ -4209,7 +4209,7 @@ msgstr "Intelligentsus Ekraan (F5)"
 
 #: data/base/script/tutorial.js:29
 msgid "In this training session you'll learn how to build an effective base"
-msgstr "Selles treening seanssil õpid saa, kuidas ehitada efectiivne baas"
+msgstr "Sellel treeningseansil õpid sa, kuidas ehitada efektiivne baas"
 
 #: data/base/script/tutorial.js:30
 msgid "Oil resources are key to your success"
@@ -4221,11 +4221,11 @@ msgstr "Et ehitada naftapuurtorni, vali üks oma veoautodest"
 
 #: data/base/script/tutorial.js:32
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Vasak-klikka naftaressursil mis on radaril näidatud pulseerivana(sinine), et käskida oma veoautol ehitada"
+msgstr "Vasak-klikka naftaressursil mis on radaril näidatud pulseerivana (sinine), et käskida oma veoautol ehitada"
 
 #: data/base/script/tutorial.js:33
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "naftapuurtorn hetkel ei tööta. Ehita energia generaator, et nafta energiaks muuta"
+msgstr "Naftapuurtorn hetkel ei tööta. Ehita energiageneraator, et nafta energiaks muuta"
 
 #: data/base/script/tutorial.js:35
 msgid "Left click the flashing build icon"
@@ -4233,11 +4233,11 @@ msgstr ""
 
 #: data/base/script/tutorial.js:36
 msgid "Now left click the power generator in the build menu on the left"
-msgstr "Nüüd vasak-klikka energia generatoril ehitus menüüs vasakul"
+msgstr "Nüüd vasak-klikka energiageneraatoril ehitusmenüüs vasakul"
 
 #: data/base/script/tutorial.js:37
 msgid "Position the square at your base and left click to start the build process"
-msgstr "Aseta ruut oma bassi ja vasak-klikka et ehitamist alustada"
+msgstr "Aseta ruut oma bassi ja vasak-klikka, et ehitamist alustada"
 
 #: data/base/script/tutorial.js:38
 msgid "To increase your build rate, select your second truck"
@@ -4245,15 +4245,15 @@ msgstr "Et ehituskiirust suurendada, vali oma teine veoauto"
 
 #: data/base/script/tutorial.js:39
 msgid "Now left click the power generator site"
-msgstr "Nüüd vasak-klikka energia generaatoril"
+msgstr "Nüüd vasak-klikka energiageneraatoril"
 
 #: data/base/script/tutorial.js:40
 msgid "The other truck will now help to build the power generator"
-msgstr "Teine veoauto aitab nüüd energia generaatorit ehitada"
+msgstr "Teine veoauto aitab nüüd energiageneraatorit ehitada"
 
 #: data/base/script/tutorial.js:42
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr "Missioonida ajal pead sa leidma ja omandama tehnoloogiad enne Kollapsi ajast"
+msgstr "Missioonide ajal pead sa leidma ja omandama tehnoloogiaid Kollapsieelsest ajast"
 
 #: data/base/script/tutorial.js:43
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
@@ -4270,11 +4270,11 @@ msgstr "Uurimiskeskus on vajalik, et artefakte uurida"
 #: data/base/script/tutorial.js:47
 #: data/base/script/tutorial.js:66
 msgid "Left click the flashing BUILD icon"
-msgstr "Vasak-klikka vilkuval EHITUS ikoonil"
+msgstr "Vasak-klikka vilkuval EHITAMINE ikoonil"
 
 #: data/base/script/tutorial.js:48
 msgid "Now left click the research facility and position it at your base"
-msgstr "Nüüd vsak-klikka uurimiskeskusel ja aseta see oma baasi"
+msgstr "Nüüd vasak-klikka uurimiskeskusel ja aseta see oma baasi"
 
 #: data/base/script/tutorial.js:49
 msgid "Use your other truck to help build the research facility"
@@ -4282,7 +4282,7 @@ msgstr "Kasuta teist veoautot, et aidata uurimiskeskust ehitada"
 
 #: data/base/script/tutorial.js:51
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr "Et artefakti uurida, vasak-klikka vilkuval UURIMIS ikoonil"
+msgstr "Et artefakti uurida, vasak-klikka vilkuval UURIMINE ikoonil"
 
 #: data/base/script/tutorial.js:52
 msgid "Now left click the machinegun artifact"
@@ -4290,19 +4290,19 @@ msgstr "Nüüd vasak-klikka kuulipilduja artefaktil"
 
 #: data/base/script/tutorial.js:53
 msgid "The artifact is now being researched by the facility"
-msgstr "artefaktit uuritakse nüüd keskuses"
+msgstr "Artefaktit uuritakse nüüd uurimiskeskuses"
 
 #: data/base/script/tutorial.js:54
 msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr "Uuritud kuulipildujat saab nüüd kasutada uue sõiduki konstrueerimiseks"
+msgstr "Uuritud kuulipildujat saab nüüd kasutada uue sõiduki disainimiseks"
 
 #: data/base/script/tutorial.js:55
 msgid "Left click the flashing DESIGN icon"
-msgstr "Vasak-klikka vilkuval KONSTRUEERIMIS ikoonil"
+msgstr "Vasak-klikka vilkuval DISAINIMINE ikoonil"
 
 #: data/base/script/tutorial.js:56
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr "Et konstrueerimist alustada, vasak-klikka UUE KONSTRUEEERIMISE ikoonil"
+msgstr "Et disainimist alustada, vasak-klikka UUE DISAINI ikoonil"
 
 #: data/base/script/tutorial.js:57
 msgid "Now left click the Vehicle Body icon"
@@ -4318,7 +4318,7 @@ msgstr "vasak-klikka Rataste ikoonil"
 
 #: data/base/script/tutorial.js:60
 msgid "Then left click the machinegun to complete your design"
-msgstr "Siis vasak-klikka kuulipildujal et konstrueerimine lõpetada"
+msgstr "Siis vasak-klikka kuulipildujal, et disainimine lõpetada"
 
 #: data/base/script/tutorial.js:63
 msgid "To finalize your design, left click the CLOSE icon"
@@ -4346,7 +4346,7 @@ msgstr "Kõik uued üksused sõidavad sellese asukohta, kui nad on valmis"
 
 #: data/base/script/tutorial.js:71
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr "Sa võid saatmiskohta igakell mujale panna sellel vasak-klikkates"
+msgstr "Sa võid saatmiskohta iga kell mujale panna sellel vasak-klikates"
 
 #: data/base/script/tutorial.js:72
 msgid "Now click where you want to position the delivery point"
@@ -4358,7 +4358,7 @@ msgstr "Tehast saab nüüd käskida uusi üksusi tootma panna"
 
 #: data/base/script/tutorial.js:74
 msgid "Left click the flashing MANUFACTURE icon"
-msgstr "Vasak-klikka vilkuval TOOTMIS ikoonil"
+msgstr "Vasak-klikka vilkuval TOOTMINE ikoonil"
 
 #: data/base/script/tutorial.js:76
 msgid "Now left click the units you want to build from the menu at the left"
@@ -4390,7 +4390,7 @@ msgstr "Projekti HQ"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr "Uus Piirkond"
+msgstr "Uus Ajastu"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
@@ -4402,11 +4402,11 @@ msgstr "Lend Lääne Sektorisse"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr "Rühm Alfa läheneb oma sihtkohta"
+msgstr "Alfa Tiim läheneb oma sihtkohta"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr "Järgnev Transpordi Sihtkoht"
+msgstr "Järgneb Transpordi Sihtkoht:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
@@ -4414,7 +4414,7 @@ msgstr "Alfa - Lääne Sektor...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr "Alfa te olete valmis õhku tõusma."
+msgstr "Alfa, te olete valmis õhku tõusma."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
@@ -4422,11 +4422,11 @@ msgstr "Head õnne ja head jahtimist."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr "Lähenemine Maandumis Tsooni. Tiim Alfa briifingu algus."
+msgstr "Lähenemine maandumistsooni. Tiim Alfa briifingu algus."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr "Komandör, sa juhit Tiim Alfat, ühte kolmest otsingurühmast mis saadeti teele Projekti poolt, et leida artifakte enne Kollapsi ajast."
+msgstr "Komandör, sa juhid Tiim Alfat, ühte kolmest otsingurühmast mis saadeti teele Projekti poolt, et leida artifakte Kollapsieelsest ajast."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -4446,11 +4446,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr "Palun abistage!..."
+msgstr "Palun aidake!..."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "Komandör, me saime New Paradigmidelt komandöritorni."
+msgstr "Komandör, me saime Uuelt Paradigmalt komandörtorni."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
@@ -4484,11 +4484,11 @@ msgstr "Nad tuleb hävitada."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
 msgid "Secure the LZ and establish a forward base."
-msgstr "Kindlusta Mandumis Tsoon ja raja edasine baas."
+msgstr "Kindlusta maandumistsoon ja raja esioperatsioonibaas."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
-msgstr "Siis hävita New Paradigm-i baas."
+msgstr "Siis hävita Uue Paradigma baas."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
@@ -4553,7 +4553,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr "Sellel on tehnoloogia ja relvad. See teab meist ja see ei ole sõbralik."
+msgstr "Sellel on tehnoloogia ja relvad. See teab meist ning see ei ole sõbralik."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
@@ -4593,7 +4593,7 @@ msgstr "Naaske oma määratud tsooni, või teid hävitatakse."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr "Kordus.Naaske oma määratud tsooni, või teid hävitatakse."
+msgstr "Kordus. Naaske oma määratud tsooni, või teid hävitatakse."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
@@ -4605,7 +4605,7 @@ msgstr "Sind hävitatakse."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "NEXUS, sünaptilise liidese tehnoloogia on omastatud ja saadetud su kolletsiooni."
+msgstr "NEXUS, sünaptilise lingi tehnoloogia on omastatud ja on saadetud sulle kogumiseks."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
@@ -4657,7 +4657,7 @@ msgstr "Lend Ida Sektorisse"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
-msgstr "Rühm Alfa läheneb Beeta Baasile"
+msgstr "Alfa Tiim läheneb Beeta Baasile"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
@@ -4665,7 +4665,7 @@ msgstr "Sa pead seda kaitsma ja iga hinnaga hoidma."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr "COLLECTIV"
+msgstr "KOLLEKTIIV"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 msgid "Commander, a new launch has been detected."
@@ -4677,19 +4677,19 @@ msgstr "See on tõenäoliselt sihitud sinu asukohta."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr "Sa pead alustama kohest evakuatsiooni Beeta Baasist ohutusse taeva."
+msgstr "Sa pead alustama kohest evakuatsiooni Beeta Baasist ohutusse varjupaika."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr "NASDA (PASKA) on Põhja Ameerika Strateegilise Kaitse Agentuur"
+msgstr "NASDA on Põhja Ameerika Strateegilise Kaitse Agentuur."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr "NASDA loodi 2076. aastal, et kaitsta Põhja Ameerikat tava- ja tuumarünnakute eest. Satelliit kaitse süsteemide ehitamine algas 2081. ja lõppes 2082. aastal."
+msgstr "NASDA loodi 2076. aastal, et kaitsta Põhja Ameerikat tava- ja tuumarünnakute eest. Satelliit kaitsesüsteemide ehitamine algas 2081. ja lõppes 2082. aastal."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr "2085.aastal tulistasis NASDA satelliidid oma tuumapommidega Maad."
+msgstr "2085. aastal tulistasid NASDA satelliidid oma tuumapommid Maa poole."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
@@ -4705,7 +4705,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr "Kõik tuumapommid, mis sihiti Põhja Ameerikasse tabasid märki."
+msgstr "Kõik tuumapommid, mis sihiti Põhja-Ameerikasse, tabasid märki."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
@@ -4757,7 +4757,7 @@ msgstr "NEXUS on end nüüd NASDA satelliitidega taasühendanud."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr "See on suur oht Projektile ja meie edasise ellujäämisele"
+msgstr "See on suur oht Projektile ja meie edasise ellujäämisele."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
@@ -4769,7 +4769,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr "Komandör, me avastasime just raketirünnaku nendest kordinaatidest."
+msgstr "Komandör, me avastasime just raketirünnaku nendest koordinaatidest."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
@@ -4781,7 +4781,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr "Collectiveite Sõdurid, ma otsin NASDA Peajaama asukohta."
+msgstr "Kollektiivi Sõdurid, ma otsin NASDA Peajaama asukohta."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
@@ -4801,7 +4801,7 @@ msgstr "Nad ei ole osa masinast."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "Collectiveite Sõdurid, rünnake ja hävitage kõik kes Masinatele vastu hakkavad."
+msgstr "Kollektiivi Sõdurid, rünnake ja hävitage kõik kes masinale vastu hakkavad."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -4821,7 +4821,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:7
 msgid "Attack and destroy all who resist the machine."
-msgstr "Rünnake ja hävitage kõik kes Masinatele vastu hakkavad."
+msgstr "Rünnake ja hävitage kõik kes masinale vastu hakkavad."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack!"
@@ -4841,7 +4841,7 @@ msgstr "Puhasta ja hävita!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
-msgstr "Collectivite Sõdurid. Te olete hästi esinenud."
+msgstr "Kollektiivi Sõdurid. Te olete hästi sooritanud."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
@@ -4853,7 +4853,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr "Me peame nad peatama!"
+msgstr "Sa pead nad peatama!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
@@ -4897,7 +4897,7 @@ msgstr "Aeg on otsas komandör!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr "Komandör, me tuvastame NEXUSe väed nendel kordinaatidel..."
+msgstr "Komandör, me tuvastame NEXUS'e väed nendel kordinaatidel..."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
@@ -4913,11 +4913,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr "Siin Rühm Alfa.Kordan,siin Rühm Alfa. Me vajame kohest abi."
+msgstr "Siin Alfa Tiim. Kordan, siin Alfa Tiim. Me vajame kohest abi."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:3
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr "Me oleme küborgide, laser tankide ja ründe VTOLite raske rünnaku all."
+msgstr "Me oleme küborgite, lasertankide ja VTOL'ite raske rünnaku all."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:5
 msgid "We were trying to reach your position, but have been ambushed."
@@ -4925,7 +4925,7 @@ msgstr "Me oleme proovinud teie asukohta jõuda, aga meid on varitsetud."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We're holed up in  a valley at these coordinates."
-msgstr "Me oleme selles orus, nendel kordinaatidel."
+msgstr "Me oleme selles orus, nendel koordinaatidel."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "Please assist."
@@ -4945,7 +4945,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
-msgstr "Komandör, tere tulemast NEXUSesse!"
+msgstr "Komandör, tere tulemast NEXUS'esse!"
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
@@ -4953,7 +4953,7 @@ msgstr "Hästi tehtud Komandör, sa ei lasknud viimasel raketil startida."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr "Kahju, sinu Projekti Peeakorter oleks olnud ideaalne sihtmärk."
+msgstr "Kahju, sinu Projekti Peakontor oleks olnud ideaalne sihtmärk."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
@@ -5118,7 +5118,7 @@ msgstr "19. Jaanuar. 2086"
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr "Põhja Ameerika"
+msgstr "Põhja-Ameerika"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
@@ -5154,7 +5154,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "Need tuumapommid olid sihitud kõikide suuremate linnade pihta üle maailma. NASDA oli programeeritud alustama Kollapsi. Kui vasturünnakud käivitati, siis selle laser kaitsed ja raketi-vastased maapinna silod feilisid."
+msgstr "Need tuumapommid olid sihitud kõikidele suurematele linnadele üle maailma. NASDA oli programmeeritud alustama Kollapsi. Kui vasturünnakud käivitati, siis selle laserkaitsed ja raketi-vastased maapealsed hoidlad ebaõnnestusid."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
@@ -5162,11 +5162,11 @@ msgstr "Maailm, mida me tundsime, lõppes..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr "Tuuma Talv oli raske. Haigused ja nälg tappis suurem osa neist, kes olid tuumarünnakutes ellu jäänud. Sõjad koreatoidu purkide pärast aga veelgi rohkem."
+msgstr "Tuumatalv oli raske. Haigused ja nälg tappis suurem osa neist, kes olid tuumarünnakutes ellu jäänud. Sõjad koreatoidu purkide pärast aga veelgi rohkem."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr "Me põgenesime Seattleist 86aastal. Me kuulsime, et Kaljumäed on suhteliselt radioktiivsuse vabad."
+msgstr "Me põgenesime Seattle'ist 86-ndal aastal. Me kuulsime, et Kaljumäed on suhteliselt radioaktiivsuse vabad."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
@@ -5186,11 +5186,11 @@ msgstr "Me olime viimaks valmis alustamaks Projekti."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr "Pärast mitut pikka  kuud võitlust võitsime me NEXUSe"
+msgstr "Pärast mitut pikka kuud võitlust võitsime me NEXUS'e."
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr "Sõjda, mille alustas Dr Reed, sai läbi."
+msgstr "Sõda, mille alustas Dr Reed, sai läbi."
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
@@ -5202,7 +5202,7 @@ msgstr "Nüüd on aeg neid kasutada, et maailm üles ehitada."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr "Aeglasti, tuhast välja, me tõuseme taas..."
+msgstr "Aeglaselt, tuhast, me tõuseme taas..."
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtMGWheels.name
@@ -18992,7 +18992,7 @@ msgstr ""
 
 #: src/multiint.cpp:3510
 msgid "Ready:"
-msgstr ""
+msgstr "Valmis:"
 
 #: src/multiint.cpp:3688
 #: src/titleui/gamefind.cpp:271
