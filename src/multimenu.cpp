@@ -1339,17 +1339,3 @@ bool intCloseMultiMenu()
 	}
 	return true;
 }
-
-// ////////////////////////////////////////////////////////////////////////////
-// In Game Options house keeping stuff.
-bool intRunMultiMenu()
-{
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// process clicks made by user.
-void intProcessMultiMenu(UDWORD id)
-{
-	// currently, no-op (all clicks are handled by onClickHandlers for the appropriate buttons
-}
