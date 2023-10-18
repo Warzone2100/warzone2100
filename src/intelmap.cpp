@@ -176,6 +176,193 @@ MESSAGE			*psCurrentMsg = nullptr;
 #define PAUSEMESSAGE_YOFFSET (0)
 
 
+
+// MARK: - WzMessageView
+
+class WzMessageView : public IntFormAnimated
+{
+protected:
+	WzMessageView(bool openAnimate = true);
+public:
+	static std::shared_ptr<WzMessageView> make(MESSAGE *psMessage, bool openAnimate = true);
+public:
+	virtual void geometryChanged() override;
+public:
+	void close(bool animated);
+private:
+	bool initialize(MESSAGE *psMessage);
+public:
+	std::function<void ()> onCloseFunc;
+private:
+	MESSAGE *psCurrentMessage = nullptr; // not used?
+	std::shared_ptr<W_BUTTON> closeButton;
+};
+
+WzMessageView::WzMessageView(bool openAnimate)
+: IntFormAnimated(openAnimate)
+{ }
+
+std::shared_ptr<WzMessageView> WzMessageView::make(MESSAGE *psMessage, bool openAnimate)
+{
+	class make_shared_enabler: public WzMessageView
+	{
+	public:
+		make_shared_enabler(bool openAnimate): WzMessageView(openAnimate) {}
+	};
+	auto result = std::make_shared<make_shared_enabler>(openAnimate);
+	result->id = IDINTMAP_MSGVIEW;
+	result->initialize(psMessage);
+	return result;
+}
+
+void WzMessageView::geometryChanged()
+{
+	closeButton->callCalcLayout();
+}
+
+bool WzMessageView::initialize(MESSAGE *psMessage)
+{
+	psCurrentMessage = psMessage;
+
+	/* Add the close box */
+	W_BUTINIT sButInit;
+	sButInit.id = IDINTMAP_CLOSE;
+	sButInit.x = 0;
+	sButInit.y = OPT_GAP;
+	sButInit.width = CLOSE_SIZE;
+	sButInit.height = CLOSE_SIZE;
+	sButInit.pTip = _("Close");
+	sButInit.pDisplay = intDisplayImageHilight;
+	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	closeButton = std::make_shared<W_BUTTON>(&sButInit);
+	attach(closeButton);
+	closeButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = psWidget->parent();
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		psWidget->setGeometry(psParent->width() - OPT_GAP - CLOSE_SIZE, OPT_GAP, CLOSE_SIZE, CLOSE_SIZE);
+	}));
+	std::weak_ptr<WzMessageView> weakParent = std::dynamic_pointer_cast<WzMessageView>(shared_from_this());
+	closeButton->addOnClickHandler([weakParent](W_BUTTON &button) {
+		// if close button pressed on 3D View then close the view only
+		widgScheduleTask([weakParent]() {
+			auto strongParent = weakParent.lock();
+			ASSERT_OR_RETURN(, strongParent != nullptr, "No parent");
+			strongParent->close(true);
+			if (strongParent->onCloseFunc)
+			{
+				strongParent->onCloseFunc();
+			}
+		});
+	});
+
+	auto title = std::make_shared<W_LABEL>();
+	title->setGeometry(0, 0, INTMAP_RESEARCHWIDTH, INTMAP_TITLEHEIGHT);
+	title->setFontColour(WZCOL_YELLOW);
+	title->setTextAlignment(WLAB_ALIGNCENTRE);
+	title->setFont(font_regular, WZCOL_YELLOW);
+	title->setString(getMessageTitle(*psMessage));
+	attach(title);
+
+	auto grid = std::make_shared<GridLayout>();
+	attach(grid);
+	grid->setGeometry(1, INTMAP_TITLEHEIGHT, INTMAP_RESEARCHWIDTH - 2, INTMAP_RESEARCHHEIGHT - 1 - INTMAP_TITLEHEIGHT);
+
+	auto messages = ScrollableListWidget::make();
+	messages->setItemSpacing(3);
+	messages->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
+	messages->setPadding({10, 10, 10, 10});
+
+	if (psMessage->type != MSG_RESEARCH && psMessage->pViewData->type == VIEW_RPL)
+	{
+		auto psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
+		for (const auto &seq: psViewReplay->seqList)
+		{
+			for (const auto &msg: seq.textMsg)
+			{
+				auto message = std::make_shared<Paragraph>();
+				message->setFontColour(WZCOL_TEXT_BRIGHT);
+				message->addText(msg.toUtf8());
+				messages->addItem(message);
+			}
+		}
+
+		grid->place({0, 1, false}, {0, 1, true}, messages);
+
+		return true;
+	}
+
+	ASSERT_OR_RETURN(false, psMessage->type != MSG_PROXIMITY, "Invalid message type for research");
+
+	/*Add the PIE box*/
+	W_FORMINIT sFormInit;
+	sFormInit.id = IDINITMAP_PIEVIEW;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.width = INTMAP_PIEWIDTH;
+	sFormInit.height = INTMAP_PIEHEIGHT;
+	sFormInit.pDisplay = intDisplayPIEView;
+	sFormInit.pUserData = psMessage;
+	auto form3dView = std::make_shared<W_CLICKFORM>(&sFormInit);
+
+	/*Add the Flic box if videos are installed, or on-demand video streaming is available */
+	if (seq_hasVideos())
+	{
+		sFormInit = W_FORMINIT();
+		sFormInit.id = IDINTMAP_FLICVIEW;
+		sFormInit.style = WFORM_PLAIN;
+		sFormInit.width = INTMAP_FLICWIDTH;
+		sFormInit.height = INTMAP_FLICHEIGHT;
+		sFormInit.pDisplay = intDisplayFLICView;
+		sFormInit.pUserData = psMessage;
+		auto flicView = std::make_shared<W_FORM>(&sFormInit);
+
+		grid->place({0, 2, true}, {0, 1, false}, form3dView);
+		grid->place({2, 1, false}, {0, 1, false}, flicView);
+	}
+	else
+	{
+		grid->place({1, 1, false}, {0, 1, false}, form3dView);
+	}
+
+	/*Add the text box*/
+	for (const auto &msg: psMessage->pViewData->textMsg)
+	{
+		auto message = std::make_shared<Paragraph>();
+		message->setFontColour(WZCOL_TEXT_BRIGHT);
+		message->addText(msg.toUtf8());
+		messages->addItem(message);
+	}
+
+	grid->place({0, 3, true}, {1, 1, true}, messages);
+
+	return true;
+}
+
+void WzMessageView::close(bool animated)
+{
+	//stop the video
+	const WzString dummy = "";
+	seq_RenderVideoToBuffer(dummy, SEQUENCE_KILL);
+
+	if (animated)
+	{
+		// Start the window close animation.
+		closeAnimateDelete();
+	}
+	else
+	{
+		//remove without the animating close window
+		auto strongThis = shared_from_this();
+		strongThis->deleteLater();
+		auto psParent = parent();
+		if (psParent)
+		{
+			psParent->detach(strongThis);
+		}
+	}
+}
+
+// MARK: -
+
 /* Add the Intelligence Map widgets to the widget screen */
 bool intAddIntelMap()
 {
@@ -340,104 +527,20 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	auto const &parent = psWScreen->psForm;
 
-	auto intMapMsgView = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	auto intMapMsgView = WzMessageView::make(psMessage, Animate);
 	parent->attach(intMapMsgView);
-	intMapMsgView->id = IDINTMAP_MSGVIEW;
 	intMapMsgView->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
 	}));
 
-	/* Add the close box */
-	W_BUTINIT sButInit;
-	sButInit.id = IDINTMAP_CLOSE;
-	sButInit.x = intMapMsgView->width() - OPT_GAP - CLOSE_SIZE;
-	sButInit.y = OPT_GAP;
-	sButInit.width = CLOSE_SIZE;
-	sButInit.height = CLOSE_SIZE;
-	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	auto closeButton = std::make_shared<W_BUTTON>(&sButInit);
-	intMapMsgView->attach(closeButton);
-
-	auto title = std::make_shared<W_LABEL>();
-	title->setGeometry(0, 0, INTMAP_RESEARCHWIDTH, INTMAP_TITLEHEIGHT);
-	title->setFontColour(WZCOL_YELLOW);
-	title->setTextAlignment(WLAB_ALIGNCENTRE);
-	title->setFont(font_regular, WZCOL_YELLOW);
-	title->setString(getMessageTitle(*psMessage));
-	intMapMsgView->attach(title);
-
-	auto grid = std::make_shared<GridLayout>();
-	intMapMsgView->attach(grid);
-	grid->setGeometry(1, INTMAP_TITLEHEIGHT, INTMAP_RESEARCHWIDTH - 2, INTMAP_RESEARCHHEIGHT - 1 - INTMAP_TITLEHEIGHT);
-
-	auto messages = ScrollableListWidget::make();
-	messages->setItemSpacing(3);
-	messages->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
-	messages->setPadding({10, 10, 10, 10});
-
-	if (psMessage->type != MSG_RESEARCH && psMessage->pViewData->type == VIEW_RPL)
-	{
-		auto psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
-		for (const auto &seq: psViewReplay->seqList)
+	intMapMsgView->onCloseFunc = []() {
+		//if close button pressed on 3D View then close the view only
+		psCurrentMsg = nullptr;
+		if (bMultiPlayer && !MultiMenuUp)
 		{
-			for (const auto &msg: seq.textMsg)
-			{
-				auto message = std::make_shared<Paragraph>();
-				message->setFontColour(WZCOL_TEXT_BRIGHT);
-				message->addText(msg.toUtf8());
-				messages->addItem(message);
-			}
+			intAddMultiMenu();
 		}
-
-		grid->place({0, 1, false}, {0, 1, true}, messages);
-
-		return true;
-	}
-
-	ASSERT_OR_RETURN(false, psMessage->type != MSG_PROXIMITY, "Invalid message type for research");
-
-	/*Add the PIE box*/
-	W_FORMINIT sFormInit;
-	sFormInit.id = IDINITMAP_PIEVIEW;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.width = INTMAP_PIEWIDTH;
-	sFormInit.height = INTMAP_PIEHEIGHT;
-	sFormInit.pDisplay = intDisplayPIEView;
-	sFormInit.pUserData = psMessage;
-	auto form3dView = std::make_shared<W_CLICKFORM>(&sFormInit);
-
-	/*Add the Flic box if videos are installed, or on-demand video streaming is available */
-	if (seq_hasVideos())
-	{
-		sFormInit = W_FORMINIT();
-		sFormInit.id = IDINTMAP_FLICVIEW;
-		sFormInit.style = WFORM_PLAIN;
-		sFormInit.width = INTMAP_FLICWIDTH;
-		sFormInit.height = INTMAP_FLICHEIGHT;
-		sFormInit.pDisplay = intDisplayFLICView;
-		sFormInit.pUserData = psMessage;
-		auto flicView = std::make_shared<W_FORM>(&sFormInit);
-
-		grid->place({0, 2, true}, {0, 1, false}, form3dView);
-		grid->place({2, 1, false}, {0, 1, false}, flicView);
-	}
-	else
-	{
-		grid->place({1, 1, false}, {0, 1, false}, form3dView);
-	}
-
-	/*Add the text box*/
-	for (const auto &msg: psMessage->pViewData->textMsg)
-	{
-		auto message = std::make_shared<Paragraph>();
-		message->setFontColour(WZCOL_TEXT_BRIGHT);
-		message->addText(msg.toUtf8());
-		messages->addItem(message);
-	}
-
-	grid->place({0, 3, true}, {1, 1, true}, messages);
+	};
 
 	return true;
 }
@@ -445,24 +548,9 @@ bool intAddMessageView(MESSAGE *psMessage)
 /* Process return codes from the Intelligence Map */
 void intProcessIntelMap(UDWORD id)
 {
-
 	if (id >= IDINTMAP_MSGSTART && id <= IDINTMAP_MSGEND)
 	{
 		intIntelButtonPressed(false, id);
-	}
-	else if (id == IDINTMAP_CLOSE)
-	{
-		//if close button pressed on 3D View then close the view only
-		psCurrentMsg = nullptr;
-		intRemoveMessageView(true);
-		if (bMultiPlayer && !MultiMenuUp)
-		{
-			intAddMultiMenu();
-		}
-	}
-	else if (MultiMenuUp)
-	{
-		intProcessMultiMenu(id);
 	}
 }
 
@@ -756,35 +844,12 @@ void intRemoveIntelMapNoAnim()
 void intRemoveMessageView(bool animated)
 {
 	//remove 3dView if still there
-	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
+	WzMessageView *form = (WzMessageView *)widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
 	if (form == nullptr)
 	{
 		return;
 	}
-
-	//stop the video
-	VIEW_RESEARCH *psViewResearch = (VIEW_RESEARCH *)form->pUserData;
-
-	if (psViewResearch != nullptr)
-	{
-		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
-	}
-	else
-	{
-		const WzString dummy = "";
-		seq_RenderVideoToBuffer(dummy, SEQUENCE_KILL);
-	}
-
-	if (animated)
-	{
-		// Start the window close animation.
-		form->closeAnimateDelete();
-	}
-	else
-	{
-		//remove without the animating close window
-		widgDelete(form);
-	}
+	form->close(animated);
 }
 
 IntMessageButton::IntMessageButton()
