@@ -1575,7 +1575,7 @@ INT_RETVAL intRunWidgets()
 				intProcessDesign(retID);
 				break;
 			case INT_INTELMAP:
-				intProcessIntelMap(retID);
+				// no-op here
 				break;
 			case INT_TRANSPORTER:
 				intProcessTransporter(retID);

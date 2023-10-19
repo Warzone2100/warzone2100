@@ -1248,6 +1248,12 @@ private:
 	std::vector<PlayerWidgets> playersWidgets;
 };
 
+std::shared_ptr<WIDGET> intCreateMultiMenuWidget()
+{
+	auto grid = MultiMenuGrid::make();
+	return grid;
+}
+
 bool intAddMultiMenu()
 {
 	//check for already open.
@@ -1279,7 +1285,7 @@ bool intAddMultiMenu()
 	});
 	form->attach(closeButton);
 
-	auto grid = MultiMenuGrid::make();
+	auto grid = intCreateMultiMenuWidget();
 	form->attach(grid);
 
 	form->setCalcLayout([closeButton, grid](WIDGET *form) {
