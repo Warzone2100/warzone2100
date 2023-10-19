@@ -226,12 +226,14 @@ public:
 
 	virtual void display(int xOffset, int yOffset);
 
-	void closeAnimateDelete();              ///< Animates the form closing, and deletes itself when done.
+	typedef std::function<void (IntFormAnimated&)> W_ANIMATED_ON_CLOSE_FUNC;
+	void closeAnimateDelete(const W_ANIMATED_ON_CLOSE_FUNC& onCloseAnimateFinished = nullptr);              ///< Animates the form closing, and deletes itself when done.
 	bool isClosing() const;
 
 private:
 	unsigned        startTime;              ///< Animation start time
 	int             currentAction;          ///< Opening/open/closing/closed.
+	W_ANIMATED_ON_CLOSE_FUNC	onCloseAnimFinished;
 };
 
 void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
