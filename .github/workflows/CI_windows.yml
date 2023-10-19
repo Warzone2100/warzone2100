@@ -88,6 +88,11 @@ jobs:
     - name: Init Git Submodules
       working-directory: '${{ github.workspace }}\src'
       run: git submodule update --init --recursive
+    # Workaround for https://github.com/actions/runner-images/issues/8598:
+    - name: Remove Strawberry Perl from PATH
+      run: |
+        $env:PATH = $env:PATH -replace "C:\\Strawberry\\c\\bin;", "" 
+        "PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Append
     # - name: Output Runner Environment Information
     #   run: |
     #     Write-Host "------------------------------------------------------"
