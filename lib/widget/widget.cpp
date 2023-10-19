@@ -230,10 +230,24 @@ void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psS
 	else
 	{
 		// priorScreen does not exist in the overlays list, so it is probably the "regular" screen
-		// just insert this overlay at the bottom of the overlay list
+		// so use z-order 0
 		OverlayScreen newOverlay {psScreen, 0};
-		overlays.insert(overlays.end(), newOverlay);
-		overlaySet.insert(psScreen);
+		it = std::find_if(overlays.begin(), overlays.end(), [](const OverlayScreen& overlay) -> bool {
+			return overlay.zOrder == 0;
+		});
+		if (it != overlays.end())
+		{
+			// found existing screen with z-order 0
+			// insert *before* it in the list (i.e. "above" it, since overlays are stored in decreasing z-order)
+			overlays.insert(it, newOverlay);
+			overlaySet.insert(psScreen);
+		}
+		else
+		{
+			// just insert this overlay at the bottom of the overlay list
+			overlays.insert(overlays.end(), newOverlay);
+			overlaySet.insert(psScreen);
+		}
 	}
 }
 
