@@ -1046,7 +1046,7 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 	if (res < buffer_count)
 	{
 		// free unused buffers
-		debug(LOG_INFO, "freeing unused %i buffers", buffer_count - res);
+		debug(LOG_SOUND, "freeing unused %i buffers", buffer_count - res);
 		alDeleteBuffers(buffer_count - res, alBuffersIds + res);
 		if (sound_GetError() != AL_NO_ERROR) {	goto _error_with_albuffers; }
 	}
