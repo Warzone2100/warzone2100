@@ -812,6 +812,11 @@ void iV_DrawImageTc(AtlasImage image, AtlasImage imageTc, int x, int y, PIELIGHT
 // Repeat a texture
 void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection, bool enableHorizontalTilingSeamWorkaround, BatchedImageDrawRequests *pBatchedRequests)
 {
+	if (Width <= 0)
+	{
+		return;
+	}
+
 	static BatchedImageDrawRequests localBatch;
 	if (pBatchedRequests == nullptr)
 	{
@@ -860,6 +865,11 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
 {
+	if (Height <= 0)
+	{
+		return;
+	}
+
 	static BatchedImageDrawRequests localBatch;
 	if (pBatchedRequests == nullptr)
 	{

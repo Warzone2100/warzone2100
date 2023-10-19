@@ -141,6 +141,11 @@ bool imageInitBitmaps()
 //
 void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, const glm::mat4 &modelViewProjectionMatrix)
 {
+	if (Width == 0 || Height == 0)
+	{
+		return;
+	}
+
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
 	SWORD WBottomRight = 0;
