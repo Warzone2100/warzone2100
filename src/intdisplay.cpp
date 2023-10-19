@@ -663,10 +663,11 @@ IntFormAnimated::IntFormAnimated(bool openAnimate)
 	disableChildren = openAnimate;
 }
 
-void IntFormAnimated::closeAnimateDelete()
+void IntFormAnimated::closeAnimateDelete(const W_ANIMATED_ON_CLOSE_FUNC& _onCloseAnimFinished)
 {
 	currentAction = 3;
 	disableChildren = true;
+	onCloseAnimFinished = _onCloseAnimFinished;
 }
 
 bool IntFormAnimated::isClosing() const
@@ -727,7 +728,13 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 		switch (currentAction)
 		{
 		case 2: disableChildren = false; break;
-		case 5: deleteLater();           break;
+		case 5:
+				deleteLater();
+				if (onCloseAnimFinished)
+				{
+					onCloseAnimFinished(*this);
+				}
+				break;
 		}
 	}
 
