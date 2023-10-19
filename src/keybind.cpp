@@ -1191,7 +1191,7 @@ void	kf_addInGameOptions()
 // Display multiplayer guff.
 void	kf_addMultiMenu()
 {
-	if (bMultiPlayer)
+	if (bMultiPlayer && (intMode != INT_INTELMAP))
 	{
 		intAddMultiMenu();
 	}
