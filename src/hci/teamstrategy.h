@@ -46,6 +46,7 @@ constexpr size_t WzStrategyPlanningUnitTypes_NUM_TYPES = 3;
 bool gameHasTeamStrategyView(bool allowAIs = false);
 std::shared_ptr<WIDGET> createTeamStrategyView(bool allowAIs = false);
 bool transformTeamStrategyViewMode(const std::shared_ptr<WIDGET>& teamStrategyView, bool updatingPlayers);
+bool teamStrategyViewSetBackgroundColor(const std::shared_ptr<WIDGET>& view, PIELIGHT color);
 
 bool recvStrategyPlanUpdate(NETQUEUE queue);
 

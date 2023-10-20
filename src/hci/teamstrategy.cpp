@@ -319,6 +319,7 @@ public:
 	void setUpdatingPlayers(bool enabled);
 	bool getUpdatingPlayer() { return updatingPlayers; }
 	std::shared_ptr<WzTeamStrategyColumnImagesManager> getSharedColumnImagesManager() const { return columnImagesManager; }
+	void setBackgroundColor(PIELIGHT color);
 
 public:
 	virtual void display(int xOffset, int yOffset) override;
@@ -338,6 +339,7 @@ private:
 	std::shared_ptr<W_LABEL> noTeammatesLabel;
 	size_t playerNameColIdx = 0;
 	bool updatingPlayers = false;
+	PIELIGHT backgroundColor = pal_RGBA(0,0,0,0);
 };
 
 WzTeamStrategyColumnImagesManager::~WzTeamStrategyColumnImagesManager()
@@ -800,7 +802,12 @@ TeamStrategyView::~TeamStrategyView()
 
 void TeamStrategyView::display(int xOffset, int yOffset)
 {
-	// currently, do nothing
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	if (backgroundColor.rgba != 0)
+	{
+		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+	}
 }
 
 void TeamStrategyView::geometryChanged()
@@ -1079,6 +1086,11 @@ void TeamStrategyView::setUpdatingPlayers(bool enabled)
 	}
 }
 
+void TeamStrategyView::setBackgroundColor(PIELIGHT color)
+{
+	backgroundColor = color;
+}
+
 std::pair<std::vector<size_t>, size_t> TeamStrategyView::getMaxTableColumnDataWidths()
 {
 	size_t totalNeededColumnWidth = 0;
@@ -1118,8 +1130,7 @@ int32_t TeamStrategyView::idealHeight()
 // Returns true if there are *any* teams with more than one human player
 bool gameHasTeamStrategyView(bool allowAIs)
 {
-	std::unordered_set<int32_t> teamsWitHumanPlayers;
-	std::vector<uint32_t> playersOnSameTeamAsSelectedPlayer;
+	std::unordered_set<int32_t> teamsWithIncludedPlayers;
 	for (int32_t player = 0; player < std::min<int32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 	{
 		// Check type of player
@@ -1129,7 +1140,7 @@ bool gameHasTeamStrategyView(bool allowAIs)
 			)
 		{
 			auto teamNumber = checkedGetPlayerTeam(player);
-			auto result = teamsWitHumanPlayers.insert(teamNumber);
+			auto result = teamsWithIncludedPlayers.insert(teamNumber);
 			if (!result.second)
 			{
 				// more than one included player on a team
@@ -1154,6 +1165,18 @@ bool transformTeamStrategyViewMode(const std::shared_ptr<WIDGET>& view, bool upd
 	}
 
 	pTeamStrategyView->setUpdatingPlayers(updatingPlayers);
+	return true;
+}
+
+bool teamStrategyViewSetBackgroundColor(const std::shared_ptr<WIDGET>& view, PIELIGHT color)
+{
+	auto pTeamStrategyView = std::dynamic_pointer_cast<TeamStrategyView>(view);
+	if (!pTeamStrategyView)
+	{
+		return false;
+	}
+
+	pTeamStrategyView->setBackgroundColor(color);
 	return true;
 }
 
