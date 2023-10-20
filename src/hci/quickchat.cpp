@@ -30,6 +30,7 @@
 #include "lib/widget/scrollablelist.h"
 #include "lib/widget/button.h"
 #include "lib/widget/multibutform.h"
+#include "lib/widget/paneltabbutton.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/netplay/netplay.h"
@@ -2005,59 +2006,6 @@ void WzQuickChatPanel::run(W_CONTEXT *psContext)
 		sections[keyPressForSection.value()]->clickPrimary();
 	}
 }
-
-// MARK: -
-
-constexpr int QCFORM_PANEL_TABS_PADDING = 20;
-
-class WzPanelTabButton : public W_BUTTON
-{
-public:
-	static std::shared_ptr<WzPanelTabButton> make(const WzString& text)
-	{
-		auto button = std::make_shared<WzPanelTabButton>();
-		button->setString(text);
-		button->FontID = font_regular;
-		int minButtonWidthForText = iV_GetTextWidth(text, button->FontID);
-		button->setGeometry(0, 0, minButtonWidthForText + QCFORM_PANEL_TABS_PADDING, QCFORM_PANEL_TABS_HEIGHT);
-		return button;
-	}
-public:
-	void display(int xOffset, int yOffset) override
-	{
-		int x0 = x() + xOffset;
-		int y0 = y() + yOffset;
-		int x1 = x0 + width();
-		int y1 = y0 + height();
-
-		bool haveText = !pText.isEmpty();
-
-		bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-		bool isDisabled = (getState() & WBUT_DISABLE) != 0;
-		bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
-
-		// Display the button.
-		auto light_border = WZCOL_QUICKCHAT_TABS_BORDER_LIGHT;
-		auto fill_color = isDown || isDisabled ? WZCOL_QUICKCHAT_TABS_FILL_COLOR_DARK : WZCOL_QUICKCHAT_TABS_FILL_COLOR;
-		iV_ShadowBox(x0, y0, x1, y1, 0, isDown || isHighlight ? light_border : WZCOL_FORM_DARK, isDown || isHighlight ? light_border : WZCOL_FORM_DARK, fill_color);
-
-		if (haveText)
-		{
-			wzText.setText(pText, FontID);
-			int fw = wzText.width();
-			int fx = x0 + (width() - fw) / 2;
-			int fy = y0 + (height() - wzText.lineSize()) / 2 - wzText.aboveBase();
-			PIELIGHT textColor = (isDown) ? WZCOL_TEXT_BRIGHT : WZCOL_FORM_TEXT;
-			if (isDisabled)
-			{
-				textColor.byte.a = (textColor.byte.a / 2);
-			}
-			wzText.render(fx, fy, textColor);
-		}
-	}
-private:
-	WzText wzText;
-};
 
 // MARK: - WzQuickChatForm
 
