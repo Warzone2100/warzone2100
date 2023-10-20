@@ -33,6 +33,7 @@
 #include "lib/widget/paragraph.h"
 #include "lib/widget/label.h"
 #include "lib/widget/scrollablelist.h"
+#include "lib/widget/multibutform.h"
 #include "lib/sound/mixer.h" //for sound_GetUIVolume()
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -415,24 +416,17 @@ void W_INTELLIGENCEOVERLAY_FORM::geometryChanged()
 
 std::shared_ptr<IntFormAnimated> W_INTELLIGENCEOVERLAY_FORM::createMultiMenuForm()
 {
-	auto form = std::make_shared<IntFormAnimated>();
+	auto form = intCreateMultiMenuForm();
 	form->id = MULTIMENU_FORM;
 
-	auto grid = intCreateMultiMenuWidget();
-	form->attach(grid);
-
-	std::weak_ptr<WIDGET> weakGrid = grid;
-	form->setCalcLayout([weakGrid](WIDGET *form) {
+	form->setCalcLayout([](WIDGET *form) {
 		auto psParent = form->parent();
 		if (psParent == nullptr)
 		{
 			return;
 		}
-		auto strongGrid = weakGrid.lock();
-		ASSERT_OR_RETURN(, strongGrid != nullptr, "No grid");
-		auto width = std::min((int32_t)psParent->width() - 20, strongGrid->idealWidth());
-		auto height = strongGrid->idealHeight();
-		strongGrid->setGeometry(0, 0, width, height);
+		auto width = std::min((int32_t)psParent->width() - 20, form->idealWidth());
+		auto height = form->idealHeight();
 		form->setGeometry((psParent->width() - width) / 2, OVERLAY_MULTIMENU_FORM_Y, width, height);
 	});
 
