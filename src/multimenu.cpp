@@ -1116,6 +1116,8 @@ private:
 			playerWidget.units->setString(unitsString);
 			playerWidget.lastColumn->setString(lastString);
 
+			auto lockedScreen = screenPointer.lock();
+
 			if (isHuman || (game.type == LEVEL_TYPE::SKIRMISH && playerWidget.player < game.maxPlayers))
 			{
 				// alliance
@@ -1126,22 +1128,22 @@ private:
 					{
 						if (alliancesCanGiveResearchAndRadar(game.alliance))
 						{
-							widgReveal(psWScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
-							widgReveal(psWScreen, MULTIMENU_GIFT_RES + playerWidget.player);
+							widgReveal(lockedScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
+							widgReveal(lockedScreen, MULTIMENU_GIFT_RES + playerWidget.player);
 						}
-						widgReveal(psWScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
-						widgReveal(psWScreen, MULTIMENU_GIFT_POW + playerWidget.player);
+						widgReveal(lockedScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
+						widgReveal(lockedScreen, MULTIMENU_GIFT_POW + playerWidget.player);
 						giftsUp[playerWidget.player] = true;
 					}
 					else if (!isAlly && !isSelectedPlayer && giftsUp[playerWidget.player])
 					{
 						if (alliancesCanGiveResearchAndRadar(game.alliance))
 						{
-							widgHide(psWScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
-							widgHide(psWScreen, MULTIMENU_GIFT_RES + playerWidget.player);
+							widgHide(lockedScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
+							widgHide(lockedScreen, MULTIMENU_GIFT_RES + playerWidget.player);
 						}
-						widgHide(psWScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
-						widgHide(psWScreen, MULTIMENU_GIFT_POW + playerWidget.player);
+						widgHide(lockedScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
+						widgHide(lockedScreen, MULTIMENU_GIFT_POW + playerWidget.player);
 						giftsUp[playerWidget.player] = false;
 					}
 				}
@@ -1150,18 +1152,18 @@ private:
 			// clean up widgets if player leaves while menu is up.
 			if (!isHuman && !(game.type == LEVEL_TYPE::SKIRMISH && playerWidget.player < game.maxPlayers))
 			{
-				if (widgGetFromID(psWScreen, MULTIMENU_CHANNEL + playerWidget.player) != nullptr)
+				if (widgGetFromID(lockedScreen, MULTIMENU_CHANNEL + playerWidget.player) != nullptr)
 				{
-					widgDelete(psWScreen, MULTIMENU_CHANNEL + playerWidget.player);
+					widgDelete(lockedScreen, MULTIMENU_CHANNEL + playerWidget.player);
 				}
 
-				if (widgGetFromID(psWScreen, MULTIMENU_ALLIANCE_BASE + playerWidget.player) != nullptr)
+				if (widgGetFromID(lockedScreen, MULTIMENU_ALLIANCE_BASE + playerWidget.player) != nullptr)
 				{
-					widgDelete(psWScreen, MULTIMENU_ALLIANCE_BASE + playerWidget.player);
-					widgDelete(psWScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
-					widgDelete(psWScreen, MULTIMENU_GIFT_RES + playerWidget.player);
-					widgDelete(psWScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
-					widgDelete(psWScreen, MULTIMENU_GIFT_POW + playerWidget.player);
+					widgDelete(lockedScreen, MULTIMENU_ALLIANCE_BASE + playerWidget.player);
+					widgDelete(lockedScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
+					widgDelete(lockedScreen, MULTIMENU_GIFT_RES + playerWidget.player);
+					widgDelete(lockedScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
+					widgDelete(lockedScreen, MULTIMENU_GIFT_POW + playerWidget.player);
 					giftsUp[playerWidget.player] = false;
 				}
 			}
