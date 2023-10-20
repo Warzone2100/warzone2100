@@ -41,7 +41,9 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 bool intCloseMultiMenu();
 void intCloseMultiMenuNoAnim();
 bool intAddMultiMenu();
-std::shared_ptr<WIDGET> intCreateMultiMenuWidget();
+
+class IntFormAnimated;
+std::shared_ptr<IntFormAnimated> intCreateMultiMenuForm(std::function<void ()> closeButtonHandler = nullptr);
 
 void multiMenuScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 

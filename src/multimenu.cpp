@@ -33,6 +33,8 @@
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/multibutform.h"
+#include "lib/widget/paneltabbutton.h"
 
 #include "display3d.h"
 #include "intdisplay.h"
@@ -65,6 +67,7 @@
 #include "keybind.h"
 #include "loop.h"
 #include "frontend.h"
+#include "hci/teamstrategy.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -78,7 +81,7 @@ static UDWORD	current_context = 0;
 UDWORD	current_numplayers = 4;
 static std::string current_searchString;
 
-#define MULTIMENU_FORM_Y		23 + D_H
+#define MULTIMENU_FORM_Y		25
 
 #define MULTIMENU_CLOSE			(MULTIMENU+1)
 #define MULTIMENU_PLAYER		(MULTIMENU+2)
@@ -1250,10 +1253,177 @@ private:
 	std::vector<PlayerWidgets> playersWidgets;
 };
 
-std::shared_ptr<WIDGET> intCreateMultiMenuWidget()
+class WzMultiMenuTabs : public MultichoiceWidget
 {
-	auto grid = MultiMenuGrid::make();
-	return grid;
+public:
+	WzMultiMenuTabs(int value = -1) : MultichoiceWidget(value) { }
+	virtual void display(int xOffset, int yOffset) override { }
+};
+
+constexpr int MULTIMENUFORM_INTERNAL_PADDING = 10;
+constexpr int MULTIMENUFORM_PANEL_TABS_HEIGHT = 20;
+
+class WzMultiWidget : public IntFormAnimated
+{
+public:
+	WzMultiWidget(bool openAnimate = true)
+	: IntFormAnimated(openAnimate)
+	{ }
+public:
+	static std::shared_ptr<WzMultiWidget> make(bool openAnimate, std::function<void ()> closeButtonHandler);
+protected:
+	virtual void geometryChanged() override;
+	virtual int32_t idealWidth() override;
+	virtual int32_t idealHeight() override;
+private:
+	void initialize(std::function<void ()> closeButtonHandler);
+	void switchAttachedPanel(const std::shared_ptr<WIDGET> newPanel);
+private:
+	std::shared_ptr<W_BUTTON> closeButton;
+	std::shared_ptr<WzMultiMenuTabs> panelSwitcher;
+	std::shared_ptr<MultiMenuGrid> multiMenuGrid;
+	std::shared_ptr<WIDGET> teamStrategyViewWrapped;
+	std::vector<std::shared_ptr<WIDGET>> panels;
+	std::shared_ptr<WIDGET> currentlyAttachedPanel;
+};
+
+std::shared_ptr<WzMultiWidget> WzMultiWidget::make(bool openAnimate, std::function<void ()> closeButtonHandler)
+{
+	auto result = std::make_shared<WzMultiWidget>(openAnimate);
+	result->initialize(closeButtonHandler);
+	return result;
+}
+
+void WzMultiWidget::geometryChanged()
+{
+	if (closeButton)
+	{
+		closeButton->callCalcLayout();
+	}
+	if (panelSwitcher)
+	{
+		panelSwitcher->callCalcLayout();
+	}
+	for (auto& panel : panels)
+	{
+		int panelY0 = 0;
+		if (panelSwitcher)
+		{
+			panelY0 += panelSwitcher->y() + panelSwitcher->height() + MULTIMENUFORM_INTERNAL_PADDING;
+		}
+		int panelHeight = std::min(panel->idealHeight(), height() - panelY0);
+		panel->setGeometry(0, panelY0, width(), panelHeight);
+	}
+}
+
+int32_t WzMultiWidget::idealWidth()
+{
+	int32_t maxPanelIdealWidth = 0;
+	for (auto& panel : panels)
+	{
+		maxPanelIdealWidth = std::max(maxPanelIdealWidth, panel->idealWidth());
+	}
+	return maxPanelIdealWidth;
+}
+
+int32_t WzMultiWidget::idealHeight()
+{
+	int32_t result = 0;
+	if (panelSwitcher)
+	{
+		result += MULTIMENUFORM_INTERNAL_PADDING + panelSwitcher->idealHeight() + MULTIMENUFORM_INTERNAL_PADDING;
+	}
+	int32_t maxPanelIdealHeight = 0;
+	for (auto& panel : panels)
+	{
+		maxPanelIdealHeight = std::max(maxPanelIdealHeight, panel->idealHeight());
+	}
+	result += maxPanelIdealHeight + MULTIMENUFORM_INTERNAL_PADDING;
+	return result;
+}
+
+void WzMultiWidget::switchAttachedPanel(const std::shared_ptr<WIDGET> newPanel)
+{
+	if (currentlyAttachedPanel)
+	{
+		detach(currentlyAttachedPanel);
+	}
+	currentlyAttachedPanel = newPanel;
+	attach(newPanel);
+}
+
+void WzMultiWidget::initialize(std::function<void ()> closeButtonHandler)
+{
+	if (closeButtonHandler)
+	{
+		// Add the close button.
+		W_BUTINIT sButInit;
+		sButInit.id = MULTIMENU_CLOSE;
+		sButInit.pTip = _("Close");
+		sButInit.pDisplay = intDisplayImageHilight;
+		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+		closeButton = std::make_shared<W_BUTTON>(&sButInit);
+		closeButton->addOnClickHandler([closeButtonHandler](W_BUTTON&) {
+			closeButtonHandler();
+		});
+		attach(closeButton);
+		closeButton->setCalcLayout([](WIDGET *psButton) {
+			auto psParent = psButton->parent();
+			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+			psButton->setGeometry(psParent->width() - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+		});
+	}
+
+	multiMenuGrid = MultiMenuGrid::make();
+	panels.push_back(multiMenuGrid);
+
+	bool allowAIsForTeamStrategy = !NetPlay.bComms;
+	if (gameHasTeamStrategyView(allowAIsForTeamStrategy))
+	{
+		auto teamStrategyView = createTeamStrategyView(allowAIsForTeamStrategy);
+		if (teamStrategyView)
+		{
+			transformTeamStrategyViewMode(teamStrategyView, true);
+			teamStrategyViewSetBackgroundColor(teamStrategyView, pal_RGBA(25, 0, 110, 180));
+			teamStrategyViewWrapped = Margin(0, 10).wrap(teamStrategyView);
+			panels.push_back(teamStrategyViewWrapped);
+		}
+	}
+
+	if (teamStrategyViewWrapped)
+	{
+		// add tabs
+		panelSwitcher = std::make_shared<WzMultiMenuTabs>(0);
+		attach(panelSwitcher);
+		panelSwitcher->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
+		panelSwitcher->addButton(0, WzPanelTabButton::make(_("Players View")));
+		panelSwitcher->addButton(1, WzPanelTabButton::make(_("Team Strategy")));
+		panelSwitcher->choose(0);
+		panelSwitcher->addOnChooseHandler([](MultibuttonWidget& widget, int newValue){
+			// Switch actively-displayed panel
+			auto weakParent = std::weak_ptr<WIDGET>(widget.parent());
+			widgScheduleTask([newValue, weakParent](){
+				auto strongParent = std::dynamic_pointer_cast<WzMultiWidget>(weakParent.lock());
+				ASSERT_OR_RETURN(, strongParent != nullptr, "Parent doesn't exist?");
+				strongParent->switchAttachedPanel(strongParent->panels[newValue]);
+			});
+		});
+		panelSwitcher->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			auto psParent = std::dynamic_pointer_cast<WzMultiWidget>(psWidget->parent());
+			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+			int panelSwitcherWidth = psWidget->idealWidth();
+			int panelSwitcherX0 = (psParent->width() - panelSwitcherWidth) / 2;
+			psWidget->setGeometry(panelSwitcherX0, MULTIMENUFORM_INTERNAL_PADDING, panelSwitcherWidth, MULTIMENUFORM_PANEL_TABS_HEIGHT);
+		}));
+	}
+
+	switchAttachedPanel(multiMenuGrid);
+}
+
+std::shared_ptr<IntFormAnimated> intCreateMultiMenuForm(std::function<void ()> closeButtonHandler)
+{
+	auto form = WzMultiWidget::make(true, closeButtonHandler);
+	return form;
 }
 
 bool intAddMultiMenu()
@@ -1270,33 +1440,18 @@ bool intAddMultiMenu()
 		intResetScreen(false);
 	}
 
-	auto form = std::make_shared<IntFormAnimated>();
-	form->id = MULTIMENU_FORM;
-
-	// Add the close button.
-	W_BUTINIT sButInit;
-	sButInit.id = MULTIMENU_CLOSE;
-	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	auto closeButton = std::make_shared<W_BUTTON>(&sButInit);
-	closeButton->addOnClickHandler([](W_BUTTON&) {
+	auto form = intCreateMultiMenuForm([]() {
 		widgScheduleTask([]() {
 			intCloseMultiMenu();
 		});
 	});
-	form->attach(closeButton);
-
-	auto grid = intCreateMultiMenuWidget();
-	form->attach(grid);
-
-	form->setCalcLayout([closeButton, grid](WIDGET *form) {
-		auto width = std::min((int32_t)screenWidth - 20, grid->idealWidth());
-		auto height = grid->idealHeight();
-		grid->setGeometry(0, 0, width, height);
+	form->id = MULTIMENU_FORM;
+	form->setCalcLayout([](WIDGET *form) {
+		auto width = std::min((int32_t)screenWidth - 20, form->idealWidth());
+		auto height = form->idealHeight();
 		form->setGeometry((screenWidth - width) / 2, MULTIMENU_FORM_Y, width, height);
-		closeButton->setGeometry(width - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	});
+
 	psWScreen->psForm->attach(form);
 
 	intShowPowerBar();						// add power bar
