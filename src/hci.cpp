@@ -965,6 +965,8 @@ bool intInitialise()
 /* Shut down the in game interface */
 void interfaceShutDown()
 {
+	intRemoveIntelMapNoAnim(); // always call to ensure overlay screen is destroyed
+
 	if (replayOverlayScreen)
 	{
 		widgRemoveOverlayScreen(replayOverlayScreen);
