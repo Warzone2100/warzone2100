@@ -788,6 +788,7 @@ void ScrollableTableWidget::displayRecursive(WidgetGraphicsContext const& contex
 	int y0 = y() + yOffset + scrollableList->y();
 	int y1 = y0 + scrollableList->height();
 
+	lines.clear();
 	lines.reserve(columnWidths.size());
 
 	// draw a line between every column widget
