@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-14 17:51\n"
+"PO-Revision-Date: 2023-10-21 03:52\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -16552,7 +16552,7 @@ msgstr "Barre de progression"
 
 #: src/hci/quickchat.cpp:898
 msgid "To:"
-msgstr ""
+msgstr "À :"
 
 #: src/hci/quickchat.cpp:997
 msgid "All"
@@ -16569,17 +16569,17 @@ msgstr "Équipe"
 #: src/hci/quickchat.cpp:1020
 #: src/hci/quickchat.cpp:1227
 msgid "Human Teammates"
-msgstr ""
+msgstr "Coéquipiers Humains"
 
 #: src/hci/quickchat.cpp:1035
 #: src/hci/quickchat.cpp:1259
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Coéquipiers Bots"
 
 #: src/hci/quickchat.cpp:1059
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u joueurs"
 
 #: src/hci/quickchat.cpp:1064
 msgid "Choose a recipient"
