@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-21 03:52\n"
+"PO-Revision-Date: 2023-10-21 16:03\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -16556,7 +16556,7 @@ msgstr "À :"
 
 #: src/hci/quickchat.cpp:997
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 #: src/hci/quickchat.cpp:1006
 #: src/hci/quickchat.cpp:1016
@@ -16583,15 +16583,15 @@ msgstr "%u joueurs"
 
 #: src/hci/quickchat.cpp:1064
 msgid "Choose a recipient"
-msgstr ""
+msgstr "Choisir un destinataire"
 
 #: src/hci/quickchat.cpp:2156
 msgid "Quick Chat:"
-msgstr ""
+msgstr "Discussion rapide :"
 
 #: src/hci/quickchat.cpp:2222
 msgid "Lobby Chat"
-msgstr ""
+msgstr "Discussion du salon"
 
 #: src/hci/quickchat.cpp:2224
 #: src/hci/quickchat.cpp:2332
