@@ -130,6 +130,10 @@ uint16_t fpathGetLandContinent(int x, int y);
 /** Get hover continent ID of specified tile coordinate. */
 uint16_t fpathGetHoverContinent(int x, int y);
 
+/** Get continent ID of a tile coordinate and specific propulsion. */
+uint16_t fpathGetContinent(int x, int y, PROPULSION_TYPE propulsion);
+
+
 /** @} */
 
 #endif // __INCLUDED_SRC_FPATH_H__
