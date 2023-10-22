@@ -165,4 +165,12 @@ void war_setSoundEnabled(bool soundEnabled);
  */
 bool war_getSoundEnabled();
 
+/**
+ * Enables debug mode for pathfinding:
+ *  - enables debug graphics
+ *  - PF requests are processed in the main thread.
+ * This mode is enabled from command line.
+ */
+void war_fpathEnableDebug();
+
 #endif // __INCLUDED_SRC_WARZONECONFIG_H__
