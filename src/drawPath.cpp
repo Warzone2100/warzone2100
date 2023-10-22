@@ -213,19 +213,19 @@ void drawPathCostLayer(int player, const iView& playerViewPos, const glm::mat4& 
 		debugDrawImpassableTiles(bmap, playerViewPos, perspectiveViewMatrix, 6);
 	}
 
-	// Accessing path contexts or droid's path is not thread safe now.
-	if (!fpathGetAsyncMode()) {
-		if (_drawDroidPath)
+	if (_drawDroidPath)
+	{
+		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 		{
-			for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+			if (psDroid->selected)
 			{
-				if (psDroid->selected)
-				{
-					drawDroidPath(psDroid, viewMatrix, perspectiveViewMatrix);
-				}
+				drawDroidPath(psDroid, viewMatrix, perspectiveViewMatrix);
 			}
 		}
+	}
 
+	// Accessing path contexts is not thread safe now.
+	if (!fpathGetAsyncMode()) {
 		if (_drawContextTree && !fpathContexts.empty())
 		{
 			drawContext(fpathContexts.back(), perspectiveViewMatrix);
