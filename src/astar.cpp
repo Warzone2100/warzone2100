@@ -371,7 +371,15 @@ static ExplorationReport fpathAStarExplore(PathfindContext &context, Predicate& 
 	constexpr int adjacency = 8;
 	while (!context.nodes.empty())
 	{
-		PathNode node = fpathTakeNode(context.nodes);
+		// Special care for reusable contexts: if we extract the node before checking the goal,
+		// then the neighbors of this node will not be properly expanded if we reuse this context.
+		// It can lead to incorrect paths in subsequent searches.
+		PathNode node = context.nodes.front();
+		if (predicate.isGoal(node)) {
+			report.success = true;
+			break;
+		}
+		fpathTakeNode(context.nodes);
 		report.tilesExplored++;
 		report.cost = node.dist;
 
@@ -379,11 +387,6 @@ static ExplorationReport fpathAStarExplore(PathfindContext &context, Predicate& 
 		if (context.isTileVisited(tile))
 			continue;
 		tile.visited = true;
-
-		if (predicate.isGoal(node)) {
-			report.success = true;
-			break;
-		}
 
 		/*
 		   5  6  7
@@ -474,18 +477,25 @@ static ASR_RETVAL fpathTracePath(const PathfindContext& context, PathCoord src, 
 ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 	MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
+	// Default context for forward searches.
+	static PathfindContext forwardContext;
+
 	ASSERT_OR_RETURN(ASR_FAILED, psMove, "Null psMove");
 	ASSERT_OR_RETURN(ASR_FAILED, psJob, "Null psMove");
 
 	ASR_RETVAL retval = ASR_OK;
 
-	bool mustReverse = false;
-
 	const PathCoord tileOrig = psJob->blockingMap->worldToMap(psJob->origX, psJob->origY);
 	const PathCoord tileDest = psJob->blockingMap->worldToMap(psJob->destX, psJob->destY);
 
-	int origContinent = fpathGetLandContinent(tileOrig.x, tileOrig.y);
-	int destContinent = fpathGetLandContinent(tileDest.x, tileDest.y);
+	int origContinent = fpathGetContinent(tileOrig.x, tileOrig.y, psJob->propulsion);
+	int destContinent = fpathGetContinent(tileDest.x, tileDest.y, psJob->propulsion);
+
+	bool mustReverse = false;
+	bool intercontinentalSearch = (origContinent != destContinent);
+
+	//if (origContinent != destContinent)
+	//	return ASR_FAILED;
 
 	if (psJob->blockingMap->isBlocked(tileOrig.x, tileOrig.y)) {
 		debug(LOG_NEVER, "Initial tile blocked (%d;%d)", tileOrig.x, tileOrig.y);
@@ -496,76 +506,23 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 
 	const PathNonblockingArea dstIgnore(psJob->dstStructure);
 
-	NearestSearchPredicate pred(tileOrig);
-
 	PathCoord endCoord;
+	// Pointer to the context, to be used for finalization of the search.
+	PathfindContext* pContext = nullptr;
 
-	// Caching reverse searches.
-	std::list<PathfindContext>::iterator contextIterator = fpathContexts.begin();
-	for (; contextIterator != fpathContexts.end(); ++contextIterator)
-	{
-		PathfindContext& pfContext = *contextIterator;
-		if (!pfContext.matches(psJob->blockingMap, tileDest, dstIgnore, /*reverse*/true))
-		{
-			// This context is not for the same droid type and same destination.
-			continue;
-		}
-
-		const PathExploredTile& pt = pfContext.tile(tileOrig);
-		// We have tried going to tileDest before.
-		if (pfContext.isTileVisited(pt))
-		{
-			// Already know the path from orig to dest.
-			endCoord = tileOrig;
-		}
-		else if (pfContext.nodes.empty()) {
-			// Wave has already collapsed. Consequent attempt to search will exit immediately.
-			// We can be here only if there is literally no path existing.
-			continue;
-		}
-		else
-		{
-			IgnoreGoalCostLayer costLayer(pfContext, pred.goal);
-			// Need to find the path from orig to dest, continue previous exploration.
-			fpathAStarReestimate(pfContext, pred.goal);
-			pred.clear();
-			ExplorationReport report = fpathAStarExplore(pfContext, pred, costLayer);
-			if (report) {
-				endCoord = pred.nearestCoord;
-				// Found the path! Don't search more contexts.
-				break;
-			} else {
-				if (origContinent == destContinent) {
-					debug(LOG_NEVER, "Failed to find cached path (%d;%d)-(%d;%d)", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y);
-				} else {
-					debug(LOG_NEVER, "Failed to find cached intercontinental path (%d;%d c%d)-(%d;%d c%d)", tileOrig.x, tileOrig.y, origContinent,
-						tileDest.x, tileDest.y, destContinent);
-				}
-			}
-		}
-	}
-
-	if (contextIterator == fpathContexts.end())
-	{
-		// We did not find an appropriate context. Make one.
-		if (fpathContexts.size() < 30)
-		{
-			fpathContexts.emplace_back();
-		}
-		contextIterator--;
-		PathfindContext& pfContext = fpathContexts.back();
+	if (intercontinentalSearch) {
+		NearestSearchPredicate forwardSearchPred(tileDest);
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
-		pfContext.assign(psJob->blockingMap, tileDest, dstIgnore, true);
-		pred.clear();
+		forwardContext.assign(psJob->blockingMap, tileDest, dstIgnore, true);
 
-		IgnoreGoalCostLayer costLayer(pfContext, pred.goal);
+		IgnoreGoalCostLayer costLayer(forwardContext, forwardSearchPred.goal);
 		// Add the start point to the open list
-		bool started = fpathNewNode(pfContext, pred, costLayer, tileDest, 0, tileDest);
+		bool started = fpathNewNode(forwardContext, forwardSearchPred, costLayer, tileOrig, 0, tileOrig);
 		ASSERT(started, "fpathNewNode failed to add node.");
 
-		ExplorationReport report = fpathAStarExplore(pfContext, pred, costLayer);
+		ExplorationReport report = fpathAStarExplore(forwardContext, forwardSearchPred, costLayer);
 		if (!report) {
 			if (origContinent == destContinent) {
 				debug(LOG_NEVER, "Failed to find path (%d;%d)-(%d;%d)", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y);
@@ -574,20 +531,113 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 					tileDest.x, tileDest.y, destContinent);
 			}
 		}
-		endCoord = pred.nearestCoord;
+		endCoord = forwardSearchPred.nearestCoord;
+		// return the nearest route if no actual route was found
+		if (endCoord != forwardSearchPred.goal)
+		{
+			retval = ASR_NEAREST;
+		}
+
+		pContext = &forwardContext;
+	}
+	else {
+		NearestSearchPredicate backSearchPred(tileOrig);
+		std::list<PathfindContext>::iterator contextIterator;
+		// Caching reverse searches.
+		for (contextIterator = fpathContexts.begin(); contextIterator != fpathContexts.end(); ++contextIterator)
+		{
+			PathfindContext& pfContext = *contextIterator;
+			if (!pfContext.matches(psJob->blockingMap, tileDest, dstIgnore, /*reverse*/true))
+			{
+				// This context is not for the same droid type and same destination.
+				continue;
+			}
+
+			const PathExploredTile& pt = pfContext.tile(tileOrig);
+			// We have tried going to tileDest before.
+			if (pfContext.isTileVisited(pt))
+			{
+				// Already know the path from orig to dest.
+				endCoord = tileOrig;
+			}
+			else if (pfContext.nodes.empty()) {
+				// Wave has already collapsed. Consequent attempt to search will exit immediately.
+				// We can be here only if there is literally no path existing.
+				continue;
+			}
+			else
+			{
+				IgnoreGoalCostLayer costLayer(pfContext, backSearchPred.goal);
+				// Need to find the path from orig to dest, continue previous exploration.
+				fpathAStarReestimate(pfContext, backSearchPred.goal);
+				backSearchPred.clear();
+				ExplorationReport report = fpathAStarExplore(pfContext, backSearchPred, costLayer);
+				if (!report) {
+					if (origContinent == destContinent) {
+						debug(LOG_NEVER, "Failed to find cached path (%d;%d)-(%d;%d)", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y);
+					} else {
+						debug(LOG_NEVER, "Failed to find cached intercontinental path (%d;%d c%d)-(%d;%d c%d)", tileOrig.x, tileOrig.y, origContinent,
+							tileDest.x, tileDest.y, destContinent);
+					}
+				}
+				endCoord = backSearchPred.nearestCoord;
+				// There should be only one context, compatible for reusing. If this path failed,
+				// then other contexts will fail as well. So we can safely exit this loop.
+				break;
+			}
+		}
+
+		if (contextIterator == fpathContexts.end())
+		{
+			// We did not find an appropriate context. Make one.
+			if (fpathContexts.size() < 30)
+			{
+				fpathContexts.emplace_back();
+			}
+			contextIterator--;
+			PathfindContext& pfContext = fpathContexts.back();
+
+			// Init a new context, overwriting the oldest one if we are caching too many.
+			// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
+			pfContext.assign(psJob->blockingMap, tileDest, dstIgnore, true);
+			backSearchPred.clear();
+
+			IgnoreGoalCostLayer costLayer(pfContext, backSearchPred.goal);
+			// Add the start point to the open list
+			bool started = fpathNewNode(pfContext, backSearchPred, costLayer, tileDest, 0, tileDest);
+			ASSERT(started, "fpathNewNode failed to add node.");
+
+			ExplorationReport report = fpathAStarExplore(pfContext, backSearchPred, costLayer);
+			if (!report) {
+				if (origContinent == destContinent) {
+					debug(LOG_NEVER, "Failed to find path (%d;%d)-(%d;%d)", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y);
+				} else {
+					debug(LOG_NEVER, "Failed to find intercontinental path (%d;%d c%d)-(%d;%d c%d)", tileOrig.x, tileOrig.y, origContinent,
+						tileDest.x, tileDest.y, destContinent);
+				}
+			}
+			endCoord = backSearchPred.nearestCoord;
+		}
+		ASSERT_OR_RETURN(ASR_FAILED, contextIterator != fpathContexts.end(), "Missed PF context iterator");
+		pContext = &*contextIterator;
+
+		// return the nearest route if no actual route was found
+		if (endCoord != backSearchPred.goal)
+		{
+			retval = ASR_NEAREST;
+		}
+
+		// Move context to beginning of last recently used list.
+		if (contextIterator != fpathContexts.begin())  // Not sure whether or not the splice is a safe noop, if equal.
+		{
+			fpathContexts.splice(fpathContexts.begin(), fpathContexts, contextIterator);
+		}
 	}
 
-	PathfindContext &context = *contextIterator;
-
-	// return the nearest route if no actual route was found
-	if (endCoord != pred.goal)
-	{
-		retval = ASR_NEAREST;
-	}
 
 
 	static std::vector<Vector2i> path;  // Declared static to save allocations.
-	ASR_RETVAL traceRet = fpathTracePath(context, endCoord, tileDest, path);
+	ASR_RETVAL traceRet = fpathTracePath(*pContext, endCoord, tileDest, path);
 	if (traceRet != ASR_OK)
 		return traceRet;
 
@@ -631,12 +681,6 @@ ASR_RETVAL fpathAStarRoute(std::list<PathfindContext>& fpathContexts,
 	}
 
 	psMove->destination = psMove->asPath[path.size() - 1];
-
-	// Move context to beginning of last recently used list.
-	if (contextIterator != fpathContexts.begin())  // Not sure whether or not the splice is a safe noop, if equal.
-	{
-		fpathContexts.splice(fpathContexts.begin(), fpathContexts, contextIterator);
-	}
 
 	return retval;
 }

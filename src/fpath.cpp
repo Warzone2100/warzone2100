@@ -698,6 +698,24 @@ uint16_t fpathGetHoverContinent(int x, int y) {
 	return pathContinents.getHover(x, y);
 }
 
+uint16_t fpathGetContinent(int x, int y, PROPULSION_TYPE propulsion) {
+	switch (propulsion)
+	{
+	case PROPULSION_TYPE_PROPELLOR:
+	case PROPULSION_TYPE_WHEELED:
+	case PROPULSION_TYPE_TRACKED:
+	case PROPULSION_TYPE_LEGGED:
+	case PROPULSION_TYPE_HALF_TRACKED:
+		return pathContinents.getLand(x, y);
+	case PROPULSION_TYPE_HOVER:
+		return pathContinents.getHover(x, y);
+	case PROPULSION_TYPE_LIFT:
+	default:
+		return 0;
+	}
+	return 0;
+}
+
 void mapFloodFillContinents()
 {
 	pathContinents.generate();
