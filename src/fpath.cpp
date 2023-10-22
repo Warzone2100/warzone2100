@@ -44,14 +44,7 @@
 
 // If the path finding system is shutdown or not
 static volatile bool fpathQuit = false;
-
-/// Check if PF tasks are running in a separate thread.
-/// Disabling async mode can simplify debugging of PF system.
-/// Making this constant "functional" is more robust and portable than extern const/constexpr.
-bool fpathGetAsyncMode()
-{
-	return true;
-}
+static volatile bool pathAsyncMode = true;
 
 /* Beware: Enabling this will cause significant slow-down. */
 #undef DEBUG_MAP
@@ -84,6 +77,19 @@ static PATHRESULT fpathExecute(PATHJOB psJob);
 
 static PathMapCache pfMapCache;
 static PathContinents pathContinents;
+
+void war_fpathEnableDebug() {
+	// Disabling async mode only if PF thread has not started.
+	if (!fpathThread)
+		pathAsyncMode = false;
+}
+/// Check if PF tasks are running in a separate thread.
+/// Disabling async mode can simplify debugging of PF system.
+/// Making this constant "functional" is more robust and portable than extern const/constexpr.
+bool fpathGetAsyncMode()
+{
+	return pathAsyncMode;
+}
 
 /** This runs in a separate thread */
 static int fpathThreadFunc(void *)
@@ -130,7 +136,7 @@ bool fpathInitialise()
 	// The path system is up
 	fpathQuit = false;
 
-	if (!fpathThread)
+	if (pathAsyncMode && !fpathThread)
 	{
 		fpathMutex = wzMutexCreate();
 		fpathSemaphore = wzSemaphoreCreate(0);

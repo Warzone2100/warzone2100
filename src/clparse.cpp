@@ -355,7 +355,8 @@ typedef enum
 	CLI_GAMELOG_OUTPUTKEY,
 	CLI_GAMELOG_OUTPUTNAMING,
 	CLI_GAMELOG_FRAMEINTERVAL,
-	CLI_GAMETIMELIMITMINUTES
+	CLI_GAMETIMELIMITMINUTES,
+	CLI_DEBUG_PATHFINDING,
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -440,7 +441,7 @@ static const struct poptOption *getOptionsTable()
 		{ "gamelog-outputnaming", POPT_ARG_STRING, CLI_GAMELOG_OUTPUTNAMING, N_("Game history log output naming"), "[default, autohosterclassic]"},
 		{ "gamelog-frameinterval", POPT_ARG_STRING, CLI_GAMELOG_FRAMEINTERVAL, N_("Game history log frame interval"), N_("interval in seconds")},
 		{ "gametimelimit", POPT_ARG_STRING, CLI_GAMETIMELIMITMINUTES, N_("Multiplayer game time limit (in minutes)"), N_("number of minutes")},
-
+		{ "pathdebug", POPT_ARG_NONE, CLI_DEBUG_PATHFINDING, N_("Enable debug mode for pathfinding"), nullptr },
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -1151,6 +1152,11 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			war_setMPGameTimeLimitMinutes(static_cast<uint32_t>(token_intval));
 			game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 			break;
+		}
+
+		case CLI_DEBUG_PATHFINDING:
+		{
+			war_fpathEnableDebug();
 		}
 
 		} // switch (option)
