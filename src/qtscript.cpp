@@ -2019,13 +2019,13 @@ bool scripting_engine::saveGroups(nlohmann::json &result, wzapi::scripting_insta
 // Label system (function defined in qtscript.h header)
 //
 
-bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
+bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding)
 {
-	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId);
+	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId, moduleToBuilding);
 }
 
 // Load labels
-bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
+bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding)
 {
 	int groupidx = -1;
 

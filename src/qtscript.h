@@ -28,6 +28,7 @@
 #include <memory>
 #include <unordered_set>
 #include <unordered_map>
+#include <array>
 
 class QString;
 class WzString;
@@ -220,7 +221,7 @@ public:
 };
 
 /// Load map labels
-bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
+bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding);
 
 /// Write map labels to savegame
 bool writeLabels(const char *filename);
@@ -318,7 +319,7 @@ public:
 // MARK: LABELS
 public:
 	/// Load map labels
-	bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
+	bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding);
 
 	/// Write map labels to savegame
 	bool writeLabels(const char *filename);

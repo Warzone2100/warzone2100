@@ -50,7 +50,6 @@
 #define ACTION_START_TIME	0
 
 extern std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
-extern std::unordered_map<UDWORD, UDWORD> moduleToBuilding[MAX_PLAYER_SLOTS];
 
 //Value is stored for easy access to this structure stat
 extern UDWORD	factoryModuleStat;

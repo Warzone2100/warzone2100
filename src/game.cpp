@@ -95,6 +95,7 @@
 #include "wzscriptdebug.h"
 #include "gamehistorylogger.h"
 #include "build_tools/autorevision.h"
+#include <array>
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
@@ -2227,7 +2228,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
 static bool loadSaveStructure2(const char *pFileName);
-static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
+static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding);
 static bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList);
 static bool writeStructFile(const char *pFileName);
 
@@ -2484,7 +2485,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	std::shared_ptr<WzMap::Map> data;
 	std::map<WzString, DROID **> droidMap;
 	std::map<WzString, STRUCTURE **> structMap;
-	std::unordered_map<UDWORD, UDWORD> fixedMapIdToGeneratedId; // only populated when loading maps, *not* savegames
+
+	// only populated when loading maps, *not* savegames
+	std::unordered_map<UDWORD, UDWORD> fixedMapIdToGeneratedId;
+	// JS compatibility: remembers which module_id maps to which building
+	// - why "MAX_PLAYER_SLOTS" instead of "MAX_PLAYERS"?
+	// 	 because in Campaign, we have objects with player==12
+	//   I don't what's the reason but we definitely need to handle more than MAX_PLAYERS
+	std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS> moduleToBuilding;
+
 	char			aFileName[256];
 	size_t			fileExten;
 	UDWORD			fileSize;
@@ -3129,7 +3138,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			freeAllFlagPositions();		//clear any flags put in during level loads
 		}
-		if (!loadWzMapStructure(*(data.get()), fixedMapIdToGeneratedId))
+		if (!loadWzMapStructure(*(data.get()), fixedMapIdToGeneratedId, moduleToBuilding))
 		{
 			aFileName[fileExten] = '\0';
 			debug(LOG_ERROR, "Failed to load map structure init from map directory: %s", aFileName);
@@ -3262,7 +3271,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	// Load labels
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "labels.json");
-	loadLabels(aFileName, fixedMapIdToGeneratedId);
+	loadLabels(aFileName, fixedMapIdToGeneratedId, moduleToBuilding);
 
 	//if user save game then reset the time - BEWARE IF YOU USE IT
 	if ((gameType == GTYPE_SAVE_START) ||
@@ -6085,7 +6094,7 @@ static UDWORD getResearchIdFromName(const WzString &name)
 	return NULL_ID;
 }
 
-static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
+static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding)
 {
 	uint32_t NumberOfSkippedStructures = 0;
 	auto pStructures = wzMap.mapStructures();
@@ -6143,6 +6152,19 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.c_str());
 			continue;
 		}
+
+		if (IsStatExpansionModule(psStats))
+		{
+			// backward compatibility:
+			// JS scripts try to find buildings by their modules ids, which isn't possible anymore
+			// (because SIMPLE_OBJECT.id is const),
+			// so we maintain a map from module_id to buildings, so that qtscripts.cpp::loadLabels
+			// can replace module_id with building_id
+			// *Not* doing so will break campaign (no artifacts being spawned from modules)
+			auto mappingInsertionResult = moduleToBuilding[player].emplace(newID, psStructure->id);
+			ASSERT(mappingInsertionResult.second, "Duplicate input module id: %" PRIu32 " - ignoring mapping module to building", structure.id.value_or(newID));
+		}
+
 		// Previously, we would override building's ID with module's ID
 		// now, "id" is const, we can't do that. 
 		// this may break some mods which look up structures by theirs module id.
