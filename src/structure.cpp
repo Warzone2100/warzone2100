@@ -1709,13 +1709,8 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			return nullptr;
 		}
 
-		// backward compatibility:
-		// JS scripts try to find buildings by their modules ids, which isn't possible anymore
-		// (because SIMPLE_OBJECT.id is const),
-		// so we maintain a map from module_id to buildings, so that qtscripts.cpp::loadLabels 
-		// can replace module_id with building_id
-		// *Not* doing so will break campaign (no artifacts being spawned from modules)
-		moduleToBuilding[player].emplace(id, psBuilding->id);
+		ASSERT(psBuilding->player == player, "Trying to upgrade player %u building with player %u module?", static_cast<unsigned>(psBuilding->player), player);
+
 		int prevResearchState = intGetResearchState();
 
 		if (pStructureType->type == REF_FACTORY_MODULE)
@@ -1723,6 +1718,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			if (psBuilding->pStructureType->type != REF_FACTORY &&
 			    psBuilding->pStructureType->type != REF_VTOL_FACTORY)
 			{
+				debug(LOG_INFO, "Factory module %" PRIu32 " trying to upgrade structure of type %u - ignoring", id, static_cast<unsigned>(psBuilding->pStructureType->type));
 				return nullptr;
 			}
 			//increment the capacity and output for the owning structure
@@ -1742,6 +1738,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			if (psBuilding->pStructureType->type != REF_RESEARCH)
 			{
+				debug(LOG_INFO, "Research module %" PRIu32 " trying to upgrade structure of type %u - ignoring", id, static_cast<unsigned>(psBuilding->pStructureType->type));
 				return nullptr;
 			}
 			//increment the capacity and research points for the owning structure
@@ -1765,6 +1762,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			if (psBuilding->pStructureType->type != REF_POWER_GEN)
 			{
+				debug(LOG_INFO, "Power module %" PRIu32 " trying to upgrade structure of type %u - ignoring", id, static_cast<unsigned>(psBuilding->pStructureType->type));
 				return nullptr;
 			}
 			//increment the capacity and research points for the owning structure
@@ -1781,6 +1779,16 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				releasePowerGen(psBuilding);
 			}
 		}
+
+		// backward compatibility:
+		// JS scripts try to find buildings by their modules ids, which isn't possible anymore
+		// (because SIMPLE_OBJECT.id is const),
+		// so we maintain a map from module_id to buildings, so that qtscripts.cpp::loadLabels
+		// can replace module_id with building_id
+		// *Not* doing so will break campaign (no artifacts being spawned from modules)
+		auto mappingInsertionResult = moduleToBuilding[player].emplace(id, psBuilding->id);
+		ASSERT(mappingInsertionResult.second, "Duplicate input module id: %" PRIu32 " - ignoring mapping module to building", id);
+
 		if (bUpgraded)
 		{
 			std::vector<iIMDBaseShape *> &IMDs = psBuilding->pStructureType->pIMD;
@@ -1813,6 +1821,10 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					intRefreshScreen();
 				}
 			}
+		}
+		else
+		{
+			debug(LOG_INFO, "Did not use upgrade %" PRIu32 " trying to upgrade structure of type %u (either reached capacity or not compatible)", id, static_cast<unsigned>(psBuilding->pStructureType->type));
 		}
 		intNotifyResearchButton(prevResearchState);
 	}
