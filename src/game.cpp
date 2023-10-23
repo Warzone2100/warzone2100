@@ -5201,7 +5201,11 @@ static bool loadWzMapDroidInit(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDW
 		if (droid.id.has_value() && droid.id.value() > 0)
 		{
 			bool addedMapping = fixedMapIdToGeneratedId.insert(std::unordered_map<UDWORD, UDWORD>::value_type(droid.id.value(), newID)).second;
-			if (!addedMapping)
+			if (addedMapping)
+			{
+				debug(LOG_MAP, "Fixed map object ID: %" PRIu32 " -> generated id: %" PRIu32, droid.id.value(), newID);
+			}
+			else
 			{
 				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", droid.id.value());
 			}
@@ -6141,7 +6145,11 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 		if (structure.id.has_value() && structure.id.value() > 0)
 		{
 			bool addedMapping = fixedMapIdToGeneratedId.insert(std::unordered_map<UDWORD, UDWORD>::value_type(structure.id.value(), newID)).second;
-			if (!addedMapping)
+			if (addedMapping)
+			{
+				debug(LOG_MAP, "Fixed map object ID: %" PRIu32 " -> generated id: %" PRIu32, structure.id.value(), newID);
+			}
+			else
 			{
 				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", structure.id.value());
 			}
@@ -6891,7 +6899,11 @@ static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWOR
 		if (feature.id.has_value() && feature.id.value() > 0)
 		{
 			bool addedMapping = fixedMapIdToGeneratedId.insert(std::unordered_map<UDWORD, UDWORD>::value_type(feature.id.value(), newID)).second;
-			if (!addedMapping)
+			if (addedMapping)
+			{
+				debug(LOG_MAP, "Fixed map object ID: %" PRIu32 " -> generated id: %" PRIu32, feature.id.value(), newID);
+			}
+			else
 			{
 				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", feature.id.value());
 			}
