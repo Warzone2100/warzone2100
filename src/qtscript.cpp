@@ -2037,7 +2037,7 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	labels.clear();
 	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading %zu labels...", list.size());
+	debug(LOG_SAVE, "Loading %zu labels... (fixedMapToGeneratedId.count = %zu)", list.size(), fixedMapIdToGeneratedId.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -2090,7 +2090,7 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			{
 				// replace fixed hard-coded map-load id with its new generated (synchronized) id
 				// note: must come *before* the moduleToBuilding call below
-				debug(LOG_NEVER, "replaced fixed map id %d with %d", id, it->second);
+				debug(LOG_MAP, "replaced fixed map id %d with %d", id, it->second);
 				id = it->second;
 			}
 			const auto player = ini.value("player").toInt();
@@ -2098,7 +2098,7 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			if (it_modulemap != moduleToBuilding[player].end())
 			{
 				// replace moduleId with its building id
-				debug(LOG_NEVER, "replaced with %i;%i", id, it_modulemap->second);
+				debug(LOG_MAP, "replaced with %i;%i", id, it_modulemap->second);
 				id = it_modulemap->second;
 			}
 			p.id = id;
@@ -2106,6 +2106,7 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			p.player = player;
 			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			ASSERT(IdToObject((OBJECT_TYPE)p.type, p.id, p.player) != nullptr, "Failed to find object that label references: %s", label.c_str());
 			labels[label] = p;
 		}
 		else if (list[i].startsWith("group"))
