@@ -19,10 +19,61 @@
 #ifndef _WZ_UPDATE_MANAGER_H_
 #define _WZ_UPDATE_MANAGER_H_
 
+#include "terrain_defs.h"
+#include <unordered_set>
+#include <string>
+
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
+
 class WzInfoManager {
 public:
 	static void initialize();
 	static void shutdown();
 };
+
+
+struct CompatCheckIssue
+{
+	enum class Severity
+	{
+		Warning,
+		Critical
+	};
+	struct ConfigFlags
+	{
+		std::unordered_set<TerrainShaderQuality> supportedTerrain = {TerrainShaderQuality::CLASSIC, TerrainShaderQuality::MEDIUM, TerrainShaderQuality::NORMAL_MAPPING};
+		bool multilobby = true;
+	};
+
+	std::string identifier;
+	Severity severity = Severity::Warning;
+	bool unsupported = false;
+	std::string infoLink;
+	ConfigFlags configFlags;
+};
+
+struct CompatCheckResults
+{
+	optional<CompatCheckIssue> issue;
+	bool successfulCheck = false;
+
+public:
+	CompatCheckResults(bool successfulCheck, optional<CompatCheckIssue> issue = nullopt)
+	: issue(issue)
+	, successfulCheck(successfulCheck)
+	{ }
+
+public:
+	bool hasIssue() const { return issue.has_value(); }
+};
+
+typedef std::function<void (CompatCheckResults results)> CompatCheckResultsHandlerFunc;
+
+// Get the compat check results
+// NOTE: resultClosure may be called on any thread at any time - use wzAsyncExecOnMainThread inside your closure if you need to perform tasks on the main thread
+void asyncGetCompatCheckResults(CompatCheckResultsHandlerFunc resultClosure);
 
 #endif //_WZ_UPDATE_MANAGER_H_
