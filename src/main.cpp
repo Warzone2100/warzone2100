@@ -1893,9 +1893,10 @@ int realmain(int argc, char *argv[])
 	urlRequestInit();
 
 	// find early boot info
-	if (!ParseCommandLineEarly(utfargc, utfargv))
+	ParseCLIEarlyResult earlyCommandLineParsingResult = ParseCommandLineEarly(utfargc, utfargv);
+	if (earlyCommandLineParsingResult != ParseCLIEarlyResult::OK_CONTINUE)
 	{
-		return EXIT_FAILURE;
+		return (earlyCommandLineParsingResult == ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND) ? 0 : EXIT_FAILURE;
 	}
 
 	/* Initialize the write/config directory for PhysicsFS.
