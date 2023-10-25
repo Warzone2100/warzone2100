@@ -1753,6 +1753,38 @@ static void cleanupOldLogFiles()
 	});
 }
 
+static void mainProcessCompatCheckResults(CompatCheckResults results)
+{
+	// Since this may be called from any thread, use wzAsyncExecOnMainThread
+	wzAsyncExecOnMainThread([results]() {
+		if (!results.successfulCheck)
+		{
+			return;
+		}
+		if (!results.hasIssue())
+		{
+			return;
+		}
+
+		// supported_terrain
+		auto& configFlags = results.issue.value().configFlags;
+		if (configFlags.supportedTerrain.count(getTerrainShaderQuality()) == 0)
+		{
+			// current terrain mode is not in supported list
+			// if not in a game, change the terrain shader quality back to default
+			if (GetGameMode() != GS_NORMAL)
+			{
+				setTerrainShaderQuality(TerrainShaderQuality::MEDIUM);
+			}
+		}
+		// multilobby
+		if (!configFlags.multilobby)
+		{
+			NET_setLobbyDisabled(results.issue.value().infoLink);
+		}
+	});
+}
+
 // for backend detection
 extern const char *BACKEND;
 
@@ -2157,6 +2189,7 @@ int realmain(int argc, char *argv[])
 		break;
 	}
 
+	asyncGetCompatCheckResults(mainProcessCompatCheckResults);
 	WzInfoManager::initialize();
 #if defined(ENABLE_DISCORD)
 	discordRPCInitialize();
