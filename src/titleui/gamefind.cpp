@@ -103,6 +103,11 @@ void WzGameFindTitleUI::start()
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
 
+	if (NET_getLobbyDisabled())
+	{
+		displayLobbyDisabledNotification();
+	}
+
 	addGames();	// now add games.
 	displayConsoleMessages();
 }
@@ -224,7 +229,14 @@ void WzGameFindTitleUI::addConsoleBox()
 	setConsolePermanence(true, true);
 	setConsoleLineInfo(3);											// use x lines on chat window
 
-	addConsoleMessage(_("Connecting to the lobby server..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	if (!NET_getLobbyDisabled())
+	{
+		addConsoleMessage(_("Connecting to the lobby server..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	}
+	else
+	{
+		addConsoleMessage(_("Multiplayer Lobby Support Unavailable"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+	}
 	displayConsoleMessages();
 	return;
 }
@@ -675,7 +687,7 @@ void WzGameFindTitleUI::addGames()
 		switch (getLobbyError())
 		{
 		case ERROR_NOERROR:
-			if (NetPlay.HaveUpgrade)
+			if (NetPlay.HaveUpgrade || NET_getLobbyDisabled())
 			{
 				txt = _("There appears to be a game update available!");
 			}
