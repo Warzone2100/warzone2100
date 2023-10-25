@@ -26,7 +26,13 @@
 
 // parse the commandline
 bool ParseCommandLine(int argc, const char * const *argv);
-bool ParseCommandLineEarly(int argc, const char * const *argv);
+
+enum class ParseCLIEarlyResult
+{
+	OK_CONTINUE,
+	HANDLED_QUIT_EARLY_COMMAND
+};
+ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv);
 bool ParseCommandLineDebugFlags(int argc, const char * const *argv);
 
 bool autogame_enabled();

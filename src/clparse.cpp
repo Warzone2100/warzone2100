@@ -575,8 +575,8 @@ static std::string specialGetBaseDir(const std::string& platformSpecificPath, st
  * set up first.
  * \param argc number of arguments given
  * \param argv string array of the arguments
- * \return Returns true on success, false on error */
-bool ParseCommandLineEarly(int argc, const char * const *argv)
+ * \return See ParseCLIEarlyResult enum */
+ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
 	int iOption;
@@ -615,11 +615,11 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 
 		case CLI_HELP:
 			poptPrintHelp(poptCon, stdout);
-			return false;
+			return ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND;
 
 		case CLI_VERSION:
 			printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
-			return false;
+			return ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND;
 
 #if defined(WZ_OS_WIN)
 		case CLI_WIN_ENABLE_CONSOLE:
@@ -693,7 +693,7 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 		};
 	}
 
-	return true;
+	return ParseCLIEarlyResult::OK_CONTINUE;
 }
 
 //! second half of parsing the commandline
