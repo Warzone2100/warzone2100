@@ -231,8 +231,10 @@ private:
 // Variables
 
 NETPLAY	NetPlay;
-static bool		allow_joining = false;
-static	bool server_not_there = false;
+static bool allow_joining = false;
+static bool server_not_there = false;
+static bool lobby_disabled = false;
+static std::string lobby_disabled_info_link_url;
 static GAMESTRUCT	gamestruct;
 
 static std::vector<WZFile> DownloadingWzFiles;
@@ -415,6 +417,22 @@ uint32_t NETGetMinorVersion()
 bool NETGameIsLocked()
 {
 	return NetPlay.GamePassworded;
+}
+
+bool NET_getLobbyDisabled()
+{
+	return lobby_disabled;
+}
+
+const std::string& NET_getLobbyDisabledInfoLinkURL()
+{
+	return lobby_disabled_info_link_url;
+}
+
+void NET_setLobbyDisabled(const std::string& infoLinkURL)
+{
+	lobby_disabled = true;
+	lobby_disabled_info_link_url = infoLinkURL;
 }
 
 //	Sets if the game is password protected or not
@@ -3409,6 +3427,14 @@ bool LobbyServerConnectionHandler::connect()
 	{
 		return false;
 	}
+	if (lobby_disabled)
+	{
+		debug(LOG_ERROR, "Multiplayer lobby support unavailable. Please update your client.");
+		wz_command_interface_output("WZEVENT: lobbyerror: Client support disabled / unavailable\n");
+		gamestruct.gameId = 0;
+		server_not_there = true;
+		return true; // return true once, so that NETallowJoining processes the "first time connect" branch
+	}
 	if (currentState == LobbyConnectionState::Connecting_WaitingForResponse || currentState == LobbyConnectionState::Connected)
 	{
 		return false; // already connecting or connected
@@ -3519,14 +3545,20 @@ bool LobbyServerConnectionHandler::disconnect()
 
 	queuedServerUpdate = false;
 
+	ActivityManager::instance().hostGameLobbyServerDisconnect();
+
 	currentState = LobbyConnectionState::Disconnected;
 	return true;
 }
 
 void LobbyServerConnectionHandler::sendUpdate()
 {
-	if (server_not_there)
+	if (lobby_disabled || server_not_there)
 	{
+		if (currentState != LobbyConnectionState::Disconnected)
+		{
+			disconnect();
+		}
 		return;
 	}
 
@@ -3545,10 +3577,18 @@ void LobbyServerConnectionHandler::sendUpdate()
 void LobbyServerConnectionHandler::sendUpdateNow()
 {
 	ASSERT_OR_RETURN(, rs_socket != nullptr, "Null socket");
+	if (lobby_disabled)
+	{
+		if (currentState != LobbyConnectionState::Disconnected)
+		{
+			disconnect();
+		}
+		return;
+	}
+
 	if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
 	{
 		disconnect();
-		ActivityManager::instance().hostGameLobbyServerDisconnect();
 	}
 	lastServerUpdate = realTime;
 	queuedServerUpdate = false;
@@ -3556,7 +3596,6 @@ void LobbyServerConnectionHandler::sendUpdateNow()
 	if (rs_socket && readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 	{
 		disconnect();
-		ActivityManager::instance().hostGameLobbyServerDisconnect();
 	}
 }
 
@@ -3567,7 +3606,6 @@ void LobbyServerConnectionHandler::sendKeepAlive()
 	{
 		// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
 		disconnect();
-		ActivityManager::instance().hostGameLobbyServerDisconnect();
 	}
 	lastServerUpdate = realTime;
 }
@@ -4585,6 +4623,12 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 {
 	size_t gamecount = 0;
 	results.clear();
+
+	if (lobby_disabled)
+	{
+		return true;
+	}
+
 	bool success = NETenumerateGames([&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &lobbyGame) -> bool {
 		if (gamecount++ < startingIndex)
 		{

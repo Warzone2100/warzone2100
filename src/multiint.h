@@ -102,6 +102,7 @@ void sendRoomNotifyMessage(char const *text);
 void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
 void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
+void displayLobbyDisabledNotification();
 
 void handleAutoReadyRequest();
 
