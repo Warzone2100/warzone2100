@@ -116,6 +116,8 @@
 #include "stdinreader.h"
 #include "urlhelpers.h"
 #include "hci/quickchat.h"
+#include "hci/teamstrategy.h"
+#include "multivote.h"
 
 #include "activity.h"
 #include <algorithm>
@@ -123,7 +125,6 @@
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 #define LOBBY_DISABLED_TAG       "lobbyDisabled"
-#define VOTE_TAG                 "voting"
 #define KICK_REASON_TAG          "kickReason"
 #define SLOTTYPE_TAG_PREFIX      "slotType"
 #define SLOTTYPE_REQUEST_TAG     SLOTTYPE_TAG_PREFIX "::request"
@@ -179,7 +180,6 @@ char sPlayer[128] = {'\0'}; // player name (to be used)
 bool multiintDisableLobbyRefresh = false; // if we allow lobby to be refreshed or not.
 
 static UDWORD hideTime = 0;
-static uint8_t playerVotes[MAX_PLAYERS];
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static bool bInActualHostedLobby = false;
 static bool bRequestedSelfMoveToPlayers = false;
@@ -1279,114 +1279,14 @@ WzString formatGameName(WzString name)
 	return withoutTechlevel + " (T" + WzString::number(game.techLevel) + " " + WzString::number(game.maxPlayers) + "P)";
 }
 
-void resetVoteData()
-{
-	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		playerVotes[i] = 0;
-	}
-}
-
-static void sendVoteData(uint8_t currentVote)
-{
-	NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
-	NETuint32_t(&selectedPlayer);
-	NETuint8_t(&currentVote);
-	NETend();
-}
-
-static uint8_t getVoteTotal()
-{
-	ASSERT_HOST_ONLY(return true);
-
-	uint8_t total = 0;
-
-	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (isHumanPlayer(i))
-		{
-			if (selectedPlayer == i)
-			{
-				// always count the host as a "yes" vote.
-				playerVotes[i] = 1;
-			}
-			total += playerVotes[i];
-		}
-		else
-		{
-			playerVotes[i] = 0;
-		}
-	}
-
-	return total;
-}
-
-static bool recvVote(NETQUEUE queue)
-{
-	ASSERT_HOST_ONLY(return true);
-
-	uint8_t newVote;
-	uint32_t player;
-
-	NETbeginDecode(queue, NET_VOTE);
-	NETuint32_t(&player); // TODO: check that NETQUEUE belongs to that player :wink:
-	NETuint8_t(&newVote);
-	NETend();
-
-	if (player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "Invalid NET_VOTE from player %d: player id = %d", queue.index, static_cast<int>(player));
-		return false;
-	}
-
-	playerVotes[player] = (newVote == 1) ? 1 : 0;
-
-	debug(LOG_NET, "total votes: %d/%d", static_cast<int>(getVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
-
-	// there is no "votes" that disallows map change so assume they are all allowing
-	if(newVote == 1) {
-		char msg[128] = {0};
-		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), NetPlay.players[player].name, player, static_cast<int>(getVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
-		sendRoomSystemMessage(msg);
-	}
-
-	return true;
-}
-
-// Show a vote popup to allow changing maps or using the randomization feature.
-static void setupVoteChoice()
-{
-	//This shouldn't happen...
-	if (NetPlay.isHost)
-	{
-		ASSERT(false, "Host tried to send vote data to themself");
-		return;
-	}
-
-	if (!hasNotificationsWithTag(VOTE_TAG))
-	{
-		WZ_Notification notification;
-		notification.duration = 0;
-		notification.contentTitle = _("Vote");
-		notification.contentText = _("Allow host to change map or randomize?");
-		notification.action = WZ_Notification_Action("Allow", [](const WZ_Notification&) {
-			uint8_t vote = 1;
-			sendVoteData(vote);
-		});
-		notification.tag = VOTE_TAG;
-
-		addNotification(notification, WZ_Notification_Trigger(GAME_TICKS_PER_SEC * 1));
-	}
-}
-
 static bool canChangeMapOrRandomize()
 {
 	ASSERT_HOST_ONLY(return true);
 
 	uint8_t numHumans = NET_numHumanPlayers();
-	bool allowed = (static_cast<float>(getVoteTotal()) / static_cast<float>(numHumans)) > 0.5f;
+	bool allowed = (static_cast<float>(getLobbyChangeVoteTotal()) / static_cast<float>(numHumans)) > 0.5f;
 
-	resetVoteData(); //So the host can only do one change every vote session
+	resetLobbyChangeVoteData(); //So the host can only do one change every vote session
 
 	if (numHumans == 1)
 	{
@@ -1395,10 +1295,7 @@ static bool canChangeMapOrRandomize()
 
 	if (!allowed)
 	{
-		//setup a vote popup for the clients
-		NETbeginEncode(NETbroadcastQueue(), NET_VOTE_REQUEST);
-		NETend();
-
+		startLobbyChangeVote();
 		displayRoomSystemMessage(_("Not enough votes to randomize or change the map."));
 	}
 
@@ -3339,7 +3236,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex); // needed??
 		if (playerIndex < MAX_PLAYERS)
 		{
-			playerVotes[playerIndex] = 0;
+			resetLobbyChangePlayerVote(playerIndex);
 		}
 	}
 	swapPlayerMultiStatsLocal(playerIndexA, playerIndexB);
@@ -5429,7 +5326,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 	bInActualHostedLobby = false;
 
 	reloadMPConfig(); // reload own settings
-	cancelOrDismissNotificationsWithTag(VOTE_TAG);
+	cancelOrDismissVoteNotifications();
 	cancelOrDismissNotificationIfTag([](const std::string& tag) {
 		return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
 	});
@@ -6359,7 +6256,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));
 
-		resetVoteData();
+		resetLobbyChangeVoteData();
 		resetDataHash();
 
 		startHost();
@@ -6381,7 +6278,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			if (NetPlay.bComms && ingame.side == InGameSide::MULTIPLAYER_CLIENT && !NetPlay.isHost)
 			{
 				// remove a potential "allow" vote if we gracefully leave
-				sendVoteData(0);
+				sendLobbyChangeVoteData(0);
 			}
 			NETGameLocked(false);		// reset status on a cancel
 			stopJoining(parent);
@@ -6914,7 +6811,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 				if (player_id < MAX_PLAYERS)
 				{
-					playerVotes[player_id] = 0;
+					resetLobbyChangePlayerVote(player_id);
 				}
 				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 				if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
@@ -6939,7 +6836,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				break;
 			}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
-			cancelOrDismissNotificationsWithTag(VOTE_TAG); // don't need vote notifications anymore
+			cancelOrDismissVoteNotifications(); // don't need vote notifications anymore
 			cancelOrDismissNotificationsWithTag(LOBBY_DISABLED_TAG);
 			cancelOrDismissNotificationIfTag([](const std::string& tag) {
 				return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
@@ -6996,7 +6893,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 				if (player_id < MAX_PLAYERS)
 				{
-					playerVotes[player_id] = 0;
+					resetLobbyChangePlayerVote(player_id);
 				}
 
 				if (player_id == NetPlay.hostPlayer)
@@ -7083,7 +6980,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 		case NET_VOTE_REQUEST:
 			if (!NetPlay.isHost && !NetPlay.players[selectedPlayer].isSpectator)
 			{
-				setupVoteChoice();
+				recvVoteRequest(queue);
 			}
 			break;
 
@@ -7366,7 +7263,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	}
 	if (!NetPlay.isHostAlive && ingame.side == InGameSide::MULTIPLAYER_CLIENT)
 	{
-		cancelOrDismissNotificationsWithTag(VOTE_TAG);
+		cancelOrDismissVoteNotifications();
 		cancelOrDismissNotificationsWithTag(LOBBY_DISABLED_TAG);
 		cancelOrDismissNotificationIfTag([](const std::string& tag) {
 			return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);

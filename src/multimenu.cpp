@@ -68,6 +68,7 @@
 #include "loop.h"
 #include "frontend.h"
 #include "hci/teamstrategy.h"
+#include "multivote.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -877,17 +878,11 @@ private:
 
 				if (mouseDown(MOUSE_RMB) && NetPlay.isHost) // both buttons....
 				{
-					char buf[250];
-
 					// Allow the host to kick the AI only in a MP game, or if they activated cheats in a skirmish game
 					if ((NetPlay.bComms || Cheated) && (NetPlay.players[i].allocated || (NetPlay.players[i].allocated == false && NetPlay.players[i].ai != AI_OPEN)))
 					{
 						inputLoseFocus();
-						ssprintf(buf, _("The host has kicked %s from the game!"), getPlayerName((unsigned int) i));
-						sendInGameSystemMessage(buf);
-						ssprintf(buf, _("kicked %s : %s from the game, and added them to the banned list!"), getPlayerName((unsigned int) i), NetPlay.players[i].IPtextAddress);
-						NETlogEntry(buf, SYNC_FLAG, (unsigned int) i);
-						kickPlayer((unsigned int) i, _("The host has kicked you from the game."), ERROR_KICKED, false);
+						startKickVote(static_cast<uint32_t>(i));
 						return;
 					}
 				}
