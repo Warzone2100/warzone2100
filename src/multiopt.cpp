@@ -62,6 +62,7 @@
 #include "multigifts.h"
 #include "multiint.h"
 #include "multirecv.h"
+#include "multivote.h"
 #include "template.h"
 #include "activity.h"
 #include "warzoneconfig.h"
@@ -725,6 +726,8 @@ bool multiGameShutdown()
 	selectedPlayer					= 0;		// Back to use player 0 (single player friendly)
 
 	NET_InitPlayers();
+
+	resetKickVoteData();
 
 	return true;
 }

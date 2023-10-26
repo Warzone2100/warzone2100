@@ -660,6 +660,12 @@ int cmdInputThreadFunc(void *)
 				std::string kickReasonStrCopy = (r >= 2) ? kickreasonstr : "You have been kicked by the administrator.";
 				convertEscapedNewlines(kickReasonStrCopy);
 				wzAsyncExecOnMainThread([playerIdentityStrCopy, kickReasonStrCopy] {
+					if (NetPlay.hostPlayer < MAX_PLAYERS && ingame.TimeEveryoneIsInGame.has_value())
+					{
+						// host is not a spectator host
+						wz_command_interface_output("WZCMD error: Failed to execute in-game kick command - not a spectator host\n");
+						return;
+					}
 					bool foundActivePlayer = kickActivePlayerWithIdentity(playerIdentityStrCopy, kickReasonStrCopy, false);
 					if (!foundActivePlayer)
 					{
@@ -698,6 +704,11 @@ int cmdInputThreadFunc(void *)
 				std::string kickReasonStrCopy = "You have been kicked by the administrator.";
 				wzAsyncExecOnMainThread([playerIdentityStrCopy, kickReasonStrCopy] {
 					netPermissionsSet_Connect(playerIdentityStrCopy, ConnectPermissions::Blocked);
+					if (NetPlay.hostPlayer < MAX_PLAYERS)
+					{
+						// host is not a spectator host
+						return;
+					}
 					kickActivePlayerWithIdentity(playerIdentityStrCopy, kickReasonStrCopy, true);
 				});
 			}
@@ -733,6 +744,12 @@ int cmdInputThreadFunc(void *)
 				std::string banReasonStrCopy = (r >= 2) ? banreasonstr : "You have been banned from joining by the administrator.";
 				convertEscapedNewlines(banReasonStrCopy);
 				wzAsyncExecOnMainThread([banIPStrCopy, banReasonStrCopy] {
+					if (NetPlay.hostPlayer < MAX_PLAYERS && ingame.TimeEveryoneIsInGame.has_value())
+					{
+						// host is not a spectator host
+						wz_command_interface_output("WZCMD error: Failed to execute in-game ban command - not a spectator host\n");
+						return;
+					}
 					bool foundActivePlayer = false;
 					for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 					{

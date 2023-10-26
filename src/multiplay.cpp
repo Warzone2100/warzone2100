@@ -77,6 +77,7 @@
 #include "cheat.h"
 #include "main.h"								// for gamemode
 #include "multiint.h"
+#include "multivote.h"
 #include "activity.h"
 #include "lib/framework/wztime.h"
 #include "chat.h" // for InGameChatMessage
@@ -370,6 +371,7 @@ bool multiPlayerLoop()
 	if (NetPlay.isHost)
 	{
 		autoLagKickRoutine();
+		processPendingKickVotes();
 	}
 
 	// if player has won then process the win effects...
@@ -1313,6 +1315,18 @@ bool recvMessage()
 			}
 		case GAME_ALLIANCE:
 			recvAlliance(queue, true);
+			break;
+		case NET_VOTE:
+			if (NetPlay.isHost)
+			{
+				recvVote(queue);
+			}
+			break;
+		case NET_VOTE_REQUEST:
+			if (!NetPlay.isHost && !NetPlay.players[selectedPlayer].isSpectator)
+			{
+				recvVoteRequest(queue);
+			}
 			break;
 		case NET_KICK:	// in-game kick message
 			{

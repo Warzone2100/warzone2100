@@ -68,6 +68,7 @@
 #include "multiint.h"
 #include "multistat.h"
 #include "multigifts.h"
+#include "multivote.h"
 #include "qtscript.h"
 #include "clparse.h"
 #include "multilobbycommands.h"
@@ -417,6 +418,7 @@ void recvPlayerLeft(NETQUEUE queue)
 	NetPlay.players[playerIndex].allocated = false;
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
+	cancelOrDismissKickVote(playerIndex);
 
 	debug(LOG_INFO, "** player %u has dropped, in-game! (gameTime: %" PRIu32 ")", playerIndex, gameTime);
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
