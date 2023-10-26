@@ -438,6 +438,18 @@ vk::Format findDepthBufferFormat(const vk::PhysicalDevice& physicalDevice, const
 	);
 }
 
+vk::Format findSceneColorBufferFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	std::vector<vk::Format> sceneColorFormats = { vk::Format::eA2B10G10R10UnormPack32, vk::Format::eR8G8B8A8Unorm };
+	return findSupportedFormat(
+		physicalDevice,
+		sceneColorFormats,
+		vk::ImageTiling::eOptimal,
+		vk::FormatFeatureFlags{vk::FormatFeatureFlagBits::eColorAttachment | vk::FormatFeatureFlagBits::eColorAttachmentBlend | vk::FormatFeatureFlagBits::eSampledImage},
+		vkDynLoader
+	);
+}
+
 bool checkValidationLayerSupport(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	std::vector<VkLayerProperties> availableLayers;
@@ -3845,7 +3857,9 @@ bool VkRoot::createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reaso
 
 vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
 {
-	const auto desiredFormats = std::array<vk::SurfaceFormatKHR, 2> {
+	const auto desiredFormats = std::array<vk::SurfaceFormatKHR, 4> {
+		vk::SurfaceFormatKHR{ vk::Format::eA2B10G10R10UnormPack32, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
+		vk::SurfaceFormatKHR{ vk::Format::eA2R10G10B10UnormPack32, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
 		vk::SurfaceFormatKHR{ vk::Format::eB8G8R8A8Unorm, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
 		vk::SurfaceFormatKHR{ vk::Format::eR8G8B8A8Unorm, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear }
 	};
@@ -4208,6 +4222,7 @@ bool VkRoot::createSwapchain()
 
 	// createDepthStencilImage
 	vk::Format depthFormat = findDepthStencilFormat(physicalDevice, vkDynLoader);
+	debug(LOG_3D, "Using depth buffer format: %s", to_string(depthFormat).c_str());
 	if (!createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, depthFormat,
 							depthStencilImage, depthStencilMemory, depthStencilView, vkDynLoader))
 	{
@@ -4231,7 +4246,8 @@ bool VkRoot::createSwapchain()
 	}
 
 	// Create scene FBOs + renderpass
-	vk::Format sceneFormat = vk::Format::eR8G8B8A8Unorm; // TODO: Choose an appropriate format
+	vk::Format sceneFormat = findSceneColorBufferFormat(physicalDevice, vkDynLoader);
+	debug(LOG_3D, "Using scene color format: %s", to_string(sceneFormat).c_str());
 	try {
 		createSceneRenderpass(sceneFormat, depthFormat);
 	}
