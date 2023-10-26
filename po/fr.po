@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-14 16:45+0000\n"
-"PO-Revision-Date: 2023-10-26 11:28\n"
+"PO-Revision-Date: 2023-10-26 23:50\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -16621,238 +16621,238 @@ msgstr ""
 
 #: src/hci/quickchat.cpp:2405
 msgid "Suggestions"
-msgstr ""
+msgstr "Suggestions"
 
 #: src/hci/quickchat.cpp:2445
 msgid "Cheats"
-msgstr ""
+msgstr "Triche"
 
 #: src/hci/quickchat.cpp:2454
 msgid "End-Game"
-msgstr ""
+msgstr "Fin de partie"
 
 #: src/hci/quickchat.cpp:2475
 msgid "Can someone please transfer me some units?"
-msgstr ""
+msgstr "Quelqu'un peut-il me transférer des unités ?"
 
 #: src/hci/quickchat.cpp:2477
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr ""
+msgstr "Est-ce que quelqu'un peut me transférer des camions pour que je puisse reconstruire ?"
 
 #: src/hci/quickchat.cpp:2479
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Désolé, je ne comprends pas. (Utilisez le tchat rapide ?)"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2484
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "Je propose : Construire plus d'unités"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2487
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "Je propose : Construire des unités différentes"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2490
 msgid "I suggest: Checking the team strategy view"
-msgstr ""
+msgstr "Je propose : Vérifier la vue stratégique de l'équipe"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2493
 msgid "I suggest: Researching different tech"
-msgstr ""
+msgstr "Je propose : Rechercher une autre branche"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2496
 msgid "I suggest: Keeping research centers busy"
-msgstr ""
+msgstr "Je propose : Garder les centres de recherche occupés"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2499
 msgid "I suggest: Building anti-air"
-msgstr ""
+msgstr "Je propose : Construire plus d'unités anti-aériens"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2502
 msgid "I suggest: Repairing your units"
-msgstr ""
+msgstr "Je propose : Réparer vos unités"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2505
 msgid "I suggest: Building repair facilities"
-msgstr ""
+msgstr "Je propose : Construire les stations de réparations"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2508
 msgid "I suggest: Building power generators"
-msgstr ""
+msgstr "Je propose : Construire des générateurs d'énergie"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2511
 msgid "I suggest: Capturing oil resources"
-msgstr ""
+msgstr "Je propose : Capturer les puits de pétrole"
 
 #: src/hci/quickchat.cpp:2524
 msgid "Hey everyone!"
-msgstr ""
+msgstr "Salut tout le monde !"
 
 #: src/hci/quickchat.cpp:2526
 msgid "Welcome!"
-msgstr ""
+msgstr "Bienvenue !"
 
 #: src/hci/quickchat.cpp:2528
 msgid "I want to spectate"
-msgstr ""
+msgstr "Je veux être Spectateur"
 
 #: src/hci/quickchat.cpp:2530
 msgid "I want to play"
-msgstr ""
+msgstr "Je veux jouer"
 
 #: src/hci/quickchat.cpp:2532
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Je veux changer d'équipe"
 
 #: src/hci/quickchat.cpp:2534
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "Veuillez cocher Prêt pour que nous puissions commencer"
 
 #: src/hci/quickchat.cpp:2539
 msgid "Please wait"
-msgstr ""
+msgstr "Patientez s'il vous plait"
 
 #: src/hci/quickchat.cpp:2541
 msgid "Let's go!"
-msgstr ""
+msgstr "Allons-y !"
 
 #. TRANSLATORS: As in "I am almost ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2545
 msgid "Almost ready"
-msgstr ""
+msgstr "Presque prêt"
 
 #. TRANSLATORS: As in "I am ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2548
 msgid "Ready"
-msgstr ""
+msgstr "Prêt"
 
 #: src/hci/quickchat.cpp:2550
 msgid "Be right back"
-msgstr ""
+msgstr "Je reviens tout de suite"
 
 #: src/hci/quickchat.cpp:2552
 msgid "I'm back"
-msgstr ""
+msgstr "Me revoilà"
 
 #: src/hci/quickchat.cpp:2555
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: src/hci/quickchat.cpp:2557
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: src/hci/quickchat.cpp:2559
 msgid "Maybe"
-msgstr ""
+msgstr "Possible"
 
 #: src/hci/quickchat.cpp:2561
 msgid "Not yet"
-msgstr ""
+msgstr "Pas encore"
 
 #: src/hci/quickchat.cpp:2563
 msgid "Soon"
-msgstr ""
+msgstr "Bientôt"
 
 #: src/hci/quickchat.cpp:2565
 msgid "Thank you"
-msgstr ""
+msgstr "Merci"
 
 #: src/hci/quickchat.cpp:2567
 msgid "No problem"
-msgstr ""
+msgstr "Aucun problème"
 
 #: src/hci/quickchat.cpp:2571
 msgid "Well-played"
-msgstr ""
+msgstr "Bien joué"
 
 #. TRANSLATORS: Should probably be left as-is, unless there is a better way of denoting a censored outburst in your language
 #: src/hci/quickchat.cpp:2574
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 #: src/hci/quickchat.cpp:2576
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "Désolé, je ne comprends pas. (Utilisez le tchat rapide ?)"
 
 #: src/hci/quickchat.cpp:2580
 msgid "Get ready..."
-msgstr ""
+msgstr "Préparez-vous..."
 
 #: src/hci/quickchat.cpp:2582
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Vous allez le regretter"
 
 #: src/hci/quickchat.cpp:2584
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "À peine une égratignure !"
 
 #: src/hci/quickchat.cpp:2588
 msgid "Attack now?"
-msgstr ""
+msgstr "Attaquer maintenant ?"
 
 #: src/hci/quickchat.cpp:2590
 msgid "Group up"
-msgstr ""
+msgstr "Se regrouper"
 
 #: src/hci/quickchat.cpp:2592
 msgid "Split up"
-msgstr ""
+msgstr "Se disperser"
 
 #: src/hci/quickchat.cpp:2594
 msgid "Focus attacks where marked"
-msgstr ""
+msgstr "Concentration des attaques là où elles sont marquées"
 
 #: src/hci/quickchat.cpp:2596
 msgid "Retreat!"
-msgstr ""
+msgstr "Retraite !"
 
 #: src/hci/quickchat.cpp:2598
 msgid "I need help!"
-msgstr ""
+msgstr "J'ai besoin d'aide !"
 
 #: src/hci/quickchat.cpp:2600
 msgid "Left side"
-msgstr ""
+msgstr "Côté gauche"
 
 #: src/hci/quickchat.cpp:2602
 msgid "Right side"
-msgstr ""
+msgstr "Côté droit"
 
 #: src/hci/quickchat.cpp:2604
 msgid "Transfer Request: Units"
-msgstr ""
+msgstr "Demande de transfert : Unités"
 
 #: src/hci/quickchat.cpp:2606
 msgid "Transfer Request: Trucks"
-msgstr ""
+msgstr "Demande de transfert : Camions"
 
 #. TRANSLATORS: As in "I am attacking now!" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2610
 msgid "Attacking now!"
-msgstr ""
+msgstr "En train d'attaquer !"
 
 #. TRANSLATORS: As in "I am on my way!" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2613
 msgid "On my way!"
-msgstr ""
+msgstr "J'arrive !"
 
 #: src/hci/quickchat.cpp:2615
 msgid "They're coming!"
-msgstr ""
+msgstr "Ils arrivent !"
 
 #: src/hci/quickchat.cpp:2617
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "Je suis attaqué !"
 
 #: src/hci/quickchat.cpp:2619
 msgid "I'm rushing oils"
@@ -16864,12 +16864,12 @@ msgstr ""
 
 #: src/hci/quickchat.cpp:2623
 msgid "I don't have enough power"
-msgstr ""
+msgstr "Je n'ai pas assez d'énergie"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2627
 msgid "Build more units"
-msgstr ""
+msgstr "Construire plus d'unités"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2630
@@ -16884,22 +16884,22 @@ msgstr ""
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2636
 msgid "Research different tech"
-msgstr ""
+msgstr "Rechercher une technologie différente"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2639
 msgid "Keep research centers busy"
-msgstr ""
+msgstr "Garder les centres de recherche occupés"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2642
 msgid "Build anti-air"
-msgstr ""
+msgstr "Construire anti-air"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2645
 msgid "Repair your units"
-msgstr ""
+msgstr "Réparez vos unités"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2648
@@ -16909,12 +16909,12 @@ msgstr ""
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2651
 msgid "Build power generators"
-msgstr ""
+msgstr "Construire des générateurs d'énergie"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2654
 msgid "Capture oil resources"
-msgstr ""
+msgstr "Capturer les puits de pétrole"
 
 #: src/hci/quickchat.cpp:2658
 msgid "That didn't go well..."
@@ -16922,19 +16922,19 @@ msgstr ""
 
 #: src/hci/quickchat.cpp:2660
 msgid "I have another plan"
-msgstr ""
+msgstr "J'ai un autre plan"
 
 #: src/hci/quickchat.cpp:2664
 msgid "Good game"
-msgstr ""
+msgstr "Bien joué"
 
 #: src/hci/quickchat.cpp:2666
 msgid "I give up"
-msgstr ""
+msgstr "J'abandonne"
 
 #: src/hci/quickchat.cpp:2668
 msgid "Sorry, I have to leave"
-msgstr ""
+msgstr "Désolé, je dois y aller"
 
 #: src/hci/quickchat.cpp:2672
 msgid "Message delivery failure - try again"
@@ -16942,15 +16942,15 @@ msgstr "Échec d'envoi du message - essayez à nouveau"
 
 #: src/hci/quickchat.cpp:2782
 msgid "Bot Allies"
-msgstr ""
+msgstr "Alliés du bot"
 
 #: src/hci/quickchat.cpp:2794
 msgid "Human Allies"
-msgstr ""
+msgstr "Alliés Humains"
 
 #: src/hci/quickchat.cpp:2864
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr ""
+msgstr "Vous avez envoyé trop de messages. Veuillez patienter et réessayer."
 
 #: src/hci/research.cpp:443
 msgid "Research Progress"
