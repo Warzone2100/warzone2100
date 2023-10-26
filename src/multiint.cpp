@@ -1759,6 +1759,8 @@ static std::shared_ptr<WzMultiButton> addMultiButWithClickHandler(const std::sha
 
 void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 {
+	ASSERT_HOST_ONLY(return);
+
 	std::shared_ptr<IntFormAnimated> aiForm = initRightSideChooser(_("DIFFICULTY"));
 	if (!aiForm)
 	{
@@ -1825,6 +1827,8 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 
 void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 {
+	ASSERT_HOST_ONLY(return);
+
 	std::shared_ptr<IntFormAnimated> aiForm = initRightSideChooser(_("CHOOSE AI"));
 	if (!aiForm)
 	{
@@ -8323,6 +8327,7 @@ static bool multiplayIsStartingGame()
 
 void sendRoomSystemMessage(char const *text)
 {
+	ASSERT_HOST_ONLY(return);
 	NetworkTextMessage message(SYSTEM_MESSAGE, text);
 	displayRoomSystemMessage(text);
 	message.enqueue(NETbroadcastQueue());
@@ -8330,6 +8335,7 @@ void sendRoomSystemMessage(char const *text)
 
 void sendRoomNotifyMessage(char const *text)
 {
+	ASSERT_HOST_ONLY(return);
 	NetworkTextMessage message(NOTIFY_MESSAGE, text);
 	displayRoomSystemMessage(text);
 	message.enqueue(NETbroadcastQueue());

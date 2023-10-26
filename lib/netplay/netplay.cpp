@@ -703,10 +703,7 @@ void NET_InitPlayers(bool initTeams, bool initSpectator)
 
 static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to)
 {
-	if (NetPlay.bComms && ingame.localJoiningInProgress)
-	{
-		ASSERT_HOST_ONLY(return);
-	}
+	ASSERT_HOST_ONLY(return);
 	NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
 	NETuint32_t(&indexLen);
 	for (unsigned n = 0; n < indexLen; ++n)
@@ -751,12 +748,14 @@ static void NETSendAllPlayerInfoTo(unsigned to)
 
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2)
 {
+	ASSERT_HOST_ONLY(return);
 	uint32_t indices[2] = {index1, index2};
 	NETSendNPlayerInfoTo(indices, 2, NET_ALL_PLAYERS);
 }
 
 void NETBroadcastPlayerInfo(uint32_t index)
 {
+	ASSERT_HOST_ONLY(return);
 	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
