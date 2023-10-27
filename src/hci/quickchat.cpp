@@ -2618,6 +2618,8 @@ const char* to_display_string(WzQuickChatMessage msg)
 		// WZ-generated internal messages - not for users to deliberately send
 		case WzQuickChatMessage::INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN:
 			return _("Message delivery failure - try again");
+		case WzQuickChatMessage::INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED:
+			return _("Map Downloaded");
 
 		// not a valid message
 		case WzQuickChatMessage::MESSAGE_COUNT:

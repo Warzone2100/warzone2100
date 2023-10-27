@@ -2078,7 +2078,11 @@ bool recvMapFileData(NETQUEUE queue)
 	{
 		netPlayersUpdated = true;  // Remove download icon from ourselves.
 		addConsoleMessage(_("MAP DOWNLOADED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		sendInGameSystemMessage("MAP DOWNLOADED");
+
+		WzQuickChatTargeting targeting;
+		targeting.all = true;
+		sendQuickChat(WzQuickChatMessage::INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED, selectedPlayer, targeting);
+
 		debug(LOG_INFO, "=== File has been received. ===");
 
 		// clear out the old level list.
