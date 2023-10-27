@@ -17,10 +17,10 @@ set(VCPKG_COMMIT_SHA "51475feaccb720ab40e5a0e3f8da70a4510defc0")
 set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.9")
 
 # Vulkan SDK
-set(VULKAN_SDK_VERSION "1.3.231.1")
+set(VULKAN_SDK_VERSION "1.3.268.1")
 set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.dmg")
 set(VULKAN_SDK_DL_URL "https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/mac/${VULKAN_SDK_DL_FILENAME}?Human=true")
-set(VULKAN_SDK_DL_SHA256 "ee63c647eb5108dfb663b701fd3d5e976e9826f991cbe4aaaf43b5bb01971db5")
+set(VULKAN_SDK_DL_SHA256 "900c019ffac72564d7c4e9e52dd08ef7d4eb2b4425084fd4d2c3e35b36958646")
 
 ########################################################
 
