@@ -104,7 +104,8 @@
 	\
 	/* FROM THIS POINT ON - ONLY INTERNAL MESSAGES! */ \
 	/* WZ-generated internal messages - not for users to deliberately send */ \
-	MSG(INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN) // This should always be the first internal message!
+	MSG(INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN) /* This should always be the first internal message! */ \
+	MSG(INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 
