@@ -2819,6 +2819,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 	bool isInGame = (GetGameMode() == GS_NORMAL);
 	auto senderTeam = checkedGetPlayerTeam(fromPlayer);
 	bool senderIsSpectator = NetPlay.players[fromPlayer].isSpectator;
+	bool senderCanUseSecuredMessages = realSelectedPlayer == NetPlay.hostPlayer || realSelectedPlayer < MAX_PLAYERS; // non-host spectator slots don't currently support / send secured messages
 
 	auto isPotentiallyValidTarget = [&](uint32_t playerIdx) -> bool {
 		if (playerIdx == fromPlayer)
@@ -2921,7 +2922,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		}
 
 		NETQUEUE queue = NETnetQueue((recipient < MAX_PLAYERS) ? whosResponsible(recipient) : recipient);
-		bool sendSecured = isInGame && (queue.index == NetPlay.hostPlayer || queue.index < MAX_PLAYERS);
+		bool sendSecured = isInGame && (queue.index == NetPlay.hostPlayer || queue.index < MAX_PLAYERS) && senderCanUseSecuredMessages;
 		if (sendSecured)
 		{
 			if (!NETbeginEncodeSecured(queue, NET_QUICK_CHAT_MSG))
@@ -2972,7 +2973,8 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 bool recvQuickChat(NETQUEUE queue)
 {
 	bool isInGame = (GetGameMode() == GS_NORMAL);
-	bool expectingSecuredMessage = isInGame && (realSelectedPlayer == NetPlay.hostPlayer || realSelectedPlayer < MAX_PLAYERS); // spectators do not expect secured messages
+	bool senderCanUseSecuredMessages = queue.index == NetPlay.hostPlayer || queue.index < MAX_PLAYERS;
+	bool expectingSecuredMessage = isInGame && (realSelectedPlayer == NetPlay.hostPlayer || realSelectedPlayer < MAX_PLAYERS) && senderCanUseSecuredMessages; // spectator slots do not expect secured messages
 
 	uint32_t sender = MAX_CONNECTED_PLAYERS;
 	uint32_t recipient = MAX_CONNECTED_PLAYERS;
