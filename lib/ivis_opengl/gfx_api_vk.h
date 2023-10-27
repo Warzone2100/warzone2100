@@ -28,6 +28,7 @@
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wshadow"
+#pragma clang diagnostic ignored "-Wnewline-eof"
 #endif
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9
 #pragma GCC diagnostic push
