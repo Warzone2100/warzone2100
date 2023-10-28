@@ -3737,12 +3737,14 @@ void gl_context::initPixelFormatsSupport()
 		// GL_ARB_ES3_compatibility makes no claims about support in glCompressedTex*Image3D?
 		bool canSupport2DTextureArrays = (gles && GLAD_GL_ES_VERSION_3_0);
 
-		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
-		if (canSupport2DTextureArrays)
+		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM, gfx_api::pixel_format_usage::sampled_image))
 		{
-			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+			if (canSupport2DTextureArrays)
+			{
+				PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB8_ETC2)
+			}
 		}
-
 		if (gles || !textureFormatIsSupported(gfx_api::pixel_format_target::texture_2d, gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM, gfx_api::pixel_format_usage::sampled_image))
 		{
 			PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC)
