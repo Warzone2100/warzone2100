@@ -561,6 +561,8 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 				endCoord = pred.nearestCoord;
 				mustReverse = false;  // We have the path from the nearest reachable tile to dest, to orig.
 				break;			// Found the path! Don't search more contexts.
+			} else {
+				syncDebug("fpathAStarRoute (%d,%d) to (%d,%d) - wave collapsed. Nearest=%d", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y, pred.nearestDist);
 			}
 		}
 	}
