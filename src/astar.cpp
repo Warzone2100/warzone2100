@@ -199,6 +199,8 @@ struct PathfindContext
 	PathCoord       tileS;
 	uint32_t        myGameTime;
 
+	PathCoord       nearestCoord;         // Nearest reachable tile to destination.
+
 	/** Counter to implement lazy deletion from map.
 	 *
 	 *  @see fpathTableReset
@@ -555,14 +557,20 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			// Need to find the path from orig to dest, continue previous exploration.
 			fpathAStarReestimate(pfContext, tileOrig);
 			pred.clear();
-			if (fpathAStarExplore(pfContext, pred)) {
-				endCoord = pred.nearestCoord;
-				mustReverse = false;  // We have the path from the nearest reachable tile to dest, to orig.
-				break;  			// Found the path! Don't search more contexts.
-			} else {
+			if (!fpathAStarExplore(pfContext, pred)) {
 				syncDebug("fpathAStarRoute (%d,%d) to (%d,%d) - wave collapsed. Nearest=%d", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y, pred.nearestDist);
 			}
+			endCoord = pred.nearestCoord;
 		}
+
+		if (endCoord != tileOrig)
+		{
+			// orig turned out to be on a different island than what this context was used for, so can't use this context data after all.
+			continue;
+		}
+
+		mustReverse = false;  // We have the path from the nearest reachable tile to dest, to orig.
+		break;  // Found the path! Don't search more contexts.
 	}
 
 	if (contextIterator == fpathContexts.end())
@@ -589,12 +597,13 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 #endif
 		}
 		endCoord = pred.nearestCoord;
+		pfContext.nearestCoord = endCoord;
 	}
 
 	PathfindContext &context = *contextIterator;
 
 	// return the nearest route if no actual route was found
-	if (endCoord != tileDest)
+	if (context.nearestCoord != tileDest)
 	{
 		retval = ASR_NEAREST;
 	}
@@ -641,7 +650,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		if (!context.isBlocked(tileOrig.x, tileOrig.y))  // If blocked, searching from tileDest to tileOrig wouldn't find the tileOrig tile.
 		{
 			// Next time, search starting from nearest reachable tile to the destination.
-			fpathInitContext(context, psJob->blockingMap, tileDest, pred.nearestCoord, tileOrig, dstIgnore);
+			fpathInitContext(context, psJob->blockingMap, tileDest, context.nearestCoord, tileOrig, dstIgnore);
 		}
 	}
 	else
