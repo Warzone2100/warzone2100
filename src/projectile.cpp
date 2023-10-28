@@ -963,7 +963,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 
 /***************************************************************************/
 
-static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, DROID *destDroid, Vector3i &targetPos, bool empRadius)
+static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, Vector3i &targetPos, bool empRadius)
 {
 	static GridList gridList;  // static to avoid allocations.
 	gridList = gridStartIterate(targetPos.x, targetPos.y, (empRadius) ? psStats->upgrade[psObj->player].empRadius : psStats->upgrade[psObj->player].radius);
@@ -1277,11 +1277,11 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 
 		if (hasEMPRadius && psStats->weaponSubClass == WSC_EMP)
 		{
-			proj_radiusSweep(psObj, psStats, destDroid, targetPos, true);
+			proj_radiusSweep(psObj, psStats, targetPos, true);
 		}
 		if (hasRadius)
 		{
-			proj_radiusSweep(psObj, psStats, destDroid, targetPos, false);
+			proj_radiusSweep(psObj, psStats, targetPos, false);
 		}
 	}
 
