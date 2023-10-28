@@ -193,10 +193,7 @@ struct PathfindContext
 		map.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));  // Allocate space for map, if needed.
 	}
 
-	/// Start tile for pathfinding.
-	/// It is used for context caching and reusing existing contexts for other units.
-	/// (May be either source or target tile.)
-	PathCoord       tileS;
+	PathCoord       tileS;                // Start tile for pathfinding. (May be either source or target tile.)
 	uint32_t        myGameTime;
 
 	PathCoord       nearestCoord;         // Nearest reachable tile to destination.
@@ -273,7 +270,7 @@ static inline unsigned WZ_DECL_PURE fpathGoodEstimate(PathCoord s, PathCoord f)
 
 /** Generate a new node
  */
-static inline void fpathNewNode(PathfindContext &context, unsigned estimateCost, PathCoord pos, unsigned prevDist, PathCoord prevPos)
+static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCoord pos, unsigned prevDist, PathCoord prevPos)
 {
 	ASSERT_OR_RETURN(, (unsigned)pos.x < (unsigned)mapWidth && (unsigned)pos.y < (unsigned)mapHeight, "X (%d) or Y (%d) coordinate for path finding node is out of range!", pos.x, pos.y);
 
@@ -282,7 +279,7 @@ static inline void fpathNewNode(PathfindContext &context, unsigned estimateCost,
 	unsigned costFactor = context.isDangerous(pos.x, pos.y) ? 5 : 1;
 	node.p = pos;
 	node.dist = prevDist + fpathEstimate(prevPos, pos) * costFactor;
-	node.est = node.dist + estimateCost;
+	node.est = node.dist + fpathGoodEstimate(pos, dest);
 
 	Vector2i delta = Vector2i(pos.x - prevPos.x, pos.y - prevPos.y) * 64;
 	bool isDiagonal = delta.x && delta.y;
@@ -355,47 +352,15 @@ static void fpathAStarReestimate(PathfindContext &context, PathCoord tileF)
 	std::make_heap(context.nodes.begin(), context.nodes.end());
 }
 
-
 /// Returns nearest explored tile to tileF.
-struct NearestSearchPredicate {
-	/// Target tile.
-	PathCoord goal;
-	/// Nearest coordinates of the wave to the target tile.
-	PathCoord nearestCoord {0, 0};
-	/// Nearest distance to the target.
-	unsigned nearestDist = 0xFFFFFFFF;
-
-	NearestSearchPredicate(const PathCoord& goal) : goal(goal) { }
-
-	bool isGoal(const PathNode& node) {
-		if (node.p == goal)
-		{
-			// reached the target
-			nearestCoord = node.p;
-			nearestDist = 0;
-			return true;
-		} else if (node.est - node.dist < nearestDist)
-		{
-			nearestCoord = node.p;
-			nearestDist = node.est - node.dist;
-		}
-		return false;
-	}
-
-	unsigned estimateCost(const PathCoord& pos) const {
-		return fpathGoodEstimate(pos, goal);
-	}
-};
-
-/// Runs A* wave propagation for 8 neighbors pattern.
-/// Target is checked using predicate object.
-/// @returns true if search wave has reached the goal or false if
-/// 	the wave has collapsed before reaching the goal.
-template <class Predicate>
-static bool fpathAStarExplore(PathfindContext &context, Predicate& predicate)
+static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 {
-	constexpr int adjacency = 8;
-	while (!context.nodes.empty())
+	PathCoord       nearestCoord(0, 0);
+	unsigned        nearestDist = 0xFFFFFFFF;
+
+	// search for a route
+	bool foundIt = false;
+	while (!context.nodes.empty() && !foundIt)
 	{
 		PathNode node = fpathTakeNode(context.nodes);
 		if (context.map[node.p.x + node.p.y * mapWidth].visited)
@@ -404,58 +369,67 @@ static bool fpathAStarExplore(PathfindContext &context, Predicate& predicate)
 		}
 		context.map[node.p.x + node.p.y * mapWidth].visited = true;
 
-		if (predicate.isGoal(node))
-			return true;
-
-		/*
-		   5  6  7
-		     \|/
-		   4 -I- 0
-		     /|\
-		   3  2  1
-		   odd:orthogonal-adjacent tiles even:non-orthogonal-adjacent tiles
-		*/
-
-		// Cached state from blocking map.
-		bool blocking[adjacency];
-		bool ignoreBlocking[adjacency];
-		for (unsigned dir = 0; dir < adjacency; ++dir) {
-			int x = node.p.x + aDirOffset[dir].x;
-			int y = node.p.y + aDirOffset[dir].y;
-			blocking[dir] = context.isBlocked(x, y);
-			ignoreBlocking[dir] = context.dstIgnore.isNonblocking(x, y);
+		// note the nearest node to the target so far
+		if (node.est - node.dist < nearestDist)
+		{
+			nearestCoord = node.p;
+			nearestDist = node.est - node.dist;
 		}
 
-		bool ignoreCenter = context.dstIgnore.isNonblocking(node.p.x, node.p.y);
+		if (node.p == tileF)
+		{
+			// reached the target
+			nearestCoord = node.p;
+			foundIt = true;  // Break out of loop, but not before inserting neighbour nodes, since the neighbours may be important if the context gets reused.
+		}
 
 		// loop through possible moves in 8 directions to find a valid move
-		for (unsigned dir = 0; dir < adjacency; ++dir)
+		for (unsigned dir = 0; dir < ARRAY_SIZE(aDirOffset); ++dir)
 		{
-			// See if the node is a blocking tile
-			if (blocking[dir])
-				continue;
-			if (dir % 2 != 0 && !ignoreCenter && !ignoreBlocking[dir])
-			{
-				// Turn CCW.
-				if (blocking[(dir + 1) % 8])
-					continue;
-				// Turn CW.
-				if (blocking[(dir + 7) % 8])
-					continue;
-			}
-
 			// Try a new location
 			int x = node.p.x + aDirOffset[dir].x;
 			int y = node.p.y + aDirOffset[dir].y;
 
-			PathCoord newPos(x, y);
-			unsigned estimateCost = predicate.estimateCost(newPos);
+			/*
+			   5  6  7
+			     \|/
+			   4 -I- 0
+			     /|\
+			   3  2  1
+			   odd:orthogonal-adjacent tiles even:non-orthogonal-adjacent tiles
+			*/
+			if (dir % 2 != 0 && !context.dstIgnore.isNonblocking(node.p.x, node.p.y) && !context.dstIgnore.isNonblocking(x, y))
+			{
+				int x2, y2;
+
+				// We cannot cut corners
+				x2 = node.p.x + aDirOffset[(dir + 1) % 8].x;
+				y2 = node.p.y + aDirOffset[(dir + 1) % 8].y;
+				if (context.isBlocked(x2, y2))
+				{
+					continue;
+				}
+				x2 = node.p.x + aDirOffset[(dir + 7) % 8].x;
+				y2 = node.p.y + aDirOffset[(dir + 7) % 8].y;
+				if (context.isBlocked(x2, y2))
+				{
+					continue;
+				}
+			}
+
+			// See if the node is a blocking tile
+			if (context.isBlocked(x, y))
+			{
+				// tile is blocked, skip it
+				continue;
+			}
+
 			// Now insert the point into the appropriate list, if not already visited.
-			fpathNewNode(context, estimateCost, newPos, node.dist, node.p);
+			fpathNewNode(context, tileF, PathCoord(x, y), node.dist, node.p);
 		}
 	}
 
-	return false;
+	return nearestCoord;
 }
 
 static void fpathInitContext(PathfindContext &context, std::shared_ptr<PathBlockingMap> &blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
@@ -463,49 +437,9 @@ static void fpathInitContext(PathfindContext &context, std::shared_ptr<PathBlock
 	context.assign(blockingMap, tileS, dstIgnore);
 
 	// Add the start point to the open list
-	unsigned estimateCost = fpathGoodEstimate(tileRealS, tileF);
-	fpathNewNode(context, estimateCost, tileRealS, 0, tileRealS);
+	fpathNewNode(context, tileF, tileRealS, 0, tileRealS);
 	ASSERT(!context.nodes.empty(), "fpathNewNode failed to add node.");
 }
-
-// Traces path from search tree.
-// @param src - starting point of a search
-// @param dst - final point, when tracing stops.
-static ASR_RETVAL fpathTracePath(const PathfindContext& context, PathCoord src, PathCoord dst, std::vector<Vector2i>& path) {
-	ASR_RETVAL retval = ASR_OK;
-	path.clear();
-	Vector2i newP(0, 0);
-	for (Vector2i p(world_coord(src.x) + TILE_UNITS / 2, world_coord(src.y) + TILE_UNITS / 2); true; p = newP)
-	{
-		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
-		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight)), "Pathfinding got in a loop.");
-
-		path.push_back(p);
-
-		const PathExploredTile &tile = context.map[map_coord(p.x) + map_coord(p.y) * mapWidth];
-		newP = p - Vector2i(tile.dx, tile.dy) * (TILE_UNITS / 64);
-		Vector2i mapP = map_coord(newP);
-		int xSide = newP.x - world_coord(mapP.x) > TILE_UNITS / 2 ? 1 : -1; // 1 if newP is on right-hand side of the tile, or -1 if newP is on the left-hand side of the tile.
-		int ySide = newP.y - world_coord(mapP.y) > TILE_UNITS / 2 ? 1 : -1; // 1 if newP is on bottom side of the tile, or -1 if newP is on the top side of the tile.
-		if (context.isBlocked(mapP.x + xSide, mapP.y))
-		{
-			newP.x = world_coord(mapP.x) + TILE_UNITS / 2; // Point too close to a blocking tile on left or right side, so move the point to the middle.
-		}
-		if (context.isBlocked(mapP.x, mapP.y + ySide))
-		{
-			newP.y = world_coord(mapP.y) + TILE_UNITS / 2; // Point too close to a blocking tile on rop or bottom side, so move the point to the middle.
-		}
-		if (map_coord(p) == Vector2i(dst.x, dst.y) || p == newP)
-		{
-			break;  // We stopped moving, because we reached the destination or the closest reachable tile to dst. Give up now.
-		}
-	}
-	return retval;
-}
-
-#if DEBUG
-extern uint32_t selectedPlayer;
-#endif
 
 ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
@@ -517,43 +451,30 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	const PathCoord tileDest(map_coord(psJob->destX), map_coord(psJob->destY));
 	const PathNonblockingArea dstIgnore(psJob->dstStructure);
 
-#if DEBUG
-	const DROID *psDroid = IdToDroid(psJob->droidID, selectedPlayer);
-	const bool isDroidSelected = (psDroid && psDroid->selected);
-#endif
-
 	PathCoord endCoord;  // Either nearest coord (mustReverse = true) or orig (mustReverse = false).
 
 	std::list<PathfindContext>::iterator contextIterator = fpathContexts.begin();
-	for (; contextIterator != fpathContexts.end(); ++contextIterator)
+	for (contextIterator = fpathContexts.begin(); contextIterator != fpathContexts.end(); ++contextIterator)
 	{
-		PathfindContext& pfContext = *contextIterator;
-		if (!pfContext.matches(psJob->blockingMap, tileDest, dstIgnore))
+		if (!contextIterator->matches(psJob->blockingMap, tileDest, dstIgnore))
 		{
 			// This context is not for the same droid type and same destination.
 			continue;
 		}
 
 		// We have tried going to tileDest before.
-		if (pfContext.map[tileOrig.x + tileOrig.y * mapWidth].iteration == pfContext.iteration
-		    && pfContext.map[tileOrig.x + tileOrig.y * mapWidth].visited)
+
+		if (contextIterator->map[tileOrig.x + tileOrig.y * mapWidth].iteration == contextIterator->iteration
+		    && contextIterator->map[tileOrig.x + tileOrig.y * mapWidth].visited)
 		{
 			// Already know the path from orig to dest.
 			endCoord = tileOrig;
 		}
-		else if (pfContext.nodes.empty()) {
-			// Wave has already collapsed. Consequent attempt to search will exit immediately.
-			continue;
-		}
 		else
 		{
 			// Need to find the path from orig to dest, continue previous exploration.
-			fpathAStarReestimate(pfContext, tileOrig);
-			NearestSearchPredicate pred(tileDest);
-			if (!fpathAStarExplore(pfContext, pred)) {
-				syncDebug("fpathAStarRoute (%d,%d) to (%d,%d) - wave collapsed. Nearest=%d", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y, pred.nearestDist);
-			}
-			endCoord = pred.nearestCoord;
+			fpathAStarReestimate(*contextIterator, tileOrig);
+			endCoord = fpathAStarExplore(*contextIterator, tileOrig);
 		}
 
 		if (endCoord != tileOrig)
@@ -569,28 +490,18 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	if (contextIterator == fpathContexts.end())
 	{
 		// We did not find an appropriate context. Make one.
+
 		if (fpathContexts.size() < 30)
 		{
-			fpathContexts.emplace_back();
+			fpathContexts.push_back(PathfindContext());
 		}
-		contextIterator--;
-		PathfindContext& pfContext = fpathContexts.back();
+		--contextIterator;
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
-		fpathInitContext(pfContext, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore);
-
-		NearestSearchPredicate pred(tileDest);
-		if (!fpathAStarExplore(pfContext, pred)) {
-#if DEBUG
-			if (isDroidSelected) {
-				pred = NearestSearchPredicate(tileDest);
-				fpathAStarExplore(pfContext, pred);
-			}
-#endif
-		}
-		endCoord = pred.nearestCoord;
-		pfContext.nearestCoord = endCoord;
+		fpathInitContext(*contextIterator, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore);
+		endCoord = fpathAStarExplore(*contextIterator, tileDest);
+		contextIterator->nearestCoord = endCoord;
 	}
 
 	PathfindContext &context = *contextIterator;
@@ -601,12 +512,36 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		retval = ASR_NEAREST;
 	}
 
-
+	// Get route, in reverse order.
 	static std::vector<Vector2i> path;  // Declared static to save allocations.
-	ASR_RETVAL traceRet = fpathTracePath(context, endCoord, tileOrig, path);
-	if (traceRet != ASR_OK)
-		return traceRet;
+	path.clear();
 
+	Vector2i newP(0, 0);
+	for (Vector2i p(world_coord(endCoord.x) + TILE_UNITS / 2, world_coord(endCoord.y) + TILE_UNITS / 2); true; p = newP)
+	{
+		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
+		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight)), "Pathfinding got in a loop.");
+
+		path.push_back(p);
+
+		PathExploredTile &tile = context.map[map_coord(p.x) + map_coord(p.y) * mapWidth];
+		newP = p - Vector2i(tile.dx, tile.dy) * (TILE_UNITS / 64);
+		Vector2i mapP = map_coord(newP);
+		int xSide = newP.x - world_coord(mapP.x) > TILE_UNITS / 2 ? 1 : -1; // 1 if newP is on right-hand side of the tile, or -1 if newP is on the left-hand side of the tile.
+		int ySide = newP.y - world_coord(mapP.y) > TILE_UNITS / 2 ? 1 : -1; // 1 if newP is on bottom side of the tile, or -1 if newP is on the top side of the tile.
+		if (context.isBlocked(mapP.x + xSide, mapP.y))
+		{
+			newP.x = world_coord(mapP.x) + TILE_UNITS / 2; // Point too close to a blocking tile on left or right side, so move the point to the middle.
+		}
+		if (context.isBlocked(mapP.x, mapP.y + ySide))
+		{
+			newP.y = world_coord(mapP.y) + TILE_UNITS / 2; // Point too close to a blocking tile on rop or bottom side, so move the point to the middle.
+		}
+		if (map_coord(p) == Vector2i(context.tileS.x, context.tileS.y) || p == newP)
+		{
+			break;  // We stopped moving, because we reached the destination or the closest reachable tile to context.tileS. Give up now.
+		}
+	}
 	if (retval == ASR_OK)
 	{
 		// Found exact path, so use exact coordinates for last point, no reason to lose precision
