@@ -157,7 +157,7 @@ struct PathNonblockingArea
 // Data structures used for pathfinding, can contain cached results.
 struct PathfindContext
 {
-	PathfindContext() : myGameTime(0), iteration(0), blockingMap(nullptr), pBlockingMap(nullptr) {}
+	PathfindContext() : myGameTime(0), iteration(0), blockingMap(nullptr) {}
 	bool isBlocked(int x, int y) const
 	{
 		if (dstIgnore.isNonblocking(x, y))
@@ -165,11 +165,11 @@ struct PathfindContext
 			return false;  // The path is actually blocked here by a structure, but ignore it since it's where we want to go (or where we came from).
 		}
 		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
-		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || pBlockingMap->map[x + y * mapWidth];
+		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || blockingMap->map[x + y * mapWidth];
 	}
 	bool isDangerous(int x, int y) const
 	{
-		return !pBlockingMap->dangerMap.empty() && pBlockingMap->dangerMap[x + y * mapWidth];
+		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * mapWidth];
 	}
 	bool matches(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
@@ -179,7 +179,6 @@ struct PathfindContext
 	void assign(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
 	{
 		blockingMap = blockingMap_;
-		pBlockingMap = blockingMap.get();
 		tileS = tileS_;
 		dstIgnore = dstIgnore_;
 		myGameTime = blockingMap->type.gameTime;
@@ -209,7 +208,6 @@ struct PathfindContext
 	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
 	std::shared_ptr<PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
-	PathBlockingMap* pBlockingMap;      ///< Direct pointer to blocking map. Using shared pointer in searching loop can hurt performance.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
 
@@ -356,7 +354,7 @@ static void fpathAStarReestimate(PathfindContext &context, PathCoord tileF)
 }
 
 
-/// A predicate for searching path to a single point.
+/// Returns nearest explored tile to tileF.
 struct NearestSearchPredicate {
 	/// Target tile.
 	PathCoord goal;
@@ -560,7 +558,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 			if (fpathAStarExplore(pfContext, pred)) {
 				endCoord = pred.nearestCoord;
 				mustReverse = false;  // We have the path from the nearest reachable tile to dest, to orig.
-				break;			// Found the path! Don't search more contexts.
+				break;  			// Found the path! Don't search more contexts.
 			} else {
 				syncDebug("fpathAStarRoute (%d,%d) to (%d,%d) - wave collapsed. Nearest=%d", tileOrig.x, tileOrig.y, tileDest.x, tileDest.y, pred.nearestDist);
 			}
@@ -582,7 +580,14 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		fpathInitContext(pfContext, psJob->blockingMap, tileOrig, tileOrig, tileDest, dstIgnore);
 
 		pred.clear();
-		fpathAStarExplore(pfContext, pred);
+		if (!fpathAStarExplore(pfContext, pred)) {
+#if DEBUG
+			if (isDroidSelected) {
+				pred = NearestSearchPredicate(tileDest);
+				fpathAStarExplore(pfContext, pred);
+			}
+#endif
+		}
 		endCoord = pred.nearestCoord;
 	}
 
