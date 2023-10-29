@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-10-29 04:20\n"
+"PO-Revision-Date: 2023-10-29 17:01\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -19144,7 +19144,7 @@ msgstr "BATE-PAPO"
 #: src/multiint.cpp:5946
 #: src/titleui/gamefind.cpp:238
 msgid "Multiplayer Lobby Support Unavailable"
-msgstr "Suporte de Lobby Multijogador Indisponível"
+msgstr "Suporte para Lobby Multijogador Indisponível"
 
 #: src/multiint.cpp:5948
 msgid "Your client cannot connect to the mutiplayer lobby."
@@ -19486,7 +19486,7 @@ msgstr "Visão dos Jogadores"
 
 #: src/multimenu.cpp:1395
 msgid "Team Strategy"
-msgstr "Estratégia da equipe"
+msgstr "Estratégia de Equipe"
 
 #: src/multiopt.cpp:306
 #, c-format
@@ -19668,12 +19668,12 @@ msgstr "%s (%d) alterações no mapa permitidas. Total: %d/%d"
 #: src/multivote.cpp:200
 #, c-format
 msgid "A player voted FOR kicking: %s"
-msgstr "Um jogador votou para expulsar: %s"
+msgstr "Um jogador votou A FAVOR da expulsão de: %s"
 
 #: src/multivote.cpp:208
 #, c-format
 msgid "A player voted AGAINST kicking: %s"
-msgstr "Um jogador votou CONTRA expulsar: %s"
+msgstr "Um jogador votou CONTRA a expulsão de: %s"
 
 #: src/multivote.cpp:214
 #, c-format
@@ -19690,7 +19690,7 @@ msgstr "Permitir que o host altere o mapa ou randomize?"
 
 #: src/multivote.cpp:334
 msgid "A vote was started to kick you from the game."
-msgstr "Um votação foi iniciada para expulsar você do jogo."
+msgstr "Uma votação foi iniciada para expulsar você do jogo."
 
 #: src/multivote.cpp:349
 #, c-format
@@ -19709,7 +19709,7 @@ msgstr "O jogador %s deve ser expulso do jogo?"
 
 #: src/multivote.cpp:359
 msgid "Yes, Kick Them"
-msgstr "Sim, lhes expulse"
+msgstr "Sim, Expulse-os"
 
 #: src/multivote.cpp:384
 #, c-format
@@ -19739,7 +19739,7 @@ msgstr "A votação para expulsar o jogador %s falhou"
 #: src/multivote.cpp:695
 #, c-format
 msgid "Cannot request vote to kick player %s yet - please wait a bit longer"
-msgstr "Não foi possível solicitar a votação para expulsar o jogador %s ainda - por favor espere um pouco mais"
+msgstr "Não foi possível solicitar a votação para expulsar o jogador %s ainda - por favor, espere um pouco mais"
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"
