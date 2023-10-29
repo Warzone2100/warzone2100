@@ -3430,42 +3430,49 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	// Requires: deviceProperties.apiVersion >= minSupportedVulkanVersion
 	if (!VK_VERSION_GREATER_THAN_OR_EQUAL(deviceProperties.apiVersion, minSupportedVulkanVersion))
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient apiVersion (%s)", deviceProperties.deviceID, deviceProperties.deviceName.data(), VkhInfo::vulkan_apiversion_to_string(deviceProperties.apiVersion).c_str());
 		return 0;
 	}
 
 	// Requires: limits.maxDescriptorSetUniformBuffers >= minRequired_DescriptorSetUniformBuffers
 	if (deviceProperties.limits.maxDescriptorSetUniformBuffers < minRequired_DescriptorSetUniformBuffers)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxDescriptorSetUniformBuffers (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxDescriptorSetUniformBuffers);
 		return 0;
 	}
 
 	// Requires: limits.maxDescriptorSetUniformBuffersDynamic >= minRequired_DescriptorSetUniformBuffersDynamic
 	if (deviceProperties.limits.maxDescriptorSetUniformBuffersDynamic < minRequired_DescriptorSetUniformBuffersDynamic)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxDescriptorSetUniformBuffersDynamic (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxDescriptorSetUniformBuffersDynamic);
 		return 0;
 	}
 
 	// Requires: limits.maxBoundDescriptorSets >= minRequired_BoundDescriptorSets
 	if (deviceProperties.limits.maxBoundDescriptorSets < minRequired_BoundDescriptorSets)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxBoundDescriptorSets (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxBoundDescriptorSets);
 		return 0;
 	}
 
 	// Requires: limits.maxViewports >= minRequired_Viewports
 	if (deviceProperties.limits.maxViewports < minRequired_Viewports)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxViewports (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxViewports);
 		return 0;
 	}
 
 	// Requires: limits.maxColorAttachments >= minRequired_ColorAttachments
 	if (deviceProperties.limits.maxColorAttachments < minRequired_ColorAttachments)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxColorAttachments (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxColorAttachments);
 		return 0;
 	}
 
 	// Requires: samplerAnisotropy
 	if (!deviceFeatures.samplerAnisotropy)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: No samplerAnisotropy support", deviceProperties.deviceID, deviceProperties.deviceName.data());
 		return 0;
 	}
 
@@ -3479,6 +3486,7 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	QueueFamilyIndices indices = findQueueFamilies(device, surface, vkDynLoader);
 	if (!indices.isComplete())
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Unable to find graphics + present queue families", deviceProperties.deviceID, deviceProperties.deviceName.data());
 		return 0;
 	}
 	if (indices.graphicsFamily.value() == indices.presentFamily.value())
@@ -3490,6 +3498,7 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	// Check that device supports `deviceExtensions`
 	if (!checkDeviceExtensionSupport(device, deviceExtensions, vkDynLoader))
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Missing required device extension(s)", deviceProperties.deviceID, deviceProperties.deviceName.data());
 		return 0;
 	}
 
@@ -3498,11 +3507,20 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 		SwapChainSupportDetails swapChainSupportDetails = querySwapChainSupport(device, surface, vkDynLoader);
 		if (swapChainSupportDetails.formats.empty() || swapChainSupportDetails.presentModes.empty())
 		{
+			if (swapChainSupportDetails.formats.empty())
+			{
+				debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Empty swapchain formats?", deviceProperties.deviceID, deviceProperties.deviceName.data());
+			}
+			if (swapChainSupportDetails.presentModes.empty())
+			{
+				debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Empty swapchain presentModes?", deviceProperties.deviceID, deviceProperties.deviceName.data());
+			}
 			return 0;
 		}
 	}
-	catch (const vk::SystemError&)
+	catch (const vk::SystemError& e)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: querySwapChainSupport failed with error: %s", deviceProperties.deviceID, deviceProperties.deviceName.data(), e.what());
 		return 0;
 	}
 
