@@ -45,9 +45,6 @@ vcpkg_from_github(
         002-fix-builder-error.patch
         003-fix-mingw.patch
         wz-mingw-headers.patch
-#        wz-mingw-headers-2.patch
-        wz-mingw-headers-3.patch
-        wz-mingw-headers-4.patch
 )
 
 # Generate angle_commit.h
