@@ -580,7 +580,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		{
 			if (wzIsFullscreen())
 			{
-				wzChangeWindowMode(WINDOW_MODE::windowed);
+				wzChangeWindowMode(WINDOW_MODE::windowed, true);
 			}
 #if defined(WZ_OS_WIN)
 			char wbuf[MAX_LEN_LOG_LINE+512];

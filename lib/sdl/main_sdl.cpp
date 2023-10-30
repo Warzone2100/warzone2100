@@ -676,7 +676,7 @@ WINDOW_MODE wzGetToggleFullscreenMode()
 	return altEnterToggleFullscreenMode;
 }
 
-bool wzChangeWindowMode(WINDOW_MODE mode)
+bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 {
 	auto currMode = wzGetCurrentWindowMode();
 	if (currMode == mode)
@@ -691,7 +691,10 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 		return false;
 	}
 
-	debug(LOG_INFO, "Changing window mode: %s -> %s", to_display_string(currMode).c_str(), to_display_string(mode).c_str());
+	if (!silent)
+	{
+		debug(LOG_INFO, "Changing window mode: %s -> %s", to_display_string(currMode).c_str(), to_display_string(mode).c_str());
+	}
 
 	int sdl_result = -1;
 	switch (mode)
