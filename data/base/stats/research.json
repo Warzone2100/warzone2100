@@ -1236,6 +1236,10 @@
 		"id": "R-Cyborg-Wpn-Laser1",
 		"msgName": "RES_CYW_LS1",
 		"name": "Flashlight Gunner Cyborg",
+		"replacedComponents": [
+			"CyborgRotMG:Cyb-Wpn-Laser",
+			"CyborgFlamer01:Cyb-Wpn-Laser"
+		],
 		"requiredResearch": [
 			"R-Wpn-Laser01"
 		],
@@ -1251,6 +1255,9 @@
 		"id": "R-Cyborg-Wpn-Rail1",
 		"msgName": "RES_CYW_RL1",
 		"name": "Needle Gunner Cyborg",
+		"replacedComponents": [
+			"CyborgCannon:Cyb-Wpn-Rail1"
+		],
 		"requiredResearch": [
 			"R-Wpn-RailGun01"
 		],
@@ -6738,6 +6745,9 @@
 		"id": "R-Defense-WallTower-PulseLas",
 		"msgName": "RES_WT14_PLS",
 		"name": "Flashlight Hardpoint",
+		"redStructures": [
+			"Wall-RotMg"
+		],
 		"requiredResearch": [
 			"R-Wpn-Laser01"
 		],
@@ -8511,6 +8521,10 @@
 		"keyTopic": 1,
 		"msgName": "RES_W_LAS1",
 		"name": "Laser - Flashlight",
+		"redComponents": [
+			"MG4ROTARY-VTOL",
+			"MG4ROTARYMk1"
+		],
 		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
