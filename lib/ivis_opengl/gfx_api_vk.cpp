@@ -2707,13 +2707,13 @@ static bool createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, co
 
 void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat)
 {
-	bool msaaEnabled = false; // default render pass doesn't get MSAA
+	bool msaaEnabled = (msaaSamplesSwapchain != vk::SampleCountFlagBits::e1);
 
 	auto attachments =
 		std::vector<vk::AttachmentDescription>{
 		vk::AttachmentDescription() // colorAttachment
 			.setFormat(swapchainFormat)
-			.setSamples(msaaSamples)
+			.setSamples(msaaSamplesSwapchain)
 			.setInitialLayout(vk::ImageLayout::eUndefined)
 			.setFinalLayout((msaaEnabled) ? vk::ImageLayout::eColorAttachmentOptimal : vk::ImageLayout::ePresentSrcKHR)
 			.setLoadOp(vk::AttachmentLoadOp::eClear)
@@ -2722,7 +2722,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 			.setStencilStoreOp(vk::AttachmentStoreOp::eStore),
 		vk::AttachmentDescription() // depthAttachment
 			.setFormat(depthFormat)
-			.setSamples(msaaSamples)
+			.setSamples(msaaSamplesSwapchain)
 			.setInitialLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal)
 			.setFinalLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal)
 			.setLoadOp(vk::AttachmentLoadOp::eClear)
@@ -2790,7 +2790,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 
 	renderPasses[DEFAULT_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
 	renderPasses[DEFAULT_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
-	renderPasses[DEFAULT_RENDER_PASS_ID].msaaSamples = (msaaEnabled) ? msaaSamples : vk::SampleCountFlagBits::e1;
+	renderPasses[DEFAULT_RENDER_PASS_ID].msaaSamples = msaaSamplesSwapchain;
 
 	// createFramebuffers for default render pass
 	ASSERT(!swapchainImageView.empty(), "No swapchain image views?");
@@ -4231,7 +4231,7 @@ bool VkRoot::createSwapchain()
 
 	// createColorResources
 	vk::Format colorFormat = surfaceFormat.format;
-	if (!createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, colorFormat,
+	if (!createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamplesSwapchain, colorFormat,
 									colorImage, colorImageMemory, colorImageView, vkDynLoader))
 	{
 		debug(LOG_ERROR, "Failed to create MSAA color attachment image");
@@ -4241,7 +4241,7 @@ bool VkRoot::createSwapchain()
 	// createDepthStencilImage
 	vk::Format depthFormat = findDepthStencilFormat(physicalDevice, vkDynLoader);
 	debug(LOG_3D, "Using depth buffer format: %s", to_string(depthFormat).c_str());
-	if (!createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, depthFormat,
+	if (!createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamplesSwapchain, depthFormat,
 							depthStencilImage, depthStencilMemory, depthStencilView, vkDynLoader))
 	{
 		debug(LOG_ERROR, "Failed to create depth stencil image");

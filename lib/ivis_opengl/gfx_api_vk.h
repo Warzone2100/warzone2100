@@ -649,7 +649,8 @@ struct VkRoot final : gfx_api::context
 	uint32_t currentSwapchainIndex = 0;
 	std::vector<vk::ImageView> swapchainImageView;
 
-	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1;
+	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1; // msaaSamples used for scene
+	vk::SampleCountFlagBits msaaSamplesSwapchain = vk::SampleCountFlagBits::e1; // msaaSamples used for swapchain assets (should generally be 1)
 	vk::Image colorImage;
 	vk::DeviceMemory colorImageMemory;
 	vk::ImageView colorImageView;
