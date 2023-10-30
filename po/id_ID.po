@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-10-29 04:20\n"
+"PO-Revision-Date: 2023-10-30 05:09\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -4053,7 +4053,7 @@ msgstr "Riset sirkuit resistansi dan terus bertahan dalam serbuan dari Nexus"
 
 #: data/base/script/campaign/cam3-ad1.js:257
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "Bangun pangkalan utama di silos"
 
 #: data/base/script/campaign/cam3-ad2.js:278
 msgid "Protect the missile silos and research for the missile codes"
@@ -4613,7 +4613,7 @@ msgstr "Program Penyusup Nexus ini adalah komputer parasit yang dapat bermutasi.
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Kami belum bisa menentukan tujuan dan fungsi utamanya. Pada mulanya ia digunakan untuk menemukan dan mengisolasi bagian-bagian memori dari sistem yang terinvasi. Lalu ia akan mulai memutasikan dirinya dan struktur-struktur data, dan memprogram ulang sistem dari dalam."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -5625,11 +5625,11 @@ msgstr "Hilang karena tidak aktif / bermain pasif."
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "Batas waktu permainan yang dikonfigurasi host akan segera berakhir. Seandainya idak ada pemenang dalam 10 menit, permainan akan berakhir."
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "Batas waktu permainan yang dikonfigurasi host telah habis. Permainan berakhir."
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
@@ -5795,7 +5795,7 @@ msgstr "Tidak dapat membuka port yang diperlukan (%s) di (%s)"
 #, c-format
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
-msgstr ""
+msgstr "Anda harus mengkonfigurasi router dan firewall ke open port %d sebelum and bisa menjadi host permainan."
 
 #: lib/netplay/netplay.cpp:1496
 #, c-format
@@ -5811,7 +5811,7 @@ msgstr "Klien gagal mengenali pergantian indeks pemain"
 #: lib/netplay/netplay.cpp:2829
 #, c-format
 msgid "No UPnP device found. Configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "UPnP device tidak ditemukan. Konfigurasi router/firewall anda ke port terbuka%d!"
 
 #: lib/netplay/netplay.cpp:3451
 #, c-format
@@ -9597,7 +9597,7 @@ msgstr "Heavy Repair Turret Cobra Hover"
 #. data/mp/stats/weapons.json: $.Rocket-MRL-Hvy.name
 #: po/custom/fromJson.txt:2691
 msgid "Heavy Rocket Array"
-msgstr ""
+msgstr "Barisan Roket Berat"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9612,7 +9612,7 @@ msgstr "Benteng Roket Berat"
 #. data/mp/stats/structure.json: $.Emplacement-MRLHvy-pit.name
 #: po/custom/fromJson.txt:2700
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "Baterai Roket Berat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -12444,7 +12444,7 @@ msgstr "Kecepatan penyiapan +30%"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
 #: po/custom/fromJson.txt:4714
 msgid "Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Kurangi Jangkauan Scavenger Flamer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -14107,7 +14107,7 @@ msgstr "Muka Dua"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 #: po/custom/fromJson.txt:5803
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Batalkan Mengurangi Jangkauan Scavenger Flamer"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -15273,7 +15273,7 @@ msgstr "Nyalakan interface komando"
 
 #: src/clparse.cpp:438
 msgid "(stdin, unixsocket:path)"
-msgstr ""
+msgstr "(stdin, unixsocket: path)"
 
 #: src/clparse.cpp:439
 msgid "Minimum required players to auto-start game"
@@ -15285,31 +15285,31 @@ msgstr "startplayers"
 
 #: src/clparse.cpp:440
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "Mode(s) output riwayat log permainan"
 
 #: src/clparse.cpp:441
 msgid "Game history log output key"
-msgstr ""
+msgstr "Tombol output riwayat log permainan"
 
 #: src/clparse.cpp:442
 msgid "Game history log output naming"
-msgstr ""
+msgstr "Pemberian nama output riwat log permainan"
 
 #: src/clparse.cpp:443
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "Frame interval riwayat log permainan"
 
 #: src/clparse.cpp:443
 msgid "interval in seconds"
-msgstr ""
+msgstr "interval dalam detik"
 
 #: src/clparse.cpp:444
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "Batas waktu permainan multiplayer (dalam menit)"
 
 #: src/clparse.cpp:444
 msgid "number of minutes"
-msgstr ""
+msgstr "jumlah menit"
 
 #: src/clparse.cpp:445
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
