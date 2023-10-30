@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-10-29 04:19\n"
+"PO-Revision-Date: 2023-10-30 05:09\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -19065,7 +19065,7 @@ msgstr "(нет)"
 
 #: src/multiint.cpp:4241
 msgid "Alt Name:"
-msgstr ""
+msgstr "Альт Имя:"
 
 #: src/multiint.cpp:4260
 msgid "Player rating:"
@@ -19497,7 +19497,7 @@ msgstr "Пакеты: %lu/%lu"
 
 #: src/multimenu.cpp:1394
 msgid "Players View"
-msgstr ""
+msgstr "Просмотр игроков"
 
 #: src/multimenu.cpp:1395
 msgid "Team Strategy"
@@ -19729,32 +19729,32 @@ msgstr "Да, выгнать их"
 #: src/multivote.cpp:384
 #, c-format
 msgid "Starting vote to kick player: %s"
-msgstr ""
+msgstr "Начинается голосования для исключения игрока %s"
 
 #: src/multivote.cpp:618
 #, c-format
 msgid "The vote to kick player %s succeeded (sufficient votes in favor) - kicking"
-msgstr ""
+msgstr "Голосование для исключения игрока %s завершено (голосов достаточно) - игрок будет исключен"
 
 #: src/multivote.cpp:628
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes in favor)"
-msgstr ""
+msgstr "Голосование для исключения игрока %s не удалось (недостаточно голосов)"
 
 #: src/multivote.cpp:652
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes before timeout)"
-msgstr ""
+msgstr "Голосование для исключения игрока %s не удалось (недостаточно голосов)"
 
 #: src/multivote.cpp:684
 #, c-format
 msgid "The vote to kick player %s failed"
-msgstr ""
+msgstr "Голосование для исключения игрока %s не удалось"
 
 #: src/multivote.cpp:695
 #, c-format
 msgid "Cannot request vote to kick player %s yet - please wait a bit longer"
-msgstr ""
+msgstr "Невозможно начать голосование, чтобы выгнать игрока %s, подождите немного и попробуйте еще раз"
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"
