@@ -1907,6 +1907,11 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 	cmdBuffer->copyBuffer(stagingMemory.buffer, object, copyRegions, root->vkDynLoader);
 }
 
+size_t VkBuf::current_buffer_size()
+{
+	return buffer_size;
+}
+
 void VkBuf::bind() {}
 
 // MARK: VkTexture

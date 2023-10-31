@@ -81,6 +81,7 @@ public:
 	void bind() override;
 	virtual void upload(const size_t & size, const void * data) override;
 	virtual void update(const size_t & start, const size_t & size, const void * data, const update_flag flag = update_flag::none) override;
+	virtual size_t current_buffer_size() override;
 };
 
 struct null_pipeline_state_object final : public gfx_api::pipeline_state_object
