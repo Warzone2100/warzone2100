@@ -124,6 +124,7 @@ bool pie_LoadShaders(uint32_t shadowFilterSize)
 	// note: actual loading of shaders now occurs in gfx_api
 
 	// initialize gfx context shadow constants (must happen after context is initialized)
+	ASSERT(gfx_api::context::isInitialized(), "gfx context isn't initialized?");
 	auto shadowConstants = gfx_api::context::get().getShadowConstants();
 	shadowConstants.shadowFilterSize = shadowFilterSize;
 	gfx_api::context::get().setShadowConstants(shadowConstants);
@@ -131,6 +132,10 @@ bool pie_LoadShaders(uint32_t shadowFilterSize)
 	if (!pie_supportsShadowMapping().value_or(false))
 	{
 		pie_setShadowMode(ShadowMode::Fallback_Stencil_Shadows);
+	}
+	else
+	{
+		pie_setShadowMode(ShadowMode::Shadow_Mapping);
 	}
 
 	gfx_api::gfxUByte rect[] {

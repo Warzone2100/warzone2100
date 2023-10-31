@@ -66,6 +66,7 @@ static size_t pieCount = 0;
 static size_t polyCount = 0;
 static size_t drawCallsCount = 0;
 static bool shadows = false;
+static bool shadowsHasBeenInit = false;
 static ShadowMode shadowMode = ShadowMode::Shadow_Mapping;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 static gfx_api::gfxFloat lightingDefault[LIGHT_MAX][4];
@@ -161,7 +162,7 @@ uint32_t pie_getShadowMapResolution()
 
 bool pie_setShadowMode(ShadowMode mode)
 {
-	if (mode == shadowMode)
+	if (mode == shadowMode && shadowsHasBeenInit)
 	{
 		return true;
 	}
@@ -179,6 +180,7 @@ bool pie_setShadowMode(ShadowMode mode)
 	}
 	shadowMode = mode;
 	refreshShadowShaders();
+	shadowsHasBeenInit = true;
 	return successfulChangeToInputMode;
 }
 
