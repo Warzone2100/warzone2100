@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-10-30 05:09\n"
+"PO-Revision-Date: 2023-10-31 07:08\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -5363,7 +5363,7 @@ msgstr "Третий уровень кодов запуска ракет"
 #: data/mp/messages/strings/names.txt:372
 #: po/custom/fromJson.txt:2569
 msgid "Heavy Gunner Cyborg"
-msgstr "Киборг с тяжёлой пушкой"
+msgstr "Киборг с лёгкой пушкой"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Flamer.name
@@ -5539,7 +5539,7 @@ msgstr "Ракетная шахта"
 #: data/mp/messages/strings/names.txt:777
 #: po/custom/fromJson.txt:5357
 msgid "Super Heavy-Gunner"
-msgstr "Суперкиборг с тяжёлой пушкой"
+msgstr "Суперкиборг со средней пушкой"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-Acannon.name
@@ -5629,7 +5629,7 @@ msgstr "Приближается установленный хостом лим�
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr "Превышен лимит времени. Игра окончена."
+msgstr "Достигнут лимит времени. Игра окончена."
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
@@ -6373,7 +6373,7 @@ msgstr "Амфибийный движитель на воздушной поду
 #. data/base/stats/research.json: $.R-Defense-MdArtMissile.name
 #: po/custom/fromJson.txt:481
 msgid "Angel Missile Battery"
-msgstr "Батарея ракет Ангел"
+msgstr "Ракетная батарея Ангел"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MdART-pit.name
@@ -6386,7 +6386,7 @@ msgstr "Ракетная установка Ангел"
 #. data/base/stats/weapons.json: $.Missile-MdArt.name
 #: po/custom/fromJson.txt:488
 msgid "Angel Missile"
-msgstr "Ракета Ангел"
+msgstr "Батарея Ангел"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text[1]
@@ -6449,7 +6449,7 @@ msgstr "Бронебойные оперённые снаряды"
 #. data/mp/stats/research.json: $.R-Defense-HvyArtMissile.name
 #: po/custom/fromJson.txt:524
 msgid "Archangel Missile Battery"
-msgstr "Батарея ракет Архангел"
+msgstr "Ракетная батарея Архангел"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-HvART-pit.name
@@ -6465,7 +6465,7 @@ msgstr "Ракетная установка Архангел"
 #. data/mp/stats/weapons.json: $.Missile-HvyArt.name
 #: po/custom/fromJson.txt:534
 msgid "Archangel Missile"
-msgstr "Ракета Архангел"
+msgstr "Батарея Архангел"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
@@ -9432,7 +9432,7 @@ msgstr "Тяжёлый огнемёт - Инферно"
 #. data/mp/stats/weapons.json: $.CyborgCannon.name
 #: po/custom/fromJson.txt:2573
 msgid "Heavy Gunner"
-msgstr "Киборг с тяжёлой пушкой"
+msgstr "Киборг с лёгкой пушкой"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HvyHowitzer.name
@@ -9599,7 +9599,7 @@ msgstr "Тяжёлая ремонтная турель Кобра Ховер"
 #. data/mp/stats/weapons.json: $.Rocket-MRL-Hvy.name
 #: po/custom/fromJson.txt:2691
 msgid "Heavy Rocket Array"
-msgstr "Тяжелая ракетная установка"
+msgstr "Тяжёлая ракетная батарея"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9614,7 +9614,7 @@ msgstr "Крепость с тяжёлыми ракетами"
 #. data/mp/stats/structure.json: $.Emplacement-MRLHvy-pit.name
 #: po/custom/fromJson.txt:2700
 msgid "Heavy Rocket Battery"
-msgstr "Батарея тяжелых ракет"
+msgstr "Тяжёлая ракетная установка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -12446,7 +12446,7 @@ msgstr "Скорость переоснащения СВВП +30%"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
 #: po/custom/fromJson.txt:4714
 msgid "Reduce Scavenger Flamer Range"
-msgstr "Уменьшение дальности огнемета для Мусорщиков"
+msgstr "Уменьшение дальности огнемёта мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -12675,7 +12675,7 @@ msgstr "Ракетная установка Дрожь"
 #. data/mp/stats/weapons.json: $.Rocket-IDF.name
 #: po/custom/fromJson.txt:4887
 msgid "Ripple Rockets"
-msgstr "Ракеты Дрожь"
+msgstr "Батарея Дрожь"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG_ROF3.text[1]
@@ -13086,7 +13086,7 @@ msgstr "Кнут Виверна Гусеницы"
 #. data/mp/stats/weapons.json: $.Missile-A-T.name
 #: po/custom/fromJson.txt:5139
 msgid "Scourge Missile"
-msgstr "Ракета Кнут"
+msgstr "Кнут"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonScourgeTracks.name
@@ -13228,7 +13228,7 @@ msgstr "Радар улучшен"
 #. data/mp/stats/weapons.json: $.Missile-MdArt.name
 #: po/custom/fromJson.txt:5233
 msgid "Seraph Missile Array"
-msgstr "Батарея ракет Серафим"
+msgstr "Батарея Серафим"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MdArtMissile.name
@@ -13372,7 +13372,7 @@ msgstr "Предотвращает захват НЕКСУС"
 #. data/mp/stats/weapons.json: $.AAGunLaser.name
 #: po/custom/fromJson.txt:5319
 msgid "Stormbringer AA Laser"
-msgstr "Лазерное ПВО Вестник Бури"
+msgstr "Лазер ПВО Вестник Бури"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-AA-Laser.name
@@ -13425,7 +13425,7 @@ msgstr "ПВО Солнечные Лучи"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5353
 msgid "Super Heavy-Gunner Cyborg"
-msgstr "Суперкиборг с тяжёлым пулемётом"
+msgstr "Суперкиборг со средней пушкой"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-HPV.name
@@ -14109,7 +14109,7 @@ msgstr "С двух сторон"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 #: po/custom/fromJson.txt:5803
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr "Отмена уменьшения дальности огнемета для Мусорщиков"
+msgstr "Отмена уменьшения дальности огнемёта мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -15600,7 +15600,7 @@ msgstr "Передача юнитов невозможна -- превышены
 #: src/frontend.cpp:2552
 #: src/terrain.cpp:2408
 msgid "Normal"
-msgstr "Обычная"
+msgstr "Нормально"
 
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:215
@@ -15948,7 +15948,7 @@ msgstr "Плавный"
 #: src/frontend.cpp:1036
 #: src/terrain.cpp:2410
 msgid "High"
-msgstr "Высокая"
+msgstr "Высоко"
 
 #: src/frontend.cpp:875
 msgid "Default"
@@ -15964,7 +15964,7 @@ msgstr "Карты теней недоступны в этой системе."
 
 #: src/frontend.cpp:1035
 msgid "Low"
-msgstr "Низкий"
+msgstr "Низко"
 
 #: src/frontend.cpp:1037
 msgid "Ultra"
@@ -16084,7 +16084,7 @@ msgstr "Объёмный звук не поддерживается на ваш�
 
 #: src/frontend.cpp:1399
 msgid "Map Zoom"
-msgstr "Масштаб миникарты"
+msgstr "Масштаб карты"
 
 #: src/frontend.cpp:1404
 msgid "Map Zoom Rate"
@@ -16100,7 +16100,7 @@ msgstr "Масштаб миникарты"
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:1428
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "НАСТРОЙКИ ЗВУКА / МИНИКАРТЫ"
+msgstr "НАСТРОЙКИ\\nЗВУКА / МИНИКАРТЫ"
 
 #: src/frontend.cpp:1540
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
@@ -16135,7 +16135,7 @@ msgstr "В окне"
 #: src/frontend.cpp:1844
 #: src/frontend.cpp:2012
 msgid "Desktop Full"
-msgstr "В окне без границ"
+msgstr "Окно без границ"
 
 #: src/frontend.cpp:1970
 msgid "On (Fullscreen)"
@@ -16148,7 +16148,7 @@ msgstr "Размер текстур"
 #: src/frontend.cpp:2125
 #: src/ingameop.cpp:761
 msgid "Vertical sync"
-msgstr "Вертикальная синхронизация"
+msgstr "Верт. синхронизация"
 
 #: src/frontend.cpp:2130
 msgid "Antialiasing*"
@@ -16239,22 +16239,22 @@ msgstr "НАСТРОЙКИ МЫШИ"
 #: src/frontend.cpp:2550
 #: src/multiint.cpp:270
 msgid "Super Easy"
-msgstr "Очень лёгкая"
+msgstr "Очень легко"
 
 #: src/frontend.cpp:2551
 #: src/multiint.cpp:270
 msgid "Easy"
-msgstr "Лёгкая"
+msgstr "Легко"
 
 #: src/frontend.cpp:2553
 #: src/multiint.cpp:270
 msgid "Hard"
-msgstr "Тяжёлая"
+msgstr "Тяжело"
 
 #: src/frontend.cpp:2554
 #: src/multiint.cpp:270
 msgid "Insane"
-msgstr "Безумная"
+msgstr "Безумно"
 
 #: src/frontend.cpp:2734
 #: src/init.cpp:1419
@@ -17171,7 +17171,7 @@ msgstr "Быстрое сохранение"
 
 #: src/input/keyconfig.cpp:46
 msgid "Toggle Radar"
-msgstr "Переключить радар"
+msgstr "Переключить миникарту"
 
 #: src/input/keyconfig.cpp:47
 #: src/keybind.cpp:2608
@@ -17760,7 +17760,7 @@ msgstr "Выделить следующий завод"
 
 #: src/input/keyconfig.cpp:203
 msgid "Select next Research Facility"
-msgstr "Выделить следующую исследовательскую лабораторию"
+msgstr "Выделить следующую лабораторию"
 
 #: src/input/keyconfig.cpp:204
 msgid "Select next Power Generator"
@@ -17780,7 +17780,7 @@ msgstr "Перейти к следующему заводу"
 
 #: src/input/keyconfig.cpp:208
 msgid "Jump to next Research Facility"
-msgstr "Перейти к следующей исследовательской лаборатории"
+msgstr "Перейти к следующей лаборатории"
 
 #: src/input/keyconfig.cpp:209
 msgid "Jump to next Power Generator"
@@ -19106,7 +19106,7 @@ msgstr "Ожидание загрузки"
 
 #: src/multiint.cpp:4458
 msgid "READY?"
-msgstr "ГОТОВЫ?"
+msgstr "ГОТОВ?"
 
 #: src/multiint.cpp:4542
 msgid "For Spectator:"
@@ -20069,7 +20069,7 @@ msgstr "Электромагнитные"
 #. TRANSLATORS: "Flame" weapons class
 #: src/stats.cpp:1523
 msgid "Flame"
-msgstr "Огнеметы"
+msgstr "Огнемёты"
 
 #: src/stats.cpp:1525
 msgid "Howitzers"
@@ -20273,7 +20273,7 @@ msgstr "Трофей мастерской - ничего"
 
 #: src/terrain.cpp:2406
 msgid "Classic"
-msgstr "Классический"
+msgstr "Классическое"
 
 #: src/titleui/gamefind.cpp:81
 msgid "GAMES"
