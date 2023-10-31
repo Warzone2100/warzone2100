@@ -473,6 +473,8 @@ optional<std::string> getTerrainOverrideBaseSourcePath(TerrainShaderQuality qual
 			return nullopt;
 		case TerrainShaderQuality::NORMAL_MAPPING:
 			return "terrain_overrides/high";
+		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+			return nullopt;
 	}
 	return nullopt; // silence compiler warning
  }

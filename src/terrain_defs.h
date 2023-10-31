@@ -21,6 +21,7 @@
 
 enum TerrainShaderQuality
 {
+	UNINITIALIZED_PICK_DEFAULT = -1, // a non-selectable option for first-run - pick a default based on the current system settings
 	CLASSIC = 0, // classic, pixel-art, tile-based textures
 	MEDIUM = 1, // the mode used by at least WZ 3.2.x - 4.3.x
 	NORMAL_MAPPING = 2	// the highest-quality mode, which adds normal / specular / height maps and advanced lighting

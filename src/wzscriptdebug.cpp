@@ -949,6 +949,8 @@ public:
 				case TerrainShaderQuality::NORMAL_MAPPING:
 					gfx_api::TerrainCombined_High::get().recompile();
 					break;
+				case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+					break;
 			}
 			debug(LOG_INFO, "Done");
 		}, prevButton);
@@ -964,6 +966,8 @@ public:
 					break;
 				case TerrainShaderQuality::NORMAL_MAPPING:
 					gfx_api::WaterHighPSO::get().recompile();
+					break;
+				case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
 					break;
 			}
 			debug(LOG_INFO, "Done");
