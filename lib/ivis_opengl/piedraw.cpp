@@ -68,6 +68,7 @@ static size_t drawCallsCount = 0;
 static bool shadows = false;
 static bool shadowsHasBeenInit = false;
 static ShadowMode shadowMode = ShadowMode::Shadow_Mapping;
+static uint32_t numShadowCascades = WZ_MAX_SHADOW_CASCADES;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 static gfx_api::gfxFloat lightingDefault[LIGHT_MAX][4];
 
@@ -114,19 +115,23 @@ static void refreshShadowShaders()
 	{
 		auto shadowConstants = gfx_api::context::get().getShadowConstants();
 		bool bShadowMappingEnabled = isShadowMappingEnabled();
+		uint32_t actualNumCascadesAndPasses = (bShadowMappingEnabled) ? numShadowCascades : 0;
 		if (bShadowMappingEnabled)
 		{
 			shadowConstants.shadowMode = 1; // Possible future TODO: Could get this from the config file to allow testing alternative filter methods
+			shadowConstants.shadowCascadesCount = actualNumCascadesAndPasses;
 		}
 		else
 		{
 			shadowConstants.shadowMode = 0; // Disable shader-drawn / shadow-mapping shadows
 		}
-		// Preserve existing shadowFilterSize and shadowCascadesCount
+
+		// Preserve existing shadowFilterSize
+
 		gfx_api::context::get().setShadowConstants(shadowConstants);
 
 		// Trigger depth pass buffer free / rebuild if needed
-		gfx_api::context::get().setDepthPassProperties((bShadowMappingEnabled) ? WZ_MAX_SHADOW_CASCADES : 0, gfx_api::context::get().getDepthPassDimensions(0));
+		gfx_api::context::get().setDepthPassProperties(actualNumCascadesAndPasses, gfx_api::context::get().getDepthPassDimensions(0));
 	}
 }
 
@@ -152,7 +157,7 @@ bool pie_setShadowMapResolution(uint32_t resolution)
 {
 	ASSERT_OR_RETURN(false, resolution && !(resolution & (resolution - 1)), "Expecting power-of-2 resolution, received: %" PRIu32, resolution);
 	bool bShadowMappingEnabled = isShadowMappingEnabled();
-	return gfx_api::context::get().setDepthPassProperties((bShadowMappingEnabled) ? WZ_MAX_SHADOW_CASCADES : 0, resolution);
+	return gfx_api::context::get().setDepthPassProperties((bShadowMappingEnabled) ? numShadowCascades : 0, resolution);
 }
 
 uint32_t pie_getShadowMapResolution()
@@ -187,6 +192,26 @@ bool pie_setShadowMode(ShadowMode mode)
 ShadowMode pie_getShadowMode()
 {
 	return shadowMode;
+}
+
+bool pie_setShadowCascades(uint32_t newValue)
+{
+	if (newValue == 0 || newValue > WZ_MAX_SHADOW_CASCADES)
+	{
+		return false;
+	}
+	if (numShadowCascades == newValue)
+	{
+		return true;
+	}
+	numShadowCascades = newValue;
+	refreshShadowShaders();
+	return true;
+}
+
+uint32_t pie_getShadowCascades()
+{
+	return numShadowCascades;
 }
 
 static Vector3f currentSunPosition(0.f, 0.f, 0.f);
