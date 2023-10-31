@@ -1876,7 +1876,10 @@ void VkBuf::upload(const size_t & size, const void * data)
 {
 	ASSERT(size > 0, "Attempt to upload buffer of size 0");
 	allocateBufferObject(size);
-	update(0, size, data);
+	if (data)
+	{
+		update(0, size, data);
+	}
 }
 
 void VkBuf::update(const size_t & start, const size_t & size, const void * data, const update_flag flag)
