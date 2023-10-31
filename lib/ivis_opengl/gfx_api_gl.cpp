@@ -2272,16 +2272,16 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 gl_gpurendered_texture* gl_context::create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename)
 {
 	GLenum depthInternalFormat = GL_DEPTH_COMPONENT32F;
-	return create_gpurendered_texture(depthInternalFormat, GL_DEPTH_COMPONENT, GL_FLOAT, width, height, layer_count, filename);
+	return create_gpurendered_texture_array(depthInternalFormat, GL_DEPTH_COMPONENT, GL_FLOAT, width, height, layer_count, filename);
 }
 
-gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename)
+gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename)
 {
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
 	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
-	new_texture->_isArray = (layer_count > 1);
+	new_texture->_isArray = false;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	new_texture->debugName = filename;
 #endif
@@ -2293,14 +2293,31 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 
-	if (!new_texture->isArray())
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, format, type, nullptr);
+
+	new_texture->unbind();
+	return new_texture;
+}
+
+gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename)
+{
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
+	auto* new_texture = new gl_gpurendered_texture();
+	new_texture->gles = gles;
+	new_texture->_isArray = true;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	new_texture->debugName = filename;
+#endif
+	new_texture->bind();
+	glTexParameteri(new_texture->target(), GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(new_texture->target(), GL_TEXTURE_MAX_LEVEL, 0);
+	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, format, type, nullptr);
+		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
-	else
-	{
-		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), static_cast<GLsizei>(layer_count), 0, format, type, nullptr);
-	}
+
+	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), static_cast<GLsizei>(layer_count), 0, format, type, nullptr);
 
 	new_texture->unbind();
 	return new_texture;
@@ -2308,7 +2325,7 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 
 gl_gpurendered_texture* gl_context::create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename)
 {
-	return create_gpurendered_texture(internalFormat, format, type, width, height, 1, filename);
+	return create_gpurendered_texture(internalFormat, format, type, width, height, filename);
 }
 
 gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
@@ -4133,9 +4150,7 @@ size_t gl_context::initDepthPasses(size_t resolution)
 		if ((!gles && !GLAD_GL_VERSION_3_0) || (gles && !GLAD_GL_ES_VERSION_3_0))
 		{
 			// glFramebufferTextureLayer requires OpenGL 3.0+ / ES 3.0+
-			debug(LOG_ERROR, "Cannot create depth texture array - requires OpenGL 3.0+ / OpenGL ES 3.0+");
-			// could use  a single depth pass (as a 2d texture) - but only bother if we want to keep support // TODO: decide
-			depthPassCount = 1;
+			debug(LOG_ERROR, "Cannot create depth texture array - requires OpenGL 3.0+ / OpenGL ES 3.0+ - this will fail");
 		}
 	}
 
