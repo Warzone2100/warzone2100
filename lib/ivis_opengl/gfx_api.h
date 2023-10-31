@@ -160,6 +160,8 @@ namespace gfx_api
 		//       (i.e. Don't re-use a buffer instance for different data in the same frame - use separate buffer instances.)
 		virtual void update(const size_t& start, const size_t& size, const void* data, const update_flag flag = update_flag::none) = 0;
 
+		virtual size_t current_buffer_size() = 0;
+
 		virtual void bind() = 0;
 
 		virtual ~buffer() {};

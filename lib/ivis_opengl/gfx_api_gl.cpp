@@ -622,6 +622,11 @@ void gl_buffer::update(const size_t & start, const size_t & size, const void * d
 	glBindBuffer(to_gl(usage), 0);
 }
 
+size_t gl_buffer::current_buffer_size()
+{
+	return buffer_size;
+}
+
 // MARK: gl_pipeline_state_object
 
 struct program_data

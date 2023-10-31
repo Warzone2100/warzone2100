@@ -158,6 +158,11 @@ void null_buffer::update(const size_t & start, const size_t & size, const void *
 	// no-op
 }
 
+size_t null_buffer::current_buffer_size()
+{
+	return buffer_size;
+}
+
 // MARK: null_pipeline_state_object
 
 null_pipeline_state_object::null_pipeline_state_object(const gfx_api::state_description& _desc, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc)
