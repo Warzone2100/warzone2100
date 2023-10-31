@@ -326,6 +326,11 @@ int32_t null_context::get_context_value(const context_value property)
 	return 0;
 }
 
+uint64_t null_context::get_estimated_vram_mb()
+{
+	return 0;
+}
+
 // MARK: null_context - debug
 
 void null_context::debugStringMarker(const char *str)
@@ -376,7 +381,7 @@ uint64_t null_context::debugGetPerfValue(PERF_POINT pp)
 std::map<std::string, std::string> null_context::getBackendGameInfo()
 {
 	std::map<std::string, std::string> backendGameInfo;
-	backendGameInfo["null_gfx_backend"] = true;
+	backendGameInfo["null_gfx_backend"] = "true";
 	return backendGameInfo;
 }
 

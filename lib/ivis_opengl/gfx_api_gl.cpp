@@ -2699,6 +2699,34 @@ int32_t gl_context::get_context_value(const context_value property)
 	return value;
 }
 
+uint64_t gl_context::get_estimated_vram_mb()
+{
+	if (GLAD_GL_NVX_gpu_memory_info)
+	{
+		// If GL_NVX_gpu_memory_info is available, get the total graphics memory
+		GLint total_graphics_mem_kb = 0;
+		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_graphics_mem_kb);
+
+		if (total_graphics_mem_kb > 0)
+		{
+			return static_cast<uint64_t>(total_graphics_mem_kb / 1024);
+		}
+	}
+	else if (GLAD_GL_ATI_meminfo)
+	{
+		// For GL_ATI_meminfo, get the current free texture memory (stats_kb[0])
+		GLint stats_kb[4] = {0, 0, 0, 0};
+		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, stats_kb);
+		if (stats_kb[0] > 0)
+		{
+			uint64_t currentFreeTextureMemory_mb = static_cast<uint64_t>(stats_kb[0] / 1024);
+			return currentFreeTextureMemory_mb;
+		}
+	}
+
+	return 0;
+}
+
 // MARK: gl_context - debug
 
 void gl_context::debugStringMarker(const char *str)

@@ -4318,7 +4318,7 @@ bool VkRoot::createSwapchain()
 	return true;
 }
 
-static uint32_t getVKSuggestedDefaultDepthBufferResolution(const vk::PhysicalDeviceMemoryProperties& memprops)
+static optional<uint32_t> getVKLargestDeviceLocalMemoryHeapIndex(const vk::PhysicalDeviceMemoryProperties& memprops)
 {
 	optional<uint32_t> largestDeviceLocalMemoryHeap;
 	for (uint32_t i = 0; i < memprops.memoryTypeCount; ++i)
@@ -4344,7 +4344,12 @@ static uint32_t getVKSuggestedDefaultDepthBufferResolution(const vk::PhysicalDev
 			}
 		}
 	}
+	return largestDeviceLocalMemoryHeap;
+}
 
+static uint32_t getVKSuggestedDefaultDepthBufferResolution(const vk::PhysicalDeviceMemoryProperties& memprops)
+{
+	optional<uint32_t> largestDeviceLocalMemoryHeap = getVKLargestDeviceLocalMemoryHeapIndex(memprops);
 	ASSERT_OR_RETURN(2048, largestDeviceLocalMemoryHeap.has_value(), "Couldn't find the largest device local memory heap?");
 
 	auto largestDeviceLocalMemoryHeapSize = memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size;
@@ -5925,6 +5930,14 @@ int32_t VkRoot::get_context_value(const gfx_api::context::context_value property
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;
+}
+
+uint64_t VkRoot::get_estimated_vram_mb()
+{
+	optional<uint32_t> largestDeviceLocalMemoryHeap = getVKLargestDeviceLocalMemoryHeapIndex(memprops);
+	ASSERT_OR_RETURN(0, largestDeviceLocalMemoryHeap.has_value(), "Couldn't find the largest device local memory heap?");
+	auto largestDeviceLocalMemoryHeapSize = memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size;
+	return static_cast<uint64_t>(largestDeviceLocalMemoryHeapSize / 1048576);
 }
 
 // DEBUG-handling
