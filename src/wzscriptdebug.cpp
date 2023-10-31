@@ -999,7 +999,9 @@ public:
 		auto shadowFilterDropdownWidget = panel->makeShadowFilterSizeDropdown(4, shadowsLabel);
 		panel->makeShadowMapResolutionDropdown(4, shadowFilterDropdownWidget);
 
-		auto shadowModeDropdownWidget = panel->makeShadowModeDropdown(5);
+		panel->makeShadowCascadesDropdown(5, shadowsLabel);
+
+		auto shadowModeDropdownWidget = panel->makeShadowModeDropdown(6);
 
 		return panel;
 	}
@@ -1232,6 +1234,79 @@ private:
 				return false;
 			}
 			war_setShadowFilterSize(newFilterSize); // persist to config
+			return true;
+		});
+
+		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
+		dropdown->setGeometry(contextDropdownX0, yPos, dropdown->idealWidth() + ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
+
+		return dropdown;
+	}
+
+	std::shared_ptr<DropdownWidget> makeShadowCascadesDropdown(int row, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+
+		std::vector<std::tuple<WzString, uint32_t>> dropDownChoices = {
+			{WzString::fromUtf8("Medium (2)"), 2},
+			{WzString::fromUtf8("Highest (3)"), 3}
+		};
+
+		// If current value is not one of the presets in dropDownChoices, add a "Custom" entry
+		size_t currentSettingIdx = 0;
+		uint32_t currValue = pie_getShadowCascades();
+		auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, uint32_t>& item) -> bool {
+			return std::get<1>(item) == currValue;
+		});
+		if (it != dropDownChoices.end())
+		{
+			currentSettingIdx = it - dropDownChoices.begin();
+		}
+		else
+		{
+			dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+			currentSettingIdx = dropDownChoices.size() - 1;
+		}
+
+		int yPos = (row * (TAB_BUTTONS_HEIGHT + ACTION_BUTTON_ROW_SPACING));
+
+		auto contextLabel = std::make_shared<W_LABEL>();
+		contextLabel->setFont(font_regular, WZCOL_FORM_TEXT);
+		contextLabel->setString("Cascades:");
+		contextLabel->setGeometry((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, yPos, contextLabel->getMaxLineWidth() + 10, TAB_BUTTONS_HEIGHT);
+		contextLabel->setCacheNeverExpires(true);
+		attach(contextLabel);
+
+		auto dropdown = std::make_shared<DropdownWidget>();
+		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+		attach(dropdown);
+		for (const auto& option : dropDownChoices)
+		{
+			WzString buttonLabel = std::get<0>(option);
+			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			bool supportedCascadeValue = pie_supportsShadowMapping().value_or(false);
+			if (!supportedCascadeValue)
+			{
+				button->setState(WBUT_DISABLE);
+			}
+			dropdown->addItem(button);
+		}
+
+		dropdown->setSelectedIndex(currentSettingIdx);
+
+		dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+			ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+			auto newCascadesCount = std::get<1>(dropDownChoices.at(newIndex));
+			if (!pie_supportsShadowMapping().value_or(false))
+			{
+				return false;
+			}
+			if (!pie_setShadowCascades(newCascadesCount))
+			{
+				debug(LOG_ERROR, "Failed to set shadow cascades: %" PRIu32, newCascadesCount);
+				return false;
+			}
+			// Possible Future TODO: could persist to config (if this proves useful beyond debugging and testing)
 			return true;
 		});
 
