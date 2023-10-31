@@ -600,7 +600,7 @@ bool loadConfig()
 		}
 		else
 		{
-			debug(LOG_WARNING, "Unsupported / invalid terrainShaderQuality value: %d; defaulting to: %d", intValue, static_cast<int>(getTerrainShaderQuality()));
+			debug(LOG_WARNING, "Unsupported / invalid terrainShaderQuality value: %d; using default", intValue);
 		}
 	}
 	war_setShadowFilterSize(iniGetInteger("shadowFilterSize", (int)war_getShadowFilterSize()).value());

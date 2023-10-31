@@ -35,6 +35,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/opengl.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"
@@ -58,6 +59,8 @@
 #include "hci.h"
 #include "loop.h"
 #include "wzcrashhandlingproviders.h"
+
+#include <cstdint>
 
 // TODO: Fix and remove after merging terrain rendering changes
 #if defined(__clang__)
@@ -161,7 +164,7 @@ GLsizei dreCount;
 /// Are we actually drawing something using the DrawRangeElements functions?
 bool drawRangeElementsStarted = false;
 
-TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::NORMAL_MAPPING;
+TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT;
 TerrainShaderType terrainShaderType = TerrainShaderType::SINGLE_PASS;
 bool initializedTerrainShaderType = false;
 
@@ -1934,6 +1937,9 @@ static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm:
 		case TerrainShaderQuality::NORMAL_MAPPING:
 			drawTerrainCombinedmpl<gfx_api::TerrainCombined_High>(ModelViewProjection, ViewMatrix, ModelUVLightmap, cameraPos, sunPos, shadowCascades);
 			break;
+		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+			// should not happen
+			break;
 	}
 
 }
@@ -2209,6 +2215,9 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 		case TerrainShaderQuality::NORMAL_MAPPING:
 			drawWaterHighImpl<gfx_api::WaterHighPSO>(ModelViewProjection, cameraPos, sunPos);
 			return;
+		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+			// should not happen
+			break;
 	}
 }
 
@@ -2362,10 +2371,79 @@ bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value)
 	return false; // silence compiler warning
 }
 
+static TerrainShaderQuality determineDefaultTerrainQuality()
+{
+	// Based on system properties, determine a reasonable default (for performance reasons)
+	// (Uses a heuristic based on system RAM, graphics renderer, and estimated VRAM)
+
+	// If < 7.5 GiB system RAM, default to medium ("normal")
+	auto systemRAMinMiB = wzGetCurrentSystemRAM();
+	if (systemRAMinMiB < 7680)
+	{
+		debug(LOG_INFO, "Due to system RAM (%" PRIu64 " MiB), defaulting to terrain quality: Normal", systemRAMinMiB);
+		return TerrainShaderQuality::MEDIUM;
+	}
+
+	// For specific older integrated cards on OpenGL, default to medium ("normal")
+	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
+	auto it = backendInfo.find("openGL_renderer");
+	if (it != backendInfo.end())
+	{
+		// If opengl_renderer starts with "Intel(R) HD Graphics"
+		if (it->second.rfind("Intel(R) HD Graphics", 0) == 0)
+		{
+			// default to medium ("normal")
+			return TerrainShaderQuality::MEDIUM;
+		}
+		// If opengl_renderer starts with "Intel(R) Graphics Media Accelerator"
+		if (it->second.rfind("Intel(R) Graphics Media Accelerator", 0) == 0)
+		{
+			// default to medium ("normal")
+			return TerrainShaderQuality::MEDIUM;
+		}
+	}
+
+	// If it's the null backend (headless mode)
+	it = backendInfo.find("null_gfx_backend");
+	if (it != backendInfo.end())
+	{
+		// default to medium ("normal")
+		debug(LOG_INFO, "Due to null gfx backend, defaulting to terrain quality: Normal");
+		return TerrainShaderQuality::MEDIUM;
+	}
+
+	// Try to get the estimated available VRAM
+	auto estimatedVRAMinMiB = gfx_api::context::get().get_estimated_vram_mb();
+	if (estimatedVRAMinMiB > 0)
+	{
+		// If estimated VRAM < 2 GiB
+		if (estimatedVRAMinMiB < 2048)
+		{
+			// default to medium ("normal")
+			debug(LOG_INFO, "Due to estimated VRAM (%" PRIu64 " MiB), defaulting to terrain quality: Normal", estimatedVRAMinMiB);
+			return TerrainShaderQuality::MEDIUM;
+		}
+	}
+
+#if INTPTR_MAX <= INT32_MAX
+	// On 32-bit builds, default to MEDIUM
+	debug(LOG_INFO, "32-bit build defaulting to terrain quality: Normal");
+	return TerrainShaderQuality::MEDIUM;
+#else
+	// If all of the above check out, default to NORMAL_MAPPING
+	return TerrainShaderQuality::NORMAL_MAPPING;
+#endif
+}
+
 void initTerrainShaderType()
 {
 	terrainShaderType = determineSupportedTerrainShader();
 	initializedTerrainShaderType = true;
+	if (terrainShaderQuality == TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT)
+	{
+		terrainShaderQuality = determineDefaultTerrainQuality();
+		debug(LOG_INFO, "Defaulting terrain quality to: %s", to_display_string(terrainShaderQuality).c_str());
+	}
 	setTerrainShaderQuality(terrainShaderQuality, true); // checks and resets unsupported values
 }
 
@@ -2402,6 +2480,8 @@ std::string to_display_string(TerrainShaderQuality value)
 {
 	switch (value)
 	{
+		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+			return "";
 		case TerrainShaderQuality::CLASSIC:
 			return _("Classic");
 		case TerrainShaderQuality::MEDIUM:
