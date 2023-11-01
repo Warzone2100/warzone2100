@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-10-31 19:03\n"
+"PO-Revision-Date: 2023-11-01 07:51\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1905,7 +1905,7 @@ msgstr "Высокоэластичный бетон, укреплённый бо
 #: data/mp/messages/strings/resstrings.txt:198
 #: po/custom/fromJson.txt:3160
 msgid "Increases Armor and Body Points"
-msgstr "Увеличивает броню и прочность корпуса"
+msgstr "Увеличивает броню и прочность построек"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[3]
@@ -8363,54 +8363,54 @@ msgstr "ЭМИ миномёт"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[2]
 #: po/custom/fromJson.txt:1887
 msgid "Enables Hardcrete gates"
-msgstr "Разрешает хардкритовые ворота"
+msgstr "Позволяет строить хардкритовые ворота"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
 #: po/custom/fromJson.txt:1891
 msgid "Enables Hardcrete walls"
-msgstr "Разрешает хардкритовые стены"
+msgstr "Позволяет строить хардкритовые стены"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[3]
 #: po/custom/fromJson.txt:1894
 msgid "Enables resistance to Nexus Link technology"
-msgstr "Разрешает технологию сопротивления НЕКСУС"
+msgstr "Открывает технологию сопротивления НЕКСУС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ASTRUC.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_ASTRUC.text[3]
 #: po/custom/fromJson.txt:1898
 msgid "Enables self-repair in all base structures"
-msgstr "Разрешает самовосстановление основных построек"
+msgstr "Позволяет основным постройкам самовосстанавливаться"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_ACYB.text[3]
 #: po/custom/fromJson.txt:1902
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Разрешает самовосстановление киборгов"
+msgstr "Позволяет киборгам самовосстанавливаться"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
 #: po/custom/fromJson.txt:1906
 msgid "Enables self-repair in all defenses"
-msgstr "Разрешает самовосстановление защитных сооружений"
+msgstr "Позволяет защитным сооружениям самовосстанавливаться"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
 #: po/custom/fromJson.txt:1910
 msgid "Enables self-repair in all vehicles"
-msgstr "Разрешает самовосстановление техники"
+msgstr "Позволяет технике самовосстанавливаться"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_AR.text[3]
 #: po/custom/fromJson.txt:1913
 msgid "Enables self-repair"
-msgstr "Разрешает самовосстановление"
+msgstr "Позволяет самовосстанавливаться"
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.player_3.name
@@ -8519,19 +8519,19 @@ msgstr "Большая дистанция по сравнению с остал�
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
 #: po/custom/fromJson.txt:1989
 msgid "Fast Fire Mini-Rockets Mk2"
-msgstr "Быстрый отстрел миниракет Мk2"
+msgstr "Быстрая зарядка миниракет Мk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF03.name
 #: po/custom/fromJson.txt:1992
 msgid "Fast Fire Mini-Rockets Mk3"
-msgstr "Быстрый отстрел миниракет Мk3"
+msgstr "Быстрая зарядка миниракет Мk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF01.name
 #: po/custom/fromJson.txt:1995
 msgid "Fast Fire Mini-Rockets"
-msgstr "Быстрый отстрел миниракет"
+msgstr "Быстрая зарядка миниракет"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[1]
