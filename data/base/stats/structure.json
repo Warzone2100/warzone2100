@@ -488,7 +488,7 @@
 		"productionPoints": 10,
 		"moduleProductionPoints": 10,
 		"resistance": 150,
-		"sensorID": "BaBaSensor",
+		"sensorID": "DefaultSensor1Mk1",
 		"strength": "MEDIUM",
 		"structureModel": [
 			"blfact0.pie",
