@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-11-01 07:51\n"
+"PO-Revision-Date: 2023-11-01 20:05\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -11113,7 +11113,7 @@ msgstr "Средний сверхтяжёлый корпус"
 #. data/mp/messages/resmessages12.json: $.RES_EMP_MRL.text[1]
 #: po/custom/fromJson.txt:3802
 msgid "Mini-rocket armored strongpoint"
-msgstr "Укреплённая точка с миниракетами"
+msgstr "Укреплённая установка с миниракетами"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
