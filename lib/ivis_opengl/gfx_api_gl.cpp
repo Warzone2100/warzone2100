@@ -2728,6 +2728,7 @@ uint64_t gl_context::get_estimated_vram_mb()
 		// If GL_NVX_gpu_memory_info is available, get the total graphics memory
 		GLint total_graphics_mem_kb = 0;
 		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_graphics_mem_kb);
+		debug(LOG_3D, "GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX: %d", total_graphics_mem_kb);
 
 		if (total_graphics_mem_kb > 0)
 		{
@@ -2741,6 +2742,9 @@ uint64_t gl_context::get_estimated_vram_mb()
 		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, stats_kb);
 		if (stats_kb[0] > 0)
 		{
+			debug(LOG_3D, "GL_TEXTURE_FREE_MEMORY_ATI [0: total pool avail]: %d", stats_kb[0]);
+			debug(LOG_3D, "GL_TEXTURE_FREE_MEMORY_ATI [1: largest pool avail]: %d", stats_kb[1]);
+
 			uint64_t currentFreeTextureMemory_mb = static_cast<uint64_t>(stats_kb[0] / 1024);
 			return currentFreeTextureMemory_mb;
 		}
@@ -3446,6 +3450,12 @@ bool gl_context::initGLContext()
 	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &glMaxArrayTextureLayers);
 	debug(LOG_3D, "  * (current) Max array texture layers is %d.", (int) glMaxArrayTextureLayers);
 	maxArrayTextureLayers = glMaxArrayTextureLayers;
+
+	uint32_t estimatedVRAMinMiB = get_estimated_vram_mb();
+	if (estimatedVRAMinMiB > 0)
+	{
+		debug(LOG_3D, "  * Estimated VRAM is %" PRIu32 " MiB", estimatedVRAMinMiB);
+	}
 
 	// IMPORTANT: Reserve enough slots in enabledVertexAttribIndexes based on glmaxVertexAttribs
 	if (glmaxVertexAttribs == 0)
