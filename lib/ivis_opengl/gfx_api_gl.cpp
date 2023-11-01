@@ -3054,8 +3054,9 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 		// If GL_NVX_gpu_memory_info is available, get the total graphics memory (in kB)
 		GLint total_graphics_mem_kb = 0;
 		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_graphics_mem_kb);
+		debug(LOG_3D, "GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX: %d", total_graphics_mem_kb);
 
-		if ((total_graphics_mem_kb / 1024) >= 4096) // If >= 4GB graphics memory
+		if ((total_graphics_mem_kb / 1024) >= 8192) // If >= 8 GiB graphics memory
 		{
 			return 4096;
 		}
@@ -3071,9 +3072,11 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, stats_kb);
 		if (stats_kb[0] > 0)
 		{
+			debug(LOG_3D, "GL_TEXTURE_FREE_MEMORY_ATI [0: total pool avail]: %d", stats_kb[0]);
+			debug(LOG_3D, "GL_TEXTURE_FREE_MEMORY_ATI [1: largest pool avail]: %d", stats_kb[1]);
 			uint32_t currentFreeTextureMemory_mb = static_cast<uint32_t>(stats_kb[0] / 1024);
 
-			if (currentFreeTextureMemory_mb >= 4096) // If >= 4 GB free texture memory
+			if (currentFreeTextureMemory_mb >= 8192) // If >= 8 GiB free texture memory
 			{
 				return 4096;
 			}
@@ -3085,24 +3088,34 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 	}
 
 	// don't currently have a good way of checking video memory on this system
-	// instead, check system RAM
-	auto systemRAMinMiB = wzGetCurrentSystemRAM();
-	if (systemRAMinMiB >= 16384) // If >= 16 GB of system RAM
-	{
+	// check some specific GL_RENDERER values...
 #if defined(WZ_OS_WIN)
-		WzString openGL_renderer = (const char*)wzSafeGlGetString(GL_RENDERER);
-		if (openGL_renderer.startsWith("Intel(R) HD Graphics"))
-		{
-			// always default to 2048 on Intel HD Graphics...
-			return 2048;
-		}
-#endif
-		return 4096;
-	}
-	else
+	WzString openGL_renderer = (const char*)wzSafeGlGetString(GL_RENDERER);
+	if (openGL_renderer.startsWith("Intel(R) HD Graphics"))
 	{
+		// always default to 2048 on Intel HD Graphics...
 		return 2048;
 	}
+#elif defined (__APPLE__)
+	WzString openGL_vendor = (const char*)wzSafeGlGetString(GL_VENDOR);
+	WzString openGL_renderer = (const char*)wzSafeGlGetString(GL_RENDERER);
+	if (openGL_vendor == "Apple" && openGL_renderer.startsWith("Apple"))
+	{
+		// For Apple GPUs, check system RAM
+		auto systemRAMinMiB = wzGetCurrentSystemRAM();
+		if (systemRAMinMiB >= 16384) // If >= 16 GB of system (unified) RAM
+		{
+			return 4096;
+		}
+		else
+		{
+			return 2048;
+		}
+	}
+#endif
+
+	// In all other cases, default to 2048 for better performance by default
+	return 2048;
 }
 
 bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
