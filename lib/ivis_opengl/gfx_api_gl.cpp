@@ -2725,10 +2725,10 @@ uint64_t gl_context::get_estimated_vram_mb()
 {
 	if (GLAD_GL_NVX_gpu_memory_info)
 	{
-		// If GL_NVX_gpu_memory_info is available, get the total graphics memory
+		// If GL_NVX_gpu_memory_info is available, get the total dedicated graphics memory
 		GLint total_graphics_mem_kb = 0;
-		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_graphics_mem_kb);
-		debug(LOG_3D, "GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX: %d", total_graphics_mem_kb);
+		glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &total_graphics_mem_kb);
+		debug(LOG_3D, "GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX: %d", total_graphics_mem_kb);
 
 		if (total_graphics_mem_kb > 0)
 		{
@@ -3055,10 +3055,10 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 	// Use a (very simple) heuristic, that may or may not be useful - but basically try to find graphics cards that have lots of memory...
 	if (GLAD_GL_NVX_gpu_memory_info)
 	{
-		// If GL_NVX_gpu_memory_info is available, get the total graphics memory (in kB)
+		// If GL_NVX_gpu_memory_info is available, get the total dedicated graphics memory
 		GLint total_graphics_mem_kb = 0;
-		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_graphics_mem_kb);
-		debug(LOG_3D, "GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX: %d", total_graphics_mem_kb);
+		glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &total_graphics_mem_kb);
+		debug(LOG_3D, "GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX: %d", total_graphics_mem_kb);
 
 		if ((total_graphics_mem_kb / 1024) >= 8192) // If >= 8 GiB graphics memory
 		{
