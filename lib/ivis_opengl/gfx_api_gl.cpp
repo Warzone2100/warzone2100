@@ -3069,27 +3069,12 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 			return 2048;
 		}
 	}
-	else if (GLAD_GL_ATI_meminfo)
-	{
-		// For GL_ATI_meminfo, get the current free texture memory (stats_kb[0])
-		GLint stats_kb[4] = {0, 0, 0, 0};
-		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, stats_kb);
-		if (stats_kb[0] > 0)
-		{
-			debug(LOG_3D, "GL_TEXTURE_FREE_MEMORY_ATI [0: total pool avail]: %d", stats_kb[0]);
-			debug(LOG_3D, "GL_TEXTURE_FREE_MEMORY_ATI [1: largest pool avail]: %d", stats_kb[1]);
-			uint32_t currentFreeTextureMemory_mb = static_cast<uint32_t>(stats_kb[0] / 1024);
-
-			if (currentFreeTextureMemory_mb >= 8192) // If >= 8 GiB free texture memory
-			{
-				return 4096;
-			}
-			else
-			{
-				return 2048;
-			}
-		}
-	}
+//	else if (GLAD_GL_ATI_meminfo)
+//	{
+//		// For GL_ATI_meminfo, we could get the current free texture memory (w/ GL_TEXTURE_FREE_MEMORY_ATI, checking stats_kb[0])
+//		// However we don't really have any way of differentiating between dedicated VRAM and shared system memory (ex. with integrated graphics)
+//		// So instead, just ignore this
+//	}
 
 	// don't currently have a good way of checking video memory on this system
 	// check some specific GL_RENDERER values...
