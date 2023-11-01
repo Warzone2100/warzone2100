@@ -4355,21 +4355,37 @@ static optional<uint32_t> getVKLargestDeviceLocalMemoryHeapIndex(const vk::Physi
 	return largestDeviceLocalMemoryHeap;
 }
 
-static uint32_t getVKSuggestedDefaultDepthBufferResolution(const vk::PhysicalDeviceMemoryProperties& memprops)
+static uint32_t getVKSuggestedDefaultDepthBufferResolution(const vk::PhysicalDeviceProperties &physicalDeviceProperties, const vk::PhysicalDeviceMemoryProperties& memprops)
 {
 	optional<uint32_t> largestDeviceLocalMemoryHeap = getVKLargestDeviceLocalMemoryHeapIndex(memprops);
 	ASSERT_OR_RETURN(2048, largestDeviceLocalMemoryHeap.has_value(), "Couldn't find the largest device local memory heap?");
 
 	auto largestDeviceLocalMemoryHeapSize = memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size;
 
-	if ((largestDeviceLocalMemoryHeapSize / 1048576) >= 4096) // If >= 4GB device-local memory
+	if (physicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
 	{
-		return 4096;
+		if ((largestDeviceLocalMemoryHeapSize / 1048576) >= 8192) // If >= 8 GiB device-local memory on a discrete GPU
+		{
+			return 4096;
+		}
+		else
+		{
+			return 2048;
+		}
 	}
-	else
+	else if (physicalDeviceProperties.vendorID == 4203) // Apple GPU
 	{
-		return 2048;
+		if ((largestDeviceLocalMemoryHeapSize / 1048576) >= 16384) // If >= 16 GiB device-local memory on an Apple GPU
+		{
+			return 4096;
+		}
+		else
+		{
+			return 2048;
+		}
 	}
+
+	return 2048;
 }
 
 bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion) const
@@ -4689,7 +4705,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	if (depthMapSize == 0)
 	{
-		depthMapSize = getVKSuggestedDefaultDepthBufferResolution(memprops);
+		depthMapSize = getVKSuggestedDefaultDepthBufferResolution(physDeviceProps, memprops);
 	}
 
 	createDepthPasses(depthBufferFormat); // TODO: Handle failures?
