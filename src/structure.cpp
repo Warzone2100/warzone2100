@@ -2044,6 +2044,124 @@ static bool setFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType)
 	return true;
 }
 
+static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType, UDWORD priorPlayer)
+{
+	ASSERT_OR_RETURN(false, psBuilding != nullptr, "Invalid pointer");
+	CHECK_STRUCTURE(psBuilding);
+
+	switch (functionType)
+	{
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+	case REF_RESEARCH:
+	case REF_POWER_GEN:
+	case REF_RESOURCE_EXTRACTOR:
+	case REF_REPAIR_FACILITY:
+	case REF_REARM_PAD:
+	case REF_WALL:
+	case REF_GATE:
+		// Structure should already have functionality
+		ASSERT_OR_RETURN(false, psBuilding->pFunctionality, "Structure does not already have functionality pointer?");
+		break;
+
+	default:
+		psBuilding->pFunctionality = nullptr;
+		break;
+	}
+
+	switch (functionType)
+	{
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+		{
+			FACTORY *psFactory = &psBuilding->pFunctionality->factory;
+
+			// Reset factoryNumFlag for prior player
+			auto psAssemblyPoint = psFactory->psAssemblyPoint;
+			if (psAssemblyPoint != nullptr)
+			{
+				if (psAssemblyPoint->factoryInc < factoryNumFlag[priorPlayer][psAssemblyPoint->factoryType].size())
+				{
+					factoryNumFlag[priorPlayer][psAssemblyPoint->factoryType][psAssemblyPoint->factoryInc] = false;
+				}
+
+				//need to cancel the repositioning of the DP if selectedPlayer and currently moving
+				if (priorPlayer == selectedPlayer && psAssemblyPoint->selected)
+				{
+					cancelDeliveryRepos();
+				}
+			}
+
+			// Transfer / fix-up factory assembly point, and number
+			transferFlagPositionToPlayer(psFactory->psAssemblyPoint, priorPlayer, psBuilding->player);
+
+			switch (functionType)
+			{
+			case REF_FACTORY:
+				setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, FACTORY_FLAG);
+				break;
+			case REF_CYBORG_FACTORY:
+				setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, CYBORG_FLAG);
+				break;
+			case REF_VTOL_FACTORY:
+				setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, VTOL_FLAG);
+				break;
+			default:
+				ASSERT_OR_RETURN(false, false, "Invalid factory type");
+			}
+			break;
+		}
+	case REF_POWER_GEN:
+	case REF_HQ:
+	case REF_REARM_PAD:
+		{
+			break;
+		}
+	case REF_RESOURCE_EXTRACTOR:
+		{
+			RES_EXTRACTOR *psResExtracter = &psBuilding->pFunctionality->resourceExtractor;
+
+			// Make the structure inactive
+			psResExtracter->psPowerGen = nullptr;
+			break;
+		}
+	case REF_REPAIR_FACILITY:
+		{
+			REPAIR_FACILITY *psRepairFac = &psBuilding->pFunctionality->repairFacility;
+
+			// POSSIBLE TODO: Do something about the group? (Or can we just keep it?)
+
+			// Reset factoryNumFlag for prior player
+			auto psAssemblyPoint = psRepairFac->psDeliveryPoint;
+			if (psAssemblyPoint != nullptr)
+			{
+				if (psAssemblyPoint->factoryInc < factoryNumFlag[priorPlayer][psAssemblyPoint->factoryType].size())
+				{
+					factoryNumFlag[priorPlayer][psAssemblyPoint->factoryType][psAssemblyPoint->factoryInc] = false;
+				}
+
+				//need to cancel the repositioning of the DP if selectedPlayer and currently moving
+				if (priorPlayer == selectedPlayer && psAssemblyPoint->selected)
+				{
+					cancelDeliveryRepos();
+				}
+			}
+
+			// Transfer / fix-up factory assembly point, and number
+			transferFlagPositionToPlayer(psRepairFac->psDeliveryPoint, priorPlayer, psBuilding->player);
+
+			setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, REPAIR_FLAG);
+			break;
+		}
+	// Structure types without a FUNCTIONALITY
+	default:
+		break;
+	}
+
+	return true;
+}
 
 // Set the command droid that factory production should go to
 void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
@@ -6722,6 +6840,8 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 					setStructureTarget(psStruct, nullptr, 0, ORIGIN_UNKNOWN);
 				}
 			}
+
+			transferFixupFunctionality(psStructure, psStructure->pStructureType->type, originalPlayer);
 
 			if (psStructure->status == SS_BUILT)
 			{
