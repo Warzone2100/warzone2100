@@ -2479,6 +2479,12 @@ static bool intAddCommand()
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen()
 {
+	if (intMode == INT_INTELMAP)
+	{
+		// screen is already up - do nothing
+		return;
+	}
+
 	intResetScreen(false);
 	intHideGroupSelectionMenu();
 
