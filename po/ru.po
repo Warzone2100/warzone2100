@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-11-02 09:10\n"
+"PO-Revision-Date: 2023-11-02 21:28\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -30,7 +30,7 @@ msgstr "Основать базу, затем найти доколлапсов�
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Это сооружение содержит жизненно важную технологию для успеха Проекта."
+msgstr "Это сооружение содержит технологию, жизненно важную для Проекта."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -71,7 +71,7 @@ msgstr "У них может находиться технология нейр�
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Найти и захватить артефакты"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Найти и захватить артефакты"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
@@ -83,11 +83,11 @@ msgstr "После высадки исследуйте руины и захва�
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Разведать исследовательский центр"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Разведать исследовательский центр"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Разведайте местность и захватите присутствующие артефакты."
+msgstr "Разведайте местность и захватите любые найденные артефакты."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
@@ -96,7 +96,7 @@ msgstr "Доступно подкрепление."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Обнаружен зашифрованный сигнал"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Обнаружен зашифрованный сигнал"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
@@ -108,19 +108,19 @@ msgstr "Используйте грузовики для возведения о
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Обнаружена вражеская передача"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Обнаружена вражеская передача"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Разведайте на обозначенной местности вражеские исследовательские лаборатории."
+msgstr "Проведите разведку местности, разыщите вражеские исследовательские лаборатории."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Отправляйтесь к зоне высадки #2. На этот раз не входите в контакт с врагом."
+msgstr "Отправляйтесь к зоне высадки #2. На данный момент не входите в контакт с врагом."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Местоположение нейросвязи"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Местоположение нейросвязи"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
@@ -132,11 +132,11 @@ msgstr "Соберите штурмовую группу и заполучите
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Новые задания"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Новые задания"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr "Где-то в этой окрестности Новая Парадигма разыскивает артефакты."
+msgstr "Новая Парадигма разыскивает артефакты в этих окрестностях."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
@@ -144,7 +144,7 @@ msgstr "Перехватите их. Не позвольте ни одному �
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Строительство вражеской базы"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Строящаяся вражеская база"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
@@ -156,7 +156,7 @@ msgstr "Уничтожьте базу и обезопасьте район."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "Миссия на базе Альфа: Постройте передовую базу"
+msgstr "МИССИЯ НА БАЗЕ АЛЬФА: Постройте передовую базу"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
@@ -196,7 +196,7 @@ msgstr "Поздравляем, Командир."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr "Теперь у нас есть другие задания для Вас."
+msgstr "У нас есть дальнейшие задания для Вас."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
@@ -208,7 +208,7 @@ msgstr "Первые две зоны теперь безопасны."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr "ДОКЛАД ОТ КОМАНДЫ ПРОЕКТА"
+msgstr "ДОКЛАДЫ ОТ ЭКСПЕДИЦОННЫХ КОМАНД ПРОЕКТА"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
@@ -260,7 +260,7 @@ msgstr "ВРАЖЕСКАЯ ЗОНА ВЫСАДКИ"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Уничтожьте зону высадки для предотвращения высадки врагов."
+msgstr "Уничтожьте зону высадки для предотвращения прибытия вражеского десанта."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
@@ -423,7 +423,7 @@ msgstr "Расшифровка..."
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Крушение транспорта"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Крушение транспорта"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
@@ -475,7 +475,7 @@ msgstr "Удерживайте позицию и отразите их атак�
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Перехват конвоя."
+msgstr "ДЕСАНТНАЯ МИССИЯ: Перехват конвоя"
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
@@ -504,7 +504,7 @@ msgstr "Тревожные новости относительно NASDA."
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Найти и уничтожить конвой"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Найти и уничтожить конвой"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
@@ -525,7 +525,7 @@ msgstr "Вражеские СВВП сопровождают эскорт."
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Спасти гражданских из концлагеря"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Спасти гражданских из концлагеря"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
@@ -583,7 +583,7 @@ msgstr "Спасите как можно больше гражданских."
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Уничтожить реактор"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Уничтожить реактор"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
@@ -613,7 +613,7 @@ msgstr "Захватите центр NASDA до того как НЕКСУС и
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Центр связи со спутником"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Центр связи со спутником"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
@@ -641,7 +641,7 @@ msgstr "Уничтожьте центр связи и вернитесь на б
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Уничтожить вражеские системы ПВО"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Уничтожить вражеские системы ПВО"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
@@ -654,7 +654,7 @@ msgstr "Направляйтесь в зону высадки, затем уни
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Обеспечить зону безопасности"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Укрепите безопасный район"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
@@ -707,7 +707,7 @@ msgstr "Удачи, Командир."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Северный сектор"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Северный сектор"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
@@ -735,7 +735,7 @@ msgstr "Команда Гамма свяжется с вами там."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Построить передовую базу"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Построить передовую базу"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:5
@@ -749,7 +749,7 @@ msgstr "Защитите зону высадки и установите пер�
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Координаты места запуска ракеты"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Координаты места запуска ракеты"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
@@ -796,11 +796,11 @@ msgstr "Долина - ваш единственный шанс спастись
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr "ДОКЛАД ОТ ОТБЫВШЕЙ КОМАНДЫ"
+msgstr "ДОКЛАД ОТ УДАЛЁННОЙ КОМАНДЫ"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "Всякая связь с отбывшей командой была потеряна после ядерных взрывов."
+msgstr "Связь с удалённой командой была потеряна после ядерных взрывов."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
@@ -836,7 +836,7 @@ msgstr "Мы получаем передачу."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr "МИССИЯ НА ВЫЛЕТЕ: Обнаружена команда Альфа"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Обнаружена команда Альфа"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -880,7 +880,7 @@ msgstr "Найдите и уничтожьте ...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Засада войск НЕКСУС"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Организуйте засаду для войск НЕКСУС"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
@@ -904,7 +904,7 @@ msgstr "Соберите ударную группу и устройте зас�
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Отбывшая команда"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Удалённая команда"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
@@ -916,7 +916,7 @@ msgstr "НЕКСУС покидает систему."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr "Входящая передача от удаленной команды."
+msgstr "Входящая передача от удалённой команды."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
@@ -1081,7 +1081,7 @@ msgstr "Начинаем процедуру запуска ракет."
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
-msgstr "ТРАНСПОРТНАЯ МИССИЯ: Атакуйте главную базу НЕКСУС"
+msgstr "ДЕСАНТНАЯ МИССИЯ: Атакуйте главную базу НЕКСУС"
 
 #: data/base/messages/strings/cam3strings.txt:181
 msgid "We have located NEXUS' base at this location."
@@ -1254,17 +1254,17 @@ msgstr "Установка гаубицы Адский Шторм"
 #: data/base/messages/strings/names.txt:228
 #: data/mp/messages/strings/names.txt:264
 msgid "Mortar Emplacement"
-msgstr "Батарея миномёта"
+msgstr "Точка миномёта"
 
 #: data/base/messages/strings/names.txt:229
 #: data/mp/messages/strings/names.txt:265
 msgid "Bombard Emplacement"
-msgstr "Батарея миномёта Бомбард"
+msgstr "Точка миномёта Бомбард"
 
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
 msgid "Pepperpot Emplacement"
-msgstr "Батарея миномёта Пепперпот"
+msgstr "Точка миномёта Пепперпот"
 
 #: data/base/messages/strings/names.txt:237
 #: data/base/messages/strings/names.txt:405
@@ -2122,7 +2122,7 @@ msgstr "Автоматически привязывается к ближайш�
 #: data/mp/messages/strings/resstrings.txt:62
 #: po/custom/fromJson.txt:646
 msgid "Armored Bombard battery pit"
-msgstr "Укреплённая миномётная батарея Бомбард"
+msgstr "Укреплённая точка с миномётом Бомбард"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotMor.text[1]
@@ -2131,7 +2131,7 @@ msgstr "Укреплённая миномётная батарея Бомбар�
 #: data/mp/messages/strings/resstrings.txt:67
 #: po/custom/fromJson.txt:775
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Укреплённая миномётная батарея Пеперпот"
+msgstr "Укреплённая точка с миномётом Пеперпот"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HOW.text[1]
@@ -6666,7 +6666,7 @@ msgstr "Укреплённый бункер с пулемётом"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMPM.text[1]
 #: po/custom/fromJson.txt:664
 msgid "Armored EMP Mortar battery pit"
-msgstr "Укреплённая батарея ЭМИ миномёта"
+msgstr "Укреплённая точка с ЭМИ миномётом"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text[1]
@@ -6799,14 +6799,14 @@ msgstr "Укреплённая точка с ракетами Кнут"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text[1]
 #: po/custom/fromJson.txt:767
 msgid "Armored Incendiary Mortar battery pit"
-msgstr "Укреплённая батарея зажигательного миномёта"
+msgstr "Укреплённая точка с зажигательным миномётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_EMP_Mpit.text[1]
 #: po/custom/fromJson.txt:771
 msgid "Armored Mortar battery pit"
-msgstr "Укреплённая батарея миномёта"
+msgstr "Укреплённая точка с миномётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_PrisLas.text[1]
@@ -7385,7 +7385,7 @@ msgstr "Бомбард Кобра Полугусеницы"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit02.name
 #: po/custom/fromJson.txt:1241
 msgid "Bombard Pit"
-msgstr "Батарея миномёта Бомбард"
+msgstr "Точка миномёта Бомбард"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar2Mk1.name
@@ -8350,7 +8350,7 @@ msgstr "ЭМИ ракетница"
 #. data/mp/stats/structure.json: $.Emplacement-MortarEMP.name
 #: po/custom/fromJson.txt:1880
 msgid "EMP Mortar Pit"
-msgstr "Батарея ЭМИ миномёта"
+msgstr "Точка ЭМИ миномёта"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MortarEMP.name
@@ -10235,14 +10235,14 @@ msgstr "Зажигательная гаубица"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3129
 msgid "Incendiary Mortar Pit 2"
-msgstr "Батарея зажигательного миномёта 2"
+msgstr "Точка зажигательного миномёта 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incendiary.name
 #: po/custom/fromJson.txt:3133
 msgid "Incendiary Mortar Pit"
-msgstr "Батарея зажигательного миномёта"
+msgstr "Точка зажигательного миномёта"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Incendiary.name
@@ -11172,7 +11172,7 @@ msgstr "Батарея миниракет"
 #. data/mp/stats/structure.json: $.Emplacement-MRL-pit.name
 #: po/custom/fromJson.txt:3834
 msgid "Mini-Rocket Battery"
-msgstr "Установка с миниракетами"
+msgstr "Установка миниракет"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODHTracks.name
@@ -11357,7 +11357,7 @@ msgstr "Быстрая зарядка миномёта"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit01.name
 #: po/custom/fromJson.txt:3957
 msgid "Mortar Pit"
-msgstr "Батарея миномёта"
+msgstr "Точка миномёта"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
@@ -11933,7 +11933,7 @@ msgstr "Пантера"
 #. data/mp/stats/structure.json: $.Emplacement-RotMor.name
 #: po/custom/fromJson.txt:4401
 msgid "Pepperpot Pit"
-msgstr "Батарея миномёта Пепперпот"
+msgstr "Точка миномёта Пепперпот"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar3ROTARYMk1.name
@@ -12925,7 +12925,7 @@ msgstr "Зенитная ракетная установка Защитник"
 #. data/mp/stats/structure.json: $.A0BaBaRocketPitAT.name
 #: po/custom/fromJson.txt:5047
 msgid "Scavenger AT-Rocket Pit"
-msgstr "Батарея противотанковых ракет мусорщиков"
+msgstr "Противотанковая ракетная установка мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaBunker.name
@@ -13005,7 +13005,7 @@ msgstr "Ремонтная мастерская мусорщиков"
 #. data/mp/stats/structure.json: $.A0BaBaRocketPit.name
 #: po/custom/fromJson.txt:5091
 msgid "Scavenger Rocket Pit"
-msgstr "Ракетная батарея мусорщиков"
+msgstr "Ракетная установка мусорщиков"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BaBaPeople.name
