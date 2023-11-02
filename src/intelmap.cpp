@@ -371,6 +371,12 @@ class W_INTELLIGENCEOVERLAY_FORM : public W_FORM
 protected:
 	W_INTELLIGENCEOVERLAY_FORM(W_FORMINIT const *init);
 	W_INTELLIGENCEOVERLAY_FORM();
+	~W_INTELLIGENCEOVERLAY_FORM() {
+		if (sound_isStreamPlaying(playing))
+		{
+			sound_StopStream(playing);
+		}
+	}
 public:
 	static std::shared_ptr<W_INTELLIGENCEOVERLAY_FORM> make(bool _playCurrent, UDWORD formID = 0);
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
@@ -394,6 +400,7 @@ private:
 	std::shared_ptr<WzMessageView> msgDetailsView;
 	bool isClosing = false;
 	bool delayedPlayCurrent = false;
+	AUDIO_STREAM *playing = nullptr;
 };
 
 constexpr int OVERLAY_MULTIMENU_FORM_Y = 50;
@@ -692,8 +699,6 @@ void W_INTELLIGENCEOVERLAY_FORM::intIntelButtonPressed(const std::shared_ptr<Int
 				psResearch = getResearchForMsg(psMessage->pViewData);
 				if (psResearch != nullptr)
 				{
-					static AUDIO_STREAM *playing = nullptr;
-
 					// only play the sample once, otherwise, they tend to overlap each other
 					if (sound_isStreamPlaying(playing))
 					{
@@ -727,10 +732,15 @@ void W_INTELLIGENCEOVERLAY_FORM::intIntelButtonPressed(const std::shared_ptr<Int
 
 					if (audio != nullptr)
 					{
-						playing = audio_PlayStream(audio, sound_GetUIVolume(), [](const AUDIO_STREAM *stream, const void *) {
-							if (stream == playing)
+						std::weak_ptr<W_INTELLIGENCEOVERLAY_FORM> weakSelf = std::dynamic_pointer_cast<W_INTELLIGENCEOVERLAY_FORM>(shared_from_this());
+						playing = audio_PlayStream(audio, sound_GetUIVolume(), [weakSelf](const AUDIO_STREAM *stream, const void *) {
+							auto strongSelf = weakSelf.lock();
+							if (strongSelf)
 							{
-								playing = nullptr;
+								if (stream == strongSelf->playing)
+								{
+									strongSelf->playing = nullptr;
+								}
 							}
 						}, nullptr);
 					}

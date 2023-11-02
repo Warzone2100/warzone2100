@@ -866,7 +866,7 @@ bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK 
  *  \note You must _never_ manually free() the memory used by the returned
  *        pointer.
  */
-AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, void (*onFinished)(const AUDIO_STREAM *, const void *), const void *user_data)
+AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished, const void *user_data)
 {
 	// If audio is not enabled return false to indicate that the given callback
 	// will not be invoked.
