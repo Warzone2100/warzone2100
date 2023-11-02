@@ -97,6 +97,8 @@ bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
 void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
 /* Remove a Flag Position from the Lists */
 void removeFlagPosition(FLAG_POSITION *psDel);
+/* Transfer a Flag Position to a new player */
+void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
 // free all flag positions
 void freeAllFlagPositions();
 

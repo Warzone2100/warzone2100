@@ -671,33 +671,59 @@ void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
 	apsFlagPosLists[psFlagPosToAdd->player] = psFlagPosToAdd;
 }
 
-/* Remove a Flag Position from the Lists */
-void removeFlagPosition(FLAG_POSITION *psDel)
+// Remove it from the list, but don't delete it!
+static bool removeFlagPositionFromList(FLAG_POSITION *psRemove)
 {
 	FLAG_POSITION		*psPrev = nullptr, *psCurr;
 
-	ASSERT_OR_RETURN(, psDel != nullptr, "Invalid Flag Position pointer");
+	ASSERT_OR_RETURN(false, psRemove != nullptr, "Invalid Flag Position pointer");
 
-	if (apsFlagPosLists[psDel->player] == psDel)
+	if (apsFlagPosLists[psRemove->player] == psRemove)
 	{
-		apsFlagPosLists[psDel->player] = apsFlagPosLists[psDel->player]->psNext;
-		free(psDel);
+		apsFlagPosLists[psRemove->player] = apsFlagPosLists[psRemove->player]->psNext;
+		return true;
 	}
 	else
 	{
-		for (psCurr = apsFlagPosLists[psDel->player]; (psCurr != psDel) &&
-		     (psCurr != nullptr); psCurr = psCurr->psNext)
+		for (psCurr = apsFlagPosLists[psRemove->player]; (psCurr != psRemove) &&
+			 (psCurr != nullptr); psCurr = psCurr->psNext)
 		{
 			psPrev = psCurr;
 		}
 		if (psCurr != nullptr)
 		{
 			psPrev->psNext = psCurr->psNext;
-			free(psCurr);
+			return true;
 		}
+	}
+
+	return false;
+}
+
+/* Remove a Flag Position from the Lists */
+void removeFlagPosition(FLAG_POSITION *psDel)
+{
+	ASSERT_OR_RETURN(, psDel != nullptr, "Invalid Flag Position pointer");
+
+	if (removeFlagPositionFromList(psDel))
+	{
+		free(psDel);
+	}
+	else
+	{
+		ASSERT(false, "Did not find flag position in expected list?");
 	}
 }
 
+/* Transfer a Flag Position to a new player */
+void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer)
+{
+	ASSERT_OR_RETURN(, psFlagPos != nullptr, "Invalid Flag Position pointer");
+	ASSERT(originalPlayer == psFlagPos->player, "Unexpected originalPlayer (%" PRIu32 ") does not match current flagPos->player (%" PRIu32 ")", originalPlayer, psFlagPos->player);
+	ASSERT(removeFlagPositionFromList(psFlagPos), "Did not find flag position in expected list?");
+	psFlagPos->player = newPlayer;
+	addFlagPosition(psFlagPos);
+}
 
 // free all flag positions
 void freeAllFlagPositions()
