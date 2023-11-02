@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-11-02 09:10\n"
+"PO-Revision-Date: 2023-11-02 21:28\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -16017,7 +16017,7 @@ msgstr "Vibrations de l’écran"
 #: src/frontend.cpp:1181
 #: src/ingameop.cpp:659
 msgid "Groups Menu"
-msgstr "Menu Groupes"
+msgstr "Menu des Groupes"
 
 #: src/frontend.cpp:1193
 msgid "GRAPHICS OPTIONS"
@@ -16150,7 +16150,7 @@ msgstr "Backend Graphique*"
 #. An option describing when / whether WZ will auto-minimize the window when it loses focus.
 #: src/frontend.cpp:2159
 msgid "Min on Focus Loss"
-msgstr "Perte minimale de focalisation"
+msgstr "Minifier si perte focus"
 
 #: src/frontend.cpp:2160
 msgid "Whether the window should auto-minimize on focus loss"
