@@ -43,6 +43,16 @@ function(WZ_FETCH_PREBUILT_PACKAGE PACKAGE_URL PACKAGE_FILENAME PACKAGE_SHA512 O
 		endif()
 	endif()
 
+	# Check if file already exists at output path
+	if (EXISTS "${OUTPUT_PATH}")
+		file(SHA512 "${OUTPUT_PATH}" _dl_received_sha512)
+		if("${_dl_received_sha512}" STREQUAL "${PACKAGE_SHA512}")
+			message(STATUS "Found: Already downloaded prebuilt package: ${OUTPUT_PATH}, with hash: ${PACKAGE_SHA512}")
+			set(${STATUS} TRUE PARENT_SCOPE)
+			return()
+		endif()
+	endif()
+
 	# Try to download the prebuilt package
 	file(DOWNLOAD "${PACKAGE_URL}" "${OUTPUT_PATH}" INACTIVITY_TIMEOUT 60 SHOW_PROGRESS STATUS _dl_status TLS_VERIFY ON)
 	list(GET _dl_status 0 _dl_status_code)
