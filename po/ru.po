@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-11-01 20:05\n"
+"PO-Revision-Date: 2023-11-02 09:10\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -336,7 +336,7 @@ msgstr "Эта передача была перехвачена нескольк
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr "Это происходит с восточной стороны."
+msgstr "Она приходит с восточной стороны."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
@@ -599,7 +599,7 @@ msgstr "Проследуйте из зоны высадки к реактору 
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr "Не позвольте Альянсу включить реактор."
+msgstr "Не позвольте Альянсу запустить реактор."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
@@ -852,7 +852,7 @@ msgstr "Это часть команды Альфа, спасите их и со
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr "МИССИЯ В СЕВЕРНОМ СЕКТОРЕ: Запрос команды Альфа"
+msgstr "МИССИЯ В СЕВЕРНОМ СЕКТОРЕ: Информация от команды Альфа"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
@@ -888,7 +888,7 @@ msgstr "Командир, ваши решительные действия ос�
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr "Прежде чем НЕКСУС был удалён, мы перехватили это сообщение - расшифровка закончена."
+msgstr "Прежде чем НЕКСУС был удалён, мы перехватили это сообщение. Расшифровка завершена."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
@@ -916,7 +916,7 @@ msgstr "НЕКСУС покидает систему."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr "Входящая передача от отбывшей команды."
+msgstr "Входящая передача от удаленной команды."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
@@ -928,7 +928,7 @@ msgstr "Вот наша текущая позиция."
 
 #: data/base/messages/strings/cam3strings.txt:106
 msgid "Take control of our forces and lead us."
-msgstr "Возьмите наши силы и ведите нас."
+msgstr "Примите управление группой и ведите нас."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
@@ -952,7 +952,7 @@ msgstr "Они утверждают, что не заражены НЕКСУС �
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr "Координаты базы загружены."
+msgstr "Координаты базы в процессе загрузки."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
@@ -960,7 +960,7 @@ msgstr "МИССИЯ В СЕВЕРНОМ СЕКТОРЕ: Лазерные спу
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
-msgstr "Мы обнаружили мощные всплески энергии с орбиты."
+msgstr "Мы обнаружили мощные всплески энергии на орбите."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
@@ -972,7 +972,7 @@ msgstr "Вторая база команды Гамма находится зд�
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr "У нас немного времени на эвакуацию этой базы и переход к базе Гамма."
+msgstr "У нас осталось немного времени на эвакуацию этой базы и переход к базе Гамма."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
@@ -1005,7 +1005,7 @@ msgstr "Ракетные шахты захвачены."
 #: data/base/messages/strings/cam3strings.txt:143
 #: data/base/messages/strings/cam3strings.txt:161
 msgid "NORTHERN SECTOR MISSION: Missile Codes"
-msgstr "МИССИЯ В СЕВЕРНОМ СЕКТОРЕ: Коды ракет"
+msgstr "МИССИЯ В СЕВЕРНОМ СЕКТОРЕ: Коды запуска ракет"
 
 #: data/base/messages/strings/cam3strings.txt:144
 msgid "Commander, there are missiles present at the silos."
@@ -1013,15 +1013,15 @@ msgstr "Командир, в этих шахтах есть ракеты."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr "НЕКСУС не даёт нам получить коды доступа к ракетам."
+msgstr "НЕКСУС не даёт нам получить коды управления ракетами."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
-msgstr "НЕКСУС присутствует в наших системах."
+msgstr "В наших системах обнаружен НЕКСУС."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr "Чтобы победить НЕКСУС мы должны исследовать программу вторжения НЕКСУС."
+msgstr "Чтобы победить НЕКСУС мы должны исследовать его программу вторжения."
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
@@ -1045,11 +1045,11 @@ msgstr "Для взлома кодов требуется исследовате
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr "Защитите шахты ракет от атак НЕКСУС."
+msgstr "Защитите ракетные шахты от атак НЕКСУС."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr "ДОКЛАД ПРОЕКТА: коды первого уровня взломаны."
+msgstr "ДОКЛАД ПРОЕКТА: Коды первого уровня взломаны."
 
 #: data/base/messages/strings/cam3strings.txt:167
 msgid "Missile arming in progress."
@@ -1061,7 +1061,7 @@ msgstr "Для дальнейших действий требуются ещё �
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr "ДОКЛАД ПРОЕКТА: коды второго уровня взломаны."
+msgstr "ДОКЛАД ПРОЕКТА: Коды второго уровня взломаны."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
@@ -1073,11 +1073,11 @@ msgstr "Как только будут взломаны коды третьег�
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr "ДОКЛАД ПРОЕКТА: коды третьего уровня взломаны."
+msgstr "ДОКЛАД ПРОЕКТА: Коды третьего уровня взломаны."
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
-msgstr "Запуск ракет произведён."
+msgstr "Начинаем процедуру запуска ракет."
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
@@ -1089,11 +1089,11 @@ msgstr "Мы обнаружили базу НЕКСУС в этих коорди
 
 #: data/base/messages/strings/cam3strings.txt:184
 msgid "This area contains numerous NEXUS structures."
-msgstr "В этом районе присутствуют многочисленные постройки НЕКСУС."
+msgstr "В этой зоне располагаются многочисленные постройки НЕКСУС."
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr "Мы уверены, что основные системы НЕКСУС расположены здесь."
+msgstr "Мы уверены, что ключевые системы НЕКСУС находятся здесь."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
@@ -1101,11 +1101,11 @@ msgstr "Установите зону высадки."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
-msgstr "Атакуйте НЕКСУС. Вы должны уничтожить его основные системы."
+msgstr "Атакуйте НЕКСУС. Вы должны уничтожить его ключевые системы."
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
-msgstr "Входящий отчёт разведки... Команда Гамма"
+msgstr "Получен отчёт разведки... Команда Гамма"
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
@@ -1249,7 +1249,7 @@ msgstr "Установка гаубицы Сотрясатель"
 #: data/mp/messages/strings/names.txt:253
 #: po/custom/fromJson.txt:2717
 msgid "Hellstorm Emplacement"
-msgstr "Установка гаубицы Шторм Ада"
+msgstr "Установка гаубицы Адский Шторм"
 
 #: data/base/messages/strings/names.txt:228
 #: data/mp/messages/strings/names.txt:264
@@ -1501,7 +1501,7 @@ msgstr "Автоматизированный ремонт машин Мk2"
 #: data/base/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:464
 msgid "Automated Vehicle Repair Mk3"
-msgstr "Автоматизированный ремонт машин Мk3"
+msgstr "Автоматизированный ремонт техники Мk3"
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
@@ -1607,7 +1607,7 @@ msgstr "Бронебойная боеголовка Mk3"
 #: data/base/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:545
 msgid "Improved Missile Loading System"
-msgstr "Улучшенная система загрузки ракет"
+msgstr "Улучшенная система заряжания ракет"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:553
@@ -1905,7 +1905,7 @@ msgstr "Высокоэластичный бетон, укреплённый бо
 #: data/mp/messages/strings/resstrings.txt:198
 #: po/custom/fromJson.txt:3160
 msgid "Increases Armor and Body Points"
-msgstr "Увеличивает броню и прочность построек"
+msgstr "Увеличивает защиту и прочность построек"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[3]
@@ -2162,7 +2162,7 @@ msgstr "Укреплённая установка гаубицы Сотряса�
 #: data/mp/messages/strings/resstrings.txt:87
 #: po/custom/fromJson.txt:760
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr "Укреплённая установка миномёта Шторм Ада"
+msgstr "Укреплённая установка миномёта Адский Шторм"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVATR.text[1]
@@ -4045,7 +4045,7 @@ msgstr "Спасите команду Альфа от НЕКСУС"
 
 #: data/base/script/campaign/cam3-4.js:116
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr "Уничтожьте командый центр, чтобы остановить программу вторжения НЕКСУС"
+msgstr "Уничтожьте командный центр, чтобы остановить программу вторжения НЕКСУС"
 
 #: data/base/script/campaign/cam3-ab.js:241
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -4065,7 +4065,7 @@ msgstr "Проведите группу Бета к аванпосту груп�
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:447
 msgid "Return to LZ"
-msgstr "Вернуться к зоне высадки"
+msgstr "Вернитесь к зоне высадки"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:530
 msgid "Hard / Insane difficulty hint:"
@@ -7034,7 +7034,7 @@ msgstr "Авторемонт"
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[1]
 #: po/custom/fromJson.txt:926
 msgid "Autoloader increases reload rate"
-msgstr "Автозарядник, увеличивает скорость перезарядки"
+msgstr "Автозарядчик увеличивает скорость перезарядки"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[1]
@@ -10262,7 +10262,7 @@ msgstr "Увеличенный заряд Гаусса ускоряет пере
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[2]
 #: po/custom/fromJson.txt:3163
 msgid "Increases Armour and Body Points"
-msgstr "Увеличивает броню и прочность корпуса"
+msgstr "Увеличивает защиту и прочность построек"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
@@ -12878,7 +12878,7 @@ msgstr "Ракета следует лазерному целеуказател�
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
 #: po/custom/fromJson.txt:5017
 msgid "Rotary Howitzer - Hellstorm"
-msgstr "Роторная гаубица - Шторм Ада"
+msgstr "Роторная гаубица - Адский Шторм"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-RotMG.name
