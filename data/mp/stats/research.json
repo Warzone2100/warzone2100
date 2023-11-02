@@ -3519,6 +3519,13 @@
 				"filterValue": "Droids",
 				"parameter": "Thermal",
 				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Thermal",
+				"value": 40
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3538,6 +3545,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3560,6 +3574,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3586,6 +3607,13 @@
 				"filterValue": "Droids",
 				"parameter": "Thermal",
 				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Thermal",
+				"value": 40
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3605,6 +3633,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3627,6 +3662,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3652,6 +3694,13 @@
 				"filterValue": "Droids",
 				"parameter": "Thermal",
 				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Thermal",
+				"value": 40
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3671,6 +3720,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3693,6 +3749,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -4149,6 +4212,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -4177,6 +4254,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4206,6 +4297,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4237,6 +4342,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -4265,6 +4384,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4294,6 +4427,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4325,6 +4472,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -4353,6 +4514,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4382,6 +4557,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
