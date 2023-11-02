@@ -351,6 +351,12 @@ bool checkDeviceExtensionSupport(const vk::PhysicalDevice &device, const std::ve
 			requiredExtensions.erase(extension.extensionName);
 		}
 
+		debug(LOG_3D, "Found %zu extensions / did not find %zu extensions, in the enumerated list of %zu device extensions", desiredExtensions.size() - requiredExtensions.size(), requiredExtensions.size(), availableExtensions.size());
+		for (const auto& extension : requiredExtensions)
+		{
+			debug(LOG_3D, "Did not find extension: \"%s\"", extension.c_str());
+		}
+
 		return requiredExtensions.empty();
 	}
 	catch (const vk::SystemError& e)
