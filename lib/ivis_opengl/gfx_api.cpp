@@ -56,8 +56,8 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 #if defined(WZ_VULKAN_ENABLED)
 			current_backend_context = new VkRoot(uses_gfx_debug);
 #else
-			debug(LOG_FATAL, "Warzone was not compiled with the Vulkan backend enabled. Aborting.");
-			abort();
+			debug(LOG_FATAL, "Warzone 2100 was not compiled with support for the Vulkan backend.");
+			return false;
 #endif
 			break;
 	}
