@@ -2724,7 +2724,9 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 			int moduleIndex = nextModuleToBuild(psStruct, ctrlShiftDown() ? highestQueuedModule(psDroid, psStruct) : -1);
 
 			//Re-written to allow demolish order to be added to the queuing system
-			if (intDemolishSelectMode() && psObj->player == psDroid->player)
+			bool ObjDepartedAlly = (bMultiPlayer && NetPlay.players[psObj->player].difficulty == AIDifficulty::HUMAN && !NetPlay.players[psObj->player].allocated);
+			if (intDemolishSelectMode()
+				&& (psObj->player == psDroid->player || ObjDepartedAlly))
 			{
 				//check to see if anything is currently trying to build the structure
 				//can't build and demolish at the same time!
