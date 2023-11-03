@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-11-02 21:28\n"
+"PO-Revision-Date: 2023-11-03 11:17\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2122,7 +2122,7 @@ msgstr "Автоматически привязывается к ближайш�
 #: data/mp/messages/strings/resstrings.txt:62
 #: po/custom/fromJson.txt:646
 msgid "Armored Bombard battery pit"
-msgstr "Укреплённая точка с миномётом Бомбард"
+msgstr "Укреплённая позиция с миномётом Бомбард"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotMor.text[1]
@@ -2131,7 +2131,7 @@ msgstr "Укреплённая точка с миномётом Бомбард"
 #: data/mp/messages/strings/resstrings.txt:67
 #: po/custom/fromJson.txt:775
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Укреплённая точка с миномётом Пеперпот"
+msgstr "Укреплённая позиция с миномётом Пепперпот"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HOW.text[1]
@@ -3224,7 +3224,7 @@ msgstr "Только воздушные цели"
 #: data/mp/messages/strings/resstrings.txt:297
 #: po/custom/fromJson.txt:4612
 msgid "Quad 80mm flak weapon"
-msgstr "Счетверённая 80мм зенитка"
+msgstr "Четырёхствольная 80мм зенитка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA3.text[1]
@@ -3243,7 +3243,7 @@ msgstr "Противовоздушный 30мм пулемёт"
 #: data/mp/messages/strings/resstrings.txt:307
 #: po/custom/fromJson.txt:4605
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Счетверённый противовоздушный 30мм пулемёт"
+msgstr "Четырёхствольный противовоздушный 30мм пулемёт"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[0]
@@ -3450,7 +3450,7 @@ msgstr "Прочность корпуса: низкая"
 #: data/mp/messages/strings/resstrings.txt:342
 #: po/custom/fromJson.txt:1842
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr "Сбрасывает бронебойные бомбы"
+msgstr "Сбрасывает бронебойно-фугасные бомбы"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB2.text[2]
@@ -3508,7 +3508,7 @@ msgstr "Доступно новое оружие"
 #: data/mp/messages/strings/resstrings.txt:352
 #: po/custom/fromJson.txt:2995
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "Гиперскоростная автоматическая пушка, стреляющая 88мм снарядами"
+msgstr "Гиперскоростная автоматическая 88мм пушка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
@@ -3538,7 +3538,7 @@ msgstr "Заменяет среднюю пушку"
 #: data/mp/messages/strings/resstrings.txt:357
 #: po/custom/fromJson.txt:32
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "76мм гиперскоростная счетверённая автоматическая пушка"
+msgstr "76мм гиперскоростная четырёхствольная автоматическая пушка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[3]
@@ -3884,7 +3884,7 @@ msgstr "Улучшение миномёта"
 #: data/mp/messages/strings/resstrings.txt:417
 #: po/custom/fromJson.txt:2778
 msgid "High Explosive Armor-Piercing Shells"
-msgstr "Фугасные бронебойные снаряды"
+msgstr "Бронебойно-фугасные снаряды"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[2]
@@ -3925,7 +3925,7 @@ msgstr "Улучшение миниракет"
 #: data/mp/messages/strings/resstrings.txt:422
 #: po/custom/fromJson.txt:2781
 msgid "High Explosive Armor-Piercing warheads"
-msgstr "Фугасные бронебойные боеголовки"
+msgstr "Бронебойно-фугасные боеголовки"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_D1.text[2]
@@ -3977,7 +3977,7 @@ msgstr "Улучшение ракет"
 #: data/mp/messages/strings/resstrings.txt:432
 #: po/custom/fromJson.txt:2807
 msgid "High Explosive Squash Head warhead"
-msgstr "Бронебойно-фугасная боеголовка"
+msgstr "Пластичная бронебойно-фугасная боеголовка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[2]
@@ -6428,21 +6428,21 @@ msgstr "Бронебойные пули"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage05.name
 #: po/custom/fromJson.txt:512
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr "Бронебойные оперённые снаряды Mk2"
+msgstr "Стреловидные снаряды Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #: po/custom/fromJson.txt:516
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Бронебойные оперённые снаряды Mk3"
+msgstr "Стреловидные снаряды Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #: po/custom/fromJson.txt:520
 msgid "APFSDS Cannon Rounds"
-msgstr "Бронебойные оперённые снаряды"
+msgstr "Стреловидные снаряды"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyArtMissile.name
@@ -6549,7 +6549,7 @@ msgstr "Вооружён гиперскоростной пушкой"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:587
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr "Вооружён четырехствольной автоматической гиперскоростной пушкой"
+msgstr "Вооружён четырёхствольной автоматической гиперскоростной пушкой"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
@@ -6666,7 +6666,7 @@ msgstr "Укреплённый бункер с пулемётом"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMPM.text[1]
 #: po/custom/fromJson.txt:664
 msgid "Armored EMP Mortar battery pit"
-msgstr "Укреплённая точка с ЭМИ миномётом"
+msgstr "Укреплённая позиция с ЭМИ миномётом"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text[1]
@@ -6799,14 +6799,14 @@ msgstr "Укреплённая точка с ракетами Кнут"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text[1]
 #: po/custom/fromJson.txt:767
 msgid "Armored Incendiary Mortar battery pit"
-msgstr "Укреплённая точка с зажигательным миномётом"
+msgstr "Укреплённая позиция с зажигательным миномётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_EMP_Mpit.text[1]
 #: po/custom/fromJson.txt:771
 msgid "Armored Mortar battery pit"
-msgstr "Укреплённая точка с миномётом"
+msgstr "Укреплённая позиция с миномётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_PrisLas.text[1]
@@ -7385,7 +7385,7 @@ msgstr "Бомбард Кобра Полугусеницы"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit02.name
 #: po/custom/fromJson.txt:1241
 msgid "Bombard Pit"
-msgstr "Точка миномёта Бомбард"
+msgstr "Позиция миномёта Бомбард"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar2Mk1.name
@@ -8350,7 +8350,7 @@ msgstr "ЭМИ ракетница"
 #. data/mp/stats/structure.json: $.Emplacement-MortarEMP.name
 #: po/custom/fromJson.txt:1880
 msgid "EMP Mortar Pit"
-msgstr "Точка ЭМИ миномёта"
+msgstr "Позиция ЭМИ миномёта"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MortarEMP.name
@@ -9709,55 +9709,55 @@ msgstr "Строительные материалы высокой плотно�
 #. data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[1]
 #: po/custom/fromJson.txt:2759
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr "Противотанковые снаряды"
+msgstr "Фугасные противотанковые снаряды"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_W_SRK_D1.text[1]
 #: po/custom/fromJson.txt:2763
 msgid "High Explosive Anti-Tank warhead"
-msgstr "Противотанковая боеголовка"
+msgstr "Фугасная противотанковая боеголовка"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text[1]
 #: po/custom/fromJson.txt:2766
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Противотанковые боеголовки"
+msgstr "Фугасные противотанковые боеголовки"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_AAD4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_AAD4.text[1]
 #: po/custom/fromJson.txt:2770
 msgid "High Explosive Armor Piercing Flak"
-msgstr "Бронебойные снаряды зенитки"
+msgstr "Бронебойно-фугасные снаряды зенитки"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_HOWD4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[1]
 #: po/custom/fromJson.txt:2774
 msgid "High Explosive Armor Piercing Shells"
-msgstr "Бронебойные снаряды"
+msgstr "Бронебойно-фугасные снаряды"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[1]
 #: po/custom/fromJson.txt:2785
 msgid "High explosive artillery missile"
-msgstr "Разрывные артиллерийские ракеты"
+msgstr "Фугасные артиллерийские ракеты"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_HART.text[1]
 #: po/custom/fromJson.txt:2793
 msgid "High explosive heavy artillery missile"
-msgstr "Разрывные тяжёлые артиллерийские ракеты"
+msgstr "Тяжёлые фугасные артиллерийские ракеты"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[1]
 #: po/custom/fromJson.txt:2797
 msgid "High explosive shaped charge missile"
-msgstr "Разрывная ракета с кумулятивным зарядом"
+msgstr "Ракета с кумулятивным зарядом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat05.name
@@ -10108,7 +10108,7 @@ msgstr "Улучшенный хардкрит"
 #. data/mp/messages/resmessages1.json: $.RES_W_M_D1.text[1]
 #: po/custom/fromJson.txt:3046
 msgid "Improved high explosive shells"
-msgstr "Улучшенные разрывные снаряды"
+msgstr "Улучшенные фугасные снаряды"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-Accuracy01.name
@@ -10235,14 +10235,14 @@ msgstr "Зажигательная гаубица"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3129
 msgid "Incendiary Mortar Pit 2"
-msgstr "Точка зажигательного миномёта 2"
+msgstr "Позиция зажигательного миномёта 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incendiary.name
 #: po/custom/fromJson.txt:3133
 msgid "Incendiary Mortar Pit"
-msgstr "Точка зажигательного миномёта"
+msgstr "Позиция зажигательного миномёта"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Incendiary.name
@@ -11357,7 +11357,7 @@ msgstr "Быстрая зарядка миномёта"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit01.name
 #: po/custom/fromJson.txt:3957
 msgid "Mortar Pit"
-msgstr "Точка миномёта"
+msgstr "Позиция миномёта"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
@@ -11933,7 +11933,7 @@ msgstr "Пантера"
 #. data/mp/stats/structure.json: $.Emplacement-RotMor.name
 #: po/custom/fromJson.txt:4401
 msgid "Pepperpot Pit"
-msgstr "Точка миномёта Пепперпот"
+msgstr "Позиция миномёта Пепперпот"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar3ROTARYMk1.name
@@ -12273,7 +12273,7 @@ msgstr "Питон"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4608
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr "Счетверённая 80мм ПВО пушка"
+msgstr "Четырёхствольная 80мм противовоздушная пушка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
