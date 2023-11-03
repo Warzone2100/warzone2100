@@ -3693,7 +3693,8 @@
 		"msgName": "RES_EMP_HVFL",
 		"name": "Inferno Emplacement",
 		"redStructures": [
-			"PillBox5"
+			"PillBox5",
+			"GuardTower4H"
 		],
 		"requiredResearch": [
 			"R-Wpn-Flame2",
