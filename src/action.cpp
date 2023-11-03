@@ -1736,7 +1736,12 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 				else if (order->type == DORDER_DEMOLISH && structureAtPos->player != psDroid->player)
 				{
-					cantDoRepairLikeAction = true;
+					bool ObjAllied = (aiCheckAlliances(psDroid->player, structureAtPos->player));
+					bool ObjDepartedAlly = (bMultiPlayer && NetPlay.players[structureAtPos->player].difficulty == AIDifficulty::HUMAN && !NetPlay.players[structureAtPos->player].allocated);
+					if (!ObjAllied || !ObjDepartedAlly)
+					{
+						cantDoRepairLikeAction = true;
+					}
 				}
 
 				if (cantDoRepairLikeAction)

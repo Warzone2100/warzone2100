@@ -777,6 +777,7 @@ void processMouseClickInput()
 
 		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is too high: %" PRIu32 "", selectedPlayer);
 		ObjAllied = (ObjUnderMouse && selectedPlayer != ObjUnderMouse->player && aiCheckAlliances(selectedPlayer, ObjUnderMouse->player));
+		bool ObjDepartedAlly = (ObjUnderMouse && bMultiPlayer && NetPlay.players[ObjUnderMouse->player].difficulty == AIDifficulty::HUMAN && !NetPlay.players[ObjUnderMouse->player].allocated);
 
 		if (item != MT_NOTARGET)
 		{
@@ -820,7 +821,7 @@ void processMouseClickInput()
 			else if (selection == SC_DROID_DEMOLISH)
 			{
 				// Can't demolish allied objects, or something that isn't built yet
-				if (ObjAllied || (ObjUnderMouse && (ObjUnderMouse->type != OBJ_STRUCTURE || (((STRUCTURE *)ObjUnderMouse)->status == SS_BLUEPRINT_PLANNED))))
+				if ((ObjAllied && !ObjDepartedAlly) || (ObjUnderMouse && (ObjUnderMouse->type != OBJ_STRUCTURE || (((STRUCTURE *)ObjUnderMouse)->status == SS_BLUEPRINT_PLANNED))))
 				{
 					item = MT_BLOCKING;
 				}
@@ -920,7 +921,8 @@ void processMouseClickInput()
 			     arnMPointers[item][selection] == CURSOR_EMBARK ||
 			     arnMPointers[item][selection] == CURSOR_ATTACH ||
 			     arnMPointers[item][selection] == CURSOR_LOCKON ||
-			     arnMPointers[item][selection] == CURSOR_DEST) && ObjAllied)
+			     arnMPointers[item][selection] == CURSOR_DEST) && ObjAllied
+				&& (selection != SC_DROID_DEMOLISH || !ObjDepartedAlly))
 			{
 				// If you want to do these things, just gift your unit to your ally.
 				item = MT_BLOCKING;
