@@ -111,16 +111,16 @@ function sendPlayerTransporter()
 	}
 
 	const droids = [];
-	const bodyList = ["Body11ABT", "Body11ABT", "Body12SUP"];
-	const propulsionList = ["tracked01", "tracked01", "tracked01", "hover01", "HalfTrack"];
+	const bodyList = ["Body12SUP", "Body11ABT"];
+	const propulsionList = ["tracked01", "tracked01", "hover01"];
 	const weaponList = ["Cannon375mmMk1", "Cannon375mmMk1", "Cannon375mmMk1", "Rocket-LtA-T", "Rocket-LtA-T", "Mortar2Mk1", "Rocket-MRL"];
 	const specialList = ["SensorTurret1Mk1", "CommandBrain01"];
+	const BODY = bodyList[camRand(bodyList.length)];
+	const PROP = propulsionList[camRand(propulsionList.length)];
 
 	for (let i = 0; i < 10; ++i)
 	{
-		const BODY = bodyList[camRand(bodyList.length)];
 		const WEAP = (!transporterIndex && (i < specialList.length)) ? specialList[i] : weaponList[camRand(weaponList.length)];
-		const PROP = propulsionList[camRand(propulsionList.length - ((WEAP === "Cannon375mmMk1") ? 1 : 0))]; //Ignore halftracks for Heavy Cannon.
 		droids.push({ body: BODY, prop: PROP, weap: WEAP });
 	}
 
