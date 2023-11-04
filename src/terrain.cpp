@@ -2437,7 +2437,7 @@ static TerrainShaderQuality determineDefaultTerrainQuality()
 	}
 
 	// Try to get the estimated available VRAM
-	auto estimatedVRAMinMiB = gfx_api::context::get().get_estimated_vram_mb();
+	auto estimatedVRAMinMiB = gfx_api::context::get().get_estimated_vram_mb(false);
 	if (estimatedVRAMinMiB > 0)
 	{
 		// If estimated VRAM < 2 GiB

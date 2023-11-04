@@ -840,7 +840,7 @@ private:
 
 public:
 	virtual int32_t get_context_value(const gfx_api::context::context_value property) override;
-	virtual uint64_t get_estimated_vram_mb() override;
+	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
 	virtual void debugSceneEnd(const char *descr) override;

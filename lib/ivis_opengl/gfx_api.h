@@ -383,7 +383,7 @@ namespace gfx_api
 		virtual void set_polygon_offset(const float& offset, const float& slope) = 0;
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
-		virtual uint64_t get_estimated_vram_mb() = 0;
+		virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) = 0;
 		static context& get();
 		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backend);
 		static bool isInitialized();
