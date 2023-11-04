@@ -299,7 +299,7 @@ public:
 		}
 
 		wzBindingText.setText(WzString::fromUtf8(sPrimaryKey), iV_fonts::font_regular);
-		wzBindingText.render(xPos, yPos + (h / 2) + 3, bindingTextColor);
+		wzBindingText.render(xPos + 2, yPos + (h / 2) + 3, bindingTextColor);
 	}
 
 private:
