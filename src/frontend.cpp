@@ -969,7 +969,7 @@ static std::shared_ptr<WIDGET> makeTerrainQualityDropdown()
 	return Margin(0, 10).wrap(dropdown);
 }
 
-static std::shared_ptr<WIDGET> makeTerrainNormalSpecularDropdown()
+static std::shared_ptr<WIDGET> makeTerrainShadingQualityDropdown()
 {
 	std::vector<std::tuple<WzString, int32_t>> dropDownChoices = {
 		{_("Medium Quality"), 512},
@@ -987,7 +987,7 @@ static std::shared_ptr<WIDGET> makeTerrainNormalSpecularDropdown()
 	}
 
 	auto dropdown = std::make_shared<DropdownWidget>();
-	dropdown->id = FRONTEND_TERRAIN_NORMSPEC_MAPPING_QUALITY_R;
+	dropdown->id = FRONTEND_TERRAIN_SHADING_QUALITY_R;
 	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
 	const auto paddingSize = 10;
 
@@ -1166,10 +1166,9 @@ void startGraphicsOptionsMenu()
 	grid->place({1, 1, false}, row, makeTerrainQualityDropdown());
 	row.start++;
 
-	// Terrain Normals / Specular
-	// TRANSLATORS: "Normals" and "Specular" refer to Normal Mapping and Specular Mapping (technical, graphics-related terms) - they may or may not make sense to translate
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_TERRAIN_NORMSPEC_MAPPING_QUALITY, _("Terrain Normals / Specular"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, makeTerrainNormalSpecularDropdown());
+	// Terrain Shading Quality
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_TERRAIN_SHADING_QUALITY, _("Terrain Shading"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, makeTerrainShadingQualityDropdown());
 	row.start++;
 
 	////////////

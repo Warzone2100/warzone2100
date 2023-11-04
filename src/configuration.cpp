@@ -591,7 +591,7 @@ bool loadConfig()
 	war_setMPopenSpectatorSlots(static_cast<uint16_t>(std::max<int>(0, std::min<int>(openSpecSlotsIntValue, MAX_SPECTATOR_SLOTS))));
 	war_setFogEnd(iniGetInteger("fogEnd", 8000).value());
 	war_setFogStart(iniGetInteger("fogStart", 4000).value());
-	if (auto value = iniGetIntegerOpt("terrainShaderQuality"))
+	if (auto value = iniGetIntegerOpt("terrainMode"))
 	{
 		auto intValue = value.value();
 		if (intValue >= 0 && intValue <= TerrainShaderQuality_MAX)
@@ -600,15 +600,15 @@ bool loadConfig()
 		}
 		else
 		{
-			debug(LOG_WARNING, "Unsupported / invalid terrainShaderQuality value: %d; using default", intValue);
+			debug(LOG_WARNING, "Unsupported / invalid terrainMode value: %d; using default", intValue);
 		}
 	}
-	if (auto value = iniGetIntegerOpt("terrainNormalSpecularQuality"))
+	if (auto value = iniGetIntegerOpt("terrainShadingQuality"))
 	{
 		auto intValue = value.value();
 		if (!setTerrainMappingTexturesMaxSize(intValue))
 		{
-			debug(LOG_WARNING, "Unsupported / invalid terrainNormalSpecularQuality value: %d; using default", intValue);
+			debug(LOG_WARNING, "Unsupported / invalid terrainShadingQuality value: %d; using default", intValue);
 		}
 	}
 	war_setShadowFilterSize(iniGetInteger("shadowFilterSize", (int)war_getShadowFilterSize()).value());
@@ -790,8 +790,8 @@ bool saveConfig()
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());
 	iniSetInteger("fogEnd", war_getFogEnd());
 	iniSetInteger("fogStart", war_getFogStart());
-	iniSetInteger("terrainShaderQuality", getTerrainShaderQuality());
-	iniSetInteger("terrainNormalSpecularQuality", getTerrainMappingTexturesMaxSize());
+	iniSetInteger("terrainMode", getTerrainShaderQuality());
+	iniSetInteger("terrainShadingQuality", getTerrainMappingTexturesMaxSize());
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetInteger("configVersion", CURRCONFVERSION);
