@@ -348,7 +348,7 @@ protected:
 	{
 		auto facility = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN("", facility);
-		return getStatsName(facility->pStructureType);
+		return getLocalizedStatsName(facility->pStructureType);
 	}
 
 	ResearchController &getController() const override

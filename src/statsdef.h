@@ -286,6 +286,7 @@ struct BASE_STATS
 };
 
 #define getStatsName(_psStats) ((_psStats)->name.isEmpty() ? "" : gettext((_psStats)->name.toUtf8().c_str()))
+#define getLocalizedStatsName(_psStats) ((_psStats)->name.isEmpty() ? "" : gettext((_psStats)->name.toUtf8().c_str()))
 #define getID(_psStats) (_psStats)->id.toUtf8().c_str()
 #define checkIfZNullStat(_psStats) ((_psStats)->id.toUtf8().find("ZNULL") != std::string::npos)
 
