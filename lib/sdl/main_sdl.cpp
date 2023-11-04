@@ -78,8 +78,8 @@ void mainLoop();
 // used in crash reports & version info
 const char *BACKEND = "SDL";
 
-std::map<KEY_CODE, SDL_Keycode> KEY_CODE_to_SDLKey;
-std::map<SDL_Keycode, KEY_CODE > SDLKey_to_KEY_CODE;
+std::map<KEY_CODE, SDL_Scancode> KEY_CODE_to_SDLScancode;
+std::map<SDL_Scancode, KEY_CODE > SDLScancode_to_KEY_CODE;
 
 int realmain(int argc, char *argv[]);
 
@@ -948,140 +948,140 @@ void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
 **/
 static inline void initKeycodes()
 {
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_ESC, SDLK_ESCAPE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_1, SDLK_1));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_2, SDLK_2));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_3, SDLK_3));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_4, SDLK_4));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_5, SDLK_5));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_6, SDLK_6));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_7, SDLK_7));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_8, SDLK_8));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_9, SDLK_9));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_0, SDLK_0));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_MINUS, SDLK_MINUS));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_EQUALS, SDLK_EQUALS));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_BACKSPACE, SDLK_BACKSPACE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_TAB, SDLK_TAB));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_Q, SDLK_q));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_W, SDLK_w));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_E, SDLK_e));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_R, SDLK_r));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_T, SDLK_t));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_Y, SDLK_y));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_U, SDLK_u));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_I, SDLK_i));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_O, SDLK_o));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_P, SDLK_p));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LBRACE, SDLK_LEFTBRACKET));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RBRACE, SDLK_RIGHTBRACKET));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RETURN, SDLK_RETURN));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LCTRL, SDLK_LCTRL));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_A, SDLK_a));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_S, SDLK_s));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_D, SDLK_d));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F, SDLK_f));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_G, SDLK_g));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_H, SDLK_h));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_J, SDLK_j));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_K, SDLK_k));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_L, SDLK_l));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_SEMICOLON, SDLK_SEMICOLON));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_QUOTE, SDLK_QUOTE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_BACKQUOTE, SDLK_BACKQUOTE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LSHIFT, SDLK_LSHIFT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LMETA, SDLK_LGUI));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LSUPER, SDLK_LGUI));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_BACKSLASH, SDLK_BACKSLASH));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_Z, SDLK_z));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_X, SDLK_x));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_C, SDLK_c));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_V, SDLK_v));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_B, SDLK_b));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_N, SDLK_n));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_M, SDLK_m));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_COMMA, SDLK_COMMA));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_FULLSTOP, SDLK_PERIOD));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_FORWARDSLASH, SDLK_SLASH));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RSHIFT, SDLK_RSHIFT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RMETA, SDLK_RGUI));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RSUPER, SDLK_RGUI));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_STAR, SDLK_KP_MULTIPLY));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LALT, SDLK_LALT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_SPACE, SDLK_SPACE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_CAPSLOCK, SDLK_CAPSLOCK));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F1, SDLK_F1));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F2, SDLK_F2));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F3, SDLK_F3));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F4, SDLK_F4));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F5, SDLK_F5));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F6, SDLK_F6));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F7, SDLK_F7));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F8, SDLK_F8));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F9, SDLK_F9));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F10, SDLK_F10));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_NUMLOCK, SDLK_NUMLOCKCLEAR));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_SCROLLLOCK, SDLK_SCROLLLOCK));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_7, SDLK_KP_7));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_8, SDLK_KP_8));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_9, SDLK_KP_9));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_MINUS, SDLK_KP_MINUS));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_4, SDLK_KP_4));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_5, SDLK_KP_5));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_6, SDLK_KP_6));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_PLUS, SDLK_KP_PLUS));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_1, SDLK_KP_1));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_2, SDLK_KP_2));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_3, SDLK_KP_3));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_0, SDLK_KP_0));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_FULLSTOP, SDLK_KP_PERIOD));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F11, SDLK_F11));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F12, SDLK_F12));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RCTRL, SDLK_RCTRL));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_BACKSLASH, SDLK_KP_DIVIDE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RALT, SDLK_RALT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_HOME, SDLK_HOME));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_UPARROW, SDLK_UP));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_PAGEUP, SDLK_PAGEUP));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LEFTARROW, SDLK_LEFT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RIGHTARROW, SDLK_RIGHT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_END, SDLK_END));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_DOWNARROW, SDLK_DOWN));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_PAGEDOWN, SDLK_PAGEDOWN));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_INSERT, SDLK_INSERT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_DELETE, SDLK_DELETE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KPENTER, SDLK_KP_ENTER));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_IGNORE, SDL_Keycode(5190)));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_ESC, SDL_SCANCODE_ESCAPE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_1, SDL_SCANCODE_1));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_2, SDL_SCANCODE_2));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_3, SDL_SCANCODE_3));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_4, SDL_SCANCODE_4));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_5, SDL_SCANCODE_5));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_6, SDL_SCANCODE_6));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_7, SDL_SCANCODE_7));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_8, SDL_SCANCODE_8));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_9, SDL_SCANCODE_9));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_0, SDL_SCANCODE_0));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_MINUS, SDL_SCANCODE_MINUS));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_EQUALS, SDL_SCANCODE_EQUALS));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_BACKSPACE, SDL_SCANCODE_BACKSPACE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_TAB, SDL_SCANCODE_TAB));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_Q, SDL_SCANCODE_Q));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_W, SDL_SCANCODE_W));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_E, SDL_SCANCODE_E));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_R, SDL_SCANCODE_R));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_T, SDL_SCANCODE_T));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_Y, SDL_SCANCODE_Y));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_U, SDL_SCANCODE_U));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_I, SDL_SCANCODE_I));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_O, SDL_SCANCODE_O));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_P, SDL_SCANCODE_P));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LBRACE, SDL_SCANCODE_LEFTBRACKET));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RBRACE, SDL_SCANCODE_RIGHTBRACKET));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RETURN, SDL_SCANCODE_RETURN));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LCTRL, SDL_SCANCODE_LCTRL));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_A, SDL_SCANCODE_A));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_S, SDL_SCANCODE_S));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_D, SDL_SCANCODE_D));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F, SDL_SCANCODE_F));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_G, SDL_SCANCODE_G));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_H, SDL_SCANCODE_H));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_J, SDL_SCANCODE_J));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_K, SDL_SCANCODE_K));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_L, SDL_SCANCODE_L));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_SEMICOLON, SDL_SCANCODE_SEMICOLON));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_QUOTE, SDL_SCANCODE_APOSTROPHE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_BACKQUOTE, SDL_SCANCODE_GRAVE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LSHIFT, SDL_SCANCODE_LSHIFT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LMETA, SDL_SCANCODE_LGUI));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LSUPER, SDL_SCANCODE_LGUI));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_BACKSLASH, SDL_SCANCODE_BACKSLASH));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_Z, SDL_SCANCODE_Z));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_X, SDL_SCANCODE_X));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_C, SDL_SCANCODE_C));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_V, SDL_SCANCODE_V));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_B, SDL_SCANCODE_B));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_N, SDL_SCANCODE_N));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_M, SDL_SCANCODE_M));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_COMMA, SDL_SCANCODE_COMMA));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_FULLSTOP, SDL_SCANCODE_PERIOD));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_FORWARDSLASH, SDL_SCANCODE_SLASH));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RSHIFT, SDL_SCANCODE_RSHIFT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RMETA, SDL_SCANCODE_RGUI));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RSUPER, SDL_SCANCODE_RGUI));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_STAR, SDL_SCANCODE_KP_MULTIPLY));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LALT, SDL_SCANCODE_LALT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_SPACE, SDL_SCANCODE_SPACE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_CAPSLOCK, SDL_SCANCODE_CAPSLOCK));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F1, SDL_SCANCODE_F1));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F2, SDL_SCANCODE_F2));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F3, SDL_SCANCODE_F3));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F4, SDL_SCANCODE_F4));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F5, SDL_SCANCODE_F5));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F6, SDL_SCANCODE_F6));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F7, SDL_SCANCODE_F7));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F8, SDL_SCANCODE_F8));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F9, SDL_SCANCODE_F9));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F10, SDL_SCANCODE_F10));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_NUMLOCK, SDL_SCANCODE_NUMLOCKCLEAR));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_SCROLLLOCK, SDL_SCANCODE_SCROLLLOCK));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_7, SDL_SCANCODE_KP_7));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_8, SDL_SCANCODE_KP_8));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_9, SDL_SCANCODE_KP_9));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_MINUS, SDL_SCANCODE_KP_MINUS));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_4, SDL_SCANCODE_KP_4));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_5, SDL_SCANCODE_KP_5));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_6, SDL_SCANCODE_KP_6));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_PLUS, SDL_SCANCODE_KP_PLUS));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_1, SDL_SCANCODE_KP_1));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_2, SDL_SCANCODE_KP_2));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_3, SDL_SCANCODE_KP_3));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_0, SDL_SCANCODE_KP_0));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_FULLSTOP, SDL_SCANCODE_KP_PERIOD));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F11, SDL_SCANCODE_F11));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F12, SDL_SCANCODE_F12));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RCTRL, SDL_SCANCODE_RCTRL));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_BACKSLASH, SDL_SCANCODE_KP_DIVIDE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RALT, SDL_SCANCODE_RALT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_HOME, SDL_SCANCODE_HOME));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_UPARROW, SDL_SCANCODE_UP));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_PAGEUP, SDL_SCANCODE_PAGEUP));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LEFTARROW, SDL_SCANCODE_LEFT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RIGHTARROW, SDL_SCANCODE_RIGHT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_END, SDL_SCANCODE_END));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_DOWNARROW, SDL_SCANCODE_DOWN));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_PAGEDOWN, SDL_SCANCODE_PAGEDOWN));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_INSERT, SDL_SCANCODE_INSERT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_DELETE, SDL_SCANCODE_DELETE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KPENTER, SDL_SCANCODE_KP_ENTER));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_IGNORE, SDL_Scancode(5190)));
 
-	std::map<KEY_CODE, SDL_Keycode>::iterator it;
-	for (it = KEY_CODE_to_SDLKey.begin(); it != KEY_CODE_to_SDLKey.end(); it++)
+	std::map<KEY_CODE, SDL_Scancode>::iterator it;
+	for (it = KEY_CODE_to_SDLScancode.begin(); it != KEY_CODE_to_SDLScancode.end(); it++)
 	{
-		SDLKey_to_KEY_CODE.insert(std::pair<SDL_Keycode, KEY_CODE>(it->second, it->first));
+		SDLScancode_to_KEY_CODE.insert(std::pair<SDL_Scancode, KEY_CODE>(it->second, it->first));
 	}
 }
 
-static inline KEY_CODE sdlKeyToKeyCode(SDL_Keycode key)
+static inline KEY_CODE sdlScancodeToKeyCode(SDL_Scancode key)
 {
-	std::map<SDL_Keycode, KEY_CODE >::iterator it;
+	std::map<SDL_Scancode, KEY_CODE >::iterator it;
 
-	it = SDLKey_to_KEY_CODE.find(key);
-	if (it != SDLKey_to_KEY_CODE.end())
+	it = SDLScancode_to_KEY_CODE.find(key);
+	if (it != SDLScancode_to_KEY_CODE.end())
 	{
 		return it->second;
 	}
-	return (KEY_CODE)key;
+	return KEY_MAXSCAN;
 }
 
-static inline SDL_Keycode keyCodeToSDLKey(KEY_CODE code)
+static inline SDL_Scancode keyCodeToSDLScancode(KEY_CODE code)
 {
-	std::map<KEY_CODE, SDL_Keycode>::iterator it;
+	std::map<KEY_CODE, SDL_Scancode>::iterator it;
 
-	it = KEY_CODE_to_SDLKey.find(code);
-	if (it != KEY_CODE_to_SDLKey.end())
+	it = KEY_CODE_to_SDLScancode.find(code);
+	if (it != KEY_CODE_to_SDLScancode.end())
 	{
 		return it->second;
 	}
-	return (SDL_Keycode)code;
+	return (SDL_Scancode)code;
 }
 
 // Cyclic increment.
@@ -1140,7 +1140,7 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 
 	if (code < KEY_MAXSCAN)
 	{
-		snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
+		snprintf(ascii, maxStringSize, "%s", SDL_GetScancodeName(keyCodeToSDLScancode(code)));
 		if (ascii[0] >= 'a' && ascii[0] <= 'z' && ascii[1] != 0)
 		{
 			// capitalize
@@ -1259,13 +1259,13 @@ void inputNewFrame(void)
 		if (aKeyState[i].state == KEY_PRESSED)
 		{
 			aKeyState[i].state = KEY_DOWN;
-			debug(LOG_NEVER, "This key is DOWN! %x, %d [%s]", i, i, SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)i)));
+			debug(LOG_NEVER, "This key is DOWN! %x, %d [%s]", i, i, SDL_GetScancodeName(keyCodeToSDLScancode((KEY_CODE)i)));
 		}
 		else if (aKeyState[i].state == KEY_RELEASED  ||
 		         aKeyState[i].state == KEY_PRESSRELEASE)
 		{
 			aKeyState[i].state = KEY_UP;
-			debug(LOG_NEVER, "This key is UP! %x, %d [%s]", i, i, SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)i)));
+			debug(LOG_NEVER, "This key is UP! %x, %d [%s]", i, i, SDL_GetScancodeName(keyCodeToSDLScancode((KEY_CODE)i)));
 		}
 	}
 
@@ -1413,71 +1413,66 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 	case SDL_KEYDOWN:
 	{
 		unsigned vk = 0;
-		switch (keyEvent->keysym.sym)
+		switch (keyEvent->keysym.scancode)
 		{
 		// our "editing" keys for text
-		case SDLK_LEFT:
+		case SDL_SCANCODE_LEFT:
 			vk = INPBUF_LEFT;
 			break;
-		case SDLK_RIGHT:
+		case SDL_SCANCODE_RIGHT:
 			vk = INPBUF_RIGHT;
 			break;
-		case SDLK_UP:
+		case SDL_SCANCODE_UP:
 			vk = INPBUF_UP;
 			break;
-		case SDLK_DOWN:
+		case SDL_SCANCODE_DOWN:
 			vk = INPBUF_DOWN;
 			break;
-		case SDLK_HOME:
+		case SDL_SCANCODE_HOME:
 			vk = INPBUF_HOME;
 			break;
-		case SDLK_END:
+		case SDL_SCANCODE_END:
 			vk = INPBUF_END;
 			break;
-		case SDLK_INSERT:
+		case SDL_SCANCODE_INSERT:
 			vk = INPBUF_INS;
 			break;
-		case SDLK_DELETE:
+		case SDL_SCANCODE_DELETE:
 			vk = INPBUF_DEL;
 			break;
-		case SDLK_PAGEUP:
+		case SDL_SCANCODE_PAGEUP:
 			vk = INPBUF_PGUP;
 			break;
-		case SDLK_PAGEDOWN:
+		case SDL_SCANCODE_PAGEDOWN:
 			vk = INPBUF_PGDN;
 			break;
-		case KEY_BACKSPACE:
+		case SDL_SCANCODE_BACKSPACE:
 			vk = INPBUF_BKSPACE;
 			break;
-		case KEY_TAB:
+		case SDL_SCANCODE_TAB:
 			vk = INPBUF_TAB;
 			break;
-		case KEY_RETURN:
+		case SDL_SCANCODE_RETURN:
 			vk = INPBUF_CR;
 			break;
-		case KEY_ESC:
+		case SDL_SCANCODE_ESCAPE:
 			vk = INPBUF_ESC;
 			break;
 		default:
 			break;
 		}
-		// Keycodes without character representations are determined by their scancode bitwise OR-ed with 1<<30 (0x40000000).
-		unsigned currentKey = keyEvent->keysym.sym;
+
+		SDL_Scancode currentKey = keyEvent->keysym.scancode;
 		if (vk)
 		{
-			// Take care of 'editing' keys that were pressed
+			// Take care of adding 'editing' keys that were pressed to the input buffer (for text editing control handling)
 			inputAddBuffer(vk, 0);
-			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetKeyName(currentKey));
-		}
-		else
-		{
-			// add everything else
-			inputAddBuffer(currentKey, 0);
+			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetScancodeName(currentKey));
 		}
 
-		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", currentKey, currentKey, currentKey < 128 && currentKey > 31 ? (char)currentKey : '?', SDL_GetKeyName(currentKey));
+		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
 
-		KEY_CODE code = sdlKeyToKeyCode(currentKey);
+		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
 		if (code >= KEY_MAXSCAN)
 		{
 			break;
@@ -1495,9 +1490,9 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 
 	case SDL_KEYUP:
 	{
-		unsigned currentKey = keyEvent->keysym.sym;
-		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, [%c] SDLkey=[%s]", currentKey, currentKey, currentKey < 128 && currentKey > 31 ? (char)currentKey : '?', SDL_GetKeyName(currentKey));
-		KEY_CODE code = sdlKeyToKeyCode(keyEvent->keysym.sym);
+		unsigned currentKey = keyEvent->keysym.scancode;
+		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetKeyName(currentKey));
+		KEY_CODE code = sdlScancodeToKeyCode(keyEvent->keysym.scancode);
 		if (code >= KEY_MAXSCAN)
 		{
 			break;
