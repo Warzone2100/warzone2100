@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-11-03 11:17\n"
+"PO-Revision-Date: 2023-11-04 12:12\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -7751,7 +7751,7 @@ msgstr "Боевой инженер, может возводить постро�
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[1]
 #: po/custom/fromJson.txt:1466
 msgid "Combines standard, counter battery and VTOL sensors"
-msgstr "Объединяет в себе стандартный, КБ и СВВП радар"
+msgstr "Объединяет в себе стандартный, контрбатарейный и авиационный радар"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CommandCentre.name
@@ -14614,7 +14614,7 @@ msgstr "Импульсный лазер СВВП"
 #. data/mp/stats/sensor.json: $.Sys-VTOLRadarTower01.name
 #: po/custom/fromJson.txt:6125
 msgid "VTOL Radar Tower"
-msgstr "Башня с радаром СВВП"
+msgstr "Башня с авиарадаром"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.RailGun2-VTOL.name
