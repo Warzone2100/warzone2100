@@ -320,7 +320,7 @@ std::vector<const char*> findSupportedDeviceExtensions(const vk::PhysicalDevice 
 	std::unordered_set<std::string> supportedExtensionNames;
 	for (auto & extension : availableExtensions)
 	{
-		supportedExtensionNames.insert(extension.extensionName);
+		supportedExtensionNames.insert(std::string(extension.extensionName.data()));
 	}
 
 	std::vector<const char*> foundExtensions;
@@ -348,7 +348,11 @@ bool checkDeviceExtensionSupport(const vk::PhysicalDevice &device, const std::ve
 
 		for (const auto& extension : availableExtensions)
 		{
-			requiredExtensions.erase(extension.extensionName);
+			auto extensionName = std::string(extension.extensionName.data());
+			if (requiredExtensions.erase(extensionName) > 0)
+			{
+				debug(LOG_3D, "Found extension: \"%s\"", extensionName.c_str());
+			}
 		}
 
 		debug(LOG_3D, "Found %zu extensions / did not find %zu extensions, in the enumerated list of %zu device extensions", desiredExtensions.size() - requiredExtensions.size(), requiredExtensions.size(), availableExtensions.size());
