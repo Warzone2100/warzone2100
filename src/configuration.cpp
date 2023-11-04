@@ -417,7 +417,7 @@ bool loadConfig()
 	setAutoratingUrl(iniGetString("autoratingUrlV2", WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL).value());
 	setAutoratingEnable(iniGetBool("autorating", false).value());
 	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
-	mpSetServerName(iniGetString("server_name", "").value().c_str());
+	mpSetServerName(iniGetString("server_name", "").value());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 //	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 //	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
