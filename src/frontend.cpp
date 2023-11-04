@@ -969,6 +969,55 @@ static std::shared_ptr<WIDGET> makeTerrainQualityDropdown()
 	return Margin(0, 10).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeTerrainNormalSpecularDropdown()
+{
+	std::vector<std::tuple<WzString, int32_t>> dropDownChoices = {
+		{_("Medium Quality"), 512},
+		{_("High Quality"), 1024},
+	};
+
+	size_t currentSettingIdx = 0;
+	auto currValue = getTerrainMappingTexturesMaxSize();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, int32_t>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_TERRAIN_NORMSPEC_MAPPING_QUALITY_R;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const auto paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		bool supportedMode = true;
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), supportedMode ? 0 : WBUT_DISABLE);
+		if (!supportedMode)
+		{
+			item->setTip(_("Terrain quality mode not available."));
+		}
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+		ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+		auto newMode = std::get<1>(dropDownChoices.at(newIndex));
+		if (!setTerrainMappingTexturesMaxSize(newMode))
+		{
+			debug(LOG_ERROR, "Failed to set terrain mapping texture quality: %d", newMode);
+			return false;
+		}
+		return true;
+	});
+
+	return Margin(0, 10).wrap(dropdown);
+}
+
 static std::shared_ptr<WIDGET> makeShadowMapResolutionDropdown()
 {
 	std::vector<std::tuple<WzString, uint32_t>> dropDownChoices = {
@@ -1115,6 +1164,12 @@ void startGraphicsOptionsMenu()
 	// Terrain Quality
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_TERRAIN_QUALITY, _("Terrain Quality"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, makeTerrainQualityDropdown());
+	row.start++;
+
+	// Terrain Normals / Specular
+	// TRANSLATORS: "Normals" and "Specular" refer to Normal Mapping and Specular Mapping (technical, graphics-related terms) - they may or may not make sense to translate
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_TERRAIN_NORMSPEC_MAPPING_QUALITY, _("Terrain Normals / Specular"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, makeTerrainNormalSpecularDropdown());
 	row.start++;
 
 	////////////
