@@ -137,21 +137,30 @@ function sendPlayerTransporter()
 	}
 
 	const droids = [];
-	const bodyList = ["Body9REC", "Body9REC", "Body9REC", "Body11ABT", "Body12SUP"];
-	const propulsionList = ["tracked01", "tracked01", "hover01"];
+	const bodyList = ["Body9REC", "Body9REC", "Body11ABT", "Body12SUP"];
+	const propulsionList = ["hover01", "hover01", "tracked01"];
 	const weaponList = ["Cannon5VulcanMk1", "Cannon5VulcanMk1", "Flame2", "Flame2", "MG4ROTARYMk1", "MG4ROTARYMk1", "Cannon4AUTOMk1", "Rocket-HvyA-T"];
 	const specialList = ["Spade1Mk1", "Spade1Mk1", "CommandBrain01", "CommandBrain01"];
+	const BODY = bodyList[camRand(bodyList.length)];
+	const PROP = propulsionList[camRand(propulsionList.length)];
 
 	for (let i = 0; i < 10; ++i)
 	{
-		const BODY = bodyList[camRand(bodyList.length)];
+		let prop = PROP;
 		let weap = (!transporterIndex && (i < specialList.length)) ? specialList[i] : weaponList[camRand(weaponList.length)];
 		if (transporterIndex === 1 && i < 4)
 		{
-			weap = "QuadRotAAGun";
+			weap = "QuadRotAAGun"; //Bring 4 Whirlwinds on the 2nd transport.
 		}
-		const PROP = propulsionList[camRand(propulsionList.length)];
-		droids.push({ body: BODY, prop: PROP, weap: weap });
+		if (BODY === "Body12SUP")
+		{
+			prop = "tracked01"; //Force Mantis to use Tracks.
+		}
+		if (weap === "Spade1Mk1")
+		{
+			prop = "hover01"; //Force trucks to use Hover.
+		}
+		droids.push({ body: BODY, prop: prop, weap: weap });
 	}
 
 	camSendReinforcement(CAM_HUMAN_PLAYER, camMakePos("landingZone"), droids,
