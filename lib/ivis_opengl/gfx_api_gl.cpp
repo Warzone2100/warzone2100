@@ -2721,7 +2721,7 @@ int32_t gl_context::get_context_value(const context_value property)
 	return value;
 }
 
-uint64_t gl_context::get_estimated_vram_mb()
+uint64_t gl_context::get_estimated_vram_mb(bool dedicatedOnly)
 {
 	if (GLAD_GL_NVX_gpu_memory_info)
 	{
@@ -2735,7 +2735,7 @@ uint64_t gl_context::get_estimated_vram_mb()
 			return static_cast<uint64_t>(total_graphics_mem_kb / 1024);
 		}
 	}
-	else if (GLAD_GL_ATI_meminfo)
+	else if (GLAD_GL_ATI_meminfo && !dedicatedOnly)
 	{
 		// For GL_ATI_meminfo, get the current free texture memory (stats_kb[0])
 		GLint stats_kb[4] = {0, 0, 0, 0};
@@ -2749,6 +2749,17 @@ uint64_t gl_context::get_estimated_vram_mb()
 			return currentFreeTextureMemory_mb;
 		}
 	}
+
+#if defined (__APPLE__)
+	WzString openGL_vendor = (const char*)wzSafeGlGetString(GL_VENDOR);
+	WzString openGL_renderer = (const char*)wzSafeGlGetString(GL_RENDERER);
+	if (openGL_vendor == "Apple" && openGL_renderer.startsWith("Apple"))
+	{
+		// For Apple GPUs, use system ("unified") RAM value
+		auto systemRAMinMiB = wzGetCurrentSystemRAM();
+		return systemRAMinMiB;
+	}
+#endif
 
 	return 0;
 }
@@ -3436,7 +3447,7 @@ bool gl_context::initGLContext()
 	debug(LOG_3D, "  * (current) Max array texture layers is %d.", (int) glMaxArrayTextureLayers);
 	maxArrayTextureLayers = glMaxArrayTextureLayers;
 
-	uint32_t estimatedVRAMinMiB = get_estimated_vram_mb();
+	uint32_t estimatedVRAMinMiB = get_estimated_vram_mb(false);
 	if (estimatedVRAMinMiB > 0)
 	{
 		debug(LOG_3D, "  * Estimated VRAM is %" PRIu32 " MiB", estimatedVRAMinMiB);

@@ -331,7 +331,7 @@ int32_t null_context::get_context_value(const context_value property)
 	return 0;
 }
 
-uint64_t null_context::get_estimated_vram_mb()
+uint64_t null_context::get_estimated_vram_mb(bool dedicatedOnly)
 {
 	return 0;
 }

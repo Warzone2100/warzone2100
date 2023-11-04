@@ -5962,11 +5962,31 @@ int32_t VkRoot::get_context_value(const gfx_api::context::context_value property
 	return 0;
 }
 
-uint64_t VkRoot::get_estimated_vram_mb()
+static bool shouldTreatAsDedicatedGPU(const vk::PhysicalDeviceProperties &physicalDeviceProperties)
+{
+	if (physicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
+	{
+		return true;
+	}
+	else if (physicalDeviceProperties.vendorID == 4203) // Apple GPU
+	{
+		return true;
+	}
+
+	return false;
+}
+
+uint64_t VkRoot::get_estimated_vram_mb(bool dedicatedOnly)
 {
 	optional<uint32_t> largestDeviceLocalMemoryHeap = getVKLargestDeviceLocalMemoryHeapIndex(memprops);
 	ASSERT_OR_RETURN(0, largestDeviceLocalMemoryHeap.has_value(), "Couldn't find the largest device local memory heap?");
 	auto largestDeviceLocalMemoryHeapSize = memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size;
+
+	if (dedicatedOnly && !shouldTreatAsDedicatedGPU(physDeviceProps))
+	{
+		return 0;
+	}
+
 	return static_cast<uint64_t>(largestDeviceLocalMemoryHeapSize / 1048576);
 }
 

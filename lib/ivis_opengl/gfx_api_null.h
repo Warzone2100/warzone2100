@@ -124,7 +124,7 @@ public:
 	virtual void set_polygon_offset(const float& offset, const float& slope) override;
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
-	virtual uint64_t get_estimated_vram_mb() override;
+	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
 
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
