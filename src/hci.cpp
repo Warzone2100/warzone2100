@@ -1731,7 +1731,7 @@ INT_RETVAL intRunWidgets()
 							// the fact that we're cheating ourselves a new
 							// structure.
 							std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new structure: %s."),
-										selectedPlayer, getStatsName(psStructure->pStructureType));
+										selectedPlayer, getLocalizedStatsName(psStructure->pStructureType));
 							sendInGameSystemMessage(msg.c_str());
 							Cheated = true;
 						}
@@ -1740,7 +1740,7 @@ INT_RETVAL intRunWidgets()
 					{
 						// Send a text message to all players, notifying them of the fact that we're cheating ourselves a new feature.
 						std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new feature: %s."),
-									selectedPlayer, getStatsName(psPositionStats));
+									selectedPlayer, getLocalizedStatsName(psPositionStats));
 						sendInGameSystemMessage(msg.c_str());
 						Cheated = true;
 						// Notify the other hosts that we've just built ourselves a feature
@@ -2371,7 +2371,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 		statList->addWidgetToLayout(button);
 
 		BASE_STATS *Stat = _ppsStatsList[i];
-		WzString tipString = getStatsName(_ppsStatsList[i]);
+		WzString tipString = getLocalizedStatsName(_ppsStatsList[i]);
 		unsigned powerCost = 0;
 		W_BARGRAPH *bar;
 		if (Stat->hasType(STAT_STRUCTURE))  // It's a structure.

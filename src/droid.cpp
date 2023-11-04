@@ -1640,7 +1640,7 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
 	DROID *psDroid = new DROID(id, player);
-	droidSetName(psDroid, getStatsName(pTemplate));
+	droidSetName(psDroid, getLocalizedStatsName(pTemplate));
 
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.

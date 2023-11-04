@@ -272,7 +272,7 @@ protected:
 	{
 		auto factory = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN("", factory);
-		return getStatsName(factory->pStructureType);
+		return getLocalizedStatsName(factory->pStructureType);
 	}
 
 	ManufactureController &getController() const override

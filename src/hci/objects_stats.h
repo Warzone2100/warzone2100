@@ -133,7 +133,7 @@ protected:
 	std::string getTip() override
 	{
 		auto stats = getStats();
-		return stats == nullptr ? "": getStatsName(stats);
+		return stats == nullptr ? "": getLocalizedStatsName(stats);
 	}
 
 	void addProgressBar();
@@ -178,7 +178,7 @@ protected:
 	{
 		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), getCost()));
 		auto stats = getStats();
-		WzString tipString = (stats == nullptr) ? "" : getStatsName(stats);
+		WzString tipString = (stats == nullptr) ? "" : getLocalizedStatsName(stats);
 		tipString.append("\n");
 		tipString.append(costString);
 		return tipString.toUtf8();

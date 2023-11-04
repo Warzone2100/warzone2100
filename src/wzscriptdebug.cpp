@@ -355,6 +355,7 @@ nlohmann::ordered_json componentToString(const COMPONENT_STATS *psStats, int pla
 	nlohmann::ordered_json key = nlohmann::ordered_json::object();
 
 	key["Name"] = getStatsName(psStats);
+	key["NameLocalized"] = getLocalizedStatsName(psStats);
 	key["^Id"] = psStats->id.toUtf8();
 	key["^Power"] = psStats->buildPower;
 	key["^Build Points"] = psStats->buildPoints;

@@ -252,7 +252,7 @@ static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID)
 		syncDebugStructure(psStruct, '>');
 		if (to == selectedPlayer)
 		{
-			CONPRINTF(_("%s Gives you a %s"), getPlayerName(from), objInfo(psStruct));
+			CONPRINTF(_("%s Gives you a %s"), getPlayerName(from), getLocalizedStatsName(psStruct->pStructureType));
 		}
 	}
 	else
@@ -830,7 +830,7 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 					MakeResearchPossible(&asPlayerResList[toPlayer][topic]);
 					if (toPlayer == selectedPlayer)
 					{
-						CONPRINTF(_("You Discover Blueprints For %s"), getStatsName(&asResearch[topic]));
+						CONPRINTF(_("You Discover Blueprints For %s"), getLocalizedStatsName(&asResearch[topic]));
 					}
 					break;
 				}

@@ -1040,7 +1040,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	if (player == selectedPlayer && bDisplay)
 	{
 		//add console text message
-		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(getStatsName(pResearch)));
+		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), getLocalizedStatsName(pResearch));
 		addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
@@ -1554,7 +1554,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			//name the actual reward
 			CONPRINTF("%s :- %s",
 			                          _("Research Award"),
-			                          getStatsName(&asResearch[rewardID]));
+			                          getLocalizedStatsName(&asResearch[rewardID]));
 		}
 	}
 }

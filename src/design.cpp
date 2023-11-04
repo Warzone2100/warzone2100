@@ -1356,7 +1356,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	    psTemplate->asParts[COMP_REPAIRUNIT]   != 0 ||
 	    psTemplate->asParts[COMP_BRAIN]		!= 0)
 	{
-		sstrcpy(aCurrName, getStatsName(psStats));
+		sstrcpy(aCurrName, getLocalizedStatsName(psStats));
 		sstrcat(aCurrName, " ");
 	}
 
@@ -1370,8 +1370,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMPONENT_STATS *)(asBodyStats + compIndex);
 	if (psTemplate->asParts[COMP_BODY] != 0)
 	{
-		checkStringLength(aCurrName, getStatsName(psStats));
-		sstrcat(aCurrName, getStatsName(psStats));
+		checkStringLength(aCurrName, getLocalizedStatsName(psStats));
+		sstrcat(aCurrName, getLocalizedStatsName(psStats));
 		sstrcat(aCurrName, " ");
 	}
 
@@ -1380,8 +1380,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMPONENT_STATS *)(asPropulsionStats + compIndex);
 	if (psTemplate->asParts[COMP_PROPULSION] != 0)
 	{
-		checkStringLength(aCurrName, getStatsName(psStats));
-		sstrcat(aCurrName, getStatsName(psStats));
+		checkStringLength(aCurrName, getLocalizedStatsName(psStats));
+		sstrcat(aCurrName, getLocalizedStatsName(psStats));
 	}
 
 	return aCurrName;
@@ -1478,7 +1478,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 	sFormInit.y = DES_BARFORMY;
 	sFormInit.width = DES_BARFORMWIDTH;	//COMPBUTWIDTH;
 	sFormInit.height = DES_BARFORMHEIGHT;	//COMPBUTHEIGHT;
-	sFormInit.pTip = getStatsName(psStats);  // set form tip to stats string
+	sFormInit.pTip = getLocalizedStatsName(psStats);  // set form tip to stats string
 	sFormInit.pUserData = psStats;			/* store component stats */
 	sFormInit.pDisplay = intDisplayStatForm;
 	auto systemForm = widgAddForm(psWScreen, &sFormInit);
@@ -1773,7 +1773,7 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sFormInit.y = DES_BARFORMY;
 	sFormInit.width = DES_BARFORMWIDTH;	//DES_COMPBUTWIDTH;
 	sFormInit.height = DES_BARFORMHEIGHT;	//DES_COMPBUTHEIGHT;
-	sFormInit.pTip = getStatsName(psStats);  // set form tip to stats string
+	sFormInit.pTip = getLocalizedStatsName(psStats);  // set form tip to stats string
 	sFormInit.pDisplay = intDisplayStatForm;
 	auto propulsionForm = widgAddForm(psWScreen, &sFormInit);
 	if (!propulsionForm)
@@ -2194,7 +2194,7 @@ static void intSetSystemStats(COMPONENT_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_SYSTEMFORM, checkIfZNullStat(psStats) ? "" : getStatsName(psStats));
+	widgSetTip(psWScreen, IDDES_SYSTEMFORM, checkIfZNullStat(psStats) ? "" : getLocalizedStatsName(psStats));
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_SYSTEMFORM);
@@ -2447,7 +2447,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats->hasType(STAT_BODY), "stats have wrong type");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_BODYFORM, checkIfZNullStat(psStats) ? "" : getStatsName(psStats));
+	widgSetTip(psWScreen, IDDES_BODYFORM, checkIfZNullStat(psStats) ? "" : getLocalizedStatsName(psStats));
 
 	/* armour */
 	//do kinetic armour
@@ -2664,7 +2664,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats->hasType(STAT_PROPULSION), "stats have wrong type");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_PROPFORM, checkIfZNullStat(psStats) ? "" : getStatsName(psStats));
+	widgSetTip(psWScreen, IDDES_PROPFORM, checkIfZNullStat(psStats) ? "" : getLocalizedStatsName(psStats));
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_PROPFORM);

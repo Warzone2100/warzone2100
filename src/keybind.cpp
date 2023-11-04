@@ -1586,7 +1586,7 @@ void	kf_FinishResearch()
 				{
 					researchResult(rindex, selectedPlayer, true, psCurr, true);
 				}
-				std::string cmsg = astringf(_("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getStatsName(pSubject));
+				std::string cmsg = astringf(_("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getLocalizedStatsName(pSubject));
 				sendInGameSystemMessage(cmsg.c_str());
 				intResearchFinished(psCurr);
 			}

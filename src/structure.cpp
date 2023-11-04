@@ -5402,7 +5402,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Hitpoints %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-			        getStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
+					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
 			if (dbgInputManager.debugMappingsAllowed())
 			{
 				// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5422,11 +5422,11 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Damage %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-			        getStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
+					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
 		}
 		else
 		{
-			console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+			console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		}
 		if (dbgInputManager.debugMappingsAllowed())
 		{
@@ -5439,7 +5439,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_REPAIR_FACILITY:
-		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5448,7 +5448,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
-		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed() && selectedPlayer < MAX_PLAYERS)
 		{
 			console(_("ID %d - %s"), psStructure->id, (auxTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe");
@@ -5464,7 +5464,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 				numConnected++;
 			}
 		}
-		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), numConnected,
+		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), numConnected,
 		        NUM_POWER_MODULES, psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
@@ -5475,7 +5475,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
 	case REF_FACTORY:
-		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5485,7 +5485,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_RESEARCH:
-		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5493,7 +5493,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_REARM_PAD:
-		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5502,7 +5502,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	default:
-		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5625,7 +5625,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				if (psStructure->player == selectedPlayer)
 				{
 					console(_("%s - Electronically Damaged"),
-					        getStatsName(psStructure->pStructureType));
+							getLocalizedStatsName(psStructure->pStructureType));
 				}
 				bCompleted = true;
 				//give the structure to the attacking player
@@ -5838,7 +5838,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_PROPULSION][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			console("%s :- %s", _("Factory Reward - Propulsion"), getStatsName(&asPropulsionStats[comp]));
+			console("%s :- %s", _("Factory Reward - Propulsion"), getLocalizedStatsName(&asPropulsionStats[comp]));
 		}
 		return;
 	}
@@ -5860,7 +5860,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_BODY][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			console("%s :- %s", _("Factory Reward - Body"), getStatsName(&asBodyStats[comp]));
+			console("%s :- %s", _("Factory Reward - Body"), getLocalizedStatsName(&asBodyStats[comp]));
 		}
 		return;
 	}
@@ -5882,7 +5882,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_WEAPON][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			console("%s :- %s", _("Factory Reward - Weapon"), getStatsName(&asWeaponStats[comp]));
+			console("%s :- %s", _("Factory Reward - Weapon"), getLocalizedStatsName(&asWeaponStats[comp]));
 		}
 		return;
 	}
@@ -5920,7 +5920,7 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_REPAIRUNIT][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			console("%s :- %s", _("Repair Facility Award - Repair"), getStatsName(&asRepairStats[comp]));
+			console("%s :- %s", _("Repair Facility Award - Repair"), getLocalizedStatsName(&asRepairStats[comp]));
 		}
 		return;
 	}
