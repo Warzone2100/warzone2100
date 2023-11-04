@@ -674,6 +674,16 @@ bool saveConfig()
 	auto iniSetString = [&iniGeneral](const std::string& key, const std::string& value) {
 		iniGeneral[key] = value;
 	};
+	auto iniSetFromCString = [&iniGeneral](const std::string& key, const char* value, size_t maxLength) {
+		std::string strVal;
+		if (value)
+		{
+			size_t len = strnlen(value, maxLength);
+			ASSERT(len < maxLength, "Input c-string value (for key: %s) appears to be missing null-terminator?", key.c_str());
+			strVal.assign(value, len);
+		}
+		iniGeneral[key] = strVal;
+	};
 
 	// //////////////////////////
 	// voicevol, fxvol and cdvol
@@ -730,7 +740,7 @@ bool saveConfig()
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	iniSetString("autoratingUrlV2", getAutoratingUrl());
 	iniSetBool("autorating", getAutoratingEnable());
-	iniSetString("masterserver_name", NETgetMasterserverName());
+	iniSetFromCString("masterserver_name", NETgetMasterserverName(), 255);
 	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
 	iniSetString("server_name", mpGetServerName());
 	if (!netGameserverPortOverride) // do not save the config port setting if there's a command-line override
@@ -752,7 +762,7 @@ bool saveConfig()
 		{
 			if (bMultiPlayer && NetPlay.bComms)
 			{
-				iniSetString("gameName", game.name);			//  last hosted game
+				iniSetFromCString("gameName", game.name, 128);			//  last hosted game
 				war_setMPInactivityMinutes(game.inactivityMinutes);
 				war_setMPGameTimeLimitMinutes(game.gameTimeLimitMinutes);
 				war_setMPPlayerLeaveMode(game.playerLeaveMode);
@@ -761,7 +771,7 @@ bool saveConfig()
 				auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
 				war_setMPopenSpectatorSlots(currentSpectatorSlotInfo.totalSpectatorSlots);
 			}
-			iniSetString("mapName", game.map);				//  map name
+			iniSetFromCString("mapName", game.map, 128);				//  map name
 			iniSetString("mapHash", game.hash.toString());          //  map hash
 			iniSetInteger("maxPlayers", (int)game.maxPlayers);		// maxPlayers
 			iniSetInteger("powerLevel", game.power);				// power
@@ -769,7 +779,7 @@ bool saveConfig()
 			iniSetInteger("alliance", (int)game.alliance);		// allow alliances
 			iniSetInteger("newScavengers", game.scavengers);
 		}
-		iniSetString("playerName", (char *)sPlayer);		// player name
+		iniSetFromCString("playerName", (char *)sPlayer, 128);		// player name
 	}
 	iniSetInteger("colourMP", war_getMPcolour());
 	iniSetInteger("inactivityMinutesMP", war_getMPInactivityMinutes());
