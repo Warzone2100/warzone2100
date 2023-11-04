@@ -66,6 +66,9 @@ std::vector<TerrainShaderQuality> getAllTerrainShaderQualityOptions();
 bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value);
 std::string to_display_string(TerrainShaderQuality value);
 
+bool setTerrainMappingTexturesMaxSize(int texSize);
+int getTerrainMappingTexturesMaxSize();
+
 void initTerrainShaderType(); // must be called after the graphics context is initialized
 
 bool debugToggleTerrainShaderType();

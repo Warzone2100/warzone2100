@@ -167,6 +167,7 @@ bool drawRangeElementsStarted = false;
 TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT;
 TerrainShaderType terrainShaderType = TerrainShaderType::SINGLE_PASS;
 bool initializedTerrainShaderType = false;
+int32_t maxTerrainMappingTextureSize = 1024;
 
 void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos);
 
@@ -783,7 +784,7 @@ void markTileDirty(int i, int j)
 	}
 }
 
-void loadWaterTextures(int maxTerrainTextureSize);
+void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTextureSize = nullopt);
 
 void loadTerrainTextures_Fallback(MAP_TILESET mapTileset)
 {
@@ -803,6 +804,24 @@ void loadTerrainTextures_Fallback(MAP_TILESET mapTileset)
 
 	// load water textures
 	loadWaterTextures(maxTerrainTextureSize);
+}
+
+bool setTerrainMappingTexturesMaxSize(int texSize)
+{
+	bool isPowerOfTwo = !(texSize == 0) && !(texSize & (texSize - 1));
+	if (!isPowerOfTwo || texSize < MIN_TERRAIN_TEXTURE_SIZE || texSize > 1024)
+	{
+		debug(LOG_ERROR, "Attempted to set bad terrain mapping texture max size %d! Ignored.", texSize);
+		return false;
+	}
+	maxTerrainMappingTextureSize = texSize;
+	debug(LOG_TEXTURE, "terrain mapping texture max size set to %d", texSize);
+	return true;
+}
+
+int getTerrainMappingTexturesMaxSize()
+{
+	return maxTerrainMappingTextureSize;
 }
 
 static gfx_api::texture_array* groundTexArr = nullptr;
@@ -857,7 +876,7 @@ gfx_api::texture* getWaterClassicTexture()
 	return waterClassicTexture;
 }
 
-void loadWaterTextures(int maxTerrainTextureSize)
+void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTextureSizeOpt)
 {
 	waterTexturesNormal.clear();
 	waterTexturesHigh.clear();
@@ -914,11 +933,13 @@ void loadWaterTextures(int maxTerrainTextureSize)
 		waterTexturesHigh.tex_nm = nullptr;
 		waterTexturesHigh.tex_sm = nullptr;
 
+		int maxTerrainAuxTextureSize = maxTerrainAuxTextureSizeOpt.value_or(maxTerrainTextureSize);
+
 		if (std::any_of(waterTextureFilenames_nm.begin(), waterTextureFilenames_nm.end(), [](const WzString& filename) {
 			return !filename.isEmpty();
 		}))
 		{
-			waterTexturesHigh.tex_nm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			waterTexturesHigh.tex_nm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
 				pDefaultNormalMap->allocate(width, height, channels, true);
 				// default normal map: (0,0,1)
@@ -940,7 +961,7 @@ void loadWaterTextures(int maxTerrainTextureSize)
 			return !filename.isEmpty();
 		}))
 		{
-			waterTexturesHigh.tex_sm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_sm, gfx_api::texture_type::specular_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			waterTexturesHigh.tex_sm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_sm, gfx_api::texture_type::specular_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
 				// default specular map: 0
 				pDefaultSpecularMap->allocate(width, height, channels, true);
@@ -1000,13 +1021,16 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 	// load the textures into the texture arrays
 	groundTexArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize, nullptr, []() { resDoResLoadCallback(); });
 	ASSERT(groundTexArr != nullptr, "Failed to load terrain textures");
+
+	int maxTerrainAuxTextureSize = std::max(std::min({getTextureSize(), getTerrainMappingTexturesMaxSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
+
 	if (terrainShaderQuality == TerrainShaderQuality::NORMAL_MAPPING)
 	{
 		if (std::any_of(groundTextureFilenames_nm.begin(), groundTextureFilenames_nm.end(), [](const WzString& filename) {
 			return !filename.isEmpty();
 		}))
 		{
-			groundNormalArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			groundNormalArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
 				pDefaultNormalMap->allocate(width, height, channels, true);
 				// default normal map: (0,0,1)
@@ -1028,7 +1052,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 			return !filename.isEmpty();
 		}))
 		{
-			groundSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_spec, gfx_api::texture_type::specular_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			groundSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_spec, gfx_api::texture_type::specular_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
 				// default specular map: 0
 				pDefaultSpecularMap->allocate(width, height, channels, true);
@@ -1040,7 +1064,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 			return !filename.isEmpty();
 		}))
 		{
-			groundHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_height, gfx_api::texture_type::height_map, maxTerrainTextureSize, maxTerrainTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			groundHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_height, gfx_api::texture_type::height_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultHeightMap = std::unique_ptr<iV_Image>(new iV_Image);
 				// default height map: 0
 				pDefaultHeightMap->allocate(width, height, channels, true);
@@ -1051,7 +1075,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 	}
 
 	// load water textures
-	loadWaterTextures(maxTerrainTextureSize);
+	loadWaterTextures(maxTerrainTextureSize, maxTerrainAuxTextureSize);
 }
 
 void loadTerrainTextures(MAP_TILESET mapTileset)
