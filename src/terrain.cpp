@@ -167,7 +167,7 @@ bool drawRangeElementsStarted = false;
 TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT;
 TerrainShaderType terrainShaderType = TerrainShaderType::SINGLE_PASS;
 bool initializedTerrainShaderType = false;
-int32_t maxTerrainMappingTextureSize = 1024;
+int32_t maxTerrainMappingTextureSize = 0; // uninitialized - pick default on first run
 
 void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos);
 
@@ -2400,9 +2400,9 @@ static TerrainShaderQuality determineDefaultTerrainQuality()
 	// Based on system properties, determine a reasonable default (for performance reasons)
 	// (Uses a heuristic based on system RAM, graphics renderer, and estimated VRAM)
 
-	// If < 7.5 GiB system RAM, default to medium ("normal")
+	// If <= 4 GiB system RAM, default to medium ("normal")
 	auto systemRAMinMiB = wzGetCurrentSystemRAM();
-	if (systemRAMinMiB < 7680)
+	if (systemRAMinMiB <= 4096)
 	{
 		debug(LOG_INFO, "Due to system RAM (%" PRIu64 " MiB), defaulting to terrain quality: Normal", systemRAMinMiB);
 		return TerrainShaderQuality::MEDIUM;
@@ -2459,6 +2459,59 @@ static TerrainShaderQuality determineDefaultTerrainQuality()
 #endif
 }
 
+static int32_t determineDefaultTerrainMappingTextureSize()
+{
+	if (determineDefaultTerrainQuality() == TerrainShaderQuality::MEDIUM)
+	{
+		// system checks yield medium terrain quality as the default
+		// so default the terrain mapping texture size to 512 (in case the user switches to NORMAL_MAPPING)
+		return 512;
+	}
+
+	// If < 8 GiB system RAM, default to 512
+	auto systemRAMinMiB = wzGetCurrentSystemRAM();
+	if (systemRAMinMiB < 8192)
+	{
+		debug(LOG_INFO, "Due to system RAM (%" PRIu64 " MiB), defaulting to terrain mapping texture size: 512", systemRAMinMiB);
+		return 512;
+	}
+
+	// For specific older integrated cards on OpenGL, default to 512
+	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
+	auto it = backendInfo.find("openGL_renderer");
+	if (it != backendInfo.end())
+	{
+		// If opengl_renderer starts with "Intel(R) HD Graphics"
+		if (it->second.rfind("Intel(R) HD Graphics", 0) == 0)
+		{
+			return 512;
+		}
+		// If opengl_renderer starts with "Intel(R) Graphics Media Accelerator"
+		if (it->second.rfind("Intel(R) Graphics Media Accelerator", 0) == 0)
+		{
+			return 512;
+		}
+	}
+
+	// Get the estimated *dedicated* VRAM
+	auto estimatedVRAMinMiB = gfx_api::context::get().get_estimated_vram_mb(true);
+	if (estimatedVRAMinMiB <= 4096)
+	{
+		// If estimated dedicated VRAM value is <= 4 GiB (or cannot be determined), default to 512
+		debug(LOG_INFO, "Due to estimated dedicated VRAM (%" PRIu64 " MiB), defaulting to terrain mapping texture size: 512", estimatedVRAMinMiB);
+		return 512;
+	}
+
+#if INTPTR_MAX <= INT32_MAX
+	// On 32-bit builds, default to 512
+	debug(LOG_INFO, "32-bit build defaulting to terrain mapping texture size: 512");
+	return 512;
+#else
+	// If all of the above check out, default to 1024
+	return 1024;
+#endif
+}
+
 void initTerrainShaderType()
 {
 	terrainShaderType = determineSupportedTerrainShader();
@@ -2467,6 +2520,10 @@ void initTerrainShaderType()
 	{
 		terrainShaderQuality = determineDefaultTerrainQuality();
 		debug(LOG_INFO, "Defaulting terrain quality to: %s", to_display_string(terrainShaderQuality).c_str());
+	}
+	if (maxTerrainMappingTextureSize == 0)
+	{
+		maxTerrainMappingTextureSize = determineDefaultTerrainMappingTextureSize();
 	}
 	setTerrainShaderQuality(terrainShaderQuality, true); // checks and resets unsupported values
 }
