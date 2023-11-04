@@ -853,7 +853,6 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		VIEW_REPLAY		*psViewReplay;
 		UDWORD Sequence;
 
-		// Surely we don't need to set up psCurrentMsg when we pass the message into this routine ... tim
 		psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
 
 		seq_ClearSeqList();
@@ -887,7 +886,7 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		VIEW_RESEARCH		*psViewReplay;
 		//UDWORD Sequence;
 
-		psViewReplay = (VIEW_RESEARCH *)psCurrentMsg->pViewData->pData;
+		psViewReplay = (VIEW_RESEARCH *)psMessage->pViewData->pData;
 
 		seq_ClearSeqList();
 		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->audio, nullptr, false);
@@ -1097,7 +1096,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
 	SWORD			image = -1;
-	RESEARCH        *psResearch;
 
 	// Should not have any proximity messages here...
 	if (!psMessage || psMessage->type == MSG_PROXIMITY)
@@ -1122,14 +1120,13 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		//render an object
-		psResearch = getResearchForMsg(psCurrentMsg->pViewData);
+		RESEARCH *psResearch = getResearchForMsg(psMessage->pViewData);
 		if (psResearch)
 		{
 			renderResearchToBuffer(psResearch, x0 + width / 2, y0 + height / 2);
 		}
 
 		//draw image icon in top left of window
-		psResearch = getResearchForMsg(psMessage->pViewData);
 		if (psResearch)
 		{
 			image = (SWORD)(psResearch->iconID);
@@ -1167,7 +1164,7 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
-		psViewResearch = (VIEW_RESEARCH *)psCurrentMsg->pViewData->pData;
+		psViewResearch = (VIEW_RESEARCH *)psMessage->pViewData->pData;
 		// set the dimensions to window size & position
 		seq_SetDisplaySize(INTMAP_FLICWIDTH, INTMAP_FLICHEIGHT, x0, y0);
 		//render a frame of the current movie *must* force above resolution!
