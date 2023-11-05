@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-11-04 12:12\n"
+"PO-Revision-Date: 2023-11-05 13:21\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1905,7 +1905,7 @@ msgstr "Высокоэластичный бетон, укреплённый бо
 #: data/mp/messages/strings/resstrings.txt:198
 #: po/custom/fromJson.txt:3160
 msgid "Increases Armor and Body Points"
-msgstr "Увеличивает защиту и прочность построек"
+msgstr "Увеличивает броню и прочность"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[3]
@@ -3128,7 +3128,7 @@ msgstr "Новая бронированная конструкция"
 #: data/mp/messages/strings/resstrings.txt:288
 #: po/custom/fromJson.txt:3169
 msgid "Increases Body Points"
-msgstr "Увеличивает прочность корпуса"
+msgstr "Увеличивает прочность"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[3]
