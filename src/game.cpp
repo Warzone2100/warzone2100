@@ -3271,7 +3271,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	// Load labels
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "labels.json");
-	loadLabels(aFileName, fixedMapIdToGeneratedId, moduleToBuilding);
+	loadLabels(aFileName, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
 
 	//if user save game then reset the time - BEWARE IF YOU USE IT
 	if ((gameType == GTYPE_SAVE_START) ||

@@ -2019,13 +2019,13 @@ bool scripting_engine::saveGroups(nlohmann::json &result, wzapi::scripting_insta
 // Label system (function defined in qtscript.h header)
 //
 
-bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding)
+bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
 {
-	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId, moduleToBuilding);
+	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
 }
 
 // Load labels
-bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding)
+bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
 {
 	int groupidx = -1;
 
@@ -2106,7 +2106,15 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			p.player = player;
 			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
-			ASSERT(IdToObject((OBJECT_TYPE)p.type, p.id, p.player) != nullptr, "Failed to find object that label references: %s", label.c_str());
+			auto checkFoundObject = IdToObject((OBJECT_TYPE)p.type, p.id, p.player);
+			if (!UserSaveGame)
+			{
+				ASSERT(checkFoundObject != nullptr, "Failed to find object that label references: %s", label.c_str());
+			}
+			else if (checkFoundObject == nullptr)
+			{
+				debug(LOG_SAVEGAME, "Failed to find object that label references (probably destroyed before save): %s", label.c_str());
+			}
 			labels[label] = p;
 		}
 		else if (list[i].startsWith("group"))
