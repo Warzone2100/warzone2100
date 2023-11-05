@@ -53,7 +53,7 @@ vec4 main_medium() {
 	vec3 N = vec3(0.f,0.f,1.f);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
 	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap);
-	vec4 light = (visibility*diffuseLight*0.75*lambertTerm + ambientLight*0.25) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+	vec4 light = (visibility*diffuseLight*0.8*(lambertTerm*lambertTerm) + ambientLight*0.2) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 
