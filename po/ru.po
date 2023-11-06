@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-06 01:41\n"
+"PO-Revision-Date: 2023-11-06 14:19\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -248,7 +248,7 @@ msgstr "ОСНОВНАЯ ЗАДАЧА"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr "Эта структура является вашей основной задачей."
+msgstr "Эта постройка является вашей основной целью."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -328,7 +328,7 @@ msgstr "База Бета подвергается тяжёлым атакам, 
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr "Мы будем информировать вас по мере поступления данных."
+msgstr "Мы будем информировать вас по мере поступления новых данных."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
@@ -364,7 +364,7 @@ msgstr "Поздравляем! Новая Парадигма повержена
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "В системе Новой Парадигмы была обнаружена программа вторжения НЕКСУС."
+msgstr "В системах Новой Парадигмы была обнаружена программа вторжения НЕКСУС."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -403,7 +403,7 @@ msgstr "МИССИЯ НА БАЗЕ БЕТА: Защита и укреплени�
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr "Надежно укрепите периметр и обеспечьте противоздушую оборону."
+msgstr "Надежно укрепите периметр и обеспечьте противовоздушую оборону."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
@@ -413,7 +413,7 @@ msgstr "Доступны новые технологии."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Мы обнаружили сигнал с закодированным потоком."
+msgstr "Мы обнаружили кодированный потоковый сигнал."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
@@ -439,7 +439,7 @@ msgstr "Соберите спасательную группу и заберит
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr "ПОЛЕТНЫЙ ИНСТРУКТАЖ"
+msgstr "ПОЛЁТНЫЙ ИНСТРУКТАЖ"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
@@ -447,7 +447,7 @@ msgstr "Команда Бета разыскивает технологию са
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr "Считается, что она есть в доколлапсовой авиабазе в этой зоне."
+msgstr "Мы считаем, что она есть в доколлапсовой авиабазе в этой зоне."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
@@ -459,7 +459,7 @@ msgstr "МИССИЯ НА БАЗЕ БЕТА: Удержать любой цен�
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr "Обнаружен сигнал закодированного потока от Альянса."
+msgstr "Обнаружен кодированный потоковый сигнал от Альянса."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
@@ -520,7 +520,7 @@ msgstr "Перехватите конвой и захватите их груз.
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Вражеские СВВП сопровождают эскорт."
+msgstr "Вражеская авиация скорее всего будет сопровождать конвой."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -541,11 +541,11 @@ msgstr "Затем уничтожить лагерь."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "МИССИЯ БАЗЫ БЕТА: Уничтожить вражескую авиабазу и захватить технологию СВВП."
+msgstr "МИССИЯ БАЗЫ БЕТА: Уничтожить вражескую авиабазу и захватить технологию СВВП"
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Анализ полётов показал, что СВВП Альянса направлялись отсюда."
+msgstr "Анализ траектории полётов показал, что самолёты Альянса вылетают отсюда."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
@@ -553,7 +553,7 @@ msgstr "МИССИЯ БАЗЫ БЕТА: Уничтожить вражескую 
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr "Авиабаза противника находится здесь; это ваша первоочередная задача."
+msgstr "Авиабаза противника находится здесь; это ваша первоочередная цель."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
@@ -603,11 +603,11 @@ msgstr "Не позвольте Альянсу запустить реактор
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr "МИССИЯ БАЗЫ БЕТА: Захватить центр NASDA"
+msgstr "МИССИЯ БАЗЫ БЕТА: Захватить центр управления NASDA"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr "Захватите центр NASDA до того как НЕКСУС и Альянс смогут им воспользоваться."
+msgstr "Захватите центр управления NASDA до того как НЕКСУС и Альянс смогут им воспользоваться."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
@@ -617,7 +617,7 @@ msgstr "ДЕСАНТНАЯ МИССИЯ: Центр связи со спутни
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr "НЕКСУС ищет все ещё функционирующие банки памяти."
+msgstr "НЕКСУС разыскивает функционирующие банки памяти."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
@@ -625,7 +625,7 @@ msgstr "Часть его сознания переместилась в уда�
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr "Мы засекли передачи с этого участка, достигающие орбиты."
+msgstr "Мы засекли достигающие орбиты передачи из этого района."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
@@ -5960,19 +5960,19 @@ msgstr "Магазин боеприпасов ПВО"
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF05.name
 #: po/custom/fromJson.txt:53
 msgid "AA Chainfeed Loader Mk2"
-msgstr "Цепной загрузчик ПВО Мk2"
+msgstr "Цепной конвейер ПВО Мk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF06.name
 #: po/custom/fromJson.txt:56
 msgid "AA Chainfeed Loader Mk3"
-msgstr "Цепной загрузчик ПВО Мk3"
+msgstr "Цепной конвейер ПВО Мk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-ROF04.name
 #: po/custom/fromJson.txt:59
 msgid "AA Chainfeed Loader"
-msgstr "Цепной загрузчик ПВО"
+msgstr "Цепной конвейер ПВО"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-AASite-QuadBof.name
@@ -7649,7 +7649,7 @@ msgstr "КБ радар"
 #. data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text[1]
 #: po/custom/fromJson.txt:1394
 msgid "Chainfeed loader eradicates jams and improves performance"
-msgstr "Цепной загрузчик избавляет от заеданий и улучшает производительность"
+msgstr "Цепной конвейер избавляет от заеданий и улучшает производительность"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_MG_ROF1.text[1]
@@ -12419,7 +12419,7 @@ msgstr "Скоростной цепной привод"
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF02.name
 #: po/custom/fromJson.txt:4695
 msgid "Rapid Fire Chaingun"
-msgstr "Скоростной цепной механизм"
+msgstr "Скоростной цепной привод"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
@@ -15961,11 +15961,11 @@ msgstr "Режим качества ландшафта недоступен."
 
 #: src/frontend.cpp:975
 msgid "Medium Quality"
-msgstr ""
+msgstr "Среднее качество"
 
 #: src/frontend.cpp:976
 msgid "High Quality"
-msgstr ""
+msgstr "Высокое качество"
 
 #: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
@@ -15994,7 +15994,7 @@ msgstr "Качество ландшафта"
 
 #: src/frontend.cpp:1170
 msgid "Terrain Shading"
-msgstr ""
+msgstr "Затенение ландшафта"
 
 #: src/frontend.cpp:1176
 #: src/ingameop.cpp:629
