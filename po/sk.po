@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-06 01:42\n"
+"PO-Revision-Date: 2023-11-06 14:19\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -208,11 +208,11 @@ msgstr "Prvé dve oblasti sú teraz bezpečné."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "AKTUALIZÁCIE PROJEKTOVÉHO TÍMU"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "AKTUALIZÁCIA PRE TÍM BETA"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
@@ -220,19 +220,19 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "V oblasti operuje lepšie vyzbrojená jednotka."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "AKTUALIZÁCIA PRE TÍM GAMA"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr ""
+msgstr "Nič pre nahlásenie."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "Neobjavili sme žiadne artefakty a nenarazili sme na žiadnych nepriateľov."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
@@ -244,11 +244,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "HLAVNÝ CIEĽ"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Táto budova je Váš hlavný cieľ."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -377,7 +377,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr ""
+msgstr "Veliteľ, budete asistovať tímu Beta"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
@@ -418,7 +418,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "Dekódujem..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
@@ -451,7 +451,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "Tím Beta je pod ťažkým útokom"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
@@ -504,7 +504,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "PREPRAVNÁ MISIA: Vyhľadajte a zničte konvoj"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
@@ -731,7 +731,7 @@ msgstr ""
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr ""
+msgstr "Tím Gama Vás tu kontaktuje."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
@@ -796,7 +796,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr ""
+msgstr "AKTUALIZÁCIA PRE VÝSADKOVÝ TÍM"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
@@ -808,11 +808,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr ""
+msgstr "MISIA SEVERNÉHO SEKTORU: Asistujte tímu Gama"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr ""
+msgstr "Budete asistovať tímu Gama."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
@@ -904,7 +904,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr ""
+msgstr "PREPRAVNÁ MISIA: Výsadkový tím"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
@@ -4402,7 +4402,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr ""
+msgstr "Tím Alfa sa blíži ku svojmu cieľu"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
