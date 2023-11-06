@@ -1,3 +1,27 @@
+2023-11-06: Version 4.4.0:
+* General:
+   * Fix: Count units inside transporters for mission end results (commit:f19cf46a28ec98f0b474347423d845407d6acbd1, #3436)
+   * Fix: Issues with intel map and saveload (too many commits, #3456)
+   * Fix: Improve the VTOL Strike / CB rearming behavior (commit:6b9557a07c5019c937632c31fe931a53484311b1, #3449)
+   * Fix: Fixup functionality when transferring a structure via giftSingleStructure (commit:31b4484b315019f3f0be0a9429f734994edec603, #3457)
+   * Fix: Use SDL physical key codes (scancodes) instead of SDL virtual key codes (commit:5040443f70c03776f3d4d294b5c942f171c205a6, #3470)
+   * Fix: Prevent campaign difficulty influencing skirmish in-game saveload (commit:e65aa099a74e1a9e7c7960ed5ebfe5df5e5da7e6, #3475)
+   * Fix: Various crashes and sanity checks (too many commits, #3467, #3471)
+* Graphics:
+   * Add: Add separate "Terrain Shading" quality setting (too many commits, #3465)
+   * Change: Classic model fixes for scavenger structures (commit:ae9d4f1fb4d72011584133f3579c18120d7deb8d, #3473)
+   * Fix: Various gfx_api / shadow tweaks, better first-run determination of settings (too many commits, #3450, #3451)
+   * Fix: Vulkan MSAA issues (too many commits, #3448)
+   * Fix: Tweak medium terrain shader to better match the previous shader (commit:74b4cc999a9153c3c41f4c721853ca20c49b7953, #3472)
+* Campaign:
+   * Change: Obsolete some more tech in Gamma campaign (too many commits, #3447)
+   * Change: Refine starting designs for Beta/Gamma 1 (commit:bc082d26baad8c5681250bcf6e4d2565959de810, #3466)
+* Multiplayer:
+   * Change: Allow demolishing departed ally structures (commit:52c563f8e279b77709e51f06139dc1422cb87938, #3458)
+* Balance MP:
+   * Change: Decrease Heavy Plasma Launcher effectivness against moving units, increase against stationary units and structures (commit:9fd8ec4801cd9e2903a5f5a5b4515f75f23a7e80, #3258)
+   * Change: Allow transporters to gain bonuses from armor upgrades (commit:d5b7444d1634cb5249d5e4cb1809b2b47fd47805, #3252)
+
 2023-10-29: Version 4.4.0-beta1:
 * General:
    * Add: Allow challenges to save replays (commit:2897e40ef22b64746d14b41aa77e68156bc79c1a, commit:6c307d0d783832656bb7eecf627047ee8db0e476, #3239)
