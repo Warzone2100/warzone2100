@@ -4644,6 +4644,10 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(save.value("playerLeaveMode").toInt());
 	}
+	if (save.contains("multiplayer"))
+	{
+		bMultiPlayer = save.value("multiplayer").toBool();
+	}
 
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
