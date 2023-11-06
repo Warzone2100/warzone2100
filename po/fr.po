@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2023-10-28 17:41+0000\n"
-"PO-Revision-Date: 2023-10-29 04:20\n"
+"POT-Creation-Date: 2023-11-06 00:01+0000\n"
+"PO-Revision-Date: 2023-11-06 01:41\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1848,7 +1848,7 @@ msgstr "Usine de production de Cyborgs nécessaire"
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:546
+#: po/custom/fromJson.txt:542
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Armé d'un fusil d'assaut"
 
@@ -3647,7 +3647,7 @@ msgstr "Obusier de calibre 105mm pouvant être affecté à un radar"
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1100
+#: po/custom/fromJson.txt:1094
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Efficace contre : bâtiments, infanterie, véhicules à roues"
 
@@ -3851,7 +3851,7 @@ msgstr "Peut être affecté à un radar"
 #. ... + 7 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1094
+#: po/custom/fromJson.txt:1100
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Efficace contre : bâtiments, infanterie, véhicules à roues"
 
@@ -4029,7 +4029,7 @@ msgstr "Envoyez au moins un transporteur avec un camion, et survivez jusqu'à la
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Envoyez autant de transporteurs que possible et apportez au moins un camion"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4053,7 +4053,7 @@ msgstr "Terminez la recherche des circuits de résistance et survivez à l’ass
 
 #: data/base/script/campaign/cam3-ad1.js:257
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "Construire un avant-poste vers les silos"
 
 #: data/base/script/campaign/cam3-ad2.js:278
 msgid "Protect the missile silos and research for the missile codes"
@@ -4069,11 +4069,11 @@ msgstr "Revenez à la ZA"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:530
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Indice de difficulté Difficile / Dément :"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:531
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Construisez une base fortifiée sur la carte pour vous protéger du Collectif"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:536
 msgid "Destroy all enemy units and structures"
@@ -4196,7 +4196,7 @@ msgstr "Commandants - Construisez des commandants d'abord"
 #: src/transporter.cpp:203
 #: src/transporter.cpp:264
 #: src/transporter.cpp:563
-#: src/wzscriptdebug.cpp:2462
+#: src/wzscriptdebug.cpp:2542
 msgid "Close"
 msgstr "Fermer"
 
@@ -4298,15 +4298,15 @@ msgstr "La mitrailleuse recherchée peut maintenant être utilisée pour créer 
 
 #: data/base/script/tutorial.js:55
 msgid "Left click the flashing DESIGN icon"
-msgstr "Cliquez sur l'icône CONCEPTION clignotante."
+msgstr "Cliquez sur l'icône CONCEPTION clignotante"
 
 #: data/base/script/tutorial.js:56
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr "Pour créer un nouveau modèle, cliquez sur l'icône NOUVELLE CRÉATION."
+msgstr "Pour créer un nouveau modèle, cliquez sur l'icône NOUVELLE CRÉATION"
 
 #: data/base/script/tutorial.js:57
 msgid "Now left click the Vehicle Body icon"
-msgstr "Cliquez Maintenant sur l'icône CHASSIS."
+msgstr "Cliquez Maintenant sur l'icône Chassis"
 
 #: data/base/script/tutorial.js:58
 msgid "Then left click the Viper body"
@@ -4314,7 +4314,7 @@ msgstr "Puis cliquez sur le châssis Vipère,"
 
 #: data/base/script/tutorial.js:59
 msgid "Left click the Wheels icon"
-msgstr "puis sur l'icône ROUES,"
+msgstr "puis sur l'icône ROUES"
 
 #: data/base/script/tutorial.js:60
 msgid "Then left click the machinegun to complete your design"
@@ -4613,7 +4613,7 @@ msgstr "Ce virus NEXUS est un programme en mutation constante. Il est donc très
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Nous sommes incapables de déterminer son but ou sa fonction finale. Dans sa forme initiale, il recherche et isole des espaces mémoire du reste du système. Il commence alors à muter les structures de données, et reprogramme tout le système de l'intérieur."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -5449,7 +5449,7 @@ msgstr "Cyber virus de NEXUS"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
 #: data/mp/messages/strings/names.txt:491
-#: po/custom/fromJson.txt:4322
+#: po/custom/fromJson.txt:4319
 msgid "Nexus Resistance Circuits"
 msgstr "Circuits résisitifs au NEXUS"
 
@@ -5625,11 +5625,11 @@ msgstr "Défaite en raison de l'inactivité / jeu passif."
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "La limite de temps de jeu configurée par l'hôte approche. S'il n'y a pas de vainqueur dans les 10 minutes, la partie se terminera."
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "La limite de temps de jeu configurée par l'hôte est dépassée. La partie est terminée."
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
@@ -5795,7 +5795,8 @@ msgstr "Impossible d'ouvrir le port (%s) sur (%s)"
 #, c-format
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
-msgstr ""
+msgstr "Veuillez configurer manuellement votre routeur/pare-feu pour\n"
+" ouvrir le port %d avant d'héberger une partie."
 
 #: lib/netplay/netplay.cpp:1496
 #, c-format
@@ -5811,7 +5812,7 @@ msgstr "Le client n'a pas confirmé le changement d'emplacement du joueur"
 #: lib/netplay/netplay.cpp:2829
 #, c-format
 msgid "No UPnP device found. Configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Aucun appareil UPnP trouvé. Configurez votre routeur/pare-feu pour ouvrir le port %d!"
 
 #: lib/netplay/netplay.cpp:3451
 #, c-format
@@ -5845,15 +5846,15 @@ msgstr "Format de fichier de relecture non pris en charge"
 
 #: lib/netplay/nettypes.cpp:1061
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "Impossible de charger le replay : le fichier de replay est incomplet ou corrompu."
 
 #: lib/sound/cdaudio.cpp:59
 msgid "Menu"
 msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:61
-#: src/frontend.cpp:2790
-#: src/frontend.cpp:2891
+#: src/frontend.cpp:2844
+#: src/frontend.cpp:2945
 msgid "Campaign"
 msgstr "Campagne"
 
@@ -6052,7 +6053,7 @@ msgstr "Temps de rechargement des armes anti-aériennes : -15%"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:119
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "Site de DCA avec Tourelle Stormbringer"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6465,7 +6466,7 @@ msgstr "Missiles Archangel"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:542
+#: po/custom/fromJson.txt:546
 msgid "Armed with Cyborg assault gun"
 msgstr "Armé d'un fusil d'assaut"
 
@@ -6544,7 +6545,7 @@ msgstr "Armé d'un canon hypersonique"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:587
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Armé d'un canon automatique d'hyper vitesse à quatre barils"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
@@ -6604,7 +6605,7 @@ msgstr "Armé de roquettes anti-char"
 #: po/custom/fromJson.txt:627
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Blindage : +120% ; PV : +90%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
@@ -7222,18 +7223,18 @@ msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Efficace contre : bâtiments, emplacements, cyborgs"
 
 #. TRANSLATORS:
+#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#: po/custom/fromJson.txt:1103
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Efficace contre : bunkers et ponts défensifs"
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #. ... + 2 refs
-#: po/custom/fromJson.txt:1106
-msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Efficace contre : bunkers et ponts défensifs"
-
-#. TRANSLATORS:
-#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1109
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Efficace contre : bunkers et ponts défensifs"
 
 #. TRANSLATORS:
@@ -8358,7 +8359,7 @@ msgstr "Mortier EMP"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[2]
 #: po/custom/fromJson.txt:1887
 msgid "Enables Hardcrete gates"
-msgstr ""
+msgstr "Permet la construction de murs en béton renforcé"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
@@ -9594,7 +9595,7 @@ msgstr "Tourelle de réparation lourde Cobra aéroglisseur"
 #. data/mp/stats/weapons.json: $.Rocket-MRL-Hvy.name
 #: po/custom/fromJson.txt:2691
 msgid "Heavy Rocket Array"
-msgstr ""
+msgstr "Rangée de roquettes lourdes"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9609,7 +9610,7 @@ msgstr "Bastion à lance-roquettes"
 #. data/mp/stats/structure.json: $.Emplacement-MRLHvy-pit.name
 #: po/custom/fromJson.txt:2700
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "Batterie de roquettes lourdes"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -11402,7 +11403,7 @@ msgstr "Mitrailleuse rotative multitube à tir rapide"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:3992
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Doit être construit pour produire des commandants"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -11693,20 +11694,20 @@ msgid "New Systems Tower Available"
 msgstr "Nouvelle tour système disponible"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4242
-msgid "New Systems Turret Available For Design"
-msgstr "Nouvelle tourelle système disponible pour assemblage"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4248
+#: po/custom/fromJson.txt:4244
 msgid "New Systems Turret Available for Design"
 msgstr "Nouveau système de tourelle disponible pour conception"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4248
+msgid "New Systems Turret Available For Design"
+msgstr "Nouvelle tourelle système disponible pour assemblage"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -11740,7 +11741,7 @@ msgstr "Châssis lourd de NEXUS"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4283
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "Système d'immunisation NEXUS"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -11804,7 +11805,7 @@ msgstr "Circuits résistants au NEXUS Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
-#: po/custom/fromJson.txt:4319
+#: po/custom/fromJson.txt:4322
 msgid "NEXUS Resistance Circuits"
 msgstr "Circuits résistants au NEXUS"
 
@@ -12441,7 +12442,7 @@ msgstr "Vitesse de réarmement : +30%"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
 #: po/custom/fromJson.txt:4714
 msgid "Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Réduire la portée des tirs des Pillards"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -13329,7 +13330,7 @@ msgstr "Prend le contrôle des unités/défenses et copie la technologie des bâ
 #. data/base/stats/structure.json: $.GuardTower3.name
 #: po/custom/fromJson.txt:5299
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Tour de garde à mitrailleuse lourde en acier"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
@@ -13748,18 +13749,18 @@ msgid "Thermal Armor +35%"
 msgstr "Blindage thermique : +35%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
-#: po/custom/fromJson.txt:5583
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#: po/custom/fromJson.txt:5582
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Blindage thermique : +40%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 #: po/custom/fromJson.txt:5587
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Blindage thermique : +40%"
 
 #. TRANSLATORS:
@@ -13850,7 +13851,7 @@ msgstr "Tigre"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[1]
 #: po/custom/fromJson.txt:5644
 msgid "Titanium-reinforced concrete gate"
-msgstr ""
+msgstr "Portail en béton renforcé au titane"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -14104,7 +14105,7 @@ msgstr "A deux faces"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 #: po/custom/fromJson.txt:5803
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Annuler la réduction de la portée du lance-flammes des Pillards"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -15113,11 +15114,11 @@ msgstr "Charger une sauvegarde de campagne"
 
 #: src/clparse.cpp:392
 msgid "Load a replay"
-msgstr ""
+msgstr "Charger un replay"
 
 #: src/clparse.cpp:392
 msgid "replay file"
-msgstr ""
+msgstr "rejouer le fichier"
 
 #: src/clparse.cpp:393
 msgid "Play in windowed mode"
@@ -15226,7 +15227,7 @@ msgstr "hébergement automatique"
 
 #: src/clparse.cpp:427
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "Demander les évaluations depuis l'URL du serveur donné, lors de l'hébergement"
 
 #: src/clparse.cpp:427
 msgid "autorating"
@@ -15270,7 +15271,7 @@ msgstr "Activer l'interface des commandes"
 
 #: src/clparse.cpp:438
 msgid "(stdin, unixsocket:path)"
-msgstr ""
+msgstr "(stdin, unixsocket:path)"
 
 #: src/clparse.cpp:439
 msgid "Minimum required players to auto-start game"
@@ -15282,35 +15283,35 @@ msgstr "joueurs au début"
 
 #: src/clparse.cpp:440
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "Mode(s) de sortie de log du jeu"
 
 #: src/clparse.cpp:441
 msgid "Game history log output key"
-msgstr ""
+msgstr "Clé de sortie de log du jeu"
 
 #: src/clparse.cpp:442
 msgid "Game history log output naming"
-msgstr ""
+msgstr "Nommage de sortie de log du jeu"
 
 #: src/clparse.cpp:443
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "Log de l'intervalle des frames du jeu"
 
 #: src/clparse.cpp:443
 msgid "interval in seconds"
-msgstr ""
+msgstr "intervalle en secondes"
 
 #: src/clparse.cpp:444
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "Limite de temps de jeu multijoueur (en minutes)"
 
 #: src/clparse.cpp:444
 msgid "number of minutes"
-msgstr ""
+msgstr "nombre de minutes"
 
 #: src/clparse.cpp:445
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "Convertir une carte spéculaire .png en luma, à un seul canal, en niveaux de gris .png (et quitter)"
 
 #: src/cmddroid.cpp:121
 msgid "Commander needs a higher level to command more units"
@@ -15468,35 +15469,35 @@ msgstr "Effacer le modèle"
 msgid "Store Design"
 msgstr "Sauvegarder le modèle"
 
-#: src/display.cpp:1589
+#: src/display.cpp:1591
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction impossible pour le moment. Le gisement de pétrole est en feu."
 
-#: src/display.cpp:1608
+#: src/display.cpp:1610
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
 msgstr "%s - Points de vie %d/%d - Expérience %.1f, %s, Tués %d"
 
-#: src/display.cpp:1622
+#: src/display.cpp:1624
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - PV %d/%d - ID %d - %s"
 
-#: src/display.cpp:1638
+#: src/display.cpp:1640
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(Ennemi !) %s - PV %d/%d - ID %d - expérience %f, %s - ordre %s - action %s - radius capteur %d - Brouillage %d - pitch %.0f"
 
-#: src/display.cpp:1782
+#: src/display.cpp:1784
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Allié - Points de vie : %d/%d - Expérience %d, %s"
 
 #. TRANSLATORS: "ref" is an internal unique id of the item (can leave untranslated as a technical term)
-#: src/display.cpp:1806
+#: src/display.cpp:1808
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(Ennemi !) %s, réf : %d, ID : %d PV : %d/%d"
 
 #: src/display3d.cpp:938
 msgid "Player left"
@@ -15573,15 +15574,15 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alignement avec le groupe %u - %u unité"
 msgstr[1] "Alignement avec le groupe %u - %u unités"
 
-#: src/droid.cpp:3209
+#: src/droid.cpp:3218
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr "Transfert d'unités impossible -- limite dépassée"
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:212
-#: src/frontend.cpp:975
-#: src/frontend.cpp:2552
-#: src/terrain.cpp:2408
+#: src/frontend.cpp:1024
+#: src/frontend.cpp:2606
+#: src/terrain.cpp:2569
 msgid "Normal"
 msgstr "Normale"
 
@@ -15689,13 +15690,13 @@ msgstr "TUTORIELS"
 #: src/frontend.cpp:408
 #: src/frontend.cpp:628
 #: src/frontend.cpp:745
-#: src/frontend.cpp:1197
-#: src/frontend.cpp:1421
-#: src/frontend.cpp:2188
-#: src/frontend.cpp:2488
-#: src/frontend.cpp:2787
-#: src/frontend.cpp:2926
-#: src/frontend.cpp:3355
+#: src/frontend.cpp:1251
+#: src/frontend.cpp:1475
+#: src/frontend.cpp:2242
+#: src/frontend.cpp:2542
+#: src/frontend.cpp:2841
+#: src/frontend.cpp:2980
+#: src/frontend.cpp:3409
 msgctxt "menu"
 msgid "Return"
 msgstr "Retour"
@@ -15770,7 +15771,7 @@ msgstr "Voir le replay"
 #: src/frontend.cpp:632
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "Le port TCP %d doit être ouvert dans votre pare-feu/routeur pour pouvoir héberger des parties !"
 
 #: src/frontend.cpp:678
 msgid "Load Multiplayer Replay"
@@ -15811,7 +15812,7 @@ msgstr "Gestionnaire de musique"
 
 #: src/frontend.cpp:739
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Options Multijoueur"
 
 #: src/frontend.cpp:744
 #: src/multiint.cpp:1330
@@ -15851,15 +15852,15 @@ msgid "2×"
 msgstr "2x"
 
 #: src/frontend.cpp:820
-#: src/frontend.cpp:1845
-#: src/frontend.cpp:2013
+#: src/frontend.cpp:1899
+#: src/frontend.cpp:2067
 msgid "Fullscreen"
 msgstr "Plein écran"
 
 #: src/frontend.cpp:821
 #: src/frontend.cpp:832
-#: src/frontend.cpp:1305
-#: src/frontend.cpp:2556
+#: src/frontend.cpp:1359
+#: src/frontend.cpp:2610
 msgid "Unsupported"
 msgstr "Non supporté"
 
@@ -15869,19 +15870,19 @@ msgstr "Non supporté"
 #: src/frontend.cpp:848
 #: src/frontend.cpp:853
 #: src/frontend.cpp:858
-#: src/frontend.cpp:1571
-#: src/frontend.cpp:1615
-#: src/frontend.cpp:1969
-#: src/frontend.cpp:2358
-#: src/frontend.cpp:2363
-#: src/frontend.cpp:2368
-#: src/frontend.cpp:2378
-#: src/frontend.cpp:3055
-#: src/frontend.cpp:3104
-#: src/frontend.cpp:3162
-#: src/frontend.cpp:3287
-#: src/frontend.cpp:3344
-#: src/frontend.cpp:3385
+#: src/frontend.cpp:1625
+#: src/frontend.cpp:1669
+#: src/frontend.cpp:2023
+#: src/frontend.cpp:2412
+#: src/frontend.cpp:2417
+#: src/frontend.cpp:2422
+#: src/frontend.cpp:2432
+#: src/frontend.cpp:3109
+#: src/frontend.cpp:3158
+#: src/frontend.cpp:3216
+#: src/frontend.cpp:3341
+#: src/frontend.cpp:3398
+#: src/frontend.cpp:3439
 msgid "Off"
 msgstr "Désactivé"
 
@@ -15899,14 +15900,14 @@ msgstr "Noir"
 #: src/frontend.cpp:848
 #: src/frontend.cpp:853
 #: src/frontend.cpp:858
-#: src/frontend.cpp:1617
-#: src/frontend.cpp:2358
-#: src/frontend.cpp:2363
-#: src/frontend.cpp:2368
-#: src/frontend.cpp:2378
-#: src/frontend.cpp:3287
-#: src/frontend.cpp:3344
-#: src/frontend.cpp:3385
+#: src/frontend.cpp:1671
+#: src/frontend.cpp:2412
+#: src/frontend.cpp:2417
+#: src/frontend.cpp:2422
+#: src/frontend.cpp:2432
+#: src/frontend.cpp:3341
+#: src/frontend.cpp:3398
+#: src/frontend.cpp:3439
 msgid "On"
 msgstr "Activé"
 
@@ -15927,153 +15928,166 @@ msgid "Tracked"
 msgstr "Suivi"
 
 #: src/frontend.cpp:874
-#: src/frontend.cpp:976
-#: src/frontend.cpp:1036
-#: src/terrain.cpp:2410
+#: src/frontend.cpp:1025
+#: src/frontend.cpp:1085
+#: src/terrain.cpp:2571
 msgid "High"
-msgstr ""
+msgstr "Élevé"
 
 #: src/frontend.cpp:875
 msgid "Default"
-msgstr ""
+msgstr "Défaut"
 
 #: src/frontend.cpp:947
+#: src/frontend.cpp:1000
 msgid "Terrain quality mode not available."
+msgstr "Mode qualité terrain non disponible."
+
+#: src/frontend.cpp:975
+msgid "Medium Quality"
 msgstr ""
 
-#: src/frontend.cpp:1006
+#: src/frontend.cpp:976
+msgid "High Quality"
+msgstr ""
+
+#: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
-msgstr ""
+msgstr "Le shadowmap n'est pas disponible sur ce système."
 
-#: src/frontend.cpp:1035
+#: src/frontend.cpp:1084
 msgid "Low"
-msgstr ""
+msgstr "Bas"
 
-#: src/frontend.cpp:1037
+#: src/frontend.cpp:1086
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
-#: src/frontend.cpp:1067
+#: src/frontend.cpp:1116
 msgid "Shadow filtering not available on this system."
-msgstr ""
+msgstr "Le filtrage des ombres n'est pas disponible sur ce système."
 
-#: src/frontend.cpp:1109
-#: src/frontend.cpp:2087
+#: src/frontend.cpp:1158
+#: src/frontend.cpp:2141
 msgid "* Takes effect on game restart"
 msgstr "* Le jeu doit être redémarré pour que ces modifications s'appliquent"
 
-#: src/frontend.cpp:1116
+#: src/frontend.cpp:1165
 msgid "Terrain Quality"
+msgstr "Qualité du terrain"
+
+#: src/frontend.cpp:1170
+msgid "Terrain Shading"
 msgstr ""
 
-#: src/frontend.cpp:1122
+#: src/frontend.cpp:1176
 #: src/ingameop.cpp:629
 msgid "Shadows"
 msgstr "Ombres"
 
-#: src/frontend.cpp:1131
+#: src/frontend.cpp:1185
 msgid "Shadow Resolution"
-msgstr ""
+msgstr "Résolution des ombres"
 
-#: src/frontend.cpp:1136
+#: src/frontend.cpp:1190
 msgid "Shadow Filtering"
-msgstr ""
+msgstr "Filtrage des ombres"
 
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
-#: src/frontend.cpp:1143
+#: src/frontend.cpp:1197
 msgid "LOD Distance"
-msgstr ""
+msgstr "Distance d'affichage"
 
-#: src/frontend.cpp:1150
+#: src/frontend.cpp:1204
 msgid "Fog"
 msgstr "Brouillard"
 
-#: src/frontend.cpp:1155
+#: src/frontend.cpp:1209
 #: src/ingameop.cpp:634
 #: src/input/context.cpp:57
 msgid "Radar"
 msgstr "Mini-carte"
 
-#: src/frontend.cpp:1160
+#: src/frontend.cpp:1214
 #: src/ingameop.cpp:639
 msgid "Radar Jump"
 msgstr "Saut Mini-carte"
 
-#: src/frontend.cpp:1166
+#: src/frontend.cpp:1220
 #: src/ingameop.cpp:644
 msgid "Video Playback"
 msgstr "Affichage des vidéos"
 
-#: src/frontend.cpp:1171
+#: src/frontend.cpp:1225
 #: src/ingameop.cpp:649
 msgid "Scanlines"
 msgstr "Lignes de balayage"
 
-#: src/frontend.cpp:1176
+#: src/frontend.cpp:1230
 msgid "Screen Shake"
 msgstr "Vibrations de l’écran"
 
-#: src/frontend.cpp:1181
+#: src/frontend.cpp:1235
 #: src/ingameop.cpp:659
 msgid "Groups Menu"
-msgstr ""
+msgstr "Menu des Groupes"
 
-#: src/frontend.cpp:1193
+#: src/frontend.cpp:1247
 msgid "GRAPHICS OPTIONS"
 msgstr "OPTIONS GRAPHIQUES"
 
-#: src/frontend.cpp:1308
+#: src/frontend.cpp:1362
 msgid "Disabled"
 msgstr "Desactivé"
 
-#: src/frontend.cpp:1311
+#: src/frontend.cpp:1365
 msgid "Enabled"
 msgstr "Activé"
 
-#: src/frontend.cpp:1315
-#: src/frontend.cpp:1321
-#: src/frontend.cpp:1968
+#: src/frontend.cpp:1369
+#: src/frontend.cpp:1375
+#: src/frontend.cpp:2022
 msgid "Auto"
 msgstr "Auto"
 
-#: src/frontend.cpp:1366
+#: src/frontend.cpp:1420
 #: src/ingameop.cpp:151
 msgid "Voice Volume"
 msgstr "Volume de la voix"
 
-#: src/frontend.cpp:1371
+#: src/frontend.cpp:1425
 #: src/ingameop.cpp:157
 msgid "FX Volume"
 msgstr "Volume des bruits (FX)"
 
-#: src/frontend.cpp:1376
+#: src/frontend.cpp:1430
 #: src/ingameop.cpp:163
 msgid "Music Volume"
 msgstr "Volume de la musique"
 
-#: src/frontend.cpp:1382
+#: src/frontend.cpp:1436
 #: src/ingameop.cpp:169
 msgid "Subtitles"
 msgstr "Sous-titres"
 
-#: src/frontend.cpp:1387
+#: src/frontend.cpp:1441
 msgid "HRTF"
 msgstr "HRTF"
 
-#: src/frontend.cpp:1393
-#: src/frontend.cpp:1395
+#: src/frontend.cpp:1447
+#: src/frontend.cpp:1449
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr "HRTF n'est pas supporter sur votre appareil / système / OpenAL library"
 
-#: src/frontend.cpp:1399
+#: src/frontend.cpp:1453
 msgid "Map Zoom"
 msgstr "Zoom de carte"
 
-#: src/frontend.cpp:1404
+#: src/frontend.cpp:1458
 msgid "Map Zoom Rate"
 msgstr "Vitesse de zoom de la carte"
 
-#: src/frontend.cpp:1409
+#: src/frontend.cpp:1463
 msgid "Radar Zoom"
 msgstr "Zoom de radar"
 
@@ -16081,330 +16095,330 @@ msgstr "Zoom de radar"
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:1428
+#: src/frontend.cpp:1482
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr "OPTIONS AUDIO / ZOOM"
 
-#: src/frontend.cpp:1540
+#: src/frontend.cpp:1594
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr "En mode bureau plein écran, la résolution correspond à celle de votre bureau \n"
 "(ou ce que le gestionnaire de fenêtres permet)."
 
-#: src/frontend.cpp:1542
+#: src/frontend.cpp:1596
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr "Vous pouvez changer la résolution en redimensionnant la fenêtre normalement. (Essayez de tirer un coin ou bord.)"
 
-#: src/frontend.cpp:1581
+#: src/frontend.cpp:1635
 msgid "Graphics Mode"
 msgstr "Mode d'affichage"
 
-#: src/frontend.cpp:1586
+#: src/frontend.cpp:1640
 msgid "Resolution"
 msgstr "Résolution"
 
-#: src/frontend.cpp:1591
+#: src/frontend.cpp:1645
 msgid "Display Scale"
 msgstr "Échelle d'affichage"
 
-#: src/frontend.cpp:1619
+#: src/frontend.cpp:1673
 msgid "Adaptive"
 msgstr "Adaptatif"
 
-#: src/frontend.cpp:1843
+#: src/frontend.cpp:1897
 msgid "Windowed"
 msgstr "Fenêtré"
 
-#: src/frontend.cpp:1844
-#: src/frontend.cpp:2012
+#: src/frontend.cpp:1898
+#: src/frontend.cpp:2066
 msgid "Desktop Full"
 msgstr "Bureau complet"
 
-#: src/frontend.cpp:1970
+#: src/frontend.cpp:2024
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "Plein écran"
 
-#: src/frontend.cpp:2120
+#: src/frontend.cpp:2174
 msgid "Texture size"
 msgstr "Taille des textures"
 
-#: src/frontend.cpp:2125
+#: src/frontend.cpp:2179
 #: src/ingameop.cpp:761
 msgid "Vertical sync"
 msgstr "Synchronisation verticale"
 
-#: src/frontend.cpp:2130
+#: src/frontend.cpp:2184
 msgid "Antialiasing*"
 msgstr "Anticrénelage*"
 
-#: src/frontend.cpp:2138
+#: src/frontend.cpp:2192
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr "Attention: l'Anticrénelage peut provoquer des crashs, surtout avec des valeurs > 16"
 
-#: src/frontend.cpp:2151
+#: src/frontend.cpp:2205
 msgid "Graphics Backend*"
 msgstr "Backend Graphique*"
 
 #. TRANSLATORS: Shortened form of "Minimize on Focus Loss"
 #. An option describing when / whether WZ will auto-minimize the window when it loses focus.
-#: src/frontend.cpp:2159
+#: src/frontend.cpp:2213
 msgid "Min on Focus Loss"
-msgstr ""
+msgstr "Minifier si perte focus"
 
-#: src/frontend.cpp:2160
+#: src/frontend.cpp:2214
 msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
+msgstr "Si la fenêtre doit être minimisée automatiquement si perte de focus"
 
 #. TRANSLATORS: The fullscreen mode used when toggling with keys: Alt + Enter
-#: src/frontend.cpp:2170
+#: src/frontend.cpp:2224
 msgid "Alt+Enter Toggle"
-msgstr ""
+msgstr "Bascule Alt+Entrée"
 
-#: src/frontend.cpp:2171
+#: src/frontend.cpp:2225
 msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
+msgstr "Le mode plein écran utilisé avec les touches : Alt + Entrée"
 
-#: src/frontend.cpp:2185
+#: src/frontend.cpp:2239
 msgid "VIDEO OPTIONS"
 msgstr "OPTIONS VIDÉO"
 
-#: src/frontend.cpp:2217
+#: src/frontend.cpp:2271
 msgid "Unable to change Vertical Sync"
 msgstr "Impossible de modifier la Synchro Verticale"
 
-#: src/frontend.cpp:2217
+#: src/frontend.cpp:2271
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Warzone n'a pas pu changer le mode de Synchro Verticale.\n"
 "Votre système / vos pilotes peuvent ne pas prendre en charge d'autres modes."
 
-#: src/frontend.cpp:2373
+#: src/frontend.cpp:2427
 msgid "Middle Mouse"
 msgstr "Molette"
 
-#: src/frontend.cpp:2373
+#: src/frontend.cpp:2427
 msgid "Right Mouse"
 msgstr "Bouton droit"
 
-#: src/frontend.cpp:2446
+#: src/frontend.cpp:2500
 #: src/ingameop.cpp:837
 msgid "Reverse Rotation"
 msgstr "Rotation inversée"
 
-#: src/frontend.cpp:2451
+#: src/frontend.cpp:2505
 #: src/ingameop.cpp:843
 msgid "Trap Cursor"
 msgstr "Piéger le curseur"
 
-#: src/frontend.cpp:2457
+#: src/frontend.cpp:2511
 #: src/ingameop.cpp:849
 msgid "Switch Mouse Buttons"
 msgstr "Inverser les boutons de la souris"
 
-#: src/frontend.cpp:2463
+#: src/frontend.cpp:2517
 #: src/ingameop.cpp:854
 msgid "Rotate Screen"
 msgstr "Rotation du point de vue"
 
-#: src/frontend.cpp:2468
+#: src/frontend.cpp:2522
 #: src/ingameop.cpp:859
 msgid "Colored Cursors"
 msgstr "Curseurs colorés"
 
-#: src/frontend.cpp:2473
+#: src/frontend.cpp:2527
 msgid "Cursor Size"
 msgstr "Taille du curseur"
 
-#: src/frontend.cpp:2485
+#: src/frontend.cpp:2539
 msgid "MOUSE OPTIONS"
 msgstr "OPTIONS SOURIS"
 
-#: src/frontend.cpp:2550
+#: src/frontend.cpp:2604
 #: src/multiint.cpp:270
 msgid "Super Easy"
-msgstr ""
+msgstr "Super facile"
 
-#: src/frontend.cpp:2551
+#: src/frontend.cpp:2605
 #: src/multiint.cpp:270
 msgid "Easy"
 msgstr "Facile"
 
-#: src/frontend.cpp:2553
+#: src/frontend.cpp:2607
 #: src/multiint.cpp:270
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.cpp:2554
+#: src/frontend.cpp:2608
 #: src/multiint.cpp:270
 msgid "Insane"
 msgstr "Démént"
 
-#: src/frontend.cpp:2734
-#: src/init.cpp:1419
+#: src/frontend.cpp:2788
+#: src/init.cpp:1421
 #: src/intimage.cpp:127
 #, c-format
 msgid "Unable to load: %s."
-msgstr ""
+msgstr "Impossible de charger : %s."
 
-#: src/frontend.cpp:2738
-#: src/init.cpp:1423
+#: src/frontend.cpp:2792
+#: src/init.cpp:1425
 #: src/intimage.cpp:131
 msgid "Please remove all incompatible mods."
-msgstr ""
+msgstr "Veuillez supprimer tous les mods incompatibles."
 
-#: src/frontend.cpp:2786
-#: src/frontend.cpp:2934
+#: src/frontend.cpp:2840
+#: src/frontend.cpp:2988
 msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
-#: src/frontend.cpp:2788
 #: src/frontend.cpp:2842
+#: src/frontend.cpp:2896
 msgid "Language"
 msgstr "Langue"
 
-#: src/frontend.cpp:2789
-#: src/frontend.cpp:2859
+#: src/frontend.cpp:2843
+#: src/frontend.cpp:2913
 msgid "Unit Colour:"
 msgstr "Couleur des unités :"
 
-#: src/frontend.cpp:2791
-#: src/frontend.cpp:2912
+#: src/frontend.cpp:2845
+#: src/frontend.cpp:2966
 msgid "Skirmish/Multiplayer"
 msgstr "Escarmouche/Multijoueurs"
 
-#: src/frontend.cpp:2792
-#: src/frontend.cpp:2848
+#: src/frontend.cpp:2846
+#: src/frontend.cpp:2902
 msgid "Campaign Difficulty"
 msgstr "Difficulté de la campagne"
 
-#: src/frontend.cpp:2793
-#: src/frontend.cpp:2854
+#: src/frontend.cpp:2847
+#: src/frontend.cpp:2908
 msgid "Camera Speed"
 msgstr "Vitesse de Camera"
 
-#: src/frontend.cpp:2929
+#: src/frontend.cpp:2983
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
 msgstr "Aidez-nous à améliorer les traductions de Warzone 2100 : %s"
 
-#: src/frontend.cpp:2931
+#: src/frontend.cpp:2985
 msgid "Click to open webpage."
 msgstr "Cliquez pour ouvrir la page web."
 
-#: src/frontend.cpp:2960
+#: src/frontend.cpp:3014
 msgid "Insane Difficulty"
 msgstr "Difficulté Déménte"
 
-#: src/frontend.cpp:2961
+#: src/frontend.cpp:3015
 msgid "This difficulty is for very experienced players!"
 msgstr "Cette difficulté s'adresse aux joueurs très expérimentés !"
 
-#: src/frontend.cpp:3059
-#: src/frontend.cpp:3116
+#: src/frontend.cpp:3113
+#: src/frontend.cpp:3170
 #, c-format
 msgid "%u minutes"
 msgstr "%u minutes"
 
-#: src/frontend.cpp:3112
+#: src/frontend.cpp:3166
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s heures"
 
-#: src/frontend.cpp:3173
-#: src/frontend.cpp:3181
+#: src/frontend.cpp:3227
+#: src/frontend.cpp:3235
 #, c-format
 msgid "%u seconds"
 msgstr "%u secondes"
 
-#: src/frontend.cpp:3212
+#: src/frontend.cpp:3266
 msgid "None"
 msgstr "Aucun"
 
-#: src/frontend.cpp:3247
+#: src/frontend.cpp:3301
 msgid "Distribute to Team"
-msgstr ""
+msgstr "Distribuer à l'équipe"
 
-#: src/frontend.cpp:3248
+#: src/frontend.cpp:3302
 msgid "Destroy (Classic)"
-msgstr ""
+msgstr "Détruire (Classique)"
 
-#: src/frontend.cpp:3304
+#: src/frontend.cpp:3358
 msgid "Hosting Options:"
 msgstr "Options d'hébergement :"
 
-#: src/frontend.cpp:3308
+#: src/frontend.cpp:3362
 msgid "Game Port"
-msgstr ""
+msgstr "Port de jeu"
 
-#: src/frontend.cpp:3313
+#: src/frontend.cpp:3367
 msgid "Enable UPnP"
 msgstr "Activer UPnP"
 
-#: src/frontend.cpp:3318
+#: src/frontend.cpp:3372
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Délai d'inactivité"
 
-#: src/frontend.cpp:3323
+#: src/frontend.cpp:3377
 msgid "Lag Kick"
-msgstr ""
+msgstr "Expulsion due à la latence"
 
-#: src/frontend.cpp:3328
+#: src/frontend.cpp:3382
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Emplacements de spectateur"
 
-#: src/frontend.cpp:3333
+#: src/frontend.cpp:3387
 msgid "On Player Leave"
-msgstr ""
+msgstr "Au départ du joueur"
 
-#: src/frontend.cpp:3338
+#: src/frontend.cpp:3392
 msgid "Game Time Limit"
-msgstr ""
+msgstr "Limite de temps de jeu"
 
-#: src/frontend.cpp:3343
+#: src/frontend.cpp:3397
 msgid "Enable Rating"
-msgstr ""
+msgstr "Activer les évaluations"
 
-#: src/frontend.cpp:3358
+#: src/frontend.cpp:3412
 msgid "MULTIPLAY OPTIONS"
-msgstr ""
+msgstr "OPTIONS MULTIJOUEUR"
 
-#: src/frontend.cpp:3423
+#: src/frontend.cpp:3477
 #: src/multiint.cpp:5298
 msgid "Mod: "
 msgstr "Mode(s) : "
 
-#: src/frontend.cpp:3947
+#: src/frontend.cpp:4001
 msgid "Increase Game Display Scale?"
 msgstr "Augmenter l'échelle d'affichage du jeu ?"
 
-#: src/frontend.cpp:3949
+#: src/frontend.cpp:4003
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
 msgstr "Avec vos paramètres de résolution et d'échelle d'affichage actuels, l'interface utilisateur du jeu peut sembler petite, et la perspective du jeu peut sembler déformée."
 
-#: src/frontend.cpp:3951
+#: src/frontend.cpp:4005
 msgid "You can fix this by increasing the game's Display Scale setting."
 msgstr "Vous pouvez corriger cela en augmentant l'échelle d'affichage du jeu."
 
-#: src/frontend.cpp:3953
+#: src/frontend.cpp:4007
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
 msgstr "Voulez-vous augmenter l'échelle d'affichage du jeu à: %u%%?"
 
-#: src/frontend.cpp:3955
+#: src/frontend.cpp:4009
 msgid "Increase Display Scale"
 msgstr "Augmenter l'échelle d'affichage"
 
-#: src/frontend.cpp:3972
+#: src/frontend.cpp:4026
 #, c-format
 msgid "Display Scale Increased to: %u%%"
 msgstr "Échelle d'affichage augmentée à : %u%%"
 
-#: src/frontend.cpp:3973
-#: src/frontend.cpp:3989
+#: src/frontend.cpp:4027
+#: src/frontend.cpp:4043
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
 msgstr "Vous pouvez régler l'échelle d'affichage à tout moment dans le menu Options Vidéo."
 
-#: src/frontend.cpp:3988
+#: src/frontend.cpp:4042
 msgid "Tip: Adjusting Display Scale"
 msgstr "Astuce : Ajuster l'échelle d'affichage"
 
@@ -16485,54 +16499,54 @@ msgstr "Afficher uniquement les technologies préférées\n"
 
 #: src/hci/groups.cpp:141
 msgid "Select / Assign Group Number: "
-msgstr ""
+msgstr "Sélectionner / Assigner un numéro de groupe : "
 
 #: src/hci/groups.cpp:144
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Groupe %u"
 
 #: src/hci/groups.cpp:145
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "Sélectionnez les unités dans le groupe %u"
 
 #: src/hci/groups.cpp:146
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "Assigner les unités sélectionnées au groupe %u"
 
 #: src/hci/groups.cpp:147
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "Centrer la caméra sur ce groupe en cliquant ou en tapant deux fois"
 
 #: src/hci/groups.cpp:257
 msgid "View and configure groups of units, which can be quickly selected and ordered."
-msgstr ""
+msgstr "Voir et configurer les groupes d'unités, qui peuvent être rapidement sélectionnés et commandés."
 
 #: src/hci/groups.cpp:259
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
-msgstr ""
+msgstr "Les boutons de groupe clignoteront en rouge lorsque les unités sont perdues (ou subissent beaucoup de dégâts)."
 
 #: src/hci/groups.cpp:261
 msgid "Unit Groups"
-msgstr ""
+msgstr "Groupe d'unités"
 
 #: src/hci/groups.cpp:263
 msgid "Select a Group"
-msgstr ""
+msgstr "Sélectionner un Groupe"
 
 #: src/hci/groups.cpp:264
 msgid "Assign Selected Units to a Group"
-msgstr ""
+msgstr "Assigner les unités sélectionnées au Groupe"
 
 #: src/hci/groups.cpp:265
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
-msgstr ""
+msgstr "Centrer la caméra sur un groupe en cliquant ou en appuyant deux fois sur le bouton du groupe"
 
 #: src/hci/groups.cpp:359
 msgid "Unit Groups:"
-msgstr ""
+msgstr "Groupes d'unités :"
 
 #: src/hci/manufacture.cpp:431
 msgid "Construction Progress"
@@ -16613,11 +16627,11 @@ msgstr "Réactions"
 
 #: src/hci/quickchat.cpp:2294
 msgid "Taunts"
-msgstr ""
+msgstr "Provocations"
 
 #: src/hci/quickchat.cpp:2322
 msgid "Coordination"
-msgstr ""
+msgstr "Coordinateur"
 
 #: src/hci/quickchat.cpp:2353
 msgid "Suggestions"
@@ -16856,11 +16870,11 @@ msgstr "Je suis attaqué !"
 
 #: src/hci/quickchat.cpp:2567
 msgid "I'm rushing oils"
-msgstr ""
+msgstr "Je rush le pétrole"
 
 #: src/hci/quickchat.cpp:2569
 msgid "They're rushing oils!"
-msgstr ""
+msgstr "Ils rushent le pétrole !"
 
 #: src/hci/quickchat.cpp:2571
 msgid "I don't have enough power"
@@ -16874,12 +16888,12 @@ msgstr "Construire plus d'unités"
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2578
 msgid "Build different units"
-msgstr ""
+msgstr "Construis les unités différentes"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2581
 msgid "Check team strategy view"
-msgstr ""
+msgstr "Regarde la vue stratégique de l'équipe"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2584
@@ -16904,7 +16918,7 @@ msgstr "Réparez vos unités"
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2596
 msgid "Build repair facilities"
-msgstr ""
+msgstr "Construis les stations de réparations"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2599
@@ -16918,7 +16932,7 @@ msgstr "Capturer les puits de pétrole"
 
 #: src/hci/quickchat.cpp:2606
 msgid "That didn't go well..."
-msgstr ""
+msgstr "Ça ne s'est pas bien passé..."
 
 #: src/hci/quickchat.cpp:2608
 msgid "I have another plan"
@@ -16942,7 +16956,7 @@ msgstr "Échec d'envoi du message - essayez à nouveau"
 
 #: src/hci/quickchat.cpp:2622
 msgid "Map Downloaded"
-msgstr ""
+msgstr "Cartes téléchargées"
 
 #: src/hci/quickchat.cpp:2732
 msgid "Bot Allies"
@@ -16966,27 +16980,27 @@ msgstr "Progression des alliés"
 
 #: src/hci/teamstrategy.cpp:90
 msgid "Tanks"
-msgstr ""
+msgstr "Tanks"
 
 #: src/hci/teamstrategy.cpp:94
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cyborgs"
 
 #: src/hci/teamstrategy.cpp:827
 msgid "No teammates."
-msgstr ""
+msgstr "Pas de coéquipiers."
 
 #: src/hci/teamstrategy.cpp:831
 msgid "Waiting for other teams to finish planning."
-msgstr ""
+msgstr "En attente de la fin de la planification des autres équipes."
 
 #: src/hci/teamstrategy.cpp:949
 msgid "Weapons:"
-msgstr ""
+msgstr "Armes :"
 
 #: src/hci/teamstrategy.cpp:966
 msgid "Units:"
-msgstr ""
+msgstr "Unités :"
 
 #: src/ingameop.cpp:114
 #: src/ingameop.cpp:191
@@ -17092,7 +17106,7 @@ msgstr "Sauvegarder une campagne"
 msgid "Save Skirmish Game"
 msgstr "Sauvegarder une escarmouche"
 
-#: src/init.cpp:811
+#: src/init.cpp:813
 #, c-format
 msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
@@ -17574,11 +17588,11 @@ msgstr "Envoyer un message à l'équipe"
 
 #: src/input/keyconfig.cpp:157
 msgid "Send Global Quick Chat"
-msgstr ""
+msgstr "Envoyer un chat rapide global"
 
 #: src/input/keyconfig.cpp:158
 msgid "Send Team Quick Chat"
-msgstr ""
+msgstr "Envoyer le chat rapide de l'équipe"
 
 #: src/input/keyconfig.cpp:159
 msgid "Drop a beacon"
@@ -17634,7 +17648,7 @@ msgstr "Sélectionner toutes les unités sévèrement endommagées"
 #: src/input/keyconfig.cpp:174
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Sélectionnez toutes les unités de terre de combat avec des points de vie >50% et aucun groupe."
 
 #: src/input/keyconfig.cpp:175
 msgid "Select all Half-tracks"
@@ -18043,24 +18057,24 @@ msgstr "Rejoindre la demande de %s"
 msgid "Allow"
 msgstr "Autoriser"
 
-#: src/intelmap.cpp:506
+#: src/intelmap.cpp:513
 #: src/keybind.cpp:1400
 msgid "PAUSED"
 msgstr "EN PAUSE"
 
-#: src/intelmap.cpp:1273
+#: src/intelmap.cpp:1280
 msgid "New Intelligence Report"
 msgstr "Nouveau rapport du Bureau Central"
 
-#: src/intelmap.cpp:1309
+#: src/intelmap.cpp:1316
 msgid "Research Update"
 msgstr "Amélioration de la recherche"
 
-#: src/intelmap.cpp:1311
+#: src/intelmap.cpp:1318
 msgid "Project Goals and Updates"
 msgstr "Objectifs du Projet et mises à jour"
 
-#: src/intelmap.cpp:1313
+#: src/intelmap.cpp:1320
 msgid "Current Objective"
 msgstr "Objectif actuel"
 
@@ -18098,7 +18112,7 @@ msgstr "Voler en cercle"
 
 #: src/intorder.cpp:191
 msgid "Accept Retreating Units"
-msgstr ""
+msgstr "Accepter les unités en retrait"
 
 #: src/keybind.cpp:121
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -18110,16 +18124,16 @@ msgstr "Attention! Ce code de triche est buggé. Nous vous recommandons de ne PA
 
 #: src/keybind.cpp:160
 msgid "Gateways toggled."
-msgstr ""
+msgstr "Passerelles activées."
 
 #: src/keybind.cpp:166
 msgid "Path display toggled."
-msgstr ""
+msgstr "L'affichage du chemin a été basculé."
 
 #: src/keybind.cpp:194
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "Joueur %d: Énergie %d"
 
 #: src/keybind.cpp:220
 msgid "Ouch! Droid's health is down 20%!"
@@ -18228,7 +18242,7 @@ msgstr "Énergie infinie activée"
 
 #: src/keybind.cpp:798
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "Valeurs d'éclairage pour toutes les tuiles recalculées"
 
 #: src/keybind.cpp:828
 msgid "All items made available"
@@ -18236,7 +18250,7 @@ msgstr "Tout les éléments sont disponibles"
 
 #: src/keybind.cpp:853
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "Informations sur la tuile enregistrées dans le journal"
 
 #: src/keybind.cpp:868
 msgid "Fog on"
@@ -18294,7 +18308,7 @@ msgstr "ESCARMOUCHE"
 
 #: src/keybind.cpp:1437
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "DIFFICULTÉ : SUPER FACILE"
 
 #: src/keybind.cpp:1440
 msgid "DIFFICULTY: EASY"
@@ -18462,23 +18476,23 @@ msgstr "Mini-carte montrant le relief"
 
 #: src/keybind.cpp:2519
 msgid "Asserts turned off"
-msgstr ""
+msgstr "Assertions désactivées"
 
 #: src/keybind.cpp:2567
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "La sauvegarde rapide n'est pas autorisé pour les parties en multijoueur ou en tutoriel"
 
 #: src/keybind.cpp:2587
 msgid "QuickSave failed"
-msgstr ""
+msgstr "La sauvegarde rapide a échoué"
 
 #: src/keybind.cpp:2596
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Le chargement rapide n'est pas autorisé pour les parties en multijoueur ou en tutoriel"
 
 #: src/keybind.cpp:2623
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "Le fichier de sauvegarde rapide n'existe pas encore"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
@@ -18486,7 +18500,7 @@ msgstr "<not bound>"
 
 #: src/keyedit.cpp:170
 msgid "<Fixed Key>"
-msgstr ""
+msgstr "<Touche assignée>"
 
 #: src/keyedit.cpp:549
 msgid "KEY MAPPING"
@@ -18496,7 +18510,7 @@ msgstr "RACOURCIS CLAVIER"
 #: src/multiint.cpp:1510
 #: src/musicmanager.cpp:773
 #: src/titleui/gamefind.cpp:84
-#: src/titleui/protocol.cpp:82
+#: src/titleui/protocol.cpp:84
 msgid "Return To Previous Screen"
 msgstr "Revenir à l'écran précédent"
 
@@ -18524,12 +18538,12 @@ msgstr "triché"
 #: src/loadsave.cpp:1166
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "Sauvegarde auto %s"
 
 #: src/loadsave.cpp:1171
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "La sauvegarde automatique %s a échoué"
 
 #: src/loop.cpp:264
 #: src/loop.cpp:280
@@ -18543,11 +18557,11 @@ msgstr "Charger le transporteur"
 
 #: src/mission.cpp:1933
 msgid "Shows the number of units currently loaded into the mission transporter, and the total capacity."
-msgstr ""
+msgstr "Affiche le nombre d'unités actuellement chargées dans le transporteur de mission et la capacité totale."
 
 #: src/mission.cpp:1934
 msgid "Open the Transporter Load Menu"
-msgstr ""
+msgstr "Ouvrir le menu de chargement des transporteurs"
 
 #: src/mission.cpp:2299
 msgid "OBJECTIVE ACHIEVED by cheating!"
@@ -18665,7 +18679,7 @@ msgstr "Tournoi IA : %3.1f%% victoires, %3.1f%% défaites, %3.1f%% égalités"
 
 #: src/multiint.cpp:1096
 msgid "Unable to join:"
-msgstr ""
+msgstr "Impossible de rejoindre :"
 
 #: src/multiint.cpp:1096
 msgid "Error while joining."
@@ -18861,7 +18875,7 @@ msgstr "Impossible d'échanger avec l'hôte"
 #: src/multiint.cpp:4147
 #: src/multiint.cpp:7581
 #: src/multiint.cpp:7872
-#: src/titleui/protocol.cpp:187
+#: src/titleui/protocol.cpp:189
 msgid "Spectator"
 msgstr "Spectateur"
 
@@ -18880,11 +18894,11 @@ msgstr "L'hôte vous a exclu de la partie."
 #: src/multiint.cpp:2283
 #, c-format
 msgid "The host has banned %s from the game!"
-msgstr ""
+msgstr "L'hôte a banni %s de la partie !"
 
 #: src/multiint.cpp:2284
 msgid "The host has banned you from the game."
-msgstr ""
+msgstr "L'hôte vous a banni du jeu."
 
 #: src/multiint.cpp:2319
 #, c-format
@@ -18966,7 +18980,7 @@ msgstr "Le joueur %s s'est déplacé vers les spectateurs"
 #: src/multiint.cpp:3103
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
-msgstr ""
+msgstr "Impossible de déplacer %s vers les joueurs - aucun emplacement disponible"
 
 #: src/multiint.cpp:3124
 msgid "Spectator would like to become a Player"
@@ -19048,15 +19062,15 @@ msgstr "(aucun)"
 
 #: src/multiint.cpp:4241
 msgid "Alt Name:"
-msgstr ""
+msgstr "Nom alternatif :"
 
 #: src/multiint.cpp:4260
 msgid "Player rating:"
-msgstr ""
+msgstr "Classement du joueur :"
 
 #: src/multiint.cpp:4271
 msgid "Host provided"
-msgstr ""
+msgstr "Hôte fourni"
 
 #: src/multiint.cpp:4275
 #, c-format
@@ -19117,7 +19131,7 @@ msgstr "Exclu de la partie"
 
 #: src/multiint.cpp:4863
 msgid "Quick Chat"
-msgstr ""
+msgstr "Chat rapide"
 
 #: src/multiint.cpp:5181
 msgid "Copy Text to Clipboard"
@@ -19126,12 +19140,12 @@ msgstr "Copier le texte dans le presse-papiers"
 #: src/multiint.cpp:5196
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "Mettre en sourdine : %s"
 
 #: src/multiint.cpp:5200
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "Réactiver le son du joueur : %s"
 
 #: src/multiint.cpp:5294
 msgid "CHAT"
@@ -19140,11 +19154,11 @@ msgstr "CHAT"
 #: src/multiint.cpp:5946
 #: src/titleui/gamefind.cpp:238
 msgid "Multiplayer Lobby Support Unavailable"
-msgstr ""
+msgstr "Support de lobby multijoueur indisponible"
 
 #: src/multiint.cpp:5948
 msgid "Your client cannot connect to the mutiplayer lobby."
-msgstr ""
+msgstr "Votre client ne peut pas se connecter au lobby du multijoueur."
 
 #: src/multiint.cpp:5950
 #: src/updatemanager.cpp:621
@@ -19188,17 +19202,17 @@ msgstr "L'hôte démarre la partie"
 #: src/multiint.cpp:6526
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "%s se déplace vers les spectateurs !"
 
 #: src/multiint.cpp:6553
 #, c-format
 msgid "Asking %s to move to Players..."
-msgstr ""
+msgstr "A demandé %s de passer aux joueurs..."
 
 #: src/multiint.cpp:6681
 #: src/multiint.cpp:7006
 msgid "Disconnected from host:"
-msgstr ""
+msgstr "Déconnecté de l'hôte :"
 
 #: src/multiint.cpp:6681
 msgid "Host supplied invalid options"
@@ -19211,7 +19225,7 @@ msgstr "Vous avez été exclu : "
 #: src/multiint.cpp:6935
 #: src/multiint.cpp:7271
 msgid "Connection lost:"
-msgstr ""
+msgstr "Connexion perdue :"
 
 #: src/multiint.cpp:6935
 msgid "No connection to host."
@@ -19260,7 +19274,7 @@ msgstr "Détection UPnP en cours..."
 #: src/multiint.cpp:7336
 #, c-format
 msgid "UPnP detection disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "La détection UPnP est désactivée. La configuration automatique du port %d ne sera pas possible."
 
 #: src/multiint.cpp:7575
 #: src/multiint.cpp:7876
@@ -19325,7 +19339,7 @@ msgstr "%s a quitté la partie"
 #: src/multijoin.cpp:392
 #, c-format
 msgid "%s joined the Game"
-msgstr ""
+msgstr "%s a rejoint la partie"
 
 #: src/multijoin.cpp:483
 #, c-format
@@ -19380,7 +19394,7 @@ msgid "Apply Defaults and Return To Previous Screen"
 msgstr "Appliquer les réglages par défaut et revenir à l'écran précédent"
 
 #: src/multilimit.cpp:188
-#: src/titleui/protocol.cpp:179
+#: src/titleui/protocol.cpp:181
 msgid "Accept Settings"
 msgstr "Valider les réglages"
 
@@ -19451,7 +19465,7 @@ msgstr "Donner de l'énergie au joueur"
 
 #: src/multimenu.cpp:1003
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "Activer/désactiver le mode silencieux"
 
 #: src/multimenu.cpp:1200
 msgid "Sent/Received per sec —"
@@ -19478,40 +19492,40 @@ msgstr "Pack : %lu/%lu"
 
 #: src/multimenu.cpp:1394
 msgid "Players View"
-msgstr ""
+msgstr "Vue du joueur"
 
 #: src/multimenu.cpp:1395
 msgid "Team Strategy"
-msgstr ""
+msgstr "Stratégie d'équipe"
 
 #: src/multiopt.cpp:306
 #, c-format
 msgid "Changed structure limits [%d]:"
-msgstr ""
+msgstr "Limite de bâtiments modifié [%d] :"
 
 #: src/multiopt.cpp:318
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
+msgstr "[%d] Limite [%s]: %u (par défaut : %u)"
 
 #: src/multiopt.cpp:322
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
+msgstr "[%d] Limite [%s]: %u (par défaut : pas de limite)"
 
 #: src/multiopt.cpp:330
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%d] Limite supérieure à numStructureStats (%u) : %u"
 
 #: src/multiopt.cpp:337
 msgid "Limits were reset to default."
-msgstr ""
+msgstr "Les limites ont été réinitialisées à la valeur par défaut."
 
 #: src/multiopt.cpp:345
 #, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
-msgstr ""
+msgstr "L'hôte a initialisé %u limites, impossible de les afficher en raison de mods"
 
 #: src/multiopt.cpp:426
 msgid "MAP REQUESTED!"
@@ -19519,7 +19533,7 @@ msgstr "CARTE REQUISE !"
 
 #: src/multiopt.cpp:451
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "MOD REQUIS !"
 
 #: src/multiopt.cpp:475
 #: src/multiplay.cpp:2104
@@ -19664,17 +19678,17 @@ msgstr "%s (%d) a autorisé le changement de carte. Total : %d/%d"
 #: src/multivote.cpp:200
 #, c-format
 msgid "A player voted FOR kicking: %s"
-msgstr ""
+msgstr "Un joueur a voté POUR l'expulsion : %s"
 
 #: src/multivote.cpp:208
 #, c-format
 msgid "A player voted AGAINST kicking: %s"
-msgstr ""
+msgstr "Un joueur a voté CONTRE l'expulsion : %s"
 
 #: src/multivote.cpp:214
 #, c-format
 msgid "A player's client ignored your vote to kick request (too frequent): %s"
-msgstr ""
+msgstr "Le client d'un joueur a ignoré votre vote pour l'expulsion (trop fréquent): %s"
 
 #: src/multivote.cpp:283
 msgid "Vote"
@@ -19686,56 +19700,56 @@ msgstr "Autoriser l'hôte à changer de carte ou aléatoire?"
 
 #: src/multivote.cpp:334
 msgid "A vote was started to kick you from the game."
-msgstr ""
+msgstr "Un vote a commencé à vous expulser du jeu."
 
 #: src/multivote.cpp:349
 #, c-format
 msgid "A vote was started to kick %s from the game."
-msgstr ""
+msgstr "Un vote a commencé pour expulser %s de la partie."
 
 #: src/multivote.cpp:357
 #, c-format
 msgid "Vote To Kick: %s"
-msgstr ""
+msgstr "Vote pour expulser : %s"
 
 #: src/multivote.cpp:358
 #, c-format
 msgid "Should player %s be kicked from the game?"
-msgstr ""
+msgstr "Le joueur %s doit-il être expulsé de la partie ?"
 
 #: src/multivote.cpp:359
 msgid "Yes, Kick Them"
-msgstr ""
+msgstr "Oui, expulsons-le"
 
 #: src/multivote.cpp:384
 #, c-format
 msgid "Starting vote to kick player: %s"
-msgstr ""
+msgstr "Début du vote pour expulser le joueur : %s"
 
 #: src/multivote.cpp:618
 #, c-format
 msgid "The vote to kick player %s succeeded (sufficient votes in favor) - kicking"
-msgstr ""
+msgstr "Le vote pour expulser le joueur %s a réussi (suffisamment de votes en faveur) - en cours d'expulsion"
 
 #: src/multivote.cpp:628
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes in favor)"
-msgstr ""
+msgstr "Le vote pour expulser le joueur %s a échoué (insuffisamment de votes)"
 
 #: src/multivote.cpp:652
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes before timeout)"
-msgstr ""
+msgstr "Le vote pour expulser le joueur %s a échoué (insuffisamment de votes avant l'expiration)"
 
 #: src/multivote.cpp:684
 #, c-format
 msgid "The vote to kick player %s failed"
-msgstr ""
+msgstr "Le vote pour expulser le joueur %s a échoué"
 
 #: src/multivote.cpp:695
 #, c-format
 msgid "Cannot request vote to kick player %s yet - please wait a bit longer"
-msgstr ""
+msgstr "Impossible de demander le vote pour expulsion du joueur %s - veuillez attendre un peu"
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"
@@ -19772,12 +19786,12 @@ msgstr "Vous ne croyez pas qu'on est un peu lourd pour entrer là dedans Command
 
 #: src/qtscript.cpp:907
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "Impossible de charger l'IA sélectionnée ! Vérifiez vos logs pour voir pourquoi."
 
 #: src/qtscript.cpp:910
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "Le script IA %s a été chargé pour le joueur actuel !"
 
 #: src/research.cpp:1043
 #, c-format
@@ -19874,34 +19888,34 @@ msgstr "Unités spéciales : %u"
 msgid "Hero: %u"
 msgstr "Héros : %u"
 
-#: src/scores.cpp:321
+#: src/scores.cpp:343
 msgid "Unit Losses"
 msgstr "Unités perdues"
 
-#: src/scores.cpp:323
+#: src/scores.cpp:345
 msgid "Structure Losses"
 msgstr "Bâtiments perdus"
 
-#: src/scores.cpp:325
+#: src/scores.cpp:347
 msgid "Force Information"
 msgstr "Bilan de renforcement de la base :"
 
-#: src/scores.cpp:402
+#: src/scores.cpp:424
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr "ARTEFACTS RÉCUPÉRÉS : %d"
 
-#: src/scores.cpp:408
+#: src/scores.cpp:430
 #, c-format
 msgid "Mission Time - %s"
 msgstr "Durée de la mission - %s"
 
-#: src/scores.cpp:414
+#: src/scores.cpp:436
 #, c-format
 msgid "Total Game Time - %s"
 msgstr "Temps de jeu total - %s"
 
-#: src/scores.cpp:421
+#: src/scores.cpp:443
 msgid "You cheated!"
 msgstr "Vous avez triché !"
 
@@ -19915,51 +19929,51 @@ msgstr "Chat : équipe"
 
 #: src/screens/helpscreen.cpp:123
 msgid "Close Help Mode"
-msgstr ""
+msgstr "Fermer le mode Aide"
 
 #: src/screens/helpscreen.cpp:218
 msgid "Click/Tap"
-msgstr ""
+msgstr "Cliquer/Appuyer"
 
 #: src/screens/helpscreen.cpp:220
 msgid "Right-Click"
-msgstr ""
+msgstr "Clic-droit"
 
 #: src/screens/helpscreen.cpp:222
 msgid "Click/Tap and Hold"
-msgstr ""
+msgstr "Cliquer/Appuyer et maintenir"
 
 #: src/screens/helpscreen.cpp:224
 msgid "Other"
-msgstr ""
+msgstr "Autre"
 
 #: src/screens/helpscreen.cpp:277
 msgid "Interactions:"
-msgstr ""
+msgstr "Interactions :"
 
 #: src/screens/helpscreen.cpp:332
 msgid "Related Keymappings:"
-msgstr ""
+msgstr "D'autres liaisons de touches :"
 
 #: src/screens/netpregamescreen.cpp:241
 msgid "Loading Status:"
-msgstr ""
+msgstr "Statut du chargement :"
 
 #: src/screens/netpregamescreen.cpp:613
 msgid "TEAM STRATEGY"
-msgstr ""
+msgstr "STRATEGIE DE L'ÉQUIPE"
 
 #: src/screens/netpregamescreen.cpp:744
 msgid "Game will start in ..."
-msgstr ""
+msgstr "Ça démarre dans..."
 
 #: src/screens/netpregamescreen.cpp:754
 msgid "Waiting for other players ..."
-msgstr ""
+msgstr "En attente des autres joueurs..."
 
 #: src/screens/netpregamescreen.cpp:761
 msgid "Team Planning"
-msgstr ""
+msgstr "Planification de l'équipe"
 
 #: src/selection.cpp:374
 #: src/selection.cpp:456
@@ -19980,7 +19994,7 @@ msgstr "Impossible de localiser le moindre commandant !"
 
 #: src/selection.cpp:517
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "Impossible de trouver le bâtiment requis !"
 
 #: src/seqdisp.cpp:576
 msgid "Loading video"
@@ -19988,7 +20002,7 @@ msgstr "Chargement de la vidéo"
 
 #: src/spectatorwidgets.cpp:121
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Afficher les statistiques des joueurs"
 
 #: src/spectatorwidgets.cpp:546
 msgid "Weapon Grade"
@@ -20004,15 +20018,15 @@ msgstr "Energie actuelle / Energie par seconde"
 
 #: src/spectatorwidgets.cpp:787
 msgid "PwrLost"
-msgstr ""
+msgstr "ÉnergiePerdue"
 
 #: src/spectatorwidgets.cpp:788
 msgid "PwrWon"
-msgstr ""
+msgstr "ÉnergieGagnée"
 
 #: src/spectatorwidgets.cpp:789
 msgid "Lab Use"
-msgstr ""
+msgstr "Utilisation lab"
 
 #: src/spectatorwidgets.cpp:793
 msgid "Kinetic Armor"
@@ -20025,110 +20039,110 @@ msgstr "(Tanks / Cyborgs)"
 
 #: src/stats.cpp:1510
 msgid "Cannons"
-msgstr ""
+msgstr "Canons"
 
 #: src/stats.cpp:1512
 msgid "Mortars"
-msgstr ""
+msgstr "Mortiers"
 
 #: src/stats.cpp:1514
 msgid "Missiles"
-msgstr ""
+msgstr "Missiles"
 
 #: src/stats.cpp:1516
 msgid "Rockets"
-msgstr ""
+msgstr "Roquettes"
 
 #: src/stats.cpp:1518
 msgid "Energy"
-msgstr ""
+msgstr "Énergie"
 
 #: src/stats.cpp:1520
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 #. TRANSLATORS: "Flame" weapons class
 #: src/stats.cpp:1523
 msgid "Flame"
-msgstr ""
+msgstr "Flamme"
 
 #: src/stats.cpp:1525
 msgid "Howitzers"
-msgstr ""
+msgstr "Obusier"
 
 #. TRANSLATORS: A short-form for "Machine Guns" (should be shorter than the translated full form - if not, just use the full translation for "Machine Guns")
 #: src/stats.cpp:1530
 msgid "MG"
-msgstr ""
+msgstr "MG"
 
 #: src/stats.cpp:1534
 msgid "Machine Guns"
-msgstr ""
+msgstr "Mitrailleuses"
 
 #. TRANSLATORS: "Electronic" weapon class
 #: src/stats.cpp:1538
 msgid "Electronic"
-msgstr ""
+msgstr "Électronique"
 
 #. TRANSLATORS: A short-form for "Anti-Air" weapons class (should be shorter than the translated full form - if not, just use the full translation for "Anti-Air")
 #: src/stats.cpp:1543
 msgid "A-A"
-msgstr ""
+msgstr "DCA"
 
 #: src/stats.cpp:1547
 msgid "Anti-Air"
-msgstr ""
+msgstr "Anti-Aérien"
 
 #: src/stats.cpp:1550
 msgid "Slow Missile"
-msgstr ""
+msgstr "Missile lent"
 
 #: src/stats.cpp:1552
 msgid "Slow Rocket"
-msgstr ""
+msgstr "Roquette lente"
 
 #. TRANSLATORS: A short-form for "Laser Satellite" weapons class - some just use "Las-Sat" or "LasSat"
 #: src/stats.cpp:1557
 msgid "Las-Sat"
-msgstr ""
+msgstr "Sat-Las"
 
 #: src/stats.cpp:1561
 msgid "Laser Satellite"
-msgstr ""
+msgstr "Satellite laser"
 
 #: src/stats.cpp:1564
 msgid "Bombs"
-msgstr ""
+msgstr "Bombes"
 
 #: src/stats.cpp:1566
 msgid "Command"
-msgstr ""
+msgstr "Commande"
 
 #. TRANSLATORS: "EMP" (electromagnetic pulse) weapons class - probably should keep it as "EMP" (or the respective acronym in your language)
 #: src/stats.cpp:1569
 msgid "EMP"
-msgstr ""
+msgstr "IEM"
 
-#: src/structure.cpp:2616
+#: src/structure.cpp:2734
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr "Vous ne pouvez pas construire plus d'unités, la limite d'unité est atteinte - La production est stoppée"
 
-#: src/structure.cpp:2624
+#: src/structure.cpp:2742
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
 msgstr "Impossible de produire \"%s\" sans un Relais de Commandement - Arrêt de la production"
 
-#: src/structure.cpp:2629
+#: src/structure.cpp:2747
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
 msgstr "Impossible de produire \"%s\", limite de commandants atteinte - Arrêt de la production"
 
-#: src/structure.cpp:2637
+#: src/structure.cpp:2755
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr "Impossible de produire plus de \"%s\", limite d'Unités de Construction atteinte - Arrêt de la production"
 
-#: src/structure.cpp:5286
+#: src/structure.cpp:5404
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
@@ -20136,25 +20150,25 @@ msgstr[0] "%s - %u Unités assignées - Points de vie %d/%d"
 msgstr[1] "%s - %u Unités assignées - Points de vie %d/%d"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5291
+#: src/structure.cpp:5409
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %d - portée du capteur %d - Brouillage %d"
 
-#: src/structure.cpp:5306
+#: src/structure.cpp:5424
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Unités affectées - Dégâts %d/%d"
 msgstr[1] "%s - %u Unités affectées - Dégâts %d/%d"
 
-#: src/structure.cpp:5311
-#: src/structure.cpp:5324
-#: src/structure.cpp:5333
-#: src/structure.cpp:5360
-#: src/structure.cpp:5370
-#: src/structure.cpp:5378
-#: src/structure.cpp:5387
+#: src/structure.cpp:5429
+#: src/structure.cpp:5442
+#: src/structure.cpp:5451
+#: src/structure.cpp:5478
+#: src/structure.cpp:5488
+#: src/structure.cpp:5496
+#: src/structure.cpp:5505
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr "%s - Points de vie : %d/%d"
@@ -20162,95 +20176,95 @@ msgstr "%s - Points de vie : %d/%d"
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #. "born": Time the game object was born
 #. "depth": Depth of structure's foundation
-#: src/structure.cpp:5318
+#: src/structure.cpp:5436
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
-msgstr ""
+msgstr "ID %d - armure %d|%d - portée du capteur %d - Brouillage %d - né %u - profondeur %.02f"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #. "state": The "RepairState" (printed as an integer, Idle = 0, Repairing = 1)
-#: src/structure.cpp:5329
+#: src/structure.cpp:5447
 #, c-format
 msgid "ID %d - State %d"
-msgstr ""
+msgstr "ID %d - État %d"
 
-#: src/structure.cpp:5336
+#: src/structure.cpp:5454
 #, c-format
 msgid "ID %d - %s"
-msgstr ""
+msgstr "ID %d - %s"
 
-#: src/structure.cpp:5349
+#: src/structure.cpp:5467
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr "%s - %u connexions établies sur %u - Points de vie : %d/%d"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5354
+#: src/structure.cpp:5472
 #, c-format
 msgid "ID %u - Multiplier: %u"
-msgstr ""
+msgstr "ID %u - Multiplicateur : %u"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5364
+#: src/structure.cpp:5482
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr ""
+msgstr "ID %u - Sortie de production : %u - Points de construction : %u - Résistance : %d / %d"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5374
+#: src/structure.cpp:5492
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "ID %u - Points de recherche : %u"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5382
+#: src/structure.cpp:5500
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "tuile %d,%d - cible %s"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5391
+#: src/structure.cpp:5509
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %u - portée du capteur %d - Brouillage %d"
 
-#: src/structure.cpp:5509
-#: src/structure.cpp:5554
+#: src/structure.cpp:5627
+#: src/structure.cpp:5672
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé(e)"
 
-#: src/structure.cpp:5681
+#: src/structure.cpp:5799
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
-#: src/structure.cpp:5723
+#: src/structure.cpp:5841
 msgid "Factory Reward - Propulsion"
 msgstr "Butin d'usine - Propulsion"
 
-#: src/structure.cpp:5745
+#: src/structure.cpp:5863
 msgid "Factory Reward - Body"
 msgstr "Butin d'usine - Châssis"
 
-#: src/structure.cpp:5767
+#: src/structure.cpp:5885
 msgid "Factory Reward - Weapon"
 msgstr "Butin d'usine - Armes"
 
-#: src/structure.cpp:5775
+#: src/structure.cpp:5893
 msgid "Factory Reward - Nothing"
 msgstr "Butin d'usine - Rien"
 
-#: src/structure.cpp:5805
+#: src/structure.cpp:5923
 msgid "Repair Facility Award - Repair"
 msgstr "Butin de centre de réparation - Réparation"
 
-#: src/structure.cpp:5811
+#: src/structure.cpp:5929
 msgid "Repair Facility Award - Nothing"
 msgstr "Butin de centre de réparation - Rien"
 
-#: src/terrain.cpp:2406
+#: src/terrain.cpp:2567
 msgid "Classic"
-msgstr ""
+msgstr "Classique"
 
 #: src/titleui/gamefind.cpp:81
 msgid "GAMES"
@@ -20393,23 +20407,23 @@ msgid "OK"
 msgstr "OK"
 
 #: src/titleui/passbox.cpp:97
-#: src/titleui/protocol.cpp:181
+#: src/titleui/protocol.cpp:183
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/titleui/protocol.cpp:79
+#: src/titleui/protocol.cpp:81
 msgid "CONNECTION"
 msgstr "CONNEXION"
 
-#: src/titleui/protocol.cpp:84
+#: src/titleui/protocol.cpp:86
 msgid "Lobby"
 msgstr "Antichambre"
 
-#: src/titleui/protocol.cpp:85
+#: src/titleui/protocol.cpp:87
 msgid "IP"
 msgstr "IP"
 
-#: src/titleui/protocol.cpp:201
+#: src/titleui/protocol.cpp:203
 msgid "IP Address or Machine Name"
 msgstr "Adresse IP ou nom du serveur"
 
@@ -20423,7 +20437,7 @@ msgstr "Envoyer le transporteur"
 #: src/transporter.cpp:313
 #: src/transporter.cpp:364
 msgid "Launch the Transporter"
-msgstr ""
+msgstr "Envoyer le transporteur"
 
 #: src/transporter.cpp:1024
 msgid "There is not enough room in the Transport!"
@@ -20444,7 +20458,7 @@ msgstr "Une nouvelle version de Warzone 2100 (%s) est disponible!"
 
 #: src/updatemanager.cpp:486
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "Cette nouvelle version inclut d'importantes corrections de bugs et mises à jour, et il est recommandé de mettre à jour maintenant."
 
 #: src/updatemanager.cpp:491
 msgid "A new build of Warzone 2100 is available!"
@@ -20501,7 +20515,7 @@ msgstr "VOUS AVEZ GAGNÉ !"
 msgid "YOU WERE DEFEATED!"
 msgstr "VOUS AVEZ PERDU !"
 
-#: src/wzscriptdebug.cpp:2365
+#: src/wzscriptdebug.cpp:2445
 msgid "Script Debugger"
 msgstr "Débogueur de script"
 
