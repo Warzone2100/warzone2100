@@ -122,19 +122,19 @@
 	},
 	"object_1": {
 		"label": "COHeavyFacL-b2",
-		"id": 223,
+		"id": 220,
 		"player": 2,
 		"type": 1
 	},
 	"object_2": {
 		"label": "COHeavyFacR-b2",
-		"id": 225,
+		"id": 221,
 		"player": 2,
 		"type": 1
 	},
 	"object_3": {
 		"label": "COVtolFac-b3",
-		"id": 227,
+		"id": 226,
 		"player": 2,
 		"type": 1
 	}

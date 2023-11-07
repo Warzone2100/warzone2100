@@ -86,13 +86,13 @@
 
 	"object_0": {
 		"label": "NPLeftFactory",
-		"id": 496,
+		"id": 494,
 		"player": 1,
 		"type": 1
 	},
 	"object_1": {
 		"label": "NPRightFactory",
-		"id": 483,
+		"id": 8,
 		"player": 1,
 		"type": 1
 	},
@@ -104,7 +104,7 @@
 	},
 	"object_3": {
 		"label": "NPResearchFacility",
-		"id": 485,
+		"id": 484,
 		"player": 1,
 		"type": 1
 	},

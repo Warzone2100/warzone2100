@@ -169,13 +169,13 @@
 	},
 	"object_5": {
 		"label": "COHeavyFactory-b2L",
-		"id": 476,
+		"id": 473,
 		"player": 2,
 		"type": 1
 	},
 	"object_6": {
 		"label": "COHeavyFactory-b2R",
-		"id": 478,
+		"id": 473,
 		"player": 2,
 		"type": 1
 	},
@@ -187,7 +187,7 @@
 	},
 	"object_8": {
 		"label": "COMediumFactory",
-		"id": 262,
+		"id": 261,
 		"player": 2,
 		"type": 1
 	}

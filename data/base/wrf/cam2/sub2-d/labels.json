@@ -88,7 +88,7 @@
 	},
 	"object_2": {
 		"label": "COHeavyFactory",
-		"id": 3231,
+		"id": 3143,
 		"player": 2,
 		"type": 1
 	},
@@ -100,7 +100,7 @@
 	},
 	"object_4": {
 		"label": "COResearchLab",
-		"id": 4175,
+		"id": 4174,
 		"player": 2,
 		"type": 1
 	},

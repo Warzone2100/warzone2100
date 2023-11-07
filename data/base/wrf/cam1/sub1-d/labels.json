@@ -196,19 +196,19 @@
 	},
 	"object_1": {
 		"label": "NPFactoryW",
-		"id": 670,
+		"id": 290,
 		"player": 1,
 		"type": 1
 	},
 	"object_2": {
 		"label": "NPFactoryE",
-		"id": 671,
+		"id": 292,
 		"player": 1,
 		"type": 1
 	},
 	"object_3": {
 		"label": "NPFactoryNE",
-		"id": 663,
+		"id": 661,
 		"player": 1,
 		"type": 1
 	},

@@ -181,13 +181,13 @@
 
 	"object_0": {
 		"label": "NXPowerGenArti",
-		"id": 901,
+		"id": 334,
 		"player": 3,
 		"type": 1
 	},
 	"object_1": {
 		"label": "NXResearchLabArti",
-		"id": 1011,
+		"id": 1008,
 		"player": 3,
 		"type": 1
 	},
@@ -211,7 +211,7 @@
 	},
 	"object_5": {
 		"label": "NXHvyFac-b2",
-		"id": 1065,
+		"id": 1063,
 		"player": 3,
 		"type": 1
 	},

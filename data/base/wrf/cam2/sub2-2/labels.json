@@ -113,13 +113,13 @@
 	},
 	"object_1": {
 		"label": "COFactoryEast",
-		"id": 518,
+		"id": 237,
 		"player": 2,
 		"type": 1
 	},
 	"object_2": {
 		"label": "COFactoryWest",
-		"id": 517,
+		"id": 382,
 		"player": 2,
 		"type": 1
 	},

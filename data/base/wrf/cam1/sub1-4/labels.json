@@ -138,13 +138,13 @@
 	},
 	"object_2": {
 		"label": "HeavyNPFactory",
-		"id": 461,
+		"id": 34,
 		"player": 1,
 		"type": 1
 	},
 	"object_3": {
 		"label": "MediumNPFactory",
-		"id": 480,
+		"id": 479,
 		"player": 1,
 		"type": 1
 	},
@@ -156,7 +156,7 @@
 	},
 	"object_5": {
 		"label": "NPResearchFacility",
-		"id": 458,
+		"id": 456,
 		"player": 1,
 		"type": 1
 	},

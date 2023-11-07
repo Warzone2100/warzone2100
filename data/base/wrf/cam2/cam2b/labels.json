@@ -150,13 +150,13 @@
 
 	"object_0": {
 		"label": "COHeavyFacL-b1",
-		"id": 4513,
+		"id": 518,
 		"player": 2,
 		"type": 1
 	},
 	"object_1": {
 		"label": "COHeavyFacR-b1",
-		"id": 4512,
+		"id": 520,
 		"player": 2,
 		"type": 1
 	},
@@ -174,7 +174,7 @@
 	},
 	"object_4": {
 		"label": "COResearchLab",
-		"id": 4511,
+		"id": 4510,
 		"player": 2,
 		"type": 1
 	},
@@ -186,7 +186,7 @@
 	},
 	"object_6": {
 		"label": "COHeavyFac-b4",
-		"id": 4596,
+		"id": 1414,
 		"player": 2,
 		"type": 1
 	},

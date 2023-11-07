@@ -164,7 +164,7 @@
 
 	"object_0": {
 		"label": "NPResearchFacility",
-		"id": 3580,
+		"id": 2051,
 		"player": 1,
 		"type": 1
 	},
@@ -188,13 +188,13 @@
 	},
 	"object_4": {
 		"label": "NPCentralFactory",
-		"id": 2135,
+		"id": 1530,
 		"player": 1,
 		"type": 1
 	},
 	"object_5": {
 		"label": "NPNorthFactory",
-		"id": 2136,
+		"id": 1476,
 		"player": 1,
 		"type": 1
 	},

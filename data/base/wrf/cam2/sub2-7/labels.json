@@ -115,13 +115,13 @@
 	},
 	"object_1": {
 		"label": "COVtolFactory-b4",
-		"id": 437,
+		"id": 436,
 		"player": 2,
 		"type": 1
 	},
 	"object_2": {
 		"label": "COHeavyFac-Arti-b2",
-		"id": 563,
+		"id": 209,
 		"player": 2,
 		"type": 1
 	},
@@ -139,7 +139,7 @@
 	},
 	"object_5": {
 		"label": "COHeavyFac-b4",
-		"id": 420,
+		"id": 418,
 		"player": 2,
 		"type": 1
 	},

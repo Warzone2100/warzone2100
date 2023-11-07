@@ -189,25 +189,25 @@
 	},
 	"object_3": {
 		"label": "COHeavyFac-Upgrade",
-		"id": 3672,
+		"id": 3670,
 		"player": 2,
 		"type": 1
 	},
 	"object_4": {
 		"label": "COHeavyFac-Leopard",
-		"id": 3675,
+		"id": 3673,
 		"player": 2,
 		"type": 1
 	},
 	"object_5": {
 		"label": "COVtolFacLeft-Prop",
-		"id": 4679,
+		"id": 3225,
 		"player": 2,
 		"type": 1
 	},
 	"object_6": {
 		"label": "COVtolFacRight",
-		"id": 4680,
+		"id": 3226,
 		"player": 2,
 		"type": 1
 	},
@@ -225,7 +225,7 @@
 	},
 	"object_9": {
 		"label": "COResearchLab",
-		"id": 4743,
+		"id": 2293,
 		"player": 2,
 		"type": 1
 	},

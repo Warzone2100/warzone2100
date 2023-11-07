@@ -168,37 +168,37 @@
 
 	"object_0": {
 		"label": "NX-NWFactory1",
-		"id": 724,
+		"id": 722,
 		"player": 3,
 		"type": 1
 	},
 	"object_1": {
 		"label": "NX-NWFactory2",
-		"id": 751,
+		"id": 729,
 		"player": 3,
 		"type": 1
 	},
 	"object_2": {
 		"label": "NX-NEFactory",
-		"id": 729,
+		"id": 216,
 		"player": 3,
 		"type": 1
 	},
 	"object_3": {
 		"label": "NX-SWFactory",
-		"id": 812,
+		"id": 1185,
 		"player": 3,
 		"type": 1
 	},
 	"object_4": {
 		"label": "NX-SEFactory",
-		"id": 733,
+		"id": 731,
 		"player": 3,
 		"type": 1
 	},
 	"object_5": {
 		"label": "NX-VtolFactory1",
-		"id": 748,
+		"id": 744,
 		"player": 3,
 		"type": 1
 	},
@@ -210,7 +210,7 @@
 	},
 	"object_7": {
 		"label": "NX-VtolFactory2",
-		"id": 746,
+		"id": 743,
 		"player": 3,
 		"type": 1
 	},

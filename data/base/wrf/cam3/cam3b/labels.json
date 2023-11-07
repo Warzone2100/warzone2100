@@ -159,7 +159,7 @@
 	},
 	"object_2": {
 		"label": "gammaFactory",
-		"id": 432,
+		"id": 430,
 		"player": 1,
 		"type": 1
 	},
@@ -171,7 +171,7 @@
 	},
 	"object_4": {
 		"label": "gammaResLabArti",
-		"id": 143,
+		"id": 136,
 		"player": 1,
 		"type": 1
 	},
