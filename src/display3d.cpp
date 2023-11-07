@@ -1560,14 +1560,17 @@ bool init3DView()
 	batchedObjectStatusRenderer.initialize();
 
 
-	// vertex attributes for a single triangle that covers the screen
-	gfx_api::gfxFloat screenTriangleVertices[] = {
-		-1.f, -1.f,
-		3.f, -1.f,
-		-1.f, 3.f
-	};
-	pScreenTriangleVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "screenTriangleVertices");
-	pScreenTriangleVBO->upload(sizeof(screenTriangleVertices), screenTriangleVertices);
+	if (!pScreenTriangleVBO)
+	{
+		// vertex attributes for a single triangle that covers the screen
+		gfx_api::gfxFloat screenTriangleVertices[] = {
+			-1.f, -1.f,
+			3.f, -1.f,
+			-1.f, 3.f
+		};
+		pScreenTriangleVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "screenTriangleVertices");
+		pScreenTriangleVBO->upload(sizeof(screenTriangleVertices), screenTriangleVertices);
+	}
 
 	return true;
 }
