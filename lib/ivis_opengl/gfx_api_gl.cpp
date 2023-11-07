@@ -2689,7 +2689,7 @@ int32_t gl_context::get_context_value(const context_value property)
 			// special-handling for MAX_VERTEX_OUTPUT_COMPONENTS
 			if (!gles)
 			{
-				if (GLAD_GL_VERSION_3_0)
+				if (GLAD_GL_VERSION_3_2)
 				{
 					glGetIntegerv(GL_MAX_VERTEX_OUTPUT_COMPONENTS, &value);
 				}
