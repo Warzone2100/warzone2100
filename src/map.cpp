@@ -131,6 +131,8 @@ static int numTile_names;
 static std::unique_ptr<char[]> Tile_names = nullptr;
 
 static std::unique_ptr<int[]> map; // 3D array pointer that holds the texturetype
+static int numTile_types = 0;
+
 static std::unique_ptr<bool[]> mapDecals;           // array that tells us what tile is a decal
 #define MAX_TERRAIN_TILES 0x0200  // max that we support (for now), see TILE_NUMMASK
 
@@ -436,6 +438,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
 
+	numTile_types = numlines;
 	map = std::unique_ptr<int[]> (new int[numlines * 2 * 2]());
 
 	for (i = 0; i < numlines; i++)
@@ -476,6 +479,12 @@ static int getTextureType(const char *textureType)
 //	so map[10][0][1] would be map[10*2*2 + 0*2 + 1] == map[41]
 static int groundFromMapTile(int tile, int j, int k)
 {
+	auto tileNumber = TileNumber_tile(tile);
+	if (tileNumber >= numTile_types)
+	{
+		debug(LOG_INFO, "Invalid ground tile number: %d", (int)tileNumber);
+		return 0;
+	}
 	return map[TileNumber_tile(tile) * 2 * 2 + j * 2 + k];
 }
 
