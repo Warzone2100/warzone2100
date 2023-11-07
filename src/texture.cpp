@@ -412,7 +412,14 @@ bool texLoad(const char *fileName)
 					}
 				}
 				// flush all of the array textures
-				decalTexArr->flush();
+				if (decalTexArr)
+				{
+					decalTexArr->flush();
+				}
+				else
+				{
+					debug(LOG_FATAL, "Failed to load one or more terrain decals");
+				}
 				if (decalNormalArr) { decalNormalArr->flush(); }
 				if (decalSpecularArr) { decalSpecularArr->flush(); }
 				if (decalHeightArr) { decalHeightArr->flush(); }
