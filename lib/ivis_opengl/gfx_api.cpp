@@ -953,6 +953,33 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 	bool uncompressedExtractionFormat = gfx_api::is_uncompressed_format(desiredImageExtractionFormat);
 	std::vector<std::unique_ptr<iV_BaseImage>> defaultTextureMips;
 
+	auto getDefaultTextureMipsP = [&defaultTextureMips, &defaultTextureGenerator, textureType, maxWidth, maxHeight](size_t layer, unsigned int width, unsigned int height, size_t mipmap_levels, gfx_api::pixel_format format) -> std::vector<std::unique_ptr<iV_BaseImage>>* {
+		if (defaultTextureMips.empty())
+		{
+			ASSERT_OR_RETURN(nullptr, defaultTextureGenerator != nullptr, "Failed to generate default texture - no default texture generator provided");
+			ASSERT_OR_RETURN(nullptr, gfx_api::is_uncompressed_format(format), "Expected uncompressed extraction format, but received: %s", gfx_api::format_to_str(format));
+			if (defaultTextureGenerator)
+			{
+				auto pCurrentImage = defaultTextureGenerator((layer > 0) ? width : maxWidth, (layer > 0) ? height : maxHeight, gfx_api::format_channels(format));
+				ASSERT_OR_RETURN(nullptr, pCurrentImage != nullptr, "Failed to generate default texture");
+				if (layer > 0)
+				{
+					ASSERT_OR_RETURN(nullptr, pCurrentImage->width() == width && pCurrentImage->height() == height, "Failed to generate matching default texture");
+				}
+				size_t expectedMipLevels = calcMipmapLevelsForUncompressedImage(*pCurrentImage, textureType);
+				if (layer > 0)
+				{
+					ASSERT_OR_RETURN(nullptr, expectedMipLevels == mipmap_levels, "Failed to generate matching default texture");
+				}
+				auto miplevels = generateMipMapsFromUncompressedImage(*pCurrentImage, expectedMipLevels, textureType);
+				defaultTextureMips.push_back(std::move(pCurrentImage));
+				defaultTextureMips.insert(defaultTextureMips.end(), std::make_move_iterator(miplevels.begin()), std::make_move_iterator(miplevels.end()));
+				miplevels.clear();
+			}
+		}
+		return &defaultTextureMips;
+	};
+
 	std::unique_ptr<gfx_api::texture_array> texture_array = nullptr;
 	unsigned int width = 0;
 	unsigned int height = 0;
@@ -968,36 +995,23 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 		std::vector<std::unique_ptr<iV_BaseImage>>* pImagesForLayer = nullptr;
 		if (imageLoadFilename.isEmpty())
 		{
-			if (defaultTextureMips.empty())
-			{
-				ASSERT_OR_RETURN(nullptr, defaultTextureGenerator != nullptr, "Failed to generate default texture - no default texture generator provided");
-				ASSERT_OR_RETURN(nullptr, uncompressedExtractionFormat, "Expected uncompressed extraction format, but received: %s", gfx_api::format_to_str(desiredImageExtractionFormat));
-				if (defaultTextureGenerator)
-				{
-					auto pCurrentImage = defaultTextureGenerator((layer > 0) ? width : maxWidth, (layer > 0) ? height : maxHeight, gfx_api::format_channels(desiredImageExtractionFormat));
-					ASSERT_OR_RETURN(nullptr, pCurrentImage != nullptr, "Failed to generate default texture");
-					if (layer > 0)
-					{
-						ASSERT_OR_RETURN(nullptr, pCurrentImage->width() == width && pCurrentImage->height() == height, "Failed to generate matching default texture");
-					}
-					size_t expectedMipLevels = calcMipmapLevelsForUncompressedImage(*pCurrentImage, textureType);
-					if (layer > 0)
-					{
-						ASSERT_OR_RETURN(nullptr, expectedMipLevels == mipmap_levels, "Failed to generate matching default texture");
-					}
-					auto miplevels = generateMipMapsFromUncompressedImage(*pCurrentImage, expectedMipLevels, textureType);
-					defaultTextureMips.push_back(std::move(pCurrentImage));
-					defaultTextureMips.insert(defaultTextureMips.end(), std::make_move_iterator(miplevels.begin()), std::make_move_iterator(miplevels.end()));
-					miplevels.clear();
-				}
-			}
-			pImagesForLayer = &defaultTextureMips;
+			pImagesForLayer = getDefaultTextureMipsP(layer, width, height, mipmap_levels, desiredImageExtractionFormat);
+			ASSERT_OR_RETURN(nullptr, pImagesForLayer != nullptr, "Failed to generate matching default texture");
 		}
 		else if (uncompressedExtractionFormat || imageLoadFilename.endsWith(".png"))
 		{
 			// load into an uncompressed format
 			loadedImagesForLayer = loadUncompressedImageWithMips(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight, desiredImageExtractionFormat == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
-			pImagesForLayer = &loadedImagesForLayer;
+			if (!loadedImagesForLayer.empty())
+			{
+				pImagesForLayer = &loadedImagesForLayer;
+			}
+			else
+			{
+				// failed to load image
+				debug(LOG_INFO, "Using default texture generator for failed image: %s", imageLoadFilename.toUtf8().c_str());
+				pImagesForLayer = getDefaultTextureMipsP(layer, width, height, mipmap_levels, desiredImageExtractionFormat);
+			}
 		}
 		else
 		{
