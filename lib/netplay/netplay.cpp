@@ -4056,8 +4056,8 @@ static void NETallowJoining()
 
 						NETcloseTempSocket(i);
 						sync_counter.cantjoin++;
-						continue;
 					}
+					continue;
 				}
 
 				if (NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
