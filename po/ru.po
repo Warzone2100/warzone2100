@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-07 02:21\n"
+"PO-Revision-Date: 2023-11-07 14:27\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -645,7 +645,7 @@ msgstr "ДЕСАНТНАЯ МИССИЯ: Уничтожить вражеские
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Если вам придётся отступать - уничтожьте системы ракетных ПВО вокруг вашей базы."
+msgstr "Обеспечьте себе возможность отступления - уничтожьте ракетные системы ПВО вокруг вашей базы."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
@@ -676,7 +676,7 @@ msgstr "Как только будет обеспечена безопасная
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr "МИССИЯ НА БАЗЕ БЕТА: Выжить и эвакуироваться! Не забыть грузовик"
+msgstr "МИССИЯ НА БАЗЕ БЕТА: Выжить и эвакуироваться! Возьмите с собой грузовик"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -731,7 +731,7 @@ msgstr "По прибытию обезопасьте зону высадки в 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr "Команда Гамма свяжется с вами там."
+msgstr "После этого команда Гамма свяжется с вами."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
@@ -784,7 +784,7 @@ msgstr "Все юниты должны покинуть район до того
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr "Транспортировка по воздуху невозможна. Вы должны передвигаться по земле."
+msgstr "Транспортировка по воздуху невозможна. Вам придётся передвигаться по земле."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
@@ -844,7 +844,7 @@ msgstr "Отправьте группу разведки по этим коор�
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr "Выясните, действительно ли это команда Альфа. Если да, то спасите их и сопроводите в зону высадки."
+msgstr "Выясните, действительно ли это команда Альфа. Если это так, спасите их и сопроводите в зону высадки."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
@@ -872,7 +872,7 @@ msgstr "Противник прибыл ....... из этих координат
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr "Защитите базу и ..... это ......."
+msgstr "Защитите базу и ........ затем ......."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
@@ -1254,17 +1254,17 @@ msgstr "Установка гаубицы Адский Шторм"
 #: data/base/messages/strings/names.txt:228
 #: data/mp/messages/strings/names.txt:264
 msgid "Mortar Emplacement"
-msgstr "Точка миномёта"
+msgstr "Позиция миномёта"
 
 #: data/base/messages/strings/names.txt:229
 #: data/mp/messages/strings/names.txt:265
 msgid "Bombard Emplacement"
-msgstr "Точка миномёта Бомбард"
+msgstr "Позиция миномёта Бомбард"
 
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
 msgid "Pepperpot Emplacement"
-msgstr "Точка миномёта Пепперпот"
+msgstr "Позиция миномёта Пепперпот"
 
 #: data/base/messages/strings/names.txt:237
 #: data/base/messages/strings/names.txt:405
@@ -1294,7 +1294,7 @@ msgstr "Прыгун с Антибункером"
 
 #: data/base/messages/strings/names.txt:290
 msgid "Jump Heavy Gunner"
-msgstr "Прыгун с тяжёлой пушкой"
+msgstr "Прыгун с лёгкой пушкой"
 
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
@@ -6063,13 +6063,13 @@ msgstr "Установка ПВО с лазером Вестник Бури"
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
 #: po/custom/fromJson.txt:130
 msgid "AA Target Acquisition Shells"
-msgstr "Идентификация целей зениток"
+msgstr "Целеуказание зениток"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
 #: po/custom/fromJson.txt:133
 msgid "AA Target Prediction Computer"
-msgstr "Компьютерное целеуказание зениток"
+msgstr "Компьютерное наведение зениток"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
@@ -6373,7 +6373,7 @@ msgstr "Амфибийный движитель на воздушной поду
 #. data/base/stats/research.json: $.R-Defense-MdArtMissile.name
 #: po/custom/fromJson.txt:481
 msgid "Angel Missile Battery"
-msgstr "Ракетная батарея Ангел"
+msgstr "Ракетная установка Ангел"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MdART-pit.name
@@ -6449,7 +6449,7 @@ msgstr "Стреловидные снаряды"
 #. data/mp/stats/research.json: $.R-Defense-HvyArtMissile.name
 #: po/custom/fromJson.txt:524
 msgid "Archangel Missile Battery"
-msgstr "Ракетная батарея Архангел"
+msgstr "Ракетная установка Архангел"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-HvART-pit.name
@@ -12400,7 +12400,7 @@ msgstr "Рельсотрон"
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
 #: po/custom/fromJson.txt:4685
 msgid "Rail Target Prediction Computer"
-msgstr "Компьютерное наведение рельсотрона"
+msgstr "Компьютерное наведение рельсотронов"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-Rail2.name
@@ -12426,7 +12426,7 @@ msgstr "Скоростной цепной привод"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
 #: po/custom/fromJson.txt:4699
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "Скорострельный рельсотрон, стреляющий иглами"
+msgstr "Скорострельный рельсотрон, стреляющий дротиками"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
@@ -13118,7 +13118,7 @@ msgstr "ИИ для карт с водой, основан на NullBot"
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
 #: po/custom/fromJson.txt:5156
 msgid "Search & Destroy Missiles"
-msgstr "Ракеты Найти и уничтожить"
+msgstr "Самонаведение ракет"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[3]
@@ -13695,41 +13695,41 @@ msgstr "Танковое заграждение"
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
 #: po/custom/fromJson.txt:5547
 msgid "Target Acquisition Artillery Shells Mk2"
-msgstr "Идентификация целей артиллерии Мk2"
+msgstr "Целеуказание артиллерии Мk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
 #: po/custom/fromJson.txt:5551
 msgid "Target Acquisition Artillery Shells"
-msgstr "Идентификация целей артиллерии"
+msgstr "Целеуказание артиллерии"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 #. data/mp/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 #: po/custom/fromJson.txt:5555
 msgid "Target Acquisition Mortar Shells"
-msgstr "Идентификация целей миномётов"
+msgstr "Целеуказание миномётов"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.name
 #: po/custom/fromJson.txt:5559
 msgid "Target Prediction Artillery Shells"
-msgstr "Прогнозирование целей артиллерии"
+msgstr "Компьютерное наведение артиллерии"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
 #: po/custom/fromJson.txt:5562
 msgid "Target Prediction Computer"
-msgstr "Компьютерный прогноз целей"
+msgstr "Компьютерное наведение"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy01.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy01.name
 #: po/custom/fromJson.txt:5566
 msgid "Target Prediction Missiles"
-msgstr "Прогнозирование целей ракет"
+msgstr "Компьютерное наведение ракет"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_AC1.text[1]
