@@ -201,7 +201,8 @@ struct iIMDShape
 
 	// The new rendering data
 	gfx_api::buffer* buffers[VBO_COUNT] = { nullptr };
-	uint16_t vertexCount = 0;
+	size_t vertexCount = 0;
+	size_t indicesCount = 0; // the number of polys * 3
 
 	// object animation (animating a level, rather than its texture)
 	std::vector<ANIMFRAME> objanimdata;
