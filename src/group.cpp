@@ -219,14 +219,14 @@ void DROID_GROUP::remove(DROID *psDroid)
 		}
 	}
 
+	intCommanderGroupChanged((type == GT_COMMAND && psCommander) ? psCommander : nullptr);
+
 	// free the group if necessary
 	if (refCount <= 0)
 	{
 		grpGlobalManager.erase(id);
 		delete this;
 	}
-
-	intCommanderGroupChanged((type == GT_COMMAND && psCommander) ? psCommander : nullptr);
 }
 
 // count the members of a group
