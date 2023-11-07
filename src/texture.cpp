@@ -367,7 +367,11 @@ bool texLoad(const char *fileName)
 					}
 				}
 
-				decalTexArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_base_filepaths, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, nullptr, nullptr, "decalTexArr");
+				decalTexArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_base_filepaths, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+						std::unique_ptr<iV_Image> pDefaultTexture = std::unique_ptr<iV_Image>(new iV_Image);
+						pDefaultTexture->allocate(width, height, channels, true);
+						return pDefaultTexture;
+					}, nullptr, "decalTexArr");
 				if (has_auxillary_texture_info)
 				{
 					if (has_nm)
