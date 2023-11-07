@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-06 14:19\n"
+"PO-Revision-Date: 2023-11-07 02:21\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -499,7 +499,7 @@ msgstr "Затем вернитесь к зоне высадки."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr "Тревожные новости относительно NASDA."
+msgstr "Тревожные новости относительно НАСДА."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
@@ -603,11 +603,11 @@ msgstr "Не позвольте Альянсу запустить реактор
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr "МИССИЯ БАЗЫ БЕТА: Захватить центр управления NASDA"
+msgstr "МИССИЯ БАЗЫ БЕТА: Захватить центр управления НАСДА"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr "Захватите центр управления NASDA до того как НЕКСУС и Альянс смогут им воспользоваться."
+msgstr "Захватите центр управления НАСДА до того как НЕКСУС и Альянс смогут им воспользоваться."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
@@ -621,7 +621,7 @@ msgstr "НЕКСУС разыскивает функционирующие ба�
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr "Часть его сознания переместилась в удалённый участок управления NASDA."
+msgstr "Часть его сознания переместилась в удалённый банк под управлением НАСДА."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
@@ -629,7 +629,7 @@ msgstr "Мы засекли достигающие орбиты передачи
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr "В настоящий момент НЕКСУС восстановил связь со спутниками NASDA."
+msgstr "В настоящий момент НЕКСУС восстановил связь со спутниками НАСДА."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
@@ -757,7 +757,7 @@ msgstr "Мы засекли место, откуда осуществлялис�
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
-msgstr "Это были одна или несколько ракет NASDA."
+msgstr "На этой базе НАСДА были размещены одна или несколько ракет."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
@@ -4681,15 +4681,15 @@ msgstr "Вы должны начать немедленную эвакуацию
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr "NASDA - это Североамериканское Стратегическое Оборонное Агентство."
+msgstr "НАСДА - Североамериканское агенство стратегической обороны."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr "NASDA было сформировано в 2076 году для защиты Северной Америки от обычных и ядерных нападений. Создание спутниковой оборонной системы было начато в 2081 году и завершено в 2082."
+msgstr "НАСДА было сформировано в 2076 году для защиты Северной Америки от обычных и ядерных нападений. Создание спутниковой оборонной системы было начато в 2081 году и завершено в 2082."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr "В 2085 году спутники NASDA подвергли Землю атаке своими ядерными боеголовками."
+msgstr "В 2085 году спутники НАСДА подвергли Землю атаке своими ядерными боеголовками."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
@@ -4697,7 +4697,7 @@ msgstr "Здесь были также наземные базы. Многие �
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr "Спутники NASDA также содержат импульсные лазеры, чтобы сбивать ракеты, приближающиеся к Северной Америке."
+msgstr "Спутники НАСДА также содержат импульсные лазеры, чтобы сбивать ракеты, приближающиеся к Северной Америке."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
@@ -4709,7 +4709,7 @@ msgstr "Всё ядерное оружие, направленное на Сев
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr "Мы знаем, что НЕКСУС ищет центр NASDA в Восточном секторе. Это был один из наземных центров управления спутниками."
+msgstr "Мы знаем, что НЕКСУС ищет центр НАСДА в Восточном секторе. Это был один из наземных центров управления спутниками."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
@@ -4721,7 +4721,7 @@ msgstr "НЕКСУС утверждал, что он уже уничтожил �
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr "Далее следует брифинг NASDA..."
+msgstr "Далее следует брифинг НАСДА..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
@@ -4729,7 +4729,7 @@ msgstr "Мы должны убедиться, что он не сделает э
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr "Анализ показывает, что эти системы были частью системы управления спутниками NASDA."
+msgstr "Анализ показывает, что эти системы были частью системы управления спутниками НАСДА."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
@@ -4737,15 +4737,15 @@ msgstr "Теперь мы уверены, что НЕКСУС был ответ�
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr "На ранних стадиях Коллапса, техники NASDA отключили заражённые системы для того, чтобы изолировать распространение НЕКСУС. Это, возможно, не позволило ЛасСат стрелять во время контрударов."
+msgstr "На ранних стадиях Коллапса, техники НАСДА отключили заражённые системы для того, чтобы изолировать распространение НЕКСУС. Это, возможно, не позволило ЛасСат стрелять во время контрударов."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr "Последовавший за этим ядерно-магнитный импульс стёр множество банков памяти NASDA, разрушая главный процессор, и вызывая шоковую реакцию в НЕКСУС."
+msgstr "Последовавший за этим ядерно-магнитный импульс стёр множество банков памяти НАСДА, разрушив главный процессор, и поразив НЕКСУС ударной волной."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr "НЕКСУС был зажарен, когда секции его сознания были уничтожены в результате контрударов."
+msgstr "НЕКСУС был зажарен, когда разделы с его сознанием были уничтожены в результате контрударов."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
@@ -4753,7 +4753,7 @@ msgstr "Командир, мы засекли передачи с этого у�
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr "НЕКСУС уже подключил себя к спутникам NASDA."
+msgstr "НЕКСУС уже подключил себя к спутникам НАСДА."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
@@ -4761,7 +4761,7 @@ msgstr "Это создаёт серьёзную угрозу для Проек�
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr "Анализ центра NASDA не оставляет сомнений, что Альянс внедрил в него программу вторжения НЕКСУС."
+msgstr "Анализ центра НАСДА не оставляет сомнений, что Альянс внедрил в него программу вторжения НЕКСУС."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
@@ -4781,7 +4781,7 @@ msgstr "Мы можем только предположить, что НЕКСУ
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr "Воины Альянса, я ищу местоположение центра NASDA."
+msgstr "Воины Альянса, я ищу местоположение центра НАСДА."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
@@ -5146,15 +5146,15 @@ msgstr "Новое начинание"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr "Система NASDA была разработана, чтобы защищать нас. Она должна была стать пиком ядерного сдерживания. Но всё обернулось так, что она стала нашим палачом."
+msgstr "Система НАСДА была разработана, чтобы защищать нас. Она должна была стать пиком ядерного сдерживания. Но всё обернулось так, что она стала нашим палачом."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "Отчёты говорят, что NASDA дала сбой в ходе обычной проверки системы. Не верьте этому. Кто-то хотел нас уничтожить."
+msgstr "Отчёты говорят, что система НАСДА дала сбой в ходе обычной проверки системы. Не верьте этому. Кто-то хотел нас уничтожить."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "Ядерные ракеты были направлены на каждый крупный город мира. NASDA была запрограммирована, чтобы начать Коллапс. Когда были произведены контрудары, её лазерные и наземные противоракетные установки отказали в работе."
+msgstr "Ядерные ракеты были направлены на каждый крупный город мира. Система НАСДА была запрограммирована, чтобы начать Коллапс. Когда были произведены контрудары, её лазерные и наземные противоракетные установки отказали в работе."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
