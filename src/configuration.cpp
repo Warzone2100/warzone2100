@@ -25,6 +25,7 @@
 
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/input.h"
+#include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
@@ -59,9 +60,8 @@
 
 #include <type_traits>
 
-#include "mINI/ini.h"
-#define PHYFSPP_IMPL
-#include "3rdparty/physfs.hpp"
+#include "3rdparty/INIReaderWriter.h"
+#include "3rdparty/gsl_finally.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -74,94 +74,46 @@ static const char *fileName = "config";
 
 // ////////////////////////////////////////////////////////////////////////////
 
-// PhysFS implementation of mINI::INIFileStreamGenerator
+// PhysFS helpers
 
-class PhysFSFileStreamGenerator : public mINI::INIFileStreamGenerator
+static inline std::string WZ_PHYSFS_getRealPath(const char *filename)
 {
-public:
-	PhysFSFileStreamGenerator(std::string const& utf8Path)
-	: INIFileStreamGenerator(utf8Path)
-	{ }
-	virtual ~PhysFSFileStreamGenerator() { }
-public:
-	virtual std::shared_ptr<std::istream> getFileReadStream() const override
-	{
-		if (utf8Path.empty())
-		{
-			return nullptr;
-		}
-		try {
-			return std::static_pointer_cast<std::istream>(PhysFS::ifstream::make(utf8Path));
-		}
-		catch (const std::exception&)
-		{
-			// file likely does not exist
-			return nullptr;
-		}
-	}
-	virtual std::shared_ptr<std::ostream> getFileWriteStream() const override
-	{
-		if (utf8Path.empty())
-		{
-			return nullptr;
-		}
-		try {
-			return std::static_pointer_cast<std::ostream>(PhysFS::ofstream::make(utf8Path));
-		}
-		catch (const std::exception&)
-		{
-			// file likely does not exist
-			return nullptr;
-		}
-	}
-	virtual bool fileExists() const override
-	{
-		if (utf8Path.empty())
-		{
-			return false;
-		}
-		return PHYSFS_exists(utf8Path.c_str());
-	}
-	optional<uint64_t> fileSize() const
-	{
+	std::string fullPath = WZ_PHYSFS_getRealDir_String(filename);
+	if (fullPath.empty()) { return fullPath; }
+	fullPath += PHYSFS_getDirSeparator();
+	fullPath += filename;
+	return fullPath;
+}
+
+static inline optional<uint64_t> WZ_PHYSFS_getFileSize(const char *filename)
+{
 #if defined(WZ_PHYSFS_2_1_OR_GREATER)
-		PHYSFS_Stat metaData;
-		if (PHYSFS_stat(utf8Path.c_str(), &metaData) == 0)
-		{
-			return nullopt; // failed to get file info
-		}
-		if (metaData.filesize < 0)
-		{
-			// unknown filesize
-			return nullopt;
-		}
-		return static_cast<uint64_t>(metaData.filesize);
-#else
-		return nullopt; // unknown
-#endif
-	}
-	std::string realPath() const
+	PHYSFS_Stat metaData = {};
+	if (PHYSFS_stat(filename, &metaData) == 0)
 	{
-		std::string fullPath = WZ_PHYSFS_getRealDir_String(utf8Path.c_str());
-		if (fullPath.empty()) { return fullPath; }
-		fullPath += PHYSFS_getDirSeparator();
-		fullPath += utf8Path;
-		return fullPath;
+		return nullopt; // failed to get file info
 	}
-};
+	if (metaData.filesize < 0)
+	{
+		// unknown filesize
+		return nullopt;
+	}
+	return static_cast<uint64_t>(metaData.filesize);
+#else
+	return nullopt;
+#endif
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 
-typedef mINI::INIMap<std::string> IniSection;
-
-static optional<int> iniSectionGetInteger(const IniSection& iniSection, const std::string& key, optional<int> defaultValue = nullopt)
+static optional<int> iniSectionGetInteger(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<int> defaultValue = nullopt)
 {
-	if (!iniSection.has(key))
+	if (!iniSection.HasValue(key))
 	{
 		return defaultValue;
 	}
 	try {
-		auto valueStr = iniSection.get(key);
+		auto valueStr = iniSection.Get(key, "");
 		int valueInt = std::stoi(valueStr);
 		return valueInt;
 	}
@@ -172,18 +124,18 @@ static optional<int> iniSectionGetInteger(const IniSection& iniSection, const st
 	}
 }
 
-static void iniSectionSetInteger(IniSection& iniSection, const std::string& key, int value)
+static void iniSectionSetInteger(INIReaderWriter::IniSection& iniSection, const std::string& key, int value)
 {
-	iniSection[key] = std::to_string(value);
+	iniSection.SetString(key, std::to_string(value));
 }
 
-static optional<bool> iniSectionGetBool(const IniSection& iniSection, const std::string& key, optional<bool> defaultValue = nullopt)
+static optional<bool> iniSectionGetBool(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<bool> defaultValue = nullopt)
 {
-	if (!iniSection.has(key))
+	if (!iniSection.HasValue(key))
 	{
 		return defaultValue;
 	}
-	auto valueStr = WzString::fromUtf8(iniSection.get(key)).toLower();
+	auto valueStr = WzString::fromUtf8(iniSection.Get(key, "")).toLower();
 	// first check if it's equal to "true" or "false" (case-insensitive)
 	if (valueStr == "true")
 	{
@@ -211,18 +163,18 @@ static optional<bool> iniSectionGetBool(const IniSection& iniSection, const std:
 	return defaultValue;
 }
 
-static void iniSectionSetBool(IniSection& iniSection, const std::string& key, bool value)
+static void iniSectionSetBool(INIReaderWriter::IniSection& iniSection, const std::string& key, bool value)
 {
-	iniSection[key] = (value) ? "true" : "false";
+	iniSection.SetString(key, (value) ? "true" : "false");
 }
 
-static optional<std::string> iniSectionGetString(const IniSection& iniSection, const std::string& key, optional<std::string> defaultValue = nullopt)
+static optional<std::string> iniSectionGetString(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<std::string> defaultValue = nullopt)
 {
-	if (!iniSection.has(key))
+	if (!iniSection.HasValue(key))
 	{
 		return defaultValue;
 	}
-	std::string result = iniSection.get(key);
+	std::string result = iniSection.Get(key, "");
 	// To support prior INI files written by QSettings, strip surrounding "" if present
 	if (!result.empty() && result.front() == '"' && result.back() == '"')
 	{
@@ -235,20 +187,13 @@ static optional<std::string> iniSectionGetString(const IniSection& iniSection, c
 	return result;
 }
 
-bool saveIniFile(mINI::INIFile &file, mINI::INIStructure &ini)
+bool saveIniFile(const char* outputPath, const INIReaderWriter& ini)
 {
 	// write out ini file changes
-	try
+	std::string iniOutput = ini.dump();
+	if (!saveFile(outputPath, iniOutput.c_str(), iniOutput.size()))
 	{
-		if (!file.write(ini))
-		{
-			debug(LOG_INFO, "Could not write configuration file \"%s\"", fileName);
-			return false;
-		}
-	}
-	catch (const std::exception& e)
-	{
-		debug(LOG_ERROR, "Ini write failed with exception: %s", e.what());
+		debug(LOG_ERROR, "Ini write failed");
 		return false;
 	}
 	return true;
@@ -256,43 +201,94 @@ bool saveIniFile(mINI::INIFile &file, mINI::INIStructure &ini)
 
 constexpr uint64_t MAX_CONFIG_FILE_SIZE = 1024 * 1024 * 2; // 2 MB seems like enough...
 
+static INIReaderWriter loadConfigIniFile(const char* inputFile)
+{
+	uint64_t fileStatSize = WZ_PHYSFS_getFileSize(inputFile).value_or(0);
+	if (fileStatSize > MAX_CONFIG_FILE_SIZE)
+	{
+		debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", inputFile, fileStatSize);
+		return INIReaderWriter();
+	}
+
+	std::vector<char> fileContentsBuffer;
+
+	{
+		// load in the existing ini file
+		PHYSFS_File* file = PHYSFS_openRead(inputFile);
+		if (!file)
+		{
+			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", inputFile);
+			return INIReaderWriter();
+		}
+
+		auto close_filehandle_finally = gsl::finally([&file, inputFile] {
+			if (!PHYSFS_close(file))
+			{
+				debug(LOG_ERROR, "Error closing %s: %s", inputFile, WZ_PHYSFS_getLastError());
+				// but continue on...
+			}
+			file = nullptr;
+		});
+
+		debug(LOG_WZ, "Reading configuration from: %s", WZ_PHYSFS_getRealPath(inputFile).c_str());
+
+		// get file size from the open file handle
+		PHYSFS_sint64 filesize = PHYSFS_fileLength(file);
+		if (filesize <= 0)
+		{
+			// File size could not be determined. Is a directory?
+			debug(LOG_INFO, "Could not read existing configuration file \"%s\"; filesize returned (%" PRIi64 ")", inputFile, static_cast<int64_t>(filesize));
+			return INIReaderWriter();
+		}
+		if (static_cast<uint64_t>(filesize) > MAX_CONFIG_FILE_SIZE)
+		{
+			debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", inputFile, static_cast<uint64_t>(filesize));
+			return INIReaderWriter();
+		}
+		ASSERT_OR_RETURN(INIReaderWriter(), filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<PHYSFS_sint32>::max()), "\"%s\" filesize >= std::numeric_limits<PHYSFS_sint32>::max()", inputFile);
+		ASSERT_OR_RETURN(INIReaderWriter(), static_cast<PHYSFS_uint64>(filesize) < static_cast<PHYSFS_uint64>(std::numeric_limits<size_t>::max()), "\"%s\" filesize >= std::numeric_limits<size_t>::max()", inputFile);
+
+		fileContentsBuffer.resize(static_cast<size_t>(filesize + 1));
+
+		/* Load the file data */
+		PHYSFS_sint64 length_read = WZ_PHYSFS_readBytes(file, fileContentsBuffer.data(), static_cast<PHYSFS_uint32>(filesize));
+		if (length_read != filesize)
+		{
+			fileContentsBuffer.clear();
+
+			debug(LOG_ERROR, "Reading %s short: %s", inputFile, WZ_PHYSFS_getLastError());
+			PHYSFS_close(file);
+			return INIReaderWriter();
+		}
+	}
+
+	if (fileContentsBuffer.empty())
+	{
+		debug(LOG_INFO, "Nothing read from configuration file \"%s\"?", inputFile);
+		return INIReaderWriter();
+	}
+
+	// append null
+	fileContentsBuffer[fileContentsBuffer.size() - 1] = 0;
+
+	// load IniReaderWriter from the buffer
+	auto result = INIReaderWriter(fileContentsBuffer.data(), fileContentsBuffer.size() - 1);
+	if (result.ParseError() != 0)
+	{
+		debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; error parsing line: %d", inputFile, result.ParseError());
+		return INIReaderWriter();
+	}
+	return result;
+}
+
+
 // ////////////////////////////////////////////////////////////////////////////
 bool loadConfig()
 {
-	// first, create a file instance
-	auto fileStreamGenerator = std::make_shared<PhysFSFileStreamGenerator>(fileName);
-	mINI::INIFile file(fileStreamGenerator);
+	auto ini = loadConfigIniFile(fileName);
+	bool createdConfigFile = !ini.LoadedFromData();
 
-	// next, create a structure that will hold data
-	mINI::INIStructure ini;
-	bool createdConfigFile = false;
-
-	// now we can read the file
-	try
-	{
-		uint64_t fileSize = fileStreamGenerator->fileSize().value_or(0);
-		if (fileSize > MAX_CONFIG_FILE_SIZE)
-		{
-			createdConfigFile = true;
-			debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", fileName, fileSize);
-			// will just proceed with an empty ini structure
-		}
-		if (!createdConfigFile && !file.read(ini))
-		{
-			createdConfigFile = true;
-			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
-			// will just proceed with an empty ini structure
-		}
-	}
-	catch (const std::exception& e)
-	{
-		createdConfigFile = true;
-		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		ini.clear();
-		// will just proceed with an empty ini structure
-	}
-
-	auto& iniGeneral = ini["General"];
+	auto& iniGeneral = ini.GetSection("General");
 
 	auto iniGetInteger = [&iniGeneral](const std::string& key, optional<int> defaultValue) -> optional<int> {
 		return iniSectionGetInteger(iniGeneral, key, defaultValue);
@@ -333,7 +329,6 @@ bool loadConfig()
 
 	ActivityManager::instance().beginLoadingSettings();
 
-	debug(LOG_WZ, "Reading configuration from: %s", fileStreamGenerator->realPath().c_str());
 	if (auto value = iniGetIntegerOpt("voicevol"))
 	{
 		sound_SetUIVolume(static_cast<float>(value.value()) / 100.0f);
@@ -375,7 +370,7 @@ bool loadConfig()
 	}
 	if (iniGeneral.has("language"))
 	{
-		setLanguage(iniGeneral.get("language").c_str());
+		setLanguage(iniGetString("language", "").value().c_str());
 	}
 	if (auto value = iniGetBoolOpt("nomousewarp"))
 	{
@@ -623,36 +618,7 @@ bool loadConfig()
 // ////////////////////////////////////////////////////////////////////////////
 bool saveConfig()
 {
-	// first, create a file instance
-	auto fileStreamGenerator = std::make_shared<PhysFSFileStreamGenerator>(fileName);
-	mINI::INIFile file(fileStreamGenerator);
-
-	// next, create a structure that will hold data
-	mINI::INIStructure ini;
-
-	// read in the current file
-	try
-	{
-		uint64_t fileSize = fileStreamGenerator->fileSize().value_or(0);
-		bool skipLoadExisting = false;
-		if (fileSize > MAX_CONFIG_FILE_SIZE)
-		{
-			skipLoadExisting = true;
-			debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", fileName, fileSize);
-			// will just proceed with an empty ini structure
-		}
-		if (!skipLoadExisting && !file.read(ini))
-		{
-			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
-			// will just proceed with an empty ini structure
-		}
-	}
-	catch (const std::exception& e)
-	{
-		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		ini.clear();
-		// will just proceed with an empty ini structure
-	}
+	auto ini = loadConfigIniFile(fileName);
 
 	std::string fullConfigFilePath;
 	if (PHYSFS_getWriteDir())
@@ -663,7 +629,7 @@ bool saveConfig()
 	fullConfigFilePath += fileName;
 	debug(LOG_WZ, "Writing configuration to: \"%s\"", fullConfigFilePath.c_str());
 
-	auto& iniGeneral = ini["General"];
+	auto& iniGeneral = ini.GetSection("General");
 
 	auto iniSetInteger = [&iniGeneral](const std::string& key, int value) {
 		iniSectionSetInteger(iniGeneral, key, value);
@@ -672,7 +638,7 @@ bool saveConfig()
 		iniSectionSetBool(iniGeneral, key, value);
 	};
 	auto iniSetString = [&iniGeneral](const std::string& key, const std::string& value) {
-		iniGeneral[key] = value;
+		iniGeneral.SetString(key, value);
 	};
 	auto iniSetFromCString = [&iniGeneral](const std::string& key, const char* value, size_t maxLength) {
 		std::string strVal;
@@ -682,7 +648,7 @@ bool saveConfig()
 			ASSERT(len < maxLength, "Input c-string value (for key: %s) appears to be missing null-terminator?", key.c_str());
 			strVal.assign(value, len);
 		}
-		iniGeneral[key] = strVal;
+		iniGeneral.SetString(key, strVal);
 	};
 
 	// //////////////////////////
@@ -807,32 +773,13 @@ bool saveConfig()
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes
-	bool result = saveIniFile(file, ini);
+	bool result = saveIniFile(fileName, ini);
 	return result;
 }
 
 bool saveGfxConfig()
 {
-	// first, create a file instance
-	mINI::INIFile file(std::make_shared<PhysFSFileStreamGenerator>(fileName));
-
-	// next, create a structure that will hold data
-	mINI::INIStructure ini;
-
-	// read in the current file
-	try
-	{
-		if (!file.read(ini))
-		{
-			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
-			// will just proceed with an empty ini structure
-		}
-	}
-	catch (const std::exception& e)
-	{
-		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		return false;
-	}
+	auto ini = loadConfigIniFile(fileName);
 
 	std::string fullConfigFilePath;
 	if (PHYSFS_getWriteDir())
@@ -843,17 +790,17 @@ bool saveGfxConfig()
 	fullConfigFilePath += fileName;
 	debug(LOG_WZ, "Writing gfx configuration to: \"%s\"", fullConfigFilePath.c_str());
 
-	auto& iniGeneral = ini["General"];
+	auto& iniGeneral = ini.GetSection("General");
 
 	auto iniSetString = [&iniGeneral](const std::string& key, const std::string& value) {
-		iniGeneral[key] = value;
+		iniGeneral.SetString(key, value);
 	};
 
 	// only change the gfx entry
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 
 	// write out ini file changes
-	bool result = saveIniFile(file, ini);
+	bool result = saveIniFile(fileName, ini);
 	return result;
 }
 
@@ -861,29 +808,26 @@ bool saveGfxConfig()
 // Ensures that others' games don't change our own configuration settings
 bool reloadMPConfig()
 {
-	// first, create a file instance
-	mINI::INIFile file(std::make_shared<PhysFSFileStreamGenerator>(fileName));
-
-	// next, create a structure that will hold data
-	mINI::INIStructure ini;
-
-	// now we can read the file
-	try
+	auto ini = loadConfigIniFile(fileName);
+	if (!ini.LoadedFromData())
 	{
-		if (!file.read(ini))
+		debug(LOG_INFO, "Could not read existing configuration file \"%s\"", fileName);
+	}
+
+	auto& iniGeneral = ini.GetSection("General");
+
+	debug(LOG_WZ, "Reloading mp config");
+
+	auto iniSetFromCString = [&iniGeneral](const std::string& key, const char* value, size_t maxLength) {
+		std::string strVal;
+		if (value)
 		{
-			debug(LOG_INFO, "Could not read existing configuration file \"%s\"", fileName);
+			size_t len = strnlen(value, maxLength);
+			ASSERT(len < maxLength, "Input c-string value (for key: %s) appears to be missing null-terminator?", key.c_str());
+			strVal.assign(value, len);
 		}
-	}
-	catch (const std::exception& e)
-	{
-		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		return false;
-	}
-
-	auto& iniGeneral = ini["General"];
-
-	debug(LOG_WZ, "Reloading prefs prefs to registry");
+		iniGeneral.SetString(key, strVal);
+	};
 
 	// If we're in-game, we already have our own configuration set, so no need to reload it.
 	if (NetPlay.isHost && !ingame.localJoiningInProgress)
@@ -905,7 +849,7 @@ bool reloadMPConfig()
 	{
 		if (bMultiPlayer && NetPlay.bComms)
 		{
-			iniGeneral["gameName"] = std::string(game.name);			//  last hosted game
+			iniSetFromCString("gameName", game.name, 128);			//  last hosted game
 		}
 		else
 		{
@@ -927,7 +871,7 @@ bool reloadMPConfig()
 		iniSectionSetInteger(iniGeneral, "alliance", game.alliance);		// allow alliances
 
 		// write out ini file changes
-		bool result = saveIniFile(file, ini);
+		bool result = saveIniFile(fileName, ini);
 		return result;
 	}
 
