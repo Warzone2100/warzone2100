@@ -10,6 +10,21 @@ set_property(TARGET launchinfo PROPERTY FOLDER "3rdparty")
 add_subdirectory(fmt)
 set_property(TARGET fmt PROPERTY FOLDER "3rdparty")
 
+# inih library
+add_library(inih STATIC "inih/ini.h" "inih/ini.c")
+set_property(TARGET inih PROPERTY FOLDER "3rdparty")
+target_include_directories(inih PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_compile_definitions(inih PRIVATE
+	"-DINI_API="
+	"-DINI_ALLOW_MULTILINE=0"
+	"-DINI_ALLOW_BOM=1"
+	"-DINI_ALLOW_INLINE_COMMENTS=0"
+	"-DINI_MAX_LINE=1024"
+	"-DINI_ALLOW_REALLOC=1"
+	"-DINI_INITIAL_ALLOC=1024"
+)
+
+# re2
 SET(RE2_BUILD_TESTING OFF CACHE BOOL "enable testing for RE2" FORCE)
 add_subdirectory(re2 EXCLUDE_FROM_ALL)
 target_include_directories(re2 PUBLIC
