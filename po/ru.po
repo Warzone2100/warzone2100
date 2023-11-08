@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-07 14:27\n"
+"PO-Revision-Date: 2023-11-08 02:24\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2171,7 +2171,7 @@ msgstr "Укреплённая установка миномёта Адский 
 #: data/mp/messages/strings/resstrings.txt:92
 #: po/custom/fromJson.txt:812
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr "Укреплённая точка с ракетами Танк Киллер"
+msgstr "Укреплённая установка с ракетами Танк Киллер"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[2]
@@ -2199,7 +2199,7 @@ msgstr "Автоматически наводится на цели в ради�
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:794
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Укреплённая точка с гиперскоростной пушкой"
+msgstr "Укреплённая установка с гиперскоростной пушкой"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[3]
@@ -2235,7 +2235,7 @@ msgstr "Сила защиты: высокая"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:798
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Укреплённая точка с огнемётом Инферно"
+msgstr "Укреплённая установка с огнемётом Инферно"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotCan.text[1]
@@ -2244,7 +2244,7 @@ msgstr "Укреплённая точка с огнемётом Инферно"
 #: data/mp/messages/strings/resstrings.txt:107
 #: po/custom/fromJson.txt:779
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "Укреплённая точка с роторной пушкой"
+msgstr "Укреплённая установка с роторной пушкой"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[1]
@@ -2285,7 +2285,7 @@ msgstr "Укреплённая башня с тяжёлым пулемётом"
 #: data/mp/messages/strings/resstrings.txt:158
 #: po/custom/fromJson.txt:1000
 msgid "Automatically targets enemies within sensor range"
-msgstr "Автоматически наводится на цели в пределах действия радара"
+msgstr "Автоматически наводится на цели в зоне действия радара"
 
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:122
@@ -8330,7 +8330,7 @@ msgstr "Заводы и юниты ранга Ветеран и Элита за�
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1869
 msgid "EMP Cannon Hardpoint"
-msgstr "Укрепточка ЭМИ пушки"
+msgstr "Укрепточка с ЭМИ пушкой"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8426,7 +8426,7 @@ msgstr "Враг"
 #. data/mp/stats/research.json: $.R-Sys-Engineering01.name
 #: po/custom/fromJson.txt:1923
 msgid "Engineering"
-msgstr "Инженеринг"
+msgstr "Инженерия"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B07.text[3]
@@ -13118,7 +13118,7 @@ msgstr "ИИ для карт с водой, основан на NullBot"
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
 #: po/custom/fromJson.txt:5156
 msgid "Search & Destroy Missiles"
-msgstr "Самонаведение ракет"
+msgstr "Активное самонаведение ракет"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[3]
