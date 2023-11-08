@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-08 02:24\n"
+"PO-Revision-Date: 2023-11-08 15:11\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -936,7 +936,7 @@ msgstr "Передача управления завершена."
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
-msgstr "Вход в новую зону."
+msgstr "Входим в новую зону."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
@@ -996,7 +996,7 @@ msgstr "Они считают, что эти ракеты способны до�
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
-msgstr "Захватите эту шахту любой ценой."
+msgstr "Захватите эти шахты любой ценой."
 
 #: data/base/messages/strings/cam3strings.txt:140
 msgid "Missile silos captured."
@@ -1029,7 +1029,7 @@ msgstr "Назначьте это задание исследовательск�
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
-msgstr "Силы НЕКСУС обнаружены в этом районе."
+msgstr "Войска НЕКСУС обнаружены в этих позициях."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
@@ -4937,7 +4937,7 @@ msgstr "Командир, отряды из команды Альфа избеж
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
-msgstr "У нас некоторые помехи из-за НЕКСУС."
+msgstr "НЕКСУС вмешивается в работу наших систем."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
@@ -6813,39 +6813,39 @@ msgstr "Укреплённая позиция с миномётом"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_PrisLas.text[1]
 #: po/custom/fromJson.txt:783
 msgid "Armored strongpoint with Flashlight laser"
-msgstr "Укреплённая точка с лазером Вспышка"
+msgstr "Укреплённая установка с лазером Вспышка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_Rail3.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail3.text[1]
 #: po/custom/fromJson.txt:787
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Укреплённая точка с пушкой Гаусса"
+msgstr "Укреплённая установка с пушкой Гаусса"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_HEAVYLAS.text[1]
 #: po/custom/fromJson.txt:790
 msgid "Armored strongpoint with Heavy Laser"
-msgstr "Укреплённая точка с тяжёлым лазером"
+msgstr "Укреплённая установка с тяжёлым лазером"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PFL.text[1]
 #: po/custom/fromJson.txt:801
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Укреплённая точка с плазменным огнемётом"
+msgstr "Укреплённая установка с плазменным огнемётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
 #: po/custom/fromJson.txt:804
 msgid "Armored strongpoint with Pulse Laser"
-msgstr "Укреплённая точка с импульсным лазером"
+msgstr "Укреплённая установка с импульсным лазером"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_Rail2.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail2.text[1]
 #: po/custom/fromJson.txt:808
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Укреплённая точка с рельсотроном"
+msgstr "Укреплённая установка с рельсотроном"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TRACK1.text[1]
