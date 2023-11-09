@@ -56,7 +56,6 @@ echo "::group::flat-manager-client purge"
 flat-manager-client --token "${FH_TOKEN}" purge "${BUILD_ID}"
 if [ $? -ne 0 ]; then
   echo "ERROR: Purging failed"
-  exit_status=1
 fi
 echo "::endgroup::"
 
