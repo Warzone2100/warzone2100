@@ -211,6 +211,9 @@ jobs:
           # SDK For target runtime
           flatpak --system install -y --noninteractive flathub org.freedesktop.Sdk.Compat.${WZ_FLATPAK_TARGET_ARCH}//${WZ_FREEDESKTOP_RUNTIME_VERSION}
         fi
+        
+        # Builder (which includes flatpak-builder-lint)
+        flatpak install flathub -y --noninteractive org.flatpak.Builder
     - name: Build Flatpak
       id: build
       env:
@@ -223,6 +226,17 @@ jobs:
         . src/.ci/flatpak/build.sh
         echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"
         echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}" >> $GITHUB_OUTPUT
+    - name: Lint Flatpak
+      env:
+        WZ_FLATPAK_LOCAL_REPO_NAME: ${{ steps.build.outputs.WZ_FLATPAK_LOCAL_REPO_NAME }}
+      run: |
+        # Start a dbus session within the container to allow flatpaks to run
+        # See: https://discussion.fedoraproject.org/t/cannot-run-flatpaks-in-a-fedora-container/73867/2
+        mkdir /run/dbus
+        dbus-send --system /org/freedesktop/DBus org.freedesktop.DBus || dbus-daemon --system --fork
+        
+        flatpak run --command=flatpak-builder-lint org.flatpak.Builder --exceptions repo "${WZ_FLATPAK_LOCAL_REPO_NAME}"
+        echo "flatpak-builder-lint - OK"
     ###############################################################
     # Upload the .flatpak and debugsymbols artifacts
     - name: Upload Artifact
