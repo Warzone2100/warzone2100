@@ -428,6 +428,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 			AdditivePSO::get().set_uniforms_at(1, meshUniforms);
 			AdditivePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			AdditivePSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
+			gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 		}
 		AdditivePSO::get().set_uniforms_at(2, instanceUniforms);
 		AdditivePSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -446,6 +447,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 				AlphaPSO::get().set_uniforms_at(1, meshUniforms);
 				AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 				AlphaPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
+				gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 			}
 			AlphaPSO::get().set_uniforms_at(2, instanceUniforms);
 			AlphaPSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -462,6 +464,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 				AlphaNoDepthWRTPSO::get().set_uniforms_at(1, meshUniforms);
 				AlphaNoDepthWRTPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 				AlphaNoDepthWRTPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
+				gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 			}
 			AlphaNoDepthWRTPSO::get().set_uniforms_at(2, instanceUniforms);
 			AlphaNoDepthWRTPSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -479,6 +482,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 			PremultipliedPSO::get().set_uniforms_at(1, meshUniforms);
 			PremultipliedPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			PremultipliedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
+			gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 		}
 		PremultipliedPSO::get().set_uniforms_at(2, instanceUniforms);
 		PremultipliedPSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -495,6 +499,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 			OpaquePSO::get().set_uniforms_at(1, meshUniforms);
 			OpaquePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 			OpaquePSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
+			gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
 		}
 		OpaquePSO::get().set_uniforms_at(2, instanceUniforms);
 		OpaquePSO::get().draw_elements(shape->polys.size() * 3, 0);
@@ -565,10 +570,6 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 	frame %= std::max<int>(1, shape->numFrames);
 
 	templatedState currentState = templatedState((light) ? SHADER_COMPONENT : SHADER_NOLIGHT, shape, pieFlag);
-	if (currentState != lastState)
-	{
-		gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
-	}
 
 	if (light)
 	{
