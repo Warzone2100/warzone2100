@@ -47,6 +47,10 @@ varying vec3 normal, lightDir, halfVec;
 varying vec2 texCoord;
 #endif
 
+float when_gt(float x, float y) {
+  return max(sign(x - y), 0.0);
+}
+
 void main()
 {
 	// Pass texture coordinates to fragment shader
@@ -82,7 +86,10 @@ void main()
 	vec4 position = vertex;
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
-		position.y -= stretch;
+		// NOTE: 'stretch' may be:
+		//	- if positive: building stretching
+		//	- if negative: the height above the terrain of the model instance overall
+		position.y -= (stretch * when_gt(stretch, 0.f));
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix
