@@ -1207,7 +1207,11 @@ std::string gl_pipeline_state_object::readShaderBuf(const std::string& name, std
 	char *buffer;
 
 	fp = PHYSFS_openRead(name.c_str());
-	ASSERT_OR_RETURN(nullptr, fp != nullptr, "Could not open %s", name.c_str());
+	if (fp == nullptr)
+	{
+		debug(LOG_FATAL, "Failed to read required shader file: %s\nPlease remove any mods and/or reinstall Warzone 2100.", name.c_str());
+		return "";
+	}
 	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(name.c_str()), name.c_str());
 	filesize = PHYSFS_fileLength(fp);
 	buffer = (char *)malloc(filesize + 1);
