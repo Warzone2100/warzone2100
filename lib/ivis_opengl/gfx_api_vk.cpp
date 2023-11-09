@@ -4109,7 +4109,10 @@ bool VkRoot::createSwapchain()
 	// see: https://bugzilla.libsdl.org/show_bug.cgi?id=4671
 	swapchainSize.width = clamp(drawableSize.width, swapChainSupport.capabilities.minImageExtent.width, swapChainSupport.capabilities.maxImageExtent.width);
 	swapchainSize.height = clamp(drawableSize.height, swapChainSupport.capabilities.minImageExtent.height, swapChainSupport.capabilities.maxImageExtent.height);
-	ASSERT(swapchainSize.width > 0 && swapchainSize.height > 0, "swapchain dimensions: %" PRIu32" x %" PRIu32"", swapchainSize.width, swapchainSize.height);
+	if (swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
+		debug(LOG_3D, "swapchain dimensions: %" PRIu32" x %" PRIu32"", swapchainSize.width, swapchainSize.height);
+	}
 	// Some drivers may return 0 for swapchain min/maxImageExtent height/width in certain circumstances
 	// (ex. some Nvidia drivers on Windows when minimizing the window)
 	// but attempting to create a swapchain with extents of 0 is invalid
