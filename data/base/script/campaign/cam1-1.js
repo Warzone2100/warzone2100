@@ -122,8 +122,6 @@ function eventStartLevel()
 	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggytwin, CAM_SCAV_7);
 	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeeptwin, CAM_SCAV_7);
 
-	//Get rid of the already existing crate and replace with another
-	camSafeRemoveObject("artifact1", false);
 	camSetArtifacts({
 		"scavFactory1": { tech: "R-Wpn-MG3Mk1" }, //Heavy machine gun
 	});

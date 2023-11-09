@@ -100,23 +100,18 @@
 	},
 
 	"object_0": {
-		"label": "artifact1",
-		"id": 160831,
-		"type": 2
-	},
-	"object_1": {
 		"label": "scavFactory1",
 		"id": 146,
 		"player": 7,
 		"type": 1
 	},
-	"object_2": {
+	"object_1": {
 		"label": "frontBunkerLeft",
 		"id": 142,
 		"player": 7,
 		"type": 1
 	},
-	"object_3": {
+	"object_2": {
 		"label": "frontBunkerRight",
 		"id": 143,
 		"player": 7,
