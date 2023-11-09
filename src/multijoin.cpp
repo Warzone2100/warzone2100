@@ -443,6 +443,8 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
 	debug(LOG_NET, "** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
 
+	ingame.muteChat[playerIndex] = false;
+
 	if (wz_command_interface_enabled())
 	{
 		std::string playerPublicKeyB64 = base64Encode(getMultiStats(playerIndex).identity.toBytes(EcKey::Public));

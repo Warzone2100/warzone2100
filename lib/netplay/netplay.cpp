@@ -688,6 +688,7 @@ void NET_InitPlayers(bool initTeams, bool initSpectator)
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NET_InitPlayer(i, true, initTeams, initSpectator);
+		ingame.muteChat[i] = false;
 		clearPlayerName(i);
 		NETinitQueue(NETnetQueue(i));
 	}

@@ -3240,6 +3240,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		}
 	}
 	swapPlayerMultiStatsLocal(playerIndexA, playerIndexB);
+	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 
 	if (playerIndexA == selectedPlayer || playerIndexB == selectedPlayer)
