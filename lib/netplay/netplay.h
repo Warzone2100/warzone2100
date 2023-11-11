@@ -524,6 +524,14 @@ void resetSyncDebug();                                              ///< Resets 
 GameCrcType nextDebugSync();                                        ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
 bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
 
+
+// Set whether verbose debug mode - outputting the current player's sync log for every single game tick - is enabled until a specific gameTime value
+// WARNING: This may significantly impact performance *and* will fill up your drive with a lot of logs data!
+// It is only intended to be used for debugging issues such as: replays desyncing when gameplay does not, etc. (And don't let the game run too long / set untilGameTime too high!)
+void NET_setDebuggingModeVerboseOutputAllSyncLogs(uint32_t untilGameTime = 0);
+void debugVerboseLogSyncIfNeeded();
+
+
 /**
  * This structure provides read-only access to a player, and can be used to identify players uniquely.
  *

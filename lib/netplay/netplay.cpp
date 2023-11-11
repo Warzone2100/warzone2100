@@ -91,6 +91,7 @@
 char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
 static bool bJoinPrefTryIPv6First = true;
+static uint32_t verboseDebugOutputAllSyncLogsUntilGameTime = 0;
 
 // This is for command line argument override
 // Disables port saving and reading from/to config
@@ -4901,6 +4902,18 @@ const char *NETgetMasterserverName()
 	return masterserver_name;
 }
 
+// Set whether verbose debug mode - outputting the current player's sync log for every single game tick - is enabled
+// WARNING: This may significantly impact performance *and* will fill up your drive with a lot of logs data!
+// It is only intended to be used for debugging issues such as: replays desyncing when gameplay does not, etc. (And don't let the game run too long!)
+void NET_setDebuggingModeVerboseOutputAllSyncLogs(uint32_t untilGameTime)
+{
+	verboseDebugOutputAllSyncLogsUntilGameTime = untilGameTime;
+	if (verboseDebugOutputAllSyncLogsUntilGameTime)
+	{
+		debug(LOG_INFO, "WARNING: Verbose sync log output is enabled!");
+	}
+}
+
 /*!
  * Set the masterserver port
  * \param port The port of the masterserver to connect to
@@ -5366,16 +5379,25 @@ GameCrcType nextDebugSync()
 	return (GameCrcType)ret;
 }
 
-static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned player, bool syncError = true)
+static void dumpDebugSyncImpl(uint8_t *buf, size_t bufLen, const char* fname)
 {
-	char fname[100];
-	PHYSFS_file *fp;
-
-	ssprintf(fname, "logs/desync%u_p%u.txt", time, player);
-	fp = openSaveFile(fname);
+	PHYSFS_file *fp = openSaveFile(fname);
+	if (!fp)
+	{
+		debug(LOG_ERROR, "Failed to open file for writing: %s", fname);
+		return;
+	}
 	ASSERT(bufLen <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "bufLen (%zu) exceeds PHYSFS_uint32::max", bufLen);
 	WZ_PHYSFS_writeBytes(fp, buf, static_cast<PHYSFS_uint32>(bufLen));
 	PHYSFS_close(fp);
+}
+
+static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned player, bool syncError = true)
+{
+	char fname[100];
+	ssprintf(fname, "logs/desync%u_p%u.txt", time, player);
+
+	dumpDebugSyncImpl(buf, bufLen, fname);
 
 	bool isSpectator = player < NetPlay.players.size() && NetPlay.players[player].isSpectator;
 	std::string typeDescription = (syncError) ? "sync error" : "sync log";
@@ -5451,6 +5473,22 @@ static void recvDebugSync(NETQUEUE queue)
 	if (bufLen > 0)
 	{
 		dumpDebugSync(debugSyncTmpBuf, bufLen, time, selectedPlayer, false);
+	}
+}
+
+void debugVerboseLogSyncIfNeeded()
+{
+	if (!verboseDebugOutputAllSyncLogsUntilGameTime || gameTime > verboseDebugOutputAllSyncLogsUntilGameTime)
+	{
+		return;
+	}
+
+	auto bufLen = dumpLocalDebugSyncLogByTime(gameTime);
+	if (bufLen > 0)
+	{
+		char fname[100];
+		ssprintf(fname, "logs/sync%u_p%u.txt", gameTime, selectedPlayer);
+		dumpDebugSyncImpl(debugSyncTmpBuf, bufLen, fname);
 	}
 }
 
