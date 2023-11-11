@@ -258,6 +258,87 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 	return GL_INVALID_ENUM;
 }
 
+// MARK: GL error handling helpers
+
+// NOTE: Not to be used in critical code paths, but more for initialization
+static bool _wzGLCheckErrors(int line, const char *function)
+{
+	if (glGetError == nullptr)
+	{
+		// function not available? can't check...
+		return true;
+	}
+	GLenum err = glGetError();
+	if (err == GL_NO_ERROR)
+	{
+		return true;
+	}
+
+	// otherwise
+	bool encounteredCriticalError = false;
+	do
+	{
+		code_part part = LOG_ERROR;
+		const char* errAsStr = "??";
+		switch (err)
+		{
+			case GL_INVALID_ENUM:
+				errAsStr = "GL_INVALID_ENUM";
+				part = LOG_INFO;
+				break;
+			case GL_INVALID_VALUE:
+				errAsStr = "GL_INVALID_VALUE";
+				part = LOG_INFO;
+				break;
+			case GL_INVALID_OPERATION:
+				errAsStr = "GL_INVALID_OPERATION";
+				part = LOG_INFO;
+				break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION:
+				errAsStr = "GL_INVALID_FRAMEBUFFER_OPERATION";
+				break;
+			case GL_OUT_OF_MEMORY:
+				errAsStr = "GL_OUT_OF_MEMORY";
+				part = LOG_FATAL;
+				// Once GL_OUT_OF_MEMORY is set, the state of the OpenGL context is *undefined*
+				encounteredCriticalError = true;
+				break;
+			case GL_STACK_UNDERFLOW:
+				errAsStr = "GL_STACK_UNDERFLOW";
+				encounteredCriticalError = true;
+				break;
+			case GL_STACK_OVERFLOW:
+				errAsStr = "GL_STACK_OVERFLOW";
+				encounteredCriticalError = true;
+				break;
+		}
+
+		if (enabled_debug[part])
+		{
+			_debug(line, part, function, "Encountered OpenGL Error: %s", errAsStr);
+		}
+	} while ((err = glGetError()) != GL_NO_ERROR);
+
+	return !encounteredCriticalError;
+}
+
+static void _wzGLClearErrors()
+{
+	// clear OpenGL error queue
+	if (glGetError != nullptr)
+	{
+		while(glGetError() != GL_NO_ERROR) { } // clear the OpenGL error queue
+	}
+}
+
+// NOTE: Not to be used in critical code paths, but more for initialization
+#define wzGLCheckErrors() _wzGLCheckErrors(__LINE__, __FUNCTION__);
+#define wzGLClearErrors() _wzGLClearErrors()
+
+// NOTE: Not to be used in critical code paths, but more for initialization
+#define ASSERT_GL_NOERRORS_OR_RETURN(retval) \
+	do { bool _wzeval = wzGLCheckErrors(); if (!_wzeval) { return retval; } } while (0)
+
 // MARK: gl_gpurendered_texture
 
 gl_gpurendered_texture::gl_gpurendered_texture()
@@ -3161,27 +3242,13 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	//	glEnable(GL_CULL_FACE);
 
 	// initialize default (0) textures
-	const size_t defaultTexture_width = 2;
-	const size_t defaultTexture_height = 2;
-	pDefaultTexture = dynamic_cast<gl_texture*>(create_texture(1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_texture>"));
-	pDefaultArrayTexture = dynamic_cast<gl_texture_array*>(create_texture_array(1, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_array_texture>"));
-	pDefaultDepthTexture = create_depthmap_texture(WZ_MAX_SHADOW_CASCADES, 2, 2, "<default_depth_map>");
-	if (!pDefaultDepthTexture)
+	if (!createDefaultTextures())
 	{
-		debug(LOG_INFO, "Failed to create default depth texture??");
+		// Failed initializing one or more default textures
+		shutdown();
+		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
+		return false;
 	}
-
-	iV_Image defaultTexture;
-	defaultTexture.allocate(defaultTexture_width, defaultTexture_height, 4, true);
-	if (!pDefaultTexture->upload(0, defaultTexture))
-	{
-		debug(LOG_ERROR, "Failed to upload default texture??");
-	}
-	if (!pDefaultArrayTexture->upload_layer(0, 0, defaultTexture))
-	{
-		debug(LOG_ERROR, "Failed to upload default array texture??");
-	}
-	pDefaultArrayTexture->flush();
 
 	if (!setSwapInterval(mode))
 	{
@@ -3197,12 +3264,54 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		depthBufferResolution = getSuggestedDefaultDepthBufferResolution();
 	}
 
-	createSceneRenderpass();
+	if (!createSceneRenderpass())
+	{
+		// Treat failure to create the scene render pass as a fatal error
+		shutdown();
+		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
+		return false;
+	}
 	initDepthPasses(depthBufferResolution);
 
 #if !defined(__EMSCRIPTEN__)
 	_beginRenderPassImpl();
 #endif
+
+	return true;
+}
+
+bool gl_context::createDefaultTextures()
+{
+	wzGLClearErrors(); // clear OpenGL error states
+
+	// initialize default (0) textures
+	const size_t defaultTexture_width = 2;
+	const size_t defaultTexture_height = 2;
+	pDefaultTexture = dynamic_cast<gl_texture*>(create_texture(1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_texture>"));
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	pDefaultArrayTexture = dynamic_cast<gl_texture_array*>(create_texture_array(1, 1, defaultTexture_width, defaultTexture_height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<default_array_texture>"));
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	pDefaultDepthTexture = create_depthmap_texture(WZ_MAX_SHADOW_CASCADES, 2, 2, "<default_depth_map>");
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	if (!pDefaultDepthTexture)
+	{
+		debug(LOG_INFO, "Failed to create default depth texture??");
+	}
+
+	iV_Image defaultTexture;
+	defaultTexture.allocate(defaultTexture_width, defaultTexture_height, 4, true);
+	if (!pDefaultTexture->upload(0, defaultTexture))
+	{
+		debug(LOG_ERROR, "Failed to upload default texture??");
+	}
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	if (!pDefaultArrayTexture->upload_layer(0, 0, defaultTexture))
+	{
+		debug(LOG_ERROR, "Failed to upload default array texture??");
+	}
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	pDefaultArrayTexture->flush();
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 	return true;
 }
@@ -4281,15 +4390,22 @@ bool gl_context::createSceneRenderpass()
 		return false;
 	}
 
+	wzGLClearErrors(); // clear OpenGL error states
+
+	bool encounteredError = false;
 	GLsizei samples = std::min<GLsizei>(multisamples, maxMultiSampleBufferFormatSamples);
 
 	if (samples > 0)
 	{
 		// If MSAA is enabled, use glRenderbufferStorageMultisample to create an intermediate buffer with MSAA enabled
 		glGenRenderbuffers(1, &sceneMsaaRBO);
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 		glBindRenderbuffer(GL_RENDERBUFFER, sceneMsaaRBO);
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, multiSampledBufferInternalFormat, viewportWidth, viewportHeight); // OpenGL 3.0+, OpenGL ES 3.0+
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 	}
 
 	// Always create a standard color texture (for the resolved color values)
@@ -4298,74 +4414,99 @@ bool gl_context::createSceneRenderpass()
 	GLenum colorInternalFormat = (samples > 0 && gles) ? multiSampledBufferInternalFormat : GL_RGB8;
 	GLenum colorBaseFormat = (samples > 0 && gles) ? multiSampledBufferBaseFormat : GL_RGB;
 	auto pNewSceneTexture = create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE, viewportWidth, viewportHeight, "<scene texture>");
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	if (!pNewSceneTexture)
 	{
-		debug(LOG_ERROR, "Failed to create scene texture");
-		return 0;
+		debug(LOG_ERROR, "Failed to create scene color texture (%" PRIu32 " x %" PRIu32 ")", viewportWidth, viewportHeight);
+		return false;
 	}
 	sceneTexture = pNewSceneTexture;
 	sceneTexture->bind();
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	sceneTexture->unbind();
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 	// Create a matching depth/stencil texture
 	sceneDepthStencilRBO = 0;
 	glGenRenderbuffers(1, &sceneDepthStencilRBO);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	glBindRenderbuffer(GL_RENDERBUFFER, sceneDepthStencilRBO);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, viewportWidth, viewportHeight); // OpenGL 3.0+, OpenGL ES 3.0+
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 	const size_t numSceneFBOs = 2;
 	for (auto i = 0; i < numSceneFBOs; ++i)
 	{
 		GLuint newFBO = 0;
 		glGenFramebuffers(1, &newFBO);
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 		sceneFBO.push_back(newFBO);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 		if (samples > 0)
 		{
 			// use the MSAA renderbuffer as the color attachment
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sceneMsaaRBO);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 		}
 		else
 		{
 			// just directly use the sceneTexture as the color attachment (since no MSAA resolving needs to occur)
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 		}
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sceneDepthStencilRBO);
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE)
 		{
-			debug(LOG_ERROR, "Failed to create scene framebuffer with error: %s", cbframebuffererror(status));
+			debug(LOG_ERROR, "Failed to create scene framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, viewportWidth, viewportHeight, static_cast<int>(samples), cbframebuffererror(status));
+			encounteredError = true;
 		}
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 		if (samples > 0)
 		{
 			// Must also create a sceneResolveFBO for resolving MSAA
 			GLuint newResolveRBO = 0;
 			glGenFramebuffers(1, &newResolveRBO);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 			sceneResolveFBO.push_back(newResolveRBO);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, newResolveRBO);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 			// shouldn't need a depth/stencil buffer
 
 			status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			if (status != GL_FRAMEBUFFER_COMPLETE)
 			{
-				debug(LOG_ERROR, "Failed to create scene resolve framebuffer with error: %s", cbframebuffererror(status));
+				debug(LOG_ERROR, "Failed to create scene resolve framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, viewportWidth, viewportHeight, static_cast<int>(samples), cbframebuffererror(status));
+				encounteredError = true;
 			}
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 		}
 	}
 
-	return true;
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+
+	return !encounteredError;
 }
 
 void gl_context::beginSceneRenderPass()
