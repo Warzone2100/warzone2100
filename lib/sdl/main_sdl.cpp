@@ -1413,49 +1413,49 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 	case SDL_KEYDOWN:
 	{
 		unsigned vk = 0;
-		switch (keyEvent->keysym.scancode)
+		switch (keyEvent->keysym.sym)
 		{
 		// our "editing" keys for text
-		case SDL_SCANCODE_LEFT:
+		case SDLK_LEFT:
 			vk = INPBUF_LEFT;
 			break;
-		case SDL_SCANCODE_RIGHT:
+		case SDLK_RIGHT:
 			vk = INPBUF_RIGHT;
 			break;
-		case SDL_SCANCODE_UP:
+		case SDLK_UP:
 			vk = INPBUF_UP;
 			break;
-		case SDL_SCANCODE_DOWN:
+		case SDLK_DOWN:
 			vk = INPBUF_DOWN;
 			break;
-		case SDL_SCANCODE_HOME:
+		case SDLK_HOME:
 			vk = INPBUF_HOME;
 			break;
-		case SDL_SCANCODE_END:
+		case SDLK_END:
 			vk = INPBUF_END;
 			break;
-		case SDL_SCANCODE_INSERT:
+		case SDLK_INSERT:
 			vk = INPBUF_INS;
 			break;
-		case SDL_SCANCODE_DELETE:
+		case SDLK_DELETE:
 			vk = INPBUF_DEL;
 			break;
-		case SDL_SCANCODE_PAGEUP:
+		case SDLK_PAGEUP:
 			vk = INPBUF_PGUP;
 			break;
-		case SDL_SCANCODE_PAGEDOWN:
+		case SDLK_PAGEDOWN:
 			vk = INPBUF_PGDN;
 			break;
-		case SDL_SCANCODE_BACKSPACE:
+		case SDLK_BACKSPACE:
 			vk = INPBUF_BKSPACE;
 			break;
-		case SDL_SCANCODE_TAB:
+		case SDLK_TAB:
 			vk = INPBUF_TAB;
 			break;
-		case SDL_SCANCODE_RETURN:
+		case SDLK_RETURN:
 			vk = INPBUF_CR;
 			break;
-		case SDL_SCANCODE_ESCAPE:
+		case SDLK_ESCAPE:
 			vk = INPBUF_ESC;
 			break;
 		default:
@@ -1467,7 +1467,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		{
 			// Take care of adding 'editing' keys that were pressed to the input buffer (for text editing control handling)
 			inputAddBuffer(vk, 0);
-			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetScancodeName(currentKey));
+			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetKeyName(keyEvent->keysym.sym));
 		}
 
 		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
