@@ -155,6 +155,8 @@ static int xSectors, ySectors;
 /// Did we initialise the terrain renderer yet?
 static bool terrainInitialised = false;
 
+static std::vector<gfx_api::TerrainDecalVertex> terrainDecalVertexUpdateBuffer;
+
 /// Helper to specify the offset in a VBO
 #define BUFFER_OFFSET(i) (reinterpret_cast<char *>(i))
 
@@ -730,13 +732,13 @@ static void updateSectorGeometry(int x, int y)
 	}
 	else
 	{
-		gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapWidth * mapHeight * 12);
+		terrainDecalVertexUpdateBuffer.resize(sectors[x * ySectors + y].terrainAndDecalSize); // reuse a buffer to avoid repeated allocations if possible
 		int terrainDecalSize = 0;
-		setSectorDecalVertex_SinglePass(x, y, terrainDecalData, &terrainDecalSize);
+		setSectorDecalVertex_SinglePass(x, y, terrainDecalVertexUpdateBuffer.data(), &terrainDecalSize);
+		ASSERT(terrainDecalSize == sectors[x * ySectors + y].terrainAndDecalSize, "Sizes don't match!");
 		terrainDecalVBO->update(sizeof(gfx_api::TerrainDecalVertex)*sectors[x * ySectors + y].terrainAndDecalOffset,
-							 sizeof(gfx_api::TerrainDecalVertex)*sectors[x * ySectors + y].terrainAndDecalSize, terrainDecalData,
+							 sizeof(gfx_api::TerrainDecalVertex)*sectors[x * ySectors + y].terrainAndDecalSize, terrainDecalVertexUpdateBuffer.data(),
 							 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
-		free(terrainDecalData);
 	}
 }
 
