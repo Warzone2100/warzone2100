@@ -2452,6 +2452,14 @@ void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true
 	}
 }
 
+void wzResetGfxSettingsOnFailure()
+{
+	// Because too high an MSAA value could lead to out-of-memory errors (for example, trying to create the scene renderpass), reset MSAA to off for next run
+	war_setAntialiasing(0);
+
+	saveGfxConfig();
+}
+
 bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails /*= ""*/)
 {
 	if (!WZbackend.has_value())

@@ -796,8 +796,9 @@ bool saveGfxConfig()
 		iniGeneral.SetString(key, value);
 	};
 
-	// only change the gfx entry
+	// only change specific gfx entries
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
+	iniSectionSetInteger(iniGeneral, "antialiasing", war_getAntialiasing());
 
 	// write out ini file changes
 	bool result = saveIniFile(fileName, ini);
