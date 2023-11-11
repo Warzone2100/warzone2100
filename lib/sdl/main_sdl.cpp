@@ -1468,14 +1468,19 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 			break;
 		}
 
-		SDL_Scancode currentKey = keyEvent->keysym.scancode;
 		if (vk)
 		{
 			// Take care of adding 'editing' keys that were pressed to the input buffer (for text editing control handling)
 			inputAddBuffer(vk, 0);
 			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetKeyName(keyEvent->keysym.sym));
 		}
+		else
+		{
+			// add everything else
+			inputAddBuffer(keyEvent->keysym.sym, 0);
+		}
 
+		SDL_Scancode currentKey = keyEvent->keysym.scancode;
 		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
 
 		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
