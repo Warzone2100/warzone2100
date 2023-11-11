@@ -993,7 +993,21 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			break;
 		}
-		ASSERT_OR_RETURN(, psDroid->psActionTarget[0] != nullptr, "target is NULL while attacking");
+
+		if (psDroid->psActionTarget[0] == nullptr)
+		{
+			if (psDroid->numWeaps > 1)
+			{
+				// FUTURE TODO: Figure out what (if any) changes to this switch case might make sense for multi-weapon bodies
+				// To avoid log spam, make this a silent return for now
+				return;
+			}
+			else
+			{
+				// For single-weapon bodies, ASSERT
+				ASSERT_OR_RETURN(, psDroid->psActionTarget[0] != nullptr, "target is NULL while attacking");
+			}
+		}
 
 		if (psDroid->action == DACTION_ROTATETOATTACK)
 		{
