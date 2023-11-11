@@ -139,6 +139,41 @@ static std::unique_ptr<bool[]> mapDecals;           // array that tells us what 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
+#if 0
+void syncLogDumpAuxMaps()
+{
+	for (int auxIdx = 0; auxIdx < MAX_PLAYERS + AUX_MAX; auxIdx++)
+	{
+		syncDebug("psAuxMap[%d]:", auxIdx);
+		for (int y = 0; y < mapHeight; ++y)
+		{
+			std::string rowDetails;
+			for (int x = 0; x < mapWidth; ++x)
+			{
+				auto val = auxTile(x, y, auxIdx);
+				rowDetails += std::to_string(val) + ",";
+			}
+			syncDebug("psAuxMap[%d] row[%d]: %s", auxIdx, y, rowDetails.c_str());
+		}
+	}
+
+	for (int idx = 0; idx < AUX_MAX; idx++)
+	{
+		syncDebug("psBlockMap[%d]:", idx);
+		for (int y = 0; y < mapHeight; ++y)
+		{
+			std::string rowDetails;
+			for (int x = 0; x < mapWidth; ++x)
+			{
+				auto val = blockTile(x, y, idx);
+				rowDetails += std::to_string(val) + ",";
+			}
+			syncDebug("psBlockMap[%d] row[%d]: %s", idx, y, rowDetails.c_str());
+		}
+	}
+}
+#endif
+
 const GROUND_TYPE& getGroundType(size_t idx)
 {
 	return groundTypes[idx];

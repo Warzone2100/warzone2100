@@ -425,6 +425,8 @@ void sendPlayerGameTime()
 		NETuint16_t(&wantedLatency);
 		NETend();
 	}
+
+	debugVerboseLogSyncIfNeeded();
 }
 
 static inline bool shouldWaitForPlayerSlot(unsigned player)
