@@ -375,7 +375,7 @@ bool KeyMappings::save(const char* path) const
 		return false;
 	}
 
-	ini.setValue("version", 1);
+	ini.setValue("version", 2);
 
 	ini.beginArray("mappings");
 	for (const KeyMapping& mapping : keyMappings)
