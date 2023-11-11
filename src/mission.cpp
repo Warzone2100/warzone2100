@@ -3097,7 +3097,10 @@ void clearMissionWidgets()
  */
 static DROID *find_transporter()
 {
-	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return nullptr;
+	}
 
 	for (auto droid_list : {apsDroidLists[selectedPlayer], mission.apsDroidLists[selectedPlayer]})
 	{
