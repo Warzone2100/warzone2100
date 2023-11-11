@@ -1093,6 +1093,12 @@ static InputKey *inputPointerNext(InputKey *p)
 /* add count copies of the characater code to the input buffer */
 static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 {
+	if (!GetTextEventsOwner)
+	{
+		// Text input events aren't enabled
+		return;
+	}
+
 	/* Calculate what pEndBuffer will be set to next */
 	InputKey	*pNext = inputPointerNext(pEndBuffer);
 
