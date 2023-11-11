@@ -1113,6 +1113,7 @@ static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 	pEndBuffer = pNext;
 }
 
+// Returns the human-readable name for the key *in the current keyboard layout*
 void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
 	if (code == KEY_LCTRL)
@@ -1146,7 +1147,7 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 
 	if (code < KEY_MAXSCAN)
 	{
-		snprintf(ascii, maxStringSize, "%s", SDL_GetScancodeName(keyCodeToSDLScancode(code)));
+		snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(SDL_GetKeyFromScancode(keyCodeToSDLScancode(code))));
 		if (ascii[0] >= 'a' && ascii[0] <= 'z' && ascii[1] != 0)
 		{
 			// capitalize
