@@ -106,7 +106,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p);
 
 /** How many ticks to skip before looking for a better target. */
 #define TARGET_UPD_SKIP_FRAMES 1000
-#define TARGET_CHECK_NEW_SKIP_TICKS 500
+#define TARGET_CHECK_NEW_SKIP_TICKS 200
 
 // Throttle how often we look for a new target
 // Notes: deltaGameTime is either 0 (if no gameTime update was processed) or GAME_TICKS_PER_UPDATE
