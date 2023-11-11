@@ -8757,7 +8757,7 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 	}
 	// Must restore `useTerrainOverrides` (this matters for re-loading the map!) - see loadMapPreview() in multiint.cpp
 	builtInMap = (mapData->realFileName == nullptr);
-	useTerrainOverrides = shouldLoadTerrainTypeOverrides(mapData->pName);
+	useTerrainOverrides = builtInMap && shouldLoadTerrainTypeOverrides(mapData->pName);
 
 	for (Sha256 &hash : game.modHashes)
 	{
