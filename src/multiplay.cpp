@@ -1988,7 +1988,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 		filename = getModFilename(hash);
 		if (filename.empty())
 		{
-			debug(LOG_INFO, "Unknown file requested by %u.", player);
+			debug(LOG_INFO, "Unknown file requested by %u. (Hash: %s, loadedMods: %zu)", player, hash.toString().c_str(), getLoadedMods().size());
 			return false;
 		}
 
