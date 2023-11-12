@@ -123,9 +123,9 @@ function helicoptersAreAllowed()
 {
 	if (getMultiTechLevel() === 1)
 	{
-		if ((baseType === CAMP_CLEAN && gameTime > (10 * 60000)) ||
-			(baseType === CAMP_BASE && gameTime > (7 * 60000)) ||
-			(baseType === CAMP_WALLS && gameTime > (4 * 60000)))
+		if ((baseType === CAMP_CLEAN && gameTime > (12 * 60000)) ||
+			(baseType === CAMP_BASE && gameTime > (9 * 60000)) ||
+			(baseType === CAMP_WALLS && gameTime > (6 * 60000)))
 		{
 			return true;
 		}
