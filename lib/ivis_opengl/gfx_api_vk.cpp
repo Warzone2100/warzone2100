@@ -144,10 +144,19 @@ void _vk_setenv(const _vkl_env_text_type& name, const _vkl_env_text_type& value)
 }
 #endif
 
-const std::vector<std::pair<_vkl_env_text_type, _vkl_env_text_type>> vulkan_implicit_layer_environment_variables = {
-	{_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_overlay_1"), _vkl_env_text("1")}
-	, {_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_fossilize_1"), _vkl_env_text("1")}
-	, {_vkl_env_text("DISABLE_FPSMON_LAYER"), _vkl_env_text("1")} // avoid crashes caused by this layer
+// <(string) layer environment var name, (string) environment var value (to disable layer), (bool) whether allowable>
+const std::vector<std::tuple<_vkl_env_text_type, _vkl_env_text_type, bool>> vulkan_implicit_layer_environment_variables = {
+	{_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_overlay_1"), _vkl_env_text("1"), false}
+	, {_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_fossilize_1"), _vkl_env_text("1"), false}
+	// avoid crashes / bugs caused by these layers
+	, {_vkl_env_text("DISABLE_FPSMON_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_RTSS_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_VULKAN_OBS_CAPTURE"), _vkl_env_text("1"), true} // OBS
+	, {_vkl_env_text("DISABLE_VULKAN_OW_OBS_CAPTURE"), _vkl_env_text("1"), true} // OverWolf
+	, {_vkl_env_text("VK_LAYER_bandicam_helper_DEBUG_1"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_SAMPLE_LAYER"), _vkl_env_text("1"), true} // AgaueEye
+	, {_vkl_env_text("DISABLE_GAMEPP_LAYER"), _vkl_env_text("1"), true} // Gamepp
 };
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -165,11 +174,14 @@ enum class VulkanBackendInternalTextureType : size_t
 
 // MARK: General helper functions
 
-void SetVKImplicitLayerEnvironmentVariables()
+void SetVKImplicitLayerEnvironmentVariables(bool allowImplicitLayers = false)
 {
 	for (const auto &it : vulkan_implicit_layer_environment_variables)
 	{
-		_vk_setenv(it.first, it.second);
+		if (!allowImplicitLayers || !std::get<2>(it))
+		{
+			_vk_setenv(std::get<0>(it), std::get<1>(it));
+		}
 	}
 }
 
@@ -4422,8 +4434,6 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	mipLodBias = _mipLodBias;
 	depthMapSize = _depthMapResolution;
 
-	SetVKImplicitLayerEnvironmentVariables();
-
 	// obtain backend_Vulkan_Impl from impl
 	backend_impl = impl.createVulkanBackendImpl();
 	if (!backend_impl)
@@ -4431,6 +4441,8 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		debug(LOG_ERROR, "Failed to get Vulkan backend implementation");
 		return false;
 	}
+
+	SetVKImplicitLayerEnvironmentVariables(backend_impl->allowImplicitLayers());
 
 	PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr = backend_impl->getVkGetInstanceProcAddr();
 	if(!_vkGetInstanceProcAddr)

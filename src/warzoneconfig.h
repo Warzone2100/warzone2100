@@ -165,6 +165,9 @@ void war_setShadowMapResolution(uint32_t resolution);
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);
 
+void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed); // not persisted to config
+bool war_getAllowVulkanImplicitLayers();
+
 /**
  * Enable or disable sound initialization
  *

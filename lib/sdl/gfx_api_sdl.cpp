@@ -46,7 +46,7 @@ std::unique_ptr<gfx_api::backend_Vulkan_Impl> SDL_gfx_api_Impl_Factory::createVu
 {
 	ASSERT_OR_RETURN(nullptr, window != nullptr, "Invalid SDL_Window*");
 #if defined(HAVE_SDL_VULKAN_H)
-	return std::unique_ptr<gfx_api::backend_Vulkan_Impl>(new sdl_Vulkan_Impl(window));
+	return std::unique_ptr<gfx_api::backend_Vulkan_Impl>(new sdl_Vulkan_Impl(window, config.allowImplicitLayers));
 #else // !defined(HAVE_SDL_VULKAN_H)
 	SDL_version compiled_version;
 	SDL_VERSION(&compiled_version);

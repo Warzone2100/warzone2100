@@ -2973,6 +2973,10 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
 	sdl_impl_config.useOpenGLES = useOpenGLES;
 	sdl_impl_config.useOpenGLESLibrary = useOpenGLESLibrary;
+	if (backend == video_backend::vulkan)
+	{
+		sdl_impl_config.allowImplicitLayers = war_getAllowVulkanImplicitLayers();
+	}
 	return sdl_impl_config;
 }
 

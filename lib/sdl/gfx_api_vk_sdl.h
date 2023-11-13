@@ -30,7 +30,7 @@
 class sdl_Vulkan_Impl final : public gfx_api::backend_Vulkan_Impl
 {
 public:
-	sdl_Vulkan_Impl(SDL_Window* window);
+	sdl_Vulkan_Impl(SDL_Window* window, bool allowImplicitLayers);
 
 	virtual PFN_vkGetInstanceProcAddr getVkGetInstanceProcAddr() override;
 	virtual bool getRequiredInstanceExtensions(std::vector<const char*> &output) override;
@@ -39,8 +39,11 @@ public:
 	// Use this function to get the size of the window's underlying drawable dimensions in pixels. This is used for setting viewport sizes, scissor rectangles, and other places where a VkExtent might show up in relation to the window.
 	virtual void getDrawableSize(int* w, int* h) override;
 
+	virtual bool allowImplicitLayers() const override;
+
 private:
 	SDL_Window* window;
+	bool m_allowImplicitLayers = false;
 };
 
 #endif // defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
