@@ -121,7 +121,8 @@ enum NET_JOIN_PLAYERTYPE : uint8_t {
 
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
-static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
+static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose);
+static void NETplayerLeaving(UDWORD player, bool quietSocketClose = false);		// Cleanup sockets on player leaving (nicely)
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETallowJoining();
 static void recvDebugSync(NETQUEUE queue);
@@ -894,7 +895,7 @@ bool NETplayerHasConnection(uint32_t index)
  * @note Connection dropped. Handle it gracefully.
  * \param index
  */
-static void NETplayerClientDisconnect(uint32_t index)
+static void NETplayerClientsDisconnect(std::set<uint32_t> indexes)
 {
 	if (!NetPlay.isHost)
 	{
@@ -902,11 +903,38 @@ static void NETplayerClientDisconnect(uint32_t index)
 		return;
 	}
 
-	if (connected_bsocket[index])
+	// 1.) Do a pass just closing the sockets (in case multiple players involved)
+	std::vector<uint32_t> playersActuallyDisconnected;
+	for (auto index : indexes)
 	{
-		debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p", index, static_cast<void *>(connected_bsocket[index]));
+		if (index >= MAX_CONNECTED_PLAYERS)
+		{
+			ASSERT(index < MAX_CONNECTED_PLAYERS, "Invalid player index: %" PRIu32, index);
+			continue;
+		}
 
-		NETplayerLeaving(index);
+		if (connected_bsocket[index])
+		{
+			debug(LOG_NET, "Player (%u) has left unexpectedly, closing socket %p", index, static_cast<void *>(connected_bsocket[index]));
+
+			NETplayerCloseSocket(index, false);
+			playersActuallyDisconnected.push_back(index);
+		}
+		else
+		{
+			debug(LOG_ERROR, "Player (%u) has left unexpectedly - but socket already closed?", index);
+		}
+	}
+
+	// 2.) Notify other players about which players were disconnected
+	for (auto index : playersActuallyDisconnected)
+	{
+		if (index >= MAX_CONNECTED_PLAYERS)
+		{
+			continue;
+		}
+
+		NETplayerLeaving(index, true);
 
 		NETlogEntry("Player has left unexpectedly.", SYNC_FLAG, index);
 		// Announce to the world. This was really icky, because we may have been calling the send
@@ -918,20 +946,11 @@ static void NETplayerClientDisconnect(uint32_t index)
 			NETend();
 		}
 	}
-	else
-	{
-		debug(LOG_ERROR, "Player (%u) has left unexpectedly - but socket already closed?", index);
-	}
 }
 
-/**
- * @note When a player leaves nicely (ie, we got a NET_PLAYER_LEAVING
- *       message), we clean up the socket that we used.
- * \param index
- */
-static void NETplayerLeaving(UDWORD index)
+static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose)
 {
-	ASSERT(index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
+	ASSERT_OR_RETURN(, index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
 	if (connected_bsocket[index])
 	{
 		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, static_cast<void *>(connected_bsocket[index]));
@@ -946,6 +965,17 @@ static void NETplayerLeaving(UDWORD index)
 	{
 		debug(LOG_NET, "Player (%u) has left nicely, socket already closed?", index);
 	}
+}
+
+/**
+ * @note When a player leaves nicely (ie, we got a NET_PLAYER_LEAVING
+ *       message), we clean up the socket that we used.
+ * \param index
+ */
+static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
+{
+	ASSERT_OR_RETURN(, index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
+	NETplayerCloseSocket(index, quietSocketClose);
 	sync_counter.left++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(index);		// more cleanup
@@ -1735,15 +1765,30 @@ size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal)
 	return nStatsLastSec.*statsType.*statisticType - nStatsSecondLastSec.*statsType.*statisticType;
 }
 
-static std::list<std::function<void()>> netSendDelayedActions;
+static std::set<uint32_t> netSendPendingDisconnectPlayerIndexes;
 
 void NETsendProcessDelayedActions()
 {
-	for (auto action : netSendDelayedActions)
+	if (netSendPendingDisconnectPlayerIndexes.empty())
 	{
-		action();
+		return;
 	}
-	netSendDelayedActions.clear();
+
+	// "consume" the netSendPendingDisconnectPlayerIndexes up-front, and do *not* reference it again (as NETplayerClientsDisconnect may lead to calls that mutate it)
+	std::set<uint32_t> pendingDisconnectPlayers = netSendPendingDisconnectPlayerIndexes;
+	netSendPendingDisconnectPlayerIndexes.clear();
+
+	for (auto player : pendingDisconnectPlayers)
+	{
+		if (player >= MAX_CONNECTED_PLAYERS)
+		{
+			ASSERT(player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32, player);
+			continue;
+		}
+		NETlogEntry("client disconnect?", SYNC_FLAG, player);
+	}
+
+	NETplayerClientsDisconnect(pendingDisconnectPlayers);
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -1810,10 +1855,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 					debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to %" PRIu8 ": %s", message->type, message->rawLen(), compressedRawLen, player, strSockError(getSockErr()));
 					if (!isTmpQueue)
 					{
-						netSendDelayedActions.push_back([player]() {
-							NETlogEntry("client disconnect?", SYNC_FLAG, player);
-							NETplayerClientDisconnect(player);
-						});
+						netSendPendingDisconnectPlayerIndexes.insert(player);
 					}
 				}
 			}
