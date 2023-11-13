@@ -2169,8 +2169,16 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 {
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
+	const bool bIsTrueMultiplayerGame = bMultiPlayer && NetPlay.bComms;
+
 	UDWORD i;
 	int disallow = allPlayersOnSameTeam(player);
+	if (bIsTrueMultiplayerGame && NetPlay.isHost)
+	{
+		// allow configuration of all teams in true multiplayer mode (by host), even if they would block the game starting
+		// (i.e. even if all players would be configured to be on the same team)
+		disallow = -1;
+	}
 	SpectatorInfo currSpectatorInfo = NETGameGetSpectatorInfo();
 
 	bool isSpectator = NetPlay.players[player].isSpectator;
