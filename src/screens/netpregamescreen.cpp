@@ -258,18 +258,27 @@ std::shared_ptr<WzLoadingPlayersStatusForm> WzLoadingPlayersStatusForm::make()
 	checkmarkText->setText("✓", font_regular);
 
 	// Add rows for all players
+	std::vector<uint32_t> playerIndexes;
 	for (uint32_t player = 0; player < std::min<uint32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 	{
 		if (isHumanPlayer(player) // is an active (connected) human player
 					|| NetPlay.players[player].difficulty == AIDifficulty::HUMAN // was a human player (probably disconnected)
 					|| NetPlay.players[player].ai >= 0) // is an AI bot
 		{
-			auto pPlayerCheckbox = std::make_shared<WzPlayerStatusCheckboxButton>(player, checkmarkText);
-			pPlayerCheckbox->FontID = font_regular;
-			pPlayerCheckbox->setString(getPlayerName(player));
-			pPlayerCheckbox->setGeometry(0, 0, pPlayerCheckbox->idealWidth(), pPlayerCheckbox->idealHeight());
-			result->playersList->addItem(pPlayerCheckbox);
+			playerIndexes.push_back(player);
 		}
+	}
+	// sort by player position
+	std::sort(playerIndexes.begin(), playerIndexes.end(), [](uint32_t playerA, uint32_t playerB) -> bool {
+		return NetPlay.players[playerA].position < NetPlay.players[playerB].position;
+	});
+	for (auto player : playerIndexes)
+	{
+		auto pPlayerCheckbox = std::make_shared<WzPlayerStatusCheckboxButton>(player, checkmarkText);
+		pPlayerCheckbox->FontID = font_regular;
+		pPlayerCheckbox->setString(getPlayerName(player));
+		pPlayerCheckbox->setGeometry(0, 0, pPlayerCheckbox->idealWidth(), pPlayerCheckbox->idealHeight());
+		result->playersList->addItem(pPlayerCheckbox);
 	}
 
 	// add table for spectators
