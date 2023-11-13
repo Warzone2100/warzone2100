@@ -2810,7 +2810,7 @@ bool isVtolDroid(const DROID *psDroid)
 bool isFlying(const DROID *psDroid)
 {
 	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->propulsionType == PROPULSION_TYPE_LIFT
-		   && (psDroid->sMove.Status != MOVEINACTIVE || isTransporter(psDroid));
+		   && psDroid->sMove.Status != MOVEINACTIVE;
 }
 
 /* returns true if it's a VTOL weapon droid which has completed all runs */
