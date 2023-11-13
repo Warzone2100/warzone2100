@@ -7,6 +7,7 @@ include("script/weather.js");
 
 var mainReticule = false;
 var lastHitTime = 0;
+const TICK_TIME = 100;
 const CREATE_LIKE_EVENT = 0;
 const DESTROY_LIKE_EVENT = 1;
 const TRANSFER_LIKE_EVENT = 2;
@@ -226,7 +227,6 @@ function reticuleUpdate(obj, eventType)
 	if (mainReticule && update_reticule)
 	{
 		//Wait a tick for the counts to update
-		const TICK_TIME = 100;
 		queue("setMainReticule", TICK_TIME);
 	}
 }
@@ -359,6 +359,12 @@ function eventStartLevel()
 	{
 		weatherCycle();
 		setTimer("weatherCycle", 45000);
+	}
+	if (getMissionType() === LDS_EXPAND_LIMBO)
+	{
+		//eventGameInit is too early to notice units placed from eventStartLevel.
+		//Fire off a reticule button update again after all of the eventStartLevel events happen.
+		queue("setMainReticule", TICK_TIME);
 	}
 }
 
