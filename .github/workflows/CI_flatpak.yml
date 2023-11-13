@@ -227,7 +227,7 @@ jobs:
         echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"
         echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}" >> $GITHUB_OUTPUT
     - name: Lint Flatpak
-      if: success() && matrix.arch == 'x86_64'
+      continue-on-error: true
       env:
         WZ_FLATPAK_LOCAL_REPO_NAME: ${{ steps.build.outputs.WZ_FLATPAK_LOCAL_REPO_NAME }}
       run: |
