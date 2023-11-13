@@ -98,6 +98,8 @@ namespace gfx_api
 
 		// Use this function to get the size of the window's underlying drawable dimensions in pixels. This is used for setting viewport sizes, scissor rectangles, and other places where the a VkExtent might show up in relation to the window.
 		virtual void getDrawableSize(int* w, int* h) = 0;
+
+		virtual bool allowImplicitLayers() const = 0;
 	};
 }
 

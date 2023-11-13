@@ -91,6 +91,9 @@ struct WARZONE_GLOBALS
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 	// groups UI
 	bool groupsMenuEnabled = true;
+
+	// run-time only settings (not persisted to config!)
+	bool allowVulkanImplicitLayers = false;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -655,4 +658,14 @@ bool war_getGroupsMenuEnabled()
 void war_setGroupsMenuEnabled(bool enabled)
 {
 	warGlobs.groupsMenuEnabled = enabled;
+}
+
+void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed) // not persisted to config
+{
+	warGlobs.allowVulkanImplicitLayers = allowed;
+}
+
+bool war_getAllowVulkanImplicitLayers()
+{
+	return warGlobs.allowVulkanImplicitLayers;
 }

@@ -358,7 +358,8 @@ typedef enum
 	CLI_GAMELOG_FRAMEINTERVAL,
 	CLI_GAMETIMELIMITMINUTES,
 	CLI_CONVERT_SPECULAR_MAP,
-	CLI_DEBUG_VERBOSE_SYNCLOG_OUTPUT
+	CLI_DEBUG_VERBOSE_SYNCLOG_OUTPUT,
+	CLI_ALLOW_VULKAN_IMPLICIT_LAYERS
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -445,6 +446,7 @@ static const struct poptOption *getOptionsTable()
 		{ "gametimelimit", POPT_ARG_STRING, CLI_GAMETIMELIMITMINUTES, N_("Multiplayer game time limit (in minutes)"), N_("number of minutes")},
 		{ "convert-specular-map", POPT_ARG_STRING, CLI_CONVERT_SPECULAR_MAP, N_("Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"), "inputpath/filename.png:outputpath/filename.png" },
 		{ "debug-verbose-sync-logs-until", POPT_ARG_STRING, CLI_DEBUG_VERBOSE_SYNCLOG_OUTPUT, nullptr, nullptr },
+		{ "allow-vulkan-implicit-layers", POPT_ARG_NONE, CLI_ALLOW_VULKAN_IMPLICIT_LAYERS, N_("Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"), nullptr },
 
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
@@ -1271,6 +1273,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Bad debug verbose synclog output gametime limit");
 			}
 			NET_setDebuggingModeVerboseOutputAllSyncLogs(atoi(token));
+			break;
+
+		case CLI_ALLOW_VULKAN_IMPLICIT_LAYERS:
+			war_runtimeOnlySetAllowVulkanImplicitLayers(true);
 			break;
 
 		} // switch (option)
