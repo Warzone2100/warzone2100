@@ -1005,8 +1005,10 @@ void orderUpdateDroid(DROID *psDroid)
 		if (psDroid->order.psObj == nullptr)
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
-			if (isVtolDroid(psDroid) && !vtolFull(psDroid))
+			if (isVtolDroid(psDroid))
 			{
+				// VTOLs need special care. We don't want them landing in the
+				// middle of the battlefield if the sensor died!!! Rearm or RTB.
 				moveToRearm(psDroid);
 			}
 			else
