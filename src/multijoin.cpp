@@ -100,6 +100,7 @@ void clearPlayer(UDWORD player, bool quietly)
 	ingame.LagCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
+	ingame.hostChatPermissions[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 
 	if (player >= MAX_PLAYERS)
@@ -646,6 +647,7 @@ void setupNewPlayer(UDWORD player)
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
+	ingame.hostChatPermissions[player] = NETgetDefaultMPHostFreeChatPreference();
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;
 	multiSyncResetPlayerChallenge(player);

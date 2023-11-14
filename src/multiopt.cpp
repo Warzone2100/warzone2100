@@ -152,6 +152,9 @@ void sendOptions()
 
 	NETend();
 
+	// also send a NET_HOST_CONFIG msg here
+	sendHostConfig();
+
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
@@ -235,6 +238,7 @@ bool recvOptions(NETQUEUE queue)
 			NETuint8_t(&alliances[i][j]);
 		}
 	}
+
 	netPlayersUpdated = true;
 
 	// Make a copy of old structure limits to see what got changed
@@ -728,6 +732,135 @@ bool multiGameShutdown()
 	NET_InitPlayers();
 
 	resetKickVoteData();
+
+	return true;
+}
+
+static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions)
+{
+	uint32_t numSlotsWithChatPermissionsEnabled = 0;
+	uint32_t numSlotsWithChatPermissionsDisabled = 0;
+	uint32_t numPlayersWithChatPermissionsFreshlyEnabled = 0;
+	uint32_t numPlayersWithChatPermissionsFreshlyDisabled = 0;
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		if (priorHostChatPermissions[i] != ingame.hostChatPermissions[i])
+		{
+			if (isHumanPlayer(i))
+			{
+				if (ingame.hostChatPermissions[i])
+				{
+					++numPlayersWithChatPermissionsFreshlyEnabled;
+				}
+				else
+				{
+					++numPlayersWithChatPermissionsFreshlyDisabled;
+				}
+			}
+		}
+
+		if (ingame.hostChatPermissions[i])
+		{
+			++numSlotsWithChatPermissionsEnabled;
+		}
+		else
+		{
+			++numSlotsWithChatPermissionsDisabled;
+		}
+	}
+
+	if (numPlayersWithChatPermissionsFreshlyEnabled == 0 && numPlayersWithChatPermissionsFreshlyDisabled == 0)
+	{
+		// no changes detected
+		return;
+	}
+
+	if (numSlotsWithChatPermissionsEnabled > 0 && numSlotsWithChatPermissionsDisabled == 0
+		&& numPlayersWithChatPermissionsFreshlyEnabled > 1)
+	{
+		// Enabled for everyone (and more than one person changed)
+		addConsoleMessage(_("The host has enabled free chat for everyone."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		return;
+	}
+
+	if (numSlotsWithChatPermissionsEnabled == 0 && numSlotsWithChatPermissionsDisabled > 0
+		&& numPlayersWithChatPermissionsFreshlyDisabled > 1)
+	{
+		// Disabled for everyone
+		addConsoleMessage(_("The host has muted free chat for everyone."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		return;
+	}
+
+	// Otherwise, output changes for each changed player
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		if (priorHostChatPermissions[i] != ingame.hostChatPermissions[i])
+		{
+			if (!isHumanPlayer(i))
+			{
+				// skip notices for non-human slots
+				continue;
+			}
+			if (i == selectedPlayer)
+			{
+				if (GetGameMode() != GS_NORMAL)
+				{
+					// skip notices for self when in lobby - those are handled elsewhere
+					continue;
+				}
+			}
+			if (ingame.hostChatPermissions[i])
+			{
+				// Host enabled free chat for player
+				auto msg = astringf(_("The host has enabled free chat for player: %s"), getPlayerName(i));
+				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+			else
+			{
+				// Host disabled free chat for player
+				auto msg = astringf(_("The host has muted free chat for player: %s"), getPlayerName(i));
+				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+		}
+	}
+}
+
+void sendHostConfig()
+{
+	ASSERT_HOST_ONLY(return);
+
+	NETbeginEncode(NETbroadcastQueue(), NET_HOST_CONFIG);
+
+	// Send the list of host-set player chat permissions
+	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		NETbool(&ingame.hostChatPermissions[i]);
+	}
+
+	NETend();
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+// host config (options that don't impact gameplay but might impact things like chat). (recvd in both frontend and in-game)
+// returns: false if the host config details should be considered invalid and the client should disconnect
+bool recvHostConfig(NETQUEUE queue)
+{
+	ASSERT_OR_RETURN(true /* silently ignore */, queue.index == NetPlay.hostPlayer, "NET_HOST_CONFIG received from unexpected player: %" PRIu8 " - ignoring", queue.index);
+
+	std::array<bool, MAX_CONNECTED_PLAYERS> priorHostChatPermissions = ingame.hostChatPermissions;
+
+	debug(LOG_NET, "Receiving host_config from host");
+	NETbeginDecode(queue, NET_HOST_CONFIG);
+
+	// Host-set player chat permissions
+	for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		NETbool(&ingame.hostChatPermissions[i]);
+	}
+
+	NETend();
+
+	informOnHostChatPermissionChanges(priorHostChatPermissions);
 
 	return true;
 }

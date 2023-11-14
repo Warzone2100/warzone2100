@@ -94,6 +94,28 @@ public:
 	void setChatMode(WzChatMode newMode);
 	void startChatBoxEditing();
 	void endChatBoxEditing();
+	void setChatBoxEnabledStatus(bool freeChatEnabled, bool quickChatEnabled)
+	{
+		if (freeChatEnabled)
+		{
+			chatBox->setPlaceholder("");
+			chatBox->setTip("");
+		}
+		else
+		{
+			if (quickChatEnabled)
+			{
+				chatBox->setPlaceholder(_("Use Quick Chat to chat with other players."));
+				chatBox->setTip(_("The host has disabled free chat. Please use Quick Chat."));
+			}
+			else
+			{
+				chatBox->setPlaceholder(_("The host has disabled free chat."));
+				chatBox->setTip("");
+			}
+			// but don't disable the edit box, so cheat / chat commands still work
+		}
+	}
 
 protected:
 	void closeParentScreen()
@@ -211,21 +233,33 @@ void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode, const W_EDITBOX
 
 			const char* pStr = enteredText.toUtf8().c_str();
 			auto message = InGameChatMessage(selectedPlayer, pStr);
-			attemptCheatCode(message.text);		// parse the message
+			bool processedCheatCode = attemptCheatCode(message.text);		// parse the message
 
-			switch (currChatMode)
+			bool skipSendingMessage = (bMultiPlayer && !ingame.hostChatPermissions[selectedPlayer]);
+
+			if (!skipSendingMessage)
 			{
-				case WzChatMode::Glob:
-					parseChatMessageModifiers(message);
-					break;
-				case WzChatMode::Team:
-					message.toAllies = true;
-					break;
+				switch (currChatMode)
+				{
+					case WzChatMode::Glob:
+						parseChatMessageModifiers(message);
+						break;
+					case WzChatMode::Team:
+						message.toAllies = true;
+						break;
+				}
+
+				if (strlen(message.text))
+				{
+					message.send();
+				}
 			}
-
-			if (strlen(message.text))
+			else
 			{
-				message.send();
+				if (strlen(message.text) && !processedCheatCode)
+				{
+					addConsoleMessage(_("Did not send message - free chat is disabled by host. Please use Quick Chat."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE, false);
+				}
 			}
 
 			auto parent = weakParent.lock();
@@ -374,6 +408,10 @@ bool WzInGameChatScreen_CLICKFORM::giveChatBoxFocus()
 
 void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 {
+	bool freeChatEnabled = !bMultiPlayer || ingame.hostChatPermissions[selectedPlayer];
+	// for now, quick chat is only available in skirmish / multiplayer mode, for players
+	bool quickChatEnabled = (bMultiPlayer && selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator);
+
 	auto weakSelf = std::weak_ptr<WzInGameChatScreen_CLICKFORM>(std::dynamic_pointer_cast<WzInGameChatScreen_CLICKFORM>(shared_from_this()));
 	consoleBox = WzInGameChatBoxForm::make(initialChatMode, [weakSelf](W_EDITBOX&) -> bool {
 		// on tab handler
@@ -389,9 +427,10 @@ void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 	consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
 	}));
+	consoleBox->setChatBoxEnabledStatus(freeChatEnabled, quickChatEnabled);
 
 	// for now, quick chat is only available in skirmish / multiplayer mode, for players
-	if (bMultiPlayer && selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
+	if (quickChatEnabled)
 	{
 		quickChatForm = createQuickChatForm(WzQuickChatContext::InGame, [weakSelf]() {
 				// on quick-chat sent
@@ -540,7 +579,7 @@ std::shared_ptr<WzInGameChatScreen> WzInGameChatScreen::make(const OnCloseFunc& 
 	}
 	else
 	{
-		bool chatBoxEnabled = true;
+		bool chatBoxEnabled = !bMultiPlayer || ingame.hostChatPermissions[selectedPlayer];
 		if (chatBoxEnabled)
 		{
 			newRootFrm->giveChatBoxFocus();

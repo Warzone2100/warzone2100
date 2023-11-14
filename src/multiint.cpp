@@ -260,7 +260,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
 
 void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
-static void sendRoomChatMessage(char const *text);
+static void sendRoomChatMessage(char const *text, bool skipLocalDisplay = false);
 
 static bool multiplayPlayersReady();
 static bool multiplayIsStartingGame();
@@ -340,6 +340,13 @@ private:
 
 class ChatBoxWidget : public IntFormAnimated
 {
+public:
+	enum class ChatBoxSendMode
+	{
+		DISABLED,
+		HOSTMSG_ONLY,
+		ENABLED
+	};
 protected:
 	ChatBoxWidget(): IntFormAnimated(true) {}
 	virtual void initialize();
@@ -357,14 +364,23 @@ public:
 	void addMessage(RoomMessage const &message);
 	void initializeMessages(bool preserveOldChat);
 
+	void setSendMode(ChatBoxSendMode mode);
+
+	void takeFocus();
+
 protected:
 	void geometryChanged() override;
 	void display(int xOffset, int yOffset) override;
+	void run(W_CONTEXT *psContext) override;
+	void focusLost() override;
 
 private:
 	void openQuickChatOverlay();
 	void closeQuickChatOverlay();
 	int32_t calculateQuickChatScreenPosY();
+
+	void setQuickChatButtonDisplay();
+	void setEditBoxDisplay();
 
 private:
 	std::shared_ptr<ScrollableListWidget> messages;
@@ -374,6 +390,9 @@ private:
 	std::shared_ptr<W_SCREEN> quickChatOverlayScreen;
 	std::shared_ptr<W_FORM> quickChatForm;
 	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
+
+	ChatBoxSendMode currentMode = ChatBoxSendMode::ENABLED;
+	bool hasFocus = false;
 
 	void displayParagraphContextualMenu(const std::string& textToCopy, const std::shared_ptr<PlayerReference>& sender);
 	std::shared_ptr<WIDGET> createParagraphContextualMenuPopoverForm(std::string textToCopy, std::shared_ptr<PlayerReference> sender);
@@ -3248,6 +3267,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		}
 	}
 	swapPlayerMultiStatsLocal(playerIndexA, playerIndexB);
+	std::swap(ingame.hostChatPermissions[playerIndexA], ingame.hostChatPermissions[playerIndexB]);
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 
@@ -4868,11 +4888,7 @@ void ChatBoxWidget::initialize()
 	});
 
 	attach(quickChatButton = std::make_shared<ChatBoxButton>());
-	quickChatButton->setString("+");
-	quickChatButton->setTip(_("Quick Chat"));
-	quickChatButton->FontID = font_regular_bold;
-	int minButtonWidthForText = iV_GetTextWidth(quickChatButton->pText, quickChatButton->FontID);
-	quickChatButton->setGeometry(0, 0, minButtonWidthForText + 20, iV_GetTextLineSize(quickChatButton->FontID));
+	setQuickChatButtonDisplay();
 	quickChatButton->addOnClickHandler([weakSelf](W_BUTTON& widg) {
 		widgScheduleTask([weakSelf]() {
 			auto strongParentForm = weakSelf.lock();
@@ -4887,15 +4903,36 @@ void ChatBoxWidget::initialize()
 	sEdInit.pBoxDisplay = displayChatEdit;
 	editBox = std::make_shared<W_EDITBOX>(&sEdInit);
 	attach(editBox);
-	editBox->setOnReturnHandler([](W_EDITBOX& widg) {
+	setEditBoxDisplay();
+	editBox->setOnReturnHandler([weakSelf](W_EDITBOX& widg) {
 		// don't send empty lines to other players in the lobby
-		auto str = widg.getString();
+		WzString str = widg.getString();
 		if (str.isEmpty())
 		{
 			return;
 		}
 
-		sendRoomChatMessage(str.toUtf8().c_str());
+		auto strongParentForm = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+
+		switch (strongParentForm->currentMode)
+		{
+			case ChatBoxWidget::ChatBoxSendMode::DISABLED:
+				displayRoomSystemMessage(_("The host has disabled free chat. Please use Quick Chat."));
+				return;
+			case ChatBoxWidget::ChatBoxSendMode::HOSTMSG_ONLY:
+				// Always ensure sent message starts with /hostmsg
+				if (!str.startsWith(LOBBY_COMMAND_PREFIX "hostmsg"))
+				{
+					str = LOBBY_COMMAND_PREFIX "hostmsg " + str;
+				}
+				break;
+			case ChatBoxWidget::ChatBoxSendMode::ENABLED:
+				// just send message as-is
+				break;
+		}
+
+		sendRoomChatMessage(str.toUtf8().c_str(), (strongParentForm->currentMode != ChatBoxWidget::ChatBoxSendMode::ENABLED));
 		widg.setString("");
 	});
 	editBox->setOnTabHandler([weakSelf](W_EDITBOX& widg) -> bool {
@@ -4944,12 +4981,132 @@ void ChatBoxWidget::initialize()
 	});
 }
 
+void ChatBoxWidget::setQuickChatButtonDisplay()
+{
+	ASSERT_OR_RETURN(, quickChatButton != nullptr, "No quick chat button?");
+	bool compactButtonForm = (currentMode == ChatBoxSendMode::ENABLED);
+	if (compactButtonForm)
+	{
+		quickChatButton->setString("+");
+	}
+	else
+	{
+		WzString str = WzString("+ ") + _("Quick Chat");
+		quickChatButton->setString(str);
+	}
+	quickChatButton->setTip(_("Quick Chat"));
+	quickChatButton->FontID = font_regular_bold;
+	int minButtonWidthForText = iV_GetTextWidth(quickChatButton->pText, quickChatButton->FontID);
+	quickChatButton->setGeometry(quickChatButton->x(), quickChatButton->y(), minButtonWidthForText + 20, iV_GetTextLineSize(quickChatButton->FontID));
+}
+
+void ChatBoxWidget::setEditBoxDisplay()
+{
+	switch (currentMode)
+	{
+		case ChatBoxSendMode::DISABLED:
+			editBox->setPlaceholder(_("Press the Tab key to open Quick Chat."));
+			editBox->setTip(_("The host has disabled free chat. Please use Quick Chat."));
+			editBox->setState(WEDBS_DISABLE);
+			break;
+		case ChatBoxSendMode::HOSTMSG_ONLY:
+			editBox->setPlaceholder(_("Press the Tab key to open Quick Chat."));
+			editBox->setTip(_("The host has disabled free chat. Please use Quick Chat or /hostmsg commands."));
+			editBox->setState(0);
+			break;
+		case ChatBoxSendMode::ENABLED:
+			editBox->setPlaceholder("");
+			editBox->setTip("");
+			editBox->setState(0);
+			break;
+	}
+}
+
+void ChatBoxWidget::setSendMode(ChatBoxSendMode mode)
+{
+	if (mode == currentMode)
+	{
+		return;
+	}
+	currentMode = mode;
+	// Update UI
+	setQuickChatButtonDisplay();
+	setEditBoxDisplay();
+	geometryChanged();
+	// message the user
+	switch (mode)
+	{
+		case ChatBoxSendMode::DISABLED:
+			displayRoomSystemMessage(_("The host has disabled free chat. Please use Quick Chat."));
+			break;
+		case ChatBoxSendMode::HOSTMSG_ONLY:
+			displayRoomSystemMessage(_("The host has disabled free chat. Please use Quick Chat or /hostmsg commands."));
+			break;
+		case ChatBoxSendMode::ENABLED:
+			displayRoomSystemMessage(_("The host has enabled free chat for you."));
+			break;
+	}
+}
+
 int32_t ChatBoxWidget::calculateQuickChatScreenPosY()
 {
 	int32_t idealQuickChatHeight = quickChatForm->idealHeight();
 	// Try to position it above the chat widget
 	int32_t screenY0 = screenPosY() - idealQuickChatHeight;
 	return std::max(screenY0, 0);
+}
+
+void ChatBoxWidget::takeFocus()
+{
+	if (currentMode != ChatBoxSendMode::DISABLED)
+	{
+		// give the edit box the focus
+		W_CONTEXT context = W_CONTEXT::ZeroContext();
+		context.mx			= mouseX();
+		context.my			= mouseY();
+		editBox->simulateClick(&context, true);
+	}
+	else
+	{
+		// when the edit box is disabled, keyboard events (tab, enter) should open the quick chat
+		// to handle this, tell the form that the ChatBoxWidget has focus
+		if (auto lockedScreen = screenPointer.lock())
+		{
+			lockedScreen->setFocus(shared_from_this());
+			hasFocus = true;
+		}
+		else
+		{
+			// If the ChatBoxWidget isn't currently attached to a screen when this is triggered, focus issues may occur
+			ASSERT(false, "ChatBoxWidget is not attached to any screen?");
+		}
+	}
+}
+
+void ChatBoxWidget::run(W_CONTEXT *psContext)
+{
+	if (!hasFocus) { return; }
+
+	if (keyPressed(KEY_TAB))
+	{
+		std::weak_ptr<ChatBoxWidget> weakSelf = std::weak_ptr<ChatBoxWidget>(std::dynamic_pointer_cast<ChatBoxWidget>(shared_from_this()));
+		widgScheduleTask([weakSelf]() {
+			auto strongParentForm = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+			strongParentForm->openQuickChatOverlay();
+		});
+		inputLoseFocus();
+	}
+	if (keyPressed(KEY_ESC))
+	{
+		// "eat" the ESC keypress, just as if the editbox had focus
+		inputLoseFocus();
+	}
+}
+
+void ChatBoxWidget::focusLost()
+{
+	hasFocus = false;
 }
 
 void ChatBoxWidget::openQuickChatOverlay()
@@ -5284,8 +5441,17 @@ static void addChatBox(bool preserveOldChat)
 		widgDelete(psWScreen, FRONTEND_TOPFORM);
 	}
 
-	if (widgGetFromID(psWScreen, MULTIOP_CHATBOX))
+	auto desiredSendMode = (ingame.hostChatPermissions[selectedPlayer]) ? ChatBoxWidget::ChatBoxSendMode::ENABLED : ChatBoxWidget::ChatBoxSendMode::HOSTMSG_ONLY;
+
+	auto psExistingChatBoxWidget = widgGetFromID(psWScreen, MULTIOP_CHATBOX);
+	if (psExistingChatBoxWidget)
 	{
+		// chat is already up
+		// update send mode if needed
+		if (auto chatBox = dynamic_cast<ChatBoxWidget *>(psExistingChatBoxWidget))
+		{
+			chatBox->setSendMode(desiredSendMode);
+		}
 		return;
 	}
 
@@ -5298,6 +5464,7 @@ static void addChatBox(bool preserveOldChat)
 			psWidget->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, parent->height() - MULTIOP_CHATBOXY);
 		}
 	}));
+	chatBox->setSendMode(desiredSendMode);
 	chatBox->initializeMessages(preserveOldChat);
 
 	addSideText(FRONTEND_SIDETEXT4, MULTIOP_CHATBOXX - 3, MULTIOP_CHATBOXY, _("CHAT"));
@@ -6704,6 +6871,28 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			break;
 		}
 
+		case NET_HOST_CONFIG:
+		{
+			if (NetPlay.hostPlayer != queue.index)
+			{
+				HandleBadParam("NET_HOST_CONFIG should be sent by host", 255, queue.index);
+				ignoredMessage = true;
+				break;
+			}
+			if (!recvHostConfig(queue))
+			{
+				// supplied NET_HOST_CONFIG is not valid
+				setLobbyError(ERROR_INVALID);
+				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Host supplied invalid host config")), parent));
+				break;
+			}
+			if (std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent))
+			{
+				addChatBox(); // refresh chat box options
+			}
+			break;
+		}
+
 		case GAME_ALLIANCE:
 			recvAlliance(queue, false);
 			break;
@@ -6952,16 +7141,25 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				NetworkTextMessage message;
 				if (message.receive(queue)) {
 
+					bool displayedMessage = false;
 					if (message.sender < 0 || !isPlayerMuted(message.sender))
 					{
 						displayRoomMessage(buildMessage(message.sender, message.text));
 						audio_PlayTrack(FE_AUDIO_MESSAGEEND);
+						displayedMessage = true;
 					}
 
 					bool isLobbySlashCommand = false;
 					if (lobby_slashcommands_enabled())
 					{
 						isLobbySlashCommand = processChatLobbySlashCommands(message, cmdInterface);
+						if (isLobbySlashCommand && !displayedMessage)
+						{
+							// display it anyway, even though user is muted, because it was a processed slash command
+							displayRoomMessage(buildMessage(message.sender, message.text));
+							audio_PlayTrack(FE_AUDIO_MESSAGEEND);
+							displayedMessage = true;
+						}
 					}
 
 					if (!isLobbySlashCommand)
@@ -7071,16 +7269,12 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	// if we don't have the focus, then autoclick in the chatbox.
 	if (psWScreen->psFocus.expired() && !isMouseOverScreenOverlayChild(mouseX(), mouseY()))
 	{
-		W_CONTEXT context = W_CONTEXT::ZeroContext();
-		context.mx			= mouseX();
-		context.my			= mouseY();
-
-		W_EDITBOX* pChatEdit = dynamic_cast<W_EDITBOX*>(widgGetFromID(psWScreen, MULTIOP_CHATEDIT));
-		if (pChatEdit)
+		auto pChatBox = dynamic_cast<ChatBoxWidget *>(widgGetFromID(psWScreen, MULTIOP_CHATBOX));
+		if (pChatBox)
 		{
 			if (wzSeemsLikeNonTouchPlatform()) // only grab focus for chat edit box on non-touch platforms (i.e. platforms that ought to have a physical keyboard)
 			{
-				pChatEdit->simulateClick(&context, true);
+				pChatBox->takeFocus();
 			}
 		}
 	}
@@ -8255,10 +8449,13 @@ void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver)
 	message.enqueue(NETnetQueue(receiver));
 }
 
-static void sendRoomChatMessage(char const *text)
+static void sendRoomChatMessage(char const *text, bool skipLocalDisplay)
 {
 	NetworkTextMessage message(selectedPlayer, text);
-	displayRoomMessage(RoomMessage::player(selectedPlayer, text));
+	if (!skipLocalDisplay)
+	{
+		displayRoomMessage(RoomMessage::player(selectedPlayer, text));
+	}
 	if (NetPlay.isHost)
 	{
 		// Always allow the host to execute lobby slash commands

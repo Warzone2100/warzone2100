@@ -39,6 +39,7 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <array>
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -111,6 +112,7 @@ struct MULTIPLAYERINGAME
 	bool				JoiningInProgress[MAX_CONNECTED_PLAYERS];
 	bool				PendingDisconnect[MAX_CONNECTED_PLAYERS];		// used to mark players who have disconnected after the game has "fired up" but before it actually starts (i.e. pre-game / loading phase) - UI only
 	bool				DataIntegrity[MAX_CONNECTED_PLAYERS];
+	std::array<bool, MAX_CONNECTED_PLAYERS> hostChatPermissions;		// the *host*-set free chat permission status for players (true if free chat is allowed, false if only Quick Chat is allowed)
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
@@ -119,7 +121,7 @@ struct MULTIPLAYERINGAME
 	std::chrono::steady_clock::time_point lastLagCheck;
 	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
 	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
-	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};
+	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};		// the local client-set mute status for this player
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
