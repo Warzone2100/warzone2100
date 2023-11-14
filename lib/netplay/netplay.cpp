@@ -92,6 +92,7 @@ char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
 static bool bJoinPrefTryIPv6First = true;
 static uint32_t verboseDebugOutputAllSyncLogsUntilGameTime = 0;
+static bool bDefaultHostFreeChatEnabled = true;
 
 // This is for command line argument override
 // Disables port saving and reading from/to config
@@ -626,6 +627,7 @@ static void initPlayerNetworkProps(int playerIndex)
 	}
 	ingame.JoiningInProgress[playerIndex] = false;
 	ingame.PendingDisconnect[playerIndex] = false;
+	ingame.hostChatPermissions[playerIndex] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
 }
 
 void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpectator)
@@ -2014,6 +2016,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 	std::swap(ingame.JoiningInProgress[playerIndexA], ingame.JoiningInProgress[playerIndexB]);
 	std::swap(ingame.PendingDisconnect[playerIndexA], ingame.PendingDisconnect[playerIndexB]);
 	std::swap(ingame.DataIntegrity[playerIndexA], ingame.DataIntegrity[playerIndexB]);
+	std::swap(ingame.hostChatPermissions[playerIndexA], ingame.hostChatPermissions[playerIndexB]);
 	std::swap(ingame.lastSentPlayerDataCheck2[playerIndexA], ingame.lastSentPlayerDataCheck2[playerIndexB]);
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
@@ -2307,6 +2310,7 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	case NET_FILE_PAYLOAD:               ///< sending file to the player that needs it
 	case NET_VOTE_REQUEST:               ///< Setup a vote popup
 	case NET_PLAYER_SWAP_INDEX:
+	case NET_HOST_CONFIG:
 		ASSERT(false, "Received unexpected host-only message (%" PRIu8 ") from sender: %" PRIu8 "", type, sender);
 		break;
 
@@ -2410,7 +2414,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				      || message->type == NET_PLAYER_JOINED
 					  || message->type == NET_PLAYER_INFO
 					  || message->type == NET_FILE_PAYLOAD
-					  || message->type == NET_PLAYER_SWAP_INDEX) && sender != NetPlay.hostPlayer)
+					  || message->type == NET_PLAYER_SWAP_INDEX
+					  || message->type == NET_HOST_CONFIG) && sender != NetPlay.hostPlayer)
 				    ||
 				    ((message->type == NET_HOST_DROPPED
 				      || message->type == NET_FILE_REQUESTED
@@ -2444,6 +2449,17 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				if (NETFilterMessageWhileSwappingPlayer(sender, message->type))
 				{
 					break;
+				}
+
+				// Certain messages should be filtered due to hostChatPermissions
+				if ((message->type == NET_TEXTMSG || message->type == NET_SPECTEXTMSG || message->type == NET_AITEXTMSG)
+					&& !ingame.hostChatPermissions[sender])
+				{
+					// Only allow messages direct to host in this case! (Carve-out to allow /hostmsg commands...)
+					if (receiver != NetPlay.hostPlayer)
+					{
+						break;
+					}
 				}
 
 				// We are the host, and player is asking us to send the message to receiver.
@@ -5013,6 +5029,15 @@ bool NETgetJoinPreferenceIPv6()
 	return bJoinPrefTryIPv6First;
 }
 
+void NETsetDefaultMPHostFreeChatPreference(bool enabled)
+{
+	bDefaultHostFreeChatEnabled = enabled;
+}
+
+bool NETgetDefaultMPHostFreeChatPreference()
+{
+	return (NetPlay.bComms) ? bDefaultHostFreeChatEnabled : true;
+}
 
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
 {
@@ -5642,6 +5667,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_SECURED_NET_MESSAGE:		return "NET_SECURED_NET_MESSAGE";
 	case NET_TEAM_STRATEGY:				return "NET_TEAM_STRATEGY";
 	case NET_QUICK_CHAT_MSG:			return "NET_QUICK_CHAT_MSG";
+	case NET_HOST_CONFIG:				return "NET_HOST_CONFIG";
 	case NET_MAX_TYPE:                  return "NET_MAX_TYPE";
 
 	// Game-state-related messages, must be processed by all clients at the same game time.

@@ -1003,6 +1003,7 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 			case NET_PLAYER_JOINED:
 			case NET_FILE_PAYLOAD:
 			case NET_VOTE_REQUEST:
+			case NET_HOST_CONFIG:
 				// only the host is allowed to send these messages
 				if (queue.index != NetPlay.hostPlayer)
 				{
@@ -1367,6 +1368,16 @@ bool recvMessage()
 				}
 				break;
 			}
+		case NET_HOST_CONFIG:
+		{
+			if (!recvHostConfig(queue))
+			{
+				// supplied NET_HOST_CONFIG is not valid
+				debug(LOG_INFO, "Bad NET_HOST_CONFIG received");
+				break;
+			}
+			break;
+		}
 		case GAME_RESEARCHSTATUS:
 			recvResearchStatus(queue);
 			break;
@@ -1690,7 +1701,7 @@ void setPlayerMuted(uint32_t playerIdx, bool muted)
 bool isPlayerMuted(uint32_t sender)
 {
 	ASSERT_OR_RETURN(false, sender < MAX_CONNECTED_PLAYERS, "Invalid sender: %" PRIu32, sender);
-	return ingame.muteChat[sender];
+	return ingame.muteChat[sender] || !ingame.hostChatPermissions[sender];
 }
 
 NetworkTextMessage::NetworkTextMessage(int32_t messageSender, char const *messageText)
@@ -1851,6 +1862,11 @@ bool recvTextMessageAI(NETQUEUE queue)
 	if (whosResponsible(sender) != queue.index)
 	{
 		sender = queue.index;  // Fix corrupted sender.
+	}
+
+	if (isPlayerMuted(sender))
+	{
+		return false;
 	}
 
 	sstrcpy(msg, newmsg);
