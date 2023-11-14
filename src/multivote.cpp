@@ -381,10 +381,6 @@ static bool sendVoteRequest(NetVoteType type, uint32_t voteID = 0, uint32_t targ
 	NETuint8_t(&voteType);
 	NETend();
 
-	std::string outputMsg = astringf(_("Starting vote to kick player: %s"), getPlayerName(targetPlayer));
-	addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false);
-	debug(LOG_INFO, "Starting vote to kick player: %s", getPlayerName(targetPlayer));
-
 	return true;
 }
 
@@ -644,7 +640,7 @@ void processPendingKickVotes()
 		if (realTime - it->start_time >= PENDING_KICK_VOTE_TIMEOUT_MS)
 		{
 			// pending vote timed-out
-			
+
 			// double-check if pending vote has a result (this might have changed if other players left)
 			if (!handleVoteKickResult(*it))
 			{
@@ -703,6 +699,10 @@ bool startKickVote(uint32_t targetPlayer)
 
 	// Initiate a network vote
 	sendVoteRequest(NetVoteType::KICK_PLAYER, pendingVote.unique_vote_id, pendingVote.target_player_id);
+
+	std::string outputMsg = astringf(_("Starting vote to kick player: %s"), getPlayerName(targetPlayer));
+	addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false);
+	debug(LOG_INFO, "Starting vote to kick player: %s", getPlayerName(targetPlayer));
 
 	lastKickVoteForEachPlayer[targetPlayer] = realTime;
 	return true;
