@@ -703,6 +703,11 @@ void W_EDITBOX::highlightLost()
 	psWidget->state = psWidget->state & WEDBS_MASK;
 }
 
+void W_EDITBOX::setTip(std::string string)
+{
+	pTip = string;
+}
+
 void W_EDITBOX::setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background)
 {
 	boxColourFirst = first;

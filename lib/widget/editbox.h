@@ -68,6 +68,12 @@ public:
 	void setPlaceholder(WzString value);
 	void setMaxStringSize(int size);
 
+	void setTip(std::string string) override;
+	std::string getTip() override
+	{
+		return pTip;
+	}
+
 	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);
 
 	typedef std::function<void (W_EDITBOX&)> OnReturnHandler;
@@ -111,6 +117,7 @@ private:
 	OnTabHandler onTabHandler = nullptr;
 	OnReturnHandler onEscHandler = nullptr;
 	OnReturnHandler onEditingStoppedHandler = nullptr;
+	std::string pTip;	// The tool tip for the edit box
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__
