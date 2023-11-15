@@ -647,7 +647,7 @@ void setupNewPlayer(UDWORD player)
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
-	ingame.hostChatPermissions[player] = NETgetDefaultMPHostFreeChatPreference();
+	ingame.hostChatPermissions[player] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;
 	multiSyncResetPlayerChallenge(player);

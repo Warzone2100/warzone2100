@@ -5036,7 +5036,7 @@ void NETsetDefaultMPHostFreeChatPreference(bool enabled)
 
 bool NETgetDefaultMPHostFreeChatPreference()
 {
-	return (NetPlay.bComms) ? bDefaultHostFreeChatEnabled : true;
+	return bDefaultHostFreeChatEnabled;
 }
 
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
