@@ -422,6 +422,7 @@ bool loadConfig()
 		NETsetGameserverPort(iniGetInteger("gameserver_port", GAMESERVERPORT).value());
 	}
 	NETsetJoinPreferenceIPv6(iniGetBool("prefer_ipv6", true).value());
+	NETsetDefaultMPHostFreeChatPreference(iniGetBool("hostingChatDefault", NETgetDefaultMPHostFreeChatPreference()).value());
 	setPublicIPv4LookupService(iniGetString("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).value());
 	setPublicIPv6LookupService(iniGetString("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).value());
 	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", FMV_FULLSCREEN).value());
@@ -714,6 +715,7 @@ bool saveConfig()
 		iniSetInteger("gameserver_port", (int)NETgetGameserverPort());
 	}
 	iniSetBool("prefer_ipv6", NETgetJoinPreferenceIPv6());
+	iniSetInteger("hostingChatDefault", (NETgetDefaultMPHostFreeChatPreference()) ? 1 : 0);
 	iniSetString("publicIPv4LookupService_Url", getPublicIPv4LookupServiceUrl());
 	iniSetString("publicIPv4LookupService_JSONKey", getPublicIPv4LookupServiceJSONKey());
 	iniSetString("publicIPv6LookupService_Url", getPublicIPv6LookupServiceUrl());
