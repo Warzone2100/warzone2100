@@ -3341,6 +3341,11 @@ char const *multiplayOptionsUPnPString()
 	return NetPlay.isUPNP ? _("On") : _("Off");
 }
 
+char const *multiplayOptionsHostingChatDefaultString()
+{
+	return NETgetDefaultMPHostFreeChatPreference() ? _("Allow All") : _("Quick Chat Only");
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Multiplay Options Menu
 void startMultiplayOptionsMenu()
@@ -3366,6 +3371,11 @@ void startMultiplayOptionsMenu()
 	// Enable UPnP
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_UPNP, _("Enable UPnP"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_UPNP_R, multiplayOptionsUPnPString(), WBUT_SECONDARY)));
+	row.start++;
+
+	// Chat
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_HOST_CHATDEFAULT, _("Chat"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_HOST_CHATDEFAULT_R, multiplayOptionsHostingChatDefaultString(), WBUT_SECONDARY)));
 	row.start++;
 
 	// Inactivity Kick
@@ -3432,6 +3442,11 @@ bool runMultiplayOptionsMenu()
 	case FRONTEND_UPNP_R:
 		NetPlay.isUPNP = !NetPlay.isUPNP;
 		widgSetString(psWScreen, FRONTEND_UPNP_R, multiplayOptionsUPnPString());
+		break;
+	case FRONTEND_HOST_CHATDEFAULT:
+	case FRONTEND_HOST_CHATDEFAULT_R:
+		NETsetDefaultMPHostFreeChatPreference(!NETgetDefaultMPHostFreeChatPreference());
+		widgSetString(psWScreen, FRONTEND_HOST_CHATDEFAULT_R, multiplayOptionsHostingChatDefaultString());
 		break;
 	case FRONTEND_AUTORATING:
 	case FRONTEND_AUTORATING_R:
