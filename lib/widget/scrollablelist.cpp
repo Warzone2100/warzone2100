@@ -91,6 +91,11 @@ void ScrollableListWidget::clear()
 	listView->setTopOffset(0);
 }
 
+size_t ScrollableListWidget::numItems() const
+{
+	return listView->children().size();
+}
+
 void ScrollableListWidget::updateLayout()
 {
 	if (!layoutDirty) {
