@@ -41,6 +41,7 @@ public:
 	virtual bool changeAlliances(uint8_t allianceValue) = 0;
 	virtual bool changeScavengers(uint8_t scavsValue) = 0;
 	virtual bool kickPlayer(uint32_t player_id, const char *reason, bool ban) = 0;
+	virtual bool changeHostChatPermissions(uint32_t player_id, bool freeChatEnabled) = 0;
 	virtual bool movePlayerToSpectators(uint32_t player_id) = 0;
 	virtual bool requestMoveSpectatorToPlayers(uint32_t player_id) = 0;
 	virtual void quitGame(int exitCode) = 0;
