@@ -117,6 +117,7 @@
 #include "urlhelpers.h"
 #include "hci/quickchat.h"
 #include "hci/teamstrategy.h"
+#include "hci/chatoptions.h"
 #include "multivote.h"
 
 #include "activity.h"
@@ -368,6 +369,8 @@ public:
 
 	void takeFocus();
 
+	void handleUpdateInHostedLobby();
+
 protected:
 	void geometryChanged() override;
 	void display(int xOffset, int yOffset) override;
@@ -382,9 +385,12 @@ private:
 	void setQuickChatButtonDisplay();
 	void setEditBoxDisplay();
 
+	void displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent);
+
 private:
 	std::shared_ptr<ScrollableListWidget> messages;
 	std::shared_ptr<ChatBoxButton> quickChatButton;
+	std::shared_ptr<ChatBoxButton> optionsButton;
 	std::shared_ptr<W_EDITBOX> editBox;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
 	std::shared_ptr<W_SCREEN> quickChatOverlayScreen;
@@ -4896,6 +4902,24 @@ void ChatBoxWidget::initialize()
 			strongParentForm->openQuickChatOverlay();
 		});
 	});
+
+	if (NetPlay.bComms)
+	{
+		attach(optionsButton = std::make_shared<ChatBoxButton>());
+		optionsButton->setString("\u2699"); // "⚙"
+		optionsButton->setTip(_("Chat Options"));
+		optionsButton->FontID = font_regular;
+		int minButtonWidthForText = iV_GetTextWidth(optionsButton->pText, optionsButton->FontID);
+		optionsButton->setGeometry(0, 0, minButtonWidthForText + 10, iV_GetTextLineSize(optionsButton->FontID));
+		optionsButton->addOnClickHandler([weakSelf](W_BUTTON& widg) {
+			widgScheduleTask([weakSelf]() {
+				auto strongParentForm = weakSelf.lock();
+				ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+				strongParentForm->displayOptionsOverlay(strongParentForm->optionsButton);
+			});
+		});
+	}
+
 	W_EDBINIT sEdInit;
 	sEdInit.formID = MULTIOP_CHATBOX;
 	sEdInit.id = MULTIOP_CHATEDIT;
@@ -4979,6 +5003,23 @@ void ChatBoxWidget::initialize()
 		int y0 = psChatBoxWidget->calculateQuickChatScreenPosY();
 		psWidget->setGeometry(x0, y0, quickChatWidth, psWidget->idealHeight());
 	});
+
+	handleUpdateInHostedLobby();
+}
+
+void ChatBoxWidget::handleUpdateInHostedLobby()
+{
+	if (optionsButton)
+	{
+		if (bInActualHostedLobby)
+		{
+			optionsButton->setState(0);
+		}
+		else
+		{
+			optionsButton->setState(WBUT_DISABLE);
+		}
+	}
 }
 
 void ChatBoxWidget::setQuickChatButtonDisplay()
@@ -5135,6 +5176,67 @@ ChatBoxWidget::~ChatBoxWidget()
 {
 	consoleRemoveMessageListener(handleConsoleMessage);
 	widgRemoveOverlayScreen(quickChatOverlayScreen);
+	if (optionsOverlayScreen)
+	{
+		widgRemoveOverlayScreen(optionsOverlayScreen);
+	}
+}
+
+void ChatBoxWidget::displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent)
+{
+	auto lockedScreen = screenPointer.lock();
+	ASSERT(lockedScreen != nullptr, "The WzPlayerBoxTabs does not have an associated screen pointer?");
+
+	// Initialize the options overlay screen
+	optionsOverlayScreen = W_SCREEN::make();
+	auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+	std::weak_ptr<W_SCREEN> psWeakOptionsOverlayScreen(optionsOverlayScreen);
+	std::weak_ptr<ChatBoxWidget> psWeakChatBoxWidget = std::dynamic_pointer_cast<ChatBoxWidget>(shared_from_this());
+	newRootFrm->onClickedFunc = [psWeakOptionsOverlayScreen, psWeakChatBoxWidget]() {
+		if (auto psOverlayScreen = psWeakOptionsOverlayScreen.lock())
+		{
+			widgRemoveOverlayScreen(psOverlayScreen);
+		}
+		// Destroy Options overlay / overlay screen
+		if (auto strongChatBoxWidget = psWeakChatBoxWidget.lock())
+		{
+			strongChatBoxWidget->optionsOverlayScreen.reset();
+		}
+	};
+	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
+	optionsOverlayScreen->psForm->attach(newRootFrm);
+
+	// Add the Chat Options form to the overlay screen form
+	auto chatOptionsForm = createChatOptionsForm(NetPlay.isHost, []() {
+		// on settings change, refresh the chat box to reflect permission changes
+		addChatBox();
+	});
+	newRootFrm->attach(chatOptionsForm);
+	chatOptionsForm->setCalcLayout([psWeakChatBoxWidget](WIDGET* psWidget){
+		auto psChatBoxWidget = psWeakChatBoxWidget.lock();
+		ASSERT_OR_RETURN(, psChatBoxWidget != nullptr, "ChatBoxWidget is null");
+		int chatBoxScreenPosX = psChatBoxWidget->screenPosX();
+		int chatBoxScreenWidth = psChatBoxWidget->width();
+		int idealChatOptionsWidth = psWidget->idealWidth();
+		int maxWidth = screenWidth - 40;
+		int w = std::min(idealChatOptionsWidth, maxWidth);
+		int x0 = chatBoxScreenPosX + (chatBoxScreenWidth - w) / 2;
+		// Try to position it above the chat widget
+		int idealChatOptionsHeight = psWidget->idealHeight();
+		int y0 = std::max(20, psChatBoxWidget->screenPosY() - idealChatOptionsHeight);
+		int maxHeight = screenHeight - y0 - 20;
+		psWidget->setGeometry(x0, y0, w, std::min(maxHeight, idealChatOptionsHeight));
+		// idealHeight may have changed due to the width change, so check and set again...
+		int lastIdealChatOptionsHeight = idealChatOptionsHeight;
+		idealChatOptionsHeight = psWidget->idealHeight();
+		if (lastIdealChatOptionsHeight != idealChatOptionsHeight)
+		{
+			y0 = std::max(20, psChatBoxWidget->screenPosY() - idealChatOptionsHeight);
+			psWidget->setGeometry(x0, y0, w, std::min(maxHeight, idealChatOptionsHeight));
+		}
+	});
+
+	widgRegisterOverlayScreenOnTopOfScreen(optionsOverlayScreen, lockedScreen);
 }
 
 
@@ -5218,7 +5320,11 @@ void ChatBoxWidget::geometryChanged()
 	int messageEditAreaY0 = messages->y() + messagesHeight + MULTIOP_CHATEDITAREA_INSET;
 
 	quickChatButton->setGeometry(MULTIOP_CHATEDITAREA_INSET, messageEditAreaY0, quickChatButton->width(), MULTIOP_CHATEDITH);
-	int buttonsWidth = quickChatButton->width();
+	if (optionsButton)
+	{
+		optionsButton->setGeometry(width() - MULTIOP_CHATEDITAREA_INSET - optionsButton->width(), messageEditAreaY0, optionsButton->width(), MULTIOP_CHATEDITH);
+	}
+	int buttonsWidth = quickChatButton->width() + ((optionsButton) ? optionsButton->width() : 0);
 
 	int chatEditBoxWidth = width() - (MULTIOP_CHATEDITAREA_INSET * 2) - buttonsWidth - (MULTIOP_CHATEDITAREA_INTERNAL_PADDING * 2);
 	editBox->setGeometry(quickChatButton->x() + quickChatButton->width() + MULTIOP_CHATEDITAREA_INTERNAL_PADDING, messageEditAreaY0, chatEditBoxWidth, MULTIOP_CHATEDITH);
@@ -5496,10 +5602,20 @@ static void disableMultiButs()
 	}
 }
 
+static void updateInActualHostedLobby(bool value)
+{
+	bInActualHostedLobby = value;
+	auto pChatBox = dynamic_cast<ChatBoxWidget *>(widgGetFromID(psWScreen, MULTIOP_CHATBOX));
+	if (pChatBox)
+	{
+		pChatBox->handleUpdateInHostedLobby();
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////
 static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 {
-	bInActualHostedLobby = false;
+	updateInActualHostedLobby(false);
 
 	reloadMPConfig(); // reload own settings
 	cancelOrDismissVoteNotifications();
@@ -6167,7 +6283,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 		displayLobbyDisabledNotification();
 	}
 
-	bInActualHostedLobby = true;
+	updateInActualHostedLobby(true);
 
 	widgDelete(psWScreen, MULTIOP_REFRESH);
 	widgDelete(psWScreen, MULTIOP_HOST);
@@ -6857,7 +6973,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Host supplied invalid options")), parent));
 				break;
 			}
-			bInActualHostedLobby = true;
+			updateInActualHostedLobby(true);
 			ingame.localOptionsReceived = true;
 
 			handleAutoReadyRequest();
@@ -7491,7 +7607,7 @@ WzMultiplayerOptionsTitleUI::~WzMultiplayerOptionsTitleUI()
 	closeMultiRequester();
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
 	closeAllChoosers();
-	bInActualHostedLobby = false;
+	bInActualHostedLobby = false; // don't bother calling updateInActualHostedLobby here because we're destroying everything
 }
 
 void WzMultiplayerOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
