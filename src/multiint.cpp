@@ -6829,6 +6829,17 @@ public:
 			msg = astringf(_("Host: Free chat muted for: %s"), playerNameStr.c_str());
 		}
 		displayRoomSystemMessage(msg.c_str());
+
+		if (wz_command_interface_enabled())
+		{
+			std::string playerPublicKeyB64 = base64Encode(getMultiStats(player).identity.toBytes(EcKey::Public));
+			std::string playerIdentityHash = getMultiStats(player).identity.publicHashString();
+			std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player]) ? "V" : "?";
+			std::string playerName = NetPlay.players[player].name;
+			std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
+			wz_command_interface_output("WZEVENT: hostChatPermissions=%s: %" PRIu32 " %" PRIu32 "%s %s %s %s %s\n", (freeChatEnabled) ? "Y" : "N", player, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
+		}
+
 		return true;
 	}
 	virtual bool movePlayerToSpectators(uint32_t player) override

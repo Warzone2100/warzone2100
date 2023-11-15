@@ -465,24 +465,23 @@ int cmdOutputThreadFunc(void *)
 	return 0;
 }
 
-static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& kickReasonStrCopy, bool banPlayer)
+static bool applyToActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::function<void (uint32_t playerIdx)>& func)
 {
 	bool foundActivePlayer = false;
 	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
-		auto player = NetPlay.players[i];
 		if (!isHumanPlayer(i))
 		{
 			continue;
 		}
 
-		bool kickThisPlayer = false;
+		bool matchingPlayer = false;
 		auto& identity = getMultiStats(i).identity;
 		if (identity.empty())
 		{
 			if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
 			{
-				kickThisPlayer = true;
+				matchingPlayer = true;
 			}
 			else
 			{
@@ -490,32 +489,103 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 			}
 		}
 
-		if (!kickThisPlayer)
+		if (!matchingPlayer)
 		{
 			// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
 			std::string checkIdentityHash = identity.publicHashString();
 			std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
 			if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
 			{
-				kickThisPlayer = true;
+				matchingPlayer = true;
 			}
 		}
 
-		if (kickThisPlayer)
+		if (matchingPlayer)
 		{
-			if (i == NetPlay.hostPlayer)
-			{
-				wz_command_interface_output("WZCMD error: Can't kick host!\n");
-				continue;
-			}
-			kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
-			auto KickMessage = astringf("Player %s was kicked by the administrator.", player.name);
-			sendRoomSystemMessage(KickMessage.c_str());
+			func(static_cast<uint32_t>(i));
 			foundActivePlayer = true;
 		}
 	}
 
 	return foundActivePlayer;
+}
+
+static bool changeHostChatPermissionsForActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, bool freeChatEnabled)
+{
+	// special-cases:
+	if (playerIdentityStrCopy == "all")
+	{
+		NETsetDefaultMPHostFreeChatPreference(freeChatEnabled);
+		if (NetPlay.isHost && NetPlay.bComms)
+		{
+			// update all existing slots
+			for (uint32_t player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
+			{
+				ingame.hostChatPermissions[player] = NETgetDefaultMPHostFreeChatPreference();
+			}
+			sendHostConfig();
+		}
+		wz_command_interface_output("WZEVENT: hostChatPermissions=%s: all\n", (freeChatEnabled) ? "Y" : "N");
+		return true;
+	}
+	else if (playerIdentityStrCopy == "newjoin")
+	{
+		NETsetDefaultMPHostFreeChatPreference(freeChatEnabled);
+		wz_command_interface_output("WZEVENT: hostChatPermissions=%s: newjoin\n", (freeChatEnabled) ? "Y" : "N");
+		return true;
+	}
+
+	bool result = applyToActivePlayerWithIdentity(playerIdentityStrCopy, [freeChatEnabled](uint32_t i) {
+		if (i == NetPlay.hostPlayer)
+		{
+			wz_command_interface_output("WZCMD error: Can't mute / unmute host!\n");
+			return;
+		}
+		ingame.hostChatPermissions[i] = freeChatEnabled;
+
+		// other clients will automatically display a notice of the change, but display one locally for the host as well
+		const char *pPlayerName = getPlayerName(i);
+		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(i) + "]");
+		std::string msg;
+		if (freeChatEnabled)
+		{
+			msg = astringf(_("Host: Free chat enabled for: %s"), playerNameStr.c_str());
+		}
+		else
+		{
+			msg = astringf(_("Host: Free chat muted for: %s"), playerNameStr.c_str());
+		}
+		displayRoomSystemMessage(msg.c_str());
+
+		std::string playerPublicKeyB64 = base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = getMultiStats(i).identity.publicHashString();
+		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[i]) ? "V" : "?";
+		std::string playerName = NetPlay.players[i].name;
+		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
+		wz_command_interface_output("WZEVENT: hostChatPermissions=%s: %" PRIu32 " %" PRIu32 "%s %s %s %s %s\n", (freeChatEnabled) ? "Y" : "N", i, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[i].IPtextAddress);
+	});
+
+	if (result)
+	{
+		sendHostConfig();
+	}
+	return result;
+}
+
+static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& kickReasonStrCopy, bool banPlayer)
+{
+	return applyToActivePlayerWithIdentity(playerIdentityStrCopy, [&](uint32_t i) {
+		if (i == NetPlay.hostPlayer)
+		{
+			wz_command_interface_output("WZCMD error: Can't kick host!\n");
+			return;
+		}
+		const char *pPlayerName = getPlayerName(i);
+		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(i) + "]");
+		kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
+		auto KickMessage = astringf("Player %s was kicked by the administrator.", playerNameStr.c_str());
+		sendRoomSystemMessage(KickMessage.c_str());
+	});
 }
 
 int cmdInputThreadFunc(void *)
@@ -726,6 +796,41 @@ int cmdInputThreadFunc(void *)
 				std::string playerIdentityStrCopy(playeridentitystring);
 				wzAsyncExecOnMainThread([playerIdentityStrCopy] {
 					netPermissionsUnset_Connect(playerIdentityStrCopy);
+				});
+			}
+		}
+		else if(!strncmpl(line, "set chat "))
+		{
+			char chatlevel[1024] = {0};
+			char playeridentitystring[1024] = {0};
+			int r = sscanf(line, "set chat %1023s %1023[^\n]s", chatlevel, playeridentitystring);
+			if (r != 2)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get chatlevel or identity!\n");
+			}
+			else
+			{
+				bool freeChatEnabled = true;
+				if (strcmp(chatlevel, "allow") == 0)
+				{
+					freeChatEnabled = true;
+				}
+				else if ((strcmp(chatlevel, "quickchat") == 0) || (strcmp(chatlevel, "mute") == 0))
+				{
+					freeChatEnabled = false;
+				}
+				else
+				{
+					wz_command_interface_output_onmainthread("WZCMD error: Unsupported set chat chatlevel!\n");
+					continue;
+				}
+				std::string playerIdentityStrCopy(playeridentitystring);
+				wzAsyncExecOnMainThread([playerIdentityStrCopy, freeChatEnabled] {
+					bool foundActivePlayer = changeHostChatPermissionsForActivePlayerWithIdentity(playerIdentityStrCopy, freeChatEnabled);
+					if (!foundActivePlayer)
+					{
+						wz_command_interface_output("WZCMD error: Failed to find currently-connected player with matching public key or hash?\n");
+					}
 				});
 			}
 		}
