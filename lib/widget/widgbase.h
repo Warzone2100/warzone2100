@@ -253,7 +253,7 @@ public:
 	{
 		return parentWidget.lock();
 	}
-	Children const &children()
+	Children const &children() const
 	{
 		return childWidgets;
 	}
