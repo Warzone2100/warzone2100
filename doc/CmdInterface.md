@@ -85,6 +85,11 @@ If state of interface buffer is unknown and/or corrupted, interface can send a f
 * `permissions unset connect <pkey|hash>`\
 	Removes any previously-set connect permission (allow / block) for the specified identity
 
+* `set chat <allow|quickchat> <all|newjoin|pkey|hash>`\
+	Allows or mutes chat.
+	- Parameter 1: If "allow" is specified, allows all chat (both free chat and quick chat). If "quickchat" is specified, mutes / disallows free chat (but still allows quick chat).
+	- Parameter 2: If "all" is specified instead of an identity, applies to all. If "newjoin" is specified instead of an identity, applies to future joins.
+	
 * `chat bcast <message [^\n]>`\
 	Send system level message to the room from stdin.
 
