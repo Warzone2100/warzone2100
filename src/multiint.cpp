@@ -6785,7 +6785,7 @@ public:
 	virtual bool kickPlayer(uint32_t player, const char *reason, bool ban) override
 	{
 		ASSERT_HOST_ONLY(return false);
-		ASSERT_OR_RETURN(false, player != NetPlay.hostPlayer, "Unable to kich the host");
+		ASSERT_OR_RETURN(false, player != NetPlay.hostPlayer, "Unable to kick the host");
 		ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Invalid player id: %" PRIu32, player);
 		if (!NetPlay.players[player].allocated)
 		{
@@ -6796,6 +6796,39 @@ public:
 		sendRoomSystemMessage((std::string("Kicking ")+slotType+": "+std::string(NetPlay.players[player].name)).c_str());
 		::kickPlayer(player, reason, ERROR_KICKED, ban);
 		resetReadyStatus(false);
+		return true;
+	}
+	virtual bool changeHostChatPermissions(uint32_t player, bool freeChatEnabled) override
+	{
+		ASSERT_HOST_ONLY(return false);
+		ASSERT_OR_RETURN(false, player != NetPlay.hostPlayer, "Unable to mute the host");
+		ASSERT_OR_RETURN(false, player < MAX_CONNECTED_PLAYERS, "Invalid player id: %" PRIu32, player);
+		if (!NetPlay.players[player].allocated)
+		{
+			debug(LOG_INFO, "Unable to mute / unmute player: %" PRIu32 " - not a connected human player", player);
+			return false;
+		}
+		if (ingame.hostChatPermissions[player] == freeChatEnabled)
+		{
+			// no change - nothing to do
+			return true;
+		}
+		ingame.hostChatPermissions[player] = freeChatEnabled;
+		sendHostConfig();
+
+		// other clients will automatically display a notice of the change, but display one locally for the host as well
+		const char *pPlayerName = getPlayerName(player);
+		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(player) + "]");
+		std::string msg;
+		if (freeChatEnabled)
+		{
+			msg = astringf(_("Host: Free chat enabled for: %s"), playerNameStr.c_str());
+		}
+		else
+		{
+			msg = astringf(_("Host: Free chat muted for: %s"), playerNameStr.c_str());
+		}
+		displayRoomSystemMessage(msg.c_str());
 		return true;
 	}
 	virtual bool movePlayerToSpectators(uint32_t player) override

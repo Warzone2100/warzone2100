@@ -595,6 +595,58 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		}
 		sendRoomSystemMessage("Autobalance done");
 	}
+	else if (strncmp(&message.text[startingCommandPosition], "mute ", 5) == 0 || strncmp(&message.text[startingCommandPosition], "unmute ", 7) == 0)
+	{
+		bool isMute = strncmp(&message.text[startingCommandPosition], "mute", 4) == 0;
+		if (!isMute)
+		{
+			ADMIN_REQUIRED_FOR_COMMAND("mute");
+		}
+		else
+		{
+			ADMIN_REQUIRED_FOR_COMMAND("unmute");
+		}
+		std::string command = (isMute) ? "mute" : "unmute";
+		unsigned int playerPos = MAX_PLAYERS + 1;
+		unsigned int playerIdx = MAX_CONNECTED_PLAYERS + 1;
+		std::string commandParse = command + " %u";
+		int r = sscanf(&message.text[startingCommandPosition], commandParse.c_str(), &playerPos);
+		if (r == 1)
+		{
+			playerIdx = posToNetPlayer(playerPos);
+			if (playerIdx >= MAX_PLAYERS)
+			{
+				std::string msg = std::string("Usage: " LOBBY_COMMAND_PREFIX) + command + " <slot>";
+				sendRoomNotifyMessage(msg.c_str());
+				return false;
+			}
+		}
+		else
+		{
+			commandParse = command + " s%u";
+			r = sscanf(&message.text[startingCommandPosition], commandParse.c_str(), &playerPos);
+			if (r != 1 || playerPos >= MAX_SPECTATOR_SLOTS)
+			{
+				std::string msg = std::string("Usage: " LOBBY_COMMAND_PREFIX) + command + " <slot>";
+				sendRoomNotifyMessage(msg.c_str());
+				return false;
+			}
+			playerIdx = MAX_PLAYER_SLOTS + playerPos;
+			ASSERT_OR_RETURN(false, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid index: %u", playerIdx);
+		}
+		if (playerIdx == NetPlay.hostPlayer)
+		{
+			// Can't mute the host...
+			sendRoomSystemMessage("Can't mute the host.");
+			return false;
+		}
+		if (!cmdInterface.changeHostChatPermissions(playerIdx, !isMute))
+		{
+			std::string msg = astringf("Failed to mute / unmute %s: %u", (playerIdx < MAX_PLAYER_SLOTS) ? "player" : "spectator", playerPos);
+			sendRoomSystemMessage(msg.c_str());
+			return false;
+		}
+	}
 	else
 	{
 		// unrecognized command - not handled
