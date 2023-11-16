@@ -450,6 +450,10 @@ std::vector<WzString> WzString::split(const WzString & delimiter) const
 WzString WzString::normalized(WzString::NormalizationForm mode) const
 {
 	static_assert(std::is_same<unsigned char, utf8proc_uint8_t>::value, "uint8_t is not unsigned char. This function requires this to avoid a violation of the strict aliasing rule.");
+	if (_utf8String.empty())
+	{
+		return WzString();
+	}
 	// The reinterpret_cast from char* to const uint8_t* is only safe when std::uint8_t is *not* implemented as an extended unsigned integer type.
 	// See: https://stackoverflow.com/a/16261758
 	utf8proc_uint8_t *result = utf8proc_NFKD(reinterpret_cast<const utf8proc_uint8_t*>(_utf8String.c_str()));
