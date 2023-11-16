@@ -66,6 +66,7 @@ public:
 	WzString getString() const override;
 	void setString(WzString string) override;
 	void setPlaceholder(WzString value);
+	void setPlaceholderTextColor(optional<PIELIGHT> fixedPlaceholderTextColor);
 	void setMaxStringSize(int size);
 
 	void setTip(std::string string) override;
@@ -111,6 +112,7 @@ private:
 	void setCursorPosPixels(int xPos);
 
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
+	optional<PIELIGHT> fixedPlaceholderTextColor;
 	EditBoxDisplayCache displayCache;
 	bool suppressAudioCallback = false;
 	OnReturnHandler	onRetHandler = nullptr;
