@@ -146,18 +146,21 @@ public:
 		{
 			chatBox->setPlaceholder("");
 			chatBox->setTip("");
+			chatBox->setPlaceholderTextColor(nullopt);
 		}
 		else
 		{
 			if (quickChatEnabled)
 			{
 				chatBox->setPlaceholder(_("Use Quick Chat to chat with other players."));
+				chatBox->setPlaceholderTextColor(WZCOL_TEXT_MEDIUM);
 				chatBox->setTip(_("The host has disabled free chat. Please use Quick Chat."));
 			}
 			else
 			{
 				chatBox->setPlaceholder(_("The host has disabled free chat."));
 				chatBox->setTip("");
+				chatBox->setPlaceholderTextColor(WZCOL_TEXT_MEDIUM);
 			}
 			// but don't disable the edit box, so cheat / chat commands still work
 		}
