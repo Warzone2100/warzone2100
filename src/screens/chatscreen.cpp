@@ -24,6 +24,7 @@
 #include "chatscreen.h"
 #include "lib/widget/widgint.h"
 #include "lib/widget/label.h"
+#include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
@@ -35,6 +36,7 @@
 #include "../chat.h"
 #include "../cheat.h"
 #include "../hci/quickchat.h"
+#include "../hci/chatoptions.h"
 
 class WzInGameChatScreen_CLICKFORM;
 struct WzInGameChatScreen;
@@ -71,6 +73,49 @@ private:
 
 // MARK: - WzInGameChatBoxForm
 
+class WzInGameChatBoxButton : public W_BUTTON
+{
+public:
+	void display(int xOffset, int yOffset) override
+	{
+		int x0 = x() + xOffset;
+		int y0 = y() + yOffset;
+		int x1 = x0 + width();
+		int y1 = y0 + height();
+
+		bool haveText = !pText.isEmpty();
+
+		bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+		bool isDisabled = (getState() & WBUT_DISABLE) != 0;
+		bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
+
+		// Display the button.
+		auto border_color = !isDisabled ? pal_RGBA(100, 100, 255, 120) : WZCOL_FORM_DARK;
+		auto fill_color = isDown || isDisabled ? pal_RGBA(0, 0, 45, 250) : pal_RGBA(0, 0, 67, 220);
+		iV_ShadowBox(x0, y0, x1, y1, 0, border_color, border_color, fill_color);
+		if (isHighlight)
+		{
+			iV_Box(x0 + 2, y0 + 2, x1 - 2, y1 - 2, WZCOL_FORM_HILITE);
+		}
+
+		if (haveText)
+		{
+			text.setText(pText, FontID);
+			int fw = text.width();
+			int fx = x0 + (width() - fw) / 2;
+			int fy = y0 + (height() - text.lineSize()) / 2 - text.aboveBase();
+			PIELIGHT textColor = WZCOL_FORM_TEXT;
+			if (isDisabled)
+			{
+				textColor.byte.a = (textColor.byte.a / 2);
+			}
+			text.render(fx, fy, textColor);
+		}
+	}
+private:
+	WzText text;
+};
+
 class WzInGameChatBoxForm : public IntFormAnimated
 {
 protected:
@@ -89,6 +134,7 @@ public:
 	virtual ~WzInGameChatBoxForm();
 
 	virtual void focusLost() override;
+	virtual void geometryChanged() override;
 
 public:
 	void setChatMode(WzChatMode newMode);
@@ -126,14 +172,23 @@ protected:
 	}
 
 private:
+	void displayOptionsOverlay();
+
+private:
 	WzChatMode chatMode;
 	std::shared_ptr<W_EDITBOX> chatBox;
 	std::shared_ptr<W_LABEL> label;
+	std::shared_ptr<WzInGameChatBoxButton> optionsButton;
+	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
 };
 
 WzInGameChatBoxForm::~WzInGameChatBoxForm()
 {
-	// currently, no-op
+	if (optionsOverlayScreen)
+	{
+		widgRemoveOverlayScreen(optionsOverlayScreen);
+		optionsOverlayScreen.reset();
+	}
 }
 
 void WzInGameChatBoxForm::focusLost()
@@ -208,6 +263,29 @@ static void parseChatMessageModifiers(InGameChatMessage &message)
 	{
 		message.addReceiverByPosition(*message.text - '0');
 	}
+}
+
+void WzInGameChatBoxForm::geometryChanged()
+{
+	int remainingWidth = width();
+
+	int usableHeight = height() - 4;
+
+	label->setGeometry(2, 2, 60, 16);
+	remainingWidth -= (label->x() + label->width());
+
+	if (optionsButton)
+	{
+		int optionsButtonHeight = std::max({optionsButton->height(), usableHeight, iV_GetTextLineSize(optionsButton->FontID)});
+		int optionsButtonWidth = std::max(optionsButton->idealWidth(), optionsButtonHeight);
+		int optionsButtonY0 = std::max(0, (height() - optionsButtonHeight) / 2);
+		optionsButton->setGeometry(width() - 2 - optionsButtonWidth, optionsButtonY0, optionsButtonWidth, optionsButtonHeight);
+		remainingWidth -= (optionsButtonWidth + 2 + 4);
+	}
+
+	int chatBoxPaddingX = 18;
+	int chatBoxWidth = std::max(1, (remainingWidth - chatBoxPaddingX));
+	chatBox->setGeometry(label->x() + label->width() + chatBoxPaddingX, 2, chatBoxWidth, 16);
 }
 
 void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode, const W_EDITBOX::OnTabHandler& onTabHandler)
@@ -305,7 +383,82 @@ void WzInGameChatBoxForm::initialize(WzChatMode initialChatMode, const W_EDITBOX
 	label->setGeometry(2, 2, 60, 16);
 	label->setTextAlignment(WLAB_ALIGNTOPLEFT);
 
+	if (NetPlay.bComms)
+	{
+		optionsButton = std::make_shared<WzInGameChatBoxButton>();
+		attach(optionsButton);
+		optionsButton->setString("\u2699"); // "⚙"
+		optionsButton->setTip(_("Chat Options"));
+		optionsButton->FontID = font_regular;
+		int minButtonWidthForText = iV_GetTextWidth(optionsButton->pText, optionsButton->FontID);
+		optionsButton->setGeometry(0, 0, minButtonWidthForText + 10, iV_GetTextLineSize(optionsButton->FontID));
+		std::weak_ptr<WzInGameChatBoxForm> weakSelf = std::dynamic_pointer_cast<WzInGameChatBoxForm>(shared_from_this());
+		optionsButton->addOnClickHandler([weakSelf](W_BUTTON& widg) {
+			widgScheduleTask([weakSelf]() {
+				auto strongParentForm = weakSelf.lock();
+				ASSERT_OR_RETURN(, strongParentForm != nullptr, "No parent form");
+				// Open the Chat Options overlay
+				strongParentForm->displayOptionsOverlay();
+			});
+		});
+	}
+
 	setChatMode(initialChatMode);
+}
+
+void WzInGameChatBoxForm::displayOptionsOverlay()
+{
+	auto lockedScreen = screenPointer.lock();
+	ASSERT(lockedScreen != nullptr, "The WzInGameChatBoxForm does not have an associated screen pointer?");
+
+	// Initialize the options overlay screen
+	optionsOverlayScreen = W_SCREEN::make();
+	auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+	std::weak_ptr<W_SCREEN> psWeakOptionsOverlayScreen(optionsOverlayScreen);
+	std::weak_ptr<WzInGameChatBoxForm> psWeakChatBoxWidget = std::dynamic_pointer_cast<WzInGameChatBoxForm>(shared_from_this());
+	newRootFrm->onClickedFunc = [psWeakOptionsOverlayScreen, psWeakChatBoxWidget]() {
+		if (auto psOverlayScreen = psWeakOptionsOverlayScreen.lock())
+		{
+			widgRemoveOverlayScreen(psOverlayScreen);
+		}
+		// Destroy Options overlay / overlay screen
+		if (auto strongChatBoxWidget = psWeakChatBoxWidget.lock())
+		{
+			strongChatBoxWidget->optionsOverlayScreen.reset();
+		}
+	};
+	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
+	optionsOverlayScreen->psForm->attach(newRootFrm);
+
+	// Add the Chat Options form to the overlay screen form
+	auto chatOptionsForm = createChatOptionsForm(NetPlay.isHost, []() {
+		// FUTURE TODO: could update the visible chat screen UI if change impacted selectedPlayer?
+	});
+	newRootFrm->attach(chatOptionsForm);
+	chatOptionsForm->setCalcLayout([psWeakChatBoxWidget](WIDGET* psWidget){
+		auto psChatBoxWidget = psWeakChatBoxWidget.lock();
+		ASSERT_OR_RETURN(, psChatBoxWidget != nullptr, "ChatBoxWidget is null");
+		int chatBoxScreenPosX = psChatBoxWidget->screenPosX();
+		int chatBoxScreenWidth = psChatBoxWidget->width();
+		int idealChatOptionsWidth = psWidget->idealWidth();
+		int maxWidth = screenWidth - 40;
+		int w = std::min(idealChatOptionsWidth, maxWidth);
+		int x0 = chatBoxScreenPosX + (chatBoxScreenWidth - w) / 2;
+		// Try to position it below the chat box widget
+		int idealChatOptionsHeight = psWidget->idealHeight();
+		int y0 = std::max(20, psChatBoxWidget->screenPosY() + psChatBoxWidget->height() + 20);
+		int maxHeight = screenHeight - y0 - 20;
+		psWidget->setGeometry(x0, y0, w, std::min(maxHeight, idealChatOptionsHeight));
+		// idealHeight may have changed due to the width change, so check and set again...
+		int lastIdealChatOptionsHeight = idealChatOptionsHeight;
+		idealChatOptionsHeight = psWidget->idealHeight();
+		if (lastIdealChatOptionsHeight != idealChatOptionsHeight)
+		{
+			psWidget->setGeometry(x0, y0, w, std::min(maxHeight, idealChatOptionsHeight));
+		}
+	});
+
+	widgRegisterOverlayScreenOnTopOfScreen(optionsOverlayScreen, lockedScreen);
 }
 
 // MARK: - WzInGameChatScreen_CLICKFORM
@@ -425,7 +578,9 @@ void WzInGameChatScreen_CLICKFORM::initialize(WzChatMode initialChatMode)
 	attach(consoleBox);
 	consoleBox->id = CHAT_CONSOLEBOX;
 	consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
+		int desiredWidth = CHAT_CONSOLEBOXW;
+		int x0 = (screenWidth - desiredWidth) / 2;
+		psWidget->setGeometry(x0, CHAT_CONSOLEBOXY, desiredWidth, CHAT_CONSOLEBOXH);
 	}));
 	consoleBox->setChatBoxEnabledStatus(freeChatEnabled, quickChatEnabled);
 
