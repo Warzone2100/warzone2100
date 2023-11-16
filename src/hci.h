@@ -109,8 +109,8 @@ enum  				  // Reticule button indecies.
 #define CHAT_GLOB		0x2
 #define CHAT_CONSOLEBOXX	RET_X + RET_FORMWIDTH + D_W
 #define CHAT_CONSOLEBOXY	(1)
-#define CHAT_CONSOLEBOXW	240
-#define CHAT_CONSOLEBOXH	16
+#define CHAT_CONSOLEBOXW	430
+#define CHAT_CONSOLEBOXH	20
 
 /* Option positions */
 #define OPT_GAP			5
