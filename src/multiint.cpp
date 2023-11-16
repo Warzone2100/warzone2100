@@ -5047,16 +5047,19 @@ void ChatBoxWidget::setEditBoxDisplay()
 	{
 		case ChatBoxSendMode::DISABLED:
 			editBox->setPlaceholder(_("Press the Tab key to open Quick Chat."));
+			editBox->setPlaceholderTextColor(WZCOL_TEXT_MEDIUM);
 			editBox->setTip(_("The host has disabled free chat. Please use Quick Chat."));
 			editBox->setState(WEDBS_DISABLE);
 			break;
 		case ChatBoxSendMode::HOSTMSG_ONLY:
 			editBox->setPlaceholder(_("Press the Tab key to open Quick Chat."));
+			editBox->setPlaceholderTextColor(WZCOL_TEXT_MEDIUM);
 			editBox->setTip(_("The host has disabled free chat. Please use Quick Chat or /hostmsg commands."));
 			editBox->setState(0);
 			break;
 		case ChatBoxSendMode::ENABLED:
 			editBox->setPlaceholder("");
+			editBox->setPlaceholderTextColor(nullopt);
 			editBox->setTip("");
 			editBox->setState(0);
 			break;
