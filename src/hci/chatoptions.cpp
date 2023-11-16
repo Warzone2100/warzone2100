@@ -650,8 +650,6 @@ public:
 	{
 		int x0 = x() + xOffset;
 		int y0 = y() + yOffset;
-		int x1 = x0 + width();
-		int y1 = y0 + height();
 
 		bool isDown = ((getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0);
 		bool isDisabled = (getState() & WBUT_DISABLE) != 0;
@@ -660,10 +658,14 @@ public:
 		if (!isDisabled)
 		{
 			// Display the background and border
+			int displayedWidth = std::min((CHATOPT_PLAYER_BUTTON_EXTERNAL_PADDING_X * 2) + 16, width());
+			int boxX0 = x0 + ((width() - displayedWidth) / 2);
+			int boxX1 = boxX0 + displayedWidth;
+			int y1 = y0 + height();
 			auto light_border = WZCOL_CHATOPTIONS_BUTTON_BORDER_HIGHLIGHT;
 			auto regular_border = (!isDisabled) ? WZCOL_CHATOPTIONS_BUTTON_BORDER_LIGHT : WZCOL_FORM_DARK;
 			auto fill_color = isDown || isDisabled ? WZCOL_CHATOPTIONS_BUTTON_FILL_COLOR_DARK : WZCOL_CHATOPTIONS_BUTTON_FILL_COLOR;
-			iV_ShadowBox(x0, y0, x1, y1, 0, isDown || isHighlight ? light_border : regular_border, isDown || isHighlight ? light_border : regular_border, fill_color);
+			iV_ShadowBox(boxX0, y0, boxX1, y1, 0, isDown || isHighlight ? light_border : regular_border, isDown || isHighlight ? light_border : regular_border, fill_color);
 		}
 
 		bool muteStatus = getMuteStatus();
