@@ -568,6 +568,11 @@ void W_EDITBOX::setPlaceholder(WzString value)
 	dirty = true;
 }
 
+void W_EDITBOX::setPlaceholderTextColor(optional<PIELIGHT> _fixedPlaceholderTextColor)
+{
+	fixedPlaceholderTextColor = _fixedPlaceholderTextColor;
+}
+
 void W_EDITBOX::simulateClick(W_CONTEXT *psContext, bool silenceClickAudio /*= false*/, WIDGET_KEY key /*= WKEY_PRIMARY*/)
 {
 	if (silenceClickAudio)
@@ -740,7 +745,7 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	if (aText.isEmpty() && !placeholderText.isEmpty())
 	{
 		displayCache.wzDisplayedText.setText(placeholderText, FontID);
-		displayedTextColor = (state & WEDBS_MASK) == WEDBS_FIXED ? WZCOL_FORM_TEXT : WZCOL_GREY;
+		displayedTextColor = fixedPlaceholderTextColor.value_or((state & WEDBS_MASK) == WEDBS_FIXED ? WZCOL_FORM_TEXT : WZCOL_GREY);
 	}
 	else
 	{
@@ -754,7 +759,7 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	int fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
 	int fy = y0 + (height() - lineSize) / 2 - aboveBase;
 
-	displayCache.wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
+	displayCache.wzDisplayedText.render(fx, fy, displayedTextColor);
 
 	// Display the cursor if editing
 	if (((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2 == 0)
