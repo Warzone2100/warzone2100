@@ -2664,9 +2664,15 @@ bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::f
 
         const char *key = JS_AtomToCString(ctx, atom);
 
-		func(key, atom);
-
-        JS_FreeCString(ctx, key);
+		if (key)
+		{
+			func(key, atom);
+			JS_FreeCString(ctx, key);
+		}
+		else
+		{
+			debug(LOG_INFO, "JS_AtomToCString returned null?");
+		}
     }
 	for (int i = 0; i < count; i++)
 	{
@@ -2725,6 +2731,7 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 	// Remember internal, reserved names
 	std::unordered_set<std::string>& internalNamespaceRef = internalNamespace;
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [&internalNamespaceRef](const char *key, JSAtom &) {
+		if (!key) { return; }
 		internalNamespaceRef.insert(key);
 	}, false);
 
@@ -2756,11 +2763,18 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &result](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
-		if (internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
-			&& !JS_IsConstructor(ctx, jsVal)
-			)//&& !it.value().equals(engine->globalObject()))
+		if (!JS_IsException(jsVal))
 		{
-			result[nameStr] = JSContextValue{ctx, jsVal, true};
+			if (internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
+				&& !JS_IsConstructor(ctx, jsVal)
+				)//&& !it.value().equals(engine->globalObject()))
+			{
+				result[nameStr] = JSContextValue{ctx, jsVal, true};
+			}
+		}
+		else
+		{
+			debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
 		}
         JS_FreeValue(ctx, jsVal);
 	});
@@ -3578,13 +3592,20 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		QuickJS_EnumerateObjectProperties(v.ctx, v.value, [v, &j](const char *key, JSAtom &atom) {
 			JSValue jsVal = JS_GetProperty(v.ctx, v.value, atom);
 			std::string nameStr = key;
-			if (!JS_IsConstructor(v.ctx, jsVal))
+			if (!JS_IsException(jsVal))
 			{
-				j[nameStr] = JSContextValue{v.ctx, jsVal, v.skip_constructors};
+				if (!JS_IsConstructor(v.ctx, jsVal))
+				{
+					j[nameStr] = JSContextValue{v.ctx, jsVal, v.skip_constructors};
+				}
+				else if (!v.skip_constructors)
+				{
+					j[nameStr] = "<constructor>";
+				}
 			}
-			else if (!v.skip_constructors)
+			else
 			{
-				j[nameStr] = "<constructor>";
+				debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
 			}
 			JS_FreeValue(v.ctx, jsVal);
 		}, false);
