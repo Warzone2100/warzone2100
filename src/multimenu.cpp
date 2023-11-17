@@ -282,7 +282,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 6 * count + 6, y + 16);
 		}
-		if (CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]))
+		if (CheckForRandom(mapData->realFileName, mapData->apDataFiles[0].c_str()))
 		{
 			iV_DrawImage(FrontImages, IMAGE_WEE_DIE, x + 80 + 6, y + 15);
 		}
@@ -485,7 +485,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 		for (auto mapData : levels)
 		{
-			std::string withoutTechlevel = mapNameWithoutTechlevel(mapData->pName);
+			std::string withoutTechlevel = mapNameWithoutTechlevel(mapData->pName.c_str());
 			// add number of players to string.
 			auto button = std::make_shared<W_BUTTON>();
 			requestList->attach(button);

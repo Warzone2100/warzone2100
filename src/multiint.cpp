@@ -460,7 +460,7 @@ void loadMultiScripts()
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	ASSERT_OR_RETURN(, psLevel->game >= 0 && psLevel->game < LEVEL_MAXFILES, "Invalid psLevel->game: %" PRIi16 " - may be a corrupt level load (%s; hash: %s)", psLevel->game, game.map, game.hash.toString().c_str());
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game].c_str());
 	aFileName[strlen(aFileName) - 4] = '\0';
 	sstrcpy(aPathName, aFileName);
 	sstrcat(aFileName, ".json");
@@ -574,11 +574,11 @@ static MAP_TILESET guessMapTilesetType(LEVEL_DATASET *psLevel)
 {
 	unsigned t = 0, c = 0;
 
-	if (psLevel->psBaseData && psLevel->psBaseData->pName)
+	if (psLevel->psBaseData && !psLevel->psBaseData->pName.empty())
 	{
-		if (sscanf(psLevel->psBaseData->pName, "MULTI_CAM_%u", &c) != 1)
+		if (sscanf(psLevel->psBaseData->pName.c_str(), "MULTI_CAM_%u", &c) != 1)
 		{
-			sscanf(psLevel->psBaseData->pName, "MULTI_T%u_C%u", &t, &c);
+			sscanf(psLevel->psBaseData->pName.c_str(), "MULTI_T%u_C%u", &t, &c);
 		}
 	}
 
@@ -717,23 +717,22 @@ void loadMapPreview(bool hideInterface)
 	{
 		builtInMap = true;
 		useTerrainOverrides = shouldLoadTerrainTypeOverrides(psLevel->pName);
-		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d override %d", psLevel->pName, psLevel->dataDir, (int)useTerrainOverrides);
+		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d override %d", psLevel->pName.c_str(), psLevel->dataDir, (int)useTerrainOverrides);
 	}
 	else
 	{
 		builtInMap = false;
 		useTerrainOverrides = false;
-		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
+		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName.c_str(), WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName, psLevel->customMountPoint);
-	const char* pGamPath = psLevel->apDataFiles[psLevel->game];
-	if (!pGamPath)
+	if (psLevel->apDataFiles[psLevel->game].empty())
 	{
-		debug(LOG_ERROR, "No path for level \"%s\"? (%s)", psLevel->pName, (psLevel->realFileName) ? psLevel->realFileName : "null");
+		debug(LOG_ERROR, "No path for level \"%s\"? (%s)", psLevel->pName.c_str(), (psLevel->realFileName) ? psLevel->realFileName : "null");
 		loadEmptyMapPreview();
 		return;
 	}
-	aFileName = pGamPath;
+	aFileName = psLevel->apDataFiles[psLevel->game];
 	// Remove the file extension (ex. ".gam")
 	auto lastPeriodPos = aFileName.rfind('.');
 	if (std::string::npos != lastPeriodPos)
@@ -785,7 +784,7 @@ void loadMapPreview(bool hideInterface)
 	if (!mapPreviewResult)
 	{
 		// Failed to generate map preview
-		debug(LOG_ERROR, "Failed to generate map preview for: %s", psLevel->pName);
+		debug(LOG_ERROR, "Failed to generate map preview for: %s", psLevel->pName.c_str());
 		loadEmptyMapPreview();
 		return;
 	}
@@ -5726,11 +5725,11 @@ static unsigned int repositionHumanSlots()
 static void updateMapWidgets(LEVEL_DATASET *mapData)
 {
 	ASSERT_OR_RETURN(, mapData != nullptr, "Invalid mapData?");
-	sstrcpy(game.map, mapData->pName);
+	sstrcpy(game.map, mapData->pName.c_str());
 	game.hash = levGetFileHash(mapData);
 	game.maxPlayers = mapData->players;
 	game.isMapMod = CheckForMod(mapData->realFileName);
-	game.isRandom = CheckForRandom(mapData->realFileName, mapData->pName);
+	game.isRandom = CheckForRandom(mapData->realFileName, mapData->pName.c_str());
 	if (game.isMapMod)
 	{
 		widgReveal(psWScreen, MULTIOP_MAP_MOD);
@@ -6046,7 +6045,7 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	ASSERT_OR_RETURN(, psLevel->game >= 0 && psLevel->game < LEVEL_MAXFILES, "Invalid psLevel->game: %" PRIi16 " - may be a corrupt level load (%s; hash: %s)", psLevel->game, game.map, game.hash.toString().c_str());
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game].c_str());
 	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
 	sstrcat(aFileName, ".json");
 
@@ -6141,7 +6140,7 @@ static void randomizeOptions()
 		updateMapWidgets(mapData);
 		loadMapPreview(false);
 		loadMapChallengeAndPlayerSettings();
-		debug(LOG_INFO, "Switching map: %s (builtin: %d)", (mapData->pName) ? mapData->pName : "n/a", (int)builtInMap);
+		debug(LOG_INFO, "Switching map: %s (builtin: %d)", (!mapData->pName.empty()) ? mapData->pName.c_str() : "n/a", (int)builtInMap);
 	}
 
 	// Reset and randomize player positions, also to guard
@@ -7505,11 +7504,11 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 						bool oldGameIsMapMod = game.isMapMod;
 						bool oldGameIsRandom = game.isRandom;
 
-						sstrcpy(game.map, mapData->pName);
+						sstrcpy(game.map, mapData->pName.c_str());
 						game.hash = levGetFileHash(mapData);
 						game.maxPlayers = mapData->players;
 						game.isMapMod = CheckForMod(mapData->realFileName);
-						game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
+						game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0].c_str());
 						loadMapPreview(false);
 
 						/* Change game info to match the previous selection if hover preview was displayed */
@@ -7542,14 +7541,14 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 
 					uint8_t oldMaxPlayers = game.maxPlayers;
 
-					sstrcpy(game.map, mapData->pName);
+					sstrcpy(game.map, mapData->pName.c_str());
 					game.hash = levGetFileHash(mapData);
 					game.maxPlayers = mapData->players;
 					game.isMapMod = CheckForMod(mapData->realFileName);
-					game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
+					game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0].c_str());
 					loadMapPreview(true);
 					loadMapChallengeAndPlayerSettings();
-					debug(LOG_INFO, "Switching map: %s (builtin: %d)", (mapData->pName) ? mapData->pName : "n/a", (int)builtInMap);
+					debug(LOG_INFO, "Switching map: %s (builtin: %d)", (!mapData->pName.empty()) ? mapData->pName.c_str() : "n/a", (int)builtInMap);
 
 					WzString name = formatGameName(game.map);
 					widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
@@ -9157,7 +9156,7 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 	{
 		game.isMapMod = true;
 	}
-	game.isRandom = mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
+	game.isRandom = mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0].c_str());
 
 	// Set various other initialization things (see NET_FIREUP)
 	ingame.TimeEveryoneIsInGame = nullopt;			// reset time
