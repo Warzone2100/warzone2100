@@ -31,6 +31,7 @@
 #include <atomic>
 #include <functional>
 #include <memory>
+#include <limits>
 
 #if defined(__clang__)
 #  pragma clang diagnostic push
@@ -999,6 +1000,44 @@ int cmdInputThreadFunc(void *)
 						wz_command_interface_output("WZCMD error: Failed to find currently-connected player with matching public key or hash?\n");
 					}
 				});
+			}
+		}
+		else if(!strncmpl(line, "join "))
+		{
+			char action[1024] = {0};
+			char uniqueJoinID[1024] = {0};
+			unsigned int rejectionReason = static_cast<unsigned int>(ERROR_NOERROR);
+			int r = sscanf(line, "join %1023s %1023s %u", action, uniqueJoinID, &rejectionReason);
+			if (r != 2 && r != 3)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get join action or uniqueJoinID!\n");
+			}
+			else
+			{
+				optional<bool> approve = nullopt;
+				if (strcmp(action, "approve") == 0)
+				{
+					approve = true;
+				}
+				else if (strcmp(action, "reject") == 0)
+				{
+					approve = false;
+				}
+				if (approve.has_value() || rejectionReason > static_cast<unsigned int>(std::numeric_limits<uint8_t>::max()))
+				{
+					bool approveValue = approve.value();
+					std::string uniqueJoinIDCopy(uniqueJoinID);
+					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, rejectionReason] {
+						if (!NETsetAsyncJoinApprovalResult(uniqueJoinIDCopy, approveValue, static_cast<LOBBY_ERROR_TYPES>(rejectionReason)))
+						{
+							wz_command_interface_output("WZCMD info: Could not find currently-waiting join with specified uniqueJoinID\n");
+						}
+					});
+				}
+				else
+				{
+					wz_command_interface_output_onmainthread("WZCMD error: Invalid action or rejectionReason passed to join approve/reject command\n");
+				}
 			}
 		}
 		else if(!strncmpl(line, "shutdown now"))
