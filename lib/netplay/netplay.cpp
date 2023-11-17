@@ -4833,6 +4833,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	
 	if (bsocket == nullptr)
 	{
+		NETclose();
 		return false;  // Connection dropped while sending NET_JOIN.
 	}
 	socketFlush(bsocket, NetPlay.hostPlayer);  // Make sure the message was completely sent.
@@ -4848,11 +4849,13 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		if ((unsigned)wzGetTicks() > i + 5000)
 		{
 			// timeout
+			NETclose();
 			return false;
 		}
 
 		if (bsocket == nullptr)
 		{
+			NETclose();
 			return false;  // Connection dropped.
 		}
 
@@ -4878,6 +4881,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 			if (NetPlay.hostPlayer >= MAX_CONNECTED_PLAYERS)
 			{
 				debug(LOG_ERROR, "Bad host player number (%" PRIu32 ") received from host!", NetPlay.hostPlayer);
+				NETclose();
 				return false;
 			}
 
@@ -4895,6 +4899,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 			if (index >= MAX_CONNECTED_PLAYERS)
 			{
 				debug(LOG_ERROR, "Bad player number (%u) received from host!", index);
+				NETclose();
 				return false;
 			}
 
