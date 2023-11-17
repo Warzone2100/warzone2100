@@ -2870,8 +2870,8 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 
 	// Check no mixing of systems and weapons
 	if (psTempl->numWeaps != 0 &&
-	    (psTempl->asParts[COMP_SENSOR] ||
-	     psTempl->asParts[COMP_ECM] ||
+	    ((psTempl->asParts[COMP_SENSOR] && psTempl->asParts[COMP_SENSOR] != aDefaultSensor[player]) ||
+	     (psTempl->asParts[COMP_ECM] && psTempl->asParts[COMP_ECM] != aDefaultECM[player]) ||
 	     (psTempl->asParts[COMP_REPAIRUNIT] && psTempl->asParts[COMP_REPAIRUNIT] != aDefaultRepair[player]) ||
 	     psTempl->asParts[COMP_CONSTRUCT]))
 	{
