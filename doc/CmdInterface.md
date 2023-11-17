@@ -35,6 +35,17 @@ All messages are sent in plain-text UTF-8 and end with 0x0a (`\n`).
 	- `%s` base64-encoded name of the player
 	- `%s` base64-encoded chat message content
 
+* `WZEVENT: join approval needed: <joinid> <ip> <hash> <b64pubkey> <b64name> [spec|play]`\
+	Passes a join request that requires approval (if `--async-join-approve` is enabled)\
+	**Important: If the cmdinterface client does not respond to this request with a `join <approve/reject>` command in a timely manner, the joiner will be kicked (or drop).**\
+	Fields:
+	- `%s` a unique **joinid** to refer to the joining connection (should be passed to `join <approve/reject>`)
+	- `%s` IP address of player in plain text (v4/v6)
+	- `%s` public hash string of the player (max 64 bytes)
+	- `%s` base64-encoded public key of the player
+	- `%s` base64-encoded name of the player
+	- `%s` either `spec` or `play` to distinguish whether the request is for joining spectators or players
+
 * `WZEVENT: bancheck: <ip>`\
 	Passes IP of connected player to initiate outside-check.
 
@@ -71,6 +82,10 @@ If state of interface buffer is unknown and/or corrupted, interface can send a f
 
 * `admin remove <pkey|hash>`\
 	Removes admin from room admins list by public key or hash
+
+* `join <approve|reject> <joinid>`\
+	Approve or reject an attempt to join the game.\
+	Pass in the `<joinid>` received in a `WZEVENT: join approval needed` event.
 
 * `ban ip <ip>`\
 	Find and kick (with adding to ip banlist) player with specified ip

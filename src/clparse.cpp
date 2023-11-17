@@ -360,7 +360,8 @@ typedef enum
 	CLI_CONVERT_SPECULAR_MAP,
 	CLI_DEBUG_VERBOSE_SYNCLOG_OUTPUT,
 	CLI_ALLOW_VULKAN_IMPLICIT_LAYERS,
-	CLI_HOST_CHAT_CONFIG
+	CLI_HOST_CHAT_CONFIG,
+	CLI_HOST_ASYNC_JOIN_APPROVAL
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -449,6 +450,7 @@ static const struct poptOption *getOptionsTable()
 		{ "debug-verbose-sync-logs-until", POPT_ARG_STRING, CLI_DEBUG_VERBOSE_SYNCLOG_OUTPUT, nullptr, nullptr },
 		{ "allow-vulkan-implicit-layers", POPT_ARG_NONE, CLI_ALLOW_VULKAN_IMPLICIT_LAYERS, N_("Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"), nullptr },
 		{ "host-chat-config", POPT_ARG_STRING, CLI_HOST_CHAT_CONFIG, N_("Set the default hosting chat configuration / permissions"), "[allow,quickchat]" },
+		{ "async-join-approve", POPT_ARG_NONE, CLI_HOST_ASYNC_JOIN_APPROVAL, N_("Enable async join approval (for connecting clients)"), nullptr },
 
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
@@ -1299,6 +1301,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			{
 				qFatal("Unsupported / invalid host-chat-config value");
 			}
+			break;
+
+		case CLI_HOST_ASYNC_JOIN_APPROVAL:
+			NETsetAsyncJoinApprovalRequired(true);
 			break;
 
 		} // switch (option)

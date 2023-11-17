@@ -282,9 +282,31 @@ struct TmpSocketInfo
 	{
 		None,
 		PendingInitialConnect,
-		PendingJoinRequest
+		PendingJoinRequest,
+		PendingAsyncApproval,
+		ProcessJoin
 	};
 	TmpConnectState connectState;
+
+	struct ReceivedJoinInfo
+	{
+		// Information received from a join request - needed for later stages
+		char name[64] = {'\0'};
+		uint8_t playerType = 0;
+		EcKey identity;
+
+		void reset()
+		{
+			name[0] = '\0';
+			playerType = 0;
+			identity.clear();
+		}
+	};
+	ReceivedJoinInfo receivedJoinInfo;
+
+	// async join approval
+	std::string uniqueJoinID;
+	optional<LOBBY_ERROR_TYPES> asyncJoinApprovalResult = nullopt;
 
 	void reset()
 	{
@@ -294,11 +316,15 @@ struct TmpSocketInfo
 		usedBuffer = 0;
 		connectChallenge.clear();
 		connectState = TmpConnectState::None;
+		receivedJoinInfo.reset();
+		uniqueJoinID.clear();
+		asyncJoinApprovalResult = nullopt;
 	}
 };
 
 static Socket *tmp_socket[MAX_TMP_SOCKETS] = { nullptr };  ///< Sockets used to talk to clients which have not yet been assigned a player number (host only).
 static std::array<TmpSocketInfo, MAX_TMP_SOCKETS> tmp_connectState;
+static bool bAsyncJoinApprovalEnabled = false;
 static std::unordered_map<std::string, size_t> tmp_pendingIPs;
 static lru11::Cache<std::string, size_t> tmp_badIPs(512, 64);
 
@@ -520,6 +546,38 @@ void NETresetGamePassword()
 	NetPlay.gamePassword[0] = '\0';
 	debug(LOG_NET, "password was reset");
 	NETGameLocked(false);
+}
+
+void NETsetAsyncJoinApprovalRequired(bool enabled)
+{
+	bAsyncJoinApprovalEnabled = enabled;
+	if (bAsyncJoinApprovalEnabled)
+	{
+		debug(LOG_INFO, "Async join approval is required");
+	}
+}
+
+//	NOTE: *MUST* be called from the main thread!
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason)
+{
+	if (!approve && rejectedReason == ERROR_NOERROR)
+	{
+		debug(LOG_INFO, "Rejecting join with NOERROR reason changed to ERROR_KICKED");
+		rejectedReason = ERROR_KICKED;
+	}
+	for (auto& tmp_info : tmp_connectState)
+	{
+		if (tmp_info.connectState == TmpSocketInfo::TmpConnectState::PendingAsyncApproval
+			&& tmp_info.uniqueJoinID == uniqueJoinID)
+		{
+			// found a match
+			tmp_info.asyncJoinApprovalResult = (approve) ? ERROR_NOERROR : rejectedReason;
+			return true;
+		}
+	}
+
+	// no matching pending join - may have dropped in the interim, etc
+	return false;
 }
 
 // *********** Socket with buffer that read NETMSGs ******************
@@ -4126,10 +4184,6 @@ static void NETallowJoining()
 
 				if (NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
 				{
-					uint8_t j;
-					uint8_t index;
-					optional<uint32_t> tmp = nullopt;
-
 					char name[64];
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
@@ -4165,63 +4219,32 @@ static void NETallowJoining()
 						continue;
 					}
 
-					tmp_connectState[i].reset();
+					// save join info in the tmp_connectState
+					sstrcpy(tmp_connectState[i].receivedJoinInfo.name, name);
+					tmp_connectState[i].receivedJoinInfo.playerType = playerType;
+					tmp_connectState[i].receivedJoinInfo.identity = identity;
 
-					if ((playerType == NET_JOIN_SPECTATOR) || (int)NetPlay.playercount <= gamestruct.desc.dwMaxPlayers)
-					{
-						tmp = NET_CreatePlayer(name, false, (playerType == NET_JOIN_SPECTATOR));
-					}
+					auto& joinRequestInfo = tmp_connectState[i].receivedJoinInfo;
 
-					if (!tmp.has_value() || tmp.value() > static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()))
-					{
-						ASSERT(tmp.value_or(0) <= static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()), "Currently limited to uint8_t");
-						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
-
-						// Tell the player that we are full.
-						rejected = ERROR_FULL;
-						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
-						NETuint8_t(&rejected);
-						NETend();
-						NETflush();
-						NETpop(NETnetTmpQueue(i));
-
-						NETcloseTempSocket(i);
-						sync_counter.cantjoin++;
-						continue;
-					}
-
-					NETpop(NETnetTmpQueue(i));
-					index = static_cast<uint8_t>(tmp.value());
-
-					debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", static_cast<void *>(tmp_socket[i]), __LINE__);
-					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-					connected_bsocket[index] = tmp_socket[i];
-					NET_waitingForIndexChangeAckSince[index] = nullopt;
-					tmp_socket[i] = nullptr;
-					SocketSet_AddSocket(socket_set, connected_bsocket[index]);
-					NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
-
-					// Copy player's IP address.
-					sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(connected_bsocket[index]));
-
+					// connection checks
 					auto connectPermissions = netPermissionsCheck_Connect(identity);
 
 					if ((connectPermissions.has_value() && connectPermissions.value() == ConnectPermissions::Blocked)
-						|| (!connectPermissions.has_value() && onBanList(NetPlay.players[index].IPtextAddress)))
+						|| (!connectPermissions.has_value() && onBanList(tmp_connectState[i].ip.c_str())))
 					{
 						char buf[256] = {'\0'};
-						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP: %s", NetPlay.players[index].IPtextAddress);
+						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP: %s", tmp_connectState[i].ip.c_str());
 						debug(LOG_INFO, "%s", buf);
 						NETlogEntry(buf, SYNC_FLAG, i);
 
 						// Player has been kicked before, kick again.
 						rejected = (uint8_t)ERROR_KICKED;
 					}
-					else if (!NetPlay.players[index].isSpectator && playerManagementRecord.hostMovedPlayerToSpectators(NetPlay.players[index].IPtextAddress))
+					else if (joinRequestInfo.playerType != NET_JOIN_SPECTATOR && playerManagementRecord.hostMovedPlayerToSpectators(tmp_connectState[i].ip))
 					{
 						// The host previously relegated a player from this IP address to Spectators (this game), and it seems they are trying to rejoin as a Player - deny this
 						char buf[256] = {'\0'};
-						ssprintf(buf, "** A player that you moved to Spectators tried to rejoin the game (as a Player), and was rejected. IP: %s", NetPlay.players[index].IPtextAddress);
+						ssprintf(buf, "** A player that you moved to Spectators tried to rejoin the game (as a Player), and was rejected. IP: %s", tmp_connectState[i].ip.c_str());
 						debug(LOG_INFO, "%s", buf);
 						NETlogEntry(buf, SYNC_FLAG, i);
 
@@ -4242,88 +4265,59 @@ static void NETallowJoining()
 					if (rejected)
 					{
 						char buf[256] = {'\0'};
-						ssprintf(buf, "**Rejecting player(%s), reason (%u). ", NetPlay.players[index].IPtextAddress, (unsigned int) rejected);
+						ssprintf(buf, "**Rejecting player(%s), reason (%u). ", tmp_connectState[i].ip.c_str(), (unsigned int) rejected);
 						debug(LOG_INFO, "%s", buf);
-						NETlogEntry(buf, SYNC_FLAG, index);
-						NETbeginEncode(NETnetQueue(index), NET_REJECTED);
+						NETlogEntry(buf, SYNC_FLAG, i);
+						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
 						NETend();
 						NETflush();
+						NETpop(NETnetTmpQueue(i));
 
-						allow_joining = false; // no need to inform master server
-						NET_DestroyPlayer(index);
-						allow_joining = true;
-
-						SocketSet_DelSocket(socket_set, connected_bsocket[index]);
-						socketClose(connected_bsocket[index]);
-						connected_bsocket[index] = nullptr;
+						NETcloseTempSocket(i);
+						sync_counter.cantjoin++;
 						continue;
 					}
 
-					NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
-					NETuint8_t(&index);
-					NETuint32_t(&NetPlay.hostPlayer);
-					NETend();
+					NETpop(NETnetTmpQueue(i));
 
-					// First send info about players to newcomer.
-					NETSendAllPlayerInfoTo(index);
-					// then send info about newcomer to all players.
-					NETBroadcastPlayerInfo(index);
-
-					char buf[250] = {'\0'};
-					const char* pPlayerType = (NetPlay.players[index].isSpectator) ? "Spectator" : "Player";
-					snprintf(buf, sizeof(buf), "%s[%" PRIu8 "] %s has joined, IP is: %s", pPlayerType, index, name, NetPlay.players[index].IPtextAddress);
-					debug(LOG_INFO, "%s", buf);
-					NETlogEntry(buf, SYNC_FLAG, index);
-					wz_command_interface_output("WZEVENT: player join: %u %s %s %s\n", i, base64Encode(pkey).c_str(), identity.publicHashString().c_str(), NetPlay.players[i].IPtextAddress);
-
-					debug(LOG_NET, "%s, %s, with index of %u has joined using socket %p", pPlayerType, name, (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
-
-					// Increment player count
-					gamestruct.desc.dwCurrentPlayers++;
-
-					MultiPlayerJoin(index);
-
-					ingame.VerifiedIdentity[index] = true;
-
-					// Narrowcast to new player that everyone has joined.
-					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
+					// on passing all built-in checks for connect...
+					if (bAsyncJoinApprovalEnabled)
 					{
-						if (index != j)  // We will broadcast the index == j case.
-						{
-							if (NetPlay.players[j].allocated)
-							{
-								NETbeginEncode(NETnetQueue(index), NET_PLAYER_JOINED);
-								NETuint8_t(&j);
-								NETend();
-							}
-						}
-					}
+						tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::PendingAsyncApproval;
 
-					// Broadcast to everyone that a new player has joined
-					NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_JOINED);
-					NETuint8_t(&index);
-					NETend();
+						// use the connectChallenge as a unique, random join ID
+						tmp_connectState[i].uniqueJoinID = base64Encode(tmp_connectState[i].connectChallenge);
 
-					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
-					{
-						NETBroadcastPlayerInfo(j);
-					}
-					NETfixDuplicatePlayerNames();
-
-					// Send the updated GAMESTRUCT to the masterserver
-					NETregisterServer(WZ_SERVER_UPDATE);
-
-					// reset flags for new players
-					if (NetPlay.players[index].wzFiles)
-					{
-						NetPlay.players[index].wzFiles->clear();
+						std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
+						std::string joinerIdentityHash = joinRequestInfo.identity.publicHashString();
+						std::string joinerName = joinRequestInfo.name;
+						std::string joinerNameB64 = base64Encode(std::vector<unsigned char>(joinerName.begin(), joinerName.end()));
+						wz_command_interface_output("WZEVENT: join approval needed: %s %s %s %s %s %s\n", tmp_connectState[i].uniqueJoinID.c_str(), tmp_connectState[i].ip.c_str(), joinerIdentityHash.c_str(), joinerPublicKeyB64.c_str(), joinerNameB64.c_str(), (joinRequestInfo.playerType == NET_JOIN_SPECTATOR) ? "spec" : "play");
 					}
 					else
 					{
-						ASSERT(false, "wzFiles is uninitialized?? (Player: %" PRIu8 ")", index);
+						// if async join approval is not enabled, go directly to pending success
+						tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::ProcessJoin;
 					}
+					tmp_connectState[i].connectTime = std::chrono::steady_clock::now(); // reset connect time
 				}
+				else
+				{
+					// unexpected message type at this time
+					// reject the bad client
+					rejected = ERROR_WRONGDATA;
+					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+					NETuint8_t(&rejected);
+					NETend();
+					NETflush();
+					NETpop(NETnetTmpQueue(i));
+
+					NETaddSessionBanBadIP(tmp_connectState[i].ip);
+					NETcloseTempSocket(i);
+					sync_counter.cantjoin++;
+				}
+				continue;
 			}
 		}
 	}
@@ -4337,6 +4331,178 @@ static void NETallowJoining()
 			continue;
 		}
 
+		if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingAsyncApproval)
+		{
+			// check if async approval result has been set
+			if (tmp_connectState[i].asyncJoinApprovalResult.has_value())
+			{
+				if (tmp_connectState[i].asyncJoinApprovalResult.value() == ERROR_NOERROR)
+				{
+					// async join approved - process the join
+					tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::ProcessJoin;
+					tmp_connectState[i].connectTime = std::chrono::steady_clock::now(); // reset connect time
+					// deliberately fall-through to the TmpSocketInfo::TmpConnectState::ProcessJoin condition further below
+				}
+				else
+				{
+					// async join rejected
+					uint8_t rejected = static_cast<uint8_t>(tmp_connectState[i].asyncJoinApprovalResult.value());
+					char buf[256] = {'\0'};
+					ssprintf(buf, "**Rejecting player(%s), due to async approval rejection, reason (%u).", tmp_connectState[i].ip.c_str(), static_cast<unsigned int>(rejected));
+					debug(LOG_INFO, "%s", buf);
+					NETlogEntry(buf, SYNC_FLAG, i);
+					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+					NETuint8_t(&rejected);
+					NETend();
+					NETflush();
+					auto tmpQueue = NETnetTmpQueue(i);
+					if (NETisMessageReady(tmpQueue))
+					{
+						NETpop(tmpQueue);
+					}
+
+					NETcloseTempSocket(i);
+					sync_counter.cantjoin++;
+					continue; // continue to next tmp_socket
+				}
+			}
+			else
+			{
+				// if no async approval, do a timeout check
+				std::chrono::milliseconds::rep timeout = 5000; // must currently be set relatively short because of the client join blocking delay
+				if (std::chrono::duration_cast<std::chrono::milliseconds>(currentSteadTime - tmp_connectState[i].connectTime).count() > timeout)
+				{
+					debug(LOG_INFO, "Freeing temp socket %p due to async connection approval timeout (IP: %s)", static_cast<void *>(tmp_socket[i]), tmp_connectState[i].ip.c_str());
+
+					uint8_t rejected = ERROR_HOSTDROPPED;
+					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+					NETuint8_t(&rejected);
+					NETend();
+					NETflush();
+					auto tmpQueue = NETnetTmpQueue(i);
+					if (NETisMessageReady(tmpQueue))
+					{
+						NETpop(tmpQueue);
+					}
+					NETcloseTempSocket(i);
+				}
+				continue; // continue to next tmp_socket
+			}
+		}
+		// note: *not* an "else if" because the condition above may transition the state to ProcessJoin!
+		if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::ProcessJoin)
+		{
+			optional<uint32_t> tmp = nullopt;
+			uint8_t rejected = 0;
+
+			auto joinRequestInfo = tmp_connectState[i].receivedJoinInfo; // keep a copy
+			tmp_connectState[i].reset();
+
+			if ((joinRequestInfo.playerType == NET_JOIN_SPECTATOR) || (int)NetPlay.playercount <= gamestruct.desc.dwMaxPlayers)
+			{
+				tmp = NET_CreatePlayer(joinRequestInfo.name, false, (joinRequestInfo.playerType == NET_JOIN_SPECTATOR));
+			}
+
+			if (!tmp.has_value() || tmp.value() > static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()))
+			{
+				ASSERT(tmp.value_or(0) <= static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()), "Currently limited to uint8_t");
+				debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
+
+				// Tell the player that we are full.
+				rejected = ERROR_FULL;
+				NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+				NETuint8_t(&rejected);
+				NETend();
+				NETflush();
+
+				NETcloseTempSocket(i);
+				sync_counter.cantjoin++;
+				continue; // continue to next tmp_socket
+			}
+
+			uint8_t index = static_cast<uint8_t>(tmp.value());
+
+			debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", static_cast<void *>(tmp_socket[i]), __LINE__);
+			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
+			connected_bsocket[index] = tmp_socket[i];
+			NET_waitingForIndexChangeAckSince[index] = nullopt;
+			tmp_socket[i] = nullptr;
+			SocketSet_AddSocket(socket_set, connected_bsocket[index]);
+			NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
+
+			// Copy player's IP address.
+			sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(connected_bsocket[index]));
+
+			NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
+			NETuint8_t(&index);
+			NETuint32_t(&NetPlay.hostPlayer);
+			NETend();
+
+			// First send info about players to newcomer.
+			NETSendAllPlayerInfoTo(index);
+			// then send info about newcomer to all players.
+			NETBroadcastPlayerInfo(index);
+
+			char buf[250] = {'\0'};
+			const char* pPlayerType = (NetPlay.players[index].isSpectator) ? "Spectator" : "Player";
+			snprintf(buf, sizeof(buf), "%s[%" PRIu8 "] %s has joined, IP is: %s", pPlayerType, index, NetPlay.players[index].name, NetPlay.players[index].IPtextAddress);
+			debug(LOG_INFO, "%s", buf);
+			NETlogEntry(buf, SYNC_FLAG, index);
+
+			std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
+			std::string joinerIdentityHash = joinRequestInfo.identity.publicHashString();
+			wz_command_interface_output("WZEVENT: player join: %u %s %s %s\n", i, joinerPublicKeyB64.c_str(), joinerIdentityHash.c_str(), NetPlay.players[i].IPtextAddress);
+
+			debug(LOG_NET, "%s, %s, with index of %u has joined using socket %p", pPlayerType, NetPlay.players[index].name, (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
+
+			// Increment player count
+			gamestruct.desc.dwCurrentPlayers++;
+
+			MultiPlayerJoin(index);
+
+			ingame.VerifiedIdentity[index] = true;
+
+			// Narrowcast to new player that everyone has joined.
+			for (uint8_t j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
+			{
+				if (index != j)  // We will broadcast the index == j case.
+				{
+					if (NetPlay.players[j].allocated)
+					{
+						NETbeginEncode(NETnetQueue(index), NET_PLAYER_JOINED);
+						NETuint8_t(&j);
+						NETend();
+					}
+				}
+			}
+
+			// Broadcast to everyone that a new player has joined
+			NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_JOINED);
+			NETuint8_t(&index);
+			NETend();
+
+			for (uint8_t j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
+			{
+				NETBroadcastPlayerInfo(j);
+			}
+			NETfixDuplicatePlayerNames();
+
+			// Send the updated GAMESTRUCT to the masterserver
+			NETregisterServer(WZ_SERVER_UPDATE);
+
+			// reset flags for new players
+			if (NetPlay.players[index].wzFiles)
+			{
+				NetPlay.players[index].wzFiles->clear();
+			}
+			else
+			{
+				ASSERT(false, "wzFiles is uninitialized?? (Player: %" PRIu8 ")", index);
+			}
+			continue; // continue to next tmp_socket
+		}
+
+		// in all other cases, do a timeout check
 		std::chrono::milliseconds::rep timeout = (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingInitialConnect) ? 2500 : 3000;
 
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentSteadTime - tmp_connectState[i].connectTime).count() > timeout)

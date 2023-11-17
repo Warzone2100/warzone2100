@@ -505,6 +505,10 @@ bool NETprocessQueuedServerUpdates();
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);    ///< Cumulative, except that CONNECTIONSTATUS_NORMAL resets.
 bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
 
+void NETsetAsyncJoinApprovalRequired(bool enabled);
+//	NOTE: *MUST* be called from the main thread!
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR);
+
 const char *messageTypeToString(unsigned messageType);
 
 /// Sync debugging. Only prints anything, if different players would print different things.
