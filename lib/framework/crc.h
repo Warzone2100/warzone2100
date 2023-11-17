@@ -43,7 +43,7 @@ struct Sha256
 	std::string toString() const;
 	void fromString(std::string const &s);
 
-	uint8_t bytes[Bytes];
+	uint8_t bytes[Bytes] = {0};
 };
 Sha256 sha256Sum(void const *data, size_t dataLen);
 template <>
