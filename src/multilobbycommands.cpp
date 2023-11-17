@@ -110,7 +110,7 @@ static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx)
 		auto& identity = getMultiStats(playerIdx).identity;
 		std::string senderIdentityHash = identity.publicHashString();
 		std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-		sendRoomSystemMessageToSingleReceiver("Waiting for sync (admin privileges not yet enabled)", playerIdx);
+		sendRoomSystemMessageToSingleReceiver("Waiting for sync (admin privileges not yet enabled)", playerIdx, true);
 		if (lobbyAdminPublicKeys.count(senderPublicKeyB64) > 0)
 		{
 			debug(LOG_INFO, "Received an admin check for player %" PRIu32 " that passed (public key: %s), but they have not yet verified their identity", playerIdx, senderPublicKeyB64.c_str());
@@ -126,25 +126,25 @@ static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx)
 
 static void lobbyCommand_PrintHelp(uint32_t receiver)
 {
-	sendRoomSystemMessageToSingleReceiver("Command list:", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "help - Get this message", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "admin - Display currently-connected admin players", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "me - Display your information", receiver);
+	sendRoomSystemMessageToSingleReceiver("Command list:", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "help - Get this message", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "admin - Display currently-connected admin players", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "me - Display your information", receiver, true);
 	if (!senderApparentlyMatchesAdmin(receiver))
 	{
-		sendRoomSystemMessageToSingleReceiver("(Additional commands are available for admins)", receiver);
+		sendRoomSystemMessageToSingleReceiver("(Additional commands are available for admins)", receiver, true);
 		return;
 	}
 	// admin-only commands
-	sendRoomSystemMessageToSingleReceiver("Admin-only commands: (All slots count from 0)", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "swap <slot-from> <slot-to> - Swap player/slot positions", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makespec <slot> - Move a player to spectators", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makeplayer s<slot> - Request to move a spectator to players", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "kick <slot> - Kick a player; (or s<slot> for spectator - ex. s0)", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "team <slot> <team> - Change team for player/slot", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "base <base level> - Change base level (0, 1, 2)", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "alliance <alliance type> - Change alliance setting (0, 1, 2, 3)", receiver);
-	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "scav <scav level> - Change scav setting (0=off, 1=on, 2=ultimate)", receiver);
+	sendRoomSystemMessageToSingleReceiver("Admin-only commands: (All slots count from 0)", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "swap <slot-from> <slot-to> - Swap player/slot positions", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makespec <slot> - Move a player to spectators", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "makeplayer s<slot> - Request to move a spectator to players", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "kick <slot> - Kick a player; (or s<slot> for spectator - ex. s0)", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "team <slot> <team> - Change team for player/slot", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "base <base level> - Change base level (0, 1, 2)", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "alliance <alliance type> - Change alliance setting (0, 1, 2, 3)", receiver, true);
+	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "scav <scav level> - Change scav setting (0=off, 1=on, 2=ultimate)", receiver, true);
 }
 
 static std::unordered_set<size_t> getConnectedAdminPlayerIndexes()
@@ -193,7 +193,7 @@ static void lobbyCommand_Admin()
 #define ADMIN_REQUIRED_FOR_COMMAND(command) \
 if (!senderHasLobbyCommandAdminPrivs(message.sender)) \
 { \
-	sendRoomSystemMessage("Only admin can use the \"" command "\" command"); \
+	sendRoomSystemMessageToSingleReceiver("Only admin can use the \"" command "\" command", static_cast<uint32_t>(message.sender), true); \
 	return false; \
 }
 
@@ -282,7 +282,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 								message.sender,
 								NetPlay.players[message.sender].position,
 								NetPlay.players[message.sender].name);
-		sendRoomSystemMessageToSingleReceiver(msg.c_str(), message.sender);
+		sendRoomSystemMessageToSingleReceiver(msg.c_str(), message.sender, true);
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "team ", 5) == 0)
 	{
@@ -504,7 +504,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		if (playerIdx == message.sender)
 		{
 			// Can't move self this way (or it'll prevent us from moving back) - use the UI!
-			sendRoomSystemMessageToSingleReceiver("Use the UI to move yourself.", static_cast<uint32_t>(message.sender));
+			sendRoomSystemMessageToSingleReceiver("Use the UI to move yourself.", static_cast<uint32_t>(message.sender), true);
 			return false;
 		}
 		if (!cmdInterface.movePlayerToSpectators(playerIdx))
