@@ -182,6 +182,7 @@ bool tryLoad(const WzString &path, const WzString &filename)
 	auto modelName = baseModel->modelName;
 	auto baseInsertResult = models.insert(ModelMap::value_type(modelName.toUtf8(), std::make_unique<iIMDBaseShape>(std::move(baseModel))));
 	ASSERT_OR_RETURN(false, baseInsertResult.second, "%s: Loaded duplicate model? (%s)", filename.toUtf8().c_str(), modelName.toUtf8().c_str());
+	// do NOT use baseModel after this point!
 
 	if (!graphics_override_model)
 	{
@@ -190,6 +191,22 @@ bool tryLoad(const WzString &path, const WzString &filename)
 	}
 
 	// there *is* a graphics override version of this model - swap out the base model's displayModel for the graphics override model
+
+	// first, some sanity checks
+	const auto& baseModelConnectors = baseInsertResult.first->second->connectors;
+	if (graphics_override_model->connectors.size() < baseModelConnectors.size())
+	{
+		// override models should not have fewer connectors than the base model
+		size_t prior_override_model_connectors_count = graphics_override_model->connectors.size();
+		// to avoid crashes later, copy over the extra connectors from the base model
+		for (size_t i = graphics_override_model->connectors.size(); i < baseModelConnectors.size(); ++i)
+		{
+			graphics_override_model->connectors.push_back(baseModelConnectors[i]);
+		}
+		// also output a log entry, so someone can know to fix the graphics override model
+		debug(LOG_INFO, "Graphics override model %s is missing connectors (override connectors: %zu, base model connectors: %zu)", filename.toUtf8().c_str(), prior_override_model_connectors_count, baseModelConnectors.size());
+	}
+
 	baseInsertResult.first->second->replaceDisplayModel(std::move(graphics_override_model));
 	return true;
 }
