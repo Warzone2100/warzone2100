@@ -146,12 +146,12 @@ static UBYTE   bPlayCountDown;
 
 //FUNCTIONS**************
 static void addLandingLights(UDWORD x, UDWORD y);
-static bool startMissionOffClear(char *pGame);
-static bool startMissionOffKeep(char *pGame);
-static bool startMissionCampaignStart(char *pGame);
-static bool startMissionCampaignChange(char *pGame);
-static bool startMissionCampaignExpand(char *pGame);
-static bool startMissionCampaignExpandLimbo(char *pGame);
+static bool startMissionOffClear(const char *pGame);
+static bool startMissionOffKeep(const char *pGame);
+static bool startMissionCampaignStart(const char *pGame);
+static bool startMissionCampaignChange(const char *pGame);
+static bool startMissionCampaignExpand(const char *pGame);
+static bool startMissionCampaignExpandLimbo(const char *pGame);
 static bool startMissionBetween();
 static void endMissionCamChange();
 static void endMissionOffClear();
@@ -376,7 +376,7 @@ void setMissionCountDown()
 }
 
 
-bool startMission(LEVEL_TYPE missionType, char *pGame)
+bool startMission(LEVEL_TYPE missionType, const char *pGame)
 {
 	bool	loaded = true;
 
@@ -1103,7 +1103,7 @@ void saveCampaignData()
 
 
 //start an off world mission - clearing the object lists
-bool startMissionOffClear(char *pGame)
+bool startMissionOffClear(const char *pGame)
 {
 	debug(LOG_SAVE, "called for %s", pGame);
 
@@ -1124,7 +1124,7 @@ bool startMissionOffClear(char *pGame)
 }
 
 //start an off world mission - keeping the object lists
-bool startMissionOffKeep(char *pGame)
+bool startMissionOffKeep(const char *pGame)
 {
 	debug(LOG_SAVE, "called for %s", pGame);
 	saveMissionData();
@@ -1143,7 +1143,7 @@ bool startMissionOffKeep(char *pGame)
 	return true;
 }
 
-bool startMissionCampaignStart(char *pGame)
+bool startMissionCampaignStart(const char *pGame)
 {
 	debug(LOG_SAVE, "called for %s", pGame);
 
@@ -1164,7 +1164,7 @@ bool startMissionCampaignStart(char *pGame)
 	return true;
 }
 
-bool startMissionCampaignChange(char *pGame)
+bool startMissionCampaignChange(const char *pGame)
 {
 	// Clear out all intelligence screen messages
 	freeMessages();
@@ -1191,7 +1191,7 @@ bool startMissionCampaignChange(char *pGame)
 	return true;
 }
 
-bool startMissionCampaignExpand(char *pGame)
+bool startMissionCampaignExpand(const char *pGame)
 {
 	//load in the new game details
 	if (!loadGame(pGame, KEEPOBJECTS, !FREEMEM, false))
@@ -1203,7 +1203,7 @@ bool startMissionCampaignExpand(char *pGame)
 	return true;
 }
 
-bool startMissionCampaignExpandLimbo(char *pGame)
+bool startMissionCampaignExpandLimbo(const char *pGame)
 {
 	saveMissionLimboData();
 
