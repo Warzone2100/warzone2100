@@ -260,7 +260,6 @@ bool changeReadyStatus(UBYTE player, bool bReady);
 static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
 
-void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
 static void sendRoomChatMessage(char const *text, bool skipLocalDisplay = false);
 
 static bool multiplayPlayersReady();
@@ -8604,11 +8603,14 @@ void sendRoomNotifyMessage(char const *text)
 	message.enqueue(NETbroadcastQueue());
 }
 
-void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver)
+void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver, bool skipLocalDisplay)
 {
 	ASSERT_OR_RETURN(, isHumanPlayer(receiver), "Invalid receiver: %" PRIu32 "", receiver);
 	NetworkTextMessage message(SYSTEM_MESSAGE, text);
-	displayRoomSystemMessage(text);
+	if (!skipLocalDisplay || receiver == selectedPlayer)
+	{
+		displayRoomSystemMessage(text);
+	}
 	message.enqueue(NETnetQueue(receiver));
 }
 
