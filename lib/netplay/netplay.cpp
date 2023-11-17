@@ -625,9 +625,12 @@ static void initPlayerNetworkProps(int playerIndex)
 	{
 		ASSERT(false, "PLAYERS.wzFiles is uninitialized??");
 	}
-	ingame.JoiningInProgress[playerIndex] = false;
-	ingame.PendingDisconnect[playerIndex] = false;
-	ingame.hostChatPermissions[playerIndex] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
+	if (playerIndex < MAX_CONNECTED_PLAYERS)
+	{
+		ingame.JoiningInProgress[playerIndex] = false;
+		ingame.PendingDisconnect[playerIndex] = false;
+		ingame.hostChatPermissions[playerIndex] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
+	}
 }
 
 void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpectator)
