@@ -259,8 +259,12 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDBaseShape *strBase
 		//draw Weapon/ECM/Sensor for structure
 		if (weaponImd[0] != nullptr)
 		{
-			for (int i = 0; i < MAX(1, Stats->numWeaps); i++)
+			for (uint32_t i = 0; i < MAX(1, Stats->numWeaps); i++)
 			{
+				if (i >= strImd->connectors.size())
+				{
+					break;
+				}
 				glm::mat4 localMatrix = glm::translate(glm::vec3(strImd->connectors[i].xzy()));
 				if (mountImd[i] != nullptr)
 				{
@@ -602,15 +606,15 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 					float localHeightAboveTerrain = psDroid->heightAboveMap;
 
 					//to skip number of VTOL_CONNECTOR_START ground unit connectors
-					if (iConnector < VTOL_CONNECTOR_START)
+					size_t bodyConnectorIndex = (iConnector < VTOL_CONNECTOR_START) ? i : iConnector + i;
+					if (bodyConnectorIndex < psShapeBody->connectors.size())
 					{
-						localModelMatrix *= glm::translate(glm::vec3(psShapeBody->connectors[i].xzy()));
-						localHeightAboveTerrain += psShapeBody->connectors[i].z;
+						localModelMatrix *= glm::translate(glm::vec3(psShapeBody->connectors[bodyConnectorIndex].xzy()));
+						localHeightAboveTerrain += psShapeBody->connectors[bodyConnectorIndex].z;
 					}
 					else
 					{
-						localModelMatrix *= glm::translate(glm::vec3(psShapeBody->connectors[iConnector + i].xzy()));
-						localHeightAboveTerrain += (psShapeBody->connectors[iConnector + i]).z;
+						debug(LOG_INFO, "Model lacks sufficient connectors?: %s", psShapeBody->modelName.toUtf8().c_str());
 					}
 					localModelMatrix *= glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
