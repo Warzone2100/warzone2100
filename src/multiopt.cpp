@@ -643,7 +643,10 @@ void playerResponding()
 {
 	ingame.startTime = std::chrono::steady_clock::now();
 	ingame.localJoiningInProgress = false; // No longer joining.
-	ingame.JoiningInProgress[selectedPlayer] = false;
+	if (selectedPlayer < MAX_CONNECTED_PLAYERS)
+	{
+		ingame.JoiningInProgress[selectedPlayer] = false;
+	}
 
 	// Home the camera to the player
 	cameraToHome(selectedPlayer, false);
