@@ -4117,6 +4117,7 @@ static void NETallowJoining()
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
 
+						NETaddSessionBanBadIP(tmp_connectState[i].ip);
 						NETcloseTempSocket(i);
 						sync_counter.cantjoin++;
 					}
@@ -4158,6 +4159,7 @@ static void NETallowJoining()
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
 
+						NETaddSessionBanBadIP(tmp_connectState[i].ip);
 						NETcloseTempSocket(i);
 						sync_counter.cantjoin++;
 						continue;
