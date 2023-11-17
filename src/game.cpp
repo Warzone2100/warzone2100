@@ -7168,7 +7168,7 @@ bool loadTerrainTypeMap(const char *pFilePath)
 }
 
 // Maps built into the game with custom tile types need to be excluded for overrides.
-bool shouldLoadTerrainTypeOverrides(const char* name)
+bool shouldLoadTerrainTypeOverrides(const std::string& name)
 {
 	std::vector<std::string> excludedMaps = {"Monocot"};
 

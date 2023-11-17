@@ -575,7 +575,7 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 void mapInit();
 void mapUpdate();
 
-bool shouldLoadTerrainTypeOverrides(const char* name);
+bool shouldLoadTerrainTypeOverrides(const std::string& name);
 bool loadTerrainTypeMapOverride(MAP_TILESET tileSet);
 
 //For saves to determine if loading the terrain type override should occur
