@@ -534,6 +534,21 @@ static bool changeHostChatPermissionsForActivePlayerWithIdentity(const std::stri
 		wz_command_interface_output("WZEVENT: hostChatPermissions=%s: newjoin\n", (freeChatEnabled) ? "Y" : "N");
 		return true;
 	}
+	else if (playerIdentityStrCopy == "host")
+	{
+		if (NetPlay.isHost && NetPlay.bComms)
+		{
+			// update host slot
+			if (NetPlay.hostPlayer < MAX_CONNECTED_PLAYERS)
+			{
+				ingame.hostChatPermissions[NetPlay.hostPlayer] = freeChatEnabled;
+				sendHostConfig();
+				wz_command_interface_output("WZEVENT: hostChatPermissions=%s: host\n", (freeChatEnabled) ? "Y" : "N");
+				return true;
+			}
+		}
+		return false;
+	}
 
 	bool result = applyToActivePlayerWithIdentity(playerIdentityStrCopy, [freeChatEnabled](uint32_t i) {
 		if (i == NetPlay.hostPlayer)
