@@ -813,7 +813,10 @@ bool setTerrainMappingTexturesMaxSize(int texSize)
 	bool isPowerOfTwo = !(texSize == 0) && !(texSize & (texSize - 1));
 	if (!isPowerOfTwo || texSize < MIN_TERRAIN_TEXTURE_SIZE || texSize > 1024)
 	{
-		debug(LOG_ERROR, "Attempted to set bad terrain mapping texture max size %d! Ignored.", texSize);
+		if (texSize != 0)
+		{
+			debug(LOG_ERROR, "Attempted to set bad terrain mapping texture max size %d! Ignored.", texSize);
+		}
 		return false;
 	}
 	maxTerrainMappingTextureSize = texSize;
