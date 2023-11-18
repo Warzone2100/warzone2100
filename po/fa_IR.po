@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-06 01:42\n"
+"PO-Revision-Date: 2023-11-18 03:28\n"
 "Last-Translator: \n"
 "Language-Team: Persian\n"
 "Language: fa_IR\n"
@@ -15939,11 +15939,11 @@ msgstr ""
 
 #: src/frontend.cpp:975
 msgid "Medium Quality"
-msgstr ""
+msgstr "کیفیت متوسط"
 
 #: src/frontend.cpp:976
 msgid "High Quality"
-msgstr ""
+msgstr "کیفیت بالا"
 
 #: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
@@ -15972,7 +15972,7 @@ msgstr ""
 
 #: src/frontend.cpp:1170
 msgid "Terrain Shading"
-msgstr ""
+msgstr "منظره"
 
 #: src/frontend.cpp:1176
 #: src/ingameop.cpp:629
