@@ -32,8 +32,8 @@
 #include "../keybind.h"
 #include "../keyedit.h"
 #include "../display3d.h"   // For playerPos
-#include "../qtscript.h"    // For triggerEventKeyPressed
 #include "../main.h"        // For KeyMapPath
+#include "lib/netplay/nettypes.h"	// For NETisReplay()
 
 
 KeyMappings& InputManager::mappings()
@@ -297,68 +297,6 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 		{
 			keyToProcess.info.function();
 			consumedInputs.insert(keyToProcess.keys.input);
-		}
-	}
-
-	/* Script callback - find out what meta key was pressed */
-	int pressedMetaKey = KEY_IGNORE;
-
-	/* getLastMetaKey() can't be used here, have to do manually */
-	if (keyDown(KEY_LCTRL))
-	{
-		pressedMetaKey = KEY_LCTRL;
-	}
-	else if (keyDown(KEY_RCTRL))
-	{
-		pressedMetaKey = KEY_RCTRL;
-	}
-	else if (keyDown(KEY_LALT))
-	{
-		pressedMetaKey = KEY_LALT;
-	}
-	else if (keyDown(KEY_RALT))
-	{
-		pressedMetaKey = KEY_RALT;
-	}
-	else if (keyDown(KEY_LSHIFT))
-	{
-		pressedMetaKey = KEY_LSHIFT;
-	}
-	else if (keyDown(KEY_RSHIFT))
-	{
-		pressedMetaKey = KEY_RSHIFT;
-	}
-	else if (keyDown(KEY_LMETA))
-	{
-		pressedMetaKey = KEY_LMETA;
-	}
-	else if (keyDown(KEY_RMETA))
-	{
-		pressedMetaKey = KEY_RMETA;
-	}
-
-	/* Find out what keys were pressed */
-	for (int i = 0; i < KEY_MAXSCAN; i++)
-	{
-		/* Skip meta keys */
-		switch (i)
-		{
-		case KEY_LCTRL:
-		case KEY_RCTRL:
-		case KEY_LALT:
-		case KEY_RALT:
-		case KEY_LSHIFT:
-		case KEY_RSHIFT:
-		case KEY_LMETA:
-		case KEY_RMETA:
-			continue;
-			break;
-		}
-
-		/* Let scripts process this key if it's pressed */
-		if (keyPressed((KEY_CODE)i))
-		{
-			triggerEventKeyPressed(pressedMetaKey, i);
 		}
 	}
 }

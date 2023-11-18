@@ -546,12 +546,6 @@ namespace wzapi
 		//__ cheating!
 		//__
 		virtual bool handle_eventSyncRequest(int from, int req_id, int x, int y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2) = 0;
-
-		//__ ## eventKeyPressed(meta, key)
-		//__
-		//__ An event that is called whenever user presses a key in the game, not counting chat
-		//__ or other pop-up user interfaces. The key values are currently undocumented.
-		virtual bool handle_eventKeyPressed(int meta, int key) SCRIPTING_EVENT_NON_REQUIRED
 	};
 
 	enum class GlobalVariableFlags
