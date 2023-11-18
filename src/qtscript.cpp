@@ -1695,20 +1695,6 @@ bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *ps
 	return true;
 }
 
-//__ ## eventKeyPressed(meta, key)
-//__
-//__ An event that is called whenever user presses a key in the game, not counting chat
-//__ or other pop-up user interfaces. The key values are currently undocumented.
-bool triggerEventKeyPressed(int meta, int key)
-{
-	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *instance : scripts)
-	{
-		instance->handle_eventKeyPressed(meta, key);
-	}
-	return true;
-}
-
 // ----
 
 #define ALL_PLAYERS -1
