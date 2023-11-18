@@ -366,6 +366,7 @@ lib/wzmaplib/src/map_version.cpp
 po/custom/fromJson.txt
 po/custom/mac-infoplist.txt
 po/custom/warzone2100.desktop.txt
+src/3rdparty/INIReaderWriter.cpp
 src/3rdparty/physfs_memoryio.cpp
 src/3rdparty/propertymatcher.cpp
 src/action.cpp
@@ -406,6 +407,7 @@ src/geometry.cpp
 src/group.cpp
 src/hci.cpp
 src/hci/build.cpp
+src/hci/chatoptions.cpp
 src/hci/commander.cpp
 src/hci/groups.cpp
 src/hci/manufacture.cpp
