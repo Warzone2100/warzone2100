@@ -338,7 +338,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 	// If original (psDroid->droidType == DROID_PERSON)
 	if (psEffect->type == DROID_ANIMEVENT_DYING_NORMAL_ST)
 	{
-		modelMatrix *= glm::scale(glm::vec3(.75f)); // FIXME - hideous....!!!!
+		// previously, used to scale the model by 0.75 - no longer needed with the fixed models though...
 	}
 
 	PIELIGHT brightness = pal_SetBrightness(255); // NOTE: brightness is not preserved from the original droid that died - FIXME: ?
