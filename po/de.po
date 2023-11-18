@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-06 01:42\n"
+"PO-Revision-Date: 2023-11-07 02:21\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15947,11 +15947,11 @@ msgstr "Terrain-Qualitätsmodus nicht verfügbar."
 
 #: src/frontend.cpp:975
 msgid "Medium Quality"
-msgstr ""
+msgstr "Mittlere Qualität"
 
 #: src/frontend.cpp:976
 msgid "High Quality"
-msgstr ""
+msgstr "Hohe Qualität"
 
 #: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
@@ -15980,7 +15980,7 @@ msgstr "Terrain-Qualität"
 
 #: src/frontend.cpp:1170
 msgid "Terrain Shading"
-msgstr ""
+msgstr "Geländeschattierung"
 
 #: src/frontend.cpp:1176
 #: src/ingameop.cpp:629
@@ -16959,7 +16959,7 @@ msgstr "Nachrichtenzustellung fehlgeschlagen - erneut versuchen"
 
 #: src/hci/quickchat.cpp:2622
 msgid "Map Downloaded"
-msgstr ""
+msgstr "Karte heruntergeladen"
 
 #: src/hci/quickchat.cpp:2732
 msgid "Bot Allies"
@@ -19065,7 +19065,7 @@ msgstr "(keine)"
 
 #: src/multiint.cpp:4241
 msgid "Alt Name:"
-msgstr ""
+msgstr "Alt. Name:"
 
 #: src/multiint.cpp:4260
 msgid "Player rating:"
@@ -19157,11 +19157,11 @@ msgstr "CHAT"
 #: src/multiint.cpp:5946
 #: src/titleui/gamefind.cpp:238
 msgid "Multiplayer Lobby Support Unavailable"
-msgstr ""
+msgstr "Unterstützung für Mehrspieler-Lobby nicht verfügbar"
 
 #: src/multiint.cpp:5948
 msgid "Your client cannot connect to the mutiplayer lobby."
-msgstr ""
+msgstr "Der Client kann sich nicht mit der Mehrspieler-Lobby verbinden."
 
 #: src/multiint.cpp:5950
 #: src/updatemanager.cpp:621
@@ -19495,11 +19495,11 @@ msgstr "Datenpakete: %lu/%lu"
 
 #: src/multimenu.cpp:1394
 msgid "Players View"
-msgstr ""
+msgstr "Spieler-Ansicht"
 
 #: src/multimenu.cpp:1395
 msgid "Team Strategy"
-msgstr ""
+msgstr "Teamstrategie"
 
 #: src/multiopt.cpp:306
 #, c-format
@@ -19681,17 +19681,17 @@ msgstr "%s (%d) erlaubte Kartenänderung. Total: %d/%d"
 #: src/multivote.cpp:200
 #, c-format
 msgid "A player voted FOR kicking: %s"
-msgstr ""
+msgstr "Ein Spieler stimmte FÜR das Kicken: %s"
 
 #: src/multivote.cpp:208
 #, c-format
 msgid "A player voted AGAINST kicking: %s"
-msgstr ""
+msgstr "Ein Spieler stimmte GEGEN das Kicken: %s"
 
 #: src/multivote.cpp:214
 #, c-format
 msgid "A player's client ignored your vote to kick request (too frequent): %s"
-msgstr ""
+msgstr "Der Client eines Spielers hat deine Abstimmung zum Kicken ignoriert (zu häufig): %s"
 
 #: src/multivote.cpp:283
 msgid "Vote"
@@ -19703,56 +19703,56 @@ msgstr "Spielleiter erlauben, die Karte zu ändern oder zufällig auszuwählen?"
 
 #: src/multivote.cpp:334
 msgid "A vote was started to kick you from the game."
-msgstr ""
+msgstr "Eine Abstimmung, dich aus dem Spiel zu kicken, wurde gestartet."
 
 #: src/multivote.cpp:349
 #, c-format
 msgid "A vote was started to kick %s from the game."
-msgstr ""
+msgstr "Eine Abstimmung, um %s aus dem Spiel zu kicken, wurde gestartet."
 
 #: src/multivote.cpp:357
 #, c-format
 msgid "Vote To Kick: %s"
-msgstr ""
+msgstr "Abstimmung zum Kicken von: %s"
 
 #: src/multivote.cpp:358
 #, c-format
 msgid "Should player %s be kicked from the game?"
-msgstr ""
+msgstr "Soll Spieler %s aus dem Spiel gekickt werden?"
 
 #: src/multivote.cpp:359
 msgid "Yes, Kick Them"
-msgstr ""
+msgstr "Ja, kicken"
 
 #: src/multivote.cpp:384
 #, c-format
 msgid "Starting vote to kick player: %s"
-msgstr ""
+msgstr "Start der Abstimmung zum Kicken des Spielers: %s"
 
 #: src/multivote.cpp:618
 #, c-format
 msgid "The vote to kick player %s succeeded (sufficient votes in favor) - kicking"
-msgstr ""
+msgstr "Die Abstimmung zum Kicken von Spieler %s war erfolgreich (genügend Ja-Stimmen) – wird gekickt"
 
 #: src/multivote.cpp:628
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes in favor)"
-msgstr ""
+msgstr "Die Abstimmung zum Kicken von Spieler %s war nicht erfolgreich (ungenügend Ja-Stimmen)"
 
 #: src/multivote.cpp:652
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes before timeout)"
-msgstr ""
+msgstr "Die Abstimmung zum Kicken von Spieler %s war nicht erfolgreich (ungenügend Ja-Stimmen vor Timeout)"
 
 #: src/multivote.cpp:684
 #, c-format
 msgid "The vote to kick player %s failed"
-msgstr ""
+msgstr "Die Abstimmung zum Kicken von Spieler %s war nicht erfolgreich"
 
 #: src/multivote.cpp:695
 #, c-format
 msgid "Cannot request vote to kick player %s yet - please wait a bit longer"
-msgstr ""
+msgstr "Abstimmung, Spieler %s zu kicken, kann nicht angefordert werden – bitte noch ein bisschen länger warten"
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"

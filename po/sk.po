@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-06 00:01+0000\n"
-"PO-Revision-Date: 2023-11-06 14:19\n"
+"PO-Revision-Date: 2023-11-11 01:44\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -216,7 +216,7 @@ msgstr "AKTUALIZÁCIA PRE TÍM BETA"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "Našli sme nejaké artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
@@ -240,7 +240,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "Na tomto mieste detekujeme nepriateľské útočné sily."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
@@ -256,11 +256,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "NEPRIATEĽSKÉ MV"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "Zničte toto MV pre to, aby ste zabránili nepriateľom pristáť."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
@@ -268,7 +268,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "Nový cieľ."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
@@ -276,7 +276,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "Doplnkové"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
@@ -537,7 +537,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "Potom zničte kemp."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
@@ -570,7 +570,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr ""
+msgstr "Potom s nimi letia na neznáme miesto."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
@@ -591,7 +591,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "Musia byť zastavení."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
@@ -701,7 +701,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "Veľa šťastia, veliteľ."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
@@ -4382,7 +4382,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "Svitanie, 4. Júl 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
@@ -4394,7 +4394,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr ""
+msgstr "Ráno, 4. Júl 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
@@ -4442,7 +4442,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
@@ -4581,7 +4581,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Varovanie!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -4601,7 +4601,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:7
 msgid "You will be destroyed."
-msgstr ""
+msgstr "Budete zničení."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
@@ -4649,7 +4649,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "Ráno, 1. September, 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
@@ -4657,7 +4657,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
-msgstr ""
+msgstr "Tím Alfa sa priblížil k základni Beta"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
@@ -4825,7 +4825,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack!"
-msgstr ""
+msgstr "Útok!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
@@ -4869,7 +4869,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr ""
+msgstr "Podvečer, 3. December, 2100"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
@@ -5531,7 +5531,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:726
 #: po/custom/fromJson.txt:3894
 msgid "Missile Silo"
-msgstr ""
+msgstr "Raketové silo"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-Mcannon.name
@@ -5743,7 +5743,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
-msgstr ""
+msgstr "Prebieha výskum "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -5848,13 +5848,13 @@ msgstr ""
 
 #: lib/sound/cdaudio.cpp:59
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:61
 #: src/frontend.cpp:2844
 #: src/frontend.cpp:2945
 msgid "Campaign"
-msgstr ""
+msgstr "Kampaň"
 
 #: lib/sound/cdaudio.cpp:63
 msgid "Challenge"
@@ -5866,7 +5866,7 @@ msgstr ""
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Multiplayer"
-msgstr ""
+msgstr "Hra viac hráčov"
 
 #: lib/sound/cdaudio.cpp:162
 msgid "Menu Music"
@@ -5878,15 +5878,15 @@ msgstr ""
 
 #: lib/widget/jsontable.cpp:496
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Kopírovať cestu do schránky"
 
 #: lib/widget/jsontable.cpp:503
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Kopírovať JSON do schránky"
 
 #: lib/widget/jsontable.cpp:510
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Vypísať JSON do StdOut"
 
 #: lib/widget/listwidget.cpp:62
 msgid "Tab Scroll left"
@@ -7595,7 +7595,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0CannonTower.name
 #: po/custom/fromJson.txt:1364
 msgid "Cannon Tower"
-msgstr ""
+msgstr "Kanónová veža"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[0]
@@ -7604,7 +7604,7 @@ msgstr ""
 #. ... + 11 refs
 #: po/custom/fromJson.txt:1370
 msgid "Cannon Upgrade"
-msgstr ""
+msgstr "Vylepšenie kanónov"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-CBTurret01.name
@@ -7664,7 +7664,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BaBaCivilian.name
 #: po/custom/fromJson.txt:1406
 msgid "Civilian"
-msgstr ""
+msgstr "Civilista"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb01.name
@@ -7705,7 +7705,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1429
 msgid "Cobra"
-msgstr ""
+msgstr "Kobra"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
@@ -7963,13 +7963,13 @@ msgstr ""
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1591
 msgid "Crane1"
-msgstr ""
+msgstr "Žeriav1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1594
 msgid "Crane2"
-msgstr ""
+msgstr "Žeriav2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
