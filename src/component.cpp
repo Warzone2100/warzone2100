@@ -514,7 +514,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 		iIMDShape *strImd = psShapeBody;
 		if (psDroid->droidType == DROID_PERSON)
 		{
-			modifiedModelMatrix *= glm::scale(glm::vec3(.75f)); // FIXME - hideous....!!!!
+			// previously, used to scale the model by 0.75 - no longer needed with the fixed models though...
 		}
 		if (strImd->objanimpie[psDroid->animationEvent])
 		{
