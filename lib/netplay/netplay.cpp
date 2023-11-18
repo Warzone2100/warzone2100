@@ -363,7 +363,6 @@ static inline bool physfs_file_safe_close_impl(PHYSFS_file* f)
 	}
 	if (!PHYSFS_isInit())
 	{
-		debug(LOG_INFO, "PhysFS isn't init - ignoring attempt to close (likely at program shutdown?)");
 		return false;
 	}
 	PHYSFS_close(f);
