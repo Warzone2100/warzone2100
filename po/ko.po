@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:45\n"
+"PO-Revision-Date: 2023-11-19 17:04\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -15311,15 +15311,15 @@ msgstr ""
 
 #: src/clparse.cpp:451
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "Vulkan implicit layers를 허용해주세요.(잠재적인 충돌이나 버그들에 의해 비활성화가 되어있을 수도 있습니다.)"
 
 #: src/clparse.cpp:452
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "기본 호스팅 채팅 환경 / 권한 들을 세팅해주세요."
 
 #: src/clparse.cpp:453
 msgid "Enable async join approval (for connecting clients)"
-msgstr ""
+msgstr "비동기 join approval을 활성화시켜주세요.(클라이언트들의 연결을 위해서입니다.)"
 
 #: src/cmddroid.cpp:121
 msgid "Commander needs a higher level to command more units"
@@ -16344,11 +16344,11 @@ msgstr ""
 
 #: src/frontend.cpp:3346
 msgid "Allow All"
-msgstr ""
+msgstr "모두 허용"
 
 #: src/frontend.cpp:3346
 msgid "Quick Chat Only"
-msgstr ""
+msgstr "Quick Chat 전용"
 
 #: src/frontend.cpp:3363
 msgid "Hosting Options:"
@@ -16364,7 +16364,7 @@ msgstr ""
 
 #: src/frontend.cpp:3377
 msgid "Chat"
-msgstr ""
+msgstr "채팅"
 
 #: src/frontend.cpp:3382
 msgid "Inactivity Timeout"
