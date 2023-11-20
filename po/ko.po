@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-20 06:10\n"
+"PO-Revision-Date: 2023-11-20 19:07\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -164,7 +164,7 @@ msgstr "고원에 새로운 전진 기지를 새우고 새로운 패러다임을
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "방어 구조물들을 녹색 점멸 표시가 사라질 때까지 건설하세요."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "안전한 피난처가 완성되면 추가 명령을 받기 위해 착�
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "BETA BASE MISSION: 살아남고 대피하세요! 트럭을 가져오세요."
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -1527,12 +1527,12 @@ msgstr "카운터배터리 센서 업그레이드"
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "CB 센서 업그레이드 Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:477
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "CB 센서 업그레이드 Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:480
@@ -1542,12 +1542,12 @@ msgstr "VTOL 카운터배터리 업그레이드"
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "VTOL CB 업그레이드 Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:482
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "VTOL CB 업그레이드 Mk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:483
@@ -4001,67 +4001,67 @@ msgstr "모든 로케트가 자동 업그레이드됩니다"
 
 #: data/base/script/campaign/cam1-7.js:242
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "모든 새로운 패러다임 유닛들 파괴"
 
 #: data/base/script/campaign/cam1a-c.js:138
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "모든 새로운 패러다임 강화제들 파괴"
 
 #: data/base/script/campaign/cam1ca.js:146
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "적어도 7개의 non-wall 구조체들을 고원에 건설하고 모든 새로운 패러다임 강화제들을 파괴"
 
 #: data/base/script/campaign/cam2-1x.js:112
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "격추된 transporter에서 유닛들을 찾아서 구출"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "많은 사람들이 붙잡히기 전에 Collective에게서 시민들을 구출하세요."
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Collective로부터 Uplink를 보호."
 
 #: data/base/script/campaign/cam2-end.js:199
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "적어도 한개 이상의 트랜스포터와 트럭을 보내고 Collective들의 공격으로부터 timer가 끝날 때까지 살아남으세요."
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "가능한 많은 transporter들을 보내고 적어도 한 대 이상의 트럭을 가져오세요."
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "모든 유닛을 계곡으로 이동시키세요."
 
 #: data/base/script/campaign/cam3-1.js:248
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "미사일 사일로를 파괴하세요."
 
 #: data/base/script/campaign/cam3-2.js:260
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "넥서스로부터 알파팀을 구출하세요."
 
 #: data/base/script/campaign/cam3-4.js:116
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "넥서스 침입 방지 프로그램을 비활성화시키기 위해 넥서스 HQ를 파괴하시오."
 
 #: data/base/script/campaign/cam3-ab.js:241
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "저항회로들을 연구하고 Nexus의 공격으로부터 생존하세요."
 
 #: data/base/script/campaign/cam3-ad1.js:257
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "사일로에 전진 기지를 구축하세요."
 
 #: data/base/script/campaign/cam3-ad2.js:278
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "마사일 사일로를 보호하고 미사일 코드들을 연구하세요."
 
 #: data/base/script/campaign/cam3-c.js:170
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "베타팀의 일부를 감마팀 전초기지와 재결합합니다."
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:447
 msgid "Return to LZ"
@@ -4069,43 +4069,43 @@ msgstr "착륙 지점으로 돌아가십시오"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:530
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Hard / Insane 난이도 힌트:"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:531
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Collective로부터 자신을 보호하기 위해 지도 전역에 견고한 기지를 구축하세요."
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:536
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "모든 적 유닛들과 건축물들을 파괴하세요."
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:552
 msgid "Artifacts collected"
-msgstr ""
+msgstr "수집한 아티팩트"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:553
 msgid "Bases destroyed"
-msgstr ""
+msgstr "기지가 파괴되었습니다."
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:554
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "적군이 남아있습니다."
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:555
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "적의 건축물이 남아있습니다."
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:561
 msgid "Return to LZ required"
-msgstr ""
+msgstr "착륙 지대로의 귀환이 필요합니다."
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:571
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "모든 적 유닛들과 기지들을 파괴하세요."
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:576
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Timer가 0이 될 때까지 살아남으세요."
 
 #: data/base/script/rules.js:57
 #: data/base/script/tutorial.js:129
@@ -4119,7 +4119,7 @@ msgstr "생산 (F1)"
 #: data/mp/multiplay/script/rules/reticule.js:25
 #: data/mp/multiplay/script/rules/reticule.js:114
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "제조 - 공장을 먼저 지어주세요."
 
 #: data/base/script/rules.js:107
 #: data/base/script/tutorial.js:156
@@ -4133,7 +4133,7 @@ msgstr "연구 (F2)"
 #: data/mp/multiplay/script/rules/reticule.js:52
 #: data/mp/multiplay/script/rules/reticule.js:115
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "연구 - 연구시설을 먼저 지어주세요."
 
 #: data/base/script/rules.js:119
 #: data/base/script/tutorial.js:148
@@ -4151,7 +4151,7 @@ msgstr "건축 (F3)"
 #: data/mp/multiplay/script/rules/reticule.js:64
 #: data/mp/multiplay/script/rules/reticule.js:116
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "빌드 - 건설 드로이드들을 먼저 제조해주세요."
 
 #: data/base/script/rules.js:169
 #: data/base/script/tutorial.js:214
@@ -4165,7 +4165,7 @@ msgstr "디자인 (F4)"
 #: data/mp/multiplay/script/rules/reticule.js:92
 #: data/mp/multiplay/script/rules/reticule.js:117
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "설계 - 본부를 먼저 건설해주세요."
 
 #: data/base/script/rules.js:183
 #: data/mp/multiplay/script/rules/reticule.js:101
@@ -4177,7 +4177,7 @@ msgstr "사령관 (F6)"
 #: data/mp/multiplay/script/rules/reticule.js:105
 #: data/mp/multiplay/script/rules/reticule.js:119
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "커맨더 - 커맨더들을 먼저 생산해주세요."
 
 #: data/base/script/rules.js:193
 #: data/base/script/tutorial.js:258
@@ -4229,7 +4229,7 @@ msgstr "유정 탑은 현재 휴면 중입니다. 기름을 전력으로 전환�
 
 #: data/base/script/tutorial.js:35
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "점멸하는 빌드 아이콘을 좌클릭해주세요."
 
 #: data/base/script/tutorial.js:36
 msgid "Now left click the power generator in the build menu on the left"
@@ -4613,7 +4613,7 @@ msgstr "이 넥서스 침입자 프로그램은 자기 형태를 변화시키는
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "우리는 그것의 궁극적인 목적이나 기능을 확인할 수 없었습니다. 초기 형태에서는 침입한 시스템의 나머지 부분으로부터 메모리 부분을 찾아내고 격리합니다. 그 후, 그것은 자기 자신과 데이터 구조를 변경하기 시작하고 내부 시스템을 효과적으로 다시 프로그래밍합니다."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -5621,7 +5621,7 @@ msgstr "플레이어"
 
 #: data/mp/multiplay/script/rules/endconditions.js:233
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "비활동적이거나 소극적인 플레이로 인해 손실되었습니다."
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
