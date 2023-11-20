@@ -1,3 +1,39 @@
+2023-11-20: Version 4.4.1:
+* General:
+   * Fix: Potential corrupt game config file issue (commit:65728ec3302a5b9d2f9af1cc914647f087917e82, #3489)
+   * Fix: Loading old maps with invalid map tile numbers (too many commits, #3484)
+   * Fix: Text input handling of virtual key codes, CTRL+V paste, and displaying virtual key names (too many commits, #3498)
+   * Fix: aiBestNearestTarget throttling (commit:066f965612344a95858a2a7e8bf2c5f9f1ca3efa, #3502)
+   * Fix: Log spam for multi-weapon bodies (commit:50ed2f89ab86302309cb9fb095280733fa0e74fc, #3503)
+   * Fix: Spawn position of first clone in clone cheat (commit:36229e062672f3f82584866c12d581ae2087cb45, #3495)
+   * Fix: Bring back the 3 turret Ultimate Scavenger truck, Delay Ultimate Scavenger Helicopters a bit (too many commits, #3505)
+   * Fix: Always tell VTOLs to rearm after their VTOL Strike/CB sensor dies (commit:1648951a80cb12be316de0161091d24a26931a62, #3507)
+   * Fix: Check for non-default sensor/ecm stats like with repair (commit:9b9a4e3993f286d8df0cff12b3df22a4fea4122c, #3516)
+   * Fix: Various crashes and memory leaks (too many commits, #3484, #3515, #3523)
+* Graphics:
+   * Fix: Handling of MAX_VERTEX_OUTPUT_COMPONENTS on OpenGL < 3.2 (commit:e65dbe7d5f879d915322fc17849613693d6483e6, #3484)
+   * Fix: Additional fixes for fallback shaders, gfx_api logging (too many commits, #3491)
+   * Fix: [OpenGL] Additional error handling for init (too many commits, #3504)
+   * Fix: Model connectors for Ultimate Scavenger Helicopters (commit:02bba99e7409155d8eef12e82a76ed8530eff562, #3515)
+   * Fix: DROID_PERSON model display size (commit:012efdd53aefc4033b6e4bcb6f76d8389a404ce8, #3519)
+* Campaign:
+   * Fix: Remove unused artifact label from Alpha 3 (commit:550ba340c4d6f2c26298355757dd5a0b26af097d, #3492)
+   * Fix: Repair Facility ID on Alpha 9 (commit:e81ca4f5e6d51dc26e66f427f5116f667ec0815f, #3493)
+   * Fix: Command/Build reticule init for LDS_EXPAND_LIMBO missions (commit:d89e1878e575fbb02e1c84e95e5e1ab52b023241, #3512)
+* Multiplayer:
+   * Add: Chat Options UI, host mute / options (too many commits, #3514)
+   * Fix: Player mute state handling (commit:edc449519d76ae3276d42714ea034d4daff15721, #3490)
+   * Fix: Non-builtin map replay desync (commit:19fa67f13f2b4a2f93c93ca88acc357ec77df6ce, #3501)
+   * Fix: Allow hosts to pre-configure all team slot choices (commit:ceb8eb50d92c05b0ec7b5070c0cc6e2225b60594, #3509)
+   * Fix: Sort loading players by position (commit:c879bbd610b8aee3b1de2a5485e5efb57d5a04a9, #3509)
+   * Fix: Grey-out button for AI difficulty if not host (commit:c59b3081b3a7e249b5c02bc39cd2afd372482a27, #3509)
+   * Fix: Adjust how pending disconnects are handled (commit:b55a09212d087ef26c4a59059d7cdea3f31e3e8d, #3511)
+   * Fix: Kick message appearing for map change (commit:daa37e7a2609ea6705527abf67be128b1a0374db, #3513)
+   * Fix: Mod hashing issue (commit:72ae817f1fd671459411189a539883ef385e921a, #3517)
+   * Fix: Refactor NETallowJoining, add async join approval support (commit:1d9fd6f97850689e2eb7ae99684dcc67e0db9e65, #3518)
+* Other:
+   * Fix: Clean-up undocumented (and unused) eventKeyPressed (commit:b4cf7e25d65c24616d32966acf76666398fd688e, #3522)
+
 2023-11-06: Version 4.4.0:
 * General:
    * Fix: Count units inside transporters for mission end results (commit:f19cf46a28ec98f0b474347423d845407d6acbd1, #3436)
