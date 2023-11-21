@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:44\n"
+"PO-Revision-Date: 2023-11-21 07:12\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -15320,15 +15320,15 @@ msgstr "Конвертировать .png карты отражений в од�
 
 #: src/clparse.cpp:451
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "Разрешить неявные слои Vulkan (которые могут быть отключены по умолчанию из-за возможных сбоев или ошибок)"
 
 #: src/clparse.cpp:452
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "Установить настройки чата по-умолчанию"
 
 #: src/clparse.cpp:453
 msgid "Enable async join approval (for connecting clients)"
-msgstr ""
+msgstr "Разрешить асинхронные подключения (для подключившихся игроков)"
 
 #: src/cmddroid.cpp:121
 msgid "Commander needs a higher level to command more units"
@@ -16373,11 +16373,11 @@ msgstr "Уничтожить (классика)"
 
 #: src/frontend.cpp:3346
 msgid "Allow All"
-msgstr ""
+msgstr "Разрешить все"
 
 #: src/frontend.cpp:3346
 msgid "Quick Chat Only"
-msgstr ""
+msgstr "Только Быстрые сообщения"
 
 #: src/frontend.cpp:3363
 msgid "Hosting Options:"
@@ -16393,7 +16393,7 @@ msgstr "Включить UPnP"
 
 #: src/frontend.cpp:3377
 msgid "Chat"
-msgstr ""
+msgstr "Чат"
 
 #: src/frontend.cpp:3382
 msgid "Inactivity Timeout"
@@ -16540,45 +16540,45 @@ msgstr "Показаны только избранные технологии\n"
 
 #: src/hci/chatoptions.cpp:434
 msgid "New Joins"
-msgstr ""
+msgstr "Новые игроки"
 
 #: src/hci/chatoptions.cpp:1196
 msgid "Refresh"
-msgstr ""
+msgstr "Обновить"
 
 #: src/hci/chatoptions.cpp:1214
 msgid "Host Chat Options"
-msgstr ""
+msgstr "Настройки чата с Хостом"
 
 #: src/hci/chatoptions.cpp:1223
 msgid "Global Options:"
-msgstr ""
+msgstr "Общие настройки:"
 
 #: src/hci/chatoptions.cpp:1229
 msgid "Enable All"
-msgstr ""
+msgstr "Включить все"
 
 #: src/hci/chatoptions.cpp:1237
 msgid "Disable All"
-msgstr ""
+msgstr "Отключить все"
 
 #: src/hci/chatoptions.cpp:1256
 #: src/multiint.cpp:4908
 #: src/screens/chatscreen.cpp:394
 msgid "Chat Options"
-msgstr ""
+msgstr "Настройки общего чата"
 
 #: src/hci/chatoptions.cpp:1264
 msgid "Mute or configure player free chat."
-msgstr ""
+msgstr "Отключите или настройте общий чат."
 
 #: src/hci/chatoptions.cpp:1273
 msgid "The host has globally muted 1+ players."
-msgstr ""
+msgstr "Хост отключил сообщения для 1+ игроков."
 
 #: src/hci/chatoptions.cpp:1286
 msgid "Local"
-msgstr ""
+msgstr "Локальный"
 
 #: src/hci/groups.cpp:141
 msgid "Select / Assign Group Number: "
@@ -19217,7 +19217,7 @@ msgstr "Исключён из игры"
 #: src/multiint.cpp:5082
 #: src/screens/chatscreen.cpp:157
 msgid "The host has disabled free chat. Please use Quick Chat."
-msgstr ""
+msgstr "Хост заблокировал общий чат. Вы все еще можете использовать Быстрые сообщения."
 
 #: src/multiint.cpp:5033
 #: src/multiint.cpp:5036
@@ -19227,16 +19227,16 @@ msgstr "Быстрый чат"
 #: src/multiint.cpp:5047
 #: src/multiint.cpp:5053
 msgid "Press the Tab key to open Quick Chat."
-msgstr ""
+msgstr "Нажмите клавишу Tab, чтобы открыть меню Быстрых сообщений."
 
 #: src/multiint.cpp:5055
 #: src/multiint.cpp:5085
 msgid "The host has disabled free chat. Please use Quick Chat or /hostmsg commands."
-msgstr ""
+msgstr "Хост заблокировал общий чат. Вы все еще можете использовать Быстрые сообщения или команду /hostmsg."
 
 #: src/multiint.cpp:5088
 msgid "The host has enabled free chat for you."
-msgstr ""
+msgstr "Хост разблокировал общий чат для вас."
 
 #: src/multiint.cpp:5454
 msgid "Copy Text to Clipboard"
@@ -19308,13 +19308,13 @@ msgstr "Хост начинает игру"
 #: src/stdinreader.cpp:568
 #, c-format
 msgid "Host: Free chat enabled for: %s"
-msgstr ""
+msgstr "Хост: общий чат разблокирован для игрока: %s"
 
 #: src/multiint.cpp:6830
 #: src/stdinreader.cpp:572
 #, c-format
 msgid "Host: Free chat muted for: %s"
-msgstr ""
+msgstr "Хост: общий чат заблокирован для игрока: %s"
 
 #: src/multiint.cpp:6863
 #, c-format
@@ -19338,7 +19338,7 @@ msgstr "Хост предоставил недопустимые настрой�
 
 #: src/multiint.cpp:7047
 msgid "Host supplied invalid host config"
-msgstr ""
+msgstr "Хост предоставил неверную конфигурацию узла"
 
 #: src/multiint.cpp:7280
 msgid "You have been kicked: "
@@ -19671,21 +19671,21 @@ msgstr "Внимание, хост изменил код игры, и ему н�
 
 #: src/multiopt.cpp:785
 msgid "The host has enabled free chat for everyone."
-msgstr ""
+msgstr "Хост разблокировал общий чат для всех игроков."
 
 #: src/multiopt.cpp:793
 msgid "The host has muted free chat for everyone."
-msgstr ""
+msgstr "Хост заблокировал общий чат для всех игроков."
 
 #: src/multiopt.cpp:818
 #, c-format
 msgid "The host has enabled free chat for player: %s"
-msgstr ""
+msgstr "Хост разблокировал общий чат для игрока: %s"
 
 #: src/multiopt.cpp:824
 #, c-format
 msgid "The host has muted free chat for player: %s"
-msgstr ""
+msgstr "Хост заблокировал общий чат для игрока: %s"
 
 #: src/multiplay.cpp:355
 #, c-format
@@ -20063,11 +20063,11 @@ msgstr "Ты читер!"
 
 #: src/screens/chatscreen.cpp:155
 msgid "Use Quick Chat to chat with other players."
-msgstr ""
+msgstr "Используйте Быстрые сообщения для взаимодействия с другими игроками."
 
 #: src/screens/chatscreen.cpp:161
 msgid "The host has disabled free chat."
-msgstr ""
+msgstr "Хост отключил общий чат."
 
 #: src/screens/chatscreen.cpp:236
 msgid "Chat: All"
@@ -20079,7 +20079,7 @@ msgstr "Чат: Команда"
 
 #: src/screens/chatscreen.cpp:342
 msgid "Did not send message - free chat is disabled by host. Please use Quick Chat."
-msgstr ""
+msgstr "Сообщение не отправлено - чат отключен хостом игры. Пожалуйста, используйте Быстрые сообщения."
 
 #: src/screens/helpscreen.cpp:123
 msgid "Close Help Mode"
