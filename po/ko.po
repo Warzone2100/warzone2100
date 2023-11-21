@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-20 19:07\n"
+"PO-Revision-Date: 2023-11-21 19:19\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -5625,24 +5625,24 @@ msgstr "비활동적이거나 소극적인 플레이로 인해 손실되었습�
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "호스트 구성 게임 제한 시간이 다 되어갑니다. 10분 이내에 승자가 없으면 게임이 종료됩니다."
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "호스트 구성 게임 제한 시간이 초과되었습니다. 게임을 종료합니다."
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "소극적인 플래이는 패배로 이어지는 지름길입니다. 다음과 같은 행동을 고려하세요:"
 
 #: data/mp/multiplay/script/rules/endconditions.js:399
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- 유닛 빌딩 - 연구 결과물 - 기지 구조물의 시공 (공장, 발전소, 연구소, 모듈 및 오일드릭스) - 손상 복구"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1434
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "얼티밋 스캐빈저"
 
 #: data/mp/multiplay/script/rules/printsettings.js:8
 #: src/multiint.cpp:1431
@@ -5673,7 +5673,7 @@ msgstr "팀 잠금"
 #: data/mp/multiplay/script/rules/printsettings.js:18
 #: src/multiint.cpp:1447
 msgid "Locked Teams, No Shared Research"
-msgstr ""
+msgstr "잠긴 팀, 공유된 연구 없음"
 
 #: data/mp/multiplay/script/rules/printsettings.js:24
 #: src/multiint.cpp:1456
@@ -5731,7 +5731,7 @@ msgstr "그런 인격은 없습니다. 이 중에서 시도해보십시오:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "부과된 연구는 완료했습니다. 지금 내가 원하는 것은 무엇이든지 연구할 것입니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
