@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-21 07:12\n"
+"PO-Revision-Date: 2023-11-21 19:19\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -15324,11 +15324,11 @@ msgstr "Разрешить неявные слои Vulkan (которые мог
 
 #: src/clparse.cpp:452
 msgid "Set the default hosting chat configuration / permissions"
-msgstr "Установить настройки чата по-умолчанию"
+msgstr "Установить настройки/разрешения чата для хоста по умолчанию"
 
 #: src/clparse.cpp:453
 msgid "Enable async join approval (for connecting clients)"
-msgstr "Разрешить асинхронные подключения (для подключившихся игроков)"
+msgstr "Включить асинхронное одобрение подключения (для подключающихся клиентов)"
 
 #: src/cmddroid.cpp:121
 msgid "Commander needs a higher level to command more units"
@@ -16373,7 +16373,7 @@ msgstr "Уничтожить (классика)"
 
 #: src/frontend.cpp:3346
 msgid "Allow All"
-msgstr "Разрешить все"
+msgstr "Разрешить всё"
 
 #: src/frontend.cpp:3346
 msgid "Quick Chat Only"
@@ -16548,19 +16548,19 @@ msgstr "Обновить"
 
 #: src/hci/chatoptions.cpp:1214
 msgid "Host Chat Options"
-msgstr "Настройки чата с Хостом"
+msgstr "Настройки чата хоста"
 
 #: src/hci/chatoptions.cpp:1223
 msgid "Global Options:"
-msgstr "Общие настройки:"
+msgstr "Глобальные настройки:"
 
 #: src/hci/chatoptions.cpp:1229
 msgid "Enable All"
-msgstr "Включить все"
+msgstr "Включить всё"
 
 #: src/hci/chatoptions.cpp:1237
 msgid "Disable All"
-msgstr "Отключить все"
+msgstr "Отключить всё"
 
 #: src/hci/chatoptions.cpp:1256
 #: src/multiint.cpp:4908
@@ -16574,7 +16574,7 @@ msgstr "Отключите или настройте общий чат."
 
 #: src/hci/chatoptions.cpp:1273
 msgid "The host has globally muted 1+ players."
-msgstr "Хост отключил сообщения для 1+ игроков."
+msgstr "Хост отключил доступ к чату для 1+ игроков."
 
 #: src/hci/chatoptions.cpp:1286
 msgid "Local"
@@ -16738,7 +16738,7 @@ msgstr "Может кто-нибудь передать мне грузовик�
 
 #: src/hci/quickchat.cpp:2427
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрый чат?)"
+msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрые сообщения)"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2432
@@ -16879,7 +16879,7 @@ msgstr "@#%*!"
 
 #: src/hci/quickchat.cpp:2524
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr "Извините, я не понимаю. (Используйте Быстрый чат?)"
+msgstr "Извините, я не понимаю. (Используйте Быстрые сообщения)"
 
 #: src/hci/quickchat.cpp:2528
 msgid "Get ready..."
@@ -19222,7 +19222,7 @@ msgstr "Хост заблокировал общий чат. Вы все еще 
 #: src/multiint.cpp:5033
 #: src/multiint.cpp:5036
 msgid "Quick Chat"
-msgstr "Быстрый чат"
+msgstr "Быстрые сообщения"
 
 #: src/multiint.cpp:5047
 #: src/multiint.cpp:5053
@@ -19338,7 +19338,7 @@ msgstr "Хост предоставил недопустимые настрой�
 
 #: src/multiint.cpp:7047
 msgid "Host supplied invalid host config"
-msgstr "Хост предоставил неверную конфигурацию узла"
+msgstr "Хост предоставил неверную конфигурацию хостинга"
 
 #: src/multiint.cpp:7280
 msgid "You have been kicked: "
