@@ -377,7 +377,7 @@ bool texLoad(const char *fileName)
 					if (has_nm)
 					{
 						decalNormalArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_nm_filepaths, gfx_api::texture_type::normal_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-							std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+							std::unique_ptr<iV_Image> pDefaultNormalMap = std::make_unique<iV_Image>();
 							pDefaultNormalMap->allocate(width, height, channels, true);
 							// default normal map: (0,0,1)
 							unsigned char* pBmpWrite = pDefaultNormalMap->bmp_w();
@@ -397,7 +397,7 @@ bool texLoad(const char *fileName)
 					if (has_sm)
 					{
 						decalSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_sm_filepaths, gfx_api::texture_type::specular_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-							std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
+							std::unique_ptr<iV_Image> pDefaultSpecularMap = std::make_unique<iV_Image>();
 							// default specular map: 0
 							pDefaultSpecularMap->allocate(width, height, channels, true);
 							return pDefaultSpecularMap;
@@ -407,7 +407,7 @@ bool texLoad(const char *fileName)
 					if (has_hm)
 					{
 						decalHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_hm_filepaths, gfx_api::texture_type::height_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-							std::unique_ptr<iV_Image> pDefaultHeightMap = std::unique_ptr<iV_Image>(new iV_Image);
+							std::unique_ptr<iV_Image> pDefaultHeightMap = std::make_unique<iV_Image>();
 							// default height map: 0
 							pDefaultHeightMap->allocate(width, height, channels, true);
 							return pDefaultHeightMap;

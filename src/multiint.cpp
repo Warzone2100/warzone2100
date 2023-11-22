@@ -754,7 +754,7 @@ void loadMapPreview(bool hideInterface)
 	previewColorScheme.hqColor = PIELIGHT_to_MapPreviewColor(WZCOL_MAP_PREVIEW_HQ);
 	previewColorScheme.oilResourceColor = PIELIGHT_to_MapPreviewColor(WZCOL_MAP_PREVIEW_OIL);
 	previewColorScheme.oilBarrelColor = PIELIGHT_to_MapPreviewColor(WZCOL_MAP_PREVIEW_BARREL);
-	previewColorScheme.playerColorProvider = std::unique_ptr<WzMap::MapPlayerColorProvider>(new WzLobbyPreviewPlayerColorProvider());
+	previewColorScheme.playerColorProvider = std::make_unique<WzLobbyPreviewPlayerColorProvider>();
 	switch (guessMapTilesetType(psLevel))
 	{
 	case MAP_TILESET::ARIZONA:

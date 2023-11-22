@@ -945,7 +945,7 @@ void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTex
 		}))
 		{
 			waterTexturesHigh.tex_nm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+				std::unique_ptr<iV_Image> pDefaultNormalMap = std::make_unique<iV_Image>();
 				pDefaultNormalMap->allocate(width, height, channels, true);
 				// default normal map: (0,0,1)
 				unsigned char* pBmpWrite = pDefaultNormalMap->bmp_w();
@@ -967,7 +967,7 @@ void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTex
 		}))
 		{
 			waterTexturesHigh.tex_sm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_sm, gfx_api::texture_type::specular_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
+				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::make_unique<iV_Image>();
 				// default specular map: 0
 				pDefaultSpecularMap->allocate(width, height, channels, true);
 				return pDefaultSpecularMap;
@@ -1036,7 +1036,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 		}))
 		{
 			groundNormalArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-				std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+				std::unique_ptr<iV_Image> pDefaultNormalMap = std::make_unique<iV_Image>();
 				pDefaultNormalMap->allocate(width, height, channels, true);
 				// default normal map: (0,0,1)
 				unsigned char* pBmpWrite = pDefaultNormalMap->bmp_w();
@@ -1058,7 +1058,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 		}))
 		{
 			groundSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_spec, gfx_api::texture_type::specular_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
+				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::make_unique<iV_Image>();
 				// default specular map: 0
 				pDefaultSpecularMap->allocate(width, height, channels, true);
 				return pDefaultSpecularMap;
@@ -1070,7 +1070,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 		}))
 		{
 			groundHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_height, gfx_api::texture_type::height_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-				std::unique_ptr<iV_Image> pDefaultHeightMap = std::unique_ptr<iV_Image>(new iV_Image);
+				std::unique_ptr<iV_Image> pDefaultHeightMap = std::make_unique<iV_Image>();
 				// default height map: 0
 				pDefaultHeightMap->allocate(width, height, channels, true);
 				return pDefaultHeightMap;
@@ -1517,7 +1517,7 @@ bool initTerrain()
 	lightmapValues.ModelUVLightmap = lightmapValues.lightMatrix * glm::transpose(glm::mat4(lightmapValues.paramsXLight, lightmapValues.paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 
 	// Prepare the lightmap pixmap and texture
-	lightmapPixmap = std::unique_ptr<iV_Image>(new iV_Image());
+	lightmapPixmap = std::make_unique<iV_Image>();
 
 	unsigned int lightmapChannels = 4; // always use 4-channel (RGBA)
 	if (lightmapPixmap == nullptr || !lightmapPixmap->allocate(lightmapWidth, lightmapHeight, lightmapChannels, true))
@@ -1703,12 +1703,12 @@ static void cullTerrain()
 static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
 {
 	const auto &renderState = getCurrentRenderState();
-	
+
 	// bind the vertex buffer
 	gfx_api::TerrainDepth::get().bind();
 	gfx_api::TerrainDepth::get().bind_textures(lightmap_texture);
 	gfx_api::TerrainDepth::get().bind_vertex_buffers(geometryVBO);
-	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), 
+	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f),
 	glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 0 });
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 

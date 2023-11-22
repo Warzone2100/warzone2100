@@ -115,7 +115,7 @@ public:
 	// The default StdIOProvider will assume pathToMapPackage is a path to an extracted map package (i.e. standard filesystem I/O)
 	//
 	// To load from an archive (.zip/.wz), create a custom implementation of WzMap::IOProvider that supports compressed archive files that you initialize with the path to the zip. An example of this (which uses libzip) is available in `plugins/ZipIOProvider`. You would then set `pathToMapPackage` to be the root path inside the zip. (In the case of plugins\ZipIOProvider, literally "/" or "").
-	static std::unique_ptr<MapPackage> loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
+	static std::unique_ptr<MapPackage> loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::make_shared<StdIOProvider>());
 
 	// Construct a new MapPackage object (which can then be exported)
 	MapPackage(const LevelDetails& levelDetails, MapType mapType, std::shared_ptr<Map> map);
@@ -123,7 +123,7 @@ public:
 	// Export the currently-loaded map package to a specified path in a specified format
 	// Can convert both the LevelFormat and the WzMap::OutputFormat
 	bool exportMapPackageFiles(std::string basePath, LevelFormat levelFormat, WzMap::OutputFormat mapOutputFormat,
-							   optional<std::string> mapFolderRelativePathOverride = nullopt, bool copyAdditionalFilesFromOriginalLoadedPackage = false, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> exportIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
+							   optional<std::string> mapFolderRelativePathOverride = nullopt, bool copyAdditionalFilesFromOriginalLoadedPackage = false, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> exportIO = std::make_shared<StdIOProvider>());
 
 	// High-level data loading functions
 

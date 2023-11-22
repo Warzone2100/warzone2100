@@ -409,7 +409,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 			ASSERT_OR_RETURN({}, format == basist::transcoder_texture_format::cTFRGBA32, "Unsupported uncompressed format: %u", (unsigned)format);
 			numBlocksOrPixels = level_info.m_orig_width * level_info.m_orig_height;
 
-			uncompressedOutput = std::unique_ptr<iV_Image>(new iV_Image());
+			uncompressedOutput = std::make_unique<iV_Image>();
 			if (!uncompressedOutput->allocate(level_info.m_orig_width, level_info.m_orig_height, 4, false)) // hard-coded for RGBA32 for now
 			{
 				debug(LOG_ERROR, "Failed to allocate memory for uncompressed image buffer");
@@ -421,7 +421,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 			numBlocksOrPixels = level_info.m_total_blocks;
 			uint32_t outputSize = numBlocksOrPixels * bytes_per_block_or_pixel;
 
-			compressedOutput = std::unique_ptr<iV_CompressedImage>(new iV_CompressedImage());
+			compressedOutput = std::make_unique<iV_CompressedImage>();
 			if (!compressedOutput->allocate(internalFormat, outputSize, level_info.m_width, level_info.m_height, level_info.m_orig_width, level_info.m_orig_height, false))
 			{
 				debug(LOG_ERROR, "Failed to allocate memory for buffer");

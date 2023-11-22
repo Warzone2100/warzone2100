@@ -1732,7 +1732,7 @@ static int get_first_available_component(int player, int capacity, const wzapi::
 
 static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::string &templateName, const wzapi::string_or_string_list& _body, const wzapi::string_or_string_list& _propulsion, const wzapi::va_list<wzapi::string_or_string_list>& _turrets, int capacity, bool strict)
 {
-	std::unique_ptr<DROID_TEMPLATE> psTemplate = std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = std::make_unique<DROID_TEMPLATE>();
 	size_t numTurrets = _turrets.va_list.size();
 	int result;
 

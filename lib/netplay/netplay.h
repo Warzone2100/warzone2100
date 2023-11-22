@@ -552,7 +552,7 @@ struct PlayerReference
 
 	void disconnect()
 	{
-		detached = std::unique_ptr<PLAYER>(new PLAYER(NetPlay.players[index]));
+		detached = std::make_unique<PLAYER>(NetPlay.players[index]);
 		detached->wzFiles = std::make_shared<std::vector<WZFile>>();
 	}
 

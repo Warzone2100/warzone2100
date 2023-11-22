@@ -273,7 +273,7 @@ static void cleanSearchPath()
 void registerSearchPath(const std::string& newPath, unsigned int priority)
 {
 	ASSERT_OR_RETURN(, !newPath.empty(), "Calling registerSearchPath with empty path, priority %u", priority);
-	std::unique_ptr<wzSearchPath> tmpSearchPath = std::unique_ptr<wzSearchPath>(new wzSearchPath());
+	std::unique_ptr<wzSearchPath> tmpSearchPath = std::make_unique<wzSearchPath>();
 	tmpSearchPath->path = newPath;
 	if (!strEndsWith(tmpSearchPath->path, PHYSFS_getDirSeparator()))
 	{

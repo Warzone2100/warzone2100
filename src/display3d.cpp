@@ -2065,11 +2065,11 @@ static void renderBuildOrder(uint8_t droidPlayer, DroidOrder const &order, STRUC
 	}
 }
 
-std::unique_ptr<Blueprint> playerBlueprint = std::unique_ptr<Blueprint>(new Blueprint());
-std::unique_ptr<ValueTracker> playerBlueprintX = std::unique_ptr<ValueTracker>(new ValueTracker());
-std::unique_ptr<ValueTracker> playerBlueprintY = std::unique_ptr<ValueTracker>(new ValueTracker());
-std::unique_ptr<ValueTracker> playerBlueprintZ = std::unique_ptr<ValueTracker>(new ValueTracker());
-std::unique_ptr<ValueTracker> playerBlueprintDirection = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<Blueprint> playerBlueprint = std::make_unique<Blueprint>();
+std::unique_ptr<ValueTracker> playerBlueprintX = std::make_unique<ValueTracker>();
+std::unique_ptr<ValueTracker> playerBlueprintY = std::make_unique<ValueTracker>();
+std::unique_ptr<ValueTracker> playerBlueprintZ = std::make_unique<ValueTracker>();
+std::unique_ptr<ValueTracker> playerBlueprintDirection = std::make_unique<ValueTracker>();
 
 void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {

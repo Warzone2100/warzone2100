@@ -239,7 +239,7 @@ bool plotStructurePreviewWzMap(Map &wzMap, const MapPreviewColorScheme& colorSch
 	MapPlayerColorProvider* pPlayerColorProvider = colorScheme.playerColorProvider.get();
 	if (!pPlayerColorProvider)
 	{
-		defaultPlayerColorProvider = std::unique_ptr<MapPlayerColorProvider>(new MapPlayerColorProvider());
+		defaultPlayerColorProvider = std::make_unique<MapPlayerColorProvider>();
 		pPlayerColorProvider = defaultPlayerColorProvider.get();
 	}
 
@@ -295,7 +295,7 @@ std::unique_ptr<MapPreviewImage> generate2DMapPreview(Map& wzMap, const MapPrevi
 
 	const TilesetColorScheme& clrSch = colorScheme.tilesetColors;
 
-	std::unique_ptr<MapPreviewImage> result = std::unique_ptr<MapPreviewImage>(new MapPreviewImage());
+	std::unique_ptr<MapPreviewImage> result = std::make_unique<MapPreviewImage>();
 	result->width = mapData->width;
 	result->height = mapData->height;
 	result->channels = 3;
