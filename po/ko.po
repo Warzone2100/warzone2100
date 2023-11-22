@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-21 19:19\n"
+"PO-Revision-Date: 2023-11-22 07:43\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -5735,11 +5735,11 @@ msgstr "부과된 연구는 완료했습니다. 지금 내가 원하는 것은 �
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "연구가 막혔습니다. 현재 아무것도 연구되고 있지 않습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "기초기술연구"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
@@ -5751,7 +5751,7 @@ msgstr "그런 연구 경로는 없습니다! 이 중에서 시도해보십시�
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "죄송합니다, 현재 어떠한 트럭도 없습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
@@ -5759,7 +5759,7 @@ msgstr "이것은 사용할 수 있습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "죄송합니다, 드로이드 전송이 실패하였습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
@@ -5767,7 +5767,7 @@ msgstr "전력이 이송되었습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr ""
+msgstr "비콘을 놓으세요!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
@@ -5775,11 +5775,11 @@ msgstr "가고 있습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "죄송합니다. 도움을 요청할 가용 병력이 없습니다."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "얼마든지요, 대장님!"
 
 #: lib/framework/i18n.cpp:110
 #: lib/framework/i18n.cpp:177
@@ -5789,13 +5789,13 @@ msgstr "사용자 시스템 언어"
 #: lib/netplay/netplay.cpp:1576
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr ""
+msgstr "(%s) 에서 필요한 포트 (%s) 를 열 수 없음."
 
 #: lib/netplay/netplay.cpp:1580
 #, c-format
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
-msgstr ""
+msgstr "게임을 호스팅하기 전에 %d 포트를 열도록 라우터와 방화벽을 수동으로 구성해야 합니다."
 
 #: lib/netplay/netplay.cpp:1590
 #, c-format
