@@ -821,15 +821,15 @@ public:
 	// Caller is expected to handle thrown exceptions
 	KnownPlayersDB(const std::string& knownPlayersDBPath)
 	{
-		db = std::unique_ptr<SQLite::Database>(new SQLite::Database(knownPlayersDBPath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE));
+		db = std::make_unique<SQLite::Database>(knownPlayersDBPath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
 		db->exec("PRAGMA journal_mode=WAL");
 		createKnownPlayersDBTables();
-		query_findPlayerIdentityByName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT local_id, name, pk FROM known_players WHERE name = ?"));
-		query_insertNewKnownPlayer = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO known_players(name, pk) VALUES(?, ?)"));
-		query_updateKnownPlayerKey = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE known_players SET pk = ? WHERE name = ?"));
-		query_findPlayerOptionsByPK = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT name, muted, banned FROM player_options WHERE pk = ?"));
-		query_insertNewPlayerOptions = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO player_options(pk, name, muted, banned) VALUES(?, ?, ?, ?)"));
-		query_updatePlayerOptionsMuted = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE player_options SET muted = ? WHERE pk = ? AND name = ?"));
+		query_findPlayerIdentityByName = std::make_unique<SQLite::Statement>(*db, "SELECT local_id, name, pk FROM known_players WHERE name = ?");
+		query_insertNewKnownPlayer = std::make_unique<SQLite::Statement>(*db, "INSERT OR IGNORE INTO known_players(name, pk) VALUES(?, ?)");
+		query_updateKnownPlayerKey = std::make_unique<SQLite::Statement>(*db, "UPDATE known_players SET pk = ? WHERE name = ?");
+		query_findPlayerOptionsByPK = std::make_unique<SQLite::Statement>(*db, "SELECT name, muted, banned FROM player_options WHERE pk = ?");
+		query_insertNewPlayerOptions = std::make_unique<SQLite::Statement>(*db, "INSERT OR IGNORE INTO player_options(pk, name, muted, banned) VALUES(?, ?, ?, ?)");
+		query_updatePlayerOptionsMuted = std::make_unique<SQLite::Statement>(*db, "UPDATE player_options SET muted = ? WHERE pk = ? AND name = ?");
 	}
 
 public:
@@ -1054,7 +1054,7 @@ void initKnownPlayers()
 		ASSERT_OR_RETURN(, pWriteDir, "PHYSFS_getWriteDir returned null");
 		std::string knownPlayersDBPath = std::string(pWriteDir) + "/" + "knownPlayers.db";
 		try {
-			knownPlayersDB = std::unique_ptr<KnownPlayersDB>(new KnownPlayersDB(knownPlayersDBPath));
+			knownPlayersDB = std::make_unique<KnownPlayersDB>(knownPlayersDBPath);
 		}
 		catch (std::exception& e) {
 			// error loading SQLite database

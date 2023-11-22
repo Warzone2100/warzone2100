@@ -558,7 +558,7 @@ bool loadDroidTemplates(const char *filename)
 
 DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate)
 {
-	auto dup = std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE(*psTemplate));
+	auto dup = std::make_unique<DROID_TEMPLATE>(*psTemplate);
 	return addTemplate(player, std::move(dup));
 }
 

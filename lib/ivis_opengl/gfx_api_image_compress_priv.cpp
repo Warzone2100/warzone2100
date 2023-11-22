@@ -286,7 +286,7 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 
 	size_t outputSize = gfx_api::format_memory_size(desiredFormat, originalWidth, originalHeight);
 
-	std::unique_ptr<iV_CompressedImage> compressedOutput = std::unique_ptr<iV_CompressedImage>(new iV_CompressedImage());
+	std::unique_ptr<iV_CompressedImage> compressedOutput = std::make_unique<iV_CompressedImage>();
 	if (!compressedOutput->allocate(desiredFormat, outputSize, alignedWidth, alignedHeight, originalWidth, originalHeight, false))
 	{
 		debug(LOG_ERROR, "Failed to allocate memory for buffer");

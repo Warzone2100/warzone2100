@@ -2430,7 +2430,7 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 	}
 	, player, ms, funcName, psObj, type
 	// additionalParams
-	, std::unique_ptr<timerAdditionalData>(new quickjs_timer_additionaldata(stringArg)));
+	, std::make_unique<quickjs_timer_additionaldata>(stringArg));
 }
 
 //-- ## setTimer(functionName, milliseconds[, object])
@@ -2845,7 +2845,7 @@ std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_in
 			std::for_each(args.begin(), args.end(), [pContext](JSValue& val) { JS_FreeValue(pContext, val); });
 		}
 		// additionalParams
-		, std::unique_ptr<timerAdditionalData>(new quickjs_timer_additionaldata(stringArg))
+		, std::make_unique<quickjs_timer_additionaldata>(stringArg)
 	};
 }
 

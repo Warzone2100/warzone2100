@@ -123,8 +123,8 @@ static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
 static SDWORD	rotX;
 static SDWORD	rotY;
-std::unique_ptr<ValueTracker> rotationHorizontalTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
-std::unique_ptr<ValueTracker> rotationVerticalTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> rotationHorizontalTracker = std::make_unique<ValueTracker>();
+std::unique_ptr<ValueTracker> rotationVerticalTracker = std::make_unique<ValueTracker>();
 static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
@@ -648,8 +648,8 @@ static void HandleDrag()
 UDWORD panMouseX;
 // Mouse Y coordinate at start of panning.
 UDWORD panMouseY;
-std::unique_ptr<ValueTracker> panXTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
-std::unique_ptr<ValueTracker> panZTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> panXTracker = std::make_unique<ValueTracker>();
+std::unique_ptr<ValueTracker> panZTracker = std::make_unique<ValueTracker>();
 bool panActive;
 
 //don't want to do any of these whilst in the Intelligence Screen

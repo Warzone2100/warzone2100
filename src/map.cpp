@@ -261,7 +261,7 @@ static void init_tileNames(MAP_TILESET type)
 	numTile_names = numlines;
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
-	Tile_names = std::unique_ptr<char[]>(new char[numlines * MAX_STR_LENGTH]());
+	Tile_names = std::make_unique<char[]>(numlines * MAX_STR_LENGTH);
 
 	for (i = 0; i < numlines; i++)
 	{
@@ -673,7 +673,7 @@ static void SetDecals(const char *filename, const char *decal_type)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
 	// value initialization sets everything to false.
-	mapDecals = std::unique_ptr<bool[]>(new bool[MAX_TERRAIN_TILES]());
+	mapDecals = std::make_unique<bool[]>(MAX_TERRAIN_TILES);
 	
 	for (i = 0; i < numlines; i++)
 	{
@@ -1011,7 +1011,7 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = std::unique_ptr<MAPTILE[]>(new MAPTILE[width * height]());
+	psMapTiles = std::make_unique<MAPTILE[]>(width * height);
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
@@ -1104,12 +1104,12 @@ static bool afterMapLoad()
 	/* Allocate aux maps */
 	ASSERT(mapWidth >= 0 && mapHeight >= 0, "Invalid mapWidth or mapHeight (%d x %d)", mapWidth, mapHeight);
 	const size_t mapSize = static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight);
-	psBlockMap[AUX_MAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
-	psBlockMap[AUX_ASTARMAP] =  std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
-	psBlockMap[AUX_DANGERMAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
+	psBlockMap[AUX_MAP] = std::make_unique<uint8_t[]>(mapSize);
+	psBlockMap[AUX_ASTARMAP] =  std::make_unique<uint8_t[]>(mapSize);
+	psBlockMap[AUX_DANGERMAP] = std::make_unique<uint8_t[]>(mapSize);
 	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
 	{
-		psAuxMap[x] = std::unique_ptr<uint8_t[]> (new uint8_t[mapSize]());
+		psAuxMap[x] = std::make_unique<uint8_t[]> (mapSize);
 	}
 
 	// Set our blocking bits

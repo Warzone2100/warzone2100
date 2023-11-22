@@ -189,7 +189,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	latestWriteBuffer.reserve(minBufferSizeToQueue);
 	if (desiredBufferSize != std::numeric_limits<size_t>::max())
 	{
-		saveThread = std::unique_ptr<wz::thread>(new wz::thread(replaySaveThreadFunc, replaySaveHandle));
+		saveThread = std::make_unique<wz::thread>(replaySaveThreadFunc, replaySaveHandle);
 	}
 	else
 	{
@@ -415,7 +415,7 @@ bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &play
 		return false;
 	}
 
-	message = std::unique_ptr<NetMessage>(new NetMessage(type));
+	message = std::make_unique<NetMessage>(type);
 	message->data.resize(len);
 	size_t messageRead = WZ_PHYSFS_readBytes(replayLoadHandle, message->data.data(), message->data.size());
 	if (messageRead != message->data.size())

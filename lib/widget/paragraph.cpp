@@ -480,14 +480,14 @@ std::vector<std::vector<FlowLayoutFragment>> Paragraph::calculateLinesLayout()
 void Paragraph::addText(std::string const &text)
 {
 	layoutDirty = true;
-	elements.push_back(std::unique_ptr<ParagraphTextElement>(new ParagraphTextElement(text, textStyle)));
+	elements.push_back(std::make_unique<ParagraphTextElement>(text, textStyle));
 }
 
 void Paragraph::addWidget(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase)
 {
 	layoutDirty = true;
 	attach(widget);
-	elements.push_back(std::unique_ptr<ParagraphWidgetElement>(new ParagraphWidgetElement(widget, aboveBase)));
+	elements.push_back(std::make_unique<ParagraphWidgetElement>(widget, aboveBase));
 }
 
 void Paragraph::geometryChanged()

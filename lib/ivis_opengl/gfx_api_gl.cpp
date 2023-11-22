@@ -3075,7 +3075,7 @@ bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> c
 		return false;
 	}
 
-	auto image = std::unique_ptr<iV_Image>(new iV_Image());
+	auto image = std::make_unique<iV_Image>();
 	auto width = m_viewport[2];
 	auto height = m_viewport[3];
 	bool allocateResult = image->allocate(width, height, channelsPerPixel); // RGB

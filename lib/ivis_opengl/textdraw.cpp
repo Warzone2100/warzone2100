@@ -1067,13 +1067,13 @@ static bool inline initializeCJKFontsIfNeeded()
 	uint32_t horizDPI = static_cast<uint32_t>(DEFAULT_DPI * _horizScaleFactor);
 	uint32_t vertDPI = static_cast<uint32_t>(DEFAULT_DPI * _vertScaleFactor);
 	try {
-		cjkFonts->regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 400));
-		cjkFonts->regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 700));
-		cjkFonts->bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 21 * 64, horizDPI, vertDPI, 400));
-		cjkFonts->medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 400));
-		cjkFonts->mediumBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 700));
-		cjkFonts->small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 400));
-		cjkFonts->smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 700));
+		cjkFonts->regular = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 400);
+		cjkFonts->regularBold = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, 12 * 64, horizDPI, vertDPI, 700);
+		cjkFonts->bold = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, 21 * 64, horizDPI, vertDPI, 400);
+		cjkFonts->medium = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 400);
+		cjkFonts->mediumBold = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, 16 * 64, horizDPI, vertDPI, 700);
+		cjkFonts->small = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 400);
+		cjkFonts->smallBold = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 700);
 	}
 	catch (const std::exception &e) {
 		debug(LOG_ERROR, "Failed to load font:\n%s", e.what());
@@ -1175,13 +1175,13 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 	}
 
 	try {
-		baseFonts->regular = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI));
-		baseFonts->regularBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI));
-		baseFonts->bold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI));
-		baseFonts->medium = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI));
-		baseFonts->mediumBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 16 * 64, horizDPI, vertDPI));
-		baseFonts->small = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI));
-		baseFonts->smallBold = std::unique_ptr<FTFace>(new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI));
+		baseFonts->regular = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, horizDPI, vertDPI);
+		baseFonts->regularBold = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 12 * 64, horizDPI, vertDPI);
+		baseFonts->bold = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, horizDPI, vertDPI);
+		baseFonts->medium = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, horizDPI, vertDPI);
+		baseFonts->mediumBold = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 16 * 64, horizDPI, vertDPI);
+		baseFonts->small = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, horizDPI, vertDPI);
+		baseFonts->smallBold = std::make_unique<FTFace>(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, horizDPI, vertDPI);
 	}
 	catch (const std::exception &e) {
 		// Log lots of details:

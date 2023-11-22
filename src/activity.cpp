@@ -220,12 +220,12 @@ public:
 	// Caller is expected to handle thrown exceptions
 	ActivityDatabase(const std::string& activityDatabasePath)
 	{
-		db = std::unique_ptr<SQLite::Database>(new SQLite::Database(activityDatabasePath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE));
+		db = std::make_unique<SQLite::Database>(activityDatabasePath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
 		db->exec("PRAGMA journal_mode=WAL");
 		createTables();
-		query_findValueByName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT value FROM general_kv_storage WHERE name = ?"));
-		query_insertValueForName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO general_kv_storage(name, value) VALUES(?, ?)"));
-		query_updateValueForName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE general_kv_storage SET value = ? WHERE name = ?"));
+		query_findValueByName = std::make_unique<SQLite::Statement>(*db, "SELECT value FROM general_kv_storage WHERE name = ?");
+		query_insertValueForName = std::make_unique<SQLite::Statement>(*db, "INSERT OR IGNORE INTO general_kv_storage(name, value) VALUES(?, ?)");
+		query_updateValueForName = std::make_unique<SQLite::Statement>(*db, "UPDATE general_kv_storage SET value = ? WHERE name = ?");
 	}
 public:
 	// Must be thread-safe

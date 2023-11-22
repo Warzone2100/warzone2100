@@ -1064,7 +1064,7 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 		return false;
 	}
 	// Add special REPLAY_ENDED message to the end of the host's gameQueue
-	newMessage = std::unique_ptr<NetMessage>(new NetMessage(REPLAY_ENDED));
+	newMessage = std::make_unique<NetMessage>(REPLAY_ENDED);
 	gameQueues[NetPlay.hostPlayer]->pushMessage(*newMessage);
 	NETreplayLoadStop();
 	bIsReplay = true;

@@ -1305,7 +1305,7 @@ void addNotification(const WZ_Notification& notification, const WZ_Notification_
 	}
 
 	// Add the notification to the notification system's queue
-	notificationQueue.push_back(std::unique_ptr<WZ_Queued_Notification>(new WZ_Queued_Notification(notification, WZ_Notification_Status(realTime), trigger)));
+	notificationQueue.push_back(std::make_unique<WZ_Queued_Notification>(notification, WZ_Notification_Status(realTime), trigger));
 }
 
 bool removeNotificationPreferencesIf(const std::function<bool (const std::string& uniqueNotificationIdentifier)>& matchIdentifierFunc)
