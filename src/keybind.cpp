@@ -1476,6 +1476,8 @@ void	kf_TogglePauseMode()
 			wzGrabMouse();
 		}
 
+		clearActiveConsole();
+
 		/* And start the clock again */
 		gameTimeStart();
 	}
