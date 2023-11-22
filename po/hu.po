@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-21 19:19\n"
+"PO-Revision-Date: 2023-11-22 07:43\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -848,7 +848,7 @@ msgstr "Állapítsa meg, hogy valóban az Alfa csapat-e az. Ha igen, menekítse 
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr "Ez az csoport az Alfa csapat része, mentse ki őket, és kísérje őket az LZ-hez."
+msgstr "Ez az csoport az Alfa csapat része, mentse ki őket, és kísérje őket az Landolási Zónához."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -872,7 +872,7 @@ msgstr "Az ellenséges erők ....... ezekről a koordinátákról."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr "Védje meg a bázist és  ........ a ....... "
+msgstr "Védje meg a bázist és ........ a ......."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
@@ -1097,7 +1097,7 @@ msgstr "Biztosak vagyunk benne, hogy a NEXUS alaprendszerei itt találhatóak."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr "Létesítsen egy LZ-t."
+msgstr "Létesítsen egy Landolási Zónát."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
