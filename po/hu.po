@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-22 07:43\n"
+"PO-Revision-Date: 2023-11-24 15:22\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -499,7 +499,7 @@ msgstr "Azután térjen vissza az LZ-hez."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr "Nyugtalanító hírek a NASDA-ról."
+msgstr "Nyugtalanító hírek a NASDA felől."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
@@ -4613,7 +4613,7 @@ msgstr "Ez a NEXUS behatoló program egy önfejlesztő számítógép parazita. 
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr "Nem tudtuk megállapítani végső célját vagy funkcióját. Kezdeti formájában felkutatja és elkülöníti az emlékezet részeit a megszállt rendszer többi részétől. Ezután elkezdi mutálni magát és az adatstruktúrákat, hatékonyan átprogramozva a rendszert belülről."
+msgstr "Nem tudtuk megállapítani végső célját vagy funkcióját. Kezdeti formájában felkutatja és elkülöníti a memória egyes részeit a megszállt rendszer többi részétől. Ezután elkezdi mutálni magát és az adatstruktúrákat, gyakorlatilag belülről átprogramozva a rendszert."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -5625,11 +5625,11 @@ msgstr "Inaktív / passzív játék miatt elveszett."
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr "Közeledik a házigazda által konfigurált játékidőkorlát. Ha 10 percen belül nincs győztes, a játék véget ér."
+msgstr "Közeledik a házigazda által beállított játékidőkorlát. Ha 10 percen belül nincs győztes, a játék véget ér."
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr "Túllépte a házigazda által konfigurált játékidőkorlátot. A játéknak vége."
+msgstr "A házigazda által beállított játékidőkorlát túllépve. A játéknak vége."
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
@@ -5796,7 +5796,7 @@ msgstr "A szükséges port (%s) nem nyitható ki ezen: (%s)"
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
 msgstr "Kézzel kell beállítania a routerét és tűzfalát, hogy\n"
-" kinyissa a %d-as portot mielőtt elindítaná a játékot."
+" kinyissa ezt portot mielőtt elindítaná a játékot: %d."
 
 #: lib/netplay/netplay.cpp:1590
 #, c-format
@@ -5812,7 +5812,7 @@ msgstr "A kliens nem tudta kezelni a játékosindex változását"
 #: lib/netplay/netplay.cpp:2949
 #, c-format
 msgid "No UPnP device found. Configure your router/firewall to open port %d!"
-msgstr "Nem található UPnP eszköz. Állítsa be a routerét/tűzfalát, hogy kinyissa a %d-as portot!"
+msgstr "Nem található UPnP-eszköz. Állítsa be a routerét/tűzfalát, hogy kinyissa ezt a portot: %d."
 
 #: lib/netplay/netplay.cpp:3571
 #, c-format
@@ -9598,7 +9598,7 @@ msgstr "Cobra légpárnás nehéz szervizkocsi"
 #. data/mp/stats/weapons.json: $.Rocket-MRL-Hvy.name
 #: po/custom/fromJson.txt:2691
 msgid "Heavy Rocket Array"
-msgstr "Nehéz Rakéta Tömb"
+msgstr "Nehéz rakétarendszer"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9613,7 +9613,7 @@ msgstr "Nehéz rakéta bástya"
 #. data/mp/stats/structure.json: $.Emplacement-MRLHvy-pit.name
 #: po/custom/fromJson.txt:2700
 msgid "Heavy Rocket Battery"
-msgstr "Nehéz Rakéta Elem"
+msgstr "Nehéz rakétaüteg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -12445,7 +12445,7 @@ msgstr "Újratöltési idő +30%"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
 #: po/custom/fromJson.txt:4714
 msgid "Reduce Scavenger Flamer Range"
-msgstr "Csökkentse a Dögevők lángoló hatótávolságát"
+msgstr "A Dögevők lángszóróinak hatótávolságának csökkentése"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -14108,7 +14108,7 @@ msgstr "Kétarcú"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 #: po/custom/fromJson.txt:5803
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr "Visszavonás Csökkentse a Dögevők lángoló tartományát"
+msgstr "A Dögevők lángszóróinak hatótávolság-csökkentésének visszavonása"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -15231,7 +15231,7 @@ msgstr "autokiszolgáló"
 
 #: src/clparse.cpp:431
 msgid "Query ratings from given server url, when hosting"
-msgstr "Lekérdezési minősítések adott szerver Url-címről, tárhely esetén"
+msgstr "Házigazdaként az értékelések lekérdezése a megadott kiszolgálócímről"
 
 #: src/clparse.cpp:431
 msgid "autorating"
@@ -15287,23 +15287,23 @@ msgstr "indulòjàtèkosok"
 
 #: src/clparse.cpp:444
 msgid "Game history log output mode(s)"
-msgstr "Játékelőzmények napló kimeneti módja(i)"
+msgstr "Játéktörténeti napló kimeneti módja(i)"
 
 #: src/clparse.cpp:445
 msgid "Game history log output key"
-msgstr "Játéktörténeti napló kimeneti kulcs"
+msgstr "Játéktörténeti napló kimeneti kulcsa"
 
 #: src/clparse.cpp:446
 msgid "Game history log output naming"
-msgstr "Játéktörténeti napló kimenet elnevezése"
+msgstr "Játéktörténeti napló kimenetének elnevezése"
 
 #: src/clparse.cpp:447
 msgid "Game history log frame interval"
-msgstr "Játéktörténeti napló képkocka intervallum"
+msgstr "Játéktörténeti napló képkockaköze"
 
 #: src/clparse.cpp:447
 msgid "interval in seconds"
-msgstr "intervallum másodpercben"
+msgstr "időköz másodpercben"
 
 #: src/clparse.cpp:448
 msgid "Multiplayer game time limit (in minutes)"
@@ -15315,11 +15315,11 @@ msgstr "percek száma"
 
 #: src/clparse.cpp:449
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr "Egy tükrös térkép .png konvertálása luma, egycsatornás, szürkeárnyalatos .png formátummá (és kilépés)"
+msgstr "Egy spekuláris leképezést tartalmazó .png átalakítása luma értékeket tartalmazó, egycsatornás, szürkeárnyalatos .png fájllá (és kilépés)"
 
 #: src/clparse.cpp:451
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr "Vulkan implicit rétegek engedélyezése (amelyek alapértelmezés szerint le vannak tiltva az esetleges összeomlások vagy hibák miatt)"
+msgstr "Vulkan implicit rétegek engedélyezése (amelyek lehet, hogy alapértelmezés szerint tiltva vannak az esetleges összeomlások vagy hibák miatt)"
 
 #: src/clparse.cpp:452
 msgid "Set the default hosting chat configuration / permissions"
@@ -15965,7 +15965,7 @@ msgstr "Közepes minőség"
 
 #: src/frontend.cpp:976
 msgid "High Quality"
-msgstr "Kiváló minőség"
+msgstr "Magas minőség"
 
 #: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
@@ -15990,11 +15990,11 @@ msgstr "* Játék újraindításakor effekteket bekapcsolja"
 
 #: src/frontend.cpp:1165
 msgid "Terrain Quality"
-msgstr "Terep Minőség"
+msgstr "Terep minősége"
 
 #: src/frontend.cpp:1170
 msgid "Terrain Shading"
-msgstr "Tereptárgyak árnyékai"
+msgstr "Terepárnyalás"
 
 #: src/frontend.cpp:1176
 #: src/ingameop.cpp:629
@@ -16188,7 +16188,7 @@ msgstr "Az ablak automatikus kicsinyítése a fókusz elvesztésekor"
 #. TRANSLATORS: The fullscreen mode used when toggling with keys: Alt + Enter
 #: src/frontend.cpp:2224
 msgid "Alt+Enter Toggle"
-msgstr "Alt+Enter váltás"
+msgstr "Alt+Enter be/ki"
 
 #: src/frontend.cpp:2225
 msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
@@ -16364,7 +16364,7 @@ msgstr "Összes engedélyezése"
 
 #: src/frontend.cpp:3346
 msgid "Quick Chat Only"
-msgstr "Csak Gyors Csevegés"
+msgstr "Csak gyors csevegés"
 
 #: src/frontend.cpp:3363
 msgid "Hosting Options:"
@@ -16396,11 +16396,11 @@ msgstr "Megfigyelők helyeinek száma"
 
 #: src/frontend.cpp:3397
 msgid "On Player Leave"
-msgstr "Játékos szabadságon"
+msgstr "Játékos kilépésekor"
 
 #: src/frontend.cpp:3402
 msgid "Game Time Limit"
-msgstr "Játék időkorlát"
+msgstr "Játék időkorlátja"
 
 #: src/frontend.cpp:3407
 msgid "Enable Rating"
@@ -16543,7 +16543,7 @@ msgstr "Általános beállítások:"
 
 #: src/hci/chatoptions.cpp:1229
 msgid "Enable All"
-msgstr "Az összes engedélyezése"
+msgstr "Összes bekapcsolása"
 
 #: src/hci/chatoptions.cpp:1237
 msgid "Disable All"
@@ -16553,11 +16553,11 @@ msgstr "Összes kikapcsolása"
 #: src/multiint.cpp:4908
 #: src/screens/chatscreen.cpp:394
 msgid "Chat Options"
-msgstr "Csevegés opciók"
+msgstr "Csevegési beállítások"
 
 #: src/hci/chatoptions.cpp:1264
 msgid "Mute or configure player free chat."
-msgstr "Némítsa el vagy konfigurálja a lejátszó ingyenes chatjét."
+msgstr "Játékosok szabad csevegésének némítása vagy beállítása."
 
 #: src/hci/chatoptions.cpp:1273
 msgid "The host has globally muted 1+ players."
@@ -16565,7 +16565,7 @@ msgstr "A házigazda 1+ játékost globálisan elnémított."
 
 #: src/hci/chatoptions.cpp:1286
 msgid "Local"
-msgstr "Hely"
+msgstr "Helyi"
 
 #: src/hci/groups.cpp:141
 msgid "Select / Assign Group Number: "
@@ -16574,21 +16574,21 @@ msgstr "Csoportszám kiválasztása / hozzárendelése: "
 #: src/hci/groups.cpp:144
 #, c-format
 msgid "Group %u"
-msgstr "Csoport %u"
+msgstr "%u. csoport"
 
 #: src/hci/groups.cpp:145
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr "Válassza ki a %u csoport egységeit"
+msgstr "A(z) %u. csoport egységeinek kiválasztása"
 
 #: src/hci/groups.cpp:146
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr "Kijelölt egységek hozzárendelése a %u csoporthoz"
+msgstr "Kijelölt egységek hozzárendelése a(z) %u. csoporthoz"
 
 #: src/hci/groups.cpp:147
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr "A kamera középső beállítása ezen a csoporton a kétszeri kattintással vagy koppintással"
+msgstr "A kamera erre a csoportra fókuszálása kétszeri kattintással vagy koppintással"
 
 #: src/hci/groups.cpp:257
 msgid "View and configure groups of units, which can be quickly selected and ordered."
@@ -16608,11 +16608,11 @@ msgstr "Csoport kiválasztása"
 
 #: src/hci/groups.cpp:264
 msgid "Assign Selected Units to a Group"
-msgstr "Kijelölt egységek hozzárendelése a  csoporthoz"
+msgstr "Kijelölt egységek hozzárendelése a csoporthoz"
 
 #: src/hci/groups.cpp:265
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
-msgstr "A kamera középre helyezése egy csoporton a csoport gombra való kétszeri kattintással vagy koppintással"
+msgstr "A kamera egy adott csoportra fókuszálása a csoport gombon történő kétszeri kattintással vagy koppintással"
 
 #: src/hci/groups.cpp:359
 msgid "Unit Groups:"
@@ -16640,7 +16640,7 @@ msgstr "Címzett:"
 
 #: src/hci/quickchat.cpp:998
 msgid "All"
-msgstr "Összes"
+msgstr "Mindenki"
 
 #: src/hci/quickchat.cpp:1007
 #: src/hci/quickchat.cpp:1017
@@ -16658,16 +16658,16 @@ msgstr "Emberi csapattársak"
 #: src/hci/quickchat.cpp:1036
 #: src/hci/quickchat.cpp:1260
 msgid "Bot Teammates"
-msgstr "Bot Csapattársak"
+msgstr "Bot csapattársak"
 
 #: src/hci/quickchat.cpp:1060
 #, c-format
 msgid "%u players"
-msgstr "%u játékosok"
+msgstr "%u játékos"
 
 #: src/hci/quickchat.cpp:1065
 msgid "Choose a recipient"
-msgstr "Kedvezményezett kiválasztása"
+msgstr "Címzett kiválasztása"
 
 #: src/hci/quickchat.cpp:2104
 msgid "Quick Chat:"
@@ -16680,7 +16680,7 @@ msgstr "Lobbi csevegés"
 #: src/hci/quickchat.cpp:2172
 #: src/hci/quickchat.cpp:2280
 msgid "Requests"
-msgstr "Kérelmek"
+msgstr "Kérések"
 
 #: src/hci/quickchat.cpp:2182
 #: src/hci/quickchat.cpp:2286
@@ -16697,11 +16697,11 @@ msgstr "Reakciók"
 
 #: src/hci/quickchat.cpp:2294
 msgid "Taunts"
-msgstr "Gúnyolódás"
+msgstr "Gúnyolódások"
 
 #: src/hci/quickchat.cpp:2322
 msgid "Coordination"
-msgstr "Koordinátor"
+msgstr "Koordináció"
 
 #: src/hci/quickchat.cpp:2353
 msgid "Suggestions"
@@ -16717,15 +16717,15 @@ msgstr "Játék befejezése"
 
 #: src/hci/quickchat.cpp:2423
 msgid "Can someone please transfer me some units?"
-msgstr "Át tudna valaki adni nekem néhány egységet?"
+msgstr "Át tudna adni nekem valaki néhány egységet?"
 
 #: src/hci/quickchat.cpp:2425
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr "Át tudna valaki vinni nekem teherautókat, hogy újjáépíthessem?"
+msgstr "Át tudna adni nekem valaki néhány teherautót, hogy újraépítkezhessem?"
 
 #: src/hci/quickchat.cpp:2427
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr "Sajnálom, nem értem. (Kérjük, használja a Gyors csevegést?)"
+msgstr "Sajnálom, nem értem. (Gyors csevegés használata?)"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2432
@@ -16735,37 +16735,37 @@ msgstr "Javaslom: Építs több egységet"
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2435
 msgid "I suggest: Building different units"
-msgstr "Javaslom: Építs több egységet"
+msgstr "Javaslom: Építs különböző egységeket"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2438
 msgid "I suggest: Checking the team strategy view"
-msgstr "Javaslom: Ellenőrizze a csapat stratégiai nézetét"
+msgstr "Javaslom: Nézd meg a csapat stratégiai nézetét"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2441
 msgid "I suggest: Researching different tech"
-msgstr "Azt javaslom: Különböző technológiákat kutass"
+msgstr "Javaslom: Kutass különböző technológiákat"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2444
 msgid "I suggest: Keeping research centers busy"
-msgstr "Javaslatom: A kutatóközpontok elfoglaltságának fenntartása"
+msgstr "Javaslom: Legyenek elfoglaltak a kutatóközpontok"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2447
 msgid "I suggest: Building anti-air"
-msgstr "Javaslom: Építs több légvédelmi egységet"
+msgstr "Javaslom: Építs légvédelmet"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2450
 msgid "I suggest: Repairing your units"
-msgstr "Javaslom: Állíts helyre több egységet"
+msgstr "Javaslom: Javítsd meg az egységeidet"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2453
 msgid "I suggest: Building repair facilities"
-msgstr "Javaslom: Épület helyreállító létesítményeket építs"
+msgstr "Javaslom: Építs javítólétesítményeket"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2456
@@ -16775,7 +16775,7 @@ msgstr "Javaslom: Építs áramfejlesztőket"
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2459
 msgid "I suggest: Capturing oil resources"
-msgstr "Javaslat: Az olajforrások megragadása szükséges"
+msgstr "Javaslom: Foglalj el olajforrásokat"
 
 #: src/hci/quickchat.cpp:2472
 msgid "Hey everyone!"
@@ -16787,11 +16787,11 @@ msgstr "Üdvözöljük!"
 
 #: src/hci/quickchat.cpp:2476
 msgid "I want to spectate"
-msgstr "Meg akarom nézni"
+msgstr "Néző szeretnék lenni"
 
 #: src/hci/quickchat.cpp:2478
 msgid "I want to play"
-msgstr "Igen, Én akarokjàtszani"
+msgstr "Játszani akarok"
 
 #: src/hci/quickchat.cpp:2480
 msgid "I want to switch teams"
@@ -16803,7 +16803,7 @@ msgstr "Kérjük, ellenőrizze a Kész lehetőséget, hogy elkezdhessük"
 
 #: src/hci/quickchat.cpp:2487
 msgid "Please wait"
-msgstr "Kérjük. várjon"
+msgstr "Kis türelmet"
 
 #: src/hci/quickchat.cpp:2489
 msgid "Let's go!"
@@ -16812,7 +16812,7 @@ msgstr "Gyerünk!"
 #. TRANSLATORS: As in "I am almost ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2493
 msgid "Almost ready"
-msgstr "Almost ready"
+msgstr "Mindjárt kész"
 
 #. TRANSLATORS: As in "I am ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2496
@@ -16825,7 +16825,7 @@ msgstr "Rögtön jövök"
 
 #: src/hci/quickchat.cpp:2500
 msgid "I'm back"
-msgstr "Visszatérek"
+msgstr "Visszatértem"
 
 #: src/hci/quickchat.cpp:2503
 msgid "Yes"
@@ -16841,7 +16841,7 @@ msgstr "Talán"
 
 #: src/hci/quickchat.cpp:2509
 msgid "Not yet"
-msgstr "Most nem"
+msgstr "Még nem"
 
 #: src/hci/quickchat.cpp:2511
 msgid "Soon"
@@ -16853,7 +16853,7 @@ msgstr "Köszönöm"
 
 #: src/hci/quickchat.cpp:2515
 msgid "No problem"
-msgstr "Semmi probléma"
+msgstr "Szívesen"
 
 #: src/hci/quickchat.cpp:2519
 msgid "Well-played"
@@ -16866,11 +16866,11 @@ msgstr "@#%*!"
 
 #: src/hci/quickchat.cpp:2524
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr "Sajnálom, nem értem. (Kérjük, használja a Gyors csevegést?)"
+msgstr "Sajnálom, nem értem. (Gyors csevegés használata?)"
 
 #: src/hci/quickchat.cpp:2528
 msgid "Get ready..."
-msgstr "Előkészül..."
+msgstr "Készülj…"
 
 #: src/hci/quickchat.cpp:2530
 msgid "You're going to regret that"
@@ -16878,7 +16878,7 @@ msgstr "Ezt meg fogod bánni"
 
 #: src/hci/quickchat.cpp:2532
 msgid "Barely a scratch!"
-msgstr "Alig egy karcolás!"
+msgstr "Csak egy karcolás!"
 
 #: src/hci/quickchat.cpp:2536
 msgid "Attack now?"
@@ -16890,11 +16890,11 @@ msgstr "Csoportosítás"
 
 #: src/hci/quickchat.cpp:2540
 msgid "Split up"
-msgstr "Szét"
+msgstr "Felbontás"
 
 #: src/hci/quickchat.cpp:2542
 msgid "Focus attacks where marked"
-msgstr "A támadások összpontosítása a megjelölt helyre"
+msgstr "Összpontosítsd a támadásokat a jelölt helyre"
 
 #: src/hci/quickchat.cpp:2544
 msgid "Retreat!"
@@ -16914,11 +16914,11 @@ msgstr "Jobb oldal"
 
 #: src/hci/quickchat.cpp:2552
 msgid "Transfer Request: Units"
-msgstr "Transzfer kérés: Teherautók"
+msgstr "Átadás kérése: egységek"
 
 #: src/hci/quickchat.cpp:2554
 msgid "Transfer Request: Trucks"
-msgstr "Transzfer kérés: Teherautók"
+msgstr "Átadás kérése: teherautók"
 
 #. TRANSLATORS: As in "I am attacking now!" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2558
@@ -16953,7 +16953,7 @@ msgstr "Nincs elég áramom"
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2575
 msgid "Build more units"
-msgstr "Több egység építése"
+msgstr "Építs több egységet"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2578
@@ -16968,12 +16968,12 @@ msgstr "Ellenőrizze a csapat stratégiai nézetét"
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2584
 msgid "Research different tech"
-msgstr "Különböző technológiák kutatása"
+msgstr "Kutass különböző technológiákat"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2587
 msgid "Keep research centers busy"
-msgstr "Tartsa lefoglalva a kutatóközpontokat"
+msgstr "Legyenek elfoglaltak a kutatóközpontok"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2590
@@ -16983,12 +16983,12 @@ msgstr "Építsen légvédelmet"
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2593
 msgid "Repair your units"
-msgstr "Egységek helyreállítása"
+msgstr "Javítsd meg az egységeidet"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2596
 msgid "Build repair facilities"
-msgstr "Javítóműhelyek építése"
+msgstr "Építs javítóműhelyeket"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2599
@@ -16998,7 +16998,7 @@ msgstr "Építs áramfejlesztőket"
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2602
 msgid "Capture oil resources"
-msgstr "Olajforrások elfoglalása"
+msgstr "Foglalj el olajforrásokat"
 
 #: src/hci/quickchat.cpp:2606
 msgid "That didn't go well..."
@@ -17018,7 +17018,7 @@ msgstr "Feladom"
 
 #: src/hci/quickchat.cpp:2616
 msgid "Sorry, I have to leave"
-msgstr "Sajnálom, el kell mennem"
+msgstr "Sajnos mennem kell"
 
 #: src/hci/quickchat.cpp:2620
 msgid "Message delivery failure - try again"
@@ -17030,7 +17030,7 @@ msgstr "Térkép letöltve"
 
 #: src/hci/quickchat.cpp:2732
 msgid "Bot Allies"
-msgstr "Bot Szövetségesek"
+msgstr "Bot szövetségesek"
 
 #: src/hci/quickchat.cpp:2744
 msgid "Human Allies"
@@ -17038,7 +17038,7 @@ msgstr "Emberi szövetségesek"
 
 #: src/hci/quickchat.cpp:2814
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Túl sok üzenetet küldött az elmúlt néhány másodpercben. Kérjük, várjon, és próbálja újra."
+msgstr "Túl sok üzenetet küldtél az elmúlt néhány másodpercben. Várj és próbáld újra."
 
 #: src/hci/research.cpp:443
 msgid "Research Progress"
@@ -17058,11 +17058,11 @@ msgstr "Kiborgok"
 
 #: src/hci/teamstrategy.cpp:827
 msgid "No teammates."
-msgstr "Nem csapattársak."
+msgstr "Nincsenek csapattársak."
 
 #: src/hci/teamstrategy.cpp:831
 msgid "Waiting for other teams to finish planning."
-msgstr "Várakozás arra, hogy más csapatok befejezzék a tervezést."
+msgstr "Várakozás arra, hogy a többi csapat is befejezze a tervezést."
 
 #: src/hci/teamstrategy.cpp:949
 msgid "Weapons:"
@@ -17559,7 +17559,7 @@ msgstr "Burkolat változtatása"
 
 #: src/input/keyconfig.cpp:134
 msgid "Toggle Console History "
-msgstr "Kijelző konzol Előzmény"
+msgstr "Konzol előzményei be/ki "
 
 #: src/input/keyconfig.cpp:135
 msgid "Toggle Team Chat History"
@@ -17678,7 +17678,7 @@ msgstr "Rögzített kurzor"
 
 #: src/input/keyconfig.cpp:162
 msgid "Toggle radar terrain"
-msgstr "Domborzati radar kapcsolása (be/ki)"
+msgstr "Domborzati radar be/ki"
 
 #: src/input/keyconfig.cpp:163
 msgid "Toggle ally-enemy radar view"
@@ -17871,11 +17871,11 @@ msgstr "A Hibakereső Feltérképezések előtérbe helyezése"
 
 #: src/input/keyconfig.cpp:215
 msgid "Toggle Level Editor"
-msgstr "Pályaszerkesztő ki/bekapcsolása"
+msgstr "Pályaszerkesztő be/ki"
 
 #: src/input/keyconfig.cpp:216
 msgid "Toggle display of droid path"
-msgstr "Be/ki kapcsolja a droid útvonalak mutatását"
+msgstr "Droidútvonalak megjelenítése be/ki"
 
 #: src/input/keyconfig.cpp:217
 msgid "Toggle display of gateways"
@@ -17939,7 +17939,7 @@ msgstr "Játékcél felkutatása"
 
 #: src/input/keyconfig.cpp:235
 msgid "Toggle fullscreen"
-msgstr "Teljes képernyő váltás"
+msgstr "Teljes képernyő be/ki"
 
 #: src/intdisplay.cpp:164
 msgid "Waiting for Power"
@@ -17998,7 +17998,7 @@ msgstr "Nem sikerült játékot megkeresni"
 
 #: src/integrations/wzdiscordrpc.cpp:284
 msgid "Failed to join the game from the specified invite link, with error:"
-msgstr "Nem sikerült csatlakozni a játékhoz a megadott meghívó linkről, hibával:"
+msgstr "Nem sikerült csatlakozni a játékhoz a megadott meghívóhivatkozással, a következő hiba történt:"
 
 #: src/integrations/wzdiscordrpc.cpp:288
 msgid "Failed to Join Game"
@@ -18035,11 +18035,11 @@ msgstr "Szeretne megbízni ebben a közvetlen kapcsolati meghívásban?"
 
 #: src/integrations/wzdiscordrpc.cpp:436
 msgid "Discord: Direct Connection Invite"
-msgstr "Gond: Közvetlen kapcsolat meghívása"
+msgstr "Discord: Meghívás közvetlen kapcsolattal"
 
 #: src/integrations/wzdiscordrpc.cpp:470
 msgid "The invite link you have followed isn't supported by this version of Warzone 2100."
-msgstr "Az általad követett meghívó linket a Warzone 2100 ezen verziója nem támogatja."
+msgstr "A követett meghívóhivatkozást a Warzone 2100 ezen verziója nem támogatja."
 
 #: src/integrations/wzdiscordrpc.cpp:471
 msgid "A newer version of Warzone 2100 may be required, if available."
@@ -18194,7 +18194,7 @@ msgstr "Figyelem! Ez a csalás hibákat tartalmaz. NEM ajánljuk használatra."
 
 #: src/keybind.cpp:160
 msgid "Gateways toggled."
-msgstr "Kapuk bekapcsolva."
+msgstr "Átjárók átváltva."
 
 #: src/keybind.cpp:166
 msgid "Path display toggled."
@@ -18627,11 +18627,11 @@ msgstr "Szállítás betöltése"
 
 #: src/mission.cpp:1933
 msgid "Shows the number of units currently loaded into the mission transporter, and the total capacity."
-msgstr "Megmutatja a küldetésszállítóba jelenleg betöltött egységek számát és a teljes kapacitást."
+msgstr "Megmutatja a küldetésszállítóba jelenleg berakodott egységek számát és a teljes kapacitást."
 
 #: src/mission.cpp:1934
 msgid "Open the Transporter Load Menu"
-msgstr "Nyissa meg a Szállító Betöltő Menüt"
+msgstr "A Szállító raktérmenüjének megnyitása"
 
 #: src/mission.cpp:2299
 msgid "OBJECTIVE ACHIEVED by cheating!"
@@ -18745,11 +18745,11 @@ msgstr "HIÁNYZÓ MI LEÍRÁS"
 #: src/multiint.cpp:926
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
-msgstr "AI verseny: %3.1f%%% győzelem, %3.1f%%% vereség, %3.1f%%% döntetlen"
+msgstr "MI verseny: %3.1f%% győzelem, %3.1f%% vereség, %3.1f%% döntetlen"
 
 #: src/multiint.cpp:1119
 msgid "Unable to join:"
-msgstr "Nem tölthető be:"
+msgstr "Nem lehet csatlakozni:"
 
 #: src/multiint.cpp:1119
 msgid "Error while joining."
@@ -18854,7 +18854,7 @@ msgstr "Random játékbeállítások"
 #: src/multiint.cpp:1497
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr "Véletlenszerű játék opciók\n"
+msgstr "Véletlenszerű játék beállításai\n"
 "A játékosok szavazataival blokkolható"
 
 #: src/multiint.cpp:1508
@@ -19054,12 +19054,12 @@ msgstr "Nem lehet %s-t áthelyezni a Játékosok közé - nincs szabad hely"
 
 #: src/multiint.cpp:3155
 msgid "Spectator would like to become a Player"
-msgstr "Néző szeretne Játékossá válni"
+msgstr "Egy néző játékos szeretne lenni"
 
 #: src/multiint.cpp:3156
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr "."
+msgstr "„%s” néző játékos szeretne lenni."
 
 #: src/multiint.cpp:3158
 msgid "However, there are currently no open Player slots."
@@ -19075,7 +19075,7 @@ msgstr "Igen, válassza ki a játékos funkciót"
 
 #: src/multiint.cpp:3446
 msgid "Joined:"
-msgstr "Csatlakoztatva:"
+msgstr "Csatlakozva:"
 
 #: src/multiint.cpp:3449
 msgid "Ready:"
@@ -19088,11 +19088,11 @@ msgstr "Játékosok"
 
 #: src/multiint.cpp:3657
 msgid "Host Options"
-msgstr "Host beàllìtàs"
+msgstr "Házigazda beállításai"
 
 #: src/multiint.cpp:3938
 msgid "Enable Spectator Join"
-msgstr "Megfigyelő belépésének engedélyezése"
+msgstr "Néző belépésének engedélyezése"
 
 #: src/multiint.cpp:3948
 msgid "Lock Teams"
@@ -19116,11 +19116,11 @@ msgstr "Kattintson a játékos pozíciójának beállításához"
 
 #: src/multiint.cpp:4229
 msgid "Click to change AI, right click to distribute choice"
-msgstr "Kattintson az MI megváltoztatásához, jobb klikk a választás elosztásához"
+msgstr "Kattintson az MI megváltoztatásához, jobb kattintás a választás elosztásához"
 
 #: src/multiint.cpp:4233
 msgid "Click to close spectator slot"
-msgstr "Megfigyelő hely lezárása"
+msgstr "Néző helyének lezárása"
 
 #: src/multiint.cpp:4252
 msgid "Player ID: "
@@ -19132,7 +19132,7 @@ msgstr "Nincs"
 
 #: src/multiint.cpp:4274
 msgid "Alt Name:"
-msgstr "Alternatív Név:"
+msgstr "Alternatív név:"
 
 #: src/multiint.cpp:4293
 msgid "Player rating:"
@@ -19177,7 +19177,7 @@ msgstr "KÉSZ?"
 
 #: src/multiint.cpp:4575
 msgid "For Spectator:"
-msgstr "Megfigyelőknek:"
+msgstr "Nézőknek:"
 
 #: src/multiint.cpp:4575
 msgid "For Player:"
@@ -19185,7 +19185,7 @@ msgstr "Játékosoknak:"
 
 #: src/multiint.cpp:4593
 msgid "Choose Player Slot"
-msgstr "Játékos működés kiválasztása"
+msgstr "Játékos helyének kiválasztása"
 
 #: src/multiint.cpp:4664
 msgid "PLAYERS"
@@ -19193,11 +19193,11 @@ msgstr "JÁTÉKOSOK"
 
 #: src/multiint.cpp:4768
 msgid "Add spectator slot"
-msgstr "Megfigyelő hely hozzáadása"
+msgstr "Néző helyének hozzáadása"
 
 #: src/multiint.cpp:4852
 msgid "Kicked from game"
-msgstr "Kirúgtak a játékből"
+msgstr "Kirúgva a játékből"
 
 #: src/multiint.cpp:4943
 #: src/multiint.cpp:5049
@@ -19574,7 +19574,7 @@ msgstr "Energiát ad a játékosnak"
 
 #: src/multimenu.cpp:1003
 msgid "Toggle Chat Mute"
-msgstr "Csevegésnémítás ki/be kapcsolása"
+msgstr "Csevegésnémítás be/ki"
 
 #: src/multimenu.cpp:1200
 msgid "Sent/Received per sec —"
