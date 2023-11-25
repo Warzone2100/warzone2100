@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-22 20:22\n"
+"PO-Revision-Date: 2023-11-25 03:30\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -25,7 +25,7 @@ msgstr "OBJECTIU: Localitzeu i recupereu la tecnologia de sinapsi neuronal"
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Establiu una base, després busqueu estructures del Pre-Col·lapse."
+msgstr "Establiu una base, després busqueu estructures d'abans del Col·lapse."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -75,7 +75,7 @@ msgstr "MISSIÓ DE TRANSPORT: Localitzeu i recupereu artefactes"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr "Carregueu una força d'atac al transport"
+msgstr "Embarqueu una unitat d'atac al transport."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
@@ -112,7 +112,7 @@ msgstr "MISSIÓ DE TRANSPORT: S'ha detectat transmissions enemigues"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Explora la àrea designada en recerca de instal·lacions enemigues"
+msgstr "Explori l'àrea designada en recerca d'instal·lacions enemigues."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
@@ -140,7 +140,7 @@ msgstr "Els Nou Paradigma està buscant artefactes a les proximitats."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr "Intercepteu-lo. No deixeu que cap enemic abandoni l'àrea"
+msgstr "Intercepteu-los. No deixeu que cap enemic abandoni l'àrea."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
@@ -172,11 +172,11 @@ msgstr "MISSIÓ DE LA BASE ALFA: Contraatac"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr "Forces enemigues s'acosten per l'est i pel nort"
+msgstr "Les forces enemigues s'acosten per l'est i pel nord."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr "Mantingueu les bases i rebutjeu qualsevol atac."
+msgstr "Protegiu les bases i repel·liu qualsevol atac."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
@@ -192,7 +192,7 @@ msgstr "És la nostra oportunitat d'eliminar el Nou Paradigma i destruir la seva
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr "Us felicitem Comandant"
+msgstr "Felicitats, Comandant."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
@@ -220,7 +220,7 @@ msgstr "Hem recuperat alguns artefactes."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr "Hi ha una força més ben equipada que opera en aquesta àrea"
+msgstr "Hi ha una força més ben equipada operant en aquesta àrea."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
@@ -692,7 +692,7 @@ msgstr "La Col·lectivitat no està al corrent de l'atac nuclear i envia unitats
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
-msgstr "Aquest missatge ha estat interceptat fa uns minuts"
+msgstr "Aquest missatge ha estat interceptat fa un moment..."
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
@@ -726,7 +726,7 @@ msgstr "Envieu les vostres forces al Sector Nord"
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr "Un cop arribeu a les muntanyes, assegureu la ZA. Després establiun una base avançada."
+msgstr "Un cop arribeu a les muntanyes, assegureu la ZA. Després establiu una base avançada."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
@@ -19963,7 +19963,7 @@ msgstr "Estructures totals: %u"
 #: src/scores.cpp:112
 #, c-format
 msgid "Rookie: %u"
-msgstr "Principiant: %u"
+msgstr "Novell: %u"
 
 #: src/scores.cpp:113
 #, c-format
