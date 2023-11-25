@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-24 15:22\n"
+"PO-Revision-Date: 2023-11-25 03:30\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -15323,7 +15323,7 @@ msgstr "Vulkan implicit rétegek engedélyezése (amelyek lehet, hogy alapértel
 
 #: src/clparse.cpp:452
 msgid "Set the default hosting chat configuration / permissions"
-msgstr "Állítsa be az alapértelmezett tárhely-csevegési konfigurációt / engedélyeket"
+msgstr "A házigazdaként használandó alapértelmezett csevegési beállítások és engedélyek megadása"
 
 #: src/clparse.cpp:453
 msgid "Enable async join approval (for connecting clients)"
