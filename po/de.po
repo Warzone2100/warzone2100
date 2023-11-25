@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:44\n"
+"PO-Revision-Date: 2023-11-25 16:34\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15318,15 +15318,15 @@ msgstr "Konvertiere eine Specular-Map-PNG in eine Luma-Ein-Kanal-Graustufen-PNG 
 
 #: src/clparse.cpp:451
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "Implizite Ebenen in Vulkan erlauben (dies kann aufgrund von möglichen Abstürzen oder Fehlern standardmäßig deaktiviert werden)"
 
 #: src/clparse.cpp:452
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "Standard-Hosting-Chat-Konfiguration/-Berechtigungen festlegen"
 
 #: src/clparse.cpp:453
 msgid "Enable async join approval (for connecting clients)"
-msgstr ""
+msgstr "Anynchrone Beitrittsbestätigung aktivieren (für Verbindung von Clients)"
 
 #: src/cmddroid.cpp:121
 msgid "Commander needs a higher level to command more units"
@@ -16360,11 +16360,11 @@ msgstr "Zerstören (Klassisch)"
 
 #: src/frontend.cpp:3346
 msgid "Allow All"
-msgstr ""
+msgstr "Alle erlauben"
 
 #: src/frontend.cpp:3346
 msgid "Quick Chat Only"
-msgstr ""
+msgstr "Nur Quickchat"
 
 #: src/frontend.cpp:3363
 msgid "Hosting Options:"
@@ -16380,7 +16380,7 @@ msgstr "UPnP aktivieren"
 
 #: src/frontend.cpp:3377
 msgid "Chat"
-msgstr ""
+msgstr "Chat"
 
 #: src/frontend.cpp:3382
 msgid "Inactivity Timeout"
@@ -16527,45 +16527,45 @@ msgstr "Zeige nur Favoriten-Technologien\n"
 
 #: src/hci/chatoptions.cpp:434
 msgid "New Joins"
-msgstr ""
+msgstr "Neu beigetreten"
 
 #: src/hci/chatoptions.cpp:1196
 msgid "Refresh"
-msgstr ""
+msgstr "Aktualisieren"
 
 #: src/hci/chatoptions.cpp:1214
 msgid "Host Chat Options"
-msgstr ""
+msgstr "Host-Chatoptionen"
 
 #: src/hci/chatoptions.cpp:1223
 msgid "Global Options:"
-msgstr ""
+msgstr "Globale Optionen:"
 
 #: src/hci/chatoptions.cpp:1229
 msgid "Enable All"
-msgstr ""
+msgstr "Alle aktivieren"
 
 #: src/hci/chatoptions.cpp:1237
 msgid "Disable All"
-msgstr ""
+msgstr "Alle deaktivieren"
 
 #: src/hci/chatoptions.cpp:1256
 #: src/multiint.cpp:4908
 #: src/screens/chatscreen.cpp:394
 msgid "Chat Options"
-msgstr ""
+msgstr "Chatoptionen"
 
 #: src/hci/chatoptions.cpp:1264
 msgid "Mute or configure player free chat."
-msgstr ""
+msgstr "Freien Chat für Spieler stummschalten oder konfigurieren."
 
 #: src/hci/chatoptions.cpp:1273
 msgid "The host has globally muted 1+ players."
-msgstr ""
+msgstr "Der Host hat weltweit 1+ Spieler stummgeschaltet."
 
 #: src/hci/chatoptions.cpp:1286
 msgid "Local"
-msgstr ""
+msgstr "Lokal"
 
 #: src/hci/groups.cpp:141
 msgid "Select / Assign Group Number: "
@@ -19204,7 +19204,7 @@ msgstr "Aus dem Spiel geworfen"
 #: src/multiint.cpp:5082
 #: src/screens/chatscreen.cpp:157
 msgid "The host has disabled free chat. Please use Quick Chat."
-msgstr ""
+msgstr "Der Host hat den freien Chat deaktiviert. Bitte Quickchat verwenden."
 
 #: src/multiint.cpp:5033
 #: src/multiint.cpp:5036
@@ -19214,16 +19214,16 @@ msgstr "Quickchat"
 #: src/multiint.cpp:5047
 #: src/multiint.cpp:5053
 msgid "Press the Tab key to open Quick Chat."
-msgstr ""
+msgstr "Tab-Taste drücken, um Quickchat zu öffnen."
 
 #: src/multiint.cpp:5055
 #: src/multiint.cpp:5085
 msgid "The host has disabled free chat. Please use Quick Chat or /hostmsg commands."
-msgstr ""
+msgstr "Der Host hat den freien Chat deaktiviert. Bitte Quickchat oder /hostmsgt-Befehle verwenden."
 
 #: src/multiint.cpp:5088
 msgid "The host has enabled free chat for you."
-msgstr ""
+msgstr "Der Host hat den freien Chat für dich deaktiviert."
 
 #: src/multiint.cpp:5454
 msgid "Copy Text to Clipboard"
@@ -19295,13 +19295,13 @@ msgstr "Der Spielleiter startet das Spiel"
 #: src/stdinreader.cpp:568
 #, c-format
 msgid "Host: Free chat enabled for: %s"
-msgstr ""
+msgstr "Host: Freier Chat aktiviert für: %s"
 
 #: src/multiint.cpp:6830
 #: src/stdinreader.cpp:572
 #, c-format
 msgid "Host: Free chat muted for: %s"
-msgstr ""
+msgstr "Host: Freier Chat stummgeschaltet für: %s"
 
 #: src/multiint.cpp:6863
 #, c-format
@@ -19325,7 +19325,7 @@ msgstr "Der Spielleiter hat ungültige Optionen angegeben"
 
 #: src/multiint.cpp:7047
 msgid "Host supplied invalid host config"
-msgstr ""
+msgstr "Der Spielleiter hat ungültige Host-Konfiguration angegeben"
 
 #: src/multiint.cpp:7280
 msgid "You have been kicked: "
@@ -19656,21 +19656,21 @@ msgstr "Warnung, der SPIELLEITER hat den Code des Spiels verändert und ist nich
 
 #: src/multiopt.cpp:785
 msgid "The host has enabled free chat for everyone."
-msgstr ""
+msgstr "Der Host hat den freien Chat für alle aktiviert."
 
 #: src/multiopt.cpp:793
 msgid "The host has muted free chat for everyone."
-msgstr ""
+msgstr "Der Host hat den freien Chat für alle stummgeschaltet."
 
 #: src/multiopt.cpp:818
 #, c-format
 msgid "The host has enabled free chat for player: %s"
-msgstr ""
+msgstr "Der Host hat den freien Chat für Spieler %s aktiviert"
 
 #: src/multiopt.cpp:824
 #, c-format
 msgid "The host has muted free chat for player: %s"
-msgstr ""
+msgstr "Der Host hat den freien Chat für Spieler %s stummgeschaltet"
 
 #: src/multiplay.cpp:355
 #, c-format
@@ -20048,11 +20048,11 @@ msgstr "Sie haben geschummelt!"
 
 #: src/screens/chatscreen.cpp:155
 msgid "Use Quick Chat to chat with other players."
-msgstr ""
+msgstr "Quickchat zum Chatten mit anderen Spielern verwenden."
 
 #: src/screens/chatscreen.cpp:161
 msgid "The host has disabled free chat."
-msgstr ""
+msgstr "Der Host hat den freien Chat deaktiviert."
 
 #: src/screens/chatscreen.cpp:236
 msgid "Chat: All"
@@ -20064,7 +20064,7 @@ msgstr "Chat: Team"
 
 #: src/screens/chatscreen.cpp:342
 msgid "Did not send message - free chat is disabled by host. Please use Quick Chat."
-msgstr ""
+msgstr "Nachricht nicht abgeschickt – Freier Chat wurde vom Host deaktiviert. Bitte Quickchat verwenden."
 
 #: src/screens/helpscreen.cpp:123
 msgid "Close Help Mode"
