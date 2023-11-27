@@ -3234,12 +3234,18 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
 	debug(LOG_WZ, "Drawable Size: %d x %d", width, height);
+	width = std::max<int>(width, 0);
+	height = std::max<int>(height, 0);
+
+	wzGLClearErrors();
 
 	glViewport(0, 0, width, height);
+	wzGLCheckErrors();
 	viewportWidth = static_cast<uint32_t>(width);
 	viewportHeight = static_cast<uint32_t>(height);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
+	wzGLCheckErrors();
 
 	// initialize default (0) textures
 	if (!createDefaultTextures())
@@ -3537,13 +3543,13 @@ bool gl_context::initGLContext()
 	}
 
 	std::pair<int, int> glslVersion(0, 0);
-	sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
+	sscanf((char const *)wzSafeGlGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
 
 	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
 	GLint glMaxTIUs = 0, glMaxTIUAs = 0, glmaxSamples = 0, glmaxSamplesbuf = 0, glmaxVertexAttribs = 0, glMaxArrayTextureLayers = 0;
 
-	debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-	ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	debug(LOG_3D, "  * OpenGL GLSL Version : %s", wzSafeGlGetString(GL_SHADING_LANGUAGE_VERSION));
+	ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", wzSafeGlGetString(GL_SHADING_LANGUAGE_VERSION));
 	addDumpInfo(opengl.GLSLversion);
 
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
@@ -3574,14 +3580,19 @@ bool gl_context::initGLContext()
 	}
 	enabledVertexAttribIndexes.resize(static_cast<size_t>(glmaxVertexAttribs), false);
 
+	wzGLClearErrors();
+
 	if (khr_debug)
 	{
 		if (glDebugMessageCallback && glDebugMessageControl)
 		{
 			glDebugMessageCallback(khr_callback, nullptr);
+			wzGLCheckErrors();
 			glEnable(GL_DEBUG_OUTPUT);
+			wzGLCheckErrors();
 			// Do not want to output notifications. Some drivers spam them too much.
 			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+			wzGLCheckErrors();
 			debug(LOG_3D, "Enabling KHR_debug message callback");
 		}
 		else
@@ -3600,23 +3611,29 @@ bool gl_context::initGLContext()
 			return false;
 		}
 		glGenVertexArrays(1, &vaoId);
+		wzGLCheckErrors();
 		glBindVertexArray(vaoId);
+		wzGLCheckErrors();
 	}
 
 	if (GLAD_GL_ARB_timer_query)
 	{
 		glGenQueries(PERF_COUNT, perfpos);
+		wzGLCheckErrors();
 	}
 
 	if (GLAD_GL_EXT_texture_filter_anisotropic)
 	{
 		maxTextureAnisotropy = 0.f;
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxTextureAnisotropy);
+		wzGLCheckErrors();
 	}
 
 	glGenBuffers(1, &scratchbuffer);
+	wzGLCheckErrors();
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	wzGLCheckErrors();
 
 	return true;
 }
