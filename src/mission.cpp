@@ -297,6 +297,7 @@ bool missionShutDown()
 		freeAllDroids();
 		freeAllStructs();
 		freeAllFeatures();
+		freeAllFlagPositions();
 		releaseAllProxDisp();
 		gwShutDown();
 
@@ -790,6 +791,7 @@ void restoreMissionData()
 	freeAllDroids();
 	freeAllStructs();
 	freeAllFeatures();
+	freeAllFlagPositions();
 	gwShutDown();
 	if (game.type != LEVEL_TYPE::CAMPAIGN)
 	{
