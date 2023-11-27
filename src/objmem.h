@@ -101,6 +101,8 @@ void removeFlagPosition(FLAG_POSITION *psDel);
 void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
 // free all flag positions
 void freeAllFlagPositions();
+// used to add flag position to a specific list (ex. from assignFactoryCommandDroid)
+void addFlagPositionToList(FLAG_POSITION *psFlagPosToAdd, FLAG_POSITION *list[MAX_PLAYERS]);
 
 // Find a base object from it's id
 BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type);

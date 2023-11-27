@@ -645,11 +645,11 @@ bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 	return true;
 }
 
-static bool isFlagPositionInList(FLAG_POSITION *psFlagPosToAdd)
+static bool isFlagPositionInList(FLAG_POSITION *psFlagPosToAdd, FLAG_POSITION *list[MAX_PLAYERS])
 {
 	ASSERT_OR_RETURN(false, psFlagPosToAdd != nullptr, "Invalid FlagPosition pointer");
 	ASSERT_OR_RETURN(false, psFlagPosToAdd->player < MAX_PLAYERS, "Invalid FlagPosition player: %u", psFlagPosToAdd->player);
-	for (FLAG_POSITION* psCurr = apsFlagPosLists[psFlagPosToAdd->player]; (psCurr != nullptr); psCurr = psCurr->psNext)
+	for (FLAG_POSITION* psCurr = list[psFlagPosToAdd->player]; (psCurr != nullptr); psCurr = psCurr->psNext)
 	{
 		if (psCurr == psFlagPosToAdd)
 		{
@@ -660,15 +660,25 @@ static bool isFlagPositionInList(FLAG_POSITION *psFlagPosToAdd)
 }
 
 /* add the Flag Position to the Flag Position Lists */
-void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
+void addFlagPositionToList(FLAG_POSITION *psFlagPosToAdd, FLAG_POSITION *list[MAX_PLAYERS])
 {
 	ASSERT_OR_RETURN(, psFlagPosToAdd != nullptr, "Invalid FlagPosition pointer");
 	ASSERT_OR_RETURN(, psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
 	ASSERT_OR_RETURN(, psFlagPosToAdd->player < MAX_PLAYERS, "Invalid FlagPosition player: %u", psFlagPosToAdd->player);
-	ASSERT_OR_RETURN(, !isFlagPositionInList(psFlagPosToAdd), "FlagPosition is already in the list!");
+	if (isFlagPositionInList(psFlagPosToAdd, list))
+	{
+		debug(LOG_INFO, "FlagPosition is already in the list - ignoring");
+		return;
+	}
 
-	psFlagPosToAdd->psNext = apsFlagPosLists[psFlagPosToAdd->player];
-	apsFlagPosLists[psFlagPosToAdd->player] = psFlagPosToAdd;
+	psFlagPosToAdd->psNext = list[psFlagPosToAdd->player];
+	list[psFlagPosToAdd->player] = psFlagPosToAdd;
+}
+
+/* add the Flag Position to the Flag Position Lists */
+void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
+{
+	addFlagPositionToList(psFlagPosToAdd, apsFlagPosLists);
 }
 
 // Remove it from the list, but don't delete it!
@@ -677,6 +687,7 @@ static bool removeFlagPositionFromList(FLAG_POSITION *psRemove)
 	FLAG_POSITION		*psPrev = nullptr, *psCurr;
 
 	ASSERT_OR_RETURN(false, psRemove != nullptr, "Invalid Flag Position pointer");
+	ASSERT_OR_RETURN(false, psRemove->player < MAX_PLAYERS, "Invalid Flag Position player: %" PRIu32, psRemove->player);
 
 	if (apsFlagPosLists[psRemove->player] == psRemove)
 	{
@@ -735,6 +746,7 @@ void freeAllFlagPositions()
 	{
 		while (apsFlagPosLists[player])
 		{
+			ASSERT(player == apsFlagPosLists[player]->player, "Player mismatch? (flagPos->player == %" PRIu32 ", expecting: %d", apsFlagPosLists[player]->player, player);
 			psNext = apsFlagPosLists[player]->psNext;
 			free(apsFlagPosLists[player]);
 			apsFlagPosLists[player] = psNext;
