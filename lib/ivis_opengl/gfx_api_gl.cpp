@@ -3416,13 +3416,13 @@ bool gl_context::initGLContext()
 	/* Dump general information about OpenGL implementation to the console and the dump file */
 	ssprintf(opengl.vendor, "OpenGL Vendor: %s", wzSafeGlGetString(GL_VENDOR));
 	addDumpInfo(opengl.vendor);
-	debug(LOG_3D, "%s", opengl.vendor);
+	debug(LOG_INFO, "%s", opengl.vendor);
 	ssprintf(opengl.renderer, "OpenGL Renderer: %s", wzSafeGlGetString(GL_RENDERER));
 	addDumpInfo(opengl.renderer);
-	debug(LOG_3D, "%s", opengl.renderer);
+	debug(LOG_INFO, "%s", opengl.renderer);
 	ssprintf(opengl.version, "OpenGL Version: %s", wzSafeGlGetString(GL_VERSION));
 	addDumpInfo(opengl.version);
-	debug(LOG_3D, "%s", opengl.version);
+	debug(LOG_INFO, "%s", opengl.version);
 
 	formattedRendererInfoString = calculateFormattedRendererInfoString();
 
@@ -3634,6 +3634,8 @@ bool gl_context::initGLContext()
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	wzGLCheckErrors();
+
+	debug(LOG_INFO, "Success");
 
 	return true;
 }
