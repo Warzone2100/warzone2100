@@ -28,6 +28,7 @@
 # pragma clang diagnostic ignored "-Wunused-private-field"
 # pragma clang diagnostic ignored "-Wcast-align"
 # pragma clang diagnostic ignored "-Wunused-function"
+# pragma clang diagnostic ignored "-Wimplicit-fallthrough"
 #  if defined(__APPLE__)
 #    pragma clang diagnostic ignored "-Wnullability-completeness" // Warning triggered on newer Xcode
 #  endif
@@ -47,6 +48,7 @@
 # pragma GCC diagnostic ignored "-Wmissing-noreturn"
 # pragma GCC diagnostic ignored "-Wcast-align"
 # pragma GCC diagnostic ignored "-Wunused-function"
+# pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #elif defined(_MSC_VER)
 # pragma warning( push )
 # pragma warning( disable : 4189 ) // warning C4189: 'identifier' : local variable is initialized but not referenced
