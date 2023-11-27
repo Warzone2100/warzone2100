@@ -41,34 +41,40 @@ tm getUtcTime(std::time_t const &timer)
 	return timeinfo;
 }
 
-optional<tm> getLocalTimeOpt(std::time_t const &timer)
+optional<tm> getLocalTimeOpt(std::time_t const &timer, bool quiet)
 {
 	struct tm timeinfo = {};
 #if defined(WZ_OS_WIN)
 	errno_t result = localtime_s(&timeinfo, &timer);
 	if (result != 0)
 	{
-		char sys_msg[80];
-		if (strerror_s(sys_msg, sizeof(sys_msg), result) != 0)
+		if (!quiet)
 		{
-			strncpy(sys_msg, "unknown error", sizeof(sys_msg));
+			char sys_msg[80];
+			if (strerror_s(sys_msg, sizeof(sys_msg), result) != 0)
+			{
+				strncpy(sys_msg, "unknown error", sizeof(sys_msg));
+			}
+			debug(LOG_ERROR, "localtime_s failed with error: %s", sys_msg);
 		}
-		debug(LOG_ERROR, "localtime_s failed with error: %s", sys_msg);
 		return nullopt;
 	}
 #else
 	if (!localtime_r(&timer, &timeinfo))
 	{
-		debug(LOG_ERROR, "localtime_r failed");
+		if (!quiet)
+		{
+			debug(LOG_ERROR, "localtime_r failed");
+		}
 		return nullopt;
 	}
 #endif
 	return timeinfo;
 }
 
-tm getLocalTime(std::time_t const &timer)
+tm getLocalTime(std::time_t const &timer, bool quiet)
 {
-	auto result = getLocalTimeOpt(timer);
+	auto result = getLocalTimeOpt(timer, quiet);
 	if (!result.has_value())
 	{
 		struct tm zeroResult = {};

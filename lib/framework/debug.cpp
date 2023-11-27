@@ -558,7 +558,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		char ourtime[15];		//HH:MM:SS
 
 		time(&rawtime);
-		timeinfo = getLocalTime(rawtime);
+		timeinfo = getLocalTime(rawtime, true);
 		strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
 
 		auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
