@@ -392,6 +392,8 @@ private:
 	size_t depthBufferResolution = 4096;
 	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
 
+	uint32_t sceneFramebufferWidth = 0;
+	uint32_t sceneFramebufferHeight = 0;
 	GLenum multiSampledBufferInternalFormat = GL_INVALID_ENUM;
 	GLenum multiSampledBufferBaseFormat = GL_INVALID_ENUM;
 	GLint maxMultiSampleBufferFormatSamples = 0;
