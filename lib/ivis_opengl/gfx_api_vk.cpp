@@ -3855,7 +3855,7 @@ bool VkRoot::handleSurfaceLost()
 	}
 
 	bool result = false;
-	if (createSwapchain())
+	if (createSwapchain(false))
 	{
 		rebuildPipelinesIfNecessary();
 		result = true;
@@ -4071,7 +4071,7 @@ T clamp(const T& n, const T& lower, const T& upper) {
 	return std::max(lower, std::min(n, upper));
 }
 
-bool VkRoot::createSwapchain()
+bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 {
 	ASSERT(backend_impl, "Backend implementation is null");
 	ASSERT(physicalDevice, "Physical device is null");
@@ -4088,6 +4088,20 @@ bool VkRoot::createSwapchain()
 	SwapChainSupportDetails swapChainSupport;
 	try {
 		swapChainSupport = querySwapChainSupport(physicalDevice, surface, vkDynLoader);
+	}
+	catch (const vk::SurfaceLostKHRError &e)
+	{
+		if (allowHandleSurfaceLost)
+		{
+			debug(LOG_INFO, "Querying swapchain support failed with ErrorSurfaceLostKHR - must recreate surface + swapchain: %s", e.what());
+			// recreate surface + swapchain
+			return handleSurfaceLost();
+		}
+		else
+		{
+			debug(LOG_ERROR, "Querying swapchain support failed with error: %s", e.what());
+			return false;
+		}
 	}
 	catch (const vk::SystemError &e)
 	{

@@ -781,7 +781,7 @@ private:
 	bool createLogicalDevice();
 	bool createAllocator();
 	void getQueues();
-	bool createSwapchain();
+	bool createSwapchain(bool allowHandleSurfaceLost = true);
 	void rebuildPipelinesIfNecessary();
 
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
