@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-25 03:30\n"
+"PO-Revision-Date: 2023-11-27 20:24\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -848,7 +848,7 @@ msgstr "Állapítsa meg, hogy valóban az Alfa csapat-e az. Ha igen, menekítse 
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr "Ez az csoport az Alfa csapat része, mentse ki őket, és kísérje őket az Landolási Zónához."
+msgstr "Ez az csoport az Alfa csapat része, mentse ki őket, és kísérje őket az LZ-hez."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -16352,11 +16352,11 @@ msgstr "Nincs"
 
 #: src/frontend.cpp:3301
 msgid "Distribute to Team"
-msgstr "Csapat megosztás"
+msgstr "Szétosztás a csapatnak"
 
 #: src/frontend.cpp:3302
 msgid "Destroy (Classic)"
-msgstr "Elpusztítani (klasszikus)"
+msgstr "Megsemmisítés (klasszikus)"
 
 #: src/frontend.cpp:3346
 msgid "Allow All"
@@ -16592,11 +16592,11 @@ msgstr "A kamera erre a csoportra fókuszálása kétszeri kattintással vagy ko
 
 #: src/hci/groups.cpp:257
 msgid "View and configure groups of units, which can be quickly selected and ordered."
-msgstr "Tekintse meg és konfigurálja az egységek csoportjait, amelyek gyorsan kiválaszthatók és rendelhetők."
+msgstr "Tekintse meg és állítsa be az egységek csoportjait, amelyek gyorsan kiválaszthatók és utasíthatók."
 
 #: src/hci/groups.cpp:259
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
-msgstr "A csoportgombok pirosan világítanak, ha az egységek elvesznek (vagy sok sebzést okoznak)."
+msgstr "A csoportgombok pirosan világítanak, ha az egységek elvesznek (vagy sok sebzést szenvednek)."
 
 #: src/hci/groups.cpp:261
 msgid "Unit Groups"
@@ -16675,7 +16675,7 @@ msgstr "Gyors csevegés:"
 
 #: src/hci/quickchat.cpp:2170
 msgid "Lobby Chat"
-msgstr "Lobbi csevegés"
+msgstr "Váró csevegése"
 
 #: src/hci/quickchat.cpp:2172
 #: src/hci/quickchat.cpp:2280
@@ -16783,7 +16783,7 @@ msgstr "Helló mindenki!"
 
 #: src/hci/quickchat.cpp:2474
 msgid "Welcome!"
-msgstr "Üdvözöljük!"
+msgstr "Üdv!"
 
 #: src/hci/quickchat.cpp:2476
 msgid "I want to spectate"
@@ -16799,7 +16799,7 @@ msgstr "Csapatot szeretnék váltani"
 
 #: src/hci/quickchat.cpp:2482
 msgid "Please check Ready so we can start"
-msgstr "Kérjük, ellenőrizze a Kész lehetőséget, hogy elkezdhessük"
+msgstr "Jelöld be a Kész lehetőséget, hogy kezdhessünk"
 
 #: src/hci/quickchat.cpp:2487
 msgid "Please wait"
@@ -16940,11 +16940,11 @@ msgstr "Megtámadnak!"
 
 #: src/hci/quickchat.cpp:2567
 msgid "I'm rushing oils"
-msgstr "Rohanok az olajjal"
+msgstr "Lerohanom az olajmezőket"
 
 #: src/hci/quickchat.cpp:2569
 msgid "They're rushing oils!"
-msgstr "Rohannak az olajokkal!"
+msgstr "Lerohanják az olajmezőket!"
 
 #: src/hci/quickchat.cpp:2571
 msgid "I don't have enough power"
@@ -16963,7 +16963,7 @@ msgstr "Építs különböző egységeket"
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2581
 msgid "Check team strategy view"
-msgstr "Ellenőrizze a csapat stratégiai nézetét"
+msgstr "Nézd meg a csapat stratégiai nézetét"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2584
@@ -16978,7 +16978,7 @@ msgstr "Legyenek elfoglaltak a kutatóközpontok"
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2590
 msgid "Build anti-air"
-msgstr "Építsen légvédelmet"
+msgstr "Építs légvédelmet"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2593
@@ -18006,7 +18006,7 @@ msgstr "Nem sikerült csatlakozni játéhoz"
 
 #: src/integrations/wzdiscordrpc.cpp:355
 msgid "The invite link you have followed specifies a non-default lobby server:"
-msgstr "Az Ön által követett meghívó link egy nem alapértelmezett lobby szervert határoz meg:"
+msgstr "A követett meghívási hivatkozás egy nem alapértelmezett várókiszolgálót határoz meg:"
 
 #: src/integrations/wzdiscordrpc.cpp:358
 msgid "Do you wish to trust this lobby server, and continue?"
@@ -18027,7 +18027,7 @@ msgstr "A követett meghívóhivatkozás közvetlen kapcsolatot határoz meg."
 
 #: src/integrations/wzdiscordrpc.cpp:430
 msgid "It has not been vetted / verified by a lobby server."
-msgstr "Ezt lobbiszerver nem lett ellenőrizve / hitelesítve."
+msgstr "Nem ellenőrizte / hitelesítette egy várókiszolgáló."
 
 #: src/integrations/wzdiscordrpc.cpp:432
 msgid "Do you wish to trust this direct connection invite?"
@@ -19246,11 +19246,11 @@ msgstr "CSEVEGÉS"
 #: src/multiint.cpp:6239
 #: src/titleui/gamefind.cpp:238
 msgid "Multiplayer Lobby Support Unavailable"
-msgstr "Többjátékos lobby támogatás nem elérhető"
+msgstr "A többjátékos váró támogatása nem érhető el"
 
 #: src/multiint.cpp:6241
 msgid "Your client cannot connect to the mutiplayer lobby."
-msgstr "A kliensed nem tud csatlakozni a multiplayer lobbihoz."
+msgstr "A kliensed nem tud csatlakozni a többjátékos váróhoz."
 
 #: src/multiint.cpp:6243
 #: src/updatemanager.cpp:621
