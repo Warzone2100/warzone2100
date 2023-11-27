@@ -3247,6 +3247,9 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	//	glEnable(GL_CULL_FACE);
 	wzGLCheckErrors();
 
+	sceneFramebufferWidth = std::max<uint32_t>(viewportWidth, 2);
+	sceneFramebufferHeight = std::max<uint32_t>(viewportHeight, 2);
+
 	// initialize default (0) textures
 	if (!createDefaultTextures())
 	{
@@ -4082,14 +4085,34 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 	backend_impl->getDrawableSize(&drawableWidth, &drawableHeight);
 	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", screenWidth, screenHeight, drawableWidth, drawableHeight);
 
-	glViewport(0, 0, drawableWidth, drawableHeight);
-	viewportWidth = static_cast<uint32_t>(drawableWidth);
-	viewportHeight = static_cast<uint32_t>(drawableHeight);
+	int width = std::max<int>(drawableWidth, 0);
+	int height = std::max<int>(drawableHeight, 0);
+
+	glViewport(0, 0, width, height);
+	viewportWidth = static_cast<uint32_t>(width);
+	viewportHeight = static_cast<uint32_t>(height);
 	glCullFace(GL_FRONT);
 	//	glEnable(GL_CULL_FACE);
 
-	// Re-create scene FBOs using new size
-	createSceneRenderpass();
+	// Re-create scene FBOs using new size (if drawable size is of reasonable dimensions)
+	if (viewportWidth > 0 && viewportHeight > 0)
+	{
+		uint32_t newSceneFramebufferWidth = std::max<uint32_t>(viewportWidth, 2);
+		uint32_t newSceneFramebufferHeight = std::max<uint32_t>(viewportHeight, 2);
+
+		if (sceneFramebufferWidth != newSceneFramebufferWidth || sceneFramebufferHeight != newSceneFramebufferHeight)
+		{
+			sceneFramebufferWidth = newSceneFramebufferWidth;
+			sceneFramebufferHeight = newSceneFramebufferHeight;
+			createSceneRenderpass();
+		}
+	}
+	else
+	{
+		// Some drivers seem to like to occasionally return a drawableSize that has a 0 dimension (ex. when minimized?)
+		// In this case, don't bother recreating the scene framebuffer (until it changes to something sensible)
+		debug(LOG_INFO, "Delaying scene framebuffer recreation (current Drawable Size: %d x %d)", drawableWidth, drawableHeight);
+	}
 }
 
 std::pair<uint32_t, uint32_t> gl_context::getDrawableDimensions()
@@ -4421,7 +4444,7 @@ bool gl_context::createSceneRenderpass()
 		ASSERT_GL_NOERRORS_OR_RETURN(false);
 		glBindRenderbuffer(GL_RENDERBUFFER, sceneMsaaRBO);
 		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, multiSampledBufferInternalFormat, viewportWidth, viewportHeight); // OpenGL 3.0+, OpenGL ES 3.0+
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, multiSampledBufferInternalFormat, sceneFramebufferWidth, sceneFramebufferHeight); // OpenGL 3.0+, OpenGL ES 3.0+
 		ASSERT_GL_NOERRORS_OR_RETURN(false);
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 		ASSERT_GL_NOERRORS_OR_RETURN(false);
@@ -4432,11 +4455,11 @@ bool gl_context::createSceneRenderpass()
 	// - OpenGL ES: color texture format must *MATCH* the format used for the multisampled color render buffer
 	GLenum colorInternalFormat = (samples > 0 && gles) ? multiSampledBufferInternalFormat : GL_RGB8;
 	GLenum colorBaseFormat = (samples > 0 && gles) ? multiSampledBufferBaseFormat : GL_RGB;
-	auto pNewSceneTexture = create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE, viewportWidth, viewportHeight, "<scene texture>");
+	auto pNewSceneTexture = create_framebuffer_color_texture(colorInternalFormat, colorBaseFormat, GL_UNSIGNED_BYTE, sceneFramebufferWidth, sceneFramebufferHeight, "<scene texture>");
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	if (!pNewSceneTexture)
 	{
-		debug(LOG_ERROR, "Failed to create scene color texture (%" PRIu32 " x %" PRIu32 ")", viewportWidth, viewportHeight);
+		debug(LOG_ERROR, "Failed to create scene color texture (%" PRIu32 " x %" PRIu32 ")", sceneFramebufferWidth, sceneFramebufferHeight);
 		return false;
 	}
 	sceneTexture = pNewSceneTexture;
@@ -4455,7 +4478,7 @@ bool gl_context::createSceneRenderpass()
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	glBindRenderbuffer(GL_RENDERBUFFER, sceneDepthStencilRBO);
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, viewportWidth, viewportHeight); // OpenGL 3.0+, OpenGL ES 3.0+
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, sceneFramebufferWidth, sceneFramebufferHeight); // OpenGL 3.0+, OpenGL ES 3.0+
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
@@ -4488,7 +4511,7 @@ bool gl_context::createSceneRenderpass()
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE)
 		{
-			debug(LOG_ERROR, "Failed to create scene framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, viewportWidth, viewportHeight, static_cast<int>(samples), cbframebuffererror(status));
+			debug(LOG_ERROR, "Failed to create scene framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, sceneFramebufferWidth, sceneFramebufferHeight, static_cast<int>(samples), cbframebuffererror(status));
 			encounteredError = true;
 		}
 		ASSERT_GL_NOERRORS_OR_RETURN(false);
@@ -4513,7 +4536,7 @@ bool gl_context::createSceneRenderpass()
 			status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			if (status != GL_FRAMEBUFFER_COMPLETE)
 			{
-				debug(LOG_ERROR, "Failed to create scene resolve framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, viewportWidth, viewportHeight, static_cast<int>(samples), cbframebuffererror(status));
+				debug(LOG_ERROR, "Failed to create scene resolve framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, sceneFramebufferWidth, sceneFramebufferHeight, static_cast<int>(samples), cbframebuffererror(status));
 				encounteredError = true;
 			}
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
@@ -4531,7 +4554,7 @@ bool gl_context::createSceneRenderpass()
 void gl_context::beginSceneRenderPass()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
-	glViewport(0, 0, viewportWidth, viewportHeight);
+	glViewport(0, 0, sceneFramebufferWidth, sceneFramebufferHeight);
 	GLbitfield clearFlags = 0;
 	glDepthMask(GL_TRUE);
 	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
@@ -4584,8 +4607,8 @@ void gl_context::endSceneRenderPass()
 	{
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sceneResolveFBO[sceneFBOIdx]);
-		glBlitFramebuffer(0,0, viewportWidth, viewportHeight,
-						  0,0, viewportWidth, viewportHeight,
+		glBlitFramebuffer(0,0, sceneFramebufferWidth, sceneFramebufferHeight,
+						  0,0, sceneFramebufferWidth, sceneFramebufferHeight,
 						  GL_COLOR_BUFFER_BIT,
 						  GL_LINEAR);
 	}
@@ -4624,6 +4647,10 @@ void gl_context::endSceneRenderPass()
 	// switch back to default framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	// Because the scene uses the same viewport, a call to glViewport should not be needed (NOTE: viewport is *not* part of the framebuffer state)
+	if (sceneFramebufferWidth != viewportWidth || sceneFramebufferHeight != viewportHeight)
+	{
+		glViewport(0, 0, viewportWidth, viewportHeight);
+	}
 }
 
 gfx_api::abstract_texture* gl_context::getSceneTexture()
