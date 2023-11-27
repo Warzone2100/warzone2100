@@ -335,12 +335,12 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 
 	//set the pitch limits based on the weapon stats of the attacker
 	pitchLowerLimit = pitchUpperLimit = 0;
-	Vector3i attackerMuzzlePos = psAttacker->pos;  // Using for calculating the pitch, but not the direction, in case using the exact direction causes bugs somewhere.
+	Vector3i attackerTurretPos = psAttacker->pos;  // Using for calculating the pitch, but not the direction, in case using the exact direction causes bugs somewhere.
 	if (psAttacker->type == OBJ_STRUCTURE)
 	{
 		STRUCTURE *psStructure = (STRUCTURE *)psAttacker;
 		int weapon_slot = psWeapon - psStructure->asWeaps;  // Should probably be passed weapon_slot instead of psWeapon.
-		calcStructureMuzzleLocation(psStructure, &attackerMuzzlePos, weapon_slot);
+		calcStructureMuzzleBaseLocation(psStructure, &attackerTurretPos, weapon_slot);
 		pitchLowerLimit = DEG(psWeapStats->minElevation);
 		pitchUpperLimit = DEG(psWeapStats->maxElevation);
 	}
@@ -348,7 +348,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	{
 		DROID *psDroid = (DROID *)psAttacker;
 		int weapon_slot = psWeapon - psDroid->asWeaps;  // Should probably be passed weapon_slot instead of psWeapon.
-		calcDroidMuzzleLocation(psDroid, &attackerMuzzlePos, weapon_slot);
+		calcDroidMuzzleBaseLocation(psDroid, &attackerTurretPos, weapon_slot);
 
 		if (psDroid->droidType == DROID_WEAPON || isTransporter(psDroid)
 		    || psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_CYBORG
@@ -395,7 +395,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	if (!bRepair && (unsigned)objPosDiffSq(psAttacker, psTarget) > minRange * minRange && proj_Direct(psWeapStats))
 	{
 		/* get target distance */
-		Vector3i delta = psTarget->pos - attackerMuzzlePos;
+		Vector3i delta = psTarget->pos - attackerTurretPos;
 		int32_t dxy = iHypot(delta.x, delta.y);
 
 		uint16_t targetPitch = iAtan2(delta.z, dxy);
