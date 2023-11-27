@@ -2220,8 +2220,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		}
 		else
 		{
-			psFact->psAssemblyPoint->psNext = mission.apsFlagPosLists[psFact->psAssemblyPoint->player];
-			mission.apsFlagPosLists[psFact->psAssemblyPoint->player] = psFact->psAssemblyPoint;
+			addFlagPositionToList(psFact->psAssemblyPoint, mission.apsFlagPosLists);
 		}
 	}
 
