@@ -182,7 +182,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 		// Although context creation eventually succeeded, log the attempts that failed
 		debug_multiline(LOG_3D, glContextErrors);
 	}
-	debug(LOG_3D, "Requested %s context", to_string(contextRequest).c_str());
+	debug(LOG_INFO, "Requested %s context", to_string(contextRequest).c_str());
 
 	int value = 0;
 	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == 0)
