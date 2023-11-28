@@ -475,6 +475,88 @@ const char *debugLastError()
 	}
 }
 
+static void debugDisplayFatalErrorMsgBox(const char* outputLogLine)
+{
+	if (wzIsFullscreen())
+	{
+		wzChangeWindowMode(WINDOW_MODE::windowed, true);
+	}
+#if defined(WZ_OS_WIN)
+	char wbuf[MAX_LEN_LOG_LINE+512];
+	ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
+		\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", outputLogLine, WZ_DBGFile, WZ_DBGFile);
+	wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
+#elif defined(WZ_OS_MAC)
+	char wbuf[MAX_LEN_LOG_LINE+128];
+	ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", outputLogLine);
+	size_t clickedIndex = wzDisplayDialogAdvanced(Dialog_Error, "Warzone has quit unexpectedly.", wbuf, {"Show Log Files & Open Bug Reporter", "Ignore"});
+	if (clickedIndex == 1)
+	{
+		if (!cocoaOpenURL("https://github.com/Warzone2100/warzone2100/issues/new"))
+		{
+			wzDisplayDialogAdvanced(Dialog_Error,
+									"Failed to open URL",
+									"Could not open URL: https://github.com/Warzone2100/warzone2100/issues/new\nPlease open this URL manually in your web browser.", {"Continue"});
+		}
+		if (strnlen(WZ_DBGFile, sizeof(WZ_DBGFile)/sizeof(WZ_DBGFile[0])) <= 0)
+		{
+			wzDisplayDialogAdvanced(Dialog_Error,
+									"Unable to open debug log.",
+									"The debug log subsystem has not yet been initialised.", {"Continue"});
+		}
+		else
+		{
+			if (!cocoaSelectFileInFinder(WZ_DBGFile))
+			{
+				wzDisplayDialogAdvanced(Dialog_Error,
+										"Cannot Display Log File",
+										"The attempt to open a Finder window highlighting the log file from this run failed.", {"Continue"});
+			}
+		}
+		cocoaOpenUserCrashReportFolder();
+	}
+#else
+	wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", outputLogLine);
+#endif
+}
+
+// Special version of _debug that doesn't use any global debug-logging state (or special sauce) *except* the callbackRegistry (via printToDebugCallbacks)
+void _debugFromGfxCallback(int line, code_part part, const char *function, const char *str, ...)
+{
+	char outputBuffer[MAX_LEN_LOG_LINE];
+
+	time_t rawtime;
+	struct tm timeinfo = {};
+	char ourtime[15];		//HH:MM:SS
+	time(&rawtime);
+	timeinfo = getLocalTime(rawtime, true);
+	strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
+
+	int numPrefixChars = ssprintf(outputBuffer, "%-8s|%s: [%s:%d] ", code_part_names[part], ourtime, function, line);
+	if (numPrefixChars < 0)
+	{
+		// encoding error occurred...
+		ssprintf(outputBuffer, "%s", "ssprintf failed: encoding error");
+		printToDebugCallbacks(outputBuffer, LOG_ERROR);
+		return;
+	}
+
+	// Then calculate the remaining length manually and pass the appropriate pointer and length to vsnprintf
+	size_t remainingLength = MAX_LEN_LOG_LINE - static_cast<size_t>(numPrefixChars);
+	char* pStartOutputLineContents = outputBuffer + numPrefixChars;
+	va_list ap;
+	va_start(ap, str);
+	vsnprintf(pStartOutputLineContents, remainingLength, str, ap);
+	va_end(ap);
+
+	printToDebugCallbacks(outputBuffer, part);
+
+	if (part == LOG_FATAL)
+	{
+		debugDisplayFatalErrorMsgBox(pStartOutputLineContents);
+	}
+}
+
 void _debug(int line, code_part part, const char *function, const char *str, ...)
 {
 	thread_local std::vector<char> outputBuffer(MAX_LEN_LOG_LINE, 0);
@@ -578,51 +660,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		// Throw up a dialog box for users since most don't have a clue to check the dump file for information. Use for (duh) Fatal errors, that force us to terminate the game.
 		if (part == LOG_FATAL)
 		{
-			if (wzIsFullscreen())
-			{
-				wzChangeWindowMode(WINDOW_MODE::windowed, true);
-			}
-#if defined(WZ_OS_WIN)
-			char wbuf[MAX_LEN_LOG_LINE+512];
-			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
-				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", currInputBuffer.data(), WZ_DBGFile, WZ_DBGFile);
-			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
-#elif defined(WZ_OS_MAC)
-			char wbuf[MAX_LEN_LOG_LINE+128];
-			ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", currInputBuffer.data());
-			int clickedIndex = \
-			                   cocoaShowAlert("Warzone has quit unexpectedly.",
-			                                  wbuf,
-			                                  2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
-			if (clickedIndex == 0)
-			{
-				if (!cocoaOpenURL("https://github.com/Warzone2100/warzone2100/issues/new"))
-                {
-                    cocoaShowAlert("Failed to open URL",
-                                   "Could not open URL: https://github.com/Warzone2100/warzone2100/issues/new\nPlease open this URL manually in your web browser.",
-                                   2, "Continue", NULL);
-                }
-                if (strnlen(WZ_DBGFile, sizeof(WZ_DBGFile)/sizeof(WZ_DBGFile[0])) <= 0)
-				{
-					cocoaShowAlert("Unable to open debug log.",
-					               "The debug log subsystem has not yet been initialised.",
-					               2, "Continue", NULL);
-				}
-				else
-				{
-                    if (!cocoaSelectFileInFinder(WZ_DBGFile))
-                    {
-                        cocoaShowAlert("Cannot Display Log File",
-                                       "The attempt to open a Finder window highlighting the log file from this run failed.",
-                                       2, "Continue", NULL);
-                    }
-				}
-				cocoaOpenUserCrashReportFolder();
-			}
-#else
-			const char *popupBuf = currInputBuffer.data();
-			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", popupBuf);
-#endif
+			debugDisplayFatalErrorMsgBox(currInputBuffer.data());
 		}
 
 		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information

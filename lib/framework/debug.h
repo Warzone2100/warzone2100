@@ -283,10 +283,13 @@ bool debug_enable_switch(const char *str);
  * Only outputs if debugging of part was formerly enabled with debug_enable_switch.
  */
 #define debug(part, ...) do { if (enabled_debug[part]) _debug(__LINE__, part, __FUNCTION__, __VA_ARGS__); } while(0)
+#define debugLogFromGfxCallback(part, ...) do { if (enabled_debug[part]) _debugFromGfxCallback(__LINE__, part, __FUNCTION__, __VA_ARGS__); } while(0)
 #if defined(__MINGW32__) || defined(__MINGW64__)
 void _debug(int line, code_part part, const char *function, const char *str, ...) WZ_DEBUG_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 4, 5);
+void _debugFromGfxCallback(int line, code_part part, const char *function, const char *str, ...) WZ_DEBUG_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 4, 5);
 #else
 void _debug(int line, code_part part, const char *function, const char *str, ...) WZ_DEBUG_DECL_FORMAT(printf, 4, 5);
+void _debugFromGfxCallback(int line, code_part part, const char *function, const char *str, ...) WZ_DEBUG_DECL_FORMAT(printf, 4, 5);
 #endif
 
 #include <string>
