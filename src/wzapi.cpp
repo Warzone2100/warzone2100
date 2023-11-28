@@ -3209,8 +3209,6 @@ bool wzapi::donatePower(WZAPI_PARAMS(int amount, int player))
 //-- then landing lights are placed. If playerFilter is ```ALL_PLAYERS```, then a limbo landing zone
 //-- is created and limbo droids placed.
 //--
-// FIXME: missing a way to call initNoGoAreas(); check if we can call this in
-// every level start instead of through scripts
 wzapi::no_return_value wzapi::setNoGoArea(WZAPI_PARAMS(int x1, int y1, int x2, int y2, int playerFilter))
 {
 	SCRIPT_ASSERT({}, context, x1 >= 0, "Minimum scroll x value %d is less than zero - ", x1);

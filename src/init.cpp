@@ -1891,11 +1891,14 @@ bool stageThreeInitialise()
 	}
 	else
 	{
+		initNoGoAreas();
+
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			triggerEventCheatMode(true);
 		}
+
 		triggerEvent(TRIGGER_GAME_INIT);
 		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
 	}

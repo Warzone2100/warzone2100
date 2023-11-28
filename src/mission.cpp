@@ -263,10 +263,7 @@ void initMission()
 	}
 
 	//init all the landing zones
-	for (auto &inc : sLandingZone)
-	{
-		inc.x1 = inc.y1 = inc.x2 = inc.y2 = 0;
-	}
+	initNoGoAreas();
 
 	bDroidsToSafety = false;
 	setPlayCountDown(true);
@@ -2659,19 +2656,12 @@ LANDING_ZONE *getLandingZone(SDWORD i)
 	return &sLandingZone[i];
 }
 
-/*Initialises all the nogo areas to 0 - DOESN'T INIT THE LIMBO AREA because we
-have to set this up in the mission BEFORE*/
+//Initialises all the nogo areas to 0
 void initNoGoAreas()
 {
-	UBYTE	i;
-
-	for (i = 0; i < MAX_NOGO_AREAS; i++)
+	for (unsigned int i = 0; i < MAX_NOGO_AREAS; ++i)
 	{
-		if (i != LIMBO_LANDING)
-		{
-			sLandingZone[i].x1 = sLandingZone[i].y1 = sLandingZone[i].x2 =
-			                         sLandingZone[i].y2 = 0;
-		}
+		sLandingZone[i].x1 = sLandingZone[i].y1 = sLandingZone[i].x2 = sLandingZone[i].y2 = 0;
 	}
 }
 
