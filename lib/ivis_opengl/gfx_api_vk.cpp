@@ -1065,7 +1065,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugReportCallback(
 		logFatal = false;
 	}
 	buf << "[" << pLayerPrefix << "] Code " << msgCode << " : " << pMsg;
-	debug((logFatal) ? LOG_FATAL : LOG_3D, "%s", buf.str().c_str());
+	debugLogFromGfxCallback((logFatal) ? LOG_FATAL : LOG_3D, "%s", buf.str().c_str());
 	return false;
 }
 
@@ -1131,7 +1131,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugUtilsCallback(
 		buf << "< no callback data? >";
 	}
 
-	debug((logFatal) ? LOG_FATAL : part, "%s", buf.str().c_str());
+	debugLogFromGfxCallback((logFatal) ? LOG_FATAL : part, "%s", buf.str().c_str());
 
 	return VK_FALSE;
 }

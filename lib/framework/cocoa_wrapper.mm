@@ -39,29 +39,6 @@ static inline NSString * _Nonnull nsstringify(const char *str)
 	return nsString;
 }
 
-int cocoaShowAlert(const char *message, const char *information, unsigned style,
-                   const char *buttonTitle, ...)
-{
-    NSInteger buttonID = -1;
-    @autoreleasepool {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:nsstringify(message)];
-        [alert setInformativeText:nsstringify(information)];
-        [alert setAlertStyle:(NSAlertStyle)style];
-
-        va_list args;
-        va_start(args, buttonTitle);
-        const char *currentButtonTitle = buttonTitle;
-        do {
-            [alert addButtonWithTitle:nsstringify(currentButtonTitle)];
-        } while ((currentButtonTitle = va_arg(args, const char *)));
-        va_end(args);
-
-        buttonID = [alert runModal];
-    }
-    return static_cast<int>(buttonID - NSAlertFirstButtonReturn);
-}
-
 bool cocoaSelectFileInFinder(const char *filename)
 {
     if (filename == nullptr) return false;
