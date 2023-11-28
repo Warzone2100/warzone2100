@@ -563,6 +563,79 @@ void wzDisplayDialog(DialogType type, const char *title, const char *message)
 	SDL_ShowSimpleMessageBox(sdl_messagebox_flags, title, message, WZwindow);
 }
 
+// Displays a message box with specified button(s)
+// Returns 0 on failure, or the (clicked button index + 1)
+size_t wzDisplayDialogAdvanced(DialogType type, const char *title, const char *message, std::vector<std::string> buttonsText)
+{
+	if (!WZbackend.has_value())
+	{
+		// while this could be thread_local, thread_local may not yet be supported on all platforms properly
+		// and wzDisplayDialog should probably be called **only** on the main thread anyway
+		static bool processingDialog = false;
+		if (!processingDialog)
+		{
+			// in headless mode, do not display a messagebox (which might block the main thread)
+			// but just log the details
+			processingDialog = true;
+			debug(LOG_INFO, "Suppressed dialog (headless):\n\tTitle: %s\n\tMessage: %s", title, message);
+			processingDialog = false;
+		}
+		return 0;
+	}
+
+	if (buttonsText.empty())
+	{
+		// always at least show an "OK" button
+		buttonsText.push_back("OK");
+	}
+
+	std::vector<SDL_MessageBoxButtonData> buttons;
+	buttons.reserve(buttonsText.size());
+	for (size_t i = 0; i < buttonsText.size(); ++i)
+	{
+		Uint32 buttonFlags = 0;
+		if (i == 0)
+		{
+			buttonFlags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+		}
+		if (i == buttonsText.size() - 1)
+		{
+			buttonFlags |= SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+		}
+		buttons.push_back(SDL_MessageBoxButtonData{buttonFlags, static_cast<int>(i + 1), buttonsText[i].c_str()});
+	}
+
+	Uint32 sdl_messagebox_flags = 0;
+	switch (type)
+	{
+		case Dialog_Error:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_ERROR;
+			break;
+		case Dialog_Warning:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_WARNING;
+			break;
+		case Dialog_Information:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_INFORMATION;
+			break;
+	}
+
+	const SDL_MessageBoxData messageboxdata = {
+		sdl_messagebox_flags, /* .flags */
+		WZwindow, /* .window */
+		title, /* .title */
+		message, /* .message */
+		static_cast<int>(buttons.size()), /* .numbuttons */
+		buttons.data(), /* .buttons */
+		nullptr /* .colorScheme */
+	};
+	int buttonid = 0;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		// error displaying message box
+		return 0;
+	}
+	return buttonid;
+}
+
 WINDOW_MODE wzGetCurrentWindowMode()
 {
 	if (!WZbackend.has_value())
