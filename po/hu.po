@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-28 09:53\n"
+"PO-Revision-Date: 2023-11-28 22:03\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -18929,7 +18929,7 @@ msgstr "Kattintson a(z) %u. játékoshely elfoglalásához"
 
 #: src/multiint.cpp:2000
 msgid "Click to swap player to this slot"
-msgstr "Kattintson a játékosok betöltésének változtatásához"
+msgstr "Kattintson a játékos helyének erre cseréléséhez"
 
 #: src/multiint.cpp:2017
 #: src/multiint.cpp:3123
@@ -19000,31 +19000,31 @@ msgstr "A megfigyelő: %s megfigyelő szeretne maradni"
 #: src/multiint.cpp:3010
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr "A játékos %s játékos akar maradni"
+msgstr "%s játékos akar maradni"
 
 #: src/multiint.cpp:3018
 msgid "Host has declined to switch you to a Player"
-msgstr "A fogadó elutasította, hogy Önt egy játékosra cserélje"
+msgstr "A házigazda elutasította, hogy játékos legyél"
 
 #: src/multiint.cpp:3022
 msgid "Unable to switch to Spectator"
-msgstr "Nem tudok átváltani a Megfigyelőre"
+msgstr "Nem lehet néző"
 
 #: src/multiint.cpp:3050
 msgid "Do you want to spectate?"
-msgstr "Meg akarom nézni?"
+msgstr "Néző szeretnél lenni?"
 
 #: src/multiint.cpp:3051
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr "A játék házigazdája szeretné tudni, hogy hajlandó vagy-e nézőként részt venni a játékban?"
+msgstr "A játék házigazdája szeretné tudni, hogy hajlandó lennél-e néző lenni."
 
 #: src/multiint.cpp:3053
 msgid "You are currently a Player."
-msgstr "Aktulálisan Megfigyelsz."
+msgstr "Jelenleg játékos vagy."
 
 #: src/multiint.cpp:3054
 msgid "Yes, I will spectate!"
-msgstr "Igen, Én megfigyelek!"
+msgstr "Igen, néző leszek."
 
 #: src/multiint.cpp:3059
 msgid "Do you want to play?"
@@ -19032,11 +19032,11 @@ msgstr "Szeretnél játszani?"
 
 #: src/multiint.cpp:3060
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr "A játék házigazdája szeretné tudni, hogy szeretnél-e játszani?"
+msgstr "A játék házigazdája szeretné tudni, hogy szeretnél-e játszani."
 
 #: src/multiint.cpp:3062
 msgid "You are currently a Spectator."
-msgstr "Aktulálisan Megfigyelsz."
+msgstr "Jelenleg néző vagy."
 
 #: src/multiint.cpp:3063
 msgid "Yes, I want to play!"
@@ -19045,12 +19045,12 @@ msgstr "Igen, Én akarokjàtszani!"
 #: src/multiint.cpp:3107
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr "A játékos %s átkerült a nézők közé"
+msgstr "%s játékos átkerült a nézők közé"
 
 #: src/multiint.cpp:3134
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
-msgstr "Nem lehet %s-t áthelyezni a Játékosok közé - nincs szabad hely"
+msgstr "%s nem helyezhető át a játékosok közé – nincs szabad hely"
 
 #: src/multiint.cpp:3155
 msgid "Spectator would like to become a Player"
@@ -19067,11 +19067,11 @@ msgstr "Jelenleg azonban nincsenek szabad játékoshelyek."
 
 #: src/multiint.cpp:3160
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr "Szeretné ezt a nézőt egy játékosra cserélni?"
+msgstr "Szeretnéd ezt a nézőt felcserélni egy játékossal?"
 
 #: src/multiint.cpp:3161
 msgid "Yes, select Player slot"
-msgstr "Igen, válassza ki a játékos funkciót"
+msgstr "Igen, a játékoshely kiválasztása"
 
 #: src/multiint.cpp:3446
 msgid "Joined:"
@@ -19177,11 +19177,11 @@ msgstr "KÉSZ?"
 
 #: src/multiint.cpp:4575
 msgid "For Spectator:"
-msgstr "Nézőknek:"
+msgstr "Nézőnek:"
 
 #: src/multiint.cpp:4575
 msgid "For Player:"
-msgstr "Játékosoknak:"
+msgstr "Játékosnak:"
 
 #: src/multiint.cpp:4593
 msgid "Choose Player Slot"
@@ -19197,14 +19197,14 @@ msgstr "Néző helyének hozzáadása"
 
 #: src/multiint.cpp:4852
 msgid "Kicked from game"
-msgstr "Kirúgva a játékből"
+msgstr "Kirúgva a játékból"
 
 #: src/multiint.cpp:4943
 #: src/multiint.cpp:5049
 #: src/multiint.cpp:5082
 #: src/screens/chatscreen.cpp:157
 msgid "The host has disabled free chat. Please use Quick Chat."
-msgstr "A házigazda letiltotta az szabad csevegést. Kérjük, használja a gyors csevegést."
+msgstr "A házigazda letiltotta a szabad csevegést. Használd a gyors csevegést."
 
 #: src/multiint.cpp:5033
 #: src/multiint.cpp:5036
@@ -19214,16 +19214,16 @@ msgstr "Gyors csevegés"
 #: src/multiint.cpp:5047
 #: src/multiint.cpp:5053
 msgid "Press the Tab key to open Quick Chat."
-msgstr "Nyomja meg a Tab billentyűt a Gyors csevegés megnyitásához."
+msgstr "A Gyors csevegés megnyitásához nyomd meg a Tab billentyűt."
 
 #: src/multiint.cpp:5055
 #: src/multiint.cpp:5085
 msgid "The host has disabled free chat. Please use Quick Chat or /hostmsg commands."
-msgstr "A házigazda letiltotta az szabad csevegést. Kérjük, használja a Quick Chat vagy a /hostmsg parancsokat."
+msgstr "A házigazda letiltotta a szabad csevegést. Használd a Gyors csevegést vagy a /hostmsg parancsokat."
 
 #: src/multiint.cpp:5088
 msgid "The host has enabled free chat for you."
-msgstr "A házigazda letiltotta az szabad csevegést nálad."
+msgstr "A házigazda bekapcsolta számodra a szabad csevegést."
 
 #: src/multiint.cpp:5454
 msgid "Copy Text to Clipboard"
@@ -19295,13 +19295,13 @@ msgstr "A játékmester elindította a játékot"
 #: src/stdinreader.cpp:568
 #, c-format
 msgid "Host: Free chat enabled for: %s"
-msgstr "Házigazda: Ingyenes csevegés engedélyezve: %s"
+msgstr "Házigazda: Szabad csevegés engedélyezve %s számára"
 
 #: src/multiint.cpp:6830
 #: src/stdinreader.cpp:572
 #, c-format
 msgid "Host: Free chat muted for: %s"
-msgstr "Házigazda: Szabad csevegés elnémítva: %s"
+msgstr "Házigazda: Szabad csevegés elnémítva %s számára"
 
 #: src/multiint.cpp:6863
 #, c-format
@@ -19311,13 +19311,13 @@ msgstr "%s Átmozgatása a megfigyelőkhöz!"
 #: src/multiint.cpp:6890
 #, c-format
 msgid "Asking %s to move to Players..."
-msgstr "Megkérem %s-t, hogy költözzön a játékosokhoz..."
+msgstr "%s megkérése, hogy lépjen át a játékosokhoz…"
 
 #: src/multiint.cpp:7018
 #: src/multiint.cpp:7047
 #: src/multiint.cpp:7374
 msgid "Disconnected from host:"
-msgstr "Megszakadt a kapcsolat a gazdaállomással:"
+msgstr "Megszakadt a kapcsolat a házigazdával:"
 
 #: src/multiint.cpp:7018
 msgid "Host supplied invalid options"
@@ -19325,7 +19325,7 @@ msgstr "A gazda érvénytelen beállításokat adott meg"
 
 #: src/multiint.cpp:7047
 msgid "Host supplied invalid host config"
-msgstr "A gazda érvénytelen beállításokat adott meg"
+msgstr "A házigazda érvénytelen beállításokat adott meg"
 
 #: src/multiint.cpp:7280
 msgid "You have been kicked: "
@@ -19342,19 +19342,19 @@ msgstr "Nincs kapcsolat a hostoláshoz."
 
 #: src/multiint.cpp:7372
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr "A házigazda áthelyezett a játékosnak, de én soha nem adtam engedélyt erre a változtatásra. Viszlát!"
+msgstr "A házigazda áthelyezett a játékosok közé, de én sosem adtam engedélyt erre a változtatásra. Viszlát!"
 
 #: src/multiint.cpp:7374
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr "A házigazda megpróbált átköltöztetni minket a játékosnak, de nem adtunk rá engedélyt."
+msgstr "A házigazda megpróbált áthelyezni minket a játékosok közé, de sosem adtunk rá engedélyt."
 
 #: src/multiint.cpp:7528
 msgid "Cannot change to a map with too few slots for all players."
-msgstr "Nem válthat olyan pályára, amely túl kevés helyet tartalmaz minden játékos számára."
+msgstr "Nem lehet olyan pályára váltani, amelyen nincs elég hely az összes játékos számára."
 
 #: src/multiint.cpp:7533
 msgid "Cannot change to a map with fewer slots."
-msgstr "Nem lehet kevesebb résszel rendelkező térképre váltani."
+msgstr "Nem lehet kevesebb játékoshellyel rendelkező pályára váltani."
 
 #: src/multiint.cpp:7635
 msgid "The host has quit."
@@ -19374,7 +19374,7 @@ msgstr "UPnP be lett kapcsolva"
 
 #: src/multiint.cpp:7689
 msgid "UPnP detection failed. You must manually configure router yourself."
-msgstr "Az UPnP-észlelés sikertelen. Az útválasztót kézzel kell konfigurálnia."
+msgstr "Az UPnP-észlelés sikertelen. Az útválasztót kézzel kell beállítani."
 
 #: src/multiint.cpp:7693
 msgid "UPnP detection is in progress..."
@@ -19383,7 +19383,7 @@ msgstr "Dekódolás folyamatban....."
 #: src/multiint.cpp:7700
 #, c-format
 msgid "UPnP detection disabled by user. Autoconfig of port %d will not happen."
-msgstr "UPnP vizsgálatot kikapcsolta a felhasználó. Automatikus beállítás a %d portra nem történt meg."
+msgstr "A felhasználó kikapcsolta a UPnP-vizsgálatot. A következő port automatikus beállítása nem fog megtörténni: %d."
 
 #: src/multiint.cpp:7939
 #: src/multiint.cpp:8240
@@ -19416,17 +19416,17 @@ msgstr "Pingelés"
 
 #: src/multiint.cpp:9031
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr "A Warzone 2100 visszajátszási fájl mentéséhez használt verziója nem egyezik meg a jelenleg futó verzióval."
+msgstr "A Warzone 2100 ennek a visszajátszási fájljának mentéséhez használt verziója nem egyezik meg a jelenleg futó verzióval."
 
 #: src/multiint.cpp:9033
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr "Újrajátszási fájl mentve: \"%s\""
+msgstr "A visszajátszási fájl ezzel lett mentve: „%s”"
 
 #: src/multiint.cpp:9037
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr "Jelenlegi Warzone 2100 verzió: \"%s\""
+msgstr "A Warzone 2100 jelenlegi verziója: „%s”"
 
 #: src/multiint.cpp:9047
 msgid "Replays should usually be played back with the same version used to save the replay."
@@ -19438,7 +19438,7 @@ msgstr "Előfordulhat, hogy a visszajátszás nem sikerül, vagy eltérések leh
 
 #: src/multiint.cpp:9050
 msgid "Replay Version Mismatch"
-msgstr "Visszajátszási verzió eltérés"
+msgstr "A visszajátszás verziója eltérő"
 
 #: src/multijoin.cpp:384
 #, c-format
@@ -19470,7 +19470,7 @@ msgstr "%s (%u) nem kompatibilis módban van, ezért ki lett rúgva a játékbó
 #: src/multiplay.cpp:795
 #: src/multiplay.cpp:979
 msgid "Your data doesn't match the host's!"
-msgstr "Az Ön adatai nem egyeznek a gazdagépével!"
+msgstr "Az adataid nem egyeznek a házigazdájéval."
 
 #: src/multijoin.cpp:662
 #, c-format
@@ -19601,11 +19601,11 @@ msgstr "Csomag:%lu/%lu"
 
 #: src/multimenu.cpp:1394
 msgid "Players View"
-msgstr "Játékos nézet"
+msgstr "Játékosok nézet"
 
 #: src/multimenu.cpp:1395
 msgid "Team Strategy"
-msgstr "Csapat Stratégia"
+msgstr "Csapatstratégia"
 
 #: src/multiopt.cpp:310
 #, c-format
@@ -19625,16 +19625,16 @@ msgstr "[%d] Korlát[%s]: %u (alapértelmezett: nincs korlát)"
 #: src/multiopt.cpp:334
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] A numStructureStats-nál nagyobb határérték (%u): %u"
+msgstr "[%d] A numStructureStats értékénél (%u) nagyobb korlát: %u"
 
 #: src/multiopt.cpp:341
 msgid "Limits were reset to default."
-msgstr "A határértékek alapértelmezettre lettek visszaállítva."
+msgstr "A korlátok alaphelyzetbe lettek állítva."
 
 #: src/multiopt.cpp:349
 #, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
-msgstr "A hoszt inicializálta a %u korlátokat, de nem tudja megjeleníteni őket a modok miatt"
+msgstr "A házigazda %u korlátot állított be, de a modok miatt nem tudja megjeleníteni őket"
 
 #: src/multiopt.cpp:430
 msgid "MAP REQUESTED!"
@@ -19656,21 +19656,21 @@ msgstr "Figyelem, GAZDAGÉP megváltoztatta a játék kódot, és nem lehet megb
 
 #: src/multiopt.cpp:785
 msgid "The host has enabled free chat for everyone."
-msgstr "A házigazda engedélyezte az szabad csevegést nálad."
+msgstr "A házigazda mindenkinél engedélyezte a szabad csevegést."
 
 #: src/multiopt.cpp:793
 msgid "The host has muted free chat for everyone."
-msgstr "A házigazda letiltotta az szabad csevegést mindenkinél."
+msgstr "A házigazda mindenkinél némította a szabad csevegést."
 
 #: src/multiopt.cpp:818
 #, c-format
 msgid "The host has enabled free chat for player: %s"
-msgstr "A házigazda engedélyezte az szabad csevegést játékosoknál: %s"
+msgstr "A házigazda engedélyezte a szabad csevegést a következő játékosnál: %s."
 
 #: src/multiopt.cpp:824
 #, c-format
 msgid "The host has muted free chat for player: %s"
-msgstr "A házigazda letiltotta az szabad csevegést játékosoknál: %s"
+msgstr "A házigazda némította a szabad csevegést a következő játékosnál: %s."
 
 #: src/multiplay.cpp:355
 #, c-format
@@ -19800,7 +19800,7 @@ msgstr "Egy megfigyelő vagy. Élvezd a játékot!"
 #: src/multivote.cpp:165
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr "%s (%d) engedélyezett térképváltás. Összesen: %d/%d"
+msgstr "%s (%d) engedélyezte a pályaváltást. Összesen: %d/%d"
 
 #: src/multivote.cpp:200
 #, c-format
