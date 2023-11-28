@@ -122,6 +122,7 @@ struct RtrBestResult
 	}
 };
 
+static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE repairState);
 static RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid);
 
 /** This function checks if the droid is off range. If yes, it uses actionDroid() to make the droid to move to its target if its target is on range, or to move to its order position if not.
@@ -1016,8 +1017,8 @@ void orderUpdateDroid(DROID *psDroid)
 				actionDroid(psDroid, DACTION_NONE);
 			}
 		}
-		//before targetting - check VTOL's are fully armed
-		else if (vtolEmpty(psDroid))
+		//before targetting - check if VTOL's are empty or need to retreat to repair
+		else if (isVtolDroid(psDroid) && (vtolEmpty(psDroid) || secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL))))
 		{
 			moveToRearm(psDroid);
 		}
