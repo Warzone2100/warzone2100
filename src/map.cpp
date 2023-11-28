@@ -674,7 +674,7 @@ static void SetDecals(const char *filename, const char *decal_type)
 	pFileData = strchr(pFileData, '\n') + 1;
 	// value initialization sets everything to false.
 	mapDecals = std::make_unique<bool[]>(MAX_TERRAIN_TILES);
-	
+
 	for (i = 0; i < numlines; i++)
 	{
 		tiledecal = -1;
@@ -1011,7 +1011,7 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = std::make_unique<MAPTILE[]>(width * height);
+	psMapTiles = std::make_unique<MAPTILE[]>(static_cast<size_t>(width) * height);
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
