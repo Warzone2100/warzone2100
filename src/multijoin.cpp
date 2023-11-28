@@ -169,6 +169,33 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 	return;
 }
 
+static bool destroyMatchingStructs(UDWORD player, std::function<bool (STRUCTURE *)> cmp, bool quietly)
+{
+	bool destroyedAnyStructs = false;
+	STRUCTURE *psStruct = apsStructLists[player];
+	while (psStruct)
+	{
+		STRUCTURE * psNext = psStruct->psNext;
+
+		if (cmp(psStruct))
+		{
+			// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
+			if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+			{
+				removeStruct(psStruct, true);
+			}
+			else			// show effects
+			{
+				destroyStruct(psStruct, gameTime);
+			}
+			destroyedAnyStructs = true;
+		}
+
+		psStruct = psNext;
+	}
+	return destroyedAnyStructs;
+}
+
 bool splitResourcesAmongTeam(UDWORD player)
 {
 	auto team = NetPlay.players[player].team;
@@ -288,7 +315,15 @@ bool splitResourcesAmongTeam(UDWORD player)
 	// Distribute key structures
 	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR; });
 	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_POWER_GEN; });
-	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESEARCH; });
+	if (alliancesSharedResearch(game.alliance))
+	{
+		distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESEARCH; });
+	}
+	else
+	{
+		// destroy the research centers in unshared research mode
+		destroyMatchingStructs(player, [](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESEARCH; }, false);
+	}
 	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_COMMAND_CONTROL; });
 	distributeMatchingStructs([](STRUCTURE *psStruct) { return StructIsFactory(psStruct); });
 
