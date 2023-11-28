@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-27 20:24\n"
+"PO-Revision-Date: 2023-11-28 09:53\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -18546,7 +18546,7 @@ msgstr "Radar mutatja a magasságot"
 
 #: src/keybind.cpp:2519
 msgid "Asserts turned off"
-msgstr "Kikapcsolt asszisztálás"
+msgstr "Hibakeresési kiértékelések kikapcsolva"
 
 #: src/keybind.cpp:2567
 msgid "QuickSave not allowed for multiplayer or tutorial games"
@@ -18935,11 +18935,11 @@ msgstr "Kattintson a játékosok betöltésének változtatásához"
 #: src/multiint.cpp:3123
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr "A néző %s átkerült a játékosok közé"
+msgstr "%s néző átkerült a játékosok közé"
 
 #: src/multiint.cpp:2023
 msgid "Cannot swap with host"
-msgstr "Nem lehet cserélni a gazdával"
+msgstr "Nem lehet cserélni a házigazdával"
 
 #: src/multiint.cpp:2282
 #: src/multiint.cpp:4180
@@ -18959,34 +18959,34 @@ msgstr "A játékmester kirúgta %s a játékból!"
 #: src/multiint.cpp:4474
 #: src/multivote.cpp:674
 msgid "The host has kicked you from the game."
-msgstr "A játékmester kirúgott a játékból."
+msgstr "A házigazda kirúgott a játékból."
 
 #: src/multiint.cpp:2314
 #, c-format
 msgid "The host has banned %s from the game!"
-msgstr "A játékmester kirúgta %s a játékból!"
+msgstr "A házigazda kirúgota %s játékost a játékból."
 
 #: src/multiint.cpp:2315
 msgid "The host has banned you from the game."
-msgstr "A játékmester kirúgta %s a játékból."
+msgstr "A házigazda kitiltotta a játékból."
 
 #: src/multiint.cpp:2350
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr "Nem sikerült átmozgatni %s a nézők közé"
+msgstr "Nem sikerült áthelyezni %s játékost a nézők közé"
 
 #: src/multiint.cpp:2355
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr "A házigazda átköltöztette %s-t a nézők közé!"
+msgstr "A házigazda áthelyezte %s játékost a nézők közé."
 
 #: src/multiint.cpp:2378
 msgid "Move to Spectators"
-msgstr "Átmozgatása a megfigyelőkhöz"
+msgstr "Áthelyezés a nézőkhöz"
 
 #: src/multiint.cpp:2399
 msgid "Ask Spectator to Play"
-msgstr "Kérje meg a nézőt, hogy játsszon"
+msgstr "Néző megkérése, hogy játsszon"
 
 #: src/multiint.cpp:2415
 msgid "Ask to Play"
