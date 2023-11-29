@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-29 10:17\n"
+"PO-Revision-Date: 2023-11-29 23:02\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -19823,50 +19823,50 @@ msgstr "Szavazàs"
 
 #: src/multivote.cpp:284
 msgid "Allow host to change map or randomize?"
-msgstr "Engedélyezze a házigazdának a térkép megváltoztatását vagy a véletlenszerűséget?"
+msgstr "A házigazda megváltoztathatja a pályát vagy bekapcsolhatja a véletlenszerűsítést?"
 
 #: src/multivote.cpp:334
 msgid "A vote was started to kick you from the game."
-msgstr "Szavazás indult arról, hogy kirúgjanak a játékból."
+msgstr "Szavazás indult arról, hogy ki legyél-e rúgva a játékból."
 
 #: src/multivote.cpp:349
 #, c-format
 msgid "A vote was started to kick %s from the game."
-msgstr "Szavazás indult arról, hogy kirúgjanak %s a játékból."
+msgstr "Szavazás indult arról, hogy %s ki legyen-e rúgva a játékból."
 
 #: src/multivote.cpp:357
 #, c-format
 msgid "Vote To Kick: %s"
-msgstr "Kirúgás szavazás: %s"
+msgstr "Szavazás %s kirúgásáról"
 
 #: src/multivote.cpp:358
 #, c-format
 msgid "Should player %s be kicked from the game?"
-msgstr "Ki kellene-e rúgni %s a játékosokat a játékból?"
+msgstr "Ki legyen-e rúgva %s a játékból?"
 
 #: src/multivote.cpp:359
 msgid "Yes, Kick Them"
-msgstr "Igen, rúgd ki őket"
+msgstr "Igen, kirúgás"
 
 #: src/multivote.cpp:614
 #, c-format
 msgid "The vote to kick player %s succeeded (sufficient votes in favor) - kicking"
-msgstr "A szavazás a %s játékos kirúgásáról sikeres volt (elegendő támogató szavazat) - rúgás"
+msgstr "A szavazás %s játékos kirúgásáról sikeres volt (elegendő támogató szavazat) – kirúgás"
 
 #: src/multivote.cpp:624
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes in favor)"
-msgstr "A szavazás a %s játékos kirúgására nem sikerült (nem volt elég támogató szavazat)"
+msgstr "A szavazás %s játékos kirúgásáról nem sikerült (nem volt elég támogató szavazat)"
 
 #: src/multivote.cpp:648
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes before timeout)"
-msgstr "A szavazás a %s játékos kirúgására sikertelen (nem volt elég szavazat az időkorlát előtt)"
+msgstr "A szavazás %s játékos kirúgásáról nem sikerült (nem volt elég támogató szavazat az időkorlát előtt)"
 
 #: src/multivote.cpp:680
 #, c-format
 msgid "The vote to kick player %s failed"
-msgstr "A %s játékos kirúgásáról szóló szavazás sikertelen volt"
+msgstr "A szavazás %s játékos kirúgásáról nem sikerült"
 
 #: src/multivote.cpp:691
 #, c-format
