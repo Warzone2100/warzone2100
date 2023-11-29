@@ -625,7 +625,7 @@ void _debugFromGfxCallback(int line, code_part part, const char *function, const
 
 void _debug(int line, code_part part, const char *function, const char *str, ...)
 {
-	thread_local std::vector<char> outputBuffer(MAX_LEN_LOG_LINE, 0);
+	char outputBuffer[MAX_LEN_LOG_LINE];
 	thread_local std::array<std::vector<char>, 2> inputBuffer = {std::vector<char>(MAX_LEN_LOG_LINE, 0), std::vector<char>(MAX_LEN_LOG_LINE, 0)};
 	thread_local unsigned int repeated = 0; /* times current message repeated */
 	thread_local unsigned int next = 2;     /* next total to print update */
@@ -633,7 +633,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 
 	va_list ap;
 	va_start(ap, str);
-	vsnprintf(outputBuffer.data(), outputBuffer.size(), str, ap);
+	vssprintf(outputBuffer, str, ap);
 	va_end(ap);
 
 	if (part == LOG_WARNING)
@@ -641,12 +641,12 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		bool addedNew = false;
 		{
 			std::lock_guard<std::mutex> guard(warning_list_mutex);
-			addedNew = warning_list.insert(std::pair<std::string, int>(std::string(function) + "-" + std::string(outputBuffer.data()), line)).second;
+			addedNew = warning_list.insert(std::pair<std::string, int>(std::string(function) + "-" + std::string(outputBuffer), line)).second;
 		}
 		if (addedNew)
 		{
 			auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
-			snprintf(currInputBuffer.data(), currInputBuffer.size(), "[%s:%d] %s (**Further warnings of this type are suppressed.)", function, line, outputBuffer.data());
+			snprintf(currInputBuffer.data(), currInputBuffer.size(), "[%s:%d] %s (**Further warnings of this type are suppressed.)", function, line, outputBuffer);
 		}
 		else
 		{
@@ -656,7 +656,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 	else
 	{
 		auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
-		snprintf(currInputBuffer.data(), currInputBuffer.size(), "[%s:%d] %s", function, line, outputBuffer.data());
+		snprintf(currInputBuffer.data(), currInputBuffer.size(), "[%s:%d] %s", function, line, outputBuffer);
 	}
 
 	if (strncmp(inputBuffer[0].data(), inputBuffer[1].data(), std::min(inputBuffer[0].size(), inputBuffer[1].size())) == 0)
@@ -667,13 +667,13 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		{
 			if (repeated > 2)
 			{
-				snprintf(outputBuffer.data(), outputBuffer.size(), "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
+				ssprintf(outputBuffer, "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
 			}
 			else
 			{
-				snprintf(outputBuffer.data(), outputBuffer.size(), "last message repeated %u times", repeated - prev);
+				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
-			printToDebugCallbacks(outputBuffer.data(), part);
+			printToDebugCallbacks(outputBuffer, part);
 			prev = repeated;
 			next *= 2;
 		}
@@ -686,13 +686,13 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 			/* just repeat the previous message when only one repeat occurred */
 			if (repeated > 2)
 			{
-				snprintf(outputBuffer.data(), outputBuffer.size(), "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
+				ssprintf(outputBuffer, "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
 			}
 			else
 			{
-				snprintf(outputBuffer.data(), outputBuffer.size(), "last message repeated %u times", repeated - prev);
+				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
-			printToDebugCallbacks(outputBuffer.data(), part);
+			printToDebugCallbacks(outputBuffer, part);
 		}
 		repeated = 0;
 		next = 2;
@@ -712,9 +712,9 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
 
 		// Assemble the outputBuffer:
-		snprintf(outputBuffer.data(), outputBuffer.size(), "%-8s|%s: %s", code_part_names[part], ourtime, currInputBuffer.data());
+		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, currInputBuffer.data());
 
-		printToDebugCallbacks(outputBuffer.data(), part);
+		printToDebugCallbacks(outputBuffer, part);
 
 		if (part == LOG_ERROR)
 		{
