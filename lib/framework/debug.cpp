@@ -520,10 +520,20 @@ static void debugDisplayFatalErrorMsgBox(const char* outputLogLine)
 #endif
 }
 
-// Special version of _debug that doesn't use any global debug-logging state (or special sauce) *except* the callbackRegistry (via printToDebugCallbacks)
+struct DebugGfxCallbackPersistentData
+{
+	char lastGfxCallbackMsg[MAX_LEN_LOG_LINE] = {'\0'};
+	unsigned int repeated = 0; /* times last message repeated */
+	unsigned int prev = 0;     /* total on last update */
+};
+static DebugGfxCallbackPersistentData savedDebugGfxCallbackData;
+std::mutex savedDebugGfxCallbackData_mutex; // protects savedDebugGfxCallbackData
+
+// Special version of _debug that doesn't use any of the normal global debug-logging state (or special sauce) *except* the callbackRegistry (via printToDebugCallbacks)
 void _debugFromGfxCallback(int line, code_part part, const char *function, const char *str, ...)
 {
 	char outputBuffer[MAX_LEN_LOG_LINE];
+	char tmpRepeatBuffer[128] = {0};
 
 	time_t rawtime;
 	struct tm timeinfo = {};
@@ -549,11 +559,67 @@ void _debugFromGfxCallback(int line, code_part part, const char *function, const
 	vsnprintf(pStartOutputLineContents, remainingLength, str, ap);
 	va_end(ap);
 
+	unsigned int curr_repeated = 0;
+	{ // lock_guard(savedDebugGfxCallbackData_mutex) scope
+		std::lock_guard<std::mutex> guard(savedDebugGfxCallbackData_mutex);
+
+		if (strncmp(savedDebugGfxCallbackData.lastGfxCallbackMsg, pStartOutputLineContents, MAX_LEN_LOG_LINE) == 0)
+		{
+			// last message, duplicated
+			++savedDebugGfxCallbackData.repeated;
+			bool isRepeatedPowOf2 = savedDebugGfxCallbackData.repeated >= 2 && ((savedDebugGfxCallbackData.repeated & (savedDebugGfxCallbackData.repeated - 1)) == 0);
+			if (isRepeatedPowOf2)
+			{
+				if (savedDebugGfxCallbackData.repeated > 2)
+				{
+					snprintf(pStartOutputLineContents, remainingLength, "last message repeated %u times (total %u repeats)", savedDebugGfxCallbackData.repeated - savedDebugGfxCallbackData.prev, savedDebugGfxCallbackData.repeated);
+				}
+				else
+				{
+					snprintf(pStartOutputLineContents, remainingLength, "last message repeated %u times", savedDebugGfxCallbackData.repeated - savedDebugGfxCallbackData.prev);
+				}
+				savedDebugGfxCallbackData.prev = savedDebugGfxCallbackData.repeated;
+			}
+			else
+			{
+				return; // do nothing - no printing
+			}
+		}
+		else
+		{
+			// Received another line, cleanup the old
+			if (savedDebugGfxCallbackData.repeated > 0 && savedDebugGfxCallbackData.repeated != savedDebugGfxCallbackData.prev && savedDebugGfxCallbackData.repeated != 1)
+			{
+				/* just repeat the previous message when only one repeat occurred */
+				if (savedDebugGfxCallbackData.repeated > 2)
+				{
+					ssprintf(tmpRepeatBuffer, "last message repeated %u times (total %u repeats)", savedDebugGfxCallbackData.repeated - savedDebugGfxCallbackData.prev, savedDebugGfxCallbackData.repeated);
+				}
+				else
+				{
+					ssprintf(tmpRepeatBuffer, "last message repeated %u times", savedDebugGfxCallbackData.repeated - savedDebugGfxCallbackData.prev);
+				}
+			}
+			savedDebugGfxCallbackData.repeated = 0;
+			savedDebugGfxCallbackData.prev = 0;
+			sstrcpy(savedDebugGfxCallbackData.lastGfxCallbackMsg, pStartOutputLineContents);
+		}
+		curr_repeated = savedDebugGfxCallbackData.repeated;
+	} // end lock_guard(savedDebugGfxCallbackData_mutex)
+
+	if (tmpRepeatBuffer[0] != '\0')
+	{
+		printToDebugCallbacks(tmpRepeatBuffer, part);
+	}
+
 	printToDebugCallbacks(outputBuffer, part);
 
-	if (part == LOG_FATAL)
+	if (!curr_repeated)
 	{
-		debugDisplayFatalErrorMsgBox(pStartOutputLineContents);
+		if (part == LOG_FATAL)
+		{
+			debugDisplayFatalErrorMsgBox(pStartOutputLineContents);
+		}
 	}
 }
 
