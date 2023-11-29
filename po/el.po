@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:45\n"
+"PO-Revision-Date: 2023-11-29 23:02\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -164,7 +164,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Χτίσε αμυντικά οχυρώματα μέχρι το πράσινο σημάδι εξαφανιστεί."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "Αφού εξασφαλιστεί το ασφαλές καταφύγιο
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "ΑΠΟΣΤΟΛΗ ΒΑΣΗΣ ΒΗΤΑ: Επιβίωσε και εγκατέλειψε! Οπωσδήποτε πάρε μαζί σου ένα φορτηγό"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -4001,31 +4001,31 @@ msgstr "Αυτόματη αναβάθμιση όλων των πυραύλων"
 
 #: data/base/script/campaign/cam1-7.js:242
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Κατέστρεψε όλο το στρατό του Νέου Παραδείγματος"
 
 #: data/base/script/campaign/cam1a-c.js:138
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Κατέστρεψε τις ενισχύσεις του Νέου Παραδείγματος"
 
 #: data/base/script/campaign/cam1ca.js:146
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Χτίσε το λιγότερο, 7 αμυντικές δομές (όχι με τοίχο) στην περιοχή και κατέστρεψε τις ενισχύσεις του Νέου Παραδείγματος"
 
 #: data/base/script/campaign/cam2-1x.js:112
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Εντόπισε και διέσωσε τις μονάδες που έπεσαν από το μεταφορικό που καταρρίφθηκε "
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Σώσε τους πολίτες από τον Σύλλογο πριν τους συλλάβει"
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Ασφάλισε τη μονάδα Μετάδοσης από τον Σύλλογο"
 
 #: data/base/script/campaign/cam2-end.js:199
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Στείλε το λιγότερο ένα μεταφορέα με ένα φορτηγό και επιβίωσε από την επίθεση του Συλλόγου μέχρι να τελειώσει ο χρόνος"
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
