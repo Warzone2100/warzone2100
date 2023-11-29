@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-28 22:03\n"
+"PO-Revision-Date: 2023-11-29 10:17\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -19815,7 +19815,7 @@ msgstr "Egy játékos a kirúgás ellen szavazott: %s"
 #: src/multivote.cpp:214
 #, c-format
 msgid "A player's client ignored your vote to kick request (too frequent): %s"
-msgstr "Egy játékos kliense figyelmen kívül hagyta a szavazási kérelmet (túl gyakori): %s"
+msgstr "Egy játékos kliense figyelmen kívül hagyta a kirúgási kérésre vonatkozó szavazatát (túl gyakori): %s"
 
 #: src/multivote.cpp:283
 msgid "Vote"
