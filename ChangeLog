@@ -1,3 +1,15 @@
+2023-11-29: Version 4.4.2:
+* General:
+   * Fix: Various potential crashes (too many commits, #3539, #3540, #3544, #3545)
+   * Fix: Clear active console messages when resuming from paused state (commit:aa5cbb60b26a28af3bf3945e9a3dfb68215a7224, #3533)
+   * Fix: Make sure VTOLs retreat to repair when attached to VTOL Strike/CB (commit:a093cddcf0927b492885b6a35a7f88689d425bba, #3541)
+* Campaign:
+   * Fix: Move a spawn position on Gamma 3 (commit:eee44f2340e6a34681a05ec03ebaf3990f92e179, #3537)
+* Multiplayer:
+   * Fix: Do not split departing player research centers with team in non-shared research mode (commit:f8778cdf4b6106215bfafff2d922fd6a3ef445a3, #3542)
+* Other:
+   * Fix: Use std::make_{unique,shared} instead of raw new (too many commits, #3535)
+
 2023-11-20: Version 4.4.1:
 * General:
    * Fix: Potential corrupt game config file issue (commit:65728ec3302a5b9d2f9af1cc914647f087917e82, #3489)
