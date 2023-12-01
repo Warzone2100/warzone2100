@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-25 03:30\n"
+"PO-Revision-Date: 2023-12-01 17:37\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -475,7 +475,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "PREPRAVNÁ MISIA: Prenasledujte konvoj."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
@@ -483,19 +483,19 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
+msgstr "Pred tým, než sa NEXUS odpojil, získali sme prístup k nasledovnému."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
+msgstr "Nepriateľský veliteľ zhromažďuje na tomto mieste náklad z NEXUS."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "Až budete na MV, odstráňte nepriateľského veliteľa a získajte náklad."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr ""
+msgstr "Potom sa váťte na MV."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
