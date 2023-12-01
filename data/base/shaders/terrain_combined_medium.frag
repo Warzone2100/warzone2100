@@ -91,7 +91,7 @@ out vec4 FragColor;
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
-	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], groundNo);
+	return vec3(uvGround * groundScale[int(groundNo/4u)][int(groundNo%4u)], groundNo);
 }
 
 vec3 getGround(int i) {
