@@ -2425,8 +2425,7 @@ static bool canFitDroid(UDWORD x, UDWORD y)
 }
 
 /// find a tile for which the function will return true
-bool	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
-					 bool (*function)(UDWORD x, UDWORD y))
+bool	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations, bool (*function)(UDWORD x, UDWORD y))
 {
 	return pickATileGenThreat(x, y, numIterations, -1, -1, function);
 }
@@ -3198,7 +3197,7 @@ bool standardSensorDroid(const DROID *psDroid)
 // Give a droid from one player to another - used in Electronic Warfare and multiplayer.
 // Got to destroy the droid and build another since there are too many complications otherwise.
 // Returns the droid created.
-DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic)
+DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 {
 	CHECK_DROID(psD);
 	ASSERT_OR_RETURN(nullptr, !isDead(psD), "Cannot gift dead unit");
@@ -3236,8 +3235,23 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic)
 		// make the old droid vanish (but is not deleted until next tick)
 		adjustDroidCount(psD, -1);
 		vanishDroid(psD);
+		// Pick coordinates of the new droid if damaged electronically
+		Position newPos = Position(psD->pos.x, psD->pos.y, 0);
+		if (electronic)
+		{
+			unsigned int pickX = map_coord(pos.x);
+			unsigned int pickY = map_coord(pos.y);
+			if (pickATileGen(&pickX, &pickY, LOOK_FOR_EMPTY_TILE, zonedPAT) != NO_FREE_TILE)
+			{
+				newPos = Position(world_coord(pickX), world_coord(pickY), 0);
+			}
+			else
+			{
+				newPos = Position(pos.x, pos.y, 0); //Meld with the attacker if we must
+			}
+		}
 		// create a new droid
-		psNewDroid = reallyBuildDroid(&sTemplate, Position(psD->pos.x, psD->pos.y, 0), to, false, psD->rot);
+		psNewDroid = reallyBuildDroid(&sTemplate, newPos, to, false, psD->rot);
 		ASSERT_OR_RETURN(nullptr, psNewDroid, "Unable to build unit");
 
 		addDroid(psNewDroid, apsDroidLists);
