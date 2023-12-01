@@ -64,6 +64,8 @@ camAreaEvent("roadblockArea", function(droid)
 // Scavengers hiding in the split canyon area between base two and three.
 function raidAttack()
 {
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 	camManageGroup(camMakeGroup("raidTrigger", ENEMIES), CAM_ORDER_ATTACK, {
 		pos: camMakePos("scavBase3Cleanup")
 	});
@@ -158,8 +160,13 @@ function eventStartLevel()
 
 	enableBaseStructures();
 	camCompleteRequiredResearch(mis_playerRes, CAM_HUMAN_PLAYER);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+	completeResearch("R-Wpn-Flamer-Range01-ScavReduce", CAM_SCAV_6);
+	completeResearch("R-Wpn-Flamer-Range01-ScavReduce", CAM_SCAV_7);
+	if (difficulty >= HARD)
+	{
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+	}
 	if (difficulty === INSANE)
 	{
 		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
