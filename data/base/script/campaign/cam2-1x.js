@@ -1,7 +1,3 @@
-/*
-SUB_2_1 Script
-Authors: Cristian Odorico (Alpha93) / KJeff01
- */
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 include("script/campaign/transitionTech.js");
@@ -10,7 +6,7 @@ var victoryFlag;
 
 const MIS_TRANSPORT_TEAM_PLAYER = 1;
 const mis_collectiveRes = [
-	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Defense-WallUpgrade04", "R-Struc-Materials04", "R-Sys-Engineering02",
 	"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
 	"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
@@ -31,8 +27,7 @@ camAreaEvent("crashSite", function(droid)
 		return;
 	}
 
-	const GOODSND = "pcv615.ogg";
-	playSound(GOODSND);
+	playSound(cam_sounds.rescue.unitsRescued);
 
 	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER);
 
@@ -150,20 +145,20 @@ function eventStartLevel()
 		"COHardpointBase": {
 			cleanup: "hardpointBaseCleanup",
 			detectMsg: "C21_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBombardBase": {
 			cleanup: "bombardBaseCleanup",
 			detectMsg: "C21_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBunkerBase": {
 			cleanup: "bunkerBaseCleanup",
 			detectMsg: "C21_BASE3",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 

@@ -5,7 +5,7 @@ const mis_collectiveRes = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
 	"R-Vehicle-Engine06", "R-Vehicle-Metals06", "R-Cyborg-Metals06",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage06", "R-Wpn-Cannon-ROF03",
-	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage07",
+	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage08",
 	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
 	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
@@ -25,10 +25,10 @@ function vtolAttack()
 function setupLandGroups()
 {
 	const hovers = enumArea("NWTankGroup", CAM_THE_COLLECTIVE, false).filter((obj) => (
-		obj.type === DROID && obj.propulsion === "hover01"
+		obj.type === DROID && obj.propulsion === tProp.tank.hover
 	));
 	const tanks = enumArea("NWTankGroup", CAM_THE_COLLECTIVE, false).filter((obj) => (
-		obj.type === DROID && obj.propulsion !== "hover01"
+		obj.type === DROID && obj.propulsion !== tProp.tank.hover
 	));
 
 	camManageGroup(camMakeGroup(hovers), CAM_ORDER_PATROL, {
@@ -120,30 +120,30 @@ function eventStartLevel()
 	//New AC Tiger tracked units for Hard and Insane difficulty
 	if (difficulty >= HARD)
 	{
-		addDroid(CAM_THE_COLLECTIVE, 30, 22, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
-		addDroid(CAM_THE_COLLECTIVE, 30, 23, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
-		addDroid(CAM_THE_COLLECTIVE, 31, 22, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
-		addDroid(CAM_THE_COLLECTIVE, 31, 23, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+		addDroid(CAM_THE_COLLECTIVE, 30, 22, "AC Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.assaultCannon);
+		addDroid(CAM_THE_COLLECTIVE, 30, 23, "AC Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.assaultCannon);
+		addDroid(CAM_THE_COLLECTIVE, 31, 22, "AC Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.assaultCannon);
+		addDroid(CAM_THE_COLLECTIVE, 31, 23, "AC Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.assaultCannon);
 	}
 
 	camSetEnemyBases({
 		"COBase1": {
 			cleanup: "COBase1Cleanup",
 			detectMsg: "C28_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBase2": {
 			cleanup: "COBase2Cleanup",
 			detectMsg: "C28_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBase3": {
 			cleanup: "COBase3Cleanup",
 			detectMsg: "C28_BASE3",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -152,7 +152,7 @@ function eventStartLevel()
 			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 27 : 30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 30 : 35)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -164,7 +164,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 50 : 55)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 70 : 75)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -176,7 +176,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 45 : 50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 55 : 60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -198,8 +198,8 @@ function eventStartLevel()
 
 	camManageTrucks(CAM_THE_COLLECTIVE);
 
-	queue("setupLandGroups", camSecondsToMilliseconds(60));
-	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 80 : 90)));
+	queue("setupLandGroups", camSecondsToMilliseconds(90));
+	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 100 : 110)));
 	queue("enableFactories", camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 135 : 150)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	truckDefense();

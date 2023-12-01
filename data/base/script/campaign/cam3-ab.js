@@ -15,7 +15,6 @@ const mis_nexusRes = [
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03",
 ];
-var edgeMapCounter; //how many Nexus reinforcement runs have happened.
 var hackFailChance; //chance the Nexus Intruder Program will fail
 var winFlag;
 
@@ -52,11 +51,6 @@ function sendEdgeMapDroids()
 	}
 	let droids = [];
 
-	if (!camDef(edgeMapCounter))
-	{
-		edgeMapCounter = 0;
-	}
-
 	for (let i = 0; i < unitCount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
@@ -69,20 +63,42 @@ function sendEdgeMapDroids()
 			data: {regroup: false, count: -1}
 		}
 	);
+}
 
-	edgeMapCounter += 1;
+function wave2()
+{
+	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
+	const ext = {
+		limit: [3, 3], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
+	const ext = {
+		limit: [3, 3], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
 }
 
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
 function vtolAttack()
 {
-	const list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv, cTempl.nxmheapv];
+	const list = [cTempl.nxmtherv, cTempl.nxmheapv];
 	const ext = {
-		limit: [2, 4, 2, 4],
+		limit: [3, 3], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
+	camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 // Order any absorbed trucks to start building defenses near themselves.
@@ -180,24 +196,24 @@ function eventObjectTransfer(obj, from)
 function powerTransfer()
 {
 	setPower(playerPower(CAM_HUMAN_PLAYER) + 5000);
-	playSound("power-transferred.ogg");
+	playSound(cam_sounds.powerTransferred);
 }
 
 function eventResearched(research, structure, player)
 {
-	if (research.name === "R-Sys-Resistance-Upgrade01")
+	if (research.name === cam_resistance_circuits.first)
 	{
-		hackFailChance = 55;
+		hackFailChance = 60;
 	}
-	else if (research.name === "R-Sys-Resistance-Upgrade02")
+	else if (research.name === cam_resistance_circuits.second)
 	{
-		hackFailChance = 70;
+		hackFailChance = 75;
 	}
-	else if (research.name === "R-Sys-Resistance-Upgrade03")
+	else if (research.name === cam_resistance_circuits.third)
 	{
-		hackFailChance = 85;
+		hackFailChance = 90;
 	}
-	else if (research.name === "R-Sys-Resistance-Upgrade04")
+	else if (research.name === cam_resistance_circuits.fourth)
 	{
 		winFlag = true;
 		hackFailChance = 100;
@@ -222,15 +238,14 @@ function hackPlayer()
 
 function synapticsSound()
 {
-	playSound(CAM_SYNAPTICS_ACTIVATED_SND);
+	playSound(cam_sounds.nexus.synapticLinksActivated);
 	camHackIntoPlayer(CAM_HUMAN_PLAYER, CAM_NEXUS);
 }
 
 //winFlag is set in eventResearched.
 function resistanceResearched()
 {
-	const MAP_EDGE_COUNT = (difficulty >= MEDIUM) ? 15 : 8;
-	if (winFlag && edgeMapCounter >= MAP_EDGE_COUNT)
+	if (winFlag)
 	{
 		return true;
 	}
@@ -259,9 +274,9 @@ function eventStartLevel()
 
 	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 
-	enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);
+	enableResearch(cam_resistance_circuits.first, CAM_HUMAN_PLAYER);
 	winFlag = false;
-	hackFailChance = (difficulty <= EASY) ? 40 : 30;
+	hackFailChance = (difficulty <= EASY) ? 45 : 33;
 
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
 
@@ -272,5 +287,5 @@ function eventStartLevel()
 	setTimer("truckDefense", camSecondsToMilliseconds(2));
 	setTimer("hackPlayer", camChangeOnDiff(camSecondsToMilliseconds(8)));
 	setTimer("nexusManufacture", camSecondsToMilliseconds(10));
-	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(4)));
 }

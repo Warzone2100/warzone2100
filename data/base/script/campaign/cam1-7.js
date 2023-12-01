@@ -1,4 +1,3 @@
-
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
@@ -59,7 +58,7 @@ camAreaEvent("NPTransportTrigger", function(droid)
 			entry: { x: 39, y: 2 },
 			exit: { x: 32, y: 60 }
 		});
-		playSound("pcv632.ogg"); //enemy transport escaping warning sound
+		playSound(cam_sounds.enemyEscaping);
 	}
 	else
 	{
@@ -98,7 +97,7 @@ function eventGroupLoss(obj, group, newsize)
 	{
 		if (obj.id === droidWithArtiID)
 		{
-			const acrate = addFeature("Crate", obj.x, obj.y);
+			const acrate = addFeature(CAM_ARTIFACT_STAT, obj.x, obj.y);
 			addLabel(acrate, "newArtiLabel");
 
 			camSetArtifacts({
@@ -280,28 +279,31 @@ function eventStartLevel()
 	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
 
 	// New MRA Mantis Tracks units on the hill
-	addDroid(CAM_NEW_PARADIGM, 29, 16, "MRA Mantis Tracks", "Body12SUP", "tracked01", "", "", "Rocket-MRL");
-	addDroid(CAM_NEW_PARADIGM, 29, 17, "MRA Mantis Tracks", "Body12SUP", "tracked01", "", "", "Rocket-MRL");
-	addDroid(CAM_NEW_PARADIGM, 29, 18, "MRA Mantis Tracks", "Body12SUP", "tracked01", "", "", "Rocket-MRL");
+	if (difficulty >= HARD)
+	{
+		addDroid(CAM_NEW_PARADIGM, 29, 16, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
+		addDroid(CAM_NEW_PARADIGM, 29, 17, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
+		addDroid(CAM_NEW_PARADIGM, 29, 18, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
+	}
 
 	camSetEnemyBases({
 		"ScavMiddleGroup": {
 			cleanup: "scavMiddle",
 			detectMsg: "C1-7_BASE1",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 		"ScavSouthEastGroup": {
 			cleanup: "scavSouthEast",
 			detectMsg: "C1-7_BASE2",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 		"ScavNorthEastGroup": {
 			cleanup: "scavNorth",
 			detectMsg: "C1-7_BASE3",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 	});
 

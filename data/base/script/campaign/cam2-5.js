@@ -2,7 +2,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const mis_collectiveRes = [
-	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Defense-WallUpgrade05", "R-Struc-Materials05", "R-Sys-Engineering02",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05", "R-Wpn-Cannon-ROF02",
 	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage07",
@@ -126,14 +126,14 @@ function eventStartLevel()
 		"COEastBase": {
 			cleanup: "baseCleanup",
 			detectMsg: "C25_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"CODamBase": {
 			cleanup: "damBaseCleanup",
 			detectMsg: "C25_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 

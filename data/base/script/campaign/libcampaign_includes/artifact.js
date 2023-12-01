@@ -38,7 +38,7 @@ function camSetArtifacts(artifacts)
 		else
 		{
 			// received position or area, place immediately
-			const acrate = addFeature("Crate", pos.x, pos.y);
+			const acrate = addFeature(CAM_ARTIFACT_STAT, pos.x, pos.y);
 			addLabel(acrate, __camGetArtifactLabel(alabel));
 			ai.placed = true;
 		}
@@ -130,7 +130,7 @@ function __camCheckPlaceArtifact(obj)
 	{
 		camTrace("Placing", ai.tech);
 	}
-	const acrate = addFeature("Crate", obj.x, obj.y);
+	const acrate = addFeature(CAM_ARTIFACT_STAT, obj.x, obj.y);
 	addLabel(acrate, __camGetArtifactLabel(__ALABEL));
 	ai.placed = true;
 }
@@ -152,7 +152,7 @@ function __camPickupArtifact(artifact)
 	}
 
 	camTrace("Picked up", ai.tech);
-	playSound("pcv352.ogg", artifact.x, artifact.y, artifact.z);
+	playSound(cam_sounds.artifactRecovered, artifact.x, artifact.y, artifact.z);
 	// artifacts are not self-removing...
 	camSafeRemoveObject(artifact);
 	if (ai.tech instanceof Array)

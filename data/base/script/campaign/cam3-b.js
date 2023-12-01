@@ -55,17 +55,40 @@ function camEnemyBaseEliminated_NXWestBase()
 	camRemoveEnemyTransporterBlip();
 }
 
-//Setup Nexus VTOL hit and runners.
-function vtolAttack()
+function wave2()
 {
-	const list = [cTempl.nxmheapv, cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv];
+	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
 	const ext = {
-		limit: [5, 2, 5, 2], //paired with template list
+		limit: [4, 4], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
-
 	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXCommandCenter", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXCommandCenter", ext);
+}
+
+//Setup Nexus VTOL hit and runners.
+function vtolAttack()
+{
+	const list = [cTempl.nxmheapv, cTempl.nxmtherv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXCommandCenter", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 function enableAllFactories()
@@ -153,9 +176,8 @@ function sendNXlandReinforcements()
 function transferPower()
 {
 	const AWARD = 5000;
-	const POWER_TRANSFER_SND = "power-transferred.ogg";
 	setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
-	playSound(POWER_TRANSFER_SND);
+	playSound(cam_sounds.powerTransferred);
 }
 
 function activateNexusGroups()
@@ -206,7 +228,7 @@ function truckDefense()
 		return;
 	}
 
-	const list = ["Emplacement-Howitzer105", "Emplacement-MdART-pit", "Emplacement-RotHow"];
+	const list = ["Emplacement-Howitzer105", "NX-Emp-MedArtMiss-Pit", "Emplacement-RotHow"];
 	let position;
 
 	if (truckLocCounter === 0)
@@ -237,7 +259,7 @@ function trapSprung()
 
 	sendNXTransporter();
 	changePlayerColour(MIS_GAMMA_PLAYER, CAM_NEXUS); // Black painting.
-	playSound(CAM_SYNAPTICS_ACTIVATED_SND);
+	playSound(cam_sounds.nexus.synapticLinksActivated);
 
 	setTimer("sendNXTransporter", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendNXlandReinforcements", camChangeOnDiff(camMinutesToMilliseconds(4)));
@@ -247,7 +269,7 @@ function trapSprung()
 function setupCapture()
 {
 	trapActive = true;
-	playSound("pcv455.ogg"); //Incoming message.
+	playSound(cam_sounds.incoming.incomingTransmission);
 	setAlliance(MIS_GAMMA_PLAYER, CAM_NEXUS, false);
 
 	queue("trapSprung", camSecondsToMilliseconds(2)); //call this a few seconds later
@@ -304,20 +326,20 @@ function eventStartLevel()
 		"GammaBase": {
 			cleanup: "gammaBaseCleanup",
 			detectMsg: "CM3B_GAMMABASE",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NXEastBase": {
 			cleanup: "NXEastBaseCleanup",
 			detectMsg: "CM3B_BASE4",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NXWestBase": {
 			cleanup: "NXWestBaseCleanup",
 			detectMsg: "CM3B_BASE6",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		}
 	});
 
@@ -326,7 +348,7 @@ function eventStartLevel()
 			assembly: "gammaFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(45)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -352,14 +374,13 @@ function eventStartLevel()
 	//In the event they put all trucks into Gamma 2 and have no completed factories on map...
 	if (enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter((obj) => (obj.status === BUILT)).length === 0 && enumDroid(CAM_HUMAN_PLAYER, DROID_CONSTRUCT).length === 0)
 	{
-		const failSafeTruck = addDroid(MIS_GAMMA_PLAYER, lz.x, lz.y, "Truck Python Tracks", "Body11ABT", "tracked01", "", "", "Spade1Mk1");
+		const failSafeTruck = addDroid(MIS_GAMMA_PLAYER, lz.x, lz.y, "Truck Python Tracks", tBody.tank.python, tProp.tank.tracks, "", "", tConstruct.truck);
 		donateObject(failSafeTruck, CAM_HUMAN_PLAYER); //So the reticules update for the next tick.
 	}
 
 	if (difficulty >= HARD)
 	{
-		addDroid(MIS_GAMMA_PLAYER, 28, 5, "Truck Python Tracks", "Body11ABT", "tracked01", "", "", "Spade1Mk1");
-
+		addDroid(MIS_GAMMA_PLAYER, 28, 5, "Truck Python Tracks", tBody.tank.python, tProp.tank.tracks, "", "", tConstruct.truck);
 		camManageTrucks(MIS_GAMMA_PLAYER);
 	}
 

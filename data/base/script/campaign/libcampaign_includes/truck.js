@@ -134,7 +134,7 @@ function __camTruckTick()
 		}
 
 		// Then, capture free oils.
-		const oils = enumFeature(ALL_PLAYERS, "OilResource");
+		const oils = enumFeature(ALL_PLAYERS, cam_base_structures.oil);
 		if (oils.length === 0)
 		{
 			continue;
@@ -143,8 +143,8 @@ function __camTruckTick()
 		truck = __camGetClosestTruck(__PLAYER, oil, freeTrucks);
 		if (camDef(truck) && __PLAYER !== CAM_NEXUS)
 		{
-			enableStructure("A0ResourceExtractor", __PLAYER);
-			orderDroidBuild(truck, DORDER_BUILD, "A0ResourceExtractor", oil.x, oil.y);
+			enableStructure(cam_base_structures.derrick, __PLAYER);
+			orderDroidBuild(truck, DORDER_BUILD, cam_base_structures.derrick, oil.x, oil.y);
 			continue;
 		}
 	}
@@ -161,7 +161,7 @@ function __camCheckDeadTruck(obj)
 		camQueueDroidProduction(obj.player, {
 			body: obj.body,
 			prop: obj.propulsion,
-			weap: "Spade1Mk1"
+			weap: CAM_GENERIC_TRUCK_STAT
 		});
 	}
 }

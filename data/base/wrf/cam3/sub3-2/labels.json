@@ -145,6 +145,12 @@
 		"player": 3,
 		"type": 0
 	},
+	"object_1": {
+		"label": "NXvtolStrikeTower",
+		"id": 350,
+		"player": 3,
+		"type": 1
+	},
 
 	"radius_0": {
 		"label": "vtolRemoveZone",

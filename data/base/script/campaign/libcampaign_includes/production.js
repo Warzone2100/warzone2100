@@ -346,7 +346,7 @@ function __camBuildDroid(template, structure)
 	}
 	//if not a normal factory and the template is a constructor then keep it in the
 	//queue until a factory can deal with it.
-	if (template.weap === "Spade1Mk1" && structure.stattype !== FACTORY)
+	if (template.weap === CAM_GENERIC_TRUCK_STAT && structure.stattype !== FACTORY)
 	{
 		return false;
 	}

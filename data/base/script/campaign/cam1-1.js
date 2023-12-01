@@ -1,4 +1,3 @@
-
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 

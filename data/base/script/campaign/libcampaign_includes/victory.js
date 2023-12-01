@@ -14,32 +14,28 @@ function camNextLevel(nextLevel)
 {
 	if (__camNeedBonusTime)
 	{
-		let bonusTime = getMissionTime();
-		if (difficulty <= MEDIUM)
-		{
-			bonusTime = Math.floor(bonusTime * 0.75);
-		}
-		if (bonusTime > 0)
+		const __POWER_TIME_REMAINING = getMissionTime();
+		if (__POWER_TIME_REMAINING > 0)
 		{
 			let bonus = 110;
 			if (difficulty === HARD)
 			{
-				bonus = 105;
+				bonus = 90; //Small bonus compared to the regular Hard extraction value.
 			}
 			else if (difficulty === INSANE)
 			{
-				bonus = 100;
+				bonus = 70; //Same value for oil extraction.
 			}
-			camTrace("Bonus time", bonusTime);
+			camTrace("Bonus time", __POWER_TIME_REMAINING);
 			setPowerModifier(bonus); // Bonus percentage for completing fast
-			extraPowerTime(bonusTime);
+			extraPowerTime(__POWER_TIME_REMAINING);
 			setPowerModifier(100);
 		}
 	}
 	camBreakAlliances();
 	//Set these limits again for the home map before exiting this mission
-	setStructureLimits("A0CommandCentre", 1, CAM_HUMAN_PLAYER);
-	setStructureLimits("A0ComDroidControl", 1, CAM_HUMAN_PLAYER);
+	setStructureLimits(cam_base_structures.commandCenter, 1, CAM_HUMAN_PLAYER);
+	setStructureLimits(cam_base_structures.commandRelay, 1, CAM_HUMAN_PLAYER);
 
 	loadLevel(nextLevel);
 }
@@ -443,7 +439,7 @@ function __camVictoryOffworld()
 				if (__camRTLZTicker % __REMIND_RETURN === 0)
 				{
 					const pos = camMakePos(lz);
-					playSound("pcv427.ogg", pos.x, pos.y, 0);
+					playSound(cam_sounds.lz.returnToLZ, pos.x, pos.y, 0);
 					console(_("Return to LZ"));
 				}
 				++__camRTLZTicker;
@@ -465,7 +461,7 @@ function __camVictoryOffworld()
 		if (__camLZCompromisedTicker % __REMIND_COMPROMISED === 1)
 		{
 			const pos = camMakePos(lz);
-			playSound("pcv445.ogg", pos.x, pos.y, 0);
+			playSound(cam_sounds.lz.LZCompromised, pos.x, pos.y, 0);
 		}
 		++__camLZCompromisedTicker;
 		if (__camRTLZTicker === 0)
@@ -477,7 +473,7 @@ function __camVictoryOffworld()
 	{
 		camTrace("LZ clear");
 		const pos = camMakePos(lz);
-		playSound("lz-clear.ogg", pos.x, pos.y, 0);
+		playSound(cam_sounds.lz.LZClear, pos.x, pos.y, 0);
 		setReinforcementTime(__camVictoryData.reinforcements);
 		__camLZCompromisedTicker = 0;
 		if (__camRTLZTicker === 0)

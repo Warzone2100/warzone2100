@@ -5,7 +5,7 @@ const mis_collectiveRes = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
 	"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage06", "R-Wpn-Cannon-ROF03",
-	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage07",
+	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage08",
 	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
 	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
@@ -119,7 +119,7 @@ function eventStartLevel()
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_THE_COLLECTIVE);
 
 	camSetArtifacts({
-		"COHeavyFac-Arti-b2": { tech: "R-Wpn-Cannon5" },
+		"COHeavyFac-Arti-b2": { tech: ["R-Wpn-Cannon5", "R-Wpn-MG-Damage08"] },
 		"COTankKillerHardpoint": { tech: "R-Wpn-RocketSlow-Damage06" },
 		"COVtolFactory-b4": { tech: "R-Wpn-Bomb-Damage02" },
 	});
@@ -132,26 +132,26 @@ function eventStartLevel()
 		"COBase1": {
 			cleanup: "COBase1Cleanup",
 			detectMsg: "C27_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBase2": {
 			cleanup: "COBase2Cleanup",
 			detectMsg: "C27_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBase3": {
 			cleanup: "COBase3Cleanup",
 			detectMsg: "C27_BASE3",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBase4": {
 			cleanup: "COBase4Cleanup",
 			detectMsg: "C27_BASE4",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -237,12 +237,10 @@ function eventStartLevel()
 	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
-	if (difficulty >= MEDIUM)
+	if (difficulty >= HARD)
 	{
-		addDroid(CAM_THE_COLLECTIVE, 55, 25, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
-
+		addDroid(CAM_THE_COLLECTIVE, 55, 25, "Truck Panther Tracks", tBody.tank.panther, tProp.tank.tracks, "", "", tConstruct.truck);
 		camManageTrucks(CAM_THE_COLLECTIVE);
-
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}
 

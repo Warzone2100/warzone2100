@@ -4,7 +4,7 @@ include("script/campaign/transitionTech.js");
 
 const MIS_ALPHA_PLAYER = 1; //Team alpha units belong to player 1.
 const mis_nexusRes = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade08", "R-Struc-Materials08",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade09", "R-Struc-Materials09",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
 	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
@@ -51,7 +51,7 @@ camAreaEvent("rescueTrigger", function(droid)
 	camAbsorbPlayer(MIS_ALPHA_PLAYER, CAM_HUMAN_PLAYER);
 
 	queue("getAlphaUnitIDs", camSecondsToMilliseconds(0.5));
-	setTimer("phantomFactorySE", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	setTimer("phantomFactorySE", camChangeOnDiff(camMinutesToMilliseconds(5)));
 
 	camPlayVideos({video: "MB3_2_MSG4", type: MISS_MSG});
 });
@@ -59,7 +59,7 @@ camAreaEvent("rescueTrigger", function(droid)
 //Play videos, donate alpha to the player and setup reinforcements.
 camAreaEvent("phantomFacTrigger", function(droid)
 {
-	camPlayVideos(["pcv456.ogg", {video: "MB3_2_MSG3", type: CAMP_MSG}]); //Warn about VTOLs.
+	camPlayVideos([cam_sounds.incoming.incomingIntelligenceReport, {video: "MB3_2_MSG3", type: CAMP_MSG}]); //Warn about VTOLs.
 	queue("enableReinforcements", camSecondsToMilliseconds(5));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
 });
@@ -197,22 +197,46 @@ function setupPatrolGroups()
 	});
 }
 
-//Setup Nexus VTOL hit and runners.
-function vtolAttack()
+function wave2()
 {
-	const list = [cTempl.nxlscouv, cTempl.nxmtherv];
+	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
 	const ext = {
-		limit: [2, 4], //paired with template list
+		limit: [3, 3], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
+	const ext = {
+		limit: [3, 3], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+}
+
+//Setup Nexus VTOL hit and runners.
+function vtolAttack()
+{
+	const list = [cTempl.nxmtherv, cTempl.nxmtherv];
+	const ext = {
+		limit: [3, 3], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 //Reinforcements not available until team Alpha brief about VTOLS.
 function enableReinforcements()
 {
-	playSound("pcv440.ogg"); // Reinforcements are available.
+	playSound(cam_sounds.reinforcementsAreAvailable);
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM3A-B", {
 		area: "RTLZ",
 		message: "C32_LZ",
@@ -295,6 +319,6 @@ function eventStartLevel()
 	queue("setAlphaExp", camSecondsToMilliseconds(2));
 	queue("setupPatrolGroups", camChangeOnDiff(camMinutesToMilliseconds(2)));
 
-	setTimer("phantomFactoryNE", camChangeOnDiff(camMinutesToMilliseconds(3.5)));
-	setTimer("phantomFactorySW", camChangeOnDiff(camMinutesToMilliseconds(5.5)));
+	setTimer("phantomFactoryNE", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
+	setTimer("phantomFactorySW", camChangeOnDiff(camMinutesToMilliseconds(6.5)));
 }

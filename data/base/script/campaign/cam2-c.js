@@ -1,4 +1,3 @@
-
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
@@ -7,7 +6,7 @@ var civilianPosIndex; //Current location of civilian groups.
 var shepardGroup; //Enemy group that protects civilians.
 var lastSoundTime; //Only play the "civilian rescued" sound every so often.
 const mis_collectiveRes = [
-	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Defense-WallUpgrade05", "R-Struc-Materials05", "R-Sys-Engineering02",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05", "R-Wpn-Cannon-ROF01",
 	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage06",
@@ -148,7 +147,7 @@ function captureCivilians()
 		for (let i = 0; i < NUM; ++i)
 		{
 			addDroid(CAM_SCAV_7, currPos.x, currPos.y, "Civilian",
-					"B1BaBaPerson01", "BaBaLegs", "", "", "BabaMG");
+					tBody.scav.human, tProp.scav.legs, "", "", tWeap.scav.machinegun);
 		}
 
 		//Only count civilians that are not in the the transporter base.
@@ -205,9 +204,8 @@ function civilianOrders()
 	//Play the "Civilian rescued" sound and throttle it.
 	if (rescued && ((lastSoundTime + camSecondsToMilliseconds(30)) < gameTime))
 	{
-		const RESCUE_SND = "pcv612.ogg";	//"Civilian Rescued".
 		lastSoundTime = gameTime;
-		playSound(RESCUE_SND);
+		playSound(cam_sounds.rescue.civilianRescued);
 	}
 }
 
@@ -219,8 +217,7 @@ function eventTransporterLanded(transport)
 
 	if (civs.length)
 	{
-		const ESCAPE_SND = "pcv632.ogg"; //"Enemy escaping".
-		playSound(ESCAPE_SND);
+		playSound(cam_sounds.enemyEscaping);
 		capturedCivCount += civs.length - 1;
 		for (let i = 0; i < civs.length; ++i)
 		{
@@ -311,20 +308,20 @@ function eventStartLevel()
 		"COAirBase": {
 			cleanup: "airBaseCleanup",
 			detectMsg: "C2C_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COCyborgBase": {
 			cleanup: "cyborgBaseCleanup",
 			detectMsg: "C2C_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COtransportBase": {
 			cleanup: "transportBaseCleanup",
 			detectMsg: "C2C_BASE3",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 

@@ -104,6 +104,26 @@ const __CAM_TICKS_PER_FRAME = 100;
 const __CAM_AI_POWER = 999999;
 const __CAM_INCLUDE_PATH = "script/campaign/libcampaign_includes/";
 
+//Anything stats related
+const CAM_ARTIFACT_STAT = "Crate";
+const CAM_GENERIC_TRUCK_STAT = "Spade1Mk1";
+const CAM_GENERIC_LAND_STAT = "wheeled01"; //For propulsionCanReach().
+const cam_base_structures = {
+	commandRelay: "A0ComDroidControl",
+	commandCenter: "A0CommandCentre",
+	powerGenerator: "A0PowerGenerator",
+	researchLab: "A0ResearchFacility",
+	factory: "A0LightFactory",
+	oil: "A0ResourceExtractor",
+	derrick: "A0ResourceExtractor"
+};
+const cam_resistance_circuits = {
+	first: "R-Sys-Resistance-Upgrade01",
+	second: "R-Sys-Resistance-Upgrade02",
+	third: "R-Sys-Resistance-Upgrade03",
+	fourth: "R-Sys-Resistance-Upgrade04"
+};
+
 //level load codes here for reference. Might be useful for later code.
 const CAM_GAMMA_OUT = "GAMMA_OUT"; //Fake next level for the final Gamma mission.
 const __CAM_ALPHA_CAMPAIGN_NUMBER = 1;
@@ -124,6 +144,95 @@ const __cam_gammaLevels = [
 	"CAM_3A", "SUB_3_1S", "SUB_3_1", "CAM_3B", "SUB_3_2S", "SUB_3_2", "CAM3A-B",
 	"CAM3C", "CAM3A-D1", "CAM3A-D2", "CAM_3_4S", "CAM_3_4"
 ];
+
+// Holds all the sounds the campaign uses. Try to name things as they are said.
+const cam_sounds = {
+	baseDetection: {
+		scavengerOutpostDetected: "pcv375.ogg",
+		scavengerBaseDetected: "pcv374.ogg",
+		enemyBaseDetected: "pcv379.ogg",
+	},
+	baseElimination: {
+		scavengerOutpostEradicated: "pcv391.ogg",
+		scavengerBaseEradicated: "pcv392.ogg",
+		enemyBaseEradicated: "pcv394.ogg",
+	},
+	lz: {
+		returnToLZ: "pcv427.ogg",
+		LZCompromised: "pcv445.ogg",
+		LZClear: "lz-clear.ogg",
+	},
+	transport: {
+		transportUnderAttack: "pcv443.ogg",
+		enemyTransportDetected: "pcv381.ogg",
+		incomingEnemyTransport: "pcv395.ogg",
+	},
+	incoming: {
+		incomingIntelligenceReport: "pcv456.ogg",
+		incomingTransmission: "pcv455.ogg",
+	},
+	rescue: {
+		unitsRescued: "pcv615.ogg",
+		groupRescued: "pcv616.ogg",
+		civilianRescued: "pcv612.ogg",
+	},
+	nexus: {
+		defensesAbsorbed: "defabsrd.ogg",
+		defensesNeutralized: "defnut.ogg",
+		laugh1: "laugh1.ogg",
+		laugh2: "laugh2.ogg",
+		laugh3: "laugh3.ogg",
+		productionCompleted: "pordcomp.ogg",
+		researchAbsorbed: "resabsrd.ogg",
+		structureAbsorbed: "strutabs.ogg",
+		structureNeutralized: "strutnut.ogg",
+		synapticLinksActivated: "synplnk.ogg",
+		unitAbsorbed: "untabsrd.ogg",
+		unitNeutralized: "untnut.ogg",
+	},
+	missile: {
+		launch: {
+			missileLaunchAborted: "labort.ogg",
+			missileLaunched: "mlaunch.ogg",
+			finalMissileLaunchSequenceInitiated: "flseq.ogg",
+			missileEnteringFinalLaunchPeriod: "meflp.ogg",
+			missileLaunchIn60Minutes: "60min.ogg",
+			missileLaunchIn50Minutes: "50min.ogg",
+			missileLaunchIn40Minutes: "40min.ogg",
+			missileLaunchIn30Minutes: "30min.ogg",
+			missileLaunchIn20Minutes: "20min.ogg",
+			missileLaunchIn10Minutes: "10min.ogg",
+			missileLaunchIn5Minutes: "5min.ogg",
+			missileLaunchIn4Minutes: "4min.ogg",
+			missileLaunchIn3Minutes: "3min.ogg",
+			missileLaunchIn2Minutes: "2min.ogg",
+			missileLaunchIn1Minute: "1min.ogg",
+		},
+		detonate: {
+			warheadActivatedCountdownBegins: "wactivat.ogg",
+			finalDetonationSequenceInitiated: "fdetseq.ogg",
+			detonationIn60Minutes: "det60min.ogg",
+			detonationIn50Minutes: "det50min.ogg",
+			detonationIn40Minutes: "det40min.ogg",
+			detonationIn30Minutes: "det30min.ogg",
+			detonationIn20Minutes: "det20min.ogg",
+			detonationIn10Minutes: "det10min.ogg",
+			detonationIn5Minutes: "det5min.ogg",
+			detonationIn4Minutes: "det4min.ogg",
+			detonationIn3Minutes: "det3min.ogg",
+			detonationIn2Minutes: "det2min.ogg",
+			detonationIn1Minute: "det1min.ogg",
+		},
+		countdown: "10to1.ogg",
+	},
+	reinforcementsAreAvailable: "pcv440.ogg",
+	objectiveCaptured: "pcv621.ogg",
+	enemyEscaping: "pcv632.ogg",
+	powerTransferred: "power-transferred.ogg",
+	laserSatelliteFiring: "pcv650.ogg",
+	artifactRecovered: "pcv352.ogg",
+	soundIdentifier: ".ogg", //Used by video.js to check for sound before a video.
+};
 
 //artifact
 var __camArtifacts;
@@ -159,18 +268,6 @@ var __camCalledOnce = {};
 var __camExpLevel;
 
 //nexus
-const CAM_DEFENSE_ABSORBED_SND = "defabsrd.ogg";
-const CAM_DEFENSE_NEUTRALIZE_SND = "defnut.ogg";
-const CAM_LAUGH1_SND = "laugh1.ogg";
-const CAM_LAUGH2_SND = "laugh2.ogg";
-const CAM_LAUGH3_SND = "laugh3.ogg";
-const CAM_PRODUCTION_COMPLETE_SND = "pordcomp.ogg";
-const CAM_RES_ABSORBED_SND = "resabsrd.ogg";
-const CAM_STRUCTURE_ABSORBED_SND = "strutabs.ogg";
-const CAM_STRUCTURE_NEUTRALIZE_SND = "strutnut.ogg";
-const CAM_SYNAPTICS_ACTIVATED_SND = "synplnk.ogg";
-const CAM_UNIT_ABSORBED_SND = "untabsrd.ogg";
-const CAM_UNIT_NEUTRALIZE_SND = "untnut.ogg";
 var __camLastNexusAttack;
 var __camNexusActivated;
 
@@ -178,6 +275,12 @@ var __camNexusActivated;
 var __camFactoryInfo;
 var __camFactoryQueue;
 var __camPropulsionTypeLimit;
+
+//research
+const __CAM_AI_INSTANT_PRODUCTION_RESEARCH = "R-Struc-Factory-Upgrade-AI";
+const __cam_nexusTech = [
+	"R-Sys-NEXUSrepair"
+];
 
 //tactics
 const CAM_ORDER_ATTACK = 0;
@@ -200,6 +303,12 @@ const CAM_SECONDS_IN_MINUTE = 60;
 const CAM_MINUTES_IN_HOUR = 60;
 
 //transport
+const cam_trComps = {
+	name: "Transport",
+	body: "TransporterBody",
+	propulsion: "V-Tol",
+	weapon: "MG3-VTOL"
+};
 var __camNumTransporterExits;
 var __camPlayerTransports;
 var __camIncomingTransports;

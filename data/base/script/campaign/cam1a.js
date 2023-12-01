@@ -12,7 +12,7 @@ const mis_scavengerRes = [
 // Player zero's droid enters area next to first oil patch.
 camAreaEvent("launchScavAttack", function(droid)
 {
-	camPlayVideos(["pcv456.ogg", {video: "MB1A_MSG", type: MISS_MSG}]);
+	camPlayVideos([cam_sounds.incoming.incomingIntelligenceReport, {video: "MB1A_MSG", type: MISS_MSG}]);
 	hackAddMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	// Send scavengers on war path if triggered above.
 	camManageGroup(camMakeGroup("scavAttack1", ENEMIES), CAM_ORDER_ATTACK, {
@@ -119,8 +119,9 @@ function camEnemyBaseEliminated_scavGroup2()
 function enableBaseStructures()
 {
 	const structs = [
-		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
-		"A0ResearchFacility", "A0LightFactory",
+		cam_base_structures.commandCenter, cam_base_structures.powerGenerator,
+		cam_base_structures.derrick, cam_base_structures.researchLab,
+		cam_base_structures.factory,
 	];
 
 	for (let i = 0; i < structs.length; ++i)
@@ -185,26 +186,26 @@ function eventStartLevel()
 		"scavGroup1": {
 			cleanup: "scavBase1Cleanup",
 			detectMsg: "C1A_BASE0",
-			detectSnd: "pcv375.ogg",
-			eliminateSnd: "pcv391.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerOutpostDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerOutpostEradicated
 		},
 		"scavGroup2": {
 			cleanup: "scavBase2Cleanup",
 			detectMsg: "C1A_BASE1",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 		"scavGroup3": {
 			cleanup: "scavBase3Cleanup",
 			detectMsg: "C1A_BASE2",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 		"scavGroup4": {
 			cleanup: "scavBase4Cleanup",
 			detectMsg: "C1A_BASE3",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 	});
 

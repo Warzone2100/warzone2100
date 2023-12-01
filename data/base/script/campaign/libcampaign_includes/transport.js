@@ -39,7 +39,7 @@ function camIsTransporter(gameObject)
 //;;
 function camSetupTransporter(placeX, placeY, exitX, exitY)
 {
-	addDroid(CAM_HUMAN_PLAYER, placeX, placeY, "Transport", "TransporterBody", "V-Tol", "", "", "MG3-VTOL");
+	addDroid(CAM_HUMAN_PLAYER, placeX, placeY, cam_trComps.name, cam_trComps.body, cam_trComps.propulsion, "", "", cam_trComps.weapon);
 	setTransporterExit(exitX, exitY, CAM_HUMAN_PLAYER);
 }
 
@@ -86,10 +86,10 @@ function __camDispatchTransporterUnsafe()
 	{
 		camTrace("Creating a transporter for player", __PLAYER);
 		__camPlayerTransports[__PLAYER] = addDroid(__PLAYER, -1, -1,
-		                                         "Transporter",
-		                                         "TransporterBody",
-		                                         "V-Tol", "", "",
-		                                         "MG3-VTOL");
+		                                         cam_trComps.name,
+		                                         cam_trComps.body,
+		                                         cam_trComps.propulsion, "", "",
+		                                         cam_trComps.weapon);
 	}
 	const transporter = __camPlayerTransports[__PLAYER];
 	const droids = [];
@@ -121,7 +121,7 @@ function __camDispatchTransporterUnsafe()
 
 	if (__PLAYER !== CAM_HUMAN_PLAYER)
 	{
-		playSound("pcv381.ogg"); //Enemy transport detected.
+		playSound(cam_sounds.transport.enemyTransportDetected);
 	}
 
 	setTransporterExit(data.exit.x, data.exit.y, __PLAYER);
@@ -156,7 +156,7 @@ function __camLandTransporter(player, pos)
 		__camTransporterMessage = undefined;
 	}
 	camTrace("Landing transport for player", player);
-	playSound("pcv395.ogg", pos.x, pos.y, 0); //Incoming enemy transport.
+	playSound(cam_sounds.transport.incomingEnemyTransport, pos.x, pos.y, 0);
 	camManageGroup(camMakeGroup(ti.droids), ti.order, ti.data);
 	if (player !== CAM_HUMAN_PLAYER)
 	{

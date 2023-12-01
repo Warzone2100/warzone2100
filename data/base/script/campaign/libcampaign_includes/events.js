@@ -166,7 +166,7 @@ function cam_eventDroidBuilt(droid, structure)
 	if (camGetNexusState() && droid.player === CAM_NEXUS && __camNextLevel === "CAM3C" && camRand(100) < 7)
 	{
 		// Occasionally hint that NEXUS is producing units on Gamma 5.
-		playSound(CAM_PRODUCTION_COMPLETE_SND);
+		playSound(cam_sounds.nexus.productionCompleted);
 	}
 	if (!camDef(__camFactoryInfo))
 	{
@@ -228,8 +228,7 @@ function cam_eventTransporterExit(transport)
 			__camVictoryData.reinforcements > -1) ||
 			__camWinLossCallback === CAM_VICTORY_STANDARD))
 		{
-			const __REINFORCEMENTS_AVAILABLE_SOUND = "pcv440.ogg";
-			playSound(__REINFORCEMENTS_AVAILABLE_SOUND);
+			playSound(cam_sounds.reinforcementsAreAvailable);
 			//Show the transporter reinforcement timer when it leaves for the first time.
 			if (__camWinLossCallback === CAM_VICTORY_OFFWORLD)
 			{
@@ -396,20 +395,20 @@ function cam_eventObjectTransfer(obj, from)
 		{
 			if (obj.stattype === DEFENSE)
 			{
-				snd = CAM_DEFENSE_ABSORBED_SND;
+				snd = cam_sounds.nexus.defensesAbsorbed;
 			}
 			else if (obj.stattype === RESEARCH_LAB)
 			{
-				snd = CAM_RES_ABSORBED_SND;
+				snd = cam_sounds.nexus.researchAbsorbed;
 			}
 			else
 			{
-				snd = CAM_STRUCTURE_ABSORBED_SND;
+				snd = cam_sounds.nexus.structureAbsorbed;
 			}
 		}
 		else if (obj.type === DROID)
 		{
-			snd = CAM_UNIT_ABSORBED_SND;
+			snd = cam_sounds.nexus.unitAbsorbed;
 		}
 
 		if (camDef(snd))

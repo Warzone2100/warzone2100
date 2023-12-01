@@ -3,7 +3,7 @@ include("script/campaign/templates.js");
 
 const MIS_Y_SCROLL_LIMIT = 137;
 const mis_nexusRes = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade10", "R-Struc-Materials10",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade12", "R-Struc-Materials10",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
 	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
@@ -19,6 +19,12 @@ const mis_nexusRes = [
 const mis_vtolPositions = [
 	"vtolAppearPosW", "vtolAppearPosE",
 ];
+const mis_researchTargets = {
+	missileCode1: "R-Comp-MissileCodes01",
+	missileCode2: "R-Comp-MissileCodes02",
+	missileCode3: "R-Comp-MissileCodes03",
+	resistance: "R-Sys-Resistance"
+};
 var winFlag;
 var mapLimit;
 var videoInfo; //holds some info about when to play a video.
@@ -58,11 +64,40 @@ function randomTemplates(list)
 	return droids;
 }
 
-//Chose a random spawn point for the VTOLs.
+function wave2()
+{
+	const list = [cTempl.nxlpulsev, cTempl.nxlpulsev];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.nxlpulsev, cTempl.nxmheapv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
+}
+
+//Setup Nexus VTOL hit and runners. Choose a random spawn point for the VTOLs.
 function vtolAttack()
 {
-	const list = [cTempl.nxmheapv, cTempl.nxlpulsev];
-	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)));
+	const list = [cTempl.nxmheapv, cTempl.nxmtherv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 //Chose a random spawn point to send ground reinforcements.
@@ -204,8 +239,7 @@ function laserSatFuzzyStrike(obj)
 	{
 		if (camRand(101) < 40)
 		{
-			const LASSAT_FIRING = "pcv650.ogg"; // LASER SATELLITE FIRING!!!
-			playSound(LASSAT_FIRING, xCoord, yCoord);
+			playSound(cam_sounds.laserSatelliteFiring, xCoord, yCoord);
 		}
 
 		//Missed it so hit close to target
@@ -230,11 +264,11 @@ function eventResearched(research, structure, player)
 		{
 			videoInfo[i].played = true;
 			camPlayVideos({video: videoInfo[i].video, type: videoInfo[i].type});
-			if (videoInfo[i].res === "R-Sys-Resistance")
+			if (videoInfo[i].res === mis_researchTargets.resistance)
 			{
-				enableResearch("R-Comp-MissileCodes01", CAM_HUMAN_PLAYER);
+				enableResearch(mis_researchTargets.missileCode1, CAM_HUMAN_PLAYER);
 			}
-			else if (videoInfo[i].res === "R-Comp-MissileCodes03")
+			else if (videoInfo[i].res === mis_researchTargets.missileCode3)
 			{
 				winFlag = true;
 			}
@@ -282,10 +316,10 @@ function eventStartLevel()
 	mapLimit = 137.0;
 	winFlag = false;
 	videoInfo = [
-		{played: false, video: "MB3_AD2_MSG3", type: MISS_MSG, res: "R-Sys-Resistance"},
-		{played: false, video: "MB3_AD2_MSG4", type: CAMP_MSG, res: "R-Comp-MissileCodes01"},
-		{played: false, video: "MB3_AD2_MSG5", type: CAMP_MSG, res: "R-Comp-MissileCodes02"},
-		{played: false, video: "MB3_AD2_MSG6", type: CAMP_MSG, res: "R-Comp-MissileCodes03"},
+		{played: false, video: "MB3_AD2_MSG3", type: MISS_MSG, res: mis_researchTargets.resistance},
+		{played: false, video: "MB3_AD2_MSG4", type: CAMP_MSG, res: mis_researchTargets.missileCode1},
+		{played: false, video: "MB3_AD2_MSG5", type: CAMP_MSG, res: mis_researchTargets.missileCode2},
+		{played: false, video: "MB3_AD2_MSG6", type: CAMP_MSG, res: mis_researchTargets.missileCode3},
 	];
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_3_4S", {
@@ -304,7 +338,7 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camMinutesToSeconds(5));
-	enableResearch("R-Sys-Resistance", CAM_HUMAN_PLAYER);
+	enableResearch(mis_researchTargets.resistance, CAM_HUMAN_PLAYER);
 
 	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 	camPlayVideos({video: "MB3_AD2_MSG", type: MISS_MSG});
