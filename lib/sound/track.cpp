@@ -27,7 +27,7 @@
 //*
 //
 // defines
-#define MAX_TRACKS	( 600 )
+#define MAX_TRACKS	( 65536 )
 
 //*
 //
