@@ -1667,11 +1667,17 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			// see if the LZ has been set up
 			int iDX = getLandingX(psDroid->player);
 			int iDY = getLandingY(psDroid->player);
+			Vector2i startPos = getPlayerStartPosition(psDroid->player);
 
 			if (iDX && iDY)
 			{
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, iDX, iDY);
+			}
+			else if (bMultiPlayer && (startPos.x != 0 && startPos.y != 0))
+			{
+				psDroid->order = *psOrder;
+				actionDroid(psDroid, DACTION_MOVE, startPos.x, startPos.y);
 			}
 			else
 			{
