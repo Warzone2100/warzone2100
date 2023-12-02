@@ -1028,16 +1028,13 @@ void intRefreshGroupsUI()
 // see if a delivery point is selected
 static FLAG_POSITION *intFindSelectedDelivPoint()
 {
-	FLAG_POSITION *psFlagPos;
-
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-	     psFlagPos = psFlagPos->psNext)
+	for (const auto& psFlag : apsFlagPosLists[selectedPlayer])
 	{
-		if (psFlagPos->selected && (psFlagPos->type == POS_DELIVERY))
+		if (psFlag->selected && psFlag->type == POS_DELIVERY)
 		{
-			return psFlagPos;
+			return psFlag;
 		}
 	}
 

@@ -2167,7 +2167,6 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 {
 	FACTORY			*psFact;
-	FLAG_POSITION	*psFlag, *psNext, *psPrev;
 	SDWORD			factoryInc, typeFlag;
 
 	CHECK_STRUCTURE(psStruct);
@@ -2229,37 +2228,23 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		ASSERT_OR_RETURN(, !missionIsOffworld(), "cannot assign a commander to a factory when off world");
 
 		factoryInc = psFact->psAssemblyPoint->factoryInc;
-		psPrev = nullptr;
 
-		for (psFlag = apsFlagPosLists[psStruct->player]; psFlag; psFlag = psNext)
+		auto& flagPosList = apsFlagPosLists[psStruct->player];
+		for (auto it = flagPosList.begin(); it != flagPosList.end(); ++it)
 		{
-			psNext = psFlag->psNext;
-
-			if ((psFlag->factoryInc == factoryInc) && (psFlag->factoryType == typeFlag))
+			if ((*it)->factoryInc == factoryInc && (*it)->factoryType == typeFlag)
 			{
-				if (psFlag != psFact->psAssemblyPoint)
+				if (*it != psFact->psAssemblyPoint)
 				{
-					removeFlagPosition(psFlag);
+					removeFlagPosition(*it);
 				}
 				else
 				{
 					// need to keep the assembly point(s) for the factory
 					// but remove it(the primary) from the list so it doesn't get
 					// displayed
-					if (psPrev == nullptr)
-					{
-						apsFlagPosLists[psStruct->player] = psFlag->psNext;
-					}
-					else
-					{
-						psPrev->psNext = psFlag->psNext;
-					}
-					psFlag->psNext = nullptr;
+					it = flagPosList.erase(it);
 				}
-			}
-			else
-			{
-				psPrev = psFlag;
 			}
 		}
 		psFact->psCommander = psCommander;
@@ -2473,7 +2458,6 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 	bool			placed;//bTemp = false;
 	DROID			*psNewDroid;
 	FACTORY			*psFact;
-	FLAG_POSITION	*psFlag;
 	Vector3i iVecEffect;
 	UBYTE			factoryType;
 	bool			assignCommander;
@@ -2575,23 +2559,24 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 				factoryType = VTOL_FLAG;
 			}
 			//find flag in question.
-			for (psFlag = apsFlagPosLists[psFact->psAssemblyPoint->player];
-			     psFlag
-			     && !(psFlag->factoryInc == psFact->psAssemblyPoint->factoryInc // correct fact.
-			          && psFlag->factoryType == factoryType); // correct type
-			     psFlag = psFlag->psNext) {}
-			ASSERT(psFlag, "No flag found for %s at (%d, %d)", objInfo(psStructure), psStructure->pos.x, psStructure->pos.y);
-			//if vtol droid - send it to ReArm Pad if one exists
-			if (psFlag && isVtolDroid(psNewDroid))
+			const auto& flagPosList = apsFlagPosLists[psFact->psAssemblyPoint->player];
+			auto psFlag = std::find_if(flagPosList.begin(), flagPosList.end(), [psFact, factoryType](FLAG_POSITION* psFlag)
 			{
-				Vector2i pos = psFlag->coords.xy();
+				return psFlag->factoryInc == psFact->psAssemblyPoint->factoryInc // correct fact.
+					&& psFlag->factoryType == factoryType; // correct type
+			});
+			ASSERT(psFlag != flagPosList.end(), "No flag found for %s at (%d, %d)", objInfo(psStructure), psStructure->pos.x, psStructure->pos.y);
+			//if vtol droid - send it to ReArm Pad if one exists
+			if (psFlag != flagPosList.end() && isVtolDroid(psNewDroid))
+			{
+				Vector2i pos = (*psFlag)->coords.xy();
 				//find a suitable location near the delivery point
 				actionVTOLLandingPos(psNewDroid, &pos);
 				orderDroidLoc(psNewDroid, DORDER_MOVE, pos.x, pos.y, ModeQueue);
 			}
-			else if (psFlag)
+			else if (psFlag != flagPosList.end())
 			{
-				orderDroidLoc(psNewDroid, DORDER_MOVE, psFlag->coords.x, psFlag->coords.y, ModeQueue);
+				orderDroidLoc(psNewDroid, DORDER_MOVE, (*psFlag)->coords.x, (*psFlag)->coords.y, ModeQueue);
 			}
 		}
 		if (assignCommander)
@@ -4161,10 +4146,10 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 	if (bCheckBuildQueue)
 	{
 		// cant place on top of a delivery point...
-		for (FLAG_POSITION const *psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
+		for (const auto& psFlag : apsFlagPosLists[selectedPlayer])
 		{
-			ASSERT_OR_RETURN(false, psCurrFlag->coords.x != ~0, "flag has invalid position");
-			Vector2i flagTile = map_coord(psCurrFlag->coords.xy());
+			ASSERT_OR_RETURN(false, psFlag->coords.x != ~0, "flag has invalid position");
+			Vector2i flagTile = map_coord(psFlag->coords.xy());
 			if (flagTile.x >= b.map.x && flagTile.x < b.map.x + b.size.x && flagTile.y >= b.map.y && flagTile.y < b.map.y + b.size.y)
 			{
 				return false;
@@ -6016,13 +6001,13 @@ FLAG_POSITION *FindFactoryDelivery(const STRUCTURE *Struct)
 	if (StructIsFactory(Struct))
 	{
 		// Find the factories delivery point.
-		for (FLAG_POSITION *psCurrFlag = apsFlagPosLists[Struct->player]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
+		for (const auto& psFlag : apsFlagPosLists[Struct->player])
 		{
-			if (FlagIsFactory(psCurrFlag)
-			    && Struct->pFunctionality->factory.psAssemblyPoint->factoryInc == psCurrFlag->factoryInc
-			    && Struct->pFunctionality->factory.psAssemblyPoint->factoryType == psCurrFlag->factoryType)
+			if (FlagIsFactory(psFlag)
+				&& Struct->pFunctionality->factory.psAssemblyPoint->factoryInc == psFlag->factoryInc
+				&& Struct->pFunctionality->factory.psAssemblyPoint->factoryType == psFlag->factoryType)
 			{
-				return psCurrFlag;
+				return psFlag;
 			}
 		}
 	}
