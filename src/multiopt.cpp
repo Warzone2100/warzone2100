@@ -648,9 +648,6 @@ void playerResponding()
 		ingame.JoiningInProgress[selectedPlayer] = false;
 	}
 
-	// Home the camera to the player
-	cameraToHome(selectedPlayer, false);
-
 	// Tell the world we're here
 	NETbeginEncode(NETbroadcastQueue(), NET_PLAYERRESPONDING);
 	NETuint32_t(&selectedPlayer);

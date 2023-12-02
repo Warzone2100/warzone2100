@@ -1908,7 +1908,8 @@ bool stageThreeInitialise()
 
 	if (bMultiPlayer)
 	{
-		playerResponding();			// say howdy!
+		cameraToHome(selectedPlayer, false, fromSave);
+		playerResponding(); // say howdy!
 		if (NetPlay.bComms && !NETisReplay())
 		{
 			multiStartScreenInit();
