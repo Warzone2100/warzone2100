@@ -225,7 +225,7 @@ bool multiplayerWinSequence(bool firstCall)
 
 	if (firstCall)
 	{
-		pos  = cameraToHome(selectedPlayer, true);			// pan the camera to home if not already doing so
+		pos  = cameraToHome(selectedPlayer, true, false); // pan the camera to home if not already doing so
 		last = 0;
 
 		// stop all research
@@ -657,7 +657,7 @@ int scavengerPlayer()
 
 // ////////////////////////////////////////////////////////////////////////////
 // probably temporary. Places the camera on the players 1st droid or struct.
-Vector3i cameraToHome(UDWORD player, bool scroll)
+Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 {
 	UDWORD x, y;
 	STRUCTURE	*psBuilding = nullptr;
@@ -693,7 +693,7 @@ Vector3i cameraToHome(UDWORD player, bool scroll)
 	{
 		requestRadarTrack(world_coord(x), world_coord(y));
 	}
-	else
+	else if (!fromSave) // This will override the saved camera position in skirmish games if not checked
 	{
 		setViewPos(x, y, true);
 	}
