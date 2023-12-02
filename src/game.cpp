@@ -5734,6 +5734,11 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		Vector2i tmp = ini.vector2i("bumpPosition");
 		psDroid->sMove.bumpPos = Vector3i(tmp.x, tmp.y, 0);
 
+		if (isVtolDroid(psDroid) && psDroid->sMove.Status != MOVEINACTIVE)
+		{
+			psDroid->rot.pitch = 0;
+		}
+
 		// Recreate path-finding jobs
 		if (psDroid->sMove.Status == MOVEWAITROUTE)
 		{
