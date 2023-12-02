@@ -1357,8 +1357,6 @@ static bool flagReposFinished;
 
 void startDeliveryPosition(FLAG_POSITION *psFlag)
 {
-	FLAG_POSITION	*psFlagPos;
-
 	if (tryingToGetLocation()) // if we're placing a building don't place
 	{
 		return;
@@ -1367,7 +1365,7 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid player (selectedPlayer: %" PRIu32 ")", selectedPlayer);
 
 	//clear the selected delivery point
-	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
+	for (auto& psFlagPos : apsFlagPosLists[selectedPlayer])
 	{
 		psFlagPos->selected = false;
 	}
@@ -1418,9 +1416,9 @@ void finishDeliveryPosition()
 			}
 		}
 		//deselect once moved
-		for (FLAG_POSITION *psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
+		for (auto& psFlag : apsFlagPosLists[selectedPlayer])
 		{
-			psFlagPos->selected = false;
+			psFlag->selected = false;
 		}
 	}
 	triggerEvent(TRIGGER_DELIVERY_POINT_MOVED, psStruct);
@@ -1447,9 +1445,9 @@ bool deliveryReposValid()
 	}
 
 	// cant place on top of a delivery point...
-	for (FLAG_POSITION const *psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
+	for (const auto& psFlag : apsFlagPosLists[selectedPlayer])
 	{
-		Vector2i flagTile = map_coord(psCurrFlag->coords.xy());
+		Vector2i flagTile = map_coord(psFlag->coords.xy());
 		if (flagTile == map)
 		{
 			return false;
@@ -2164,7 +2162,7 @@ static FLAG_POSITION *findMouseDeliveryPoint()
 		return nullptr;
 	}
 
-	for (auto psPoint = apsFlagPosLists[selectedPlayer]; psPoint; psPoint = psPoint->psNext)
+	for (const auto& psPoint : apsFlagPosLists[selectedPlayer])
 	{
 		if (psPoint->type != POS_DELIVERY) {
 			continue;
@@ -2770,7 +2768,6 @@ void clearSelection()
 {
 	DROID			*psCurrDroid;
 	STRUCTURE		*psStruct;
-	FLAG_POSITION	*psFlagPos;
 
 	memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
 
@@ -2789,9 +2786,9 @@ void clearSelection()
 	}
 	bLasSatStruct = false;
 	//clear the Deliv Point if one
-	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos; psFlagPos = psFlagPos->psNext)
+	for (auto& psFlag : apsFlagPosLists[selectedPlayer])
 	{
-		psFlagPos->selected = false;
+		psFlag->selected = false;
 	}
 
 	intRefreshScreen();

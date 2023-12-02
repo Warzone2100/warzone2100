@@ -1846,7 +1846,6 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	DROID	*psDroid;
 	bool	bAtLeastOne = false;
 	size_t  numCleared = 0;
-	FLAG_POSITION	*psFlagPos;
 
 	ASSERT_OR_RETURN(, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
@@ -1875,10 +1874,9 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	{
 		//clear the Deliv Point if one
 		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
-		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-			 psFlagPos = psFlagPos->psNext)
+		for (auto& psFlag : apsFlagPosLists[selectedPlayer])
 		{
-			psFlagPos->selected = false;
+			psFlag->selected = false;
 		}
 		groupConsoleInformOfCreation(groupNumber);
 		secondarySetAverageGroupState(selectedPlayer, groupNumber);
@@ -1922,7 +1920,6 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 	DROID	*psDroid, *psCentreDroid = nullptr;
 	bool selected = false;
 	size_t numDeselected = 0;
-	FLAG_POSITION	*psFlagPos;
 
 	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
@@ -1951,10 +1948,9 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 			ASSERT(selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
 			if (selectedPlayer < MAX_PLAYERS)
 			{
-				for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-					 psFlagPos = psFlagPos->psNext)
+				for (auto& psFlag : apsFlagPosLists[selectedPlayer])
 				{
-					psFlagPos->selected = false;
+					psFlag->selected = false;
 				}
 			}
 
@@ -1989,7 +1985,6 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen) {
 	DROID	*psDroid;
 	bool selected = false;
-	FLAG_POSITION	*psFlagPos;
 	SELECTIONTYPE dselectionType = selectionType;
 	SELECTION_CLASS dselectionClass = selectionClass;
 	unsigned selectionCount = 0;
@@ -2011,10 +2006,9 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 	{
 		//clear the Deliv Point if one
 		ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
-		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-			 psFlagPos = psFlagPos->psNext)
+		for (auto& psFlag : apsFlagPosLists[selectedPlayer])
 		{
-			psFlagPos->selected = false;
+			psFlag->selected = false;
 		}
 	}
 	intGroupsChanged(UBYTE_MAX);
@@ -2027,7 +2021,6 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 	DROID	*psDroid;
 	bool selected = false;
 	size_t numDeselected = 0;
-	FLAG_POSITION	*psFlagPos;
 
 	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
@@ -2054,10 +2047,9 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 	{
 		//clear the Deliv Point if one
 		ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
-		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-			 psFlagPos = psFlagPos->psNext)
+		for (auto& psFlag : apsFlagPosLists[selectedPlayer])
 		{
-			psFlagPos->selected = false;
+			psFlag->selected = false;
 		}
 		groupConsoleInformOfSelection(groupNumber);
 	}

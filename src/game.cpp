@@ -2536,7 +2536,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			apsDroidLists[player] = nullptr;
 			apsStructLists[player] = nullptr;
 			apsFeatureLists[player] = nullptr;
-			apsFlagPosLists[player] = nullptr;
+			apsFlagPosLists[player].clear();
 			//clear all the messages?
 			apsProxDisp[player] = nullptr;
 			apsSensorList[0] = nullptr;
@@ -2555,7 +2555,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			mission.apsDroidLists[player] = nullptr;
 			mission.apsStructLists[player] = nullptr;
 			mission.apsFeatureLists[player] = nullptr;
-			mission.apsFlagPosLists[player] = nullptr;
+			mission.apsFlagPosLists[player].clear();
 			mission.apsExtractorLists[player] = nullptr;
 		}
 		mission.apsOilList[0] = nullptr;

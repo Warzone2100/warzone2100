@@ -68,7 +68,7 @@ struct MISSION
 	FEATURE						*apsFeatureLists[MAX_PLAYERS];
 	BASE_OBJECT			*apsSensorList[1];
 	FEATURE				*apsOilList[1];
-	FLAG_POSITION				*apsFlagPosLists[MAX_PLAYERS];
+	PerPlayerFlagPositionLists      apsFlagPosLists;
 	int32_t                         asCurrentPower[MAX_PLAYERS];
 
 	UDWORD				startTime;			//time the mission started

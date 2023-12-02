@@ -42,6 +42,8 @@
 #include "visibility.h"
 #include "qtscript.h"
 
+#include <algorithm>
+
 // the initial value for the object ID
 #define OBJ_ID_INIT 20000
 
@@ -60,7 +62,7 @@ FEATURE			*apsOilList[1];
 BASE_OBJECT		*apsSensorList[1];			///< List of sensors in the game.
 
 /*The list of Flag Positions allocated */
-FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
+PerPlayerFlagPositionLists apsFlagPosLists;
 
 /* The list of destroyed objects */
 BASE_OBJECT		*psDestroyedObj = nullptr;
@@ -645,22 +647,16 @@ bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 	return true;
 }
 
-static bool isFlagPositionInList(FLAG_POSITION *psFlagPosToAdd, FLAG_POSITION *list[MAX_PLAYERS])
+static bool isFlagPositionInList(FLAG_POSITION *psFlagPosToAdd, const PerPlayerFlagPositionLists& list)
 {
 	ASSERT_OR_RETURN(false, psFlagPosToAdd != nullptr, "Invalid FlagPosition pointer");
 	ASSERT_OR_RETURN(false, psFlagPosToAdd->player < MAX_PLAYERS, "Invalid FlagPosition player: %u", psFlagPosToAdd->player);
-	for (FLAG_POSITION* psCurr = list[psFlagPosToAdd->player]; (psCurr != nullptr); psCurr = psCurr->psNext)
-	{
-		if (psCurr == psFlagPosToAdd)
-		{
-			return true;
-		}
-	}
-	return false;
+	const auto& flagPosList = list[psFlagPosToAdd->player];
+	return flagPosList.end() != std::find(flagPosList.begin(), flagPosList.end(), psFlagPosToAdd);
 }
 
 /* add the Flag Position to the Flag Position Lists */
-void addFlagPositionToList(FLAG_POSITION *psFlagPosToAdd, FLAG_POSITION *list[MAX_PLAYERS])
+void addFlagPositionToList(FLAG_POSITION *psFlagPosToAdd, PerPlayerFlagPositionLists& list)
 {
 	ASSERT_OR_RETURN(, psFlagPosToAdd != nullptr, "Invalid FlagPosition pointer");
 	ASSERT_OR_RETURN(, psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
@@ -670,9 +666,7 @@ void addFlagPositionToList(FLAG_POSITION *psFlagPosToAdd, FLAG_POSITION *list[MA
 		debug(LOG_INFO, "FlagPosition is already in the list - ignoring");
 		return;
 	}
-
-	psFlagPosToAdd->psNext = list[psFlagPosToAdd->player];
-	list[psFlagPosToAdd->player] = psFlagPosToAdd;
+	list[psFlagPosToAdd->player].emplace_front(psFlagPosToAdd);
 }
 
 /* add the Flag Position to the Flag Position Lists */
@@ -684,28 +678,20 @@ void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
 // Remove it from the list, but don't delete it!
 static bool removeFlagPositionFromList(FLAG_POSITION *psRemove)
 {
-	FLAG_POSITION		*psPrev = nullptr, *psCurr;
-
 	ASSERT_OR_RETURN(false, psRemove != nullptr, "Invalid Flag Position pointer");
 	ASSERT_OR_RETURN(false, psRemove->player < MAX_PLAYERS, "Invalid Flag Position player: %" PRIu32, psRemove->player);
 
-	if (apsFlagPosLists[psRemove->player] == psRemove)
+	auto& flagPosList = apsFlagPosLists[psRemove->player];
+	if (flagPosList.front() == psRemove)
 	{
-		apsFlagPosLists[psRemove->player] = apsFlagPosLists[psRemove->player]->psNext;
+		flagPosList.pop_front();
 		return true;
 	}
-	else
+	auto it = std::find(flagPosList.begin(), flagPosList.end(), psRemove);
+	if (it != flagPosList.end())
 	{
-		for (psCurr = apsFlagPosLists[psRemove->player]; (psCurr != psRemove) &&
-			 (psCurr != nullptr); psCurr = psCurr->psNext)
-		{
-			psPrev = psCurr;
-		}
-		if (psCurr != nullptr)
-		{
-			psPrev->psNext = psCurr->psNext;
-			return true;
-		}
+		flagPosList.erase(it);
+		return true;
 	}
 
 	return false;
@@ -739,18 +725,14 @@ void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlaye
 // free all flag positions
 void freeAllFlagPositions()
 {
-	FLAG_POSITION	*psNext;
-	SDWORD			player;
-
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (uint32_t player = 0; player < MAX_PLAYERS; player++)
 	{
-		while (apsFlagPosLists[player])
+		for (const auto& flagPos : apsFlagPosLists[player])
 		{
-			ASSERT(player == apsFlagPosLists[player]->player, "Player mismatch? (flagPos->player == %" PRIu32 ", expecting: %d", apsFlagPosLists[player]->player, player);
-			psNext = apsFlagPosLists[player]->psNext;
-			free(apsFlagPosLists[player]);
-			apsFlagPosLists[player] = psNext;
+			ASSERT(player == flagPos->player, "Player mismatch? (flagPos->player == %" PRIu32 ", expecting: %d", flagPos->player, player);
+			free(flagPos);
 		}
+		apsFlagPosLists[player].clear();
 	}
 }
 
@@ -770,17 +752,15 @@ void checkFactoryFlags()
 			factoryDeliveryPointCheck[type].clear();
 		}
 
-		FLAG_POSITION *psFlag = apsFlagPosLists[player];
-		while (psFlag)
+		for (const auto& flagPos : apsFlagPosLists[player])
 		{
-			if ((psFlag->type == POS_DELIVERY) &&//check this is attached to a unique factory
-			    (psFlag->factoryType != REPAIR_FLAG))
+			if ((flagPos->type == POS_DELIVERY) &&//check this is attached to a unique factory
+				(flagPos->factoryType != REPAIR_FLAG))
 			{
-				unsigned type = psFlag->factoryType;
-				unsigned factory = psFlag->factoryInc;
+				unsigned type = flagPos->factoryType;
+				unsigned factory = flagPos->factoryInc;
 				factoryDeliveryPointCheck[type].push_back(factory);
 			}
-			psFlag = psFlag->psNext;
 		}
 		for (int type = 0; type < NUM_FLAG_TYPES; ++type)
 		{

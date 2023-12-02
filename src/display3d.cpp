@@ -2196,7 +2196,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
-	for (FLAG_POSITION *psDelivPoint = apsFlagPosLists[selectedPlayer]; psDelivPoint != nullptr; psDelivPoint = psDelivPoint->psNext)
+	for (const auto& psDelivPoint : apsFlagPosLists[selectedPlayer])
 	{
 		if (clipXY(psDelivPoint->coords.x, psDelivPoint->coords.y))
 		{

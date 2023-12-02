@@ -907,7 +907,6 @@ void kf_MapCheck()
 
 	DROID		*psDroid;
 	STRUCTURE	*psStruct;
-	FLAG_POSITION	*psCurrFlag;
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
@@ -921,9 +920,9 @@ void kf_MapCheck()
 		alignStructure(psStruct);
 	}
 
-	for (psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
+	for (auto& psFlag : apsFlagPosLists[selectedPlayer])
 	{
-		psCurrFlag->coords.z = map_Height(psCurrFlag->coords.x, psCurrFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
+		psFlag->coords.z = map_Height(psFlag->coords.x, psFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
 	}
 }
 
