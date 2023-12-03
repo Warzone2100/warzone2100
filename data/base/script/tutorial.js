@@ -147,7 +147,7 @@ function enableBuild()
 {
 	setReticuleButton(MIS_BUILD_BUTTON, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
 	setReticuleFlash(MIS_BUILD_BUTTON, true);
-	enableStructure("A0PowerGenerator", CAM_HUMAN_PLAYER);
+	enableStructure(cam_base_structures.powerGenerator, CAM_HUMAN_PLAYER);
 }
 
 //show the research button
@@ -155,7 +155,7 @@ function enableRes()
 {
 	setReticuleButton(MIS_RESEARCH_BUTTON, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
 	setReticuleFlash(MIS_RESEARCH_BUTTON, true);
-	enableStructure("A0ResearchFacility", CAM_HUMAN_PLAYER);
+	enableStructure(cam_base_structures.researchLab, CAM_HUMAN_PLAYER);
 }
 
 //They clicked the button so turn off flash
@@ -266,7 +266,7 @@ function eventDesignQuit()
 	{
 		increaseTutorialState();
 		setReticuleButton(MIS_DESIGN_BUTTON, _("Design - construct HQ first"), "", "");
-		enableStructure("A0LightFactory", CAM_HUMAN_PLAYER);
+		enableStructure(cam_base_structures.factory, CAM_HUMAN_PLAYER);
 		setReticuleFlash(MIS_CLOSE_BUTTON, false);
 		setReticuleButton(MIS_BUILD_BUTTON, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
 		setReticuleFlash(MIS_BUILD_BUTTON, true);
@@ -279,7 +279,7 @@ function checkForPowGen()
 {
 	if (tutState === 4)
 	{
-		if (countStruct("A0PowerGenerator", CAM_HUMAN_PLAYER) > 0)
+		if (countStruct(cam_base_structures.powerGenerator, CAM_HUMAN_PLAYER) > 0)
 		{
 			setReticuleButton(MIS_BUILD_BUTTON, _("Build - manufacture constructor droids first"), "", "");
 			increaseTutorialState();
@@ -312,7 +312,7 @@ function checkResFac()
 {
 	if (tutState === 11)
 	{
-		if (countStruct("A0ResearchFacility", CAM_HUMAN_PLAYER) > 0)
+		if (countStruct(cam_base_structures.researchLab, CAM_HUMAN_PLAYER) > 0)
 		{
 			setReticuleButton(MIS_BUILD_BUTTON, _("Build - manufacture constructor droids first"), "", "");
 		}
@@ -360,7 +360,7 @@ function eventPickup(feature, droid)
 		increaseTutorialState();
 		setReticuleButton(MIS_BUILD_BUTTON, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
 		setReticuleFlash(MIS_BUILD_BUTTON, true);
-		enableStructure("A0ResearchFacility", CAM_HUMAN_PLAYER);
+		enableStructure(cam_base_structures.researchLab, CAM_HUMAN_PLAYER);
 	}
 }
 
@@ -424,7 +424,7 @@ function eventSelectionChanged(objects)
 			{
 				if (tut0)
 				{
-					enableStructure("A0ResourceExtractor", CAM_HUMAN_PLAYER);
+					enableStructure(cam_base_structures.derrick, CAM_HUMAN_PLAYER);
 					increaseTutorialState();
 				}
 				else if (tut5 && obj.id !== firstTruckID)
@@ -503,10 +503,10 @@ function eventStartLevel()
 	hackStopIngameAudio();
 
 	grantStartTech();
-	setStructureLimits("A0LightFactory", 1, CAM_HUMAN_PLAYER);
-	setStructureLimits("A0ResourceExtractor", 1, CAM_HUMAN_PLAYER);
-	setStructureLimits("A0PowerGenerator", 1, CAM_HUMAN_PLAYER);
-	setStructureLimits("A0ResearchFacility", 1, CAM_HUMAN_PLAYER);
+	setStructureLimits(cam_base_structures.factory, 1, CAM_HUMAN_PLAYER);
+	setStructureLimits(cam_base_structures.derrick, 1, CAM_HUMAN_PLAYER);
+	setStructureLimits(cam_base_structures.powerGenerator, 1, CAM_HUMAN_PLAYER);
+	setStructureLimits(cam_base_structures.researchLab, 1, CAM_HUMAN_PLAYER);
 
 	camSafeRemoveObject("mgArtifact", false);
 	addFeature("OilResource", 24, 26);
