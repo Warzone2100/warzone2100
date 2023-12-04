@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:45\n"
+"PO-Revision-Date: 2023-12-04 07:06\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "Language: et_EE\n"
@@ -2305,7 +2305,7 @@ msgstr "Soomustatud punker Raskekuulipildujaga"
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
 msgid "Armored hardpoint with Flamer"
-msgstr "Soomustaud hardpoint Leegiheitjaga"
+msgstr "Soomustaud tugipunkt Leegiheitjaga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT7_RMG.text[1]
@@ -2314,7 +2314,7 @@ msgstr "Soomustaud hardpoint Leegiheitjaga"
 #: data/mp/messages/strings/resstrings.txt:142
 #: po/custom/fromJson.txt:706
 msgid "Armored hardpoint with Assault Gun"
-msgstr "Soomustatud hardpoint Ründekuulipildujaga"
+msgstr "Soomustatud tugipunkt Ründekuulipildujaga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT8_RC.text[1]
@@ -2323,7 +2323,7 @@ msgstr "Soomustatud hardpoint Ründekuulipildujaga"
 #: data/mp/messages/strings/resstrings.txt:147
 #: po/custom/fromJson.txt:702
 msgid "Armored hardpoint with Assault Cannon"
-msgstr "Soomustatud hardpoint Ründekahuriga"
+msgstr "Soomustatud tugipunkt Ründekahuriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT11_HFL.text[1]
@@ -2332,7 +2332,7 @@ msgstr "Soomustatud hardpoint Ründekahuriga"
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Soomustatud hardpoint ,,Inferno'' Leegiheitjaga"
+msgstr "Soomustatud tugipunkt  ,,Inferno'' Leegiheitjaga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -2341,7 +2341,7 @@ msgstr "Soomustatud hardpoint ,,Inferno'' Leegiheitjaga"
 #: data/mp/messages/strings/resstrings.txt:157
 #: po/custom/fromJson.txt:754
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Soomustatud hardpoint Tankitapja AT raketiga"
+msgstr "Soomustatud tugipunkt Tankitapja AT raketiga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[1]
@@ -5980,7 +5980,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:67
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr ",,Cyclone'' Õhutõrjekahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
@@ -6083,7 +6083,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:144
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr ",,Tornado'' Õhutõrjekahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
@@ -6724,70 +6724,70 @@ msgstr "Soomustatud Pool-Roomikud"
 #. data/mp/messages/resmessages3.json: $.RES_WT14_PLS.text[1]
 #: po/custom/fromJson.txt:710
 msgid "Armored hardpoint with Flashlight laser"
-msgstr "Soomustatud hardpoint Välkvalgus laseriga"
+msgstr "Soomustatud tugipunkt ,,Flashlight'' laseriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL3.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL3.text[1]
 #: po/custom/fromJson.txt:714
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Soomustatud hardpoint Gausskahuriga"
+msgstr "Soomustatud tugipunkt Solenoidkahuriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT4_HC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_WT4_HC.text[1]
 #: po/custom/fromJson.txt:718
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Soomuststud hardpoint Raskekahuriga"
+msgstr "Soomuststud tugipunkt Raskekahuriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #: po/custom/fromJson.txt:722
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Soomustatud hardpoint Raskekuulipildujaga"
+msgstr "Soomustatud tugipunkt Raskekuulipildujaga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
 #. data/mp/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
 #: po/custom/fromJson.txt:726
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Soomustatud hardpoint Super-Kiire Kahuriga"
+msgstr "Soomustatud tugipunkt Hüperkiire Kahuriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
 #: po/custom/fromJson.txt:734
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Soomustatud hardpoint Lancer AT raketiga"
+msgstr "Soomustatud tugipunkt ,,Lancer'' AT raketiga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT2_LC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_WT2_LC.text[1]
 #: po/custom/fromJson.txt:738
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Soomustatud hardpoint Kergekahuriga"
+msgstr "Soomustatud tugipunkt Kergekahuriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #: po/custom/fromJson.txt:742
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Soomustatud hardpoint Keskkahuriga"
+msgstr "Soomustatud tugipunkt Keskkahuriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL2.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL2.text[1]
 #: po/custom/fromJson.txt:746
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Soomustatud hardpoint Railkahuriga"
+msgstr "Soomustatud tugipunkt Rööpkahuriga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT9_ATM.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_WT9_ATM.text[1]
 #: po/custom/fromJson.txt:750
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr "Soomustatud hardpoint Scourge AT Rakettidega"
+msgstr "Soomustatud tugipunkt ,,Scourge'' AT Rakettidega"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text[1]
@@ -6895,7 +6895,7 @@ msgstr "Rünndekahuri Valvetorn"
 #. data/mp/stats/structure.json: $.Wall-VulcanCan.name
 #: po/custom/fromJson.txt:844
 msgid "Assault Cannon Hardpoint"
-msgstr "Ründekahuri Hardpoint"
+msgstr "Ründekahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
@@ -6945,7 +6945,7 @@ msgstr "Ründekuulipilduja Valvetorn"
 #. data/mp/stats/structure.json: $.Wall-RotMg.name
 #: po/custom/fromJson.txt:873
 msgid "Assault Gun Hardpoint"
-msgstr "Ründekuulipilduja Hardpoint"
+msgstr "Ründekuulipilduja Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
@@ -7116,7 +7116,7 @@ msgstr "Automaatne laadia asendab manuaalse varustamise"
 #. data/mp/stats/structure.json: $.WallTower-SamSite.name
 #: po/custom/fromJson.txt:1015
 msgid "Avenger Hardpoint"
-msgstr "Kättemaksja Hardpoint"
+msgstr ",,Avenger'' Tugipunkt"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-SamSite1.name
@@ -7224,7 +7224,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1103
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Parimad Sihtmärgid: Punkrid ja Harpointid"
+msgstr "Parimad Sihtmärgid: Punkrid ja Tugipunkt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7233,7 +7233,7 @@ msgstr "Parimad Sihtmärgid: Punkrid ja Harpointid"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:1109
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Parimad Sihtmärgid: Punkrid ja harpointid"
+msgstr "Parimad Sihtmärgid: Punkrid ja tugipunktid"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
@@ -7301,7 +7301,7 @@ msgstr "Parimad Sihtmärgid: Sõidukid ja Kaitsvad Paigaldused"
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[2]
 #: po/custom/fromJson.txt:1165
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Parimad Sihtmärgid: Sõidukid ja Kaitsvad Paigaldused"
+msgstr "Parimad Sihtmärgid: Sõidukid ja Tugipunktd"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
@@ -8324,7 +8324,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1869
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "EMP Kahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8704,7 +8704,7 @@ msgstr "Välgvalguskahuriga Küborg"
 #. data/base/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:2132
 msgid "Flashlight Hardpoint"
-msgstr "Välkvalguse Hardpoint"
+msgstr ",,Flashlight'' Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.RetreHoverFlashLight.name
@@ -8819,7 +8819,7 @@ msgstr "Gausskahuri Paigaldus"
 #. data/mp/stats/structure.json: $.WallTower-Rail3.name
 #: po/custom/fromJson.txt:2199
 msgid "Gauss Cannon Hardpoint"
-msgstr "Gausskahuri Hardpoint"
+msgstr "Solenoidkahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
@@ -9054,37 +9054,37 @@ msgstr "Tugevndatud Sensor Torn"
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[0]
 #: po/custom/fromJson.txt:2347
 msgid "Hardpoint Avenger SAM Site Available"
-msgstr "Kättemaksja SAM Hardpoint Kasutatav"
+msgstr ",,Avenger'' Õhutõrjeraketi Tugipunkt Saadaval"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[0]
 #: po/custom/fromJson.txt:2350
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr "Keeristormi AA Kahuri Hardpoint Kasutatav"
+msgstr ",,Cyclone'' Õhjutõrjerelva Tugipunkt Saadaval"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2353
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr ",,Tornado'' Õhutõrjerelva Tugipunkt Saadaval"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
 #: po/custom/fromJson.txt:2356
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Kaksik Ründekuulipulduja Hardpoint Kasutatav"
+msgstr "Kaksik-Ründekuulipilduja Tugipunkt Saadaval"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text[0]
 #: po/custom/fromJson.txt:2359
 msgid "Hardpoint Vindicator SAM Site Available"
-msgstr "Hävitaja Harpoint SAM Kasutatav"
+msgstr ",,Vindicator'' Õhutõrjeraketi Tugipunkt Saadaval"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text[0]
 #: po/custom/fromJson.txt:2362
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr "Tuulispasa Hardpoint AA Kahur Kasutatav"
+msgstr ",,Whirlwind'' Õhutõrjerelva Tugipunkt Saadaval"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb-Damage01.name
@@ -9367,7 +9367,7 @@ msgstr "Raskekahur tulistab 120mm mürske"
 #. data/mp/stats/structure.json: $.WallTower04.name
 #: po/custom/fromJson.txt:2531
 msgid "Heavy Cannon Hardpoint"
-msgstr "Raskekahuri Hardpoint"
+msgstr "Raskekahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
@@ -9493,7 +9493,7 @@ msgstr "Ratastega Cobra Raskekuulipilduja"
 #. data/mp/stats/structure.json: $.WallTower01.name
 #: po/custom/fromJson.txt:2625
 msgid "Heavy Machinegun Hardpoint"
-msgstr "Raskekuulipilduja Hardpoint"
+msgstr "Raskekuulipilduja Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
@@ -9619,13 +9619,13 @@ msgstr "Raske Maa-Õhk tüüpi rakett"
 #. data/base/stats/features.json: $.Heavywepslab.name
 #: po/custom/fromJson.txt:2708
 msgid "Heavyweaponslab"
-msgstr ""
+msgstr "Raskerelvade labor"
 
 #. TRANSLATORS:
 #. data/mp/stats/propulsion.json: $.Helicopter.name
 #: po/custom/fromJson.txt:2711
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopter"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer03-Rot.name
@@ -9638,7 +9638,7 @@ msgstr "Põrgutorm"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2724
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "Kangelase ja Spetsiaalse auaste üksused on kaitstud"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -9686,7 +9686,7 @@ msgstr "Hi-Energia Laseri Emitter"
 #. data/mp/challenges/hidebehind.json: $.challenge.name
 #: po/custom/fromJson.txt:2751
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "Peida Minu Taga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT10.text[1]
@@ -9713,7 +9713,7 @@ msgstr "Tanki-Vastane  Võimsaplahvatuslik lõhkepea"
 #. data/mp/messages/resmessages2.json: $.RES_W_RK_D4.text[1]
 #: po/custom/fromJson.txt:2766
 msgid "High Explosive Anti-Tank warheads"
-msgstr ""
+msgstr "Plahvatavad Tangivastased lõhkepead"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_AAD4.text[1]
@@ -9810,26 +9810,26 @@ msgstr "Kõrgeveniv betoon-plastik komposiit"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2850
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Kõrge Survega Gaasi Konteiner"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2853
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "Kõrge survega gaas viskab leegigeeli kaugemale"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:2861
 msgid "HMG Bunker"
-msgstr ""
+msgstr "RKP Bunker"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:2864
 msgid "Hover AI"
-msgstr ""
+msgstr "Hõljuki AI"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
@@ -9991,7 +9991,7 @@ msgstr "Hüperkiire Kahuri Paigaldus"
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2975
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Hüperkiire Kahuri Hardpoint"
+msgstr "Hüperkiire Kahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
@@ -10289,7 +10289,7 @@ msgstr "Suurenenud ehitamis kiirus"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3213
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Tõstab Leegiheitja kasutusala"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10399,7 +10399,7 @@ msgstr "Suurendab Raketi Laskekiirust"
 #. data/base/stats/features.json: $.Indirectlab.name
 #: po/custom/fromJson.txt:3344
 msgid "Indirectweaponslab"
-msgstr ""
+msgstr "Kaudsete relvade laboratoorium"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[1]
@@ -10446,7 +10446,7 @@ msgstr "Põrgutule Paigaldus"
 #. data/mp/stats/structure.json: $.WallTower-Projector.name
 #: po/custom/fromJson.txt:3370
 msgid "Inferno Hardpoint"
-msgstr "Põrgutule Hardpoint"
+msgstr ",,Inferno'' Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
@@ -10479,13 +10479,13 @@ msgstr "Ioonturbiin Mootor"
 #. data/mp/stats/structure.json: $.ECM1PylonMk1.name
 #: po/custom/fromJson.txt:3388
 msgid "Jammer Tower"
-msgstr ""
+msgstr "Signaalikatkestaja Torn"
 
 #. TRANSLATORS:
 #. data/mp/stats/ecm.json: $.ECM1TurretMk1.name
 #: po/custom/fromJson.txt:3391
 msgid "Jammer Turret"
-msgstr ""
+msgstr "Signaalikatkestaja Torn"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaJeep.name
@@ -10591,7 +10591,7 @@ msgstr "Lancer Küborg"
 #. data/mp/stats/structure.json: $.WallTower06.name
 #: po/custom/fromJson.txt:3458
 msgid "Lancer Hardpoint"
-msgstr ""
+msgstr ",,Lancer'' Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
@@ -10635,7 +10635,7 @@ msgstr "Ratastega Viper Lancer"
 #. data/mp/stats/weapons.json: $.Rocket-LtA-T.name
 #: po/custom/fromJson.txt:3486
 msgid "Lancer"
-msgstr ""
+msgstr ",,Lancer''"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[0]
@@ -10705,13 +10705,13 @@ msgstr "Laseri Uuendus"
 #. data/base/stats/features.json: $.Laseropticslab.name
 #: po/custom/fromJson.txt:3526
 msgid "Laseropticslab"
-msgstr ""
+msgstr "Laseroptikate labor"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3529
 msgid "LasSat"
-msgstr ""
+msgstr "LasSat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -10727,7 +10727,7 @@ msgstr "Kihiline komposiit sulamid ning energiat neelavad kiud"
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3545
 msgid "Leopard"
-msgstr ""
+msgstr "Leopard"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
@@ -10801,7 +10801,7 @@ msgstr "Kergekahur tulistab 40mm mürske"
 #. data/mp/stats/structure.json: $.WallTower02.name
 #: po/custom/fromJson.txt:3589
 msgid "Light Cannon Hardpoint"
-msgstr "Kergekahuri Hardpoint"
+msgstr "Kergekahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonLtCnTrks.name
@@ -10884,7 +10884,7 @@ msgstr "Kuulipilduja kahju +25%"
 #. data/base/stats/structure.json: $.GuardTower1MG.name
 #: po/custom/fromJson.txt:3642
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Kuulipilduja Valvetorn"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -10972,7 +10972,7 @@ msgstr "Võib uuendada kasutades tehase moodulit"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3727
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Mehhaanik Küborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -11049,7 +11049,7 @@ msgstr "Keskkahur tulistab 76mm mürske"
 #. data/mp/stats/structure.json: $.WallTower03.name
 #: po/custom/fromJson.txt:3771
 msgid "Medium Cannon Hardpoint"
-msgstr "Keskkahuri Hardpoint"
+msgstr "Keskkahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-MC.name
@@ -11404,7 +11404,7 @@ msgstr ""
 #. data/base/stats/features.json: $.Nanolab.name
 #: po/custom/fromJson.txt:3995
 msgid "Nanolab"
-msgstr ""
+msgstr "Nanolabor"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[3]
@@ -11815,13 +11815,13 @@ msgstr "NEXUSe Müür"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4329
 msgid "Nexus"
-msgstr ""
+msgstr "Neksus"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4332
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Pole Peidupaika"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
@@ -11833,7 +11833,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4338
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot AI"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
@@ -11915,7 +11915,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body6SUPP.name
 #: po/custom/fromJson.txt:4395
 msgid "Panther"
-msgstr ""
+msgstr "Panter"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMor.name
@@ -12125,7 +12125,7 @@ msgstr "Võimas Elektrooniline magneetiline impulssrelv"
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4512
 msgid "Powerlab"
-msgstr ""
+msgstr "Jõulabor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -12187,7 +12187,7 @@ msgstr "Impulsslaseri Paigaldus"
 #. data/mp/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:4562
 msgid "Pulse Laser Hardpoint"
-msgstr "Impulsslaseri Hardpoint"
+msgstr "Impulsslaseri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.LeopardHoverPulseLas.name
@@ -12327,7 +12327,7 @@ msgstr "Railkahur tulistab soomustläbistavaid nooli"
 #. data/mp/stats/structure.json: $.WallTower-Rail2.name
 #: po/custom/fromJson.txt:4648
 msgid "Rail Gun Hardpoint"
-msgstr "Railkahuri Hardpoint"
+msgstr "Rööpkahuri Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Rail.name
@@ -13053,7 +13053,7 @@ msgstr "Roomikutega Mantis Scourge"
 #. data/mp/stats/structure.json: $.WallTower-Atmiss.name
 #: po/custom/fromJson.txt:5124
 msgid "Scourge Missile Hardpoint"
-msgstr "Scourge Rakettide Hardpoint"
+msgstr ",,Scourge'' Rakettide Tugipunkt"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-GuardTower-ATMiss.name
@@ -13102,7 +13102,7 @@ msgstr "Skramblertorn"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5152
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "Merekaartide AI, põhineb NullBot AI-l"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -13630,7 +13630,7 @@ msgstr "Tanki Tapja Pigaldus"
 #. data/mp/stats/structure.json: $.WallTower-HvATrocket.name
 #: po/custom/fromJson.txt:5515
 msgid "Tank Killer Hardpoint"
-msgstr "Tanki Tapja Hardpoint"
+msgstr ",,Tank Killer'' Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TK-Mantis-H.name
@@ -14015,7 +14015,7 @@ msgstr "Kaksik Ründekahur"
 #. data/mp/stats/structure.json: $.WallTower-TwinAssaultGun.name
 #: po/custom/fromJson.txt:5754
 msgid "Twin Assault Gun Hardpoint"
-msgstr "Kaksik Ründekuulipilduja Hardpoint"
+msgstr "Kaksik-Ründekuulipilduja Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MG5.name
@@ -14294,7 +14294,7 @@ msgstr "Väga aeglane uurimine"
 #. data/mp/stats/structure.json: $.WallTower-SamHvy.name
 #: po/custom/fromJson.txt:5939
 msgid "Vindicator Hardpoint"
-msgstr "Hävitaja Hardpoint"
+msgstr ",,Vindicator'' Tugipunkt"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-SamSite2.name
@@ -14778,7 +14778,7 @@ msgstr "Tuulispasa AA Torn"
 #. data/mp/stats/structure.json: $.WallTower-QuadRotAAGun.name
 #: po/custom/fromJson.txt:6246
 msgid "Whirlwind Hardpoint"
-msgstr "Tuulispasa Hardpoint"
+msgstr ",,Whirlwind'' Tugipunkt"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-WSTower.name
