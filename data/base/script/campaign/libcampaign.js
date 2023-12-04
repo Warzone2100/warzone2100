@@ -108,13 +108,13 @@ const __CAM_INCLUDE_PATH = "script/campaign/libcampaign_includes/";
 const CAM_ARTIFACT_STAT = "Crate";
 const CAM_GENERIC_TRUCK_STAT = "Spade1Mk1";
 const CAM_GENERIC_LAND_STAT = "wheeled01"; //For propulsionCanReach().
+const CAM_OIL_RESOURCE_STAT = "OilResource";
 const cam_base_structures = {
 	commandRelay: "A0ComDroidControl",
 	commandCenter: "A0CommandCentre",
 	powerGenerator: "A0PowerGenerator",
 	researchLab: "A0ResearchFacility",
 	factory: "A0LightFactory",
-	oil: "A0ResourceExtractor",
 	derrick: "A0ResourceExtractor"
 };
 const cam_resistance_circuits = {
