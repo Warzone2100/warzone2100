@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include <cstring>
+#include <nonstd/optional.hpp>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
@@ -91,7 +92,8 @@ bool	bMovePause = false;
 bool		bAllowOtherKeyPresses = true;
 char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
 
-static STRUCTURE	*psOldRE = nullptr;
+using ExtractorListIter = optional<ExtractorList::const_iterator>;
+static ExtractorListIter psOldRE = {};
 static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
 
 #define QUICKSAVE_CAM_FOLDER "savegames/campaign/QuickSave"
@@ -1634,19 +1636,19 @@ void	kf_JumpToResourceExtractor()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	if (psOldRE && (STRUCTURE *)psOldRE->psNextFunc)
+	if (psOldRE.has_value() && *psOldRE != apsExtractorLists[selectedPlayer].end())
 	{
-		psOldRE = psOldRE->psNextFunc;
+		++(*psOldRE);
 	}
 	else
 	{
-		psOldRE = apsExtractorLists[selectedPlayer];
+		psOldRE.emplace(apsExtractorLists[selectedPlayer].begin());
 	}
 
-	if (psOldRE)
+	if (*psOldRE != apsExtractorLists[selectedPlayer].end() && **psOldRE != nullptr)
 	{
 		playerPos.r.y = 0; // face north
-		setViewPos(map_coord(psOldRE->pos.x), map_coord(psOldRE->pos.y), true);
+		setViewPos(map_coord((**psOldRE)->pos.x), map_coord((**psOldRE)->pos.y), true);
 	}
 	else
 	{
@@ -1657,9 +1659,9 @@ void	kf_JumpToResourceExtractor()
 
 void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor)
 {
-	if (psOldRE == psResourceExtractor)
+	if (psOldRE.has_value() && *psOldRE != apsExtractorLists[selectedPlayer].end() && **psOldRE == psResourceExtractor)
 	{
-		psOldRE = nullptr;
+		psOldRE.reset();
 	}
 }
 
@@ -2641,5 +2643,5 @@ void kf_ToggleSpecOverlays()
 
 void keybindShutdown()
 {
-	psOldRE = nullptr;
+	psOldRE.reset();
 }

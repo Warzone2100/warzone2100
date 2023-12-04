@@ -57,9 +57,9 @@ uint32_t                synchObjID;
 DROID			*apsDroidLists[MAX_PLAYERS];
 STRUCTURE		*apsStructLists[MAX_PLAYERS];
 FEATURE			*apsFeatureLists[MAX_PLAYERS];		///< Only player zero is valid for features. TODO: Reduce to single list.
-STRUCTURE		*apsExtractorLists[MAX_PLAYERS];
-FEATURE			*apsOilList[1];
-BASE_OBJECT		*apsSensorList[1];			///< List of sensors in the game.
+PerPlayerExtractorLists apsExtractorLists;
+GlobalOilList apsOilList;
+GlobalSensorList apsSensorList; ///< List of sensors in the game.
 
 /*The list of Flag Positions allocated */
 PerPlayerFlagPositionLists apsFlagPosLists;
@@ -235,15 +235,15 @@ static inline void addObjectToList(OBJECT *list[], OBJECT *object, int player)
 /* Add the object to its list
  * \param list is a pointer to the object list
  */
-template <typename OBJECT>
-static inline void addObjectToFuncList(OBJECT *list[], OBJECT *object, int player)
+template <typename FunctionList, typename OBJECT>
+static inline void addObjectToFuncList(FunctionList& list, OBJECT *object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
-	ASSERT_OR_RETURN(, static_cast<OBJECT *>(object->psNextFunc) == nullptr, "%s(%p) is already in a function list!", objInfo(object), static_cast<void *>(object));
+	ASSERT_OR_RETURN(, !object->hasExtraFunction, "%s(%p) is already in a function list!", objInfo(object), static_cast<void *>(object));
 
 	// Prepend the object to the top of the list
-	object->psNextFunc = list[player];
-	list[player] = object;
+	list[player].emplace_front(object);
+	object->hasExtraFunction = true;
 }
 
 /* Move an object from the active list to the destroyed list.
@@ -328,32 +328,24 @@ static inline void removeObjectFromList(OBJECT *list[], OBJECT *object, int play
  * \param remove is a pointer to the object to remove
  * \param type is the type of the object
  */
-template <typename OBJECT>
-static inline void removeObjectFromFuncList(OBJECT *list[], OBJECT *object, int player)
+template <typename FunctionList, typename OBJECT>
+static inline void removeObjectFromFuncList(FunctionList& list, OBJECT *object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 
 	// If the message to remove is the first one in the list then mark the next one as the first
-	if (list[player] == object)
+	if (list[player].front() == object)
 	{
-		list[player] = list[player]->psNextFunc;
-		object->psNextFunc = nullptr;
+		list[player].pop_front();
+		object->hasExtraFunction = false;
 		return;
 	}
 
 	// Iterate through the list and find the item before the object to delete
-	OBJECT *psPrev = nullptr, *psCurr;
-	for (psCurr = list[player]; psCurr != object && psCurr != nullptr; psCurr = psCurr->psNextFunc)
-	{
-		psPrev = psCurr;
-	}
-
-	ASSERT_OR_RETURN(, psCurr != nullptr, "Object %p not found in list", static_cast<void *>(object));
-
-	// Modify the "next" pointer of the previous item to
-	// point to the "next" item of the item to delete.
-	psPrev->psNextFunc = psCurr->psNextFunc;
-	object->psNextFunc = nullptr;
+	auto it = std::find(list[player].begin(), list[player].end(), object);
+	ASSERT_OR_RETURN(, it != list[player].end(), "Object %p not found in list", static_cast<void*>(object));
+	list[player].erase(it);
+	object->hasExtraFunction = false;
 }
 
 template <typename OBJECT>

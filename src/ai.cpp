@@ -177,7 +177,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 		*targetOrigin = ORIGIN_UNKNOWN;
 	}
 
-	for (BASE_OBJECT *psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
+	for (BASE_OBJECT* psSensor : apsSensorList[0])
 	{
 		BASE_OBJECT	*psTemp = nullptr;
 		bool		isCB = false;

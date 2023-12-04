@@ -118,7 +118,6 @@ BASE_OBJECT::~BASE_OBJECT()
 
 #ifdef DEBUG
 	psNext = this;                                                       // Hopefully this will trigger an infinite loop       if someone uses the freed object.
-	psNextFunc = this;                                                   // Hopefully this will trigger an infinite loop       if someone uses the freed object.
 #endif //DEBUG
 }
 

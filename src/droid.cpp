@@ -748,16 +748,8 @@ void droidUpdate(DROID *psDroid)
 	// Check that we are (still) in the sensor list
 	if (psDroid->droidType == DROID_SENSOR)
 	{
-		BASE_OBJECT	*psSensor;
-
-		for (psSensor = apsSensorList[0]; psSensor; psSensor = psSensor->psNextFunc)
-		{
-			if (psSensor == (BASE_OBJECT *)psDroid)
-			{
-				break;
-			}
-		}
-		ASSERT(psSensor == (BASE_OBJECT *)psDroid, "%s(%p) not in sensor list!",
+		const auto sensor = std::find(apsSensorList[0].begin(), apsSensorList[0].end(), (BASE_OBJECT*)psDroid);
+		ASSERT(sensor != apsSensorList[0].end(), "%s(%p) not in sensor list!",
 			   droidGetName(psDroid), static_cast<void *>(psDroid));
 	}
 #endif

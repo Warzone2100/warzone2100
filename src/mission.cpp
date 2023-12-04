@@ -239,11 +239,11 @@ void initMission()
 		mission.apsDroidLists[inc] = nullptr;
 		mission.apsFeatureLists[inc] = nullptr;
 		mission.apsFlagPosLists[inc].clear();
-		mission.apsExtractorLists[inc] = nullptr;
+		mission.apsExtractorLists[inc].clear();
 		apsLimboDroids[inc] = nullptr;
 	}
-	mission.apsSensorList[0] = nullptr;
-	mission.apsOilList[0] = nullptr;
+	mission.apsSensorList[0].clear();
+	mission.apsOilList[0].clear();
 	offWorldKeepLists = false;
 	mission.time = -1;
 	setMissionCountDown();
@@ -311,13 +311,13 @@ bool missionShutDown()
 			mission.apsFeatureLists[inc] = nullptr;
 			apsFlagPosLists[inc] = std::move(mission.apsFlagPosLists[inc]);
 			mission.apsFlagPosLists[inc].clear();
-			apsExtractorLists[inc] = mission.apsExtractorLists[inc];
-			mission.apsExtractorLists[inc] = nullptr;
+			apsExtractorLists[inc] = std::move(mission.apsExtractorLists[inc]);
+			mission.apsExtractorLists[inc].clear();
 		}
-		apsSensorList[0] = mission.apsSensorList[0];
-		apsOilList[0] = mission.apsOilList[0];
-		mission.apsSensorList[0] = nullptr;
-		mission.apsOilList[0] = nullptr;
+		apsSensorList[0] = std::move(mission.apsSensorList[0]);
+		apsOilList[0] = std::move(mission.apsOilList[0]);
+		mission.apsSensorList[0].clear();
+		mission.apsOilList[0].clear();
 
 		psMapTiles = std::move(mission.psMapTiles);
 		mapWidth = mission.mapWidth;
@@ -817,12 +817,13 @@ void restoreMissionData()
 		apsFlagPosLists[inc] = std::move(mission.apsFlagPosLists[inc]);
 		mission.apsFlagPosLists[inc].clear();
 
-		apsExtractorLists[inc] = mission.apsExtractorLists[inc];
-		mission.apsExtractorLists[inc] = nullptr;
+		apsExtractorLists[inc] = std::move(mission.apsExtractorLists[inc]);
+		mission.apsExtractorLists[inc].clear();
 	}
-	apsSensorList[0] = mission.apsSensorList[0];
-	apsOilList[0] = mission.apsOilList[0];
-	mission.apsSensorList[0] = nullptr;
+	apsSensorList[0] = std::move(mission.apsSensorList[0]);
+	apsOilList[0] = std::move(mission.apsOilList[0]);
+	mission.apsSensorList[0].clear();
+	apsOilList[0].clear();
 	//swap mission data over
 
 	psMapTiles = std::move(mission.psMapTiles);
