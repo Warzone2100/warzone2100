@@ -51,7 +51,8 @@ using GlobalOilList = std::array<OilList, 1>;
 extern GlobalOilList apsOilList;
 
 /* The list of destroyed objects */
-extern BASE_OBJECT	*psDestroyedObj;
+using DestroyedObjectsList = std::list<BASE_OBJECT*>;
+extern DestroyedObjectsList psDestroyedObj;
 
 /* Initialise the object heaps */
 bool objmemInitialise();

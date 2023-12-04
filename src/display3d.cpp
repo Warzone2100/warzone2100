@@ -1951,9 +1951,9 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 //	pie_SetDepthOffset(-1.0f);
 
 	/* Go through all the players */
-	for (unsigned aPlayer = 0; aPlayer <= MAX_PLAYERS; ++aPlayer)
+	for (unsigned aPlayer = 0; aPlayer < MAX_PLAYERS; ++aPlayer)
 	{
-		BASE_OBJECT *list = aPlayer < MAX_PLAYERS ? apsStructLists[aPlayer] : psDestroyedObj;
+		BASE_OBJECT *list = apsStructLists[aPlayer];
 
 		/* Now go all buildings for that player */
 		for (; list != nullptr; list = list->psNext)
@@ -1973,6 +1973,27 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 			renderStructure(psStructure, viewMatrix, perspectiveViewMatrix);
 		}
 	}
+
+	// Walk through destroyed objects.
+
+	/* Now go all buildings for that player */
+	for (BASE_OBJECT* obj : psDestroyedObj)
+	{
+		/* Worth rendering the structure? */
+		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+		{
+			continue;
+		}
+		STRUCTURE* psStructure = castStructure(obj);
+
+		if (!clipStructureOnScreen(psStructure))
+		{
+			continue;
+		}
+
+		renderStructure(psStructure, viewMatrix, perspectiveViewMatrix);
+	}
+
 //	pie_SetDepthOffset(0.0f);
 }
 
@@ -2209,20 +2230,30 @@ static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &per
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	// player can only be 0 for the features.
-	for (unsigned player = 0; player <= 1; ++player)
-	{
-		BASE_OBJECT *list = player < 1 ? apsFeatureLists[player] : psDestroyedObj;
 
-		/* Go through all the features */
-		for (; list != nullptr; list = list->psNext)
+	/* Go through all the features */
+	for (BASE_OBJECT* list = apsFeatureLists[0]; list != nullptr; list = list->psNext)
+	{
+		if (list->type == OBJ_FEATURE
+			&& (list->died == 0 || list->died > graphicsTime)
+			&& clipXY(list->pos.x, list->pos.y))
 		{
-			if (list->type == OBJ_FEATURE
-			    && (list->died == 0 || list->died > graphicsTime)
-			    && clipXY(list->pos.x, list->pos.y))
-			{
-				FEATURE *psFeature = castFeature(list);
-				renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
-			}
+			FEATURE* psFeature = castFeature(list);
+			renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+		}
+	}
+
+	// Walk through destroyed objects.
+
+	/* Go through all the features */
+	for (BASE_OBJECT* obj : psDestroyedObj)
+	{
+		if (obj->type == OBJ_FEATURE
+			&& (obj->died == 0 || obj->died > graphicsTime)
+			&& clipXY(obj->pos.x, obj->pos.y))
+		{
+			FEATURE* psFeature = castFeature(obj);
+			renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
 		}
 	}
 }
@@ -2266,9 +2297,9 @@ static void displayProximityMsgs(const glm::mat4& viewMatrix, const glm::mat4 &p
 static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
 	/* Need to go through all the droid lists */
-	for (unsigned player = 0; player <= MAX_PLAYERS; ++player)
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *list = player < MAX_PLAYERS ? apsDroidLists[player] : psDestroyedObj;
+		BASE_OBJECT *list = apsDroidLists[player];
 
 		for (; list != nullptr; list = list->psNext)
 		{
@@ -2284,6 +2315,23 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &
 			{
 				displayComponentObject(psDroid, viewMatrix, perspectiveViewMatrix);
 			}
+		}
+	}
+
+	// Walk through destroyed objects.
+	for (const auto& obj : psDestroyedObj)
+	{
+		DROID* psDroid = castDroid(obj);
+		if (!psDroid || (obj->died != 0 && obj->died < graphicsTime)
+			|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
+		{
+			continue;
+		}
+
+		/* No point in adding it if you can't see it? */
+		if (psDroid->visibleForLocalDisplay())
+		{
+			displayComponentObject(psDroid, viewMatrix, perspectiveViewMatrix);
 		}
 	}
 }
