@@ -65,7 +65,7 @@ GlobalSensorList apsSensorList; ///< List of sensors in the game.
 PerPlayerFlagPositionLists apsFlagPosLists;
 
 /* The list of destroyed objects */
-BASE_OBJECT		*psDestroyedObj = nullptr;
+DestroyedObjectsList psDestroyedObj;
 
 /* Forward function declarations */
 #ifdef DEBUG
@@ -166,8 +166,6 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 /* General housekeeping for the object system */
 void objmemUpdate()
 {
-	BASE_OBJECT		*psCurr, *psNext, *psPrev;
-
 #ifdef DEBUG
 	// do a general validity check first
 	objListIntegCheck();
@@ -177,30 +175,25 @@ void objmemUpdate()
 	   were destroyed before this turn */
 
 	/* First remove the objects from the start of the list */
-	while (psDestroyedObj != nullptr && psDestroyedObj->died <= gameTime - deltaGameTime)
+	DestroyedObjectsList::iterator it = psDestroyedObj.begin();
+	while (it != psDestroyedObj.end()  && (*it)->died <= gameTime - deltaGameTime)
 	{
-		psNext = psDestroyedObj->psNext;
-		objmemDestroy(psDestroyedObj);
-		psDestroyedObj = psNext;
+		objmemDestroy(*it);
+		it = psDestroyedObj.erase(it);
 	}
 
-	/* Now see if there are any further down the list
-	Keep track of the previous object to set its Next pointer*/
-	for (psCurr = psPrev = psDestroyedObj; psCurr != nullptr; psCurr = psNext)
+	/* Now see if there are any further down the list */
+	while (it != psDestroyedObj.end())
 	{
-		psNext = psCurr->psNext;
-		if (psCurr->died <= gameTime - deltaGameTime)
+		if ((*it)->died <= gameTime - deltaGameTime)
 		{
-			/*set the linked list up - you will never be deleting the top
-			of the list, so don't have to check*/
-			psPrev->psNext = psNext;
-			objmemDestroy(psCurr);
+			objmemDestroy(*it);
+			it = psDestroyedObj.erase(it);
 		}
 		else
 		{
 			// do the object died callback
-			triggerEventDestroyed(psCurr);
-			psPrev = psCurr;
+			triggerEventDestroyed(*it++);
 		}
 	}
 }
@@ -260,8 +253,8 @@ static inline void destroyObject(OBJECT *list[], OBJECT *object)
 	if (list[object->player] == object)
 	{
 		list[object->player] = list[object->player]->psNext;
-		object->psNext = psDestroyedObj;
-		psDestroyedObj = (BASE_OBJECT *)object;
+		object->psNext = nullptr;
+		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
 		object->died = gameTime;
 		scriptRemoveObject(object);
 		return;
@@ -283,8 +276,8 @@ static inline void destroyObject(OBJECT *list[], OBJECT *object)
 		psPrev->psNext = psCurr->psNext;
 
 		// Prepend the object to the destruction list
-		object->psNext = psDestroyedObj;
-		psDestroyedObj = object;
+		object->psNext = nullptr;
+		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
 
 		// Set destruction time
 		object->died = gameTime;
@@ -998,9 +991,9 @@ static void objListIntegCheck()
 		ASSERT(psCurr->type == OBJ_FEATURE,
 		       "objListIntegCheck: misplaced object in the feature list");
 	}
-	for (psCurr = (BASE_OBJECT *)psDestroyedObj; psCurr; psCurr = psCurr->psNext)
+	for (const auto& obj : psDestroyedObj)
 	{
-		ASSERT(psCurr->died > 0, "objListIntegCheck: Object in destroyed list but not dead!");
+		ASSERT(obj->died > 0, "objListIntegCheck: Object in destroyed list but not dead!");
 	}
 }
 #endif

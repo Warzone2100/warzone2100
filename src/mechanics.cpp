@@ -37,14 +37,11 @@
 /* Shutdown the mechanics system */
 bool mechanicsShutdown()
 {
-	BASE_OBJECT *psObj, *psNext;
-
-	for (psObj = psDestroyedObj; psObj != nullptr; psObj = psNext)
+	for (BASE_OBJECT* psObj : psDestroyedObj)
 	{
-		psNext = psObj->psNext;
 		delete psObj;
 	}
-	psDestroyedObj = nullptr;
+	psDestroyedObj.clear();
 
 	return true;
 }
