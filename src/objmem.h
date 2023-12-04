@@ -36,11 +36,19 @@ extern FEATURE			*apsFeatureLists[MAX_PLAYERS];
 
 using FlagPositionList = std::list<FLAG_POSITION*>;
 using PerPlayerFlagPositionLists = std::array<FlagPositionList, MAX_PLAYERS>;
-
 extern PerPlayerFlagPositionLists apsFlagPosLists;
-extern STRUCTURE		*apsExtractorLists[MAX_PLAYERS];
-extern BASE_OBJECT		*apsSensorList[1];
-extern FEATURE			*apsOilList[1];
+
+using ExtractorList = std::list<STRUCTURE*>;
+using PerPlayerExtractorLists = std::array<ExtractorList, MAX_PLAYERS>;
+extern PerPlayerExtractorLists apsExtractorLists;
+
+using SensorList = std::list<BASE_OBJECT*>;
+using GlobalSensorList = std::array<SensorList, 1>;
+extern GlobalSensorList apsSensorList;
+
+using OilList = std::list<FEATURE*>;
+using GlobalOilList = std::array<OilList, 1>;
+extern GlobalOilList apsOilList;
 
 /* The list of destroyed objects */
 extern BASE_OBJECT	*psDestroyedObj;

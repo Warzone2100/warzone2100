@@ -135,7 +135,7 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	std::bitset<OBJECT_FLAG_COUNT> flags;
 
 	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
-	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list
+	bool                hasExtraFunction = false;   ///< Does this object include some extra functionality?
 
 public:
 	// Query visibility for display purposes (i.e. for `selectedPlayer`)

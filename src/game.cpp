@@ -2539,10 +2539,10 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			apsFlagPosLists[player].clear();
 			//clear all the messages?
 			apsProxDisp[player] = nullptr;
-			apsSensorList[0] = nullptr;
-			apsExtractorLists[player] = nullptr;
+			apsSensorList[0].clear();
+			apsExtractorLists[player].clear();
 		}
-		apsOilList[0] = nullptr;
+		apsOilList[0].clear();
 		initFactoryNumFlag();
 	}
 
@@ -2556,10 +2556,10 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			mission.apsStructLists[player] = nullptr;
 			mission.apsFeatureLists[player] = nullptr;
 			mission.apsFlagPosLists[player].clear();
-			mission.apsExtractorLists[player] = nullptr;
+			mission.apsExtractorLists[player].clear();
 		}
-		mission.apsOilList[0] = nullptr;
-		mission.apsSensorList[0] = nullptr;
+		mission.apsOilList[0].clear();
+		mission.apsSensorList[0].clear();
 
 		// Stuff added after level load to avoid being reset or initialised during load
 		// always !keepObjects

@@ -860,11 +860,11 @@ void processVisibility()
 			}
 		}
 	}
-	for (BASE_OBJECT *psObj = apsSensorList[0]; psObj != nullptr; psObj = psObj->psNextFunc)
+	for (BASE_OBJECT *psObj : apsSensorList[0])
 	{
 		if (objRadarDetector(psObj))
 		{
-			for (BASE_OBJECT *psTarget = apsSensorList[0]; psTarget != nullptr; psTarget = psTarget->psNextFunc)
+			for (BASE_OBJECT *psTarget : apsSensorList[0])
 			{
 				if (psObj != psTarget && psTarget->visible[psObj->player] < UBYTE_MAX / 2
 				    && objActiveRadar(psTarget)

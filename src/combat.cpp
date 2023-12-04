@@ -340,7 +340,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 
 	CHECK_OBJECT(psTarget);
 
-	for (BASE_OBJECT *psViewer = apsSensorList[0]; psViewer; psViewer = psViewer->psNextFunc)
+	for (BASE_OBJECT* psViewer : apsSensorList[0])
 	{
 		if (aiCheckAlliances(psTarget->player, psViewer->player))
 		{

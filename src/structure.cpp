@@ -5027,7 +5027,7 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 	typedef std::vector<Derrick> Derricks;
 	Derricks derricks;
 	derricks.reserve(NUM_POWER_MODULES + 1);
-	for (STRUCTURE *currExtractor = apsExtractorLists[psBuilding->player]; currExtractor != nullptr; currExtractor = currExtractor->psNextFunc)
+	for (STRUCTURE *currExtractor : apsExtractorLists[psBuilding->player])
 	{
 		RES_EXTRACTOR *resExtractor = &currExtractor->pFunctionality->resourceExtractor;
 
@@ -5082,7 +5082,7 @@ uint16_t countPlayerUnusedDerricks()
 
 	if (selectedPlayer >= MAX_PLAYERS) { return 0; }
 
-	for (STRUCTURE *psStruct = apsExtractorLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : apsExtractorLists[selectedPlayer])
 	{
 		if (psStruct->status == SS_BUILT && psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
@@ -5176,8 +5176,6 @@ adjusts the owning Power Gen so that it can link to a different Res Extractor if
 is available*/
 void releaseResExtractor(STRUCTURE *psRelease)
 {
-	STRUCTURE	*psCurr;
-
 	if (psRelease->pStructureType->type != REF_RESOURCE_EXTRACTOR)
 	{
 		ASSERT(!"invalid structure type", "Invalid structure type");
@@ -5193,7 +5191,7 @@ void releaseResExtractor(STRUCTURE *psRelease)
 	psRelease->pFunctionality->resourceExtractor.psPowerGen = nullptr;
 
 	//there may be spare resource extractors
-	for (psCurr = apsExtractorLists[psRelease->player]; psCurr != nullptr; psCurr = psCurr->psNextFunc)
+	for (STRUCTURE* psCurr : apsExtractorLists[psRelease->player])
 	{
 		//check not connected and power left and built!
 		if (psCurr != psRelease && psCurr->pFunctionality->resourceExtractor.psPowerGen == nullptr && psCurr->status == SS_BUILT)
