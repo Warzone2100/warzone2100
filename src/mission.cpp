@@ -2219,6 +2219,7 @@ static void missionResetInGameState()
 	forceHidePowerBar();
 	intRemoveReticule();
 	intRemoveMissionTimer();
+	intRemoveTransporterTimer();
 	intHideGroupSelectionMenu();
 }
 
