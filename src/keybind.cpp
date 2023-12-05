@@ -1302,15 +1302,12 @@ void	kf_ToggleGodMode()
 	{
 		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Cannot disable godMode for spectator-only slots");
 
-		FEATURE	*psFeat = apsFeatureLists[0];
-
 		godMode = false;
 		setRevealStatus(pastReveal);
 		// now hide the features
-		while (psFeat)
+		for (BASE_OBJECT* psFeat : apsFeatureLists[0])
 		{
 			psFeat->visible[selectedPlayer] = 0;
-			psFeat = psFeat->psNext;
 		}
 
 		// and the structures

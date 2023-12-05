@@ -56,7 +56,7 @@ uint32_t                synchObjID;
 /* The lists of objects allocated */
 DROID			*apsDroidLists[MAX_PLAYERS];
 STRUCTURE		*apsStructLists[MAX_PLAYERS];
-FEATURE			*apsFeatureLists[MAX_PLAYERS];		///< Only player zero is valid for features. TODO: Reduce to single list.
+PerPlayerFeatureLists apsFeatureLists;		///< Only player zero is valid for features. TODO: Reduce to single list.
 PerPlayerExtractorLists apsExtractorLists;
 GlobalOilList apsOilList;
 GlobalSensorList apsSensorList; ///< List of sensors in the game.
@@ -228,6 +228,18 @@ static inline void addObjectToList(OBJECT *list[], OBJECT *object, int player)
 /* Add the object to its list
  * \param list is a pointer to the object list
  */
+template <typename OBJECT>
+static inline void addObjectToList(std::array<std::list<OBJECT*>, MAX_PLAYERS>& list, OBJECT* object, int player)
+{
+	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
+
+	// Prepend the object to the top of the list
+	list[player].emplace_front(object);
+}
+
+/* Add the object to its list
+ * \param list is a pointer to the object list
+ */
 template <typename FunctionList, typename OBJECT>
 static inline void addObjectToFuncList(FunctionList& list, OBJECT *object, int player)
 {
@@ -274,6 +286,44 @@ static inline void destroyObject(OBJECT *list[], OBJECT *object)
 		// Modify the "next" pointer of the previous item to
 		// point to the "next" item of the item to delete.
 		psPrev->psNext = psCurr->psNext;
+
+		// Prepend the object to the destruction list
+		object->psNext = nullptr;
+		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
+
+		// Set destruction time
+		object->died = gameTime;
+	}
+	scriptRemoveObject(object);
+}
+
+/* Move an object from the active list to the destroyed list.
+ * \param list is a pointer to the object list
+ * \param del is a pointer to the object to remove
+ */
+template <typename OBJECT>
+static inline void destroyObject(std::array<std::list<OBJECT*>, MAX_PLAYERS>& list, OBJECT* object)
+{
+	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
+	ASSERT(gameTime - deltaGameTime <= gameTime || gameTime == 2, "Expected %u <= %u, bad time", gameTime - deltaGameTime, gameTime);
+
+	// If the message to remove is the first one in the list then mark the next one as the first
+	if (!list[object->player].empty() && list[object->player].front() == object)
+	{
+		list[object->player].pop_front();
+		object->psNext = nullptr;
+		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
+		object->died = gameTime;
+		scriptRemoveObject(object);
+		return;
+	}
+
+	auto it = std::find(list[object->player].begin(), list[object->player].end(), object);
+	ASSERT(it != list[object->player].end(), "Object %s(%d) not found in list", objInfo(object), object->id);
+
+	if (it != list[object->player].end())
+	{
+		list[object->player].erase(it);
 
 		// Prepend the object to the destruction list
 		object->psNext = nullptr;
@@ -360,6 +410,25 @@ static inline void releaseAllObjectsInList(OBJECT *list[])
 			delete psCurr;
 		}
 		list[i] = nullptr;
+	}
+}
+
+template <typename OBJECT>
+static inline void releaseAllObjectsInList(std::array<std::list<OBJECT*>, MAX_PLAYERS>& list)
+{
+	// Iterate through all players' object lists
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	{
+		// Iterate through all objects in list
+		for (OBJECT* psCurr : list[i])
+		{
+			// FIXME: the next call is disabled for now, yes, it will leak memory again.
+			// issue is with campaign games, and the swapping pointers 'trick' Pumpkin uses.
+			//	visRemoveVisibility(psCurr);
+			// Release object's memory
+			delete psCurr;
+		}
+		list[i].clear();
 	}
 }
 
@@ -759,7 +828,54 @@ void checkFactoryFlags()
 
 /**************************  OBJECT ACCESS FUNCTIONALITY ********************************/
 
-// Find a base object from it's id
+static BASE_OBJECT* getBaseObjFromFeatureData(unsigned id, unsigned player, OBJECT_TYPE type)
+{
+	FeatureList::iterator objIt;
+	FeatureList* list = nullptr;
+
+	ASSERT_OR_RETURN(nullptr, type == OBJ_FEATURE, "Expected feature type");
+
+	for (int i = 0; i < 2; ++i)
+	{
+		switch (i)
+		{
+		case 0:
+			objIt = apsFeatureLists[0].begin();
+			list = &apsFeatureLists[0];
+			break;
+		case 1:
+			objIt = mission.apsFeatureLists[0].begin();
+			list = &mission.apsFeatureLists[0];
+			break;
+		}
+
+		while (objIt != list->end())
+		{
+			if ((*objIt)->id == id)
+			{
+				return *objIt;
+			}
+			// if transporter check any droids in the grp
+			if (((*objIt)->type == OBJ_DROID) && isTransporter((DROID*)(*objIt)))
+			{
+				ASSERT_OR_RETURN(nullptr, ((DROID*)(*objIt))->psGroup != nullptr, "Transporter has null group?");
+				for (DROID* psTrans = ((DROID*)(*objIt))->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
+				{
+					if (psTrans->id == id)
+					{
+						return (BASE_OBJECT*)psTrans;
+					}
+				}
+			}
+			++objIt;
+		}
+	}
+	ASSERT(false, "failed to find id %d for player %d", id, player);
+
+	return nullptr;
+}
+
+// Find a base object from its id
 BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 {
 	BASE_OBJECT		*psObj;
@@ -777,7 +893,6 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 			{
 			case OBJ_DROID: psObj = apsDroidLists[player]; break;
 			case OBJ_STRUCTURE: psObj = apsStructLists[player]; break;
-			case OBJ_FEATURE: psObj = apsFeatureLists[0];
 			default: break;
 			}
 			break;
@@ -786,7 +901,6 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 			{
 			case OBJ_DROID: psObj = mission.apsDroidLists[player]; break;
 			case OBJ_STRUCTURE: psObj = mission.apsStructLists[player]; break;
-			case OBJ_FEATURE: psObj = mission.apsFeatureLists[0]; break;
 			default: break;
 			}
 			break;
@@ -819,8 +933,30 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 			psObj = psObj->psNext;
 		}
 	}
-	ASSERT(false, "failed to find id %d for player %d", id, player);
+	return getBaseObjFromFeatureData(id, player, type);
+}
 
+// Find a base object from it's id
+static BASE_OBJECT* getBaseObjFromFeatureId(const FeatureList& list, UDWORD id)
+{
+	for (BASE_OBJECT* psObj : list)
+	{
+		if (psObj->id == id)
+		{
+			return psObj;
+		}
+		// if transporter check any droids in the grp
+		if ((psObj->type == OBJ_DROID) && isTransporter((DROID*)psObj))
+		{
+			for (DROID* psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
+			{
+				if (psTrans->id == id)
+				{
+					return (BASE_OBJECT*)psTrans;
+				}
+			}
+		}
+	}
 	return nullptr;
 }
 
@@ -847,7 +983,11 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 			case 2:
 				if (player == 0)
 				{
-					psObj = (BASE_OBJECT *)apsFeatureLists[0];
+					psObj = getBaseObjFromFeatureId(apsFeatureLists[0], id);
+					if (psObj)
+					{
+						return psObj;
+					}
 				}
 				else
 				{
@@ -863,7 +1003,11 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 			case 5:
 				if (player == 0)
 				{
-					psObj = (BASE_OBJECT *)mission.apsFeatureLists[0];
+					psObj = getBaseObjFromFeatureId(mission.apsFeatureLists[0], id);
+					if (psObj)
+					{
+						return psObj;
+					}
 				}
 				else
 				{
@@ -986,9 +1130,9 @@ static void objListIntegCheck()
 			       objInfo(psCurr), (void*) psCurr, player, (int)psCurr->player);
 		}
 	}
-	for (psCurr = (BASE_OBJECT *)apsFeatureLists[0]; psCurr; psCurr = psCurr->psNext)
+	for (BASE_OBJECT* obj : apsFeatureLists[0])
 	{
-		ASSERT(psCurr->type == OBJ_FEATURE,
+		ASSERT(obj->type == OBJ_FEATURE,
 		       "objListIntegCheck: misplaced object in the feature list");
 	}
 	for (const auto& obj : psDestroyedObj)
@@ -1026,8 +1170,5 @@ void objCount(int *droids, int *structures, int *features)
 		}
 	}
 
-	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
-	{
-		(*features)++;
-	}
+	*features += apsFeatureLists[0].size();
 }

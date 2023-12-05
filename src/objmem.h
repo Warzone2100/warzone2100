@@ -32,7 +32,10 @@
 /* The lists of objects allocated */
 extern DROID			*apsDroidLists[MAX_PLAYERS];
 extern STRUCTURE		*apsStructLists[MAX_PLAYERS];
-extern FEATURE			*apsFeatureLists[MAX_PLAYERS];
+
+using FeatureList = std::list<FEATURE*>;
+using PerPlayerFeatureLists = std::array<FeatureList, MAX_PLAYERS>;
+extern PerPlayerFeatureLists apsFeatureLists;
 
 using FlagPositionList = std::list<FLAG_POSITION*>;
 using PerPlayerFlagPositionLists = std::array<FlagPositionList, MAX_PLAYERS>;

@@ -838,7 +838,7 @@ void processVisibility()
 	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};
+		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player]};
 		unsigned list;
 		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
 		{
@@ -846,6 +846,10 @@ void processVisibility()
 			{
 				processVisibilitySelf(psObj);
 			}
+		}
+		for (BASE_OBJECT* psObj : apsFeatureLists[player])
+		{
+			processVisibilitySelf(psObj);
 		}
 	}
 	for (int player = 0; player < MAX_PLAYERS; ++player)
@@ -878,7 +882,7 @@ void processVisibility()
 	bool addedMessage = false;
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};
+		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player]};
 		unsigned list;
 		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
 		{
@@ -886,6 +890,10 @@ void processVisibility()
 			{
 				processVisibilityLevel(psObj, addedMessage);
 			}
+		}
+		for (BASE_OBJECT* psObj : apsFeatureLists[player])
+		{
+			processVisibilityLevel(psObj, addedMessage);
 		}
 	}
 	if (addedMessage)

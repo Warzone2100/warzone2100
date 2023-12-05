@@ -2232,13 +2232,13 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 	// player can only be 0 for the features.
 
 	/* Go through all the features */
-	for (BASE_OBJECT* list = apsFeatureLists[0]; list != nullptr; list = list->psNext)
+	for (BASE_OBJECT* obj : apsFeatureLists[0])
 	{
-		if (list->type == OBJ_FEATURE
-			&& (list->died == 0 || list->died > graphicsTime)
-			&& clipXY(list->pos.x, list->pos.y))
+		if (obj->type == OBJ_FEATURE
+			&& (obj->died == 0 || obj->died > graphicsTime)
+			&& clipXY(obj->pos.x, obj->pos.y))
 		{
-			FEATURE* psFeature = castFeature(list);
+			FEATURE* psFeature = castFeature(obj);
 			renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
 		}
 	}
@@ -3549,7 +3549,7 @@ static void	drawDroidSelections()
 		}
 	}
 
-	for (const FEATURE *psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
+	for (const FEATURE *psFeature : apsFeatureLists[0])
 	{
 		if (!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)
 		{

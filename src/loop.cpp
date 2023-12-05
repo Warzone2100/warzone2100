@@ -578,10 +578,8 @@ static void gameStateUpdate()
 
 	proj_UpdateAll();
 
-	FEATURE *psNFeat;
-	for (FEATURE *psCFeat = apsFeatureLists[0]; psCFeat; psCFeat = psNFeat)
+	for (FEATURE *psCFeat : apsFeatureLists[0])
 	{
-		psNFeat = psCFeat->psNext;
 		featureUpdate(psCFeat);
 	}
 
