@@ -486,7 +486,7 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 FEATURE *IdToFeature(UDWORD id, UDWORD player)
 {
 	(void)player;	// unused, all features go into player 0
-	for (FEATURE *d = apsFeatureLists[0]; d; d = d->psNext)
+	for (FEATURE *d : apsFeatureLists[0])
 	{
 		if (d->id == id)
 		{

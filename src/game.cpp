@@ -2535,7 +2535,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			apsDroidLists[player] = nullptr;
 			apsStructLists[player] = nullptr;
-			apsFeatureLists[player] = nullptr;
+			apsFeatureLists[player].clear();
 			apsFlagPosLists[player].clear();
 			//clear all the messages?
 			apsProxDisp[player] = nullptr;
@@ -2554,7 +2554,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			apsLimboDroids[player] = nullptr;
 			mission.apsDroidLists[player] = nullptr;
 			mission.apsStructLists[player] = nullptr;
-			mission.apsFeatureLists[player] = nullptr;
+			mission.apsFeatureLists[player].clear();
 			mission.apsFlagPosLists[player].clear();
 			mission.apsExtractorLists[player].clear();
 		}
@@ -7021,7 +7021,7 @@ bool writeFeatureFile(const char *pFileName)
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
 	int counter = 0;
 
-	for (FEATURE *psCurr = apsFeatureLists[0]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (FEATURE *psCurr : apsFeatureLists[0])
 	{
 		ini.beginGroup("feature_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
 		ini.setValue("name", psCurr->psStats->id);

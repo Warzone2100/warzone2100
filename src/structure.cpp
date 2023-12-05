@@ -5943,7 +5943,7 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		}
 
 		//feature
-		for (FEATURE *psFeat = apsFeatureLists[i]; psFeat != nullptr; psFeat = psFeat->psNext)
+		for (FEATURE *psFeat : apsFeatureLists[i])
 		{
 			if (psFeat->visible[losingPlayer])
 			{

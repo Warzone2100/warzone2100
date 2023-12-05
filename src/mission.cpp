@@ -237,7 +237,7 @@ void initMission()
 	{
 		mission.apsStructLists[inc] = nullptr;
 		mission.apsDroidLists[inc] = nullptr;
-		mission.apsFeatureLists[inc] = nullptr;
+		mission.apsFeatureLists[inc].clear();
 		mission.apsFlagPosLists[inc].clear();
 		mission.apsExtractorLists[inc].clear();
 		apsLimboDroids[inc] = nullptr;
@@ -307,8 +307,8 @@ bool missionShutDown()
 			mission.apsDroidLists[inc] = nullptr;
 			apsStructLists[inc] = mission.apsStructLists[inc];
 			mission.apsStructLists[inc] = nullptr;
-			apsFeatureLists[inc] = mission.apsFeatureLists[inc];
-			mission.apsFeatureLists[inc] = nullptr;
+			apsFeatureLists[inc] = std::move(mission.apsFeatureLists[inc]);
+			mission.apsFeatureLists[inc].clear();
 			apsFlagPosLists[inc] = std::move(mission.apsFlagPosLists[inc]);
 			mission.apsFlagPosLists[inc].clear();
 			apsExtractorLists[inc] = std::move(mission.apsExtractorLists[inc]);
@@ -811,8 +811,8 @@ void restoreMissionData()
 		apsStructLists[inc] = mission.apsStructLists[inc];
 		mission.apsStructLists[inc] = nullptr;
 
-		apsFeatureLists[inc] = mission.apsFeatureLists[inc];
-		mission.apsFeatureLists[inc] = nullptr;
+		apsFeatureLists[inc] = std::move(mission.apsFeatureLists[inc]);
+		mission.apsFeatureLists[inc].clear();
 
 		apsFlagPosLists[inc] = std::move(mission.apsFlagPosLists[inc]);
 		mission.apsFlagPosLists[inc].clear();
