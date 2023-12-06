@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:44\n"
+"PO-Revision-Date: 2023-12-06 16:44\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -15274,7 +15274,7 @@ msgstr "コマンドインタフェースを有効にする"
 
 #: src/clparse.cpp:442
 msgid "(stdin, unixsocket:path)"
-msgstr ""
+msgstr "(stdin, unixsocket:path)"
 
 #: src/clparse.cpp:443
 msgid "Minimum required players to auto-start game"
@@ -15950,15 +15950,15 @@ msgstr "デフォルト"
 #: src/frontend.cpp:947
 #: src/frontend.cpp:1000
 msgid "Terrain quality mode not available."
-msgstr ""
+msgstr "地形品質モードは利用できません。"
 
 #: src/frontend.cpp:975
 msgid "Medium Quality"
-msgstr ""
+msgstr "普通品質"
 
 #: src/frontend.cpp:976
 msgid "High Quality"
-msgstr ""
+msgstr "高品質"
 
 #: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
@@ -15974,7 +15974,7 @@ msgstr "ウルトラ"
 
 #: src/frontend.cpp:1116
 msgid "Shadow filtering not available on this system."
-msgstr ""
+msgstr "このシステムではシャドウフィルタリングは利用できません。"
 
 #: src/frontend.cpp:1158
 #: src/frontend.cpp:2141
@@ -15983,11 +15983,11 @@ msgstr "* ゲーム再開時に反映されます"
 
 #: src/frontend.cpp:1165
 msgid "Terrain Quality"
-msgstr ""
+msgstr "地形の品質"
 
 #: src/frontend.cpp:1170
 msgid "Terrain Shading"
-msgstr ""
+msgstr "地形シェーディング"
 
 #: src/frontend.cpp:1176
 #: src/ingameop.cpp:629
@@ -15996,11 +15996,11 @@ msgstr "影"
 
 #: src/frontend.cpp:1185
 msgid "Shadow Resolution"
-msgstr ""
+msgstr "影の解像度"
 
 #: src/frontend.cpp:1190
 msgid "Shadow Filtering"
-msgstr ""
+msgstr "シャドウフィルタリング"
 
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 #: src/frontend.cpp:1197
@@ -16039,7 +16039,7 @@ msgstr "スクリーン振動"
 #: src/frontend.cpp:1235
 #: src/ingameop.cpp:659
 msgid "Groups Menu"
-msgstr ""
+msgstr "グループメニュー"
 
 #: src/frontend.cpp:1247
 msgid "GRAPHICS OPTIONS"
@@ -16353,11 +16353,11 @@ msgstr ""
 
 #: src/frontend.cpp:3346
 msgid "Allow All"
-msgstr ""
+msgstr "すべて許可"
 
 #: src/frontend.cpp:3346
 msgid "Quick Chat Only"
-msgstr ""
+msgstr "クイックチャットのみ"
 
 #: src/frontend.cpp:3363
 msgid "Hosting Options:"
@@ -16373,7 +16373,7 @@ msgstr "UPnPを有効にする"
 
 #: src/frontend.cpp:3377
 msgid "Chat"
-msgstr ""
+msgstr "チャット"
 
 #: src/frontend.cpp:3382
 msgid "Inactivity Timeout"
@@ -16393,7 +16393,7 @@ msgstr ""
 
 #: src/frontend.cpp:3402
 msgid "Game Time Limit"
-msgstr ""
+msgstr "ゲーム制限時間"
 
 #: src/frontend.cpp:3407
 msgid "Enable Rating"
@@ -16520,33 +16520,33 @@ msgstr "お気に入りの技術だけを表示する\n"
 
 #: src/hci/chatoptions.cpp:434
 msgid "New Joins"
-msgstr ""
+msgstr "新規参加"
 
 #: src/hci/chatoptions.cpp:1196
 msgid "Refresh"
-msgstr ""
+msgstr "更新"
 
 #: src/hci/chatoptions.cpp:1214
 msgid "Host Chat Options"
-msgstr ""
+msgstr "ホストチャットオプション"
 
 #: src/hci/chatoptions.cpp:1223
 msgid "Global Options:"
-msgstr ""
+msgstr "グローバル 設定:"
 
 #: src/hci/chatoptions.cpp:1229
 msgid "Enable All"
-msgstr ""
+msgstr "すべて有効"
 
 #: src/hci/chatoptions.cpp:1237
 msgid "Disable All"
-msgstr ""
+msgstr "すべて無効"
 
 #: src/hci/chatoptions.cpp:1256
 #: src/multiint.cpp:4908
 #: src/screens/chatscreen.cpp:394
 msgid "Chat Options"
-msgstr ""
+msgstr "チャットオプション"
 
 #: src/hci/chatoptions.cpp:1264
 msgid "Mute or configure player free chat."
@@ -16558,7 +16558,7 @@ msgstr ""
 
 #: src/hci/chatoptions.cpp:1286
 msgid "Local"
-msgstr ""
+msgstr "ローカル"
 
 #: src/hci/groups.cpp:141
 msgid "Select / Assign Group Number: "
@@ -19797,17 +19797,17 @@ msgstr "%s (%d) はマップの変更を許可しました。合計：%d/%d"
 #: src/multivote.cpp:200
 #, c-format
 msgid "A player voted FOR kicking: %s"
-msgstr ""
+msgstr "プレイヤーがキックに投票しました： %s"
 
 #: src/multivote.cpp:208
 #, c-format
 msgid "A player voted AGAINST kicking: %s"
-msgstr ""
+msgstr "プレイヤーがキック反対に投票しました： %s"
 
 #: src/multivote.cpp:214
 #, c-format
 msgid "A player's client ignored your vote to kick request (too frequent): %s"
-msgstr ""
+msgstr "プレイヤーのクライアントは、キックする投票のリクエストを無視しました(頻度が高すぎます): %s"
 
 #: src/multivote.cpp:283
 msgid "Vote"
@@ -19819,12 +19819,12 @@ msgstr "ホストがマップを変更できるようにする、またはラン
 
 #: src/multivote.cpp:334
 msgid "A vote was started to kick you from the game."
-msgstr ""
+msgstr "ゲームからあなたをキックする投票を開始しました。"
 
 #: src/multivote.cpp:349
 #, c-format
 msgid "A vote was started to kick %s from the game."
-msgstr ""
+msgstr "ゲームから %s をキックする投票を開始しました。"
 
 #: src/multivote.cpp:357
 #, c-format
@@ -19838,17 +19838,17 @@ msgstr ""
 
 #: src/multivote.cpp:359
 msgid "Yes, Kick Them"
-msgstr ""
+msgstr "はい、キックします"
 
 #: src/multivote.cpp:614
 #, c-format
 msgid "The vote to kick player %s succeeded (sufficient votes in favor) - kicking"
-msgstr ""
+msgstr "プレイヤー %s をキックする投票が成功しました（賛成多数） - キックします"
 
 #: src/multivote.cpp:624
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes in favor)"
-msgstr ""
+msgstr "プレイヤー %s をキックする投票に失敗しました (賛成票不足)"
 
 #: src/multivote.cpp:648
 #, c-format
@@ -19858,17 +19858,17 @@ msgstr ""
 #: src/multivote.cpp:680
 #, c-format
 msgid "The vote to kick player %s failed"
-msgstr ""
+msgstr "プレイヤー %s をキックする投票に失敗しました"
 
 #: src/multivote.cpp:691
 #, c-format
 msgid "Cannot request vote to kick player %s yet - please wait a bit longer"
-msgstr ""
+msgstr "まだプレイヤー %s をキックする投票を要求できません - もう少しお待ちください"
 
 #: src/multivote.cpp:703
 #, c-format
 msgid "Starting vote to kick player: %s"
-msgstr ""
+msgstr "プレイヤーをキックする投票を開始しました: %s"
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"
@@ -20040,7 +20040,7 @@ msgstr "あなたはチートを使いました！"
 
 #: src/screens/chatscreen.cpp:155
 msgid "Use Quick Chat to chat with other players."
-msgstr ""
+msgstr "クイックチャットを使用して他のプレイヤーとチャットできます。"
 
 #: src/screens/chatscreen.cpp:161
 msgid "The host has disabled free chat."
@@ -20056,15 +20056,15 @@ msgstr "チャット：チーム"
 
 #: src/screens/chatscreen.cpp:342
 msgid "Did not send message - free chat is disabled by host. Please use Quick Chat."
-msgstr ""
+msgstr "メッセージを送信しませんでした - 無料チャットはホストによって無効になっています。クイックチャットを使用してください。"
 
 #: src/screens/helpscreen.cpp:123
 msgid "Close Help Mode"
-msgstr ""
+msgstr "ヘルプモードを閉じる"
 
 #: src/screens/helpscreen.cpp:218
 msgid "Click/Tap"
-msgstr ""
+msgstr "クリック／タップ"
 
 #: src/screens/helpscreen.cpp:220
 msgid "Right-Click"
@@ -20096,11 +20096,11 @@ msgstr ""
 
 #: src/screens/netpregamescreen.cpp:753
 msgid "Game will start in ..."
-msgstr ""
+msgstr "ゲームが開始されます..."
 
 #: src/screens/netpregamescreen.cpp:763
 msgid "Waiting for other players ..."
-msgstr ""
+msgstr "プレイヤー待機中 ..."
 
 #: src/screens/netpregamescreen.cpp:770
 msgid "Team Planning"
@@ -20170,89 +20170,89 @@ msgstr "（戦車／サイボーグ）"
 
 #: src/stats.cpp:1510
 msgid "Cannons"
-msgstr ""
+msgstr "キャノン"
 
 #: src/stats.cpp:1512
 msgid "Mortars"
-msgstr ""
+msgstr "迫撃砲"
 
 #: src/stats.cpp:1514
 msgid "Missiles"
-msgstr ""
+msgstr "ミサイル"
 
 #: src/stats.cpp:1516
 msgid "Rockets"
-msgstr ""
+msgstr "ロケット"
 
 #: src/stats.cpp:1518
 msgid "Energy"
-msgstr ""
+msgstr "エネルギー"
 
 #: src/stats.cpp:1520
 msgid "Gauss"
-msgstr ""
+msgstr "ガウス"
 
 #. TRANSLATORS: "Flame" weapons class
 #: src/stats.cpp:1523
 msgid "Flame"
-msgstr ""
+msgstr "フレイム"
 
 #: src/stats.cpp:1525
 msgid "Howitzers"
-msgstr ""
+msgstr "榴弾砲"
 
 #. TRANSLATORS: A short-form for "Machine Guns" (should be shorter than the translated full form - if not, just use the full translation for "Machine Guns")
 #: src/stats.cpp:1530
 msgid "MG"
-msgstr ""
+msgstr "MG"
 
 #: src/stats.cpp:1534
 msgid "Machine Guns"
-msgstr ""
+msgstr "マシンガン"
 
 #. TRANSLATORS: "Electronic" weapon class
 #: src/stats.cpp:1538
 msgid "Electronic"
-msgstr ""
+msgstr "電子"
 
 #. TRANSLATORS: A short-form for "Anti-Air" weapons class (should be shorter than the translated full form - if not, just use the full translation for "Anti-Air")
 #: src/stats.cpp:1543
 msgid "A-A"
-msgstr ""
+msgstr "A-A"
 
 #: src/stats.cpp:1547
 msgid "Anti-Air"
-msgstr ""
+msgstr "対空"
 
 #: src/stats.cpp:1550
 msgid "Slow Missile"
-msgstr ""
+msgstr "低速ミサイル"
 
 #: src/stats.cpp:1552
 msgid "Slow Rocket"
-msgstr ""
+msgstr "低速ロケット"
 
 #. TRANSLATORS: A short-form for "Laser Satellite" weapons class - some just use "Las-Sat" or "LasSat"
 #: src/stats.cpp:1557
 msgid "Las-Sat"
-msgstr ""
+msgstr "レーザー衛星"
 
 #: src/stats.cpp:1561
 msgid "Laser Satellite"
-msgstr ""
+msgstr "レーザー衛星"
 
 #: src/stats.cpp:1564
 msgid "Bombs"
-msgstr ""
+msgstr "爆弾"
 
 #: src/stats.cpp:1566
 msgid "Command"
-msgstr ""
+msgstr "コマンド"
 
 #. TRANSLATORS: "EMP" (electromagnetic pulse) weapons class - probably should keep it as "EMP" (or the respective acronym in your language)
 #: src/stats.cpp:1569
 msgid "EMP"
-msgstr ""
+msgstr "EMP"
 
 #: src/structure.cpp:2734
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -20393,7 +20393,7 @@ msgstr "リペア施設賞 - なし"
 
 #: src/terrain.cpp:2572
 msgid "Classic"
-msgstr ""
+msgstr "クラシック"
 
 #: src/titleui/gamefind.cpp:81
 msgid "GAMES"
@@ -20566,7 +20566,7 @@ msgstr "輸送開始"
 #: src/transporter.cpp:313
 #: src/transporter.cpp:364
 msgid "Launch the Transporter"
-msgstr ""
+msgstr "輸送開始"
 
 #: src/transporter.cpp:1024
 msgid "There is not enough room in the Transport!"
