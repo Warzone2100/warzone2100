@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-12-05 15:15\n"
+"PO-Revision-Date: 2023-12-06 03:46\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -236,7 +236,7 @@ msgstr "Neobjavili sme žiadne artefakty a nenarazili sme na žiadnych nepriate�
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "SPRÁVA ROZVIEDKY ZÁKLADNE ALFA: Nepriateľský útok"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
@@ -252,7 +252,7 @@ msgstr "Táto budova je Váš hlavný cieľ."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Vyhľadaj a získaj všetky artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
@@ -280,11 +280,11 @@ msgstr "Doplnkové"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "Technológia synaptického spojenia sa nachádzala na tomto mieste, ale bola odstránená."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "Založ predsunutú základňu a pokračuj v hľadaní synaptického spojenia."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -340,7 +340,7 @@ msgstr "Pochádza z východu."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "ARTEFAKT NAPÁJACIEHO MODULU"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
