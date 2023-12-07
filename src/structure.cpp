@@ -321,7 +321,7 @@ void resetFactoryNumFlag()
 			factoryNumFlag[i][type].clear();
 		}
 		//look through the list of structures to see which have been used
-		for (STRUCTURE *psStruct = apsStructLists[i]; psStruct != nullptr; psStruct = psStruct->psNext)
+		for (STRUCTURE *psStruct : apsStructLists[i])
 		{
 			FLAG_TYPE type;
 			switch (psStruct->pStructureType->type)
@@ -654,7 +654,7 @@ void setCurrentStructQuantity(bool displayError)
 		{
 			asStructureStats[inc].curCount[player] = 0;
 		}
-		for (const STRUCTURE *psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (const STRUCTURE *psCurr : apsStructLists[player])
 		{
 			unsigned inc = psCurr->pStructureType - asStructureStats;
 			asStructureStats[inc].curCount[player]++;
@@ -1667,7 +1667,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		StructureBounds bounds = getStructureBounds(psBuilding);
 		for (unsigned playerNum = 0; playerNum < MAX_PLAYERS; ++playerNum)
 		{
-			for (STRUCTURE *psStruct = apsStructLists[playerNum]; psStruct != nullptr; psStruct = psStruct->psNext)
+			for (STRUCTURE *psStruct : apsStructLists[playerNum])
 			{
 				FLAG_POSITION *fp = nullptr;
 				if (StructIsFactory(psStruct))
@@ -2256,11 +2256,9 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 // remove all factories from a command droid
 void clearCommandDroidFactory(DROID *psDroid)
 {
-	STRUCTURE	*psCurr;
-
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	for (STRUCTURE* psCurr : apsStructLists[selectedPlayer])
 	{
 		if ((psCurr->pStructureType->type == REF_FACTORY) ||
 		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
@@ -2272,7 +2270,7 @@ void clearCommandDroidFactory(DROID *psDroid)
 			}
 		}
 	}
-	for (psCurr = mission.apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	for (STRUCTURE* psCurr : mission.apsStructLists[selectedPlayer])
 	{
 		if ((psCurr->pStructureType->type == REF_FACTORY) ||
 		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
@@ -2641,7 +2639,8 @@ bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission
 		return false;
 	}
 
-	for (STRUCTURE *psCurr = isMission ? mission.apsStructLists[player] : apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	StructureList* pList = isMission ? &mission.apsStructLists[player] : &apsStructLists[player];
+	for (STRUCTURE *psCurr : *pList)
 	{
 		if (psCurr->pStructureType->type == type && (!built || (built && psCurr->status == SS_BUILT)))
 		{
@@ -2918,12 +2917,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	{
 		// This isn't supposed to happen, and really shouldn't be possible - if this happens, maybe a structure is being updated twice?
 		int count1 = 0, count2 = 0;
-		STRUCTURE *s;
-		for (s =         apsStructLists[psStructure->player]; s != nullptr; s = s->psNext)
+		for (STRUCTURE* s : apsStructLists[psStructure->player])
 		{
 			count1 += s == psStructure;
 		}
-		for (s = mission.apsStructLists[psStructure->player]; s != nullptr; s = s->psNext)
+		for (STRUCTURE* s : mission.apsStructLists[psStructure->player])
 		{
 			count2 += s == psStructure;
 		}
@@ -3905,7 +3903,6 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 {
 	std::vector<STRUCTURE_STATS *> structureList;
 	UDWORD			inc;
-	STRUCTURE		*psCurr;
 	STRUCTURE_STATS	*psBuilding;
 
 	ASSERT_OR_RETURN(structureList, _selectedPlayer < MAX_PLAYERS, "_selectedPlayer = %" PRIu32 "", _selectedPlayer);
@@ -3922,7 +3919,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 	//if currently on a mission can't build factory/research/power/derricks
 	if (!missionIsOffworld())
 	{
-		for (psCurr = apsStructLists[_selectedPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (STRUCTURE* psCurr : apsStructLists[_selectedPlayer])
 		{
 			if (psCurr->pStructureType->type == REF_RESEARCH && psCurr->status == SS_BUILT)
 			{
@@ -4751,7 +4748,7 @@ bool checkSpecificStructExists(UDWORD structInc, UDWORD player)
 {
 	ASSERT_OR_RETURN(false, structInc < numStructureStats, "Invalid structure inc");
 
-	for (STRUCTURE *psStructure = apsStructLists[player]; psStructure != nullptr; psStructure = psStructure->psNext)
+	for (STRUCTURE *psStructure : apsStructLists[player])
 	{
 		if (psStructure->status == SS_BUILT)
 		{
@@ -5110,7 +5107,7 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 	// Find a power generator, if possible with a power module.
 	STRUCTURE *bestPowerGen = nullptr;
 	int bestSlot = 0;
-	for (STRUCTURE *psCurr = apsStructLists[psBuilding->player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (STRUCTURE *psCurr : apsStructLists[psBuilding->player])
 	{
 		if (psCurr->pStructureType->type == REF_POWER_GEN && psCurr->status == SS_BUILT)
 		{
@@ -5207,7 +5204,6 @@ adjusts the associated Res Extractors so that they can link to different Power
 Gens if any are available*/
 void releasePowerGen(STRUCTURE *psRelease)
 {
-	STRUCTURE	*psCurr;
 	POWER_GEN	*psPowerGen;
 	UDWORD		i;
 
@@ -5228,8 +5224,7 @@ void releasePowerGen(STRUCTURE *psRelease)
 		}
 	}
 	//may have a power gen with spare capacity
-	for (psCurr = apsStructLists[psRelease->player]; psCurr != nullptr; psCurr =
-	         psCurr->psNext)
+	for (STRUCTURE* psCurr : apsStructLists[psRelease->player])
 	{
 		if (psCurr->pStructureType->type == REF_POWER_GEN &&
 		    psCurr != psRelease && psCurr->status == SS_BUILT)
@@ -5934,7 +5929,7 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//struct
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for (STRUCTURE *psStruct = apsStructLists[i]; psStruct != nullptr; psStruct = psStruct->psNext)
+		for (STRUCTURE *psStruct : apsStructLists[i])
 		{
 			if (psStruct->visible[losingPlayer] && !psStruct->died)
 			{
@@ -6017,12 +6012,10 @@ FLAG_POSITION *FindFactoryDelivery(const STRUCTURE *Struct)
 //Find the factory associated with the delivery point - returns NULL if none exist
 STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 {
-	STRUCTURE	*psCurr;
 	FACTORY		*psFactory;
 	REPAIR_FACILITY *psRepair;
 
-	for (psCurr = apsStructLists[psDelPoint->player]; psCurr != nullptr; psCurr =
-	         psCurr->psNext)
+	for (STRUCTURE* psCurr : apsStructLists[psDelPoint->player])
 	{
 		if (StructIsFactory(psCurr))
 		{
@@ -6390,7 +6383,6 @@ bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc)
 void checkDeliveryPoints(UDWORD version)
 {
 	UBYTE			inc;
-	STRUCTURE		*psStruct;
 	FACTORY			*psFactory;
 	REPAIR_FACILITY	*psRepair;
 	UDWORD					x, y;
@@ -6403,8 +6395,7 @@ void checkDeliveryPoints(UDWORD version)
 		//will have been called to put in down in the first place
 		if (inc != selectedPlayer)
 		{
-			for (psStruct = apsStructLists[inc]; psStruct != nullptr; psStruct =
-			         psStruct->psNext)
+			for (STRUCTURE* psStruct : apsStructLists[inc])
 			{
 				if (StructIsFactory(psStruct))
 				{
@@ -6660,7 +6651,7 @@ STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 	totallyDist = SDWORD_MAX;
 	psNearest = nullptr;
 	psTotallyClear = nullptr;
-	for (STRUCTURE *psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : apsStructLists[psDroid->player])
 	{
 		if (psStruct->pStructureType->type == REF_REARM_PAD && (!bClear || clearRearmPad(psStruct)))
 		{
@@ -6755,7 +6746,7 @@ bool	structIsDamaged(STRUCTURE *psStruct)
 //returns pointer to the new structure
 STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare)
 {
-	STRUCTURE           *psNewStruct, *psStruct;
+	STRUCTURE           *psNewStruct;
 	DROID               *psCurr;
 	STRUCTURE_STATS     *psType, *psModule;
 	UDWORD              x, y;
@@ -6815,7 +6806,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			}
 
 			//check through the 'attackPlayer' players list of structures to see if any are targetting it
-			for (psStruct = apsStructLists[attackPlayer]; psStruct != nullptr; psStruct = psStruct->psNext)
+			for (STRUCTURE* psStruct : apsStructLists[attackPlayer])
 			{
 				if (psStruct->psTarget[0] == psStructure)
 				{

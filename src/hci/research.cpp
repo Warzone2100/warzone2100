@@ -42,11 +42,15 @@ void ResearchController::updateFacilitiesList()
 {
 	facilities.clear();
 
-	for (auto psStruct = interfaceStructList(); psStruct != nullptr; psStruct = psStruct->psNext)
+	auto* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		if (psStruct->pStructureType->type == REF_RESEARCH && psStruct->status == SS_BUILT && psStruct->died == 0)
+		for (auto psStruct : *intStrList)
 		{
-			facilities.push_back(psStruct);
+			if (psStruct->pStructureType->type == REF_RESEARCH && psStruct->status == SS_BUILT && psStruct->died == 0)
+			{
+				facilities.push_back(psStruct);
+			}
 		}
 	}
 

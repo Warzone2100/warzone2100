@@ -613,11 +613,11 @@ void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = tr
 			uint32_t unitsKilled = getMultiPlayUnitsKilled(n);
 			uint32_t numUnits = 0;
 			for (DROID *psDroid = apsDroidLists[n]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
-			uint32_t numStructs = 0;
+			uint32_t numStructs = apsStructLists[n].size();
 			uint32_t numFactories = 0;
 			uint32_t numResearch = 0;
 			uint32_t numFactoriesThatCanProduceConstructionUnits = 0;
-			for (STRUCTURE *psStruct = apsStructLists[n]; psStruct; psStruct = psStruct->psNext, numStructs++)
+			for (STRUCTURE *psStruct : apsStructLists[n])
 			{
 				if (psStruct->status != SS_BUILT || psStruct->died != 0)
 				{

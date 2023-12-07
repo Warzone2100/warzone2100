@@ -666,26 +666,27 @@ DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 /*called when a Template is deleted in the Design screen*/
 void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, QUEUE_MODE mode)
 {
-	STRUCTURE   *psStruct;
-	STRUCTURE	*psList;
-
 	ASSERT_OR_RETURN(, psTemplate != nullptr, "Null psTemplate");
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %u", player);
 
 	//see if any factory is currently using the template
 	for (unsigned i = 0; i < 2; ++i)
 	{
-		psList = nullptr;
+		StructureList* psList = nullptr;
 		switch (i)
 		{
 		case 0:
-			psList = apsStructLists[player];
+			psList = &apsStructLists[player];
 			break;
 		case 1:
-			psList = mission.apsStructLists[player];
+			psList = &mission.apsStructLists[player];
 			break;
 		}
-		for (psStruct = psList; psStruct != nullptr; psStruct = psStruct->psNext)
+		if (!psList)
+		{
+			continue;
+		}
+		for (STRUCTURE* psStruct : *psList)
 		{
 			if (StructIsFactory(psStruct))
 			{

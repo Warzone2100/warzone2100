@@ -227,7 +227,7 @@ void kf_DamageMe()
 			}
 		}
 	}
-	for (STRUCTURE *psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : apsStructLists[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -248,7 +248,6 @@ void kf_DamageMe()
 void	kf_TraceObject()
 {
 	DROID		*psCDroid, *psNDroid;
-	STRUCTURE	*psCStruct, *psNStruct;
 
 	if (selectedPlayer >= MAX_PLAYERS)
 	{
@@ -265,9 +264,8 @@ void	kf_TraceObject()
 			return;
 		}
 	}
-	for (psCStruct = apsStructLists[selectedPlayer]; psCStruct; psCStruct = psNStruct)
+	for (STRUCTURE* psCStruct : apsStructLists[selectedPlayer])
 	{
-		psNStruct = psCStruct->psNext;
 		if (psCStruct->selected)
 		{
 			objTraceEnable(psCStruct->id);
@@ -513,7 +511,7 @@ void kf_Unselectable()
 			psDroid->selected = false;
 		}
 	}
-	for (STRUCTURE *psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : apsStructLists[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -908,7 +906,6 @@ void kf_MapCheck()
 #endif
 
 	DROID		*psDroid;
-	STRUCTURE	*psStruct;
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
@@ -917,7 +914,7 @@ void kf_MapCheck()
 		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	}
 
-	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 	{
 		alignStructure(psStruct);
 	}
@@ -1315,12 +1312,9 @@ void	kf_ToggleGodMode()
 		{
 			if (playerId != selectedPlayer)
 			{
-				STRUCTURE *psStruct = apsStructLists[playerId];
-
-				while (psStruct)
+				for (STRUCTURE* psStruct : apsStructLists[playerId])
 				{
 					psStruct->visible[selectedPlayer] = 0;
-					psStruct = psStruct->psNext;
 				}
 			}
 		}
@@ -1522,8 +1516,6 @@ void	kf_FinishAllResearch()
 
 void kf_Reload()
 {
-	STRUCTURE	*psCurr;
-
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
@@ -1535,15 +1527,18 @@ void kf_Reload()
 		return;
 	}
 #endif
-
-	for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+	auto* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		if (isLasSat(psCurr->pStructureType) && psCurr->selected)
+		for (STRUCTURE* psCurr : *intStrList)
 		{
-			unsigned int firePause = weaponFirePause(&asWeaponStats[psCurr->asWeaps[0].nStat], psCurr->player);
+			if (isLasSat(psCurr->pStructureType) && psCurr->selected)
+			{
+				unsigned int firePause = weaponFirePause(&asWeaponStats[psCurr->asWeaps[0].nStat], psCurr->player);
 
-			psCurr->asWeaps[0].lastFired -= firePause;
-			CONPRINTF("%s", _("Selected buildings instantly recharged!"));
+				psCurr->asWeaps[0].lastFired -= firePause;
+				CONPRINTF("%s", _("Selected buildings instantly recharged!"));
+			}
 		}
 	}
 }
@@ -1552,8 +1547,6 @@ void kf_Reload()
 // finish all the research for the selected player
 void	kf_FinishResearch()
 {
-	STRUCTURE	*psCurr;
-
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
@@ -1566,29 +1559,33 @@ void	kf_FinishResearch()
 	}
 #endif
 
-	for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+	auto* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		if (psCurr->pStructureType->type == REF_RESEARCH)
+		for (STRUCTURE* psCurr : *intStrList)
 		{
-			BASE_STATS	*pSubject;
-
-			// find out what we are researching here
-			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
-			if (pSubject)
+			if (psCurr->pStructureType->type == REF_RESEARCH)
 			{
-				int rindex = ((RESEARCH *)pSubject)->index;
-				if (bMultiMessages)
+				BASE_STATS* pSubject;
+
+				// find out what we are researching here
+				pSubject = ((RESEARCH_FACILITY*)psCurr->pFunctionality)->psSubject;
+				if (pSubject)
 				{
-					SendResearch(selectedPlayer, rindex, true);
-					// Wait for our message before doing anything.
+					int rindex = ((RESEARCH*)pSubject)->index;
+					if (bMultiMessages)
+					{
+						SendResearch(selectedPlayer, rindex, true);
+						// Wait for our message before doing anything.
+					}
+					else
+					{
+						researchResult(rindex, selectedPlayer, true, psCurr, true);
+					}
+					std::string cmsg = astringf(_("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getLocalizedStatsName(pSubject));
+					sendInGameSystemMessage(cmsg.c_str());
+					intResearchFinished(psCurr);
 				}
-				else
-				{
-					researchResult(rindex, selectedPlayer, true, psCurr, true);
-				}
-				std::string cmsg = astringf(_("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getLocalizedStatsName(pSubject));
-				sendInGameSystemMessage(cmsg.c_str());
-				intResearchFinished(psCurr);
 			}
 		}
 	}
@@ -1854,10 +1851,8 @@ MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bo
 
 		selNextSpecifiedBuilding(factoryType, bJumpToSelected);
 
-		STRUCTURE* psCurrent;
-
 		//deselect factories of other types
-		for (psCurrent = apsStructLists[selectedPlayer]; psCurrent; psCurrent = psCurrent->psNext)
+		for (STRUCTURE* psCurrent : apsStructLists[selectedPlayer])
 		{
 			const STRUCTURE_TYPE currentType = psCurrent->pStructureType->type;
 			const bool bIsAnotherTypeOfFactory = currentType != factoryType && std::any_of(FACTORY_TYPES.begin(), FACTORY_TYPES.end(), [currentType](const STRUCTURE_TYPE type) {
@@ -1909,7 +1904,6 @@ MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected)
 void	kf_KillEnemy()
 {
 	DROID		*psCDroid, *psNDroid;
-	STRUCTURE	*psCStruct, *psNStruct;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1940,9 +1934,8 @@ void	kf_KillEnemy()
 				SendDestroyDroid(psCDroid);
 			}
 			// wipe out all their structures
-			for (psCStruct = apsStructLists[playerId]; psCStruct; psCStruct = psNStruct)
+			for (STRUCTURE* psCStruct : apsStructLists[playerId])
 			{
-				psNStruct = psCStruct->psNext;
 				SendDestroyStructure(psCStruct);
 			}
 		}
@@ -1953,7 +1946,6 @@ void	kf_KillEnemy()
 void kf_KillSelected()
 {
 	DROID		*psCDroid, *psNDroid;
-	STRUCTURE	*psCStruct, *psNStruct;
 
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
@@ -1983,9 +1975,8 @@ void kf_KillSelected()
 			SendDestroyDroid(psCDroid);
 		}
 	}
-	for (psCStruct = apsStructLists[selectedPlayer]; psCStruct; psCStruct = psNStruct)
+	for (STRUCTURE* psCStruct : apsStructLists[selectedPlayer])
 	{
-		psNStruct = psCStruct->psNext;
 		if (psCStruct->selected)
 		{
 			SendDestroyStructure(psCStruct);
@@ -2168,24 +2159,23 @@ void	kf_TriggerRayCast()
 // --------------------------------------------------------------------------
 void	kf_CentreOnBase()
 {
-	STRUCTURE	*psStruct;
-	bool		bGotHQ;
+	bool		bGotHQ = false;
 	UDWORD		xJump = 0, yJump = 0;
 
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
 	/* Got through our buildings */
-	for (psStruct = apsStructLists[selectedPlayer], bGotHQ = false;	// start
-	     psStruct && !bGotHQ;											// terminate
-	     psStruct = psStruct->psNext)									// iteration
+	auto structIt = apsStructLists[selectedPlayer].begin();
+	while (structIt != apsStructLists[selectedPlayer].end())
 	{
 		/* Have we got a HQ? */
-		if (psStruct->pStructureType->type == REF_HQ)
+		if ((*structIt)->pStructureType->type == REF_HQ)
 		{
 			bGotHQ = true;
-			xJump = psStruct->pos.x;
-			yJump = psStruct->pos.y;
+			xJump = (*structIt)->pos.x;
+			yJump = (*structIt)->pos.y;
+			break;
 		}
 	}
 

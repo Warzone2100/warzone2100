@@ -145,7 +145,7 @@ static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
 static PIELIGHT GetPlayerTextColor(int mode, UDWORD player)
 {
 	// override color if they are dead...
-	if (player >= MAX_PLAYERS || (!apsDroidLists[player] && !apsStructLists[player]))
+	if (player >= MAX_PLAYERS || (!apsDroidLists[player] && apsStructLists[player].empty()))
 	{
 		return WZCOL_GREY;			// dead text color
 	}
@@ -1100,11 +1100,7 @@ private:
 				if (isAlly || gInputManager.debugManager().debugMappingsAllowed())
 				{
 					// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
-					int num = 0;
-					for (STRUCTURE *temp = apsStructLists[playerWidget.player]; temp != nullptr; temp = temp->psNext)
-					{
-						++num;
-					}
+					int num = apsStructLists[playerWidget.player].size();
 					ssprintf(lastString, "%d", num);
 				}
 			}

@@ -425,7 +425,7 @@ static bool localPlayerHasSelection()
 		}
 	}
 
-	for (STRUCTURE* psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -1845,10 +1845,8 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 			auto shouldDisplayInterface = !anyDroidSelected(selectedPlayer);
 			if (selection == SC_INVALID)
 			{
-				STRUCTURE *psCurr;
-
 				/* Clear old building selection(s) - should only be one */
-				for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+				for (STRUCTURE* psCurr : apsStructLists[selectedPlayer])
 				{
 					psCurr->selected = false;
 				}
@@ -1872,10 +1870,8 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 	         (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) &&
 	         selection == SC_INVALID && ownStruct)
 	{
-		STRUCTURE *psCurr;
-
 		/* Clear old building selection(s) - should only be one */
-		for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+		for (STRUCTURE* psCurr : apsStructLists[selectedPlayer])
 		{
 			psCurr->selected = false;
 		}
@@ -2767,7 +2763,6 @@ bool cyborgDroidSelected(UDWORD player)
 void clearSelection()
 {
 	DROID			*psCurrDroid;
-	STRUCTURE		*psStruct;
 
 	memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
 
@@ -2780,7 +2775,7 @@ void clearSelection()
 	{
 		psCurrDroid->selected = false;
 	}
-	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 	{
 		psStruct->selected = false;
 	}

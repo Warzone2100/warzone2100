@@ -474,7 +474,6 @@ void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio)
 void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 {
 	char	tm1[128];
-	STRUCTURE* psStructure;
 
 	if (prop && bMultiMessages)
 	{
@@ -502,7 +501,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 
 	// Make sure p1's structures are no longer considered "our buildings" to their former allies
 	// For unit pathing
-	for (psStructure = apsStructLists[p1]; psStructure; psStructure = psStructure->psNext)
+	for (STRUCTURE* psStructure : apsStructLists[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -516,7 +515,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		}
 	}
 	// Do the same for p2's stuff
-	for (psStructure = apsStructLists[p2]; psStructure; psStructure = psStructure->psNext)
+	for (STRUCTURE* psStructure : apsStructLists[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -534,7 +533,6 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allowNotification)
 {
 	DROID	*psDroid;
-	STRUCTURE	*psStructure;
 	char	tm1[128];
 
 	if (bMultiMessages && prop)
@@ -593,7 +591,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Properly mark all of p1's structures as allied buildings for unit pathing
-	for (psStructure = apsStructLists[p1]; psStructure; psStructure = psStructure->psNext)
+	for (STRUCTURE* psStructure : apsStructLists[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -615,7 +613,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 		}
 	}
 	// Do the same for p2's stuff
-	for (psStructure = apsStructLists[p2]; psStructure; psStructure = psStructure->psNext)
+	for (STRUCTURE* psStructure : apsStructLists[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 

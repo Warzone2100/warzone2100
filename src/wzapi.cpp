@@ -1000,7 +1000,7 @@ bool wzapi::structureIdle(WZAPI_PARAMS(const STRUCTURE *psStruct))
 	return ::structureIdle(psStruct);
 }
 
-std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _player, optional<wzapi::STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter), STRUCTURE **psStructLists)
+std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _player, optional<wzapi::STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter), const PerPlayerStructureList& psStructLists)
 {
 	std::vector<const STRUCTURE *> matches;
 	WzString statsName;
@@ -1017,7 +1017,7 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
-	for (STRUCTURE *psStruct = psStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : psStructLists[player])
 	{
 		if ((playerFilter == ALL_PLAYERS || psStruct->visible[playerFilter])
 		    && !psStruct->died
@@ -1170,7 +1170,7 @@ std::vector<const BASE_OBJECT *> wzapi::enumSelected(WZAPI_NO_PARAMS_NO_CONTEXT)
 			matches.push_back(psDroid);
 		}
 	}
-	for (STRUCTURE *psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : apsStructLists[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -3367,11 +3367,11 @@ static void dirtyAllDroids(int player)
 
 static void dirtyAllStructures(int player)
 {
-	for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (STRUCTURE *psCurr : apsStructLists[player])
 	{
 		psCurr->flags.set(OBJECT_FLAG_DIRTY);
 	}
-	for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (STRUCTURE *psCurr : mission.apsStructLists[player])
 	{
 		psCurr->flags.set(OBJECT_FLAG_DIRTY);
 	}
@@ -3696,14 +3696,14 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 		case SCRCB_ELW:
 			// Update resistance points for all structures, to avoid making them damaged
 			// FIXME - this is _really_ slow! we could be doing this for dozens of buildings one at a time!
-			for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			for (STRUCTURE *psCurr : apsStructLists[player])
 			{
 				if (psStats == psCurr->pStructureType && psStats->upgrade[player].resistance < value)
 				{
 					psCurr->resistance = value;
 				}
 			}
-			for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			for (STRUCTURE *psCurr : mission.apsStructLists[player])
 			{
 				if (psStats == psCurr->pStructureType && psStats->upgrade[player].resistance < value)
 				{
@@ -3716,14 +3716,14 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			// Update body points for all structures, to avoid making them damaged
 			// FIXME - this is _really_ slow! we could be doing this for
 			// dozens of buildings one at a time!
-			for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			for (STRUCTURE *psCurr : apsStructLists[player])
 			{
 				if (psStats == psCurr->pStructureType && psStats->upgrade[player].hitpoints < value)
 				{
 					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
 				}
 			}
-			for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+			for (STRUCTURE *psCurr : mission.apsStructLists[player])
 			{
 				if (psStats == psCurr->pStructureType && psStats->upgrade[player].hitpoints < value)
 				{

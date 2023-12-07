@@ -468,7 +468,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 	/* Firstly, start coughing if the type is invalid */
 	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u", structType);
 
-	for (STRUCTURE *psCurr = apsStructLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
+	for (STRUCTURE *psCurr : apsStructLists[selectedPlayer])
 	{
 		if (psCurr->pStructureType->type == structType && psCurr->status == SS_BUILT)
 		{

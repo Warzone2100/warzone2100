@@ -1352,7 +1352,7 @@ static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
 void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	UDWORD		iFactoryDistSq;
-	STRUCTURE	*psStruct, *psFactory;
+	STRUCTURE	*psFactory;
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	const Vector3i rPos(psOrder->pos, 0);
 	syncDebugDroid(psDroid, '-');
@@ -1645,7 +1645,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_RTB:
-		for (psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[psDroid->player])
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
@@ -1828,7 +1828,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_RECYCLE:
 		psFactory = nullptr;
 		iFactoryDistSq = 0;
-		for (psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[psDroid->player])
 		{
 			// Look for nearest factory or repair facility
 			if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
@@ -3001,7 +3001,7 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
-	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : apsStructLists[player])
 	{
 		if (psStruct->pStructureType->type == factoryType)
 		{
@@ -3018,7 +3018,7 @@ static STRUCTURE *FindARepairFacility(unsigned player)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
-	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : apsStructLists[player])
 	{
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 		{
@@ -3346,7 +3346,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	vDroidPos.clear();
 	vDroid.clear();
 
-	for (STRUCTURE *psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE *psStruct : apsStructLists[psDroid->player])
 	{
 		if (psStruct->pStructureType->type == REF_HQ)
 		{
@@ -3462,7 +3462,6 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
 {
 	UDWORD		CurrState, factType, prodType;
-	STRUCTURE	*psStruct;
 	SDWORD		factoryInc;
 	bool		retVal;
 	DROID		*psTransport, *psCurr, *psNext;
@@ -3667,8 +3666,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		if (psDroid->droidType == DROID_COMMAND)
 		{
 			// look for the factories
-			for (psStruct = apsStructLists[psDroid->player]; psStruct;
-			     psStruct = psStruct->psNext)
+			for (STRUCTURE* psStruct : apsStructLists[psDroid->player])
 			{
 				factType = psStruct->pStructureType->type;
 				if (factType == REF_FACTORY ||
@@ -4124,9 +4122,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	STRUCTURE   *psStruct;
-
-	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE* psStruct : apsStructLists[player])
 	{
 		if (lasSatStructSelected(psStruct))
 		{

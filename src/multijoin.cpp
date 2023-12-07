@@ -114,7 +114,6 @@ void clearPlayer(UDWORD player, bool quietly)
 void destroyPlayerResources(UDWORD player, bool quietly)
 {
 	UDWORD			i;
-	STRUCTURE		*psStruct, *psNext;
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -148,22 +147,22 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 	}
 
 	debug(LOG_DEATH, "killing off all structures for player %d", player);
-	psStruct = apsStructLists[player];
-	while (psStruct)				// delete all structs
+	StructureList::iterator psStructIt = apsStructLists[player].begin(), psNextIt;
+	while (psStructIt != apsStructLists[player].end())				// delete all structs
 	{
-		psNext = psStruct->psNext;
+		psNextIt = std::next(psStructIt);
 
 		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
-		if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+		if (quietly || (*psStructIt)->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 		{
-			removeStruct(psStruct, true);
+			removeStruct(*psStructIt, true);
 		}
 		else			// show effects
 		{
-			destroyStruct(psStruct, gameTime);
+			destroyStruct(*psStructIt, gameTime);
 		}
 
-		psStruct = psNext;
+		psStructIt = psNextIt;
 	}
 
 	return;
@@ -172,26 +171,26 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 static bool destroyMatchingStructs(UDWORD player, std::function<bool (STRUCTURE *)> cmp, bool quietly)
 {
 	bool destroyedAnyStructs = false;
-	STRUCTURE *psStruct = apsStructLists[player];
-	while (psStruct)
+	StructureList::iterator psStructIt = apsStructLists[player].begin(), psNextIt;
+	while (psStructIt != apsStructLists[player].end())
 	{
-		STRUCTURE * psNext = psStruct->psNext;
+		psNextIt = std::next(psStructIt);
 
-		if (cmp(psStruct))
+		if (cmp(*psStructIt))
 		{
 			// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
-			if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+			if (quietly || (*psStructIt)->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 			{
-				removeStruct(psStruct, true);
+				removeStruct(*psStructIt, true);
 			}
 			else			// show effects
 			{
-				destroyStruct(psStruct, gameTime);
+				destroyStruct(*psStructIt, gameTime);
 			}
 			destroyedAnyStructs = true;
 		}
 
-		psStruct = psNext;
+		psStructIt = psNextIt;
 	}
 	return destroyedAnyStructs;
 }
@@ -297,18 +296,18 @@ bool splitResourcesAmongTeam(UDWORD player)
 			});
 		};
 
-		STRUCTURE *psStruct = apsStructLists[player];
-		while (psStruct)
+		StructureList::iterator psStructIt = apsStructLists[player].begin(), psNextIt;
+		while (psStructIt != apsStructLists[player].end())
 		{
-			STRUCTURE * psNext = psStruct->psNext;
+			psNextIt = std::next(psStructIt);
 
-			if (cmp(psStruct))
+			if (cmp(*psStructIt))
 			{
-				giftSingleStructure(psStruct, structsGiftedPerTarget.front().player, false);
+				giftSingleStructure(*psStructIt, structsGiftedPerTarget.front().player, false);
 				incrRecvStruct(0);
 			}
 
-			psStruct = psNext;
+			psStructIt = psNextIt;
 		}
 	};
 
@@ -373,7 +372,6 @@ static void resetMultiVisibility(UDWORD player)
 {
 	UDWORD		owned;
 	DROID		*pDroid;
-	STRUCTURE	*pStruct;
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -391,7 +389,7 @@ static void resetMultiVisibility(UDWORD player)
 			}
 
 			//structures
-			for (pStruct = apsStructLists[owned]; pStruct; pStruct = pStruct->psNext)
+			for (STRUCTURE* pStruct : apsStructLists[owned])
 			{
 				pStruct->visible[player] = false;
 			}

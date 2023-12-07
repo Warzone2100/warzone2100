@@ -264,7 +264,7 @@ static bool intAddCommand();
 /* Stop looking for a structure location */
 static void intStopStructPosition();
 
-static STRUCTURE *CurrentStruct = nullptr;
+static optional<StructureList::iterator> CurrentStruct;
 static SWORD CurrentStructType = 0;
 static DROID *CurrentDroid = nullptr;
 static DROID_TYPE CurrentDroidType = DROID_ANY;
@@ -2510,7 +2510,7 @@ void addTransporterInterface(DROID *psSelected, bool onMission)
 }
 
 /*sets which list of structures to use for the interface*/
-STRUCTURE *interfaceStructList()
+StructureList *interfaceStructList()
 {
 	if (selectedPlayer >= MAX_PLAYERS)
 	{
@@ -2519,11 +2519,11 @@ STRUCTURE *interfaceStructList()
 
 	if (offWorldKeepLists)
 	{
-		return mission.apsStructLists[selectedPlayer];
+		return &mission.apsStructLists[selectedPlayer];
 	}
 	else
 	{
-		return apsStructLists[selectedPlayer];
+		return &apsStructLists[selectedPlayer];
 	}
 }
 
@@ -2782,16 +2782,19 @@ int intGetResearchState()
 	}
 
 	bool resFree = false;
-	for (STRUCTURE *psStruct = interfaceStructList(); psStruct != nullptr; psStruct = psStruct->psNext)
+	StructureList* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		if (psStruct->pStructureType->type == REF_RESEARCH &&
-		    psStruct->status == SS_BUILT &&
-		    getResearchStats(psStruct) == nullptr)
+		for (STRUCTURE* psStruct : *intStrList)
 		{
-			resFree = true;
-			break;
+			if (psStruct->pStructureType->type == REF_RESEARCH &&
+				psStruct->status == SS_BUILT &&
+				getResearchStats(psStruct) == nullptr)
+			{
+				resFree = true;
+				break;
+			}
 		}
-
 	}
 
 	int count = 0;
@@ -2847,33 +2850,37 @@ bool intCheckReticuleButEnabled(UDWORD id)
 //
 static STRUCTURE *intGotoNextStructureType(UDWORD structType)
 {
-	STRUCTURE	*psStruct;
+	StructureList::iterator psStructIt;
 	bool Found = false;
 
 	if ((SWORD)structType != CurrentStructType)
 	{
-		CurrentStruct = nullptr;
+		CurrentStruct.reset();
 		CurrentStructType = (SWORD)structType;
 	}
 
-	if (CurrentStruct != nullptr)
+	auto* intStrList = interfaceStructList();
+	if (CurrentStruct.has_value())
 	{
-		psStruct = CurrentStruct;
+		psStructIt = *CurrentStruct;
 	}
 	else
 	{
-		psStruct = interfaceStructList();
+		if (intStrList)
+		{
+			psStructIt = intStrList->begin();
+		}
 	}
 
-	for (; psStruct != nullptr; psStruct = psStruct->psNext)
+	while (psStructIt != intStrList->end())
 	{
-		if ((psStruct->pStructureType->type == structType || structType == REF_ANY) && psStruct->status == SS_BUILT)
+		if (((*psStructIt)->pStructureType->type == structType || structType == REF_ANY) && (*psStructIt)->status == SS_BUILT)
 		{
-			if (psStruct != CurrentStruct)
+			if (!CurrentStruct || psStructIt != CurrentStruct)
 			{
 				clearSelection();
-				psStruct->selected = true;
-				CurrentStruct = psStruct;
+				(*psStructIt)->selected = true;
+				CurrentStruct = psStructIt;
 				Found = true;
 				break;
 			}
@@ -2881,18 +2888,19 @@ static STRUCTURE *intGotoNextStructureType(UDWORD structType)
 	}
 
 	// Start back at the beginning?
-	if ((!Found) && (CurrentStruct != nullptr))
+	if ((!Found) && CurrentStruct.has_value())
 	{
-		for (psStruct = interfaceStructList(); psStruct != CurrentStruct && psStruct != nullptr; psStruct = psStruct->psNext)
+		psStructIt = intStrList->begin();
+		while (psStructIt != intStrList->end() && psStructIt != CurrentStruct)
 		{
-			if ((psStruct->pStructureType->type == structType || structType == REF_ANY) && psStruct->status == SS_BUILT)
+			if (((*psStructIt)->pStructureType->type == structType || structType == REF_ANY) && (*psStructIt)->status == SS_BUILT)
 			{
-				if (psStruct != CurrentStruct)
+				if (psStructIt != CurrentStruct)
 				{
 					clearSelection();
-					psStruct->selected = true;
-					jsDebugSelected(psStruct);
-					CurrentStruct = psStruct;
+					(*psStructIt)->selected = true;
+					jsDebugSelected((*psStructIt));
+					CurrentStruct = psStructIt;
 					break;
 				}
 			}
@@ -2901,7 +2909,7 @@ static STRUCTURE *intGotoNextStructureType(UDWORD structType)
 
 	triggerEventSelected();
 
-	return CurrentStruct;
+	return CurrentStruct.has_value() ? **CurrentStruct : nullptr;
 }
 
 // Find any structure. Returns NULL if none found.

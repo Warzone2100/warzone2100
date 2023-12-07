@@ -448,7 +448,7 @@ public:
 	void addStructureSelectionsToRender(uint32_t player, BASE_OBJECT *psClickedOn, bool bMouseOverOwnStructure)
 	{
 		/* Go thru' all the buildings */
-		for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE *psStruct : apsStructLists[player])
 		{
 			if (psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
@@ -522,11 +522,10 @@ public:
 
 		if (renderStructureTargetingGfx)
 		{
-			STRUCTURE *psStruct = nullptr;
 			SDWORD scrX, scrY;
 			for (uint32_t i = 0; i < MAX_PLAYERS; i++)
 			{
-				for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+				for (STRUCTURE* psStruct : apsStructLists[i])
 				{
 					/* If it's targetted and on-screen */
 					if (psStruct->flags.test(OBJECT_FLAG_TARGETED)
@@ -1953,17 +1952,15 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	/* Go through all the players */
 	for (unsigned aPlayer = 0; aPlayer < MAX_PLAYERS; ++aPlayer)
 	{
-		BASE_OBJECT *list = apsStructLists[aPlayer];
-
 		/* Now go all buildings for that player */
-		for (; list != nullptr; list = list->psNext)
+		for (BASE_OBJECT* obj : apsStructLists[aPlayer])
 		{
 			/* Worth rendering the structure? */
-			if (list->type != OBJ_STRUCTURE || (list->died != 0 && list->died < graphicsTime))
+			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
 			{
 				continue;
 			}
-			STRUCTURE *psStructure = castStructure(list);
+			STRUCTURE *psStructure = castStructure(obj);
 
 			if (!clipStructureOnScreen(psStructure))
 			{
@@ -4015,7 +4012,7 @@ static void structureEffectsPlayer(UDWORD player)
 		return;  // Don't add effects this frame.
 	}
 
-	for (STRUCTURE *psStructure = apsStructLists[player]; psStructure; psStructure = psStructure->psNext)
+	for (STRUCTURE *psStructure : apsStructLists[player])
 	{
 		if (psStructure->status != SS_BUILT)
 		{
@@ -4109,7 +4106,7 @@ static void structureEffects()
 {
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (apsStructLists[i])
+		if (!apsStructLists[i].empty())
 		{
 			structureEffectsPlayer(i);
 		}
@@ -4122,7 +4119,6 @@ static void	showDroidSensorRanges()
 	static uint32_t lastRangeUpdateTime = 0;
 
 	DROID		*psDroid;
-	STRUCTURE	*psStruct;
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
@@ -4137,7 +4133,7 @@ static void	showDroidSensorRanges()
 			}
 		}
 
-		for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 		{
 			if (psStruct->selected)
 			{

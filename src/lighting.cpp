@@ -382,13 +382,12 @@ void calcDroidIllumination(DROID *psDroid)
 
 void doBuildingLights()
 {
-	STRUCTURE	*psStructure;
 	UDWORD	i;
 	LIGHT	light;
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
+		for (STRUCTURE* psStructure : apsStructLists[i])
 		{
 			light.range = psStructure->pStructureType->baseWidth * TILE_UNITS;
 			light.position.x = psStructure->pos.x;

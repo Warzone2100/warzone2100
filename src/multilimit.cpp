@@ -380,7 +380,7 @@ bool applyLimitSet()
 				{
 					while (asStructureStats[id].curCount[player] > asStructureStats[id].upgrade[player].limit)
 					{
-						for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+						for (STRUCTURE *psStruct : apsStructLists[player])
 						{
 							if (psStruct->pStructureType->type == asStructureStats[id].type)
 							{

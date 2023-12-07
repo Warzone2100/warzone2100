@@ -2229,7 +2229,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
 static bool loadSaveStructure2(const char *pFileName);
 static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding);
-static bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList);
+static bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureList *ppList);
 static bool writeStructFile(const char *pFileName);
 
 static bool loadSaveTemplate(const char *pFileName);
@@ -2484,7 +2484,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 {
 	std::shared_ptr<WzMap::Map> data;
 	std::map<WzString, DROID **> droidMap;
-	std::map<WzString, STRUCTURE **> structMap;
+	std::map<WzString, PerPlayerStructureList *> structMap;
 
 	// only populated when loading maps, *not* savegames
 	std::unordered_map<UDWORD, UDWORD> fixedMapIdToGeneratedId;
@@ -2534,7 +2534,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
 			apsDroidLists[player] = nullptr;
-			apsStructLists[player] = nullptr;
+			apsStructLists[player].clear();
 			apsFeatureLists[player].clear();
 			apsFlagPosLists[player].clear();
 			//clear all the messages?
@@ -2553,7 +2553,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			apsLimboDroids[player] = nullptr;
 			mission.apsDroidLists[player] = nullptr;
-			mission.apsStructLists[player] = nullptr;
+			mission.apsStructLists[player].clear();
 			mission.apsFeatureLists[player].clear();
 			mission.apsFlagPosLists[player].clear();
 			mission.apsExtractorLists[player].clear();
@@ -2750,7 +2750,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			if (pl != selectedPlayer)
 			{
 				/* Structures */
-				for (STRUCTURE *psStr = apsStructLists[pl]; psStr; psStr = psStr->psNext)
+				for (STRUCTURE *psStr : apsStructLists[pl])
 				{
 					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psStr->player, selectedPlayer))
 					{
@@ -2887,7 +2887,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 		else
 		{
-			structMap[aFileName] = mission.apsStructLists;	// we swap pointers below
+			structMap[aFileName] = &mission.apsStructLists;	// we swap pointers below
 		}
 
 		// load in the mission droids, if any
@@ -3156,7 +3156,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
-		structMap[aFileName] = apsStructLists;
+		structMap[aFileName] = &apsStructLists;
 	}
 
 	//if user save game then load up the current level for structs and components
@@ -3263,7 +3263,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		for (auto it = structMap.begin(); it != structMap.end(); ++it)
 		{
 			const WzString& key = it->first;
-			STRUCTURE **pList = it->second;
+			PerPlayerStructureList* pList = it->second;
 			loadSaveStructurePointers(key, pList);
 		}
 	}
@@ -6520,7 +6520,7 @@ bool writeStructFile(const char *pFileName)
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (STRUCTURE *psCurr : apsStructLists[player])
 		{
 			if (!psCurr->pStructureType)
 			{
@@ -6677,7 +6677,7 @@ bool writeStructFile(const char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
+bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureList *ppList)
 {
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
@@ -6685,10 +6685,17 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		STRUCTURE *psStruct;
+		STRUCTURE *psStruct = nullptr;
 		int player = getPlayer(ini);
 		int id = ini.value("id", -1).toInt();
-		for (psStruct = ppList[player]; psStruct && psStruct->id != id; psStruct = psStruct->psNext) { }
+		auto structIt = std::find_if((*ppList)[player].begin(), (*ppList)[player].end(), [id](STRUCTURE* str)
+		{
+			return str->id == id;
+		});
+		if (structIt != (*ppList)[player].end())
+		{
+			psStruct = *structIt;
+		}
 		if (!psStruct)
 		{
 			ini.endGroup();
@@ -6724,7 +6731,7 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				{
 					DROID *psCommander = (DROID *)getBaseObjFromData(tid, tplayer, ttype);
 					ASSERT(psCommander, "Commander %d not found for building %d", tid, id);
-					if (ppList == mission.apsStructLists)
+					if (ppList == &mission.apsStructLists)
 					{
 						psFactory->psCommander = psCommander;
 					}
@@ -7109,7 +7116,7 @@ bool writeTemplateFile(const char *pFileName)
 	mRoot["version"] = 1;
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		if (!apsDroidLists[player] && !apsStructLists[player])	// only write out templates of players that are still 'alive'
+		if (!apsDroidLists[player] && apsStructLists[player].empty())	// only write out templates of players that are still 'alive'
 		{
 			continue;
 		}

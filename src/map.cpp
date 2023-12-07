@@ -2075,7 +2075,6 @@ static void threatUpdate(int player)
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		DROID *psDroid;
-		STRUCTURE *psStruct;
 
 		if (aiCheckAlliances(player, i))
 		{
@@ -2106,7 +2105,7 @@ static void threatUpdate(int player)
 			}
 		}
 
-		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[i])
 		{
 			UBYTE mode = 0;
 

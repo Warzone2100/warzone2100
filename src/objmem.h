@@ -31,7 +31,10 @@
 
 /* The lists of objects allocated */
 extern DROID			*apsDroidLists[MAX_PLAYERS];
-extern STRUCTURE		*apsStructLists[MAX_PLAYERS];
+
+using StructureList = std::list<STRUCTURE*>;
+using PerPlayerStructureList = std::array<StructureList, MAX_PLAYERS>;
+extern PerPlayerStructureList apsStructLists;
 
 using FeatureList = std::list<FEATURE*>;
 using PerPlayerFeatureLists = std::array<FeatureList, MAX_PLAYERS>;
@@ -99,7 +102,7 @@ void killStruct(STRUCTURE *psDel);
 void freeAllStructs();
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_PLAYERS]);
+void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureList& pList);
 
 /* add the feature to the Feature Lists */
 void addFeature(FEATURE *psFeatureToAdd);
