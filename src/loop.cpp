@@ -457,7 +457,7 @@ void countUpdate(bool synch)
 		}
 		// FIXME: These for-loops are code duplicationo
 		setLasSatExists(false, i);
-		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psCBuilding->psNext)
+		for (STRUCTURE *psCBuilding : apsStructLists[i])
 		{
 			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
@@ -469,7 +469,7 @@ void countUpdate(bool synch)
 				setLasSatExists(true, i);
 			}
 		}
-		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psCBuilding->psNext)
+		for (STRUCTURE *psCBuilding : mission.apsStructLists[i])
 		{
 			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
@@ -559,17 +559,12 @@ static void gameStateUpdate()
 		}
 
 		// FIXME: These for-loops are code duplicationo
-		STRUCTURE *psNBuilding;
-		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psNBuilding)
+		for (STRUCTURE *psCBuilding : apsStructLists[i])
 		{
-			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
-			psNBuilding = psCBuilding->psNext;
 			structureUpdate(psCBuilding, false);
 		}
-		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psNBuilding)
+		for (STRUCTURE *psCBuilding : mission.apsStructLists[i])
 		{
-			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway. It shouldn't do since its not even on the map!*/
-			psNBuilding = psCBuilding->psNext;
 			structureUpdate(psCBuilding, true); // update for mission
 		}
 	}

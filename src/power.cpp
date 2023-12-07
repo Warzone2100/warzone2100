@@ -53,7 +53,7 @@ static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks);
 static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 
 //returns the relevant list based on OffWorld or OnWorld
-static STRUCTURE *powerStructList(int player);
+static StructureList* powerStructList(int player);
 
 struct PowerRequest
 {
@@ -250,34 +250,37 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 }
 
 //returns the relevant list based on OffWorld or OnWorld
-STRUCTURE *powerStructList(int player)
+StructureList* powerStructList(int player)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player %d", player);
 	if (offWorldKeepLists)
 	{
-		return (mission.apsStructLists[player]);
+		return &mission.apsStructLists[player];
 	}
 	else
 	{
-		return (apsStructLists[player]);
+		return &apsStructLists[player];
 	}
 }
 
 /* Update current power based on what Power Generators exist */
 void updatePlayerPower(int player, int ticks)
 {
-	STRUCTURE		*psStruct;//, *psList;
 	int64_t powerBefore = asPower[player].currentPower;
 
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player %d", player);
 
 	syncDebugEconomy(player, '<');
 
-	for (psStruct = powerStructList(player); psStruct != nullptr; psStruct = psStruct->psNext)
+	auto* powerStrList = powerStructList(player);
+	if (powerStrList)
 	{
-		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
+		for (STRUCTURE* psStruct : *powerStrList)
 		{
-			updateCurrentPower(psStruct, player, ticks);
+			if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
+			{
+				updateCurrentPower(psStruct, player, ticks);
+			}
 		}
 	}
 	syncDebug("updatePlayerPower%u %" PRId64"->%" PRId64"", player, powerBefore, asPower[player].currentPower);

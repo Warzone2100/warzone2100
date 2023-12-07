@@ -55,7 +55,7 @@ uint32_t                synchObjID;
 
 /* The lists of objects allocated */
 DROID			*apsDroidLists[MAX_PLAYERS];
-STRUCTURE		*apsStructLists[MAX_PLAYERS];
+PerPlayerStructureList apsStructLists;
 PerPlayerFeatureLists apsFeatureLists;		///< Only player zero is valid for features. TODO: Reduce to single list.
 PerPlayerExtractorLists apsExtractorLists;
 GlobalOilList apsOilList;
@@ -98,7 +98,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 {
 	for (int plr = 0; plr < MAX_PLAYERS; ++plr)
 	{
-		for (STRUCTURE *psStruct = apsStructLists[plr]; psStruct != nullptr; psStruct = psStruct->psNext)
+		for (STRUCTURE *psStruct : apsStructLists[plr])
 		{
 			if (psStruct == psVictim)
 			{
@@ -366,6 +366,27 @@ static inline void removeObjectFromList(OBJECT *list[], OBJECT *object, int play
 	psPrev->psNext = psCurr->psNext;
 }
 
+/* Remove an object from the active list
+ * \param list is a pointer to the object list
+ * \param remove is a pointer to the object to remove
+ * \param type is the type of the object
+ */
+template <typename OBJECT>
+static inline void removeObjectFromList(std::array<std::list<OBJECT*>, MAX_PLAYERS>& list, OBJECT* object, int player)
+{
+	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
+
+	// If the message to remove is the first one in the list then mark the next one as the first
+	if (!list[player].empty() && list[player].front() == object)
+	{
+		list[player].pop_front();
+		return;
+	}
+	auto it = std::find(list[player].begin(), list[player].end(), object);
+	ASSERT_OR_RETURN(, it != list[player].end(), "Object %p not found in list", static_cast<void*>(object));
+	list[player].erase(it);
+}
+
 /* Remove an object from the relevant function list. An object can only be in one function list at a time!
  * \param list is a pointer to the object list
  * \param remove is a pointer to the object to remove
@@ -626,7 +647,7 @@ void freeAllStructs()
 }
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_PLAYERS])
+void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureList& pList)
 {
 	ASSERT(psStructToRemove->type == OBJ_STRUCTURE,
 	       "removeStructureFromList: pointer is not a structure");
@@ -892,7 +913,22 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 			switch (type)
 			{
 			case OBJ_DROID: psObj = apsDroidLists[player]; break;
-			case OBJ_STRUCTURE: psObj = apsStructLists[player]; break;
+			case OBJ_STRUCTURE:
+			{
+				auto structIt = std::find_if(apsStructLists[player].begin(), apsStructLists[player].end(), [id](STRUCTURE* s)
+				{
+					return s->id == id;
+				});
+				if (structIt != apsStructLists[player].end())
+				{
+					return *structIt;
+				}
+				else
+				{
+					psObj = nullptr;
+				}
+				break;
+			}
 			default: break;
 			}
 			break;
@@ -900,7 +936,22 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 			switch (type)
 			{
 			case OBJ_DROID: psObj = mission.apsDroidLists[player]; break;
-			case OBJ_STRUCTURE: psObj = mission.apsStructLists[player]; break;
+			case OBJ_STRUCTURE:
+			{
+				auto structIt = std::find_if(mission.apsStructLists[player].begin(), mission.apsStructLists[player].end(), [id](STRUCTURE* s)
+				{
+					return s->id == id;
+				});
+				if (structIt != mission.apsStructLists[player].end())
+				{
+					return *structIt;
+				}
+				else
+				{
+					psObj = nullptr;
+				}
+				break;
+			}
 			default: break;
 			}
 			break;
@@ -978,8 +1029,21 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 				psObj = (BASE_OBJECT *)apsDroidLists[player];
 				break;
 			case 1:
-				psObj = (BASE_OBJECT *)apsStructLists[player];
+			{
+				auto objIt = std::find_if(apsStructLists[player].begin(), apsStructLists[player].end(), [id](STRUCTURE* s)
+				{
+					return s->id == id;
+				});
+				if (objIt != apsStructLists[player].end())
+				{
+					return *objIt;
+				}
+				else
+				{
+					psObj = nullptr;
+				}
 				break;
+			}
 			case 2:
 				if (player == 0)
 				{
@@ -998,8 +1062,21 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 				psObj = (BASE_OBJECT *)mission.apsDroidLists[player];
 				break;
 			case 4:
-				psObj = (BASE_OBJECT *)mission.apsStructLists[player];
+			{
+				auto objIt = std::find_if(mission.apsStructLists[player].begin(), mission.apsStructLists[player].end(), [id](STRUCTURE* s)
+				{
+					return s->id == id;
+				});
+				if (objIt != mission.apsStructLists[player].end())
+				{
+					return *objIt;
+				}
+				else
+				{
+					psObj = nullptr;
+				}
 				break;
+			}
 			case 5:
 				if (player == 0)
 				{
@@ -1055,6 +1132,26 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 	return nullptr;
 }
 
+static UDWORD getRepairIdFromFlagSingleList(FLAG_POSITION* psFlag, uint32_t player, const StructureList& list)
+{
+	for (STRUCTURE* psObj : list)
+	{
+		if (psObj->pFunctionality)
+		{
+			if (psObj->pStructureType->type == REF_REPAIR_FACILITY)
+			{
+				//check for matching delivery point
+				REPAIR_FACILITY* psRepair = ((REPAIR_FACILITY*)psObj->pFunctionality);
+				if (psRepair->psDeliveryPoint == psFlag)
+				{
+					return psObj->id;
+				}
+			}
+		}
+	}
+	return UDWORD_MAX;
+}
+
 UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 {
 	unsigned int i;
@@ -1071,11 +1168,31 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 		switch (i)
 		{
 		case 0:
-			psObj = (STRUCTURE *)apsStructLists[player];
+		{
+			auto id = getRepairIdFromFlagSingleList(psFlag, player, apsStructLists[player]);
+			if (id != UDWORD_MAX)
+			{
+				return id;
+			}
+			else
+			{
+				psObj = nullptr;
+			}
 			break;
+		}
 		case 1:
-			psObj = (STRUCTURE *)mission.apsStructLists[player];
+		{
+			auto id = getRepairIdFromFlagSingleList(psFlag, player, mission.apsStructLists[player]);
+			if (id != UDWORD_MAX)
+			{
+				return id;
+			}
+			else
+			{
+				psObj = nullptr;
+			}
 			break;
+		}
 		default:
 			psObj = nullptr;
 			break;
@@ -1122,12 +1239,12 @@ static void objListIntegCheck()
 	}
 	for (player = 0; player < MAX_PLAYERS; player += 1)
 	{
-		for (psCurr = (BASE_OBJECT *)apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[player])
 		{
-			ASSERT(psCurr->type == OBJ_STRUCTURE &&
-			       (SDWORD)psCurr->player == player,
+			ASSERT(psStruct->type == OBJ_STRUCTURE &&
+			       (SDWORD)psStruct->player == player,
 			       "objListIntegCheck: misplaced %s(%p) in the structure list for player %d, is owned by %d",
-			       objInfo(psCurr), (void*) psCurr, player, (int)psCurr->player);
+			       objInfo(psStruct), (void*)psStruct, player, (int)psStruct->player);
 		}
 	}
 	for (BASE_OBJECT* obj : apsFeatureLists[0])
@@ -1164,10 +1281,7 @@ void objCount(int *droids, int *structures, int *features)
 			}
 		}
 
-		for (STRUCTURE *psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
-		{
-			(*structures)++;
-		}
+		*structures += apsStructLists[i].size();
 	}
 
 	*features += apsFeatureLists[0].size();

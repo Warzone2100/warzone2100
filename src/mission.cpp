@@ -235,7 +235,7 @@ void initMission()
 	mission.type = LEVEL_TYPE::LDS_NONE;
 	for (int inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		mission.apsStructLists[inc] = nullptr;
+		mission.apsStructLists[inc].clear();
 		mission.apsDroidLists[inc] = nullptr;
 		mission.apsFeatureLists[inc].clear();
 		mission.apsFlagPosLists[inc].clear();
@@ -305,8 +305,8 @@ bool missionShutDown()
 		{
 			apsDroidLists[inc] = mission.apsDroidLists[inc];
 			mission.apsDroidLists[inc] = nullptr;
-			apsStructLists[inc] = mission.apsStructLists[inc];
-			mission.apsStructLists[inc] = nullptr;
+			apsStructLists[inc] = std::move(mission.apsStructLists[inc]);
+			mission.apsStructLists[inc].clear();
 			apsFeatureLists[inc] = std::move(mission.apsFeatureLists[inc]);
 			mission.apsFeatureLists[inc].clear();
 			apsFlagPosLists[inc] = std::move(mission.apsFlagPosLists[inc]);
@@ -658,7 +658,7 @@ static void saveMissionData()
 {
 	UDWORD			inc;
 	DROID			*psDroid;
-	STRUCTURE		*psStruct, *psStructBeingBuilt;
+	STRUCTURE		*psStructBeingBuilt;
 	bool			bRepairExists;
 
 	debug(LOG_SAVE, "called");
@@ -670,7 +670,7 @@ static void saveMissionData()
 
 	bRepairExists = false;
 	//set any structures currently being built to completed for the selected player
-	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 	{
 		if (psStruct->status == SS_BEING_BUILT)
 		{
@@ -808,8 +808,8 @@ void restoreMissionData()
 			psObj->died = false;	//make sure the died flag is not set
 		}
 
-		apsStructLists[inc] = mission.apsStructLists[inc];
-		mission.apsStructLists[inc] = nullptr;
+		apsStructLists[inc] = std::move(mission.apsStructLists[inc]);
+		mission.apsStructLists[inc].clear();
 
 		apsFeatureLists[inc] = std::move(mission.apsFeatureLists[inc]);
 		mission.apsFeatureLists[inc].clear();
@@ -868,7 +868,6 @@ void restoreMissionData()
 void saveMissionLimboData()
 {
 	DROID           *psDroid, *psNext;
-	STRUCTURE           *psStruct;
 
 	debug(LOG_SAVE, "called");
 
@@ -893,7 +892,7 @@ void saveMissionLimboData()
 	apsDroidLists[selectedPlayer] = nullptr;
 
 	// any selectedPlayer's factories/research need to be put on holdProduction/holdresearch
-	for (psStruct = apsStructLists[selectedPlayer]; psStruct != nullptr; psStruct = psStruct->psNext)
+	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 	{
 		if (StructIsFactory(psStruct))
 		{
@@ -1630,18 +1629,18 @@ static void missionResetDroids()
 			}
 			else // if couldn't find the factory - try to place near HQ instead
 			{
-				for (psStruct = apsStructLists[psDroid->player]; psStruct != nullptr; psStruct = psStruct->psNext)
+				for (STRUCTURE* psStructure : apsStructLists[psDroid->player])
 				{
-					if (psStruct->pStructureType->type == REF_HQ)
+					if (psStructure->pStructureType->type == REF_HQ)
 					{
-						UDWORD		x = map_coord(psStruct->pos.x);
-						UDWORD		y = map_coord(psStruct->pos.y);
+						UDWORD		x = map_coord(psStructure->pos.x);
+						UDWORD		y = map_coord(psStructure->pos.y);
 						PICKTILE	pickRes = pickHalfATile(&x, &y, LOOK_FOR_EMPTY_TILE);
 
 						if (pickRes == NO_FREE_TILE)
 						{
 							ASSERT(false, "missionResetUnits: Unable to find a free location");
-							psStruct = nullptr;
+							psStructure = nullptr;
 						}
 						else
 						{
@@ -2890,7 +2889,6 @@ void missionTimerUpdate()
 void missionDestroyObjects()
 {
 	DROID *psDroid;
-	STRUCTURE *psStruct;
 	UBYTE Player, i;
 
 	debug(LOG_SAVE, "called");
@@ -2925,13 +2923,9 @@ void missionDestroyObjects()
 			}
 			mission.apsDroidLists[Player] = nullptr;
 
-			psStruct = apsStructLists[Player];
-
-			while (psStruct != nullptr)
+			for (STRUCTURE* psStruct : apsStructLists[Player])
 			{
-				STRUCTURE *psNext = psStruct->psNext;
 				removeStruct(psStruct, true);
-				psStruct = psNext;
 			}
 		}
 	}
@@ -2970,8 +2964,7 @@ void missionDestroyObjects()
 		psDroid = psDroid->psNext;
 	}
 
-	psStruct = apsStructLists[Player];
-	while (psStruct != nullptr)
+	for (STRUCTURE* psStruct : apsStructLists[Player])
 	{
 		for (i = 0; i < MAX_WEAPONS; i++)
 		{
@@ -2980,7 +2973,6 @@ void missionDestroyObjects()
 				setStructureTarget(psStruct, nullptr, i, ORIGIN_UNKNOWN);
 			}
 		}
-		psStruct = psStruct->psNext;
 	}
 
 	// FIXME: check that orders do not reference anything bad?

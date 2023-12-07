@@ -33,9 +33,13 @@ void BaseObjectsController::clearSelection()
 
 void BaseObjectsController::clearStructureSelection()
 {
-	for (auto structure = interfaceStructList(); structure != nullptr; structure = structure->psNext)
+	StructureList* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		structure->selected = false;
+		for (auto structure : *intStrList)
+		{
+			structure->selected = false;
+		}
 	}
 }
 

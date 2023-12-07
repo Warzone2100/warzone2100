@@ -216,7 +216,6 @@ bool multiplayerWinSequence(bool firstCall)
 	static Position pos = Position(0, 0, 0);
 	static UDWORD last = 0;
 	float		rotAmount;
-	STRUCTURE	*psStruct;
 
 	if (selectedPlayer >= MAX_PLAYERS)
 	{
@@ -232,7 +231,7 @@ bool multiplayerWinSequence(bool firstCall)
 		CancelAllResearch(selectedPlayer);
 
 		// stop all manufacture.
-		for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 		{
 			if (StructIsFactory(psStruct))
 			{
@@ -446,18 +445,23 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 
 static STRUCTURE* _IdToStruct(UDWORD id, UDWORD beginPlayer, UDWORD endPlayer)
 {
-	STRUCTURE **lists[2] = {apsStructLists, mission.apsStructLists};
-	for (int j = 0; j < 2; ++j)
+	for (int i = beginPlayer; i < endPlayer; ++i)
 	{
-		for (int i = beginPlayer; i < endPlayer; ++i)
+		auto it = std::find_if(apsStructLists[i].begin(), apsStructLists[i].end(), [id](STRUCTURE* s)
 		{
-			for (STRUCTURE *d = lists[j][i]; d; d = d->psNext)
-			{
-				if (d->id == id)
-				{
-					return d;
-				}
-			}
+			return s->id == id;
+		});
+		if (it != apsStructLists[i].end())
+		{
+			return *it;
+		}
+		it = std::find_if(mission.apsStructLists[i].begin(), mission.apsStructLists[i].end(), [id](STRUCTURE* s)
+		{
+			return s->id == id;
+		});
+		if (it != mission.apsStructLists[i].end())
+		{
+			return *it;
 		}
 	}
 	return nullptr;
@@ -664,7 +668,14 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 
 	if (player < MAX_PLAYERS)
 	{
-		for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding = psBuilding->psNext) {}
+		auto buildingIt = std::find_if(apsStructLists[player].begin(), apsStructLists[player].end(), [](STRUCTURE* building)
+		{
+			return building->pStructureType->type == REF_HQ;
+		});
+		if (buildingIt != apsStructLists[player].end())
+		{
+			psBuilding = *buildingIt;
+		}
 	}
 
 	if (psBuilding)
@@ -677,10 +688,10 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 		x = map_coord(apsDroidLists[player]->pos.x);
 		y =	map_coord(apsDroidLists[player]->pos.y);
 	}
-	else if ((player < MAX_PLAYERS) && apsStructLists[player])				// center on first struct
+	else if ((player < MAX_PLAYERS) && !apsStructLists[player].empty())				// center on first struct
 	{
-		x = map_coord(apsStructLists[player]->pos.x);
-		y = map_coord(apsStructLists[player]->pos.y);
+		x = map_coord(apsStructLists[player].front()->pos.x);
+		y = map_coord(apsStructLists[player].front()->pos.y);
 	}
 	else														//or map center.
 	{
@@ -1540,7 +1551,7 @@ bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t pla
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index)
 {
 	// Go through the structs to find the one doing this topic
-	for (STRUCTURE *psBuilding = apsStructLists[player]; psBuilding; psBuilding = psBuilding->psNext)
+	for (STRUCTURE *psBuilding : apsStructLists[player])
 	{
 		if (psBuilding->pStructureType->type == REF_RESEARCH
 		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
@@ -2420,7 +2431,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy HQ
 		std::vector<STRUCTURE *> hqStructs;
-		for (STRUCTURE *psStruct = apsStructLists[playerIndex]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE *psStruct : apsStructLists[playerIndex])
 		{
 			if (REF_HQ == psStruct->pStructureType->type)
 			{
@@ -2455,29 +2466,29 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy structs
 		debug(LOG_DEATH, "killing off structures for player %d", playerIndex);
-		STRUCTURE *psStruct = apsStructLists[playerIndex];
-		while (psStruct)				// delete structs
+		StructureList::iterator psStructIt = apsStructLists[playerIndex].begin(), psNextIt;
+		while (psStructIt != apsStructLists[playerIndex].end())				// delete structs
 		{
-			STRUCTURE * psNext = psStruct->psNext;
+			psNextIt = std::next(psStructIt);
 
 			if (removeAllStructs
-				|| psStruct->pStructureType->type == REF_POWER_GEN
-				|| psStruct->pStructureType->type == REF_RESEARCH
-				|| psStruct->pStructureType->type == REF_COMMAND_CONTROL
-				|| StructIsFactory(psStruct))
+				|| (*psStructIt)->pStructureType->type == REF_POWER_GEN
+				|| (*psStructIt)->pStructureType->type == REF_RESEARCH
+				|| (*psStructIt)->pStructureType->type == REF_COMMAND_CONTROL
+				|| StructIsFactory((*psStructIt)))
 			{
 				// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
-				if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+				if (quietly || (*psStructIt)->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 				{
-					removeStruct(psStruct, true);
+					removeStruct(*psStructIt, true);
 				}
 				else			// show effects
 				{
-					destroyStruct(psStruct, gameTime);
+					destroyStruct(*psStructIt, gameTime);
 				}
 			}
 
-			psStruct = psNext;
+			psStructIt = psNextIt;
 		}
 	}
 

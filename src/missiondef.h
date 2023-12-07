@@ -64,7 +64,7 @@ struct MISSION
 	int32_t                         scrollMaxX;
 	int32_t                         scrollMaxY;
 	//original object lists
-	STRUCTURE* apsStructLists[MAX_PLAYERS];
+	PerPlayerStructureList apsStructLists;
 	PerPlayerExtractorLists apsExtractorLists;
 
 	DROID						*apsDroidLists[MAX_PLAYERS];

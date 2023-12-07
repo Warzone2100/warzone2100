@@ -138,11 +138,15 @@ void ManufactureController::updateFactoriesList()
 {
 	factories.clear();
 
-	for (auto structure = interfaceStructList(); structure != nullptr; structure = structure->psNext)
+	auto* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		if (structure->status == SS_BUILT && structure->died == 0 && StructIsFactory(structure))
+		for (auto structure : *intStrList)
 		{
-			factories.push_back(structure);
+			if (structure->status == SS_BUILT && structure->died == 0 && StructIsFactory(structure))
+			{
+				factories.push_back(structure);
+			}
 		}
 	}
 

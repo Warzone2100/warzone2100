@@ -552,7 +552,7 @@ bool removeDroidBase(DROID *psDel)
 	/* Put Deliv. Pts back into world when a command droid dies */
 	if (psDel->droidType == DROID_COMMAND)
 	{
-		for (auto psStruct = apsStructLists[psDel->player]; psStruct; psStruct = psStruct->psNext)
+		for (auto psStruct : apsStructLists[psDel->player])
 		{
 			// alexl's stab at a right answer.
 			if (StructIsFactory(psStruct)
@@ -2425,7 +2425,6 @@ bool pickATileGen(Vector2i *pos, unsigned numIterations, bool (*function)(UDWORD
 static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
 {
 	UDWORD				i, structType;
-	STRUCTURE			*psStruct;
 	DROID				*psDroid;
 
 	const int tx = map_coord(rangeX);
@@ -2439,7 +2438,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 		}
 
 		//check structures
-		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[i])
 		{
 			if (psStruct->visible[player] || psStruct->born == 2)	// if can see it or started there
 			{
@@ -3359,7 +3358,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 		}
 
 		// check through the players list, and our allies, of structures to see if any are targetting it
-		for (STRUCTURE *psStruct = apsStructLists[i]; psStruct != nullptr; psStruct = psStruct->psNext)
+		for (STRUCTURE *psStruct : apsStructLists[i])
 		{
 			if (psStruct->psTarget[0] == psD)
 			{

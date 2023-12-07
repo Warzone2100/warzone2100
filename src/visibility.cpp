@@ -633,9 +633,7 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			STRUCTURE *psWall;
-
-			for (psWall = apsStructLists[player]; psWall; psWall = psWall->psNext)
+			for (STRUCTURE* psWall : apsStructLists[player])
 			{
 				if (map_coord(psWall->pos) == tile)
 				{
@@ -838,7 +836,7 @@ void processVisibility()
 	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player]};
+		BASE_OBJECT *lists[] = {apsDroidLists[player]};
 		unsigned list;
 		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
 		{
@@ -847,6 +845,10 @@ void processVisibility()
 				processVisibilitySelf(psObj);
 			}
 		}
+		for (BASE_OBJECT* psObj : apsStructLists[player])
+		{
+			processVisibilitySelf(psObj);
+		}
 		for (BASE_OBJECT* psObj : apsFeatureLists[player])
 		{
 			processVisibilitySelf(psObj);
@@ -854,7 +856,7 @@ void processVisibility()
 	}
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player]};
+		BASE_OBJECT *lists[] = {apsDroidLists[player]};
 		unsigned list;
 		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
 		{
@@ -862,6 +864,10 @@ void processVisibility()
 			{
 				processVisibilityVision(psObj);
 			}
+		}
+		for (BASE_OBJECT* psObj : apsStructLists[player])
+		{
+			processVisibilityVision(psObj);
 		}
 	}
 	for (BASE_OBJECT *psObj : apsSensorList[0])
@@ -882,7 +888,7 @@ void processVisibility()
 	bool addedMessage = false;
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player]};
+		BASE_OBJECT *lists[] = {apsDroidLists[player]};
 		unsigned list;
 		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
 		{
@@ -890,6 +896,10 @@ void processVisibility()
 			{
 				processVisibilityLevel(psObj, addedMessage);
 			}
+		}
+		for (BASE_OBJECT* psObj : apsStructLists[player])
+		{
+			processVisibilityLevel(psObj, addedMessage);
 		}
 		for (BASE_OBJECT* psObj : apsFeatureLists[player])
 		{

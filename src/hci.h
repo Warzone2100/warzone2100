@@ -33,6 +33,7 @@ typedef std::function<void (const int)> playerCallbackFunc; // callback function
 #include "lib/ivis_opengl/pieclip.h"
 
 #include "message.h"
+#include "objmem.h"
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -345,7 +346,7 @@ void intRemoveStatsNoAnim();
 void intRemoveObjectNoAnim();
 
 /*sets which list of structures to use for the interface*/
-STRUCTURE *interfaceStructList();
+StructureList *interfaceStructList();
 
 //sets up the Transporter Screen as far as the interface is concerned
 void addTransporterInterface(DROID *psSelected, bool onMission);

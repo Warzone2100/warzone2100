@@ -57,7 +57,7 @@ void gridReset()
 	// Put all existing objects into the point tree.
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
-		BASE_OBJECT *start[2] = {(BASE_OBJECT *)apsDroidLists[player], (BASE_OBJECT *)apsStructLists[player]};
+		BASE_OBJECT *start[1] = {(BASE_OBJECT *)apsDroidLists[player]};
 		for (unsigned type = 0; type != sizeof(start) / sizeof(*start); ++type)
 		{
 			for (BASE_OBJECT *psObj = start[type]; psObj != nullptr; psObj = psObj->psNext)
@@ -69,6 +69,17 @@ void gridReset()
 					{
 						viewer = 0;
 					}
+				}
+			}
+		}
+		for (BASE_OBJECT* psObj : apsStructLists[player])
+		{
+			if (!psObj->died)
+			{
+				gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+				for (unsigned char& viewer : psObj->seenThisTick)
+				{
+					viewer = 0;
 				}
 			}
 		}
