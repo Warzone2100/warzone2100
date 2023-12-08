@@ -36,16 +36,26 @@ echo "  -> Size (bytes): $(stat -c %s "${WZ_FLATPAK_BUNDLE}")"
 
 WZ_FLATPAK_BUILD_PATH="${WZ_FLATPAK_BUILD_DIR}/files/share"
 
-echo "::group::Validating: appdata/${WZ_FLATPAK_APPID}.appdata.xml"
-if [ -x "$(command -v appstreamcli)" ]; then
-  echo "appstreamcli validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml"
-  appstreamcli validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml
-else
-  # Older utility fallback
-  echo "appstream-util validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml"
-  appstream-util validate ${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml
+WZ_FLATPAK_APPSTREAM_PATH="${WZ_FLATPAK_BUILD_PATH}/metainfo/${WZ_FLATPAK_APPID}.metainfo.xml"
+if [ ! -f "${WZ_FLATPAK_APPSTREAM_PATH}" ]; then
+  # try the old path?
+  WZ_FLATPAK_APPSTREAM_PATH="${WZ_FLATPAK_BUILD_PATH}/appdata/${WZ_FLATPAK_APPID}.appdata.xml"
 fi
-echo "::endgroup::"
+
+if [ -f "${WZ_FLATPAK_APPSTREAM_PATH}" ]; then
+  echo "::group::Validating appstream"
+  if [ -x "$(command -v appstreamcli)" ]; then
+    echo "appstreamcli validate ${WZ_FLATPAK_APPSTREAM_PATH}"
+    appstreamcli validate "${WZ_FLATPAK_APPSTREAM_PATH}"
+  else
+    # Older utility fallback
+    echo "appstream-util validate ${WZ_FLATPAK_APPSTREAM_PATH}"
+    appstream-util validate "${WZ_FLATPAK_APPSTREAM_PATH}"
+  fi
+  echo "::endgroup::"
+else
+  echo "::warning ::Could not find appstream file to validate?"
+fi
 
 echo "::group::Verify icon and metadata in app-info"
 test -f "${WZ_FLATPAK_BUILD_PATH}/app-info/icons/flatpak/128x128/${WZ_FLATPAK_APPID}.png" || { echo "Missing 128x128 icon in app-info" ; exit 1; }
