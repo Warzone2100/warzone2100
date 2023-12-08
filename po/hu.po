@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-29 23:02\n"
+"PO-Revision-Date: 2023-12-08 13:47\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -19871,7 +19871,7 @@ msgstr "A szavazás %s játékos kirúgásáról nem sikerült"
 #: src/multivote.cpp:691
 #, c-format
 msgid "Cannot request vote to kick player %s yet - please wait a bit longer"
-msgstr "Még nem lehet szavazást kérni a %s játékos kirúgására - kérlek várj még egy kicsit"
+msgstr "Még nem lehet szavazást kérni %s játékos kirúgására – várj még egy kicsit"
 
 #: src/multivote.cpp:703
 #, c-format
