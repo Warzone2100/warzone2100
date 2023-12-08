@@ -226,6 +226,11 @@ jobs:
         . src/.ci/flatpak/build.sh
         echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"
         echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}" >> $GITHUB_OUTPUT
+    - name: Output generated files listing
+      shell: bash
+      working-directory: flatpak_app/files
+      run: |
+        find . -type f
     - name: Lint Flatpak
       continue-on-error: true
       env:
@@ -245,11 +250,6 @@ jobs:
       with:
         name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
         path: ${{ steps.settings.outputs.WZ_FLATPAK_BUNDLE }}
-    - name: Output generated files listing
-      shell: bash
-      working-directory: flatpak_app/files
-      run: |
-        find . -type f
     - name: Upload debug info
       uses: actions/upload-artifact@v3
       with:

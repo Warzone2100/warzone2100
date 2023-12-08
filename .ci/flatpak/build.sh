@@ -62,6 +62,19 @@ test -f "${WZ_FLATPAK_BUILD_PATH}/app-info/icons/flatpak/128x128/${WZ_FLATPAK_AP
 test -f "${WZ_FLATPAK_BUILD_PATH}/app-info/xmls/${WZ_FLATPAK_APPID}.xml.gz" || { echo "Missing ${WZ_FLATPAK_APPID}.xml.gz in app-info" ; exit 1; }
 echo "::endgroup::"
 
+echo "::group::Check screenshots"
+if [ ! -d "${WZ_FLATPAK_BUILD_DIR}/screenshots" ]; then
+  echo "::notice ::Screenshots not mirrored by flatpak-builder?"
+else
+  echo "Found screenshots:"
+  find "${WZ_FLATPAK_BUILD_DIR}/screenshots" -type f
+fi
+echo "::endgroup::"
+
 echo "::group::Commit screenshots to the OSTree repository"
-ostree commit --repo=${WZ_FLATPAK_LOCAL_REPO_NAME} --canonical-permissions --branch=screenshots/${WZ_FLATPAK_TARGET_ARCH} "${WZ_FLATPAK_BUILD_DIR}/screenshots"
+if [ -d "${WZ_FLATPAK_BUILD_DIR}/screenshots" ]; then
+  ostree commit --repo=${WZ_FLATPAK_LOCAL_REPO_NAME} --canonical-permissions --branch=screenshots/${WZ_FLATPAK_TARGET_ARCH} "${WZ_FLATPAK_BUILD_DIR}/screenshots"
+else
+  echo "::warning ::Screenshots not added to OSTree repository"
+fi
 echo "::endgroup::"
