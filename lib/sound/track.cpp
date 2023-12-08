@@ -24,16 +24,19 @@
 #include "audio_id.h"
 #include "src/droid.h"
 
+#include <algorithm>
+#include <vector>
+
 //*
 //
 // defines
-#define MAX_TRACKS	( 600 )
+#define MAX_TRACKS	( 65536 )
 
 //*
 //
 // static global variables
 // array of pointers to sound effects
-static TRACK			*g_apTrack[MAX_TRACKS];
+static std::vector<TRACK *> g_apTrack;
 
 // number of tracks loaded
 static SDWORD			g_iCurTracks = 0;
@@ -55,8 +58,7 @@ bool sound_Init(HRTFMode hrtf)
 		return false;
 	}
 
-	// init audio array (with NULL pointers; which calloc ensures by setting all allocated memory to zero)
-	memset(g_apTrack, 0, sizeof(g_apTrack));
+	g_apTrack.resize(std::max<size_t>(ID_MAX_SOUND, 512));
 
 	// set system active flag for callbacks
 	g_bSystemActive = true;
@@ -115,12 +117,14 @@ unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 	{
 		// No pre-assigned ID available, produce one
 		trackID = sound_GetAvailableID();
-		if (trackID == SAMPLE_NOT_ALLOCATED)
+		if (trackID >= MAX_TRACKS)
 		{
+			ASSERT(trackID < MAX_TRACKS, "sound_GetTrackID: unused track not found / available!");
 			return 0;
 		}
 	}
 
+	ASSERT_OR_RETURN(0, trackID < g_apTrack.size(), "Invalid trackID: %u", trackID);
 	if (g_apTrack[trackID] != nullptr)
 	{
 		debug(LOG_ERROR, "sound_SetTrackVals: track %i already set (filename: \"%s\"\n", trackID, g_apTrack[trackID]->fileName);
@@ -152,8 +156,6 @@ unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 //
 void sound_ReleaseTrack(TRACK *psTrack)
 {
-	TRACK **currTrack;
-
 	// This is here to save CPU wasted by the loop below;
 	// Calling this function with psTrack = NULL is perfectly legal,
 	// with or without this check
@@ -163,11 +165,11 @@ void sound_ReleaseTrack(TRACK *psTrack)
 	}
 
 	// Run through the list of tracks and set the pointer to the track which is to be released to NULL
-	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
+	for (auto it = g_apTrack.begin(), end = g_apTrack.end(); it != end; ++it)
 	{
-		if (*currTrack == psTrack)
+		if (*it == psTrack)
 		{
-			*currTrack = nullptr;
+			*it = nullptr;
 		}
 	}
 
@@ -181,11 +183,9 @@ void sound_ReleaseTrack(TRACK *psTrack)
 //
 void sound_CheckAllUnloaded(void)
 {
-	TRACK **currTrack;
-
-	for (currTrack = &g_apTrack[0]; currTrack != &g_apTrack[MAX_TRACKS]; ++currTrack)
+	for (auto pTrack : g_apTrack)
 	{
-		ASSERT(*currTrack == nullptr, "A track is not unloaded yet (%s); check audio.cfg for duplicate IDs", (*currTrack)->fileName);
+		ASSERT(pTrack == nullptr, "A track is not unloaded yet (%s); check audio.cfg for duplicate IDs", pTrack->fileName);
 	}
 }
 
@@ -195,7 +195,10 @@ void sound_CheckAllUnloaded(void)
 //
 bool sound_TrackLooped(SDWORD iTrack)
 {
-	sound_CheckTrack(iTrack);
+	if (!sound_CheckTrack(iTrack))
+	{
+		return false;
+	}
 	return g_apTrack[iTrack]->bLoop;
 }
 
@@ -205,7 +208,10 @@ bool sound_TrackLooped(SDWORD iTrack)
 //
 SDWORD sound_GetNumPlaying(SDWORD iTrack)
 {
-	sound_CheckTrack(iTrack);
+	if (!sound_CheckTrack(iTrack))
+	{
+		return 0;
+	}
 	return g_apTrack[iTrack]->iNumPlaying;
 }
 
@@ -215,9 +221,9 @@ SDWORD sound_GetNumPlaying(SDWORD iTrack)
 //
 bool sound_CheckTrack(SDWORD iTrack)
 {
-	if (iTrack < 0 || iTrack > g_iCurTracks - 1)
+	if (iTrack < 0 || iTrack > g_iCurTracks - 1 || static_cast<size_t>(iTrack) >= g_apTrack.size())
 	{
-		debug(LOG_SOUND, "Track number %i outside max %i\n", iTrack, g_iCurTracks);
+		debug(LOG_SOUND, "Track number %i outside max %i (size: %zu)\n", iTrack, g_iCurTracks, g_apTrack.size());
 		return false;
 	}
 
@@ -236,7 +242,10 @@ bool sound_CheckTrack(SDWORD iTrack)
 //
 SDWORD sound_GetTrackTime(SDWORD iTrack)
 {
-	sound_CheckTrack(iTrack);
+	if (!sound_CheckTrack(iTrack))
+	{
+		return 0;
+	}
 	return g_apTrack[iTrack]->iTime;
 }
 
@@ -246,7 +255,10 @@ SDWORD sound_GetTrackTime(SDWORD iTrack)
 //
 SDWORD sound_GetTrackVolume(SDWORD iTrack)
 {
-	sound_CheckTrack(iTrack);
+	if (!sound_CheckTrack(iTrack))
+	{
+		return 0;
+	}
 	return g_apTrack[iTrack]->iVol;
 }
 
@@ -256,7 +268,10 @@ SDWORD sound_GetTrackVolume(SDWORD iTrack)
 //
 SDWORD sound_GetTrackAudibleRadius(SDWORD iTrack)
 {
-	sound_CheckTrack(iTrack);
+	if (!sound_CheckTrack(iTrack))
+	{
+		return 0;
+	}
 	return g_apTrack[iTrack]->iAudibleRadius;
 }
 
@@ -269,7 +284,7 @@ const char *sound_GetTrackName(SDWORD iTrack)
 	// If we get an invalid track ID or there are
 	// currently no tracks loaded then return NULL
 	if (iTrack <= 0
-	    || iTrack >= MAX_TRACKS
+	    || static_cast<size_t>(iTrack) >= g_apTrack.size()
 	    || iTrack == SAMPLE_NOT_FOUND
 	    || g_apTrack[iTrack] == nullptr)
 	{
@@ -347,7 +362,13 @@ void sound_PauseTrack(AUDIO_SAMPLE *psSample)
 //
 void sound_FinishedCallback(AUDIO_SAMPLE *psSample)
 {
-	ASSERT(psSample != nullptr, "sound_FinishedCallback: sample pointer invalid\n");
+	ASSERT_OR_RETURN(, psSample != nullptr, "sound_FinishedCallback: sample pointer invalid\n");
+
+	// Check to make sure the requested track is loaded
+	if (!sound_CheckTrack(psSample->iTrack))
+	{
+		return;
+	}
 
 	if (g_apTrack[psSample->iTrack] != nullptr)
 	{
@@ -377,54 +398,43 @@ void sound_FinishedCallback(AUDIO_SAMPLE *psSample)
 //
 SDWORD sound_GetTrackID(TRACK *psTrack)
 {
-	unsigned int i;
-
 	if (psTrack == nullptr)
 	{
 		return SAMPLE_NOT_FOUND;
 	}
 
 	// find matching track
-	for (i = 0; i < MAX_TRACKS; ++i)
+	for (unsigned int i = 0; i < static_cast<unsigned int>(g_apTrack.size()); ++i)
 	{
 		if (g_apTrack[i] == psTrack)
 		{
-			break;
+			return i;
 		}
 	}
 
-	// if matching track found return it else find empty track
-	if (i >= MAX_TRACKS)
-	{
-		return SAMPLE_NOT_FOUND;
-	}
-
-	return i;
+	// no matching track found
+	return SAMPLE_NOT_FOUND;
 }
 
 //*
 // =======================================================================================================================
 // =======================================================================================================================
 //
-SDWORD sound_GetAvailableID()
+UDWORD sound_GetAvailableID()
 {
 	unsigned int i;
 
 	// Iterate through the list of tracks until we find an unused ID slot
-	for (i = ID_SOUND_NEXT; i < MAX_TRACKS; ++i)
+	for (i = ID_SOUND_NEXT; i < static_cast<unsigned int>(g_apTrack.size()); ++i)
 	{
 		if (g_apTrack[i] == nullptr)
 		{
-			break;
+			return i;
 		}
 	}
 
-	ASSERT(i < MAX_TRACKS, "sound_GetTrackID: unused track not found!");
-	if (i >= MAX_TRACKS)
-	{
-		return SAMPLE_NOT_ALLOCATED;
-	}
-
+	// add a new entry
+	g_apTrack.push_back(nullptr);
 	return i;
 }
 
@@ -443,7 +453,10 @@ void sound_SetStoppedCallback(AUDIO_CALLBACK pStopTrackCallback)
 //
 UDWORD sound_GetTrackTimeLastFinished(SDWORD iTrack)
 {
-	sound_CheckTrack(iTrack);
+	if (!sound_CheckTrack(iTrack))
+	{
+		return 0;
+	}
 	return g_apTrack[iTrack]->iTimeLastFinished;
 }
 
@@ -453,6 +466,9 @@ UDWORD sound_GetTrackTimeLastFinished(SDWORD iTrack)
 //
 void sound_SetTrackTimeLastFinished(SDWORD iTrack, UDWORD iTime)
 {
-	sound_CheckTrack(iTrack);
+	if (!sound_CheckTrack(iTrack))
+	{
+		return;
+	}
 	g_apTrack[iTrack]->iTimeLastFinished = iTime;
 }
