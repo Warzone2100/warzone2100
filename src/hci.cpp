@@ -266,8 +266,6 @@ static void intStopStructPosition();
 
 static optional<StructureList::iterator> CurrentStruct;
 static SWORD CurrentStructType = 0;
-static DROID *CurrentDroid = nullptr;
-static DROID_TYPE CurrentDroidType = DROID_ANY;
 
 /******************Power Bar Stuff!**************/
 
@@ -2752,7 +2750,6 @@ void	setKeyButtonMapping(UDWORD	val)
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType)
 {
-	DROID	*psDroid;
 	SDWORD	num;
 
 	if (selectedPlayer >= MAX_PLAYERS)
@@ -2761,7 +2758,7 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 	}
 
 	num = 0;
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->droidType == droidType)
 		{
@@ -2932,89 +2929,6 @@ STRUCTURE *intFindAStructure()
 	}
 
 	return Struct;
-}
-
-// Look through the players droids and find the next one of type droidType.
-// If Current=NULL then start at the beginning overwise start at Current.
-//
-DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGroup)
-{
-	DROID *psDroid;
-	bool Found = false;
-
-	if (selectedPlayer >= MAX_PLAYERS)
-	{
-		return nullptr;
-	}
-
-	if (CurrDroid != nullptr)
-	{
-		CurrentDroid = CurrDroid;
-	}
-
-	if (droidType != CurrentDroidType && droidType != DROID_ANY)
-	{
-		CurrentDroid = nullptr;
-		CurrentDroidType = droidType;
-	}
-
-	if (CurrentDroid != nullptr)
-	{
-		psDroid = CurrentDroid;
-	}
-	else
-	{
-		psDroid = apsDroidLists[selectedPlayer];
-	}
-
-	for (; psDroid != nullptr; psDroid = psDroid->psNext)
-	{
-		if ((psDroid->droidType == droidType
-		     || (droidType == DROID_ANY && !isTransporter(psDroid)))
-		    && (psDroid->group == UBYTE_MAX || AllowGroup))
-		{
-			if (psDroid != CurrentDroid)
-			{
-				clearSelection();
-				SelectDroid(psDroid);
-				CurrentDroid = psDroid;
-				Found = true;
-				break;
-			}
-		}
-	}
-
-	// Start back at the beginning?
-	if ((!Found) && (CurrentDroid != nullptr))
-	{
-		for (psDroid = apsDroidLists[selectedPlayer]; (psDroid != CurrentDroid) && (psDroid != nullptr); psDroid = psDroid->psNext)
-		{
-			if ((psDroid->droidType == droidType ||
-			     ((droidType == DROID_ANY) && !isTransporter(psDroid))) &&
-			    ((psDroid->group == UBYTE_MAX) || AllowGroup))
-			{
-				if (psDroid != CurrentDroid)
-				{
-					clearSelection();
-					SelectDroid(psDroid);
-					CurrentDroid = psDroid;
-					Found = true;
-					break;
-				}
-			}
-		}
-	}
-
-	if (Found == true)
-	{
-		// Center it on screen.
-		if (CurrentDroid)
-		{
-			intSetMapPos(CurrentDroid->pos.x, CurrentDroid->pos.y);
-		}
-		return CurrentDroid;
-	}
-	return nullptr;
 }
 
 // Checks if a coordinate is over the build menu

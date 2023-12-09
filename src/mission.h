@@ -39,7 +39,7 @@
 
 extern MISSION		mission;
 extern bool			offWorldKeepLists;
-extern DROID       *apsLimboDroids[MAX_PLAYERS];
+extern PerPlayerDroidList apsLimboDroids;
 
 extern bool Cheated;
 

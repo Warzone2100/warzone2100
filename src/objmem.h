@@ -30,7 +30,9 @@
 #include <list>
 
 /* The lists of objects allocated */
-extern DROID			*apsDroidLists[MAX_PLAYERS];
+using DroidList = std::list<DROID*>;
+using PerPlayerDroidList = std::array<DroidList, MAX_PLAYERS>;
+extern PerPlayerDroidList apsDroidLists;
 
 using StructureList = std::list<STRUCTURE*>;
 using PerPlayerStructureList = std::array<StructureList, MAX_PLAYERS>;
@@ -75,7 +77,7 @@ uint32_t generateNewObjectId();
 uint32_t generateSynchronisedObjectId();
 
 /* add the droid to the Droid Lists */
-void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS]);
+void addDroid(DROID *psDroidToAdd, PerPlayerDroidList& pList);
 
 /*destroy a droid */
 void killDroid(DROID *psDel);
@@ -84,7 +86,7 @@ void killDroid(DROID *psDel);
 void freeAllDroids();
 
 /*Remove a single Droid from its list*/
-void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS]);
+void removeDroid(DROID *psDroidToRemove, PerPlayerDroidList& pList);
 
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids();

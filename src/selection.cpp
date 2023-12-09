@@ -60,7 +60,7 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen
 	selDroidDeselect(player);
 
 	// Go through all.
-	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		bool shouldSelect = (!onlyOnScreen || objectOnScreen(psDroid, 0)) &&
 		                    condition(psDroid);
@@ -142,7 +142,7 @@ unsigned int selDroidDeselect(unsigned int player)
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[player])
 	{
 		if (psDroid->selected)
 		{
@@ -161,7 +161,7 @@ unsigned int selNumSelected(unsigned int player)
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->selected)
 		{
@@ -239,7 +239,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	if (player >= MAX_PLAYERS) { return 0; }
 
 	// find out which units will need to be compared to which component combinations
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if (bOnScreen && !objectOnScreen(psDroid, 0))
 		{
@@ -260,7 +260,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	{
 		// reset unit counter
 		i = 0;
-		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[player])
 		{
 			if (excluded.empty() || *excluded.begin() != i)
 			{
@@ -290,7 +290,7 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[selectedPlayer])
 	{
 		//exceptions - as always...
 		bool bMatch = false;
@@ -331,12 +331,14 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 			if (!psOldRD)
 			{
 				psResult = psCurr;
+				break;
 			}
 
 			/* Only select is this isn't the old one and it's further on in list */
 			else if (psCurr != psOldRD && bLaterInList)
 			{
 				psResult = psCurr;
+				break;
 			}
 		}
 	}
@@ -396,7 +398,7 @@ void selNextUnassignedUnit()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[selectedPlayer])
 	{
 		/* Only look at unselected ones */
 		if (psCurr->group == UBYTE_MAX)
@@ -416,12 +418,14 @@ void selNextUnassignedUnit()
 			if (!psOldNS)
 			{
 				psResult = psCurr;
+				break;
 			}
 
 			/* Dont choose same one again */
 			else if (psCurr != psOldNS && bLaterInList)
 			{
 				psResult = psCurr;
+				break;
 			}
 		}
 	}
@@ -528,7 +532,7 @@ static bool droidIsCommanderNum(DROID *psDroid, SDWORD n)
 	}
 
 	int numLess = 0;
-	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[psDroid->player])
 	{
 		if ((psCurr->droidType == DROID_COMMAND) && (psCurr->id < psDroid->id))
 		{
@@ -544,7 +548,7 @@ void selCommander(int n)
 {
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[selectedPlayer])
 	{
 		if (droidIsCommanderNum(psCurr, n))
 		{

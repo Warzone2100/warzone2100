@@ -2692,7 +2692,7 @@ wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, 
 	int x2 = world_coord(_x2);
 	int y2 = world_coord(_y2);
 
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
 		{

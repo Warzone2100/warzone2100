@@ -194,7 +194,7 @@ static GAMECODE renderLoop()
 
 			for (unsigned i = 0; i < MAX_PLAYERS; i++)
 			{
-				for (DROID *psCurr = apsDroidLists[i]; psCurr; psCurr = psCurr->psNext)
+				for (DROID *psCurr : apsDroidLists[i])
 				{
 					// Don't copy the next pointer - if droids somehow get destroyed in the graphics rendering loop, who cares if we crash.
 					calcDroidIllumination(psCurr);
@@ -399,7 +399,7 @@ void countUpdate(bool synch)
 		numMissionDroids[i] = 0;
 		numTransporterDroids[i] = 0;
 
-		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (DROID *psCurr : apsDroidLists[i])
 		{
 			numDroids[i]++;
 			switch (psCurr->droidType)
@@ -419,7 +419,7 @@ void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (DROID *psCurr : mission.apsDroidLists[i])
 		{
 			numMissionDroids[i]++;
 			switch (psCurr->droidType)
@@ -439,7 +439,7 @@ void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr = apsLimboDroids[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (DROID *psCurr : apsLimboDroids[i])
 		{
 			// count the type of units
 			switch (psCurr->droidType)
@@ -542,20 +542,23 @@ static void gameStateUpdate()
 		//update the current power available for a player
 		updatePlayerPower(i);
 
-		DROID *psNext;
-		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psNext)
+		DroidList::iterator droidIt = apsDroidLists[i].begin(), droidItNext;
+		while (droidIt != apsDroidLists[i].end())
 		{
 			// Copy the next pointer - not 100% sure if the droid could get destroyed but this covers us anyway
-			psNext = psCurr->psNext;
-			droidUpdate(psCurr);
+			droidItNext = std::next(droidIt);
+			droidUpdate(*droidIt);
+			droidIt = droidItNext;
 		}
 
-		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != nullptr; psCurr = psNext)
+		droidIt = mission.apsDroidLists[i].begin();
+		while (droidIt != mission.apsDroidLists[i].end())
 		{
 			/* Copy the next pointer - not 100% sure if the droid could
 			get destroyed but this covers us anyway */
-			psNext = psCurr->psNext;
-			missionDroidUpdate(psCurr);
+			droidItNext = std::next(droidIt);
+			missionDroidUpdate(*droidIt);
+			droidIt = droidItNext;
 		}
 
 		// FIXME: These for-loops are code duplicationo

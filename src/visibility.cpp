@@ -836,14 +836,9 @@ void processVisibility()
 	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player]};
-		unsigned list;
-		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
+		for (BASE_OBJECT* psObj : apsDroidLists[player])
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
-			{
-				processVisibilitySelf(psObj);
-			}
+			processVisibilitySelf(psObj);
 		}
 		for (BASE_OBJECT* psObj : apsStructLists[player])
 		{
@@ -856,14 +851,9 @@ void processVisibility()
 	}
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player]};
-		unsigned list;
-		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
+		for (BASE_OBJECT* psObj : apsDroidLists[player])
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
-			{
-				processVisibilityVision(psObj);
-			}
+			processVisibilityVision(psObj);
 		}
 		for (BASE_OBJECT* psObj : apsStructLists[player])
 		{
@@ -888,14 +878,9 @@ void processVisibility()
 	bool addedMessage = false;
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player]};
-		unsigned list;
-		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
+		for (BASE_OBJECT* psObj : apsDroidLists[player])
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
-			{
-				processVisibilityLevel(psObj, addedMessage);
-			}
+			processVisibilityLevel(psObj, addedMessage);
 		}
 		for (BASE_OBJECT* psObj : apsStructLists[player])
 		{

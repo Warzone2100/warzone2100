@@ -31,6 +31,7 @@
 #include "stats.h"
 #include "visibility.h"
 #include "selection.h"
+#include "objmem.h"
 
 #include <queue>
 
@@ -156,7 +157,7 @@ void vanishDroid(DROID *psDel);
 
 /* Remove a droid from the apsDroidLists so doesn't update or get drawn etc*/
 //returns true if successfully removed from the list
-bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS]);
+bool droidRemove(DROID *psDroid, PerPlayerDroidList& pList);
 
 //free the storage for the droid templates
 bool droidTemplateShutDown();

@@ -64,7 +64,7 @@ static std::tuple<uint32_t, uint32_t> getDroidHPPercentageAndExperience(uint32_t
 	uint64_t totalHP = 0;
 	uint64_t totalExp = 0;
 	uint64_t numDroids = 0;
-	for (const DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (const DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->died)
 		{

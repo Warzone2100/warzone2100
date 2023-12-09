@@ -88,7 +88,7 @@ static bool checkResearchName(RESEARCH *psRes, UDWORD numStats);
 
 //flag that indicates whether the player can self repair
 static UBYTE bSelfRepair[MAX_PLAYERS];
-static void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
+static void replaceDroidComponent(DroidList& pList, UDWORD oldType, UDWORD oldCompInc,
                                   UDWORD newCompInc);
 static void replaceStructureComponent(StructureList& pList, UDWORD oldType, UDWORD oldCompInc,
                                       UDWORD newCompInc, UBYTE player);
@@ -1577,13 +1577,11 @@ bool selfRepairEnabled(UBYTE player)
 }
 
 /*for a given list of droids, replace the old component if exists*/
-void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
+void replaceDroidComponent(DroidList& pList, UDWORD oldType, UDWORD oldCompInc,
                            UDWORD newCompInc)
 {
-	DROID   *psDroid;
-
 	//check thru the droids
-	for (psDroid = pList; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID* psDroid : pList)
 	{
 		switchComponent(psDroid, oldType, oldCompInc, newCompInc);
 		// Need to replace the units inside the transporter

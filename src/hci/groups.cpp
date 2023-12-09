@@ -278,7 +278,7 @@ void GroupsUIController::updateData()
 	};
 
 	std::array<AccumulatedGroupInfo, 10> calculatedGroupInfo;
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
 		auto groupIdx = psDroid->group;
 		if (psDroid->group >= calculatedGroupInfo.size())

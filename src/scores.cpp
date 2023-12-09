@@ -296,15 +296,19 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 		unsigned int idx = 0;
 		do
 		{
-			DROID *psDroid = nullptr;
+			DroidList* dList = nullptr;
 			switch (idx)
 			{
-				case 0: psDroid = apsDroidLists[selectedPlayer]; break;
-				case 1: psDroid = mission.apsDroidLists[selectedPlayer]; break;
-				case 2: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { psDroid = apsLimboDroids[selectedPlayer]; } break;
-				default: psDroid = nullptr;
+				case 0: dList = &apsDroidLists[selectedPlayer]; break;
+				case 1: dList = &mission.apsDroidLists[selectedPlayer]; break;
+				case 2: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { dList = &apsLimboDroids[selectedPlayer]; } break;
+				default: dList = nullptr;
 			}
-			for (; psDroid; psDroid = psDroid->psNext, ++fullStats.numUnits)
+			if (!dList)
+			{
+				continue;
+			}
+			for (DROID* psDroid : *dList)
 			{
 				if (isTransporter(psDroid))
 				{
@@ -316,6 +320,7 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 						}
 					}
 				}
+				++fullStats.numUnits;
 			}
 		} while (++idx < 3);
 	}
@@ -611,8 +616,7 @@ void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = tr
 				continue;
 			}
 			uint32_t unitsKilled = getMultiPlayUnitsKilled(n);
-			uint32_t numUnits = 0;
-			for (DROID *psDroid = apsDroidLists[n]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
+			uint32_t numUnits = apsDroidLists[n].size();
 			uint32_t numStructs = apsStructLists[n].size();
 			uint32_t numFactories = 0;
 			uint32_t numResearch = 0;

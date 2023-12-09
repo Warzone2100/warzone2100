@@ -570,7 +570,7 @@ bool removeDroidBase(DROID *psDel)
 		if (tryingToGetLocation())
 		{
 			int numSelectedConstructors = 0;
-			for (DROID *psDroid = apsDroidLists[psDel->player]; psDroid != nullptr; psDroid = psDroid->psNext)
+			for (DROID *psDroid : apsDroidLists[psDel->player])
 			{
 				numSelectedConstructors += psDroid->selected && isConstructionDroid(psDroid);
 			}
@@ -675,7 +675,7 @@ void vanishDroid(DROID *psDel)
 /* Remove a droid from the List so doesn't update or get drawn etc
 TAKE CARE with removeDroid() - usually want droidRemove since it deal with grid code*/
 //returns false if the droid wasn't removed - because it died!
-bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
+bool droidRemove(DROID *psDroid, PerPlayerDroidList& pList)
 {
 	CHECK_DROID(psDroid);
 
@@ -1835,7 +1835,6 @@ void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 /* Make all the droids for a certain player a member of a specific group */
 void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup)
 {
-	DROID	*psDroid;
 	bool	bAtLeastOne = false;
 	size_t  numCleared = 0;
 
@@ -1844,7 +1843,7 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	if (groupNumber < UBYTE_MAX)
 	{
 		/* Run through all the droids */
-		for (psDroid = apsDroidLists[playerNumber]; psDroid != nullptr; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[playerNumber])
 		{
 			/* Clear out the old ones */
 			if (clearGroup && psDroid->group == groupNumber)
@@ -1887,12 +1886,11 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 
 void removeDroidsFromGroup(UDWORD playerNumber)
 {
-	DROID	*psDroid;
 	unsigned removedCount = 0;
 
 	ASSERT_OR_RETURN(, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
-	for (psDroid = apsDroidLists[playerNumber]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[playerNumber])
 	{
 		if (psDroid->selected)
 		{
@@ -1909,7 +1907,7 @@ void removeDroidsFromGroup(UDWORD playerNumber)
 
 bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 {
-	DROID	*psDroid, *psCentreDroid = nullptr;
+	DROID	*psCentreDroid = nullptr;
 	bool selected = false;
 	size_t numDeselected = 0;
 
@@ -1917,7 +1915,7 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 
 	if (groupNumber < UBYTE_MAX)
 	{
-		for (psDroid = apsDroidLists[playerNumber]; psDroid != nullptr; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[playerNumber])
 		{
 			/* Wipe out the ones in the wrong group */
 			if (psDroid->selected && psDroid->group != groupNumber)
@@ -1975,7 +1973,6 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 }
 
 bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen) {
-	DROID	*psDroid;
 	bool selected = false;
 	SELECTIONTYPE dselectionType = selectionType;
 	SELECTION_CLASS dselectionClass = selectionClass;
@@ -1985,7 +1982,7 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
 	selectionCount = selDroidSelection(selectedPlayer, dselectionClass, dselectionType, dbOnScreen);
-	for (psDroid = apsDroidLists[playerNumber]; psDroid; psDroid = psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[playerNumber])
 	{
 		/* Wipe out the ones in the wrong group */
 		if (psDroid->selected && psDroid->group != UBYTE_MAX)
@@ -2010,7 +2007,6 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 
 bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 {
-	DROID	*psDroid;
 	bool selected = false;
 	size_t numDeselected = 0;
 
@@ -2018,7 +2014,7 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 
 	if (groupNumber < UBYTE_MAX)
 	{
-		for (psDroid = apsDroidLists[playerNumber]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[playerNumber])
 		{
 			/* Wipe out the ones in the wrong group */
 			if (psDroid->selected && psDroid->group != groupNumber)
@@ -2277,14 +2273,18 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 
 	do
 	{
-		DROID *psDroid = nullptr;
+		DroidList* dList = nullptr;
 		switch (idx)
 		{
-			case 0: psDroid = apsDroidLists[selectedPlayer]; break;
-			case 1: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { psDroid = apsLimboDroids[selectedPlayer]; } break;
-			default: psDroid = nullptr;
+			case 0: dList = &apsDroidLists[selectedPlayer]; break;
+			case 1: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { dList = &apsLimboDroids[selectedPlayer]; } break;
+			default: dList = nullptr;
 		}
-		for (; psDroid; psDroid = psDroid->psNext)
+		if (!dList)
+		{
+			continue;
+		}
+		for (DROID* psDroid : *dList)
 		{
 			if (getDroidLevel(psDroid) == level)
 			{
@@ -2333,8 +2333,7 @@ bool noDroid(UDWORD x, UDWORD y)
 	// check each droid list
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		const DROID *psDroid;
-		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (const DROID* psDroid : apsDroidLists[i])
 		{
 			if (map_coord(psDroid->pos.x) == x
 				&& map_coord(psDroid->pos.y) == y)
@@ -2352,11 +2351,10 @@ static bool oneDroidMax(UDWORD x, UDWORD y)
 {
 	UDWORD i;
 	bool bFound = false;
-	DROID *pD;
 	// check each droid list
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (pD = apsDroidLists[i]; pD ; pD = pD->psNext)
+		for (DROID* pD : apsDroidLists[i])
 		{
 			if (map_coord(pD->pos.x) == x
 				&& map_coord(pD->pos.y) == y)
@@ -2425,7 +2423,6 @@ bool pickATileGen(Vector2i *pos, unsigned numIterations, bool (*function)(UDWORD
 static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
 {
 	UDWORD				i, structType;
-	DROID				*psDroid;
 
 	const int tx = map_coord(rangeX);
 	const int ty = map_coord(rangeY);
@@ -2467,7 +2464,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 		}
 
 		//check droids
-		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[i])
 		{
 			if (psDroid->visible[player])		//can see this droid?
 			{
@@ -2557,10 +2554,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 building the specified structure - returns true if finds one*/
 bool checkDroidsBuilding(STRUCTURE *psStructure)
 {
-	DROID				*psDroid;
-
-	for (psDroid = apsDroidLists[psStructure->player]; psDroid != nullptr; psDroid =
-			 psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[psStructure->player])
 	{
 		//check DORDER_BUILD, HELP_BUILD is handled the same
 		BASE_OBJECT *const psStruct = orderStateObj(psDroid, DORDER_BUILD);
@@ -2576,10 +2570,7 @@ bool checkDroidsBuilding(STRUCTURE *psStructure)
 demolishing the specified structure - returns true if finds one*/
 bool checkDroidsDemolishing(STRUCTURE *psStructure)
 {
-	DROID				*psDroid;
-
-	for (psDroid = apsDroidLists[psStructure->player]; psDroid != nullptr; psDroid =
-			 psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[psStructure->player])
 	{
 		//check DORDER_DEMOLISH
 		BASE_OBJECT *const psStruct = orderStateObj(psDroid, DORDER_DEMOLISH);
@@ -2738,7 +2729,7 @@ bool droidUnderRepair(const DROID *psDroid)
 	if (droidIsDamaged(psDroid))
 	{
 		//look thru the list of players droids to see if any are repairing this droid
-		for (const DROID *psCurr = apsDroidLists[psDroid->player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (const DROID *psCurr : apsDroidLists[psDroid->player])
 		{
 			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
 				 DROID_CYBORG_REPAIR) && psCurr->action ==
@@ -2765,7 +2756,7 @@ UBYTE checkCommandExist(UBYTE player)
 {
 	UBYTE	quantity = 0;
 
-	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->droidType == DROID_COMMAND)
 		{
@@ -2956,7 +2947,7 @@ bool allVtolsRearmed(const DROID *psDroid)
 	}
 
 	bool stillRearming = false;
-	for (const DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (const DROID *psCurr : apsDroidLists[psDroid->player])
 	{
 		if (vtolRearming(psCurr) &&
 			psCurr->order.type == psDroid->order.type &&
@@ -3256,7 +3247,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 	int oldPlayer = psD->player;
 
 	// reset the assigned state of units attached to a leader
-	for (DROID *psCurr = apsDroidLists[oldPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[oldPlayer])
 	{
 		BASE_OBJECT	*psLeader;
 
@@ -3330,7 +3321,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 			continue;
 		}
 
-		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (DROID *psCurr : apsDroidLists[i])
 		{
 			if (psCurr->order.psObj == psD || psCurr->psActionTarget[0] == psD)
 			{

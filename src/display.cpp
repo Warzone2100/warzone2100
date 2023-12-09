@@ -417,7 +417,7 @@ static bool localPlayerHasSelection()
 		return false;
 	}
 
-	for (DROID* psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -806,7 +806,7 @@ void processMouseClickInput()
 			else if (selection == SC_DROID_REPAIR)
 			{
 				// We can't repair ourselves, so change it to a blocking cursor
-				for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
+				for (DROID *psCurr : apsDroidLists[selectedPlayer])
 				{
 					if (psCurr->selected)
 					{
@@ -1314,8 +1314,7 @@ BASE_OBJECT *mouseTarget()
 	/* First have a look through the droid lists */
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		/* Note the !psObject check isn't really necessary as the goto will jump out */
-		for (DROID *psDroid = apsDroidLists[i]; psDroid && !psReturn; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[i])
 		{
 			dispX = psDroid->sDisplay.screenX;
 			dispY = psDroid->sDisplay.screenY;
@@ -1715,10 +1714,8 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 	// Clicked on a sensor? Will assign to it.
 	else if (psDroid->droidType == DROID_SENSOR)
 	{
-		DROID *psCurr;
-
 		bSensorAssigned = false;
-		for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+		for (DROID* psCurr : apsDroidLists[selectedPlayer])
 		{
 			//must be indirect weapon droid or VTOL weapon droid
 			if ((psCurr->droidType == DROID_WEAPON) &&
@@ -1933,10 +1930,8 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 		if ((i < numStructureStats) &&
 		    (apStructTypeLists[selectedPlayer][i] == AVAILABLE))	// don't go any further if no derrick stat found.
 		{
-			DROID *psCurr;
-
 			// for each droid
-			for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+			for (DROID* psCurr : apsDroidLists[selectedPlayer])
 			{
 				if ((droidType(psCurr) == DROID_CONSTRUCT ||
 				     droidType(psCurr) == DROID_CYBORG_CONSTRUCT) && (psCurr->selected))
@@ -2355,7 +2350,6 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 	UDWORD		i;
 	MOUSE_TARGET retVal;
 	BASE_OBJECT	 *psNotDroid;
-	DROID		*psDroid;
 	UDWORD		dispX, dispY, dispR;
 	STRUCTURE	*psStructure;
 
@@ -2373,9 +2367,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 	/* First have a look through the droid lists */
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		/* Note the !psObject check isn't really necessary as the goto will jump out */
-		for (psDroid = apsDroidLists[i]; psDroid && retVal == MT_NOTARGET;
-		     psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[i])
 		{
 			dispX = psDroid->sDisplay.screenX;
 			dispY = psDroid->sDisplay.screenY;
@@ -2594,7 +2586,7 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 		return SC_INVALID;
 	}
 
-	for (DROID *psDroid = apsDroidLists[_selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[_selectedPlayer])
 	{
 		// This works, uses the DroidSelectionWeights[] table to priorities the different
 		// droid types and find the dominant selection.
@@ -2684,9 +2676,7 @@ bool	repairDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected && (
 		        psCurr->droidType == DROID_REPAIR ||
@@ -2705,9 +2695,7 @@ bool	vtolDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "player: %" PRIu32 "", player);
 
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected && isVtolDroid(psCurr))
 		{
@@ -2726,9 +2714,7 @@ bool	anyDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2745,9 +2731,7 @@ bool cyborgDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected && cyborgDroid(psCurr))
 		{
@@ -2762,8 +2746,6 @@ bool cyborgDroidSelected(UDWORD player)
 /* Clear the selection flag for a player */
 void clearSelection()
 {
-	DROID			*psCurrDroid;
-
 	memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
 
 	if (selectedPlayer >= MAX_PLAYERS)
@@ -2771,7 +2753,7 @@ void clearSelection()
 		return;
 	}
 
-	for (psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid; psCurrDroid = psCurrDroid->psNext)
+	for (DROID* psCurrDroid : apsDroidLists[selectedPlayer])
 	{
 		psCurrDroid->selected = false;
 	}

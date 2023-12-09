@@ -2530,7 +2530,6 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
  */
 void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 {
-	DROID			*psCurr;
 	DROID_ORDER		order;
 
 	//if were in build select mode ignore all other clicking
@@ -2544,7 +2543,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2847,7 +2846,7 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 	ASSERT_PLAYER_OR_RETURN(, player);
 
 	/* loop over selected droids */
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->selected)
 		{
@@ -2882,7 +2881,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2940,7 +2939,7 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected && isConstructionDroid(psCurr))
 		{
@@ -2964,7 +2963,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2989,7 +2988,7 @@ DROID *FindATransporter(DROID const *embarkee)
 	DROID *bestDroid = nullptr;
 	unsigned bestDist = ~0u;
 
-	for (DROID *psDroid = apsDroidLists[embarkee->player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[embarkee->player])
 	{
 		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
@@ -3272,8 +3271,7 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected && selectedPlayer < MAX_PLAYERS)
 		{
-			DROID *psTempDroid;
-			for (psTempDroid = apsDroidLists[selectedPlayer]; psTempDroid; psTempDroid = psTempDroid->psNext)
+			for (DROID* psTempDroid : apsDroidLists[selectedPlayer])
 			{
 				if (psTempDroid != psDroid && psTempDroid->selected)
 				{
@@ -3392,24 +3390,27 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		&& secondaryGetState(psDroid, DSO_ACCEPT_RETREP)))
 	{
 		// one of these lists is empty when on mission
-		DROID* psdroidList = apsDroidLists[psDroid->player] != nullptr ? apsDroidLists[psDroid->player] : mission.apsDroidLists[psDroid->player];
-		for (DROID* psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
+		DroidList* psdroidList = !apsDroidLists[psDroid->player].empty() ? &apsDroidLists[psDroid->player] : &mission.apsDroidLists[psDroid->player];
+		if (!psdroidList->empty())
 		{
-			// Accept any repair droids that accept retreating units
-			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
-				&& secondaryGetState(psCurr, DSO_ACCEPT_RETREP))
+			for (DROID* psCurr : *psdroidList)
 			{
-				thisDistToRepair = droidSqDist(psDroid, psCurr);
-				if (thisDistToRepair <= 0)
+				// Accept any repair droids that accept retreating units
+				if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
+					&& secondaryGetState(psCurr, DSO_ACCEPT_RETREP))
 				{
-					continue; // unreachable
-				}
-				vDroidPos.push_back(psCurr->pos);
-				vDroid.push_back(psCurr);
-				if (bestDistToRepairDroid > thisDistToRepair)
-				{
-					bestDistToRepairDroid = thisDistToRepair;
-					bestDroidPos = psCurr->pos;
+					thisDistToRepair = droidSqDist(psDroid, psCurr);
+					if (thisDistToRepair <= 0)
+					{
+						continue; // unreachable
+					}
+					vDroidPos.push_back(psCurr->pos);
+					vDroid.push_back(psCurr);
+					if (bestDistToRepairDroid > thisDistToRepair)
+					{
+						bestDistToRepairDroid = thisDistToRepair;
+						bestDroidPos = psCurr->pos;
+					}
 				}
 			}
 		}
@@ -3925,7 +3926,7 @@ static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER 
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[player])
 	{
 		if (psCurr->group == group &&
 		    secondaryGetState(psCurr, sec) != state)
@@ -3950,12 +3951,11 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 		UDWORD state, num;
 	} aStateCount[MAX_STATES];
 	SDWORD	i, numStates, max;
-	DROID	*psCurr;
 
 	// count the number of units for each state
 	numStates = 0;
 	memset(aStateCount, 0, sizeof(aStateCount));
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->group == group)
 		{

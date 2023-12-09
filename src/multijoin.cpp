@@ -134,16 +134,19 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 	}
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
-	while (apsDroidLists[player])				// delete all droids
+	DroidList::iterator droidIt = apsDroidLists[player].begin(), droidItNext;
+	while (droidIt != apsDroidLists[player].end())				// delete all droids
 	{
+		droidItNext = std::next(droidIt);
 		if (quietly)			// don't show effects
 		{
-			killDroid(apsDroidLists[player]);
+			killDroid(*droidIt);
 		}
 		else				// show effects
 		{
-			destroyDroid(apsDroidLists[player], gameTime);
+			destroyDroid(*droidIt, gameTime);
 		}
+		droidIt = droidItNext;
 	}
 
 	debug(LOG_DEATH, "killing off all structures for player %d", player);
@@ -258,15 +261,16 @@ bool splitResourcesAmongTeam(UDWORD player)
 			return a.itemsRecv < b.itemsRecv;
 		});
 	};
-	while (apsDroidLists[player])
+	DroidList::iterator droidIt = apsDroidLists[player].begin(), droidItNext;
+	while (droidIt != apsDroidLists[player].end())
 	{
-		auto psDroid = apsDroidLists[player];
+		droidItNext = std::next(droidIt);
 		bool transferredDroid = false;
-		if (!isDead(psDroid))
+		if (!isDead(*droidIt))
 		{
 			for (size_t i = 0; i < droidsGiftedPerTarget.size(); ++i)
 			{
-				if (giftSingleDroid(psDroid, droidsGiftedPerTarget[i].player, false))
+				if (giftSingleDroid(*droidIt, droidsGiftedPerTarget[i].player, false))
 				{
 					transferredDroid = true;
 					incrRecvItem(i);
@@ -278,8 +282,9 @@ bool splitResourcesAmongTeam(UDWORD player)
 
 		if (!transferredDroid)
 		{
-			destroyDroid(apsDroidLists[player], gameTime);
+			destroyDroid(*droidIt, gameTime);
 		}
+		droidIt = droidItNext;
 	}
 
 	auto distributeMatchingStructs = [&](std::function<bool (STRUCTURE *)> cmp)
@@ -371,7 +376,6 @@ void handlePlayerLeftInGame(UDWORD player)
 static void resetMultiVisibility(UDWORD player)
 {
 	UDWORD		owned;
-	DROID		*pDroid;
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -383,7 +387,7 @@ static void resetMultiVisibility(UDWORD player)
 		if (owned != player)								// done reset own stuff..
 		{
 			//droids
-			for (pDroid = apsDroidLists[owned]; pDroid; pDroid = pDroid->psNext)
+			for (DROID* pDroid : apsDroidLists[owned])
 			{
 				pDroid->visible[player] = false;
 			}

@@ -2074,15 +2074,13 @@ static void threatUpdate(int player)
 	// Step 2: Set threat bits
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		DROID *psDroid;
-
 		if (aiCheckAlliances(player, i))
 		{
 			// No need to iterate friendly objects
 			continue;
 		}
 
-		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[i])
 		{
 			UBYTE mode = 0;
 

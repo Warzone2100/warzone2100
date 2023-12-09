@@ -126,7 +126,7 @@ static bool intAddTransButtonForm();
 static bool intAddTransContentsForm();
 static bool intAddDroidsAvailForm();
 static void intRemoveTransContent();
-static DROID *transInterfaceDroidList();
+static DroidList* transInterfaceDroidList();
 static void intTransporterAddDroid(UDWORD id);
 static void intRemoveTransDroidsAvail();
 static void intRemoveTransDroidsAvailNoAnim();
@@ -426,55 +426,59 @@ bool intAddTransButtonForm()
 	int nextStatButtonId = IDTRANS_STATSTART;
 
 	//add each button
-	for (DROID *psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
+	auto* transIntDroidList = transInterfaceDroidList();
+	if (transIntDroidList)
 	{
-		//only interested in Transporter droids
-		if ((isTransporter(psDroid) && (psDroid->action == DACTION_TRANSPORTOUT  ||
-		                                psDroid->action == DACTION_TRANSPORTIN)) || !isTransporter(psDroid))
+		for (DROID* psDroid : *transIntDroidList)
 		{
-			continue;
+			//only interested in Transporter droids
+			if ((isTransporter(psDroid) && (psDroid->action == DACTION_TRANSPORTOUT ||
+				psDroid->action == DACTION_TRANSPORTIN)) || !isTransporter(psDroid))
+			{
+				continue;
+			}
+
+			auto buttonHolder = std::make_shared<WIDGET>();
+			transList->attach(buttonHolder);
+			transList->addWidgetToLayout(buttonHolder);
+
+			auto statButton = std::make_shared<IntStatusButton>();
+			buttonHolder->attach(statButton);
+			statButton->id = nextStatButtonId;
+			statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+
+			auto objButton = std::make_shared<IntObjectButton>();
+			buttonHolder->attach(objButton);
+			objButton->id = nextObjButtonId;
+			objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+
+			/* Set the tip and add the button */
+			objButton->setTip(droidGetName(psDroid));
+			objButton->setObject(psDroid);
+
+			//set the first Transporter to be the current one if not already set
+			if (psCurrTransporter == nullptr)
+			{
+				psCurrTransporter = psDroid;
+			}
+
+			/* if the current droid matches psCurrTransporter lock the button */
+			if (psDroid == psCurrTransporter)
+			{
+				objButton->setState(WBUT_LOCK);
+				transList->setCurrentPage(transList->pages() - 1);
+			}
+
+			//now do status button
+			statButton->setObject(nullptr);
+
+			/* Update the init struct for the next buttons */
+			++nextObjButtonId;
+			ASSERT(nextObjButtonId < IDTRANS_END, "Too many Transporter buttons");
+
+			++nextStatButtonId;
+			ASSERT(nextStatButtonId < IDTRANS_STATEND, "Too many Transporter status buttons");
 		}
-
-		auto buttonHolder = std::make_shared<WIDGET>();
-		transList->attach(buttonHolder);
-		transList->addWidgetToLayout(buttonHolder);
-
-		auto statButton = std::make_shared<IntStatusButton>();
-		buttonHolder->attach(statButton);
-		statButton->id = nextStatButtonId;
-		statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
-
-		auto objButton = std::make_shared<IntObjectButton>();
-		buttonHolder->attach(objButton);
-		objButton->id = nextObjButtonId;
-		objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
-
-		/* Set the tip and add the button */
-		objButton->setTip(droidGetName(psDroid));
-		objButton->setObject(psDroid);
-
-		//set the first Transporter to be the current one if not already set
-		if (psCurrTransporter == nullptr)
-		{
-			psCurrTransporter = psDroid;
-		}
-
-		/* if the current droid matches psCurrTransporter lock the button */
-		if (psDroid == psCurrTransporter)
-		{
-			objButton->setState(WBUT_LOCK);
-			transList->setCurrentPage(transList->pages() - 1);
-		}
-
-		//now do status button
-		statButton->setObject(nullptr);
-
-		/* Update the init struct for the next buttons */
-		++nextObjButtonId;
-		ASSERT(nextObjButtonId < IDTRANS_END, "Too many Transporter buttons");
-
-		++nextStatButtonId;
-		ASSERT(nextStatButtonId < IDTRANS_STATEND, "Too many Transporter status buttons");
 	}
 	return true;
 }
@@ -596,7 +600,7 @@ bool intAddDroidsAvailForm()
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	//add droids built before the mission
-	for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : mission.apsDroidLists[selectedPlayer])
 	{
 		//stop adding the buttons once IDTRANS_DROIDEND has been reached
 		if (nextButtonId == IDTRANS_DROIDEND)
@@ -861,26 +865,32 @@ void intRemoveTransDroidsAvailNoAnim()
 /*sets psCurrTransporter */
 void setCurrentTransporter(UDWORD id)
 {
-	DROID	*psDroid;
+	DROID	*psDroid = nullptr;
 	UDWORD	currID;
 
 	psCurrTransporter = nullptr;
 	currID = IDTRANS_START;
 
 	//loop thru all the droids to find the selected one
-	for (psDroid = transInterfaceDroidList(); psDroid != nullptr; psDroid = psDroid->psNext)
+	auto* transIntDroidList = transInterfaceDroidList();
+	if (transIntDroidList)
 	{
-		if (isTransporter(psDroid) &&
-		    (psDroid->action != DACTION_TRANSPORTOUT &&
-		     psDroid->action != DACTION_TRANSPORTIN))
+		for (DROID* psCurr : *transIntDroidList)
 		{
-			if (currID == id)
+			if (isTransporter(psCurr) &&
+				(psCurr->action != DACTION_TRANSPORTOUT &&
+					psCurr->action != DACTION_TRANSPORTIN))
 			{
-				break;
+				if (currID == id)
+				{
+					psDroid = psCurr;
+					break;
+				}
+				currID++;
 			}
-			currID++;
 		}
 	}
+
 	if (psDroid)
 	{
 		psCurrTransporter = psDroid;
@@ -976,16 +986,20 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 /*adds a droid to the current transporter via the interface*/
 static void intTransporterAddDroid(UDWORD id)
 {
-	DROID		*psDroid, *psNext;
 	UDWORD		currID;
 
 	ASSERT(psCurrTransporter != nullptr, "intTransporterAddUnit:can't remove units");
 
 	currID = IDTRANS_DROIDSTART;
-	for (psDroid = transInterfaceDroidList(); psDroid != nullptr; psDroid = psNext)
+	auto* transIntDroidList = transInterfaceDroidList();
+	if (!transIntDroidList)
 	{
-		psNext = psDroid->psNext;
-		if (!isTransporter(psDroid))
+		return;
+	}
+	DroidList::iterator droidIt = transIntDroidList->begin();
+	while (droidIt != transIntDroidList->end())
+	{
+		if (!isTransporter(*droidIt))
 		{
 			if (currID == id)
 			{
@@ -994,9 +1008,9 @@ static void intTransporterAddDroid(UDWORD id)
 			currID++;
 		}
 	}
-	if (psDroid)
+	if (droidIt != transIntDroidList->end())
 	{
-		transporterAddDroid(psCurrTransporter, psDroid);
+		transporterAddDroid(psCurrTransporter, *droidIt);
 	}
 }
 
@@ -1104,16 +1118,16 @@ int transporterSpaceRequired(const DROID *psDroid)
 }
 
 /*sets which list of droids to use for the transporter interface*/
-DROID *transInterfaceDroidList()
+DroidList* transInterfaceDroidList()
 {
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
 	if (onMission)
 	{
-		return mission.apsDroidLists[selectedPlayer];
+		return &mission.apsDroidLists[selectedPlayer];
 	}
 	else
 	{
-		return apsDroidLists[selectedPlayer];
+		return &apsDroidLists[selectedPlayer];
 	}
 }
 
