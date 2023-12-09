@@ -131,7 +131,7 @@ bool		offWorldKeepLists;
 /*lists of droids that are held separate over several missions. There should
 only be selectedPlayer's droids but have possibility for MAX_PLAYERS -
 also saves writing out list functions to cater for just one player*/
-DROID       *apsLimboDroids[MAX_PLAYERS];
+PerPlayerDroidList apsLimboDroids;
 
 //Where the Transporter lands for player 0 (sLandingZone[0]), and the rest are
 //a list of areas that cannot be built on, used for landing the enemy transporters
@@ -236,11 +236,11 @@ void initMission()
 	for (int inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		mission.apsStructLists[inc].clear();
-		mission.apsDroidLists[inc] = nullptr;
+		mission.apsDroidLists[inc].clear();
 		mission.apsFeatureLists[inc].clear();
 		mission.apsFlagPosLists[inc].clear();
 		mission.apsExtractorLists[inc].clear();
-		apsLimboDroids[inc] = nullptr;
+		apsLimboDroids[inc].clear();
 	}
 	mission.apsSensorList[0].clear();
 	mission.apsOilList[0].clear();
@@ -303,8 +303,8 @@ bool missionShutDown()
 
 		for (int inc = 0; inc < MAX_PLAYERS; inc++)
 		{
-			apsDroidLists[inc] = mission.apsDroidLists[inc];
-			mission.apsDroidLists[inc] = nullptr;
+			apsDroidLists[inc] = std::move(mission.apsDroidLists[inc]);
+			mission.apsDroidLists[inc].clear();
 			apsStructLists[inc] = std::move(mission.apsStructLists[inc]);
 			mission.apsStructLists[inc].clear();
 			apsFeatureLists[inc] = std::move(mission.apsFeatureLists[inc]);
@@ -532,7 +532,7 @@ void addTransporterTimerInterface()
 	if (mission.ETA >= 0 && selectedPlayer < MAX_PLAYERS)
 	{
 		//check the player has at least one Transporter back at base
-		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+		for (DROID *psDroid : mission.apsDroidLists[selectedPlayer])
 		{
 			if (isTransporter(psDroid))
 			{
@@ -579,7 +579,6 @@ void addTransporterTimerInterface()
 /* fly in transporters at start of level */
 void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 {
-	DROID	*psTransporter, *psNext;
 	UWORD	iX, iY, iZ;
 	SDWORD	iLandX, iLandY, iDx, iDy;
 
@@ -590,11 +589,12 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 	missionGetTransporterEntry(iPlayer, &iX, &iY);
 	iZ = (UWORD)(map_Height(iX, iY) + OFFSCREEN_HEIGHT);
 
-	psNext = nullptr;
 	//get the droids for the mission
-	for (psTransporter = mission.apsDroidLists[iPlayer]; psTransporter != nullptr; psTransporter = psNext)
+	DroidList::iterator droidIt = mission.apsDroidLists[iPlayer].begin(), droidItNext;
+	while (droidIt != mission.apsDroidLists[iPlayer].end())
 	{
-		psNext = psTransporter->psNext;
+		droidItNext = std::next(droidIt);
+		DROID* psTransporter = *droidIt;
 
 		if (psTransporter->droidType == DROID_SUPERTRANSPORTER)
 		{
@@ -650,6 +650,7 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 				break;
 			}
 		}
+		droidIt = droidItNext;
 	}
 }
 
@@ -657,7 +658,6 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 static void saveMissionData()
 {
 	UDWORD			inc;
-	DROID			*psDroid;
 	STRUCTURE		*psStructBeingBuilt;
 	bool			bRepairExists;
 
@@ -675,7 +675,7 @@ static void saveMissionData()
 		if (psStruct->status == SS_BEING_BUILT)
 		{
 			//find a droid working on it
-			for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+			for (DROID* psDroid : apsDroidLists[selectedPlayer])
 			{
 				if ((psStructBeingBuilt = (STRUCTURE *)orderStateObj(psDroid, DORDER_BUILD))
 				    && psStructBeingBuilt == psStruct)
@@ -697,7 +697,7 @@ static void saveMissionData()
 	//repair all droids back at home base if have a repair facility
 	if (bRepairExists)
 	{
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
 			if (droidIsDamaged(psDroid))
 			{
@@ -707,7 +707,7 @@ static void saveMissionData()
 	}
 
 	//clear droid orders for all droids except constructors still building
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		if ((psStructBeingBuilt = (STRUCTURE *)orderStateObj(psDroid, DORDER_BUILD)))
 		{
@@ -779,7 +779,6 @@ static void saveMissionData()
 void restoreMissionData()
 {
 	UDWORD		inc;
-	BASE_OBJECT	*psObj;
 
 	debug(LOG_SAVE, "called");
 
@@ -801,9 +800,9 @@ void restoreMissionData()
 	//restore the game pointers
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		apsDroidLists[inc] = mission.apsDroidLists[inc];
-		mission.apsDroidLists[inc] = nullptr;
-		for (psObj = (BASE_OBJECT *)apsDroidLists[inc]; psObj; psObj = psObj->psNext)
+		apsDroidLists[inc] = std::move(mission.apsDroidLists[inc]);
+		mission.apsDroidLists[inc].clear();
+		for (DROID* psObj : apsDroidLists[inc])
 		{
 			psObj->died = false;	//make sure the died flag is not set
 		}
@@ -867,8 +866,6 @@ void restoreMissionData()
 /*Saves the necessary data when moving from one mission to a limbo expand Mission*/
 void saveMissionLimboData()
 {
-	DROID           *psDroid, *psNext;
-
 	debug(LOG_SAVE, "called");
 
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
@@ -881,15 +878,18 @@ void saveMissionLimboData()
 	processPreviousCampDroids();
 
 	// move droids properly - does all the clean up code
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psNext)
+	DroidList::iterator psDroid = apsDroidLists[selectedPlayer].begin(), psNext;
+	while (psDroid != apsDroidLists[selectedPlayer].end())
 	{
-		psNext = psDroid->psNext;
-		if (droidRemove(psDroid, apsDroidLists))
+		psNext = std::next(psDroid);
+		DROID* psDroidRaw = *psDroid;
+		if (droidRemove(psDroidRaw, apsDroidLists))
 		{
-			addDroid(psDroid, mission.apsDroidLists);
+			addDroid(psDroidRaw, mission.apsDroidLists);
 		}
+		psDroid = psNext;
 	}
-	apsDroidLists[selectedPlayer] = nullptr;
+	apsDroidLists[selectedPlayer].clear();
 
 	// any selectedPlayer's factories/research need to be put on holdProduction/holdresearch
 	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
@@ -908,7 +908,6 @@ void saveMissionLimboData()
 //this is called via a script function to place the Limbo droids once the mission has started
 void placeLimboDroids()
 {
-	DROID           *psDroid, *psNext;
 	UDWORD			droidX, droidY;
 	PICKTILE		pickRes;
 
@@ -917,9 +916,11 @@ void placeLimboDroids()
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	// Copy the droids across for the selected Player
-	for (psDroid = apsLimboDroids[selectedPlayer]; psDroid != nullptr; psDroid = psNext)
+	DroidList::iterator droidIt = apsLimboDroids[selectedPlayer].begin(), droidItNext;
+	while (droidIt != apsLimboDroids[selectedPlayer].end())
 	{
-		psNext = psDroid->psNext;
+		droidItNext = std::next(droidIt);
+		DROID* psDroid = *droidIt;
 		if (droidRemove(psDroid, apsLimboDroids))
 		{
 			addDroid(psDroid, apsDroidLists);
@@ -954,23 +955,24 @@ void placeLimboDroids()
 		{
 			ASSERT(false, "placeLimboUnits: Unable to remove unit from Limbo list");
 		}
+		droidIt = droidItNext;
 	}
 }
 
 /*restores the necessary data on completion of a Limbo Expand mission*/
 void restoreMissionLimboData()
 {
-	DROID           *psDroid, *psNext;
-
 	debug(LOG_SAVE, "called");
 
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	/*the droids stored in the mission droid list need to be added back
 	into the current droid list*/
-	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psNext)
+	DroidList::iterator droidIt = mission.apsDroidLists[selectedPlayer].begin(), droidItNext;
+	while (droidIt != mission.apsDroidLists[selectedPlayer].end())
 	{
-		psNext = psDroid->psNext;
+		droidItNext = std::next(droidIt);
+		DROID* psDroid = *droidIt;
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, mission.apsDroidLists))
 		{
@@ -979,15 +981,16 @@ void restoreMissionLimboData()
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			//the location of the droid should be valid!
 		}
+		droidIt = droidItNext;
 	}
-	ASSERT(mission.apsDroidLists[selectedPlayer] == nullptr, "list should be empty");
+	ASSERT(mission.apsDroidLists[selectedPlayer].empty(), "list should be empty");
 }
 
 /*Saves the necessary data when moving from one campaign to the start of the
 next - saves out the list of droids for the selected player*/
 void saveCampaignData()
 {
-	DROID		*psDroid, *psNext, *psSafeDroid, *psNextSafe, *psCurr, *psCurrNext;
+	DROID		*psCurr, *psCurrNext;
 
 	debug(LOG_SAVE, "called");
 
@@ -997,10 +1000,11 @@ void saveCampaignData()
 	if (getDroidsToSafetyFlag())
 	{
 		// Move any Transporters into the mission list
-		psDroid = apsDroidLists[selectedPlayer];
-		while (psDroid != nullptr)
+		DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
+		while (droidIt != apsDroidLists[selectedPlayer].end())
 		{
-			psNext = psDroid->psNext;
+			droidItNext = std::next(droidIt);
+			DROID* psDroid = *droidIt;
 			if (isTransporter(psDroid))
 			{
 				// Empty the transporter into the mission list
@@ -1026,21 +1030,19 @@ void saveCampaignData()
 					addDroid(psDroid, mission.apsDroidLists);
 				}
 			}
-			psDroid = psNext;
+			droidIt = droidItNext;
 		}
 	}
 	else
 	{
 		// Reserve the droids for selected player for start of next campaign
-		mission.apsDroidLists[selectedPlayer] = apsDroidLists[selectedPlayer];
-		apsDroidLists[selectedPlayer] = nullptr;
-		psDroid = mission.apsDroidLists[selectedPlayer];
-		while (psDroid != nullptr)
+		mission.apsDroidLists[selectedPlayer] = std::move(apsDroidLists[selectedPlayer]);
+		apsDroidLists[selectedPlayer].clear();
+		for (DROID* psDroid : mission.apsDroidLists[selectedPlayer])
 		{
 			//cam change add droid
 			psDroid->pos.x = INVALID_XY;
 			psDroid->pos.y = INVALID_XY;
-			psDroid = psDroid->psNext;
 		}
 	}
 
@@ -1049,17 +1051,22 @@ void saveCampaignData()
 	{
 		/*now that every unit for the selected player has been moved into the
 		mission list - reverse it and fill the transporter with the first ten units*/
-		reverseObjectList(&mission.apsDroidLists[selectedPlayer]);
+		mission.apsDroidLists[selectedPlayer].reverse();
 
 		//find the *first* transporter
-		for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		DroidList::iterator droidIt = mission.apsDroidLists[selectedPlayer].begin(), droidItNext;
+		while (droidIt != mission.apsDroidLists[selectedPlayer].end())
 		{
+			droidItNext = std::next(droidIt);
+			DROID* psDroid = *droidIt;
 			if (isTransporter(psDroid))
 			{
 				//fill it with droids from the mission list
-				for (psSafeDroid = mission.apsDroidLists[selectedPlayer]; psSafeDroid; psSafeDroid = psNextSafe)
+				DroidList::iterator safeDroidIt = mission.apsDroidLists[selectedPlayer].begin(), safeDroidItNext;
+				while (safeDroidIt != mission.apsDroidLists[selectedPlayer].end())
 				{
-					psNextSafe = psSafeDroid->psNext;
+					safeDroidItNext = std::next(safeDroidIt);
+					DROID* psSafeDroid = *safeDroidIt;
 					if (psSafeDroid != psDroid)
 					{
 						//add to the Transporter, checking for when full
@@ -1072,26 +1079,27 @@ void saveCampaignData()
 						}
 						else
 						{
-							//setting this will cause the loop to end
-							psNextSafe = nullptr;
+							break;
 						}
 					}
+					safeDroidIt = safeDroidItNext;
 				}
 				//only want to fill one transporter
 				break;
 			}
+			droidIt = droidItNext;
 		}
 	}
 
 	//clear all other droids
 	for (int inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		psDroid = apsDroidLists[inc];
-		while (psDroid != nullptr)
+		DroidList::iterator droidIt = apsDroidLists[inc].begin(), droidItNext;
+		while (droidIt != apsDroidLists[inc].end())
 		{
-			psNext = psDroid->psNext;
-			vanishDroid(psDroid);
-			psDroid = psNext;
+			droidItNext = std::next(droidIt);
+			vanishDroid(*droidIt);
+			droidIt = droidItNext;
 		}
 	}
 
@@ -1232,7 +1240,7 @@ static void clearCampaignUnits()
 {
 	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
 		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		setDroidBase(psDroid, nullptr);
@@ -1244,17 +1252,17 @@ static void clearCampaignUnits()
 /*This deals with droids at the end of an offworld mission*/
 static void processMission()
 {
-	DROID			*psNext;
-	DROID			*psDroid;
 	UDWORD			droidX, droidY;
 	PICKTILE		pickRes;
 
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	//and the rest on the mission map  - for now?
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psNext)
+	DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
+	while (droidIt != apsDroidLists[selectedPlayer].end())
 	{
-		psNext = psDroid->psNext;
+		droidItNext = std::next(droidIt);
+		DROID* psDroid = *droidIt;
 		//reset order - do this to all the droids that are returning from offWorld
 		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		// clean up visibility
@@ -1283,6 +1291,7 @@ static void processMission()
 			// This is mainly for VTOLs
 			setDroidBase(psDroid, nullptr);
 		}
+		droidIt = droidItNext;
 	}
 }
 
@@ -1292,15 +1301,16 @@ static void processMission()
 /*This deals with droids at the end of an offworld Limbo mission*/
 void processMissionLimbo()
 {
-	DROID			*psNext, *psDroid;
 	UDWORD	numDroidsAddedToLimboList = 0;
 
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	//all droids (for selectedPlayer only) are placed into the limbo list
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psNext)
+	DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
+	while (droidIt != apsDroidLists[selectedPlayer].end())
 	{
-		psNext = psDroid->psNext;
+		droidItNext = std::next(droidIt);
+		DROID* psDroid = *droidIt;
 		//KILL OFF TRANSPORTER - should never be one but....
 		if (isTransporter(psDroid))
 		{
@@ -1328,6 +1338,7 @@ void processMissionLimbo()
 				}
 			}
 		}
+		droidIt = droidItNext;
 	}
 }
 
@@ -1558,31 +1569,37 @@ static void missionResetDroids()
 
 	for (unsigned int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+		DroidList::iterator droidIt = apsDroidLists[player].begin(), droidItNext;
+		while (droidIt != apsDroidLists[player].end())
 		{
+			droidItNext = std::next(droidIt);
 			// Reset order - unless constructor droid that is mid-build
-			if ((psDroid->droidType == DROID_CONSTRUCT
-			     || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
-			    && orderStateObj(psDroid, DORDER_BUILD))
+			if (((*droidIt)->droidType == DROID_CONSTRUCT
+			     || (*droidIt)->droidType == DROID_CYBORG_CONSTRUCT)
+			    && orderStateObj((*droidIt), DORDER_BUILD))
 			{
 				// Need to set the action time to ignore the previous mission time
-				psDroid->actionStarted = gameTime;
+				(*droidIt)->actionStarted = gameTime;
 			}
 			else
 			{
-				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+				orderDroid(*droidIt, DORDER_STOP, ModeImmediate);
 			}
 
 			//KILL OFF TRANSPORTER
-			if (isTransporter(psDroid))
+			if (isTransporter(*droidIt))
 			{
-				vanishDroid(psDroid);
+				vanishDroid(*droidIt);
 			}
+			droidIt = droidItNext;
 		}
 	}
 
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+	DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
+	while (droidIt != apsDroidLists[selectedPlayer].end())
 	{
+		droidItNext = std::next(droidIt);
+		DROID* psDroid = *droidIt;
 		bool	placed = false;
 
 		//for all droids that have never left home base
@@ -1683,6 +1700,7 @@ static void missionResetDroids()
 				vanishDroid(psDroid);
 			}
 		}
+		droidIt = droidItNext;
 	}
 }
 
@@ -1691,18 +1709,18 @@ goingHome = true when returning from an off World mission*/
 void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 {
 	DROID		*psDroid, *psNext;
-	DROID		**ppCurrentList;
+	PerPlayerDroidList* ppCurrentList;
 	UDWORD		droidX, droidY;
 	DROID_GROUP	*psGroup;
 
 	ASSERT_OR_RETURN(, psTransporter != nullptr, "Invalid transporter");
 	if (goingHome)
 	{
-		ppCurrentList = mission.apsDroidLists;
+		ppCurrentList = &mission.apsDroidLists;
 	}
 	else
 	{
-		ppCurrentList = apsDroidLists;
+		ppCurrentList = &apsDroidLists;
 	}
 
 	//unload all the droids from within the current Transporter
@@ -1713,7 +1731,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 		{
 			psNext = psDroid->psGrpNext;
 			//add it back into current droid lists
-			addDroid(psDroid, ppCurrentList);
+			addDroid(psDroid, *ppCurrentList);
 
 			//starting point...based around the value passed in
 			droidX = map_coord(x);
@@ -1791,7 +1809,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 void missionMoveTransporterOffWorld(DROID *psTransporter)
 {
 	W_CLICKFORM     *psForm;
-	DROID           *psDroid;
 
 	if (psTransporter->droidType == DROID_SUPERTRANSPORTER)
 	{
@@ -1827,15 +1844,11 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 		if (psTransporter->player == selectedPlayer)
 		{
 			ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
-			psDroid = nullptr;
-			for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+			auto droidIt = std::find_if(mission.apsDroidLists[selectedPlayer].begin(), mission.apsDroidLists[selectedPlayer].end(), [](DROID* d)
 			{
-				if (!isTransporter(psDroid))
-				{
-					break;
-				}
-			}
-			if (psDroid == nullptr)
+				return !isTransporter(d);
+			});
+			if (droidIt == mission.apsDroidLists[selectedPlayer].end())
 			{
 				triggerEvent(TRIGGER_TRANSPORTER_DONE, psTransporter);
 			}
@@ -2888,7 +2901,6 @@ void missionTimerUpdate()
 //
 void missionDestroyObjects()
 {
-	DROID *psDroid;
 	UBYTE Player, i;
 
 	debug(LOG_SAVE, "called");
@@ -2899,29 +2911,28 @@ void missionDestroyObjects()
 		{
 			// AI player, clear out old data
 
-			psDroid = apsDroidLists[Player];
-
-			while (psDroid != nullptr)
+			DroidList::iterator droidIt = apsDroidLists[Player].begin(), droidItNext;
+			while (droidIt != apsDroidLists[Player].end())
 			{
-				DROID *psNext = psDroid->psNext;
-				removeDroidBase(psDroid);
-				psDroid = psNext;
+				droidItNext = std::next(droidIt);
+				removeDroidBase(*droidIt);
+				droidIt = droidItNext;
 			}
 
 			//clear out the mission lists as well to make sure no Transporters exist
-			apsDroidLists[Player] = mission.apsDroidLists[Player];
-			psDroid = apsDroidLists[Player];
+			apsDroidLists[Player] = std::move(mission.apsDroidLists[Player]);
 
-			while (psDroid != nullptr)
+			droidIt = apsDroidLists[Player].begin();
+			while (droidIt != apsDroidLists[Player].end())
 			{
-				DROID *psNext = psDroid->psNext;
-
+				droidItNext = std::next(droidIt);
+				DROID* psDroid = *droidIt;
 				//make sure its died flag is not set since we've swapped the apsDroidList pointers over
 				psDroid->died = false;
 				removeDroidBase(psDroid);
-				psDroid = psNext;
+				droidIt = droidItNext;
 			}
-			mission.apsDroidLists[Player] = nullptr;
+			mission.apsDroidLists[Player].clear();
 
 			for (STRUCTURE* psStruct : apsStructLists[Player])
 			{
@@ -2934,10 +2945,8 @@ void missionDestroyObjects()
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 	Player = selectedPlayer;
 
-	psDroid = apsDroidLists[Player];
-	while (psDroid != nullptr)
+	for (DROID* psDroid : apsDroidLists[Player])
 	{
-
 		if (psDroid->psBaseStruct && psDroid->psBaseStruct->died)
 		{
 			setDroidBase(psDroid, nullptr);
@@ -2983,16 +2992,16 @@ void missionDestroyObjects()
 
 void processPreviousCampDroids()
 {
-	DROID           *psDroid, *psNext;
-
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	// See if any are left
-	if (mission.apsDroidLists[selectedPlayer])
+	if (!mission.apsDroidLists[selectedPlayer].empty())
 	{
-		for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psNext)
+		DroidList::iterator droidIt = mission.apsDroidLists[selectedPlayer].begin(), droidItNext;
+		while (droidIt != mission.apsDroidLists[selectedPlayer].end())
 		{
-			psNext = psDroid->psNext;
+			droidItNext = std::next(droidIt);
+			DROID* psDroid = *droidIt;
 			// We want to kill off all droids now! - AB 27/01/99
 			// KILL OFF TRANSPORTER
 			if (droidRemove(psDroid, mission.apsDroidLists))
@@ -3000,6 +3009,7 @@ void processPreviousCampDroids()
 				addDroid(psDroid, apsDroidLists);
 				vanishDroid(psDroid);
 			}
+			droidIt = droidItNext;
 		}
 	}
 }
@@ -3032,7 +3042,7 @@ bool getPlayCountDown()
 bool missionDroidsRemaining(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu32 "", player);
-	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if (!isTransporter(psDroid))
 		{
@@ -3098,14 +3108,18 @@ static DROID *find_transporter()
 		return nullptr;
 	}
 
-	for (auto droid_list : {apsDroidLists[selectedPlayer], mission.apsDroidLists[selectedPlayer]})
+	for (DROID* droid : apsDroidLists[selectedPlayer])
 	{
-		for (auto droid = droid_list; droid != nullptr; droid = droid->psNext)
+		if (isTransporter(droid))
 		{
-			if (isTransporter(droid))
-			{
-				return droid;
-			}
+			return droid;
+		}
+	}
+	for (DROID* droid : mission.apsDroidLists[selectedPlayer])
+	{
+		if (isTransporter(droid))
+		{
+			return droid;
 		}
 	}
 
@@ -3198,14 +3212,15 @@ std::vector<CAMPAIGN_FILE> readCampaignFiles()
 mission ends. bOffWorld is true if the Mission is currently offWorld*/
 void emptyTransporters(bool bOffWorld)
 {
-	DROID       *psTransporter, *psDroid, *psNext, *psNextTrans;
-
+	DROID* psNext;
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " >= MAX_PLAYERS", selectedPlayer);
 
 	//see if there are any Transporters in the world
-	for (psTransporter = apsDroidLists[selectedPlayer]; psTransporter != nullptr; psTransporter = psNextTrans)
+	DroidList::iterator transIt = apsDroidLists[selectedPlayer].begin(), transItNext;
+	while (transIt != apsDroidLists[selectedPlayer].end())
 	{
-		psNextTrans = psTransporter->psNext;
+		transItNext = std::next(transIt);
+		DROID* psTransporter = *transIt;
 		if (isTransporter(psTransporter))
 		{
 			//if flying in, empty the contents
@@ -3215,7 +3230,7 @@ void emptyTransporters(bool bOffWorld)
 				and processMission() will assign them a location etc */
 				if (bOffWorld)
 				{
-					for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr
+					for (DROID* psDroid = psTransporter->psGroup->psList; psDroid != nullptr
 					     && psDroid != psTransporter; psDroid = psNext)
 					{
 						psNext = psDroid->psGrpNext;
@@ -3229,7 +3244,7 @@ void emptyTransporters(bool bOffWorld)
 				processed by the endMission function */
 				else
 				{
-					for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr
+					for (DROID* psDroid = psTransporter->psGroup->psList; psDroid != nullptr
 					     && psDroid != psTransporter; psDroid = psNext)
 					{
 						psNext = psDroid->psGrpNext;
@@ -3240,7 +3255,7 @@ void emptyTransporters(bool bOffWorld)
 					}
 				}
 				//now kill off the Transporter
-				vanishDroid(psDroid);
+				vanishDroid(psTransporter);
 			}
 			else if (!bOffWorld && orderState(psTransporter, DORDER_TRANSPORTRETURN))
 			{
@@ -3248,15 +3263,18 @@ void emptyTransporters(bool bOffWorld)
 				vanishDroid(psTransporter);
 			}
 		}
+		transIt = transItNext;
 	}
 	//deal with any transporters that are waiting to come over
-	for (psTransporter = mission.apsDroidLists[selectedPlayer]; psTransporter !=
-	     nullptr; psTransporter = psTransporter->psNext)
+	transIt = mission.apsDroidLists[selectedPlayer].begin();
+	while (transIt != mission.apsDroidLists[selectedPlayer].end())
 	{
+		transItNext = std::next(transIt);
+		DROID* psTransporter = *transIt;
 		if (isTransporter(psTransporter))
 		{
 			//for each droid within the transporter...
-			for (psDroid = psTransporter->psGroup->psList; psDroid != nullptr
+			for (DROID* psDroid = psTransporter->psGroup->psList; psDroid != nullptr
 			     && psDroid != psTransporter; psDroid = psNext)
 			{
 				psNext = psDroid->psGrpNext;
@@ -3267,6 +3285,7 @@ void emptyTransporters(bool bOffWorld)
 			}
 		}
 		//don't need to destroy the transporter here - it is dealt with by the endMission process
+		transIt = transItNext;
 	}
 }
 

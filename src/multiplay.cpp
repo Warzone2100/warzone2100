@@ -392,7 +392,7 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			for (DROID *d = apsDroidLists[i]; d; d = d->psNext)
+			for (DROID *d : apsDroidLists[i])
 			{
 				if (d->id == id)
 				{
@@ -403,7 +403,7 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		for (DROID *d = apsDroidLists[player]; d; d = d->psNext)
+		for (DROID *d : apsDroidLists[player])
 		{
 			if (d->id == id)
 			{
@@ -421,7 +421,7 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			for (DROID *d = mission.apsDroidLists[i]; d; d = d->psNext)
+			for (DROID *d : mission.apsDroidLists[i])
 			{
 				if (d->id == id)
 				{
@@ -432,7 +432,7 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		for (DROID *d = mission.apsDroidLists[player]; d; d = d->psNext)
+		for (DROID *d : mission.apsDroidLists[player])
 		{
 			if (d->id == id)
 			{
@@ -683,10 +683,10 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 		x = map_coord(psBuilding->pos.x);
 		y = map_coord(psBuilding->pos.y);
 	}
-	else if ((player < MAX_PLAYERS) && apsDroidLists[player])				// or first droid
+	else if ((player < MAX_PLAYERS) && !apsDroidLists[player].empty())				// or first droid
 	{
-		x = map_coord(apsDroidLists[player]->pos.x);
-		y =	map_coord(apsDroidLists[player]->pos.y);
+		x = map_coord(apsDroidLists[player].front()->pos.x);
+		y =	map_coord(apsDroidLists[player].front()->pos.y);
 	}
 	else if ((player < MAX_PLAYERS) && !apsStructLists[player].empty())				// center on first struct
 	{
@@ -2452,16 +2452,19 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy all droids
 		debug(LOG_DEATH, "killing off all droids for player %d", playerIndex);
-		while (apsDroidLists[playerIndex])				// delete all droids
+		DroidList::iterator droidIt = apsDroidLists[playerIndex].begin(), droidItNext;
+		while (droidIt != apsDroidLists[playerIndex].end())				// delete all droids
 		{
+			droidItNext = std::next(droidIt);
 			if (quietly)			// don't show effects
 			{
-				killDroid(apsDroidLists[playerIndex]);
+				killDroid(*droidIt);
 			}
 			else				// show effects
 			{
-				destroyDroid(apsDroidLists[playerIndex], gameTime);
+				destroyDroid(*droidIt, gameTime);
 			}
+			droidIt = droidItNext;
 		}
 
 		// Destroy structs

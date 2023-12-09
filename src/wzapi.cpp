@@ -498,7 +498,7 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid))
 		DROID *droid = _droid.value();
 		SCRIPT_ASSERT(false, context, droid, "No valid droid provided");
 		SCRIPT_ASSERT(false, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
-		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[selectedPlayer])
 		{
 			psDroid->selected = psDroid == droid; // select only the target droid
 		}
@@ -1092,7 +1092,7 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 	}
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if ((playerFilter == ALL_PLAYERS || psDroid->visible[playerFilter])
 		    && !psDroid->died
@@ -1163,7 +1163,7 @@ std::vector<const BASE_OBJECT *> wzapi::enumSelected(WZAPI_NO_PARAMS_NO_CONTEXT)
 	{
 		return matches;
 	}
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -2531,17 +2531,14 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time))
 	{
 		intRemoveTransporterTimer();
 	}
-	DROID* psDroid;
-
 	/* Search for a transport that is idle; if we can't find any, remove the launch button
 	 * since there's no transport to launch */
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+	auto droidIt = std::find_if(apsDroidLists[selectedPlayer].begin(), apsDroidLists[selectedPlayer].end(), [](DROID* d)
 	{
-		if (isTransporter(psDroid) && !transporterFlying(psDroid))
-		{
-			break;
-		}
-	}
+		return isTransporter(d) && !transporterFlying(d);
+	});
+	DROID* psDroid = droidIt != apsDroidLists[selectedPlayer].end() ? *droidIt : nullptr;
+
 	// Didn't find an idle transporter, we can remove the launch button
 	if (psDroid == nullptr)
 	{
@@ -3351,15 +3348,15 @@ bool wzapi::transformPlayerToSpectator(WZAPI_PARAMS(int player))
 // flag all droids as requiring update on next frame
 static void dirtyAllDroids(int player)
 {
-	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		psDroid->flags.set(OBJECT_FLAG_DIRTY);
 	}
-	for (DROID *psDroid = mission.apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : mission.apsDroidLists[player])
 	{
 		psDroid->flags.set(OBJECT_FLAG_DIRTY);
 	}
-	for (DROID *psDroid = apsLimboDroids[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsLimboDroids[player])
 	{
 		psDroid->flags.set(OBJECT_FLAG_DIRTY);
 	}

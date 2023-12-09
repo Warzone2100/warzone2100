@@ -2790,7 +2790,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	int startY = map_coord(p->y);
 
 	// set blocking flags for all the other droids
-	for (const DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (const DROID *psCurr : apsDroidLists[psDroid->player])
 	{
 		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))
@@ -2822,7 +2822,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	}
 
 	// clear blocking flags for all the other droids
-	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[psDroid->player])
 	{
 		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))

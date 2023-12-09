@@ -145,7 +145,7 @@ static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
 static PIELIGHT GetPlayerTextColor(int mode, UDWORD player)
 {
 	// override color if they are dead...
-	if (player >= MAX_PLAYERS || (!apsDroidLists[player] && apsStructLists[player].empty()))
+	if (player >= MAX_PLAYERS || (apsDroidLists[player].empty() && apsStructLists[player].empty()))
 	{
 		return WZCOL_GREY;			// dead text color
 	}
@@ -732,16 +732,21 @@ public:
 	void display(int xOffset, int yOffset) override
 	{
 		// a droid of theirs.
-		DROID *displayDroid = (player < MAX_PLAYERS) ? apsDroidLists[player] : nullptr;
-		while (displayDroid != nullptr && !displayDroid->visibleForLocalDisplay())
+		DroidList* displayDroidList = (player < MAX_PLAYERS) ? &apsDroidLists[player] : nullptr;
+		if (!displayDroidList)
 		{
-			displayDroid = displayDroid->psNext;
+			return;
 		}
+		auto displayDroidIt = std::find_if(displayDroidList->begin(), displayDroidList->end(), [](DROID* d)
+		{
+			return d->visibleForLocalDisplay();
+		});
 
 		auto centerX = xOffset + x() + width() / 2;
 		auto y0 = yOffset + y();
-		if (displayDroid)
+		if (displayDroidIt != displayDroidList->end())
 		{
+			DROID* displayDroid = *displayDroidIt;
 			pie_SetGeometricOffset(centerX, y0 + height() * 3 / 4);
 			Vector3i rotation(-15, 45, 0);
 			Position position(0, 0, BUTTON_DEPTH);  // Scale them.
@@ -756,7 +761,7 @@ public:
 
 			displayComponentButtonObject(displayDroid, &rotation, &position, 100);
 		}
-		else if ((player < MAX_PLAYERS) && apsDroidLists[player])
+		else if ((player < MAX_PLAYERS) && !apsDroidLists[player].empty())
 		{
 			// Show that they have droids, but not which droids, since we can't see them.
 			iV_DrawImageTc(

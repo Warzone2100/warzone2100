@@ -67,7 +67,7 @@ struct MISSION
 	PerPlayerStructureList apsStructLists;
 	PerPlayerExtractorLists apsExtractorLists;
 
-	DROID						*apsDroidLists[MAX_PLAYERS];
+	PerPlayerDroidList              apsDroidLists;
 	PerPlayerFeatureLists           apsFeatureLists;
 	GlobalSensorList                apsSensorList;
 	GlobalOilList                   apsOilList;

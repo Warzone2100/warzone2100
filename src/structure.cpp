@@ -829,7 +829,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	{
 		for (unsigned player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (DROID *psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+			for (DROID *psCurr : apsDroidLists[player])
 			{
 				// An enemy droid is blocking it
 				if ((STRUCTURE *) orderStateObj(psCurr, DORDER_BUILD) == psStruct
@@ -888,10 +888,8 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		     in order to be able to start a new built task, doubled in actionUpdateDroid() */
 		if (psDroid)
 		{
-			DROID	*psIter;
-
 			// Clear all orders for helping hands. Needed for AI script which runs next frame.
-			for (psIter = apsDroidLists[psDroid->player]; psIter; psIter = psIter->psNext)
+			for (DROID* psIter : apsDroidLists[psDroid->player])
 			{
 				if ((psIter->order.type == DORDER_BUILD || psIter->order.type == DORDER_HELPBUILD || psIter->order.type == DORDER_LINEBUILD)
 				    && psIter->order.psObj == psStruct
@@ -2288,7 +2286,6 @@ void clearCommandDroidFactory(DROID *psDroid)
 static bool structClearTile(UWORD x, UWORD y)
 {
 	UDWORD	player;
-	DROID	*psCurr;
 
 	/* Check for a structure */
 	if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
@@ -2300,7 +2297,7 @@ static bool structClearTile(UWORD x, UWORD y)
 	/* Check for a droid */
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+		for (DROID* psCurr : apsDroidLists[player])
 		{
 			if (map_coord(psCurr->pos.x) == x
 			    && map_coord(psCurr->pos.y) == y)
@@ -3122,15 +3119,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			if (psChosenObj == nullptr)
 			{
 				objTrace(psStructure->id, "Rearm pad idle - look for victim");
-				for (psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
+				for (DROID* psCurr : apsDroidLists[psStructure->player])
 				{
 					// move next droid waiting on ground to rearm pad
-					if (vtolReadyToRearm(psDroid, psStructure) &&
-					    (psChosenObj == nullptr || (((DROID *)psChosenObj)->actionStarted > psDroid->actionStarted)))
+					if (vtolReadyToRearm(psCurr, psStructure) &&
+					    (psChosenObj == nullptr || (((DROID *)psChosenObj)->actionStarted > psCurr->actionStarted)))
 					{
-						objTrace(psDroid->id, "rearm pad candidate");
-						objTrace(psStructure->id, "we found %s to rearm", objInfo(psDroid));
-						psChosenObj = psDroid;
+						objTrace(psCurr->id, "rearm pad candidate");
+						objTrace(psStructure->id, "we found %s to rearm", objInfo(psCurr));
+						psChosenObj = psCurr;
 					}
 				}
 				// None available? Try allies.
@@ -3138,13 +3135,13 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
 					{
-						for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+						for (DROID* psCurr : apsDroidLists[i])
 						{
 							// move next droid waiting on ground to rearm pad
-							if (vtolReadyToRearm(psDroid, psStructure))
+							if (vtolReadyToRearm(psCurr, psStructure))
 							{
-								psChosenObj = psDroid;
-								objTrace(psDroid->id, "allied rearm pad candidate");
+								psChosenObj = psCurr;
+								objTrace(psCurr->id, "allied rearm pad candidate");
 								objTrace(psStructure->id, "we found allied %s to rearm", objInfo(psDroid));
 								break;
 							}
@@ -5322,7 +5319,6 @@ STRUCTURE_STATS *getModuleStat(const STRUCTURE *psStruct)
  */
 static unsigned int countAssignedDroids(const STRUCTURE *psStructure)
 {
-	const DROID *psCurr;
 	unsigned int num;
 
 	CHECK_STRUCTURE(psStructure);
@@ -5339,7 +5335,7 @@ static unsigned int countAssignedDroids(const STRUCTURE *psStructure)
 	}
 
 	num = 0;
-	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	for (const DROID* psCurr : apsDroidLists[selectedPlayer])
 	{
 		if (psCurr->order.psObj
 		    && psCurr->order.psObj->id == psStructure->id
@@ -5947,7 +5943,7 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		}
 
 		//droids.
-		for (DROID *psDroid = apsDroidLists[i]; psDroid != nullptr; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[i])
 		{
 			if (psDroid->visible[losingPlayer] || psDroid->player == losingPlayer)
 			{
@@ -6698,7 +6694,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 	{
 		if (aiCheckAlliances(psStruct->player, i))
 		{
-			for (DROID *psCurr = apsDroidLists[i]; psCurr; psCurr = psCurr->psNext)
+			for (DROID *psCurr : apsDroidLists[i])
 			{
 				if (psCurr != psDroid
 				    && map_coord(psCurr->pos.x) == tx
@@ -6716,13 +6712,12 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 // return whether a rearm pad has a vtol on it
 bool vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid)
 {
-	DROID	*psCurr;
 	SDWORD	tx, ty;
 
 	tx = map_coord(psStruct->pos.x);
 	ty = map_coord(psStruct->pos.y);
 
-	for (psCurr = apsDroidLists[psStruct->player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID* psCurr : apsDroidLists[psStruct->player])
 	{
 		if (psCurr != psDroid
 		    && map_coord(psCurr->pos.x) == tx
@@ -6747,7 +6742,6 @@ bool	structIsDamaged(STRUCTURE *psStruct)
 STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare)
 {
 	STRUCTURE           *psNewStruct;
-	DROID               *psCurr;
 	STRUCTURE_STATS     *psType, *psModule;
 	UDWORD              x, y;
 	UBYTE               capacity = 0, originalPlayer;
@@ -6786,7 +6780,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			addStructure(psStructure);
 
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
-			for (psCurr = apsDroidLists[attackPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
+			for (DROID* psCurr : apsDroidLists[attackPlayer])
 			{
 				if (psCurr->order.psObj == psStructure)
 				{

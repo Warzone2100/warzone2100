@@ -54,7 +54,7 @@ uint32_t                unsynchObjID;
 uint32_t                synchObjID;
 
 /* The lists of objects allocated */
-DROID			*apsDroidLists[MAX_PLAYERS];
+PerPlayerDroidList apsDroidLists;
 PerPlayerStructureList apsStructLists;
 PerPlayerFeatureLists apsFeatureLists;		///< Only player zero is valid for features. TODO: Reduce to single list.
 PerPlayerExtractorLists apsExtractorLists;
@@ -110,7 +110,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 				ASSERT_OR_RETURN(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
 			}
 		}
-		for (DROID *psDroid = apsDroidLists[plr]; psDroid != nullptr; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[plr])
 		{
 			if (psDroid == psVictim)
 			{
@@ -461,7 +461,7 @@ static inline void releaseAllObjectsInList(std::array<std::list<OBJECT*>, MAX_PL
 /***************************  DROID  *********************************/
 
 /* add the droid to the Droid Lists */
-void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
+void addDroid(DROID *psDroidToAdd, PerPlayerDroidList& pList)
 {
 	DROID_GROUP	*psGroup;
 
@@ -470,7 +470,7 @@ void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
 	/* Whenever a droid gets added to a list other than the current list
 	 * its died flag is set to NOT_CURRENT_LIST so that anything targetting
 	 * it will cancel itself - HACK?! */
-	if (pList[psDroidToAdd->player] == apsDroidLists[psDroidToAdd->player])
+	if (&pList[psDroidToAdd->player] == &apsDroidLists[psDroidToAdd->player])
 	{
 		psDroidToAdd->died = false;
 		if (psDroidToAdd->droidType == DROID_SENSOR)
@@ -485,7 +485,7 @@ void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
 			psGroup->add(psDroidToAdd);
 		}
 	}
-	else if (pList[psDroidToAdd->player] == mission.apsDroidLists[psDroidToAdd->player])
+	else if (&pList[psDroidToAdd->player] == &mission.apsDroidLists[psDroidToAdd->player])
 	{
 		if (psDroidToAdd->droidType == DROID_SENSOR)
 		{
@@ -525,7 +525,7 @@ void freeAllDroids()
 }
 
 /*Remove a single Droid from a list*/
-void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
+void removeDroid(DROID* psDroidToRemove, PerPlayerDroidList& pList)
 {
 	ASSERT_OR_RETURN(, psDroidToRemove->type == OBJ_DROID, "Pointer is not a unit");
 	ASSERT_OR_RETURN(, psDroidToRemove->player < MAX_PLAYERS, "Invalid player for unit");
@@ -534,19 +534,19 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 	/* Whenever a droid is removed from the current list its died
 	 * flag is set to NOT_CURRENT_LIST so that anything targetting
 	 * it will cancel itself, and we know it is not really on the map. */
-	if (pList[psDroidToRemove->player] == apsDroidLists[psDroidToRemove->player])
+	if (&pList[psDroidToRemove->player] == &apsDroidLists[psDroidToRemove->player])
 	{
 		if (psDroidToRemove->droidType == DROID_SENSOR)
 		{
-			removeObjectFromFuncList(apsSensorList, (BASE_OBJECT *)psDroidToRemove, 0);
+			removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psDroidToRemove, 0);
 		}
 		psDroidToRemove->died = NOT_CURRENT_LIST;
 	}
-	else if (pList[psDroidToRemove->player] == mission.apsDroidLists[psDroidToRemove->player])
+	else if (&pList[psDroidToRemove->player] == &mission.apsDroidLists[psDroidToRemove->player])
 	{
 		if (psDroidToRemove->droidType == DROID_SENSOR)
 		{
-			removeObjectFromFuncList(mission.apsSensorList, (BASE_OBJECT *)psDroidToRemove, 0);
+			removeObjectFromFuncList(mission.apsSensorList, (BASE_OBJECT*)psDroidToRemove, 0);
 		}
 	}
 }
@@ -896,11 +896,34 @@ static BASE_OBJECT* getBaseObjFromFeatureData(unsigned id, unsigned player, OBJE
 	return nullptr;
 }
 
+static BASE_OBJECT* getBaseObjFromDroidData(const DroidList& list, unsigned id)
+{
+	for (DROID* psObj : list)
+	{
+		if (psObj->id == id)
+		{
+			return psObj;
+		}
+		// if transporter check any droids in the grp
+		if ((psObj->type == OBJ_DROID) && isTransporter((DROID*)psObj))
+		{
+			ASSERT_OR_RETURN(nullptr, ((DROID*)psObj)->psGroup != nullptr, "Transporter has null group?");
+			for (DROID* psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
+			{
+				if (psTrans->id == id)
+				{
+					return (BASE_OBJECT*)psTrans;
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
 // Find a base object from its id
 BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 {
-	BASE_OBJECT		*psObj;
-	DROID			*psTrans;
+	BASE_OBJECT		*psObj = nullptr;
 
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS || type == OBJ_FEATURE, "Invalid player: %u", player);
 
@@ -912,7 +935,13 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 		case 0:
 			switch (type)
 			{
-			case OBJ_DROID: psObj = apsDroidLists[player]; break;
+			case OBJ_DROID:
+				psObj = getBaseObjFromDroidData(apsDroidLists[player], id);
+				if (psObj)
+				{
+					return psObj;
+				}
+				break;
 			case OBJ_STRUCTURE:
 			{
 				auto structIt = std::find_if(apsStructLists[player].begin(), apsStructLists[player].end(), [id](STRUCTURE* s)
@@ -935,7 +964,13 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 		case 1:
 			switch (type)
 			{
-			case OBJ_DROID: psObj = mission.apsDroidLists[player]; break;
+			case OBJ_DROID:
+				psObj = getBaseObjFromDroidData(mission.apsDroidLists[player], id);
+				if (psObj)
+				{
+					return psObj;
+				}
+				break;
 			case OBJ_STRUCTURE:
 			{
 				auto structIt = std::find_if(mission.apsStructLists[player].begin(), mission.apsStructLists[player].end(), [id](STRUCTURE* s)
@@ -958,30 +993,13 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 		case 2:
 			if (player == 0 && type == OBJ_DROID)
 			{
-				psObj = apsLimboDroids[0];
-			}
-			break;
-		}
-
-		while (psObj)
-		{
-			if (psObj->id == id)
-			{
-				return psObj;
-			}
-			// if transporter check any droids in the grp
-			if ((psObj->type == OBJ_DROID) && isTransporter((DROID *)psObj))
-			{
-				ASSERT_OR_RETURN(nullptr, ((DROID *)psObj)->psGroup != nullptr, "Transporter has null group?");
-				for (psTrans = ((DROID *)psObj)->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
+				psObj = getBaseObjFromDroidData(apsLimboDroids[0], id);
+				if (psObj)
 				{
-					if (psTrans->id == id)
-					{
-						return (BASE_OBJECT *)psTrans;
-					}
+					return psObj;
 				}
 			}
-			psObj = psObj->psNext;
+			break;
 		}
 	}
 	return getBaseObjFromFeatureData(id, player, type);
@@ -1011,13 +1029,35 @@ static BASE_OBJECT* getBaseObjFromFeatureId(const FeatureList& list, UDWORD id)
 	return nullptr;
 }
 
+static BASE_OBJECT* getBaseObjFromDroidId(const DroidList& list, UDWORD id)
+{
+	for (DROID* psObj : list)
+	{
+		if (psObj->id == id)
+		{
+			return psObj;
+		}
+		// if transporter check any droids in the grp
+		if ((psObj->type == OBJ_DROID) && isTransporter((DROID*)psObj))
+		{
+			for (DROID* psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
+			{
+				if (psTrans->id == id)
+				{
+					return (BASE_OBJECT*)psTrans;
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
 // Find a base object from it's id
 BASE_OBJECT *getBaseObjFromId(UDWORD id)
 {
 	unsigned int i;
 	UDWORD			player;
-	BASE_OBJECT		*psObj;
-	DROID			*psTrans;
+	BASE_OBJECT		*psObj = nullptr;
 
 	for (i = 0; i < 7; ++i)
 	{
@@ -1026,7 +1066,11 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 			switch (i)
 			{
 			case 0:
-				psObj = (BASE_OBJECT *)apsDroidLists[player];
+				psObj = getBaseObjFromDroidId(apsDroidLists[player], id);
+				if (psObj)
+				{
+					return psObj;
+				}
 				break;
 			case 1:
 			{
@@ -1059,7 +1103,11 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 				}
 				break;
 			case 3:
-				psObj = (BASE_OBJECT *)mission.apsDroidLists[player];
+				psObj = getBaseObjFromDroidId(mission.apsDroidLists[player], id);
+				if (psObj)
+				{
+					return psObj;
+				}
 				break;
 			case 4:
 			{
@@ -1094,7 +1142,11 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 			case 6:
 				if (player == 0)
 				{
-					psObj = (BASE_OBJECT *)apsLimboDroids[0];
+					psObj = getBaseObjFromDroidId(apsLimboDroids[0], id);
+					if (psObj)
+					{
+						return psObj;
+					}
 				}
 				else
 				{
@@ -1104,26 +1156,6 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 			default:
 				psObj = nullptr;
 				break;
-			}
-
-			while (psObj)
-			{
-				if (psObj->id == id)
-				{
-					return psObj;
-				}
-				// if transporter check any droids in the grp
-				if ((psObj->type == OBJ_DROID) && isTransporter((DROID *)psObj))
-				{
-					for (psTrans = ((DROID *)psObj)->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
-					{
-						if (psTrans->id == id)
-						{
-							return (BASE_OBJECT *)psTrans;
-						}
-					}
-				}
-				psObj = psObj->psNext;
 			}
 		}
 	}
@@ -1225,11 +1257,10 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 static void objListIntegCheck()
 {
 	SDWORD			player;
-	BASE_OBJECT		*psCurr;
 
 	for (player = 0; player < MAX_PLAYERS; player += 1)
 	{
-		for (psCurr = (BASE_OBJECT *)apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+		for (DROID* psCurr : apsDroidLists[player])
 		{
 			ASSERT(psCurr->type == OBJ_DROID &&
 			       (SDWORD)psCurr->player == player,
@@ -1267,7 +1298,7 @@ void objCount(int *droids, int *structures, int *features)
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[i])
 		{
 			(*droids)++;
 			if (isTransporter(psDroid) && psDroid->psGroup && psDroid->psGroup->psList)

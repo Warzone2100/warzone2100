@@ -491,8 +491,6 @@ static void DrawRadarObjects()
 	/* Show droids on map - go through all players */
 	for (clan = 0; clan < MAX_PLAYERS; clan++)
 	{
-		DROID		*psDroid;
-
 		//see if have to draw enemy/ally color
 		if (bEnemyAllyRadarColor)
 		{
@@ -516,7 +514,7 @@ static void DrawRadarObjects()
 		flashCol = flashColours[getPlayerColour(clan)];
 
 		/* Go through all droids */
-		for (psDroid = apsDroidLists[clan]; psDroid != nullptr; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[clan])
 		{
 			if (psDroid->pos.x < world_coord(scrollMinX) || psDroid->pos.y < world_coord(scrollMinY)
 			    || psDroid->pos.x >= world_coord(scrollMaxX) || psDroid->pos.y >= world_coord(scrollMaxY))

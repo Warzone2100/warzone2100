@@ -159,14 +159,13 @@ void cmdDroidClearDesignator(UDWORD player)
 SDWORD cmdDroidGetIndex(DROID *psCommander)
 {
 	SDWORD	index = 1;
-	DROID	*psCurr;
 
 	if (psCommander->droidType != DROID_COMMAND)
 	{
 		return 0;
 	}
 
-	for (psCurr = apsDroidLists[psCommander->player]; psCurr; psCurr = psCurr->psNext)
+	for (DROID* psCurr : apsDroidLists[psCommander->player])
 	{
 		if (psCurr->droidType == DROID_COMMAND &&
 		    psCurr->id < psCommander->id)

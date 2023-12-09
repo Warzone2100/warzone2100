@@ -407,7 +407,7 @@ public:
 		bool bDrawAll = barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES;
 
 		// first, for all droids, queue the various rects
-		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[player])
 		{
 			if (psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
@@ -784,7 +784,7 @@ static void showDroidPaths()
 		return; // no-op for now
 	}
 
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
@@ -1098,7 +1098,7 @@ void draw3DScene()
 	{
 		int visibleDroids = 0;
 		int undrawnDroids = 0;
-		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[selectedPlayer])
 		{
 			if (psDroid->sDisplay.frameNumber != currentGameFrame)
 			{
@@ -2183,7 +2183,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 			continue;
 		}
 		STRUCT_STATES state = player == selectedPlayer ? SS_BLUEPRINT_PLANNED : SS_BLUEPRINT_PLANNED_BY_ALLY;
-		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[player])
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
@@ -2296,13 +2296,10 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &
 	/* Need to go through all the droid lists */
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *list = apsDroidLists[player];
-
-		for (; list != nullptr; list = list->psNext)
+		for (DROID* psDroid : apsDroidLists[player])
 		{
-			DROID *psDroid = castDroid(list);
-			if (!psDroid || (list->died != 0 && list->died < graphicsTime)
-			    || !quickClipXYToMaximumTilesFromCurrentPosition(list->pos.x, list->pos.y))
+			if (!psDroid || (psDroid->died != 0 && psDroid->died < graphicsTime)
+			    || !quickClipXYToMaximumTilesFromCurrentPosition(psDroid->pos.x, psDroid->pos.y))
 			{
 				continue;
 			}
@@ -3527,8 +3524,8 @@ static void	drawDroidSelections()
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		/* Go thru' all the droidss */
-		for (const DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		/* Go thru' all the droids */
+		for (const DROID *psDroid : apsDroidLists[i])
 		{
 			if (showORDERS)
 			{
@@ -4118,14 +4115,12 @@ static void	showDroidSensorRanges()
 {
 	static uint32_t lastRangeUpdateTime = 0;
 
-	DROID		*psDroid;
-
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
 	if (rangeOnScreen
 		&& (graphicsTime - lastRangeUpdateTime) >= 50)		// note, we still have to decide what to do with multiple units selected, since it will draw it for all of them! -Q 5-10-05
 	{
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
 			if (psDroid->selected)
 			{
@@ -4304,7 +4299,7 @@ static void doConstructionLines(const glm::mat4 &viewMatrix)
 {
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID *psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[i])
 		{
 			if (clipXY(psDroid->pos.x, psDroid->pos.y)
 			    && psDroid->visibleForLocalDisplay() == UBYTE_MAX
