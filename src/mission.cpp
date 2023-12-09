@@ -2970,7 +2970,6 @@ void missionDestroyObjects()
 		{
 			setDroidTarget(psDroid, nullptr);
 		}
-		psDroid = psDroid->psNext;
 	}
 
 	for (STRUCTURE* psStruct : apsStructLists[Player])

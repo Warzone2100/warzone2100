@@ -134,7 +134,7 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 
 	std::bitset<OBJECT_FLAG_COUNT> flags;
 
-	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
+	//NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
 	bool                hasExtraFunction = false;   ///< Does this object include some extra functionality?
 
 public:

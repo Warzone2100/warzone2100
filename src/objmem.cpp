@@ -311,7 +311,6 @@ static inline void destroyObject(std::array<std::list<OBJECT*>, MAX_PLAYERS>& li
 	if (!list[object->player].empty() && list[object->player].front() == object)
 	{
 		list[object->player].pop_front();
-		object->psNext = nullptr;
 		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
 		object->died = gameTime;
 		scriptRemoveObject(object);
@@ -326,7 +325,6 @@ static inline void destroyObject(std::array<std::list<OBJECT*>, MAX_PLAYERS>& li
 		list[object->player].erase(it);
 
 		// Prepend the object to the destruction list
-		object->psNext = nullptr;
 		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
 
 		// Set destruction time
@@ -1188,8 +1186,6 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 {
 	unsigned int i;
 	UDWORD			player;
-	STRUCTURE		*psObj;
-	REPAIR_FACILITY	*psRepair;
 
 
 	player = psFlag->player;
@@ -1206,10 +1202,6 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 			{
 				return id;
 			}
-			else
-			{
-				psObj = nullptr;
-			}
 			break;
 		}
 		case 1:
@@ -1219,32 +1211,10 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 			{
 				return id;
 			}
-			else
-			{
-				psObj = nullptr;
-			}
 			break;
 		}
 		default:
-			psObj = nullptr;
 			break;
-		}
-
-		while (psObj)
-		{
-			if (psObj->pFunctionality)
-			{
-				if	(psObj->pStructureType->type == REF_REPAIR_FACILITY)
-				{
-					//check for matching delivery point
-					psRepair = ((REPAIR_FACILITY *)psObj->pFunctionality);
-					if (psRepair->psDeliveryPoint == psFlag)
-					{
-						return psObj->id;
-					}
-				}
-			}
-			psObj = psObj->psNext;
 		}
 	}
 	ASSERT(!"unable to find repair id for FLAG_POSITION", "getRepairIdFromFlag() failed");
