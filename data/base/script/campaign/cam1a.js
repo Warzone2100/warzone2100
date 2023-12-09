@@ -12,7 +12,7 @@ const mis_scavengerRes = [
 // Player zero's droid enters area next to first oil patch.
 camAreaEvent("launchScavAttack", function(droid)
 {
-	camPlayVideos(["pcv456.ogg", {video: "MB1A_MSG", type: MISS_MSG}]);
+	camPlayVideos([cam_sounds.incoming.incomingIntelligenceReport, {video: "MB1A_MSG", type: MISS_MSG}]);
 	hackAddMessage("C1A_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	// Send scavengers on war path if triggered above.
 	camManageGroup(camMakeGroup("scavAttack1", ENEMIES), CAM_ORDER_ATTACK, {
@@ -64,6 +64,8 @@ camAreaEvent("roadblockArea", function(droid)
 // Scavengers hiding in the split canyon area between base two and three.
 function raidAttack()
 {
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 	camManageGroup(camMakeGroup("raidTrigger", ENEMIES), CAM_ORDER_ATTACK, {
 		pos: camMakePos("scavBase3Cleanup")
 	});
@@ -119,8 +121,9 @@ function camEnemyBaseEliminated_scavGroup2()
 function enableBaseStructures()
 {
 	const structs = [
-		"A0CommandCentre", "A0PowerGenerator", "A0ResourceExtractor",
-		"A0ResearchFacility", "A0LightFactory",
+		cam_base_structures.commandCenter, cam_base_structures.powerGenerator,
+		cam_base_structures.derrick, cam_base_structures.researchLab,
+		cam_base_structures.factory,
 	];
 
 	for (let i = 0; i < structs.length; ++i)
@@ -157,8 +160,13 @@ function eventStartLevel()
 
 	enableBaseStructures();
 	camCompleteRequiredResearch(mis_playerRes, CAM_HUMAN_PLAYER);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+	completeResearch("R-Wpn-Flamer-Range01-ScavReduce", CAM_SCAV_6);
+	completeResearch("R-Wpn-Flamer-Range01-ScavReduce", CAM_SCAV_7);
+	if (difficulty >= HARD)
+	{
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+	}
 	if (difficulty === INSANE)
 	{
 		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
@@ -185,47 +193,35 @@ function eventStartLevel()
 		"scavGroup1": {
 			cleanup: "scavBase1Cleanup",
 			detectMsg: "C1A_BASE0",
-			detectSnd: "pcv375.ogg",
-			eliminateSnd: "pcv391.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerOutpostDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerOutpostEradicated
 		},
 		"scavGroup2": {
 			cleanup: "scavBase2Cleanup",
 			detectMsg: "C1A_BASE1",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 		"scavGroup3": {
 			cleanup: "scavBase3Cleanup",
 			detectMsg: "C1A_BASE2",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 		"scavGroup4": {
 			cleanup: "scavBase4Cleanup",
 			detectMsg: "C1A_BASE3",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg"
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 		},
 	});
 
-	if (difficulty >= HARD)
-	{
-		camSetArtifacts({
-			"base1ArtifactPos": { tech: ["R-Wpn-MG-Damage01", "R-Sys-Engineering01"] },
-			"base2Factory": { tech: ["R-Wpn-Flamer01Mk1", "R-Sys-MobileRepairTurret01"] },
-			"base3Factory": { tech: "R-Wpn-MG-Damage02" },
-			"base4Factory": { tech: "R-Wpn-MG-ROF01" },
-		});
-	}
-	else
-	{
-		camSetArtifacts({
-			"base1ArtifactPos": { tech: ["R-Wpn-MG-Damage01", "R-Sys-Engineering01"] },
-			"base2Factory": { tech: "R-Wpn-Flamer01Mk1" },
-			"base3Factory": { tech: ["R-Wpn-MG-Damage02", "R-Sys-MobileRepairTurret01"] },
-			"base4Factory": { tech: "R-Wpn-MG-ROF01" },
-		});
-	}
+	camSetArtifacts({
+		"base1ArtifactPos": { tech: ["R-Wpn-MG-Damage01", "R-Sys-Engineering01"] },
+		"base2Factory": { tech: ["R-Wpn-Flamer01Mk1", "R-Sys-MobileRepairTurret01"] },
+		"base3Factory": { tech: "R-Wpn-MG-Damage02" },
+		"base4Factory": { tech: "R-Wpn-MG-ROF01" },
+	});
 
 	camSetFactories({
 		"base2Factory": {

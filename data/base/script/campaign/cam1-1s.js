@@ -2,6 +2,12 @@ include("script/campaign/libcampaign.js");
 
 var cheat;
 var powModVideoPlayed;
+const mis_Labels = {
+	startPos: {x: 13, y: 52},
+	lz: {x: 10, y: 51, x2: 12, y2: 53},
+	trPlace: {x: 11, y: 52},
+	trExit: {x: 1, y: 32}
+};
 
 function eventChat(from, to, message)
 {
@@ -43,7 +49,7 @@ function checkForPowerModule()
 {
 	if (cheat || powerModuleBuilt())
 	{
-		camSetupTransporter(11, 52, 1, 32);
+		camSetupTransporter(mis_Labels.trPlace.x, mis_Labels.trPlace.y, mis_Labels.trExit.x, mis_Labels.trExit.y);
 		setMissionTime(camChangeOnDiff(camMinutesToSeconds(25))); // 25 min for offworld
 		secondVideo();
 
@@ -56,8 +62,8 @@ function checkForPowerModule()
 
 function eventStartLevel()
 {
-	centreView(13, 52);
-	setNoGoArea(10, 51, 12, 53, CAM_HUMAN_PLAYER);
+	centreView(mis_Labels.startPos.x, mis_Labels.startPos.y);
+	setNoGoArea(mis_Labels.lz.x, mis_Labels.lz.y, mis_Labels.lz.x2, mis_Labels.lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10))); // 10 min for building module.
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_1");
 	cheat = false;

@@ -970,7 +970,7 @@
 		"type": "DROID"
 	},
 	"NX-Cyb-Miss-JUMP": {
-		"body": "CyborgLightBody",
+		"body": "CybNXMissJmp",
 		"id": "NX-Cyb-Miss-JUMP",
 		"name": "*NX-Cyb-Miss-JUMP*",
 		"propulsion": "CyborgLegs",
@@ -981,7 +981,7 @@
 		]
 	},
 	"NX-Cyb-PulseLas-JUMP": {
-		"body": "CyborgLightBody",
+		"body": "CybNXPulseLasJmp",
 		"id": "NX-Cyb-PulseLas-JUMP",
 		"name": "*NX-Cyb-PulseLas-JUMP*",
 		"propulsion": "CyborgLegs",
@@ -992,7 +992,7 @@
 		]
 	},
 	"NX-Cyb-Rail1-JUMP": {
-		"body": "CyborgLightBody",
+		"body": "CybNXRail1Jmp",
 		"id": "NX-Cyb-Rail1-JUMP",
 		"name": "*NX-Cyb-JUMP*",
 		"propulsion": "CyborgLegs",

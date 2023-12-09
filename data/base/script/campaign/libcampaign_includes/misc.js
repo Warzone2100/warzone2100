@@ -455,7 +455,7 @@ function camGenerateRandomMapEdgeCoordinate(reachPosition)
 		}
 
 		loc = location;
-	} while (camDef(reachPosition) && reachPosition && !propulsionCanReach("wheeled01", reachPosition.x, reachPosition.y, loc.x, loc.y));
+	} while (camDef(reachPosition) && reachPosition && !propulsionCanReach(CAM_GENERIC_LAND_STAT, reachPosition.x, reachPosition.y, loc.x, loc.y));
 
 	return loc;
 }
@@ -506,7 +506,7 @@ function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObject
 		pos = randomPos;
 	} while (camDef(reachPosition) &&
 		reachPosition &&
-		!propulsionCanReach("wheeled01", reachPosition.x, reachPosition.y, pos.x, pos.y) &&
+		!propulsionCanReach(CAM_GENERIC_LAND_STAT, reachPosition.x, reachPosition.y, pos.x, pos.y) &&
 		(camDist(pos, reachPosition) < distFromReach) &&
 		(enumRange(pos.x, pos.y, scanObjectRadius, ALL_PLAYERS, false).length > 0));
 

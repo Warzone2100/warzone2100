@@ -3,7 +3,7 @@ include("script/campaign/templates.js");
 
 const MIS_UPLINK_PLAYER = 1; //The satellite uplink player number.
 const mis_collectiveRes = [
-	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Defense-WallUpgrade05", "R-Struc-Materials05", "R-Sys-Engineering02",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05", "R-Wpn-Cannon-ROF02",
 	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage07",
@@ -39,18 +39,46 @@ function truckDefense()
 	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)], camMakePos("uplinkPos"));
 }
 
-//Attacks every 2 minutes until HQ is destroyed.
+//Attacks every 3 minutes until HQ is destroyed.
+function wave2()
+{
+	const list = [cTempl.colatv, cTempl.colatv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.commorv, cTempl.commorv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter", ext);
+}
+
 function vtolAttack()
 {
-	const list = [cTempl.colatv, cTempl.commorvt];
-	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "COCommandCenter");
+	const list = [cTempl.commorvt, cTempl.commorvt];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 //The project captured the uplink.
 function captureUplink()
 {
-	const GOODSND = "pcv621.ogg";	//"Objective captured"
-	playSound(GOODSND);
+	playSound(cam_sounds.objectiveCaptured);
 	hackRemoveMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
@@ -111,8 +139,8 @@ function eventStartLevel()
 		"COSouthEastBase": {
 			cleanup: "baseCleanup",
 			detectMsg: "C2D_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 

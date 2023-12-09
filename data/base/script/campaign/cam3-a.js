@@ -103,7 +103,7 @@ function truckDefense()
 		return;
 	}
 
-	const list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit", "Emplacement-RotHow"];
+	const list = ["Emplacement-Howitzer150", "NX-Emp-MedArtMiss-Pit", "Emplacement-RotHow"];
 	let position;
 
 	if (truckLocCounter === 0)
@@ -137,10 +137,14 @@ function sendPlayerTransporter()
 	}
 
 	const droids = [];
-	const bodyList = ["Body9REC", "Body9REC", "Body11ABT", "Body12SUP"];
-	const propulsionList = ["hover01", "hover01", "tracked01"];
-	const weaponList = ["Cannon5VulcanMk1", "Cannon5VulcanMk1", "Flame2", "Flame2", "MG4ROTARYMk1", "MG4ROTARYMk1", "Cannon4AUTOMk1", "Rocket-HvyA-T"];
-	const specialList = ["Spade1Mk1", "Spade1Mk1", "CommandBrain01", "CommandBrain01"];
+	const bodyList = [tBody.tank.tiger, tBody.tank.tiger, tBody.tank.python, tBody.tank.mantis];
+	const propulsionList = [tProp.tank.hover, tProp.tank.hover, tProp.tank.tracks];
+	const weaponList = [
+		tWeap.tank.assaultCannon, tWeap.tank.assaultCannon, tWeap.tank.inferno,
+		tWeap.tank.inferno, tWeap.tank.assaultGun, tWeap.tank.assaultGun,
+		tWeap.tank.hyperVelocityCannon, tWeap.tank.tankKiller
+	];
+	const specialList = [tConstruct.truck, tConstruct.truck, tCommand.commander, tCommand.commander];
 	const BODY = bodyList[camRand(bodyList.length)];
 	const PROP = propulsionList[camRand(propulsionList.length)];
 
@@ -150,15 +154,15 @@ function sendPlayerTransporter()
 		let weap = (!transporterIndex && (i < specialList.length)) ? specialList[i] : weaponList[camRand(weaponList.length)];
 		if (transporterIndex === 1 && i < 4)
 		{
-			weap = "QuadRotAAGun"; //Bring 4 Whirlwinds on the 2nd transport.
+			weap = tWeap.tank.whirlwind; //Bring 4 Whirlwinds on the 2nd transport.
 		}
-		if (BODY === "Body12SUP")
+		if (BODY === tBody.tank.mantis)
 		{
-			prop = "tracked01"; //Force Mantis to use Tracks.
+			prop = tProp.tank.tracks; //Force Mantis to use Tracks.
 		}
-		if (weap === "Spade1Mk1")
+		if (weap === tConstruct.truck)
 		{
-			prop = "hover01"; //Force trucks to use Hover.
+			prop = tProp.tank.hover; //Force trucks to use Hover.
 		}
 		droids.push({ body: BODY, prop: prop, weap: weap });
 	}
@@ -173,11 +177,40 @@ function sendPlayerTransporter()
 	transporterIndex += 1;
 }
 
+function wave2()
+{
+	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+}
+
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	const list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
+	const list = [cTempl.nxmtherv, cTempl.nxmtherv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 //These groups are active immediately.
@@ -220,7 +253,7 @@ function cam3Setup()
 		"R-Sys-Engineering03", "R-Defense-WallUpgrade07", "R-Struc-Materials07",
 		"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 		"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
-		"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage08", "R-Wpn-Mortar-ROF04",
+		"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
 		"R-Vehicle-Engine07", "R-Vehicle-Metals06", "R-Vehicle-Armor-Heat03",
 		"R-Cyborg-Metals06", "R-Cyborg-Armor-Heat03", "R-Wpn-RocketSlow-ROF04",
 		"R-Wpn-AAGun-Damage05", "R-Wpn-AAGun-ROF04", "R-Wpn-Howitzer-Damage09",
@@ -245,7 +278,9 @@ function cam3Setup()
 	}
 
 	enableResearch("R-Wpn-Howitzer03-Rot", CAM_HUMAN_PLAYER);
-	enableResearch("R-Wpn-MG-Damage08", CAM_HUMAN_PLAYER);
+	enableResearch("R-Wpn-MG-Damage09", CAM_HUMAN_PLAYER);
+	enableResearch("R-Wpn-Flamer-ROF04", CAM_HUMAN_PLAYER);
+	enableResearch("R-Defense-WallUpgrade07", CAM_HUMAN_PLAYER);
 }
 
 //Normal and lower difficulties has Nexus start off a little bit weaker
@@ -289,26 +324,26 @@ function eventStartLevel()
 		"NEXUS-WBase": {
 			cleanup: "westBaseCleanup",
 			detectMsg: "CM3A_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NEXUS-SWBase": {
 			cleanup: "southWestBaseCleanup",
 			detectMsg: "CM3A_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NEXUS-NEBase": {
 			cleanup: "northEastBaseCleanup",
 			detectMsg: "CM3A_BASE3",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NEXUS-NWBase": {
 			cleanup: "northWestBaseCleanup",
 			detectMsg: "CM3A_BASE4",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -322,7 +357,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			group: camMakeGroup("NEAttackerGroup"),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
@@ -335,7 +370,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			group: camMakeGroup("cybAttackers"),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
@@ -353,7 +388,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			group: camMakeGroup("cybValleyPatrol"),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
@@ -371,7 +406,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(70)),
 			group: camMakeGroup("hoverPatrolGrp"),
 			templates: [cTempl.nxmscouh]
 		},
@@ -384,17 +419,15 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(45)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(55)),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
 	});
 
 	if (difficulty >= HARD)
 	{
-		addDroid(CAM_NEXUS, 8, 112, "Truck Retribution Hover", "Body7ABT", "hover02", "", "", "Spade1Mk1");
-
+		addDroid(CAM_NEXUS, 8, 112, "Truck Retribution Hover", tBody.tank.retribution, tProp.tank.hover2, "", "", tConstruct.truck);
 		camManageTrucks(CAM_NEXUS);
-
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}
 

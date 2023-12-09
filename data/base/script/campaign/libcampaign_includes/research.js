@@ -42,7 +42,7 @@ function camCompleteRequiredResearch(researchIds, playerId)
 		if (reqRes.length === 0)
 		{
 			//HACK: autorepair like upgrades don't work after mission transition.
-			if (__RESEARCH_ID === "R-Sys-NEXUSrepair")
+			if (__cam_nexusTech.indexOf(__RESEARCH_ID) !== -1)
 			{
 				completeResearch(__RESEARCH_ID, playerId, true);
 			}
@@ -70,7 +70,7 @@ function __camGrantSpecialResearch()
 		if (!allianceExistsBetween(CAM_HUMAN_PLAYER, i) && (countDroid(DROID_ANY, i) > 0 || enumStruct(i).length > 0))
 		{
 			//Boost AI production to produce all droids within a factory throttle
-			completeResearch("R-Struc-Factory-Upgrade-AI", i);
+			completeResearch(__CAM_AI_INSTANT_PRODUCTION_RESEARCH, i);
 		}
 	}
 }

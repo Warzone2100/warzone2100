@@ -111,10 +111,13 @@ function sendPlayerTransporter()
 	}
 
 	const droids = [];
-	const bodyList = ["Body12SUP", "Body11ABT"];
-	const propulsionList = ["tracked01", "tracked01", "hover01"];
-	const weaponList = ["Cannon375mmMk1", "Cannon375mmMk1", "Cannon375mmMk1", "Rocket-LtA-T", "Rocket-LtA-T", "Mortar2Mk1", "Rocket-MRL"];
-	const specialList = ["SensorTurret1Mk1", "CommandBrain01"];
+	const bodyList = [tBody.tank.mantis, tBody.tank.python];
+	const propulsionList = [tProp.tank.tracks, tProp.tank.tracks, tProp.tank.hover];
+	const weaponList = [
+		tWeap.tank.heavyCannon, tWeap.tank.heavyCannon, tWeap.tank.heavyCannon,
+		tWeap.tank.lancer, tWeap.tank.lancer, tWeap.tank.bombard, tWeap.tank.miniRocketArray
+	];
+	const specialList = [tSensor.sensor, tCommand.commander];
 	const BODY = bodyList[camRand(bodyList.length)];
 	const PROP = propulsionList[camRand(propulsionList.length)];
 
@@ -147,10 +150,39 @@ function mapEdgeDroids()
 	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos("groundUnitPos"), droids, CAM_REINFORCE_GROUND);
 }
 
+function wave2()
+{
+	const list = [cTempl.colatv, cTempl.colatv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), "COCommandCenter", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.colcbv, cTempl.colcbv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), "COCommandCenter", ext);
+}
+
 function vtolAttack()
 {
-	const list = [cTempl.colcbv];
-	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter");
+	const list = [cTempl.colpbv, cTempl.colpbv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), "COCommandCenter", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 function groupPatrol()
@@ -193,7 +225,7 @@ function cam2Setup()
 {
 	const collectiveRes = [
 		"R-Wpn-MG1Mk1", "R-Sys-Engineering02",
-		"R-Defense-WallUpgrade06", "R-Struc-Materials06",
+		"R-Defense-WallUpgrade04", "R-Struc-Materials04",
 		"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
 		"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
 		"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
@@ -285,7 +317,7 @@ function reallyDownTransporter()
 		removeTimer("sendPlayerTransporter");
 	}
 	setReinforcementTime(LZ_COMPROMISED_TIME);
-	playSound("pcv443.ogg");
+	playSound(cam_sounds.transport.transportUnderAttack);
 }
 
 function downTransporter()
@@ -342,14 +374,14 @@ function eventStartLevel()
 		"CONorthBase": {
 			cleanup: "CONorth",
 			detectMsg: "C2A_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"CONorthWestBase": {
 			cleanup: "CONorthWest",
 			detectMsg: "C2A_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -372,7 +404,7 @@ function eventStartLevel()
 
 	queue("secondVideo", camSecondsToMilliseconds(12));
 	queue("groupPatrol", camChangeOnDiff(camMinutesToMilliseconds(1)));
-	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(6)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));

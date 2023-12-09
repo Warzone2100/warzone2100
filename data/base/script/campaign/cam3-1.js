@@ -60,11 +60,40 @@ camAreaEvent("hillTriggerZone", function(droid)
 	});
 });
 
+function wave2()
+{
+	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+}
+
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	const list = [cTempl.nxlscouv, cTempl.nxmtherv];
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
+	const list = [cTempl.nxmtherv, cTempl.nxmtherv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 //These groups are active immediately.
@@ -164,7 +193,7 @@ function setupNextMission()
 	{
 		camSetExtraObjectiveMessage(_("Move all units into the valley"));
 
-		camPlayVideos(["labort.ogg", {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
+		camPlayVideos([cam_sounds.missile.launch.missileLaunchAborted, {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
 		setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
@@ -254,37 +283,37 @@ function eventStartLevel()
 
 	//Time is in seconds.
 	launchInfo = [
-		{sound: "60min.ogg", time: camMinutesToSeconds(60)},
-		{sound: "50min.ogg", time: camMinutesToSeconds(50)},
-		{sound: "40min.ogg", time: camMinutesToSeconds(40)},
-		{sound: "30min.ogg", time: camMinutesToSeconds(30)},
-		{sound: "20min.ogg", time: camMinutesToSeconds(20)},
-		{sound: "10min.ogg", time: camMinutesToSeconds(10)},
-		{sound: "meflp.ogg", time: camMinutesToSeconds(5) + 10},
-		{sound: "5min.ogg", time: camMinutesToSeconds(5)},
-		{sound: "4min.ogg", time: camMinutesToSeconds(4)},
-		{sound: "3min.ogg", time: camMinutesToSeconds(3)},
-		{sound: "2min.ogg", time: camMinutesToSeconds(2)},
-		{sound: "1min.ogg", time: camMinutesToSeconds(1)},
-		{sound: "flseq.ogg", time: 25},
-		{sound: "10to1.ogg", time: 11},
-		{sound: "mlaunch.ogg", time: 2},
+		{sound: cam_sounds.missile.launch.missileLaunchIn60Minutes, time: camMinutesToSeconds(60)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn50Minutes, time: camMinutesToSeconds(50)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn40Minutes, time: camMinutesToSeconds(40)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn30Minutes, time: camMinutesToSeconds(30)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn20Minutes, time: camMinutesToSeconds(20)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn10Minutes, time: camMinutesToSeconds(10)},
+		{sound: cam_sounds.missile.launch.missileEnteringFinalLaunchPeriod, time: camMinutesToSeconds(5) + 10},
+		{sound: cam_sounds.missile.launch.missileLaunchIn5Minutes, time: camMinutesToSeconds(5)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn4Minutes, time: camMinutesToSeconds(4)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn3Minutes, time: camMinutesToSeconds(3)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn2Minutes, time: camMinutesToSeconds(2)},
+		{sound: cam_sounds.missile.launch.missileLaunchIn1Minute, time: camMinutesToSeconds(1)},
+		{sound: cam_sounds.missile.launch.finalMissileLaunchSequenceInitiated, time: 25},
+		{sound: cam_sounds.missile.countdown, time: 11},
+		{sound: cam_sounds.missile.launch.missileLaunched, time: 2},
 	];
 	detonateInfo = [
-		{sound: "mlaunch.ogg", time: camMinutesToSeconds(60) - 9},
-		{sound: "det60min.ogg", time: camMinutesToSeconds(60) - 10},
-		{sound: "det50min.ogg", time: camMinutesToSeconds(50)},
-		{sound: "det40min.ogg", time: camMinutesToSeconds(40)},
-		{sound: "det30min.ogg", time: camMinutesToSeconds(30)},
-		{sound: "det20min.ogg", time: camMinutesToSeconds(20)},
-		{sound: "det10min.ogg", time: camMinutesToSeconds(10)},
-		{sound: "det5min.ogg", time: camMinutesToSeconds(5)},
-		{sound: "det4min.ogg", time: camMinutesToSeconds(4)},
-		{sound: "det3min.ogg", time: camMinutesToSeconds(3)},
-		{sound: "det2min.ogg", time: camMinutesToSeconds(2)},
-		{sound: "det1min.ogg", time: camMinutesToSeconds(1)},
-		{sound: "fdetseq.ogg", time: 20},
-		{sound: "10to1.ogg", time: 10},
+		{sound: cam_sounds.missile.detonate.warheadActivatedCountdownBegins, time: camMinutesToSeconds(60) - 9},
+		{sound: cam_sounds.missile.detonate.detonationIn60Minutes, time: camMinutesToSeconds(60) - 10},
+		{sound: cam_sounds.missile.detonate.detonationIn50Minutes, time: camMinutesToSeconds(50)},
+		{sound: cam_sounds.missile.detonate.detonationIn40Minutes, time: camMinutesToSeconds(40)},
+		{sound: cam_sounds.missile.detonate.detonationIn30Minutes, time: camMinutesToSeconds(30)},
+		{sound: cam_sounds.missile.detonate.detonationIn20Minutes, time: camMinutesToSeconds(20)},
+		{sound: cam_sounds.missile.detonate.detonationIn10Minutes, time: camMinutesToSeconds(10)},
+		{sound: cam_sounds.missile.detonate.detonationIn5Minutes, time: camMinutesToSeconds(5)},
+		{sound: cam_sounds.missile.detonate.detonationIn4Minutes, time: camMinutesToSeconds(4)},
+		{sound: cam_sounds.missile.detonate.detonationIn3Minutes, time: camMinutesToSeconds(3)},
+		{sound: cam_sounds.missile.detonate.detonationIn2Minutes, time: camMinutesToSeconds(2)},
+		{sound: cam_sounds.missile.detonate.detonationIn1Minute, time: camMinutesToSeconds(1)},
+		{sound: cam_sounds.missile.detonate.finalDetonationSequenceInitiated, time: 20},
+		{sound: cam_sounds.missile.countdown, time: 10},
 	];
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
@@ -305,15 +334,16 @@ function eventStartLevel()
 	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 
 	camSetArtifacts({
-		"NXMediumFac": { tech: "R-Wpn-MG-Damage09" },
+		"NXMediumFac": { tech: "R-Wpn-Cannon-Damage08" },
+		"NXCommandCenter": { tech: "R-Defense-WallUpgrade08" },
 	});
 
 	camSetEnemyBases({
 		"NX-SWBase": {
 			cleanup: "baseCleanupArea",
 			detectMsg: "CM31_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -322,7 +352,7 @@ function eventStartLevel()
 			assembly: "NXCybFac1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -334,7 +364,7 @@ function eventStartLevel()
 			assembly: "NXCybFac2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 40,

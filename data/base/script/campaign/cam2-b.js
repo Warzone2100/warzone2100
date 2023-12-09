@@ -2,7 +2,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const mis_collectiveRes = [
-	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Defense-WallUpgrade05", "R-Struc-Materials05", "R-Sys-Engineering02",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals04", "R-Cyborg-Metals04",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
 	"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF01",
@@ -82,15 +82,39 @@ function ambushPlayer()
 	});
 }
 
-function vtolAttack()
+function wave2()
 {
-	const list = [cTempl.colcbv, cTempl.colatv];
+	const list = [cTempl.colatv, cTempl.colatv];
 	const ext = {
 		limit: [4, 4], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
 	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.colcbv, cTempl.colcbv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+}
+
+function vtolAttack()
+{
+	const list = [cTempl.colpbv, cTempl.colpbv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 function truckDefense()
@@ -109,7 +133,7 @@ function transferPower()
 {
 	//increase player power level and play sound
 	setPower(playerPower(CAM_HUMAN_PLAYER) + 4000);
-	playSound("power-transferred.ogg");
+	playSound(cam_sounds.powerTransferred);
 }
 
 function eventStartLevel()
@@ -128,7 +152,7 @@ function eventStartLevel()
 	camPlayVideos([{video: "MB2_B_MSG", type: CAMP_MSG}, {video: "MB2_B_MSG2", type: MISS_MSG}]);
 
 	camSetArtifacts({
-		"COResearchLab": { tech: "R-Wpn-Flame2" },
+		"COResearchLab": { tech: ["R-Wpn-Flame2", "R-Defense-WallUpgrade05"] },
 		"COHeavyFac-b4": { tech: "R-Wpn-RocketSlow-ROF01" },
 		"COHeavyFacL-b1": { tech: "R-Wpn-MG-ROF03" },
 		"COCommandCenter": { tech: "R-Vehicle-Body02" }, //Leopard
@@ -144,28 +168,31 @@ function eventStartLevel()
 	}
 
 	// New HMG Tiger Tracks units in first attack group
-	addDroid(CAM_THE_COLLECTIVE, 92, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
-	addDroid(CAM_THE_COLLECTIVE, 96, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
-	addDroid(CAM_THE_COLLECTIVE, 97, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
+	if (difficulty >= HARD)
+	{
+		addDroid(CAM_THE_COLLECTIVE, 92, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+		addDroid(CAM_THE_COLLECTIVE, 96, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+		addDroid(CAM_THE_COLLECTIVE, 97, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+	}
 
 	camSetEnemyBases({
 		"CONorthBase": {
 			cleanup: "base1Cleanup",
 			detectMsg: "C2B_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COCentralBase": {
 			cleanup: "base2Cleanup",
 			detectMsg: "C2B_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COMiddleBase": {
 			cleanup: "base4Cleanup",
 			detectMsg: "C2B_BASE4",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 

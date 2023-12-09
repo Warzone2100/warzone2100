@@ -1,4 +1,3 @@
-
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
@@ -171,25 +170,25 @@ function eventStartLevel()
 		"NPSouthEastGroup": {
 			cleanup: "NPSouthEast",
 			detectMsg: "C1D_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NPMiddleGroup": {
 			cleanup: "NPMiddle",
 			detectMsg: "C1D_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NPNorthEastGroup": {
 			cleanup: "NPNorthEast",
 			detectMsg: "C1D_BASE3",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NPLZGroup": {
 			cleanup: "NPLZ1",
 			detectMsg: "C1D_LZ2",
-			eliminateSnd: "pcv394.ogg",
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 			player: CAM_NEW_PARADIGM // required for LZ-type bases
 		},
 	});
