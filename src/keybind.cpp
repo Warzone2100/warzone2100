@@ -2155,6 +2155,7 @@ void	kf_CentreOnBase()
 			yJump = (*structIt)->pos.y;
 			break;
 		}
+		++structIt;
 	}
 
 	/* If we found it, then jump to it! */
