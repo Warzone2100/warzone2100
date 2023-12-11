@@ -562,13 +562,19 @@ static void gameStateUpdate()
 		}
 
 		// FIXME: These for-loops are code duplicationo
-		for (STRUCTURE *psCBuilding : apsStructLists[i])
+		StructureList::iterator structIt = apsStructLists[i].begin(), structItNext;
+		while (structIt != apsStructLists[i].end())
 		{
-			structureUpdate(psCBuilding, false);
+			structItNext = std::next(structIt);
+			structureUpdate(*structIt, false);
+			structIt = structItNext;
 		}
-		for (STRUCTURE *psCBuilding : mission.apsStructLists[i])
+		structIt = mission.apsStructLists[i].begin();
+		while (structIt != mission.apsStructLists[i].end())
 		{
-			structureUpdate(psCBuilding, true); // update for mission
+			structItNext = std::next(structIt);
+			structureUpdate(*structIt, true); // update for mission
+			structIt = structItNext;
 		}
 	}
 

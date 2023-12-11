@@ -1007,6 +1007,7 @@ static void intTransporterAddDroid(UDWORD id)
 			}
 			currID++;
 		}
+		++droidIt;
 	}
 	if (droidIt != transIntDroidList->end())
 	{
