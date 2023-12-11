@@ -670,8 +670,11 @@ static void saveMissionData()
 
 	bRepairExists = false;
 	//set any structures currently being built to completed for the selected player
-	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
+	StructureList::iterator structIt = apsStructLists[selectedPlayer].begin(), structItNext;
+	while (structIt != apsStructLists[selectedPlayer].end())
 	{
+		structItNext = std::next(structIt);
+		STRUCTURE* psStruct = *structIt;
 		if (psStruct->status == SS_BEING_BUILT)
 		{
 			//find a droid working on it
@@ -692,6 +695,7 @@ static void saveMissionData()
 		{
 			bRepairExists = true;
 		}
+		structIt = structItNext;
 	}
 
 	//repair all droids back at home base if have a repair facility
@@ -2934,9 +2938,12 @@ void missionDestroyObjects()
 			}
 			mission.apsDroidLists[Player].clear();
 
-			for (STRUCTURE* psStruct : apsStructLists[Player])
+			StructureList::iterator structIt = apsStructLists[Player].begin(), structItNext;
+			while (structIt != apsStructLists[Player].end())
 			{
-				removeStruct(psStruct, true);
+				structItNext = std::next(structIt);
+				removeStruct(*structIt, true);
+				structIt = structItNext;
 			}
 		}
 	}

@@ -2228,22 +2228,26 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		factoryInc = psFact->psAssemblyPoint->factoryInc;
 
 		auto& flagPosList = apsFlagPosLists[psStruct->player];
-		for (auto it = flagPosList.begin(); it != flagPosList.end(); ++it)
+		FlagPositionList::iterator flagPosIt = flagPosList.begin(), flagPosItNext;
+		while (flagPosIt != flagPosList.end())
 		{
-			if ((*it)->factoryInc == factoryInc && (*it)->factoryType == typeFlag)
+			flagPosItNext = std::next(flagPosIt);
+			FLAG_POSITION* flagPos = *flagPosIt;
+			if (flagPos->factoryInc == factoryInc && flagPos->factoryType == typeFlag)
 			{
-				if (*it != psFact->psAssemblyPoint)
+				if (flagPos != psFact->psAssemblyPoint)
 				{
-					removeFlagPosition(*it);
+					removeFlagPosition(flagPos);
 				}
 				else
 				{
 					// need to keep the assembly point(s) for the factory
 					// but remove it(the primary) from the list so it doesn't get
 					// displayed
-					it = flagPosList.erase(it);
+					flagPosList.erase(flagPosIt);
 				}
 			}
+			flagPosIt = flagPosItNext;
 		}
 		psFact->psCommander = psCommander;
 		syncDebug("Assigned commander %d to factory %d", psCommander->id, psStruct->id);

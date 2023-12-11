@@ -380,13 +380,17 @@ bool applyLimitSet()
 				{
 					while (asStructureStats[id].curCount[player] > asStructureStats[id].upgrade[player].limit)
 					{
-						for (STRUCTURE *psStruct : apsStructLists[player])
+						StructureList::iterator structIt = apsStructLists[player].begin(), structItNext;
+						while (structIt != apsStructLists[player].end())
 						{
+							structItNext = std::next(structIt);
+							STRUCTURE* psStruct = *structIt;
 							if (psStruct->pStructureType->type == asStructureStats[id].type)
 							{
 								removeStruct(psStruct, true);
 								break;
 							}
+							structIt = structItNext;
 						}
 
 					}
