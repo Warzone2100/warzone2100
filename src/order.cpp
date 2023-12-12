@@ -198,13 +198,30 @@ struct RSComparator
 
 		if (lhighest && !rhighest) return true;
 		if (!lhighest && rhighest) return false;
-		if (lhighest && rhighest)
+
+		const auto distanceCheck = [this](const DROID* l, const DROID* r)
 		{
-			// break the tie with distance check
 			const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY) * (l->pos.y - selfPosY);
 			const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY) * (r->pos.y - selfPosY);
 			// debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
-			return (ldist >= rdist);
+			if (ldist != rdist)
+			{
+				return ldist > rdist;
+			}
+			// If the distances are the same, fallback to damage level check: prefer the one which is more damaged.
+			if (l->body != r->body)
+			{
+				return l->body > r->body;
+			}
+			// Fall back to comparing droid IDs, which should never be the same, as the last resort
+			// to preserve the consistency of comparator (e.g. strict weak ordering).
+			return l->id > r->id;
+		};
+
+		if (lhighest && rhighest)
+		{
+			// break the tie with distance check
+			return distanceCheck(l, r);
 		}
 
 		// Second highest priority:
@@ -215,12 +232,10 @@ struct RSComparator
 		if (!lsecond && rsecond) return false;
 
 		// at this point we don't really have a preference
-		// just repair closest (maybe should repair the most damaged?..)
-		const auto ldist = (l->pos.x - selfPosX) * (l->pos.x - selfPosX) + (l->pos.y - selfPosY) * (l->pos.y - selfPosY);
-		const auto rdist = (r->pos.x - selfPosX) * (r->pos.x - selfPosX) + (r->pos.y - selfPosY) * (r->pos.y - selfPosY);
-		// debug(LOG_REPAIRS, "comparator called %i %i:  (ldist %i >= %i rdist) %i", l->id, r->id, ldist, rdist, ldist >= rdist);
-		return ldist >= rdist;
-
+		// just repair closest.
+		// In case they have the same distance,
+		// fallback to the damage level check: prefer the most damaged.
+		return distanceCheck(l, r);
 	}
 	private:
 	const int selfPosX;
