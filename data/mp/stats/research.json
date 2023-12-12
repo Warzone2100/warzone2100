@@ -1926,7 +1926,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 45
 			},
 			{
 				"class": "Building",
@@ -1954,7 +1954,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 45
 			},
 			{
 				"class": "Building",
@@ -1983,7 +1983,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 45
 			},
 			{
 				"class": "Building",
@@ -2014,7 +2014,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 55
 			},
 			{
 				"class": "Building",
@@ -2042,7 +2042,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 55
 			},
 			{
 				"class": "Building",
@@ -2071,7 +2071,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 55
 			},
 			{
 				"class": "Building",
@@ -2100,7 +2100,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 65
 			},
 			{
 				"class": "Building",
@@ -2129,7 +2129,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 65
 			},
 			{
 				"class": "Building",
@@ -2158,7 +2158,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 65
 			},
 			{
 				"class": "Building",
