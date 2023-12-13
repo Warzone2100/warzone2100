@@ -675,7 +675,7 @@ void vanishDroid(DROID *psDel)
 /* Remove a droid from the List so doesn't update or get drawn etc
 TAKE CARE with removeDroid() - usually want droidRemove since it deal with grid code*/
 //returns false if the droid wasn't removed - because it died!
-bool droidRemove(DROID *psDroid, PerPlayerDroidList& pList)
+bool droidRemove(DROID *psDroid, PerPlayerDroidLists& pList)
 {
 	CHECK_DROID(psDroid);
 

@@ -31,33 +31,33 @@
 
 /* The lists of objects allocated */
 template <typename ObjectType, unsigned PlayerCount>
-using PerPlayerObjectList = std::array<std::list<ObjectType*>, PlayerCount>;
+using PerPlayerObjectLists = std::array<std::list<ObjectType*>, PlayerCount>;
 
-using PerPlayerDroidList = PerPlayerObjectList<DROID, MAX_PLAYERS>;
-using DroidList = typename PerPlayerDroidList::value_type;
-extern PerPlayerDroidList apsDroidLists;
+using PerPlayerDroidLists = PerPlayerObjectLists<DROID, MAX_PLAYERS>;
+using DroidList = typename PerPlayerDroidLists::value_type;
+extern PerPlayerDroidLists apsDroidLists;
 
-using PerPlayerStructureList = PerPlayerObjectList<STRUCTURE, MAX_PLAYERS>;
-using StructureList = typename PerPlayerStructureList::value_type;
-extern PerPlayerStructureList apsStructLists;
+using PerPlayerStructureLists = PerPlayerObjectLists<STRUCTURE, MAX_PLAYERS>;
+using StructureList = typename PerPlayerStructureLists::value_type;
+extern PerPlayerStructureLists apsStructLists;
 
-using PerPlayerFeatureLists = PerPlayerObjectList<FEATURE, MAX_PLAYERS>;
+using PerPlayerFeatureLists = PerPlayerObjectLists<FEATURE, MAX_PLAYERS>;
 using FeatureList = typename PerPlayerFeatureLists::value_type;
 extern PerPlayerFeatureLists apsFeatureLists;
 
-using PerPlayerFlagPositionLists = PerPlayerObjectList<FLAG_POSITION, MAX_PLAYERS>;
+using PerPlayerFlagPositionLists = PerPlayerObjectLists<FLAG_POSITION, MAX_PLAYERS>;
 using FlagPositionList = typename PerPlayerFlagPositionLists::value_type;
 extern PerPlayerFlagPositionLists apsFlagPosLists;
 
-using PerPlayerExtractorLists = PerPlayerStructureList;
+using PerPlayerExtractorLists = PerPlayerStructureLists;
 using ExtractorList = typename PerPlayerExtractorLists::value_type;
 extern PerPlayerExtractorLists apsExtractorLists;
 
-using GlobalSensorList = PerPlayerObjectList<BASE_OBJECT, 1>;
+using GlobalSensorList = PerPlayerObjectLists<BASE_OBJECT, 1>;
 using SensorList = typename GlobalSensorList::value_type;
 extern GlobalSensorList apsSensorList;
 
-using GlobalOilList = PerPlayerObjectList<FEATURE, 1>;
+using GlobalOilList = PerPlayerObjectLists<FEATURE, 1>;
 using OilList = typename GlobalOilList::value_type;
 extern GlobalOilList apsOilList;
 
@@ -80,7 +80,7 @@ uint32_t generateNewObjectId();
 uint32_t generateSynchronisedObjectId();
 
 /* add the droid to the Droid Lists */
-void addDroid(DROID *psDroidToAdd, PerPlayerDroidList& pList);
+void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList);
 
 /*destroy a droid */
 void killDroid(DROID *psDel);
@@ -89,7 +89,7 @@ void killDroid(DROID *psDel);
 void freeAllDroids();
 
 /*Remove a single Droid from its list*/
-void removeDroid(DROID *psDroidToRemove, PerPlayerDroidList& pList);
+void removeDroid(DROID *psDroidToRemove, PerPlayerDroidLists& pList);
 
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids();
@@ -107,7 +107,7 @@ void killStruct(STRUCTURE *psDel);
 void freeAllStructs();
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureList& pList);
+void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList);
 
 /* add the feature to the Feature Lists */
 void addFeature(FEATURE *psFeatureToAdd);

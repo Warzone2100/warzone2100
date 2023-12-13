@@ -64,10 +64,10 @@ struct MISSION
 	int32_t                         scrollMaxX;
 	int32_t                         scrollMaxY;
 	//original object lists
-	PerPlayerStructureList apsStructLists;
+	PerPlayerStructureLists apsStructLists;
 	PerPlayerExtractorLists apsExtractorLists;
 
-	PerPlayerDroidList              apsDroidLists;
+	PerPlayerDroidLists              apsDroidLists;
 	PerPlayerFeatureLists           apsFeatureLists;
 	GlobalSensorList                apsSensorList;
 	GlobalOilList                   apsOilList;
