@@ -490,14 +490,11 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 FEATURE *IdToFeature(UDWORD id, UDWORD player)
 {
 	(void)player;	// unused, all features go into player 0
-	for (FEATURE *d : apsFeatureLists[0])
+	auto feat = std::find_if(apsFeatureLists[0].begin(), apsFeatureLists[0].end(), [id](FEATURE* f)
 	{
-		if (d->id == id)
-		{
-			return d;
-		}
-	}
-	return nullptr;
+		return f->id == id;
+	});
+	return feat != apsFeatureLists[0].end() ? *feat : nullptr;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

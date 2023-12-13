@@ -241,16 +241,6 @@ static inline void destroyObject(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 	ASSERT(gameTime - deltaGameTime <= gameTime || gameTime == 2, "Expected %u <= %u, bad time", gameTime - deltaGameTime, gameTime);
 
-	// If the message to remove is the first one in the list then mark the next one as the first
-	if (!list[object->player].empty() && list[object->player].front() == object)
-	{
-		list[object->player].pop_front();
-		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
-		object->died = gameTime;
-		scriptRemoveObject(object);
-		return;
-	}
-
 	auto it = std::find(list[object->player].begin(), list[object->player].end(), object);
 	ASSERT(it != list[object->player].end(), "Object %s(%d) not found in list", objInfo(object), object->id);
 
@@ -277,12 +267,6 @@ static inline void removeObjectFromList(PerPlayerObjectLists<OBJECT, MAX_PLAYERS
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 
-	// If the message to remove is the first one in the list then mark the next one as the first
-	if (!list[player].empty() && list[player].front() == object)
-	{
-		list[player].pop_front();
-		return;
-	}
 	auto it = std::find(list[player].begin(), list[player].end(), object);
 	ASSERT_OR_RETURN(, it != list[player].end(), "Object %p not found in list", static_cast<void*>(object));
 	list[player].erase(it);
@@ -298,14 +282,6 @@ static inline void removeObjectFromFuncList(FunctionList& list, OBJECT *object, 
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 
-	// If the message to remove is the first one in the list then mark the next one as the first
-	if (list[player].front() == object)
-	{
-		list[player].pop_front();
-		object->hasExtraFunction = false;
-		return;
-	}
-
 	// Iterate through the list and find the item before the object to delete
 	auto it = std::find(list[player].begin(), list[player].end(), object);
 	ASSERT_OR_RETURN(, it != list[player].end(), "Object %p not found in list", static_cast<void*>(object));
@@ -314,13 +290,13 @@ static inline void removeObjectFromFuncList(FunctionList& list, OBJECT *object, 
 }
 
 template <typename OBJECT>
-static inline void releaseAllObjectsInList(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list)
+static inline void releaseAllObjectsInList(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& lists)
 {
 	// Iterate through all players' object lists
-	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+	for (auto& list: lists)
 	{
 		// Iterate through all objects in list
-		for (OBJECT* psCurr : list[i])
+		for (OBJECT* psCurr : list)
 		{
 			// FIXME: the next call is disabled for now, yes, it will leak memory again.
 			// issue is with campaign games, and the swapping pointers 'trick' Pumpkin uses.
@@ -328,7 +304,7 @@ static inline void releaseAllObjectsInList(PerPlayerObjectLists<OBJECT, MAX_PLAY
 			// Release object's memory
 			delete psCurr;
 		}
-		list[i].clear();
+		list.clear();
 	}
 }
 
@@ -636,11 +612,6 @@ static bool removeFlagPositionFromList(FLAG_POSITION *psRemove)
 	ASSERT_OR_RETURN(false, psRemove->player < MAX_PLAYERS, "Invalid Flag Position player: %" PRIu32, psRemove->player);
 
 	auto& flagPosList = apsFlagPosLists[psRemove->player];
-	if (flagPosList.front() == psRemove)
-	{
-		flagPosList.pop_front();
-		return true;
-	}
 	auto it = std::find(flagPosList.begin(), flagPosList.end(), psRemove);
 	if (it != flagPosList.end())
 	{
@@ -728,54 +699,17 @@ void checkFactoryFlags()
 
 /**************************  OBJECT ACCESS FUNCTIONALITY ********************************/
 
-static BASE_OBJECT* getBaseObjFromFeatureData(unsigned id, unsigned player, OBJECT_TYPE type)
+template <typename ObjectType>
+BASE_OBJECT* getBaseObjFromId(const std::list<ObjectType*>& list, unsigned id)
 {
-	FeatureList::iterator objIt;
-	FeatureList* list = nullptr;
-
-	ASSERT_OR_RETURN(nullptr, type == OBJ_FEATURE, "Expected feature type");
-
-	for (int i = 0; i < 2; ++i)
+	auto objIt = std::find_if(list.begin(), list.end(), [id](ObjectType* obj)
 	{
-		switch (i)
-		{
-		case 0:
-			objIt = apsFeatureLists[0].begin();
-			list = &apsFeatureLists[0];
-			break;
-		case 1:
-			objIt = mission.apsFeatureLists[0].begin();
-			list = &mission.apsFeatureLists[0];
-			break;
-		}
-
-		while (objIt != list->end())
-		{
-			if ((*objIt)->id == id)
-			{
-				return *objIt;
-			}
-			// if transporter check any droids in the grp
-			if (((*objIt)->type == OBJ_DROID) && isTransporter((DROID*)(*objIt)))
-			{
-				ASSERT_OR_RETURN(nullptr, ((DROID*)(*objIt))->psGroup != nullptr, "Transporter has null group?");
-				for (DROID* psTrans = ((DROID*)(*objIt))->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
-				{
-					if (psTrans->id == id)
-					{
-						return (BASE_OBJECT*)psTrans;
-					}
-				}
-			}
-			++objIt;
-		}
-	}
-	ASSERT(false, "failed to find id %d for player %d", id, player);
-
-	return nullptr;
+		return obj->id == id;
+	});
+	return objIt != list.end() ? *objIt : nullptr;
 }
 
-static BASE_OBJECT* getBaseObjFromDroidData(const DroidList& list, unsigned id)
+static BASE_OBJECT* getBaseObjFromDroidId(const DroidList& list, unsigned id)
 {
 	for (DROID* psObj : list)
 	{
@@ -802,131 +736,65 @@ static BASE_OBJECT* getBaseObjFromDroidData(const DroidList& list, unsigned id)
 // Find a base object from its id
 BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 {
-	BASE_OBJECT		*psObj = nullptr;
-
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS || type == OBJ_FEATURE, "Invalid player: %u", player);
 
-	for (int i = 0; i < 3; ++i)
+	switch (type)
 	{
-		psObj = nullptr;
-		switch (i)
+	case OBJ_DROID:
 		{
-		case 0:
-			switch (type)
+			auto pDroid = getBaseObjFromDroidId(apsDroidLists[player], id);
+			if (pDroid)
 			{
-			case OBJ_DROID:
-				psObj = getBaseObjFromDroidData(apsDroidLists[player], id);
-				if (psObj)
-				{
-					return psObj;
-				}
-				break;
-			case OBJ_STRUCTURE:
-			{
-				auto structIt = std::find_if(apsStructLists[player].begin(), apsStructLists[player].end(), [id](STRUCTURE* s)
-				{
-					return s->id == id;
-				});
-				if (structIt != apsStructLists[player].end())
-				{
-					return *structIt;
-				}
-				else
-				{
-					psObj = nullptr;
-				}
-				break;
+				return pDroid;
 			}
-			default: break;
-			}
-			break;
-		case 1:
-			switch (type)
+			pDroid = getBaseObjFromDroidId(mission.apsDroidLists[player], id);
+			if (pDroid)
 			{
-			case OBJ_DROID:
-				psObj = getBaseObjFromDroidData(mission.apsDroidLists[player], id);
-				if (psObj)
-				{
-					return psObj;
-				}
-				break;
-			case OBJ_STRUCTURE:
-			{
-				auto structIt = std::find_if(mission.apsStructLists[player].begin(), mission.apsStructLists[player].end(), [id](STRUCTURE* s)
-				{
-					return s->id == id;
-				});
-				if (structIt != mission.apsStructLists[player].end())
-				{
-					return *structIt;
-				}
-				else
-				{
-					psObj = nullptr;
-				}
-				break;
+				return pDroid;
 			}
-			default: break;
-			}
-			break;
-		case 2:
-			if (player == 0 && type == OBJ_DROID)
+			if (player == 0)
 			{
-				psObj = getBaseObjFromDroidData(apsLimboDroids[0], id);
-				if (psObj)
+				pDroid = getBaseObjFromDroidId(apsLimboDroids[0], id);
+				if (pDroid)
 				{
-					return psObj;
+					return pDroid;
 				}
 			}
 			break;
 		}
-	}
-	return getBaseObjFromFeatureData(id, player, type);
-}
-
-// Find a base object from it's id
-static BASE_OBJECT* getBaseObjFromFeatureId(const FeatureList& list, UDWORD id)
-{
-	for (BASE_OBJECT* psObj : list)
-	{
-		if (psObj->id == id)
+	case OBJ_STRUCTURE:
 		{
-			return psObj;
-		}
-		// if transporter check any droids in the grp
-		if ((psObj->type == OBJ_DROID) && isTransporter((DROID*)psObj))
-		{
-			for (DROID* psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
+			auto pStruct = getBaseObjFromId(apsStructLists[player], id);
+			if (pStruct)
 			{
-				if (psTrans->id == id)
+				return pStruct;
+			}
+			pStruct = getBaseObjFromId(mission.apsStructLists[player], id);
+			if (pStruct)
+			{
+				return pStruct;
+			}
+			break;
+		}
+	case OBJ_FEATURE:
+		{
+			if (player == 0)
+			{
+				auto pFeat = getBaseObjFromId(apsFeatureLists[0], id);
+				if (pFeat)
 				{
-					return (BASE_OBJECT*)psTrans;
+					return pFeat;
 				}
+				pFeat = getBaseObjFromId(mission.apsFeatureLists[0], id);
+				if (pFeat)
+				{
+					return pFeat;
+				}
+				break;
 			}
 		}
-	}
-	return nullptr;
-}
-
-static BASE_OBJECT* getBaseObjFromDroidId(const DroidList& list, UDWORD id)
-{
-	for (DROID* psObj : list)
-	{
-		if (psObj->id == id)
-		{
-			return psObj;
-		}
-		// if transporter check any droids in the grp
-		if ((psObj->type == OBJ_DROID) && isTransporter((DROID*)psObj))
-		{
-			for (DROID* psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
-			{
-				if (psTrans->id == id)
-				{
-					return (BASE_OBJECT*)psTrans;
-				}
-			}
-		}
+	default:
+		break;
 	}
 	return nullptr;
 }
@@ -934,107 +802,14 @@ static BASE_OBJECT* getBaseObjFromDroidId(const DroidList& list, UDWORD id)
 // Find a base object from it's id
 BASE_OBJECT *getBaseObjFromId(UDWORD id)
 {
-	unsigned int i;
-	UDWORD			player;
-	BASE_OBJECT		*psObj = nullptr;
-
-	for (i = 0; i < 7; ++i)
+	for (size_t type = OBJ_DROID; type != OBJ_NUM_TYPES; ++type)
 	{
-		for (player = 0; player < MAX_PLAYERS; ++player)
+		for (size_t player = 0; player != MAX_PLAYERS; ++player)
 		{
-			switch (i)
+			auto psObj = getBaseObjFromData(id, player, static_cast<OBJECT_TYPE>(type));
+			if (psObj)
 			{
-			case 0:
-				psObj = getBaseObjFromDroidId(apsDroidLists[player], id);
-				if (psObj)
-				{
-					return psObj;
-				}
-				break;
-			case 1:
-			{
-				auto objIt = std::find_if(apsStructLists[player].begin(), apsStructLists[player].end(), [id](STRUCTURE* s)
-				{
-					return s->id == id;
-				});
-				if (objIt != apsStructLists[player].end())
-				{
-					return *objIt;
-				}
-				else
-				{
-					psObj = nullptr;
-				}
-				break;
-			}
-			case 2:
-				if (player == 0)
-				{
-					psObj = getBaseObjFromFeatureId(apsFeatureLists[0], id);
-					if (psObj)
-					{
-						return psObj;
-					}
-				}
-				else
-				{
-					psObj = nullptr;
-				}
-				break;
-			case 3:
-				psObj = getBaseObjFromDroidId(mission.apsDroidLists[player], id);
-				if (psObj)
-				{
-					return psObj;
-				}
-				break;
-			case 4:
-			{
-				auto objIt = std::find_if(mission.apsStructLists[player].begin(), mission.apsStructLists[player].end(), [id](STRUCTURE* s)
-				{
-					return s->id == id;
-				});
-				if (objIt != mission.apsStructLists[player].end())
-				{
-					return *objIt;
-				}
-				else
-				{
-					psObj = nullptr;
-				}
-				break;
-			}
-			case 5:
-				if (player == 0)
-				{
-					psObj = getBaseObjFromFeatureId(mission.apsFeatureLists[0], id);
-					if (psObj)
-					{
-						return psObj;
-					}
-				}
-				else
-				{
-					psObj = nullptr;
-				}
-				break;
-			case 6:
-				if (player == 0)
-				{
-					psObj = getBaseObjFromDroidId(apsLimboDroids[0], id);
-					if (psObj)
-					{
-						return psObj;
-					}
-				}
-				else
-				{
-					psObj = nullptr;
-				}
-				break;
-			default:
-				psObj = nullptr;
-				break;
+				return psObj;
 			}
 		}
 	}
