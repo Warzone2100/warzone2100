@@ -570,7 +570,7 @@ bool removeDroidBase(DROID *psDel)
 		if (tryingToGetLocation())
 		{
 			int numSelectedConstructors = 0;
-			for (DROID *psDroid : apsDroidLists[psDel->player])
+			for (const DROID *psDroid : apsDroidLists[psDel->player])
 			{
 				numSelectedConstructors += psDroid->selected && isConstructionDroid(psDroid);
 			}
@@ -1341,7 +1341,7 @@ bool idfDroid(DROID *psDroid)
 }
 
 /* Return the type of a droid */
-DROID_TYPE droidType(DROID *psDroid)
+DROID_TYPE droidType(const DROID *psDroid)
 {
 	return psDroid->droidType;
 }
@@ -2284,7 +2284,7 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 		{
 			continue;
 		}
-		for (DROID* psDroid : *dList)
+		for (const DROID* psDroid : *dList)
 		{
 			if (getDroidLevel(psDroid) == level)
 			{
@@ -2354,7 +2354,7 @@ static bool oneDroidMax(UDWORD x, UDWORD y)
 	// check each droid list
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID* pD : apsDroidLists[i])
+		for (const DROID* pD : apsDroidLists[i])
 		{
 			if (map_coord(pD->pos.x) == x
 				&& map_coord(pD->pos.y) == y)
@@ -2435,7 +2435,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 		}
 
 		//check structures
-		for (STRUCTURE* psStruct : apsStructLists[i])
+		for (const STRUCTURE* psStruct : apsStructLists[i])
 		{
 			if (psStruct->visible[player] || psStruct->born == 2)	// if can see it or started there
 			{
@@ -2464,11 +2464,11 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 		}
 
 		//check droids
-		for (DROID* psDroid : apsDroidLists[i])
+		for (const DROID* psDroid : apsDroidLists[i])
 		{
 			if (psDroid->visible[player])		//can see this droid?
 			{
-				if (!objHasWeapon((BASE_OBJECT *)psDroid))
+				if (!objHasWeapon(psDroid))
 				{
 					continue;
 				}
@@ -2554,7 +2554,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 building the specified structure - returns true if finds one*/
 bool checkDroidsBuilding(STRUCTURE *psStructure)
 {
-	for (DROID* psDroid : apsDroidLists[psStructure->player])
+	for (const DROID* psDroid : apsDroidLists[psStructure->player])
 	{
 		//check DORDER_BUILD, HELP_BUILD is handled the same
 		BASE_OBJECT *const psStruct = orderStateObj(psDroid, DORDER_BUILD);
@@ -2570,7 +2570,7 @@ bool checkDroidsBuilding(STRUCTURE *psStructure)
 demolishing the specified structure - returns true if finds one*/
 bool checkDroidsDemolishing(STRUCTURE *psStructure)
 {
-	for (DROID* psDroid : apsDroidLists[psStructure->player])
+	for (const DROID* psDroid : apsDroidLists[psStructure->player])
 	{
 		//check DORDER_DEMOLISH
 		BASE_OBJECT *const psStruct = orderStateObj(psDroid, DORDER_DEMOLISH);
@@ -2756,7 +2756,7 @@ UBYTE checkCommandExist(UBYTE player)
 {
 	UBYTE	quantity = 0;
 
-	for (DROID *psDroid : apsDroidLists[player])
+	for (const DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->droidType == DROID_COMMAND)
 		{

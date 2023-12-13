@@ -860,7 +860,7 @@ void processVisibility()
 			processVisibilityVision(psObj);
 		}
 	}
-	for (BASE_OBJECT *psObj : apsSensorList[0])
+	for (const BASE_OBJECT *psObj : apsSensorList[0])
 	{
 		if (objRadarDetector(psObj))
 		{

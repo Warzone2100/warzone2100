@@ -132,6 +132,16 @@ void freeAllFlagPositions();
 void addFlagPositionToList(FLAG_POSITION* psFlagPosToAdd, PerPlayerFlagPositionLists& list);
 
 // Find a base object from it's id
+template <typename ObjectType>
+BASE_OBJECT* getBaseObjFromId(const std::list<ObjectType*>& list, unsigned id)
+{
+	auto objIt = std::find_if(list.begin(), list.end(), [id](ObjectType* obj)
+	{
+		return obj->id == id;
+	});
+	return objIt != list.end() ? *objIt : nullptr;
+}
+
 BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type);
 BASE_OBJECT *getBaseObjFromId(UDWORD id);
 

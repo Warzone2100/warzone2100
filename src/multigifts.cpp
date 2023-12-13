@@ -294,7 +294,7 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 // \param to    :player that should be getting the droid
 static void sendGiftDroids(uint8_t from, uint8_t to)
 {
-	DroidList::iterator psD;
+	DroidList::const_iterator psD;
 	uint8_t      giftType = DROID_GIFT;
 	uint8_t      totalToSend;
 
@@ -501,7 +501,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 
 	// Make sure p1's structures are no longer considered "our buildings" to their former allies
 	// For unit pathing
-	for (STRUCTURE* psStructure : apsStructLists[p1])
+	for (const STRUCTURE* psStructure : apsStructLists[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -515,7 +515,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		}
 	}
 	// Do the same for p2's stuff
-	for (STRUCTURE* psStructure : apsStructLists[p2])
+	for (const STRUCTURE* psStructure : apsStructLists[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -590,7 +590,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Properly mark all of p1's structures as allied buildings for unit pathing
-	for (STRUCTURE* psStructure : apsStructLists[p1])
+	for (const STRUCTURE* psStructure : apsStructLists[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -612,7 +612,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 		}
 	}
 	// Do the same for p2's stuff
-	for (STRUCTURE* psStructure : apsStructLists[p2])
+	for (const STRUCTURE* psStructure : apsStructLists[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 

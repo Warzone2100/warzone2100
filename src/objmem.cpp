@@ -98,7 +98,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 {
 	for (int plr = 0; plr < MAX_PLAYERS; ++plr)
 	{
-		for (STRUCTURE *psStruct : apsStructLists[plr])
+		for (const STRUCTURE *psStruct : apsStructLists[plr])
 		{
 			if (psStruct == psVictim)
 			{
@@ -110,7 +110,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 				ASSERT_OR_RETURN(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
 			}
 		}
-		for (DROID *psDroid : apsDroidLists[plr])
+		for (const DROID *psDroid : apsDroidLists[plr])
 		{
 			if (psDroid == psVictim)
 			{
@@ -699,16 +699,6 @@ void checkFactoryFlags()
 
 /**************************  OBJECT ACCESS FUNCTIONALITY ********************************/
 
-template <typename ObjectType>
-BASE_OBJECT* getBaseObjFromId(const std::list<ObjectType*>& list, unsigned id)
-{
-	auto objIt = std::find_if(list.begin(), list.end(), [id](ObjectType* obj)
-	{
-		return obj->id == id;
-	});
-	return objIt != list.end() ? *objIt : nullptr;
-}
-
 static BASE_OBJECT* getBaseObjFromDroidId(const DroidList& list, unsigned id)
 {
 	for (DROID* psObj : list)
@@ -886,7 +876,7 @@ static void objListIntegCheck()
 
 	for (player = 0; player < MAX_PLAYERS; player += 1)
 	{
-		for (DROID* psCurr : apsDroidLists[player])
+		for (const DROID* psCurr : apsDroidLists[player])
 		{
 			ASSERT(psCurr->type == OBJ_DROID &&
 			       (SDWORD)psCurr->player == player,
@@ -896,7 +886,7 @@ static void objListIntegCheck()
 	}
 	for (player = 0; player < MAX_PLAYERS; player += 1)
 	{
-		for (STRUCTURE* psStruct : apsStructLists[player])
+		for (const STRUCTURE* psStruct : apsStructLists[player])
 		{
 			ASSERT(psStruct->type == OBJ_STRUCTURE &&
 			       (SDWORD)psStruct->player == player,
@@ -904,7 +894,7 @@ static void objListIntegCheck()
 			       objInfo(psStruct), (void*)psStruct, player, (int)psStruct->player);
 		}
 	}
-	for (BASE_OBJECT* obj : apsFeatureLists[0])
+	for (const BASE_OBJECT* obj : apsFeatureLists[0])
 	{
 		ASSERT(obj->type == OBJ_FEATURE,
 		       "objListIntegCheck: misplaced object in the feature list");
@@ -924,12 +914,12 @@ void objCount(int *droids, int *structures, int *features)
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID *psDroid : apsDroidLists[i])
+		for (const DROID *psDroid : apsDroidLists[i])
 		{
 			(*droids)++;
 			if (isTransporter(psDroid) && psDroid->psGroup && psDroid->psGroup->psList)
 			{
-				DROID *psTrans = psDroid->psGroup->psList;
+				const DROID *psTrans = psDroid->psGroup->psList;
 
 				for (psTrans = psTrans->psGrpNext; psTrans != nullptr; psTrans = psTrans->psGrpNext)
 				{

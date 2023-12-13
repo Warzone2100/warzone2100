@@ -321,7 +321,7 @@ void resetFactoryNumFlag()
 			factoryNumFlag[i][type].clear();
 		}
 		//look through the list of structures to see which have been used
-		for (STRUCTURE *psStruct : apsStructLists[i])
+		for (const STRUCTURE *psStruct : apsStructLists[i])
 		{
 			FLAG_TYPE type;
 			switch (psStruct->pStructureType->type)
@@ -829,7 +829,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	{
 		for (unsigned player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (DROID *psCurr : apsDroidLists[player])
+			for (const DROID *psCurr : apsDroidLists[player])
 			{
 				// An enemy droid is blocking it
 				if ((STRUCTURE *) orderStateObj(psCurr, DORDER_BUILD) == psStruct
@@ -1665,7 +1665,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		StructureBounds bounds = getStructureBounds(psBuilding);
 		for (unsigned playerNum = 0; playerNum < MAX_PLAYERS; ++playerNum)
 		{
-			for (STRUCTURE *psStruct : apsStructLists[playerNum])
+			for (const STRUCTURE *psStruct : apsStructLists[playerNum])
 			{
 				FLAG_POSITION *fp = nullptr;
 				if (StructIsFactory(psStruct))
@@ -2301,7 +2301,7 @@ static bool structClearTile(UWORD x, UWORD y)
 	/* Check for a droid */
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (DROID* psCurr : apsDroidLists[player])
+		for (const DROID* psCurr : apsDroidLists[player])
 		{
 			if (map_coord(psCurr->pos.x) == x
 			    && map_coord(psCurr->pos.y) == y)
@@ -2641,7 +2641,7 @@ bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission
 	}
 
 	StructureList* pList = isMission ? &mission.apsStructLists[player] : &apsStructLists[player];
-	for (STRUCTURE *psCurr : *pList)
+	for (const STRUCTURE *psCurr : *pList)
 	{
 		if (psCurr->pStructureType->type == type && (!built || (built && psCurr->status == SS_BUILT)))
 		{
@@ -2918,11 +2918,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	{
 		// This isn't supposed to happen, and really shouldn't be possible - if this happens, maybe a structure is being updated twice?
 		int count1 = 0, count2 = 0;
-		for (STRUCTURE* s : apsStructLists[psStructure->player])
+		for (const STRUCTURE* s : apsStructLists[psStructure->player])
 		{
 			count1 += s == psStructure;
 		}
-		for (STRUCTURE* s : mission.apsStructLists[psStructure->player])
+		for (const STRUCTURE* s : mission.apsStructLists[psStructure->player])
 		{
 			count2 += s == psStructure;
 		}
@@ -3920,7 +3920,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 	//if currently on a mission can't build factory/research/power/derricks
 	if (!missionIsOffworld())
 	{
-		for (STRUCTURE* psCurr : apsStructLists[_selectedPlayer])
+		for (const STRUCTURE* psCurr : apsStructLists[_selectedPlayer])
 		{
 			if (psCurr->pStructureType->type == REF_RESEARCH && psCurr->status == SS_BUILT)
 			{
@@ -4749,7 +4749,7 @@ bool checkSpecificStructExists(UDWORD structInc, UDWORD player)
 {
 	ASSERT_OR_RETURN(false, structInc < numStructureStats, "Invalid structure inc");
 
-	for (STRUCTURE *psStructure : apsStructLists[player])
+	for (const STRUCTURE *psStructure : apsStructLists[player])
 	{
 		if (psStructure->status == SS_BUILT)
 		{
@@ -5080,7 +5080,7 @@ uint16_t countPlayerUnusedDerricks()
 
 	if (selectedPlayer >= MAX_PLAYERS) { return 0; }
 
-	for (STRUCTURE *psStruct : apsExtractorLists[selectedPlayer])
+	for (const STRUCTURE *psStruct : apsExtractorLists[selectedPlayer])
 	{
 		if (psStruct->status == SS_BUILT && psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
@@ -6714,14 +6714,14 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 
 
 // return whether a rearm pad has a vtol on it
-bool vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid)
+bool vtolOnRearmPad(const STRUCTURE *psStruct, DROID *psDroid)
 {
 	SDWORD	tx, ty;
 
 	tx = map_coord(psStruct->pos.x);
 	ty = map_coord(psStruct->pos.y);
 
-	for (DROID* psCurr : apsDroidLists[psStruct->player])
+	for (const DROID* psCurr : apsDroidLists[psStruct->player])
 	{
 		if (psCurr != psDroid
 		    && map_coord(psCurr->pos.x) == tx

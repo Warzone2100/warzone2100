@@ -678,7 +678,7 @@ static void saveMissionData()
 		if (psStruct->status == SS_BEING_BUILT)
 		{
 			//find a droid working on it
-			for (DROID* psDroid : apsDroidLists[selectedPlayer])
+			for (const DROID* psDroid : apsDroidLists[selectedPlayer])
 			{
 				if ((psStructBeingBuilt = (STRUCTURE *)orderStateObj(psDroid, DORDER_BUILD))
 				    && psStructBeingBuilt == psStruct)
@@ -1637,7 +1637,6 @@ static void missionResetDroids()
 				if (pickRes == NO_FREE_TILE)
 				{
 					ASSERT(false, "missionResetUnits: Unable to find a free location");
-					psStruct = nullptr;
 				}
 				else
 				{
@@ -1650,7 +1649,7 @@ static void missionResetDroids()
 			}
 			else // if couldn't find the factory - try to place near HQ instead
 			{
-				for (STRUCTURE* psStructure : apsStructLists[psDroid->player])
+				for (const STRUCTURE* psStructure : apsStructLists[psDroid->player])
 				{
 					if (psStructure->pStructureType->type == REF_HQ)
 					{
@@ -1661,7 +1660,6 @@ static void missionResetDroids()
 						if (pickRes == NO_FREE_TILE)
 						{
 							ASSERT(false, "missionResetUnits: Unable to find a free location");
-							psStructure = nullptr;
 						}
 						else
 						{
@@ -3048,7 +3046,7 @@ bool getPlayCountDown()
 bool missionDroidsRemaining(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu32 "", player);
-	for (DROID *psDroid : apsDroidLists[player])
+	for (const DROID *psDroid : apsDroidLists[player])
 	{
 		if (!isTransporter(psDroid))
 		{

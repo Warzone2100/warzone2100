@@ -439,7 +439,7 @@ void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr : apsLimboDroids[i])
+		for (const DROID *psCurr : apsLimboDroids[i])
 		{
 			// count the type of units
 			switch (psCurr->droidType)
@@ -457,7 +457,7 @@ void countUpdate(bool synch)
 		}
 		// FIXME: These for-loops are code duplicationo
 		setLasSatExists(false, i);
-		for (STRUCTURE *psCBuilding : apsStructLists[i])
+		for (const STRUCTURE *psCBuilding : apsStructLists[i])
 		{
 			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
@@ -469,7 +469,7 @@ void countUpdate(bool synch)
 				setLasSatExists(true, i);
 			}
 		}
-		for (STRUCTURE *psCBuilding : mission.apsStructLists[i])
+		for (const STRUCTURE *psCBuilding : mission.apsStructLists[i])
 		{
 			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{

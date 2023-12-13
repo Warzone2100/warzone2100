@@ -525,7 +525,7 @@ public:
 			SDWORD scrX, scrY;
 			for (uint32_t i = 0; i < MAX_PLAYERS; i++)
 			{
-				for (STRUCTURE* psStruct : apsStructLists[i])
+				for (const STRUCTURE* psStruct : apsStructLists[i])
 				{
 					/* If it's targetted and on-screen */
 					if (psStruct->flags.test(OBJECT_FLAG_TARGETED)
@@ -784,7 +784,7 @@ static void showDroidPaths()
 		return; // no-op for now
 	}
 
-	for (DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
@@ -1098,7 +1098,7 @@ void draw3DScene()
 	{
 		int visibleDroids = 0;
 		int undrawnDroids = 0;
-		for (DROID *psDroid : apsDroidLists[selectedPlayer])
+		for (const DROID *psDroid : apsDroidLists[selectedPlayer])
 		{
 			if (psDroid->sDisplay.frameNumber != currentGameFrame)
 			{
@@ -2183,7 +2183,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 			continue;
 		}
 		STRUCT_STATES state = player == selectedPlayer ? SS_BLUEPRINT_PLANNED : SS_BLUEPRINT_PLANNED_BY_ALLY;
-		for (DROID *psDroid : apsDroidLists[player])
+		for (const DROID *psDroid : apsDroidLists[player])
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
@@ -4009,7 +4009,7 @@ static void structureEffectsPlayer(UDWORD player)
 		return;  // Don't add effects this frame.
 	}
 
-	for (STRUCTURE *psStructure : apsStructLists[player])
+	for (const STRUCTURE *psStructure : apsStructLists[player])
 	{
 		if (psStructure->status != SS_BUILT)
 		{

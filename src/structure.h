@@ -311,7 +311,7 @@ bool clearRearmPad(const STRUCTURE *psStruct);
 void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid);
 
 // return whether a rearm pad has a vtol on it
-bool vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid);
+bool vtolOnRearmPad(const STRUCTURE *psStruct, DROID *psDroid);
 
 /* Just returns true if the structure's present body points aren't as high as the original*/
 bool	structIsDamaged(STRUCTURE *psStruct);
@@ -462,9 +462,9 @@ static inline STRUCTURE const *castStructure(SIMPLE_OBJECT const *psObject)
 	return isStructure(psObject) ? (STRUCTURE const *)psObject : (STRUCTURE const *)nullptr;
 }
 
-static inline int getBuildingResearchPoints(STRUCTURE *psStruct)
+static inline int getBuildingResearchPoints(const STRUCTURE *psStruct)
 {
-	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	const auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
 	return upgrade.research + upgrade.moduleResearch * psStruct->capacity;
 }
 

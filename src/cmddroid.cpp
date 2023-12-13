@@ -165,7 +165,7 @@ SDWORD cmdDroidGetIndex(DROID *psCommander)
 		return 0;
 	}
 
-	for (DROID* psCurr : apsDroidLists[psCommander->player])
+	for (const DROID* psCurr : apsDroidLists[psCommander->player])
 	{
 		if (psCurr->droidType == DROID_COMMAND &&
 		    psCurr->id < psCommander->id)
