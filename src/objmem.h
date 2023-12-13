@@ -30,32 +30,35 @@
 #include <list>
 
 /* The lists of objects allocated */
-using DroidList = std::list<DROID*>;
-using PerPlayerDroidList = std::array<DroidList, MAX_PLAYERS>;
+template <typename ObjectType, unsigned PlayerCount>
+using PerPlayerObjectList = std::array<std::list<ObjectType*>, PlayerCount>;
+
+using PerPlayerDroidList = PerPlayerObjectList<DROID, MAX_PLAYERS>;
+using DroidList = typename PerPlayerDroidList::value_type;
 extern PerPlayerDroidList apsDroidLists;
 
-using StructureList = std::list<STRUCTURE*>;
-using PerPlayerStructureList = std::array<StructureList, MAX_PLAYERS>;
+using PerPlayerStructureList = PerPlayerObjectList<STRUCTURE, MAX_PLAYERS>;
+using StructureList = typename PerPlayerStructureList::value_type;
 extern PerPlayerStructureList apsStructLists;
 
-using FeatureList = std::list<FEATURE*>;
-using PerPlayerFeatureLists = std::array<FeatureList, MAX_PLAYERS>;
+using PerPlayerFeatureLists = PerPlayerObjectList<FEATURE, MAX_PLAYERS>;
+using FeatureList = typename PerPlayerFeatureLists::value_type;
 extern PerPlayerFeatureLists apsFeatureLists;
 
-using FlagPositionList = std::list<FLAG_POSITION*>;
-using PerPlayerFlagPositionLists = std::array<FlagPositionList, MAX_PLAYERS>;
+using PerPlayerFlagPositionLists = PerPlayerObjectList<FLAG_POSITION, MAX_PLAYERS>;
+using FlagPositionList = typename PerPlayerFlagPositionLists::value_type;
 extern PerPlayerFlagPositionLists apsFlagPosLists;
 
-using ExtractorList = std::list<STRUCTURE*>;
-using PerPlayerExtractorLists = std::array<ExtractorList, MAX_PLAYERS>;
+using PerPlayerExtractorLists = PerPlayerStructureList;
+using ExtractorList = typename PerPlayerExtractorLists::value_type;
 extern PerPlayerExtractorLists apsExtractorLists;
 
-using SensorList = std::list<BASE_OBJECT*>;
-using GlobalSensorList = std::array<SensorList, 1>;
+using GlobalSensorList = PerPlayerObjectList<BASE_OBJECT, 1>;
+using SensorList = typename GlobalSensorList::value_type;
 extern GlobalSensorList apsSensorList;
 
-using OilList = std::list<FEATURE*>;
-using GlobalOilList = std::array<OilList, 1>;
+using GlobalOilList = PerPlayerObjectList<FEATURE, 1>;
+using OilList = typename GlobalOilList::value_type;
 extern GlobalOilList apsOilList;
 
 /* The list of destroyed objects */

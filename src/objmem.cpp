@@ -176,13 +176,6 @@ void objmemUpdate()
 
 	/* First remove the objects from the start of the list */
 	DestroyedObjectsList::iterator it = psDestroyedObj.begin();
-	while (it != psDestroyedObj.end()  && (*it)->died <= gameTime - deltaGameTime)
-	{
-		objmemDestroy(*it);
-		it = psDestroyedObj.erase(it);
-	}
-
-	/* Now see if there are any further down the list */
 	while (it != psDestroyedObj.end())
 	{
 		if ((*it)->died <= gameTime - deltaGameTime)
@@ -216,20 +209,7 @@ uint32_t generateSynchronisedObjectId()
  * \param list is a pointer to the object list
  */
 template <typename OBJECT>
-static inline void addObjectToList(OBJECT *list[], OBJECT *object, int player)
-{
-	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
-
-	// Prepend the object to the top of the list
-	object->psNext = list[player];
-	list[player] = object;
-}
-
-/* Add the object to its list
- * \param list is a pointer to the object list
- */
-template <typename OBJECT>
-static inline void addObjectToList(std::array<std::list<OBJECT*>, MAX_PLAYERS>& list, OBJECT* object, int player)
+static inline void addObjectToList(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list, OBJECT* object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 
@@ -256,53 +236,7 @@ static inline void addObjectToFuncList(FunctionList& list, OBJECT *object, int p
  * \param del is a pointer to the object to remove
  */
 template <typename OBJECT>
-static inline void destroyObject(OBJECT *list[], OBJECT *object)
-{
-	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
-	ASSERT(gameTime - deltaGameTime <= gameTime || gameTime == 2, "Expected %u <= %u, bad time", gameTime - deltaGameTime, gameTime);
-
-	// If the message to remove is the first one in the list then mark the next one as the first
-	if (list[object->player] == object)
-	{
-		list[object->player] = list[object->player]->psNext;
-		object->psNext = nullptr;
-		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
-		object->died = gameTime;
-		scriptRemoveObject(object);
-		return;
-	}
-
-	// Iterate through the list and find the item before the object to delete
-	OBJECT *psPrev = nullptr, *psCurr;
-	for (psCurr = list[object->player]; (psCurr != object) && (psCurr != nullptr); psCurr = psCurr->psNext)
-	{
-		psPrev = psCurr;
-	}
-
-	ASSERT(psCurr != nullptr, "Object %s(%d) not found in list", objInfo(object), object->id);
-
-	if (psCurr != nullptr)
-	{
-		// Modify the "next" pointer of the previous item to
-		// point to the "next" item of the item to delete.
-		psPrev->psNext = psCurr->psNext;
-
-		// Prepend the object to the destruction list
-		object->psNext = nullptr;
-		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
-
-		// Set destruction time
-		object->died = gameTime;
-	}
-	scriptRemoveObject(object);
-}
-
-/* Move an object from the active list to the destroyed list.
- * \param list is a pointer to the object list
- * \param del is a pointer to the object to remove
- */
-template <typename OBJECT>
-static inline void destroyObject(std::array<std::list<OBJECT*>, MAX_PLAYERS>& list, OBJECT* object)
+static inline void destroyObject(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list, OBJECT* object)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 	ASSERT(gameTime - deltaGameTime <= gameTime || gameTime == 2, "Expected %u <= %u, bad time", gameTime - deltaGameTime, gameTime);
@@ -339,38 +273,7 @@ static inline void destroyObject(std::array<std::list<OBJECT*>, MAX_PLAYERS>& li
  * \param type is the type of the object
  */
 template <typename OBJECT>
-static inline void removeObjectFromList(OBJECT *list[], OBJECT *object, int player)
-{
-	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
-
-	// If the message to remove is the first one in the list then mark the next one as the first
-	if (list[player] == object)
-	{
-		list[player] = list[player]->psNext;
-		return;
-	}
-
-	// Iterate through the list and find the item before the object to delete
-	OBJECT *psPrev = nullptr, *psCurr;
-	for (psCurr = list[player]; (psCurr != object) && (psCurr != nullptr); psCurr = psCurr->psNext)
-	{
-		psPrev = psCurr;
-	}
-
-	ASSERT_OR_RETURN(, psCurr != nullptr, "Object %p not found in list", static_cast<void *>(object));
-
-	// Modify the "next" pointer of the previous item to
-	// point to the "next" item of the item to delete.
-	psPrev->psNext = psCurr->psNext;
-}
-
-/* Remove an object from the active list
- * \param list is a pointer to the object list
- * \param remove is a pointer to the object to remove
- * \param type is the type of the object
- */
-template <typename OBJECT>
-static inline void removeObjectFromList(std::array<std::list<OBJECT*>, MAX_PLAYERS>& list, OBJECT* object, int player)
+static inline void removeObjectFromList(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list, OBJECT* object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 
@@ -411,29 +314,7 @@ static inline void removeObjectFromFuncList(FunctionList& list, OBJECT *object, 
 }
 
 template <typename OBJECT>
-static inline void releaseAllObjectsInList(OBJECT *list[])
-{
-	// Iterate through all players' object lists
-	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
-	{
-		// Iterate through all objects in list
-		OBJECT *psNext;
-		for (OBJECT *psCurr = list[i]; psCurr != nullptr; psCurr = psNext)
-		{
-			psNext = psCurr->psNext;
-
-			// FIXME: the next call is disabled for now, yes, it will leak memory again.
-			// issue is with campaign games, and the swapping pointers 'trick' Pumpkin uses.
-			//	visRemoveVisibility(psCurr);
-			// Release object's memory
-			delete psCurr;
-		}
-		list[i] = nullptr;
-	}
-}
-
-template <typename OBJECT>
-static inline void releaseAllObjectsInList(std::array<std::list<OBJECT*>, MAX_PLAYERS>& list)
+static inline void releaseAllObjectsInList(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list)
 {
 	// Iterate through all players' object lists
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
