@@ -54,8 +54,8 @@ uint32_t                unsynchObjID;
 uint32_t                synchObjID;
 
 /* The lists of objects allocated */
-PerPlayerDroidList apsDroidLists;
-PerPlayerStructureList apsStructLists;
+PerPlayerDroidLists apsDroidLists;
+PerPlayerStructureLists apsStructLists;
 PerPlayerFeatureLists apsFeatureLists;		///< Only player zero is valid for features. TODO: Reduce to single list.
 PerPlayerExtractorLists apsExtractorLists;
 GlobalOilList apsOilList;
@@ -209,7 +209,7 @@ uint32_t generateSynchronisedObjectId()
  * \param list is a pointer to the object list
  */
 template <typename OBJECT>
-static inline void addObjectToList(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list, OBJECT* object, int player)
+static inline void addObjectToList(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list, OBJECT* object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 
@@ -236,7 +236,7 @@ static inline void addObjectToFuncList(FunctionList& list, OBJECT *object, int p
  * \param del is a pointer to the object to remove
  */
 template <typename OBJECT>
-static inline void destroyObject(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list, OBJECT* object)
+static inline void destroyObject(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list, OBJECT* object)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 	ASSERT(gameTime - deltaGameTime <= gameTime || gameTime == 2, "Expected %u <= %u, bad time", gameTime - deltaGameTime, gameTime);
@@ -273,7 +273,7 @@ static inline void destroyObject(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list,
  * \param type is the type of the object
  */
 template <typename OBJECT>
-static inline void removeObjectFromList(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list, OBJECT* object, int player)
+static inline void removeObjectFromList(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list, OBJECT* object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 
@@ -314,7 +314,7 @@ static inline void removeObjectFromFuncList(FunctionList& list, OBJECT *object, 
 }
 
 template <typename OBJECT>
-static inline void releaseAllObjectsInList(PerPlayerObjectList<OBJECT, MAX_PLAYERS>& list)
+static inline void releaseAllObjectsInList(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list)
 {
 	// Iterate through all players' object lists
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
@@ -340,7 +340,7 @@ static inline void releaseAllObjectsInList(PerPlayerObjectList<OBJECT, MAX_PLAYE
 /***************************  DROID  *********************************/
 
 /* add the droid to the Droid Lists */
-void addDroid(DROID *psDroidToAdd, PerPlayerDroidList& pList)
+void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList)
 {
 	DROID_GROUP	*psGroup;
 
@@ -404,7 +404,7 @@ void freeAllDroids()
 }
 
 /*Remove a single Droid from a list*/
-void removeDroid(DROID* psDroidToRemove, PerPlayerDroidList& pList)
+void removeDroid(DROID* psDroidToRemove, PerPlayerDroidLists& pList)
 {
 	ASSERT_OR_RETURN(, psDroidToRemove->type == OBJ_DROID, "Pointer is not a unit");
 	ASSERT_OR_RETURN(, psDroidToRemove->player < MAX_PLAYERS, "Invalid player for unit");
@@ -526,7 +526,7 @@ void freeAllStructs()
 }
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureList& pList)
+void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList)
 {
 	ASSERT(psStructToRemove->type == OBJ_STRUCTURE,
 	       "removeStructureFromList: pointer is not a structure");

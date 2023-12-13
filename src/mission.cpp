@@ -131,7 +131,7 @@ bool		offWorldKeepLists;
 /*lists of droids that are held separate over several missions. There should
 only be selectedPlayer's droids but have possibility for MAX_PLAYERS -
 also saves writing out list functions to cater for just one player*/
-PerPlayerDroidList apsLimboDroids;
+PerPlayerDroidLists apsLimboDroids;
 
 //Where the Transporter lands for player 0 (sLandingZone[0]), and the rest are
 //a list of areas that cannot be built on, used for landing the enemy transporters
@@ -1713,7 +1713,7 @@ goingHome = true when returning from an off World mission*/
 void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 {
 	DROID		*psDroid, *psNext;
-	PerPlayerDroidList* ppCurrentList;
+	PerPlayerDroidLists* ppCurrentList;
 	UDWORD		droidX, droidY;
 	DROID_GROUP	*psGroup;
 

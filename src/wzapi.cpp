@@ -1000,7 +1000,7 @@ bool wzapi::structureIdle(WZAPI_PARAMS(const STRUCTURE *psStruct))
 	return ::structureIdle(psStruct);
 }
 
-std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _player, optional<wzapi::STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter), const PerPlayerStructureList& psStructLists)
+std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _player, optional<wzapi::STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter), const PerPlayerStructureLists& psStructLists)
 {
 	std::vector<const STRUCTURE *> matches;
 	WzString statsName;

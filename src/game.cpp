@@ -2222,14 +2222,14 @@ static bool writeMapFile(const char *fileName);
 
 static bool loadWzMapDroidInit(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 
-static bool loadSaveDroid(const char *pFileName, PerPlayerDroidList& ppsCurrentDroidLists);
-static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidList* ppsCurrentDroidLists);
-static bool writeDroidFile(const char *pFileName, const PerPlayerDroidList& ppsCurrentDroidLists);
+static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists);
+static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists* ppsCurrentDroidLists);
+static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
 static bool loadSaveStructure2(const char *pFileName);
 static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding);
-static bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureList *ppList);
+static bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureLists *ppList);
 static bool writeStructFile(const char *pFileName);
 
 static bool loadSaveTemplate(const char *pFileName);
@@ -2483,8 +2483,8 @@ static WzMap::MapType getWzMapType(bool UserSaveGame)
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
 {
 	std::shared_ptr<WzMap::Map> data;
-	std::map<WzString, PerPlayerDroidList *> droidMap;
-	std::map<WzString, PerPlayerStructureList *> structMap;
+	std::map<WzString, PerPlayerDroidLists *> droidMap;
+	std::map<WzString, PerPlayerStructureLists *> structMap;
 
 	// only populated when loading maps, *not* savegames
 	std::unordered_map<UDWORD, UDWORD> fixedMapIdToGeneratedId;
@@ -3256,13 +3256,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		for (auto it = droidMap.begin(); it != droidMap.end(); ++it)
 		{
 			const WzString& key = it->first;
-			PerPlayerDroidList* pList = it->second;
+			PerPlayerDroidLists* pList = it->second;
 			loadSaveDroidPointers(key, pList);
 		}
 		for (auto it = structMap.begin(); it != structMap.end(); ++it)
 		{
 			const WzString& key = it->first;
-			PerPlayerStructureList* pList = it->second;
+			PerPlayerStructureLists* pList = it->second;
 			loadSaveStructurePointers(key, pList);
 		}
 	}
@@ -5312,7 +5312,7 @@ static inline void setPlayerJSON(nlohmann::json &jsonObj, int player)
 	}
 }
 
-static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidList* ppsCurrentDroidLists)
+static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists* ppsCurrentDroidLists)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
@@ -5545,7 +5545,7 @@ inline T getCompFromName_NullCompOnFail(COMPONENT_TYPE compType, const WzString 
 	return (index >= 0) ? static_cast<T>(index) : 0; // 0 to reference the null weapon / body / etc
 }
 
-static bool loadSaveDroid(const char *pFileName, PerPlayerDroidList& ppsCurrentDroidLists)
+static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
@@ -5905,7 +5905,7 @@ static nlohmann::json writeDroid(DROID *psCurr, bool onMission, int &counter)
 	return droidObj;
 }
 
-static bool writeDroidFile(const char *pFileName, const PerPlayerDroidList& ppsCurrentDroidLists)
+static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& ppsCurrentDroidLists)
 {
 	nlohmann::json mRoot = nlohmann::json::object();
 	int counter = 0;
@@ -6685,7 +6685,7 @@ bool writeStructFile(const char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureList *ppList)
+bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureLists *ppList)
 {
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	std::vector<WzString> list = ini.childGroups();
