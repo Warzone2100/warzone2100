@@ -38,7 +38,7 @@ void delPowerRequest(STRUCTURE *psStruct);
 
 /// Checks how much power must be accumulated, before the power request from this structure can be satisfied.
 /// Returns -1 if there is no power request or if there is enough power already.
-int32_t checkPowerRequest(STRUCTURE *psStruct);
+int32_t checkPowerRequest(const STRUCTURE *psStruct);
 
 bool requestPowerFor(STRUCTURE *psStruct, int32_t amount);
 bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount);

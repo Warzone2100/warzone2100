@@ -514,7 +514,7 @@ static void DrawRadarObjects()
 		flashCol = flashColours[getPlayerColour(clan)];
 
 		/* Go through all droids */
-		for (DROID* psDroid : apsDroidLists[clan])
+		for (const DROID* psDroid : apsDroidLists[clan])
 		{
 			if (psDroid->pos.x < world_coord(scrollMinX) || psDroid->pos.y < world_coord(scrollMinY)
 			    || psDroid->pos.x >= world_coord(scrollMaxX) || psDroid->pos.y >= world_coord(scrollMaxY))

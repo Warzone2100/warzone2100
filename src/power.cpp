@@ -144,7 +144,7 @@ void delPowerRequest(STRUCTURE *psStruct)
 	}
 }
 
-static int64_t checkPrecisePowerRequest(STRUCTURE *psStruct)
+static int64_t checkPrecisePowerRequest(const STRUCTURE *psStruct)
 {
 	ASSERT_NOT_NULLPTR_OR_RETURN(-1, psStruct);
 	PlayerPower const *p = &asPower[psStruct->player];
@@ -166,7 +166,7 @@ static int64_t checkPrecisePowerRequest(STRUCTURE *psStruct)
 	return -1;
 }
 
-int32_t checkPowerRequest(STRUCTURE *psStruct)
+int32_t checkPowerRequest(const STRUCTURE *psStruct)
 {
 	int64_t power = checkPrecisePowerRequest(psStruct);
 	return power != -1 ? power / FP_ONE : -1;

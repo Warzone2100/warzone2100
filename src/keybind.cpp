@@ -252,7 +252,7 @@ void	kf_TraceObject()
 		return; // no-op
 	}
 
-	for (DROID* psCDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psCDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psCDroid->selected)
 		{
@@ -261,7 +261,7 @@ void	kf_TraceObject()
 			return;
 		}
 	}
-	for (STRUCTURE* psCStruct : apsStructLists[selectedPlayer])
+	for (const STRUCTURE* psCStruct : apsStructLists[selectedPlayer])
 	{
 		if (psCStruct->selected)
 		{
@@ -359,7 +359,7 @@ void	kf_DebugDroidInfo()
 		return; // no-op
 	}
 
-	for (DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -740,7 +740,7 @@ void kf_ListDroids()
 	}
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID *psDroid : apsDroidLists[i])
+		for (const DROID *psDroid : apsDroidLists[i])
 		{
 			const auto x = map_coord(psDroid->pos.x);
 			const auto y = map_coord(psDroid->pos.y);
@@ -1921,7 +1921,7 @@ void	kf_KillEnemy()
 		if (playerId != selectedPlayer && !aiCheckAlliances(selectedPlayer, playerId))
 		{
 			// wipe out all the droids
-			for (DROID* psCDroid : apsDroidLists[playerId])
+			for (const DROID* psCDroid : apsDroidLists[playerId])
 			{
 				SendDestroyDroid(psCDroid);
 			}
@@ -1957,7 +1957,7 @@ void kf_KillSelected()
 	audio_PlayTrack(ID_SOUND_COLL_DIE);
 	Cheated = true;
 
-	for (DROID* psCDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psCDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psCDroid->selected)
 		{
@@ -2144,18 +2144,16 @@ void	kf_CentreOnBase()
 	SPECTATOR_NO_OP();
 
 	/* Got through our buildings */
-	auto structIt = apsStructLists[selectedPlayer].begin();
-	while (structIt != apsStructLists[selectedPlayer].end())
+	for (const STRUCTURE* pStruct : apsStructLists[selectedPlayer])
 	{
 		/* Have we got a HQ? */
-		if ((*structIt)->pStructureType->type == REF_HQ)
+		if (pStruct->pStructureType->type == REF_HQ)
 		{
 			bGotHQ = true;
-			xJump = (*structIt)->pos.x;
-			yJump = (*structIt)->pos.y;
+			xJump = pStruct->pos.x;
+			yJump = pStruct->pos.y;
 			break;
 		}
-		++structIt;
 	}
 
 	/* If we found it, then jump to it! */

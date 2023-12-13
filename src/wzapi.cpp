@@ -1120,7 +1120,7 @@ std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int playerFilter, o
 	}
 
 	std::vector<const FEATURE *> matches;
-	for (FEATURE *psFeat : apsFeatureLists[0])
+	for (const FEATURE *psFeat : apsFeatureLists[0])
 	{
 		if ((playerFilter == ALL_PLAYERS || psFeat->visible[playerFilter])
 		    && !psFeat->died
@@ -1142,7 +1142,7 @@ std::vector<scr_position> wzapi::enumBlips(WZAPI_PARAMS(int player))
 {
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	std::vector<scr_position> matches;
-	for (BASE_OBJECT *psSensor : apsSensorList[0])
+	for (const BASE_OBJECT *psSensor : apsSensorList[0])
 	{
 		if (psSensor->visible[player] > 0 && psSensor->visible[player] < UBYTE_MAX)
 		{
@@ -1965,7 +1965,7 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 {
 	int feature = getFeatureStatFromName(WzString::fromUtf8(featureName));
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
-	for (FEATURE *psFeat : apsFeatureLists[0])
+	for (const FEATURE *psFeat : apsFeatureLists[0])
 	{
 		SCRIPT_ASSERT(nullptr, context, map_coord(psFeat->pos.x) != x || map_coord(psFeat->pos.y) != y,
 		              "Building feature on tile already occupied");

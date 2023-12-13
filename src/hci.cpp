@@ -2758,7 +2758,7 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 	}
 
 	num = 0;
-	for (DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->droidType == droidType)
 		{

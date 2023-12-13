@@ -161,7 +161,7 @@ unsigned int selNumSelected(unsigned int player)
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (DROID *psDroid : apsDroidLists[player])
+	for (const DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->selected)
 		{
@@ -173,7 +173,7 @@ unsigned int selNumSelected(unsigned int player)
 }
 
 
-std::vector<uint32_t> buildComponentsFromDroid(DROID* psDroid)
+std::vector<uint32_t> buildComponentsFromDroid(const DROID* psDroid)
 {
 	std::vector<uint32_t> components;
 	uint32_t stat = 0;
@@ -532,7 +532,7 @@ static bool droidIsCommanderNum(DROID *psDroid, SDWORD n)
 	}
 
 	int numLess = 0;
-	for (DROID *psCurr : apsDroidLists[psDroid->player])
+	for (const DROID *psCurr : apsDroidLists[psDroid->player])
 	{
 		if ((psCurr->droidType == DROID_COMMAND) && (psCurr->id < psDroid->id))
 		{

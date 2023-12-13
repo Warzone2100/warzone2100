@@ -163,7 +163,7 @@ bool droidRemove(DROID *psDroid, PerPlayerDroidLists& pList);
 bool droidTemplateShutDown();
 
 /* Return the type of a droid */
-DROID_TYPE droidType(DROID *psDroid);
+DROID_TYPE droidType(const DROID *psDroid);
 
 /* Return the type of a droid from it's template */
 DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);

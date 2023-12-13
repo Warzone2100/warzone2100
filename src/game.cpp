@@ -5355,14 +5355,11 @@ static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists
 foundDroid:
 		if (!psDroid)
 		{
-			auto missionDroidIt = std::find_if(mission.apsDroidLists[player].begin(), mission.apsDroidLists[player].end(), [id](DROID* d)
-			{
-				return d->id == id;
-			});
+			DROID* d = (DROID*)getBaseObjFromId(mission.apsDroidLists[player], id);
 			// FIXME
-			if (missionDroidIt != mission.apsDroidLists[player].end())
+			if (d)
 			{
-				debug(LOG_ERROR, "Droid %s (%d) was in wrong file/list (was in %s)...", objInfo(*missionDroidIt), id, pFileName.toUtf8().c_str());
+				debug(LOG_ERROR, "Droid %s (%d) was in wrong file/list (was in %s)...", objInfo(d), id, pFileName.toUtf8().c_str());
 			}
 		}
 		ASSERT_OR_RETURN(false, psDroid, "Droid %d not found", id);
@@ -5438,7 +5435,7 @@ static void loadSaveObject(WzConfig &ini, BASE_OBJECT *psObj)
 	psObj->born = ini.value("born", 2).toInt();
 }
 
-static void writeSaveObject(WzConfig &ini, BASE_OBJECT *psObj)
+static void writeSaveObject(WzConfig &ini, const BASE_OBJECT *psObj)
 {
 	ini.setValue("id", psObj->id);
 	setPlayer(ini, psObj->player);
@@ -6528,7 +6525,7 @@ bool writeStructFile(const char *pFileName)
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (STRUCTURE *psCurr : apsStructLists[player])
+		for (const STRUCTURE *psCurr : apsStructLists[player])
 		{
 			if (!psCurr->pStructureType)
 			{
@@ -6696,14 +6693,7 @@ bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureLists
 		STRUCTURE *psStruct = nullptr;
 		int player = getPlayer(ini);
 		int id = ini.value("id", -1).toInt();
-		auto structIt = std::find_if((*ppList)[player].begin(), (*ppList)[player].end(), [id](STRUCTURE* str)
-		{
-			return str->id == id;
-		});
-		if (structIt != (*ppList)[player].end())
-		{
-			psStruct = *structIt;
-		}
+		psStruct = (STRUCTURE*)getBaseObjFromId((*ppList)[player], id);
 		if (!psStruct)
 		{
 			ini.endGroup();
@@ -7036,7 +7026,7 @@ bool writeFeatureFile(const char *pFileName)
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
 	int counter = 0;
 
-	for (FEATURE *psCurr : apsFeatureLists[0])
+	for (const FEATURE *psCurr : apsFeatureLists[0])
 	{
 		ini.beginGroup("feature_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
 		ini.setValue("name", psCurr->psStats->id);

@@ -417,7 +417,7 @@ static bool localPlayerHasSelection()
 		return false;
 	}
 
-	for (DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -425,7 +425,7 @@ static bool localPlayerHasSelection()
 		}
 	}
 
-	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
+	for (const STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -806,7 +806,7 @@ void processMouseClickInput()
 			else if (selection == SC_DROID_REPAIR)
 			{
 				// We can't repair ourselves, so change it to a blocking cursor
-				for (DROID *psCurr : apsDroidLists[selectedPlayer])
+				for (const DROID *psCurr : apsDroidLists[selectedPlayer])
 				{
 					if (psCurr->selected)
 					{
@@ -2676,7 +2676,7 @@ bool	repairDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (DROID* psCurr : apsDroidLists[player])
+	for (const DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected && (
 		        psCurr->droidType == DROID_REPAIR ||
@@ -2714,7 +2714,7 @@ bool	anyDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (DROID* psCurr : apsDroidLists[player])
+	for (const DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2731,7 +2731,7 @@ bool cyborgDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (DROID* psCurr : apsDroidLists[player])
+	for (const DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->selected && cyborgDroid(psCurr))
 		{

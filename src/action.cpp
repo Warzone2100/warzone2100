@@ -2822,7 +2822,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	}
 
 	// clear blocking flags for all the other droids
-	for (DROID *psCurr : apsDroidLists[psDroid->player])
+	for (const DROID *psCurr : apsDroidLists[psDroid->player])
 	{
 		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))

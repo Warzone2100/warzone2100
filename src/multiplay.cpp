@@ -392,23 +392,19 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			for (DROID *d : apsDroidLists[i])
+			DROID* d = (DROID*)getBaseObjFromId(apsDroidLists[i], id);
+			if (d)
 			{
-				if (d->id == id)
-				{
-					return d;
-				}
+				return d;
 			}
 		}
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		for (DROID *d : apsDroidLists[player])
+		DROID* d = (DROID*)getBaseObjFromId(apsDroidLists[player], id);
+		if (d)
 		{
-			if (d->id == id)
-			{
-				return d;
-			}
+			return d;
 		}
 	}
 	return nullptr;
@@ -421,23 +417,19 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			for (DROID *d : mission.apsDroidLists[i])
+			DROID* d = (DROID*)getBaseObjFromId(mission.apsDroidLists[i], id);
+			if (d)
 			{
-				if (d->id == id)
-				{
-					return d;
-				}
+				return d;
 			}
 		}
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		for (DROID *d : mission.apsDroidLists[player])
+		DROID* d = (DROID*)getBaseObjFromId(mission.apsDroidLists[player], id);
+		if (d)
 		{
-			if (d->id == id)
-			{
-				return d;
-			}
+			return d;
 		}
 	}
 	return nullptr;
@@ -447,21 +439,15 @@ static STRUCTURE* _IdToStruct(UDWORD id, UDWORD beginPlayer, UDWORD endPlayer)
 {
 	for (int i = beginPlayer; i < endPlayer; ++i)
 	{
-		auto it = std::find_if(apsStructLists[i].begin(), apsStructLists[i].end(), [id](STRUCTURE* s)
+		STRUCTURE* s = (STRUCTURE*)getBaseObjFromId(apsStructLists[i], id);
+		if (s)
 		{
-			return s->id == id;
-		});
-		if (it != apsStructLists[i].end())
-		{
-			return *it;
+			return s;
 		}
-		it = std::find_if(mission.apsStructLists[i].begin(), mission.apsStructLists[i].end(), [id](STRUCTURE* s)
+		s = (STRUCTURE*)getBaseObjFromId(mission.apsStructLists[i], id);
+		if (s)
 		{
-			return s->id == id;
-		});
-		if (it != mission.apsStructLists[i].end())
-		{
-			return *it;
+			return s;
 		}
 	}
 	return nullptr;
@@ -490,11 +476,7 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 FEATURE *IdToFeature(UDWORD id, UDWORD player)
 {
 	(void)player;	// unused, all features go into player 0
-	auto feat = std::find_if(apsFeatureLists[0].begin(), apsFeatureLists[0].end(), [id](FEATURE* f)
-	{
-		return f->id == id;
-	});
-	return feat != apsFeatureLists[0].end() ? *feat : nullptr;
+	return (FEATURE*)getBaseObjFromId(apsFeatureLists[0], id);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

@@ -137,7 +137,7 @@ Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad)
 }
 
 //-----------------------------------------------------------------------------------
-bool objectOnScreen(BASE_OBJECT *object, SDWORD tolerance)
+bool objectOnScreen(const BASE_OBJECT *object, SDWORD tolerance)
 {
 	if (DrawnInLastFrame(object->sDisplay.frameNumber) == true)
 	{

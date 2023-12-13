@@ -308,7 +308,7 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 			{
 				continue;
 			}
-			for (DROID* psDroid : *dList)
+			for (const DROID* psDroid : *dList)
 			{
 				if (isTransporter(psDroid))
 				{
@@ -621,7 +621,7 @@ void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = tr
 			uint32_t numFactories = 0;
 			uint32_t numResearch = 0;
 			uint32_t numFactoriesThatCanProduceConstructionUnits = 0;
-			for (STRUCTURE *psStruct : apsStructLists[n])
+			for (const STRUCTURE *psStruct : apsStructLists[n])
 			{
 				if (psStruct->status != SS_BUILT || psStruct->died != 0)
 				{

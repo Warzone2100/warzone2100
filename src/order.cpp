@@ -1645,7 +1645,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_RTB:
-		for (STRUCTURE* psStruct : apsStructLists[psDroid->player])
+		for (const STRUCTURE* psStruct : apsStructLists[psDroid->player])
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
@@ -2832,7 +2832,7 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 	ASSERT_PLAYER_OR_RETURN(, player);
 
 	/* loop over selected droids */
-	for (DROID *psDroid : apsDroidLists[player])
+	for (const DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->selected)
 		{
@@ -3941,7 +3941,7 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 	// count the number of units for each state
 	numStates = 0;
 	memset(aStateCount, 0, sizeof(aStateCount));
-	for (DROID* psCurr : apsDroidLists[player])
+	for (const DROID* psCurr : apsDroidLists[player])
 	{
 		if (psCurr->group == group)
 		{

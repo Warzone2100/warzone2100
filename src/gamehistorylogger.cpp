@@ -88,7 +88,7 @@ static uint32_t getNumOilRigs(uint32_t player)
 	}
 
 	uint32_t result = 0;
-	for (STRUCTURE *psStruct : apsStructLists[player])
+	for (const STRUCTURE *psStruct : apsStructLists[player])
 	{
 		if (!psStruct->died
 			&& (REF_RESOURCE_EXTRACTOR == psStruct->pStructureType->type))
