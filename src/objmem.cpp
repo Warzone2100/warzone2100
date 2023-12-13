@@ -768,20 +768,17 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 		}
 	case OBJ_FEATURE:
 		{
-			if (player == 0)
+			auto pFeat = getBaseObjFromId(apsFeatureLists[0], id);
+			if (pFeat)
 			{
-				auto pFeat = getBaseObjFromId(apsFeatureLists[0], id);
-				if (pFeat)
-				{
-					return pFeat;
-				}
-				pFeat = getBaseObjFromId(mission.apsFeatureLists[0], id);
-				if (pFeat)
-				{
-					return pFeat;
-				}
-				break;
+				return pFeat;
 			}
+			pFeat = getBaseObjFromId(mission.apsFeatureLists[0], id);
+			if (pFeat)
+			{
+				return pFeat;
+			}
+			break;
 		}
 	default:
 		break;
@@ -792,7 +789,8 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 // Find a base object from it's id
 BASE_OBJECT *getBaseObjFromId(UDWORD id)
 {
-	for (size_t type = OBJ_DROID; type != OBJ_NUM_TYPES; ++type)
+	// Only cover OBJ_DROID, OBJ_STRUCTURE and OBJ_FEATURE types
+	for (size_t type = OBJ_DROID; type != OBJ_PROJECTILE; ++type)
 	{
 		for (size_t player = 0; player != MAX_PLAYERS; ++player)
 		{
