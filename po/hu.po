@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-12-08 13:47\n"
+"PO-Revision-Date: 2023-12-14 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -20052,7 +20052,7 @@ msgstr "Használd a gyors csevegést a többi játékossal való csevegéshez."
 
 #: src/screens/chatscreen.cpp:161
 msgid "The host has disabled free chat."
-msgstr "A házigazda letiltotta az szabad csevegést."
+msgstr "A házigazda letiltotta a szabad csevegést."
 
 #: src/screens/chatscreen.cpp:236
 msgid "Chat: All"
@@ -20064,11 +20064,11 @@ msgstr "Chat: Csapat"
 
 #: src/screens/chatscreen.cpp:342
 msgid "Did not send message - free chat is disabled by host. Please use Quick Chat."
-msgstr "Nem küldött üzenetet - az ingyenes csevegés le van tiltva a házigazda által. Kérjük, használja a gyors csevegést."
+msgstr "Az üzenet nem lett elküldve – a házigazda letiltotta a szabad csevegést. Használd a gyors csevegést."
 
 #: src/screens/helpscreen.cpp:123
 msgid "Close Help Mode"
-msgstr "A Súgó mód bezárása"
+msgstr "Súgó mód bezárása"
 
 #: src/screens/helpscreen.cpp:218
 msgid "Click/Tap"
@@ -20096,11 +20096,11 @@ msgstr "Kapcsolódó billentyűzetkiosztások:"
 
 #: src/screens/netpregamescreen.cpp:241
 msgid "Loading Status:"
-msgstr "Állapot betöltése:"
+msgstr "Betöltési állapot:"
 
 #: src/screens/netpregamescreen.cpp:622
 msgid "TEAM STRATEGY"
-msgstr "CSAPAT STRATÉGIA"
+msgstr "CSAPATSTRATÉGIA"
 
 #: src/screens/netpregamescreen.cpp:753
 msgid "Game will start in ..."
@@ -20112,7 +20112,7 @@ msgstr "Várakozás további játékosra ..."
 
 #: src/screens/netpregamescreen.cpp:770
 msgid "Team Planning"
-msgstr "Csapat Tervezés"
+msgstr "Csapattervezés"
 
 #: src/selection.cpp:374
 #: src/selection.cpp:456
