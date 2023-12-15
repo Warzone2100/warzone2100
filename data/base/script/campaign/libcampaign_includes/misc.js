@@ -247,6 +247,38 @@ function camCountStructuresInArea(label, playerFilter)
 	return ret;
 }
 
+//;; ## camCleanTileOfObstructions(x, y | pos)
+//;;
+//;; Obliterates player structures and features near the tile around certain coordinates.
+//;; Can be used for spawn locations or transport reinforcement spots. May not
+//;; delete very large objects like factories or skyscrapers.
+//;;
+//;; @param {number|Object} x
+//;; @param {number} [y]
+//;; @returns {void}
+//;;
+function camCleanTileOfObstructions(x, y)
+{
+	if (!camDef(x))
+	{
+		camDebug("invalid parameters?");
+		return;
+	}
+
+	const __TILE_SWEEP_RADIUS = 1;
+	const pos = (camDef(y)) ? {x: x, y: y} : x;
+	const objects = enumRange(pos.x, pos.y, __TILE_SWEEP_RADIUS, CAM_HUMAN_PLAYER, false);
+
+	for (let i = 0, len = objects.length; i < len; ++i)
+	{
+		const obj = objects[i];
+		if (obj.type !== DROID)
+		{
+			camSafeRemoveObject(obj, true);
+		}
+	}
+}
+
 //;; ## camChangeOnDiff(numericValue)
 //;;
 //;; Change a numeric value based on campaign difficulty.

@@ -39,6 +39,10 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 			order_data = data.data;
 		}
 	}
+	if (playerId !== CAM_HUMAN_PLAYER)
+	{
+		camCleanTileOfObstructions(pos);
+	}
 	switch (kind)
 	{
 		case CAM_REINFORCE_GROUND:
