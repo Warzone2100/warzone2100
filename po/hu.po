@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-12-14 15:33\n"
+"PO-Revision-Date: 2023-12-19 09:26\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -20112,7 +20112,7 @@ msgstr "Várakozás további játékosra ..."
 
 #: src/screens/netpregamescreen.cpp:770
 msgid "Team Planning"
-msgstr "Csapattervezés"
+msgstr "Csapat tervezése"
 
 #: src/selection.cpp:374
 #: src/selection.cpp:456
@@ -20165,7 +20165,7 @@ msgstr "Teljesítménynyerés"
 
 #: src/spectatorwidgets.cpp:789
 msgid "Lab Use"
-msgstr "Laboratóriumi használat"
+msgstr "Laboratóriumhasználat"
 
 #: src/spectatorwidgets.cpp:793
 msgid "Kinetic Armor"
@@ -20182,7 +20182,7 @@ msgstr "Ágyúk"
 
 #: src/stats.cpp:1512
 msgid "Mortars"
-msgstr "Mozsárágyú"
+msgstr "Mozsárágyúk"
 
 #: src/stats.cpp:1514
 msgid "Missiles"
