@@ -1097,7 +1097,6 @@ void orderUpdateDroid(DROID *psDroid)
 				}
 			}
 			else if (isVtolDroid(psDroid) &&
-			        !vtolFull(psDroid) &&
 			         (psDroid->action != DACTION_NONE) &&
 			         (psDroid->action != DACTION_FIRESUPPORT))
 			{
