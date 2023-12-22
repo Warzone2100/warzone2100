@@ -122,9 +122,6 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	const enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_THE_COLLECTIVE);
-
 	//Add crash site blip and from an alliance with the crashed team.
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	setAlliance(CAM_HUMAN_PLAYER, MIS_TRANSPORT_TEAM_PLAYER, true);

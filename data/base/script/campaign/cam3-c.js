@@ -185,9 +185,6 @@ function eventStartLevel()
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10)));
 
-	const enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_NEXUS);
-
 	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 	camCompleteRequiredResearch(mis_gammaAllyRes, MIS_GAMMA_PLAYER);
 	hackAddMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, false);

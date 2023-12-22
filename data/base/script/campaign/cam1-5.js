@@ -181,11 +181,9 @@ function eventStartLevel()
 
 	useHeavyReinforcement = false; //Start with a light unit reinforcement first
 	const lz = getObject("LandingZone1"); //player lz
-	const lz2 = getObject("LandingZone2"); //new paradigm lz
 	const tEnt = getObject("TransporterEntry");
 	const tExt = getObject("TransporterExit");
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, 5);
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 

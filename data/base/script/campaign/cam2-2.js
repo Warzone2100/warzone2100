@@ -194,9 +194,6 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	const enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_THE_COLLECTIVE);
-
 	camSetArtifacts({
 		"COCommander": { tech: "R-Wpn-RocketSlow-Accuracy03" },
 	});

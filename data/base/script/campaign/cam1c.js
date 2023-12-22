@@ -183,15 +183,6 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	// make sure player doesn't build on enemy LZs of the next level
-	for (let i = 1; i <= 5; ++i)
-	{
-		const ph = getObject("PhantomLZ" + i);
-		// HACK: set LZs of bad players, namely 2...6,
-		// note: player 1 is NP, player 7 is scavs
-		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
-	}
-
 	if (difficulty === HARD)
 	{
 		setMissionTime(camMinutesToSeconds(100));

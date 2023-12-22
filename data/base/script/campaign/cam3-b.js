@@ -303,11 +303,6 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	const enemyLz = getObject("NXlandingZone");
-	const enemyLz2 = getObject("NXlandingZone2");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_NEXUS);
-	setNoGoArea(enemyLz2.x, enemyLz2.y, enemyLz2.x2, enemyLz2.y2, 5);
-
 	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 	camCompleteRequiredResearch(mis_gammaAllyRes, MIS_GAMMA_PLAYER);
 	camCompleteRequiredResearch(mis_nexusRes, MIS_GAMMA_PLAYER); //They get even more research.
