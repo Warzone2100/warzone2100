@@ -269,9 +269,6 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
-	const enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, CAM_NEXUS);
-
 	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 
 	enableResearch(cam_resistance_circuits.first, CAM_HUMAN_PLAYER);

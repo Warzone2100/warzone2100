@@ -255,7 +255,6 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Build a forward base at the silos"));
 
-	const siloZone = getObject("missileSilos");
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
 	const lz2 = getObject("landingZone2"); //LZ for cam3-4s.
@@ -267,9 +266,7 @@ function eventStartLevel()
 
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, 5);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, CAM_NEXUS);
-	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, MIS_SILO_PLAYER);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);

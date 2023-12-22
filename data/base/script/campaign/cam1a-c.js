@@ -147,13 +147,6 @@ function eventStartLevel()
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 
-	// make sure player doesn't build on enemy LZs
-	for (let i = 6; i <= 10; ++i)
-	{
-		const ph = getObject("NPLZ" + i);
-		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i - 4);
-	}
-
 	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
 	camPlayVideos([{video: "MB1A-C_MSG", type: CAMP_MSG}, {video: "MB1A-C_MSG2", type: MISS_MSG}]);
 

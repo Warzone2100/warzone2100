@@ -280,9 +280,6 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	const enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, 5);
-
 	camSetArtifacts({
 		"rippleRocket": { tech: "R-Wpn-Rocket06-IDF" },
 		"quadbof": { tech: "R-Wpn-AAGun02" },

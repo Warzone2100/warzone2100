@@ -346,7 +346,6 @@ function eventStartLevel()
 	const PLAYER_POWER = 5000;
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone"); //player lz
-	const enemyLz = getObject("COLandingZone");
 	const tEnt = getObject("transporterEntry");
 	const tExt = getObject("transporterExit");
 
@@ -355,7 +354,6 @@ function eventStartLevel()
 
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, 5);
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
