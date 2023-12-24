@@ -1596,12 +1596,9 @@ void replaceDroidComponent(DroidList& pList, UDWORD oldType, UDWORD oldCompInc,
 void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                  UDWORD oldCompInc, UDWORD newCompInc)
 {
-	DROID       *psCurr;
-
 	ASSERT(isTransporter(psTransporter), "invalid unit type");
 
-	for (psCurr = psTransporter->psGroup->psList; psCurr != nullptr; psCurr =
-	         psCurr->psGrpNext)
+	for (DROID* psCurr : psTransporter->psGroup->psList)
 	{
 		if (psCurr != psTransporter)
 		{

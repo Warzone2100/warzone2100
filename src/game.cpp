@@ -5341,7 +5341,7 @@ static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists
 			}
 			if (isTransporter(psDroid) && psDroid->psGroup != nullptr)  // Check for droids in the transporter.
 			{
-				for (DROID *psTrDroid = psDroid->psGroup->psList; psTrDroid != nullptr; psTrDroid = psTrDroid->psGrpNext)
+				for (DROID *psTrDroid : psDroid->psGroup->psList)
 				{
 					if (psTrDroid->id == id)
 					{
@@ -5485,7 +5485,7 @@ static void writeSaveObject(WzConfig &ini, const BASE_OBJECT *psObj)
 	}
 }
 
-static void writeSaveObjectJSON(nlohmann::json &jsonObj, BASE_OBJECT *psObj)
+static void writeSaveObjectJSON(nlohmann::json &jsonObj, const BASE_OBJECT *psObj)
 {
 	jsonObj["id"] = psObj->id;
 	setPlayerJSON(jsonObj, psObj->player);
@@ -5787,7 +5787,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 /*
 Writes the linked list of droids for each player to a file
 */
-static nlohmann::json writeDroid(DROID *psCurr, bool onMission, int &counter)
+static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &counter)
 {
 	nlohmann::json droidObj = nlohmann::json::object();
 	droidObj["name"] = psCurr->aName;
@@ -5918,7 +5918,7 @@ static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& pps
 			{
 				if (psCurr->psGroup)
 				{
-					for (DROID *psTrans = psCurr->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
+					for (const DROID *psTrans : psCurr->psGroup->psList)
 					{
 						if (psTrans != psCurr)
 						{

@@ -2281,8 +2281,7 @@ std::vector<const DROID *> wzapi::enumCargo(WZAPI_PARAMS(const DROID *psDroid))
 	std::vector<const DROID *> result;
 	SCRIPT_ASSERT({}, context, psDroid->psGroup, "Droid is not assigned to a group");
 	result.reserve(psDroid->psGroup->getNumMembers());
-	int i = 0;
-	for (DROID *psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext, i++)
+	for (const DROID *psCurr : psDroid->psGroup->psList)
 	{
 		if (psDroid != psCurr)
 		{
