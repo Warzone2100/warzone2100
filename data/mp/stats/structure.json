@@ -1524,7 +1524,7 @@
 		"armour": 10,
 		"breadth": 1,
 		"buildPoints": 250,
-		"buildPower": 170,
+		"buildPower": 450,
 		"height": 1,
 		"hitpoints": 700,
 		"id": "Emplacement-PlasmaCannon",
