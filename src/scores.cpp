@@ -312,7 +312,7 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 			{
 				if (isTransporter(psDroid))
 				{
-					for (DROID *psCurr = psDroid->psGroup->psList; psCurr != nullptr; psCurr = psCurr->psGrpNext)
+					for (DROID *psCurr : psDroid->psGroup->psList)
 					{
 						if (psCurr != psDroid)
 						{

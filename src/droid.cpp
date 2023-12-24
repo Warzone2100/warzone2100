@@ -143,7 +143,7 @@ static void droidBodyUpgrade(DROID *psDroid)
 	psDroid->baseSpeed = calcDroidBaseSpeed(&sTemplate, psDroid->weight, psDroid->player);
 	if (isTransporter(psDroid))
 	{
-		for (DROID *psCurr = psDroid->psGroup->psList; psCurr != nullptr; psCurr = psCurr->psGrpNext)
+		for (DROID *psCurr : psDroid->psGroup->psList)
 		{
 			if (psCurr != psDroid)
 			{
@@ -387,7 +387,6 @@ DROID::DROID(uint32_t id, unsigned player)
 	: BASE_OBJECT(OBJ_DROID, id, player)
 	, droidType(DROID_ANY)
 	, psGroup(nullptr)
-	, psGrpNext(nullptr)
 	, secondaryOrder(DSS_ARANGE_LONG | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
 	, secondaryOrderPending(DSS_ARANGE_LONG | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
 	, secondaryOrderPendingCount(0)
@@ -438,16 +437,18 @@ DROID::~DROID()
 	audio_RemoveObj(this);
 
 	DROID *psDroid = this;
-	DROID	*psCurr, *pNextGroupDroid = nullptr;
 
 	if (isTransporter(psDroid))
 	{
 		if (psDroid->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (psCurr = psDroid->psGroup->psList; psCurr != nullptr && psCurr != psDroid; psCurr = pNextGroupDroid)
+			for (DROID* psCurr : psDroid->psGroup->psList)
 			{
-				pNextGroupDroid = psCurr->psGrpNext;
+				if (psCurr == psDroid)
+				{
+					break;
+				}
 				delete psCurr;
 			}
 		}
@@ -530,15 +531,18 @@ bool removeDroidBase(DROID *psDel)
 		if (psDel->psGroup)
 		{
 			//free all droids associated with this Transporter
-			DROID *psNext;
-			for (auto psCurr = psDel->psGroup->psList; psCurr != nullptr && psCurr != psDel; psCurr = psNext)
+			mutating_list_iterate(psDel->psGroup->psList, [psDel](DROID* psCurr)
 			{
-				psNext = psCurr->psGrpNext;
-
+				if (psCurr == psDel)
+				{
+					return IterationResult::BREAK_ITERATION;
+				}
 				/* add droid to droid list then vanish it - hope this works! - GJ */
 				addDroid(psCurr, apsDroidLists);
 				vanishDroid(psCurr);
-			}
+
+				return IterationResult::CONTINUE_ITERATION;
+			});
 		}
 	}
 
@@ -2292,7 +2296,7 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 			}
 			if (isTransporter(psDroid))
 			{
-				for (DROID *psCurr = psDroid->psGroup->psList; psCurr != nullptr; psCurr = psCurr->psGrpNext)
+				for (const DROID *psCurr : psDroid->psGroup->psList)
 				{
 					if (psCurr != psDroid && getDroidLevel(psCurr) == level)
 					{
@@ -2708,7 +2712,7 @@ bool electronicDroid(const DROID *psDroid)
 	if (psDroid->droidType == DROID_COMMAND && psDroid->psGroup && psDroid->psGroup->psCommander == psDroid)
 	{
 		// if a commander has EW units attached it is electronic
-		for (const DROID *psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (const DROID *psCurr : psDroid->psGroup->psList)
 		{
 			if (psDroid != psCurr && electronicDroid(psCurr))
 			{

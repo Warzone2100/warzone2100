@@ -115,7 +115,6 @@ struct DROID : public BASE_OBJECT
 	SWORD           resistance;                     ///< used in Electronic Warfare
 	// The group the droid belongs to
 	DROID_GROUP    *psGroup;
-	DROID          *psGrpNext;
 	STRUCTURE      *psBaseStruct;                   ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
 	// queued orders
 	SDWORD          listSize;                       ///< Gives the number of synchronised orders. Orders from listSize to the real end of the list may not affect game state.

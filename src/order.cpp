@@ -1249,7 +1249,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 		// picking up an artifact - only need to send one unit
 		DROID *psChosen = nullptr;
 		int mindist = SDWORD_MAX;
-		for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (DROID* psCurr : psGroup->psList)
 		{
 			if (psCurr->order.type == DORDER_RTR || psCurr->order.type == DORDER_RTB || psCurr->order.type == DORDER_RTR_SPECIFIED)
 			{
@@ -1272,7 +1272,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	else
 	{
 		const bool isAttackOrder = psData->type == DORDER_ATTACKTARGET || psData->type == DORDER_ATTACK;
-		for (DROID *psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (DROID* psCurr : psGroup->psList)
 		{
 			syncDebug("command %d", psCurr->id);
 			if (!orderState(psCurr, DORDER_RTR))		// if you change this, youll need to change sendcmdgroup()
@@ -1427,7 +1427,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		// the commander doesn't have to pick up artifacts, one
 		// of his units will do it for him (if there are any in his group).
 		if ((psOrder->type == DORDER_RECOVER) &&
-		    (psDroid->psGroup->psList != nullptr))
+		    (!psDroid->psGroup->psList.empty()))
 		{
 			psOrder->type = DORDER_NONE;
 		}
@@ -3479,7 +3479,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	UDWORD		CurrState, factType, prodType;
 	SDWORD		factoryInc;
 	bool		retVal;
-	DROID		*psTransport, *psCurr, *psNext;
+	DROID		*psTransport;
 	DROID_ORDER     order;
 
 	CurrState = psDroid->secondaryOrder;
@@ -3758,12 +3758,13 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 				if (psDroid->droidType == DROID_COMMAND)
 				{
 					// remove all the units from the commanders group
-					for (psCurr = psDroid->psGroup->psList; psCurr; psCurr = psNext)
+					mutating_list_iterate(psDroid->psGroup->psList, [](DROID* psCurr)
 					{
-						psNext = psCurr->psGrpNext;
 						psCurr->psGroup->remove(psCurr);
 						orderDroid(psCurr, DORDER_STOP, ModeImmediate);
-					}
+
+						return IterationResult::CONTINUE_ITERATION;
+					});
 				}
 				else if (psDroid->psGroup->type == GT_COMMAND)
 				{

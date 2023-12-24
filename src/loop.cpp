@@ -897,8 +897,6 @@ void adjustDroidCount(DROID *droid, int delta) {
 // Increase counts of droids in a transporter
 void droidCountsInTransporter(DROID *droid, int player)
 {
-	DROID *psDroid = nullptr;
-
 	if (!isTransporter(droid) || droid->psGroup == nullptr)
 	{
 		return;
@@ -907,8 +905,12 @@ void droidCountsInTransporter(DROID *droid, int player)
 	numTransporterDroids[player] += droid->psGroup->refCount - 1;
 
 	// and count the units inside it...
-	for (psDroid = droid->psGroup->psList; psDroid != nullptr && psDroid != droid; psDroid = psDroid->psGrpNext)
+	for (DROID* psDroid : droid->psGroup->psList)
 	{
+		if (psDroid == droid)
+		{
+			break;
+		}
 		if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
 		{
 			numConstructorDroids[player] += 1;
