@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:45\n"
+"PO-Revision-Date: 2023-12-25 06:47\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -160,11 +160,11 @@ msgstr "ALPHA基地任务：建立一个前进基地"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "在高原上建立前方基地，并击退 New Paradigm。"
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "建造防御性建筑，直到绿色目标闪电消失。"
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -4009,7 +4009,7 @@ msgstr "摧毁所有的 Paradigm 增援部队"
 
 #: data/base/script/campaign/cam1ca.js:146
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "在高原上建造7座非墙体建筑，并摧毁所有的 New Paradigm 增援部队"
 
 #: data/base/script/campaign/cam2-1x.js:112
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4021,7 +4021,7 @@ msgstr "在过多人被俘之前，从 Collective 营拯平民。"
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "保护 Uplink 不受 Collective 破坏"
 
 #: data/base/script/campaign/cam2-end.js:199
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
