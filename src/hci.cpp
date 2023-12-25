@@ -264,9 +264,6 @@ static bool intAddCommand();
 /* Stop looking for a structure location */
 static void intStopStructPosition();
 
-static optional<StructureList::iterator> CurrentStruct;
-static SWORD CurrentStructType = 0;
-
 /******************Power Bar Stuff!**************/
 
 /* Set the shadow for the PowerBar */
@@ -2841,94 +2838,6 @@ bool intCheckReticuleButEnabled(UDWORD id)
 		}
 	}
 	return false;
-}
-
-// Look through the players structures and find the next one of type structType.
-//
-static STRUCTURE *intGotoNextStructureType(UDWORD structType)
-{
-	StructureList::iterator psStructIt;
-	bool Found = false;
-
-	if ((SWORD)structType != CurrentStructType)
-	{
-		CurrentStruct.reset();
-		CurrentStructType = (SWORD)structType;
-	}
-
-	auto* intStrList = interfaceStructList();
-	if (CurrentStruct.has_value())
-	{
-		psStructIt = *CurrentStruct;
-	}
-	else
-	{
-		if (intStrList)
-		{
-			psStructIt = intStrList->begin();
-		}
-	}
-
-	while (psStructIt != intStrList->end())
-	{
-		if (((*psStructIt)->pStructureType->type == structType || structType == REF_ANY) && (*psStructIt)->status == SS_BUILT)
-		{
-			if (!CurrentStruct || psStructIt != CurrentStruct)
-			{
-				clearSelection();
-				(*psStructIt)->selected = true;
-				CurrentStruct = psStructIt;
-				Found = true;
-				break;
-			}
-		}
-	}
-
-	// Start back at the beginning?
-	if ((!Found) && CurrentStruct.has_value())
-	{
-		psStructIt = intStrList->begin();
-		while (psStructIt != intStrList->end() && psStructIt != CurrentStruct)
-		{
-			if (((*psStructIt)->pStructureType->type == structType || structType == REF_ANY) && (*psStructIt)->status == SS_BUILT)
-			{
-				if (psStructIt != CurrentStruct)
-				{
-					clearSelection();
-					(*psStructIt)->selected = true;
-					jsDebugSelected((*psStructIt));
-					CurrentStruct = psStructIt;
-					break;
-				}
-			}
-		}
-	}
-
-	triggerEventSelected();
-
-	return CurrentStruct.has_value() ? **CurrentStruct : nullptr;
-}
-
-// Find any structure. Returns NULL if none found.
-//
-STRUCTURE *intFindAStructure()
-{
-	STRUCTURE *Struct;
-
-	// First try and find a factory.
-	Struct = intGotoNextStructureType(REF_FACTORY);
-	if (Struct == nullptr)
-	{
-		// If that fails then look for a command center.
-		Struct = intGotoNextStructureType(REF_HQ);
-		if (Struct == nullptr)
-		{
-			// If that fails then look for a any structure.
-			Struct = intGotoNextStructureType(REF_ANY);
-		}
-	}
-
-	return Struct;
 }
 
 // Checks if a coordinate is over the build menu

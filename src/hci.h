@@ -378,7 +378,6 @@ void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
 /* Allows us to fool the widgets with a keypress */
 void	setKeyButtonMapping(UDWORD	val);
 
-STRUCTURE *intFindAStructure();
 DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGroup);
 
 /// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.
