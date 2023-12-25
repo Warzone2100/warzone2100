@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-12-25 06:47\n"
+"PO-Revision-Date: 2023-12-25 19:10\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -4025,11 +4025,11 @@ msgstr "保护 Uplink 不受 Collective 破坏"
 
 #: data/base/script/campaign/cam2-end.js:199
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "用工程车运送至少一架运输机，抵御 Collective 攻击直到计时结束"
 
 #: data/base/script/campaign/cam2-end.js:203
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "发送尽可能多的运输机并带走至少一辆工程车"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4037,15 +4037,15 @@ msgstr "将所有部队移到山谷中"
 
 #: data/base/script/campaign/cam3-1.js:248
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "摧毁导弹发射井"
 
 #: data/base/script/campaign/cam3-2.js:260
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "从 Nexus 救援 Alpha 团队"
 
 #: data/base/script/campaign/cam3-4.js:116
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "摧毁 Nexus 总部并关闭 Nexus 入侵程序"
 
 #: data/base/script/campaign/cam3-ab.js:241
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -6607,7 +6607,7 @@ msgstr "装备有火箭（坦克杀手）的生化人步兵"
 #: po/custom/fromJson.txt:627
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "防御力 +120%，HP +90%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[2]
@@ -6921,7 +6921,7 @@ msgstr "突击加农炮"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:857
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "突击枪碉堡"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -6933,7 +6933,7 @@ msgstr "突击枪炮台"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:863
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "突击枪防卫塔2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
@@ -7243,7 +7243,7 @@ msgstr "最佳目标：碉堡与要塞"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1112
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "最佳目标：碉堡、防御、基地建筑"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7276,7 +7276,7 @@ msgstr "最佳目标：步兵、基本建筑物与轮式坦克"
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1142
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "最佳目标：步兵、轮式和气垫船车辆"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7291,7 +7291,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1151
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "最佳目标：车辆与生化人步兵"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
