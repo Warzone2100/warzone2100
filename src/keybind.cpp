@@ -1625,16 +1625,23 @@ void	kf_JumpToResourceExtractor()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	if (psOldRE.has_value() && *psOldRE != apsExtractorLists[selectedPlayer].end())
+	if (apsExtractorLists[selectedPlayer].empty())
 	{
-		++(*psOldRE);
+		addConsoleMessage(_("Unable to locate any oil derricks!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		return;
+	}
+
+	if (!psOldRE.has_value() || std::next(*psOldRE) == apsExtractorLists[selectedPlayer].end())
+	{
+		// Reset the pointer if `psOldRE` is either not initialized yet or points to the last element.
+		psOldRE.emplace(apsExtractorLists[selectedPlayer].begin());
 	}
 	else
 	{
-		psOldRE.emplace(apsExtractorLists[selectedPlayer].begin());
+		++(*psOldRE);
 	}
 
-	if (*psOldRE != apsExtractorLists[selectedPlayer].end() && **psOldRE != nullptr)
+	if (**psOldRE != nullptr)
 	{
 		playerPos.r.y = 0; // face north
 		setViewPos(map_coord((**psOldRE)->pos.x), map_coord((**psOldRE)->pos.y), true);
@@ -1643,7 +1650,6 @@ void	kf_JumpToResourceExtractor()
 	{
 		addConsoleMessage(_("Unable to locate any oil derricks!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
-
 }
 
 void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor)
