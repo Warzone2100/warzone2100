@@ -448,7 +448,7 @@ function __camVictoryOffworld()
 		//Protect against early access to reinforcements GUI if it shouldn't be available yet
 		if (__camVictoryData.reinforcements >= 0)
 		{
-			setReinforcementTime(LZ_COMPROMISED_TIME);
+			setReinforcementTime(LZ_COMPROMISED_TIME, false);
 		}
 		if (__camLZCompromisedTicker === 0)
 		{
@@ -470,7 +470,7 @@ function __camVictoryOffworld()
 		camTrace("LZ clear");
 		const pos = camMakePos(lz);
 		playSound(cam_sounds.lz.LZClear, pos.x, pos.y, 0);
-		setReinforcementTime(__camVictoryData.reinforcements);
+		setReinforcementTime(__camVictoryData.reinforcements, false);
 		__camLZCompromisedTicker = 0;
 		if (__camRTLZTicker === 0)
 		{
