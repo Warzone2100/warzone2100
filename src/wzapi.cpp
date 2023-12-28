@@ -2511,7 +2511,7 @@ int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 	return (mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC;
 }
 
-//-- ## setReinforcementTime(time)
+//-- ## setReinforcementTime(time[, removeLaunch])
 //--
 //-- Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
 //-- is removed and the timer stopped. Time is in seconds.
@@ -2519,30 +2519,32 @@ int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 //-- is set to "--:--" and reinforcements are suppressed until this function is called
 //-- again with a regular time value.
 //--
-wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time))
+wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time, optional<bool> _removeLaunch))
 {
 	int time = _time * GAME_TICKS_PER_SEC;
-	SCRIPT_ASSERT({}, context, time == LZ_COMPROMISED_TIME || time < 60 * 60 * GAME_TICKS_PER_SEC,
-	              "The transport timer cannot be set to more than 1 hour!");
+	bool removeLaunch = _removeLaunch.value_or(true);
+	SCRIPT_ASSERT({}, context, time == LZ_COMPROMISED_TIME || time < 60 * 60 * GAME_TICKS_PER_SEC, "The transport timer cannot be set to more than 1 hour!");
 	SCRIPT_ASSERT({}, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
 	mission.ETA = time;
-	
 	if (time < 0)
 	{
 		intRemoveTransporterTimer();
 	}
-	/* Search for a transport that is idle; if we can't find any, remove the launch button
-	 * since there's no transport to launch */
-	auto droidIt = std::find_if(apsDroidLists[selectedPlayer].begin(), apsDroidLists[selectedPlayer].end(), [](DROID* d)
+	if (removeLaunch)
 	{
-		return isTransporter(d) && !transporterFlying(d);
-	});
-	DROID* psDroid = droidIt != apsDroidLists[selectedPlayer].end() ? *droidIt : nullptr;
+		/* Search for a transport that is idle; if we can't find any, remove the launch button
+		 * since there's no transport to launch */
+		auto droidIt = std::find_if(apsDroidLists[selectedPlayer].begin(), apsDroidLists[selectedPlayer].end(), [](DROID* d)
+		{
+			return isTransporter(d) && !transporterFlying(d);
+		});
+		DROID* psDroid = droidIt != apsDroidLists[selectedPlayer].end() ? *droidIt : nullptr;
 
-	// Didn't find an idle transporter, we can remove the launch button
-	if (psDroid == nullptr)
-	{
-		intRemoveTransporterLaunch();
+		// Didn't find an idle transporter, we can remove the launch button
+		if (psDroid == nullptr)
+		{
+			intRemoveTransporterLaunch();
+		}
 	}
 	resetMissionWidgets();
 	addTransporterTimerInterface();

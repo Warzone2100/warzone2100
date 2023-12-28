@@ -1075,7 +1075,7 @@ namespace wzapi
 	bool applyLimitSet(WZAPI_NO_PARAMS);
 	no_return_value setMissionTime(WZAPI_PARAMS(int _time));
 	int getMissionTime(WZAPI_NO_PARAMS);
-	no_return_value setReinforcementTime(WZAPI_PARAMS(int _time));
+	no_return_value setReinforcementTime(WZAPI_PARAMS(int _time, optional<bool> _removeLaunch));
 	no_return_value completeResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player, optional<bool> _forceResearch));
 	no_return_value completeAllResearch(WZAPI_PARAMS(optional<int> _player));
 	bool enableResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player));
