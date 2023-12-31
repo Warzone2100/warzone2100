@@ -25,10 +25,14 @@
 #include <string>
 
 #ifdef WZ_PROFILING_NVTX
-#pragma warning( push )
-#pragma warning( disable : 4191 )
+#if defined( _MSC_VER )
+#  pragma warning( push )
+#  pragma warning( disable : 4191 )
+#endif
 #include <nvtx3/nvToolsExt.h>
-#pragma warning( pop )
+#if defined( _MSC_VER )
+#  pragma warning( pop )
+#endif
 #endif
 
 #ifdef WZ_PROFILING_VTUNE
