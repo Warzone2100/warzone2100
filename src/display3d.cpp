@@ -82,6 +82,7 @@
 #include "advvis.h"
 #include "cmddroid.h"
 #include "terrain.h"
+#include "profiling.h"
 #include "warzoneconfig.h"
 #include "multistat.h"
 #include "animation.h"
@@ -967,6 +968,7 @@ static void setupConnectionStatusForm()
 /// Render the 3D world
 void draw3DScene()
 {
+	WZ_PROFILE_SCOPE(draw3DScene);
 	wzPerfBegin(PERF_START_FRAME, "Start 3D scene");
 
 	/* What frame number are we on? */
@@ -1288,6 +1290,7 @@ glm::mat4 getBiasedShadowMapMVPMatrix(glm::mat4 lightOrthoMatrix, const glm::mat
 /// Draw the terrain and all droids, missiles and other objects on it
 static void drawTiles(iView *player)
 {
+	WZ_PROFILE_SCOPE(drawTiles);
 	// draw terrain
 
 	auto currShadowMode = pie_getShadowMode();
@@ -1354,52 +1357,58 @@ static void drawTiles(iView *player)
 	// update the fog of war... FIXME: Remove this
 	const glm::mat4 tileCalcPerspectiveViewMatrix = perspectiveMatrix * baseViewMatrix;
 	auto currTerrainShaderType = getTerrainShaderType();
-	for (int i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
 	{
-		/* Go through the x's */
-		for (int j = -visibleTiles.x / 2, jdx = 0; j <= visibleTiles.x / 2; j++, ++jdx)
+		WZ_PROFILE_SCOPE(init_lightmap);
+		for (int i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
 		{
-			Vector2i screen(0, 0);
-			Position pos;
-
-			pos.x = world_coord(j);
-			pos.z = -world_coord(i);
-			pos.y = 0;
-
-			if (tileOnMap(playerXTile + j, playerZTile + i))
+			/* Go through the x's */
+			for (int j = -visibleTiles.x / 2, jdx = 0; j <= visibleTiles.x / 2; j++, ++jdx)
 			{
-				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
+				Vector2i screen(0, 0);
+				Position pos;
 
-				pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level)));
+				pos.x = world_coord(j);
+				pos.z = -world_coord(i);
+				pos.y = 0;
+
+				if (tileOnMap(playerXTile + j, playerZTile + i))
+				{
+					MAPTILE* psTile = mapTile(playerXTile + j, playerZTile + i);
+
+					pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
+					setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level)));
+				}
+				tileScreenInfo[idx][jdx].z = pie_RotateProjectWithPerspective(&pos, tileCalcPerspectiveViewMatrix, &screen);
+				tileScreenInfo[idx][jdx].x = screen.x;
+				tileScreenInfo[idx][jdx].y = screen.y;
 			}
-			tileScreenInfo[idx][jdx].z = pie_RotateProjectWithPerspective(&pos, tileCalcPerspectiveViewMatrix, &screen);
-			tileScreenInfo[idx][jdx].x = screen.x;
-			tileScreenInfo[idx][jdx].y = screen.y;
 		}
 	}
 
 	// Determine whether each tile in the drawable range is actually visible on-screen
 	// (used for more accurate clipping elsewhere)
-	for (int idx = 0; idx < visibleTiles.y; ++idx)
 	{
-		for (int jdx = 0; jdx < visibleTiles.x; ++jdx)
+		WZ_PROFILE_SCOPE(tile_Culling);
+		for (int idx = 0; idx < visibleTiles.y; ++idx)
 		{
-			QUAD quad;
+			for (int jdx = 0; jdx < visibleTiles.x; ++jdx)
+			{
+				QUAD quad;
 
-			quad.coords[0].x = tileScreenInfo[idx + 0][jdx + 0].x;
-			quad.coords[0].y = tileScreenInfo[idx + 0][jdx + 0].y;
+				quad.coords[0].x = tileScreenInfo[idx + 0][jdx + 0].x;
+				quad.coords[0].y = tileScreenInfo[idx + 0][jdx + 0].y;
 
-			quad.coords[1].x = tileScreenInfo[idx + 0][jdx + 1].x;
-			quad.coords[1].y = tileScreenInfo[idx + 0][jdx + 1].y;
+				quad.coords[1].x = tileScreenInfo[idx + 0][jdx + 1].x;
+				quad.coords[1].y = tileScreenInfo[idx + 0][jdx + 1].y;
 
-			quad.coords[2].x = tileScreenInfo[idx + 1][jdx + 1].x;
-			quad.coords[2].y = tileScreenInfo[idx + 1][jdx + 1].y;
+				quad.coords[2].x = tileScreenInfo[idx + 1][jdx + 1].x;
+				quad.coords[2].y = tileScreenInfo[idx + 1][jdx + 1].y;
 
-			quad.coords[3].x = tileScreenInfo[idx + 1][jdx + 0].x;
-			quad.coords[3].y = tileScreenInfo[idx + 1][jdx + 0].y;
+				quad.coords[3].x = tileScreenInfo[idx + 1][jdx + 0].x;
+				quad.coords[3].y = tileScreenInfo[idx + 1][jdx + 0].y;
 
-			tileScreenVisible[idx][jdx] = quadIntersectsWithScreen(quad);
+				tileScreenVisible[idx][jdx] = quadIntersectsWithScreen(quad);
+			}
 		}
 	}
 
@@ -1461,6 +1470,7 @@ static void drawTiles(iView *player)
 
 	if (currShadowMode == ShadowMode::Shadow_Mapping)
 	{
+		WZ_PROFILE_SCOPE(ShadowMapping);
 		for (size_t i = 0; i < numShadowCascades; ++i)
 		{
 			gfx_api::context::get().beginDepthPass(i);
@@ -1493,7 +1503,10 @@ static void drawTiles(iView *player)
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
-	pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowCascadesInfo, false);
+	{
+		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
+		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowCascadesInfo, false);
+	}
 	wzPerfEnd(PERF_MODELS);
 
 	if (!gamePaused())
@@ -1502,15 +1515,21 @@ static void drawTiles(iView *player)
 	}
 	locateMouse();
 
-	gfx_api::context::get().endSceneRenderPass();
+	{
+		WZ_PROFILE_SCOPE(endSceneRenderPass);
+		gfx_api::context::get().endSceneRenderPass();
+	}
 
 	// Draw the scene to the default framebuffer
-	gfx_api::WorldToScreenPSO::get().bind();
-	gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
-	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
-	gfx_api::WorldToScreenPSO::get().bind_textures(gfx_api::context::get().getSceneTexture());
-	gfx_api::WorldToScreenPSO::get().draw(3, 0);
-	gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+	{
+		WZ_PROFILE_SCOPE(copyToFBO);
+		gfx_api::WorldToScreenPSO::get().bind();
+		gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
+		gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
+		gfx_api::WorldToScreenPSO::get().bind_textures(gfx_api::context::get().getSceneTexture());
+		gfx_api::WorldToScreenPSO::get().draw(3, 0);
+		gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+	}
 }
 
 /// Initialise the fog, skybox and some other stuff
@@ -1774,6 +1793,7 @@ static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const gl
 /// Decide whether to render a projectile, and make sure it will be drawn
 static void display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(display3DProjectiles);
 	PROJECTILE *psObj = proj_GetFirst();
 	while (psObj != nullptr)
 	{
@@ -1946,6 +1966,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 /// Draw the buildings
 static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(displayStaticObjects);
 	// to solve the flickering edges of baseplates
 //	pie_SetDepthOffset(-1.0f);
 
@@ -2213,6 +2234,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 /// Draw Factory Delivery Points
 static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(displayDelivPoints);
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 	for (const auto& psDelivPoint : apsFlagPosLists[selectedPlayer])
 	{
@@ -2226,6 +2248,7 @@ static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &per
 /// Draw the features
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(displayFeatures);
 	// player can only be 0 for the features.
 
 	/* Go through all the features */
@@ -2293,6 +2316,7 @@ static void displayProximityMsgs(const glm::mat4& viewMatrix, const glm::mat4 &p
 /// Draw the droids
 static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(displayDynamicObjects);
 	/* Need to go through all the droid lists */
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
@@ -3821,6 +3845,7 @@ static void locateMouse()
 /// Render the sky and surroundings
 static void renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4 &skyboxViewMatrix)
 {
+	WZ_PROFILE_SCOPE(renderSurroundings);
 	// Render skybox relative to ground (i.e. undo player y translation)
 	// then move it somewhat below ground level for the blending effect
 	// rotate it
@@ -4297,6 +4322,7 @@ static void	drawDroidSensorLock(DROID *psDroid)
 /// Draw the construction lines for all construction droids
 static void doConstructionLines(const glm::mat4 &viewMatrix)
 {
+	WZ_PROFILE_SCOPE(doConstructionLines);
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (DROID *psDroid : apsDroidLists[i])

@@ -125,7 +125,7 @@ target_link_libraries(warzone2100 SQLite::SQLite3)
 target_link_libraries(warzone2100 SQLiteCpp)
 
 if (WZ_PROFILING_NVTX)
-	target_include_directories(warzone2100 PRIVATE ${PROFILING_NVTX_INCLUDE})
+	target_link_libraries(warzone2100 nvtx3-cpp)
 endif()
 
 set(_curl_gnutls_thread_safe_fix FALSE)
