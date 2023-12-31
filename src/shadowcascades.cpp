@@ -46,6 +46,7 @@
 
 #include "shadowcascades.h"
 #include "display3d.h"
+#include "profiling.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"
 
@@ -59,6 +60,7 @@ float cascadeSplitLambda = 0.3f;
 
 void calculateShadowCascades(const iView *player, float terrainDistance, const glm::mat4& baseViewMatrix, const glm::vec3& lightInvDir, size_t SHADOW_MAP_CASCADE_COUNT, std::vector<Cascade>& output)
 {
+	WZ_PROFILE_SCOPE(calculateShadowCascades);
 	output.clear();
 	output.resize(SHADOW_MAP_CASCADE_COUNT);
 

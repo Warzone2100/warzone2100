@@ -59,6 +59,7 @@
 #include "hci.h"
 #include "loop.h"
 #include "wzcrashhandlingproviders.h"
+#include "profiling.h"
 
 #include <cstdint>
 
@@ -1975,6 +1976,7 @@ static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm:
 
 void perFrameTerrainUpdates()
 {
+	WZ_PROFILE_SCOPE(perFrameTerrainUpdates);
 	///////////////////////////////////
 	// set up the lightmap texture
 
@@ -2014,6 +2016,7 @@ void drawTerrainDepthOnly(const glm::mat4 &mvp)
  */
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
+	WZ_PROFILE_SCOPE(drawTerrain);
 	const glm::vec4& paramsXLight = lightmapValues.paramsXLight;
 	const glm::vec4& paramsYLight = lightmapValues.paramsYLight;
 	const glm::mat4& lightMatrix = lightmapValues.lightMatrix;

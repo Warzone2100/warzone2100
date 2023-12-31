@@ -69,6 +69,7 @@
 
 #include "multiplay.h"
 #include "component.h"
+#include "profiling.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -475,6 +476,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 /* Calls all the update functions for each different currently active effect */
 void processEffects(const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(processEffects);
 	for (auto it = activeList.begin(); it != activeList.end(); )
 	{
 		EFFECT *psEffect = *it;

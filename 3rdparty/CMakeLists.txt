@@ -206,6 +206,14 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 endif(WZ_ENABLE_BASIS_UNIVERSAL)
 
 if (WZ_PROFILING_NVTX)
-	find_package(CUDAToolkit REQUIRED VERSION 5.0)
+	include(FetchContent)
+	FetchContent_Declare(
+	  nvtx
+	  GIT_REPOSITORY https://github.com/NVIDIA/NVTX.git
+	  GIT_TAG        a1ceb0677f67371ed29a2b1c022794f077db5fe7
+	)
+
+	FetchContent_MakeAvailable(nvtx)
 	set(PROFILING_NVTX_INCLUDE ${CUDAToolkit_INCLUDE_DIRS} PARENT_SCOPE)
+
 endif ()

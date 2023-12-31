@@ -33,6 +33,7 @@
 #include "loop.h"
 #include "map.h"
 #include "miscimd.h"
+#include "profiling.h"
 #include "lib/gamelib/gtime.h"
 #include <cmath>
 
@@ -247,6 +248,7 @@ static void atmosAddParticle(const Vector3f &pos, AP_TYPE type)
 /* Move the particles */
 void atmosUpdateSystem()
 {
+	WZ_PROFILE_SCOPE(atmosUpdateSystem);
 	UDWORD	i;
 	UDWORD	numberToAdd;
 	Vector3f pos;
@@ -324,6 +326,7 @@ static inline void renderParticleInternal(ATPART *psPart, const glm::mat4 &viewM
 
 void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(atmosDrawParticles);
 	UDWORD	i;
 
 	if (weather == WT_NONE)

@@ -31,6 +31,7 @@
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp.h"
+#include "profiling.h"
 
 #include "action.h"
 #include "display.h"
