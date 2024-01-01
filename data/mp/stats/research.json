@@ -1697,7 +1697,10 @@
 		"msgName": "RES_WT15_RL3",
 		"name": "Gauss Cannon Hardpoint",
 		"redStructures": [
-			"WallTower-Rail2"
+			"WallTower-Rail2",
+			"WallTower04",
+			"WallTower-HPVcannon",
+			"Wall-VulcanCan"
 		],
 		"requiredResearch": [
 			"R-Wpn-RailGun03"
