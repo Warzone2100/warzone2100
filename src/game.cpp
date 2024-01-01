@@ -2537,7 +2537,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			apsFeatureLists[player].clear();
 			apsFlagPosLists[player].clear();
 			//clear all the messages?
-			apsProxDisp[player] = nullptr;
+			apsProxDisp[player].clear();
 			apsSensorList[0].clear();
 			apsExtractorLists[player].clear();
 		}
@@ -7712,16 +7712,12 @@ static bool writeMessageFile(const char *pFileName)
 			if (psMessage->type == MSG_PROXIMITY)
 			{
 				//get the matching proximity message
-				PROXIMITY_DISPLAY *psProx = nullptr;
-				for (psProx = apsProxDisp[player]; psProx != nullptr; psProx = psProx->psNext)
+				auto psProxIt = std::find_if(apsProxDisp[player].begin(), apsProxDisp[player].end(), [psMessage](PROXIMITY_DISPLAY* psProx)
 				{
-					//compare the pointers
-					if (psProx->psMessage == psMessage)
-					{
-						break;
-					}
-				}
-				ASSERT(psProx != nullptr, "Save message; proximity display not found for message");
+					return psProx->psMessage == psMessage; //compare the pointers
+				});
+				ASSERT(psProxIt != apsProxDisp[player].end(), "Save message; proximity display not found for message");
+				PROXIMITY_DISPLAY* psProx = *psProxIt;
 				if (psProx && psProx->type == POS_PROXDATA)
 				{
 					//message has viewdata so store the name

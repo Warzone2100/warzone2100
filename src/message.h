@@ -27,6 +27,7 @@
 #include "structure.h"
 #include "messagedef.h"
 #include "lib/framework/wzstring.h"
+#include "objmem.h"
 
 #define NO_AUDIO_MSG		-1
 
@@ -37,7 +38,9 @@ extern MESSAGE		*apsMessages[MAX_PLAYERS];
 extern iIMDBaseShape	*pProximityMsgIMD;
 
 /** The list of proximity displays allocated. */
-extern PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
+using PerPlayerProximityDisplayLists = PerPlayerObjectLists<PROXIMITY_DISPLAY, MAX_PLAYERS>;
+using ProximityDisplayList = typename PerPlayerProximityDisplayLists::value_type;
+extern PerPlayerProximityDisplayLists apsProxDisp;
 
 extern bool releaseObjectives;
 

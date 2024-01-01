@@ -2648,7 +2648,6 @@ void forceHidePowerBar(bool forceSetPowerBarUpState)
 /* Add the Proximity message buttons */
 bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 {
-	PROXIMITY_DISPLAY	*psProxDisp2;
 	UDWORD				cnt;
 
 	if (selectedPlayer >= MAX_PLAYERS)
@@ -2666,9 +2665,13 @@ bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 		for (cnt = IDPROX_START; cnt < IDPROX_END; cnt++)
 		{
 			// go down the prox msgs and see if it's free.
-			for (psProxDisp2 = apsProxDisp[selectedPlayer]; psProxDisp2 && psProxDisp2->buttonID != cnt; psProxDisp2 = psProxDisp2->psNext) {}
+			const auto& proxDispList = apsProxDisp[selectedPlayer];
+			auto proxDispIt = std::find_if(proxDispList.begin(), proxDispList.end(), [cnt](PROXIMITY_DISPLAY* pd)
+			{
+				return pd->buttonID == cnt;
+			});
 
-			if (psProxDisp2 == nullptr)	// value was unused.
+			if (proxDispIt == proxDispList.end())	// value was unused.
 			{
 				sBFormInit.id = cnt;
 				break;
@@ -2710,8 +2713,6 @@ void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp)
 /*deals with the proximity message when clicked on*/
 void processProximityButtons(UDWORD id)
 {
-	PROXIMITY_DISPLAY	*psProxDisp;
-
 	if (!doWeDrawProximitys())
 	{
 		return;
@@ -2720,20 +2721,17 @@ void processProximityButtons(UDWORD id)
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
 	//find which proximity display this relates to
-	psProxDisp = nullptr;
-	for (psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp; psProxDisp = psProxDisp->psNext)
+	const auto& proxDispList = apsProxDisp[selectedPlayer];
+	auto proxDispIt = std::find_if(proxDispList.begin(), proxDispList.end(), [id](PROXIMITY_DISPLAY* psProxDisp)
 	{
-		if (psProxDisp->buttonID == id)
-		{
-			break;
-		}
-	}
-	if (psProxDisp)
+		return psProxDisp->buttonID == id;
+	});
+	if (proxDispIt != proxDispList.end())
 	{
 		//if not been read - display info
-		if (!psProxDisp->psMessage->read)
+		if (!(*proxDispIt)->psMessage->read)
 		{
-			displayProximityMessage(psProxDisp);
+			displayProximityMessage(*proxDispIt);
 		}
 	}
 }

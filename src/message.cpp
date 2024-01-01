@@ -51,7 +51,7 @@ static int currentNumProxDisplays = 0;
 MESSAGE *apsMessages[MAX_PLAYERS];
 
 /* The list of proximity displays allocated */
-PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
+PerPlayerProximityDisplayLists apsProxDisp;
 
 /* The IMD to use for the proximity messages */
 iIMDBaseShape	*pProximityMsgIMD;
@@ -242,7 +242,7 @@ bool messageInitVars()
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		apsMessages[i] = nullptr;
-		apsProxDisp[i] = nullptr;
+		apsProxDisp[i].clear();
 	}
 
 	pProximityMsgIMD = nullptr;
@@ -305,8 +305,7 @@ static void addProximityDisplay(MESSAGE *psMessage, bool proxPos, UDWORD player)
 		// Now add it to the top of the list. Be aware that this
 		// check means that messages and proximity displays can
 		// become out of sync - but this should never happen.
-		psToAdd->psNext = apsProxDisp[player];
-		apsProxDisp[player] = psToAdd;
+		apsProxDisp[player].emplace_front(psToAdd);
 		currentNumProxDisplays++;
 	}
 	else
@@ -343,41 +342,25 @@ MESSAGE *addMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player)
 /* remove a proximity display */
 static void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 {
-	PROXIMITY_DISPLAY		*psCurr, *psPrev;
-
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player");
 	ASSERT_OR_RETURN(, psMessage != nullptr, "Bad message");
 
-	if (!apsProxDisp[player])
+	if (apsProxDisp[player].empty())
 	{
 		return;	// no corresponding proximity display
 	}
 
 	//find the proximity display for this message
-	if (apsProxDisp[player]->psMessage == psMessage)
+	auto it = std::find_if(apsProxDisp[player].begin(), apsProxDisp[player].end(), [psMessage](PROXIMITY_DISPLAY* psCurr)
 	{
-		psCurr = apsProxDisp[player];
-
-		apsProxDisp[player] = apsProxDisp[player]->psNext;
-		intRemoveProximityButton(psCurr);
-		delete psCurr;
-	}
-	else
+		return psCurr->psMessage == psMessage;
+	});
+	if (it != apsProxDisp[player].end())
 	{
-		psPrev = apsProxDisp[player];
-		for (psCurr = apsProxDisp[player]; psCurr != nullptr; psCurr =
-		         psCurr->psNext)
-		{
-			//compare the pointers
-			if (psCurr->psMessage == psMessage)
-			{
-				psPrev->psNext = psCurr->psNext;
-				intRemoveProximityButton(psCurr);
-				delete psCurr;
-				break;
-			}
-			psPrev = psCurr;
-		}
+		PROXIMITY_DISPLAY* psDisp = *it;
+		apsProxDisp[player].erase(it);
+		intRemoveProximityButton(psDisp);
+		delete psDisp;
 	}
 }
 
@@ -406,20 +389,19 @@ void freeMessages()
 /* removes all the proximity displays */
 void releaseAllProxDisp()
 {
-	UDWORD				player;
-	PROXIMITY_DISPLAY	*psCurr, *psNext;
 	bool removedAMessage = false;
 
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (size_t player = 0, end = apsProxDisp.size(); player < end; ++player)
 	{
-		for (psCurr = apsProxDisp[player]; psCurr != nullptr; psCurr = psNext)
+		mutating_list_iterate(apsProxDisp[player], [&removedAMessage, player](PROXIMITY_DISPLAY* psCurr)
 		{
-			psNext = psCurr->psNext;
 			//remove message associated with this display
 			removeMessage(psCurr->psMessage, player);
 			removedAMessage = true;
-		}
-		apsProxDisp[player] = nullptr;
+
+			return IterationResult::CONTINUE_ITERATION;
+		});
+		apsProxDisp[player].clear();
 	}
 	//re-initialise variables
 	currentNumProxDisplays = 0;
