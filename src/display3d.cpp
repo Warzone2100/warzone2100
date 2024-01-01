@@ -2284,7 +2284,7 @@ static void displayProximityMsgs(const glm::mat4& viewMatrix, const glm::mat4 &p
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
 
 	/* Go through all the proximity Displays*/
-	for (PROXIMITY_DISPLAY *psProxDisp = apsProxDisp[selectedPlayer]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
+	for (PROXIMITY_DISPLAY* psProxDisp : apsProxDisp[selectedPlayer])
 	{
 		if (!(psProxDisp->psMessage->read))
 		{

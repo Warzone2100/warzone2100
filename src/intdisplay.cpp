@@ -1691,7 +1691,6 @@ void IntTransportButton::display(int xOffset, int yOffset)
 /* Draws blips on radar to represent Proximity Display and damaged structures */
 void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, const glm::mat4 &modelViewProjection)
 {
-	PROXIMITY_DISPLAY	*psProxDisp;
 	UWORD			imageID;
 	UDWORD			delay = 150;
 	UDWORD			i;
@@ -1712,28 +1711,29 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Go through all the proximity Displays*/
-		for (psProxDisp = apsProxDisp[i]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
+		mutating_list_iterate(apsProxDisp[i], [&removedAMessage, i](PROXIMITY_DISPLAY* psProxDisp)
 		{
 			if (psProxDisp->psMessage->dataType == MSG_DATA_BEACON)
 			{
-				MESSAGE		*psCurrMsg = psProxDisp->psMessage;
-				VIEWDATA	*pViewData = psCurrMsg->pViewData;
+				MESSAGE* psCurrMsg = psProxDisp->psMessage;
+				VIEWDATA* pViewData = psCurrMsg->pViewData;
 
-				ASSERT_OR_RETURN(, pViewData != nullptr, "Message without data!");
+				ASSERT_OR_RETURN(IterationResult::CONTINUE_ITERATION, pViewData != nullptr, "Message without data!");
 
 				if (pViewData->type == VIEW_BEACON)
 				{
-					ASSERT_OR_RETURN(, pViewData->pData != nullptr, "Help message without data!");
-					if (pViewData->pData != nullptr && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
+					ASSERT_OR_RETURN(IterationResult::CONTINUE_ITERATION, pViewData->pData != nullptr, "Help message without data!");
+					if (pViewData->pData != nullptr && (((VIEW_PROXIMITY*)pViewData->pData)->timeAdded + 60000) <= gameTime)
 					{
-						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
+						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY*)pViewData->pData)->sender));
 						removeMessage(psCurrMsg, i);	//remove beacon
 						removedAMessage = true;
-						break;	//there can only be 1 beacon per player
+						return IterationResult::BREAK_ITERATION; //there can only be 1 beacon per player
 					}
 				}
 			}
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 	if (removedAMessage)
 	{
@@ -1741,84 +1741,87 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	}
 
 	/* Go through all the proximity Displays */
-	for (psProxDisp = (selectedPlayer < MAX_PLAYERS) ? apsProxDisp[selectedPlayer] : nullptr; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
+	if (selectedPlayer < MAX_PLAYERS)
 	{
-		unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
-		const uint16_t *images;
-
-		if (psProxDisp->psMessage->player != selectedPlayer)
+		for (PROXIMITY_DISPLAY* psProxDisp : apsProxDisp[selectedPlayer])
 		{
-			continue;
-		}
+			unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
+			const uint16_t* images;
 
-		if (psProxDisp->type == POS_PROXDATA)
-		{
-			PROX_TYPE proxType = ((VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData)->proxType;
-			images = imagesProxTypes[proxType];
-		}
-		else
-		{
-			const FEATURE *psFeature = castFeature(psProxDisp->psMessage->psObj);
-
-			ASSERT_OR_RETURN(, psFeature && psFeature->psStats, "Bad feature message");
-			if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+			if (psProxDisp->psMessage->player != selectedPlayer)
 			{
-				images = imagesResource;
-				if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
-				{
-					images = imagesBurningResource;
-					animationLength = ARRAY_SIZE(imagesBurningResource) - 1;  // Longer animation for burning oil wells.
-				}
+				continue;
+			}
+
+			if (psProxDisp->type == POS_PROXDATA)
+			{
+				PROX_TYPE proxType = ((VIEW_PROXIMITY*)psProxDisp->psMessage->pViewData->pData)->proxType;
+				images = imagesProxTypes[proxType];
 			}
 			else
 			{
-				images = imagesArtifact;
-			}
-		}
+				const FEATURE* psFeature = castFeature(psProxDisp->psMessage->psObj);
 
-		// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
-		if (psProxDisp->psMessage->read)
-		{
-			imageID = images[0];
-		}
-		else
-		{
-			// Draw animated
-			if (realTime - psProxDisp->timeLastDrawn > delay)
+				ASSERT_OR_RETURN(, psFeature && psFeature->psStats, "Bad feature message");
+				if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+				{
+					images = imagesResource;
+					if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
+					{
+						images = imagesBurningResource;
+						animationLength = ARRAY_SIZE(imagesBurningResource) - 1;  // Longer animation for burning oil wells.
+					}
+				}
+				else
+				{
+					images = imagesArtifact;
+				}
+			}
+
+			// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
+			if (psProxDisp->psMessage->read)
 			{
-				++psProxDisp->strobe;
-				psProxDisp->timeLastDrawn = realTime;
+				imageID = images[0];
 			}
-			psProxDisp->strobe %= animationLength;
-			imageID = images[1 + psProxDisp->strobe];
-		}
+			else
+			{
+				// Draw animated
+				if (realTime - psProxDisp->timeLastDrawn > delay)
+				{
+					++psProxDisp->strobe;
+					psProxDisp->timeLastDrawn = realTime;
+				}
+				psProxDisp->strobe %= animationLength;
+				imageID = images[1 + psProxDisp->strobe];
+			}
 
-		if (psProxDisp->type == POS_PROXDATA)
-		{
-			const VIEW_PROXIMITY *psViewProx = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
+			if (psProxDisp->type == POS_PROXDATA)
+			{
+				const VIEW_PROXIMITY* psViewProx = (VIEW_PROXIMITY*)psProxDisp->psMessage->pViewData->pData;
 
-			x = static_cast<int>((psViewProx->x / TILE_UNITS - scrollMinX) * pixSizeH);
-			y = static_cast<int>((psViewProx->y / TILE_UNITS - scrollMinY) * pixSizeV);
-		}
-		else if (psProxDisp->type == POS_PROXOBJ)
-		{
-			x = static_cast<int>((psProxDisp->psMessage->psObj->pos.x / TILE_UNITS - scrollMinX) * pixSizeH);
-			y = static_cast<int>((psProxDisp->psMessage->psObj->pos.y / TILE_UNITS - scrollMinY) * pixSizeV);
-		}
-		else
-		{
-			ASSERT(false, "Bad message type");
-			continue;
-		}
+				x = static_cast<int>((psViewProx->x / TILE_UNITS - scrollMinX) * pixSizeH);
+				y = static_cast<int>((psViewProx->y / TILE_UNITS - scrollMinY) * pixSizeV);
+			}
+			else if (psProxDisp->type == POS_PROXOBJ)
+			{
+				x = static_cast<int>((psProxDisp->psMessage->psObj->pos.x / TILE_UNITS - scrollMinX) * pixSizeH);
+				y = static_cast<int>((psProxDisp->psMessage->psObj->pos.y / TILE_UNITS - scrollMinY) * pixSizeV);
+			}
+			else
+			{
+				ASSERT(false, "Bad message type");
+				continue;
+			}
 
-		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
-		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
-		// everything outside the box.
-		if ((x + radarX) < width * pixSizeV / 2 && (x + radarX) > -width * pixSizeV / 2
-		    && (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
-		{
-			// Draw the 'blip'
-			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+			// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
+			// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
+			// everything outside the box.
+			if ((x + radarX) < width * pixSizeV / 2 && (x + radarX) > -width * pixSizeV / 2
+				&& (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
+			{
+				// Draw the 'blip'
+				iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+			}
 		}
 	}
 	if (audio_GetPreviousQueueTrackRadarBlipPos(&x, &y))

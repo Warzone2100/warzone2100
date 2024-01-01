@@ -138,7 +138,6 @@ struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 	UDWORD             timeLastDrawn = 0;     // stores the time the 'button' was last drawn for animation
 	UDWORD             strobe = 0;            // id of image last used
 	UDWORD             buttonID = 0;          // id of the button for the interface
-	PROXIMITY_DISPLAY  *psNext = nullptr;      // pointer to the next in the list
 };
 
 #endif // __INCLUDED_MESSAGEDEF_H__
