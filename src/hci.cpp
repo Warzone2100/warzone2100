@@ -1300,7 +1300,6 @@ static void intProcessEditStats(UDWORD id)
 			debugMenuDroidDeliveryPoint.factoryInc = 0;
 			debugMenuDroidDeliveryPoint.player = selectedPlayer;
 			debugMenuDroidDeliveryPoint.selected = false;
-			debugMenuDroidDeliveryPoint.psNext = nullptr;
 			startDeliveryPosition(&debugMenuDroidDeliveryPoint);
 		}
 		else
