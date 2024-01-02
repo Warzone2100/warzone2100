@@ -70,7 +70,6 @@ struct FLAG_POSITION : public OBJECT_POSITION
 	Vector3i coords = Vector3i(0, 0, 0); //the world coords of the Position
 	UBYTE    factoryInc;           //indicates whether the first, second etc factory
 	UBYTE    factoryType;          //indicates whether standard, cyborg or vtol factory
-	FLAG_POSITION *psNext;
 };
 
 enum STRUCT_STRENGTH
