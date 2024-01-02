@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-12-29 16:32\n"
+"PO-Revision-Date: 2024-01-02 11:14\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -529,7 +529,7 @@ msgstr "PREPRAVNÁ MISIA: Zachráňte civilistov zo zadržiavacieho tábora"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "Spoločenstvo spracováva a vyhladzuje civilistov na tejto základni."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
@@ -541,19 +541,19 @@ msgstr "Potom zničte kemp."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
+msgstr "MISIA ZÁKLADNE BETA: Znič nepriateľskú leteckú základňu a získaj VTOLy."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr ""
+msgstr "Analýza leteckých ciest indikuje, že VTOLy Spoločenstva pochádzajú odtiaľto."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
+msgstr "MISIA ZÁKLADNE BETA: Znič nepriateľskú leteckú základňu a získaj VTOLy"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
+msgstr "Nepriateľská letecká základňa je umiestnená na tomto mieste. Toto je tvoj primárny cieľ."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
