@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-02 11:14\n"
+"PO-Revision-Date: 2024-01-03 16:19\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -557,7 +557,7 @@ msgstr "Nepriateľská letecká základňa je umiestnená na tomto mieste. Toto 
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr ""
+msgstr "Znič všetky jednotky Spoločenstva a získaj všetky artefakty."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
@@ -566,7 +566,7 @@ msgstr "SEKUNDÁRNA MISIA: Znič, alebo odraz nepriateľský transport"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr ""
+msgstr "Spoločenstvo zhromažďuje všetkých civilistov v tejto oblasti."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
@@ -574,7 +574,7 @@ msgstr "Potom s nimi letia na neznáme miesto."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr ""
+msgstr "Znič, alebo odožeň transport Spoločenstva."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
@@ -587,7 +587,7 @@ msgstr "PREPRAVNÁ MISIA: Znič reaktor"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "Spoločenstvo hľadá znalosti o nukleárnych reaktoroch."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
@@ -776,7 +776,7 @@ msgstr ""
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr ""
+msgstr "MISIA SEVERNÉHO SEKTORA: Nukleárny výbuch"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
@@ -18253,7 +18253,7 @@ msgstr ""
 
 #: src/keybind.cpp:563
 msgid "Hard as nails!!!"
-msgstr "Ťažké ako nechty!"
+msgstr "Tvrdo ako kladivo!!!"
 
 #: src/keybind.cpp:577
 msgid "Takings thing easy!"
@@ -19757,43 +19757,43 @@ msgstr "Azurová"
 
 #: src/multiplay.cpp:2331
 msgid "Yellow"
-msgstr ""
+msgstr "Žltá"
 
 #: src/multiplay.cpp:2332
 msgid "Purple"
-msgstr ""
+msgstr "Fialová"
 
 #: src/multiplay.cpp:2333
 msgid "White"
-msgstr ""
+msgstr "Biela"
 
 #: src/multiplay.cpp:2334
 msgid "Bright blue"
-msgstr ""
+msgstr "Svetlomodrá"
 
 #: src/multiplay.cpp:2335
 msgid "Neon green"
-msgstr ""
+msgstr "Neónovo zelená"
 
 #: src/multiplay.cpp:2336
 msgid "Infrared"
-msgstr ""
+msgstr "Infračervená"
 
 #: src/multiplay.cpp:2337
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ultrafialová"
 
 #: src/multiplay.cpp:2338
 msgid "Brown"
-msgstr ""
+msgstr "Hnedá"
 
 #: src/multiplay.cpp:2522
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Mód pozorovateľa"
 
 #: src/multiplay.cpp:2523
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Si pozorovateľ. Uži si sledovanie hry!"
 
 #: src/multivote.cpp:165
 #, c-format
