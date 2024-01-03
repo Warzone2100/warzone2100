@@ -729,8 +729,8 @@ void  technologyGiveAway(const STRUCTURE *pS)
 	}
 
 	int featureIndex;
-	for (featureIndex = 0; featureIndex < numFeatureStats && asFeatureStats[featureIndex].subType != FEAT_GEN_ARTE; ++featureIndex) {}
-	if (featureIndex >= numFeatureStats)
+	for (featureIndex = 0; featureIndex < asFeatureStats.size() && asFeatureStats[featureIndex].subType != FEAT_GEN_ARTE; ++featureIndex) {}
+	if (featureIndex >= asFeatureStats.size())
 	{
 		debug(LOG_WARNING, "No artefact feature!");
 		return;
@@ -774,7 +774,6 @@ void sendMultiPlayerFeature(uint32_t ref, uint32_t x, uint32_t y, uint32_t id)
 void recvMultiPlayerFeature(NETQUEUE queue)
 {
 	uint32_t ref = 0xff, x = 0, y = 0, id = 0;
-	unsigned int i;
 
 	NETbeginDecode(queue, GAME_DEBUG_ADD_FEATURE);
 	{
@@ -793,7 +792,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 	}
 
 	// Find the feature stats list that contains the feature type we want to build
-	for (i = 0; i < numFeatureStats; ++i)
+	for (size_t i = 0, end = asFeatureStats.size(); i < end; ++i)
 	{
 		// If we found the correct feature type
 		if (asFeatureStats[i].ref == ref)

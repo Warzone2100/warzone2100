@@ -6789,7 +6789,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 	FEATURE_SAVEHEADER		*psHeader;
 	SAVE_FEATURE_V14			*psSaveFeature;
 	FEATURE					*pFeature;
-	UDWORD					count, i, statInc;
+	UDWORD					count, i;
 	FEATURE_STATS			*psStats = nullptr;
 	bool					found;
 	UDWORD					sizeOfSaveFeature;
@@ -6852,12 +6852,12 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 		//get the stats for this feature
 		found = false;
 
-		for (statInc = 0; statInc < numFeatureStats; statInc++)
+		for (FEATURE_STATS& stat : asFeatureStats)
 		{
-			psStats = asFeatureStats + statInc;
 			//loop until find the same name
-			if (psStats->id.compare(psSaveFeature->name) == 0)
+			if (stat.id.compare(psSaveFeature->name) == 0)
 			{
+				psStats = &stat;
 				found = true;
 				break;
 			}
@@ -6905,8 +6905,8 @@ static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWOR
 
 	for (auto &feature : *pFeatures)
 	{
-		auto psStats = std::find_if(asFeatureStats, asFeatureStats + numFeatureStats, [&](FEATURE_STATS &stat) { return stat.id.compare(feature.name.c_str()) == 0; });
-		if (psStats == asFeatureStats + numFeatureStats)
+		auto psStats = std::find_if(asFeatureStats.begin(), asFeatureStats.end(), [&feature](FEATURE_STATS& stat) { return stat.id.compare(feature.name.c_str()) == 0; });
+		if (psStats == asFeatureStats.end())
 		{
 			debug(LOG_ERROR, "Feature type \"%s\" unknown", feature.name.c_str());
 			continue;  // ignore this
@@ -6927,7 +6927,7 @@ static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWOR
 				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", feature.id.value());
 			}
 		}
-		pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true, newID);
+		pFeature = buildFeature(&*psStats, feature.position.x, feature.position.y, true, newID);
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", feature.name.c_str());
@@ -6962,17 +6962,16 @@ bool loadSaveFeature2(const char *pFileName)
 		ini.beginGroup(list[i]);
 		WzString name = ini.string("name");
 		Position pos = ini.vector3i("position");
-		int statInc;
 		bool found = false;
 		FEATURE_STATS *psStats = nullptr;
 
 		//get the stats for this feature
-		for (statInc = 0; statInc < numFeatureStats; statInc++)
+		for (FEATURE_STATS& stat : asFeatureStats)
 		{
-			psStats = asFeatureStats + statInc;
 			//loop until find the same name
-			if (psStats->id.compare(name) == 0)
+			if (stat.id.compare(name) == 0)
 			{
+				psStats = &stat;
 				found = true;
 				break;
 			}
@@ -7702,7 +7701,7 @@ static bool writeMessageFile(const char *pFileName)
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
 		ASSERT(player < MAX_PLAYERS, "player out of bounds: %d", player);
-		for (MESSAGE *psMessage = apsMessages[player]; psMessage != nullptr; psMessage = psMessage->psNext)
+		for (const MESSAGE *psMessage : apsMessages[player])
 		{
 			ini.beginGroup("message_" + WzString::number(numMessages++));
 			ini.setValue("id", numMessages - 1);	// for future use

@@ -1270,12 +1270,12 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 		editPosMode = IED_NOPOS;
 		break;
 	case OBJ_FEATURE:
-		for (unsigned i = 0; i < std::min<unsigned>(numFeatureStats, MAXFEATURES); ++i)
+		for (unsigned i = 0, end = std::min<unsigned>(asFeatureStats.size(), MAXFEATURES); i < end; ++i)
 		{
-			apsFeatureList[i] = asFeatureStats + i;
+			apsFeatureList[i] = &asFeatureStats.at(i);
 		}
 		ppsStatsList = (BASE_STATS **)apsFeatureList;
-		intAddDebugStatsForm(ppsStatsList, std::min<unsigned>(numFeatureStats, MAXFEATURES));
+		intAddDebugStatsForm(ppsStatsList, std::min<unsigned>(asFeatureStats.size(), MAXFEATURES));
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
 		break;

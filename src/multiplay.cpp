@@ -2186,7 +2186,7 @@ MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Unsupported player: %" PRIu32 "", player);
 
-	for (MESSAGE *psCurr = apsMessages[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (MESSAGE *psCurr : apsMessages[player])
 	{
 		//look for VIEW_BEACON, should only be 1 per player
 		if (psCurr->dataType == MSG_DATA_BEACON)

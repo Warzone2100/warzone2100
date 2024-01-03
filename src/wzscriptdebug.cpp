@@ -178,7 +178,7 @@ static RowDataModel fillMessageModel()
 	RowDataModel result(6);
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (const MESSAGE *psCurr = apsMessages[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (const MESSAGE *psCurr : apsMessages[i])
 		{
 			ASSERT(psCurr->type < msg_type.size(), "Bad message type");
 			ASSERT(psCurr->dataType < msg_data_type.size(), "Bad viewdata type");
