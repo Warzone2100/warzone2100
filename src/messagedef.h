@@ -127,8 +127,6 @@ struct MESSAGE
 	bool            read = false;                           // flag to indicate whether message has been read
 	UDWORD		player;                                 // which player this message belongs to
 	MSG_DATA_TYPE	dataType;
-
-	MESSAGE         *psNext = nullptr;                       // pointer to the next in the list
 };
 
 //used to display the proximity messages

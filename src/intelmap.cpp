@@ -539,7 +539,7 @@ void W_INTELLIGENCEOVERLAY_FORM::initialize(bool _playCurrent, bool animate)
 		/* Add the message buttons */
 
 		//add each button
-		for (MESSAGE *psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage = psMessage->psNext)
+		for (MESSAGE *psMessage : apsMessages[selectedPlayer])
 		{
 			/*if (psMessage->type == MSG_TUTORIAL)
 			{
@@ -901,22 +901,20 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 
 static void intCleanUpIntelMap()
 {
-	MESSAGE		*psMessage, *psNext;
 	bool removedAMessage = false;
 
 	if (selectedPlayer < MAX_PLAYERS)
 	{
 		//remove any research messages that have been read
-		for (psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage =
-				 psNext)
+		mutating_list_iterate(apsMessages[selectedPlayer], [&removedAMessage](MESSAGE* psMessage)
 		{
-			psNext = psMessage->psNext;
 			if (psMessage->type == MSG_RESEARCH && psMessage->read)
 			{
 				removeMessage(psMessage, selectedPlayer);
 				removedAMessage = true;
 			}
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 	if (removedAMessage)
 	{
@@ -1205,20 +1203,16 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 /*sets psCurrentMsg for the Intelligence screen*/
 void setCurrentMsg()
 {
-	MESSAGE *psMsg, *psLastMsg;
-
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	psLastMsg = nullptr;
-	for (psMsg = apsMessages[selectedPlayer]; psMsg != nullptr; psMsg =
-	         psMsg->psNext)
+	for (auto it = apsMessages[selectedPlayer].rbegin(), end = apsMessages[selectedPlayer].rend(); it != end; ++it)
 	{
-		if (psMsg->type != MSG_PROXIMITY)
+		if ((*it)->type != MSG_PROXIMITY)
 		{
-			psLastMsg = psMsg;
+			psCurrentMsg = *it;
+			return;
 		}
 	}
-	psCurrentMsg = psLastMsg;
 }
 
 /*sets which states need to be paused when the intelligence screen is up*/

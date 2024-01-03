@@ -28,8 +28,7 @@
 #include "lib/framework/wzconfig.h"
 
 /* The statistics for the features */
-extern FEATURE_STATS	*asFeatureStats;
-extern UDWORD			numFeatureStats;
+extern std::vector<FEATURE_STATS> asFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
 extern FEATURE_STATS *oilResFeature;
