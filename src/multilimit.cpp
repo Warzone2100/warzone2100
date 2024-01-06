@@ -380,19 +380,15 @@ bool applyLimitSet()
 				{
 					while (asStructureStats[id].curCount[player] > asStructureStats[id].upgrade[player].limit)
 					{
-						StructureList::iterator structIt = apsStructLists[player].begin(), structItNext;
-						while (structIt != apsStructLists[player].end())
+						mutating_list_iterate(apsStructLists[player], [id](STRUCTURE* psStruct)
 						{
-							structItNext = std::next(structIt);
-							STRUCTURE* psStruct = *structIt;
 							if (psStruct->pStructureType->type == asStructureStats[id].type)
 							{
 								removeStruct(psStruct, true);
-								break;
+								return IterationResult::BREAK_ITERATION;
 							}
-							structIt = structItNext;
-						}
-
+							return IterationResult::CONTINUE_ITERATION;
+						});
 					}
 				}
 			}

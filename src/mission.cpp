@@ -580,7 +580,7 @@ void addTransporterTimerInterface()
 void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 {
 	UWORD	iX, iY, iZ;
-	SDWORD	iLandX, iLandY, iDx, iDy;
+	SDWORD	iLandX, iLandY;
 
 	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "Flying nonexistent player %d's transporters in", iPlayer);
 
@@ -590,11 +590,9 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 	iZ = (UWORD)(map_Height(iX, iY) + OFFSCREEN_HEIGHT);
 
 	//get the droids for the mission
-	DroidList::iterator droidIt = mission.apsDroidLists[iPlayer].begin(), droidItNext;
-	while (droidIt != mission.apsDroidLists[iPlayer].end())
+	mutating_list_iterate(mission.apsDroidLists[iPlayer], [iPlayer, bTrackTransporter, iX, iY, iZ, iLandX, iLandY](DROID* psTransporter)
 	{
-		droidItNext = std::next(droidIt);
-		DROID* psTransporter = *droidIt;
+		SDWORD iDx, iDy;
 
 		if (psTransporter->droidType == DROID_SUPERTRANSPORTER)
 		{
@@ -647,18 +645,17 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 				audio_PlayObjDynamicTrack(psTransporter, ID_SOUND_BLIMP_FLIGHT, moveCheckDroidMovingAndVisible);
 
 				//only want to fly one transporter in at a time now - AB 14/01/99
-				break;
+				return IterationResult::BREAK_ITERATION;
 			}
 		}
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 /* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
 static void saveMissionData()
 {
 	UDWORD			inc;
-	STRUCTURE		*psStructBeingBuilt;
 	bool			bRepairExists;
 
 	debug(LOG_SAVE, "called");
@@ -670,18 +667,16 @@ static void saveMissionData()
 
 	bRepairExists = false;
 	//set any structures currently being built to completed for the selected player
-	StructureList::iterator structIt = apsStructLists[selectedPlayer].begin(), structItNext;
-	while (structIt != apsStructLists[selectedPlayer].end())
+	mutating_list_iterate(apsStructLists[selectedPlayer], [&bRepairExists](STRUCTURE* psStruct)
 	{
-		structItNext = std::next(structIt);
-		STRUCTURE* psStruct = *structIt;
+		STRUCTURE* psStructBeingBuilt;
 		if (psStruct->status == SS_BEING_BUILT)
 		{
 			//find a droid working on it
 			for (const DROID* psDroid : apsDroidLists[selectedPlayer])
 			{
-				if ((psStructBeingBuilt = (STRUCTURE *)orderStateObj(psDroid, DORDER_BUILD))
-				    && psStructBeingBuilt == psStruct)
+				if ((psStructBeingBuilt = (STRUCTURE*)orderStateObj(psDroid, DORDER_BUILD))
+					&& psStructBeingBuilt == psStruct)
 				{
 					// just give it all its build points
 					structureBuild(psStruct, nullptr, structureBuildPointsToCompletion(*psStruct));
@@ -695,8 +690,8 @@ static void saveMissionData()
 		{
 			bRepairExists = true;
 		}
-		structIt = structItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	//repair all droids back at home base if have a repair facility
 	if (bRepairExists)
@@ -713,6 +708,7 @@ static void saveMissionData()
 	//clear droid orders for all droids except constructors still building
 	for (DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
+		STRUCTURE* psStructBeingBuilt;
 		if ((psStructBeingBuilt = (STRUCTURE *)orderStateObj(psDroid, DORDER_BUILD)))
 		{
 			if (psStructBeingBuilt->status == SS_BUILT)
@@ -882,17 +878,14 @@ void saveMissionLimboData()
 	processPreviousCampDroids();
 
 	// move droids properly - does all the clean up code
-	DroidList::iterator psDroid = apsDroidLists[selectedPlayer].begin(), psNext;
-	while (psDroid != apsDroidLists[selectedPlayer].end())
+	mutating_list_iterate(apsDroidLists[selectedPlayer], [](DROID* psDroid)
 	{
-		psNext = std::next(psDroid);
-		DROID* psDroidRaw = *psDroid;
-		if (droidRemove(psDroidRaw, apsDroidLists))
+		if (droidRemove(psDroid, apsDroidLists))
 		{
-			addDroid(psDroidRaw, mission.apsDroidLists);
+			addDroid(psDroid, mission.apsDroidLists);
 		}
-		psDroid = psNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 	apsDroidLists[selectedPlayer].clear();
 
 	// any selectedPlayer's factories/research need to be put on holdProduction/holdresearch
@@ -912,19 +905,16 @@ void saveMissionLimboData()
 //this is called via a script function to place the Limbo droids once the mission has started
 void placeLimboDroids()
 {
-	UDWORD			droidX, droidY;
-	PICKTILE		pickRes;
-
 	debug(LOG_SAVE, "called");
 
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	// Copy the droids across for the selected Player
-	DroidList::iterator droidIt = apsLimboDroids[selectedPlayer].begin(), droidItNext;
-	while (droidIt != apsLimboDroids[selectedPlayer].end())
+	mutating_list_iterate(apsLimboDroids[selectedPlayer], [](DROID* psDroid)
 	{
-		droidItNext = std::next(droidIt);
-		DROID* psDroid = *droidIt;
+		UDWORD			droidX, droidY;
+		PICKTILE		pickRes;
+
 		if (droidRemove(psDroid, apsLimboDroids))
 		{
 			addDroid(psDroid, apsDroidLists);
@@ -932,7 +922,7 @@ void placeLimboDroids()
 			if (isTransporter(psDroid))
 			{
 				vanishDroid(psDroid);
-				continue;
+				return IterationResult::CONTINUE_ITERATION;
 			}
 			//set up location for each of the droids
 			droidX = map_coord(getLandingX(LIMBO_LANDING));
@@ -959,8 +949,8 @@ void placeLimboDroids()
 		{
 			ASSERT(false, "placeLimboUnits: Unable to remove unit from Limbo list");
 		}
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 /*restores the necessary data on completion of a Limbo Expand mission*/
@@ -972,11 +962,8 @@ void restoreMissionLimboData()
 
 	/*the droids stored in the mission droid list need to be added back
 	into the current droid list*/
-	DroidList::iterator droidIt = mission.apsDroidLists[selectedPlayer].begin(), droidItNext;
-	while (droidIt != mission.apsDroidLists[selectedPlayer].end())
+	mutating_list_iterate(mission.apsDroidLists[selectedPlayer], [](DROID* psDroid)
 	{
-		droidItNext = std::next(droidIt);
-		DROID* psDroid = *droidIt;
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, mission.apsDroidLists))
 		{
@@ -985,8 +972,8 @@ void restoreMissionLimboData()
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			//the location of the droid should be valid!
 		}
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 	ASSERT(mission.apsDroidLists[selectedPlayer].empty(), "list should be empty");
 }
 
@@ -1002,15 +989,12 @@ void saveCampaignData()
 	if (getDroidsToSafetyFlag())
 	{
 		// Move any Transporters into the mission list
-		DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
-		while (droidIt != apsDroidLists[selectedPlayer].end())
+		mutating_list_iterate(apsDroidLists[selectedPlayer], [](DROID* psDroid)
 		{
-			droidItNext = std::next(droidIt);
-			DROID* psDroid = *droidIt;
 			if (isTransporter(psDroid))
 			{
 				// Empty the transporter into the mission list
-				ASSERT_OR_RETURN(, psDroid->psGroup != nullptr, "Transporter does not have a group");
+				ASSERT_OR_RETURN(IterationResult::CONTINUE_ITERATION, psDroid->psGroup != nullptr, "Transporter does not have a group");
 
 				mutating_list_iterate(psDroid->psGroup->psList, [psDroid](DROID* psCurr)
 				{
@@ -1037,8 +1021,8 @@ void saveCampaignData()
 					addDroid(psDroid, mission.apsDroidLists);
 				}
 			}
-			droidIt = droidItNext;
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 	else
 	{
@@ -1061,19 +1045,13 @@ void saveCampaignData()
 		mission.apsDroidLists[selectedPlayer].reverse();
 
 		//find the *first* transporter
-		DroidList::iterator droidIt = mission.apsDroidLists[selectedPlayer].begin(), droidItNext;
-		while (droidIt != mission.apsDroidLists[selectedPlayer].end())
+		mutating_list_iterate(mission.apsDroidLists[selectedPlayer], [](DROID* psDroid)
 		{
-			droidItNext = std::next(droidIt);
-			DROID* psDroid = *droidIt;
 			if (isTransporter(psDroid))
 			{
 				//fill it with droids from the mission list
-				DroidList::iterator safeDroidIt = mission.apsDroidLists[selectedPlayer].begin(), safeDroidItNext;
-				while (safeDroidIt != mission.apsDroidLists[selectedPlayer].end())
+				mutating_list_iterate(mission.apsDroidLists[selectedPlayer], [psDroid](DROID* psSafeDroid)
 				{
-					safeDroidItNext = std::next(safeDroidIt);
-					DROID* psSafeDroid = *safeDroidIt;
 					if (psSafeDroid != psDroid)
 					{
 						//add to the Transporter, checking for when full
@@ -1086,28 +1064,26 @@ void saveCampaignData()
 						}
 						else
 						{
-							break;
+							return IterationResult::BREAK_ITERATION;
 						}
 					}
-					safeDroidIt = safeDroidItNext;
-				}
+					return IterationResult::CONTINUE_ITERATION;
+				});
 				//only want to fill one transporter
-				break;
+				return IterationResult::BREAK_ITERATION;
 			}
-			droidIt = droidItNext;
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 
 	//clear all other droids
 	for (int inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		DroidList::iterator droidIt = apsDroidLists[inc].begin(), droidItNext;
-		while (droidIt != apsDroidLists[inc].end())
+		mutating_list_iterate(apsDroidLists[inc], [](DROID* d)
 		{
-			droidItNext = std::next(droidIt);
-			vanishDroid(*droidIt);
-			droidIt = droidItNext;
-		}
+			vanishDroid(d);
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 
 	//clear out the audio
@@ -1259,21 +1235,17 @@ static void clearCampaignUnits()
 /*This deals with droids at the end of an offworld mission*/
 static void processMission()
 {
-	UDWORD			droidX, droidY;
-	PICKTILE		pickRes;
-
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	//and the rest on the mission map  - for now?
-	DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
-	while (droidIt != apsDroidLists[selectedPlayer].end())
+	mutating_list_iterate(apsDroidLists[selectedPlayer], [](DROID* psDroid)
 	{
-		droidItNext = std::next(droidIt);
-		DROID* psDroid = *droidIt;
+		UDWORD			droidX, droidY;
+		PICKTILE		pickRes;
 		//reset order - do this to all the droids that are returning from offWorld
 		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		// clean up visibility
-		visRemoveVisibility((BASE_OBJECT *)psDroid);
+		visRemoveVisibility((BASE_OBJECT*)psDroid);
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, apsDroidLists))
 		{
@@ -1298,8 +1270,8 @@ static void processMission()
 			// This is mainly for VTOLs
 			setDroidBase(psDroid, nullptr);
 		}
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 
@@ -1313,11 +1285,8 @@ void processMissionLimbo()
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 
 	//all droids (for selectedPlayer only) are placed into the limbo list
-	DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
-	while (droidIt != apsDroidLists[selectedPlayer].end())
+	mutating_list_iterate(apsDroidLists[selectedPlayer], [&numDroidsAddedToLimboList](DROID* psDroid)
 	{
-		droidItNext = std::next(droidIt);
-		DROID* psDroid = *droidIt;
 		//KILL OFF TRANSPORTER - should never be one but....
 		if (isTransporter(psDroid))
 		{
@@ -1345,8 +1314,8 @@ void processMissionLimbo()
 				}
 			}
 		}
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 /*switch the pointers for the map and droid lists so that droid placement
@@ -1576,48 +1545,43 @@ static void missionResetDroids()
 
 	for (unsigned int player = 0; player < MAX_PLAYERS; player++)
 	{
-		DroidList::iterator droidIt = apsDroidLists[player].begin(), droidItNext;
-		while (droidIt != apsDroidLists[player].end())
+		mutating_list_iterate(apsDroidLists[player], [](DROID* d)
 		{
-			droidItNext = std::next(droidIt);
 			// Reset order - unless constructor droid that is mid-build
-			if (((*droidIt)->droidType == DROID_CONSTRUCT
-			     || (*droidIt)->droidType == DROID_CYBORG_CONSTRUCT)
-			    && orderStateObj((*droidIt), DORDER_BUILD))
+			if ((d->droidType == DROID_CONSTRUCT
+				|| d->droidType == DROID_CYBORG_CONSTRUCT)
+				&& orderStateObj(d, DORDER_BUILD))
 			{
 				// Need to set the action time to ignore the previous mission time
-				(*droidIt)->actionStarted = gameTime;
+				d->actionStarted = gameTime;
 			}
 			else
 			{
-				orderDroid(*droidIt, DORDER_STOP, ModeImmediate);
+				orderDroid(d, DORDER_STOP, ModeImmediate);
 			}
 
 			//KILL OFF TRANSPORTER
-			if (isTransporter(*droidIt))
+			if (isTransporter(d))
 			{
-				vanishDroid(*droidIt);
+				vanishDroid(d);
 			}
-			droidIt = droidItNext;
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 
-	DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
-	while (droidIt != apsDroidLists[selectedPlayer].end())
+	mutating_list_iterate(apsDroidLists[selectedPlayer], [](DROID* psDroid)
 	{
-		droidItNext = std::next(droidIt);
-		DROID* psDroid = *droidIt;
 		bool	placed = false;
 
 		//for all droids that have never left home base
 		if (psDroid->pos.x == INVALID_XY && psDroid->pos.y == INVALID_XY)
 		{
-			STRUCTURE	*psStruct = psDroid->psBaseStruct;
-			FACTORY		*psFactory = nullptr;
+			STRUCTURE* psStruct = psDroid->psBaseStruct;
+			FACTORY* psFactory = nullptr;
 
 			if (psStruct && StructIsFactory(psStruct))
 			{
-				psFactory = (FACTORY *)psStruct->pFunctionality;
+				psFactory = (FACTORY*)psStruct->pFunctionality;
 			}
 			//find a location next to the factory
 			if (psFactory)
@@ -1681,13 +1645,13 @@ static void missionResetDroids()
 				// Do all the things in build droid that never did when it was built!
 				// check the droid is a reasonable distance from the edge of the map
 				if (psDroid->pos.x <= world_coord(EDGE_SIZE) ||
-				    psDroid->pos.y <= world_coord(EDGE_SIZE) ||
-				    psDroid->pos.x >= world_coord(mapWidth - EDGE_SIZE) ||
-				    psDroid->pos.y >= world_coord(mapHeight - EDGE_SIZE))
+					psDroid->pos.y <= world_coord(EDGE_SIZE) ||
+					psDroid->pos.x >= world_coord(mapWidth - EDGE_SIZE) ||
+					psDroid->pos.y >= world_coord(mapHeight - EDGE_SIZE))
 				{
 					debug(LOG_ERROR, "missionResetUnits: unit too close to edge of map - removing");
 					vanishDroid(psDroid);
-					continue;
+					return IterationResult::CONTINUE_ITERATION;
 				}
 
 				// People always stand upright
@@ -1705,8 +1669,8 @@ static void missionResetDroids()
 				vanishDroid(psDroid);
 			}
 		}
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 /*unloads the Transporter passed into the mission at the specified x/y
@@ -2922,36 +2886,29 @@ void missionDestroyObjects()
 		{
 			// AI player, clear out old data
 
-			DroidList::iterator droidIt = apsDroidLists[Player].begin(), droidItNext;
-			while (droidIt != apsDroidLists[Player].end())
+			mutating_list_iterate(apsDroidLists[Player], [](DROID* d)
 			{
-				droidItNext = std::next(droidIt);
-				removeDroidBase(*droidIt);
-				droidIt = droidItNext;
-			}
+				removeDroidBase(d);
+				return IterationResult::CONTINUE_ITERATION;
+			});
 
 			//clear out the mission lists as well to make sure no Transporters exist
 			apsDroidLists[Player] = std::move(mission.apsDroidLists[Player]);
 
-			droidIt = apsDroidLists[Player].begin();
-			while (droidIt != apsDroidLists[Player].end())
+			mutating_list_iterate(apsDroidLists[Player], [](DROID* psDroid)
 			{
-				droidItNext = std::next(droidIt);
-				DROID* psDroid = *droidIt;
 				//make sure its died flag is not set since we've swapped the apsDroidList pointers over
 				psDroid->died = false;
 				removeDroidBase(psDroid);
-				droidIt = droidItNext;
-			}
+				return IterationResult::CONTINUE_ITERATION;
+			});
 			mission.apsDroidLists[Player].clear();
 
-			StructureList::iterator structIt = apsStructLists[Player].begin(), structItNext;
-			while (structIt != apsStructLists[Player].end())
+			mutating_list_iterate(apsStructLists[Player], [](STRUCTURE* s)
 			{
-				structItNext = std::next(structIt);
-				removeStruct(*structIt, true);
-				structIt = structItNext;
-			}
+				removeStruct(s, true);
+				return IterationResult::CONTINUE_ITERATION;
+			});
 		}
 	}
 
@@ -3010,11 +2967,8 @@ void processPreviousCampDroids()
 	// See if any are left
 	if (!mission.apsDroidLists[selectedPlayer].empty())
 	{
-		DroidList::iterator droidIt = mission.apsDroidLists[selectedPlayer].begin(), droidItNext;
-		while (droidIt != mission.apsDroidLists[selectedPlayer].end())
+		mutating_list_iterate(mission.apsDroidLists[selectedPlayer], [](DROID* psDroid)
 		{
-			droidItNext = std::next(droidIt);
-			DROID* psDroid = *droidIt;
 			// We want to kill off all droids now! - AB 27/01/99
 			// KILL OFF TRANSPORTER
 			if (droidRemove(psDroid, mission.apsDroidLists))
@@ -3022,8 +2976,8 @@ void processPreviousCampDroids()
 				addDroid(psDroid, apsDroidLists);
 				vanishDroid(psDroid);
 			}
-			droidIt = droidItNext;
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 }
 
@@ -3231,11 +3185,8 @@ void emptyTransporters(bool bOffWorld)
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " >= MAX_PLAYERS", selectedPlayer);
 
 	//see if there are any Transporters in the world
-	DroidList::iterator transIt = apsDroidLists[selectedPlayer].begin(), transItNext;
-	while (transIt != apsDroidLists[selectedPlayer].end())
+	mutating_list_iterate(apsDroidLists[selectedPlayer], [bOffWorld](DROID* psTransporter)
 	{
-		transItNext = std::next(transIt);
-		DROID* psTransporter = *transIt;
 		if (isTransporter(psTransporter))
 		{
 			//if flying in, empty the contents
@@ -3286,14 +3237,12 @@ void emptyTransporters(bool bOffWorld)
 				vanishDroid(psTransporter);
 			}
 		}
-		transIt = transItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
+
 	//deal with any transporters that are waiting to come over
-	transIt = mission.apsDroidLists[selectedPlayer].begin();
-	while (transIt != mission.apsDroidLists[selectedPlayer].end())
+	mutating_list_iterate(mission.apsDroidLists[selectedPlayer], [](DROID* psTransporter)
 	{
-		transItNext = std::next(transIt);
-		DROID* psTransporter = *transIt;
 		if (isTransporter(psTransporter))
 		{
 			//for each droid within the transporter...
@@ -3312,8 +3261,8 @@ void emptyTransporters(bool bOffWorld)
 			});
 		}
 		//don't need to destroy the transporter here - it is dealt with by the endMission process
-		transIt = transItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 /*bCheating = true == start of cheat

@@ -385,13 +385,11 @@ void kf_CloneSelected(int limit)
 		return; // no-op
 	}
 
-	DroidList::iterator droidIt = apsDroidLists[selectedPlayer].begin(), droidItNext;
-	while (droidIt != apsDroidLists[selectedPlayer].end())
+	mutating_list_iterate(apsDroidLists[selectedPlayer], [limit, &sTemplate](DROID* d)
 	{
-		droidItNext = std::next(droidIt);
-		if ((*droidIt)->selected)
+		if (d->selected)
 		{
-			enumerateTemplates(selectedPlayer, [psDroid = *droidIt, &sTemplate](DROID_TEMPLATE * psTempl) {
+			enumerateTemplates(selectedPlayer, [psDroid = d, &sTemplate](DROID_TEMPLATE* psTempl) {
 				if (psTempl->name.compare(psDroid->aName) == 0)
 				{
 					sTemplate = psTempl;
@@ -402,15 +400,15 @@ void kf_CloneSelected(int limit)
 
 			if (!sTemplate)
 			{
-				debug(LOG_ERROR, "Cloning vat has been destroyed. We can't find the template for this droid: %s, id:%u, type:%d!", (*droidIt)->aName, (*droidIt)->id, (*droidIt)->droidType);
-				return;
+				debug(LOG_ERROR, "Cloning vat has been destroyed. We can't find the template for this droid: %s, id:%u, type:%d!", d->aName, d->id, d->droidType);
+				return IterationResult::BREAK_ITERATION;
 			}
 
 			// create a new droid army
 			for (int i = 0; i < limit; i++)
 			{
-				Vector2i pos = (*droidIt)->pos.xy() + iSinCosR(40503 * i, iSqrt(50 * 50 * (i + 1)));  // 40503 = 65536/φ (A bit more than a right angle)
-				DROID *psNewDroid = buildDroid(sTemplate, pos.x, pos.y, (*droidIt)->player, false, nullptr);
+				Vector2i pos = d->pos.xy() + iSinCosR(40503 * i, iSqrt(50 * 50 * (i + 1)));  // 40503 = 65536/φ (A bit more than a right angle)
+				DROID* psNewDroid = buildDroid(sTemplate, pos.x, pos.y, d->player, false, nullptr);
 				if (psNewDroid)
 				{
 					addDroid(psNewDroid, apsDroidLists);
@@ -421,15 +419,15 @@ void kf_CloneSelected(int limit)
 					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", getID(sTemplate), sTemplate->multiPlayerID);
 				}
 			}
-			std::string msg = astringf(_("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, (*droidIt)->aName);
+			std::string msg = astringf(_("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, d->aName);
 			sendInGameSystemMessage(msg.c_str());
 			Cheated = true;
 			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
-			return;
+			return IterationResult::BREAK_ITERATION;
 		}
 		debug(LOG_INFO, "Nothing was selected?");
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 void kf_MakeMeHero()

@@ -542,40 +542,28 @@ static void gameStateUpdate()
 		//update the current power available for a player
 		updatePlayerPower(i);
 
-		DroidList::iterator droidIt = apsDroidLists[i].begin(), droidItNext;
-		while (droidIt != apsDroidLists[i].end())
+		mutating_list_iterate(apsDroidLists[i], [](DROID* d)
 		{
-			// Copy the next pointer - not 100% sure if the droid could get destroyed but this covers us anyway
-			droidItNext = std::next(droidIt);
-			droidUpdate(*droidIt);
-			droidIt = droidItNext;
-		}
+			droidUpdate(d);
+			return IterationResult::CONTINUE_ITERATION;
+		});
+		mutating_list_iterate(mission.apsDroidLists[i], [](DROID* d)
+		{
+			missionDroidUpdate(d);
+			return IterationResult::CONTINUE_ITERATION;
+		});
 
-		droidIt = mission.apsDroidLists[i].begin();
-		while (droidIt != mission.apsDroidLists[i].end())
+		// FIXME: These for-loops are code duplication
+		mutating_list_iterate(apsStructLists[i], [](STRUCTURE* s)
 		{
-			/* Copy the next pointer - not 100% sure if the droid could
-			get destroyed but this covers us anyway */
-			droidItNext = std::next(droidIt);
-			missionDroidUpdate(*droidIt);
-			droidIt = droidItNext;
-		}
-
-		// FIXME: These for-loops are code duplicationo
-		StructureList::iterator structIt = apsStructLists[i].begin(), structItNext;
-		while (structIt != apsStructLists[i].end())
+			structureUpdate(s, false);
+			return IterationResult::CONTINUE_ITERATION;
+		});
+		mutating_list_iterate(mission.apsStructLists[i], [](STRUCTURE* s)
 		{
-			structItNext = std::next(structIt);
-			structureUpdate(*structIt, false);
-			structIt = structItNext;
-		}
-		structIt = mission.apsStructLists[i].begin();
-		while (structIt != mission.apsStructLists[i].end())
-		{
-			structItNext = std::next(structIt);
-			structureUpdate(*structIt, true); // update for mission
-			structIt = structItNext;
-		}
+			structureUpdate(s, true); // update for mission
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 
 	missionTimerUpdate();
