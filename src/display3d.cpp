@@ -89,6 +89,8 @@
 #include "faction.h"
 #include "wzcrashhandlingproviders.h"
 #include "shadowcascades.h"
+#include "profiling.h"
+
 
 /********************  Prototypes  ********************/
 
@@ -105,7 +107,7 @@ static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static void	drawDragBox();
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const glm::mat4 &perspectiveViewModelMatrix);
-static void	drawTiles(iView *player);
+static void	drawTiles(iView *player, LightingData& lightData, LightMap& lightmap, ILightingManager& lightManager);
 static void	display3DProjectiles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static void	drawDroidAndStructureSelections();
 static void	drawDroidSelections();
@@ -999,8 +1001,16 @@ void draw3DScene()
 
 	updateFogDistance(distance);
 
+	// Set light manager
+	{
+		if (war_getPointLightPerPixelLighting())
+			setLightingManager(std::make_unique<renderingNew::LightingManager>());
+		else
+			setLightingManager(std::make_unique<rendering1999::LightingManager>());
+	}
+
 	/* Now, draw the terrain */
-	drawTiles(&playerPos);
+	drawTiles(&playerPos, getCurrentLightingData(), getCurrentLighmapData(), getCurrentLightingManager());
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
@@ -1288,7 +1298,7 @@ glm::mat4 getBiasedShadowMapMVPMatrix(glm::mat4 lightOrthoMatrix, const glm::mat
 }
 
 /// Draw the terrain and all droids, missiles and other objects on it
-static void drawTiles(iView *player)
+static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap, ILightingManager& lightManager)
 {
 	WZ_PROFILE_SCOPE(drawTiles);
 	// draw terrain
@@ -1354,6 +1364,10 @@ static void drawTiles(iView *player)
 	const Vector3f theSun = (viewMatrix * glm::vec4(getTheSun(), 0.f)).xyz();
 	pie_BeginLighting(theSun);
 
+	// Reset all lighting data
+	lightData.lights.clear();
+	lightManager.SetFrameStart();
+
 	// update the fog of war... FIXME: Remove this
 	const glm::mat4 tileCalcPerspectiveViewMatrix = perspectiveMatrix * baseViewMatrix;
 	auto currTerrainShaderType = getTerrainShaderType();
@@ -1376,7 +1390,8 @@ static void drawTiles(iView *player)
 					MAPTILE* psTile = mapTile(playerXTile + j, playerZTile + i);
 
 					pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-					setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level)));
+					auto color = pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level));
+					lightmap(playerXTile + j, playerZTile + i) = color;
 				}
 				tileScreenInfo[idx][jdx].z = pie_RotateProjectWithPerspective(&pos, tileCalcPerspectiveViewMatrix, &screen);
 				tileScreenInfo[idx][jdx].x = screen.x;
@@ -1418,13 +1433,19 @@ static void drawTiles(iView *player)
 
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	wzPerfBegin(PERF_EFFECTS, "3D scene - effects");
-	processEffects(perspectiveViewMatrix);
+	processEffects(perspectiveViewMatrix, lightData);
 	atmosUpdateSystem();
 	avUpdateTiles();
 	wzPerfEnd(PERF_EFFECTS);
 
+	// The lightmap need to be ready at this point
+	{
+		WZ_PROFILE_SCOPE(LightingManager_ComputeFrameData);
+		lightManager.ComputeFrameData(lightData, lightmap, perspectiveViewMatrix);
+	}
+
 	// prepare terrain for drawing
-	perFrameTerrainUpdates();
+	perFrameTerrainUpdates(lightmap);
 
 	// and prepare for rendering the models
 	wzPerfBegin(PERF_MODEL_INIT, "Draw 3D scene - model init");
@@ -1458,6 +1479,7 @@ static void drawTiles(iView *player)
 
 	pie_UpdateLightmap(getTerrainLightmapTexture(), getModelUVLightmapMatrix());
 	pie_FinalizeMeshes(currentGameFrame);
+
 
 	// shadow/depth-mapping passes
 	ShadowCascadesInfo shadowCascadesInfo;

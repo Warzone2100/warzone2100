@@ -18,28 +18,21 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_SRC_LIGHTNING_H__
-#define __INCLUDED_SRC_LIGHTNING_H__
+#pragma once
 
-#include "lib/ivis_opengl/pietypes.h"
-#include "lib/ivis_opengl/pielighting.h"
+#include <array>
+#include <glm/glm.hpp>
+#include <algorithm>
+#include <functional>
 
+using BoundingBox = std::array<glm::vec3, 8>;
 
-namespace rendering1999
-{
-	//! This lighting manager relies on lightmap to handle point lights
-	struct LightingManager final : ILightingManager {
+/// Project a bounding box in clip space
+BoundingBox transformBoundingBox(const glm::mat4& worldViewProjectionMatrix, const BoundingBox& worldSpaceBoundingBox);
 
-		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
-	};
-}
+/// Define a half space
+using HalfSpaceCheck = std::function<bool(glm::vec3)>;
+/// Define a view frustrum (as an intersection of half space
+using IntersectionOfHalfSpace = std::array< HalfSpaceCheck, 6>;
 
-void setTheSun(Vector3f newSun);
-Vector3f getTheSun();
-
-void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
-void updateFogDistance(float distance);
-void setDefaultFogColour();
-void calcDroidIllumination(DROID *psDroid);
-
-#endif // __INCLUDED_SRC_LIGHTNING_H__
+bool isBBoxInClipSpace(const IntersectionOfHalfSpace& intersectionOfHalfSpace, const BoundingBox& points);

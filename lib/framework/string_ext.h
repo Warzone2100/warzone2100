@@ -46,8 +46,8 @@
 #	endif
 #	if defined(DEBUG)
 #		define strdup(s) \
-	strdup2(s,__FILE__,__LINE__)
-static inline char *strdup2(const char *s, char *fileName, int line)
+	strdup2(static_cast<const char*>(s),__LINE__)
+static inline char *strdup2(const char *s, int line)
 {
 	char *result;
 

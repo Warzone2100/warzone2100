@@ -169,19 +169,22 @@ static	uint8_t	EffectForPlayer = 0;
 // ----------------------------------------------------------------------------------------
 /* PROTOTYPES */
 
+
+static bool rejectLandLight(LAND_LIGHT_SPEC type);
+
 // ----------------------------------------------------------------------------------------
 // ---- Update functions - every group type of effect has one of these */
 static bool updateWaypoint(EFFECT *psEffect);
-static bool updateExplosion(EFFECT *psEffect);
+static bool updateExplosion(EFFECT *psEffect, LightingData& lightData);
 static bool updatePolySmoke(EFFECT *psEffect);
-static bool updateGraviton(EFFECT *psEffect);
+static bool updateGraviton(EFFECT *psEffect, LightingData& lightData);
 static bool updateConstruction(EFFECT *psEffect);
 static bool updateBlood(EFFECT *psEffect);
-static bool updateDestruction(EFFECT *psEffect);
-static bool updateFire(EFFECT *psEffect);
-static bool updateSatLaser(EFFECT *psEffect);
+static bool updateDestruction(EFFECT *psEffect, LightingData& lightData);
+static bool updateFire(EFFECT *psEffect, LightingData& lightData);
+static bool updateSatLaser(EFFECT *psEffect, LightingData& lightData);
 static bool updateFirework(EFFECT *psEffect);
-static bool updateEffect(EFFECT *psEffect);	// MASTER function
+static bool updateEffect(EFFECT *psEffect, LightingData& lightData);	// MASTER function
 
 // ----------------------------------------------------------------------------------------
 // ---- The render functions - every group type of effect has a distinct one
@@ -474,7 +477,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 
 
 /* Calls all the update functions for each different currently active effect */
-void processEffects(const glm::mat4 &perspectiveViewMatrix)
+void processEffects(const glm::mat4 &perspectiveViewMatrix, LightingData& lightData)
 {
 	WZ_PROFILE_SCOPE(processEffects);
 	for (auto it = activeList.begin(); it != activeList.end(); )
@@ -483,7 +486,7 @@ void processEffects(const glm::mat4 &perspectiveViewMatrix)
 
 		if (psEffect->birthTime <= graphicsTime)  // Don't process, if it doesn't exist yet
 		{
-			if (!updateEffect(psEffect))
+			if (!updateEffect(psEffect, lightData))
 			{
 				delete psEffect;
 				it = activeList.erase(it);
@@ -502,13 +505,13 @@ void processEffects(const glm::mat4 &perspectiveViewMatrix)
 }
 
 /* The general update function for all effects - calls a specific one for each. Returns false if effect should be deleted. */
-static bool updateEffect(EFFECT *psEffect)
+static bool updateEffect(EFFECT *psEffect, LightingData& lightData)
 {
 	/* What type of effect are we dealing with? */
 	switch (psEffect->group)
 	{
 	case EFFECT_EXPLOSION:
-		return updateExplosion(psEffect);
+		return updateExplosion(psEffect, lightData);
 	case EFFECT_WAYPOINT:
 		if (!gamePaused())
 		{
@@ -530,7 +533,7 @@ static bool updateEffect(EFFECT *psEffect)
 	case EFFECT_GRAVITON:
 		if (!gamePaused())
 		{
-			return updateGraviton(psEffect);
+			return updateGraviton(psEffect, lightData);
 		}
 		return true;
 	case EFFECT_BLOOD:
@@ -542,19 +545,19 @@ static bool updateEffect(EFFECT *psEffect)
 	case EFFECT_DESTRUCTION:
 		if (!gamePaused())
 		{
-			return updateDestruction(psEffect);
+			return updateDestruction(psEffect, lightData);
 		}
 		return true;
 	case EFFECT_FIRE:
 		if (!gamePaused())
 		{
-			return updateFire(psEffect);
+			return updateFire(psEffect, lightData);
 		}
 		return true;
 	case EFFECT_SAT_LASER:
 		if (!gamePaused())
 		{
-			return updateSatLaser(psEffect);
+			return updateSatLaser(psEffect, lightData);
 		}
 		return true;
 	case EFFECT_FIREWORK:
@@ -696,7 +699,7 @@ static bool updateFirework(EFFECT *psEffect)
 	return true;
 }
 
-static bool updateSatLaser(EFFECT *psEffect)
+static bool updateSatLaser(EFFECT *psEffect, LightingData& lightData)
 {
 	Vector3i dv;
 	UDWORD	val;
@@ -773,7 +776,7 @@ static bool updateSatLaser(EFFECT *psEffect)
 		light.position = Vector3f(xPos, startHeight, yPos);
 		light.range = 800;
 		light.colour = pal_Colour(0, 0, 255);
-		processLight(&light);
+		lightData.lights.push_back(light);
 		return true;
 	}
 	else
@@ -783,7 +786,7 @@ static bool updateSatLaser(EFFECT *psEffect)
 }
 
 /** The update function for the explosions */
-static bool updateExplosion(EFFECT *psEffect)
+static bool updateExplosion(EFFECT *psEffect, LightingData& lightData)
 {
 	if (TEST_LIT(psEffect))
 	{
@@ -807,11 +810,14 @@ static bool updateExplosion(EFFECT *psEffect)
 			percent = 100;
 		}
 
-		UDWORD range = percent;
-		light.position = psEffect->position;
-		light.range = (3 * range) / 2;
-		light.colour = pal_Colour(255, 0, 0);
-		processLight(&light);
+		if (psEffect->type != EXPLOSION_TYPE_LAND_LIGHT || !rejectLandLight(static_cast<LAND_LIGHT_SPEC>(psEffect->specific)))
+		{
+			UDWORD range = percent;
+			light.position = psEffect->position;
+			light.range = (3 * range) / 2;
+			light.colour = pal_Colour(255, 0, 0);
+			lightData.lights.push_back(light);
+		}
 	}
 
 	if (psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
@@ -825,7 +831,7 @@ static bool updateExplosion(EFFECT *psEffect)
 		light.position = psEffect->position;
 		light.range = psEffect->size + 200;
 		light.colour = pal_Colour(255, 255, 0);
-		processLight(&light);
+		lightData.lights.push_back(light);
 
 		if (psEffect->size > MAX_SHOCKWAVE_SIZE || light.range > 600)
 		{
@@ -937,7 +943,7 @@ static bool updatePolySmoke(EFFECT *psEffect)
 	Gravitons just fly up for a bit and then drop down and are
 	killed off when they hit the ground
 */
-static bool updateGraviton(EFFECT *psEffect)
+static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 {
 	float	accel;
 	Vector3i dv;
@@ -949,7 +955,7 @@ static bool updateGraviton(EFFECT *psEffect)
 		light.position = psEffect->position;
 		light.range = 128;
 		light.colour = pal_Colour(255, 255, 0);
-		processLight(&light);
+		lightData.lights.push_back(light);
 	}
 
 	if (gamePaused())
@@ -1069,7 +1075,7 @@ static bool updateGraviton(EFFECT *psEffect)
 
 
 /** This isn't really an on-screen effect itself - it just spawns other ones.... */
-static bool updateDestruction(EFFECT *psEffect)
+static bool updateDestruction(EFFECT *psEffect, LightingData& lightData)
 {
 	Vector3i pos;
 	UDWORD	effectType;
@@ -1106,7 +1112,7 @@ static bool updateDestruction(EFFECT *psEffect)
 	{
 		light.colour = pal_Colour(255, 0, 0);
 	}
-	processLight(&light);
+	lightData.lights.push_back(light);
 
 	if (graphicsTime > psEffect->birthTime + psEffect->lifeSpan)
 	{
@@ -1290,7 +1296,7 @@ static bool updateConstruction(EFFECT *psEffect)
 }
 
 /** Update fire sequences */
-static bool updateFire(EFFECT *psEffect)
+static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 {
 	Vector3i pos;
 	LIGHT	light;
@@ -1305,7 +1311,7 @@ static bool updateFire(EFFECT *psEffect)
 	light.position = psEffect->position;
 	light.range = (percent * psEffect->radius * 3) / 100;
 	light.colour = pal_Colour(255, 0, 0);
-	processLight(&light);
+	lightData.lights.push_back(light);
 
 	/* Time to update the frame number on the construction sprite */
 	if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)

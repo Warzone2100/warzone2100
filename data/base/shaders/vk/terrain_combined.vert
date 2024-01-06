@@ -12,6 +12,7 @@ layout(location = 7) in vec4 groundWeights;	// ground weights for splatting
 
 layout(location = 0) out FragData frag;
 layout(location = 11) out flat FragFlatData fragf;
+layout(location = 14) out mat3 ModelTangentMatrix;
 
 void main()
 {
@@ -33,7 +34,7 @@ void main()
 		vec3 vaxis = vec3(1,0,0); // v ~ vertex.x, see uv_ground
 		vec3 tangent = normalize(cross(vertexNormal, vaxis));
 		vec3 bitangent = cross(vertexNormal, tangent);
-		mat3 ModelTangentMatrix = mat3(tangent, bitangent, vertexNormal); // aka TBN-matrix
+		ModelTangentMatrix = mat3(tangent, bitangent, vertexNormal); // aka TBN-matrix
 		// transform light to TangentSpace:
 		vec3 eyeVec = normalize((cameraPos.xyz - vertex.xyz) * ModelTangentMatrix);
 		frag.groundLightDir = sunPos.xyz * ModelTangentMatrix; // already normalized

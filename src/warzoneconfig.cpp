@@ -89,6 +89,7 @@ struct WARZONE_GLOBALS
 	uint32_t shadowFilteringMode = 1;
 	uint32_t shadowFilterSize = 5;
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
+	bool pointLightLighting = false;
 	// groups UI
 	bool groupsMenuEnabled = true;
 
@@ -648,6 +649,16 @@ void war_setShadowMapResolution(uint32_t resolution)
 		debug(LOG_INFO, "Shadow map resolution %" PRIu32 " may not have the desired effect", resolution);
 	}
 	warGlobs.shadowMapResolution = resolution;
+}
+
+bool war_getPointLightPerPixelLighting()
+{
+	return warGlobs.pointLightLighting;
+}
+
+void war_setPointLightPerPixelLighting(bool perPixelEnabled)
+{
+	warGlobs.pointLightLighting = perPixelEnabled;
 }
 
 bool war_getGroupsMenuEnabled()

@@ -3322,7 +3322,7 @@ bool VkRoot::setupDebugReportCallbacks(const std::vector<const char*>& extension
 	VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
 	dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
 	dbgCreateInfo.pfnCallback = WZDebugReportCallback;
-	dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT |
+	dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT | VK_DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT |
 	VK_DEBUG_REPORT_WARNING_BIT_EXT; // |
 	//VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
 
@@ -6140,12 +6140,12 @@ size_t VkRoot::maxFramesInFlight() const
 	return MAX_FRAMES_IN_FLIGHT;
 }
 
-gfx_api::shadow_constants VkRoot::getShadowConstants()
+gfx_api::lighting_constants VkRoot::getShadowConstants()
 {
 	return shadowConstants;
 }
 
-bool VkRoot::setShadowConstants(gfx_api::shadow_constants newValues)
+bool VkRoot::setShadowConstants(gfx_api::lighting_constants newValues)
 {
 	if (shadowConstants == newValues)
 	{

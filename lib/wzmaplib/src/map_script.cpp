@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <cinttypes>
 #include <limits>
+#include <cassert>
 
 #define MAX_PLAYERS         11                 ///< Maximum number of players in the game.
 

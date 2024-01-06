@@ -27,6 +27,7 @@
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
+#include <array>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzstring.h"
@@ -319,17 +320,19 @@ namespace gfx_api
 		{}
 	};
 
-	struct shadow_constants
+	struct lighting_constants
 	{
 		uint32_t shadowMode = 1;
 		uint32_t shadowFilterSize = 5;
 		uint32_t shadowCascadesCount = WZ_MAX_SHADOW_CASCADES;
+		bool isPointLightPerPixelEnabled = false;
 
-		bool operator==(const shadow_constants& rhs) const
+		bool operator==(const lighting_constants& rhs) const
 		{
 			return shadowMode == rhs.shadowMode
 			&& shadowFilterSize == rhs.shadowFilterSize
-			&& shadowCascadesCount == rhs.shadowCascadesCount;
+			&& shadowCascadesCount == rhs.shadowCascadesCount
+			&& isPointLightPerPixelEnabled == rhs.isPointLightPerPixelEnabled;
 		}
 	};
 
@@ -412,6 +415,7 @@ namespace gfx_api
 		virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) = 0;
 		virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) = 0;
 		virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() = 0;
+		virtual bool isYAxisInverted() const = 0;
 		virtual bool shouldDraw() = 0;
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;
@@ -422,8 +426,8 @@ namespace gfx_api
 		virtual bool supports2DTextureArrays() const = 0;
 		virtual bool supportsIntVertexAttributes() const = 0;
 		virtual size_t maxFramesInFlight() const = 0;
-		virtual shadow_constants getShadowConstants() = 0;
-		virtual bool setShadowConstants(shadow_constants values) = 0;
+		virtual lighting_constants getShadowConstants() = 0;
+		virtual bool setShadowConstants(lighting_constants values) = 0;
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
 		virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const primitive_type &primitive, std::size_t instance_count) = 0;
@@ -728,6 +732,10 @@ namespace gfx_api
 	using Draw3DShapeAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_COMPONENT, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeNoLightAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_NOLIGHT, DEPTH_CMP_LEQ_WRT_OFF>;
 
+	constexpr size_t max_lights = 128;
+	constexpr size_t max_indexed_lights = 512;
+	constexpr size_t bucket_dimension = 8;
+
 	// Only change once per frame
 	struct Draw3DShapeInstancedGlobalUniforms
 	{
@@ -747,6 +755,13 @@ namespace gfx_api
 		float fogBegin;
 		float timeState; // graphicsCycle
 		int fogEnabled;
+		int viewportWidth;
+		int viewportheight;
+		float unused2;
+		std::array<glm::vec4, max_lights> PointLightsPosition;
+		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
+		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
+		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
 	};
 
 	// Only change per mesh
@@ -978,6 +993,8 @@ namespace gfx_api
 	};
 
 	static_assert(WZ_MAX_SHADOW_CASCADES <= 4, "Packing the ShadowMapCascadeSplits into a vec4 won't work...");
+
+
 	struct TerrainCombinedUniforms
 	{
 		glm::mat4 ModelViewProjectionMatrix;
@@ -998,6 +1015,13 @@ namespace gfx_api
 		float fog_begin;
 		float fog_end;
 		int quality;
+		int viewportWidth;
+		int viewportheight;
+		float  unused2;
+		std::array<glm::vec4, max_lights> PointLightsPosition;
+		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
+		std::array<glm::ivec4, 64> bucketOffsetAndSize;
+		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>

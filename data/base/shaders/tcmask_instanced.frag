@@ -8,6 +8,7 @@
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
+#define WZ_POINT_LIGHT_ENABLED 0
 //
 
 #define WZ_MAX_SHADOW_CASCADES 3
@@ -67,6 +68,10 @@ FRAGMENT_INPUT vec3 fragNormal;
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
+#endif
+
+#if WZ_POINT_LIGHT_ENABLED == 1
+#include "pointlights.frag"
 #endif
 
 float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeInv, int cascadeIndex, float z)
@@ -337,13 +342,15 @@ void main()
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
 
+	float specularMapValue = 0;
+
 	if (lambertTerm > 0.0)
 	{
 		float vanillaFactor = 0.0; // Classic models shouldn't use diffuse light
 
 		if (specularmap != 0)
 		{
-			float specularMapValue = texture(TextureSpecular, texCoord, WZ_MIP_LOAD_BIAS).r;
+			specularMapValue = texture(TextureSpecular, texCoord, WZ_MIP_LOAD_BIAS).r;
 			vec4 specularFromMap = vec4(specularMapValue, specularMapValue, specularMapValue, 1.0);
 
 			// Gaussian specular term computation
@@ -360,6 +367,17 @@ void main()
 	}
 	// ambient light maxed for classic models to keep results similar to original
 	light += vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+
+#if WZ_POINT_LIGHT_ENABLED == 1
+	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+
+	mat3 identityMat = mat3(
+		1., 0., 0.,
+		0., 1., 0.,
+		0., 0., 1.
+	);
+	light += iterateOverAllPointLights(clipSpaceCoord, fragPos, -N, normalize(halfVec - lightDir), diffuse, specularMapValue, identityMat);
+#endif
 
 	light.rgb *= visibility;
 	light.a = 1.0f;

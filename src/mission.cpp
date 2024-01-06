@@ -2723,15 +2723,15 @@ static void addLandingLights(UDWORD x, UDWORD y)
 {
 	addLandingLight(x, y, LL_MIDDLE, true);                 // middle
 
-	addLandingLight(x + 128, y + 128, LL_OUTER, false);     // outer
-	addLandingLight(x + 128, y - 128, LL_OUTER, false);
-	addLandingLight(x - 128, y + 128, LL_OUTER, false);
-	addLandingLight(x - 128, y - 128, LL_OUTER, false);
+	addLandingLight(x + 128, y + 128, LL_OUTER, true);     // outer
+	addLandingLight(x + 128, y - 128, LL_OUTER, true);
+	addLandingLight(x - 128, y + 128, LL_OUTER, true);
+	addLandingLight(x - 128, y - 128, LL_OUTER, true);
 
-	addLandingLight(x + 64, y + 64, LL_INNER, false);       // inner
-	addLandingLight(x + 64, y - 64, LL_INNER, false);
-	addLandingLight(x - 64, y + 64, LL_INNER, false);
-	addLandingLight(x - 64, y - 64, LL_INNER, false);
+	addLandingLight(x + 64, y + 64, LL_INNER, true);       // inner
+	addLandingLight(x + 64, y - 64, LL_INNER, true);
+	addLandingLight(x - 64, y + 64, LL_INNER, true);
+	addLandingLight(x - 64, y - 64, LL_INNER, true);
 }
 
 /*	checks the x,y passed in are not within the boundary of any Landing Zone

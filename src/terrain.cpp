@@ -44,6 +44,7 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_opengl/pielighting.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piedraw.h"
 #include <glm/mat4x4.hpp>
@@ -59,6 +60,8 @@
 #include "hci.h"
 #include "loop.h"
 #include "wzcrashhandlingproviders.h"
+#include "lighting.h"
+
 #include "profiling.h"
 
 #include <cstdint>
@@ -240,19 +243,6 @@ static void addDrawRangeElements(GLuint start,
 	ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", (int)(dreCount));
 }
 
-/// Get the colour of the terrain tile at the specified position
-PIELIGHT getTileColour(int x, int y)
-{
-	return mapTile(x, y)->colour;
-}
-
-/// Set the colour of the tile at the specified position
-void setTileColour(int x, int y, PIELIGHT colour)
-{
-	MAPTILE *psTile = mapTile(x, y);
-
-	psTile->colour = colour;
-}
 
 static void flipRotateTexCoords(unsigned short texture, Vector2f &sP1, Vector2f &sP2, Vector2f &sP3, Vector2f &sP4);
 
@@ -1595,7 +1585,7 @@ void shutdownTerrain()
 	terrainInitialised = false;
 }
 
-static void updateLightMap()
+static void updateLightMap(const LightMap& lightmap)
 {
 	size_t lightmapChannels = lightmapPixmap->channels(); // should always be 4 now...
 	unsigned char* lightMapWritePtr = lightmapPixmap->bmp_w();
@@ -1604,7 +1594,7 @@ static void updateLightMap()
 		for (int i = 0; i < mapWidth; ++i)
 		{
 			MAPTILE *psTile = mapTile(i, j);
-			PIELIGHT colour = psTile->colour;
+			PIELIGHT colour = lightmap(i, j);
 			UBYTE level = static_cast<UBYTE>(psTile->level);
 
 			if (psTile->tileInfoBits & BITS_GATEWAY && showGateways)
@@ -1916,12 +1906,15 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 	for (int i = 0; i < getNumGroundTypes(); i++) {
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
 	}
+
+	auto bucketLight = getCurrentLightingManager().getPointLightBuckets();
+	auto dimension = gfx_api::context::get().getDrawableDimensions();
 	gfx_api::TerrainCombinedUniforms uniforms = {
 		ModelViewProjection, ViewMatrix, ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]}, groundScale,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality
+		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index
 	};
 	PSO::get().set_uniforms(uniforms);
 
@@ -1974,7 +1967,7 @@ static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm:
 
 }
 
-void perFrameTerrainUpdates()
+void perFrameTerrainUpdates(const LightMap& lightMap)
 {
 	WZ_PROFILE_SCOPE(perFrameTerrainUpdates);
 	///////////////////////////////////
@@ -1984,7 +1977,7 @@ void perFrameTerrainUpdates()
 	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
 	{
 		lightmapLastUpdate = realTime;
-		updateLightMap();
+		updateLightMap(lightMap);
 
 		lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	}

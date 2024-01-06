@@ -26,10 +26,12 @@ layout(set = 1, binding = 9) uniform sampler2DArrayShadow shadowMap;
 
 layout(location = 0) in FragData frag;
 layout(location = 11) flat in FragFlatData fragf;
+layout(location = 14) in mat3 ModelTangentMatrix;
 
 layout(location = 0) out vec4 FragColor;
 
 #include "terrain_combined_frag.glsl"
+#include "pointlights.glsl"
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fragf.grounds[i];
@@ -82,6 +84,10 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	light_spec *= (b.gloss * b.gloss);
 
 	vec4 res = (b.color*light) + light_spec;
+
+	// point lights
+	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+	res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
 
 	return vec4(res.rgb, b.color.a);
 }
