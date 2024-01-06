@@ -5330,18 +5330,16 @@ static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists
 			continue; // special hack for campaign missions, cannot have targets
 		}
 
-		DroidList::iterator droidIt = (*ppsCurrentDroidLists)[player].begin(), droidItNext;
-		while (droidIt != (*ppsCurrentDroidLists)[player].end())
+		for (DROID* d : (*ppsCurrentDroidLists)[player])
 		{
-			droidItNext = std::next(droidIt);
-			psDroid = *droidIt;
-			if (psDroid->id == id)
+			if (d->id == id)
 			{
+				psDroid = d;
 				break;
 			}
-			if (isTransporter(psDroid) && psDroid->psGroup != nullptr)  // Check for droids in the transporter.
+			if (isTransporter(d) && d->psGroup != nullptr)  // Check for droids in the transporter.
 			{
-				for (DROID *psTrDroid : psDroid->psGroup->psList)
+				for (DROID *psTrDroid : d->psGroup->psList)
 				{
 					if (psTrDroid->id == id)
 					{
@@ -5350,7 +5348,6 @@ static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists
 					}
 				}
 			}
-			droidIt = droidItNext;
 		}
 foundDroid:
 		if (!psDroid)

@@ -2431,47 +2431,41 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy all droids
 		debug(LOG_DEATH, "killing off all droids for player %d", playerIndex);
-		DroidList::iterator droidIt = apsDroidLists[playerIndex].begin(), droidItNext;
-		while (droidIt != apsDroidLists[playerIndex].end())				// delete all droids
+		mutating_list_iterate(apsDroidLists[playerIndex], [quietly](DROID* d)
 		{
-			droidItNext = std::next(droidIt);
 			if (quietly)			// don't show effects
 			{
-				killDroid(*droidIt);
+				killDroid(d);
 			}
 			else				// show effects
 			{
-				destroyDroid(*droidIt, gameTime);
+				destroyDroid(d, gameTime);
 			}
-			droidIt = droidItNext;
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 
 		// Destroy structs
 		debug(LOG_DEATH, "killing off structures for player %d", playerIndex);
-		StructureList::iterator psStructIt = apsStructLists[playerIndex].begin(), psNextIt;
-		while (psStructIt != apsStructLists[playerIndex].end())				// delete structs
+		mutating_list_iterate(apsStructLists[playerIndex], [quietly, removeAllStructs](STRUCTURE* psStruct)
 		{
-			psNextIt = std::next(psStructIt);
-
 			if (removeAllStructs
-				|| (*psStructIt)->pStructureType->type == REF_POWER_GEN
-				|| (*psStructIt)->pStructureType->type == REF_RESEARCH
-				|| (*psStructIt)->pStructureType->type == REF_COMMAND_CONTROL
-				|| StructIsFactory((*psStructIt)))
+				|| psStruct->pStructureType->type == REF_POWER_GEN
+				|| psStruct->pStructureType->type == REF_RESEARCH
+				|| psStruct->pStructureType->type == REF_COMMAND_CONTROL
+				|| StructIsFactory(psStruct))
 			{
 				// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
-				if (quietly || (*psStructIt)->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+				if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 				{
-					removeStruct(*psStructIt, true);
+					removeStruct(psStruct, true);
 				}
 				else			// show effects
 				{
-					destroyStruct(*psStructIt, gameTime);
+					destroyStruct(psStruct, gameTime);
 				}
 			}
-
-			psStructIt = psNextIt;
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 
 	if (!quietly)

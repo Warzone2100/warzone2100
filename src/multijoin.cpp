@@ -134,39 +134,35 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 	}
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
-	DroidList::iterator droidIt = apsDroidLists[player].begin(), droidItNext;
-	while (droidIt != apsDroidLists[player].end())				// delete all droids
+	// delete all droids
+	mutating_list_iterate(apsDroidLists[player], [quietly](DROID* d)
 	{
-		droidItNext = std::next(droidIt);
 		if (quietly)			// don't show effects
 		{
-			killDroid(*droidIt);
+			killDroid(d);
 		}
 		else				// show effects
 		{
-			destroyDroid(*droidIt, gameTime);
+			destroyDroid(d, gameTime);
 		}
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	debug(LOG_DEATH, "killing off all structures for player %d", player);
-	StructureList::iterator psStructIt = apsStructLists[player].begin(), psNextIt;
-	while (psStructIt != apsStructLists[player].end())				// delete all structs
+	// delete all structs
+	mutating_list_iterate(apsStructLists[player], [quietly](STRUCTURE* psStruct)
 	{
-		psNextIt = std::next(psStructIt);
-
 		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
-		if (quietly || (*psStructIt)->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+		if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 		{
-			removeStruct(*psStructIt, true);
+			removeStruct(psStruct, true);
 		}
 		else			// show effects
 		{
-			destroyStruct(*psStructIt, gameTime);
+			destroyStruct(psStruct, gameTime);
 		}
-
-		psStructIt = psNextIt;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	return;
 }
@@ -174,27 +170,23 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 static bool destroyMatchingStructs(UDWORD player, std::function<bool (STRUCTURE *)> cmp, bool quietly)
 {
 	bool destroyedAnyStructs = false;
-	StructureList::iterator psStructIt = apsStructLists[player].begin(), psNextIt;
-	while (psStructIt != apsStructLists[player].end())
+	mutating_list_iterate(apsStructLists[player], [quietly, &cmp, &destroyedAnyStructs](STRUCTURE* psStruct)
 	{
-		psNextIt = std::next(psStructIt);
-
-		if (cmp(*psStructIt))
+		if (cmp(psStruct))
 		{
 			// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
-			if (quietly || (*psStructIt)->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+			if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 			{
-				removeStruct(*psStructIt, true);
+				removeStruct(psStruct, true);
 			}
 			else			// show effects
 			{
-				destroyStruct(*psStructIt, gameTime);
+				destroyStruct(psStruct, gameTime);
 			}
 			destroyedAnyStructs = true;
 		}
-
-		psStructIt = psNextIt;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 	return destroyedAnyStructs;
 }
 
@@ -261,16 +253,14 @@ bool splitResourcesAmongTeam(UDWORD player)
 			return a.itemsRecv < b.itemsRecv;
 		});
 	};
-	DroidList::iterator droidIt = apsDroidLists[player].begin(), droidItNext;
-	while (droidIt != apsDroidLists[player].end())
+	mutating_list_iterate(apsDroidLists[player], [&droidsGiftedPerTarget, &incrRecvItem](DROID* d)
 	{
-		droidItNext = std::next(droidIt);
 		bool transferredDroid = false;
-		if (!isDead(*droidIt))
+		if (!isDead(d))
 		{
 			for (size_t i = 0; i < droidsGiftedPerTarget.size(); ++i)
 			{
-				if (giftSingleDroid(*droidIt, droidsGiftedPerTarget[i].player, false))
+				if (giftSingleDroid(d, droidsGiftedPerTarget[i].player, false))
 				{
 					transferredDroid = true;
 					incrRecvItem(i);
@@ -282,10 +272,10 @@ bool splitResourcesAmongTeam(UDWORD player)
 
 		if (!transferredDroid)
 		{
-			destroyDroid(*droidIt, gameTime);
+			destroyDroid(d, gameTime);
 		}
-		droidIt = droidItNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	auto distributeMatchingStructs = [&](std::function<bool (STRUCTURE *)> cmp)
 	{
@@ -301,19 +291,15 @@ bool splitResourcesAmongTeam(UDWORD player)
 			});
 		};
 
-		StructureList::iterator psStructIt = apsStructLists[player].begin(), psNextIt;
-		while (psStructIt != apsStructLists[player].end())
+		mutating_list_iterate(apsStructLists[player], [&cmp, &structsGiftedPerTarget, &incrRecvStruct](STRUCTURE* psStruct)
 		{
-			psNextIt = std::next(psStructIt);
-
-			if (cmp(*psStructIt))
+			if (cmp(psStruct))
 			{
-				giftSingleStructure(*psStructIt, structsGiftedPerTarget.front().player, false);
+				giftSingleStructure(psStruct, structsGiftedPerTarget.front().player, false);
 				incrRecvStruct(0);
 			}
-
-			psStructIt = psNextIt;
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	};
 
 	// Distribute key structures
