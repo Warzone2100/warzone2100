@@ -2,6 +2,11 @@
 
 #define WZ_MAX_SHADOW_CASCADES 3
 
+#define WZ_MAX_POINT_LIGHTS 128
+#define WZ_MAX_INDEXED_POINT_LIGHTS 512
+#define WZ_BUCKET_DIMENSION 8
+
+
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
 	mat4 ViewMatrix;
@@ -21,6 +26,12 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float fogEnd;
 	float fogStart;
 	int quality;
+	int viewportWidth;
+	int viewportHeight;
+	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
+	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
+	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
+	ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
 };
 
 // interpolated data. location count = 11

@@ -35,8 +35,13 @@
 #include <limits>
 #include <typeindex>
 #include <sstream>
+#include "3rdparty/fmt/include/fmt/format.h"
 
 #include <glm/gtc/type_ptr.hpp>
+
+#ifdef WZ_CC_MSVC
+#include <debugapi.h>
+#endif
 
 #ifndef GL_GENERATE_MIPMAP
 #define GL_GENERATE_MIPMAP 0x8191
@@ -733,7 +738,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents"
 		},
@@ -758,7 +763,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 		},
@@ -778,21 +783,21 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
@@ -1045,7 +1050,7 @@ typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_
 	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::shadow_constants& shadowConstants) :
+gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants) :
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
@@ -1391,6 +1396,12 @@ void gl_pipeline_state_object::printShaderInfoLog(code_part part, GLuint shader)
 		GLchar *infoLog = (GLchar *)malloc(infologLen);
 
 		glGetShaderInfoLog(shader, infologLen, &charsWritten, infoLog);
+
+		// Display log in VS output log
+#ifdef WZ_CC_MSVC
+		OutputDebugStringA(infoLog);
+#endif
+
 		debug(part, "Shader info log: %s", infoLog);
 		free(infoLog);
 	}
@@ -1569,7 +1580,26 @@ static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, fl
 	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_MIP_LOAD_BIAS %s", floatAsString.c_str()));
 }
 
-static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, const gfx_api::shadow_constants& shadowConstants)
+static void patchDefines(std::string& fragmentShaderStr, const gfx_api::lighting_constants& lightingConstants)
+{
+	const auto defines = {
+		std::make_pair("WZ_MAX_POINT_LIGHTS", gfx_api::max_lights),
+		std::make_pair("WZ_MAX_INDEXED_POINT_LIGHTS", gfx_api::max_indexed_lights),
+		std::make_pair("WZ_BUCKET_DIMENSION", gfx_api::bucket_dimension),
+		std::make_pair("WZ_POINT_LIGHT_ENABLED", static_cast<size_t>(lightingConstants.isPointLightPerPixelEnabled)),
+	};
+
+	const auto& replacer = [&fragmentShaderStr](const std::string& define, const auto& value) {
+		const auto re_1 = std::regex(fmt::format("#define {} .*", define), std::regex_constants::ECMAScript);
+		regex_replace_wrapper(fragmentShaderStr, re_1, fmt::format("#define {} {}", define, value));
+	};
+	for (const auto& p : defines)
+	{
+		replacer(p.first, p.second);
+	}
+}
+
+static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, const gfx_api::lighting_constants& shadowConstants)
 {
 	// #define WZ_SHADOW_MODE <number>
 	const auto re_1 = std::regex("#define WZ_SHADOW_MODE .*", std::regex_constants::ECMAScript);
@@ -1593,7 +1623,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 											 const char * fragment_header, const std::string& fragmentPath,
 											 const std::vector<std::string> &uniformNames,
 											 const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-											 optional<float> mipLodBias, const gfx_api::shadow_constants& shadowConstants)
+											 optional<float> mipLodBias, const gfx_api::lighting_constants& lightingConstants)
 {
 	GLint status;
 	bool success = true; // Assume overall success
@@ -1712,7 +1742,8 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 			{
 				patchFragmentShaderTextureLodBias(fragmentShaderStr, mipLodBias.value());
 			}
-			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, shadowConstants);
+			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, lightingConstants);
+			patchDefines(fragmentShaderStr, lightingConstants);
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
 
@@ -1820,6 +1851,24 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat4 
 	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
 	{
 		glUniformMatrix4fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), GL_FALSE, glm::value_ptr(*m));
+	}
+}
+
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec4 *m, size_t count)
+{
+	glUniform4fv(locations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform4fv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
+	}
+}
+
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::ivec4 *m, size_t count)
+{
+	glUniform4iv(locations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform4iv(duplicateFragmentUniformLocations[uniformIdx], static_cast<GLsizei>(count), glm::value_ptr(*m));
 	}
 }
 
@@ -1967,14 +2016,20 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(13, cbuf.fogBegin);
 	setUniforms(14, cbuf.timeState);
 	setUniforms(15, cbuf.fogEnabled);
+	setUniforms(16, cbuf.PointLightsPosition);
+	setUniforms(17, cbuf.PointLightsColorAndEnergy);
+	setUniforms(18, cbuf.bucketOffsetAndSize);
+	setUniforms(19, cbuf.indexed_lights);
+	setUniforms(20, cbuf.viewportWidth);
+	setUniforms(21, cbuf.viewportheight);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
 {
-	setUniforms(16, cbuf.tcmask);
-	setUniforms(17, cbuf.normalMap);
-	setUniforms(18, cbuf.specularMap);
-	setUniforms(19, cbuf.hasTangents);
+	setUniforms(22, cbuf.tcmask);
+	setUniforms(23, cbuf.normalMap);
+	setUniforms(24, cbuf.specularMap);
+	setUniforms(25, cbuf.hasTangents);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
@@ -2061,6 +2116,12 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
 	setUniforms(i++, cbuf.quality);
+	setUniforms(i++, cbuf.PointLightsPosition);
+	setUniforms(i++, cbuf.PointLightsColorAndEnergy);
+	setUniforms(i++, cbuf.bucketOffsetAndSize);
+	setUniforms(i++, cbuf.indexed_lights);
+	setUniforms(i++, cbuf.viewportWidth);
+	setUniforms(i++, cbuf.viewportheight);
 	setUniforms(i++, 0); // lightmap_tex
 	setUniforms(i++, 1); // ground
 	setUniforms(i++, 2); // groundNormal
@@ -4269,12 +4330,12 @@ size_t gl_context::maxFramesInFlight() const
 	return 2;
 }
 
-gfx_api::shadow_constants gl_context::getShadowConstants()
+gfx_api::lighting_constants gl_context::getShadowConstants()
 {
 	return shadowConstants;
 }
 
-bool gl_context::setShadowConstants(gfx_api::shadow_constants newValues)
+bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 {
 	if (shadowConstants == newValues)
 	{

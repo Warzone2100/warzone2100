@@ -612,6 +612,12 @@ bool loadConfig()
 	{
 		war_setShadowMapResolution(value.value());
 	}
+
+	{
+		auto value = iniGetBoolOpt("pointLightsPerpixel");
+		war_setPointLightPerPixelLighting(value.value_or(false));
+	}
+
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -772,6 +778,7 @@ bool saveConfig()
 	iniSetInteger("terrainShadingQuality", getTerrainMappingTexturesMaxSize());
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
+	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes

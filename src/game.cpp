@@ -1960,6 +1960,8 @@ static bool deserializeSaveGameV35Data(PHYSFS_file *fileHandle, SAVE_GAME_V35 *s
 struct SAVE_GAME_V38 : public SAVE_GAME_V35
 {
 	char modList[modlist_string_size];
+
+	SAVE_GAME_V38() : SAVE_GAME_V35() {}
 };
 
 static void serializeSaveGameV38Data_json(nlohmann::json &o, const SAVE_GAME_V38 *serializeGame)

@@ -52,6 +52,7 @@
 #include "fpath.h"
 #include "levels.h"
 #include "lib/framework/wzapp.h"
+#include "lib/ivis_opengl/pielighting.h"
 
 #define GAME_TICKS_FOR_DANGER (GAME_TICKS_PER_SEC * 2)
 
@@ -1012,6 +1013,7 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 
 	/* Allocate the memory for the map */
 	psMapTiles = std::make_unique<MAPTILE[]>(static_cast<size_t>(width) * height);
+	getCurrentLighmapData().reset(width, height);
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;

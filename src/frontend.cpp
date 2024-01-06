@@ -853,6 +853,11 @@ char const *graphicsOptionsShadowsString()
 	return getDrawShadows() ? _("On") : _("Off");
 }
 
+char const* graphicsOptionsLightingString()
+{
+	return war_getPointLightPerPixelLighting() ? _("Per Pixel") : _("Lightmap");
+}
+
 char const *graphicsOptionsFogString()
 {
 	return pie_GetFogEnabled() ? _("On") : _("Off");
@@ -1192,6 +1197,12 @@ void startGraphicsOptionsMenu()
 		row.start++;
 	}
 
+	///////////
+	// Lighting
+	grid->place({ 0 }, row, addMargin(makeTextButton(FRONTEND_LIGHTS, _("Per Pixel point lights"), WBUT_SECONDARY)));
+	grid->place({ 1, 1, false }, row, addMargin(makeTextButton(FRONTEND_LIGHTS_R, graphicsOptionsLightingString(), WBUT_SECONDARY)));
+	row.start++;
+
 	// LOD Distance
 	// TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 	std::string lodDistanceString = _("LOD Distance");
@@ -1277,7 +1288,13 @@ bool runGraphicsOptionsMenu()
 		setDrawShadows(!getDrawShadows());
 		widgSetString(psWScreen, FRONTEND_SHADOWS_R, graphicsOptionsShadowsString());
 		break;
-
+	case FRONTEND_LIGHTS:
+	case FRONTEND_LIGHTS_R:
+	{
+		war_setPointLightPerPixelLighting(!war_getPointLightPerPixelLighting());
+		widgSetString(psWScreen, FRONTEND_LIGHTS_R, graphicsOptionsLightingString());
+		break;
+	}
 	case FRONTEND_FOG:
 	case FRONTEND_FOG_R:
 		if (pie_GetFogEnabled())

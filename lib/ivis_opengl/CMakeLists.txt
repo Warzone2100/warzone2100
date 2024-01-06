@@ -1,5 +1,6 @@
 file(GLOB HEADERS
 	"bitimage.h"
+	"culling.h"
 	"gfx_api.h"
 	"gfx_api_formats_def.h"
 	"gfx_api_gl.h"
@@ -14,6 +15,7 @@ file(GLOB HEADERS
 	"pieclip.h"
 	"piedef.h"
 	"piefunc.h"
+	"pielighting.h"
 	"piematrix.h"
 	"piemode.h"
 	"pienormalize.h"
@@ -29,6 +31,7 @@ file(GLOB HEADERS
 
 file(GLOB SRC
 	"bitimage.cpp"
+	"culling.cpp"
 	"gfx_api.cpp"
 	"gfx_api_gl.cpp"
 	"gfx_api_image_basis_priv.cpp"
@@ -42,6 +45,7 @@ file(GLOB SRC
 	"piedraw.cpp"
 	"piefunc.cpp"
 	"pieimage.cpp"
+	"pielighting.cpp"
 	"piematrix.cpp"
 	"piemode.cpp"
 	"piepalette.cpp"

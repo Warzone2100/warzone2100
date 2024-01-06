@@ -496,12 +496,12 @@ size_t null_context::maxFramesInFlight() const
 	return 1;
 }
 
-gfx_api::shadow_constants null_context::getShadowConstants()
+gfx_api::lighting_constants null_context::getShadowConstants()
 {
-	return gfx_api::shadow_constants();
+	return gfx_api::lighting_constants();
 }
 
-bool null_context::setShadowConstants(gfx_api::shadow_constants newValues)
+bool null_context::setShadowConstants(gfx_api::lighting_constants newValues)
 {
 	return true;
 }

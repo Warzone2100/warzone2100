@@ -33,7 +33,7 @@ void loadTerrainTextures(MAP_TILESET mapTileset);
 bool initTerrain();
 void shutdownTerrain();
 
-void perFrameTerrainUpdates();
+void perFrameTerrainUpdates(const struct LightMap& lightData);
 void drawTerrainDepthOnly(const glm::mat4 &mvp);
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowMVPMatrix);
 void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos);
@@ -45,9 +45,6 @@ namespace gfx_api
 
 gfx_api::texture* getTerrainLightmapTexture();
 const glm::mat4& getModelUVLightmapMatrix();
-
-PIELIGHT getTileColour(int x, int y);
-void setTileColour(int x, int y, PIELIGHT colour);
 
 void markTileDirty(int i, int j);
 

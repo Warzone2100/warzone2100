@@ -181,7 +181,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<typename T>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
-	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::shadow_constants& shadowConstants);
+	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
@@ -208,7 +208,7 @@ private:
 					   const char * fragment_header, const std::string& fragmentPath,
 					   const std::vector<std::string> &uniformNames,
 					   const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-					   optional<float> mipLodBias, const gfx_api::shadow_constants& shadowConstants);
+					   optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
 
 	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms, const std::string& programName);
 
@@ -226,6 +226,13 @@ private:
 	void setUniforms(size_t uniformIdx, const float &v);
 
 	void setUniforms(size_t uniformIdx, const ::glm::mat4 *m, size_t count);
+	void setUniforms(size_t uniformIdx, const ::glm::vec4* m, size_t count);
+	template<typename T, size_t count>
+	void setUniforms(size_t uniformIdx, const std::array<T, count>& m)
+	{
+		setUniforms(uniformIdx, m.data(), count);
+	}
+	void setUniforms(size_t uniformIdx, const ::glm::ivec4* m, size_t count);
 	void setUniforms(size_t uniformIdx, const float *v, size_t count);
 
 	// Wish there was static reflection in C++...
@@ -267,7 +274,7 @@ struct gl_context final : public gfx_api::context
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
 	optional<float> mipLodBias;
-	gfx_api::shadow_constants shadowConstants;
+	gfx_api::lighting_constants shadowConstants;
 
 	bool gles = false;
 	bool fragmentHighpFloatAvailable = true;
@@ -323,6 +330,7 @@ struct gl_context final : public gfx_api::context
 	virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() override;
+	bool isYAxisInverted() const override { return false; }
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
@@ -333,8 +341,8 @@ struct gl_context final : public gfx_api::context
 	virtual bool supports2DTextureArrays() const override;
 	virtual bool supportsIntVertexAttributes() const override;
 	virtual size_t maxFramesInFlight() const override;
-	virtual gfx_api::shadow_constants getShadowConstants() override;
-	virtual bool setShadowConstants(gfx_api::shadow_constants values) override;
+	virtual gfx_api::lighting_constants getShadowConstants() override;
+	virtual bool setShadowConstants(gfx_api::lighting_constants values) override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;

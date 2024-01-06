@@ -58,6 +58,8 @@ uniform vec4 ambientLight;
 uniform vec4 diffuseLight;
 uniform vec4 specularLight;
 
+
+uniform vec4 cameraPos; // in modelSpace
 uniform vec4 sunPos; // in modelSpace, normalized
 
 // fog
@@ -77,6 +79,9 @@ in vec4 fgroundWeights;
 in vec3 groundLightDir;
 in vec3 groundHalfVec;
 in mat2 decal2groundMat2;
+
+
+in mat3 ModelTangentMatrix;
 // For Shadows
 in vec3 fragPos;
 in vec3 fragNormal;
@@ -88,6 +93,7 @@ out vec4 FragColor;
 #endif
 
 #include "terrain_combined_frag.glsl"
+#include "pointlights.frag"
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
@@ -140,6 +146,10 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	light_spec *= (b.gloss * b.gloss);
 
 	vec4 res = (b.color*light) + light_spec;
+
+	// point lights
+	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+	res += iterateOverAllPointLights(clipSpaceCoord, fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
 
 	return vec4(res.rgb, b.color.a);
 }
