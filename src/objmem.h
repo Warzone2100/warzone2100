@@ -29,6 +29,7 @@
 #include <array>
 #include <list>
 #include <functional>
+#include <type_traits>
 
 /* The lists of objects allocated */
 template <typename ObjectType, unsigned PlayerCount>
@@ -166,6 +167,9 @@ enum class IterationResult
 template <typename ObjectType, typename MaybeErasingLoopBodyHandler>
 void mutating_list_iterate(std::list<ObjectType*>& list, MaybeErasingLoopBodyHandler handler)
 {
+	static_assert(std::is_same<std::result_of_t<MaybeErasingLoopBodyHandler(ObjectType*)>, IterationResult>::value,
+		"Loop body handler should return IterationResult");
+
 	typename std::remove_reference_t<decltype(list)>::iterator it = list.begin(), itNext;
 	while (it != list.end())
 	{
