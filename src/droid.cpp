@@ -443,14 +443,16 @@ DROID::~DROID()
 		if (psDroid->psGroup)
 		{
 			//free all droids associated with this Transporter
-			for (DROID* psCurr : psDroid->psGroup->psList)
+			mutating_list_iterate(psDroid->psGroup->psList, [psDroid](DROID* psCurr)
 			{
 				if (psCurr == psDroid)
 				{
-					break;
+					return IterationResult::BREAK_ITERATION;
 				}
+				// This will cause each droid to self-remove from `psGroup->psList`.
 				delete psCurr;
-			}
+				return IterationResult::CONTINUE_ITERATION;
+			});
 		}
 	}
 
