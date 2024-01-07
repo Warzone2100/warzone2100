@@ -1272,7 +1272,7 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 	case OBJ_FEATURE:
 		for (unsigned i = 0, end = std::min<unsigned>(asFeatureStats.size(), MAXFEATURES); i < end; ++i)
 		{
-			apsFeatureList[i] = &asFeatureStats.at(i);
+			apsFeatureList[i] = &asFeatureStats[i];
 		}
 		ppsStatsList = (BASE_STATS **)apsFeatureList;
 		intAddDebugStatsForm(ppsStatsList, std::min<unsigned>(asFeatureStats.size(), MAXFEATURES));
