@@ -73,7 +73,7 @@ bool loadFeatureStats(WzConfig &ini)
 	{
 		ini.beginGroup(list[i]);
 		asFeatureStats.emplace_back(STAT_FEATURE + i);
-		FEATURE_STATS& p = asFeatureStats.at(i);
+		FEATURE_STATS& p = asFeatureStats[i];
 		p.name = ini.string(WzString::fromUtf8("name"));
 		p.id = list[i];
 		WzString subType = ini.value("type").toWzString();
