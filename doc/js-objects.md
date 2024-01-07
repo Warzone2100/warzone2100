@@ -25,6 +25,7 @@ In addition, the following properties are defined:
 * ```status``` The completeness status of the structure. It will be one of ```BEING_BUILT``` and ```BUILT```.
 * ```type``` The type will always be ```STRUCTURE```.
 * ```cost``` What it would cost to build this structure. (3.2+ only)
+* ```direction``` The direction the structure is facing. (4.4+ only)
 * ```stattype``` The stattype defines the type of structure. It will be one of ```HQ```, ```FACTORY```, ```POWER_GEN```,
 ```RESOURCE_EXTRACTOR```, ```LASSAT```, ```DEFENSE```, ```WALL```, ```RESEARCH_LAB```, ```REPAIR_FACILITY```,
 ```CYBORG_FACTORY```, ```VTOL_FACTORY```, ```REARM_PAD```, ```SAT_UPLINK```, ```GATE``` and ```COMMAND_CONTROL```.
@@ -93,6 +94,7 @@ the action directly, but it may be interesting to look at what it currently is.
 * ```experience``` Amount of experience this droid has, based on damage it has dealt to enemies.
 * ```cost``` What it would cost to build the droid. (3.2+ only)
 * ```isVTOL``` True if the droid is VTOL. (3.2+ only)
+* ```isFlying``` True if the droid is currently flying. (4.4+ only)
 * ```canHitAir``` True if the droid has anti-air capabilities. (3.2+ only)
 * ```canHitGround``` True if the droid has anti-ground capabilities. (3.2+ only)
 * ```isSensor``` True if the droid has sensor ability. (3.2+ only)
