@@ -1,0 +1,17 @@
+[Unit]
+Description=Host a Warzone2100 game
+Wants=network.target
+
+[Service]
+# Edit those three lines
+WorkingDirectory=/<path>/<to>/<hosting>/<scripts>
+ExecStart=bash game.sh
+User=warzone2100
+
+Type=simple
+PrivateTmp=true
+Restart=on-success
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
