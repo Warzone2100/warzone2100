@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-03 16:19\n"
+"PO-Revision-Date: 2024-01-09 20:27\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -633,15 +633,15 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr ""
+msgstr "Použi transport na prevoz útočnej jednotky na toto miesto."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr ""
+msgstr "Znič miesto a vráť sa späť na tvoju základňu."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "PREPRAVNÁ MISIA: Znič umiestnenia nepriateľských SAM"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
@@ -658,7 +658,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "Potvrdzujeme, že na základňu Alfa smeruje raketa."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
@@ -792,7 +792,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
-msgstr ""
+msgstr "Údolie je tvojou jedinou šancou na únik."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
