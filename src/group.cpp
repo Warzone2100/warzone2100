@@ -206,7 +206,7 @@ void DROID_GROUP::remove(DROID *psDroid)
 }
 
 // count the members of a group
-unsigned int DROID_GROUP::getNumMembers()
+unsigned int DROID_GROUP::getNumMembers() const
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
 	return psList.size();

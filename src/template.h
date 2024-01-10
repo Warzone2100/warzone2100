@@ -29,7 +29,7 @@ extern bool allowDesign;
 extern bool includeRedundantDesigns;
 extern bool playerBuiltHQ;
 
-bool designableTemplate(DROID_TEMPLATE *psTempl, int player);
+bool designableTemplate(const DROID_TEMPLATE *psTempl, int player);
 bool initTemplates();
 
 /// Take ownership of template given by pointer.
@@ -50,7 +50,7 @@ bool storeTemplates();
 bool loadDroidTemplates(const char *filename);
 
 /// return whether a template is for an IDF droid
-bool templateIsIDF(DROID_TEMPLATE *psTemplate);
+bool templateIsIDF(const DROID_TEMPLATE *psTemplate);
 
 /// Fills the list with Templates that can be manufactured in the Factory - based on size
 std::vector<DROID_TEMPLATE *> fillTemplateList(STRUCTURE *psFactory);

@@ -53,7 +53,7 @@ void cmdDroidSetDesignator(DROID *psDroid);
 void cmdDroidClearDesignator(UDWORD player);
 
 /** \brief Gets the index of the command droid.*/
-SDWORD cmdDroidGetIndex(DROID *psCommander);
+SDWORD cmdDroidGetIndex(const DROID *psCommander);
 
 /** \brief Gets the maximum group size for a command droid.*/
 unsigned int cmdDroidMaxGroup(const DROID *psCommander);

@@ -4283,7 +4283,7 @@ UDWORD  getDroidRankGraphicFromLevel(unsigned int level)
 	return gfxId;
 }
 /// Get the graphic ID for a droid rank
-UDWORD  getDroidRankGraphic(DROID *psDroid)
+UDWORD  getDroidRankGraphic(const DROID *psDroid)
 {
 	/* Establish the numerical value of the droid's rank */
 	return getDroidRankGraphicFromLevel(getDroidLevel(psDroid));

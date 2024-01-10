@@ -1369,7 +1369,7 @@ void resetTransporter()
 }
 
 /*checks the order of the droid to see if its currently flying*/
-bool transporterFlying(DROID *psTransporter)
+bool transporterFlying(const DROID *psTransporter)
 {
 	ASSERT_OR_RETURN(false, psTransporter != nullptr, "Invalid droid pointer");
 	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Droid is not a Transporter");

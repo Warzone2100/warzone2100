@@ -227,7 +227,7 @@ bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
 }
 
 // A way to check if a design is something someone could legitimately have in multiplayer
-bool designableTemplate(DROID_TEMPLATE *psTempl, int player)
+bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 {
 	if (!bMultiPlayer || !isHumanPlayer(player))
 	{
@@ -735,7 +735,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 }
 
 // return whether a template is for an IDF droid
-bool templateIsIDF(DROID_TEMPLATE *psTemplate)
+bool templateIsIDF(const DROID_TEMPLATE *psTemplate)
 {
 	//add Cyborgs
 	if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG || psTemplate->droidType == DROID_CYBORG_SUPER))

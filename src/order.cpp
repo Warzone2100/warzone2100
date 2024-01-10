@@ -1948,7 +1948,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 /** This function compares the current droid's order to the order.
  * Returns true if they are the same, false else.
  */
-bool orderState(DROID *psDroid, DROID_ORDER order)
+bool orderState(const DROID *psDroid, DROID_ORDER order)
 {
 	if (order == DORDER_RTR)
 	{
@@ -1991,7 +1991,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_
 /** This function attributes the order's location to (pX,pY) if the order is the same as the droid.
  * Returns true if it was attributed and false if not.
  */
-bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
+bool orderStateLoc(const DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 {
 	if (order != psDroid->order.type)
 	{
@@ -2207,7 +2207,7 @@ void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, STRUCTURE_ST
 /** This function returns false if droid's order and order don't match or the order is not a location order. Else ppsStats = psDroid->psTarStats, (pX,pY) = psDroid.(orderX,orderY) and it returns true.
  * @todo seems closely related to orderStateLoc()
  */
-bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS **ppsStats)
+bool orderStateStatsLoc(const DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS **ppsStats)
 {
 	bool	match = false;
 
@@ -3044,7 +3044,7 @@ static STRUCTURE *FindARepairFacility(unsigned player)
 
 
 /** This function returns true if the droid supports the secondary order, and false if not.*/
-bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
+bool secondarySupported(const DROID *psDroid, SECONDARY_ORDER sec)
 {
 	bool supported;
 
@@ -3155,7 +3155,7 @@ bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 
 
 /** This function returns the droid order's secondary state of the secondary order.*/
-SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MODE mode)
+SECONDARY_STATE secondaryGetState(const DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MODE mode)
 {
 	uint32_t state = psDroid->secondaryOrder;
 
@@ -4095,7 +4095,7 @@ bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
  *  return true except on an ASSERT (which is not a good design.)
  *  or, an invalid factory.
  */
-bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
+bool getFactoryState(const STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
 {
 	ASSERT_OR_RETURN(false, StructIsFactory(psStruct), "Structure is not a factory");
 	if ((FACTORY *)psStruct->pFunctionality)

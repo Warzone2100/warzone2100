@@ -67,7 +67,7 @@ void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj);
 void visRemoveVisibility(BASE_OBJECT *psObj);
 
 // fast test for whether obj2 is in range of obj1
-static inline bool visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)
+static inline bool visObjInRange(const BASE_OBJECT *psObj1, const BASE_OBJECT *psObj2, SDWORD range)
 {
 	int32_t xdiff = psObj1->pos.x - psObj2->pos.x, ydiff = psObj1->pos.y - psObj2->pos.y;
 

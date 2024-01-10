@@ -135,7 +135,7 @@ static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psO
 
 
 /***************************************************************************/
-bool gfxVisible(PROJECTILE *psObj)
+bool gfxVisible(const PROJECTILE *psObj)
 {
 	// Already know it is visible
 	if (psObj->bVisible)
@@ -1511,7 +1511,7 @@ int proj_GetShortRange(const WEAPON_STATS *psStats, int player)
 }
 
 /***************************************************************************/
-ObjectShape establishTargetShape(BASE_OBJECT *psTarget)
+ObjectShape establishTargetShape(const BASE_OBJECT *psTarget)
 {
 	CHECK_OBJECT(psTarget);
 
@@ -1557,7 +1557,7 @@ ObjectShape establishTargetShape(BASE_OBJECT *psTarget)
 
 /*the damage depends on the weapon effect and the target propulsion type or
 structure strength*/
-UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget)
+UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, const BASE_OBJECT *psTarget)
 {
 	if (baseDamage == 0)
 	{
@@ -1568,12 +1568,12 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 
 	if (psTarget->type == OBJ_STRUCTURE)
 	{
-		damage += baseDamage * (asStructStrengthModifier[weaponEffect][((STRUCTURE *)psTarget)->pStructureType->strength] - 100);
+		damage += baseDamage * (asStructStrengthModifier[weaponEffect][((const STRUCTURE *)psTarget)->pStructureType->strength] - 100);
 	}
 	else if (psTarget->type == OBJ_DROID)
 	{
-		const int propulsion = (asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION])->propulsionType;
-		const int body = (asBodyStats + ((DROID *)psTarget)->asBits[COMP_BODY])->size;
+		const int propulsion = (asPropulsionStats + ((const DROID *)psTarget)->asBits[COMP_PROPULSION])->propulsionType;
+		const int body = (asBodyStats + ((const DROID *)psTarget)->asBits[COMP_BODY])->size;
 		damage += baseDamage * (asWeaponModifier[weaponEffect][propulsion] - 100);
 		damage += baseDamage * (asWeaponModifierBody[weaponEffect][body] - 100);
 	}

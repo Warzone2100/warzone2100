@@ -60,6 +60,7 @@ class CombinedPropertyProvider : public PropertyMatcher::PropertyProvider {
 public:
 	CombinedPropertyProvider(const std::vector<std::shared_ptr<PropertyMatcher::PropertyProvider>>& providers)
 	{
+		propertyProviders.reserve(providers.size());
 		for (auto& provider : providers)
 		{
 			if (!provider) continue;

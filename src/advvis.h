@@ -24,7 +24,7 @@
 #include "basedef.h"
 
 void avUpdateTiles();
-UDWORD avGetObjLightLevel(BASE_OBJECT *psObj, UDWORD origLevel);
+UDWORD avGetObjLightLevel(BASE_OBJECT const *psObj, UDWORD origLevel);
 void setRevealStatus(bool val);
 bool getRevealStatus();
 void preProcessVisibility();

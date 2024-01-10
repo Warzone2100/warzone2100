@@ -795,9 +795,9 @@ namespace wzapi
 		, x1(x1), y1(y1), x2(x2), y2(y2)
 		{ }
 	public:
-		inline bool isValid() { return type != Type::Invalid_Request; }
-		inline bool isLabel() { return type == Type::Label_Request; }
-		inline bool isPositionValues() { return type == Type::Position_Values_Request; }
+		inline bool isValid() const { return type != Type::Invalid_Request; }
+		inline bool isLabel() const { return type == Type::Label_Request; }
+		inline bool isPositionValues() const { return type == Type::Position_Values_Request; }
 	public:
 		enum Type
 		{

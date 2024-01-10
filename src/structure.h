@@ -311,10 +311,10 @@ bool clearRearmPad(const STRUCTURE *psStruct);
 void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid);
 
 // return whether a rearm pad has a vtol on it
-bool vtolOnRearmPad(const STRUCTURE *psStruct, DROID *psDroid);
+bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid);
 
 /* Just returns true if the structure's present body points aren't as high as the original*/
-bool	structIsDamaged(STRUCTURE *psStruct);
+bool	structIsDamaged(const STRUCTURE *psStruct);
 
 // give a structure from one player to another - used in Electronic Warfare
 STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare = true);
@@ -356,7 +356,7 @@ static inline int structJammerPower(const STRUCTURE *psObj)
 	return objJammerPower((const BASE_OBJECT *)psObj);
 }
 
-static inline Rotation structureGetInterpolatedWeaponRotation(STRUCTURE *psStructure, int weaponSlot, uint32_t time)
+static inline Rotation structureGetInterpolatedWeaponRotation(const STRUCTURE *psStructure, int weaponSlot, uint32_t time)
 {
 	return interpolateRot(psStructure->asWeaps[weaponSlot].prevRot, psStructure->asWeaps[weaponSlot].rot, psStructure->prevTime, psStructure->time, time);
 }
@@ -468,24 +468,24 @@ static inline int getBuildingResearchPoints(const STRUCTURE *psStruct)
 	return upgrade.research + upgrade.moduleResearch * psStruct->capacity;
 }
 
-static inline int getBuildingProductionPoints(STRUCTURE *psStruct)
+static inline int getBuildingProductionPoints(const STRUCTURE *psStruct)
 {
-	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	const auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
 	return upgrade.production + upgrade.moduleProduction * psStruct->capacity;
 }
 
-static inline int getBuildingPowerPoints(STRUCTURE *psStruct)
+static inline int getBuildingPowerPoints(const STRUCTURE *psStruct)
 {
-	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	const auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
 	return upgrade.power + upgrade.modulePower * psStruct->capacity;
 }
 
-static inline int getBuildingRepairPoints(STRUCTURE *psStruct)
+static inline int getBuildingRepairPoints(const STRUCTURE *psStruct)
 {
 	return psStruct->pStructureType->upgrade[psStruct->player].repair;
 }
 
-static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
+static inline int getBuildingRearmPoints(const STRUCTURE *psStruct)
 {
 	return psStruct->pStructureType->upgrade[psStruct->player].rearm;
 }
