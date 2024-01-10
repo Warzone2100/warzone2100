@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-09 20:27\n"
+"PO-Revision-Date: 2024-01-10 08:51\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -712,7 +712,7 @@ msgstr "PREPRAVNÁ MISIA: Severný sektor"
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr ""
+msgstr "Gratulujeme k úspešnej evakuácii základne Beta."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
@@ -721,7 +721,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr ""
+msgstr "Zober tvoje jednotky do severného sektora"
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
@@ -753,7 +753,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
-msgstr ""
+msgstr "Našli sme miesto odpalu rakiet."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
@@ -820,11 +820,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
-msgstr ""
+msgstr "NEXUS PORAZENÝ"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
-msgstr ""
+msgstr "Veliteľ, porazili sme NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
