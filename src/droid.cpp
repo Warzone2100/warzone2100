@@ -1333,7 +1333,7 @@ static void droidUpdateDroidSelfRepair(DROID *psRepairDroid)
 }
 
 // return whether a droid is IDF
-bool idfDroid(DROID *psDroid)
+bool idfDroid(const DROID *psDroid)
 {
 	//add Cyborgs
 	//if (psDroid->droidType != DROID_WEAPON)
@@ -1583,7 +1583,7 @@ UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UD
 }
 
 template <typename T>
-static uint32_t calcBuild(T *obj)
+static uint32_t calcBuild(const T *obj)
 {
 	return calcSum(obj, [](COMPONENT_STATS const &stat) {
 		return stat.buildPoints;
@@ -1599,7 +1599,7 @@ UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate)
 	return calcBuild(psTemplate);
 }
 
-UDWORD calcDroidPoints(DROID *psDroid)
+UDWORD calcDroidPoints(const DROID *psDroid)
 {
 	return calcBuild(psDroid);
 }
@@ -2558,7 +2558,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 
 /* Looks through the players list of droids to see if any of them are
 building the specified structure - returns true if finds one*/
-bool checkDroidsBuilding(STRUCTURE *psStructure)
+bool checkDroidsBuilding(const STRUCTURE *psStructure)
 {
 	for (const DROID* psDroid : apsDroidLists[psStructure->player])
 	{
@@ -2574,7 +2574,7 @@ bool checkDroidsBuilding(STRUCTURE *psStructure)
 
 /* Looks through the players list of droids to see if any of them are
 demolishing the specified structure - returns true if finds one*/
-bool checkDroidsDemolishing(STRUCTURE *psStructure)
+bool checkDroidsDemolishing(const STRUCTURE *psStructure)
 {
 	for (const DROID* psDroid : apsDroidLists[psStructure->player])
 	{
@@ -2854,7 +2854,7 @@ bool vtolFull(const DROID *psDroid)
 }
 
 // true if a vtol is waiting to be rearmed by a particular rearm pad
-bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
+bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct)
 {
 	CHECK_DROID(psDroid);
 
@@ -3385,7 +3385,7 @@ true if valid weapon*/
 /* this will be buggy if the droid being checked has both AA weapon and non-AA weapon
 Cannot think of a solution without adding additional return value atm.
 */
-bool checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
+bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate)
 {
 	PROPULSION_STATS	*psPropStats;
 
@@ -3557,7 +3557,7 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 	}
 }
 
-int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj)
+int droidSqDist(const DROID *psDroid, const BASE_OBJECT *psObj)
 {
 	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 

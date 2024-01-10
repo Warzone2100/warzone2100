@@ -42,7 +42,7 @@ class ValueTracker {
 	/// Stops tracking
 	ValueTracker* stopTracking();
 	/// Returns true if currently tracking a value.
-	bool isTracking();
+	bool isTracking() const;
 	/// Sets speed/smoothness of the interpolation. 1 is syrup, 100 is instant. Default 10.
 	ValueTracker* setSpeed(int value);
 	/// Sets the target delta value
@@ -52,17 +52,17 @@ class ValueTracker {
 	/// Update current value
 	ValueTracker* update();
 	/// Get initial value
-	int getInitial();
+	int getInitial() const;
 	/// Get current value
-	int getCurrent();
+	int getCurrent() const;
 	/// Get current delta value
-	int getCurrentDelta();
+	int getCurrentDelta() const;
 	/// Get absolute target value
-	int getTarget();
+	int getTarget() const;
 	/// Get target delta value
-	int getTargetDelta();
+	int getTargetDelta() const;
 	/// Returns if the tracker reached its target
-	bool reachedTarget();
+	bool reachedTarget() const;
 };
 
 enum EasingType

@@ -806,7 +806,7 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 	return nullptr;
 }
 
-static UDWORD getRepairIdFromFlagSingleList(FLAG_POSITION* psFlag, uint32_t player, const StructureList& list)
+static UDWORD getRepairIdFromFlagSingleList(const FLAG_POSITION* psFlag, uint32_t player, const StructureList& list)
 {
 	for (STRUCTURE* psObj : list)
 	{
@@ -826,7 +826,7 @@ static UDWORD getRepairIdFromFlagSingleList(FLAG_POSITION* psFlag, uint32_t play
 	return UDWORD_MAX;
 }
 
-UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
+UDWORD getRepairIdFromFlag(const FLAG_POSITION *psFlag)
 {
 	unsigned int i;
 	UDWORD			player;

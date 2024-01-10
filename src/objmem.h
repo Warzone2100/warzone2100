@@ -147,7 +147,7 @@ BASE_OBJECT* getBaseObjFromId(const std::list<ObjectType*>& list, unsigned id)
 BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type);
 BASE_OBJECT *getBaseObjFromId(UDWORD id);
 
-UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag);
+UDWORD getRepairIdFromFlag(const FLAG_POSITION *psFlag);
 
 void objCount(int *droids, int *structures, int *features);
 

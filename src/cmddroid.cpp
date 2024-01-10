@@ -156,7 +156,7 @@ void cmdDroidClearDesignator(UDWORD player)
  * It does this by searching throughout all the player's droids.
  * @todo try to find something more efficient, has this function is of O(TotalNumberOfDroidsOfPlayer).
  */
-SDWORD cmdDroidGetIndex(DROID *psCommander)
+SDWORD cmdDroidGetIndex(const DROID *psCommander)
 {
 	SDWORD	index = 1;
 

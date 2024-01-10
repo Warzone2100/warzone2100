@@ -6714,7 +6714,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 
 
 // return whether a rearm pad has a vtol on it
-bool vtolOnRearmPad(const STRUCTURE *psStruct, DROID *psDroid)
+bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid)
 {
 	SDWORD	tx, ty;
 
@@ -6736,7 +6736,7 @@ bool vtolOnRearmPad(const STRUCTURE *psStruct, DROID *psDroid)
 
 
 /* Just returns true if the structure's present body points aren't as high as the original*/
-bool	structIsDamaged(STRUCTURE *psStruct)
+bool	structIsDamaged(const STRUCTURE *psStruct)
 {
 	return psStruct->body < structureBody(psStruct);
 }

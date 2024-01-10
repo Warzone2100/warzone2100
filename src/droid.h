@@ -95,7 +95,7 @@ UDWORD calcDroidWeight(const DROID_TEMPLATE *psTemplate);
 UDWORD calcDroidPower(const DROID *psDroid);
 
 // Calculate the number of points required to build a droid
-UDWORD calcDroidPoints(DROID *psDroid);
+UDWORD calcDroidPoints(const DROID *psDroid);
 
 /* Calculate the body points of a droid from it's template */
 UDWORD calcTemplateBody(const DROID_TEMPLATE *psTemplate, UBYTE player);
@@ -113,7 +113,7 @@ UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate);
 UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate);
 
 // return whether a droid is IDF
-bool idfDroid(DROID *psDroid);
+bool idfDroid(const DROID *psDroid);
 
 /* Do damage to a droid */
 int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
@@ -210,10 +210,10 @@ bool pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 void initDroidMovement(DROID *psDroid);
 
 /// Looks through the players list of droids to see if any of them are building the specified structure - returns true if finds one
-bool checkDroidsBuilding(STRUCTURE *psStructure);
+bool checkDroidsBuilding(const STRUCTURE *psStructure);
 
 /// Looks through the players list of droids to see if any of them are demolishing the specified structure - returns true if finds one
-bool checkDroidsDemolishing(STRUCTURE *psStructure);
+bool checkDroidsDemolishing(const STRUCTURE *psStructure);
 
 /// Returns the next module which can be built after lastOrderedModule, or returns 0 if not possible.
 int nextModuleToBuild(STRUCTURE const *psStruct, int lastOrderedModule);
@@ -259,7 +259,7 @@ UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot);
 //assign rearmPad to the VTOL
 void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad);
 // true if a vtol is waiting to be rearmed by a particular rearm pad
-bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct);
+bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct);
 // true if a vtol droid currently returning to be rearmed
 bool vtolRearming(const DROID *psDroid);
 // true if a droid is currently attacking
@@ -284,7 +284,7 @@ bool standardSensorDroid(const DROID *psDroid);
 SWORD droidResistance(const DROID *psDroid);
 
 /// This is called to check the weapon is allowed
-bool checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);
+bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate);
 
 const char *getDroidNameForRank(UDWORD rank);
 
@@ -453,7 +453,7 @@ void checkDroid(const DROID *droid, const char *const location_description, cons
 #define CHECK_DROID(droid) checkDroid(droid, AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
 /** If droid can get to given object using its current propulsion, return the square distance. Otherwise return -1. */
-int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
+int droidSqDist(const DROID *psDroid, const BASE_OBJECT *psObj);
 
 // Minimum damage a weapon will deal to its target
 #define	MIN_WEAPON_DAMAGE	1

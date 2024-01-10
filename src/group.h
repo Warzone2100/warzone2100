@@ -44,7 +44,7 @@ public: // TODO: c++ design to members become private.
 
 	void add(DROID *psDroid);     // Add a droid to group. Remove it from its group in case it already has group
 	void remove(DROID *psDroid);  // Remove droid from group. Free group in case RefCount<=0
-	unsigned int getNumMembers(); // Count the number of members of a group
+	unsigned int getNumMembers() const; // Count the number of members of a group
 
 	void orderGroup(DROID_ORDER order);                     // give an order all the droids of the group
 	void orderGroup(DROID_ORDER order, UDWORD x, UDWORD y); // give an order all the droids of the group (using location)

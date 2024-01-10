@@ -745,7 +745,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 }
 
 // Are there a lot of bullets heading towards the droid?
-static bool aiDroidIsProbablyDoomed(DROID *psDroid, bool isDirect)
+static bool aiDroidIsProbablyDoomed(DROID const *psDroid, bool isDirect)
 {
 	if (isDirect)
 	{
@@ -760,14 +760,14 @@ static bool aiDroidIsProbablyDoomed(DROID *psDroid, bool isDirect)
 }
 
 // Are there a lot of bullets heading towards the structure?
-static bool aiStructureIsProbablyDoomed(STRUCTURE *psStructure)
+static bool aiStructureIsProbablyDoomed(STRUCTURE const *psStructure)
 {
 	return psStructure->expectedDamage > psStructure->body
 	       && psStructure->expectedDamage - psStructure->body > psStructure->body / 15; // Doomed if projectiles will damage 106.6666666667% of remaining body points.
 }
 
 // Are there a lot of bullets heading towards the object?
-bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject, bool isDirect)
+bool aiObjectIsProbablyDoomed(BASE_OBJECT const *psObject, bool isDirect)
 {
 	if (psObject->died)
 	{
@@ -777,9 +777,9 @@ bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject, bool isDirect)
 	switch (psObject->type)
 	{
 	case OBJ_DROID:
-		return aiDroidIsProbablyDoomed((DROID *)psObject, isDirect);
+		return aiDroidIsProbablyDoomed((DROID const *)psObject, isDirect);
 	case OBJ_STRUCTURE:
-		return aiStructureIsProbablyDoomed((STRUCTURE *)psObject);
+		return aiStructureIsProbablyDoomed((STRUCTURE const *)psObject);
 	default:
 		return false;
 	}
@@ -1239,9 +1239,9 @@ void aiUpdateDroid(DROID *psDroid)
 }
 
 /* Check if any of our weapons can hit the target... */
-bool checkAnyWeaponsTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
+bool checkAnyWeaponsTarget(BASE_OBJECT const *psObject, BASE_OBJECT const *psTarget)
 {
-	DROID *psDroid = (DROID *) psObject;
+	DROID const *psDroid = (DROID const *) psObject;
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (validTarget(psObject, psTarget, i))
@@ -1253,7 +1253,7 @@ bool checkAnyWeaponsTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
 }
 
 /* Set of rules which determine whether the weapon associated with the object can fire on the propulsion type of the target. */
-bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
+bool validTarget(BASE_OBJECT const *psObject, BASE_OBJECT const *psTarget, int weapon_slot)
 {
 	bool	bTargetInAir = false, bValidTarget = false;
 	UBYTE	surfaceToAir = 0;
@@ -1267,9 +1267,9 @@ bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 	switch (psTarget->type)
 	{
 	case OBJ_DROID:
-		if (asPropulsionTypes[asPropulsionStats[((DROID *)psTarget)->asBits[COMP_PROPULSION]].propulsionType].travel == AIR)
+		if (asPropulsionTypes[asPropulsionStats[((const DROID *)psTarget)->asBits[COMP_PROPULSION]].propulsionType].travel == AIR)
 		{
-			if (((DROID *)psTarget)->sMove.Status != MOVEINACTIVE)
+			if (((const DROID *)psTarget)->sMove.Status != MOVEINACTIVE)
 			{
 				bTargetInAir = true;
 			}
@@ -1294,15 +1294,15 @@ bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 	switch (psObject->type)
 	{
 	case OBJ_DROID:
-		if (((DROID *)psObject)->droidType == DROID_SENSOR)
+		if (((const DROID *)psObject)->droidType == DROID_SENSOR)
 		{
 			return !bTargetInAir;  // Sensor droids should not target anything in the air.
 		}
 
 		// Can't attack without a weapon
-		if (((DROID *)psObject)->numWeaps != 0 && ((DROID *)psObject)->asWeaps[weapon_slot].nStat != 0)
+		if (((const DROID *)psObject)->numWeaps != 0 && ((const DROID *)psObject)->asWeaps[weapon_slot].nStat != 0)
 		{
-			surfaceToAir = asWeaponStats[((DROID *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
+			surfaceToAir = asWeaponStats[((const DROID *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
 			if (((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir))
 			{
 				return true;
@@ -1315,9 +1315,9 @@ bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 		break;
 	case OBJ_STRUCTURE:
 		// Can't attack without a weapon
-		if (((STRUCTURE *)psObject)->numWeaps != 0 && ((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat != 0)
+		if (((const STRUCTURE *)psObject)->numWeaps != 0 && ((const STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat != 0)
 		{
-			surfaceToAir = asWeaponStats[((STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
+			surfaceToAir = asWeaponStats[((const STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
 		}
 		else
 		{
