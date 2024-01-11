@@ -5552,10 +5552,16 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
 	std::vector<std::pair<int, WzString>> sortedList;
 	bool missionList = fName.compare("mdroid");
+	// This will be set to the largest group ID found throughout the droid file + 1.
+	//
+	// This helps to allocate non-conflicting group IDs for commanders which
+	// happen to lose their group, e.g. when transitioning from an offworld mission.
+	int nextFreeGroupID = 0;
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		DROID_TYPE droidType = (DROID_TYPE)ini.value("droidType").toInt();
+		int aigroup = ini.value("aigroup", -1).toInt();
 		int priority = 0;
 		switch (droidType)
 		{
@@ -5570,6 +5576,10 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 			if (!missionList || (missionList && !getDroidsToSafetyFlag()))
 			{
 				++priority;
+			}
+			if (aigroup >= 0)
+			{
+				nextFreeGroupID = std::max(nextFreeGroupID, aigroup) + 1;
 			}
 		default:
 			break;
@@ -5701,7 +5711,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		{
 			if (isTransporter(psDroid) || psDroid->droidType == DROID_COMMAND)
 			{
-				DROID_GROUP *psGroup = grpCreate();
+				DROID_GROUP *psGroup = grpCreate(nextFreeGroupID++);
 				psGroup->add(psDroid);
 			}
 			else
