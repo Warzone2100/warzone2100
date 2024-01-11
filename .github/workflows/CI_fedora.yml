@@ -92,5 +92,5 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/gcc.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" fedora cmake --build .
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" fedora cmake --build . -- -k0
         echo "::remove-matcher owner=gcc::"
