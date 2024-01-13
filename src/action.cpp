@@ -350,7 +350,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 		int weapon_slot = psWeapon - psDroid->asWeaps;  // Should probably be passed weapon_slot instead of psWeapon.
 		calcDroidMuzzleBaseLocation(psDroid, &attackerTurretPos, weapon_slot);
 
-		if (psDroid->droidType == DROID_WEAPON || isTransporter(psDroid)
+		if (psDroid->droidType == DROID_WEAPON || psDroid->isTransporter()
 		    || psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_CYBORG
 		    || psDroid->droidType == DROID_CYBORG_SUPER)
 		{
@@ -2279,7 +2279,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 
 	case DACTION_ATTACK:
-		if (psDroid->asWeaps[0].nStat == 0 || isTransporter(psDroid) || psAction->psObj == psDroid)
+		if (psDroid->asWeaps[0].nStat == 0 || psDroid->isTransporter() || psAction->psObj == psDroid)
 		{
 			break;
 		}
@@ -2308,7 +2308,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			//in multiPlayer cannot electronically attack a transporter
 			if (bMultiPlayer
 			    && psAction->psObj->type == OBJ_DROID
-			    && isTransporter((DROID *)psAction->psObj))
+			    && ((DROID*)psAction->psObj)->isTransporter())
 			{
 				psDroid->action = DACTION_NONE;
 				break;

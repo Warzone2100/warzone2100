@@ -2910,7 +2910,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 				if (psCurr->droidType != DROID_PERSON
 				    // && psCurr->droidType != DROID_CYBORG
 				    && !psCurr->isCyborg()
-				    && (!isTransporter(psCurr))
+				    && (!psCurr->isTransporter())
 				    && psCurr->pos.x != INVALID_XY)
 				{
 					updateDroidOrientation(psCurr);
@@ -3074,7 +3074,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			{
 				if (psCurr->droidType != DROID_PERSON
 				    && !psCurr->isCyborg()
-				    && (!isTransporter(psCurr))
+				    && !psCurr->isTransporter()
 				    && psCurr->pos.x != INVALID_XY)
 				{
 					updateDroidOrientation(psCurr);
@@ -5339,7 +5339,7 @@ static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists
 				psDroid = d;
 				break;
 			}
-			if (isTransporter(d) && d->psGroup != nullptr)  // Check for droids in the transporter.
+			if (d->isTransporter() && d->psGroup != nullptr)  // Check for droids in the transporter.
 			{
 				for (DROID *psTrDroid : d->psGroup->psList)
 				{
@@ -5711,7 +5711,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		}
 		else
 		{
-			if (isTransporter(psDroid) || psDroid->droidType == DROID_COMMAND)
+			if (psDroid->isTransporter() || psDroid->droidType == DROID_COMMAND)
 			{
 				DROID_GROUP *psGroup = grpCreate(nextFreeGroupID++);
 				psGroup->add(psDroid);
@@ -5782,7 +5782,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 			scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);	// set map start position, FIXME - save properly elsewhere!
 		}
 
-		if (psDroid->psGroup == nullptr || psDroid->psGroup->type != GT_TRANSPORTER || isTransporter(psDroid))  // do not add to list if on a transport, then the group list is used instead
+		if (psDroid->psGroup == nullptr || psDroid->psGroup->type != GT_TRANSPORTER || psDroid->isTransporter())  // do not add to list if on a transport, then the group list is used instead
 		{
 			addDroid(psDroid, ppsCurrentDroidLists);
 		}
@@ -5923,7 +5923,7 @@ static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& pps
 		{
 			auto droidKey = "droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10));  // Zero padded so that alphabetical sort works.
 			mRoot[droidKey.toStdString()] = writeDroid(psCurr, onMission, counter);
-			if (isTransporter(psCurr))	// if transporter save any droids in the grp
+			if (psCurr->isTransporter())	// if transporter save any droids in the grp
 			{
 				if (psCurr->psGroup)
 				{

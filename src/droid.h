@@ -233,7 +233,6 @@ UBYTE checkCommandExist(UBYTE player);
  BASE_OBJECT *checkForRepairRange(DROID *psDroid, DROID *psTarget);
 
 // Returns true if the droid is a transporter.
-bool isTransporter(DROID const *psDroid);
 bool isTransporter(DROID_TEMPLATE const *psTemplate);
 /// Returns true if the droid has VTOL propulsion, and is not a transport.
 bool isVtolDroid(const DROID *psDroid);

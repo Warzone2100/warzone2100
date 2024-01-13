@@ -325,7 +325,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 
 	for (psD = apsDroidLists[from].begin(); psD != apsDroidLists[from].end() && totalToSend != 0; ++psD)
 	{
-		if (isTransporter(*psD)
+		if ((*psD)->isTransporter()
 		    && !transporterIsEmpty(*psD))
 		{
 			CONPRINTF(_("Tried to give away a non-empty %s - but this is not allowed."), (*psD)->aName);

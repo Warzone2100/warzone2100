@@ -885,7 +885,7 @@ void adjustDroidCount(DROID *droid, int delta) {
 // Increase counts of droids in a transporter
 void droidCountsInTransporter(DROID *droid, int player)
 {
-	if (!isTransporter(droid) || droid->psGroup == nullptr)
+	if (!droid->isTransporter() || droid->psGroup == nullptr)
 	{
 		return;
 	}

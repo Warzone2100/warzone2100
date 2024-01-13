@@ -2111,7 +2111,7 @@ static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE sta
 	for (DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		// Only set the state if it's not a transporter.
-		if (psDroid->selected && !isTransporter(psDroid))
+		if (psDroid->selected && !psDroid->isTransporter())
 		{
 			secondarySetState(psDroid, sec, state);
 		}

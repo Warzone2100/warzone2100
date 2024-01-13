@@ -889,7 +889,7 @@ static bool SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 		if (SelectedDroid)
 		{
 			//Only set the state if it's not a transporter.
-			if (!isTransporter(SelectedDroid))
+			if (!SelectedDroid->isTransporter())
 			{
 				if (!secondarySetState(SelectedDroid, sec, (SECONDARY_STATE)State))
 				{

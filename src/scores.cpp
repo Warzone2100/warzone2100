@@ -310,7 +310,7 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 			}
 			for (const DROID* psDroid : *dList)
 			{
-				if (isTransporter(psDroid))
+				if (psDroid->isTransporter())
 				{
 					for (DROID *psCurr : psDroid->psGroup->psList)
 					{
