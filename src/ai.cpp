@@ -1176,7 +1176,7 @@ void aiUpdateDroid(DROID *psDroid)
 		updateTarget = false;
 	}
 
-	if (bMultiPlayer && isVtolDroid(psDroid) && isHumanPlayer(psDroid->player))
+	if (bMultiPlayer && psDroid->isVtol() && isHumanPlayer(psDroid->player))
 	{
 		lookForTarget = false;
 		updateTarget = false;

@@ -1997,7 +1997,7 @@ bool wzapi::componentAvailable(WZAPI_PARAMS(std::string componentType, optional<
 bool wzapi::isVTOL(WZAPI_PARAMS(const DROID *psDroid))
 {
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
-	return isVtolDroid(psDroid);
+	return psDroid->isVtol();
 }
 
 //-- ## safeDest(player, x, y)

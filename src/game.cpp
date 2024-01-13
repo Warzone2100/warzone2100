@@ -5748,7 +5748,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		Vector2i tmp = ini.vector2i("bumpPosition");
 		psDroid->sMove.bumpPos = Vector3i(tmp.x, tmp.y, 0);
 
-		if (isVtolDroid(psDroid) && psDroid->sMove.Status != MOVEINACTIVE)
+		if (psDroid->isVtol() && psDroid->sMove.Status != MOVEINACTIVE)
 		{
 			psDroid->rot.pitch = 0;
 		}

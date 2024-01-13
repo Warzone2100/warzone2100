@@ -464,7 +464,7 @@ void orderUpdateDroid(DROID *psDroid)
 		         && psDroid->order.type != DORDER_HOLD
 		         && psDroid->order.psStats != structGetDemolishStat()
 		         && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_GUARD
-		         && !isVtolDroid(psDroid))
+		         && !psDroid->isVtol())
 		{
 			orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y, ModeImmediate);
 		}
@@ -570,10 +570,10 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_SCOUT:
 	case DORDER_PATROL:
 		// if there is an enemy around, attack it
-		if (psDroid->action == DACTION_MOVE || psDroid->action == DACTION_MOVEFIRE || (psDroid->action == DACTION_NONE && isVtolDroid(psDroid)))
+		if (psDroid->action == DACTION_MOVE || psDroid->action == DACTION_MOVEFIRE || (psDroid->action == DACTION_NONE && psDroid->isVtol()))
 		{
 			bool tooFarFromPath = false;
-			if (isVtolDroid(psDroid) && psDroid->order.type == DORDER_PATROL)
+			if (psDroid->isVtol() && psDroid->order.type == DORDER_PATROL)
 			{
 				// Don't stray too far from the patrol path - only attack if we're near it
 				// A fun algorithm to detect if we're near the path
@@ -650,7 +650,7 @@ void orderUpdateDroid(DROID *psDroid)
 						// started a new order, quit
 						break;
 					}
-					if (isVtolDroid(psDroid) && !vtolFull(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
+					if (psDroid->isVtol() && !vtolFull(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
 					{
 						moveToRearm(psDroid);
 						break;
@@ -683,7 +683,7 @@ void orderUpdateDroid(DROID *psDroid)
 				actionDroid(psDroid, DACTION_RETURNTOPOS, psDroid->actionPos.x, psDroid->actionPos.y);
 			}
 		}
-		if (psDroid->order.type == DORDER_PATROL && isVtolDroid(psDroid) && vtolEmpty(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
+		if (psDroid->order.type == DORDER_PATROL && psDroid->isVtol() && vtolEmpty(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
 		{
 			moveToRearm(psDroid);  // Completely empty (and we're not set to hold fire), don't bother patrolling.
 			break;
@@ -740,7 +740,7 @@ void orderUpdateDroid(DROID *psDroid)
 				actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset);
 			}
 
-			if (isVtolDroid(psDroid) && vtolEmpty(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
+			if (psDroid->isVtol() && vtolEmpty(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
 			{
 				moveToRearm(psDroid);  // Completely empty (and we're not set to hold fire), don't bother circling.
 				break;
@@ -798,7 +798,7 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			// if vtol then return to rearm pad as long as there are no other
 			// orders queued up
-			if (isVtolDroid(psDroid))
+			if (psDroid->isVtol())
 			{
 				if (!orderDroidList(psDroid))
 				{
@@ -814,13 +814,13 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		else if (((psDroid->action == DACTION_MOVE) ||
 		          (psDroid->action == DACTION_MOVEFIRE)) &&
-		         actionVisibleTarget(psDroid, psDroid->order.psObj, 0) && !isVtolDroid(psDroid))
+		         actionVisibleTarget(psDroid, psDroid->order.psObj, 0) && !psDroid->isVtol())
 		{
 			// moved near enough to attack change to attack action
 			actionDroid(psDroid, DACTION_ATTACK, psDroid->order.psObj);
 		}
 		else if ((psDroid->action == DACTION_MOVETOATTACK) &&
-		         !isVtolDroid(psDroid) &&
+		         !psDroid->isVtol() &&
 		         !actionVisibleTarget(psDroid, psDroid->order.psObj, 0) &&
 				 secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD)
 		{
@@ -828,7 +828,7 @@ void orderUpdateDroid(DROID *psDroid)
 			// that the unit will fire on other things while moving
 			actionDroid(psDroid, DACTION_MOVE, psDroid->order.psObj->pos.x, psDroid->order.psObj->pos.y);
 		}
-		else if (!isVtolDroid(psDroid)
+		else if (!psDroid->isVtol()
 		         && psDroid->order.psObj == psDroid->psActionTarget[0]
 		         && actionInRange(psDroid, psDroid->order.psObj, 0)
 		         && (psWall = visGetBlockingWall(psDroid, psDroid->order.psObj))
@@ -852,7 +852,7 @@ void orderUpdateDroid(DROID *psDroid)
 				// target is not in range and DSS_HALT_HOLD: give up, don't move
 				psDroid->order = DroidOrder(DORDER_NONE);
 			}
-			else if (!isVtolDroid(psDroid) || allVtolsRearmed(psDroid))
+			else if (!psDroid->isVtol() || allVtolsRearmed(psDroid))
 			{
 				actionDroid(psDroid, DACTION_ATTACK, psDroid->order.psObj);
 			}
@@ -1021,7 +1021,7 @@ void orderUpdateDroid(DROID *psDroid)
 		if (psDroid->order.psObj == nullptr)
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
-			if (isVtolDroid(psDroid))
+			if (psDroid->isVtol())
 			{
 				// VTOLs need special care. We don't want them landing in the
 				// middle of the battlefield if the sensor died!!! Rearm or RTB.
@@ -1033,7 +1033,7 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 		}
 		//before targetting - check if VTOL's are empty or need to retreat to repair
-		else if (isVtolDroid(psDroid) && (vtolEmpty(psDroid) || secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL))))
+		else if (psDroid->isVtol() && (vtolEmpty(psDroid) || secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL))))
 		{
 			moveToRearm(psDroid);
 		}
@@ -1062,7 +1062,7 @@ void orderUpdateDroid(DROID *psDroid)
 			if (psFireTarget && !psFireTarget->died && checkAnyWeaponsTarget(psDroid, psFireTarget))
 			{
 				bAttack = false;
-				if (isVtolDroid(psDroid))
+				if (psDroid->isVtol())
 				{
 					if (psDroid->action == DACTION_WAITDURINGREARM)
 					{
@@ -1096,7 +1096,7 @@ void orderUpdateDroid(DROID *psDroid)
 					actionDroid(psDroid, DACTION_ATTACK, psFireTarget);
 				}
 			}
-			else if (isVtolDroid(psDroid) &&
+			else if (psDroid->isVtol() &&
 			         (psDroid->action != DACTION_NONE) &&
 			         (psDroid->action != DACTION_FIRESUPPORT))
 			{
@@ -1464,7 +1464,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_MOVE:
 	case DORDER_SCOUT:
 		// can't move vtols to blocking tiles
-		if (isVtolDroid(psDroid)
+		if (psDroid->isVtol()
 		    && fpathBlockingTile(map_coord(psOrder->pos), getPropulsionStats(psDroid)->propulsionType))
 		{
 			break;
@@ -1528,7 +1528,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			}
 			psDroid->order = *psOrder;
 
-			if (isVtolDroid(psDroid)
+			if (psDroid->isVtol()
 				|| actionInRange(psDroid, psOrder->psObj, 0)
 				|| ((psOrder->type == DORDER_ATTACKTARGET || psOrder->type == DORDER_ATTACK)  && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
 			{
@@ -1631,7 +1631,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		psDroid->order = *psOrder;
 		// let the order update deal with vtol droids
-		if (!isVtolDroid(psDroid))
+		if (!psDroid->isVtol())
 		{
 			actionDroid(psDroid, DACTION_FIRESUPPORT, psOrder->psObj);
 		}
@@ -1667,7 +1667,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 				psDroid->order = *psOrder;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
-				if (isVtolDroid(psDroid) || (game.type == LEVEL_TYPE::SKIRMISH && psDroid->isTransporter()))
+				if (psDroid->isVtol() || (game.type == LEVEL_TYPE::SKIRMISH && psDroid->isTransporter()))
 				{
 					actionVTOLLandingPos(psDroid, &pos);
 				}
@@ -1706,7 +1706,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			// DORDER_RTR_SPECIFIED requires special handling, different from RTR
 			// because we don't want the damaged droid to randomly chose a repair station
 			// when User already specified one explicitely
-			if (isVtolDroid(psDroid))
+			if (psDroid->isVtol())
 			{
 				moveToRearm(psDroid);
 				break;
@@ -1741,7 +1741,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_RTR:
 		{
-			if (isVtolDroid(psDroid))
+			if (psDroid->isVtol())
 			{
 				moveToRearm(psDroid);
 				break;
@@ -1902,7 +1902,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_CIRCLE:
-		if (!isVtolDroid(psDroid))
+		if (!psDroid->isVtol())
 		{
 			break;
 		}
@@ -2479,7 +2479,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
 
 	// default to move; however, we can only end up on a tile
 	// where can stay, ie VTOLs must be able to land as well
-	if (isVtolDroid(psDroid))
+	if (psDroid->isVtol())
 	{
 		propulsion = PROPULSION_TYPE_WHEELED;
 	}
@@ -2492,7 +2492,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
 	if (altOrder)
 	{
 		order = DORDER_SCOUT;
-		if (isVtolDroid(psDroid))
+		if (psDroid->isVtol())
 		{
 			// Patrol if in a VTOL
 			order = DORDER_PATROL;
@@ -2658,7 +2658,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         (((FEATURE *)psObj)->psStats->subType == FEAT_GEN_ARTE ||
 	          ((FEATURE *)psObj)->psStats->subType == FEAT_OIL_DRUM))
 	{
-		if (!isVtolDroid(psDroid))
+		if (!psDroid->isVtol())
 		{
 			order = DroidOrder(DORDER_RECOVER, psObj);
 		}
@@ -2811,7 +2811,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 				DeSelectDroid(psDroid);
 			}
 			//REARM VTOLS
-			else if (isVtolDroid(psDroid))
+			else if (psDroid->isVtol())
 			{
 				//default to no order
 				//check if rearm pad
@@ -2851,7 +2851,7 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 		if (psDroid->selected)
 		{
 			/* currently only looks for VTOL */
-			if (isVtolDroid(psDroid))
+			if (psDroid->isVtol())
 			{
 				switch (psDroid->order.type)
 				{
@@ -3116,7 +3116,7 @@ bool secondarySupported(const DROID *psDroid, SECONDARY_ORDER sec)
 		break;
 
 	case DSO_CIRCLE:
-		if (!isVtolDroid(psDroid))
+		if (!psDroid->isVtol())
 		{
 			supported = false;
 		}
@@ -3291,7 +3291,7 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 {
 	if (secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL)))
 	{
-		if (!isVtolDroid(psDroid))
+		if (!psDroid->isVtol())
 		{
 			psDroid->group = UBYTE_MAX;
 		}
@@ -3301,7 +3301,7 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 		    psDroid->order.type != DORDER_RTB &&
 		    !vtolRearming(psDroid))
 		{
-			if (isVtolDroid(psDroid))
+			if (psDroid->isVtol())
 			{
 				moveToRearm(psDroid);
 			}
@@ -3640,7 +3640,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 			{
 				// just kill these orders
 				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
-				if (isVtolDroid(psDroid))
+				if (psDroid->isVtol())
 				{
 					moveToRearm(psDroid);
 				}

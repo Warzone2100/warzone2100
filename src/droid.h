@@ -234,10 +234,6 @@ UBYTE checkCommandExist(UBYTE player);
 
 // Returns true if the droid is a transporter.
 bool isTransporter(DROID_TEMPLATE const *psTemplate);
-/// Returns true if the droid has VTOL propulsion, and is not a transport.
-bool isVtolDroid(const DROID *psDroid);
-/// Returns true if the droid has VTOL propulsion and is moving.
-bool isFlying(const DROID *psDroid);
 /*returns true if a VTOL weapon droid which has completed all runs*/
 bool vtolEmpty(const DROID *psDroid);
 /*returns true if a VTOL weapon droid which still has full ammo*/
