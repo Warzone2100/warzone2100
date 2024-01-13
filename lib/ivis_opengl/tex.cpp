@@ -244,6 +244,25 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 	return false;
 }
 
+bool debugReloadTexturesFromDisk(const std::unordered_set<size_t>& texPages)
+{
+	std::string filename;
+	for (auto page : texPages)
+	{
+		gfx_api::texture_type existingTextureType = _TEX_PAGE[page].textureType;
+		filename = _TEX_PAGE[page].filename;
+		debug(LOG_TEXTURE, "Reloading texture %s from index %zu", filename.c_str(), page);
+		gfx_api::texture *pTexture = loadTextureHandleGraphicsOverrides(filename.c_str(), existingTextureType);
+		if (!pTexture)
+		{
+			debug(LOG_INFO, "Failed to reload texture: %s", filename.c_str());
+			continue;
+		}
+		pie_AddTexPage(pTexture, filename.c_str(), existingTextureType, page);
+	}
+	return true;
+}
+
 void pie_TexShutDown()
 {
 	// TODO, lazy deletions for faster loading of next level

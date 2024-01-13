@@ -67,4 +67,6 @@ const WzString &modelName(const iIMDShape *model);
 
 iIMDBaseShape *modelGet(const WzString &filename);
 
+void modelReloadAllModelTextures();
+
 #endif
