@@ -94,6 +94,11 @@ struct DROID : public BASE_OBJECT
 	DROID(uint32_t id, unsigned player);
 	~DROID();
 
+	// returns true if droid type is one of the Cyborg types
+	bool isCyborg() const;
+	// Just returns true if the droid's present body points aren't as high as the original
+	bool isDamaged() const;
+
 	/// UTF-8 name of the droid. This is generated from the droid template
 	///  WARNING: This *can* be changed by the game player after creation & can be translated, do NOT rely on this being the same for everyone!
 	char            aName[MAX_STR_LENGTH];

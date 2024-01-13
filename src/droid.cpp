@@ -865,7 +865,7 @@ void droidUpdate(DROID *psDroid)
 	}
 	// ------------------------
 	// See if we can and need to self repair.
-	if (!isVtolDroid(psDroid) && droidIsDamaged(psDroid) && psDroid->asBits[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(psDroid->player))
+	if (!isVtolDroid(psDroid) && psDroid->isDamaged() && psDroid->asBits[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(psDroid->player))
 	{
 		droidUpdateDroidSelfRepair(psDroid);
 	}
@@ -2684,10 +2684,10 @@ void setUpBuildModule(DROID *psDroid)
 	cancelBuild(psDroid);
 }
 
-/* Just returns true if the droid's present body points aren't as high as the original*/
-bool	droidIsDamaged(const DROID *psDroid)
+
+bool DROID::isDamaged() const
 {
-	return psDroid->body < psDroid->originalBody;
+	return body < originalBody;
 }
 
 
@@ -2732,7 +2732,7 @@ bool droidUnderRepair(const DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	//droid must be damaged
-	if (droidIsDamaged(psDroid))
+	if (psDroid->isDamaged())
 	{
 		//look thru the list of players droids to see if any are repairing this droid
 		for (const DROID *psCurr : apsDroidLists[psDroid->player])
@@ -2989,7 +2989,7 @@ bool vtolHappy(const DROID *psDroid)
 
 	ASSERT_OR_RETURN(false, isVtolDroid(psDroid), "not a VTOL droid");
 
-	if (droidIsDamaged(psDroid))
+	if (psDroid->isDamaged())
 	{
 		// VTOLs with less health than their original aren't happy
 		return false;
@@ -3241,7 +3241,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 		psNewDroid->experience = psD->experience;
 		psNewDroid->kills = psD->kills;
 
-		if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || isTransporter(psNewDroid)))
+		if (!(psNewDroid->droidType == DROID_PERSON || psNewDroid->isCyborg() || isTransporter(psNewDroid)))
 		{
 			updateDroidOrientation(psNewDroid);
 		}
@@ -3494,13 +3494,12 @@ bool droidAudioTrackStopped(void *psObj)
 	return true;
 }
 
-/*returns true if droid type is one of the Cyborg types*/
-bool cyborgDroid(const DROID *psDroid)
+bool DROID::isCyborg() const
 {
-	return (psDroid->droidType == DROID_CYBORG
-			|| psDroid->droidType == DROID_CYBORG_CONSTRUCT
-			|| psDroid->droidType == DROID_CYBORG_REPAIR
-			|| psDroid->droidType == DROID_CYBORG_SUPER);
+	return (droidType == DROID_CYBORG
+			|| droidType == DROID_CYBORG_CONSTRUCT
+			|| droidType == DROID_CYBORG_REPAIR
+			|| droidType == DROID_CYBORG_SUPER);
 }
 
 bool isConstructionDroid(DROID const *psDroid)

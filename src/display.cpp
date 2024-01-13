@@ -914,7 +914,7 @@ void processMouseClickInput()
 			}
 			// special droid at full health
 			if (arnMPointers[item][selection] == CURSOR_FIX && ObjUnderMouse && ObjUnderMouse->type == OBJ_DROID &&
-			    !droidIsDamaged((DROID *)ObjUnderMouse))
+			    !((DROID *)ObjUnderMouse)->isDamaged())
 			{
 				item = MT_OWNDROID;
 			}
@@ -1755,7 +1755,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		FeedbackOrderGiven();
 	}
 	// Clicked on a damaged unit? Will repair it.
-	else if (droidIsDamaged(psDroid) && repairDroidSelected(selectedPlayer))
+	else if (psDroid->isDamaged() && repairDroidSelected(selectedPlayer))
 	{
 		assignDestTarget();
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
@@ -2425,7 +2425,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 						}
 						else
 						{
-							if (droidIsDamaged(psDroid))
+							if (psDroid->isDamaged())
 							{
 								retVal = MT_OWNDROIDDAM;
 							}
@@ -2734,7 +2734,7 @@ bool cyborgDroidSelected(UDWORD player)
 
 	for (const DROID* psCurr : apsDroidLists[player])
 	{
-		if (psCurr->selected && cyborgDroid(psCurr))
+		if (psCurr->selected && psCurr->isCyborg())
 		{
 			return true;
 		}

@@ -253,7 +253,7 @@ static DROID* _findSomeoneToRepair(REPAIR_FACILITY *psRepairFac,
 	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
 		DROID *psDroid = (DROID*) *gi;
-		if (droidIsDamaged(psDroid))
+		if (psDroid->isDamaged())
 		{
 			queue.push(psDroid);
 		}
@@ -877,7 +877,7 @@ void orderUpdateDroid(DROID *psDroid)
 			// only place it can be trapped - in multiPlayer can only put cyborgs onto a Cyborg Transporter
 			DROID *temp = (DROID *)psDroid->order.psObj;	// NOTE: It is possible to have a NULL here
 
-			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid))
+			if (temp && temp->droidType == DROID_TRANSPORTER && !psDroid->isCyborg())
 			{
 				psDroid->order = DroidOrder(DORDER_NONE);
 				actionDroid(psDroid, DACTION_NONE);
@@ -958,7 +958,7 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_RTR:
 	case DORDER_RTR_SPECIFIED:
 		// send them back to commander, no need to repair
-		if (!droidIsDamaged(psDroid))
+		if (!psDroid->isDamaged())
 		{
 			objTrace(psDroid->id, "was RTR, but we are full health");
 			droidWasFullyRepaired(psDroid, nullptr);
@@ -2642,7 +2642,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 		{
 			return DroidOrder(DORDER_DROIDREPAIR, psObj);
 		}
-		else if ((psDroid->droidType == DROID_WEAPON) || cyborgDroid(psDroid) ||
+		else if ((psDroid->droidType == DROID_WEAPON) || psDroid->isCyborg() ||
 		         (psDroid->droidType == DROID_COMMAND))
 		{
 			return DroidOrder(DORDER_ATTACK, psObj);
@@ -2713,7 +2713,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         psObj->type == OBJ_DROID &&
 	         (psDroid->droidType == DROID_REPAIR ||
 	          psDroid->droidType == DROID_CYBORG_REPAIR) &&
-	         droidIsDamaged((DROID *)psObj))
+	         ((DROID *)psObj)->isDamaged())
 	{
 		order = DroidOrder(DORDER_DROIDREPAIR, psObj);
 	}
@@ -2983,7 +2983,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 /** This function runs though all player's droids to check if any of then is a transporter. Returns the transporter droid if any was found, and NULL else.*/
 DROID *FindATransporter(DROID const *embarkee)
 {
-	bool isCyborg = cyborgDroid(embarkee);
+	const bool isCyborg = embarkee->isCyborg();
 
 	DROID *bestDroid = nullptr;
 	unsigned bestDist = ~0u;

@@ -3465,7 +3465,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						}
 					}
 				}
-				if (droidIsDamaged(psDroid)) // do repairs
+				if (psDroid->isDamaged()) // do repairs
 				{
 					psDroid->body += gameTimeAdjustedAverage(getBuildingRepairPoints(psStructure));
 					if (psDroid->body >= psDroid->originalBody)

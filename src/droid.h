@@ -221,9 +221,6 @@ int nextModuleToBuild(STRUCTURE const *psStruct, int lastOrderedModule);
 /// Deals with building a module - checking if any droid is currently doing this if so, helping to build the current one
 void setUpBuildModule(DROID *psDroid);
 
-/// Just returns true if the droid's present body points aren't as high as the original
-bool droidIsDamaged(const DROID *psDroid);
-
 char const *getDroidResourceName(char const *pName);
 
 /// Checks to see if an electronic warfare weapon is attached to the droid
@@ -302,9 +299,6 @@ void DeSelectDroid(DROID *psDroid);
 
 /* audio finished callback */
 bool droidAudioTrackStopped(void *psObj);
-
-/*returns true if droid type is one of the Cyborg types*/
-bool cyborgDroid(const DROID *psDroid);
 
 bool isConstructionDroid(DROID const *psDroid);
 bool isConstructionDroid(BASE_OBJECT const *psObject);
