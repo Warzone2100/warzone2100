@@ -277,9 +277,6 @@ bool standardSensorDroid(const DROID *psDroid);
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
  DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic = false, Vector2i pos = {0, 0});
 
-/// Calculates the electronic resistance of a droid based on its experience level
-SWORD droidResistance(const DROID *psDroid);
-
 /// This is called to check the weapon is allowed
 bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate);
 

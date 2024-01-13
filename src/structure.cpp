@@ -5628,7 +5628,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		if (psDroid->resistance == ACTION_START_TIME)
 		{
 			//need to set the current resistance level since not been previously attacked (by EW)
-			psDroid->resistance = droidResistance(psDroid);
+			psDroid->resistance = psDroid->droidResistance();
 		}
 
 		if (psDroid->resistance < 0)

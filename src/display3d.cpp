@@ -3130,7 +3130,7 @@ static void queueWeaponReloadBarRects(BASE_OBJECT *psObj, WEAPON *psWeap, int we
 		}
 		if (psDroid->resistance)
 		{
-			mulH = (float)PERCENT(psDroid->resistance, droidResistance(psDroid));
+			mulH = (float)PERCENT(psDroid->resistance, psDroid->droidResistance());
 		}
 		else
 		{
@@ -3453,7 +3453,7 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 	{
 		if (psDroid->resistance)
 		{
-			damage = PERCENT(psDroid->resistance, droidResistance(psDroid));
+			damage = PERCENT(psDroid->resistance, psDroid->droidResistance());
 		}
 		else
 		{
@@ -3486,7 +3486,7 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 	{
 		if (psDroid->resistance)
 		{
-			mulH = (float)psDroid->resistance / (float)droidResistance(psDroid);
+			mulH = (float)psDroid->resistance / (float)psDroid->droidResistance();
 		}
 		else
 		{
