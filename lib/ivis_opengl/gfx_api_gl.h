@@ -172,6 +172,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	std::vector<GLint> locations;
 	std::vector<GLint> duplicateFragmentUniformLocations;
 	bool hasSpecializationConstant_ShadowConstants = false;
+	bool hasSpecializationConstants_PointLights = false;
 
 	std::vector<std::function<void(const void*, size_t)>> uniform_bind_functions;
 

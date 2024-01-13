@@ -1580,7 +1580,7 @@ static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, fl
 	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_MIP_LOAD_BIAS %s", floatAsString.c_str()));
 }
 
-static void patchDefines(std::string& fragmentShaderStr, const gfx_api::lighting_constants& lightingConstants)
+static bool patchFragmentShaderPointLightsDefines(std::string& fragmentShaderStr, const gfx_api::lighting_constants& lightingConstants)
 {
 	const auto defines = {
 		std::make_pair("WZ_MAX_POINT_LIGHTS", gfx_api::max_lights),
@@ -1589,14 +1589,16 @@ static void patchDefines(std::string& fragmentShaderStr, const gfx_api::lighting
 		std::make_pair("WZ_POINT_LIGHT_ENABLED", static_cast<size_t>(lightingConstants.isPointLightPerPixelEnabled)),
 	};
 
-	const auto& replacer = [&fragmentShaderStr](const std::string& define, const auto& value) {
+	const auto& replacer = [&fragmentShaderStr](const std::string& define, const auto& value) -> bool {
 		const auto re_1 = std::regex(fmt::format("#define {} .*", define), std::regex_constants::ECMAScript);
-		regex_replace_wrapper(fragmentShaderStr, re_1, fmt::format("#define {} {}", define, value));
+		return regex_replace_wrapper(fragmentShaderStr, re_1, fmt::format("#define {} {}", define, value));
 	};
+	bool foundAndReplaced_PointLightsDefine = false;
 	for (const auto& p : defines)
 	{
-		replacer(p.first, p.second);
+		foundAndReplaced_PointLightsDefine = replacer(p.first, p.second) || foundAndReplaced_PointLightsDefine;
 	}
+	return foundAndReplaced_PointLightsDefine;
 }
 
 static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, const gfx_api::lighting_constants& shadowConstants)
@@ -1743,7 +1745,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 				patchFragmentShaderTextureLodBias(fragmentShaderStr, mipLodBias.value());
 			}
 			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, lightingConstants);
-			patchDefines(fragmentShaderStr, lightingConstants);
+			hasSpecializationConstants_PointLights = patchFragmentShaderPointLightsDefines(fragmentShaderStr, lightingConstants);
 
 			const char* ShaderStrings[2] = { fragment_header, fragmentShaderStr.c_str() };
 
@@ -4349,7 +4351,7 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 	for (auto& pipelineInfo : createdPipelines)
 	{
 		if (pipelineInfo.pso &&
-			pipelineInfo.pso->hasSpecializationConstant_ShadowConstants)
+			(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
 		{
 			delete pipelineInfo.pso;
 			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
