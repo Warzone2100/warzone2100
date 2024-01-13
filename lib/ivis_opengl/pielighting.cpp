@@ -161,6 +161,10 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	// Iterate over all buckets
 	size_t overallId = 0;
 	size_t bucketId = 0;
+
+	// GLSL std layout 140 force us to store array of int with the same stride as
+	// an array of ivec4, wasting 3/4 of the storage.
+	// To circumvent this, we pack 4 consecutives index in a ivec4 here, and unpack the value in the shader.
 	std::array<size_t, gfx_api::max_indexed_lights * 4> lightList;
 	for (size_t i = 0; i < gfx_api::bucket_dimension; i++)
 	{
