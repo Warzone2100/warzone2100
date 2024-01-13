@@ -121,6 +121,9 @@ function eventStartLevel()
 	{
 		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
 	}
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COEastBase": {
@@ -160,7 +163,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.npcybf, cTempl.npcybr]
+			templates: [cTempl.cocybag, cTempl.cocybth, cTempl.cocybtk]
 		},
 		"COCyborgFactoryR": {
 			assembly: "COCyborgFactoryRAssembly",
@@ -172,7 +175,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.npcybr, cTempl.npcybc]
+			templates: [cTempl.cocybtk, cTempl.cocybsn]
 		},
 	});
 

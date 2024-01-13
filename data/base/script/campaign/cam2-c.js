@@ -303,6 +303,7 @@ function eventStartLevel()
 	{
 		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
 	}
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COAirBase": {
@@ -360,7 +361,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybf, cTempl.npcybc, cTempl.npcybr]
+			templates: [cTempl.cocybth, cTempl.npcybc, cTempl.npcybr]
 		},
 		"COCyborgFactoryR": {
 			assembly: "COCyborgFactoryRAssembly",
@@ -372,7 +373,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybf, cTempl.npcybc, cTempl.npcybr]
+			templates: [cTempl.cocybth, cTempl.npcybc, cTempl.npcybr]
 		},
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,

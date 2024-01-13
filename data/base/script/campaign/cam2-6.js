@@ -139,6 +139,10 @@ function eventStartLevel()
 
 	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+
 	camSetEnemyBases({
 		"COUplinkBase": {
 			cleanup: "uplinkBaseCleanup",
@@ -171,7 +175,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybf, cTempl.cocybag, cTempl.npcybr]
+			templates: [cTempl.cocybsn, cTempl.cocybth, cTempl.cocybag, cTempl.cocybtk]
 		},
 		"COCyborgFactory-b1": {
 			assembly: "COCyborgFactory-b1Assembly",
@@ -183,7 +187,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.npcybr]
+			templates: [cTempl.cocybag, cTempl.cocybtk]
 		},
 		"COCyborgFactory-b2": {
 			assembly: "COCyborgFactory-b2Assembly",
@@ -195,7 +199,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybf]
+			templates: [cTempl.cocybsn, cTempl.cocybth]
 		},
 		"COHeavyFactory-b2L": {
 			assembly: "COHeavyFactory-b2LAssembly",

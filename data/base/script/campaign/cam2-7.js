@@ -127,6 +127,9 @@ function eventStartLevel()
 	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
 	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohact, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COBase1": {
@@ -178,7 +181,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.cocybag]
+			templates: [cTempl.cocybsn, cTempl.cocybag]
 		},
 		"COCyborgFac-b3": {
 			assembly: "base3CybAssembly",
@@ -190,7 +193,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybf, cTempl.npcybr]
+			templates: [cTempl.cocybth, cTempl.cocybtk]
 		},
 		"COHeavyFac-b4": {
 			assembly: "base4HeavyAssembly",
@@ -214,7 +217,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.npcybc, cTempl.npcybr]
+			templates: [cTempl.cocybag, cTempl.cocybsn, cTempl.cocybtk]
 		},
 		"COVtolFactory-b4": {
 			assembly: "base4VTOLAssembly",
@@ -225,7 +228,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [cTempl.colagv, cTempl.commorv, cTempl.commorvt]
+			templates: [cTempl.colagv, cTempl.commorv, cTempl.commorvt, cTempl.colhvat]
 		},
 	});
 

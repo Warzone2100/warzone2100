@@ -1146,6 +1146,24 @@
 		],
 		"statID": "Cannon1Mk1"
 	},
+	"R-Cyborg-Wpn-Cannon02": {
+		"iconID": "IMAGE_RES_CYBORGTECH",
+		"id": "R-Cyborg-Wpn-Cannon02",
+		"msgName": "RES_CYW_CN2",
+		"name": "Sniper Cyborg",
+		"replacedComponents": [
+			"CyborgCannon:CyborgCannon02"
+		],
+		"requiredResearch": [
+			"R-Wpn-Cannon4AMk1"
+		],
+		"researchPoints": 4000,
+		"researchPower": 125,
+		"resultComponents": [
+			"CyborgCannon02"
+		],
+		"statID": "Cannon4AUTOMk1"
+	},
 	"R-Cyborg-Wpn-Flamer": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Flamer",
@@ -1161,6 +1179,24 @@
 			"CyborgFlamer01"
 		],
 		"statID": "Flame1Mk1"
+	},
+	"R-Cyborg-Wpn-Flamer02": {
+		"iconID": "IMAGE_RES_CYBORGTECH",
+		"id": "R-Cyborg-Wpn-Flamer02",
+		"msgName": "RES_CYW_FL2",
+		"name": "Thermite Cyborg",
+		"replacedComponents": [
+			"CyborgFlamer01:CyborgFlamer02"
+		],
+		"requiredResearch": [
+			"R-Wpn-Flame2"
+		],
+		"researchPoints": 3600,
+		"researchPower": 112,
+		"resultComponents": [
+			"CyborgFlamer02"
+		],
+		"statID": "Flame2"
 	},
 	"R-Cyborg-Wpn-MG": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -1195,6 +1231,24 @@
 		],
 		"statID": "Rocket-LtA-T"
 	},
+	"R-Cyborg-Wpn-Rocket02": {
+		"iconID": "IMAGE_RES_CYBORGTECH",
+		"id": "R-Cyborg-Wpn-Rocket02",
+		"msgName": "RES_CYW_RK2",
+		"name": "Tank Killer Cyborg",
+		"replacedComponents": [
+			"CyborgRocket:CyborgRocket02"
+		],
+		"requiredResearch": [
+			"R-Wpn-Rocket07-Tank-Killer"
+		],
+		"researchPoints": 5000,
+		"researchPower": 156,
+		"resultComponents": [
+			"CyborgRocket02"
+		],
+		"statID": "Rocket-HvyA-T"
+	},
 	"R-Cyborg-Wpn-RotMG": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-RotMG",
@@ -1219,7 +1273,7 @@
 		"msgName": "RES_CYW_ATM",
 		"name": "Scourge Cyborg",
 		"replacedComponents": [
-			"CyborgRocket:Cyb-Wpn-Atmiss"
+			"CyborgRocket02:Cyb-Wpn-Atmiss"
 		],
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
@@ -1236,10 +1290,6 @@
 		"id": "R-Cyborg-Wpn-Laser1",
 		"msgName": "RES_CYW_LS1",
 		"name": "Flashlight Gunner Cyborg",
-		"replacedComponents": [
-			"CyborgRotMG:Cyb-Wpn-Laser",
-			"CyborgFlamer01:Cyb-Wpn-Laser"
-		],
 		"requiredResearch": [
 			"R-Wpn-Laser01"
 		],
@@ -1256,7 +1306,7 @@
 		"msgName": "RES_CYW_RL1",
 		"name": "Needle Gunner Cyborg",
 		"replacedComponents": [
-			"CyborgCannon:Cyb-Wpn-Rail1"
+			"CyborgCannon02:Cyb-Wpn-Rail1"
 		],
 		"requiredResearch": [
 			"R-Wpn-RailGun01"
@@ -6639,7 +6689,9 @@
 		"msgName": "RES_EMP_PulseLas",
 		"name": "Pulse Laser Emplacement",
 		"redStructures": [
-			"Emplacement-PrisLas"
+			"Emplacement-PrisLas",
+			"Tower-Projector",
+			"Wall-RotMg"
 		],
 		"requiredResearch": [
 			"R-Wpn-Laser02",
@@ -6784,9 +6836,6 @@
 		"id": "R-Defense-WallTower-PulseLas",
 		"msgName": "RES_WT14_PLS",
 		"name": "Flashlight Hardpoint",
-		"redStructures": [
-			"Wall-RotMg"
-		],
 		"requiredResearch": [
 			"R-Wpn-Laser01"
 		],
@@ -7348,6 +7397,27 @@
 		],
 		"resultComponents": [
 			"NEXUSrepair"
+		],
+		"techCode": 1
+	},
+	"R-Sys-NEXUSsensor": {
+		"id": "R-Sys-NEXUSsensor",
+		"keyTopic": 1,
+		"name": "*R-Sys-NEXUSsensor*",
+		"replacedComponents": [
+			"ZNULLSENSOR:NavGunSensor"
+		],
+		"resultComponents": [
+			"NavGunSensor"
+		],
+		"techCode": 1
+	},
+	"R-Sys-NEXUSsensorUndo": {
+		"id": "R-Sys-NEXUSsensorUndo",
+		"keyTopic": 1,
+		"name": "*R-Sys-NEXUSsensorUndo*",
+		"replacedComponents": [
+			"NavGunSensor:ZNULLSENSOR"
 		],
 		"techCode": 1
 	},
@@ -8628,10 +8698,6 @@
 		"keyTopic": 1,
 		"msgName": "RES_W_LAS1",
 		"name": "Laser - Flashlight",
-		"redComponents": [
-			"MG4ROTARY-VTOL",
-			"MG4ROTARYMk1"
-		],
 		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
@@ -8648,7 +8714,14 @@
 		"name": "Pulse Laser",
 		"redComponents": [
 			"Laser3BEAM-VTOL",
-			"Laser3BEAMMk1"
+			"Laser3BEAMMk1",
+			"MG4ROTARY-VTOL",
+			"MG4ROTARYMk1",
+			"Flame2"
+		],
+		"replacedComponents": [
+			"CyborgRotMG:Cyb-Wpn-Laser",
+			"CyborgFlamer02:Cyb-Wpn-Laser"
 		],
 		"requiredResearch": [
 			"R-Wpn-Laser01"
@@ -8701,6 +8774,29 @@
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
 				"value": 35
+			}
+		],
+		"statID": "MG1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"techCode": 1
+	},
+	"R-Wpn-MG-Damage10": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-MG-Damage10",
+		"name": "Depleted Uranium MG Bullets Mk3",
+		"requiredResearch": [
+			"R-Wpn-MG-Damage09",
+			"R-Wpn-Cannon-Damage09"
+		],
+		"researchPoints": 11600,
+		"researchPower": 362,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "Damage",
+				"value": 30
 			}
 		],
 		"statID": "MG1Mk1",

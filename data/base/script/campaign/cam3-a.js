@@ -181,7 +181,7 @@ function wave2()
 {
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [2, 2], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -192,7 +192,7 @@ function wave3()
 {
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [3, 3], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -204,7 +204,7 @@ function vtolAttack()
 {
 	const list = [cTempl.nxmtherv, cTempl.nxmtherv];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [2, 2], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -261,6 +261,7 @@ function cam3Setup()
 		"R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-Accuracy01",
 		"R-Wpn-Rail-Damage01", "R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01",
 		"R-Wpn-Energy-Damage02", "R-Wpn-Energy-ROF01", "R-Wpn-Energy-Accuracy01",
+		"R-Sys-NEXUSsensor",
 	];
 
 	for (let x = 0, l = mis_structsAlpha.length; x < l; ++x)

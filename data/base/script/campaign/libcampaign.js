@@ -279,7 +279,7 @@ var __camPropulsionTypeLimit;
 //research
 const __CAM_AI_INSTANT_PRODUCTION_RESEARCH = "R-Struc-Factory-Upgrade-AI";
 const __cam_nexusTech = [
-	"R-Sys-NEXUSrepair"
+	"R-Sys-NEXUSrepair", "R-Sys-NEXUSsensor"
 ];
 
 //tactics

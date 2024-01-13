@@ -18,6 +18,7 @@ const mis_nexusRes = [
 	"R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-Accuracy01",
 	"R-Wpn-Rail-Damage01", "R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01",
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
+	"R-Sys-NEXUSsensor",
 ];
 
 //Remove Nexus VTOL droids.

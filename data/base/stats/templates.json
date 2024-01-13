@@ -662,6 +662,17 @@
 			"CyborgCannon"
 		]
 	},
+	"CyborgCannon02Grd": {
+		"available": true,
+		"body": "CyborgLightBody",
+		"id": "Cyb-Cannon02-GROUND",
+		"name": "Sniper Cyborg",
+		"propulsion": "CyborgLegs",
+		"type": "CYBORG",
+		"weapons": [
+			"CyborgCannon02"
+		]
+	},
 	"CyborgChain01Ground": {
 		"available": true,
 		"body": "CyborgLightBody",
@@ -682,6 +693,17 @@
 		"type": "CYBORG",
 		"weapons": [
 			"CyborgFlamer01"
+		]
+	},
+	"CyborgFlamer02Grd": {
+		"available": true,
+		"body": "CyborgLightBody",
+		"id": "Cyb-Flamer02-GROUND",
+		"name": "Thermite Cyborg",
+		"propulsion": "CyborgLegs",
+		"type": "CYBORG",
+		"weapons": [
+			"CyborgFlamer02"
 		]
 	},
 	"Cyb-Laser1-GROUND": {
@@ -715,6 +737,17 @@
 		"type": "CYBORG",
 		"weapons": [
 			"CyborgRocket"
+		]
+	},
+	"CyborgRkt02Ground": {
+		"available": true,
+		"body": "CyborgLightBody",
+		"id": "Cyb-Rocket02-GROUND",
+		"name": "Tank Killer Cyborg",
+		"propulsion": "CyborgLegs",
+		"type": "CYBORG",
+		"weapons": [
+			"CyborgRocket02"
 		]
 	},
 	"Cyb-Rocket-GROUND": {

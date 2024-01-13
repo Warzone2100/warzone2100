@@ -231,5 +231,11 @@
 		"id": 1235,
 		"player": 3,
 		"type": 1
+	},
+	"object_11": {
+		"label": "NX-HQ",
+		"id": 237,
+		"player": 3,
+		"type": 1
 	}
 }

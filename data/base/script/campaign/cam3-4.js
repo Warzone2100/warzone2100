@@ -5,7 +5,7 @@ const mis_nexusRes = [
 	"R-Sys-Engineering03", "R-Defense-WallUpgrade12", "R-Struc-Materials11",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
-	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
+	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage10", "R-Wpn-Mortar-ROF04",
 	"R-Vehicle-Engine09", "R-Vehicle-Metals11", "R-Vehicle-Armor-Heat08",
 	"R-Cyborg-Metals11", "R-Cyborg-Armor-Heat08", "R-Wpn-RocketSlow-ROF06",
 	"R-Wpn-AAGun-Damage06", "R-Wpn-AAGun-ROF06", "R-Wpn-Howitzer-Damage09",
@@ -13,12 +13,12 @@ const mis_nexusRes = [
 	"R-Wpn-Missile-Damage03", "R-Wpn-Missile-ROF03", "R-Wpn-Missile-Accuracy02",
 	"R-Wpn-Rail-Damage03", "R-Wpn-Rail-ROF03", "R-Wpn-Rail-Accuracy01",
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
-	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03",
+	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Sys-NEXUSsensor",
 ];
 
 function eventDestroyed(obj)
 {
-	if (obj.player === CAM_NEXUS && obj.type === STRUCTURE && obj.stattype === HQ)
+	if (camGetNexusState() && obj.player === CAM_NEXUS && obj.type === STRUCTURE && obj.stattype === HQ)
 	{
 		camSetNexusState(false);
 		removeTimer("nexusHackFeature");
@@ -47,11 +47,11 @@ function nexusHackFeature()
 
 	switch (difficulty)
 	{
-		case SUPEREASY: hackFailChance = 90; break;
-		case EASY: hackFailChance = 80; break;
-		case MEDIUM: hackFailChance = 70; break;
+		case SUPEREASY: hackFailChance = 95; break;
+		case EASY: hackFailChance = 85; break;
+		case MEDIUM: hackFailChance = 75; break;
 		case HARD: hackFailChance = 65; break;
-		case INSANE: hackFailChance = 60; break;
+		case INSANE: hackFailChance = 55; break;
 		default: hackFailChance = 70;
 	}
 
@@ -66,7 +66,17 @@ function nexusHackFeature()
 // A little suprise absorbption attack when discovering the SW base.
 function takeoverChanceAttack()
 {
-	const CHANCE = (difficulty === INSANE) ? 10 : 5;
+	let chance = 0;
+	switch (difficulty)
+	{
+		case SUPEREASY: chance = 1; break;
+		case EASY: chance = 3; break;
+		case MEDIUM: chance = 5; break;
+		case HARD: chance = 7; break;
+		case INSANE: chance = 9; break;
+		default: chance = 5;
+	}
+
 	const objects = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
 		(obj.type !== DROID) || (obj.type === DROID && obj.droidType !== DROID_SUPERTRANSPORTER)
 	));
@@ -74,7 +84,11 @@ function takeoverChanceAttack()
 	for (let i = 0, len = objects.length; i < len; ++i)
 	{
 		const obj = objects[i];
-		if (camRand(100) < CHANCE)
+		if (obj.type === DROID && obj.droidType === DROID_COMMAND)
+		{
+			continue; //A little too hectic to take a Commander immediately.
+		}
+		if (camRand(100) < chance)
 		{
 			if (obj.type === STRUCTURE && obj.stattype === WALL)
 			{
@@ -88,26 +102,23 @@ function takeoverChanceAttack()
 	}
 }
 
-//Destroy some VTOLs initially.
 function destroyPlayerVtols()
 {
-	let vtolBlowupAmount = 0;
-	const vtols = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
-		(obj.type === DROID) && (obj.droidType !== DROID_SUPERTRANSPORTER) && isVTOL(obj)
-	));
-
-	switch (difficulty)
+	const hq = getObject("NX-HQ");
+	if (hq === null)
 	{
-		case MEDIUM: vtolBlowupAmount = 0.5; break;
-		case HARD: vtolBlowupAmount = 0.65; break;
-		case INSANE: vtolBlowupAmount = 0.8; break;
-		default: vtolBlowupAmount = 0.5;
+		removeTimer("destroyPlayerVtols");
+		return;
 	}
-
-	for (let i = 0, len = Math.floor(vtolBlowupAmount * vtols.length); i < len; ++i)
+	const __SCAN_RADIUS = 11;
+	const objects = enumRange(hq.x, hq.y, __SCAN_RADIUS, CAM_HUMAN_PLAYER, false);
+	for (let i = 0, len = objects.length; i < len; ++i)
 	{
-		const vtol = vtols[i];
-		camSafeRemoveObject(vtol, true);
+		const obj = objects[i];
+		if (obj.type === DROID && isVTOL(obj))
+		{
+			camSafeRemoveObject(obj, true);
+		}
 	}
 }
 
@@ -116,21 +127,19 @@ function activateNexus()
 	camSetExtraObjectiveMessage(_("Destroy the Nexus HQ to disable the Nexus Intruder Program"));
 	playSound(cam_sounds.nexus.synapticLinksActivated);
 	camSetNexusState(true);
-	setTimer("nexusHackFeature", camSecondsToMilliseconds((difficulty <= MEDIUM) ? 20 : 10));
+	setTimer("nexusHackFeature", camSecondsToMilliseconds((difficulty <= EASY) ? 20 : 10));
+	setTimer("destroyPlayerVtols", camSecondsToMilliseconds(0.2));
 }
 
 function camEnemyBaseDetected_NX_SWBase()
 {
+	if (getObject("NX-HQ") === null)
+	{
+		return; //Probably destroyed through cheats?
+	}
 	camPlayVideos({video: "MB3_4_MSG4", type: MISS_MSG});
 	//Do these before Nexus state activation to prevent sound spam.
-	if (difficulty >= MEDIUM)
-	{
-		queue("destroyPlayerVtols", camSecondsToMilliseconds(0.2));
-	}
-	if (difficulty >= HARD)
-	{
-		queue("takeoverChanceAttack", camSecondsToMilliseconds(0.5));
-	}
+	queue("takeoverChanceAttack", camSecondsToMilliseconds(0.5));
 	queue("activateNexus", camSecondsToMilliseconds(1));
 }
 

@@ -116,6 +116,9 @@ function eventStartLevel()
 
 	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohhpv, CAM_THE_COLLECTIVE);
 	camUpgradeOnMapTemplates(cTempl.comtath, cTempl.comltath, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
 
 	//New AC Tiger tracked units for Hard and Insane difficulty
 	if (difficulty >= HARD)
@@ -158,7 +161,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.npcybr]
+			templates: [cTempl.cocybag, cTempl.cocybtk]
 		},
 		"COHeavyFacL-b2": {
 			assembly: "COHeavyFacL-b2Assembly",

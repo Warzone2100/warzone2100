@@ -154,7 +154,7 @@ function wave2()
 {
 	const list = [cTempl.colatv, cTempl.colatv];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [3, 3], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -165,7 +165,7 @@ function wave3()
 {
 	const list = [cTempl.colcbv, cTempl.colcbv];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [2, 2], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -176,7 +176,7 @@ function vtolAttack()
 {
 	const list = [cTempl.colpbv, cTempl.colpbv];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [2, 2], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -404,7 +404,7 @@ function eventStartLevel()
 
 	queue("secondVideo", camSecondsToMilliseconds(12));
 	queue("groupPatrol", camChangeOnDiff(camMinutesToMilliseconds(1)));
-	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(6)));
+	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
