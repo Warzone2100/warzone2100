@@ -32,6 +32,7 @@ function camNextLevel(nextLevel)
 			setPowerModifier(100);
 		}
 	}
+	__camRemoveNavGunSensorResearch();
 	camBreakAlliances();
 	//Set these limits again for the home map before exiting this mission
 	setStructureLimits(cam_base_structures.commandCenter, 1, CAM_HUMAN_PLAYER);
@@ -60,7 +61,6 @@ function camNextLevel(nextLevel)
 //;;   * `false` means instant defeat ("objective failed"),
 //;;   * `true` means victory as long as other standard victory conditions are met,
 //;;   * `undefined` means suppress other victory checks ("clearly not won yet").
-//;; * `victoryVideo` Pass in the name of a video string here and it will be played before attempting to load the next level.
 //;; For offworld victory, some more extra data parameters can be defined:
 //;; * `retlz` Force the player to return to the LZ area:
 //;;   * `false` mission does not require a LZ return,
@@ -186,10 +186,6 @@ function __camGameLost()
 function __camGameWon()
 {
 	__camLevelEnded = true;
-	if (camDef(__camVictoryData) && camDef(__camVictoryData.victoryVideo))
-	{
-		camPlayVideos(__camVictoryData.victoryVideo);
-	}
 
 	if (camDef(__camNextLevel))
 	{

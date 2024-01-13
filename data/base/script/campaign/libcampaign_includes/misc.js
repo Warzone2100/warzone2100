@@ -712,3 +712,19 @@ function camSetDroidExperience(droid)
 
 	setDroidExperience(droid, exp);
 }
+
+// Only to prevent prebuilt units from team Gamma on Gamma 6 from having the NavGunSensor.
+function __camRemoveNavGunSensorResearch()
+{
+	if (camDiscoverCampaign() !== __CAM_GAMMA_CAMPAIGN_NUMBER)
+	{
+		return;
+	}
+	for (let i = 0; i < __CAM_MAX_PLAYERS; ++i)
+	{
+		if (i !== CAM_NEXUS && getResearch("R-Sys-NEXUSsensor", i).done)
+		{
+			completeResearch("R-Sys-NEXUSsensorUndo", i, true);
+		}
+	}
+}

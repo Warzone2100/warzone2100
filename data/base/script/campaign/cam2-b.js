@@ -166,6 +166,7 @@ function eventStartLevel()
 	{
 		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
 	}
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
 
 	// New HMG Tiger Tracks units in first attack group
 	if (difficulty >= HARD)
@@ -243,7 +244,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.npcybf, cTempl.npcybm]
+			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.cocybth, cTempl.npcybm]
 		},
 		"COHeavyFac-b4": {
 			assembly: "COHeavyFac-b4Assembly",
@@ -267,7 +268,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.npcybf]
+			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.cocybth]
 		},
 	});
 

@@ -135,7 +135,7 @@ function vtolAttack()
 //SouthEast attackers which are mostly cyborgs.
 function cyborgAttack()
 {
-	const list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.comhltat, cTempl.cohhpv];
+	const list = [cTempl.cocybtk, cTempl.cocybag, cTempl.cocybsn, cTempl.comhltat, cTempl.cohhpv];
 
 	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(mis_Labels.southCyborgAssembly), randomTemplates(list, false, true), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
@@ -144,7 +144,7 @@ function cyborgAttack()
 
 function cyborgAttackRandom()
 {
-	const list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.npcybc, cTempl.comrotm]; //favor cannon cyborg
+	const list = [cTempl.cocybtk, cTempl.cocybag, cTempl.cocybsn, cTempl.cocybsn, cTempl.comrotm]; //favor cannon cyborg
 
 	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(camGenerateRandomMapEdgeCoordinate(mis_Labels.startPos)), randomTemplates(list, false, true).concat(cTempl.comsens), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }

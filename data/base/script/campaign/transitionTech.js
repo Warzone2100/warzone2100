@@ -94,7 +94,7 @@ const mis_betaResearchNew = [
 	"R-Wpn-RocketSlow-ROF01", "R-Defense-HvyFlamer", "R-Vehicle-Metals04",
 	"R-Wpn-Cannon-Damage05", "R-Wpn-MG-Damage06", "R-Wpn-Rocket-Damage05",
 	"R-Wpn-RocketSlow-Damage05", "R-Cyborg-Metals04", "R-Wpn-Flamer-Damage06",
-	"R-Wpn-Mortar-Damage04", "R-Defense-WallUpgrade05",
+	"R-Wpn-Mortar-Damage04", "R-Defense-WallUpgrade05", "R-Cyborg-Wpn-Flamer02",
 
 	// 4
 	"R-Wpn-RocketSlow-Accuracy03", "R-Wpn-AAGun-Accuracy01", "R-Wpn-Mortar-Acc02",
@@ -124,6 +124,7 @@ const mis_betaResearchNew = [
 	"R-Defense-Emplacement-HPVcannon", "R-Defense-HvyA-Trocket", "R-Defense-RotMor",
 	"R-Defense-WallTower-HPVcannon", "R-Defense-WallTower-HvyA-Trocket", "R-Sys-VTOLCBS-Turret01",
 	"R-Wpn-Mortar-ROF03", "R-Wpn-Mortar-Damage06", "R-Wpn-AAGun04", "R-Defense-AASite-QuadRotMg",
+	"R-Cyborg-Wpn-Cannon02", "R-Cyborg-Wpn-Rocket02",
 
 	// 9
 	"R-Wpn-Cannon5", "R-Wpn-RocketSlow-Damage06", "R-Defense-Wall-VulcanCan",
@@ -164,7 +165,7 @@ const mis_gammaResearchNew = [
 	// 4
 	"R-Wpn-Cannon-ROF05", "R-Wpn-Cannon-ROF06", "R-Wpn-Cannon-Damage09", "R-Wpn-AAGun-Damage06",
 	"R-Wpn-Howitzer-Damage06", "R-Wpn-AAGun-ROF05", "R-Wpn-AAGun-ROF06", "R-Wpn-RocketSlow-ROF05",
-	"R-Wpn-RocketSlow-ROF06",
+	"R-Wpn-RocketSlow-ROF06", "R-Wpn-MG-Damage10",
 
 	// 5
 	"R-Sys-Resistance-Upgrade01", "R-Sys-Resistance-Upgrade02", "R-Sys-Resistance-Upgrade03",

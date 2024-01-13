@@ -42,9 +42,9 @@ function truckDefense()
 //Attacks every 3 minutes until HQ is destroyed.
 function wave2()
 {
-	const list = [cTempl.colatv, cTempl.colatv];
+	const list = [cTempl.colhvat, cTempl.colhvat];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [2, 2], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -55,7 +55,7 @@ function wave3()
 {
 	const list = [cTempl.commorv, cTempl.commorv];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [2, 2], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -66,7 +66,7 @@ function vtolAttack()
 {
 	const list = [cTempl.commorvt, cTempl.commorvt];
 	const ext = {
-		limit: [4, 4], //paired with list array
+		limit: [2, 2], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
@@ -135,6 +135,10 @@ function eventStartLevel()
 
 	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+
 	camSetEnemyBases({
 		"COSouthEastBase": {
 			cleanup: "baseCleanup",
@@ -167,7 +171,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybf, cTempl.npcybr, cTempl.cocybag]
+			templates: [cTempl.cocybsn, cTempl.cocybth, cTempl.cocybtk, cTempl.cocybag]
 		},
 	});
 

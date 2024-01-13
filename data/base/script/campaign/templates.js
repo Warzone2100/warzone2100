@@ -154,10 +154,13 @@ const tWeap = {
         assaultGun: "CyborgRotMG",
         //Flamer
         flamer: "CyborgFlamer01",
+        thermite: "CyborgFlamer02",
         //Cannon
         lightCannon: "CyborgCannon",
+        sniperCannon: "CyborgCannon02",
         //Rocket
         lancer: "CyborgRocket",
+        tankKiller: "CyborgRocket02",
         //Laser
         flashlight: "Cyb-Wpn-Laser",
         nexusFlashlight: "NX-CyborgPulseLas",
@@ -303,6 +306,7 @@ prrept: { body: tBody.tank.cobra, prop: tProp.tank.tracks, weap: tRepair.lightRe
 // CAM_2_B
 comatt: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.lancer },
 comit: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.inferno },
+cocybth: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.thermite },
 
 // SUB_2_2
 comtath: { body: tBody.tank.panther, prop: tProp.tank.hover, weap: tWeap.tank.lancer },
@@ -323,6 +327,9 @@ comhltat: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.
 commorvt: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.thermiteBomb },
 cohhpv: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.hyperVelocityCannon },
 comagt: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.assaultGun },
+cocybsn: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.sniperCannon },
+cocybtk: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.tankKiller },
+colhvat: { body: tBody.tank.leopard, prop: tProp.air.vtol, weap: tWeap.air.tankKiller },
 
 // SUB_2_6
 cohact: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.assaultCannon },
