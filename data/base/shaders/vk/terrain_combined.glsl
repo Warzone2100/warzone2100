@@ -6,7 +6,6 @@
 #define WZ_MAX_INDEXED_POINT_LIGHTS 512
 #define WZ_BUCKET_DIMENSION 8
 
-
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
 	mat4 ViewMatrix;
