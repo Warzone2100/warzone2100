@@ -1332,20 +1332,6 @@ static void droidUpdateDroidSelfRepair(DROID *psRepairDroid)
 	droidUpdateDroidRepairBase(psRepairDroid, psRepairDroid);
 }
 
-// return whether a droid is IDF
-bool idfDroid(const DROID *psDroid)
-{
-	//add Cyborgs
-	//if (psDroid->droidType != DROID_WEAPON)
-	if (!(psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_CYBORG ||
-		  psDroid->droidType == DROID_CYBORG_SUPER))
-	{
-		return false;
-	}
-
-	return !proj_Direct(psDroid->asWeaps[0].nStat + asWeaponStats);
-}
-
 /* Return the type of a droid */
 DROID_TYPE droidType(const DROID *psDroid)
 {

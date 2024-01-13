@@ -112,9 +112,6 @@ UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate);
 /* Calculate the power points required to build/maintain the droid */
 UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate);
 
-// return whether a droid is IDF
-bool idfDroid(const DROID *psDroid);
-
 /* Do damage to a droid */
 int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
