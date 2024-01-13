@@ -1043,7 +1043,7 @@ void IntFancyButton::displayIMD(AtlasImage image, ImdObject imdObject, int xOffs
 
 		if (IMDType == IMDTYPE_DROID)
 		{
-			if (isTransporter((DROID *)Object))
+			if (((DROID*)Object)->isTransporter())
 			{
 				if (((DROID *)Object)->droidType == DROID_TRANSPORTER)
 				{

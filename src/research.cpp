@@ -1585,7 +1585,7 @@ void replaceDroidComponent(DroidList& pList, UDWORD oldType, UDWORD oldCompInc,
 	{
 		switchComponent(psDroid, oldType, oldCompInc, newCompInc);
 		// Need to replace the units inside the transporter
-		if (isTransporter(psDroid))
+		if (psDroid->isTransporter())
 		{
 			replaceTransDroidComponents(psDroid, oldType, oldCompInc, newCompInc);
 		}
@@ -1596,7 +1596,7 @@ void replaceDroidComponent(DroidList& pList, UDWORD oldType, UDWORD oldCompInc,
 void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                  UDWORD oldCompInc, UDWORD newCompInc)
 {
-	ASSERT(isTransporter(psTransporter), "invalid unit type");
+	ASSERT(psTransporter->isTransporter(), "invalid unit type");
 
 	for (DROID* psCurr : psTransporter->psGroup->psList)
 	{

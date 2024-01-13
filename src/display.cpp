@@ -1667,7 +1667,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
 		FeedbackOrderGiven();
 	}
-	else if (isTransporter(psDroid))
+	else if (psDroid->isTransporter())
 	{
 		if (selection == SC_INVALID)
 		{
@@ -2204,7 +2204,7 @@ static void dealWithRMB()
 					dealWithDroidSelect(psDroid, false);
 				}
 				// Not a transporter
-				else if (!isTransporter(psDroid))
+				else if (!psDroid->isTransporter())
 				{
 					if (bRightClickOrders)
 					{
@@ -2394,7 +2394,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 								retVal = MT_SENSOR;
 							}
 						}
-						else if (isTransporter(psDroid) &&
+						else if (psDroid->isTransporter() &&
 						         selectedPlayer == psDroid->player)
 						{
 							//check the transporter is not full

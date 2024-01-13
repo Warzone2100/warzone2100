@@ -3785,7 +3785,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &perspectiveViewMatrix)
 		{
 			//don't allow Transporter Droids to be selected here
 			//unless we're in multiPlayer mode!!!!
-			if (!isTransporter(psDroid) || bMultiPlayer)
+			if (!psDroid->isTransporter() || bMultiPlayer)
 			{
 				dealWithDroidSelect(psDroid, true);
 			}

@@ -1944,7 +1944,7 @@ bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporte
 	int transporterPlayer = transporter.player;
 	DROID *psTransporter = IdToMissionDroid(transporterId, transporterPlayer);
 	SCRIPT_ASSERT(false, context, psTransporter, "No such transporter id %d belonging to player %d", transporterId, transporterPlayer);
-	SCRIPT_ASSERT(false, context, isTransporter(psTransporter), "Droid id %d belonging to player %d is not a transporter", transporterId, transporterPlayer);
+	SCRIPT_ASSERT(false, context, psTransporter->isTransporter(), "Droid id %d belonging to player %d is not a transporter", transporterId, transporterPlayer);
 	int droidId = droid.id;
 	int droidPlayer = droid.player;
 	DROID *psDroid = IdToMissionDroid(droidId, droidPlayer);
@@ -2277,7 +2277,7 @@ bool wzapi::setExperienceModifier(WZAPI_PARAMS(int player, int percent))
 std::vector<const DROID *> wzapi::enumCargo(WZAPI_PARAMS(const DROID *psDroid))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
-	SCRIPT_ASSERT({}, context, isTransporter(psDroid), "Wrong droid type (expecting: transporter)");
+	SCRIPT_ASSERT({}, context, psDroid->isTransporter(), "Wrong droid type (expecting: transporter)");
 	std::vector<const DROID *> result;
 	SCRIPT_ASSERT({}, context, psDroid->psGroup, "Droid is not assigned to a group");
 	result.reserve(psDroid->psGroup->getNumMembers());
@@ -2535,7 +2535,7 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time, optio
 		 * since there's no transport to launch */
 		auto droidIt = std::find_if(apsDroidLists[selectedPlayer].begin(), apsDroidLists[selectedPlayer].end(), [](DROID* d)
 		{
-			return isTransporter(d) && !transporterFlying(d);
+			return d->isTransporter() && !transporterFlying(d);
 		});
 		DROID* psDroid = droidIt != apsDroidLists[selectedPlayer].end() ? *droidIt : nullptr;
 

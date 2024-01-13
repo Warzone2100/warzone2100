@@ -531,7 +531,7 @@ void addTransporterTimerInterface()
 		//check the player has at least one Transporter back at base
 		for (DROID *psDroid : mission.apsDroidLists[selectedPlayer])
 		{
-			if (isTransporter(psDroid))
+			if (psDroid->isTransporter())
 			{
 				psTransporter = psDroid;
 				break;
@@ -916,7 +916,7 @@ void placeLimboDroids()
 		{
 			addDroid(psDroid, apsDroidLists);
 			//KILL OFF TRANSPORTER - should never be one but....
-			if (isTransporter(psDroid))
+			if (psDroid->isTransporter())
 			{
 				vanishDroid(psDroid);
 				return IterationResult::CONTINUE_ITERATION;
@@ -988,7 +988,7 @@ void saveCampaignData()
 		// Move any Transporters into the mission list
 		mutating_list_iterate(apsDroidLists[selectedPlayer], [](DROID* psDroid)
 		{
-			if (isTransporter(psDroid))
+			if (psDroid->isTransporter())
 			{
 				// Empty the transporter into the mission list
 				ASSERT_OR_RETURN(IterationResult::CONTINUE_ITERATION, psDroid->psGroup != nullptr, "Transporter does not have a group");
@@ -1044,7 +1044,7 @@ void saveCampaignData()
 		//find the *first* transporter
 		mutating_list_iterate(mission.apsDroidLists[selectedPlayer], [](DROID* psDroid)
 		{
-			if (isTransporter(psDroid))
+			if (psDroid->isTransporter())
 			{
 				//fill it with droids from the mission list
 				mutating_list_iterate(mission.apsDroidLists[selectedPlayer], [psDroid](DROID* psSafeDroid)
@@ -1285,7 +1285,7 @@ void processMissionLimbo()
 	mutating_list_iterate(apsDroidLists[selectedPlayer], [&numDroidsAddedToLimboList](DROID* psDroid)
 	{
 		//KILL OFF TRANSPORTER - should never be one but....
-		if (isTransporter(psDroid))
+		if (psDroid->isTransporter())
 		{
 			vanishDroid(psDroid);
 		}
@@ -1507,14 +1507,14 @@ void missionDroidUpdate(DROID *psDroid)
 	/*This is required for Transporters that are moved offWorld so the
 	saveGame doesn't try to set their position in the map - especially important
 	for endCam2 where there isn't a valid map!*/
-	if (isTransporter(psDroid))
+	if (psDroid->isTransporter())
 	{
 		psDroid->pos.x = INVALID_XY;
 		psDroid->pos.y = INVALID_XY;
 	}
 
 	//ignore all droids except Transporters
-	if (!isTransporter(psDroid)
+	if (!psDroid->isTransporter()
 	    || !(orderState(psDroid, DORDER_TRANSPORTOUT)  ||
 	         orderState(psDroid, DORDER_TRANSPORTIN)     ||
 	         orderState(psDroid, DORDER_TRANSPORTRETURN)))
@@ -1558,7 +1558,7 @@ static void missionResetDroids()
 			}
 
 			//KILL OFF TRANSPORTER
-			if (isTransporter(d))
+			if (d->isTransporter())
 			{
 				vanishDroid(d);
 			}
@@ -1689,7 +1689,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	}
 
 	//unload all the droids from within the current Transporter
-	if (isTransporter(psTransporter))
+	if (psTransporter->isTransporter())
 	{
 		ASSERT(psTransporter->psGroup != nullptr, "psTransporter->psGroup is null??");
 		for (DROID* psDroid : psTransporter->psGroup->psList)
@@ -1818,7 +1818,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 			ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer %" PRIu32 " exceeds MAX_PLAYERS", selectedPlayer);
 			auto droidIt = std::find_if(mission.apsDroidLists[selectedPlayer].begin(), mission.apsDroidLists[selectedPlayer].end(), [](DROID* d)
 			{
-				return !isTransporter(d);
+				return !d->isTransporter();
 			});
 			if (droidIt == mission.apsDroidLists[selectedPlayer].end())
 			{
@@ -3001,7 +3001,7 @@ bool missionDroidsRemaining(UDWORD player)
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player: %" PRIu32 "", player);
 	for (const DROID *psDroid : apsDroidLists[player])
 	{
-		if (!isTransporter(psDroid))
+		if (!psDroid->isTransporter())
 		{
 			return true;
 		}
@@ -3014,7 +3014,7 @@ being flown to safety. The droids inside the Transporter are placed into the
 mission list for later use*/
 void moveDroidsToSafety(DROID *psTransporter)
 {
-	ASSERT_OR_RETURN(, isTransporter(psTransporter), "unit not a Transporter");
+	ASSERT_OR_RETURN(, psTransporter->isTransporter(), "unit not a Transporter");
 
 	if (psTransporter->psGroup != nullptr)
 	{
@@ -3070,14 +3070,14 @@ static DROID *find_transporter()
 
 	for (DROID* droid : apsDroidLists[selectedPlayer])
 	{
-		if (isTransporter(droid))
+		if (droid->isTransporter())
 		{
 			return droid;
 		}
 	}
 	for (DROID* droid : mission.apsDroidLists[selectedPlayer])
 	{
-		if (isTransporter(droid))
+		if (droid->isTransporter())
 		{
 			return droid;
 		}
@@ -3177,7 +3177,7 @@ void emptyTransporters(bool bOffWorld)
 	//see if there are any Transporters in the world
 	mutating_list_iterate(apsDroidLists[selectedPlayer], [bOffWorld](DROID* psTransporter)
 	{
-		if (isTransporter(psTransporter))
+		if (psTransporter->isTransporter())
 		{
 			//if flying in, empty the contents
 			if (orderState(psTransporter, DORDER_TRANSPORTIN))
@@ -3233,7 +3233,7 @@ void emptyTransporters(bool bOffWorld)
 	//deal with any transporters that are waiting to come over
 	mutating_list_iterate(mission.apsDroidLists[selectedPlayer], [](DROID* psTransporter)
 	{
-		if (isTransporter(psTransporter))
+		if (psTransporter->isTransporter())
 		{
 			//for each droid within the transporter...
 			mutating_list_iterate(psTransporter->psGroup->psList, [psTransporter](DROID* psDroid)

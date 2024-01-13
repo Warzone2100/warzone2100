@@ -708,7 +708,7 @@ static BASE_OBJECT* getBaseObjFromDroidId(const DroidList& list, unsigned id)
 			return psObj;
 		}
 		// if transporter check any droids in the grp
-		if ((psObj->type == OBJ_DROID) && isTransporter(psObj))
+		if ((psObj->type == OBJ_DROID) && psObj->isTransporter())
 		{
 			ASSERT_OR_RETURN(nullptr, psObj->psGroup != nullptr, "Transporter has null group?");
 			for (DROID* psTrans : psObj->psGroup->psList)
@@ -915,7 +915,7 @@ void objCount(int *droids, int *structures, int *features)
 		for (const DROID *psDroid : apsDroidLists[i])
 		{
 			(*droids)++;
-			if (isTransporter(psDroid) && psDroid->psGroup && !psDroid->psGroup->psList.empty())
+			if (psDroid->isTransporter() && psDroid->psGroup && !psDroid->psGroup->psList.empty())
 			{
 				*droids += psDroid->psGroup->psList.size();
 			}

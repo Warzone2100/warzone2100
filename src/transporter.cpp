@@ -430,8 +430,8 @@ bool intAddTransButtonForm()
 		for (DROID* psDroid : *transIntDroidList)
 		{
 			//only interested in Transporter droids
-			if ((isTransporter(psDroid) && (psDroid->action == DACTION_TRANSPORTOUT ||
-				psDroid->action == DACTION_TRANSPORTIN)) || !isTransporter(psDroid))
+			if ((psDroid->isTransporter() && (psDroid->action == DACTION_TRANSPORTOUT ||
+				psDroid->action == DACTION_TRANSPORTIN)) || !psDroid->isTransporter())
 			{
 				continue;
 			}
@@ -610,7 +610,7 @@ bool intAddDroidsAvailForm()
 			break;
 		}
 		//don't add Transporter Droids!
-		if (!isTransporter(psDroid))
+		if (!psDroid->isTransporter())
 		{
 			/* Set the tip and add the button */
 			auto button = std::make_shared<IntTransportButton>();
@@ -688,11 +688,11 @@ int calcRemainingCapacity(const DROID *psTransporter)
 
 bool transporterIsEmpty(const DROID *psTransporter)
 {
-	ASSERT(isTransporter(psTransporter), "Non-transporter droid given");
+	ASSERT(psTransporter->isTransporter(), "Non-transporter droid given");
 
 	// Assume dead droids and non-transporter droids to be empty
 	return (isDead((const BASE_OBJECT *)psTransporter)
-	        || !isTransporter(psTransporter)
+	        || !psTransporter->isTransporter()
 	        || psTransporter->psGroup->psList.empty()
 	        || psTransporter->psGroup->psList.front() == psTransporter);
 }
@@ -881,7 +881,7 @@ void setCurrentTransporter(UDWORD id)
 	{
 		for (DROID* psCurr : *transIntDroidList)
 		{
-			if (isTransporter(psCurr) &&
+			if (psCurr->isTransporter() &&
 				(psCurr->action != DACTION_TRANSPORTOUT &&
 					psCurr->action != DACTION_TRANSPORTIN))
 			{
@@ -1003,7 +1003,7 @@ static void intTransporterAddDroid(UDWORD id)
 	DroidList::iterator droidIt = transIntDroidList->begin();
 	while (droidIt != transIntDroidList->end())
 	{
-		if (!isTransporter(*droidIt))
+		if (!(*droidIt)->isTransporter())
 		{
 			if (currID == id)
 			{
@@ -1088,7 +1088,7 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 
 	ASSERT_OR_RETURN(false, psTransporter != nullptr, "Invalid droid pointer");
 	ASSERT_OR_RETURN(false, psAssigned != nullptr, "Invalid droid pointer");
-	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Droid is not a Transporter");
+	ASSERT_OR_RETURN(false, psTransporter->isTransporter(), "Droid is not a Transporter");
 	ASSERT_OR_RETURN(false, psTransporter->psGroup != nullptr, "transporter doesn't have a group");
 
 	//work out how much space is currently left
@@ -1168,7 +1168,7 @@ bool launchTransporter(DROID *psTransporter)
 	//otherwise just launches the Transporter
 	else
 	{
-		if (!isTransporter(psTransporter))
+		if (!psTransporter->isTransporter())
 		{
 			ASSERT(false, "Invalid Transporter Droid");
 			return false;
@@ -1191,7 +1191,7 @@ have arrived - returns true when there*/
 bool updateTransporter(DROID *psTransporter)
 {
 	ASSERT_OR_RETURN(true, psTransporter != nullptr, "Invalid droid pointer");
-	ASSERT_OR_RETURN(true, isTransporter(psTransporter), "Invalid droid type");
+	ASSERT_OR_RETURN(true, psTransporter->isTransporter(), "Invalid droid type");
 
 	//if not moving to mission site, exit
 	if (psTransporter->action != DACTION_TRANSPORTOUT && psTransporter->action != DACTION_TRANSPORTIN)
@@ -1372,7 +1372,7 @@ void resetTransporter()
 bool transporterFlying(const DROID *psTransporter)
 {
 	ASSERT_OR_RETURN(false, psTransporter != nullptr, "Invalid droid pointer");
-	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Droid is not a Transporter");
+	ASSERT_OR_RETURN(false, psTransporter->isTransporter(), "Droid is not a Transporter");
 
 	return psTransporter->order.type == DORDER_TRANSPORTOUT ||
 	       psTransporter->order.type == DORDER_TRANSPORTIN ||

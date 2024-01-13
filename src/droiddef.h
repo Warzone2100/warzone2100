@@ -96,6 +96,8 @@ struct DROID : public BASE_OBJECT
 
 	// returns true if droid type is one of the Cyborg types
 	bool isCyborg() const;
+	// Returns true if the droid is a transporter.
+	bool isTransporter() const;
 	// Just returns true if the droid's present body points aren't as high as the original
 	bool isDamaged() const;
 	// calculates the electronic resistance of a droid based on its experience level
