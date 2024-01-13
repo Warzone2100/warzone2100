@@ -16,9 +16,9 @@ float pointLightEnergyAtPosition(vec3 position, vec3 pointLightWorldPosition, fl
 	vec3 pointLightVector = position - pointLightWorldPosition;
 	float normalizedDistance = length(pointLightVector) / range;
 
-	float sqNormDist =  normalizedDistance * normalizedDistance;
-	float numerator = max(1 - sqNormDist, 0);
-	return numerator * numerator / ( 1 + 2 * sqNormDist);
+	float sqNormDist = normalizedDistance * normalizedDistance;
+	float numerator = max(1.f - sqNormDist, 0.f);
+	return numerator * numerator / ( 1.f + 2.f * sqNormDist);
 }
 
 vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, mat3 normalWorldSpaceToLocalSpace)
@@ -27,9 +27,9 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4
 	vec3 pointLightDir = -normalize(pointLightVector * normalWorldSpaceToLocalSpace);
 
 	float energy = pointLightEnergyAtPosition(WorldFragPos, pointLightWorldPosition, pointLightEnergy);
-	vec4 lightColor = vec4(pointLightColor * energy, 1);
+	vec4 lightColor = vec4(pointLightColor * energy, 1.f);
 
-	float pointLightLambert = max(dot(fragNormal, pointLightDir), 0.0);
+	float pointLightLambert = max(dot(fragNormal, pointLightDir), 0.f);
 
 	vec3 pointLightHalfVec = normalize(viewVector + pointLightDir);
 
@@ -52,8 +52,8 @@ vec4 iterateOverAllPointLights(
 	float gloss,
 	mat3 normalWorldSpaceToLocalSpace
 ) {
-	vec4 light = vec4(0);
-	ivec2 bucket = ivec2(WZ_BUCKET_DIMENSION * clipSpaceCoord);
+	vec4 light = vec4(0.f);
+	ivec2 bucket = ivec2(float(WZ_BUCKET_DIMENSION) * clipSpaceCoord);
 	int bucketId = min(bucket.y + bucket.x * WZ_BUCKET_DIMENSION, WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION - 1);
 
 	for (int i = 0; i < bucketOffsetAndSize[bucketId].y; i++)
@@ -62,7 +62,7 @@ vec4 iterateOverAllPointLights(
 		int lightIndex = PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
 		vec4 position = PointLightsPosition[lightIndex];
 		vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
-		vec3 tmp = position.xyz * vec3(1., 1., -1.);
+		vec3 tmp = position.xyz * vec3(1.f, 1.f, -1.f);
 		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, normalWorldSpaceToLocalSpace);
 	}
 	return light;
