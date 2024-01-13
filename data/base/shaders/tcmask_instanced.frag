@@ -342,7 +342,7 @@ void main()
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
 
-	float specularMapValue = 0;
+	float specularMapValue = 0.f;
 
 	if (lambertTerm > 0.0)
 	{
@@ -369,7 +369,7 @@ void main()
 	light += vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap * (1.0 + (1.0 - float(specularmap)));
 
 #if WZ_POINT_LIGHT_ENABLED == 1
-	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
 
 	mat3 identityMat = mat3(
 		1., 0., 0.,
