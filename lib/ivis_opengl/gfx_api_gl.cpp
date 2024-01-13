@@ -39,7 +39,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#ifdef WZ_CC_MSVC
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
 #include <debugapi.h>
 #endif
 
@@ -1398,7 +1398,7 @@ void gl_pipeline_state_object::printShaderInfoLog(code_part part, GLuint shader)
 		glGetShaderInfoLog(shader, infologLen, &charsWritten, infoLog);
 
 		// Display log in VS output log
-#ifdef WZ_CC_MSVC
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
 		OutputDebugStringA(infoLog);
 #endif
 
