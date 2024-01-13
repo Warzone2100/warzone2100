@@ -900,7 +900,7 @@ void droidUpdate(DROID *psDroid)
 	if ((psDroid->id + gameTime) / 833 != (psDroid->id + gameTime - deltaGameTime) / 833)
 	{
 		// Zero resistance means not currently been attacked - ignore these
-		if (psDroid->resistance && psDroid->resistance < droidResistance(psDroid))
+		if (psDroid->resistance && psDroid->resistance < psDroid->droidResistance())
 		{
 			// Increase over time if low
 			psDroid->resistance++;
@@ -3368,15 +3368,14 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 	return psD;
 }
 
-/*calculates the electronic resistance of a droid based on its experience level*/
-SWORD   droidResistance(const DROID *psDroid)
+int16_t DROID::droidResistance() const
 {
-	CHECK_DROID(psDroid);
-	const BODY_STATS *psStats = asBodyStats + psDroid->asBits[COMP_BODY];
-	int resistance = psDroid->experience / (65536 / MAX(1, psStats->upgrade[psDroid->player].resistance));
+	CHECK_DROID(this);
+	const BODY_STATS *psStats = asBodyStats + asBits[COMP_BODY];
+	int res = experience / (65536 / MAX(1, psStats->upgrade[player].resistance));
 	// ensure resistance is a base minimum
-	resistance = MAX(resistance, psStats->upgrade[psDroid->player].resistance);
-	return MIN(resistance, INT16_MAX);
+	res = MAX(res, psStats->upgrade[player].resistance);
+	return MIN(res, INT16_MAX);
 }
 
 /*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is
