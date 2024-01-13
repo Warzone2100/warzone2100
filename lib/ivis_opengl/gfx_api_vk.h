@@ -374,6 +374,7 @@ struct VkPSO final
 
 	std::shared_ptr<VkhRenderPassCompat> renderpass_compat;
 	bool hasSpecializationConstant_ShadowConstants = false;
+	bool hasSpecializationConstant_PointLightConstants = false;
 
 private:
 	// Read shader into text buffer

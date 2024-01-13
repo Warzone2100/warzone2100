@@ -7,6 +7,7 @@ layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
 layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
+layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
 
 layout(set = 2, binding = 0) uniform sampler2D Texture; // diffuse
 layout(set = 2, binding = 1) uniform sampler2D TextureTcmask; // tcmask
@@ -309,7 +310,7 @@ void main()
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
 
-	float specularMapValue = 0;
+	float specularMapValue = 0.f;
 	if (lambertTerm > 0.0)
 	{
 		float vanillaFactor = 0.0; // Classic models shouldn't use diffuse light
@@ -334,14 +335,17 @@ void main()
 	// ambient light maxed for classic models to keep results similar to original
 	light += vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap * (1.0 + (1.0 - float(specularmap)));
 
-	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+	if (WZ_POINT_LIGHT_ENABLED == 1)
+	{
+		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
 
-	mat3 identityMat = mat3(
-		1., 0., 0.,
-		0., 1., 0.,
-		0., 0., 1.
-	);
-	light += iterateOverAllPointLights(clipSpaceCoord, fragPos, -N, normalize(halfVec - lightDir), diffuse, specularMapValue, identityMat);
+		mat3 identityMat = mat3(
+								1., 0., 0.,
+								0., 1., 0.,
+								0., 0., 1.
+								);
+		light += iterateOverAllPointLights(clipSpaceCoord, fragPos, -N, normalize(halfVec - lightDir), diffuse, specularMapValue, identityMat);
+	}
 
 	light.rgb *= visibility;
 	light.a = 1.0f;

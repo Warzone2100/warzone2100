@@ -6,6 +6,7 @@ layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
 layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
+layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
 
 layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -85,9 +86,12 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 
 	vec4 res = (b.color*light) + light_spec;
 
-	// point lights
-	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-	res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+	if (WZ_POINT_LIGHT_ENABLED == 1)
+	{
+		// point lights
+		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+		res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+	}
 
 	return vec4(res.rgb, b.color.a);
 }
