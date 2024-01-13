@@ -1,9 +1,7 @@
-
-
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,7 +26,7 @@
 BoundingBox transformBoundingBox(const glm::mat4& worldViewProjectionMatrix, const BoundingBox& worldSpaceBoundingBox)
 {
 	BoundingBox bboxInClipSpace;
-	for (int i = 0; i < 8; i++)
+	for (size_t i = 0, end = bboxInClipSpace.size(); i < end; i++)
 	{
 		glm::vec4 tmp = worldViewProjectionMatrix * glm::vec4(worldSpaceBoundingBox[i], 1.0);
 		tmp = (tmp / tmp.w);
