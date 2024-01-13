@@ -695,7 +695,7 @@ static void saveMissionData()
 	{
 		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
-			if (droidIsDamaged(psDroid))
+			if (psDroid->isDamaged())
 			{
 				psDroid->body = psDroid->originalBody;
 			}
@@ -1652,7 +1652,7 @@ static void missionResetDroids()
 				}
 
 				// People always stand upright
-				if (psDroid->droidType != DROID_PERSON && !cyborgDroid(psDroid))
+				if (psDroid->droidType != DROID_PERSON && !psDroid->isCyborg())
 				{
 					updateDroidOrientation(psDroid);
 				}

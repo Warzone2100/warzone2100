@@ -487,7 +487,7 @@ static void actionUpdateVtolAttack(DROID *psDroid)
 	}
 
 	/* circle around target if hovering and not cyborg */
-	if (psDroid->sMove.Status == MOVEHOVER && !cyborgDroid(psDroid))
+	if (psDroid->sMove.Status == MOVEHOVER && !psDroid->isCyborg())
 	{
 		actionAddVtolAttackRun(psDroid);
 	}
