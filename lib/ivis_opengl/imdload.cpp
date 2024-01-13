@@ -26,6 +26,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <array>
 
 #include "lib/framework/frame.h"
@@ -113,6 +114,30 @@ void iIMDBaseShape::replaceDisplayModel(std::unique_ptr<iIMDShape> newDisplayMod
 void modelShutdown()
 {
 	models.clear();
+}
+
+void modelReloadAllModelTextures()
+{
+	std::unordered_set<size_t> texPagesToReloadFromDisk;
+	enumerateLoadedModels([&texPagesToReloadFromDisk](const std::string &modelName, iIMDBaseShape &s){
+		for (iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		{
+			const iIMDShapeTextures& textures = pDisplayShape->getTextures();
+			if (!textures.initialized)
+			{
+				continue;
+			}
+			std::array<size_t, 4> pages = {textures.texpage, textures.tcmaskpage, textures.normalpage, textures.specularpage};
+			for (auto page : pages)
+			{
+				if (page != iV_TEX_INVALID)
+				{
+					texPagesToReloadFromDisk.insert(page);
+				}
+			}
+		}
+	});
+	debugReloadTexturesFromDisk(texPagesToReloadFromDisk);
 }
 
 void modelUpdateTilesetIdx(size_t tilesetIdx)
