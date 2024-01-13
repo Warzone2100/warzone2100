@@ -1004,9 +1004,13 @@ void draw3DScene()
 	// Set light manager
 	{
 		if (war_getPointLightPerPixelLighting() && getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING)
+		{
 			setLightingManager(std::make_unique<renderingNew::LightingManager>());
+		}
 		else
+		{
 			setLightingManager(std::make_unique<rendering1999::LightingManager>());
+		}
 	}
 
 	/* Now, draw the terrain */

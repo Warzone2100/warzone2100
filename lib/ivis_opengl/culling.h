@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ using BoundingBox = std::array<glm::vec3, 8>;
 BoundingBox transformBoundingBox(const glm::mat4& worldViewProjectionMatrix, const BoundingBox& worldSpaceBoundingBox);
 
 /// Define a half space
-using HalfSpaceCheck = std::function<bool(glm::vec3)>;
-/// Define a view frustrum (as an intersection of half space
+using HalfSpaceCheck = std::function<bool(const glm::vec3&)>;
+/// Define a view frustum (as an intersection of half space
 using IntersectionOfHalfSpace = std::array< HalfSpaceCheck, 6>;
 
 bool isBBoxInClipSpace(const IntersectionOfHalfSpace& intersectionOfHalfSpace, const BoundingBox& points);

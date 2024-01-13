@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,7 +65,6 @@ void LightMap::reset(size_t width, size_t height)
 	mapWidth = static_cast<int32_t>(width);
 	mapHeight = static_cast<int32_t>(height);
 	data = std::make_unique<PIELIGHT[]>(width * height);
-	ASSERT(data != nullptr, "Out of memory");
 }
 
 
@@ -109,22 +108,26 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 {
 	PointLightBuckets result;
 
-	// Pick the first lights inside the view frustrum
-	auto viewFrustrum = IntersectionOfHalfSpace{
-		[](glm::vec3 in) { return in.x >= -1.f; },
-		[](glm::vec3 in) { return in.x <= 1.f; },
-		[](glm::vec3 in) {
+	// Pick the first lights inside the view frustum
+	auto viewFrustum = IntersectionOfHalfSpace{
+		[](const glm::vec3& in) { return in.x >= -1.f; },
+		[](const glm::vec3& in) { return in.x <= 1.f; },
+		[](const glm::vec3& in) {
 			if (gfx_api::context::get().isYAxisInverted())
-				return -in.y >= -1.f ;
-			return in.y >= -1.f ;
+			{
+				return -in.y >= -1.f;
+			}
+			return in.y >= -1.f;
 		},
-		[](glm::vec3 in) {
+		[](const glm::vec3& in) {
 			if (gfx_api::context::get().isYAxisInverted())
+			{
 				return -in.y <= 1.f;
+			}
 			return in.y <= 1.f;
 		},
-		[](glm::vec3 in) { return in.z >= 0; },
-		[](glm::vec3 in) { return in.z <= 1; }
+		[](const glm::vec3& in) { return in.z >= 0; },
+		[](const glm::vec3& in) { return in.z <= 1; }
 	};
 
 	std::vector<LIGHT> culledLights;
@@ -135,7 +138,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 			break;
 		}
 		auto clipSpaceBoundingBox = transformBoundingBox(worldViewProjectionMatrix, getLightBoundingBox(light));
-		if (!isBBoxInClipSpace(viewFrustrum, clipSpaceBoundingBox))
+		if (!isBBoxInClipSpace(viewFrustum, clipSpaceBoundingBox))
 		{
 			continue;
 		}
@@ -143,7 +146,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	}
 
 
-	for (size_t lightIndex = 0; lightIndex < culledLights.size(); lightIndex++)
+	for (size_t lightIndex = 0, end = culledLights.size(); lightIndex < end; lightIndex++)
 	{
 		const auto& light = culledLights[lightIndex];
 		result.positions[lightIndex].x = light.position.x;
@@ -159,36 +162,38 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	size_t overallId = 0;
 	size_t bucketId = 0;
 	std::array<size_t, gfx_api::max_indexed_lights * 4> lightList;
-	for (int i = 0; i < gfx_api::bucket_dimension; i++)
+	for (size_t i = 0; i < gfx_api::bucket_dimension; i++)
 	{
-		for (int j = 0; j < gfx_api::bucket_dimension; j++)
+		for (size_t j = 0; j < gfx_api::bucket_dimension; j++)
 		{
-			auto frustrum = IntersectionOfHalfSpace{
-				[i](glm::vec3 in) { return in.x >= -1.f + 2 * static_cast<float>(i) / gfx_api::bucket_dimension; },
-				[i](glm::vec3 in) { return in.x <= -1.f + 2 * static_cast<float>(i + 1) / gfx_api::bucket_dimension; },
-				[j](glm::vec3 in) {
+			auto frustum = IntersectionOfHalfSpace{
+				[i](const glm::vec3& in) { return in.x >= -1.f + 2 * static_cast<float>(i) / gfx_api::bucket_dimension; },
+				[i](const glm::vec3& in) { return in.x <= -1.f + 2 * static_cast<float>(i + 1) / gfx_api::bucket_dimension; },
+				[j](const glm::vec3& in) {
 					if (gfx_api::context::get().isYAxisInverted())
 						return -in.y >= -1.f + 2 * static_cast<float>(j) / gfx_api::bucket_dimension;
 					return in.y >= -1.f + 2 * static_cast<float>(j) / gfx_api::bucket_dimension;
 				},
-				[j](glm::vec3 in) {
+				[j](const glm::vec3& in) {
 					if (gfx_api::context::get().isYAxisInverted())
 						return -in.y <= -1.f + 2 * static_cast<float>(j + 1) / gfx_api::bucket_dimension;
 					return in.y <= -1.f + 2 * static_cast<float>(j + 1) / gfx_api::bucket_dimension;
 				},
-				[](glm::vec3 in) { return in.z >= 0; },
-				[](glm::vec3 in) { return in.z <= 1; }
+				[](const glm::vec3& in) { return in.z >= 0; },
+				[](const glm::vec3& in) { return in.z <= 1; }
 			};
 
 			size_t bucketSize = 0;
 			for (size_t lightIndex = 0; lightIndex < culledLights.size(); lightIndex++)
 			{
 				if (overallId + bucketSize >= lightList.size())
+				{
 					continue;
+				}
 				const LIGHT& light = culledLights[lightIndex];
 				BoundingBox clipSpaceBoundingBox = transformBoundingBox(worldViewProjectionMatrix, getLightBoundingBox(light));
 
-				if (isBBoxInClipSpace(frustrum, clipSpaceBoundingBox))
+				if (isBBoxInClipSpace(frustum, clipSpaceBoundingBox))
 				{
 					lightList[overallId + bucketSize] = lightIndex;
 
@@ -208,7 +213,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		result.light_index[i / 4][i % 4] = static_cast<int>(lightList[i]);
 	}
 
-	currentPointLightBuckets = result;
+	currentPointLightBuckets = std::move(result);
 }
 
 static std::unique_ptr<ILightingManager> lightingManager;
