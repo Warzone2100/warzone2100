@@ -4361,6 +4361,20 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 	return true;
 }
 
+bool gl_context::debugRecompileAllPipelines()
+{
+	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
+	for (auto& pipelineInfo : createdPipelines)
+	{
+		if (pipelineInfo.pso)
+		{
+			delete pipelineInfo.pso;
+			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+		}
+	}
+	return true;
+}
+
 static const char *cbframebuffererror(GLenum err)
 {
 	switch (err)

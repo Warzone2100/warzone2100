@@ -506,6 +506,11 @@ bool null_context::setShadowConstants(gfx_api::lighting_constants newValues)
 	return true;
 }
 
+bool null_context::debugRecompileAllPipelines()
+{
+	return true;
+}
+
 bool null_context::supportsInstancedRendering()
 {
 	return false;

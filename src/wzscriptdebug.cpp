@@ -927,16 +927,11 @@ public:
 			debug(LOG_INFO, "Done");
 		}, prevButton);
 
-		prevButton = panel->createButton(1, "Recompile terrain", [](){
-			debug(LOG_INFO, "Recompiling terrain");
-			gfx_api::TerrainLayer::get().recompile();
+		prevButton = panel->createButton(1, "Recompile All Shaders", [](){
+			debug(LOG_INFO, "Recompiling all shader pipelines");
+			gfx_api::context::get().debugRecompileAllPipelines();
 			debug(LOG_INFO, "Done");
 		});
-		prevButton =panel->createButton(1, "Recompile decals", [](){
-			debug(LOG_INFO, "Recompiling decals");
-			gfx_api::TerrainDecals::get().recompile();
-			debug(LOG_INFO, "Done");
-		}, prevButton);
 		prevButton =panel->createButton(1, "Recompile terrainCombined", [](){
 			debug(LOG_INFO, "Recompiling terrainCombined");
 			switch (getTerrainShaderQuality())
