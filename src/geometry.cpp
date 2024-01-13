@@ -55,7 +55,7 @@ DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
 	for (DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
-		if (!isVtolDroid(psDroid))
+		if (!psDroid->isVtol())
 		{
 			/* Clever (?) bit that reads whether we're interested in droids being selected or not */
 			if (!bSelected || psDroid->selected)

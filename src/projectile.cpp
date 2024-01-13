@@ -844,7 +844,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		else if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
 		         (psTempObj->type == OBJ_STRUCTURE ||
 		          psTempObj->type == OBJ_FEATURE ||
-		          (psTempObj->type == OBJ_DROID && !isFlying((DROID *)psTempObj))
+		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlying())
 		         ))
 		{
 			// AA weapons should not hit buildings and non-vtol droids
@@ -1429,7 +1429,7 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 		}
 
 		if (psCurr->type == OBJ_DROID &&
-		    isVtolDroid((DROID *)psCurr) &&
+		    ((DROID *)psCurr)->isVtol() &&
 		    ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
 		{
 			continue;  // Can't set flying vtols on fire.
@@ -1764,7 +1764,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 			unsigned int utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
 
 			// VTOL's don't have pIMD either it seems...
-			if (isVtolDroid(psDroid))
+			if (psDroid->isVtol())
 			{
 				return (height + VTOL_HITBOX_MODIFICATOR);
 			}

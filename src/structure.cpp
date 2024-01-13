@@ -2522,7 +2522,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			assignCommander = true;
 		}
 
-		if (isVtolDroid(psNewDroid) && !psNewDroid->isTransporter())
+		if (psNewDroid->isVtol() && !psNewDroid->isTransporter())
 		{
 			moveToRearm(psNewDroid);
 		}
@@ -2535,7 +2535,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 				// Transporters can't be assigned to commanders, due to abuse of .psGroup. Try to land on the commander instead. Hopefully the transport is heavy enough to crush the commander.
 				orderDroidLoc(psNewDroid, DORDER_MOVE, psFact->psCommander->pos.x, psFact->psCommander->pos.y, ModeQueue);
 			}
-			else if (isVtolDroid(psNewDroid))
+			else if (psNewDroid->isVtol())
 			{
 				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, psFact->psCommander, ModeQueue);
 				//moveToRearm(psNewDroid);
@@ -2566,7 +2566,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			});
 			ASSERT(psFlag != flagPosList.end(), "No flag found for %s at (%d, %d)", objInfo(psStructure), psStructure->pos.x, psStructure->pos.y);
 			//if vtol droid - send it to ReArm Pad if one exists
-			if (psFlag != flagPosList.end() && isVtolDroid(psNewDroid))
+			if (psFlag != flagPosList.end() && psNewDroid->isVtol())
 			{
 				Vector2i pos = (*psFlag)->coords.xy();
 				//find a suitable location near the delivery point
@@ -3409,7 +3409,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 			psDroid = (DROID *)psChosenObj;
 			ASSERT_OR_RETURN(, psDroid != nullptr, "invalid droid pointer");
-			ASSERT_OR_RETURN(, isVtolDroid(psDroid), "invalid droid type");
+			ASSERT_OR_RETURN(, psDroid->isVtol(), "invalid droid type");
 
 			//check hasn't died whilst waiting to be rearmed
 			// also clear out any previously repaired droid
@@ -5349,7 +5349,7 @@ static unsigned int countAssignedDroids(const STRUCTURE *psStructure)
 
 			if (weapontype == MM_INDIRECT
 			    || weapontype == MM_HOMINGINDIRECT
-			    || isVtolDroid(psCurr))
+			    || psCurr->isVtol())
 			{
 				num++;
 			}
@@ -6513,7 +6513,7 @@ bool structSensorDroidWeapon(const STRUCTURE *psStruct, const DROID *psDroid)
 		//else if (structStandardSensor(psStruct) && (psDroid->numWeaps &&
 		if (structStandardSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
 		                                       !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
-		    !isVtolDroid(psDroid))
+		    !psDroid->isVtol())
 		{
 			return true;
 		}
@@ -6521,21 +6521,21 @@ bool structSensorDroidWeapon(const STRUCTURE *psStruct, const DROID *psDroid)
 		//if (structCBSensor(psStruct) && (psDroid->numWeaps &&
 		else if (structCBSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
 		                                      !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
-		         !isVtolDroid(psDroid))
+		         !psDroid->isVtol())
 		{
 			return true;
 		}
 		//VTOL Intercept Sensor Tower + any weapon VTOL droid
 		//else if (structVTOLSensor(psStruct) && psDroid->numWeaps &&
 		else if (structVTOLSensor(psStruct) && psDroid->asWeaps[0].nStat > 0 &&
-		         isVtolDroid(psDroid))
+		         psDroid->isVtol())
 		{
 			return true;
 		}
 		//VTOL CB Sensor Tower + any weapon VTOL droid
 		//else if (structVTOLCBSensor(psStruct) && psDroid->numWeaps &&
 		else if (structVTOLCBSensor(psStruct) && psDroid->asWeaps[0].nStat > 0 &&
-		         isVtolDroid(psDroid))
+		         psDroid->isVtol())
 		{
 			return true;
 		}
@@ -6703,7 +6703,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 				if (psCurr != psDroid
 				    && map_coord(psCurr->pos.x) == tx
 				    && map_coord(psCurr->pos.y) == ty
-				    && isVtolDroid(psCurr))
+				    && psCurr->isVtol())
 				{
 					actionDroid(psCurr, DACTION_CLEARREARMPAD, psStruct);
 				}

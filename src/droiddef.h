@@ -98,6 +98,10 @@ struct DROID : public BASE_OBJECT
 	bool isCyborg() const;
 	// Returns true if the droid is a transporter.
 	bool isTransporter() const;
+	// Returns true if the droid has VTOL propulsion, and is not a transport.
+	bool isVtol() const;
+	// Returns true if the droid has VTOL propulsion and is moving.
+	bool isFlying() const;
 	// Just returns true if the droid's present body points aren't as high as the original
 	bool isDamaged() const;
 	// calculates the electronic resistance of a droid based on its experience level

@@ -207,7 +207,7 @@ bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE m
  */
 void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
 {
-	ASSERT_OR_RETURN(, psDroid != nullptr && isVtolDroid(psDroid), "Only valid for a VTOL unit");
+	ASSERT_OR_RETURN(, psDroid != nullptr && psDroid->isVtol(), "Only valid for a VTOL unit");
 
 	fpathSetDirectRoute(psDroid, x, y);
 	psDroid->sMove.Status = MOVENAVIGATE;
@@ -324,7 +324,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 
 	// check the location for vtols
 	Vector2i tar = psDroid->pos.xy() + Vector2i(mx, my);
-	if (isVtolDroid(psDroid))
+	if (psDroid->isVtol())
 	{
 		actionVTOLLandingPos(psDroid, &tar);
 	}
@@ -388,7 +388,7 @@ void updateDroidOrientation(DROID *psDroid)
 	int32_t vX, vY;
 
 	if (psDroid->droidType == DROID_PERSON || psDroid->isCyborg() || psDroid->isTransporter()
-	    || isFlying(psDroid))
+	    || psDroid->isFlying())
 	{
 		/* The ground doesn't affect the pitch/roll of these droids*/
 		return;
@@ -744,7 +744,7 @@ static void moveOpenGates(DROID *psDroid, Vector2i tile)
 		return;
 	}
 	MAPTILE *psTile = mapTile(tile);
-	if (!isFlying(psDroid) && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, psDroid->player))
+	if (!psDroid->isFlying() && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, psDroid->player))
 	{
 		requestOpenGate((STRUCTURE *)psTile->psObject);  // If it's a friendly gate, open it. (It would be impolite to open an enemy gate.)
 	}
@@ -795,7 +795,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	}
 
 	// note the bump time and position if necessary
-	if (!isVtolDroid(psDroid) &&
+	if (!psDroid->isVtol() &&
 	    psDroid->sMove.bumpTime == 0)
 	{
 		psDroid->sMove.bumpTime = gameTime;
@@ -1057,8 +1057,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				// ignore transporters
 				continue;
 			}
-			if ((!isFlying(psDroid) && isFlying(psObjcast) && psObjcast->pos.z > (psDroid->pos.z + droidR)) || 
-			    (!isFlying(psObjcast) && isFlying(psDroid) && psDroid->pos.z > (psObjcast->pos.z + objR)))
+			if ((!psDroid->isFlying() && psObjcast->isFlying() && psObjcast->pos.z > (psDroid->pos.z + droidR)) ||
+			    (!psObjcast->isFlying() && psDroid->isFlying() && psDroid->pos.z > (psObjcast->pos.z + objR)))
 			{
 				// ground unit can't bump into a flying saucer..
 				continue;
@@ -1180,7 +1180,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 		}
 
 		// vtol droids only avoid each other and don't affect ground droids
-		if (isVtolDroid(psDroid) != isVtolDroid(psObstacle))
+		if (psDroid->isVtol() != psObstacle->isVtol())
 		{
 			continue;
 		}
@@ -1353,7 +1353,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	}
 
 	// slow down shuffling VTOLs
-	if (isVtolDroid(psDroid) &&
+	if (psDroid->isVtol() &&
 	    (psDroid->sMove.Status == MOVESHUFFLE) &&
 	    (speed > MIN_END_SPEED))
 	{
@@ -1496,7 +1496,7 @@ static void moveCheckFinalWaypoint(DROID *psDroid, SDWORD *pSpeed)
 	minEndSpeed = std::min(minEndSpeed, MIN_END_SPEED);
 
 	// don't do this for VTOLs doing attack runs
-	if (isVtolDroid(psDroid) && (psDroid->action == DACTION_VTOLATTACK))
+	if (psDroid->isVtol() && (psDroid->action == DACTION_VTOLATTACK))
 	{
 		return;
 	}
@@ -2018,7 +2018,7 @@ static bool pickupOilDrum(int toPlayer, int fromPlayer)
 static void checkLocalFeatures(DROID *psDroid)
 {
 	// NOTE: Why not do this for AI units also?
-	if ((!isHumanPlayer(psDroid->player) && psDroid->order.type != DORDER_RECOVER) || isVtolDroid(psDroid) || psDroid->isTransporter())  // VTOLs or transporters can't pick up features!
+	if ((!isHumanPlayer(psDroid->player) && psDroid->order.type != DORDER_RECOVER) || psDroid->isVtol() || psDroid->isTransporter())  // VTOLs or transporters can't pick up features!
 	{
 		return;
 	}
@@ -2147,7 +2147,7 @@ void moveUpdateDroid(DROID *psDroid)
 			break;
 		}
 
-		if (isVtolDroid(psDroid))
+		if (psDroid->isVtol())
 		{
 			psDroid->rot.pitch = 0;
 		}

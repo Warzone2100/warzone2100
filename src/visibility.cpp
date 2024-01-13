@@ -525,7 +525,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 				return 0;
 			}
 
-			if (psTarget->type == OBJ_DROID && isVtolDroid((const DROID *)psTarget)
+			if (psTarget->type == OBJ_DROID && ((const DROID*)psTarget)->isVtol()
 			    && asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR)
 			{
 				range = 3 * range / 2;	// increase vision range of AA vs VTOL
@@ -556,8 +556,8 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	const bool jammed = psTile->jammerBits & ~alliancebits[psViewer->player];
 
 	// Special rule for VTOLs, as they are not affected by ECM
-	if (((psTarget->type == OBJ_DROID && isVtolDroid((const DROID *)psTarget))
-	     || (psViewer->type == OBJ_DROID && isVtolDroid((const DROID *)psViewer)))
+	if (((psTarget->type == OBJ_DROID && ((const DROID*)psTarget)->isVtol())
+	     || (psViewer->type == OBJ_DROID && ((const DROID*)psViewer)->isVtol()))
 	    && dist < range)
 	{
 		return UBYTE_MAX;
