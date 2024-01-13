@@ -16,6 +16,7 @@
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
+#define WZ_POINT_LIGHT_ENABLED 0
 //
 
 #define WZ_MAX_SHADOW_CASCADES 3
@@ -147,9 +148,11 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 
 	vec4 res = (b.color*light) + light_spec;
 
+#if WZ_POINT_LIGHT_ENABLED == 1
 	// point lights
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
 	res += iterateOverAllPointLights(clipSpaceCoord, fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+#endif
 
 	return vec4(res.rgb, b.color.a);
 }
