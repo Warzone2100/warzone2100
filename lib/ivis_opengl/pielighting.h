@@ -79,7 +79,7 @@ struct ILightingManager
 
 	virtual void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) = 0;
 
-	PointLightBuckets getPointLightBuckets() const
+	const PointLightBuckets& getPointLightBuckets() const
 	{
 		return currentPointLightBuckets;
 	}
