@@ -997,7 +997,7 @@ bool wzapi::clearConsole(WZAPI_NO_PARAMS)
 bool wzapi::structureIdle(WZAPI_PARAMS(const STRUCTURE *psStruct))
 {
 	SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
-	return ::structureIdle(psStruct);
+	return psStruct->isIdle();
 }
 
 std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _player, optional<wzapi::STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter), const PerPlayerStructureLists& psStructLists)

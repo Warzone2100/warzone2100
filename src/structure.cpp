@@ -4704,30 +4704,30 @@ STRUCTURE_STATS *getStructStatsFromName(const WzString &name)
 }
 
 /*check to see if the structure is 'doing' anything  - return true if idle*/
-bool  structureIdle(const STRUCTURE *psBuilding)
+bool  STRUCTURE::isIdle() const
 {
 	BASE_STATS		*pSubject = nullptr;
 
-	CHECK_STRUCTURE(psBuilding);
+	CHECK_STRUCTURE(this);
 
-	if (psBuilding->pFunctionality == nullptr)
+	if (pFunctionality == nullptr)
 	{
 		return true;
 	}
 
 	//determine the Subject
-	switch (psBuilding->pStructureType->type)
+	switch (pStructureType->type)
 	{
 	case REF_RESEARCH:
 		{
-			pSubject = psBuilding->pFunctionality->researchFacility.psSubject;
+			pSubject = pFunctionality->researchFacility.psSubject;
 			break;
 		}
 	case REF_FACTORY:
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
 		{
-			pSubject = psBuilding->pFunctionality->factory.psSubject;
+			pSubject = pFunctionality->factory.psSubject;
 			break;
 		}
 	default:

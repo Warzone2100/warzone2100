@@ -136,8 +136,6 @@ void alignStructure(STRUCTURE *psBuilding);
 void setCurrentStructQuantity(bool displayError);
 /* get a stat inc based on the name */
 int32_t getStructStatFromName(const WzString &name);
-/*check to see if the structure is 'doing' anything  - return true if idle*/
-bool  structureIdle(const STRUCTURE *psBuilding);
 /*sets the point new droids go to - x/y in world coords for a Factory*/
 void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y, UDWORD player, bool bCheck);
 
