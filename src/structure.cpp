@@ -6735,9 +6735,9 @@ bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid)
 
 
 /* Just returns true if the structure's present body points aren't as high as the original*/
-bool	structIsDamaged(const STRUCTURE *psStruct)
+bool	STRUCTURE::isDamaged() const
 {
-	return psStruct->body < psStruct->structureBody();
+	return body < structureBody();
 }
 
 // give a structure from one player to another - used in Electronic Warfare

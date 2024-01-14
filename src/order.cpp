@@ -319,7 +319,7 @@ static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid
 		}
 
 		// Check for structures to repair.
-		if (structure->status == SS_BUILT && structIsDamaged(structure))
+		if (structure->status == SS_BUILT && structure->isDamaged())
 		{
 			bestDistanceSq = distanceSq;
 			best = {structure, DACTION_REPAIR};
