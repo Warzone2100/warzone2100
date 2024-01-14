@@ -1403,7 +1403,7 @@ void finishDeliveryPosition()
 		psStruct = IdToStruct(flagStructId, selectedPlayer);
 		if (psStruct)
 		{
-			if (StructIsFactory(psStruct) && psStruct->pFunctionality
+			if (psStruct->isFactory() && psStruct->pFunctionality
 				&& psStruct->pFunctionality->factory.psAssemblyPoint)
 			{
 				setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
@@ -1833,7 +1833,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 	{
 		if (bRightClickOrders)
 		{
-			if (StructIsFactory(psStructure) && selection != SC_DROID_CONSTRUCT)
+			if (psStructure->isFactory() && selection != SC_DROID_CONSTRUCT)
 			{
 				intAddFactoryOrder(psStructure);
 			}
@@ -2127,7 +2127,7 @@ static void dealWithLMBDClick()
 			psStructure = (STRUCTURE *) psClickedOn;
 			if (psStructure->player == selectedPlayer && !structureIsBlueprint(psStructure))
 			{
-				if (StructIsFactory(psStructure))
+				if (psStructure->isFactory())
 				{
 					setViewPos(map_coord(psStructure->pFunctionality->factory.psAssemblyPoint->coords.x),
 					           map_coord(psStructure->pFunctionality->factory.psAssemblyPoint->coords.y),
@@ -2299,7 +2299,7 @@ static void dealWithRMB()
 							triggerEventSelected();
 						}
 					}
-					else if (StructIsFactory(psStructure))
+					else if (psStructure->isFactory())
 					{
 						//pop up the order interface for the factory
 						intAddFactoryOrder(psStructure);
@@ -2669,7 +2669,7 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 /* Just returns true if the building's present body points aren't 100 percent */
 static bool	buildingDamaged(STRUCTURE *psStructure)
 {
-	return psStructure->body < structureBody(psStructure);
+	return psStructure->body < psStructure->structureBody();
 }
 
 /*Looks through the list of selected players droids to see if one is a repair droid*/

@@ -627,7 +627,7 @@ void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = tr
 				{
 					continue; // ignore structures that aren't completely built, or are "dead"
 				}
-				if (StructIsFactory(psStruct))
+				if (psStruct->isFactory())
 				{
 					numFactories++;
 					if (psStruct->pStructureType->type == REF_FACTORY ||

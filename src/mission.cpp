@@ -888,7 +888,7 @@ void saveMissionLimboData()
 	// any selectedPlayer's factories/research need to be put on holdProduction/holdresearch
 	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 	{
-		if (StructIsFactory(psStruct))
+		if (psStruct->isFactory())
 		{
 			holdProduction(psStruct, ModeImmediate);
 		}
@@ -1576,7 +1576,7 @@ static void missionResetDroids()
 			STRUCTURE* psStruct = psDroid->psBaseStruct;
 			FACTORY* psFactory = nullptr;
 
-			if (psStruct && StructIsFactory(psStruct))
+			if (psStruct && psStruct->isFactory())
 			{
 				psFactory = (FACTORY*)psStruct->pFunctionality;
 			}

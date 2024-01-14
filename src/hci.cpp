@@ -1861,7 +1861,7 @@ void intObjectSelected(BASE_OBJECT *psObj)
 
 				if (structure->status == SS_BUILT)
 				{
-					if (StructIsFactory(structure))
+					if (structure->isFactory())
 					{
 						intAddManufacture();
 						break;
