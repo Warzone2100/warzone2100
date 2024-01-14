@@ -6444,7 +6444,7 @@ static bool loadSaveStructure2(const char *pFileName)
 		default:
 			break;
 		}
-		psStructure->body = healthValue(ini, structureBody(psStructure));
+		psStructure->body = healthValue(ini, psStructure->structureBody());
 		psStructure->currentBuildPts = ini.value("currentBuildPts", structureBuildPointsToCompletion(*psStructure)).toInt();
 		if (psStructure->status == SS_BUILT)
 		{

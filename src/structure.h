@@ -224,13 +224,9 @@ bool checkSpecificStructExists(UDWORD structInc, UDWORD player);
 int32_t getStructureDamage(const STRUCTURE *psStructure);
 
 unsigned structureBodyBuilt(const STRUCTURE *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
-UDWORD structureBody(const STRUCTURE *psStruct);
 UDWORD structureResistance(const STRUCTURE_STATS *psStats, UBYTE player);
 
 void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
-
-// Is a structure a factory of somekind?
-bool StructIsFactory(const STRUCTURE *Struct);
 
 // Is a flag a factory delivery point?
 bool FlagIsFactory(const FLAG_POSITION *psCurrFlag);

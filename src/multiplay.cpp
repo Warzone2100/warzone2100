@@ -233,7 +233,7 @@ bool multiplayerWinSequence(bool firstCall)
 		// stop all manufacture.
 		for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 		{
-			if (StructIsFactory(psStruct))
+			if (psStruct->isFactory())
 			{
 				if (((FACTORY *)psStruct->pFunctionality)->psSubject)//check if active
 				{
@@ -2452,7 +2452,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 				|| psStruct->pStructureType->type == REF_POWER_GEN
 				|| psStruct->pStructureType->type == REF_RESEARCH
 				|| psStruct->pStructureType->type == REF_COMMAND_CONTROL
-				|| StructIsFactory(psStruct))
+				|| psStruct->isFactory())
 			{
 				// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
 				if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects

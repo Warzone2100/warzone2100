@@ -831,7 +831,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 	QuickJS_DefinePropertyValue(ctx, value, "isRadarDetector", JS_NewBool(ctx, objRadarDetector(psStruct)), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "range", JS_NewInt32(ctx, range), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "status", JS_NewInt32(ctx, (int)psStruct->status), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewInt32(ctx, 100 * psStruct->body / MAX(1, structureBody(psStruct))), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewInt32(ctx, 100 * psStruct->body / MAX(1, psStruct->structureBody())), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewInt32(ctx, psStruct->pStructureType->powerToBuild), JS_PROP_ENUMERABLE);
 	int stattype = 0;
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world

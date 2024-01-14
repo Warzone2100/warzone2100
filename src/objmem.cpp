@@ -462,7 +462,7 @@ void killStruct(STRUCTURE *psBuilding)
 
 	if (psBuilding->pFunctionality != nullptr)
 	{
-		if (StructIsFactory(psBuilding))
+		if (psBuilding->isFactory())
 		{
 			FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 

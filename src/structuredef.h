@@ -282,6 +282,9 @@ struct STRUCTURE : public BASE_OBJECT
 
 	//check to see if the structure is 'doing' anything  - return true if idle
 	bool isIdle() const;
+	// Return true if structure is a factory of any type.
+	bool isFactory() const;
+	uint32_t structureBody() const;
 
 	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
 	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */

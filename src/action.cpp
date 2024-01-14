@@ -1744,7 +1744,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					cantDoRepairLikeAction = true;
 				}
-				else if (order->type != DORDER_DEMOLISH && structureAtPos->body == structureBody(structureAtPos))
+				else if (order->type != DORDER_DEMOLISH && structureAtPos->body == structureAtPos->structureBody())
 				{
 					cantDoRepairLikeAction = true;
 				}

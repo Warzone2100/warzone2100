@@ -762,7 +762,7 @@ int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS we
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
 	      psStructure->id, psStructure->body, objArmour(psStructure, weaponClass), damage);
 
-	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
+	relativeDamage = objDamage(psStructure, damage, psStructure->structureBody(), weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0)
@@ -864,7 +864,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	ASSERT(newBuildPoints <= 1 + 3 * (int)structureBuildPointsToCompletion(*psStruct), "unsigned int underflow?");
 	CLIP(newBuildPoints, 0, structureBuildPointsToCompletion(*psStruct));
 
-	int deltaBody = quantiseFraction(9 * structureBody(psStruct), 10 * structureBuildPointsToCompletion(*psStruct), newBuildPoints, psStruct->currentBuildPts);
+	int deltaBody = quantiseFraction(9 * psStruct->structureBody(), 10 * structureBuildPointsToCompletion(*psStruct), newBuildPoints, psStruct->currentBuildPts);
 	psStruct->currentBuildPts = newBuildPoints;
 	psStruct->body = std::max<int>(psStruct->body + deltaBody, 1);
 
@@ -973,7 +973,7 @@ void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 {
-	int repairAmount = gameTimeAdjustedAverage(buildRate * structureBody(psStruct), psStruct->pStructureType->buildPoints);
+	int repairAmount = gameTimeAdjustedAverage(buildRate * psStruct->structureBody(), psStruct->pStructureType->buildPoints);
 	/*	(droid construction power * current max hitpoints [incl. upgrades])
 			/ construction power that was necessary to build structure in the first place
 
@@ -982,12 +982,12 @@ void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 		This happens with expensive, but weak buildings like mortar pits. In this case, do nothing
 		and notify the caller (read: droid) of your idleness by returning false.
 	*/
-	psStruct->body = clip<UDWORD>(psStruct->body + repairAmount, 0, structureBody(psStruct));
+	psStruct->body = clip<UDWORD>(psStruct->body + repairAmount, 0, psStruct->structureBody());
 }
 
 static void refundFactoryBuildPower(STRUCTURE *psBuilding)
 {
-	ASSERT_OR_RETURN(, StructIsFactory(psBuilding), "structure not a factory");
+	ASSERT_OR_RETURN(, psBuilding->isFactory(), "structure not a factory");
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
 	if (psFactory->psSubject)
@@ -1006,7 +1006,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 {
 	CHECK_STRUCTURE(psStruct);
 
-	ASSERT_OR_RETURN(false, StructIsFactory(psStruct), "structure not a factory");
+	ASSERT_OR_RETURN(false, psStruct->isFactory(), "structure not a factory");
 
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 	ASSERT_OR_RETURN(false, !psTempl
@@ -1648,7 +1648,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		psBuilding->body = (UWORD)structureBody(psBuilding);
+		psBuilding->body = (UWORD)psBuilding->structureBody();
 		psBuilding->expectedDamage = 0;  // Begin life optimistically.
 
 		//add the structure to the list - this enables it to be drawn whilst being built
@@ -1668,7 +1668,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			for (const STRUCTURE *psStruct : apsStructLists[playerNum])
 			{
 				FLAG_POSITION *fp = nullptr;
-				if (StructIsFactory(psStruct))
+				if (psStruct->isFactory())
 				{
 					fp = psStruct->pFunctionality->factory.psAssemblyPoint;
 				}
@@ -1787,7 +1787,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			psBuilding->sDisplay.imd = IMDs[imdIndex];
 
 			//calculate the new body points of the owning structure
-			psBuilding->body = (uint64_t)structureBody(psBuilding) * bodyDiff / 65536;
+			psBuilding->body = (uint64_t)psBuilding->structureBody() * bodyDiff / 65536;
 
 			//initialise the build points
 			psBuilding->currentBuildPts = 0;
@@ -2168,7 +2168,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 	SDWORD			factoryInc, typeFlag;
 
 	CHECK_STRUCTURE(psStruct);
-	ASSERT_OR_RETURN(, StructIsFactory(psStruct), "structure not a factory");
+	ASSERT_OR_RETURN(, psStruct->isFactory(), "structure not a factory");
 
 	psFact = &psStruct->pFunctionality->factory;
 
@@ -2420,7 +2420,7 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 void setFactorySecondaryState(DROID *psDroid, STRUCTURE *psStructure)
 {
 	CHECK_STRUCTURE(psStructure);
-	ASSERT_OR_RETURN(, StructIsFactory(psStructure), "structure not a factory");
+	ASSERT_OR_RETURN(, psStructure->isFactory(), "structure not a factory");
 
 	if (myResponsibility(psStructure->player))
 	{
@@ -3811,7 +3811,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 	{
 		//if selfrepair has been researched then check the health level of the
 		//structure once resistance is fully up
-		iPointsRequired = structureBody(psBuilding);
+		iPointsRequired = psBuilding->structureBody();
 		if (selfRepairEnabled(psBuilding->player) && psBuilding->body < iPointsRequired && psBuilding->status != SS_BEING_BUILT)
 		{
 			//start the self repair off
@@ -4473,7 +4473,7 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 	}
 
 	//if it is a factory - need to reset the factoryNumFlag
-	if (StructIsFactory(psDel))
+	if (psDel->isFactory())
 	{
 		FACTORY *psFactory = &psDel->pFunctionality->factory;
 
@@ -5379,7 +5379,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Hitpoints %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
+					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, psStructure->structureBody());
 			if (dbgInputManager.debugMappingsAllowed())
 			{
 				// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5399,11 +5399,11 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Damage %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
+					getLocalizedStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, psStructure->structureBody());
 		}
 		else
 		{
-			console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+			console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
 		}
 		if (dbgInputManager.debugMappingsAllowed())
 		{
@@ -5416,7 +5416,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_REPAIR_FACILITY:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5425,7 +5425,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
 		if (dbgInputManager.debugMappingsAllowed() && selectedPlayer < MAX_PLAYERS)
 		{
 			console(_("ID %d - %s"), psStructure->id, (auxTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe");
@@ -5442,7 +5442,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 			}
 		}
 		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), numConnected,
-		        NUM_POWER_MODULES, psStructure->body, structureBody(psStructure));
+		        NUM_POWER_MODULES, psStructure->body, psStructure->structureBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5452,7 +5452,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
 	case REF_FACTORY:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5462,7 +5462,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_RESEARCH:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5470,7 +5470,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_REARM_PAD:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5479,7 +5479,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	default:
-		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getLocalizedStatsName(psStructure->pStructureType), psStructure->body, psStructure->structureBody());
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
@@ -5719,7 +5719,7 @@ bool validStructResistance(const STRUCTURE *psStruct)
 
 unsigned structureBodyBuilt(const STRUCTURE *psStructure)
 {
-	unsigned maxBody = structureBody(psStructure);
+	unsigned maxBody = psStructure->structureBody();
 
 	if (psStructure->status == SS_BEING_BUILT)
 	{
@@ -5733,9 +5733,9 @@ unsigned structureBodyBuilt(const STRUCTURE *psStructure)
 }
 
 /*Access functions for the upgradeable stats of a structure*/
-UDWORD structureBody(const STRUCTURE *psStructure)
+uint32_t STRUCTURE::structureBody() const
 {
-	return psStructure->pStructureType->upgrade[psStructure->player].hitpoints;
+	return pStructureType->upgrade[player].hitpoints;
 }
 
 UDWORD	structureResistance(const STRUCTURE_STATS *psStats, UBYTE player)
@@ -5960,15 +5960,14 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 
 // Return true if structure is a factory of any type.
 //
-bool StructIsFactory(const STRUCTURE *Struct)
+bool STRUCTURE::isFactory() const
 {
-	ASSERT_OR_RETURN(false, Struct != nullptr, "Invalid structure!");
-	ASSERT_OR_RETURN(false, Struct->pStructureType != nullptr, "Invalid structureType!");
+	ASSERT_OR_RETURN(false, pStructureType != nullptr, "Invalid structureType!");
 
-	return Struct->type == OBJ_STRUCTURE && (
-		Struct->pStructureType->type == REF_FACTORY ||
-		Struct->pStructureType->type == REF_CYBORG_FACTORY ||
-		Struct->pStructureType->type == REF_VTOL_FACTORY);
+	return type == OBJ_STRUCTURE && (
+		pStructureType->type == REF_FACTORY ||
+		pStructureType->type == REF_CYBORG_FACTORY ||
+		pStructureType->type == REF_VTOL_FACTORY);
 }
 
 
@@ -5991,7 +5990,7 @@ bool FlagIsFactory(const FLAG_POSITION *psCurrFlag)
 //
 FLAG_POSITION *FindFactoryDelivery(const STRUCTURE *Struct)
 {
-	if (StructIsFactory(Struct))
+	if (Struct->isFactory())
 	{
 		// Find the factories delivery point.
 		for (const auto& psFlag : apsFlagPosLists[Struct->player])
@@ -6017,7 +6016,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 
 	for (STRUCTURE* psCurr : apsStructLists[psDelPoint->player])
 	{
-		if (StructIsFactory(psCurr))
+		if (psCurr->isFactory())
 		{
 			psFactory = &psCurr->pFunctionality->factory;
 			if (psFactory->psAssemblyPoint->factoryInc == psDelPoint->factoryInc &&
@@ -6042,7 +6041,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 accrued but not used*/
 void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProductionRun)
 {
-	ASSERT_OR_RETURN(, StructIsFactory(psBuilding), "structure not a factory");
+	ASSERT_OR_RETURN(, psBuilding->isFactory(), "structure not a factory");
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6076,7 +6075,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory;
 
-	ASSERT_OR_RETURN(, StructIsFactory(psBuilding), "structure not a factory");
+	ASSERT_OR_RETURN(, psBuilding->isFactory(), "structure not a factory");
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6105,7 +6104,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a factory's production run from hold*/
 void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT_OR_RETURN(, StructIsFactory(psBuilding), "structure not a factory");
+	ASSERT_OR_RETURN(, psBuilding->isFactory(), "structure not a factory");
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6291,7 +6290,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
  */
 ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 {
-	if (psStructure == nullptr || psStructure->player != productionPlayer || psTemplate == nullptr || !StructIsFactory(psStructure))
+	if (psStructure == nullptr || psStructure->player != productionPlayer || psTemplate == nullptr || !psStructure->isFactory())
 	{
 		return ProductionRunEntry();  // Not producing any NULL pointers.
 	}
@@ -6397,7 +6396,7 @@ void checkDeliveryPoints(UDWORD version)
 		{
 			for (STRUCTURE* psStruct : apsStructLists[inc])
 			{
-				if (StructIsFactory(psStruct))
+				if (psStruct->isFactory())
 				{
 					//check the DP
 					psFactory = &psStruct->pFunctionality->factory;
@@ -6456,7 +6455,7 @@ void factoryLoopAdjust(STRUCTURE *psStruct, bool add)
 {
 	FACTORY		*psFactory;
 
-	ASSERT_OR_RETURN(, StructIsFactory(psStruct), "structure is not a factory");
+	ASSERT_OR_RETURN(, psStruct->isFactory(), "structure is not a factory");
 	ASSERT_OR_RETURN(, psStruct->player == selectedPlayer, "should only be called for selectedPlayer");
 
 	psFactory = &psStruct->pFunctionality->factory;
@@ -6738,7 +6737,7 @@ bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid)
 /* Just returns true if the structure's present body points aren't as high as the original*/
 bool	structIsDamaged(const STRUCTURE *psStruct)
 {
-	return psStruct->body < structureBody(psStruct);
+	return psStruct->body < psStruct->structureBody();
 }
 
 // give a structure from one player to another - used in Electronic Warfare

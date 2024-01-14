@@ -561,7 +561,7 @@ bool removeDroidBase(DROID *psDel)
 		for (auto psStruct : apsStructLists[psDel->player])
 		{
 			// alexl's stab at a right answer.
-			if (StructIsFactory(psStruct)
+			if (psStruct->isFactory()
 				&& psStruct->pFunctionality->factory.psCommander == psDel)
 			{
 				assignFactoryCommandDroid(psStruct, nullptr);
@@ -1260,7 +1260,7 @@ bool droidUpdateRepair(DROID *psDroid)
 	structureRepair(psStruct, psDroid, iRepairRate);
 
 	/* if not finished repair return true else complete repair and return false */
-	if (psStruct->body < structureBody(psStruct))
+	if (psStruct->body < psStruct->structureBody())
 	{
 		return true;
 	}
