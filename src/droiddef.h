@@ -107,6 +107,8 @@ struct DROID : public BASE_OBJECT
 	bool isDamaged() const;
 	// calculates the electronic resistance of a droid based on its experience level
 	int16_t droidResistance() const;
+	// true if a droid is currently attacking
+	bool isAttacking() const;
 
 	/// UTF-8 name of the droid. This is generated from the droid template
 	///  WARNING: This *can* be changed by the game player after creation & can be translated, do NOT rely on this being the same for everyone!

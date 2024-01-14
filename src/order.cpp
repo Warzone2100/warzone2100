@@ -1089,7 +1089,7 @@ void orderUpdateDroid(DROID *psDroid)
 
 				//if not currently attacking or target has changed
 				if (bAttack &&
-				    (!droidAttacking(psDroid) ||
+				    (!psDroid->isAttacking() ||
 				     psFireTarget != psDroid->psActionTarget[0]))
 				{
 					//get the droid to attack
@@ -3645,7 +3645,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					moveToRearm(psDroid);
 				}
 			}
-			else if (droidAttacking(psDroid))
+			else if (psDroid->isAttacking())
 			{
 				// send the unit back to the guard position
 				actionDroid(psDroid, DACTION_NONE);

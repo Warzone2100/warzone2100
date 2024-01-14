@@ -251,8 +251,7 @@ void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad);
 bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct);
 // true if a vtol droid currently returning to be rearmed
 bool vtolRearming(const DROID *psDroid);
-// true if a droid is currently attacking
-bool droidAttacking(const DROID *psDroid);
+
 // see if there are any other vtols attacking the same target
 // but still rearming
 bool allVtolsRearmed(const DROID *psDroid);
