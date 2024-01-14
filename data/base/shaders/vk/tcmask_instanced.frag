@@ -346,7 +346,10 @@ void main()
 								);
 		// Normals are in view space, we need to get back to world space
 		vec3 worldSpaceNormal = -(inverse(ViewMatrix) * vec4(N, 0.f)).xyz;
-		light += iterateOverAllPointLights(clipSpaceCoord, fragPos, worldSpaceNormal, normalize(halfVec - lightDir), diffuse, specularMapValue, identityMat);
+		MaterialInfo materialInfo;
+		materialInfo.albedo = diffuse;
+		materialInfo.gloss = specularMapValue;
+		light += iterateOverAllPointLights(clipSpaceCoord, fragPos, worldSpaceNormal, normalize(halfVec - lightDir), materialInfo, identityMat);
 	}
 
 	light.rgb *= visibility;

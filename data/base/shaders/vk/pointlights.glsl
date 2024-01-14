@@ -33,20 +33,15 @@ vec3 BRDF(vec3 inputLightDirection, vec3 incomingLightEnergy, vec3 N, vec3 H, Ma
 }
 
 
-vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, mat3 normalWorldSpaceToLocalSpace)
+vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, MaterialInfo material, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, mat3 normalWorldSpaceToLocalSpace)
 {
 	vec3 pointLightVector = WorldFragPos - pointLightWorldPosition;
 	vec3 pointLightDir = -normalize(pointLightVector * normalWorldSpaceToLocalSpace);
 
-	float energy = pointLightEnergyAtPosition(WorldFragPos, pointLightWorldPosition, pointLightEnergy);
-	vec4 lightColor = vec4(pointLightColor * energy, 1);
-
-	float pointLightLambert = max(dot(fragNormal, pointLightDir), 0.0);
-
+	float energy = pointLightEnergyAtPosition(WorldFragPos, pointLightWorldPosition, pointLightEnergy);	
 	vec3 pointLightHalfVec = normalize(viewVector + pointLightDir);
 
-	float pointLightBlinn = pow(clamp(dot(fragNormal, pointLightHalfVec), 0.f, 1.f), 16.f);
-	return lightColor * pointLightLambert * (albedo +  pointLightBlinn * (gloss * gloss));
+	return vec4(BRDF(pointLightDir, energy * pointLightColor, fragNormal, pointLightHalfVec, material), 1);
 }
 
 // This function expects that we have :
@@ -60,8 +55,7 @@ vec4 iterateOverAllPointLights(
 	vec3 WorldFragPos,
 	vec3 fragNormal,
 	vec3 viewVector,
-	vec4 albedo,
-	float gloss,
+	MaterialInfo material,
 	mat3 normalWorldSpaceToLocalSpace
 ) {
 	vec4 light = vec4(0);
@@ -75,7 +69,7 @@ vec4 iterateOverAllPointLights(
 		vec4 position = PointLightsPosition[lightIndex];
 		vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
 		vec3 tmp = position.xyz * vec3(1., 1., -1.);
-		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, normalWorldSpaceToLocalSpace);
+		light += processPointLight(WorldFragPos, fragNormal, viewVector, material, tmp, colorAndEnergy.w, colorAndEnergy.xyz, normalWorldSpaceToLocalSpace);
 	}
 	return light;
 }
