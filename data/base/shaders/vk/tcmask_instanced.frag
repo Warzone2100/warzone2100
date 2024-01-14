@@ -31,15 +31,13 @@ layout(location = 12) in vec3 fragPos;
 
 layout(location = 0) out vec4 FragColor;
 
-#include "pointlights.glsl"
-
 float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeInv, int cascadeIndex, float z)
 {
 	vec2 uv = base_uv + vec2(u, v) * shadowMapSizeInv;
 	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
 }
 
-float getShadowVisibility()
+float getShadowVisibility(vec3 fragPos)
 {
 	if (WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0)
 	{
@@ -264,6 +262,9 @@ float getShadowVisibility()
 	}
 }
 
+
+#include "pointlights.glsl"
+
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
 }
@@ -305,7 +306,7 @@ void main()
 	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
-	float visibility = getShadowVisibility();
+	float visibility = getShadowVisibility(fragPos);
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap.xy, 0.f);
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
@@ -373,7 +374,12 @@ void main()
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
-	
+
+#if 1
+	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+	vec4 volumetric = volumetricIterateOverAllPointLights(clipSpaceCoord, cameraPos.xyz, fragPos);
+	fragColour.xyz = toneMap(fragColour.xyz * volumetric.a + volumetric.xyz);	
+#else
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
@@ -383,6 +389,7 @@ void main()
 		// Return fragment color
 		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), fogFactor);
 	}
+#endif
 
 	FragColor = fragColour;
 }

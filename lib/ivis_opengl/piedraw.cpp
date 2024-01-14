@@ -1414,29 +1414,35 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
 
 	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor = renderState.fogEnabled ? glm::vec4(
-		renderState.fogColour.vector[0] / 255.f,
-		renderState.fogColour.vector[1] / 255.f,
-		renderState.fogColour.vector[2] / 255.f,
-		renderState.fogColour.vector[3] / 255.f
-	) : glm::vec4(0.f);
-
 
 	if (useInstancedRendering)
 	{
-
+		const glm::vec3 cameraPos = (glm::inverse(viewMatrix) * glm::vec4(0, 0, 0, 1)).xyz();
+		const glm::vec4 fogColor = glm::vec4(
+			renderState.fogColour.vector[0] / 255.f,
+			renderState.fogColour.vector[1] / 255.f,
+			renderState.fogColour.vector[2] / 255.f,
+			renderState.fogColour.vector[3] / 255.f
+		);
 		auto bucketLight = getCurrentLightingManager().getPointLightBuckets();
 		auto dimension = gfx_api::context::get().getDrawableDimensions();
 		gfx_api::Draw3DShapeInstancedGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, modelUVLightmapMatrix, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index,
+			glm::vec4(cameraPos, 0.f)
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts, depthPass);
 	}
 	else
 	{
+		const glm::vec4 fogColor = renderState.fogEnabled ? glm::vec4(
+			renderState.fogColour.vector[0] / 255.f,
+			renderState.fogColour.vector[1] / 255.f,
+			renderState.fogColour.vector[2] / 255.f,
+			renderState.fogColour.vector[3] / 255.f
+		) : glm::vec4(0.f);
 		gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, shadowCascades.shadowMVPMatrix[0],
 			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,

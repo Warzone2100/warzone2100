@@ -764,6 +764,7 @@ namespace gfx_api
 		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
 		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
 		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
+		glm::vec4 cameraPos;
 	};
 
 	// Only change per mesh
