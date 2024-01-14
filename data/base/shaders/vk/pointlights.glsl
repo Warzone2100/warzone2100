@@ -10,6 +10,29 @@ float pointLightEnergyAtPosition(vec3 position, vec3 pointLightWorldPosition, fl
 	return numerator * numerator / ( 1 + 2 * sqNormDist);
 }
 
+struct MaterialInfo
+{
+	vec4 albedo;
+	float gloss;
+};
+
+// InpoutLightDirection, N and H are expected to be normalized, and in the same space (eg global/tangent/etc)
+// Based on Blinn Phong model
+vec3 BRDF(vec3 inputLightDirection, vec3 incomingLightEnergy, vec3 N, vec3 H, MaterialInfo materialInfo)
+{
+	// diffuse lighting
+	float lambertTerm = max(dot(N, inputLightDirection), 0.0);
+	vec3 diffuseComponent = materialInfo.albedo.xyz * incomingLightEnergy * lambertTerm;
+
+	// Gaussian specular term computation
+	float blinnTerm = clamp(dot(N, H), 0.f, 1.f);
+	blinnTerm = pow(blinnTerm, 16.f);
+	vec3 blinnComponent = incomingLightEnergy * (materialInfo.gloss * materialInfo.gloss) * blinnTerm;
+
+	return diffuseComponent + blinnComponent;
+}
+
+
 vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, mat3 normalWorldSpaceToLocalSpace)
 {
 	vec3 pointLightVector = WorldFragPos - pointLightWorldPosition;
@@ -55,4 +78,9 @@ vec4 iterateOverAllPointLights(
 		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, normalWorldSpaceToLocalSpace);
 	}
 	return light;
+}
+
+vec3 toneMap(vec3 x)
+{
+	return x;
 }
