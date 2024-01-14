@@ -289,7 +289,6 @@ void DeSelectDroid(DROID *psDroid);
 /* audio finished callback */
 bool droidAudioTrackStopped(void *psObj);
 
-bool isConstructionDroid(DROID const *psDroid);
 bool isConstructionDroid(BASE_OBJECT const *psObject);
 
 /** Check if droid is in a legal world position and is not on its way to drive off the map. */

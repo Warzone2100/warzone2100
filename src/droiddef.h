@@ -94,6 +94,7 @@ struct DROID : public BASE_OBJECT
 	DROID(uint32_t id, unsigned player);
 	~DROID();
 
+	bool isConstructionDroid() const;
 	// returns true if droid type is one of the Cyborg types
 	bool isCyborg() const;
 	// Returns true if the droid is a transporter.

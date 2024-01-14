@@ -47,7 +47,7 @@ void BuildController::updateBuildersList()
 
 	for (DROID *droid : apsDroidLists[selectedPlayer])
 	{
-		if (isConstructionDroid(droid) && droid->died == 0)
+		if (droid->isConstructionDroid() && droid->died == 0)
 		{
 			builders.push_back(droid);
 		}
@@ -168,7 +168,7 @@ void BuildController::setHighlightedObject(BASE_OBJECT *object)
 
 	auto builder = castDroid(object);
 	ASSERT_NOT_NULLPTR_OR_RETURN(, builder);
-	ASSERT_OR_RETURN(, isConstructionDroid(builder), "Droid is not a construction droid");
+	ASSERT_OR_RETURN(, builder->isConstructionDroid(), "Droid is not a construction droid");
 	highlightedBuilder = builder;
 }
 

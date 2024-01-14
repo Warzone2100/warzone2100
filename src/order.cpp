@@ -1544,7 +1544,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:
 		// build a new structure or line of structures
-		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "%s cannot construct things!", objInfo(psDroid));
+		ASSERT_OR_RETURN(, psDroid->isConstructionDroid(), "%s cannot construct things!", objInfo(psDroid));
 		ASSERT_OR_RETURN(, psOrder->psStats != nullptr, "invalid structure stats pointer");
 		psDroid->order = *psOrder;
 		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
@@ -1554,7 +1554,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_BUILDMODULE:
 		{
 			//build a module onto the structure
-			if (!isConstructionDroid(psDroid) || psOrder->index < nextModuleToBuild((STRUCTURE *)psOrder->psObj, -1))
+			if (!psDroid->isConstructionDroid() || psOrder->index < nextModuleToBuild((STRUCTURE *)psOrder->psObj, -1))
 			{
 				break;
 			}
@@ -1568,7 +1568,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
-		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
+		ASSERT_OR_RETURN(, psDroid->isConstructionDroid(), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Help to build a NULL pointer?");
 		if (psDroid->action == DACTION_BUILD && psOrder->psObj == psDroid->psActionTarget[0] 
 			// skip DORDER_LINEBUILD -> we still want to drop pending structure blueprints
@@ -2887,7 +2887,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 		{
 			if (isBlueprint(psObj))
 			{
-				if (isConstructionDroid(psCurr))
+				if (psCurr->isConstructionDroid())
 				{
 					// Help build the planned structure.
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
@@ -2941,7 +2941,7 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
 
 	for (DROID *psCurr : apsDroidLists[player])
 	{
-		if (psCurr->selected && isConstructionDroid(psCurr))
+		if (psCurr->selected && psCurr->isConstructionDroid())
 		{
 			if (add)
 			{
