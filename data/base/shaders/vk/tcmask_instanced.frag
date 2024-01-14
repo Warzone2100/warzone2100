@@ -377,7 +377,7 @@ void main()
 
 #if 1
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-	vec4 volumetric = volumetricIterateOverAllPointLights(clipSpaceCoord, cameraPos.xyz, fragPos);
+	vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, fragPos, diffuse.xyz);
 	fragColour.xyz = toneMap(fragColour.xyz * volumetric.a + volumetric.xyz);	
 #else
 	if (fogEnabled > 0)

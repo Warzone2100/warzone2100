@@ -74,11 +74,12 @@ vec4 iterateOverAllPointLights(
 	return light;
 }
 
-//volumetric
-vec4 volumetricIterateOverAllPointLights(
+// based on equations found here : https://www.shadertoy.com/view/lstfR7
+vec4 volumetricLights(
 	vec2 clipSpaceCoord,
 	vec3 cameraPosition,
-	vec3 WorldFragPos
+	vec3 WorldFragPos,
+	vec3 sunLightColor
 ) {
 	vec3 result = vec3(0);
 	ivec2 bucket = ivec2(WZ_BUCKET_DIMENSION * clipSpaceCoord);
@@ -93,12 +94,15 @@ vec4 volumetricIterateOverAllPointLights(
 #define STEPS 64
 	for (int i = 0; i < STEPS; i++)
 	{
-		vec3 od = fogColor.xyz * length(viewLine / STEPS) / 10000;
+		
 		vec3 posOnViewLine = WorldFragPos + viewLine * i / STEPS;
+		// fog is thicker near 0
+		float thickness = exp(-posOnViewLine.y / 300);
 
+		vec3 od = fogColor.xyz * thickness * length(viewLine / STEPS) / 1000;
 
-		float sunLightEnergy = getShadowVisibility(posOnViewLine);
-		vec3 scatteredLight = vec3(sunLightEnergy) * od;
+		float sunLightEnergy = getShadowVisibility(posOnViewLine) ;
+		vec3 scatteredLight = vec3(sunLightEnergy) * sunLightColor * od;
 
 		for (int i = 0; i < bucketOffsetAndSize[bucketId].y; i++)
 		{
