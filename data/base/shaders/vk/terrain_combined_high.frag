@@ -66,7 +66,7 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	vec3 L = normalize(lightDir);
 	vec3 H = normalize(halfVec);
-	float visibility = getShadowVisibility();
+	float visibility = getShadowVisibility(frag.fragPos);
 
 	MaterialInfo materialInfo;
 	materialInfo.albedo = b.color;
@@ -125,6 +125,12 @@ void main()
 {
 	vec4 fragColor = main_bumpMapping();
 
+#if 1
+
+	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);	
+	vec4 volumetric = volumetricIterateOverAllPointLights(clipSpaceCoord, cameraPos.xyz, frag.fragPos);
+	fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);
+#else
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
@@ -134,5 +140,6 @@ void main()
 		// Return fragment color
 		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), fogFactor);
 	}
-	FragColor = vec4(toneMap(fragColor.xyz), fragColor.w);
+#endif
+	FragColor = fragColor;
 }

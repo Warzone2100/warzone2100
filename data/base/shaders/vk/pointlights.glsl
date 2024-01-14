@@ -74,6 +74,50 @@ vec4 iterateOverAllPointLights(
 	return light;
 }
 
+//volumetric
+vec4 volumetricIterateOverAllPointLights(
+	vec2 clipSpaceCoord,
+	vec3 cameraPosition,
+	vec3 WorldFragPos
+) {
+	vec3 result = vec3(0);
+	ivec2 bucket = ivec2(WZ_BUCKET_DIMENSION * clipSpaceCoord);
+	int bucketId = min(bucket.y + bucket.x * WZ_BUCKET_DIMENSION, WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION - 1);
+
+
+	vec3 viewLine = cameraPosition.xyz - WorldFragPos;
+	vec3 currentTransmittence = vec3(1);
+	vec3 transMittance = vec3(1);
+
+
+#define STEPS 64
+	for (int i = 0; i < STEPS; i++)
+	{
+		vec3 od = fogColor.xyz * length(viewLine / STEPS) / 10000;
+		vec3 posOnViewLine = WorldFragPos + viewLine * i / STEPS;
+
+
+		float sunLightEnergy = getShadowVisibility(posOnViewLine);
+		vec3 scatteredLight = vec3(sunLightEnergy) * od;
+
+		for (int i = 0; i < bucketOffsetAndSize[bucketId].y; i++)
+		{
+			int entryInLightList = bucketOffsetAndSize[bucketId].x + i;
+			int lightIndex = PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
+			vec4 position = PointLightsPosition[lightIndex];
+			vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
+			vec3 tmp = position.xyz * vec3(1., 1., -1.);
+			scatteredLight += colorAndEnergy.xyz * pointLightEnergyAtPosition(posOnViewLine, tmp, colorAndEnergy.w) * od;
+		}
+
+		result += scatteredLight * currentTransmittence;
+
+		currentTransmittence *= exp2(od);
+		transMittance *= exp2(-od);
+	}
+	return vec4(result * transMittance, transMittance);
+}
+
 vec3 toneMap(vec3 x)
 {
 	return x;
