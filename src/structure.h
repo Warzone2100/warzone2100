@@ -317,7 +317,6 @@ void changeProductionPlayer(UBYTE player);
 bool IsStatExpansionModule(const STRUCTURE_STATS *psStats);
 
 /// is this a blueprint and not a real structure?
-bool structureIsBlueprint(const STRUCTURE *psStructure);
 bool isBlueprint(const BASE_OBJECT *psObject);
 
 /*returns the power cost to build this structure, or to add its next module */

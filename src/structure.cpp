@@ -226,17 +226,17 @@ static int numStructureModules(STRUCTURE const *psStruct)
 	return psStruct->capacity;
 }
 
-bool structureIsBlueprint(const STRUCTURE *psStructure)
+bool STRUCTURE::isBlueprint() const
 {
-	return (psStructure->status == SS_BLUEPRINT_VALID ||
-	        psStructure->status == SS_BLUEPRINT_INVALID ||
-	        psStructure->status == SS_BLUEPRINT_PLANNED ||
-	        psStructure->status == SS_BLUEPRINT_PLANNED_BY_ALLY);
+	return (status == SS_BLUEPRINT_VALID ||
+	        status == SS_BLUEPRINT_INVALID ||
+	        status == SS_BLUEPRINT_PLANNED ||
+	        status == SS_BLUEPRINT_PLANNED_BY_ALLY);
 }
 
 bool isBlueprint(const BASE_OBJECT *psObject)
 {
-	return psObject != nullptr && psObject->type == OBJ_STRUCTURE && structureIsBlueprint((const STRUCTURE *)psObject);
+	return psObject != nullptr && psObject->type == OBJ_STRUCTURE && ((const STRUCTURE*)psObject)->isBlueprint();
 }
 
 void initStructLimits()

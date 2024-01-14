@@ -2125,7 +2125,7 @@ static void dealWithLMBDClick()
 		{
 			/* We clicked on structure */
 			psStructure = (STRUCTURE *) psClickedOn;
-			if (psStructure->player == selectedPlayer && !structureIsBlueprint(psStructure))
+			if (psStructure->player == selectedPlayer && !psStructure->isBlueprint())
 			{
 				if (psStructure->isFactory())
 				{
@@ -2277,7 +2277,7 @@ static void dealWithRMB()
 					triggerEventSelected();
 					jsDebugSelected(psStructure);
 				}
-				else if (!structureIsBlueprint(psStructure))
+				else if (!psStructure->isBlueprint())
 				{
 					clearSelection();
 

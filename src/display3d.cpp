@@ -746,7 +746,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 {
 	PIELIGHT buildingBrightness;
 
-	if (structureIsBlueprint(psStructure))
+	if (psStructure->isBlueprint())
 	{
 		buildingBrightness = getBlueprintColour(psStructure->status);
 	}
@@ -2663,7 +2663,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 	}
 
 	// flags for drawing weapons
-	if (structureIsBlueprint(psStructure))
+	if (psStructure->isBlueprint())
 	{
 		pieFlag = pie_TRANSLUCENT;
 		pieFlagData = BLUEPRINT_OPACITY;
@@ -2874,7 +2874,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		/* Draw the building's base first */
 		if (psStructure->pStructureType->pBaseIMD != nullptr)
 		{
-			if (structureIsBlueprint(psStructure))
+			if (psStructure->isBlueprint())
 			{
 				pieFlagData = BLUEPRINT_OPACITY;
 			}
@@ -2920,7 +2920,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		return;
 	}
 
-	if (structureIsBlueprint(psStructure))
+	if (psStructure->isBlueprint())
 	{
 		pieFlag = pie_TRANSLUCENT;
 		pieFlagData = BLUEPRINT_OPACITY;
@@ -2941,7 +2941,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	while (strImd)
 	{
 		float stretch = 0.f;
-		if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
+		if (defensive && !psStructure->isBlueprint() && !(strImd->flags & iV_IMD_NOSTRETCH))
 		{
 			stretch = psStructure->pos.z - psStructure->foundationDepth;
 		}
@@ -3049,7 +3049,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	}
 	else
 	{
-		if (structureIsBlueprint(psStructure))
+		if (psStructure->isBlueprint())
 		{
 			pieFlag = pie_TRANSLUCENT;
 			pieFlagData = BLUEPRINT_OPACITY;
