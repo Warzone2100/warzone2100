@@ -2903,22 +2903,22 @@ bool vtolRearming(const DROID *psDroid)
 }
 
 // true if a droid is currently attacking
-bool droidAttacking(const DROID *psDroid)
+bool DROID::isAttacking() const
 {
-	CHECK_DROID(psDroid);
+	CHECK_DROID(this);
 
 	//what about cyborgs?
-	if (!(psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_CYBORG ||
-		  psDroid->droidType == DROID_CYBORG_SUPER))
+	if (!(droidType == DROID_WEAPON || droidType == DROID_CYBORG ||
+		  droidType == DROID_CYBORG_SUPER))
 	{
 		return false;
 	}
 
-	if (psDroid->action == DACTION_ATTACK ||
-		psDroid->action == DACTION_MOVETOATTACK ||
-		psDroid->action == DACTION_ROTATETOATTACK ||
-		psDroid->action == DACTION_VTOLATTACK ||
-		psDroid->action == DACTION_MOVEFIRE)
+	if (action == DACTION_ATTACK ||
+		action == DACTION_MOVETOATTACK ||
+		action == DACTION_ROTATETOATTACK ||
+		action == DACTION_VTOLATTACK ||
+		action == DACTION_MOVEFIRE)
 	{
 		return true;
 	}
