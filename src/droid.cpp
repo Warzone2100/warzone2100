@@ -570,7 +570,7 @@ bool removeDroidBase(DROID *psDel)
 	}
 
 	// Check to see if constructor droid currently trying to find a location to build
-	if (psDel->player == selectedPlayer && psDel->selected && isConstructionDroid(psDel))
+	if (psDel->player == selectedPlayer && psDel->selected && psDel->isConstructionDroid())
 	{
 		// If currently trying to build, kill off the placement
 		if (tryingToGetLocation())
@@ -578,7 +578,7 @@ bool removeDroidBase(DROID *psDel)
 			int numSelectedConstructors = 0;
 			for (const DROID *psDroid : apsDroidLists[psDel->player])
 			{
-				numSelectedConstructors += psDroid->selected && isConstructionDroid(psDroid);
+				numSelectedConstructors += psDroid->selected && psDroid->isConstructionDroid();
 			}
 			if (numSelectedConstructors <= 1)  // If we were the last selected construction droid.
 			{
@@ -3487,14 +3487,14 @@ bool DROID::isCyborg() const
 			|| droidType == DROID_CYBORG_SUPER);
 }
 
-bool isConstructionDroid(DROID const *psDroid)
+bool DROID::isConstructionDroid() const
 {
-	return psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT;
+	return droidType == DROID_CONSTRUCT || droidType == DROID_CYBORG_CONSTRUCT;
 }
 
 bool isConstructionDroid(BASE_OBJECT const *psObject)
 {
-	return isDroid(psObject) && isConstructionDroid(castDroid(psObject));
+	return isDroid(psObject) && castDroid(psObject)->isConstructionDroid();
 }
 
 bool droidOnMap(const DROID *psDroid)

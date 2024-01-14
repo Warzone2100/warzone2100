@@ -1599,7 +1599,7 @@ INT_RETVAL intRunWidgets()
 				// Set the droid order
 				if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
 					&& intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
-					&& psSelectedBuilder != nullptr && isConstructionDroid(psSelectedBuilder))
+					&& psSelectedBuilder != nullptr && psSelectedBuilder->isConstructionDroid())
 				{
 					orderDroidStatsTwoLocDir(psSelectedBuilder, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, pos2.x, pos2.y, getBuildingDirection(), ModeQueue);
 				}

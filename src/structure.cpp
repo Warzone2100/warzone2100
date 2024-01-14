@@ -2540,7 +2540,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, psFact->psCommander, ModeQueue);
 				//moveToRearm(psNewDroid);
 			}
-			else if (!isConstructionDroid(psNewDroid))
+			else if (!psNewDroid->isConstructionDroid())
 			{
 				orderDroidObj(psNewDroid, DORDER_COMMANDERSUPPORT, psFact->psCommander, ModeQueue);
 			}
