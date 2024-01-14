@@ -307,9 +307,6 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid);
 // return whether a rearm pad has a vtol on it
 bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid);
 
-/* Just returns true if the structure's present body points aren't as high as the original*/
-bool	structIsDamaged(const STRUCTURE *psStruct);
-
 // give a structure from one player to another - used in Electronic Warfare
 STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare = true);
 

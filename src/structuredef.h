@@ -285,6 +285,8 @@ struct STRUCTURE : public BASE_OBJECT
 	// Return true if structure is a factory of any type.
 	bool isFactory() const;
 	uint32_t structureBody() const;
+	// Just returns true if the structure's present body points aren't as high as the original
+	bool isDamaged() const;
 
 	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
 	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */
