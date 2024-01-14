@@ -2289,7 +2289,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			// for ex. AA gun can't attack ground unit
 			break;
 		}
-		if (vtolEmpty(psDroid) && vtolRearming(psDroid))
+		if (vtolEmpty(psDroid) && psDroid->isVtolRearming())
 		{
 			// ignore attack order: we have no ammo and we are rearming right now, or going to rearm, or waiting for it
 			break;
@@ -2636,7 +2636,7 @@ void moveToRearm(DROID *psDroid)
 	}
 
 	//if droid is already returning - ignore
-	if (vtolRearming(psDroid))
+	if (psDroid->isVtolRearming())
 	{
 		return;
 	}

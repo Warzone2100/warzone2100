@@ -1165,7 +1165,7 @@ void orderUpdateDroid(DROID *psDroid)
 		else
 		{
 			//let vtols return to rearm
-			if (!vtolRearming(psDroid))
+			if (!psDroid->isVtolRearming())
 			{
 				// attacking something, make sure the droid doesn't go too far
 				if (psDroid->order.psObj != nullptr && psDroid->order.psObj->type == OBJ_DROID &&
@@ -1219,7 +1219,7 @@ void orderUpdateDroid(DROID *psDroid)
 	}
 
 	// catch any vtol that is rearming but has finished his order
-	if (psDroid->order.type == DORDER_NONE && vtolRearming(psDroid)
+	if (psDroid->order.type == DORDER_NONE && psDroid->isVtolRearming()
 	    && (psDroid->psActionTarget[0] == nullptr || !psDroid->psActionTarget[0]->died))
 	{
 		psDroid->order = DroidOrder(DORDER_REARM, psDroid->psActionTarget[0]);
@@ -1894,7 +1894,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_REARM:
 		// didn't get executed before
-		if (!vtolRearming(psDroid))
+		if (!psDroid->isVtolRearming())
 		{
 			psDroid->order = *psOrder;
 			actionDroid(psDroid, DACTION_MOVETOREARM, psOrder->psObj);
@@ -3299,7 +3299,7 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 		/* set return to repair if not on hold */
 		if (psDroid->order.type != DORDER_RTR &&
 		    psDroid->order.type != DORDER_RTB &&
-		    !vtolRearming(psDroid))
+		    !psDroid->isVtolRearming())
 		{
 			if (psDroid->isVtol())
 			{

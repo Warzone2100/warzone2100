@@ -2878,23 +2878,23 @@ bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct)
 }
 
 // true if a vtol droid currently returning to be rearmed
-bool vtolRearming(const DROID *psDroid)
+bool DROID::isVtolRearming() const
 {
-	CHECK_DROID(psDroid);
+	CHECK_DROID(this);
 
-	if (!psDroid->isVtol())
+	if (!isVtol())
 	{
 		return false;
 	}
-	if (psDroid->droidType != DROID_WEAPON)
+	if (droidType != DROID_WEAPON)
 	{
 		return false;
 	}
 
-	if (psDroid->action == DACTION_MOVETOREARM ||
-		psDroid->action == DACTION_WAITFORREARM ||
-		psDroid->action == DACTION_MOVETOREARMPOINT ||
-		psDroid->action == DACTION_WAITDURINGREARM)
+	if (action == DACTION_MOVETOREARM ||
+		action == DACTION_WAITFORREARM ||
+		action == DACTION_MOVETOREARMPOINT ||
+		action == DACTION_WAITDURINGREARM)
 	{
 		return true;
 	}
@@ -2941,7 +2941,7 @@ bool allVtolsRearmed(const DROID *psDroid)
 	bool stillRearming = false;
 	for (const DROID *psCurr : apsDroidLists[psDroid->player])
 	{
-		if (vtolRearming(psCurr) &&
+		if (psCurr->isVtolRearming() &&
 			psCurr->order.type == psDroid->order.type &&
 			psCurr->order.psObj == psDroid->order.psObj)
 		{
