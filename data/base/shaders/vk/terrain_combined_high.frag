@@ -78,11 +78,13 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 
 	float ambientOcclusion = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 
+	float FogOfWarLevel = lightmap_vec4.a;
+
 	vec3 light = ambientLight.xyz * ambientOcclusion * materialInfo.albedo.xyz * 0.3 + // ambient term
 		0.7 * directLighting + 
 		lightmap_vec4.rgb / 1.4f; // additive color (from environmental point lights / effects)
 
-	vec4 res = vec4(light, 1.0);
+	vec4 res = vec4(light * FogOfWarLevel, 1.0); // Unfortunately we add ambient occlusion twice here...
 
 	if (WZ_POINT_LIGHT_ENABLED == 1)
 	{
