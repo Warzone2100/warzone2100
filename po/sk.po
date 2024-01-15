@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-15 07:55\n"
+"PO-Revision-Date: 2024-01-15 20:49\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -916,7 +916,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr ""
+msgstr "Prichádzajúci prenos od výsadkového tímu."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
@@ -928,7 +928,7 @@ msgstr "Toto je naša súčasná pozícia."
 
 #: data/base/messages/strings/cam3strings.txt:106
 msgid "Take control of our forces and lead us."
-msgstr ""
+msgstr "Prevezmi kontrolu nad našimi jednotkami a veď nás."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
@@ -940,7 +940,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "Prichádzajúci prenos..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
@@ -960,7 +960,7 @@ msgstr "MISIA SEVERNÉHO SEKTORA: Laserové satelity"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
-msgstr ""
+msgstr "Detekujeme silné energetické výboje z orbity."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
@@ -984,7 +984,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:132
 msgid "We will need to evacuate this base shortly."
-msgstr ""
+msgstr "Čoskoro budeme musieť evakuovať túto základňu."
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
