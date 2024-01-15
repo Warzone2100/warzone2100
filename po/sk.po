@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-10 08:51\n"
+"PO-Revision-Date: 2024-01-15 07:55\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -744,12 +744,12 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr ""
+msgstr "Zabezpeč MV, následne založ predsunutú základňu."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr ""
+msgstr "PREPRAVNÁ MISIA: Súradnice odpaľovacieho miesta rakiet"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
@@ -757,7 +757,7 @@ msgstr "Našli sme miesto odpalu rakiet."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
-msgstr ""
+msgstr "Na tomto mieste NASDA sa machádzala jedna, alebo viac rakiet."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
@@ -828,31 +828,31 @@ msgstr "Veliteľ, porazili sme NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr ""
+msgstr "Nanešťastie, výkon nášich systémov bol ovplyvnený NEXUS. Snažíme sa to napraviť."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
-msgstr ""
+msgstr "Momentálne prijímame tento prenos."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "PREPRAVNÁ MISIA: Tím Alfa nájdený"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr ""
+msgstr "Pošli prieskumnú jednotku an tieto súradnice a zhodnoť situáciu."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr ""
+msgstr "Zisti, či sú to členovia tímu Alfa. Ak áno, zachráň a doprav ich späť na MV."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
+msgstr "Táto skupina je súčasťou tímu Alfa, zachráň ich a doprav ich na MV."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr ""
+msgstr "MISIA SEVERNÉHO SEKORA: Debrífing Teamu Alfa"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
@@ -956,7 +956,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr ""
+msgstr "MISIA SEVERNÉHO SEKTORA: Laserové satelity"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
@@ -1162,11 +1162,11 @@ msgstr "Nepriateľská základňa"
 
 #: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
-msgstr ""
+msgstr "Prichádzajúci prenos"
 
 #: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
-msgstr ""
+msgstr "Prichádzajúca spravodajská správa."
 
 #: data/base/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
@@ -1194,7 +1194,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:4001
 msgid "Naval"
-msgstr ""
+msgstr "Námorné"
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
@@ -1216,7 +1216,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:403
 msgid "Dragon's Teeth"
-msgstr ""
+msgstr "Dračie zuby"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Howitzer.name
@@ -1351,7 +1351,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:396
 #: po/custom/fromJson.txt:2597
 msgid "Heavy Machinegun Bunker"
-msgstr ""
+msgstr "Bunker s ťažkým guľometom"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PrisLas.name
@@ -1372,7 +1372,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:322
 #: po/custom/fromJson.txt:2619
 msgid "Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Strážna veža s ťažkým guľometom"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower04.name
@@ -1401,15 +1401,15 @@ msgstr ""
 #: data/base/messages/strings/names.txt:330
 #: po/custom/fromJson.txt:176
 msgid "Advanced Cyborg Production"
-msgstr ""
+msgstr "Pokročilá výroba cyborgov"
 
 #: data/base/messages/strings/names.txt:331
 msgid "Advanced Cyborg Production Mk2"
-msgstr ""
+msgstr "Pokročilá výroba cyborgov Mk2"
 
 #: data/base/messages/strings/names.txt:332
 msgid "Advanced Cyborg Production Mk3"
-msgstr ""
+msgstr "Pokročilá výroba cyborgov Mk3"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[1]
