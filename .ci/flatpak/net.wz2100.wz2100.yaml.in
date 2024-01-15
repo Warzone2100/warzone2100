@@ -95,6 +95,7 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
+      strip: true
       no-debuginfo: true
     # Always build for host - do not include WZ_CROSS_BUILD_OPTIONS
     cleanup:
