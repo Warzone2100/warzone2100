@@ -688,7 +688,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 		}
 		for (STRUCTURE* psStruct : *psList)
 		{
-			if (psStruct->isFactory())
+			if (psStruct && psStruct->isFactory())
 			{
 				if (psStruct->pFunctionality == nullptr)
 				{

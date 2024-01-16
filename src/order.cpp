@@ -4028,7 +4028,7 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
  */
 bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State)
 {
-	if (!psStruct->isFactory())
+	if (!psStruct || !psStruct->isFactory())
 	{
 		ASSERT(false, "setFactoryState: structure is not a factory");
 		return false;
@@ -4097,7 +4097,7 @@ bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
  */
 bool getFactoryState(const STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
 {
-	ASSERT_OR_RETURN(false, psStruct->isFactory(), "Structure is not a factory");
+	ASSERT_OR_RETURN(false, psStruct && psStruct->isFactory(), "Structure is not a factory");
 	if ((FACTORY *)psStruct->pFunctionality)
 	{
 		UDWORD state = ((FACTORY *)psStruct->pFunctionality)->secondaryOrder;
