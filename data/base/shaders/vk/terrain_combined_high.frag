@@ -90,7 +90,12 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	{
 		// point lights
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-		res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+		mat3 identityMat = mat3(
+								1., 0., 0.,
+								0., 1., 0.,
+								0., 0., 1.
+								);
+		res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, identityMat, ModelTangentMatrix);
 	}
 
 	return vec4(res.rgb, b.color.a);

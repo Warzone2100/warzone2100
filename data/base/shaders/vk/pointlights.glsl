@@ -10,10 +10,20 @@ float pointLightEnergyAtPosition(vec3 position, vec3 pointLightWorldPosition, fl
 	return numerator * numerator / ( 1 + 2 * sqNormDist);
 }
 
-vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, mat3 normalWorldSpaceToLocalSpace)
+vec4 processPointLight(vec3 WorldFragPos,
+ vec3 fragNormal, 
+ vec3 viewVector, 
+ vec4 albedo, 
+ float gloss, 
+ vec3 pointLightWorldPosition, 
+ float pointLightEnergy, 
+ vec3 pointLightColor, 
+ mat3 worldSpaceToViewSpace,
+ mat3 normalWorldSpaceToLocalSpace)
 {
 	vec3 pointLightVector = WorldFragPos - pointLightWorldPosition;
 	vec3 pointLightDir = -normalize(pointLightVector * normalWorldSpaceToLocalSpace);
+	pointLightDir = worldSpaceToViewSpace * pointLightDir;
 
 	float energy = pointLightEnergyAtPosition(WorldFragPos, pointLightWorldPosition, pointLightEnergy);
 	vec4 lightColor = vec4(pointLightColor * energy, 1);
@@ -31,6 +41,7 @@ vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4
 // - a uniforms named PointLightsPosition of vec4[]
 // - a uniforms named colorAndEnergy of vec4[]
 // fragNormal and view vector are expected to be in the same local space
+// worldSpaceToViewSpace is used to move from world space to view space
 // normalWorldSpaceToLocalSpace is used to move from world space to local space
 vec4 iterateOverAllPointLights(
 	vec2 clipSpaceCoord,
@@ -39,6 +50,7 @@ vec4 iterateOverAllPointLights(
 	vec3 viewVector,
 	vec4 albedo,
 	float gloss,
+ 	mat3 worldSpaceToViewSpace,
 	mat3 normalWorldSpaceToLocalSpace
 ) {
 	vec4 light = vec4(0);
@@ -51,7 +63,7 @@ vec4 iterateOverAllPointLights(
 		int lightIndex = PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
 		vec4 position = PointLightsPosition[lightIndex];
 		vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
-		vec3 tmp = position.xyz * vec3(1., 1., -1.);
+		vec3 tmp = position.xyz;
 		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, normalWorldSpaceToLocalSpace);
 	}
 	return light;

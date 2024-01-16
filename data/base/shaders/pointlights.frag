@@ -21,10 +21,20 @@ float pointLightEnergyAtPosition(vec3 position, vec3 pointLightWorldPosition, fl
 	return numerator * numerator / ( 1.f + 2.f * sqNormDist);
 }
 
-vec4 processPointLight(vec3 WorldFragPos, vec3 fragNormal, vec3 viewVector, vec4 albedo, float gloss, vec3 pointLightWorldPosition, float pointLightEnergy, vec3 pointLightColor, mat3 normalWorldSpaceToLocalSpace)
+vec4 processPointLight(
+	vec3 WorldFragPos,
+	vec3 fragNormal, 
+	vec3 viewVector, 
+	vec4 albedo, 
+	float gloss, 
+	vec3 pointLightWorldPosition, 
+	float pointLightEnergy, 
+	vec3 pointLightColor, 
+ 	mat3 worldSpaceToViewSpace,
+	mat3 normalWorldSpaceToLocalSpace)
 {
 	vec3 pointLightVector = WorldFragPos - pointLightWorldPosition;
-	vec3 pointLightDir = -normalize(pointLightVector * normalWorldSpaceToLocalSpace);
+	vec3 pointLightDir = -normalize(worldSpaceToViewSpace * pointLightVector * normalWorldSpaceToLocalSpace);
 
 	float energy = pointLightEnergyAtPosition(WorldFragPos, pointLightWorldPosition, pointLightEnergy);
 	vec4 lightColor = vec4(pointLightColor * energy, 1.f);
@@ -50,6 +60,7 @@ vec4 iterateOverAllPointLights(
 	vec3 viewVector,
 	vec4 albedo,
 	float gloss,
+ 	mat3 worldSpaceToViewSpace,
 	mat3 normalWorldSpaceToLocalSpace
 ) {
 	vec4 light = vec4(0.f);
@@ -62,7 +73,7 @@ vec4 iterateOverAllPointLights(
 		int lightIndex = PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
 		vec4 position = PointLightsPosition[lightIndex];
 		vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
-		vec3 tmp = position.xyz * vec3(1.f, 1.f, -1.f);
+		vec3 tmp = position.xyz;
 		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, normalWorldSpaceToLocalSpace);
 	}
 	return light;

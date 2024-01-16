@@ -151,7 +151,12 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 #if WZ_POINT_LIGHT_ENABLED == 1
 	// point lights
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
-	res += iterateOverAllPointLights(clipSpaceCoord, fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+	mat3 identityMat = mat3(
+								1., 0., 0.,
+								0., 1., 0.,
+								0., 0., 1.
+								);	
+	res += iterateOverAllPointLights(clipSpaceCoord, fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, identityMat, ModelTangentMatrix);
 #endif
 
 	return vec4(res.rgb, b.color.a);
