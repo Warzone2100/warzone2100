@@ -293,7 +293,7 @@ bool splitResourcesAmongTeam(UDWORD player)
 
 		mutating_list_iterate(apsStructLists[player], [&cmp, &structsGiftedPerTarget, &incrRecvStruct](STRUCTURE* psStruct)
 		{
-			if (cmp(psStruct))
+			if (psStruct && cmp(psStruct))
 			{
 				giftSingleStructure(psStruct, structsGiftedPerTarget.front().player, false);
 				incrRecvStruct(0);

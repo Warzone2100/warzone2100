@@ -233,7 +233,7 @@ bool multiplayerWinSequence(bool firstCall)
 		// stop all manufacture.
 		for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 		{
-			if (psStruct->isFactory())
+			if (psStruct && psStruct->isFactory())
 			{
 				if (((FACTORY *)psStruct->pFunctionality)->psSubject)//check if active
 				{

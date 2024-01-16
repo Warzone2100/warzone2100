@@ -888,6 +888,10 @@ void saveMissionLimboData()
 	// any selectedPlayer's factories/research need to be put on holdProduction/holdresearch
 	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
 	{
+		if (!psStruct)
+		{
+			continue;
+		}
 		if (psStruct->isFactory())
 		{
 			holdProduction(psStruct, ModeImmediate);

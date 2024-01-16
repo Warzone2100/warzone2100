@@ -33,7 +33,7 @@ static const uint8_t commandBrainComponent = 1; // hmm there is only 1 "CommandB
 
 FACTORY *getFactoryOrNullptr(STRUCTURE *factory)
 {
-	ASSERT_OR_RETURN(nullptr, factory->isFactory(), "Invalid factory pointer");
+	ASSERT_OR_RETURN(nullptr, factory && factory->isFactory(), "Invalid factory pointer");
 	return (FACTORY *)factory->pFunctionality;
 }
 
@@ -197,7 +197,7 @@ void ManufactureController::setHighlightedObject(BASE_OBJECT *object)
 	}
 
 	auto factory = castStructure(object);
-	ASSERT_OR_RETURN(, factory->isFactory(), "Invalid factory pointer");
+	ASSERT_OR_RETURN(, factory && factory->isFactory(), "Invalid factory pointer");
 	highlightedFactory = factory;
 }
 

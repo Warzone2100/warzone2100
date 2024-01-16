@@ -987,7 +987,7 @@ void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 
 static void refundFactoryBuildPower(STRUCTURE *psBuilding)
 {
-	ASSERT_OR_RETURN(, psBuilding->isFactory(), "structure not a factory");
+	ASSERT_OR_RETURN(, psBuilding && psBuilding->isFactory(), "structure not a factory");
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
 	if (psFactory->psSubject)
@@ -1667,6 +1667,10 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			for (const STRUCTURE *psStruct : apsStructLists[playerNum])
 			{
+				if (!psStruct)
+				{
+					continue;
+				}
 				FLAG_POSITION *fp = nullptr;
 				if (psStruct->isFactory())
 				{
@@ -5990,7 +5994,7 @@ bool FlagIsFactory(const FLAG_POSITION *psCurrFlag)
 //
 FLAG_POSITION *FindFactoryDelivery(const STRUCTURE *Struct)
 {
-	if (Struct->isFactory())
+	if (Struct && Struct->isFactory())
 	{
 		// Find the factories delivery point.
 		for (const auto& psFlag : apsFlagPosLists[Struct->player])
@@ -6016,6 +6020,10 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 
 	for (STRUCTURE* psCurr : apsStructLists[psDelPoint->player])
 	{
+		if (!psCurr)
+		{
+			continue;
+		}
 		if (psCurr->isFactory())
 		{
 			psFactory = &psCurr->pFunctionality->factory;
@@ -6041,7 +6049,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 accrued but not used*/
 void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProductionRun)
 {
-	ASSERT_OR_RETURN(, psBuilding->isFactory(), "structure not a factory");
+	ASSERT_OR_RETURN(, psBuilding && psBuilding->isFactory(), "structure not a factory");
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6075,7 +6083,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory;
 
-	ASSERT_OR_RETURN(, psBuilding->isFactory(), "structure not a factory");
+	ASSERT_OR_RETURN(, psBuilding && psBuilding->isFactory(), "structure not a factory");
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6104,7 +6112,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a factory's production run from hold*/
 void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT_OR_RETURN(, psBuilding->isFactory(), "structure not a factory");
+	ASSERT_OR_RETURN(, psBuilding && psBuilding->isFactory(), "structure not a factory");
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6396,6 +6404,10 @@ void checkDeliveryPoints(UDWORD version)
 		{
 			for (STRUCTURE* psStruct : apsStructLists[inc])
 			{
+				if (!psStruct)
+				{
+					continue;
+				}
 				if (psStruct->isFactory())
 				{
 					//check the DP
@@ -6455,7 +6467,7 @@ void factoryLoopAdjust(STRUCTURE *psStruct, bool add)
 {
 	FACTORY		*psFactory;
 
-	ASSERT_OR_RETURN(, psStruct->isFactory(), "structure is not a factory");
+	ASSERT_OR_RETURN(, psStruct && psStruct->isFactory(), "structure is not a factory");
 	ASSERT_OR_RETURN(, psStruct->player == selectedPlayer, "should only be called for selectedPlayer");
 
 	psFactory = &psStruct->pFunctionality->factory;

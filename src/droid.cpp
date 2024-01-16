@@ -561,7 +561,7 @@ bool removeDroidBase(DROID *psDel)
 		for (auto psStruct : apsStructLists[psDel->player])
 		{
 			// alexl's stab at a right answer.
-			if (psStruct->isFactory()
+			if (psStruct && psStruct->isFactory()
 				&& psStruct->pFunctionality->factory.psCommander == psDel)
 			{
 				assignFactoryCommandDroid(psStruct, nullptr);

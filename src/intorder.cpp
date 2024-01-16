@@ -450,7 +450,7 @@ static std::vector<AVORDER> buildDroidOrderList()
 // Build a list of orders available for the selected structure.
 static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 {
-	ASSERT_OR_RETURN(std::vector<AVORDER>(), psStructure->isFactory(), "BuildStructureOrderList: structure is not a factory");
+	ASSERT_OR_RETURN(std::vector<AVORDER>(), psStructure && psStructure->isFactory(), "BuildStructureOrderList: structure is not a factory");
 
 	//this can be hard-coded!
 	std::vector<AVORDER> orders(4);
