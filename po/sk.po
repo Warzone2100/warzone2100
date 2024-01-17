@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-15 20:49\n"
+"PO-Revision-Date: 2024-01-17 17:59\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -980,7 +980,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
-msgstr ""
+msgstr "Smerujú svoju paľbu na túto pozíciu."
 
 #: data/base/messages/strings/cam3strings.txt:132
 msgid "We will need to evacuate this base shortly."
@@ -1017,7 +1017,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
-msgstr ""
+msgstr "NEXUS sa nachádza v našich systémoch."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
@@ -1097,11 +1097,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr ""
+msgstr "Založte MV."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
-msgstr ""
+msgstr "Začnite s útokmi na NEXUS. Musíte zničiť jeho základné systémy."
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
@@ -1121,7 +1121,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
-msgstr ""
+msgstr "Neznámy artefakt"
 
 #: data/base/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
@@ -1134,7 +1134,7 @@ msgstr ""
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
 msgid "Mission Target"
-msgstr ""
+msgstr "Cieľ misie"
 
 #: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
@@ -1146,11 +1146,11 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
-msgstr ""
+msgstr "Misia neúspešná"
 
 #: data/base/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
-msgstr ""
+msgstr "Misia úspešná"
 
 #: data/base/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
@@ -1175,7 +1175,7 @@ msgstr "Jadrový reaktor"
 #: data/base/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr ""
+msgstr "Nový návrh"
 
 #: data/base/messages/strings/names.txt:103
 #: data/mp/messages/strings/names.txt:160
@@ -1187,7 +1187,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:218
 msgid "Demolish"
-msgstr ""
+msgstr "Zbúrať"
 
 #. TRANSLATORS:
 #. data/mp/stats/propulsion.json: $.Naval.name
