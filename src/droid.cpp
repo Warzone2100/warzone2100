@@ -27,6 +27,7 @@
 #include "lib/framework/math_ext.h"
 #include "lib/framework/geometry.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/object_list_iteration.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piematrix.h"

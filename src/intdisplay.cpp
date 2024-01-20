@@ -25,6 +25,7 @@
  */
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/object_list_iteration.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/ivisdef.h"

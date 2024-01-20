@@ -27,6 +27,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/gridlayout.h"
 #include "lib/widget/button.h"

@@ -26,10 +26,11 @@
 
 #include "objectdef.h"
 
+//#include "lib/framework/object_list_iteration.h"
+
 #include <array>
 #include <list>
 #include <functional>
-#include <type_traits>
 
 /* The lists of objects allocated */
 template <typename ObjectType, unsigned PlayerCount>
@@ -154,34 +155,5 @@ void objCount(int *droids, int *structures, int *features);
 #ifdef DEBUG
 void checkFactoryFlags();
 #endif
-
-enum class IterationResult
-{
-	BREAK_ITERATION,
-	CONTINUE_ITERATION
-};
-
-// Common iteration helper for lists of game objects
-// with an ability to execute loop body handlers which can
-// possibly invalidate the any iterator in the range `[begin(), currentIterator]`.
-template <typename ObjectType, typename MaybeErasingLoopBodyHandler>
-void mutating_list_iterate(std::list<ObjectType*>& list, MaybeErasingLoopBodyHandler handler)
-{
-	static_assert(std::is_same<std::result_of_t<MaybeErasingLoopBodyHandler(ObjectType*)>, IterationResult>::value,
-		"Loop body handler should return IterationResult");
-
-	typename std::remove_reference_t<decltype(list)>::iterator it = list.begin(), itNext;
-	while (it != list.end())
-	{
-		itNext = std::next(it);
-		// Can possibly invalidate `it` and anything before it.
-		const auto res = handler(*it);
-		if (res == IterationResult::BREAK_ITERATION)
-		{
-			break;
-		}
-		it = itNext;
-	}
-}
 
 #endif // __INCLUDED_SRC_OBJMEM_H__
