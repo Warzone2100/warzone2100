@@ -23,6 +23,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/rational.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/framework/physfs_ext.h"
 #include "objects.h"
 #include "levels.h"

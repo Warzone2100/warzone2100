@@ -32,6 +32,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "map.h"
 

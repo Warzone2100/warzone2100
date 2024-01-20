@@ -29,6 +29,7 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/ivis_opengl/imd.h"

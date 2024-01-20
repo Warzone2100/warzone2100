@@ -27,6 +27,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/object_list_iteration.h"
 
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h" //ivis render code

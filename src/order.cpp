@@ -29,6 +29,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/ivis_opengl/ivisdef.h"
 
 #include "objects.h"

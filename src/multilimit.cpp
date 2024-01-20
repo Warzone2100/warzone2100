@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/widget/slider.h"
 #include "lib/widget/widget.h"
 #include "hci.h"
