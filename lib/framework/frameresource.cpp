@@ -231,7 +231,7 @@ static RES_TYPE *resAlloc(const char *pType)
 #endif
 
 	// setup the structure
-	psT = (RES_TYPE *)malloc(sizeof(RES_TYPE));
+	psT = new RES_TYPE();
 	sstrcpy(psT->aType, pType);
 	psT->HashedType = HashString(psT->aType); // store a hased version for super speed !
 	psT->psRes = nullptr;
@@ -775,7 +775,7 @@ void resReleaseAll()
 	for (psT = psResTypes; psT != nullptr; psT = psNT)
 	{
 		psNT = psT->psNext;
-		free(psT);
+		delete psT;
 	}
 
 	psResTypes = nullptr;
