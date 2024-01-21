@@ -72,7 +72,6 @@ struct RES_TYPE
 	UDWORD	HashedType;				// hashed version of the name of the id - // a null hashedtype indicates end of list
 
 	RES_FILELOAD	fileLoad;		// This isn't really used any more ?
-	RES_TYPE       *psNext;
 };
 
 

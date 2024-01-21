@@ -35,7 +35,7 @@
 #include <list>
 
 // Local prototypes
-static RES_TYPE *psResTypes = nullptr;
+static std::list<RES_TYPE *> psResTypes;
 
 /* The initial resource directory and the current resource directory */
 char aResDir[PATH_MAX];
@@ -148,9 +148,9 @@ void resDoResLoadCallback()
 /* Initialise the resource module */
 bool resInitialise()
 {
-	ASSERT(psResTypes == nullptr,
+	ASSERT(psResTypes.empty(),
 	       "resInitialise: resource module hasn't been shut down??");
-	psResTypes = nullptr;
+	psResTypes.clear();
 	resBlockID = 0;
 	resLoadCallback = nullptr;
 
@@ -163,7 +163,7 @@ bool resInitialise()
 /* Shutdown the resource module */
 void resShutDown()
 {
-	if (psResTypes != nullptr)
+	if (!psResTypes.empty())
 	{
 		debug(LOG_WZ, "resShutDown: warning resources still allocated");
 		resReleaseAll();
@@ -223,18 +223,16 @@ bool resLoad(const char *pResFile, SDWORD blockID)
 /* Allocate a RES_TYPE structure */
 static RES_TYPE *resAlloc(const char *pType)
 {
-	RES_TYPE	*psT;
-
 #ifdef DEBUG
 	// Check for a duplicate type
-	for (psT = psResTypes; psT; psT = psT->psNext)
+	for (RES_TYPE* psT : psResTypes)
 	{
 		ASSERT(strcmp(psT->aType, pType) != 0, "Duplicate function for type: %s", pType);
 	}
 #endif
 
 	// setup the structure
-	psT = new RES_TYPE();
+	auto psT = new RES_TYPE();
 	sstrcpy(psT->aType, pType);
 	psT->HashedType = HashString(psT->aType); // store a hased version for super speed !
 
@@ -251,8 +249,7 @@ bool resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad, RES_FREE relea
 	psT->fileLoad = nullptr;
 	psT->release = release;
 
-	psT->psNext = psResTypes;
-	psResTypes = psT;
+	psResTypes.emplace_front(psT);
 
 	return true;
 }
@@ -267,8 +264,7 @@ bool resAddFileLoad(const char *pType, RES_FILELOAD fileLoad, RES_FREE release)
 	psT->fileLoad = fileLoad;
 	psT->release = release;
 
-	psT->psNext = psResTypes;
-	psResTypes = psT;
+	psResTypes.emplace_front(psT);
 
 	return true;
 }
@@ -468,26 +464,27 @@ static void makeLocaleFile(char *fileName, size_t maxlen)  // given string must 
  */
 bool resLoadFile(const char *pType, const char *pFile)
 {
-	RES_TYPE	*psT = nullptr;
 	void		*pData = nullptr;
 	char		aFileName[PATH_MAX];
 	UDWORD HashedName, HashedType = HashString(pType);
 
 	// Find the resource-type
-	for (psT = psResTypes; psT != nullptr; psT = psT->psNext)
+	auto resTypeIt = std::find_if(psResTypes.begin(), psResTypes.end(), [pType, HashedType](const RES_TYPE* psT)
 	{
 		if (psT->HashedType == HashedType)
 		{
 			ASSERT(strcmp(psT->aType, pType) == 0, "Hash collision \"%s\" vs \"%s\"", psT->aType, pType);
-			break;
+			return true;
 		}
-	}
+		return false;
+	});
 
-	if (psT == nullptr)
+	if (resTypeIt == psResTypes.end())
 	{
 		debug(LOG_WZ, "resLoadFile: Unknown type: %s", pType);
 		return false;
 	}
+	RES_TYPE* psT = *resTypeIt;
 
 	// Check for duplicates
 	HashedName = HashStringIgnoreCase(pFile);
@@ -582,24 +579,19 @@ bool resLoadFile(const char *pType, const char *pFile)
 /* Return the resource for a type and hashedname */
 void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 {
-	RES_TYPE	*psT = nullptr;
 	// Find the correct type
 	UDWORD HashedType = HashString(pType);
 
-	for (psT = psResTypes; psT != nullptr; psT = psT->psNext)
+	auto resTypeIt = std::find_if(psResTypes.begin(), psResTypes.end(), [HashedType](const RES_TYPE* psT)
 	{
-		if (psT->HashedType == HashedType)
-		{
-			/* We found it */
-			break;
-		}
-	}
-
-	ASSERT(psT != nullptr, "resGetDataFromHash: Unknown type: %s", pType);
-	if (psT == nullptr)
+		return psT->HashedType == HashedType;
+	});
+	ASSERT(resTypeIt != psResTypes.end(), "resGetDataFromHash: Unknown type: %s", pType);
+	if (resTypeIt == psResTypes.end())
 	{
 		return nullptr;
 	}
+	RES_TYPE* psT = *resTypeIt;
 
 	auto res = std::find_if(psT->psRes.begin(), psT->psRes.end(), [HashedID](const RES_DATA* rd)
 	{
@@ -629,20 +621,15 @@ void *resGetData(const char *pType, const char *pID)
 
 bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 {
-	RES_TYPE	*psT;
-
 	// Find the correct type
 	UDWORD	HashedType = HashString(pType);
 
-	for (psT = psResTypes; psT != nullptr; psT = psT->psNext)
+	auto resTypeIt = std::find_if(psResTypes.begin(), psResTypes.end(), [HashedType](const RES_TYPE* psT)
 	{
-		if (psT->HashedType == HashedType)
-		{
-			break;
-		}
-	}
-
-	ASSERT_OR_RETURN(false, psT, "Unknown type: %x", HashedType);
+		return psT->HashedType == HashedType;
+	});
+	ASSERT_OR_RETURN(false, resTypeIt != psResTypes.end(), "Unknown type: %x", HashedType);
+	RES_TYPE* psT = *resTypeIt;
 
 	// Find the resource
 	auto res = std::find_if(psT->psRes.begin(), psT->psRes.end(), [pData](const RES_DATA* rd)
@@ -663,7 +650,6 @@ bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 
 const char *resGetNamefromData(const char *type, const void *data)
 {
-	RES_TYPE	*psT;
 	UDWORD   HashedType;
 
 	if (type == nullptr || data == nullptr)
@@ -675,19 +661,16 @@ const char *resGetNamefromData(const char *type, const void *data)
 	HashedType = HashString(type);
 
 	// Find the resource table for the given type
-	for (psT = psResTypes; psT != nullptr; psT = psT->psNext)
+	auto resTypeIt = std::find_if(psResTypes.begin(), psResTypes.end(), [HashedType](const RES_TYPE* psT)
 	{
-		if (psT->HashedType == HashedType)
-		{
-			break;
-		}
-	}
-
-	if (psT == nullptr)
+		return psT->HashedType == HashedType;
+	});
+	if (resTypeIt == psResTypes.end())
 	{
 		ASSERT(false, "resGetHashfromData: Unknown type: %x", HashedType);
 		return "";
 	}
+	RES_TYPE* psT = *resTypeIt;
 
 	// Find the resource in the resource table
 	auto res = std::find_if(psT->psRes.begin(), psT->psRes.end(), [data](const RES_DATA* rd)
@@ -707,25 +690,20 @@ const char *resGetNamefromData(const char *type, const void *data)
 /* Simply returns true if a resource is present */
 bool resPresent(const char *pType, const char *pID)
 {
-	RES_TYPE	*psT;
-
 	// Find the correct type
 	UDWORD HashedType = HashString(pType);
 
-	for (psT = psResTypes; psT != nullptr; psT = psT->psNext)
+	auto resTypeIt = std::find_if(psResTypes.begin(), psResTypes.end(), [HashedType](const RES_TYPE* psT)
 	{
-		if (psT->HashedType == HashedType)
-		{
-			break;
-		}
-	}
-
+		return psT->HashedType == HashedType;
+	});
 	/* Bow out if unrecognised type */
-	ASSERT(psT != nullptr, "resPresent: Unknown type");
-	if (psT == nullptr)
+	ASSERT(resTypeIt != psResTypes.end(), "resPresent: Unknown type");
+	if (resTypeIt == psResTypes.end())
 	{
 		return false;
 	}
+	RES_TYPE* psT = *resTypeIt;
 
 	UDWORD HashedID = HashStringIgnoreCase(pID);
 	auto res = std::find_if(psT->psRes.begin(), psT->psRes.end(), [HashedID](const RES_DATA* rd)
@@ -739,24 +717,21 @@ bool resPresent(const char *pType, const char *pID)
 /* Release all the resources currently loaded and the resource load functions */
 void resReleaseAll()
 {
-	RES_TYPE *psT, *psNT;
-
 	resReleaseAllData();
 
-	for (psT = psResTypes; psT != nullptr; psT = psNT)
+	for (RES_TYPE* psT : psResTypes)
 	{
-		psNT = psT->psNext;
 		delete psT;
 	}
 
-	psResTypes = nullptr;
+	psResTypes.clear();
 }
 
 
 /* Release all the resources currently loaded but keep the resource load functions */
 void resReleaseAllData()
 {
-	for (RES_TYPE* psT = psResTypes; psT != nullptr; psT = psT->psNext)
+	for (RES_TYPE* psT : psResTypes)
 	{
 		mutating_list_iterate(psT->psRes, [psT](RES_DATA* psRes)
 		{
@@ -779,9 +754,7 @@ void resReleaseAllData()
 // release the data for a particular block ID
 void resReleaseBlockData(SDWORD blockID)
 {
-	RES_TYPE	*psT, *psNT;
-
-	for (psT = psResTypes; psT != nullptr; psT = psNT)
+	for (RES_TYPE* psT : psResTypes)
 	{
 		mutating_list_iterate(psT->psRes, [psT, blockID](std::list<RES_DATA*>::iterator resIt)
 		{
@@ -804,6 +777,5 @@ void resReleaseBlockData(SDWORD blockID)
 			free(psRes);
 			return IterationResult::CONTINUE_ITERATION;
 		});
-		psNT = psT->psNext;
 	}
 }
