@@ -26,8 +26,6 @@
 
 #include "objectdef.h"
 
-//#include "lib/framework/object_list_iteration.h"
-
 #include <array>
 #include <list>
 #include <functional>
