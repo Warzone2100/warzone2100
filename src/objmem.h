@@ -28,7 +28,6 @@
 
 #include <array>
 #include <list>
-#include <functional>
 
 /* The lists of objects allocated */
 template <typename ObjectType, unsigned PlayerCount>
