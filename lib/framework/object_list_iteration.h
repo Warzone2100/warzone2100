@@ -24,6 +24,7 @@
 #include <list>
 #include <type_traits>
 #include <iterator>
+#include <functional>
 
 enum class IterationResult
 {
@@ -67,7 +68,7 @@ struct LoopBodyHandlerCallStrategy
 	template <typename ObjectType>
 	static constexpr bool handler_accepts_iter = std::is_convertible<
 		Callable,
-		std::function<IterationResult(std::list<ObjectType*>::iterator)>>::value;
+		std::function<IterationResult(typename std::list<ObjectType*>::iterator)>>::value;
 
 	// `Invoke` overload for Callable taking a list iterator as the argument
 	template <typename ObjectType>
@@ -95,8 +96,8 @@ void mutating_list_iterate(std::list<ObjectType*>& list, MaybeErasingLoopBodyHan
 	using HandlerCallStrategy = LoopBodyHandlerCallStrategy<MaybeErasingLoopBodyHandler>;
 
 	static_assert(
-		   HandlerCallStrategy::handler_accepts_ptr<ObjectType>
-		|| HandlerCallStrategy::handler_accepts_iter<ObjectType>,
+		   HandlerCallStrategy::template handler_accepts_ptr<ObjectType>
+		|| HandlerCallStrategy::template handler_accepts_iter<ObjectType>,
 		"Unsupported loop body handler signature: "
 		"should return IterationResult and take either an ObjectType* or an iterator");
 
@@ -110,7 +111,7 @@ void mutating_list_iterate(std::list<ObjectType*>& list, MaybeErasingLoopBodyHan
 	{
 		itNext = std::next(it);
 		// Can possibly invalidate `it` and anything before it.
-		const auto res = HandlerCallStrategy::Invoke<ObjectType>(handler, it);
+		const auto res = HandlerCallStrategy::template Invoke<ObjectType>(handler, it);
 		if (res == IterationResult::BREAK_ITERATION)
 		{
 			break;

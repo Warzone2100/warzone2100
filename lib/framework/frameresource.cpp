@@ -33,6 +33,7 @@
 #include "resly.h"
 
 #include <list>
+#include <algorithm>
 
 // Local prototypes
 static std::list<RES_TYPE *> psResTypes;
