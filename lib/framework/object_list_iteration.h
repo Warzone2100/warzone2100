@@ -100,6 +100,11 @@ void mutating_list_iterate(std::list<ObjectType*>& list, MaybeErasingLoopBodyHan
 		"Unsupported loop body handler signature: "
 		"should return IterationResult and take either an ObjectType* or an iterator");
 
+	if (list.empty())
+	{
+		return;
+	}
+
 	typename std::remove_reference_t<decltype(list)>::iterator it = list.begin(), itNext;
 	while (it != list.end())
 	{
