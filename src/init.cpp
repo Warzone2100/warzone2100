@@ -1835,6 +1835,7 @@ bool stageThreeInitialise()
 	effectResetUpdates();
 	initLighting(0, 0, mapWidth, mapHeight);
 	pie_InitLighting();
+	getCurrentLightmapData().reset(mapWidth, mapHeight);
 
 	if (fromSave)
 	{

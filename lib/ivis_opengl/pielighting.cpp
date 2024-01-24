@@ -74,7 +74,7 @@ LightingData& getCurrentLightingData()
 	return scene;
 }
 
-LightMap& getCurrentLighmapData()
+LightMap& getCurrentLightmapData()
 {
 	static LightMap lightmap;
 	return lightmap;
