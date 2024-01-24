@@ -1013,7 +1013,7 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 
 	/* Allocate the memory for the map */
 	psMapTiles = std::make_unique<MAPTILE[]>(static_cast<size_t>(width) * height);
-	getCurrentLighmapData().reset(width, height);
+	getCurrentLightmapData().reset(width, height);
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;

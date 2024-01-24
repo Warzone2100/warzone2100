@@ -52,7 +52,7 @@ struct LightingData
 };
 
 LightingData& getCurrentLightingData();
-LightMap& getCurrentLighmapData();
+LightMap& getCurrentLightmapData();
 
 
 

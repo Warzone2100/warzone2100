@@ -1014,7 +1014,7 @@ void draw3DScene()
 	}
 
 	/* Now, draw the terrain */
-	drawTiles(&playerPos, getCurrentLightingData(), getCurrentLighmapData(), getCurrentLightingManager());
+	drawTiles(&playerPos, getCurrentLightingData(), getCurrentLightmapData(), getCurrentLightingManager());
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
