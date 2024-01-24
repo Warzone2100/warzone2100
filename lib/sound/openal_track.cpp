@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
 #include <AL/al.h>
@@ -38,6 +39,7 @@
 #include <string.h>
 #include <math.h>
 #include <limits>
+#include <list>
 
 #include "tracklib.h"
 #include "audio.h"
@@ -66,9 +68,6 @@ struct AUDIO_STREAM
 	// Callbacks
 	std::function<void (const AUDIO_STREAM *, const void *)> onFinished;
 	const void              *user_data = nullptr;
-
-	// Linked list pointer
-	AUDIO_STREAM           *next = nullptr;
 };
 
 struct SAMPLE_LIST
@@ -80,7 +79,7 @@ struct SAMPLE_LIST
 static SAMPLE_LIST *active_samples = nullptr;
 
 /* actives openAL-Sources */
-static AUDIO_STREAM *active_streams = nullptr;
+static std::list<AUDIO_STREAM *> active_streams;
 
 static ALfloat		sfx_volume = 1.0;
 static ALfloat		sfx3d_volume = 1.0;
@@ -371,7 +370,6 @@ static void sound_UpdateStreams(void);
 
 void sound_ShutdownLibrary(void)
 {
-	AUDIO_STREAM *stream;
 	SAMPLE_LIST *aSample = active_samples, * tmpSample = nullptr;
 
 	if (!openal_initialized)
@@ -381,7 +379,7 @@ void sound_ShutdownLibrary(void)
 	debug(LOG_SOUND, "starting shutdown");
 
 	// Stop all streams, sound_UpdateStreams() will deallocate all stopped streams
-	for (stream = active_streams; stream != nullptr; stream = stream->next)
+	for (AUDIO_STREAM* stream : active_streams)
 	{
 		sound_StopStream(stream);
 	}
@@ -1064,8 +1062,7 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 	stream->user_data = user_data;
 
 	// Prepend this stream to the linked list
-	stream->next = active_streams;
-	active_streams = stream;
+	active_streams.emplace_front(stream);
 
 	return stream;
 
@@ -1342,43 +1339,20 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
  */
 static void sound_UpdateStreams()
 {
-	AUDIO_STREAM *stream = active_streams, *previous = nullptr, *next = nullptr;
-
-	while (stream != nullptr)
+	mutating_list_iterate(active_streams, [](typename std::list<AUDIO_STREAM*>::iterator streamIt)
 	{
-		next = stream->next;
-
 		// Attempt to update the current stream, if we find that impossible,
 		// destroy it instead.
-		if (!sound_UpdateStream(stream))
+		if (!sound_UpdateStream(*streamIt))
 		{
+			AUDIO_STREAM* stream = *streamIt;
 			// First remove our current stream from the linked list
-			if (previous)
-			{
-				// Make the previous item skip over the current to the next item
-				previous->next = next;
-			}
-			else
-			{
-				// Apparently this is the first item in the list, so make the
-				// next item the list-head.
-				active_streams = next;
-			}
-
+			active_streams.erase(streamIt);
 			// Now actually destroy the current stream
 			sound_DestroyStream(stream);
-
-			// Make sure the current stream pointer is intact again
-			stream = next;
-
-			// Skip regular style iterator incrementing
-			continue;
 		}
-
-		// Increment our iterator pair
-		previous = stream;
-		stream = stream->next;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 //*
