@@ -15,10 +15,8 @@ attribute vec4 vertexColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec2 uv;
-out vec4 vColour;
 #else
 varying vec2 uv;
-varying vec4 vColour;
 #endif
 
 void main()
@@ -27,5 +25,4 @@ void main()
 	uv = vertexTexCoord;
 
 	gl_Position = posMatrix * vertex;
-	vColour = vertexColor;
 }

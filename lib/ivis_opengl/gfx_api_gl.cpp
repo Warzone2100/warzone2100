@@ -823,17 +823,17 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_RECT_INSTANCED, program_data{ "Rect program", "shaders/rect_instanced.vert", "shaders/rect_instanced.frag",
 		{ "ProjectionMatrix" } }),
 	std::make_pair(SHADER_TEXRECT, program_data{ "Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" } }),
-	std::make_pair(SHADER_GFX_COLOUR, program_data{ "gfx_color program", "shaders/gfx.vert", "shaders/gfx.frag",
+		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color" } }),
+	std::make_pair(SHADER_GFX_COLOUR, program_data{ "gfx_color program", "shaders/gfx_color.vert", "shaders/gfx.frag",
 		{ "posMatrix" } }),
-	std::make_pair(SHADER_GFX_TEXT, program_data{ "gfx_text program", "shaders/gfx.vert", "shaders/texturedrect.frag",
-		{ "posMatrix", "color", "texture" } }),
+	std::make_pair(SHADER_GFX_TEXT, program_data{ "gfx_text program", "shaders/gfx_text.vert", "shaders/texturedrect.frag",
+		{ "posMatrix", "color" } }),
 	std::make_pair(SHADER_SKYBOX, program_data{ "skybox program", "shaders/skybox.vert", "shaders/skybox.frag",
 		{ "posMatrix", "color", "fog_color", "fog_enabled" } }),
 	std::make_pair(SHADER_GENERIC_COLOR, program_data{ "generic color program", "shaders/generic.vert", "shaders/rect.frag",{ "ModelViewProjectionMatrix", "color" } }),
 	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
 	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" } }),
+		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color" } }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, program_data{ "Debug texture quad program", "shaders/quad_texture2d.vert", "shaders/quad_texture2d.frag",
 		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "texture" } }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
@@ -2217,7 +2217,6 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(1, cbuf.offset);
 	setUniforms(2, cbuf.size);
 	setUniforms(3, cbuf.color);
-	setUniforms(4, cbuf.texture);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GFX_COLOUR>& cbuf)
@@ -2229,7 +2228,6 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 {
 	setUniforms(0, cbuf.transform_matrix);
 	setUniforms(1, cbuf.color);
-	setUniforms(2, cbuf.texture);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf)
@@ -2265,7 +2263,6 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(1, cbuf.offset);
 	setUniforms(2, cbuf.size);
 	setUniforms(3, cbuf.color);
-	setUniforms(4, cbuf.texture);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2D_QUAD>& cbuf)
