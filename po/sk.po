@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-17 17:59\n"
+"PO-Revision-Date: 2024-01-25 05:07\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -936,7 +936,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
-msgstr ""
+msgstr "Vstup do novej zóny."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
@@ -1381,7 +1381,7 @@ msgstr "Strážna veža s ťažkým guľometom"
 #: data/base/messages/strings/names.txt:323
 #: po/custom/fromJson.txt:2086
 msgid "Flamer Guard Tower"
-msgstr ""
+msgstr "Strážna plameňometná veža"
 
 #: data/base/messages/strings/names.txt:324
 msgid "Lancer Guard Tower"
@@ -1632,12 +1632,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:590
 msgid "Bridge"
-msgstr ""
+msgstr "Most"
 
 #: data/base/messages/strings/names.txt:469
 #: data/mp/messages/strings/names.txt:597
 msgid "Wrecked Tank"
-msgstr ""
+msgstr "Zničený tank"
 
 #: data/base/messages/strings/names.txt:487
 #: data/base/messages/strings/names.txt:503
@@ -1682,7 +1682,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:621
 #: data/mp/messages/strings/names.txt:630
 msgid "Chemical Laboratory"
-msgstr ""
+msgstr "Chemické laboratórium"
 
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:629
@@ -2563,7 +2563,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:196
 #: po/custom/fromJson.txt:3199
 msgid "Increases Damage Resistance"
-msgstr ""
+msgstr "Zvýšená odolnosť voči poškodeniu"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_MAT4.text[1]
@@ -2574,7 +2574,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:197
 #: po/custom/fromJson.txt:2312
 msgid "Hardened Base Structure Materials"
-msgstr ""
+msgstr "Tvrdené materiály konštrukcií základne"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[3]
@@ -2585,7 +2585,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:199
 #: po/custom/fromJson.txt:273
 msgid "All base structures upgraded automatically"
-msgstr ""
+msgstr "Všetky konštrukcie základne boli automaticky vylepšené"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[0]
@@ -2690,7 +2690,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:212
 #: po/custom/fromJson.txt:2687
 msgid "Heavy repair unit"
-msgstr ""
+msgstr "Ťažká opravárenská jednotka"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[2]
@@ -2700,7 +2700,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:988
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "Automaticky opravuje poškodené jednotky"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
