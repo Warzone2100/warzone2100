@@ -178,7 +178,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 			}
 		});
 	};
-	req.onFailure = [](std::string const &url, WZ_DECL_UNUSED URLRequestFailureType type, WZ_DECL_UNUSED optional<HTTPResponseDetails> transferDetails) {
+	req.onFailure = [](std::string const &url, WZ_DECL_UNUSED URLRequestFailureType type, WZ_DECL_UNUSED std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string urlCopy = url;
 		wzAsyncExecOnMainThread([urlCopy] {
 			debug(LOG_WARNING, "Failure fetching \"%s\".", urlCopy.c_str());
