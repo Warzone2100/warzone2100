@@ -1235,31 +1235,10 @@ void gl_pipeline_state_object::bind()
 			break;
 		case gfx_api::stencil_mode::stencil_shadow_silhouette:
 			glEnable(GL_STENCIL_TEST);
-			if (GLAD_GL_VERSION_2_0 || GLAD_GL_ES_VERSION_2_0)
-			{
-				glStencilMask(~0);
-				glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
-				glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_DECR_WRAP);
-				glStencilFunc(GL_ALWAYS, 0, ~0);
-			}
-			else if (GLAD_GL_EXT_stencil_two_side)
-			{
-				glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-				glStencilMask(~0);
-				glActiveStencilFaceEXT(GL_BACK);
-				glStencilOp(GL_KEEP, GL_KEEP, GL_DECR_WRAP);
-				glStencilFunc(GL_ALWAYS, 0, ~0);
-				glActiveStencilFaceEXT(GL_FRONT);
-				glStencilOp(GL_KEEP, GL_KEEP, GL_INCR_WRAP);
-				glStencilFunc(GL_ALWAYS, 0, ~0);
-			}
-			else if (GLAD_GL_ATI_separate_stencil)
-			{
-				glStencilMask(~0);
-				glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
-				glStencilOpSeparateATI(GL_FRONT, GL_KEEP, GL_KEEP, GL_DECR_WRAP);
-				glStencilFunc(GL_ALWAYS, 0, ~0);
-			}
+			glStencilMask(~0);
+			glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
+			glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_DECR_WRAP);
+			glStencilFunc(GL_ALWAYS, 0, ~0);
 
 			break;
 		case gfx_api::stencil_mode::stencil_disabled:
@@ -3550,8 +3529,6 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLAD_GL_VERSION_4_1 ? "is" : "is NOT");
 	#endif
 
-		debug(LOG_3D, "  * Two side stencil %s supported.", GLAD_GL_EXT_stencil_two_side ? "is" : "is NOT");
-		debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLAD_GL_ATI_separate_stencil ? "" : " NOT");
 		debug(LOG_3D, "  * Stencil wrap %s supported.", GLAD_GL_EXT_stencil_wrap ? "is" : "is NOT");
 		debug(LOG_3D, "  * Rectangular texture %s supported.", GLAD_GL_ARB_texture_rectangle ? "is" : "is NOT");
 		debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLAD_GL_EXT_framebuffer_object ? "is" : "is NOT");
