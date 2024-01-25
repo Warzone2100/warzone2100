@@ -144,6 +144,14 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 		return false;
 	}
 
+	// Set various limits for handling untrusted files
+#ifdef PNG_SET_USER_LIMITS_SUPPORTED
+	png_set_user_limits(png_ptr, WZ_PNG_MAX_IMAGE_DIMENSIONS, WZ_PNG_MAX_IMAGE_DIMENSIONS);
+#endif
+#if PNG_LIBPNG_VER >= 10401
+	png_set_chunk_malloc_max(png_ptr, static_cast<png_alloc_size_t>(WZ_PNG_MAX_CHUNKSIZE_LIMIT));
+#endif
+
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == nullptr)
 	{
@@ -195,6 +203,12 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 		// something is wrong - unexpected row size
 		png_error(png_ptr, "unexpected row bytes");
 	}
+	size_t decoded_image_size = sizeof(unsigned char) * static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(depth);
+	if (decoded_image_size > WZ_PNG_MAX_DECODED_MEMSIZE)
+	{
+		png_error(png_ptr, "unexpectedly large decoded image size");
+	}
+
 	image->allocate(width, height, depth);
 
 	{
@@ -271,6 +285,14 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
+
+	// Set various limits for handling untrusted files
+#ifdef PNG_SET_USER_LIMITS_SUPPORTED
+	png_set_user_limits(png_ptr, WZ_PNG_MAX_IMAGE_DIMENSIONS, WZ_PNG_MAX_IMAGE_DIMENSIONS);
+#endif
+#if PNG_LIBPNG_VER >= 10401
+	png_set_chunk_malloc_max(png_ptr, static_cast<png_alloc_size_t>(WZ_PNG_MAX_CHUNKSIZE_LIMIT));
+#endif
 
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == nullptr)
@@ -392,6 +414,14 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 		return false;
 	}
 
+	size_t decoded_image_size = sizeof(unsigned char) * static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(channels);
+	if (decoded_image_size > WZ_PNG_MAX_DECODED_MEMSIZE)
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unexpectedly large decoded image size (%zu): %s", decoded_image_size, fileName);
+		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
+		return false;
+	}
+
 	// Allocate buffer
 	if (!image.allocate(width, height, channels))
 	{
@@ -497,6 +527,14 @@ IMGSaveError iV_loadImage_PNG(const std::vector<unsigned char>& memoryBuffer, iV
 		return IMGSaveError("iV_loadImage_PNG: Unable to create png struct");
 	}
 
+	// Set various limits for handling untrusted files
+#ifdef PNG_SET_USER_LIMITS_SUPPORTED
+	png_set_user_limits(png_ptr, WZ_PNG_MAX_IMAGE_DIMENSIONS, WZ_PNG_MAX_IMAGE_DIMENSIONS);
+#endif
+#if PNG_LIBPNG_VER >= 10401
+	png_set_chunk_malloc_max(png_ptr, static_cast<png_alloc_size_t>(WZ_PNG_MAX_CHUNKSIZE_LIMIT));
+#endif
+
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == nullptr)
 	{
@@ -546,6 +584,12 @@ IMGSaveError iV_loadImage_PNG(const std::vector<unsigned char>& memoryBuffer, iV
 		// something is wrong - unexpected row size
 		png_error(png_ptr, "unexpected row bytes");
 	}
+	size_t decoded_image_size = sizeof(unsigned char) * static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(depth);
+	if (decoded_image_size > WZ_PNG_MAX_DECODED_MEMSIZE)
+	{
+		png_error(png_ptr, "unexpectedly large decoded image size");
+	}
+
 	image->allocate(width, height, depth);
 
 	{
