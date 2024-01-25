@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "98a562a04cd03728f399e79e1b37bcccb5a69b37",
+	"builtin-baseline": "11e79b1072c7f12d84258b77948cda3b166aac59",
 	"dependencies": [
 		"sdl2",
 		"physfs",
