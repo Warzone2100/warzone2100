@@ -1155,7 +1155,7 @@ namespace gfx_api
 		glm::vec2 offset;
 		glm::vec2 size;
 		glm::vec4 color;
-		int texture;
+		int texture; // IGNORED
 	};
 
 	template<>
@@ -1206,7 +1206,7 @@ namespace gfx_api
 		glm::vec2 offset;
 		glm::vec2 size;
 		glm::vec4 color;
-		int texture;
+		int texture; // IGNORED
 	};
 
 	using DrawImageTextPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_TEXT, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangle_strip, index_type::u16,
@@ -1243,7 +1243,7 @@ namespace gfx_api
 		glm::vec2 offset;
 		glm::vec2 size;
 		glm::vec4 color;
-		int texture;
+		int texture; // IGNORED
 	};
 
 	using DrawImagePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangle_strip, index_type::u16,
