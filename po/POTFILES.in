@@ -294,7 +294,7 @@ lib/ivis_opengl/piematrix.cpp
 lib/ivis_opengl/piemode.cpp
 lib/ivis_opengl/piepalette.cpp
 lib/ivis_opengl/piestate.cpp
-lib/ivis_opengl/png_util.cpp
+lib/ivis_opengl/png_util_libpng.cpp
 lib/ivis_opengl/screen.cpp
 lib/ivis_opengl/tex.cpp
 lib/ivis_opengl/textdraw.cpp
