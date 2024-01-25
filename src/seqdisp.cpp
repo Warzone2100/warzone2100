@@ -250,7 +250,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 			requestDetails->responseData = memoryBuffer;
 		});
 	};
-	urlRequest.onFailure = [requestDetails](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+	urlRequest.onFailure = [requestDetails](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string urlCopy = url;
 		wzAsyncExecOnMainThread([requestDetails, urlCopy]{
 			debug(LOG_INFO, "Failed to load video: %s", urlCopy.c_str());

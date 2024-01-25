@@ -979,7 +979,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			}
 		}
 	};
-	pRequest->onFailure = [additionalUrls, processDataFunc, outputPaths, completionHandler](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+	pRequest->onFailure = [additionalUrls, processDataFunc, outputPaths, completionHandler](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		bool tryNextUrl = false;
 		switch (type)
 		{
@@ -990,7 +990,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				tryNextUrl = true;
 				break;
 			case URLRequestFailureType::TRANSFER_FAILED:
-				if (!transferDetails.has_value())
+				if (!transferDetails)
 				{
 					wzAsyncExecOnMainThread([]{
 						debug(LOG_WARNING, "Update check request failed - but no transfer failure details provided!");
@@ -998,10 +998,10 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				}
 				else
 				{
-					CURLcode result = transferDetails->curlResult();
+					std::string resultStr = transferDetails->getInternalResultDescription();
 					long httpStatusCode = transferDetails->httpStatusCode();
-					wzAsyncExecOnMainThread([result, httpStatusCode]{
-						debug(LOG_WARNING, "Update check request failed with error %d, and HTTP response code: %ld", result, httpStatusCode);
+					wzAsyncExecOnMainThread([resultStr, httpStatusCode]{
+						debug(LOG_WARNING, "Update check request failed with error \"%s\", and HTTP response code: %ld", resultStr.c_str(), httpStatusCode);
 					});
 				}
 				tryNextUrl = true;

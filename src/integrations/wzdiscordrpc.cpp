@@ -96,7 +96,7 @@ static void asyncGetDiscordDefaultUserAvatar(const std::string& discord_user_dis
 		std::vector<unsigned char> memoryBuffer((unsigned char *)data->memory, ((unsigned char*)data->memory) + data->size);
 		callback(memoryBuffer);
 	};
-	urlRequest.onFailure = [callback](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+	urlRequest.onFailure = [callback](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		callback(nullopt);
 	};
 	urlRequest.maxDownloadSizeLimit = 4 * 1024 * 1024; // response should never be > 4 MB
@@ -149,7 +149,7 @@ static void asyncGetDiscordUserAvatar(const DiscordUser* request, const std::fun
 		std::vector<unsigned char> memoryBuffer((unsigned char *)data->memory, ((unsigned char*)data->memory) + data->size);
 		callback(memoryBuffer);
 	};
-	urlRequest.onFailure = [callback, discord_user_discriminator](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+	urlRequest.onFailure = [callback, discord_user_discriminator](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		// fallback
 		asyncGetDiscordDefaultUserAvatar(discord_user_discriminator, callback);
 	};
