@@ -64,6 +64,10 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	spng_ctx *ctx = spng_ctx_new(SPNG_CTX_IGNORE_ADLER32);
 	if (ctx == NULL) return false;
 
+	// Set various limits for handling untrusted files
+	spng_set_image_limits(ctx, WZ_PNG_MAX_IMAGE_DIMENSIONS, WZ_PNG_MAX_IMAGE_DIMENSIONS);
+	spng_set_chunk_limits(ctx, WZ_PNG_MAX_CHUNKSIZE_LIMIT, WZ_PNG_MAX_CHUNKSIZE_LIMIT);
+
 	int ret = 0;
 	// Set read stream function
 	ret = spng_set_png_stream(ctx, wzspng_read_data, fileHandle);
@@ -77,6 +81,12 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	size_t image_size;
 	ret = spng_decoded_image_size(ctx, SPNG_FMT_RGBA8, &image_size);
 	if (ret) goto err;
+
+	if (image_size > WZ_PNG_MAX_DECODED_MEMSIZE)
+	{
+		ret = -1;
+		goto err;
+	}
 
 	if (!image->allocate(ihdr.width, ihdr.height, 4))
 	{
@@ -131,6 +141,10 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 	// Create SPNG context
 	spng_ctx *ctx = spng_ctx_new(SPNG_CTX_IGNORE_ADLER32);
 	if (ctx == NULL) return false;
+
+	// Set various limits for handling untrusted files
+	spng_set_image_limits(ctx, WZ_PNG_MAX_IMAGE_DIMENSIONS, WZ_PNG_MAX_IMAGE_DIMENSIONS);
+	spng_set_chunk_limits(ctx, WZ_PNG_MAX_CHUNKSIZE_LIMIT, WZ_PNG_MAX_CHUNKSIZE_LIMIT);
 
 	int ret = 0;
 	// Set read stream function
@@ -200,6 +214,12 @@ bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 /*
 	size_t image_size;
 	ret = spng_decoded_image_size(ctx, fmt, &image_size);
 	if (ret) goto err;
+
+	if (image_size > WZ_PNG_MAX_DECODED_MEMSIZE)
+	{
+		ret = -1;
+		goto err;
+	}
 
 	if (!image.allocate(ihdr.width, ihdr.height, channels))
 	{
@@ -283,6 +303,10 @@ IMGSaveError iV_loadImage_PNG(const std::vector<unsigned char>& memoryBuffer, iV
 		return IMGSaveError("iV_loadImage_PNG: Failed to create spng context");
 	}
 
+	// Set various limits for handling untrusted files
+	spng_set_image_limits(ctx, WZ_PNG_MAX_IMAGE_DIMENSIONS, WZ_PNG_MAX_IMAGE_DIMENSIONS);
+	spng_set_chunk_limits(ctx, WZ_PNG_MAX_CHUNKSIZE_LIMIT, WZ_PNG_MAX_CHUNKSIZE_LIMIT);
+
 	int ret = 0;
 	// Set read stream function
 	ret = spng_set_png_stream(ctx, wzspng_read_data_from_buffer, &inputStream);
@@ -296,6 +320,12 @@ IMGSaveError iV_loadImage_PNG(const std::vector<unsigned char>& memoryBuffer, iV
 	size_t image_size;
 	ret = spng_decoded_image_size(ctx, SPNG_FMT_RGBA8, &image_size);
 	if (ret) goto err;
+
+	if (image_size > WZ_PNG_MAX_DECODED_MEMSIZE)
+	{
+		ret = -1;
+		goto err;
+	}
 
 	if (!image->allocate(ihdr.width, ihdr.height, 4))
 	{

@@ -24,6 +24,10 @@
 #include "pietypes.h"
 #include <vector>
 
+constexpr uint32_t WZ_PNG_MAX_IMAGE_DIMENSIONS = 4096;
+constexpr size_t WZ_PNG_MAX_DECODED_MEMSIZE = (WZ_PNG_MAX_IMAGE_DIMENSIONS * WZ_PNG_MAX_IMAGE_DIMENSIONS * 4);
+constexpr size_t WZ_PNG_MAX_CHUNKSIZE_LIMIT = (1024 * 1024 * 64);
+
 struct IMGSaveError
 {
 	IMGSaveError()
