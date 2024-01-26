@@ -184,7 +184,7 @@ void makeAllAvailable()
 		{
 			apCompLists[i][COMP_PROPULSION][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numSensorStats; comp++)
+		for (comp = 0; comp < asSensorStats.size(); comp++)
 		{
 			apCompLists[i][COMP_SENSOR][comp] = AVAILABLE;
 		}

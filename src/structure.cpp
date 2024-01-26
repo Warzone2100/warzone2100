@@ -579,7 +579,7 @@ bool loadStructureStats(WzConfig &ini)
 		int sensor = getCompFromName(COMP_SENSOR, ini.value("sensorID", "ZNULLSENSOR").toWzString());
 		if (sensor >= 0)
 		{
-			psStats->pSensor = asSensorStats + sensor;
+			psStats->pSensor = &asSensorStats[sensor];
 		}
 		else
 		{

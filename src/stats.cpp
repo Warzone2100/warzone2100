@@ -50,7 +50,7 @@
 std::vector<BODY_STATS> asBodyStats;
 std::vector<BRAIN_STATS> asBrainStats;
 std::vector<PROPULSION_STATS> asPropulsionStats;
-SENSOR_STATS		*asSensorStats;
+std::vector<SENSOR_STATS> asSensorStats;
 ECM_STATS		*asECMStats;
 REPAIR_STATS		*asRepairStats;
 WEAPON_STATS		*asWeaponStats;
@@ -63,7 +63,6 @@ WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 /* The number of different stats stored */
-UDWORD		numSensorStats;
 UDWORD		numECMStats;
 UDWORD		numRepairStats;
 UDWORD		numWeaponStats;
@@ -124,7 +123,6 @@ static void deallocTerrainTable()
 void statsInitVars()
 {
 	/* The number of different stats stored */
-	numSensorStats = 0;
 	numECMStats = 0;
 	numRepairStats = 0;
 	numWeaponStats = 0;
@@ -143,7 +141,7 @@ bool statsShutDown()
 	STATS_DEALLOC(asRepairStats, numRepairStats);
 	STATS_DEALLOC(asConstructStats, numConstructStats);
 	STATS_DEALLOC(asECMStats, numECMStats);
-	STATS_DEALLOC(asSensorStats, numSensorStats);
+	asSensorStats.clear();
 	asBodyStats.clear();
 	deallocPropulsionTypes();
 	deallocTerrainTable();
@@ -178,7 +176,7 @@ bool statsAllocPropulsion(UDWORD	numStats)
 /* Allocate Sensor Stats */
 bool statsAllocSensor(UDWORD	numStats)
 {
-	ALLOC_STATS(numStats, asSensorStats, numSensorStats, SENSOR_STATS);
+	ALLOC_STATS_VECTOR(numStats, asSensorStats, SENSOR_STATS);
 }
 /* Allocate Ecm Stats */
 bool statsAllocECM(UDWORD	numStats)
@@ -1838,8 +1836,8 @@ SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj)
 			return nullptr;
 		}
 		compIndex = ((const DROID *)psObj)->asBits[COMP_SENSOR];
-		ASSERT_OR_RETURN(nullptr, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
-		psStats = asSensorStats + compIndex;
+		ASSERT_OR_RETURN(nullptr, compIndex < asSensorStats.size(), "Invalid range referenced for numSensorStats, %d > %d", compIndex, asSensorStats.size());
+		psStats = &asSensorStats[compIndex];
 		break;
 	case OBJ_STRUCTURE:
 		psStats = ((const STRUCTURE *)psObj)->pStructureType->pSensor;

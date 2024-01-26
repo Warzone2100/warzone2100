@@ -988,7 +988,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		int compInc = componentResult->index;
 		makeComponentAvailable(apCompLists[player][type][compInc]);
 		//check for default sensor
-		if (type == COMP_SENSOR && (asSensorStats + compInc)->location == LOC_DEFAULT)
+		if (type == COMP_SENSOR && asSensorStats[compInc].location == LOC_DEFAULT)
 		{
 			aDefaultSensor[player] = compInc;
 		}

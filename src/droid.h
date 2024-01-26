@@ -321,7 +321,7 @@ static inline PROPULSION_STATS *getPropulsionStats(const DROID *psDroid)
 
 static inline SENSOR_STATS *getSensorStats(const DROID *psDroid)
 {
-	return asSensorStats + psDroid->asBits[COMP_SENSOR];
+	return &asSensorStats[psDroid->asBits[COMP_SENSOR]];
 }
 
 static inline ECM_STATS *getECMStats(const DROID *psDroid)

@@ -255,7 +255,7 @@ void printDroidInfo(const DROID *psDroid)
 			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF("%s", "Sensor: ");
-				psSensStats = asSensorStats + psDroid->asBits[i];
+				psSensStats = &asSensorStats[psDroid->asBits[i]];
 				printComponentInfo((COMPONENT_STATS *)psSensStats);
 				CONPRINTF("   rng %d loc %d imd %p\n",
 				                          sensorRange(*psSensStats, psDroid->player),
