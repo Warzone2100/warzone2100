@@ -436,8 +436,8 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	nlohmann::json weapons = nlohmann::json::array();
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
-		ASSERT(psCurr->asWeaps[j] < numWeaponStats, "psCurr->asWeaps[%d] (%d) exceeds numWeaponStats (%" PRIu32 ")", j, (int)psCurr->asWeaps[j], numWeaponStats);
-		weapons.push_back((asWeaponStats + psCurr->asWeaps[j])->id);
+		ASSERT(psCurr->asWeaps[j] < asWeaponStats.size(), "psCurr->asWeaps[%d] (%d) exceeds numWeaponStats (%" PRIu32 ")", j, (int)psCurr->asWeaps[j], asWeaponStats.size());
+		weapons.push_back(asWeaponStats[psCurr->asWeaps[j]].id);
 	}
 	if (!weapons.empty())
 	{
@@ -743,7 +743,7 @@ bool templateIsIDF(const DROID_TEMPLATE *psTemplate)
 		return false;
 	}
 
-	if (proj_Direct(psTemplate->asWeaps[0] + asWeaponStats))
+	if (proj_Direct(&asWeaponStats[psTemplate->asWeaps[0]]))
 	{
 		return false;
 	}

@@ -5881,7 +5881,7 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 	partsObj["construct"] = (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->id;
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
-		partsObj["weapon/" + WzString::number(j + 1).toStdString()] = (asWeaponStats + psCurr->asWeaps[j].nStat)->id;
+		partsObj["weapon/" + WzString::number(j + 1).toStdString()] = asWeaponStats[psCurr->asWeaps[j].nStat].id;
 	}
 	droidObj["parts"] = partsObj;
 	droidObj["moveStatus"] = psCurr->sMove.Status;
@@ -6557,7 +6557,7 @@ bool writeStructFile(const char *pFileName)
 			ini.setValue("weapons", psCurr->numWeaps);
 			for (unsigned j = 0; j < psCurr->numWeaps; j++)
 			{
-				ini.setValue("parts/weapon/" + WzString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->id);
+				ini.setValue("parts/weapon/" + WzString::number(j + 1), asWeaponStats[psCurr->asWeaps[j].nStat].id);
 				if (psCurr->asWeaps[j].nStat > 0)
 				{
 					ini.setValue("ammo/" + WzString::number(j), psCurr->asWeaps[j].ammo);
@@ -7345,9 +7345,9 @@ static bool writeCompListFile(const char *pFileName)
 				ini.setValue(psStats->id, state);
 			}
 		}
-		for (int i = 0; i < numWeaponStats; i++)
+		for (int i = 0; i < asWeaponStats.size(); i++)
 		{
-			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asWeaponStats + i);
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(&asWeaponStats[i]);
 			const int state = apCompLists[player][COMP_WEAPON][i];
 			if (state != UNAVAILABLE)
 			{

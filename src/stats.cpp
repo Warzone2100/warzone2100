@@ -53,7 +53,7 @@ std::vector<PROPULSION_STATS> asPropulsionStats;
 std::vector<SENSOR_STATS> asSensorStats;
 std::vector<ECM_STATS> asECMStats;
 std::vector<REPAIR_STATS> asRepairStats;
-WEAPON_STATS		*asWeaponStats;
+std::vector<WEAPON_STATS> asWeaponStats;
 CONSTRUCT_STATS		*asConstructStats;
 std::vector<PROPULSION_TYPES> asPropulsionTypes;
 static int		*asTerrainTable;
@@ -63,7 +63,6 @@ WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 /* The number of different stats stored */
-UDWORD		numWeaponStats;
 UDWORD		numConstructStats;
 
 //stores for each players component states - can be either UNAVAILABLE, REDUNDANT, FOUND or AVAILABLE
@@ -121,7 +120,6 @@ static void deallocTerrainTable()
 void statsInitVars()
 {
 	/* The number of different stats stored */
-	numWeaponStats = 0;
 	numConstructStats = 0;
 }
 
@@ -131,7 +129,7 @@ bool statsShutDown()
 	lookupStatPtr.clear();
 	lookupCompStatPtr.clear();
 
-	STATS_DEALLOC(asWeaponStats, numWeaponStats);
+	asWeaponStats.clear();
 	asBrainStats.clear();
 	asPropulsionStats.clear();
 	asRepairStats.clear();
@@ -152,7 +150,7 @@ bool statsShutDown()
 /* Allocate Weapon stats */
 bool statsAllocWeapons(UDWORD	numStats)
 {
-	ALLOC_STATS(numStats, asWeaponStats, numWeaponStats, WEAPON_STATS);
+	ALLOC_STATS_VECTOR(numStats, asWeaponStats, WEAPON_STATS);
 }
 /* Allocate Body Stats */
 bool statsAllocBody(UDWORD	numStats)
@@ -758,7 +756,7 @@ bool loadBrainStats(WzConfig &ini)
 			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toWzString());
 			if (weapon >= 0)
 			{
-				psStats->psWeaponStat = asWeaponStats + weapon;
+				psStats->psWeaponStat = &asWeaponStats[weapon];
 			}
 			else
 			{

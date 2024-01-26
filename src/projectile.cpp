@@ -428,7 +428,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 {
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
-	ASSERT_OR_RETURN(false, psWeap->nStat < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, numWeaponStats);
+	ASSERT_OR_RETURN(false, psWeap->nStat < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, asWeaponStats.size());
 	ASSERT_OR_RETURN(false, psStats != nullptr, "Invalid weapon stats");
 	ASSERT_OR_RETURN(false, psTarget == nullptr || !psTarget->died, "Aiming at dead target!");
 
@@ -897,7 +897,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		if (closestCollisionObject != nullptr && closestCollisionObject->type == OBJ_DROID && psStats->penetrate && currentDistance < static_cast<int>(1.25 * proj_GetLongRange(*psStats, psProj->player)))
 		{
 			WEAPON asWeap;
-			asWeap.nStat = psStats - asWeaponStats;
+			asWeap.nStat = psStats - asWeaponStats.data();
 
 			// Assume we damaged the chosen target
 			psProj->psDamaged.push_back(closestCollisionObject);

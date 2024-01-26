@@ -176,7 +176,7 @@ int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_sl
 	{
 		return -1;
 	}
-	psStats = asWeaponStats + psWeap->nStat;
+	psStats = &asWeaponStats[psWeap->nStat];
 
 	/* Justifiable only when greater than a one second reload or intra salvo time  */
 	bSalvo = (psStats->upgrade[psObj->player].numRounds > 1);
@@ -1173,7 +1173,7 @@ bool droidUpdateRestore(DROID *psDroid)
 	ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat > 0, "Droid doesn't have any weapons");
 
 	unsigned compIndex = psDroid->asWeaps[0].nStat;
-	ASSERT_OR_RETURN(false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %u > %u", compIndex, numWeaponStats);
+	ASSERT_OR_RETURN(false, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %u > %u", compIndex, asWeaponStats.size());
 	WEAPON_STATS *psStats = &asWeaponStats[compIndex];
 
 	ASSERT_OR_RETURN(false, psStats->weaponSubClass == WSC_ELECTRONIC, "unit's weapon is not EW");
@@ -1423,7 +1423,7 @@ static unsigned calcUpgradeSum(const uint8_t (&asParts)[DROID_MAXCOMP], int numW
 		// asWeaps[i] > 0 check only needed for droids, not templates.
 		if (asWeaps[i] > 0)
 		{
-			ASSERT(asWeaps[i] < numWeaponStats, "Invalid weapon stat index (%" PRIu32 ", numWeaponStats: %" PRIu32 ") (player: %d)", asWeaps[i], numWeaponStats, player);
+			ASSERT(asWeaps[i] < asWeaponStats.size(), "Invalid weapon stat index (%" PRIu32 ", numWeaponStats: %" PRIu32 ") (player: %d)", asWeaps[i], asWeaponStats.size(), player);
 			sum += func(asWeaponStats[asWeaps[i]].upgrade[player]);
 		}
 	}
@@ -1783,7 +1783,7 @@ void droidSetBits(const DROID_TEMPLATE *pTemplate, DROID *psDroid)
 		if (inc < pTemplate->numWeaps)
 		{
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
-			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->upgrade[psDroid->player].numRounds;
+			psDroid->asWeaps[inc].ammo = asWeaponStats[psDroid->asWeaps[inc].nStat].upgrade[psDroid->player].numRounds;
 		}
 		psDroid->asWeaps[inc].usedAmmo = 0;
 	}
@@ -3115,7 +3115,7 @@ bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid)
 	}
 
 	// Check indirect weapon droid with standard/CB/radar detector sensor
-	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
+	if (!proj_Direct(&asWeaponStats[psDroid->asWeaps[0].nStat]))
 	{
 		if ((psStats->type == STANDARD_SENSOR || psStats->type == INDIRECT_CB_SENSOR || psStats->type == SUPER_SENSOR /*|| psStats->type == RADAR_DETECTOR_SENSOR*/)
 			&& !(psObj->type == OBJ_DROID && ((const DROID*)psObj)->droidType == DROID_COMMAND))
@@ -3389,7 +3389,7 @@ bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate)
 	if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 	{
 		//check weapon stat for indirect
-		if (!proj_Direct(asWeaponStats + psTemplate->asWeaps[0])
+		if (!proj_Direct(&asWeaponStats[psTemplate->asWeaps[0]])
 			|| !asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns)
 		{
 			return false;

@@ -1344,7 +1344,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	{
 		if (psDroid->asWeaps[0].nStat > 0 && psDroid->asWeaps[0].lastFired + FOM_MOVEPAUSE > gameTime)
 		{
-			psWStats = asWeaponStats + psDroid->asWeaps[0].nStat;
+			psWStats = &asWeaponStats[psDroid->asWeaps[0].nStat];
 			if (!psWStats->fireOnMove)
 			{
 				speed = 0;

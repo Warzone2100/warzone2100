@@ -2320,7 +2320,7 @@ nlohmann::json wzapi::getWeaponInfo(WZAPI_PARAMS(std::string weaponName)) WZAPI_
 {
 	int weaponIndex = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
 	SCRIPT_ASSERT(nlohmann::json(), context, weaponIndex >= 0, "No such weapon: %s", weaponName.c_str());
-	WEAPON_STATS *psStats = asWeaponStats + weaponIndex;
+	WEAPON_STATS *psStats = &asWeaponStats[weaponIndex];
 	nlohmann::json result = nlohmann::json::object();
 	result["id"] = weaponName;
 	result["name"] = psStats->name;
@@ -3592,8 +3592,8 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 	}
 	else if (type == COMP_WEAPON)
 	{
-		SCRIPT_ASSERT(false, context, index < numWeaponStats, "Bad index");
-		WEAPON_STATS *psStats = asWeaponStats + index;
+		SCRIPT_ASSERT(false, context, index < asWeaponStats.size(), "Bad index");
+		WEAPON_STATS *psStats = &asWeaponStats[index];
 		if (name == "MaxRange")
 		{
 			psStats->upgrade[player].maxRange = value;
@@ -3917,8 +3917,8 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 	}
 	else if (type == COMP_WEAPON)
 	{
-		SCRIPT_ASSERT(nlohmann::json(), context, index < numWeaponStats, "Bad index");
-		const WEAPON_STATS *psStats = asWeaponStats + index;
+		SCRIPT_ASSERT(nlohmann::json(), context, index < asWeaponStats.size(), "Bad index");
+		const WEAPON_STATS *psStats = &asWeaponStats[index];
 		if (name == "MaxRange")
 		{
 			return psStats->upgrade[player].maxRange;
@@ -4168,9 +4168,9 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Weapon``` Weapon turrets
 		GameEntityRuleContainer wbase;
-		for (unsigned j = 0; j < numWeaponStats; j++)
+		for (unsigned j = 0; j < asWeaponStats.size(); j++)
 		{
-			WEAPON_STATS *psStats = asWeaponStats + j;
+			WEAPON_STATS *psStats = &asWeaponStats[j];
 			GameEntityRules weap(i, j, {
 				{"MaxRange", COMP_WEAPON},
 				{"ShortRange", COMP_WEAPON},
@@ -4348,9 +4348,9 @@ nlohmann::json wzapi::constructStatsObject()
 
 		//==   * ```Weapon``` Weapon turrets
 		nlohmann::json wbase = nlohmann::json::object();
-		for (int j = 0; j < numWeaponStats; j++)
+		for (int j = 0; j < asWeaponStats.size(); j++)
 		{
-			WEAPON_STATS *psStats = asWeaponStats + j;
+			WEAPON_STATS *psStats = &asWeaponStats[j];
 			nlohmann::json weap = register_common(psStats);
 			weap["MaxRange"] = psStats->base.maxRange;
 			weap["ShortRange"] = psStats->base.shortRange;

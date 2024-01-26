@@ -601,7 +601,7 @@ bool loadStructureStats(WzConfig &ini)
 			int weapon = getCompFromName(COMP_WEAPON, weaponsID);
 			if (weapon >= 0)
 			{
-				WEAPON_STATS *pWeap = asWeaponStats + weapon;
+				WEAPON_STATS *pWeap = &asWeaponStats[weapon];
 				psStats->psWeapStat[j] = pWeap;
 			}
 			else
@@ -1552,8 +1552,8 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					{
 						psBuilding->asWeaps[0].lastFired = gameTime;
 					}
-					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats;
-					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->asWeaps[weapon].nStat)->upgrade[psBuilding->player].numRounds;
+					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats.data();
+					psBuilding->asWeaps[weapon].ammo = asWeaponStats[psBuilding->asWeaps[weapon].nStat].upgrade[psBuilding->player].numRounds;
 					psBuilding->numWeaps++;
 				}
 			}
@@ -1569,8 +1569,8 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				{
 					psBuilding->asWeaps[0].lastFired = gameTime;
 				}
-				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats;
-				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->asWeaps[0].nStat)->upgrade[psBuilding->player].numRounds;
+				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats.data();
+				psBuilding->asWeaps[0].ammo = asWeaponStats[psBuilding->asWeaps[0].nStat].upgrade[psBuilding->player].numRounds;
 			}
 		}
 
@@ -1884,7 +1884,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 	// give defensive structures a weapon
 	if (psStats->psWeapStat[0])
 	{
-		blueprint->asWeaps[0].nStat = psStats->psWeapStat[0] - asWeaponStats;
+		blueprint->asWeaps[0].nStat = psStats->psWeapStat[0] - asWeaponStats.data();
 	}
 	// things with sensors or ecm (or repair facilities) need these set, even if they have no official weapon
 	blueprint->numWeaps = 0;
@@ -2985,7 +2985,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		//structures always update their targets
 		for (UDWORD i = 0; i < psStructure->numWeaps; i++)
 		{
-			bDirect = proj_Direct(asWeaponStats + psStructure->asWeaps[i].nStat);
+			bDirect = proj_Direct(&asWeaponStats[psStructure->asWeaps[i].nStat]);
 			if (psStructure->asWeaps[i].nStat > 0 &&
 			    asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
 			{
@@ -3022,7 +3022,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (psChosenObjs[i] != nullptr && !aiObjectIsProbablyDoomed(psChosenObjs[i], bDirect))
 				{
 					// get the weapon stat to see if there is a visible turret to rotate
-					psWStats = asWeaponStats + psStructure->asWeaps[i].nStat;
+					psWStats = &asWeaponStats[psStructure->asWeaps[i].nStat];
 
 					//if were going to shoot at something move the turret first then fire when locked on
 					if (psWStats->pMountGraphic == nullptr)//no turret so lock on whatever
@@ -5847,7 +5847,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	}
 
 	//haven't found a body - look for a weapon
-	for (unsigned inc = 0; inc < numWeaponStats; inc++)
+	for (unsigned inc = 0; inc < asWeaponStats.size(); inc++)
 	{
 		if (apCompLists[losingPlayer][COMP_WEAPON][inc] == AVAILABLE &&
 		    apCompLists[rewardPlayer][COMP_WEAPON][inc] != AVAILABLE)
@@ -6523,7 +6523,7 @@ bool structSensorDroidWeapon(const STRUCTURE *psStruct, const DROID *psDroid)
 		//Standard Sensor Tower + indirect weapon droid (non VTOL)
 		//else if (structStandardSensor(psStruct) && (psDroid->numWeaps &&
 		if (structStandardSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
-		                                       !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
+		                                       !proj_Direct(&asWeaponStats[psDroid->asWeaps[0].nStat])) &&
 		    !psDroid->isVtol())
 		{
 			return true;
@@ -6531,7 +6531,7 @@ bool structSensorDroidWeapon(const STRUCTURE *psStruct, const DROID *psDroid)
 		//CB Sensor Tower + indirect weapon droid (non VTOL)
 		//if (structCBSensor(psStruct) && (psDroid->numWeaps &&
 		else if (structCBSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
-		                                      !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
+		                                      !proj_Direct(&asWeaponStats[psDroid->asWeaps[0].nStat])) &&
 		         !psDroid->isVtol())
 		{
 			return true;

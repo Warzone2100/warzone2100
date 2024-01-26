@@ -4220,8 +4220,8 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 	{
 		DROID *psDroid = (DROID *)psObj;
 		const int compIndex = psDroid->asWeaps[0].nStat;	// weapon_slot
-		ASSERT_OR_RETURN(, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-		psStats = asWeaponStats + compIndex;
+		ASSERT_OR_RETURN(, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", compIndex, asWeaponStats.size());
+		psStats = &asWeaponStats[compIndex];
 	}
 	else
 	{

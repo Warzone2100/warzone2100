@@ -167,8 +167,8 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 	}
 
 	const unsigned compIndex = psDroid->asWeaps[weapon_slot].nStat;
-	ASSERT_OR_RETURN(false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-	const WEAPON_STATS *psStats = asWeaponStats + compIndex;
+	ASSERT_OR_RETURN(false, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", compIndex, asWeaponStats.size());
+	const WEAPON_STATS *psStats = &asWeaponStats[compIndex];
 
 	const int dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
 	const int dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
@@ -304,7 +304,7 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 /* returns true if on target */
 bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon)
 {
-	WEAPON_STATS *psWeapStats = asWeaponStats + psWeapon->nStat;
+	WEAPON_STATS *psWeapStats = &asWeaponStats[psWeapon->nStat];
 	uint16_t tRotation, tPitch;
 	uint16_t targetRotation;
 	int32_t  rotationTolerance = 0;
@@ -634,7 +634,7 @@ void actionSanity(DROID *psDroid)
 	// clear the target if it has died
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		bDirect = proj_Direct(asWeaponStats + psDroid->asWeaps[i].nStat);
+		bDirect = proj_Direct(&asWeaponStats[psDroid->asWeaps[i].nStat]);
 		if (psDroid->psActionTarget[i] && (avoidOverkill ? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i], bDirect) : psDroid->psActionTarget[i]->died))
 		{
 			syncDebugObject(psDroid->psActionTarget[i], '-');
@@ -876,7 +876,7 @@ void actionUpdateDroid(DROID *psDroid)
 		bHasTarget = false;
 		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 		{
-			bDirect = proj_Direct(asWeaponStats + psDroid->asWeaps[i].nStat);
+			bDirect = proj_Direct(&asWeaponStats[psDroid->asWeaps[i].nStat]);
 			blockingWall = nullptr;
 			// Does this weapon have a target?
 			if (psDroid->psActionTarget[i] != nullptr)
@@ -927,7 +927,7 @@ void actionUpdateDroid(DROID *psDroid)
 			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 			{
 				const unsigned compIndex = psDroid->asWeaps[i].nStat;
-				const WEAPON_STATS *psStats = asWeaponStats + compIndex;
+				const WEAPON_STATS *psStats = &asWeaponStats[compIndex];
 				wallBlocked = false;
 
 				// has weapon a target? is target valid?
