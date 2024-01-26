@@ -3546,8 +3546,8 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 	}
 	else if (type == COMP_CONSTRUCT)
 	{
-		SCRIPT_ASSERT(false, context, index < numConstructStats, "Bad index");
-		CONSTRUCT_STATS *psStats = asConstructStats + index;
+		SCRIPT_ASSERT(false, context, index < asConstructStats.size(), "Bad index");
+		CONSTRUCT_STATS *psStats = &asConstructStats[index];
 		if (name == "ConstructorPoints")
 		{
 			psStats->upgrade[player].constructPoints = value;
@@ -3875,8 +3875,8 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 	}
 	else if (type == COMP_CONSTRUCT)
 	{
-		SCRIPT_ASSERT(nlohmann::json(), context, index < numConstructStats, "Bad index");
-		const CONSTRUCT_STATS *psStats = asConstructStats + index;
+		SCRIPT_ASSERT(nlohmann::json(), context, index < asConstructStats.size(), "Bad index");
+		const CONSTRUCT_STATS *psStats = &asConstructStats[index];
 		if (name == "ConstructorPoints")
 		{
 			return psStats->upgrade[player].constructPoints;
@@ -4134,9 +4134,9 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Construct``` Constructor turrets (eg for trucks)
 		GameEntityRuleContainer conbase;
-		for (unsigned j = 0; j < numConstructStats; j++)
+		for (unsigned j = 0; j < asConstructStats.size(); j++)
 		{
-			CONSTRUCT_STATS *psStats = asConstructStats + j;
+			CONSTRUCT_STATS *psStats = &asConstructStats[j];
 			GameEntityRules con(i, j, {
 				{"ConstructorPoints", COMP_CONSTRUCT},
 				{"HitPoints", COMP_CONSTRUCT},
@@ -4313,9 +4313,9 @@ nlohmann::json wzapi::constructStatsObject()
 
 		//==   * ```Construct``` Constructor turrets (eg for trucks)
 		nlohmann::json conbase = nlohmann::json::object();
-		for (int j = 0; j < numConstructStats; j++)
+		for (int j = 0; j < asConstructStats.size(); j++)
 		{
-			CONSTRUCT_STATS *psStats = asConstructStats + j;
+			CONSTRUCT_STATS *psStats = &asConstructStats[j];
 			nlohmann::json con = register_common(psStats);
 			con["ConstructorPoints"] = psStats->base.constructPoints;
 			conbase[psStats->name.toUtf8()] = std::move(con);

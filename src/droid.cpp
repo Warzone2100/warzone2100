@@ -1093,7 +1093,7 @@ bool droidUpdateBuild(DROID *psDroid)
 	}
 
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	ASSERT_OR_RETURN(false, psDroid->asBits[COMP_CONSTRUCT] < numConstructStats, "Invalid construct pointer for unit");
+	ASSERT_OR_RETURN(false, psDroid->asBits[COMP_CONSTRUCT] < asConstructStats.size(), "Invalid construct pointer for unit");
 
 	// First check the structure hasn't been completed by another droid
 	if (psStruct->status == SS_BUILT)
@@ -1120,8 +1120,8 @@ bool droidUpdateBuild(DROID *psDroid)
 		return false;
 	}
 
-	unsigned constructPoints = constructorPoints(*(asConstructStats + psDroid->
-										asBits[COMP_CONSTRUCT]), psDroid->player);
+	unsigned constructPoints = constructorPoints(asConstructStats[psDroid->
+										asBits[COMP_CONSTRUCT]], psDroid->player);
 
 	unsigned pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 				  GAME_TICKS_PER_SEC;
@@ -1144,7 +1144,7 @@ bool droidUpdateDemolishing(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
-	int constructRate = 5 * constructorPoints(*(asConstructStats + psDroid->asBits[COMP_CONSTRUCT]), psDroid->player);
+	int constructRate = 5 * constructorPoints(asConstructStats[psDroid->asBits[COMP_CONSTRUCT]], psDroid->player);
 	int pointsToAdd = gameTimeAdjustedAverage(constructRate);
 
 	structureDemolish(psStruct, psDroid, pointsToAdd);
@@ -1255,7 +1255,7 @@ bool droidUpdateRepair(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	int iRepairRate = constructorPoints(*(asConstructStats + psDroid->asBits[COMP_CONSTRUCT]), psDroid->player);
+	int iRepairRate = constructorPoints(asConstructStats[psDroid->asBits[COMP_CONSTRUCT]], psDroid->player);
 
 	/* add points to structure */
 	structureRepair(psStruct, psDroid, iRepairRate);

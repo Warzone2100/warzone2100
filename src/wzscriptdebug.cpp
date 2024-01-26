@@ -2699,7 +2699,7 @@ void WZScriptDebugger::selected(const BASE_OBJECT *psObj)
 			selectedObjectDetails["Propulsion"] = componentToString(&asPropulsionStats[psDroid->asBits[COMP_PROPULSION]], psObj->player);
 			selectedObjectDetails["ECM"] = componentToString(&asECMStats[psDroid->asBits[COMP_ECM]], psObj->player);
 			selectedObjectDetails["Sensor"] = componentToString(&asSensorStats[psDroid->asBits[COMP_SENSOR]], psObj->player);
-			selectedObjectDetails["Construct"] = componentToString(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psObj->player);
+			selectedObjectDetails["Construct"] = componentToString(&asConstructStats[psDroid->asBits[COMP_CONSTRUCT]], psObj->player);
 			selectedObjectDetails["Repair"] = componentToString(&asRepairStats[psDroid->asBits[COMP_REPAIRUNIT]], psObj->player);
 		}
 		else if (psObj->type == OBJ_STRUCTURE)

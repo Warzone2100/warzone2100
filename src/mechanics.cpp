@@ -192,7 +192,7 @@ void makeAllAvailable()
 		{
 			apCompLists[i][COMP_ECM][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numConstructStats; comp++)
+		for (comp = 0; comp < asConstructStats.size(); comp++)
 		{
 			apCompLists[i][COMP_CONSTRUCT][comp] = AVAILABLE;
 		}

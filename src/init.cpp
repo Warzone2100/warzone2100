@@ -190,7 +190,6 @@ static const char* versionedModsPath(MODS_PATHS type)
 static bool InitialiseGlobals()
 {
 	frontendInitVars();	// Initialise frontend globals and statics.
-	statsInitVars();
 	structureInitVars();
 	if (!messageInitVars())
 	{

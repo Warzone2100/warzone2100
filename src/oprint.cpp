@@ -270,7 +270,7 @@ void printDroidInfo(const DROID *psDroid)
 			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF("%s", "Construct: ");
-				psConstStats = asConstructStats + psDroid->asBits[i];
+				psConstStats = &asConstructStats[psDroid->asBits[i]];
 				printComponentInfo((COMPONENT_STATS *)psConstStats);
 				CONPRINTF("   cPnts %d imd %p\n",
 				                          constructorPoints(*psConstStats, psDroid->player),
