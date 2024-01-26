@@ -505,7 +505,7 @@ static ComponentIterator constructorIterator()
 static ComponentIterator repairIterator()
 {
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
-	return componentIterator(asRepairStats, sizeof(REPAIR_STATS), apCompLists[selectedPlayer][COMP_REPAIRUNIT], numRepairStats);
+	return componentIterator(asRepairStats.data(), sizeof(REPAIR_STATS), apCompLists[selectedPlayer][COMP_REPAIRUNIT], asRepairStats.size());
 }
 
 static ComponentIterator brainIterator()
@@ -1279,8 +1279,8 @@ intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 	case DROID_REPAIR:
 	case DROID_CYBORG_REPAIR:
 		compIndex = psTemplate->asParts[COMP_REPAIRUNIT];
-		ASSERT_OR_RETURN(nullptr, compIndex < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
-		psStats = (COMPONENT_STATS *)(asRepairStats + compIndex);
+		ASSERT_OR_RETURN(nullptr, compIndex < asRepairStats.size(), "Invalid range referenced for numRepairStats, %d > %d", compIndex, asRepairStats.size());
+		psStats = (COMPONENT_STATS *)(&asRepairStats[compIndex]);
 		break;
 	case DROID_WEAPON:
 	case DROID_PERSON:
@@ -2562,7 +2562,7 @@ static void setTemplateStat(DROID_TEMPLATE *psTemplate, COMPONENT_STATS *psStats
 	}
 	case COMP_REPAIRUNIT:
 		clearTurret();
-		psTemplate->asParts[COMP_REPAIRUNIT] = (REPAIR_STATS *)psStats - asRepairStats;
+		psTemplate->asParts[COMP_REPAIRUNIT] = (REPAIR_STATS *)psStats - asRepairStats.data();
 		break;
 	case COMP_ECM:
 		clearTurret();
@@ -2799,7 +2799,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BODY] < asBodyStats.size(), "Invalid range referenced for numBodyStats, %d > %d", psTempl->asParts[COMP_BODY], asBodyStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BRAIN] < asBrainStats.size(), "Invalid range referenced for numBrainStats, %d > %d", psTempl->asParts[COMP_BRAIN], asBrainStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_PROPULSION] < asPropulsionStats.size(), "Invalid range referenced for numPropulsionStats, %d > %d", psTempl->asParts[COMP_PROPULSION], asPropulsionStats.size());
-	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_REPAIRUNIT] < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", psTempl->asParts[COMP_REPAIRUNIT], numRepairStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_REPAIRUNIT] < asRepairStats.size(), "Invalid range referenced for numRepairStats, %d > %d", psTempl->asParts[COMP_REPAIRUNIT], asRepairStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_ECM] < asECMStats.size(), "Invalid range referenced for numECMStats, %d > %d", psTempl->asParts[COMP_ECM], asECMStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_SENSOR] < asSensorStats.size(), "Invalid range referenced for numSensorStats, %d > %d", psTempl->asParts[COMP_SENSOR], asSensorStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_CONSTRUCT] < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", psTempl->asParts[COMP_CONSTRUCT], numConstructStats);
@@ -3879,7 +3879,7 @@ void runTemplateShadowStats(UDWORD id)
 				break;
 			case DROID_REPAIR:
 				compIndex = psTempl->asParts[COMP_REPAIRUNIT];
-				ASSERT_OR_RETURN(, compIndex < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
+				ASSERT_OR_RETURN(, compIndex < asRepairStats.size(), "Invalid range referenced for numRepairStats, %d > %d", compIndex, asRepairStats.size());
 				psStats = &asRepairStats[compIndex];
 				break;
 			default:

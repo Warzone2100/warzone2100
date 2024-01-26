@@ -200,7 +200,7 @@ void makeAllAvailable()
 		{
 			apCompLists[i][COMP_BRAIN][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numRepairStats; comp++)
+		for (comp = 0; comp < asRepairStats.size(); comp++)
 		{
 			apCompLists[i][COMP_REPAIRUNIT][comp] = AVAILABLE;
 		}

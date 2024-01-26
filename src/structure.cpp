@@ -3825,10 +3825,10 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 			}
 
 			/*since self repair, then add half repair points depending on the time delay for the stat*/
-			iPointsToAdd = (repairPoints(*(asRepairStats + aDefaultRepair[
-			                                 psBuilding->player]), psBuilding->player) / 4) * ((gameTime -
-			                                         psBuilding->lastResistance) / (asRepairStats +
-			                                                 aDefaultRepair[psBuilding->player])->time);
+			iPointsToAdd = (repairPoints(asRepairStats[aDefaultRepair[
+			                                 psBuilding->player]], psBuilding->player) / 4) * ((gameTime -
+			                                         psBuilding->lastResistance) / asRepairStats[
+			                                                 aDefaultRepair[psBuilding->player]].time);
 
 			//add the blue flashing effect for multiPlayer
 			if (bMultiPlayer && ONEINTEN && !bMission)
@@ -5885,7 +5885,7 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	ASSERT_OR_RETURN(, rewardPlayer < MAX_PLAYERS, "Invalid rewardPlayer id %d", (int)rewardPlayer);
 
 	//search through the repair stats
-	for (unsigned inc = 0; inc < numRepairStats; inc++)
+	for (unsigned inc = 0; inc < asRepairStats.size(); inc++)
 	{
 		if (apCompLists[losingPlayer][COMP_REPAIRUNIT][inc] == AVAILABLE &&
 		    apCompLists[rewardPlayer][COMP_REPAIRUNIT][inc] != AVAILABLE)

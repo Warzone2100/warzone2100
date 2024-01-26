@@ -281,7 +281,7 @@ void printDroidInfo(const DROID *psDroid)
 			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF("%s", "Repair: ");
-				psRepairStats = asRepairStats + psDroid->asBits[i];
+				psRepairStats = &asRepairStats[psDroid->asBits[i]];
 				printComponentInfo((COMPONENT_STATS *)psRepairStats);
 				CONPRINTF("   repPnts %d loc %d imd %p\n",
 				                          repairPoints(*psRepairStats, psDroid->player),

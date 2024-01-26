@@ -998,7 +998,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 			aDefaultECM[player] = compInc;
 		}
 		//check for default Repair
-		else if (type == COMP_REPAIRUNIT && (asRepairStats + compInc)->location == LOC_DEFAULT)
+		else if (type == COMP_REPAIRUNIT && asRepairStats[compInc].location == LOC_DEFAULT)
 		{
 			aDefaultRepair[player] = compInc;
 			enableSelfRepair(player);
