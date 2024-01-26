@@ -195,7 +195,7 @@ int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_sl
 		else
 		{
 			firingStage = gameTime - psWeap->lastFired;
-			interval = bSalvo ? weaponReloadTime(psStats, psObj->player) : weaponFirePause(psStats, psObj->player);
+			interval = bSalvo ? weaponReloadTime(*psStats, psObj->player) : weaponFirePause(*psStats, psObj->player);
 		}
 		if (firingStage < interval && interval > 0)
 		{
@@ -1120,8 +1120,8 @@ bool droidUpdateBuild(DROID *psDroid)
 		return false;
 	}
 
-	unsigned constructPoints = constructorPoints(asConstructStats + psDroid->
-										asBits[COMP_CONSTRUCT], psDroid->player);
+	unsigned constructPoints = constructorPoints(*(asConstructStats + psDroid->
+										asBits[COMP_CONSTRUCT]), psDroid->player);
 
 	unsigned pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 				  GAME_TICKS_PER_SEC;
@@ -1144,7 +1144,7 @@ bool droidUpdateDemolishing(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
-	int constructRate = 5 * constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psDroid->player);
+	int constructRate = 5 * constructorPoints(*(asConstructStats + psDroid->asBits[COMP_CONSTRUCT]), psDroid->player);
 	int pointsToAdd = gameTimeAdjustedAverage(constructRate);
 
 	structureDemolish(psStruct, psDroid, pointsToAdd);
@@ -1178,7 +1178,7 @@ bool droidUpdateRestore(DROID *psDroid)
 
 	ASSERT_OR_RETURN(false, psStats->weaponSubClass == WSC_ELECTRONIC, "unit's weapon is not EW");
 
-	unsigned restorePoints = calcDamage(weaponDamage(psStats, psDroid->player),
+	unsigned restorePoints = calcDamage(weaponDamage(*psStats, psDroid->player),
 							   psStats->weaponEffect, (BASE_OBJECT *)psStruct);
 
 	unsigned pointsToAdd = restorePoints * (gameTime - psDroid->actionStarted) /
@@ -1255,7 +1255,7 @@ bool droidUpdateRepair(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	int iRepairRate = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psDroid->player);
+	int iRepairRate = constructorPoints(*(asConstructStats + psDroid->asBits[COMP_CONSTRUCT]), psDroid->player);
 
 	/* add points to structure */
 	structureRepair(psStruct, psDroid, iRepairRate);
@@ -1277,7 +1277,7 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 {
 	CHECK_DROID(psRepairDroid);
 
-	int iRepairRateNumerator = repairPoints(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT], psRepairDroid->player);
+	int iRepairRateNumerator = repairPoints(*(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT]), psRepairDroid->player);
 	int iRepairRateDenominator = 1;
 
 	//if self repair then add repair points depending on the time delay for the stat
@@ -1526,7 +1526,7 @@ static UDWORD calcDroidBaseBody(DROID *psDroid)
 UDWORD calcDroidBaseSpeed(const DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
 {
 	unsigned speed = asPropulsionTypes[asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType].powerRatioMult *
-				 bodyPower(&asBodyStats[psTemplate->asParts[COMP_BODY]], player) / MAX(1, weight);
+				 bodyPower(asBodyStats[psTemplate->asParts[COMP_BODY]], player) / MAX(1, weight);
 
 	// reduce the speed of medium/heavy VTOLs
 	if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)

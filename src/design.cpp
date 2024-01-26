@@ -559,11 +559,11 @@ static uint32_t findMaxPropulsionSpeed(TYPE_OF_TERRAIN terrainType)
 	);
 }
 
-static uint32_t findMaxWeaponAttribute(std::function<uint32_t(WEAPON_STATS *, int)> attributeGetter)
+static uint32_t findMaxWeaponAttribute(std::function<uint32_t(const WEAPON_STATS&, int)> attributeGetter)
 {
 	return findMax(
 		weaponIterator(),
-		[=](COMPONENT_STATS &stats) { return attributeGetter((WEAPON_STATS *)&stats, selectedPlayer); }
+		[=](COMPONENT_STATS &stats) { return attributeGetter((WEAPON_STATS&)stats, selectedPlayer); }
 	);
 }
 
@@ -571,7 +571,7 @@ static uint32_t getDesignMaxBodyArmour(WEAPON_CLASS weaponClass)
 {
 	return findMax(
 		bodyIterator(),
-		[=](COMPONENT_STATS &stats) { return bodyArmour((BODY_STATS *)&stats, selectedPlayer, weaponClass); }
+		[=](COMPONENT_STATS &stats) { return bodyArmour((BODY_STATS&)stats, selectedPlayer, weaponClass); }
 	);
 }
 
@@ -579,7 +579,7 @@ static uint32_t getDesignMaxEngineOutput()
 {
 	return findMax(
 		bodyIterator(),
-		[=](COMPONENT_STATS &stats) { return bodyPower((BODY_STATS *)&stats, selectedPlayer); }
+		[=](COMPONENT_STATS &stats) { return bodyPower((BODY_STATS&)stats, selectedPlayer); }
 	);
 }
 
@@ -601,7 +601,7 @@ static uint32_t getDesignMaxSensorRange()
 {
 	return findMax(
 		sensorIterator(),
-		[=](COMPONENT_STATS &stats) { return sensorRange((SENSOR_STATS *)&stats, selectedPlayer); }
+		[=](COMPONENT_STATS &stats) { return sensorRange((SENSOR_STATS&)stats, selectedPlayer); }
 	);
 }
 
@@ -609,7 +609,7 @@ static uint32_t getDesignMaxEcmRange()
 {
 	return findMax(
 		ecmIterator(),
-		[=](COMPONENT_STATS &stats) { return ecmRange((ECM_STATS *)&stats, selectedPlayer); }
+		[=](COMPONENT_STATS &stats) { return ecmRange((ECM_STATS&)stats, selectedPlayer); }
 	);
 }
 
@@ -617,7 +617,7 @@ static uint32_t getDesignMaxBuildPoints()
 {
 	return findMax(
 		constructorIterator(),
-		[=](COMPONENT_STATS &stats) { return constructorPoints((CONSTRUCT_STATS *)&stats, selectedPlayer); }
+		[=](COMPONENT_STATS &stats) { return constructorPoints((CONSTRUCT_STATS&)stats, selectedPlayer); }
 	);
 }
 
@@ -1616,7 +1616,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.pTip = _("Build Points");
 		sBarInit.iRange = findMax(
 			repairIterator(),
-			[=](COMPONENT_STATS &stats) { return repairPoints((REPAIR_STATS *)&stats, selectedPlayer); }
+			[=](COMPONENT_STATS &stats) { return repairPoints((REPAIR_STATS&)stats, selectedPlayer); }
 		);
 		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
@@ -2263,7 +2263,7 @@ static void intSetSensorStats(SENSOR_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats->hasType(STAT_SENSOR), "stats have wrong type");
 
 	/* range */
-	widgSetBarSize(psWScreen, IDDES_SENSORRANGE, sensorRange(psStats, selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_SENSORRANGE, sensorRange(*psStats, selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 }
@@ -2277,7 +2277,7 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 	{
 		/* range */
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORRANGE,
-		                    sensorRange(psStats, (UBYTE)selectedPlayer));
+		                    sensorRange(*psStats, (UBYTE)selectedPlayer));
 
 		widgSetMinorBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 	}
@@ -2297,7 +2297,7 @@ static void intSetECMStats(ECM_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats->hasType(STAT_ECM), "stats have wrong type");
 
 	/* range */
-	widgSetBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(psStats, selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(*psStats, selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 }
@@ -2310,7 +2310,7 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 	if (psStats)
 	{
 		/* power */
-		widgSetMinorBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(psStats, (UBYTE)selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(*psStats, (UBYTE)selectedPlayer));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 	}
@@ -2331,7 +2331,7 @@ static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_CONSTPOINTS,
-	               constructorPoints(psStats, (UBYTE)selectedPlayer));
+	               constructorPoints(*psStats, (UBYTE)selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 }
@@ -2346,7 +2346,7 @@ static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 	{
 		/* power */
 		widgSetMinorBarSize(psWScreen, IDDES_CONSTPOINTS,
-		                    constructorPoints(psStats, (UBYTE)selectedPlayer));
+		                    constructorPoints(*psStats, (UBYTE)selectedPlayer));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 	}
@@ -2366,7 +2366,7 @@ static void intSetRepairStats(REPAIR_STATS *psStats)
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_REPAIRPOINTS,
-	               repairPoints(psStats, (UBYTE)selectedPlayer));
+	               repairPoints(*psStats, (UBYTE)selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 }
@@ -2381,7 +2381,7 @@ static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 	{
 		/* power */
 		widgSetMinorBarSize(psWScreen, IDDES_REPAIRPOINTS,
-		                    repairPoints(psStats, (UBYTE)selectedPlayer));
+		                    repairPoints(*psStats, (UBYTE)selectedPlayer));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 	}
@@ -2401,11 +2401,11 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats->hasType(STAT_WEAPON), "stats have wrong type");
 
 	/* range */
-	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats, selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(*psStats, selectedPlayer));
 	/* rate of fire */
-	widgSetBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats, (SBYTE)selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_WEAPROF, weaponROF(*psStats, (SBYTE)selectedPlayer));
 	/* damage */
-	widgSetBarSize(psWScreen, IDDES_WEAPDAMAGE, (UWORD)weaponDamage(psStats,
+	widgSetBarSize(psWScreen, IDDES_WEAPDAMAGE, (UWORD)weaponDamage(*psStats,
 	               (UBYTE)selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
@@ -2419,12 +2419,12 @@ static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 	if (psStats)
 	{
 		/* range */
-		widgSetMinorBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats, selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(*psStats, selectedPlayer));
 		/* rate of fire */
-		widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats, (SBYTE)selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, weaponROF(*psStats, (SBYTE)selectedPlayer));
 		/* damage */
 		widgSetMinorBarSize(psWScreen, IDDES_WEAPDAMAGE, (UWORD)weaponDamage(
-		                        psStats, (UBYTE)selectedPlayer));
+		                        *psStats, (UBYTE)selectedPlayer));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_SYSTEMSWEIGHT, psStats->weight);
 	}
@@ -2451,11 +2451,11 @@ static void intSetBodyStats(BODY_STATS *psStats)
 
 	/* armour */
 	//do kinetic armour
-	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats, selectedPlayer, WC_KINETIC));
+	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(*psStats, selectedPlayer, WC_KINETIC));
 	//do heat armour
-	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats, selectedPlayer, WC_HEAT));
+	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(*psStats, selectedPlayer, WC_HEAT));
 	/* power */
-	widgSetBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats, selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(*psStats, selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_BODYWEIGHT, psStats->weight);
 
@@ -2475,11 +2475,11 @@ static void intSetBodyShadowStats(BODY_STATS *psStats)
 	if (psStats)
 	{
 		/* armour - kinetic*/
-		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats, selectedPlayer, WC_KINETIC));
+		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(*psStats, selectedPlayer, WC_KINETIC));
 		//armour - heat
-		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats, selectedPlayer, WC_HEAT));
+		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(*psStats, selectedPlayer, WC_HEAT));
 		/* power */
-		widgSetMinorBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats, selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(*psStats, selectedPlayer));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_BODYWEIGHT, psStats->weight);
 	}

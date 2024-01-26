@@ -3088,7 +3088,7 @@ bool secondarySupported(const DROID *psDroid, SECONDARY_ORDER sec)
 			{
 				const WEAPON_STATS *weaponStats = asWeaponStats + psDroid->asWeaps[i].nStat;
 
-				if (proj_GetLongRange(weaponStats, psDroid->player) == proj_GetShortRange(weaponStats, psDroid->player))
+				if (proj_GetLongRange(*weaponStats, psDroid->player) == proj_GetShortRange(*weaponStats, psDroid->player))
 				{
 					supported = false;
 				}

@@ -2972,7 +2972,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 	/* Check lassat */
 	if (isLasSat(psStructure->pStructureType)
-	    && gameTime - psStructure->asWeaps[0].lastFired > weaponFirePause(&asWeaponStats[psStructure->asWeaps[0].nStat], psStructure->player)
+	    && gameTime - psStructure->asWeaps[0].lastFired > weaponFirePause(asWeaponStats[psStructure->asWeaps[0].nStat], psStructure->player)
 	    && psStructure->asWeaps[0].ammo > 0)
 	{
 		triggerEventStructureReady(psStructure);
@@ -3825,8 +3825,8 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 			}
 
 			/*since self repair, then add half repair points depending on the time delay for the stat*/
-			iPointsToAdd = (repairPoints(asRepairStats + aDefaultRepair[
-			                                 psBuilding->player], psBuilding->player) / 4) * ((gameTime -
+			iPointsToAdd = (repairPoints(*(asRepairStats + aDefaultRepair[
+			                                 psBuilding->player]), psBuilding->player) / 4) * ((gameTime -
 			                                         psBuilding->lastResistance) / (asRepairStats +
 			                                                 aDefaultRepair[psBuilding->player])->time);
 

@@ -174,14 +174,14 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 	const int dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
 
 	const int radSq = dx * dx + dy * dy;
-	const int longRange = proj_GetLongRange(psStats, psDroid->player);
-	const int shortRange = proj_GetShortRange(psStats, psDroid->player);
+	const int longRange = proj_GetLongRange(*psStats, psDroid->player);
+	const int shortRange = proj_GetShortRange(*psStats, psDroid->player);
 
 	int rangeSq = 0;
 	switch (psDroid->secondaryOrder & DSS_ARANGE_MASK)
 	{
 		case DSS_ARANGE_OPTIMUM:
-			if (!useLongWithOptimum && weaponShortHit(psStats, psDroid->player) > weaponLongHit(psStats, psDroid->player))
+			if (!useLongWithOptimum && weaponShortHit(*psStats, psDroid->player) > weaponLongHit(*psStats, psDroid->player))
 			{
 				rangeSq = shortRange * shortRange;
 			}
@@ -206,7 +206,7 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 	if (radSq <= rangeSq)
 	{
 		/* check min range */
-		const int minrange = proj_GetMinRange(psStats, psDroid->player);
+		const int minrange = proj_GetMinRange(*psStats, psDroid->player);
 		if (radSq >= minrange * minrange || !proj_Direct(psStats))
 		{
 			return true;
@@ -239,7 +239,7 @@ static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STAT
 	const int dx = psDroid->pos.x - psObj->pos.x;
 	const int dy = psDroid->pos.y - psObj->pos.y;
 	const int radSq = dx * dx + dy * dy;
-	const int minRange = proj_GetMinRange(psStats, psDroid->player);
+	const int minRange = proj_GetMinRange(*psStats, psDroid->player);
 	const int rangeSq = minRange * minRange;
 
 	// check min range
@@ -391,7 +391,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	bool onTarget = abs(angleDelta(targetRotation - (tRotation + psAttacker->rot.direction))) <= rotationTolerance;
 
 	/* Set muzzle pitch if not repairing or outside minimum range */
-	const int minRange = proj_GetMinRange(psWeapStats, psAttacker->player);
+	const int minRange = proj_GetMinRange(*psWeapStats, psAttacker->player);
 	if (!bRepair && (unsigned)objPosDiffSq(psAttacker, psTarget) > minRange * minRange && proj_Direct(psWeapStats))
 	{
 		/* get target distance */
@@ -1278,7 +1278,7 @@ void actionUpdateDroid(DROID *psDroid)
 				else if (psWeapStats)
 				{
 					// if the vtol is far enough away head for the target again
-					const int maxRange = proj_GetLongRange(psWeapStats, psDroid->player);
+					const int maxRange = proj_GetLongRange(*psWeapStats, psDroid->player);
 					if (rangeSq > maxRange * maxRange)
 					{
 						// don't do another attack run if already heading for the target

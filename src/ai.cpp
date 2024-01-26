@@ -95,7 +95,7 @@ static int aiDroidRange(DROID *psDroid, int weapon_slot)
 	else
 	{
 		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
-		longRange = proj_GetLongRange(psWStats, psDroid->player);
+		longRange = proj_GetLongRange(*psWStats, psDroid->player);
 	}
 
 	return longRange;
@@ -112,7 +112,7 @@ static bool aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 
 	WEAPON_STATS *psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
 
-	int longRange = proj_GetLongRange(psWStats, psStruct->player);
+	int longRange = proj_GetLongRange(*psWStats, psStruct->player);
 	return objPosDiffSq(psStruct, psTarget) < longRange * longRange && lineOfFire(psStruct, psTarget, weapon_slot, true);
 }
 
@@ -166,10 +166,10 @@ bool aiShutdown()
 /** Search the global list of sensors for a possible target for psObj. */
 static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_STATS *psWStats, TARGET_ORIGIN *targetOrigin)
 {
-	int		longRange = proj_GetLongRange(psWStats, psObj->player);
+	int		longRange = proj_GetLongRange(*psWStats, psObj->player);
 	int		tarDist = longRange * longRange;
 	bool		foundCB = false;
-	int		minDist = proj_GetMinRange(psWStats, psObj->player) * proj_GetMinRange(psWStats, psObj->player);
+	int		minDist = proj_GetMinRange(*psWStats, psObj->player) * proj_GetMinRange(*psWStats, psObj->player);
 	BASE_OBJECT	*psTarget = nullptr;
 
 	if (targetOrigin)
@@ -357,7 +357,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	bEmpWeap = (attackerWeapon->weaponSubClass == WSC_EMP);
 
 	int dist = iHypot((psAttacker->pos - psTarget->pos).xy());
-	bool tooClose = (unsigned)dist <= proj_GetMinRange(attackerWeapon, psAttacker->player);
+	bool tooClose = (unsigned)dist <= proj_GetMinRange(*attackerWeapon, psAttacker->player);
 	if (tooClose)
 	{
 		dist = objSensorRange(psAttacker);  // If object is too close to fire at, consider it to be at maximum range.
@@ -501,9 +501,9 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	{
 		/* indirect firing units have slow reload times, so give the target a chance to die,
 		 * and give a different unit a chance to get in range, too. */
-		if (weaponROF(attackerWeapon, psAttacker->player) < TARGET_DOOMED_SLOW_RELOAD_T)
+		if (weaponROF(*attackerWeapon, psAttacker->player) < TARGET_DOOMED_SLOW_RELOAD_T)
 		{
-			debug(LOG_NEVER, "Not killing unit - doomed. My ROF: %i (%s)", weaponROF(attackerWeapon, psAttacker->player), getStatsName(attackerWeapon));
+			debug(LOG_NEVER, "Not killing unit - doomed. My ROF: %i (%s)", weaponROF(*attackerWeapon, psAttacker->player), getStatsName(attackerWeapon));
 			return noTarget;
 		}
 		attackWeight /= TARGET_DOOMED_PENALTY_F;
@@ -888,7 +888,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		ASSERT_OR_RETURN(false, psObj->asWeaps[weapon_slot].nStat > 0, "Invalid weapon turret");
 
 		WEAPON_STATS *psWStats = psObj->asWeaps[weapon_slot].nStat + asWeaponStats;
-		int longRange = proj_GetLongRange(psWStats, psObj->player);
+		int longRange = proj_GetLongRange(*psWStats, psObj->player);
 
 		// see if there is a target from the command droids
 		psTarget = nullptr;
