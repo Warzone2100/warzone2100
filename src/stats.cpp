@@ -49,7 +49,7 @@
 /* The stores for the different stats */
 std::vector<BODY_STATS> asBodyStats;
 std::vector<BRAIN_STATS> asBrainStats;
-PROPULSION_STATS	*asPropulsionStats;
+std::vector<PROPULSION_STATS> asPropulsionStats;
 SENSOR_STATS		*asSensorStats;
 ECM_STATS		*asECMStats;
 REPAIR_STATS		*asRepairStats;
@@ -63,7 +63,6 @@ WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 /* The number of different stats stored */
-UDWORD		numPropulsionStats;
 UDWORD		numSensorStats;
 UDWORD		numECMStats;
 UDWORD		numRepairStats;
@@ -125,7 +124,6 @@ static void deallocTerrainTable()
 void statsInitVars()
 {
 	/* The number of different stats stored */
-	numPropulsionStats = 0;
 	numSensorStats = 0;
 	numECMStats = 0;
 	numRepairStats = 0;
@@ -141,7 +139,7 @@ bool statsShutDown()
 
 	STATS_DEALLOC(asWeaponStats, numWeaponStats);
 	asBrainStats.clear();
-	STATS_DEALLOC(asPropulsionStats, numPropulsionStats);
+	asPropulsionStats.clear();
 	STATS_DEALLOC(asRepairStats, numRepairStats);
 	STATS_DEALLOC(asConstructStats, numConstructStats);
 	STATS_DEALLOC(asECMStats, numECMStats);
@@ -175,7 +173,7 @@ bool statsAllocBrain(UDWORD	numStats)
 /* Allocate Propulsion Stats */
 bool statsAllocPropulsion(UDWORD	numStats)
 {
-	ALLOC_STATS(numStats, asPropulsionStats, numPropulsionStats, PROPULSION_STATS);
+	ALLOC_STATS_VECTOR(numStats, asPropulsionStats, PROPULSION_STATS);
 }
 /* Allocate Sensor Stats */
 bool statsAllocSensor(UDWORD	numStats)
@@ -657,9 +655,9 @@ bool loadBodyStats(WzConfig &ini)
 	for (int numStats = 0; numStats < asBodyStats.size(); ++numStats)
 	{
 		BODY_STATS *psBodyStat = &asBodyStats[numStats];
-		psBodyStat->ppIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
-		psBodyStat->ppMoveIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
-		psBodyStat->ppStillIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
+		psBodyStat->ppIMDList.resize(asPropulsionStats.size() * NUM_PROP_SIDES, nullptr);
+		psBodyStat->ppMoveIMDList.resize(asPropulsionStats.size() * NUM_PROP_SIDES, nullptr);
+		psBodyStat->ppStillIMDList.resize(asPropulsionStats.size() * NUM_PROP_SIDES, nullptr);
 	}
 	for (size_t i = 0; i < list.size(); ++i)
 	{
@@ -691,7 +689,7 @@ bool loadBodyStats(WzConfig &ini)
 		std::vector<WzString> keys = ini.childKeys();
 		for (size_t j = 0; j < keys.size(); j++)
 		{
-			for (numStats = 0; numStats < numPropulsionStats; numStats++)
+			for (numStats = 0; numStats < asPropulsionStats.size(); numStats++)
 			{
 				PROPULSION_STATS *psPropulsionStat = &asPropulsionStats[numStats];
 				if (keys[j].compare(psPropulsionStat->id) == 0)
@@ -699,7 +697,7 @@ bool loadBodyStats(WzConfig &ini)
 					break;
 				}
 			}
-			if (numStats == numPropulsionStats)
+			if (numStats == asPropulsionStats.size())
 			{
 				debug(LOG_FATAL, "Invalid propulsion name %s", keys[j].toUtf8().c_str());
 				return false;

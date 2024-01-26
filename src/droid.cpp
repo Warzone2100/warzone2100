@@ -247,7 +247,7 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 		{
 			iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING]->displayModel();
 			/* get propulsion stats */
-			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+			PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 			if (psPropStats && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
 			{
 				// FIXME: change when adding submarines to the game
@@ -2784,7 +2784,7 @@ bool DROID::isVtol() const
 /* returns true if the droid has lift propulsion and is moving */
 bool DROID::isFlying() const
 {
-	return (asPropulsionStats + asBits[COMP_PROPULSION])->propulsionType == PROPULSION_TYPE_LIFT
+	return asPropulsionStats[asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT
 		   && (sMove.Status != MOVEINACTIVE || isTransporter());
 }
 
@@ -3376,7 +3376,7 @@ bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate)
 	PROPULSION_STATS	*psPropStats;
 
 	//check propulsion stat for vtol
-	psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
+	psPropStats = &asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]];
 
 	ASSERT_OR_RETURN(false, psPropStats != nullptr, "invalid propulsion stats pointer");
 
@@ -3544,7 +3544,7 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 
 int droidSqDist(const DROID *psDroid, const BASE_OBJECT *psObj)
 {
-	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 
 	if (!fpathCheck(psDroid->pos, psObj->pos, psPropStats->propulsionType))
 	{

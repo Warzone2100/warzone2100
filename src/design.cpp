@@ -481,7 +481,7 @@ static ComponentIterator weaponIterator()
 static ComponentIterator propulsionIterator()
 {
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
-	return componentIterator(asPropulsionStats, sizeof(*asPropulsionStats), apCompLists[selectedPlayer][COMP_PROPULSION], numPropulsionStats);
+	return componentIterator(asPropulsionStats.data(), sizeof(PROPULSION_STATS), apCompLists[selectedPlayer][COMP_PROPULSION], asPropulsionStats.size());
 }
 
 static ComponentIterator sensorIterator()
@@ -1217,7 +1217,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 		widgSetButtonState(psWScreen, IDDES_PROPFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_PROPBUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_PROPFORM);
-		intSetPropulsionForm(asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION]);
+		intSetPropulsionForm(&asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]]);
 		break;
 	case IDES_TURRET_A:
 		compList = intAddComponentForm();
@@ -1376,8 +1376,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	}
 
 	compIndex = psTemplate->asParts[COMP_PROPULSION];
-	ASSERT_OR_RETURN("", compIndex < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
-	psStats = (COMPONENT_STATS *)(asPropulsionStats + compIndex);
+	ASSERT_OR_RETURN("", compIndex < asPropulsionStats.size(), "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, asPropulsionStats.size());
+	psStats = (COMPONENT_STATS *)(&asPropulsionStats[compIndex]);
 	if (psTemplate->asParts[COMP_PROPULSION] != 0)
 	{
 		checkStringLength(aCurrName, getLocalizedStatsName(psStats));
@@ -1416,7 +1416,7 @@ static void intSetDesignStats(DROID_TEMPLATE *psTemplate)
 	intSetBodyStats(&asBodyStats[psTemplate->asParts[COMP_BODY]]);
 
 	/* Set the propulsion stats */
-	intSetPropulsionForm(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION]);
+	intSetPropulsionForm(&asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]]);
 
 	/* Set the name in the edit box */
 	intSetEditBoxTextFromTemplate(psTemplate);
@@ -2030,7 +2030,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, ComponentIterator co
 		//check if the current Template propulsion has been set
 		if (sCurrDesign.asParts[COMP_PROPULSION])
 		{
-			PROPULSION_STATS *psPropStats = asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION];
+			PROPULSION_STATS *psPropStats = &asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]];
 			ASSERT_OR_RETURN(false, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 			bVTOL |= asPropulsionTypes[psPropStats->propulsionType].travel == AIR;
@@ -2557,7 +2557,7 @@ static void setTemplateStat(DROID_TEMPLATE *psTemplate, COMPONENT_STATS *psStats
 		{
 			clearTurret();
 		}
-		psTemplate->asParts[COMP_PROPULSION] = stats - asPropulsionStats;
+		psTemplate->asParts[COMP_PROPULSION] = stats - asPropulsionStats.data();
 		break;
 	}
 	case COMP_REPAIRUNIT:
@@ -2650,7 +2650,7 @@ static UDWORD intCalcSpeed(TYPE_OF_TERRAIN type, PROPULSION_STATS *psProp)
 			return 0;
 		}
 	}
-	UDWORD droidSpeed = calcDroidSpeed(calcDroidBaseSpeed(&psTempl, weight, selectedPlayer), type, psProp - asPropulsionStats, 0);
+	UDWORD droidSpeed = calcDroidSpeed(calcDroidBaseSpeed(&psTempl, weight, selectedPlayer), type, psProp - asPropulsionStats.data(), 0);
 	return droidSpeed;
 }
 
@@ -2798,7 +2798,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BODY] < asBodyStats.size(), "Invalid range referenced for numBodyStats, %d > %d", psTempl->asParts[COMP_BODY], asBodyStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BRAIN] < asBrainStats.size(), "Invalid range referenced for numBrainStats, %d > %d", psTempl->asParts[COMP_BRAIN], asBrainStats.size());
-	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_PROPULSION] < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", psTempl->asParts[COMP_PROPULSION], numPropulsionStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_PROPULSION] < asPropulsionStats.size(), "Invalid range referenced for numPropulsionStats, %d > %d", psTempl->asParts[COMP_PROPULSION], asPropulsionStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_REPAIRUNIT] < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", psTempl->asParts[COMP_REPAIRUNIT], numRepairStats);
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_ECM] < numECMStats, "Invalid range referenced for numECMStats, %d > %d", psTempl->asParts[COMP_ECM], numECMStats);
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_SENSOR] < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", psTempl->asParts[COMP_SENSOR], numSensorStats);
@@ -3230,7 +3230,7 @@ void intProcessDesign(UDWORD id)
 		desCompID = id;
 
 		/* Update the propulsion stats as the droid weight will have changed */
-		intSetPropulsionStats(asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION]);
+		intSetPropulsionStats(&asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]]);
 
 		/*Update the Power bar stats as the power to build will have changed */
 		intSetDesignPower(&sCurrDesign);
@@ -3848,7 +3848,7 @@ void runTemplateShadowStats(UDWORD id)
 	{
 		/* Now set the bar graphs for the stats */
 		intSetBodyShadowStats(&asBodyStats[psTempl->asParts[COMP_BODY]]);
-		intSetPropulsionShadowStats(asPropulsionStats + psTempl->asParts[COMP_PROPULSION]);
+		intSetPropulsionShadowStats(&asPropulsionStats[psTempl->asParts[COMP_PROPULSION]]);
 		//only set the system shadow bar if the same type of droid
 		COMPONENT_STATS *psStats = nullptr;
 		DROID_TYPE templType = droidTemplateType(psTempl);
