@@ -2728,7 +2728,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         (psDroid->droidType == DROID_WEAPON ||
 	          psDroid->droidType == DROID_CYBORG ||
 	          psDroid->droidType == DROID_CYBORG_SUPER) &&
-	         proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
+	         proj_Direct(&asWeaponStats[psDroid->asWeaps[0].nStat]))
 	{
 		order = DroidOrder(DORDER_GUARD, psObj);
 		assignSensorTarget(psObj);
@@ -2826,7 +2826,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 			else if ((psDroid->droidType == DROID_WEAPON ||
 			          psDroid->droidType == DROID_CYBORG ||
 			          psDroid->droidType == DROID_CYBORG_SUPER)
-			         && proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat))
+			         && proj_Direct(&asWeaponStats[psDroid->asWeaps[0].nStat]))
 			{
 				order = DroidOrder(DORDER_GUARD, psObj);
 			}
@@ -3086,7 +3086,7 @@ bool secondarySupported(const DROID *psDroid, SECONDARY_ORDER sec)
 		{
 			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 			{
-				const WEAPON_STATS *weaponStats = asWeaponStats + psDroid->asWeaps[i].nStat;
+				const WEAPON_STATS *weaponStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 
 				if (proj_GetLongRange(*weaponStats, psDroid->player) == proj_GetShortRange(*weaponStats, psDroid->player))
 				{

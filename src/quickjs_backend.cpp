@@ -865,7 +865,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 	for (int j = 0; j < psStruct->numWeaps; j++)
 	{
 		JSValue weapon = JS_NewObject(ctx);
-		const WEAPON_STATS *psStats = asWeaponStats + psStruct->asWeaps[j].nStat;
+		const WEAPON_STATS *psStats = &asWeaponStats[psStruct->asWeaps[j].nStat];
 		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain full name
 		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
@@ -968,7 +968,7 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	{
 		if (psDroid->asWeaps[i].nStat)
 		{
-			ASSERT(psDroid->asWeaps[i].nStat < numWeaponStats, "Invalid nStat (%d) referenced for asWeaps[%d]; numWeaponStats (%d); droid: \"%s\" (numWeaps: %u)", psDroid->asWeaps[i].nStat, i, numWeaponStats, psDroid->aName, psDroid->numWeaps);
+			ASSERT(psDroid->asWeaps[i].nStat < asWeaponStats.size(), "Invalid nStat (%d) referenced for asWeaps[%d]; numWeaponStats (%d); droid: \"%s\" (numWeaps: %u)", psDroid->asWeaps[i].nStat, i, asWeaponStats.size(), psDroid->aName, psDroid->numWeaps);
 			WEAPON_STATS *psWeap = &asWeaponStats[psDroid->asWeaps[i].nStat];
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
@@ -1029,7 +1029,7 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	{
 		int armed = droidReloadBar(psDroid, &psDroid->asWeaps[j], j);
 		JSValue weapon = JS_NewObject(ctx);
-		const WEAPON_STATS *psStats = asWeaponStats + psDroid->asWeaps[j].nStat;
+		const WEAPON_STATS *psStats = &asWeaponStats[psDroid->asWeaps[j].nStat];
 		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain full name
 		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
@@ -1127,7 +1127,7 @@ JSValue convTemplate(const DROID_TEMPLATE *psTempl, JSContext *ctx)
 	JSValue weaponlist = JS_NewArray(ctx);
 	for (int j = 0; j < psTempl->numWeaps; j++)
 	{
-		JS_DefinePropertyValueUint32(ctx, weaponlist, j, JS_NewString(ctx, (asWeaponStats + psTempl->asWeaps[j])->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+		JS_DefinePropertyValueUint32(ctx, weaponlist, j, JS_NewString(ctx, asWeaponStats[psTempl->asWeaps[j]].id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	}
 	QuickJS_DefinePropertyValue(ctx, value, "weapons", weaponlist, JS_PROP_ENUMERABLE);
 	return value;

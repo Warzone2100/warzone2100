@@ -172,7 +172,7 @@ void makeAllAvailable()
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (comp = 0; comp < numWeaponStats; comp++)
+		for (comp = 0; comp < asWeaponStats.size(); comp++)
 		{
 			apCompLists[i][COMP_WEAPON][comp] = AVAILABLE;
 		}

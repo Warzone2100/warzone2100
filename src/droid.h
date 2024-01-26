@@ -341,7 +341,7 @@ static inline CONSTRUCT_STATS *getConstructStats(const DROID *psDroid)
 
 static inline WEAPON_STATS *getWeaponStats(const DROID *psDroid, int weapon_slot)
 {
-	return asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
+	return &asWeaponStats[psDroid->asWeaps[weapon_slot].nStat];
 }
 
 static inline Rotation getInterpolatedWeaponRotation(const DROID *psDroid, int weaponSlot, uint32_t time)

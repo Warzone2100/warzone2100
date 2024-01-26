@@ -2650,7 +2650,7 @@ void WZScriptDebugger::selected(const BASE_OBJECT *psObj)
 		{
 			if (psObj->asWeaps[i].nStat > 0)
 			{
-				WEAPON_STATS *psWeap = asWeaponStats + psObj->asWeaps[i].nStat;
+				WEAPON_STATS *psWeap = &asWeaponStats[psObj->asWeaps[i].nStat];
 				auto component = componentToString(psWeap, psObj->player);
 				component["Ammo"] = psObj->asWeaps[i].ammo;
 				component["Last fired time"] = psObj->asWeaps[i].lastFired;

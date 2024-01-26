@@ -203,7 +203,7 @@ void printDroidInfo(const DROID *psDroid)
 
 	if (psDroid->asWeaps[0].nStat > 0)
 	{
-		printWeaponInfo(asWeaponStats + psDroid->asWeaps[0].nStat);
+		printWeaponInfo(&asWeaponStats[psDroid->asWeaps[0].nStat]);
 	}
 
 	for (int i = 0; i < COMP_NUMCOMPONENTS; ++i)

@@ -960,11 +960,11 @@ bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int 
 
 	if (psViewer->type == OBJ_DROID)
 	{
-		psStats = asWeaponStats + ((const DROID *)psViewer)->asWeaps[weapon_slot].nStat;
+		psStats = &asWeaponStats[((const DROID *)psViewer)->asWeaps[weapon_slot].nStat];
 	}
 	else if (psViewer->type == OBJ_STRUCTURE)
 	{
-		psStats = asWeaponStats + ((const STRUCTURE *)psViewer)->asWeaps[weapon_slot].nStat;
+		psStats = &asWeaponStats[((const STRUCTURE *)psViewer)->asWeaps[weapon_slot].nStat];
 	}
 	// 2d distance
 	int distance = iHypot((psTarget->pos - psViewer->pos).xy());

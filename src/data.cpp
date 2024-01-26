@@ -170,7 +170,7 @@ static bool bufferSWEAPONLoad(const char *fileName, void **ppData)
 	calcDataHash(ini, DATA_SWEAPON);
 
 	if (!loadWeaponStats(ini)
-	    || !allocComponentList(COMP_WEAPON, numWeaponStats))
+	    || !allocComponentList(COMP_WEAPON, asWeaponStats.size()))
 	{
 		return false;
 	}

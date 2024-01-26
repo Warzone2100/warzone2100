@@ -94,7 +94,7 @@ static int aiDroidRange(DROID *psDroid, int weapon_slot)
 	}
 	else
 	{
-		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
+		WEAPON_STATS *psWStats = &asWeaponStats[psDroid->asWeaps[weapon_slot].nStat];
 		longRange = proj_GetLongRange(*psWStats, psDroid->player);
 	}
 
@@ -110,7 +110,7 @@ static bool aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 		return false;
 	}
 
-	WEAPON_STATS *psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
+	WEAPON_STATS *psWStats = &asWeaponStats[psStruct->asWeaps[weapon_slot].nStat];
 
 	int longRange = proj_GetLongRange(*psWStats, psStruct->player);
 	return objPosDiffSq(psStruct, psTarget) < longRange * longRange && lineOfFire(psStruct, psTarget, weapon_slot, true);
@@ -292,7 +292,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	{
 		psAttackerDroid = (DROID *)psAttacker;
 
-		attackerWeapon = (WEAPON_STATS *)(asWeaponStats + psAttackerDroid->asWeaps[weapon_slot].nStat);
+		attackerWeapon = (WEAPON_STATS *)(&asWeaponStats[psAttackerDroid->asWeaps[weapon_slot].nStat]);
 
 		//check if this droid is assigned to a commander
 		bCmdAttached = hasCommander(psAttackerDroid);
@@ -334,7 +334,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	}
 	else if (psAttacker->type == OBJ_STRUCTURE)
 	{
-		attackerWeapon = ((WEAPON_STATS *)(asWeaponStats + ((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].nStat));
+		attackerWeapon = (WEAPON_STATS *)(&asWeaponStats[((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].nStat]);
 	}
 	else	/* feature */
 	{
@@ -582,15 +582,15 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	++numDroidNearestTargetChecksThisFrame;
 
 	// Check if we have a CB target to begin with
-	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat))
+	if (!proj_Direct(&asWeaponStats[psDroid->asWeaps[weapon_slot].nStat]))
 	{
-		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
+		WEAPON_STATS *psWStats = &asWeaponStats[psDroid->asWeaps[weapon_slot].nStat];
 
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
 		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
 	}
 
-	weaponEffect = (asWeaponStats + psDroid->asWeaps[weapon_slot].nStat)->weaponEffect;
+	weaponEffect = asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].weaponEffect;
 
 	electronic = electronicDroid(psDroid);
 
@@ -726,7 +726,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 
 		// See if target is blocked by a wall; only affects direct weapons
 		// Ignore friendly walls here
-		if (proj_Direct(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat)
+		if (proj_Direct(&asWeaponStats[psDroid->asWeaps[weapon_slot].nStat])
 			&& targetStructure
 			&& !aiCheckAlliances(psDroid->player, targetStructure->player))
 		{
@@ -887,7 +887,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 		ASSERT_OR_RETURN(false, psObj->asWeaps[weapon_slot].nStat > 0, "Invalid weapon turret");
 
-		WEAPON_STATS *psWStats = psObj->asWeaps[weapon_slot].nStat + asWeaponStats;
+		WEAPON_STATS *psWStats = &asWeaponStats[psObj->asWeaps[weapon_slot].nStat];
 		int longRange = proj_GetLongRange(*psWStats, psObj->player);
 
 		// see if there is a target from the command droids

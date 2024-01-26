@@ -475,7 +475,7 @@ static ComponentIterator bodyIterator()
 static ComponentIterator weaponIterator()
 {
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
-	return componentIterator(asWeaponStats, sizeof(*asWeaponStats), apCompLists[selectedPlayer][COMP_WEAPON], numWeaponStats);
+	return componentIterator(asWeaponStats.data(), sizeof(WEAPON_STATS), apCompLists[selectedPlayer][COMP_WEAPON], asWeaponStats.size());
 }
 
 static ComponentIterator propulsionIterator()
@@ -1202,7 +1202,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_SYSTEMFORM);
-		intSetSystemForm((COMPONENT_STATS *)(asWeaponStats + sCurrDesign.asWeaps[0])); // in case previous was a different slot
+		intSetSystemForm((COMPONENT_STATS *)(&asWeaponStats[sCurrDesign.asWeaps[0]])); // in case previous was a different slot
 		break;
 	case IDES_BODY:
 		compList = intAddComponentForm();
@@ -1227,7 +1227,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_SYSTEMFORM);
-		intSetSystemForm((COMPONENT_STATS *)(asWeaponStats + sCurrDesign.asWeaps[1])); // in case previous was a different slot
+		intSetSystemForm((COMPONENT_STATS *)(&asWeaponStats[sCurrDesign.asWeaps[1]])); // in case previous was a different slot
 		// Stop the button flashing
 		intSetButtonFlash(IDDES_WPABUTTON,   false);
 		break;
@@ -1239,7 +1239,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_SYSTEMFORM);
-		intSetSystemForm((COMPONENT_STATS *)(asWeaponStats + sCurrDesign.asWeaps[2])); // in case previous was a different slot
+		intSetSystemForm((COMPONENT_STATS *)(&asWeaponStats[sCurrDesign.asWeaps[2]])); // in case previous was a different slot
 		// Stop the button flashing
 		intSetButtonFlash(IDDES_WPBBUTTON,   false);
 		break;
@@ -1288,8 +1288,8 @@ intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 	case DROID_CYBORG_SUPER:
 	case DROID_DEFAULT:
 		compIndex = psTemplate->asWeaps[0];
-		ASSERT_OR_RETURN(nullptr, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-		psStats = (COMPONENT_STATS *)(asWeaponStats + compIndex);
+		ASSERT_OR_RETURN(nullptr, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", compIndex, asWeaponStats.size());
+		psStats = (COMPONENT_STATS *)(&asWeaponStats[compIndex]);
 		break;
 	default:
 		debug(LOG_ERROR, "unrecognised droid type");
@@ -2546,7 +2546,7 @@ static void setTemplateStat(DROID_TEMPLATE *psTemplate, COMPONENT_STATS *psStats
 		auto stats = (BRAIN_STATS *)psStats;
 		clearTurret();
 		psTemplate->asParts[COMP_BRAIN] = stats - asBrainStats.data();
-		psTemplate->asWeaps[0] = stats->psWeaponStat - asWeaponStats;
+		psTemplate->asWeaps[0] = stats->psWeaponStat - asWeaponStats.data();
 		psTemplate->numWeaps = 1;
 		break;
 	}
@@ -2579,7 +2579,7 @@ static void setTemplateStat(DROID_TEMPLATE *psTemplate, COMPONENT_STATS *psStats
 	case COMP_WEAPON: {
 		clearNonWeapons();
 		int i = desCompMode == IDES_TURRET_A? 1 : desCompMode == IDES_TURRET_B? 2 : 0;
-		psTemplate->asWeaps[i] = (WEAPON_STATS *)psStats - asWeaponStats;
+		psTemplate->asWeaps[i] = (WEAPON_STATS *)psStats - asWeaponStats.data();
 		psTemplate->numWeaps = std::max<int>(psTemplate->numWeaps, i + 1);
 		break;
 	}
@@ -2811,7 +2811,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	if (psTempl->asParts[COMP_BRAIN] != 0)
 	{
 		psTempl->numWeaps = 1;
-		psTempl->asWeaps[0] = asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat - asWeaponStats;
+		psTempl->asWeaps[0] = asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat - asWeaponStats.data();
 	}
 
 	/* Check all the components have been set */
@@ -2842,7 +2842,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	// Check the weapons
 	for (int i = 0; i < psTempl->numWeaps; i++)
 	{
-		ASSERT_OR_RETURN(false, psTempl->asWeaps[i] < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psTempl->asWeaps[i], numWeaponStats);
+		ASSERT_OR_RETURN(false, psTempl->asWeaps[i] < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", psTempl->asWeaps[i], asWeaponStats.size());
 
 		int weaponSize = asWeaponStats[psTempl->asWeaps[i]].weaponSize;
 
@@ -3859,7 +3859,7 @@ void runTemplateShadowStats(UDWORD id)
 			{
 			case DROID_WEAPON:
 				compIndex = psTempl->asWeaps[0];
-				ASSERT_OR_RETURN(, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+				ASSERT_OR_RETURN(, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", compIndex, asWeaponStats.size());
 				psStats = &asWeaponStats[compIndex];
 				break;
 			case DROID_SENSOR:
