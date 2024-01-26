@@ -2211,8 +2211,8 @@ struct rankMap
 unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent)
 {
 	unsigned int numKills = experience / 65536;
-	ASSERT_OR_RETURN(0, brainComponent < numBrainStats, "Invalid brainComponent: %u", (unsigned)brainComponent);
-	const BRAIN_STATS *psStats = asBrainStats + brainComponent;
+	ASSERT_OR_RETURN(0, brainComponent < asBrainStats.size(), "Invalid brainComponent: %u", (unsigned)brainComponent);
+	const BRAIN_STATS *psStats = &asBrainStats[brainComponent];
 	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Invalid player: %u", (unsigned)player);
 	auto &vec = psStats->upgrade[player].rankThresholds;
 	ASSERT_OR_RETURN(0, vec.size() > 0, "rankThreshold was empty?");

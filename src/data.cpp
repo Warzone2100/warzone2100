@@ -268,7 +268,7 @@ static bool bufferSBRAINLoad(const char *fileName, void **ppData)
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	calcDataHash(ini, DATA_SBRAIN);
 
-	if (!loadBrainStats(ini) || !allocComponentList(COMP_BRAIN, numBrainStats))
+	if (!loadBrainStats(ini) || !allocComponentList(COMP_BRAIN, asBrainStats.size()))
 	{
 		return false;
 	}

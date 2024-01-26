@@ -48,7 +48,7 @@
 
 /* The stores for the different stats */
 std::vector<BODY_STATS> asBodyStats;
-BRAIN_STATS		*asBrainStats;
+std::vector<BRAIN_STATS> asBrainStats;
 PROPULSION_STATS	*asPropulsionStats;
 SENSOR_STATS		*asSensorStats;
 ECM_STATS		*asECMStats;
@@ -63,7 +63,6 @@ WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 /* The number of different stats stored */
-UDWORD		numBrainStats;
 UDWORD		numPropulsionStats;
 UDWORD		numSensorStats;
 UDWORD		numECMStats;
@@ -126,7 +125,6 @@ static void deallocTerrainTable()
 void statsInitVars()
 {
 	/* The number of different stats stored */
-	numBrainStats = 0;
 	numPropulsionStats = 0;
 	numSensorStats = 0;
 	numECMStats = 0;
@@ -142,7 +140,7 @@ bool statsShutDown()
 	lookupCompStatPtr.clear();
 
 	STATS_DEALLOC(asWeaponStats, numWeaponStats);
-	STATS_DEALLOC(asBrainStats, numBrainStats);
+	asBrainStats.clear();
 	STATS_DEALLOC(asPropulsionStats, numPropulsionStats);
 	STATS_DEALLOC(asRepairStats, numRepairStats);
 	STATS_DEALLOC(asConstructStats, numConstructStats);
@@ -172,7 +170,7 @@ bool statsAllocBody(UDWORD	numStats)
 /* Allocate Brain Stats */
 bool statsAllocBrain(UDWORD	numStats)
 {
-	ALLOC_STATS(numStats, asBrainStats, numBrainStats, BRAIN_STATS);
+	ALLOC_STATS_VECTOR(numStats, asBrainStats, BRAIN_STATS);
 }
 /* Allocate Propulsion Stats */
 bool statsAllocPropulsion(UDWORD	numStats)

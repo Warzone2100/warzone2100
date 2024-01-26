@@ -410,8 +410,8 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	templateObj["propulsion"] = (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
 	{
-		ASSERT(psCurr->asParts[COMP_BRAIN] < numBrainStats, "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BRAIN], numBrainStats);
-		templateObj["brain"] = (asBrainStats + psCurr->asParts[COMP_BRAIN])->id;
+		ASSERT(psCurr->asParts[COMP_BRAIN] < asBrainStats.size(), "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BRAIN], asBrainStats.size());
+		templateObj["brain"] = asBrainStats[psCurr->asParts[COMP_BRAIN]].id;
 	}
 	if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
 	{
