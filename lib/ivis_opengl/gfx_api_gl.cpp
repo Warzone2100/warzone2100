@@ -46,6 +46,9 @@
 #if GL_KHR_debug && !defined(__EMSCRIPTEN__)
 # define WZ_GL_KHR_DEBUG_SUPPORTED
 #endif
+#if !defined(__EMSCRIPTEN__)
+# define WZ_GL_TIMER_QUERY_SUPPORTED
+#endif
 
 struct OPENGL_DATA
 {
@@ -56,8 +59,10 @@ struct OPENGL_DATA
 };
 OPENGL_DATA opengl;
 
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 static GLuint perfpos[PERF_COUNT] = {};
 static bool perfStarted = false;
+#endif
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 static std::unordered_set<const gl_texture*> debugLiveTextures;
@@ -2942,11 +2947,16 @@ void gl_context::debugSceneEnd(const char *descr)
 
 bool gl_context::debugPerfAvailable()
 {
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 	return GLAD_GL_ARB_timer_query;
+#else
+	return false;
+#endif
 }
 
 bool gl_context::debugPerfStart(size_t sample)
 {
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 	if (GLAD_GL_ARB_timer_query)
 	{
 		char text[80];
@@ -2956,11 +2966,16 @@ bool gl_context::debugPerfStart(size_t sample)
 		return true;
 	}
 	return false;
+#else
+	return false;
+#endif
 }
 
 void gl_context::debugPerfStop()
 {
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 	perfStarted = false;
+#endif
 }
 
 void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
@@ -2971,11 +2986,13 @@ void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
 	}
 #endif
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 	if (!perfStarted)
 	{
 		return;
 	}
 	glBeginQuery(GL_TIME_ELAPSED, perfpos[pp]);
+#endif
 }
 
 void gl_context::debugPerfEnd(PERF_POINT pp)
@@ -2986,18 +3003,24 @@ void gl_context::debugPerfEnd(PERF_POINT pp)
 		glPopDebugGroup();
 	}
 #endif
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 	if (!perfStarted)
 	{
 		return;
 	}
 	glEndQuery(GL_TIME_ELAPSED);
+#endif
 }
 
 uint64_t gl_context::debugGetPerfValue(PERF_POINT pp)
 {
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 	GLuint64 count;
 	glGetQueryObjectui64v(perfpos[pp], GL_QUERY_RESULT, &count);
 	return count;
+#else
+	return 0;
+#endif
 }
 
 // Returns a space-separated list of OpenGL extensions
@@ -3573,7 +3596,9 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * ARB Vertex Buffer Object (VBO) %s supported.", GLAD_GL_ARB_vertex_buffer_object ? "is" : "is NOT");
 		debug(LOG_3D, "  * NPOT %s supported.", GLAD_GL_ARB_texture_non_power_of_two ? "is" : "is NOT");
 		debug(LOG_3D, "  * texture cube_map %s supported.", GLAD_GL_ARB_texture_cube_map ? "is" : "is NOT");
+	#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 		debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLAD_GL_ARB_timer_query ? "is" : "is NOT");
+	#endif
 	}
 	else
 	{
@@ -3698,11 +3723,13 @@ bool gl_context::initGLContext()
 		wzGLCheckErrors();
 	}
 
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 	if (GLAD_GL_ARB_timer_query)
 	{
 		glGenQueries(PERF_COUNT, perfpos);
 		wzGLCheckErrors();
 	}
+#endif
 
 	if (GLAD_GL_EXT_texture_filter_anisotropic)
 	{
@@ -4246,10 +4273,12 @@ void gl_context::shutdown()
 		scratchbuffer = 0;
 	}
 
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
 	if (GLAD_GL_ARB_timer_query && glDeleteQueries)
 	{
 		glDeleteQueries(PERF_COUNT, perfpos);
 	}
+#endif
 
 	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
 	{
