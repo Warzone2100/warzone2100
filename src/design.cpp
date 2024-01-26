@@ -493,7 +493,7 @@ static ComponentIterator sensorIterator()
 static ComponentIterator ecmIterator()
 {
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
-	return componentIterator(asECMStats, sizeof(ECM_STATS), apCompLists[selectedPlayer][COMP_ECM], numECMStats);
+	return componentIterator(asECMStats.data(), sizeof(ECM_STATS), apCompLists[selectedPlayer][COMP_ECM], asECMStats.size());
 }
 
 static ComponentIterator constructorIterator()
@@ -1267,8 +1267,8 @@ intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 		break;
 	case DROID_ECM:
 		compIndex = psTemplate->asParts[COMP_ECM];
-		ASSERT_OR_RETURN(nullptr, compIndex < numECMStats, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
-		psStats = (COMPONENT_STATS *)(asECMStats + compIndex);
+		ASSERT_OR_RETURN(nullptr, compIndex < asECMStats.size(), "Invalid range referenced for numECMStats, %d > %d", compIndex, asECMStats.size());
+		psStats = (COMPONENT_STATS *)(&asECMStats[compIndex]);
 		break;
 	case DROID_CONSTRUCT:
 	case DROID_CYBORG_CONSTRUCT:
@@ -2566,7 +2566,7 @@ static void setTemplateStat(DROID_TEMPLATE *psTemplate, COMPONENT_STATS *psStats
 		break;
 	case COMP_ECM:
 		clearTurret();
-		psTemplate->asParts[COMP_ECM] = (ECM_STATS *)psStats - asECMStats;
+		psTemplate->asParts[COMP_ECM] = (ECM_STATS *)psStats - asECMStats.data();
 		break;
 	case COMP_SENSOR:
 		clearTurret();
@@ -2800,7 +2800,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BRAIN] < asBrainStats.size(), "Invalid range referenced for numBrainStats, %d > %d", psTempl->asParts[COMP_BRAIN], asBrainStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_PROPULSION] < asPropulsionStats.size(), "Invalid range referenced for numPropulsionStats, %d > %d", psTempl->asParts[COMP_PROPULSION], asPropulsionStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_REPAIRUNIT] < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", psTempl->asParts[COMP_REPAIRUNIT], numRepairStats);
-	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_ECM] < numECMStats, "Invalid range referenced for numECMStats, %d > %d", psTempl->asParts[COMP_ECM], numECMStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_ECM] < asECMStats.size(), "Invalid range referenced for numECMStats, %d > %d", psTempl->asParts[COMP_ECM], asECMStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_SENSOR] < asSensorStats.size(), "Invalid range referenced for numSensorStats, %d > %d", psTempl->asParts[COMP_SENSOR], asSensorStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_CONSTRUCT] < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", psTempl->asParts[COMP_CONSTRUCT], numConstructStats);
 
@@ -3869,7 +3869,7 @@ void runTemplateShadowStats(UDWORD id)
 				break;
 			case DROID_ECM:
 				compIndex = psTempl->asParts[COMP_ECM];
-				ASSERT_OR_RETURN(, compIndex < numECMStats, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
+				ASSERT_OR_RETURN(, compIndex < asECMStats.size(), "Invalid range referenced for numECMStats, %d > %d", compIndex, asECMStats.size());
 				psStats = &asECMStats[compIndex];
 				break;
 			case DROID_CONSTRUCT:

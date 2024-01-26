@@ -3497,8 +3497,8 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 	}
 	else if (type == COMP_ECM)
 	{
-		SCRIPT_ASSERT(false, context, index < numECMStats, "Bad index");
-		ECM_STATS *psStats = asECMStats + index;
+		SCRIPT_ASSERT(false, context, index < asECMStats.size(), "Bad index");
+		ECM_STATS *psStats = &asECMStats[index];
 		if (name == "Range")
 		{
 			psStats->upgrade[player].range = value;
@@ -3833,8 +3833,8 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 	}
 	else if (type == COMP_ECM)
 	{
-		SCRIPT_ASSERT(nlohmann::json(), context, index < numECMStats, "Bad index");
-		const ECM_STATS *psStats = asECMStats + index;
+		SCRIPT_ASSERT(nlohmann::json(), context, index < asECMStats.size(), "Bad index");
+		const ECM_STATS *psStats = &asECMStats[index];
 		if (name == "Range")
 		{
 			return psStats->upgrade[player].range;
@@ -4106,9 +4106,9 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
 		GameEntityRuleContainer ecmbase;
-		for (unsigned j = 0; j < numECMStats; j++)
+		for (unsigned j = 0; j < asECMStats.size(); j++)
 		{
-			ECM_STATS *psStats = asECMStats + j;
+			ECM_STATS *psStats = &asECMStats[j];
 			GameEntityRules ecm(i, j, {
 				{"Range", COMP_ECM},
 				{"HitPoints", COMP_ECM},
@@ -4273,9 +4273,9 @@ nlohmann::json wzapi::constructStatsObject()
 
 		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
 		nlohmann::json ecmbase = nlohmann::json::object();
-		for (int j = 0; j < numECMStats; j++)
+		for (int j = 0; j < asECMStats.size(); j++)
 		{
-			ECM_STATS *psStats = asECMStats + j;
+			ECM_STATS *psStats = &asECMStats[j];
 			nlohmann::json ecm = register_common(psStats);
 			ecm["Range"] = psStats->base.range;
 			ecmbase[psStats->name.toUtf8()] = std::move(ecm);

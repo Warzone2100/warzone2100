@@ -204,7 +204,7 @@ static bool bufferSECMLoad(const char *fileName, void **ppData)
 	calcDataHash(ini, DATA_SECM);
 
 	if (!loadECMStats(ini)
-	    || !allocComponentList(COMP_ECM, numECMStats))
+	    || !allocComponentList(COMP_ECM, asECMStats.size()))
 	{
 		return false;
 	}

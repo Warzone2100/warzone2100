@@ -418,10 +418,10 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 		ASSERT(psCurr->asParts[COMP_REPAIRUNIT] < numRepairStats, "asParts[COMP_REPAIRUNIT] (%d) exceeds numRepairStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_REPAIRUNIT], numRepairStats);
 		templateObj["repair"] = (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id;
 	}
-	if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
+	if (asECMStats[psCurr->asParts[COMP_ECM]].location == LOC_TURRET)
 	{
-		ASSERT(psCurr->asParts[COMP_ECM] < numECMStats, "asParts[COMP_ECM] (%d) exceeds numECMStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_ECM], numECMStats);
-		templateObj["ecm"] = (asECMStats + psCurr->asParts[COMP_ECM])->id;
+		ASSERT(psCurr->asParts[COMP_ECM] < asECMStats.size(), "asParts[COMP_ECM] (%d) exceeds numECMStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_ECM], asECMStats.size());
+		templateObj["ecm"] = asECMStats[psCurr->asParts[COMP_ECM]].id;
 	}
 	if (asSensorStats[psCurr->asParts[COMP_SENSOR]].location == LOC_TURRET)
 	{
