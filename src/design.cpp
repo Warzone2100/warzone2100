@@ -511,7 +511,7 @@ static ComponentIterator repairIterator()
 static ComponentIterator brainIterator()
 {
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
-	return componentIterator(asBrainStats, sizeof(BRAIN_STATS), apCompLists[selectedPlayer][COMP_BRAIN], numBrainStats);
+	return componentIterator(asBrainStats.data(), sizeof(BRAIN_STATS), apCompLists[selectedPlayer][COMP_BRAIN], asBrainStats.size());
 }
 
 static ComponentIterator concatIterators(std::vector<ComponentIterator> iterators)
@@ -1257,8 +1257,8 @@ intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 	{
 	case DROID_COMMAND:
 		compIndex = psTemplate->asParts[COMP_BRAIN];
-		ASSERT_OR_RETURN(nullptr, compIndex < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
-		psStats = (COMPONENT_STATS *)(asBrainStats + compIndex);
+		ASSERT_OR_RETURN(nullptr, compIndex < asBrainStats.size(), "Invalid range referenced for numBrainStats, %d > %d", compIndex, asBrainStats.size());
+		psStats = (COMPONENT_STATS *)(&asBrainStats[compIndex]);
 		break;
 	case DROID_SENSOR:
 		compIndex = psTemplate->asParts[COMP_SENSOR];
@@ -2545,7 +2545,7 @@ static void setTemplateStat(DROID_TEMPLATE *psTemplate, COMPONENT_STATS *psStats
 	case COMP_BRAIN: {
 		auto stats = (BRAIN_STATS *)psStats;
 		clearTurret();
-		psTemplate->asParts[COMP_BRAIN] = stats - asBrainStats;
+		psTemplate->asParts[COMP_BRAIN] = stats - asBrainStats.data();
 		psTemplate->asWeaps[0] = stats->psWeaponStat - asWeaponStats;
 		psTemplate->numWeaps = 1;
 		break;
@@ -2797,7 +2797,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	ASSERT_PLAYER_OR_RETURN(false, player);
 
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BODY] < asBodyStats.size(), "Invalid range referenced for numBodyStats, %d > %d", psTempl->asParts[COMP_BODY], asBodyStats.size());
-	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BRAIN] < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", psTempl->asParts[COMP_BRAIN], numBrainStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BRAIN] < asBrainStats.size(), "Invalid range referenced for numBrainStats, %d > %d", psTempl->asParts[COMP_BRAIN], asBrainStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_PROPULSION] < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", psTempl->asParts[COMP_PROPULSION], numPropulsionStats);
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_REPAIRUNIT] < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", psTempl->asParts[COMP_REPAIRUNIT], numRepairStats);
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_ECM] < numECMStats, "Invalid range referenced for numECMStats, %d > %d", psTempl->asParts[COMP_ECM], numECMStats);

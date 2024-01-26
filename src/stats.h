@@ -37,7 +37,7 @@
 
 /* The stores for the different stats */
 extern std::vector<BODY_STATS> asBodyStats;
-extern BRAIN_STATS			*asBrainStats;
+extern std::vector<BRAIN_STATS> asBrainStats;
 extern PROPULSION_STATS		*asPropulsionStats;
 extern SENSOR_STATS			*asSensorStats;
 extern ECM_STATS			*asECMStats;
@@ -51,7 +51,6 @@ extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 extern WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 /* The number of different stats stored */
-extern UDWORD		numBrainStats;
 extern UDWORD		numPropulsionStats;
 extern UDWORD		numSensorStats;
 extern UDWORD		numECMStats;

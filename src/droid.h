@@ -311,7 +311,7 @@ static inline BODY_STATS *getBodyStats(const DROID *psDroid)
 
 static inline BRAIN_STATS *getBrainStats(const DROID *psDroid)
 {
-	return asBrainStats + psDroid->asBits[COMP_BRAIN];
+	return &asBrainStats[psDroid->asBits[COMP_BRAIN]];
 }
 
 static inline PROPULSION_STATS *getPropulsionStats(const DROID *psDroid)

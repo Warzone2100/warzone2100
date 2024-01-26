@@ -3434,8 +3434,8 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 	}
 	else if (type == COMP_BRAIN)
 	{
-		SCRIPT_ASSERT(false, context, index < numBrainStats, "Bad index");
-		BRAIN_STATS *psStats = asBrainStats + index;
+		SCRIPT_ASSERT(false, context, index < asBrainStats.size(), "Bad index");
+		BRAIN_STATS *psStats = &asBrainStats[index];
 		if (name == "BaseCommandLimit")
 		{
 			psStats->upgrade[player].maxDroids = value;
@@ -3777,8 +3777,8 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 	}
 	else if (type == COMP_BRAIN)
 	{
-		SCRIPT_ASSERT(nlohmann::json(), context, index < numBrainStats, "Bad index");
-		const BRAIN_STATS *psStats = asBrainStats + index;
+		SCRIPT_ASSERT(nlohmann::json(), context, index < asBrainStats.size(), "Bad index");
+		const BRAIN_STATS *psStats = &asBrainStats[index];
 		if (name == "BaseCommandLimit")
 		{
 			return psStats->upgrade[player].maxDroids;
@@ -4152,9 +4152,9 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		//== kills are required for this brain to level up to the next rank. To alter this from scripts, you must
 		//== set the entire array at once. Setting each item in the array will not work at the moment.
 		GameEntityRuleContainer brainbase;
-		for (unsigned j = 0; j < numBrainStats; j++)
+		for (unsigned j = 0; j < asBrainStats.size(); j++)
 		{
-			BRAIN_STATS *psStats = asBrainStats + j;
+			BRAIN_STATS *psStats = &asBrainStats[j];
 			GameEntityRules br(i, j, {
 				{"BaseCommandLimit", COMP_BRAIN},
 				{"CommandLimitByLevel", COMP_BRAIN},
@@ -4324,9 +4324,9 @@ nlohmann::json wzapi::constructStatsObject()
 
 		//==   * ```Brain``` Brains
 		nlohmann::json brainbase = nlohmann::json::object();
-		for (int j = 0; j < numBrainStats; j++)
+		for (int j = 0; j < asBrainStats.size(); j++)
 		{
-			BRAIN_STATS *psStats = asBrainStats + j;
+			BRAIN_STATS *psStats = &asBrainStats[j];
 			nlohmann::json br = register_common(psStats);
 			br["BaseCommandLimit"] = psStats->base.maxDroids;
 			br["CommandLimitByLevel"] = psStats->base.maxDroidsMult;
