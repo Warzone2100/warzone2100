@@ -181,6 +181,7 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 		message(FATAL_ERROR "No basisu tool has been provided - set BASIS_UNIVERSAL_CLI to the path to basisu or disable WZ_ENABLE_BASIS_UNIVERSAL!")
 	endif()
 
+	# Normal Terrain
 	file(GLOB TEXPAGES_TERRAIN
 		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-82-yellow-sand-arizona.png"
 		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-83-red-earth-arizona.png"
@@ -215,14 +216,42 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/texpages")
 	file(MAKE_DIRECTORY "${_output_dir}")
 	set(_terrain_max_size 1024)
+	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+		set(_terrain_max_size 512)
+	endif()
 
 	WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "TEXTURE" RESIZE "${_terrain_max_size}" RDO ENCODING_TARGET texture_encoding TARGET_FOLDER data ALL FILES ${TEXPAGES_TERRAIN})
 	set(PROCESSED_TEXTURE_FILES ${TEXPAGES_TERRAIN})
 
+	# Backdrops
+	file(GLOB TEXPAGES_BACKDROPS_ALL
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/bdrops/*.png"
+	)
+	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+		# limit backdrops included on Emscripten (to save space)
+		file(GLOB TEXPAGES_BACKDROPS
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/bdrops/backdrop0.png"
+		)
+	else()
+		set(TEXPAGES_BACKDROPS ${TEXPAGES_BACKDROPS_ALL})
+	endif()
+
+	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/texpages/bdrops")
+	file(MAKE_DIRECTORY "${_output_dir}")
+	set(_bdrop_max_size 2048)
+	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+		set(_bdrop_max_size 1024)
+	endif()
+
+	WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "UITEXTURE" RESIZE "${_bdrop_max_size}" RDO ENCODING_TARGET texture_encoding TARGET_FOLDER data ALL FILES ${TEXPAGES_BACKDROPS})
+
+	# The rest of the texture files
+	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/texpages")
 	file(GLOB_RECURSE ALL_TEXPAGES LIST_DIRECTORIES false CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.png" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/compression_overrides.txt" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.radar")
 	unset(ALL_TEXPAGES_unprocessed)
 	list(APPEND ALL_TEXPAGES_unprocessed ${ALL_TEXPAGES})
 	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${PROCESSED_TEXTURE_FILES})
+	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${TEXPAGES_BACKDROPS_ALL})
 	foreach(TEXPAGE_FILE ${ALL_TEXPAGES_unprocessed})
 		file(RELATIVE_PATH _output_name "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages" "${TEXPAGE_FILE}")
 		message(STATUS "Copy unprocessed image file: ${_output_name}")
@@ -246,6 +275,8 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/base"
 	)
 
+	unset(TEXPAGES_BACKDROPS)
+	unset(TEXPAGES_BACKDROPS_ALL)
 	unset(PROCESSED_TEXTURE_FILES)
 	unset(ALL_TEXPAGES)
 	unset(TEXTURE_UNPROCESSED_LIST)
