@@ -404,8 +404,8 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	case DROID_DEFAULT: templateObj["type"] = "DROID"; break;
 	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().c_str());
 	}
-	ASSERT(psCurr->asParts[COMP_BODY] < numBodyStats, "asParts[COMP_BODY] (%d) exceeds numBodyStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BODY], numBodyStats);
-	templateObj["body"] = (asBodyStats + psCurr->asParts[COMP_BODY])->id;
+	ASSERT(psCurr->asParts[COMP_BODY] < asBodyStats.size(), "asParts[COMP_BODY] (%d) exceeds numBodyStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BODY], asBodyStats.size());
+	templateObj["body"] = asBodyStats[psCurr->asParts[COMP_BODY]].id;
 	ASSERT(psCurr->asParts[COMP_PROPULSION] < numPropulsionStats, "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_PROPULSION], numPropulsionStats);
 	templateObj["propulsion"] = (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
@@ -799,14 +799,14 @@ std::vector<DROID_TEMPLATE *> fillTemplateList(STRUCTURE *psFactory)
 		}
 
 		//check the factory can cope with this sized body
-		if (((asBodyStats + psCurr->asParts[COMP_BODY])->size <= iCapacity))
+		if (asBodyStats[psCurr->asParts[COMP_BODY]].size <= iCapacity)
 		{
 			pList.push_back(psCurr);
 		}
 		else if (bMultiPlayer && (iCapacity == SIZE_HEAVY))
 		{
 			// Special case for Super heavy bodyies (Super Transporter)
-			if ((asBodyStats + psCurr->asParts[COMP_BODY])->size == SIZE_SUPER_HEAVY)
+			if (asBodyStats[psCurr->asParts[COMP_BODY]].size == SIZE_SUPER_HEAVY)
 			{
 				pList.push_back(psCurr);
 			}

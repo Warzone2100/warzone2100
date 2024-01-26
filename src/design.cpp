@@ -469,7 +469,7 @@ static ComponentIterator componentIterator(COMPONENT_STATS *psStats, unsigned si
 static ComponentIterator bodyIterator()
 {
 	ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer: %" PRIu32 "", selectedPlayer);
-	return componentIterator(asBodyStats, sizeof(*asBodyStats), apCompLists[selectedPlayer][COMP_BODY], numBodyStats);
+	return componentIterator(asBodyStats.data(), sizeof(BODY_STATS), apCompLists[selectedPlayer][COMP_BODY], asBodyStats.size());
 }
 
 static ComponentIterator weaponIterator()
@@ -1366,8 +1366,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	}
 
 	compIndex = psTemplate->asParts[COMP_BODY];
-	ASSERT_OR_RETURN("", compIndex < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
-	psStats = (COMPONENT_STATS *)(asBodyStats + compIndex);
+	ASSERT_OR_RETURN("", compIndex < asBodyStats.size(), "Invalid range referenced for numBodyStats, %d > %d", compIndex, asBodyStats.size());
+	psStats = (COMPONENT_STATS *)(&asBodyStats[compIndex]);
 	if (psTemplate->asParts[COMP_BODY] != 0)
 	{
 		checkStringLength(aCurrName, getLocalizedStatsName(psStats));
@@ -1413,7 +1413,7 @@ static void intSetDesignStats(DROID_TEMPLATE *psTemplate)
 	intSetSystemForm(psStats);
 
 	/* Set the body stats */
-	intSetBodyStats(asBodyStats + psTemplate->asParts[COMP_BODY]);
+	intSetBodyStats(&asBodyStats[psTemplate->asParts[COMP_BODY]]);
 
 	/* Set the propulsion stats */
 	intSetPropulsionForm(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION]);
@@ -2531,7 +2531,7 @@ static void setTemplateStat(DROID_TEMPLATE *psTemplate, COMPONENT_STATS *psStats
 	{
 	case COMP_BODY: {
 		auto stats = (BODY_STATS *)psStats;
-		psTemplate->asParts[COMP_BODY] = stats - asBodyStats;
+		psTemplate->asParts[COMP_BODY] = stats - asBodyStats.data();
 		if (!intCheckValidWeaponForProp(psTemplate))
 		{
 			clearTurret();
@@ -2796,7 +2796,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 {
 	ASSERT_PLAYER_OR_RETURN(false, player);
 
-	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BODY] < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", psTempl->asParts[COMP_BODY], numBodyStats);
+	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BODY] < asBodyStats.size(), "Invalid range referenced for numBodyStats, %d > %d", psTempl->asParts[COMP_BODY], asBodyStats.size());
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_BRAIN] < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", psTempl->asParts[COMP_BRAIN], numBrainStats);
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_PROPULSION] < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", psTempl->asParts[COMP_PROPULSION], numPropulsionStats);
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_REPAIRUNIT] < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", psTempl->asParts[COMP_REPAIRUNIT], numRepairStats);
@@ -3569,7 +3569,7 @@ void intProcessDesign(UDWORD id)
 
 			case IDES_SYSTEM:
 			case IDES_TURRET:
-				if ((asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 1 &&
+				if (asBodyStats[sCurrDesign.asParts[COMP_BODY]].weaponSlots > 1 &&
 				    sCurrDesign.numWeaps == 1 && sCurrDesign.asParts[COMP_BRAIN] == 0)
 				{
 					debug(LOG_GUI, "intProcessDesign: First weapon selected, doing next.");
@@ -3582,7 +3582,7 @@ void intProcessDesign(UDWORD id)
 				}
 				break;
 			case IDES_TURRET_A:
-				if ((asBodyStats + sCurrDesign.asParts[COMP_BODY])->weaponSlots > 2)
+				if (asBodyStats[sCurrDesign.asParts[COMP_BODY]].weaponSlots > 2)
 				{
 					debug(LOG_GUI, "intProcessDesign: Second weapon selected, doing next.");
 					intSetDesignMode(IDES_TURRET_B);
@@ -3847,7 +3847,7 @@ void runTemplateShadowStats(UDWORD id)
 	if (psTempl && psTempl != &sCurrDesign)
 	{
 		/* Now set the bar graphs for the stats */
-		intSetBodyShadowStats(asBodyStats + psTempl->asParts[COMP_BODY]);
+		intSetBodyShadowStats(&asBodyStats[psTempl->asParts[COMP_BODY]]);
 		intSetPropulsionShadowStats(asPropulsionStats + psTempl->asParts[COMP_PROPULSION]);
 		//only set the system shadow bar if the same type of droid
 		COMPONENT_STATS *psStats = nullptr;

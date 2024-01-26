@@ -3358,7 +3358,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 int16_t DROID::droidResistance() const
 {
 	CHECK_DROID(this);
-	const BODY_STATS *psStats = asBodyStats + asBits[COMP_BODY];
+	const BODY_STATS *psStats = &asBodyStats[asBits[COMP_BODY]];
 	int res = experience / (65536 / MAX(1, psStats->upgrade[player].resistance));
 	// ensure resistance is a base minimum
 	res = MAX(res, psStats->upgrade[player].resistance);

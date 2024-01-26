@@ -1771,7 +1771,7 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 {
 	/* Get its absolute dimensions */
 	// NOTE: This only takes into account body, but is "good enough"
-	const BODY_STATS *psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
+	const BODY_STATS *psBStats = &asBodyStats[psDroid->asBits[COMP_BODY]];
 	const iIMDShape * pIMD = (psBStats != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
@@ -3751,7 +3751,7 @@ static void	drawDroidCmndNo(DROID *psDroid)
 void calcScreenCoords(DROID *psDroid, const glm::mat4 &perspectiveViewMatrix)
 {
 	/* Get it's absolute dimensions */
-	const BODY_STATS *psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
+	const BODY_STATS *psBStats = &asBodyStats[psDroid->asBits[COMP_BODY]];
 	Vector3i origin;
 	Vector2i center(0, 0);
 	int wsRadius = 22; // World space radius, 22 = magic minimum

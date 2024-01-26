@@ -306,7 +306,7 @@ static inline int droidSensorRange(const DROID *psDroid)
  */
 static inline BODY_STATS *getBodyStats(const DROID *psDroid)
 {
-	return asBodyStats + psDroid->asBits[COMP_BODY];
+	return &asBodyStats[psDroid->asBits[COMP_BODY]];
 }
 
 static inline BRAIN_STATS *getBrainStats(const DROID *psDroid)

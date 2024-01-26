@@ -176,7 +176,7 @@ void makeAllAvailable()
 		{
 			apCompLists[i][COMP_WEAPON][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numBodyStats; comp++)
+		for (comp = 0; comp < asBodyStats.size(); comp++)
 		{
 			apCompLists[i][COMP_BODY][comp] = AVAILABLE;
 		}

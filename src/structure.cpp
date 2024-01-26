@@ -5825,7 +5825,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	}
 
 	//haven't found a propulsion - look for a body
-	for (unsigned inc = 0; inc < numBodyStats; inc++)
+	for (unsigned inc = 0; inc < asBodyStats.size(); inc++)
 	{
 		if (apCompLists[losingPlayer][COMP_BODY][inc] == AVAILABLE &&
 		    apCompLists[rewardPlayer][COMP_BODY][inc] != AVAILABLE)
