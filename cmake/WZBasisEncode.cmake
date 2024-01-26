@@ -50,7 +50,7 @@ endfunction()
 ########################################################################
 #
 # WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR outputDir
-#			   TYPE <TEXTURE, NORMALMAP, SPECULARMAP, ALPHAMASK>
+#			   TYPE <TEXTURE, NORMALMAP, SPECULARMAP, ALPHAMASK, UITEXTURE>
 #			   [RESIZE <512 | 1024 | 2048 ...>]
 #			   [UASTC_LEVEL <0 | 1 | 2 | 3 | 4> = 2]
 #			   [RDO]
@@ -89,7 +89,7 @@ function(WZ_BASIS_ENCODE_TEXTURES)
 	if(NOT _parsedArguments_OUTPUT_DIR)
 		message( FATAL_ERROR "Missing required OUTPUT_DIR parameter" )
 	endif()
-	if(NOT _parsedArguments_TYPE OR NOT _parsedArguments_TYPE MATCHES "^(TEXTURE|NORMALMAP|SPECULARMAP|ALPHAMASK)$")
+	if(NOT _parsedArguments_TYPE OR NOT _parsedArguments_TYPE MATCHES "^(TEXTURE|NORMALMAP|SPECULARMAP|ALPHAMASK|UITEXTURE)$")
 		message( FATAL_ERROR "Missing valid TYPE parameter" )
 	endif()
 	if(NOT _parsedArguments_ENCODING_TARGET)
@@ -118,6 +118,11 @@ function(WZ_BASIS_ENCODE_TEXTURES)
 	unset(_type_dependent_arguments)
 	if(_parsedArguments_TYPE STREQUAL "TEXTURE")
 		set(_type_dependent_arguments -mipmap)
+		if (_parsedArguments_RDO)
+			set(_rdo_arguments -uastc_rdo_l 1.0)
+		endif()
+	elseif(_parsedArguments_TYPE STREQUAL "UITEXTURE")
+		# no mipmaps
 		if (_parsedArguments_RDO)
 			set(_rdo_arguments -uastc_rdo_l 1.0)
 		endif()
