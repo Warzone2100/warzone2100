@@ -819,7 +819,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
 			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
-			range = MAX(proj_GetLongRange(psWeap, psStruct->player), range);
+			range = MAX(proj_GetLongRange(*psWeap, psStruct->player), range);
 		}
 	}
 	JSValue value = convObj(psStruct, ctx);
@@ -973,7 +973,7 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
 			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
-			range = MAX(proj_GetLongRange(psWeap, psDroid->player), range);
+			range = MAX(proj_GetLongRange(*psWeap, psDroid->player), range);
 		}
 	}
 	DROID_TYPE type = psDroid->droidType;

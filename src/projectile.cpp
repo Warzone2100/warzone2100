@@ -894,7 +894,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		setProjectileDestination(psProj, closestCollisionObject);  // We hit something.
 
 		// Buildings and terrain cannot be penetrated and we need a penetrating weapon, and projectile should not have already travelled further than 1.25 * maximum range.
-		if (closestCollisionObject != nullptr && closestCollisionObject->type == OBJ_DROID && psStats->penetrate && currentDistance < static_cast<int>(1.25 * proj_GetLongRange(psStats, psProj->player)))
+		if (closestCollisionObject != nullptr && closestCollisionObject->type == OBJ_DROID && psStats->penetrate && currentDistance < static_cast<int>(1.25 * proj_GetLongRange(*psStats, psProj->player)))
 		{
 			WEAPON asWeap;
 			asWeap.nStat = psStats - asWeaponStats;
@@ -910,7 +910,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		return;
 	}
 
-	if (currentDistance * 100 >= proj_GetLongRange(psStats, psProj->player) * psStats->distanceExtensionFactor)
+	if (currentDistance * 100 >= proj_GetLongRange(*psStats, psProj->player) * psStats->distanceExtensionFactor)
 	{
 		// We've travelled our maximum range.
 		psProj->state = PROJ_IMPACT;
@@ -930,14 +930,14 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			{
 			case WSC_FLAME:
 				posFlip.z -= 8;  // Why?
-				effectGiveAuxVar(PERCENT(currentDistance, proj_GetLongRange(psStats, psProj->player)));
+				effectGiveAuxVar(PERCENT(currentDistance, proj_GetLongRange(*psStats, psProj->player)));
 				addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, nullptr, 0, effectTime);
 				break;
 			case WSC_COMMAND:
 			case WSC_ELECTRONIC:
 			case WSC_EMP:
 				posFlip.z -= 8;  // Why?
-				effectGiveAuxVar(PERCENT(currentDistance, proj_GetLongRange(psStats, psProj->player)) / 2);
+				effectGiveAuxVar(PERCENT(currentDistance, proj_GetLongRange(*psStats, psProj->player)) / 2);
 				addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0, effectTime);
 				break;
 			case WSC_ROCKET:
@@ -1018,7 +1018,7 @@ static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, Vector3i 
 			continue;  // Target out of range.
 		}
 		// The psCurr will get damaged, at this point.
-		unsigned damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, psCurr);
+		unsigned damage = calcDamage(weaponRadDamage(*psStats, psObj->player), psStats->weaponEffect, psCurr);
 		debug(LOG_ATTACK, "Damage to object %d, player %d : %u", psCurr->id, psCurr->player, damage);
 		if (bMultiPlayer && psObj->psSource != nullptr && psCurr->type != OBJ_FEATURE)
 		{
@@ -1190,7 +1190,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		{
 			// If we did enough `damage' to capture the target
 			if (electronicDamage(psObj->psDest,
-			                     calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
+			                     calcDamage(weaponDamage(*psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
 			                     psObj->player))
 			{
 				switch (psObj->psSource->type)
@@ -1215,7 +1215,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		else
 		{
 			// Calculate the damage the weapon does to its target
-			unsigned int damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
+			unsigned int damage = calcDamage(weaponDamage(*psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
 
 			// If we are in a multi-player game and the attacker is our responsibility
 			if (bMultiPlayer && psObj->psSource)
@@ -1445,7 +1445,7 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 			psCurr->periodicalDamageStart = gameTime;
 			psCurr->periodicalDamage = 0;  // Reset periodical damage done this tick.
 		}
-		unsigned damageRate = calcDamage(weaponPeriodicalDamage(psStats, psProj->player), psStats->periodicalDamageWeaponEffect, psCurr);
+		unsigned damageRate = calcDamage(weaponPeriodicalDamage(*psStats, psProj->player), psStats->periodicalDamageWeaponEffect, psCurr);
 		debug(LOG_NEVER, "Periodical damage of %d per second to object %d, player %d\n", damageRate, psCurr->id, psCurr->player);
 
 		struct DAMAGE sDamage = {
@@ -1490,24 +1490,24 @@ bool proj_Direct(const WEAPON_STATS *psStats)
 	ASSERT_OR_RETURN(retVal, player >= 0 && player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
 // return the maximum range for a weapon
-int proj_GetLongRange(const WEAPON_STATS *psStats, int player)
+int proj_GetLongRange(const WEAPON_STATS& psStats, int player)
 {
 	ASSERT_PLAYER_OR_RETURN(0, player);
-	return psStats->upgrade[player].maxRange;
+	return psStats.upgrade[player].maxRange;
 }
 
 // return the minimum range for a weapon
-int proj_GetMinRange(const WEAPON_STATS *psStats, int player)
+int proj_GetMinRange(const WEAPON_STATS& psStats, int player)
 {
 	ASSERT_PLAYER_OR_RETURN(0, player);
-	return psStats->upgrade[player].minRange;
+	return psStats.upgrade[player].minRange;
 }
 
 // return the short range for a weapon
-int proj_GetShortRange(const WEAPON_STATS *psStats, int player)
+int proj_GetShortRange(const WEAPON_STATS& psStats, int player)
 {
 	ASSERT_PLAYER_OR_RETURN(0, player);
-	return psStats->upgrade[player].shortRange;
+	return psStats.upgrade[player].shortRange;
 }
 
 /***************************************************************************/

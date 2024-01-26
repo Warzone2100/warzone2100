@@ -76,7 +76,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// See if reloadable weapon.
 	if (psStats->upgrade[psAttacker->player].reloadTime)
 	{
-		unsigned reloadTime = psWeap->lastFired + weaponReloadTime(psStats, psAttacker->player);
+		unsigned reloadTime = psWeap->lastFired + weaponReloadTime(*psStats, psAttacker->player);
 		if (psWeap->ammo == 0)  // Out of ammo?
 		{
 			fireTime = std::max(fireTime, reloadTime);  // Have to wait for weapon to reload before firing.
@@ -94,7 +94,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* See when the weapon last fired to control it's rate of fire */
-	firePause = weaponFirePause(psStats, psAttacker->player);
+	firePause = weaponFirePause(*psStats, psAttacker->player);
 	firePause = std::max(firePause, 1u);  // Don't shoot infinitely many shots at once.
 	fireTime = std::max(fireTime, psWeap->lastFired + firePause);
 
@@ -138,8 +138,8 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Now see if the target is in range  - also check not too near */
 	int dist = iHypot(deltaPos.xy());
-	longRange = proj_GetLongRange(psStats, psAttacker->player);
-	shortRange = proj_GetShortRange(psStats, psAttacker->player);
+	longRange = proj_GetLongRange(*psStats, psAttacker->player);
+	shortRange = proj_GetShortRange(*psStats, psAttacker->player);
 
 	int min_angle = 0;
 	// Calculate angle for indirect shots
@@ -162,16 +162,16 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	int baseHitChance = 0;
-	const int min_range = proj_GetMinRange(psStats, psAttacker->player);
+	const int min_range = proj_GetMinRange(*psStats, psAttacker->player);
 	if (dist <= shortRange && dist >= min_range)
 	{
 		// get weapon chance to hit in the short range
-		baseHitChance = weaponShortHit(psStats, psAttacker->player);
+		baseHitChance = weaponShortHit(*psStats, psAttacker->player);
 	}
 	else if (dist <= longRange && dist >= min_range)
 	{
 		// get weapon chance to hit in the long range
-		baseHitChance = weaponLongHit(psStats, psAttacker->player);
+		baseHitChance = weaponLongHit(*psStats, psAttacker->player);
 	}
 	else
 	{
@@ -237,7 +237,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		DROID *psDroid = castDroid(psTarget);
 
 		int32_t flightTime;
-		if (proj_Direct(psStats) || dist <= proj_GetMinRange(psStats, psAttacker->player))
+		if (proj_Direct(psStats) || dist <= proj_GetMinRange(*psStats, psAttacker->player))
 		{
 			flightTime = dist * GAME_TICKS_PER_SEC / psStats->flightSpeed;
 		}
@@ -376,7 +376,7 @@ int objArmour(const BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
 	int armour = 0;
 	if (psObj->type == OBJ_DROID)
 	{
-		armour = bodyArmour(asBodyStats + ((const DROID *)psObj)->asBits[COMP_BODY], psObj->player, weaponClass);
+		armour = bodyArmour(*(asBodyStats + ((const DROID *)psObj)->asBits[COMP_BODY]), psObj->player, weaponClass);
 	}
 	else if (psObj->type == OBJ_STRUCTURE && weaponClass == WC_KINETIC && ((const STRUCTURE *)psObj)->status != SS_BEING_BUILT)
 	{
@@ -506,7 +506,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 		return 0;    // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
 	}
 
-	damage = calcDamage(weaponDamage(psStats, player), psStats->weaponEffect, psTarget);
+	damage = calcDamage(weaponDamage(*psStats, player), psStats->weaponEffect, psTarget);
 
 	// apply game difficulty setting
 	damage = modifyForDifficultyLevel(damage, psTarget->player != selectedPlayer);
