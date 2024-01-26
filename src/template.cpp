@@ -430,8 +430,8 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	}
 	if (psCurr->asParts[COMP_CONSTRUCT] != 0)
 	{
-		ASSERT(psCurr->asParts[COMP_CONSTRUCT] < numConstructStats, "asParts[COMP_CONSTRUCT] (%d) exceeds numConstructStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_CONSTRUCT], numConstructStats);
-		templateObj["construct"] = (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id;
+		ASSERT(psCurr->asParts[COMP_CONSTRUCT] < asConstructStats.size(), "asParts[COMP_CONSTRUCT] (%d) exceeds numConstructStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_CONSTRUCT], asConstructStats.size());
+		templateObj["construct"] = asConstructStats[psCurr->asParts[COMP_CONSTRUCT]].id;
 	}
 	nlohmann::json weapons = nlohmann::json::array();
 	for (int j = 0; j < psCurr->numWeaps; j++)

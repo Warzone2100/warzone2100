@@ -43,7 +43,7 @@ extern std::vector<SENSOR_STATS> asSensorStats;
 extern std::vector<ECM_STATS> asECMStats;
 extern std::vector<REPAIR_STATS> asRepairStats;
 extern std::vector<WEAPON_STATS> asWeaponStats;
-extern CONSTRUCT_STATS		*asConstructStats;
+extern std::vector<CONSTRUCT_STATS> asConstructStats;
 extern std::vector<PROPULSION_TYPES> asPropulsionTypes;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
@@ -51,7 +51,6 @@ extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 extern WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 /* The number of different stats stored */
-extern UDWORD		numConstructStats;
 extern UDWORD		numTerrainTypes;
 
 //stores for each players component states - see below
@@ -231,8 +230,6 @@ WZ_DECL_PURE int bodyPower(const BODY_STATS& psStats, int player);
 WZ_DECL_PURE int bodyArmour(const BODY_STATS& psStats, int player, WEAPON_CLASS weaponClass);
 
 WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
-
-void statsInitVars();
 
 bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect);
 /*returns the weapon effect string based on the enum passed in */

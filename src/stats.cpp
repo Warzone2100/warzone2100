@@ -54,16 +54,13 @@ std::vector<SENSOR_STATS> asSensorStats;
 std::vector<ECM_STATS> asECMStats;
 std::vector<REPAIR_STATS> asRepairStats;
 std::vector<WEAPON_STATS> asWeaponStats;
-CONSTRUCT_STATS		*asConstructStats;
+std::vector<CONSTRUCT_STATS> asConstructStats;
 std::vector<PROPULSION_TYPES> asPropulsionTypes;
 static int		*asTerrainTable;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
-
-/* The number of different stats stored */
-UDWORD		numConstructStats;
 
 //stores for each players component states - can be either UNAVAILABLE, REDUNDANT, FOUND or AVAILABLE
 UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
@@ -117,12 +114,6 @@ static void deallocTerrainTable()
 	listSize = 0; \
 	(list) = NULL
 
-void statsInitVars()
-{
-	/* The number of different stats stored */
-	numConstructStats = 0;
-}
-
 /*Deallocate all the stats assigned from input data*/
 bool statsShutDown()
 {
@@ -133,7 +124,7 @@ bool statsShutDown()
 	asBrainStats.clear();
 	asPropulsionStats.clear();
 	asRepairStats.clear();
-	STATS_DEALLOC(asConstructStats, numConstructStats);
+	asConstructStats.clear();
 	asECMStats.clear();
 	asSensorStats.clear();
 	asBodyStats.clear();
@@ -187,7 +178,7 @@ bool statsAllocRepair(UDWORD	numStats)
 /* Allocate Construct Stats */
 bool statsAllocConstruct(UDWORD	numStats)
 {
-	ALLOC_STATS(numStats, asConstructStats, numConstructStats, CONSTRUCT_STATS);
+	ALLOC_STATS_VECTOR(numStats, asConstructStats, CONSTRUCT_STATS);
 }
 
 /*******************************************************************************

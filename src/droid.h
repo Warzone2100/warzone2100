@@ -336,7 +336,7 @@ static inline REPAIR_STATS *getRepairStats(const DROID *psDroid)
 
 static inline CONSTRUCT_STATS *getConstructStats(const DROID *psDroid)
 {
-	return asConstructStats + psDroid->asBits[COMP_CONSTRUCT];
+	return &asConstructStats[psDroid->asBits[COMP_CONSTRUCT]];
 }
 
 static inline WEAPON_STATS *getWeaponStats(const DROID *psDroid, int weapon_slot)

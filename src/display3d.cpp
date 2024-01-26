@@ -4412,7 +4412,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	auto deltaPlayer = Vector3f(0,0,0);
 	auto pt0 = Vector3f(psDroid->pos.x, psDroid->pos.z + 24, -psDroid->pos.y) + deltaPlayer;
 
-	int constructPoints = constructorPoints(*(asConstructStats + psDroid->asBits[COMP_CONSTRUCT]), psDroid->player);
+	int constructPoints = constructorPoints(asConstructStats[psDroid->asBits[COMP_CONSTRUCT]], psDroid->player);
 	int amount = 800 * constructPoints * (graphicsTime - psDroid->actionStarted) / GAME_TICKS_PER_SEC;
 
 	Vector3i each;

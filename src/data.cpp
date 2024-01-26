@@ -187,7 +187,7 @@ static bool bufferSCONSTRLoad(const char *fileName, void **ppData)
 	calcDataHash(ini, DATA_SCONSTR);
 
 	if (!loadConstructStats(ini)
-	    || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
+	    || !allocComponentList(COMP_CONSTRUCT, asConstructStats.size()))
 	{
 		return false;
 	}
