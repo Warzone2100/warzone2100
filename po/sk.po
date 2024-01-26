@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-25 05:07\n"
+"PO-Revision-Date: 2024-01-26 09:59\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -680,7 +680,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
-msgstr ""
+msgstr "Veliteľ, máme závažné správy."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
@@ -740,7 +740,7 @@ msgstr "PREPRAVNÁ MISIA: Založ predsunutú základňu"
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:5
 msgid "Commander, the success of the Project lies with you."
-msgstr ""
+msgstr "Veliteľ, úspech projektu je na tebe."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
@@ -761,13 +761,13 @@ msgstr "Na tomto mieste NASDA sa machádzala jedna, alebo viac rakiet."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr ""
+msgstr "Odosielame koordináty MV v blízkosti síl."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:1
 msgid "Coordinate Download Completed."
-msgstr ""
+msgstr "Sťahovanie koordinátov dokončené."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
@@ -976,7 +976,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr ""
+msgstr "Laserové satelity nefungujú správne, ich streľba zlyháva."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
@@ -3009,7 +3009,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:258
 #: po/custom/fromJson.txt:3109
 msgid "Improves vehicle speed"
-msgstr ""
+msgstr "Zlepší rýchlosť vozidiel"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[3]
@@ -3024,7 +3024,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:269
 #: po/custom/fromJson.txt:432
 msgid "All vehicles upgraded automatically"
-msgstr ""
+msgstr "Všetky vozidlá vylepšené automaticky"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[0]
@@ -3057,7 +3057,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:266
 #: po/custom/fromJson.txt:5902
 msgid "Vehicle Thermal Armor Improved"
-msgstr ""
+msgstr "Tepelná ochrana vozidiel vylepšená"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[1]
@@ -3068,7 +3068,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:267
 #: po/custom/fromJson.txt:2487
 msgid "Heat-resistant armored layers"
-msgstr ""
+msgstr "Teplu odolné vrstvy pancieru"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[2]
@@ -3077,7 +3077,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:268
 #: po/custom/fromJson.txt:3331
 msgid "Increases Thermal Armor"
-msgstr ""
+msgstr "Zvýši tepelnú ochranu"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[0]
@@ -14838,7 +14838,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6278
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Elita"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14858,7 +14858,7 @@ msgstr "Zelenáč"
 #: po/custom/fromJson.txt:6290
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Hrdina"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14868,7 +14868,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6296
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "Profesionál"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
@@ -14878,7 +14878,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6302
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "Základné"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14888,7 +14888,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6308
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "Nováčik"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14898,7 +14898,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6314
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "Špeciálne"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14908,7 +14908,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6320
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "Trénované"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14918,17 +14918,18 @@ msgstr ""
 #: po/custom/fromJson.txt:6326
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Veterán"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
+msgstr "Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2020 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14960,7 +14961,7 @@ msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:3
 msgid "Strategy Game"
-msgstr ""
+msgstr "Strategická hra"
 
 #: src/chat.cpp:63
 #: src/hci/chatoptions.cpp:1285
@@ -14975,7 +14976,7 @@ msgstr ""
 #: src/hci/quickchat.cpp:2736
 #: src/hci/quickchat.cpp:2748
 msgid "Allies"
-msgstr ""
+msgstr "Spojenci"
 
 #: src/chat.cpp:75
 #: src/hci/quickchat.cpp:2771
@@ -14990,7 +14991,7 @@ msgstr ""
 #: src/chat.cpp:173
 #: src/multiint.cpp:3641
 msgid "Spectators"
-msgstr ""
+msgstr "Diváci"
 
 #: src/cheat.cpp:232
 #, c-format
