@@ -1358,7 +1358,7 @@ DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate)
 	{
 		type = DROID_COMMAND;
 	}
-	else if ((asSensorStats + psTemplate->asParts[COMP_SENSOR])->location == LOC_TURRET)
+	else if (asSensorStats[psTemplate->asParts[COMP_SENSOR]].location == LOC_TURRET)
 	{
 		type = DROID_SENSOR;
 	}
@@ -3074,8 +3074,8 @@ bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid)
 			return false;
 		}
 		compIndex = ((const DROID *)psObj)->asBits[COMP_SENSOR];
-		ASSERT_OR_RETURN(false, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
-		psStats = asSensorStats + compIndex;
+		ASSERT_OR_RETURN(false, compIndex < asSensorStats.size(), "Invalid range referenced for numSensorStats, %d > %d", compIndex, asSensorStats.size());
+		psStats = &asSensorStats[compIndex];
 		break;
 	case OBJ_STRUCTURE:
 		psStats = ((const STRUCTURE *)psObj)->pStructureType->pSensor;
@@ -3275,7 +3275,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 		adjustDroidCount(psD, 1);
 
 		// the new player may have different default sensor/ecm/repair components
-		if ((asSensorStats + psD->asBits[COMP_SENSOR])->location == LOC_DEFAULT)
+		if (asSensorStats[psD->asBits[COMP_SENSOR]].location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_SENSOR] != aDefaultSensor[psD->player])
 			{

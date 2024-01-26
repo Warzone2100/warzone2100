@@ -236,7 +236,7 @@ static bool bufferSSENSORLoad(const char *fileName, void **ppData)
 	calcDataHash(ini, DATA_SSENSOR);
 
 	if (!loadSensorStats(ini)
-	    || !allocComponentList(COMP_SENSOR, numSensorStats))
+	    || !allocComponentList(COMP_SENSOR, asSensorStats.size()))
 	{
 		return false;
 	}

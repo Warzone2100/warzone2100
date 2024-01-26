@@ -3472,8 +3472,8 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 	}
 	else if (type == COMP_SENSOR)
 	{
-		SCRIPT_ASSERT(false, context, index < numSensorStats, "Bad index");
-		SENSOR_STATS *psStats = asSensorStats + index;
+		SCRIPT_ASSERT(false, context, index < asSensorStats.size(), "Bad index");
+		SENSOR_STATS *psStats = &asSensorStats[index];
 		if (name == "Range")
 		{
 			psStats->upgrade[player].range = value;
@@ -3812,8 +3812,8 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 	}
 	else if (type == COMP_SENSOR)
 	{
-		SCRIPT_ASSERT(nlohmann::json(), context, index < numSensorStats, "Bad index");
-		const SENSOR_STATS *psStats = asSensorStats + index;
+		SCRIPT_ASSERT(nlohmann::json(), context, index < asSensorStats.size(), "Bad index");
+		const SENSOR_STATS *psStats = &asSensorStats[index];
 		if (name == "Range")
 		{
 			return psStats->upgrade[player].range;
@@ -4078,9 +4078,9 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Sensor``` Sensor turrets
 		GameEntityRuleContainer sensorbase;
-		for (unsigned j = 0; j < numSensorStats; j++)
+		for (unsigned j = 0; j < asSensorStats.size(); j++)
 		{
-			SENSOR_STATS *psStats = asSensorStats + j;
+			SENSOR_STATS *psStats = &asSensorStats[j];
 			GameEntityRules sensor(i, j, {
 				{"HitPoints", COMP_SENSOR},
 				{"HitPointPct", COMP_SENSOR},
@@ -4262,9 +4262,9 @@ nlohmann::json wzapi::constructStatsObject()
 
 		//==   * ```Sensor``` Sensor turrets
 		nlohmann::json sensorbase = nlohmann::json::object();
-		for (int j = 0; j < numSensorStats; j++)
+		for (int j = 0; j < asSensorStats.size(); j++)
 		{
-			SENSOR_STATS *psStats = asSensorStats + j;
+			SENSOR_STATS *psStats = &asSensorStats[j];
 			nlohmann::json sensor = register_common(psStats);
 			sensor["Range"] = psStats->base.range;
 			sensorbase[psStats->name.toUtf8()] = std::move(sensor);

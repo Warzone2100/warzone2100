@@ -5877,7 +5877,7 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 	partsObj["brain"] = asBrainStats[psCurr->asBits[COMP_BRAIN]].id;
 	partsObj["repair"] = (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT])->id;
 	partsObj["ecm"] = (asECMStats + psCurr->asBits[COMP_ECM])->id;
-	partsObj["sensor"] = (asSensorStats + psCurr->asBits[COMP_SENSOR])->id;
+	partsObj["sensor"] = asSensorStats[psCurr->asBits[COMP_SENSOR]].id;
 	partsObj["construct"] = (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->id;
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
@@ -7381,9 +7381,9 @@ static bool writeCompListFile(const char *pFileName)
 				ini.setValue(psStats->id, state);
 			}
 		}
-		for (int i = 0; i < numSensorStats; i++)
+		for (int i = 0; i < asSensorStats.size(); i++)
 		{
-			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asSensorStats + i);
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(&asSensorStats[i]);
 			const int state = apCompLists[player][COMP_SENSOR][i];
 			if (state != UNAVAILABLE)
 			{
