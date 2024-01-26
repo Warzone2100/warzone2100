@@ -180,7 +180,7 @@ void makeAllAvailable()
 		{
 			apCompLists[i][COMP_BODY][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numPropulsionStats; comp++)
+		for (comp = 0; comp < asPropulsionStats.size(); comp++)
 		{
 			apCompLists[i][COMP_PROPULSION][comp] = AVAILABLE;
 		}

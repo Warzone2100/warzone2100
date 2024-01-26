@@ -1651,7 +1651,7 @@ endstructloc:
 bool wzapi::droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y))
 {
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
-	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	const PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	return fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType);
 }
 
@@ -1664,7 +1664,7 @@ bool wzapi::propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, 
 {
 	int propulsionIndex = getCompFromName(COMP_PROPULSION, WzString::fromUtf8(propulsionName));
 	SCRIPT_ASSERT(false, context, propulsionIndex > 0, "No such propulsion: %s", propulsionName.c_str());
-	const PROPULSION_STATS *psPropStats = asPropulsionStats + propulsionIndex;
+	const PROPULSION_STATS *psPropStats = &asPropulsionStats[propulsionIndex];
 	return fpathCheck(Vector3i(world_coord(x1), world_coord(y1), 0), Vector3i(world_coord(x2), world_coord(y2), 0), psPropStats->propulsionType);
 }
 
@@ -3522,8 +3522,8 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 	}
 	else if (type == COMP_PROPULSION)
 	{
-		SCRIPT_ASSERT(false, context, index < numPropulsionStats, "Bad index");
-		PROPULSION_STATS *psStats = asPropulsionStats + index;
+		SCRIPT_ASSERT(false, context, index < asPropulsionStats.size(), "Bad index");
+		PROPULSION_STATS *psStats = &asPropulsionStats[index];
 		if (name == "HitPoints")
 		{
 			psStats->upgrade[player].hitpoints = value;
@@ -3854,8 +3854,8 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 	}
 	else if (type == COMP_PROPULSION)
 	{
-		SCRIPT_ASSERT(nlohmann::json(), context, index < numPropulsionStats, "Bad index");
-		const PROPULSION_STATS *psStats = asPropulsionStats + index;
+		SCRIPT_ASSERT(nlohmann::json(), context, index < asPropulsionStats.size(), "Bad index");
+		const PROPULSION_STATS *psStats = &asPropulsionStats[index];
 		if (name == "HitPoints")
 		{
 			return psStats->upgrade[player].hitpoints;
@@ -4092,9 +4092,9 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Propulsion``` Propulsions
 		GameEntityRuleContainer propbase;
-		for (unsigned j = 0; j < numPropulsionStats; j++)
+		for (unsigned j = 0; j < asPropulsionStats.size(); j++)
 		{
-			PROPULSION_STATS *psStats = asPropulsionStats + j;
+			PROPULSION_STATS *psStats = &asPropulsionStats[j];
 			GameEntityRules v(i, j, {
 				{"HitPoints", COMP_PROPULSION},
 				{"HitPointPct", COMP_PROPULSION},
@@ -4284,9 +4284,9 @@ nlohmann::json wzapi::constructStatsObject()
 
 		//==   * ```Propulsion``` Propulsions
 		nlohmann::json propbase = nlohmann::json::object();
-		for (int j = 0; j < numPropulsionStats; j++)
+		for (int j = 0; j < asPropulsionStats.size(); j++)
 		{
-			PROPULSION_STATS *psStats = asPropulsionStats + j;
+			PROPULSION_STATS *psStats = &asPropulsionStats[j];
 			nlohmann::json v = register_common(psStats);
 			v["HitpointPctOfBody"] = psStats->base.hitpointPctOfBody;
 			v["MaxSpeed"] = psStats->maxSpeed;

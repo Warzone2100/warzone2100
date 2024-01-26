@@ -350,7 +350,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 void moveStopDroid(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
-	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	ASSERT_OR_RETURN(, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
@@ -1152,7 +1152,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 {
 	int32_t                 numObst = 0, distTot = 0;
 	Vector2i                dir(0, 0);
-	PROPULSION_STATS       *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	PROPULSION_STATS       *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	ASSERT_OR_RETURN(dir, psPropStats, "invalid propulsion stats pointer");
 
 	int ourMaxSpeed = psPropStats->maxSpeed;
@@ -1193,7 +1193,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 			continue;
 		}
 
-		PROPULSION_STATS *obstaclePropStats = asPropulsionStats + psObstacle->asBits[COMP_PROPULSION];
+		PROPULSION_STATS *obstaclePropStats = &asPropulsionStats[psObstacle->asBits[COMP_PROPULSION]];
 		int obstacleMaxSpeed = obstaclePropStats->maxSpeed;
 		int obstacleRadius = moveObjRadius(psObstacle);
 		int totalRadius = ourRadius + obstacleRadius;
@@ -1317,7 +1317,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	// NOTE: This screws up since the transporter is offscreen still (on a mission!), and we are trying to find terrainType of a tile (that is offscreen!)
 	if (psDroid->droidType == DROID_SUPERTRANSPORTER && missionIsOffworld())
 	{
-		PROPULSION_STATS	*propulsion = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+		PROPULSION_STATS	*propulsion = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 		speed = propulsion->maxSpeed;
 	}
 	else
@@ -1572,7 +1572,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		return;
 	}
 
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
 	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
 	spinAngle = DEG(psPropStats->spinAngle);
@@ -1636,7 +1636,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		return;
 	}
 
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
 	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
 
@@ -1733,7 +1733,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 		return;
 	}
 
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	spinSpeed = DEG(psPropStats->spinSpeed);
 	turnSpeed = DEG(psPropStats->turnSpeed);
 
@@ -1866,7 +1866,7 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 	if ((psDroid != nullptr) &&
 	    (psDroid->visibleForLocalDisplay()))
 	{
-		PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+		PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 		ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 		iPropType = asPropulsionStats[(psDroid)->asBits[COMP_PROPULSION]].propulsionType;
 		psPropType = &asPropulsionTypes[iPropType];
@@ -1926,7 +1926,7 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 	AUDIO_CALLBACK		pAudioCallback = nullptr;
 
 	/* get prop stats */
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 	propType = psPropStats->propulsionType;
 	psPropType = &asPropulsionTypes[propType];
@@ -2075,7 +2075,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 
 	// If the droid has been attacked by an EMP weapon, it is temporarily disabled

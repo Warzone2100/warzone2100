@@ -4378,7 +4378,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 	}
 	else if (psTemplate != nullptr)
 	{
-		PROPULSION_STATS *psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
+		PROPULSION_STATS *psPropStats = &asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]];
 
 		if (fpathBlockingTile(b.map.x, b.map.y, psPropStats->propulsionType))
 		{
@@ -5523,7 +5523,7 @@ bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFact
 	}
 	//check for VTOL droid
 	else if (psTemplate->asParts[COMP_PROPULSION] &&
-	         ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->propulsionType == PROPULSION_TYPE_LIFT))
+	         (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT))
 	{
 		if (psFactory->pStructureType->type != REF_VTOL_FACTORY)
 		{
@@ -5549,7 +5549,7 @@ bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFact
 	else if (psFactory->pStructureType->type == REF_VTOL_FACTORY)
 	{
 		if (!psTemplate->asParts[COMP_PROPULSION] ||
-		    ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->propulsionType != PROPULSION_TYPE_LIFT))
+		    (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType != PROPULSION_TYPE_LIFT))
 		{
 			debug(level, "Can only build vtol in vtol factory, not in %s.", objInfo(psFactory));
 			return false;
@@ -5803,7 +5803,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	ASSERT_OR_RETURN(, rewardPlayer < MAX_PLAYERS, "Invalid rewardPlayer id %d", (int)rewardPlayer);
 
 	//search through the propulsions first
-	for (unsigned inc = 0; inc < numPropulsionStats; inc++)
+	for (unsigned inc = 0; inc < asPropulsionStats.size(); inc++)
 	{
 		if (apCompLists[losingPlayer][COMP_PROPULSION][inc] == AVAILABLE &&
 		    apCompLists[rewardPlayer][COMP_PROPULSION][inc] != AVAILABLE)

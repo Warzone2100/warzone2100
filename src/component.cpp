@@ -444,7 +444,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	}
 
 	/* get propulsion stats */
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 	ASSERT_OR_RETURN(didDrawSomething, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 	//set pieflag for button object or ingame object

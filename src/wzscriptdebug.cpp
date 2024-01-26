@@ -2696,7 +2696,7 @@ void WZScriptDebugger::selected(const BASE_OBJECT *psObj)
 			selectedObjectDetails["Move vert speed"] = psDroid->sMove.iVertSpeed;
 			selectedObjectDetails["Body"] = componentToString(&asBodyStats[psDroid->asBits[COMP_BODY]], psObj->player);
 			selectedObjectDetails["Brain"] = componentToString(&asBrainStats[psDroid->asBits[COMP_BRAIN]], psObj->player);
-			selectedObjectDetails["Propulsion"] = componentToString(asPropulsionStats + psDroid->asBits[COMP_PROPULSION], psObj->player);
+			selectedObjectDetails["Propulsion"] = componentToString(&asPropulsionStats[psDroid->asBits[COMP_PROPULSION]], psObj->player);
 			selectedObjectDetails["ECM"] = componentToString(asECMStats + psDroid->asBits[COMP_ECM], psObj->player);
 			selectedObjectDetails["Sensor"] = componentToString(asSensorStats + psDroid->asBits[COMP_SENSOR], psObj->player);
 			selectedObjectDetails["Construct"] = componentToString(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psObj->player);

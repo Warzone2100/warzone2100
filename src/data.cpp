@@ -220,7 +220,7 @@ static bool bufferSPROPLoad(const char *fileName, void **ppData)
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	calcDataHash(ini, DATA_SPROP);
 
-	if (!loadPropulsionStats(ini) || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
+	if (!loadPropulsionStats(ini) || !allocComponentList(COMP_PROPULSION, asPropulsionStats.size()))
 	{
 		return false;
 	}

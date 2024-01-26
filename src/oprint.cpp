@@ -228,7 +228,7 @@ void printDroidInfo(const DROID *psDroid)
 			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF("%s", "Prop: ");
-				psPropStats = asPropulsionStats + psDroid->asBits[i];
+				psPropStats = &asPropulsionStats[psDroid->asBits[i]];
 				printComponentInfo((COMPONENT_STATS *)psPropStats);
 			}
 			else

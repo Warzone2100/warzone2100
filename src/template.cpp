@@ -406,8 +406,8 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	}
 	ASSERT(psCurr->asParts[COMP_BODY] < asBodyStats.size(), "asParts[COMP_BODY] (%d) exceeds numBodyStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BODY], asBodyStats.size());
 	templateObj["body"] = asBodyStats[psCurr->asParts[COMP_BODY]].id;
-	ASSERT(psCurr->asParts[COMP_PROPULSION] < numPropulsionStats, "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_PROPULSION], numPropulsionStats);
-	templateObj["propulsion"] = (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id;
+	ASSERT(psCurr->asParts[COMP_PROPULSION] < asPropulsionStats.size(), "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_PROPULSION], asPropulsionStats.size());
+	templateObj["propulsion"] = asPropulsionStats[psCurr->asParts[COMP_PROPULSION]].id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
 	{
 		ASSERT(psCurr->asParts[COMP_BRAIN] < asBrainStats.size(), "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BRAIN], asBrainStats.size());
