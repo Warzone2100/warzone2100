@@ -1277,14 +1277,14 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 {
 	CHECK_DROID(psRepairDroid);
 
-	int iRepairRateNumerator = repairPoints(*(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT]), psRepairDroid->player);
+	int iRepairRateNumerator = repairPoints(asRepairStats[psRepairDroid->asBits[COMP_REPAIRUNIT]], psRepairDroid->player);
 	int iRepairRateDenominator = 1;
 
 	//if self repair then add repair points depending on the time delay for the stat
 	if (psRepairDroid == psDroidToRepair)
 	{
 		iRepairRateNumerator *= GAME_TICKS_PER_SEC;
-		iRepairRateDenominator *= (asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT])->time;
+		iRepairRateDenominator *= asRepairStats[psRepairDroid->asBits[COMP_REPAIRUNIT]].time;
 	}
 
 	int iPointsToAdd = gameTimeAdjustedAverage(iRepairRateNumerator, iRepairRateDenominator);
@@ -1370,7 +1370,7 @@ DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate)
 	{
 		type = DROID_CONSTRUCT;
 	}
-	else if ((asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET)
+	else if (asRepairStats[psTemplate->asParts[COMP_REPAIRUNIT]].location == LOC_TURRET)
 	{
 		type = DROID_REPAIR;
 	}
@@ -3289,7 +3289,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 				psD->asBits[COMP_ECM] = aDefaultECM[psD->player];
 			}
 		}
-		if ((asRepairStats + psD->asBits[COMP_REPAIRUNIT])->location == LOC_DEFAULT)
+		if (asRepairStats[psD->asBits[COMP_REPAIRUNIT]].location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_REPAIRUNIT] != aDefaultRepair[psD->player])
 			{

@@ -252,7 +252,7 @@ static bool bufferSREPAIRLoad(const char *fileName, void **ppData)
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	calcDataHash(ini, DATA_SREPAIR);
 
-	if (!loadRepairStats(ini) || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
+	if (!loadRepairStats(ini) || !allocComponentList(COMP_REPAIRUNIT, asRepairStats.size()))
 	{
 		return false;
 	}

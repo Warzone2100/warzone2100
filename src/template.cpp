@@ -413,10 +413,10 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 		ASSERT(psCurr->asParts[COMP_BRAIN] < asBrainStats.size(), "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BRAIN], asBrainStats.size());
 		templateObj["brain"] = asBrainStats[psCurr->asParts[COMP_BRAIN]].id;
 	}
-	if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
+	if (asRepairStats[psCurr->asParts[COMP_REPAIRUNIT]].location == LOC_TURRET) // avoid auto-repair...
 	{
-		ASSERT(psCurr->asParts[COMP_REPAIRUNIT] < numRepairStats, "asParts[COMP_REPAIRUNIT] (%d) exceeds numRepairStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_REPAIRUNIT], numRepairStats);
-		templateObj["repair"] = (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id;
+		ASSERT(psCurr->asParts[COMP_REPAIRUNIT] < asRepairStats.size(), "asParts[COMP_REPAIRUNIT] (%d) exceeds numRepairStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_REPAIRUNIT], asRepairStats.size());
+		templateObj["repair"] = asRepairStats[psCurr->asParts[COMP_REPAIRUNIT]].id;
 	}
 	if (asECMStats[psCurr->asParts[COMP_ECM]].location == LOC_TURRET)
 	{

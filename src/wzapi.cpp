@@ -3569,8 +3569,8 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 	}
 	else if (type == COMP_REPAIRUNIT)
 	{
-		SCRIPT_ASSERT(false, context, index < numRepairStats, "Bad index");
-		REPAIR_STATS *psStats = asRepairStats + index;
+		SCRIPT_ASSERT(false, context, index < asRepairStats.size(), "Bad index");
+		REPAIR_STATS *psStats = &asRepairStats[index];
 		if (name == "RepairPoints")
 		{
 			psStats->upgrade[player].repairPoints = value;
@@ -3896,8 +3896,8 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 	}
 	else if (type == COMP_REPAIRUNIT)
 	{
-		SCRIPT_ASSERT(nlohmann::json(), context, index < numRepairStats, "Bad index");
-		const REPAIR_STATS *psStats = asRepairStats + index;
+		SCRIPT_ASSERT(nlohmann::json(), context, index < asRepairStats.size(), "Bad index");
+		const REPAIR_STATS *psStats = &asRepairStats[index];
 		if (name == "RepairPoints")
 		{
 			return psStats->upgrade[player].repairPoints;
@@ -4120,9 +4120,9 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
 		GameEntityRuleContainer repairbase;
-		for (unsigned j = 0; j < numRepairStats; j++)
+		for (unsigned j = 0; j < asRepairStats.size(); j++)
 		{
-			REPAIR_STATS *psStats = asRepairStats + j;
+			REPAIR_STATS *psStats = &asRepairStats[j];
 			GameEntityRules repair(i, j, {
 				{"RepairPoints", COMP_REPAIRUNIT},
 				{"HitPoints", COMP_REPAIRUNIT},
@@ -4302,9 +4302,9 @@ nlohmann::json wzapi::constructStatsObject()
 
 		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
 		nlohmann::json repairbase = nlohmann::json::object();
-		for (int j = 0; j < numRepairStats; j++)
+		for (int j = 0; j < asRepairStats.size(); j++)
 		{
-			REPAIR_STATS *psStats = asRepairStats + j;
+			REPAIR_STATS *psStats = &asRepairStats[j];
 			nlohmann::json repair = register_common(psStats);
 			repair["RepairPoints"] = psStats->base.repairPoints;
 			repairbase[psStats->name.toUtf8()] = std::move(repair);
