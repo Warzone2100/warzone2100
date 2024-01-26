@@ -47,7 +47,7 @@
 #define DEFAULT_DROID_RESISTANCE	150
 
 /* The stores for the different stats */
-BODY_STATS		*asBodyStats;
+std::vector<BODY_STATS> asBodyStats;
 BRAIN_STATS		*asBrainStats;
 PROPULSION_STATS	*asPropulsionStats;
 SENSOR_STATS		*asSensorStats;
@@ -63,7 +63,6 @@ WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 /* The number of different stats stored */
-UDWORD		numBodyStats;
 UDWORD		numBrainStats;
 UDWORD		numPropulsionStats;
 UDWORD		numSensorStats;
@@ -112,6 +111,12 @@ static void deallocTerrainTable()
 	(listSize) = (numEntries); \
 	return true
 
+#define ALLOC_STATS_VECTOR(numEntries, list, type) \
+	ASSERT((numEntries) < ~STAT_MASK + 1, "Number of stats entries too large for " #type);\
+	if (!list.empty()) list.clear(); \
+	list.resize(numEntries); \
+	return true
+
 /*Macro to Deallocate stats*/
 #define STATS_DEALLOC(list, listSize) \
 	delete [] (list); \
@@ -121,7 +126,6 @@ static void deallocTerrainTable()
 void statsInitVars()
 {
 	/* The number of different stats stored */
-	numBodyStats = 0;
 	numBrainStats = 0;
 	numPropulsionStats = 0;
 	numSensorStats = 0;
@@ -144,7 +148,7 @@ bool statsShutDown()
 	STATS_DEALLOC(asConstructStats, numConstructStats);
 	STATS_DEALLOC(asECMStats, numECMStats);
 	STATS_DEALLOC(asSensorStats, numSensorStats);
-	STATS_DEALLOC(asBodyStats, numBodyStats);
+	asBodyStats.clear();
 	deallocPropulsionTypes();
 	deallocTerrainTable();
 
@@ -163,7 +167,7 @@ bool statsAllocWeapons(UDWORD	numStats)
 /* Allocate Body Stats */
 bool statsAllocBody(UDWORD	numStats)
 {
-	ALLOC_STATS(numStats, asBodyStats, numBodyStats, BODY_STATS);
+	ALLOC_STATS_VECTOR(numStats, asBodyStats, BODY_STATS);
 }
 /* Allocate Brain Stats */
 bool statsAllocBrain(UDWORD	numStats)
@@ -652,7 +656,7 @@ bool loadBodyStats(WzConfig &ini)
 	// separate function
 
 	// allocate space
-	for (int numStats = 0; numStats < numBodyStats; ++numStats)
+	for (int numStats = 0; numStats < asBodyStats.size(); ++numStats)
 	{
 		BODY_STATS *psBodyStat = &asBodyStats[numStats];
 		psBodyStat->ppIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, nullptr);
@@ -673,7 +677,7 @@ bool loadBodyStats(WzConfig &ini)
 		}
 		ini.beginGroup("propulsionExtraModels");
 		//get the body stats
-		for (numStats = 0; numStats < numBodyStats; ++numStats)
+		for (numStats = 0; numStats < asBodyStats.size(); ++numStats)
 		{
 			psBodyStat = &asBodyStats[numStats];
 			if (list[i].compare(psBodyStat->id) == 0)
@@ -681,7 +685,7 @@ bool loadBodyStats(WzConfig &ini)
 				break;
 			}
 		}
-		if (numStats == numBodyStats) // not found
+		if (numStats == asBodyStats.size()) // not found
 		{
 			debug(LOG_FATAL, "Invalid body name %s", list[i].toUtf8().c_str());
 			return false;

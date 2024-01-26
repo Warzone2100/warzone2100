@@ -420,7 +420,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 
 		/* Now calculate the overall weight */
 		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION])->propulsionType] // Our weapon's effect against target
-		               + asWeaponModifierBody[weaponEffect][(asBodyStats + targetDroid->asBits[COMP_BODY])->size]
+		               + asWeaponModifierBody[weaponEffect][asBodyStats[targetDroid->asBits[COMP_BODY]].size]
 		               + WEIGHT_DIST_TILE_DROID * objSensorRange(psAttacker) / TILE_UNITS
 		               - WEIGHT_DIST_TILE_DROID * dist / TILE_UNITS // farther droids are less attractive
 		               + WEIGHT_HEALTH_DROID * damageRatio / 100 // we prefer damaged droids

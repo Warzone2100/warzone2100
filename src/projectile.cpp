@@ -1573,7 +1573,7 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, const BASE_OBJE
 	else if (psTarget->type == OBJ_DROID)
 	{
 		const int propulsion = (asPropulsionStats + ((const DROID *)psTarget)->asBits[COMP_PROPULSION])->propulsionType;
-		const int body = (asBodyStats + ((const DROID *)psTarget)->asBits[COMP_BODY])->size;
+		const int body = asBodyStats[((const DROID*)psTarget)->asBits[COMP_BODY]].size;
 		damage += baseDamage * (asWeaponModifier[weaponEffect][propulsion] - 100);
 		damage += baseDamage * (asWeaponModifierBody[weaponEffect][body] - 100);
 	}

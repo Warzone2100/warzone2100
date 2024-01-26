@@ -3397,8 +3397,8 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 	syncDebug("stats[p%d,t%d,%s,i%d] = %d", player, type, name.c_str(), index, value);
 	if (type == COMP_BODY)
 	{
-		SCRIPT_ASSERT(false, context, index < numBodyStats, "Bad index");
-		BODY_STATS *psStats = asBodyStats + index;
+		SCRIPT_ASSERT(false, context, index < asBodyStats.size(), "Bad index");
+		BODY_STATS *psStats = &asBodyStats[index];
 		if (name == "HitPoints")
 		{
 			psStats->upgrade[player].hitpoints = value;
@@ -3744,8 +3744,8 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::s
 {
 	if (type == COMP_BODY)
 	{
-		SCRIPT_ASSERT(nlohmann::json(), context, index < numBodyStats, "Bad index");
-		const BODY_STATS *psStats = asBodyStats + index;
+		SCRIPT_ASSERT(nlohmann::json(), context, index < asBodyStats.size(), "Bad index");
+		const BODY_STATS *psStats = &asBodyStats[index];
 		if (name == "HitPoints")
 		{
 			return psStats->upgrade[player].hitpoints;
@@ -4061,9 +4061,9 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Body``` Droid bodies
 		GameEntityRuleContainer bodybase;
-		for (unsigned j = 0; j < numBodyStats; j++)
+		for (unsigned j = 0; j < asBodyStats.size(); j++)
 		{
-			BODY_STATS *psStats = asBodyStats + j;
+			BODY_STATS *psStats = &asBodyStats[j];
 			GameEntityRules body(i, j, {
 				{"HitPoints", COMP_BODY},
 				{"HitPointPct", COMP_BODY},
@@ -4245,9 +4245,9 @@ nlohmann::json wzapi::constructStatsObject()
 	{
 		//==   * ```Body``` Droid bodies
 		nlohmann::json bodybase = nlohmann::json::object();
-		for (int j = 0; j < numBodyStats; j++)
+		for (int j = 0; j < asBodyStats.size(); j++)
 		{
-			BODY_STATS *psStats = asBodyStats + j;
+			BODY_STATS *psStats = &asBodyStats[j];
 			nlohmann::json body = register_common(psStats);
 			body["Power"] = psStats->base.power;
 			body["Armour"] = psStats->base.armour;

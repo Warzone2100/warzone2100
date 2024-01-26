@@ -26,6 +26,7 @@
 #include "lib/framework/wzconfig.h"
 
 #include <utility>
+#include <vector>
 
 #include "objectdef.h"
 
@@ -35,7 +36,7 @@
  */
 
 /* The stores for the different stats */
-extern BODY_STATS			*asBodyStats;
+extern std::vector<BODY_STATS> asBodyStats;
 extern BRAIN_STATS			*asBrainStats;
 extern PROPULSION_STATS		*asPropulsionStats;
 extern SENSOR_STATS			*asSensorStats;
@@ -50,7 +51,6 @@ extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 extern WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
 /* The number of different stats stored */
-extern UDWORD		numBodyStats;
 extern UDWORD		numBrainStats;
 extern UDWORD		numPropulsionStats;
 extern UDWORD		numSensorStats;

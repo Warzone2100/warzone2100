@@ -214,7 +214,7 @@ void printDroidInfo(const DROID *psDroid)
 			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF("%s", "Body: ");
-				psBdyStats = asBodyStats + psDroid->asBits[i];
+				psBdyStats = &asBodyStats[psDroid->asBits[i]];
 				printComponentInfo((COMPONENT_STATS *)psBdyStats);
 			}
 			else

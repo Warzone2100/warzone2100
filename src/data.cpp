@@ -147,7 +147,7 @@ static bool bufferSBODYLoad(const char *fileName, void **ppData)
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	calcDataHash(ini, DATA_SBODY);
 
-	if (!loadBodyStats(ini) || !allocComponentList(COMP_BODY, numBodyStats))
+	if (!loadBodyStats(ini) || !allocComponentList(COMP_BODY, asBodyStats.size()))
 	{
 		return false;
 	}
