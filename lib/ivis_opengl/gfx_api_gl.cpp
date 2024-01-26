@@ -43,8 +43,8 @@
 #include <debugapi.h>
 #endif
 
-#ifndef GL_GENERATE_MIPMAP
-#define GL_GENERATE_MIPMAP 0x8191
+#if GL_KHR_debug && !defined(__EMSCRIPTEN__)
+# define WZ_GL_KHR_DEBUG_SUPPORTED
 #endif
 
 struct OPENGL_DATA
@@ -1673,10 +1673,12 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 				glAttachShader(program, shader);
 				success = true;
 			}
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 			if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
 			{
 				glObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
 			}
+#endif
 		}
 	}
 
@@ -1744,10 +1746,12 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 				glAttachShader(program, shader);
 				success = true;
 			}
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 			if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
 			{
 				glObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
 			}
+#endif
 		}
 	}
 
@@ -1767,10 +1771,12 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 		{
 			printProgramInfoLog(LOG_3D, program);
 		}
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 		if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
 		{
 			glObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 		}
+#endif
 	}
 	fetch_uniforms(uniformNames, duplicateFragmentUniformNames, programName);
 	getLocs(samplersToBind);
@@ -2345,10 +2351,12 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	new_texture->bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
 	{
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
+#endif
 	for (GLint i = 0, e = static_cast<GLint>(mipmap_count); i < e; ++i)
 	{
 		if (is_uncompressed_format(internal_format))
@@ -2383,10 +2391,12 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 	new_texture->bind();
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
 	{
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
+#endif
 	// Allocate a client-side buffer
 	new_texture->pInternalBuffer = new texture_array_mip_level_buffer(mipmap_count, layer_count, width, height, internal_format);
 	new_texture->unbind();
@@ -2412,10 +2422,12 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 	new_texture->bind();
 	glTexParameteri(new_texture->target(), GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(new_texture->target(), GL_TEXTURE_MAX_LEVEL, 0);
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
 	{
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
+#endif
 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, format, type, nullptr);
 
@@ -2436,10 +2448,12 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum inte
 	new_texture->bind();
 	glTexParameteri(new_texture->target(), GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(new_texture->target(), GL_TEXTURE_MAX_LEVEL, 0);
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
 	{
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
+#endif
 
 	glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, internalFormat, static_cast<GLsizei>(width), static_cast<GLsizei>(height), static_cast<GLsizei>(layer_count), 0, format, type, nullptr);
 
@@ -2892,26 +2906,38 @@ uint64_t gl_context::get_estimated_vram_mb(bool dedicatedOnly)
 
 void gl_context::debugStringMarker(const char *str)
 {
+#if defined(GL_GREMEDY_string_marker)
 	if (GLAD_GL_GREMEDY_string_marker)
 	{
 		glStringMarkerGREMEDY(0, str);
 	}
+#else
+	// not supported
+#endif
 }
 
 void gl_context::debugSceneBegin(const char *descr)
 {
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khr_debug && glPushDebugGroup)
 	{
 		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
 	}
+#else
+	// not supported
+#endif
 }
 
 void gl_context::debugSceneEnd(const char *descr)
 {
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khr_debug && glPopDebugGroup)
 	{
 		glPopDebugGroup();
 	}
+#else
+	// not supported
+#endif
 }
 
 bool gl_context::debugPerfAvailable()
@@ -2939,10 +2965,12 @@ void gl_context::debugPerfStop()
 
 void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 {
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khr_debug && glPushDebugGroup)
 	{
 		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
 	}
+#endif
 	if (!perfStarted)
 	{
 		return;
@@ -2952,10 +2980,12 @@ void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 
 void gl_context::debugPerfEnd(PERF_POINT pp)
 {
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khr_debug && glPopDebugGroup)
 	{
 		glPopDebugGroup();
 	}
+#endif
 	if (!perfStarted)
 	{
 		return;
@@ -3128,7 +3158,9 @@ bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> c
 	return true;
 }
 
-//
+// MARK: khr_callback
+
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 
 static const char *cbsource(GLenum source)
 {
@@ -3184,6 +3216,8 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 	}
 	debugLogFromGfxCallback(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), (message != nullptr) ? message : "");
 }
+
+#endif // defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 
 uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 {
@@ -3475,7 +3509,11 @@ bool gl_context::initGLContext()
 		return false;
 	}
 
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	khr_debug = GLAD_GL_KHR_debug;
+#else
+	khr_debug = false;
+#endif
 
 	std::string extensionsStr = getGLExtensions();
 	const char *extensionsBegin = extensionsStr.data();
@@ -3543,7 +3581,9 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * OpenGL ES 3.0 %s supported!", GLAD_GL_ES_VERSION_3_0 ? "is" : "is NOT");
 	}
 	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLAD_GL_EXT_texture_filter_anisotropic ? "is" : "is NOT");
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	debug(LOG_3D, "  * KHR_DEBUG support %s detected", khr_debug ? "was" : "was NOT");
+#endif
 	debug(LOG_3D, "  * glGenerateMipmap support %s detected", glGenerateMipmap ? "was" : "was NOT");
 
 	if (!GLAD_GL_VERSION_3_0 && !GLAD_GL_ES_VERSION_3_0)
@@ -3622,6 +3662,7 @@ bool gl_context::initGLContext()
 
 	wzGLClearErrors();
 
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khr_debug)
 	{
 		if (glDebugMessageCallback && glDebugMessageControl)
@@ -3640,6 +3681,7 @@ bool gl_context::initGLContext()
 			debug(LOG_3D, "Failed to enable KHR_debug message callback");
 		}
 	}
+#endif
 
 	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
 	{
