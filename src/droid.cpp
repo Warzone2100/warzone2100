@@ -1362,7 +1362,7 @@ DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate)
 	{
 		type = DROID_SENSOR;
 	}
-	else if ((asECMStats + psTemplate->asParts[COMP_ECM])->location == LOC_TURRET)
+	else if (asECMStats[psTemplate->asParts[COMP_ECM]].location == LOC_TURRET)
 	{
 		type = DROID_ECM;
 	}
@@ -3282,7 +3282,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 				psD->asBits[COMP_SENSOR] = aDefaultSensor[psD->player];
 			}
 		}
-		if ((asECMStats + psD->asBits[COMP_ECM])->location == LOC_DEFAULT)
+		if (asECMStats[psD->asBits[COMP_ECM]].location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_ECM] != aDefaultECM[psD->player])
 			{

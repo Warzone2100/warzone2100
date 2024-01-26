@@ -326,7 +326,7 @@ static inline SENSOR_STATS *getSensorStats(const DROID *psDroid)
 
 static inline ECM_STATS *getECMStats(const DROID *psDroid)
 {
-	return asECMStats + psDroid->asBits[COMP_ECM];
+	return &asECMStats[psDroid->asBits[COMP_ECM]];
 }
 
 static inline REPAIR_STATS *getRepairStats(const DROID *psDroid)

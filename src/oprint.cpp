@@ -240,7 +240,7 @@ void printDroidInfo(const DROID *psDroid)
 			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF("%s", "ECM: ");
-				psECMStats = asECMStats + psDroid->asBits[i];
+				psECMStats = &asECMStats[psDroid->asBits[i]];
 				printComponentInfo((COMPONENT_STATS *)psECMStats);
 				CONPRINTF("   range %d loc %d imd %p\n",
 				                          ecmRange(*psECMStats, psDroid->player), psECMStats->location,

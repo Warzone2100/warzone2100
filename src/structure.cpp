@@ -569,7 +569,7 @@ bool loadStructureStats(WzConfig &ini)
 		int ecm = getCompFromName(COMP_ECM, ini.value("ecmID", "ZNULLECM").toWzString());
 		if (ecm >= 0)
 		{
-			psStats->pECM = asECMStats + ecm;
+			psStats->pECM = &asECMStats[ecm];
 		}
 		else
 		{

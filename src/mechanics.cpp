@@ -188,7 +188,7 @@ void makeAllAvailable()
 		{
 			apCompLists[i][COMP_SENSOR][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numECMStats; comp++)
+		for (comp = 0; comp < asECMStats.size(); comp++)
 		{
 			apCompLists[i][COMP_ECM][comp] = AVAILABLE;
 		}

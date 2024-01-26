@@ -993,7 +993,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 			aDefaultSensor[player] = compInc;
 		}
 		//check for default ECM
-		else if (type == COMP_ECM && (asECMStats + compInc)->location == LOC_DEFAULT)
+		else if (type == COMP_ECM && asECMStats[compInc].location == LOC_DEFAULT)
 		{
 			aDefaultECM[player] = compInc;
 		}
