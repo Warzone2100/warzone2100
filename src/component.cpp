@@ -444,7 +444,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	}
 
 	/* get propulsion stats */
-	psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
+	psPropStats = getPropulsionStats(psDroid);
 	ASSERT_OR_RETURN(didDrawSomething, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 	//set pieflag for button object or ingame object
@@ -531,8 +531,8 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	}
 
 	/* Render animation effects based on movement or lack thereof, if any */
-	psMoveAnim = asBodyStats[psDroid->asBits[COMP_BODY]].ppMoveIMDList[psDroid->asBits[COMP_PROPULSION]];
-	psStillAnim = asBodyStats[psDroid->asBits[COMP_BODY]].ppStillIMDList[psDroid->asBits[COMP_PROPULSION]];
+	psMoveAnim = getBodyStats(psDroid)->ppMoveIMDList[psDroid->asBits[COMP_PROPULSION]];
+	psStillAnim = getBodyStats(psDroid)->ppStillIMDList[psDroid->asBits[COMP_PROPULSION]];
 	if (!bButton && psMoveAnim && psDroid->sMove.Status != MOVEINACTIVE)
 	{
 		iIMDShape *displayModel = psMoveAnim->displayModel();

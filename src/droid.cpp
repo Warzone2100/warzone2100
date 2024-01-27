@@ -247,7 +247,7 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 		{
 			iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING]->displayModel();
 			/* get propulsion stats */
-			PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
+			PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 			if (psPropStats && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
 			{
 				// FIXME: change when adding submarines to the game
@@ -1120,8 +1120,7 @@ bool droidUpdateBuild(DROID *psDroid)
 		return false;
 	}
 
-	unsigned constructPoints = constructorPoints(asConstructStats[psDroid->
-										asBits[COMP_CONSTRUCT]], psDroid->player);
+	unsigned constructPoints = constructorPoints(*getConstructStats(psDroid), psDroid->player);
 
 	unsigned pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 				  GAME_TICKS_PER_SEC;
@@ -1144,7 +1143,7 @@ bool droidUpdateDemolishing(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
-	int constructRate = 5 * constructorPoints(asConstructStats[psDroid->asBits[COMP_CONSTRUCT]], psDroid->player);
+	int constructRate = 5 * constructorPoints(*getConstructStats(psDroid), psDroid->player);
 	int pointsToAdd = gameTimeAdjustedAverage(constructRate);
 
 	structureDemolish(psStruct, psDroid, pointsToAdd);
@@ -1255,7 +1254,7 @@ bool droidUpdateRepair(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	int iRepairRate = constructorPoints(asConstructStats[psDroid->asBits[COMP_CONSTRUCT]], psDroid->player);
+	int iRepairRate = constructorPoints(*getConstructStats(psDroid), psDroid->player);
 
 	/* add points to structure */
 	structureRepair(psStruct, psDroid, iRepairRate);
@@ -1277,14 +1276,14 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 {
 	CHECK_DROID(psRepairDroid);
 
-	int iRepairRateNumerator = repairPoints(asRepairStats[psRepairDroid->asBits[COMP_REPAIRUNIT]], psRepairDroid->player);
+	int iRepairRateNumerator = repairPoints(*getRepairStats(psRepairDroid), psRepairDroid->player);
 	int iRepairRateDenominator = 1;
 
 	//if self repair then add repair points depending on the time delay for the stat
 	if (psRepairDroid == psDroidToRepair)
 	{
 		iRepairRateNumerator *= GAME_TICKS_PER_SEC;
-		iRepairRateDenominator *= asRepairStats[psRepairDroid->asBits[COMP_REPAIRUNIT]].time;
+		iRepairRateDenominator *= getRepairStats(psRepairDroid)->time;
 	}
 
 	int iPointsToAdd = gameTimeAdjustedAverage(iRepairRateNumerator, iRepairRateDenominator);
@@ -1783,7 +1782,7 @@ void droidSetBits(const DROID_TEMPLATE *pTemplate, DROID *psDroid)
 		if (inc < pTemplate->numWeaps)
 		{
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
-			psDroid->asWeaps[inc].ammo = asWeaponStats[psDroid->asWeaps[inc].nStat].upgrade[psDroid->player].numRounds;
+			psDroid->asWeaps[inc].ammo = getWeaponStats(psDroid, inc)->upgrade[psDroid->player].numRounds;
 		}
 		psDroid->asWeaps[inc].usedAmmo = 0;
 	}
@@ -2467,7 +2466,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				}
 
 				//if VTOLs are excluded, skip them
-				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || psDroid->isTransporter()))
+				if (!bVTOLs && ((getPropulsionStats(psDroid)->propulsionType == PROPULSION_TYPE_LIFT) || psDroid->isTransporter()))
 				{
 					continue;
 				}
@@ -2693,7 +2692,7 @@ bool electronicDroid(const DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	//use slot 0 for now
-	if (psDroid->numWeaps > 0 && asWeaponStats[psDroid->asWeaps[0].nStat].weaponSubClass == WSC_ELECTRONIC)
+	if (psDroid->numWeaps > 0 && getWeaponStats(psDroid, 0)->weaponSubClass == WSC_ELECTRONIC)
 	{
 		return true;
 	}
@@ -2777,14 +2776,14 @@ bool isTransporter(DROID_TEMPLATE const *psTemplate)
 //access functions for vtols
 bool DROID::isVtol() const
 {
-	return asPropulsionStats[asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT
+	return getPropulsionStats(this)->propulsionType == PROPULSION_TYPE_LIFT
 		   && !isTransporter();
 }
 
 /* returns true if the droid has lift propulsion and is moving */
 bool DROID::isFlying() const
 {
-	return asPropulsionStats[asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT
+	return getPropulsionStats(this)->propulsionType == PROPULSION_TYPE_LIFT
 		   && (sMove.Status != MOVEINACTIVE || isTransporter());
 }
 
@@ -2804,7 +2803,7 @@ bool vtolEmpty(const DROID *psDroid)
 
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
-		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0 &&
+		if (getWeaponStats(psDroid, i)->vtolAttackRuns > 0 &&
 			psDroid->asWeaps[i].usedAmmo < getNumAttackRuns(psDroid, i))
 		{
 			return false;
@@ -2830,7 +2829,7 @@ bool vtolFull(const DROID *psDroid)
 
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
-		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0 &&
+		if (getWeaponStats(psDroid, i)->vtolAttackRuns > 0 &&
 			psDroid->asWeaps[i].usedAmmo > 0)
 		{
 			return false;
@@ -2960,12 +2959,12 @@ UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot)
 {
 	ASSERT_OR_RETURN(0, psDroid->isVtol(), "not a VTOL Droid");
 	// if weapon is a salvo weapon, then number of shots that can be fired = vtolAttackRuns * numRounds
-	if (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].upgrade[psDroid->player].reloadTime)
+	if (getWeaponStats(psDroid, weapon_slot)->upgrade[psDroid->player].reloadTime)
 	{
-		return asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].upgrade[psDroid->player].numRounds
-			   * asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns;
+		return getWeaponStats(psDroid, weapon_slot)->upgrade[psDroid->player].numRounds
+			   * getWeaponStats(psDroid, weapon_slot)->vtolAttackRuns;
 	}
-	return asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns;
+	return getWeaponStats(psDroid, weapon_slot)->vtolAttackRuns;
 }
 
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
@@ -2998,7 +2997,7 @@ bool vtolHappy(const DROID *psDroid)
 	//check full complement of ammo
 	for (int i = 0; i < psDroid->numWeaps; ++i)
 	{
-		if (asWeaponStats[psDroid->asWeaps[i].nStat].vtolAttackRuns > 0
+		if (getWeaponStats(psDroid, i)->vtolAttackRuns > 0
 			&& psDroid->asWeaps[i].usedAmmo != 0)
 		{
 			return false;
@@ -3015,7 +3014,7 @@ void updateVtolAttackRun(DROID *psDroid, int weapon_slot)
 	{
 		if (psDroid->numWeaps > 0)
 		{
-			if (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns > 0)
+			if (getWeaponStats(psDroid, weapon_slot)->vtolAttackRuns > 0)
 			{
 				++psDroid->asWeaps[weapon_slot].usedAmmo;
 				if (psDroid->asWeaps[weapon_slot].usedAmmo == getNumAttackRuns(psDroid, weapon_slot))
@@ -3115,7 +3114,7 @@ bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid)
 	}
 
 	// Check indirect weapon droid with standard/CB/radar detector sensor
-	if (!proj_Direct(&asWeaponStats[psDroid->asWeaps[0].nStat]))
+	if (!proj_Direct(getWeaponStats(psDroid, 0)))
 	{
 		if ((psStats->type == STANDARD_SENSOR || psStats->type == INDIRECT_CB_SENSOR || psStats->type == SUPER_SENSOR /*|| psStats->type == RADAR_DETECTOR_SENSOR*/)
 			&& !(psObj->type == OBJ_DROID && ((const DROID*)psObj)->droidType == DROID_COMMAND))
@@ -3134,8 +3133,8 @@ bool cbSensorDroid(const DROID *psDroid)
 	{
 		return false;
 	}
-	if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_CB_SENSOR
-		|| asSensorStats[psDroid->asBits[COMP_SENSOR]].type == INDIRECT_CB_SENSOR)
+	if (getSensorStats(psDroid)->type == VTOL_CB_SENSOR
+		|| getSensorStats(psDroid)->type == INDIRECT_CB_SENSOR)
 	{
 		return true;
 	}
@@ -3150,9 +3149,9 @@ bool standardSensorDroid(const DROID *psDroid)
 	{
 		return false;
 	}
-	if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_INTERCEPT_SENSOR
-		|| asSensorStats[psDroid->asBits[COMP_SENSOR]].type == STANDARD_SENSOR
-		|| asSensorStats[psDroid->asBits[COMP_SENSOR]].type == SUPER_SENSOR)
+	if (getSensorStats(psDroid)->type == VTOL_INTERCEPT_SENSOR
+		|| getSensorStats(psDroid)->type == STANDARD_SENSOR
+		|| getSensorStats(psDroid)->type == SUPER_SENSOR)
 	{
 		return true;
 	}
@@ -3275,21 +3274,21 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 		adjustDroidCount(psD, 1);
 
 		// the new player may have different default sensor/ecm/repair components
-		if (asSensorStats[psD->asBits[COMP_SENSOR]].location == LOC_DEFAULT)
+		if (getSensorStats(psD)->location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_SENSOR] != aDefaultSensor[psD->player])
 			{
 				psD->asBits[COMP_SENSOR] = aDefaultSensor[psD->player];
 			}
 		}
-		if (asECMStats[psD->asBits[COMP_ECM]].location == LOC_DEFAULT)
+		if (getECMStats(psD)->location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_ECM] != aDefaultECM[psD->player])
 			{
 				psD->asBits[COMP_ECM] = aDefaultECM[psD->player];
 			}
 		}
-		if (asRepairStats[psD->asBits[COMP_REPAIRUNIT]].location == LOC_DEFAULT)
+		if (getRepairStats(psD)->location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_REPAIRUNIT] != aDefaultRepair[psD->player])
 			{
@@ -3544,7 +3543,7 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 
 int droidSqDist(const DROID *psDroid, const BASE_OBJECT *psObj)
 {
-	PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
+	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 
 	if (!fpathCheck(psDroid->pos, psObj->pos, psPropStats->propulsionType))
 	{

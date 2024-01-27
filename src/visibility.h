@@ -24,6 +24,7 @@
 #include "objectdef.h"
 #include "raycast.h"
 #include "stats.h"
+#include "droid.h"
 
 #define LINE_OF_FIRE_MINIMUM 5
 
@@ -76,16 +77,16 @@ static inline bool visObjInRange(const BASE_OBJECT *psObj1, const BASE_OBJECT *p
 
 // If we have ECM, use this for range instead. Otherwise, the sensor's range will be used for
 // jamming range, which we do not want. Rather limit ECM unit sensor range to jammer range.
-static inline int objSensorRange(const BASE_OBJECT *psObj)
+inline int objSensorRange(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
-		const int ecmrange = asECMStats[((const DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
+		const int ecmrange = getECMStats((const DROID*)psObj)->upgrade[psObj->player].range;
 		if (ecmrange > 0)
 		{
 			return ecmrange;
 		}
-		return asSensorStats[((const DROID *)psObj)->asBits[COMP_SENSOR]].upgrade[psObj->player].range;
+		return getSensorStats((const DROID*)psObj)->upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
@@ -103,7 +104,7 @@ static inline int objJammerPower(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
-		return asECMStats[((const DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
+		return getECMStats((const DROID *)psObj)->upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{

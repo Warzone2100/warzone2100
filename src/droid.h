@@ -29,7 +29,6 @@
 
 #include "objectdef.h"
 #include "stats.h"
-#include "visibility.h"
 #include "selection.h"
 #include "objmem.h"
 
@@ -295,6 +294,9 @@ void droidSetPosition(DROID *psDroid, int x, int y);
 
 /// Return a percentage of how fully armed the object is, or -1 if N/A.
 int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_slot);
+
+// from visibility.h
+extern int objSensorRange(const BASE_OBJECT* psObj);
 
 static inline int droidSensorRange(const DROID *psDroid)
 {

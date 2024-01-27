@@ -203,7 +203,7 @@ void printDroidInfo(const DROID *psDroid)
 
 	if (psDroid->asWeaps[0].nStat > 0)
 	{
-		printWeaponInfo(&asWeaponStats[psDroid->asWeaps[0].nStat]);
+		printWeaponInfo(getWeaponStats(psDroid, 0));
 	}
 
 	for (int i = 0; i < COMP_NUMCOMPONENTS; ++i)
@@ -281,7 +281,7 @@ void printDroidInfo(const DROID *psDroid)
 			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF("%s", "Repair: ");
-				psRepairStats = &asRepairStats[psDroid->asBits[i]];
+				psRepairStats = getRepairStats(psDroid);
 				printComponentInfo((COMPONENT_STATS *)psRepairStats);
 				CONPRINTF("   repPnts %d loc %d imd %p\n",
 				                          repairPoints(*psRepairStats, psDroid->player),

@@ -993,7 +993,7 @@ static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, Vector3i 
 		switch (psCurr->type)
 		{
 		case OBJ_DROID:
-			bTargetInAir = asPropulsionTypes[asPropulsionStats[((DROID *)psCurr)->asBits[COMP_PROPULSION]].propulsionType].travel == AIR && ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE;
+			bTargetInAir = asPropulsionTypes[getPropulsionStats((DROID*)psCurr)->propulsionType].travel == AIR && ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE;
 			useSphere = true;
 			break;
 		case OBJ_STRUCTURE:
@@ -1572,8 +1572,8 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, const BASE_OBJE
 	}
 	else if (psTarget->type == OBJ_DROID)
 	{
-		const int propulsion = asPropulsionStats[((const DROID *)psTarget)->asBits[COMP_PROPULSION]].propulsionType;
-		const int body = asBodyStats[((const DROID*)psTarget)->asBits[COMP_BODY]].size;
+		const int propulsion = getPropulsionStats((const DROID*)psTarget)->propulsionType;
+		const int body = getBodyStats((const DROID*)psTarget)->size;
 		damage += baseDamage * (asWeaponModifier[weaponEffect][propulsion] - 100);
 		damage += baseDamage * (asWeaponModifierBody[weaponEffect][body] - 100);
 	}
@@ -1760,7 +1760,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 	case OBJ_DROID:
 		{
 			DROID const *psDroid = (DROID const *)psTarget;
-			unsigned int height = asBodyStats[psDroid->asBits[COMP_BODY]].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY]].pIMD->min.y;
+			unsigned int height = getBodyStats(psDroid)->pIMD->max.y - getBodyStats(psDroid)->pIMD->min.y;
 			unsigned int utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
 
 			// VTOL's don't have pIMD either it seems...
@@ -1775,34 +1775,34 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 				if (psDroid->numWeaps > 0)
 				{
 					// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-					if ((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD == nullptr)
+					if (getWeaponStats(psDroid, 0)->pIMD == nullptr)
 					{
 						return height;
 					}
 
-					yMax = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->max.y;
-					yMin = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->min.y;
+					yMax = getWeaponStats(psDroid, 0)->pIMD->max.y;
+					yMin = getWeaponStats(psDroid, 0)->pIMD->min.y;
 				}
 				break;
 
 			case DROID_SENSOR:
-				yMax = (asSensorStats[psDroid->asBits[COMP_SENSOR]]).pIMD->max.y;
-				yMin = (asSensorStats[psDroid->asBits[COMP_SENSOR]]).pIMD->min.y;
+				yMax = getSensorStats(psDroid)->pIMD->max.y;
+				yMin = getSensorStats(psDroid)->pIMD->min.y;
 				break;
 
 			case DROID_ECM:
-				yMax = (asECMStats[psDroid->asBits[COMP_ECM]]).pIMD->max.y;
-				yMin = (asECMStats[psDroid->asBits[COMP_ECM]]).pIMD->min.y;
+				yMax = getECMStats(psDroid)->pIMD->max.y;
+				yMin = getECMStats(psDroid)->pIMD->min.y;
 				break;
 
 			case DROID_CONSTRUCT:
-				yMax = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT]]).pIMD->max.y;
-				yMin = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT]]).pIMD->min.y;
+				yMax = getConstructStats(psDroid)->pIMD->max.y;
+				yMin = getConstructStats(psDroid)->pIMD->min.y;
 				break;
 
 			case DROID_REPAIR:
-				yMax = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT]]).pIMD->max.y;
-				yMin = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT]]).pIMD->min.y;
+				yMax = getRepairStats(psDroid)->pIMD->max.y;
+				yMin = getRepairStats(psDroid)->pIMD->min.y;
 				break;
 
 			case DROID_PERSON:
