@@ -7,6 +7,7 @@ layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
+layout (constant_id = 5) const uint WZ_VOLUMETRIC_LIGHTING_ENABLED = 0;
 
 layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -125,12 +126,11 @@ void main()
 {
 	vec4 fragColor = main_bumpMapping();
 
-#if 1
-
-	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);	
-	vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, frag.fragPos, diffuseLight.xyz);
-	fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);
-#else
+	if (WZ_VOLUMETRIC_LIGHTING_ENABLED == 1) {
+		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);	
+		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, frag.fragPos, diffuseLight.xyz);
+		fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);
+	}
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
@@ -140,6 +140,5 @@ void main()
 		// Return fragment color
 		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), fogFactor);
 	}
-#endif
 	FragColor = fragColor;
 }

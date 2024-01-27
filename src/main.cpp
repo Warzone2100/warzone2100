@@ -2128,7 +2128,7 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
-	if (!pie_LoadShaders(war_getShadowFilterSize(), war_getPointLightPerPixelLighting() && getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING))
+	if (!pie_LoadShaders(war_getShadowFilterSize(), war_getPointLightPerPixelLighting() && getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING, war_getVolumetricLighting()))
 	{
 		return EXIT_FAILURE;
 	}

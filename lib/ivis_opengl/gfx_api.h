@@ -326,13 +326,15 @@ namespace gfx_api
 		uint32_t shadowFilterSize = 5;
 		uint32_t shadowCascadesCount = WZ_MAX_SHADOW_CASCADES;
 		bool isPointLightPerPixelEnabled = false;
+		bool isVolumetricLightingEnabled = false;
 
 		bool operator==(const lighting_constants& rhs) const
 		{
 			return shadowMode == rhs.shadowMode
 			&& shadowFilterSize == rhs.shadowFilterSize
 			&& shadowCascadesCount == rhs.shadowCascadesCount
-			&& isPointLightPerPixelEnabled == rhs.isPointLightPerPixelEnabled;
+			&& isPointLightPerPixelEnabled == rhs.isPointLightPerPixelEnabled
+			&& isVolumetricLightingEnabled == rhs.isVolumetricLightingEnabled;
 		}
 	};
 

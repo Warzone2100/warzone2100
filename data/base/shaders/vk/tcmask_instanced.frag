@@ -8,6 +8,7 @@ layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
+layout (constant_id = 5) const uint WZ_VOLUMETRIC_LIGHTING_ENABLED = 0;
 
 layout(set = 2, binding = 0) uniform sampler2D Texture; // diffuse
 layout(set = 2, binding = 1) uniform sampler2D TextureTcmask; // tcmask
@@ -375,12 +376,12 @@ void main()
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
 
-#if 1
-	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-	vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, fragPos, diffuse.xyz);
-	fragColour.xyz = toneMap(fragColour.xyz * volumetric.a + volumetric.xyz);	
-#else
-	if (fogEnabled > 0)
+	if (WZ_VOLUMETRIC_LIGHTING_ENABLED == 1) {
+		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, fragPos, diffuse.xyz);
+		fragColour.xyz = toneMap(fragColour.xyz * volumetric.a + volumetric.xyz);
+	} 
+	else if (fogEnabled > 0)
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
@@ -389,7 +390,6 @@ void main()
 		// Return fragment color
 		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), fogFactor);
 	}
-#endif
 
 	FragColor = fragColour;
 }
