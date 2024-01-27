@@ -90,6 +90,7 @@ struct WARZONE_GLOBALS
 	uint32_t shadowFilterSize = 5;
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 	bool pointLightLighting = false;
+	bool volumetricLighting = false;
 	// groups UI
 	bool groupsMenuEnabled = true;
 
@@ -656,9 +657,19 @@ bool war_getPointLightPerPixelLighting()
 	return warGlobs.pointLightLighting;
 }
 
+bool war_getVolumetricLighting()
+{
+	return warGlobs.volumetricLighting;
+}
+
 void war_setPointLightPerPixelLighting(bool perPixelEnabled)
 {
 	warGlobs.pointLightLighting = perPixelEnabled;
+}
+
+void war_setVolumetricLighting(bool volumetricEnabled)
+{
+	warGlobs.volumetricLighting = volumetricEnabled;
 }
 
 bool war_getGroupsMenuEnabled()

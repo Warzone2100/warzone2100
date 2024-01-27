@@ -165,6 +165,9 @@ void war_setShadowMapResolution(uint32_t resolution);
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
+bool war_getVolumetricLighting();
+void war_setVolumetricLighting(bool enabled);
+
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);
 

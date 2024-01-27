@@ -618,6 +618,11 @@ bool loadConfig()
 		war_setPointLightPerPixelLighting(value.value_or(false));
 	}
 
+	{
+		auto value = iniGetBoolOpt("volumetricLighting");
+		war_setVolumetricLighting(value.value_or(false));
+	}
+
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -779,6 +784,7 @@ bool saveConfig()
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
+	iniSetBool("volumetricLighting", war_getVolumetricLighting());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes
