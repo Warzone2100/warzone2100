@@ -957,9 +957,10 @@ public:
 	{
 		ShadowCastingShapes = 0x1,
 		TranslucentShapes = 0x2,
-		OldShadows = 0x4
+		AdditiveShapes = 0x4,
+		OldShadows = 0x8
 	};
-	static constexpr int DrawParts_All = DrawParts::ShadowCastingShapes | DrawParts::TranslucentShapes;
+	static constexpr int DrawParts_All = DrawParts::ShadowCastingShapes | DrawParts::TranslucentShapes | DrawParts::AdditiveShapes;
 
 	// Draws all queued meshes, given a projection + view matrix
 	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const ShadowCascadesInfo& shadowMVPMatrix, int drawParts = DrawParts_All, bool depthPass = false);
@@ -983,8 +984,10 @@ private:
 	typedef templatedState MeshInstanceKey;
 	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceMeshes;
 	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshes;
+	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceAdditiveMeshes;
 	size_t instancesCount = 0;
 	size_t translucentInstancesCount = 0;
+	size_t additiveInstancesCount = 0;
 
 	std::vector<SHAPE> tshapes;
 	std::vector<SHAPE> shapes;
@@ -1011,6 +1014,7 @@ private:
 	};
 	std::vector<InstancedDrawCall> finalizedDrawCalls;
 	size_t startIdxTranslucentDrawCalls = 0;
+	size_t startIdxAdditiveDrawCalls = 0;
 };
 
 bool InstancedMeshRenderer::initialize()
@@ -1036,8 +1040,10 @@ void InstancedMeshRenderer::clear()
 {
 	instanceMeshes.clear();
 	instanceTranslucentMeshes.clear();
+	instanceAdditiveMeshes.clear();
 	instancesCount = 0;
 	translucentInstancesCount = 0;
+	additiveInstancesCount = 0;
 	tshapes.clear();
 	shapes.clear();
 	lightmapTexture = nullptr;
@@ -1104,7 +1110,19 @@ bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT te
 		tshape.modelMatrix = glm::translate(tshape.modelMatrix, glm::vec3(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f));
 	}
 
-	if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED))
+	if (pieFlag & (pie_ADDITIVE | pie_PREMULTIPLIED))
+	{
+		if (useInstancedRendering)
+		{
+			instanceAdditiveMeshes[currentState].push_back(tshape);
+		}
+		else
+		{
+			tshapes.push_back(tshape);
+		}
+		++additiveInstancesCount;
+	}
+	else if (pieFlag & pie_TRANSLUCENT)
 	{
 		if (useInstancedRendering)
 		{
@@ -1328,12 +1346,12 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	instancesData.clear();
 	finalizedDrawCalls.clear();
 
-	if (instancesCount + translucentInstancesCount == 0)
+	if (instancesCount + translucentInstancesCount + additiveInstancesCount == 0)
 	{
 		return true;
 	}
 
-	instancesData.reserve(instancesCount + translucentInstancesCount);
+	instancesData.reserve(instancesCount + translucentInstancesCount + additiveInstancesCount);
 
 	for (const auto& mesh : instanceMeshes)
 	{
@@ -1349,6 +1367,19 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	startIdxTranslucentDrawCalls = finalizedDrawCalls.size();
 
 	for (const auto& mesh : instanceTranslucentMeshes)
+	{
+		const auto& meshInstances = mesh.second;
+		size_t startingIdxInInstancesBuffer = instancesData.size();
+		for (const auto& instance : meshInstances)
+		{
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
+		}
+		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
+	}
+
+	startIdxAdditiveDrawCalls = finalizedDrawCalls.size();
+
+	for (const auto& mesh : instanceAdditiveMeshes)
 	{
 		const auto& meshInstances = mesh.second;
 		size_t startingIdxInInstancesBuffer = instancesData.size();
@@ -1613,9 +1644,9 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 
 	if ((drawParts & DrawParts::TranslucentShapes) == DrawParts::TranslucentShapes)
 	{
-		// Draw translucent models last
+		// Draw translucent models next
 		gfx_api::context::get().debugStringMarker("Remaining passes - translucent models");
-		for (size_t i = startIdxTranslucentDrawCalls; i < finalizedDrawCalls.size(); ++i)
+		for (size_t i = startIdxTranslucentDrawCalls; i < startIdxAdditiveDrawCalls; ++i)
 		{
 			const auto& call = finalizedDrawCalls[i];
 			const iIMDShape * shape = call.state.shape;
@@ -1623,6 +1654,24 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 			pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count, depthPass, lightmapTexture);
 		}
 		if (startIdxTranslucentDrawCalls < finalizedDrawCalls.size())
+		{
+			// unbind last index buffer bound inside pie_Draw3DShape2
+			gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls.back().state.shape)->buffers[VBO_INDEX]));
+		}
+	}
+
+	if ((drawParts & DrawParts::AdditiveShapes) == DrawParts::AdditiveShapes)
+	{
+		// Draw additive models last
+		gfx_api::context::get().debugStringMarker("Remaining passes - additive models");
+		for (size_t i = startIdxAdditiveDrawCalls; i < finalizedDrawCalls.size(); ++i)
+		{
+			const auto& call = finalizedDrawCalls[i];
+			const iIMDShape * shape = call.state.shape;
+			size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
+			pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count, depthPass, lightmapTexture);
+		}
+		if (startIdxAdditiveDrawCalls < finalizedDrawCalls.size())
 		{
 			// unbind last index buffer bound inside pie_Draw3DShape2
 			gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls.back().state.shape)->buffers[VBO_INDEX]));
