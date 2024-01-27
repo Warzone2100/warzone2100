@@ -415,7 +415,7 @@ void orderUpdateDroid(DROID *psDroid)
 	SDWORD			xdiff, ydiff;
 	bool			bAttack;
 	SDWORD			xoffset, yoffset;
-	const WEAPON_STATS *psWeapStats = &asWeaponStats[psDroid->asWeaps[0].nStat];
+	const WEAPON_STATS *psWeapStats = getWeaponStats(psDroid, 0);
 	// clear the target if it has died
 	if (psDroid->order.psObj && psDroid->order.psObj->died)
 	{
@@ -1368,7 +1368,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	UDWORD		iFactoryDistSq;
 	STRUCTURE	*psFactory;
-	const PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
+	const PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 	const Vector3i rPos(psOrder->pos, 0);
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d ordered %s", psDroid->id, getDroidOrderName(psOrder->type));
@@ -2684,9 +2684,9 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         && !aiCheckAlliances(psObj->player , psDroid->player))
 	{
 		//check for standard sensor or VTOL intercept sensor
-		if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == STANDARD_SENSOR
-		    || asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_INTERCEPT_SENSOR
-		    || asSensorStats[psDroid->asBits[COMP_SENSOR]].type == SUPER_SENSOR)
+		if (getSensorStats(psDroid)->type == STANDARD_SENSOR
+		    || getSensorStats(psDroid)->type == VTOL_INTERCEPT_SENSOR
+		    || getSensorStats(psDroid)->type == SUPER_SENSOR)
 		{
 			// a sensor droid observing an object
 			order = DroidOrder(DORDER_OBSERVE, psObj);
@@ -2728,7 +2728,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         (psDroid->droidType == DROID_WEAPON ||
 	          psDroid->droidType == DROID_CYBORG ||
 	          psDroid->droidType == DROID_CYBORG_SUPER) &&
-	         proj_Direct(&asWeaponStats[psDroid->asWeaps[0].nStat]))
+	         proj_Direct(getWeaponStats(psDroid, 0)))
 	{
 		order = DroidOrder(DORDER_GUARD, psObj);
 		assignSensorTarget(psObj);
@@ -2826,7 +2826,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 			else if ((psDroid->droidType == DROID_WEAPON ||
 			          psDroid->droidType == DROID_CYBORG ||
 			          psDroid->droidType == DROID_CYBORG_SUPER)
-			         && proj_Direct(&asWeaponStats[psDroid->asWeaps[0].nStat]))
+			         && proj_Direct(getWeaponStats(psDroid, 0)))
 			{
 				order = DroidOrder(DORDER_GUARD, psObj);
 			}
@@ -3086,7 +3086,7 @@ bool secondarySupported(const DROID *psDroid, SECONDARY_ORDER sec)
 		{
 			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 			{
-				const WEAPON_STATS *weaponStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
+				const WEAPON_STATS *weaponStats = getWeaponStats(psDroid, i);
 
 				if (proj_GetLongRange(*weaponStats, psDroid->player) == proj_GetShortRange(*weaponStats, psDroid->player))
 				{

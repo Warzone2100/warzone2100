@@ -962,14 +962,14 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	bool ga = false;
 	bool indirect = false;
 	int range = -1;
-	const BODY_STATS *psBodyStats = &asBodyStats[psDroid->asBits[COMP_BODY]];
+	const BODY_STATS *psBodyStats = getBodyStats(psDroid);
 
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (psDroid->asWeaps[i].nStat)
 		{
 			ASSERT(psDroid->asWeaps[i].nStat < asWeaponStats.size(), "Invalid nStat (%d) referenced for asWeaps[%d]; numWeaponStats (%d); droid: \"%s\" (numWeaps: %u)", psDroid->asWeaps[i].nStat, i, asWeaponStats.size(), psDroid->aName, psDroid->numWeaps);
-			WEAPON_STATS *psWeap = &asWeaponStats[psDroid->asWeaps[i].nStat];
+			WEAPON_STATS *psWeap = getWeaponStats(psDroid, i);
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
 			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
@@ -1020,8 +1020,8 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	QuickJS_DefinePropertyValue(ctx, value, "experience", JS_NewFloat64(ctx, (double)psDroid->experience / 65536.0), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewFloat64(ctx, 100.0 / (double)psDroid->originalBody * (double)psDroid->body), JS_PROP_ENUMERABLE);
 
-	QuickJS_DefinePropertyValue(ctx, value, "body", JS_NewString(ctx, asBodyStats[psDroid->asBits[COMP_BODY]].id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "propulsion", JS_NewString(ctx, asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "body", JS_NewString(ctx, getBodyStats(psDroid)->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "propulsion", JS_NewString(ctx, getPropulsionStats(psDroid)->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "armed", JS_NewFloat64(ctx, 0.0), JS_PROP_ENUMERABLE); // deprecated!
 
 	JSValue weaponlist = JS_NewArray(ctx);
@@ -1029,7 +1029,7 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	{
 		int armed = droidReloadBar(psDroid, &psDroid->asWeaps[j], j);
 		JSValue weapon = JS_NewObject(ctx);
-		const WEAPON_STATS *psStats = &asWeaponStats[psDroid->asWeaps[j].nStat];
+		const WEAPON_STATS *psStats = getWeaponStats(psDroid, j);
 		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain full name
 		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);

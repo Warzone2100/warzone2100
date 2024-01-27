@@ -1771,7 +1771,7 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 {
 	/* Get its absolute dimensions */
 	// NOTE: This only takes into account body, but is "good enough"
-	const BODY_STATS *psBStats = &asBodyStats[psDroid->asBits[COMP_BODY]];
+	const BODY_STATS *psBStats = getBodyStats(psDroid);
 	const iIMDShape * pIMD = (psBStats != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
@@ -3751,7 +3751,7 @@ static void	drawDroidCmndNo(DROID *psDroid)
 void calcScreenCoords(DROID *psDroid, const glm::mat4 &perspectiveViewMatrix)
 {
 	/* Get it's absolute dimensions */
-	const BODY_STATS *psBStats = &asBodyStats[psDroid->asBits[COMP_BODY]];
+	const BODY_STATS *psBStats = getBodyStats(psDroid);
 	Vector3i origin;
 	Vector2i center(0, 0);
 	int wsRadius = 22; // World space radius, 22 = magic minimum
@@ -4412,7 +4412,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	auto deltaPlayer = Vector3f(0,0,0);
 	auto pt0 = Vector3f(psDroid->pos.x, psDroid->pos.z + 24, -psDroid->pos.y) + deltaPlayer;
 
-	int constructPoints = constructorPoints(asConstructStats[psDroid->asBits[COMP_CONSTRUCT]], psDroid->player);
+	int constructPoints = constructorPoints(*getConstructStats(psDroid), psDroid->player);
 	int amount = 800 * constructPoints * (graphicsTime - psDroid->actionStarted) / GAME_TICKS_PER_SEC;
 
 	Vector3i each;

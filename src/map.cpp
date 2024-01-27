@@ -2093,7 +2093,7 @@ static void threatUpdate(int player)
 			}
 			for (weapon = 0; weapon < psDroid->numWeaps; weapon++)
 			{
-				mode |= asWeaponStats[psDroid->asWeaps[weapon].nStat].surfaceToAir;
+				mode |= getWeaponStats(psDroid, weapon)->surfaceToAir;
 			}
 			if (psDroid->droidType == DROID_SENSOR)	// special treatment for sensor turrets, no multiweapon support
 			{

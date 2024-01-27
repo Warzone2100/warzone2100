@@ -376,7 +376,7 @@ int objArmour(const BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
 	int armour = 0;
 	if (psObj->type == OBJ_DROID)
 	{
-		armour = bodyArmour(asBodyStats[((const DROID *)psObj)->asBits[COMP_BODY]], psObj->player, weaponClass);
+		armour = bodyArmour(*getBodyStats((const DROID*)psObj), psObj->player, weaponClass);
 	}
 	else if (psObj->type == OBJ_STRUCTURE && weaponClass == WC_KINETIC && ((const STRUCTURE *)psObj)->status != SS_BEING_BUILT)
 	{
