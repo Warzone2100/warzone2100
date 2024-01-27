@@ -344,7 +344,9 @@ void main()
 								0., 1., 0.,
 								0., 0., 1.
 								);
-		light += iterateOverAllPointLights(clipSpaceCoord, fragPos, -N, normalize(halfVec - lightDir), diffuse, specularMapValue, identityMat);
+		// Normals are in view space, we need to get back to world space
+		vec3 worldSpaceNormal = -(inverse(ViewMatrix) * vec4(N, 0.f)).xyz;
+		light += iterateOverAllPointLights(clipSpaceCoord, fragPos, worldSpaceNormal, normalize(halfVec - lightDir), diffuse, specularMapValue, identityMat);
 	}
 
 	light.rgb *= visibility;
