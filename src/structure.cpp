@@ -6520,10 +6520,11 @@ bool structSensorDroidWeapon(const STRUCTURE *psStruct, const DROID *psDroid)
 	//Added a safety check: Only units with weapons can be assigned.
 	if (psDroid->numWeaps > 0)
 	{
+		const auto* weaponStats = getWeaponStats(psDroid, 0);
 		//Standard Sensor Tower + indirect weapon droid (non VTOL)
 		//else if (structStandardSensor(psStruct) && (psDroid->numWeaps &&
 		if (structStandardSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
-		                                       !proj_Direct(getWeaponStats(psDroid, 0))) &&
+		                                       !proj_Direct(weaponStats)) &&
 		    !psDroid->isVtol())
 		{
 			return true;
@@ -6531,7 +6532,7 @@ bool structSensorDroidWeapon(const STRUCTURE *psStruct, const DROID *psDroid)
 		//CB Sensor Tower + indirect weapon droid (non VTOL)
 		//if (structCBSensor(psStruct) && (psDroid->numWeaps &&
 		else if (structCBSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
-		                                      !proj_Direct(getWeaponStats(psDroid, 0))) &&
+		                                      !proj_Direct(weaponStats)) &&
 		         !psDroid->isVtol())
 		{
 			return true;

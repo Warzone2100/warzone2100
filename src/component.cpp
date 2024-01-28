@@ -531,8 +531,9 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	}
 
 	/* Render animation effects based on movement or lack thereof, if any */
-	psMoveAnim = getBodyStats(psDroid)->ppMoveIMDList[psDroid->asBits[COMP_PROPULSION]];
-	psStillAnim = getBodyStats(psDroid)->ppStillIMDList[psDroid->asBits[COMP_PROPULSION]];
+	const auto* bodyStats = getBodyStats(psDroid);
+	psMoveAnim = bodyStats->ppMoveIMDList[psDroid->asBits[COMP_PROPULSION]];
+	psStillAnim = bodyStats->ppStillIMDList[psDroid->asBits[COMP_PROPULSION]];
 	if (!bButton && psMoveAnim && psDroid->sMove.Status != MOVEINACTIVE)
 	{
 		iIMDShape *displayModel = psMoveAnim->displayModel();

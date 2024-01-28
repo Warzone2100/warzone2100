@@ -260,19 +260,20 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	rvx = svy;   // 90° to the... left?
 	rvy = -svx;
 
+	const auto droidPropType = getPropulsionStats(psDroid)->propulsionType;
 	// check for blocking tiles
 	if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + lvx),
-	                      map_coord((SDWORD)psDroid->pos.y + lvy), getPropulsionStats(psDroid)->propulsionType))
+	                      map_coord((SDWORD)psDroid->pos.y + lvy), droidPropType))
 	{
 		leftClear = false;
 	}
 	else if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + rvx),
-	                           map_coord((SDWORD)psDroid->pos.y + rvy), getPropulsionStats(psDroid)->propulsionType))
+	                           map_coord((SDWORD)psDroid->pos.y + rvy), droidPropType))
 	{
 		rightClear = false;
 	}
 	else if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + svx),
-	                           map_coord((SDWORD)psDroid->pos.y + svy), getPropulsionStats(psDroid)->propulsionType))
+	                           map_coord((SDWORD)psDroid->pos.y + svy), droidPropType))
 	{
 		frontClear = false;
 	}
@@ -1868,7 +1869,7 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 	{
 		PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 		ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
-		iPropType = getPropulsionStats(psDroid)->propulsionType;
+		iPropType = psPropStats->propulsionType;
 		psPropType = &asPropulsionTypes[iPropType];
 
 		/* play specific wheeled and transporter or stats-specified noises */
