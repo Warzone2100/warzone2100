@@ -37,7 +37,7 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 
 vec4 main_classic() {
 	vec4 decal = fragf.tileNo >= 0 ? texture(decalTex, vec3(frag.uvDecal, fragf.tileNo), WZ_MIP_LOAD_BIAS) : vec4(0);
-	float visibility = getShadowVisibility(frag.fragPos);
+	float visibility = getShadowVisibility();
 
 	vec3 L = normalize(frag.groundLightDir);
 	vec3 N = vec3(0,0,1);

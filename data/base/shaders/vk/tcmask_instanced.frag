@@ -38,7 +38,7 @@ float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeIn
 	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
 }
 
-float getShadowVisibility(vec3 fragPos)
+float getShadowVisibility()
 {
 	if (WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0)
 	{
@@ -307,7 +307,7 @@ void main()
 	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
-	float visibility = getShadowVisibility(fragPos);
+	float visibility = getShadowVisibility();
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap.xy, 0.f);
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);

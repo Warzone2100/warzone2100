@@ -65,27 +65,31 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 }
 
 vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
-	vec3 L = normalize(lightDir);
-	vec3 H = normalize(halfVec);
-	float visibility = getShadowVisibility(frag.fragPos);
-
 	MaterialInfo materialInfo;
 	materialInfo.albedo = b.color;
 	materialInfo.gloss = b.gloss;
 
-	vec3 directLighting = BRDF(L, visibility * diffuseLight.xyz, b.N, H, materialInfo);
-
+	vec3 L = normalize(lightDir);
+	float lambertTerm = max(dot(b.N, L), 0.0); // diffuse lighting
+	// Gaussian specular term computation
+	vec3 H = normalize(halfVec);
+	float blinnTerm = clamp(dot(b.N, H), 0.f, 1.f);
+	blinnTerm = lambertTerm != 0.0 ? blinnTerm : 0.0;
+	blinnTerm = pow(blinnTerm, 16.f);
+	float visibility = getShadowVisibility();
 	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap, 0.f);
 
-	float ambientOcclusion = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+	float adjustedTileBrightness = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 
-	float FogOfWarLevel = lightmap_vec4.a;
+	vec4 adjustedAmbientLight = ambientLight*lightmap_vec4.a;
+	vec4 light = (ambientLight*0.30f + visibility*(adjustedAmbientLight*0.40f + adjustedAmbientLight*lambertTerm*0.30f + diffuseLight*lambertTerm)) * lightmap_vec4.a;
+	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.4f)); // additive color (from environmental point lights / effects)
 
-	vec3 light = ambientLight.xyz * ambientOcclusion * materialInfo.albedo.xyz * 0.3 + // ambient term
-		0.7 * directLighting + 
-		lightmap_vec4.rgb / 1.4f; // additive color (from environmental point lights / effects)
+	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm) * adjustedTileBrightness;
+	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.5f)); // additive color (from environmental point lights / effects)
+	light_spec *= (b.gloss * b.gloss);
 
-	vec4 res = vec4(light * FogOfWarLevel, 1.0); // Unfortunately we add ambient occlusion twice here...
+	vec4 res = (b.color*light) + light_spec;
 
 	if (WZ_POINT_LIGHT_ENABLED == 1)
 	{
