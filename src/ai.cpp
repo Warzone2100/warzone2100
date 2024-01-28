@@ -197,15 +197,16 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			{
 				continue;
 			}
+			const auto sensorType = getSensorStats(psDroid)->type;
 			// Artillery should not fire at objects observed by VTOL CB/Strike sensors.
-			if (getSensorStats(psDroid)->type == VTOL_CB_SENSOR ||
-				getSensorStats(psDroid)->type == VTOL_INTERCEPT_SENSOR ||
+			if (sensorType == VTOL_CB_SENSOR ||
+				sensorType == VTOL_INTERCEPT_SENSOR ||
 				objRadarDetector((BASE_OBJECT *)psDroid))
 			{
 				continue;
 			}
 			psTemp = psDroid->psActionTarget[0];
-			isCB = getSensorStats(psDroid)->type == INDIRECT_CB_SENSOR;
+			isCB = sensorType == INDIRECT_CB_SENSOR;
 			//isRD = objRadarDetector((BASE_OBJECT *)psDroid);
 		}
 		else if (psSensor->type == OBJ_STRUCTURE)
@@ -582,15 +583,14 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	++numDroidNearestTargetChecksThisFrame;
 
 	// Check if we have a CB target to begin with
-	if (!proj_Direct(getWeaponStats(psDroid, weapon_slot)))
+	WEAPON_STATS* psWStats = getWeaponStats(psDroid, weapon_slot);
+	if (!proj_Direct(psWStats))
 	{
-		WEAPON_STATS *psWStats = getWeaponStats(psDroid, weapon_slot);
-
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
 		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
 	}
 
-	weaponEffect = getWeaponStats(psDroid, weapon_slot)->weaponEffect;
+	weaponEffect = psWStats->weaponEffect;
 
 	electronic = electronicDroid(psDroid);
 
@@ -726,7 +726,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 
 		// See if target is blocked by a wall; only affects direct weapons
 		// Ignore friendly walls here
-		if (proj_Direct(getWeaponStats(psDroid, weapon_slot))
+		if (proj_Direct(psWStats)
 			&& targetStructure
 			&& !aiCheckAlliances(psDroid->player, targetStructure->player))
 		{

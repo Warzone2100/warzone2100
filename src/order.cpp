@@ -2683,10 +2683,11 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         && psObj->player != psDroid->player
 	         && !aiCheckAlliances(psObj->player , psDroid->player))
 	{
+		const auto sensorType = getSensorStats(psDroid)->type;
 		//check for standard sensor or VTOL intercept sensor
-		if (getSensorStats(psDroid)->type == STANDARD_SENSOR
-		    || getSensorStats(psDroid)->type == VTOL_INTERCEPT_SENSOR
-		    || getSensorStats(psDroid)->type == SUPER_SENSOR)
+		if (sensorType == STANDARD_SENSOR
+		    || sensorType == VTOL_INTERCEPT_SENSOR
+		    || sensorType == SUPER_SENSOR)
 		{
 			// a sensor droid observing an object
 			order = DroidOrder(DORDER_OBSERVE, psObj);

@@ -1276,14 +1276,15 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 {
 	CHECK_DROID(psRepairDroid);
 
-	int iRepairRateNumerator = repairPoints(*getRepairStats(psRepairDroid), psRepairDroid->player);
+	const auto* repairStats = getRepairStats(psRepairDroid);
+	int iRepairRateNumerator = repairPoints(*repairStats, psRepairDroid->player);
 	int iRepairRateDenominator = 1;
 
 	//if self repair then add repair points depending on the time delay for the stat
 	if (psRepairDroid == psDroidToRepair)
 	{
 		iRepairRateNumerator *= GAME_TICKS_PER_SEC;
-		iRepairRateDenominator *= getRepairStats(psRepairDroid)->time;
+		iRepairRateDenominator *= repairStats->time;
 	}
 
 	int iPointsToAdd = gameTimeAdjustedAverage(iRepairRateNumerator, iRepairRateDenominator);
@@ -2958,13 +2959,14 @@ bool allVtolsRearmed(const DROID *psDroid)
 UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot)
 {
 	ASSERT_OR_RETURN(0, psDroid->isVtol(), "not a VTOL Droid");
+	const auto* weaponStats = getWeaponStats(psDroid, weapon_slot);
 	// if weapon is a salvo weapon, then number of shots that can be fired = vtolAttackRuns * numRounds
-	if (getWeaponStats(psDroid, weapon_slot)->upgrade[psDroid->player].reloadTime)
+	if (weaponStats->upgrade[psDroid->player].reloadTime)
 	{
-		return getWeaponStats(psDroid, weapon_slot)->upgrade[psDroid->player].numRounds
-			   * getWeaponStats(psDroid, weapon_slot)->vtolAttackRuns;
+		return weaponStats->upgrade[psDroid->player].numRounds
+			   * weaponStats->vtolAttackRuns;
 	}
-	return getWeaponStats(psDroid, weapon_slot)->vtolAttackRuns;
+	return weaponStats->vtolAttackRuns;
 }
 
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
@@ -3133,8 +3135,9 @@ bool cbSensorDroid(const DROID *psDroid)
 	{
 		return false;
 	}
-	if (getSensorStats(psDroid)->type == VTOL_CB_SENSOR
-		|| getSensorStats(psDroid)->type == INDIRECT_CB_SENSOR)
+	const auto sensorType = getSensorStats(psDroid)->type;
+	if (sensorType == VTOL_CB_SENSOR
+		|| sensorType == INDIRECT_CB_SENSOR)
 	{
 		return true;
 	}
@@ -3149,9 +3152,10 @@ bool standardSensorDroid(const DROID *psDroid)
 	{
 		return false;
 	}
-	if (getSensorStats(psDroid)->type == VTOL_INTERCEPT_SENSOR
-		|| getSensorStats(psDroid)->type == STANDARD_SENSOR
-		|| getSensorStats(psDroid)->type == SUPER_SENSOR)
+	const auto sensorType = getSensorStats(psDroid)->type;
+	if (sensorType == VTOL_INTERCEPT_SENSOR
+		|| sensorType == STANDARD_SENSOR
+		|| sensorType == SUPER_SENSOR)
 	{
 		return true;
 	}

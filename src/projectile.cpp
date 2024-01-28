@@ -1774,37 +1774,46 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 			case DROID_WEAPON:
 				if (psDroid->numWeaps > 0)
 				{
+					const auto* weaponImd = getWeaponStats(psDroid, 0)->pIMD;
 					// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
-					if (getWeaponStats(psDroid, 0)->pIMD == nullptr)
+					if (weaponImd == nullptr)
 					{
 						return height;
 					}
 
-					yMax = getWeaponStats(psDroid, 0)->pIMD->max.y;
-					yMin = getWeaponStats(psDroid, 0)->pIMD->min.y;
+					yMax = weaponImd->max.y;
+					yMin = weaponImd->min.y;
 				}
 				break;
 
 			case DROID_SENSOR:
-				yMax = getSensorStats(psDroid)->pIMD->max.y;
-				yMin = getSensorStats(psDroid)->pIMD->min.y;
+			{
+				const auto* sensorImd = getSensorStats(psDroid)->pIMD;
+				yMax = sensorImd->max.y;
+				yMin = sensorImd->min.y;
 				break;
-
+			}
 			case DROID_ECM:
-				yMax = getECMStats(psDroid)->pIMD->max.y;
-				yMin = getECMStats(psDroid)->pIMD->min.y;
+			{
+				const auto* ecmImd = getECMStats(psDroid)->pIMD;
+				yMax = ecmImd->max.y;
+				yMin = ecmImd->min.y;
 				break;
-
+			}
 			case DROID_CONSTRUCT:
-				yMax = getConstructStats(psDroid)->pIMD->max.y;
-				yMin = getConstructStats(psDroid)->pIMD->min.y;
+			{
+				const auto* constructImd = getConstructStats(psDroid)->pIMD;
+				yMax = constructImd->max.y;
+				yMin = constructImd->min.y;
 				break;
-
+			}
 			case DROID_REPAIR:
-				yMax = getRepairStats(psDroid)->pIMD->max.y;
-				yMin = getRepairStats(psDroid)->pIMD->min.y;
+			{
+				const auto repairImd = getRepairStats(psDroid)->pIMD;
+				yMax = repairImd->max.y;
+				yMin = repairImd->min.y;
 				break;
-
+			}
 			case DROID_PERSON:
 			//TODO:add person 'state'checks here(stand, knee, crouch, prone etc)
 			case DROID_CYBORG:
