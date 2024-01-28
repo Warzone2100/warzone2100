@@ -95,24 +95,11 @@ static void deallocTerrainTable()
 *******************************************************************************/
 
 /* Macro to allocate memory for a set of stats */
-#define ALLOC_STATS(numEntries, list, listSize, type) \
-	ASSERT((numEntries) < ~STAT_MASK + 1, "Number of stats entries too large for " #type);\
-	if ((list))	delete [] (list);	\
-	(list) = new type[numEntries]; \
-	(listSize) = (numEntries); \
-	return true
-
-#define ALLOC_STATS_VECTOR(numEntries, list, type) \
+#define ALLOC_STATS(numEntries, list, type) \
 	ASSERT((numEntries) < ~STAT_MASK + 1, "Number of stats entries too large for " #type);\
 	if (!list.empty()) list.clear(); \
 	list.resize(numEntries); \
 	return true
-
-/*Macro to Deallocate stats*/
-#define STATS_DEALLOC(list, listSize) \
-	delete [] (list); \
-	listSize = 0; \
-	(list) = NULL
 
 /*Deallocate all the stats assigned from input data*/
 bool statsShutDown()
@@ -141,44 +128,44 @@ bool statsShutDown()
 /* Allocate Weapon stats */
 bool statsAllocWeapons(UDWORD	numStats)
 {
-	ALLOC_STATS_VECTOR(numStats, asWeaponStats, WEAPON_STATS);
+	ALLOC_STATS(numStats, asWeaponStats, WEAPON_STATS);
 }
 /* Allocate Body Stats */
 bool statsAllocBody(UDWORD	numStats)
 {
-	ALLOC_STATS_VECTOR(numStats, asBodyStats, BODY_STATS);
+	ALLOC_STATS(numStats, asBodyStats, BODY_STATS);
 }
 /* Allocate Brain Stats */
 bool statsAllocBrain(UDWORD	numStats)
 {
-	ALLOC_STATS_VECTOR(numStats, asBrainStats, BRAIN_STATS);
+	ALLOC_STATS(numStats, asBrainStats, BRAIN_STATS);
 }
 /* Allocate Propulsion Stats */
 bool statsAllocPropulsion(UDWORD	numStats)
 {
-	ALLOC_STATS_VECTOR(numStats, asPropulsionStats, PROPULSION_STATS);
+	ALLOC_STATS(numStats, asPropulsionStats, PROPULSION_STATS);
 }
 /* Allocate Sensor Stats */
 bool statsAllocSensor(UDWORD	numStats)
 {
-	ALLOC_STATS_VECTOR(numStats, asSensorStats, SENSOR_STATS);
+	ALLOC_STATS(numStats, asSensorStats, SENSOR_STATS);
 }
 /* Allocate Ecm Stats */
 bool statsAllocECM(UDWORD	numStats)
 {
-	ALLOC_STATS_VECTOR(numStats, asECMStats, ECM_STATS);
+	ALLOC_STATS(numStats, asECMStats, ECM_STATS);
 }
 
 /* Allocate Repair Stats */
 bool statsAllocRepair(UDWORD	numStats)
 {
-	ALLOC_STATS_VECTOR(numStats, asRepairStats, REPAIR_STATS);
+	ALLOC_STATS(numStats, asRepairStats, REPAIR_STATS);
 }
 
 /* Allocate Construct Stats */
 bool statsAllocConstruct(UDWORD	numStats)
 {
-	ALLOC_STATS_VECTOR(numStats, asConstructStats, CONSTRUCT_STATS);
+	ALLOC_STATS(numStats, asConstructStats, CONSTRUCT_STATS);
 }
 
 /*******************************************************************************
