@@ -62,7 +62,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Get the stats for the weapon */
 	compIndex = psWeap->nStat;
-	ASSERT_OR_RETURN(false , compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", compIndex, asWeaponStats.size());
+	ASSERT_OR_RETURN(false , compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %zu", compIndex, asWeaponStats.size());
 	psStats = &asWeaponStats[compIndex];
 
 	// check valid weapon/prop combination

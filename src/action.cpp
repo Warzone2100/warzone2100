@@ -167,7 +167,7 @@ bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_sl
 	}
 
 	const unsigned compIndex = psDroid->asWeaps[weapon_slot].nStat;
-	ASSERT_OR_RETURN(false, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", compIndex, asWeaponStats.size());
+	ASSERT_OR_RETURN(false, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %zu", compIndex, asWeaponStats.size());
 	const WEAPON_STATS *psStats = &asWeaponStats[compIndex];
 
 	const int dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
