@@ -57,8 +57,7 @@ vec4 iterateOverAllPointLights(
 		int lightIndex = PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
 		vec4 position = PointLightsPosition[lightIndex];
 		vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
-		vec3 tmp = position.xyz * vec3(1., 1., -1.);
-		light += processPointLight(WorldFragPos, fragNormal, viewVector, material, tmp, colorAndEnergy.w, colorAndEnergy.xyz, normalWorldSpaceToLocalSpace);
+		light += processPointLight(WorldFragPos, fragNormal, viewVector, material, position.xyz, colorAndEnergy.w, colorAndEnergy.xyz, normalWorldSpaceToLocalSpace);
 	}
 	return light;
 }
@@ -154,8 +153,7 @@ vec4 volumetricLights(
 			int lightIndex = PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
 			vec4 position = PointLightsPosition[lightIndex];
 			vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
-			vec3 tmp = position.xyz * vec3(1., 1., -1.);
-			scatteredLight += colorAndEnergy.xyz * pointLightEnergyAtPosition(posOnViewLine, tmp, colorAndEnergy.w) * od;
+			scatteredLight += colorAndEnergy.xyz * pointLightEnergyAtPosition(posOnViewLine, position.xyz, colorAndEnergy.w) * od;
 		}
 
 		result += scatteredLight * currentTransmittence;
