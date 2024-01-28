@@ -1172,7 +1172,7 @@ bool droidUpdateRestore(DROID *psDroid)
 	ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat > 0, "Droid doesn't have any weapons");
 
 	unsigned compIndex = psDroid->asWeaps[0].nStat;
-	ASSERT_OR_RETURN(false, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %u > %u", compIndex, asWeaponStats.size());
+	ASSERT_OR_RETURN(false, compIndex < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %u > %zu", compIndex, asWeaponStats.size());
 	WEAPON_STATS *psStats = &asWeaponStats[compIndex];
 
 	ASSERT_OR_RETURN(false, psStats->weaponSubClass == WSC_ELECTRONIC, "unit's weapon is not EW");
@@ -1422,7 +1422,7 @@ static unsigned calcUpgradeSum(const uint8_t (&asParts)[DROID_MAXCOMP], int numW
 		// asWeaps[i] > 0 check only needed for droids, not templates.
 		if (asWeaps[i] > 0)
 		{
-			ASSERT(asWeaps[i] < asWeaponStats.size(), "Invalid weapon stat index (%" PRIu32 ", numWeaponStats: %" PRIu32 ") (player: %d)", asWeaps[i], asWeaponStats.size(), player);
+			ASSERT(asWeaps[i] < asWeaponStats.size(), "Invalid weapon stat index (%" PRIu32 ", numWeaponStats: %zu) (player: %d)", asWeaps[i], asWeaponStats.size(), player);
 			sum += func(asWeaponStats[asWeaps[i]].upgrade[player]);
 		}
 	}
@@ -3073,7 +3073,7 @@ bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid)
 			return false;
 		}
 		compIndex = ((const DROID *)psObj)->asBits[COMP_SENSOR];
-		ASSERT_OR_RETURN(false, compIndex < asSensorStats.size(), "Invalid range referenced for numSensorStats, %d > %d", compIndex, asSensorStats.size());
+		ASSERT_OR_RETURN(false, compIndex < asSensorStats.size(), "Invalid range referenced for numSensorStats, %d > %zu", compIndex, asSensorStats.size());
 		psStats = &asSensorStats[compIndex];
 		break;
 	case OBJ_STRUCTURE:

@@ -428,7 +428,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 {
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
-	ASSERT_OR_RETURN(false, psWeap->nStat < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, asWeaponStats.size());
+	ASSERT_OR_RETURN(false, psWeap->nStat < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %zu", psWeap->nStat, asWeaponStats.size());
 	ASSERT_OR_RETURN(false, psStats != nullptr, "Invalid weapon stats");
 	ASSERT_OR_RETURN(false, psTarget == nullptr || !psTarget->died, "Aiming at dead target!");
 
