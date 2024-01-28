@@ -50,9 +50,6 @@ extern std::vector<PROPULSION_TYPES> asPropulsionTypes;
 extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 extern WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
-/* The number of different stats stored */
-extern UDWORD		numTerrainTypes;
-
 //stores for each players component states - see below
 extern UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 
