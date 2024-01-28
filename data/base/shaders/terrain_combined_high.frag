@@ -148,10 +148,14 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 
 	vec4 res = (b.color*light) + light_spec;
 
+	MaterialInfo materialInfo;
+	materialInfo.albedo = b.color;
+	materialInfo.gloss = b.gloss;
+
 #if WZ_POINT_LIGHT_ENABLED == 1
 	// point lights
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
-	res += iterateOverAllPointLights(clipSpaceCoord, fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+	res += iterateOverAllPointLights(clipSpaceCoord, fragPos, b.N, normalize(halfVec - lightDir), materialInfo, ModelTangentMatrix);
 #endif
 
 	return vec4(res.rgb, b.color.a);
@@ -186,7 +190,12 @@ void main()
 {
 	vec4 fragColor = main_bumpMapping();
 
-	if (fogEnabled > 0)
+	if (WZ_VOLUMETRIC_LIGHTING_ENABLED == 1) {
+		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);	
+		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, frag.fragPos, diffuseLight.xyz);
+		fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);
+	}
+	else if (fogEnabled > 0)
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
