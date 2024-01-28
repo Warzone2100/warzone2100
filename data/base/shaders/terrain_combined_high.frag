@@ -60,7 +60,7 @@ uniform vec4 diffuseLight;
 uniform vec4 specularLight;
 
 
-uniform vec4 cameraPos; // in modelSpace
+//uniform vec4 cameraPos; // in modelSpace
 uniform vec4 sunPos; // in modelSpace, normalized
 
 // fog
@@ -192,7 +192,7 @@ void main()
 
 	if (WZ_VOLUMETRIC_LIGHTING_ENABLED == 1) {
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);	
-		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, frag.fragPos, diffuseLight.xyz);
+		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, fragPos, diffuseLight.xyz);
 		fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);
 	}
 	else if (fogEnabled > 0)
