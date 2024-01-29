@@ -148,6 +148,9 @@ public:
 	// Returns whether an error occurred trying to get the video data
 	bool getVideoDataError(const WzString& videoName);
 
+	// Cancel video download
+	bool cancelDownloadRequest(const WzString& videoName);
+
 	// Clear all cached requests
 	void clear();
 
@@ -180,6 +183,7 @@ private:
 	private:
 		AsyncURLRequestHandle requestHandle;
 		friend bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName);
+		friend bool OnDemandVideoDownloader::cancelDownloadRequest(const WzString& videoName);
 	};
 	std::unordered_map<WzString, std::shared_ptr<RequestDetails>> priorRequests;
 	optional<WzString> baseURLPath;
@@ -325,6 +329,22 @@ bool OnDemandVideoDownloader::getVideoDataError(const WzString& videoName)
 		return it->second->status == RequestDetails::RequestStatus::Failure;
 	}
 	return false;
+}
+
+// Cancel video download request
+bool OnDemandVideoDownloader::cancelDownloadRequest(const WzString& videoName)
+{
+	auto it = priorRequests.find(videoName);
+	if (it == priorRequests.end())
+	{
+		return false;
+	}
+	if (it->second->requestHandle)
+	{
+		urlRequestSetCancelFlag(it->second->requestHandle);
+	}
+	priorRequests.erase(it);
+	return true;
 }
 
 void OnDemandVideoDownloader::clear()
@@ -708,6 +728,8 @@ bool seq_StopFullScreenVideo()
 	{
 		loop_ClearVideoPlaybackMode();
 	}
+
+	onDemandVideoProvider.cancelDownloadRequest(currVideoName);
 
 	seq_Shutdown();
 
