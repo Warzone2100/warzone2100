@@ -1413,7 +1413,7 @@ static void intSetDesignStats(DROID_TEMPLATE *psTemplate)
 	intSetSystemForm(psStats);
 
 	/* Set the body stats */
-	intSetBodyStats(&asBodyStats[psTemplate->asParts[COMP_BODY]]);
+	intSetBodyStats(psTemplate->getBodyStats());
 
 	/* Set the propulsion stats */
 	intSetPropulsionForm(&asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]]);
@@ -2037,7 +2037,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, ComponentIterator co
 		}
 		if (sCurrDesign.asParts[COMP_BODY])
 		{
-			bodysize = asBodyStats[sCurrDesign.asParts[COMP_BODY]].size;
+			bodysize = sCurrDesign.getBodyStats()->size;
 		}
 	}
 
@@ -2701,7 +2701,7 @@ static uint32_t calculatePropulsionWeight(COMPONENT_STATS &propulsionStats)
 		return 0;
 	}
 
-	return propulsionStats.weight *asBodyStats[sCurrDesign.asParts[COMP_BODY]].weight / 100;
+	return propulsionStats.weight * sCurrDesign.getBodyStats()->weight / 100;
 }
 
 /* Set the shadow bar graphs for the Propulsion stats */
@@ -2805,7 +2805,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	ASSERT_OR_RETURN(false, psTempl->asParts[COMP_CONSTRUCT] < asConstructStats.size(), "Invalid range referenced for numConstructStats, %d > %zu", psTempl->asParts[COMP_CONSTRUCT], asConstructStats.size());
 
 	code_part level = complain ? LOG_ERROR : LOG_NEVER;
-	int bodysize = asBodyStats[psTempl->asParts[COMP_BODY]].size;
+	int bodysize = psTempl->getBodyStats()->size;
 
 	// set the weapon for a command droid
 	if (psTempl->asParts[COMP_BRAIN] != 0)
@@ -2862,7 +2862,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	}
 
 	// Check number of weapon slots
-	if ((unsigned)psTempl->numWeaps > asBodyStats[psTempl->asParts[COMP_BODY]].weaponSlots)
+	if ((unsigned)psTempl->numWeaps > psTempl->getBodyStats()->weaponSlots)
 	{
 		debug(level, "Too many weapon turrets");
 		return false;
@@ -3140,7 +3140,7 @@ void intProcessDesign(UDWORD id)
 		case IDES_TURRET:
 			setTemplateStat(&sCurrDesign, apsComponentList[id - IDDES_COMPSTART]);
 			//Watermelon:weaponslots >= 2
-			if (asBodyStats[sCurrDesign.asParts[COMP_BODY]].weaponSlots >= 2)
+			if (sCurrDesign.getBodyStats()->weaponSlots >= 2)
 			{
 				/* reveal turret_a button if hidden */
 				widgReveal(psWScreen, IDDES_WPABUTTON);
@@ -3156,7 +3156,7 @@ void intProcessDesign(UDWORD id)
 		case IDES_TURRET_A:
 			setTemplateStat(&sCurrDesign, apsComponentList[id - IDDES_COMPSTART]);
 			//Watermelon:weaponSlots > 2
-			if (asBodyStats[sCurrDesign.asParts[COMP_BODY]].weaponSlots > 2)
+			if (sCurrDesign.getBodyStats()->weaponSlots > 2)
 			{
 				/* reveal turret_b button if hidden */
 				widgReveal(psWScreen, IDDES_WPBBUTTON);
@@ -3186,7 +3186,7 @@ void intProcessDesign(UDWORD id)
 			intSetBodyStats((BODY_STATS *)apsComponentList[id - IDDES_COMPSTART]);
 
 			int numWeaps = sCurrDesign.asParts[COMP_BRAIN] != 0? 0 : sCurrDesign.numWeaps;
-			int maxWeaps = asBodyStats[sCurrDesign.asParts[COMP_BODY]].weaponSlots;
+			int maxWeaps = sCurrDesign.getBodyStats()->weaponSlots;
 			widgGetFromID(psWScreen, IDDES_WPABUTTON)->show(maxWeaps > 1 && numWeaps >= 1);
 			widgGetFromID(psWScreen, IDDES_WPBBUTTON)->show(maxWeaps > 2 && numWeaps >= 2);
 			widgSetButtonState(psWScreen, IDDES_WPABUTTON, maxWeaps > 1 && numWeaps == 1? WBUT_FLASH : 0);
@@ -3569,7 +3569,7 @@ void intProcessDesign(UDWORD id)
 
 			case IDES_SYSTEM:
 			case IDES_TURRET:
-				if (asBodyStats[sCurrDesign.asParts[COMP_BODY]].weaponSlots > 1 &&
+				if (sCurrDesign.getBodyStats()->weaponSlots > 1 &&
 				    sCurrDesign.numWeaps == 1 && sCurrDesign.asParts[COMP_BRAIN] == 0)
 				{
 					debug(LOG_GUI, "intProcessDesign: First weapon selected, doing next.");
@@ -3582,7 +3582,7 @@ void intProcessDesign(UDWORD id)
 				}
 				break;
 			case IDES_TURRET_A:
-				if (asBodyStats[sCurrDesign.asParts[COMP_BODY]].weaponSlots > 2)
+				if (sCurrDesign.getBodyStats()->weaponSlots > 2)
 				{
 					debug(LOG_GUI, "intProcessDesign: Second weapon selected, doing next.");
 					intSetDesignMode(IDES_TURRET_B);
@@ -3847,7 +3847,7 @@ void runTemplateShadowStats(UDWORD id)
 	if (psTempl && psTempl != &sCurrDesign)
 	{
 		/* Now set the bar graphs for the stats */
-		intSetBodyShadowStats(&asBodyStats[psTempl->asParts[COMP_BODY]]);
+		intSetBodyShadowStats(psTempl->getBodyStats());
 		intSetPropulsionShadowStats(&asPropulsionStats[psTempl->asParts[COMP_PROPULSION]]);
 		//only set the system shadow bar if the same type of droid
 		COMPONENT_STATS *psStats = nullptr;
