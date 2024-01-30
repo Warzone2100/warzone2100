@@ -1526,23 +1526,23 @@ static UDWORD calcDroidBaseBody(DROID *psDroid)
 UDWORD calcDroidBaseSpeed(const DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
 {
 	unsigned speed = asPropulsionTypes[asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType].powerRatioMult *
-				 bodyPower(asBodyStats[psTemplate->asParts[COMP_BODY]], player) / MAX(1, weight);
+				 bodyPower(*psTemplate->getBodyStats(), player) / MAX(1, weight);
 
 	// reduce the speed of medium/heavy VTOLs
 	if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)
 	{
-		if (asBodyStats[psTemplate->asParts[COMP_BODY]].size == SIZE_HEAVY)
+		if (psTemplate->getBodyStats()->size == SIZE_HEAVY)
 		{
 			speed /= 4;
 		}
-		else if (asBodyStats[psTemplate->asParts[COMP_BODY]].size == SIZE_MEDIUM)
+		else if (psTemplate->getBodyStats()->size == SIZE_MEDIUM)
 		{
 			speed = speed * 3 / 4;
 		}
 	}
 
 	// applies the engine output bonus if output > weight
-	if (asBodyStats[psTemplate->asParts[COMP_BODY]].base.power > weight)
+	if (psTemplate->getBodyStats()->base.power > weight)
 	{
 		speed = speed * 3 / 2;
 	}
@@ -3361,7 +3361,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 int16_t DROID::droidResistance() const
 {
 	CHECK_DROID(this);
-	const BODY_STATS *psStats = &asBodyStats[asBits[COMP_BODY]];
+	const BODY_STATS *psStats = getBodyStats(this);
 	int res = experience / (65536 / MAX(1, psStats->upgrade[player].resistance));
 	// ensure resistance is a base minimum
 	res = MAX(res, psStats->upgrade[player].resistance);

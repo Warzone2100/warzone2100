@@ -255,11 +255,11 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
 						(!designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") && asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]].usageClass == UsageClass::Cyborg) ||
 						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
-		bool isSuperCyborg = asBodyStats[psTempl->asParts[COMP_BODY]].usageClass == UsageClass::SuperCyborg;
+		bool isSuperCyborg = psTempl->getBodyStats()->usageClass == UsageClass::SuperCyborg;
 
 		designable =
-			   !designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")
-			&& (strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Cyborgs") == 0)
+			   !designablePart(*psTempl->getBodyStats(), "Body")
+			&& (strcmp(psTempl->getBodyStats()->bodyClass.toStdString().c_str(), "Cyborgs") == 0)
 			&& !designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
 			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LEGGED
 			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].usageClass == UsageClass::Cyborg
@@ -281,7 +281,7 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 		bool transporter = (psTempl->droidType == DROID_TRANSPORTER) || (psTempl->droidType == DROID_SUPERTRANSPORTER);
 
 		designable =
-			   (transporter || (!transporter && designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")))
+			   (transporter || (!transporter && designablePart(*psTempl->getBodyStats(), "Body")))
 			&& designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
 			&& (psTempl->asParts[COMP_BRAIN]      == 0 || designablePart(asBrainStats    [psTempl->asParts[COMP_BRAIN]],      "Brain"))
 			&& repair
@@ -296,10 +296,10 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 		if (transporter && designable)
 		{
 			designable = (asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) &&
-						!designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body");
+						!designablePart(*psTempl->getBodyStats(), "Body");
 			if (designable)
 			{
-				designable = strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Transports") == 0;
+				designable = strcmp(psTempl->getBodyStats()->bodyClass.toStdString().c_str(), "Transports") == 0;
 			}
 		}
 	}
@@ -405,7 +405,7 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().c_str());
 	}
 	ASSERT(psCurr->asParts[COMP_BODY] < asBodyStats.size(), "asParts[COMP_BODY] (%d) exceeds numBodyStats (%zu)", (int)psCurr->asParts[COMP_BODY], asBodyStats.size());
-	templateObj["body"] = asBodyStats[psCurr->asParts[COMP_BODY]].id;
+	templateObj["body"] = psCurr->getBodyStats()->id;
 	ASSERT(psCurr->asParts[COMP_PROPULSION] < asPropulsionStats.size(), "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%zu)", (int)psCurr->asParts[COMP_PROPULSION], asPropulsionStats.size());
 	templateObj["propulsion"] = asPropulsionStats[psCurr->asParts[COMP_PROPULSION]].id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
@@ -490,6 +490,11 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 {
 	std::fill_n(asParts, DROID_MAXCOMP, static_cast<uint8_t>(0));
 	std::fill_n(asWeaps, MAX_WEAPONS, 0);
+}
+
+BODY_STATS* DROID_TEMPLATE::getBodyStats() const
+{
+	return &asBodyStats[asParts[COMP_BODY]];
 }
 
 bool loadDroidTemplates(const char *filename)
@@ -799,14 +804,14 @@ std::vector<DROID_TEMPLATE *> fillTemplateList(STRUCTURE *psFactory)
 		}
 
 		//check the factory can cope with this sized body
-		if (asBodyStats[psCurr->asParts[COMP_BODY]].size <= iCapacity)
+		if (psCurr->getBodyStats()->size <= iCapacity)
 		{
 			pList.push_back(psCurr);
 		}
 		else if (bMultiPlayer && (iCapacity == SIZE_HEAVY))
 		{
 			// Special case for Super heavy bodyies (Super Transporter)
-			if (asBodyStats[psCurr->asParts[COMP_BODY]].size == SIZE_SUPER_HEAVY)
+			if (psCurr->getBodyStats()->size == SIZE_SUPER_HEAVY)
 			{
 				pList.push_back(psCurr);
 			}
