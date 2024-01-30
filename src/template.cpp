@@ -264,11 +264,11 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LEGGED
 			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].usageClass == UsageClass::Cyborg
 			&& repair
-			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(asBrainStats[psTempl->asParts[COMP_BRAIN]], "Brain") && asBrainStats[psTempl->asParts[COMP_BRAIN]].usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(*psTempl->getBrainStats(), "Brain") && psTempl->getBrainStats()->usageClass == UsageClass::Cyborg))
 			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(asECMStats[psTempl->asParts[COMP_ECM]], "ECM") && asECMStats[psTempl->asParts[COMP_ECM]].usageClass == UsageClass::Cyborg))
 			&& ((psTempl->asParts[COMP_SENSOR] == 0) || (!designablePart(asSensorStats[psTempl->asParts[COMP_SENSOR]], "Sensor") && asSensorStats[psTempl->asParts[COMP_SENSOR]].usageClass == UsageClass::Cyborg))
 			&& ((psTempl->asParts[COMP_CONSTRUCT] == 0) || (!designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]], "Construction part") && asConstructStats[psTempl->asParts[COMP_CONSTRUCT]].usageClass == UsageClass::Cyborg))
-			&& ((psTempl->numWeaps <= 0) || (asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]])
+			&& ((psTempl->numWeaps <= 0) || (psTempl->getBrainStats()->psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]])
 				|| (!designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::SuperCyborg))))
 			&& ((psTempl->numWeaps <= 1) || (!designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::SuperCyborg))))
 			&& ((psTempl->numWeaps <= 2) || (!designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::SuperCyborg))));
@@ -283,12 +283,12 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 		designable =
 			   (transporter || (!transporter && designablePart(*psTempl->getBodyStats(), "Body")))
 			&& designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
-			&& (psTempl->asParts[COMP_BRAIN]      == 0 || designablePart(asBrainStats    [psTempl->asParts[COMP_BRAIN]],      "Brain"))
+			&& (psTempl->asParts[COMP_BRAIN]      == 0 || designablePart(*psTempl->getBrainStats(), "Brain"))
 			&& repair
 			&& (psTempl->asParts[COMP_ECM]        == 0 || designablePart(asECMStats      [psTempl->asParts[COMP_ECM]],        "ECM"))
 			&& (psTempl->asParts[COMP_SENSOR]     == 0 || designablePart(asSensorStats   [psTempl->asParts[COMP_SENSOR]],     "Sensor"))
 			&& (psTempl->asParts[COMP_CONSTRUCT]  == 0 || designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]],  "Construction part"))
-			&& (psTempl->numWeaps <= 0 || asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]]
+			&& (psTempl->numWeaps <= 0 || psTempl->getBrainStats()->psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]]
 									 || designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0"))
 			&& (psTempl->numWeaps <= 1 || designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1"))
 			&& (psTempl->numWeaps <= 2 || designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2"));
@@ -411,7 +411,7 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	if (psCurr->asParts[COMP_BRAIN] != 0)
 	{
 		ASSERT(psCurr->asParts[COMP_BRAIN] < asBrainStats.size(), "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%zu)", (int)psCurr->asParts[COMP_BRAIN], asBrainStats.size());
-		templateObj["brain"] = asBrainStats[psCurr->asParts[COMP_BRAIN]].id;
+		templateObj["brain"] = psCurr->getBrainStats()->id;
 	}
 	if (asRepairStats[psCurr->asParts[COMP_REPAIRUNIT]].location == LOC_TURRET) // avoid auto-repair...
 	{
@@ -495,6 +495,11 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 BODY_STATS* DROID_TEMPLATE::getBodyStats() const
 {
 	return &asBodyStats[asParts[COMP_BODY]];
+}
+
+BRAIN_STATS* DROID_TEMPLATE::getBrainStats() const
+{
+	return &asBrainStats[asParts[COMP_BRAIN]];
 }
 
 bool loadDroidTemplates(const char *filename)

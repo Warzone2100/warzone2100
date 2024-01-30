@@ -2811,7 +2811,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	if (psTempl->asParts[COMP_BRAIN] != 0)
 	{
 		psTempl->numWeaps = 1;
-		psTempl->asWeaps[0] = asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat - asWeaponStats.data();
+		psTempl->asWeaps[0] = psTempl->getBrainStats()->psWeaponStat - asWeaponStats.data();
 	}
 
 	/* Check all the components have been set */
