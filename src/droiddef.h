@@ -59,6 +59,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 
 	BODY_STATS* getBodyStats() const;
 	BRAIN_STATS* getBrainStats() const;
+	PROPULSION_STATS* getPropulsionStats() const;
 
 	/*!
 	 * The droid components.
