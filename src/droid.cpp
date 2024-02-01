@@ -1362,7 +1362,7 @@ DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate)
 	{
 		type = DROID_SENSOR;
 	}
-	else if (asECMStats[psTemplate->asParts[COMP_ECM]].location == LOC_TURRET)
+	else if (psTemplate->getECMStats()->location == LOC_TURRET)
 	{
 		type = DROID_ECM;
 	}
