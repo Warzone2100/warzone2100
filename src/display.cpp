@@ -1722,7 +1722,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 			if ((psCurr->droidType == DROID_WEAPON) &&
 			    (psCurr->selected) &&
 			    (psCurr->asWeaps[0].nStat > 0) &&
-			    ((!proj_Direct(getWeaponStats(psCurr, 0))) ||
+			    ((!proj_Direct(psCurr->getWeaponStats(0))) ||
 			     psCurr->isVtol()) &&
 			    droidSensorDroidWeapon((BASE_OBJECT *)psDroid, psCurr))
 			{
@@ -2608,7 +2608,7 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 		switch (psDominant->droidType)
 		{
 		case DROID_WEAPON:
-			if (proj_Direct(getWeaponStats(psDominant, 0)))
+			if (proj_Direct(psDominant->getWeaponStats(0)))
 			{
 				selectionClass = SC_DROID_DIRECT;
 			}

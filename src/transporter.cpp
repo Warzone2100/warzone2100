@@ -1121,7 +1121,7 @@ int transporterSpaceRequired(const DROID *psDroid)
 {
 	// all droids are the same weight for campaign games.
 	// TODO - move this into a droid flag
-	return bMultiPlayer ? getBodyStats(psDroid)->size + 1 : 1;
+	return bMultiPlayer ? psDroid->getBodyStats()->size + 1 : 1;
 }
 
 /*sets which list of droids to use for the transporter interface*/

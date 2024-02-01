@@ -260,7 +260,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	rvx = svy;   // 90° to the... left?
 	rvy = -svx;
 
-	const auto droidPropType = getPropulsionStats(psDroid)->propulsionType;
+	const auto droidPropType = psDroid->getPropulsionStats()->propulsionType;
 	// check for blocking tiles
 	if (fpathBlockingTile(map_coord((SDWORD)psDroid->pos.x + lvx),
 	                      map_coord((SDWORD)psDroid->pos.y + lvy), droidPropType))
@@ -351,7 +351,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 void moveStopDroid(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
-	PROPULSION_STATS* psPropStats = getPropulsionStats(psDroid);
+	PROPULSION_STATS* psPropStats = psDroid->getPropulsionStats();
 	ASSERT_OR_RETURN(, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
@@ -456,7 +456,7 @@ static int32_t moveDirectPathToWaypoint(DROID *psDroid, unsigned positionIndex)
 	Vector2i delta = dst - src;
 	int32_t dist = iHypot(delta);
 	BLOCKING_CALLBACK_DATA data;
-	data.propulsionType = getPropulsionStats(psDroid)->propulsionType;
+	data.propulsionType = psDroid->getPropulsionStats()->propulsionType;
 	data.blocking = false;
 	data.src = src;
 	data.dst = dst;
@@ -554,7 +554,7 @@ static SDWORD moveObjRadius(const BASE_OBJECT *psObj)
 			}
 			else
 			{
-				const BODY_STATS *psBdyStats = getBodyStats(psDroid);
+				const BODY_STATS *psBdyStats = psDroid->getBodyStats();
 				switch (psBdyStats->size)
 				{
 				case SIZE_LIGHT:
@@ -761,7 +761,7 @@ static void moveOpenGates(DROID *psDroid)
 // TODO See if this function can be simplified.
 static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, uint16_t tarDir, uint16_t *pSlideDir)
 {
-	PROPULSION_TYPE	propulsion = getPropulsionStats(psDroid)->propulsionType;
+	PROPULSION_TYPE	propulsion = psDroid->getPropulsionStats()->propulsionType;
 	SDWORD	horizX, horizY, vertX, vertY;
 	uint16_t slideDir;
 	// calculate the new coords and see if they are on a different tile
@@ -1153,7 +1153,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 {
 	int32_t                 numObst = 0, distTot = 0;
 	Vector2i                dir(0, 0);
-	PROPULSION_STATS       *psPropStats = getPropulsionStats(psDroid);
+	PROPULSION_STATS       *psPropStats = psDroid->getPropulsionStats();
 	ASSERT_OR_RETURN(dir, psPropStats, "invalid propulsion stats pointer");
 
 	int ourMaxSpeed = psPropStats->maxSpeed;
@@ -1194,7 +1194,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 			continue;
 		}
 
-		PROPULSION_STATS *obstaclePropStats = getPropulsionStats(psObstacle);
+		PROPULSION_STATS *obstaclePropStats = psObstacle->getPropulsionStats();
 		int obstacleMaxSpeed = obstaclePropStats->maxSpeed;
 		int obstacleRadius = moveObjRadius(psObstacle);
 		int totalRadius = ourRadius + obstacleRadius;
@@ -1318,7 +1318,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	// NOTE: This screws up since the transporter is offscreen still (on a mission!), and we are trying to find terrainType of a tile (that is offscreen!)
 	if (psDroid->droidType == DROID_SUPERTRANSPORTER && missionIsOffworld())
 	{
-		PROPULSION_STATS	*propulsion = getPropulsionStats(psDroid);
+		PROPULSION_STATS	*propulsion = psDroid->getPropulsionStats();
 		speed = propulsion->maxSpeed;
 	}
 	else
@@ -1345,7 +1345,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	{
 		if (psDroid->asWeaps[0].nStat > 0 && psDroid->asWeaps[0].lastFired + FOM_MOVEPAUSE > gameTime)
 		{
-			psWStats = getWeaponStats(psDroid, 0);
+			psWStats = psDroid->getWeaponStats(0);
 			if (!psWStats->fireOnMove)
 			{
 				speed = 0;
@@ -1573,7 +1573,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		return;
 	}
 
-	psPropStats = getPropulsionStats(psDroid);
+	psPropStats = psDroid->getPropulsionStats();
 	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
 	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
 	spinAngle = DEG(psPropStats->spinAngle);
@@ -1637,7 +1637,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		return;
 	}
 
-	psPropStats = getPropulsionStats(psDroid);
+	psPropStats = psDroid->getPropulsionStats();
 	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
 	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
 
@@ -1734,7 +1734,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 		return;
 	}
 
-	psPropStats = getPropulsionStats(psDroid);
+	psPropStats = psDroid->getPropulsionStats();
 	spinSpeed = DEG(psPropStats->spinSpeed);
 	turnSpeed = DEG(psPropStats->turnSpeed);
 
@@ -1867,7 +1867,7 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 	if ((psDroid != nullptr) &&
 	    (psDroid->visibleForLocalDisplay()))
 	{
-		PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
+		PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
 		ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 		iPropType = psPropStats->propulsionType;
 		psPropType = &asPropulsionTypes[iPropType];
@@ -1927,7 +1927,7 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 	AUDIO_CALLBACK		pAudioCallback = nullptr;
 
 	/* get prop stats */
-	psPropStats = getPropulsionStats(psDroid);
+	psPropStats = psDroid->getPropulsionStats();
 	ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 	propType = psPropStats->propulsionType;
 	psPropType = &asPropulsionTypes[propType];
@@ -2076,7 +2076,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	psPropStats = getPropulsionStats(psDroid);
+	psPropStats = psDroid->getPropulsionStats();
 	ASSERT_OR_RETURN(, psPropStats != nullptr, "Invalid propulsion stats pointer");
 
 	// If the droid has been attacked by an EMP weapon, it is temporarily disabled

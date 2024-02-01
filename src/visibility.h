@@ -81,12 +81,12 @@ inline int objSensorRange(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
-		const int ecmrange = getECMStats((const DROID*)psObj)->upgrade[psObj->player].range;
+		const int ecmrange = ((const DROID*)psObj)->getECMStats()->upgrade[psObj->player].range;
 		if (ecmrange > 0)
 		{
 			return ecmrange;
 		}
-		return getSensorStats((const DROID*)psObj)->upgrade[psObj->player].range;
+		return ((const DROID*)psObj)->getSensorStats()->upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
@@ -104,7 +104,7 @@ static inline int objJammerPower(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
-		return getECMStats((const DROID *)psObj)->upgrade[psObj->player].range;
+		return ((const DROID*)psObj)->getECMStats()->upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{

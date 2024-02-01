@@ -215,7 +215,7 @@ struct ConditionDroidCandidateForRepair
 		if (obj->type != OBJ_DROID) return false;
 		const DROID *psDroid = (const DROID*) obj;
 		const bool isOwnOrAlly = psDroid->player == player || aiCheckAlliances(psDroid->player, player);
-		const bool isVTOL = getPropulsionStats(psDroid)->propulsionType == PROPULSION_TYPE_LIFT;
+		const bool isVTOL = psDroid->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT;
 		// either it's a ground unit, or it's a VTOL on ground
 		const bool isOnGround = (!isVTOL) || (isVTOL && (psDroid->sMove.Status == MOVEINACTIVE && psDroid->sMove.iVertSpeed == 0));
 		// Note: no check for droidIsDamaged(psDroid) this is intentional

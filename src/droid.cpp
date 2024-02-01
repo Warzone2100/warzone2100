@@ -247,7 +247,7 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 		{
 			iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING]->displayModel();
 			/* get propulsion stats */
-			PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
+			PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
 			if (psPropStats && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
 			{
 				// FIXME: change when adding submarines to the game
@@ -1120,7 +1120,7 @@ bool droidUpdateBuild(DROID *psDroid)
 		return false;
 	}
 
-	unsigned constructPoints = constructorPoints(*getConstructStats(psDroid), psDroid->player);
+	unsigned constructPoints = constructorPoints(*psDroid->getConstructStats(), psDroid->player);
 
 	unsigned pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 				  GAME_TICKS_PER_SEC;
@@ -1143,7 +1143,7 @@ bool droidUpdateDemolishing(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
-	int constructRate = 5 * constructorPoints(*getConstructStats(psDroid), psDroid->player);
+	int constructRate = 5 * constructorPoints(*psDroid->getConstructStats(), psDroid->player);
 	int pointsToAdd = gameTimeAdjustedAverage(constructRate);
 
 	structureDemolish(psStruct, psDroid, pointsToAdd);
@@ -1254,7 +1254,7 @@ bool droidUpdateRepair(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	int iRepairRate = constructorPoints(*getConstructStats(psDroid), psDroid->player);
+	int iRepairRate = constructorPoints(*psDroid->getConstructStats(), psDroid->player);
 
 	/* add points to structure */
 	structureRepair(psStruct, psDroid, iRepairRate);
@@ -1276,7 +1276,7 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 {
 	CHECK_DROID(psRepairDroid);
 
-	const auto* repairStats = getRepairStats(psRepairDroid);
+	const auto* repairStats = psRepairDroid->getRepairStats();
 	int iRepairRateNumerator = repairPoints(*repairStats, psRepairDroid->player);
 	int iRepairRateDenominator = 1;
 
@@ -1783,13 +1783,13 @@ void droidSetBits(const DROID_TEMPLATE *pTemplate, DROID *psDroid)
 		if (inc < pTemplate->numWeaps)
 		{
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
-			psDroid->asWeaps[inc].ammo = getWeaponStats(psDroid, inc)->upgrade[psDroid->player].numRounds;
+			psDroid->asWeaps[inc].ammo = psDroid->getWeaponStats(inc)->upgrade[psDroid->player].numRounds;
 		}
 		psDroid->asWeaps[inc].usedAmmo = 0;
 	}
 	memcpy(psDroid->asBits, pTemplate->asParts, sizeof(psDroid->asBits));
 
-	switch (getPropulsionStats(psDroid)->propulsionType)  // getPropulsionStats(psDroid) only defined after psDroid->asBits[COMP_PROPULSION] is set.
+	switch (psDroid->getPropulsionStats()->propulsionType)  // getPropulsionStats(psDroid) only defined after psDroid->asBits[COMP_PROPULSION] is set.
 	{
 	case PROPULSION_TYPE_LIFT:
 		psDroid->blockedBits = AIR_BLOCKED;
@@ -2253,7 +2253,7 @@ UDWORD getDroidEffectiveLevel(const DROID *psDroid)
 
 const char *getDroidLevelName(const DROID *psDroid)
 {
-	const BRAIN_STATS *psStats = getBrainStats(psDroid);
+	const BRAIN_STATS *psStats = psDroid->getBrainStats();
 	return PE_("rank", psStats->rankNames[getDroidLevel(psDroid)].c_str());
 }
 
@@ -2467,7 +2467,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				}
 
 				//if VTOLs are excluded, skip them
-				if (!bVTOLs && ((getPropulsionStats(psDroid)->propulsionType == PROPULSION_TYPE_LIFT) || psDroid->isTransporter()))
+				if (!bVTOLs && ((psDroid->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT) || psDroid->isTransporter()))
 				{
 					continue;
 				}
@@ -2693,7 +2693,7 @@ bool electronicDroid(const DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	//use slot 0 for now
-	if (psDroid->numWeaps > 0 && getWeaponStats(psDroid, 0)->weaponSubClass == WSC_ELECTRONIC)
+	if (psDroid->numWeaps > 0 && psDroid->getWeaponStats(0)->weaponSubClass == WSC_ELECTRONIC)
 	{
 		return true;
 	}
@@ -2777,14 +2777,14 @@ bool isTransporter(DROID_TEMPLATE const *psTemplate)
 //access functions for vtols
 bool DROID::isVtol() const
 {
-	return getPropulsionStats(this)->propulsionType == PROPULSION_TYPE_LIFT
+	return getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT
 		   && !isTransporter();
 }
 
 /* returns true if the droid has lift propulsion and is moving */
 bool DROID::isFlying() const
 {
-	return getPropulsionStats(this)->propulsionType == PROPULSION_TYPE_LIFT
+	return getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT
 		   && (sMove.Status != MOVEINACTIVE || isTransporter());
 }
 
@@ -2804,7 +2804,7 @@ bool vtolEmpty(const DROID *psDroid)
 
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
-		if (getWeaponStats(psDroid, i)->vtolAttackRuns > 0 &&
+		if (psDroid->getWeaponStats(i)->vtolAttackRuns > 0 &&
 			psDroid->asWeaps[i].usedAmmo < getNumAttackRuns(psDroid, i))
 		{
 			return false;
@@ -2830,7 +2830,7 @@ bool vtolFull(const DROID *psDroid)
 
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
-		if (getWeaponStats(psDroid, i)->vtolAttackRuns > 0 &&
+		if (psDroid->getWeaponStats(i)->vtolAttackRuns > 0 &&
 			psDroid->asWeaps[i].usedAmmo > 0)
 		{
 			return false;
@@ -2959,7 +2959,7 @@ bool allVtolsRearmed(const DROID *psDroid)
 UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot)
 {
 	ASSERT_OR_RETURN(0, psDroid->isVtol(), "not a VTOL Droid");
-	const auto* weaponStats = getWeaponStats(psDroid, weapon_slot);
+	const auto* weaponStats = psDroid->getWeaponStats(weapon_slot);
 	// if weapon is a salvo weapon, then number of shots that can be fired = vtolAttackRuns * numRounds
 	if (weaponStats->upgrade[psDroid->player].reloadTime)
 	{
@@ -2999,7 +2999,7 @@ bool vtolHappy(const DROID *psDroid)
 	//check full complement of ammo
 	for (int i = 0; i < psDroid->numWeaps; ++i)
 	{
-		if (getWeaponStats(psDroid, i)->vtolAttackRuns > 0
+		if (psDroid->getWeaponStats(i)->vtolAttackRuns > 0
 			&& psDroid->asWeaps[i].usedAmmo != 0)
 		{
 			return false;
@@ -3016,7 +3016,7 @@ void updateVtolAttackRun(DROID *psDroid, int weapon_slot)
 	{
 		if (psDroid->numWeaps > 0)
 		{
-			if (getWeaponStats(psDroid, weapon_slot)->vtolAttackRuns > 0)
+			if (psDroid->getWeaponStats(weapon_slot)->vtolAttackRuns > 0)
 			{
 				++psDroid->asWeaps[weapon_slot].usedAmmo;
 				if (psDroid->asWeaps[weapon_slot].usedAmmo == getNumAttackRuns(psDroid, weapon_slot))
@@ -3116,7 +3116,7 @@ bool droidSensorDroidWeapon(const BASE_OBJECT *psObj, const DROID *psDroid)
 	}
 
 	// Check indirect weapon droid with standard/CB/radar detector sensor
-	if (!proj_Direct(getWeaponStats(psDroid, 0)))
+	if (!proj_Direct(psDroid->getWeaponStats(0)))
 	{
 		if ((psStats->type == STANDARD_SENSOR || psStats->type == INDIRECT_CB_SENSOR || psStats->type == SUPER_SENSOR /*|| psStats->type == RADAR_DETECTOR_SENSOR*/)
 			&& !(psObj->type == OBJ_DROID && ((const DROID*)psObj)->droidType == DROID_COMMAND))
@@ -3135,7 +3135,7 @@ bool cbSensorDroid(const DROID *psDroid)
 	{
 		return false;
 	}
-	const auto sensorType = getSensorStats(psDroid)->type;
+	const auto sensorType = psDroid->getSensorStats()->type;
 	if (sensorType == VTOL_CB_SENSOR
 		|| sensorType == INDIRECT_CB_SENSOR)
 	{
@@ -3152,7 +3152,7 @@ bool standardSensorDroid(const DROID *psDroid)
 	{
 		return false;
 	}
-	const auto sensorType = getSensorStats(psDroid)->type;
+	const auto sensorType = psDroid->getSensorStats()->type;
 	if (sensorType == VTOL_INTERCEPT_SENSOR
 		|| sensorType == STANDARD_SENSOR
 		|| sensorType == SUPER_SENSOR)
@@ -3278,21 +3278,21 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 		adjustDroidCount(psD, 1);
 
 		// the new player may have different default sensor/ecm/repair components
-		if (getSensorStats(psD)->location == LOC_DEFAULT)
+		if (psD->getSensorStats()->location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_SENSOR] != aDefaultSensor[psD->player])
 			{
 				psD->asBits[COMP_SENSOR] = aDefaultSensor[psD->player];
 			}
 		}
-		if (getECMStats(psD)->location == LOC_DEFAULT)
+		if (psD->getECMStats()->location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_ECM] != aDefaultECM[psD->player])
 			{
 				psD->asBits[COMP_ECM] = aDefaultECM[psD->player];
 			}
 		}
-		if (getRepairStats(psD)->location == LOC_DEFAULT)
+		if (psD->getRepairStats()->location == LOC_DEFAULT)
 		{
 			if (psD->asBits[COMP_REPAIRUNIT] != aDefaultRepair[psD->player])
 			{
@@ -3361,7 +3361,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 int16_t DROID::droidResistance() const
 {
 	CHECK_DROID(this);
-	const BODY_STATS *psStats = getBodyStats(this);
+	const BODY_STATS *psStats = getBodyStats();
 	int res = experience / (65536 / MAX(1, psStats->upgrade[player].resistance));
 	// ensure resistance is a base minimum
 	res = MAX(res, psStats->upgrade[player].resistance);
@@ -3547,11 +3547,51 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 
 int droidSqDist(const DROID *psDroid, const BASE_OBJECT *psObj)
 {
-	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
+	PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
 
 	if (!fpathCheck(psDroid->pos, psObj->pos, psPropStats->propulsionType))
 	{
 		return -1;
 	}
 	return objPosDiffSq(psDroid->pos, psObj->pos);
+}
+
+BODY_STATS* DROID::getBodyStats() const
+{
+	return &asBodyStats[asBits[COMP_BODY]];
+}
+
+BRAIN_STATS* DROID::getBrainStats() const
+{
+	return &asBrainStats[asBits[COMP_BRAIN]];
+}
+
+PROPULSION_STATS* DROID::getPropulsionStats() const
+{
+	return &asPropulsionStats[asBits[COMP_PROPULSION]];
+}
+
+SENSOR_STATS* DROID::getSensorStats() const
+{
+	return &asSensorStats[asBits[COMP_SENSOR]];
+}
+
+ECM_STATS* DROID::getECMStats() const
+{
+	return &asECMStats[asBits[COMP_ECM]];
+}
+
+REPAIR_STATS* DROID::getRepairStats() const
+{
+	return &asRepairStats[asBits[COMP_REPAIRUNIT]];
+}
+
+CONSTRUCT_STATS* DROID::getConstructStats() const
+{
+	return &asConstructStats[asBits[COMP_CONSTRUCT]];
+}
+
+WEAPON_STATS* DROID::getWeaponStats(int weaponSlot) const
+{
+	return &asWeaponStats[asWeaps[weaponSlot].nStat];
 }

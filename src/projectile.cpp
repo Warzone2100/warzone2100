@@ -993,7 +993,7 @@ static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, Vector3i 
 		switch (psCurr->type)
 		{
 		case OBJ_DROID:
-			bTargetInAir = asPropulsionTypes[getPropulsionStats((DROID*)psCurr)->propulsionType].travel == AIR && ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE;
+			bTargetInAir = asPropulsionTypes[((DROID*)psCurr)->getPropulsionStats()->propulsionType].travel == AIR && ((DROID*)psCurr)->sMove.Status != MOVEINACTIVE;
 			useSphere = true;
 			break;
 		case OBJ_STRUCTURE:
@@ -1572,8 +1572,8 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, const BASE_OBJE
 	}
 	else if (psTarget->type == OBJ_DROID)
 	{
-		const int propulsion = getPropulsionStats((const DROID*)psTarget)->propulsionType;
-		const int body = getBodyStats((const DROID*)psTarget)->size;
+		const int propulsion = ((const DROID*)psTarget)->getPropulsionStats()->propulsionType;
+		const int body = ((const DROID*)psTarget)->getBodyStats()->size;
 		damage += baseDamage * (asWeaponModifier[weaponEffect][propulsion] - 100);
 		damage += baseDamage * (asWeaponModifierBody[weaponEffect][body] - 100);
 	}
@@ -1760,7 +1760,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 	case OBJ_DROID:
 		{
 			DROID const *psDroid = (DROID const *)psTarget;
-			unsigned int height = getBodyStats(psDroid)->pIMD->max.y - getBodyStats(psDroid)->pIMD->min.y;
+			unsigned int height = psDroid->getBodyStats()->pIMD->max.y - psDroid->getBodyStats()->pIMD->min.y;
 			unsigned int utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
 
 			// VTOL's don't have pIMD either it seems...
@@ -1774,7 +1774,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 			case DROID_WEAPON:
 				if (psDroid->numWeaps > 0)
 				{
-					const auto* weaponImd = getWeaponStats(psDroid, 0)->pIMD;
+					const auto* weaponImd = psDroid->getWeaponStats(0)->pIMD;
 					// Don't do this for Barbarian Propulsions as they don't possess a turret (and thus have pIMD == NULL)
 					if (weaponImd == nullptr)
 					{
@@ -1788,28 +1788,28 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 
 			case DROID_SENSOR:
 			{
-				const auto* sensorImd = getSensorStats(psDroid)->pIMD;
+				const auto* sensorImd = psDroid->getSensorStats()->pIMD;
 				yMax = sensorImd->max.y;
 				yMin = sensorImd->min.y;
 				break;
 			}
 			case DROID_ECM:
 			{
-				const auto* ecmImd = getECMStats(psDroid)->pIMD;
+				const auto* ecmImd = psDroid->getECMStats()->pIMD;
 				yMax = ecmImd->max.y;
 				yMin = ecmImd->min.y;
 				break;
 			}
 			case DROID_CONSTRUCT:
 			{
-				const auto* constructImd = getConstructStats(psDroid)->pIMD;
+				const auto* constructImd = psDroid->getConstructStats()->pIMD;
 				yMax = constructImd->max.y;
 				yMin = constructImd->min.y;
 				break;
 			}
 			case DROID_REPAIR:
 			{
-				const auto repairImd = getRepairStats(psDroid)->pIMD;
+				const auto repairImd = psDroid->getRepairStats()->pIMD;
 				yMax = repairImd->max.y;
 				yMin = repairImd->min.y;
 				break;

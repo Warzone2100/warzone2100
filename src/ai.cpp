@@ -94,7 +94,7 @@ static int aiDroidRange(DROID *psDroid, int weapon_slot)
 	}
 	else
 	{
-		WEAPON_STATS *psWStats = getWeaponStats(psDroid, weapon_slot);
+		WEAPON_STATS *psWStats = psDroid->getWeaponStats(weapon_slot);
 		longRange = proj_GetLongRange(*psWStats, psDroid->player);
 	}
 
@@ -197,7 +197,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			{
 				continue;
 			}
-			const auto sensorType = getSensorStats(psDroid)->type;
+			const auto sensorType = psDroid->getSensorStats()->type;
 			// Artillery should not fire at objects observed by VTOL CB/Strike sensors.
 			if (sensorType == VTOL_CB_SENSOR ||
 				sensorType == VTOL_INTERCEPT_SENSOR ||
@@ -293,7 +293,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	{
 		psAttackerDroid = (DROID *)psAttacker;
 
-		attackerWeapon = getWeaponStats(psAttackerDroid, weapon_slot);
+		attackerWeapon = psAttackerDroid->getWeaponStats(weapon_slot);
 
 		//check if this droid is assigned to a commander
 		bCmdAttached = hasCommander(psAttackerDroid);
@@ -420,8 +420,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		}
 
 		/* Now calculate the overall weight */
-		attackWeight = asWeaponModifier[weaponEffect][getPropulsionStats(targetDroid)->propulsionType] // Our weapon's effect against target
-		               + asWeaponModifierBody[weaponEffect][getBodyStats(targetDroid)->size]
+		attackWeight = asWeaponModifier[weaponEffect][targetDroid->getPropulsionStats()->propulsionType] // Our weapon's effect against target
+		               + asWeaponModifierBody[weaponEffect][targetDroid->getBodyStats()->size]
 		               + WEIGHT_DIST_TILE_DROID * objSensorRange(psAttacker) / TILE_UNITS
 		               - WEIGHT_DIST_TILE_DROID * dist / TILE_UNITS // farther droids are less attractive
 		               + WEIGHT_HEALTH_DROID * damageRatio / 100 // we prefer damaged droids
@@ -583,7 +583,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	++numDroidNearestTargetChecksThisFrame;
 
 	// Check if we have a CB target to begin with
-	WEAPON_STATS* psWStats = getWeaponStats(psDroid, weapon_slot);
+	WEAPON_STATS* psWStats = psDroid->getWeaponStats(weapon_slot);
 	if (!proj_Direct(psWStats))
 	{
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
@@ -1267,7 +1267,7 @@ bool validTarget(BASE_OBJECT const *psObject, BASE_OBJECT const *psTarget, int w
 	switch (psTarget->type)
 	{
 	case OBJ_DROID:
-		if (asPropulsionTypes[getPropulsionStats((const DROID*)psTarget)->propulsionType].travel == AIR)
+		if (asPropulsionTypes[((const DROID*)psTarget)->getPropulsionStats()->propulsionType].travel == AIR)
 		{
 			if (((const DROID *)psTarget)->sMove.Status != MOVEINACTIVE)
 			{
@@ -1302,7 +1302,7 @@ bool validTarget(BASE_OBJECT const *psObject, BASE_OBJECT const *psTarget, int w
 		// Can't attack without a weapon
 		if (((const DROID *)psObject)->numWeaps != 0 && ((const DROID *)psObject)->asWeaps[weapon_slot].nStat != 0)
 		{
-			surfaceToAir = getWeaponStats((const DROID*)psObject, weapon_slot)->surfaceToAir;
+			surfaceToAir = ((const DROID*)psObject)->getWeaponStats(weapon_slot)->surfaceToAir;
 			if (((surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir))
 			{
 				return true;

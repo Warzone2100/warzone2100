@@ -960,7 +960,7 @@ bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int 
 
 	if (psViewer->type == OBJ_DROID)
 	{
-		psStats = getWeaponStats((const DROID*)psViewer, weapon_slot);
+		psStats = ((const DROID*)psViewer)->getWeaponStats(weapon_slot);
 	}
 	else if (psViewer->type == OBJ_STRUCTURE)
 	{

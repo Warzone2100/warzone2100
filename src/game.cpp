@@ -5872,16 +5872,16 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 	droidObj["droidType"] = psCurr->droidType;
 	droidObj["weapons"] = psCurr->numWeaps;
 	nlohmann::json partsObj = nlohmann::json::object();
-	partsObj["body"] = getBodyStats(psCurr)->id;
-	partsObj["propulsion"] = getPropulsionStats(psCurr)->id;
-	partsObj["brain"] = getBrainStats(psCurr)->id;
-	partsObj["repair"] = getRepairStats(psCurr)->id;
-	partsObj["ecm"] = getECMStats(psCurr)->id;
-	partsObj["sensor"] = getSensorStats(psCurr)->id;
-	partsObj["construct"] = getConstructStats(psCurr)->id;
+	partsObj["body"] = psCurr->getBodyStats()->id;
+	partsObj["propulsion"] = psCurr->getPropulsionStats()->id;
+	partsObj["brain"] = psCurr->getBrainStats()->id;
+	partsObj["repair"] = psCurr->getRepairStats()->id;
+	partsObj["ecm"] = psCurr->getECMStats()->id;
+	partsObj["sensor"] = psCurr->getSensorStats()->id;
+	partsObj["construct"] = psCurr->getConstructStats()->id;
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
-		partsObj["weapon/" + WzString::number(j + 1).toStdString()] = getWeaponStats(psCurr, j)->id;
+		partsObj["weapon/" + WzString::number(j + 1).toStdString()] = psCurr->getWeaponStats(j)->id;
 	}
 	droidObj["parts"] = partsObj;
 	droidObj["moveStatus"] = psCurr->sMove.Status;

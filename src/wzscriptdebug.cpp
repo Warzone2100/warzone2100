@@ -2694,13 +2694,13 @@ void WZScriptDebugger::selected(const BASE_OBJECT *psObj)
 			selectedObjectDetails["Move pause time"] = psDroid->sMove.pauseTime;
 			selectedObjectDetails["Move shuffle start"] = psDroid->sMove.shuffleStart;
 			selectedObjectDetails["Move vert speed"] = psDroid->sMove.iVertSpeed;
-			selectedObjectDetails["Body"] = componentToString(getBodyStats(psDroid), psObj->player);
-			selectedObjectDetails["Brain"] = componentToString(getBrainStats(psDroid), psObj->player);
-			selectedObjectDetails["Propulsion"] = componentToString(getPropulsionStats(psDroid), psObj->player);
-			selectedObjectDetails["ECM"] = componentToString(getECMStats(psDroid), psObj->player);
-			selectedObjectDetails["Sensor"] = componentToString(getSensorStats(psDroid), psObj->player);
-			selectedObjectDetails["Construct"] = componentToString(getConstructStats(psDroid), psObj->player);
-			selectedObjectDetails["Repair"] = componentToString(getRepairStats(psDroid), psObj->player);
+			selectedObjectDetails["Body"] = componentToString(psDroid->getBodyStats(), psObj->player);
+			selectedObjectDetails["Brain"] = componentToString(psDroid->getBrainStats(), psObj->player);
+			selectedObjectDetails["Propulsion"] = componentToString(psDroid->getPropulsionStats(), psObj->player);
+			selectedObjectDetails["ECM"] = componentToString(psDroid->getECMStats(), psObj->player);
+			selectedObjectDetails["Sensor"] = componentToString(psDroid->getSensorStats(), psObj->player);
+			selectedObjectDetails["Construct"] = componentToString(psDroid->getConstructStats(), psObj->player);
+			selectedObjectDetails["Repair"] = componentToString(psDroid->getRepairStats(), psObj->player);
 		}
 		else if (psObj->type == OBJ_STRUCTURE)
 		{

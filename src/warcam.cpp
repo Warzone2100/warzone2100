@@ -563,7 +563,7 @@ static void updateCameraAcceleration(UBYTE update)
 	*/
 	const int angle = 90 - abs((playerPos.r.x / 182) % 90);
 
-	const PROPULSION_STATS *psPropStats = getPropulsionStats(trackingCamera.target);
+	const PROPULSION_STATS *psPropStats = trackingCamera.target->getPropulsionStats();
 
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
@@ -675,7 +675,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 	SDWORD	xPos = 0, yPos = 0, zPos = 0;
 
 	bTooLow = false;
-	psPropStats = getPropulsionStats(trackingCamera.target);
+	psPropStats = trackingCamera.target->getPropulsionStats();
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		int droidHeight, difHeight, droidMapHeight;
@@ -838,7 +838,7 @@ static bool camTrackCamera()
 	/* Update the acceleration,velocity and rotation of the camera for rotation */
 	/*	You can track roll as well (z axis) but it makes you ill and looks
 		like a flight sim, so for now just pitch and orientation */
-	psPropStats = getPropulsionStats(trackingCamera.target);
+	psPropStats = trackingCamera.target->getPropulsionStats();
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		bFlying = true;

@@ -1835,7 +1835,7 @@ bool objRadarDetector(const BASE_OBJECT *psObj)
 	else if (psObj->type == OBJ_DROID)
 	{
 		const DROID *psDroid = (const DROID *)psObj;
-		SENSOR_STATS *psSensor = getSensorStats(psDroid);
+		SENSOR_STATS *psSensor = psDroid->getSensorStats();
 
 		return (psSensor && psSensor->type == RADAR_DETECTOR_SENSOR);
 	}
