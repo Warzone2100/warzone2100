@@ -1358,7 +1358,7 @@ DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate)
 	{
 		type = DROID_COMMAND;
 	}
-	else if (asSensorStats[psTemplate->asParts[COMP_SENSOR]].location == LOC_TURRET)
+	else if (psTemplate->getSensorStats()->location == LOC_TURRET)
 	{
 		type = DROID_SENSOR;
 	}
