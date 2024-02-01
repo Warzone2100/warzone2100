@@ -260,9 +260,9 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 		designable =
 			   !designablePart(*psTempl->getBodyStats(), "Body")
 			&& (strcmp(psTempl->getBodyStats()->bodyClass.toStdString().c_str(), "Cyborgs") == 0)
-			&& !designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
-			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LEGGED
-			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].usageClass == UsageClass::Cyborg
+			&& !designablePart(*psTempl->getPropulsionStats(), "Propulsion")
+			&& psTempl->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LEGGED
+			&& psTempl->getPropulsionStats()->usageClass == UsageClass::Cyborg
 			&& repair
 			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(*psTempl->getBrainStats(), "Brain") && psTempl->getBrainStats()->usageClass == UsageClass::Cyborg))
 			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(asECMStats[psTempl->asParts[COMP_ECM]], "ECM") && asECMStats[psTempl->asParts[COMP_ECM]].usageClass == UsageClass::Cyborg))
@@ -282,7 +282,7 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 
 		designable =
 			   (transporter || (!transporter && designablePart(*psTempl->getBodyStats(), "Body")))
-			&& designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
+			&& designablePart(*psTempl->getPropulsionStats(), "Propulsion")
 			&& (psTempl->asParts[COMP_BRAIN]      == 0 || designablePart(*psTempl->getBrainStats(), "Brain"))
 			&& repair
 			&& (psTempl->asParts[COMP_ECM]        == 0 || designablePart(asECMStats      [psTempl->asParts[COMP_ECM]],        "ECM"))
@@ -295,7 +295,7 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 
 		if (transporter && designable)
 		{
-			designable = (asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) &&
+			designable = (psTempl->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT) &&
 						!designablePart(*psTempl->getBodyStats(), "Body");
 			if (designable)
 			{
@@ -407,7 +407,7 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	ASSERT(psCurr->asParts[COMP_BODY] < asBodyStats.size(), "asParts[COMP_BODY] (%d) exceeds numBodyStats (%zu)", (int)psCurr->asParts[COMP_BODY], asBodyStats.size());
 	templateObj["body"] = psCurr->getBodyStats()->id;
 	ASSERT(psCurr->asParts[COMP_PROPULSION] < asPropulsionStats.size(), "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%zu)", (int)psCurr->asParts[COMP_PROPULSION], asPropulsionStats.size());
-	templateObj["propulsion"] = asPropulsionStats[psCurr->asParts[COMP_PROPULSION]].id;
+	templateObj["propulsion"] = psCurr->getPropulsionStats()->id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
 	{
 		ASSERT(psCurr->asParts[COMP_BRAIN] < asBrainStats.size(), "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%zu)", (int)psCurr->asParts[COMP_BRAIN], asBrainStats.size());
@@ -500,6 +500,11 @@ BODY_STATS* DROID_TEMPLATE::getBodyStats() const
 BRAIN_STATS* DROID_TEMPLATE::getBrainStats() const
 {
 	return &asBrainStats[asParts[COMP_BRAIN]];
+}
+
+PROPULSION_STATS* DROID_TEMPLATE::getPropulsionStats() const
+{
+	return &asPropulsionStats[asParts[COMP_PROPULSION]];
 }
 
 bool loadDroidTemplates(const char *filename)

@@ -2614,7 +2614,7 @@ static bool IsFactoryCommanderGroupFull(const FACTORY *psFactory)
 	}
 
 	// allow any number of IDF droids
-	if (templateIsIDF(psFactory->psSubject) || asPropulsionStats[psFactory->psSubject->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)
+	if (templateIsIDF(psFactory->psSubject) || psFactory->psSubject->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		return false;
 	}
@@ -4378,7 +4378,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 	}
 	else if (psTemplate != nullptr)
 	{
-		PROPULSION_STATS *psPropStats = &asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]];
+		PROPULSION_STATS *psPropStats = psTemplate->getPropulsionStats();
 
 		if (fpathBlockingTile(b.map.x, b.map.y, psPropStats->propulsionType))
 		{
@@ -5523,7 +5523,7 @@ bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFact
 	}
 	//check for VTOL droid
 	else if (psTemplate->asParts[COMP_PROPULSION] &&
-	         (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT))
+	         (psTemplate->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT))
 	{
 		if (psFactory->pStructureType->type != REF_VTOL_FACTORY)
 		{
@@ -5549,7 +5549,7 @@ bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFact
 	else if (psFactory->pStructureType->type == REF_VTOL_FACTORY)
 	{
 		if (!psTemplate->asParts[COMP_PROPULSION] ||
-		    (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType != PROPULSION_TYPE_LIFT))
+		    (psTemplate->getPropulsionStats()->propulsionType != PROPULSION_TYPE_LIFT))
 		{
 			debug(level, "Can only build vtol in vtol factory, not in %s.", objInfo(psFactory));
 			return false;

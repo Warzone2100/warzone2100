@@ -1217,7 +1217,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 		widgSetButtonState(psWScreen, IDDES_PROPFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_PROPBUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_PROPFORM);
-		intSetPropulsionForm(&asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]]);
+		intSetPropulsionForm(sCurrDesign.getPropulsionStats());
 		break;
 	case IDES_TURRET_A:
 		compList = intAddComponentForm();
@@ -1416,7 +1416,7 @@ static void intSetDesignStats(DROID_TEMPLATE *psTemplate)
 	intSetBodyStats(psTemplate->getBodyStats());
 
 	/* Set the propulsion stats */
-	intSetPropulsionForm(&asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]]);
+	intSetPropulsionForm(psTemplate->getPropulsionStats());
 
 	/* Set the name in the edit box */
 	intSetEditBoxTextFromTemplate(psTemplate);
@@ -2030,7 +2030,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, ComponentIterator co
 		//check if the current Template propulsion has been set
 		if (sCurrDesign.asParts[COMP_PROPULSION])
 		{
-			PROPULSION_STATS *psPropStats = &asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]];
+			PROPULSION_STATS *psPropStats = sCurrDesign.getPropulsionStats();
 			ASSERT_OR_RETURN(false, psPropStats != nullptr, "invalid propulsion stats pointer");
 
 			bVTOL |= asPropulsionTypes[psPropStats->propulsionType].travel == AIR;
@@ -2552,7 +2552,7 @@ static void setTemplateStat(DROID_TEMPLATE *psTemplate, COMPONENT_STATS *psStats
 	}
 	case COMP_PROPULSION: {
 		auto stats = (PROPULSION_STATS *)psStats;
-		auto oldStats = &asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]];
+		auto oldStats = psTemplate->getPropulsionStats();
 		if ((stats->propulsionType == PROPULSION_TYPE_LIFT) != (oldStats->propulsionType == PROPULSION_TYPE_LIFT))
 		{
 			clearTurret();
@@ -3230,7 +3230,7 @@ void intProcessDesign(UDWORD id)
 		desCompID = id;
 
 		/* Update the propulsion stats as the droid weight will have changed */
-		intSetPropulsionStats(&asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]]);
+		intSetPropulsionStats(sCurrDesign.getPropulsionStats());
 
 		/*Update the Power bar stats as the power to build will have changed */
 		intSetDesignPower(&sCurrDesign);
@@ -3270,7 +3270,7 @@ void intProcessDesign(UDWORD id)
 		desCompID = id;
 
 		// Update the propulsion stats as the droid weight will have changed
-		intSetPropulsionStats(&asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]]);
+		intSetPropulsionStats(sCurrDesign.getPropulsionStats());
 
 		// Update the Power bar stats as the power to build will have changed
 		intSetDesignPower(&sCurrDesign);
@@ -3848,7 +3848,7 @@ void runTemplateShadowStats(UDWORD id)
 	{
 		/* Now set the bar graphs for the stats */
 		intSetBodyShadowStats(psTempl->getBodyStats());
-		intSetPropulsionShadowStats(&asPropulsionStats[psTempl->asParts[COMP_PROPULSION]]);
+		intSetPropulsionShadowStats(psTempl->getPropulsionStats());
 		//only set the system shadow bar if the same type of droid
 		COMPONENT_STATS *psStats = nullptr;
 		DROID_TYPE templType = droidTemplateType(psTempl);
@@ -3932,7 +3932,7 @@ to check the weapon is 'allowed'. Check if VTOL, the weapon is direct fire.
 Also check numVTOLattackRuns for the weapon is not zero - return true if valid weapon*/
 static bool intCheckValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 {
-	if (asPropulsionTypes[asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType].travel != AIR)
+	if (asPropulsionTypes[psTemplate->getPropulsionStats()->propulsionType].travel != AIR)
 	{
 		if (psTemplate->numWeaps == 0 &&
 		    (psTemplate->asParts[COMP_SENSOR] ||
@@ -3950,7 +3950,7 @@ static bool intCheckValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 //checks if the template has PROPULSION_TYPE_LIFT propulsion attached - returns true if it does
 bool checkTemplateIsVtol(const DROID_TEMPLATE *psTemplate)
 {
-	return asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT;
+	return psTemplate->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT;
 }
 
 void updateStoreButton(bool isStored)

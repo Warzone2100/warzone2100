@@ -1525,11 +1525,11 @@ static UDWORD calcDroidBaseBody(DROID *psDroid)
 /* Calculate the base speed of a droid from it's template */
 UDWORD calcDroidBaseSpeed(const DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
 {
-	unsigned speed = asPropulsionTypes[asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType].powerRatioMult *
+	unsigned speed = asPropulsionTypes[psTemplate->getPropulsionStats()->propulsionType].powerRatioMult *
 				 bodyPower(*psTemplate->getBodyStats(), player) / MAX(1, weight);
 
 	// reduce the speed of medium/heavy VTOLs
-	if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)
+	if (psTemplate->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		if (psTemplate->getBodyStats()->size == SIZE_HEAVY)
 		{
@@ -3379,7 +3379,7 @@ bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate)
 	PROPULSION_STATS	*psPropStats;
 
 	//check propulsion stat for vtol
-	psPropStats = &asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]];
+	psPropStats = psTemplate->getPropulsionStats();
 
 	ASSERT_OR_RETURN(false, psPropStats != nullptr, "invalid propulsion stats pointer");
 
