@@ -1370,7 +1370,7 @@ DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate)
 	{
 		type = DROID_CONSTRUCT;
 	}
-	else if (asRepairStats[psTemplate->asParts[COMP_REPAIRUNIT]].location == LOC_TURRET)
+	else if (psTemplate->getRepairStats()->location == LOC_TURRET)
 	{
 		type = DROID_REPAIR;
 	}
