@@ -3441,7 +3441,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					{
 						// set rearm value to no runs made
 						psDroid->asWeaps[i].usedAmmo = 0;
-						psDroid->asWeaps[i].ammo = getWeaponStats(psDroid, i)->upgrade[psDroid->player].numRounds;
+						psDroid->asWeaps[i].ammo = psDroid->getWeaponStats(i)->upgrade[psDroid->player].numRounds;
 						psDroid->asWeaps[i].lastFired = 0;
 					}
 					objTrace(psDroid->id, "fully loaded");
@@ -3451,7 +3451,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					for (unsigned i = 0; i < psDroid->numWeaps; i++)		// rearm one weapon at a time
 					{
 						// Make sure it's a rearmable weapon (and so we don't divide by zero)
-						if (psDroid->asWeaps[i].usedAmmo > 0 && getWeaponStats(psDroid, i)->upgrade[psDroid->player].numRounds > 0)
+						if (psDroid->asWeaps[i].usedAmmo > 0 && psDroid->getWeaponStats(i)->upgrade[psDroid->player].numRounds > 0)
 						{
 							// Do not "simplify" this formula.
 							// It is written this way to prevent rounding errors.
@@ -3462,7 +3462,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							if (ammoToAddThisTime)
 							{
 								// reset ammo and lastFired
-								psDroid->asWeaps[i].ammo = getWeaponStats(psDroid, i)->upgrade[psDroid->player].numRounds;
+								psDroid->asWeaps[i].ammo = psDroid->getWeaponStats(i)->upgrade[psDroid->player].numRounds;
 								psDroid->asWeaps[i].lastFired = 0;
 								break;
 							}
@@ -5349,7 +5349,7 @@ static unsigned int countAssignedDroids(const STRUCTURE *psStructure)
 		    && psCurr->order.psObj->id == psStructure->id
 		    && psCurr->player == psStructure->player)
 		{
-			const MOVEMENT_MODEL weapontype = getWeaponStats(psCurr, 0)->movementModel;
+			const MOVEMENT_MODEL weapontype = psCurr->getWeaponStats(0)->movementModel;
 
 			if (weapontype == MM_INDIRECT
 			    || weapontype == MM_HOMINGINDIRECT
@@ -6520,7 +6520,7 @@ bool structSensorDroidWeapon(const STRUCTURE *psStruct, const DROID *psDroid)
 	//Added a safety check: Only units with weapons can be assigned.
 	if (psDroid->numWeaps > 0)
 	{
-		const auto* weaponStats = getWeaponStats(psDroid, 0);
+		const auto* weaponStats = psDroid->getWeaponStats(0);
 		//Standard Sensor Tower + indirect weapon droid (non VTOL)
 		//else if (structStandardSensor(psStruct) && (psDroid->numWeaps &&
 		if (structStandardSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&

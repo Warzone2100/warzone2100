@@ -180,7 +180,7 @@ SDWORD cmdDroidGetIndex(const DROID *psCommander)
 /** This function returns the maximum group size of the command droid.*/
 unsigned int cmdDroidMaxGroup(const DROID *psCommander)
 {
-	const BRAIN_STATS *psStats = getBrainStats(psCommander);
+	const BRAIN_STATS *psStats = psCommander->getBrainStats();
 	return getDroidLevel(psCommander) * psStats->upgrade[psCommander->player].maxDroidsMult + psStats->upgrade[psCommander->player].maxDroids;
 }
 

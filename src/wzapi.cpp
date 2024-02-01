@@ -1577,7 +1577,7 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 
 	Vector2i offset(psStat->baseWidth * (TILE_UNITS / 2), psStat->baseBreadth * (TILE_UNITS / 2));
 
-	PROPULSION_TYPE propType = (psDroid) ? getPropulsionStats(psDroid)->propulsionType : PROPULSION_TYPE_WHEELED;
+	PROPULSION_TYPE propType = (psDroid) ? psDroid->getPropulsionStats()->propulsionType : PROPULSION_TYPE_WHEELED;
 
 	// save a lot of typing... checks whether a position is valid
 #define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
@@ -1651,7 +1651,7 @@ endstructloc:
 bool wzapi::droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y))
 {
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
-	const PROPULSION_STATS* psPropStats = getPropulsionStats(psDroid);
+	const PROPULSION_STATS* psPropStats = psDroid->getPropulsionStats();
 	return fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType);
 }
 

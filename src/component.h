@@ -83,32 +83,32 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 #define PART_IMD(STATS,DROID,COMPONENT,PLAYER)	(STATS[DROID->asBits[COMPONENT]].pIMD)
 
 /* Get the chassis imd */
-#define BODY_IMD(DROID,PLAYER)	(getBodyStats(DROID)->pIMD)
+#define BODY_IMD(DROID,PLAYER)	(DROID->getBodyStats()->pIMD)
 /* Get the brain imd - NOTE: Unused!*/
-#define BRAIN_IMD(DROID,PLAYER)	(getBrainStats(DROID)->pIMD)
+#define BRAIN_IMD(DROID,PLAYER)	(DROID->getBrainStats()->pIMD)
 /* Get the weapon imd */
-#define WEAPON_IMD(DROID,WEAPON_NUM)	(getWeaponStats(DROID, WEAPON_NUM)->pIMD)
+#define WEAPON_IMD(DROID,WEAPON_NUM)	(DROID->getWeaponStats(WEAPON_NUM)->pIMD)
 /* Get the propulsion imd  THIS IS A LITTLE MORE COMPLICATED NOW!*/
 //#define PROPULSION_IMD(DROID,PLAYER)	(asPropulsionStats[DROID->asBits[COMP_PROPULSION]].pIMD[PLAYER])
 /* Get the sensor imd */
-#define SENSOR_IMD(DROID,PLAYER)	(getSensorStats(DROID)->pIMD)
+#define SENSOR_IMD(DROID,PLAYER)	(DROID->getSensorStats()->pIMD)
 /* Get an ECM imd!?! */
-#define ECM_IMD(DROID,PLAYER)	(getECMStats(DROID)->pIMD)
+#define ECM_IMD(DROID,PLAYER)	(DROID->getECMStats()->pIMD)
 /* Get an Repair imd!?! */
-#define REPAIR_IMD(DROID,PLAYER)	(getRepairStats(DROID)->pIMD)
+#define REPAIR_IMD(DROID,PLAYER)	(DROID->getRepairStats()->pIMD)
 /* Get a construct imd */
-#define CONSTRUCT_IMD(DROID,PLAYER)	(getConstructStats(DROID)->pIMD)
+#define CONSTRUCT_IMD(DROID,PLAYER)	(DROID->getConstructStats()->pIMD)
 /* Get a weapon mount imd*/
-#define WEAPON_MOUNT_IMD(DROID,WEAPON_NUM)	(getWeaponStats(DROID, WEAPON_NUM)->pMountGraphic)
+#define WEAPON_MOUNT_IMD(DROID,WEAPON_NUM)	(DROID->getWeaponStats(WEAPON_NUM)->pMountGraphic)
 /* Get a sensor mount imd*/
-#define SENSOR_MOUNT_IMD(DROID,PLAYER)	(getSensorStats(DROID)->pMountGraphic)
+#define SENSOR_MOUNT_IMD(DROID,PLAYER)	(DROID->getSensorStats()->pMountGraphic)
 /* Get a construct mount imd*/
-#define CONSTRUCT_MOUNT_IMD(DROID,PLAYER)	(getConstructStats(DROID)->pMountGraphic)
+#define CONSTRUCT_MOUNT_IMD(DROID,PLAYER)	(DROID->getConstructStats()->pMountGraphic)
 /* Get a ecm mount imd*/
-#define ECM_MOUNT_IMD(DROID,PLAYER)	(getECMStats(DROID)->pMountGraphic)
+#define ECM_MOUNT_IMD(DROID,PLAYER)	(DROID->getECMStats()->pMountGraphic)
 /* Get a repair mount imd*/
-#define REPAIR_MOUNT_IMD(DROID,PLAYER)	(getRepairStats(DROID)->pMountGraphic)
+#define REPAIR_MOUNT_IMD(DROID,PLAYER)	(DROID->getRepairStats()->pMountGraphic)
 /* Get a muzzle flash pie*/
-#define MUZZLE_FLASH_PIE(DROID,WEAPON_NUM)	(getWeaponStats(DROID, WEAPON_NUM)->pMuzzleGraphic)
+#define MUZZLE_FLASH_PIE(DROID,WEAPON_NUM)	(DROID->getWeaponStats(WEAPON_NUM)->pMuzzleGraphic)
 
 #endif // __INCLUDED_SRC_COMPONENT_H__

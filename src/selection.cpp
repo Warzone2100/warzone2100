@@ -94,11 +94,11 @@ static bool selTrue(DROID *droid)
 }
 static bool selProp(DROID *droid, PROPULSION_TYPE prop)
 {
-	return getPropulsionStats(droid)->propulsionType == prop && !selTransporter(droid);
+	return droid->getPropulsionStats()->propulsionType == prop && !selTransporter(droid);
 }
 static bool selPropArmed(DROID *droid, PROPULSION_TYPE prop)
 {
-	return getPropulsionStats(droid)->propulsionType == prop && vtolFull(droid) && !selTransporter(droid);
+	return droid->getPropulsionStats()->propulsionType == prop && vtolFull(droid) && !selTransporter(droid);
 }
 static bool selType(DROID *droid, DROID_TYPE type)
 {
@@ -110,7 +110,7 @@ static bool selCombat(DROID *droid)
 }
 static bool selCombatLand(DROID *droid)
 {
-	PROPULSION_TYPE type = getPropulsionStats(droid)->propulsionType;
+	PROPULSION_TYPE type = droid->getPropulsionStats()->propulsionType;
 	return droid->asWeaps[0].nStat > 0 && (type == PROPULSION_TYPE_WHEELED ||
 	                                       type == PROPULSION_TYPE_HALF_TRACKED ||
 	                                       type == PROPULSION_TYPE_TRACKED ||
@@ -119,7 +119,7 @@ static bool selCombatLand(DROID *droid)
 }
 static bool selCombatCyborg(DROID *droid)
 {
-	PROPULSION_TYPE type = getPropulsionStats(droid)->propulsionType;
+	PROPULSION_TYPE type = droid->getPropulsionStats()->propulsionType;
 	return droid->asWeaps[0].nStat > 0 && type == PROPULSION_TYPE_LEGGED;
 }
 static bool selDamaged(DROID *droid)
