@@ -268,10 +268,10 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(*psTempl->getECMStats(), "ECM") && psTempl->getECMStats()->usageClass == UsageClass::Cyborg))
 			&& ((psTempl->asParts[COMP_SENSOR] == 0) || (!designablePart(*psTempl->getSensorStats(), "Sensor") && psTempl->getSensorStats()->usageClass == UsageClass::Cyborg))
 			&& ((psTempl->asParts[COMP_CONSTRUCT] == 0) || (!designablePart(*psTempl->getConstructStats(), "Construction part") && psTempl->getConstructStats()->usageClass == UsageClass::Cyborg))
-			&& ((psTempl->numWeaps <= 0) || (psTempl->getBrainStats()->psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]])
-				|| (!designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::SuperCyborg))))
-			&& ((psTempl->numWeaps <= 1) || (!designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::SuperCyborg))))
-			&& ((psTempl->numWeaps <= 2) || (!designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::SuperCyborg))));
+			&& ((psTempl->numWeaps <= 0) || (psTempl->getBrainStats()->psWeaponStat == psTempl->getWeaponStats(0))
+				|| (!designablePart(*psTempl->getWeaponStats(0), "Weapon 0") && ((!isSuperCyborg && psTempl->getWeaponStats(0)->usageClass == UsageClass::Cyborg) || (isSuperCyborg && psTempl->getWeaponStats(0)->usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 1) || (!designablePart(*psTempl->getWeaponStats(1), "Weapon 1") && ((!isSuperCyborg && psTempl->getWeaponStats(1)->usageClass == UsageClass::Cyborg) || (isSuperCyborg && psTempl->getWeaponStats(1)->usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 2) || (!designablePart(*psTempl->getWeaponStats(2), "Weapon 2") && ((!isSuperCyborg && psTempl->getWeaponStats(2)->usageClass == UsageClass::Cyborg) || (isSuperCyborg && psTempl->getWeaponStats(2)->usageClass == UsageClass::SuperCyborg))));
 	}
 	else
 	{
@@ -288,10 +288,10 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 			&& (psTempl->asParts[COMP_ECM]        == 0 || designablePart(*psTempl->getECMStats(), "ECM"))
 			&& (psTempl->asParts[COMP_SENSOR]     == 0 || designablePart(*psTempl->getSensorStats(), "Sensor"))
 			&& (psTempl->asParts[COMP_CONSTRUCT]  == 0 || designablePart(*psTempl->getConstructStats(), "Construction part"))
-			&& (psTempl->numWeaps <= 0 || psTempl->getBrainStats()->psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]]
-									 || designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0"))
-			&& (psTempl->numWeaps <= 1 || designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1"))
-			&& (psTempl->numWeaps <= 2 || designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2"));
+			&& (psTempl->numWeaps <= 0 || psTempl->getBrainStats()->psWeaponStat == psTempl->getWeaponStats(0)
+									 || designablePart(*psTempl->getWeaponStats(0), "Weapon 0"))
+			&& (psTempl->numWeaps <= 1 || designablePart(*psTempl->getWeaponStats(1), "Weapon 1"))
+			&& (psTempl->numWeaps <= 2 || designablePart(*psTempl->getWeaponStats(2), "Weapon 2"));
 
 		if (transporter && designable)
 		{
@@ -437,7 +437,7 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
 		ASSERT(psCurr->asWeaps[j] < asWeaponStats.size(), "psCurr->asWeaps[%d] (%d) exceeds numWeaponStats (%zu)", j, (int)psCurr->asWeaps[j], asWeaponStats.size());
-		weapons.push_back(asWeaponStats[psCurr->asWeaps[j]].id);
+		weapons.push_back(psCurr->getWeaponStats(j)->id);
 	}
 	if (!weapons.empty())
 	{
@@ -525,6 +525,11 @@ REPAIR_STATS* DROID_TEMPLATE::getRepairStats() const
 CONSTRUCT_STATS* DROID_TEMPLATE::getConstructStats() const
 {
 	return &asConstructStats[asParts[COMP_CONSTRUCT]];
+}
+
+WEAPON_STATS* DROID_TEMPLATE::getWeaponStats(int weaponSlot) const
+{
+	return &asWeaponStats[asWeaps[weaponSlot]];
 }
 
 bool loadDroidTemplates(const char *filename)
@@ -778,7 +783,7 @@ bool templateIsIDF(const DROID_TEMPLATE *psTemplate)
 		return false;
 	}
 
-	if (proj_Direct(&asWeaponStats[psTemplate->asWeaps[0]]))
+	if (proj_Direct(psTemplate->getWeaponStats(0)))
 	{
 		return false;
 	}

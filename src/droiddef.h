@@ -64,6 +64,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 	ECM_STATS* getECMStats() const;
 	REPAIR_STATS* getRepairStats() const;
 	CONSTRUCT_STATS* getConstructStats() const;
+	WEAPON_STATS* getWeaponStats(int weaponSlot) const;
 
 	/*!
 	 * The droid components.

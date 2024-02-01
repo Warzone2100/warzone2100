@@ -3392,8 +3392,8 @@ bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate)
 	if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
 	{
 		//check weapon stat for indirect
-		if (!proj_Direct(&asWeaponStats[psTemplate->asWeaps[0]])
-			|| !asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns)
+		if (!proj_Direct(psTemplate->getWeaponStats(0))
+			|| !psTemplate->getWeaponStats(0)->vtolAttackRuns)
 		{
 			return false;
 		}
@@ -3401,7 +3401,7 @@ bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate)
 	else
 	{
 		// VTOL weapons do not go on non-AIR units.
-		if (asWeaponStats[psTemplate->asWeaps[0]].vtolAttackRuns)
+		if (psTemplate->getWeaponStats(0)->vtolAttackRuns)
 		{
 			return false;
 		}
@@ -3409,7 +3409,7 @@ bool checkValidWeaponForProp(const DROID_TEMPLATE *psTemplate)
 
 	//also checks that there is no other system component
 	if (psTemplate->asParts[COMP_BRAIN] != 0
-		&& asWeaponStats[psTemplate->asWeaps[0]].weaponSubClass != WSC_COMMAND)
+		&& psTemplate->getWeaponStats(0)->weaponSubClass != WSC_COMMAND)
 	{
 		assert(false);
 		return false;
