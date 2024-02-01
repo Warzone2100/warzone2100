@@ -63,6 +63,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 	SENSOR_STATS* getSensorStats() const;
 	ECM_STATS* getECMStats() const;
 	REPAIR_STATS* getRepairStats() const;
+	CONSTRUCT_STATS* getConstructStats() const;
 
 	/*!
 	 * The droid components.
