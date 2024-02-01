@@ -1202,7 +1202,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_SYSTEMFORM);
-		intSetSystemForm((COMPONENT_STATS *)(&asWeaponStats[sCurrDesign.asWeaps[0]])); // in case previous was a different slot
+		intSetSystemForm(sCurrDesign.getWeaponStats(0)); // in case previous was a different slot
 		break;
 	case IDES_BODY:
 		compList = intAddComponentForm();
@@ -1227,7 +1227,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_SYSTEMFORM);
-		intSetSystemForm((COMPONENT_STATS *)(&asWeaponStats[sCurrDesign.asWeaps[1]])); // in case previous was a different slot
+		intSetSystemForm(sCurrDesign.getWeaponStats(1)); // in case previous was a different slot
 		// Stop the button flashing
 		intSetButtonFlash(IDDES_WPABUTTON,   false);
 		break;
@@ -1239,7 +1239,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_SYSTEMFORM);
-		intSetSystemForm((COMPONENT_STATS *)(&asWeaponStats[sCurrDesign.asWeaps[2]])); // in case previous was a different slot
+		intSetSystemForm(sCurrDesign.getWeaponStats(2)); // in case previous was a different slot
 		// Stop the button flashing
 		intSetButtonFlash(IDDES_WPBBUTTON,   false);
 		break;
@@ -2844,7 +2844,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	{
 		ASSERT_OR_RETURN(false, psTempl->asWeaps[i] < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %zu", psTempl->asWeaps[i], asWeaponStats.size());
 
-		int weaponSize = asWeaponStats[psTempl->asWeaps[i]].weaponSize;
+		int weaponSize = psTempl->getWeaponStats(i)->weaponSize;
 
 		if ((weaponSize == WEAPON_SIZE_LIGHT && bodysize != SIZE_LIGHT)
 		    || (weaponSize == WEAPON_SIZE_HEAVY && bodysize == SIZE_LIGHT)
@@ -2854,7 +2854,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 			return false;
 		}
 		if (checkTemplateIsVtol(psTempl)
-		    && asWeaponStats[psTempl->asWeaps[i]].vtolAttackRuns <= 0)
+		    && psTempl->getWeaponStats(i)->vtolAttackRuns <= 0)
 		{
 			debug(level, "VTOL with non-VTOL turret, not possible");
 			return false;
