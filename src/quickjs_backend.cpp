@@ -1120,7 +1120,7 @@ JSValue convTemplate(const DROID_TEMPLATE *psTempl, JSContext *ctx)
 	QuickJS_DefinePropertyValue(ctx, value, "body", JS_NewString(ctx, psTempl->getBodyStats()->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "propulsion", JS_NewString(ctx, psTempl->getPropulsionStats()->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "brain", JS_NewString(ctx, psTempl->getBrainStats()->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "repair", JS_NewString(ctx, asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]].id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "repair", JS_NewString(ctx, psTempl->getRepairStats()->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "ecm", JS_NewString(ctx, psTempl->getECMStats()->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "sensor", JS_NewString(ctx, psTempl->getSensorStats()->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "construct", JS_NewString(ctx, asConstructStats[psTempl->asParts[COMP_CONSTRUCT]].id.toUtf8().c_str()), JS_PROP_ENUMERABLE);

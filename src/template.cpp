@@ -253,7 +253,7 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 		psTempl->droidType == DROID_CYBORG_REPAIR)
 	{
 		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
-						(!designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") && asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]].usageClass == UsageClass::Cyborg) ||
+						(!designablePart(*psTempl->getRepairStats(), "Repair unit") && psTempl->getRepairStats()->usageClass == UsageClass::Cyborg) ||
 						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
 		bool isSuperCyborg = psTempl->getBodyStats()->usageClass == UsageClass::SuperCyborg;
 
@@ -276,7 +276,7 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 	else
 	{
 		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
-						designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") ||
+						designablePart(*psTempl->getRepairStats(), "Repair unit") ||
 						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
 		bool transporter = (psTempl->droidType == DROID_TRANSPORTER) || (psTempl->droidType == DROID_SUPERTRANSPORTER);
 
@@ -413,10 +413,10 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 		ASSERT(psCurr->asParts[COMP_BRAIN] < asBrainStats.size(), "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%zu)", (int)psCurr->asParts[COMP_BRAIN], asBrainStats.size());
 		templateObj["brain"] = psCurr->getBrainStats()->id;
 	}
-	if (asRepairStats[psCurr->asParts[COMP_REPAIRUNIT]].location == LOC_TURRET) // avoid auto-repair...
+	if (psCurr->getRepairStats()->location == LOC_TURRET) // avoid auto-repair...
 	{
 		ASSERT(psCurr->asParts[COMP_REPAIRUNIT] < asRepairStats.size(), "asParts[COMP_REPAIRUNIT] (%d) exceeds numRepairStats (%zu)", (int)psCurr->asParts[COMP_REPAIRUNIT], asRepairStats.size());
-		templateObj["repair"] = asRepairStats[psCurr->asParts[COMP_REPAIRUNIT]].id;
+		templateObj["repair"] = psCurr->getRepairStats()->id;
 	}
 	if (psCurr->getECMStats()->location == LOC_TURRET)
 	{
@@ -515,6 +515,11 @@ SENSOR_STATS* DROID_TEMPLATE::getSensorStats() const
 ECM_STATS* DROID_TEMPLATE::getECMStats() const
 {
 	return &asECMStats[asParts[COMP_ECM]];
+}
+
+REPAIR_STATS* DROID_TEMPLATE::getRepairStats() const
+{
+	return &asRepairStats[asParts[COMP_REPAIRUNIT]];
 }
 
 bool loadDroidTemplates(const char *filename)
