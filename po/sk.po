@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-01-26 09:59\n"
+"PO-Revision-Date: 2024-02-01 16:52\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -804,7 +804,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
-msgstr ""
+msgstr "Ich posledné hlásenie naznačovalo, že smerovali späť na základňu."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
@@ -1117,7 +1117,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:8
 msgid "Power Resource"
-msgstr ""
+msgstr "Zdroj energie"
 
 #: data/base/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
@@ -3256,7 +3256,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:321
 #: po/custom/fromJson.txt:154
 msgid "AA Upgrade"
-msgstr ""
+msgstr "Vylepšenie AA"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[1]
@@ -3275,7 +3275,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:313
 #: po/custom/fromJson.txt:3146
 msgid "Increases AA accuracy"
-msgstr ""
+msgstr "Zvýši presnosť AA"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[3]
@@ -3288,7 +3288,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:324
 #: po/custom/fromJson.txt:267
 msgid "All AA weapons upgraded automatically"
-msgstr ""
+msgstr "Všetky AA zbrane vylepšené automaticky"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[0]
