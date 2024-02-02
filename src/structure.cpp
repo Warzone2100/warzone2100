@@ -1553,7 +1553,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 						psBuilding->asWeaps[0].lastFired = gameTime;
 					}
 					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats.data();
-					psBuilding->asWeaps[weapon].ammo = asWeaponStats[psBuilding->asWeaps[weapon].nStat].upgrade[psBuilding->player].numRounds;
+					psBuilding->asWeaps[weapon].ammo = psBuilding->getWeaponStats(weapon)->upgrade[psBuilding->player].numRounds;
 					psBuilding->numWeaps++;
 				}
 			}
@@ -1570,7 +1570,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					psBuilding->asWeaps[0].lastFired = gameTime;
 				}
 				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats.data();
-				psBuilding->asWeaps[0].ammo = asWeaponStats[psBuilding->asWeaps[0].nStat].upgrade[psBuilding->player].numRounds;
+				psBuilding->asWeaps[0].ammo = psBuilding->getWeaponStats(0)->upgrade[psBuilding->player].numRounds;
 			}
 		}
 
@@ -2972,7 +2972,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 	/* Check lassat */
 	if (isLasSat(psStructure->pStructureType)
-	    && gameTime - psStructure->asWeaps[0].lastFired > weaponFirePause(asWeaponStats[psStructure->asWeaps[0].nStat], psStructure->player)
+	    && gameTime - psStructure->asWeaps[0].lastFired > weaponFirePause(*psStructure->getWeaponStats(0), psStructure->player)
 	    && psStructure->asWeaps[0].ammo > 0)
 	{
 		triggerEventStructureReady(psStructure);
@@ -2985,9 +2985,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		//structures always update their targets
 		for (UDWORD i = 0; i < psStructure->numWeaps; i++)
 		{
-			bDirect = proj_Direct(&asWeaponStats[psStructure->asWeaps[i].nStat]);
+			bDirect = proj_Direct(psStructure->getWeaponStats(i));
 			if (psStructure->asWeaps[i].nStat > 0 &&
-			    asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
+			    psStructure->getWeaponStats(i)->weaponSubClass != WSC_LAS_SAT)
 			{
 				if (aiChooseTarget(psStructure, &psChosenObjs[i], i, true, &tmpOrigin))
 				{
@@ -3022,7 +3022,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (psChosenObjs[i] != nullptr && !aiObjectIsProbablyDoomed(psChosenObjs[i], bDirect))
 				{
 					// get the weapon stat to see if there is a visible turret to rotate
-					psWStats = &asWeaponStats[psStructure->asWeaps[i].nStat];
+					psWStats = psStructure->getWeaponStats(i);
 
 					//if were going to shoot at something move the turret first then fire when locked on
 					if (psWStats->pMountGraphic == nullptr)//no turret so lock on whatever
@@ -6974,7 +6974,7 @@ bool lasSatStructSelected(const STRUCTURE *psStruct)
 {
 	if ((psStruct->selected || (bMultiPlayer && !isHumanPlayer(psStruct->player)))
 	    && psStruct->asWeaps[0].nStat
-	    && (asWeaponStats[psStruct->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
+	    && (psStruct->getWeaponStats(0)->weaponSubClass == WSC_LAS_SAT))
 	{
 		return true;
 	}

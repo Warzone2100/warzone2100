@@ -3590,8 +3590,3 @@ CONSTRUCT_STATS* DROID::getConstructStats() const
 {
 	return &asConstructStats[asBits[COMP_CONSTRUCT]];
 }
-
-WEAPON_STATS* DROID::getWeaponStats(int weaponSlot) const
-{
-	return &asWeaponStats[asWeaps[weaponSlot].nStat];
-}

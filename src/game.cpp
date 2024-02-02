@@ -6557,7 +6557,7 @@ bool writeStructFile(const char *pFileName)
 			ini.setValue("weapons", psCurr->numWeaps);
 			for (unsigned j = 0; j < psCurr->numWeaps; j++)
 			{
-				ini.setValue("parts/weapon/" + WzString::number(j + 1), asWeaponStats[psCurr->asWeaps[j].nStat].id);
+				ini.setValue("parts/weapon/" + WzString::number(j + 1), psCurr->getWeaponStats(j)->id);
 				if (psCurr->asWeaps[j].nStat > 0)
 				{
 					ini.setValue("ammo/" + WzString::number(j), psCurr->asWeaps[j].ammo);
