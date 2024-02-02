@@ -944,7 +944,7 @@ void processMouseClickInput()
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
 			         ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat &&
-			         (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
+			         (((STRUCTURE*)ObjUnderMouse)->getWeaponStats(0)->weaponSubClass == WSC_LAS_SAT))
 			{
 				wzSetCursor(CURSOR_SELECT); // Special casing for LasSat
 			}
@@ -990,7 +990,7 @@ void processMouseClickInput()
 		}
 		else if (ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
 		         ((ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat
-		           && (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
+		           && (((STRUCTURE*)ObjUnderMouse)->getWeaponStats(0)->weaponSubClass == WSC_LAS_SAT))
 		          || ObjUnderMouse->type == OBJ_DROID))
 		{
 			wzSetCursor(CURSOR_SELECT); // Special casing for LasSat or own unit

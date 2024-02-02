@@ -84,10 +84,14 @@ enum OBJECT_FLAG
 	OBJECT_FLAG_COUNT
 };
 
+struct WEAPON_STATS;
+
 struct BASE_OBJECT : public SIMPLE_OBJECT
 {
 	BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player);
 	~BASE_OBJECT();
+
+	WEAPON_STATS* getWeaponStats(int weaponSlot) const;
 
 	SCREEN_DISP_DATA    sDisplay;                   ///< screen coordinate details
 	UBYTE               group = 0;                  ///< Which group selection is the droid currently in?

@@ -117,6 +117,12 @@ BASE_OBJECT::~BASE_OBJECT()
 	visRemoveVisibility(this);
 }
 
+
+WEAPON_STATS* BASE_OBJECT::getWeaponStats(int weaponSlot) const
+{
+	return &asWeaponStats[asWeaps[weaponSlot].nStat];
+}
+
 // Query visibility for display purposes (i.e. for `selectedPlayer`)
 // *DO NOT USE TO QUERY VISIBILITY FOR CALCULATIONS INVOLVING GAME / SIMULATION STATE*
 UBYTE BASE_OBJECT::visibleForLocalDisplay() const

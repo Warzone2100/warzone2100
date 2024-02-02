@@ -815,7 +815,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 	{
 		if (psStruct->asWeaps[i].nStat)
 		{
-			WEAPON_STATS *psWeap = &asWeaponStats[psStruct->asWeaps[i].nStat];
+			WEAPON_STATS *psWeap = psStruct->getWeaponStats(i);
 			aa = aa || psWeap->surfaceToAir & SHOOT_IN_AIR;
 			ga = ga || psWeap->surfaceToAir & SHOOT_ON_GROUND;
 			indirect = indirect || psWeap->movementModel == MM_INDIRECT || psWeap->movementModel == MM_HOMINGINDIRECT;
@@ -865,7 +865,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 	for (int j = 0; j < psStruct->numWeaps; j++)
 	{
 		JSValue weapon = JS_NewObject(ctx);
-		const WEAPON_STATS *psStats = &asWeaponStats[psStruct->asWeaps[j].nStat];
+		const WEAPON_STATS *psStats = psStruct->getWeaponStats(j);
 		QuickJS_DefinePropertyValue(ctx, weapon, "fullname", JS_NewString(ctx, psStats->name.toUtf8().c_str()), JS_PROP_ENUMERABLE);
 		QuickJS_DefinePropertyValue(ctx, weapon, "name", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE); // will be changed to contain full name
 		QuickJS_DefinePropertyValue(ctx, weapon, "id", JS_NewString(ctx, psStats->id.toUtf8().c_str()), JS_PROP_ENUMERABLE);

@@ -526,7 +526,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 			}
 
 			if (psTarget->type == OBJ_DROID && ((const DROID*)psTarget)->isVtol()
-			    && asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR)
+			    && psStruct->getWeaponStats(0)->surfaceToAir == SHOOT_IN_AIR)
 			{
 				range = 3 * range / 2;	// increase vision range of AA vs VTOL
 			}
@@ -964,7 +964,7 @@ bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int 
 	}
 	else if (psViewer->type == OBJ_STRUCTURE)
 	{
-		psStats = &asWeaponStats[((const STRUCTURE *)psViewer)->asWeaps[weapon_slot].nStat];
+		psStats = ((const STRUCTURE*)psViewer)->getWeaponStats(weapon_slot);
 	}
 	// 2d distance
 	int distance = iHypot((psTarget->pos - psViewer->pos).xy());

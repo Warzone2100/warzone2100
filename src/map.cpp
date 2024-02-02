@@ -2111,7 +2111,7 @@ static void threatUpdate(int player)
 
 			for (weapon = 0; weapon < psStruct->numWeaps; weapon++)
 			{
-				mode |= asWeaponStats[psStruct->asWeaps[weapon].nStat].surfaceToAir;
+				mode |= psStruct->getWeaponStats(weapon)->surfaceToAir;
 			}
 			if (psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->location == LOC_TURRET)	// special treatment for sensor turrets
 			{

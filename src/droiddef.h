@@ -129,7 +129,6 @@ struct DROID : public BASE_OBJECT
 	ECM_STATS* getECMStats() const;
 	REPAIR_STATS* getRepairStats() const;
 	CONSTRUCT_STATS* getConstructStats() const;
-	WEAPON_STATS* getWeaponStats(int weaponSlot) const;
 
 	/// UTF-8 name of the droid. This is generated from the droid template
 	///  WARNING: This *can* be changed by the game player after creation & can be translated, do NOT rely on this being the same for everyone!

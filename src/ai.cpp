@@ -110,7 +110,7 @@ static bool aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 		return false;
 	}
 
-	WEAPON_STATS *psWStats = &asWeaponStats[psStruct->asWeaps[weapon_slot].nStat];
+	WEAPON_STATS *psWStats = psStruct->getWeaponStats(weapon_slot);
 
 	int longRange = proj_GetLongRange(*psWStats, psStruct->player);
 	return objPosDiffSq(psStruct, psTarget) < longRange * longRange && lineOfFire(psStruct, psTarget, weapon_slot, true);
@@ -335,7 +335,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	}
 	else if (psAttacker->type == OBJ_STRUCTURE)
 	{
-		attackerWeapon = (WEAPON_STATS *)(&asWeaponStats[((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].nStat]);
+		attackerWeapon = ((STRUCTURE*)psAttacker)->getWeaponStats(weapon_slot);
 	}
 	else	/* feature */
 	{
@@ -887,7 +887,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 
 		ASSERT_OR_RETURN(false, psObj->asWeaps[weapon_slot].nStat > 0, "Invalid weapon turret");
 
-		WEAPON_STATS *psWStats = &asWeaponStats[psObj->asWeaps[weapon_slot].nStat];
+		WEAPON_STATS *psWStats = ((const STRUCTURE*)psObj)->getWeaponStats(weapon_slot);
 		int longRange = proj_GetLongRange(*psWStats, psObj->player);
 
 		// see if there is a target from the command droids
@@ -1317,7 +1317,7 @@ bool validTarget(BASE_OBJECT const *psObject, BASE_OBJECT const *psTarget, int w
 		// Can't attack without a weapon
 		if (((const STRUCTURE *)psObject)->numWeaps != 0 && ((const STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat != 0)
 		{
-			surfaceToAir = asWeaponStats[((const STRUCTURE *)psObject)->asWeaps[weapon_slot].nStat].surfaceToAir;
+			surfaceToAir = ((const STRUCTURE*)psObject)->getWeaponStats(weapon_slot)->surfaceToAir;
 		}
 		else
 		{
