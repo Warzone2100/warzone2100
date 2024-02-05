@@ -738,7 +738,7 @@ void startOptionsMenu()
 	addTextButton(FRONTEND_MUSICMANAGER, _("Music Manager"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_MULTIPLAYOPTIONS, _("Multiplay Options"), WBUT_TXTCENTRE);
 
-	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_POS9Y - FRONTEND_POS2Y);
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_BUTHEIGHT_LIST_SPACER);
 	parent->attach(scrollableList);
 
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("OPTIONS"));
@@ -1250,7 +1250,7 @@ void startGraphicsOptionsMenu()
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
-	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_BUTHEIGHT_LIST_SPACER);
 	scrollableList->addItem(grid);
 	parent->attach(scrollableList);
 
@@ -1484,7 +1484,7 @@ void startAudioAndZoomOptionsMenu()
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
-	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_BUTHEIGHT_LIST_SPACER);
 	scrollableList->addItem(grid);
 	parent->attach(scrollableList);
 
@@ -2248,7 +2248,7 @@ void startVideoOptionsMenu()
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
-	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_BUTHEIGHT_LIST_SPACER);
 	scrollableList->addItem(grid);
 	parent->attach(scrollableList);
 
@@ -2548,7 +2548,7 @@ void startMouseOptionsMenu()
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
-	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_BUTHEIGHT_LIST_SPACER);
 	scrollableList->addItem(grid);
 	parent->attach(scrollableList);
 
@@ -2989,7 +2989,7 @@ void startGameOptionsMenu()
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH_WIDE, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
-	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORM_WIDEW - 1, FRONTEND_BOTFORM_WIDEH - FRONTEND_POS2Y - 1);
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORM_WIDEW - 1, FRONTEND_BOTFORM_WIDEH - FRONTEND_BUTHEIGHT_LIST_SPACER);
 	scrollableList->addItem(grid);
 	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(scrollableList);
 
@@ -3428,7 +3428,7 @@ void startMultiplayOptionsMenu()
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
-	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_BUTHEIGHT_LIST_SPACER);
 	scrollableList->addItem(grid);
 	parent->attach(scrollableList);
 
