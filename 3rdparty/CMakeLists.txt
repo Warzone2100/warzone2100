@@ -1,13 +1,13 @@
 cmake_minimum_required (VERSION 3.5...3.24)
 
 SET(UTF8PROC_INSTALL OFF CACHE BOOL "Enable installation of utf8proc" FORCE)
-add_subdirectory(utf8proc)
+add_subdirectory(utf8proc EXCLUDE_FROM_ALL)
 set_property(TARGET utf8proc PROPERTY FOLDER "3rdparty")
 
-add_subdirectory(launchinfo)
+add_subdirectory(launchinfo EXCLUDE_FROM_ALL)
 set_property(TARGET launchinfo PROPERTY FOLDER "3rdparty")
 
-add_subdirectory(fmt)
+add_subdirectory(fmt EXCLUDE_FROM_ALL)
 set_property(TARGET fmt PROPERTY FOLDER "3rdparty")
 
 # inih library
@@ -34,7 +34,7 @@ set_property(TARGET re2 PROPERTY FOLDER "3rdparty")
 set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS NO)	# -Wmissing-field-initializers
 set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-missing-field-initializers")
 
-add_subdirectory(EmbeddedJSONSignature)
+add_subdirectory(EmbeddedJSONSignature EXCLUDE_FROM_ALL)
 set_property(TARGET EmbeddedJSONSignature PROPERTY FOLDER "3rdparty")
 
 if(ENABLE_DISCORD)
