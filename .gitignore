@@ -271,7 +271,6 @@ devpkg/*
 *.tlog
 *.lastbuildstate
 *.cache*
-*manifest.*
 *.exp
 warzone*.*build
 *.lnk
