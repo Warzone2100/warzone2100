@@ -109,7 +109,7 @@ int quitSignalEventFd = -1;
 int quitSignalPipeFds[2] = {-1, -1};
 #endif
 
-#if !defined(_WIN32) && (defined(HAVE_SYS_EVENTFD_H) || defined(HAVE_UNISTD_H))
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__) && (defined(HAVE_SYS_EVENTFD_H) || defined(HAVE_UNISTD_H))
 # define WZ_STDIN_READER_SUPPORTED
 #endif
 

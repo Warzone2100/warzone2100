@@ -44,7 +44,9 @@ public:
 		ENV_VAR_NAMES,
 		SYSTEM_RAM, // system RAM in MiB
 		// WZ 4.4.0+
-		CONTAINER_TYPE
+		CONTAINER_TYPE,
+		// WZ 4.5.0+
+		EMSCRIPTEN_WINDOW_URL
 	};
 private:
 	std::string GetCurrentEnvironmentPropertyValue(const EnvironmentProperty& property);

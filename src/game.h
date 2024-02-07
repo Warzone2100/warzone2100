@@ -55,7 +55,7 @@ bool loadScriptState(char *pFileName);
 /// Load the terrain types
 bool loadTerrainTypeMap(const char *pFilePath);
 
-bool saveGame(const char *aFileName, GAME_TYPE saveType);
+bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave = false);
 
 // Get the campaign number for loadGameInit game
 UDWORD getCampaign(const char *fileName);
@@ -70,4 +70,9 @@ void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsi
 void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor);
 nonstd::optional<nlohmann::json> parseJsonFile(const char *filename);
 bool saveJSONToFile(const nlohmann::json& obj, const char* pFileName);
+
+#if defined(__EMSCRIPTEN__)
+void wz_emscripten_did_finish_render(unsigned int browserRenderDelta);
+#endif
+
 #endif // __INCLUDED_SRC_GAME_H__

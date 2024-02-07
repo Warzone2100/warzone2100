@@ -250,7 +250,7 @@ install(FILES ${wz2100_doc_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPU
 install(FILES ${host_doc_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPUT_NAME_SUFFIX}/hosting" COMPONENT Docs)
 install(FILES ${host_doc_linux_scripts_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPUT_NAME_SUFFIX}/hosting/linux_scripts" COMPONENT Docs)
 
-if(UNIX AND NOT SKIPPED_DOC_GENERATION)
+if(UNIX AND NOT EMSCRIPTEN AND NOT SKIPPED_DOC_GENERATION)
 	# Man-page gzip and installation
 
 	find_program(GZIP_BIN NAMES gzip PATHS /bin /usr/bin /usr/local/bin)

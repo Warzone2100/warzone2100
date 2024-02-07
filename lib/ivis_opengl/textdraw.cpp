@@ -1076,7 +1076,9 @@ static bool inline initializeCJKFontsIfNeeded()
 		cjkFonts->smallBold = std::make_unique<FTFace>(getGlobalFTlib().lib, CJK_FONT_PATH, 9 * 64, horizDPI, vertDPI, 700);
 	}
 	catch (const std::exception &e) {
+#if !defined(__EMSCRIPTEN__)
 		debug(LOG_ERROR, "Failed to load font:\n%s", e.what());
+#endif
 		delete cjkFonts;
 		cjkFonts = nullptr;
 		failedToLoadCJKFonts = true;
@@ -1203,7 +1205,9 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 	// (since it's only loaded on-demand, and thus might fail with a fatal error later if missing)
 	if (PHYSFS_exists(CJK_FONT_PATH) == 0)
 	{
+#if !defined(__EMSCRIPTEN__)
 		debug(LOG_FATAL, "Missing data file: %s", CJK_FONT_PATH);
+#endif
 	}
 
 	m_unicode_funcs_hb = hb_unicode_funcs_get_default();

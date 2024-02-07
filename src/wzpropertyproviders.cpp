@@ -59,6 +59,11 @@
 #include <cstdlib>
 #endif
 
+// Includes for Emscripten
+#if defined(__EMSCRIPTEN__)
+# include "emscripten_helpers.h"
+#endif
+
 // MARK: - BuildPropertyProvider
 
 enum class BuildProperty {
@@ -313,9 +318,13 @@ static const std::unordered_map<std::string, EnvironmentPropertyProvider::Enviro
 	{"WIN_INSTALLED_BINARIES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_INSTALLED_BINARIES},
 	{"WIN_LOADEDMODULES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_LOADEDMODULES},
 	{"WIN_LOADEDMODULENAMES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_LOADEDMODULENAMES},
+	// WZ 4.3.3+
 	{"ENV_VAR_NAMES", EnvironmentPropertyProvider::EnvironmentProperty::ENV_VAR_NAMES},
 	{"SYSTEM_RAM", EnvironmentPropertyProvider::EnvironmentProperty::SYSTEM_RAM},
-	{"CONTAINER_TYPE", EnvironmentPropertyProvider::EnvironmentProperty::CONTAINER_TYPE}
+	// WZ 4.4.0+
+	{"CONTAINER_TYPE", EnvironmentPropertyProvider::EnvironmentProperty::CONTAINER_TYPE},
+	// WZ 4.5.0+
+	{"EMSCRIPTEN_WINDOW_URL", EnvironmentPropertyProvider::EnvironmentProperty::EMSCRIPTEN_WINDOW_URL}
 };
 
 #if defined(WZ_OS_WIN)
@@ -629,6 +638,12 @@ std::string EnvironmentPropertyProvider::GetCurrentEnvironmentPropertyValue(cons
 			return std::to_string(wzGetCurrentSystemRAM());
 		case EP::CONTAINER_TYPE:
 			return GetCurrentContainerTypeStr();
+		case EP::EMSCRIPTEN_WINDOW_URL:
+#if defined(__EMSCRIPTEN__)
+			return WZ_GetEmscriptenWindowLocationURL();
+#else
+			return "";
+#endif
 	}
 	return ""; // silence warning
 }

@@ -603,6 +603,24 @@ void setMaxFastForwardTicks(optional<size_t> value, bool fixedToNormalTickRate)
 	fastForwardTicksFixedToNormalTickRate = fixedToNormalTickRate;
 }
 
+static int renderBudget = 0;  // Scaled time spent rendering minus scaled time spent updating.
+const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
+const Rational updateFraction = Rational(1) - renderFraction;
+
+#if defined(__EMSCRIPTEN__)
+unsigned lastRenderDelta = 0;
+void wz_emscripten_did_finish_render(unsigned int browserRenderDelta)
+{
+	if (GetGameMode() != GS_NORMAL)
+	{
+		return;
+	}
+	renderBudget += (lastRenderDelta + browserRenderDelta) * updateFraction.n;
+	renderBudget = std::min(renderBudget, (renderFraction * 500).floor());
+	lastRenderDelta = 0;
+}
+#endif
+
 /* The main game loop */
 GAMECODE gameLoop()
 {
@@ -610,10 +628,7 @@ GAMECODE gameLoop()
 	static uint32_t lastFlushTime = 0;
 
 	static size_t numForcedUpdatesLastCall = 0;
-	static int renderBudget = 0;  // Scaled time spent rendering minus scaled time spent updating.
 	static bool previousUpdateWasRender = false;
-	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
-	const Rational updateFraction = Rational(1) - renderFraction;
 
 	// Shouldn't this be when initialising the game, rather than randomly called between ticks?
 	countUpdate(false); // kick off with correct counts
@@ -683,8 +698,12 @@ GAMECODE gameLoop()
 	pie_ScreenFrameRenderEnd(); // must happen here for proper renderBudget calculation
 	unsigned after = wzGetTicks();
 
+#if defined(__EMSCRIPTEN__)
+	lastRenderDelta = (after - before);
+#else
 	renderBudget += (after - before) * updateFraction.n;
 	renderBudget = std::min(renderBudget, (renderFraction * 500).floor());
+#endif
 	previousUpdateWasRender = true;
 
 	if (headlessGameMode() && autogame_enabled())

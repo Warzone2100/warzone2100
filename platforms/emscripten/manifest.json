@@ -1,0 +1,30 @@
+{
+    "name": "Warzone 2100",
+    "short_name": "Warzone 2100",
+    "description": "The Web Edition of Warzone 2100. Command the forces of The Project in a battle to rebuild the world.",
+    "icons": [
+        {
+            "src": "./assets/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./assets/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#000000",
+    "background_color": "#000000",
+    "display": "standalone",
+    "orientation": "landscape",
+    "related_applications": [
+        {
+            "platform": "windows",
+            "url": "https://apps.microsoft.com/detail/9MW0Z4MPCS8C"
+        }
+    ],
+    "prefer_related_applications": true,
+    "start_url": "./",
+    "scope": "."
+}

@@ -1619,6 +1619,10 @@ void osSpecificPostInit_Win()
 }
 #endif /* defined(WZ_OS_WIN) */
 
+#if defined(__EMSCRIPTEN__)
+# include "emscripten_helpers.h"
+#endif
+
 void osSpecificFirstChanceProcessSetup()
 {
 #if defined(WZ_OS_WIN)
@@ -1636,6 +1640,10 @@ void osSpecificFirstChanceProcessSetup()
 	tzset();
 #else
 	// currently, no-op
+#endif
+
+#if defined(__EMSCRIPTEN__) // must be separate, because WZ_OS_UNIX is also defined for emscripten builds
+	initWZEmscriptenHelpers();
 #endif
 }
 
@@ -1838,7 +1846,11 @@ int realmain(int argc, char *argv[])
 	osSpecificFirstChanceProcessSetup();
 
 	debug_init();
+#if defined(__EMSCRIPTEN__)
+	debug_register_callback(debug_callback_emscripten_log, nullptr, nullptr, nullptr);
+#else
 	debug_register_callback(debug_callback_stderr, nullptr, nullptr, nullptr);
+#endif
 #if defined(_WIN32) && defined(DEBUG_INSANE)
 	debug_register_callback(debug_callback_win32debug, NULL, NULL, NULL);
 #endif // WZ_OS_WIN && DEBUG_INSANE

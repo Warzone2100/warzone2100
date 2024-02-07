@@ -1161,7 +1161,7 @@ bool autoSave()
 	std::string suggestedName = suggestSaveName(dir).toStdString();
 	char savefile[PATH_MAX];
 	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, suggestedName.c_str(), savedate);
-	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION))
+	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION, true))
 	{
 		console(_("AutoSave %s"), savegameWithoutExtension(savefile));
 		return true;

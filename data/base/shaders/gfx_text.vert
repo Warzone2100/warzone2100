@@ -6,11 +6,9 @@ uniform mat4 posMatrix;
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 in vec2 vertexTexCoord;
-in vec4 vertexColor;
 #else
 attribute vec4 vertex;
 attribute vec2 vertexTexCoord;
-attribute vec4 vertexColor;
 #endif
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))

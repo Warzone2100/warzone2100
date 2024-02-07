@@ -21,7 +21,17 @@
 
 #include "gfx_api.h"
 
+#if defined(__EMSCRIPTEN__)
+# define WZ_STATIC_GL_BINDINGS
+#endif
+
+#if !defined(__EMSCRIPTEN__) || !defined(WZ_STATIC_GL_BINDINGS)
 #include <glad/glad.h>
+#else
+// Emscripten uses static linking for performance
+#include <GLES3/gl3.h>
+typedef void* (* GLADloadproc)(const char *name);
+#endif
 #include <algorithm>
 #include <cmath>
 #include <functional>

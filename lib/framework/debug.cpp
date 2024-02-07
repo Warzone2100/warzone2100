@@ -350,6 +350,9 @@ void debug_init()
 	enabled_debug[LOG_INFO] = true;
 	enabled_debug[LOG_FATAL] = true;
 	enabled_debug[LOG_POPUP] = true;
+#if defined(__EMSCRIPTEN__)
+	enabled_debug[LOG_SOUND] = false; // must be false or sound breaks (some openal edge case)
+#endif
 #ifdef DEBUG
 	enabled_debug[LOG_WARNING] = true;
 #endif
@@ -803,3 +806,38 @@ void _debug_multiline(int line, code_part part, const char *function, const std:
 	}
 }
 
+#if defined(__EMSCRIPTEN__)
+
+#include <emscripten.h>
+
+/**
+ * Callback for outputting to a emscripten log / console
+ *
+ * \param	data			Ignored. Use NULL.
+ * \param	outputBuffer	Buffer containing the preprocessed text to output.
+ */
+void debug_callback_emscripten_log(WZ_DECL_UNUSED void **data, const char *outputBuffer, code_part part)
+{
+	int flags = EM_LOG_NO_PATHS | EM_LOG_CONSOLE;
+	switch (part)
+	{
+		case LOG_ERROR:
+			flags |= EM_LOG_ERROR;
+			break;
+		case LOG_WARNING:
+			flags |= EM_LOG_WARN;
+			break;
+		default:
+			break;
+	}
+	if (outputBuffer[strlen(outputBuffer) - 1] != '\n')
+	{
+		emscripten_log(flags, "%s\n", outputBuffer);
+	}
+	else
+	{
+		emscripten_log(flags, "%s", outputBuffer);
+	}
+}
+
+#endif

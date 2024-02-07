@@ -114,6 +114,10 @@
 # pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 
+#if defined(__EMSCRIPTEN__)
+# include "emscripten_helpers.h"
+#endif
+
 bool saveJSONToFile(const nlohmann::json& obj, const char* pFileName)
 {
 	std::ostringstream stream;
@@ -3358,7 +3362,7 @@ error:
 }
 // -----------------------------------------------------------------------------------------
 
-bool saveGame(const char *aFileName, GAME_TYPE saveType)
+bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 {
 	size_t			fileExtension;
 	char			CurrentFileName[PATH_MAX] = {'\0'};
@@ -3643,6 +3647,13 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 
 	// strip the last filename
 	CurrentFileName[fileExtension - 1] = '\0';
+
+#if defined(__EMSCRIPTEN__)
+	if (!isAutoSave)
+	{
+		WZ_EmscriptenSyncPersistFSChanges(); // NOTE: Will block main loop iterations until it finishes (asynchronously)
+	}
+#endif
 
 	/* Start the game clock */
 	triggerEvent(TRIGGER_GAME_SAVED);
