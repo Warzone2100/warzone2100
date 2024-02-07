@@ -265,6 +265,10 @@ void debug_callback_file_exit(void **data);
 
 void debug_callback_stderr(void **data, const char *outputBuffer, code_part part);
 
+#if defined(__EMSCRIPTEN__)
+void debug_callback_emscripten_log(void **data, const char *outputBuffer, code_part part);
+#endif
+
 #if defined(_WIN32) && defined(DEBUG)
 void debug_callback_win32debug(void **data, const char *outputBuffer, code_part part);
 #endif

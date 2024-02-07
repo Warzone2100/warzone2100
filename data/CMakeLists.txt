@@ -8,7 +8,12 @@ endif()
 OPTION(WZ_INCLUDE_TERRAIN_HIGH "Include high terrain texture pack" ON)
 OPTION(WZ_DOWNLOAD_PREBUILT_PACKAGES "Download prebuilt texture packages (if OFF, will generate from scratch - this can take a while to encode textures)" ON)
 
-find_package(ZIP REQUIRED)
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	# "Fake" COMPRESS_ZIP that just stages the needed files in folders
+	include(EmscriptenCompressZip)
+else()
+	find_package(ZIP REQUIRED)
+endif()
 
 ###########################
 # Prebuilt package DL info
@@ -221,7 +226,45 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	endif()
 
 	WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "TEXTURE" RESIZE "${_terrain_max_size}" RDO ENCODING_TARGET texture_encoding TARGET_FOLDER data ALL FILES ${TEXPAGES_TERRAIN})
-	set(PROCESSED_TEXTURE_FILES ${TEXPAGES_TERRAIN})
+	set(PROCESSED_TEXTURE_FILES "${TEXPAGES_TERRAIN}")
+
+	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+		# Additional Normal Texpages (that are 1024x1024)
+		file(GLOB TEXPAGES_BASE_1024
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-8-player-buildings-bases-rockies.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-8-player-buildings-bases-urban.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-8-player-buildings-bases.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-9-player-buildings-bases-rockies.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-9-player-buildings-bases-urban.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-9-player-buildings-bases.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-11-player-buildings.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-12-player-buildings.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-13-player-buildings.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-29-features-arizona.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-30-features-rockies.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-31-features-urban.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-34-buildings.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-111-player-buildings-nexus-bases.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-112-player-buildings-nexus.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-114-player-buildings_Collective.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-116-player-buildings_nex.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-117-player-buildings-bases_nex.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-120-player-buildings-bases_Collective.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-121-player-buildings_Collective.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-122-player-buildings_Collective.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-123-laboratories_Collective.png"
+		)
+
+		set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/texpages")
+		file(MAKE_DIRECTORY "${_output_dir}")
+		set(_texpage_max_size 1024)
+		if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+			set(_texpage_max_size 512)
+		endif()
+
+		WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "TEXTURE" RESIZE "${_texpage_max_size}" RDO ENCODING_TARGET texture_encoding TARGET_FOLDER data ALL FILES ${TEXPAGES_BASE_1024})
+		list(APPEND PROCESSED_TEXTURE_FILES "${TEXPAGES_BASE_1024}")
+	endif()
 
 	# Backdrops
 	file(GLOB TEXPAGES_BACKDROPS_ALL
@@ -245,6 +288,17 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 
 	WZ_BASIS_ENCODE_TEXTURES(OUTPUT_DIR "${_output_dir}" TYPE "UITEXTURE" RESIZE "${_bdrop_max_size}" RDO ENCODING_TARGET texture_encoding TARGET_FOLDER data ALL FILES ${TEXPAGES_BACKDROPS})
 
+	# Excluding pre-generated decal mips
+	file(GLOB DECALS_128 LIST_DIRECTORIES false CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/tertilesc*hw-128/*.png")
+	if (DECALS_128)
+		file(GLOB DECALS_ALL LIST_DIRECTORIES false CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/tertilesc*hw-*/*.png")
+		set(DECALS_skipped "${DECALS_ALL}")
+		unset(DECALS_ALL)
+		foreach(high_qual_decal IN LISTS DECALS_128)
+			list(REMOVE_ITEM DECALS_skipped "${high_qual_decal}")
+		endforeach()
+	endif()
+
 	# The rest of the texture files
 	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/texpages")
 	file(GLOB_RECURSE ALL_TEXPAGES LIST_DIRECTORIES false CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.png" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/compression_overrides.txt" "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/*.radar")
@@ -252,6 +306,7 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	list(APPEND ALL_TEXPAGES_unprocessed ${ALL_TEXPAGES})
 	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${PROCESSED_TEXTURE_FILES})
 	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${TEXPAGES_BACKDROPS_ALL})
+	list(REMOVE_ITEM ALL_TEXPAGES_unprocessed ${DECALS_skipped})
 	foreach(TEXPAGE_FILE ${ALL_TEXPAGES_unprocessed})
 		file(RELATIVE_PATH _output_name "${CMAKE_CURRENT_SOURCE_DIR}/base/texpages" "${TEXPAGE_FILE}")
 		message(STATUS "Copy unprocessed image file: ${_output_name}")
@@ -562,10 +617,6 @@ set(DATA_FILES
 if(WZ_INCLUDE_VIDEOS)
 	list(APPEND DATA_FILES "${CMAKE_CURRENT_BINARY_DIR}/sequences.wz")
 endif()
-install(FILES ${DATA_FILES}
-	DESTINATION "${WZ_DATADIR}"
-	COMPONENT Data
-)
 
 set(DATA_TERRAIN_OVERRIDES_FILES
 	"${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/classic.wz"
@@ -573,25 +624,78 @@ set(DATA_TERRAIN_OVERRIDES_FILES
 if(TARGET data_terrain_overrides_high OR EXISTS "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz")
 	list(APPEND DATA_TERRAIN_OVERRIDES_FILES "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/high.wz")
 endif()
-install(FILES ${DATA_TERRAIN_OVERRIDES_FILES}
-	DESTINATION "${WZ_DATADIR}/terrain_overrides"
-	COMPONENT Data
-)
 
-install(FILES
-	${wz2100_fonts_FILES}
-	COMPONENT Data DESTINATION "${WZ_DATADIR}/fonts"
-)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 
-file(GLOB DATA_MUSIC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/music/*.opus" "${CMAKE_CURRENT_SOURCE_DIR}/music/albums/*/*.*")
-foreach(_music_file ${DATA_MUSIC_FILES})
-	file(RELATIVE_PATH _music_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}/music" "${_music_file}")
-	get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
-	install(FILES ${_music_file}
-		DESTINATION "${WZ_DATADIR}/music/${_music_file_subdir_path}"
+	install(FILES ${DATA_FILES}
+		DESTINATION "${WZ_DATADIR}"
 		COMPONENT Data
 	)
-endforeach()
+	install(FILES ${DATA_TERRAIN_OVERRIDES_FILES}
+		DESTINATION "${WZ_DATADIR}/terrain_overrides"
+		COMPONENT Data
+	)
+	install(FILES
+		${wz2100_fonts_FILES}
+		COMPONENT Data DESTINATION "${WZ_DATADIR}/fonts"
+	)
+
+	file(GLOB DATA_MUSIC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/music/*.opus" "${CMAKE_CURRENT_SOURCE_DIR}/music/albums/*/*.*")
+	foreach(_music_file ${DATA_MUSIC_FILES})
+		file(RELATIVE_PATH _music_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}/music" "${_music_file}")
+		get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
+		install(FILES ${_music_file}
+			DESTINATION "${WZ_DATADIR}/music/${_music_file_subdir_path}"
+			COMPONENT Data
+		)
+	endforeach()
+
+else()
+	# Emscripten:
+
+	if (NOT DEFINED EMSCRIPTEN_ROOT_PATH OR NOT EMSCRIPTEN_ROOT_PATH)
+		message(WARNING "Invalid EMSCRIPTEN_ROOT_PATH? (=${EMSCRIPTEN_ROOT_PATH})")
+	endif()
+	find_file(EMSCRIPTEN_FILE_PACKAGER_PY NAMES "file_packager.py" PATHS "${EMSCRIPTEN_ROOT_PATH}/tools" NO_CMAKE_FIND_ROOT_PATH)
+	if (NOT EMSCRIPTEN_FILE_PACKAGER_PY)
+		message(FATAL_ERROR "Unable to find Emscripten file_packager.py")
+	endif()
+	find_package (Python3 COMPONENTS Interpreter REQUIRED)
+
+	# Bundle the classic terrain into a separate package
+	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/empackaged/terrain_overrides")
+	add_custom_target(
+		data_terrain_overrides_classic_packaging ALL
+		${Python3_EXECUTABLE} "${EMSCRIPTEN_FILE_PACKAGER_PY}" warzone2100-terrain-classic.data --preload "${CMAKE_CURRENT_BINARY_DIR}/terrain_overrides/classic.wz@/data/terrain_overrides/classic/" --js-output=warzone2100-terrain-classic.js --use-preload-cache --indexedDB-name=EM_PRELOAD_TERRAIN_CLASSIC_CACHE --no-node
+		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/empackaged/terrain_overrides"
+		DEPENDS data_terrain_overrides_classic
+		VERBATIM
+	)
+	list(APPEND DATA_ADDITIONAL_EMPACKAGE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/empackaged/terrain_overrides")
+
+	# Bundle the original music into a separate package
+	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/music_staging")
+	file(GLOB DATA_ORIG_MUSIC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/music/*.opus" "${CMAKE_CURRENT_SOURCE_DIR}/music/albums/original_soundtrack/*.*")
+	foreach(_music_file ${DATA_ORIG_MUSIC_FILES})
+		file(RELATIVE_PATH _music_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}/music" "${_music_file}")
+		get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
+		file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/music_staging/${_music_file_subdir_path}")
+		configure_file("${_music_file}" "${CMAKE_CURRENT_BINARY_DIR}/music_staging/${_music_file_subdir_path}" COPYONLY)
+	endforeach()
+	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/empackaged/music")
+	add_custom_target(
+		data_music_empackage ALL
+		${Python3_EXECUTABLE} "${EMSCRIPTEN_FILE_PACKAGER_PY}" warzone2100-music.data --preload "${CMAKE_CURRENT_BINARY_DIR}/music_staging@/data/music/" --js-output=warzone2100-music.js --use-preload-cache --indexedDB-name=EM_PRELOAD_MUSIC_CACHE --no-node
+		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/empackaged/music"
+		VERBATIM
+	)
+	list(APPEND DATA_ADDITIONAL_EMPACKAGE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/empackaged/music")
+
+	set(DATA_ADDITIONAL_EMPACKAGE_DIRS ${DATA_ADDITIONAL_EMPACKAGE_DIRS} PARENT_SCOPE)
+	set(DATA_ADDITIONAL_EMPACKAGE_BASEDIR "${CMAKE_CURRENT_BINARY_DIR}" PARENT_SCOPE)
+
+
+endif()
 
 set(DATA_FILES ${DATA_FILES} PARENT_SCOPE)
 set(DATA_TERRAIN_OVERRIDES_FILES ${DATA_TERRAIN_OVERRIDES_FILES} PARENT_SCOPE)

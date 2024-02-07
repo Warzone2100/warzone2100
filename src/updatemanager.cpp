@@ -26,6 +26,7 @@ using json = nlohmann::json;
 #include <unordered_map>
 #include <unordered_set>
 #include <functional>
+#include <chrono>
 
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/frame.h"
@@ -529,6 +530,11 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 void WzUpdateManager::initUpdateCheck()
 {
 	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100.json", "https://warzone2100.github.io/update-data/wz2100.json"};
+#if defined(__EMSCRIPTEN__)
+	// Bypass browser cache (if needed) by appending a query string parameter
+	std::string queryStringParam = std::to_string(std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count());
+	updateDataUrls.insert(updateDataUrls.begin() + 1, "https://data.wz2100.net/wz2100.json?v=" + queryStringParam);
+#endif
 	initProcessData(updateDataUrls, WzUpdateManager::processUpdateJSONFile, updatesCachePaths, nullptr);
 }
 
@@ -669,6 +675,11 @@ ProcessResult WzCompatCheckManager::processCompatCheckJSONFile(const json& updat
 void WzCompatCheckManager::initCompatCheck()
 {
 	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100_compat.json", "https://warzone2100.github.io/update-data/wz2100_compat.json"};
+#if defined(__EMSCRIPTEN__)
+	// Bypass browser cache (if needed) by appending a query string parameter
+	std::string queryStringParam = std::to_string(std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count());
+	updateDataUrls.insert(updateDataUrls.begin() + 1, "https://data.wz2100.net/wz2100_compat.json?v=" + queryStringParam);
+#endif
 	initProcessData(updateDataUrls, WzCompatCheckManager::processCompatCheckJSONFile, compatCachePaths, []() {
 		// set an unsuccessful result (if no prior result set)
 		setCompatCheckResults(CompatCheckResults(false), true);

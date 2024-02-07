@@ -54,6 +54,9 @@ set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "Run cpplint.py tool for Google C++ Sty
 set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "Run cppcheck C++ static analysis tool." FORCE)
 set(SQLITECPP_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
 set(SQLITECPP_BUILD_TESTS OFF CACHE BOOL "Build and run tests." FORCE)
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	set(SQLITECPP_USE_STACK_PROTECTION OFF CACHE BOOL "USE Stack Protection hardening." FORCE)
+endif()
 add_subdirectory(SQLiteCpp EXCLUDE_FROM_ALL)
 set_property(TARGET SQLiteCpp PROPERTY FOLDER "3rdparty")
 

@@ -155,6 +155,7 @@
 #elif defined(__INTEGRITY)
 #  define WZ_OS_INTEGRITY
 #elif defined(__MAKEDEPEND__)
+#elif defined(__EMSCRIPTEN__)
 #else
 #  error "Warzone has not been tested on this OS. Please contact warzone2100-project@lists.sourceforge.net"
 #endif /* WZ_OS_x */

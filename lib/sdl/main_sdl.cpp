@@ -70,6 +70,10 @@
 #include "cocoa_wz_menus.h"
 #endif
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -93,8 +97,9 @@ int main(int argc, char *argv[])
 static SDL_Window *WZwindow = nullptr;
 static optional<video_backend> WZbackend = video_backend::opengl;
 
-#if defined(WZ_OS_MAC) || defined(WZ_OS_WIN)
+#if defined(WZ_OS_MAC) || defined(WZ_OS_WIN) || defined(__EMSCRIPTEN__)
 // on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
+// on Emscripten (browser), SDL_WINDOW_FULLSCREEN_DESKTOP should be used (to avoid various toggling breaks)
 const WINDOW_MODE WZ_SDL_DEFAULT_FULLSCREEN_MODE = WINDOW_MODE::desktop_fullscreen;
 #else
 const WINDOW_MODE WZ_SDL_DEFAULT_FULLSCREEN_MODE = WINDOW_MODE::fullscreen;
@@ -213,6 +218,17 @@ void* GetTextEventsOwner = nullptr;
 static optional<int> wzQuitExitCode;
 
 bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight);
+
+#if defined(__EMSCRIPTEN__)
+
+#include <emscripten.h>
+#include <emscripten/html5.h>
+
+void wzemscripten_startup_ensure_canvas_displayed();
+bool wz_emscripten_enable_soft_fullscreen();
+EM_BOOL wz_emscripten_fullscreenchange_callback(int eventType, const EmscriptenFullscreenChangeEvent *fullscreenChangeEvent, void *userData);
+
+#endif
 
 /**************************/
 /***     Misc support   ***/
@@ -394,7 +410,9 @@ static std::vector<video_backend>& sortGfxBackendsForCurrentSystem(std::vector<v
 std::vector<video_backend> wzAvailableGfxBackends()
 {
 	std::vector<video_backend> availableBackends;
+#if !defined(__EMSCRIPTEN__)
 	availableBackends.push_back(video_backend::opengl);
+#endif
 #if !defined(WZ_OS_MAC) // OpenGL ES is not supported on macOS, and WZ doesn't currently ship with an OpenGL ES library on macOS
 	availableBackends.push_back(video_backend::opengles);
 #endif
@@ -412,7 +430,10 @@ video_backend wzGetDefaultGfxBackendForCurrentSystem()
 {
 	// SDL backend supports: OpenGL, OpenGLES, Vulkan (if compiled with support), DirectX (on Windows, via LibANGLE)
 
-#if defined(_WIN32) && defined(WZ_BACKEND_DIRECTX) && (defined(_M_ARM64) || defined(_M_ARM))
+#if defined(__EMSCRIPTEN__)
+	// For Emscripten, OpenGLES (WebGL) should be the default
+	return video_backend::opengles;
+#elif defined(_WIN32) && defined(WZ_BACKEND_DIRECTX) && (defined(_M_ARM64) || defined(_M_ARM))
 	// On ARM-based Windows, DirectX should be the default (for compatibility)
 	return video_backend::directx;
 #else
@@ -666,7 +687,7 @@ WINDOW_MODE wzGetCurrentWindowMode()
 
 std::vector<WINDOW_MODE> wzSupportedWindowModes()
 {
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) || defined(__EMSCRIPTEN__)
 	// on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
 	// thus "classic" fullscreen is not supported
 	return {WINDOW_MODE::desktop_fullscreen, WINDOW_MODE::windowed};
@@ -751,8 +772,8 @@ WINDOW_MODE wzGetToggleFullscreenMode()
 
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 {
-	auto currMode = wzGetCurrentWindowMode();
-	if (currMode == mode)
+	auto previousMode = wzGetCurrentWindowMode();
+	if (previousMode == mode)
 	{
 		// already in this mode
 		return true;
@@ -766,15 +787,27 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 
 	if (!silent)
 	{
-		debug(LOG_INFO, "Changing window mode: %s -> %s", to_display_string(currMode).c_str(), to_display_string(mode).c_str());
+		debug(LOG_INFO, "Changing window mode: %s -> %s", to_display_string(previousMode).c_str(), to_display_string(mode).c_str());
 	}
 
 	int sdl_result = -1;
 	switch (mode)
 	{
 		case WINDOW_MODE::desktop_fullscreen:
-			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
-			if (sdl_result != 0) { return false; }
+#if defined(__EMSCRIPTEN__)
+			emscripten_exit_soft_fullscreen();
+#endif
+			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN_DESKTOP); // TODO: Currently crashes in Emscripten builds?
+			if (sdl_result != 0)
+			{
+#if defined(__EMSCRIPTEN__)
+				if (previousMode == WINDOW_MODE::windowed)
+				{
+					wz_emscripten_enable_soft_fullscreen();
+				}
+#endif
+				return false;
+			}
 			wzSetWindowIsResizable(false);
 			break;
 		case WINDOW_MODE::windowed:
@@ -814,8 +847,20 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 		}
 		case WINDOW_MODE::fullscreen:
 		{
+#if defined(__EMSCRIPTEN__)
+			emscripten_exit_soft_fullscreen();
+#endif
 			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN);
-			if (sdl_result != 0) { return false; }
+			if (sdl_result != 0)
+			{
+#if defined(__EMSCRIPTEN__)
+				if (previousMode == WINDOW_MODE::windowed)
+				{
+					wz_emscripten_enable_soft_fullscreen();
+				}
+#endif
+				return false;
+			}
 			wzSetWindowIsResizable(false);
 			int currWidth = 0, currHeight = 0;
 			SDL_GetWindowSize(WZwindow, &currWidth, &currHeight);
@@ -3183,6 +3228,10 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	}
 #endif
 
+#if defined(__EMSCRIPTEN__)
+	wzemscripten_startup_ensure_canvas_displayed();
+#endif
+
 	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
 
 	if (backend.has_value())
@@ -3263,6 +3312,20 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	if (backend.has_value())
 	{
 		wzMainScreenSetup_VerifyWindow();
+
+#if defined(__EMSCRIPTEN__)
+		// Catch the full screen change events
+		// - If user-initiated (i.e. by pressing ESC or similar to exit fullscreen), SDL does not currently expose this event
+		// - SDL itself sets a fullscreenchange callback on the document, which must remain for SDL functionality - fortunately, emscripten lets us set one on the canvas element itself
+		emscripten_set_fullscreenchange_callback("#canvas", nullptr, 0, wz_emscripten_fullscreenchange_callback);
+
+		auto mode = wzGetCurrentWindowMode();
+		if (mode == WINDOW_MODE::windowed)
+		{
+			// Enable "soft fullscreen" - where the canvas automatically fills the window
+			wz_emscripten_enable_soft_fullscreen();
+		}
+#endif
 	}
 
 #if defined(WZ_OS_WIN)
@@ -3555,9 +3618,20 @@ static void handleActiveEvent(SDL_Event *event)
 }
 
 static SDL_Event event;
+#if defined(__EMSCRIPTEN__)
+std::function<void()> saved_onShutdown;
+unsigned lastLoopReturn = 0;
+#endif
 
 void wzEventLoopOneFrame(void* arg)
 {
+#if defined(__EMSCRIPTEN__)
+	if (lastLoopReturn > 0)
+	{
+		wz_emscripten_did_finish_render(lastLoopReturn - wzGetTicks());
+	}
+#endif
+
 	/* Deal with any windows messages */
 	while (SDL_PollEvent(&event))
 	{
@@ -3584,12 +3658,27 @@ void wzEventLoopOneFrame(void* arg)
 			inputhandleText(&event.text);
 			break;
 		case SDL_QUIT:
+#if defined(__EMSCRIPTEN__)
+			// Exit "soft fullscreen" - (as long as we aren't in "real" fullscreen mode)
+			emscripten_exit_soft_fullscreen();
+
+			// Actually trigger cleanup code
+			if (saved_onShutdown)
+			{
+				saved_onShutdown();
+			}
+			wzShutdown();
+
+			// Stop Emscripten from calling the main loop
+			emscripten_cancel_main_loop();
+#else
 			ASSERT(arg != nullptr, "No valid bContinue");
 			if (arg)
 			{
 				bool *bContinue = static_cast<bool*>(arg);
 				*bContinue = false;
 			}
+#endif
 			return;
 		default:
 			break;
@@ -3617,6 +3706,9 @@ void wzEventLoopOneFrame(void* arg)
 	processScreenSizeChangeNotificationIfNeeded();
 	mainLoop();				// WZ does its thing
 	inputNewFrame();			// reset input states
+#if defined(__EMSCRIPTEN__)
+	lastLoopReturn = wzGetTicks();
+#endif
 }
 
 // Actual mainloop
@@ -3624,6 +3716,11 @@ void wzMainEventLoop(std::function<void()> onShutdown)
 {
 	event.type = 0;
 
+#if defined(__EMSCRIPTEN__)
+	saved_onShutdown = onShutdown;
+	// Receives a function to call and some user data to provide it.
+	emscripten_set_main_loop_arg(wzEventLoopOneFrame, nullptr, -1, true);
+#else
 	bool bContinue = true;
 	while (bContinue)
 	{
@@ -3634,6 +3731,7 @@ void wzMainEventLoop(std::function<void()> onShutdown)
 	{
 		onShutdown();
 	}
+#endif
 }
 
 void wzPumpEventsWhileLoading()
@@ -3686,3 +3784,76 @@ uint64_t wzGetCurrentSystemRAM()
 	int value = SDL_GetSystemRAM();
 	return (value > 0) ? static_cast<uint64_t>(value) : 0;
 }
+
+// MARK: - Emscripten-specific functions
+
+#if defined(__EMSCRIPTEN__)
+
+void wzemscripten_startup_ensure_canvas_displayed()
+{
+	MAIN_THREAD_EM_ASM({
+		if (typeof wz_js_display_canvas === "function") {
+			wz_js_display_canvas();
+		}
+		else {
+			console.log('Cannot find wz_js_display_canvas function');
+		}
+	});
+}
+
+EM_BOOL wz_emscripten_window_resized_callback(int eventType, const void *reserved, void *userData)
+{
+	double width, height;
+	emscripten_get_element_css_size("#canvas", &width, &height);
+
+	int newWindowWidth = (int)width, newWindowHeight = (int)height;
+
+	wzAsyncExecOnMainThread([newWindowWidth, newWindowHeight]{
+		// resize SDL window
+		SDL_SetWindowSize(WZwindow, newWindowWidth, newWindowHeight);
+
+		unsigned int oldWindowWidth = windowWidth;
+		unsigned int oldWindowHeight = windowHeight;
+		handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+		// Store the new values (in case the user manually resized the window bounds)
+		war_SetWidth(newWindowWidth);
+		war_SetHeight(newWindowHeight);
+	});
+	return EMSCRIPTEN_RESULT_SUCCESS;
+}
+
+bool wz_emscripten_enable_soft_fullscreen()
+{
+	// Enable "soft fullscreen" - where the canvas automatically fills the window
+	debug(LOG_INFO, "Would enter soft fullscreen");
+	EmscriptenFullscreenStrategy strategy;
+	strategy.scaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_STDDEF;
+	strategy.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
+	strategy.canvasResizedCallback = wz_emscripten_window_resized_callback;
+	strategy.canvasResizedCallbackUserData = nullptr; // pointer to user data
+	strategy.canvasResizedCallbackTargetThread = pthread_self(); // not used
+	EMSCRIPTEN_RESULT result = emscripten_enter_soft_fullscreen("#canvas", &strategy);
+	return result == EMSCRIPTEN_RESULT_SUCCESS || result == EMSCRIPTEN_RESULT_DEFERRED;
+}
+
+EM_BOOL wz_emscripten_fullscreenchange_callback(int eventType, const EmscriptenFullscreenChangeEvent *fullscreenChangeEvent, void *userData)
+{
+	if (!fullscreenChangeEvent->isFullscreen)
+	{
+		// browser left fullscreen, so reset soft fullscreen mode
+		wzAsyncExecOnMainThread([]{
+
+			war_setWindowMode(WINDOW_MODE::windowed); // persist the change
+
+			wz_emscripten_enable_soft_fullscreen();
+
+			// manually trigger resize callback
+			wz_emscripten_window_resized_callback(EMSCRIPTEN_EVENT_FULLSCREENCHANGE, nullptr, nullptr);
+
+		});
+	}
+
+	return EM_FALSE; // return false to ensure this event "bubbles up" to the SDL event handler
+}
+
+#endif

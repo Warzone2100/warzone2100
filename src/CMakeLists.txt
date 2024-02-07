@@ -116,8 +116,12 @@ target_link_libraries(warzone2100 optional-lite)
 target_link_libraries(warzone2100 quickjs)
 target_link_libraries(warzone2100 inih)
 
-include(IncludeFindCurl)
-target_link_libraries(warzone2100 CURL::libcurl)
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	# Exclude CURL implementation, Use Fetch API for Emscripten
+else()
+	include(IncludeFindCurl)
+	target_link_libraries(warzone2100 CURL::libcurl)
+endif()
 target_link_libraries(warzone2100 re2::re2)
 
 find_package(SQLite3 3.14 REQUIRED)
@@ -182,7 +186,7 @@ if (DEFINED CURL_OPENSSL_REQUIRES_CALLBACKS)
 		message(STATUS "Ignoring cURL OpenSSL backend, as other thread-safe backend(s) exist")
 	endif()
 endif()
-if (NOT DEFINED CURL_SUPPORTED_SSL_BACKENDS)
+if (NOT DEFINED CURL_SUPPORTED_SSL_BACKENDS AND NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	if (NOT VCPKG_TOOLCHAIN) # ignore warning when using vcpkg
 		message(WARNING "Could not determine cURL's SSL/TLS backends; if cURL is built with OpenSSL < 1.1.0 or GnuTLS < 2.11.0, this may result in thread-safety issues")
 	endif()
@@ -229,6 +233,101 @@ endif()
 # To change the install destination at configure-time, please change the value of CMAKE_INSTALL_BINDIR
 # (WZ_APP_INSTALL_DEST is for the platform / generator-specific overrides *in* this file)
 set(WZ_APP_INSTALL_DEST "${CMAKE_INSTALL_BINDIR}")
+
+#######################
+# Emscripten Build Config
+
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+
+	# WZ requires WebGL 2
+	target_link_options(warzone2100 PRIVATE "SHELL:-s MIN_WEBGL_VERSION=2")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s MAX_WEBGL_VERSION=2")
+
+	target_link_options(warzone2100 PRIVATE "SHELL:-s FETCH=1")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s WASM_BIGINT")
+
+	target_link_options(warzone2100 PRIVATE "SHELL:-s ENVIRONMENT=web,worker") # Worker must also be enabled because multithreading is enabled
+
+	target_link_options(warzone2100 PRIVATE "SHELL:-s MINIFY_HTML=0") # Disable MINIFY_HTML
+
+	target_link_options(warzone2100 PRIVATE "SHELL:-s TOTAL_STACK=10485760")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s INITIAL_MEMORY=268435456")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s ALLOW_MEMORY_GROWTH=1")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s DEMANGLE_SUPPORT=1")
+#	target_link_options(warzone2100 PRIVATE "SHELL:-s GL_ASSERTIONS=1") # Useful for debugging, but impacts performance
+#	target_link_options(warzone2100 PRIVATE "SHELL:-s LZ4=1") # LZ4 can't be used while also supporting gettext translations (no support for mmap in LZ4 filesystem backend)
+	#target_link_options(warzone2100 PRIVATE "SHELL:-s FULL_ES3=1")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s PTHREAD_POOL_SIZE=8")
+
+	# Needed for SDL2
+	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER 3.1.50)
+		target_link_options(warzone2100 PRIVATE "SHELL:-s GL_ENABLE_GET_PROC_ADDRESS=1")
+	endif()
+
+	# Display more information on linking issues
+	target_link_options(warzone2100 PRIVATE "SHELL:-s LLD_REPORT_UNDEFINED")
+
+	# Offscreen canvas and proxy to pthread support
+	# - not currently supported - seems to lead to eventual freezes in Firefox and flickering in Safari
+	# target_link_options(warzone2100 PRIVATE "SHELL:-s PROXY_TO_PTHREAD=1")
+	# target_link_options(warzone2100 PRIVATE "SHELL:-s OFFSCREENCANVAS_SUPPORT=1")
+
+	target_link_options(warzone2100 PRIVATE "SHELL:-lidbfs.js") # Explicitly include IDBFS, see: https://github.com/emscripten-core/emscripten/issues/9406
+
+	target_link_options(warzone2100 PRIVATE "SHELL:--shell-file ${PROJECT_SOURCE_DIR}/platforms/emscripten/shell.html")
+	target_link_options(warzone2100 PRIVATE "SHELL:--pre-js ${PROJECT_SOURCE_DIR}/platforms/emscripten/prejs.js")
+	target_link_options(warzone2100 PRIVATE "SHELL:--post-js ${PROJECT_SOURCE_DIR}/platforms/emscripten/postjs.js")
+
+	target_link_options(warzone2100 PRIVATE "SHELL:-s MODULARIZE")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s EXPORT_NAME=createWZModule")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s EXIT_RUNTIME")
+
+	# Bundle core data files
+	foreach(_data_file ${DATA_FILES})
+		get_filename_component(_foldername "${_data_file}" NAME_WE)
+		message(STATUS "COPYING DATA: ${_foldername}")
+		target_link_options(warzone2100 PRIVATE "SHELL:--preload-file ${_data_file}@/data/${_foldername}/")
+	endforeach()
+
+	# Bundle needed base fonts
+	foreach(_font_file ${DATA_FONTS})
+		get_filename_component(_fontname "${_font_file}" NAME)
+		message(STATUS "COPYING FONT FILE: ${_fontname} (from: ${_font_file})")
+		target_link_options(warzone2100 PRIVATE "SHELL:--preload-file ${_font_file}@/data/fonts/")
+	endforeach()
+
+	# Bundle the translations
+	if(ENABLE_NLS AND TARGET translations AND DEFINED wz2100_translations_LOCALE_FOLDER)
+		if (NOT WZ_LOCALEDIR_ISABSOLUTE)
+			message(FATAL_ERROR "Expected absolute path for WZ_LOCALEDIR: ${WZ_LOCALEDIR}")
+		endif()
+		target_link_options(warzone2100 PRIVATE "SHELL:--preload-file ${wz2100_translations_LOCALE_FOLDER}@${WZ_LOCALEDIR}/")
+	endif()
+
+	# Cache preload data in browser (if possible)
+	target_link_options(warzone2100 PRIVATE "SHELL:--use-preload-cache")
+
+	# Add dependencies on optional packages (if available)
+	if (TARGET data_music_empackage)
+		add_dependencies(warzone2100 data_music_empackage)
+	else()
+		message(WARNING "Missing data_music package - Emscripten build will not ship with music")
+	endif()
+	if (TARGET data_terrain_overrides_classic_packaging)
+		add_dependencies(warzone2100 data_terrain_overrides_classic_packaging)
+	else()
+		message(WARNING "Missing data_terrain_overrides_classic package - Emscripten build will not ship with classic terrain overrides")
+	endif()
+
+	# Install the app files directly in the destination root
+	set(WZ_APP_INSTALL_DEST ".")
+
+	# Rename output warzone2100.html -> index.html
+	add_custom_command(TARGET warzone2100 POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E rename "$<TARGET_FILE:warzone2100>" "$<TARGET_FILE_DIR:warzone2100>/index.html"
+		VERBATIM)
+
+endif()
 
 #######################
 # macOS Build Config
@@ -583,7 +682,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	endif()
 endif()
 
-if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin" AND NOT MSVC)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "(Darwin|Emscripten)" AND NOT MSVC)
 	# Ensure noexecstack
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,noexecstack" CACHED_RESULT_NAME LINK_FLAG_WL_Z_NOEXECSTACK_SUPPORTED)
 	# Enable RELRO (if supported)
@@ -645,10 +744,80 @@ endif()
 
 #######################
 # Install
-install(TARGETS warzone2100 COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
 
-# For Portable packages only, copy the ".portable" file that triggers portable mode (Windows-only)
-install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT PortableConfig DESTINATION "${WZ_APP_INSTALL_DEST}" RENAME ".portable" EXCLUDE_FROM_ALL)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+
+	# Executable
+	install(TARGETS warzone2100 COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+
+	# For Portable packages only, copy the ".portable" file that triggers portable mode (Windows-only)
+	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT PortableConfig DESTINATION "${WZ_APP_INSTALL_DEST}" RENAME ".portable" EXCLUDE_FROM_ALL)
+
+else()
+
+	# For Emscripten: install the generated files
+	install(FILES
+			"$<TARGET_FILE_DIR:warzone2100>/index.html"
+			COMPONENT Core
+			DESTINATION "${WZ_APP_INSTALL_DEST}"
+			RENAME "index.html")
+	install(FILES
+			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.js"
+			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.worker.js"
+			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.wasm"
+			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.data"
+			COMPONENT Core
+			DESTINATION "${WZ_APP_INSTALL_DEST}")
+
+	# Install manifest file
+	configure_file("${CMAKE_SOURCE_DIR}/platforms/emscripten/manifest.json" "${CMAKE_CURRENT_BINARY_DIR}/manifest.json" COPYONLY)
+	install(FILES
+		"${CMAKE_SOURCE_DIR}/platforms/emscripten/manifest.json"
+		COMPONENT Core
+		DESTINATION "${WZ_APP_INSTALL_DEST}")
+
+	# Install static assets
+	file(GLOB static_assets "${CMAKE_SOURCE_DIR}/platforms/emscripten/assets/*.*")
+	if (static_assets)
+		install(DIRECTORY DESTINATION "${WZ_APP_INSTALL_DEST}/assets" COMPONENT Core)
+		install(FILES
+			${static_assets}
+			COMPONENT Core
+			DESTINATION "${WZ_APP_INSTALL_DEST}/assets")
+		# Also place assets in build dir so it can be run directly
+		foreach(asset IN LISTS static_assets)
+			configure_file("${asset}" "${CMAKE_CURRENT_BINARY_DIR}/" COPYONLY)
+		endforeach()
+	endif()
+
+	# Install additional (optional) file packages
+	foreach(_empackage_dir IN LISTS DATA_ADDITIONAL_EMPACKAGE_DIRS)
+		install(DIRECTORY
+			${_empackage_dir}
+			COMPONENT Core
+			DESTINATION "${WZ_APP_INSTALL_DEST}")
+	endforeach()
+
+	if (WZ_EMSCRIPTEN_COMPRESS_OUTPUT AND NOT CMAKE_VERSION VERSION_LESS "3.18.0")
+		install(CODE "
+			execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}\")
+
+			file(GLOB _files_to_compress LIST_DIRECTORIES false \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.js\" \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.wasm\" \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.data\" \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.html\")
+
+			list(LENGTH _files_to_compress _num_files_to_compress)
+			if (_num_files_to_compress GREATER 0)
+				foreach(_input_file IN LISTS _files_to_compress)
+					get_filename_component(_input_file_filename \"\${_input_file}\" NAME)
+					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Compressing file: \${_input_file_filename} -> \${_input_file_filename}.gz\")
+					file(ARCHIVE_CREATE OUTPUT \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\${_input_file_filename}.gz\" PATHS \"\${_input_file}\" FORMAT raw COMPRESSION GZip COMPRESSION_LEVEL 7)
+				endforeach()
+			else()
+				message(WARNING \"Did not find any files to compress in: \${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\")
+			endif()
+		" COMPONENT Core)
+	endif()
+
+endif()
 
 #####################
 # Installing Required Runtime Dependencies

@@ -3,18 +3,40 @@
 	"version-string": "master-branch",
 	"builtin-baseline": "11e79b1072c7f12d84258b77948cda3b166aac59",
 	"dependencies": [
-		"sdl2",
 		"physfs",
-		"harfbuzz",
-		"fribidi",
+		"sdl2",
+		{
+			"name": "harfbuzz",
+			"platform": "!emscripten"
+		},
+		{
+			"name": "fribidi",
+			"platform": "!emscripten"
+		},
+		{
+			"name": "freetype",
+			"platform": "!emscripten"
+		},
 		"libogg",
 		"libtheora",
 		"libvorbis",
 		"opus",
-		"libpng",
-		"freetype",
-		"gettext",
-		"openal-soft",
+		{
+			"name": "libpng",
+			"platform": "!emscripten"
+		},
+		{
+			"name": "libspng",
+			"platform": "emscripten"
+		},
+		{
+			"name": "gettext",
+			"platform": "!emscripten"
+		},
+		{
+			"name": "openal-soft",
+			"platform": "!emscripten"
+		},
 		"zlib",
 		"sqlite3",
 		"libsodium",
@@ -42,7 +64,7 @@
 			"features": [
 				"ssl"
 			],
-			"platform": "!windows & !mingw & !osx"
+			"platform": "!windows & !mingw & !osx & !emscripten"
 		},
 		{
 			"name": "angle",
@@ -65,7 +87,8 @@
 					"default-features": true,
 					"features": [
 						"vulkan"
-					]
+					],
+					"platform": "!emscripten"
 				}
 			]
 		}
