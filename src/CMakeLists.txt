@@ -327,6 +327,34 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 		COMMAND ${CMAKE_COMMAND} -E rename "$<TARGET_FILE:warzone2100>" "$<TARGET_FILE_DIR:warzone2100>/index.html"
 		VERBATIM)
 
+	# If workbox-cli is available, generate a proper service worker
+	set(GENERATED_SERVICE_WORKER FALSE)
+	find_package(WorkboxCLI)
+	if (WorkboxCLI_FOUND)
+		add_custom_target(generate_service_worker ALL
+			COMMAND ${CMAKE_COMMAND} -P "${CMAKE_SOURCE_DIR}/platforms/emscripten/cmake/WorkboxRemoveOldFiles.cmake"
+			COMMAND ${WorkboxCLI_COMMAND} generateSW "${CMAKE_SOURCE_DIR}/platforms/emscripten/wz-workbox-config.js"
+			WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+			BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/service-worker.js"
+			VERBATIM
+		)
+		add_dependencies(generate_service_worker warzone2100)
+		set(GENERATED_SERVICE_WORKER TRUE)
+	endif()
+	# Otherwise, copy the no-op-service-worker.js -> service-worker.js
+	if (NOT GENERATED_SERVICE_WORKER)
+		message(WARNING "workbox-cli is not available - will use a no-op service worker")
+		# configure_file("${CMAKE_SOURCE_DIR}/platforms/emscripten/no-op-service-worker.js" "${CMAKE_CURRENT_BINARY_DIR}/service-worker.js" COPYONLY)
+		add_custom_target(generate_service_worker ALL
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/platforms/emscripten/no-op-service-worker.js" "${CMAKE_CURRENT_BINARY_DIR}/service-worker.js"
+			WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+			DEPENDS "${CMAKE_SOURCE_DIR}/platforms/emscripten/no-op-service-worker.js"
+			BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/service-worker.js"
+			VERBATIM
+		)
+		add_dependencies(generate_service_worker warzone2100)
+	endif()
+
 endif()
 
 #######################
@@ -797,6 +825,19 @@ else()
 			COMPONENT Core
 			DESTINATION "${WZ_APP_INSTALL_DEST}")
 	endforeach()
+
+	# Install service worker (and associated files)
+	install(CODE "
+		file(GLOB _service_worker_files LIST_DIRECTORIES false \"${CMAKE_CURRENT_BINARY_DIR}/service-worker.js\" \"${CMAKE_CURRENT_BINARY_DIR}/workbox-*.js\")
+		list(LENGTH _service_worker_files _num_service_worker_files)
+		if (_num_service_worker_files GREATER 0)
+			foreach(_input_file IN LISTS _service_worker_files)
+				file(INSTALL \"\${_input_file}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}\")
+			endforeach()
+		else()
+			message(WARNING \"Did not find any service worker files in: ${CMAKE_CURRENT_BINARY_DIR}/\")
+		endif()
+	" COMPONENT Core)
 
 	if (WZ_EMSCRIPTEN_COMPRESS_OUTPUT AND NOT CMAKE_VERSION VERSION_LESS "3.18.0")
 		install(CODE "
