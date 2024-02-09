@@ -2026,6 +2026,7 @@ static void checkLocalFeatures(DROID *psDroid)
 
 	// scan the neighbours
 #define DROIDDIST ((TILE_UNITS*5)/2)
+	constexpr int MAX_PICKUP_DISTANCE = (TILE_UNITS / 2);
 	static GridList gridList;  // static to avoid allocations.
 	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, DROIDDIST);
 	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
@@ -2035,6 +2036,11 @@ static void checkLocalFeatures(DROID *psDroid)
 
 		if (psObj->type == OBJ_FEATURE && !psObj->died)
 		{
+			if (std::abs(psDroid->pos.z - psObj->pos.z) > MAX_PICKUP_DISTANCE)
+			{
+				continue; // Don't pickup if height difference is more than half of a tile.
+			}
+
 			switch (((FEATURE *)psObj)->psStats->subType)
 			{
 			case FEAT_OIL_DRUM:
