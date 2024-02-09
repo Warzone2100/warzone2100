@@ -60,6 +60,11 @@ jobs:
         # Install additional host tools
         DEBIAN_FRONTEND=noninteractive sudo apt-get -y install cmake git zip unzip gettext asciidoctor
 
+    - uses: actions/setup-node@v4
+
+    - name: Install workbox-cli
+      run: npm install workbox-cli --global
+    
     - name: Install EMSDK
       id: emsdk
       run: |
