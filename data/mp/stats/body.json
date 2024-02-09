@@ -598,7 +598,7 @@
 	"Body2SUP": {
 		"armourHeat": 6,
 		"armourKinetic": 14,
-		"buildPoints": 170,
+		"buildPoints": 190,
 		"buildPower": 37,
 		"class": "Droids",
 		"designable": 1,
@@ -641,7 +641,7 @@
 		"armourHeat": 15,
 		"armourKinetic": 20,
 		"buildPoints": 170,
-		"buildPower": 45,
+		"buildPower": 49,
 		"class": "Droids",
 		"designable": 1,
 		"hitpoints": 150,
