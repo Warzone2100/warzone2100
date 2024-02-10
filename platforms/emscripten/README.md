@@ -57,12 +57,22 @@ The Web Edition also ships with textures that have been optimized for size, at t
 
 The Web Edition can persist Warzone 2100 settings, configuration, savegames and more in your browser storage using technologies such as IndexedDB.
 
-> [!IMPORTANT]
-> If you clear your browser's cache / history, this will probably clear your savegames.
+When you explicitly save your game, Warzone 2100 will ask the browser to opt-in to [persistent storage](https://web.dev/articles/persistent-storage).
+
+Depending on your browser, you may receive a prompt (ex. on Firefox), or this may automatically succeed (or be denied by the browser) without any prompt or notice.
+
+> [!TIP]
+> By default, browsers store data in a "best-effort" manner.
+> This means it may be cleared by the browser:
+> - When storage is low
+> - If a site hasn't been visited in a while
+> - Or for other reasons
+>  
+> **Persistent storage can help prevent the browser from automatically evicting your saved games and data.**  
+> See: [Storage for the Web: Eviction](https://web.dev/articles/storage-for-the-web#eviction)
 
 > [!IMPORTANT]
-> Some web browsers may also automatically clear storage for domains that haven't been visited in a while.
->
+> If you manually clear your browser's cache / history for all sites, this will still clear your savegames.
 
 ## Campaign Videos:
 
