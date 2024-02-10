@@ -612,7 +612,7 @@
       if (window.location.hostname == 'play.wz2100.net') {
         return 'https://data.'+window.location.hostname;
       } else {
-        return null;
+        return '';
       }
     })();
     let WZ_VIDEO_SEQUENCES_BASE_URL = (() => {
@@ -622,20 +622,8 @@
         return 'sequences/'; // default is just relative to current path
       }
     })();
-    let WZ_MUSIC_BASE_URL = (() => {
-      if (window.location.hostname == 'play.wz2100.net') {
-        return 'https://data.play.wz2100.net/music/';
-      } else {
-        return 'music/'; // default is just relative to current path
-      }
-    })();
-    let WZ_DATA_TERRAIN_BASE_URL = (() => {
-      if (window.location.hostname == 'play.wz2100.net') {
-        return 'https://data.play.wz2100.net/terrain_overrides/';
-      } else {
-        return 'terrain_overrides/'; // default is just relative to current path
-      }
-    })();
+    let WZ_MUSIC_BASE_URL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + 'pkg/music/';
+    let WZ_DATA_TERRAIN_BASE_URL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + 'pkg/terrain_overrides/';
     
     // Initialize title badge (based on location pathname)
     (function() {
@@ -1258,32 +1246,28 @@
     }
     
     Module['locateFile'] = function(path, prefix) {
-      // If it's a data file, and a custom data files host is specified
+      // Custom handling for .data files
       if (path.endsWith(".data")) {
+        // NOTE: Prefix is not guaranteed to be set for these by the preloader, so construct the paths manually
+        
         // Shared data files
         // - music
         if (path === 'warzone2100-music.data') {
           let musicDataURL = WZ_MUSIC_BASE_URL + path;
-          console.log(musicDataURL);
+          console.debug('Loading: ' + musicDataURL);
           return musicDataURL;
         }
         // - terrain_overrides
         if (path.startsWith('warzone2100-terrain-')) {
           let terrainDataURL = WZ_DATA_TERRAIN_BASE_URL + path;
-          console.log(terrainDataURL);
+          console.debug('Loading: ' + terrainDataURL);
           return terrainDataURL;
         }
         
-        if (WZ_DATA_FILES_URL_HOST !== null) {
-          // Regular build-specific data files
-          // Prefix is not guaranteed to be set for these by the preloader, so construct the path manually
-          var subPath = WZ_DATA_FILES_URL_SUBDIR;
-          if (!subPath.endsWith('/')) { subPath += '/'; }
-          subPath += path;
-          var dataURL = new URL(subPath, WZ_DATA_FILES_URL_HOST);
-          console.log(dataURL.toString());
-          return dataURL;
-        }
+        // Regular build-specific data files
+        var dataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + path;
+        console.debug('Loading: ' + dataURL);
+        return dataURL;
       }
       // otherwise, use the default, the prefix (JS file's dir) + the path
       return prefix + path;
