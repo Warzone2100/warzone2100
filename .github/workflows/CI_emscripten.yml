@@ -26,6 +26,8 @@ env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
   EMSDK_VERSION: 3.1.53
+  WZ_BUILD_DESC: web-wasm32
+  CMAKE_BUILD_PARALLEL_LEVEL: 4 # See: https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
 
 jobs:
   build:
@@ -54,6 +56,7 @@ jobs:
       run: |
         mkdir -p "${{ github.workspace }}/build"
         mkdir -p "${{ github.workspace }}/installed"
+        mkdir -p "${{ github.workspace }}/output"
 
     - name: Prep Build Environment
       run: |
@@ -102,3 +105,34 @@ jobs:
     - name: Debug Output
       working-directory: ${{github.workspace}}/installed
       run: ls -al
+  
+    - name: Package Archive
+      working-directory: '${{ github.workspace }}/build'
+      env:
+        OUTPUT_DIR: "${{ github.workspace }}/output"
+      run: |
+        cpack --config "./CPackConfig.cmake" -G ZIP -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -D CPACK_COMPONENTS_GROUPING=ALL_COMPONENTS_IN_ONE
+        OUTPUT_FILE_NAME="warzone2100_${WZ_BUILD_DESC}_archive.zip"
+        mv "./warzone2100_archive.zip" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+        echo "Generated .zip: \"${OUTPUT_FILE_NAME}\""
+        echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
+        echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
+        echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
+
+    - name: 'Upload Artifact - (Archive)'
+      uses: actions/upload-artifact@v3
+      if: success() && (github.repository == 'Warzone2100/warzone2100')
+      with:
+        name: warzone2100_${{ env.WZ_BUILD_DESC }}_archive
+        path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
+        if-no-files-found: 'error'
+
+    - name: Upload Release Assets
+      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true)
+      run: |
+        SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+        gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+        WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
