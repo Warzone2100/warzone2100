@@ -4083,7 +4083,7 @@
 		"weight": 250
 	},
 	"Rocket-MRL-Hvy": {
-		"buildPoints": 900,
+		"buildPoints": 800,
 		"buildPower": 150,
 		"damage": 40,
 		"designable": 1,
