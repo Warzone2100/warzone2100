@@ -3651,7 +3651,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 #if defined(__EMSCRIPTEN__)
 	if (!isAutoSave)
 	{
-		WZ_EmscriptenSyncPersistFSChanges(); // NOTE: Will block main loop iterations until it finishes (asynchronously)
+		WZ_EmscriptenSyncPersistFSChanges(true); // NOTE: Will block main loop iterations until it finishes (asynchronously)
 	}
 #endif
 

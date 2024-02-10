@@ -56,7 +56,7 @@ void initWZEmscriptenHelpers()
 	free(str); // Each call to _malloc() must be paired with free(), or heap memory will leak!
 }
 
-void WZ_EmscriptenSyncPersistFSChanges()
+void WZ_EmscriptenSyncPersistFSChanges(bool isUserInitiatedSave)
 {
 	emscripten_runtime_keepalive_push(); // Must be used so that onExit handlers aren't called
 	emscripten_pause_main_loop();
@@ -74,7 +74,7 @@ void WZ_EmscriptenSyncPersistFSChanges()
 			runtimeKeepalivePop();
 		};
 		try {
-			Module.wzSaveConfigDirToPersistentStore(() => {
+			wz_js_save_config_dir_to_persistent_storage($0, () => {
 				handleFinished();
 			});
 		}
@@ -83,7 +83,7 @@ void WZ_EmscriptenSyncPersistFSChanges()
 			// Always resume the main loop on error
 			handleFinished();
 		}
-	});
+	}, isUserInitiatedSave);
 }
 
 #endif

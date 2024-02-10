@@ -575,6 +575,37 @@
         let canvasContainer = document.getElementById('emscripten_container');
         canvasContainer.style.display = 'block';
       }
+      function wz_js_save_config_dir_to_persistent_storage(isUserInitiatedSave, callback) {
+        Module.wzSaveConfigDirToPersistentStore(() => {
+          if (!isUserInitiatedSave) {
+            // Immediately call the callback
+            if (callback) callback();
+            return;
+          }
+          // If it's a user-initiated save...
+          // Also check for permanent storage persistence, and potentially prompt the user if not enabled
+          if (!navigator.storage || !navigator.storage.persist) {
+            // Not available - Immediately call the callback
+            if (callback) callback();
+            return;
+          }
+          try {
+            navigator.storage.persist().then((persistent) => {
+              if (persistent) {
+                console.debug("Storage will not be cleared except by explicit user action");
+              } else {
+                console.debug("Storage may be cleared by the UA under storage pressure.");
+              }
+              if (callback) callback();
+            });
+          }
+          catch (err) {
+            // call the callback anyway
+            console.warn('navigator.storage.persist API appears to be unavailable');
+            if (callback) callback();
+          }
+        });
+      }
   </script>
   <script type='text/javascript'>
     
