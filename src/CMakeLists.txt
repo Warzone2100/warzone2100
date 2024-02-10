@@ -327,6 +327,14 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 		COMMAND ${CMAKE_COMMAND} -E rename "$<TARGET_FILE:warzone2100>" "$<TARGET_FILE_DIR:warzone2100>/index.html"
 		VERBATIM)
 
+	# Copy additional (optional) file packages to build dir to allow direct-running
+	foreach(_empackage_dir IN LISTS DATA_ADDITIONAL_EMPACKAGE_DIRS)
+		file(RELATIVE_PATH _empackage_dir_subdir_path "${DATA_ADDITIONAL_EMPACKAGE_BASEDIR}" "${_empackage_dir}")
+		add_custom_command(TARGET warzone2100 POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different "${_empackage_dir}" "$<TARGET_FILE_DIR:warzone2100>/pkg/${_empackage_dir_subdir_path}"
+			VERBATIM)
+	endforeach()
+
 	# If workbox-cli is available, generate a proper service worker
 	set(GENERATED_SERVICE_WORKER FALSE)
 	find_package(WorkboxCLI)
@@ -823,7 +831,7 @@ else()
 		install(DIRECTORY
 			${_empackage_dir}
 			COMPONENT Core
-			DESTINATION "${WZ_APP_INSTALL_DEST}")
+			DESTINATION "${WZ_APP_INSTALL_DEST}/pkg")
 	endforeach()
 
 	# Install service worker (and associated files)
@@ -843,14 +851,24 @@ else()
 		install(CODE "
 			execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}\")
 
-			file(GLOB _files_to_compress LIST_DIRECTORIES false \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.js\" \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.wasm\" \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.data\" \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.html\")
+			file(GLOB _files_to_compress LIST_DIRECTORIES false
+				\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.js\"
+				\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.wasm\"
+				\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.data\"
+				\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/*.html\"
+				\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/pkg/music/*.js\"
+				\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/pkg/terrain_overrides/*.js\"
+				\"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/pkg/terrain_overrides/*.data\"
+			)
 
 			list(LENGTH _files_to_compress _num_files_to_compress)
 			if (_num_files_to_compress GREATER 0)
 				foreach(_input_file IN LISTS _files_to_compress)
+					file(RELATIVE_PATH _input_file_relative_path \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}\" \"\${_input_file}\")
+					get_filename_component(_input_file_subdir_path \"\${_input_file_relative_path}\" DIRECTORY)
 					get_filename_component(_input_file_filename \"\${_input_file}\" NAME)
-					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Compressing file: \${_input_file_filename} -> \${_input_file_filename}.gz\")
-					file(ARCHIVE_CREATE OUTPUT \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\${_input_file_filename}.gz\" PATHS \"\${_input_file}\" FORMAT raw COMPRESSION GZip COMPRESSION_LEVEL 7)
+					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Compressing file: \${_input_file_subdir_path}/\${_input_file_filename} -> \${_input_file_subdir_path}/\${_input_file_filename}.gz\")
+					file(ARCHIVE_CREATE OUTPUT \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\${_input_file_subdir_path}/\${_input_file_filename}.gz\" PATHS \"\${_input_file}\" FORMAT raw COMPRESSION GZip COMPRESSION_LEVEL 7)
 				endforeach()
 			else()
 				message(WARNING \"Did not find any files to compress in: \${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/\")
