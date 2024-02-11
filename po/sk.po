@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-02-01 16:52\n"
+"PO-Revision-Date: 2024-02-11 10:09\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -4077,23 +4077,23 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:536
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Znič všetky nepriateľské jednotky a budovy"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:552
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Zozbieraných artefaktov"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:553
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Zničených základní"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:554
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Zostávajúce nepriateľské jednotky"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:555
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Zostávajúce nepriateľské budovy"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:561
 msgid "Return to LZ required"
