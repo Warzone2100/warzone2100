@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-25 16:34\n"
+"PO-Revision-Date: 2024-02-11 22:16\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -4053,7 +4053,7 @@ msgstr "Erforsche die Resistenzschaltkreise und überlebe den Angriff von Nexus"
 
 #: data/base/script/campaign/cam3-ad1.js:257
 msgid "Build a forward base at the silos"
-msgstr "Errichte eine vorgelagerte Basis bei den Silos"
+msgstr "Errichten Sie eine vorgelagerte Basis bei den Silos"
 
 #: data/base/script/campaign/cam3-ad2.js:278
 msgid "Protect the missile silos and research for the missile codes"
@@ -5795,7 +5795,7 @@ msgstr "Konnte benötigten Port (%s) auf (%s) nicht öffnen"
 #, c-format
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
-msgstr "Dein Router und deiner Firewall müssen manuell konfiguriert werden, um Port %d zu öffnen, bevor du ein Spiel leiten kannst."
+msgstr "Du musst Deinen Router und Deine Firewall manuell konfigurieren, um Port %d zu öffnen, bevor Du ein Spiel leiten kannst."
 
 #: lib/netplay/netplay.cpp:1590
 #, c-format
@@ -5811,7 +5811,7 @@ msgstr "Client bestätigte nicht den Wechsel des Spieler-Indexes"
 #: lib/netplay/netplay.cpp:2949
 #, c-format
 msgid "No UPnP device found. Configure your router/firewall to open port %d!"
-msgstr "Kein UPnP-Gerät gefunden. Konfiguriere deinen Router / deine Firewall, damit Port %d geöffnet ist!"
+msgstr "Kein UPnP-Gerät gefunden. Konfiguriere Deinen Router / Deine Firewall, damit Port %d geöffnet ist!"
 
 #: lib/netplay/netplay.cpp:3571
 #, c-format
@@ -12444,7 +12444,7 @@ msgstr "Wiederbewaffnungsgeschwindigkeit +30%"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
 #: po/custom/fromJson.txt:4714
 msgid "Reduce Scavenger Flamer Range"
-msgstr "Verringere die Flammenwerferreichweite der Scavenger"
+msgstr "Verringert die Flammenwerferreichweite der Scavenger"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -14107,7 +14107,7 @@ msgstr "In der Zange"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 #: po/custom/fromJson.txt:5803
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr "Mache die Reduktion der Flammenwerferreichweite von Scavanger rückgängig"
+msgstr "Macht die Reduktion der Flammenwerferreichweite von Scavenger rückgängig"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
