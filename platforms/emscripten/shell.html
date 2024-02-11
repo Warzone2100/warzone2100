@@ -90,6 +90,12 @@
         color: rgba(132,3,252,0.9)!important;
         border-color: rgba(132,3,252,0.9)!important;
       }
+      .storage-persistence-enabled { display: none; }
+      .storage-persistence-disabled { display: none; }
+      body.persist-enabled .storage-persistence-enabled { display: unset; }
+      body.persist-enabled .storage-persistence-loading { display: none; }
+      body.persist-disabled .storage-persistence-disabled { display: unset; }
+      body.persist-disabled .storage-persistence-loading { display: none; }
       #gameloadingspinner {
         z-index: 999;
         position: absolute;
@@ -287,6 +293,10 @@
         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
         <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
       </symbol>
+      <symbol id="bi-info-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+      </symbol>
       <symbol id="bi-mouse2" viewBox="0 0 16 16">
         <path d="M3 5.188C3 2.341 5.22 0 8 0s5 2.342 5 5.188v5.625C13 13.658 10.78 16 8 16s-5-2.342-5-5.188V5.189zm4.5-4.155C5.541 1.289 4 3.035 4 5.188V5.5h3.5zm1 0V5.5H12v-.313c0-2.152-1.541-3.898-3.5-4.154M12 6.5H4v4.313C4 13.145 5.81 15 8 15s4-1.855 4-4.188z"/>
       </symbol>
@@ -343,7 +353,7 @@
         <a class="nav-link fw-bold py-1 px-0 hide-on-standalone" href="https://wz2100.net" target="_blank" rel="noopener">Get the Full Version</a>
         <a class="nav-link fw-bold py-1 px-0" title="Donate" href="https://donations.wz2100.net" target="_blank" rel="noopener"><svg class="bi me-1"><use href="#bi-heart"></use></svg>Donate</a>
         <a class="nav-link fw-bold py-1 px-0" title="Discord Server" href="https://discord.com/invite/ZvRVQ8g" target="_blank" rel="noopener"><svg class="bi"><use href="#bi-discord"></use></svg></a>
-        <a class="nav-link fw-bold py-1 px-0" title="Options" data-bs-toggle="modal" data-bs-target="#launchOptions" href="#"><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></a>
+        <a class="nav-link fw-bold py-1 px-0" title="Options" onclick="wz_open_options_modal()" href="#"><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></a>
       </nav>
     </div>
   </header>
@@ -371,7 +381,7 @@
       <button type="button" class="btn btn-lg btn-primary fw-bold btn-wz-start-game" id="start-button" onclick="startGame()">Play Now</button>
     </p>
     <p class="mb-0 text-white" style="--bs-text-opacity: .4;">If this is your first time, this will download approximately 60MiB of data.</p>
-    <p class="pb-2 text-white small" style="--bs-text-opacity: .5;">Plays Best With: <svg class="bi me-1"><use href="#bi-mouse2"></use></svg><svg class="bi me-1"><use href="#bi-keyboard"></use></svg>Mouse &amp; Keyboard<span class="px-2">|</span><a class="options-link" data-bs-toggle="modal" data-bs-target="#launchOptions" href="#"><svg class="bi me-1"><use href="#bi-gear"></use></svg>View Options</a></p>
+    <p class="pb-2 text-white small" style="--bs-text-opacity: .5;">Plays Best With: <svg class="bi me-1"><use href="#bi-mouse2"></use></svg><svg class="bi me-1"><use href="#bi-keyboard"></use></svg>Mouse &amp; Keyboard<span class="px-2">|</span><a class="options-link" onclick="wz_open_options_modal();" href="#"><svg class="bi me-1"><use href="#bi-gear"></use></svg>View Options</a></p>
   </main>
   
   <main class="px-3" style="display: none;" id="loading-game">
@@ -508,10 +518,7 @@
                 </h2>
                 <div id="flush-advancedOptions" class="accordion-collapse collapse" data-bs-parent="#optionsAccordion">
                   <div class="accordion-body">
-                    <p>
-                      <button type="button" class="btn btn-sm btn-danger" data-bs-target="#resetDataPrompt" data-bs-toggle="modal">Reset Configuration &amp; Saved Data</button>
-                    </p>
-                    <form id="debug-flags-form">
+                    <form class="mb-3 small" id="debug-flags-form">
                       <label for="optional-data-form" class="form-label">Debug Log Options:</label>
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="launchOption_DebugWarning">
@@ -532,6 +539,25 @@
                         </label>
                       </div>
                     </form>
+                    <div class="mb-3 small">
+                      <div class="storage-persistence-loading">
+                        <div class="spinner-border me-2" style="width:1em; height:1em;" role="status"></div>
+                        <label>Checking storage status ...</label>
+                      </div>
+                      <div class="storage-persistence-enabled">
+                        <svg class="bi me-1"><use href="#bi-check-circle"></use></svg>
+                        <label>Storage Persistence: Enabled</label>
+                      </div>
+                      <div class="storage-persistence-disabled">
+                        <svg class="bi me-1"><use href="#bi-info-circle"></use></svg>
+                        <label>Storage Persistence: Not Enabled</label>
+                        <br>
+                        <span class="text-secondary">Game configuration and savegames may be automatically cleared by the browser.</span>
+                      </div>
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-sm btn-danger" data-bs-target="#resetDataPrompt" data-bs-toggle="modal">Reset Configuration &amp; Saved Data</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -768,6 +794,32 @@
     
     // DOM manipulation functions
     
+    function wz_open_options_modal() {
+      const launchoptions_modal = document.querySelector('#launchOptions');
+      const modal = bootstrap.Modal.getOrCreateInstance(launchoptions_modal);
+      modal.show();
+      
+      // Trigger check for persistent storage, so current status can be displayed
+      if (navigator.storage && navigator.storage.persist && navigator.storage.persisted) {
+        document.body.classList.remove('persist-enabled', 'persist-disabled');
+        navigator.storage.persisted().then((persistent) => {
+          if (persistent) {
+            console.debug("Storage will not be cleared except by explicit user action");
+            document.body.classList.remove('persist-disabled');
+            document.body.classList.add('persist-enabled');
+          } else {
+            console.debug("Storage may be cleared by the UA under storage pressure.");
+            document.body.classList.remove('persist-enabled');
+            document.body.classList.add('persist-disabled');
+          }
+        });
+      }
+      else {
+        console.debug("Storage persistence API unavailable");
+        document.body.classList.remove('persist-enabled');
+        document.body.classList.add('persist-disabled');
+      }
+    }
     function wz_dismiss_options_modal() {
       wz_save_launch_options();
       const launchoptions_modal = document.querySelector('#launchOptions');
