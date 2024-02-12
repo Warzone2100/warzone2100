@@ -300,6 +300,18 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(CPACK_DMG_DS_STORE_SETUP_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/dmg/WZDMGSetup.scpt")
 	set(CPACK_DMG_VOLUME_NAME "Warzone 2100")
 
+elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	# Emscripten builds
+
+	# Only install the "Core" component, as it installs all of the data & supporting files & languages
+	set(CPACK_COMPONENTS_ALL Core)
+	unset(CPACK_COMPONENT_CORE_DEPENDS)
+	set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+
+	# Default package generator for Emscripten (archive)
+	set(CPACK_GENERATOR "ZIP")
+	set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY FALSE)
+
 endif()
 
 #####################
