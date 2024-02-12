@@ -100,7 +100,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &
 static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static UDWORD	getTargettingGfx();
-static void	drawDroidGroupNumber(DROID *psDroid);
+static void	drawGroupNumber(BASE_OBJECT *psObject);
 static void	trackHeight(int desiredHeight);
 static void	renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4 &skyboxViewMatrix);
 static void	locateMouse();
@@ -501,7 +501,7 @@ public:
 				drawDroidRank(psDroid);
 				drawDroidSensorLock(psDroid);
 				drawDroidCmndNo(psDroid);
-				drawDroidGroupNumber(psDroid);
+				drawGroupNumber(psDroid);
 			}
 		}
 		// 3. weapon reload bar
@@ -516,6 +516,10 @@ public:
 			for (unsigned i = 0; i < psStruct->numWeaps; i++)
 			{
 				drawStructureTargetOriginIcon(psStruct, i);
+			}
+			if (psStruct->isFactory())
+			{
+				drawGroupNumber(psStruct);
 			}
 		}
 		// 3. structure weapon reload bars
@@ -3636,14 +3640,45 @@ static void drawDroidAndStructureSelections()
 }
 
 /* ---------------------------------------------------------------------------- */
-/// X offset to display the group number at
+/// X/Y offset to display the group number at
 #define GN_X_OFFSET	(8)
-/// Draw the number of the group the droid is in next to the droid
-static void	drawDroidGroupNumber(DROID *psDroid)
+#define GN_Y_OFFSET	(3)
+/// rendering of the unit's group next to the unit itself, 
+/// or the group that will be assigned to the unit after production in the factory
+static void	drawGroupNumber(BASE_OBJECT *psObject)
 {
 	UWORD id = UWORD_MAX;
+	UBYTE groupNumber = UBYTE_MAX;
+	int32_t x = 0, y = 0;
+	bool colored = false;
 
-	switch (psDroid->group)
+	if (auto *psDroid = dynamic_cast<DROID*>(psObject))
+	{
+		int32_t xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
+		int32_t yShift = psDroid->sDisplay.screenR;
+
+		x = psDroid->sDisplay.screenX - xShift;
+		y = psDroid->sDisplay.screenY + yShift;
+
+		groupNumber = psDroid->group;
+	} 
+	else if (auto *psStruct = dynamic_cast<STRUCTURE*>(psObject))
+	{
+		// same as in queueStructureHealth
+		int32_t scale = static_cast<int32_t>(MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth));
+		int32_t width = scale * 20;
+		int32_t scrX = psStruct->sDisplay.screenX;
+		int32_t scrY = static_cast<int32_t>(psStruct->sDisplay.screenY) + (scale * 10);
+		int32_t scrR = width;
+
+		x = scrX - scrR - GN_X_OFFSET;
+		y = scrY - GN_Y_OFFSET;
+
+		groupNumber = psStruct->productToGroup;
+		colored = true;
+	}
+
+	switch (groupNumber)
 	{
 	case 0:
 		id = IMAGE_GN_0;
@@ -3681,9 +3716,14 @@ static void	drawDroidGroupNumber(DROID *psDroid)
 
 	if (id != UWORD_MAX)
 	{
-		int xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
-		int yShift = psDroid->sDisplay.screenR;
-		iV_DrawImage(IntImages, id, psDroid->sDisplay.screenX - xShift, psDroid->sDisplay.screenY + yShift);
+		if (colored)
+		{
+			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 220, 115, 255) /* gold */);
+		}
+		else
+		{
+			iV_DrawImage(IntImages, id, x, y);
+		}
 	}
 }
 
