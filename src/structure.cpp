@@ -2475,7 +2475,12 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			*ppsDroid = nullptr;
 			return false;
 		}
-
+		// assign a group to the manufactured droid
+		if (psStructure->productToGroup != UBYTE_MAX)
+		{
+			psNewDroid->group = psStructure->productToGroup;
+			intGroupsChanged(psNewDroid->group); // update groups UI
+		}
 		setFactorySecondaryState(psNewDroid, psStructure);
 		const auto mapCoord = map_coord({x, y});
 		const auto psTile = mapTile(mapCoord);

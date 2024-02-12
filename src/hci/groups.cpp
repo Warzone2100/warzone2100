@@ -94,7 +94,7 @@ public:
 
 	void assignSelectedDroidsToGroup(size_t groupNumber)
 	{
-		assignDroidsToGroup(selectedPlayer, groupNumber, true);
+		assignObjectToGroup(selectedPlayer, groupNumber, true);
 	}
 
 private:

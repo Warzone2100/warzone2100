@@ -314,6 +314,7 @@ struct STRUCTURE : public BASE_OBJECT
 	STRUCT_ANIM_STATES	state;
 	UDWORD lastStateTime;
 	iIMDBaseShape *prebuiltImd;
+	UBYTE productToGroup = UBYTE_MAX;
 
 	inline Vector2i size() const { return pStructureType->size(rot.direction); }
 };
