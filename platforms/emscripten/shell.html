@@ -443,14 +443,14 @@
     <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <div class="small-screen-blocker">
-      <main class="px-3 py-3">
+    <div class="small-screen-blocker px-3">
+      <main class="py-3">
         <h1>Too Small</h1>
-        <p class="lead">Window / display is too small for Warzone 2100</p>
-        <p class="">Required Minimum: 640x480</p>
+        <p class="lead mb-0">Window / display is too small for Warzone 2100</p>
+        <p class="text-secondary">Required Minimum: 640x480</p>
       </main>
       <footer class="mt-auto text-white" style="--bs-text-opacity: .5;">
-        <p class="hide-on-standalone">Or get the Full Desktop version, with high-resolution remastered graphics, online multiplayer, better performance, and more.</p>
+        <p class="hide-on-standalone">Or get the Full Desktop version, with HQ remastered graphics, Online multiplayer, Better performance, and more.</p>
         <p class="hide-on-standalone">
           <a href="https://wz2100.net" class="btn btn-sm btn-outline-primary">Download Warzone 2100</a>
         </p>
@@ -522,19 +522,19 @@
                       <label for="optional-data-form" class="form-label">Debug Log Options:</label>
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="launchOption_DebugWarning">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <label class="form-check-label" for="launchOption_DebugWarning">
                           Warnings
                         </label>
                       </div>
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="launchOption_DebugInfo">
-                        <label class="form-check-label" for="flexCheckChecked">
+                        <label class="form-check-label" for="launchOption_DebugInfo">
                           Info
                         </label>
                       </div>
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="launchOption_Debug3D">
-                        <label class="form-check-label" for="flexCheckChecked">
+                        <label class="form-check-label" for="launchOption_Debug3D">
                           3D
                         </label>
                       </div>
@@ -664,8 +664,8 @@
         return 'sequences/'; // default is just relative to current path
       }
     })();
-    let WZ_MUSIC_BASE_URL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + 'pkg/music/';
-    let WZ_DATA_TERRAIN_BASE_URL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + 'pkg/terrain_overrides/';
+    let WZ_MUSIC_PKG_SUBDIR = 'pkg/music/';
+    let WZ_TERRAIN_PKG_SUBDIR = 'pkg/terrain_overrides/';
     
     // Initialize config dir suffix and the title badge (based on location pathname)
     var WZ_CONFIG_DIR_SUFFIX = "";
@@ -955,14 +955,10 @@
       // optional data file loads
       let start_optional_promises = data_load_promises.length;
       if (WZ_LAUNCH_OPTIONS['load_music']) {
-        // music data file
-        let musicJSURL = WZ_MUSIC_BASE_URL + 'warzone2100-music.js';
-        data_load_promises.push(loadScriptAsync(musicJSURL));
+        data_load_promises.push(loadScriptAsync(WZ_MUSIC_PKG_SUBDIR + 'warzone2100-music.js'));
       }
       if (WZ_LAUNCH_OPTIONS['load_classic_terrain']) {
-        // classic terrain pack
-        let terrainJSURL = WZ_DATA_TERRAIN_BASE_URL + 'warzone2100-terrain-classic.js';
-        data_load_promises.push(loadScriptAsync(terrainJSURL));
+        data_load_promises.push(loadScriptAsync(WZ_TERRAIN_PKG_SUBDIR + 'warzone2100-terrain-classic.js'));
       }
       
       Promise.allSettled(data_load_promises)
@@ -1352,13 +1348,13 @@
         // Shared data files
         // - music
         if (path === 'warzone2100-music.data') {
-          let musicDataURL = WZ_MUSIC_BASE_URL + path;
+          let musicDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_MUSIC_PKG_SUBDIR + path;
           console.debug('Loading: ' + musicDataURL);
           return musicDataURL;
         }
         // - terrain_overrides
         if (path.startsWith('warzone2100-terrain-')) {
-          let terrainDataURL = WZ_DATA_TERRAIN_BASE_URL + path;
+          let terrainDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_TERRAIN_PKG_SUBDIR + path;
           console.debug('Loading: ' + terrainDataURL);
           return terrainDataURL;
         }
