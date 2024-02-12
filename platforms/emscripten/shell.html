@@ -647,21 +647,6 @@
     var progressElement = document.getElementById('progress');
     const originalStartButtonContents = document.getElementById('start-button').innerHTML;
 
-    var WZ_CONFIG_DIR_SUFFIX = (() => {
-      // Determine default config dir suffix based on window.location, to ensure that separate branches get separate config directories
-      // If in root, no suffix. If in "/dev/", should be "-dev"
-      var pathArray = window.location.pathname.split('/').filter(n => n);
-      if (!window.location.pathname.endsWith('/') && pathArray.length > 0) {
-        pathArray.pop();
-      }
-      let dirSuffix = pathArray.join('-');
-      if (dirSuffix.length > 0) {
-        return "-" + dirSuffix;
-      }
-      else {
-        return "";
-      }
-    })();
     let WZ_DATA_FILES_URL_SUBDIR = (() => {
       return window.location.pathname.replace(/[^/]*$/, '');
     })();
@@ -682,17 +667,48 @@
     let WZ_MUSIC_BASE_URL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + 'pkg/music/';
     let WZ_DATA_TERRAIN_BASE_URL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + 'pkg/terrain_overrides/';
     
-    // Initialize title badge (based on location pathname)
+    // Initialize config dir suffix and the title badge (based on location pathname)
+    var WZ_CONFIG_DIR_SUFFIX = "";
     (function() {
+      
+      WZ_CONFIG_DIR_SUFFIX = (() => {
+        // Determine default config dir suffix based on window.location, to ensure that separate branches get separate config directories
+        var pathArray = window.location.pathname.split('/').filter(n => n);
+        if (!window.location.pathname.endsWith('/') && pathArray.length > 0) {
+          pathArray.pop();
+        }
+        let dirSuffix = pathArray.join('-');
+        if (dirSuffix.length > 0) {
+          return "-" + dirSuffix;
+        }
+        else {
+          return "";
+        }
+      })();
+      
       var el = document.getElementById('wz-title-badge');
-      if (/\/(latest|stable|web)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR) || WZ_DATA_FILES_URL_SUBDIR === '/' || WZ_DATA_FILES_URL_SUBDIR.length === 0) {
-         el.innerText = 'Web Edition';
+      if (/\/(latest|previous)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR) || WZ_DATA_FILES_URL_SUBDIR === '/' || WZ_DATA_FILES_URL_SUBDIR.length === 0) {
+        WZ_CONFIG_DIR_SUFFIX = "";
+        el.innerText = 'Web Edition';
       }
-      else if (/([\-\_]beta[\d]?|preview|prerelease|pre-release)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+      else if (/^\/release\/([^\/]+)/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+        // Release build (but possibly an older one, or a pre-release)
+        WZ_CONFIG_DIR_SUFFIX = "";
+        let tagname = WZ_DATA_FILES_URL_SUBDIR.match(/^\/release\/([^\/]+)/)[1];
+        el.innerText = tagname;
+        if (/[\-\_](beta|rc)[\d]*[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+          document.body.classList.add('prerelease');
+        }
+      }
+      else if (/(preview|prerelease)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+        WZ_CONFIG_DIR_SUFFIX = "";
         document.body.classList.add('prerelease');
         el.innerText = 'Pre-release';
       }
       else if (/\/(dev|development|master|main)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+        if (/\/(dev|development)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+          WZ_CONFIG_DIR_SUFFIX = "-dev";
+        }
         document.body.classList.add('dev-preview');
         el.innerText = 'Dev Preview';
       }
