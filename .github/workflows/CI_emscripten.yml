@@ -26,13 +26,27 @@ env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
   EMSDK_VERSION: 3.1.53
-  WZ_BUILD_DESC: web-wasm32
   CMAKE_BUILD_PARALLEL_LEVEL: 4 # See: https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
 
 jobs:
-  build:
-    name: 'wasm32'
+  web-build:
+    strategy:
+      matrix:
+        include:
+          - arch: "wasm32"
+            upload_artifact: true
+      fail-fast: false
+    name: '${{ matrix.arch }}'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
+    env:
+      WZ_WASM_ARCH: '${{ matrix.arch }}'
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    outputs:
+      # Needed by the release + other later jobs - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
+      WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
+      WZ_GITHUB_SHA: ${{ steps.checkout-config.outputs.WZ_GITHUB_SHA }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -57,6 +71,18 @@ jobs:
         mkdir -p "${{ github.workspace }}/build"
         mkdir -p "${{ github.workspace }}/installed"
         mkdir -p "${{ github.workspace }}/output"
+    - name: Compute build variables
+      run: |
+        WZ_DISTRIBUTOR="UNKNOWN"
+        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+          WZ_DISTRIBUTOR="wz2100.net"
+        fi
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
+        
+        WZ_BUILD_DESC="web_${WZ_WASM_ARCH}"
+        echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}"
+        echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" >> $GITHUB_ENV
 
     - name: Prep Build Environment
       run: |
@@ -91,7 +117,7 @@ jobs:
         # CMake Configure
         source "${CI_EMSDK_ENV_SCRIPT_PATH}"
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" "-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=wasm32-emscripten" "-DCMAKE_INSTALL_PREFIX:PATH=${WZ_INSTALL_DIR}" "${{ github.workspace }}/src"
+        cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" "-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=${WZ_WASM_ARCH}-emscripten" "-DCMAKE_INSTALL_PREFIX:PATH=${WZ_INSTALL_DIR}" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
 
     - name: CMake Build
@@ -121,18 +147,81 @@ jobs:
 
     - name: 'Upload Artifact - (Archive)'
       uses: actions/upload-artifact@v3
-      if: success() && (github.repository == 'Warzone2100/warzone2100')
+      if: success() && (matrix.upload_artifact == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ env.WZ_BUILD_DESC }}_archive
         path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
         if-no-files-found: 'error'
 
-    - name: Upload Release Assets
-      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true)
+  upload_to_release:
+    strategy:
+      matrix:
+        architecture: ["wasm32"]
+      fail-fast: false
+    name: 'Upload to Release'
+    permissions:
+      contents: write # Needed to upload to releases
+    runs-on: ubuntu-latest
+    if: (github.repository == 'Warzone2100/warzone2100') && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
+    needs: web-build
+    env:
+      WZ_WASM_ARCH: '${{ matrix.arch }}'
+      WZ_BUILD_DESC: 'web_${{ matrix.arch }}'
+    steps:
+    - name: Prep Environment
+      run: mkdir dl-archive
+    - name: Download Archive Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: 'warzone2100_${{ env.WZ_BUILD_DESC }}_archive'
+        path: ./dl-archive
+    - name: Upload Release Asset
       run: |
         SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
         gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}
-        WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
+        WZ_GITHUB_REF: ${{ needs.web-build.outputs.WZ_GITHUB_REF }}
+        WZ_FULL_OUTPUT_ZIP_PATH: ./dl-archive/warzone2100_${{ env.WZ_BUILD_DESC }}_archive.zip
+
+  publish_dev_build:
+    strategy:
+      matrix:
+        architecture: ["wasm32"]
+      fail-fast: false
+    name: 'Publish Dev Build (${{ matrix.architecture }})'
+    # Run on push to master branch (development build)
+    if: (github.repository == 'Warzone2100/warzone2100') && (github.event_name == 'push' && github.ref == 'refs/heads/master')
+    needs: web-build
+    uses: ./.github/workflows/publish_web_build.yml
+    with:
+      env: webedition_deploy_dev
+      architecture: ${{ matrix.architecture }}
+      artifact: 'warzone2100_web_${{ matrix.architecture }}_archive'
+      built-ref: ${{ needs.web-build.outputs.WZ_GITHUB_REF }}
+      built-commit-sha: ${{ needs.web-build.outputs.WZ_GITHUB_SHA }}
+      release: false
+      ssh-dest-host: ${{ vars.WZ_WEB_BUILD_UPLOAD_SSH_HOST }}
+    secrets: inherit
+  
+  publish_release_build:
+    strategy:
+      matrix:
+        architecture: ["wasm32"]
+      fail-fast: false
+    name: 'Publish Release Build (${{ matrix.architecture }})'
+    # Run on tag release automation build
+    # Note: the build will be uploaded to a /release/<tag>/ folder, but will not be set as the "latest" release until the GitHub Release is published
+    if: (github.repository == 'Warzone2100/warzone2100') && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
+    needs: web-build
+    uses: ./.github/workflows/publish_web_build.yml
+    with:
+      env: webedition_deploy_release
+      architecture: ${{ matrix.architecture }}
+      artifact: 'warzone2100_web_${{ matrix.architecture }}_archive'
+      built-ref: ${{ needs.web-build.outputs.WZ_GITHUB_REF }}
+      built-commit-sha: ${{ needs.web-build.outputs.WZ_GITHUB_SHA }}
+      release: true
+      ssh-dest-host: ${{ vars.WZ_WEB_BUILD_UPLOAD_SSH_HOST }}
+    secrets: inherit
