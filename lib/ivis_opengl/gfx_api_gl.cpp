@@ -57,8 +57,8 @@
 # endif
 
 // forward-declarations
-static std::unordered_set<std::string> supportedWebGLExtensions;
-static bool getWebGLExtensions();
+static std::unordered_set<std::string> enabledWebGLExtensions;
+static bool initWebGLExtensions();
 
 static int GLAD_GL_ES_VERSION_3_0 = 0;
 static int GLAD_GL_EXT_texture_filter_anisotropic = 0;
@@ -3137,38 +3137,59 @@ uint64_t gl_context::debugGetPerfValue(PERF_POINT pp)
 #endif
 }
 
+static std::vector<std::string> splitStringIntoVector(const char* pStr, char delimeter)
+{
+	const char *pStrBegin = pStr;
+	const char *pStrEnd = pStrBegin + strlen(pStr);
+	std::vector<std::string> result;
+	for (const char *i = pStrBegin; i < pStrEnd;)
+	{
+		const char *j = std::find(i, pStrEnd, delimeter);
+		result.push_back(std::string(i, j));
+		i = j + 1;
+	}
+	return result;
+}
+
+static std::vector<std::string> wzGLGetStringi_GL_EXTENSIONS_Impl()
+{
+	std::vector<std::string> extensions;
+
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (!glGetIntegerv || !glGetStringi)
+	{
+		return extensions;
+	}
+#endif
+
+	GLint ext_count = 0;
+	glGetIntegerv(GL_NUM_EXTENSIONS, &ext_count);
+	if (ext_count < 0)
+	{
+		ext_count = 0;
+	}
+	for (GLint i = 0; i < ext_count; i++)
+	{
+		const char *pGLStr = (const char*) glGetStringi(GL_EXTENSIONS, i);
+		if (pGLStr != nullptr)
+		{
+			extensions.push_back(std::string(pGLStr));
+		}
+	}
+
+	return extensions;
+}
+
 #if !defined(__EMSCRIPTEN__)
 
 // Returns a space-separated list of OpenGL extensions
-static std::string getGLExtensions()
+static std::vector<std::string> getGLExtensions()
 {
-	std::string extensions;
+	std::vector<std::string> extensions;
 	if (GLAD_GL_VERSION_3_0)
 	{
 		// OpenGL 3.0+
-		if (!glGetIntegerv || !glGetStringi)
-		{
-			return extensions;
-		}
-
-		GLint ext_count = 0;
-		glGetIntegerv(GL_NUM_EXTENSIONS, &ext_count);
-		if (ext_count < 0)
-		{
-			ext_count = 0;
-		}
-		for (GLint i = 0; i < ext_count; i++)
-		{
-			const char *pGLStr = (const char*) glGetStringi(GL_EXTENSIONS, i);
-			if (pGLStr != nullptr)
-			{
-				if (!extensions.empty())
-				{
-					extensions += " ";
-				}
-				extensions += pGLStr;
-			}
-		}
+		return wzGLGetStringi_GL_EXTENSIONS_Impl();
 	}
 	else
 	{
@@ -3177,7 +3198,7 @@ static std::string getGLExtensions()
 		const char *pExtensionsStr = (const char *) glGetString(GL_EXTENSIONS);
 		if (pExtensionsStr != nullptr)
 		{
-			extensions = std::string(pExtensionsStr);
+			extensions = splitStringIntoVector(pExtensionsStr, ' ');
 		}
 	}
 	return extensions;
@@ -3185,16 +3206,11 @@ static std::string getGLExtensions()
 
 #else
 
-static std::string getGLExtensions()
+// Return a list of *enabled* WebGL extensions
+static std::vector<std::string> getGLExtensions()
 {
-	std::string extensions;
-	char* spaceSeparatedExtensions = emscripten_webgl_get_supported_extensions();
-	if (spaceSeparatedExtensions)
-	{
-		extensions = std::string(spaceSeparatedExtensions);
-		free(spaceSeparatedExtensions);
-	}
-	return extensions;
+	// Note: Only works after initWebGLExtensions() has been called
+	return std::vector<std::string>(enabledWebGLExtensions.begin(), enabledWebGLExtensions.end());
 }
 
 #endif // !defined(__EMSCRIPTEN__)
@@ -3206,7 +3222,11 @@ std::map<std::string, std::string> gl_context::getBackendGameInfo()
 	backendGameInfo["openGL_renderer"] = opengl.renderer;
 	backendGameInfo["openGL_version"] = opengl.version;
 	backendGameInfo["openGL_GLSL_version"] = opengl.GLSLversion;
-	backendGameInfo["GL_EXTENSIONS"] = getGLExtensions();
+#if !defined(__EMSCRIPTEN__)
+	backendGameInfo["GL_EXTENSIONS"] = fmt::format("{}",fmt::join(getGLExtensions()," "));
+#else
+	backendGameInfo["GL_EXTENSIONS"] = fmt::format("{}",fmt::join(enabledWebGLExtensions," "));
+#endif
 	return backendGameInfo;
 }
 
@@ -3676,21 +3696,11 @@ bool gl_context::initGLContext()
 	khr_debug = false;
 #endif
 
-	std::string extensionsStr = getGLExtensions();
-	const char *extensionsBegin = extensionsStr.data();
-	const char *extensionsEnd = extensionsBegin + strlen(extensionsBegin);
-	std::vector<std::string> glExtensions;
-	for (const char *i = extensionsBegin; i < extensionsEnd;)
-	{
-		const char *j = std::find(i, extensionsEnd, ' ');
-		glExtensions.push_back(std::string(i, j));
-		i = j + 1;
-	}
-
 #if !defined(__EMSCRIPTEN__)
 
 	/* Dump extended information about OpenGL implementation to the console */
 
+	std::vector<std::string> glExtensions = getGLExtensions();
 	std::string line;
 	for (unsigned n = 0; n < glExtensions.size(); ++n)
 	{
@@ -3783,11 +3793,11 @@ bool gl_context::initGLContext()
 
 	debug(LOG_3D, "  * WebGL 2.0 %s supported!", WZ_WEB_GL_VERSION_2_0 ? "is" : "is NOT");
 
-	if (!getWebGLExtensions())
+	if (!initWebGLExtensions())
 	{
 		debug(LOG_ERROR, "Failed to get WebGL extensions");
 	}
-	GLAD_GL_EXT_texture_filter_anisotropic = supportedWebGLExtensions.count("EXT_texture_filter_anisotropic") > 0;
+	GLAD_GL_EXT_texture_filter_anisotropic = enabledWebGLExtensions.count("EXT_texture_filter_anisotropic") > 0;
 
 	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLAD_GL_EXT_texture_filter_anisotropic ? "is" : "is NOT");
 	// FUTURE TODO: Check and output other extensions
@@ -4048,17 +4058,23 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
 		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
 		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
-			if (supportedWebGLExtensions.count("WEBGL_compressed_texture_s3tc") > 0)
+			if (enabledWebGLExtensions.count("WEBGL_compressed_texture_s3tc") > 0)
 			{
 				retVal |= gfx_api::pixel_format_usage::sampled_image;
 			}
 			break;
 		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
 		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
-			// not supported
+			if (enabledWebGLExtensions.count("EXT_texture_compression_rgtc") > 0)
+			{
+				retVal |= gfx_api::pixel_format_usage::sampled_image;
+			}
 			break;
 		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
-			// not supported
+			if (enabledWebGLExtensions.count("EXT_texture_compression_bptc") > 0)
+			{
+				retVal |= gfx_api::pixel_format_usage::sampled_image;
+			}
 			break;
 		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
 			// not supported
@@ -4067,13 +4083,13 @@ static gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport_gl(GLenum t
 		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
 		case gfx_api::pixel_format::FORMAT_R11_EAC:
 		case gfx_api::pixel_format::FORMAT_RG11_EAC:
-			if (supportedWebGLExtensions.count("WEBGL_compressed_texture_etc") > 0)
+			if (enabledWebGLExtensions.count("WEBGL_compressed_texture_etc") > 0)
 			{
 				retVal |= gfx_api::pixel_format_usage::sampled_image;
 			}
 			break;
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
-			if (supportedWebGLExtensions.count("WEBGL_compressed_texture_astc") > 0)
+			if (enabledWebGLExtensions.count("WEBGL_compressed_texture_astc") > 0)
 			{
 				retVal |= gfx_api::pixel_format_usage::sampled_image;
 			}
@@ -4122,7 +4138,7 @@ void gl_context::initPixelFormatsSupport()
 
 	// S3TC
 	// WebGL: WEBGL_compressed_texture_s3tc
-	if (supportedWebGLExtensions.count("WEBGL_compressed_texture_s3tc") > 0)
+	if (enabledWebGLExtensions.count("WEBGL_compressed_texture_s3tc") > 0)
 	{
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM) // DXT1
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM) // DXT3
@@ -4133,14 +4149,28 @@ void gl_context::initPixelFormatsSupport()
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM) // DXT5
 	}
 
+	// RGTC
+	// WebGL: EXT_texture_compression_rgtc
+	if (enabledWebGLExtensions.count("EXT_texture_compression_rgtc") > 0)
+	{
+		// Note: EXT_texture_compression_rgtc does *NOT* support glCompressedTex*Image3D (even for 2d texture arrays)?
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R_BC4_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG_BC5_UNORM)
+	}
+
 	// BPTC
-	// WebGL: Theoretically could check EXT_texture_compression_bptc?
+	// WebGL: EXT_texture_compression_bptc
+	if (enabledWebGLExtensions.count("EXT_texture_compression_bptc") > 0)
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM)
+	}
 
 	// ETC1
 
 	// ETC2
 	// WebGL: WEBGL_compressed_texture_etc
-	if (supportedWebGLExtensions.count("WEBGL_compressed_texture_etc") > 0)
+	if (enabledWebGLExtensions.count("WEBGL_compressed_texture_etc") > 0)
 	{
 		// NOTES:
 		// WebGL 2.0 claims it is supported for 2d texture arrays
@@ -4173,7 +4203,7 @@ void gl_context::initPixelFormatsSupport()
 
 	// ASTC (LDR)
 	// WebGL: WEBGL_compressed_texture_astc
-	if (supportedWebGLExtensions.count("WEBGL_compressed_texture_astc") > 0)
+	if (enabledWebGLExtensions.count("WEBGL_compressed_texture_astc") > 0)
 	{
 		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
 		PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM)
@@ -5186,9 +5216,31 @@ gfx_api::abstract_texture* gl_context::getSceneTexture()
 }
 
 #if defined(__EMSCRIPTEN__)
-static bool getWebGLExtensions()
+
+static std::vector<std::string> getEmscriptenSupportedGLExtensions()
 {
-	supportedWebGLExtensions.clear();
+	// Use the GL_NUM_EXTENSIONS / GL_EXTENSIONS implementation to get the list of extensions that *Emscripten* natively supports
+	// This may be a subset of all the extensions that the browser supports
+	// (WebGL extensions must be enabled to be available)
+	auto extensions = wzGLGetStringi_GL_EXTENSIONS_Impl();
+
+	// Remove the "GL_" prefix that Emscripten may add
+	const std::string GL_prefix = "GL_";
+	for (auto& extensionStr : extensions)
+	{
+		if (extensionStr.rfind(GL_prefix, 0) == 0)
+		{
+			extensionStr = extensionStr.substr(GL_prefix.length());
+		}
+	}
+
+	return extensions;
+}
+
+static bool initWebGLExtensions()
+{
+	// Get list of _supported_ WebGL extensions (which may be a superset of the Emscripten-default-enabled ones)
+	std::unordered_set<std::string> supportedWebGLExtensions;
 	char* spaceSeparatedExtensions = emscripten_webgl_get_supported_extensions();
 	if (!spaceSeparatedExtensions)
 	{
@@ -5205,6 +5257,56 @@ static bool getWebGLExtensions()
 	}
 
 	free(spaceSeparatedExtensions);
+
+	// Get the list of Emscripten-enabled / default-supported WebGL extensions
+	auto glExtensionsResult = getEmscriptenSupportedGLExtensions();
+	std::unordered_set<std::string> emscriptenSupportedExtensionsList(glExtensionsResult.begin(), glExtensionsResult.end());
+
+	// Enable WebGL extensions
+	// NOTE: It is possible to compile for Emscripten without auto-enabling of the default set of extensions
+	// So we *MUST* always call emscripten_webgl_enable_extension() for each desired extension
+	enabledWebGLExtensions.clear();
+	auto ctx = emscripten_webgl_get_current_context();
+	auto tryEnableWebGLExtension = [&](const char* extensionName, bool bypassEmscriptenSupportedCheck = false) {
+		if (supportedWebGLExtensions.count(extensionName) == 0)
+		{
+			debug(LOG_3D, "Extension not available: %s", extensionName);
+			return;
+		}
+		if (!bypassEmscriptenSupportedCheck && emscriptenSupportedExtensionsList.count(extensionName) == 0)
+		{
+			debug(LOG_3D, "Skipping due to lack of Emscripten-advertised support: %s", extensionName);
+			return;
+		}
+		if (!emscripten_webgl_enable_extension(ctx, extensionName))
+		{
+			debug(LOG_3D, "Failed to enable extension: %s", extensionName);
+			return;
+		}
+
+		debug(LOG_3D, "Enabled extension: %s", extensionName);
+		enabledWebGLExtensions.insert(extensionName);
+	};
+
+	// NOTE: WebGL 2 includes some features by default (that used to be in extensions)
+	// See: https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html#features-you-can-take-for-granted
+
+	// general
+	tryEnableWebGLExtension("EXT_color_buffer_half_float");
+	tryEnableWebGLExtension("EXT_color_buffer_float");
+	tryEnableWebGLExtension("EXT_float_blend");
+	tryEnableWebGLExtension("EXT_texture_filter_anisotropic", true);
+	tryEnableWebGLExtension("OES_texture_float_linear");
+	tryEnableWebGLExtension("WEBGL_blend_func_extended");
+
+	// compressed texture format extensions
+	tryEnableWebGLExtension("WEBGL_compressed_texture_s3tc", true);
+	tryEnableWebGLExtension("WEBGL_compressed_texture_s3tc_srgb", true);
+	tryEnableWebGLExtension("EXT_texture_compression_rgtc", true);
+	tryEnableWebGLExtension("EXT_texture_compression_bptc", true);
+	tryEnableWebGLExtension("WEBGL_compressed_texture_etc", true);
+	tryEnableWebGLExtension("WEBGL_compressed_texture_astc", true);
+
 	return true;
 }
 #endif
