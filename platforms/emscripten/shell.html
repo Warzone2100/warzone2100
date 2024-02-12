@@ -39,6 +39,9 @@
       .options-link:hover{
         text-decoration: underline!important;
       }
+      .nav-wz-img {
+        margin-top: -3px;
+      }
       .nav-masthead .nav-link {
         color: rgba(255, 255, 255, .5);
         border-bottom: .25rem solid transparent;
@@ -348,7 +351,7 @@
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="mb-auto">
     <div>
-      <span class="h3 float-md-start mb-0"><img src="assets/android-chrome-192x192.png" width="42px" class="me-2">Warzone 2100 <span class="web-edition-badge d-inline-flex mb-3 px-2 py-1 fw-semibold border rounded-2 align-text-top" id="wz-title-badge">Web Edition</span></span>
+      <span class="h3 float-md-start mb-0"><img src="assets/android-chrome-192x192.png" width="42px" height="42px" class="me-2 nav-wz-img">Warzone 2100 <span class="web-edition-badge d-inline-flex mb-3 px-2 py-1 fw-semibold border rounded-2 align-text-top" id="wz-title-badge">Web Edition</span></span>
       <nav class="nav nav-masthead justify-content-center float-md-end">
         <a class="nav-link fw-bold py-1 px-0 hide-on-standalone" href="https://wz2100.net" target="_blank" rel="noopener">Get the Full Version</a>
         <a class="nav-link fw-bold py-1 px-0" title="Donate" href="https://donations.wz2100.net" target="_blank" rel="noopener"><svg class="bi me-1"><use href="#bi-heart"></use></svg>Donate</a>
@@ -386,8 +389,8 @@
   
   <main class="px-3" style="display: none;" id="loading-game">
     <h1>Loading ...</h1>
-    <div class="emscripten" id="status"></div>
-    <div class="emscripten" style="block-size: 1em;">
+    <div class="emscripten" id="status" style="block-size: 1.5em;"></div>
+    <div class="emscripten" style="block-size: 1.5em;">
       <progress value="0" max="100" id="progress" hidden=1></progress>
     </div>
     <p class="lead">&nbsp;</p>
@@ -1235,26 +1238,38 @@
         }
       }, 10);
     });
+    
+    function wz_expected_content_length(file, contentLength) {
+      // The content-length header may be missing or smaller than the received content (for example, when compressing before transmitting)
+      if (file.endsWith("warzone2100.wasm")) {
+        // The main .wasm file - just hard-code at least 10 MB for now
+        return Math.max((contentLength) ? contentLength : 0, 10 * 1024 * 1024);
+      } else {
+        if (!contentLength) { return 5 * 1024 * 1024; } // use a default of 5MB (to show some sort of progress)
+        return contentLength;
+      }
+    }
   
     // Monkeypatch WebAssembly downloading to have a progress bar
     // inspired from: https://github.com/WordPress/wordpress-playground/pull/46 (but modified)
-    function monkeyPatch(progressFun) {
+    function monkeyPatchWASMInst(progressFun) {
       const _instantiateStreaming = WebAssembly.instantiateStreaming;
       WebAssembly.instantiateStreaming = (response, ...args) => {
         const file = response.url.substring(
           new URL(response.url).origin.length + 1
         );
+        const contentLength = response.headers.get("content-length");
+        let total = wz_expected_content_length(file, parseInt(contentLength, 10));
+        
         const reportingResponse = new Response(
           new ReadableStream({
             async start(controller) {
-              const contentLength = response.headers.get("content-length");
-              const total = parseInt(contentLength, 10);
               const reader = response.clone().body.getReader();
               let loaded = 0;
               for (; ;) {
                 const { done, value } = await reader.read();
                 if (done) {
-                  progressFun(file, total, total);
+                  progressFun(file, loaded, loaded);
                   break;
                 }
                 loaded += value.byteLength;
@@ -1277,12 +1292,17 @@
         return _instantiateStreaming(reportingResponse, ...args);
       }
     }
-    monkeyPatch((file, done, total) => {
+    monkeyPatchWASMInst((file, done, total) => {
       let percent = ((done/total)*100).toFixed(2);
       let mib = (done/1024**2).toFixed(2);
-      statusElement.innerHTML = `Downloading app: ${percent}% (${mib}MiB)`;
       progressElement.value = (done / 1024);
-      progressElement.max = (total / 1024);
+      if (done <= total) {
+        statusElement.innerHTML = `Downloading app: ${percent}% (${mib}MiB)`;
+        progressElement.max = (total / 1024);
+      } else {
+        statusElement.innerHTML = `Downloading app: ... (${mib}MiB)`;
+        progressElement.max = (done / 1024);
+      }
       progressElement.hidden = false;
     });
 
