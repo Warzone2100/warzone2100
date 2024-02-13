@@ -1226,6 +1226,17 @@ int getRecoil(WEAPON const &weapon)
 	return 0;
 }
 
+/* Droid was completely repaired by another droid, auto-repair, or repair facility */
+void droidWasFullyRepairedAny(DROID *psDroid)
+{
+	if (psDroid->repairGroup != UBYTE_MAX)
+	{
+		psDroid->group = psDroid->repairGroup;
+		psDroid->repairGroup = UBYTE_MAX;
+		intGroupsChanged(psDroid->group); // update groups UI
+	}
+}
+
 void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
 {
 	const bool prevWasRTR = psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED;
@@ -1247,6 +1258,8 @@ void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
 		objTrace(psDroid->id, "Repair complete - guarding the place at x=%i y=%i", psDroid->pos.x, psDroid->pos.y);
 		orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y, ModeImmediate);
 	}
+
+	droidWasFullyRepairedAny(psDroid);
 } 
 
 bool droidUpdateRepair(DROID *psDroid)
@@ -1305,7 +1318,12 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 
 	CHECK_DROID(psRepairDroid);
 	/* if not finished repair return true else complete repair and return false */
-	return psDroidToRepair->body < psDroidToRepair->originalBody;
+	bool needMoreRepair = psDroidToRepair->body < psDroidToRepair->originalBody;
+	if (!needMoreRepair)
+	{
+		droidWasFullyRepairedAny(psDroidToRepair);
+	}
+	return needMoreRepair;
 }
 
 bool droidUpdateDroidRepair(DROID *psRepairDroid)
@@ -1864,6 +1882,7 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 			{
 				/* Set them to the right group - they can only be a member of one group */
 				psDroid->group = (UBYTE)groupNumber;
+				psDroid->repairGroup = UBYTE_MAX;
 				bAtLeastOne = true;
 			}
 		}
@@ -1911,6 +1930,7 @@ void removeObjectFromGroup(UDWORD playerNumber)
 		if (psDroid->selected)
 		{
 			psDroid->group = UBYTE_MAX;
+			psDroid->repairGroup = UBYTE_MAX;
 			removedCount++;
 		}
 	}

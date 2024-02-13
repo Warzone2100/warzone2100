@@ -95,6 +95,7 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	{
 		psGroup = grpCreate();
 		psGroup->add(psCommander);
+		psDroid->repairGroup = UBYTE_MAX;
 		psDroid->group = UBYTE_MAX;
 	}
 
@@ -103,6 +104,7 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		addedToGroup = true;
 
 		psCommander->psGroup->add(psDroid);
+		psDroid->repairGroup = UBYTE_MAX;
 		psDroid->group = UBYTE_MAX;
 
 		// set the secondary states for the unit
