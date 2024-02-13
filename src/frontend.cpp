@@ -86,6 +86,10 @@
 
 #include <fmt/core.h>
 
+#if defined(__EMSCRIPTEN__)
+# include "emscripten_helpers.h"
+#endif
+
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
 
@@ -3526,7 +3530,11 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 	cache.formattedVersionString.setText(version_getFormattedVersionString(), font_regular);
 	cache.modListText.setText(modListText, font_regular);
+#if defined(__EMSCRIPTEN__)
+	cache.gfxBackend.setText(WZ_EmscriptenGetBottomRendererSysInfoString(), font_small);
+#else
 	cache.gfxBackend.setText(WzString::fromUtf8(gfx_api::context::get().getFormattedRendererInfoString()), font_small);
+#endif
 
 	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, WZCOL_GREY, 270.f);
 

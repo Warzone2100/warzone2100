@@ -1651,6 +1651,8 @@ void osSpecificPostInit()
 {
 #if defined(WZ_OS_WIN)
 	osSpecificPostInit_Win();
+#elif defined(__EMSCRIPTEN__)
+	initWZEmscriptenHelpers_PostInit();
 #else
 	// currently, no-op
 #endif

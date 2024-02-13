@@ -250,9 +250,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MINIFY_HTML=0") # Disable MINIFY_HTML
 
+	# Stack and memory usage
 	target_link_options(warzone2100 PRIVATE "SHELL:-s TOTAL_STACK=10485760")
-	target_link_options(warzone2100 PRIVATE "SHELL:-s INITIAL_MEMORY=268435456")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s INITIAL_MEMORY=268435456") # 256 MB
 	target_link_options(warzone2100 PRIVATE "SHELL:-s ALLOW_MEMORY_GROWTH=1")
+	# NOTE: WZ's shell.html handles intelligently detecting and picking a maximum for the WebAssembly.Memory request
+
 	target_link_options(warzone2100 PRIVATE "SHELL:-s DEMANGLE_SUPPORT=1")
 #	target_link_options(warzone2100 PRIVATE "SHELL:-s GL_ASSERTIONS=1") # Useful for debugging, but impacts performance
 #	target_link_options(warzone2100 PRIVATE "SHELL:-s LZ4=1") # LZ4 can't be used while also supporting gettext translations (no support for mmap in LZ4 filesystem backend)
