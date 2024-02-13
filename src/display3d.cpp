@@ -3650,7 +3650,8 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 	UWORD id = UWORD_MAX;
 	UBYTE groupNumber = UBYTE_MAX;
 	int32_t x = 0, y = 0;
-	bool colored = false;
+	bool isFactory = false;
+	bool wentToRepair = false;
 
 	if (auto *psDroid = dynamic_cast<DROID*>(psObject))
 	{
@@ -3660,7 +3661,12 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 		x = psDroid->sDisplay.screenX - xShift;
 		y = psDroid->sDisplay.screenY + yShift;
 
-		groupNumber = psDroid->group;
+		if (psDroid->repairGroup != UBYTE_MAX) {
+			groupNumber = psDroid->repairGroup;
+			wentToRepair = true;
+		} else {
+			groupNumber = psDroid->group;
+		}
 	} 
 	else if (auto *psStruct = dynamic_cast<STRUCTURE*>(psObject))
 	{
@@ -3675,7 +3681,7 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 		y = scrY - GN_Y_OFFSET;
 
 		groupNumber = psStruct->productToGroup;
-		colored = true;
+		isFactory = true;
 	}
 
 	switch (groupNumber)
@@ -3716,7 +3722,11 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 
 	if (id != UWORD_MAX)
 	{
-		if (colored)
+		if (wentToRepair)
+		{
+			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 0, 0, 255) /* red */);
+		}
+		else if (isFactory)
 		{
 			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 220, 115, 255) /* gold */);
 		}
