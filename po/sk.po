@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-02-13 03:57\n"
+"PO-Revision-Date: 2024-02-13 17:40\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -4853,7 +4853,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "Musíš ich zastaviť!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
@@ -4865,7 +4865,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "SEVERNÝ SEKTOR"
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
@@ -4929,7 +4929,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "Please assist."
-msgstr ""
+msgstr "Prosím pomôžte."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:3
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
@@ -5113,12 +5113,12 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19. Január 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "Severná Amerika"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
