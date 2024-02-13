@@ -29,8 +29,12 @@ function wzSetupPersistentConfigDir() {
 function wzSaveConfigDirToPersistentStore(callback) {
 	let configDirPath = Module['WZVAL_configDirPath'];
 	FS.syncfs(false, (err) => {
-		console.log('saved to idbfs', FS.readdir(configDirPath));
-		if (callback) callback();
+		if (!err) {
+			console.log('saved to idbfs', FS.readdir(configDirPath));
+		} else {
+			console.warn('Failed to save to idbfs store - data may not be persisted');
+		}
+		if (callback) callback(err);
 	})
 }
 Module.wzSaveConfigDirToPersistentStore = wzSaveConfigDirToPersistentStore;
