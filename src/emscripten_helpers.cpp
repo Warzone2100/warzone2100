@@ -23,6 +23,8 @@
 #include <emscripten.h>
 #include <emscripten/eventloop.h>
 #include <cstdlib>
+#include <algorithm>
+#include "lib/ivis_opengl/gfx_api.h"
 
 /* Older Emscriptens don't have this, but it's needed for wasm64 compatibility. */
 #ifndef MAIN_THREAD_EM_ASM_PTR
@@ -36,6 +38,7 @@
 EM_JS_DEPS(wz2100emhelpers, "$stringToUTF8,$UTF8ToString");
 
 static std::string windowLocationURL;
+static WzString emBottomRendererSystemInfoText;
 
 std::string WZ_GetEmscriptenWindowLocationURL()
 {
@@ -54,6 +57,40 @@ void initWZEmscriptenHelpers()
 	});
 	windowLocationURL = (str) ? str : "";
 	free(str); // Each call to _malloc() must be paired with free(), or heap memory will leak!
+}
+
+void initWZEmscriptenHelpers_PostInit()
+{
+	// Generate bottom renderer + system info text
+	emBottomRendererSystemInfoText.clear();
+	if (gfx_api::context::isInitialized())
+	{
+		emBottomRendererSystemInfoText = WzString::fromUtf8(gfx_api::context::get().getFormattedRendererInfoString());
+	}
+	else
+	{
+		ASSERT(gfx_api::context::isInitialized(), "Function called before gfx context initialized");
+		emBottomRendererSystemInfoText = "WebGL";
+	}
+	emBottomRendererSystemInfoText.append(" | Available Memory: ");
+	emBottomRendererSystemInfoText.append(WzString::number(WZ_EmscriptenGetMaximumMemoryMiB()));
+	emBottomRendererSystemInfoText.append(" MiB");
+}
+
+unsigned int WZ_EmscriptenGetMaximumMemoryMiB()
+{
+	int result = MAIN_THREAD_EM_ASM_INT({
+		if (typeof wz_js_get_maximum_memory_mib !== "function") {
+			return 0;
+		}
+		return wz_js_get_maximum_memory_mib();
+	});
+	return static_cast<unsigned int>(std::max<int>(result, 0));
+}
+
+const WzString& WZ_EmscriptenGetBottomRendererSysInfoString()
+{
+	return emBottomRendererSystemInfoText;
 }
 
 void WZ_EmscriptenSyncPersistFSChanges(bool isUserInitiatedSave)

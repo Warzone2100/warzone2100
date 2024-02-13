@@ -604,6 +604,12 @@
         let canvasContainer = document.getElementById('emscripten_container');
         canvasContainer.style.display = 'block';
       }
+      function wz_js_get_maximum_memory_mib() {
+        if (!Module.hasOwnProperty('wzMaximumMemory')) {
+          return 0; // not initialized yet
+        }
+        return Math.trunc(Module['wzMaximumMemory'] / 1024 / 1024);
+      }
       function wz_js_save_config_dir_to_persistent_storage(isUserInitiatedSave, callback) {
         Module.wzSaveConfigDirToPersistentStore((err) => {
           if (err || !isUserInitiatedSave) {
@@ -898,6 +904,70 @@
         document.head.appendChild(element);
       });
     }
+    
+    function allocateWZWasmMemory() {
+      let initialMemory = 268435456; // 256 MB
+      let INITIAL_MAX_MEMORY = 2147483648; // 2 GB
+      let maximumMemory = INITIAL_MAX_MEMORY;
+      
+      if (LOCALSTORAGE_AVAILABLE) {
+        // Check any last stored attempt
+        let lastRunJSON = localStorage.getItem("lastRun_Details");
+        if (lastRunJSON) {
+          let lastRun = JSON.parse(lastRunJSON);
+          if (lastRun['maxMem'] && lastRun['maxMem'] >= 1073741824) {
+            if (lastRun['success']) {
+              // Start this run at the same memory request as last successful run
+              maximumMemory = lastRun['maxMem'];
+            }
+            else {
+              // Start this run at the memory we got for the last attempt, minus a buffer to account for data files, etc
+              maximumMemory = lastRun['maxMem'] - 268435456; // - 256 MiB
+            }
+          }
+        }
+      }
+      
+      let wasmMemory;
+      let retryAllocate = false;
+      do {
+        retryAllocate = false;
+        try {
+          wasmMemory = new WebAssembly.Memory({
+              "initial": initialMemory / 65536,
+              "maximum": maximumMemory / 65536,
+              "shared": true
+          });
+        } catch (e) {
+          if (e instanceof RangeError) {
+            // reduce maximumMemory and try again - some browsers / systems may fail out because starting maximum is too high
+            if (maximumMemory > 1073741824) { // > 1GiB
+              maximumMemory -= 268435456; // reduce by 256 MiB chunks
+            } else if (maximumMemory >= 805306368) { // >= 768 MiB
+              maximumMemory -= 134217728; // reduce by 128 MiB chunks
+            } else {
+              console.error("Failed to allocate memory of necessary size - please restart your browser");
+              throw Error("Failed to allocate memory of necessary size - please restart your browser");
+            }
+            retryAllocate = true;
+          }
+          else {
+            throw e;
+          }
+        }
+      } while (retryAllocate);
+      
+      if (!(wasmMemory.buffer instanceof SharedArrayBuffer)) {
+          console.error("Requested a shared WebAssembly.Memory but the returned buffer is not a SharedArrayBuffer, indicating that while the browser has SharedArrayBuffer it does not have WebAssembly threads support - you may need to set a flag");
+          throw Error("bad memory");
+      }
+      
+      let initialMB = initialMemory / 1024 / 1024;
+      let maximumMB = maximumMemory / 1024 / 1024;
+      console.log(`WebAssembly.Memory {allocated: ${initialMB} MiB, maximum memory: ${maximumMB} MiB}`);
+      
+      return { wasmMemory: wasmMemory, maximumMemory: maximumMemory };
+    }
 
     function startGame() {
       // Make canvas visible
@@ -917,6 +987,17 @@
       
       function actuallyStartGame() {
         setTimeout( function() {
+          
+          // try to create WebAssembly.Memory
+          let {wasmMemory, maximumMemory} = allocateWZWasmMemory();
+          Module["wasmMemory"] = wasmMemory;
+          Module["wzMaximumMemory"] = maximumMemory;
+          
+          if (LOCALSTORAGE_AVAILABLE) {
+            // Store this attempt, for future use
+            localStorage.setItem('lastRun_Details', JSON.stringify({ maxMem: maximumMemory, success: 0, time: (new Date()).getTime() }));
+          }
+          
           createWZModule(Module).then(function(Module) {
             // this is reached when everything is ready, and you can call methods on Module
             // Hide the loading-game panel
@@ -931,6 +1012,11 @@
             // Handle triggering update modal
             if (window.wz_update_pending) {
               wz_display_update_available_refresh_needed();
+            }
+            
+            if (LOCALSTORAGE_AVAILABLE) {
+              // Store this successful run, for future use
+              localStorage.setItem('lastRun_Details', JSON.stringify({ maxMem: maximumMemory, success: 1, time: (new Date()).getTime() }));
             }
           })
           .catch((error) => {
@@ -1353,8 +1439,13 @@
     function wz_pre_run_fixup_canvas() {
       Module.canvas.style.backgroundColor = "black";
     }
+    
+    function wz_handle_post_run() {
+      Module.wzEncounteredPostRun = true;
+    }
   
     Module['preRun'].push(wz_pre_run_fixup_canvas);
+    Module['postRun'].push(wz_handle_post_run);
     Module.arguments = ['--configdir='+wz_js_get_config_dir_path()];
     if (WZ_VIDEO_SEQUENCES_BASE_URL !== null) {
       Module.arguments.push('--videourl='+WZ_VIDEO_SEQUENCES_BASE_URL);
@@ -1399,7 +1490,8 @@
       Module.setStatus = function(text) {
         if (text) console.log('[post-exception status] ' + text);
       };
-      if (!Module.hasOwnProperty('calledRun') || !Module.calledRun) {
+      if (!Module.hasOwnProperty('calledRun') || !Module.calledRun
+          || !Module.hasOwnProperty('wzEncounteredPostRun') || !Module.wzEncounteredPostRun) {
         wz_display_loading_error(event);
       }
     };

@@ -22,12 +22,16 @@
 #if defined(__EMSCRIPTEN__)
 
 #include <string>
+#include "lib/framework/wzstring.h"
 
 std::string WZ_GetEmscriptenWindowLocationURL();
+const WzString& WZ_EmscriptenGetBottomRendererSysInfoString();
 
+unsigned int WZ_EmscriptenGetMaximumMemoryMiB();
 void WZ_EmscriptenSyncPersistFSChanges(bool isUserInitiatedSave);
 
 // must be called on the main thread
 void initWZEmscriptenHelpers();
+void initWZEmscriptenHelpers_PostInit();
 
 #endif
