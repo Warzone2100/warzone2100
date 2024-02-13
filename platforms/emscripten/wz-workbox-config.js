@@ -74,7 +74,7 @@ module.exports = {
 		// Backup on-demand caching of any additional utilized CSS and JS files for offline use
 		// (useful in case someone forgot to update the additionalManifestEntries above)
 		{
-			urlPattern: new RegExp('/.*\.(js|css)$'),
+			urlPattern: ({url}) => (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) && url.origin !== 'https://static.cloudflareinsights.com',
 			handler: 'NetworkFirst',
 			options: {
 				cacheName: 'additional-dependencies',
