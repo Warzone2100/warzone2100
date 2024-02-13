@@ -3295,6 +3295,10 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 	{
 		if (!psDroid->isVtol())
 		{
+			if (psDroid->group != UBYTE_MAX)
+			{
+				psDroid->repairGroup = psDroid->group;
+			}
 			psDroid->group = UBYTE_MAX;
 		}
 
@@ -3754,7 +3758,10 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 			}
 			CurrState &= ~(DSS_RTL_MASK | DSS_RECYCLE_MASK | DSS_HALT_MASK);
 			CurrState |= DSS_RECYCLE_SET | DSS_HALT_GUARD;
+			UBYTE prevGroup = psDroid->group;
 			psDroid->group = UBYTE_MAX;
+			psDroid->repairGroup = UBYTE_MAX;
+			intGroupsChanged(prevGroup);
 			if (psDroid->psGroup != nullptr)
 			{
 				if (psDroid->droidType == DROID_COMMAND)
