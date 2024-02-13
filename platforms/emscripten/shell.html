@@ -605,8 +605,8 @@
         canvasContainer.style.display = 'block';
       }
       function wz_js_save_config_dir_to_persistent_storage(isUserInitiatedSave, callback) {
-        Module.wzSaveConfigDirToPersistentStore(() => {
-          if (!isUserInitiatedSave) {
+        Module.wzSaveConfigDirToPersistentStore((err) => {
+          if (err || !isUserInitiatedSave) {
             // Immediately call the callback
             if (callback) callback();
             return;
