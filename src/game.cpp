@@ -3649,10 +3649,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	CurrentFileName[fileExtension - 1] = '\0';
 
 #if defined(__EMSCRIPTEN__)
-	if (!isAutoSave)
-	{
-		WZ_EmscriptenSyncPersistFSChanges(true); // NOTE: Will block main loop iterations until it finishes (asynchronously)
-	}
+	WZ_EmscriptenSyncPersistFSChanges(!isAutoSave); // NOTE: Will block main loop iterations until it finishes (asynchronously)
 #endif
 
 	/* Start the game clock */
