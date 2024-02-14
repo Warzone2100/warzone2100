@@ -274,6 +274,7 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 		# limit backdrops included on Emscripten (to save space)
 		file(GLOB TEXPAGES_BACKDROPS
 			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/bdrops/backdrop0.png"
+			"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/bdrops/missionend.png"
 		)
 	else()
 		set(TEXPAGES_BACKDROPS ${TEXPAGES_BACKDROPS_ALL})
