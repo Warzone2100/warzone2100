@@ -611,6 +611,17 @@
         </div>
       </div>
     </div>
+    <!-- Runtime error toast -->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3 text-start" id="runtimeErrToastContainer">
+      <div id="runtimeErrToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-theme="dark">
+        <div class="toast-header">
+          <svg class="bi me-2"><use href="#bi-emoji-frown"></use></svg><strong class="me-auto">Runtime Error:</strong><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.reload();">Restart WZ</button><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+        <p>Warzone 2100 has encountered an error:</p><p class="small mb-1 text-secondary" id="runtimeErrorDetails"></p>
+        </div>
+      </div>
+    </div>
   <script type='text/javascript'>
       // JS APIs called from WZ code
       function wz_js_display_loading_indicator(enabled) {
@@ -980,6 +991,14 @@
       document.getElementById('loading-error-message').innerText = errorStr;
       document.getElementById('loading-game').style.display = 'none';
       wz_js_display_loading_indicator(0);
+    }
+    function wz_display_runtime_error(errorStr) {
+      document.getElementById('runtimeErrToastContainer').style.display = 'block';
+      let errorDetailsEl = document.getElementById('runtimeErrorDetails');
+      if (errorDetailsEl.innerHTML.trim().length == 0) { // only set this once
+        document.getElementById('runtimeErrorDetails').innerText = errorStr;
+      }
+      bootstrap.Toast.getOrCreateInstance(document.getElementById('runtimeErrToast')).show();
     }
     function wz_display_update_available_refresh_needed() {
       if (Module && Module.hasOwnProperty('pauseMainLoop')) {
@@ -1616,6 +1635,9 @@
       if (!Module.hasOwnProperty('calledRun') || !Module.calledRun
           || !Module.hasOwnProperty('wzEncounteredPostRun') || !Module.wzEncounteredPostRun) {
         wz_display_loading_error(event);
+      }
+      else {
+        wz_display_runtime_error(event);
       }
     };
     
