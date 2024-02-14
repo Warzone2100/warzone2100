@@ -271,9 +271,11 @@ protected:
 		if (factory->psAssemblyPoint == nullptr)
 		{
 			factoryNumberLabel->setString("");
-			return;
 		}
-		factoryNumberLabel->setString(WzString::fromUtf8(astringf("%u", factory->psAssemblyPoint->factoryInc + 1)));
+		else
+		{
+			factoryNumberLabel->setString(WzString::fromUtf8(astringf("%u", factory->psAssemblyPoint->factoryInc + 1)));
+		}
 		if (psStruct->productToGroup != UBYTE_MAX)
 		{
 			factoryAssignGroupLabel->setString(WzString::fromUtf8(astringf("%u", psStruct->productToGroup)));
