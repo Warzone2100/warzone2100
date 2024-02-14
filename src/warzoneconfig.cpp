@@ -40,9 +40,15 @@ constexpr int MAX_OLD_LOGS = 50;
 
 /***************************************************************************/
 
+#if !defined(__EMSCRIPTEN__)
+#define WZ_DEFAULT_FMV_MODE FMV_FULLSCREEN
+#else
+#define WZ_DEFAULT_FMV_MODE FMV_2X
+#endif
+
 struct WARZONE_GLOBALS
 {
-	FMV_MODE FMVmode = FMV_FULLSCREEN;
+	FMV_MODE FMVmode = WZ_DEFAULT_FMV_MODE;
 	UDWORD width = 1024;
 	UDWORD height = 768;
 	UDWORD videoBufferDepth = 32;
