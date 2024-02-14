@@ -1190,6 +1190,9 @@ void draw3DScene()
 # pragma GCC diagnostic pop
 #endif
 		}
+#if defined(__EMSCRIPTEN__)
+		abort();
+#endif
 		exit(-1);	// should never reach this, but just in case...
 	}
 	//visualize radius if needed
