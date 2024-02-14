@@ -543,18 +543,39 @@
                       </div>
                     </form>
                     <div class="mb-3 small">
+                      <div class="row mb-1 align-items-center">
+                        <label for="launchOption_wasmMemoryLimit" class="col-sm-5">Wasm.Memory Limit:</label>
+                        <div class="col-sm-7">
+                          <select class="form-select form-select-sm" id="launchOption_wasmMemoryLimit" aria-label="Memory limit select" style="padding-top: 0.1rem;padding-bottom: 0.1rem;">
+                            <option value="2048" selected>2 GB</option>
+                            <option value="1792">1.75 GB</option>
+                            <option value="1536">1.5 GB</option>
+                            <option value="1280">1.25 GB</option>
+                            <option value="1024">1 GB</option>
+                          </select>
+                        </div>
+                      </div>
+                      <span class="text-secondary">Configures the memory limit for the game. Not all systems or browsers may support higher limits.</span>
+                    </div>
+                    <div class="mb-3 small">
                       <div class="storage-persistence-loading">
-                        <div class="spinner-border me-2" style="width:1em; height:1em;" role="status"></div>
-                        <label>Checking storage status ...</label>
+                        <div class="mb-5 text-secondary">
+                          <div class="spinner-border me-2" style="width:1em; height:1em;" role="status"></div>
+                          <label>Checking storage status ...</label>
+                        </div>
                       </div>
                       <div class="storage-persistence-enabled">
-                        <svg class="bi me-1"><use href="#bi-check-circle"></use></svg>
-                        <label>Storage Persistence: Enabled</label>
+                        <p class="mb-1">
+                          <svg class="bi me-1"><use href="#bi-check-circle"></use></svg>
+                          <label>Storage Persistence: Enabled</label>
+                        </p>
+                        <span class="text-secondary">Game configuration and savegames should be persisted, but manually clearing browser cache can still remove them.</span>
                       </div>
                       <div class="storage-persistence-disabled">
-                        <svg class="bi me-1"><use href="#bi-info-circle"></use></svg>
-                        <label>Storage Persistence: Not Enabled</label>
-                        <br>
+                        <p class="mb-1">
+                          <svg class="bi me-1"><use href="#bi-info-circle"></use></svg>
+                          <label>Storage Persistence: Not Enabled</label>
+                        </p>
                         <span class="text-secondary">Game configuration and savegames may be automatically cleared by the browser.</span>
                       </div>
                     </div>
@@ -655,7 +676,59 @@
     var statusElement = document.getElementById('status');
     var progressElement = document.getElementById('progress');
     const originalStartButtonContents = document.getElementById('start-button').innerHTML;
+    
+    // Platform detection
+    function wz_detect_platform() {
+      let platformValue = (function() {
+        // Modern method, accurate, but only works on Chromium browsers (currently)
+        if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+          return navigator.userAgentData.platform;
+        }
+        // Deprecated, but still available in many cases
+        if (typeof navigator.platform !== 'undefined') {
+            if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
+              // Android device navigator.platform is often set as 'linux', so use userAgent detection
+              return 'android';
+            }
+            if (navigator.platform.match(/Mac/)) {
+              // Sometimes an iPad may masquerade as a Mac
+              if (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) {
+                return 'ipad'; // Probably an iPad
+              }
+            }
+            return navigator.platform;
+        }
+        return 'unknown';
+      })().toLowerCase();
+      
+      let macosPlatforms = /(macintosh|macintel|macos)/i;
+      let iosPlatforms = /(iphone|ipad)/i;
+      let windowsPlatforms = /(win32|win64|windows)/i;
+      
+      var result = 'unknown';
+      if (macosPlatforms.test(platformValue)) {
+        result = "macos";
+      } else if (iosPlatforms.test(platformValue)) {
+        result = "ios";
+      } else if (windowsPlatforms.test(platformValue)) {
+        result = "windows";
+      } else if (/android/.test(platformValue)) {
+        result = "android";
+      } else if (/linux/.test(platformValue)) {
+        result = "linux";
+      }
+      return result;
+    }
+    let WZ_BROWSER_PLATFORM = wz_detect_platform();
 
+    let WZ_MINIMUM_MAX_MEMORY_MIB = 512;
+    let WZ_DEFAULT_MAX_MEMORY_MIB = (() => {
+      if (/(ios|android)/.test(WZ_BROWSER_PLATFORM)) {
+        // Default to something less on mobile devices (especially iPhone / iPad, due to current WebKit limitations)
+        return 1024; // 1 GB
+      }
+      return 1536; // Default to 1.5 GB
+    })();
     let WZ_DATA_FILES_URL_SUBDIR = (() => {
       return window.location.pathname.replace(/[^/]*$/, '');
     })();
@@ -766,6 +839,35 @@
       Object.entries(WZ_LAUNCH_OPTIONS_MAPPING).forEach(([k,v]) => {
         localStorage.setItem(k, document.getElementById(v)?.checked);
       })
+      // Also save the chosen override for the maximum memory limit
+      localStorage.setItem('memoryLimitMiB', document.getElementById('launchOption_wasmMemoryLimit').value);
+    }
+    
+    function loadLocalStorageValueIntoSelect(selectId, key, valueTransformer, valueToOptionTextTransformer) {
+      let el = document.getElementById(selectId);
+      if (!el) {
+        throw Error(`Can't find element: ${selectId}`);
+      }
+      let value = localStorage.getItem(key);
+      if (valueTransformer) {
+        value = valueTransformer(value);
+      }
+      if (value === null) {
+        return;
+      }
+      for (var i = 0; i < el.options.length; i++) {
+        if (el.options[i].value == value) {
+          el.options[i].selected = true;
+          return;
+        }
+      }
+      // didn't find it - add new option
+      let text = (valueToOptionTextTransformer) ? valueToOptionTextTransformer(value) : value;
+      let opt = document.createElement('option');
+      opt.value = value;
+      opt.innerHTML = text;
+      el.appendChild(opt);
+      opt.selected = true;
     }
     
     function wz_restore_launch_options() {
@@ -787,6 +889,23 @@
           }
         }
       })
+      // Also load the current value for the maximum memory limit
+      loadLocalStorageValueIntoSelect('launchOption_wasmMemoryLimit', 'memoryLimitMiB', 
+        (val) => {
+          if (!val) {
+            val = WZ_DEFAULT_MAX_MEMORY_MIB;
+          }
+          return adjustMaxMemoryMiBIfLastRunFailed(val);
+        },
+        (val) => {
+          if (val >= 1024) {
+            let GBval = (val / 1024).toFixed(2);
+            return `(Auto) ${GBval} GB`;
+          } else {
+            return `(Auto) ${val} MB`;
+          }
+        }
+      );
     }
 
     function wz_js_get_config_dir_path()
@@ -905,28 +1024,32 @@
       });
     }
     
-    function allocateWZWasmMemory() {
-      let initialMemory = 268435456; // 256 MB
-      let INITIAL_MAX_MEMORY = 2147483648; // 2 GB
-      let maximumMemory = INITIAL_MAX_MEMORY;
-      
-      if (LOCALSTORAGE_AVAILABLE) {
-        // Check any last stored attempt
-        let lastRunJSON = localStorage.getItem("lastRun_Details");
-        if (lastRunJSON) {
-          let lastRun = JSON.parse(lastRunJSON);
-          if (lastRun['maxMem'] && lastRun['maxMem'] >= 1073741824) {
-            if (lastRun['success']) {
-              // Start this run at the same memory request as last successful run
-              maximumMemory = lastRun['maxMem'];
-            }
-            else {
-              // Start this run at the memory we got for the last attempt, minus a buffer to account for data files, etc
-              maximumMemory = lastRun['maxMem'] - 268435456; // - 256 MiB
-            }
-          }
+    function adjustMaxMemoryMiBIfLastRunFailed(currentMaxMemoryMiB) {
+      if (!LOCALSTORAGE_AVAILABLE) {
+        return currentMaxMemoryMiB; 
+      }
+      // Check any last stored unsuccessful run attempt
+      let lastRunJSON = localStorage.getItem("lastRun_Details");
+      if (lastRunJSON) {
+        let lastRun = JSON.parse(lastRunJSON);
+        if (!lastRun['success'] && lastRun['maxMem'] && lastRun['maxMem'] >= 1073741824) {
+          // Start this run at the memory we got for the last attempt, minus a buffer to account for data files, etc
+          let adjustedMaxMemoryBytes = lastRun['maxMem'] - 268435456; // - 256 MiB
+          let adjustedMaxMemoryMiB = Math.floor(adjustedMaxMemoryBytes / 1024 / 1024);
+          return Math.min(adjustedMaxMemoryMiB, currentMaxMemoryMiB);
         }
       }
+      return currentMaxMemoryMiB;
+    }
+    
+    function allocateWZWasmMemory() {
+      let initialMemory = 268435456; // 256 MB
+      let maximumMemoryMiB = parseInt(document.getElementById('launchOption_wasmMemoryLimit').value, 10) || WZ_DEFAULT_MAX_MEMORY_MIB;
+      if (maximumMemoryMiB < WZ_MINIMUM_MAX_MEMORY_MIB) {
+        console.error(`Memory limit set too low: ${maximumMemoryMiB} - resetting to ${WZ_MINIMUM_MAX_MEMORY_MIB}`);
+        maximumMemoryMiB = WZ_MINIMUM_MAX_MEMORY_MIB;
+      }
+      let maximumMemory = maximumMemoryMiB * 1024 * 1024;
       
       let wasmMemory;
       let retryAllocate = false;
@@ -1496,47 +1619,8 @@
       }
     };
     
-    // Platform detection
-    function wz_detect_platform() {
-      
-      let platformValue = (function() {
-        // Modern method, accurate, but only works on Chromium browsers (currently)
-        if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
-            return navigator.userAgentData.platform;
-        }
-        // Deprecated, but still available in many cases
-        if (typeof navigator.platform !== 'undefined') {
-            if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
-                // Android device navigator.platform is often set as 'linux', so use userAgent detection
-                return 'android';
-            }
-            return navigator.platform;
-        }
-        return 'unknown';
-      })().toLowerCase();
-      
-      let macosPlatforms = /(macintosh|macintel|macos)/i;
-      let iosPlatforms = /(iphone|ipad)/i;
-      let windowsPlatforms = /(win32|win64|windows)/i;
-      
-      var result = 'unknown';
-      if (macosPlatforms.test(platformValue)) {
-        result = "macos";
-      } else if (iosPlatforms.test(platformValue)) {
-        result = "ios";
-      } else if (windowsPlatforms.test(platformValue)) {
-        result = "windows";
-      } else if (/android/.test(platformValue)) {
-        result = "android";
-      } else if (/linux/.test(platformValue)) {
-        result = "linux";
-      }
-      return result;
-    }
-    
     // Best-effort attempt to detect whether the desktop full version might be available for the current platform
-    let platform = wz_detect_platform();
-    if (/(windows|macos|linux)/.test(platform)) {
+    if (/(windows|macos|linux)/.test(WZ_BROWSER_PLATFORM)) {
       // display the footer notice even in standalone mode
       document.getElementById('full-version-footer-notice').classList.remove('hide-on-standalone');
     }
