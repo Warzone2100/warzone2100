@@ -3643,6 +3643,12 @@ static void drawDroidAndStructureSelections()
 /// X/Y offset to display the group number at
 #define GN_X_OFFSET	(8)
 #define GN_Y_OFFSET	(3)
+enum GROUPNUMBER_TYPE
+{
+	GN_NORMAL,
+	GN_DAMAGED,
+	GN_FACTORY
+};
 /// rendering of the unit's group next to the unit itself, 
 /// or the group that will be assigned to the unit after production in the factory
 static void	drawGroupNumber(BASE_OBJECT *psObject)
@@ -3650,8 +3656,7 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 	UWORD id = UWORD_MAX;
 	UBYTE groupNumber = UBYTE_MAX;
 	int32_t x = 0, y = 0;
-	bool isFactory = false;
-	bool wentToRepair = false;
+	GROUPNUMBER_TYPE groupNumberType = GN_NORMAL;
 
 	if (auto *psDroid = dynamic_cast<DROID*>(psObject))
 	{
@@ -3663,7 +3668,7 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 
 		if (psDroid->repairGroup != UBYTE_MAX) {
 			groupNumber = psDroid->repairGroup;
-			wentToRepair = true;
+			groupNumberType = GN_DAMAGED;
 		} else {
 			groupNumber = psDroid->group;
 		}
@@ -3681,7 +3686,7 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 		y = scrY - GN_Y_OFFSET;
 
 		groupNumber = psStruct->productToGroup;
-		isFactory = true;
+		groupNumberType = GN_FACTORY;
 	}
 
 	switch (groupNumber)
@@ -3722,17 +3727,19 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 
 	if (id != UWORD_MAX)
 	{
-		if (wentToRepair)
+		switch (groupNumberType)
 		{
-			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 0, 0, 255) /* red */);
-		}
-		else if (isFactory)
-		{
-			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 220, 115, 255) /* gold */);
-		}
-		else
-		{
+		case GN_NORMAL:
 			iV_DrawImage(IntImages, id, x, y);
+			break;
+		case GN_DAMAGED:
+			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 0, 0, 255) /* red */);
+			break;
+		case GN_FACTORY:
+			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 220, 115, 255) /* gold */);
+			break;
+		default:
+			break;
 		}
 	}
 }
