@@ -57,6 +57,9 @@
         color: #fff;
         border-bottom-color: #fff;
       }
+      button:disabled.nav-link {
+        opacity: 0.65;
+      }
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
       textarea.emscripten { font-family: monospace; width: 80%; }
       div.emscripten { text-align: center; color: rgb(148 163 184); }
@@ -356,7 +359,7 @@
         <a class="nav-link fw-bold py-1 px-0 hide-on-standalone" href="https://wz2100.net" target="_blank" rel="noopener">Get the Full Version</a>
         <a class="nav-link fw-bold py-1 px-0" title="Donate" href="https://donations.wz2100.net" target="_blank" rel="noopener"><svg class="bi me-1"><use href="#bi-heart"></use></svg>Donate</a>
         <a class="nav-link fw-bold py-1 px-0" title="Discord Server" href="https://discord.com/invite/ZvRVQ8g" target="_blank" rel="noopener"><svg class="bi"><use href="#bi-discord"></use></svg></a>
-        <a class="nav-link fw-bold py-1 px-0" title="Options" onclick="wz_open_options_modal()" href="#"><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></a>
+        <button id="nav-options-button" class="nav-link fw-bold py-1 px-0" title="Options" onclick="wz_open_options_modal()"><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></button>
       </nav>
     </div>
   </header>
@@ -990,6 +993,7 @@
       document.getElementById('loading-error').style.display = 'block';
       document.getElementById('loading-error-message').innerText = errorStr;
       document.getElementById('loading-game').style.display = 'none';
+      document.getElementById('nav-options-button').disabled = false;
       wz_js_display_loading_indicator(0);
     }
     function wz_display_runtime_error(errorStr) {
@@ -1116,6 +1120,7 @@
       document.getElementById('loading-game').style.display = 'block';
       document.getElementById('launch-game').style.display = 'none';
       document.getElementById('footer').style.display = 'none';
+      document.getElementById('nav-options-button').disabled = true;
       window.scroll({
         top: 0,
         left: 0,
@@ -1625,6 +1630,7 @@
       document.getElementById('emscripten_container').style.display = 'none';
       document.getElementById('post-exit').style.display = 'block';
       document.getElementById('footer').style.display = 'block';
+      document.getElementById('nav-options-button').disabled = false;
     }
     
     window.onerror = function(event) {
