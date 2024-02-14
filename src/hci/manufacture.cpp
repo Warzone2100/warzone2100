@@ -240,7 +240,10 @@ protected:
 	void initialize()
 	{
 		attach(factoryNumberLabel = std::make_shared<W_LABEL>());
+		attach(factoryAssignGroupLabel = std::make_shared<W_LABEL>());
 		factoryNumberLabel->setGeometry(OBJ_TEXTX, OBJ_B1TEXTY, 16, 16);
+		factoryAssignGroupLabel->setGeometry(OBJ_TEXTX + 48, OBJ_B1TEXTY, 16, 16);
+		factoryAssignGroupLabel->setFontColour(pal_RGBA(255, 220, 115, 255) /* gold */);
 	}
 
 	void display(int xOffset, int yOffset) override
@@ -262,7 +265,8 @@ protected:
 	void updateLayout() override
 	{
 		BaseWidget::updateLayout();
-		auto factory = getFactoryOrNullptr(controller->getObjectAt(objectIndex));
+		auto psStruct = controller->getObjectAt(objectIndex);
+		auto factory = getFactoryOrNullptr(psStruct);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
 		if (factory->psAssemblyPoint == nullptr)
 		{
@@ -270,6 +274,14 @@ protected:
 			return;
 		}
 		factoryNumberLabel->setString(WzString::fromUtf8(astringf("%u", factory->psAssemblyPoint->factoryInc + 1)));
+		if (psStruct->productToGroup != UBYTE_MAX)
+		{
+			factoryAssignGroupLabel->setString(WzString::fromUtf8(astringf("%u", psStruct->productToGroup)));
+		}
+		else
+		{
+			factoryAssignGroupLabel->setString("");
+		}
 	}
 
 	std::string getTip() override
@@ -287,6 +299,7 @@ protected:
 private:
 	std::shared_ptr<ManufactureController> controller;
 	std::shared_ptr<W_LABEL> factoryNumberLabel;
+	std::shared_ptr<W_LABEL> factoryAssignGroupLabel;
 };
 
 class ManufactureStatsButton: public StatsButton
