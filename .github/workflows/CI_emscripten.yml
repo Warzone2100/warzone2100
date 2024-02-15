@@ -203,6 +203,7 @@ jobs:
       built-commit-sha: ${{ needs.web-build.outputs.WZ_GITHUB_SHA }}
       release: false
       ssh-dest-host: ${{ vars.WZ_WEB_BUILD_UPLOAD_SSH_HOST }}
+      cdn-purge-base-url: 'play.wz2100.net/dev'
     secrets: inherit
   
   publish_release_build:
@@ -224,4 +225,5 @@ jobs:
       built-commit-sha: ${{ needs.web-build.outputs.WZ_GITHUB_SHA }}
       release: true
       ssh-dest-host: ${{ vars.WZ_WEB_BUILD_UPLOAD_SSH_HOST }}
+      cdn-purge-base-url: 'play.wz2100.net/release'
     secrets: inherit
