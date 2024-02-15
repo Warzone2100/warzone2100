@@ -139,10 +139,10 @@ jobs:
           # Then, sync the server-worker.js
           # (If replacing in-place, the service-worker should be updated last)
           echo "::group::rsync"
-          rsync -chvzP -rlpt --exclude="/service-worker.*" --stats --delete "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
+          rsync -chzP -vv -rlpt --exclude="/service-worker.*" --stats --delete "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
           echo "::endgroup::"
-          echo "::group::rsync (service-worker.js)"
-          rsync -chvzP -lpt --stats --include="/service-worker.*" --exclude="*" "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
+          echo "::group::rsync (including: service-worker.js)"
+          rsync -chzP -vv -rlpt --stats "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
           echo "::endgroup::"
           rm ~/.ssh/id_ed25519
       - name: 'Generate Cloudflare Cache Purge URLs List'
