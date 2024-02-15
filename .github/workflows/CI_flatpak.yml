@@ -87,7 +87,7 @@ jobs:
       uses: docker/setup-qemu-action@v2
       with:
         platforms: ${{ matrix.arch }}
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         path: 'src'
@@ -444,7 +444,7 @@ jobs:
           curl -Lf https://raw.githubusercontent.com/flatpak/flat-manager/master/flat-manager-client --output /usr/bin/flat-manager-client
           chmod +x /usr/bin/flat-manager-client
           echo "::endgroup::"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: 'src'
           set-safe-directory: true
