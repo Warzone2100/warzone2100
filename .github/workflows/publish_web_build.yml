@@ -97,7 +97,11 @@ jobs:
       - name: Set up SSH Agent
         env:
           UPLOAD_SSH_KEY: ${{ secrets.WZ_WEB_BUILD_UPLOAD_SSH_KEY }}
+          WZ_WEB_BUILD_UPLOAD_SSH_HOST: ${{ inputs.ssh-dest-host }}
         run: |
+          mkdir -p ~/.ssh/
+          ssh-keyscan "${WZ_WEB_BUILD_UPLOAD_SSH_HOST}" >> ~/.ssh/known_hosts
+
           eval "$(ssh-agent -s)"
           set +x
 
