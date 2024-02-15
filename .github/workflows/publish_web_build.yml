@@ -58,7 +58,7 @@ jobs:
           mkdir -p "${CHANGELOG_DIR}"
           echo "CHANGELOG_DIR=${CHANGELOG_DIR}" >> $GITHUB_OUTPUT
           # BUILD_ASSETS_UPLOAD_DIR
-          BUILD_ASSETS_UPLOAD_DIR="build_wz_${{ inputs.architecture }}}"
+          BUILD_ASSETS_UPLOAD_DIR="build_wz_${{ inputs.architecture }}"
           echo "BUILD_ASSETS_UPLOAD_DIR=${BUILD_ASSETS_UPLOAD_DIR}" >> $GITHUB_ENV
           echo "BUILD_ASSETS_UPLOAD_DIR=${BUILD_ASSETS_UPLOAD_DIR}" >> $GITHUB_OUTPUT
           # Determine additional output subdir based on architecture
@@ -94,6 +94,12 @@ jobs:
           find . -type f -print | cut -d/ -f2- > "${CHANGED_FILES_LIST}"
           cat "${CHANGED_FILES_LIST}"
           echo "CHANGED_FILES_LIST=${CHANGED_FILES_LIST}" >> $GITHUB_OUTPUT
+          #
+          # Get the list of service-worker files / paths
+          CHANGED_SW_LIST="${{ steps.settings.outputs.CHANGELOG_DIR }}/changedsw.txt"
+          find . -type f -name 'service-worker.*' -print | cut -d/ -f2- > "${CHANGED_SW_LIST}"
+          cat "${CHANGED_SW_LIST}"
+          echo "CHANGED_SW_LIST=${CHANGED_SW_LIST}" >> $GITHUB_OUTPUT
       - name: Set up SSH Agent
         env:
           UPLOAD_SSH_KEY: ${{ secrets.WZ_WEB_BUILD_UPLOAD_SSH_KEY }}
@@ -124,31 +130,37 @@ jobs:
           # Then, sync the server-worker.js
           # (If replacing in-place, the service-worker should be updated last)
           echo "::group::rsync"
-          rsync -chvzP -rlpt --exclude=/service-worker.js --stats --delete "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
+          rsync -chvzP -rlpt --exclude="/service-worker.*" --stats --delete "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
           echo "::endgroup::"
           echo "::group::rsync (service-worker.js)"
-          rsync -chvzP -lpt --stats "${BUILD_ASSETS_UPLOAD_DIR}/service-worker.js" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
+          rsync -chvzP -lpt --stats --include="/service-worker.*" --exclude="*" "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
           echo "::endgroup::"
           rm ~/.ssh/id_ed25519
       - name: 'Generate Cloudflare Cache Purge URLs List'
         id: purgeurls
         env:
           CHANGED_FILES_LIST: '${{ steps.fileslist.outputs.CHANGED_FILES_LIST }}'
+          CHANGED_SW_LIST: '${{ steps.fileslist.outputs.CHANGED_SW_LIST }}'
           GEN_PURGE_URLS_SCRIPT_DL: https://raw.githubusercontent.com/Warzone2100/update-data/master/ci/gen_purge_url_batches.py
           GEN_PURGE_URLS_SCRIPT_SHA512: 65d21f9b204d8febc700d613070b50e1ef6f13a46eb406206c047c7085b7d94124aaee082d1ef8c2d656983f9270d151794909ba859ad7438666ed821a0b9ea3
         run: |
           PURGE_URLS_DATA_FILES_DIR="purged-files-dir"
           mkdir "${PURGE_URLS_DATA_FILES_DIR}"
+          PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR="purged-sw-files-dir"
+          mkdir "${PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR}"
           # Get the script
           curl -L --retry 3 -o "gen_purge_url_batches.py" "${GEN_PURGE_URLS_SCRIPT_DL}"
-          DOWNLOADED_SHA512="$(sha512sum "${GEN_PURGE_URLS_SCRIPT_DL}")"
+          DOWNLOADED_SHA512="$(sha512sum --binary "gen_purge_url_batches.py" | cut -d " " -f 1)"
           if [ "${GEN_PURGE_URLS_SCRIPT_SHA512}" != "${DOWNLOADED_SHA512}" ]; then
             echo "::error ::Downloaded script hash ${DOWNLOADED_SHA512} does not match expected ${GEN_PURGE_URLS_SCRIPT_SHA512}"
             exit 1
           fi
-          # Run the gen_purge_url_batches script
+          # Run the gen_purge_url_batches script on the main list
           python3 "./gen_purge_url_batches.py" "play.wz2100.net" "${CHANGED_FILES_LIST}" "${PURGE_URLS_DATA_FILES_DIR}"
           echo "PURGE_URLS_DATA_FILES_DIR=${PURGE_URLS_DATA_FILES_DIR}" >> $GITHUB_OUTPUT
+          # Run the gen_purge_url_batches script on the service-worker file list
+          python3 "./gen_purge_url_batches.py" "play.wz2100.net" "${CHANGED_SW_LIST}" "${PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR}"
+          echo "PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR=${PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR}" >> $GITHUB_OUTPUT
       - name: 'Purge Cloudflare Cache'
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_WZ2100_ZONE }}
@@ -156,6 +168,16 @@ jobs:
         run: |
           # Needs to handle multiple data files, since each purge command can only send a max of 30 URLs
           for file in ${{ steps.purgeurls.outputs.PURGE_URLS_DATA_FILES_DIR }}/*
+          do
+            echo "File: $file"
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
+                 -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+                 -H "Content-Type: application/json" \
+                 --data-binary "@$file"
+          done; # file
+          echo "Done with main purge ..."
+          sleep 30 # Wait and then trigger a purge for just the service worker files
+          for file in ${{ steps.purgeurls.outputs.PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR }}/*
           do
             echo "File: $file"
             curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
