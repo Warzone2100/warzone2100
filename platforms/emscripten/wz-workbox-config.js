@@ -19,6 +19,7 @@ module.exports = {
 	],
 	globIgnores: [
 		'**\/node_modules\/**\/*',
+		'**/service-worker.js', // do not precache the service-worker file (which shouldn't exist when this is run, but just in case)
 		'**/*.data', // do not precache .data files, which are often huge
 		'**/*.debug.wasm', // do not precache wasm debug symbols
 		'**\/music\/**\/*', // do not precache music (which is optional)
@@ -74,7 +75,7 @@ module.exports = {
 		// Backup on-demand caching of any additional utilized CSS and JS files for offline use
 		// (useful in case someone forgot to update the additionalManifestEntries above)
 		{
-			urlPattern: ({url}) => (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) && url.origin !== 'https://static.cloudflareinsights.com',
+			urlPattern: ({url}) => (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) && !url.pathname.endsWith('service-worker.js') && url.origin !== 'https://static.cloudflareinsights.com',
 			handler: 'NetworkFirst',
 			options: {
 				cacheName: 'additional-dependencies',
