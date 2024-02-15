@@ -146,7 +146,7 @@ jobs:
         echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
 
     - name: 'Upload Artifact - (Archive)'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: success() && (matrix.upload_artifact == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ env.WZ_BUILD_DESC }}_archive
@@ -171,7 +171,7 @@ jobs:
     - name: Prep Environment
       run: mkdir dl-archive
     - name: Download Archive Artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: 'warzone2100_${{ env.WZ_BUILD_DESC }}_archive'
         path: ./dl-archive
