@@ -85,6 +85,10 @@ jobs:
           WZ_CDN_BASE_URL="$(echo "${INPUT_CDN_PURGE_BASE_URL}" | sed 's:/*$::')"
           echo "WZ_CDN_BASE_URL=${WZ_CDN_BASE_URL}" >> $GITHUB_ENV
           echo "WZ_CDN_BASE_URL=${WZ_CDN_BASE_URL}" >> $GITHUB_OUTPUT
+          # Determine base CDN url hostname
+          WZ_CDN_BASE_HOSTNAME="$(echo "${INPUT_CDN_PURGE_BASE_URL}" | cut -f1 -d/)"
+          echo "WZ_CDN_BASE_HOSTNAME=${WZ_CDN_BASE_HOSTNAME}" >> $GITHUB_ENV
+          echo "WZ_CDN_BASE_HOSTNAME=${WZ_CDN_BASE_HOSTNAME}" >> $GITHUB_OUTPUT
       - name: Download Archive Artifact
         uses: actions/download-artifact@v4
         with:
@@ -185,6 +189,12 @@ jobs:
                  -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
                  -H "Content-Type: application/json" \
                  --data-binary "@$file"
+            # Separately clear any cache keys that include the Origin
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
+                 -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+                 -H "Content-Type: application/json" \
+                 -H "Origin: https://${WZ_CDN_BASE_HOSTNAME}" \
+                 --data-binary "@$file"
           done; # file
           echo "Done with main purge ..."
           sleep 30 # Wait and then trigger a purge for just the service worker files
@@ -194,6 +204,12 @@ jobs:
             curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
                  -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
                  -H "Content-Type: application/json" \
+                 --data-binary "@$file"
+            # Separately clear any cache keys that include the Origin
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
+                 -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+                 -H "Content-Type: application/json" \
+                 -H "Origin: https://${WZ_CDN_BASE_HOSTNAME}" \
                  --data-binary "@$file"
           done; # file
           echo "Done."
