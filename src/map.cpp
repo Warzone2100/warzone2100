@@ -708,11 +708,9 @@ static bool hasDecals(int i, int j)
 // Sets the ground type to be a decal or not
 static bool mapSetGroundTypes()
 {
-	int i, j;
-
-	for (i = 0; i < mapWidth; i++)
+	for (int j = 0; j < mapHeight; j++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (int i = 0; i < mapWidth; i++)
 		{
 			MAPTILE *psTile = mapTile(i, j);
 

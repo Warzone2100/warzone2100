@@ -1760,9 +1760,9 @@ std::vector<scripting_engine::LabelInfo> scripting_engine::debug_GetLabelInfo() 
 
 void clearMarks()
 {
-	for (int x = 0; x < mapWidth; x++) // clear old marks
+	for (int y = 0; y < mapHeight; y++)
 	{
-		for (int y = 0; y < mapHeight; y++)
+		for (int x = 0; x < mapWidth; x++) // clear old marks
 		{
 			MAPTILE *psTile = mapTile(x, y);
 			psTile->tileInfoBits &= ~BITS_MARKED;

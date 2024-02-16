@@ -89,9 +89,9 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 		return;
 	}
 
-	for (unsigned i = x1; i < x2; i++)
+	for (unsigned j = y1; j < y2; j++)
 	{
-		for (unsigned j = y1; j < y2; j++)
+		for (unsigned i = x1; i < x2; i++)
 		{
 			MAPTILE	*psTile = mapTile(i, j);
 
