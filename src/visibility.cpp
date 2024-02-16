@@ -462,9 +462,9 @@ void revealAll(UBYTE player)
 	}
 
 	//reveal all tiles
-	for (i = 0; i < mapWidth; i++)
+	for (j = 0; j < mapHeight; j++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (i = 0; i < mapWidth; i++)
 		{
 			psTile = mapTile(i, j);
 			psTile->tileExploredBits |= alliancebits[player];

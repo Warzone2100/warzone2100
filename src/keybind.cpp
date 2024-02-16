@@ -305,9 +305,9 @@ void	kf_HalveHeights()
 {
 	MAPTILE	*psTile;
 
-	for (int i = 0; i < mapWidth; ++i)
+	for (int j = 0; j < mapHeight; ++j)
 	{
-		for (int j = 0; j < mapHeight; ++j)
+		for (int i = 0; i < mapWidth; ++i)
 		{
 			psTile = mapTile(i, j);
 			psTile->height /= 2;
