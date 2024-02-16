@@ -756,16 +756,19 @@ static bool isWaterVertex(int x, int y)
 static void generateRiverbed()
 {
 	MersenneTwister mt(12345);  // 12345 = random seed.
-	int maxIdx = 1, idx[MAP_MAXWIDTH][MAP_MAXHEIGHT];
-	int i, j, l = 0;
+	int maxIdx = 1;
+	ASSERT_OR_RETURN(, mapWidth > 0 && mapHeight > 0, "Invalid map width or height (%d x %d)", mapWidth, mapHeight);
+	std::vector<int> idx(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight), 0);
+	int x, y, l = 0;
 
-	for (i = 0; i < mapWidth; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			// initially set the seabed index to 0 for ground and 100 for water
-			idx[i][j] = 100 * isWaterVertex(i, j);
-			if (idx[i][j] > 0)
+			int val = 100 * isWaterVertex(x, y);
+			idx[x + (y * mapWidth)] = val;
+			if (val > 0)
 			{
 				l++;
 			}
@@ -780,17 +783,18 @@ static void generateRiverbed()
 	do
 	{
 		maxIdx = 1;
-		for (i = 1; i < mapWidth - 2; i++)
+		for (y = 1; y < mapHeight - 2; y++)
 		{
-			for (j = 1; j < mapHeight - 2; j++)
+			for (x = 1; x < mapWidth - 2; x++)
 			{
-
-				if (idx[i][j] > 0)
+				int rowOffset = (y * mapWidth);
+				auto& idxVal = idx[x + rowOffset];
+				if (idxVal > 0)
 				{
-					idx[i][j] = (idx[i - 1][j] + idx[i][j - 1] + idx[i][j + 1] + idx[i + 1][j]) / 4;
-					if (idx[i][j] > maxIdx)
+					idxVal = (idx[(x - 1) + rowOffset] + idx[x + ((y - 1) * mapWidth)] + idx[x + ((y + 1) * mapWidth)] + idx[(x + 1) + rowOffset]) / 4;
+					if (idxVal > maxIdx)
 					{
-						maxIdx = idx[i][j];
+						maxIdx = idxVal;
 					}
 				}
 			}
@@ -800,22 +804,23 @@ static void generateRiverbed()
 	}
 	while (maxIdx > 90 && l < 20);
 
-	for (i = 0; i < mapWidth; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
-			if (idx[i][j] > maxIdx)
+			auto& idxVal = idx[x + (y * mapWidth)];
+			if (idxVal > maxIdx)
 			{
-				idx[i][j] = maxIdx;
+				idxVal = maxIdx;
 			}
-			if (idx[i][j] < 1)
+			if (idxVal < 1)
 			{
-				idx[i][j] = 1;
+				idxVal = 1;
 			}
-			if (isWaterVertex(i, j))
+			if (isWaterVertex(x, y))
 			{
-				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idx[i][j] - mt.u32() % (maxIdx / 6 + 1));
-				mapTile(i, j)->height -= WATER_MIN_DEPTH - (l / maxIdx);
+				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idxVal - mt.u32() % (maxIdx / 6 + 1));
+				mapTile(x, y)->height -= WATER_MIN_DEPTH - (l / maxIdx);
 			}
 		}
 	}
