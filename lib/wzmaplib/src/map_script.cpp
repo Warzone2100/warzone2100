@@ -713,7 +713,7 @@ std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 		JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Warning);
 		pRuntimeFree_CustomLogger = nullptr;
 	});
-	JSLimitedContextOptions ctxOptions;
+	JSLimitedContextOptions ctxOptions = { };
 	ctxOptions.baseObjects = true;
 	ctxOptions.dateObject = false;
 	ctxOptions.eval = false;
@@ -724,6 +724,7 @@ std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	ctxOptions.mapSet = true;
 	ctxOptions.typedArrays = false;
 	ctxOptions.promise = false;
+	ctxOptions.bigInt = false;
 	JSContext *ctx = JS_NewLimitedContext(rt, &ctxOptions);
 	if (ctx == nullptr)
 	{
