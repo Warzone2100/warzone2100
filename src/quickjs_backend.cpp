@@ -152,7 +152,7 @@ public:
 		rt = JS_NewRuntime();
 		ASSERT(rt != nullptr, "JS_NewRuntime failed?");
 
-		JSLimitedContextOptions ctxOptions;
+		JSLimitedContextOptions ctxOptions = { };
 		ctxOptions.baseObjects = true;
 		ctxOptions.dateObject = true;
 		ctxOptions.eval = (game.type == LEVEL_TYPE::CAMPAIGN); // allow "eval" only for campaign (which currently has lots of implicit eval usage)
@@ -163,6 +163,7 @@ public:
 		ctxOptions.mapSet = true;
 		ctxOptions.typedArrays = true;
 		ctxOptions.promise = false; // disable promise, async, await
+		ctxOptions.bigInt = false;
 		ctx = JS_NewLimitedContext(rt, &ctxOptions);
 		ASSERT(ctx != nullptr, "JS_NewContext failed?");
 
