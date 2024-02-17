@@ -1169,7 +1169,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		vertexShaderHeader += "precision highp float;\n";
 		fragmentShaderHeader += "precision highp float;precision highp int;\n";
 #else
-		fragmentShaderHeader = "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\nprecision highp int;\n#else\nprecision mediump float;\n#endif\n";
+		fragmentShaderHeader += "#if GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\nprecision highp int;\n#else\nprecision mediump float;\n#endif\n";
 #endif
 		fragmentShaderHeader += "#if __VERSION__ >= 300 || defined(GL_EXT_texture_array)\nprecision lowp sampler2DArray;\n#endif\n";
 		fragmentShaderHeader += "#if __VERSION__ >= 300\nprecision lowp sampler2DShadow;\nprecision lowp sampler2DArrayShadow;\n#endif\n";
