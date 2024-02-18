@@ -125,28 +125,24 @@ enum LAND_LIGHT_SPEC
 
 struct EFFECT
 {
-	uint8_t           player;      //	when the effect in question needs a player's color
-	uint8_t           control;     // Controls the bits above - essential,flips etc
-	EFFECT_GROUP      group;       // what group is it - explosion, building effect etc....
-	EFFECT_TYPE       type;        // what type is it within the group?
-	uint8_t           frameNumber; // what frame number is the imd on?
-	uint16_t          size;        // Size in terms of percent of original imd.
-	uint8_t           baseScale;   // if scaled, what's bottom line?
-	uint8_t           specific;    // how many times has it bounced?
-	Vector3f          position;    // world coordinates of the effect - floats on the PC.
-	Vector3f          velocity;    // movement values per update
-	Vector3i          rotation;    // current rotation - only for gravitons
-	Vector3i          spin;        // rotation info for spinning things.
-	uint32_t          birthTime;   // what time was it introduced into the world?
-	uint32_t          lastFrame;   // when did we last update the frame?
-	uint16_t          frameDelay;  // how many game ticks between each frame?
-	uint16_t          lifeSpan;    // what is it's life expectancy?
-	uint16_t          radius;      // Used for area effects
-	iIMDShape         *imd;        // pointer to the imd the effect uses.
-
-	EFFECT() : player(MAX_PLAYERS), control(0), group(EFFECT_FREED), type(EXPLOSION_TYPE_SMALL), frameNumber(0), size(0),
-	           baseScale(0), specific(0), position(0.f, 0.f, 0.f), velocity(0.f, 0.f, 0.f), rotation(0, 0, 0), spin(0, 0, 0), birthTime(0), lastFrame(0), frameDelay(0), lifeSpan(0), radius(0),
-	           imd(nullptr) {}
+	Vector3f     position = { 0.f, 0.f, 0.f };  // world coordinates of the effect - floats on the PC.
+	Vector3f     velocity = { 0.f, 0.f, 0.f };  // movement values per update
+	Vector3i     rotation = { 0, 0, 0 };        // current rotation - only for gravitons
+	Vector3i     spin = { 0, 0, 0 };            // rotation info for spinning things.
+	iIMDShape*   imd = nullptr;               // pointer to the imd the effect uses.
+	uint32_t     birthTime = 0;               // what time was it introduced into the world?
+	uint32_t     lastFrame = 0;               // when did we last update the frame?
+	EFFECT_GROUP group = EFFECT_FREED;        // what group is it - explosion, building effect etc....
+	EFFECT_TYPE  type = EXPLOSION_TYPE_SMALL; // what type is it within the group?
+	uint16_t     size = 0;                    // Size in terms of percent of original imd.
+	uint16_t     frameDelay = 0;              // how many game ticks between each frame?
+	uint16_t     lifeSpan = 0;                // what is it's life expectancy?
+	uint16_t     radius = 0;                  // Used for area effects
+	uint8_t      player = MAX_PLAYERS;        // when the effect in question needs a player's color
+	uint8_t      control = 0;                 // Controls the bits above - essential,flips etc
+	uint8_t      frameNumber = 0;             // what frame number is the imd on?
+	uint8_t      baseScale = 0;               // if scaled, what's bottom line?
+	uint8_t      specific = 0;                // how many times has it bounced?
 };
 
 /* Maximum number of effects in the world - need to investigate what this should be */
