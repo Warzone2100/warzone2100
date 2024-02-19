@@ -460,7 +460,11 @@ void countUpdate(bool synch)
 		setLasSatExists(false, i);
 		for (const STRUCTURE *psCBuilding : apsStructLists[i])
 		{
-			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
+			if (psCBuilding == nullptr || isDead(psCBuilding))
+			{
+				continue;
+			}
+			if (psCBuilding->pStructureType && psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
 				setSatUplinkExists(true, i);
 			}
@@ -472,7 +476,11 @@ void countUpdate(bool synch)
 		}
 		for (const STRUCTURE *psCBuilding : mission.apsStructLists[i])
 		{
-			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
+			if (psCBuilding == nullptr || isDead(psCBuilding))
+			{
+				continue;
+			}
+			if (psCBuilding->pStructureType && psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
 				setSatUplinkExists(true, i);
 			}
