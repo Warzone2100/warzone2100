@@ -604,6 +604,11 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		BASE_OBJECT *friendlyObj = nullptr;
 		BASE_OBJECT *targetInQuestion = *gi;
 
+		if (targetInQuestion == nullptr || isDead(targetInQuestion))
+		{
+			continue;
+		}
+
 		/* This is a friendly unit, check if we can reuse its target */
 		if (aiCheckAlliances(targetInQuestion->player, psDroid->player))
 		{
