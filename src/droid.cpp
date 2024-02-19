@@ -2279,12 +2279,20 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 		}
 		for (const DROID* psDroid : *dList)
 		{
+			if (psDroid == nullptr || isDead(psDroid))
+			{
+				continue;
+			}
 			if (getDroidLevel(psDroid) == level)
 			{
 				++count;
 			}
 			if (psDroid->isTransporter())
 			{
+				if (psDroid->psGroup == nullptr)
+				{
+					continue;
+				}
 				for (const DROID *psCurr : psDroid->psGroup->psList)
 				{
 					if (psCurr != psDroid && getDroidLevel(psCurr) == level)
