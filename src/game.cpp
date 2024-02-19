@@ -2401,7 +2401,7 @@ static void getIniDroidOrder(WzConfig &ini, WzString const &key, DroidOrder &ord
 
 static void setIniBaseObject(nlohmann::json &json, WzString const &key, BASE_OBJECT const *object)
 {
-	if (object != nullptr && object->died <= 1)
+	if (object != nullptr && object->died <= NOT_CURRENT_LIST)
 	{
 		const auto& keyStr = key.toStdString();
 		json[keyStr + "/id"] = object->id;
@@ -5470,7 +5470,7 @@ static void writeSaveObject(WzConfig &ini, const BASE_OBJECT *psObj)
 		ini.setValue("periodicalDamage", psObj->periodicalDamage);
 	}
 	ini.setValue("born", psObj->born);
-	if (psObj->died > 0)
+	if (psObj->died >= NOT_CURRENT_LIST)
 	{
 		ini.setValue("died", psObj->died);
 	}
@@ -5520,7 +5520,7 @@ static void writeSaveObjectJSON(nlohmann::json &jsonObj, const BASE_OBJECT *psOb
 		jsonObj["periodicalDamage"] = psObj->periodicalDamage;
 	}
 	jsonObj["born"] = psObj->born;
-	if (psObj->died > 0)
+	if (psObj->died >= NOT_CURRENT_LIST)
 	{
 		jsonObj["died"] = psObj->died;
 	}
@@ -5868,7 +5868,7 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 		droidObj["aigroup/type"] = psCurr->psGroup->type;
 	}
 	droidObj["group"] = psCurr->group;	// different kind of group. of course.
-	if (hasCommander(psCurr) && psCurr->psGroup->psCommander->died <= 1)
+	if (hasCommander(psCurr) && psCurr->psGroup->psCommander->died <= NOT_CURRENT_LIST)
 	{
 		droidObj["commander"] = psCurr->psGroup->psCommander->id;
 	}
