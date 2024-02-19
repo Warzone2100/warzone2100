@@ -415,7 +415,14 @@ void orderUpdateDroid(DROID *psDroid)
 	SDWORD			xdiff, ydiff;
 	bool			bAttack;
 	SDWORD			xoffset, yoffset;
+
+	if (psDroid == nullptr || isDead(psDroid))
+	{
+		return;
+	}
+
 	const WEAPON_STATS *psWeapStats = psDroid->getWeaponStats(0);
+
 	// clear the target if it has died
 	if (psDroid->order.psObj && psDroid->order.psObj->died)
 	{
@@ -434,11 +441,6 @@ void orderUpdateDroid(DROID *psDroid)
 
 	// check for died objects in the list
 	orderCheckList(psDroid);
-
-	if (isDead(psDroid))
-	{
-		return;
-	}
 
 	switch (psDroid->order.type)
 	{
