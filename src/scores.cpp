@@ -310,8 +310,17 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 			}
 			for (const DROID* psDroid : *dList)
 			{
+				if (psDroid == nullptr || isDead(psDroid))
+				{
+					continue;
+				}
+				++fullStats.numUnits;
 				if (psDroid->isTransporter())
 				{
+					if (psDroid->psGroup == nullptr)
+					{
+						continue;
+					}
 					for (DROID *psCurr : psDroid->psGroup->psList)
 					{
 						if (psCurr != psDroid)
@@ -320,7 +329,6 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 						}
 					}
 				}
-				++fullStats.numUnits;
 			}
 		} while (++idx < 3);
 	}
