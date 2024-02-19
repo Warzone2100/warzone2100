@@ -1500,7 +1500,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				psTile->psObject = psBuilding;
 
 				// if it's a tall structure then flag it in the map.
-				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
+				if (psBuilding->sDisplay.imd && psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
 					auxSetBlocking(tileX, tileY, AIR_BLOCKED);
 				}
