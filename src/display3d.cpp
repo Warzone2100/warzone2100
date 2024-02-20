@@ -160,7 +160,6 @@ static gfx_api::buffer* pScreenTriangleVBO = nullptr;
 // To get the real camera position, still need to add Vector3i(player.p.x, 0, player.p.z).
 static Vector3i actualCameraPosition;
 
-bool	bRender3DOnly;
 static bool	bRangeDisplay = false;
 static SDWORD	rangeCenterX, rangeCenterY, rangeRadius;
 static bool	bDrawProximitys = true;
@@ -1030,22 +1029,6 @@ void draw3DScene()
 	}
 
 	drawDroidAndStructureSelections();
-
-	if (!bRender3DOnly)
-	{
-		if (radarVisible())
-		{
-			pie_SetFogStatus(false);
-			gfx_api::context::get().debugStringMarker("Draw 3D scene - radar");
-			drawRadar();
-			pie_SetFogStatus(true);
-		}
-
-		/* Ensure that any text messages are displayed at bottom of screen */
-		pie_SetFogStatus(false);
-		displayConsoleMessages();
-		bRender3DOnly = true;
-	}
 
 	pie_SetFogStatus(false);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);

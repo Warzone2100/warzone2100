@@ -75,6 +75,7 @@
 #include "keybind.h"
 #include "qtscript.h"
 #include "chat.h"
+#include "radar.h"
 #include "hci/build.h"
 #include "hci/research.h"
 #include "hci/manufacture.h"
@@ -1939,6 +1940,18 @@ void intDisplayWidgets()
 				displayConsoleMessages();
 			}
 		}
+	}
+
+	if (!gameUpdatePaused())
+	{
+		if (radarVisible())
+		{
+			gfx_api::context::get().debugStringMarker("Draw 3D scene - radar");
+			drawRadar();
+		}
+		
+		/* Ensure that any text messages are displayed at bottom of screen */
+		displayConsoleMessages();
 	}
 
 	widgDisplayScreen(psWScreen);

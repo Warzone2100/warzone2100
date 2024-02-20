@@ -118,7 +118,6 @@ void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight,
 extern SDWORD mouseTileX, mouseTileY;
 extern Vector2i mousePos;
 
-extern bool bRender3DOnly;
 extern bool showGateways;
 extern bool showPath;
 extern const Vector2i visibleTiles;

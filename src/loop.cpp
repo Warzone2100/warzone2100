@@ -321,7 +321,6 @@ static GAMECODE renderLoop()
 			{
 				processMouseClickInput();
 			}
-			bRender3DOnly = false;
 			displayWorld();
 		}
 		wzPerfBegin(PERF_GUI, "User interface");
