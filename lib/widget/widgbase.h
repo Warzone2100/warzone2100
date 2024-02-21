@@ -341,7 +341,12 @@ public:
 	void setGeometry(WzRect const &r);
 	virtual void setGeometryFromScreenRect(WzRect const &r);
 
-	void attach(const std::shared_ptr<WIDGET> &widget);
+	enum class ChildZPos {
+		Front,
+		Back
+	};
+
+	void attach(const std::shared_ptr<WIDGET> &widget, ChildZPos zPos = ChildZPos::Front);
 	/**
 	 * @deprecated use `void WIDGET::attach(const std::shared_ptr<WIDGET> &widget)` instead
 	 **/

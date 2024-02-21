@@ -566,12 +566,22 @@ void WIDGET::setCustomHitTest(const WIDGET_HITTEST_FUNC& newCustomHitTestFunc)
 	customHitTest = newCustomHitTestFunc;
 }
 
-void WIDGET::attach(const std::shared_ptr<WIDGET> &widget)
+void WIDGET::attach(const std::shared_ptr<WIDGET> &widget, ChildZPos zPos /*= ChildZPos::Front*/)
 {
 	ASSERT_OR_RETURN(, widget != nullptr && widget->parentWidget.expired(), "Bad attach.");
 	widget->parentWidget = shared_from_this();
 	widget->setScreenPointer(screenPointer.lock());
-	childWidgets.push_back(widget);
+	switch (zPos)
+	{
+	case ChildZPos::Front:
+		// insert at the end of the list of children, and thus the top of the z-order (childWidgets order is bottom -> top)
+		childWidgets.push_back(widget);
+		break;
+	case ChildZPos::Back:
+		// insert at the very beginning of the list of children
+		childWidgets.insert(childWidgets.begin(), widget);
+		break;
+	}
 }
 
 void WIDGET::detach(const std::shared_ptr<WIDGET> &widget)
@@ -1180,8 +1190,10 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 	if (!skipProcessingChildren)
 	{
 		// Process subwidgets.
-		for (auto const &psCurr: childWidgets)
+		// (Enumerate the child widgets in decreasing z-order (i.e. "top-down"))
+		for (auto i = childWidgets.size(); i--;)
 		{
+			auto const &psCurr = childWidgets[i];
 			if (!psCurr->visible() || !psCurr->hitTest(shiftedContext.mx, shiftedContext.my))
 			{
 				continue;  // Skip any hidden widgets, or widgets the click missed.
@@ -1422,6 +1434,9 @@ void WIDGET::displayRecursive(WidgetGraphicsContext const &context)
 	}
 
 	// Display the widgets on this widget.
+	// NOTE: Draw them in the opposite order that clicks are processed, so behavior matches the visual.
+	// i.e. Since processClickRecursive handles processing children in decreasing z-order (i.e. "top-down")
+	//      we want to draw things in list order (bottom-up) so the "top-most" is drawn last
 	for (auto const &child: childWidgets)
 	{
 		if (child->visible())
