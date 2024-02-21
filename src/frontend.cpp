@@ -3834,6 +3834,8 @@ std::shared_ptr<W_LABEL> addSideText(WIDGET* psParent, UDWORD id, UDWORD PosX, U
 	};
 
 	auto psLabel = std::make_shared<W_LABEL>(&sLabInit);
+	psLabel->setTransparentToClicks(true);
+	psLabel->setTransparentToMouse(true);
 	psParent->attach(psLabel);
 	return psLabel;
 }
