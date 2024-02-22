@@ -139,8 +139,8 @@ modules:
     @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
-        url: https://github.com/icculus/physfs/archive/eb3383b532c5f74bfeb42ec306ba2cf80eed988c.zip # PhysFS 3.2.0
-        sha512: 1068b1e0636b478f0d7910303e94d109923b2e4d809fa7a00232ba3733a4cd39c28d17851ff946859c431d7d7febdd229237cc10176eb5d5d19b49c887919fd8
+        url: https://github.com/icculus/physfs/archive/741c4be358cd87366af1387d1e04e3f7d4f50c1e.zip # PhysFS 3.2.0+
+        sha512: 56bfe808e28d7de6b9f242ca3ce81d08439480499c7d5901f78a3ec8ea75c55b71958515db015f101bb6b884a0a0f1140fab1a7222aff0bbe28555ebf378807f
       
   - name: fribidi
     buildsystem: meson
