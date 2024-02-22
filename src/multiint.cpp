@@ -7686,7 +7686,7 @@ static void printHostHelpMessagesToConsole()
 	char buf[512] = { '\0' };
 	if (!motd.isEmpty())
 	{
-		ssprintf(buf, motd.toUtf8().c_str());
+		ssprintf(buf, "%s", motd.toUtf8().c_str());
 		displayRoomNotifyMessage(buf);
 	}
 	if (challengeActive)
