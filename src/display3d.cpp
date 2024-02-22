@@ -3649,8 +3649,8 @@ enum GROUPNUMBER_TYPE
 	GN_DAMAGED,
 	GN_FACTORY
 };
-/// rendering of the unit's group next to the unit itself, 
-/// or the group that will be assigned to the unit after production in the factory
+/// rendering of the object's group next to the object itself, 
+/// or the group that will be assigned to the object after production in the factory
 static void	drawGroupNumber(BASE_OBJECT *psObject)
 {
 	UWORD id = UWORD_MAX;
@@ -3658,7 +3658,7 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 	int32_t x = 0, y = 0;
 	GROUPNUMBER_TYPE groupNumberType = GN_NORMAL;
 
-	if (auto *psDroid = dynamic_cast<DROID*>(psObject))
+	if (auto *psDroid = castDroid(psObject))
 	{
 		int32_t xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
 		int32_t yShift = psDroid->sDisplay.screenR;
@@ -3666,14 +3666,17 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 		x = psDroid->sDisplay.screenX - xShift;
 		y = psDroid->sDisplay.screenY + yShift;
 
-		if (psDroid->repairGroup != UBYTE_MAX) {
+		if (psDroid->repairGroup != UBYTE_MAX)
+		{
 			groupNumber = psDroid->repairGroup;
 			groupNumberType = GN_DAMAGED;
-		} else {
+		}
+		else 
+		{
 			groupNumber = psDroid->group;
 		}
 	} 
-	else if (auto *psStruct = dynamic_cast<STRUCTURE*>(psObject))
+	else if (auto *psStruct = castStructure(psObject))
 	{
 		// same as in queueStructureHealth
 		int32_t scale = static_cast<int32_t>(MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth));
