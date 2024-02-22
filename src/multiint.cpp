@@ -284,6 +284,7 @@ static struct
 } locked;
 static bool spectatorHost = false;
 static uint16_t defaultOpenSpectatorSlots = 0;
+static WzString motd = WzString();
 
 struct AIDATA
 {
@@ -6036,6 +6037,23 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 	}
 }
 
+static void loadMapMessageOfTheDay(WzConfig& ini)
+{
+	if (ini.contains("motd"))
+	{
+		motd = ini.value("motd").toWzString();
+		if (motd.length() > MAX_CONSOLE_STRING_LENGTH)
+		{
+			motd.truncate(MAX_CONSOLE_STRING_LENGTH);
+			debug(LOG_WARNING, "MOTD was truncated to fit into %d characters.", MAX_CONSOLE_STRING_LENGTH);
+		}
+	}
+	else
+	{
+		motd = WzString("");
+	}
+}
+
 /**
  * Loads challenge and player configurations from level/autohost/test .json-files.
  */
@@ -6081,6 +6099,7 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 	WzConfig ini(ininame, WzConfig::ReadOnly);
 
 	loadMapChallengeSettings(ini);
+	loadMapMessageOfTheDay(ini);
 
 	/* Do not load player settings if we are already hosting an online match */
 	if (!bIsOnline || forceLoadPlayers)
@@ -7665,6 +7684,11 @@ void WzMultiplayerOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, uns
 static void printHostHelpMessagesToConsole()
 {
 	char buf[512] = { '\0' };
+	if (!motd.isEmpty())
+	{
+		ssprintf(buf, motd.toUtf8().c_str());
+		displayRoomNotifyMessage(buf);
+	}
 	if (challengeActive)
 	{
 		ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
@@ -8611,6 +8635,17 @@ void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver, 
 	{
 		displayRoomSystemMessage(text);
 	}
+	message.enqueue(NETnetQueue(receiver));
+}
+
+void sendRoomMotdToSingleReceiver(uint32_t receiver)
+{
+	if (motd.isEmpty())
+	{
+		return;
+	}
+	ASSERT_OR_RETURN(, isHumanPlayer(receiver), "Invalid receiver: %" PRIu32 "", receiver);
+	NetworkTextMessage message(NOTIFY_MESSAGE, motd.toUtf8().c_str());
 	message.enqueue(NETnetQueue(receiver));
 }
 

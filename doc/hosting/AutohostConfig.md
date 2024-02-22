@@ -45,6 +45,10 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 * `difficulty` sets the difficulty for an AI. It can be one of `Easy`, `Medium`, `Hard` or `Insane`.
 * `name` sets a custom name for the AI.
 
+## Message of the Day
+
+The `motd` is displayed in the chat box when a player joins the game. It is optional and will be truncated if it exceeds 256 characters.
+
 ## Sample file
 
 ```
@@ -83,6 +87,7 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 	},
 	"player_3": {
 		"team": 1
-	}
+	},
+	"motd": "Good Luck, Have Fun!"
 }
 ```
