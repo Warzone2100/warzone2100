@@ -1491,9 +1491,9 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 					debug(LOG_ERROR, "%s: Invalid object animation level %" PRIu32 ", line %d, frame %d", filename.toUtf8().c_str(), level, i, frame);
 				}
 				ASSERT(frame == i, "%s: Invalid frame enumeration object animation (level %" PRIu32 ") %d: %d", filename.toUtf8().c_str(), level, i, frame);
-				s.objanimdata[i].pos.x = pos.x / INT_SCALE;
-				s.objanimdata[i].pos.y = pos.z / INT_SCALE;
-				s.objanimdata[i].pos.z = pos.y / INT_SCALE;
+				s.objanimdata[i].pos.x = static_cast<float>(pos.x) / static_cast<float>(INT_SCALE);
+				s.objanimdata[i].pos.y = static_cast<float>(pos.z) / static_cast<float>(INT_SCALE);
+				s.objanimdata[i].pos.z = static_cast<float>(pos.y) / static_cast<float>(INT_SCALE);
 				s.objanimdata[i].rot.pitch = static_cast<uint16_t>(static_cast<int32_t>(-(rot.x * DEG_1 / INT_SCALE)));
 				s.objanimdata[i].rot.direction = static_cast<uint16_t>(static_cast<int32_t>(-(rot.z * DEG_1 / INT_SCALE)));
 				s.objanimdata[i].rot.roll = static_cast<uint16_t>(static_cast<int32_t>(-(rot.y * DEG_1 / INT_SCALE)));
