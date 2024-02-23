@@ -131,13 +131,11 @@ static float	scrollSpeedLeftRight; //use two directions and add them because its
 static float	scrollStepLeftRight;
 static float	scrollSpeedUpDown;
 static float	scrollStepUpDown;
-static bool	mouseOverRadar = false;
 static bool	mouseOverConsole = false;
 static bool	ignoreOrder = false;
 static bool	ignoreRMBC	= true;
 static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
-static bool bRadarDragging = false;
 static bool cameraAccel = true;
 
 bool	rotActive = false;
@@ -273,11 +271,6 @@ static void shakeUpdate()
 	}
 }
 
-bool isMouseOverRadar()
-{
-	return mouseOverRadar;
-}
-
 bool	getCameraAccel()
 {
 	return cameraAccel;
@@ -333,73 +326,6 @@ void	setDrawShadows(bool val)
 {
 	bDrawShadows = val;
 	pie_setShadows(val);
-}
-
-void ProcessRadarInput()
-{
-	int PosX, PosY;
-	int x = mouseX();
-	int y = mouseY();
-	UDWORD	temp1, temp2;
-
-	/* Only allow jump-to-area-of-map if radar is on-screen */
-	mouseOverRadar = false;
-	if (radarVisible())
-	{
-		if (CoordInRadar(x, y))
-		{
-			mouseOverRadar = true;
-
-			if (mousePressed(MOUSE_ORDER))
-			{
-				x = mousePressPos_DEPRECATED(MOUSE_ORDER).x;
-				y = mousePressPos_DEPRECATED(MOUSE_ORDER).y;
-
-				/* If we're tracking a droid, then cancel that */
-				CalcRadarPosition(x, y, &PosX, &PosY);
-				if (mouseOverRadar && selectedPlayer < MAX_PLAYERS)
-				{
-					// MARKER
-					// Send all droids to that location
-					orderSelectedLoc(selectedPlayer, (PosX * TILE_UNITS) + TILE_UNITS / 2,
-					                 (PosY * TILE_UNITS) + TILE_UNITS / 2, ctrlShiftDown()); // ctrlShiftDown() = ctrl clicked a destination, add an order
-
-				}
-				CheckScrollLimits();
-				audio_PlayTrack(ID_SOUND_MESSAGEEND);
-			}
-
-
-			if (mouseDrag(MOUSE_SELECT, &temp1, &temp2) && !rotActive)
-			{
-				CalcRadarPosition(x, y, &PosX, &PosY);
-				setViewPos(PosX, PosY, true);
-				bRadarDragging = true;
-				if (ctrlShiftDown())
-				{
-					playerPos.r.y = 0;
-				}
-			}
-			else if (mousePressed(MOUSE_SELECT))
-			{
-				x = mousePressPos_DEPRECATED(MOUSE_SELECT).x;
-				y = mousePressPos_DEPRECATED(MOUSE_SELECT).y;
-
-				CalcRadarPosition(x, y, &PosX, &PosY);
-
-				if (war_GetRadarJump())
-				{
-					/* Go instantly */
-					setViewPos(PosX, PosY, true);
-				}
-				else
-				{
-					/* Pan to it */
-					requestRadarTrack(PosX * TILE_UNITS, PosY * TILE_UNITS);
-				}
-			}
-		}
-	}
 }
 
 // reset the input state
@@ -493,7 +419,7 @@ void processInput()
 
 static bool OverRadarAndNotDragging()
 {
-	return mouseOverRadar && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING;
+	return isMouseOverRadar() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING;
 }
 
 static void CheckFinishedDrag(SELECTION_TYPE selection)
@@ -629,7 +555,7 @@ static void HandleDrag()
 {
 	UDWORD dragX = 0, dragY = 0;
 
-	if (mouseDrag(MOUSE_LMB, &dragX, &dragY) && !mouseOverRadar && !mouseDown(MOUSE_RMB))
+	if (mouseDrag(MOUSE_LMB, &dragX, &dragY) && !isMouseOverRadar() && !mouseDown(MOUSE_RMB))
 	{
 		dragBox3D.x1 = dragX;
 		dragBox3D.x2 = mouseX();
@@ -707,7 +633,6 @@ void processMouseClickInput()
 		dragBox3D.status = DRAG_INACTIVE;
 		// Pretty sure we wan't set walldrag status here aswell.
 		wallDrag.status = DRAG_INACTIVE;
-		bRadarDragging = false;
 		if (bRightClickOrders)
 		{
 			dealWithLMB();
@@ -723,30 +648,24 @@ void processMouseClickInput()
 		}
 	}
 
-	if (!mouseDrag(MOUSE_SELECT, (UDWORD *)&rotX, (UDWORD *)&rotY) && bRadarDragging)
-	{
-		bRadarDragging = false;
-	}
-
 	/* Right mouse click kills a building placement */
 	if (!rotActive && mouseReleased(MOUSE_RMB) &&
 	    (buildState == BUILD3D_POS || buildState == BUILD3D_VALID))
 	{
 		/* Stop the placement */
 		kill3DBuilding();
-		bRadarDragging = false;
 	}
 	if (mouseReleased(MOUSE_RMB))
 	{
 		cancelDeliveryRepos();
 	}
-	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging && !getRadarTrackingStatus())
+	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !isRadarDragging() && !getRadarTrackingStatus())
 	{
 		rotationVerticalTracker->startTracking((UWORD)playerPos.r.x);
 		rotationHorizontalTracker->startTracking((UWORD)playerPos.r.y); // negative values caused problems with float conversion
 		rotActive = true;
 	}
-	if (mouseDrag(MOUSE_PAN, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !bRadarDragging && !getRadarTrackingStatus())
+	if (mouseDrag(MOUSE_PAN, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !isRadarDragging() && !getRadarTrackingStatus())
 	{
 		panXTracker->startTracking(playerPos.p.x);
 		panZTracker->startTracking(playerPos.p.z);
@@ -1253,7 +1172,6 @@ void displayWorld()
 		pos.y = playerPos.r.y;
 		pos.z = playerPos.r.z;
 		camInformOfRotation(&pos);
-		bRadarDragging = false;
 	}
 
 	draw3DScene();
@@ -2014,7 +1932,7 @@ void	dealWithLMB()
 	STRUCTURE			*psStructure;
 
 	/* Don't process if in game options are on screen */
-	if (mouseOverRadar ||
+	if (isMouseOverRadar() ||
 	    InGameOpUp == true || widgGetFromID(psWScreen, INTINGAMEOP))
 	{
 		return;
@@ -2182,7 +2100,7 @@ static void dealWithRMB()
 	DROID				*psDroid;
 	STRUCTURE			*psStructure;
 
-	if (mouseOverRadar || InGameOpUp == true || widgGetFromID(psWScreen, INTINGAMEOP))
+	if (isMouseOverRadar() || InGameOpUp == true || widgGetFromID(psWScreen, INTINGAMEOP))
 	{
 		return;
 	}

@@ -1879,6 +1879,8 @@ bool stageThreeInitialise()
 		challengeActive = true;
 	}
 
+	// add radar to interface screen, and resize
+	intAddRadarWidget();
 	resizeRadar();
 
 	setAllPauseStates(false);

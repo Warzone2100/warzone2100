@@ -28,6 +28,8 @@
 #ifndef __INCLUDED_SRC_RADAR_H__
 #define __INCLUDED_SRC_RADAR_H__
 
+#include "lib/widget/widget.h"
+
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set radar colour for given terrain type.
 
 #define MAX_RADARZOOM		(64)
@@ -42,7 +44,6 @@ void drawRadar();				///< Draw the minimap on the screen.
 void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY);	///< Given a position within the radar, returns a world coordinate.
 void SetRadarZoom(uint8_t ZoomLevel);		///< Set current zoom level. 1.0 is 1:1 resolution.
 uint8_t GetRadarZoom();			///< Get current zoom level.
-bool CoordInRadar(int x, int y);			///< Is screen coordinate inside minimap?
 
 /** Different mini-map draw modes. */
 enum RADAR_DRAW_MODE
@@ -61,6 +62,10 @@ extern bool rotateRadar;
 extern bool radarRotationArrow;
 
 void radarInitVars();			///< Recalculate minimap variables. For initialization code only.
+
+std::shared_ptr<WIDGET> getRadarWidget();
+bool isMouseOverRadar();
+bool isRadarDragging();
 
 extern PIELIGHT clanColours[];
 

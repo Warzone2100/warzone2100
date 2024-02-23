@@ -268,6 +268,8 @@ extern iIMDShape	*pNewDesignIMD;
 /* Initialise the in game interface */
 bool intInitialise();
 
+bool intAddRadarWidget();
+
 // Check of coordinate is in the build menu
 bool CoordInBuild(int x, int y);
 

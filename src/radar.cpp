@@ -30,6 +30,8 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/bitimage.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 #include "lib/gamelib/gtime.h"
 #include "advvis.h"
 #include "objects.h"
@@ -50,6 +52,7 @@
 #include "intdisplay.h"
 #include "texture.h"
 #include "warzoneconfig.h"
+#include "order.h"
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
@@ -70,6 +73,31 @@ static PIELIGHT		tileColours[MAX_TILES];
 static iV_Image		radarBitmap;
 static UDWORD		*radarOverlayBuffer = nullptr;
 static Vector3i		playerpos = {0, 0, 0};
+
+class RadarWidget : public WIDGET {
+public:
+	RadarWidget();
+
+protected:
+	void run(W_CONTEXT *) override;
+	void display(int xOffset, int yOffset) override;
+	bool hitTest(int x, int y) override;
+	void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) override;
+	void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) override;
+	void highlight(W_CONTEXT *) override;
+	void highlightLost() override;
+
+public:
+	bool hasHighlight() const { return m_hasHighlight; }
+	bool isRadarDragging() const { return m_handlingDrag; }
+
+private:
+	std::array<optional<Vector2i>, 3> m_clickPosition;
+	bool m_hasHighlight = false;
+	bool m_handlingDrag = false;
+};
+
+static std::shared_ptr<RadarWidget> pRadarWidget;
 
 PIELIGHT clanColours[] =
 {
@@ -191,6 +219,14 @@ static void radarSize(int ZoomLevel)
 		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - static_cast<int>(radarHeight) / 2;
 	}
 	debug(LOG_WZ, "radar=(%u,%u) tex=(%zu,%zu) size=(%zu,%zu)", radarCenterX, radarCenterY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
+
+	if (pRadarWidget)
+	{
+		auto radarDiag = static_cast<size_t>(ceil(sqrt(double((radarWidth + 1) * (radarWidth + 1)) + double((radarHeight + 1) * (radarHeight + 1)))));
+		int radarX0 = radarCenterX - (radarDiag / 2);
+		int radarY0 = radarCenterY - (radarDiag / 2);
+		pRadarWidget->setGeometry(radarX0, radarY0, radarDiag, radarDiag);
+	}
 }
 
 void radarInitVars()
@@ -210,6 +246,7 @@ bool InitRadar()
 	colRadarAlly = WZCOL_YELLOW;
 	colRadarEnemy = WZCOL_RED;
 	colRadarMe = WZCOL_WHITE;
+	pRadarWidget = std::make_shared<RadarWidget>();
 	return true;
 }
 
@@ -248,6 +285,8 @@ bool ShutdownRadar()
 	free(radarOverlayBuffer);
 	radarOverlayBuffer = nullptr;
 	frameSkip = 0;
+	psWScreen->psForm->detach(pRadarWidget);
+	pRadarWidget.reset();
 	return true;
 }
 
@@ -776,4 +815,158 @@ void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b)
 	tileColours[tileNumber].byte.g = g;
 	tileColours[tileNumber].byte.b = b;
 	tileColours[tileNumber].byte.a = 255;
+}
+
+
+// MARK: - RadarWidget
+
+std::shared_ptr<WIDGET> getRadarWidget()
+{
+	return pRadarWidget;
+}
+
+RadarWidget::RadarWidget()
+:  WIDGET()
+{ }
+
+#define WKEY_ORDER (getRightClickOrders()?WKEY_SECONDARY:WKEY_PRIMARY)
+#define WKEY_SELECT (getRightClickOrders()?WKEY_PRIMARY:WKEY_SECONDARY)
+#define MOUSE_SELECT (getRightClickOrders()?MOUSE_LMB:MOUSE_RMB)
+
+void RadarWidget::run(W_CONTEXT *)
+{
+	int PosX, PosY;
+	UDWORD	temp1, temp2;
+
+	if (m_hasHighlight)
+	{
+		// process drag events
+		if (mouseDrag(MOUSE_SELECT, &temp1, &temp2))
+		{
+			if (!getRotActive())
+			{
+				int x = mouseX();
+				int y = mouseY();
+				CalcRadarPosition(x, y, &PosX, &PosY);
+				setViewPos(PosX, PosY, true);
+				m_handlingDrag = true;
+				if (ctrlShiftDown())
+				{
+					playerPos.r.y = 0;
+				}
+			}
+		}
+		else
+		{
+			m_handlingDrag = false;
+		}
+	}
+	else
+	{
+		if (m_handlingDrag && !mouseDrag(MOUSE_SELECT, &temp1, &temp2))
+		{
+			m_handlingDrag = false;
+		}
+	}
+}
+
+void RadarWidget::display(int xOffset, int yOffset)
+{
+	if (!radarVisible()) { return; }
+
+	gfx_api::context::get().debugStringMarker("Draw 3D scene - radar");
+	drawRadar();
+}
+
+bool RadarWidget::hitTest(int x, int y)
+{
+	// NOTE: CoordInRadar expects x, y in *screen* coordinates - this is _currently_ the case as a byproduct of how the radar widget is added to the UI screen
+	return WIDGET::hitTest(x, y) && CoordInRadar(x, y);
+}
+
+void RadarWidget::clicked(W_CONTEXT *context, WIDGET_KEY key)
+{
+	int x = context->xOffset + context->mx;
+	int y = context->yOffset + context->my;
+
+	m_clickPosition[key] = Vector2i(x, y);
+}
+
+void RadarWidget::highlight(W_CONTEXT *)
+{
+	m_hasHighlight = true;
+}
+
+void RadarWidget::highlightLost()
+{
+	m_hasHighlight = false;
+	for (auto& keyClickPos : m_clickPosition)
+	{
+		keyClickPos.reset();
+	}
+}
+
+void RadarWidget::released(W_CONTEXT *context, WIDGET_KEY key)
+{
+	int PosX, PosY;
+	int x = context->xOffset + context->mx;
+	int y = context->yOffset + context->my;
+
+	if (key == WKEY_ORDER)
+	{
+		if (m_clickPosition[WKEY_ORDER].has_value())
+		{
+			x = m_clickPosition[WKEY_ORDER].value().x;
+			y = m_clickPosition[WKEY_ORDER].value().y;
+
+			/* If we're tracking a droid, then cancel that */
+			CalcRadarPosition(x, y, &PosX, &PosY);
+			if (selectedPlayer < MAX_PLAYERS)
+			{
+				// MARKER
+				// Send all droids to that location
+				orderSelectedLoc(selectedPlayer, (PosX * TILE_UNITS) + TILE_UNITS / 2,
+								 (PosY * TILE_UNITS) + TILE_UNITS / 2, ctrlShiftDown()); // ctrlShiftDown() = ctrl clicked a destination, add an order
+
+			}
+			CheckScrollLimits();
+			audio_PlayTrack(ID_SOUND_MESSAGEEND);
+		}
+	}
+
+	if (key == WKEY_SELECT && !m_handlingDrag)
+	{
+		if (m_clickPosition[WKEY_SELECT].has_value())
+		{
+			x = m_clickPosition[WKEY_SELECT].value().x;
+			y = m_clickPosition[WKEY_SELECT].value().y;
+
+			CalcRadarPosition(x, y, &PosX, &PosY);
+
+			if (war_GetRadarJump())
+			{
+				/* Go instantly */
+				setViewPos(PosX, PosY, true);
+			}
+			else
+			{
+				/* Pan to it */
+				requestRadarTrack(PosX * TILE_UNITS, PosY * TILE_UNITS);
+			}
+		}
+	}
+
+	m_clickPosition[key].reset();
+}
+
+bool isMouseOverRadar()
+{
+	if (!pRadarWidget) { return false; }
+	return pRadarWidget->hasHighlight();
+}
+
+bool isRadarDragging()
+{
+	if (!pRadarWidget) { return false; }
+	return pRadarWidget->isRadarDragging();
 }
