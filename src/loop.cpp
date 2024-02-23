@@ -308,12 +308,6 @@ static GAMECODE renderLoop()
 	{
 		if (!gameUpdatePaused())
 		{
-			if (dragBox3D.status != DRAG_DRAGGING
-			    && wallDrag.status != DRAG_DRAGGING
-			    && intRetVal != INT_INTERCEPT)
-			{
-				ProcessRadarInput();
-			}
 			processInput();
 
 			//no key clicks or in Intelligence Screen

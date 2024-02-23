@@ -1020,6 +1020,13 @@ void intRefreshGroupsUI()
 	IntGroupsRefreshPending = true;
 }
 
+bool intAddRadarWidget()
+{
+	auto radarWidget = getRadarWidget();
+	ASSERT_OR_RETURN(false, radarWidget != nullptr, "Failed to get radar widget?");
+	psWScreen->psForm->attach(radarWidget, WIDGET::ChildZPos::Back);
+	return true;
+}
 
 // see if a delivery point is selected
 static FLAG_POSITION *intFindSelectedDelivPoint()
@@ -1942,16 +1949,19 @@ void intDisplayWidgets()
 		}
 	}
 
+	bool desiredRadarVisibility = false;
 	if (!gameUpdatePaused())
 	{
-		if (radarVisible())
-		{
-			gfx_api::context::get().debugStringMarker("Draw 3D scene - radar");
-			drawRadar();
-		}
-		
+		desiredRadarVisibility = radarVisible();
+
 		/* Ensure that any text messages are displayed at bottom of screen */
 		displayConsoleMessages();
+	}
+
+	auto radarWidget = getRadarWidget();
+	if (radarWidget && (desiredRadarVisibility != radarWidget->visible()))
+	{
+		(desiredRadarVisibility) ? radarWidget->show() : radarWidget->hide();
 	}
 
 	widgDisplayScreen(psWScreen);

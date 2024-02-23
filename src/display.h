@@ -54,8 +54,6 @@ void clearSelection();
 // deal with selecting a droid
 void dealWithDroidSelect(DROID *psDroid, bool bDragBox);
 
-bool isMouseOverRadar();
-
 void	setInvertMouseStatus(bool val);
 bool	getInvertMouseStatus();
 
