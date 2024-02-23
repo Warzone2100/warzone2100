@@ -77,7 +77,7 @@ struct EDGE
 struct ANIMFRAME
 {
 	Vector3f scale = Vector3f(0.f, 0.f, 0.f);
-	Position pos = Position(0, 0, 0);
+	Vector3f pos = Vector3f(0.f, 0.f, 0.f);
 	Rotation rot;
 };
 
