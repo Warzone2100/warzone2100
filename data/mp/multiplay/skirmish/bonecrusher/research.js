@@ -120,7 +120,7 @@ function doResearch_old(){
 
 	var avail_research = enumResearch().filter((e) => {
 		//		debugMsg(e.name+' - '+e.started+' - '+e.done, 'research_advance');
-		return !e.started
+		return !e.started;
 	});
 
 	if (research_way.length === 0 || avail_research.length === 0) {
