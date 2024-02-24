@@ -87,6 +87,7 @@ jobs:
     - name: Prep Build Environment
       run: |
         # Install additional host tools
+        sudo apt-get -u update
         DEBIAN_FRONTEND=noninteractive sudo apt-get -y install cmake git zip unzip gettext asciidoctor
 
     - uses: actions/setup-node@v4
