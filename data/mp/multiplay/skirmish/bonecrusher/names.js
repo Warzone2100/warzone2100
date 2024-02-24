@@ -561,4 +561,4 @@ const research_name = {
 	"R-Comp-CommandTurret02" : "Command Turret II",
 	"R-Comp-CommandTurret03" : "Command Turret III",
 	"R-Comp-CommandTurret04" : "Command Turret IV"
-}
+};

@@ -106,9 +106,10 @@ function builderBuild(droid, structure, rotation, position){
 	if (isStructureAvailable(structure, me)) {
 
 		debugMsg('try '+structure, 'builders');
+		var _pos;
 
-		if (position) var _pos = position;
-		else var _pos = base;
+		if (position) _pos = position;
+		else _pos = base;
 
 		if (structure === "A0RepairCentre3" && !position) {
 			if (repfac.length === 0) {

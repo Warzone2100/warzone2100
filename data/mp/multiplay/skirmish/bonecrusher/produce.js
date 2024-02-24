@@ -223,7 +223,6 @@ function produceCyborgs(){
 
 
 	if (enumStruct(me, FACTORY).length === 0) {
-		var cyborg_factories = enumStruct(me,CYBORG_FACTORY).filter((e) => (e.status === BUILT && structureIdle(e)));
 		if (cyborg_factories.length > 0) {
 			buildDroid(cyborg_factories[0], 'Emergency Builder', 'CyborgLightBody', "CyborgLegs", "", "", 'CyborgSpade');
 		}

@@ -125,9 +125,9 @@ function bc_eventObjectSeen(sensor, gameObject) {
 		if (!allianceExistsBetween(me,gameObject.player)) {
 //			debugMsg("eventObjectSeen: "+ sensor.name+" обнаружил вражескую еденицу: "+gameObject.name, 'events');
 //			getTarget();
-			if (gameObject.droidType === DROID_WEAPON
-				&& isFixVTOL(gameObject)
-				&& distBetweenTwoPoints_p(gameObject.x,gameObject.y,base.x,base.y) < base_range)
+			if (gameObject.droidType === DROID_WEAPON &&
+				isFixVTOL(gameObject) &&
+				distBetweenTwoPoints_p(gameObject.x,gameObject.y,base.x,base.y) < base_range)
 				AA_queue.push({x:gameObject.x,y:gameObject.y});
 		}
 		break;

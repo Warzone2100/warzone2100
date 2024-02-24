@@ -85,9 +85,10 @@ function targetJammers(){
 
 
 	var jammers = enumGroup(armyJammers);
+	var partisans;
 
-	if (se_r >= army_rich) var partisans = enumGroup(armyRegular);
-	else var partisans = enumGroup(armyPartisans);
+	if (se_r >= army_rich) partisans = enumGroup(armyRegular);
+	else partisans = enumGroup(armyPartisans);
 
 
 	if (jammers.length === 0 || partisans.length === 0) return;
@@ -467,6 +468,7 @@ function targetRegularRich(target, victim){
 
 	var help = [];
 	var stopPoint;
+	var endPoint;
 	if (ally.length > 0) help = getEnemyNearAlly();
 	if (help.length === 0) {
 		help = getEnemyCloseBase();
@@ -479,10 +481,10 @@ function targetRegularRich(target, victim){
 	}
 
 	if (stopPoint) {
-		var endPoint = {x:stopPoint.x,y:stopPoint.y};
+		endPoint = {x:stopPoint.x,y:stopPoint.y};
 	}
 	else {
-		var endPoint = {x:targRegular.x,y:targRegular.y};
+		endPoint = {x:targRegular.x,y:targRegular.y};
 	}
 
 	if (targRegular.x === 0 && targRegular.y === 0 && !target) {
