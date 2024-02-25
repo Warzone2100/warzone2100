@@ -161,11 +161,11 @@ static void refreshTip(std::shared_ptr<WIDGET> mouseOverWidget)
 		height += displayCache.wzTip.back().belowBase();
 	}
 	auto x = clip<SDWORD>(mouseOverWidget->screenPosX() + mouseOverWidget->width() / 2, 0, screenWidth - width - 1);
-	auto y = std::max(mouseOverWidget->screenPosY() + mouseOverWidget->height() + TIP_VGAP, 0);
-	if (y + height >= (int)screenHeight)
+	auto y = std::min(mouseOverWidget->screenPosY() - height - TIP_VGAP, (int)screenHeight);
+	if (y < 0)
 	{
-		/* Position the tip above the button */
-		y = mouseOverWidget->screenPosY() - height - TIP_VGAP;
+		/* Position the tip below the button */
+		y = std::max(mouseOverWidget->screenPosY() + mouseOverWidget->height() + TIP_VGAP, 0);
 	}
 	tipRect = WzRect(x - 1, y - 1, width + 2, height + 2);
 
