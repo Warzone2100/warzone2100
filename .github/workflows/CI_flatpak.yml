@@ -158,7 +158,7 @@ jobs:
         WZ_FLATPAK_BUNDLE="warzone2100${WZ_OUTPUT_FLATPAK_BUNDLE_SUFFIX}_linux_${WZ_TARGET_ARCH}.flatpak"
         echo "WZ_FLATPAK_BUNDLE=${WZ_FLATPAK_BUNDLE}" >> $GITHUB_ENV
         echo "WZ_FLATPAK_BUNDLE=${WZ_FLATPAK_BUNDLE}" >> $GITHUB_OUTPUT
-        WZ_FLATPAK_MIRROR_SCREENSHOTS_URL="https://dl.flathub.org/repo/screenshots"
+        WZ_FLATPAK_MIRROR_SCREENSHOTS_URL="https://dl.flathub.org/media/"
         echo "WZ_FLATPAK_MIRROR_SCREENSHOTS_URL=${WZ_FLATPAK_MIRROR_SCREENSHOTS_URL}" >> $GITHUB_ENV
     - name: Generate Flatpak manifest
       working-directory: '${{ github.workspace }}/src'
