@@ -4641,7 +4641,7 @@
 		"imdName": "iceng.pie",
 		"name": "Turbo-Charged Engine Mk2",
 		"requiredResearch": [
-			"R-Vehicle-Body09",
+			"R-Struc-Research-Upgrade04",
 			"R-Vehicle-Engine04"
 		],
 		"researchPoints": 9000,
@@ -4664,6 +4664,7 @@
 		"imdName": "iceng.pie",
 		"name": "Turbo-Charged Engine Mk3",
 		"requiredResearch": [
+			"R-Vehicle-Body09",
 			"R-Vehicle-Engine05"
 		],
 		"researchPoints": 11000,
@@ -8751,7 +8752,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
-				"value": 5
+				"value": 15
 			}
 		],
 		"statID": "MG1Mk1",

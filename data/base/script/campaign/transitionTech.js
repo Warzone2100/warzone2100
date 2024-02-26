@@ -117,7 +117,7 @@ const mis_betaResearchNew = [
 	"R-Wpn-Bomb02", "R-Wpn-Howitzer-Accuracy01", "R-Wpn-Howitzer-Damage02",
 	"R-Wpn-AAGun-Accuracy02", "R-Wpn-Howitzer-ROF02", "R-Struc-Research-Upgrade06",
 	"R-Struc-VTOLPad-Upgrade03", "R-Wpn-Bomb-Damage02", "R-Wpn-Bomb04",
-	"R-Defense-WallUpgrade06",
+	"R-Defense-WallUpgrade06", "R-Vehicle-Engine05",
 
 	// 8
 	"R-Sys-VTOLCBS-Tower01", "R-Wpn-Cannon4AMk1", "R-Wpn-Mortar3", "R-Wpn-Rocket07-Tank-Killer",

@@ -125,7 +125,7 @@
 
 	"object_0": {
 		"label": "NXbase1HeavyFacArti",
-		"id": 1309,
+		"id": 524,
 		"player": 3,
 		"type": 1
 	},
@@ -137,7 +137,7 @@
 	},
 	"object_2": {
 		"label": "NXvtolFacArti",
-		"id": 544,
+		"id": 542,
 		"player": 3,
 		"type": 1
 	},

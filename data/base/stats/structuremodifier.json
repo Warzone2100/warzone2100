@@ -24,7 +24,7 @@
 		"SOFT": 200
 	},
 	"BUNKER BUSTER": {
-		"BUNKER": 500,
+		"BUNKER": 1000,
 		"HARD": 350,
 		"MEDIUM": 200,
 		"SOFT": 100
