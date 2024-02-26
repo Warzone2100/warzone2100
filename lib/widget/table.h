@@ -60,7 +60,7 @@ public:
 protected:
 	virtual void display(int, int) override;
 	virtual void displayRecursive(WidgetGraphicsContext const& context) override;
-	virtual bool hitTest(int x, int y) override;
+	virtual bool hitTest(int x, int y) const override;
 public:
 	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 protected:

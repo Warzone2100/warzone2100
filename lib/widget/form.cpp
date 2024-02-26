@@ -300,7 +300,7 @@ void W_FORM::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int 
 	WIDGET::screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
-bool W_FORM::hitTest(int x, int y)
+bool W_FORM::hitTest(int x, int y) const
 {
 	if (!minimizable || formState != FormState::MINIMIZED)
 	{

@@ -4565,7 +4565,7 @@ void WzMultiplayerOptionsTitleUI::openPlayerSlotSwapChooser(uint32_t playerIndex
 
 	// Now create a dummy row for the row being swapped, and display beneath
 	auto playerRow = WzPlayerRow::make(playerIndex, titleUI);
-	playerRow->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; }); // ensure clicks on this display-only row have no effect
+	playerRow->setTransparentToMouse(true); // ensure clicks on this display-only row have no effect
 	swapContextForm->attach(playerRow);
 	playerRow->setCalcLayout([swapContextFormPadding, textHeight](WIDGET *psWidget) {
 		psWidget->setGeometry(PLAYERBOX_X0, swapContextFormPadding + textHeight + 4, MULTIOP_PLAYERWIDTH, MULTIOP_PLAYERHEIGHT);

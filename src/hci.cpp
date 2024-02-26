@@ -340,7 +340,7 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 		button.setGeometry(button.x(), button.y(), image->Width / 2, image->Height / 2);
 
 		// add a custom hit-testing function that uses a tighter bounding ellipse
-		button.setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool {
+		button.setCustomHitTest([](const WIDGET *psWidget, int x, int y) -> bool {
 
 			// determine center of ellipse contained within the bounding rect
 			float centerX = ((psWidget->x()) + (psWidget->x() + psWidget->width())) / 2.f;

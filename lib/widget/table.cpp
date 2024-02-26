@@ -156,7 +156,7 @@ void TableRow::displayRecursive(WidgetGraphicsContext const& context)
 	pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), disabledColor);
 }
 
-bool TableRow::hitTest(int x, int y)
+bool TableRow::hitTest(int x, int y) const
 {
 	if (disabledRow) { return false; }
 	return W_BUTTON::hitTest(x, y);
