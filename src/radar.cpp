@@ -81,7 +81,7 @@ public:
 protected:
 	void run(W_CONTEXT *) override;
 	void display(int xOffset, int yOffset) override;
-	bool hitTest(int x, int y) override;
+	bool hitTest(int x, int y) const override;
 	void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) override;
 	void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) override;
 	void highlight(W_CONTEXT *) override;
@@ -878,7 +878,7 @@ void RadarWidget::display(int xOffset, int yOffset)
 	drawRadar();
 }
 
-bool RadarWidget::hitTest(int x, int y)
+bool RadarWidget::hitTest(int x, int y) const
 {
 	// NOTE: CoordInRadar expects x, y in *screen* coordinates - this is _currently_ the case as a byproduct of how the radar widget is added to the UI screen
 	return WIDGET::hitTest(x, y) && CoordInRadar(x, y);

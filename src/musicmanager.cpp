@@ -489,8 +489,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psNowPlaying->setFont(font_regular, WZCOL_TEXT_MEDIUM);
 	psNowPlaying->setString((selectedTrack) ? (WzString::fromUtf8(_("NOW PLAYING")) + ":") : "");
 	psNowPlaying->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	psNowPlaying->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	psNowPlaying->setTransparentToMouse(true);
 
 	// Add Selected Track name
 	if (!psSelectedTrackName)
@@ -501,8 +500,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psSelectedTrackName->setFont(font_regular_bold, WZCOL_TEXT_BRIGHT);
 	psSelectedTrackName->setString((selectedTrack) ? WzString::fromUtf8(selectedTrack->title) : "");
 	psSelectedTrackName->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	psSelectedTrackName->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	psSelectedTrackName->setTransparentToMouse(true);
 
 	// Add Selected Track author details
 	if (!psSelectedTrackAuthorName)
@@ -513,8 +511,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psSelectedTrackAuthorName->setFont(font_regular, WZCOL_TEXT_BRIGHT);
 	psSelectedTrackAuthorName->setString((selectedTrack) ? WzString::fromUtf8(selectedTrack->author) : "");
 	psSelectedTrackAuthorName->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	psSelectedTrackAuthorName->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	psSelectedTrackAuthorName->setTransparentToMouse(true);
 
 	// album info xPosStart
 	int albumInfoXPosStart = psNowPlaying->x() + psNowPlaying->width() + 10 + WZ_TRACKDETAILS_IMAGE_SIZE + 10;
@@ -529,8 +526,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psSelectedTrackAlbumName->setFont(font_small, WZCOL_TEXT_BRIGHT);
 	psSelectedTrackAlbumName->setString((pAlbum) ? (WzString::fromUtf8(_("Album")) + ": " + WzString::fromUtf8(pAlbum->title)) : "");
 	psSelectedTrackAlbumName->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	psSelectedTrackAlbumName->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	psSelectedTrackAlbumName->setTransparentToMouse(true);
 
 	if (!psSelectedTrackAlbumDate)
 	{
@@ -540,8 +536,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psSelectedTrackAlbumDate->setFont(font_small, WZCOL_TEXT_BRIGHT);
 	psSelectedTrackAlbumDate->setString((pAlbum) ? (WzString::fromUtf8(_("Date")) + ": " + WzString::fromUtf8(pAlbum->date)) : "");
 	psSelectedTrackAlbumDate->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	psSelectedTrackAlbumDate->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	psSelectedTrackAlbumDate->setTransparentToMouse(true);
 
 	if (!psSelectedTrackAlbumDescription)
 	{
@@ -552,8 +547,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	int heightOfTitleLabel =  psSelectedTrackAlbumDescription->setFormattedString((pAlbum) ? WzString::fromUtf8(pAlbum->description) : "", maxWidthOfAlbumLabel, font_small);
 	psSelectedTrackAlbumDescription->setGeometry(albumInfoXPosStart, 12 + 13 + 15, maxWidthOfAlbumLabel, heightOfTitleLabel);
 	psSelectedTrackAlbumDescription->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	psSelectedTrackAlbumDescription->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	psSelectedTrackAlbumDescription->setTransparentToMouse(true);
 
 	pTrackDetailsBox->loadImage((pAlbum) ? pAlbum->album_cover_filename : "");
 }
@@ -674,8 +668,7 @@ static void addTrackList(WIDGET *parent, bool ingame)
 	title_header->setFontColour(WZCOL_TEXT_MEDIUM);
 	title_header->setString(_("Title"));
 	title_header->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	title_header->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	title_header->setTransparentToMouse(true);
 
 	auto album_header = std::make_shared<W_LABEL>();
 	pHeader->attach(album_header);
@@ -683,8 +676,7 @@ static void addTrackList(WIDGET *parent, bool ingame)
 	album_header->setFontColour(WZCOL_TEXT_MEDIUM);
 	album_header->setString(_("Album"));
 	album_header->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	album_header->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	album_header->setTransparentToMouse(true);
 
 	for (int musicModeIdx = 0; musicModeIdx < NUM_MUSICGAMEMODES; musicModeIdx++)
 	{

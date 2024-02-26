@@ -1157,7 +1157,7 @@ void WIDGET::runRecursive(W_CONTEXT *psContext)
 	}
 }
 
-bool WIDGET::hitTest(int x, int y)
+bool WIDGET::hitTest(int x, int y) const
 {
 	// default hit-testing bounding rect (based on the widget's x, y, width, height)
 	bool hitTestResult = dim.contains(x, y);

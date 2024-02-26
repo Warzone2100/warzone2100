@@ -70,7 +70,7 @@ typedef std::function<void (WIDGET *psWidget)> WIDGET_CALCLAYOUT_FUNC;
 typedef std::function<void (WIDGET *psWidget)> WIDGET_ONDELETE_FUNC;
 
 /* The optional hit-testing function, used for custom hit-testing within the outer bounding rectangle */
-typedef std::function<bool (WIDGET *psWidget, int x, int y)> WIDGET_HITTEST_FUNC;
+typedef std::function<bool (const WIDGET *psWidget, int x, int y)> WIDGET_HITTEST_FUNC;
 
 
 /* The different base types of widget */
@@ -218,7 +218,7 @@ protected:
 	virtual void display(int, int) {}
 	virtual void geometryChanged() {}
 
-	virtual bool hitTest(int x, int y);
+	virtual bool hitTest(int x, int y) const;
 
 public:
 	virtual unsigned getState();

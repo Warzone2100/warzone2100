@@ -124,7 +124,7 @@ bool specLayerInit(bool showButton /*= true*/)
 					specStatsViewCreate();
 				});
 			});
-			specStatsButton->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool {
+			specStatsButton->setCustomHitTest([](const WIDGET *psWidget, int x, int y) -> bool {
 				if (bDisplayMultiJoiningStatus)
 				{
 					// effectively: make this unclickable until the game actually starts
