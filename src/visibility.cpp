@@ -256,9 +256,14 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 /* The terrain revealing ray callback */
 static void doWaveTerrain(BASE_OBJECT *psObj)
 {
+	if (psObj == nullptr)
+	{
+		return;
+	}
+
 	const int sx = psObj->pos.x;
 	const int sy = psObj->pos.y;
-	const int sz = psObj->pos.z + MAX(MIN_VIS_HEIGHT, psObj->sDisplay.imd->max.y);
+	const int sz = psObj->pos.z + ((psObj->sDisplay.imd != nullptr) ? MAX(MIN_VIS_HEIGHT, psObj->sDisplay.imd->max.y) : MIN_VIS_HEIGHT);
 	const unsigned radius = objSensorRange(psObj);
 	const int rayPlayer = psObj->player;
 	size_t size;
