@@ -1534,6 +1534,11 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 {
 	const PIELIGHT brightness = WZCOL_WHITE;
 
+	if (psEffect == nullptr || psEffect->imd == nullptr)
+	{
+		return;
+	}
+
 	if (psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
 	{
 		if (rejectLandLight((LAND_LIGHT_SPEC)psEffect->specific))
