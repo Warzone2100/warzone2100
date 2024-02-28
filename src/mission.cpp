@@ -3163,8 +3163,6 @@ std::vector<CAMPAIGN_FILE> readCampaignFiles()
 		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 		c.name = ini.value("name").toWzString();
 		c.level = ini.value("level").toWzString();
-		c.package = ini.value("package").toWzString();
-		c.loading = ini.value("loading").toWzString();
 		c.video = ini.value("video").toWzString();
 		c.captions = ini.value("captions").toWzString();
 		result.push_back(c);
