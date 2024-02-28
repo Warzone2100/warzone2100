@@ -1694,7 +1694,6 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 {
 	UWORD			imageID;
 	UDWORD			delay = 150;
-	UDWORD			i;
 	SDWORD width, height;
 	int		x = 0, y = 0;
 	static const uint16_t imagesEnemy[] = {IMAGE_RAD_ENMREAD, IMAGE_RAD_ENM1, IMAGE_RAD_ENM2, IMAGE_RAD_ENM3};
@@ -1706,40 +1705,6 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	// store the width & height of the radar/mini-map
 	width = scrollMaxX - scrollMinX;
 	height = scrollMaxY - scrollMinY;
-
-	// Check if it's time to remove beacons
-	bool removedAMessage = false;
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		/* Go through all the proximity Displays*/
-		mutating_list_iterate(apsProxDisp[i], [&removedAMessage, i](PROXIMITY_DISPLAY* psProxDisp)
-		{
-			if (psProxDisp->psMessage->dataType == MSG_DATA_BEACON)
-			{
-				MESSAGE* psCurrMsg = psProxDisp->psMessage;
-				VIEWDATA* pViewData = psCurrMsg->pViewData;
-
-				ASSERT_OR_RETURN(IterationResult::CONTINUE_ITERATION, pViewData != nullptr, "Message without data!");
-
-				if (pViewData->type == VIEW_BEACON)
-				{
-					ASSERT_OR_RETURN(IterationResult::CONTINUE_ITERATION, pViewData->pData != nullptr, "Help message without data!");
-					if (pViewData->pData != nullptr && (((VIEW_PROXIMITY*)pViewData->pData)->timeAdded + 60000) <= gameTime)
-					{
-						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY*)pViewData->pData)->sender));
-						removeMessage(psCurrMsg, i);	//remove beacon
-						removedAMessage = true;
-						return IterationResult::BREAK_ITERATION; //there can only be 1 beacon per player
-					}
-				}
-			}
-			return IterationResult::CONTINUE_ITERATION;
-		});
-	}
-	if (removedAMessage)
-	{
-		jsDebugMessageUpdate();
-	}
 
 	/* Go through all the proximity Displays */
 	if (selectedPlayer < MAX_PLAYERS)
