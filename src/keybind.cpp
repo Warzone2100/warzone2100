@@ -2584,8 +2584,6 @@ void kf_QuickLoad()
 		setWidgetsStatus(true);
 		intResetScreen(false);
 		wzSetCursor(CURSOR_DEFAULT);
-		int campaign = getCampaign(filename);
-		setCampaignNumber(campaign);
 
 		loopMissionState = LMS_LOADGAME;
 		sstrcpy(saveGameName, filename);
