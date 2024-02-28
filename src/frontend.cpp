@@ -434,29 +434,6 @@ static void frontEndNewGame(int which)
 			seq_StartNextFullScreenVideo();
 		}
 	}
-	if (!list[which].package.isEmpty())
-	{
-		WzString path;
-		path += PHYSFS_getWriteDir();
-		path += PHYSFS_getDirSeparator();
-		path += "campaigns";
-		path += PHYSFS_getDirSeparator();
-		path += list[which].package;
-		if (!PHYSFS_mount(path.toUtf8().c_str(), NULL, PHYSFS_APPEND))
-		{
-			debug(LOG_ERROR, "Failed to load campaign mod \"%s\": %s",
-			      path.toUtf8().c_str(), WZ_PHYSFS_getLastError());
-		}
-	}
-	if (!list[which].loading.isEmpty())
-	{
-		debug(LOG_WZ, "Adding campaign mod level \"%s\"", list[which].loading.toUtf8().c_str());
-		if (!loadLevFile(list[which].loading.toUtf8(), mod_campaign, false, nullptr))
-		{
-			debug(LOG_ERROR, "Failed to load %s", list[which].loading.toUtf8().c_str());
-			return;
-		}
-	}
 	debug(LOG_WZ, "Loading campaign mod -- %s", aLevelName);
 	changeTitleMode(STARTGAME);
 }

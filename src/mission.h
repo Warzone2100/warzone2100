@@ -194,8 +194,6 @@ struct CAMPAIGN_FILE
 	WzString level;
 	WzString video;
 	WzString captions;
-	WzString package;
-	WzString loading;
 };
 std::vector<CAMPAIGN_FILE> readCampaignFiles();
 
