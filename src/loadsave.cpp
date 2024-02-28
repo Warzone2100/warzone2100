@@ -802,10 +802,6 @@ static void runLoadCleanup()
 		return;
 	}
 
-	// Load a savegame.
-	unsigned campaign = getCampaign(sRequestResult);
-	setCampaignNumber(campaign);
-	debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
 	closeLoadSave();
 }
 
