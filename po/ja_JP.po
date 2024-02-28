@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-02-28 10:47\n"
+"PO-Revision-Date: 2024-02-28 23:06\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -5795,7 +5795,7 @@ msgstr "(%s) で必要なポート (%s) を開けませんでした。"
 #, c-format
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
-msgstr ""
+msgstr "ゲームをホストする前に、%d番ポートを開くように、ルータとファイアウォールを手動で設定する必要があります。"
 
 #: lib/netplay/netplay.cpp:1590
 #, c-format
