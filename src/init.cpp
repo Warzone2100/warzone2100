@@ -1796,6 +1796,8 @@ bool stageTwoShutDown()
 		return false;
 	}
 
+	clearCampaignName();
+
 	return true;
 }
 

@@ -186,7 +186,11 @@ void resetMissionWidgets();
 UDWORD	getCampaignNumber();
 void	setCampaignNumber(UDWORD number);
 
+void setCampaignName(const std::string& campaignName);
+void clearCampaignName();
 std::string getCampaignName();
+
+std::string getCampaignNameFromCampaignNumber(UDWORD number);
 
 struct CAMPAIGN_FILE
 {
