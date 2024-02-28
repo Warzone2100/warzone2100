@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-12-06 16:44\n"
+"PO-Revision-Date: 2024-02-28 10:47\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -4613,7 +4613,7 @@ msgstr "このNEXUS侵入プログラムは、自己変異型コンピュータ�
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "その最終的な目標や機能はわかっていません。初期段階では、侵入したシステムの残りの部分からメモリの一部を探し出し、分離しています。そして、自分自身とデータ構造を変異させ、システムを内部から再プログラミングし始めます。"
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -5625,11 +5625,11 @@ msgstr "非アクティブ／受動的なプレーで負けました。"
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "ホストの設定されたゲームの時間制限が近づいています。10分以内に勝者がいない場合、ゲームは終了されます。"
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "ホストの設定されたゲームの時間制限を超えました。ゲーム終了です。"
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
