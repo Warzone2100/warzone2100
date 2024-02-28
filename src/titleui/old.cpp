@@ -52,10 +52,6 @@ void WzOldTitleUI::start()
 {
 	switch (mode)
 	{
-	case CAMPAIGNS:
-		ActivityManager::instance().navigateToMenu("Campaign");
-		startCampaignSelector();
-		break;
 	case SINGLE:
 		ActivityManager::instance().navigateToMenu("Single Player");
 		startSinglePlayerMenu();
@@ -148,10 +144,6 @@ TITLECODE WzOldTitleUI::run()
 
 	case TITLE:
 		runTitleMenu();
-		break;
-
-	case CAMPAIGNS:
-		runCampaignSelector();
 		break;
 
 	case SINGLE:

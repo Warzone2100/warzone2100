@@ -76,6 +76,7 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 #include "titleui/titleui.h"
+#include "titleui/campaign.h"
 #include "urlhelpers.h"
 #include "game.h"
 #include "map.h" //for builtInMap and useTerrainOverrides
@@ -105,7 +106,6 @@ static std::shared_ptr<IMAGEFILE> pFlagsImages;
 // ////////////////////////////////////////////////////////////////////////////
 // Forward definitions
 
-static W_BUTTON * addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
 static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &txt, unsigned int style, optional<unsigned int> minimumWidth = nullopt);
 static std::shared_ptr<W_SLIDER> makeFESlider(UDWORD id, UDWORD parent, UDWORD stops, UDWORD pos);
 static std::shared_ptr<WIDGET> addMargin(std::shared_ptr<WIDGET> widget);
@@ -182,7 +182,7 @@ static void runchatlink()
 
 const char * VIDEO_TAG = "videoMissing";
 
-static void notifyAboutMissingVideos()
+void notifyAboutMissingVideos()
 {
 	if (!hasNotificationsWithTag(VIDEO_TAG))
 	{
@@ -398,48 +398,6 @@ void startSinglePlayerMenu()
 	}
 }
 
-void startCampaignSelector()
-{
-	addBackdrop();
-	addTopForm(false);
-	addBottomForm();
-
-	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
-	ASSERT(list.size() <= static_cast<size_t>(std::numeric_limits<UDWORD>::max()), "list.size() (%zu) exceeds UDWORD max", list.size());
-	for (UDWORD i = 0; i < static_cast<UDWORD>(list.size()); i++)
-	{
-		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + FRONTEND_BUTHEIGHT * i, gettext(list[i].name.toUtf8().c_str()), WBUT_TXTCENTRE);
-	}
-	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("CAMPAIGNS"));
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-	// show this only when the video sequences are not installed
-	if (!seq_hasVideos())
-	{
-		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
-		notifyAboutMissingVideos();
-	}
-}
-
-static void frontEndNewGame(int which)
-{
-	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
-	sstrcpy(aLevelName, list[which].level.toUtf8().c_str());
-	setCampaignName(list[which].name.toStdString());
-
-	// show this only when the video sequences are installed
-	if (seq_hasVideos())
-	{
-		if (!list[which].video.isEmpty())
-		{
-			seq_ClearSeqList();
-			seq_AddSeqToList(list[which].video.toUtf8().c_str(), nullptr, list[which].captions.toUtf8().c_str(), false);
-			seq_StartNextFullScreenVideo();
-		}
-	}
-	debug(LOG_WZ, "Loading campaign mod -- %s", aLevelName);
-	changeTitleMode(STARTGAME);
-}
-
 static void loadOK()
 {
 	if (strlen(sRequestResult))
@@ -475,34 +433,6 @@ void SPinit(LEVEL_TYPE gameType)
 	useTerrainOverrides = true;
 }
 
-bool runCampaignSelector()
-{
-	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
-	if (id == FRONTEND_QUIT)
-	{
-		changeTitleMode(SINGLE); // go back
-	}
-	else if (id >= FRONTEND_CAMPAIGN_1 && id <= FRONTEND_CAMPAIGN_6) // chose a campaign
-	{
-		SPinit(LEVEL_TYPE::CAMPAIGN);
-		frontEndNewGame(id - FRONTEND_CAMPAIGN_1);
-	}
-	else if (id == FRONTEND_HYPERLINK)
-	{
-		runHyperlink();
-	}
-
-	widgDisplayScreen(psWScreen); // show the widgets currently running
-
-	if (CancelPressed())
-	{
-		changeTitleMode(SINGLE);
-	}
-
-	return true;
-}
-
 bool runSinglePlayerMenu()
 {
 	if (bLoadSaveUp)
@@ -524,7 +454,8 @@ bool runSinglePlayerMenu()
 		switch (id)
 		{
 		case FRONTEND_NEWGAME:
-			changeTitleMode(CAMPAIGNS);
+			ActivityManager::instance().navigateToMenu("Campaign");
+			changeTitleUI(std::make_shared<WzCampaignSelectorTitleUI>(wzTitleUICurrent));
 			break;
 
 		case FRONTEND_LOADGAME_MISSION:
@@ -3900,7 +3831,7 @@ static std::shared_ptr<WIDGET> addMargin(std::shared_ptr<WIDGET> widget)
 	return Margin(0, 20).wrap(widget);
 }
 
-void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)
+std::shared_ptr<W_BUTTON> addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)
 {
 	auto button = makeTextButton(id, txt, style);
 	if (style & WBUT_TXTCENTRE)
@@ -3915,6 +3846,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt,
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
 	ASSERT(parent != nullptr, "Unable to find FRONTEND_BOTFORM?");
 	parent->attach(button);
+	return button;
 }
 
 W_BUTTON * addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
