@@ -424,6 +424,8 @@ static void frontEndNewGame(int which)
 {
 	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
 	sstrcpy(aLevelName, list[which].level.toUtf8().c_str());
+	setCampaignName(list[which].name.toStdString());
+
 	// show this only when the video sequences are installed
 	if (seq_hasVideos())
 	{

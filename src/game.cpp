@@ -4467,6 +4467,18 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		game.type = static_cast<LEVEL_TYPE>(save.value("gameType").toInt());
 	}
+	if (save.contains("campaignName"))
+	{
+		auto saveCampaignName = save.value("campaignName").toWzString();
+		if (!saveCampaignName.isEmpty())
+		{
+			setCampaignName(saveCampaignName.toStdString());
+		}
+		else
+		{
+			clearCampaignName();
+		}
+	}
 	if (save.contains("scavengers"))
 	{
 		auto saveScavValue = save.value("scavengers").toUInt();
@@ -4624,6 +4636,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("version", currentGameVersion); // game version save was made on
 	save.setValue("versionFile", 2); // version of this file. Bump for significant changes
 	save.setValue("saveKey", saveKey);
+	save.setValue("campaignName", getCampaignName());
 	save.setValue("gameTime", gameTime);
 	save.setValue("missionTime", mission.startTime);
 	save.setVector2i("scrollMin", Vector2i(scrollMinX, scrollMinY));

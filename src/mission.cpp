@@ -186,6 +186,7 @@ static SDWORD		g_iReinforceTime = 0;
 
 /* Which campaign are we dealing with? */
 static	UDWORD	camNumber = 1;
+static  optional<std::string> campaignName = nullopt;
 
 
 //returns true if on an off world mission
@@ -2578,6 +2579,7 @@ bool setUpMission(LEVEL_TYPE type)
 		{
 			return false;
 		}
+		clearCampaignName();
 		loopMissionState = LMS_SAVECONTINUE;
 	}
 	else if (type == LEVEL_TYPE::LDS_MKEEP
@@ -3125,6 +3127,18 @@ void	setCampaignNumber(UDWORD number)
 {
 	ASSERT(number < 4, "Campaign Number too high!");
 	camNumber = number;
+
+	if (!bMultiPlayer && !bInTutorial)
+	{
+		if (!campaignName.has_value())
+		{
+			campaignName = getCampaignNameFromCampaignNumber(number);
+		}
+	}
+	else
+	{
+		campaignName.reset();
+	}
 }
 
 UDWORD	getCampaignNumber()
@@ -3132,16 +3146,30 @@ UDWORD	getCampaignNumber()
 	return camNumber;
 }
 
+void setCampaignName(const std::string& newCampaignName)
+{
+	campaignName = newCampaignName;
+}
+
+void clearCampaignName()
+{
+	campaignName.reset();
+}
+
 std::string getCampaignName()
 {
-	UDWORD campaignNum = getCampaignNumber();
-	std::string campaignName;
+	return campaignName.value_or(std::string());
+}
+
+std::string getCampaignNameFromCampaignNumber(UDWORD campaignNum)
+{
 	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
+
 	if (campaignNum > 0 && campaignNum <= list.size())
 	{
-		campaignName = list[campaignNum - 1].name.toStdString();
+		return list[campaignNum - 1].name.toStdString();
 	}
-	return campaignName;
+	return std::string();
 }
 
 std::vector<CAMPAIGN_FILE> readCampaignFiles()
