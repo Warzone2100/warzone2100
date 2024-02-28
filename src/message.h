@@ -96,4 +96,6 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
 
 bool messageInitVars();
 
+void cleanupOldBeaconMessages();
+
 #endif // __INCLUDED_SRC_MESSAGE_H__

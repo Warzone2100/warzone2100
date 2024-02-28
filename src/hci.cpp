@@ -1954,6 +1954,8 @@ void intDisplayWidgets()
 	{
 		desiredRadarVisibility = radarVisible();
 
+		cleanupOldBeaconMessages();
+
 		/* Ensure that any text messages are displayed at bottom of screen */
 		displayConsoleMessages();
 	}
