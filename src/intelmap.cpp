@@ -228,6 +228,14 @@ void WzMessageView::geometryChanged()
 
 bool WzMessageView::initialize(MESSAGE *psMessage)
 {
+	auto title = std::make_shared<W_LABEL>();
+	title->setGeometry(0, 0, INTMAP_RESEARCHWIDTH, INTMAP_TITLEHEIGHT);
+	title->setFontColour(WZCOL_YELLOW);
+	title->setTextAlignment(WLAB_ALIGNCENTRE);
+	title->setFont(font_regular, WZCOL_YELLOW);
+	title->setString(getMessageTitle(*psMessage));
+	attach(title);
+
 	/* Add the close box */
 	W_BUTINIT sButInit;
 	sButInit.id = IDINTMAP_CLOSE;
@@ -258,14 +266,6 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 			}
 		});
 	});
-
-	auto title = std::make_shared<W_LABEL>();
-	title->setGeometry(0, 0, INTMAP_RESEARCHWIDTH, INTMAP_TITLEHEIGHT);
-	title->setFontColour(WZCOL_YELLOW);
-	title->setTextAlignment(WLAB_ALIGNCENTRE);
-	title->setFont(font_regular, WZCOL_YELLOW);
-	title->setString(getMessageTitle(*psMessage));
-	attach(title);
 
 	auto grid = std::make_shared<GridLayout>();
 	attach(grid);
