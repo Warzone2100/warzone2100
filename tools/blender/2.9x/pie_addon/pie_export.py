@@ -239,15 +239,17 @@ class Exporter():
                                             '{uvx1} {uvy1} {uvx2} {uvy2} '
                                             '{uvx3} {uvy3}').format(
                                     type=200,
+                                    # Normals in Blender and in game are flipped
+                                    # Import and export in opposite order to flip them
                                     v1=face.verts[0].index,
-                                    v2=face.verts[1].index,
-                                    v3=face.verts[2].index,
+                                    v2=face.verts[2].index,
+                                    v3=face.verts[1].index,
                                     uvx1=uvx1,
                                     uvy1=uvy1,
-                                    uvx2=uvx2,
-                                    uvy2=uvy2,
-                                    uvx3=uvx3,
-                                    uvy3=uvy3,
+                                    uvx2=uvx3,
+                                    uvy2=uvy3,
+                                    uvx3=uvx2,
+                                    uvy3=uvy2,
                                 )
 
                         # if child.pie_object_prop.exportNormal is True:

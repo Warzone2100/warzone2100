@@ -186,7 +186,9 @@ class Importer():
             pie_polygons = []
 
             for p in level['POLYGONS']:
-                pie_polygons.append((p[2], p[3], p[4]))
+                # Normals in Blender and in game are flipped
+                # Import and export in opposite order to flip them
+                pie_polygons.append((p[2], p[4], p[3]))
             mesh.from_pydata(pie_points, [], pie_polygons)
 
             animatedPolygons = []
@@ -205,12 +207,12 @@ class Importer():
 
                 if pieParse['PIE'] == '3':
                     uvData[L + 0].uv = ((p[5 + m], -p[6 + m] + 1))
-                    uvData[L + 1].uv = ((p[7 + m], -p[8 + m] + 1))
-                    uvData[L + 2].uv = ((p[9 + m], -p[10 + m] + 1))
+                    uvData[L + 1].uv = ((p[9 + m], -p[10 + m] + 1))
+                    uvData[L + 2].uv = ((p[7 + m], -p[8 + m] + 1))
                 elif pieParse['PIE'] == '2':
                     uvData[L + 0].uv = ((p[5 + m] / n, (-p[6 + m] / n) + 1))
-                    uvData[L + 1].uv = ((p[7 + m] / n, (-p[8 + m] / n) + 1))
-                    uvData[L + 2].uv = ((p[9 + m] / n, (-p[10 + m] / n) + 1))
+                    uvData[L + 1].uv = ((p[9 + m] / n, (-p[10 + m] / n) + 1))
+                    uvData[L + 2].uv = ((p[7 + m] / n, (-p[8 + m] / n) + 1))
 
             bpy.ops.object.mode_set(mode='EDIT', toggle=False)
             bm = bmesh.from_edit_mesh(mesh)
