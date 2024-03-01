@@ -16,6 +16,17 @@ const mis_nexusRes = [
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Sys-NEXUSsensor",
 ];
+const mis_nexusResClassic = [
+	"R-Defense-WallUpgrade09", "R-Struc-Materials09", "R-Struc-Factory-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals09",
+	"R-Cyborg-Metals09", "R-Vehicle-Armor-Heat06", "R-Cyborg-Armor-Heat06",
+	"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
+	"R-Wpn-Bomb-Damage03", "R-Wpn-Energy-Accuracy01", "R-Wpn-Energy-Damage03",
+	"R-Wpn-Energy-ROF03", "R-Wpn-Missile-Accuracy01", "R-Wpn-Missile-Damage02",
+	"R-Wpn-Rail-Accuracy01", "R-Wpn-Rail-Damage03", "R-Wpn-Rail-ROF03",
+	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
+	"R-Sys-NEXUSsensor",
+];
 const mis_vtolPositions = [
 	"vtolAppearPosW", "vtolAppearPosE",
 ];
@@ -89,15 +100,23 @@ function wave3()
 //Setup Nexus VTOL hit and runners. Choose a random spawn point for the VTOLs.
 function vtolAttack()
 {
-	const list = [cTempl.nxmheapv, cTempl.nxmtherv];
-	const ext = {
-		limit: [4, 4], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
-	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
-	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	if (camClassicMode())
+	{
+		const list = [cTempl.nxmheapv, cTempl.nxlpulsev];
+		camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined);
+	}
+	else
+	{
+		const list = [cTempl.nxmheapv, cTempl.nxmtherv];
+		const ext = {
+			limit: [4, 4], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
+		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	}
 }
 
 //Chose a random spawn point to send ground reinforcements.
@@ -340,7 +359,15 @@ function eventStartLevel()
 	setMissionTime(camMinutesToSeconds(5));
 	enableResearch(mis_researchTargets.resistance, CAM_HUMAN_PLAYER);
 
-	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
+	if (camClassicMode())
+	{
+		camEnableRes(mis_nexusResClassic, CAM_NEXUS);
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
+	}
+
 	camPlayVideos({video: "MB3_AD2_MSG", type: MISS_MSG});
 
 	setTimer("checkTime", camSecondsToMilliseconds(0.2));

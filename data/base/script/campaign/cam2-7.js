@@ -14,6 +14,18 @@ const mis_collectiveRes = [
 	"R-Wpn-Bomb-Damage02", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
 	"R-Wpn-AAGun-Accuracy02", "R-Wpn-Howitzer-Accuracy01", "R-Struc-VTOLPad-Upgrade03",
 ];
+const mis_collectiveResClassic = [
+	"R-Defense-WallUpgrade05", "R-Struc-Materials05", "R-Struc-Factory-Upgrade05",
+	"R-Struc-VTOLPad-Upgrade03", "R-Vehicle-Engine05", "R-Vehicle-Metals05",
+	"R-Cyborg-Metals05", "R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+	"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
+	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
+	"R-Wpn-Howitzer-Accuracy02", "R-Wpn-Howitzer-Damage03", "R-Sys-Sensor-Upgrade01",
+	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
+	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
+	"R-Wpn-RocketSlow-ROF03"
+];
 
 function camEnemyBaseDetected_COBase1()
 {
@@ -115,18 +127,29 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camSetArtifacts({
-		"COHeavyFac-Arti-b2": { tech: ["R-Wpn-Cannon5", "R-Wpn-MG-Damage08"] },
-		"COTankKillerHardpoint": { tech: "R-Wpn-RocketSlow-Damage06" },
-		"COVtolFactory-b4": { tech: "R-Wpn-Bomb-Damage02" },
-	});
+	if (camClassicMode())
+	{
+		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
 
-	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+		camSetArtifacts({
+			"COHeavyFac-Arti-b2": { tech: "R-Wpn-Cannon5" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
-	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohact, CAM_THE_COLLECTIVE);
-	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
-	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
-	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohact, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"COHeavyFac-Arti-b2": { tech: ["R-Wpn-Cannon5", "R-Wpn-MG-Damage08"] },
+			"COTankKillerHardpoint": { tech: "R-Wpn-RocketSlow-Damage06" },
+			"COVtolFactory-b4": { tech: "R-Wpn-Bomb-Damage02" },
+		});
+	}
 
 	camSetEnemyBases({
 		"COBase1": {
@@ -178,7 +201,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybsn, cTempl.cocybag]
+			templates: (!camClassicMode()) ? [cTempl.cocybsn, cTempl.cocybag] : [cTempl.npcybc, cTempl.cocybag]
 		},
 		"COCyborgFac-b3": {
 			assembly: "base3CybAssembly",
@@ -190,7 +213,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybth, cTempl.cocybtk]
+			templates: (!camClassicMode()) ? [cTempl.cocybth, cTempl.cocybtk] : [cTempl.npcybf, cTempl.npcybr]
 		},
 		"COHeavyFac-b4": {
 			assembly: "base4HeavyAssembly",
@@ -202,7 +225,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [cTempl.comrotmh, cTempl.comhltat, cTempl.cohact, cTempl.cohhpv]
+			templates: (!camClassicMode()) ? [cTempl.comrotmh, cTempl.comhltat, cTempl.cohact, cTempl.cohhpv] : [cTempl.comrotmh, cTempl.comhltat, cTempl.cohct]
 		},
 		"COCyborgFac-b4": {
 			assembly: "base4CybAssembly",
@@ -214,7 +237,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.cocybsn, cTempl.cocybtk]
+			templates: (!camClassicMode()) ? [cTempl.cocybag, cTempl.cocybsn, cTempl.cocybtk] : [cTempl.cocybag, cTempl.npcybc, cTempl.npcybr]
 		},
 		"COVtolFactory-b4": {
 			assembly: "base4VTOLAssembly",
@@ -225,7 +248,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [cTempl.colagv, cTempl.commorv, cTempl.commorvt, cTempl.colhvat]
+			templates: (!camClassicMode()) ? [cTempl.colagv, cTempl.commorv, cTempl.commorvt, cTempl.colhvat] : [cTempl.colagv, cTempl.commorv]
 		},
 	});
 

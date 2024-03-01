@@ -17,6 +17,16 @@ const mis_nexusRes = [
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Sys-NEXUSsensor",
 ];
+const mis_nexusResClassic = [
+	"R-Defense-WallUpgrade08", "R-Struc-Materials08", "R-Struc-Factory-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals07",
+	"R-Cyborg-Metals07", "R-Vehicle-Armor-Heat05", "R-Cyborg-Armor-Heat05",
+	"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
+	"R-Wpn-Bomb-Damage03", "R-Wpn-Energy-Accuracy01", "R-Wpn-Energy-Damage02",
+	"R-Wpn-Energy-ROF02", "R-Wpn-Missile-Accuracy01", "R-Wpn-Missile-Damage01",
+	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
+	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06", "R-Sys-NEXUSsensor",
+];
 var alphaUnitIDs;
 var startExtraLoss;
 
@@ -222,15 +232,28 @@ function wave3()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	const list = [cTempl.nxmtherv, cTempl.nxmtherv];
-	const ext = {
-		limit: [3, 3], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
-	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
-	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	if (camClassicMode())
+	{
+		const list = [cTempl.nxlscouv, cTempl.nxmtherv];
+		const ext = {
+			limit: [2, 4], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+	}
+	else
+	{
+		const list = [cTempl.nxmtherv, cTempl.nxmtherv];
+		const ext = {
+			limit: [3, 3], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	}
 }
 
 //Reinforcements not available until team Alpha brief about VTOLS.
@@ -297,17 +320,26 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	camSetArtifacts({
-		"NXartiCyborg": { tech: "R-Wpn-Cannon-ROF05" },
-	});
+	if (camClassicMode())
+	{
+		camEnableRes(mis_nexusResClassic, CAM_NEXUS);
+		camEnableRes(mis_gammaAllyResClassic, MIS_ALPHA_PLAYER);
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
+		camCompleteRequiredResearch(mis_gammaAllyRes, MIS_ALPHA_PLAYER);
+
+		camSetArtifacts({
+			"NXartiCyborg": { tech: "R-Wpn-Cannon-ROF05" },
+		});
+	}
 
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
-	camCompleteRequiredResearch(mis_gammaAllyRes, MIS_ALPHA_PLAYER);
 	setAlliance(MIS_ALPHA_PLAYER, CAM_NEXUS, true);
 	setAlliance(MIS_ALPHA_PLAYER, CAM_HUMAN_PLAYER, true);
 	changePlayerColour(MIS_ALPHA_PLAYER, 0);

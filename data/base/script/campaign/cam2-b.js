@@ -12,6 +12,17 @@ const mis_collectiveRes = [
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
 	"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF01"
 ];
+const mis_collectiveResClassic = [
+	"R-Defense-WallUpgrade03", "R-Struc-Materials04", "R-Struc-Factory-Upgrade04",
+	"R-Struc-VTOLPad-Upgrade01", "R-Vehicle-Engine04", "R-Vehicle-Metals03",
+	"R-Cyborg-Metals03", "R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04", "R-Wpn-Cannon-ROF02",
+	"R-Wpn-Flamer-Damage05", "R-Wpn-Flamer-ROF02", "R-Wpn-MG-Damage05",
+	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage04",
+	"R-Wpn-Mortar-ROF02", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage05",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage04",
+	"R-Wpn-RocketSlow-ROF03", "R-Sys-Sensor-Upgrade01"
+];
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
@@ -106,15 +117,28 @@ function wave3()
 
 function vtolAttack()
 {
-	const list = [cTempl.colpbv, cTempl.colpbv];
-	const ext = {
-		limit: [4, 4], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
-	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
-	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	if (camClassicMode())
+	{
+		const list = [cTempl.colcbv, cTempl.colatv];
+		const ext = {
+			limit: [4, 4], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+	}
+	else
+	{
+		const list = [cTempl.colpbv, cTempl.colpbv];
+		const ext = {
+			limit: [4, 4], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	}
 }
 
 function truckDefense()
@@ -148,29 +172,42 @@ function eventStartLevel()
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 	camPlayVideos([{video: "MB2_B_MSG", type: CAMP_MSG}, {video: "MB2_B_MSG2", type: MISS_MSG}]);
 
-	camSetArtifacts({
-		"COResearchLab": { tech: ["R-Wpn-Flame2", "R-Defense-WallUpgrade05"] },
-		"COHeavyFac-b4": { tech: "R-Wpn-RocketSlow-ROF01" },
-		"COHeavyFacL-b1": { tech: "R-Wpn-MG-ROF03" },
-		"COCommandCenter": { tech: "R-Vehicle-Body02" }, //Leopard
-		"COCybFac-b4": { tech: "R-Wpn-Cannon-ROF01" },
-		"COBombardPit": { tech: "R-Wpn-Mortar-Damage04" },
-	});
-
-	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
-
-	if (difficulty >= MEDIUM)
+	if (camClassicMode())
 	{
-		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
+		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"COResearchLab": { tech: "R-Wpn-Flame2" },
+			"COHeavyFac-b4": { tech: "R-Wpn-RocketSlow-ROF01" },
+			"COHeavyFacL-b1": { tech: "R-Wpn-MG-ROF03" },
+			"COCommandCenter": { tech: "R-Vehicle-Body06" }, //Panther
+		});
 	}
-	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
-
-	// New HMG Tiger Tracks units in first attack group
-	if (difficulty >= HARD)
+	else
 	{
-		addDroid(CAM_THE_COLLECTIVE, 92, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
-		addDroid(CAM_THE_COLLECTIVE, 96, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
-		addDroid(CAM_THE_COLLECTIVE, 97, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+		camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+
+		if (difficulty >= MEDIUM)
+		{
+			camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
+		}
+		// New HMG Tiger Tracks units in first attack group
+		if (difficulty >= HARD)
+		{
+			addDroid(CAM_THE_COLLECTIVE, 92, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+			addDroid(CAM_THE_COLLECTIVE, 96, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+			addDroid(CAM_THE_COLLECTIVE, 97, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+		}
+		camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"COResearchLab": { tech: ["R-Wpn-Flame2", "R-Defense-WallUpgrade05"] },
+			"COHeavyFac-b4": { tech: "R-Wpn-RocketSlow-ROF01" },
+			"COHeavyFacL-b1": { tech: "R-Wpn-MG-ROF03" },
+			"COCommandCenter": { tech: "R-Vehicle-Body02" }, //Leopard
+			"COCybFac-b4": { tech: "R-Wpn-Cannon-ROF01" },
+			"COBombardPit": { tech: "R-Wpn-Mortar-Damage04" },
+		});
 	}
 
 	camSetEnemyBases({
@@ -205,7 +242,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.comatt, cTempl.cohct, cTempl.commrp]
+			templates: (!camClassicMode()) ? [cTempl.comatt, cTempl.cohct, cTempl.commrp] : [cTempl.comatt, cTempl.cohct, cTempl.comct]
 		},
 		"COHeavyFacR-b1": {
 			assembly: "COHeavyFacR-b1Assembly",
@@ -217,7 +254,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.comatt, cTempl.cohct, cTempl.commrp]
+			templates: (!camClassicMode()) ? [cTempl.comatt, cTempl.cohct, cTempl.commrp] : [cTempl.comatt, cTempl.cohct, cTempl.comct]
 		},
 		"COCybFacL-b2": {
 			assembly: "COCybFacL-b2Assembly",
@@ -241,7 +278,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.cocybth, cTempl.npcybm]
+			templates: (!camClassicMode()) ? [cTempl.npcybc, cTempl.npcybr, cTempl.cocybth, cTempl.npcybm] : [cTempl.npcybc, cTempl.npcybr, cTempl.npcybf, cTempl.npcybm]
 		},
 		"COHeavyFac-b4": {
 			assembly: "COHeavyFac-b4Assembly",
@@ -265,7 +302,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.cocybth]
+			templates: (!camClassicMode()) ? [cTempl.npcybc, cTempl.npcybr, cTempl.cocybth] : [cTempl.npcybc, cTempl.npcybr, cTempl.npcybf]
 		},
 	});
 

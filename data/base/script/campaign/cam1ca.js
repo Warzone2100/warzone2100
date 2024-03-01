@@ -10,6 +10,12 @@ const mis_newParadigmRes = [
 	"R-Vehicle-Metals01", "R-Wpn-Mortar-Damage02", "R-Wpn-Rocket-Accuracy01",
 	"R-Wpn-RocketSlow-Damage01", "R-Wpn-Mortar-ROF01",
 ];
+const mis_newParadigmResClassic = [
+	"R-Defense-WallUpgrade01", "R-Struc-Factory-Upgrade01", "R-Struc-Materials01",
+	"R-Vehicle-Metals02", "R-Vehicle-Engine01", "R-Wpn-Cannon-Damage02",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02",
+	"R-Wpn-Mortar-Damage01", "R-Wpn-MG-ROF01", "R-Wpn-Rocket-Accuracy01",
+];
 const mis_landingZoneList = [ "NPLZ1", "NPLZ2", "NPLZ3", "NPLZ4", "NPLZ5" ];
 const mis_landingZoneMessages = [ "C1CA_LZ1", "C1CA_LZ2", "C1CA_LZ3", "C1CA_LZ4", "C1CA_LZ5" ];
 var blipActive;
@@ -102,11 +108,19 @@ function sendTransport()
 	{
 		lastHeavy = false;
 		templates = [ cTempl.nppod, cTempl.nphmg, cTempl.npmrl, cTempl.npsmc, cTempl.npltat ];
+		if (camClassicMode())
+		{
+			templates.pop();
+		}
 	}
 	else
 	{
 		lastHeavy = true;
 		templates = [ cTempl.npsmct, cTempl.npmor, cTempl.npsmc, cTempl.npmmct, cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npltat ];
+		if (camClassicMode())
+		{
+			templates.pop();
+		}
 	}
 
 	const droids = [];
@@ -154,7 +168,15 @@ function eventStartLevel()
 	const lz = getObject("landingZone");
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+
+	if (camClassicMode())
+	{
+		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+	}
 
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 	camPlayVideos({video: "MB1CA_MSG", type: CAMP_MSG});

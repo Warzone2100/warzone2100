@@ -16,6 +16,15 @@ const mis_collectiveRes = [
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
 	"R-Wpn-RocketSlow-Damage04", "R-Sys-Sensor-Upgrade01"
 ];
+const mis_collectiveResClassic = [
+	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Vehicle-Engine04",
+	"R-Vehicle-Metals03", "R-Cyborg-Metals03", "R-Vehicle-Armor-Heat01",
+	"R-Cyborg-Armor-Heat01", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
+	"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage04", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Sys-Sensor-Upgrade01",
+	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-Damage04", "R-Wpn-RocketSlow-Accuracy03",
+	"R-Wpn-RocketSlow-Damage03", "R-Wpn-RocketSlow-ROF03"
+];
 
 //trigger event when droid reaches the downed transport.
 camAreaEvent("crashSite", function(droid)
@@ -129,13 +138,22 @@ function eventStartLevel()
 	//set downed transport team colour to be Project Green.
 	changePlayerColour(MIS_TRANSPORT_TEAM_PLAYER, 0);
 
-	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
-	camCompleteRequiredResearch(mis_alphaResearchNew, MIS_TRANSPORT_TEAM_PLAYER);
-	camCompleteRequiredResearch(mis_playerResBeta, MIS_TRANSPORT_TEAM_PLAYER);
-
-	if (difficulty >= HARD)
+	if (camClassicMode())
 	{
-		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
+		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+		camEnableRes(mis_alphaResearchNewClassic, MIS_TRANSPORT_TEAM_PLAYER);
+		camEnableRes(mis_playerResBetaClassic, MIS_TRANSPORT_TEAM_PLAYER);
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+		camCompleteRequiredResearch(mis_alphaResearchNew, MIS_TRANSPORT_TEAM_PLAYER);
+		camCompleteRequiredResearch(mis_playerResBeta, MIS_TRANSPORT_TEAM_PLAYER);
+
+		if (difficulty >= HARD)
+		{
+			camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
+		}
 	}
 
 	camSetEnemyBases({

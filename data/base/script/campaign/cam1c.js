@@ -16,6 +16,15 @@ const mis_scavengerRes = [
 	"R-Wpn-Cannon-Damage02", "R-Wpn-Mortar-Damage02", "R-Wpn-Mortar-ROF01",
 	"R-Wpn-Rocket-ROF03", "R-Defense-WallUpgrade01", "R-Struc-Materials01",
 ];
+const mis_newParadigmResClassic = [
+	"R-Defense-WallUpgrade01", "R-Struc-Factory-Upgrade01", "R-Struc-Materials01",
+	"R-Wpn-MG-ROF01", "R-Vehicle-Engine01", "R-Wpn-Cannon-Damage02", "R-Wpn-Flamer-Damage03",
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage01", "R-Wpn-Flamer-ROF01", "R-Vehicle-Metals01",
+	"R-Struc-RprFac-Upgrade03",
+];
+const mis_scavengerResClassic = [
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage01"
+];
 
 function sendRocketForce()
 {
@@ -186,13 +195,36 @@ function eventStartLevel()
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
-	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 
-	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
+	if (camClassicMode())
+	{
+		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+		camEnableRes(mis_scavengerResClassic, CAM_SCAV_7);
+
+		camSetArtifacts({
+			"ScavSouthFactory": { tech: "R-Wpn-Rocket05-MiniPod" },
+			"NPResearchFacility": { tech: "R-Struc-Research-Module" },
+			"NPCentralFactory": { tech: "R-Vehicle-Prop-Tracks" },
+			"NPNorthFactory": { tech: "R-Vehicle-Engine01" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+
+		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
+
+		camSetArtifacts({
+			"ScavSouthFactory": { tech: ["R-Wpn-Rocket05-MiniPod", "R-Wpn-Cannon2Mk1"] },
+			"NPResearchFacility": { tech: "R-Struc-Research-Module" },
+			"NPCentralFactory": { tech: "R-Vehicle-Prop-Tracks" },
+			"NPNorthFactory": { tech: "R-Vehicle-Engine01" },
+		});
+	}
 
 	camSetEnemyBases({
 		"ScavSouthDerrickGroup": {
@@ -268,34 +300,27 @@ function eventStartLevel()
 	hackAddMessage("C1C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); // initial beacon
 	camPlayVideos([{video: "MB1C_MSG", type: CAMP_MSG}, {video: "MB1C2_MSG", type: CAMP_MSG}]);
 
-	camSetArtifacts({
-		"ScavSouthFactory": { tech: ["R-Wpn-Rocket05-MiniPod", "R-Wpn-Cannon2Mk1"] },
-		"NPResearchFacility": { tech: "R-Struc-Research-Module" },
-		"NPCentralFactory": { tech: "R-Vehicle-Prop-Tracks" },
-		"NPNorthFactory": { tech: "R-Vehicle-Engine01" },
-	});
-
 	camSetFactories({
 		"ScavSouthFactory": {
 			assembly: "ScavSouthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
-			templates: [ cTempl.buscan, cTempl.rbjeep8, cTempl.trikeheavy, cTempl.buggyheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.buscan, cTempl.rbjeep8, cTempl.trikeheavy, cTempl.buggyheavy ] : [ cTempl.buscan, cTempl.rbjeep, cTempl.trike, cTempl.buggy ]
 		},
 		"ScavCentralFactory": {
 			assembly: "ScavCentralFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
-			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeepheavy, cTempl.blokeheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeepheavy, cTempl.blokeheavy ] : [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeep, cTempl.bloke ]
 		},
 		"ScavNorthFactory": {
 			assembly: "ScavNorthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
-			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trikeheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trikeheavy ] : [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trike ]
 		},
 		"NPCentralFactory": {
 			assembly: "NPCentralFactoryAssembly",

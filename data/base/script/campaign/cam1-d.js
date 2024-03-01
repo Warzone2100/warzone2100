@@ -11,6 +11,15 @@ const mis_newParadigmRes = [
 	"R-Wpn-RocketSlow-Damage03", "R-Wpn-Mortar-ROF01", "R-Cyborg-Metals03",
 	"R-Wpn-Mortar-Acc01", "R-Wpn-RocketSlow-Accuracy01", "R-Wpn-Cannon-Accuracy01",
 ];
+const mis_newParadigmResClassic = [
+	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
+	"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
+	"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon-Damage03", "R-Wpn-Flamer-Damage03",
+	"R-Wpn-Flamer-ROF01", "R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01",
+	"R-Wpn-Mortar-Acc01", "R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
+	"R-Wpn-RocketSlow-Damage03", "R-Struc-RprFac-Upgrade03"
+];
 
 camAreaEvent("tankTrapTrig", function(droid)
 {
@@ -164,7 +173,14 @@ function eventStartLevel()
 		"NPFactoryNE": { tech: "R-Vehicle-Body12" }, //Main base factory
 	});
 
-	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+	if (camClassicMode())
+	{
+		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+	}
 
 	camSetEnemyBases({
 		"NPSouthEastGroup": {
@@ -212,7 +228,7 @@ function eventStartLevel()
 				repair: 66,
 				count: -1,
 			},
-			templates: [ cTempl.nphmgh, cTempl.npltath, cTempl.nphch, cTempl.nphbb ] //Hover factory
+			templates: (!camClassicMode()) ? [ cTempl.nphmgh, cTempl.npltath, cTempl.nphch, cTempl.nphbb ] : [ cTempl.nphmgh, cTempl.npltath, cTempl.nphch ] //Hover factory
 		},
 		"NPFactoryE": {
 			assembly: "NPFactoryEAssembly",

@@ -15,6 +15,19 @@ const mis_collectiveRes = [
 	"R-Wpn-Bomb-Damage02", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
 	"R-Wpn-AAGun-Accuracy02", "R-Wpn-Howitzer-Accuracy02", "R-Struc-VTOLPad-Upgrade03",
 ];
+const mis_collectiveResClassic = [
+	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Struc-Factory-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade03", "R-Vehicle-Engine06", "R-Vehicle-Metals06",
+	"R-Cyborg-Metals06", "R-Sys-Engineering02", "R-Wpn-AAGun-Accuracy01",
+	"R-Wpn-AAGun-Damage01", "R-Wpn-AAGun-ROF01", "R-Wpn-Bomb-Damage01",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage06", "R-Wpn-Cannon-ROF03",
+	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-Howitzer-Accuracy02",
+	"R-Wpn-Howitzer-Damage03", "R-Sys-Sensor-Upgrade01", "R-Wpn-MG-Damage07",
+	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
+	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
+	"R-Wpn-RocketSlow-ROF03"
+];
 const mis_Labels = {
 	startPos: {x: 92, y: 99},
 	lz: {x: 86, y: 99, x2: 88, y2: 101},
@@ -120,9 +133,16 @@ function vtolAttack()
 		vtolPositions = undefined; //to randomize the spawns each time
 	}
 
-	const list = [
-		cTempl.commorv, cTempl.commorv, cTempl.comhvat, cTempl.commorvt
-	];
+	let list = [];
+	if (camClassicMode())
+	{
+		list = [ cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat ];
+	}
+	else
+	{
+		list = [ cTempl.commorv, cTempl.commorv, cTempl.comhvat, cTempl.commorvt ];
+	}
+
 	const extras = {
 		minVTOLs: 4,
 		maxRandomVTOLs: (difficulty >= HARD) ? 2 : 1
@@ -134,7 +154,15 @@ function vtolAttack()
 //SouthEast attackers which are mostly cyborgs.
 function cyborgAttack()
 {
-	const list = [cTempl.cocybtk, cTempl.cocybag, cTempl.cocybsn, cTempl.comhltat, cTempl.cohhpv];
+	let list = [];
+	if (camClassicMode())
+	{
+		list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.comhltat, cTempl.cohhpv];
+	}
+	else
+	{
+		list = [cTempl.cocybtk, cTempl.cocybag, cTempl.cocybsn, cTempl.comhltat, cTempl.cohhpv];
+	}
 
 	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(mis_Labels.southCyborgAssembly), randomTemplates(list, false, true), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
@@ -143,7 +171,15 @@ function cyborgAttack()
 
 function cyborgAttackRandom()
 {
-	const list = [cTempl.cocybtk, cTempl.cocybag, cTempl.cocybsn, cTempl.cocybsn, cTempl.comrotm]; //favor cannon cyborg
+	let list = []; //favor cannon cyborg
+	if (camClassicMode())
+	{
+		list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.npcybc, cTempl.comrotm];
+	}
+	else
+	{
+		list = [cTempl.cocybtk, cTempl.cocybag, cTempl.cocybsn, cTempl.cocybsn, cTempl.comrotm];
+	}
 
 	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(camGenerateRandomMapEdgeCoordinate(mis_Labels.startPos)), randomTemplates(list, false, true).concat(cTempl.comsens), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
@@ -234,7 +270,15 @@ function eventStartLevel()
 	setNoGoArea(mis_Labels.lz.x, mis_Labels.lz.y, mis_Labels.lz.x2, mis_Labels.lz.y2, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camMinutesToSeconds(30));
-	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+
+	if (camClassicMode())
+	{
+		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+	}
 
 	allowWin = false;
 	camPlayVideos([{video: "MB2_DII_MSG", type: CAMP_MSG}, {video: "MB2_DII_MSG2", type: MISS_MSG}]);

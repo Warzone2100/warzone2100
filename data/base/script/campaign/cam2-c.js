@@ -18,6 +18,18 @@ const mis_collectiveRes = [
 	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF02",
 	"R-Wpn-AAGun-Accuracy01", "R-Struc-VTOLPad-Upgrade01"
 ];
+const mis_collectiveResClassic = [
+	"R-Defense-WallUpgrade03", "R-Struc-Materials04", "R-Struc-Factory-Upgrade04",
+	"R-Struc-VTOLPad-Upgrade01", "R-Vehicle-Engine04", "R-Vehicle-Metals03",
+	"R-Cyborg-Metals04", "R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+	"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
+	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
+	"R-Wpn-Howitzer-Accuracy02", "R-Wpn-Howitzer-Damage02", "R-Sys-Sensor-Upgrade01",
+	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
+	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
+	"R-Wpn-RocketSlow-ROF03"
+];
 
 //Play video about civilians being captured by the Collective. Triggered
 //by destroying the air base or crossing the base3Trigger area.
@@ -280,27 +292,44 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	camSetArtifacts({
-		"rippleRocket": { tech: "R-Wpn-Rocket06-IDF" },
-		"quadbof": { tech: "R-Wpn-AAGun02" },
-		"howitzer": { tech: "R-Wpn-HowitzerMk1" },
-		"COHeavyFac-Leopard": { tech: "R-Vehicle-Body06" }, //Panther
-		"COHeavyFac-Upgrade": { tech: "R-Struc-Factory-Upgrade04" },
-		"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
-		"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
-	});
+	if (camClassicMode())
+	{
+		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"rippleRocket": { tech: "R-Wpn-Rocket06-IDF" },
+			"COResearchLab": { tech: "R-Struc-Factory-Upgrade04" },
+			"quadbof": { tech: "R-Wpn-AAGun02" },
+			"howitzer": { tech: "R-Wpn-HowitzerMk1" },
+			"COHeavyFac-Leopard": { tech: "R-Vehicle-Body02" }, //Leopard
+			"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+
+		if (difficulty >= MEDIUM)
+		{
+			camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
+		}
+		camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"rippleRocket": { tech: "R-Wpn-Rocket06-IDF" },
+			"quadbof": { tech: "R-Wpn-AAGun02" },
+			"howitzer": { tech: "R-Wpn-HowitzerMk1" },
+			"COHeavyFac-Leopard": { tech: "R-Vehicle-Body06" }, //Panther
+			"COHeavyFac-Upgrade": { tech: "R-Struc-Factory-Upgrade04" },
+			"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
+			"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
+		});
+	}
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	setAlliance(CAM_THE_COLLECTIVE, CAM_SCAV_7, true);
 	setAlliance(CAM_HUMAN_PLAYER, CAM_SCAV_7, true);
-	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
-
-	if (difficulty >= MEDIUM)
-	{
-		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
-	}
-	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COAirBase": {
@@ -358,7 +387,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybth, cTempl.npcybc, cTempl.npcybr]
+			templates: (!camClassicMode()) ? [cTempl.cocybth, cTempl.npcybc, cTempl.npcybr] : [cTempl.npcybf, cTempl.npcybc, cTempl.npcybr]
 		},
 		"COCyborgFactoryR": {
 			assembly: "COCyborgFactoryRAssembly",
@@ -370,7 +399,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybth, cTempl.npcybc, cTempl.npcybr]
+			templates: (!camClassicMode()) ? [cTempl.cocybth, cTempl.npcybc, cTempl.npcybr] : [cTempl.npcybf, cTempl.npcybc, cTempl.npcybr]
 		},
 		"COVtolFacLeft-Prop": {
 			order: CAM_ORDER_ATTACK,

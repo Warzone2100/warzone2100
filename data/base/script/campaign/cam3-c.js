@@ -17,6 +17,16 @@ const mis_nexusRes = [
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Sys-NEXUSsensor",
 ];
+const mis_nexusResClassic = [
+	"R-Defense-WallUpgrade09", "R-Struc-Materials09", "R-Struc-Factory-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals07",
+	"R-Cyborg-Metals08", "R-Vehicle-Armor-Heat05", "R-Cyborg-Armor-Heat05",
+	"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
+	"R-Wpn-Bomb-Damage03", "R-Wpn-Energy-Accuracy01", "R-Wpn-Energy-Damage03",
+	"R-Wpn-Energy-ROF03", "R-Wpn-Missile-Accuracy01", "R-Wpn-Missile-Damage02",
+	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
+	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06", "R-Sys-NEXUSsensor",
+];
 var reunited;
 var betaUnitIds;
 var truckLocCounter;
@@ -185,20 +195,36 @@ function eventStartLevel()
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10)));
 
-	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
-	camCompleteRequiredResearch(mis_gammaAllyRes, MIS_GAMMA_PLAYER);
+	if (camClassicMode())
+	{
+		camEnableRes(mis_nexusResClassic, CAM_NEXUS);
+		camEnableRes(mis_gammaAllyResClassic, MIS_GAMMA_PLAYER);
+
+		camSetArtifacts({
+			"NXbase1HeavyFacArti": { tech: "R-Vehicle-Body07" }, //retribution
+			"NXcybFacArti": { tech: "R-Wpn-RailGun01" },
+			"NXvtolFacArti": { tech: "R-Struc-VTOLPad-Upgrade04" },
+			"NXcommandCenter": { tech: "R-Wpn-Missile-LtSAM" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
+		camCompleteRequiredResearch(mis_gammaAllyRes, MIS_GAMMA_PLAYER);
+
+		camSetArtifacts({
+			"NXbase1HeavyFacArti": { tech: "R-Vehicle-Body07" }, //retribution
+			"NXcybFacArti": { tech: "R-Wpn-RailGun01" },
+			"NXvtolFacArti": { tech: "R-Struc-VTOLPad-Upgrade04" },
+			"NXcommandCenter": { tech: ["R-Wpn-Missile-LtSAM", "R-Defense-WallUpgrade10"] },
+		});
+	}
+
 	hackAddMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	hackAddMessage("CM3C_BETATEAM", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	setAlliance(CAM_HUMAN_PLAYER, MIS_GAMMA_PLAYER, true);
 	setAlliance(CAM_NEXUS, MIS_GAMMA_PLAYER, true);
-
-	camSetArtifacts({
-		"NXbase1HeavyFacArti": { tech: "R-Vehicle-Body07" }, //retribution
-		"NXcybFacArti": { tech: "R-Wpn-RailGun01" },
-		"NXvtolFacArti": { tech: "R-Struc-VTOLPad-Upgrade04" },
-		"NXcommandCenter": { tech: ["R-Wpn-Missile-LtSAM", "R-Defense-WallUpgrade10"] },
-	});
 
 	camSetEnemyBases({
 		"NXNorthBase": {
