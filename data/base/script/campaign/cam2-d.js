@@ -15,6 +15,18 @@ const mis_collectiveRes = [
 	"R-Wpn-Bomb-Damage02", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
 	"R-Wpn-AAGun-Accuracy02", "R-Wpn-Howitzer-Accuracy01", "R-Struc-VTOLPad-Upgrade03",
 ];
+const mis_collectiveResClassic = [
+	"R-Defense-WallUpgrade04", "R-Struc-Materials05", "R-Struc-Factory-Upgrade05",
+	"R-Struc-VTOLPad-Upgrade03", "R-Vehicle-Engine05", "R-Vehicle-Metals05",
+	"R-Cyborg-Metals05", "R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+	"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
+	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
+	"R-Wpn-Howitzer-Accuracy01", "R-Wpn-Howitzer-Damage01", "R-Sys-Sensor-Upgrade01",
+	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
+	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
+	"R-Wpn-RocketSlow-ROF03"
+];
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
@@ -64,15 +76,28 @@ function wave3()
 
 function vtolAttack()
 {
-	const list = [cTempl.commorvt, cTempl.commorvt];
-	const ext = {
-		limit: [2, 2], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter", ext);
-	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
-	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	if (camClassicMode())
+	{
+		const list = [cTempl.colatv];
+		const ext = {
+			limit: [2, 2], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "COCommandCenter", ext);
+	}
+	else
+	{
+		const list = [cTempl.commorvt, cTempl.commorvt];
+		const ext = {
+			limit: [2, 2], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter", ext);
+		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	}
 }
 
 //The project captured the uplink.
@@ -119,22 +144,36 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camSetArtifacts({
-		"COCommandCenter": { tech: "R-Struc-VTOLPad-Upgrade01" },
-		"COResearchLab": { tech: "R-Struc-Research-Upgrade04" },
-		"COCommandRelay": { tech: "R-Wpn-Bomb02" },
-		"COHeavyFactory": { tech: "R-Wpn-Howitzer-Accuracy01" },
-		"COHowitzerEmplacement": { tech: "R-Wpn-Howitzer-Damage02" },
-	});
+	if (camClassicMode())
+	{
+		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"COCommandCenter": { tech: "R-Struc-Research-Upgrade04" },
+			"COResearchLab": { tech: "R-Struc-VTOLPad-Upgrade01" },
+			"COCommandRelay": { tech: "R-Wpn-Bomb02" },
+			"COHeavyFactory": { tech: "R-Wpn-Howitzer-Accuracy01" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+
+		camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"COCommandCenter": { tech: "R-Struc-VTOLPad-Upgrade01" },
+			"COResearchLab": { tech: "R-Struc-Research-Upgrade04" },
+			"COCommandRelay": { tech: "R-Wpn-Bomb02" },
+			"COHeavyFactory": { tech: "R-Wpn-Howitzer-Accuracy01" },
+			"COHowitzerEmplacement": { tech: "R-Wpn-Howitzer-Damage02" },
+		});
+	}
 
 	setAlliance(CAM_HUMAN_PLAYER, MIS_UPLINK_PLAYER, true);
 	setAlliance(CAM_THE_COLLECTIVE, MIS_UPLINK_PLAYER, true);
-
-	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
-
-	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
-	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
-	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COSouthEastBase": {
@@ -168,7 +207,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybsn, cTempl.cocybth, cTempl.cocybtk, cTempl.cocybag]
+			templates: (!camClassicMode()) ? [cTempl.cocybsn, cTempl.cocybth, cTempl.cocybtk, cTempl.cocybag] : [cTempl.npcybc, cTempl.npcybf, cTempl.npcybr, cTempl.cocybag]
 		},
 	});
 

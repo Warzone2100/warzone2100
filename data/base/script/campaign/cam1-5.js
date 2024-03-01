@@ -19,6 +19,17 @@ const mis_scavengerRes = [
 	"R-Defense-WallUpgrade02", "R-Struc-Materials02", "R-Wpn-Cannon-Accuracy01",
 	"R-Wpn-Mortar-Acc01",
 ];
+const mis_newParadigmResClassic = [
+	"R-Defense-WallUpgrade02", "R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
+	"R-Vehicle-Engine02", "R-Vehicle-Metals02", "R-Cyborg-Metals02", "R-Wpn-Cannon-Accuracy01",
+	"R-Wpn-Cannon-Damage03", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Wpn-Mortar-Acc01", "R-Wpn-Mortar-Damage03",
+	"R-Wpn-Rocket-Accuracy01", "R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF02",
+	"R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03"
+];
+const mis_scavengerResClassic = [
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02"
+];
 var useHeavyReinforcement;
 
 //Get some droids for the New Paradigm transport
@@ -42,22 +53,29 @@ function getDroidsForNPLZ(args)
 
 	if (useHeavyReinforcement)
 	{
-		const artillery = [cTempl.npmor];
-		const other = [cTempl.npmmct];
-		if (camRand(2) > 0)
+		if (camClassicMode())
 		{
-			//Add a sensor if artillery was chosen for the heavy units
-			list.push(cTempl.npsens);
-			unitTemplates = artillery;
+			unitTemplates = [cTempl.npsbb, cTempl.npmmct, cTempl.npmrl];
 		}
 		else
 		{
-			unitTemplates = other;
+			const artillery = [cTempl.npmor];
+			const other = [cTempl.npmmct];
+			if (camRand(2) > 0)
+			{
+				//Add a sensor if artillery was chosen for the heavy units
+				list.push(cTempl.npsens);
+				unitTemplates = artillery;
+			}
+			else
+			{
+				unitTemplates = other;
+			}
 		}
 	}
 	else
 	{
-		unitTemplates = [cTempl.nppod, cTempl.npmrl, cTempl.nphmgt];
+		unitTemplates = (!camClassicMode()) ? [cTempl.nppod, cTempl.npmrl, cTempl.nphmgt] : [cTempl.npsens, cTempl.nppod, cTempl.nphmg];
 	}
 
 	const LIM = useHeavyReinforcement ? heavyAttackerLimit : lightAttackerLimit;
@@ -194,14 +212,35 @@ function eventStartLevel()
 	//Make sure the New Paradigm and Scavs are allies
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 
-	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+	if (camClassicMode())
+	{
+		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+		camEnableRes(mis_scavengerResClassic, CAM_SCAV_7);
 
-	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
+		camSetArtifacts({
+			"NPCyborgFactory": { tech: "R-Struc-Factory-Upgrade03" },
+			"NPRightFactory": { tech: "R-Vehicle-Engine02" },
+			"NPLeftFactory": { tech: "R-Vehicle-Body08" },
+			"NPResearchFacility": { tech: "R-Comp-SynapticLink" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+
+		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
+
+		camSetArtifacts({
+			"NPRightFactory": { tech: "R-Vehicle-Engine02" },
+			"NPLeftFactory": { tech: "R-Struc-Factory-Upgrade03" },
+			"NPResearchFacility": { tech: "R-Comp-SynapticLink" },
+		});
+	}
 
 	camSetEnemyBases({
 		"ScavNorthGroup": {
@@ -231,19 +270,13 @@ function eventStartLevel()
 		},
 	});
 
-	camSetArtifacts({
-		"NPRightFactory": { tech: "R-Vehicle-Engine02" },
-		"NPLeftFactory": { tech: "R-Struc-Factory-Upgrade03" },
-		"NPResearchFacility": { tech: "R-Comp-SynapticLink" },
-	});
-
 	camSetFactories({
 		"NPLeftFactory": {
 			assembly: "NPLeftAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
-			templates: [ cTempl.npmrl, cTempl.npmmct, cTempl.nphmgt, cTempl.nppod ],
+			templates: (!camClassicMode()) ? [ cTempl.npmrl, cTempl.npmmct, cTempl.nphmgt, cTempl.nppod ] : [ cTempl.npmrl, cTempl.npmmct, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
 				repair: 40,
@@ -255,7 +288,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
-			templates: [ cTempl.npmor, cTempl.npsens, cTempl.nphmgt ],
+			templates: (!camClassicMode()) ? [ cTempl.npmor, cTempl.npsens, cTempl.nphmgt ] : [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
 				repair: 40,
@@ -279,7 +312,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ],
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ] : [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
 				count: -1,
@@ -290,7 +323,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ],
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ] : [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
 				count: -1,
@@ -301,7 +334,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ],
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ] : [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
 			data: {
 				regroup: false,
 				count: -1,

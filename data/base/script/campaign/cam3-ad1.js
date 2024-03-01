@@ -16,6 +16,17 @@ const mis_nexusRes = [
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Sys-NEXUSsensor",
 ];
+const mis_nexusResClassic = [
+	"R-Defense-WallUpgrade09", "R-Struc-Materials09", "R-Struc-Factory-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals08",
+	"R-Cyborg-Metals08", "R-Vehicle-Armor-Heat06", "R-Cyborg-Armor-Heat06",
+	"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
+	"R-Wpn-Bomb-Damage03", "R-Wpn-Energy-Accuracy01", "R-Wpn-Energy-Damage03",
+	"R-Wpn-Energy-ROF03", "R-Wpn-Missile-Accuracy01", "R-Wpn-Missile-Damage02",
+	"R-Wpn-Rail-Accuracy01", "R-Wpn-Rail-Damage03", "R-Wpn-Rail-ROF03",
+	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
+	"R-Sys-NEXUSsensor",
+];
 var capturedSilos; // victory flag letting us know if we captured any silos.
 var mapLimit; //LasSat slowly creeps toward missile silos.
 var truckLocCounter;
@@ -269,16 +280,29 @@ function eventStartLevel()
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, CAM_NEXUS);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
-	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
+	if (camClassicMode())
+	{
+		camEnableRes(mis_nexusResClassic, CAM_NEXUS);
+
+		camSetArtifacts({
+			"NXbase2HeavyFac": { tech: "R-Wpn-MdArtMissile" },
+			"NXcommandCenter": { tech: "R-Wpn-Laser02" },
+			"NXcyborgFac2Arti": { tech: "R-Wpn-RailGun02" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
+
+		camSetArtifacts({
+			"NXbase1VtolFacArti": { tech: "R-Wpn-MdArtMissile" },
+			"NXcommandCenter": { tech: ["R-Wpn-Laser02", "R-Defense-WallUpgrade11"] },
+			"NXcyborgFac2Arti": { tech: "R-Wpn-RailGun02" },
+		});
+	}
 
 	setAlliance(CAM_HUMAN_PLAYER, MIS_SILO_PLAYER, true);
 	setAlliance(CAM_NEXUS, MIS_SILO_PLAYER, true);
-
-	camSetArtifacts({
-		"NXbase1VtolFacArti": { tech: "R-Wpn-MdArtMissile" },
-		"NXcommandCenter": { tech: ["R-Wpn-Laser02", "R-Defense-WallUpgrade11"] },
-		"NXcyborgFac2Arti": { tech: "R-Wpn-RailGun02" },
-	});
 
 	camSetEnemyBases({
 		"NXMainBase": {

@@ -14,6 +14,18 @@ const mis_collectiveRes = [
 	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
 	"R-Wpn-AAGun-Accuracy01", "R-Struc-VTOLPad-Upgrade02"
 ];
+const mis_collectiveResClassic = [
+	"R-Defense-WallUpgrade03", "R-Struc-Materials05", "R-Struc-Factory-Upgrade05",
+	"R-Struc-VTOLPad-Upgrade01", "R-Vehicle-Engine04", "R-Vehicle-Metals03",
+	"R-Cyborg-Metals04", "R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
+	"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
+	"R-Wpn-Cannon-ROF02", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
+	"R-Wpn-Howitzer-Accuracy01", "R-Wpn-Howitzer-Damage01", "R-Sys-Sensor-Upgrade01",
+	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
+	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
+	"R-Wpn-RocketSlow-ROF03"
+];
 
 camAreaEvent("factoryTrigger", function(droid)
 {
@@ -105,22 +117,35 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camSetArtifacts({
-		"NuclearReactor": { tech: "R-Struc-Power-Upgrade01" },
-		"COMediumFactory": { tech: "R-Wpn-Cannon-ROF02" },
-		"COCyborgFactoryL": { tech: "R-Wpn-MG4" },
-		"COTankKillerHardpoint": { tech: "R-Wpn-RocketSlow-ROF02" },
-	});
-
-	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
-
-	if (difficulty >= MEDIUM)
+	if (camClassicMode())
 	{
-		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
+		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"NuclearReactor": { tech: "R-Struc-Power-Upgrade01" },
+			"COMediumFactory": { tech: "R-Wpn-Cannon4AMk1" },
+			"COCyborgFactoryL": { tech: "R-Wpn-MG4" },
+		});
 	}
-	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
-	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
-	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+	else
+	{
+		camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+
+		if (difficulty >= MEDIUM)
+		{
+			camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
+		}
+		camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+
+		camSetArtifacts({
+			"NuclearReactor": { tech: "R-Struc-Power-Upgrade01" },
+			"COMediumFactory": { tech: "R-Wpn-Cannon-ROF02" },
+			"COCyborgFactoryL": { tech: "R-Wpn-MG4" },
+			"COTankKillerHardpoint": { tech: "R-Wpn-RocketSlow-ROF02" },
+		});
+	}
 
 	camSetEnemyBases({
 		"COEastBase": {
@@ -148,7 +173,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [cTempl.commrp, cTempl.comatt, cTempl.comhpv]
+			templates: (!camClassicMode()) ? [cTempl.commrp, cTempl.comatt, cTempl.comhpv] : [cTempl.comct, cTempl.comatt, cTempl.comhpv]
 		},
 		"COCyborgFactoryL": {
 			assembly: "COCyborgFactoryLAssembly",
@@ -160,7 +185,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.cocybth, cTempl.cocybtk]
+			templates: (!camClassicMode()) ? [cTempl.cocybag, cTempl.cocybth, cTempl.cocybtk] : [cTempl.cocybag, cTempl.npcybf, cTempl.npcybr]
 		},
 		"COCyborgFactoryR": {
 			assembly: "COCyborgFactoryRAssembly",
@@ -172,7 +197,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.cocybtk, cTempl.cocybsn]
+			templates: (!camClassicMode()) ? [cTempl.cocybtk, cTempl.cocybsn] : [cTempl.npcybr, cTempl.npcybc]
 		},
 	});
 

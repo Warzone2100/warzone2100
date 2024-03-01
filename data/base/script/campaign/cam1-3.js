@@ -17,6 +17,12 @@ const mis_scavengerRes = [
 	"R-Wpn-Mortar-Damage02", "R-Wpn-Mortar-ROF01", "R-Wpn-Rocket-ROF03",
 	"R-Defense-WallUpgrade01","R-Struc-Materials01",
 ];
+const mis_newParadigmResClassic = [
+	"R-Wpn-Flamer-Damage03", "R-Wpn-MG-Damage02", "R-Struc-RprFac-Upgrade03"
+];
+const mis_scavengerResClassic = [
+	"R-Wpn-MG-Damage02"
+];
 var NPDefenseGroup, NPScoutGroup, NPFactory;
 
 camAreaEvent("RemoveBeacon", function(droid)
@@ -53,8 +59,11 @@ camAreaEvent("WestConvoyTrigger", function(droid)
 function enableNP(args)
 {
 	camEnableFactory("ScavFactory");
-	camEnableFactory("ScavFactorySouth");
 	camEnableFactory("NPFactory");
+	if (!camClassicMode())
+	{
+		camEnableFactory("ScavFactorySouth");
+	}
 
 	if (difficulty === INSANE)
 	{
@@ -156,6 +165,10 @@ function camEnemyBaseDetected_ScavBaseGroup()
 
 function camEnemyBaseDetected_ScavBaseGroupSouth()
 {
+	if (camClassicMode())
+	{
+		return;
+	}
 	camEnableFactory("ScavFactory");
 	camEnableFactory("ScavFactorySouth");
 	camManageGroup(camMakeGroup("SouthConvoyForce"), CAM_ORDER_COMPROMISE, {
@@ -200,6 +213,20 @@ function eventDroidBuilt(droid, structure)
 	// hence fall-through.
 }
 
+function blowupSouthScavengerBase()
+{
+	const objects = enumArea("SouthScavBase", ALL_PLAYERS, false);
+
+	for (let i = 0, len = objects.length; i < len; ++i)
+	{
+		const obj = objects[i];
+		if (obj.type === STRUCTURE)
+		{
+			camSafeRemoveObject(obj, false);
+		}
+	}
+}
+
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
@@ -218,45 +245,82 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+	if (camClassicMode())
+	{
+		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+		camEnableRes(mis_scavengerResClassic, CAM_SCAV_7);
+
+		camSetArtifacts({
+			"ScavFactory": { tech: "R-Wpn-Cannon1Mk1" },
+			"NPFactory": { tech: "R-Defense-HardcreteWall" },
+			"NPLab": { tech: "R-Struc-Factory-Module" },
+			"NPCRC": { tech: "R-Struc-CommandRelay" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+
+		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
+
+		camSetArtifacts({
+			"ScavFactory": { tech: "R-Wpn-Flamer-Damage03" },
+			"NPFactory": { tech: ["R-Struc-Factory-Module", "R-Vehicle-Body04"] },
+			"NPLab": { tech: "R-Defense-HardcreteWall" },
+			"NPCRC": { tech: "R-Struc-CommandRelay" },
+		});
+	}
+
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 
-	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
-
-	camSetEnemyBases({
-		"ScavBaseGroup": {
-			cleanup: "ScavBase",
-			detectMsg: "C1-3_BASE1",
-			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
-			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
-		},
-		"NPBaseGroup": {
-			cleanup: "NPBase",
-			detectMsg: "C1-3_BASE2",
-			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
-			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated
-		},
-		"ScavBaseGroupSouth": {
-			cleanup: "SouthScavBase",
-			detectMsg: "C1-3_OBJ2",
-			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
-			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
-		},
-	});
+	// Perhaps allow adding more bases via libcampaign to cut out this duplication.
+	if (camClassicMode())
+	{
+		camSetEnemyBases({
+			"ScavBaseGroup": {
+				cleanup: "ScavBase",
+				detectMsg: "C1-3_BASE1",
+				detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+				eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
+			},
+			"NPBaseGroup": {
+				cleanup: "NPBase",
+				detectMsg: "C1-3_BASE2",
+				detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+				eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated
+			},
+		});
+	}
+	else
+	{
+		camSetEnemyBases({
+			"ScavBaseGroup": {
+				cleanup: "ScavBase",
+				detectMsg: "C1-3_BASE1",
+				detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+				eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
+			},
+			"NPBaseGroup": {
+				cleanup: "NPBase",
+				detectMsg: "C1-3_BASE2",
+				detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+				eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated
+			},
+			"ScavBaseGroupSouth": {
+				cleanup: "SouthScavBase",
+				detectMsg: "C1-3_OBJ2",
+				detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+				eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
+			},
+		});
+	}
 
 	hackAddMessage("C1-3_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); // south-west beacon
-
-	camSetArtifacts({
-		"ScavFactory": { tech: "R-Wpn-Flamer-Damage03" },
-		"NPFactory": { tech: ["R-Struc-Factory-Module", "R-Vehicle-Body04"] },
-		"NPLab": { tech: "R-Defense-HardcreteWall" },
-		"NPCRC": { tech: "R-Struc-CommandRelay" },
-	});
 
 	camSetFactories({
 		"ScavFactory": {
@@ -269,7 +333,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 10,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [ cTempl.buggyheavy, cTempl.blokeheavy, cTempl.bjeepheavy, cTempl.trikeheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.buggyheavy, cTempl.blokeheavy, cTempl.bjeepheavy, cTempl.trikeheavy ] : [ cTempl.rbuggy, cTempl.bloke, cTempl.bjeep, cTempl.buggy ]
 		},
 		"NPFactory": {
 			assembly: "NPAssembly",
@@ -293,7 +357,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 10,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
-			templates: [ cTempl.rbjeep8, cTempl.buscan, cTempl.rbuggy, cTempl.firecan ]
+			templates: (!camClassicMode()) ? [ cTempl.rbjeep8, cTempl.buscan, cTempl.rbuggy, cTempl.firecan ] : [ cTempl.rbjeep, cTempl.buscan, cTempl.rbuggy, cTempl.firecan ]
 		},
 	});
 
@@ -301,6 +365,10 @@ function eventStartLevel()
 	NPDefenseGroup = camMakeGroup("NPDefense");
 	NPFactory = getObject("NPFactory");
 
+	if (camClassicMode())
+	{
+		queue("blowupSouthScavengerBase", camSecondsToMilliseconds(2));
+	}
 	queue("playNPWarningMessage", camSecondsToMilliseconds(3));
 	queue("sendScouts", camSecondsToMilliseconds(60));
 }

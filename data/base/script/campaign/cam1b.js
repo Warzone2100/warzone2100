@@ -6,6 +6,8 @@ const mis_scavengerRes = [
 	"R-Wpn-Flamer-Damage01", "R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01", "R-Wpn-Flamer-Range01-ScavReduce",
 ];
 
+// CLASSIC: No research.
+
 camAreaEvent("AttackArea1", function(droid)
 {
 	queue("camCallOnce", camSecondsToMilliseconds(2), "doNPRetreat");
@@ -24,7 +26,7 @@ camAreaEvent("AttackArea1", function(droid)
 		groupSize: 10, // changes
 		maxSize: 10,
 		throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 20 : 15)),
-		templates: [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin, ] // changes
+		templates: (!camClassicMode()) ? [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin, ] : [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bloke, ] // changes
 	});
 	camEnableFactory("base2factory"); // re-enable
 });
@@ -82,26 +84,40 @@ function eventStartLevel()
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 	setAlliance(CAM_SCAV_6, CAM_SCAV_7, true);
 
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
-	if (difficulty === HARD)
+	if (camClassicMode())
 	{
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
+		camSetArtifacts({
+			"base1factory": { tech: "R-Wpn-Flamer-Damage01" },
+			"base2factory": { tech: "R-Wpn-MG2Mk1" },
+			"base3sensor": { tech: "R-Sys-Sensor-Turret01" },
+			"base4gen": { tech: "R-Struc-PowerModuleMk1" },
+		});
 	}
-	else if (difficulty === INSANE)
+	else
 	{
-		completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_6);
-		completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_7);
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+
+		if (difficulty === HARD)
+		{
+			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
+			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
+		}
+		else if (difficulty === INSANE)
+		{
+			completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_6);
+			completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_7);
+			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
+			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
+		}
+
+		camSetArtifacts({
+			"base1factory": { tech: "R-Wpn-Flamer-Damage02" },
+			"base2factory": { tech: "R-Wpn-MG2Mk1" },
+			"base3sensor": { tech: "R-Sys-Sensor-Turret01" },
+			"base4gen": { tech: "R-Struc-PowerModuleMk1" },
+		});
 	}
-	camSetArtifacts({
-		"base1factory": { tech: "R-Wpn-Flamer-Damage02" },
-		"base2factory": { tech: "R-Wpn-MG2Mk1" },
-		"base3sensor": { tech: "R-Sys-Sensor-Turret01" },
-		"base4gen": { tech: "R-Struc-PowerModuleMk1" },
-	});
 
 	camSetEnemyBases({
 		"base1group": {
@@ -141,7 +157,7 @@ function eventStartLevel()
 			groupSize: 6,
 			maxSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 11 : 8)),
-			templates: [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin ]
+			templates: (!camClassicMode()) ? [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin ] : [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bloke ]
 		},
 		"base2factory": { // the hill harass factory
 			assembly: "assembly2",
@@ -154,7 +170,7 @@ function eventStartLevel()
 			groupSize: 4, // will override later
 			maxSize: 10,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 24 : 18)),
-			templates: [ cTempl.bloketwin ] // will override later
+			templates: (!camClassicMode()) ? [ cTempl.bloketwin ] : [ cTempl.bloke ] // will override later
 		},
 		"base4factory": {
 			assembly: "assembly4",
@@ -163,7 +179,7 @@ function eventStartLevel()
 			groupSize: 8,
 			maxSize: 8,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 16 : 12)),
-			templates: [ cTempl.trike, cTempl.bloketwin, cTempl.buggytwin, cTempl.bjeeptwin ]
+			templates: (!camClassicMode()) ? [ cTempl.trike, cTempl.bloketwin, cTempl.buggytwin, cTempl.bjeeptwin ] : [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
 	});
 	camEnableFactory("base2factory");

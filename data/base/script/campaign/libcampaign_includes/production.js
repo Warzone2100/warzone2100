@@ -253,6 +253,12 @@ function camUpgradeOnMapTemplates(template1, template2, playerId, excluded)
 
 //////////// privates
 
+// Boosts the throttle on factories if classic balance is active.
+function __camFactoryThrottleMultiplier()
+{
+	return ((camClassicMode()) ? 2 : 1);
+}
+
 function __camFactoryUpdateTactics(flabel)
 {
 	const fi = __camFactoryInfo[flabel];
@@ -410,7 +416,7 @@ function __camContinueProduction(structure)
 	if (camDef(fi.throttle) && camDef(fi.lastprod))
 	{
 		const __THROTTLE = gameTime - fi.lastprod;
-		if (__THROTTLE < fi.throttle)
+		if (__THROTTLE < (fi.throttle * __camFactoryThrottleMultiplier()))
 		{
 			// do throttle
 			return;

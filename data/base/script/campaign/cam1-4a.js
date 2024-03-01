@@ -17,6 +17,16 @@ const mis_scavengerRes = [
 	"R-Wpn-Rocket-ROF03", "R-Vehicle-Metals02",
 	"R-Defense-WallUpgrade02", "R-Struc-Materials02",
 ];
+const mis_newParadigmResClassic = [
+	"R-Defense-WallUpgrade02", "R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
+	"R-Vehicle-Engine02", "R-Vehicle-Metals02", "R-Cyborg-Metals02", "R-Wpn-Cannon-Damage03",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01", "R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01",
+	"R-Wpn-Mortar-Damage02", "R-Wpn-Rocket-Accuracy01", "R-Wpn-Rocket-Damage02",
+	"R-Wpn-Rocket-ROF01", "R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03"
+];
+const mis_scavengerResClassic = [
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02"
+];
 
 //Pursue player when nearby but do not go too far away from defense zone.
 function camEnemyBaseDetected_NPBaseGroup()
@@ -122,15 +132,37 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
-	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
+	if (camClassicMode())
+	{
+		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+		camEnableRes(mis_scavengerResClassic, CAM_SCAV_7);
 
-	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
+		camSetArtifacts({
+			"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
+			"NPResearchFacility": { tech: "R-Vehicle-Body04" },
+			"MediumNPFactory": { tech: "R-Wpn-Rocket02-MRL" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+
+		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
+
+		camSetArtifacts({
+			"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
+			"NPResearchFacility": { tech: "R-Wpn-MG-Damage04" },
+			"MediumNPFactory": { tech: "R-Wpn-Rocket02-MRL" },
+			"HeavyNPFactory": { tech: "R-Wpn-Rocket-Damage02" },
+		});
+	}
+
+	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 
 	camSetEnemyBases({
 		"SouthScavBaseGroup": {
@@ -155,13 +187,6 @@ function eventStartLevel()
 
 	hackAddMessage("C1-4_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
-	camSetArtifacts({
-		"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
-		"NPResearchFacility": { tech: "R-Wpn-MG-Damage04" },
-		"MediumNPFactory": { tech: "R-Wpn-Rocket02-MRL" },
-		"HeavyNPFactory": { tech: "R-Wpn-Rocket-Damage02" },
-	});
-
 	camSetFactories({
 		"SouthScavFactory": {
 			assembly: "SouthScavFactoryAssembly",
@@ -169,7 +194,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
-			templates: [ cTempl.rbuggy, cTempl.bjeepheavy, cTempl.buscan, cTempl.trikeheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.rbuggy, cTempl.bjeepheavy, cTempl.buscan, cTempl.trikeheavy ] : [ cTempl.rbuggy, cTempl.bjeep, cTempl.buscan, cTempl.trike ]
 		},
 		"NorthScavFactory": {
 			assembly: "NorthScavFactoryAssembly",
@@ -181,7 +206,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
-			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.blokeheavy, cTempl.buggyheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbjeep8, cTempl.blokeheavy, cTempl.buggyheavy ] : [ cTempl.firecan, cTempl.rbjeep, cTempl.bloke, cTempl.buggy ]
 		},
 		"HeavyNPFactory": {
 			assembly: "HeavyNPFactoryAssembly",
@@ -189,7 +214,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6, // this one was exclusively producing trucks
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)), // but we simplify this out
-			templates: [ cTempl.npsmc, cTempl.npmmct, cTempl.npsmc, cTempl.npsmct ]
+			templates: (!camClassicMode()) ? [ cTempl.npsmc, cTempl.npmmct, cTempl.npsmc, cTempl.npsmct ] : [ cTempl.npmmct, cTempl.npsmct, cTempl.npsmc ]
 		},
 		"MediumNPFactory": {
 			assembly: "MediumNPFactoryAssembly",

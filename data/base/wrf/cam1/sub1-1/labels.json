@@ -116,5 +116,17 @@
 		"id": 143,
 		"player": 7,
 		"type": 1
+	},
+	"object_3": {
+		"label": "originalFlamerTower",
+		"id": 114,
+		"player": 7,
+		"type": 1
+	},
+	"object_4": {
+		"label": "originalLookoutTower",
+		"id": 73,
+		"player": 7,
+		"type": 1
 	}
 }

@@ -202,15 +202,23 @@ function wave3()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	const list = [cTempl.nxmtherv, cTempl.nxmtherv];
-	const ext = {
-		limit: [2, 2], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
-	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
-	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	if (camClassicMode())
+	{
+		const list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
+	}
+	else
+	{
+		const list = [cTempl.nxmtherv, cTempl.nxmtherv];
+		const ext = {
+			limit: [2, 2], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	}
 }
 
 //These groups are active immediately.
@@ -263,30 +271,69 @@ function cam3Setup()
 		"R-Wpn-Energy-Damage02", "R-Wpn-Energy-ROF01", "R-Wpn-Energy-Accuracy01",
 		"R-Sys-NEXUSsensor",
 	];
+	const nexusResClassic = [
+		"R-Defense-WallUpgrade07", "R-Struc-Materials07", "R-Struc-Factory-Upgrade06",
+		"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals07",
+		"R-Cyborg-Metals07", "R-Vehicle-Armor-Heat03", "R-Cyborg-Armor-Heat03",
+		"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
+		"R-Wpn-Bomb-Damage03", "R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01",
+		"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Rail-Damage01",
+		"R-Wpn-Rail-ROF01", "R-Wpn-Flamer-Damage06", "R-Sys-NEXUSsensor",
+	];
 
 	for (let x = 0, l = mis_structsAlpha.length; x < l; ++x)
 	{
 		enableStructure(mis_structsAlpha[x], CAM_HUMAN_PLAYER);
 	}
 
-	camCompleteRequiredResearch(mis_gammaAllyRes, CAM_HUMAN_PLAYER);
-	camCompleteRequiredResearch(mis_gammaAllyRes, CAM_NEXUS);
-	camCompleteRequiredResearch(nexusRes, CAM_NEXUS);
-
-	if (difficulty >= HARD)
+	if (camClassicMode())
 	{
-		improveNexusAlloys();
-	}
+		// Research Alpha tree (that is available).
+		camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_HUMAN_PLAYER);
+		camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_NEXUS);
+		// Undo the stats according to the contents within mis_betaStartingResearch.
+		completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
+		completeResearch("CAM2RESEARCH-UNDO", CAM_NEXUS);
+		// Research Beta tree (that is available).
+		camCompleteRequiredResearch(mis_betaResearchNewClassic, CAM_HUMAN_PLAYER);
+		camCompleteRequiredResearch(mis_betaResearchNewClassic, CAM_NEXUS);
+		// Undo the stats according to the contents within mis_betaStartingResearch.
+		completeResearch("CAM3RESEARCH-UNDO", CAM_HUMAN_PLAYER);
+		completeResearch("CAM3RESEARCH-UNDO", CAM_NEXUS);
+		// Give bonus transition to Beta tech to the player.
+		camCompleteRequiredResearch(mis_playerResBetaClassic, CAM_HUMAN_PLAYER);
+		camCompleteRequiredResearch(mis_playerResGammaClassic, CAM_HUMAN_PLAYER);
+		// Research Gamma baseline tech.
+		camEnableRes(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
+		camEnableRes(nexusResClassic, CAM_NEXUS);
 
-	enableResearch("R-Wpn-Howitzer03-Rot", CAM_HUMAN_PLAYER);
-	enableResearch("R-Wpn-MG-Damage09", CAM_HUMAN_PLAYER);
-	enableResearch("R-Wpn-Flamer-ROF04", CAM_HUMAN_PLAYER);
-	enableResearch("R-Defense-WallUpgrade07", CAM_HUMAN_PLAYER);
+		enableResearch("R-Wpn-MG-Damage08", CAM_HUMAN_PLAYER);
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_gammaAllyRes, CAM_HUMAN_PLAYER);
+		camCompleteRequiredResearch(mis_gammaAllyRes, CAM_NEXUS);
+		camCompleteRequiredResearch(nexusRes, CAM_NEXUS);
+
+		if (difficulty >= HARD)
+		{
+			improveNexusAlloys();
+		}
+
+		enableResearch("R-Wpn-Howitzer03-Rot", CAM_HUMAN_PLAYER);
+		enableResearch("R-Wpn-MG-Damage09", CAM_HUMAN_PLAYER);
+		enableResearch("R-Wpn-Flamer-ROF04", CAM_HUMAN_PLAYER);
+		enableResearch("R-Defense-WallUpgrade07", CAM_HUMAN_PLAYER);
+	}
 }
 
 //Normal and lower difficulties has Nexus start off a little bit weaker
 function improveNexusAlloys()
 {
+	if (camClassicMode())
+	{
+		return;
+	}
 	const alloys = [
 		"R-Vehicle-Metals07", "R-Cyborg-Metals07",
 		"R-Vehicle-Armor-Heat04", "R-Cyborg-Armor-Heat04"

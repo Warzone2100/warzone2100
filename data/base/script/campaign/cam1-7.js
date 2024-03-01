@@ -19,6 +19,18 @@ const mis_scavengerRes = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Wpn-Cannon-Accuracy01",
 	"R-Wpn-Mortar-Acc01",
 ];
+const mis_newParadigmResClassic = [
+	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
+	"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
+	"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon-Damage03", "R-Wpn-Flamer-Damage03",
+	"R-Wpn-Flamer-ROF01", "R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01",
+	"R-Wpn-Mortar-Acc01", "R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy02",
+	"R-Wpn-RocketSlow-Damage03", "R-Struc-RprFac-Upgrade03"
+];
+const mis_scavengerResClassic = [
+	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02"
+];
 var artiGroup; //Droids that take the artifact
 var enemyHasArtifact; //Do they have the artifact
 var enemyStoleArtifact; //Reached the LZ with the artifact
@@ -100,9 +112,18 @@ function eventGroupLoss(obj, group, newsize)
 			const acrate = addFeature(CAM_ARTIFACT_STAT, obj.x, obj.y);
 			addLabel(acrate, "newArtiLabel");
 
-			camSetArtifacts({
-				"newArtiLabel": { tech: ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03"] }
-			});
+			if (camClassicMode())
+			{
+				camSetArtifacts({
+					"newArtiLabel": { tech: "R-Wpn-Cannon3Mk1" }
+				});
+			}
+			else
+			{
+				camSetArtifacts({
+					"newArtiLabel": { tech: ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03"] }
+				});
+			}
 
 			droidWithArtiID = undefined;
 			enemyHasArtifact = false;
@@ -265,25 +286,38 @@ function eventStartLevel()
 
 	//Get rid of the already existing crate and replace with another
 	camSafeRemoveObject("artifact1", false);
-	camSetArtifacts({
-		"artifactLocation": { tech: ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03"] },
-	});
 
-	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
-
-	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
-
-	// New MRA Mantis Tracks units on the hill
-	if (difficulty >= HARD)
+	if (camClassicMode())
 	{
-		addDroid(CAM_NEW_PARADIGM, 29, 16, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
-		addDroid(CAM_NEW_PARADIGM, 29, 17, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
-		addDroid(CAM_NEW_PARADIGM, 29, 18, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
+		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+		camEnableRes(mis_scavengerResClassic, CAM_SCAV_7);
+
+		camSetArtifacts({
+			"artifactLocation": { tech: "R-Wpn-Cannon3Mk1" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+
+		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
+
+		// New MRA Mantis Tracks units on the hill
+		if (difficulty >= HARD)
+		{
+			addDroid(CAM_NEW_PARADIGM, 29, 16, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
+			addDroid(CAM_NEW_PARADIGM, 29, 17, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
+			addDroid(CAM_NEW_PARADIGM, 29, 18, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
+		}
+
+		camSetArtifacts({
+			"artifactLocation": { tech: ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03"] },
+		});
 	}
 
 	camSetEnemyBases({
@@ -317,7 +351,7 @@ function eventStartLevel()
 				regroup: true,
 				count: -1,
 			},
-			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ] : [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ]
 		},
 		"scavSouthEastFactory": {
 			assembly: "southAssembly",
@@ -328,7 +362,7 @@ function eventStartLevel()
 				regroup: true,
 				count: -1,
 			},
-			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ] : [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ]
 		},
 		"scavNorthEastFactory": {
 			assembly: "northAssembly",
@@ -339,7 +373,7 @@ function eventStartLevel()
 				regroup: true,
 				count: -1,
 			},
-			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ] : [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ]
 		},
 	});
 

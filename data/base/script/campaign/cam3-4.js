@@ -15,6 +15,17 @@ const mis_nexusRes = [
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
 	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Sys-NEXUSsensor",
 ];
+const mis_nexusResClassic = [
+	"R-Defense-WallUpgrade09", "R-Struc-Materials09", "R-Struc-Factory-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals09",
+	"R-Cyborg-Metals09", "R-Vehicle-Armor-Heat06", "R-Cyborg-Armor-Heat06",
+	"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
+	"R-Wpn-Bomb-Damage03", "R-Wpn-Energy-Accuracy01", "R-Wpn-Energy-Damage03",
+	"R-Wpn-Energy-ROF03", "R-Wpn-Missile-Accuracy02", "R-Wpn-Missile-Damage03",
+	"R-Wpn-Missile-ROF03", "R-Wpn-Rail-Accuracy01", "R-Wpn-Rail-Damage03",
+	"R-Wpn-Rail-ROF03", "R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair",
+	"R-Wpn-Flamer-Damage06", "R-Sys-NEXUSsensor",
+];
 
 function eventDestroyed(obj)
 {
@@ -133,6 +144,10 @@ function activateNexus()
 
 function camEnemyBaseDetected_NX_SWBase()
 {
+	if (camClassicMode())
+	{
+		return;
+	}
 	if (getObject("NX-HQ") === null)
 	{
 		return; //Probably destroyed through cheats?
@@ -251,11 +266,20 @@ function eventStartLevel()
 	setTransporterExit(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
 	setMissionTime(-1); //Infinite time
 
-	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
-	if (difficulty === INSANE)
+	if (camClassicMode())
 	{
-		completeResearch("R-Defense-WallUpgrade13", CAM_NEXUS);
+		camEnableRes(mis_nexusResClassic, CAM_NEXUS);
 	}
+	else
+	{
+		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
+
+		if (difficulty === INSANE)
+		{
+			completeResearch("R-Defense-WallUpgrade13", CAM_NEXUS);
+		}
+	}
+
 	setupNexusPatrols();
 	camManageTrucks(CAM_NEXUS);
 

@@ -11,7 +11,7 @@
 //;;
 function camClassicMode()
 {
-	return modList.indexOf("wz2100_camclassic.wz") !== -1;
+	return __camClassicModActive;
 }
 
 //;; ## camDef(something)

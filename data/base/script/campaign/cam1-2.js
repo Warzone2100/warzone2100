@@ -8,6 +8,8 @@ const mis_scavengerRes = [
 	"R-Defense-WallUpgrade01", "R-Struc-Materials01",
 ];
 
+// CLASSIC: No research.
+
 function exposeNorthBase()
 {
 	camDetectEnemyBase("NorthGroup"); // no problem if already detected
@@ -31,7 +33,7 @@ function camArtifactPickup_ScavLab()
 		groupSize: 5,
 		maxSize: 9,
 		throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 13 : 10)),
-		templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
+		templates: (!camClassicMode()) ? [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ] : [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 	});
 	camEnableFactory("WestFactory");
 }
@@ -75,12 +77,27 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+	if (camClassicMode())
+	{
+		camSetArtifacts({
+			"ScavLab": { tech: "R-Wpn-Mortar01Lt" },
+			"NorthFactory": { tech: "R-Vehicle-Prop-Halftracks" },
+		});
+	}
+	else
+	{
+		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 
-	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.trike, cTempl.triketwin, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggytwin, CAM_SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeeptwin, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.trike, cTempl.triketwin, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggytwin, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeeptwin, CAM_SCAV_7);
+
+		camSetArtifacts({
+			"ScavLab": { tech: "R-Wpn-Mortar01Lt" },
+			"NorthFactory": { tech: ["R-Vehicle-Prop-Halftracks", "R-Wpn-Cannon1Mk1"] },
+		});
+	}
 
 	camSetEnemyBases({
 		"NorthGroup": {
@@ -103,11 +120,6 @@ function eventStartLevel()
 
 	camDetectEnemyBase("ScavLabGroup");
 
-	camSetArtifacts({
-		"ScavLab": { tech: "R-Wpn-Mortar01Lt" },
-		"NorthFactory": { tech: ["R-Vehicle-Prop-Halftracks", "R-Wpn-Cannon1Mk1"] },
-	});
-
 	camSetFactories({
 		"NorthFactory": {
 			assembly: "NorthAssembly",
@@ -125,7 +137,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			group: camMakeGroup("NorthTankGroup"),
-			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ] : [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
 		"WestFactory": {
 			assembly: "WestAssembly",
@@ -143,7 +155,7 @@ function eventStartLevel()
 				count: -1,
 			},
 
-			templates: [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ]
+			templates: (!camClassicMode()) ? [ cTempl.trikeheavy, cTempl.blokeheavy, cTempl.buggyheavy, cTempl.bjeepheavy ] : [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
 		},
 	});
 
