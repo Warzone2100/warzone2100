@@ -56,7 +56,7 @@ struct wzSearchPath
 	unsigned int priority = 0;
 };
 
-enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
+enum searchPathMode { mod_clean, mod_campaign, mod_multiplay };
 
 void registerSearchPath(const std::string& path, unsigned int priority);
 void unregisterSearchPath(const std::string& path);
