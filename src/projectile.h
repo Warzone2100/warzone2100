@@ -54,6 +54,8 @@ bool	proj_Shutdown();	///< Shut down projectile subsystem.
 PROJECTILE *proj_GetFirst();	///< Get first projectile in the list.
 PROJECTILE *proj_GetNext();		///< Get next projectile in the list.
 
+void proj_AddActiveProjectile(PROJECTILE* p); ///< Add allocated projectile `p` to the list of active projectiles
+
 void	proj_FreeAllProjectiles();	///< Free all projectiles in the list.
 
 void setExpGain(int player, int gain);
@@ -62,12 +64,16 @@ int getExpGain(int player);
 /// Calculate the initial velocities of an indirect projectile. Returns the flight time.
 int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz, int min_angle);
 
-/** Send a single projectile against the given target. */
-bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot);
+/** Send a single projectile against the given target.
+  * Returns a non-null pointer to the newly-created projectile in the case of penetrating projectiles.
+  * The returned projectile is automatically added `psProjectileList` global list. */
+bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, const Vector3i& target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot);
 
 /** Send a single projectile against the given target
- * with a minimum shot angle. */
-bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle, unsigned fireTime);
+ * with a minimum shot angle.
+ * Returns a non-null pointer to the newly-created projectile in the case of penetrating projectiles.
+ * The returned projectile is automatically added `psProjectileList` global list. */
+bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, const Vector3i& target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle, unsigned fireTime);
 
 /** Return whether a weapon is direct or indirect. */
 bool proj_Direct(const WEAPON_STATS *psStats);
