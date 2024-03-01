@@ -1398,7 +1398,15 @@ void proj_UpdateAll()
 	std::for_each(psProjectileListOld.begin(), psProjectileListOld.end(), std::mem_fn(&PROJECTILE::update));
 
 	// Remove and free dead projectiles.
-	psProjectileList.erase(std::remove_if(psProjectileList.begin(), psProjectileList.end(), std::mem_fn(&PROJECTILE::deleteIfDead)), psProjectileList.end());
+	psProjectileList.erase(std::remove_if(psProjectileList.begin(), psProjectileList.end(), [](PROJECTILE* p)
+	{
+		if (p->died == 0 || p->died >= gameTime - deltaGameTime)
+		{
+			return false;
+		}
+		delete p;
+		return true;
+	}), psProjectileList.end());
 }
 
 /***************************************************************************/
