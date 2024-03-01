@@ -599,7 +599,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		}
 
 		current_mode = mode;
-		lastCommand.mode = mode; // store this separately, so it doesn't get overridden with mod_override below
+		lastCommand.mode = mode; // store this separately, so it doesn't get overridden by anything below
 		lastCommand.force = force;
 		lastCommand.current_map.reset();
 		if (current_map != nullptr)
@@ -811,8 +811,6 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 			{
 				debug(LOG_POPUP, _("The required mod could not be loaded: %s\n\nWarzone will try to load the game without it."), override_mod_list.c_str());
 			}
-			clearOverrideMods();
-			current_mode = mod_override;
 		}
 
 		// User's home dir must be first so we always see what we write
@@ -837,11 +835,6 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		}
 
 		ActivityManager::instance().rebuiltSearchPath();
-	}
-	else if (use_override_mods)
-	{
-		// override mods are already the same as current mods, so no need to do anything
-		clearOverrideMods();
 	}
 	return true;
 }
@@ -1631,6 +1624,7 @@ bool stageOneShutDown()
 	modelShutdown();
 	pie_TexShutDown();
 
+	clearOverrideMods();
 	// Use mod_multiplay as the default (campaign might have set it to mod_singleplayer)
 	rebuildSearchPath(mod_multiplay, true);
 	pie_TexInit(); // restart it
