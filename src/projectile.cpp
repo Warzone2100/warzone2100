@@ -29,6 +29,7 @@
 #include "lib/framework/trig.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/paged_entity_container.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
@@ -98,11 +99,22 @@ struct DAMAGE
 static const uint32_t ProjectileTrackerID = 0xdead0000;
 static uint32_t projectileTrackerIDIncrement = 0;
 
-/* The list of projectiles in play */
+/* The list of projectiles in play.
+ * This intermediate container is needed to ensure that projectiles are always
+ * enumerated in a stable and predictable order, because `globalProjectileStorage`
+ * may insert new elements in place of old ones, which were previously destroyed,
+ * thus, modifying the order of iteration. */
 static std::vector<PROJECTILE*> psProjectileList;
 
-/* The next projectile to give out in the proj_First / proj_Next methods */
+/* The next projectile to give out in the proj_First / proj_Next methods.
+ * References `psProjectileList` container. */
 static ProjectileIterator psProjectileNext;
+
+/// <summary>
+/// Global container to allocate and hold instances of `PROJECTILE`
+/// within the Warzone's process lifetime.
+/// </summary>
+static PagedEntityContainer<PROJECTILE> globalProjectileStorage;
 
 /***************************************************************************/
 
@@ -208,17 +220,23 @@ proj_InitSystem()
 
 /***************************************************************************/
 
+// Add allocated projectile `p` to the list of active projectiles (`psProjectileList`)
+void proj_AddActiveProjectile(PROJECTILE* p)
+{
+	psProjectileList.emplace_back(p);
+}
+
+/***************************************************************************/
+
 // Clean out all projectiles from the system, and properly decrement
 // all reference counts.
 void
 proj_FreeAllProjectiles()
 {
-	for (auto proj: psProjectileList)
-	{
-		delete proj;
-	}
 	psProjectileList.clear();
 	psProjectileNext = psProjectileList.end();
+
+	globalProjectileStorage.clear();
 }
 
 /***************************************************************************/
@@ -419,55 +437,50 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 	return t;
 }
 
-bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot)
-{
-	return proj_SendProjectileAngled(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot, 0, gameTime - 1);
-}
-
-bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle, unsigned fireTime)
+static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJECT* psAttacker, int player, const Vector3i& target, BASE_OBJECT* psTarget, bool bVisible, int weapon_slot, int min_angle, unsigned fireTime)
 {
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
-	ASSERT_OR_RETURN(false, psWeap->nStat < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %zu", psWeap->nStat, asWeaponStats.size());
-	ASSERT_OR_RETURN(false, psStats != nullptr, "Invalid weapon stats");
-	ASSERT_OR_RETURN(false, psTarget == nullptr || !psTarget->died, "Aiming at dead target!");
+	ASSERT_OR_RETURN(nullptr, psWeap->nStat < asWeaponStats.size(), "Invalid range referenced for numWeaponStats, %d > %zu", psWeap->nStat, asWeaponStats.size());
+	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "Invalid weapon stats");
+	ASSERT_OR_RETURN(nullptr, psTarget == nullptr || !psTarget->died, "Aiming at dead target!");
 
-	PROJECTILE *psProj = new PROJECTILE(ProjectileTrackerID + ++projectileTrackerIDIncrement, player);
+	PROJECTILE proj(ProjectileTrackerID + ++projectileTrackerIDIncrement, player);
 
 	/* get muzzle offset */
 	if (psAttacker == nullptr)
 	{
 		// if there isn't an attacker just start at the target position
 		// NB this is for the script function to fire the las sats
-		psProj->src = target;
+		proj.src = target;
 	}
 	else if (psAttacker->type == OBJ_DROID && weapon_slot >= 0)
 	{
-		calcDroidMuzzleLocation((DROID *)psAttacker, &psProj->src, weapon_slot);
+		calcDroidMuzzleLocation((DROID *)psAttacker, &proj.src, weapon_slot);
 		/*update attack runs for VTOL droid's each time a shot is fired*/
 		updateVtolAttackRun((DROID *)psAttacker, weapon_slot);
 	}
 	else if (psAttacker->type == OBJ_STRUCTURE && weapon_slot >= 0)
 	{
-		calcStructureMuzzleLocation((STRUCTURE *)psAttacker, &psProj->src, weapon_slot);
+		calcStructureMuzzleLocation((STRUCTURE *)psAttacker, &proj.src, weapon_slot);
 	}
 	else // incase anything wants a projectile
 	{
-		psProj->src = psAttacker->pos;
+		proj.src = psAttacker->pos;
 	}
 
 	/* Initialise the structure */
-	psProj->psWStats		= psStats;
+	proj.psWStats		= psStats;
 
-	psProj->pos             = psProj->src;
-	psProj->dst             = target;
+	proj.pos             = proj.src;
+	proj.dst             = target;
 
-	psProj->bVisible = false;
+	proj.bVisible = false;
 
 	// Must set ->psDest and ->expectedDamageCaused before first call to setProjectileDestination().
-	psProj->psDest = nullptr;
-	psProj->expectedDamageCaused = objGuessFutureDamage(psStats, player, psTarget);
-	setProjectileDestination(psProj, psTarget);  // Updates expected damage of psProj->psDest, using psProj->expectedDamageCaused.
+	proj.psDest = nullptr;
+	proj.expectedDamageCaused = objGuessFutureDamage(psStats, player, psTarget);
+	setProjectileDestination(&proj, psTarget);  // Updates expected damage of proj.psDest, using proj.expectedDamageCaused.
 
 	/*
 	When we have been created by penetration (spawned from another projectile),
@@ -476,26 +489,26 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	if (psAttacker && psAttacker->type == OBJ_PROJECTILE)
 	{
 		PROJECTILE *psOldProjectile = (PROJECTILE *)psAttacker;
-		psProj->born = psOldProjectile->born;
-		psProj->src = psOldProjectile->src;
+		proj.born = psOldProjectile->born;
+		proj.src = psOldProjectile->src;
 
-		psProj->prevSpacetime.time = psOldProjectile->time;  // Have partially ticked already.
-		psProj->time = gameTime;
-		psProj->prevSpacetime.time -=  psProj->prevSpacetime.time == psProj->time;  // Times should not be equal, for interpolation.
+		proj.prevSpacetime.time = psOldProjectile->time;  // Have partially ticked already.
+		proj.time = gameTime;
+		proj.prevSpacetime.time -= proj.prevSpacetime.time == proj.time;  // Times should not be equal, for interpolation.
 
-		setProjectileSource(psProj, psOldProjectile->psSource);
-		psProj->psDamaged = psOldProjectile->psDamaged;
+		setProjectileSource(&proj, psOldProjectile->psSource);
+		proj.psDamaged = psOldProjectile->psDamaged;
 
 		// TODO Should finish the tick, when penetrating.
 	}
 	else
 	{
-		psProj->born = fireTime;  // Born at the start of the tick.
+		proj.born = fireTime;  // Born at the start of the tick.
 
-		psProj->prevSpacetime.time = fireTime;
-		psProj->time = psProj->prevSpacetime.time;
+		proj.prevSpacetime.time = fireTime;
+		proj.time = proj.prevSpacetime.time;
 
-		setProjectileSource(psProj, psAttacker);
+		setProjectileSource(&proj, psAttacker);
 	}
 
 	if (psTarget)
@@ -504,22 +517,22 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 		int minHeight = std::min(std::max(maxHeight + 2 * LINE_OF_FIRE_MINIMUM - areaOfFire(psAttacker, psTarget, weapon_slot, true), 0), maxHeight);
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
 
-		psProj->dst.z = psTarget->pos.z + minHeight + gameRand(std::max(maxHeight - minHeight, 1));
+		proj.dst.z = psTarget->pos.z + minHeight + gameRand(std::max(maxHeight - minHeight, 1));
 		/* store visible part (LOCK ON this part for homing :) */
-		psProj->partVisible = maxHeight - minHeight;
+		proj.partVisible = maxHeight - minHeight;
 	}
 	else
 	{
-		psProj->dst.z = target.z + LINE_OF_FIRE_MINIMUM;
+		proj.dst.z = target.z + LINE_OF_FIRE_MINIMUM;
 		scoreUpdateVar(WD_SHOTS_OFF_TARGET);
 	}
 
-	Vector3i deltaPos = psProj->dst - psProj->src;
+	Vector3i deltaPos = proj.dst - proj.src;
 
 	/* roll never set */
-	psProj->rot.roll = 0;
+	proj.rot.roll = 0;
 
-	psProj->rot.direction = iAtan2(deltaPos.xy());
+	proj.rot.direction = iAtan2(deltaPos.xy());
 
 
 	// Get target distance, horizontal distance only.
@@ -527,57 +540,57 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 
 	if (proj_Direct(psStats))
 	{
-		psProj->rot.pitch = iAtan2(deltaPos.z, dist);
+		proj.rot.pitch = iAtan2(deltaPos.z, dist);
 	}
 	else
 	{
 		/* indirect */
-		projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &psProj->vXY, &psProj->vZ, min_angle);
-		psProj->rot.pitch = iAtan2(psProj->vZ, psProj->vXY);
+		projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &proj.vXY, &proj.vZ, min_angle);
+		proj.rot.pitch = iAtan2(proj.vZ, proj.vXY);
 	}
-	psProj->state = PROJ_INFLIGHT;
+	proj.state = PROJ_INFLIGHT;
 
 	// If droid or structure, set muzzle pitch.
 	if (psAttacker != nullptr && weapon_slot >= 0)
 	{
 		if (psAttacker->type == OBJ_DROID)
 		{
-			((DROID *)psAttacker)->asWeaps[weapon_slot].rot.pitch = psProj->rot.pitch;
+			((DROID *)psAttacker)->asWeaps[weapon_slot].rot.pitch = proj.rot.pitch;
 		}
 		else if (psAttacker->type == OBJ_STRUCTURE)
 		{
-			((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].rot.pitch = psProj->rot.pitch;
+			((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].rot.pitch = proj.rot.pitch;
 		}
 	}
 
-	/* put the projectile object in the global list */
-	psProjectileList.push_back(psProj);
+	/* put the projectile object in the global list, obtain the stable address for it. */
+	PROJECTILE& stableProj = globalProjectileStorage.emplace(std::move(proj));
 
 	/* play firing audio */
 	// only play if either object is visible, i know it's a bit of a hack, but it avoids the problem
 	// of having to calculate real visibility values for each projectile.
-	if (bVisible || gfxVisible(psProj))
+	if (bVisible || gfxVisible(&stableProj))
 	{
 		// note that the projectile is visible
-		psProj->bVisible = true;
+		stableProj.bVisible = true;
 
 		if (psStats->iAudioFireID != NO_SOUND)
 		{
 
-			if (psProj->psSource)
+			if (stableProj.psSource)
 			{
 				/* firing sound emitted from source */
-				audio_PlayObjDynamicTrack(psProj->psSource, psStats->iAudioFireID, nullptr);
+				audio_PlayObjDynamicTrack(stableProj.psSource, psStats->iAudioFireID, nullptr);
 				/* GJ HACK: move howitzer sound with shell */
 				if (psStats->weaponSubClass == WSC_HOWITZERS)
 				{
-					audio_PlayObjDynamicTrack(psProj, ID_SOUND_HOWITZ_FLIGHT, nullptr);
+					audio_PlayObjDynamicTrack(&stableProj, ID_SOUND_HOWITZ_FLIGHT, nullptr);
 				}
 			}
 			//don't play the sound for a LasSat in multiPlayer
 			else if (!(bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT))
 			{
-				audio_PlayObjStaticTrack(psProj, psStats->iAudioFireID);
+				audio_PlayObjStaticTrack(&stableProj, psStats->iAudioFireID);
 			}
 		}
 	}
@@ -588,12 +601,40 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 		counterBatteryFire(castBaseObject(psAttacker), psTarget);
 	}
 
-	syncDebugProjectile(psProj, '*');
+	syncDebugProjectile(&stableProj, '*');
 
-	CHECK_PROJECTILE(psProj);
+	CHECK_PROJECTILE(&stableProj);
 
+	return &stableProj;
+}
+
+static PROJECTILE* proj_SendProjectileInternal(WEAPON* psWeap, SIMPLE_OBJECT* psAttacker, int player, const Vector3i& target, BASE_OBJECT* psTarget, bool bVisible, int weapon_slot)
+{
+	return proj_SendProjectileAngledInternal(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot, 0, gameTime - 1);
+}
+
+bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, const Vector3i& target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot)
+{
+	auto p = proj_SendProjectileInternal(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot);
+	if (!p)
+	{
+		return false;
+	}
+	proj_AddActiveProjectile(p);
 	return true;
 }
+
+bool proj_SendProjectileAngled(WEAPON* psWeap, SIMPLE_OBJECT* psAttacker, int player, const Vector3i& target, BASE_OBJECT* psTarget, bool bVisible, int weapon_slot, int min_angle, unsigned fireTime)
+{
+	auto p = proj_SendProjectileAngledInternal(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot, min_angle, fireTime);
+	if (!p)
+	{
+		return false;
+	}
+	proj_AddActiveProjectile(p);
+	return true;
+}
+
 
 /***************************************************************************/
 
@@ -691,7 +732,7 @@ static int32_t collisionXYZ(Vector3i v1, Vector3i v2, ObjectShape shape, int32_t
 	return -1;
 }
 
-static void proj_InFlightFunc(PROJECTILE *psProj)
+static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 {
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
@@ -707,14 +748,14 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	int deltaProjectileTime = psProj->time - psProj->prevSpacetime.time;
 
 	WEAPON_STATS *psStats = psProj->psWStats;
-	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid weapon stats pointer");
+	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "Invalid weapon stats pointer");
 
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	if (bMultiPlayer && psStats->weaponSubClass == WSC_LAS_SAT &&
 	    (unsigned)timeSoFar < LAS_SAT_DELAY * GAME_TICKS_PER_SEC)
 	{
-		return;
+		return nullptr;
 	}
 
 	/* Calculate movement vector: */
@@ -893,6 +934,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		}
 		setProjectileDestination(psProj, closestCollisionObject);  // We hit something.
 
+		PROJECTILE* spawnedProjectile = nullptr;
 		// Buildings and terrain cannot be penetrated and we need a penetrating weapon, and projectile should not have already travelled further than 1.25 * maximum range.
 		if (closestCollisionObject != nullptr && closestCollisionObject->type == OBJ_DROID && psStats->penetrate && currentDistance < static_cast<int>(1.25 * proj_GetLongRange(*psStats, psProj->player)))
 		{
@@ -902,12 +944,12 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			// Assume we damaged the chosen target
 			psProj->psDamaged.push_back(closestCollisionObject);
 
-			proj_SendProjectile(&asWeap, psProj, psProj->player, psProj->dst, nullptr, true, -1);
+			spawnedProjectile = proj_SendProjectileInternal(&asWeap, psProj, psProj->player, psProj->dst, nullptr, true, -1);
 		}
 
 		psProj->state = PROJ_IMPACT;
 
-		return;
+		return spawnedProjectile;
 	}
 
 	if (currentDistance * 100 >= proj_GetLongRange(*psStats, psProj->player) * psStats->distanceExtensionFactor)
@@ -915,7 +957,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		// We've travelled our maximum range.
 		psProj->state = PROJ_IMPACT;
 		setProjectileDestination(psProj, nullptr); /* miss registered if NULL target */
-		return;
+		return nullptr;
 	}
 
 	/* Paint effects if visible */
@@ -959,6 +1001,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			}
 		}
 	}
+	return nullptr;
 }
 
 /***************************************************************************/
@@ -1325,7 +1368,7 @@ static void proj_PostImpactFunc(PROJECTILE *psObj)
 
 /***************************************************************************/
 
-void PROJECTILE::update()
+PROJECTILE* PROJECTILE::update()
 {
 	PROJECTILE *psObj = this;
 
@@ -1355,13 +1398,14 @@ void PROJECTILE::update()
 	if (worldOnMap(psObj->pos.x, psObj->pos.y) == false)
 	{
 		psObj->died = true;
-		return;
+		return nullptr;
 	}
 
+	PROJECTILE* spawnedProjectile = nullptr;
 	switch (psObj->state)
 	{
 	case PROJ_INFLIGHT:
-		proj_InFlightFunc(psObj);
+		spawnedProjectile = proj_InFlightFunc(psObj);
 		if (psObj->state != PROJ_IMPACT)
 		{
 			break;
@@ -1384,6 +1428,8 @@ void PROJECTILE::update()
 	}
 
 	syncDebugProjectile(psObj, '>');
+
+	return spawnedProjectile;
 }
 
 /***************************************************************************/
@@ -1392,10 +1438,23 @@ void PROJECTILE::update()
 void proj_UpdateAll()
 {
 	WZ_PROFILE_SCOPE(proj_UpdateAll);
-	std::vector<PROJECTILE *> psProjectileListOld = psProjectileList;
 
-	// Update all projectiles. Penetrating projectiles may add to psProjectileList.
-	std::for_each(psProjectileListOld.begin(), psProjectileListOld.end(), std::mem_fn(&PROJECTILE::update));
+	static std::vector<PROJECTILE*> spawnedProjectiles;
+	spawnedProjectiles.reserve(psProjectileList.size());
+	spawnedProjectiles.clear();
+
+	// Update all projectiles.
+	// Penetrating projectiles may spawn additional projectiles,
+	// which will be returned from `PROJECTILE::update()`.
+	// These need to be added separately to `psProjectileList` later.
+	for (PROJECTILE* p : psProjectileList)
+	{
+		PROJECTILE* spawned = p->update();
+		if (spawned)
+		{
+			spawnedProjectiles.emplace_back(spawned);
+		}
+	}
 
 	// Remove and free dead projectiles.
 	psProjectileList.erase(std::remove_if(psProjectileList.begin(), psProjectileList.end(), [](PROJECTILE* p)
@@ -1404,9 +1463,16 @@ void proj_UpdateAll()
 		{
 			return false;
 		}
-		delete p;
+		auto it = globalProjectileStorage.find(*p);
+		ASSERT(it != globalProjectileStorage.end(), "Invalid projectile, not found in global storage");
+		globalProjectileStorage.erase(it);
 		return true;
 	}), psProjectileList.end());
+
+	// Add spawned penetrating projectiles,
+	// which were collected earlier during the update procedure.
+	psProjectileList.reserve(psProjectileList.size() + spawnedProjectiles.size());
+	std::move(spawnedProjectiles.begin(), spawnedProjectiles.end(), std::back_inserter(psProjectileList));
 }
 
 /***************************************************************************/
