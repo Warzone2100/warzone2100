@@ -42,7 +42,8 @@
 /// As noted above, the container allocates memory in fixed-size
 /// continuous chunks, or pages, hence the name.
 ///
-/// Currently, each page is set to hold exactly 1024 elements.
+/// Each page is set to hold exactly `MaxElementsPerPage` elements,
+/// which is 1024 by default.
 ///
 /// Also, each element is equipped with some additional metadata,
 /// which allows the container to reuse the same memory (also called "slots")
@@ -97,14 +98,14 @@
 /// * https://github.com/Masstronaut/slot_array/blob/master/slot_map.hpp
 /// </summary>
 /// <typeparam name="T">Entity type. Should be a complete type.</typeparam>
-template <typename T>
+/// <typeparam name="MaxElementsPerPage">The fixed number of elements each page may hold.</typeparam>
+template <typename T, size_t MaxElementsPerPage = 1024>
 class PagedEntityContainer
 {
 	using SlotIndexType = size_t;
 
-	static constexpr size_t MAX_ELEMENTS_PER_PAGE = 1024;
 	// Default initial capacity is exactly 1 page.
-	static constexpr size_t DEFAULT_INITIAL_CAPACITY = 1 * MAX_ELEMENTS_PER_PAGE;
+	static constexpr size_t DEFAULT_INITIAL_CAPACITY = 1 * MaxElementsPerPage;
 
 	static constexpr SlotIndexType INVALID_SLOT_IDX = std::numeric_limits<SlotIndexType>::max();
 	static constexpr size_t INVALID_PAGE_IDX = std::numeric_limits<size_t>::max();
@@ -174,7 +175,7 @@ class PagedEntityContainer
 	/// This class holds the actual contiguous storage and metadata for the elements,
 	/// as well as the queue for recycled indices.
 	///
-	/// Always allocates storage for exactly `MAX_ELEMENTS_PER_PAGE` elements.
+	/// Always allocates storage for exactly `MaxElementsPerPage` elements.
 	/// </summary>
 	class Page
 	{
@@ -195,7 +196,7 @@ class PagedEntityContainer
 
 		bool is_full() const
 		{
-			return _currentSize + _expiredSlotsCount == MAX_ELEMENTS_PER_PAGE;
+			return _currentSize + _expiredSlotsCount == MaxElementsPerPage;
 		}
 
 		void allocate_storage()
@@ -203,9 +204,9 @@ class PagedEntityContainer
 			assert(_storage == nullptr);
 			assert(_slotMetadata == nullptr);
 
-			// Allocate storage for MAX_ELEMENTS_PER_PAGE elements.
-			_storage = std::make_unique<AlignedElementStorage[]>(MAX_ELEMENTS_PER_PAGE);
-			_slotMetadata = std::make_unique<SlotMetadata[]>(MAX_ELEMENTS_PER_PAGE);
+			// Allocate storage for `MaxElementsPerPage` elements.
+			_storage = std::make_unique<AlignedElementStorage[]>(MaxElementsPerPage);
+			_slotMetadata = std::make_unique<SlotMetadata[]>(MaxElementsPerPage);
 		}
 
 		bool has_recycled_indices() const
@@ -274,7 +275,7 @@ class PagedEntityContainer
 
 		bool is_expired() const
 		{
-			return _expiredSlotsCount == MAX_ELEMENTS_PER_PAGE;
+			return _expiredSlotsCount == MaxElementsPerPage;
 		}
 
 		// Reset generations to least possible valid value for all slots,
@@ -283,7 +284,7 @@ class PagedEntityContainer
 		{
 			auto* meta = slotMetadata();
 			assert(meta != nullptr);
-			for (size_t i = 0; i < MAX_ELEMENTS_PER_PAGE; ++i)
+			for (size_t i = 0; i < MaxElementsPerPage; ++i)
 			{
 				auto& slot = meta[i];
 				slot.reset_generation();
@@ -342,7 +343,7 @@ public:
 		{
 			return;
 		}
-		size_t needed_nr_of_pages = (capacity / MAX_ELEMENTS_PER_PAGE) - _pages.size();
+		size_t needed_nr_of_pages = (capacity / MaxElementsPerPage) - _pages.size();
 		while (needed_nr_of_pages-- != 0)
 		{
 			allocate_new_page();
@@ -354,7 +355,7 @@ public:
 		Page newPage;
 		newPage.allocate_storage();
 		_pages.emplace_back(std::move(newPage));
-		_capacity += MAX_ELEMENTS_PER_PAGE;
+		_capacity += MaxElementsPerPage;
 	}
 
 	template <typename... Args>
@@ -682,7 +683,7 @@ public:
 		}
 		// Shrink the storage to just a single page.
 		_pages.resize(1);
-		_capacity = MAX_ELEMENTS_PER_PAGE;
+		_capacity = MaxElementsPerPage;
 		// No valid items in the container now.
 		_maxIndex = INVALID_SLOT_IDX;
 		_pages.front().reset_metadata();
@@ -742,12 +743,12 @@ private:
 
 	static PageIndex global_to_page_index(SlotIndexType idx)
 	{
-		return {idx / MAX_ELEMENTS_PER_PAGE, idx % MAX_ELEMENTS_PER_PAGE};
+		return { idx / MaxElementsPerPage, idx % MaxElementsPerPage };
 	}
 
 	static SlotIndexType page_index_to_global(const PageIndex& idx)
 	{
-		return idx.first * MAX_ELEMENTS_PER_PAGE + idx.second;
+		return idx.first * MaxElementsPerPage + idx.second;
 	}
 
 	// No need to call destructors manually for trivially destructible types.
@@ -793,9 +794,10 @@ private:
 	size_t _expiredSlotsCount = 0;
 };
 
-template <typename T>
-constexpr typename PagedEntityContainer<T>::SlotIndexType PagedEntityContainer<T>::INVALID_SLOT_IDX;
+template <typename T, size_t MaxElementsPerPage>
+constexpr typename PagedEntityContainer<T, MaxElementsPerPage>::SlotIndexType
+	PagedEntityContainer<T, MaxElementsPerPage>::INVALID_SLOT_IDX;
 
-template <typename T>
-constexpr size_t PagedEntityContainer<T>::INVALID_PAGE_IDX;
+template <typename T, size_t MaxElementsPerPage>
+constexpr size_t PagedEntityContainer<T, MaxElementsPerPage>::INVALID_PAGE_IDX;
 
