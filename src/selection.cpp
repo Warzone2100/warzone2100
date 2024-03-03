@@ -474,6 +474,10 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 
 	for (STRUCTURE *psCurr : apsStructLists[selectedPlayer])
 	{
+		if (psResult)
+		{
+			break;
+		}
 		if (psCurr->pStructureType->type == structType && psCurr->status == SS_BUILT)
 		{
 			if (!psFirst)
