@@ -444,14 +444,17 @@ DROID::~DROID()
 		if (psDroid->psGroup)
 		{
 			//free all droids associated with this Transporter
-			mutating_list_iterate(psDroid->psGroup->psList, [psDroid](DROID* psCurr)
+			auto& droidContainer = GlobalDroidContainer();
+			mutating_list_iterate(psDroid->psGroup->psList, [psDroid, &droidContainer](DROID* psCurr)
 			{
 				if (psCurr == psDroid)
 				{
 					return IterationResult::BREAK_ITERATION;
 				}
 				// This will cause each droid to self-remove from `psGroup->psList`.
-				delete psCurr;
+				auto it = droidContainer.find(*psCurr);
+				ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
+				droidContainer.erase(it);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		}
@@ -1624,90 +1627,90 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
-	DROID *psDroid = new DROID(id, player);
-	droidSetName(psDroid, getLocalizedStatsName(pTemplate));
+	DROID& droid = GlobalDroidContainer().emplace(id, player);
+	droidSetName(&droid, getLocalizedStatsName(pTemplate));
 
 	// Set the droids type
-	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
-	psDroid->pos = pos;
-	psDroid->rot = rot;
+	droid.droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
+	droid.pos = pos;
+	droid.rot = rot;
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
 	{
 		//set droid height
-		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+		droid.pos.z = map_Height(droid.pos.x, droid.pos.y);
 	}
 
-	if (psDroid->isTransporter() || psDroid->droidType == DROID_COMMAND)
+	if (droid.isTransporter() || droid.droidType == DROID_COMMAND)
 	{
 		DROID_GROUP *psGrp = grpCreate();
-		psGrp->add(psDroid);
+		psGrp->add(&droid);
 	}
 
 	// find the highest stored experience
 	// Unless game time is stopped, then we're hopefully loading a game and
 	// don't want to use up recycled experience for the droids we just loaded.
 	if (!gameTimeIsStopped() &&
-		(psDroid->droidType != DROID_CONSTRUCT) &&
-		(psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
-		(psDroid->droidType != DROID_REPAIR) &&
-		(psDroid->droidType != DROID_CYBORG_REPAIR) &&
-		!psDroid->isTransporter() &&
-		!recycled_experience[psDroid->player].empty())
+		(droid.droidType != DROID_CONSTRUCT) &&
+		(droid.droidType != DROID_CYBORG_CONSTRUCT) &&
+		(droid.droidType != DROID_REPAIR) &&
+		(droid.droidType != DROID_CYBORG_REPAIR) &&
+		!droid.isTransporter() &&
+		!recycled_experience[droid.player].empty())
 	{
-		psDroid->experience = recycled_experience[psDroid->player].top();
-		recycled_experience[psDroid->player].pop();
+		droid.experience = recycled_experience[droid.player].top();
+		recycled_experience[droid.player].pop();
 	}
 	else
 	{
-		psDroid->experience = 0;
+		droid.experience = 0;
 	}
-	psDroid->kills = 0;
+	droid.kills = 0;
 
-	droidSetBits(pTemplate, psDroid);
+	droidSetBits(pTemplate, &droid);
 
 	//calculate the droids total weight
-	psDroid->weight = calcDroidWeight(pTemplate);
+	droid.weight = calcDroidWeight(pTemplate);
 
 	// Initialise the movement stuff
-	psDroid->baseSpeed = calcDroidBaseSpeed(pTemplate, psDroid->weight, (UBYTE)player);
+	droid.baseSpeed = calcDroidBaseSpeed(pTemplate, droid.weight, (UBYTE)player);
 
-	initDroidMovement(psDroid);
+	initDroidMovement(&droid);
 
 	//allocate 'easy-access' data!
-	psDroid->body = calcDroidBaseBody(psDroid); // includes upgrades
-	ASSERT(psDroid->body > 0, "Invalid number of hitpoints");
-	psDroid->originalBody = psDroid->body;
+	droid.body = calcDroidBaseBody(&droid); // includes upgrades
+	ASSERT(droid.body > 0, "Invalid number of hitpoints");
+	droid.originalBody = droid.body;
 
 	/* Set droid's initial illumination */
-	psDroid->sDisplay.imd = BODY_IMD(psDroid, psDroid->player);
+	droid.sDisplay.imd = BODY_IMD(&droid, droid.player);
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
 	{
 		/* People always stand upright */
-		if (psDroid->droidType != DROID_PERSON)
+		if (droid.droidType != DROID_PERSON)
 		{
-			updateDroidOrientation(psDroid);
+			updateDroidOrientation(&droid);
 		}
-		visTilesUpdate(psDroid);
+		visTilesUpdate(&droid);
 	}
 
 	/* transporter-specific stuff */
-	if (psDroid->isTransporter())
+	if (droid.isTransporter())
 	{
 		//add transporter launch button if selected player and not a reinforcable situation
 		if (player == selectedPlayer && !missionCanReEnforce())
 		{
-			(void)intAddTransporterLaunch(psDroid);
+			(void)intAddTransporterLaunch(&droid);
 		}
 
 		//set droid height to be above the terrain
-		psDroid->pos.z += TRANSPORTER_HOVER_HEIGHT;
+		droid.pos.z += TRANSPORTER_HOVER_HEIGHT;
 
 		/* reset halt secondary order from guard to hold */
-		secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_HOLD);
+		secondarySetState(&droid, DSO_HALTTYPE, DSS_HALT_HOLD);
 	}
 
 	if (player == selectedPlayer)
@@ -1716,12 +1719,12 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 	}
 
 	// Avoid droid appearing to jump or turn on spawn.
-	psDroid->prevSpacetime.pos = psDroid->pos;
-	psDroid->prevSpacetime.rot = psDroid->rot;
+	droid.prevSpacetime.pos = droid.pos;
+	droid.prevSpacetime.rot = droid.rot;
 
-	debug(LOG_LIFE, "created droid for player %d, droid = %p, id=%d (%s): position: x(%d)y(%d)z(%d)", player, static_cast<void *>(psDroid), (int)psDroid->id, psDroid->aName, psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
+	debug(LOG_LIFE, "created droid for player %d, droid = %p, id=%d (%s): position: x(%d)y(%d)z(%d)", player, static_cast<void *>(&droid), (int)droid.id, droid.aName, droid.pos.x, droid.pos.y, droid.pos.z);
 
-	return psDroid;
+	return &droid;
 }
 
 DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot)
@@ -3597,4 +3600,10 @@ REPAIR_STATS* DROID::getRepairStats() const
 CONSTRUCT_STATS* DROID::getConstructStats() const
 {
 	return &asConstructStats[asBits[COMP_CONSTRUCT]];
+}
+
+DroidContainer& GlobalDroidContainer()
+{
+	static DroidContainer instance;
+	return instance;
 }

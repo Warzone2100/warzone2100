@@ -2159,6 +2159,7 @@ std::unique_ptr<const DROID> wzapi::getDroidProduction(WZAPI_PARAMS(const STRUCT
 	{
 		return nullptr;
 	}
+	// Since it's not intended to be used anywhere, don't put it in the global droid storage.
 	DROID *psDroid = new DROID(0, player);
 	psDroid->pos = psStruct->pos;
 	psDroid->rot = psStruct->rot;

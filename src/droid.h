@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_SRC_DROID_H__
 #define __INCLUDED_SRC_DROID_H__
 
+#include "lib/framework/paged_entity_container.h"
 #include "lib/framework/string_ext.h"
 #include "lib/gamelib/gtime.h"
 
@@ -424,5 +425,11 @@ static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
  * repairs were made by a mobile repair turret
  */
 void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac);
+
+// Split the droid storage into pages containing 256 droids, disable slot reuse
+// to guard against memory-related issues when some object pointers won't get
+// updated properly, e.g. when transitioning between the base and offworld missions.
+using DroidContainer = PagedEntityContainer<DROID, 256, false>;
+DroidContainer& GlobalDroidContainer();
 
 #endif // __INCLUDED_SRC_DROID_H__
