@@ -83,7 +83,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 #define PART_IMD(STATS,DROID,COMPONENT,PLAYER)	(STATS[DROID->asBits[COMPONENT]].pIMD)
 
 /* Get the chassis imd */
-#define BODY_IMD(DROID,PLAYER)	(DROID->getBodyStats()->pIMD)
+#define BODY_IMD(DROID,PLAYER)	((DROID)->getBodyStats()->pIMD)
 /* Get the brain imd - NOTE: Unused!*/
 #define BRAIN_IMD(DROID,PLAYER)	(DROID->getBrainStats()->pIMD)
 /* Get the weapon imd */

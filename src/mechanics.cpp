@@ -39,7 +39,7 @@ bool mechanicsShutdown()
 {
 	for (BASE_OBJECT* psObj : psDestroyedObj)
 	{
-		delete psObj;
+		objmemDestroy(psObj);
 	}
 	psDestroyedObj.clear();
 

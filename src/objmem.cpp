@@ -201,7 +201,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
-static bool objmemDestroy(BASE_OBJECT *psObj)
+bool objmemDestroy(BASE_OBJECT *psObj)
 {
 	switch (psObj->type)
 	{
@@ -224,8 +224,19 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 	{
 		return false;
 	}
-	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", static_cast<void *>(psObj));
-	delete psObj;
+	// Droids are managed by a separate droid container.
+	if (psObj->type == OBJ_DROID)
+	{
+		auto& droidContainer = GlobalDroidContainer();
+		auto it = droidContainer.find(*static_cast<DROID*>(psObj));
+		ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
+		droidContainer.erase(it);
+	}
+	else
+	{
+		delete psObj;
+	}
+	debug(LOG_MEMORY, "BASE_OBJECT* is freed.");
 	return true;
 }
 
@@ -439,10 +450,25 @@ void killDroid(DROID *psDel)
 	destroyObject(apsDroidLists, psDel);
 }
 
+static void freeAllDroidsImpl(PerPlayerDroidLists& droidLists)
+{
+	auto& droidContainer = GlobalDroidContainer();
+	for (auto& list : droidLists)
+	{
+		for (DROID* d : list)
+		{
+			auto it = droidContainer.find(*d);
+			ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
+			droidContainer.erase(it);
+		}
+		list.clear();
+	}
+}
+
 /* Remove all droids */
 void freeAllDroids()
 {
-	releaseAllObjectsInList(apsDroidLists);
+	freeAllDroidsImpl(apsDroidLists);
 }
 
 /*Remove a single Droid from a list*/
@@ -475,13 +501,13 @@ void removeDroid(DROID* psDroidToRemove, PerPlayerDroidLists& pList)
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids()
 {
-	releaseAllObjectsInList(mission.apsDroidLists);
+	freeAllDroidsImpl(mission.apsDroidLists);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids()
 {
-	releaseAllObjectsInList(apsLimboDroids);
+	freeAllDroidsImpl(apsLimboDroids);
 }
 
 /**************************  STRUCTURE  *******************************/
