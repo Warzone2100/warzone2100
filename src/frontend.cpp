@@ -1320,8 +1320,22 @@ bool runGraphicsOptionsMenu()
 	case FRONTEND_LIGHTS:
 	case FRONTEND_LIGHTS_R:
 	{
-		war_setPointLightPerPixelLighting(!war_getPointLightPerPixelLighting());
-		widgSetString(psWScreen, FRONTEND_LIGHTS_R, graphicsOptionsLightingString());
+		bool newValue = !war_getPointLightPerPixelLighting();
+		if (getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+		{
+			newValue = false; // point light per pixel lighting is only supported in normal_mapping mode
+		}
+		auto shadowConstants = gfx_api::context::get().getShadowConstants();
+		shadowConstants.isPointLightPerPixelEnabled = newValue;
+		if (gfx_api::context::get().setShadowConstants(shadowConstants))
+		{
+			war_setPointLightPerPixelLighting(newValue);
+			widgSetString(psWScreen, FRONTEND_LIGHTS_R, graphicsOptionsLightingString());
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to set per pixel point lighting value: %d", (int)newValue);
+		}
 		break;
 	}
 	case FRONTEND_VOLUMETRIC_LIGHTING:
