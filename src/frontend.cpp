@@ -874,6 +874,8 @@ char const* graphicsOptionsVolumetricLightingString()
 	case VOLUMETRIC_LIGHT_LEVEL::low: return _("Low");
 	case VOLUMETRIC_LIGHT_LEVEL::medium: return _("Medium");
 	case VOLUMETRIC_LIGHT_LEVEL::high: return _("High");
+	default:
+		break;
 	}
 
 	return _("Disabled");
