@@ -109,6 +109,35 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 			{
 				ASSERT_OR_RETURN(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
 			}
+
+			if (psStruct->pFunctionality && psStruct->pStructureType)
+			{
+				switch (psStruct->pStructureType->type)
+				{
+					case REF_FACTORY:
+					case REF_CYBORG_FACTORY:
+					case REF_VTOL_FACTORY:
+					{
+						FACTORY *psFactory = &psStruct->pFunctionality->factory;
+						ASSERT_OR_RETURN(false, psFactory->psCommander != psVictim, "Illegal reference to object %" PRIu32 " in FACTORY.psCommander", psFactory->psCommander->id);
+						break;
+					}
+					case REF_REPAIR_FACILITY:
+					{
+						REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
+						ASSERT_OR_RETURN(false, psRepairFac->psObj != psVictim, "Illegal reference to object %" PRIu32 " in REPAIR_FACILITY.psObj", psRepairFac->psObj->id);
+						break;
+					}
+					case REF_REARM_PAD:
+					{
+						REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
+						ASSERT_OR_RETURN(false, psReArmPad->psObj != psVictim, "Illegal reference to object %" PRIu32 " in REARM_PAD.psObj", psReArmPad->psObj->id);
+						break;
+					}
+					default:
+						break;
+				}
+			}
 		}
 		for (const DROID *psDroid : apsDroidLists[plr])
 		{
