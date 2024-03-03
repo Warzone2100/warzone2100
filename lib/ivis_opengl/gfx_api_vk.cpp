@@ -1774,7 +1774,7 @@ VkPSO::VkPSO(vk::Device _dev,
 		appendSpecializationConstant_uint32(4, static_cast<uint32_t>(root->shadowConstants.isPointLightPerPixelEnabled));
 		hasSpecializationConstant_PointLightConstants = true;
 	}
-	if (shaderInfo.specializationConstant_4_pointLightEnabled)
+	if (shaderInfo.specializationConstant_5_volumetricEnabled)
 	{
 		appendSpecializationConstant_uint32(5, static_cast<uint32_t>(root->shadowConstants.isVolumetricLightingEnabled));
 		hasSpecializationConstant_VolumetricLightingConstants = true;

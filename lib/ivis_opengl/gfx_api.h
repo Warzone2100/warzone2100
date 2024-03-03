@@ -43,6 +43,15 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+
+enum class VOLUMETRIC_LIGHT_LEVEL
+{
+	disabled,
+	low,
+	medium,
+	high,
+};
+
 namespace gfx_api
 {
 	// Must be implemented by backend (ex. SDL)
@@ -326,7 +335,7 @@ namespace gfx_api
 		uint32_t shadowFilterSize = 5;
 		uint32_t shadowCascadesCount = WZ_MAX_SHADOW_CASCADES;
 		bool isPointLightPerPixelEnabled = false;
-		bool isVolumetricLightingEnabled = false;
+		VOLUMETRIC_LIGHT_LEVEL isVolumetricLightingEnabled = VOLUMETRIC_LIGHT_LEVEL::disabled;
 
 		bool operator==(const lighting_constants& rhs) const
 		{

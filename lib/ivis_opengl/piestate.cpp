@@ -119,7 +119,7 @@ void pie_FreeShaders()
 //static float fogEnd;
 
 // Run from screen.c on init.
-bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled, bool volumetricEnabled)
+bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled, VOLUMETRIC_LIGHT_LEVEL volumetricEnabled)
 {
 	// note: actual loading of shaders now occurs in gfx_api
 

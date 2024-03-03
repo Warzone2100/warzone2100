@@ -59,6 +59,8 @@ enum class JS_BACKEND
 	num_backends // Must be last!
 };
 
+enum class VOLUMETRIC_LIGHT_LEVEL;
+
 bool js_backend_from_str(const char *str, JS_BACKEND &output_backend);
 std::string to_string(JS_BACKEND backend);
 
@@ -165,8 +167,8 @@ void war_setShadowMapResolution(uint32_t resolution);
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
-bool war_getVolumetricLighting();
-void war_setVolumetricLighting(bool enabled);
+VOLUMETRIC_LIGHT_LEVEL war_getVolumetricLighting();
+void war_setVolumetricLighting(VOLUMETRIC_LIGHT_LEVEL enabled);
 
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);

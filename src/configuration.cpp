@@ -619,8 +619,8 @@ bool loadConfig()
 	}
 
 	{
-		auto value = iniGetBoolOpt("volumetricLighting");
-		war_setVolumetricLighting(value.value_or(false));
+		auto value = iniGetIntegerOpt("volumetricLighting");
+		war_setVolumetricLighting(static_cast<VOLUMETRIC_LIGHT_LEVEL>(value.value_or(0)));
 	}
 
 	ActivityManager::instance().endLoadingSettings();
@@ -784,7 +784,7 @@ bool saveConfig()
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
-	iniSetBool("volumetricLighting", war_getVolumetricLighting());
+	iniSetInteger("volumetricLighting", static_cast<int>(war_getVolumetricLighting()));
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes

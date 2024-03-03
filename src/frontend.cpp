@@ -860,7 +860,14 @@ char const* graphicsOptionsLightingString()
 
 char const* graphicsOptionsVolumetricLightingString()
 {
-	return war_getVolumetricLighting() ? _("On") : _("Off");
+	switch (war_getVolumetricLighting())
+	{
+	case VOLUMETRIC_LIGHT_LEVEL::low: return _("Low");
+	case VOLUMETRIC_LIGHT_LEVEL::medium: return _("Medium");
+	case VOLUMETRIC_LIGHT_LEVEL::high: return _("High");
+	}
+
+	return _("Disabled");
 }
 
 char const *graphicsOptionsFogString()
@@ -1309,7 +1316,9 @@ bool runGraphicsOptionsMenu()
 	case FRONTEND_VOLUMETRIC_LIGHTING:
 	case FRONTEND_VOLUMETRIC_LIGHTING_R:
 	{
-		war_setVolumetricLighting(!war_getVolumetricLighting());
+		auto previousValue = static_cast<int>(war_getVolumetricLighting());
+		auto newValue = previousValue + 1 % 4;
+		war_setVolumetricLighting(static_cast<VOLUMETRIC_LIGHT_LEVEL>(newValue));
 		widgSetString(psWScreen, FRONTEND_VOLUMETRIC_LIGHTING_R, graphicsOptionsVolumetricLightingString());
 		break;
 	}
