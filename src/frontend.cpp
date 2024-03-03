@@ -1342,9 +1342,19 @@ bool runGraphicsOptionsMenu()
 	case FRONTEND_VOLUMETRIC_LIGHTING_R:
 	{
 		auto previousValue = static_cast<int>(war_getVolumetricLighting());
-		auto newValue = previousValue + 1 % 4;
-		war_setVolumetricLighting(static_cast<VOLUMETRIC_LIGHT_LEVEL>(newValue));
-		widgSetString(psWScreen, FRONTEND_VOLUMETRIC_LIGHTING_R, graphicsOptionsVolumetricLightingString());
+		auto newValue = (previousValue + 1) % 4;
+
+		auto shadowConstants = gfx_api::context::get().getShadowConstants();
+		shadowConstants.isVolumetricLightingEnabled = static_cast<VOLUMETRIC_LIGHT_LEVEL>(newValue);
+		if (gfx_api::context::get().setShadowConstants(shadowConstants))
+		{
+			war_setVolumetricLighting(static_cast<VOLUMETRIC_LIGHT_LEVEL>(newValue));
+			widgSetString(psWScreen, FRONTEND_VOLUMETRIC_LIGHTING_R, graphicsOptionsVolumetricLightingString());
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to set volumetric lighting value: %d", (int)newValue);
+		}
 		break;
 	}
 	case FRONTEND_FOG:
