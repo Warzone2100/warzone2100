@@ -82,7 +82,7 @@ const Vector3f& getDefaultSunPosition();
 
 int pie_GetMaxAntialiasing();
 
-bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled);
+bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled, VOLUMETRIC_LIGHT_LEVEL volumetricEnabled);
 void pie_FreeShaders();
 
 namespace pie_internal

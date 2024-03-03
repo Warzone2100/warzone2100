@@ -8,6 +8,7 @@ layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
+layout (constant_id = 5) const uint WZ_VOLUMETRIC_LIGHTING_ENABLED = 0;
 
 layout(set = 2, binding = 0) uniform sampler2D Texture; // diffuse
 layout(set = 2, binding = 1) uniform sampler2D TextureTcmask; // tcmask
@@ -30,8 +31,6 @@ layout(location = 12) in vec3 fragPos;
 //layout(location = 13) in vec3 fragNormal;
 
 layout(location = 0) out vec4 FragColor;
-
-#include "pointlights.glsl"
 
 float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeInv, int cascadeIndex, float z)
 {
@@ -264,6 +263,9 @@ float getShadowVisibility()
 	}
 }
 
+
+#include "pointlights.glsl"
+
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
 }
@@ -346,7 +348,10 @@ void main()
 								);
 		// Normals are in view space, we need to get back to world space
 		vec3 worldSpaceNormal = -(inverse(ViewMatrix) * vec4(N, 0.f)).xyz;
-		light += iterateOverAllPointLights(clipSpaceCoord, fragPos, worldSpaceNormal, normalize(halfVec - lightDir), diffuse, specularMapValue, identityMat);
+		MaterialInfo materialInfo;
+		materialInfo.albedo = diffuse;
+		materialInfo.gloss = specularMapValue;
+		light += iterateOverAllPointLights(clipSpaceCoord, fragPos, worldSpaceNormal, normalize(halfVec - lightDir), materialInfo, identityMat);
 	}
 
 	light.rgb *= visibility;
@@ -370,8 +375,13 @@ void main()
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
-	
-	if (fogEnabled > 0)
+
+	if (WZ_VOLUMETRIC_LIGHTING_ENABLED != 0) {
+		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, fragPos, diffuse.xyz);
+		fragColour.xyz = toneMap(fragColour.xyz * volumetric.a + volumetric.xyz);
+	} 
+	else if (fogEnabled > 0)
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);

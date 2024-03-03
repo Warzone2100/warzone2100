@@ -867,6 +867,18 @@ char const* graphicsOptionsLightingString()
 	return war_getPointLightPerPixelLighting() ? _("Per Pixel") : _("Lightmap");
 }
 
+char const* graphicsOptionsVolumetricLightingString()
+{
+	switch (war_getVolumetricLighting())
+	{
+	case VOLUMETRIC_LIGHT_LEVEL::low: return _("Low");
+	case VOLUMETRIC_LIGHT_LEVEL::medium: return _("Medium");
+	case VOLUMETRIC_LIGHT_LEVEL::high: return _("High");
+	}
+
+	return _("Disabled");
+}
+
 char const *graphicsOptionsFogString()
 {
 	return pie_GetFogEnabled() ? _("On") : _("Off");
@@ -1212,6 +1224,12 @@ void startGraphicsOptionsMenu()
 	grid->place({ 1, 1, false }, row, addMargin(makeTextButton(FRONTEND_LIGHTS_R, graphicsOptionsLightingString(), WBUT_SECONDARY)));
 	row.start++;
 
+	///////////
+	// Volumetric lighting
+	grid->place({ 0 }, row, addMargin(makeTextButton(FRONTEND_VOLUMETRIC_LIGHTING, _("Volumetric Lighting"), WBUT_SECONDARY)));
+	grid->place({ 1, 1, false }, row, addMargin(makeTextButton(FRONTEND_VOLUMETRIC_LIGHTING_R, graphicsOptionsVolumetricLightingString(), WBUT_SECONDARY)));
+	row.start++;
+
 	// LOD Distance
 	// TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 	std::string lodDistanceString = _("LOD Distance");
@@ -1302,6 +1320,15 @@ bool runGraphicsOptionsMenu()
 	{
 		war_setPointLightPerPixelLighting(!war_getPointLightPerPixelLighting());
 		widgSetString(psWScreen, FRONTEND_LIGHTS_R, graphicsOptionsLightingString());
+		break;
+	}
+	case FRONTEND_VOLUMETRIC_LIGHTING:
+	case FRONTEND_VOLUMETRIC_LIGHTING_R:
+	{
+		auto previousValue = static_cast<int>(war_getVolumetricLighting());
+		auto newValue = previousValue + 1 % 4;
+		war_setVolumetricLighting(static_cast<VOLUMETRIC_LIGHT_LEVEL>(newValue));
+		widgSetString(psWScreen, FRONTEND_VOLUMETRIC_LIGHTING_R, graphicsOptionsVolumetricLightingString());
 		break;
 	}
 	case FRONTEND_FOG:
