@@ -135,7 +135,7 @@ void main()
 		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, frag.fragPos, diffuseLight.xyz);
 		fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);
 	}
-	if (fogEnabled > 0)
+	else if (fogEnabled > 0)
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - frag.vertexDistance) / (fogEnd - fogStart);
