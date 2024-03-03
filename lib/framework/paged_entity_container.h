@@ -565,6 +565,8 @@ public:
 		template<bool IsConst2>
 		friend class IteratorImpl;
 
+		friend class PagedEntityContainer;
+
 		PageIndex _pageIdx;
 		ParentContainerType& _c;
 	};
@@ -626,13 +628,46 @@ public:
 		return end();
 	}
 
+	// Tries to look up the relevant page index for `x` and return an iterator to it.
+	// Returns `end()` if not found.
+	iterator find(T& x)
+	{
+		auto* addr = reinterpret_cast<AlignedElementStorage*>(&x);
+		assert(is_properly_aligned_ptr(addr));
+		if (empty())
+		{
+			return end();
+		}
+		for (size_t i = 0, end = _pages.size(); i != end; ++i)
+		{
+			Page& p = _pages[i];
+			auto* storage = p.storage();
+			// If the address is inside the current page, calculate the index from raw offset.
+			if (addr >= storage && addr <= &storage[p.max_valid_index()])
+			{
+				// Pointer subtraction of yields the difference between
+				// array subscripts in the current case.
+				const ptrdiff_t idx = addr - storage;
+				return iterator(*this, {i, static_cast<size_t>(idx)});
+			}
+		}
+		return end();
+	}
+
+	const_iterator find(const T& x) const
+	{
+		return const_iterator(const_cast<PagedEntityContainer<T>*>(this)->find(const_cast<T&>(x)));
+	}
+
 	void erase(const_iterator it)
 	{
+		assert(&it._c == this);
 		erase(it.index());
 	}
 
 	void erase(iterator it)
 	{
+		assert(&it._c == this);
 		erase(it.index());
 	}
 
@@ -744,6 +779,11 @@ private:
 	static PageIndex invalid_page_index()
 	{
 		return { INVALID_PAGE_IDX, INVALID_SLOT_IDX };
+	}
+
+	static bool is_properly_aligned_ptr(void* addr)
+	{
+		return (reinterpret_cast<uintptr_t>(addr) % alignof(T)) == 0;
 	}
 
 	std::vector<Page> _pages;
