@@ -119,7 +119,7 @@ void pie_FreeShaders()
 //static float fogEnd;
 
 // Run from screen.c on init.
-bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled)
+bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled, VOLUMETRIC_LIGHT_LEVEL volumetricEnabled)
 {
 	// note: actual loading of shaders now occurs in gfx_api
 
@@ -128,6 +128,7 @@ bool pie_LoadShaders(uint32_t shadowFilterSize, bool pointLightEnabled)
 	auto shadowConstants = gfx_api::context::get().getShadowConstants();
 	shadowConstants.shadowFilterSize = shadowFilterSize;
 	shadowConstants.isPointLightPerPixelEnabled = pointLightEnabled;
+	shadowConstants.isVolumetricLightingEnabled = volumetricEnabled;
 	gfx_api::context::get().setShadowConstants(shadowConstants);
 
 	if (!pie_supportsShadowMapping().value_or(false))

@@ -867,6 +867,20 @@ char const* graphicsOptionsLightingString()
 	return war_getPointLightPerPixelLighting() ? _("Per Pixel") : _("Lightmap");
 }
 
+char const* graphicsOptionsVolumetricLightingString()
+{
+	switch (war_getVolumetricLighting())
+	{
+	case VOLUMETRIC_LIGHT_LEVEL::low: return _("Low");
+	case VOLUMETRIC_LIGHT_LEVEL::medium: return _("Medium");
+	case VOLUMETRIC_LIGHT_LEVEL::high: return _("High");
+	default:
+		break;
+	}
+
+	return _("Disabled");
+}
+
 char const *graphicsOptionsFogString()
 {
 	return pie_GetFogEnabled() ? _("On") : _("Off");
@@ -1212,6 +1226,12 @@ void startGraphicsOptionsMenu()
 	grid->place({ 1, 1, false }, row, addMargin(makeTextButton(FRONTEND_LIGHTS_R, graphicsOptionsLightingString(), WBUT_SECONDARY)));
 	row.start++;
 
+	///////////
+	// Volumetric lighting
+	grid->place({ 0 }, row, addMargin(makeTextButton(FRONTEND_VOLUMETRIC_LIGHTING, _("Volumetric Lighting"), WBUT_SECONDARY)));
+	grid->place({ 1, 1, false }, row, addMargin(makeTextButton(FRONTEND_VOLUMETRIC_LIGHTING_R, graphicsOptionsVolumetricLightingString(), WBUT_SECONDARY)));
+	row.start++;
+
 	// LOD Distance
 	// TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 	std::string lodDistanceString = _("LOD Distance");
@@ -1300,8 +1320,41 @@ bool runGraphicsOptionsMenu()
 	case FRONTEND_LIGHTS:
 	case FRONTEND_LIGHTS_R:
 	{
-		war_setPointLightPerPixelLighting(!war_getPointLightPerPixelLighting());
-		widgSetString(psWScreen, FRONTEND_LIGHTS_R, graphicsOptionsLightingString());
+		bool newValue = !war_getPointLightPerPixelLighting();
+		if (getTerrainShaderQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+		{
+			newValue = false; // point light per pixel lighting is only supported in normal_mapping mode
+		}
+		auto shadowConstants = gfx_api::context::get().getShadowConstants();
+		shadowConstants.isPointLightPerPixelEnabled = newValue;
+		if (gfx_api::context::get().setShadowConstants(shadowConstants))
+		{
+			war_setPointLightPerPixelLighting(newValue);
+			widgSetString(psWScreen, FRONTEND_LIGHTS_R, graphicsOptionsLightingString());
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to set per pixel point lighting value: %d", (int)newValue);
+		}
+		break;
+	}
+	case FRONTEND_VOLUMETRIC_LIGHTING:
+	case FRONTEND_VOLUMETRIC_LIGHTING_R:
+	{
+		auto previousValue = static_cast<int>(war_getVolumetricLighting());
+		auto newValue = (previousValue + 1) % 4;
+
+		auto shadowConstants = gfx_api::context::get().getShadowConstants();
+		shadowConstants.isVolumetricLightingEnabled = static_cast<VOLUMETRIC_LIGHT_LEVEL>(newValue);
+		if (gfx_api::context::get().setShadowConstants(shadowConstants))
+		{
+			war_setVolumetricLighting(static_cast<VOLUMETRIC_LIGHT_LEVEL>(newValue));
+			widgSetString(psWScreen, FRONTEND_VOLUMETRIC_LIGHTING_R, graphicsOptionsVolumetricLightingString());
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to set volumetric lighting value: %d", (int)newValue);
+		}
 		break;
 	}
 	case FRONTEND_FOG:

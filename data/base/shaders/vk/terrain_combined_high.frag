@@ -7,6 +7,7 @@ layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
+layout (constant_id = 5) const uint WZ_VOLUMETRIC_LIGHTING_ENABLED = 0;
 
 layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -64,6 +65,10 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 }
 
 vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
+	MaterialInfo materialInfo;
+	materialInfo.albedo = b.color;
+	materialInfo.gloss = b.gloss;
+
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(b.N, L), 0.0); // diffuse lighting
 	// Gaussian specular term computation
@@ -90,7 +95,7 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	{
 		// point lights
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-		res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+		res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), materialInfo, ModelTangentMatrix);
 	}
 
 	return vec4(res.rgb, b.color.a);
@@ -125,7 +130,12 @@ void main()
 {
 	vec4 fragColor = main_bumpMapping();
 
-	if (fogEnabled > 0)
+	if (WZ_VOLUMETRIC_LIGHTING_ENABLED != 1) {
+		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);	
+		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, frag.fragPos, diffuseLight.xyz);
+		fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);
+	}
+	else if (fogEnabled > 0)
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - frag.vertexDistance) / (fogEnd - fogStart);
