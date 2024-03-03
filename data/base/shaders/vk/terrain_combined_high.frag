@@ -130,7 +130,7 @@ void main()
 {
 	vec4 fragColor = main_bumpMapping();
 
-	if (WZ_VOLUMETRIC_LIGHTING_ENABLED == 1) {
+	if (WZ_VOLUMETRIC_LIGHTING_ENABLED != 1) {
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);	
 		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, frag.fragPos, diffuseLight.xyz);
 		fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);

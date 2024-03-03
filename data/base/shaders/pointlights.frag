@@ -1,7 +1,7 @@
 #define WZ_MAX_POINT_LIGHTS 0
 #define WZ_MAX_INDEXED_POINT_LIGHTS 0
 #define WZ_BUCKET_DIMENSION 0
-#define WZ_VOLUMETRIC_LIGHTING_ENABLED 1
+#define WZ_VOLUMETRIC_LIGHTING_ENABLED 0
 
 uniform vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
 uniform vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
@@ -148,7 +148,7 @@ vec4 volumetricLights(
 	vec3 transMittance = vec3(1);
 
 
-#define STEPS 64
+#define STEPS (WZ_VOLUMETRIC_LIGHTING_ENABLED * 16)
 	for (int i = 0; i < STEPS; i++)
 	{
 		
