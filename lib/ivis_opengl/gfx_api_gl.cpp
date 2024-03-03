@@ -1657,6 +1657,7 @@ static bool patchFragmentShaderPointLightsDefines(std::string& fragmentShaderStr
 		std::make_pair("WZ_MAX_INDEXED_POINT_LIGHTS", gfx_api::max_indexed_lights),
 		std::make_pair("WZ_BUCKET_DIMENSION", gfx_api::bucket_dimension),
 		std::make_pair("WZ_POINT_LIGHT_ENABLED", static_cast<size_t>(lightingConstants.isPointLightPerPixelEnabled)),
+		std::make_pair("WZ_VOLUMETRIC_LIGHTING_ENABLED", static_cast<size_t>(lightingConstants.isVolumetricLightingEnabled)),
 	};
 
 	const auto& replacer = [&fragmentShaderStr](const std::string& define, const auto& value) -> bool {
