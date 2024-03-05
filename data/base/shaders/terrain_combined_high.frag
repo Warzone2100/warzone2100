@@ -191,9 +191,10 @@ void main()
 	vec4 fragColor = main_bumpMapping();
 
 	if (WZ_VOLUMETRIC_LIGHTING_ENABLED != 1) {
+		vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);	
 		vec4 volumetric = volumetricLights(clipSpaceCoord, cameraPos.xyz, fragPos, diffuseLight.xyz);
-		fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz);
+		fragColor.xyz = toneMap(fragColor.xyz * volumetric.a + volumetric.xyz) * lightmap_vec4.a;
 	}
 	else if (fogEnabled > 0)
 	{
