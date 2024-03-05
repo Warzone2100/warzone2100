@@ -76,61 +76,6 @@ vec4 iterateOverAllPointLights(
 }
 
 
-
-float getShadowVisibilityWithoutPCF(vec3 fragPos)
-{
-	if (WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0)
-	{
-		// no shadow-mapping
-		return 1.0;
-	}
-	else
-	{
-		// Shadow Mapping
-
-		vec4 fragPosViewSpace = ViewMatrix * vec4(fragPos, 1.0);
-		float depthValue = abs(fragPosViewSpace.z);
-
-		int cascadeIndex = 0;
-
-		// unrolled loop, using vec4 swizzles
-		if (WZ_SHADOW_CASCADES_COUNT > 1)
-		{
-			if (depthValue >= ShadowMapCascadeSplits.x)
-			{
-				cascadeIndex = 1;
-			}
-		}
-		if (WZ_SHADOW_CASCADES_COUNT > 2)
-		{
-			if (depthValue >= ShadowMapCascadeSplits.y)
-			{
-				cascadeIndex = 2;
-			}
-		}
-		if (WZ_SHADOW_CASCADES_COUNT > 3)
-		{
-			if (depthValue >= ShadowMapCascadeSplits.z)
-			{
-				cascadeIndex = 3;
-			}
-		}
-
-		vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(fragPos, 1.0);
-		vec3 pos = shadowPos.xyz / shadowPos.w;
-
-		if (pos.z > 1.0f)
-		{
-			return 1.0;
-		}
-
-		float bias = 0.0002f;
-
-		return  texture( shadowMap, vec4(pos.xy, cascadeIndex, (pos.z+bias)) );
-	}
-}
-
-
 // based on equations found here : https://www.shadertoy.com/view/lstfR7
 vec4 volumetricLights(
 	vec2 clipSpaceCoord,
@@ -148,7 +93,7 @@ vec4 volumetricLights(
 	vec3 transMittance = vec3(1);
 
 
-#define STEPS (WZ_VOLUMETRIC_LIGHTING_ENABLED * 16)
+#define STEPS (WZ_VOLUMETRIC_LIGHTING_ENABLED * 4)
 	for (int i = 0; i < STEPS; i++)
 	{
 		
@@ -158,18 +103,7 @@ vec4 volumetricLights(
 
 		vec3 od = fogColor.xyz * thickness * length(viewLine / STEPS) / 1000;
 
-		float sunLightEnergy = getShadowVisibilityWithoutPCF(posOnViewLine) ;
-		vec3 scatteredLight = vec3(sunLightEnergy) * sunLightColor * od;
-
-		for (int i = 0; i < bucketOffsetAndSize[bucketId].y; i++)
-		{
-			int entryInLightList = bucketOffsetAndSize[bucketId].x + i;
-			int lightIndex = PointLightsIndex[entryInLightList / 4][entryInLightList % 4];
-			vec4 position = PointLightsPosition[lightIndex];
-			vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
-			scatteredLight += colorAndEnergy.xyz * pointLightEnergyAtPosition(posOnViewLine, position.xyz, colorAndEnergy.w) * od;
-		}
-
+		vec3 scatteredLight = sunLightColor * od;
 		result += scatteredLight * currentTransmittence;
 
 		currentTransmittence *= exp2(od);
