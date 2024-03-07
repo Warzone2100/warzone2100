@@ -3984,39 +3984,9 @@ bool gameLoadV7(PHYSFS_file *fileHandle, nonstd::optional<nlohmann::json> &gamJs
 	//set IsScenario to true if not a user saved game
 	if (gameType == GTYPE_SAVE_START)
 	{
-		LEVEL_DATASET *psNewLevel;
-
-		IsScenario = false;
-		//copy the level name across
-		sstrcpy(aLevelName, saveGame.levelName);
-		//load up the level dataset
-		if (!levLoadData(aLevelName, nullptr, saveGameName, (GAME_TYPE)gameType))
-		{
-			return false;
-		}
-		// find the level dataset
-		psNewLevel = levFindDataSet(aLevelName);
-		if (psNewLevel == nullptr)
-		{
-			debug(LOG_ERROR, "gameLoadV7: couldn't find level data");
-
-			return false;
-		}
-		//check to see whether mission automatically starts
-		//shouldn't be able to be any other value at the moment!
-		if (psNewLevel->type == LEVEL_TYPE::LDS_CAMSTART
-		    || psNewLevel->type == LEVEL_TYPE::LDS_BETWEEN
-		    || psNewLevel->type == LEVEL_TYPE::LDS_EXPAND
-		    || psNewLevel->type == LEVEL_TYPE::LDS_EXPAND_LIMBO)
-		{
-			launchMission();
-		}
-
+		debug(LOG_FATAL, "Should not be called with gameType GTYPE_SAVE_START");
 	}
-	else
-	{
-		IsScenario = true;
-	}
+	IsScenario = true;
 
 	return true;
 }
