@@ -176,6 +176,7 @@ private:
 	std::function<void(DropdownWidget&)> onChange;
 	std::shared_ptr<DropdownItemWrapper> mouseOverItem;
 	std::shared_ptr<DropdownItemWrapper> mouseDownItem;
+	int32_t overlayYPosOffset = 0;
 
 	bool select(const std::shared_ptr<DropdownItemWrapper> &selected, size_t selectedIndex)
 	{
