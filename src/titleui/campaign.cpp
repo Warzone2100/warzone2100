@@ -23,7 +23,7 @@
 #include "campaign.h"
 #include "../frontend.h"
 #include "../multiint.h"
-#include "../mission.h"
+#include "../campaigninfo.h"
 #include "../seqdisp.h"
 #include "../hci.h"
 #include "../urlhelpers.h"
