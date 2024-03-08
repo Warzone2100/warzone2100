@@ -64,6 +64,8 @@ public:
 	void setScrollbarWidth(int newWidth);
 	uint16_t getScrollPosition() const;
 	void setScrollPosition(uint16_t newPosition);
+	void scrollToItem(size_t itemNum);
+	int32_t getCurrentYPosOfItem(size_t itemNum);
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
 
@@ -84,6 +86,7 @@ private:
 	uint32_t snappedOffset();
 	void updateLayout();
 	void resizeChildren(uint32_t width);
+	uint32_t getScrollPositionForItem(size_t itemNum);
 };
 
 #endif // __INCLUDED_LIB_WIDGET_SCROLLABLELIST_H__

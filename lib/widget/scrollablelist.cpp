@@ -77,6 +77,26 @@ uint32_t ScrollableListWidget::snappedOffset()
 	return 0;
 }
 
+uint32_t ScrollableListWidget::getScrollPositionForItem(size_t itemNum)
+{
+	ASSERT_OR_RETURN(0, itemNum < listView->children().size(), "Invalid itemNum: %zu", itemNum);
+	auto& child = listView->children()[itemNum];
+	const auto childOffsets = child->getScrollSnapOffsets().value_or(std::vector<uint32_t>{0});
+	for (const auto childOffset: childOffsets)
+	{
+		const auto y = child->y() + childOffset;
+		return y;
+	}
+	return child->y();
+}
+
+int32_t ScrollableListWidget::getCurrentYPosOfItem(size_t itemNum)
+{
+	int currTopOffset = listView->getTopOffset();
+	auto itemYPos = getScrollPositionForItem(itemNum);
+	return itemYPos - currTopOffset;
+}
+
 void ScrollableListWidget::addItem(const std::shared_ptr<WIDGET> &item)
 {
 	listView->attach(item);
@@ -247,4 +267,11 @@ int32_t ScrollableListWidget::idealHeight()
 {
 	updateLayout();
 	return scrollableHeight + padding.top + padding.bottom;
+}
+
+void ScrollableListWidget::scrollToItem(size_t itemNum)
+{
+	updateLayout();
+	scrollBar->setPosition(getScrollPositionForItem(itemNum));
+	listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
 }
