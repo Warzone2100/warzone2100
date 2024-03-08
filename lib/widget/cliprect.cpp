@@ -72,6 +72,11 @@ void ClipRectWidget::setTopOffset(uint16_t value)
 	offset.y = value;
 }
 
+uint16_t ClipRectWidget::getTopOffset()
+{
+	return offset.y;
+}
+
 void ClipRectWidget::setLeftOffset(uint16_t value)
 {
 	offset.x = value;

@@ -38,6 +38,7 @@ public:
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 	void setTopOffset(uint16_t value);
 	void setLeftOffset(uint16_t value);
+	uint16_t getTopOffset();
 	int parentRelativeXOffset(int coord) const override;
 	int parentRelativeYOffset(int coord) const override;
 
