@@ -42,6 +42,7 @@
 #include "display3d.h"
 #include "map.h"
 #include "mission.h"
+#include "campaigninfo.h"
 #include "move.h"
 #include "order.h"
 #include "transporter.h"

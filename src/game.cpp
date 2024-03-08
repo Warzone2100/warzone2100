@@ -68,6 +68,7 @@
 #include "effects.h"
 #include "init.h"
 #include "mission.h"
+#include "campaigninfo.h"
 #include "scores.h"
 #include "design.h"
 #include "component.h"

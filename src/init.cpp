@@ -48,6 +48,7 @@
 #include "input/manager.h"
 #include "advvis.h"
 #include "atmos.h"
+#include "campaigninfo.h"
 #include "challenge.h"
 #include "cmddroid.h"
 #include "configuration.h"

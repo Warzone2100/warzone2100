@@ -54,6 +54,7 @@
 #include "multigifts.h"
 #include "random.h"
 #include "mission.h"
+#include "campaigninfo.h"
 #include "qtscript.h"
 
 /* max and min vtol heights above terrain */

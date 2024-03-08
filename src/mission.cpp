@@ -81,6 +81,7 @@
 #include "activity.h"
 #include "lib/framework/wztime.h"
 #include "keybind.h"
+#include "campaigninfo.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -183,10 +184,6 @@ static void emptyTransporters(bool bOffWorld);
 bool MissionResUp	= false;
 
 static SDWORD		g_iReinforceTime = 0;
-
-/* Which campaign are we dealing with? */
-static	UDWORD	camNumber = 1;
-static  optional<std::string> campaignName = nullopt;
 
 
 //returns true if on an off world mission
@@ -3121,82 +3118,6 @@ void resetMissionWidgets()
 		addTransporterTimerInterface();
 	}
 
-}
-
-void	setCampaignNumber(UDWORD number)
-{
-	ASSERT(number < 4, "Campaign Number too high!");
-	camNumber = number;
-
-	if (!bMultiPlayer && !bInTutorial)
-	{
-		if (!campaignName.has_value())
-		{
-			campaignName = getCampaignNameFromCampaignNumber(number);
-		}
-	}
-	else
-	{
-		campaignName.reset();
-	}
-}
-
-UDWORD	getCampaignNumber()
-{
-	return camNumber;
-}
-
-void setCampaignName(const std::string& newCampaignName)
-{
-	campaignName = newCampaignName;
-}
-
-void clearCampaignName()
-{
-	campaignName.reset();
-}
-
-std::string getCampaignName()
-{
-	return campaignName.value_or(std::string());
-}
-
-std::string getCampaignNameFromCampaignNumber(UDWORD campaignNum)
-{
-	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
-
-	if (campaignNum > 0 && campaignNum <= list.size())
-	{
-		return list[campaignNum - 1].name.toStdString();
-	}
-	return std::string();
-}
-
-std::vector<CAMPAIGN_FILE> readCampaignFiles()
-{
-	static std::vector<CAMPAIGN_FILE> result;
-	if (!result.empty())
-	{
-		return result;
-	}
-
-	WZ_PHYSFS_enumerateFiles("campaigns", [&](const char *i) -> bool {
-		CAMPAIGN_FILE c;
-		WzString filename("campaigns/");
-		filename += i;
-		if (!filename.endsWith(".json"))
-		{
-			return true; // continue;
-		}
-		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-		c.name = ini.value("name").toWzString();
-		c.level = ini.value("level").toWzString();
-		c.video = ini.value("video").toWzString();
-		c.captions = ini.value("captions").toWzString();
-		result.push_back(c);
-		return true; // continue
-	});
-	return result;
 }
 
 /*deals with any selectedPlayer's transporters that are flying in when the

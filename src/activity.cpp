@@ -23,6 +23,7 @@
 #include "activity.h"
 #include "multiint.h"
 #include "mission.h"
+#include "campaigninfo.h"
 #include "challenge.h"
 #include "modding.h"
 #include "gamehistorylogger.h"

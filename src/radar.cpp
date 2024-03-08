@@ -48,6 +48,7 @@
 #include "warcam.h"
 #include "display.h"
 #include "mission.h"
+#include "campaigninfo.h"
 #include "multiplay.h"
 #include "intdisplay.h"
 #include "texture.h"
