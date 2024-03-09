@@ -54,6 +54,14 @@ data/fonts/NotoSansCJK-VF.otf.ttc
 	- OFL 1.1 - Copyright (c) 2014-2021 Adobe (https://github.com/googlefonts/noto-cjk)
 data/base/images/flags/flag-*.png
 	- MIT License, Copyright (c) 2016 Bowtie AB (https://github.com/madebybowtie/FlagKit)
+data/base/images/frontend/image_cam_universe_stars.png
+data/base/images/frontend/image_check_circle.png
+data/base/images/frontend/image_question_circle.png
+data/base/images/frontend/image_info_circle.png
+data/base/images/frontend/image_check_square_fill.png
+data/base/images/frontend/image_check_square_empty.png
+data/base/images/frontend/image_arrow_undo.png
+	- MIT License - Copyright (c) 2019-2024 The Bootstrap Authors (https://github.com/twbs/icons/blob/main/LICENSE)
 data/base/images/intfac/image_volume_mute.png
 data/base/images/intfac/image_volume_up.png
 data/base/images/notifications/connect_wait.png
