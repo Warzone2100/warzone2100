@@ -3502,6 +3502,38 @@ void SelectDroid(DROID *psDroid)
 	jsDebugSelected(psDroid);
 }
 
+// If the whole group is selected, add new droids of psNewDroid group to the selection after production
+//
+void SelectNewDroid(DROID *psNewDroid)
+{
+	std::vector<DROID *> groupDroids;
+	for (DROID *psDroid : apsDroidLists[psNewDroid->player])
+	{
+		if (psDroid->group == psNewDroid->group)
+		{
+			groupDroids.push_back(psDroid);
+		}
+	}
+
+	if (!groupDroids.empty())
+	{
+		bool bDoSelection = true;
+		for (DROID *psDroid : groupDroids)
+		{
+			if (!psDroid->selected)
+			{
+				bDoSelection = false;
+				break;
+			}
+		}
+
+		if (bDoSelection)
+		{
+			SelectDroid(psNewDroid);
+		}
+	}
+}
+
 // De-select a droid and do any necessary housekeeping.
 //
 void DeSelectDroid(DROID *psDroid)
