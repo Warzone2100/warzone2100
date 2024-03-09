@@ -247,7 +247,7 @@ public:
 	{
 		auto x0 = xOffset + x();
 		auto y0 = yOffset + y();
-		pie_UniTransBoxFill(x0, y0, x0 + width() - 1, y0 + height() - 1, textStyle.shadeColour);
+		pie_UniTransBoxFill(x0, y0 + 1, x0 + width(), y0 + 1 + height(), textStyle.shadeColour);
 		cachedText->render(x0, y0 - cachedText->aboveBase(), textStyle.fontColour);
 	}
 
