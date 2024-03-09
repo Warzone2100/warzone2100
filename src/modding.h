@@ -22,10 +22,12 @@
 #define __INCLUDED_SRC_MODDING_H__
 
 #include "lib/framework/crc.h"
+#include "lib/framework/wzstring.h"
 
 #include <string>
 #include <vector>
 
+WzString convertToPlatformDependentPath(const char *platformIndependentPath);
 
 size_t addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, std::vector<std::string> const *checkList, bool addToModList);
 void removeSubdirs(const char *basedir, const char *subdir);
@@ -33,6 +35,10 @@ void printSearchPath();
 
 void setOverrideMods(char *modlist);
 void clearOverrideMods();
+bool hasOverrideMods();
+
+bool hasCampaignMods();
+void clearCampaignMods();
 
 namespace WzMods {
 struct LoadedMod

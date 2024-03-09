@@ -81,7 +81,7 @@ static inline std::string join(std::vector<std::string> const &strs, std::string
 	return str;
 }
 
-static WzString convertToPlatformDependentPath(const char *platformIndependentPath)
+WzString convertToPlatformDependentPath(const char *platformIndependentPath)
 {
 	WzString path(platformIndependentPath);
 
@@ -180,6 +180,21 @@ void clearOverrideMods()
 	override_mods.clear();
 	override_mod_list.clear();
 	use_override_mods = false;
+}
+
+bool hasOverrideMods()
+{
+	return !override_mods.empty();
+}
+
+void clearCampaignMods()
+{
+	campaign_mods.clear();
+}
+
+bool hasCampaignMods()
+{
+	return !campaign_mods.empty();
 }
 
 static void addLoadedMod(std::string modname, std::string filename)
