@@ -142,6 +142,8 @@ public:
 	void released(W_CONTEXT *, WIDGET_KEY key) override;
 	void highlightLost() override;
 
+	nonstd::optional<std::vector<uint32_t>> getScrollSnapOffsets() override;
+
 private:
 	std::vector<std::unique_ptr<ParagraphElement>> elements;
 	bool layoutDirty = true;
@@ -152,6 +154,8 @@ private:
 	bool hasElementWithLayoutDirty() const;
 	void updateLayout();
 	std::vector<std::vector<FlowLayoutFragment>> calculateLinesLayout();
+
+	std::vector<uint32_t> scrollSnapOffsets;
 
 	bool isMouseDown = false;
 	std::vector<W_PARAGRAPH_ONCLICK_FUNC> onClickHandlers;
