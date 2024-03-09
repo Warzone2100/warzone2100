@@ -2487,6 +2487,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		{
 			psNewDroid->group = psStructure->productToGroup;
 			intGroupsChanged(psNewDroid->group); // update groups UI
+			SelectNewDroid(psNewDroid);
 		}
 		setFactorySecondaryState(psNewDroid, psStructure);
 		const auto mapCoord = map_coord({x, y});
