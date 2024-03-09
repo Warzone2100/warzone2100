@@ -430,14 +430,20 @@ void Paragraph::updateLayout()
 	{
 		element->destroyFragments(*this);
 	}
+	scrollSnapOffsets.clear();
 
 	auto nextLineOffset = 0;
 	auto totalHeight = 0;
-	for (const auto& line : calculateLinesLayout())
+	auto linesLayout = calculateLinesLayout();
+	scrollSnapOffsets.reserve(linesLayout.size());
+	for (const auto& line : linesLayout)
 	{
 		std::vector<WIDGET *> lineFragments;
 		auto aboveBase = 0;
 		auto belowBase = 0;
+
+		scrollSnapOffsets.push_back(nextLineOffset);
+
 		for (auto fragmentDescriptor: line)
 		{
 			auto fragment = elements[fragmentDescriptor.elementId]->createFragmentWidget(*this, fragmentDescriptor);
@@ -557,4 +563,9 @@ void Paragraph::highlightLost()
 {
 	isMouseDown = false;
 	dirty = true;
+}
+
+nonstd::optional<std::vector<uint32_t>> Paragraph::getScrollSnapOffsets()
+{
+	return scrollSnapOffsets;
 }
