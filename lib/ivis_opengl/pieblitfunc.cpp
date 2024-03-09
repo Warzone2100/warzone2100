@@ -776,7 +776,7 @@ void iV_DrawImageTint(IMAGEFILE *ImageFile, UWORD ID, float x, float y, PIELIGHT
 	}
 }
 
-void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection, uint8_t alpha)
+void iV_DrawImageFileAnisotropicTint(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, PIELIGHT color, const glm::mat4 &modelViewProjection)
 {
 	if (!assertValidImage(ImageFile, ID))
 	{
@@ -789,7 +789,12 @@ void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, V
 	dest.h = size.y;
 
 	gfx_api::DrawImageAnisotropicPSO::get().bind();
-	pie_DrawImageTemplate<gfx_api::DrawImageAnisotropicPSO>(ImageFile, ID, pieImage, &dest, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
+	pie_DrawImageTemplate<gfx_api::DrawImageAnisotropicPSO>(ImageFile, ID, pieImage, &dest, color, modelViewProjection);
+}
+
+void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection, uint8_t alpha)
+{
+	iV_DrawImageFileAnisotropicTint(ImageFile, ID, x, y, size, pal_RGBA(255, 255, 255, alpha), modelViewProjection);
 }
 
 void iV_DrawImageTc(AtlasImage image, AtlasImage imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection)
