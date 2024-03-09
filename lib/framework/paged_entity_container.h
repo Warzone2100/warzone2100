@@ -99,7 +99,8 @@
 /// </summary>
 /// <typeparam name="T">Entity type. Should be a complete type.</typeparam>
 /// <typeparam name="MaxElementsPerPage">The fixed number of elements each page may hold.</typeparam>
-template <typename T, size_t MaxElementsPerPage = 1024>
+/// <typeparam name="ReuseSlots">If `false`, slots are one-shot and set to expire after single use.</typeparam>
+template <typename T, size_t MaxElementsPerPage = 1024, bool ReuseSlots = true>
 class PagedEntityContainer
 {
 	using SlotIndexType = size_t;
@@ -148,6 +149,11 @@ class PagedEntityContainer
 		bool is_alive() const
 		{
 			return _isAlive;
+		}
+
+		void invalidate()
+		{
+			_generation = INVALID_GENERATION;
 		}
 
 		void set_dead()
@@ -399,8 +405,11 @@ public:
 		{
 			return;
 		}
-		// Advance slot generation number.
-		slotMetadata.advance_generation();
+
+		// Either advance slot generation number or invalidate the slot right away,
+		// the behavior depends on whether we reuse the slots or not.
+		advance_slot_generation<ReuseSlots>(slotMetadata);
+
 		// Ensure that the element pointed-to by this slot is dead.
 		slotMetadata.set_dead();
 
@@ -580,7 +589,7 @@ public:
 
 	const_iterator begin() const
 	{
-		return const_iterator(const_cast<PagedEntityContainer<T>*>(this)->begin());
+		return const_iterator(const_cast<PagedEntityContainer*>(this)->begin());
 	}
 
 	iterator begin()
@@ -657,7 +666,7 @@ public:
 
 	const_iterator find(const T& x) const
 	{
-		return const_iterator(const_cast<PagedEntityContainer<T>*>(this)->find(const_cast<T&>(x)));
+		return const_iterator(const_cast<PagedEntityContainer*>(this)->find(const_cast<T&>(x)));
 	}
 
 	void erase(const_iterator it)
@@ -787,6 +796,21 @@ private:
 		return (reinterpret_cast<uintptr_t>(addr) % alignof(T)) == 0;
 	}
 
+	template <bool ReuseSlotsAux = ReuseSlots, std::enable_if_t<ReuseSlotsAux, bool> = true>
+	void advance_slot_generation(SlotMetadata& meta)
+	{
+		// Advance slot generation number, when `ReuseSlots=true`.
+		meta.advance_generation();
+	}
+
+	// Specialization for the case when `ReuseSlots=false`.
+	template <bool ReuseSlotsAux = ReuseSlots, std::enable_if_t<!ReuseSlotsAux, bool> = true>
+	void advance_slot_generation(SlotMetadata& meta)
+	{
+		// Invalidate slot right away so that it cannot be reused anymore.
+		meta.invalidate();
+	}
+
 	std::vector<Page> _pages;
 	SlotIndexType _maxIndex = INVALID_SLOT_IDX;
 	size_t _size = 0;
@@ -794,10 +818,10 @@ private:
 	size_t _expiredSlotsCount = 0;
 };
 
-template <typename T, size_t MaxElementsPerPage>
-constexpr typename PagedEntityContainer<T, MaxElementsPerPage>::SlotIndexType
-	PagedEntityContainer<T, MaxElementsPerPage>::INVALID_SLOT_IDX;
+template <typename T, size_t MaxElementsPerPage, bool ReuseSlots>
+constexpr typename PagedEntityContainer<T, MaxElementsPerPage, ReuseSlots>::SlotIndexType
+	PagedEntityContainer<T, MaxElementsPerPage, ReuseSlots>::INVALID_SLOT_IDX;
 
-template <typename T, size_t MaxElementsPerPage>
-constexpr size_t PagedEntityContainer<T, MaxElementsPerPage>::INVALID_PAGE_IDX;
+template <typename T, size_t MaxElementsPerPage, bool ReuseSlots>
+constexpr size_t PagedEntityContainer<T, MaxElementsPerPage, ReuseSlots>::INVALID_PAGE_IDX;
 
