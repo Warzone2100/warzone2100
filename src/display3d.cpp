@@ -2469,6 +2469,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	    || psFeature->psStats->subType == FEAT_GEN_ARTE
 	    || psFeature->psStats->subType == FEAT_BOULDER
 	    || psFeature->psStats->subType == FEAT_VEHICLE
+	    || psFeature->psStats->subType == FEAT_TREE
 	    || psFeature->psStats->subType == FEAT_OIL_DRUM)
 	{
 		/* these cast a shadow */
