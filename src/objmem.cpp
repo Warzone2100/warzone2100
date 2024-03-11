@@ -226,13 +226,21 @@ bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 	{
 		return false;
 	}
-	// Droids are managed by a separate droid container.
 	if (psObj->type == OBJ_DROID)
 	{
+		// Droids are managed by a separate droid container.
 		auto& droidContainer = GlobalDroidContainer();
 		auto it = droidContainer.find(*static_cast<DROID*>(psObj));
 		ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
 		droidContainer.erase(it);
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		// Structs are managed by a separate struct container.
+		auto& structContainer = GlobalStructContainer();
+		auto it = structContainer.find(*static_cast<STRUCTURE*>(psObj));
+		ASSERT(it != structContainer.end(), "Structure not found in the global container!");
+		structContainer.erase(it);
 	}
 	else
 	{
@@ -452,16 +460,53 @@ void killDroid(DROID *psDel)
 	destroyObject(apsDroidLists, psDel);
 }
 
-static void freeAllDroidsImpl(PerPlayerDroidLists& droidLists)
+template <typename EntityType>
+struct GlobalEntityContainerTraits;
+
+template <>
+struct GlobalEntityContainerTraits<DROID>
 {
-	auto& droidContainer = GlobalDroidContainer();
-	for (auto& list : droidLists)
+	using StorageType = DroidContainer;
+
+	static DroidContainer& getContainer()
 	{
-		for (DROID* d : list)
+		return GlobalDroidContainer();
+	}
+
+	static const char* entityName()
+	{
+		return "Droid";
+	}
+};
+
+template <>
+struct GlobalEntityContainerTraits<STRUCTURE>
+{
+	using StorageType = StructContainer;
+
+	static StructContainer& getContainer()
+	{
+		return GlobalStructContainer();
+	}
+
+	static const char* entityName()
+	{
+		return "Structure";
+	}
+};
+
+template <typename Entity, unsigned PlayerCount>
+static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entityLists)
+{
+	using Traits = GlobalEntityContainerTraits<Entity>;
+	auto& entityContainer = Traits::getContainer();
+	for (auto& list : entityLists)
+	{
+		for (auto* ent : list)
 		{
-			auto it = droidContainer.find(*d);
-			ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
-			droidContainer.erase(it);
+			auto it = entityContainer.find(*ent);
+			ASSERT(it != entityContainer.end(), "%s not found in the global container!", Traits::entityName());
+			entityContainer.erase(it);
 		}
 		list.clear();
 	}
@@ -470,7 +515,7 @@ static void freeAllDroidsImpl(PerPlayerDroidLists& droidLists)
 /* Remove all droids */
 void freeAllDroids()
 {
-	freeAllDroidsImpl(apsDroidLists);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsDroidLists);
 }
 
 /*Remove a single Droid from a list*/
@@ -503,13 +548,13 @@ void removeDroid(DROID* psDroidToRemove, PerPlayerDroidLists& pList)
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids()
 {
-	freeAllDroidsImpl(mission.apsDroidLists);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(mission.apsDroidLists);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids()
 {
-	freeAllDroidsImpl(apsLimboDroids);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsLimboDroids);
 }
 
 /**************************  STRUCTURE  *******************************/
@@ -592,7 +637,7 @@ void killStruct(STRUCTURE *psBuilding)
 /* Remove heapall structures */
 void freeAllStructs()
 {
-	releaseAllObjectsInList(apsStructLists);
+	freeAllEntitiesImpl<STRUCTURE, MAX_PLAYERS>(apsStructLists);
 }
 
 /*Remove a single Structure from a list*/

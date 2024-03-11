@@ -496,4 +496,10 @@ struct LineBuild
 LineBuild calcLineBuild(Vector2i size, STRUCTURE_TYPE type, Vector2i pos, Vector2i pos2);
 LineBuild calcLineBuild(STRUCTURE_STATS const *stats, uint16_t direction, Vector2i pos, Vector2i pos2);
 
+// Split the struct storage into pages containing 256 structs, disable slot reuse
+// to guard against memory-related issues when some object pointers won't get
+// updated properly, e.g. when transitioning between the base and offworld missions.
+using StructContainer = PagedEntityContainer<STRUCTURE, 256, false>;
+StructContainer& GlobalStructContainer();
+
 #endif // __INCLUDED_SRC_STRUCTURE_H__
