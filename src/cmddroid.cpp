@@ -90,6 +90,7 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	ASSERT_OR_RETURN(false, psDroid != nullptr, "psDroid is null?");
 
 	auto initialDroidGroup = psDroid->group;
+	auto fallbackDroidGroup = initialDroidGroup != UBYTE_MAX ? initialDroidGroup : psDroid->fallbackGroup;
 
 	if (psCommander->psGroup == nullptr)
 	{
@@ -122,6 +123,13 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		{
 			addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 			lastMaxCmdLimitMsgTime = gameTime;
+		}
+
+		if (fallbackDroidGroup != UBYTE_MAX)
+		{
+			psDroid->group = fallbackDroidGroup;
+			psDroid->fallbackGroup = UBYTE_MAX;
+			// fixme: SelectNewDroid doesn't work here for some reason
 		}
 	}
 
