@@ -1414,31 +1414,27 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				}
 		}
 
-		// allocate memory for and initialize a structure object
-		psBuilding = new STRUCTURE(id, player);
-		if (psBuilding == nullptr)
-		{
-			return nullptr;
-		}
+		// initialize the structure object
+		STRUCTURE building(id, player);
 
 		//fill in other details
-		psBuilding->pStructureType = pStructureType;
+		building.pStructureType = pStructureType;
 
-		psBuilding->pos.x = x;
-		psBuilding->pos.y = y;
-		psBuilding->rot.direction = snapDirection(direction);
-		psBuilding->rot.pitch = 0;
-		psBuilding->rot.roll = 0;
+		building.pos.x = x;
+		building.pos.y = y;
+		building.rot.direction = snapDirection(direction);
+		building.rot.pitch = 0;
+		building.rot.roll = 0;
 
 		//This needs to be done before the functionality bit...
 		//load into the map data and structure list if not an upgrade
 		Vector2i map = map_coord(Vector2i(x, y)) - size / 2;
 
 		//set up the imd to use for the display
-		psBuilding->sDisplay.imd = pStructureType->pIMD[0];
+		building.sDisplay.imd = pStructureType->pIMD[0];
 
-		psBuilding->state = SAS_NORMAL;
-		psBuilding->lastStateTime = gameTime;
+		building.state = SAS_NORMAL;
+		building.lastStateTime = gameTime;
 
 		/* if resource extractor - need to remove oil feature first, but do not do any
 		 * consistency checking here - save games do not have any feature to remove
@@ -1452,7 +1448,6 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
 				{
 					// Can't build on burning oil resource
-					delete psBuilding;
 					return nullptr;
 				}
 				// remove it from the map
@@ -1486,16 +1481,18 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic pop
 #endif
-					delete psBuilding;
 					return nullptr;
 				}
 			}
 		}
+		// Emplace the structure being built in the global storage to obtain stable address.
+		STRUCTURE& stableBuilding = GlobalStructContainer().emplace(std::move(building));
+		psBuilding = &stableBuilding;
 		for (int tileY = map.y; tileY < map.y + size.y; ++tileY)
 		{
 			for (int tileX = map.x; tileX < map.x + size.x; ++tileX)
 			{
-				// We now know the previous loop didn't return early, so it is safe to save references to psBuilding now.
+				// We now know the previous loop didn't return early, so it is safe to save references to `stableBuilding` now.
 				MAPTILE *psTile = mapTile(tileX, tileY);
 				psTile->psObject = psBuilding;
 
@@ -1612,7 +1609,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (!setFunctionality(psBuilding, pStructureType->type))
 		{
 			removeStructFromMap(psBuilding);
-			delete psBuilding;
+			objmemDestroy(psBuilding, false);
 			//better reset these if you couldn't build the structure!
 			if (FromSave && player == selectedPlayer && missionLimboExpand())
 			{
@@ -1834,8 +1831,6 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer)
 {
-	STRUCTURE *blueprint = nullptr;
-
 	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "No blueprint stats");
 	ASSERT_OR_RETURN(nullptr, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getStatsName(psStats));
 	ASSERT_OR_RETURN(nullptr, ownerPlayer < MAX_PLAYERS, "invalid ownerPlayer: %" PRIu8 "", ownerPlayer);
@@ -1866,55 +1861,57 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 		}
 	}
 
-	blueprint = new STRUCTURE(0, ownerPlayer);
+	STRUCTURE blueprint(0, ownerPlayer);
 	// construct the fake structure
-	blueprint->pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
+	blueprint.pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
 	if (selectedPlayer < MAX_PLAYERS)
 	{
-		blueprint->visible[selectedPlayer] = UBYTE_MAX;
+		blueprint.visible[selectedPlayer] = UBYTE_MAX;
 	}
-	blueprint->sDisplay.imd = (*pIMD)[std::min<int>(moduleNumber, pIMD->size() - 1)];
-	blueprint->pos = pos;
-	blueprint->rot = rot;
-	blueprint->selected = false;
+	blueprint.sDisplay.imd = (*pIMD)[std::min<int>(moduleNumber, pIMD->size() - 1)];
+	blueprint.pos = pos;
+	blueprint.rot = rot;
+	blueprint.selected = false;
 
-	blueprint->numWeaps = 0;
-	blueprint->asWeaps[0].nStat = 0;
+	blueprint.numWeaps = 0;
+	blueprint.asWeaps[0].nStat = 0;
 
 	// give defensive structures a weapon
 	if (psStats->psWeapStat[0])
 	{
-		blueprint->asWeaps[0].nStat = psStats->psWeapStat[0] - asWeaponStats.data();
+		blueprint.asWeaps[0].nStat = psStats->psWeapStat[0] - asWeaponStats.data();
 	}
 	// things with sensors or ecm (or repair facilities) need these set, even if they have no official weapon
-	blueprint->numWeaps = 0;
-	blueprint->asWeaps[0].lastFired = 0;
-	blueprint->asWeaps[0].rot.pitch = 0;
-	blueprint->asWeaps[0].rot.direction = 0;
-	blueprint->asWeaps[0].rot.roll = 0;
-	blueprint->asWeaps[0].prevRot = blueprint->asWeaps[0].rot;
+	blueprint.numWeaps = 0;
+	blueprint.asWeaps[0].lastFired = 0;
+	blueprint.asWeaps[0].rot.pitch = 0;
+	blueprint.asWeaps[0].rot.direction = 0;
+	blueprint.asWeaps[0].rot.roll = 0;
+	blueprint.asWeaps[0].prevRot = blueprint.asWeaps[0].rot;
 
-	blueprint->expectedDamage = 0;
+	blueprint.expectedDamage = 0;
 
 	// Times must be different, but don't otherwise matter.
-	blueprint->time = 23;
-	blueprint->prevTime = 42;
+	blueprint.time = 23;
+	blueprint.prevTime = 42;
 
-	blueprint->status = state;
+	blueprint.status = state;
 
 	// Rotate wall if needed.
-	if (blueprint->pStructureType->type == REF_WALL || blueprint->pStructureType->type == REF_GATE)
+	if (blueprint.pStructureType->type == REF_WALL || blueprint.pStructureType->type == REF_GATE)
 	{
-		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(blueprint->pos.xy()));
+		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(blueprint.pos.xy()));
 		unsigned type = wallType(scanType);
 		if (scanType != WallConnectNone)
 		{
-			blueprint->rot.direction = wallDir(scanType);
-			blueprint->sDisplay.imd = blueprint->pStructureType->pIMD[std::min<unsigned>(type, blueprint->pStructureType->pIMD.size() - 1)];
+			blueprint.rot.direction = wallDir(scanType);
+			blueprint.sDisplay.imd = blueprint.pStructureType->pIMD[std::min<unsigned>(type, blueprint.pStructureType->pIMD.size() - 1)];
 		}
 	}
 
-	return blueprint;
+	auto& stableBlueprint = GlobalStructContainer().emplace(std::move(blueprint));
+
+	return &stableBlueprint;
 }
 
 static Vector2i defaultAssemblyPointPos(STRUCTURE *psBuilding)
@@ -7215,4 +7212,10 @@ LineBuild calcLineBuild(Vector2i size, STRUCTURE_TYPE type, Vector2i worldPos, V
 LineBuild calcLineBuild(STRUCTURE_STATS const *stats, uint16_t direction, Vector2i pos, Vector2i pos2)
 {
 	return calcLineBuild(stats->size(direction), stats->type, pos, pos2);
+}
+
+StructContainer& GlobalStructContainer()
+{
+	static StructContainer instance;
+	return instance;
 }

@@ -363,7 +363,8 @@ struct Blueprint
 			STRUCTURE *psStruct = buildBlueprint();
 			ASSERT_OR_RETURN(, psStruct != nullptr, "buildBlueprint returned nullptr");
 			renderStructure(psStruct, viewMatrix, perspectiveViewMatrix);
-			delete psStruct;
+
+			objmemDestroy(psStruct, false);
 		}
 	}
 
@@ -692,7 +693,11 @@ STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
 	Blueprint blueprint = getTileBlueprint(mapX, mapY);
 	if (blueprint.state == SS_BLUEPRINT_PLANNED)
 	{
-		delete psStruct;  // Delete previously returned structure, if any.
+		if (psStruct)
+		{
+			// Delete previously returned structure, if any.
+			objmemDestroy(psStruct, false);
+		}
 		psStruct = blueprint.buildBlueprint();
 		return psStruct;  // This blueprint was clicked on.
 	}
