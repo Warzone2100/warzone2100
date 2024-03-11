@@ -183,14 +183,10 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 /* Create a feature on the map */
 FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
 {
-	//try and create the Feature
-	FEATURE *psFeature = new FEATURE(id, psStats);
+	//try and create the Feature, obtain stable address.
+	FEATURE& feature = GlobalFeatureContainer().emplace(id, psStats);
+	FEATURE* psFeature = &feature;
 
-	if (psFeature == nullptr)
-	{
-		debug(LOG_WARNING, "Feature couldn't be built.");
-		return nullptr;
-	}
 	//add the feature to the list - this enables it to be drawn whilst being built
 	addFeature(psFeature);
 
@@ -555,4 +551,10 @@ StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos)
 	const Vector2i size = stats->size();
 	const Vector2i map = map_coord(pos) - size / 2;
 	return StructureBounds(map, size);
+}
+
+FeatureContainer& GlobalFeatureContainer()
+{
+	static FeatureContainer instance;
+	return instance;
 }

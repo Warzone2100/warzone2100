@@ -86,10 +86,9 @@ bool objmemInitialise()
 /* Release the object heaps */
 void objmemShutdown()
 {
-	auto& droidContainer = GlobalDroidContainer();
-	droidContainer.clear();
-	auto& structContainer = GlobalStructContainer();
-	structContainer.clear();
+	GlobalDroidContainer().clear();
+	GlobalStructContainer().clear();
+	GlobalFeatureContainer().clear();
 }
 
 // Check that psVictim is not referred to by any other object in the game. We can dump out some extra data in debug builds that help track down sources of dangling pointer errors.
@@ -243,6 +242,14 @@ bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 		auto it = structContainer.find(*static_cast<STRUCTURE*>(psObj));
 		ASSERT(it != structContainer.end(), "Structure not found in the global container!");
 		structContainer.erase(it);
+	}
+	else if (psObj->type == OBJ_FEATURE)
+	{
+		// Features are managed by a separate feature container.
+		auto& featureContainer = GlobalFeatureContainer();
+		auto it = featureContainer.find(*static_cast<FEATURE*>(psObj));
+		ASSERT(it != featureContainer.end(), "Feature not found in the global container!");
+		featureContainer.erase(it);
 	}
 	else
 	{
@@ -497,6 +504,22 @@ struct GlobalEntityContainerTraits<STRUCTURE>
 	}
 };
 
+template <>
+struct GlobalEntityContainerTraits<FEATURE>
+{
+	using StorageType = FeatureContainer;
+
+	static FeatureContainer& getContainer()
+	{
+		return GlobalFeatureContainer();
+	}
+
+	static const char* entityName()
+	{
+		return "Feature";
+	}
+};
+
 template <typename Entity, unsigned PlayerCount>
 static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entityLists)
 {
@@ -692,7 +715,7 @@ void killFeature(FEATURE *psDel)
 /* Remove all features */
 void freeAllFeatures()
 {
-	releaseAllObjectsInList(apsFeatureLists);
+	freeAllEntitiesImpl<FEATURE, MAX_PLAYERS>(apsFeatureLists);
 }
 
 /**************************  FLAG_POSITION ********************************/
