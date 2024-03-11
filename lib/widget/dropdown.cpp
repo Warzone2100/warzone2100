@@ -146,6 +146,7 @@ void DropdownWidget::run(W_CONTEXT *psContext)
 
 void DropdownWidget::geometryChanged()
 {
+	itemsList->setGeometry(itemsList->x(), itemsList->y(), width(), itemsList->height());
 	for(auto& item : items)
 	{
 		item->setGeometry(0, 0, width(), height());
@@ -270,6 +271,7 @@ void DropdownWidget::addItem(const std::shared_ptr<WIDGET> &item)
 	};
 
 	auto wrapper = DropdownItemWrapper::make(std::dynamic_pointer_cast<DropdownWidget>(shared_from_this()), item, itemOnSelect);
+	wrapper->setGeometry(0, 0, width(), height());
 
 	items.push_back(wrapper);
 	itemsList->addItem(wrapper);
