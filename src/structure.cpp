@@ -2475,8 +2475,11 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			*ppsDroid = nullptr;
 			return false;
 		}
+		psFact = &psStructure->pFunctionality->factory;
+		bool hasCommander = psFact->psCommander != nullptr && myResponsibility(psStructure->player);
 		// assign a group to the manufactured droid
-		if (psStructure->productToGroup != UBYTE_MAX)
+		// if a commander is assigned, ignore this behavior (except for builders)
+		if (psStructure->productToGroup != UBYTE_MAX && (!hasCommander || isConstructionDroid(psNewDroid)))
 		{
 			psNewDroid->group = psStructure->productToGroup;
 			intGroupsChanged(psNewDroid->group); // update groups UI
@@ -2514,8 +2517,6 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		// update the droid counts
 		adjustDroidCount(psNewDroid, 1);
 
-		psFact = &psStructure->pFunctionality->factory;
-
 		// if we've built a command droid - make sure that it isn't assigned to another commander
 		assignCommander = false;
 		if ((psNewDroid->droidType == DROID_COMMAND) &&
@@ -2529,7 +2530,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		{
 			moveToRearm(psNewDroid);
 		}
-		if (psFact->psCommander != nullptr && myResponsibility(psStructure->player))
+		if (hasCommander)
 		{
 			// TODO: Should synchronise .psCommander in all cases.
 			//syncDebug("Has commander.");
