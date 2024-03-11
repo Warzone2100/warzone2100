@@ -1233,6 +1233,7 @@ void droidWasFullyRepairedAny(DROID *psDroid)
 	{
 		psDroid->group = psDroid->repairGroup;
 		psDroid->repairGroup = UBYTE_MAX;
+		SelectNewDroid(psDroid);
 		intGroupsChanged(psDroid->group); // update groups UI
 	}
 }
@@ -3509,6 +3510,11 @@ void SelectNewDroid(DROID *psNewDroid)
 	std::vector<DROID *> groupDroids;
 	for (DROID *psDroid : apsDroidLists[psNewDroid->player])
 	{
+		// skip itself
+		if (psDroid == psNewDroid)
+		{
+			continue;
+		}
 		if (psDroid->group == psNewDroid->group)
 		{
 			groupDroids.push_back(psDroid);
