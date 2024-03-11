@@ -275,6 +275,15 @@ void DropdownWidget::addItem(const std::shared_ptr<WIDGET> &item)
 	itemsList->addItem(wrapper);
 }
 
+void DropdownWidget::clear()
+{
+	items.clear();
+	itemsList->clear();
+	selectedItem.reset();
+	mouseOverItem.reset();
+	mouseDownItem.reset();
+}
+
 bool DropdownWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	if (!overlayScreen && selectedItem)
