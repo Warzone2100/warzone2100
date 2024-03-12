@@ -3490,7 +3490,7 @@ bool isSelectable(DROID const *psDroid)
 
 // Select a droid and do any necessary housekeeping.
 //
-void SelectDroid(DROID *psDroid)
+void SelectDroid(DROID *psDroid, bool programmaticSelection)
 {
 	if (!isSelectable(psDroid))
 	{
@@ -3499,8 +3499,11 @@ void SelectDroid(DROID *psDroid)
 
 	psDroid->selected = true;
 	intRefreshScreen();
-	triggerEventSelected();
-	jsDebugSelected(psDroid);
+	if (!programmaticSelection) 
+	{
+		triggerEventSelected();
+		jsDebugSelected(psDroid);
+	}
 }
 
 // If all other droids with psGroupDroid's group are selected, add psGroupDroid to the selection after production/repair/etc.
@@ -3535,7 +3538,7 @@ void SelectGroupDroid(DROID *psGroupDroid)
 
 		if (bDoSelection)
 		{
-			SelectDroid(psGroupDroid);
+			SelectDroid(psGroupDroid, true);
 		}
 	}
 }
