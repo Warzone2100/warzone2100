@@ -1227,7 +1227,7 @@ int getRecoil(WEAPON const &weapon)
 }
 
 /* Droid was completely repaired by another droid, auto-repair, or repair facility */
-void droidWasFullyRepairedAny(DROID *psDroid)
+void droidWasFullyRepairedBase(DROID *psDroid)
 {
 	if (psDroid->repairGroup != UBYTE_MAX)
 	{
@@ -1260,7 +1260,7 @@ void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
 		orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y, ModeImmediate);
 	}
 
-	droidWasFullyRepairedAny(psDroid);
+	droidWasFullyRepairedBase(psDroid);
 } 
 
 bool droidUpdateRepair(DROID *psDroid)
@@ -1322,7 +1322,7 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 	bool needMoreRepair = psDroidToRepair->body < psDroidToRepair->originalBody;
 	if (!needMoreRepair)
 	{
-		droidWasFullyRepairedAny(psDroidToRepair);
+		droidWasFullyRepairedBase(psDroidToRepair);
 	}
 	return needMoreRepair;
 }
