@@ -91,8 +91,6 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 
 	auto initialDroidGroup = psDroid->group;
 	auto initialRepairDroidGroup = psDroid->repairGroup;
-	// select a value depending on whether the commander was assigned manually or after construction in the factory
-	auto fallbackDroidGroup = initialDroidGroup != UBYTE_MAX ? initialDroidGroup : psDroid->fallbackGroup;
 
 	if (psCommander->psGroup == nullptr)
 	{
@@ -127,10 +125,9 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 			lastMaxCmdLimitMsgTime = gameTime;
 		}
 
-		if (fallbackDroidGroup != UBYTE_MAX)
+		if (initialDroidGroup != UBYTE_MAX)
 		{
-			psDroid->group = fallbackDroidGroup;
-			psDroid->fallbackGroup = UBYTE_MAX;
+			psDroid->group = initialDroidGroup;
 			SelectGroupDroid(psDroid);
 		}
 		psDroid->repairGroup = initialRepairDroidGroup;
