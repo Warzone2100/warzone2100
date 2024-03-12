@@ -35,6 +35,7 @@
 #include <map>
 #include <string>
 #include <regex>
+#include <array>
 
 #if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -115,11 +116,11 @@ static const char *code_part_names[] =
 	"last"
 };
 
-static char inputBuffer[2][MAX_LEN_LOG_LINE];
 static bool useInputBuffer1 = false;
 static bool debug_flush_stderr = false;
 
 static std::map<std::string, int> warning_list;	// only used for LOG_WARNING
+static std::mutex warning_list_mutex;
 
 /**
  * Convert code_part names to enum. Case insensitive.
@@ -349,8 +350,14 @@ void debug_init()
 	enabled_debug[LOG_INFO] = true;
 	enabled_debug[LOG_FATAL] = true;
 	enabled_debug[LOG_POPUP] = true;
-	inputBuffer[0][0] = '\0';
-	inputBuffer[1][0] = '\0';
+#if defined(__EMSCRIPTEN__)
+	// start with certain options off so that we can control them predictably from the command-line options via the web interface
+	enabled_debug[LOG_INFO] = false;
+	enabled_debug[LOG_WARNING] = false;
+	enabled_debug[LOG_3D] = false;
+	// must be false or sound breaks (some openal edge case)
+	enabled_debug[LOG_SOUND] = false;
+#endif
 #ifdef DEBUG
 	enabled_debug[LOG_WARNING] = true;
 #endif
@@ -371,7 +378,10 @@ void debug_exit()
 		free(curCallback);
 		curCallback = tmpCallback;
 	}
-	warning_list.clear();
+	{
+		std::lock_guard<std::mutex> guard(warning_list_mutex);
+		warning_list.clear();
+	}
 	callbackRegistry = nullptr;
 }
 
@@ -458,8 +468,8 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 // Thread local to prevent a race condition on read and write to this buffer if multiple
 // threads log errors. This means we will not be reporting any errors to console from threads
 // other than main. If we want to fix this, make sure accesses are protected by a mutex.
-static WZ_DECL_THREAD char errorStore[512];
-static WZ_DECL_THREAD bool errorWaiting = false;
+static thread_local char errorStore[512];
+static thread_local bool errorWaiting = false;
 const char *debugLastError()
 {
 	if (errorWaiting)
@@ -473,25 +483,178 @@ const char *debugLastError()
 	}
 }
 
+static void debugDisplayFatalErrorMsgBox(const char* outputLogLine)
+{
+	if (wzIsFullscreen())
+	{
+		wzChangeWindowMode(WINDOW_MODE::windowed, true);
+	}
+#if defined(WZ_OS_WIN)
+	char wbuf[MAX_LEN_LOG_LINE+512];
+	ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
+		\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", outputLogLine, WZ_DBGFile, WZ_DBGFile);
+	wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
+#elif defined(WZ_OS_MAC)
+	char wbuf[MAX_LEN_LOG_LINE+128];
+	ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", outputLogLine);
+	size_t clickedIndex = wzDisplayDialogAdvanced(Dialog_Error, "Warzone has quit unexpectedly.", wbuf, {"Show Log Files & Open Bug Reporter", "Ignore"});
+	if (clickedIndex == 1)
+	{
+		if (!cocoaOpenURL("https://github.com/Warzone2100/warzone2100/issues/new"))
+		{
+			wzDisplayDialogAdvanced(Dialog_Error,
+									"Failed to open URL",
+									"Could not open URL: https://github.com/Warzone2100/warzone2100/issues/new\nPlease open this URL manually in your web browser.", {"Continue"});
+		}
+		if (strnlen(WZ_DBGFile, sizeof(WZ_DBGFile)/sizeof(WZ_DBGFile[0])) <= 0)
+		{
+			wzDisplayDialogAdvanced(Dialog_Error,
+									"Unable to open debug log.",
+									"The debug log subsystem has not yet been initialised.", {"Continue"});
+		}
+		else
+		{
+			if (!cocoaSelectFileInFinder(WZ_DBGFile))
+			{
+				wzDisplayDialogAdvanced(Dialog_Error,
+										"Cannot Display Log File",
+										"The attempt to open a Finder window highlighting the log file from this run failed.", {"Continue"});
+			}
+		}
+		cocoaOpenUserCrashReportFolder();
+	}
+#else
+	wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", outputLogLine);
+#endif
+}
+
+struct DebugGfxCallbackPersistentData
+{
+	char lastGfxCallbackMsg[MAX_LEN_LOG_LINE] = {'\0'};
+	unsigned int repeated = 0; /* times last message repeated */
+	unsigned int prev = 0;     /* total on last update */
+};
+static DebugGfxCallbackPersistentData savedDebugGfxCallbackData;
+std::mutex savedDebugGfxCallbackData_mutex; // protects savedDebugGfxCallbackData
+
+// Special version of _debug that doesn't use any of the normal global debug-logging state (or special sauce) *except* the callbackRegistry (via printToDebugCallbacks)
+void _debugFromGfxCallback(int line, code_part part, const char *function, const char *str, ...)
+{
+	char outputBuffer[MAX_LEN_LOG_LINE];
+	char tmpRepeatBuffer[128] = {0};
+
+	time_t rawtime;
+	struct tm timeinfo = {};
+	char ourtime[15];		//HH:MM:SS
+	time(&rawtime);
+	timeinfo = getLocalTime(rawtime, true);
+	strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
+
+	int numPrefixChars = ssprintf(outputBuffer, "%-8s|%s: [%s:%d] ", code_part_names[part], ourtime, function, line);
+	if (numPrefixChars < 0)
+	{
+		// encoding error occurred...
+		ssprintf(outputBuffer, "%s", "ssprintf failed: encoding error");
+		printToDebugCallbacks(outputBuffer, LOG_ERROR);
+		return;
+	}
+
+	// Then calculate the remaining length manually and pass the appropriate pointer and length to vsnprintf
+	size_t remainingLength = MAX_LEN_LOG_LINE - static_cast<size_t>(numPrefixChars);
+	char* pStartOutputLineContents = outputBuffer + numPrefixChars;
+	va_list ap;
+	va_start(ap, str);
+	vsnprintf(pStartOutputLineContents, remainingLength, str, ap);
+	va_end(ap);
+
+	unsigned int curr_repeated = 0;
+	{ // lock_guard(savedDebugGfxCallbackData_mutex) scope
+		std::lock_guard<std::mutex> guard(savedDebugGfxCallbackData_mutex);
+
+		if (strncmp(savedDebugGfxCallbackData.lastGfxCallbackMsg, pStartOutputLineContents, MAX_LEN_LOG_LINE) == 0)
+		{
+			// last message, duplicated
+			++savedDebugGfxCallbackData.repeated;
+			bool isRepeatedPowOf2 = savedDebugGfxCallbackData.repeated >= 2 && ((savedDebugGfxCallbackData.repeated & (savedDebugGfxCallbackData.repeated - 1)) == 0);
+			if (isRepeatedPowOf2)
+			{
+				if (savedDebugGfxCallbackData.repeated > 2)
+				{
+					snprintf(pStartOutputLineContents, remainingLength, "last message repeated %u times (total %u repeats)", savedDebugGfxCallbackData.repeated - savedDebugGfxCallbackData.prev, savedDebugGfxCallbackData.repeated);
+				}
+				else
+				{
+					snprintf(pStartOutputLineContents, remainingLength, "last message repeated %u times", savedDebugGfxCallbackData.repeated - savedDebugGfxCallbackData.prev);
+				}
+				savedDebugGfxCallbackData.prev = savedDebugGfxCallbackData.repeated;
+			}
+			else
+			{
+				return; // do nothing - no printing
+			}
+		}
+		else
+		{
+			// Received another line, cleanup the old
+			if (savedDebugGfxCallbackData.repeated > 0 && savedDebugGfxCallbackData.repeated != savedDebugGfxCallbackData.prev && savedDebugGfxCallbackData.repeated != 1)
+			{
+				/* just repeat the previous message when only one repeat occurred */
+				if (savedDebugGfxCallbackData.repeated > 2)
+				{
+					ssprintf(tmpRepeatBuffer, "last message repeated %u times (total %u repeats)", savedDebugGfxCallbackData.repeated - savedDebugGfxCallbackData.prev, savedDebugGfxCallbackData.repeated);
+				}
+				else
+				{
+					ssprintf(tmpRepeatBuffer, "last message repeated %u times", savedDebugGfxCallbackData.repeated - savedDebugGfxCallbackData.prev);
+				}
+			}
+			savedDebugGfxCallbackData.repeated = 0;
+			savedDebugGfxCallbackData.prev = 0;
+			sstrcpy(savedDebugGfxCallbackData.lastGfxCallbackMsg, pStartOutputLineContents);
+		}
+		curr_repeated = savedDebugGfxCallbackData.repeated;
+	} // end lock_guard(savedDebugGfxCallbackData_mutex)
+
+	if (tmpRepeatBuffer[0] != '\0')
+	{
+		printToDebugCallbacks(tmpRepeatBuffer, part);
+	}
+
+	printToDebugCallbacks(outputBuffer, part);
+
+	if (!curr_repeated)
+	{
+		if (part == LOG_FATAL)
+		{
+			debugDisplayFatalErrorMsgBox(pStartOutputLineContents);
+		}
+	}
+}
+
 void _debug(int line, code_part part, const char *function, const char *str, ...)
 {
-	va_list ap;
-	static char outputBuffer[MAX_LEN_LOG_LINE];
-	static unsigned int repeated = 0; /* times current message repeated */
-	static unsigned int next = 2;     /* next total to print update */
-	static unsigned int prev = 0;     /* total on last update */
+	char outputBuffer[MAX_LEN_LOG_LINE];
+	thread_local std::array<std::vector<char>, 2> inputBuffer = {std::vector<char>(MAX_LEN_LOG_LINE, 0), std::vector<char>(MAX_LEN_LOG_LINE, 0)};
+	thread_local unsigned int repeated = 0; /* times current message repeated */
+	thread_local unsigned int next = 2;     /* next total to print update */
+	thread_local unsigned int prev = 0;     /* total on last update */
 
+	va_list ap;
 	va_start(ap, str);
 	vssprintf(outputBuffer, str, ap);
 	va_end(ap);
 
 	if (part == LOG_WARNING)
 	{
-		std::pair<std::map<std::string, int>::iterator, bool> ret;
-		ret = warning_list.insert(std::pair<std::string, int>(std::string(function) + "-" + std::string(outputBuffer), line));
-		if (ret.second)
+		bool addedNew = false;
 		{
-			ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s:%d] %s (**Further warnings of this type are suppressed.)", function, line, outputBuffer);
+			std::lock_guard<std::mutex> guard(warning_list_mutex);
+			addedNew = warning_list.insert(std::pair<std::string, int>(std::string(function) + "-" + std::string(outputBuffer), line)).second;
+		}
+		if (addedNew)
+		{
+			auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
+			snprintf(currInputBuffer.data(), currInputBuffer.size(), "[%s:%d] %s (**Further warnings of this type are suppressed.)", function, line, outputBuffer);
 		}
 		else
 		{
@@ -500,10 +663,11 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 	}
 	else
 	{
-		ssprintf(inputBuffer[useInputBuffer1 ? 1 : 0], "[%s:%d] %s", function, line, outputBuffer);
+		auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
+		snprintf(currInputBuffer.data(), currInputBuffer.size(), "[%s:%d] %s", function, line, outputBuffer);
 	}
 
-	if (sstrcmp(inputBuffer[0], inputBuffer[1]) == 0)
+	if (strncmp(inputBuffer[0].data(), inputBuffer[1].data(), std::min(inputBuffer[0].size(), inputBuffer[1].size())) == 0)
 	{
 		// Received again the same line
 		repeated++;
@@ -550,76 +714,34 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		char ourtime[15];		//HH:MM:SS
 
 		time(&rawtime);
-		timeinfo = getLocalTime(rawtime);
+		timeinfo = getLocalTime(rawtime, true);
 		strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
 
+		auto& currInputBuffer = inputBuffer[useInputBuffer1 ? 1 : 0];
+
 		// Assemble the outputBuffer:
-		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, currInputBuffer.data());
 
 		printToDebugCallbacks(outputBuffer, part);
 
 		if (part == LOG_ERROR)
 		{
 			// used to signal user that there was a error condition, and to check the logs.
-			sstrcpy(errorStore, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			sstrcpy(errorStore, currInputBuffer.data());
 			errorWaiting = true;
 		}
 
 		// Throw up a dialog box for users since most don't have a clue to check the dump file for information. Use for (duh) Fatal errors, that force us to terminate the game.
 		if (part == LOG_FATAL)
 		{
-			if (wzIsFullscreen())
-			{
-				wzChangeWindowMode(WINDOW_MODE::windowed);
-			}
-#if defined(WZ_OS_WIN)
-			char wbuf[MAX_LEN_LOG_LINE+512];
-			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
-				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
-			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
-#elif defined(WZ_OS_MAC)
-			char wbuf[MAX_LEN_LOG_LINE+128];
-			ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
-			int clickedIndex = \
-			                   cocoaShowAlert("Warzone has quit unexpectedly.",
-			                                  wbuf,
-			                                  2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
-			if (clickedIndex == 0)
-			{
-				if (!cocoaOpenURL("https://github.com/Warzone2100/warzone2100/issues/new"))
-                {
-                    cocoaShowAlert("Failed to open URL",
-                                   "Could not open URL: https://github.com/Warzone2100/warzone2100/issues/new\nPlease open this URL manually in your web browser.",
-                                   2, "Continue", NULL);
-                }
-                if (strnlen(WZ_DBGFile, sizeof(WZ_DBGFile)/sizeof(WZ_DBGFile[0])) <= 0)
-				{
-					cocoaShowAlert("Unable to open debug log.",
-					               "The debug log subsystem has not yet been initialised.",
-					               2, "Continue", NULL);
-				}
-				else
-				{
-                    if (!cocoaSelectFileInFinder(WZ_DBGFile))
-                    {
-                        cocoaShowAlert("Cannot Display Log File",
-                                       "The attempt to open a Finder window highlighting the log file from this run failed.",
-                                       2, "Continue", NULL);
-                    }
-				}
-				cocoaOpenUserCrashReportFolder();
-			}
-#else
-			const char *popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
-			wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", popupBuf);
-#endif
+			debugDisplayFatalErrorMsgBox(currInputBuffer.data());
 		}
 
 		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
 		// This is a popup dialog used for times when the error isn't fatal, but we still need to notify user what is going on.
 		if (part == LOG_POPUP)
 		{
-			wzDisplayDialog(Dialog_Information, "Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0]);
+			wzDisplayDialog(Dialog_Information, "Warzone has detected a problem.", currInputBuffer.data());
 		}
 
 	}
@@ -689,3 +811,38 @@ void _debug_multiline(int line, code_part part, const char *function, const std:
 	}
 }
 
+#if defined(__EMSCRIPTEN__)
+
+#include <emscripten.h>
+
+/**
+ * Callback for outputting to a emscripten log / console
+ *
+ * \param	data			Ignored. Use NULL.
+ * \param	outputBuffer	Buffer containing the preprocessed text to output.
+ */
+void debug_callback_emscripten_log(WZ_DECL_UNUSED void **data, const char *outputBuffer, code_part part)
+{
+	int flags = EM_LOG_NO_PATHS | EM_LOG_CONSOLE;
+	switch (part)
+	{
+		case LOG_ERROR:
+			flags |= EM_LOG_ERROR;
+			break;
+		case LOG_WARNING:
+			flags |= EM_LOG_WARN;
+			break;
+		default:
+			break;
+	}
+	if (outputBuffer[strlen(outputBuffer) - 1] != '\n')
+	{
+		emscripten_log(flags, "%s\n", outputBuffer);
+	}
+	else
+	{
+		emscripten_log(flags, "%s", outputBuffer);
+	}
+}
+
+#endif

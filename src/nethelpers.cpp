@@ -117,12 +117,12 @@ static void requestPublicIPAddress(const std::string& lookupServiceUrl, Internet
 		std::string ipAddressString = it.value().get<std::string>();
 		callback(ipAddressString, nullopt);
 	};
-	request.onFailure = [callback](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+	request.onFailure = [callback](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string errorString = "Request failed; failure type: ";
 		errorString += std::to_string(type);
-		if (transferDetails.has_value())
+		if (transferDetails)
 		{
-			errorString += "; status code: " + std::to_string(transferDetails.value().httpStatusCode());
+			errorString += "; status code: " + std::to_string(transferDetails->httpStatusCode());
 		}
 		callback(nullopt, errorString);
 	};

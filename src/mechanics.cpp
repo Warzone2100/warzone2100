@@ -37,14 +37,11 @@
 /* Shutdown the mechanics system */
 bool mechanicsShutdown()
 {
-	BASE_OBJECT *psObj, *psNext;
-
-	for (psObj = psDestroyedObj; psObj != nullptr; psObj = psNext)
+	for (BASE_OBJECT* psObj : psDestroyedObj)
 	{
-		psNext = psObj->psNext;
 		delete psObj;
 	}
-	psDestroyedObj = nullptr;
+	psDestroyedObj.clear();
 
 	return true;
 }
@@ -175,35 +172,35 @@ void makeAllAvailable()
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (comp = 0; comp < numWeaponStats; comp++)
+		for (comp = 0; comp < asWeaponStats.size(); comp++)
 		{
 			apCompLists[i][COMP_WEAPON][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numBodyStats; comp++)
+		for (comp = 0; comp < asBodyStats.size(); comp++)
 		{
 			apCompLists[i][COMP_BODY][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numPropulsionStats; comp++)
+		for (comp = 0; comp < asPropulsionStats.size(); comp++)
 		{
 			apCompLists[i][COMP_PROPULSION][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numSensorStats; comp++)
+		for (comp = 0; comp < asSensorStats.size(); comp++)
 		{
 			apCompLists[i][COMP_SENSOR][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numECMStats; comp++)
+		for (comp = 0; comp < asECMStats.size(); comp++)
 		{
 			apCompLists[i][COMP_ECM][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numConstructStats; comp++)
+		for (comp = 0; comp < asConstructStats.size(); comp++)
 		{
 			apCompLists[i][COMP_CONSTRUCT][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numBrainStats; comp++)
+		for (comp = 0; comp < asBrainStats.size(); comp++)
 		{
 			apCompLists[i][COMP_BRAIN][comp] = AVAILABLE;
 		}
-		for (comp = 0; comp < numRepairStats; comp++)
+		for (comp = 0; comp < asRepairStats.size(); comp++)
 		{
 			apCompLists[i][COMP_REPAIRUNIT][comp] = AVAILABLE;
 		}

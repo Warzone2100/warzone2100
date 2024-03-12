@@ -1,0 +1,1674 @@
+<!doctype html>
+<html lang="en" class="h-100" data-bs-theme="auto">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Play Warzone 2100 in your web browser. Command the forces of The Project in a battle to rebuild the world.">
+    <meta name="author" content="pastdue, and Warzone 2100 Project contributors">
+    <title>Warzone 2100 - Web Edition</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Favicons -->  
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Warzone 2100">
+    <meta name="application-name" content="Warzone 2100">
+    <meta name="theme-color" content="#000000">
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        min-width: 480px;
+        min-height: 640px;
+        overflow: hidden;
+        text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+        box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+      }
+      .cover-container {
+        max-width: 43em;
+      }
+      .options-link {
+        color: rgba(255, 255, 255, .5);
+        text-decoration: none;
+      }
+      .options-link:hover{
+        text-decoration: underline!important;
+      }
+      .nav-wz-img {
+        margin-top: -3px;
+      }
+      .nav-masthead .nav-link {
+        color: rgba(255, 255, 255, .5);
+        border-bottom: .25rem solid transparent;
+      }
+      .nav-masthead .nav-link:hover,
+      .nav-masthead .nav-link:focus {
+        border-bottom-color: rgba(255, 255, 255, .25);
+      }
+      .nav-masthead .nav-link + .nav-link {
+        margin-left: 1rem;
+      }
+      .nav-masthead .active {
+        color: #fff;
+        border-bottom-color: #fff;
+      }
+      button:disabled.nav-link {
+        opacity: 0.65;
+      }
+      .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
+      textarea.emscripten { font-family: monospace; width: 80%; }
+      div.emscripten { text-align: center; color: rgb(148 163 184); }
+      div.emscripten_container { border: 0px none; outline: none; position: absolute; top: 0;}
+      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+      canvas.emscripten { border: 0px none; padding: 0px; outline: none!important; }
+      canvas.emscripten:focus { border-color: inherit; -webkit-box-shadow: none; box-shadow: none; }
+      .bi {
+        display: inline-block;
+        vertical-align: -.125em;
+        fill: currentcolor;
+        width: 1em;
+        height: 1em;
+      }
+      .web-edition-badge {
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.5);
+        border-color: rgba(255,255,255,0.5)!important;
+        display: inline-block!important;
+        max-width: 9em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      body.prerelease .web-edition-badge {
+        color: rgba(154,103,0,1.0)!important;
+        border-color: rgba(154,103,0,1.0)!important;
+      }
+      body.dev-preview .web-edition-badge {
+        color: rgba(252,111,3,0.9)!important;
+        border-color: rgba(252,111,3,0.9)!important;
+      }
+      body.branch-build .web-edition-badge {
+        color: rgba(132,3,252,0.9)!important;
+        border-color: rgba(132,3,252,0.9)!important;
+      }
+      .storage-persistence-enabled { display: none; }
+      .storage-persistence-disabled { display: none; }
+      body.persist-enabled .storage-persistence-enabled { display: unset; }
+      body.persist-enabled .storage-persistence-loading { display: none; }
+      body.persist-disabled .storage-persistence-disabled { display: unset; }
+      body.persist-disabled .storage-persistence-loading { display: none; }
+      #gameloadingspinner {
+        z-index: 999;
+        position: absolute;
+        display: none;
+      }
+      #gameloadingspinner .spin-figure-container {
+        width: 100px;
+        height: 100px;
+        margin: 1em;
+      }
+      #gameloadingspinner .spin-loading-text {
+        display: none;
+      }
+      #gamesavingspinner {
+        z-index: 999;
+        position: absolute;
+        display: none;
+        margin: 1em;
+      }
+      #gamesavingspinner .spin-figure-container {
+        animation: saveFade 1s infinite alternate;
+      }
+      @keyframes saveFade { 
+        from { opacity: .5; } 
+      }
+      .initial-load-spinner {
+        position: relative;
+        display: block;
+        height: 100px;
+        min-height: 100px;
+      }
+      .smaller {
+        font-size: .75em;
+      }
+      .lead {
+        font-size: inherit!important;
+      }
+      @media (min-height: 800px) {
+        .lead {
+          font-size: 1.25rem!important;
+        }
+      }
+      .small-screen-blocker {
+         position: fixed;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         z-index: 100001;
+         background: #000;
+         color: #fff;
+         text-align: center;
+         display: none;
+      }
+      @media (max-width: 640px) {
+         .small-screen-blocker {
+             display: block;
+         }
+      }
+      @media (max-height: 480px) {
+         .small-screen-blocker {
+             display: block;
+         }
+      }
+      @media all and (display-mode: standalone) {
+          /* CSS rules that will only apply if app is running standalone */
+          .hide-on-standalone {
+            display: none;
+          }
+          .show-on-standalone-inline {
+            display: inline-block!important;
+          }
+      }
+    </style>
+    
+    <style>
+      /*
+      CSS Loading Spinner (Modified for WZ)
+      Original License:
+      Copyright (c) 2022 by Martin van Driel (https://codepen.io/martinvd/pen/xbQJom)
+      Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+      The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+      */
+      .loader {
+      position: absolute;
+      top: calc(50% - 32px);
+      left: calc(50% - 32px);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      perspective: 800px;
+      }
+      .inner {
+      position: absolute;
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      }
+      .inner.core {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      }
+      .circle {
+      width: 15%;
+      height: 15%;
+      border-radius: 50%;
+      background-color: #EFEFFA;
+      box-shadow:
+        inset 0 0 5px #09ff00,
+        inset 2px 0 8px #09ff00,
+        inset -2px 0 8px #09ff00,
+        inset 2px 0 30px #09ff00,
+        inset -2px 0 30px #09ff00,
+        0 0 50px #09ff00,
+        -1px 0 8px #09ff00,
+        1px 0 8px #09ff00;
+      animation: pulseOpacity 2.5s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+      }
+
+      @keyframes pulseOpacity {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: .4;
+      }
+      100% {
+        opacity: 1;
+      }
+      }
+
+      .inner.one {
+      left: 0%;
+      top: 0%;
+      animation: rotate-one 1s linear infinite;
+      border-bottom: 3px solid #EFEFFA;
+      }
+      .inner.two {
+      right: 0%;
+      top: 0%;
+      animation: rotate-two 1s linear infinite;
+      border-right: 3px solid #EFEFFA;
+      }
+      .inner.three {
+      right: 0%;
+      bottom: 0%;
+      animation: rotate-three 1s linear infinite;
+      border-top: 3px solid #EFEFFA;
+      }
+
+      @keyframes rotate-one {
+      0% {
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+      }
+      100% {
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+      }
+      }
+
+      @keyframes rotate-two {
+      0% {
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+      }
+      100% {
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+      }
+      }
+
+      @keyframes rotate-three {
+      0% {
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+      }
+      100% {
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+      }
+      }
+    </style>
+  </head>
+  <body class="d-flex text-center text-bg-dark">
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="bi-heart" viewBox="0 0 16 16">
+        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+      </symbol>
+      <symbol id="bi-discord" viewBox="0 0 16 16">
+        <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
+      </symbol>
+      <symbol id="bi-gear" viewBox="0 0 16 16">
+        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
+        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+      </symbol>
+      <symbol id="bi-check-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+      </symbol>
+      <symbol id="bi-info-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+      </symbol>
+      <symbol id="bi-mouse2" viewBox="0 0 16 16">
+        <path d="M3 5.188C3 2.341 5.22 0 8 0s5 2.342 5 5.188v5.625C13 13.658 10.78 16 8 16s-5-2.342-5-5.188V5.189zm4.5-4.155C5.541 1.289 4 3.035 4 5.188V5.5h3.5zm1 0V5.5H12v-.313c0-2.152-1.541-3.898-3.5-4.154M12 6.5H4v4.313C4 13.145 5.81 15 8 15s4-1.855 4-4.188z"/>
+      </symbol>
+      <symbol id="bi-keyboard" viewBox="0 0 16 16">
+        <path d="M14 5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM2 4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
+        <path d="M13 10.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm0-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-5 0A.25.25 0 0 1 8.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 8 8.75zm2 0a.25.25 0 0 1 .25-.25h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5a.25.25 0 0 1-.25-.25zm1 2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-5-2A.25.25 0 0 1 6.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 6 8.75zm-2 0A.25.25 0 0 1 4.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 4 8.75zm-2 0A.25.25 0 0 1 2.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 2 8.75zm11-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-2 0a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm-2 0A.25.25 0 0 1 9.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 9 6.75zm-2 0A.25.25 0 0 1 7.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 7 6.75zm-2 0A.25.25 0 0 1 5.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 5 6.75zm-3 0A.25.25 0 0 1 2.25 6h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5A.25.25 0 0 1 2 6.75zm0 4a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm2 0a.25.25 0 0 1 .25-.25h5.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-5.5a.25.25 0 0 1-.25-.25z"/>
+      </symbol>
+      <symbol id="bi-arrow-clockwise" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+      </symbol>
+      <symbol id="bi-emoji-frown" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+        <path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.5 3.5 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.5 4.5 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5"></path>
+      </symbol>
+      <symbol id="bi-badge-hd-fill" viewBox="0 0 16 16">
+        <path d="M10.53 5.968h-.843v4.06h.843c1.117 0 1.622-.667 1.622-2.02 0-1.354-.51-2.04-1.622-2.04"/>
+        <path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm5.396 3.001V11H6.209V8.43H3.687V11H2.5V5.001h1.187v2.44h2.522V5h1.187zM8.5 11V5.001h2.188c1.824 0 2.685 1.09 2.685 2.984C13.373 9.893 12.5 11 10.69 11z"/>
+      </symbol>
+      <symbol id="bi-globe2" viewBox="0 0 16 16">
+        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855q-.215.403-.395.872c.705.157 1.472.257 2.282.287zM4.249 3.539q.214-.577.481-1.078a7 7 0 0 1 .597-.933A7 7 0 0 0 3.051 3.05q.544.277 1.198.49zM3.509 7.5c.036-1.07.188-2.087.436-3.008a9 9 0 0 1-1.565-.667A6.96 6.96 0 0 0 1.018 7.5zm1.4-2.741a12.3 12.3 0 0 0-.4 2.741H7.5V5.091c-.91-.03-1.783-.145-2.591-.332M8.5 5.09V7.5h2.99a12.3 12.3 0 0 0-.399-2.741c-.808.187-1.681.301-2.591.332zM4.51 8.5c.035.987.176 1.914.399 2.741A13.6 13.6 0 0 1 7.5 10.91V8.5zm3.99 0v2.409c.91.03 1.783.145 2.591.332.223-.827.364-1.754.4-2.741zm-3.282 3.696q.18.469.395.872c.552 1.035 1.218 1.65 1.887 1.855V11.91c-.81.03-1.577.13-2.282.287zm.11 2.276a7 7 0 0 1-.598-.933 9 9 0 0 1-.481-1.079 8.4 8.4 0 0 0-1.198.49 7 7 0 0 0 2.276 1.522zm-1.383-2.964A13.4 13.4 0 0 1 3.508 8.5h-2.49a6.96 6.96 0 0 0 1.362 3.675c.47-.258.995-.482 1.565-.667m6.728 2.964a7 7 0 0 0 2.275-1.521 8.4 8.4 0 0 0-1.197-.49 9 9 0 0 1-.481 1.078 7 7 0 0 1-.597.933M8.5 11.909v3.014c.67-.204 1.335-.82 1.887-1.855q.216-.403.395-.872A12.6 12.6 0 0 0 8.5 11.91zm3.555-.401c.57.185 1.095.409 1.565.667A6.96 6.96 0 0 0 14.982 8.5h-2.49a13.4 13.4 0 0 1-.437 3.008M14.982 7.5a6.96 6.96 0 0 0-1.362-3.675c-.47.258-.995.482-1.565.667.248.92.4 1.938.437 3.008zM11.27 2.461q.266.502.482 1.078a8.4 8.4 0 0 0 1.196-.49 7 7 0 0 0-2.275-1.52c.218.283.418.597.597.932m-.488 1.343a8 8 0 0 0-.395-.872C9.835 1.897 9.17 1.282 8.5 1.077V4.09c.81-.03 1.577-.13 2.282-.287z"/>
+      </symbol>
+      <symbol id="bi-speedometer" viewBox="0 0 16 16">
+        <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.39.39 0 0 0-.029-.518z"/>
+        <path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.95 11.95 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0"/>
+      </symbol>
+    </svg>
+  <div id="gameloadingspinner">
+    <figure style="overflow:visible;" class="spin-figure-container">
+      <div class="loader">
+      <div class="inner core"><div class="circle"></div></div>
+      <div class="inner one"></div>
+      <div class="inner two"></div>
+      <div class="inner three"></div>
+      </div>
+    </figure>
+    <span class="spin-loading-text" id="spin-loading-text">Loading ...</span>
+  </div>
+  <div id="gamesavingspinner">
+    <div class="spin-figure-container">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
+        <path d="M11 2H9v3h2z"/>
+        <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/>
+      </svg>
+    </div>
+  </div>
+
+<div class="w-100 vh-100" id="content_container">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="mb-auto">
+    <div>
+      <span class="h3 float-md-start mb-0"><img src="assets/android-chrome-192x192.png" width="42px" height="42px" class="me-2 nav-wz-img">Warzone 2100 <span class="web-edition-badge d-inline-flex mb-3 px-2 py-1 fw-semibold border rounded-2 align-text-top" id="wz-title-badge">Web Edition</span></span>
+      <nav class="nav nav-masthead justify-content-center float-md-end">
+        <a class="nav-link fw-bold py-1 px-0 hide-on-standalone" href="https://wz2100.net" target="_blank" rel="noopener">Get the Full Version</a>
+        <a class="nav-link fw-bold py-1 px-0" title="Donate" href="https://donations.wz2100.net" target="_blank" rel="noopener"><svg class="bi me-1"><use href="#bi-heart"></use></svg>Donate</a>
+        <a class="nav-link fw-bold py-1 px-0" title="Discord Server" href="https://discord.com/invite/ZvRVQ8g" target="_blank" rel="noopener"><svg class="bi"><use href="#bi-discord"></use></svg></a>
+        <button id="nav-options-button" class="nav-link fw-bold py-1 px-0" title="Options" onclick="wz_open_options_modal()"><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <noscript>
+  <main class="px-3">
+    <h1>Javascript is disabled</h1>
+    <p class="lead">The web edition of Warzone 2100 requires Javascript to be enabled</p>
+    <p class="text-white" style="--bs-text-opacity: .5;">Please enable Javascript and refresh your browser to continue.</p>
+  </main>
+  </noscript>
+  
+  <main class="px-3" style="display: none;" id="unsupported-browser">
+    <h1>Unsupported Browser</h1>
+    <p>Unfortunately, your browser does not support the Web Edition of Warzone 2100</p>
+    <p class="lead">:-(</p>
+    <p class="">Please try updating to the latest version of a supported browser<br/>(ex. Chrome, Edge, Firefox, or Safari).</p>
+    <p class="text-white" style="--bs-text-opacity: .5;">Missing or disabled features: <span id="missing-features">WebAssembly, WebGL 2</span></p>
+  </main>
+
+  <main class="px-3" style="display: none;" id="launch-game">
+    <h1>Launch the Web Edition</h1>
+    <p class="lead"><svg class="bi me-1"><use href="#bi-check-circle"></use></svg>Classic look, <svg class="bi me-1"><use href="#bi-check-circle"></use></svg>Medium-quality textures, <svg class="bi me-1"><use href="#bi-check-circle"></use></svg>Campaign &amp; skirmish</p>
+    <p class="lead">
+      <button type="button" class="btn btn-lg btn-primary fw-bold btn-wz-start-game" id="start-button" onclick="startGame()">Play Now</button>
+    </p>
+    <p class="mb-0 text-white" style="--bs-text-opacity: .4;">If this is your first time, this will download approximately 60MiB of data.</p>
+    <p class="pb-2 text-white small" style="--bs-text-opacity: .5;">Plays Best With: <svg class="bi me-1"><use href="#bi-mouse2"></use></svg><svg class="bi me-1"><use href="#bi-keyboard"></use></svg>Mouse &amp; Keyboard<span class="px-2">|</span><a class="options-link" onclick="wz_open_options_modal();" href="#"><svg class="bi me-1"><use href="#bi-gear"></use></svg>View Options</a></p>
+  </main>
+  
+  <main class="px-3" style="display: none;" id="loading-game">
+    <h1>Loading ...</h1>
+    <div class="emscripten" id="status" style="block-size: 1.5em;"></div>
+    <div class="emscripten" style="block-size: 1.5em;">
+      <progress value="0" max="100" id="progress" hidden=1></progress>
+    </div>
+    <p class="lead">&nbsp;</p>
+  </main>
+  
+  <div class="px-3 initial-load-spinner" id="initial-load-spinner">
+      <figure style="overflow:visible;">
+        <div class="loader">
+        <div class="inner core"><div class="circle"></div></div>
+        <div class="inner one"></div>
+        <div class="inner two"></div>
+        <div class="inner three"></div>
+        </div>
+      </figure>
+  </div>
+  
+  <main class="px-3" style="display: none;" id="loading-error">
+    <h1 class="mb-3">
+      <svg class="bi"><use href="#bi-emoji-frown"></use></svg>
+    </h1>
+    <p class="lead">An error occurred trying to load Warzone 2100.</p>
+    <p class="mb-1">Please check your Internet connection, and reload to try again.</p>
+    <p class="text-white" style="--bs-text-opacity: .5;">Error Message: <span id="loading-error-message"></span></p>
+    <p class="lead">
+      <button type="button" class="btn btn-lg btn-outline-secondary fw-bold" id="reload-err-button" onclick="window.location.reload();"><svg class="bi me-1"><use href="#bi-arrow-clockwise"></use></svg>Reload</button>
+    </p>
+  </main>
+  
+  <main class="px-3" style="display: none;" id="post-exit">
+    <h1>Thanks for playing!</h1>
+    <p class="lead">If you'd like to play again, simply reload.</p>
+    <p class="lead">
+      <button type="button" class="btn btn-lg btn-outline-secondary fw-bold" id="reload-button" onclick="window.location.reload();"><svg class="bi me-1"><use href="#bi-arrow-clockwise"></use></svg>Reload</button>
+    </p>
+    <p class="lead">Or help support by donating:</p>
+    <a class="btn btn-sm btn-outline-secondary btn-block" title="Donate" href="https://donations.wz2100.net" target="_blank" rel="noopener"><svg class="bi me-1"><use href="#bi-heart"></use></svg>Donate</a>
+  </main>
+
+  <footer class="mt-auto text-white" style="--bs-text-opacity: .5;">
+    <div id="footer">
+      <div id="full-version-footer-notice" class="hide-on-standalone">
+        <p class="lead">Or download the Full Version, with:<br /><small><svg class="bi me-1"><use href="#bi-badge-hd-fill"></use></svg>HQ remastered graphics, <svg class="bi me-1"><use href="#bi-globe2"></use></svg>Online multiplayer, <svg class="bi me-1"><use href="#bi-speedometer"></use></svg>Better performance</small></p>
+        <p class="lead">
+          <a href="https://wz2100.net" class="btn btn-sm btn-outline-primary">Download Warzone 2100</a>
+        </p>
+      </div>
+    </div>
+    <p class="smaller">Copyright © Warzone 2100 Project. Licensed under <a href="https://github.com/Warzone2100/warzone2100/blob/master/LICENSE" rel="noopener nofollow" data-target="_blank" target="_blank" hreflang="en" class="text-white" style="--bs-text-opacity: .5;">GPL-2.0-or-later</a>. <a href="https://github.com/Warzone2100/warzone2100" rel="noopener" data-target="_blank" target="_blank" class="text-white" style="--bs-text-opacity: .5;">Get the Source</a>.</p>
+  </footer>
+</div>
+</div> <!-- content_container -->
+  <div class="emscripten_container" id="emscripten_container" style="display:none;">
+    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <div class="small-screen-blocker px-3">
+      <main class="py-3">
+        <h1>Too Small</h1>
+        <p class="lead mb-0">Window / display is too small for Warzone 2100</p>
+        <p class="text-secondary">Required Minimum: 640x480</p>
+      </main>
+      <footer class="mt-auto text-white" style="--bs-text-opacity: .5;">
+        <p class="hide-on-standalone">Or get the Full Desktop version, with HQ remastered graphics, Online multiplayer, Better performance, and more.</p>
+        <p class="hide-on-standalone">
+          <a href="https://wz2100.net" class="btn btn-sm btn-outline-primary">Download Warzone 2100</a>
+        </p>
+      </footer>
+    </div>
+    <!-- Reset Data Prompt Modal -->
+    <div class="modal fade" id="resetDataPrompt" data-bs-theme="dark" aria-hidden="true" aria-labelledby="resetDataPromptLabel" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="resetDataPromptLabel">Reset All Configuration and Data?</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-warning" role="alert">
+              This will <strong>erase all Warzone 2100 saved games / data, configuration &amp; settings</strong>.
+            </div>
+            <p>
+              Are you sure you want to continue?<br/>(This operation is irreversible.)
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" onclick="wz_reset_config_dir(); wz_dismiss_reset_data_prompt_modal();">Yes, Reset All Saved Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Launch Options Modal -->
+    <div class="modal fade text-start" id="launchOptions" data-bs-backdrop="static" data-bs-keyboard="false" data-bs-theme="dark" tabindex="-1" aria-labelledby="launchOptionsLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="launchOptionsLabel">Options</h1>
+            <button type="button" class="btn-close" onclick="wz_dismiss_options_modal()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="accordion accordion-flush" id="optionsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseLaunchOptions" aria-expanded="true" aria-controls="flush-collapseLaunchOptions">
+                    Launch Options
+                  </button>
+                </h2>
+                <div id="flush-collapseLaunchOptions" class="accordion-collapse collapse show" data-bs-parent="#optionsAccordion">
+                  <div class="accordion-body">
+                    <form id="optional-data-form">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="launchOption_loadMusic" checked>
+                        <label class="form-check-label" for="launchOption_loadMusic">Load Music</label>
+                      </div>
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="launchOption_loadClassicTerrain">
+                        <label class="form-check-label" for="launchOption_loadClassicTerrain">Load Classic Terrain Pack</label>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-advancedOptions" aria-expanded="false" aria-controls="flush-advancedOptions">
+                    Advanced Options
+                  </button>
+                </h2>
+                <div id="flush-advancedOptions" class="accordion-collapse collapse" data-bs-parent="#optionsAccordion">
+                  <div class="accordion-body">
+                    <form class="mb-3 small" id="debug-flags-form">
+                      <label for="optional-data-form" class="form-label">Debug Log Options:</label>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="launchOption_DebugWarning">
+                        <label class="form-check-label" for="launchOption_DebugWarning">
+                          Warnings
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="launchOption_DebugInfo">
+                        <label class="form-check-label" for="launchOption_DebugInfo">
+                          Info
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="launchOption_Debug3D">
+                        <label class="form-check-label" for="launchOption_Debug3D">
+                          3D
+                        </label>
+                      </div>
+                    </form>
+                    <div class="mb-3 small">
+                      <div class="row mb-1 align-items-center">
+                        <label for="launchOption_wasmMemoryLimit" class="col-sm-5">Wasm.Memory Limit:</label>
+                        <div class="col-sm-7">
+                          <select class="form-select form-select-sm" id="launchOption_wasmMemoryLimit" aria-label="Memory limit select" style="padding-top: 0.1rem;padding-bottom: 0.1rem;">
+                            <option value="2048" selected>2 GB</option>
+                            <option value="1792">1.75 GB</option>
+                            <option value="1536">1.5 GB</option>
+                            <option value="1280">1.25 GB</option>
+                            <option value="1024">1 GB</option>
+                          </select>
+                        </div>
+                      </div>
+                      <span class="text-secondary">Configures the memory limit for the game. Not all systems or browsers may support higher limits.</span>
+                    </div>
+                    <div class="mb-3 small">
+                      <div class="storage-persistence-loading">
+                        <div class="mb-5 text-secondary">
+                          <div class="spinner-border me-2" style="width:1em; height:1em;" role="status"></div>
+                          <label>Checking storage status ...</label>
+                        </div>
+                      </div>
+                      <div class="storage-persistence-enabled">
+                        <p class="mb-1">
+                          <svg class="bi me-1"><use href="#bi-check-circle"></use></svg>
+                          <label>Storage Persistence: Enabled</label>
+                        </p>
+                        <span class="text-secondary">Game configuration and savegames should be persisted, but manually clearing browser cache can still remove them.</span>
+                      </div>
+                      <div class="storage-persistence-disabled">
+                        <p class="mb-1">
+                          <svg class="bi me-1"><use href="#bi-info-circle"></use></svg>
+                          <label>Storage Persistence: Not Enabled</label>
+                        </p>
+                        <span class="text-secondary">Game configuration and savegames may be automatically cleared by the browser.</span>
+                      </div>
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-sm btn-danger" data-bs-target="#resetDataPrompt" data-bs-toggle="modal">Reset Configuration &amp; Saved Data</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="wz_dismiss_options_modal()">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Refresh on Update Modal -->
+    <div class="modal fade" id="refreshForUpdate" data-bs-backdrop="static" data-bs-keyboard="false" data-bs-theme="dark" aria-hidden="true" aria-labelledby="refreshForUpdateLabel" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="refreshForUpdateLabel">Update Required</h1>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-primary" role="alert">
+              Warzone 2100 must be restarted to apply updates.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="window.location.reload();">Restart Warzone 2100</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Runtime error toast -->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3 text-start" id="runtimeErrToastContainer">
+      <div id="runtimeErrToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-theme="dark">
+        <div class="toast-header">
+          <svg class="bi me-2"><use href="#bi-emoji-frown"></use></svg><strong class="me-auto">Runtime Error:</strong><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.reload();">Restart WZ</button><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+        <p>Warzone 2100 has encountered an error:</p><p class="small mb-1 text-secondary" id="runtimeErrorDetails"></p>
+        </div>
+      </div>
+    </div>
+  <script type='text/javascript'>
+      // JS APIs called from WZ code
+      function wz_js_display_loading_indicator(enabled) {
+        var loadingElement = document.getElementById('gameloadingspinner');
+        loadingElement.style.display = (enabled ? 'inline' : 'none');
+      }
+      function wz_js_display_saving_indicator(enabled) {
+        var savingElement = document.getElementById('gamesavingspinner');
+        savingElement.style.display = (enabled ? 'inline' : 'none');
+      }
+      function wz_js_display_canvas() {
+        let canvasContainer = document.getElementById('emscripten_container');
+        canvasContainer.style.display = 'block';
+      }
+      function wz_js_get_maximum_memory_mib() {
+        if (!Module.hasOwnProperty('wzMaximumMemory')) {
+          return 0; // not initialized yet
+        }
+        return Math.trunc(Module['wzMaximumMemory'] / 1024 / 1024);
+      }
+      function wz_js_save_config_dir_to_persistent_storage(isUserInitiatedSave, callback) {
+        Module.wzSaveConfigDirToPersistentStore((err) => {
+          if (err || !isUserInitiatedSave) {
+            // Immediately call the callback
+            if (callback) callback();
+            return;
+          }
+          // If it's a user-initiated save...
+          // Also check for permanent storage persistence, and potentially prompt the user if not enabled
+          if (!navigator.storage || !navigator.storage.persist) {
+            // Not available - Immediately call the callback
+            if (callback) callback();
+            return;
+          }
+          try {
+            navigator.storage.persist().then((persistent) => {
+              if (persistent) {
+                console.debug("Storage will not be cleared except by explicit user action");
+              } else {
+                console.debug("Storage may be cleared by the UA under storage pressure.");
+              }
+              if (callback) callback();
+            });
+          }
+          catch (err) {
+            // call the callback anyway
+            console.warn('navigator.storage.persist API appears to be unavailable');
+            if (callback) callback();
+          }
+        });
+      }
+  </script>
+  <script type='text/javascript'>
+    
+    let WZ_LAUNCH_OPTIONS_MAPPING = {
+      'load_music': 'launchOption_loadMusic',
+      'load_classic_terrain': 'launchOption_loadClassicTerrain',
+      'debug_warning': 'launchOption_DebugWarning',
+      'debug_info': 'launchOption_DebugInfo',
+      'debug_3d': 'launchOption_Debug3D'
+    }
+    
+    var statusElement = document.getElementById('status');
+    var progressElement = document.getElementById('progress');
+    const originalStartButtonContents = document.getElementById('start-button').innerHTML;
+    
+    // Platform detection
+    function wz_detect_platform() {
+      let platformValue = (function() {
+        // Modern method, accurate, but only works on Chromium browsers (currently)
+        if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+          return navigator.userAgentData.platform;
+        }
+        // Deprecated, but still available in many cases
+        if (typeof navigator.platform !== 'undefined') {
+            if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
+              // Android device navigator.platform is often set as 'linux', so use userAgent detection
+              return 'android';
+            }
+            if (navigator.platform.match(/Mac/)) {
+              // Sometimes an iPad may masquerade as a Mac
+              if (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) {
+                return 'ipad'; // Probably an iPad
+              }
+            }
+            return navigator.platform;
+        }
+        return 'unknown';
+      })().toLowerCase();
+      
+      let macosPlatforms = /(macintosh|macintel|macos)/i;
+      let iosPlatforms = /(iphone|ipad)/i;
+      let windowsPlatforms = /(win32|win64|windows)/i;
+      
+      var result = 'unknown';
+      if (macosPlatforms.test(platformValue)) {
+        result = "macos";
+      } else if (iosPlatforms.test(platformValue)) {
+        result = "ios";
+      } else if (windowsPlatforms.test(platformValue)) {
+        result = "windows";
+      } else if (/android/.test(platformValue)) {
+        result = "android";
+      } else if (/linux/.test(platformValue)) {
+        result = "linux";
+      }
+      return result;
+    }
+    let WZ_BROWSER_PLATFORM = wz_detect_platform();
+
+    let WZ_MINIMUM_MAX_MEMORY_MIB = 512;
+    let WZ_DEFAULT_MAX_MEMORY_MIB = (() => {
+      if (/(ios|android)/.test(WZ_BROWSER_PLATFORM)) {
+        // Default to something less on mobile devices (especially iPhone / iPad, due to current WebKit limitations)
+        return 1024; // 1 GB
+      }
+      return 1536; // Default to 1.5 GB
+    })();
+    let WZ_DATA_FILES_URL_SUBDIR = (() => {
+      return window.location.pathname.replace(/[^/]*$/, '');
+    })();
+    let WZ_DATA_FILES_URL_HOST = (() => {
+      if (window.location.hostname == 'play.wz2100.net') {
+        return 'https://data.'+window.location.hostname;
+      } else {
+        return '';
+      }
+    })();
+    let WZ_VIDEO_SEQUENCES_BASE_URL = (() => {
+      if (window.location.hostname == 'play.wz2100.net') {
+        return 'https://data.play.wz2100.net/sequences/';
+      } else {
+        return 'sequences/'; // default is just relative to current path
+      }
+    })();
+    let WZ_MUSIC_PKG_SUBDIR = 'pkg/music/';
+    let WZ_TERRAIN_PKG_SUBDIR = 'pkg/terrain_overrides/';
+    
+    // Initialize config dir suffix and the title badge (based on location pathname)
+    var WZ_CONFIG_DIR_SUFFIX = "";
+    (function() {
+      
+      WZ_CONFIG_DIR_SUFFIX = (() => {
+        // Determine default config dir suffix based on window.location, to ensure that separate branches get separate config directories
+        var pathArray = window.location.pathname.split('/').filter(n => n);
+        if (!window.location.pathname.endsWith('/') && pathArray.length > 0) {
+          pathArray.pop();
+        }
+        let dirSuffix = pathArray.join('-');
+        if (dirSuffix.length > 0) {
+          return "-" + dirSuffix;
+        }
+        else {
+          return "";
+        }
+      })();
+      
+      var el = document.getElementById('wz-title-badge');
+      if (/\/(latest|previous)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR) || WZ_DATA_FILES_URL_SUBDIR === '/' || WZ_DATA_FILES_URL_SUBDIR.length === 0) {
+        WZ_CONFIG_DIR_SUFFIX = "";
+        el.innerText = 'Web Edition';
+      }
+      else if (/^\/release\/([^\/]+)/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+        // Release build (but possibly an older one, or a pre-release)
+        WZ_CONFIG_DIR_SUFFIX = "";
+        let tagname = WZ_DATA_FILES_URL_SUBDIR.match(/^\/release\/([^\/]+)/)[1];
+        el.innerText = tagname;
+        if (/[\-\_](beta|rc)[\d]*[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+          document.body.classList.add('prerelease');
+        }
+      }
+      else if (/(preview|prerelease)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+        WZ_CONFIG_DIR_SUFFIX = "";
+        document.body.classList.add('prerelease');
+        el.innerText = 'Pre-release';
+      }
+      else if (/\/(dev|development|master|main)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+        if (/\/(dev|development)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+          WZ_CONFIG_DIR_SUFFIX = "-dev";
+        }
+        document.body.classList.add('dev-preview');
+        el.innerText = 'Dev Preview';
+      }
+      else {
+        document.body.classList.add('branch-build');
+        let displayValue = WZ_DATA_FILES_URL_SUBDIR.replace(/^\/+|\/+$/g, '');
+        el.innerText = displayValue;
+        el.title = displayValue;
+      }
+    })();
+    
+    // Localstorage persistence of launch (and other) options
+    function storageAvailable(type) {
+      let storage;
+      try {
+        storage = window[type];
+        const x = "__storage_test__";
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+      } catch (e) {
+        return (
+          e instanceof DOMException &&
+          // everything except Firefox
+          (e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === "QuotaExceededError" ||
+            // Firefox
+            e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
+          // acknowledge QuotaExceededError only if there's something already stored
+          storage &&
+          storage.length !== 0
+        );
+      }
+    }
+    let LOCALSTORAGE_AVAILABLE = storageAvailable("localStorage");
+    
+    function wz_save_launch_options() {
+      if (!LOCALSTORAGE_AVAILABLE) {
+        console.log('localStorage is not available - launch options not persisted');
+        return;
+      }
+      Object.entries(WZ_LAUNCH_OPTIONS_MAPPING).forEach(([k,v]) => {
+        localStorage.setItem(k, document.getElementById(v)?.checked);
+      })
+      // Also save the chosen override for the maximum memory limit
+      localStorage.setItem('memoryLimitMiB', document.getElementById('launchOption_wasmMemoryLimit').value);
+    }
+    
+    function loadLocalStorageValueIntoSelect(selectId, key, valueTransformer, valueToOptionTextTransformer) {
+      let el = document.getElementById(selectId);
+      if (!el) {
+        throw Error(`Can't find element: ${selectId}`);
+      }
+      let value = localStorage.getItem(key);
+      if (valueTransformer) {
+        value = valueTransformer(value);
+      }
+      if (value === null) {
+        return;
+      }
+      for (var i = 0; i < el.options.length; i++) {
+        if (el.options[i].value == value) {
+          el.options[i].selected = true;
+          return;
+        }
+      }
+      // didn't find it - add new option
+      let text = (valueToOptionTextTransformer) ? valueToOptionTextTransformer(value) : value;
+      let opt = document.createElement('option');
+      opt.value = value;
+      opt.innerHTML = text;
+      el.appendChild(opt);
+      opt.selected = true;
+    }
+    
+    function wz_restore_launch_options() {
+      if (!LOCALSTORAGE_AVAILABLE) {
+        console.log('localStorage is not available - launch options not restored');
+        return;
+      }
+      Object.entries(WZ_LAUNCH_OPTIONS_MAPPING).forEach(([k,v]) => {
+        let el = document.getElementById(v);
+        if (!el) {
+          return;
+        }
+        let checkedValue = localStorage.getItem(k);
+        if (checkedValue !== null) {
+          if (checkedValue && checkedValue !== "false") {
+            el.checked = true;
+          } else {
+            el.checked = false;
+          }
+        }
+      })
+      // Also load the current value for the maximum memory limit
+      loadLocalStorageValueIntoSelect('launchOption_wasmMemoryLimit', 'memoryLimitMiB', 
+        (val) => {
+          if (!val) {
+            val = WZ_DEFAULT_MAX_MEMORY_MIB;
+          }
+          return adjustMaxMemoryMiBIfLastRunFailed(val);
+        },
+        (val) => {
+          if (val >= 1024) {
+            let GBval = (val / 1024).toFixed(2);
+            return `(Auto) ${GBval} GB`;
+          } else {
+            return `(Auto) ${val} MB`;
+          }
+        }
+      );
+    }
+
+    function wz_js_get_config_dir_path()
+    {
+      return '/warzone2100' + WZ_CONFIG_DIR_SUFFIX;
+    }
+    
+    // Deletes the current configuration directory
+    function wz_reset_config_dir() {
+      let databaseName = wz_js_get_config_dir_path();
+      // Emscripten's IDBFS FS uses the path as the database name
+      try {
+        var req = indexedDB.deleteDatabase(databaseName);
+        req.onsuccess = function () {
+          console.log("Database deleted");
+        };
+        req.onerror = function () {
+          console.log("Couldn't delete database - error");
+          alert('Failed to clear / reset Warzone 2100 configuration directory');
+        };
+        req.onblocked = function () {
+          console.log("Couldn't delete database - operation blocked");
+          alert('Failed to clear / reset Warzone 2100 configuration directory - operation blocked');
+        };
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
+    
+    // DOM manipulation functions
+    
+    function wz_open_options_modal() {
+      const launchoptions_modal = document.querySelector('#launchOptions');
+      const modal = bootstrap.Modal.getOrCreateInstance(launchoptions_modal);
+      modal.show();
+      
+      // Trigger check for persistent storage, so current status can be displayed
+      if (navigator.storage && navigator.storage.persist && navigator.storage.persisted) {
+        document.body.classList.remove('persist-enabled', 'persist-disabled');
+        navigator.storage.persisted().then((persistent) => {
+          if (persistent) {
+            console.debug("Storage will not be cleared except by explicit user action");
+            document.body.classList.remove('persist-disabled');
+            document.body.classList.add('persist-enabled');
+          } else {
+            console.debug("Storage may be cleared by the UA under storage pressure.");
+            document.body.classList.remove('persist-enabled');
+            document.body.classList.add('persist-disabled');
+          }
+        });
+      }
+      else {
+        console.debug("Storage persistence API unavailable");
+        document.body.classList.remove('persist-enabled');
+        document.body.classList.add('persist-disabled');
+      }
+    }
+    function wz_dismiss_options_modal() {
+      wz_save_launch_options();
+      const launchoptions_modal = document.querySelector('#launchOptions');
+      const modal = bootstrap.Modal.getInstance(launchoptions_modal);
+      modal.hide();
+    }
+    function wz_dismiss_reset_data_prompt_modal() {
+      const resetdataprompt_modal = document.querySelector('#resetDataPrompt');
+      const modal = bootstrap.Modal.getInstance(resetdataprompt_modal);
+      modal.hide();
+    }
+    function wz_display_loading_error(errorStr) {
+      document.getElementById('loading-error').style.display = 'block';
+      document.getElementById('loading-error-message').innerText = errorStr;
+      document.getElementById('loading-game').style.display = 'none';
+      document.getElementById('nav-options-button').disabled = false;
+      wz_js_display_loading_indicator(0);
+    }
+    function wz_display_runtime_error(errorStr) {
+      document.getElementById('runtimeErrToastContainer').style.display = 'block';
+      let errorDetailsEl = document.getElementById('runtimeErrorDetails');
+      if (errorDetailsEl.innerHTML.trim().length == 0) { // only set this once
+        document.getElementById('runtimeErrorDetails').innerText = errorStr;
+      }
+      bootstrap.Toast.getOrCreateInstance(document.getElementById('runtimeErrToast')).show();
+    }
+    function wz_display_update_available_refresh_needed() {
+      if (Module && Module.hasOwnProperty('pauseMainLoop')) {
+        Module.pauseMainLoop(); // a bit of a hack...
+      }
+      console.log('An update is available - please refresh');
+      const myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('refreshForUpdate'), {keyboard: false, backdrop: 'static'});
+      myModal.show();
+    }
+    function wz_display_unsupported_browser_msg(missingFeatures) {
+      document.getElementById('unsupported-browser').style.display = 'block';
+      document.getElementById('missing-features').innerText = missingFeatures.join(', ');
+      document.getElementById('initial-load-spinner').style.display = 'none';
+      document.getElementById('launch-game').style.display = 'none';
+    }
+    function wz_display_launch_game_msg() {
+      document.getElementById('launch-game').style.display = 'block';
+      document.getElementById('initial-load-spinner').style.display = 'none';
+    }
+    function wz_block_start_now_button_for_pending_update() {
+      var startButton = document.getElementById('start-button');
+      startButton.disabled = true;
+      startButton.innerHTML = `<span id="start-button-spinner" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Loading`;
+    }
+    function wz_unblock_start_now_button() {
+      var startButton = document.getElementById('start-button');
+      startButton.disabled = false;
+      startButton.innerHTML = originalStartButtonContents;
+    }
+    
+    // Loading data / starting the game
+    
+    async function loadScriptAsync(url) {
+      return new Promise((resolve, reject) => {
+        const element = document.createElement('script');
+        element.src = url;
+        element.type = 'text/javascript';
+        element.async = true;
+        element.onload = () => resolve();
+        element.onerror = () => reject();
+        document.head.appendChild(element);
+      });
+    }
+    
+    function adjustMaxMemoryMiBIfLastRunFailed(currentMaxMemoryMiB) {
+      if (!LOCALSTORAGE_AVAILABLE) {
+        return currentMaxMemoryMiB; 
+      }
+      // Check any last stored unsuccessful run attempt
+      let lastRunJSON = localStorage.getItem("lastRun_Details");
+      if (lastRunJSON) {
+        let lastRun = JSON.parse(lastRunJSON);
+        if (!lastRun['success'] && lastRun['maxMem'] && lastRun['maxMem'] >= 1073741824) {
+          // Start this run at the memory we got for the last attempt, minus a buffer to account for data files, etc
+          let adjustedMaxMemoryBytes = lastRun['maxMem'] - 268435456; // - 256 MiB
+          let adjustedMaxMemoryMiB = Math.floor(adjustedMaxMemoryBytes / 1024 / 1024);
+          return Math.min(adjustedMaxMemoryMiB, currentMaxMemoryMiB);
+        }
+      }
+      return currentMaxMemoryMiB;
+    }
+    
+    function allocateWZWasmMemory() {
+      let initialMemory = 268435456; // 256 MB
+      let maximumMemoryMiB = parseInt(document.getElementById('launchOption_wasmMemoryLimit').value, 10) || WZ_DEFAULT_MAX_MEMORY_MIB;
+      if (maximumMemoryMiB < WZ_MINIMUM_MAX_MEMORY_MIB) {
+        console.error(`Memory limit set too low: ${maximumMemoryMiB} - resetting to ${WZ_MINIMUM_MAX_MEMORY_MIB}`);
+        maximumMemoryMiB = WZ_MINIMUM_MAX_MEMORY_MIB;
+      }
+      let maximumMemory = maximumMemoryMiB * 1024 * 1024;
+      
+      let wasmMemory;
+      let retryAllocate = false;
+      do {
+        retryAllocate = false;
+        try {
+          wasmMemory = new WebAssembly.Memory({
+              "initial": initialMemory / 65536,
+              "maximum": maximumMemory / 65536,
+              "shared": true
+          });
+        } catch (e) {
+          if (e instanceof RangeError) {
+            // reduce maximumMemory and try again - some browsers / systems may fail out because starting maximum is too high
+            if (maximumMemory > 1073741824) { // > 1GiB
+              maximumMemory -= 268435456; // reduce by 256 MiB chunks
+            } else if (maximumMemory >= 805306368) { // >= 768 MiB
+              maximumMemory -= 134217728; // reduce by 128 MiB chunks
+            } else {
+              console.error("Failed to allocate memory of necessary size - please restart your browser");
+              throw Error("Failed to allocate memory of necessary size - please restart your browser");
+            }
+            retryAllocate = true;
+          }
+          else {
+            throw e;
+          }
+        }
+      } while (retryAllocate);
+      
+      if (!(wasmMemory.buffer instanceof SharedArrayBuffer)) {
+          console.error("Requested a shared WebAssembly.Memory but the returned buffer is not a SharedArrayBuffer, indicating that while the browser has SharedArrayBuffer it does not have WebAssembly threads support - you may need to set a flag");
+          throw Error("bad memory");
+      }
+      
+      let initialMB = initialMemory / 1024 / 1024;
+      let maximumMB = maximumMemory / 1024 / 1024;
+      console.log(`WebAssembly.Memory {allocated: ${initialMB} MiB, maximum memory: ${maximumMB} MiB}`);
+      
+      return { wasmMemory: wasmMemory, maximumMemory: maximumMemory };
+    }
+
+    function startGame() {
+      // Make canvas visible
+      document.getElementById('loading-game').style.display = 'block';
+      document.getElementById('launch-game').style.display = 'none';
+      document.getElementById('footer').style.display = 'none';
+      document.getElementById('nav-options-button').disabled = true;
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
+      var startButton = document.getElementById('start-button');
+      startButton.disabled = false;
+      startButton.hidden = true;
+      wz_js_display_loading_indicator(1);
+      window.wz_starting_game = true;
+      
+      function actuallyStartGame() {
+        setTimeout( function() {
+          
+          // try to create WebAssembly.Memory
+          let {wasmMemory, maximumMemory} = allocateWZWasmMemory();
+          Module["wasmMemory"] = wasmMemory;
+          Module["wzMaximumMemory"] = maximumMemory;
+          
+          if (LOCALSTORAGE_AVAILABLE) {
+            // Store this attempt, for future use
+            localStorage.setItem('lastRun_Details', JSON.stringify({ maxMem: maximumMemory, success: 0, time: (new Date()).getTime() }));
+          }
+          
+          createWZModule(Module).then(function(Module) {
+            // this is reached when everything is ready, and you can call methods on Module
+            // Hide the loading-game panel
+            document.getElementById('loading-game').style.display = 'none';
+            // Since some browsers (i.e. Safari) won't show the spinner animation when WZ's main thread is blocked
+            // Also display "Loading ..." text
+            document.getElementById('spin-loading-text').style.display = 'inline-block';
+            
+            // On first-run, register service worker *after* everything has loaded
+            wz_serviceworker_register();
+            
+            // Handle triggering update modal
+            if (window.wz_update_pending) {
+              wz_display_update_available_refresh_needed();
+            }
+            
+            if (LOCALSTORAGE_AVAILABLE) {
+              // Store this successful run, for future use
+              localStorage.setItem('lastRun_Details', JSON.stringify({ maxMem: maximumMemory, success: 1, time: (new Date()).getTime() }));
+            }
+          })
+          .catch((error) => {
+            // Failed to create / load
+            console.error(error);
+            wz_display_loading_error(error.message);
+          });
+        }, 10);
+      }
+      
+      var WZ_LAUNCH_OPTIONS = {};
+      Object.entries(WZ_LAUNCH_OPTIONS_MAPPING).forEach(([k,v]) => {
+        WZ_LAUNCH_OPTIONS[k] = document.getElementById(v)?.checked;
+      })
+      wz_save_launch_options();
+      var data_load_promises = [];
+      
+      // additional debug flags
+      Object.entries(WZ_LAUNCH_OPTIONS).forEach(([k,v]) => {
+        if (k.startsWith('debug_') && v) {
+          Module.arguments.push('--debug='+k.substring(k.indexOf('_') + 1));
+        }
+      })
+      
+      // optional data file loads
+      let start_optional_promises = data_load_promises.length;
+      if (WZ_LAUNCH_OPTIONS['load_music']) {
+        data_load_promises.push(loadScriptAsync(WZ_MUSIC_PKG_SUBDIR + 'warzone2100-music.js'));
+      }
+      if (WZ_LAUNCH_OPTIONS['load_classic_terrain']) {
+        data_load_promises.push(loadScriptAsync(WZ_TERRAIN_PKG_SUBDIR + 'warzone2100-terrain-classic.js'));
+      }
+      
+      Promise.allSettled(data_load_promises)
+      .then((values) => {
+        var failedRequiredLoad = false;
+        for (let i = 0; i < values.length; i++) {
+          if (values[i].status != 'fulfilled') {
+            if (i < start_optional_promises) {
+              // Failed a required promise
+              console.error('Failed a required data-file load');
+              failedRequiredLoad = true;
+            }
+          }
+        }
+        if (failedRequiredLoad) {
+          wz_display_loading_error('Failed to load required data file(s)')
+          console.error('Failed to load at least one required data file');
+          return;
+        }
+        actuallyStartGame();
+      });
+    }
+      
+    function isRunningStandalone() {
+        return (window.matchMedia('(display-mode: standalone)').matches);
+    }
+    
+    // Check browser WASM support
+    function wasmSupported() {
+      try {
+        if (typeof WebAssembly === "object" && typeof WebAssembly.instantiate === "function") {
+          // Smallest possible WebAssembly module
+          const module = new WebAssembly.Module(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+          if (module instanceof WebAssembly.Module)
+            return new WebAssembly.Instance(module) instanceof WebAssembly.Instance;
+        }
+      } catch (e) { }
+      return false;
+    }
+
+    /* wasm-feature-detect
+     https://github.com/GoogleChromeLabs/wasm-feature-detect
+     License: License Apache-2.0 */
+    !function(e,n){"object"==typeof exports&&"undefined"!=typeof module?module.exports=n():"function"==typeof define&&define.amd?define(n):(e="undefined"!=typeof globalThis?globalThis:e||self).wasmFeatureDetect=n()}(this,(function(){"use strict";return{bigInt:()=>(async e=>{try{return(await WebAssembly.instantiate(e)).instance.exports.b(BigInt(0))===BigInt(0)}catch(e){return!1}})(new Uint8Array([0,97,115,109,1,0,0,0,1,6,1,96,1,126,1,126,3,2,1,0,7,5,1,1,98,0,0,10,6,1,4,0,32,0,11])),bulkMemory:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,5,3,1,0,1,10,14,1,12,0,65,0,65,0,65,0,252,10,0,0,11])),exceptions:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,8,1,6,0,6,64,25,11,11])),extendedConst:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,5,3,1,0,1,11,9,1,0,65,1,65,2,106,11,0])),gc:()=>(async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,5,1,95,1,120,0])))(),jspi:()=>(async()=>"Suspender"in WebAssembly)(),memory64:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,5,3,1,4,1])),multiMemory:()=>(async()=>{try{return new WebAssembly.Module(new Uint8Array([0,97,115,109,1,0,0,0,5,5,2,0,0,0,0])),!0}catch(e){return!1}})(),multiValue:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,6,1,96,0,2,127,127,3,2,1,0,10,8,1,6,0,65,0,65,0,11])),mutableGlobals:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,2,8,1,1,97,1,98,3,127,1,6,6,1,127,1,65,0,11,7,5,1,1,97,3,1])),referenceTypes:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,7,1,5,0,208,112,26,11])),relaxedSimd:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,5,1,96,0,1,123,3,2,1,0,10,15,1,13,0,65,1,253,15,65,2,253,15,253,128,2,11])),saturatedFloatToInt:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,12,1,10,0,67,0,0,0,0,252,0,26,11])),signExtensions:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,8,1,6,0,65,0,192,26,11])),simd:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,5,1,96,0,1,123,3,2,1,0,10,10,1,8,0,65,0,253,15,253,98,11])),streamingCompilation:()=>(async()=>"compileStreaming"in WebAssembly)(),tailCall:async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,6,1,4,0,18,0,11])),threads:()=>(async e=>{try{return"undefined"!=typeof MessageChannel&&(new MessageChannel).port1.postMessage(new SharedArrayBuffer(1)),WebAssembly.validate(e)}catch(e){return!1}})(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,5,4,1,3,1,1,10,11,1,9,0,65,0,254,16,2,0,26,11])),typeReflection:()=>(async()=>"Function"in WebAssembly)()}}));
+    
+    class CustomWZBrowserUnsupportedError extends Error {
+      constructor(missingFeatures = [], ...params) {
+        // Pass remaining arguments (including vendor specific ones) to parent constructor
+        super(...params);
+
+        // Maintains proper stack trace for where our error was thrown (only available on V8)
+        if (Error.captureStackTrace) {
+          Error.captureStackTrace(this, CustomWZBrowserUnsupportedError);
+        }
+
+        this.name = "CustomWZBrowserUnsupportedError";
+        // Custom debugging information
+        this.missingFeatures = missingFeatures;
+      }
+    }
+
+    // Check whether the browser supports the basic required functionality to run the webassembly port of WZ
+    function checkWZBrowserSupport() {
+      return new Promise((resolve, reject) => {
+        var missingFeatures = [];
+        let hasWASMSupport = wasmSupported();
+        if (!hasWASMSupport) {
+          missingFeatures.push('WebAssembly');
+        }
+
+        // Check WebGL 2.0
+        const gl = document.createElement('canvas').getContext('webgl2');
+        if (!gl) {
+          if (typeof WebGL2RenderingContext !== 'undefined') {
+            // Browser appears as thought it might support WebGL, but support might be disabled.
+            // Try checking browser settings, and updating your OS and/or video card drivers.
+            console.log('Your browser appears to possibly support WebGL2, but support may be disabled.\nMake sure WebGL2 is enabled in your browser settings, and try updating your OS and/or graphics drivers.');
+            missingFeatures.push('WebGL2 (disabled?)');
+          } else {
+            console.log('Your browser has no WebGL2 support. Please try updating to the latest version of a supported browser (ex. Chrome, Edge, Firefox, or Safari).');
+            missingFeatures.push('WebGL2');
+          }
+        } else {
+          // Initial test for WebGL2 context succeeded
+        }
+      
+        if (missingFeatures.length > 0) {
+          reject(
+            new CustomWZBrowserUnsupportedError(missingFeatures, "Unsupported Browser")
+          );
+          return;
+        }
+
+        if (hasWASMSupport) {
+          // WebAssembly feature checks
+          Promise.all([wasmFeatureDetect.bigInt(), wasmFeatureDetect.bulkMemory(), wasmFeatureDetect.exceptions(), wasmFeatureDetect.saturatedFloatToInt(), wasmFeatureDetect.threads()]).then((values) => {
+            if (values.every(element => element === true)) {
+              // All required features available
+              resolve(true);
+            } else {
+              var missingWASMFeaturesStr = '';
+              if (!values[0]) {
+                missingFeatures.push('Wasm:BigInt');
+              }
+              if (!values[1]) {
+                missingFeatures.push('Wasm:BulkMemory');
+              }
+              if (!values[2]) {
+                missingFeatures.push('Wasm:Exceptions');
+              }
+              if (!values[3]) {
+                missingFeatures.push('Wasm:FloatToInt');
+              }
+              if (!values[4]) {
+                missingFeatures.push('Wasm:Threads');
+              }
+              reject(
+                new CustomWZBrowserUnsupportedError(missingFeatures, "Unsupported Browser")
+              );
+            }
+          });
+        }
+      });
+    }
+      
+    // Service worker functions
+    
+    function wz_serviceworker_skip_waiting(waiting) {
+      wz_block_start_now_button_for_pending_update();
+      window.wz_update_pending = true;
+      
+      console.debug(
+        "A new service worker is waiting to be activated: ",
+        waiting,
+      );
+      waiting.addEventListener('statechange', () => {
+        if (waiting.state === 'activated') {
+          console.debug('Waiting service worker activated - refresh needed');
+          //wz_display_update_available_refresh_needed(); // handled by global controllerchange event listener
+        } else {
+          console.debug('Waiting service worker -> ' + waiting.state);
+        }
+      });
+      waiting.postMessage({type: 'SKIP_WAITING'});
+    }
+    
+    function wz_serviceworker_register() {
+      if (!('serviceWorker' in navigator)) {
+        console.log('serviceWorker not available');
+        return;
+      }
+      if (window.wz_already_registered_serviceworker) {
+        console.debug('Ignoring duplicate call to register service worker - already registered this run');
+        return;
+      }
+      try {
+        navigator.serviceWorker.register("service-worker.js").then(
+          (reg) => {
+            console.debug("Service worker registration succeeded:", reg);
+            
+            if (reg.waiting) {
+              wz_serviceworker_skip_waiting(reg.waiting);
+              return;
+            }
+            
+            reg.addEventListener('updatefound', () => {
+              // A new service worker has appeared in reg.installing
+              const newWorker = reg.installing;
+              
+              wz_block_start_now_button_for_pending_update();
+              
+              console.debug(
+                "A new service worker is being installed:",
+                newWorker,
+              );
+
+              newWorker.addEventListener('statechange', () => {
+                console.debug('New service worker -> ' + newWorker.state);
+                if (newWorker.state === 'installed') {
+                  if (reg.active) {
+                    // There is already an active service worker, so trigger skipWaiting (if game hasn't already started)
+                    if (reg.waiting && !window.wz_starting_game) {
+                      wz_serviceworker_skip_waiting(reg.waiting);
+                    } else {
+                      console.log('There is an update waiting - please close all tabs to install');
+                    }
+                  }
+                  else {
+                    // The newly-installed service worker will soon become the active one
+                  }
+                } else if (newWorker.state === 'activated' || newWorker.state === 'redundant') {
+                  wz_unblock_start_now_button();
+                }
+              });
+            });
+            
+            if (isRunningStandalone()) {
+              // automatically trigger a run in standalone mode
+              startGame();
+            }
+          },
+          (error) => {
+            console.warn(`Service worker registration failed: ${error}`);
+            // despite the service worker not being installed, auto-start the game if in standalone mode
+            if (isRunningStandalone()) {
+              startGame();
+            }
+          },
+        );
+        window.wz_already_registered_serviceworker = true;
+      }
+      catch (err) {
+        console.error('serviceWorker.register failed:', err);
+      }
+    }
+    
+    function wz_serviceworker_register_early_if_possible() {
+      // Register the service worker early if either:
+      // (a) running standalone
+      // (b) there is already a service worker installed
+      // (i.e. This basically prevents precaching immediately on first-visit, until the user starts the game - which also triggers service worker install)
+      
+      const standaloneCheck = (isRunningStandalone()) ? Promise.resolve(true) : Promise.reject(false);
+      const existingServiceWorkerCheck = new Promise((resolve, reject) => {
+        if (!('serviceWorker' in navigator)) {
+          reject(false);
+          return;
+        }
+        navigator.serviceWorker.getRegistration().then((reg) => {
+          if (reg) {
+            resolve(true);
+          } else {
+            reject(false);
+          }
+        });
+      });
+      
+      Promise.any([standaloneCheck, existingServiceWorkerCheck]).then((value) => {
+        if (value) {
+          console.debug('Registering service worker early');
+          wz_serviceworker_register();
+        }
+      }).catch(() => {
+        // ignore
+      });
+    }
+    
+    // Initial page startup (once everything is loaded)
+    function wz_everything_is_loaded() {
+      wz_restore_launch_options();
+      checkWZBrowserSupport().then((r) => {
+        // All required features are available
+        wz_display_launch_game_msg();
+        try {
+          // Register service worker early if possible / needed
+          wz_serviceworker_register_early_if_possible();
+        } catch (err) {
+          console.warn('Failed to check / attempt early service worker registration:', err);
+        }
+      }).catch((err) => {
+        var missingFeatures = [];
+        if (err instanceof CustomWZBrowserUnsupportedError) {
+          missingFeatures = err.missingFeatures;
+        }
+        wz_display_unsupported_browser_msg(missingFeatures);
+      });
+    }
+    // Detect when everything - including async scripts - is loaded
+    window.addEventListener('load', () => {
+      var everythingLoadedTimer = setInterval(function() {
+        if (/loaded|complete/.test(document.readyState)) {
+          clearInterval(everythingLoadedTimer);
+          wz_everything_is_loaded();
+        }
+      }, 10);
+    });
+    
+    function wz_expected_content_length(file, contentLength) {
+      // The content-length header may be missing or smaller than the received content (for example, when compressing before transmitting)
+      if (file.endsWith("warzone2100.wasm")) {
+        // The main .wasm file - just hard-code at least 10 MB for now
+        return Math.max((contentLength) ? contentLength : 0, 10 * 1024 * 1024);
+      } else {
+        if (!contentLength) { return 5 * 1024 * 1024; } // use a default of 5MB (to show some sort of progress)
+        return contentLength;
+      }
+    }
+  
+    // Monkeypatch WebAssembly downloading to have a progress bar
+    // inspired from: https://github.com/WordPress/wordpress-playground/pull/46 (but modified)
+    function monkeyPatchWASMInst(progressFun) {
+      const _instantiateStreaming = WebAssembly.instantiateStreaming;
+      WebAssembly.instantiateStreaming = (response, ...args) => {
+        const file = response.url.substring(
+          new URL(response.url).origin.length + 1
+        );
+        const contentLength = response.headers.get("content-length");
+        let total = wz_expected_content_length(file, parseInt(contentLength, 10));
+        
+        const reportingResponse = new Response(
+          new ReadableStream({
+            async start(controller) {
+              const reader = response.clone().body.getReader();
+              let loaded = 0;
+              for (; ;) {
+                const { done, value } = await reader.read();
+                if (done) {
+                  progressFun(file, loaded, loaded);
+                  break;
+                }
+                loaded += value.byteLength;
+                progressFun(file, loaded, total);
+                controller.enqueue(value);
+              }
+              controller.close();
+            }
+          },
+            {
+              status: response.status,
+              statusText: response.statusText
+            }
+          )
+        );
+        for (const pair of response.headers.entries()) {
+          reportingResponse.headers.set(pair[0], pair[1]);
+        }
+
+        return _instantiateStreaming(reportingResponse, ...args);
+      }
+    }
+    monkeyPatchWASMInst((file, done, total) => {
+      let percent = ((done/total)*100).toFixed(2);
+      let mib = (done/1024**2).toFixed(2);
+      progressElement.value = (done / 1024);
+      if (done <= total) {
+        statusElement.innerHTML = `Downloading app: ${percent}% (${mib}MiB)`;
+        progressElement.max = (total / 1024);
+      } else {
+        statusElement.innerHTML = `Downloading app: ... (${mib}MiB)`;
+        progressElement.max = (done / 1024);
+      }
+      progressElement.hidden = false;
+    });
+
+    // Initial Module configuration
+    var Module = {
+      preRun: [],
+      postRun: [],
+      print: (function() {
+        return function(text) {
+        if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+        console.log(text);
+        };
+      })(),
+      canvas: (function() {
+        var canvas = document.getElementById('canvas');
+        // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+        // application robust, you may want to override this behavior before shipping!
+        // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+        canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+        return canvas;
+      })(),
+      setStatus: function(text) {
+        if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+        if (text === Module.setStatus.last.text) return;
+        var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+        var now = Date.now();
+        if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+        Module.setStatus.last.time = now;
+        Module.setStatus.last.text = text;
+        if (m) {
+          progressElement.value = parseInt(m[2])*100;
+          progressElement.max = parseInt(m[4])*100;
+          progressElement.hidden = false;
+        } else {
+          progressElement.value = null;
+          progressElement.max = null;
+          progressElement.hidden = true;
+        }
+        statusElement.innerHTML = text;
+      },
+      totalDependencies: 0,
+      monitorRunDependencies: function(left) {
+        this.totalDependencies = Math.max(this.totalDependencies, left);
+        Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+      }
+    };
+    
+    function wz_pre_run_fixup_canvas() {
+      Module.canvas.style.backgroundColor = "black";
+    }
+    
+    function wz_handle_post_run() {
+      Module.wzEncounteredPostRun = true;
+    }
+  
+    Module['preRun'].push(wz_pre_run_fixup_canvas);
+    Module['postRun'].push(wz_handle_post_run);
+    Module.arguments = ['--configdir='+wz_js_get_config_dir_path()];
+    if (WZ_VIDEO_SEQUENCES_BASE_URL !== null) {
+      Module.arguments.push('--videourl='+WZ_VIDEO_SEQUENCES_BASE_URL);
+    }
+    
+    Module['locateFile'] = function(path, prefix) {
+      // Custom handling for .data files
+      if (path.endsWith(".data")) {
+        // NOTE: Prefix is not guaranteed to be set for these by the preloader, so construct the paths manually
+        
+        // Shared data files
+        // - music
+        if (path === 'warzone2100-music.data') {
+          let musicDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_MUSIC_PKG_SUBDIR + path;
+          console.debug('Loading: ' + musicDataURL);
+          return musicDataURL;
+        }
+        // - terrain_overrides
+        if (path.startsWith('warzone2100-terrain-')) {
+          let terrainDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_TERRAIN_PKG_SUBDIR + path;
+          console.debug('Loading: ' + terrainDataURL);
+          return terrainDataURL;
+        }
+        
+        // Regular build-specific data files
+        var dataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + path;
+        console.debug('Loading: ' + dataURL);
+        return dataURL;
+      }
+      // otherwise, use the default, the prefix (JS file's dir) + the path
+      return prefix + path;
+    }
+    
+    function wz_js_handle_app_exit() {
+      document.getElementById('emscripten_container').style.display = 'none';
+      document.getElementById('post-exit').style.display = 'block';
+      document.getElementById('footer').style.display = 'block';
+      document.getElementById('nav-options-button').disabled = false;
+    }
+    
+    window.onerror = function(event) {
+      Module.setStatus('Exception thrown, see JavaScript console');
+      Module.setStatus = function(text) {
+        if (text) console.log('[post-exception status] ' + text);
+      };
+      if (!Module.hasOwnProperty('calledRun') || !Module.calledRun
+          || !Module.hasOwnProperty('wzEncounteredPostRun') || !Module.wzEncounteredPostRun) {
+        wz_display_loading_error(event);
+      }
+      else {
+        wz_display_runtime_error(event);
+      }
+    };
+    
+    // Best-effort attempt to detect whether the desktop full version might be available for the current platform
+    if (/(windows|macos|linux)/.test(WZ_BROWSER_PLATFORM)) {
+      // display the footer notice even in standalone mode
+      document.getElementById('full-version-footer-notice').classList.remove('hide-on-standalone');
+    }
+  </script>
+  <script type='text/javascript'>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        // This fires when the service worker controlling this page
+        // changes, eg a new worker has skipped waiting and become
+        // the new active worker.
+        console.debug('serviceWorker: controllerchange');
+        window.wz_update_pending = true;
+        if (!window.wz_starting_game) {
+          // Start Game button hasn't been clicked yet - prompt to refresh to ensure the latest content is loaded
+          wz_display_update_available_refresh_needed();
+        }
+      });
+    }
+  </script>
+  {{{ SCRIPT }}}
+  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "86fc2fd5b4b44e60836e1c059333c8ad"}'></script><!-- End Cloudflare Web Analytics -->
+  </body>
+</html>

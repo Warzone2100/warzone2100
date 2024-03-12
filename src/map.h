@@ -45,8 +45,12 @@
 
 struct GROUND_TYPE
 {
-	const char *textureName;
+	std::string textureName;
 	float textureSize;
+	std::string normalMapTextureName = "";
+	std::string specularMapTextureName = "";
+	std::string heightMapTextureName = "";
+	bool highQualityTextures = false; // whether this ground_type has normal / specular / height maps
 };
 
 /* Information stored with each tile */
@@ -55,31 +59,38 @@ struct MAPTILE
 	uint8_t         tileInfoBits;
 	PlayerMask      tileExploredBits;
 	PlayerMask      sensorBits;             ///< bit per player, who can see tile with sensor
-	uint8_t         illumination;           // How bright is this tile?
 	uint8_t         watchers[MAX_PLAYERS];  // player sees through fog of war here with this many objects
 	uint16_t        texture;                // Which graphics texture is on this tile
 	int32_t         height;                 ///< The height at the top left of the tile
-	float           level;                  ///< The visibility level of the top left of the tile, for this client.
 	BASE_OBJECT *   psObject;               // Any object sitting on the location (e.g. building)
-	PIELIGHT        colour;
 	uint16_t        limitedContinent;       ///< For land or sea limited propulsion types
 	uint16_t        hoverContinent;         ///< For hover type propulsions
-	uint8_t         ground;                 ///< The ground type used for the terrain renderer
 	uint16_t        fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	int32_t         waterLevel;             ///< At what height is the water for this tile
 	PlayerMask      jammerBits;             ///< bit per player, who is jamming tile
 	uint8_t         sensors[MAX_PLAYERS];   ///< player sees this tile with this many radar sensors
 	uint8_t         jammers[MAX_PLAYERS];   ///< player jams the tile with this many objects
+
+	// DISPLAY ONLY (NOT for use in game calculations)
+	uint8_t         ground;                 ///< The ground type used for the terrain renderer
+	uint8_t         illumination;           // How bright is this tile? = diffuseSunLight * ambientOcclusion
+	uint8_t			ambientOcclusion;		// ambient occlusion. from 1 (max occlusion) to 254 (no occlusion), similar to illumination.
+	float           level;                  ///< The visibility level of the top left of the tile, for this client. for terrain lightmap
 };
 
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
 
+
+
 extern std::unique_ptr<MAPTILE[]> psMapTiles;
 extern float waterLevel;
-extern std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
-extern int numGroundTypes;
 extern char *tilesetDir;
+extern MAP_TILESET currentMapTileset;
+
+const GROUND_TYPE& getGroundType(size_t idx);
+size_t getNumGroundTypes();
+#define MAX_GROUND_TYPES 12
 
 #define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
 #define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way
@@ -162,7 +173,7 @@ WZ_DECL_ALWAYS_INLINE static inline void auxSetAllied(int x, int y, int player, 
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (alliancebits[player] & (1 << i))
+		if (aiCheckAlliances(player, i))
 		{
 			psAuxMap[i][x + y * mapWidth] |= state;
 		}
@@ -176,7 +187,7 @@ WZ_DECL_ALWAYS_INLINE static inline void auxSetEnemy(int x, int y, int player, i
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (!(alliancebits[player] & (1 << i)))
+		if (!aiCheckAlliances(player, i))
 		{
 			psAuxMap[i][x + y * mapWidth] |= state;
 		}
@@ -341,11 +352,6 @@ static inline unsigned char terrainType(const MAPTILE *tile)
 }
 
 
-
-/* The size and contents of the map */
-extern SDWORD	mapWidth, mapHeight;
-extern int numGroundTypes;
-
 /* Additional tile <-> world coordinate overloads */
 
 static inline Vector2i world_coord(Vector2i const &mapCoord)
@@ -386,6 +392,9 @@ bool mapShutdown();
 bool mapLoad(char const *filename);
 struct ScriptMapData;
 bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData);
+
+// used to reload decal + ground types types when switching terrain overrides
+bool mapReloadGroundTypes();
 
 class WzMapPhysFSIO : public WzMap::IOProvider
 {
@@ -567,9 +576,11 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 void mapInit();
 void mapUpdate();
 
+bool shouldLoadTerrainTypeOverrides(const std::string& name);
 bool loadTerrainTypeMapOverride(MAP_TILESET tileSet);
 
 //For saves to determine if loading the terrain type override should occur
 extern bool builtInMap;
+extern bool useTerrainOverrides;
 
 #endif // __INCLUDED_SRC_MAP_H__

@@ -48,9 +48,21 @@ struct PLAYERSTATS
 	uint32_t totalKills = 0;
 	uint32_t totalScore = 0;
 
-	uint32_t recentKills = 0;  // score/kills in last game.
+	uint32_t recentKills = 0;  // score/kills in last game. (total kills - both droids and structures)
+	uint32_t recentDroidsKilled = 0;
+	uint32_t recentDroidsLost = 0;
+	uint32_t recentDroidsBuilt = 0;
+	uint32_t recentStructuresKilled = 0;
+	uint32_t recentStructuresLost = 0;
+	uint32_t recentStructuresBuilt = 0;
 	uint32_t recentScore = 0;
+	uint32_t recentResearchComplete = 0;
 	uint64_t recentPowerLost = 0;  // power lost in last game (i.e. from droids / structures being killed by other players)
+	uint64_t recentDroidPowerLost = 0;	// power lost in last game (from droids being killed by other players)
+	uint64_t recentStructurePowerLost = 0;	// power lost in last game (from structures being killed by other players)
+	uint64_t recentPowerWon = 0;  // power that was destroyed in last game (i.e. from droids / structures being killed)
+	uint64_t recentResearchPotential = 0;  // how many labs were ticking
+	uint64_t recentResearchPerformance = 0;  // how many labs were ticking with objective (researching)
 
 	struct Autorating
 	{
@@ -63,8 +75,11 @@ struct PLAYERSTATS
 		uint8_t star[3] = {0, 0, 0};
 		uint8_t medal = 0;
 		uint8_t level = 0;
+		uint8_t altNameTextColorOverride[3] = {255, 255, 255}; // rgb
+		uint8_t eloTextColorOverride[3] = {255, 255, 255}; // rgb
 		std::string elo;
 		std::string details;
+		std::string altName;
 	};
 	Autorating autorating;
 	RATING_SOURCE autoratingFrom = RATING_SOURCE_HOST;
@@ -72,16 +87,24 @@ struct PLAYERSTATS
 	EcKey identity;
 };
 
+struct RESEARCH;
+
 bool saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 PLAYERSTATS const &getMultiStats(UDWORD player);									// get from net
-bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // send to net.
+bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // set + send to net.
+bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex = nullopt); // send to net
+bool sendMultiStatsScoreUpdates(uint32_t player);
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames();
 void updateMultiStatsWins();
 void updateMultiStatsLoses();
+void incrementMultiStatsResearchPerformance(UDWORD player);
+void incrementMultiStatsResearchPotential(UDWORD player);
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
-void recvMultiStats(NETQUEUE queue);
+void updateMultiStatsBuilt(BASE_OBJECT *psBuilt);
+void updateMultiStatsResearchComplete(RESEARCH *psResearch, UDWORD player);
+bool recvMultiStats(NETQUEUE queue);
 void lookupRatingAsync(uint32_t playerIndex);
 
 bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB);
@@ -103,6 +126,21 @@ void setMultiPlayUnitsKilled(uint32_t player, uint32_t kills);
 uint32_t getMultiPlayRecentScore(uint32_t player);
 void setMultiPlayRecentScore(uint32_t player, uint32_t score);
 uint32_t getSelectedPlayerUnitsKilled();
+
+void setMultiPlayRecentDroidsKilled(uint32_t player, uint32_t value);
+void setMultiPlayRecentDroidsLost(uint32_t player, uint32_t value);
+void setMultiPlayRecentDroidsBuilt(uint32_t player, uint32_t value);
+void setMultiPlayRecentStructuresKilled(uint32_t player, uint32_t value);
+void setMultiPlayRecentStructuresLost(uint32_t player, uint32_t value);
+void setMultiPlayRecentStructuresBuilt(uint32_t player, uint32_t value);
+void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost);
+void setMultiPlayRecentDroidPowerLost(uint32_t player, uint64_t powerLost);
+void setMultiPlayRecentStructurePowerLost(uint32_t player, uint64_t powerLost);
+void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon);
+void setMultiPlayRecentResearchComplete(uint32_t player, uint32_t value);
+void setMultiPlayRecentResearchPotential(uint32_t player, uint64_t value);
+void setMultiPlayRecentResearchPerformance(uint32_t player, uint64_t value);
+
 void resetRecentScoreData();
 
 bool saveMultiStatsToJSON(nlohmann::json& json);

@@ -30,8 +30,11 @@ class SDL_gfx_api_Impl_Factory final : public gfx_api::backend_Impl_Factory
 public:
 	struct Configuration
 	{
+		// OpenGL
 		bool useOpenGLES = false;
 		bool useOpenGLESLibrary = false;
+		// Vulkan
+		bool allowImplicitLayers = false;
 	};
 public:
 	SDL_gfx_api_Impl_Factory(SDL_Window* window, Configuration config);

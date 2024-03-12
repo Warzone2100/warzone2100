@@ -14,9 +14,8 @@ const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which 
 // - construction of base structures (factories, power plants, laboratories, modules and oil rigs)
 // - dealing damage
 const BASESTRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR, POWER_GEN, RESEARCH_LAB];
-const ENABLE_activity = (challenge != true && isMultiplayer === true && idleTime > 0); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
-//const ENABLE_activity = true; //debug
 
+var ENABLE_activity;
 var teams; // array class instance Team
 var playersTeam; // array class instancePlayer
 
@@ -194,6 +193,12 @@ class Team
 	setState(state)
 	{
 		this.state = state;
+		this.players.forEach(
+			(player) =>
+			{
+				setGameStoryLogPlayerDataValue(player.playNum, "usertype", this.state);
+			}
+		);
 		if (state ===  STATE_winner || state === STATE_loser ||  state === STATE_spectator)
 		{
 			this.players.forEach(
@@ -244,7 +249,7 @@ function checkEndConditions()
 		// (can be spectator-only slots who have not yet received a message,
 		// or previous losers who were converted to spectators who should now receive
 		// a new message that the game has fully ended)
-		if (isSpectator(-1) && !newlyLosingTeams.some((team) => (team.containsPlayer(selectedPlayer))))
+		if (isSpectator(-1))
 		{
 			gameOverMessage(false);
 		}
@@ -336,6 +341,7 @@ function createTeams()
 
 function conditions_eventGameInit()
 {
+	ENABLE_activity = (challenge != true && isMultiplayer === true && idleTime > 0); //The prohibition on passive play can interfere when playing against bots. There is no reason to end a fight earlier in PVE.
 	createTeams();
 	//find old type spectators
 	if  (ENABLE_activity && !isSpectator(-1))
@@ -343,11 +349,32 @@ function conditions_eventGameInit()
 		setTimer("activityAlert", 10*1000);
 	}
 	setTimer("checkEndConditions", 3000);
+
+	if (gameTimeLimit > 0)
+	{
+		queue("timeOutGameTenMinWarning", gameTimeLimit - (10 * 60 * 1000));
+		queue("timeOutGame", gameTimeLimit);
+	}
 }
 
 function conditions_eventGameLoaded()
 {
 	createTeams();
+}
+
+function timeOutGameTenMinWarning()
+{
+	console(
+		_("Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end.")
+	);
+}
+
+function timeOutGame()
+{
+	console(
+		_("Host-configured game time limit exceeded. Game is over.")
+	);
+	gameOverMessage(false);
 }
 
 ///////////////////////////////////////////////////////////////////////////

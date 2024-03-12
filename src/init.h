@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_INIT_H__
 
 #include <vector>
+#include "terrain_defs.h"
 
 struct IMAGEFILE;
 
@@ -62,11 +63,14 @@ void unregisterSearchPath(const std::string& path);
 void debugOutputSearchPaths();
 void debugOutputSearchPathMountErrors();
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL, const char* current_map_mount_point = NULL);
+bool rebuildExistingSearchPathWithGraphicsOptionChange();
 
 bool buildMapList();
 bool CheckForMod(char const *mapFile);
 bool CheckForRandom(char const *mapFile, char const *mapDataFile0);
 bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData);
+
+std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures();
 
 bool loadLevFile(const std::string& filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 

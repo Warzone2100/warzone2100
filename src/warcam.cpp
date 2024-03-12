@@ -136,7 +136,6 @@ void	initWarCam()
 
 static void processLeaderSelection()
 {
-	DROID *psDroid;
 	DROID *psNew = nullptr;
 	UDWORD leaderClass;
 	bool bSuccess;
@@ -184,7 +183,7 @@ static void processLeaderSelection()
 	switch (leaderClass)
 	{
 	case	LEADER_LEFT:
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
 			/* Is it even on the sscreen? */
 			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != trackingCamera.target)
@@ -203,7 +202,7 @@ static void processLeaderSelection()
 		}
 		break;
 	case	LEADER_RIGHT:
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
 			/* Is it even on the sscreen? */
 			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != trackingCamera.target)
@@ -222,7 +221,7 @@ static void processLeaderSelection()
 		}
 		break;
 	case	LEADER_UP:
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
 			/* Is it even on the sscreen? */
 			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != trackingCamera.target)
@@ -241,7 +240,7 @@ static void processLeaderSelection()
 		}
 		break;
 	case	LEADER_DOWN:
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
 			/* Is it even on the sscreen? */
 			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != trackingCamera.target)
@@ -379,15 +378,13 @@ void	setWarCamActive(bool status)
 
 DROID *camFindDroidTarget()
 {
-	DROID	*psDroid;
-
 	if (selectedPlayer >= MAX_PLAYERS)
 	{
 		// Not currently supported when selectedPlayer >= MAX_PLAYERS
 		return nullptr;
 	}
 
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -447,7 +444,6 @@ void	camAlignWithTarget(DROID *psDroid)
 //-----------------------------------------------------------------------------------
 static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 {
-	DROID *psDroid;
 	int32_t xTotal = 0, yTotal = 0;
 
 	if (selectedPlayer >= MAX_PLAYERS)
@@ -457,7 +453,7 @@ static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 	}
 
 	/* Got thru' all droids */
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		/* Is he worth selecting? */
 		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
@@ -478,8 +474,7 @@ static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNumber, bool bOnScreen)
 {
 	SDWORD xTotals = 0, yTotals = 0, zTotals = 0;
-	DROID *psDroid;
-	UDWORD count;
+	UDWORD count = 0;
 
 	if (selectedPlayer >= MAX_PLAYERS)
 	{
@@ -487,7 +482,7 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNum
 		return;
 	}
 
-	for (count = 0, psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
 	{
 		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
 		{
@@ -568,7 +563,7 @@ static void updateCameraAcceleration(UBYTE update)
 	*/
 	const int angle = 90 - abs((playerPos.r.x / 182) % 90);
 
-	const PROPULSION_STATS *psPropStats = &asPropulsionStats[trackingCamera.target->asBits[COMP_PROPULSION]];
+	const PROPULSION_STATS *psPropStats = trackingCamera.target->getPropulsionStats();
 
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
@@ -680,7 +675,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 	SDWORD	xPos = 0, yPos = 0, zPos = 0;
 
 	bTooLow = false;
-	psPropStats = asPropulsionStats + trackingCamera.target->asBits[COMP_PROPULSION];
+	psPropStats = trackingCamera.target->getPropulsionStats();
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		int droidHeight, difHeight, droidMapHeight;
@@ -843,7 +838,7 @@ static bool camTrackCamera()
 	/* Update the acceleration,velocity and rotation of the camera for rotation */
 	/*	You can track roll as well (z axis) but it makes you ill and looks
 		like a flight sim, so for now just pitch and orientation */
-	psPropStats = asPropulsionStats + trackingCamera.target->asBits[COMP_PROPULSION];
+	psPropStats = trackingCamera.target->getPropulsionStats();
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
 		bFlying = true;

@@ -34,6 +34,8 @@
 #include "display3d.h"
 #include "effects.h"
 #include "miscimd.h"
+#include "profiling.h"
+#include "droid.h"
 
 #include <algorithm>
 
@@ -78,8 +80,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		position.y = static_cast<int>(((ATPART *)pObject)->position.y);
 		position.z = static_cast<int>(((ATPART *)pObject)->position.z);
 
-		position.x = position.x - playerPos.p.x;
-		position.z = -(position.z - playerPos.p.z);
+		position.x = position.x;
+		position.z = -(position.z);
 
 		/* 16 below is HACK!!! */
 		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel) - 16;
@@ -108,11 +110,11 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		{
 
 			//the weapon stats holds the reference to which graphic to use
-			pImd = ((PROJECTILE *)pObject)->psWStats->pInFlightGraphic;
+			pImd = ((PROJECTILE *)pObject)->psWStats->pInFlightGraphic->displayModel();
 
 			psSimpObj = (SIMPLE_OBJECT *) pObject;
-			position.x = psSimpObj->pos.x - playerPos.p.x;
-			position.z = -(psSimpObj->pos.y - playerPos.p.z);
+			position.x = psSimpObj->pos.x;
+			position.z = -(psSimpObj->pos.y);
 
 			position.y = psSimpObj->pos.z;
 
@@ -134,8 +136,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		break;
 	case RENDER_STRUCTURE://not depth sorted
 		psSimpObj = (SIMPLE_OBJECT *) pObject;
-		position.x = psSimpObj->pos.x - playerPos.p.x;
-		position.z = -(psSimpObj->pos.y - playerPos.p.z);
+		position.x = psSimpObj->pos.x;
+		position.z = -(psSimpObj->pos.y);
 
 		if ((objectType == RENDER_STRUCTURE) &&
 		    ((((STRUCTURE *)pObject)->pStructureType->type == REF_DEFENSE) ||
@@ -167,8 +169,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		break;
 	case RENDER_FEATURE://not depth sorted
 		psSimpObj = (SIMPLE_OBJECT *) pObject;
-		position.x = psSimpObj->pos.x - playerPos.p.x;
-		position.z = -(psSimpObj->pos.y - playerPos.p.z);
+		position.x = psSimpObj->pos.x;
+		position.z = -(psSimpObj->pos.y);
 
 		position.y = psSimpObj->pos.z + 2;
 
@@ -191,11 +193,11 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		psDroid = (DROID *) pObject;
 
 		psSimpObj = (SIMPLE_OBJECT *) pObject;
-		position.x = psSimpObj->pos.x - playerPos.p.x;
-		position.z = -(psSimpObj->pos.y - playerPos.p.z);
+		position.x = psSimpObj->pos.x;
+		position.z = -(psSimpObj->pos.y);
 		position.y = psSimpObj->pos.z;
 
-		psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
+		psBStats = psDroid->getBodyStats();
 		droidSize = psBStats->pIMD->radius;
 		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel) - (droidSize * 2);
 
@@ -216,12 +218,12 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXDATA)
 		{
 			const PROXIMITY_DISPLAY *ptr = (PROXIMITY_DISPLAY *)pObject;
-			position.x = ((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->x - playerPos.p.x;
+			position.x = ((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->x;
 #if defined( _MSC_VER )
 	#pragma warning( push )
 	#pragma warning( disable : 4146 ) // warning C4146: unary minus operator applied to unsigned type, result still unsigned
 #endif
-			position.z = -(((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->y - playerPos.p.z);
+			position.z = -(((VIEW_PROXIMITY *)ptr->psMessage->pViewData->pData)->y);
 #if defined( _MSC_VER )
 	#pragma warning( pop )
 #endif
@@ -230,8 +232,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		else if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXOBJ)
 		{
 			const PROXIMITY_DISPLAY *ptr = (PROXIMITY_DISPLAY *)pObject;
-			position.x = ptr->psMessage->psObj->pos.x - playerPos.p.x;
-			position.z = -(ptr->psMessage->psObj->pos.y - playerPos.p.z);
+			position.x = ptr->psMessage->psObj->pos.x;
+			position.z = -(ptr->psMessage->psObj->pos.y);
 			position.y = ptr->psMessage->psObj->pos.z;
 		}
 		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel);
@@ -239,7 +241,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		if (z > 0)
 		{
 			//particle use the image radius
-			pImd = getImdFromIndex(MI_BLIP_ENEMY);//use MI_BLIP_ENEMY as all are same radius
+			pImd = getDisplayImdFromIndex(MI_BLIP_ENEMY);//use MI_BLIP_ENEMY as all are same radius
 			radius = pImd->radius;
 			radius *= SCALE_DEPTH;
 			radius /= z;
@@ -251,8 +253,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		}
 		break;
 	case RENDER_EFFECT:
-		position.x = static_cast<int>(((EFFECT *)pObject)->position.x - playerPos.p.x);
-		position.z = static_cast<int>(-(((EFFECT *)pObject)->position.z - playerPos.p.z));
+		position.x = static_cast<int>(((EFFECT *)pObject)->position.x);
+		position.z = static_cast<int>(-(((EFFECT *)pObject)->position.z));
 		position.y = static_cast<int>(((EFFECT *)pObject)->position.y);
 
 		/* 16 below is HACK!!! */
@@ -278,9 +280,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		break;
 
 	case RENDER_DELIVPOINT:
-		position.x = ((FLAG_POSITION *)pObject)->coords.x - playerPos.p.x;
-		position.z = -(((FLAG_POSITION *)pObject)->
-		               coords.y - playerPos.p.z);
+		position.x = ((FLAG_POSITION *)pObject)->coords.x;
+		position.z = -(((FLAG_POSITION *)pObject)->coords.y);
 		position.y = ((FLAG_POSITION *)pObject)->coords.z;
 
 		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel);
@@ -340,7 +341,7 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 
 		case EFFECT_WAYPOINT:
 			pie = ((EFFECT *)pObject)->imd;
-			z = INT32_MAX - pie->texpage;
+			z = INT32_MAX - pie->getTextures().texpage;
 			break;
 
 		default:
@@ -349,21 +350,21 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 		}
 		break;
 	case RENDER_DROID:
-		pie = BODY_IMD(((DROID *)pObject), 0);
-		z = INT32_MAX - pie->texpage;
+		pie = BODY_IMD(((DROID *)pObject), 0)->displayModel();
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_STRUCTURE:
-		pie = ((STRUCTURE *)pObject)->sDisplay.imd;
-		z = INT32_MAX - pie->texpage;
+		pie = ((STRUCTURE *)pObject)->sDisplay.imd->displayModel();
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_FEATURE:
-		pie = ((FEATURE *)pObject)->sDisplay.imd;
-		z = INT32_MAX - pie->texpage;
+		pie = ((FEATURE *)pObject)->sDisplay.imd->displayModel();
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_DELIVPOINT:
 		pie = pAssemblyPointIMDs[((FLAG_POSITION *)pObject)->
-		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc];
-		z = INT32_MAX - pie->texpage;
+		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc]->displayModel();
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_PARTICLE:
 		z = 0;
@@ -385,6 +386,7 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 /* render Objects in list */
 void bucketRenderCurrentList(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(bucketRenderCurrentList);
 	std::sort(bucketArray.begin(), bucketArray.end());
 
 	for (auto thisTag = bucketArray.cbegin(); thisTag != bucketArray.cend(); ++thisTag)

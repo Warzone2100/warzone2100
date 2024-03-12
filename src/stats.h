@@ -26,6 +26,7 @@
 #include "lib/framework/wzconfig.h"
 
 #include <utility>
+#include <vector>
 
 #include "objectdef.h"
 
@@ -35,30 +36,19 @@
  */
 
 /* The stores for the different stats */
-extern BODY_STATS			*asBodyStats;
-extern BRAIN_STATS			*asBrainStats;
-extern PROPULSION_STATS		*asPropulsionStats;
-extern SENSOR_STATS			*asSensorStats;
-extern ECM_STATS			*asECMStats;
-extern REPAIR_STATS			*asRepairStats;
-extern WEAPON_STATS			*asWeaponStats;
-extern CONSTRUCT_STATS		*asConstructStats;
+extern std::vector<BODY_STATS> asBodyStats;
+extern std::vector<BRAIN_STATS> asBrainStats;
+extern std::vector<PROPULSION_STATS> asPropulsionStats;
+extern std::vector<SENSOR_STATS> asSensorStats;
+extern std::vector<ECM_STATS> asECMStats;
+extern std::vector<REPAIR_STATS> asRepairStats;
+extern std::vector<WEAPON_STATS> asWeaponStats;
+extern std::vector<CONSTRUCT_STATS> asConstructStats;
 extern std::vector<PROPULSION_TYPES> asPropulsionTypes;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 extern WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
-
-/* The number of different stats stored */
-extern UDWORD		numBodyStats;
-extern UDWORD		numBrainStats;
-extern UDWORD		numPropulsionStats;
-extern UDWORD		numSensorStats;
-extern UDWORD		numECMStats;
-extern UDWORD		numRepairStats;
-extern UDWORD		numWeaponStats;
-extern UDWORD		numConstructStats;
-extern UDWORD		numTerrainTypes;
 
 //stores for each players component states - see below
 extern UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
@@ -175,6 +165,16 @@ BASE_STATS *getBaseStatsFromName(const WzString &name);
 /*returns the weapon sub class based on the string name passed in */
 bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
+
+/* returns the translated weapon sub class name - for local display purposes only */
+const char *getWeaponSubClassDisplayName(WEAPON_SUBCLASS wclass, bool shortForm);
+
+namespace gfx_api
+{
+	struct texture; // forward-declare
+}
+gfx_api::texture* loadImageForWeapSubclass(WEAPON_SUBCLASS subClass);
+
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
 bool getBodySize(const WzString &size, BODY_SIZE *pStore);
@@ -211,24 +211,22 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type);
  */
 extern const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT;
 
-WZ_DECL_PURE int weaponROF(const WEAPON_STATS *psStat, int player);
-WZ_DECL_PURE int weaponFirePause(const WEAPON_STATS *psStats, int player);
-WZ_DECL_PURE int weaponReloadTime(const WEAPON_STATS *psStats, int player);
-WZ_DECL_PURE int weaponShortHit(const WEAPON_STATS *psStats, int player);
-WZ_DECL_PURE int weaponLongHit(const WEAPON_STATS *psStats, int player);
-WZ_DECL_PURE int weaponDamage(const WEAPON_STATS *psStats, int player);
-WZ_DECL_PURE int weaponRadDamage(const WEAPON_STATS *psStats, int player);
-WZ_DECL_PURE int weaponPeriodicalDamage(const WEAPON_STATS *psStats, int player);
-WZ_DECL_PURE int sensorRange(const SENSOR_STATS *psStats, int player);
-WZ_DECL_PURE int ecmRange(const ECM_STATS *psStats, int player);
-WZ_DECL_PURE int repairPoints(const REPAIR_STATS *psStats, int player);
-WZ_DECL_PURE int constructorPoints(const CONSTRUCT_STATS *psStats, int player);
-WZ_DECL_PURE int bodyPower(const BODY_STATS *psStats, int player);
-WZ_DECL_PURE int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass);
+WZ_DECL_PURE int weaponROF(const WEAPON_STATS& psStat, int player);
+WZ_DECL_PURE int weaponFirePause(const WEAPON_STATS& psStats, int player);
+WZ_DECL_PURE int weaponReloadTime(const WEAPON_STATS& psStats, int player);
+WZ_DECL_PURE int weaponShortHit(const WEAPON_STATS& psStats, int player);
+WZ_DECL_PURE int weaponLongHit(const WEAPON_STATS& psStats, int player);
+WZ_DECL_PURE int weaponDamage(const WEAPON_STATS& psStats, int player);
+WZ_DECL_PURE int weaponRadDamage(const WEAPON_STATS& psStats, int player);
+WZ_DECL_PURE int weaponPeriodicalDamage(const WEAPON_STATS& psStats, int player);
+WZ_DECL_PURE int sensorRange(const SENSOR_STATS& psStats, int player);
+WZ_DECL_PURE int ecmRange(const ECM_STATS& psStats, int player);
+WZ_DECL_PURE int repairPoints(const REPAIR_STATS& psStats, int player);
+WZ_DECL_PURE int constructorPoints(const CONSTRUCT_STATS& psStats, int player);
+WZ_DECL_PURE int bodyPower(const BODY_STATS& psStats, int player);
+WZ_DECL_PURE int bodyArmour(const BODY_STATS& psStats, int player, WEAPON_CLASS weaponClass);
 
 WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
-
-void statsInitVars();
 
 bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect);
 /*returns the weapon effect string based on the enum passed in */

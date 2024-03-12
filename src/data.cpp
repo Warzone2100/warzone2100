@@ -147,7 +147,7 @@ static bool bufferSBODYLoad(const char *fileName, void **ppData)
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	calcDataHash(ini, DATA_SBODY);
 
-	if (!loadBodyStats(ini) || !allocComponentList(COMP_BODY, numBodyStats))
+	if (!loadBodyStats(ini) || !allocComponentList(COMP_BODY, asBodyStats.size()))
 	{
 		return false;
 	}
@@ -170,7 +170,7 @@ static bool bufferSWEAPONLoad(const char *fileName, void **ppData)
 	calcDataHash(ini, DATA_SWEAPON);
 
 	if (!loadWeaponStats(ini)
-	    || !allocComponentList(COMP_WEAPON, numWeaponStats))
+	    || !allocComponentList(COMP_WEAPON, asWeaponStats.size()))
 	{
 		return false;
 	}
@@ -187,7 +187,7 @@ static bool bufferSCONSTRLoad(const char *fileName, void **ppData)
 	calcDataHash(ini, DATA_SCONSTR);
 
 	if (!loadConstructStats(ini)
-	    || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
+	    || !allocComponentList(COMP_CONSTRUCT, asConstructStats.size()))
 	{
 		return false;
 	}
@@ -204,7 +204,7 @@ static bool bufferSECMLoad(const char *fileName, void **ppData)
 	calcDataHash(ini, DATA_SECM);
 
 	if (!loadECMStats(ini)
-	    || !allocComponentList(COMP_ECM, numECMStats))
+	    || !allocComponentList(COMP_ECM, asECMStats.size()))
 	{
 		return false;
 	}
@@ -220,7 +220,7 @@ static bool bufferSPROPLoad(const char *fileName, void **ppData)
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	calcDataHash(ini, DATA_SPROP);
 
-	if (!loadPropulsionStats(ini) || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
+	if (!loadPropulsionStats(ini) || !allocComponentList(COMP_PROPULSION, asPropulsionStats.size()))
 	{
 		return false;
 	}
@@ -236,7 +236,7 @@ static bool bufferSSENSORLoad(const char *fileName, void **ppData)
 	calcDataHash(ini, DATA_SSENSOR);
 
 	if (!loadSensorStats(ini)
-	    || !allocComponentList(COMP_SENSOR, numSensorStats))
+	    || !allocComponentList(COMP_SENSOR, asSensorStats.size()))
 	{
 		return false;
 	}
@@ -252,7 +252,7 @@ static bool bufferSREPAIRLoad(const char *fileName, void **ppData)
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	calcDataHash(ini, DATA_SREPAIR);
 
-	if (!loadRepairStats(ini) || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
+	if (!loadRepairStats(ini) || !allocComponentList(COMP_REPAIRUNIT, asRepairStats.size()))
 	{
 		return false;
 	}
@@ -268,7 +268,7 @@ static bool bufferSBRAINLoad(const char *fileName, void **ppData)
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	calcDataHash(ini, DATA_SBRAIN);
 
-	if (!loadBrainStats(ini) || !allocComponentList(COMP_BRAIN, numBrainStats))
+	if (!loadBrainStats(ini) || !allocComponentList(COMP_BRAIN, asBrainStats.size()))
 	{
 		return false;
 	}

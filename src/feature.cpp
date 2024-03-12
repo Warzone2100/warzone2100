@@ -52,16 +52,14 @@
 #include "random.h"
 
 /* The statistics for the features */
-FEATURE_STATS	*asFeatureStats;
-UDWORD			numFeatureStats;
+std::vector<FEATURE_STATS> asFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
 FEATURE_STATS *oilResFeature = nullptr;
 
 void featureInitVars()
 {
-	asFeatureStats = nullptr;
-	numFeatureStats = 0;
+	asFeatureStats.clear();
 	oilResFeature = nullptr;
 }
 
@@ -70,70 +68,69 @@ bool loadFeatureStats(WzConfig &ini)
 {
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
-	asFeatureStats = new FEATURE_STATS[list.size()];
-	numFeatureStats = list.size();
+	asFeatureStats.reserve(list.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		asFeatureStats[i] = FEATURE_STATS(STAT_FEATURE + i);
-		FEATURE_STATS *p = &asFeatureStats[i];
-		p->name = ini.string(WzString::fromUtf8("name"));
-		p->id = list[i];
+		asFeatureStats.emplace_back(STAT_FEATURE + i);
+		FEATURE_STATS& p = asFeatureStats[i];
+		p.name = ini.string(WzString::fromUtf8("name"));
+		p.id = list[i];
 		WzString subType = ini.value("type").toWzString();
 		if (subType == "TANK WRECK")
 		{
-			p->subType = FEAT_TANK;
+			p.subType = FEAT_TANK;
 		}
 		else if (subType == "GENERIC ARTEFACT")
 		{
-			p->subType = FEAT_GEN_ARTE;
+			p.subType = FEAT_GEN_ARTE;
 		}
 		else if (subType == "OIL RESOURCE")
 		{
-			p->subType = FEAT_OIL_RESOURCE;
+			p.subType = FEAT_OIL_RESOURCE;
 		}
 		else if (subType == "BOULDER")
 		{
-			p->subType = FEAT_BOULDER;
+			p.subType = FEAT_BOULDER;
 		}
 		else if (subType == "VEHICLE")
 		{
-			p->subType = FEAT_VEHICLE;
+			p.subType = FEAT_VEHICLE;
 		}
 		else if (subType == "BUILDING")
 		{
-			p->subType = FEAT_BUILDING;
+			p.subType = FEAT_BUILDING;
 		}
 		else if (subType == "OIL DRUM")
 		{
-			p->subType = FEAT_OIL_DRUM;
+			p.subType = FEAT_OIL_DRUM;
 		}
 		else if (subType == "TREE")
 		{
-			p->subType = FEAT_TREE;
+			p.subType = FEAT_TREE;
 		}
 		else if (subType == "SKYSCRAPER")
 		{
-			p->subType = FEAT_SKYSCRAPER;
+			p.subType = FEAT_SKYSCRAPER;
 		}
 		else
 		{
 			ASSERT(false, "Unknown feature type: %s", subType.toUtf8().c_str());
 		}
-		p->psImd = modelGet(ini.value("model").toWzString());
-		p->baseWidth = ini.value("width", 1).toInt();
-		p->baseBreadth = ini.value("breadth", 1).toInt();
-		p->tileDraw = ini.value("tileDraw", 1).toInt();
-		p->allowLOS = ini.value("lineOfSight", 1).toInt();
-		p->visibleAtStart = ini.value("startVisible", 1).toInt();
-		p->damageable = ini.value("damageable", 1).toInt();
-		p->body = ini.value("hitpoints", 1).toInt();
-		p->armourValue = ini.value("armour", 1).toInt();
+		p.psImd = modelGet(ini.value("model").toWzString());
+		p.baseWidth = ini.value("width", 1).toInt();
+		p.baseBreadth = ini.value("breadth", 1).toInt();
+		p.tileDraw = ini.value("tileDraw", 1).toInt();
+		p.allowLOS = ini.value("lineOfSight", 1).toInt();
+		p.visibleAtStart = ini.value("startVisible", 1).toInt();
+		p.damageable = ini.value("damageable", 1).toInt();
+		p.body = ini.value("hitpoints", 1).toInt();
+		p.armourValue = ini.value("armour", 1).toInt();
 
 		//and the oil resource - assumes only one!
-		if (asFeatureStats[i].subType == FEAT_OIL_RESOURCE)
+		if (p.subType == FEAT_OIL_RESOURCE)
 		{
-			oilResFeature = &asFeatureStats[i];
+			oilResFeature = &p;
 		}
 		ini.endGroup();
 	}
@@ -144,9 +141,7 @@ bool loadFeatureStats(WzConfig &ini)
 /* Release the feature stats memory */
 void featureStatsShutDown()
 {
-	delete[] asFeatureStats;
-	asFeatureStats = nullptr;
-	numFeatureStats = 0;
+	asFeatureStats.clear();
 }
 
 /** Deals with damage to a feature
@@ -155,7 +150,7 @@ void featureStatsShutDown()
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
  *  \return < 0 never, >= 0 always
  */
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage)
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int32_t relativeDamage;
 
@@ -164,7 +159,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->psStats->armourValue, damage);
 
-	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond, minDamage);
+	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
 	// If the shell did sufficient damage to destroy the feature
 	if (relativeDamage < 0)
@@ -467,8 +462,8 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			pos.x = psDel->pos.x;
 			pos.z = psDel->pos.y;
 			pos.y = psDel->pos.z;
-			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_SKYSCRAPER, true, psDel->sDisplay.imd, 0, impactTime);
-			initPerimeterSmoke(psDel->sDisplay.imd, pos);
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_SKYSCRAPER, true, psDel->sDisplay.imd->displayModel(), 0, impactTime);
+			initPerimeterSmoke(psDel->sDisplay.imd->displayModel(), pos);
 
 			shakeStart(250); // small shake
 		}
@@ -496,7 +491,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		// ----- Flip all the tiles under the skyscraper to a rubble tile
 		// smoke effect should disguise this happening
 		StructureBounds b = getStructureBounds(psDel);
-		bool isUrban = tilesetDir && strcmp(tilesetDir, "texpages/tertilesc2hw") == 0;
+		bool isUrban = (currentMapTileset == MAP_TILESET::URBAN);
 		for (int breadth = 0; breadth < b.size.y; ++breadth)
 		{
 			for (int width = 0; width < b.size.x; ++width)
@@ -539,7 +534,7 @@ SDWORD getFeatureStatFromName(const WzString &name)
 {
 	FEATURE_STATS *psStat;
 
-	for (unsigned inc = 0; inc < numFeatureStats; inc++)
+	for (unsigned inc = 0, size = asFeatureStats.size(); inc < size; inc++)
 	{
 		psStat = &asFeatureStats[inc];
 		if (psStat->id.compare(name) == 0)

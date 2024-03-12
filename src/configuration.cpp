@@ -25,6 +25,7 @@
 
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/input.h"
+#include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
@@ -54,12 +55,13 @@
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
 #include "clparse.h" // for autoratingUrl
+#include "terrain.h"
+#include "hci/groups.h"
 
 #include <type_traits>
 
-#include "mINI/ini.h"
-#define PHYFSPP_IMPL
-#include "3rdparty/physfs.hpp"
+#include "3rdparty/INIReaderWriter.h"
+#include "3rdparty/gsl_finally.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -72,94 +74,46 @@ static const char *fileName = "config";
 
 // ////////////////////////////////////////////////////////////////////////////
 
-// PhysFS implementation of mINI::INIFileStreamGenerator
+// PhysFS helpers
 
-class PhysFSFileStreamGenerator : public mINI::INIFileStreamGenerator
+static inline std::string WZ_PHYSFS_getRealPath(const char *filename)
 {
-public:
-	PhysFSFileStreamGenerator(std::string const& utf8Path)
-	: INIFileStreamGenerator(utf8Path)
-	{ }
-	virtual ~PhysFSFileStreamGenerator() { }
-public:
-	virtual std::shared_ptr<std::istream> getFileReadStream() const override
-	{
-		if (utf8Path.empty())
-		{
-			return nullptr;
-		}
-		try {
-			return std::static_pointer_cast<std::istream>(PhysFS::ifstream::make(utf8Path));
-		}
-		catch (const std::exception&)
-		{
-			// file likely does not exist
-			return nullptr;
-		}
-	}
-	virtual std::shared_ptr<std::ostream> getFileWriteStream() const override
-	{
-		if (utf8Path.empty())
-		{
-			return nullptr;
-		}
-		try {
-			return std::static_pointer_cast<std::ostream>(PhysFS::ofstream::make(utf8Path));
-		}
-		catch (const std::exception&)
-		{
-			// file likely does not exist
-			return nullptr;
-		}
-	}
-	virtual bool fileExists() const override
-	{
-		if (utf8Path.empty())
-		{
-			return false;
-		}
-		return PHYSFS_exists(utf8Path.c_str());
-	}
-	optional<uint64_t> fileSize() const
-	{
+	std::string fullPath = WZ_PHYSFS_getRealDir_String(filename);
+	if (fullPath.empty()) { return fullPath; }
+	fullPath += PHYSFS_getDirSeparator();
+	fullPath += filename;
+	return fullPath;
+}
+
+static inline optional<uint64_t> WZ_PHYSFS_getFileSize(const char *filename)
+{
 #if defined(WZ_PHYSFS_2_1_OR_GREATER)
-		PHYSFS_Stat metaData;
-		if (PHYSFS_stat(utf8Path.c_str(), &metaData) == 0)
-		{
-			return nullopt; // failed to get file info
-		}
-		if (metaData.filesize < 0)
-		{
-			// unknown filesize
-			return nullopt;
-		}
-		return static_cast<uint64_t>(metaData.filesize);
-#else
-		return nullopt; // unknown
-#endif
-	}
-	std::string realPath() const
+	PHYSFS_Stat metaData = {};
+	if (PHYSFS_stat(filename, &metaData) == 0)
 	{
-		std::string fullPath = WZ_PHYSFS_getRealDir_String(utf8Path.c_str());
-		if (fullPath.empty()) { return fullPath; }
-		fullPath += PHYSFS_getDirSeparator();
-		fullPath += utf8Path;
-		return fullPath;
+		return nullopt; // failed to get file info
 	}
-};
+	if (metaData.filesize < 0)
+	{
+		// unknown filesize
+		return nullopt;
+	}
+	return static_cast<uint64_t>(metaData.filesize);
+#else
+	return nullopt;
+#endif
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 
-typedef mINI::INIMap<std::string> IniSection;
-
-static optional<int> iniSectionGetInteger(const IniSection& iniSection, const std::string& key, optional<int> defaultValue = nullopt)
+static optional<int> iniSectionGetInteger(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<int> defaultValue = nullopt)
 {
-	if (!iniSection.has(key))
+	if (!iniSection.HasValue(key))
 	{
 		return defaultValue;
 	}
 	try {
-		auto valueStr = iniSection.get(key);
+		auto valueStr = iniSection.Get(key, "");
 		int valueInt = std::stoi(valueStr);
 		return valueInt;
 	}
@@ -170,18 +124,18 @@ static optional<int> iniSectionGetInteger(const IniSection& iniSection, const st
 	}
 }
 
-static void iniSectionSetInteger(IniSection& iniSection, const std::string& key, int value)
+static void iniSectionSetInteger(INIReaderWriter::IniSection& iniSection, const std::string& key, int value)
 {
-	iniSection[key] = std::to_string(value);
+	iniSection.SetString(key, std::to_string(value));
 }
 
-static optional<bool> iniSectionGetBool(const IniSection& iniSection, const std::string& key, optional<bool> defaultValue = nullopt)
+static optional<bool> iniSectionGetBool(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<bool> defaultValue = nullopt)
 {
-	if (!iniSection.has(key))
+	if (!iniSection.HasValue(key))
 	{
 		return defaultValue;
 	}
-	auto valueStr = WzString::fromUtf8(iniSection.get(key)).toLower();
+	auto valueStr = WzString::fromUtf8(iniSection.Get(key, "")).toLower();
 	// first check if it's equal to "true" or "false" (case-insensitive)
 	if (valueStr == "true")
 	{
@@ -209,18 +163,18 @@ static optional<bool> iniSectionGetBool(const IniSection& iniSection, const std:
 	return defaultValue;
 }
 
-static void iniSectionSetBool(IniSection& iniSection, const std::string& key, bool value)
+static void iniSectionSetBool(INIReaderWriter::IniSection& iniSection, const std::string& key, bool value)
 {
-	iniSection[key] = (value) ? "true" : "false";
+	iniSection.SetString(key, (value) ? "true" : "false");
 }
 
-static optional<std::string> iniSectionGetString(const IniSection& iniSection, const std::string& key, optional<std::string> defaultValue = nullopt)
+static optional<std::string> iniSectionGetString(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<std::string> defaultValue = nullopt)
 {
-	if (!iniSection.has(key))
+	if (!iniSection.HasValue(key))
 	{
 		return defaultValue;
 	}
-	std::string result = iniSection.get(key);
+	std::string result = iniSection.Get(key, "");
 	// To support prior INI files written by QSettings, strip surrounding "" if present
 	if (!result.empty() && result.front() == '"' && result.back() == '"')
 	{
@@ -233,20 +187,13 @@ static optional<std::string> iniSectionGetString(const IniSection& iniSection, c
 	return result;
 }
 
-bool saveIniFile(mINI::INIFile &file, mINI::INIStructure &ini)
+bool saveIniFile(const char* outputPath, const INIReaderWriter& ini)
 {
 	// write out ini file changes
-	try
+	std::string iniOutput = ini.dump();
+	if (!saveFile(outputPath, iniOutput.c_str(), iniOutput.size()))
 	{
-		if (!file.write(ini))
-		{
-			debug(LOG_INFO, "Could not write configuration file \"%s\"", fileName);
-			return false;
-		}
-	}
-	catch (const std::exception& e)
-	{
-		debug(LOG_ERROR, "Ini write failed with exception: %s", e.what());
+		debug(LOG_ERROR, "Ini write failed");
 		return false;
 	}
 	return true;
@@ -254,43 +201,94 @@ bool saveIniFile(mINI::INIFile &file, mINI::INIStructure &ini)
 
 constexpr uint64_t MAX_CONFIG_FILE_SIZE = 1024 * 1024 * 2; // 2 MB seems like enough...
 
+static INIReaderWriter loadConfigIniFile(const char* inputFile)
+{
+	uint64_t fileStatSize = WZ_PHYSFS_getFileSize(inputFile).value_or(0);
+	if (fileStatSize > MAX_CONFIG_FILE_SIZE)
+	{
+		debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", inputFile, fileStatSize);
+		return INIReaderWriter();
+	}
+
+	std::vector<char> fileContentsBuffer;
+
+	{
+		// load in the existing ini file
+		PHYSFS_File* file = PHYSFS_openRead(inputFile);
+		if (!file)
+		{
+			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", inputFile);
+			return INIReaderWriter();
+		}
+
+		auto close_filehandle_finally = gsl::finally([&file, inputFile] {
+			if (!PHYSFS_close(file))
+			{
+				debug(LOG_ERROR, "Error closing %s: %s", inputFile, WZ_PHYSFS_getLastError());
+				// but continue on...
+			}
+			file = nullptr;
+		});
+
+		debug(LOG_WZ, "Reading configuration from: %s", WZ_PHYSFS_getRealPath(inputFile).c_str());
+
+		// get file size from the open file handle
+		PHYSFS_sint64 filesize = PHYSFS_fileLength(file);
+		if (filesize <= 0)
+		{
+			// File size could not be determined. Is a directory?
+			debug(LOG_INFO, "Could not read existing configuration file \"%s\"; filesize returned (%" PRIi64 ")", inputFile, static_cast<int64_t>(filesize));
+			return INIReaderWriter();
+		}
+		if (static_cast<uint64_t>(filesize) > MAX_CONFIG_FILE_SIZE)
+		{
+			debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", inputFile, static_cast<uint64_t>(filesize));
+			return INIReaderWriter();
+		}
+		ASSERT_OR_RETURN(INIReaderWriter(), filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<PHYSFS_sint32>::max()), "\"%s\" filesize >= std::numeric_limits<PHYSFS_sint32>::max()", inputFile);
+		ASSERT_OR_RETURN(INIReaderWriter(), static_cast<PHYSFS_uint64>(filesize) < static_cast<PHYSFS_uint64>(std::numeric_limits<size_t>::max()), "\"%s\" filesize >= std::numeric_limits<size_t>::max()", inputFile);
+
+		fileContentsBuffer.resize(static_cast<size_t>(filesize + 1));
+
+		/* Load the file data */
+		PHYSFS_sint64 length_read = WZ_PHYSFS_readBytes(file, fileContentsBuffer.data(), static_cast<PHYSFS_uint32>(filesize));
+		if (length_read != filesize)
+		{
+			fileContentsBuffer.clear();
+
+			debug(LOG_ERROR, "Reading %s short: %s", inputFile, WZ_PHYSFS_getLastError());
+			PHYSFS_close(file);
+			return INIReaderWriter();
+		}
+	}
+
+	if (fileContentsBuffer.empty())
+	{
+		debug(LOG_INFO, "Nothing read from configuration file \"%s\"?", inputFile);
+		return INIReaderWriter();
+	}
+
+	// append null
+	fileContentsBuffer[fileContentsBuffer.size() - 1] = 0;
+
+	// load IniReaderWriter from the buffer
+	auto result = INIReaderWriter(fileContentsBuffer.data(), fileContentsBuffer.size() - 1);
+	if (result.ParseError() != 0)
+	{
+		debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; error parsing line: %d", inputFile, result.ParseError());
+		return INIReaderWriter();
+	}
+	return result;
+}
+
+
 // ////////////////////////////////////////////////////////////////////////////
 bool loadConfig()
 {
-	// first, create a file instance
-	auto fileStreamGenerator = std::make_shared<PhysFSFileStreamGenerator>(fileName);
-	mINI::INIFile file(fileStreamGenerator);
+	auto ini = loadConfigIniFile(fileName);
+	bool createdConfigFile = !ini.LoadedFromData();
 
-	// next, create a structure that will hold data
-	mINI::INIStructure ini;
-	bool createdConfigFile = false;
-
-	// now we can read the file
-	try
-	{
-		uint64_t fileSize = fileStreamGenerator->fileSize().value_or(0);
-		if (fileSize > MAX_CONFIG_FILE_SIZE)
-		{
-			createdConfigFile = true;
-			debug(LOG_ERROR, "Could not read existing configuration file \"%s\"; filesize (%" PRIu64 ") exceeds max", fileName, fileSize);
-			// will just proceed with an empty ini structure
-		}
-		if (!createdConfigFile && !file.read(ini))
-		{
-			createdConfigFile = true;
-			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
-			// will just proceed with an empty ini structure
-		}
-	}
-	catch (const std::exception& e)
-	{
-		createdConfigFile = true;
-		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		ini.clear();
-		// will just proceed with an empty ini structure
-	}
-
-	auto& iniGeneral = ini["General"];
+	auto& iniGeneral = ini.GetSection("General");
 
 	auto iniGetInteger = [&iniGeneral](const std::string& key, optional<int> defaultValue) -> optional<int> {
 		return iniSectionGetInteger(iniGeneral, key, defaultValue);
@@ -312,9 +310,25 @@ bool loadConfig()
 		return iniSectionGetString(iniGeneral, key, defaultValue);
 	};
 
+	auto iniGetPlayerLeaveMode = [&iniGeneral](const std::string& key, PLAYER_LEAVE_MODE defaultValue) -> optional<PLAYER_LEAVE_MODE> {
+		auto intVal = iniSectionGetInteger(iniGeneral, key);
+		if (!intVal.has_value())
+		{
+			return defaultValue;
+		}
+		if (intVal.value() >= 0 && intVal.value() <= static_cast<int>(PLAYER_LEAVE_MODE_MAX))
+		{
+			return static_cast<PLAYER_LEAVE_MODE>(intVal.value());
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid PLAYER_LEAVE_MODE value: %d; defaulting to: %d", intVal.value(), static_cast<int>(defaultValue));
+			return defaultValue;
+		}
+	};
+
 	ActivityManager::instance().beginLoadingSettings();
 
-	debug(LOG_WZ, "Reading configuration from: %s", fileStreamGenerator->realPath().c_str());
 	if (auto value = iniGetIntegerOpt("voicevol"))
 	{
 		sound_SetUIVolume(static_cast<float>(value.value()) / 100.0f);
@@ -356,7 +370,7 @@ bool loadConfig()
 	}
 	if (iniGeneral.has("language"))
 	{
-		setLanguage(iniGeneral.get("language").c_str());
+		setLanguage(iniGetString("language", "").value().c_str());
 	}
 	if (auto value = iniGetBoolOpt("nomousewarp"))
 	{
@@ -371,6 +385,8 @@ bool loadConfig()
 		war_SetCameraSpeed((v % CAMERASPEED_STEP != 0) ? CAMERASPEED_DEFAULT : v);
 	}
 	setShakeStatus(iniGetBool("shake", false).value());
+	war_setGroupsMenuEnabled(iniGetBool("groupmenu", true).value());
+	setGroupButtonEnabled(war_getGroupsMenuEnabled());
 	setCameraAccel(iniGetBool("cameraAccel", true).value());
 	setDrawShadows(iniGetBool("shadows", true).value());
 	war_setSoundEnabled(iniGetBool("sound", true).value());
@@ -397,7 +413,7 @@ bool loadConfig()
 	setAutoratingEnable(iniGetBool("autorating", false).value());
 	setSendGeoIPDataEnable(iniGetBool("sendGeoIPData", true).value());
 	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
-	mpSetServerName(iniGetString("server_name", "").value().c_str());
+	mpSetServerName(iniGetString("server_name", "").value());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 //	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 //	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
@@ -407,9 +423,10 @@ bool loadConfig()
 		NETsetGameserverPort(iniGetInteger("gameserver_port", GAMESERVERPORT).value());
 	}
 	NETsetJoinPreferenceIPv6(iniGetBool("prefer_ipv6", true).value());
+	NETsetDefaultMPHostFreeChatPreference(iniGetBool("hostingChatDefault", NETgetDefaultMPHostFreeChatPreference()).value());
 	setPublicIPv4LookupService(iniGetString("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).value());
 	setPublicIPv6LookupService(iniGetString("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).value());
-	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", FMV_FULLSCREEN).value());
+	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", war_GetFMVmode()).value());
 	war_setScanlineMode((SCANLINE_MODE)iniGetInteger("scanlines", SCANLINES_OFF).value());
 	seq_SetSubtitles(iniGetBool("subtitles", true).value());
 	setDifficultyLevel((DIFFICULTY_LEVEL)iniGetInteger("difficulty", DL_NORMAL).value());
@@ -444,6 +461,10 @@ bool loadConfig()
 	game.scavengers = iniGetInteger("newScavengers", SCAVENGERS).value();
 	war_setMPInactivityMinutes(iniGetInteger("inactivityMinutesMP", war_getMPInactivityMinutes()).value());
 	game.inactivityMinutes = war_getMPInactivityMinutes();
+	war_setMPGameTimeLimitMinutes(iniGetInteger("gameTimeLimitMinutesMP", war_getMPGameTimeLimitMinutes()).value());
+	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
+	war_setMPPlayerLeaveMode(iniGetPlayerLeaveMode("playerLeaveModeMP", war_getMPPlayerLeaveMode()).value());
+	game.playerLeaveMode = war_getMPPlayerLeaveMode();
 	bEnemyAllyRadarColor = iniGetBool("radarObjectMode", false).value();
 	radarDrawMode = (RADAR_DRAW_MODE)iniGetInteger("radarTerrainMode", RADAR_MODE_DEFAULT).value();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
@@ -567,6 +588,37 @@ bool loadConfig()
 	war_setMPopenSpectatorSlots(static_cast<uint16_t>(std::max<int>(0, std::min<int>(openSpecSlotsIntValue, MAX_SPECTATOR_SLOTS))));
 	war_setFogEnd(iniGetInteger("fogEnd", 8000).value());
 	war_setFogStart(iniGetInteger("fogStart", 4000).value());
+	if (auto value = iniGetIntegerOpt("terrainMode"))
+	{
+		auto intValue = value.value();
+		if (intValue >= 0 && intValue <= TerrainShaderQuality_MAX)
+		{
+			setTerrainShaderQuality(static_cast<TerrainShaderQuality>(intValue));
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid terrainMode value: %d; using default", intValue);
+		}
+	}
+	if (auto value = iniGetIntegerOpt("terrainShadingQuality"))
+	{
+		auto intValue = value.value();
+		if (!setTerrainMappingTexturesMaxSize(intValue))
+		{
+			debug(LOG_WARNING, "Unsupported / invalid terrainShadingQuality value: %d; using default", intValue);
+		}
+	}
+	war_setShadowFilterSize(iniGetInteger("shadowFilterSize", (int)war_getShadowFilterSize()).value());
+	if (auto value = iniGetIntegerOpt("shadowMapResolution"))
+	{
+		war_setShadowMapResolution(value.value());
+	}
+
+	{
+		auto value = iniGetBoolOpt("pointLightsPerpixel");
+		war_setPointLightPerPixelLighting(value.value_or(false));
+	}
+
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -574,26 +626,7 @@ bool loadConfig()
 // ////////////////////////////////////////////////////////////////////////////
 bool saveConfig()
 {
-	// first, create a file instance
-	mINI::INIFile file(std::make_shared<PhysFSFileStreamGenerator>(fileName));
-
-	// next, create a structure that will hold data
-	mINI::INIStructure ini;
-
-	// read in the current file
-	try
-	{
-		if (!file.read(ini))
-		{
-			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
-			// will just proceed with an empty ini structure
-		}
-	}
-	catch (const std::exception& e)
-	{
-		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		return false;
-	}
+	auto ini = loadConfigIniFile(fileName);
 
 	std::string fullConfigFilePath;
 	if (PHYSFS_getWriteDir())
@@ -604,7 +637,7 @@ bool saveConfig()
 	fullConfigFilePath += fileName;
 	debug(LOG_WZ, "Writing configuration to: \"%s\"", fullConfigFilePath.c_str());
 
-	auto& iniGeneral = ini["General"];
+	auto& iniGeneral = ini.GetSection("General");
 
 	auto iniSetInteger = [&iniGeneral](const std::string& key, int value) {
 		iniSectionSetInteger(iniGeneral, key, value);
@@ -613,7 +646,17 @@ bool saveConfig()
 		iniSectionSetBool(iniGeneral, key, value);
 	};
 	auto iniSetString = [&iniGeneral](const std::string& key, const std::string& value) {
-		iniGeneral[key] = value;
+		iniGeneral.SetString(key, value);
+	};
+	auto iniSetFromCString = [&iniGeneral](const std::string& key, const char* value, size_t maxLength) {
+		std::string strVal;
+		if (value)
+		{
+			size_t len = strnlen(value, maxLength);
+			ASSERT(len < maxLength, "Input c-string value (for key: %s) appears to be missing null-terminator?", key.c_str());
+			strVal.assign(value, len);
+		}
+		iniGeneral.SetString(key, strVal);
 	};
 
 	// //////////////////////////
@@ -641,6 +684,7 @@ bool saveConfig()
 	iniSetInteger("lodDistanceBias", war_getLODDistanceBiasPercentage());
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
+	iniSetInteger("groupmenu", (int)war_getGroupsMenuEnabled());		// groups menu
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
@@ -671,7 +715,7 @@ bool saveConfig()
 	iniSetString("autoratingUrlV2", getAutoratingUrl());
 	iniSetBool("autorating", getAutoratingEnable());
 	iniSetBool("sendGeoIPData", getSendGeoIPDataEnable());
-	iniSetString("masterserver_name", NETgetMasterserverName());
+	iniSetFromCString("masterserver_name", NETgetMasterserverName(), 255);
 	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
 	iniSetString("server_name", mpGetServerName());
 	if (!netGameserverPortOverride) // do not save the config port setting if there's a command-line override
@@ -679,6 +723,7 @@ bool saveConfig()
 		iniSetInteger("gameserver_port", (int)NETgetGameserverPort());
 	}
 	iniSetBool("prefer_ipv6", NETgetJoinPreferenceIPv6());
+	iniSetInteger("hostingChatDefault", (NETgetDefaultMPHostFreeChatPreference()) ? 1 : 0);
 	iniSetString("publicIPv4LookupService_Url", getPublicIPv4LookupServiceUrl());
 	iniSetString("publicIPv4LookupService_JSONKey", getPublicIPv4LookupServiceJSONKey());
 	iniSetString("publicIPv6LookupService_Url", getPublicIPv6LookupServiceUrl());
@@ -693,14 +738,16 @@ bool saveConfig()
 		{
 			if (bMultiPlayer && NetPlay.bComms)
 			{
-				iniSetString("gameName", game.name);			//  last hosted game
+				iniSetFromCString("gameName", game.name, 128);			//  last hosted game
 				war_setMPInactivityMinutes(game.inactivityMinutes);
+				war_setMPGameTimeLimitMinutes(game.gameTimeLimitMinutes);
+				war_setMPPlayerLeaveMode(game.playerLeaveMode);
 
 				// remember number of spectator slots in MP games
 				auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
 				war_setMPopenSpectatorSlots(currentSpectatorSlotInfo.totalSpectatorSlots);
 			}
-			iniSetString("mapName", game.map);				//  map name
+			iniSetFromCString("mapName", game.map, 128);				//  map name
 			iniSetString("mapHash", game.hash.toString());          //  map hash
 			iniSetInteger("maxPlayers", (int)game.maxPlayers);		// maxPlayers
 			iniSetInteger("powerLevel", game.power);				// power
@@ -708,10 +755,12 @@ bool saveConfig()
 			iniSetInteger("alliance", (int)game.alliance);		// allow alliances
 			iniSetInteger("newScavengers", game.scavengers);
 		}
-		iniSetString("playerName", (char *)sPlayer);		// player name
+		iniSetFromCString("playerName", (char *)sPlayer, 128);		// player name
 	}
 	iniSetInteger("colourMP", war_getMPcolour());
 	iniSetInteger("inactivityMinutesMP", war_getMPInactivityMinutes());
+	iniSetInteger("gameTimeLimitMinutesMP", war_getMPGameTimeLimitMinutes());
+	iniSetInteger("playerLeaveModeMP", (int)war_getMPPlayerLeaveMode());
 	iniSetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetInteger("minimizeOnFocusLoss", war_getMinimizeOnFocusLoss());
@@ -727,35 +776,21 @@ bool saveConfig()
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());
 	iniSetInteger("fogEnd", war_getFogEnd());
 	iniSetInteger("fogStart", war_getFogStart());
+	iniSetInteger("terrainMode", getTerrainShaderQuality());
+	iniSetInteger("terrainShadingQuality", getTerrainMappingTexturesMaxSize());
+	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
+	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
+	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes
-	bool result = saveIniFile(file, ini);
+	bool result = saveIniFile(fileName, ini);
 	return result;
 }
 
 bool saveGfxConfig()
 {
-	// first, create a file instance
-	mINI::INIFile file(std::make_shared<PhysFSFileStreamGenerator>(fileName));
-
-	// next, create a structure that will hold data
-	mINI::INIStructure ini;
-
-	// read in the current file
-	try
-	{
-		if (!file.read(ini))
-		{
-			debug(LOG_WZ, "Could not read existing configuration file \"%s\"", fileName);
-			// will just proceed with an empty ini structure
-		}
-	}
-	catch (const std::exception& e)
-	{
-		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		return false;
-	}
+	auto ini = loadConfigIniFile(fileName);
 
 	std::string fullConfigFilePath;
 	if (PHYSFS_getWriteDir())
@@ -766,17 +801,18 @@ bool saveGfxConfig()
 	fullConfigFilePath += fileName;
 	debug(LOG_WZ, "Writing gfx configuration to: \"%s\"", fullConfigFilePath.c_str());
 
-	auto& iniGeneral = ini["General"];
+	auto& iniGeneral = ini.GetSection("General");
 
 	auto iniSetString = [&iniGeneral](const std::string& key, const std::string& value) {
-		iniGeneral[key] = value;
+		iniGeneral.SetString(key, value);
 	};
 
-	// only change the gfx entry
+	// only change specific gfx entries
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
+	iniSectionSetInteger(iniGeneral, "antialiasing", war_getAntialiasing());
 
 	// write out ini file changes
-	bool result = saveIniFile(file, ini);
+	bool result = saveIniFile(fileName, ini);
 	return result;
 }
 
@@ -784,29 +820,26 @@ bool saveGfxConfig()
 // Ensures that others' games don't change our own configuration settings
 bool reloadMPConfig()
 {
-	// first, create a file instance
-	mINI::INIFile file(std::make_shared<PhysFSFileStreamGenerator>(fileName));
-
-	// next, create a structure that will hold data
-	mINI::INIStructure ini;
-
-	// now we can read the file
-	try
+	auto ini = loadConfigIniFile(fileName);
+	if (!ini.LoadedFromData())
 	{
-		if (!file.read(ini))
+		debug(LOG_INFO, "Could not read existing configuration file \"%s\"", fileName);
+	}
+
+	auto& iniGeneral = ini.GetSection("General");
+
+	debug(LOG_WZ, "Reloading mp config");
+
+	auto iniSetFromCString = [&iniGeneral](const std::string& key, const char* value, size_t maxLength) {
+		std::string strVal;
+		if (value)
 		{
-			debug(LOG_INFO, "Could not read existing configuration file \"%s\"", fileName);
+			size_t len = strnlen(value, maxLength);
+			ASSERT(len < maxLength, "Input c-string value (for key: %s) appears to be missing null-terminator?", key.c_str());
+			strVal.assign(value, len);
 		}
-	}
-	catch (const std::exception& e)
-	{
-		debug(LOG_ERROR, "Ini read failed with exception: %s", e.what());
-		return false;
-	}
-
-	auto& iniGeneral = ini["General"];
-
-	debug(LOG_WZ, "Reloading prefs prefs to registry");
+		iniGeneral.SetString(key, strVal);
+	};
 
 	// If we're in-game, we already have our own configuration set, so no need to reload it.
 	if (NetPlay.isHost && !ingame.localJoiningInProgress)
@@ -828,7 +861,7 @@ bool reloadMPConfig()
 	{
 		if (bMultiPlayer && NetPlay.bComms)
 		{
-			iniGeneral["gameName"] = std::string(game.name);			//  last hosted game
+			iniSetFromCString("gameName", game.name, 128);			//  last hosted game
 		}
 		else
 		{
@@ -850,7 +883,7 @@ bool reloadMPConfig()
 		iniSectionSetInteger(iniGeneral, "alliance", game.alliance);		// allow alliances
 
 		// write out ini file changes
-		bool result = saveIniFile(file, ini);
+		bool result = saveIniFile(fileName, ini);
 		return result;
 	}
 
@@ -871,6 +904,11 @@ bool reloadMPConfig()
 	game.base = iniSectionGetInteger(iniGeneral, "base", CAMP_BASE).value();
 	game.alliance = iniSectionGetInteger(iniGeneral, "alliance", NO_ALLIANCES).value();
 	game.inactivityMinutes = war_getMPInactivityMinutes();
+	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
+	game.playerLeaveMode = war_getMPPlayerLeaveMode();
+
+	// restore group menus enabled setting (as tutorial may override it)
+	setGroupButtonEnabled(war_getGroupsMenuEnabled());
 
 	return true;
 }

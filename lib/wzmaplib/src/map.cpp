@@ -597,13 +597,14 @@ static inline bool jsonGetBaseMapObjectInfo(T& mapObj, uint32_t jsonFileVersion,
 			return false;
 		}
 		uint32_t id = jsonObj["id"].get<uint32_t>();
-		if (id == 0)
+		if (id > 0)
 		{
-			// Invalid droid id - cannot be 0
-			debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"id\" = 0 for: %s", jsonContext.filename, jsonContext.jsonPath);
-			return false;
+			mapObj.id = id;
 		}
-		mapObj.id = id;
+		else
+		{
+			debug(pCustomLogger, LOG_WARNING, "%s: Invalid \"id\" = 0 for: %s - ignoring id value", jsonContext.filename, jsonContext.jsonPath);
+		}
 	}
 	// "position" must contain at least two components [x, y]
 	auto position = jsonGetListOfType<uint32_t>(jsonObj, "position", 2, maxComponentsPosition, jsonContext, pCustomLogger);
@@ -799,7 +800,14 @@ static optional<FileLoadResult<Structure>> loadBJOStructureInit(const std::strin
 		}
 
 		Structure structure;
-		structure.id = id;
+		if (id > 0)
+		{
+			structure.id = id;
+		}
+		else
+		{
+			debug(pCustomLogger, LOG_WARNING, "%s: Structure %" PRIu32 " has id = 0 - ignoring id value", path, i);
+		}
 		structure.name.assign(nameBuff.begin(), std::find(nameBuff.begin(), nameBuff.end(), '\0'));
 		// TODO: Possibly handle collecting modules?
 		structure.position.x = x;
@@ -1191,7 +1199,14 @@ static optional<FileLoadResult<Droid>> loadBJODroidInit(const std::string& filen
 			return nullopt;
 		}
 		Droid droid;
-		droid.id = id;
+		if (id > 0)
+		{
+			droid.id = id;
+		}
+		else
+		{
+			debug(pCustomLogger, LOG_WARNING, "%s: Droid %" PRIu32 " has id = 0 - ignoring id value", path, i);
+		}
 		droid.name.assign(nameBuff.begin(), std::find(nameBuff.begin(), nameBuff.end(), '\0'));
 		droid.position.x = (x & ~TILE_MASK) + TILE_UNITS / 2;
 		droid.position.y = (y & ~TILE_MASK) + TILE_UNITS / 2;
@@ -1544,7 +1559,14 @@ static optional<FileLoadResult<Feature>> loadBJOFeatureInit(const std::string& f
 		}
 
 		Feature feature;
-		feature.id = id;
+		if (id > 0)
+		{
+			feature.id = id;
+		}
+		else
+		{
+			debug(pCustomLogger, LOG_WARNING, "%s: Feature %" PRIu32 " has id = 0 - ignoring id value", path, i);
+		}
 		feature.name.assign(nameBuff.begin(), std::find(nameBuff.begin(), nameBuff.end(), '\0'));
 		feature.position.x = x;
 		feature.position.y = y;

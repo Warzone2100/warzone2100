@@ -2,7 +2,7 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 uniform vec4 color;
-uniform sampler2D theTexture;
+uniform sampler2D Texture;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec2 uv;
@@ -19,8 +19,8 @@ out vec4 FragColor;
 void main()
 {
 	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-	FragColor = texture(theTexture, uv) * color;
+	FragColor = texture(Texture, uv) * color;
 	#else
-	gl_FragColor = texture2D(theTexture, uv) * color;
+	gl_FragColor = texture2D(Texture, uv) * color;
 	#endif
 }

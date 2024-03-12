@@ -730,6 +730,11 @@ static bool fetchProgramPath(char *const output_programPath, size_t const bufSiz
 	 * output in output_programPath.
 	 */
 	whichProgramStream = popen(whichProgramCommand, "r");
+	if(!whichProgramStream)
+	{
+		debug(LOG_WARNING, "failed to popen which");
+		return false;
+	}
 	bytesRead = fread(output_programPath, 1, bufSize, whichProgramStream);
 	pclose(whichProgramStream);
 
@@ -779,7 +784,7 @@ void setupExceptionHandler(int argc, const char * const *argv, const char *packa
 
 #if defined(WZ_OS_WIN)
 	ExchndlSetup(packageVersion, writeDir, portable_mode);
-#elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
+#elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC) && !defined(__EMSCRIPTEN__)
 	programCommand = argv[0];
 
 	// Get full path to this program. Needed for gdb to find the binary.

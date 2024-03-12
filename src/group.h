@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_GROUP_H__
 
 #include "orderdef.h"
+#include "objmem.h"
 
 struct BASE_OBJECT;
 struct DROID;
@@ -43,7 +44,7 @@ public: // TODO: c++ design to members become private.
 
 	void add(DROID *psDroid);     // Add a droid to group. Remove it from its group in case it already has group
 	void remove(DROID *psDroid);  // Remove droid from group. Free group in case RefCount<=0
-	unsigned int getNumMembers(); // Count the number of members of a group
+	unsigned int getNumMembers() const; // Count the number of members of a group
 
 	void orderGroup(DROID_ORDER order);                     // give an order all the droids of the group
 	void orderGroup(DROID_ORDER order, UDWORD x, UDWORD y); // give an order all the droids of the group (using location)
@@ -51,11 +52,11 @@ public: // TODO: c++ design to members become private.
 
 	void setSecondary(SECONDARY_ORDER sec, SECONDARY_STATE state); // set the secondary state for a group of droids
 
-	GROUP_TYPE	type;         // Type from the enum GROUP_TYPE above
-	SWORD		refCount;     // Number of objects in the group. Group is deleted if refCount<=0. Count number of droids+NULL pointers.
-	DROID		*psList;      // List of droids in the group
-	DROID		*psCommander; // The command droid of a command group
-	int		id;	// unique group id
+	GROUP_TYPE type;         // Type from the enum GROUP_TYPE above
+	SWORD      refCount;     // Number of objects in the group. Group is deleted if refCount<=0. Count number of droids+NULL pointers.
+	DroidList  psList;       // List of droids in the group
+	DROID      *psCommander; // The command droid of a command group
+	int        id;           // unique group id
 };
 
 // initialise the group system

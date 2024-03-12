@@ -30,6 +30,7 @@
 
 #include <list>
 #include <string>
+#include <array>
 
 /// maximum number of data files
 #define LEVEL_MAXFILES	9
@@ -60,19 +61,22 @@ enum class LEVEL_TYPE : uint8_t
 
 struct LEVEL_DATASET
 {
-	LEVEL_TYPE type;				// type of map
-	SWORD	players;				// number of players for the map
-	SWORD	game;					// index of WRF/WDG that loads the scenario file
-	char	*pName;					// title for the level
-	searchPathMode	dataDir;					// title for the level
-	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/GAM files for the level
+	LEVEL_TYPE type = LEVEL_TYPE::LDS_COMPLETE;				// type of map
+	SWORD	players = 0;									// number of players for the map
+	SWORD	game = 0;										// index of WRF/WDG that loads the scenario file
+	std::string	pName;										// title for the level
+	searchPathMode	dataDir = mod_clean;					// title for the level
+	std::array<std::string, LEVEL_MAXFILES> apDataFiles;	// the WRF/GAM files for the level
 	// in load order
-	LEVEL_DATASET *psBaseData;                      // LEVEL_DATASET that must be loaded for this level to load
-	LEVEL_DATASET *psChange;                        // LEVEL_DATASET used when changing to this level from another
+	LEVEL_DATASET *psBaseData = nullptr;					// LEVEL_DATASET that must be loaded for this level to load
+	LEVEL_DATASET *psChange = nullptr;						// LEVEL_DATASET used when changing to this level from another
 
-	char           *realFileName;                   ///< Filename of the file containing the level, or NULL if the level is built in.
-	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
-	char           *customMountPoint;               ///< A custom mount point (to be used for "flattened" map packages, or NULL for the default.
+	char *realFileName = nullptr;							///< Filename of the file containing the level, or NULL if the level is built in.
+	Sha256 realFileHash;									///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
+	char *customMountPoint = nullptr;						///< A custom mount point (to be used for "flattened" map packages, or NULL for the default.
+
+public:
+	void reset();
 };
 
 typedef std::vector<LEVEL_DATASET *> LEVEL_LIST;

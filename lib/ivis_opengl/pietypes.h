@@ -59,6 +59,7 @@ using nonstd::nullopt;
 #define pie_STATIC_SHADOW       0x100
 #define pie_PREMULTIPLIED       0x200
 #define pie_NODEPTHWRITE        0x400
+#define pie_FORCELIGHT          0x800
 
 #define pie_RAISE_SCALE			256
 
@@ -99,13 +100,17 @@ enum SHADER_MODE
 {
 	SHADER_NONE,
 	SHADER_COMPONENT,
-	SHADER_BUTTON,
+	SHADER_COMPONENT_INSTANCED,
+	SHADER_COMPONENT_DEPTH_INSTANCED,
 	SHADER_NOLIGHT,
+	SHADER_NOLIGHT_INSTANCED,
 	SHADER_TERRAIN,
 	SHADER_TERRAIN_DEPTH,
+	SHADER_TERRAIN_DEPTHMAP,
 	SHADER_DECALS,
 	SHADER_WATER,
 	SHADER_RECT,
+	SHADER_RECT_INSTANCED,
 	SHADER_TEXRECT,
 	SHADER_GFX_COLOUR,
 	SHADER_GFX_TEXT,
@@ -113,6 +118,16 @@ enum SHADER_MODE
 	SHADER_GENERIC_COLOR,
 	SHADER_LINE,
 	SHADER_TEXT,
+	SHADER_TERRAIN_COMBINED_CLASSIC,
+	SHADER_TERRAIN_COMBINED_MEDIUM,
+	SHADER_TERRAIN_COMBINED_HIGH,
+	SHADER_WATER_CLASSIC,
+	SHADER_WATER_HIGH,
+	// Render World to Screen
+	SHADER_WORLD_TO_SCREEN,
+	// Debugging
+	SHADER_DEBUG_TEXTURE2D_QUAD,
+	SHADER_DEBUG_TEXTURE2DARRAY_QUAD,
 	SHADER_MAX
 };
 
@@ -208,6 +223,13 @@ public:
 	// Converts a 3 or 4 component (RGB/RGBA) image to a 1-component (luma)
 	bool convert_to_luma();
 
+	// Swizzles existing channels to a new set of channels
+	// Examples:
+	// - convert_channels({0,1,2}) on an RGBA image will convert it to a RGB image
+	// - convert_channels({3}) will extract the third channel of an 3+ channel image into a new single-channel image
+	// - convert_channels({0,0,0}) on an RGB/RGBA image will convert it to an RGB image with all channels containing the first channel (R) from the original image
+	bool convert_channels(const std::vector<unsigned int>& channelMap);
+
 	// Converts an image to a single-component image of the selected component/channel
 	bool convert_to_single_channel(unsigned int channel = 0);
 
@@ -217,7 +239,11 @@ public:
 
 	bool pad_image(unsigned int newWidth, unsigned int newHeight, bool useSmearing);
 
+	bool blit_image(const iV_Image& other, unsigned int xOffset, unsigned int yOffset);
+
 	bool convert_color_order(ColorOrder newOrder);
+
+	bool compare_equal(const iV_Image& other);
 
 private:
 	bool resizeInternal(const iV_Image& source, int output_w, int output_h, optional<int> alphaChannelOverride = nullopt);

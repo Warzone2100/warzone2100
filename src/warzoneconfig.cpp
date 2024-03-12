@@ -40,9 +40,15 @@ constexpr int MAX_OLD_LOGS = 50;
 
 /***************************************************************************/
 
+#if !defined(__EMSCRIPTEN__)
+#define WZ_DEFAULT_FMV_MODE FMV_FULLSCREEN
+#else
+#define WZ_DEFAULT_FMV_MODE FMV_2X
+#endif
+
 struct WARZONE_GLOBALS
 {
-	FMV_MODE FMVmode = FMV_FULLSCREEN;
+	FMV_MODE FMVmode = WZ_DEFAULT_FMV_MODE;
 	UDWORD width = 1024;
 	UDWORD height = 768;
 	UDWORD videoBufferDepth = 32;
@@ -72,7 +78,9 @@ struct WARZONE_GLOBALS
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
 	uint32_t MPinactivityMinutes = 5;
+	uint32_t MPgameTimeLimitMinutes = 0; // default to unlimited
 	uint8_t MPopenSpectatorSlots = 0;
+	PLAYER_LEAVE_MODE MPplayerLeaveMode = PLAYER_LEAVE_MODE_DEFAULT;
 	int fogStart = 4000;
 	int fogEnd = 8000;
 	int lodDistanceBiasPercentage = WZ_LODDISTANCEPERCENTAGE_HIGH; // default to "High" to best match prior version behavior
@@ -83,6 +91,16 @@ struct WARZONE_GLOBALS
 	int fullscreenModeScreen = -1;
 	int toggleFullscreenMode = 0; // 0 = the backend default
 	unsigned int cursorScale = 100;
+	// shadow mapping settings
+	uint32_t shadowFilteringMode = 1;
+	uint32_t shadowFilterSize = 5;
+	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
+	bool pointLightLighting = false;
+	// groups UI
+	bool groupsMenuEnabled = true;
+
+	// run-time only settings (not persisted to config!)
+	bool allowVulkanImplicitLayers = false;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -512,6 +530,20 @@ void war_setMPInactivityMinutes(uint32_t minutes)
 	warGlobs.MPinactivityMinutes = minutes;
 }
 
+uint32_t war_getMPGameTimeLimitMinutes()
+{
+	return warGlobs.MPgameTimeLimitMinutes;
+}
+
+void war_setMPGameTimeLimitMinutes(uint32_t minutes)
+{
+	if (minutes > 0 && minutes < MIN_MPGAMETIMELIMIT_MINUTES)
+	{
+		minutes = MIN_MPGAMETIMELIMIT_MINUTES;
+	}
+	warGlobs.MPgameTimeLimitMinutes = minutes;
+}
+
 uint16_t war_getMPopenSpectatorSlots()
 {
 	return warGlobs.MPopenSpectatorSlots;
@@ -521,6 +553,16 @@ void war_setMPopenSpectatorSlots(uint16_t spectatorSlots)
 {
 	spectatorSlots = std::min<uint16_t>(spectatorSlots, MAX_SPECTATOR_SLOTS);
 	warGlobs.MPopenSpectatorSlots = spectatorSlots;
+}
+
+PLAYER_LEAVE_MODE war_getMPPlayerLeaveMode()
+{
+	return warGlobs.MPplayerLeaveMode;
+}
+
+void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE mode)
+{
+	warGlobs.MPplayerLeaveMode = mode;
 }
 
 int war_getFogEnd()
@@ -580,4 +622,67 @@ void war_setToggleFullscreenMode(int mode)
 int war_getToggleFullscreenMode()
 {
 	return warGlobs.toggleFullscreenMode;
+}
+
+uint32_t war_getShadowFilterSize()
+{
+	return warGlobs.shadowFilterSize;
+}
+
+void war_setShadowFilterSize(uint32_t filterSize)
+{
+	if (filterSize > 7)
+	{
+		debug(LOG_INFO, "Shadow filter size %" PRIu32 " may not have the desired effect", filterSize);
+	}
+	warGlobs.shadowFilterSize = filterSize;
+}
+
+uint32_t war_getShadowMapResolution()
+{
+	return warGlobs.shadowMapResolution;
+}
+
+void war_setShadowMapResolution(uint32_t resolution)
+{
+	if (resolution > 0 && ((resolution & (resolution - 1)) != 0))
+	{
+		debug(LOG_ERROR, "Shadow map resolution %" PRIu32 " is unsupported: must be a power of 2", resolution);
+		return;
+	}
+	if (resolution > 0 && (resolution < 2048 || resolution > 4096)) // 0 is a special case that maps to "figure out a decent default for this system"
+	{
+		debug(LOG_INFO, "Shadow map resolution %" PRIu32 " may not have the desired effect", resolution);
+	}
+	warGlobs.shadowMapResolution = resolution;
+}
+
+bool war_getPointLightPerPixelLighting()
+{
+	return warGlobs.pointLightLighting;
+}
+
+void war_setPointLightPerPixelLighting(bool perPixelEnabled)
+{
+	warGlobs.pointLightLighting = perPixelEnabled;
+}
+
+bool war_getGroupsMenuEnabled()
+{
+	return warGlobs.groupsMenuEnabled;
+}
+
+void war_setGroupsMenuEnabled(bool enabled)
+{
+	warGlobs.groupsMenuEnabled = enabled;
+}
+
+void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed) // not persisted to config
+{
+	warGlobs.allowVulkanImplicitLayers = allowed;
+}
+
+bool war_getAllowVulkanImplicitLayers()
+{
+	return warGlobs.allowVulkanImplicitLayers;
 }

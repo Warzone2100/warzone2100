@@ -19,10 +19,23 @@
 
 #pragma once
 
-void stdInThreadInit();
-void stdInThreadShutdown();
-
+#include <string>
 #include "lib/framework/wzglobal.h"
+
+enum class WZ_Command_Interface
+{
+	None,
+	StdIn_Interface,
+	Unix_Socket,
+};
+
+// used from clparse:
+void configSetCmdInterface(WZ_Command_Interface mode, std::string value);
+
+void cmdInterfaceThreadInit();
+void cmdInterfaceThreadShutdown();
+
+bool wz_command_interface_enabled();
 
 #if defined(WZ_CC_MINGW)
 #include <cstdio> // For __MINGW_PRINTF_FORMAT define
@@ -30,3 +43,5 @@ void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(__MINGW_PR
 #else
 void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(printf, 1, 2);
 #endif
+
+void wz_command_interface_output_str(const char *str);

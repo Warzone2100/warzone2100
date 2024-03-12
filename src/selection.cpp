@@ -60,7 +60,7 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen
 	selDroidDeselect(player);
 
 	// Go through all.
-	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		bool shouldSelect = (!onlyOnScreen || objectOnScreen(psDroid, 0)) &&
 		                    condition(psDroid);
@@ -86,7 +86,7 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, U value, bool onl
 
 static bool selTransporter(DROID *droid)
 {
-	return isTransporter(droid);
+	return droid->isTransporter();
 }
 static bool selTrue(DROID *droid)
 {
@@ -94,11 +94,11 @@ static bool selTrue(DROID *droid)
 }
 static bool selProp(DROID *droid, PROPULSION_TYPE prop)
 {
-	return asPropulsionStats[droid->asBits[COMP_PROPULSION]].propulsionType == prop && !selTransporter(droid);
+	return droid->getPropulsionStats()->propulsionType == prop && !selTransporter(droid);
 }
 static bool selPropArmed(DROID *droid, PROPULSION_TYPE prop)
 {
-	return asPropulsionStats[droid->asBits[COMP_PROPULSION]].propulsionType == prop && vtolFull(droid) && !selTransporter(droid);
+	return droid->getPropulsionStats()->propulsionType == prop && vtolFull(droid) && !selTransporter(droid);
 }
 static bool selType(DROID *droid, DROID_TYPE type)
 {
@@ -110,7 +110,7 @@ static bool selCombat(DROID *droid)
 }
 static bool selCombatLand(DROID *droid)
 {
-	PROPULSION_TYPE type = asPropulsionStats[droid->asBits[COMP_PROPULSION]].propulsionType;
+	PROPULSION_TYPE type = droid->getPropulsionStats()->propulsionType;
 	return droid->asWeaps[0].nStat > 0 && (type == PROPULSION_TYPE_WHEELED ||
 	                                       type == PROPULSION_TYPE_HALF_TRACKED ||
 	                                       type == PROPULSION_TYPE_TRACKED ||
@@ -119,7 +119,7 @@ static bool selCombatLand(DROID *droid)
 }
 static bool selCombatCyborg(DROID *droid)
 {
-	PROPULSION_TYPE type = asPropulsionStats[droid->asBits[COMP_PROPULSION]].propulsionType;
+	PROPULSION_TYPE type = droid->getPropulsionStats()->propulsionType;
 	return droid->asWeaps[0].nStat > 0 && type == PROPULSION_TYPE_LEGGED;
 }
 static bool selDamaged(DROID *droid)
@@ -142,7 +142,7 @@ unsigned int selDroidDeselect(unsigned int player)
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID* psDroid : apsDroidLists[player])
 	{
 		if (psDroid->selected)
 		{
@@ -161,7 +161,7 @@ unsigned int selNumSelected(unsigned int player)
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (const DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->selected)
 		{
@@ -172,9 +172,8 @@ unsigned int selNumSelected(unsigned int player)
 	return count;
 }
 
-// Helper function to check whether the component stats of a unit can be found
-// in the combinations vector and, optionally, to add them to it if not
-static bool componentsInCombinations(DROID *psDroid, bool add)
+
+std::vector<uint32_t> buildComponentsFromDroid(const DROID* psDroid)
 {
 	std::vector<uint32_t> components;
 	uint32_t stat = 0;
@@ -205,6 +204,13 @@ static bool componentsInCombinations(DROID *psDroid, bool add)
 			components.push_back(stat);
 		}
 	}
+	return components;
+}
+// Helper function to check whether the component stats of a unit can be found
+// in the combinations vector and, optionally, to add them to it if not
+static bool componentsInCombinations(DROID *psDroid, bool add)
+{
+	std::vector<uint32_t> components = buildComponentsFromDroid(psDroid);
 	auto it = std::find(combinations.begin(), combinations.end(), components);
 	if (it != combinations.end())
 	{
@@ -233,7 +239,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	if (player >= MAX_PLAYERS) { return 0; }
 
 	// find out which units will need to be compared to which component combinations
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if (bOnScreen && !objectOnScreen(psDroid, 0))
 		{
@@ -254,7 +260,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	{
 		// reset unit counter
 		i = 0;
-		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		for (DROID *psDroid : apsDroidLists[player])
 		{
 			if (excluded.empty() || *excluded.begin() != i)
 			{
@@ -284,7 +290,7 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[selectedPlayer])
 	{
 		//exceptions - as always...
 		bool bMatch = false;
@@ -325,12 +331,14 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 			if (!psOldRD)
 			{
 				psResult = psCurr;
+				break;
 			}
 
 			/* Only select is this isn't the old one and it's further on in list */
 			else if (psCurr != psOldRD && bLaterInList)
 			{
 				psResult = psCurr;
+				break;
 			}
 		}
 	}
@@ -390,7 +398,7 @@ void selNextUnassignedUnit()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[selectedPlayer])
 	{
 		/* Only look at unselected ones */
 		if (psCurr->group == UBYTE_MAX)
@@ -410,12 +418,14 @@ void selNextUnassignedUnit()
 			if (!psOldNS)
 			{
 				psResult = psCurr;
+				break;
 			}
 
 			/* Dont choose same one again */
 			else if (psCurr != psOldNS && bLaterInList)
 			{
 				psResult = psCurr;
+				break;
 			}
 		}
 	}
@@ -462,8 +472,12 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 	/* Firstly, start coughing if the type is invalid */
 	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u", structType);
 
-	for (STRUCTURE *psCurr = apsStructLists[selectedPlayer]; psCurr && !psResult; psCurr = psCurr->psNext)
+	for (STRUCTURE *psCurr : apsStructLists[selectedPlayer])
 	{
+		if (psResult)
+		{
+			break;
+		}
 		if (psCurr->pStructureType->type == structType && psCurr->status == SS_BUILT)
 		{
 			if (!psFirst)
@@ -522,7 +536,7 @@ static bool droidIsCommanderNum(DROID *psDroid, SDWORD n)
 	}
 
 	int numLess = 0;
-	for (DROID *psCurr = apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+	for (const DROID *psCurr : apsDroidLists[psDroid->player])
 	{
 		if ((psCurr->droidType == DROID_COMMAND) && (psCurr->id < psDroid->id))
 		{
@@ -538,7 +552,7 @@ void selCommander(int n)
 {
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	for (DROID *psCurr : apsDroidLists[selectedPlayer])
 	{
 		if (droidIsCommanderNum(psCurr, n))
 		{

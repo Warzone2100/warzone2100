@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/widget/slider.h"
 #include "lib/widget/widget.h"
 #include "hci.h"
@@ -380,15 +381,15 @@ bool applyLimitSet()
 				{
 					while (asStructureStats[id].curCount[player] > asStructureStats[id].upgrade[player].limit)
 					{
-						for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+						mutating_list_iterate(apsStructLists[player], [id](STRUCTURE* psStruct)
 						{
 							if (psStruct->pStructureType->type == asStructureStats[id].type)
 							{
 								removeStruct(psStruct, true);
-								break;
+								return IterationResult::BREAK_ITERATION;
 							}
-						}
-
+							return IterationResult::CONTINUE_ITERATION;
+						});
 					}
 				}
 			}
@@ -503,7 +504,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	displayStructureStatButton(stat, &rotation, &position, scale);
 
 	// draw name
-	cache.wzNameText.setText(_(getStatsName(stat)), font_regular);
+	cache.wzNameText.setText(getLocalizedStatsName(stat), font_regular);
 	cache.wzNameText.render(x + 80, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	// draw limit

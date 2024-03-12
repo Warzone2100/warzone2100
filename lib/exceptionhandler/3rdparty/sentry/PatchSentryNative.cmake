@@ -8,50 +8,7 @@ if((NOT DEFINED SOURCE_DIR) OR (SOURCE_DIR STREQUAL ""))
  message(FATAL_ERROR "SOURCE_DIR must be specified on command-line")
 endif()
 
-# Fix sentry_sync.h x86 compile on llvm-mingw
-set(_sentry_sync_h_path "${SOURCE_DIR}/src/sentry_sync.h")
-set(_sentry_sync_find_text "#if defined(__MINGW32__) && !defined(__MINGW64__)")
-set(_sentry_sync_replace_text "#if defined(__MINGW32__) && !defined(__MINGW64__) && !defined(__clang__)")
-file(READ "${_sentry_sync_h_path}" FILE_CONTENTS)
-string(REPLACE "${_sentry_sync_find_text}" "${_sentry_sync_replace_text}" FILE_CONTENTS "${FILE_CONTENTS}")
-file(WRITE "${_sentry_sync_h_path}" "${FILE_CONTENTS}")
-
-# Patch compat/mingw files
-execute_process(
-   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/crashpad/dbghelp.h" "${SOURCE_DIR}/external/crashpad/compat/mingw/dbghelp.h"
-   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
- )
-execute_process(
-   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/crashpad/winnt.h" "${SOURCE_DIR}/external/crashpad/compat/mingw/winnt.h"
-   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
- )
-execute_process(
-   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/crashpad/werapi.h" "${SOURCE_DIR}/external/crashpad/compat/mingw/werapi.h"
-   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
- )
-
-# Patch for mingw compilation
-execute_process(
-   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/crashpad/snapshot/CMakeLists.txt" "${SOURCE_DIR}/external/crashpad/snapshot/CMakeLists.txt"
-   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
- )
-execute_process(
-   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/src/backends/sentry_backend_crashpad.cpp" "${SOURCE_DIR}/src/backends/sentry_backend_crashpad.cpp"
-   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
- )
-
-# Patch for ARM64 support
-execute_process(
-   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/src/unwinder/sentry_unwinder_dbghelp.c" "${SOURCE_DIR}/src/unwinder/sentry_unwinder_dbghelp.c"
-   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
- )
-
-# Patch for mingw wer support in crashpad
-execute_process(
-   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/crashpad/CMakeLists.txt" "${SOURCE_DIR}/external/crashpad/CMakeLists.txt"
-   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
- )
-execute_process(
-   COMMAND ${CMAKE_COMMAND} -E copy "${_scriptFolder}/crashpad/handler/CMakeLists.txt" "${SOURCE_DIR}/external/crashpad/handler/CMakeLists.txt"
-   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
- )
+# Remove compat/mingw/werapi.h (no longer needed)
+if (EXISTS "${SOURCE_DIR}/external/crashpad/compat/mingw/werapi.h")
+	file(REMOVE "${SOURCE_DIR}/external/crashpad/compat/mingw/werapi.h")
+endif()

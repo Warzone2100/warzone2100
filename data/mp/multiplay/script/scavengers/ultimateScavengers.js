@@ -62,8 +62,8 @@ const templates = [
 	["FireBody","BabaPitRocketAT"],
 	["ScavCamperBody","BabaPitRocket"],
 	["ScavCamperBody","BusCannon"],
-	//["ScavTruckBody","BabaFlame","BabaRocket","BabaPitRocketAT"],
-	//["ScavTruckBody","BusCannon","BabaPitRocket","BabaRocket"],
+	["ScavTruckBody","BabaFlame","BabaRocket","BabaPitRocketAT"],
+	["ScavTruckBody","BusCannon","BabaPitRocket","BabaRocket"],
 	["ScavIcevanBody","BabaFlame"],
 	["ScavIcevanBody","Mortar1Mk1"],
 	["ScavNEXUStrack","ScavNEXUSlink"],
@@ -123,9 +123,9 @@ function helicoptersAreAllowed()
 {
 	if (getMultiTechLevel() === 1)
 	{
-		if ((baseType === CAMP_CLEAN && gameTime > (10 * 60000)) ||
-			(baseType === CAMP_BASE && gameTime > (7 * 60000)) ||
-			(baseType === CAMP_WALLS && gameTime > (4 * 60000)))
+		if ((baseType === CAMP_CLEAN && gameTime > (12 * 60000)) ||
+			(baseType === CAMP_BASE && gameTime > (9 * 60000)) ||
+			(baseType === CAMP_WALLS && gameTime > (6 * 60000)))
 		{
 			return true;
 		}

@@ -36,6 +36,7 @@
 #include "console.h"
 #include "objmem.h"
 #include "droid.h"
+#include "hci.h"
 
 /**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;
@@ -88,6 +89,8 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	ASSERT_OR_RETURN(false, psCommander != nullptr, "psCommander is null?");
 	ASSERT_OR_RETURN(false, psDroid != nullptr, "psDroid is null?");
 
+	auto initialDroidGroup = psDroid->group;
+
 	if (psCommander->psGroup == nullptr)
 	{
 		psGroup = grpCreate();
@@ -120,6 +123,11 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		}
 	}
 
+	if (initialDroidGroup != psDroid->group)
+	{
+		intGroupsChanged();
+	}
+
 	return addedToGroup;
 }
 
@@ -148,17 +156,16 @@ void cmdDroidClearDesignator(UDWORD player)
  * It does this by searching throughout all the player's droids.
  * @todo try to find something more efficient, has this function is of O(TotalNumberOfDroidsOfPlayer).
  */
-SDWORD cmdDroidGetIndex(DROID *psCommander)
+SDWORD cmdDroidGetIndex(const DROID *psCommander)
 {
 	SDWORD	index = 1;
-	DROID	*psCurr;
 
 	if (psCommander->droidType != DROID_COMMAND)
 	{
 		return 0;
 	}
 
-	for (psCurr = apsDroidLists[psCommander->player]; psCurr; psCurr = psCurr->psNext)
+	for (const DROID* psCurr : apsDroidLists[psCommander->player])
 	{
 		if (psCurr->droidType == DROID_COMMAND &&
 		    psCurr->id < psCommander->id)
@@ -173,7 +180,7 @@ SDWORD cmdDroidGetIndex(DROID *psCommander)
 /** This function returns the maximum group size of the command droid.*/
 unsigned int cmdDroidMaxGroup(const DROID *psCommander)
 {
-	const BRAIN_STATS *psStats = getBrainStats(psCommander);
+	const BRAIN_STATS *psStats = psCommander->getBrainStats();
 	return getDroidLevel(psCommander) * psStats->upgrade[psCommander->player].maxDroidsMult + psStats->upgrade[psCommander->player].maxDroids;
 }
 

@@ -39,6 +39,7 @@
 #include "astar.h"
 
 #include "fpath.h"
+#include "profiling.h"
 
 // If the path finding system is shutdown or not
 static volatile bool fpathQuit = false;
@@ -86,6 +87,7 @@ static int fpathThreadFunc(void *)
 			continue;
 		}
 
+		WZ_PROFILE_SCOPE(fpathJob);
 		// Copy the first job from the queue.
 		packagedPathJob job = std::move(pathJobs.front());
 		pathJobs.pop_front();
@@ -114,7 +116,7 @@ bool fpathInitialise()
 		fpathMutex = wzMutexCreate();
 		fpathSemaphore = wzSemaphoreCreate(0);
 		waitingForResultSemaphore = wzSemaphoreCreate(0);
-		fpathThread = wzThreadCreate(fpathThreadFunc, nullptr);
+		fpathThread = wzThreadCreate(fpathThreadFunc, nullptr, "wzPath");
 		wzThreadStart(fpathThread);
 	}
 
@@ -249,7 +251,7 @@ bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int m
 
 bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType)
 {
-	return fpathBaseBlockingTile(x, y, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+	return fpathBaseBlockingTile(x, y, psDroid->getPropulsionStats()->propulsionType, psDroid->player, moveType);
 }
 
 // Check if the map tile at a location blocks a droid
@@ -412,7 +414,7 @@ queuePathfinding:
 FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
 	bool acceptNearest;
-	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
+	PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
 
 	// override for AI to blast our way through stuff
 	if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
@@ -427,10 +429,11 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
 	StructureBounds dstStructure = getStructureBounds(worldTile(endPos.xy())->psObject);
-	startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+	const auto droidPropulsionType = psDroid->getPropulsionStats()->propulsionType;
+	startPos = findNonblockingPosition(startPos, droidPropulsionType, psDroid->player, moveType);
 	if (!dstStructure.valid())  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
 	{
-		endPos   = findNonblockingPosition(endPos,   getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+		endPos   = findNonblockingPosition(endPos, droidPropulsionType, psDroid->player, moveType);
 	}
 	objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
 	switch (psDroid->order.type)

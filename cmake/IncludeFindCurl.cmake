@@ -148,9 +148,11 @@ if(CURL_CONFIG_EXECUTABLE)
 	# NOTE: cURL may list OpenSSL as "OpenSSL", "OpenSSL v3+" (but this is not guaranteed for all build configurations, even *if* OpenSSL is >= 3), etc
 	# So instead of exact matches, look for any list entry that begins with OpenSSL
 	set(_curl_hasOpenSSLBackend FALSE)
+	set(_curl_openSSLBackendName "")
 	foreach (backend IN LISTS CURL_SUPPORTED_SSL_BACKENDS)
 		if (backend MATCHES "^OpenSSL.*")
 			set(_curl_hasOpenSSLBackend TRUE)
+			set(_curl_openSSLBackendName "${backend}")
 		endif()
 	endforeach()
 	if (_curl_hasOpenSSLBackend)
@@ -168,7 +170,13 @@ if(CURL_CONFIG_EXECUTABLE)
 			endif()
 		else()
 			# cURL is linked to OpenSSL, but OpenSSL was not found
-			set(CURL_OPENSSL_REQUIRES_CALLBACKS "UNKNOWN")
+			if (_curl_openSSLBackendName MATCHES "^OpenSSL v3")
+				# if cURL OpenSSL backend is "OpenSSL v3+", then we can assume it's >= 3.0, and no callbacks are required
+				set(CURL_OPENSSL_REQUIRES_CALLBACKS "NO")
+			else()
+				# otherwise, unknown
+				set(CURL_OPENSSL_REQUIRES_CALLBACKS "UNKNOWN")
+			endif()
 		endif()
 		message(STATUS "OpenSSL requires explicit thread-safety callback init: ${CURL_OPENSSL_REQUIRES_CALLBACKS}")
 	endif()

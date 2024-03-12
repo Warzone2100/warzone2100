@@ -134,20 +134,20 @@ void GFX::updateTexture(const iV_Image& image /*= nullptr*/)
 void GFX::buffers(int vertices, const void *vertBuf, const void *auxBuf)
 {
 	if (!mBuffers[VBO_VERTEX])
-		mBuffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		mBuffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "GFX::VBO_VERTEX");
 	mBuffers[VBO_VERTEX]->upload(vertices * mCoordsPerVertex * sizeof(gfx_api::gfxFloat), vertBuf);
 
 	if (mType == GFX_TEXTURE)
 	{
 		if (!mBuffers[VBO_TEXCOORD])
-			mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+			mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "GFX::VBO_TEXCOORD");
 		mBuffers[VBO_TEXCOORD]->upload(vertices * 2 * sizeof(gfx_api::gfxFloat), auxBuf);
 	}
 	else if (mType == GFX_COLOUR)
 	{
 		// reusing texture buffer for colours for now
 		if (!mBuffers[VBO_TEXCOORD])
-			mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+			mBuffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "GFX::VBO_TEXCOORD");
 		mBuffers[VBO_TEXCOORD]->upload(vertices * 4 * sizeof(gfx_api::gfxByte), auxBuf);
 	}
 	mSize = vertices;
@@ -255,6 +255,227 @@ void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects)
 		gfx_api::BoxFillPSO::get().draw(4, 0);
 	}
 	gfx_api::BoxFillPSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
+}
+
+void BatchedMultiRectRenderer::resizeRectGroups(size_t count)
+{
+	groupsData.resize(count);
+}
+
+void BatchedMultiRectRenderer::addRect(PIERECT_DrawRequest rect, size_t rectGroup /*= 0*/)
+{
+	if (rect.x0 > rect.x1)
+	{
+		std::swap(rect.x0, rect.x1);
+	}
+	if (rect.y0 > rect.y1)
+	{
+		std::swap(rect.y0, rect.y1);
+	}
+	const auto center = Vector2f(rect.x0, rect.y0);
+	const glm::mat4 matrix = glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(rect.x1 - rect.x0, rect.y1 - rect.y0, 1.f));
+
+	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData{ matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba });
+	++totalAddedRects;
+}
+
+void BatchedMultiRectRenderer::addRectF(PIERECT_DrawRequest_f rect, size_t rectGroup /*= 0*/)
+{
+	if (rect.x0 > rect.x1)
+	{
+		std::swap(rect.x0, rect.x1);
+	}
+	if (rect.y0 > rect.y1)
+	{
+		std::swap(rect.y0, rect.y1);
+	}
+	const auto center = Vector2f(rect.x0, rect.y0);
+	const glm::mat4 matrix = glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(rect.x1 - rect.x0, rect.y1 - rect.y0, 1.f));
+
+	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData{ matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba });
+	++totalAddedRects;
+}
+
+void BatchedMultiRectRenderer::drawAllRects(glm::mat4 projectionMatrix /*= defaultProjectionMatrix()*/)
+{
+	drawRects(nullopt, projectionMatrix);
+}
+
+BatchedMultiRectRenderer::UploadedRectsInstanceBufferInfo BatchedMultiRectRenderer::uploadAllRectInstances()
+{
+	UploadedRectsInstanceBufferInfo result;
+
+	instancesData.clear();
+	instancesData.reserve(totalAddedRects);
+	for (size_t i = 0; i < groupsData.size(); ++i)
+	{
+		auto& groupInstanceData = groupsData[i];
+		size_t startIdxOfGroupInstances = instancesData.size();
+		instancesData.insert(instancesData.end(), groupInstanceData.begin(), groupInstanceData.end());
+		result.groupInfo.push_back(UploadedRectsInstanceBufferInfo::GroupBufferInfo(startIdxOfGroupInstances * sizeof(gfx_api::MultiRectPerInstanceInterleavedData), groupInstanceData.size()));
+	}
+
+	ASSERT(totalAddedRects == instancesData.size(), "totalAddedRects not up-to-date!");
+	result.totalInstances = instancesData.size();
+
+	if (result.totalInstances != 0)
+	{
+		ASSERT_OR_RETURN(UploadedRectsInstanceBufferInfo(), !instanceDataBuffers.empty(), "No buffers available - unexpectedly called before init");
+
+		// Upload buffer
+		++currInstanceBufferIdx;
+		if (currInstanceBufferIdx >= instanceDataBuffers.size())
+		{
+			currInstanceBufferIdx = 0;
+		}
+		instanceDataBuffers[currInstanceBufferIdx]->upload(instancesData.size() * sizeof(gfx_api::MultiRectPerInstanceInterleavedData), instancesData.data());
+		result.buffer = instanceDataBuffers[currInstanceBufferIdx];
+	}
+	else
+	{
+		result.buffer = nullptr;
+	}
+
+	return result;
+}
+
+void pie_DrawMultiRect_NonInstanced(const std::vector<gfx_api::MultiRectPerInstanceInterleavedData>& instances)
+{
+	if (instances.empty()) { return; }
+
+	const auto projectionMatrix = defaultProjectionMatrix();
+	bool didEnableRect = false;
+	gfx_api::BoxFillPSO::get().bind();
+
+	for (auto it = instances.begin(); it != instances.end(); ++it)
+	{
+		const auto mvp = projectionMatrix * it->TransformationMatrix;
+		gfx_api::BoxFillPSO::get().bind_constants({ mvp, glm::vec2(0.f), glm::vec2(0.f),
+			glm::vec4((it->colour & 0xff) / 255.f, ((it->colour >> 8) & 0xff) / 255.f, ((it->colour >> 16) & 0xff) / 255.f, ((it->colour >> 24) & 0xff) / 255.f) });
+		if (!didEnableRect)
+		{
+			gfx_api::BoxFillPSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
+			didEnableRect = true;
+		}
+
+		gfx_api::BoxFillPSO::get().draw(4, 0);
+	}
+	gfx_api::BoxFillPSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
+}
+
+void BatchedMultiRectRenderer::drawRects(optional<size_t> rectGroup, glm::mat4 projectionMatrix /*= defaultProjectionMatrix()*/)
+{
+	if (groupsData.empty()) { return; }
+
+	if (!useInstancedRendering)
+	{
+		for (size_t i = rectGroup.value_or(0); i < groupsData.size(); ++i)
+		{
+			if (rectGroup.has_value() && rectGroup.value() != i) { break; }
+			auto& rectsData = groupsData[i];
+			if (rectsData.empty()) { continue; }
+			pie_DrawMultiRect_NonInstanced(rectsData);
+		}
+
+		return;
+	}
+
+	// otherwise, use instanced rendering
+	if (!currentUploadedRectInfo.has_value())
+	{
+		currentUploadedRectInfo = uploadAllRectInstances();
+	}
+
+	auto& uploadedInfo = currentUploadedRectInfo.value();
+	if (uploadedInfo.totalInstances == 0)
+	{
+		return;
+	}
+	ASSERT_OR_RETURN(, uploadedInfo.totalInstances == totalAddedRects, "Rects were added after instance data was uploaded - make sure to call clear() before adding rects after draw!");
+
+	size_t instanceBufferOffset = 0;
+	size_t instancesCount = uploadedInfo.totalInstances;
+
+	if (rectGroup.has_value())
+	{
+		instanceBufferOffset = uploadedInfo.groupInfo[rectGroup.value()].bufferOffset;
+		instancesCount = uploadedInfo.groupInfo[rectGroup.value()].instancesCount;
+	}
+
+	if (instancesCount == 0)
+	{
+		return;
+	}
+
+	// draw instances
+	gfx_api::BoxFillPSO_Instanced::get().bind();
+	gfx_api::BoxFillPSO_Instanced::get().bind_constants({ projectionMatrix });
+	gfx_api::context::get().bind_vertex_buffers(0, {
+		std::make_tuple(pie_internal::rectBuffer, 0),
+		std::make_tuple(uploadedInfo.buffer, instanceBufferOffset)});
+	gfx_api::BoxFillPSO_Instanced::get().draw_instanced(4, 0, instancesCount);
+	gfx_api::BoxFillPSO_Instanced::get().unbind_vertex_buffers(pie_internal::rectBuffer, instanceDataBuffers[currInstanceBufferIdx]);
+}
+
+bool BatchedMultiRectRenderer::initialize()
+{
+	reset();
+
+	if (!gfx_api::context::get().supportsInstancedRendering())
+	{
+		useInstancedRendering = false;
+		return true;
+	}
+
+	// check for minimum required vertex attributes (and vertex outputs) for the instanced shaders
+	int32_t max_vertex_attribs = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_VERTEX_ATTRIBS);
+	int32_t max_vertex_output_components = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS);
+	size_t maxInstancedMeshShaderVertexAttribs = std::max({gfx_api::instance_modelMatrix, gfx_api::instance_packedValues, gfx_api::instance_Colour, gfx_api::instance_TeamColour}) + 1;
+	constexpr size_t min_required_vertex_output_components = 11 * 4; // from the shaders - see tcmask_instanced.vert / nolight_instanced.vert
+	if (max_vertex_attribs < maxInstancedMeshShaderVertexAttribs)
+	{
+		debug(LOG_INFO, "Disabling instanced rendering - Insufficient MAX_VERTEX_ATTRIBS (%" PRIi32 "; need: %zu)", max_vertex_attribs, maxInstancedMeshShaderVertexAttribs);
+		useInstancedRendering = false;
+		return true;
+	}
+	if (max_vertex_output_components < min_required_vertex_output_components)
+	{
+		debug(LOG_INFO, "Disabling instanced rendering - Insufficient MAX_VERTEX_OUTPUT_COMPONENTS (%" PRIi32 "; need: %zu)", max_vertex_output_components, min_required_vertex_output_components);
+		useInstancedRendering = false;
+		return true;
+	}
+
+	instanceDataBuffers.resize(gfx_api::context::get().maxFramesInFlight() + 1);
+	for (size_t i = 0; i < instanceDataBuffers.size(); ++i)
+	{
+		instanceDataBuffers[i] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw, "BatchedMultiRectRenderer::instanceDataBuffer[" + std::to_string(i) + "]");
+	}
+	useInstancedRendering = true;
+	return true;
+}
+
+void BatchedMultiRectRenderer::clear()
+{
+	for (auto& rects : groupsData)
+	{
+		rects.clear();
+	}
+	totalAddedRects = 0;
+	currentUploadedRectInfo.reset();
+	instancesData.clear();
+}
+
+void BatchedMultiRectRenderer::reset()
+{
+	clear();
+	size_t numGroups = groupsData.size();
+	groupsData.clear();
+	groupsData.resize(numGroups);
+	for (auto buffer : instanceDataBuffers)
+	{
+		delete buffer;
+	}
+	instanceDataBuffers.clear();
 }
 
 void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill)
@@ -392,7 +613,7 @@ static inline void pie_DrawImageTemplate(IMAGEFILE *imageFile, int id, Vector2i 
 
 	glm::mat4 mvp = modelViewProjection * glm::translate(glm::vec3((float)dest->x, (float)dest->y, 0.f));
 
-	iv_DrawImageImpl<PSO>(pie_Texture(texPage), Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
+	iv_DrawImageImpl<PSO>(pie_Texture(texPage), Vector2i(0, 0), Vector2f(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
 }
 
 static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
@@ -464,6 +685,22 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, i
 	return pieImage;
 }
 
+static Vector2i makePieImagef(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, float x, float y)
+{
+	AtlasImageDef const &image = imageFile->imageDefs[id];
+	Vector2i pieImage;
+	pieImage.x = image.Width;
+	pieImage.y = image.Height;
+	if (dest != nullptr)
+	{
+		dest->x = x + static_cast<float>(image.XOffset);
+		dest->y = y + static_cast<float>(image.YOffset);
+		dest->w = static_cast<float>(image.Width);
+		dest->h = static_cast<float>(image.Height);
+	}
+	return pieImage;
+}
+
 void iV_DrawImage2(const WzString &filename, float x, float y, float width, float height)
 {
 	if (filename.isEmpty()) { return; }
@@ -512,6 +749,33 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 
 	}
 }
 
+void iV_DrawImageTint(IMAGEFILE *ImageFile, UWORD ID, float x, float y, PIELIGHT color, optional<Vector2f> size, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
+{
+	if (!assertValidImage(ImageFile, ID))
+	{
+		return;
+	}
+
+	PIERECT dest;
+	Vector2i pieImage = makePieImagef(ImageFile, ID, &dest, x, y);
+	if (size.has_value())
+	{
+		dest.w = size.value().x;
+		dest.h = size.value().y;
+	}
+
+	if (pBatchedRequests == nullptr)
+	{
+		gfx_api::DrawImagePSO::get().bind();
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, color, modelViewProjection);
+	}
+	else
+	{
+		pBatchedRequests->queuePieImageDraw(REND_ALPHA, ImageFile, ID, pieImage, dest, color, modelViewProjection);
+		pBatchedRequests->draw(); // draw only if not deferred
+	}
+}
+
 void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection, uint8_t alpha)
 {
 	if (!assertValidImage(ImageFile, ID))
@@ -548,6 +812,11 @@ void iV_DrawImageTc(AtlasImage image, AtlasImage imageTc, int x, int y, PIELIGHT
 // Repeat a texture
 void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection, bool enableHorizontalTilingSeamWorkaround, BatchedImageDrawRequests *pBatchedRequests)
 {
+	if (Width <= 0)
+	{
+		return;
+	}
+
 	static BatchedImageDrawRequests localBatch;
 	if (pBatchedRequests == nullptr)
 	{
@@ -596,6 +865,11 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection, BatchedImageDrawRequests* pBatchedRequests)
 {
+	if (Height <= 0)
+	{
+		return;
+	}
+
 	static BatchedImageDrawRequests localBatch;
 	if (pBatchedRequests == nullptr)
 	{
@@ -723,4 +997,43 @@ bool BatchedImageDrawRequests::draw(bool force /*= false*/)
 	pie_DrawMultipleImages(_imageDrawRequests);
 	_imageDrawRequests.clear();
 	return true;
+}
+
+void iV_DebugDrawTextureToQuad(gfx_api::abstract_texture& texture, size_t layer, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, glm::ivec4 channelSwizzle, glm::mat4 textureUVTransform)
+{
+	glm::mat4 modelViewProjection = defaultProjectionMatrix() * glm::translate(glm::vec3(Position.x, Position.y, 0)) * glm::rotate(RADIANS(angle), glm::vec3(0.f, 0.f, 1.f));
+	glm::mat4 mvpFinal = modelViewProjection * glm::translate(glm::vec3(offset.x, offset.y, 0.f)) * glm::scale(glm::vec3(size.x, size.y, 1.f));
+
+	Vector2f TextureUV(0.f, 0.f);
+	Vector2f TextureSize(1.f, 1.f);
+
+	glm::mat4 uvTransformMatrix = glm::mat4(1.f) * glm::scale(glm::vec3(TextureSize, 1.f)) * glm::translate(glm::vec3(TextureUV, 0.f)) * textureUVTransform;
+
+	if (texture.isArray())
+	{
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind();
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind_constants({ mvpFinal,
+			uvTransformMatrix,
+			channelSwizzle,
+			glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f),
+			static_cast<int>(layer),
+			0});
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind_textures(&texture);
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind_vertex_buffers(pie_internal::rectBuffer);
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().draw(4, 0);
+		gfx_api::DebugDrawTexture2DArrayToQuad::get().unbind_vertex_buffers(pie_internal::rectBuffer);
+	}
+	else
+	{
+		gfx_api::DebugDrawTexture2DToQuad::get().bind();
+		gfx_api::DebugDrawTexture2DToQuad::get().bind_constants({ mvpFinal,
+			uvTransformMatrix,
+			channelSwizzle,
+			glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f),
+			0});
+		gfx_api::DebugDrawTexture2DToQuad::get().bind_textures(&texture);
+		gfx_api::DebugDrawTexture2DToQuad::get().bind_vertex_buffers(pie_internal::rectBuffer);
+		gfx_api::DebugDrawTexture2DToQuad::get().draw(4, 0);
+		gfx_api::DebugDrawTexture2DToQuad::get().unbind_vertex_buffers(pie_internal::rectBuffer);
+	}
 }

@@ -27,6 +27,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/object_list_iteration.h"
 
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h" //ivis render code
@@ -84,6 +85,8 @@
 #include "notifications.h"
 #include "scores.h"
 #include "clparse.h"
+#include "gamehistorylogger.h"
+#include "profiling.h"
 
 #include "warzoneconfig.h"
 
@@ -132,9 +135,11 @@ LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
 // this is set by scrStartMission to say what type of new level is to be started
 LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
+LEVEL_TYPE prevMissionType = LEVEL_TYPE::LDS_NONE;
 
 static GAMECODE renderLoop()
 {
+	WZ_PROFILE_SCOPE(renderLoop);
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
 		intAddInGamePopup();
@@ -190,7 +195,7 @@ static GAMECODE renderLoop()
 
 			for (unsigned i = 0; i < MAX_PLAYERS; i++)
 			{
-				for (DROID *psCurr = apsDroidLists[i]; psCurr; psCurr = psCurr->psNext)
+				for (DROID *psCurr : apsDroidLists[i])
 				{
 					// Don't copy the next pointer - if droids somehow get destroyed in the graphics rendering loop, who cares if we crash.
 					calcDroidIllumination(psCurr);
@@ -218,7 +223,7 @@ static GAMECODE renderLoop()
 			displayRenderLoop();
 		}
 
-		if (InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
+		if (InGameOpUp || isInGamePopupUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
 		{
 			WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 			unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
@@ -240,7 +245,6 @@ static GAMECODE renderLoop()
 			if (bRequestLoad)
 			{
 				loopMissionState = LMS_LOADGAME;
-				NET_InitPlayers();			// otherwise alliances were not cleared
 				sstrcpy(saveGameName, sRequestResult);
 			}
 			else
@@ -304,12 +308,6 @@ static GAMECODE renderLoop()
 	{
 		if (!gameUpdatePaused())
 		{
-			if (dragBox3D.status != DRAG_DRAGGING
-			    && wallDrag.status != DRAG_DRAGGING
-			    && intRetVal != INT_INTERCEPT)
-			{
-				ProcessRadarInput();
-			}
 			processInput();
 
 			//no key clicks or in Intelligence Screen
@@ -317,18 +315,12 @@ static GAMECODE renderLoop()
 			{
 				processMouseClickInput();
 			}
-			bRender3DOnly = false;
 			displayWorld();
 		}
 		wzPerfBegin(PERF_GUI, "User interface");
+		WZ_PROFILE_SCOPE(DrawUI);
 		/* Display the in game interface */
 		pie_SetFogStatus(false);
-
-		if (bMultiPlayer && bDisplayMultiJoiningStatus)
-		{
-			intDisplayMultiJoiningStatus(bDisplayMultiJoiningStatus);
-			setWidgetsStatus(false);
-		}
 
 		if (getWidgetsStatus())
 		{
@@ -401,7 +393,7 @@ void countUpdate(bool synch)
 		numMissionDroids[i] = 0;
 		numTransporterDroids[i] = 0;
 
-		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (DROID *psCurr : apsDroidLists[i])
 		{
 			numDroids[i]++;
 			switch (psCurr->droidType)
@@ -421,7 +413,7 @@ void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (DROID *psCurr : mission.apsDroidLists[i])
 		{
 			numMissionDroids[i]++;
 			switch (psCurr->droidType)
@@ -441,7 +433,7 @@ void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr = apsLimboDroids[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (const DROID *psCurr : apsLimboDroids[i])
 		{
 			// count the type of units
 			switch (psCurr->droidType)
@@ -459,26 +451,34 @@ void countUpdate(bool synch)
 		}
 		// FIXME: These for-loops are code duplicationo
 		setLasSatExists(false, i);
-		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psCBuilding->psNext)
+		for (const STRUCTURE *psCBuilding : apsStructLists[i])
 		{
-			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
+			if (psCBuilding == nullptr || isDead(psCBuilding))
+			{
+				continue;
+			}
+			if (psCBuilding->pStructureType && psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
 				setSatUplinkExists(true, i);
 			}
 			//don't wait for the Las Sat to be built - can't build another if one is partially built
-			if (asWeaponStats[psCBuilding->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT)
+			if (psCBuilding->getWeaponStats(0)->weaponSubClass == WSC_LAS_SAT)
 			{
 				setLasSatExists(true, i);
 			}
 		}
-		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psCBuilding->psNext)
+		for (const STRUCTURE *psCBuilding : mission.apsStructLists[i])
 		{
-			if (psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
+			if (psCBuilding == nullptr || isDead(psCBuilding))
+			{
+				continue;
+			}
+			if (psCBuilding->pStructureType && psCBuilding->pStructureType->type == REF_SAT_UPLINK && psCBuilding->status == SS_BUILT)
 			{
 				setSatUplinkExists(true, i);
 			}
 			//don't wait for the Las Sat to be built - can't build another if one is partially built
-			if (asWeaponStats[psCBuilding->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT)
+			if (psCBuilding->getWeaponStats(0)->weaponSubClass == WSC_LAS_SAT)
 			{
 				setLasSatExists(true, i);
 			}
@@ -492,6 +492,7 @@ void countUpdate(bool synch)
 
 static void gameStateUpdate()
 {
+	WZ_PROFILE_SCOPE(gameStateUpdate);
 	syncDebug("map = \"%s\", pseudorandom 32-bit integer = 0x%08X, allocated = %d %d %d %d %d %d %d %d %d %d, position = %d %d %d %d %d %d %d %d %d %d", game.map, gameRandU32(),
 	          NetPlay.players[0].allocated, NetPlay.players[1].allocated, NetPlay.players[2].allocated, NetPlay.players[3].allocated, NetPlay.players[4].allocated, NetPlay.players[5].allocated, NetPlay.players[6].allocated, NetPlay.players[7].allocated, NetPlay.players[8].allocated, NetPlay.players[9].allocated,
 	          NetPlay.players[0].position, NetPlay.players[1].position, NetPlay.players[2].position, NetPlay.players[3].position, NetPlay.players[4].position, NetPlay.players[5].position, NetPlay.players[6].position, NetPlay.players[7].position, NetPlay.players[8].position, NetPlay.players[9].position
@@ -543,51 +544,47 @@ static void gameStateUpdate()
 		//update the current power available for a player
 		updatePlayerPower(i);
 
-		DROID *psNext;
-		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psNext)
+		mutating_list_iterate(apsDroidLists[i], [](DROID* d)
 		{
-			// Copy the next pointer - not 100% sure if the droid could get destroyed but this covers us anyway
-			psNext = psCurr->psNext;
-			droidUpdate(psCurr);
-		}
+			droidUpdate(d);
+			return IterationResult::CONTINUE_ITERATION;
+		});
+		mutating_list_iterate(mission.apsDroidLists[i], [](DROID* d)
+		{
+			missionDroidUpdate(d);
+			return IterationResult::CONTINUE_ITERATION;
+		});
 
-		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != nullptr; psCurr = psNext)
+		// FIXME: These for-loops are code duplication
+		mutating_list_iterate(apsStructLists[i], [](STRUCTURE* s)
 		{
-			/* Copy the next pointer - not 100% sure if the droid could
-			get destroyed but this covers us anyway */
-			psNext = psCurr->psNext;
-			missionDroidUpdate(psCurr);
-		}
-
-		// FIXME: These for-loops are code duplicationo
-		STRUCTURE *psNBuilding;
-		for (STRUCTURE *psCBuilding = apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psNBuilding)
+			structureUpdate(s, false);
+			return IterationResult::CONTINUE_ITERATION;
+		});
+		mutating_list_iterate(mission.apsStructLists[i], [](STRUCTURE* s)
 		{
-			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
-			psNBuilding = psCBuilding->psNext;
-			structureUpdate(psCBuilding, false);
-		}
-		for (STRUCTURE *psCBuilding = mission.apsStructLists[i]; psCBuilding != nullptr; psCBuilding = psNBuilding)
-		{
-			/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway. It shouldn't do since its not even on the map!*/
-			psNBuilding = psCBuilding->psNext;
-			structureUpdate(psCBuilding, true); // update for mission
-		}
+			structureUpdate(s, true); // update for mission
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 
 	missionTimerUpdate();
 
 	proj_UpdateAll();
 
-	FEATURE *psNFeat;
-	for (FEATURE *psCFeat = apsFeatureLists[0]; psCFeat; psCFeat = psNFeat)
+	for (FEATURE *psCFeat : apsFeatureLists[0])
 	{
-		psNFeat = psCFeat->psNext;
 		featureUpdate(psCFeat);
 	}
 
 	// Free dead droid memory.
 	objmemUpdate();
+
+	// accumulate occasional stats / snapshots
+	if (!paused && !scriptPaused())
+	{
+		GameStoryLogger::instance().logGameFrame();
+	}
 
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();
@@ -607,16 +604,32 @@ void setMaxFastForwardTicks(optional<size_t> value, bool fixedToNormalTickRate)
 	fastForwardTicksFixedToNormalTickRate = fixedToNormalTickRate;
 }
 
+static int renderBudget = 0;  // Scaled time spent rendering minus scaled time spent updating.
+const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
+const Rational updateFraction = Rational(1) - renderFraction;
+
+#if defined(__EMSCRIPTEN__)
+unsigned lastRenderDelta = 0;
+void wz_emscripten_did_finish_render(unsigned int browserRenderDelta)
+{
+	if (GetGameMode() != GS_NORMAL)
+	{
+		return;
+	}
+	renderBudget += (lastRenderDelta + browserRenderDelta) * updateFraction.n;
+	renderBudget = std::min(renderBudget, (renderFraction * 500).floor());
+	lastRenderDelta = 0;
+}
+#endif
+
 /* The main game loop */
 GAMECODE gameLoop()
 {
+	WZ_PROFILE_SCOPE(gameLoop);
 	static uint32_t lastFlushTime = 0;
 
 	static size_t numForcedUpdatesLastCall = 0;
-	static int renderBudget = 0;  // Scaled time spent rendering minus scaled time spent updating.
 	static bool previousUpdateWasRender = false;
-	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
-	const Rational updateFraction = Rational(1) - renderFraction;
 
 	// Shouldn't this be when initialising the game, rather than randomly called between ticks?
 	countUpdate(false); // kick off with correct counts
@@ -686,8 +699,12 @@ GAMECODE gameLoop()
 	pie_ScreenFrameRenderEnd(); // must happen here for proper renderBudget calculation
 	unsigned after = wzGetTicks();
 
+#if defined(__EMSCRIPTEN__)
+	lastRenderDelta = (after - before);
+#else
 	renderBudget += (after - before) * updateFraction.n;
 	renderBudget = std::min(renderBudget, (renderFraction * 500).floor());
+#endif
 	previousUpdateWasRender = true;
 
 	if (headlessGameMode() && autogame_enabled())
@@ -889,9 +906,7 @@ void adjustDroidCount(DROID *droid, int delta) {
 // Increase counts of droids in a transporter
 void droidCountsInTransporter(DROID *droid, int player)
 {
-	DROID *psDroid = nullptr;
-
-	if (!isTransporter(droid) || droid->psGroup == nullptr)
+	if (!droid->isTransporter() || droid->psGroup == nullptr)
 	{
 		return;
 	}
@@ -899,8 +914,12 @@ void droidCountsInTransporter(DROID *droid, int player)
 	numTransporterDroids[player] += droid->psGroup->refCount - 1;
 
 	// and count the units inside it...
-	for (psDroid = droid->psGroup->psList; psDroid != nullptr && psDroid != droid; psDroid = psDroid->psGrpNext)
+	for (DROID* psDroid : droid->psGroup->psList)
 	{
+		if (psDroid == droid)
+		{
+			break;
+		}
 		if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
 		{
 			numConstructorDroids[player] += 1;

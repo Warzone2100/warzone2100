@@ -23,6 +23,7 @@
 
 #include <functional>
 #include <memory>
+#include "lib/ivis_opengl/pietypes.h"
 
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
@@ -91,6 +92,7 @@ void permitNewConsoleMessages(bool allow);
 void toggleConsoleDrop();
 void setHistoryMode(bool mode);
 void clearInfoMessages();
+PIELIGHT getConsoleTextColor(int player);
 
 typedef std::function<void(ConsoleMessage const &)> CONSOLE_MESSAGE_LISTENER;
 void consoleAddMessageListener(const std::shared_ptr<CONSOLE_MESSAGE_LISTENER>& listener);

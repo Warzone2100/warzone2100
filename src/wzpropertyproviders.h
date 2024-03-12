@@ -43,6 +43,10 @@ public:
 		// WZ 4.3.3+
 		ENV_VAR_NAMES,
 		SYSTEM_RAM, // system RAM in MiB
+		// WZ 4.4.0+
+		CONTAINER_TYPE,
+		// WZ 4.5.0+
+		EMSCRIPTEN_WINDOW_URL
 	};
 private:
 	std::string GetCurrentEnvironmentPropertyValue(const EnvironmentProperty& property);
@@ -58,6 +62,7 @@ class CombinedPropertyProvider : public PropertyMatcher::PropertyProvider {
 public:
 	CombinedPropertyProvider(const std::vector<std::shared_ptr<PropertyMatcher::PropertyProvider>>& providers)
 	{
+		propertyProviders.reserve(providers.size());
 		for (auto& provider : providers)
 		{
 			if (!provider) continue;

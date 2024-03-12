@@ -24,3 +24,22 @@ const VTOL_RESEARCH = [
 	"R-Wpn-Bomb05",
 	"R-Wpn-Bomb-Damage03"
 ];
+
+const INSANE_RESEARCH = [
+	"R-Vehicle-Metals02",
+	"R-Cyborg-Metals02",
+	"R-Cyborg-Hvywpn-PulseLsr",
+	"R-Struc-Research-Upgrade09",
+	"R-Sys-Autorepair-General",
+	"R-Cyborg-Hvywpn-RailGunner",
+	"R-Cyborg-Hvywpn-A-T",
+	"R-Defense-HeavyLas",
+	"R-Cyborg-Metals09",
+	"R-Vehicle-Body10",
+	"R-Vehicle-Metals09",
+	"R-Struc-Factory-Upgrade09",
+	"R-Defense-HeavyPlasmaLauncher",
+	"R-Defense-WallTower-Rail3",
+	"R-Defense-HvyArtMissile",
+	"R-Vehicle-Body14",
+];

@@ -68,7 +68,6 @@ function camSetVtolSpawnState(state, identifier)
 			if (__camVtolDataSystem[idx].spawnStopObject === identifier)
 			{
 				__camVtolDataSystem[idx].active = state;
-				break;
 			}
 		}
 	}
@@ -149,8 +148,8 @@ function __camSpawnVtols()
 			}
 		}
 
-		let amount = minVtolAmount + camRand(maxRandomAdditions + 1);
-		let droids = [];
+		const __AMOUNT = minVtolAmount + camRand(maxRandomAdditions + 1);
+		const droids = [];
 		let pos;
 
 		//Make sure to catch multiple start positions also.
@@ -170,15 +169,15 @@ function __camSpawnVtols()
 		if (!camDef(__camVtolDataSystem[idx].extras))
 		{
 			//Pick some droids randomly.
-			for (let i = 0; i < amount; ++i)
+			for (let i = 0; i < __AMOUNT; ++i)
 			{
 				droids.push(__camVtolDataSystem[idx].templates[camRand(__camVtolDataSystem[idx].templates.length)]);
 			}
 		}
 		else
 		{
-			var lim = amount;
-			var alternate = false;
+			let lim = __AMOUNT;
+			let alternate = false;
 			if (camDef(__camVtolDataSystem[idx].extras.alternate))
 			{
 				alternate = __camVtolDataSystem[idx].extras.alternate; //Only use one template type
@@ -238,16 +237,16 @@ function __camRetreatVtols()
 			camDef(__camVtolDataSystem[idx].exitPosition.y) &&
 			enumStruct(__camVtolDataSystem[idx].player, REARM_PAD).length === 0)
 		{
-			const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
-			const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
-			let vtols = enumDroid(__camVtolDataSystem[idx].player).filter((obj) => (isVTOL(obj)));
+			const __VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
+			const __VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
+			const vtols = enumDroid(__camVtolDataSystem[idx].player).filter((obj) => (isVTOL(obj)));
 
 			for (let i = 0, len = vtols.length; i < len; ++i)
 			{
-				let vt = vtols[i];
+				const vt = vtols[i];
 				for (let c = 0, len2 = vt.weapons.length; c < len2; ++c)
 				{
-					if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))
+					if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < __VTOL_RETURN_ARMED) || (vt.health < __VTOL_RETURN_HEALTH))
 					{
 						orderDroidLoc(vt, DORDER_MOVE, __camVtolDataSystem[idx].exitPosition.x, __camVtolDataSystem[idx].exitPosition.y);
 						break;

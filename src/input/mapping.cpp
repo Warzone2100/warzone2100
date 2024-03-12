@@ -101,7 +101,7 @@ bool KeyMapping::hasMeta() const
 	return keys.meta != KEY_CODE::KEY_IGNORE;
 }
 
-bool KeyMapping::toString(char* pOutStr) const
+std::string KeyMapping::toString() const
 {
 	// Figure out if the keycode is for mouse or keyboard and print the name of
 	// the respective key/mouse button to `asciiSub`
@@ -115,9 +115,8 @@ bool KeyMapping::toString(char* pOutStr) const
 		mouseKeyCodeToString(keys.input.value.mouseKeyCode, (char*)&asciiSub, 20);
 		break;
 	default:
-		strcpy(asciiSub, "NOT VALID");
 		debug(LOG_WZ, "Encountered invalid key mapping source %u while converting mapping to string!", static_cast<unsigned int>(keys.input.source));
-		return true;
+		return std::string("NOT VALID");
 	}
 
 	if (hasMeta())
@@ -125,13 +124,12 @@ bool KeyMapping::toString(char* pOutStr) const
 		char asciiMeta[20] = "\0";
 		keyScanToString(keys.meta, (char*)&asciiMeta, 20);
 
-		sprintf(pOutStr, "%s %s", asciiMeta, asciiSub);
+		return astringf("%s %s", asciiMeta, asciiSub);
 	}
 	else
 	{
-		sprintf(pOutStr, "%s", asciiSub);
+		return std::string(asciiSub);
 	}
-	return true;
 }
 
 
@@ -185,10 +183,10 @@ KeyMapping& KeyMappings::add(const KeyCombination keys, const KeyFunctionInfo& i
 	return keyMappings.back();
 }
 
-nonstd::optional<std::reference_wrapper<KeyMapping>> KeyMappings::get(const KeyFunctionInfo& info, const KeyMappingSlot slot)
+nonstd::optional<std::reference_wrapper<KeyMapping>> KeyMappings::get(const std::string& name, const KeyMappingSlot slot)
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [&info, slot](const KeyMapping& mapping) {
-		return mapping.info.name == info.name && mapping.slot == slot;
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [&name, slot](const KeyMapping& mapping) {
+		return mapping.info.name == name && mapping.slot == slot;
 	});
 	if (mapping != keyMappings.end())
 	{
@@ -196,6 +194,11 @@ nonstd::optional<std::reference_wrapper<KeyMapping>> KeyMappings::get(const KeyF
 	}
 
 	return nonstd::nullopt;
+}
+
+nonstd::optional<std::reference_wrapper<KeyMapping>> KeyMappings::get(const KeyFunctionInfo& info, const KeyMappingSlot slot)
+{
+	return get(info.name, slot);
 }
 
 std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::find(const KEY_CODE meta, const KeyMappingInput input)
@@ -372,7 +375,7 @@ bool KeyMappings::save(const char* path) const
 		return false;
 	}
 
-	ini.setValue("version", 1);
+	ini.setValue("version", 2);
 
 	ini.beginArray("mappings");
 	for (const KeyMapping& mapping : keyMappings)

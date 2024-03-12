@@ -72,6 +72,7 @@ NETQUEUE NETbroadcastQueue(unsigned excludePlayer = NET_NO_EXCLUDE);  ///< The q
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
 void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message);     ///< Dump whole NetMessages into the queue.
 bool NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
+size_t NETincompleteMessageDataBuffered(NETQUEUE queue);
 NetMessage const *NETgetMessage(NETQUEUE queue);///< Returns the current message in the queue which is ready to be deserialised. Do not delete the message.
 
 void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
@@ -84,6 +85,14 @@ void NETbeginDecode(NETQUEUE queue, uint8_t type);
 bool NETend();
 void NETflushGameQueues();
 void NETpop(NETQUEUE queue);
+
+class SessionKeys;
+void NETsetSessionKeys(uint8_t player, SessionKeys&& keys);
+void NETclearSessionKeys();
+void NETclearSessionKeys(uint8_t player);
+bool NETbeginEncodeSecured(NETQUEUE queue, uint8_t type); ///< For encoding a secured net message, for a *specific player* - see .cpp file for more details
+bool NETbeginDecodeSecured(NETQUEUE queue, uint8_t type);
+bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type);
 
 void NETint8_t(int8_t *ip);
 void NETuint8_t(uint8_t *ip);

@@ -70,8 +70,8 @@ struct VIEW_BASE
 // info required to view an object in Intelligence screen
 struct VIEW_RESEARCH : VIEW_BASE
 {
-	iIMDShape	*pIMD = nullptr;
-	iIMDShape	*pIMD2 = nullptr;	// allows base plates and turrets to be drawn as well
+	iIMDBaseShape	*pIMD = nullptr;
+	iIMDBaseShape	*pIMD2 = nullptr;	// allows base plates and turrets to be drawn as well
 	WzString		sequenceName;	// which windowed flic to display
 	WzString		audio;			// name of audio track to play (for this seq)
 };
@@ -127,8 +127,6 @@ struct MESSAGE
 	bool            read = false;                           // flag to indicate whether message has been read
 	UDWORD		player;                                 // which player this message belongs to
 	MSG_DATA_TYPE	dataType;
-
-	MESSAGE         *psNext = nullptr;                       // pointer to the next in the list
 };
 
 //used to display the proximity messages
@@ -138,7 +136,6 @@ struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 	UDWORD             timeLastDrawn = 0;     // stores the time the 'button' was last drawn for animation
 	UDWORD             strobe = 0;            // id of image last used
 	UDWORD             buttonID = 0;          // id of the button for the interface
-	PROXIMITY_DISPLAY  *psNext = nullptr;      // pointer to the next in the list
 };
 
 #endif // __INCLUDED_MESSAGEDEF_H__

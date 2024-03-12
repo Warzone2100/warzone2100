@@ -11,6 +11,7 @@ var artilleryDefenses = [
 	"Emplacement-HvART-pit",
 	"Emplacement-MdART-pit",
 	"Emplacement-Rocket06-IDF",
+	"Emplacement-MRLHvy-pit",
 	"Emplacement-MRL-pit",
 ];
 

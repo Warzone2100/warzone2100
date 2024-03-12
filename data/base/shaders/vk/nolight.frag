@@ -4,9 +4,12 @@
 layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
 
 layout(set = 3, binding = 0) uniform sampler2D Texture;
+
 layout(std140, set = 0, binding = 0) uniform globaluniforms
 {
 	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+	mat4 ShadowMapMVPMatrix;
 	vec4 lightPosition;
 	vec4 sceneColor;
 	vec4 ambient;
@@ -34,6 +37,7 @@ layout(std140, set = 2, binding = 0) uniform instanceuniforms
 	vec4 colour;
 	vec4 teamcolour;
 	float stretch;
+	float animFrameNumber;
 	int ecmEffect;
 	int alphaTest;
 };

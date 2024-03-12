@@ -71,6 +71,9 @@ static void NETauto(PLAYERSTATS::Autorating &ar)
 		NETauto(ar.elo);
 		NETauto(ar.autohoster);
 		NETauto(ar.details);
+		NETauto(ar.altName);
+		NETauto(ar.altNameTextColorOverride);
+		NETauto(ar.eloTextColorOverride);
 	}
 }
 
@@ -86,6 +89,22 @@ PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
 		elo = json["elo"].get<std::string>();
 		autohoster = json["autohoster"].get<bool>();
 		details = json["details"].get<std::string>();
+		if (json.contains("name"))
+		{
+			altName = json["name"].get<std::string>();
+		}
+		if (json.contains("nameTextColorOverride"))
+		{
+			altNameTextColorOverride[0] = json["nameTextColorOverride"][0].get<uint8_t>();
+			altNameTextColorOverride[1] = json["nameTextColorOverride"][1].get<uint8_t>();
+			altNameTextColorOverride[2] = json["nameTextColorOverride"][2].get<uint8_t>();
+		}
+		if (json.contains("eloTextColorOverride"))
+		{
+			eloTextColorOverride[0] = json["eloTextColorOverride"][0].get<uint8_t>();
+			eloTextColorOverride[1] = json["eloTextColorOverride"][1].get<uint8_t>();
+			eloTextColorOverride[2] = json["eloTextColorOverride"][2].get<uint8_t>();
+		}
 		valid = true;
 	} catch (const std::exception &e) {
 		debug(LOG_WARNING, "Error parsing rating JSON: %s", e.what());
@@ -159,14 +178,34 @@ void lookupRatingAsync(uint32_t playerIndex)
 			}
 		});
 	};
-	req.onFailure = [](std::string const &url, WZ_DECL_UNUSED URLRequestFailureType type, WZ_DECL_UNUSED optional<HTTPResponseDetails> transferDetails) {
+	req.onFailure = [](std::string const &url, WZ_DECL_UNUSED URLRequestFailureType type, WZ_DECL_UNUSED std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string urlCopy = url;
 		wzAsyncExecOnMainThread([urlCopy] {
 			debug(LOG_WARNING, "Failure fetching \"%s\".", urlCopy.c_str());
 		});
 	};
-	req.maxDownloadSizeLimit = 4096;
+	req.maxDownloadSizeLimit = 4096*4;
 	urlRequestData(req);
+}
+
+static bool generateSessionKeysWithPlayer(uint32_t playerIndex)
+{
+	if (playerStats[playerIndex].identity.empty())
+	{
+		NETclearSessionKeys(playerIndex);
+		return false;
+	}
+
+	// generate session keys
+	auto& localIdentity = playerStats[realSelectedPlayer].identity;
+	try {
+		NETsetSessionKeys(playerIndex, SessionKeys(localIdentity, realSelectedPlayer, playerStats[playerIndex].identity, playerIndex));
+	}
+	catch (const std::invalid_argument&) {
+		NETclearSessionKeys(playerIndex);
+		throw;
+	}
+	return true;
 }
 
 bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
@@ -176,6 +215,65 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 		return false;
 	}
 	std::swap(playerStats[playerIndexA], playerStats[playerIndexB]);
+
+	// NOTE: We can't just swap session keys - we have to re-generate to be sure they are correct
+	// (since client / server determinism can also be based on the playerIdx relative to the realSelectedPlayer - see SessionKeys constructor)
+	if (playerIndexA != realSelectedPlayer && (playerIndexA < MAX_PLAYERS || playerIndexA == NetPlay.hostPlayer))
+	{
+		try {
+			generateSessionKeysWithPlayer(playerIndexA);
+		}
+		catch (const std::invalid_argument& e) {
+			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexA, NetPlay.players[playerIndexA].name, e.what());
+		}
+	}
+	if (playerIndexB != realSelectedPlayer && (playerIndexB < MAX_PLAYERS || playerIndexB == NetPlay.hostPlayer))
+	{
+		try {
+			generateSessionKeysWithPlayer(playerIndexB);
+		}
+		catch (const std::invalid_argument& e) {
+			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexB, NetPlay.players[playerIndexB].name, e.what());
+		}
+	}
+	return true;
+}
+
+bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex /*= nullopt*/)
+{
+	NETQUEUE queue;
+	if (!recipientPlayerIndex.has_value())
+	{
+		queue = NETbroadcastQueue();
+	}
+	else
+	{
+		queue = NETnetQueue(recipientPlayerIndex.value());
+	}
+	// Now send it to all other players
+	NETbeginEncode(queue, NET_PLAYER_STATS);
+	// Send the ID of the player's stats we're updating
+	NETuint32_t(&playerIndex);
+
+	NETauto(playerStats[playerIndex].autorating);
+
+	// Send over the actual stats
+	NETuint32_t(&playerStats[playerIndex].played);
+	NETuint32_t(&playerStats[playerIndex].wins);
+	NETuint32_t(&playerStats[playerIndex].losses);
+	NETuint32_t(&playerStats[playerIndex].totalKills);
+	NETuint32_t(&playerStats[playerIndex].totalScore);
+	NETuint32_t(&playerStats[playerIndex].recentKills);
+	NETuint32_t(&playerStats[playerIndex].recentScore);
+
+	EcKey::Key identity;
+	if (!playerStats[playerIndex].identity.empty())
+	{
+		identity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+	}
+	NETbytes(&identity);
+	NETend();
+
 	return true;
 }
 
@@ -194,36 +292,55 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 
 	if (!bLocal && (NetPlay.isHost || playerIndex == realSelectedPlayer))
 	{
-		// Now send it to all other players
-		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_STATS);
-		// Send the ID of the player's stats we're updating
-		NETuint32_t(&playerIndex);
+		sendMultiStats(playerIndex);
 
-		NETauto(playerStats[playerIndex].autorating);
-
-		// Send over the actual stats
-		NETuint32_t(&playerStats[playerIndex].played);
-		NETuint32_t(&playerStats[playerIndex].wins);
-		NETuint32_t(&playerStats[playerIndex].losses);
-		NETuint32_t(&playerStats[playerIndex].totalKills);
-		NETuint32_t(&playerStats[playerIndex].totalScore);
-		NETuint32_t(&playerStats[playerIndex].recentKills);
-		NETuint32_t(&playerStats[playerIndex].recentScore);
-		NETuint64_t(&playerStats[playerIndex].recentPowerLost);
-
-		EcKey::Key identity;
-		if (!playerStats[playerIndex].identity.empty())
+		if (playerIndex == realSelectedPlayer)
 		{
-			identity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+			// need to clear and re-generate any session keys for communication between us and other players
+			NETclearSessionKeys();
+			auto& localIdentity = playerStats[realSelectedPlayer].identity;
+			if (localIdentity.hasPrivate())
+			{
+				for (uint8_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+				{
+					if (i == realSelectedPlayer) { continue; }
+					if (i >= MAX_PLAYERS && i != NetPlay.hostPlayer)
+					{
+						// Don't bother creating SessionKeys with non-host spectator slots
+						continue;
+					}
+					if (playerStats[i].identity.empty())
+					{
+						continue;
+					}
+					try {
+						NETsetSessionKeys(i, SessionKeys(localIdentity, realSelectedPlayer, playerStats[i].identity, i));
+					}
+					catch (const std::invalid_argument& e) {
+						debug(LOG_INFO, "One or both identities can't be used for session keys (self: %u, other: %u), with error: %s", realSelectedPlayer, i, e.what());
+					}
+				}
+			}
+			else
+			{
+				ASSERT(false, "Local identity is missing key pair?");
+			}
 		}
-		NETbytes(&identity);
-		NETend();
 	}
 
 	return true;
 }
 
-void recvMultiStats(NETQUEUE queue)
+bool sendMultiStatsScoreUpdates(uint32_t playerIndex)
+{
+	if (NetPlay.isHost || playerIndex == realSelectedPlayer)
+	{
+		return sendMultiStats(playerIndex);
+	}
+	return false;
+}
+
+bool recvMultiStats(NETQUEUE queue)
 {
 	uint32_t playerIndex;
 
@@ -235,7 +352,7 @@ void recvMultiStats(NETQUEUE queue)
 	if (playerIndex >= MAX_CONNECTED_PLAYERS)
 	{
 		NETend();
-		return;
+		return false;
 	}
 
 
@@ -243,7 +360,7 @@ void recvMultiStats(NETQUEUE queue)
 	{
 		HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
 		NETend();
-		return;
+		return false;
 	}
 
 	PLAYERSTATS::Autorating receivedAutorating;
@@ -261,7 +378,6 @@ void recvMultiStats(NETQUEUE queue)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
-		NETuint64_t(&playerStats[playerIndex].recentPowerLost);
 
 		EcKey::Key identity;
 		NETbytes(&identity);
@@ -270,43 +386,84 @@ void recvMultiStats(NETQUEUE queue)
 		{
 			prevIdentity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
 		}
-		playerStats[playerIndex].identity.clear();
-		if (!identity.empty())
-		{
-			playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public);
-		}
-		else
-		{
-			debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
-		}
-		if ((identity != prevIdentity) || identity.empty())
-		{
-			ingame.PingTimes[playerIndex] = PING_LIMIT;
-			ingame.VerifiedIdentity[playerIndex] = false;
 
-			if (!ingame.muteChat[playerIndex])
-			{
-				// check if the new identity was previously muted
-				auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
-				if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
-				{
-					ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
-				}
-			}
-
-			// Output to stdinterface, if enabled
+		// If game hasn't actually started, process potential identity changes
+		if (!ingame.TimeEveryoneIsInGame.has_value())
+		{
+			playerStats[playerIndex].identity.clear();
 			if (!identity.empty())
 			{
-				std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
-				std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
-				wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str());
+				if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
+				{
+					debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+				}
 			}
 			else
 			{
-				wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
+				debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
 			}
+			if ((identity != prevIdentity) || identity.empty())
+			{
+				if (GetGameMode() == GS_NORMAL)
+				{
+					debug(LOG_INFO, "Unexpected identity change after NET_FIREUP for: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+				}
 
-			processAutoratingData = true;
+				ingame.PingTimes[playerIndex] = PING_LIMIT;
+				ingame.VerifiedIdentity[playerIndex] = false;
+
+				if (!ingame.muteChat[playerIndex])
+				{
+					// check if the new identity was previously muted
+					auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
+					if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
+					{
+						ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
+					}
+				}
+
+				// Output to stdinterface, if enabled
+				if (!identity.empty())
+				{
+					std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
+					std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
+					std::string sendername = NetPlay.players[playerIndex].name;
+					std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
+					wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
+				}
+				else
+				{
+					wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
+				}
+
+				if (playerIndex < MAX_PLAYERS || playerIndex == NetPlay.hostPlayer)
+				{
+					if (!playerStats[playerIndex].identity.empty())
+					{
+						// generate session keys
+						try {
+							generateSessionKeysWithPlayer(playerIndex);
+						}
+						catch (const std::invalid_argument& e) {
+							debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
+						}
+					}
+					else
+					{
+						NETclearSessionKeys(playerIndex);
+					}
+				}
+
+				processAutoratingData = true;
+			}
+		}
+		else
+		{
+			// Changing an identity should not happen once a game starts
+			if ((identity != prevIdentity) || identity.empty())
+			{
+				ASSERT(false, "Cannot change identity for player %u after game has started", playerIndex);
+			}
 		}
 	}
 	else
@@ -330,6 +487,7 @@ void recvMultiStats(NETQUEUE queue)
 	}
 
 	NETend();
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -364,7 +522,10 @@ static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, boo
 		free(pFileData);
 		if (identity[0] != '\0')
 		{
-			st->identity.fromBytes(base64Decode(identity), EcKey::Private);
+			if (!st->identity.fromBytes(base64Decode(identity), EcKey::Private))
+			{
+				debug(LOG_INFO, "Failed to load profile identity");
+			}
 		}
 	}
 
@@ -373,6 +534,9 @@ static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, boo
 
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 {
+	// preserve current player identity (if loaded)
+	EcKey currentIdentity = (st) ? st->identity : EcKey();
+
 	*st = PLAYERSTATS();  // clear in case we don't get to load
 
 	// Prevent an empty player name (where the first byte is a 0x0 terminating char already)
@@ -406,16 +570,36 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 		}
 	}
 
-	if (st->identity.empty())
+	if (st->identity.empty() || !st->identity.hasPrivate())
 	{
-		st->identity = EcKey::generate();  // Generate new identity.
-		saveMultiStats(sPlayerName, sPlayerName, st);  // Save new identity.
+		if (!currentIdentity.empty())
+		{
+			st->identity = currentIdentity;  	// Preserve existing identity when creating a new profile
+		}
+		else
+		{
+			st->identity = EcKey::generate();	// Generate new identity
+		}
+
+		saveMultiStats(sPlayerName, sPlayerName, st);  // Save new profile
 	}
 
 	// reset recent scores
 	st->recentKills = 0;
+	st->recentDroidsKilled = 0;
+	st->recentDroidsLost = 0;
+	st->recentDroidsBuilt = 0;
+	st->recentStructuresKilled = 0;
+	st->recentStructuresLost = 0;
+	st->recentStructuresBuilt = 0;
 	st->recentScore = 0;
+	st->recentResearchComplete = 0;
 	st->recentPowerLost = 0;
+	st->recentDroidPowerLost = 0;
+	st->recentStructurePowerLost = 0;
+	st->recentPowerWon = 0;
+	st->recentResearchPerformance = 0;
+	st->recentResearchPotential = 0;
 
 	return true;
 }
@@ -429,6 +613,12 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 	    return false;
 	}
 	char buffer[1000];
+
+	if (st->identity.empty())
+	{
+		debug(LOG_INFO, "Refusing to save profile with empty identity: %s", sFileName);
+		return false;
+	}
 
 	ssprintf(buffer, "WZ.STA.v3\n%u %u %u %u %u\n%s\n",
 	         st->wins, st->losses, st->totalKills, st->totalScore, st->played, base64Encode(st->identity.toBytes(EcKey::Private)).c_str());
@@ -520,6 +710,26 @@ static inline uint32_t calcObjectCost(const BASE_OBJECT *psObj)
 	return 0;
 }
 
+void incrementMultiStatsResearchPerformance(UDWORD player)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+	// printf("Increment performance, player %d was %ld\n", player, playerStats[player].recentResearchPerformance);
+	playerStats[player].recentResearchPerformance += 1;
+}
+
+void incrementMultiStatsResearchPotential(UDWORD player)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+	// printf("Increment potential, player %d was %ld\n", player, playerStats[player].recentResearchPotential);
+	playerStats[player].recentResearchPotential += 1;
+}
+
 // update kills
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 {
@@ -527,7 +737,7 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 	{
 		return;
 	}
-	if (NetPlay.bComms)
+	if (bMultiPlayer)
 	{
 		if (psKilled != nullptr)
 		{
@@ -537,14 +747,59 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 			}
 			if (psKilled->player < MAX_PLAYERS)
 			{
-				playerStats[psKilled->player].recentPowerLost += static_cast<uint64_t>(calcObjectCost(psKilled));
+				uint64_t pwrCost = static_cast<uint64_t>(calcObjectCost(psKilled));
+				playerStats[psKilled->player].recentPowerLost += pwrCost;
+				playerStats[player].recentPowerWon += pwrCost;
+
+				if (isDroid(psKilled))
+				{
+					playerStats[psKilled->player].recentDroidPowerLost += pwrCost;
+					playerStats[psKilled->player].recentDroidsLost++;
+					playerStats[player].recentDroidsKilled++;
+				}
+				else if (isStructure(psKilled))
+				{
+					playerStats[psKilled->player].recentStructurePowerLost += pwrCost;
+					playerStats[psKilled->player].recentStructuresLost++;
+					playerStats[player].recentStructuresKilled++;
+				}
 			}
-			++playerStats[player].totalKills;
+			if (NetPlay.bComms)
+			{
+				++playerStats[player].totalKills;
+			}
 			++playerStats[player].recentKills;
 		}
 		return;
 	}
 	++playerStats[player].recentKills;
+}
+
+void updateMultiStatsBuilt(BASE_OBJECT *psBuilt)
+{
+	if (psBuilt->player >= MAX_PLAYERS)
+	{
+		return;
+	}
+
+	if (isDroid(psBuilt))
+	{
+		playerStats[psBuilt->player].recentDroidsBuilt++;
+	}
+	else if (isStructure(psBuilt))
+	{
+		playerStats[psBuilt->player].recentStructuresBuilt++;
+	}
+}
+
+void updateMultiStatsResearchComplete(RESEARCH *psResearch, UDWORD player)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return;
+	}
+
+	playerStats[player].recentResearchComplete++;
 }
 
 class KnownPlayersDB {
@@ -566,15 +821,15 @@ public:
 	// Caller is expected to handle thrown exceptions
 	KnownPlayersDB(const std::string& knownPlayersDBPath)
 	{
-		db = std::unique_ptr<SQLite::Database>(new SQLite::Database(knownPlayersDBPath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE));
+		db = std::make_unique<SQLite::Database>(knownPlayersDBPath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
 		db->exec("PRAGMA journal_mode=WAL");
 		createKnownPlayersDBTables();
-		query_findPlayerIdentityByName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT local_id, name, pk FROM known_players WHERE name = ?"));
-		query_insertNewKnownPlayer = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO known_players(name, pk) VALUES(?, ?)"));
-		query_updateKnownPlayerKey = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE known_players SET pk = ? WHERE name = ?"));
-		query_findPlayerOptionsByPK = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT name, muted, banned FROM player_options WHERE pk = ?"));
-		query_insertNewPlayerOptions = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO player_options(pk, name, muted, banned) VALUES(?, ?, ?, ?)"));
-		query_updatePlayerOptionsMuted = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE player_options SET muted = ? WHERE pk = ? AND name = ?"));
+		query_findPlayerIdentityByName = std::make_unique<SQLite::Statement>(*db, "SELECT local_id, name, pk FROM known_players WHERE name = ?");
+		query_insertNewKnownPlayer = std::make_unique<SQLite::Statement>(*db, "INSERT OR IGNORE INTO known_players(name, pk) VALUES(?, ?)");
+		query_updateKnownPlayerKey = std::make_unique<SQLite::Statement>(*db, "UPDATE known_players SET pk = ? WHERE name = ?");
+		query_findPlayerOptionsByPK = std::make_unique<SQLite::Statement>(*db, "SELECT name, muted, banned FROM player_options WHERE pk = ?");
+		query_insertNewPlayerOptions = std::make_unique<SQLite::Statement>(*db, "INSERT OR IGNORE INTO player_options(pk, name, muted, banned) VALUES(?, ?, ?, ?)");
+		query_updatePlayerOptionsMuted = std::make_unique<SQLite::Statement>(*db, "UPDATE player_options SET muted = ? WHERE pk = ? AND name = ?");
 	}
 
 public:
@@ -716,7 +971,7 @@ public:
 		// Begin transaction
 		SQLite::Transaction transaction(*db);
 
-		auto mutedTimeValue = mutedTime.has_value() ? mutedTime.value().time_since_epoch().count() : 0;
+		int64_t mutedTimeValue = static_cast<int64_t>(mutedTime.has_value() ? mutedTime.value().time_since_epoch().count() : 0);
 
 		query_insertNewPlayerOptions->bind(1, publicKeyb64);
 		query_insertNewPlayerOptions->bind(2, name);
@@ -799,7 +1054,7 @@ void initKnownPlayers()
 		ASSERT_OR_RETURN(, pWriteDir, "PHYSFS_getWriteDir returned null");
 		std::string knownPlayersDBPath = std::string(pWriteDir) + "/" + "knownPlayers.db";
 		try {
-			knownPlayersDB = std::unique_ptr<KnownPlayersDB>(new KnownPlayersDB(knownPlayersDBPath));
+			knownPlayersDB = std::make_unique<KnownPlayersDB>(knownPlayersDBPath);
 		}
 		catch (std::exception& e) {
 			// error loading SQLite database
@@ -917,13 +1172,90 @@ uint32_t getSelectedPlayerUnitsKilled()
 	}
 }
 
+void setMultiPlayRecentDroidsKilled(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentDroidsKilled = value;
+}
+
+void setMultiPlayRecentDroidsLost(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentDroidsLost = value;
+}
+
+void setMultiPlayRecentDroidsBuilt(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentDroidsBuilt = value;
+}
+
+void setMultiPlayRecentStructuresKilled(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentStructuresKilled = value;
+}
+
+void setMultiPlayRecentStructuresLost(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentStructuresLost = value;
+}
+
+void setMultiPlayRecentStructuresBuilt(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentStructuresBuilt = value;
+}
+
+void setMultiPlayRecentPowerLost(uint32_t player, uint64_t powerLost)
+{
+	playerStats[player].recentPowerLost = powerLost;
+}
+
+void setMultiPlayRecentDroidPowerLost(uint32_t player, uint64_t powerLost)
+{
+	playerStats[player].recentDroidPowerLost = powerLost;
+}
+
+void setMultiPlayRecentStructurePowerLost(uint32_t player, uint64_t powerLost)
+{
+	playerStats[player].recentStructurePowerLost = powerLost;
+}
+
+void setMultiPlayRecentPowerWon(uint32_t player, uint64_t powerWon)
+{
+	playerStats[player].recentPowerWon = powerWon;
+}
+
+void setMultiPlayRecentResearchComplete(uint32_t player, uint32_t value)
+{
+	playerStats[player].recentResearchComplete = value;
+}
+
+void setMultiPlayRecentResearchPotential(uint32_t player, uint64_t value)
+{
+	playerStats[player].recentResearchPotential = value;
+}
+
+void setMultiPlayRecentResearchPerformance(uint32_t player, uint64_t value)
+{
+	playerStats[player].recentResearchPerformance = value;
+}
+
 void resetRecentScoreData()
 {
 	for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		playerStats[i].recentKills = 0;
+		playerStats[i].recentDroidsKilled = 0;
+		playerStats[i].recentDroidsLost = 0;
+		playerStats[i].recentDroidsBuilt = 0;
+		playerStats[i].recentStructuresKilled = 0;
+		playerStats[i].recentStructuresLost = 0;
+		playerStats[i].recentStructuresBuilt = 0;
 		playerStats[i].recentScore = 0;
+		playerStats[i].recentResearchComplete = 0;
 		playerStats[i].recentPowerLost = 0;
+		playerStats[i].recentDroidPowerLost = 0;
+		playerStats[i].recentStructurePowerLost = 0;
+		playerStats[i].recentPowerWon = 0;
+		playerStats[i].recentResearchPerformance = 0;
+		playerStats[i].recentResearchPotential = 0;
 		playerStats[i].identity.clear();
 		playerStats[i].autorating = PLAYERSTATS::Autorating();
 	}
@@ -961,9 +1293,32 @@ inline void to_json(nlohmann::json& j, const PLAYERSTATS& p) {
 	j["totalKills"] = p.totalKills;
 	j["totalScore"] = p.totalScore;
 	j["recentKills"] = p.recentKills;
+	j["recentDroidsKilled"] = p.recentDroidsKilled;
+	j["recentDroidsLost"] = p.recentDroidsLost;
+	j["recentDroidsBuilt"] = p.recentDroidsBuilt;
+	j["recentStructuresKilled"] = p.recentStructuresKilled;
+	j["recentStructuresLost"] = p.recentStructuresLost;
+	j["recentStructuresBuilt"] = p.recentStructuresBuilt;
 	j["recentScore"] = p.recentScore;
+	j["recentResearchComplete"] = p.recentResearchComplete;
 	j["recentPowerLost"] = p.recentPowerLost;
+	j["recentDroidPowerLost"] = p.recentDroidPowerLost;
+	j["recentStructurePowerLost"] = p.recentStructurePowerLost;
+	j["recentPowerWon"] = p.recentPowerWon;
+	j["recentResearchPotential"] = p.recentResearchPotential;
+	j["recentResearchPerformance"] = p.recentResearchPerformance;
 	j["identity"] = p.identity;
+}
+
+template <typename T>
+optional<T> optGetJSONValue(const nlohmann::json& j, const std::string& key)
+{
+	auto it = j.find(key);
+	if (it == j.end())
+	{
+		return nullopt;
+	}
+	return it->get<T>();
 }
 
 inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
@@ -976,6 +1331,19 @@ inline void from_json(const nlohmann::json& j, PLAYERSTATS& k) {
 	k.recentScore = j.at("recentScore").get<uint32_t>();
 	k.recentPowerLost = j.at("recentPowerLost").get<uint64_t>();
 	k.identity = j.at("identity").get<EcKey>();
+	// WZ 4.4.0+:
+	k.recentDroidsKilled = optGetJSONValue<uint32_t>(j, "recentDroidsKilled").value_or(0);
+	k.recentDroidsLost = optGetJSONValue<uint32_t>(j, "recentDroidsLost").value_or(0);
+	k.recentDroidsBuilt = optGetJSONValue<uint32_t>(j, "recentDroidsBuilt").value_or(0);
+	k.recentStructuresKilled = optGetJSONValue<uint32_t>(j, "recentStructuresKilled").value_or(0);
+	k.recentStructuresLost = optGetJSONValue<uint32_t>(j, "recentStructuresLost").value_or(0);
+	k.recentStructuresBuilt = optGetJSONValue<uint32_t>(j, "recentStructuresBuilt").value_or(0);
+	k.recentResearchComplete = optGetJSONValue<uint32_t>(j, "recentResearchComplete").value_or(0);
+	k.recentDroidPowerLost = optGetJSONValue<uint64_t>(j, "recentDroidPowerLost").value_or(0);
+	k.recentStructurePowerLost = optGetJSONValue<uint64_t>(j, "recentStructurePowerLost").value_or(0);
+	k.recentPowerWon = optGetJSONValue<uint64_t>(j, "recentPowerWon").value_or(0);
+	k.recentResearchPotential = optGetJSONValue<uint64_t>(j, "recentResearchPotential").value_or(0);
+	k.recentResearchPerformance = optGetJSONValue<uint64_t>(j, "recentResearchPerformance").value_or(0);
 }
 
 bool saveMultiStatsToJSON(nlohmann::json& json)

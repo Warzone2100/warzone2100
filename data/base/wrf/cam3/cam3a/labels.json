@@ -107,7 +107,6 @@
 	},
 	"area_1": {
 		"label": "cybAttackers",
-		"subscriber": 0,
 		"pos1": [6976, 12480],
 		"pos2": [7424, 12864]
 	},
@@ -160,12 +159,24 @@
 		"label": "westFactoryTrigger",
 		"subscriber": 0,
 		"pos1": [5632, 13312],
-		"pos2": [6144, 14592]
+		"pos2": [6144, 14720]
 	},
 	"area_12": {
 		"label": "NXlandingZone",
 		"pos1": [896, 6656],
 		"pos2": [1152, 6912]
+	},
+	"area_13": {
+		"label": "middleTrigger",
+		"subscriber": 0,
+		"pos1": [128, 12672],
+		"pos2": [6272, 13312]
+	},
+	"area_14": {
+		"label": "northFactoryTrigger",
+		"subscriber": 0,
+		"pos1": [6592, 11840],
+		"pos2": [7424, 12224]
 	},
 
 	"object_0": {

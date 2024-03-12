@@ -50,7 +50,7 @@ struct FEATURE_STATS : public BASE_STATS
 
 	FEATURE_TYPE    subType = FEAT_COUNT;   ///< type of feature
 
-	iIMDShape      *psImd = nullptr;        ///< Graphic for the feature
+	iIMDBaseShape   *psImd = nullptr;        ///< Graphic for the feature
 	UWORD           baseWidth = 0;          ///< The width of the base in tiles
 	UWORD           baseBreadth = 0;        ///< The breadth of the base in tiles
 

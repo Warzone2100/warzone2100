@@ -31,6 +31,7 @@
 
 #include <memory>
 #include <functional>
+#include <string>
 
 // Regarding construction vs. start():
 // This allows a reference to the parent to be held for a stack-like effect.
@@ -46,8 +47,6 @@ public:
 
 // Pointer to the current UI. Dynamic allocation helps with the encapsulation.
 extern std::shared_ptr<WzTitleUI> wzTitleUICurrent;
-
-extern char serverName[128];
 
 void changeTitleUI(std::shared_ptr<WzTitleUI> ui);
 
@@ -99,10 +98,11 @@ private:
 class WzMsgBoxTitleUI: public WzTitleUI
 {
 public:
-	WzMsgBoxTitleUI(WzString text, std::shared_ptr<WzTitleUI> next);
+	WzMsgBoxTitleUI(WzString title, WzString text, std::shared_ptr<WzTitleUI> next);
 	virtual void start() override;
 	virtual TITLECODE run() override;
 private:
+	WzString title;
 	WzString text;
 	// Where to go after the user has acknowledged.
 	std::shared_ptr<WzTitleUI> next;
@@ -140,7 +140,7 @@ private:
 
 #define WZ_MSGBOX_TUI_LEAVE 4597000
 
-void mpSetServerName(const char *hostname);
-const char *mpGetServerName();
+void mpSetServerName(const std::string& hostname);
+const std::string& mpGetServerName();
 
 #endif

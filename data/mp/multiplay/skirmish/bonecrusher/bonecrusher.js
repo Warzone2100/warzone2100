@@ -62,7 +62,7 @@ var debugName = me;
 
 
 //Массив конкретных технологий (tech.js)
-var tech = [];
+var tech = {};
 
 include("multiplay/skirmish/"+vernum+"/names.js");
 
@@ -195,10 +195,10 @@ else rage = HARD;
 var buildersMain = newGroup();
 var buildersHunters = newGroup();
 
-var policy = [];
+var policy = {};
 
 //Фитчи, не совместимые с 3.1.5
-var nf = [];
+var nf = {};
 nf['policy'] = false;
 
 var enemyDist = 0;
@@ -238,7 +238,7 @@ var credit = 0;
 var lassat_charged = false;
 
 
-var eventsRun=[];
+var eventsRun={};
 eventsRun['targetCyborgs'] = 0;
 eventsRun['targetArmy'] = 0;
 eventsRun['targetRegular'] = 0;

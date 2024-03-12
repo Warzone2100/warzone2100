@@ -61,18 +61,17 @@ function __camEnqueueVideos()
 		return; //Nothing to play
 	}
 
-	const SOUND_IDENTIFER = ".ogg";
-	var what = __camVideoSequences[0];
+	const what = __camVideoSequences[0];
 
 	// Check if this is a sound to play before some sequence.
-	if (typeof what === "string" && what.indexOf(SOUND_IDENTIFER) !== -1)
+	if (typeof what === "string" && what.indexOf(cam_sounds.soundIdentifier) !== -1)
 	{
 		playSound(what);
 		queue("__camEnqueueVideos", camSecondsToMilliseconds(3.2)); //more than enough for most sounds.
 	}
 	else if (typeof what === "object")
 	{
-		var play = true;
+		let play = true;
 
 		if (!camDef(what.video) || !camIsString(what.video))
 		{
@@ -81,7 +80,7 @@ function __camEnqueueVideos()
 		}
 		if (!camDef(what.type) || (what.type !== MISS_MSG && what.type !== CAMP_MSG))
 		{
-			camDebug("Video message type was NOT specified. Please specify one.")
+			camDebug("Video message type was NOT specified. Please specify one.");
 			play = false;
 		}
 		if (!camDef(what.immediate))

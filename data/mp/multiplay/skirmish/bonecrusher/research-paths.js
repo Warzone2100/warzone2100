@@ -124,6 +124,7 @@ const research_rockets = [
 "R-Wpn-MG5",					//Twin Assault Gun
 "R-Wpn-Rocket-Accuracy02",
 "R-Sys-MobileRepairTurretHvy",
+"R-Defense-MRLHvy",
 "R-Wpn-Rocket-Damage09",
 "R-Struc-VTOLPad",				//Заправка авиации A0VtolPad
 "R-Wpn-Rocket07-Tank-Killer",

@@ -25,21 +25,8 @@
 			"half-tracked": 100
 		}
 	},
-	"greenmud": {
-		"id": 2,
-		"comment": "Green Mud",
-		"speedFactor": {
-			"wheeled": 80,
-			"tracked": 100,
-			"legged": 100,
-			"hover": 150,
-			"lift": 250,
-			"propellor": 100,
-			"half-tracked": 100
-		}
-	},
 	"bakedearth": {
-		"id": 3,
+		"id": 2,
 		"comment": "Baked Earth",
 		"speedFactor": {
 			"wheeled": 80,
@@ -49,6 +36,19 @@
 			"lift": 250,
 			"propellor": 100,
 			"half-tracked": 80
+		}
+	},
+	"greenmud": {
+		"id": 3,
+		"comment": "Green Mud",
+		"speedFactor": {
+			"wheeled": 80,
+			"tracked": 100,
+			"legged": 100,
+			"hover": 150,
+			"lift": 250,
+			"propellor": 100,
+			"half-tracked": 100
 		}
 	},
 	"redbrush": {

@@ -73,16 +73,16 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 bool proj_Direct(const WEAPON_STATS *psStats);
 
 /** Return the maximum range for a weapon. */
-int proj_GetLongRange(const WEAPON_STATS *psStats, int player);
+int proj_GetLongRange(const WEAPON_STATS& psStats, int player);
 
 /** Return the minimum range for a weapon. */
-int proj_GetMinRange(const WEAPON_STATS *psStats, int player);
+int proj_GetMinRange(const WEAPON_STATS& psStats, int player);
 
 /** Return the short range for a weapon. */
-int proj_GetShortRange(const WEAPON_STATS *psStats, int player);
+int proj_GetShortRange(const WEAPON_STATS& psStats, int player);
 
-UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
-bool gfxVisible(PROJECTILE *psObj);
+UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, const BASE_OBJECT *psTarget);
+bool gfxVisible(const PROJECTILE *psObj);
 
 /***************************************************************************/
 
@@ -137,6 +137,6 @@ struct ObjectShape
 	Vector2i size;           ///< x == y if circular.
 };
 
-ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
+ObjectShape establishTargetShape(const BASE_OBJECT *psTarget);
 
 #endif // __INCLUDED_SRC_PROJECTILE_H__

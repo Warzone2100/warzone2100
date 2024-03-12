@@ -88,9 +88,9 @@ static bool checkResearchName(RESEARCH *psRes, UDWORD numStats);
 
 //flag that indicates whether the player can self repair
 static UBYTE bSelfRepair[MAX_PLAYERS];
-static void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
+static void replaceDroidComponent(DroidList& pList, UDWORD oldType, UDWORD oldCompInc,
                                   UDWORD newCompInc);
-static void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompInc,
+static void replaceStructureComponent(StructureList& pList, UDWORD oldType, UDWORD oldCompInc,
                                       UDWORD newCompInc, UBYTE player);
 static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
                             UDWORD newCompInc);
@@ -988,17 +988,17 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		int compInc = componentResult->index;
 		makeComponentAvailable(apCompLists[player][type][compInc]);
 		//check for default sensor
-		if (type == COMP_SENSOR && (asSensorStats + compInc)->location == LOC_DEFAULT)
+		if (type == COMP_SENSOR && asSensorStats[compInc].location == LOC_DEFAULT)
 		{
 			aDefaultSensor[player] = compInc;
 		}
 		//check for default ECM
-		else if (type == COMP_ECM && (asECMStats + compInc)->location == LOC_DEFAULT)
+		else if (type == COMP_ECM && asECMStats[compInc].location == LOC_DEFAULT)
 		{
 			aDefaultECM[player] = compInc;
 		}
 		//check for default Repair
-		else if (type == COMP_REPAIRUNIT && (asRepairStats + compInc)->location == LOC_DEFAULT)
+		else if (type == COMP_REPAIRUNIT && asRepairStats[compInc].location == LOC_DEFAULT)
 		{
 			aDefaultRepair[player] = compInc;
 			enableSelfRepair(player);
@@ -1040,7 +1040,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	if (player == selectedPlayer && bDisplay)
 	{
 		//add console text message
-		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(getStatsName(pResearch)));
+		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), getLocalizedStatsName(pResearch));
 		addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
@@ -1131,10 +1131,9 @@ void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 */
 void CancelAllResearch(UDWORD pl)
 {
-	STRUCTURE	*psCurr;
 	if (pl >= MAX_PLAYERS) { return; }
 
-	for (psCurr = apsStructLists[pl]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (STRUCTURE* psCurr : apsStructLists[pl])
 	{
 		if (psCurr->pStructureType->type == REF_RESEARCH)
 		{
@@ -1456,11 +1455,8 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	//check thru the templates
 	enumerateTemplates(player, replaceComponentInTemplate);
 	// also check build queues
-	STRUCTURE *psNBuilding = nullptr;
-	for (STRUCTURE *psCBuilding = apsStructLists[player]; psCBuilding != nullptr; psCBuilding = psNBuilding)
+	for (STRUCTURE *psCBuilding : apsStructLists[player])
 	{
-		/* Copy the next pointer - not 100% sure if the structure could get destroyed but this covers us anyway */
-		psNBuilding = psCBuilding->psNext;
 		if ((psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_FACTORY ||
 			psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_CYBORG_FACTORY ||
 			psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_VTOL_FACTORY) &&
@@ -1523,7 +1519,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	UDWORD topicIndex = 0, researchPoints = 0, rewardID = 0;
 
 	//look through the losing players structures to find a research facility
-	for (STRUCTURE *psStruct = apsStructLists[losingPlayer]; psStruct != nullptr; psStruct = psStruct->psNext)
+	for (const STRUCTURE *psStruct : apsStructLists[losingPlayer])
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
@@ -1554,7 +1550,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			//name the actual reward
 			CONPRINTF("%s :- %s",
 			                          _("Research Award"),
-			                          getStatsName(&asResearch[rewardID]));
+			                          getLocalizedStatsName(&asResearch[rewardID]));
 		}
 	}
 }
@@ -1581,17 +1577,15 @@ bool selfRepairEnabled(UBYTE player)
 }
 
 /*for a given list of droids, replace the old component if exists*/
-void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
+void replaceDroidComponent(DroidList& pList, UDWORD oldType, UDWORD oldCompInc,
                            UDWORD newCompInc)
 {
-	DROID   *psDroid;
-
 	//check thru the droids
-	for (psDroid = pList; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (DROID* psDroid : pList)
 	{
 		switchComponent(psDroid, oldType, oldCompInc, newCompInc);
 		// Need to replace the units inside the transporter
-		if (isTransporter(psDroid))
+		if (psDroid->isTransporter())
 		{
 			replaceTransDroidComponents(psDroid, oldType, oldCompInc, newCompInc);
 		}
@@ -1602,12 +1596,9 @@ void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
 void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                  UDWORD oldCompInc, UDWORD newCompInc)
 {
-	DROID       *psCurr;
+	ASSERT(psTransporter->isTransporter(), "invalid unit type");
 
-	ASSERT(isTransporter(psTransporter), "invalid unit type");
-
-	for (psCurr = psTransporter->psGroup->psList; psCurr != nullptr; psCurr =
-	         psCurr->psGrpNext)
+	for (DROID* psCurr : psTransporter->psGroup->psList)
 	{
 		if (psCurr != psTransporter)
 		{
@@ -1616,10 +1607,9 @@ void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
 	}
 }
 
-void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompInc,
+void replaceStructureComponent(StructureList& pList, UDWORD oldType, UDWORD oldCompInc,
                                UDWORD newCompInc, UBYTE player)
 {
-	STRUCTURE   *psStructure;
 	int			inc;
 
 	// If the type is not one we are interested in, then don't bother checking
@@ -1629,7 +1619,7 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 	}
 
 	//check thru the structures
-	for (psStructure = pList; psStructure != nullptr; psStructure = psStructure->psNext)
+	for (STRUCTURE* psStructure : pList)
 	{
 		switch (oldType)
 		{
@@ -1735,7 +1725,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 			}
 
 			// Check each research facility to see if they are doing this topic. (As opposed to having started the topic, but stopped researching it.)
-			for (STRUCTURE *psStruct = apsStructLists[player]; psStruct != nullptr; psStruct = psStruct->psNext)
+			for (const STRUCTURE *psStruct : apsStructLists[player])
 			{
 				RESEARCH_FACILITY *res = (RESEARCH_FACILITY *)psStruct->pFunctionality;
 				if (psStruct->pStructureType->type != REF_RESEARCH || res->psSubject == nullptr)

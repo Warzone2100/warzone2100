@@ -206,6 +206,16 @@ bool openURLInBrowser(char const *url)
 	return succeededOpeningUrl;
 }
 
+#if defined(__EMSCRIPTEN__)
+
+std::string urlEncode(const char* urlFragment)
+{
+	// TODO: Implement?
+	return urlFragment;
+}
+
+#else // !defined(__EMSCRIPTEN__)
+
 #include <curl/curl.h>
 
 std::string urlEncode(const char* urlFragment)
@@ -238,6 +248,8 @@ std::string urlEncode(const char* urlFragment)
 # endif
 	return result;
 }
+
+#endif // defined(__EMSCRIPTEN__)
 
 bool openFolderInDefaultFileManager(const char* path)
 {

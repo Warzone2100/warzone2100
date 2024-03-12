@@ -121,7 +121,7 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	glm::vec4 color(c.byte.r / 255.f, c.byte.g / 255.f, c.byte.b / 255.f, 128.f / 255.f);
 
 	gfx_api::TransColouredTrianglePSO::get().bind();
-	gfx_api::TransColouredTrianglePSO::get().bind_constants({ pie_PerspectiveGet() * modelViewMatrix, glm::vec2(0), glm::vec2(0), color });
+	gfx_api::TransColouredTrianglePSO::get().bind_constants({ pie_UIPerspectiveGet() * modelViewMatrix, glm::vec2(0), glm::vec2(0), color });
 	gfx_api::context::get().bind_streamed_vertex_buffers(vrt.data(), 3 * sizeof(Vector3f));
 	gfx_api::TransColouredTrianglePSO::get().draw(3, 0);
 	gfx_api::context::get().disable_all_vertex_buffers();
@@ -262,9 +262,9 @@ void pie_Skybox_Shutdown()
 	skyboxGfx = nullptr;
 }
 
-void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix)
+void pie_DrawSkybox(float scale, const glm::mat4& projectionMatrix, const glm::mat4 &viewMatrix)
 {
-	const auto& modelViewProjectionMatrix = pie_PerspectiveGet() * viewMatrix * glm::scale(glm::vec3(scale, scale / 2.f, scale));
+	const auto& modelViewProjectionMatrix = projectionMatrix * viewMatrix * glm::scale(glm::vec3(scale, scale / 2.f, scale));
 
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(

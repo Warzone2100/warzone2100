@@ -28,8 +28,8 @@ using nonstd::optional;
 using nonstd::nullopt;
 
 tm getUtcTime(std::time_t const &timer);
-optional<tm> getLocalTimeOpt(std::time_t const &timer);
-tm getLocalTime(std::time_t const &timer);
+optional<tm> getLocalTimeOpt(std::time_t const &timer, bool quiet = false);
+tm getLocalTime(std::time_t const &timer, bool quiet = false);
 
 /**
  * Examples of formats:

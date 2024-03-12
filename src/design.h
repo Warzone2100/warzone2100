@@ -96,8 +96,8 @@
 #define IDDES_REPAIRWGTLAB		5232		// The Repair Weigth label
 
 /* Design screen buttons */
-#define IDDES_TEMPLSTART		5300		// The first design template button
-#define IDDES_TEMPLEND			5339		// The last design template button
+#define IDDES_TEMPLSTART		53000		// The first design template button
+#define IDDES_TEMPLEND			53499		// The last design template button
 #define IDDES_BARSTART			5400
 #define IDDES_BAREND			5499
 #define IDDES_COMPSTART			5500000		// The first component button

@@ -23,6 +23,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/ivis_opengl/imd.h"
+#include "lib/ivis_opengl/ivisdef.h"
 #include "effects.h"
 #include "structure.h"
 #include "messagedef.h"
@@ -119,20 +120,24 @@ static bool multiLoadMiscImds()
 }
 // -------------------------------------------------------------------------------
 // Returns a pointer to the imd from a #define number passed in - see above
-iIMDShape	*getImdFromIndex(UDWORD	index)
+iIMDBaseShape	*getImdFromIndex(UDWORD	index)
 {
 	ASSERT(index < MI_TOO_MANY, "Out of range index in getImdFromIndex");
 
 	return (miscImds[index].pImd);
 }
-// -------------------------------------------------------------------------------
-
-// -------------------------------------------------------------------------------
-iIMDShape	*getRandomDebrisImd()
+// DISPLAY-ONLY
+iIMDShape *getDisplayImdFromIndex(UDWORD index)
 {
-	iIMDShape *DebrisIMD;
+	iIMDBaseShape *pBaseIMD = getImdFromIndex(index);
+	return ((pBaseIMD) ? pBaseIMD->displayModel() : nullptr);
+}
+// -------------------------------------------------------------------------------
 
-	DebrisIMD = getImdFromIndex(MI_DEBRIS0 + rand() % ((MI_DEBRIS4 - MI_DEBRIS0) + 1));
+// -------------------------------------------------------------------------------
+iIMDBaseShape	*getRandomDebrisImd()
+{
+	iIMDBaseShape *DebrisIMD = getImdFromIndex(MI_DEBRIS0 + rand() % ((MI_DEBRIS4 - MI_DEBRIS0) + 1));
 
 	ASSERT(DebrisIMD != nullptr, "getRandomDebrisImd : NULL PIE");
 
@@ -140,7 +145,7 @@ iIMDShape	*getRandomDebrisImd()
 }
 // -------------------------------------------------------------------------------
 
-iIMDShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
+iIMDBaseShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
 
 static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
 {

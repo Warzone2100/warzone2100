@@ -43,6 +43,7 @@
 #include "src/order.h"
 #include <cstring>
 #include <limits>
+#include <array>
 
 /// There is a game queue representing each player. The game queues are synchronised among all players, so that all players process the same game queue
 /// messages at the same game time. The game queues should be used, even in single-player. Players should write to their own queue, not to other player's
@@ -66,6 +67,9 @@ static MessageReader reader;  ///< Used when deserialising a message.
 static NetMessage message;    ///< A message which is being serialised or deserialised.
 static NETQUEUE queueInfo;    ///< Indicates which queue is currently being (de)serialised.
 static PACKETDIR NetDir;      ///< Indicates whether a message is being serialised (PACKET_ENCODE) or deserialised (PACKET_DECODE), or not doing anything (PACKET_INVALID).
+static bool bSecretMessageWrap = false;
+
+static std::array<std::unique_ptr<SessionKeys>, MAX_CONNECTED_PLAYERS> netSessionKeys;
 
 static bool bIsReplay = false;
 
@@ -269,6 +273,27 @@ static void queue(const Q &q, std::vector<T> &v)
 }
 
 template<class Q>
+static void queue(const Q &q, std::vector<uint8_t> &v)
+{
+	ASSERT(v.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "v.size() exceeds uint32_t max");
+	uint32_t len = static_cast<uint32_t>(std::min(v.size(), static_cast<size_t>(std::numeric_limits<uint32_t>::max())));
+	queue(q, len);
+	switch (Q::Direction)
+	{
+	case Q::Write:
+		q.bytes(v.data(), v.size());
+		break;
+	case Q::Read:
+		v.clear();
+		if (q.valid())
+		{
+			q.bytesVector(v, len);
+		}
+		break;
+	}
+}
+
+template<class Q>
 static void queue(const Q &q, NetMessage &v)
 {
 	queue(q, v.type);
@@ -426,6 +451,11 @@ bool NETisMessageReady(NETQUEUE queue)
 	return receiveQueue(queue)->haveMessage();
 }
 
+size_t NETincompleteMessageDataBuffered(NETQUEUE queue)
+{
+	return receiveQueue(queue)->currentIncompleteDataBuffered();
+}
+
 NetMessage const *NETgetMessage(NETQUEUE queue)
 {
 	return &receiveQueue(queue)->getMessage();
@@ -518,8 +548,129 @@ void NETbeginDecode(NETQUEUE queue, uint8_t type)
 	assert(type == message.type);
 }
 
+void NETsetSessionKeys(uint8_t player, SessionKeys&& keys)
+{
+	ASSERT_OR_RETURN(, player < netSessionKeys.size(), "Invalid player: %u", static_cast<unsigned>(player));
+	netSessionKeys[player] = std::make_unique<SessionKeys>(std::move(keys));
+}
+
+void NETclearSessionKeys()
+{
+	for (auto& key : netSessionKeys)
+	{
+		key.reset();
+	}
+}
+
+void NETclearSessionKeys(uint8_t player)
+{
+	ASSERT_OR_RETURN(, player < netSessionKeys.size(), "Invalid player: %u", static_cast<unsigned>(player));
+	netSessionKeys[player].reset();
+}
+
+bool NETisExpectedSecuredMessageType(uint8_t type)
+{
+	switch (type)
+	{
+		case NET_TEAM_STRATEGY:
+			return true;
+		case NET_QUICK_CHAT_MSG:
+			return true;
+		default:
+			return false;
+	}
+}
+
+// For encoding a secured net message, for a *specific player*
+// Returns `false` on failure
+// Notes:
+//	- *DO NOT CALL NETend() if this returns false!!*
+//	- Only for NET_* messages
+bool NETbeginEncodeSecured(NETQUEUE queue, uint8_t type)
+{
+	ASSERT_OR_RETURN(false, type < NET_MAX_TYPE, "Message type %u is >= NET_MAX_TYPE", static_cast<unsigned>(type));
+	ASSERT_OR_RETURN(false, queue.index != realSelectedPlayer, "Secured messages are for other players, not ourselves.");
+	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS || queue.index == NetPlay.hostPlayer, "Invalid recipient (queue.index == %u)", static_cast<unsigned>(queue.index));
+	ASSERT_OR_RETURN(false, netSessionKeys[queue.index] != nullptr, "Lacking session key for recipient: %u", static_cast<unsigned>(queue.index));
+	ASSERT(NETisExpectedSecuredMessageType(type), "Message type is not expected to be secured, and will be ignored on receipt");
+
+	NETbeginEncode(queue, type);
+	bSecretMessageWrap = true;
+
+	return true;
+}
+
+// For decoding what is expected to have been a secured message
+// Returns `false` on failure
+// Notes:
+//	- *DO NOT CALL NETend() if this returns false!!*
+//	- Only for NET_* messages
+bool NETbeginDecodeSecured(NETQUEUE queue, uint8_t type)
+{
+	ASSERT_OR_RETURN(false, type < NET_MAX_TYPE, "Message type %u is >= NET_MAX_TYPE", static_cast<unsigned>(type));
+	ASSERT_OR_RETURN(false, queue.index != realSelectedPlayer, "Secured messages are for other players, not ourselves.");
+	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS || queue.index == NetPlay.hostPlayer, "Invalid sender (queue.index == %u)", static_cast<unsigned>(queue.index));
+	ASSERT_OR_RETURN(false, receiveQueue(queue)->currentMessageWasDecrypted(), "Message was not sent secured (type: %s)", messageTypeToString(type));
+
+	NETbeginDecode(queue, type);
+	return true;
+}
+
+// Decrypts a secured net message in a queue *and replaces it with the decrypted message*
+// If message is successfully decrypted:
+//	- Returns true, updates the current message in queue to be the decrypted message, updates `type`
+bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type)
+{
+	ASSERT_OR_RETURN(false, queue.index < MAX_PLAYERS || queue.index == NetPlay.hostPlayer, "Invalid sender (queue.index == %u", static_cast<unsigned>(queue.index));
+	ASSERT_OR_RETURN(false, netSessionKeys[queue.index] != nullptr, "Lacking session key for player: %u", static_cast<unsigned>(queue.index));
+	ASSERT_OR_RETURN(false, type == NET_SECURED_NET_MESSAGE, "Not a secured message?");
+
+	auto pReceiveQueue = receiveQueue(queue);
+
+	// Get & decrypt message raw data
+	auto encryptedMessage = pReceiveQueue->getMessage();
+	ASSERT_OR_RETURN(false, encryptedMessage.type == NET_SECURED_NET_MESSAGE, "Not a secured message?");
+	std::vector<uint8_t> decryptedMessageRawData;
+	if (!netSessionKeys[queue.index]->decryptMessageFromOther(&(encryptedMessage.data[0]), encryptedMessage.data.size(), decryptedMessageRawData))
+	{
+		debug(LOG_INFO, "Invalid encrypted message from player: %u", static_cast<unsigned>(queue.index));
+		return false;
+	}
+
+	NetMessage decryptedMessage;
+	if (!NetMessage::tryFromRawData(decryptedMessageRawData.data(), decryptedMessageRawData.size(), decryptedMessage))
+	{
+		debug(LOG_INFO, "Failed to parse decrypted data from player: %u", static_cast<unsigned>(queue.index));
+		return false;
+	}
+
+	if (!(decryptedMessage.type > NET_MIN_TYPE && decryptedMessage.type < NET_MAX_TYPE))
+	{
+		debug(LOG_NET, "Not a secured NET_* message? (type: %s) - ignoring", messageTypeToString(decryptedMessage.type));
+		return false;
+	}
+
+	if (!NETisExpectedSecuredMessageType(decryptedMessage.type))
+	{
+		// Ignore message types that aren't expected to be secured
+		debug(LOG_NET, "Not a message type that's expected to be secured: (type: %s) - ignoring", messageTypeToString(decryptedMessage.type));
+		return false;
+	}
+
+	NETlogPacket(NET_SECURED_NET_MESSAGE, static_cast<uint32_t>(encryptedMessage.rawLen()), true);
+
+	type = decryptedMessage.type; // must update type!
+	pReceiveQueue->replaceCurrentWithDecrypted(std::move(decryptedMessage));
+	return true;
+}
+
+static std::vector<uint8_t> tmpMessageRawDataBuffer;
+
 bool NETend()
 {
+	bool shouldWrapSecretMessage = bSecretMessageWrap;
+	bSecretMessageWrap = false; // reset global, always
+
 	// If we are encoding just return true
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
@@ -536,6 +687,24 @@ bool NETend()
 			debug(LOG_WARNING, "Sending %s to null queue, type %d.", messageTypeToString(message.type), queueInfo.queueType);
 			return true;
 		}
+
+		if (shouldWrapSecretMessage)
+		{
+			// Need to actually encrypt and wrap the current net message in a NET_SECURED_NET_MESSAGE message
+			ASSERT(message.type < NET_MAX_TYPE, "Message type %u is >= NET_MAX_TYPE", static_cast<unsigned>(message.type));
+			ASSERT(queueInfo.index < MAX_PLAYERS || queueInfo.index == NetPlay.hostPlayer, "Invalid recipient (queue.index == %u)", static_cast<unsigned>(queueInfo.index));
+			ASSERT(netSessionKeys[queueInfo.index] != nullptr, "Lacking session key for recipient: %u", static_cast<unsigned>(queueInfo.index));
+
+			// Decoded in NETprocessSystemMessage in netplay.cpp.
+			// Encrypt the serialized message (including type and size)
+			NetMessage encryptedNetMessage(NET_SECURED_NET_MESSAGE);
+			tmpMessageRawDataBuffer.clear();
+			message.rawDataAppendToVector(tmpMessageRawDataBuffer);
+			encryptedNetMessage.data = netSessionKeys[queueInfo.index]->encryptMessageForOther(&tmpMessageRawDataBuffer[0], tmpMessageRawDataBuffer.size());
+
+			message = encryptedNetMessage;
+		}
+
 		queue->pushMessage(message);
 		NETlogPacket(message.type, static_cast<uint32_t>(message.data.size()), false);
 
@@ -557,6 +726,9 @@ bool NETend()
 
 		// We have ended the serialisation, so mark the direction invalid
 		NETsetPacketDir(PACKET_INVALID);
+
+		// Process any delayed actions from the NETsend call
+		NETsendProcessDelayedActions();
 
 		if (queueInfo.queueType == QUEUE_GAME_FORCED)  // If true, we must be the host, inserting a GAME_PLAYER_LEFT into the other player's game queue. Since they left, they're not around to complain about us messing with their queue, which would normally cause a desynch.
 		{
@@ -802,7 +974,7 @@ void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen)
 
 	if (len > maxLen)
 	{
-		debug(LOG_ERROR, "NETstring: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxLen);
+		debug(LOG_ERROR, "NETbytes: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxLen);
 	}
 
 	len = std::min<unsigned>(len, maxLen);  // Truncate length if necessary.
@@ -892,7 +1064,7 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 		return false;
 	}
 	// Add special REPLAY_ENDED message to the end of the host's gameQueue
-	newMessage = std::unique_ptr<NetMessage>(new NetMessage(REPLAY_ENDED));
+	newMessage = std::make_unique<NetMessage>(REPLAY_ENDED);
 	gameQueues[NetPlay.hostPlayer]->pushMessage(*newMessage);
 	NETreplayLoadStop();
 	bIsReplay = true;

@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <functional>
 
 void registerDefaultContexts(class ContextManager& contextManager, class DebugInputManager& dbgInputManager);
 

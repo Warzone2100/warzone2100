@@ -20,7 +20,11 @@
 #define _URL_REQUEST_H_
 
 #include <functional>
+#if !defined(__EMSCRIPTEN__)
 #include <curl/curl.h>
+#else
+typedef long curl_off_t;
+#endif
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -54,26 +58,24 @@ public:
 
 class HTTPResponseDetails {
 public:
-	HTTPResponseDetails(CURLcode curlResult, long httpStatusCode, std::shared_ptr<HTTPResponseHeaders> responseHeaders)
-	: _curlResult(curlResult)
-	, _httpStatusCode(httpStatusCode)
+	HTTPResponseDetails(long httpStatusCode, std::shared_ptr<HTTPResponseHeaders> responseHeaders)
+	: _httpStatusCode(httpStatusCode)
 	, _responseHeaders(responseHeaders)
 	{ }
 	virtual ~HTTPResponseDetails();
 
-	CURLcode curlResult() const { return _curlResult; }
+	virtual std::string getInternalResultDescription() const = 0;
 	long httpStatusCode() const { return _httpStatusCode; }
 
 	// Permits retrieving HTTP response headers in a case-insensitive manner
 	bool hasHeader(const std::string& name) const { return _responseHeaders->hasHeader(name); }
 	bool getHeader(const std::string& name, std::string& output_value) const { return _responseHeaders->getHeader(name, output_value); }
 private:
-	CURLcode _curlResult;
 	long _httpStatusCode;
 	std::shared_ptr<HTTPResponseHeaders> _responseHeaders;
 };
 
-typedef std::function<void (const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails)> UrlRequestFailure;
+typedef std::function<void (const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails)> UrlRequestFailure;
 typedef std::function<void (const std::string& url, int64_t dltotal, int64_t dlnow)> UrlProgressCallback;
 
 enum class InternetProtocol {
@@ -91,9 +93,11 @@ public:
 
 	// MARK: callbacks
 	// IMPORTANT:
-	// - callbacks will be called on a background thread
+	// - callbacks *may* be called on a background thread
 	// - if you need to do something on the main thread, please wrap that logic
 	//   (inside your callback) in wzAsyncExecOnMainThread
+	// IMPORTANT:
+	// - `dltotal` may be <= 0 if the server did not report the Content-Length field
 	UrlProgressCallback progressCallback;
 	// IMPORTANT:
 	// - `transferDetails` may be null

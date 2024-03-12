@@ -671,8 +671,7 @@ std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* req
 	}
 	label_title->setGeometry(titleStartXPos, titleStartYPos, maxTitleWidth, heightOfTitleLabel);
 	label_title->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	label_title->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	label_title->setTransparentToMouse(true);
 	int titleBottom = label_title->y() + label_title->height();
 	if (isModal)
 	{
@@ -693,8 +692,7 @@ std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* req
 	int heightOfContentsLabel = label_contents->setFormattedString(WzString::fromUtf8(request->notification.contentText), maxContentsWidth, font_regular, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
 	label_contents->setGeometry(label_contents->x(), label_contents->y(), maxContentsWidth, heightOfContentsLabel);
 	label_contents->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	// set a custom hit-testing function that ignores all mouse input / clicks
-	label_contents->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	label_contents->setTransparentToMouse(true);
 
 	// Add action buttons
 	std::string dismissLabel = _("Dismiss");
@@ -1305,7 +1303,7 @@ void addNotification(const WZ_Notification& notification, const WZ_Notification_
 	}
 
 	// Add the notification to the notification system's queue
-	notificationQueue.push_back(std::unique_ptr<WZ_Queued_Notification>(new WZ_Queued_Notification(notification, WZ_Notification_Status(realTime), trigger)));
+	notificationQueue.push_back(std::make_unique<WZ_Queued_Notification>(notification, WZ_Notification_Status(realTime), trigger));
 }
 
 bool removeNotificationPreferencesIf(const std::function<bool (const std::string& uniqueNotificationIdentifier)>& matchIdentifierFunc)

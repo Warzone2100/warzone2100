@@ -102,6 +102,7 @@ enum SECONDARY_ORDER
 	DSO_FIRE_DESIGNATOR,            /**< Assigns a droid to be a target designator. */
 	DSO_ASSIGN_VTOL_PRODUCTION,     /**< Assigns a vtol factory to a command droid - the state is given by the factory number. */
 	DSO_CIRCLE,                     /**< circling target position and engage. */
+	DSO_ACCEPT_RETREP				/**< Whether droids should retreat to this repair droid. */
 };
 
 /** All associated secondary states of the secondary orders. */
@@ -122,6 +123,7 @@ enum SECONDARY_STATE
 	DSS_HALT_PURSUE     = 0x0000c0,	/**< state referred to secondary order DSO_HALTTYPE. If halted, droid pursues the target by its free will. */
 	DSS_RECYCLE_SET     = 0x000100,	/**< state referred to secondary order DSO_RECYCLE. If set, the droid can be recycled. */
 	DSS_ASSPROD_START   = 0x000200,	/**< @todo this state is not called on the code. Consider removing it. */
+	DSS_ACCREP_SET		= 0x000400,	/**< state referred to secondary order DSO_ACCEPT_RETREP. If set, units will retreat to this repair droid. */
 	DSS_ASSPROD_MID     = 0x002000,	/**< @todo this state is not called on the code. Consider removing it. */
 	DSS_ASSPROD_END     = 0x040000,	/**< @todo this state is not called on the code. Consider removing it. */
 	DSS_RTL_REPAIR      = 0x080000,	/**< state set to send order DORDER_RTR to droid. */
@@ -149,6 +151,7 @@ enum SECONDARY_STATE
 #define DSS_PATROL_MASK             0x400000
 #define DSS_FIREDES_MASK            0x800000
 #define DSS_CIRCLE_MASK             0x400100
+#define DSS_ACCREP_MASK             0x000400
 
 struct STRUCTURE_STATS;
 
@@ -158,6 +161,7 @@ enum RTR_DATA_TYPE
 	RTR_TYPE_REPAIR_FACILITY,
 	RTR_TYPE_DROID,
 	RTR_TYPE_HQ,
+	// If modifying, only *add* entries at end! (or savegame loading will break)
 };
 
 /** Struct that stores data of an order.

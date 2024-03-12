@@ -1,0 +1,215 @@
+name: Publish Web Build
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: 'The environment used for deployment (must contain the required secrets)'
+        required: true
+        type: string
+      architecture:
+        required: true
+        type: string
+      artifact:
+        description: 'The name of the artifact to download'
+        required: true
+        type: string
+      built-ref:
+        description: 'The built ref (i.e. WZ_GITHUB_REF from the calling workflow)'
+        required: true
+        type: string
+      built-commit-sha:
+        description: 'The built commit sha (i.e. WZ_GITHUB_SHA from the calling workflow)'
+        required: true
+        type: string
+      release:
+        description: 'Whether this is a release build'
+        required: true
+        type: boolean
+      ssh-dest-host:
+        description: 'The destination HOST for the rsync'
+        required: true
+        type: string
+      cdn-purge-base-url:
+        description: 'The base URL for CDN cache purging'
+        required: false
+        type: string
+    secrets:
+      WZ_WEB_BUILD_UPLOAD_SSH_KEY:
+        required: true
+      WZ_WEB_BUILD_UPLOAD_SSH_USERNAME:
+        required: true
+
+jobs:
+  publish_web_build:
+    name: 'Publish Build (${{ inputs.architecture }})'
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    # For this job to work, the following secrets must be set in the specified environment:
+    # WZ_WEB_BUILD_UPLOAD_SSH_KEY, WZ_WEB_BUILD_UPLOAD_SSH_USERNAME
+    environment: ${{ inputs.env }}
+    steps:
+      - name: Prep Environment
+        id: settings
+        env:
+          WASM_ARCHITECTURE: ${{ inputs.architecture }}
+          WZ_GITHUB_REF: ${{ inputs.built-ref }}
+          WZ_IS_RELEASE: ${{ inputs.release }}
+          INPUT_CDN_PURGE_BASE_URL: ${{ inputs.cdn-purge-base-url }}
+        run: |
+          mkdir dl-archive
+          CHANGELOG_DIR="${GITHUB_WORKSPACE}/temp/changes"
+          mkdir -p "${CHANGELOG_DIR}"
+          echo "CHANGELOG_DIR=${CHANGELOG_DIR}" >> $GITHUB_OUTPUT
+          # BUILD_ASSETS_UPLOAD_DIR
+          BUILD_ASSETS_UPLOAD_DIR="build_wz_${{ inputs.architecture }}"
+          echo "BUILD_ASSETS_UPLOAD_DIR=${BUILD_ASSETS_UPLOAD_DIR}" >> $GITHUB_ENV
+          echo "BUILD_ASSETS_UPLOAD_DIR=${BUILD_ASSETS_UPLOAD_DIR}" >> $GITHUB_OUTPUT
+          # Determine additional output subdir based on architecture
+          # wasm32 gets the root, wasm64 (or other) gets a subdirectory
+          WZ_UPLOAD_SUBDIR="arch/${WASM_ARCHITECTURE}"
+          if [ "${WASM_ARCHITECTURE}" == "wasm32" ]; then
+            WZ_UPLOAD_SUBDIR=""
+          fi
+          # Determine upload path - always starts with a slash
+          if [ "${WZ_IS_RELEASE}" == "true" ]; then
+            SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+            WZ_UPLOAD_PATH="/${SOURCE_TAG}/${WZ_UPLOAD_SUBDIR}"
+          else
+            WZ_UPLOAD_PATH="/${WZ_UPLOAD_SUBDIR}"
+          fi
+          echo "WZ_UPLOAD_PATH=${WZ_UPLOAD_PATH}" >> $GITHUB_ENV
+          echo "WZ_UPLOAD_PATH=${WZ_UPLOAD_PATH}" >> $GITHUB_OUTPUT
+          # Determine base CDN url path (remove any trailing slashes)
+          WZ_CDN_BASE_URL="$(echo "${INPUT_CDN_PURGE_BASE_URL}" | sed 's:/*$::')"
+          echo "WZ_CDN_BASE_URL=${WZ_CDN_BASE_URL}" >> $GITHUB_ENV
+          echo "WZ_CDN_BASE_URL=${WZ_CDN_BASE_URL}" >> $GITHUB_OUTPUT
+          # Determine base CDN url hostname
+          WZ_CDN_BASE_HOSTNAME="$(echo "${INPUT_CDN_PURGE_BASE_URL}" | cut -f1 -d/)"
+          echo "WZ_CDN_BASE_HOSTNAME=${WZ_CDN_BASE_HOSTNAME}" >> $GITHUB_ENV
+          echo "WZ_CDN_BASE_HOSTNAME=${WZ_CDN_BASE_HOSTNAME}" >> $GITHUB_OUTPUT
+      - name: Download Archive Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: '${{ inputs.artifact }}'
+          path: ./dl-archive
+      - name: Extract archive
+        run: |
+          ZIPFILE="./dl-archive/warzone2100_web_${{ inputs.architecture }}_archive.zip"
+          unzip -o "${ZIPFILE}" -d "${BUILD_ASSETS_UPLOAD_DIR}" && rm "${ZIPFILE}"
+      - name: Get list of files
+        id: fileslist
+        working-directory: '${{ steps.settings.outputs.BUILD_ASSETS_UPLOAD_DIR }}'
+        run: |
+          # Get the list of files / paths changed in the latest commit
+          CHANGED_FILES_LIST="${{ steps.settings.outputs.CHANGELOG_DIR }}/changedpaths.txt"
+          find . -type f -print | cut -d/ -f2- > "${CHANGED_FILES_LIST}"
+          cat "${CHANGED_FILES_LIST}"
+          echo "CHANGED_FILES_LIST=${CHANGED_FILES_LIST}" >> $GITHUB_OUTPUT
+          #
+          # Get the list of service-worker files / paths
+          CHANGED_SW_LIST="${{ steps.settings.outputs.CHANGELOG_DIR }}/changedsw.txt"
+          find . -type f -name 'service-worker.*' -print | cut -d/ -f2- > "${CHANGED_SW_LIST}"
+          cat "${CHANGED_SW_LIST}"
+          echo "CHANGED_SW_LIST=${CHANGED_SW_LIST}" >> $GITHUB_OUTPUT
+      - name: Set up SSH Agent
+        env:
+          UPLOAD_SSH_KEY: ${{ secrets.WZ_WEB_BUILD_UPLOAD_SSH_KEY }}
+          WZ_WEB_BUILD_UPLOAD_SSH_HOST: ${{ inputs.ssh-dest-host }}
+        run: |
+          mkdir -p ~/.ssh/
+          ssh-keyscan "${WZ_WEB_BUILD_UPLOAD_SSH_HOST}" >> ~/.ssh/known_hosts
+
+          eval "$(ssh-agent -s)"
+          set +x
+
+          # Add the private key to SSH agent
+          mkdir -p ~/.ssh/
+          echo "${UPLOAD_SSH_KEY}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-add ~/.ssh/id_ed25519
+
+          # Create a public key file
+          ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
+      - name: Upload build to server
+        env:
+          BUILD_ASSETS_UPLOAD_DIR: '${{ steps.settings.outputs.BUILD_ASSETS_UPLOAD_DIR }}'
+          WZ_WEB_BUILD_UPLOAD_USERNAME: ${{ secrets.WZ_WEB_BUILD_UPLOAD_SSH_USERNAME }}
+          WZ_WEB_BUILD_UPLOAD_SSH_HOST: ${{ inputs.ssh-dest-host }}
+        run: |
+          # Two-stage rsync:
+          # First, sync everything except the server-worker.js
+          # Then, sync the server-worker.js
+          # (If replacing in-place, the service-worker should be updated last)
+          echo "::group::rsync"
+          rsync -chzP -vv -rlpt --exclude="/service-worker.*" --stats --delete "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
+          echo "::endgroup::"
+          echo "::group::rsync (including: service-worker.js)"
+          rsync -chzP -vv -rlpt --stats "${BUILD_ASSETS_UPLOAD_DIR}/" "${WZ_WEB_BUILD_UPLOAD_USERNAME}@${WZ_WEB_BUILD_UPLOAD_SSH_HOST}:${WZ_UPLOAD_PATH}/"
+          echo "::endgroup::"
+          rm ~/.ssh/id_ed25519
+      - name: 'Generate Cloudflare Cache Purge URLs List'
+        id: purgeurls
+        if: ${{ success() && env.WZ_CDN_BASE_URL != '' }}
+        env:
+          CHANGED_FILES_LIST: '${{ steps.fileslist.outputs.CHANGED_FILES_LIST }}'
+          CHANGED_SW_LIST: '${{ steps.fileslist.outputs.CHANGED_SW_LIST }}'
+          GEN_PURGE_URLS_SCRIPT_DL: https://raw.githubusercontent.com/Warzone2100/update-data/master/ci/gen_purge_url_batches.py
+          GEN_PURGE_URLS_SCRIPT_SHA512: 65d21f9b204d8febc700d613070b50e1ef6f13a46eb406206c047c7085b7d94124aaee082d1ef8c2d656983f9270d151794909ba859ad7438666ed821a0b9ea3
+        run: |
+          PURGE_URLS_DATA_FILES_DIR="purged-files-dir"
+          mkdir "${PURGE_URLS_DATA_FILES_DIR}"
+          PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR="purged-sw-files-dir"
+          mkdir "${PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR}"
+          # Get the script
+          curl -L --retry 3 -o "gen_purge_url_batches.py" "${GEN_PURGE_URLS_SCRIPT_DL}"
+          DOWNLOADED_SHA512="$(sha512sum --binary "gen_purge_url_batches.py" | cut -d " " -f 1)"
+          if [ "${GEN_PURGE_URLS_SCRIPT_SHA512}" != "${DOWNLOADED_SHA512}" ]; then
+            echo "::error ::Downloaded script hash ${DOWNLOADED_SHA512} does not match expected ${GEN_PURGE_URLS_SCRIPT_SHA512}"
+            exit 1
+          fi
+          # Run the gen_purge_url_batches script on the main list
+          python3 "./gen_purge_url_batches.py" "${WZ_CDN_BASE_URL}${WZ_UPLOAD_PATH}" "${CHANGED_FILES_LIST}" "${PURGE_URLS_DATA_FILES_DIR}"
+          echo "PURGE_URLS_DATA_FILES_DIR=${PURGE_URLS_DATA_FILES_DIR}" >> $GITHUB_OUTPUT
+          # Run the gen_purge_url_batches script on the service-worker file list
+          python3 "./gen_purge_url_batches.py" "${WZ_CDN_BASE_URL}${WZ_UPLOAD_PATH}" "${CHANGED_SW_LIST}" "${PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR}"
+          echo "PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR=${PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR}" >> $GITHUB_OUTPUT
+      - name: 'Purge Cloudflare Cache'
+        if: ${{ success() && env.WZ_CDN_BASE_URL != '' }}
+        env:
+          CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_WZ2100_ZONE }}
+          CLOUDFLARE_CACHEPURGE_TOKEN: ${{ secrets.CLOUDFLARE_WZ2100_CACHEPURGE_TOKEN }}
+        run: |
+          # Needs to handle multiple data files, since each purge command can only send a max of 30 URLs
+          for file in ${{ steps.purgeurls.outputs.PURGE_URLS_DATA_FILES_DIR }}/*
+          do
+            echo "File: $file"
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
+                 -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+                 -H "Content-Type: application/json" \
+                 --data-binary "@$file"
+            # Separately clear any cache keys that include the Origin
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
+                 -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+                 -H "Content-Type: application/json" \
+                 -H "Origin: https://${WZ_CDN_BASE_HOSTNAME}" \
+                 --data-binary "@$file"
+          done; # file
+          echo "Done with main purge ..."
+          sleep 30 # Wait and then trigger a purge for just the service worker files
+          for file in ${{ steps.purgeurls.outputs.PURGE_SERVICEWORKER_URLS_DATA_FILES_DIR }}/*
+          do
+            echo "File: $file"
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
+                 -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+                 -H "Content-Type: application/json" \
+                 --data-binary "@$file"
+            # Separately clear any cache keys that include the Origin
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
+                 -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+                 -H "Content-Type: application/json" \
+                 -H "Origin: https://${WZ_CDN_BASE_HOSTNAME}" \
+                 --data-binary "@$file"
+          done; # file
+          echo "Done."

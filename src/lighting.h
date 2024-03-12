@@ -22,20 +22,22 @@
 #define __INCLUDED_SRC_LIGHTNING_H__
 
 #include "lib/ivis_opengl/pietypes.h"
+#include "lib/ivis_opengl/pielighting.h"
 
-struct LIGHT
+
+namespace rendering1999
 {
-	Vector3i position = Vector3i(0, 0, 0);
-	UDWORD range;
-	PIELIGHT colour;
-};
+	//! This lighting manager relies on lightmap to handle point lights
+	struct LightingManager final : ILightingManager {
+
+		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
+	};
+}
 
 void setTheSun(Vector3f newSun);
 Vector3f getTheSun();
 
-void processLight(LIGHT *psLight);
 void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
-void doBuildingLights();
 void updateFogDistance(float distance);
 void setDefaultFogColour();
 void calcDroidIllumination(DROID *psDroid);

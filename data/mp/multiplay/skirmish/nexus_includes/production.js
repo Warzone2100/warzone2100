@@ -354,7 +354,7 @@ function produceCyborgs()
 
 			if (!defined(tmp))
 			{
-				tmp = getBestRandomTemplate("CYBORG", 2); //go for a little cyborg
+				tmp = getBestRandomTemplate("CYBORG", 3); //go for a little cyborg
 			}
 
 			if (defined(tmp) && buildDroid(cybFactory, "Nexus cyborg", tmp.body, tmp.prop, "", "", tmp.weaps[0], "", ""))

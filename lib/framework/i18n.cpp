@@ -17,6 +17,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "frame.h"
+#include "string_ext.h"
 
 #include <sstream>
 #include <vector>
@@ -331,6 +332,16 @@ static bool setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
 
 	return success;
 }
+#  elif defined(__EMSCRIPTEN__)
+static bool setLocaleEmscripten(const char *localeFilename)
+{
+	setlocale(LC_ALL, localeFilename);
+
+	const char * numericLocale = setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
+	debug(LOG_WZ, "LC_NUMERIC: \"%s\"", (numericLocale != nullptr) ? numericLocale : "<null>");
+
+	return true;
+}
 #  else
 /*!
  * Set the prefered locale
@@ -426,6 +437,8 @@ bool setLanguage(const char *language)
 
 #  if defined(WZ_OS_WIN)
 			return setLocaleWindows(map[i].usPrimaryLanguage, map[i].usSubLanguage);
+#  elif defined(__EMSCRIPTEN__)
+			return setLocaleEmscripten(map[i].localeFilename);
 #  else
 			return setLocaleUnix(map[i].locale) || setLocaleUnix(map[i].localeFallback) || setLocaleUnix_LANGUAGEFallback(map[i].localeFilename);
 #  endif
@@ -560,9 +573,53 @@ static bool checkSupportsLANGUAGEenvVarOverride()
 #endif // defined(_LIBINTL_H) && defined(LIBINTL_VERSION)
 }
 
+#if defined(__EMSCRIPTEN__)
+static std::string getEmscriptenDefaultLanguage()
+{
+	auto pEnvLang = getenv("LANG");
+	if (pEnvLang)
+	{
+		std::string defaultLanguage = pEnvLang;
+		// Remove any .UTF-8 suffix
+		if (strEndsWith(defaultLanguage, ".UTF-8"))
+		{
+			defaultLanguage = defaultLanguage.substr(0, defaultLanguage.size() - 6);
+		}
+		// Find matching closest language (if present)
+		for (unsigned i = 0; i < ARRAY_SIZE(map); i++)
+		{
+			if (strcmp(defaultLanguage.c_str(), map[i].language) == 0)
+			{
+				return map[i].language;
+			}
+		}
+		for (unsigned i = 0; i < ARRAY_SIZE(map); i++)
+		{
+			if (strcmp(defaultLanguage.c_str(), map[i].localeFilename) == 0)
+			{
+				return map[i].language;
+			}
+		}
+		for (unsigned i = 0; i < ARRAY_SIZE(map); i++)
+		{
+			if (strcmp(defaultLanguage.c_str(), map[i].localeFallback) == 0)
+			{
+				return map[i].language;
+			}
+		}
+	}
+	return "";
+}
+#endif
+
 void initI18n()
 {
 	std::string textdomainDirectory;
+	std::string defaultLanguage = ""; // "" is system default (in most cases)
+
+#if defined(__EMSCRIPTEN__)
+	defaultLanguage = getEmscriptenDefaultLanguage();
+#endif
 
 #if defined(_LIBINTL_H) && defined(LIBINTL_VERSION)
 	int wz_libintl_maj = LIBINTL_VERSION >> 16;
@@ -623,7 +680,7 @@ void initI18n()
 	// Should come *after* bindTextDomain
 	canUseLANGUAGEEnvVar = checkSupportsLANGUAGEenvVarOverride();
 
-	if (!setLanguage("")) // set to system default
+	if (!setLanguage(defaultLanguage.c_str())) // set to system default
 	{
 		// no system default?
 		debug(LOG_ERROR, "initI18n: No system language found");

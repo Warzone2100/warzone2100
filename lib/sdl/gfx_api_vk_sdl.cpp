@@ -24,10 +24,11 @@
 #include <SDL_vulkan.h>
 #include <SDL_version.h>
 
-sdl_Vulkan_Impl::sdl_Vulkan_Impl(SDL_Window* _window)
+sdl_Vulkan_Impl::sdl_Vulkan_Impl(SDL_Window* _window, bool _allowImplicitLayers)
 {
 	ASSERT(_window != nullptr, "Invalid SDL_Window*");
 	window = _window;
+	m_allowImplicitLayers = _allowImplicitLayers;
 }
 
 PFN_vkGetInstanceProcAddr sdl_Vulkan_Impl::getVkGetInstanceProcAddr()
@@ -77,6 +78,11 @@ bool sdl_Vulkan_Impl::createWindowSurface(VkInstance instance, VkSurfaceKHR* sur
 void sdl_Vulkan_Impl::getDrawableSize(int* w, int* h)
 {
 	SDL_Vulkan_GetDrawableSize(window, w, h);
+}
+
+bool sdl_Vulkan_Impl::allowImplicitLayers() const
+{
+	return m_allowImplicitLayers;
 }
 
 #endif // defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)

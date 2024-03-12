@@ -2,6 +2,7 @@
 // Generally, initialize variables, personality information, and timers.
 function eventStartLevel()
 {
+	var lenient = (difficulty <= MEDIUM);
 	debugMode = true;
 	numVtolUnits = 0;
 	rebuildQueue = [];
@@ -12,19 +13,19 @@ function eventStartLevel()
 	initPersonalityData();
 
 	//See also the notes at each * function for how many ticks they span over.
-	setTimer("buildBase", 900); //* 9
-	setTimer("buildDerrick", 1000);
-	setTimer("protectCloseDerrick", 1200);
-	setTimer("doResearch", 1400);
-	setTimer("productionMain", 1600); //* 3
+	setTimer("buildBase", (lenient) ? 3600 : 900); //* 9
+	setTimer("buildDerrick", (lenient) ? 4000 : 1000);
+	setTimer("protectCloseDerrick", (lenient) ? 4800 : 1200);
+	setTimer("doResearch", (lenient) ? 5600 : 1400);
+	setTimer("productionMain", (lenient) ? 8000 : 1600); //* 3
 	if (alliancesType === ALLIANCES)
 	{
 		setTimer("allianceMain", 2000); //* 2
 	}
 	setTimer("helpMain", 2400);
-	setTimer("scoutMain", 2700); //* 2
-	setTimer("tacticsMain", 3000); //* 2
-	setTimer("vtolMain", 3400); //* 3
+	setTimer("scoutMain", (lenient) ? 10800 : 2700); //* 2
+	setTimer("tacticsMain", (lenient) ? 18000 : 3000); //* 2
+	setTimer("vtolMain", (lenient) ? 10200 : 3400); //* 3
 }
 
 function eventAttacked(victim, attacker)

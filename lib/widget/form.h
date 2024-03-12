@@ -51,7 +51,7 @@ public:
 	void display(int xOffset, int yOffset) override;
 
 	void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
-	bool hitTest(int x, int y) override;
+	bool hitTest(int x, int y) const override;
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 	using WIDGET::displayRecursive;
@@ -89,19 +89,27 @@ public:
 	W_CLICKFORM();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	virtual bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key);
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
+	void run(W_CONTEXT *psContext) override;
 	void display(int xOffset, int yOffset) override;
 	std::string getTip() override
 	{
 		return pTip;
+	}
+	WidgetHelp const * getHelp() const override
+	{
+		if (!help.has_value()) { return nullptr; }
+		return &(help.value());
 	}
 
 	unsigned getState() override;
 	void setState(unsigned state) override;
 	void setFlash(bool enable) override;
 	void setTip(std::string string) override;
+	void setHelp(optional<WidgetHelp> help) override;
 
 	using WIDGET::setString;
 	using WIDGET::setTip;
@@ -113,9 +121,12 @@ public:
 
 private:
 	std::string pTip;                   // Tip for the form
+	optional<WidgetHelp> help;
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
+	optional<std::chrono::steady_clock::time_point> clickDownStart; // the start time of click down on this form
+	optional<WIDGET_KEY> clickDownKey;
 };
 
 class W_FULLSCREENOVERLAY_CLICKFORM : public W_CLICKFORM

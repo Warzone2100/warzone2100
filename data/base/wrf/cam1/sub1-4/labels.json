@@ -121,7 +121,7 @@
 		"label": "removeRedObjectiveBlip",
 		"subscriber": 0,
 		"pos1": [3840, 128],
-		"pos2": [4096, 4224]
+		"pos2": [4096, 4352]
 	},
 
 	"object_0": {

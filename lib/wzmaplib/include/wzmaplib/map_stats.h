@@ -25,6 +25,7 @@
 
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -52,6 +53,29 @@ namespace WzMap {
 			bool cyborgFactories = true;
 			// Whether all players have equal starting research centers
 			bool researchCenters = true;
+			// Whether all players have equal starting "defense" structs (quantity and type) (i.e. bunkers, towers, hardpoints, etc)
+			bool defenseStructures = true;
+		};
+
+		struct PerPlayerCounts
+		{
+			struct MinMax
+			{
+				uint32_t min = 0;
+				uint32_t max = 0;
+			};
+			MinMax unitsPerPlayer;
+			MinMax structuresPerPlayer;
+			MinMax resourceExtractorsPerPlayer;
+			MinMax powerGeneratorsPerPlayer;
+			MinMax powerGeneratorModulesPerPlayer;
+			MinMax regFactoriesPerPlayer;
+			MinMax regFactoryModulesPerPlayer;
+			MinMax vtolFactoriesPerPlayer;
+			MinMax cyborgFactoriesPerPlayer;
+			MinMax researchCentersPerPlayer;
+			MinMax researchCenterModulesPerPlayer;
+			MinMax defenseStructuresPerPlayer;
 		};
 
 	public:
@@ -66,16 +90,13 @@ namespace WzMap {
 		// The total number of oil resources (oil well features) on the map
 		uint32_t oilWellsTotal = 0;
 		// Per-player counts of various starting droids and structs
-		// NOTE: If the corresponding playerBalance value is false, these are equivalent to the "minimum" of that entity type per player
-		uint32_t unitsPerPlayer = 0;
-		uint32_t resourceExtractorsPerPlayer = 0;
-		uint32_t powerGeneratorsPerPlayer = 0;
-		uint32_t regFactoriesPerPlayer = 0;
-		uint32_t vtolFactoriesPerPlayer = 0;
-		uint32_t cyborgFactoriesPerPlayer = 0;
-		uint32_t researchCentersPerPlayer = 0;
+		// NOTE: In certain cases (like with unitsPerPlayer) min == max does not necessarily imply playerBalance.units will be true (as the *type* of units may differ)
+		PerPlayerCounts perPlayerCounts;
 		// An analysis of the starting balance for all players
 		StartEquality playerBalance;
+		// Player startPos (i.e. HQ position) in _map_ coords
+		typedef std::unordered_map<int8_t, std::vector<std::pair<int32_t, int32_t>>> PlayerHQPositionMap;
+		PlayerHQPositionMap playerHQPositions; // player hq position(s) as pixel location in map preview / map coords
 	public:
 		inline bool hasScavengers() const { return scavengerUnits > 0 || scavengerStructs > 0; }
 	};
@@ -83,8 +104,18 @@ namespace WzMap {
 	class MapStatsConfiguration
 	{
 	public:
+		struct StructureSize {
+			uint32_t baseWidth = 0;   /*The width of the base in tiles*/
+			uint32_t baseBreadth = 0; /*The breadth of the base in tiles*/
+
+			StructureSize(uint32_t baseWidth, uint32_t baseBreadth)
+			: baseWidth(baseWidth)
+			, baseBreadth(baseBreadth)
+			{ }
+		};
+	public:
 		// Construct a MapStatsConfiguration with hard-coded defaults that map to WZ 4.3+ (currently)
-		MapStatsConfiguration();
+		MapStatsConfiguration(MapType mapType = MapType::SKIRMISH);
 
 		// Load stats configuration for droid templates from a `templates.json` file
 		// Returns: `true` if the `templates.json` file was loaded, and overwrote the existing droid stats configuration
@@ -120,6 +151,15 @@ namespace WzMap {
 		// the names (ids) of research structs
 		//	- "type": "RESEARCH"
 		std::unordered_set<std::string> researchCenters;
+		// the names (ids) of the HQ struct(s)
+		//  - "type": "HQ"
+		std::unordered_set<std::string> hqStructs;
+		// the names (ids) of defense structs (i.e. bunkers, towers, hardpoints, etc)
+		//  - "type": "DEFENSE"
+		std::unordered_set<std::string> defenseStructs;
+
+		// [STRUCT SIZES]:
+		optional<StructureSize> getStructureSize(const std::string& struct_id) const;
 
 		// [STRUCT MODULES]:
 		//	- "type": "FACTORY MODULE"
@@ -134,6 +174,14 @@ namespace WzMap {
 		std::unordered_set<std::string> oilResources;
 		//	- "type": "OIL DRUM"
 		std::unordered_set<std::string> oilDrums;
+
+	public:
+		bool isStructExpansionModule(const std::string& struct_id) const;
+
+	private:
+		// [STRUCT SIZES]:
+		typedef std::unordered_map<std::string, StructureSize> StructSizesMap;
+		StructSizesMap structSizes;
 	};
 
 } // namespace WzMap

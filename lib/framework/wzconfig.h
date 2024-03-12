@@ -79,6 +79,7 @@ public:
 	// QVariant-like conversion methods
 	int toInt(bool *ok = nullptr) const;
 	unsigned int toUInt(bool *ok = nullptr) const;
+	uint64_t toUint64(bool *ok = nullptr) const;
 	bool toBool() const;
 	double toDouble(bool *ok = nullptr) const;
 	float toFloat(bool *ok = nullptr) const;

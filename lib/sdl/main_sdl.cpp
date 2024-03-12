@@ -74,6 +74,10 @@ extern GeoIP *gi;
 #include "cocoa_wz_menus.h"
 #endif
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -82,8 +86,8 @@ void mainLoop();
 // used in crash reports & version info
 const char *BACKEND = "SDL";
 
-std::map<KEY_CODE, SDL_Keycode> KEY_CODE_to_SDLKey;
-std::map<SDL_Keycode, KEY_CODE > SDLKey_to_KEY_CODE;
+std::map<KEY_CODE, SDL_Scancode> KEY_CODE_to_SDLScancode;
+std::map<SDL_Scancode, KEY_CODE > SDLScancode_to_KEY_CODE;
 
 int realmain(int argc, char *argv[]);
 
@@ -97,8 +101,9 @@ int main(int argc, char *argv[])
 static SDL_Window *WZwindow = nullptr;
 static optional<video_backend> WZbackend = video_backend::opengl;
 
-#if defined(WZ_OS_MAC) || defined(WZ_OS_WIN)
+#if defined(WZ_OS_MAC) || defined(WZ_OS_WIN) || defined(__EMSCRIPTEN__)
 // on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
+// on Emscripten (browser), SDL_WINDOW_FULLSCREEN_DESKTOP should be used (to avoid various toggling breaks)
 const WINDOW_MODE WZ_SDL_DEFAULT_FULLSCREEN_MODE = WINDOW_MODE::desktop_fullscreen;
 #else
 const WINDOW_MODE WZ_SDL_DEFAULT_FULLSCREEN_MODE = WINDOW_MODE::fullscreen;
@@ -218,6 +223,17 @@ static optional<int> wzQuitExitCode;
 
 bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight);
 
+#if defined(__EMSCRIPTEN__)
+
+#include <emscripten.h>
+#include <emscripten/html5.h>
+
+void wzemscripten_startup_ensure_canvas_displayed();
+bool wz_emscripten_enable_soft_fullscreen();
+EM_BOOL wz_emscripten_fullscreenchange_callback(int eventType, const EmscriptenFullscreenChangeEvent *fullscreenChangeEvent, void *userData);
+
+#endif
+
 /**************************/
 /***     Misc support   ***/
 /**************************/
@@ -265,10 +281,16 @@ bool get_scrap(char **dst)
 	}
 }
 
-void StartTextInput(void* pTextInputRequester)
+void StartTextInput(void* pTextInputRequester, const WzTextInputRect& textInputRect)
 {
 	if (!GetTextEventsOwner)
 	{
+		SDL_Rect rect;
+		rect.x = textInputRect.x;
+		rect.y = textInputRect.y;
+		rect.w = textInputRect.width;
+		rect.h = textInputRect.height;
+		SDL_SetTextInputRect(&rect);
 		SDL_StartTextInput();	// enable text events
 		debug(LOG_INPUT, "SDL text events started");
 	}
@@ -277,6 +299,14 @@ void StartTextInput(void* pTextInputRequester)
 		debug(LOG_INPUT, "StartTextInput called by new input requester before old requester called StopTextInput");
 	}
 	GetTextEventsOwner = pTextInputRequester;
+
+	// on some platforms, it seems like we also need to call SDL_SetTextInputRect every frame to properly set the text input rect (?)
+	SDL_Rect rect;
+	rect.x = textInputRect.x;
+	rect.y = textInputRect.y;
+	rect.w = textInputRect.width;
+	rect.h = textInputRect.height;
+	SDL_SetTextInputRect(&rect);
 }
 
 void StopTextInput(void* pTextInputResigner)
@@ -302,6 +332,16 @@ bool isInTextInputMode()
 	bool result = (GetTextEventsOwner != nullptr);
 	ASSERT((SDL_IsTextInputActive() != SDL_FALSE) == result, "How did GetTextEvents state and SDL_IsTextInputActive get out of sync?");
 	return result;
+}
+
+bool wzHasTouchInputDevices()
+{
+	return SDL_GetNumTouchDevices() > 0;
+}
+
+bool wzSeemsLikeNonTouchPlatform()
+{
+	return !wzHasTouchInputDevices() || (SDL_HasScreenKeyboardSupport() == SDL_FALSE);
 }
 
 /* Put a character into a text buffer overwriting any text under the cursor */
@@ -374,7 +414,9 @@ static std::vector<video_backend>& sortGfxBackendsForCurrentSystem(std::vector<v
 std::vector<video_backend> wzAvailableGfxBackends()
 {
 	std::vector<video_backend> availableBackends;
+#if !defined(__EMSCRIPTEN__)
 	availableBackends.push_back(video_backend::opengl);
+#endif
 #if !defined(WZ_OS_MAC) // OpenGL ES is not supported on macOS, and WZ doesn't currently ship with an OpenGL ES library on macOS
 	availableBackends.push_back(video_backend::opengles);
 #endif
@@ -392,7 +434,10 @@ video_backend wzGetDefaultGfxBackendForCurrentSystem()
 {
 	// SDL backend supports: OpenGL, OpenGLES, Vulkan (if compiled with support), DirectX (on Windows, via LibANGLE)
 
-#if defined(_WIN32) && defined(WZ_BACKEND_DIRECTX) && (defined(_M_ARM64) || defined(_M_ARM))
+#if defined(__EMSCRIPTEN__)
+	// For Emscripten, OpenGLES (WebGL) should be the default
+	return video_backend::opengles;
+#elif defined(_WIN32) && defined(WZ_BACKEND_DIRECTX) && (defined(_M_ARM64) || defined(_M_ARM))
 	// On ARM-based Windows, DirectX should be the default (for compatibility)
 	return video_backend::directx;
 #else
@@ -543,6 +588,79 @@ void wzDisplayDialog(DialogType type, const char *title, const char *message)
 	SDL_ShowSimpleMessageBox(sdl_messagebox_flags, title, message, WZwindow);
 }
 
+// Displays a message box with specified button(s)
+// Returns 0 on failure, or the (clicked button index + 1)
+size_t wzDisplayDialogAdvanced(DialogType type, const char *title, const char *message, std::vector<std::string> buttonsText)
+{
+	if (!WZbackend.has_value())
+	{
+		// while this could be thread_local, thread_local may not yet be supported on all platforms properly
+		// and wzDisplayDialog should probably be called **only** on the main thread anyway
+		static bool processingDialog = false;
+		if (!processingDialog)
+		{
+			// in headless mode, do not display a messagebox (which might block the main thread)
+			// but just log the details
+			processingDialog = true;
+			debug(LOG_INFO, "Suppressed dialog (headless):\n\tTitle: %s\n\tMessage: %s", title, message);
+			processingDialog = false;
+		}
+		return 0;
+	}
+
+	if (buttonsText.empty())
+	{
+		// always at least show an "OK" button
+		buttonsText.push_back("OK");
+	}
+
+	std::vector<SDL_MessageBoxButtonData> buttons;
+	buttons.reserve(buttonsText.size());
+	for (size_t i = 0; i < buttonsText.size(); ++i)
+	{
+		Uint32 buttonFlags = 0;
+		if (i == 0)
+		{
+			buttonFlags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+		}
+		if (i == buttonsText.size() - 1)
+		{
+			buttonFlags |= SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+		}
+		buttons.push_back(SDL_MessageBoxButtonData{buttonFlags, static_cast<int>(i + 1), buttonsText[i].c_str()});
+	}
+
+	Uint32 sdl_messagebox_flags = 0;
+	switch (type)
+	{
+		case Dialog_Error:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_ERROR;
+			break;
+		case Dialog_Warning:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_WARNING;
+			break;
+		case Dialog_Information:
+			sdl_messagebox_flags = SDL_MESSAGEBOX_INFORMATION;
+			break;
+	}
+
+	const SDL_MessageBoxData messageboxdata = {
+		sdl_messagebox_flags, /* .flags */
+		WZwindow, /* .window */
+		title, /* .title */
+		message, /* .message */
+		static_cast<int>(buttons.size()), /* .numbuttons */
+		buttons.data(), /* .buttons */
+		nullptr /* .colorScheme */
+	};
+	int buttonid = 0;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		// error displaying message box
+		return 0;
+	}
+	return buttonid;
+}
+
 WINDOW_MODE wzGetCurrentWindowMode()
 {
 	if (!WZbackend.has_value())
@@ -573,7 +691,7 @@ WINDOW_MODE wzGetCurrentWindowMode()
 
 std::vector<WINDOW_MODE> wzSupportedWindowModes()
 {
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) || defined(__EMSCRIPTEN__)
 	// on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
 	// thus "classic" fullscreen is not supported
 	return {WINDOW_MODE::desktop_fullscreen, WINDOW_MODE::windowed};
@@ -656,10 +774,10 @@ WINDOW_MODE wzGetToggleFullscreenMode()
 	return altEnterToggleFullscreenMode;
 }
 
-bool wzChangeWindowMode(WINDOW_MODE mode)
+bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 {
-	auto currMode = wzGetCurrentWindowMode();
-	if (currMode == mode)
+	auto previousMode = wzGetCurrentWindowMode();
+	if (previousMode == mode)
 	{
 		// already in this mode
 		return true;
@@ -671,14 +789,29 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 		return false;
 	}
 
-	debug(LOG_INFO, "Changing window mode: %s -> %s", to_display_string(currMode).c_str(), to_display_string(mode).c_str());
+	if (!silent)
+	{
+		debug(LOG_INFO, "Changing window mode: %s -> %s", to_display_string(previousMode).c_str(), to_display_string(mode).c_str());
+	}
 
 	int sdl_result = -1;
 	switch (mode)
 	{
 		case WINDOW_MODE::desktop_fullscreen:
-			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
-			if (sdl_result != 0) { return false; }
+#if defined(__EMSCRIPTEN__)
+			emscripten_exit_soft_fullscreen();
+#endif
+			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN_DESKTOP); // TODO: Currently crashes in Emscripten builds?
+			if (sdl_result != 0)
+			{
+#if defined(__EMSCRIPTEN__)
+				if (previousMode == WINDOW_MODE::windowed)
+				{
+					wz_emscripten_enable_soft_fullscreen();
+				}
+#endif
+				return false;
+			}
 			wzSetWindowIsResizable(false);
 			break;
 		case WINDOW_MODE::windowed:
@@ -718,8 +851,20 @@ bool wzChangeWindowMode(WINDOW_MODE mode)
 		}
 		case WINDOW_MODE::fullscreen:
 		{
+#if defined(__EMSCRIPTEN__)
+			emscripten_exit_soft_fullscreen();
+#endif
 			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN);
-			if (sdl_result != 0) { return false; }
+			if (sdl_result != 0)
+			{
+#if defined(__EMSCRIPTEN__)
+				if (previousMode == WINDOW_MODE::windowed)
+				{
+					wz_emscripten_enable_soft_fullscreen();
+				}
+#endif
+				return false;
+			}
 			wzSetWindowIsResizable(false);
 			int currWidth = 0, currHeight = 0;
 			SDL_GetWindowSize(WZwindow, &currWidth, &currHeight);
@@ -815,9 +960,12 @@ void wzDelay(unsigned int delay)
 /**************************/
 /***    Thread support  ***/
 /**************************/
-WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data)
+WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data, const char* name)
 {
-	return (WZ_THREAD *)SDL_CreateThread(threadFunc, "wzThread", data);
+	const char* defaultName = "wzThread";
+	if (name == nullptr)
+		name = defaultName;
+	return (WZ_THREAD *)SDL_CreateThread(threadFunc, name, data);
 }
 
 unsigned long wzThreadID(WZ_THREAD *thread)
@@ -922,140 +1070,140 @@ void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec)
 **/
 static inline void initKeycodes()
 {
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_ESC, SDLK_ESCAPE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_1, SDLK_1));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_2, SDLK_2));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_3, SDLK_3));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_4, SDLK_4));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_5, SDLK_5));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_6, SDLK_6));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_7, SDLK_7));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_8, SDLK_8));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_9, SDLK_9));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_0, SDLK_0));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_MINUS, SDLK_MINUS));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_EQUALS, SDLK_EQUALS));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_BACKSPACE, SDLK_BACKSPACE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_TAB, SDLK_TAB));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_Q, SDLK_q));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_W, SDLK_w));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_E, SDLK_e));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_R, SDLK_r));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_T, SDLK_t));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_Y, SDLK_y));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_U, SDLK_u));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_I, SDLK_i));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_O, SDLK_o));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_P, SDLK_p));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LBRACE, SDLK_LEFTBRACKET));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RBRACE, SDLK_RIGHTBRACKET));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RETURN, SDLK_RETURN));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LCTRL, SDLK_LCTRL));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_A, SDLK_a));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_S, SDLK_s));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_D, SDLK_d));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F, SDLK_f));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_G, SDLK_g));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_H, SDLK_h));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_J, SDLK_j));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_K, SDLK_k));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_L, SDLK_l));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_SEMICOLON, SDLK_SEMICOLON));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_QUOTE, SDLK_QUOTE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_BACKQUOTE, SDLK_BACKQUOTE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LSHIFT, SDLK_LSHIFT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LMETA, SDLK_LGUI));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LSUPER, SDLK_LGUI));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_BACKSLASH, SDLK_BACKSLASH));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_Z, SDLK_z));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_X, SDLK_x));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_C, SDLK_c));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_V, SDLK_v));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_B, SDLK_b));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_N, SDLK_n));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_M, SDLK_m));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_COMMA, SDLK_COMMA));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_FULLSTOP, SDLK_PERIOD));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_FORWARDSLASH, SDLK_SLASH));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RSHIFT, SDLK_RSHIFT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RMETA, SDLK_RGUI));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RSUPER, SDLK_RGUI));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_STAR, SDLK_KP_MULTIPLY));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LALT, SDLK_LALT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_SPACE, SDLK_SPACE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_CAPSLOCK, SDLK_CAPSLOCK));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F1, SDLK_F1));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F2, SDLK_F2));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F3, SDLK_F3));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F4, SDLK_F4));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F5, SDLK_F5));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F6, SDLK_F6));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F7, SDLK_F7));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F8, SDLK_F8));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F9, SDLK_F9));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F10, SDLK_F10));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_NUMLOCK, SDLK_NUMLOCKCLEAR));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_SCROLLLOCK, SDLK_SCROLLLOCK));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_7, SDLK_KP_7));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_8, SDLK_KP_8));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_9, SDLK_KP_9));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_MINUS, SDLK_KP_MINUS));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_4, SDLK_KP_4));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_5, SDLK_KP_5));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_6, SDLK_KP_6));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_PLUS, SDLK_KP_PLUS));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_1, SDLK_KP_1));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_2, SDLK_KP_2));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_3, SDLK_KP_3));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_0, SDLK_KP_0));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_FULLSTOP, SDLK_KP_PERIOD));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F11, SDLK_F11));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_F12, SDLK_F12));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RCTRL, SDLK_RCTRL));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KP_BACKSLASH, SDLK_KP_DIVIDE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RALT, SDLK_RALT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_HOME, SDLK_HOME));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_UPARROW, SDLK_UP));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_PAGEUP, SDLK_PAGEUP));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_LEFTARROW, SDLK_LEFT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_RIGHTARROW, SDLK_RIGHT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_END, SDLK_END));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_DOWNARROW, SDLK_DOWN));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_PAGEDOWN, SDLK_PAGEDOWN));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_INSERT, SDLK_INSERT));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_DELETE, SDLK_DELETE));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_KPENTER, SDLK_KP_ENTER));
-	KEY_CODE_to_SDLKey.insert(std::pair<KEY_CODE, SDL_Keycode>(KEY_IGNORE, SDL_Keycode(5190)));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_ESC, SDL_SCANCODE_ESCAPE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_1, SDL_SCANCODE_1));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_2, SDL_SCANCODE_2));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_3, SDL_SCANCODE_3));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_4, SDL_SCANCODE_4));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_5, SDL_SCANCODE_5));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_6, SDL_SCANCODE_6));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_7, SDL_SCANCODE_7));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_8, SDL_SCANCODE_8));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_9, SDL_SCANCODE_9));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_0, SDL_SCANCODE_0));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_MINUS, SDL_SCANCODE_MINUS));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_EQUALS, SDL_SCANCODE_EQUALS));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_BACKSPACE, SDL_SCANCODE_BACKSPACE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_TAB, SDL_SCANCODE_TAB));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_Q, SDL_SCANCODE_Q));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_W, SDL_SCANCODE_W));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_E, SDL_SCANCODE_E));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_R, SDL_SCANCODE_R));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_T, SDL_SCANCODE_T));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_Y, SDL_SCANCODE_Y));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_U, SDL_SCANCODE_U));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_I, SDL_SCANCODE_I));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_O, SDL_SCANCODE_O));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_P, SDL_SCANCODE_P));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LBRACE, SDL_SCANCODE_LEFTBRACKET));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RBRACE, SDL_SCANCODE_RIGHTBRACKET));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RETURN, SDL_SCANCODE_RETURN));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LCTRL, SDL_SCANCODE_LCTRL));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_A, SDL_SCANCODE_A));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_S, SDL_SCANCODE_S));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_D, SDL_SCANCODE_D));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F, SDL_SCANCODE_F));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_G, SDL_SCANCODE_G));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_H, SDL_SCANCODE_H));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_J, SDL_SCANCODE_J));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_K, SDL_SCANCODE_K));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_L, SDL_SCANCODE_L));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_SEMICOLON, SDL_SCANCODE_SEMICOLON));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_QUOTE, SDL_SCANCODE_APOSTROPHE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_BACKQUOTE, SDL_SCANCODE_GRAVE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LSHIFT, SDL_SCANCODE_LSHIFT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LMETA, SDL_SCANCODE_LGUI));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LSUPER, SDL_SCANCODE_LGUI));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_BACKSLASH, SDL_SCANCODE_BACKSLASH));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_Z, SDL_SCANCODE_Z));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_X, SDL_SCANCODE_X));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_C, SDL_SCANCODE_C));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_V, SDL_SCANCODE_V));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_B, SDL_SCANCODE_B));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_N, SDL_SCANCODE_N));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_M, SDL_SCANCODE_M));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_COMMA, SDL_SCANCODE_COMMA));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_FULLSTOP, SDL_SCANCODE_PERIOD));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_FORWARDSLASH, SDL_SCANCODE_SLASH));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RSHIFT, SDL_SCANCODE_RSHIFT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RMETA, SDL_SCANCODE_RGUI));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RSUPER, SDL_SCANCODE_RGUI));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_STAR, SDL_SCANCODE_KP_MULTIPLY));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LALT, SDL_SCANCODE_LALT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_SPACE, SDL_SCANCODE_SPACE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_CAPSLOCK, SDL_SCANCODE_CAPSLOCK));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F1, SDL_SCANCODE_F1));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F2, SDL_SCANCODE_F2));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F3, SDL_SCANCODE_F3));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F4, SDL_SCANCODE_F4));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F5, SDL_SCANCODE_F5));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F6, SDL_SCANCODE_F6));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F7, SDL_SCANCODE_F7));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F8, SDL_SCANCODE_F8));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F9, SDL_SCANCODE_F9));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F10, SDL_SCANCODE_F10));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_NUMLOCK, SDL_SCANCODE_NUMLOCKCLEAR));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_SCROLLLOCK, SDL_SCANCODE_SCROLLLOCK));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_7, SDL_SCANCODE_KP_7));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_8, SDL_SCANCODE_KP_8));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_9, SDL_SCANCODE_KP_9));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_MINUS, SDL_SCANCODE_KP_MINUS));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_4, SDL_SCANCODE_KP_4));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_5, SDL_SCANCODE_KP_5));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_6, SDL_SCANCODE_KP_6));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_PLUS, SDL_SCANCODE_KP_PLUS));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_1, SDL_SCANCODE_KP_1));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_2, SDL_SCANCODE_KP_2));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_3, SDL_SCANCODE_KP_3));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_0, SDL_SCANCODE_KP_0));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_FULLSTOP, SDL_SCANCODE_KP_PERIOD));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F11, SDL_SCANCODE_F11));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_F12, SDL_SCANCODE_F12));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RCTRL, SDL_SCANCODE_RCTRL));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KP_BACKSLASH, SDL_SCANCODE_KP_DIVIDE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RALT, SDL_SCANCODE_RALT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_HOME, SDL_SCANCODE_HOME));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_UPARROW, SDL_SCANCODE_UP));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_PAGEUP, SDL_SCANCODE_PAGEUP));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_LEFTARROW, SDL_SCANCODE_LEFT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_RIGHTARROW, SDL_SCANCODE_RIGHT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_END, SDL_SCANCODE_END));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_DOWNARROW, SDL_SCANCODE_DOWN));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_PAGEDOWN, SDL_SCANCODE_PAGEDOWN));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_INSERT, SDL_SCANCODE_INSERT));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_DELETE, SDL_SCANCODE_DELETE));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_KPENTER, SDL_SCANCODE_KP_ENTER));
+	KEY_CODE_to_SDLScancode.insert(std::pair<KEY_CODE, SDL_Scancode>(KEY_IGNORE, SDL_Scancode(5190)));
 
-	std::map<KEY_CODE, SDL_Keycode>::iterator it;
-	for (it = KEY_CODE_to_SDLKey.begin(); it != KEY_CODE_to_SDLKey.end(); it++)
+	std::map<KEY_CODE, SDL_Scancode>::iterator it;
+	for (it = KEY_CODE_to_SDLScancode.begin(); it != KEY_CODE_to_SDLScancode.end(); it++)
 	{
-		SDLKey_to_KEY_CODE.insert(std::pair<SDL_Keycode, KEY_CODE>(it->second, it->first));
+		SDLScancode_to_KEY_CODE.insert(std::pair<SDL_Scancode, KEY_CODE>(it->second, it->first));
 	}
 }
 
-static inline KEY_CODE sdlKeyToKeyCode(SDL_Keycode key)
+static inline KEY_CODE sdlScancodeToKeyCode(SDL_Scancode key)
 {
-	std::map<SDL_Keycode, KEY_CODE >::iterator it;
+	std::map<SDL_Scancode, KEY_CODE >::iterator it;
 
-	it = SDLKey_to_KEY_CODE.find(key);
-	if (it != SDLKey_to_KEY_CODE.end())
+	it = SDLScancode_to_KEY_CODE.find(key);
+	if (it != SDLScancode_to_KEY_CODE.end())
 	{
 		return it->second;
 	}
-	return (KEY_CODE)key;
+	return KEY_MAXSCAN;
 }
 
-static inline SDL_Keycode keyCodeToSDLKey(KEY_CODE code)
+static inline SDL_Scancode keyCodeToSDLScancode(KEY_CODE code)
 {
-	std::map<KEY_CODE, SDL_Keycode>::iterator it;
+	std::map<KEY_CODE, SDL_Scancode>::iterator it;
 
-	it = KEY_CODE_to_SDLKey.find(code);
-	if (it != KEY_CODE_to_SDLKey.end())
+	it = KEY_CODE_to_SDLScancode.find(code);
+	if (it != KEY_CODE_to_SDLScancode.end())
 	{
 		return it->second;
 	}
-	return (SDL_Keycode)code;
+	return (SDL_Scancode)code;
 }
 
 // Cyclic increment.
@@ -1067,6 +1215,12 @@ static InputKey *inputPointerNext(InputKey *p)
 /* add count copies of the characater code to the input buffer */
 static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 {
+	if (!GetTextEventsOwner)
+	{
+		// Text input events aren't enabled
+		return;
+	}
+
 	/* Calculate what pEndBuffer will be set to next */
 	InputKey	*pNext = inputPointerNext(pEndBuffer);
 
@@ -1081,6 +1235,7 @@ static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 	pEndBuffer = pNext;
 }
 
+// Returns the human-readable name for the key *in the current keyboard layout*
 void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
 	if (code == KEY_LCTRL)
@@ -1114,7 +1269,7 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 
 	if (code < KEY_MAXSCAN)
 	{
-		snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(keyCodeToSDLKey(code)));
+		snprintf(ascii, maxStringSize, "%s", SDL_GetKeyName(SDL_GetKeyFromScancode(keyCodeToSDLScancode(code))));
 		if (ascii[0] >= 'a' && ascii[0] <= 'z' && ascii[1] != 0)
 		{
 			// capitalize
@@ -1233,13 +1388,13 @@ void inputNewFrame(void)
 		if (aKeyState[i].state == KEY_PRESSED)
 		{
 			aKeyState[i].state = KEY_DOWN;
-			debug(LOG_NEVER, "This key is DOWN! %x, %d [%s]", i, i, SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)i)));
+			debug(LOG_NEVER, "This key is DOWN! %x, %d [%s]", i, i, SDL_GetScancodeName(keyCodeToSDLScancode((KEY_CODE)i)));
 		}
 		else if (aKeyState[i].state == KEY_RELEASED  ||
 		         aKeyState[i].state == KEY_PRESSRELEASE)
 		{
 			aKeyState[i].state = KEY_UP;
-			debug(LOG_NEVER, "This key is UP! %x, %d [%s]", i, i, SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)i)));
+			debug(LOG_NEVER, "This key is UP! %x, %d [%s]", i, i, SDL_GetScancodeName(keyCodeToSDLScancode((KEY_CODE)i)));
 		}
 	}
 
@@ -1420,38 +1575,38 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		case SDLK_PAGEDOWN:
 			vk = INPBUF_PGDN;
 			break;
-		case KEY_BACKSPACE:
+		case SDLK_BACKSPACE:
 			vk = INPBUF_BKSPACE;
 			break;
-		case KEY_TAB:
+		case SDLK_TAB:
 			vk = INPBUF_TAB;
 			break;
-		case KEY_RETURN:
+		case SDLK_RETURN:
 			vk = INPBUF_CR;
 			break;
-		case KEY_ESC:
+		case SDLK_ESCAPE:
 			vk = INPBUF_ESC;
 			break;
 		default:
 			break;
 		}
-		// Keycodes without character representations are determined by their scancode bitwise OR-ed with 1<<30 (0x40000000).
-		unsigned currentKey = keyEvent->keysym.sym;
+
 		if (vk)
 		{
-			// Take care of 'editing' keys that were pressed
+			// Take care of adding 'editing' keys that were pressed to the input buffer (for text editing control handling)
 			inputAddBuffer(vk, 0);
-			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetKeyName(currentKey));
+			debug(LOG_INPUT, "Editing key: 0x%x, %d SDLkey=[%s] pressed", vk, vk, SDL_GetKeyName(keyEvent->keysym.sym));
 		}
 		else
 		{
 			// add everything else
-			inputAddBuffer(currentKey, 0);
+			inputAddBuffer(keyEvent->keysym.sym, 0);
 		}
 
-		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", currentKey, currentKey, currentKey < 128 && currentKey > 31 ? (char)currentKey : '?', SDL_GetKeyName(currentKey));
+		SDL_Scancode currentKey = keyEvent->keysym.scancode;
+		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
 
-		KEY_CODE code = sdlKeyToKeyCode(currentKey);
+		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
 		if (code >= KEY_MAXSCAN)
 		{
 			break;
@@ -1469,9 +1624,9 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 
 	case SDL_KEYUP:
 	{
-		unsigned currentKey = keyEvent->keysym.sym;
-		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, [%c] SDLkey=[%s]", currentKey, currentKey, currentKey < 128 && currentKey > 31 ? (char)currentKey : '?', SDL_GetKeyName(currentKey));
-		KEY_CODE code = sdlKeyToKeyCode(keyEvent->keysym.sym);
+		unsigned currentKey = keyEvent->keysym.scancode;
+		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetKeyName(currentKey));
+		KEY_CODE code = sdlScancodeToKeyCode(keyEvent->keysym.scancode);
 		if (code >= KEY_MAXSCAN)
 		{
 			break;
@@ -2419,6 +2574,14 @@ void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true
 	}
 }
 
+void wzResetGfxSettingsOnFailure()
+{
+	// Because too high an MSAA value could lead to out-of-memory errors (for example, trying to create the scene renderpass), reset MSAA to off for next run
+	war_setAntialiasing(0);
+
+	saveGfxConfig();
+}
+
 bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails /*= ""*/)
 {
 	if (!WZbackend.has_value())
@@ -2530,11 +2693,8 @@ void wzSDLPreWindowCreate_InitOpenGLAttributes(int antialiasing, bool useOpenGLE
 	// Enable stencil buffer, needed for shadows to work.
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	if (antialiasing)
-	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
-	}
+	// Do *not* enable multisampling on the default framebuffer (i.e. setting SDL_GL_MULTISAMPLEBUFFERS)
+	// This is handled separately for the scene render buffer / frame buffer
 
 	if (!sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary))
 	{
@@ -2935,6 +3095,10 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
 	sdl_impl_config.useOpenGLES = useOpenGLES;
 	sdl_impl_config.useOpenGLESLibrary = useOpenGLESLibrary;
+	if (backend == video_backend::vulkan)
+	{
+		sdl_impl_config.allowImplicitLayers = war_getAllowVulkanImplicitLayers();
+	}
 	return sdl_impl_config;
 }
 
@@ -2972,7 +3136,7 @@ bool wzMainScreenSetup_VerifyWindow()
 	return true;
 }
 
-bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, int lodDistanceBiasPercentage, bool highDPI)
+bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, int lodDistanceBiasPercentage, uint32_t depthMapResolution, bool highDPI)
 {
 	// Output linked SDL version
 	char buf[512];
@@ -3068,6 +3232,10 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	}
 #endif
 
+#if defined(__EMSCRIPTEN__)
+	wzemscripten_startup_ensure_canvas_displayed();
+#endif
+
 	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
 
 	if (backend.has_value())
@@ -3120,7 +3288,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		lodDistanceBias = static_cast<float>(lodDistanceBiasPercentage) / 100.f;
 	}
 
-	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, sdl_impl_config), antialiasing, vsyncMode, lodDistanceBias, gfxapi_backend))
+	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, sdl_impl_config), antialiasing, vsyncMode, lodDistanceBias, depthMapResolution, gfxapi_backend))
 	{
 		// Failed to initialize desired backend / renderer settings
 		if (backend.has_value())
@@ -3148,6 +3316,20 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	if (backend.has_value())
 	{
 		wzMainScreenSetup_VerifyWindow();
+
+#if defined(__EMSCRIPTEN__)
+		// Catch the full screen change events
+		// - If user-initiated (i.e. by pressing ESC or similar to exit fullscreen), SDL does not currently expose this event
+		// - SDL itself sets a fullscreenchange callback on the document, which must remain for SDL functionality - fortunately, emscripten lets us set one on the canvas element itself
+		emscripten_set_fullscreenchange_callback("#canvas", nullptr, 0, wz_emscripten_fullscreenchange_callback);
+
+		auto mode = wzGetCurrentWindowMode();
+		if (mode == WINDOW_MODE::windowed)
+		{
+			// Enable "soft fullscreen" - where the canvas automatically fills the window
+			wz_emscripten_enable_soft_fullscreen();
+		}
+#endif
 	}
 
 #if defined(WZ_OS_WIN)
@@ -3411,12 +3593,14 @@ static void handleActiveEvent(SDL_Event *event)
 			break;
 		case SDL_WINDOWEVENT_ENTER:
 			debug(LOG_WZ, "Mouse entered window %d", event->window.windowID);
+			wzQueueRefreshCursor();
 			break;
 		case SDL_WINDOWEVENT_LEAVE:
 			debug(LOG_WZ, "Mouse left window %d", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
 			mouseInWindow = SDL_TRUE;
+			wzQueueRefreshCursor();
 			debug(LOG_WZ, "Window %d gained keyboard focus", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_LOST:
@@ -3438,9 +3622,20 @@ static void handleActiveEvent(SDL_Event *event)
 }
 
 static SDL_Event event;
+#if defined(__EMSCRIPTEN__)
+std::function<void()> saved_onShutdown;
+unsigned lastLoopReturn = 0;
+#endif
 
 void wzEventLoopOneFrame(void* arg)
 {
+#if defined(__EMSCRIPTEN__)
+	if (lastLoopReturn > 0)
+	{
+		wz_emscripten_did_finish_render(lastLoopReturn - wzGetTicks());
+	}
+#endif
+
 	/* Deal with any windows messages */
 	while (SDL_PollEvent(&event))
 	{
@@ -3467,12 +3662,27 @@ void wzEventLoopOneFrame(void* arg)
 			inputhandleText(&event.text);
 			break;
 		case SDL_QUIT:
+#if defined(__EMSCRIPTEN__)
+			// Exit "soft fullscreen" - (as long as we aren't in "real" fullscreen mode)
+			emscripten_exit_soft_fullscreen();
+
+			// Actually trigger cleanup code
+			if (saved_onShutdown)
+			{
+				saved_onShutdown();
+			}
+			wzShutdown();
+
+			// Stop Emscripten from calling the main loop
+			emscripten_cancel_main_loop();
+#else
 			ASSERT(arg != nullptr, "No valid bContinue");
 			if (arg)
 			{
 				bool *bContinue = static_cast<bool*>(arg);
 				*bContinue = false;
 			}
+#endif
 			return;
 		default:
 			break;
@@ -3500,6 +3710,9 @@ void wzEventLoopOneFrame(void* arg)
 	processScreenSizeChangeNotificationIfNeeded();
 	mainLoop();				// WZ does its thing
 	inputNewFrame();			// reset input states
+#if defined(__EMSCRIPTEN__)
+	lastLoopReturn = wzGetTicks();
+#endif
 }
 
 // Actual mainloop
@@ -3507,6 +3720,11 @@ void wzMainEventLoop(std::function<void()> onShutdown)
 {
 	event.type = 0;
 
+#if defined(__EMSCRIPTEN__)
+	saved_onShutdown = onShutdown;
+	// Receives a function to call and some user data to provide it.
+	emscripten_set_main_loop_arg(wzEventLoopOneFrame, nullptr, -1, true);
+#else
 	bool bContinue = true;
 	while (bContinue)
 	{
@@ -3517,6 +3735,7 @@ void wzMainEventLoop(std::function<void()> onShutdown)
 	{
 		onShutdown();
 	}
+#endif
 }
 
 void wzPumpEventsWhileLoading()
@@ -3569,6 +3788,78 @@ bool wzBackendAttemptOpenURL(const char *url)
 uint64_t wzGetCurrentSystemRAM()
 {
 	int value = SDL_GetSystemRAM();
-	if (value <= 0) { return 0; }
-	return static_cast<uint64_t>(value);
+	return (value > 0) ? static_cast<uint64_t>(value) : 0;
 }
+
+// MARK: - Emscripten-specific functions
+
+#if defined(__EMSCRIPTEN__)
+
+void wzemscripten_startup_ensure_canvas_displayed()
+{
+	MAIN_THREAD_EM_ASM({
+		if (typeof wz_js_display_canvas === "function") {
+			wz_js_display_canvas();
+		}
+		else {
+			console.log('Cannot find wz_js_display_canvas function');
+		}
+	});
+}
+
+EM_BOOL wz_emscripten_window_resized_callback(int eventType, const void *reserved, void *userData)
+{
+	double width, height;
+	emscripten_get_element_css_size("#canvas", &width, &height);
+
+	int newWindowWidth = (int)width, newWindowHeight = (int)height;
+
+	wzAsyncExecOnMainThread([newWindowWidth, newWindowHeight]{
+		// resize SDL window
+		SDL_SetWindowSize(WZwindow, newWindowWidth, newWindowHeight);
+
+		unsigned int oldWindowWidth = windowWidth;
+		unsigned int oldWindowHeight = windowHeight;
+		handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+		// Store the new values (in case the user manually resized the window bounds)
+		war_SetWidth(newWindowWidth);
+		war_SetHeight(newWindowHeight);
+	});
+	return EMSCRIPTEN_RESULT_SUCCESS;
+}
+
+bool wz_emscripten_enable_soft_fullscreen()
+{
+	// Enable "soft fullscreen" - where the canvas automatically fills the window
+	debug(LOG_INFO, "Would enter soft fullscreen");
+	EmscriptenFullscreenStrategy strategy;
+	strategy.scaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_STDDEF;
+	strategy.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
+	strategy.canvasResizedCallback = wz_emscripten_window_resized_callback;
+	strategy.canvasResizedCallbackUserData = nullptr; // pointer to user data
+	strategy.canvasResizedCallbackTargetThread = pthread_self(); // not used
+	EMSCRIPTEN_RESULT result = emscripten_enter_soft_fullscreen("#canvas", &strategy);
+	return result == EMSCRIPTEN_RESULT_SUCCESS || result == EMSCRIPTEN_RESULT_DEFERRED;
+}
+
+EM_BOOL wz_emscripten_fullscreenchange_callback(int eventType, const EmscriptenFullscreenChangeEvent *fullscreenChangeEvent, void *userData)
+{
+	if (!fullscreenChangeEvent->isFullscreen)
+	{
+		// browser left fullscreen, so reset soft fullscreen mode
+		wzAsyncExecOnMainThread([]{
+
+			war_setWindowMode(WINDOW_MODE::windowed); // persist the change
+
+			wz_emscripten_enable_soft_fullscreen();
+
+			// manually trigger resize callback
+			wz_emscripten_window_resized_callback(EMSCRIPTEN_EVENT_FULLSCREENCHANGE, nullptr, nullptr);
+
+		});
+	}
+
+	return EM_FALSE; // return false to ensure this event "bubbles up" to the SDL event handler
+}
+
+#endif

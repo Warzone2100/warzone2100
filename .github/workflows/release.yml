@@ -47,6 +47,42 @@ jobs:
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.DEPLOY_DISPATCH_ACCESS_TOKEN }} \
           --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+  webedition-release-commit:
+    name: 'Commit Web Edition Release'
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    if: ((github.event.action == 'published') || (github.event.action == 'released')) && (github.repository == 'Warzone2100/warzone2100')
+    environment: webedition_release_management
+    # The following must be set in the 'webedition_release_management' environment:
+    # Secret: WZ_WEB_BUILD_RELEASE_MANAGEMENT_TOKEN
+    # Variable: WZ_WEB_BUILD_RELEASE_MANAGEMENT_API_URL
+    steps:
+      - name: 'Get actual latest release from GH'
+        run: |
+          # Get the actual latest release from GitHub directly
+          # (which could differ from the release associated with this event, if someone publishes some older versions as GitHub Releases at some point)
+          # (this also ensure that prereleases - which won't get set as the "latest" release - aren't set as /latest/)
+          WZ_LATEST_RELEASE_TAG="$(gh --repo $GITHUB_REPOSITORY release view --json 'tagName' --jq '.tagName')"
+          echo "WZ_LATEST_RELEASE_TAG=${WZ_LATEST_RELEASE_TAG}"
+          echo "WZ_LATEST_RELEASE_TAG=${WZ_LATEST_RELEASE_TAG}" >> $GITHUB_ENV
+      - name: 'Set play.wz2100.net/latest/ to the latest release'
+        env:
+          WZ_WEB_BUILD_RELEASE_MANAGEMENT_TOKEN: ${{ secrets.WZ_WEB_BUILD_RELEASE_MANAGEMENT_TOKEN }}
+          WZ_WEB_BUILD_RELEASE_MANAGEMENT_API_URL: ${{ vars.WZ_WEB_BUILD_RELEASE_MANAGEMENT_API_URL }}
+        run: |
+          curl -i -X POST "${WZ_WEB_BUILD_RELEASE_MANAGEMENT_API_URL}" \
+          --data "token=${WZ_WEB_BUILD_RELEASE_MANAGEMENT_TOKEN}&setlatest=${WZ_LATEST_RELEASE_TAG}"
+      - name: 'Purge Cloudflare Cache'
+        if: success() && (steps.publishpages.outputs.PROCESS_DEPLOYMENT == 'true')
+        env:
+          CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_WZ2100_ZONE }}
+          CLOUDFLARE_CACHEPURGE_TOKEN: ${{ secrets.CLOUDFLARE_WZ2100_CACHEPURGE_TOKEN }}
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
+               -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+               -H "Content-Type: application/json" \
+               --data '{"purge_everything":true}'
   sentry-release-commit-info:
     name: 'Upload Release Commit Info'
     permissions:
@@ -60,7 +96,7 @@ jobs:
       - name: Prep Environment
         run: |
           mkdir empty-folder
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           path: 'src'

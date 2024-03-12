@@ -26,17 +26,19 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 
 	debugMsg(x+'x'+y+' '+command, 'gi');
 
-	if (typeof _globalInfoNear[x+'_'+y+'_'+command] !== "undefined"
-	&& gameTime < (_globalInfoNear[x+'_'+y+'_'+command].setTime + _globalInfoNear[x+'_'+y+'_'+command].updateIn)) {
+	if (typeof _globalInfoNear[x+'_'+y+'_'+command] !== "undefined" &&
+		gameTime < (_globalInfoNear[x+'_'+y+'_'+command].setTime + _globalInfoNear[x+'_'+y+'_'+command].updateIn))
+	{
 		if (inc) {
 			_globalInfoNear[x+'_'+y+'_'+command].value++;
 		}
 		return _globalInfoNear[x+'_'+y+'_'+command];
 	} else {
+		var view;
 		if (typeof time === "undefined") time = 30000;
 		if (typeof range === "undefined") range = 7;
-		if (typeof cheat === "undefined") var view = me;
-		else if (cheat) var view = -1;
+		if (typeof cheat === "undefined") view = me;
+		else if (cheat) view = -1;
 //		_globalInfoNear[x+'_'+y+'_'+command] = [];
 		_globalInfoNear[x+'_'+y+'_'+command] = { setTime: gameTime, updateIn: time };
 
@@ -358,8 +360,9 @@ function checkProcess(){
 			}
 
 			if (enumDroid(bc_ally[plally], DROID_CONSTRUCT).length < 3) {
+				var truck;
 				if (groupSize(buildersMain) >= 2) {
-					var truck = enumGroup(buildersMain);
+					truck = enumGroup(buildersMain);
 					if (truck.length > 0) {
 						debugMsg("Send builder["+truck[0].id+"] from "+me+" to "+bc_ally[plally], 'ally');
 						donateObject(truck[0], bc_ally[plally]);
@@ -368,7 +371,7 @@ function checkProcess(){
 				}
 
 				if (groupSize(buildersHunters) > 1) {
-					var truck = enumGroup(buildersHunters);
+					truck = enumGroup(buildersHunters);
 					if (truck.length > 0) {
 						donateObject(truck[0], bc_ally[plally]);
 						debugMsg("Send hunter["+truck[0].id+"] from "+me+" to "+bc_ally[plally], 'ally');
@@ -424,19 +427,19 @@ function gameStop(condition){
 
 function playerLoose(player){
 	var loose = false;
-	if (enumStruct(player,"A0LightFactory").length === 0
-		&& enumDroid(player, DROID_CONSTRUCT).length === 0
-		&& enumStruct(player,"A0CyborgFactory").length === 0
-		&& enumDroid(player, 10).length === 0) loose = true;
+	if (enumStruct(player,"A0LightFactory").length === 0 &&
+		enumDroid(player, DROID_CONSTRUCT).length === 0 &&
+		enumStruct(player,"A0CyborgFactory").length === 0 &&
+		enumDroid(player, 10).length === 0) loose = true;
 	return loose;
 }
 
 function playerSpectator(player){
 	var loose = false;
-	if ((enumStruct(player, "A0Sat-linkCentre").length === 1 || enumStruct(player, "A0CommandCentre").length === 1)
-		&& enumStruct(player,"A0LightFactory").length === 0
-		&& enumStruct(player,"A0CyborgFactory").length === 0
-		&& enumDroid(player, 10).length === 0) loose = true;
+	if ((enumStruct(player, "A0Sat-linkCentre").length === 1 || enumStruct(player, "A0CommandCentre").length === 1) &&
+		enumStruct(player,"A0LightFactory").length === 0 &&
+		enumStruct(player,"A0CyborgFactory").length === 0 &&
+		enumDroid(player, 10).length === 0) loose = true;
 	return loose;
 }
 
@@ -1008,7 +1011,7 @@ var isFixVTOL = function(obj) {
 	} catch(e) {
 //		debugMsg("isFixVTOL(): "+e.message, 'error');
 	}
-}
+};
 
 //from: http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
 function shuffle(a) {
@@ -1266,7 +1269,7 @@ function getFleetPoint(droid){
 	droidsNear = sortByDistance(droidsNear, base);
 //	debugMsg('dl:'+droidsNear.length, 'temp');
 //	debugMsg('dr:'+droidCanReach(droid, base.x, base.y), 'temp');
-	if (droidsNear.length === 0 || droidsNear[0].id === droid.id) return base
+	if (droidsNear.length === 0 || droidsNear[0].id === droid.id) return base;
 	return droidsNear[0];
 
 }

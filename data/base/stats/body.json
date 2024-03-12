@@ -977,8 +977,8 @@
 		"weight": 150
 	},
 	"CybNXMissJmp": {
-		"armourHeat": 15,
-		"armourKinetic": 18,
+		"armourHeat": 12,
+		"armourKinetic": 15,
 		"buildPoints": 125,
 		"buildPower": 30,
 		"class": "Cyborgs",
@@ -993,8 +993,8 @@
 		"weight": 150
 	},
 	"CybNXPulseLasJmp": {
-		"armourHeat": 15,
-		"armourKinetic": 18,
+		"armourHeat": 12,
+		"armourKinetic": 15,
 		"buildPoints": 125,
 		"buildPower": 30,
 		"class": "Cyborgs",
@@ -1009,8 +1009,8 @@
 		"weight": 150
 	},
 	"CybNXRail1Jmp": {
-		"armourHeat": 15,
-		"armourKinetic": 18,
+		"armourHeat": 12,
+		"armourKinetic": 15,
 		"buildPoints": 125,
 		"buildPower": 30,
 		"class": "Cyborgs",

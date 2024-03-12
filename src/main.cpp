@@ -109,6 +109,7 @@
 #include "updatemanager.h"
 #include "activity.h"
 #include "stdinreader.h"
+#include "gamehistorylogger.h"
 #if defined(ENABLE_DISCORD)
 #include "integrations/wzdiscordrpc.h"
 #endif
@@ -991,6 +992,8 @@ static void startGameLoop()
 	triggerEvent(TRIGGER_START_LEVEL);
 	screen_disableMapPreview();
 
+	GameStoryLogger::instance().logStartGame();
+
 	auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
 	switch (currentGameMode)
 	{
@@ -998,9 +1001,9 @@ static void startGameLoop()
 			// should not happen
 			break;
 		case ActivitySink::GameMode::CAMPAIGN:
-		case ActivitySink::GameMode::CHALLENGE:
 			// replays not currently supported
 			break;
+		case ActivitySink::GameMode::CHALLENGE:
 		case ActivitySink::GameMode::SKIRMISH:
 		case ActivitySink::GameMode::MULTIPLAYER:
 		{
@@ -1050,6 +1053,7 @@ static void stopGameLoop()
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
+			game.modHashes.clear(); // must clear this before calling levReleaseAll so that when search paths are reloaded we don't reload mods downloaded for the last game (or loaded for the last replay)
 			if (!levReleaseAll())
 			{
 				debug(LOG_ERROR, "levReleaseAll failed!");
@@ -1059,6 +1063,10 @@ static void stopGameLoop()
 				player.resetAll();
 			}
 			NetPlay.players.resize(MAX_CONNECTED_PLAYERS);
+			for (size_t i = 0; i < NetPlay.scriptSetPlayerDataStrings.size(); i++)
+			{
+				NetPlay.scriptSetPlayerDataStrings[i].clear();
+			}
 		}
 		closeLoadingScreen();
 		reloadMPConfig();
@@ -1076,6 +1084,8 @@ static void stopGameLoop()
 		// FIXME: This is required because of the disabling in startGameLoop()
 		wzSetWindowIsResizable(true);
 	}
+
+	GameStoryLogger::instance().reset();
 
 	gameInitialised = false;
 }
@@ -1365,6 +1375,15 @@ bool getUTF8CmdLine(int *const _utfargc WZ_DECL_UNUSED, char *** const _utfargv 
 
 #if defined(WZ_OS_WIN)
 
+// Special exports to default to high-performance GPU on multi-GPU systems
+extern "C" {
+	// https://developer.download.nvidia.com/devzone/devcenter/gamegraphics/files/OptimusRenderingPolicies.pdf
+	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+
+	// https://gpuopen.com/learn/amdpowerxpressrequesthighperformance/
+	__declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x00000001;
+}
+
 typedef BOOL (WINAPI *SetDefaultDllDirectoriesFunction)(
   DWORD DirectoryFlags
 );
@@ -1604,6 +1623,10 @@ void osSpecificPostInit_Win()
 }
 #endif /* defined(WZ_OS_WIN) */
 
+#if defined(__EMSCRIPTEN__)
+# include "emscripten_helpers.h"
+#endif
+
 void osSpecificFirstChanceProcessSetup()
 {
 #if defined(WZ_OS_WIN)
@@ -1622,12 +1645,18 @@ void osSpecificFirstChanceProcessSetup()
 #else
 	// currently, no-op
 #endif
+
+#if defined(__EMSCRIPTEN__) // must be separate, because WZ_OS_UNIX is also defined for emscripten builds
+	initWZEmscriptenHelpers();
+#endif
 }
 
 void osSpecificPostInit()
 {
 #if defined(WZ_OS_WIN)
 	osSpecificPostInit_Win();
+#elif defined(__EMSCRIPTEN__)
+	initWZEmscriptenHelpers_PostInit();
 #else
 	// currently, no-op
 #endif
@@ -1660,6 +1689,11 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 		gfxBackendString = to_string(gfxbackend.value());
 	}
 	crashHandlingProviderSetTag("wz.gfx_backend", gfxBackendString);
+
+	auto systemRamMiB = wzGetCurrentSystemRAM();
+	std::string systemRamString = std::to_string(systemRamMiB);
+	crashHandlingProviderSetTag("wz.system_ram", systemRamString);
+
 	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
 	// Truncate absurdly long backend info values (if needed - common culprit is GL_EXTENSIONS)
 	const size_t MAX_BACKENDINFO_VALUE_LENGTH = 2048;
@@ -1679,19 +1713,15 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 
 static void wzCmdInterfaceInit()
 {
-	switch (wz_command_interface())
+	if (wz_command_interface_enabled())
 	{
-		case WZ_Command_Interface::None:
-			return;
-		case WZ_Command_Interface::StdIn_Interface:
-			stdInThreadInit();
-			break;
+		cmdInterfaceThreadInit();
 	}
 }
 
 static void wzCmdInterfaceShutdown()
 {
-	stdInThreadShutdown();
+	cmdInterfaceThreadShutdown();
 }
 
 static void cleanupOldLogFiles()
@@ -1734,6 +1764,38 @@ static void cleanupOldLogFiles()
 			return false;
 		}
 		return true;
+	});
+}
+
+static void mainProcessCompatCheckResults(CompatCheckResults results)
+{
+	// Since this may be called from any thread, use wzAsyncExecOnMainThread
+	wzAsyncExecOnMainThread([results]() {
+		if (!results.successfulCheck)
+		{
+			return;
+		}
+		if (!results.hasIssue())
+		{
+			return;
+		}
+
+		// supported_terrain
+		auto& configFlags = results.issue.value().configFlags;
+		if (configFlags.supportedTerrain.count(getTerrainShaderQuality()) == 0)
+		{
+			// current terrain mode is not in supported list
+			// if not in a game, change the terrain shader quality back to default
+			if (GetGameMode() != GS_NORMAL)
+			{
+				setTerrainShaderQuality(TerrainShaderQuality::MEDIUM);
+			}
+		}
+		// multilobby
+		if (!configFlags.multilobby)
+		{
+			NET_setLobbyDisabled(results.issue.value().infoLink);
+		}
 	});
 }
 
@@ -1843,7 +1905,11 @@ int realmain(int argc, char *argv[])
 	osSpecificFirstChanceProcessSetup();
 
 	debug_init();
+#if defined(__EMSCRIPTEN__)
+	debug_register_callback(debug_callback_emscripten_log, nullptr, nullptr, nullptr);
+#else
 	debug_register_callback(debug_callback_stderr, nullptr, nullptr, nullptr);
+#endif
 #if defined(_WIN32) && defined(DEBUG_INSANE)
 	debug_register_callback(debug_callback_win32debug, NULL, NULL, NULL);
 #endif // WZ_OS_WIN && DEBUG_INSANE
@@ -1898,9 +1964,10 @@ int realmain(int argc, char *argv[])
 	urlRequestInit();
 
 	// find early boot info
-	if (!ParseCommandLineEarly(utfargc, utfargv))
+	ParseCLIEarlyResult earlyCommandLineParsingResult = ParseCommandLineEarly(utfargc, utfargv);
+	if (earlyCommandLineParsingResult != ParseCLIEarlyResult::OK_CONTINUE)
 	{
-		return EXIT_FAILURE;
+		return (earlyCommandLineParsingResult == ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND) ? 0 : EXIT_FAILURE;
 	}
 
 	/* Initialize the write/config directory for PhysicsFS.
@@ -2100,7 +2167,7 @@ int realmain(int argc, char *argv[])
 	{
 		gfxbackend = war_getGfxBackend();
 	}
-	if (!wzMainScreenSetup(gfxbackend, war_getAntialiasing(), war_getWindowMode(), war_GetVsync(), war_getLODDistanceBiasPercentage()))
+	if (!wzMainScreenSetup(gfxbackend, war_getAntialiasing(), war_getWindowMode(), war_GetVsync(), war_getLODDistanceBiasPercentage(), war_getShadowMapResolution()))
 	{
 		saveConfig(); // ensure any setting changes are persisted on failure
 		return EXIT_FAILURE;
@@ -2132,11 +2199,11 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
-	if (!screenInitialise())
+	if (!pie_LoadShaders(war_getShadowFilterSize(), war_getPointLightPerPixelLighting() && getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING))
 	{
 		return EXIT_FAILURE;
 	}
-	if (!pie_LoadShaders())
+	if (!screenInitialise())
 	{
 		return EXIT_FAILURE;
 	}
@@ -2194,6 +2261,7 @@ int realmain(int argc, char *argv[])
 		break;
 	}
 
+	asyncGetCompatCheckResults(mainProcessCompatCheckResults);
 	WzInfoManager::initialize();
 #if defined(ENABLE_DISCORD)
 	discordRPCInitialize();

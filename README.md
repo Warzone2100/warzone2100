@@ -6,7 +6,7 @@ Warzone 2100
 Origins
 -------
 
-Warzone 2100, released in 1999 and developed by Pumpkin Studios, was a
+Warzone 2100, released in 1999 and developed by Pumpkin Studios, is a
 ground-breaking and innovative 3D real-time strategy game.
 
 In 2004 Eidos, in collaboration with Pumpkin Studios, decided to release
@@ -19,8 +19,8 @@ State of the game
 After the liberation of the Warzone 2100 source-code on December 6th, 2004, all
 proprietary technologies have been replaced with open-source counterparts.
 
-Right now supported platforms are Linux, Windows, and macOS. There are reports
-that Warzone 2100 is working on BSD, too.
+Currently, the supported platforms are Linux, Windows, and macOS. There are reports
+that Warzone 2100 is also working on BSD.
 
 Installation
 ------------
@@ -70,8 +70,8 @@ How to get the latest Ubuntu development builds:
 2. Select the latest workflow run in the table / list.
    This should display a list of **Artifacts** from the run.
 3. Download the appropriate `warzone2100_ubuntu<version>_amd64_deb` artifact.
-   - If you are running Ubuntu 18.04: `warzone2100_ubuntu18.04_amd64_deb`
    - If you are running Ubuntu 20.04: `warzone2100_ubuntu20.04_amd64_deb`
+   - If you are running Ubuntu 22.04: `warzone2100_ubuntu22.04_amd64_deb`
 > Note: A free GitHub account is currently required to download the artifacts.
 4. Extract the contents of the downloaded .zip (`warzone2100_ubuntu<version>_amd64.deb`) to your Desktop.
 5. Execute the following commands in Terminal:
@@ -101,8 +101,8 @@ Reporting bugs
 --------------
 
 This game still has bugs and if you run into one, please use the GitHub bugtracker
-(https://github.com/Warzone2100/warzone2100/issues) to report this bug. In order to faster fix
-those bugs we require that you follow these rules:
+(https://github.com/Warzone2100/warzone2100/issues) to report the bug. In order to fix
+those bugs more quickly, we require that you follow these rules:
 
    1. If the game crashes you may save a memory dump. Please do so and upload it
       when reporting the bug. (Linux locates that file at /tmp/warzone2100.gdmp,
@@ -111,21 +111,21 @@ those bugs we require that you follow these rules:
       A self created backtrace is just as useful.
    2. Give as much information about what you were doing before the crash/bug
       occurred.
-   3. Try to reproduce the bug and add a description of the process to your bug-
+   3. Try to reproduce the bug and add a description of the process to your bug
       report.
-   4. You may even upload save-games. These consist of one or two file(s) and
-      one folder. All two/three are named after your save-game (e.g.
+   4. You may even upload save files. These consist of one or two file(s) and
+      one folder. All two/three are named after your savegame (e.g.
       MySaveGame.es, MySaveGame.gam and the folder MySaveGame).
-   5. Bug-reports are not submit-and-forget. It may be that you forgot some
-      information or forgot to upload a file. So it is, too, in your interest to
-      watch the bug-report after it has been submitted. Additionally you receive
-      e-mails of comments to your bug-report.
+   5. Bug reports are not submit-and-forget. It may be that you forgot some
+      information or forgot to upload a file. So it is also in your interest to
+      watch the bug-report after it has been submitted. Additionally, you can enable
+      e-mails of comments to your bug report.
 
 Configuration
 -------------
 
-Warzone 2100 uses an own sub-directory in a user's home directory to save
-configuration data, save-games and certain other things. Additionally you can
+Warzone 2100 uses its own subdirectory in a user's home directory to save
+configuration data, save files and certain other things. Additionally you can
 use this directory to place custom maps and mods so the game can find them. The
 location of this directory depends on the operating system.
 
@@ -133,14 +133,14 @@ location of this directory depends on the operating system.
 
 Under GNU/Linux, Warzone 2100 conforms to the [XDG base directory spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
 
-By default, the directory `warzone2100-<version>` can be found in your home-directory
+By default, the directory `warzone2100-<version>` can be found in your home directory
 under the path `~/.local/share/`.
 (If the `XDG_DATA_HOME` environment variable is defined, the Warzone 2100 folder will
 be located within `$XDG_DATA_HOME`.)
 
 The leading dot in the `.local` part of the path indicates that it is a hidden
 directory, so depending on your configuration you may not be able to see it.
-However, you can still access it by typing the path into your address-bar.
+However, you can still access it by typing the path into your address bar.
 
 ### Warzone 2100 directory under Windows
 
@@ -160,7 +160,7 @@ will browse to your Warzone 2100 directory.
 
 ### Warzone 2100 directory under macOS
 
-The directory `Warzone 2100 <version>` can be found in your home-directory at:
+The directory `Warzone 2100 <version>` can be found in your home directory at:
 `~/Library/Application Support/`
 
 By default, recent version of macOS hide your account's Library folder. To view it in
@@ -171,7 +171,7 @@ will appear as a menu choice.
 
 The configuration file is just called 'config' and contains several configuration
 options, some of them can be changed by using command-line options or using
-the in-game menus, others can only be changed by editing the file by hand.
+the in-game menus, others can only be changed by editing the file manually.
 
 If at any point you did something wrong, you can delete the old configuration
 file and just restart Warzone 2100. Then the game will regenerate a new
@@ -187,45 +187,45 @@ Notes: These options all have two dashes (--), not one dash only (-). Also,
 if the option has an argument, you need to separate the option and its argument
 with a '=' sign - spaces do not work.
 
-Note: Some options have corresponding entries in the configuration-file and will
+Note: Some options have corresponding entries in the configuration file and will
 persist from one start of Warzone 2100 to the next.
 
 Multiplaying via internet
 -------------------------
 
-There are two methods to start a multiplayer-game via internet: using the host's
-IP or using the lobby-server. Make sure to be able to communicate on TCP-ports
+There are two methods to start a multiplayer game via the internet: using the host's
+IP or using the lobby server. Make sure you are able to communicate on TCP ports
 2100 and 9999. Note that for port forwarding, you only need to configure your
 router to forward port 2100.
 
 You can choose whether to connect via Lobby or IP:
 
-* If you choose IP, Warzone 2100 asks you for the ip-address of the host and
+* If you choose IP, Warzone 2100 asks you for the IP address of the host and
   will try to connect to that IP.
 * If you choose Lobby, Warzone 2100 will connect to the lobby server, as long as
-  the lobby-server-address in your config-file has not been changed.
+  the lobby-server-address in your config file has not been changed.
 
-You will see a list of games from which you can select one.
+You will see a list of games from which you can select.
 
-You can kick unwanted players out of not-yet-started game by clicking left on
+You can kick unwanted players out of a game before it begins by clicking left on
 them while holding the right mouse button.
 
-When you are hosting a game it will automatically be listed on the lobby-server.
-If you do not want your games to be listed on the lobby-server, you have to
+When you are hosting a game it will automatically be listed on the lobby server.
+If you do not want your games to be listed on the lobby-server, you should
 change the entry "masterserver_name=lobby.wz2100.net" in your config to some-
-thing invalid as "nomasterserverplease".
+thing invalid, for example: "nomasterserverplease".
 
-If you then want to see the games that are listed on the lobby-server you may
+If you then want to see the games that are listed on the lobby server you may
 enter "lobby.wz2100.net" when prompted to enter the host's IP or change the
-entry in the config-file back. You will have to restart Warzone 2100 in order
-for config-changes to take effect.
+entry in the config file back. You will have to restart Warzone 2100 in order
+for config changes to take effect.
 
 Cheats
 ------
 
-Like many other games Warzone 2100 features a certain set of cheats that can be
+Like many other games, Warzone 2100 features a certain set of cheats that can be
 used to have an advantage in the singleplayer-campaign and skirmish-games, or to
-just help mod- and map-makers with testing. Cheats do not work in multiplayer,
+just help mod-makers and map-makers with testing. Cheats do not work in multiplayer,
 unless all players agree to it.
 
 Cheats are likely to contain or trigger bugs, so use with care, especially
@@ -234,7 +234,7 @@ during campaign.
 ### Entering cheat mode
 
 To be able cheats while in-game, press shift and backspace simultaneously.
-An on-screen message should appear telling you that cheat-mode has been enabled.
+An on-screen message should appear telling you that cheat mode has been enabled.
 You can disable it using the same key combination again.
 
 Pressing ctrl+o opens up the debug menu, which is useful for inspecting the
@@ -242,7 +242,7 @@ game state, or just messing around.
 
 ### Cheat commands
 
-After activating cheat-mode cheats can be entered using the normal chat-
+After activating cheat mode, cheats can be entered using the normal chat-
 function. Cheats are ordered by their use and where they can be used.
 
 There are many cheat commands. Some examples:
@@ -255,21 +255,21 @@ There are many cheat commands. Some examples:
 * `let me win` - You win the current campaign mission
 * `superpower` - Gives you maximum power
 * `teach us` - Gives experience to selected units
-* `makemehero` - Makes selected units Heros
-* `clone wars` - Clone selected units (x10)
-* `clone wars!` - Clone selected units (x40)
-* `clone wars!!` - Clone selected units (x135)
+* `makemehero` - Makes selected units Heroes
+* `clone wars` - Clones selected units (x10)
+* `clone wars!` - Clones selected units (x40)
+* `clone wars!!` - Clones selected units (x135)
 * `kill` - Kills selected object
 * `john kettley` - Toggles weather conditions
 * `get off my land` - Kills all enemy units and structures
-* `showfps` - Show average FPS
+* `showfps` - Shows average FPS
 * `reload me` - Reloads selected weapon instantly
 * `damage me` - Selected object takes 20% damage
 * `showunits` - Displays unit count information
 * `showorders` - Displays unit order/action state
-* `droidinfo` - Show unit stats
+* `droidinfo` - Shows unit stats
 
-All available commands can be found in the file: https://github.com/Warzone2100/warzone2100/blob/master/src/cheat.cpp
+All available commands can be found in this file: https://github.com/Warzone2100/warzone2100/blob/master/src/cheat.cpp
 
 Modding information
 -------------------
@@ -300,7 +300,7 @@ To properly build the game, either:
   ```
   > Note: Initializing submodules is required.
 
-Do **not** use GitHub's "Download Zip" option, as it does not contain submodules or the Git-based autorevision information.
+Do **not** use GitHub's "Download Zip" option, as it **does not contain submodules** or the Git-based autorevision information.
 
 ### Linux
 
@@ -334,18 +334,6 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       ```shell
       sudo ./get-dependencies_linux.sh ubuntu build-dependencies
       ```
-   * Manually (Ubuntu 18.04)+:
-     ```shell
-     sudo apt-get -u update
-     sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
-     sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev libfribidi-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
-     ```
-   * Manually (Fedora):
-     ```shell
-     sudo dnf -y update && dnf clean all
-     sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
-     sudo dnf -y install libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel fribidi harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel
-     ```
 * **Building from the command-line:**
    1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
       ```shell
@@ -369,10 +357,10 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
 ### Windows using MSVC
 
 * Prerequisites
-   * **Visual Studio 2019** (Visual Studio 2015-2017 may work, but 2019 is strongly encouraged)
+   * **Visual Studio 2022** (Visual Studio 2017-2019 may work, but 2022+ is strongly encouraged)
       - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
-   * **CMake 3.10+** (https://cmake.org/)
+   * **CMake 3.20+** (https://cmake.org/)
    * **Git** (if not building from a release source archive)
    * **7-Zip** (https://www.7-zip.org)
    * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
@@ -383,14 +371,14 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
 * **Building from the command-line:**
    * Change directory to the warzone2100 repo directory
    * Configure
+      * Visual Studio 2022: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 17 2022"`
       * Visual Studio 2019: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 16 2019"`
       * Visual Studio 2017: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 15 2017"`
-      * Visual Studio 2015: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 14 2015"`
    * Build
       * Release: `cmake --build build --config Release`
       * Debug: `cmake --build build --config Debug`
-* **Building using Visual Studio 2019:**
-   1. Open Visual Studio 2019
+* **Building using Visual Studio:**
+   1. Open Visual Studio
    2. Open the warzone2100 folder using **File** > **Open** > **Folder...**
       - Allow Visual Studio some time to load the project and retrieve information from CMake.
    3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**. You can also reach this dialog by clicking "Manage Configurations" in the configuration dropdown in the toolbar. Make sure the CMake components in Visual Studio are installed (by running the Visual Studio Installer).

@@ -25,6 +25,7 @@
 #include "png_util.h"
 
 #include <functional>
+#include <unordered_set>
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -54,6 +55,8 @@ void pie_TexInit();
 
 std::string pie_MakeTexPageName(const std::string& filename);
 std::string pie_MakeTexPageTCMaskName(const std::string& filename);
+
+bool debugReloadTexturesFromDisk(const std::unordered_set<size_t>& texPages);
 
 //*************************************************************************
 

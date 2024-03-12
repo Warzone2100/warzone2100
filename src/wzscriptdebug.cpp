@@ -37,6 +37,7 @@
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #if defined(_wz_restore_libintl_vsprintf)
 #  undef _wz_restore_libintl_vsprintf
@@ -75,6 +76,9 @@
 #include "multiint.h"
 #include "challenge.h"
 #include "multistat.h"
+#include "lighting.h"
+#include "texture.h"
+#include "warzoneconfig.h"
 
 #include "wzapi.h"
 #include "qtscript.h"
@@ -83,6 +87,7 @@
 #include <numeric>
 #include <algorithm>
 #include <limits>
+#include <tuple>
 
 static std::shared_ptr<W_SCREEN> debugScreen = nullptr;
 static std::shared_ptr<WZScriptDebugger> globalDialog = nullptr;
@@ -173,7 +178,7 @@ static RowDataModel fillMessageModel()
 	RowDataModel result(6);
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (const MESSAGE *psCurr = apsMessages[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (const MESSAGE *psCurr : apsMessages[i])
 		{
 			ASSERT(psCurr->type < msg_type.size(), "Bad message type");
 			ASSERT(psCurr->dataType < msg_data_type.size(), "Bad viewdata type");
@@ -350,6 +355,7 @@ nlohmann::ordered_json componentToString(const COMPONENT_STATS *psStats, int pla
 	nlohmann::ordered_json key = nlohmann::ordered_json::object();
 
 	key["Name"] = getStatsName(psStats);
+	key["NameLocalized"] = getLocalizedStatsName(psStats);
 	key["^Id"] = psStats->id.toUtf8();
 	key["^Power"] = psStats->buildPower;
 	key["^Build Points"] = psStats->buildPoints;
@@ -439,6 +445,7 @@ nlohmann::ordered_json componentToString(const COMPONENT_STATS *psStats, int pla
 			const WEAPON_STATS *psWeap = (const WEAPON_STATS *)psStats;
 			key["Max range"] = psWeap->upgrade[player].maxRange;
 			key["Min range"] = psWeap->upgrade[player].minRange;
+			key["EMP Radius"] = psWeap->upgrade[player].empRadius;
 			key["Radius"] = psWeap->upgrade[player].radius;
 			key["Number of Rounds"] = psWeap->upgrade[player].numRounds;
 			key["Damage"] = psWeap->upgrade[player].damage;
@@ -894,6 +901,494 @@ public:
 	std::shared_ptr<W_BUTTON> aiAttachButton;
 	std::shared_ptr<JSONTableWidget> table;
 	bool readOnly = false;
+};
+
+// MARK: - WzGraphicsPanel
+
+class WzGraphicsPanel : public W_FORM
+{
+public:
+	WzGraphicsPanel(): W_FORM() {}
+	~WzGraphicsPanel() {}
+public:
+	virtual void display(int xOffset, int yOffset) override { }
+	virtual void geometryChanged() override {}
+public:
+	static std::shared_ptr<WzGraphicsPanel> make()
+	{
+		auto panel = std::make_shared<WzGraphicsPanel>();
+
+		auto prevButton = panel->createButton(0, "Reload terrain & water textures", [](){
+			loadTerrainTextures(currentMapTileset);
+			debug(LOG_INFO, "Done");
+		});
+		prevButton = panel->createButton(0, "Reload decals", [](){
+			reloadTileTextures();
+			debug(LOG_INFO, "Done");
+		}, prevButton);
+		prevButton = panel->createButton(0, "Reload model textures", [](){
+			debug(LOG_INFO, "Reloading all model textures");
+			modelReloadAllModelTextures();
+			debug(LOG_INFO, "Done");
+		}, prevButton);
+
+		prevButton = panel->createButton(1, "Recompile All Shaders", [](){
+			debug(LOG_INFO, "Recompiling all shader pipelines");
+			gfx_api::context::get().debugRecompileAllPipelines();
+			debug(LOG_INFO, "Done");
+		});
+		prevButton =panel->createButton(1, "Recompile terrainCombined", [](){
+			debug(LOG_INFO, "Recompiling terrainCombined");
+			switch (getTerrainShaderQuality())
+			{
+				case TerrainShaderQuality::CLASSIC:
+					gfx_api::TerrainCombined_Classic::get().recompile();
+					break;
+				case TerrainShaderQuality::MEDIUM:
+					gfx_api::TerrainCombined_Medium::get().recompile();
+					break;
+				case TerrainShaderQuality::NORMAL_MAPPING:
+					gfx_api::TerrainCombined_High::get().recompile();
+					break;
+				case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+					break;
+			}
+			debug(LOG_INFO, "Done");
+		}, prevButton);
+		prevButton = panel->createButton(1, "Recompile water", [](){
+			debug(LOG_INFO, "Recompiling water");
+			switch (getTerrainShaderQuality())
+			{
+				case TerrainShaderQuality::CLASSIC:
+					gfx_api::WaterClassicPSO::get().recompile();
+					break;
+				case TerrainShaderQuality::MEDIUM:
+					gfx_api::WaterPSO::get().recompile();
+					break;
+				case TerrainShaderQuality::NORMAL_MAPPING:
+					gfx_api::WaterHighPSO::get().recompile();
+					break;
+				case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+					break;
+			}
+			debug(LOG_INFO, "Done");
+		}, prevButton);
+
+		prevButton = panel->createButton(2, "Rotate sun", [](){
+			auto newSun = glm::rotate(getTheSun(), glm::pi<float>()/10.f, glm::vec3(0,1,0));
+			setTheSun(newSun);
+			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
+		});
+
+		auto dropdownWidget = panel->makeTerrainQualityDropdown(3);
+
+		auto pWeakTerrainQualityDropdown = std::weak_ptr<DropdownWidget>(dropdownWidget);
+		prevButton = panel->createButton(3, "Toggle Old / New Shaders", [pWeakTerrainQualityDropdown](){
+			if (debugToggleTerrainShaderType())
+			{
+				auto updateMsg = std::string("Switched terrain shader type to: ") + ((getTerrainShaderType() == TerrainShaderType::SINGLE_PASS) ? "New Shader (Single-Pass)" : "Old (Fallback) Shader");
+				addConsoleMessage(updateMsg.c_str(), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+
+				if (auto pStrongDropdown = pWeakTerrainQualityDropdown.lock())
+				{
+					pStrongDropdown->setSelectedIndex(static_cast<size_t>(getTerrainShaderQuality()));
+				}
+			}
+		}, dropdownWidget);
+
+		auto shadowsLabel = panel->createLabel(4, font_regular_bold, "Shadow Mapping:");
+		auto shadowFilterDropdownWidget = panel->makeShadowFilterSizeDropdown(4, shadowsLabel);
+		panel->makeShadowMapResolutionDropdown(4, shadowFilterDropdownWidget);
+
+		panel->makeShadowCascadesDropdown(5, shadowsLabel);
+
+		auto shadowModeDropdownWidget = panel->makeShadowModeDropdown(6);
+
+		return panel;
+	}
+private:
+	std::shared_ptr<WIDGET> createButton(int row, const std::string &text, const std::function<void ()>& onClickFunc, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		auto button = makeDebugButton(text.c_str());
+		button->setGeometry(button->x(), button->y(), button->width() + 10, button->height());
+		attach(button);
+		button->addOnClickHandler([onClickFunc](W_BUTTON& button) {
+			widgScheduleTask([onClickFunc](){
+				onClickFunc();
+			});
+		});
+
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+		button->move((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, (row * (button->height() + ACTION_BUTTON_ROW_SPACING)));
+
+		return button;
+	}
+
+	std::shared_ptr<W_LABEL> createLabel(int row, iV_fonts font, WzString str, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+
+		int yPos = (row * (TAB_BUTTONS_HEIGHT + ACTION_BUTTON_ROW_SPACING));
+
+		auto contextLabel = std::make_shared<W_LABEL>();
+		contextLabel->setFont(font, WZCOL_FORM_TEXT);
+		contextLabel->setString(str);
+		contextLabel->setGeometry((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, yPos, contextLabel->getMaxLineWidth() /*+ 10*/, TAB_BUTTONS_HEIGHT);
+		contextLabel->setCacheNeverExpires(true);
+		attach(contextLabel);
+
+		return contextLabel;
+	}
+
+	std::shared_ptr<DropdownWidget> makeTerrainQualityDropdown(int row, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+
+		std::vector<std::tuple<WzString, TerrainShaderQuality>> dropDownChoices = {
+			{WzString::fromUtf8(to_display_string(TerrainShaderQuality::CLASSIC)), TerrainShaderQuality::CLASSIC},
+			{WzString::fromUtf8(to_display_string(TerrainShaderQuality::MEDIUM)), TerrainShaderQuality::MEDIUM},
+			{WzString::fromUtf8(to_display_string(TerrainShaderQuality::NORMAL_MAPPING)), TerrainShaderQuality::NORMAL_MAPPING}
+		};
+
+		size_t currentSettingIdx = 0;
+		auto currValue = getTerrainShaderQuality();
+		auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, TerrainShaderQuality>& item) -> bool {
+			return std::get<1>(item) == currValue;
+		});
+		if (it != dropDownChoices.end())
+		{
+			currentSettingIdx = it - dropDownChoices.begin();
+		}
+
+		int yPos = (row * (TAB_BUTTONS_HEIGHT + ACTION_BUTTON_ROW_SPACING));
+
+		auto contextLabel = std::make_shared<W_LABEL>();
+		contextLabel->setFont(font_regular_bold, WZCOL_FORM_TEXT);
+		contextLabel->setString("Terrain Quality:");
+		contextLabel->setGeometry((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, yPos, contextLabel->getMaxLineWidth() + 10, TAB_BUTTONS_HEIGHT);
+		contextLabel->setCacheNeverExpires(true);
+		attach(contextLabel);
+
+		auto dropdown = std::make_shared<DropdownWidget>();
+		dropdown->id = FRONTEND_TERRAIN_QUALITY_R;
+		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+		attach(dropdown);
+		for (const auto& option : dropDownChoices)
+		{
+			WzString buttonLabel = std::get<0>(option);
+			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			if (!isSupportedTerrainShaderQualityOption(std::get<1>(option)))
+			{
+				button->setState(WBUT_DISABLE);
+			}
+			dropdown->addItem(button);
+		}
+
+		dropdown->setSelectedIndex(currentSettingIdx);
+
+		dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+			ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+			auto newMode = std::get<1>(dropDownChoices.at(newIndex));
+			if (!isSupportedTerrainShaderQualityOption(newMode))
+			{
+				return false;
+			}
+			if (!setTerrainShaderQuality(newMode))
+			{
+				debug(LOG_ERROR, "Failed to set terrain shader quality: %s", to_display_string(newMode).c_str());
+				return false;
+			}
+			return true;
+		});
+
+		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
+		dropdown->setGeometry(contextDropdownX0, yPos, dropdown->idealWidth() + ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
+
+		return dropdown;
+	}
+
+	std::shared_ptr<DropdownWidget> makeShadowModeDropdown(int row, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+
+		std::vector<std::tuple<WzString, ShadowMode>> dropDownChoices = {
+			{WzString::fromUtf8("Fallback Stencil"), ShadowMode::Fallback_Stencil_Shadows},
+			{WzString::fromUtf8("Shadow Mapping"), ShadowMode::Shadow_Mapping}
+		};
+
+		size_t currentSettingIdx = 0;
+		auto currValue = pie_getShadowMode();
+		auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, ShadowMode>& item) -> bool {
+			return std::get<1>(item) == currValue;
+		});
+		if (it != dropDownChoices.end())
+		{
+			currentSettingIdx = it - dropDownChoices.begin();
+		}
+
+		int yPos = (row * (TAB_BUTTONS_HEIGHT + ACTION_BUTTON_ROW_SPACING));
+
+		auto contextLabel = std::make_shared<W_LABEL>();
+		contextLabel->setFont(font_regular_bold, WZCOL_FORM_TEXT);
+		contextLabel->setString("Shadows Mode:");
+		contextLabel->setGeometry((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, yPos, contextLabel->getMaxLineWidth() + 10, TAB_BUTTONS_HEIGHT);
+		contextLabel->setCacheNeverExpires(true);
+		attach(contextLabel);
+
+		auto dropdown = std::make_shared<DropdownWidget>();
+		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+		attach(dropdown);
+		for (const auto& option : dropDownChoices)
+		{
+			WzString buttonLabel = std::get<0>(option);
+			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			if (std::get<1>(option) == ShadowMode::Shadow_Mapping && !pie_supportsShadowMapping().value_or(false))
+			{
+				button->setState(WBUT_DISABLE);
+			}
+			dropdown->addItem(button);
+		}
+
+		dropdown->setSelectedIndex(currentSettingIdx);
+
+		dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+			ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+			auto newMode = std::get<1>(dropDownChoices.at(newIndex));
+			if (!pie_setShadowMode(newMode))
+			{
+				debug(LOG_ERROR, "Failed to set shadows mode: %u", (unsigned int)newMode);
+				return false;
+			}
+			return true;
+		});
+
+		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
+		dropdown->setGeometry(contextDropdownX0, yPos, dropdown->idealWidth() + ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
+
+		return dropdown;
+	}
+
+	std::shared_ptr<DropdownWidget> makeShadowFilterSizeDropdown(int row, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+
+		std::vector<std::tuple<WzString, uint32_t>> dropDownChoices = {
+			{WzString::fromUtf8("Low (3x3)"), 3},
+			{WzString::fromUtf8("High (5x5)"), 5},
+			{WzString::fromUtf8("Ultra (7x7)"), 7}
+		};
+
+		// If current value is not one of the presets in dropDownChoices, add a "Custom" entry
+		size_t currentSettingIdx = 0;
+		uint32_t currValue = gfx_api::context::get().getShadowConstants().shadowFilterSize;
+		auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, uint32_t>& item) -> bool {
+			return std::get<1>(item) == currValue;
+		});
+		if (it != dropDownChoices.end())
+		{
+			currentSettingIdx = it - dropDownChoices.begin();
+		}
+		else
+		{
+			dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+			currentSettingIdx = dropDownChoices.size() - 1;
+		}
+
+		int yPos = (row * (TAB_BUTTONS_HEIGHT + ACTION_BUTTON_ROW_SPACING));
+
+		auto contextLabel = std::make_shared<W_LABEL>();
+		contextLabel->setFont(font_regular, WZCOL_FORM_TEXT);
+		contextLabel->setString("Filtering:");
+		contextLabel->setGeometry((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, yPos, contextLabel->getMaxLineWidth() + 10, TAB_BUTTONS_HEIGHT);
+		contextLabel->setCacheNeverExpires(true);
+		attach(contextLabel);
+
+		auto dropdown = std::make_shared<DropdownWidget>();
+		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+		attach(dropdown);
+		for (const auto& option : dropDownChoices)
+		{
+			WzString buttonLabel = std::get<0>(option);
+			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			bool supportedFilterSize = pie_supportsShadowMapping().value_or(false);
+			if (!supportedFilterSize)
+			{
+				button->setState(WBUT_DISABLE);
+			}
+			dropdown->addItem(button);
+		}
+
+		dropdown->setSelectedIndex(currentSettingIdx);
+
+		dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+			ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+			auto newFilterSize = std::get<1>(dropDownChoices.at(newIndex));
+			if (!pie_supportsShadowMapping().value_or(false))
+			{
+				return false;
+			}
+			auto shadowConstants = gfx_api::context::get().getShadowConstants();
+			shadowConstants.shadowFilterSize = newFilterSize;
+			if (!gfx_api::context::get().setShadowConstants(shadowConstants))
+			{
+				debug(LOG_ERROR, "Failed to set shadow filter size: %" PRIu32, newFilterSize);
+				return false;
+			}
+			war_setShadowFilterSize(newFilterSize); // persist to config
+			return true;
+		});
+
+		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
+		dropdown->setGeometry(contextDropdownX0, yPos, dropdown->idealWidth() + ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
+
+		return dropdown;
+	}
+
+	std::shared_ptr<DropdownWidget> makeShadowCascadesDropdown(int row, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+
+		std::vector<std::tuple<WzString, uint32_t>> dropDownChoices = {
+			{WzString::fromUtf8("Medium (2)"), 2},
+			{WzString::fromUtf8("Highest (3)"), 3}
+		};
+
+		// If current value is not one of the presets in dropDownChoices, add a "Custom" entry
+		size_t currentSettingIdx = 0;
+		uint32_t currValue = pie_getShadowCascades();
+		auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, uint32_t>& item) -> bool {
+			return std::get<1>(item) == currValue;
+		});
+		if (it != dropDownChoices.end())
+		{
+			currentSettingIdx = it - dropDownChoices.begin();
+		}
+		else
+		{
+			dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+			currentSettingIdx = dropDownChoices.size() - 1;
+		}
+
+		int yPos = (row * (TAB_BUTTONS_HEIGHT + ACTION_BUTTON_ROW_SPACING));
+
+		auto contextLabel = std::make_shared<W_LABEL>();
+		contextLabel->setFont(font_regular, WZCOL_FORM_TEXT);
+		contextLabel->setString("Cascades:");
+		contextLabel->setGeometry((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, yPos, contextLabel->getMaxLineWidth() + 10, TAB_BUTTONS_HEIGHT);
+		contextLabel->setCacheNeverExpires(true);
+		attach(contextLabel);
+
+		auto dropdown = std::make_shared<DropdownWidget>();
+		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+		attach(dropdown);
+		for (const auto& option : dropDownChoices)
+		{
+			WzString buttonLabel = std::get<0>(option);
+			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			bool supportedCascadeValue = pie_supportsShadowMapping().value_or(false);
+			if (!supportedCascadeValue)
+			{
+				button->setState(WBUT_DISABLE);
+			}
+			dropdown->addItem(button);
+		}
+
+		dropdown->setSelectedIndex(currentSettingIdx);
+
+		dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+			ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+			auto newCascadesCount = std::get<1>(dropDownChoices.at(newIndex));
+			if (!pie_supportsShadowMapping().value_or(false))
+			{
+				return false;
+			}
+			if (!pie_setShadowCascades(newCascadesCount))
+			{
+				debug(LOG_ERROR, "Failed to set shadow cascades: %" PRIu32, newCascadesCount);
+				return false;
+			}
+			// Possible Future TODO: could persist to config (if this proves useful beyond debugging and testing)
+			return true;
+		});
+
+		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
+		dropdown->setGeometry(contextDropdownX0, yPos, dropdown->idealWidth() + ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
+
+		return dropdown;
+	}
+
+	std::shared_ptr<DropdownWidget> makeShadowMapResolutionDropdown(int row, const std::shared_ptr<WIDGET>& previousButton = nullptr)
+	{
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+
+		std::vector<std::tuple<WzString, uint32_t>> dropDownChoices = {
+			{WzString::fromUtf8("Normal (2048)"), 2048},
+			{WzString::fromUtf8("High (4096)"), 4096}
+		};
+
+		// If current value is not one of the presets in dropDownChoices, add a "Custom" entry
+		size_t currentSettingIdx = 0;
+		uint32_t currValue = pie_getShadowMapResolution();
+		auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, uint32_t>& item) -> bool {
+			return std::get<1>(item) == currValue;
+		});
+		if (it != dropDownChoices.end())
+		{
+			currentSettingIdx = it - dropDownChoices.begin();
+		}
+		else
+		{
+			dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %" PRIu32 ")", currValue)), currValue});
+			currentSettingIdx = dropDownChoices.size() - 1;
+		}
+
+		int yPos = (row * (TAB_BUTTONS_HEIGHT + ACTION_BUTTON_ROW_SPACING));
+
+		auto contextLabel = std::make_shared<W_LABEL>();
+		contextLabel->setFont(font_regular, WZCOL_FORM_TEXT);
+		contextLabel->setString("Resolution:");
+		contextLabel->setGeometry((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, yPos, contextLabel->getMaxLineWidth() + 10, TAB_BUTTONS_HEIGHT);
+		contextLabel->setCacheNeverExpires(true);
+		attach(contextLabel);
+
+		auto dropdown = std::make_shared<DropdownWidget>();
+		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+		attach(dropdown);
+		for (const auto& option : dropDownChoices)
+		{
+			WzString buttonLabel = std::get<0>(option);
+			auto button = makeDebugButton(buttonLabel.toUtf8().c_str());
+			bool supportedResolution = pie_supportsShadowMapping().value_or(false);
+			if (!supportedResolution)
+			{
+				button->setState(WBUT_DISABLE);
+			}
+			dropdown->addItem(button);
+		}
+
+		dropdown->setSelectedIndex(currentSettingIdx);
+
+		dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+			ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+			auto newResolution = std::get<1>(dropDownChoices.at(newIndex));
+			if (!pie_supportsShadowMapping().value_or(false))
+			{
+				return false;
+			}
+			if (!pie_setShadowMapResolution(newResolution))
+			{
+				debug(LOG_ERROR, "Failed to set map resolution: %" PRIu32, newResolution);
+				return false;
+			}
+			war_setShadowMapResolution(newResolution); // persist to config
+			return true;
+		});
+
+		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
+		dropdown->setGeometry(contextDropdownX0, yPos, dropdown->idealWidth() + ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
+
+		return dropdown;
+	}
 };
 
 // MARK: - WzScriptContextsPanel
@@ -1897,6 +2392,9 @@ void WZScriptDebugger::switchPanel(WZScriptDebugger::ScriptDebuggerPanel newPane
 		case ScriptDebuggerPanel::Labels:
 			psPanel = createLabelsPanel();
 			break;
+		case ScriptDebuggerPanel::Graphics:
+			psPanel = createGraphicsPanel();
+			break;
 		default:
 			debug(LOG_ERROR, "Panel not implemented yet");
 			break;
@@ -1958,6 +2456,11 @@ void WZScriptDebugger::display(int xOffset, int yOffset)
 std::shared_ptr<W_FORM> WZScriptDebugger::createMainPanel()
 {
 	return WzMainPanel::make(readOnly);
+}
+
+std::shared_ptr<W_FORM> WZScriptDebugger::createGraphicsPanel()
+{
+	return WzGraphicsPanel::make();
 }
 
 std::shared_ptr<WIDGET> WZScriptDebugger::createSelectedPanel()
@@ -2066,6 +2569,7 @@ std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<s
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Triggers, "Triggers");
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Messages, "Messages");
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Labels, "Labels");
+	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Graphics, "Graphics");
 	result->pageTabs->addOnChooseHandler([](MultibuttonWidget& widget, int newValue){
 		// Switch actively-displayed "tab"
 		widgScheduleTask([newValue](){
@@ -2146,7 +2650,7 @@ void WZScriptDebugger::selected(const BASE_OBJECT *psObj)
 		{
 			if (psObj->asWeaps[i].nStat > 0)
 			{
-				WEAPON_STATS *psWeap = asWeaponStats + psObj->asWeaps[i].nStat;
+				WEAPON_STATS *psWeap = &asWeaponStats[psObj->asWeaps[i].nStat];
 				auto component = componentToString(psWeap, psObj->player);
 				component["Ammo"] = psObj->asWeaps[i].ammo;
 				component["Last fired time"] = psObj->asWeaps[i].lastFired;
@@ -2190,13 +2694,13 @@ void WZScriptDebugger::selected(const BASE_OBJECT *psObj)
 			selectedObjectDetails["Move pause time"] = psDroid->sMove.pauseTime;
 			selectedObjectDetails["Move shuffle start"] = psDroid->sMove.shuffleStart;
 			selectedObjectDetails["Move vert speed"] = psDroid->sMove.iVertSpeed;
-			selectedObjectDetails["Body"] = componentToString(asBodyStats + psDroid->asBits[COMP_BODY], psObj->player);
-			selectedObjectDetails["Brain"] = componentToString(asBrainStats + psDroid->asBits[COMP_BRAIN], psObj->player);
-			selectedObjectDetails["Propulsion"] = componentToString(asPropulsionStats + psDroid->asBits[COMP_PROPULSION], psObj->player);
-			selectedObjectDetails["ECM"] = componentToString(asECMStats + psDroid->asBits[COMP_ECM], psObj->player);
-			selectedObjectDetails["Sensor"] = componentToString(asSensorStats + psDroid->asBits[COMP_SENSOR], psObj->player);
-			selectedObjectDetails["Construct"] = componentToString(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psObj->player);
-			selectedObjectDetails["Repair"] = componentToString(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT], psObj->player);
+			selectedObjectDetails["Body"] = componentToString(psDroid->getBodyStats(), psObj->player);
+			selectedObjectDetails["Brain"] = componentToString(psDroid->getBrainStats(), psObj->player);
+			selectedObjectDetails["Propulsion"] = componentToString(psDroid->getPropulsionStats(), psObj->player);
+			selectedObjectDetails["ECM"] = componentToString(psDroid->getECMStats(), psObj->player);
+			selectedObjectDetails["Sensor"] = componentToString(psDroid->getSensorStats(), psObj->player);
+			selectedObjectDetails["Construct"] = componentToString(psDroid->getConstructStats(), psObj->player);
+			selectedObjectDetails["Repair"] = componentToString(psDroid->getRepairStats(), psObj->player);
 		}
 		else if (psObj->type == OBJ_STRUCTURE)
 		{

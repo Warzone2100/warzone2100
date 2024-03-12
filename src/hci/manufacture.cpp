@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2021-2023  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
@@ -14,7 +33,7 @@ static const uint8_t commandBrainComponent = 1; // hmm there is only 1 "CommandB
 
 FACTORY *getFactoryOrNullptr(STRUCTURE *factory)
 {
-	ASSERT_OR_RETURN(nullptr, StructIsFactory(factory), "Invalid factory pointer");
+	ASSERT_OR_RETURN(nullptr, factory && factory->isFactory(), "Invalid factory pointer");
 	return (FACTORY *)factory->pFunctionality;
 }
 
@@ -119,11 +138,15 @@ void ManufactureController::updateFactoriesList()
 {
 	factories.clear();
 
-	for (auto structure = interfaceStructList(); structure != nullptr; structure = structure->psNext)
+	auto* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		if (structure->status == SS_BUILT && structure->died == 0 && StructIsFactory(structure))
+		for (auto structure : *intStrList)
 		{
-			factories.push_back(structure);
+			if (structure->status == SS_BUILT && structure->died == 0 && structure->isFactory())
+			{
+				factories.push_back(structure);
+			}
 		}
 	}
 
@@ -174,7 +197,7 @@ void ManufactureController::setHighlightedObject(BASE_OBJECT *object)
 	}
 
 	auto factory = castStructure(object);
-	ASSERT_OR_RETURN(, StructIsFactory(factory), "Invalid factory pointer");
+	ASSERT_OR_RETURN(, factory && factory->isFactory(), "Invalid factory pointer");
 	highlightedFactory = factory;
 }
 
@@ -253,7 +276,7 @@ protected:
 	{
 		auto factory = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN("", factory);
-		return getStatsName(factory->pStructureType);
+		return getLocalizedStatsName(factory->pStructureType);
 	}
 
 	ManufactureController &getController() const override
@@ -324,7 +347,7 @@ protected:
 			// not showing icon when nothing is being built
 			return;
 		}
-		if (factory->pFunctionality->factory.psSubject->droidType == DROID_COMMAND)
+		if (factory->pFunctionality->factory.psSubject->droidType == DROID_COMMAND || factory->pFunctionality->factory.psSubject->droidType == DROID_SENSOR)
 		{
 			lvl = getDroidLevel(exp, player, commandBrainComponent);
 		}
@@ -436,7 +459,7 @@ private:
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto factory = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
@@ -540,7 +563,7 @@ private:
 		adjustFactoryProduction(true);
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		adjustFactoryProduction(false);
 	}

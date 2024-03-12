@@ -35,6 +35,7 @@ enum DATA_INDEX
 	WD_STR_LOST,
 	WD_ARTEFACTS_FOUND,
 	WD_MISSION_STARTED,
+	WD_MISSION_ENDED,
 	WD_SHOTS_ON_TARGET,
 	WD_SHOTS_OFF_TARGET,
 	WD_BARBARIANS_MOWED_DOWN
@@ -52,6 +53,7 @@ struct MISSION_DATA
 	uint32_t    strLost;		// How many structures were lost
 	uint32_t    artefactsFound;	// How many artefacts were found
 	uint32_t    missionStarted;	// When was the mission started
+	uint32_t    missionEnded;	// When was the mission ended
 	uint32_t    shotsOnTarget;	// How many hits
 	uint32_t    shotsOffTarget;	// How many misses
 	uint32_t    babasMowedDown; // How many barbarians did we mow down?
@@ -117,7 +119,7 @@ bool scoreInitSystem();
 void scoreUpdateVar(DATA_INDEX var);
 END_GAME_STATS_DATA	collectEndGameStatsData();
 void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache);
-void getAsciiTime(char *psText, unsigned time);
+void getAsciiTime(char *psText, unsigned time, bool showMs = false);
 bool readScoreData(const char *fileName);
 bool writeScoreData(const char *fileName);
 

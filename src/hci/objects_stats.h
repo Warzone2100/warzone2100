@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2021-2023  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #ifndef __INCLUDED_SRC_HCI_OBJECTS_STATS_INTERFACE_H__
 #define __INCLUDED_SRC_HCI_OBJECTS_STATS_INTERFACE_H__
 
@@ -99,8 +118,11 @@ protected:
 	virtual void updateLayout();
 	void updateHighlight();
 	virtual void clickPrimary() {}
-	virtual void clickSecondary() {}
+	virtual void clickSecondary(bool synthesizedFromHold) {}
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override;
+	bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key) override;
+public:
+	DynamicIntFancyButton();
 };
 
 class StatsButton: public DynamicIntFancyButton
@@ -111,7 +133,7 @@ protected:
 	std::string getTip() override
 	{
 		auto stats = getStats();
-		return stats == nullptr ? "": getStatsName(stats);
+		return stats == nullptr ? "": getLocalizedStatsName(stats);
 	}
 
 	void addProgressBar();
@@ -135,7 +157,7 @@ protected:
 	virtual BaseObjectsController &getController() const = 0;
 	virtual void jump();
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		jump();
 	}
@@ -156,7 +178,7 @@ protected:
 	{
 		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), getCost()));
 		auto stats = getStats();
-		WzString tipString = (stats == nullptr) ? "" : getStatsName(stats);
+		WzString tipString = (stats == nullptr) ? "" : getLocalizedStatsName(stats);
 		tipString.append("\n");
 		tipString.append(costString);
 		return tipString.toUtf8();

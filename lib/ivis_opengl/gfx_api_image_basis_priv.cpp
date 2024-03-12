@@ -36,6 +36,7 @@ static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_
 static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_AlphaMask = {nullopt};
 static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_NormalMap = {nullopt};
 static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_SpecularMap = {nullopt};
+static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> bestAvailableBasisCompressionFormat_HeightMap = {nullopt};
 
 // MARK: - Basis Universal transcoder implementation
 
@@ -58,8 +59,6 @@ static std::array<optional<gfx_api::pixel_format>, gfx_api::PIXEL_FORMAT_TARGET_
 #elif defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
-
-#define WZ_BASIS_UNCOMPRESSED_FORMAT gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8
 
 static optional<basist::transcoder_texture_format> to_basis_format(gfx_api::pixel_format desiredFormat)
 {
@@ -186,6 +185,7 @@ void gfx_api::initBasisTranscoder()
 
 		// gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
 		// gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
+		// gfx_api::texture_type::height_map:	// a single-channel texture, containing the height value
 			// Is is expected that for either of the above, the single-channel value is stored in the R (and possibly GB) channels
 		// Overall quality rankings: FORMAT_R11_EAC (4bpp) > FORMAT_R_BC4_UNORM (4bpp)
 		constexpr std::array<gfx_api::pixel_format, 3> qualityOrderR = { gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM, gfx_api::pixel_format::FORMAT_R11_EAC, gfx_api::pixel_format::FORMAT_R_BC4_UNORM };
@@ -199,11 +199,13 @@ void gfx_api::initBasisTranscoder()
 			{
 				bestAvailableBasisCompressionFormat_AlphaMask[target_idx] = format;
 				bestAvailableBasisCompressionFormat_SpecularMap[target_idx] = format;
+				bestAvailableBasisCompressionFormat_HeightMap[target_idx] = format;
 				break;
 			}
 		}
 		debug(LOG_3D, "  * AlphaMask: %s", (bestAvailableBasisCompressionFormat_AlphaMask[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_AlphaMask[target_idx].value()) : "<none>");
 		debug(LOG_3D, "  * SpecularMap: %s", (bestAvailableBasisCompressionFormat_SpecularMap[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_SpecularMap[target_idx].value()) : "<none>");
+		debug(LOG_3D, "  * HeightMap: %s", (bestAvailableBasisCompressionFormat_HeightMap[target_idx].has_value()) ? gfx_api::format_to_str(bestAvailableBasisCompressionFormat_HeightMap[target_idx].value()) : "<none>");
 	}
 }
 
@@ -240,6 +242,8 @@ static optional<gfx_api::pixel_format> getBestAvailableTranscodeFormatForBasisFi
 			return bestAvailableBasisCompressionFormat_NormalMap[target_idx];
 		case gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
 			return bestAvailableBasisCompressionFormat_SpecularMap[target_idx];
+		case gfx_api::texture_type::height_map:	// a single-channel texture, containing the height values
+			return bestAvailableBasisCompressionFormat_HeightMap[target_idx];
 		default:
 			// unsupported
 			break;
@@ -264,6 +268,8 @@ optional<gfx_api::pixel_format> gfx_api::getBestAvailableTranscodeFormatForBasis
 			return bestAvailableBasisCompressionFormat_NormalMap[static_cast<size_t>(target)];
 		case gfx_api::texture_type::specular_map: // a single-channel texture, containing the specular / luma value
 			return bestAvailableBasisCompressionFormat_SpecularMap[static_cast<size_t>(target)];
+		case gfx_api::texture_type::height_map:	// a single-channel texture, containing the height values
+			return bestAvailableBasisCompressionFormat_HeightMap[static_cast<size_t>(target)];
 		default:
 			// unsupported
 			break;
@@ -272,16 +278,25 @@ optional<gfx_api::pixel_format> gfx_api::getBestAvailableTranscodeFormatForBasis
 	return nullopt;
 }
 
-static bool iVImage_Basis_Convert_Channels(gfx_api::texture_type textureType, std::unique_ptr<iV_Image>& uncompressedImage)
+static bool iVImage_Basis_Convert_Channels(gfx_api::pixel_format_target target, gfx_api::texture_type textureType, std::unique_ptr<iV_Image>& uncompressedImage)
 {
 	// Convert to expected # (and arrangement) of channels based on textureType
 	switch (textureType)
 	{
 		case gfx_api::texture_type::specular_map:
 		case gfx_api::texture_type::alpha_mask:
+		case gfx_api::texture_type::height_map:
 			// extract single channel (should always be in R)
 			return uncompressedImage->convert_to_single_channel(0);
-		// TODO: Normal map
+		case gfx_api::texture_type::normal_map:
+			// TODO: the following must match how the build process encodes normal maps - currently, this assumes they are just encoded as RGBA (with no swizzling)
+			if (uncompressedImage->channels() > 3)
+			{
+				if (gfx_api::context::get().textureFormatIsSupported(target, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, gfx_api::pixel_format_usage::flags::sampled_image))
+				{
+					return uncompressedImage->convert_channels({0,1,2});
+				}
+			}
 		default:
 			break;
 	}
@@ -394,7 +409,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 			ASSERT_OR_RETURN({}, format == basist::transcoder_texture_format::cTFRGBA32, "Unsupported uncompressed format: %u", (unsigned)format);
 			numBlocksOrPixels = level_info.m_orig_width * level_info.m_orig_height;
 
-			uncompressedOutput = std::unique_ptr<iV_Image>(new iV_Image());
+			uncompressedOutput = std::make_unique<iV_Image>();
 			if (!uncompressedOutput->allocate(level_info.m_orig_width, level_info.m_orig_height, 4, false)) // hard-coded for RGBA32 for now
 			{
 				debug(LOG_ERROR, "Failed to allocate memory for uncompressed image buffer");
@@ -406,7 +421,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 			numBlocksOrPixels = level_info.m_total_blocks;
 			uint32_t outputSize = numBlocksOrPixels * bytes_per_block_or_pixel;
 
-			compressedOutput = std::unique_ptr<iV_CompressedImage>(new iV_CompressedImage());
+			compressedOutput = std::make_unique<iV_CompressedImage>();
 			if (!compressedOutput->allocate(internalFormat, outputSize, level_info.m_width, level_info.m_height, level_info.m_orig_width, level_info.m_orig_height, false))
 			{
 				debug(LOG_ERROR, "Failed to allocate memory for buffer");
@@ -433,7 +448,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 		if (basist::basis_transcoder_format_is_uncompressed(format))
 		{
 			// Convert to expected # (and arrangement) of channels based on textureType
-			iVImage_Basis_Convert_Channels(textureType, uncompressedOutput);
+			iVImage_Basis_Convert_Channels(target, textureType, uncompressedOutput);
 			if (desiredFormat.has_value())
 			{
 				ASSERT(uncompressedOutput->pixel_format() == desiredFormat.value(), "Input desiredFormat (%d) does not match converted output format (%d)", static_cast<int>(desiredFormat.value()), static_cast<int>(uncompressedOutput->pixel_format()));
@@ -518,12 +533,12 @@ gfx_api::texture* gfx_api::loadImageTextureFromFile_KTX2(const std::string& file
 	return pTexture.release();
 }
 
-std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile_KTX2(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile_KTX2(const std::string& filename, gfx_api::texture_type textureType, gfx_api::pixel_format_target target, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	uint32_t maxWidth_u32 = (maxWidth > 0) ? static_cast<uint32_t>(maxWidth) : UINT32_MAX;
 	uint32_t maxHeight_u32 = (maxHeight > 0) ? static_cast<uint32_t>(maxHeight) : UINT32_MAX;
 
-	auto images = loadiVImagesFromFile_Basis_internal(filename.c_str(), textureType, gfx_api::pixel_format_target::texture_2d /* value doesn't actually matter since we are passing an explicit format */, WZ_BASIS_UNCOMPRESSED_FORMAT, maxWidth_u32, maxHeight_u32, 1);
+	auto images = loadiVImagesFromFile_Basis_internal(filename.c_str(), textureType, target, WZ_BASIS_UNCOMPRESSED_FORMAT, maxWidth_u32, maxHeight_u32, 1);
 	if (images.empty())
 	{
 		// Failed to load

@@ -286,7 +286,7 @@ static std::unique_ptr<iV_CompressedImage> compressImageEtcPak(const iV_Image& i
 
 	size_t outputSize = gfx_api::format_memory_size(desiredFormat, originalWidth, originalHeight);
 
-	std::unique_ptr<iV_CompressedImage> compressedOutput = std::unique_ptr<iV_CompressedImage>(new iV_CompressedImage());
+	std::unique_ptr<iV_CompressedImage> compressedOutput = std::make_unique<iV_CompressedImage>();
 	if (!compressedOutput->allocate(desiredFormat, outputSize, alignedWidth, alignedHeight, originalWidth, originalHeight, false))
 	{
 		debug(LOG_ERROR, "Failed to allocate memory for buffer");
@@ -377,7 +377,9 @@ optional<gfx_api::pixel_format> gfx_api::bestRealTimeCompressionFormat(gfx_api::
 		case gfx_api::texture_type::game_texture: // a RGB / RGBA texture, possibly stored in a compressed format
 			// Since we don't have an image, to check whether it's actually RGB (no alpha), we have to err on the side of RGBA
 			return bestAvailableCompressionFormat_GameTextureRGBA[target_idx];
+		case gfx_api::texture_type::specular_map:
 		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
+		case gfx_api::texture_type::height_map:
 			// Do not run-time compress this - just store in a single-channel uncompressed texture
 			break;
 		default:

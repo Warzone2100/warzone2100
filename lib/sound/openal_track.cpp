@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
 #include <AL/al.h>
@@ -38,6 +39,7 @@
 #include <string.h>
 #include <math.h>
 #include <limits>
+#include <list>
 
 #include "tracklib.h"
 #include "audio.h"
@@ -66,21 +68,12 @@ struct AUDIO_STREAM
 	// Callbacks
 	std::function<void (const AUDIO_STREAM *, const void *)> onFinished;
 	const void              *user_data = nullptr;
-
-	// Linked list pointer
-	AUDIO_STREAM           *next = nullptr;
 };
 
-struct SAMPLE_LIST
-{
-	AUDIO_SAMPLE   *curr;
-	SAMPLE_LIST    *next;
-};
-
-static SAMPLE_LIST *active_samples = nullptr;
+static std::list<AUDIO_SAMPLE *> active_samples;
 
 /* actives openAL-Sources */
-static AUDIO_STREAM *active_streams = nullptr;
+static std::list<AUDIO_STREAM *> active_streams;
 
 static ALfloat		sfx_volume = 1.0;
 static ALfloat		sfx3d_volume = 1.0;
@@ -92,32 +85,6 @@ static ALCcontext *context = nullptr;
 static LPALCGETSTRINGISOFT alcGetStringiSOFT = nullptr;
 static LPALCRESETDEVICESOFT alcResetDeviceSOFT = nullptr;
 #endif
-
-
-/** Removes the given sample from the "active_samples" linked list
- *  \param previous either NULL (if \c to_remove is the first item in the
- *                  list) or the item occurring just before \c to_remove in
- *                  the list
- *  \param to_remove the item to actually remove from the list
- */
-static void sound_RemoveSample(SAMPLE_LIST *previous, SAMPLE_LIST *to_remove)
-{
-	if (previous != nullptr && previous != to_remove)
-	{
-		// Verify that the given two samples actually follow eachother in the list
-		ASSERT(previous->next == to_remove, "Sound samples don't follow eachother in the list, we're probably removing the wrong item.");
-
-		// Remove the item to remove from the linked list by skipping
-		// it in the pointer sequence.
-		previous->next = to_remove->next;
-	}
-	else
-	{
-		// Apparently we're removing the first item from the list. So
-		// make the next one the list's head.
-		active_samples = to_remove->next;
-	}
-}
 
 ALCint HRTFModeToALCint(HRTFMode mode)
 {
@@ -371,9 +338,6 @@ static void sound_UpdateStreams(void);
 
 void sound_ShutdownLibrary(void)
 {
-	AUDIO_STREAM *stream;
-	SAMPLE_LIST *aSample = active_samples, * tmpSample = nullptr;
-
 	if (!openal_initialized)
 	{
 		return;
@@ -381,7 +345,7 @@ void sound_ShutdownLibrary(void)
 	debug(LOG_SOUND, "starting shutdown");
 
 	// Stop all streams, sound_UpdateStreams() will deallocate all stopped streams
-	for (stream = active_streams; stream != nullptr; stream = stream->next)
+	for (AUDIO_STREAM* stream : active_streams)
 	{
 		sound_StopStream(stream);
 	}
@@ -405,38 +369,27 @@ void sound_ShutdownLibrary(void)
 	}
 	device = nullptr;
 
-	while (aSample)
-	{
-		tmpSample = aSample->next;
-		free(aSample);
-		aSample = tmpSample;
-	}
-	active_samples = nullptr;
+	active_samples.clear();
 }
 
-/** Deletes the given sample and updates the \c previous and \c current iterators
- *  \param previous iterator to the previous sample in the list
- *  \param sample iterator to the current sample in the list which you want to delete
+/** Deletes the given sample and performs additional OpenAL cleanup procedures.
+ *  \param sample iterator to the current sample in the list which you want to delete, invalidated upon return
  */
-static void sound_DestroyIteratedSample(SAMPLE_LIST **previous, SAMPLE_LIST **sample)
+static void sound_DestroyIteratedSample(typename std::list<AUDIO_SAMPLE*>::iterator it)
 {
+	AUDIO_SAMPLE* sample = *it;
 	// If an OpenAL source is associated with this sample, release it
-	if ((*sample)->curr->iSample != (ALuint)AL_INVALID)
+	if (sample->iSample != (ALuint)AL_INVALID)
 	{
-		alDeleteSources(1, &(*sample)->curr->iSample);
+		alDeleteSources(1, &sample->iSample);
 		sound_GetError();
 	}
 
 	// Do the cleanup of this sample
-	sound_FinishedCallback((*sample)->curr);
+	sound_FinishedCallback(sample);
 
 	// Remove the sample from the list
-	sound_RemoveSample(*previous, *sample);
-	// Free it
-	free(*sample);
-
-	// Get a pointer to the next node, the previous pointer doesn't change
-	*sample = (*previous != nullptr) ? (*previous)->next : active_samples;
+	active_samples.erase(it);
 }
 
 /** Counts the number of samples in active_samples
@@ -444,23 +397,12 @@ static void sound_DestroyIteratedSample(SAMPLE_LIST **previous, SAMPLE_LIST **sa
  */
 unsigned int sound_GetActiveSamplesCount()
 {
-	unsigned int  num = 0;
-	SAMPLE_LIST *node = active_samples;
-
-	while (node)
-	{
-		num++;
-		node = node->next;
-	}
-	return num;
+	return static_cast<unsigned int>(active_samples.size());
 }
 
 /* gets called in audio.cpp: audio_update(), which gets called in renderLoop() */
 void sound_Update()
 {
-	SAMPLE_LIST *node = active_samples;
-	SAMPLE_LIST *previous = nullptr;
-	ALfloat gain;
 
 	if (!openal_initialized)
 	{
@@ -470,23 +412,26 @@ void sound_Update()
 	// Update all streaming audio
 	sound_UpdateStreams();
 
-	while (node != nullptr)
+	mutating_list_iterate(active_samples, [](typename std::list<AUDIO_SAMPLE*>::iterator sampleIt)
 	{
 		ALenum state, err;
+		ALfloat gain;
+
+		AUDIO_SAMPLE* sample = *sampleIt;
 
 		// query what the gain is for this sample
-		alGetSourcef(node->curr->iSample, AL_GAIN, &gain);
+		alGetSourcef(sample->iSample, AL_GAIN, &gain);
 		err = sound_GetError();
 
 		// if gain is 0, then we can't hear it, so we kill it.
 		if (gain == 0.0f)
 		{
-			sound_DestroyIteratedSample(&previous, &node);
-			continue;
+			sound_DestroyIteratedSample(sampleIt);
+			return IterationResult::CONTINUE_ITERATION;
 		}
 
 		//ASSERT(alIsSource(node->curr->iSample), "Not a valid source!");
-		alGetSourcei(node->curr->iSample, AL_SOURCE_STATE, &state);
+		alGetSourcei(sample->iSample, AL_SOURCE_STATE, &state);
 
 		// Check whether an error occurred while retrieving the state.
 		// If one did, the state returned is useless. So instead of
@@ -495,11 +440,11 @@ void sound_Update()
 		if (err != AL_NO_ERROR)
 		{
 			// Make sure to invoke the "finished" callback
-			sound_FinishedCallback(node->curr);
+			sound_FinishedCallback(sample);
 
 			// Destroy this object and move to the next object
-			sound_DestroyIteratedSample(&previous, &node);
-			continue;
+			sound_DestroyIteratedSample(sampleIt);
+			return IterationResult::CONTINUE_ITERATION;
 		}
 
 		switch (state)
@@ -512,18 +457,17 @@ void sound_Update()
 			// sound_SetObjectPosition(i->curr->iSample, i->curr->x, i->curr->y, i->curr->z);
 
 			// Move to the next object
-			previous = node;
-			node = node->next;
-			break;
+			return IterationResult::CONTINUE_ITERATION;
 
-		// NOTE: if it isn't playing | paused, then it is most likely either done
-		// or a error.  In either case, we want to kill the sample in question.
+			// NOTE: if it isn't playing | paused, then it is most likely either done
+			// or a error.  In either case, we want to kill the sample in question.
 
 		default:
-			sound_DestroyIteratedSample(&previous, &node);
+			sound_DestroyIteratedSample(sampleIt);
 			break;
 		}
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	// Reset the current error state
 	alcGetError(device);
@@ -541,7 +485,7 @@ void sound_Update()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool sound_QueueSamplePlaying(void)
+bool sound_QueueSamplePlaying()
 {
 	ALenum	state;
 
@@ -571,24 +515,23 @@ bool sound_QueueSamplePlaying(void)
 
 	if (current_queue_sample != (ALuint)AL_INVALID)
 	{
-		SAMPLE_LIST *node = active_samples;
-		SAMPLE_LIST *previous = nullptr;
-
-		// We need to remove it from the queue of actively played samples
-		while (node != nullptr)
+		bool sampleFound = false;
+		mutating_list_iterate(active_samples, [&sampleFound](typename std::list<AUDIO_SAMPLE*>::iterator sampleIt)
 		{
-			if (node->curr->iSample == current_queue_sample)
+			if ((*sampleIt)->iSample == current_queue_sample)
 			{
-				sound_DestroyIteratedSample(&previous, &node);
+				sound_DestroyIteratedSample(sampleIt);
 				current_queue_sample = AL_INVALID;
-				return false;
+				sampleFound = true;
+				return IterationResult::BREAK_ITERATION;
 			}
-			previous = node;
-			if (node)
-			{
-				node = node->next;
-			}
+			return IterationResult::CONTINUE_ITERATION;
+		});
+		if (sampleFound)
+		{
+			return false;
 		}
+
 		debug(LOG_ERROR, "Sample %u not deleted because it wasn't in the active queue!", current_queue_sample);
 		current_queue_sample = AL_INVALID;
 	}
@@ -715,41 +658,33 @@ void sound_FreeTrack(TRACK *psTrack)
 
 static void sound_AddActiveSample(AUDIO_SAMPLE *psSample)
 {
-	SAMPLE_LIST *tmp = (SAMPLE_LIST *) malloc(sizeof(SAMPLE_LIST));
-
 	// Prepend the given sample to our list of active samples
-	tmp->curr = psSample;
-	tmp->next = active_samples;
-	active_samples = tmp;
+	active_samples.emplace_front(psSample);
 }
 
 /** Routine gets rid of the psObj's sound sample and reference in active_samples.
  */
 void sound_RemoveActiveSample(AUDIO_SAMPLE *psSample)
 {
-	SAMPLE_LIST *node = active_samples;
-	SAMPLE_LIST *previous = nullptr;
-
-	while (node != nullptr)
+	mutating_list_iterate(active_samples, [psSample](typename std::list<AUDIO_SAMPLE*>::iterator sampleIt)
 	{
-		if (node->curr->psObj == psSample->psObj)
-		{
-			debug(LOG_MEMORY, "Removing object 0x%p from active_samples list 0x%p\n", static_cast<void *>(psSample->psObj), static_cast<void *>(node));
-
-			// Buginator: should we wait for it to finish, or just stop it?
-			sound_StopSample(node->curr);
-
-			sound_FinishedCallback(node->curr);	//tell the callback it is finished.
-
-			sound_DestroyIteratedSample(&previous, &node);
-		}
-		else
+		AUDIO_SAMPLE* currSample = *sampleIt;
+		if (currSample->psObj != psSample->psObj)
 		{
 			// Move to the next sample object
-			previous = node;
-			node = node->next;
+			return IterationResult::CONTINUE_ITERATION;
 		}
-	}
+		debug(LOG_MEMORY, "Removing object 0x%p from active_samples list\n", static_cast<void*>(psSample->psObj));
+
+		// Buginator: should we wait for it to finish, or just stop it?
+		sound_StopSample(currSample);
+
+		sound_FinishedCallback(currSample);	//tell the callback it is finished.
+
+		sound_DestroyIteratedSample(sampleIt);
+
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 static bool sound_SetupChannel(AUDIO_SAMPLE *psSample)
@@ -1046,7 +981,7 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 	if (res < buffer_count)
 	{
 		// free unused buffers
-		debug(LOG_INFO, "freeing unused %i buffers", buffer_count - res);
+		debug(LOG_SOUND, "freeing unused %i buffers", buffer_count - res);
 		alDeleteBuffers(buffer_count - res, alBuffersIds + res);
 		if (sound_GetError() != AL_NO_ERROR) {	goto _error_with_albuffers; }
 	}
@@ -1064,8 +999,7 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 	stream->user_data = user_data;
 
 	// Prepend this stream to the linked list
-	stream->next = active_streams;
-	active_streams = stream;
+	active_streams.emplace_front(stream);
 
 	return stream;
 
@@ -1342,43 +1276,20 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
  */
 static void sound_UpdateStreams()
 {
-	AUDIO_STREAM *stream = active_streams, *previous = nullptr, *next = nullptr;
-
-	while (stream != nullptr)
+	mutating_list_iterate(active_streams, [](typename std::list<AUDIO_STREAM*>::iterator streamIt)
 	{
-		next = stream->next;
-
 		// Attempt to update the current stream, if we find that impossible,
 		// destroy it instead.
-		if (!sound_UpdateStream(stream))
+		if (!sound_UpdateStream(*streamIt))
 		{
+			AUDIO_STREAM* stream = *streamIt;
 			// First remove our current stream from the linked list
-			if (previous)
-			{
-				// Make the previous item skip over the current to the next item
-				previous->next = next;
-			}
-			else
-			{
-				// Apparently this is the first item in the list, so make the
-				// next item the list-head.
-				active_streams = next;
-			}
-
+			active_streams.erase(streamIt);
 			// Now actually destroy the current stream
 			sound_DestroyStream(stream);
-
-			// Make sure the current stream pointer is intact again
-			stream = next;
-
-			// Skip regular style iterator incrementing
-			continue;
 		}
-
-		// Increment our iterator pair
-		previous = stream;
-		stream = stream->next;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 }
 
 //*

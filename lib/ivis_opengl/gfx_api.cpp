@@ -30,7 +30,7 @@ static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
 static gfx_api::context* current_backend_context = nullptr;
 
-bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, gfx_api::backend_type backendType)
+bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backendType)
 {
 	if (current_backend_context != nullptr && backend == backendType)
 	{
@@ -56,13 +56,13 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 #if defined(WZ_VULKAN_ENABLED)
 			current_backend_context = new VkRoot(uses_gfx_debug);
 #else
-			debug(LOG_FATAL, "Warzone was not compiled with the Vulkan backend enabled. Aborting.");
-			abort();
+			debug(LOG_FATAL, "Warzone 2100 was not compiled with support for the Vulkan backend.");
+			return false;
 #endif
 			break;
 	}
 	ASSERT(current_backend_context != nullptr, "Failed to initialize gfx backend context");
-	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias);
+	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias, depthMapResolution);
 	if (!result)
 	{
 		return false;
@@ -82,6 +82,11 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 gfx_api::context& gfx_api::context::get()
 {
 	return *current_backend_context;
+}
+
+bool gfx_api::context::isInitialized()
+{
+	return current_backend_context != nullptr;
 }
 
 // MARK: - Per-texture compression overrides
@@ -216,13 +221,13 @@ optional<gfx_api::max_texture_compression_level> gfx_api::getMaxTextureCompressi
 
 #include "png_util.h"
 
-static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool quiet)
 {
 	iV_Image loadedUncompressedImage;
 
 	// 1.) Load the PNG into an iV_Image
 	bool forceRGB = (textureType == gfx_api::texture_type::game_texture) || (textureType == gfx_api::texture_type::user_interface);
-	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage, forceRGB))
+	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage, forceRGB, quiet))
 	{
 		// Failed to load the image
 		return nullptr;
@@ -235,7 +240,7 @@ static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filenam
 const WzString wz_png_extension = WzString(".png");
 #endif
 
-static std::string imageLoadFilenameFromInputFilename(const WzString& filename)
+WzString gfx_api::imageLoadFilenameFromInputFilename(const WzString& filename)
 {
 #if defined(BASIS_ENABLED)
 	// For backwards-compatibility support, filenames that end in ".png" are used as "keys" and we first check for a .ktx2 file with the same filename
@@ -245,7 +250,7 @@ static std::string imageLoadFilenameFromInputFilename(const WzString& filename)
 		// (.png files take precedence, so that existing mods work - and only have to include png files)
 		if (PHYSFS_exists(filename))
 		{
-			return filename.toUtf8();
+			return filename;
 		}
 
 		// Check for presence of .ktx2 file
@@ -253,32 +258,63 @@ static std::string imageLoadFilenameFromInputFilename(const WzString& filename)
 		ktx2Filename.append(".ktx2");
 		if (PHYSFS_exists(ktx2Filename))
 		{
-			return ktx2Filename.toUtf8();
+			return ktx2Filename;
 		}
 		// Fall-back to the .png file (which presumably doesn't exist because of the first check above, but this will cause it to be named as such in the later error message)
 	}
 #endif
-	return filename.toUtf8();
+	return filename;
+}
+
+bool gfx_api::checkImageFilesWouldLoadFromSameParentMountPath(const std::vector<WzString>& filenames, bool ignoreNotFound)
+{
+	if (filenames.empty()) { return false; }
+	if (filenames.size() == 1) { return true; }
+	auto imageLoadFilename1 = imageLoadFilenameFromInputFilename(filenames.front());
+	optional<std::string> realDir1;
+	if (PHYSFS_exists(imageLoadFilename1.toUtf8().c_str()))
+	{
+		realDir1 = WZ_PHYSFS_getRealDir_String(imageLoadFilename1.toUtf8().c_str());
+	}
+
+	for (size_t i = 1; i < filenames.size(); ++i)
+	{
+		auto imageLoadFilename_other = imageLoadFilenameFromInputFilename(filenames[i]);
+		if (!PHYSFS_exists(imageLoadFilename_other.toUtf8().c_str()))
+		{
+			if (!realDir1.has_value() || ignoreNotFound)
+			{
+				continue;
+			}
+			return false;
+		}
+		auto realDir_other = WZ_PHYSFS_getRealDir_String(imageLoadFilename_other.toUtf8().c_str());
+		if (realDir_other != realDir1)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 // MARK: - High-level texture loading
 
 // Load a texture from a file
 // (which loads straight to a texture based on the appropriate texture_type, handling mip_maps, compression, etc)
-gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool quiet /*= false*/)
 {
-	std::string imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
+	auto imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
 
 #if defined(BASIS_ENABLED)
-	if (strEndsWith(imageLoadFilename, ".ktx2"))
+	if (imageLoadFilename.endsWith(".ktx2"))
 	{
-		return gfx_api::loadImageTextureFromFile_KTX2(imageLoadFilename, textureType, maxWidth, maxHeight);
+		return gfx_api::loadImageTextureFromFile_KTX2(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight);
 	}
 	else
 #endif
-	if (strEndsWith(imageLoadFilename, ".png"))
+	if (imageLoadFilename.endsWith(".png"))
 	{
-		return loadImageTextureFromFile_PNG(imageLoadFilename, textureType, maxWidth, maxHeight);
+		return loadImageTextureFromFile_PNG(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight, quiet);
 	}
 	else
 	{
@@ -287,7 +323,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gf
 	}
 }
 
-static inline size_t calcMipmapLevelsForUncompressedImage(const iV_Image& image, gfx_api::texture_type textureType)
+static inline size_t calcMipmapLevelsForUncompressedImage(const iV_BaseImage& image, gfx_api::texture_type textureType)
 {
 	// 3.) Determine mipmap levels (if needed / desired)
 	bool generateMipMaps = (textureType != gfx_api::texture_type::user_interface);
@@ -300,7 +336,7 @@ static inline size_t calcMipmapLevelsForUncompressedImage(const iV_Image& image,
 	return mipmap_levels;
 }
 
-static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api::texture_type textureType, const std::string& filename)
+static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api::pixel_format_target target, gfx_api::texture_type textureType, const std::string& filename)
 {
 	// 1.) Convert to expected # of channels based on textureType
 	switch (textureType)
@@ -319,6 +355,24 @@ static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api:
 				image.convert_to_single_channel(3); // extract alpha channel
 			}
 			break;
+		}
+		case gfx_api::texture_type::height_map:
+		{
+			if (image.channels() > 1)
+			{
+				image.convert_to_single_channel(0); // extract first channel
+			}
+			break;
+		}
+		case gfx_api::texture_type::normal_map:
+		{
+			if (image.channels() > 3)
+			{
+				if (gfx_api::context::get().textureFormatIsSupported(target, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, gfx_api::pixel_format_usage::flags::sampled_image))
+				{
+					image.convert_channels({0,1,2}); // convert to RGB (which is supported)
+				}
+			}
 		}
 		default:
 			break;
@@ -343,11 +397,38 @@ static bool checkFormatVersusMaxCompressionLevel_FromUncompressed(optional<gfx_a
 	return true;
 }
 
+static std::vector<std::unique_ptr<iV_Image>> generateMipMapsFromUncompressedImage(const iV_Image& image, size_t mipmap_levels, gfx_api::texture_type textureType)
+{
+	std::vector<std::unique_ptr<iV_Image>> results;
+
+	const iV_Image *pLastImage = &image;
+	for (size_t i = 1; i < mipmap_levels; i++)
+	{
+		optional<int> alphaChannelOverride;
+		if (textureType == gfx_api::texture_type::alpha_mask)
+		{
+			alphaChannelOverride = 0;
+		}
+
+		unsigned int output_w = std::max<unsigned int>(1, pLastImage->width() >> 1);
+		unsigned int output_h = std::max<unsigned int>(1, pLastImage->height() >> 1);
+
+		iV_Image *pNewLevel = new iV_Image();
+		pNewLevel->resizedFromOther(*pLastImage, output_w, output_h, alphaChannelOverride);
+
+		results.push_back(std::unique_ptr<iV_Image>(pNewLevel));
+
+		pLastImage = pNewLevel;
+	}
+
+	return results;
+}
+
 // Takes an iv_Image and texture_type and loads a texture as appropriate / possible
 gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	// 1.) Convert to expected # of channels based on textureType
-	if (!uncompressedPNGImageConvertChannels(image, textureType, filename))
+	if (!uncompressedPNGImageConvertChannels(image, gfx_api::pixel_format_target::texture_2d, textureType, filename))
 	{
 		return nullptr;
 	}
@@ -432,15 +513,15 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	return pTexture.release();
 }
 
-std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool forceRGBA8 /*= false*/)
+std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *filename, gfx_api::pixel_format_target target, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool forceRGBA8 /*= false*/)
 {
-	std::string imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
+	auto imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
 	std::unique_ptr<iV_Image> loadedUncompressedImage;
 
 #if defined(BASIS_ENABLED)
-	if (strEndsWith(imageLoadFilename, ".ktx2"))
+	if (imageLoadFilename.endsWith(".ktx2"))
 	{
-		loadedUncompressedImage = gfx_api::loadUncompressedImageFromFile_KTX2(imageLoadFilename, textureType, maxWidth, maxHeight);
+		loadedUncompressedImage = gfx_api::loadUncompressedImageFromFile_KTX2(imageLoadFilename.toUtf8(), textureType, target, maxWidth, maxHeight);
 		if (!loadedUncompressedImage)
 		{
 			// Failed to load the image
@@ -453,17 +534,17 @@ std::unique_ptr<iV_Image> gfx_api::loadUncompressedImageFromFile(const char *fil
 	}
 	else
 #endif
-	if (strEndsWith(imageLoadFilename, ".png"))
+	if (imageLoadFilename.endsWith(".png"))
 	{
 		// Load the PNG into an iV_Image
 		loadedUncompressedImage = std::unique_ptr<iV_Image>(new iV_Image());
-		if (!iV_loadImage_PNG2(imageLoadFilename.c_str(), *loadedUncompressedImage, forceRGBA8))
+		if (!iV_loadImage_PNG2(imageLoadFilename.toUtf8().c_str(), *loadedUncompressedImage, forceRGBA8))
 		{
 			// Failed to load the image
 			return nullptr;
 		}
 		// Convert to expected # of channels based on textureType (if forceRGBA8 is not set)
-		if (!forceRGBA8 && !uncompressedPNGImageConvertChannels(*loadedUncompressedImage, textureType, imageLoadFilename))
+		if (!forceRGBA8 && !uncompressedPNGImageConvertChannels(*loadedUncompressedImage, target, textureType, imageLoadFilename.toUtf8()))
 		{
 			return nullptr;
 		}
@@ -494,6 +575,36 @@ optional<unsigned int> gfx_api::context::getClosestSupportedUncompressedImageFor
 	}
 
 	return channels;
+}
+
+// Determine the best available uncompressed image format for the current system (+ textureType)
+gfx_api::pixel_format gfx_api::context::bestUncompressedPixelFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType)
+{
+	switch (textureType)
+	{
+		case gfx_api::texture_type::user_interface:
+		case gfx_api::texture_type::game_texture: // a RGB / RGBA texture, possibly stored in a compressed format
+			// Since we don't have an image, to check whether it's actually RGB (no alpha), we have to err on the side of RGBA
+			return gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+		case gfx_api::texture_type::specular_map:
+		case gfx_api::texture_type::alpha_mask:	// a single-channel texture, containing the alpha values
+		case gfx_api::texture_type::height_map:
+			return gfx_api::pixel_format::FORMAT_R8_UNORM;
+		case gfx_api::texture_type::normal_map:
+			// *MUST* check if 3-channel is supported (not guaranteed on all systems)
+			if (gfx_api::context::get().textureFormatIsSupported(target, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, gfx_api::pixel_format_usage::flags::sampled_image))
+			{
+				return gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
+			}
+			else
+			{
+				return gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+			}
+		default:
+			break;
+	}
+
+	return gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 }
 
 gfx_api::texture* gfx_api::context::createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename)
@@ -669,7 +780,309 @@ size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, s
 		// ASTC
 		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
 			return calculate_astc_size<4, 4>(width, height);
+
 		// no default case to ensure compiler error if more formats are added
 	}
 	return 0; // silence warning
+}
+
+// texture arrays
+
+// loads an image into a texture array, generating mip levels as needed (based on textureType)
+bool gfx_api::context::loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& image, gfx_api::texture_type textureType, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	size_t mipmap_levels = calcMipmapLevelsForUncompressedImage(image, textureType);
+	return loadTextureArrayLayerFromUncompressedImage(array, layer, image, textureType, mipmap_levels, uploadFormat, filename, maxWidth, maxHeight);
+}
+bool gfx_api::context::loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& rootImage, gfx_api::texture_type textureType, size_t mipmap_levels, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	auto miplevels = generateMipMapsFromUncompressedImage(rootImage, mipmap_levels, textureType);
+
+	auto uploadMipLevel = [&](const iV_Image* image, size_t level) {
+		if (uploadFormat == image->pixel_format())
+		{
+			bool uploadResult = array.upload_layer(layer, level, *image);
+			ASSERT_OR_RETURN(false, uploadResult, "Failed to upload buffer to image");
+		}
+		else
+		{
+			// Run-time compression
+			auto compressedImage = gfx_api::compressImage(*image, uploadFormat);
+			ASSERT_OR_RETURN(false, compressedImage != nullptr, "Failed to compress image to format: %zu", static_cast<size_t>(uploadFormat));
+			bool uploadResult = array.upload_layer(layer, level, *compressedImage);
+			ASSERT_OR_RETURN(false, uploadResult, "Failed to upload buffer to image");
+		}
+		return true;
+	};
+	
+	if (!uploadMipLevel(&rootImage, 0))
+	{
+		return false;
+	}
+
+	for (size_t level = 1; level <= miplevels.size(); ++level)
+	{
+		const iV_Image* image = dynamic_cast<iV_Image*>(miplevels[level - 1].get());
+		ASSERT_OR_RETURN(false, image != nullptr, "Image wasn't an iV_Image?");
+
+		if (!uploadMipLevel(image, level))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+// used to load basis mip levels (already encoded in the desired target format) into a texture array
+bool gfx_api::context::loadTextureArrayLayerFromBaseImages(gfx_api::texture_array& array, size_t layer, const std::vector<std::unique_ptr<iV_BaseImage>>& images, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	for (size_t level = 0; level < images.size(); ++level)
+	{
+		const iV_BaseImage* pMipLevelImage = images[level].get();
+		ASSERT_OR_RETURN(false, pMipLevelImage != nullptr, "Null image for level: %zu", level);
+		bool uploadSuccess = array.upload_layer(layer, level, *pMipLevelImage);
+		ASSERT_OR_RETURN(false, uploadSuccess, "Failed to upload image for level: %zu", level);
+	}
+
+	return true;
+}
+
+static std::vector<std::unique_ptr<iV_BaseImage>> loadUncompressedImageWithMips(const std::string& imageLoadFilename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool forceRGBA8 /*= false*/)
+{
+	std::vector<std::unique_ptr<iV_BaseImage>> results;
+#if defined(BASIS_ENABLED)
+	if (strEndsWith(imageLoadFilename, ".ktx2"))
+	{
+		results = gfx_api::loadiVImagesFromFile_Basis(imageLoadFilename, textureType, gfx_api::pixel_format_target::texture_2d_array, (forceRGBA8) ? WZ_BASIS_UNCOMPRESSED_FORMAT : gfx_api::context::get().bestUncompressedPixelFormat(gfx_api::pixel_format_target::texture_2d_array, textureType), std::max(0, maxWidth), std::max(0, maxHeight));
+
+		if (forceRGBA8)
+		{
+			for (auto& image : results)
+			{
+				auto pLoadedUncompressedImage = dynamic_cast<iV_Image*>(image.get());
+				if (!pLoadedUncompressedImage)
+				{
+					debug(LOG_ERROR, "Loaded image is not an uncompressed format?: %s", imageLoadFilename.c_str());
+					continue;
+				}
+				pLoadedUncompressedImage->convert_to_rgba();
+			}
+		}
+
+		return results;
+	}
+	else
+#endif
+	if (strEndsWith(imageLoadFilename, ".png"))
+	{
+		auto pCurrentImage = gfx_api::loadUncompressedImageFromFile(imageLoadFilename.c_str(), gfx_api::pixel_format_target::texture_2d_array, textureType, maxWidth, maxHeight, forceRGBA8);
+		if (!pCurrentImage)
+		{
+			debug(LOG_ERROR, "Unable to load image file: %s", imageLoadFilename.c_str());
+			return {};
+		}
+		size_t mipmap_levels = calcMipmapLevelsForUncompressedImage(*pCurrentImage, textureType);
+		auto miplevels = generateMipMapsFromUncompressedImage(*pCurrentImage, mipmap_levels, textureType);
+		results.push_back(std::move(pCurrentImage));
+		results.insert(results.end(), std::make_move_iterator(miplevels.begin()), std::make_move_iterator(miplevels.end()));
+		miplevels.clear();
+	}
+	else
+	{
+		debug(LOG_ERROR, "Unable to load image file: %s", imageLoadFilename.c_str());
+		return {};
+	}
+	return results;
+}
+
+gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, const GenerateDefaultTextureFunc& defaultTextureGenerator, const std::function<void ()>& progressCallback, const std::string& debugName /*= ""*/)
+{
+	ASSERT_OR_RETURN(nullptr, filenames.size() <= gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS), "Too many layers");
+
+	std::vector<WzString> imageLoadFilenames;
+	std::transform(filenames.cbegin(), filenames.cend(), std::back_inserter(imageLoadFilenames), [](const WzString& filename) {
+		return imageLoadFilenameFromInputFilename(filename);
+	});
+
+	bool allFilesAreKTX2 = std::all_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".ktx2"); });
+	bool anyFileIsKTX2 = allFilesAreKTX2 || std::any_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".ktx2"); });
+	bool anyFileIsPNG = !allFilesAreKTX2 && std::any_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".png"); });
+
+#if !defined(BASIS_ENABLED)
+	if (anyFileIsKTX2)
+	{
+		for (auto& imageLoadFilename : imageLoadFilenames)
+		{
+			const std::string& filename = imageLoadFilename.toUtf8();
+			if (strEndsWith(filename, ".ktx2"))
+			{
+				debug(LOG_ERROR, "Unable to load image file: %s", filename.c_str());
+			}
+		}
+		return nullptr;
+	}
+#endif
+
+	gfx_api::pixel_format uploadFormat = bestUncompressedPixelFormat(gfx_api::pixel_format_target::texture_2d_array, textureType);
+	gfx_api::pixel_format desiredImageExtractionFormat = uploadFormat;
+	if (allFilesAreKTX2)
+	{
+		auto bestBasisFormat = gfx_api::getBestAvailableTranscodeFormatForBasis(gfx_api::pixel_format_target::texture_2d_array, textureType);
+		if (bestBasisFormat.has_value())
+		{
+			uploadFormat = bestBasisFormat.value();
+			desiredImageExtractionFormat = uploadFormat;
+		}
+	}
+	else
+	{
+		// just use the best runtime compression format
+		auto bestAvailableCompressedFormat = gfx_api::bestRealTimeCompressionFormat(gfx_api::pixel_format_target::texture_2d_array, textureType);
+		if (bestAvailableCompressedFormat.has_value() && bestAvailableCompressedFormat.value() != gfx_api::pixel_format::invalid)
+		{
+			uploadFormat = bestAvailableCompressedFormat.value();
+			desiredImageExtractionFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8; // must extract to RGBA for run-time compression
+		}
+		if (anyFileIsKTX2 && anyFileIsPNG)
+		{
+			debug(LOG_INFO, "Performance info: Some files are .ktx2, but others are .png");
+		}
+	}
+
+	bool uncompressedExtractionFormat = gfx_api::is_uncompressed_format(desiredImageExtractionFormat);
+	std::vector<std::unique_ptr<iV_BaseImage>> defaultTextureMips;
+
+	auto getDefaultTextureMipsP = [&defaultTextureMips, &defaultTextureGenerator, textureType, maxWidth, maxHeight](size_t layer, unsigned int width, unsigned int height, size_t mipmap_levels, gfx_api::pixel_format format) -> std::vector<std::unique_ptr<iV_BaseImage>>* {
+		if (defaultTextureMips.empty())
+		{
+			ASSERT_OR_RETURN(nullptr, defaultTextureGenerator != nullptr, "Failed to generate default texture - no default texture generator provided");
+			ASSERT_OR_RETURN(nullptr, gfx_api::is_uncompressed_format(format), "Expected uncompressed extraction format, but received: %s", gfx_api::format_to_str(format));
+			if (defaultTextureGenerator)
+			{
+				auto pCurrentImage = defaultTextureGenerator((layer > 0) ? width : maxWidth, (layer > 0) ? height : maxHeight, gfx_api::format_channels(format));
+				ASSERT_OR_RETURN(nullptr, pCurrentImage != nullptr, "Failed to generate default texture");
+				if (layer > 0)
+				{
+					ASSERT_OR_RETURN(nullptr, pCurrentImage->width() == width && pCurrentImage->height() == height, "Failed to generate matching default texture");
+				}
+				size_t expectedMipLevels = calcMipmapLevelsForUncompressedImage(*pCurrentImage, textureType);
+				if (layer > 0)
+				{
+					ASSERT_OR_RETURN(nullptr, expectedMipLevels == mipmap_levels, "Failed to generate matching default texture");
+				}
+				auto miplevels = generateMipMapsFromUncompressedImage(*pCurrentImage, expectedMipLevels, textureType);
+				defaultTextureMips.push_back(std::move(pCurrentImage));
+				defaultTextureMips.insert(defaultTextureMips.end(), std::make_move_iterator(miplevels.begin()), std::make_move_iterator(miplevels.end()));
+				miplevels.clear();
+			}
+		}
+		return &defaultTextureMips;
+	};
+
+	std::unique_ptr<gfx_api::texture_array> texture_array = nullptr;
+	unsigned int width = 0;
+	unsigned int height = 0;
+	size_t mipmap_levels = 0;
+	size_t layers_count = imageLoadFilenames.size();
+
+	for (size_t layer = 0; layer < layers_count; ++layer)
+	{
+		const WzString& imageLoadFilename = imageLoadFilenames[layer];
+
+		// load the file to an array of base images
+		std::vector<std::unique_ptr<iV_BaseImage>> loadedImagesForLayer;
+		std::vector<std::unique_ptr<iV_BaseImage>>* pImagesForLayer = nullptr;
+		if (imageLoadFilename.isEmpty())
+		{
+			pImagesForLayer = getDefaultTextureMipsP(layer, width, height, mipmap_levels, desiredImageExtractionFormat);
+			ASSERT_OR_RETURN(nullptr, pImagesForLayer != nullptr, "Failed to generate matching default texture");
+		}
+		else if (uncompressedExtractionFormat || imageLoadFilename.endsWith(".png"))
+		{
+			// load into an uncompressed format
+			loadedImagesForLayer = loadUncompressedImageWithMips(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight, desiredImageExtractionFormat == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
+			if (!loadedImagesForLayer.empty())
+			{
+				pImagesForLayer = &loadedImagesForLayer;
+			}
+			else
+			{
+				// failed to load image
+				debug(LOG_INFO, "Using default texture generator for failed image: %s", imageLoadFilename.toUtf8().c_str());
+				pImagesForLayer = getDefaultTextureMipsP(layer, width, height, mipmap_levels, desiredImageExtractionFormat);
+			}
+		}
+		else
+		{
+			// load directly into a compressed format
+#if defined(BASIS_ENABLED)
+			if (imageLoadFilename.endsWith(".ktx2"))
+			{
+				loadedImagesForLayer = gfx_api::loadiVImagesFromFile_Basis(imageLoadFilename.toUtf8(), textureType, gfx_api::pixel_format_target::texture_2d_array, desiredImageExtractionFormat, std::max(0, maxWidth), std::max(0, maxHeight));
+				pImagesForLayer = &loadedImagesForLayer;
+			}
+			else
+#endif
+			{
+				debug(LOG_ERROR, "Unable to load image file: %s", imageLoadFilename.toUtf8().c_str());
+				return {};
+			}
+		}
+
+		if (progressCallback)
+		{
+			progressCallback();
+		}
+
+		ASSERT_OR_RETURN(nullptr, pImagesForLayer && !pImagesForLayer->empty(), "Unable to load images: %s", imageLoadFilename.toUtf8().c_str());
+
+		if (layer == 0)
+		{
+			width = pImagesForLayer->front()->width();
+			height = pImagesForLayer->front()->height();
+			mipmap_levels = pImagesForLayer->size();
+
+			texture_array = std::unique_ptr<gfx_api::texture_array>(gfx_api::context::get().create_texture_array(mipmap_levels, layers_count, width, height, uploadFormat, debugName));
+			ASSERT_OR_RETURN(nullptr, texture_array.get() != nullptr, "Failed to create texture array (miplevels: %zu, layers: %zu, width: %u, height: %u): %s", mipmap_levels, layers_count, width, height, imageLoadFilename.toUtf8().c_str());
+		}
+		else
+		{
+			ASSERT_OR_RETURN(nullptr, width == pImagesForLayer->front()->width() && height == pImagesForLayer->front()->height(), "Unexpected image dimensions (%u x %u) does not match the first image dimensions (%u x %u): %s", pImagesForLayer->front()->width(), pImagesForLayer->front()->height(), width, height, imageLoadFilename.toUtf8().c_str());
+			ASSERT_OR_RETURN(nullptr, pImagesForLayer->size() == mipmap_levels, "Unexpected number of mip levels (%zu; expected: %zu): %s", pImagesForLayer->size(), mipmap_levels, imageLoadFilename.toUtf8().c_str());
+		}
+
+		// upload the layer
+
+		// If already in the uploadFormat
+		if (uploadFormat == desiredImageExtractionFormat)
+		{
+			// just load directly
+			bool uploadSuccess = gfx_api::context::get().loadTextureArrayLayerFromBaseImages(*texture_array, layer, *pImagesForLayer, imageLoadFilename.toUtf8(), width, height);
+			ASSERT_OR_RETURN(nullptr, uploadSuccess, "Failed to loadTextureArrayLayerFromBaseImages");
+		}
+		else
+		{
+			// convert from (presumably uncompressed) to desired run-time compressed target format (for each mip level)
+			ASSERT_OR_RETURN(nullptr, uncompressedExtractionFormat, "Expected uncompressed extraction format, but received: %s", gfx_api::format_to_str(desiredImageExtractionFormat));
+
+			for (size_t level = 0; level < pImagesForLayer->size(); ++level)
+			{
+				const iV_Image* image = dynamic_cast<iV_Image*>(pImagesForLayer->at(level).get());
+				ASSERT_OR_RETURN(nullptr, image != nullptr, "Image wasn't an iV_Image?");
+				// Run-time compression
+				auto compressedImage = gfx_api::compressImage(*image, uploadFormat);
+				ASSERT_OR_RETURN(nullptr, compressedImage != nullptr, "Failed to compress image to format: %zu", static_cast<size_t>(uploadFormat));
+				bool uploadResult = texture_array->upload_layer(layer, level, *compressedImage);
+				ASSERT_OR_RETURN(nullptr, uploadResult, "Failed to upload buffer to image");
+			}
+		}
+	}
+
+	if (texture_array)
+	{
+		texture_array->flush();
+	}
+
+	return texture_array.release();
 }

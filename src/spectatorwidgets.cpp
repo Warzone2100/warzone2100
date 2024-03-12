@@ -38,6 +38,7 @@
 #include "multistat.h"
 #include "notifications.h"
 #include "component.h"
+#include "loop.h" // for getNumDroids
 
 #include <unordered_set>
 #include <unordered_map>
@@ -84,6 +85,15 @@ static std::shared_ptr<SpectatorStatsView> globalStatsForm = nullptr;
 #define SPEC_STATS_BUTTON_X RET_X
 #define SPEC_STATS_BUTTON_Y 20
 
+void intDisplayImageHilightOnceStarted(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	if (bDisplayMultiJoiningStatus)
+	{
+		return;
+	}
+	intDisplayImageHilight(psWidget, xOffset, yOffset);
+}
+
 bool specLayerInit(bool showButton /*= true*/)
 {
 	if (selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator
@@ -106,13 +116,21 @@ bool specLayerInit(bool showButton /*= true*/)
 			ASSERT_OR_RETURN(true, width > 0 && height > 0, "Possibly missing specstats button image?");
 
 			specStatsButton = std::make_shared<W_BUTTON>();
-			specStatsButton->displayFunction = intDisplayImageHilight;
+			specStatsButton->displayFunction = intDisplayImageHilightOnceStarted;
 			specStatsButton->UserData = PACKDWORD_TRI(0, IMAGE_SPECSTATS_DOWN, IMAGE_SPECSTATS_UP);
 			specStatsButton->pTip = _("Show Player Stats");
 			specStatsButton->addOnClickHandler([](W_BUTTON& button){
 				widgScheduleTask([](){
 					specStatsViewCreate();
 				});
+			});
+			specStatsButton->setCustomHitTest([](const WIDGET *psWidget, int x, int y) -> bool {
+				if (bDisplayMultiJoiningStatus)
+				{
+					// effectively: make this unclickable until the game actually starts
+					return false;
+				}
+				return true; // revert back to default hit-testing behavior
 			});
 			specStatsButton->setGeometry(x, y, width, height);
 			statsOverlay->psForm->attach(specStatsButton);
@@ -232,7 +250,7 @@ public:
 	{
 		auto newLabel = std::make_shared<WzThrottledUpdateLabel>(updateFunc, updateInterval);
 		newLabel->setFont(font_regular, WZCOL_FORM_LIGHT);
-		newLabel->setCanTruncate(true);
+		newLabel->setCanTruncate(false);
 		newLabel->setTransparentToClicks(true);
 		if (updateFunc)
 		{
@@ -272,71 +290,6 @@ static gfx_api::texture* loadImageForArmorCol(bool thermal)
 widgScheduleTask([](){ \
 	specS##id##ewShutdown(); \
 });
-
-static gfx_api::texture* loadImageForWeapSubclass(WEAPON_SUBCLASS subClass)
-{
-	const char* imagePath = nullptr;
-	switch (subClass)
-	{
-		case WSC_MGUN:
-			imagePath = "images/intfac/wsc_mgun.png";
-			break;
-		case WSC_CANNON:
-			imagePath = "images/intfac/wsc_cannon.png";
-			break;
-		case WSC_MORTARS:
-			imagePath = "images/intfac/wsc_mortars.png";
-			break;
-		case WSC_MISSILE:
-			imagePath = "images/intfac/wsc_missile.png";
-			break;
-		case WSC_ROCKET:
-			imagePath = "images/intfac/wsc_rocket.png";
-			break;
-		case WSC_ENERGY:
-			imagePath = "images/intfac/wsc_energy.png";
-			break;
-		case WSC_GAUSS:
-			imagePath = "images/intfac/wsc_gauss.png";
-			break;
-		case WSC_FLAME:
-			imagePath = "images/intfac/wsc_flame.png";
-			break;
-		//case WSC_CLOSECOMBAT:
-		case WSC_HOWITZERS:
-			imagePath = "images/intfac/wsc_howitzers.png";
-			break;
-		case WSC_ELECTRONIC:
-			imagePath = "images/intfac/wsc_electronic.png";
-			break;
-		case WSC_AAGUN:
-			imagePath = "images/intfac/wsc_aagun.png";
-			break;
-		case WSC_SLOWMISSILE:
-			imagePath = "images/intfac/wsc_slowmissile.png";
-			break;
-		case WSC_SLOWROCKET:
-			imagePath = "images/intfac/wsc_slowrocket.png";
-			break;
-		case WSC_LAS_SAT:
-			imagePath = "images/intfac/wsc_las_sat.png";
-			break;
-		case WSC_BOMB:
-			imagePath = "images/intfac/wsc_bomb.png";
-			break;
-		case WSC_COMMAND:
-			imagePath = "images/intfac/wsc_command.png";
-			break;
-		case WSC_EMP:
-			imagePath = "images/intfac/wsc_emp.png";
-			break;
-		case WSC_NUM_WEAPON_SUBCLASSES:	/** The number of enumerators in this enum.	 */
-			break;
-	}
-	ASSERT_OR_RETURN(nullptr, imagePath != nullptr, "No image path");
-	WZ_Notification_Image img(imagePath);
-	return img.loadImageToTexture();
-}
 
 class WzCenteredColumnIcon: public W_BUTTON
 {
@@ -724,6 +677,34 @@ if ((!NetPlay.players[playerIdx].allocated && NetPlay.players[playerIdx].ai < 0)
 			label.setString(WzString::number(getMultiStats(playerIdx).recentPowerLost));
 			ADJUST_LABEL_COLOR_FOR_PLAYERS();
 		}, INFO_UPDATE_INTERVAL_TICKS));
+		// PowerWon
+		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+			label.setString(WzString::number(getMultiStats(playerIdx).recentPowerWon));
+			ADJUST_LABEL_COLOR_FOR_PLAYERS();
+		}, INFO_UPDATE_INTERVAL_TICKS));
+		// Lab Use
+		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+			PLAYERSTATS sts = getMultiStats(playerIdx);
+			if (sts.recentResearchPotential == 0)
+			{
+				label.setString(" - ");
+			}
+			else
+			{
+				label.setString(WzString::fromUtf8(astringf("%.2f%%", ((float)sts.recentResearchPerformance/(float)sts.recentResearchPotential)*100)));
+			}
+			ADJUST_LABEL_COLOR_FOR_PLAYERS();
+		}, INFO_UPDATE_INTERVAL_TICKS));
+		// Kills
+		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+			label.setString(WzString::number(getMultiStats(playerIdx).recentKills));
+			ADJUST_LABEL_COLOR_FOR_PLAYERS();
+		}, INFO_UPDATE_INTERVAL_TICKS));
+		// Units (as in F5)
+		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
+			label.setString(WzString::number(getNumDroids(playerIdx) + getNumTransporterDroids(playerIdx)));
+			ADJUST_LABEL_COLOR_FOR_PLAYERS();
+		}, INFO_UPDATE_INTERVAL_TICKS));
 		// Kinetic Armor (T/C)
 		columnWidgets.push_back(WzThrottledUpdateLabel::make([playerIdx](W_LABEL& label){
 			WzString armorStr = WzString::number(getNumBodyClassArmourUpgrades(playerIdx, BodyClass::Tank)) + "/" +  WzString::number(getNumBodyClassArmourUpgrades(playerIdx, BodyClass::Cyborg));
@@ -803,7 +784,11 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	auto playerLabel = createColHeaderLabel(_("Player"));
 	auto powerRateLabel = createColHeaderLabel(_("Power/Rate"));
 	powerRateLabel->setTip(_("Current Power / Power Per Second"));
-	auto powerLostLabel = createColHeaderLabel(_("PowerLost"));
+	auto powerLostLabel = createColHeaderLabel(_("PwrLost"));
+	auto powerWonLabel = createColHeaderLabel(_("PwrWon"));
+	auto labActivityLabel = createColHeaderLabel(_("Lab Use"));
+	auto killsLabel = createColHeaderLabel(_("Kills"));
+	auto unitsLabel = createColHeaderLabel(_("Units"));
 	auto armorLabel = createArmorColWidget(false);
 	armorLabel->setTip(std::string(_("Kinetic Armor")) + "\n" + _("(Tanks / Cyborgs)"));
 	auto thermalArmorLabel = createArmorColWidget(true);
@@ -814,6 +799,10 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 		{playerLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{powerRateLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{powerLostLabel, TableColumn::ResizeBehavior::RESIZABLE},
+		{powerWonLabel, TableColumn::ResizeBehavior::RESIZABLE},
+		{labActivityLabel, TableColumn::ResizeBehavior::RESIZABLE},
+		{killsLabel, TableColumn::ResizeBehavior::RESIZABLE},
+		{unitsLabel, TableColumn::ResizeBehavior::RESIZABLE},
 		{armorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
 		{thermalArmorLabel, TableColumn::ResizeBehavior::FIXED_WIDTH},
 		{result->weaponGradesManager, TableColumn::ResizeBehavior::FIXED_WIDTH},
@@ -844,7 +833,9 @@ std::shared_ptr<SpectatorStatsView> SpectatorStatsView::make()
 	std::vector<uint32_t> playerIndexes;
 	for (uint32_t player = 0; player < std::min<uint32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 	{
-		if (isHumanPlayer(player) || NetPlay.players[player].ai >= 0)
+		if (isHumanPlayer(player) // is an active (connected) human player
+			|| NetPlay.players[player].difficulty == AIDifficulty::HUMAN // was a human player (probably disconnected)
+			|| NetPlay.players[player].ai >= 0) // is an AI bot
 		{
 			playerIndexes.push_back(player);
 		}

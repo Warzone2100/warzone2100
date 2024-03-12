@@ -42,6 +42,9 @@ bool recvPositionRequest(NETQUEUE queue);
 bool recvOptions(NETQUEUE queue);
 void sendOptions();
 
+void sendHostConfig();
+bool recvHostConfig(NETQUEUE queue);
+
 bool recvResearchStatus(NETQUEUE queue);
 bool recvLasSat(NETQUEUE queue);
 void recvStructureInfo(NETQUEUE queue);

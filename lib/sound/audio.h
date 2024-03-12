@@ -39,7 +39,7 @@ bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK 
 void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack);
 void audio_PlayTrack(int iTrack);
 void audio_PlayCallbackTrack(int iTrack, AUDIO_CALLBACK pUserCallback);
-AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, void (*onFinished)(const AUDIO_STREAM *, const void *), const void *user_data);
+AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished, const void *user_data);
 void audio_QueueTrack(SDWORD iTrack);
 void audio_QueueTrackMinDelay(SDWORD iTrack, UDWORD iMinDelay);
 void audio_QueueTrackMinDelayPos(SDWORD iTrack, UDWORD iMinDelay, SDWORD iX, SDWORD iY, SDWORD iZ);

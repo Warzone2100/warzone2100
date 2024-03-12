@@ -29,6 +29,7 @@
 #include "lib/framework/vector.h"
 #include "lib/framework/crc.h"
 #include "lib/netplay/nettypes.h"
+#include "multiplaydefs.h"
 #include "orderdef.h"
 #include "stringdef.h"
 #include "messagedef.h"
@@ -38,6 +39,7 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <array>
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -73,9 +75,11 @@ struct MULTIPLAYERGAME
 	bool        isRandom;                   // If a map is non-static.
 	uint32_t	techLevel;					// what technology level is being used
 	uint32_t	inactivityMinutes;			// The number of minutes without active play before a player should be considered "inactive". (0 = disable activity alerts)
+	uint32_t	gameTimeLimitMinutes;		// The number of minutes before the game automatically ends (0 = disable time limit)
+	PLAYER_LEAVE_MODE	playerLeaveMode;	// The behavior used for when players leave a game
 
 	// NOTE: If adding to this struct, a lot of things probably require changing
-	// (send/recvOptions? to/from_json in multiint.h.cpp?)
+	// (send/recvOptions? loadMainFile/writeMainFile? to/from_json in multiint.h.cpp?)
 };
 
 struct MULTISTRUCTLIMITS
@@ -106,7 +110,9 @@ struct MULTIPLAYERINGAME
 	bool				localOptionsReceived;							// used to show if we have game options yet..
 	bool				localJoiningInProgress;							// used before we know our player number.
 	bool				JoiningInProgress[MAX_CONNECTED_PLAYERS];
+	bool				PendingDisconnect[MAX_CONNECTED_PLAYERS];		// used to mark players who have disconnected after the game has "fired up" but before it actually starts (i.e. pre-game / loading phase) - UI only
 	bool				DataIntegrity[MAX_CONNECTED_PLAYERS];
+	std::array<bool, MAX_CONNECTED_PLAYERS> hostChatPermissions;		// the *host*-set free chat permission status for players (true if free chat is allowed, false if only Quick Chat is allowed)
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
@@ -115,7 +121,7 @@ struct MULTIPLAYERINGAME
 	std::chrono::steady_clock::time_point lastLagCheck;
 	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
 	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
-	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};
+	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};		// the local client-set mute status for this player
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
@@ -201,9 +207,8 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define TECH_3					3
 #define TECH_4					4
 
-#define MAX_KICK_REASON			80			// max array size for the reason your kicking someone
+#define MAX_KICK_REASON			1024		// max array size for the reason your kicking someone
 
-#define CLEAR_ALL_NAMES         -1
 // functions
 
 WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
@@ -213,7 +218,7 @@ WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
-const char *getPlayerName(int player, bool storedName = false);
+const char *getPlayerName(int player);
 bool setPlayerName(int player, const char *sName);
 void clearPlayerName(unsigned int player);
 const char *getPlayerColourName(int player);
@@ -224,7 +229,7 @@ int whosResponsible(int player);
 bool canGiveOrdersFor(int player, int playerInQuestion);
 int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
 int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
-Vector3i cameraToHome(UDWORD player, bool scroll);
+Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave);
 
 bool multiPlayerLoop();							// for loop.c
 
@@ -296,6 +301,7 @@ JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();
+bool multiStartScreenInit();
 
 // syncing.
 bool sendScoreCheck();							//score check only(frontend)
@@ -324,6 +330,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 void setPlayerMuted(uint32_t playerIdx, bool muted);
 bool isPlayerMuted(uint32_t sender);
 
+bool setGameStoryLogPlayerDataValue(uint32_t playerIndex, const std::string& key_str, const std::string& value_str);
 bool makePlayerSpectator(uint32_t player_id, bool removeAllStructs = false, bool quietly = false);
 
 class WZGameReplayOptionsHandler : public ReplayOptionsHandler

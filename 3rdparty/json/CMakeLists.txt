@@ -1,6 +1,6 @@
 # A simplified version of: https://github.com/nlohmann/json/blob/b21c34517900c46a943c804d9af3a20cd0c77062/CMakeLists.txt
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.1...3.14)
 
 project(nlohmann_json LANGUAGES CXX)
 

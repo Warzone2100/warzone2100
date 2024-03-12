@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2021-2023  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #include "lib/widget/button.h"
 #include "lib/widget/bar.h"
 #include "objects_stats.h"
@@ -5,6 +24,7 @@
 #include "../qtscript.h"
 #include "../warcam.h"
 #include "../geometry.h"
+#include "groups.h"
 
 void BaseObjectsController::clearSelection()
 {
@@ -13,9 +33,13 @@ void BaseObjectsController::clearSelection()
 
 void BaseObjectsController::clearStructureSelection()
 {
-	for (auto structure = interfaceStructList(); structure != nullptr; structure = structure->psNext)
+	StructureList* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		structure->selected = false;
+		for (auto structure : *intStrList)
+		{
+			structure->selected = false;
+		}
 	}
 }
 
@@ -108,6 +132,11 @@ void BaseStatsController::scheduleDisplayStatsForm(const std::shared_ptr<BaseSta
 	});
 }
 
+DynamicIntFancyButton::DynamicIntFancyButton()
+{
+	style |= WFORM_SECONDARY;
+}
+
 void DynamicIntFancyButton::updateLayout()
 {
 	updateHighlight();
@@ -116,7 +145,14 @@ void DynamicIntFancyButton::updateLayout()
 
 void DynamicIntFancyButton::released(W_CONTEXT *context, WIDGET_KEY mouseButton)
 {
+	bool clickAndReleaseOnThisButton = ((state & WBUT_DOWN) != 0); // relies on W_CLICKFORM handling to properly set WBUT_DOWN
+
 	IntFancyButton::released(context, mouseButton);
+
+	if (!clickAndReleaseOnThisButton)
+	{
+		return; // do nothing
+	}
 
 	if (mouseButton == WKEY_PRIMARY)
 	{
@@ -124,8 +160,18 @@ void DynamicIntFancyButton::released(W_CONTEXT *context, WIDGET_KEY mouseButton)
 	}
 	else if (mouseButton == WKEY_SECONDARY)
 	{
-		clickSecondary();
+		clickSecondary(false);
 	}
+}
+
+bool DynamicIntFancyButton::clickHeld(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	if (key == WKEY_PRIMARY)
+	{
+		clickSecondary(true);
+		return true;
+	}
+	return false;
 }
 
 void StatsButton::addProgressBar()
@@ -217,9 +263,10 @@ void ObjectsForm::goToHighlightedTab()
 
 void ObjectsForm::initialize()
 {
+	// creating an obj stat form
 	id = IDOBJ_FORM;
 	setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
+		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY - (getGroupButtonEnabled() ? 80 : 0), OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
 	}));
 
 	addCloseButton();

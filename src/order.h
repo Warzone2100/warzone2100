@@ -50,7 +50,7 @@ void orderUpdateDroid(DROID *psDroid);
 void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode);
 
 /** \brief Compares droid's order with order. */
-bool orderState(DROID *psDroid, DROID_ORDER order);
+bool orderState(const DROID *psDroid, DROID_ORDER order);
 
 /** \brief Checks if an order is valid for a location. */
 bool validOrderForLoc(DROID_ORDER order);
@@ -62,7 +62,7 @@ bool validOrderForObj(DROID_ORDER order);
 void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_MODE mode);
 
 /** \brief Gets the state of a droid order with a location. */
-bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY);
+bool orderStateLoc(const DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY);
 
 /** \brief Sends an order with an object target to a droid. */
 void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_MODE mode);
@@ -74,7 +74,7 @@ BASE_OBJECT *orderStateObj(const DROID *psDroid, DROID_ORDER order);
 void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, QUEUE_MODE mode);
 
 /** \brief Gets the state of a droid order with a location and a stat. */
-bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS **ppsStats);
+bool orderStateStatsLoc(const DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS **ppsStats);
 
 /** \brief Sends an order with a location and a stat to a droid. */
 void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, QUEUE_MODE mode);
@@ -108,10 +108,10 @@ void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS
 void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add);
 
 /** \brief Sees if a droid supports a given secondary order. */
-bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
+bool secondarySupported(const DROID *psDroid, SECONDARY_ORDER sec);
 
 /** \brief Gets the state of a secondary order, return false if unsupported. */
-SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MODE mode = ModeImmediate);
+SECONDARY_STATE secondaryGetState(const DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MODE mode = ModeImmediate);
 
 /** \brief Sets the state of a secondary order, return false if failed. */
 bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode = ModeQueue);
@@ -133,7 +133,7 @@ DROID *FindATransporter(DROID const *embarkee);
 bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State);
 
 /** \brief Gets the state of a secondary order for a Factory. */
-bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
+bool getFactoryState(const STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
 
 /** \brief lasSat structure can select a target. */
 void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);

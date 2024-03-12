@@ -1,16 +1,15 @@
-
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const SCAVENGER_RES = [
+const mis_scavengerRes = [
 	"R-Wpn-Flamer-Damage01", "R-Wpn-MG-Damage02", "R-Wpn-MG-ROF01",
 ];
 
 //Ambush player from scav base - triggered from middle path
 camAreaEvent("scavBaseTrigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("eastScavsNorth", SCAV_7, false));
-	camManageGroup(ambushGroup, CAM_ORDER_ATTACK, {
+	const AMBUSH_GROUP = camMakeGroup(enumArea("eastScavsNorth", CAM_SCAV_7, false));
+	camManageGroup(AMBUSH_GROUP, CAM_ORDER_ATTACK, {
 		count: -1,
 		regroup: false
 	});
@@ -35,16 +34,16 @@ camAreaEvent("factoryTrigger", function()
 
 function westScavAction()
 {
-	var ambushGroup = camMakeGroup(enumArea("westScavs", SCAV_7, false));
-	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
+	const AMBUSH_GROUP = camMakeGroup(enumArea("westScavs", CAM_SCAV_7, false));
+	camManageGroup(AMBUSH_GROUP, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush1")
 	});
 }
 
 function northwestScavAction()
 {
-	var ambushGroup = camMakeGroup(enumArea("northWestScavs", SCAV_7, false));
-	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
+	const AMBUSH_GROUP = camMakeGroup(enumArea("northWestScavs", CAM_SCAV_7, false));
+	camManageGroup(AMBUSH_GROUP, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush2")
 	});
 }
@@ -68,7 +67,8 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	if (victim.type === STRUCTURE && victim.id === 146)
+	const scavFactory = getObject("scavFactory1");
+	if (camDef(scavFactory) && scavFactory && victim.type === STRUCTURE && victim.id === scavFactory.id)
 	{
 		camCallOnce("westScavAction");
 	}
@@ -79,8 +79,8 @@ function checkFrontBunkers()
 {
 	if (getObject("frontBunkerLeft") === null && getObject("frontBunkerRight") === null)
 	{
-		var ambushGroup = camMakeGroup(enumArea("eastScavsSouth", SCAV_7, false));
-		camManageGroup(ambushGroup, CAM_ORDER_ATTACK, {
+		const AMBUSH_GROUP = camMakeGroup(enumArea("eastScavsSouth", CAM_SCAV_7, false));
+		camManageGroup(AMBUSH_GROUP, CAM_ORDER_ATTACK, {
 			count: -1,
 			regroup: false
 		});
@@ -101,28 +101,26 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 	if (difficulty >= HARD)
 	{
-		completeResearch("R-Wpn-Flamer-Range01", SCAV_7);
+		completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_7);
 	}
 
-	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.trike, cTempl.triketwin, SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggytwin, SCAV_7);
-	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeeptwin, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.trike, cTempl.triketwin, CAM_SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggytwin, CAM_SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeeptwin, CAM_SCAV_7);
 
-	//Get rid of the already existing crate and replace with another
-	camSafeRemoveObject("artifact1", false);
 	camSetArtifacts({
 		"scavFactory1": { tech: "R-Wpn-MG3Mk1" }, //Heavy machine gun
 	});

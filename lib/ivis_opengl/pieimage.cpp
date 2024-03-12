@@ -43,6 +43,8 @@
 #  pragma clang diagnostic pop
 #endif
 
+#include <algorithm>
+
 /***************************************************************************/
 /*
  *	Source
@@ -410,9 +412,36 @@ bool iV_Image::scale_image_max_size(int maxWidth, int maxHeight)
 	return resize(output_w, output_h);
 }
 
+bool iV_Image::convert_channels(const std::vector<unsigned int>& channelMap)
+{
+	ASSERT_OR_RETURN(false, !channelMap.empty(), "No channels supplied to extract?");
+	ASSERT_OR_RETURN(false, channelMap.size() <= 4, "iV_Image does not support > 4 channel textures (channelMap has %zu entries)", channelMap.size());
+	auto originalChannels = m_channels;
+	ASSERT_OR_RETURN(false, std::all_of(channelMap.begin(), channelMap.end(), [originalChannels](unsigned int srcChannel){ return srcChannel < originalChannels; }), "Channel swizzle contains channel > originalChannels (%u)", m_channels);
+	ASSERT_OR_RETURN(false, m_width > 0 && m_height > 0, "No size");
+
+	unsigned int newChannels = static_cast<unsigned int>(channelMap.size());
+
+	auto originalBmpData = m_bmp;
+	const size_t numPixels = static_cast<size_t>(m_height) * static_cast<size_t>(m_width);
+	m_channels = newChannels;
+	m_bmp = (unsigned char *)malloc(static_cast<size_t>(m_height) * static_cast<size_t>(m_width) * static_cast<size_t>(newChannels));
+	for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
+	{
+		for (unsigned int i = 0; i < newChannels; ++i)
+		{
+			m_bmp[(pixelIdx * m_channels) + i] = originalBmpData[(pixelIdx * originalChannels) + channelMap[i]];
+		}
+	}
+	// free the original bitmap data
+	free(originalBmpData);
+	return true;
+}
+
 bool iV_Image::convert_to_single_channel(unsigned int channel /*= 0*/)
 {
 	ASSERT_OR_RETURN(false, channel < m_channels, "Cannot extract channel %u from image with %u channels", channel, m_channels);
+	ASSERT_OR_RETURN(false, m_width > 0 && m_height > 0, "No size");
 	if (channel == 0 && m_channels == 1)
 	{
 		// nothing to do
@@ -485,6 +514,40 @@ bool iV_Image::pad_image(unsigned int newWidth, unsigned int newHeight, bool use
 	return true;
 }
 
+bool iV_Image::blit_image(const iV_Image& src, unsigned int xOffset, unsigned int yOffset)
+{
+	ASSERT_OR_RETURN(false, xOffset < m_width, "xOffset (%u) >= destination width (%u)", xOffset, m_width);
+	ASSERT_OR_RETURN(false, yOffset < m_height, "yOffset (%u) >= destination height (%u)", yOffset, m_height);
+
+	// For now, the source and destination images must share the same format / # of channels
+	ASSERT_OR_RETURN(false, src.channels() == channels() && src.pixel_format() == pixel_format(), "Source and destination must share the same number of channels / format");
+
+	auto sourceImageHeight = src.height();
+	auto sourceImageWidth = src.width();
+
+	unsigned int rowWidthToCopy = sourceImageWidth;
+	if (xOffset + sourceImageWidth > m_width)
+	{
+		debug(LOG_ERROR, "Cropping source image, as it would extend beyond the width of the destination image.");
+		rowWidthToCopy = m_width - xOffset;
+	}
+	unsigned int rowsToCopy = sourceImageHeight;
+	if (yOffset + sourceImageHeight > m_height)
+	{
+		debug(LOG_ERROR, "Cropping source image, as it would extend beyond the height of the destination image.");
+		rowsToCopy = m_height - yOffset;
+	}
+
+	for (unsigned int y = 0; y < rowsToCopy; ++y)
+	{
+		// Copy the source image row
+		size_t copyOffset = (((m_width * (yOffset + y)) + xOffset) * 4);
+		memcpy(&m_bmp[copyOffset], &src.m_bmp[sourceImageWidth * y * m_channels], (m_channels * rowWidthToCopy));
+	}
+
+	return true;
+}
+
 bool iV_Image::convert_color_order(ColorOrder newOrder)
 {
 	if (m_colorOrder == newOrder)
@@ -499,4 +562,23 @@ bool iV_Image::convert_color_order(ColorOrder newOrder)
 	}
 	m_colorOrder = newOrder;
 	return true;
+}
+
+bool iV_Image::compare_equal(const iV_Image& other)
+{
+	if (m_width != other.m_width || m_height != other.m_height || m_channels != other.m_channels)
+	{
+		return false;
+	}
+	if (m_colorOrder != other.m_colorOrder)
+	{
+		return false;
+	}
+	if ((m_bmp == nullptr || other.m_bmp == nullptr) && (m_bmp != other.m_bmp))
+	{
+		return false;
+	}
+
+	const size_t sizeOfBuffers = sizeof(unsigned char) * m_width * m_height * m_channels;
+	return memcmp(m_bmp, other.m_bmp, sizeOfBuffers) == 0;
 }

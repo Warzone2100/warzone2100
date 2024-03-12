@@ -47,7 +47,7 @@ static inline WZ_DECL_CONST float RADIANS(float degrees)
 
 static inline WZ_DECL_CONST float UNDEG(uint16_t angle)
 {
-	return angle * (360.f / 65536.0f) * (3.141592f / 180.0f);
+	return static_cast<float>(static_cast<uint32_t>(angle)) * (360.f / 65536.0f) * (3.141592f / 180.0f);
 }
 
 // Should be a macro (or two separate functions), since we can't do function overloading for float and int, and we don't want to use the float version for anything game-state related.

@@ -33,6 +33,8 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
+#include "lib/widget/label.h"
+#include "lib/widget/paragraph.h"
 #include "../multiplay.h"
 #include "../intdisplay.h"
 #include "../hci.h"
@@ -40,7 +42,7 @@
 #include "../warzoneconfig.h"
 #include "../frend.h"
 
-WzMsgBoxTitleUI::WzMsgBoxTitleUI(WzString text, std::shared_ptr<WzTitleUI> next) : text(text), next(next)
+WzMsgBoxTitleUI::WzMsgBoxTitleUI(WzString title, WzString text, std::shared_ptr<WzTitleUI> next) : title(title), text(text), next(next)
 {
 }
 
@@ -50,18 +52,36 @@ void WzMsgBoxTitleUI::start()
 	addTopForm(false);
 	addBottomForm();
 
-	W_LABINIT sLabInit;
-	sLabInit.formID = FRONTEND_BOTFORM;
-	sLabInit.id	= WZ_MSGBOX_TUI_LEAVE;
-	sLabInit.style = WLAB_ALIGNCENTRE;
-	sLabInit.x = MULTIOP_OKW;
-	sLabInit.y = MULTIOP_OKH;
-	sLabInit.width = FRONTEND_BOTFORMW - (MULTIOP_OKW * 2);
-	sLabInit.height = FRONTEND_BOTFORMH - (MULTIOP_OKH * 3);
-	sLabInit.pText = text;
-	widgAddLabel(psWScreen, &sLabInit);
-
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, WZ_MSGBOX_TUI_LEAVE, FRONTEND_BOTFORMW - (MULTIOP_OKW * 2), FRONTEND_BOTFORMH - (MULTIOP_OKH * 2), MULTIOP_OKW, MULTIOP_OKH, _("Continue"), IMAGE_OK, IMAGE_OK, true);
+
+	auto psBotForm = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	if (psBotForm)
+	{
+		auto msgboxTitle = std::make_shared<W_LABEL>();
+		if (msgboxTitle) // silence a GCC warning ...
+		{
+			msgboxTitle->setFont(font_medium_bold, WZCOL_TEXT_BRIGHT);
+			msgboxTitle->setString(title);
+			msgboxTitle->setGeometry(MULTIOP_OKW, MULTIOP_OKH, msgboxTitle->getMaxLineWidth(), iV_GetTextLineSize(font_regular_bold));
+			psBotForm->attach(msgboxTitle);
+		}
+
+		auto paragraph = std::make_shared<Paragraph>();
+		const int msgboxTitleContentsPadding = 20;
+		int msgboxTitleBottomY = msgboxTitle->y() + msgboxTitle->height();
+		int msgboxContentsY = msgboxTitleBottomY + msgboxTitleContentsPadding;
+		paragraph->setGeometry(MULTIOP_OKW, msgboxContentsY, FRONTEND_BOTFORMW - (MULTIOP_OKW * 2), FRONTEND_BOTFORMH - msgboxContentsY - (MULTIOP_OKH * 2));
+		paragraph->setFontColour(WZCOL_TEXT_BRIGHT);
+		paragraph->setLineSpacing(5);
+		paragraph->setFont(font_regular);
+		paragraph->addText(text.toUtf8());
+		psBotForm->attach(paragraph);
+	}
+	else
+	{
+		debug(LOG_FATAL, "No bottom form?");
+	}
 }
 
 TITLECODE WzMsgBoxTitleUI::run()

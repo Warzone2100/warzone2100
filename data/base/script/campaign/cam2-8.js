@@ -1,11 +1,11 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const COLLECTIVE_RES = [
+const mis_collectiveRes = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
 	"R-Vehicle-Engine06", "R-Vehicle-Metals06", "R-Cyborg-Metals06",
-	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage06","R-Wpn-Cannon-ROF03",
-	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage07",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage06", "R-Wpn-Cannon-ROF03",
+	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage08",
 	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
 	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
@@ -24,11 +24,11 @@ function vtolAttack()
 
 function setupLandGroups()
 {
-	var hovers = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => (
-		obj.type === DROID && obj.propulsion === "hover01"
+	const hovers = enumArea("NWTankGroup", CAM_THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && obj.propulsion === tProp.tank.hover
 	));
-	var tanks = enumArea("NWTankGroup", THE_COLLECTIVE, false).filter((obj) => (
-		obj.type === DROID && obj.propulsion !== "hover01"
+	const tanks = enumArea("NWTankGroup", CAM_THE_COLLECTIVE, false).filter((obj) => (
+		obj.type === DROID && obj.propulsion !== tProp.tank.hover
 	));
 
 	camManageGroup(camMakeGroup(hovers), CAM_ORDER_PATROL, {
@@ -75,16 +75,16 @@ function enableFactories()
 
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
+	if (enumDroid(CAM_THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
 		removeTimer("truckDefense");
 		return;
 	}
 
-	var list = ["Emplacement-Rocket06-IDF", "Emplacement-Howitzer150", "CO-Tower-HvATRkt", "CO-Tower-HVCan", "Sys-CB-Tower01"];
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos3"));
+	const list = ["Emplacement-Rocket06-IDF", "Emplacement-Howitzer150", "CO-Tower-HvATRkt", "CO-Tower-HVCan", "Sys-CB-Tower01"];
+	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
+	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
+	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos3"));
 }
 
 function eventStartLevel()
@@ -95,55 +95,55 @@ function eventStartLevel()
 		annihilate: true
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
-
-	var enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
 		"COVtolFac-b3": { tech: "R-Vehicle-Body09" }, //Tiger body
 		"COHeavyFacL-b2": { tech: "R-Wpn-HvyHowitzer" },
 	});
 
-	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
-	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohhpv, THE_COLLECTIVE);
-	camUpgradeOnMapTemplates(cTempl.comtath, cTempl.comltath, THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.commc, cTempl.cohhpv, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.comtath, cTempl.comltath, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
 
 	//New AC Tiger tracked units for Hard and Insane difficulty
 	if (difficulty >= HARD)
 	{
-		addDroid(THE_COLLECTIVE, 30, 22, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
-		addDroid(THE_COLLECTIVE, 30, 23, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
-		addDroid(THE_COLLECTIVE, 31, 22, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
-		addDroid(THE_COLLECTIVE, 31, 23, "AC Tiger Tracks", "Body9REC", "tracked01", "", "", "Cannon5VulcanMk1");
+		addDroid(CAM_THE_COLLECTIVE, 30, 22, "AC Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.assaultCannon);
+		addDroid(CAM_THE_COLLECTIVE, 30, 23, "AC Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.assaultCannon);
+		addDroid(CAM_THE_COLLECTIVE, 31, 22, "AC Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.assaultCannon);
+		addDroid(CAM_THE_COLLECTIVE, 31, 23, "AC Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.assaultCannon);
 	}
 
 	camSetEnemyBases({
 		"COBase1": {
 			cleanup: "COBase1Cleanup",
 			detectMsg: "C28_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBase2": {
 			cleanup: "COBase2Cleanup",
 			detectMsg: "C28_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COBase3": {
 			cleanup: "COBase3Cleanup",
 			detectMsg: "C28_BASE3",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -152,19 +152,19 @@ function eventStartLevel()
 			assembly: "COCyborgFac-b1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 27 : 30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 30 : 35)),
 			data: {
 				regroup: false,
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.cocybag, cTempl.npcybr]
+			templates: [cTempl.cocybag, cTempl.cocybtk]
 		},
 		"COHeavyFacL-b2": {
 			assembly: "COHeavyFacL-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 50 : 55)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 70 : 75)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -176,7 +176,7 @@ function eventStartLevel()
 			assembly: "COHeavyFacR-b2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 6,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 45 : 50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 55 : 60)),
 			data: {
 				regroup: false,
 				repair: 20,
@@ -196,10 +196,10 @@ function eventStartLevel()
 		},
 	});
 
-	camManageTrucks(THE_COLLECTIVE);
+	camManageTrucks(CAM_THE_COLLECTIVE);
 
-	queue("setupLandGroups", camSecondsToMilliseconds(60));
-	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 80 : 90)));
+	queue("setupLandGroups", camSecondsToMilliseconds(90));
+	queue("vtolAttack", camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 100 : 110)));
 	queue("enableFactories", camChangeOnDiff(camSecondsToMilliseconds((difficulty <= MEDIUM) ? 135 : 150)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	truckDefense();

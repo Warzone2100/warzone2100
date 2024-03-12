@@ -26,6 +26,8 @@
 
 #include "lib/framework/frame.h"
 
+#include <list>
+
 /** Maximum number of characters in a resource type. */
 #define RESTYPE_MAXCHAR		20
 
@@ -48,7 +50,6 @@ struct RES_DATA
 	SDWORD		blockID;			// which of the blocks is it in (so we can clear some of them...)
 
 	UDWORD	HashedID;				// hashed version of the name of the id
-	RES_DATA       *psNext;                         // next entry - most likely to be following on!
 	UDWORD		usage; // Reference count
 
 	// ID of the resource - filename from the .wrf - e.g. "TRON.PIE"
@@ -67,11 +68,10 @@ struct RES_TYPE
 	RES_FREE release;			// routine to release the data (NULL indicates none)
 
 	// we must have a pointer to the data here so that we can do a resGetData();
-	RES_DATA		*psRes;		// Linked list of data items of this type
+	std::list<RES_DATA*> psRes;		// Linked list of data items of this type
 	UDWORD	HashedType;				// hashed version of the name of the id - // a null hashedtype indicates end of list
 
 	RES_FILELOAD	fileLoad;		// This isn't really used any more ?
-	RES_TYPE       *psNext;
 };
 
 

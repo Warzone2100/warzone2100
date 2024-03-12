@@ -77,7 +77,7 @@ static LEVEL_DATASET	*psBaseData = nullptr;
 static LEVEL_DATASET	*psCurrLevel = nullptr;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = { LEVEL_TYPE::LDS_COMPLETE, 0, 0, nullptr, mod_clean, {nullptr}, nullptr, nullptr, nullptr, {{0}}, nullptr};
+static LEVEL_DATASET	sSingleWRF = LEVEL_DATASET();
 
 // return values from the lexer
 char *pLevToken;
@@ -98,6 +98,31 @@ enum LEVELPARSER_STATE
 	LP_GAME,		// game token received
 };
 
+void LEVEL_DATASET::reset()
+{
+	type = static_cast<LEVEL_TYPE>(0);
+	players = 0;
+	game = 0;
+	pName.clear();
+	dataDir = mod_clean;
+	for (auto &apDataFile : apDataFiles)
+	{
+		apDataFile.clear();
+	}
+	psBaseData = nullptr;
+	psChange = nullptr;
+	if (realFileName)
+	{
+		free(realFileName);
+	}
+	realFileName = nullptr;
+	realFileHash.setZero();
+	if (customMountPoint)
+	{
+		free(customMountPoint);
+	}
+	customMountPoint = nullptr;
+}
 
 // initialise the level system
 bool levInitialise()
@@ -116,18 +141,8 @@ SDWORD getLevelLoadType()
 
 static inline void freeLevel(LEVEL_DATASET* toDelete)
 {
-	for (auto &apDataFile : toDelete->apDataFiles)
-	{
-		if (apDataFile != nullptr)
-		{
-			free(apDataFile);
-		}
-	}
-
-	free(toDelete->pName);
-	free(toDelete->realFileName);
-	free(toDelete->customMountPoint);
-	free(toDelete);
+	toDelete->reset();
+	delete toDelete;
 }
 
 // shutdown the level system
@@ -160,7 +175,7 @@ LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash)
 
 	for (auto psNewLevel : psLevels)
 	{
-		if (psNewLevel->pName && strcmp(psNewLevel->pName, name) == 0)
+		if (!psNewLevel->pName.empty() && strcmp(psNewLevel->pName.c_str(), name) == 0)
 		{
 			if (hash == nullptr || levGetFileHash(psNewLevel) == *hash)
 			{
@@ -282,14 +297,13 @@ LEVEL_DATASET* levFindBaseTileset(MAP_TILESET tileset)
 bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName)
 {
 	// start a new level data set
-	LEVEL_DATASET *psDataSet = (LEVEL_DATASET *)malloc(sizeof(LEVEL_DATASET));
+	LEVEL_DATASET *psDataSet = new LEVEL_DATASET();
 	if (!psDataSet)
 	{
 		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return false;
 	}
-	memset(psDataSet, 0, sizeof(LEVEL_DATASET));
 	
 	psDataSet->players = 1;
 	psDataSet->game = -1;
@@ -302,7 +316,7 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 	if (!levelDetails.has_value())
 	{
 		debug(LOG_ERROR, "Level File JSON load error: Failed to load JSON: %s", filename.c_str());
-		free(psDataSet);
+		delete psDataSet;
 		return false;
 	}
 
@@ -315,7 +329,7 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 		if (levelDetails.value().name.empty())
 		{
 			debug(LOG_ERROR, "Level File JSON load error: Map has empty name??: %s", filename.c_str());
-			free(psDataSet);
+			delete psDataSet;
 			return false;
 		}
 		switch (levelDetails.value().type)
@@ -324,7 +338,7 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 			case WzMap::MapType::SAVEGAME:
 				// FUTURE TODO: Support other map types
 				debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
-				free(psDataSet);
+				delete psDataSet;
 				return false;
 			case WzMap::MapType::SKIRMISH:
 				customMountPoint = std::string("multiplay/maps/") + levelDetails.value().name;
@@ -338,22 +352,22 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 		case WzMap::MapType::SAVEGAME:
 			// FUTURE TODO: Support other map types
 			debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
-			free(psDataSet);
+			delete psDataSet;
 			return false;
 		case WzMap::MapType::SKIRMISH:
 			psDataSet->type = LEVEL_TYPE::SKIRMISH;
 			break;
 	}
 	psDataSet->players = static_cast<SWORD>(levelDetails.value().players);
-	psDataSet->pName = strdup(levelDetails.value().name.c_str());
+	psDataSet->pName = levelDetails.value().name;
 	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.value().gamFilePath());
-	psDataSet->apDataFiles[0] = strdup(gamFilePath.c_str());
+	psDataSet->apDataFiles[0] = gamFilePath;
 	psDataSet->game = 0;
 	psDataSet->psBaseData = levFindBaseTileset(levelDetails.value().tileset);
 	if (psDataSet->psBaseData == nullptr)
 	{
 		debug(LOG_ERROR, "Level File JSON load error: Failed to find base tileset for: %d", (int)levelDetails.value().tileset);
-		free(psDataSet);
+		delete psDataSet;
 		return false;
 	}
 	if (!customMountPoint.empty())
@@ -408,14 +422,13 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				}
 
 				// start a new level data set
-				psDataSet = (LEVEL_DATASET *)malloc(sizeof(LEVEL_DATASET));
+				psDataSet = new LEVEL_DATASET();
 				if (!psDataSet)
 				{
 					debug(LOG_FATAL, "Out of memory");
 					abort();
 					return false;
 				}
-				memset(psDataSet, 0, sizeof(LEVEL_DATASET));
 				psDataSet->players = 1;
 				psDataSet->game = -1;
 				psDataSet->dataDir = pathMode;
@@ -464,7 +477,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			state = LP_LEVEL;
@@ -478,7 +491,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			break;
@@ -490,7 +503,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			break;
@@ -504,7 +517,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				if (levVal < LEVEL_TYPE::LDS_MULTI_TYPE_START)
 				{
 					lev_error("invalid type number");
-					if (psDataSet) { free(psDataSet); }
+					if (psDataSet) { delete psDataSet; }
 					return false;
 				}
 
@@ -513,7 +526,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			state = LP_LEVELDONE;
@@ -526,7 +539,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			break;
@@ -547,7 +560,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				   )
 				{
 					lev_error("Missing dataset command");
-					if (psDataSet) { free(psDataSet); }
+					if (psDataSet) { delete psDataSet; }
 					return false;
 				}
 				state = LP_DATA;
@@ -555,7 +568,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			break;
@@ -568,7 +581,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			break;
@@ -583,26 +596,20 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 					if (psFoundData == nullptr)
 					{
 						lev_error("Cannot find full data set for camchange");
-						if (psDataSet) { free(psDataSet); }
+						if (psDataSet) { delete psDataSet; }
 						return false;
 					}
 
 					if (psFoundData->type != LEVEL_TYPE::LDS_CAMSTART)
 					{
 						lev_error("Invalid data set name for cam change");
-						if (psDataSet) { free(psDataSet); }
+						if (psDataSet) { delete psDataSet; }
 						return false;
 					}
 					psFoundData->psChange = psDataSet;
 				}
 				// store the level name
-				psDataSet->pName = strdup(pLevToken);
-				if (psDataSet->pName == nullptr)
-				{
-					debug(LOG_FATAL, "Out of memory!");
-					abort();
-					return false;
-				}
+				psDataSet->pName = pLevToken;
 
 				state = LP_LEVELDONE;
 			}
@@ -614,7 +621,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				if (psDataSet->psBaseData == nullptr)
 				{
 					lev_error("Unknown dataset");
-					if (psDataSet) { free(psDataSet); }
+					if (psDataSet) { delete psDataSet; }
 					return false;
 				}
 				state = LP_WAITDATA;
@@ -622,7 +629,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			break;
@@ -632,7 +639,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				if (currData >= LEVEL_MAXFILES)
 				{
 					lev_error("Too many data files");
-					if (psDataSet) { free(psDataSet); }
+					if (psDataSet) { delete psDataSet; }
 					return false;
 				}
 
@@ -648,7 +655,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 				}
 
 				// store the data name
-				psDataSet->apDataFiles[currData] = strdup(pLevToken);
+				psDataSet->apDataFiles[currData] = pLevToken;
 
 				resToLower(pLevToken);
 
@@ -658,7 +665,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode pathMode, bool ign
 			else
 			{
 				lev_error("Syntax Error");
-				if (psDataSet) { free(psDataSet); }
+				if (psDataSet) { delete psDataSet; }
 				return false;
 			}
 			break;
@@ -758,7 +765,7 @@ bool levReleaseAll()
 		{
 			for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
 			{
-				if (psCurrLevel->psBaseData->apDataFiles[i])
+				if (!psCurrLevel->psBaseData->apDataFiles[i].empty())
 				{
 					resReleaseBlockData(i);
 				}
@@ -787,13 +794,8 @@ static bool levLoadSingleWRF(const char *name)
 	}
 
 	// create the dummy level data
-	if (sSingleWRF.pName)
-	{
-		free(sSingleWRF.pName);
-	}
-
-	memset(&sSingleWRF, 0, sizeof(LEVEL_DATASET));
-	sSingleWRF.pName = strdup(name);
+	sSingleWRF.reset();
+	sSingleWRF.pName = (name) ? std::string(name) : std::string();
 
 	// load up the WRF
 	if (!stageOneInitialise())
@@ -848,7 +850,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		debug(LOG_INFO, "Dataset %s not found - trying to load as WRF", name);
 		return levLoadSingleWRF(name);
 	}
-	debug(LOG_WZ, "** Data set found is %s type %d", psNewLevel->pName, (int)psNewLevel->type);
+	debug(LOG_WZ, "** Data set found is %s type %d", psNewLevel->pName.c_str(), (int)psNewLevel->type);
 
 	/* Keep a copy of the present level name */
 	sstrcpy(currentLevelName, name);
@@ -872,7 +874,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	// ensure the correct dataset is loaded
 	if (psNewLevel->type == LEVEL_TYPE::LDS_CAMPAIGN)
 	{
-		debug(LOG_ERROR, "Cannot load a campaign dataset (%s)", psNewLevel->pName);
+		debug(LOG_ERROR, "Cannot load a campaign dataset (%s)", psNewLevel->pName.c_str());
 		return false;
 	}
 	else
@@ -903,7 +905,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		{
 			if (psNewLevel->psBaseData != nullptr)
 			{
-				debug(LOG_WZ, "Setting base dataset to load: %s", psNewLevel->psBaseData->pName);
+				debug(LOG_WZ, "Setting base dataset to load: %s", psNewLevel->psBaseData->pName.c_str());
 			}
 			psBaseData = psNewLevel->psBaseData;
 		}
@@ -955,16 +957,16 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	// load up a base dataset if necessary
 	if (psBaseData != nullptr)
 	{
-		debug(LOG_WZ, "Loading base dataset %s", psBaseData->pName);
+		debug(LOG_WZ, "Loading base dataset %s", psBaseData->pName.c_str());
 		for (int i = 0; i < LEVEL_MAXFILES; i++)
 		{
-			if (psBaseData->apDataFiles[i])
+			if (!psBaseData->apDataFiles[i].empty())
 			{
 				// load the data
-				debug(LOG_WZ, "Loading [directory: %s] %s ...", WZ_PHYSFS_getRealDir_String(psBaseData->apDataFiles[i]).c_str(), psBaseData->apDataFiles[i]);
-				if (!resLoad(psBaseData->apDataFiles[i], i))
+				debug(LOG_WZ, "Loading [directory: %s] %s ...", WZ_PHYSFS_getRealDir_String(psBaseData->apDataFiles[i].c_str()).c_str(), psBaseData->apDataFiles[i].c_str());
+				if (!resLoad(psBaseData->apDataFiles[i].c_str(), i))
 				{
-					debug(LOG_ERROR, "Failed resLoad(%s)!", psBaseData->apDataFiles[i]);
+					debug(LOG_ERROR, "Failed resLoad(%s)!", psBaseData->apDataFiles[i].c_str());
 					return false;
 				}
 			}
@@ -974,31 +976,29 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	std::unordered_set<FactionID> enabledNonNormalFactions = getEnabledFactions(true);
 	if (!enabledNonNormalFactions.empty())
 	{
-		enumerateLoadedModels([enabledNonNormalFactions](const std::string &modelName, iIMDShape &s){
-			if (s.modelLevel != 0)
-			{
-				return; // skip
-			}
+		struct FactionModelInfo
+		{
+			WzString factionModel;
+			WzString normalModel;
+		};
+		std::vector<FactionModelInfo> factionModelsToLoad;
+		enumerateLoadedModels([enabledNonNormalFactions, &factionModelsToLoad](const std::string &modelName, iIMDBaseShape &s){
 			for (const auto& faction : enabledNonNormalFactions)
 			{
-				auto factionModel = getFactionModelName(faction, WzString::fromUtf8(modelName));
+				auto wzModelName = WzString::fromUtf8(modelName);
+				auto factionModel = getFactionModelName(faction, wzModelName);
 				if (factionModel.has_value())
 				{
-					iIMDShape *retval = modelGet(factionModel.value());
-					ASSERT(retval != nullptr, "Cannot find the faction PIE model %s (for normal model: %s)",
-						   factionModel.value().toUtf8().c_str(), modelName.c_str());
-					for (const iIMDShape *pIMD = retval, *pNormalIMD = &s; pIMD != nullptr && pNormalIMD != nullptr; pIMD = pIMD->next, pNormalIMD = pNormalIMD->next)
-					{
-						if (pIMD->modelLevel <= 0)
-						{
-							continue;
-						}
-						// Must add mapping to faction IMD lookup table for all additional level modelNames (these have _<level> appended)
-						addFactionModelNameMapping(faction, WzString::fromUtf8(pNormalIMD->modelName), WzString::fromUtf8(pIMD->modelName));
-					}
+					factionModelsToLoad.push_back({factionModel.value(), wzModelName});
 				}
 			}
 		});
+		for (const auto& factionModelInfo : factionModelsToLoad)
+		{
+			iIMDBaseShape *retval = modelGet(factionModelInfo.factionModel);
+			ASSERT(retval != nullptr, "Cannot find the faction PIE model %s (for normal model: %s)",
+				   factionModelInfo.factionModel.toUtf8().c_str(), factionModelInfo.normalModel.toUtf8().c_str());
+		}
 		resDoResLoadCallback();		// do callback.
 	}
 
@@ -1085,7 +1085,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 
 	// load the new data
-	debug(LOG_NEVER, "Loading mission dataset: %s", psNewLevel->pName);
+	debug(LOG_NEVER, "Loading mission dataset: %s", psNewLevel->pName.c_str());
 	for (int i = 0; i < LEVEL_MAXFILES; i++)
 	{
 		if (psNewLevel->game == i)
@@ -1128,96 +1128,96 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			if (pSaveName == nullptr || saveType == GTYPE_SAVE_START)
 			{
 				// load the game
-				debug(LOG_WZ, "Loading scenario file %s", psNewLevel->apDataFiles[i]);
+				debug(LOG_WZ, "Loading scenario file %s", psNewLevel->apDataFiles[i].c_str());
 				switch (psNewLevel->type)
 				{
 				case LEVEL_TYPE::LDS_COMPLETE:
 				case LEVEL_TYPE::LDS_CAMSTART:
 					debug(LOG_WZ, "LDS_COMPLETE / LDS_CAMSTART");
-					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 				case LEVEL_TYPE::LDS_BETWEEN:
 					debug(LOG_WZ, "LDS_BETWEEN");
-					if (!startMission(LEVEL_TYPE::LDS_BETWEEN, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_BETWEEN, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_BETWEEN), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_BETWEEN), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 
 				case LEVEL_TYPE::LDS_MKEEP:
 					debug(LOG_WZ, "LDS_MKEEP");
-					if (!startMission(LEVEL_TYPE::LDS_MKEEP, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_MKEEP, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 				case LEVEL_TYPE::LDS_CAMCHANGE:
 					debug(LOG_WZ, "LDS_CAMCHANGE");
-					if (!startMission(LEVEL_TYPE::LDS_CAMCHANGE, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_CAMCHANGE, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMCHANGE), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMCHANGE), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 
 				case LEVEL_TYPE::LDS_EXPAND:
 					debug(LOG_WZ, "LDS_EXPAND");
-					if (!startMission(LEVEL_TYPE::LDS_EXPAND, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_EXPAND, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 				case LEVEL_TYPE::LDS_EXPAND_LIMBO:
 					debug(LOG_WZ, "LDS_LIMBO");
-					if (!startMission(LEVEL_TYPE::LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 
 				case LEVEL_TYPE::LDS_MCLEAR:
 					debug(LOG_WZ, "LDS_MCLEAR");
-					if (!startMission(LEVEL_TYPE::LDS_MCLEAR, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_MCLEAR, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MCLEAR), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MCLEAR), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 				case LEVEL_TYPE::LDS_MKEEP_LIMBO:
 					debug(LOG_WZ, "LDS_MKEEP_LIMBO");
-					if (!startMission(LEVEL_TYPE::LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP_LIMBO), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP_LIMBO), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 				default:
 					ASSERT(psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START, "Unexpected mission type");
 					debug(LOG_WZ, "default (MULTIPLAYER)");
-					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, psNewLevel->apDataFiles[i]))
+					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, psNewLevel->apDataFiles[i].c_str()))
 					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s) (default)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i]);
+						debug(LOG_ERROR, "Failed startMission(%d, %s) (default)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 						return false;
 					}
 					break;
 				}
 			}
 		}
-		else if (psNewLevel->apDataFiles[i])
+		else if (!psNewLevel->apDataFiles[i].empty())
 		{
 			// load the data
-			debug(LOG_WZ, "Loading %s", psNewLevel->apDataFiles[i]);
-			if (!resLoad(psNewLevel->apDataFiles[i], i + CURRENT_DATAID))
+			debug(LOG_WZ, "Loading %s", psNewLevel->apDataFiles[i].c_str());
+			if (!resLoad(psNewLevel->apDataFiles[i].c_str(), i + CURRENT_DATAID))
 			{
-				debug(LOG_ERROR, "Failed resLoad(%s, %d) (default)!", psNewLevel->apDataFiles[i], i + CURRENT_DATAID);
+				debug(LOG_ERROR, "Failed resLoad(%s, %d) (default)!", psNewLevel->apDataFiles[i].c_str(), i + CURRENT_DATAID);
 				return false;
 			}
 		}
@@ -1272,7 +1272,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	// Copy this info to be used by the crash handler for the dump file
 	char buf[256];
 
-	ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
+	ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName.c_str());
 	addDumpInfo(buf);
 
 	if (autogame_enabled() && getHostLaunch() != HostLaunch::LoadReplay)
@@ -1340,17 +1340,17 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
 		{
 			if ((lev->type == LEVEL_TYPE::SKIRMISH || lev->type == LEVEL_TYPE::MULTI_SKIRMISH2 || lev->type == LEVEL_TYPE::MULTI_SKIRMISH3 || lev->type == LEVEL_TYPE::MULTI_SKIRMISH4)
 			    && (numPlayers == 0 || numPlayers == lev->players)
-			    && lev->pName)
+			    && !lev->pName.empty())
 			{
 				bool already_added = false;
 				for (auto map : list)
 				{
-					if (!map->pName)
+					if (map->pName.empty())
 					{
 						continue;
 					}
-					std::string levelBaseName = mapNameWithoutTechlevel(lev->pName);
-					std::string mapBaseName = mapNameWithoutTechlevel(map->pName);
+					std::string levelBaseName = mapNameWithoutTechlevel(lev->pName.c_str());
+					std::string mapBaseName = mapNameWithoutTechlevel(map->pName.c_str());
 					if (strcmp(levelBaseName.c_str(), mapBaseName.c_str()) == 0)
 					{
 						already_added = true;

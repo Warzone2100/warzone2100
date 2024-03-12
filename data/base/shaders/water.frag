@@ -1,43 +1,66 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
+// constants overridden by WZ when loading shaders (do not modify here in the shader source!)
+#define WZ_MIP_LOAD_BIAS 0.f
+//
+
 uniform sampler2D tex1;
 uniform sampler2D tex2;
+uniform sampler2D lightmap_tex;
 
+// light colors/intensity:
+uniform vec4 emissiveLight;
+uniform vec4 ambientLight;
+uniform vec4 diffuseLight;
+uniform vec4 specularLight;
+
+uniform vec4 fogColor;
 uniform int fogEnabled; // whether fog is enabled
 uniform float fogEnd;
 uniform float fogStart;
-uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-in vec4 color;
-in vec2 uv1;
-in vec2 uv2;
-in float vertexDistance;
+#define NEWGL
+#define FRAGMENT_INPUT in
 #else
-varying vec4 color;
-varying vec2 uv1;
-varying vec2 uv2;
-varying float vertexDistance;
+#define texture(tex,uv,bias) texture2D(tex,uv,bias)
+#define FRAGMENT_INPUT varying
 #endif
 
-#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+FRAGMENT_INPUT vec4 uv1_uv2;
+FRAGMENT_INPUT vec2 uvLightmap;
+FRAGMENT_INPUT float depth;
+FRAGMENT_INPUT float depth2;
+FRAGMENT_INPUT float vertexDistance;
+// light in modelSpace:
+FRAGMENT_INPUT vec3 lightDir;
+FRAGMENT_INPUT vec3 halfVec;
+
+#ifdef NEWGL
 out vec4 FragColor;
 #else
-// Uses gl_FragColor
+#define FragColor gl_FragColor
 #endif
+
+vec4 main_medium()
+{
+	vec2 uv1 = uv1_uv2.xy;
+	vec2 uv2 = uv1_uv2.zw;
+	vec4 fragColor = texture(tex1, uv1, WZ_MIP_LOAD_BIAS);
+	float specColor = texture(tex2, uv2, WZ_MIP_LOAD_BIAS).r;
+	fragColor *= vec4(specColor, specColor, specColor, 1.0);
+	return fragColor;
+}
+
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return min(a + b, vec3(1.0));
+}
 
 void main()
 {
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-	vec4 fragColor = texture(tex1, uv1);
-	float specColor = texture(tex2, uv2).r;
-	#else
-	vec4 fragColor = texture2D(tex1, uv1);
-	float specColor = texture2D(tex2, uv2).r;
-	#endif
-	fragColor *= vec4(specColor, specColor, specColor, 1.0);
-	
+	vec4 fragColor = main_medium();
+
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
@@ -45,12 +68,8 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		fragColor = mix(fragColor, vec4(1), fogFactor);
+		fragColor = mix(fragColor, fogColor, fogFactor);
 	}
 
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	FragColor = fragColor;
-	#else
-	gl_FragColor = fragColor;
-	#endif
 }

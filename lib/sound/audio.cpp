@@ -23,6 +23,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/object_list_iteration.h"
 
 #include "oggopus.h"
 #include "oggvorbis.h"
@@ -32,13 +33,16 @@
 #include "audio_id.h"
 #include "openal_error.h"
 #include "mixer.h"
+
+#include <list>
+
 // defines
 #define NO_SAMPLE				- 2
 #define MAX_SAME_SAMPLES		2
 
 // global variables
-static AUDIO_SAMPLE *g_psSampleList = nullptr;
-static AUDIO_SAMPLE *g_psSampleQueue = nullptr;
+static std::list<AUDIO_SAMPLE *> g_psSampleList;
+static std::list<AUDIO_SAMPLE *> g_psSampleQueue;
 static bool			g_bAudioEnabled = false;
 static bool			g_bAudioPaused = false;
 static AUDIO_SAMPLE g_sPreviousSample;
@@ -49,20 +53,7 @@ static int			g_iPreviousSampleTime = 0;
  */
 unsigned int audio_GetSampleQueueCount()
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample = nullptr;
-	unsigned int	count = 0;
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-	// loop through SampleQueue to count how many we have.
-	psSample = g_psSampleQueue;
-	while (psSample != nullptr)
-	{
-		count++;
-		psSample = psSample->psNext;
-	}
-
-	return count;
+	return static_cast<unsigned int>(g_psSampleQueue.size());
 }
 
 /** Counts the number of samples in the SampleList
@@ -70,20 +61,7 @@ unsigned int audio_GetSampleQueueCount()
  */
 unsigned int audio_GetSampleListCount()
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE *psSample = nullptr;
-	unsigned int count = 0;
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-	// loop through SampleList to count how many we have.
-	psSample = g_psSampleList;
-	while (psSample != nullptr)
-	{
-		++count;
-		psSample = psSample->psNext;
-	}
-
-	return count;
+	return static_cast<unsigned int>(g_psSampleList.size());
 }
 //*
 // =======================================================================================================================
@@ -124,7 +102,6 @@ bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, HRTFMode hrtf, bool really_en
 bool audio_Shutdown(void)
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample = nullptr, *psSampleTemp = nullptr;
 	bool			bOK;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -138,26 +115,20 @@ bool audio_Shutdown(void)
 	bOK = sound_Shutdown();
 
 	// empty sample list
-	psSample = g_psSampleList;
-	while (psSample != nullptr)
+	for (AUDIO_SAMPLE* psSample : g_psSampleList)
 	{
-		psSampleTemp = psSample->psNext;
 		free(psSample);
-		psSample = psSampleTemp;
 	}
 
 	// empty sample queue
-	psSample = g_psSampleQueue;
-	while (psSample != nullptr)
+	for (AUDIO_SAMPLE* psSample : g_psSampleQueue)
 	{
-		psSampleTemp = psSample->psNext;
 		free(psSample);
-		psSample = psSampleTemp;
 	}
 
 	// free sample heap
-	g_psSampleList = nullptr;
-	g_psSampleQueue = nullptr;
+	g_psSampleList.clear();
+	g_psSampleQueue.clear();
 
 	return bOK;
 }
@@ -211,42 +182,18 @@ bool audio_GetPreviousQueueTrackRadarBlipPos(SDWORD *iX, SDWORD *iY)
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static void audio_AddSampleToHead(AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample)
+static void audio_AddSampleToHead(std::list<AUDIO_SAMPLE *>& ppsSampleList, AUDIO_SAMPLE *psSample)
 {
-	psSample->psNext = (*ppsSampleList);
-	psSample->psPrev = nullptr;
-	if ((*ppsSampleList) != nullptr)
-	{
-		(*ppsSampleList)->psPrev = psSample;
-	}
-	(*ppsSampleList) = psSample;
+	ppsSampleList.emplace_front(psSample);
 }
 
 //*
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static void audio_AddSampleToTail(AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample)
+static void audio_AddSampleToTail(std::list<AUDIO_SAMPLE *>& ppsSampleList, AUDIO_SAMPLE *psSample)
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSampleTail = nullptr;
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-	if ((*ppsSampleList) == nullptr)
-	{
-		(*ppsSampleList) = psSample;
-		return;
-	}
-
-	psSampleTail = (*ppsSampleList);
-	while (psSampleTail->psNext != nullptr)
-	{
-		psSampleTail = psSampleTail->psNext;
-	}
-
-	psSampleTail->psNext = psSample;
-	psSample->psPrev = psSampleTail;
-	psSample->psNext = nullptr;
+	ppsSampleList.emplace_back(psSample);
 }
 
 //*
@@ -257,32 +204,16 @@ static void audio_AddSampleToTail(AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *ps
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static void audio_RemoveSample(AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSample)
+static void audio_RemoveSample(std::list<AUDIO_SAMPLE *>& ppsSampleList, AUDIO_SAMPLE *psSample)
 {
 	if (psSample == nullptr)
 	{
 		return;
 	}
 
-	if (psSample == (*ppsSampleList))
-	{
-		// first sample in list
-		(*ppsSampleList) = psSample->psNext;
-	}
-
-	if (psSample->psPrev != nullptr)
-	{
-		psSample->psPrev->psNext = psSample->psNext;
-	}
-
-	if (psSample->psNext != nullptr)
-	{
-		psSample->psNext->psPrev = psSample->psPrev;
-	}
-
-	// set sample pointers NULL for safety
-	psSample->psPrev = nullptr;
-	psSample->psNext = nullptr;
+	auto it = std::find(ppsSampleList.begin(), ppsSampleList.end(), psSample);
+	ASSERT(it != ppsSampleList.end(), "audio_RemoveSample: sample not found in list");
+	ppsSampleList.erase(it);
 }
 
 //*
@@ -293,7 +224,6 @@ static bool audio_CheckSameQueueTracksPlaying(SDWORD iTrack)
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SDWORD			iCount;
-	AUDIO_SAMPLE	*psSample = nullptr;
 	bool			bOK = true;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -306,8 +236,7 @@ static bool audio_CheckSameQueueTracksPlaying(SDWORD iTrack)
 	iCount = 0;
 
 	// loop through queue sounds and check whether too many already in it
-	psSample = g_psSampleQueue;
-	while (psSample != nullptr)
+	for (const AUDIO_SAMPLE* psSample : g_psSampleQueue)
 	{
 		if (psSample->iTrack == iTrack)
 		{
@@ -319,8 +248,6 @@ static bool audio_CheckSameQueueTracksPlaying(SDWORD iTrack)
 			bOK = false;
 			break;
 		}
-
-		psSample = psSample->psNext;
 	}
 
 	return bOK;
@@ -364,7 +291,7 @@ static AUDIO_SAMPLE *audio_QueueSample(SDWORD iTrack)
 	psSample->bFinishedPlaying = false;
 
 	// add to queue
-	audio_AddSampleToTail(&g_psSampleQueue, psSample);
+	audio_AddSampleToTail(g_psSampleQueue, psSample);
 
 	return psSample;
 }
@@ -411,7 +338,7 @@ void audio_QueueTrackMinDelay(SDWORD iTrack, UDWORD iMinDelay)
 
 	// Determine if at least iMinDelay time has passed since the last time this track was played
 	iDelay = sound_GetGameTime() - sound_GetTrackTimeLastFinished(iTrack);
-	if (!(iDelay > iMinDelay))
+	if (iDelay < iMinDelay)
 	{
 		return;
 	}
@@ -446,7 +373,7 @@ void audio_QueueTrackMinDelayPos(SDWORD iTrack, UDWORD iMinDelay, SDWORD iX, SDW
 
 	// Determine if at least iMinDelay time has passed since the last time this track was played
 	iDelay = sound_GetGameTime() - sound_GetTrackTimeLastFinished(iTrack);
-	if (iDelay > iMinDelay)
+	if (iDelay < iMinDelay)
 	{
 		return;
 	}
@@ -516,14 +443,14 @@ static void audio_UpdateQueue(void)
 	}
 
 	// check queue for members
-	if (g_psSampleQueue == nullptr)
+	if (g_psSampleQueue.empty())
 	{
 		return;
 	}
 
 	// remove queue head
-	psSample = g_psSampleQueue;
-	audio_RemoveSample(&g_psSampleQueue, psSample);
+	psSample = g_psSampleQueue.front();
+	audio_RemoveSample(g_psSampleQueue, psSample);
 
 	// add sample to list if able to play
 	if (!sound_Play2DTrack(psSample, true))
@@ -533,7 +460,7 @@ static void audio_UpdateQueue(void)
 		return;
 	}
 
-	audio_AddSampleToHead(&g_psSampleList, psSample);
+	audio_AddSampleToHead(g_psSampleList, psSample);
 
 	// update last queue sound coords
 	if (psSample->x != SAMPLE_COORD_INVALID && psSample->y != SAMPLE_COORD_INVALID
@@ -552,7 +479,6 @@ void audio_Update()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Vector3f playerPos;
 	float angle;
-	AUDIO_SAMPLE	*psSample, *psSampleTemp;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
@@ -572,25 +498,20 @@ void audio_Update()
 	sound_SetPlayerOrientation(angle);
 
 	// loop through 3D sounds and remove if finished or update position
-	psSample = g_psSampleList;
-	while (psSample != nullptr)
+	mutating_list_iterate(g_psSampleList, [](AUDIO_SAMPLE* psSample)
 	{
 		// remove finished samples from list
 		if (psSample->bFinishedPlaying == true)
 		{
-			psSampleTemp = psSample->psNext;
-			audio_RemoveSample(&g_psSampleList, psSample);
+			audio_RemoveSample(g_psSampleList, psSample);
 			free(psSample);
-			psSample = psSampleTemp;
 		}
-
-		// check looping sound callbacks for finished condition
-		else
+		else // check looping sound callbacks for finished condition
 		{
 			if (psSample->psObj != nullptr)
 			{
 				if (audio_ObjectDead(psSample->psObj)
-				    || (psSample->pCallback != nullptr && psSample->pCallback(psSample->psObj) == false))
+					|| (psSample->pCallback != nullptr && psSample->pCallback(psSample->psObj) == false))
 				{
 					sound_StopTrack(psSample);
 					psSample->psObj = nullptr;
@@ -601,10 +522,9 @@ void audio_Update()
 					sound_SetObjectPosition(psSample);
 				}
 			}
-			// next sample
-			psSample = psSample->psNext;
 		}
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	sound_Update();
 	return;
@@ -644,7 +564,6 @@ static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, 
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SDWORD			iCount, iDx, iDy, iDz, iDistSq, iMaxDistSq, iRad;
-	AUDIO_SAMPLE	*psSample = nullptr;
 	bool			bOK = true;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -657,8 +576,7 @@ static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, 
 	iCount = 0;
 
 	// loop through 3D sounds and check whether too many already in earshot
-	psSample = g_psSampleList;
-	while (psSample != nullptr)
+	for (const AUDIO_SAMPLE* psSample : g_psSampleList)
 	{
 		if (psSample->iTrack == iTrack)
 		{
@@ -679,8 +597,6 @@ static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, 
 				break;
 			}
 		}
-
-		psSample = psSample->psNext;
 	}
 
 	return bOK;
@@ -764,7 +680,7 @@ static bool audio_Play3DTrack(SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPL
 		return false;
 	}
 
-	audio_AddSampleToHead(&g_psSampleList, psSample);
+	audio_AddSampleToHead(g_psSampleList, psSample);
 	return true;
 }
 
@@ -866,7 +782,7 @@ bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK 
  *  \note You must _never_ manually free() the memory used by the returned
  *        pointer.
  */
-AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, void (*onFinished)(const AUDIO_STREAM *, const void *), const void *user_data)
+AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished, const void *user_data)
 {
 	// If audio is not enabled return false to indicate that the given callback
 	// will not be invoked.
@@ -884,10 +800,6 @@ AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, void (*onFini
 //
 void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack)
 {
-	//~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample;
-	//~~~~~~~~~~~~~~~~~~~~~~
-
 	// return if audio not enabled
 	if (g_bAudioEnabled == false)
 	{
@@ -895,8 +807,7 @@ void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack)
 	}
 
 	// find sample
-	psSample = g_psSampleList;
-	while (psSample != nullptr)
+	for (AUDIO_SAMPLE* psSample : g_psSampleList)
 	{
 		// If track has been found stop it and return
 		if (psSample->psObj == psObj && psSample->iTrack == iTrack)
@@ -904,9 +815,6 @@ void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack)
 			sound_StopTrack(psSample);
 			return;
 		}
-
-		// get next sample from linked list
-		psSample = psSample->psNext;
 	}
 }
 static UDWORD lastTimeBuildFailedPlayed = 0;
@@ -970,7 +878,7 @@ void audio_PlayTrack(int iTrack)
 		return;
 	}
 
-	audio_AddSampleToHead(&g_psSampleList, psSample);
+	audio_AddSampleToHead(g_psSampleList, psSample);
 }
 
 //*
@@ -1011,10 +919,6 @@ void audio_ResumeAll(void)
 //
 void audio_StopAll(void)
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE *psSample;
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 	// return if audio not enabled
 	if (g_bAudioEnabled == false)
 	{
@@ -1024,7 +928,7 @@ void audio_StopAll(void)
 	//
 	// * empty list - audio_Update will free samples because callbacks have to come in first
 	//
-	for (psSample = g_psSampleList; psSample != nullptr; psSample = psSample->psNext)
+	for (AUDIO_SAMPLE* psSample : g_psSampleList)
 	{
 		// Stop this sound sample
 		sound_StopTrack(psSample);
@@ -1046,19 +950,12 @@ void audio_StopAll(void)
 	}
 
 	// empty sample queue
-	psSample = g_psSampleQueue;
-	while (psSample != nullptr)
+	for (AUDIO_SAMPLE* psSample : g_psSampleQueue)
 	{
-		AUDIO_SAMPLE *psSampleTemp = psSample;
-
-		// Advance the sample iterator (before invalidating it)
-		psSample = psSample->psNext;
-
 		// Destroy the sample
-		free(psSampleTemp);
+		free(psSample);
 	}
-
-	g_psSampleQueue = nullptr;
+	g_psSampleQueue.clear();
 }
 
 //*
@@ -1102,35 +999,30 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 	unsigned int count = 0;
 
 	// loop through queued sounds and check if a sample needs to be removed
-	AUDIO_SAMPLE *psSample = g_psSampleQueue;
-	while (psSample != nullptr)
+	mutating_list_iterate(g_psSampleQueue, [psObj, &count](AUDIO_SAMPLE* psSample)
 	{
-		if (psSample->psObj == psObj)
+		if (psSample->psObj != psObj)
 		{
-			// The current audio sample seems to refer to an object
-			// that is about to be destroyed. So destroy this
-			// sample as well.
-			AUDIO_SAMPLE *toRemove = psSample;
-
-			// Make sure to keep our linked list iterator valid
-			psSample = psSample->psNext;
-
-			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n", reinterpret_cast<void *>(toRemove->pCallback), toRemove->iTrack);
-			// Remove sound from global active list
-			sound_RemoveActiveSample(toRemove);   //remove from global active list.
-
-			// Perform the actual task of destroying this sample
-			audio_RemoveSample(&g_psSampleQueue, toRemove);
-			free(toRemove);
-
-			// Increment the deletion count
-			++count;
+			return IterationResult::CONTINUE_ITERATION;
 		}
-		else
-		{
-			psSample = psSample->psNext;
-		}
-	}
+		// The current audio sample seems to refer to an object
+		// that is about to be destroyed. So destroy this
+		// sample as well.
+		AUDIO_SAMPLE* toRemove = psSample;
+
+		debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n", reinterpret_cast<void*>(toRemove->pCallback), toRemove->iTrack);
+		// Remove sound from global active list
+		sound_RemoveActiveSample(toRemove);   //remove from global active list.
+
+		// Perform the actual task of destroying this sample
+		audio_RemoveSample(g_psSampleQueue, toRemove);
+		free(toRemove);
+
+		// Increment the deletion count
+		++count;
+
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	if (count)
 	{
@@ -1141,35 +1033,30 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 	count = 0;
 
 	// loop through list of currently playing sounds and check if a sample needs to be removed
-	psSample = g_psSampleList;
-	while (psSample != nullptr)
+	mutating_list_iterate(g_psSampleList, [psObj, &count](AUDIO_SAMPLE* psSample)
 	{
-		if (psSample->psObj == psObj)
+		if (psSample->psObj != psObj)
 		{
-			// The current audio sample seems to refer to an object
-			// that is about to be destroyed. So destroy this
-			// sample as well.
-			AUDIO_SAMPLE *toRemove = psSample;
-
-			// Make sure to keep our linked list iterator valid
-			psSample = psSample->psNext;
-
-			debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n", reinterpret_cast<void *>(toRemove->pCallback), toRemove->iTrack);
-			// Stop this sound sample
-			sound_RemoveActiveSample(toRemove);   //remove from global active list.
-
-			// Perform the actual task of destroying this sample
-			audio_RemoveSample(&g_psSampleList, toRemove);
-			free(toRemove);
-
-			// Increment the deletion count
-			++count;
+			return IterationResult::CONTINUE_ITERATION;
 		}
-		else
-		{
-			psSample = psSample->psNext;
-		}
-	}
+		// The current audio sample seems to refer to an object
+		// that is about to be destroyed. So destroy this
+		// sample as well.
+		AUDIO_SAMPLE* toRemove = psSample;
+
+		debug(LOG_MEMORY, "audio_RemoveObj: callback %p sample %d\n", reinterpret_cast<void*>(toRemove->pCallback), toRemove->iTrack);
+		// Stop this sound sample
+		sound_RemoveActiveSample(toRemove);   //remove from global active list.
+
+		// Perform the actual task of destroying this sample
+		audio_RemoveSample(g_psSampleList, toRemove);
+		free(toRemove);
+
+		// Increment the deletion count
+		++count;
+
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	if (count)
 	{

@@ -2,8 +2,8 @@
 # wzmaplib version
 
 set(WZMAPLIB_VERSION_MAJOR 1)
-set(WZMAPLIB_VERSION_MINOR 0)
-set(WZMAPLIB_VERSION_REV 5)
+set(WZMAPLIB_VERSION_MINOR 2)
+set(WZMAPLIB_VERSION_REV 3)
 
 ###################
 # Determine minimum CMake version
@@ -45,7 +45,7 @@ set_target_properties(wzmaplib PROPERTIES VERSION "${WZMAPLIB_VERSION_STRING}")
 
 set_target_properties(wzmaplib
 	PROPERTIES
-		CXX_STANDARD 11
+		CXX_STANDARD 14
 		CXX_STANDARD_REQUIRED YES
 		CXX_EXTENSIONS NO
 )
@@ -170,7 +170,7 @@ if (libzip_FOUND AND libzip_LINK_TEST)
 	set_property(TARGET ZipIOProvider PROPERTY FOLDER "lib")
 	set_target_properties(ZipIOProvider
 		PROPERTIES
-			CXX_STANDARD 11
+			CXX_STANDARD 14
 			CXX_STANDARD_REQUIRED YES
 			CXX_EXTENSIONS NO
 	)

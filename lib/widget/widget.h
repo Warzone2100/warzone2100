@@ -34,6 +34,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "widgbase.h"
 #include <string>
+#include <chrono>
 
 /***********************************************************************************
  *
@@ -240,6 +241,7 @@ void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16
 void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psScreen, const std::shared_ptr<W_SCREEN> &priorScreen);
 void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
 void widgForEachOverlayScreen(const std::function<bool (const std::shared_ptr<W_SCREEN>& psScreen, uint16_t zOrder)>& func);
+bool isMouseOverScreen(const std::shared_ptr<W_SCREEN>& psScreen);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
 bool isMouseClickDownOnScreenOverlayChild();
 bool isMouseOverSomeWidget(const std::shared_ptr<W_SCREEN> &psScreen);
@@ -391,6 +393,8 @@ void setWidgetsStatus(bool var);
 bool getWidgetsStatus();
 
 std::weak_ptr<WIDGET> getMouseOverWidget();
+
+std::chrono::milliseconds widgGetClickHoldMS();
 
 /** @} */
 

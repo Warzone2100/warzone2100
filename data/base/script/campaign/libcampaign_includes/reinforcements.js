@@ -28,9 +28,9 @@
 //;;
 function camSendReinforcement(playerId, position, templates, kind, data)
 {
-	var pos = camMakePos(position);
-	var order = CAM_ORDER_ATTACK;
-	var order_data = { regroup: false, count: -1 };
+	const pos = camMakePos(position);
+	let order = CAM_ORDER_ATTACK;
+	let order_data = { regroup: false, count: -1 };
 	if (camDef(data) && camDef(data.order))
 	{
 		order = data.order;
@@ -39,19 +39,28 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 			order_data = data.data;
 		}
 	}
+	if (playerId !== CAM_HUMAN_PLAYER)
+	{
+		camCleanTileOfObstructions(pos);
+	}
 	switch (kind)
 	{
 		case CAM_REINFORCE_GROUND:
-			var droids = [];
+		{
+			const droids = [];
 			for (let i = 0, l = templates.length; i < l; ++i)
 			{
-				var template = templates[i];
-				var prop = __camChangePropulsionOnDiff(template.prop);
-				droids.push(addDroid(playerId, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap));
+				const template = templates[i];
+				const __PROP = __camChangePropulsion(template.prop, playerId);
+				const droid = addDroid(playerId, pos.x, pos.y, "Reinforcement", template.body, __PROP, "", "", template.weap);
+				camSetDroidExperience(droid);
+				droids.push(droid);
 			}
 			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;
+		}
 		case CAM_REINFORCE_TRANSPORT:
+		{
 			__camTransporterQueue.push({
 				player: playerId,
 				position: position,
@@ -62,9 +71,12 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 			});
 			__camDispatchTransporterSafe();
 			break;
+		}
 		default:
+		{
 			camTrace("Unknown reinforcement type");
 			break;
+		}
 	}
 }
 
@@ -89,7 +101,7 @@ function camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 	{
 		camDebug("Callback name must be a string (received", callbackName, ")");
 	}
-	var bi = __camEnemyBases[baseLabel];
+	const bi = __camEnemyBases[baseLabel];
 	bi.reinforce_kind = kind;
 	bi.reinforce_interval = interval;
 	bi.reinforce_callback = callbackName;

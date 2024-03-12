@@ -46,8 +46,8 @@
 #	endif
 #	if defined(DEBUG)
 #		define strdup(s) \
-	strdup2(s,__FILE__,__LINE__)
-static inline char *strdup2(const char *s, char *fileName, int line)
+	strdup2(static_cast<const char*>(s),__LINE__)
+static inline char *strdup2(const char *s, int line)
 {
 	char *result;
 
@@ -235,6 +235,28 @@ static inline void sstringf(std::string &str, char const *format, P &&... params
 static inline bool strEndsWith(const std::string &str, const std::string &suffix)
 {
 	return (str.size() >= suffix.size()) && (str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0);
+}
+
+static inline size_t nthOccurrenceOfChar(const std::string& str, const char c, size_t n)
+{
+	size_t pos = 0;
+	size_t count = 0;
+
+	while (count < n)
+	{
+		pos = str.find(c, (count > 0) ? pos + 1 : pos);
+		if (pos == std::string::npos)
+		{
+			return std::string::npos;
+		}
+		++count;
+		if (pos == str.length() - 1)
+		{
+			return std::string::npos;
+		}
+	}
+
+	return pos;
 }
 
 #endif // STRING_EXT_H

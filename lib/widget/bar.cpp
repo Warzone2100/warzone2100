@@ -391,3 +391,8 @@ void W_BARGRAPH::setTip(std::string string)
 {
 	pTip = string;
 }
+
+void W_BARGRAPH::setHelp(optional<WidgetHelp> _help)
+{
+	help = _help;
+}

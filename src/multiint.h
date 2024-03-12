@@ -90,18 +90,18 @@ bool changeColour(unsigned player, int col, bool isHost);
 extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
 
-void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
+void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer = false);
 void displayKickReasonPopup(const std::string &reason);
 void loadMapPreview(bool hideInterface);
 
 bool changeReadyStatus(UBYTE player, bool bReady);
 WzString formatGameName(WzString name);
-void resetVoteData();
 void sendRoomSystemMessage(char const *text);
 void sendRoomNotifyMessage(char const *text);
-void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
+void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver, bool skipLocalDisplay = false);
 void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
+void displayLobbyDisabledNotification();
 
 void handleAutoReadyRequest();
 
@@ -184,8 +184,9 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_TEAMCHOOSER_END     	102841
 #define MULTIOP_TEAMCHOOSER_KICK		10289
 #define MULTIOP_TEAMCHOOSER_SPECTATOR	10288
+#define MULTIOP_TEAMCHOOSER_BAN			10287
 
-#define MULTIOP_INLINE_OVERLAY_ROOT_FRM	10287
+#define MULTIOP_INLINE_OVERLAY_ROOT_FRM	10286
 
 // 'Ready' button
 #define MULTIOP_READY_FORM_ID		102900
@@ -257,7 +258,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 
 #define MULTIOP_CHATEDIT		10279
 #define MULTIOP_CHATEDITX		4
-#define MULTIOP_CHATEDITH		18
+#define MULTIOP_CHATEDITH		20
 #define	MULTIOP_CHATEDITW		(MULTIOP_CHATBOXW - 8)
 
 #define MULTIOP_COLCHOOSER_FORM         10280

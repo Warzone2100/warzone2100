@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 
 #include "advvis.h"
+#include "profiling.h"
 #include "map.h"
 
 // ------------------------------------------------------------------------------------
@@ -37,9 +38,23 @@
 /// for scripts, since campaign may still want total darkness on unexplored tiles.
 static bool bRevealActive = true;
 
+// For display only (*NOT* for use in game state calculations)
+inline float getTileIllumination(const MAPTILE *psTile)
+{
+	switch (terrainShaderType)
+	{
+		case TerrainShaderType::SINGLE_PASS:
+			return psTile->ambientOcclusion; // sunlight is handled by shaders so only AO needed for lightmap
+		case TerrainShaderType::FALLBACK:
+			return psTile->illumination;
+	}
+	return psTile->illumination; // silence GCC warning
+}
+
 // ------------------------------------------------------------------------------------
 void	avUpdateTiles()
 {
+	WZ_PROFILE_SCOPE(avUpdateTiles);
 	const int len = mapHeight * mapWidth;
 	const int playermask = 1 << selectedPlayer;
 	UDWORD i = 0;
@@ -52,7 +67,7 @@ void	avUpdateTiles()
 	for (; i < len; i++)
 	{
 		psTile = &psMapTiles[i];
-		maxLevel = psTile->illumination;
+		maxLevel = getTileIllumination(psTile);
 
 		if (psTile->level > MIN_ILLUM || psTile->tileExploredBits & playermask)	// seen
 		{
@@ -74,7 +89,7 @@ void	avUpdateTiles()
 }
 
 // ------------------------------------------------------------------------------------
-UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj, UDWORD origLevel)
+UDWORD	avGetObjLightLevel(BASE_OBJECT const *psObj, UDWORD origLevel)
 {
 	float div = (float)psObj->visibleForLocalDisplay() / 255.f;
 	unsigned int lowest = origLevel / START_DIVIDE;
@@ -109,11 +124,11 @@ void	preProcessVisibility()
 		for (int j = 0; j < mapHeight; j++)
 		{
 			MAPTILE *psTile = mapTile(i, j);
-			psTile->level = bRevealActive ? MIN(MIN_ILLUM, psTile->illumination / 4.0f) : 0;
+			psTile->level = bRevealActive ? MIN(MIN_ILLUM, getTileIllumination(psTile) / 4.0f) : 0;
 
 			if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 			{
-				psTile->level = psTile->illumination;
+				psTile->level = getTileIllumination(psTile);
 			}
 		}
 	}

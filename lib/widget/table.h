@@ -49,8 +49,18 @@ public:
 
 	// Get the total idealWidth() returned by all column widgets in this row (does not include padding)
 	int32_t getColumnTotalContentIdealWidth();
+
+	// Set whether the row draws an outer border
+	void setDrawBorder(optional<PIELIGHT> borderColor);
+
+	// Set whether row is "disabled"
+	void setDisabled(bool disabled);
+	// Set row disable overlay color
+	void setDisabledColor(PIELIGHT disabledColor);
 protected:
 	virtual void display(int, int) override;
+	virtual void displayRecursive(WidgetGraphicsContext const& context) override;
+	virtual bool hitTest(int x, int y) const override;
 public:
 	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 protected:
@@ -62,8 +72,11 @@ private:
 	bool isMouseOverRowOrChildren() const;
 private:
 	bool highlightsOnMouseOver = false;
+	bool disabledRow = false;
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 	optional<UDWORD> lastFrameMouseIsOverRowOrChildren = nullopt;
+	optional<PIELIGHT> borderColor = nullopt;
+	PIELIGHT disabledColor;
 };
 
 class TableHeader; // forward-declare
@@ -97,6 +110,9 @@ public:
 	// See: ``TableRow``
 	void addRow(const std::shared_ptr<TableRow> &row);
 	void clearRows();
+
+	// Disable / enable a row
+	void setRowDisabled(size_t row, bool disabled);
 
 	// Get the maximum width that can be used by the column widths passed to changeColumnWidths, based on the current widget size (minus padding)
 	size_t getMaxColumnTotalWidth(size_t numColumns) const;
@@ -135,15 +151,24 @@ public:
 	// Get the maximum idealWidth() returned by any of the row widgets in the specified column
 	int32_t getColumnMaxContentIdealWidth(size_t col);
 
+	inline size_t getNumRows() const { return rows.size(); }
 	inline size_t getNumColumns() const { return tableColumns.size(); }
 
 	// Change the table background color
 	void setBackgroundColor(PIELIGHT const &color);
 
+	// Configure whether to draw column lines for list rows
+	void setDrawColumnLines(bool bEnabled);
+
+	void setItemSpacing(uint32_t value);
+
 	uint16_t getScrollPosition() const;
 	void setScrollPosition(uint16_t newPosition);
 
 	bool isUserDraggingColumnHeader() const;
+
+	void setColumnPadding(Vector2i padding);
+	const Vector2i& getColumnPadding();
 
 	virtual int32_t idealHeight() override;
 
@@ -153,6 +178,7 @@ protected:
 
 protected:
 	virtual void geometryChanged() override;
+	virtual void displayRecursive(WidgetGraphicsContext const& context) override;
 
 private:
 	size_t totalPaddingWidthFor(size_t numColumns) const;
@@ -177,11 +203,15 @@ private:
 	std::vector<TableColumn> tableColumns;
 	std::vector<size_t> columnWidths;
 	std::vector<size_t> minColumnWidths;
+	Vector2i columnPadding;
 
 	std::shared_ptr<TableHeader> header;
 	std::shared_ptr<ScrollableListWidget> scrollableList;
 
 	std::vector<std::shared_ptr<TableRow>> rows;
+
+	std::vector<glm::ivec4> lines;
+	bool drawColumnLines = false;
 
 	bool userDidResizeColumnWidths = false;
 };

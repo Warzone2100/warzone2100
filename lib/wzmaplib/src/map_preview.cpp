@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013-2021  Warzone 2100 Project
+	Copyright (C) 2013-2023  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ static inline T clip(T x, T min, T max)
 	return x < min ? min : x > max ? max : x;
 }
 
-static void plotBackdropPixel(MapPreviewImage& output, int32_t xx, int32_t yy, MapPreviewColor const &colour)
+static void plotBackdropPixel(MapPreviewImage& output, int32_t xx, int32_t yy, const MapPreviewColor &colour)
 {
 	xx = clip(xx, 0, static_cast<int32_t>(output.width - 1));
 	yy = clip(yy, 0, static_cast<int32_t>(output.height - 1));
@@ -127,6 +127,47 @@ static void plotBackdropPixel(MapPreviewImage& output, int32_t xx, int32_t yy, M
 	pixel[0] = colour.r;
 	pixel[1] = colour.g;
 	pixel[2] = colour.b;
+}
+
+// Round direction to nearest axis-aligned direction.
+static inline uint16_t snapDirection(uint16_t direction)
+{
+	return (direction + 0x2000) & 0xC000;
+}
+
+static void plotBackdropStructurePixels(MapPreviewImage& output, const Structure &structure, const MapStatsConfiguration& statsConfig, const MapPreviewColor &colour)
+{
+	if (statsConfig.isStructExpansionModule(structure.name))
+	{
+		// Skip drawing expansion modules on the map preview
+		return;
+	}
+
+	MapStatsConfiguration::StructureSize structStatSize = statsConfig.getStructureSize(structure.name).value_or(MapStatsConfiguration::StructureSize(1,1));
+
+	std::pair<int32_t, int32_t> size = {structStatSize.baseWidth, structStatSize.baseBreadth};
+	if ((snapDirection(structure.direction) & 0x4000) != 0)
+	{
+		// If building is rotated left or right by 90°, swap width and height
+		std::swap(size.first, size.second);
+	}
+
+	// Snap the WorldPos to a tile
+	int32_t x = (structure.position.x & ~TILE_MASK) + size.first % 2 * TILE_UNITS / 2;
+	int32_t y = (structure.position.y & ~TILE_MASK) + size.second % 2 * TILE_UNITS / 2;
+
+	// Calculate starting MapTilePos for output
+	std::pair<int32_t, int32_t> map = { map_coord(x), map_coord(y) };
+	map.first -= size.first / 2;
+	map.second -= size.second / 2;
+
+	for (int32_t tileX = map.first; tileX < map.first + size.first; ++tileX)
+	{
+		for (int32_t tileY = map.second; tileY < map.second + size.second; ++tileY)
+		{
+			plotBackdropPixel(output, tileX, tileY, colour);
+		}
+	}
 }
 
 static inline bool isOilResource(const Feature& feature)
@@ -184,7 +225,7 @@ static void plotWzMapFeature(Map &wzMap, const MapPreviewColorScheme& colorSchem
  * present. Additionally we load the player's HQ location into playeridpos so
  * we know the player's starting location.
  */
-bool plotStructurePreviewWzMap(Map &wzMap, const MapPreviewColorScheme& colorScheme, MapPreviewImage& output, LoggingProtocol* pCustomLogger)
+bool plotStructurePreviewWzMap(Map &wzMap, const MapPreviewColorScheme& colorScheme, const MapStatsConfiguration& statsConfig, MapPreviewImage& output, LoggingProtocol* pCustomLogger)
 {
 	auto pStructures = wzMap.mapStructures();
 	if (pStructures == nullptr)
@@ -198,7 +239,7 @@ bool plotStructurePreviewWzMap(Map &wzMap, const MapPreviewColorScheme& colorSch
 	MapPlayerColorProvider* pPlayerColorProvider = colorScheme.playerColorProvider.get();
 	if (!pPlayerColorProvider)
 	{
-		defaultPlayerColorProvider = std::unique_ptr<MapPlayerColorProvider>(new MapPlayerColorProvider());
+		defaultPlayerColorProvider = std::make_unique<MapPlayerColorProvider>();
 		pPlayerColorProvider = defaultPlayerColorProvider.get();
 	}
 
@@ -219,7 +260,7 @@ bool plotStructurePreviewWzMap(Map &wzMap, const MapPreviewColorScheme& colorSch
 			color = colorScheme.hqColor;
 		}
 		// and now we blit the color to the texture
-		plotBackdropPixel(output, pos.first, pos.second, color);
+		plotBackdropStructurePixels(output, structure, statsConfig, color);
 	}
 
 	plotWzMapFeature(wzMap, colorScheme, output, pCustomLogger);
@@ -237,7 +278,7 @@ static inline TYPE_OF_TERRAIN terrainTypeWzMap(const MapData::MapTile& tile, con
 	return data.terrainTypes[tileType];
 }
 
-std::unique_ptr<MapPreviewImage> generate2DMapPreview(Map& wzMap, const MapPreviewColorScheme& colorScheme, LoggingProtocol* pCustomLogger /*= nullptr*/)
+std::unique_ptr<MapPreviewImage> generate2DMapPreview(Map& wzMap, const MapPreviewColorScheme& colorScheme, const MapStatsConfiguration& statsConfig /*= MapStatsConfiguration()*/, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	auto mapData = wzMap.mapData();
 	if (!mapData)
@@ -254,7 +295,7 @@ std::unique_ptr<MapPreviewImage> generate2DMapPreview(Map& wzMap, const MapPrevi
 
 	const TilesetColorScheme& clrSch = colorScheme.tilesetColors;
 
-	std::unique_ptr<MapPreviewImage> result = std::unique_ptr<MapPreviewImage>(new MapPreviewImage());
+	std::unique_ptr<MapPreviewImage> result = std::make_unique<MapPreviewImage>();
 	result->width = mapData->width;
 	result->height = mapData->height;
 	result->channels = 3;
@@ -303,7 +344,7 @@ std::unique_ptr<MapPreviewImage> generate2DMapPreview(Map& wzMap, const MapPrevi
 	}
 
 	// color our texture with clancolors @ correct position
-	plotStructurePreviewWzMap(wzMap, colorScheme, *(result.get()), pCustomLogger);
+	plotStructurePreviewWzMap(wzMap, colorScheme, statsConfig, *(result.get()), pCustomLogger);
 
 	return result;
 }

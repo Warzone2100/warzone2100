@@ -1,11 +1,17 @@
 include("script/campaign/libcampaign.js");
 
+const mis_Labels = {
+	startPos: {x: 88, y: 101},
+	lz: {x: 86, y: 99, x2: 88, y2: 101},
+	trPlace: {x: 87, y: 100},
+	trExit: {x: 100, y: 1}
+};
+
 function eventStartLevel()
 {
-	camSetupTransporter(87, 100, 100, 1);
-	centreView(88, 101);
-	setNoGoArea(86, 99, 88, 101, CAM_HUMAN_PLAYER);
-	setNoGoArea(49, 83, 51, 85, THE_COLLECTIVE);
+	camSetupTransporter(mis_Labels.trPlace.x, mis_Labels.trPlace.y, mis_Labels.trExit.x, mis_Labels.trExit.y);
+	centreView(mis_Labels.startPos.x, mis_Labels.startPos.y);
+	setNoGoArea(mis_Labels.lz.x, mis_Labels.lz.y, mis_Labels.lz.x2, mis_Labels.lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1.5)));
 	camPlayVideos([{video: "MB2_7_MSG", type: CAMP_MSG}, {video: "MB2_7_MSG2", type: MISS_MSG}]);
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_2_7");

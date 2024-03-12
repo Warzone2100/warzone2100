@@ -58,28 +58,6 @@ struct TILEPOS
   For explanation of yaw/pitch/roll look for "flight dynamics" in your encyclopedia.
 */
 
-/// NEXTOBJ is an ugly hack to avoid having to fix all occurrences of psNext and psNextFunc. The use of the original NEXTOBJ(pointerType) hack wasn't valid C, so in that sense, it's an improvement.
-/// NEXTOBJ is a BASE_OBJECT *, which can automatically be cast to DROID *, STRUCTURE * and FEATURE *...
-
-struct BASE_OBJECT;
-
-struct NEXTOBJ
-{
-	NEXTOBJ(BASE_OBJECT *ptr_ = nullptr) : ptr(ptr_) {}
-	NEXTOBJ &operator =(BASE_OBJECT *ptr_)
-	{
-		ptr = ptr_;
-		return *this;
-	}
-	template<class T>
-	operator T *() const
-	{
-		return static_cast<T *>(ptr);
-	}
-
-	BASE_OBJECT *ptr;
-};
-
 struct SIMPLE_OBJECT
 {
 	SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player);
@@ -106,10 +84,14 @@ enum OBJECT_FLAG
 	OBJECT_FLAG_COUNT
 };
 
+struct WEAPON_STATS;
+
 struct BASE_OBJECT : public SIMPLE_OBJECT
 {
 	BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player);
 	~BASE_OBJECT();
+
+	WEAPON_STATS* getWeaponStats(int weaponSlot) const;
 
 	SCREEN_DISP_DATA    sDisplay;                   ///< screen coordinate details
 	UBYTE               group = 0;                  ///< Which group selection is the droid currently in?
@@ -124,16 +106,17 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
 	std::vector<TILEPOS> watchedTiles;              ///< Variable size array of watched tiles, empty for features
 
+	// DISPLAY-ONLY (*NOT* for game state calculations)
 	UDWORD              timeAnimationStarted;       ///< Animation start time, zero for do not animate
 	UBYTE               animationEvent;             ///< If animation start time > 0, this points to which animation to run
+	//
 
 	unsigned            numWeaps;
 	WEAPON              asWeaps[MAX_WEAPONS];
 
 	std::bitset<OBJECT_FLAG_COUNT> flags;
 
-	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
-	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list
+	bool                hasExtraFunction = false;   ///< Does this object include some extra functionality?
 
 public:
 	// Query visibility for display purposes (i.e. for `selectedPlayer`)

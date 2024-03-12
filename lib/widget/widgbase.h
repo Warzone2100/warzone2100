@@ -30,6 +30,7 @@
 #include <vector>
 #include <functional>
 #include <string>
+#include <set>
 #include <nonstd/optional.hpp>
 #include "lib/framework/geometry.h"
 #include "lib/framework/wzstring.h"
@@ -54,7 +55,7 @@ class ScrollBarWidget;
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 /* The optional user callback function */
-typedef void (*WIDGET_CALLBACK)(WIDGET *psWidget, W_CONTEXT *psContext);
+typedef void (*WIDGET_CALLBACK)(WIDGET *psWidget, const W_CONTEXT *psContext);
 typedef void (*WIDGET_AUDIOCALLBACK)(int AudioID);
 
 /* The optional "calc layout" callback function, to support runtime layout recalculation */
@@ -69,7 +70,7 @@ typedef std::function<void (WIDGET *psWidget)> WIDGET_CALCLAYOUT_FUNC;
 typedef std::function<void (WIDGET *psWidget)> WIDGET_ONDELETE_FUNC;
 
 /* The optional hit-testing function, used for custom hit-testing within the outer bounding rectangle */
-typedef std::function<bool (WIDGET *psWidget, int x, int y)> WIDGET_HITTEST_FUNC;
+typedef std::function<bool (const WIDGET *psWidget, int x, int y)> WIDGET_HITTEST_FUNC;
 
 
 /* The different base types of widget */
@@ -133,6 +134,56 @@ public:
 	WidgetGraphicsContext clippedBy(WzRect const &newRect) const;
 };
 
+struct WidgetHelp
+{
+public:
+	enum class InteractionTriggers: uint8_t
+	{
+		PrimaryClick,
+		SecondaryClick,
+		ClickAndHold,
+		Misc
+	};
+	static constexpr size_t NUM_WIDGET_INTERACTION_TRIGGERS = static_cast<size_t>(InteractionTriggers::Misc) + 1;
+	typedef std::set<InteractionTriggers> WidgetInteractionTriggerFlagSet;
+	struct InteractionDescription
+	{
+		WidgetInteractionTriggerFlagSet triggers;
+		WzString description;
+	};
+	struct KeybindingInfo
+	{
+		std::string keybindingName; // for lookup on display with the input manager
+	};
+public:
+	WzString title;
+	WzString description;
+	std::vector<InteractionDescription> interactions;
+	std::vector<KeybindingInfo> relatedKeybindings;
+public:
+	WidgetHelp() { }
+	WidgetHelp& setTitle(const WzString& newValue)
+	{
+		title = newValue;
+		return *this;
+	}
+	WidgetHelp& setDescription(const WzString& newValue)
+	{
+		description = newValue;
+		return *this;
+	}
+	WidgetHelp& addInteraction(WidgetInteractionTriggerFlagSet triggers, const WzString& effectDescription)
+	{
+		interactions.push_back({triggers, effectDescription});
+		return *this;
+	}
+	WidgetHelp& addRelatedKeybinding(const std::string& keybindingName)
+	{
+		relatedKeybindings.push_back({keybindingName});
+		return *this;
+	}
+};
+
 /* The base widget data type */
 class WIDGET: public std::enable_shared_from_this<WIDGET>
 {
@@ -154,6 +205,10 @@ public:
 	{
 		return "";
 	}
+	virtual WidgetHelp const * getHelp() const
+	{
+		return nullptr;
+	}
 
 protected:
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
@@ -163,7 +218,7 @@ protected:
 	virtual void display(int, int) {}
 	virtual void geometryChanged() {}
 
-	virtual bool hitTest(int x, int y);
+	virtual bool hitTest(int x, int y) const;
 
 public:
 	virtual unsigned getState();
@@ -171,7 +226,8 @@ public:
 	virtual void setFlash(bool enable);
 	virtual WzString getString() const;
 	virtual void setString(WzString string);
-	virtual void setTip(std::string string);
+	virtual void setTip(std::string string); // tooltip
+	virtual void setHelp(optional<WidgetHelp> help); // formatted help information for this UI element
 
 	virtual void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight); // used to handle screen resizing
 
@@ -197,7 +253,7 @@ public:
 	{
 		return parentWidget.lock();
 	}
-	Children const &children()
+	Children const &children() const
 	{
 		return childWidgets;
 	}
@@ -283,8 +339,14 @@ public:
 		setGeometry(WzRect(x, y, w, h));
 	}
 	void setGeometry(WzRect const &r);
+	virtual void setGeometryFromScreenRect(WzRect const &r);
 
-	void attach(const std::shared_ptr<WIDGET> &widget);
+	enum class ChildZPos {
+		Front,
+		Back
+	};
+
+	void attach(const std::shared_ptr<WIDGET> &widget, ChildZPos zPos = ChildZPos::Front);
 	/**
 	 * @deprecated use `void WIDGET::attach(const std::shared_ptr<WIDGET> &widget)` instead
 	 **/
@@ -334,6 +396,8 @@ private:
 	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calc layout callback
 	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
 	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional hit-testing custom function
+protected:
+	friend struct W_SCREEN;
 	void setScreenPointer(const std::shared_ptr<W_SCREEN> &screen); ///< Set screen pointer for us and all children.
 public:
 	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);

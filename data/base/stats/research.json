@@ -1146,6 +1146,24 @@
 		],
 		"statID": "Cannon1Mk1"
 	},
+	"R-Cyborg-Wpn-Cannon02": {
+		"iconID": "IMAGE_RES_CYBORGTECH",
+		"id": "R-Cyborg-Wpn-Cannon02",
+		"msgName": "RES_CYW_CN2",
+		"name": "Sniper Cyborg",
+		"replacedComponents": [
+			"CyborgCannon:CyborgCannon02"
+		],
+		"requiredResearch": [
+			"R-Wpn-Cannon4AMk1"
+		],
+		"researchPoints": 4000,
+		"researchPower": 125,
+		"resultComponents": [
+			"CyborgCannon02"
+		],
+		"statID": "Cannon4AUTOMk1"
+	},
 	"R-Cyborg-Wpn-Flamer": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Flamer",
@@ -1161,6 +1179,24 @@
 			"CyborgFlamer01"
 		],
 		"statID": "Flame1Mk1"
+	},
+	"R-Cyborg-Wpn-Flamer02": {
+		"iconID": "IMAGE_RES_CYBORGTECH",
+		"id": "R-Cyborg-Wpn-Flamer02",
+		"msgName": "RES_CYW_FL2",
+		"name": "Thermite Cyborg",
+		"replacedComponents": [
+			"CyborgFlamer01:CyborgFlamer02"
+		],
+		"requiredResearch": [
+			"R-Wpn-Flame2"
+		],
+		"researchPoints": 3600,
+		"researchPower": 112,
+		"resultComponents": [
+			"CyborgFlamer02"
+		],
+		"statID": "Flame2"
 	},
 	"R-Cyborg-Wpn-MG": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -1195,6 +1231,24 @@
 		],
 		"statID": "Rocket-LtA-T"
 	},
+	"R-Cyborg-Wpn-Rocket02": {
+		"iconID": "IMAGE_RES_CYBORGTECH",
+		"id": "R-Cyborg-Wpn-Rocket02",
+		"msgName": "RES_CYW_RK2",
+		"name": "Tank Killer Cyborg",
+		"replacedComponents": [
+			"CyborgRocket:CyborgRocket02"
+		],
+		"requiredResearch": [
+			"R-Wpn-Rocket07-Tank-Killer"
+		],
+		"researchPoints": 5000,
+		"researchPower": 156,
+		"resultComponents": [
+			"CyborgRocket02"
+		],
+		"statID": "Rocket-HvyA-T"
+	},
 	"R-Cyborg-Wpn-RotMG": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-RotMG",
@@ -1219,7 +1273,7 @@
 		"msgName": "RES_CYW_ATM",
 		"name": "Scourge Cyborg",
 		"replacedComponents": [
-			"CyborgRocket:Cyb-Wpn-Atmiss"
+			"CyborgRocket02:Cyb-Wpn-Atmiss"
 		],
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
@@ -1251,6 +1305,9 @@
 		"id": "R-Cyborg-Wpn-Rail1",
 		"msgName": "RES_CYW_RL1",
 		"name": "Needle Gunner Cyborg",
+		"replacedComponents": [
+			"CyborgCannon02:Cyb-Wpn-Rail1"
+		],
 		"requiredResearch": [
 			"R-Wpn-RailGun01"
 		],
@@ -1587,7 +1644,8 @@
 		"imdName": "BLWALLH.PIE",
 		"name": "Improved Hardcrete Mk2",
 		"requiredResearch": [
-			"R-Defense-WallUpgrade01"
+			"R-Defense-WallUpgrade01",
+			"R-Struc-Research-Module"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -1616,7 +1674,8 @@
 		"imdName": "BLWALLH.PIE",
 		"name": "Improved Hardcrete Mk3",
 		"requiredResearch": [
-			"R-Defense-WallUpgrade02"
+			"R-Defense-WallUpgrade02",
+			"R-Struc-Research-Upgrade01"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
@@ -1982,6 +2041,13 @@
 				"class": "Building",
 				"parameter": "RepairPoints",
 				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 50
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -2000,6 +2066,13 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 50
 			}
@@ -2021,6 +2094,13 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 50
 			}
@@ -2470,7 +2550,6 @@
 		"researchPoints": 2400,
 		"researchPower": 75,
 		"resultComponents": [
-			"Cannon1-VTOL",
 			"Cannon1Mk1"
 		],
 		"statID": "Cannon1Mk1"
@@ -2512,7 +2591,8 @@
 		"researchPoints": 7200,
 		"researchPower": 225,
 		"resultComponents": [
-			"Cannon375mmMk1"
+			"Cannon375mmMk1",
+			"Cannon375mm-VTOL"
 		],
 		"statID": "Cannon375mmMk1"
 	},
@@ -3172,14 +3252,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "ROCKET",
 				"parameter": "Damage",
-				"value": 35
+				"value": 30
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "ROCKET",
 				"parameter": "RadiusDamage",
-				"value": 35
+				"value": 30
 			}
 		],
 		"statID": "Rocket-Pod",
@@ -3201,14 +3281,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "ROCKET",
 				"parameter": "Damage",
-				"value": 15
+				"value": 20
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "ROCKET",
 				"parameter": "RadiusDamage",
-				"value": 15
+				"value": 20
 			}
 		],
 		"statID": "Rocket-Pod",
@@ -3389,8 +3469,7 @@
 		"researchPoints": 1200,
 		"researchPower": 37,
 		"resultComponents": [
-			"Rocket-Pod",
-			"Rocket-VTOL-Pod"
+			"Rocket-Pod"
 		],
 		"statID": "Rocket-Pod"
 	},
@@ -3665,7 +3744,8 @@
 		"msgName": "RES_EMP_HVFL",
 		"name": "Inferno Emplacement",
 		"redStructures": [
-			"PillBox5"
+			"PillBox5",
+			"GuardTower4H"
 		],
 		"requiredResearch": [
 			"R-Wpn-Flame2",
@@ -3683,6 +3763,9 @@
 		"id": "R-Defense-HvyHowitzer",
 		"msgName": "RES_EMP_HvHOW",
 		"name": "Ground Shaker Emplacement",
+		"redStructures": [
+			"Emplacement-Howitzer105"
+		],
 		"requiredResearch": [
 			"R-Wpn-HvyHowitzer",
 			"R-Defense-Howitzer"
@@ -3885,6 +3968,7 @@
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallUpgrade05",
 		"imdName": "BLWALLH.PIE",
+		"keyTopic": 1,
 		"name": "Supercrete Mk2",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade04"
@@ -3916,7 +4000,8 @@
 		"imdName": "BLWALLH.PIE",
 		"name": "Supercrete Mk3",
 		"requiredResearch": [
-			"R-Defense-WallUpgrade05"
+			"R-Defense-WallUpgrade05",
+			"R-Struc-Research-Upgrade04"
 		],
 		"researchPoints": 10000,
 		"researchPower": 312,
@@ -4186,6 +4271,13 @@
 				"class": "Building",
 				"parameter": "RepairPoints",
 				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 50
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -4204,6 +4296,13 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 50
 			}
@@ -4225,6 +4324,13 @@
 		"results": [
 			{
 				"class": "Building",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
 				"parameter": "RepairPoints",
 				"value": 50
 			}
@@ -4372,7 +4478,7 @@
 			{
 				"class": "Construct",
 				"parameter": "ConstructorPoints",
-				"value": 20
+				"value": 30
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -4380,7 +4486,6 @@
 	"R-Sys-Sensor-Tower02": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Tower02",
-		"keyTopic": 1,
 		"msgName": "RES_SY_STW2",
 		"name": "Hardened Sensor Tower",
 		"redStructures": [
@@ -4388,7 +4493,7 @@
 		],
 		"requiredResearch": [
 			"R-Sys-Sensor-Tower01",
-			"R-Defense-WallUpgrade02"
+			"R-Defense-WallUpgrade01"
 		],
 		"researchPoints": 1200,
 		"researchPower": 37,
@@ -4536,7 +4641,7 @@
 		"imdName": "iceng.pie",
 		"name": "Turbo-Charged Engine Mk2",
 		"requiredResearch": [
-			"R-Vehicle-Body09",
+			"R-Struc-Research-Upgrade04",
 			"R-Vehicle-Engine04"
 		],
 		"researchPoints": 9000,
@@ -4559,6 +4664,7 @@
 		"imdName": "iceng.pie",
 		"name": "Turbo-Charged Engine Mk3",
 		"requiredResearch": [
+			"R-Vehicle-Body09",
 			"R-Vehicle-Engine05"
 		],
 		"researchPoints": 11000,
@@ -5219,7 +5325,7 @@
 		"name": "Hyper Velocity Cannon",
 		"redComponents": [
 			"Cannon375mmMk1",
-			"Cannon1-VTOL"
+			"Cannon375mm-VTOL"
 		],
 		"requiredResearch": [
 			"R-Wpn-Cannon3Mk1"
@@ -5410,6 +5516,36 @@
 				"filterValue": "FLAME",
 				"parameter": "ReloadTime",
 				"value": -20
+			}
+		],
+		"statID": "Flame1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"techCode": 1
+	},
+	"R-Wpn-Flamer-ROF04": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Flamer-ROF04",
+		"keyTopic": 1,
+		"name": "Flamer Fast Loader",
+		"requiredResearch": [
+			"R-Wpn-Flamer-ROF03"
+		],
+		"researchPoints": 8000,
+		"researchPower": 250,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "FLAME",
+				"parameter": "FirePause",
+				"value": -10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "FLAME",
+				"parameter": "ReloadTime",
+				"value": -10
 			}
 		],
 		"statID": "Flame1Mk1",
@@ -5710,6 +5846,9 @@
 		"keyTopic": 1,
 		"msgName": "RES_W_HH1",
 		"name": "Heavy Howitzer - Ground Shaker",
+		"redComponents": [
+			"Howitzer105Mk1"
+		],
 		"requiredResearch": [
 			"R-Wpn-HowitzerMk1"
 		],
@@ -6211,7 +6350,6 @@
 		"name": "Tank Killer Rocket",
 		"redComponents": [
 			"Rocket-Pod",
-			"Rocket-VTOL-Pod",
 			"Rocket-LtA-T",
 			"Rocket-VTOL-LtA-T"
 		],
@@ -6552,7 +6690,9 @@
 		"msgName": "RES_EMP_PulseLas",
 		"name": "Pulse Laser Emplacement",
 		"redStructures": [
-			"Emplacement-PrisLas"
+			"Emplacement-PrisLas",
+			"Tower-Projector",
+			"Wall-RotMg"
 		],
 		"requiredResearch": [
 			"R-Wpn-Laser02",
@@ -6749,6 +6889,7 @@
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallUpgrade07",
 		"imdName": "BLWALLH.PIE",
+		"keyTopic": 1,
 		"msgName": "RES_DF_WU7",
 		"name": "Plascrete",
 		"requiredResearch": [
@@ -6770,7 +6911,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "HitPoints",
-				"value": 40
+				"value": 120
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -6779,6 +6920,7 @@
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallUpgrade08",
 		"imdName": "BLWALLH.PIE",
+		"keyTopic": 1,
 		"name": "Plascrete Mk2",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade07"
@@ -6798,7 +6940,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "HitPoints",
-				"value": 20
+				"value": 40
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -6810,7 +6952,8 @@
 		"imdName": "BLWALLH.PIE",
 		"name": "Plascrete Mk3",
 		"requiredResearch": [
-			"R-Defense-WallUpgrade08"
+			"R-Defense-WallUpgrade08",
+			"R-Struc-Research-Upgrade07"
 		],
 		"researchPoints": 16000,
 		"researchPower": 450,
@@ -6820,7 +6963,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 40
+				"value": 60
 			},
 			{
 				"class": "Building",
@@ -6836,30 +6979,95 @@
 	"R-Defense-WallUpgrade10": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallUpgrade10",
-		"keyTopic": 1,
 		"imdName": "BLWALLH.PIE",
+		"keyTopic": 1,
+		"msgName": "RES_DF_WU10",
+		"name": "Plasteel",
+		"requiredResearch": [
+			"R-Defense-WallUpgrade09"
+		],
+		"researchPoints": 18000,
+		"researchPower": 450,
 		"results": [
 			{
 				"class": "Building",
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 100
+				"value": 30
 			},
 			{
 				"class": "Building",
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "HitPoints",
-				"value": 100
+				"value": 20
+			}
+		],
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
+	},
+	"R-Defense-WallUpgrade11": {
+		"iconID": "IMAGE_RES_DEFENCE",
+		"id": "R-Defense-WallUpgrade11",
+		"imdName": "BLWALLH.PIE",
+		"keyTopic": 1,
+		"name": "Plasteel Mk2",
+		"requiredResearch": [
+			"R-Defense-WallUpgrade10"
+		],
+		"researchPoints": 20000,
+		"researchPower": 450,
+		"results": [
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Wall",
+				"parameter": "Armour",
+				"value": 30
+			},
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Wall",
+				"parameter": "HitPoints",
+				"value": 20
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
 		"techCode": 1
 	},
-	"R-Defense-WallUpgrade11": {
+	"R-Defense-WallUpgrade12": {
 		"iconID": "IMAGE_RES_DEFENCE",
-		"id": "R-Defense-WallUpgrade11",
+		"id": "R-Defense-WallUpgrade12",
+		"imdName": "BLWALLH.PIE",
+		"name": "Plasteel Mk3",
+		"requiredResearch": [
+			"R-Defense-WallUpgrade11"
+		],
+		"researchPoints": 22000,
+		"researchPower": 450,
+		"results": [
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Wall",
+				"parameter": "Armour",
+				"value": 30
+			},
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Wall",
+				"parameter": "HitPoints",
+				"value": 20
+			}
+		],
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"techCode": 1
+	},
+	"R-Defense-WallUpgrade13": {
+		"iconID": "IMAGE_RES_DEFENCE",
+		"id": "R-Defense-WallUpgrade13",
 		"keyTopic": 1,
 		"imdName": "BLWALLH.PIE",
 		"results": [
@@ -6868,14 +7076,14 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 400
+				"value": 200
 			},
 			{
 				"class": "Building",
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "HitPoints",
-				"value": 100
+				"value": 50
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -7176,7 +7384,7 @@
 			{
 				"class": "Construct",
 				"parameter": "ConstructorPoints",
-				"value": 20
+				"value": 30
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -7190,6 +7398,27 @@
 		],
 		"resultComponents": [
 			"NEXUSrepair"
+		],
+		"techCode": 1
+	},
+	"R-Sys-NEXUSsensor": {
+		"id": "R-Sys-NEXUSsensor",
+		"keyTopic": 1,
+		"name": "*R-Sys-NEXUSsensor*",
+		"replacedComponents": [
+			"ZNULLSENSOR:NavGunSensor"
+		],
+		"resultComponents": [
+			"NavGunSensor"
+		],
+		"techCode": 1
+	},
+	"R-Sys-NEXUSsensorUndo": {
+		"id": "R-Sys-NEXUSsensorUndo",
+		"keyTopic": 1,
+		"name": "*R-Sys-NEXUSsensorUndo*",
+		"replacedComponents": [
+			"NavGunSensor:ZNULLSENSOR"
 		],
 		"techCode": 1
 	},
@@ -7506,14 +7735,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "Damage",
-				"value": 30
+				"value": 40
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 40
 			}
 		],
 		"statID": "QuadMg1AAGun",
@@ -7535,14 +7764,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "Damage",
-				"value": 30
+				"value": 40
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 40
 			}
 		],
 		"statID": "QuadMg1AAGun",
@@ -7565,14 +7794,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "Damage",
-				"value": 30
+				"value": 40
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 40
 			}
 		],
 		"statID": "QuadMg1AAGun",
@@ -7731,7 +7960,7 @@
 		"msgName": "RES_W_CN_D7",
 		"name": "HVAPFSDS Cannon Rounds",
 		"requiredResearch": [
-			"R-Wpn-MG-Damage08",
+			"R-Wpn-MG-Damage09",
 			"R-Wpn-Cannon-Damage06"
 		],
 		"researchPoints": 9600,
@@ -7758,10 +7987,10 @@
 	"R-Wpn-Cannon-Damage08": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-Damage08",
+		"keyTopic": 1,
 		"name": "HVAPFSDS Cannon Rounds Mk2",
 		"requiredResearch": [
-			"R-Wpn-Cannon-Damage07",
-			"R-Wpn-MG-Damage09"
+			"R-Wpn-Cannon-Damage07"
 		],
 		"researchPoints": 10800,
 		"researchPower": 337,
@@ -8038,14 +8267,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "ENERGY",
 				"parameter": "Damage",
-				"value": 30
+				"value": 12
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "ENERGY",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 12
 			}
 		],
 		"statID": "Laser2PULSEMk1",
@@ -8067,14 +8296,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "ENERGY",
 				"parameter": "Damage",
-				"value": 30
+				"value": 12
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "ENERGY",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 12
 			}
 		],
 		"statID": "Laser2PULSEMk1",
@@ -8098,14 +8327,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "ENERGY",
 				"parameter": "Damage",
-				"value": 30
+				"value": 20
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "ENERGY",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 20
 			}
 		],
 		"statID": "Laser2PULSEMk1",
@@ -8486,7 +8715,14 @@
 		"name": "Pulse Laser",
 		"redComponents": [
 			"Laser3BEAM-VTOL",
-			"Laser3BEAMMk1"
+			"Laser3BEAMMk1",
+			"MG4ROTARY-VTOL",
+			"MG4ROTARYMk1",
+			"Flame2"
+		],
+		"replacedComponents": [
+			"CyborgRotMG:Cyb-Wpn-Laser",
+			"CyborgFlamer02:Cyb-Wpn-Laser"
 		],
 		"requiredResearch": [
 			"R-Wpn-Laser01"
@@ -8516,7 +8752,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
-				"value": 10
+				"value": 15
 			}
 		],
 		"statID": "MG1Mk1",
@@ -8538,7 +8774,30 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "Damage",
-				"value": 10
+				"value": 35
+			}
+		],
+		"statID": "MG1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"techCode": 1
+	},
+	"R-Wpn-MG-Damage10": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-MG-Damage10",
+		"name": "Depleted Uranium MG Bullets Mk3",
+		"requiredResearch": [
+			"R-Wpn-MG-Damage09",
+			"R-Wpn-Cannon-Damage09"
+		],
+		"researchPoints": 11600,
+		"researchPower": 362,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "Damage",
+				"value": 30
 			}
 		],
 		"statID": "MG1Mk1",

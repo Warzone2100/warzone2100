@@ -52,6 +52,7 @@
 #include "fpath.h"
 #include "levels.h"
 #include "lib/framework/wzapp.h"
+#include "lib/ivis_opengl/pielighting.h"
 
 #define GAME_TICKS_FOR_DANGER (GAME_TICKS_PER_SEC * 2)
 
@@ -73,6 +74,7 @@ SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
 //For saves to determine if loading the terrain type override should occur
 bool builtInMap;
+bool useTerrainOverrides;
 
 /* Structure definitions for loading and saving map data */
 struct MAP_SAVEHEADER  // : public GAME_SAVEHEADER
@@ -123,18 +125,65 @@ static void SetDecals(const char *filename, const char *decal_type);
 static void init_tileNames(MAP_TILESET type);
 
 /// The different ground types
-std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
-int numGroundTypes;
+static std::vector<GROUND_TYPE> groundTypes;
 char *tilesetDir = nullptr;
+MAP_TILESET currentMapTileset = MAP_TILESET::ARIZONA;
 static int numTile_names;
 static std::unique_ptr<char[]> Tile_names = nullptr;
-	
+
 static std::unique_ptr<int[]> map; // 3D array pointer that holds the texturetype
+static int numTile_types = 0;
+
 static std::unique_ptr<bool[]> mapDecals;           // array that tells us what tile is a decal
 #define MAX_TERRAIN_TILES 0x0200  // max that we support (for now), see TILE_NUMMASK
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
+
+#if 0
+void syncLogDumpAuxMaps()
+{
+	for (int auxIdx = 0; auxIdx < MAX_PLAYERS + AUX_MAX; auxIdx++)
+	{
+		syncDebug("psAuxMap[%d]:", auxIdx);
+		for (int y = 0; y < mapHeight; ++y)
+		{
+			std::string rowDetails;
+			for (int x = 0; x < mapWidth; ++x)
+			{
+				auto val = auxTile(x, y, auxIdx);
+				rowDetails += std::to_string(val) + ",";
+			}
+			syncDebug("psAuxMap[%d] row[%d]: %s", auxIdx, y, rowDetails.c_str());
+		}
+	}
+
+	for (int idx = 0; idx < AUX_MAX; idx++)
+	{
+		syncDebug("psBlockMap[%d]:", idx);
+		for (int y = 0; y < mapHeight; ++y)
+		{
+			std::string rowDetails;
+			for (int x = 0; x < mapWidth; ++x)
+			{
+				auto val = blockTile(x, y, idx);
+				rowDetails += std::to_string(val) + ",";
+			}
+			syncDebug("psBlockMap[%d] row[%d]: %s", idx, y, rowDetails.c_str());
+		}
+	}
+}
+#endif
+
+const GROUND_TYPE& getGroundType(size_t idx)
+{
+	return groundTypes[idx];
+}
+
+size_t getNumGroundTypes()
+{
+	return groundTypes.size();
+}
 
 static void init_tileNames(MAP_TILESET type)
 {
@@ -213,7 +262,7 @@ static void init_tileNames(MAP_TILESET type)
 	numTile_names = numlines;
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
-	Tile_names = std::unique_ptr<char[]>(new char[numlines * MAX_STR_LENGTH]());
+	Tile_names = std::make_unique<char[]>(numlines * MAX_STR_LENGTH);
 
 	for (i = 0; i < numlines; i++)
 	{
@@ -224,12 +273,63 @@ static void init_tileNames(MAP_TILESET type)
 	}
 }
 
-// This is the main loading routine to get all the map's parameters set.
-// Once it figures out what tileset we need, we then parse the files for that tileset.
-// Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
-static bool mapLoadGroundTypes(bool preview)
+static MAP_TILESET mapTilesetDirToTileset(const char *dir)
 {
-	char	*pFileData = nullptr;
+	// For Arizona
+	if (strcmp(dir, "texpages/tertilesc1hw") == 0)
+	{
+		return MAP_TILESET::ARIZONA;
+	}
+	// for Urban
+	else if (strcmp(dir, "texpages/tertilesc2hw") == 0)
+	{
+		return MAP_TILESET::URBAN;
+	}
+	// for Rockie
+	else if (strcmp(dir, "texpages/tertilesc3hw") == 0)
+	{
+		return MAP_TILESET::ROCKIES;
+	}
+	else
+	{
+		debug(LOG_ERROR, "unsupported tileset: %s", dir);
+		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
+	}
+	return MAP_TILESET::ARIZONA; // fallback
+}
+
+static std::string appendToFileName(const std::string &origFilename, const char *appendStr)
+{
+	std::string newFilename = origFilename;
+	std::string fileExtension = "";
+	// right-most "." index
+	size_t extensionSeparatorPos = origFilename.rfind('.');
+	if (extensionSeparatorPos != std::string::npos)
+	{
+		// separate the file extension
+		fileExtension = origFilename.substr(extensionSeparatorPos);
+		newFilename = origFilename.substr(0, extensionSeparatorPos);
+	}
+	newFilename += appendStr;
+	newFilename += fileExtension;
+	return newFilename;
+}
+
+static std::string getTextureVariant(const std::string &origTextureFilename, const char *variantStr)
+{
+	std::string variantFileName = appendToFileName(origTextureFilename, variantStr);
+	std::string variantPath = std::string("texpages/") + variantFileName;
+	auto variantImageLoadPath = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(variantPath));
+	if (PHYSFS_exists(variantImageLoadPath))
+	{
+		return variantFileName;
+	}
+	return "";
+}
+
+static void mapLoadTertiles(bool preview, MAP_TILESET tileSet, const char* tertilesFile)
+{
+	char	*pFileData = fileLoadBuffer;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
 	char	textureName[MAX_STR_LENGTH] = {'\0'};
 	char	textureType[MAX_STR_LENGTH] = {'\0'};
@@ -237,142 +337,99 @@ static bool mapLoadGroundTypes(bool preview)
 	int		numlines = 0;
 	int		cnt = 0, i = 0;
 	uint32_t	fileSize = 0;
-
-	pFileData = fileLoadBuffer;
-
-	debug(LOG_TERRAIN, "tileset: %s", tilesetDir);
-	// For Arizona
-	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
+	// load the override terrain types
+	if (!preview && useTerrainOverrides && !loadTerrainTypeMapOverride(tileSet))
 	{
-fallback:
-		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::ARIZONA))
-		{
-			debug(LOG_POPUP, "Failed to load terrain type override");
-		}
-		init_tileNames(MAP_TILESET::ARIZONA);
-		if (!loadFileToBuffer("tileset/tertilesc1hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug(LOG_FATAL, "tileset/tertilesc1hwGtype.txt not found, aborting.");
-			abort();
-		}
+		debug(LOG_POPUP, "Failed to load terrain type override");
+	}
+	init_tileNames(tileSet);
+	if (!loadFileToBuffer(tertilesFile, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	{
+		debug(LOG_FATAL, "%s not found, aborting.", tertilesFile);
+		abort();
+	}
 
-		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
+	sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
+	pFileData += cnt;
+
+	if (!strstr(tertilesFile, tilename))
+	{
+		debug(LOG_FATAL, "%s found, but was expecting %s!  Aborting.", tilename, tertilesFile);
+		abort();
+	}
+
+	debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+	//increment the pointer to the start of the next record
+	pFileData = strchr(pFileData, '\n') + 1;
+	groundTypes.resize(numlines);
+
+	for (i = 0; i < numlines; i++)
+	{
+		sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 		pFileData += cnt;
-
-		if (strcmp(tilename, "tertilesc1hw"))
-		{
-			debug(LOG_FATAL, "%s found, but was expecting tertilesc1hw!  Aborting.", tilename);
-			abort();
-		}
-
-		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
-		numGroundTypes = numlines;
-		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
 
-		for (i = 0; i < numlines; i++)
-		{
-			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
-			pFileData += cnt;
-			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData, '\n') + 1;
+		int textureTypeIdx = getTextureType(textureType);
+		groundTypes[textureTypeIdx].textureName = textureName;
+		groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
+		groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
+		groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
+		groundTypes[textureTypeIdx].heightMapTextureName = getTextureVariant(textureName, "_hm");
+		groundTypes[textureTypeIdx].highQualityTextures = !groundTypes[textureTypeIdx].normalMapTextureName.empty() || !groundTypes[textureTypeIdx].specularMapTextureName.empty() || !groundTypes[textureTypeIdx].heightMapTextureName.empty();
+	}
+}
 
-			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
-		}
-
-		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
+static void SetDecals(MAP_TILESET tileset)
+{
+	if (tileset == MAP_TILESET::ARIZONA)
+	{
+fallback:
 		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	// for Urban
-	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
+	else if (tileset == MAP_TILESET::URBAN)
 	{
-		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::URBAN))
-		{
-			debug(LOG_POPUP, "Failed to load terrain type override");
-		}
-		init_tileNames(MAP_TILESET::URBAN);
-		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug(LOG_POPUP, "tileset/tertilesc2hwGtype.txt not found, using default terrain ground types.");
-			goto fallback;
-		}
-
-		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
-		pFileData += cnt;
-
-		if (strcmp(tilename, "tertilesc2hw"))
-		{
-			debug(LOG_POPUP, "%s found, but was expecting tertilesc2hw!", tilename);
-			goto fallback;
-		}
-
-		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
-		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
-		numGroundTypes = numlines;
-		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
-
-		for (i = 0; i < numlines; i++)
-		{
-			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
-			pFileData += cnt;
-			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData, '\n') + 1;
-
-			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
-		}
-
-		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
 		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
 	// for Rockie
-	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
+	else if (tileset == MAP_TILESET::ROCKIES)
 	{
-		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(MAP_TILESET::ROCKIES))
-		{
-			debug(LOG_POPUP, "Failed to load terrain type override");
-		}
-		init_tileNames(MAP_TILESET::ROCKIES);
-		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug(LOG_POPUP, "tileset/tertilesc3hwGtype.txt not found, using default terrain ground types.");
-			goto fallback;
-		}
-
-		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
-		pFileData += cnt;
-
-		if (strcmp(tilename, "tertilesc3hw"))
-		{
-			debug(LOG_POPUP, "%s found, but was expecting tertilesc3hw!", tilename);
-			goto fallback;
-		}
-
-		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
-		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
-		numGroundTypes = numlines;
-		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
-
-		for (i = 0; i < numlines; i++)
-		{
-			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
-			pFileData += cnt;
-			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData, '\n') + 1;
-
-			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
-		}
-
-		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
 		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
+	}
+	// When a map uses something other than the above, we fallback to Arizona
+	else
+	{
+		debug(LOG_ERROR, "unsupported tileset: %s", tilesetDir);
+		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
+		goto fallback;
+	}
+}
+
+// This is the main loading routine to get all the map's parameters set.
+// Once it figures out what tileset we need, we then parse the files for that tileset.
+// Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
+static bool mapLoadGroundTypes(bool preview)
+{
+	debug(LOG_TERRAIN, "tileset: %s", tilesetDir);
+	// For Arizona
+	if (currentMapTileset == MAP_TILESET::ARIZONA)
+	{
+fallback:
+		mapLoadTertiles(preview, MAP_TILESET::ARIZONA, "tileset/tertilesc1hwGtype.txt");
+		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
+	}
+	// for Urban
+	else if (currentMapTileset == MAP_TILESET::URBAN)
+	{
+		mapLoadTertiles(preview, MAP_TILESET::URBAN, "tileset/tertilesc2hwGtype.txt");
+		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
+	}
+	// for Rockie
+	else if (currentMapTileset == MAP_TILESET::ROCKIES)
+	{
+		mapLoadTertiles(preview, MAP_TILESET::ROCKIES, "tileset/tertilesc3hwGtype.txt");
+		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
 	}
 	// When a map uses something other than the above, we fallback to Arizona
 	else
@@ -382,6 +439,8 @@ fallback:
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
 		goto fallback;
 	}
+
+	SetDecals(currentMapTileset);
 	return true;
 }
 
@@ -415,6 +474,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
 
+	numTile_types = numlines;
 	map = std::unique_ptr<int[]> (new int[numlines * 2 * 2]());
 
 	for (i = 0; i < numlines; i++)
@@ -428,10 +488,10 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 		// in case it isn't obvious, this is a 3D array, and using pointer math to access each element.
 		// so map[10][0][1] would be map[10*2*2 + 0 + 1] == map[41]
 		// map[10][1][0] == map[10*2*2 + 2 + 0] == map[42]
-		map[i * 2 * 2 + 0 * 2 + 0] = getTextureType(val1);
+		map[i * 2 * 2 + 0 * 2 + 0] = getTextureType(val4);
 		map[i * 2 * 2 + 0 * 2 + 1] = getTextureType(val2);
 		map[i * 2 * 2 + 1 * 2 + 0] = getTextureType(val3);
-		map[i * 2 * 2 + 1 * 2 + 1] = getTextureType(val4);
+		map[i * 2 * 2 + 1 * 2 + 1] = getTextureType(val1);
 	}
 }
 
@@ -455,6 +515,12 @@ static int getTextureType(const char *textureType)
 //	so map[10][0][1] would be map[10*2*2 + 0*2 + 1] == map[41]
 static int groundFromMapTile(int tile, int j, int k)
 {
+	auto tileNumber = TileNumber_tile(tile);
+	if (tileNumber >= numTile_types)
+	{
+		debug(LOG_INFO, "Invalid ground tile number: %d", (int)tileNumber);
+		return 0;
+	}
 	return map[TileNumber_tile(tile) * 2 * 2 + j * 2 + k];
 }
 
@@ -608,8 +674,8 @@ static void SetDecals(const char *filename, const char *decal_type)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
 	// value initialization sets everything to false.
-	mapDecals = std::unique_ptr<bool[]>(new bool[MAX_TERRAIN_TILES]());
-	
+	mapDecals = std::make_unique<bool[]>(MAX_TERRAIN_TILES);
+
 	for (i = 0; i < numlines; i++)
 	{
 		tiledecal = -1;
@@ -642,11 +708,9 @@ static bool hasDecals(int i, int j)
 // Sets the ground type to be a decal or not
 static bool mapSetGroundTypes()
 {
-	int i, j;
-
-	for (i = 0; i < mapWidth; i++)
+	for (int j = 0; j < mapHeight; j++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (int i = 0; i < mapWidth; i++)
 		{
 			MAPTILE *psTile = mapTile(i, j);
 
@@ -665,6 +729,20 @@ static bool mapSetGroundTypes()
 	return true;
 }
 
+bool mapReloadGroundTypes()
+{
+	if (!tilesetDir)
+	{
+		return false;
+	}
+	mapLoadGroundTypes(false);
+	if (!mapSetGroundTypes())
+	{
+		return false;
+	}
+	return true;
+}
+
 static bool isWaterVertex(int x, int y)
 {
 	if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
@@ -678,16 +756,19 @@ static bool isWaterVertex(int x, int y)
 static void generateRiverbed()
 {
 	MersenneTwister mt(12345);  // 12345 = random seed.
-	int maxIdx = 1, idx[MAP_MAXWIDTH][MAP_MAXHEIGHT];
-	int i, j, l = 0;
+	int maxIdx = 1;
+	ASSERT_OR_RETURN(, mapWidth > 0 && mapHeight > 0, "Invalid map width or height (%d x %d)", mapWidth, mapHeight);
+	std::vector<int> idx(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight), 0);
+	int x, y, l = 0;
 
-	for (i = 0; i < mapWidth; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			// initially set the seabed index to 0 for ground and 100 for water
-			idx[i][j] = 100 * isWaterVertex(i, j);
-			if (idx[i][j] > 0)
+			int val = 100 * isWaterVertex(x, y);
+			idx[x + (y * mapWidth)] = val;
+			if (val > 0)
 			{
 				l++;
 			}
@@ -702,17 +783,18 @@ static void generateRiverbed()
 	do
 	{
 		maxIdx = 1;
-		for (i = 1; i < mapWidth - 2; i++)
+		for (y = 1; y < mapHeight - 2; y++)
 		{
-			for (j = 1; j < mapHeight - 2; j++)
+			for (x = 1; x < mapWidth - 2; x++)
 			{
-
-				if (idx[i][j] > 0)
+				int rowOffset = (y * mapWidth);
+				auto& idxVal = idx[x + rowOffset];
+				if (idxVal > 0)
 				{
-					idx[i][j] = (idx[i - 1][j] + idx[i][j - 1] + idx[i][j + 1] + idx[i + 1][j]) / 4;
-					if (idx[i][j] > maxIdx)
+					idxVal = (idx[(x - 1) + rowOffset] + idx[x + ((y - 1) * mapWidth)] + idx[x + ((y + 1) * mapWidth)] + idx[(x + 1) + rowOffset]) / 4;
+					if (idxVal > maxIdx)
 					{
-						maxIdx = idx[i][j];
+						maxIdx = idxVal;
 					}
 				}
 			}
@@ -722,22 +804,23 @@ static void generateRiverbed()
 	}
 	while (maxIdx > 90 && l < 20);
 
-	for (i = 0; i < mapWidth; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
-			if (idx[i][j] > maxIdx)
+			auto& idxVal = idx[x + (y * mapWidth)];
+			if (idxVal > maxIdx)
 			{
-				idx[i][j] = maxIdx;
+				idxVal = maxIdx;
 			}
-			if (idx[i][j] < 1)
+			if (idxVal < 1)
 			{
-				idx[i][j] = 1;
+				idxVal = 1;
 			}
-			if (isWaterVertex(i, j))
+			if (isWaterVertex(x, y))
 			{
-				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idx[i][j] - mt.u32() % (maxIdx / 6 + 1));
-				mapTile(i, j)->height -= WATER_MIN_DEPTH - (l / maxIdx);
+				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idxVal - mt.u32() % (maxIdx / 6 + 1));
+				mapTile(x, y)->height -= WATER_MIN_DEPTH - (l / maxIdx);
 			}
 		}
 	}
@@ -932,7 +1015,8 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = std::unique_ptr<MAPTILE[]>(new MAPTILE[width * height]());
+	psMapTiles = std::make_unique<MAPTILE[]>(static_cast<size_t>(width) * height);
+	getCurrentLightmapData().reset(width, height);
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
@@ -944,6 +1028,8 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 		tilesetDir = strdup("texpages/tertilesc1hw");
 	}
 
+	currentMapTileset = mapTilesetDirToTileset(tilesetDir);
+
 	// load the ground types
 	if (!mapLoadGroundTypes(preview))
 	{
@@ -953,7 +1039,7 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 	if (!preview)
 	{
 		//preload the terrain textures
-		loadTerrainTextures();
+		loadTerrainTextures(currentMapTileset);
 	}
 
 	//load in the map data itself
@@ -1023,12 +1109,12 @@ static bool afterMapLoad()
 	/* Allocate aux maps */
 	ASSERT(mapWidth >= 0 && mapHeight >= 0, "Invalid mapWidth or mapHeight (%d x %d)", mapWidth, mapHeight);
 	const size_t mapSize = static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight);
-	psBlockMap[AUX_MAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
-	psBlockMap[AUX_ASTARMAP] =  std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
-	psBlockMap[AUX_DANGERMAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
+	psBlockMap[AUX_MAP] = std::make_unique<uint8_t[]>(mapSize);
+	psBlockMap[AUX_ASTARMAP] =  std::make_unique<uint8_t[]>(mapSize);
+	psBlockMap[AUX_DANGERMAP] = std::make_unique<uint8_t[]>(mapSize);
 	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
 	{
-		psAuxMap[x] = std::unique_ptr<uint8_t[]> (new uint8_t[mapSize]());
+		psAuxMap[x] = std::make_unique<uint8_t[]> (mapSize);
 	}
 
 	// Set our blocking bits
@@ -1142,12 +1228,17 @@ bool mapShutdown()
 
 	map = nullptr;
 	floodbucket = nullptr;
-	psGroundTypes = nullptr;
+	groundTypes.clear();
 	mapDecals = nullptr;
 	psMapTiles = nullptr;
 	mapWidth = mapHeight = 0;
 	numTile_names = 0;
 	Tile_names = nullptr;
+	if (tilesetDir)
+	{
+		free(tilesetDir);
+		tilesetDir = nullptr;
+	}
 	return true;
 }
 
@@ -1988,16 +2079,13 @@ static void threatUpdate(int player)
 	// Step 2: Set threat bits
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		DROID *psDroid;
-		STRUCTURE *psStruct;
-
 		if (aiCheckAlliances(player, i))
 		{
 			// No need to iterate friendly objects
 			continue;
 		}
 
-		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[i])
 		{
 			UBYTE mode = 0;
 
@@ -2008,7 +2096,7 @@ static void threatUpdate(int player)
 			}
 			for (weapon = 0; weapon < psDroid->numWeaps; weapon++)
 			{
-				mode |= asWeaponStats[psDroid->asWeaps[weapon].nStat].surfaceToAir;
+				mode |= psDroid->getWeaponStats(weapon)->surfaceToAir;
 			}
 			if (psDroid->droidType == DROID_SENSOR)	// special treatment for sensor turrets, no multiweapon support
 			{
@@ -2020,13 +2108,13 @@ static void threatUpdate(int player)
 			}
 		}
 
-		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[i])
 		{
 			UBYTE mode = 0;
 
 			for (weapon = 0; weapon < psStruct->numWeaps; weapon++)
 			{
-				mode |= asWeaponStats[psStruct->asWeaps[weapon].nStat].surfaceToAir;
+				mode |= psStruct->getWeaponStats(weapon)->surfaceToAir;
 			}
 			if (psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->location == LOC_TURRET)	// special treatment for sensor turrets
 			{
@@ -2064,7 +2152,7 @@ void mapInit()
 		lastDangerPlayer = 0;
 		dangerSemaphore = wzSemaphoreCreate(0);
 		dangerDoneSemaphore = wzSemaphoreCreate(0);
-		dangerThread = wzThreadCreate(dangerThreadFunc, nullptr);
+		dangerThread = wzThreadCreate(dangerThreadFunc, nullptr, "wzDanger");
 		wzThreadStart(dangerThread);
 	}
 }

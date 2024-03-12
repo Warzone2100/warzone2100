@@ -443,11 +443,13 @@ const weaponStats =
 		alias: "rkta",
 		weapons: [
 			{ res: "R-Wpn-Rocket02-MRL", stat: "Rocket-MRL" }, // mra
+			{ res: "R-Wpn-Rocket02-MRLHvy", stat: "Rocket-MRL-Hvy" }, // hra
 			{ res: "R-Wpn-Rocket06-IDF", stat: "Rocket-IDF" }, // ripple
 			{ res: "R-Wpn-MdArtMissile", stat: "Missile-MdArt" }, // seraph
 			{ res: "R-Wpn-HvArtMissile", stat: "Missile-HvyArt" }, // archie
 		],
 		fastFire: [
+			{ res: "R-Wpn-Rocket02-MRLHvy", stat: "Rocket-MRL-Hvy" },
 			{ res: "R-Wpn-MdArtMissile", stat: "Missile-MdArt" },
 		],
 		vtols: [
@@ -455,6 +457,7 @@ const weaponStats =
 		],
 		defenses: [
 			{ res: "R-Defense-MRL", stat: "Emplacement-MRL-pit" }, // mra
+			{ res: "R-Defense-MRLHvy", stat: "Emplacement-MRLHvy-pit" }, // hra
 			{ res: "R-Defense-IDFRocket", stat: "Emplacement-Rocket06-IDF" }, // ripple
 			{ res: "R-Defense-MdArtMissile", stat: "Emplacement-MdART-pit" }, // seraph
 			{ res: "R-Defense-HvyArtMissile", stat: "Emplacement-HvART-pit" }, // archie

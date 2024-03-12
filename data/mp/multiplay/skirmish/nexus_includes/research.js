@@ -33,32 +33,41 @@ function doResearch()
 	for (let i = 0, len = resLabs.length; i < len; ++i)
 	{
 		var lab = resLabs[i];
+		var found = false;
 
 		if (lab.status !== BUILT || !structureIdle(lab) || getRealPower(me) < LOW_POWER)
 		{
 			continue;
 		}
 
-		var found = evalResearch(lab.id, nexusBranch[branch].earlyResearch);
-
-		if (!found)
+		if ((difficulty === MEDIUM && random(100) < 10) || (difficulty >= HARD))
 		{
-			found = evalResearch(lab.id, ESSENTIAL_RESEARCH_1);
+			found = evalResearch(lab.id, nexusBranch[branch].earlyResearch);
+
+			if (!found)
+			{
+				found = evalResearch(lab.id, ESSENTIAL_RESEARCH_1);
+			}
+
+			if (!found && nexusBranch[branch].type === "vtol" && random(100) < 15)
+			{
+				found = evalResearch(lab.id, VTOL_RESEARCH);
+			}
+
+			if (!found)
+			{
+				found = evalResearch(lab.id, ESSENTIAL_RESEARCH_2);
+			}
+
+			if (!found && random(100) < 5)
+			{
+				found = evalResearch(lab.id, SPECIAL_STRUCTURE_RESEARCH);
+			}
 		}
 
-		if (!found && nexusBranch[branch].type === "vtol" && random(100) < 15)
+		if (!found && (difficulty === INSANE) && (random(100) < 25))
 		{
-			found = evalResearch(lab.id, VTOL_RESEARCH);
-		}
-
-		if (!found)
-		{
-			found = evalResearch(lab.id, ESSENTIAL_RESEARCH_2);
-		}
-
-		if (!found && random(100) < 5)
-		{
-			found = evalResearch(lab.id, SPECIAL_STRUCTURE_RESEARCH);
+			found = evalResearch(lab.id, INSANE_RESEARCH);
 		}
 
 		//Random research

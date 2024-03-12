@@ -68,7 +68,7 @@ bool launchTransporter(DROID *psTransporter);
 have arrived - returns true when there*/
 bool updateTransporter(DROID *psTransporter);
 
-void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateTransCapacity(WIDGET *psWidget, const W_CONTEXT *psContext);
 
 /* Remove the Transporter Launch widget from the screen*/
 void intRemoveTransporterLaunch();
@@ -99,7 +99,7 @@ void transporterSetLaunchTime(UDWORD time);
 void flashMissionButton(UDWORD buttonID);
 void stopMissionButtonFlash(UDWORD buttonID);
 /*checks the order of the droid to see if its currently flying*/
-bool transporterFlying(DROID *psTransporter);
+bool transporterFlying(const DROID *psTransporter);
 //initialise the flag to indicate the first transporter has arrived - set in startMission()
 void initFirstTransporterFlag();
 

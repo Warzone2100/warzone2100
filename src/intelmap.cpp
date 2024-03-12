@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2023  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,12 +27,14 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/object_list_iteration.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/gridlayout.h"
 #include "lib/widget/button.h"
 #include "lib/widget/paragraph.h"
 #include "lib/widget/label.h"
 #include "lib/widget/scrollablelist.h"
+#include "lib/widget/multibutform.h"
 #include "lib/sound/mixer.h" //for sound_GetUIVolume()
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -126,16 +128,16 @@
 
 /* the widget screen */
 extern std::shared_ptr<W_SCREEN> psWScreen;
+static std::shared_ptr<W_SCREEN> intelligenceOverlayScreen;
 
-static UDWORD			messageID;
 static bool				immediateMessage = false;
 
 //flags whether to open the Intel Screen with a message
 static bool				playCurrent;
 
 /* functions declarations ****************/
-static bool intAddMessageForm(bool playCurrent);
 static const char* getMessageTitle(const MESSAGE& message);
+static void StartMessageSequences(MESSAGE *psMessage, bool Start);
 /*Displays the buttons used on the intelligence map */
 class IntMessageButton : public IntFancyButton
 {
@@ -156,13 +158,20 @@ public:
 		return (pMessageTitle != nullptr) ? pMessageTitle : "";
 	}
 
+	MESSAGE* getMessage() const { return psMsg; }
+
+	typedef std::function<void (IntMessageButton& button, WIDGET_KEY mouseButton)> W_BUTTON_ONCLICK_FUNC;
+	void setOnClickHandler(const W_BUTTON_ONCLICK_FUNC& onClickFunc) { onClickHandler = onClickFunc; }
+
+protected:
+	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override;
+	bool clickHeld(W_CONTEXT *psContext, WIDGET_KEY key) override;
+
 protected:
 	MESSAGE *psMsg;
+private:
+	W_BUTTON_ONCLICK_FUNC onClickHandler;
 };
-
-/*deal with the actual button press - proxMsg is set to true if a proximity
-  button has been pressed*/
-static void intIntelButtonPressed(bool proxMsg, UDWORD id);
 
 static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -175,201 +184,91 @@ MESSAGE			*psCurrentMsg = nullptr;
 #define PAUSE_DISPLAY_CONDITION (!bMultiPlayer)
 #define PAUSEMESSAGE_YOFFSET (0)
 
+// MARK: - WzMessageView
 
-/* Add the Intelligence Map widgets to the widget screen */
-bool intAddIntelMap()
+class WzMessageView : public IntFormAnimated
 {
-	bool			Animate = true;
+protected:
+	WzMessageView(bool openAnimate = true);
+public:
+	static std::shared_ptr<WzMessageView> make(MESSAGE *psMessage, bool openAnimate = true);
+public:
+	virtual void geometryChanged() override;
+public:
+	void close(bool animated);
+private:
+	bool initialize(MESSAGE *psMessage);
+public:
+	std::function<void ()> onCloseFunc;
+private:
+	std::shared_ptr<W_BUTTON> closeButton;
+};
 
-	//check playCurrent with psCurrentMsg
-	if (psCurrentMsg == nullptr)
+WzMessageView::WzMessageView(bool openAnimate)
+: IntFormAnimated(openAnimate)
+{ }
+
+std::shared_ptr<WzMessageView> WzMessageView::make(MESSAGE *psMessage, bool openAnimate)
+{
+	class make_shared_enabler: public WzMessageView
 	{
-		playCurrent = false;
-	}
-	else
-	{
-		playCurrent = true;
-	}
-
-	// Is the form already up?
-	if (widgGetFromID(psWScreen, IDINTMAP_FORM) != nullptr)
-	{
-		intRemoveIntelMapNoAnim();
-		Animate = false;
-	}
-	else
-	{
-		audio_StopAll();
-	}
-
-	//add message to indicate game is paused - single player mode
-	if (PAUSE_DISPLAY_CONDITION)
-	{
-		if (widgGetFromID(psWScreen, IDINTMAP_PAUSELABEL) == nullptr)
-		{
-			W_LABINIT sLabInit;
-			sLabInit.id = IDINTMAP_PAUSELABEL;
-			sLabInit.formID = 0;
-			sLabInit.x = INTMAP_LABELX;
-			sLabInit.y = INTMAP_LABELY + PAUSEMESSAGE_YOFFSET;
-			sLabInit.width = INTMAP_LABELWIDTH;
-			sLabInit.height = INTMAP_LABELHEIGHT;
-			sLabInit.pText = WzString::fromUtf8(_("PAUSED"));
-			if (!widgAddLabel(psWScreen, &sLabInit))
-			{
-				return false;
-			}
-		}
-	}
-
-	//set pause states before putting the interface up
-	setIntelligencePauseState();
-
-	auto const &parent = psWScreen->psForm;
-
-	// Add the main Intelligence Map form
-	auto intMapForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
-	parent->attach(intMapForm);
-	intMapForm->id = IDINTMAP_FORM;
-	intMapForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
-	}));
-
-	if (!intAddMessageForm(playCurrent))
-	{
-		return false;
-	}
-
-	if (bMultiPlayer && !MultiMenuUp && !playCurrent)
-	{
-		intAddMultiMenu();
-	}
-
-	return true;
+	public:
+		make_shared_enabler(bool openAnimate): WzMessageView(openAnimate) {}
+	};
+	auto result = std::make_shared<make_shared_enabler>(openAnimate);
+	result->id = IDINTMAP_MSGVIEW;
+	result->initialize(psMessage);
+	return result;
 }
 
-/* Add the Message sub form */
-static bool intAddMessageForm(bool _playCurrent)
+void WzMessageView::geometryChanged()
 {
-	if (selectedPlayer >= MAX_PLAYERS) { return true; }
-
-	WIDGET *msgForm = widgGetFromID(psWScreen, IDINTMAP_FORM);
-
-	/* Add the Message form */
-	auto msgList = IntListTabWidget::make();
-	msgForm->attach(msgList);
-	msgList->id = IDINTMAP_MSGFORM;
-	msgList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
-	msgList->setChildSpacing(OBJ_GAP, OBJ_GAP);
-	int msgListWidth = OBJ_BUTWIDTH * 5 + OBJ_GAP * 4;
-	msgList->setGeometry((msgForm->width() - msgListWidth) / 2, INTMAP_MSGY, msgListWidth, msgForm->height() - INTMAP_MSGY);
-
-	/* Add the message buttons */
-	int nextButtonId = IDINTMAP_MSGSTART;
-
-	//add each button
-	messageID = 0;
-	for (MESSAGE *psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage = psMessage->psNext)
-	{
-		/*if (psMessage->type == MSG_TUTORIAL)
-		{
-			//tutorial cases should never happen
-			ASSERT( false, "Tutorial message in Intelligence screen!" );
-			continue;
-		}*/
-		if (psMessage->type == MSG_PROXIMITY)
-		{
-			//ignore proximity messages here
-			continue;
-		}
-
-		auto button = std::make_shared<IntMessageButton>();
-		msgList->attach(button);
-		button->id = nextButtonId;
-		button->setMessage(psMessage);
-		msgList->addWidgetToLayout(button);
-
-		/* if the current message matches psSelected lock the button */
-		if (psMessage == psCurrentMsg)
-		{
-			messageID = nextButtonId;
-			button->setState(WBUT_LOCK);
-			msgList->setCurrentPage(msgList->pages() - 1);
-		}
-
-		/* Update the init struct for the next button */
-		++nextButtonId;
-
-		// stop adding the buttons when at max
-		if (nextButtonId > IDINTMAP_MSGEND)
-		{
-			break;
-		}
-	}
-	//check to play current message instantly
-	if (_playCurrent)
-	{
-		//is it a proximity message?
-		if (psCurrentMsg->type == MSG_PROXIMITY)
-		{
-			//intIntelButtonPressed(true, messageID);
-		}
-		else
-		{
-			intIntelButtonPressed(false, messageID);
-		}
-	}
-	return true;
+	closeButton->callCalcLayout();
 }
 
-/*Add the 3D world view for the particular message */
-bool intAddMessageView(MESSAGE *psMessage)
+bool WzMessageView::initialize(MESSAGE *psMessage)
 {
-	bool Animate = true;
-
-	// Is the form already up?
-	if (widgGetFromID(psWScreen, IDINTMAP_MSGVIEW) != nullptr)
-	{
-		intRemoveMessageView(false);
-		Animate = false;
-	}
-	if (MultiMenuUp)
-	{
-		intCloseMultiMenuNoAnim();
-	}
-
-	auto const &parent = psWScreen->psForm;
-
-	auto intMapMsgView = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
-	parent->attach(intMapMsgView);
-	intMapMsgView->id = IDINTMAP_MSGVIEW;
-	intMapMsgView->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
-	}));
-
-	/* Add the close box */
-	W_BUTINIT sButInit;
-	sButInit.id = IDINTMAP_CLOSE;
-	sButInit.x = intMapMsgView->width() - OPT_GAP - CLOSE_SIZE;
-	sButInit.y = OPT_GAP;
-	sButInit.width = CLOSE_SIZE;
-	sButInit.height = CLOSE_SIZE;
-	sButInit.pTip = _("Close");
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	auto closeButton = std::make_shared<W_BUTTON>(&sButInit);
-	intMapMsgView->attach(closeButton);
-
 	auto title = std::make_shared<W_LABEL>();
 	title->setGeometry(0, 0, INTMAP_RESEARCHWIDTH, INTMAP_TITLEHEIGHT);
 	title->setFontColour(WZCOL_YELLOW);
 	title->setTextAlignment(WLAB_ALIGNCENTRE);
 	title->setFont(font_regular, WZCOL_YELLOW);
 	title->setString(getMessageTitle(*psMessage));
-	intMapMsgView->attach(title);
+	attach(title);
+
+	/* Add the close box */
+	W_BUTINIT sButInit;
+	sButInit.id = IDINTMAP_CLOSE;
+	sButInit.x = 0;
+	sButInit.y = OPT_GAP;
+	sButInit.width = CLOSE_SIZE;
+	sButInit.height = CLOSE_SIZE;
+	sButInit.pTip = _("Close");
+	sButInit.pDisplay = intDisplayImageHilight;
+	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
+	closeButton = std::make_shared<W_BUTTON>(&sButInit);
+	attach(closeButton);
+	closeButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = psWidget->parent();
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		psWidget->setGeometry(psParent->width() - OPT_GAP - CLOSE_SIZE, OPT_GAP, CLOSE_SIZE, CLOSE_SIZE);
+	}));
+	std::weak_ptr<WzMessageView> weakParent = std::dynamic_pointer_cast<WzMessageView>(shared_from_this());
+	closeButton->addOnClickHandler([weakParent](W_BUTTON &button) {
+		// if close button pressed on 3D View then close the view only
+		widgScheduleTask([weakParent]() {
+			auto strongParent = weakParent.lock();
+			ASSERT_OR_RETURN(, strongParent != nullptr, "No parent");
+			strongParent->close(true);
+			if (strongParent->onCloseFunc)
+			{
+				strongParent->onCloseFunc();
+			}
+		});
+	});
 
 	auto grid = std::make_shared<GridLayout>();
-	intMapMsgView->attach(grid);
+	attach(grid);
 	grid->setGeometry(1, INTMAP_TITLEHEIGHT, INTMAP_RESEARCHWIDTH - 2, INTMAP_RESEARCHHEIGHT - 1 - INTMAP_TITLEHEIGHT);
 
 	auto messages = ScrollableListWidget::make();
@@ -442,147 +341,330 @@ bool intAddMessageView(MESSAGE *psMessage)
 	return true;
 }
 
-/* Process return codes from the Intelligence Map */
-void intProcessIntelMap(UDWORD id)
+void WzMessageView::close(bool animated)
 {
+	//stop the video
+	const WzString dummy = "";
+	seq_RenderVideoToBuffer(dummy, SEQUENCE_KILL);
 
-	if (id >= IDINTMAP_MSGSTART && id <= IDINTMAP_MSGEND)
+	if (animated)
 	{
-		intIntelButtonPressed(false, id);
+		// Start the window close animation.
+		closeAnimateDelete();
 	}
-	else if (id == IDINTMAP_CLOSE)
+	else
 	{
-		//if close button pressed on 3D View then close the view only
-		psCurrentMsg = nullptr;
-		intRemoveMessageView(true);
-		if (bMultiPlayer && !MultiMenuUp)
+		//remove without the animating close window
+		auto strongThis = shared_from_this();
+		strongThis->deleteLater();
+		auto psParent = parent();
+		if (psParent)
 		{
-			intAddMultiMenu();
+			psParent->detach(strongThis);
 		}
-	}
-	else if (MultiMenuUp)
-	{
-		intProcessMultiMenu(id);
 	}
 }
 
+// MARK: - Intelligence screen
 
-// Add all the Video Sequences for a message
-static void StartMessageSequences(MESSAGE *psMessage, bool Start)
+class W_INTELLIGENCEOVERLAY_FORM : public W_FORM
 {
-	bool bLoop = false;
+protected:
+	W_INTELLIGENCEOVERLAY_FORM(W_FORMINIT const *init);
+	W_INTELLIGENCEOVERLAY_FORM();
+	~W_INTELLIGENCEOVERLAY_FORM() {
+		if (sound_isStreamPlaying(playing))
+		{
+			sound_StopStream(playing);
+		}
+	}
+public:
+	static std::shared_ptr<W_INTELLIGENCEOVERLAY_FORM> make(bool _playCurrent, UDWORD formID = 0);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void display(int xOffset, int yOffset) override;
+	void run(W_CONTEXT *psContext) override;
+	virtual void geometryChanged() override;
 
-	debug(LOG_GUI, "StartMessageSequences: start message sequence");
+public:
+	void closeAnimated(std::function<void ()> onCompleteHandler);
 
-	//should never have a proximity message here
-	if (psMessage->type == MSG_PROXIMITY)
+private:
+	void initialize(bool _playCurrent, bool animate);
+	std::shared_ptr<IntFormAnimated> createMultiMenuForm();
+	void intIntelButtonPressed(const std::shared_ptr<IntMessageButton>& button);
+	void intShowMessageView(MESSAGE *psMessage);
+
+private:
+	std::shared_ptr<IntFormAnimated> multiMenuForm;
+	std::shared_ptr<IntFormAnimated> msgForm;
+	std::shared_ptr<IntMessageButton> selectedMsgButton;
+	std::shared_ptr<WzMessageView> msgDetailsView;
+	bool isClosing = false;
+	bool delayedPlayCurrent = false;
+	AUDIO_STREAM *playing = nullptr;
+};
+
+constexpr int OVERLAY_MULTIMENU_FORM_Y = 50;
+
+void W_INTELLIGENCEOVERLAY_FORM::geometryChanged()
+{
+	if (multiMenuForm)
 	{
-		return;
+		multiMenuForm->callCalcLayout();
+	}
+	if (msgForm)
+	{
+		msgForm->callCalcLayout();
+	}
+	if (msgDetailsView)
+	{
+		msgDetailsView->callCalcLayout();
+	}
+}
+
+std::shared_ptr<IntFormAnimated> W_INTELLIGENCEOVERLAY_FORM::createMultiMenuForm()
+{
+	auto form = intCreateMultiMenuForm();
+	form->id = MULTIMENU_FORM;
+
+	form->setCalcLayout([](WIDGET *form) {
+		auto psParent = form->parent();
+		if (psParent == nullptr)
+		{
+			return;
+		}
+		auto width = std::min((int32_t)psParent->width() - 20, form->idealWidth());
+		auto height = form->idealHeight();
+		form->setGeometry((psParent->width() - width) / 2, OVERLAY_MULTIMENU_FORM_Y, width, height);
+	});
+
+	return form;
+}
+
+void W_INTELLIGENCEOVERLAY_FORM::closeAnimated(std::function<void ()> onCompleteHandler)
+{
+	//remove 3dView if still there
+	if (msgDetailsView)
+	{
+		msgDetailsView->close(false);
+		msgDetailsView.reset();
 	}
 
-	ASSERT_OR_RETURN(, psMessage->pViewData != nullptr, "Invalid ViewData pointer");
-
-	if (psMessage->pViewData->type == VIEW_RPL)
+	// Start the window close animation.
+	if (msgForm)
 	{
-		VIEW_REPLAY		*psViewReplay;
-		UDWORD Sequence;
-
-		// Surely we don't need to set up psCurrentMsg when we pass the message into this routine ... tim
-		psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
-
-		seq_ClearSeqList();
-
-		//add any sequences to the list to be played when the first one is finished
-		for (Sequence = 0; Sequence < psViewReplay->seqList.size(); Sequence++)
-		{
-			if (psViewReplay->seqList.at(Sequence).flag == 1)
+		msgForm->closeAnimateDelete([onCompleteHandler](IntFormAnimated&) {
+			// Trigger onCompleteHandler once close animation is complete
+			if (onCompleteHandler)
 			{
-				bLoop = true;
+				onCompleteHandler();
 			}
-			else
-			{
-				bLoop = false;
-			}
-
-			seq_AddSeqToList(psViewReplay->seqList.at(Sequence).sequenceName, psViewReplay->seqList.at(Sequence).audio, nullptr, bLoop);
-
-			debug(LOG_GUI, "StartMessageSequences: sequence=%d", Sequence);
-			addVideoText(&psViewReplay->seqList.at(Sequence), Sequence);
-		}
-		//play first full screen video
-		if (Start == true)
-		{
-			seq_StartNextFullScreenVideo();
-		}
+		});
 	}
 
-	else if (psMessage->pViewData->type == VIEW_RES)
+	//remove the text label
+	widgDelete(screenPointer.lock(), IDINTMAP_PAUSELABEL);
+
+	if (bMultiPlayer && multiMenuForm)
 	{
-		VIEW_RESEARCH		*psViewReplay;
-		//UDWORD Sequence;
+		multiMenuForm->closeAnimateDelete();
+	}
 
-		psViewReplay = (VIEW_RESEARCH *)psCurrentMsg->pViewData->pData;
+	isClosing = true;
+}
 
-		seq_ClearSeqList();
-		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->audio, nullptr, false);
-		//play first full screen video
-		if (Start == true)
+W_INTELLIGENCEOVERLAY_FORM::W_INTELLIGENCEOVERLAY_FORM(W_FORMINIT const *init) : W_FORM(init) {}
+W_INTELLIGENCEOVERLAY_FORM::W_INTELLIGENCEOVERLAY_FORM() : W_FORM() {}
+
+std::shared_ptr<W_INTELLIGENCEOVERLAY_FORM> W_INTELLIGENCEOVERLAY_FORM::make(bool _playCurrent, UDWORD formID)
+{
+	W_FORMINIT sInit;
+	sInit.id = formID;
+	sInit.style = WFORM_PLAIN;
+	sInit.x = 0;
+	sInit.y = 0;
+	sInit.width = screenWidth - 1;
+	sInit.height = screenHeight - 1;
+	sInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(0, 0, screenWidth, screenHeight);
+	});
+
+	class make_shared_enabler: public W_INTELLIGENCEOVERLAY_FORM
+	{
+	public:
+		make_shared_enabler(W_FORMINIT const *init): W_INTELLIGENCEOVERLAY_FORM(init) {}
+	};
+	auto result = std::make_shared<make_shared_enabler>(&sInit);
+	result->initialize(_playCurrent, true);
+	return result;
+}
+
+void W_INTELLIGENCEOVERLAY_FORM::initialize(bool _playCurrent, bool animate)
+{
+	//add message to indicate game is paused - single player mode
+	if (PAUSE_DISPLAY_CONDITION)
+	{
+		W_LABINIT sLabInit;
+		sLabInit.id = IDINTMAP_PAUSELABEL;
+		sLabInit.formID = 0;
+		sLabInit.x = INTMAP_LABELX;
+		sLabInit.y = INTMAP_LABELY + PAUSEMESSAGE_YOFFSET;
+		sLabInit.width = INTMAP_LABELWIDTH;
+		sLabInit.height = INTMAP_LABELHEIGHT;
+		sLabInit.pText = WzString::fromUtf8(_("PAUSED"));
+		auto pausedLabel = std::make_shared<W_LABEL>(&sLabInit);
+		attach(pausedLabel);
+	}
+
+	std::weak_ptr<W_INTELLIGENCEOVERLAY_FORM> weakParent = std::dynamic_pointer_cast<W_INTELLIGENCEOVERLAY_FORM>(shared_from_this());
+
+	// Add the main Intelligence Map form
+	if (selectedPlayer < MAX_PLAYERS)
+	{
+		msgForm = std::make_shared<IntFormAnimated>(animate);  // Do not animate the opening, if the window was already open.
+		attach(msgForm);
+		msgForm->id = IDINTMAP_FORM;
+		msgForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
+		}));
+
+		/* Add the Message form */
+		auto msgList = IntListTabWidget::make();
+		msgForm->attach(msgList);
+		msgList->id = IDINTMAP_MSGFORM;
+		msgList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+		msgList->setChildSpacing(OBJ_GAP, OBJ_GAP);
+		int msgListWidth = OBJ_BUTWIDTH * 5 + OBJ_GAP * 4;
+		msgList->setGeometry((msgForm->width() - msgListWidth) / 2, INTMAP_MSGY, msgListWidth, msgForm->height() - INTMAP_MSGY);
+
+		/* Add the message buttons */
+
+		//add each button
+		for (MESSAGE *psMessage : apsMessages[selectedPlayer])
 		{
-			seq_StartNextFullScreenVideo();
+			/*if (psMessage->type == MSG_TUTORIAL)
+			{
+				//tutorial cases should never happen
+				ASSERT( false, "Tutorial message in Intelligence screen!" );
+				continue;
+			}*/
+			if (psMessage->type == MSG_PROXIMITY)
+			{
+				//ignore proximity messages here
+				continue;
+			}
+
+			auto button = std::make_shared<IntMessageButton>();
+			msgList->attach(button);
+			button->setMessage(psMessage);
+			msgList->addWidgetToLayout(button);
+
+			/* if the current message matches psSelected lock the button */
+			if (psMessage == psCurrentMsg)
+			{
+				selectedMsgButton = button;
+				button->setState(WBUT_LOCK);
+				msgList->setCurrentPage(msgList->pages() - 1);
+			}
+
+			/* Add the click handler */
+			button->setOnClickHandler([weakParent](IntMessageButton& widg, WIDGET_KEY mouseButton) {
+				auto messageButton = std::dynamic_pointer_cast<IntMessageButton>(widg.shared_from_this());
+				widgScheduleTask([weakParent, messageButton]() {
+					auto strongParent = weakParent.lock();
+					ASSERT_OR_RETURN(, strongParent != nullptr, "No parent");
+					strongParent->intIntelButtonPressed(messageButton);
+				});
+			});
+		}
+		//check to play current message instantly
+		if (_playCurrent && selectedMsgButton)
+		{
+			if (psCurrentMsg->type != MSG_PROXIMITY)
+			{
+				delayedPlayCurrent = true;
+			}
 		}
 	}
 
+	if (bMultiPlayer && !multiMenuForm)
+	{
+		multiMenuForm = createMultiMenuForm();
+		attach(multiMenuForm);
+		multiMenuForm->callCalcLayout();
+	}
+}
+
+void W_INTELLIGENCEOVERLAY_FORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	// no-op
+}
+
+void W_INTELLIGENCEOVERLAY_FORM::display(int xOffset, int yOffset)
+{
+	// no-op
+}
+
+void W_INTELLIGENCEOVERLAY_FORM::run(W_CONTEXT *psContext)
+{
+	if (isClosing) { return; }
+	if (keyPressed(KEY_ESC))
+	{
+		inputLoseFocus();	// clear the input buffer.
+		widgScheduleTask([](){
+			intResetScreen(false);
+		});
+	}
+
+	//check to play current message instantly
+	if (delayedPlayCurrent && selectedMsgButton)
+	{
+		delayedPlayCurrent = false;
+		std::weak_ptr<W_INTELLIGENCEOVERLAY_FORM> weakSelf = std::dynamic_pointer_cast<W_INTELLIGENCEOVERLAY_FORM>(shared_from_this());
+		auto scheduledClickButton = selectedMsgButton;
+		widgScheduleTask([weakSelf, scheduledClickButton]() {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null");
+			strongSelf->intIntelButtonPressed(scheduledClickButton);
+		});
+	}
 }
 
 /*
 deal with the actual button press - proxMsg is set to true if a proximity
 button has been pressed
 */
-void intIntelButtonPressed(bool proxMsg, UDWORD id)
+void W_INTELLIGENCEOVERLAY_FORM::intIntelButtonPressed(const std::shared_ptr<IntMessageButton>& button)
 {
-	MESSAGE			*psMessage;
-	UDWORD			currID;
 	RESEARCH		*psResearch;
 
-	ASSERT_OR_RETURN(, proxMsg != true, "Shouldn't be able to get a proximity message!");
-
-	if (id == 0)
+	/* message button has been pressed - clear the old button and messageView*/
+	if (selectedMsgButton && selectedMsgButton != button)
 	{
-		intRemoveIntelMap();
+		selectedMsgButton->setState(0);
+		psCurrentMsg = nullptr;
+		selectedMsgButton.reset();
+	}
+
+	if (!button)
+	{
 		return;
 	}
 
-	/* message button has been pressed - clear the old button and messageView*/
-	if (messageID != 0)
-	{
-		widgSetButtonState(psWScreen, messageID, 0);
-		intRemoveMessageView(false);
-		psCurrentMsg = nullptr;
-	}
+	selectedMsgButton = button;
 
 	/* Lock the new button */
 	// This means we can't click on the same movie button twice.
-	widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
-	messageID = id;
+	selectedMsgButton->setState(WBUT_CLICKLOCK);
 
-	//Find the message for the new button */
-	currID = IDINTMAP_MSGSTART;
-	for (psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
-	         psMessage->psNext)
-	{
-		if (psMessage->type != MSG_PROXIMITY)
-		{
-			if (currID == id)
-			{
-				break;
-			}
-			currID++;
-		}
-	}
+	// Get the message for the new button */
+	MESSAGE *psMessage = selectedMsgButton->getMessage();
 
 	//deal with the message if one
 	if (psMessage)
 	{
+		ASSERT_OR_RETURN(, psMessage->type != MSG_PROXIMITY, "Shouldn't be able to get a proximity message!");
+
 		//set the current message
 		psCurrentMsg = psMessage;
 
@@ -590,7 +672,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 		psCurrentMsg->read = true;
 
 		debug(LOG_GUI, "intIntelButtonPressed: Dealing with a new message type=%d",
-		      psMessage->type);
+			  psMessage->type);
 
 		//should never have a proximity message
 		if (psMessage->type == MSG_PROXIMITY)
@@ -605,7 +687,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 			{
 				if (psMessage->pViewData)
 				{
-					intAddMessageView(psMessage);
+					intShowMessageView(psMessage);
 				}
 				// only attempt to show videos if they are installed
 				if (seq_hasVideos())
@@ -618,8 +700,6 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 				psResearch = getResearchForMsg(psMessage->pViewData);
 				if (psResearch != nullptr)
 				{
-					static AUDIO_STREAM *playing = nullptr;
-
 					// only play the sample once, otherwise, they tend to overlap each other
 					if (sound_isStreamPlaying(playing))
 					{
@@ -653,44 +733,189 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 
 					if (audio != nullptr)
 					{
-						playing = audio_PlayStream(audio, sound_GetUIVolume(), [](const AUDIO_STREAM *stream, const void *) {
-							if (stream == playing)
+						std::weak_ptr<W_INTELLIGENCEOVERLAY_FORM> weakSelf = std::dynamic_pointer_cast<W_INTELLIGENCEOVERLAY_FORM>(shared_from_this());
+						playing = audio_PlayStream(audio, sound_GetUIVolume(), [weakSelf](const AUDIO_STREAM *stream, const void *) {
+							auto strongSelf = weakSelf.lock();
+							if (strongSelf)
 							{
-								playing = nullptr;
+								if (stream == strongSelf->playing)
+								{
+									strongSelf->playing = nullptr;
+								}
 							}
 						}, nullptr);
 					}
 				}
 
-				//and finally for the dumb?
 				if (psMessage->pViewData)
 				{
-					intAddMessageView(psMessage);
+					intShowMessageView(psMessage);
 				}
 			}
 		}
 	}
 }
 
+/*Add the 3D world view for the particular message */
+void W_INTELLIGENCEOVERLAY_FORM::intShowMessageView(MESSAGE *psMessage)
+{
+	bool animate = true;
+
+	// Is the form already up?
+	if (msgDetailsView)
+	{
+		msgDetailsView->close(false);
+		animate = false;
+	}
+	if (multiMenuForm)
+	{
+		multiMenuForm->hide();
+	}
+
+	msgDetailsView = WzMessageView::make(psMessage, animate);
+	attach(msgDetailsView);
+	msgDetailsView->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
+	}));
+
+	std::weak_ptr<W_INTELLIGENCEOVERLAY_FORM> weakSelf = std::dynamic_pointer_cast<W_INTELLIGENCEOVERLAY_FORM>(shared_from_this());
+	msgDetailsView->onCloseFunc = [weakSelf]() {
+		auto strongSelf = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongSelf != nullptr, "Null");
+		// if close button pressed on 3D View then close the view only
+		psCurrentMsg = nullptr;
+		if (bMultiPlayer && strongSelf->multiMenuForm)
+		{
+			strongSelf->multiMenuForm->show();
+		}
+	};
+}
+
+std::shared_ptr<W_SCREEN> createIntelligenceScreen()
+{
+	// Initialize the intelligence overlay screen
+	auto result = W_SCREEN::make();
+	auto newRootFrm = W_INTELLIGENCEOVERLAY_FORM::make(playCurrent);
+	newRootFrm->setTransparentToMouse(true);
+	result->psForm->hide(); // hide actual root form so it doesn't get clicks
+	result->psForm->attach(newRootFrm);
+
+	return result;
+}
+
+
+// MARK: -
+
+bool intAddIntelMap()
+{
+	if (intelligenceOverlayScreen)
+	{
+		// overlay screen already up
+		return true;
+	}
+
+	//check playCurrent with psCurrentMsg
+	if (psCurrentMsg == nullptr)
+	{
+		playCurrent = false;
+	}
+	else
+	{
+		playCurrent = true;
+	}
+
+	//set pause states before putting the interface up
+	audio_StopAll();
+	setIntelligencePauseState();
+
+	intelligenceOverlayScreen = createIntelligenceScreen();
+	widgRegisterOverlayScreenOnTopOfScreen(intelligenceOverlayScreen, psWScreen);
+
+	return true;
+}
+
+// Add all the Video Sequences for a message
+static void StartMessageSequences(MESSAGE *psMessage, bool Start)
+{
+	bool bLoop = false;
+
+	debug(LOG_GUI, "StartMessageSequences: start message sequence");
+
+	//should never have a proximity message here
+	if (psMessage->type == MSG_PROXIMITY)
+	{
+		return;
+	}
+
+	ASSERT_OR_RETURN(, psMessage->pViewData != nullptr, "Invalid ViewData pointer");
+
+	if (psMessage->pViewData->type == VIEW_RPL)
+	{
+		VIEW_REPLAY		*psViewReplay;
+		UDWORD Sequence;
+
+		psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
+
+		seq_ClearSeqList();
+
+		//add any sequences to the list to be played when the first one is finished
+		for (Sequence = 0; Sequence < psViewReplay->seqList.size(); Sequence++)
+		{
+			if (psViewReplay->seqList.at(Sequence).flag == 1)
+			{
+				bLoop = true;
+			}
+			else
+			{
+				bLoop = false;
+			}
+
+			seq_AddSeqToList(psViewReplay->seqList.at(Sequence).sequenceName, psViewReplay->seqList.at(Sequence).audio, nullptr, bLoop);
+
+			debug(LOG_GUI, "StartMessageSequences: sequence=%d", Sequence);
+			addVideoText(&psViewReplay->seqList.at(Sequence), Sequence);
+		}
+		//play first full screen video
+		if (Start == true)
+		{
+			seq_StartNextFullScreenVideo();
+		}
+	}
+
+	else if (psMessage->pViewData->type == VIEW_RES)
+	{
+		VIEW_RESEARCH		*psViewReplay;
+		//UDWORD Sequence;
+
+		psViewReplay = (VIEW_RESEARCH *)psMessage->pViewData->pData;
+
+		seq_ClearSeqList();
+		seq_AddSeqToList(psViewReplay->sequenceName, psViewReplay->audio, nullptr, false);
+		//play first full screen video
+		if (Start == true)
+		{
+			seq_StartNextFullScreenVideo();
+		}
+	}
+
+}
 
 static void intCleanUpIntelMap()
 {
-	MESSAGE		*psMessage, *psNext;
 	bool removedAMessage = false;
 
 	if (selectedPlayer < MAX_PLAYERS)
 	{
 		//remove any research messages that have been read
-		for (psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage =
-				 psNext)
+		mutating_list_iterate(apsMessages[selectedPlayer], [&removedAMessage](MESSAGE* psMessage)
 		{
-			psNext = psMessage->psNext;
 			if (psMessage->type == MSG_RESEARCH && psMessage->read)
 			{
 				removeMessage(psMessage, selectedPlayer);
 				removedAMessage = true;
 			}
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	}
 	if (removedAMessage)
 	{
@@ -704,26 +929,30 @@ static void intCleanUpIntelMap()
 /* Remove the Intelligence Map widgets from the screen */
 void intRemoveIntelMap()
 {
-	//remove 3dView if still there
-	WIDGET *Widg = widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
-	if (Widg)
+	if (!intelligenceOverlayScreen)
 	{
-		intRemoveMessageView(false);
+		return;
 	}
 
 	// Start the window close animation.
-	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDINTMAP_FORM);
-	if (form)
+	auto rootIntelligenceForm = std::dynamic_pointer_cast<W_INTELLIGENCEOVERLAY_FORM>(intelligenceOverlayScreen->psForm->children().front());
+	if (rootIntelligenceForm == nullptr)
 	{
-		form->closeAnimateDelete();
+		ASSERT(rootIntelligenceForm != nullptr, "Failed to get intelligence form?");
+		intRemoveIntelMapNoAnim();
+		return;
 	}
-	//remove the text label
-	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
-	if (bMultiPlayer && MultiMenuUp)
-	{
-		intCloseMultiMenu();
-	}
+	std::weak_ptr<W_SCREEN> weakOverlayScreen = intelligenceOverlayScreen;
+	rootIntelligenceForm->closeAnimated([weakOverlayScreen]() {
+		// on animation complete: remove the overlay screen
+		if (auto strongOverlayScreen = weakOverlayScreen.lock())
+		{
+			widgRemoveOverlayScreen(strongOverlayScreen);
+		}
+	});
+
+	intelligenceOverlayScreen.reset();
 
 	intCleanUpIntelMap();
 }
@@ -731,60 +960,15 @@ void intRemoveIntelMap()
 /* Remove the Intelligence Map widgets from the screen */
 void intRemoveIntelMapNoAnim()
 {
-	WIDGET *Widg;
-
-	//remove 3dView if still there
-	Widg = widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
-	if (Widg)
-	{
-		intRemoveMessageView(false);
-	}
-	//remove main Intelligence screen
-	widgDelete(psWScreen, IDINTMAP_FORM);
-	//remove the text label
-	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
-
-	if (bMultiPlayer && MultiMenuUp)
-	{
-		intCloseMultiMenuNoAnim();
-	}
-
-	intCleanUpIntelMap();
-}
-
-/* Remove the Message View from the Intelligence screen */
-void intRemoveMessageView(bool animated)
-{
-	//remove 3dView if still there
-	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
-	if (form == nullptr)
+	if (!intelligenceOverlayScreen)
 	{
 		return;
 	}
 
-	//stop the video
-	VIEW_RESEARCH *psViewResearch = (VIEW_RESEARCH *)form->pUserData;
+	widgRemoveOverlayScreen(intelligenceOverlayScreen);
+	intelligenceOverlayScreen.reset();
 
-	if (psViewResearch != nullptr)
-	{
-		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
-	}
-	else
-	{
-		const WzString dummy = "";
-		seq_RenderVideoToBuffer(dummy, SEQUENCE_KILL);
-	}
-
-	if (animated)
-	{
-		// Start the window close animation.
-		form->closeAnimateDelete();
-	}
-	else
-	{
-		//remove without the animating close window
-		widgDelete(form);
-	}
+	intCleanUpIntelMap();
 }
 
 IntMessageButton::IntMessageButton()
@@ -876,13 +1060,41 @@ void IntMessageButton::display(int xOffset, int yOffset)
 	displayIfHighlight(xOffset, yOffset);
 }
 
+void IntMessageButton::released(W_CONTEXT *context, WIDGET_KEY mouseButton)
+{
+	bool clickAndReleaseOnThisButton = ((state & WBUT_DOWN) != 0); // relies on W_CLICKFORM handling to properly set WBUT_DOWN
+
+	IntFancyButton::released(context, mouseButton);
+
+	if (!clickAndReleaseOnThisButton)
+	{
+		return; // do nothing
+	}
+
+	if (onClickHandler)
+	{
+		onClickHandler(*this, mouseButton);
+	}
+}
+
+bool IntMessageButton::clickHeld(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	if (key == WKEY_PRIMARY)
+	{
+		if (onClickHandler)
+		{
+			onClickHandler(*this, WKEY_SECONDARY);
+		}
+		return true;
+	}
+	return false;
+}
 
 /* displays the PIE view for the current message */
 void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
 	SWORD			image = -1;
-	RESEARCH        *psResearch;
 
 	// Should not have any proximity messages here...
 	if (!psMessage || psMessage->type == MSG_PROXIMITY)
@@ -907,14 +1119,13 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		//render an object
-		psResearch = getResearchForMsg(psCurrentMsg->pViewData);
+		RESEARCH *psResearch = getResearchForMsg(psMessage->pViewData);
 		if (psResearch)
 		{
 			renderResearchToBuffer(psResearch, x0 + width / 2, y0 + height / 2);
 		}
 
 		//draw image icon in top left of window
-		psResearch = getResearchForMsg(psMessage->pViewData);
 		if (psResearch)
 		{
 			image = (SWORD)(psResearch->iconID);
@@ -952,7 +1163,7 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
-		psViewResearch = (VIEW_RESEARCH *)psCurrentMsg->pViewData->pData;
+		psViewResearch = (VIEW_RESEARCH *)psMessage->pViewData->pData;
 		// set the dimensions to window size & position
 		seq_SetDisplaySize(INTMAP_FLICWIDTH, INTMAP_FLICHEIGHT, x0, y0);
 		//render a frame of the current movie *must* force above resolution!
@@ -993,20 +1204,16 @@ void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence)
 /*sets psCurrentMsg for the Intelligence screen*/
 void setCurrentMsg()
 {
-	MESSAGE *psMsg, *psLastMsg;
-
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	psLastMsg = nullptr;
-	for (psMsg = apsMessages[selectedPlayer]; psMsg != nullptr; psMsg =
-	         psMsg->psNext)
+	for (auto it = apsMessages[selectedPlayer].rbegin(), end = apsMessages[selectedPlayer].rend(); it != end; ++it)
 	{
-		if (psMsg->type != MSG_PROXIMITY)
+		if ((*it)->type != MSG_PROXIMITY)
 		{
-			psLastMsg = psMsg;
+			psCurrentMsg = *it;
+			return;
 		}
 	}
-	psCurrentMsg = psLastMsg;
 }
 
 /*sets which states need to be paused when the intelligence screen is up*/

@@ -91,6 +91,11 @@ void ScrollableListWidget::clear()
 	listView->setTopOffset(0);
 }
 
+size_t ScrollableListWidget::numItems() const
+{
+	return listView->children().size();
+}
+
 void ScrollableListWidget::updateLayout()
 {
 	if (!layoutDirty) {
@@ -178,7 +183,12 @@ void ScrollableListWidget::setSnapOffset(bool value)
 
 void ScrollableListWidget::setItemSpacing(uint32_t value)
 {
+	if (value == itemSpacing)
+	{
+		return;
+	}
 	itemSpacing = value;
+	layoutDirty = true;
 }
 
 void ScrollableListWidget::display(int xOffset, int yOffset)

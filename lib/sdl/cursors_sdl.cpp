@@ -1429,6 +1429,11 @@ void wzSDLReinitCursors()
 	SDL_SetCursor(aCursors[currentCursor]);
 }
 
+void wzQueueRefreshCursor()
+{
+	lastAppliedCursor = CURSOR_MAX;
+}
+
 void wzApplyCursor()
 {
 	if (!cursorsEnabled) return;

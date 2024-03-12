@@ -1,11 +1,11 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const UPLINK = 1; //The satellite uplink player number.
-const COLLECTIVE_RES = [
-	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
-	"R-Vehicle-Engine04", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
-	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05","R-Wpn-Cannon-ROF02",
+const MIS_UPLINK_PLAYER = 1; //The satellite uplink player number.
+const mis_collectiveRes = [
+	"R-Defense-WallUpgrade05", "R-Struc-Materials05", "R-Sys-Engineering02",
+	"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05", "R-Wpn-Cannon-ROF02",
 	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage07",
 	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage05",
 	"R-Wpn-Mortar-ROF02", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
@@ -18,39 +18,67 @@ const COLLECTIVE_RES = [
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if ((droid.player === THE_COLLECTIVE) && isVTOL(droid))
+	if ((droid.player === CAM_THE_COLLECTIVE) && isVTOL(droid))
 	{
 		camSafeRemoveObject(droid, false);
 	}
 
-	resetLabel("vtolRemoveZone", THE_COLLECTIVE);
+	resetLabel("vtolRemoveZone", CAM_THE_COLLECTIVE);
 });
 
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
+	if (enumDroid(CAM_THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
 		removeTimer("truckDefense");
 		return;
 	}
 
-	var list = ["AASite-QuadBof", "CO-WallTower-HvCan", "CO-Tower-RotMG", "CO-Tower-HvFlame"];
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("uplinkPos"));
+	const list = ["AASite-QuadBof", "CO-WallTower-HvCan", "CO-Tower-RotMG", "CO-Tower-HvFlame"];
+	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)], camMakePos("uplinkPos"));
 }
 
-//Attacks every 2 minutes until HQ is destroyed.
+//Attacks every 3 minutes until HQ is destroyed.
+function wave2()
+{
+	const list = [cTempl.colhvat, cTempl.colhvat];
+	const ext = {
+		limit: [2, 2], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.commorv, cTempl.commorv];
+	const ext = {
+		limit: [2, 2], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter", ext);
+}
+
 function vtolAttack()
 {
-	var list = [cTempl.colatv, cTempl.commorvt];
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "COCommandCenter");
+	const list = [cTempl.commorvt, cTempl.commorvt];
+	const ext = {
+		limit: [2, 2], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), "COCommandCenter", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 //The project captured the uplink.
 function captureUplink()
 {
-	const GOODSND = "pcv621.ogg";	//"Objective captured"
-	playSound(GOODSND);
+	playSound(cam_sounds.objectiveCaptured);
 	hackRemoveMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 }
 
@@ -62,7 +90,7 @@ function checkNASDACentral()
 		return false; //It was destroyed
 	}
 
-	if (camCountStructuresInArea("uplinkClearArea", THE_COLLECTIVE) === 0)
+	if (camCountStructuresInArea("uplinkClearArea", CAM_THE_COLLECTIVE) === 0)
 	{
 		camCallOnce("captureUplink");
 		return true;
@@ -82,17 +110,14 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tEnt = getObject("transporterEntry");
+	const tExt = getObject("transporterExit");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
-	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
-
-	var enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
+	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
+	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
 	camSetArtifacts({
 		"COCommandCenter": { tech: "R-Struc-VTOLPad-Upgrade01" },
@@ -102,17 +127,21 @@ function eventStartLevel()
 		"COHowitzerEmplacement": { tech: "R-Wpn-Howitzer-Damage02" },
 	});
 
-	setAlliance(CAM_HUMAN_PLAYER, UPLINK, true);
-	setAlliance(THE_COLLECTIVE, UPLINK, true);
+	setAlliance(CAM_HUMAN_PLAYER, MIS_UPLINK_PLAYER, true);
+	setAlliance(CAM_THE_COLLECTIVE, MIS_UPLINK_PLAYER, true);
 
-	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
+
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
+	camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
 
 	camSetEnemyBases({
 		"COSouthEastBase": {
 			cleanup: "baseCleanup",
 			detectMsg: "C2D_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -139,11 +168,11 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybf, cTempl.npcybr, cTempl.cocybag]
+			templates: [cTempl.cocybsn, cTempl.cocybth, cTempl.cocybtk, cTempl.cocybag]
 		},
 	});
 
-	camManageTrucks(THE_COLLECTIVE);
+	camManageTrucks(CAM_THE_COLLECTIVE);
 	hackAddMessage("C2D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	camEnableFactory("COHeavyFactory");

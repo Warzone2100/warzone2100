@@ -1,12 +1,12 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.24)
 
-# Automatically update the Release and other info in the net.wz2100.warzone2100.appdata.xml.in file
+# Automatically update the Release and other info in the net.wz2100.warzone2100.metainfo.xml.in file
 #
 # Required input defines:
 # - CACHEFILE: the path to the autorevision.cache file generated for the build
 # - PROJECT_ROOT: the path the project root (${PROJECT_SOURCE_DIR})
-# - TEMPLATE_FILE: the full filename + path for the input net.wz2100.warzone2100.appdata.xml.in template file
-# - OUTPUT_FILE: the full filename + path for the output net.wz2100.warzone2100.appdata.xml file
+# - TEMPLATE_FILE: the full filename + path for the input net.wz2100.warzone2100.metainfo.xml.in template file
+# - OUTPUT_FILE: the full filename + path for the output net.wz2100.warzone2100.metainfo.xml file
 #
 # And also, passed from the main CMake build:
 # - WZ_OUTPUT_NAME_SUFFIX

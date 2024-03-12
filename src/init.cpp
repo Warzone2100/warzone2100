@@ -97,6 +97,7 @@
 #include "spectatorwidgets.h"
 #include "seqdisp.h"
 #include "version.h"
+#include "hci/teamstrategy.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -117,6 +118,8 @@ static std::vector<std::string> searchPathMountErrors;
 static std::string inMemoryMapVirtualFilenameUID;
 static std::vector<uint8_t> inMemoryMapArchiveData;
 static size_t inMemoryMapArchiveMounted = 0;
+
+static optional<std::vector<TerrainShaderQuality>> cachedAvailableTerrainShaderQualityTextures;
 
 struct WZmapInfo
 {
@@ -187,7 +190,6 @@ static const char* versionedModsPath(MODS_PATHS type)
 static bool InitialiseGlobals()
 {
 	frontendInitVars();	// Initialise frontend globals and statics.
-	statsInitVars();
 	structureInitVars();
 	if (!messageInitVars())
 	{
@@ -259,6 +261,7 @@ bool loadLevFile_JSON(const std::string& mountPoint, const std::string& filename
 static void cleanSearchPath()
 {
 	searchPathRegistry.clear();
+	cachedAvailableTerrainShaderQualityTextures.reset();
 }
 
 
@@ -269,7 +272,7 @@ static void cleanSearchPath()
 void registerSearchPath(const std::string& newPath, unsigned int priority)
 {
 	ASSERT_OR_RETURN(, !newPath.empty(), "Calling registerSearchPath with empty path, priority %u", priority);
-	std::unique_ptr<wzSearchPath> tmpSearchPath = std::unique_ptr<wzSearchPath>(new wzSearchPath());
+	std::unique_ptr<wzSearchPath> tmpSearchPath = std::make_unique<wzSearchPath>();
 	tmpSearchPath->path = newPath;
 	if (!strEndsWith(tmpSearchPath->path, PHYSFS_getDirSeparator()))
 	{
@@ -284,6 +287,8 @@ void registerSearchPath(const std::string& newPath, unsigned int priority)
 		return a->priority < b->priority;
 	});
 	searchPathRegistry.insert(insert_pos, std::move(tmpSearchPath));
+
+	cachedAvailableTerrainShaderQualityTextures.reset();
 }
 
 void unregisterSearchPath(const std::string& path)
@@ -300,6 +305,8 @@ void unregisterSearchPath(const std::string& path)
 
 		++it;
 	}
+
+	cachedAvailableTerrainShaderQualityTextures.reset();
 }
 
 std::list<std::string> getPhysFSSearchPathsAsStr()
@@ -426,6 +433,148 @@ static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mou
 	}
 }
 
+struct RebuildSearchPathCommand
+{
+	searchPathMode mode = mod_clean;
+	bool force = false;
+	optional<std::string> current_map;
+	optional<std::string> current_map_mount_point;
+	TerrainShaderQuality lastTerrainShaderQuality = TerrainShaderQuality::MEDIUM;
+};
+
+static RebuildSearchPathCommand lastCommand;
+
+bool rebuildExistingSearchPathWithGraphicsOptionChange()
+{
+	char* current_map = nullptr;
+	char* current_map_mount_point = nullptr;
+	if (lastCommand.current_map.has_value())
+	{
+		current_map = strdup(lastCommand.current_map.value().c_str());
+	}
+	if (lastCommand.current_map_mount_point.has_value())
+	{
+		current_map_mount_point = strdup(lastCommand.current_map_mount_point.value().c_str());
+	}
+	bool result = rebuildSearchPath(lastCommand.mode, false /* do not force */, current_map, current_map_mount_point);
+	free(current_map);
+	free(current_map_mount_point);
+	return result;
+}
+
+optional<std::string> getTerrainOverrideBaseSourcePath(TerrainShaderQuality quality)
+ {
+	switch (quality)
+	{
+		case TerrainShaderQuality::CLASSIC:
+			return "terrain_overrides/classic";
+		case TerrainShaderQuality::MEDIUM:
+			return nullopt;
+		case TerrainShaderQuality::NORMAL_MAPPING:
+			return "terrain_overrides/high";
+		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+			return nullopt;
+	}
+	return nullopt; // silence compiler warning
+ }
+
+optional<std::string> getCurrentTerrainOverrideBaseSourcePath()
+{
+	return getTerrainOverrideBaseSourcePath(getTerrainShaderQuality());
+}
+
+std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures()
+{
+	// Cached result, which is invalidated with any calls to: cleanSearchPath / registerSearchPath / unregisterSearchPath
+	if (cachedAvailableTerrainShaderQualityTextures.has_value())
+	{
+		return cachedAvailableTerrainShaderQualityTextures.value();
+	}
+
+	std::vector<TerrainShaderQuality> result;
+	auto allQualities = getAllTerrainShaderQualityOptions();
+
+	auto checkValidTerrainOverridesPath = [](const std::string& terrainOverridesPlatformDependentPath) -> bool {
+		if (PHYSFS_mount(terrainOverridesPlatformDependentPath.c_str(), "WZTerrainOverrideTest", PHYSFS_APPEND) == 0)
+		{
+			return false;
+		}
+
+		// Get the actual mount point for this archive
+		// (Why? Because it could have been mounted *before* this check at a different location, if it's the currently-selected terrain override pack and is present...)
+		const char* mountPoint = PHYSFS_getMountPoint(terrainOverridesPlatformDependentPath.c_str());
+		std::string actualMountPoint = (mountPoint) ? mountPoint : "WZTerrainOverrideTest";
+		if (!strEndsWith(actualMountPoint, "/"))
+		{
+			actualMountPoint += "/";
+		}
+
+		bool validTerrainOverridesPackage = false;
+
+		// Sanity check: For texpages and/or tileset folder(s)
+		std::string checkFolder = actualMountPoint + "texpages";
+		if (WZ_PHYSFS_isDirectory(checkFolder.c_str()))
+		{
+			validTerrainOverridesPackage = true;
+		}
+		checkFolder = actualMountPoint + "tileset";
+		if (!validTerrainOverridesPackage && WZ_PHYSFS_isDirectory(checkFolder.c_str()))
+		{
+			validTerrainOverridesPackage = true;
+		}
+
+		if (!WZ_PHYSFS_unmount(terrainOverridesPlatformDependentPath.c_str()))
+		{
+			debug(LOG_WZ, "* Failed to remove path %s again", terrainOverridesPlatformDependentPath.c_str());
+		}
+
+		return validTerrainOverridesPackage;
+	};
+
+	std::string tmpstr;
+	for (const auto& quality : allQualities)
+	{
+		auto textureOverrideBaseSourcePath = getTerrainOverrideBaseSourcePath(quality);
+		bool foundTexturePack = false;
+		if (textureOverrideBaseSourcePath.has_value())
+		{
+			// Check all search paths for this folder or .wz file
+			for (const auto& curSearchPath : searchPathRegistry)
+			{
+				// Check <path> (folder)
+				tmpstr = curSearchPath->path + textureOverrideBaseSourcePath.value();
+				if (checkValidTerrainOverridesPath(tmpstr))
+				{
+					foundTexturePack = true;
+					break;
+				}
+
+				// Check <path>.wz
+				tmpstr += ".wz";
+				if (checkValidTerrainOverridesPath(tmpstr))
+				{
+					foundTexturePack = true;
+					break;
+				}
+			}
+		}
+		else
+		{
+			// quality doesn’t need a separate texture pack - always available
+			foundTexturePack = true;
+		}
+
+		if (foundTexturePack)
+		{
+			result.push_back(quality);
+		}
+	}
+
+	cachedAvailableTerrainShaderQualityTextures = result;
+
+	return result;
+}
+
 /*!
  * \brief Rebuilds the PHYSFS searchPath with mode specific subdirs
  *
@@ -434,12 +583,15 @@ static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mou
  */
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map, const char* current_map_mount_point)
 {
-	static searchPathMode current_mode = mod_clean;
-	static std::string current_current_map;
 	std::string tmpstr;
+	static searchPathMode current_mode = mod_clean;
+	auto currentTerrainShaderQuality = getTerrainShaderQuality();
 
-	if (mode != current_mode || (current_map != nullptr ? current_map : "") != current_current_map || force ||
-	    (use_override_mods && override_mod_list != getModList()))
+	if (mode != current_mode
+		|| (current_map != nullptr ? current_map : "") != lastCommand.current_map.value_or("")
+		|| force
+		|| lastCommand.lastTerrainShaderQuality != currentTerrainShaderQuality
+		|| (use_override_mods && override_mod_list != getModList()))
 	{
 		if (mode != mod_clean)
 		{
@@ -447,7 +599,22 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		}
 
 		current_mode = mode;
-		current_current_map = current_map != nullptr ? current_map : "";
+		lastCommand.mode = mode; // store this separately, so it doesn't get overridden with mod_override below
+		lastCommand.force = force;
+		lastCommand.current_map.reset();
+		if (current_map != nullptr)
+		{
+			lastCommand.current_map = current_map;
+		}
+		lastCommand.current_map_mount_point.reset();
+		if (current_map_mount_point != nullptr)
+		{
+			lastCommand.current_map_mount_point = current_map_mount_point;
+		}
+		lastCommand.lastTerrainShaderQuality = currentTerrainShaderQuality;
+
+		auto terrainQualityOverrideBasePath = getCurrentTerrainOverrideBaseSourcePath();
+		bool loadedTerrainTextureOverrides = false;
 
 		switch (mode)
 		{
@@ -525,6 +692,19 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// Add plain dir
 				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
+				if (terrainQualityOverrideBasePath.has_value() && !loadedTerrainTextureOverrides)
+				{
+					// Add terrain quality override files
+					tmpstr = curSearchPath->path + terrainQualityOverrideBasePath.value();
+					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					tmpstr += ".wz";
+					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					if (loadedTerrainTextureOverrides)
+					{
+						debug(LOG_INFO, "Loaded terrain overrides from: %s", curSearchPath->path.c_str());
+					}
+				}
+
 				// Add base files
 				tmpstr = curSearchPath->path + "base";
 				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
@@ -601,6 +781,19 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// Add plain dir
 				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
+				if (terrainQualityOverrideBasePath.has_value() && !loadedTerrainTextureOverrides)
+				{
+					// Add terrain quality override files
+					tmpstr = curSearchPath->path + terrainQualityOverrideBasePath.value();
+					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					tmpstr += ".wz";
+					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					if (loadedTerrainTextureOverrides)
+					{
+						debug(LOG_INFO, "Loaded terrain overrides from: %s", curSearchPath->path.c_str());
+					}
+				}
+
 				// Add base files
 				tmpstr = curSearchPath->path + "base";
 				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
@@ -633,6 +826,14 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		if (mode != mod_clean)
 		{
 			gfx_api::loadTextureCompressionOverrides(); // reload these as mods may have overridden the file!
+		}
+
+		if (terrainQualityOverrideBasePath.has_value() && (mode == mod_campaign || mode == mod_multiplay))
+		{
+			if (!loadedTerrainTextureOverrides)
+			{
+				debug(LOG_INFO, "Failed to load expected terrain quality overrides: %s", (terrainQualityOverrideBasePath.value().c_str()));
+			}
 		}
 
 		ActivityManager::instance().rebuiltSearchPath();
@@ -1104,6 +1305,8 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 
 	readAIs();
 
+	initTerrainShaderType();
+
 	return true;
 }
 
@@ -1384,6 +1587,8 @@ bool stageOneInitialise()
 	transitionInit();
 	resetScroll();
 
+	strategyPlansInit();
+
 	return true;
 }
 
@@ -1565,6 +1770,8 @@ bool stageTwoShutDown()
 {
 	debug(LOG_WZ, "== stageTwoShutDown ==");
 
+	shutdown3DView_FullReset();
+
 	fpathShutdown();
 
 	cdAudio_Stop();
@@ -1602,8 +1809,6 @@ bool stageTwoShutDown()
 		return false;
 	}
 
-	shutdown3DView();
-
 	return true;
 }
 
@@ -1614,6 +1819,17 @@ bool stageThreeInitialise()
 	debug(LOG_WZ, "== stageThreeInitialise ==");
 
 	loopMissionState = LMS_NORMAL;
+
+	// preload model textures for current tileset
+	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
+	modelUpdateTilesetIdx(modelTilesetIdx);
+	enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
+		for (iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		{
+			pDisplayShape->getTextures();
+		}
+	});
+	resDoResLoadCallback();		// do callback.
 
 	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
@@ -1631,6 +1847,7 @@ bool stageThreeInitialise()
 	effectResetUpdates();
 	initLighting(0, 0, mapWidth, mapHeight);
 	pie_InitLighting();
+	getCurrentLightmapData().reset(mapWidth, mapHeight);
 
 	if (fromSave)
 	{
@@ -1675,6 +1892,8 @@ bool stageThreeInitialise()
 		challengeActive = true;
 	}
 
+	// add radar to interface screen, and resize
+	intAddRadarWidget();
 	resizeRadar();
 
 	setAllPauseStates(false);
@@ -1687,17 +1906,33 @@ bool stageThreeInitialise()
 	}
 	else
 	{
+		initNoGoAreas();
+
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			triggerEventCheatMode(true);
 		}
+
 		triggerEvent(TRIGGER_GAME_INIT);
 		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
 	}
 
 	// Start / randomize in-game music
 	cdAudio_PlayTrack(SONG_INGAME);
+
+	// always start off with a refresh of the groups UI data
+	intGroupsChanged();
+
+	if (bMultiPlayer)
+	{
+		cameraToHome(selectedPlayer, false, fromSave);
+		playerResponding(); // say howdy!
+		if (NetPlay.bComms && !NETisReplay())
+		{
+			multiStartScreenInit();
+		}
+	}
 
 	return true;
 }
@@ -1747,6 +1982,8 @@ bool stageThreeShutDown()
 	}
 
 	setScriptWinLoseVideo(PLAY_NONE);
+
+	shutdown3DView();
 
 	return true;
 }

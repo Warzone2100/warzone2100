@@ -69,7 +69,7 @@ jobs:
     runs-on: windows-2022
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         path: 'src'
@@ -88,6 +88,11 @@ jobs:
     - name: Init Git Submodules
       working-directory: '${{ github.workspace }}\src'
       run: git submodule update --init --recursive
+    # Workaround for https://github.com/actions/runner-images/issues/8598:
+    - name: Remove Strawberry Perl from PATH
+      run: |
+        $env:PATH = $env:PATH -replace "C:\\Strawberry\\c\\bin;", "" 
+        "PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Append
     # - name: Output Runner Environment Information
     #   run: |
     #     Write-Host "------------------------------------------------------"
@@ -163,10 +168,23 @@ jobs:
         $WZ_FULL_CMAKE_PATH = Split-Path -Path ((Get-Command cmake.exe).Path)
         echo "WZ_FULL_CMAKE_PATH=${WZ_FULL_CMAKE_PATH}"
         
+        # ------------------------------
+        # Install Gettext tools
+        
+        $origPath = $env:PATH
+        $env:PATH = "C:\msys64\mingw64\bin;C:\msys64\usr\bin;$origPath"
+        
+        pacman --noconfirm -S --needed gettext
+        if ($LastExitCode -ne 0) {
+            throw "Failed to install gettext with exit code: $LastExitCode"
+        }
+        
         $WZ_FULL_MSGMERGE_PATH = Split-Path -Path ((Get-Command msgmerge.exe).Path)
         echo "WZ_FULL_MSGMERGE_PATH=${WZ_FULL_MSGMERGE_PATH}"
         $WZ_FULL_MSGFMT_PATH = Split-Path -Path ((Get-Command msgfmt.exe).Path)
         echo "WZ_FULL_MSGFMT_PATH=${WZ_FULL_MSGFMT_PATH}"
+        
+        $env:PATH = $origPath
 
         # ------------------------------
         # MSVC version / generator info
@@ -291,8 +309,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.3.231.1/windows/VulkanSDK-1.3.231.1-Installer.exe?Human=true"
-        $VULKAN_DL_SHA256 = "ffdf442893761a453499d612d86534a02573c3d2b2442b40311b69a4b2518bf2"
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.3.268.0/windows/VulkanSDK-1.3.268.0-Installer.exe?Human=true"
+        $VULKAN_DL_SHA256 = "8459ef49bd06b697115ddd3d97c9aec729e849cd775f5be70897718a9b3b9db5"
 
         $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
         $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
@@ -381,10 +399,10 @@ jobs:
         $VerbosePreference = "Continue"
         . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
 
-        $LLVM_MINGW_RELEASE = "20220906";
+        $LLVM_MINGW_RELEASE = "20231031";
         $LLVM_MINGW_PKG = "llvm-mingw-${LLVM_MINGW_RELEASE}-ucrt-x86_64"
         $LLVM_MINGW_DL_URL = "https://github.com/mstorsjo/llvm-mingw/releases/download/${LLVM_MINGW_RELEASE}/${LLVM_MINGW_PKG}.zip"
-        $LLVM_MINGW_DL_SHA512 = "3c724dd0663558c7247d2cdde196b37dc54e49fb8c4065aef0274d69d92d2d023440505fe6f23e83476d56f4a39c105d551f998a4342e823a2d2705d7a73fe7c"
+        $LLVM_MINGW_DL_SHA512 = "3173b7a9b7836adce0fa5a59b13a01fa7707d1fc5be27606e779cca853b4452571ab37a1d5d6b3fd2ca067f58aa6011b121ba4f29b9b0eaaa1de2679d6b55af9"
 
         $LLVM_MINGW_DL_BASEDIR = "${{ github.workspace }}\dl"
         $LLVM_MINGW_DL_PATH = "${LLVM_MINGW_DL_BASEDIR}\llvm-mingw.zip"
@@ -486,6 +504,8 @@ jobs:
         WZ_ENABLE_SENTRY: ${{ steps.settings.outputs.WZ_ENABLE_SENTRY }}
         SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
         DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
+        WZ_FULL_MSGMERGE_PATH: ${{ steps.settings.outputs.WZ_FULL_MSGMERGE_PATH }}
+        WZ_FULL_MSGFMT_PATH: ${{ steps.settings.outputs.WZ_FULL_MSGFMT_PATH }}
       run: |
         $ADDITIONAL_CMAKE_PARAMS = ""
         $WZ_BUILD_SENTRY_VALUE = "OFF"
@@ -495,6 +515,7 @@ jobs:
             $ADDITIONAL_CMAKE_PARAMS = "-DSENTRY_IO_DSN:STRING=${env:SENTRY_IO_DSN}"
           }
         }
+        $env:PATH = "${env:PATH};${env:WZ_FULL_MSGMERGE_PATH}";
         # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" ${ADDITIONAL_CMAKE_PARAMS} -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
@@ -529,7 +550,7 @@ jobs:
         & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_C_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-gcc" -DCMAKE_CXX_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-g++" -DCMAKE_RC_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-windres" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: Upload vcpkg logs (on failure)
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: win_${{ matrix.architecture }}_vcpkg_logs
@@ -550,7 +571,7 @@ jobs:
       working-directory: '${{ github.workspace }}\build'
       run: |
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\clang.json"
-        & cmake --build . --config Release --target warzone2100
+        & cmake --build . --config Release --target warzone2100 -- -k0
         echo "::remove-matcher owner=clang::"
     - name: Package Portable Installer
       working-directory: '${{ github.workspace }}\build'
@@ -577,7 +598,7 @@ jobs:
           Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
         }
     - name: Upload Failure Logs Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: win_${{ matrix.architecture }}_error_logs
@@ -629,28 +650,28 @@ jobs:
     # Upload build artifacts
     #####################################################
     - name: 'Upload Artifact - (Portable Build)'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_portable
         path: '${{ github.workspace }}\output\portable'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Regular Installer)'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_installer
         path: '${{ github.workspace }}\output\installer'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Debug Symbols)'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')) && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive
@@ -679,6 +700,7 @@ jobs:
       env:
         WZ_REPO_PATH: ${{ steps.settings.outputs.WZ_REPO_PATH }}
         WZ_ARCHIVE_PATH: '${{ github.workspace }}\output\archive\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive.zip'
+        WZ_DEBUGSYMBOLS_PATH: '${{ github.workspace }}\output\debugsymbols\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}.DEBUGSYMBOLS.7z'
         SOURCE_BUNDLE_OUTPUT_DIR: '${{ github.workspace }}\output\sentry_source_bundles'
       run: |
         # Download sentry-cli
@@ -689,9 +711,14 @@ jobs:
         # Extract the WZ archive to a temporary path
         echo "::group::Expanding archive ..."
         Expand-Archive -LiteralPath "${env:WZ_ARCHIVE_PATH}" -DestinationPath "$(pwd)\wz_extracted"
+        echo "Expanding archive ... Done"
+        # Extract the debug symbols to the temporary path's "bin" directory
+        $SYMBOLS_OUTPUT_DIR = "$(pwd)\wz_extracted"
+        echo "Extracting debug symbols ..."
+        Start-Process "7z" -ArgumentList "x","${env:WZ_DEBUGSYMBOLS_PATH}","-o${SYMBOLS_OUTPUT_DIR}","-aos" -Wait
+        echo "Extracting debug symbols ... Done"
         # Remove any .sym files from extracted archive
         Remove-Item "$(pwd)\wz_extracted\bin\*" -Recurse -Include *.sym
-        echo "Expanding archive ... Done"
         Get-ChildItem -Path "$(pwd)\wz_extracted\bin" -Recurse
         echo "::endgroup::"
         # Create the Sentry source bundle
@@ -702,7 +729,7 @@ jobs:
         Get-ChildItem -Path "${env:SOURCE_BUNDLE_OUTPUT_DIR}" -Recurse
     - name: Upload Sentry source bundles
       if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: 'warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_debug_sourcebundles'
         path: '${{ github.workspace }}\output\sentry_source_bundles'
@@ -735,7 +762,7 @@ jobs:
           echo "OUTPUTDIR=${OUTPUTDIR}" >> $GITHUB_ENV
           echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
       - name: Download Archive Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_archive'
           path: ./dl-archive
@@ -745,7 +772,7 @@ jobs:
           unzip -o "${ZIPFILE}" -d "${OUTPUTDIR}" && rm "${ZIPFILE}"
       - name: Download Debug Symbols Artifact
         continue-on-error: true
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS'
           path: ./dl-archive
@@ -764,7 +791,7 @@ jobs:
           fi
       - name: Download Source Bundle
         continue-on-error: true
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_debug_sourcebundles'
           path: ./dl-sourcebundle

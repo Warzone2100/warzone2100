@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2021-2023  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #include "lib/widget/label.h"
 #include "commander.h"
 #include "../objmem.h"
@@ -19,7 +38,7 @@ void CommanderController::updateCommandersList()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer = %" PRIu32 "", selectedPlayer);
 
-	for (DROID *droid = apsDroidLists[selectedPlayer]; droid; droid = droid->psNext)
+	for (DROID *droid : apsDroidLists[selectedPlayer])
 	{
 		if (droid->droidType == DROID_COMMAND && droid->died == 0)
 		{
@@ -27,7 +46,10 @@ void CommanderController::updateCommandersList()
 		}
 	}
 
-	std::reverse(commanders.begin(), commanders.end());
+	// Sort the list of commanders from lowest to highest id (using a lambda function defined within the sort call)
+	std::sort(commanders.begin(), commanders.end(), [](DROID *droid1, DROID *droid2) {
+		return droid1->id < droid2->id;
+	});
 }
 
 STRUCTURE_STATS *CommanderController::getObjectStatsAt(size_t objectIndex) const
@@ -275,7 +297,7 @@ private:
 		controller->displayOrderForm();
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);

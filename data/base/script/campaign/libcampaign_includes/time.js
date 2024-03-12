@@ -13,7 +13,7 @@
 //;;
 function camSecondsToMilliseconds(seconds)
 {
-	return seconds * MILLISECONDS_IN_SECOND;
+	return seconds * CAM_MILLISECONDS_IN_SECOND;
 }
 
 //;; ## camMinutesToMilliseconds(minutes)
@@ -25,7 +25,7 @@ function camSecondsToMilliseconds(seconds)
 //;;
 function camMinutesToMilliseconds(minutes)
 {
-	return minutes * camSecondsToMilliseconds(SECONDS_IN_MINUTE);
+	return minutes * camSecondsToMilliseconds(CAM_SECONDS_IN_MINUTE);
 }
 
 //;; ## camMinutesToSeconds(minutes)
@@ -37,7 +37,7 @@ function camMinutesToMilliseconds(minutes)
 //;;
 function camMinutesToSeconds(minutes)
 {
-	return minutes * SECONDS_IN_MINUTE;
+	return minutes * CAM_SECONDS_IN_MINUTE;
 }
 
 //;; ## camHoursToSeconds(hours)
@@ -49,5 +49,5 @@ function camMinutesToSeconds(minutes)
 //;;
 function camHoursToSeconds(hours)
 {
-	return hours * camMinutesToSeconds(MINUTES_IN_HOUR);
+	return hours * camMinutesToSeconds(CAM_MINUTES_IN_HOUR);
 }
