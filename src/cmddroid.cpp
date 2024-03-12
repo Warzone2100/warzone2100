@@ -129,7 +129,7 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		{
 			psDroid->group = fallbackDroidGroup;
 			psDroid->fallbackGroup = UBYTE_MAX;
-			SelectNewDroid(psDroid);
+			SelectGroupDroid(psDroid);
 		}
 	}
 
