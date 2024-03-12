@@ -2478,18 +2478,13 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		psFact = &psStructure->pFunctionality->factory;
 		bool hasCommander = psFact->psCommander != nullptr && myResponsibility(psStructure->player);
 		// assign a group to the manufactured droid
-		// if a commander is assigned, ignore this behavior (except for builders)
 		if (psStructure->productToGroup != UBYTE_MAX)
 		{
+			psNewDroid->group = psStructure->productToGroup;
 			if (!hasCommander || isConstructionDroid(psNewDroid))
 			{
-				psNewDroid->group = psStructure->productToGroup;
 				intGroupsChanged(psNewDroid->group); // update groups UI
 				SelectGroupDroid(psNewDroid);
-			}
-			else
-			{
-				psNewDroid->fallbackGroup = psStructure->productToGroup;
 			}
 		}
 		setFactorySecondaryState(psNewDroid, psStructure);
