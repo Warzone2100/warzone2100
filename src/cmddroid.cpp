@@ -90,7 +90,7 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	ASSERT_OR_RETURN(false, psDroid != nullptr, "psDroid is null?");
 
 	auto initialDroidGroup = psDroid->group;
-	auto initialRepairDroidGroup = psDroid->repairGroup;
+	auto initialDroidRepairGroup = psDroid->repairGroup;
 
 	if (psCommander->psGroup == nullptr)
 	{
@@ -130,7 +130,7 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 			psDroid->group = initialDroidGroup;
 			SelectGroupDroid(psDroid);
 		}
-		psDroid->repairGroup = initialRepairDroidGroup;
+		psDroid->repairGroup = initialDroidRepairGroup;
 	}
 
 	if (initialDroidGroup != psDroid->group)
