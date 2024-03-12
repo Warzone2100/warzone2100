@@ -90,6 +90,8 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	ASSERT_OR_RETURN(false, psDroid != nullptr, "psDroid is null?");
 
 	auto initialDroidGroup = psDroid->group;
+	auto initialRepairDroidGroup = psDroid->repairGroup;
+	// select a value depending on whether the commander was assigned manually or after construction in the factory
 	auto fallbackDroidGroup = initialDroidGroup != UBYTE_MAX ? initialDroidGroup : psDroid->fallbackGroup;
 
 	if (psCommander->psGroup == nullptr)
@@ -131,6 +133,7 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 			psDroid->fallbackGroup = UBYTE_MAX;
 			SelectGroupDroid(psDroid);
 		}
+		psDroid->repairGroup = initialRepairDroidGroup;
 	}
 
 	if (initialDroidGroup != psDroid->group)
