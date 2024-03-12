@@ -4250,17 +4250,6 @@ static void NETallowJoining()
 					// connection checks
 					auto connectPermissions = netPermissionsCheck_Connect(identity);
 
-					// Get country code from client's ip address
-					const char *countryCode = nullptr;
-					if (gi)
-					{
-						countryCode = GeoIP_country_code_by_name(gi, NetPlay.players[index].IPtextAddress);
-					}
-					if (countryCode)
-					{
-						sstrcpy(NetPlay.players[index].countryCode, countryCode);
-					}
-
 					if ((connectPermissions.has_value() && connectPermissions.value() == ConnectPermissions::Blocked)
 						|| (!connectPermissions.has_value() && onBanList(tmp_connectState[i].ip.c_str())))
 					{
@@ -4461,6 +4450,17 @@ static void NETallowJoining()
 			tmp_socket[i] = nullptr;
 			SocketSet_AddSocket(socket_set, connected_bsocket[index]);
 			NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
+
+			// Get country code from client's ip address
+			const char *countryCode = nullptr;
+			if (gi)
+			{
+				countryCode = GeoIP_country_code_by_name(gi, NetPlay.players[index].IPtextAddress);
+			}
+			if (countryCode)
+			{
+				sstrcpy(NetPlay.players[index].countryCode, countryCode);
+			}
 
 			// Copy player's IP address.
 			sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(connected_bsocket[index]));
