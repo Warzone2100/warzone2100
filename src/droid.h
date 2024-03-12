@@ -280,8 +280,8 @@ bool isSelectable(DROID const *psDroid);
 // Select a droid and do any necessary housekeeping.
 void SelectDroid(DROID *psDroid);
 
-// If the whole group is selected, add new droids of psNewDroid group to the selection after production
-void SelectNewDroid(DROID *psNewDroid);
+// If all other droids with psGroupDroid's group are selected, add psGroupDroid to the selection after production/repair/etc.
+void SelectGroupDroid(DROID *psGroupDroid);
 
 // De-select a droid and do any necessary housekeeping.
 void DeSelectDroid(DROID *psDroid);
