@@ -256,6 +256,11 @@ public:
 		cachedText.tick();
 	}
 
+	void setFontColour(PIELIGHT colour)
+	{
+		textStyle.fontColour = colour;
+	}
+
 private:
 	WzCachedText cachedText;
 	ParagraphTextStyle textStyle;
@@ -326,7 +331,7 @@ struct ParagraphTextElement: public ParagraphElement
 
 	void destroyFragments(Paragraph &paragraph) override
 	{
-		for (auto fragment: fragments)
+		for (auto& fragment: fragments)
 		{
 			paragraph.detach(fragment);
 		}
@@ -339,10 +344,19 @@ struct ParagraphTextElement: public ParagraphElement
 		return iV_GetTextAboveBase(style.font);
 	}
 
+	void setFontColour(PIELIGHT colour)
+	{
+		style.fontColour = colour;
+		for (auto& fragment: fragments)
+		{
+			fragment->setFontColour(colour);
+		}
+	}
+
 private:
 	WzString text;
 	ParagraphTextStyle style;
-	std::vector<std::shared_ptr<WIDGET>> fragments;
+	std::vector<std::shared_ptr<ParagraphTextWidget>> fragments;
 };
 
 struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescriptor
@@ -568,4 +582,20 @@ void Paragraph::highlightLost()
 nonstd::optional<std::vector<uint32_t>> Paragraph::getScrollSnapOffsets()
 {
 	return scrollSnapOffsets;
+}
+
+void Paragraph::forceSetAllFontColor(PIELIGHT colour)
+{
+	// set for any newly-added text
+	setFontColour(colour);
+
+	// set for all existing text
+	for (auto &element: elements)
+	{
+		auto psTextElement = dynamic_cast<ParagraphTextElement*>(element.get());
+		if (psTextElement)
+		{
+			psTextElement->setFontColour(colour);
+		}
+	}
 }
