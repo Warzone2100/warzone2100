@@ -34,6 +34,7 @@ public:
 	W_SLIDER(W_SLDINIT const *init);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
 	void run(W_CONTEXT *psContext) override;
@@ -48,6 +49,9 @@ public:
 	std::string getTip() override;
 	WidgetHelp const * getHelp() const override;
 
+	bool capturesMouseDrag(WIDGET_KEY) override;
+	void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) override;
+
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
 	UWORD		barSize;			// Thickness of slider bar
@@ -56,6 +60,9 @@ public:
 	std::string pTip;                           // Tool tip
 private:
 	optional<WidgetHelp> help;
+	bool		isHandlingDrag = false;
+private:
+	void updateSliderFromMousePosition(W_CONTEXT*);
 };
 
 #endif // __INCLUDED_LIB_WIDGET_SLIDER_H__
