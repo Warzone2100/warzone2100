@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-03-04 01:42\n"
+"PO-Revision-Date: 2024-03-13 02:30\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -595,7 +595,7 @@ msgstr "Musia byť zastavení."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "Pokračuj z MV k reaktoru a znič ho."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
@@ -607,13 +607,13 @@ msgstr "MISIA ZÁKLADNE BETA: Obsaď centrálu NASDA"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
+msgstr "Ovládni centrálu NASDA pred tým, než ju stihne NEXUS a Spoločenstvo použiť."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr ""
+msgstr "PREPRAVNÁ MISIA: Satelitná komunikačná stanica"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
@@ -621,15 +621,15 @@ msgstr "NEXUS hľadá ešte stále funkčné pamäťové banky."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
+msgstr "Časti jeho vedomia boli presunuté na odľahlú riadiacu stanicu NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "Detegujeme prenosy z tejto stanice, ktoré dosahujú vysokú orbitu."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "NEXUS sa teraz znova prepojil so satelitmi NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
@@ -645,16 +645,16 @@ msgstr "PREPRAVNÁ MISIA: Znič umiestnenia nepriateľských SAM"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr ""
+msgstr "Pokiaľ chceš uniknúť, zlikviduj odpaliská rakiet zem-vzduch okolo tvojej základne."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr ""
+msgstr "Prileť k MV, následne pokračuj po pevnine a znič odpaliská SAM rakiet."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr ""
+msgstr "PREPRAVNÁ MISIA: Založ bezpečné útočisko"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
@@ -662,7 +662,7 @@ msgstr "Potvrdzujeme, že na základňu Alfa smeruje raketa."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr ""
+msgstr "Musíš založiť bezpečné útočisko pre evakuáciu základne Beta."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
