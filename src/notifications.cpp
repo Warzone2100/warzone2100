@@ -1246,25 +1246,6 @@ void runNotifications()
 			displayNotification(currentNotification.get());
 		}
 	}
-
-	if (!currentInGameNotification || !currentInGameNotification->isActivelyBeingDragged())
-	{
-		if (lastDragOnNotificationStartPos.x >= 0 && lastDragOnNotificationStartPos.y >= 0)
-		{
-			UDWORD currDragStartX, currDragStartY;
-			if (mouseDrag(MOUSE_LMB, &currDragStartX, &currDragStartY))
-			{
-				if (currDragStartX != lastDragOnNotificationStartPos.x || currDragStartY != lastDragOnNotificationStartPos.y)
-				{
-					notificationDidStopDragOnNotification(); // ensure last notification drag position is cleared
-				}
-			}
-			else
-			{
-				notificationDidStopDragOnNotification(); // ensure last notification drag position is cleared
-			}
-		}
-	}
 }
 
 void removeInGameNotificationForm(WZ_Queued_Notification* request)
