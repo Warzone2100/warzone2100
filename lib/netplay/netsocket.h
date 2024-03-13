@@ -102,8 +102,8 @@ WZ_DECL_NONNULL(1) void socketClose(Socket *sock);                      ///< Des
 Socket *socketOpenAny(const SocketAddress *addr, unsigned timeout);     ///< Opens a Socket, using the first address that works in addr.
 size_t socketArrayOpen(Socket **sockets, size_t maxSockets, const SocketAddress *addr, unsigned timeout);  ///< Opens up to maxSockets Sockets, of the types listed in addr.
 void socketArrayClose(Socket **sockets, size_t maxSockets);             ///< Closes all Sockets in the array.
-WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock);
-WZ_DECL_NONNULL(1) bool socketHasIPv6(Socket *sock);
+WZ_DECL_NONNULL(1) bool socketHasIPv4(const Socket *sock);
+WZ_DECL_NONNULL(1) bool socketHasIPv6(const Socket *sock);
 
 WZ_DECL_NONNULL(1) char const *getSocketTextAddress(Socket const *sock); ///< Gets a string with the socket address.
 std::vector<unsigned char> ipv4_AddressString_To_NetBinary(const std::string& ipv4Address);
