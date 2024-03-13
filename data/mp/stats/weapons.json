@@ -3181,7 +3181,7 @@
 		"flightSpeed": 2250,
 		"hitGfx": "FXMExp.PIE",
 		"hitpoints": 50,
-		"id": "Missile-LtSAM",
+		"id": "Missile-VTOL-LtAAM",
 		"lightWorld": 1,
 		"longRange": 3416,
 		"longHit": 80,
