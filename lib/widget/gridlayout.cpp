@@ -55,7 +55,9 @@ nonstd::optional<std::vector<uint32_t>> GridLayout::getScrollSnapOffsets()
 void GridLayout::displayRecursive(WidgetGraphicsContext const &context)
 {
 	updateLayout();
-	WIDGET::displayRecursive(context);
+	auto overrideContext = context
+		.setAllowChildDisplayRecursiveIfSelfClipped(true);
+	WIDGET::displayRecursive(overrideContext);
 }
 
 void GridLayout::geometryChanged()
