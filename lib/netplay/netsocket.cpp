@@ -1550,7 +1550,7 @@ void socketArrayClose(Socket **sockets, size_t maxSockets)
 	std::fill(sockets, sockets + maxSockets, (Socket *)nullptr);      // Set the pointers to NULL.
 }
 
-WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock)
+WZ_DECL_NONNULL(1) bool socketHasIPv4(const Socket *sock)
 {
 	if (sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
@@ -1573,7 +1573,7 @@ WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock)
 	}
 }
 
-WZ_DECL_NONNULL(1) bool socketHasIPv6(Socket *sock)
+WZ_DECL_NONNULL(1) bool socketHasIPv6(const Socket *sock)
 {
 	return sock->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET;
 }
