@@ -144,6 +144,8 @@ public:
 
 	nonstd::optional<std::vector<uint32_t>> getScrollSnapOffsets() override;
 
+	void forceSetAllFontColor(PIELIGHT colour);
+
 private:
 	std::vector<std::unique_ptr<ParagraphElement>> elements;
 	bool layoutDirty = true;
