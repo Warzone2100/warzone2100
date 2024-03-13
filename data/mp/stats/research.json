@@ -7498,7 +7498,8 @@
 		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
-			"Missile-LtSAM"
+			"Missile-LtSAM",
+			"Missile-VTOL-LtAAM"
 		],
 		"statID": "Missile-LtSAM"
 	},
