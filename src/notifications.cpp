@@ -378,6 +378,8 @@ public:
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void display(int xOffset, int yOffset) override;
+	bool capturesMouseDrag(WIDGET_KEY) override;
+	void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) override;
 public:
 	Vector2i getDragOffset() const { return dragOffset; }
 	bool isActivelyBeingDragged() const { return isInDragMode; }
@@ -400,7 +402,6 @@ private:
 	bool isModal = false;
 	bool isInDragMode = false;
 	Vector2i dragOffset = {0, 0};
-	Vector2i dragStartMousePos = {0, 0};
 	Vector2i dragOffsetEnded = {0, 0};
 	uint32_t dragStartedTime = 0;
 	uint32_t dragEndedTime = 0;
@@ -988,45 +989,44 @@ bool W_NOTIFICATION::calculateNotificationWidgetPos()
 	return false;
 }
 
-/* Run a notification widget */
-void W_NOTIFICATION::run(W_CONTEXT *psContext)
+bool W_NOTIFICATION::capturesMouseDrag(WIDGET_KEY)
 {
-	if (isInDragMode && mouseDown(MOUSE_LMB))
-	{
-		int dragStartY = dragStartMousePos.y;
-		int currMouseY = mouseY();
+	return true;
+}
 
-		// calculate how much to respond to the drag by comparing the start to the current position
-		if (dragStartY > currMouseY)
-		{
-			// dragging up (to close) - respond 1 to 1
-			int distanceY = dragStartY - currMouseY;
-			dragOffset.y = (distanceY > 0) ? -(distanceY) : 0;
-//			debug(LOG_GUI, "dragging up, dragOffset.y: (%d)", dragOffset.y);
-		}
-		else if (currMouseY > dragStartY)
-		{
-			// dragging down
-			const int verticalLimit = 10;
-			int distanceY = currMouseY - dragStartY;
-			dragOffset.y = static_cast<int>(verticalLimit * (1 + log10(float(distanceY) / float(verticalLimit))));
-//			debug(LOG_GUI, "dragging down, dragOffset.y: (%d)", dragOffset.y);
-		}
-		else
-		{
-			dragOffset.y = 0;
-		}
+void W_NOTIFICATION::mouseDragged(WIDGET_KEY, W_CONTEXT *psStartContext, W_CONTEXT *psContext)
+{
+	int dragStartY = psStartContext->my;
+	int currMouseY = psContext->my;
+
+	// calculate how much to respond to the drag by comparing the start to the current position
+	if (dragStartY > currMouseY)
+	{
+		// dragging up (to close) - respond 1 to 1
+		int distanceY = dragStartY - currMouseY;
+		dragOffset.y = (distanceY > 0) ? -(distanceY) : 0;
+//		debug(LOG_GUI, "dragging up, dragOffset.y: (%d) - dragStartY: %d, currMouseY: %d, distanceY: %d", dragOffset.y, dragStartY, currMouseY, distanceY);
+	}
+	else if (currMouseY > dragStartY)
+	{
+		// dragging down
+		const int verticalLimit = 10;
+		int distanceY = currMouseY - dragStartY;
+		dragOffset.y = static_cast<int>(verticalLimit * (1 + log10(float(distanceY) / float(verticalLimit))));
+//		debug(LOG_GUI, "dragging down, dragOffset.y: (%d) - dragStartY: %d, currMouseY: %d, distanceY: %d", dragOffset.y, dragStartY, currMouseY, distanceY);
 	}
 	else
 	{
-		if (isInDragMode && !mouseDown(MOUSE_LMB))
-		{
-//			debug(LOG_GUI, "No longer in drag mode");
-			isInDragMode = false;
-			dragEndedTime = realTime;
-			dragOffsetEnded = dragOffset;
-			notificationDidStopDragOnNotification();
-		}
+		dragOffset.y = 0;
+	}
+}
+
+
+/* Run a notification widget */
+void W_NOTIFICATION::run(W_CONTEXT *psContext)
+{
+	if (!isInDragMode)
+	{
 		if (request && (request->status.state != WZ_Notification_Status::NotificationState::closing))
 		{
 			// decay drag offset
@@ -1057,6 +1057,7 @@ void W_NOTIFICATION::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 	{
 //		debug(LOG_GUI, "Enabling drag mode");
 		isInDragMode = true;
+		Vector2i dragStartMousePos;
 		dragStartMousePos.x = psContext->mx;
 		dragStartMousePos.y = psContext->my;
 //		debug(LOG_GUI, "dragStartMousePos: (%d x %d)", dragStartMousePos.x, dragStartMousePos.y);
@@ -1071,9 +1072,19 @@ void W_NOTIFICATION::released(W_CONTEXT *psContext, WIDGET_KEY key)
 {
 //	debug(LOG_GUI, "released");
 
+	bool wasInDragMode = isInDragMode;
+	if (isInDragMode)
+	{
+//		debug(LOG_GUI, "No longer in drag mode");
+		isInDragMode = false;
+		dragEndedTime = realTime;
+		dragOffsetEnded = dragOffset;
+		notificationDidStopDragOnNotification();
+	}
+
 	if (request)
 	{
-		if (isInDragMode && dragOffset.y < WZ_NOTIFICATION_DOWN_DRAG_DISCARD_CLICK_THRESHOLD)
+		if (wasInDragMode && dragOffset.y < WZ_NOTIFICATION_DOWN_DRAG_DISCARD_CLICK_THRESHOLD)
 		{
 			internalDismissNotification();
 		}
