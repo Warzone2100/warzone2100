@@ -1494,7 +1494,10 @@ void W_SCREEN::setReturn(const std::shared_ptr<WIDGET> &psWidget)
 
 void WIDGET::displayRecursive(WidgetGraphicsContext const &context)
 {
-	if (context.clipContains(geometry())) {
+	bool widgetIsClipped = !context.clipContains(geometry());
+
+	if (!widgetIsClipped)
+	{
 		if (debugBoundingBoxesOnly)
 		{
 			// Display bounding boxes.
@@ -1513,12 +1516,17 @@ void WIDGET::displayRecursive(WidgetGraphicsContext const &context)
 		}
 	}
 
+	if (widgetIsClipped && !context.allowChildDisplayRecursiveIfSelfClipped())
+	{
+		return;
+	}
+
 	if (type == WIDG_FORM && ((W_FORM *)this)->disableChildren)
 	{
 		return;
 	}
 
-	auto childrenContext = context.translatedBy(x(), y());
+	auto childrenContext = context.translatedBy(x(), y()).setAllowChildDisplayRecursiveIfSelfClipped(false);
 
 	// If this is a clickable form, the widgets on it have to move when it's down.
 	if (type == WIDG_FORM && (((W_FORM *)this)->style & WFORM_NOCLICKMOVE) == 0)
@@ -1689,6 +1697,14 @@ WidgetGraphicsContext WidgetGraphicsContext::clippedBy(WzRect const &newRect) co
 
 	newContext.clipped = true;
 
+	return newContext;
+}
+
+WidgetGraphicsContext WidgetGraphicsContext::setAllowChildDisplayRecursiveIfSelfClipped(bool val) const
+{
+	WidgetGraphicsContext newContext(*this);
+
+	newContext.allowChildDisplayIfSelfClipped = true;
 	return newContext;
 }
 

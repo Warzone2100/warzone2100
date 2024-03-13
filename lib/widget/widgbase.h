@@ -116,6 +116,7 @@ private:
 	Vector2i offset = {0, 0};
 	WzRect clipRect = {0, 0, 0, 0};
 	bool clipped = false;
+	bool allowChildDisplayIfSelfClipped = false;
 
 public:
 	int32_t getXOffset() const
@@ -128,11 +129,18 @@ public:
 		return offset.y;
 	}
 
+	bool allowChildDisplayRecursiveIfSelfClipped() const
+	{
+		return allowChildDisplayIfSelfClipped;
+	}
+
 	bool clipContains(WzRect const& rect) const;
 
 	WidgetGraphicsContext translatedBy(int32_t x, int32_t y) const;
 
 	WidgetGraphicsContext clippedBy(WzRect const &newRect) const;
+
+	WidgetGraphicsContext setAllowChildDisplayRecursiveIfSelfClipped(bool val) const;
 };
 
 struct WidgetHelp
