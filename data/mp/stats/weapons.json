@@ -3195,7 +3195,7 @@
 		"movement": "HOMING-DIRECT",
 		"muzzleGfx": "FXATMiss.PIE",
 		"name": "VTOL Avenger AAM",
-		"numAttackRuns": 3,
+		"numAttackRuns": 6,
 		"numExplosions": 1,
 		"numRounds": 2,
 		"radiusLife": 10,
