@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-03-13 02:30\n"
+"PO-Revision-Date: 2024-03-14 05:00\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -1025,19 +1025,19 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
-msgstr ""
+msgstr "Priraď túto úlohu výskumnému stredisku."
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
-msgstr ""
+msgstr "Jednotky NEXUS boli detegované na týchto miestach."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr ""
+msgstr "NEXUS bol odstránený zo všetkých systémov projeku."
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
-msgstr ""
+msgstr "Pokúšame sa získať prístup ku kontrolným kódom strely."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
@@ -1045,7 +1045,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr ""
+msgstr "Ochráň raketové silá pred útokmi NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
