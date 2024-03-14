@@ -1226,7 +1226,7 @@
 		"resultStructures": [
 			"Emplacement-PlasmaCannon"
 		],
-		"statID": "Emplacement-PulseLaser"
+		"statID": "Emplacement-PlasmaCannon"
 	},
 	"R-Defense-PlasmiteFlamer": {
 		"iconID": "IMAGE_RES_DEFENCE",
