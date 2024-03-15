@@ -3200,7 +3200,7 @@
 		"numRounds": 2,
 		"radiusLife": 10,
 		"recoilValue": 25,
-		"reloadTime": 10,
+		"reloadTime": 30,
 		"rotate": 180,
 		"shortHit": 70,
 		"shortRange": 2048,
