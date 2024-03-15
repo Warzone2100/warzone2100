@@ -628,7 +628,7 @@ void orderUpdateDroid(DROID *psDroid)
 					}
 					break;
 				case DROID_SENSOR:
-					if (attack)
+					if (!cbSensorDroid(psDroid) && attack)
 					{
 						actionDroid(psDroid, DACTION_OBSERVE, psObj);
 					}
