@@ -119,6 +119,7 @@
 #include "hci/teamstrategy.h"
 #include "hci/chatoptions.h"
 #include "multivote.h"
+#include "campaigninfo.h"
 
 #include "activity.h"
 #include <algorithm>
@@ -8908,6 +8909,9 @@ bool WZGameReplayOptionsHandler::saveOptions(nlohmann::json& object) const
 	// Save `selectedPlayer` (even though we don't actually use it on restore - for now)
 	object["selectedPlayer"] = selectedPlayer;
 
+	// Save campaignName
+	object["campaignName"] = getCampaignName();
+
 	// ? Do not need to save alliances (?)
 
 	// Save `NetPlay.players` -- possibly recreate NetPlay.playerReferences on load?
@@ -9055,6 +9059,24 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 
 	// restore `ingame`
 	ingame = object.at("ingame").get<MULTIPLAYERINGAME>();
+
+	// restore `campaignName`
+	if (object.contains("campaignName"))
+	{
+		auto restoredCampaignName = object.at("campaignName").get<std::string>();
+		if (!restoredCampaignName.empty())
+		{
+			setCampaignName(restoredCampaignName);
+		}
+		else
+		{
+			clearCampaignName();
+		}
+	}
+	else
+	{
+		clearCampaignName();
+	}
 
 	// ? Do not need to restore alliances (?)
 
