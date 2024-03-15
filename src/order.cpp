@@ -96,6 +96,9 @@
 /** The maximum distance allowed to a droid to move out of the path if already attacking a target on a patrol/scout. */
 #define SCOUT_ATTACK_DIST	(TILE_UNITS * 5)
 
+/** The maximum number of units a repair facility can handle before units start crowding and interfering with each other. */
+#define REPAIR_FACILITY_MAX_CAPACITY	8
+
 static void orderClearDroidList(DROID *psDroid);
 
 /** Whether an order effect has been displayed
@@ -3413,6 +3416,23 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 			if (thisDistToRepair <= 0)
 			{
 				continue;	// cannot reach position
+			}
+			uint32_t droidsAtRepair = 0;
+			for (DROID *psOtherDroid : apsDroidLists[psDroid->player])
+			{
+				if (psDroid == psOtherDroid)
+				{
+					continue;
+				}
+				/* Search for droids within a radius of 2 tiles */
+				if (psOtherDroid->isDamaged() && droidSqDist(psOtherDroid, psStruct) < TILE_WIDTH * TILE_WIDTH * 4)
+				{
+					droidsAtRepair++;
+				}
+			}
+			if (droidsAtRepair > REPAIR_FACILITY_MAX_CAPACITY)
+			{
+				continue;
 			}
 			vFacilityPos.push_back(psStruct->pos);
 			vFacility.push_back(psStruct);
