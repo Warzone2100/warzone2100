@@ -555,8 +555,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["selectedPlayer"] = selectedPlayer;
 	//== * ```gameTime``` The current game time. Updated before every invokation of a script.
 	pNewInstance->setSpecifiedGlobalVariable("gameTime", gameTime, wzapi::GlobalVariableFlags::ReadOnlyUpdatedFromApp | wzapi::GlobalVariableFlags::DoNotSave);
-	//== * ```modList``` The current loaded mods.
-	globalVars["modList"] = getModList();
+	//== * ```modList``` An array of the current loaded mods (mod names).
+	globalVars["modList"] = getModNamesList();
 
 
 	//== * ```difficulty``` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of

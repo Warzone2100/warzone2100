@@ -57,6 +57,7 @@ private:
 void clearLoadedMods();
 std::string const &getModList();
 std::vector<WzMods::LoadedMod> const &getLoadedMods();
+std::vector<std::string> const &getModNamesList();
 std::vector<Sha256> const &getModHashList();
 std::string getModFilename(Sha256 const &hash);
 

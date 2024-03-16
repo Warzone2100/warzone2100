@@ -40,6 +40,7 @@ bool use_override_mods = false;
 
 static std::vector<WzMods::LoadedMod> loaded_mods;
 static std::string mod_list;
+static std::vector<std::string> mod_names_list;
 static std::vector<Sha256> mod_hash_list;
 
 
@@ -202,6 +203,7 @@ static void addLoadedMod(std::string modname, std::string filename)
 	// Note, findHashOfFile won't work right now, since the search paths aren't set up until after all calls to addSubdirs, see rebuildSearchPath in init.cpp.
 	loaded_mods.emplace_back(std::move(modname), std::move(filename));
 	mod_list.clear();
+	mod_names_list.clear();
 	mod_hash_list.clear();
 }
 
@@ -209,6 +211,7 @@ void clearLoadedMods()
 {
 	loaded_mods.clear();
 	mod_list.clear();
+	mod_names_list.clear();
 	mod_hash_list.clear();
 }
 
@@ -233,6 +236,20 @@ std::string const &getModList()
 		mod_list.resize(std::min<size_t>(mod_list.size(), modlist_string_size - 1));  // Probably not needed.
 	}
 	return mod_list;
+}
+
+std::vector<std::string> const &getModNamesList()
+{
+	if (mod_names_list.empty())
+	{
+		for (auto const &mod : loaded_mods)
+		{
+			mod_names_list.push_back(mod.name);
+		}
+		std::sort(mod_names_list.begin(), mod_names_list.end());
+		mod_names_list.erase(std::unique(mod_names_list.begin(), mod_names_list.end()), mod_names_list.end());
+	}
+	return mod_names_list;
 }
 
 WzMods::LoadedMod::LoadedMod(const std::string& name, const std::string& filename)
