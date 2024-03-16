@@ -183,18 +183,7 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	if (difficulty === HARD)
-	{
-		setMissionTime(camMinutesToSeconds(100));
-	}
-	else if (difficulty === INSANE)
-	{
-		setMissionTime(camMinutesToSeconds(90));
-	}
-	else
-	{
-		setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
-	}
+	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 	camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);

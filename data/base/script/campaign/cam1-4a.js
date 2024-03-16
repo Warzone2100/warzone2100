@@ -54,7 +54,7 @@ camAreaEvent("LandingZoneTrigger", function()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// Give extra 40 minutes.
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(40)) + getMissionTime());
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 30 : 40)) + getMissionTime());
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
 		area: "RTLZ",
 		message: "C1-4_LZ",
