@@ -52,6 +52,8 @@ data/base/components/prop/prhlwhl1.pie
 	- CC BY SA 3.0 - Copyright (c) 2008 <Mysteryem>
 data/fonts/NotoSansCJK-VF.otf.ttc
 	- OFL 1.1 - Copyright (c) 2014-2021 Adobe (https://github.com/googlefonts/noto-cjk)
+data/base/images/wz_original_campaign_banner.png
+	- CC BY SA 3.0	- Copyright (c) 2007-2008 "B. V. Edwards" <cathuria>
 data/base/images/flags/flag-*.png
 	- MIT License, Copyright (c) 2016 Bowtie AB (https://github.com/madebybowtie/FlagKit)
 data/base/images/frontend/image_cam_universe_stars.png

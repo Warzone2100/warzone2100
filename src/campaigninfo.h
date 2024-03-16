@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <unordered_map>
 #include "lib/framework/wzstring.h"
 #include <nlohmann/json_fwd.hpp>
 
@@ -49,5 +50,11 @@ struct CAMPAIGN_FILE
 void from_json(const nlohmann::json& j, CAMPAIGN_FILE& v);
 
 std::vector<CAMPAIGN_FILE> readCampaignFiles();
+
+
+void setCamTweakOptions(std::unordered_map<std::string, nlohmann::json> options);
+void clearCamTweakOptions();
+const std::unordered_map<std::string, nlohmann::json>& getCamTweakOptions();
+nlohmann::json getCamTweakOptionsValue(const std::string& identifier, nlohmann::json defaultValue);
 
 #endif // __INCLUDED_SRC_CAMPAIGNINFO_H__

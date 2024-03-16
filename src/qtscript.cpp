@@ -62,6 +62,7 @@
 #include "challenge.h"
 #include "multistat.h"
 #include "gamehistorylogger.h"
+#include "campaigninfo.h"
 #include "hci/quickchat.h"
 
 #include <set>
@@ -612,6 +613,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["gameTimeLimit"] = game.gameTimeLimitMinutes * 60 * 1000;
 	//== * ```playerLeaveMode``` The mode used to handle human players leaving a multiplayer game in progress. (0 = destroy resources, 1 = split resources with team) (4.4.0+ only)
 	globalVars["playerLeaveMode"] = static_cast<uint8_t>(game.playerLeaveMode);
+	//== * ```tweakOptions``` The tweakOptions offered by the current mod / mode, as configured by the user. (4.5.0+ only)
+	globalVars["tweakOptions"] = getCamTweakOptions();
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 

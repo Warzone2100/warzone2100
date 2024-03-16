@@ -138,16 +138,6 @@ typedef std::string MapName;
 typedef std::unordered_map<MapName, WZmapInfo> WZMapInfo_Map;
 WZMapInfo_Map WZ_Maps;
 
-enum MODS_PATHS: size_t
-{
-	MODS_MUSIC,
-	MODS_GLOBAL,
-	MODS_AUTOLOAD,
-	MODS_CAMPAIGN,
-	MODS_MULTIPLAY,
-	MODS_PATHS_MAX
-};
-
 static std::string getFullModPath(MODS_PATHS type)
 {
 	switch (type)
@@ -159,7 +149,8 @@ static std::string getFullModPath(MODS_PATHS type)
 		case MODS_AUTOLOAD:
 			return version_getVersionedModsFolderPath("autoload");
 		case MODS_CAMPAIGN:
-			return version_getVersionedModsFolderPath("campaign");
+			// With the new campaign mod packaging format, we no longer need a versioned path (as the mods contain version compatibility info)
+			return "mods/campaign";
 		case MODS_MULTIPLAY:
 			return version_getVersionedModsFolderPath("multiplay");
 		case MODS_PATHS_MAX:
@@ -178,7 +169,7 @@ static std::array<std::string, MODS_PATHS_MAX> buildFullModsPaths()
 	return result;
 }
 
-static const char* versionedModsPath(MODS_PATHS type)
+const char* versionedModsPath(MODS_PATHS type)
 {
 	static std::array<std::string, MODS_PATHS_MAX> cachedFullModsPaths = buildFullModsPaths();
 	return cachedFullModsPaths[type].c_str();
@@ -1203,18 +1194,25 @@ bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
 }
 #endif
 
-bool buildMapList()
+bool buildMapList(bool campaignOnly)
 {
 	if (!loadLevFile("gamedesc.lev", mod_campaign, false, nullptr))
 	{
 		return false;
 	}
-	loadLevFile("addon.lev", mod_multiplay, false, nullptr);
+	if (!campaignOnly)
+	{
+		loadLevFile("addon.lev", mod_multiplay, false, nullptr);
+	}
 	WZ_Maps.clear();
 	if (!inMemoryMapArchiveMounted && !inMemoryMapArchiveData.empty())
 	{
 		debug(LOG_INFO, "Clearing in-memory map archive (since it isn't currently loaded)");
 		clearInMemoryMapFile(inMemoryMapArchiveData.data());
+	}
+	if (campaignOnly)
+	{
+		return true;
 	}
 	MapFileList realFileNames = listMapFiles();
 	for (auto &realFileName : realFileNames)
@@ -1625,9 +1623,26 @@ bool stageOneShutDown()
 	modelShutdown();
 	pie_TexShutDown();
 
+	bool needsLevReload = (hasOverrideMods() || hasCampaignMods()) && (game.type == LEVEL_TYPE::CAMPAIGN);
 	clearOverrideMods();
+	clearCampaignMods();
+	clearCamTweakOptions();
+
 	// Use mod_multiplay as the default (campaign might have set it to mod_singleplayer)
 	rebuildSearchPath(mod_multiplay, true);
+
+	if (needsLevReload)
+	{
+		// Clear & reload level list
+		levShutDown();
+		levInitialise();
+		pal_Init(); // Update palettes.
+		if (!buildMapList(false))
+		{
+			debug(LOG_FATAL, "Failed to rebuild map / level list?");
+		}
+	}
+
 	pie_TexInit(); // restart it
 
 	initMiscVars();
