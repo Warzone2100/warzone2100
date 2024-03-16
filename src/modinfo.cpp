@@ -283,39 +283,42 @@ WzCampaignModInfo loadCampaignModInfo(const nlohmann::json& j, const std::string
 	}
 	loadBaseModInfo(j, v);
 
-	// campaigns
-	std::vector<std::string> campaignJSONList;
-	auto& campaigns = j.at("campaigns");
-	if (!campaigns.is_array())
+	if (v.type == WzModType::AlternateCampaign)
 	{
-		throw nlohmann::json::type_error::create(302, "campaigns type must be an array, but is " + std::string(campaigns.type_name()), &j);
-	}
-	campaignJSONList = campaigns.get<std::vector<std::string>>();
-	for (const auto& jsonName : campaignJSONList)
-	{
-		std::string fullJSONPath = baseDir + "/campaigns/" + jsonName;
-		auto jsonObj = wzLoadJsonObjectFromFile(fullJSONPath.c_str());
-		if (!jsonObj.has_value())
+		// campaigns
+		std::vector<std::string> campaignJSONList;
+		auto& campaigns = j.at("campaigns");
+		if (!campaigns.is_array())
 		{
-			debug(LOG_ERROR, "Failed to find: campaigns/%s", jsonName.c_str());
-			continue;
+			throw nlohmann::json::type_error::create(302, "campaigns type must be an array, but is " + std::string(campaigns.type_name()), &j);
 		}
-
-		CAMPAIGN_FILE c;
-		try {
-			c = jsonObj.value().get<CAMPAIGN_FILE>();
+		campaignJSONList = campaigns.get<std::vector<std::string>>();
+		for (const auto& jsonName : campaignJSONList)
+		{
+			std::string fullJSONPath = baseDir + "/campaigns/" + jsonName;
+			auto jsonObj = wzLoadJsonObjectFromFile(fullJSONPath.c_str());
+			if (!jsonObj.has_value())
+			{
+				debug(LOG_ERROR, "Failed to find: campaigns/%s", jsonName.c_str());
+				continue;
+			}
+			
+			CAMPAIGN_FILE c;
+			try {
+				c = jsonObj.value().get<CAMPAIGN_FILE>();
+			}
+			catch (const std::exception &e) {
+				// Failed to parse the JSON
+				debug(LOG_ERROR, "JSON document from %s is invalid: %s", jsonName.c_str(), e.what());
+				continue;
+			}
+			
+			v.campaignFiles.push_back(c);
 		}
-		catch (const std::exception &e) {
-			// Failed to parse the JSON
-			debug(LOG_ERROR, "JSON document from %s is invalid: %s", jsonName.c_str(), e.what());
-			continue;
+		if (v.campaignFiles.empty())
+		{
+			throw nlohmann::json::parse_error::create(302, 0, "\"campaigns\" must list one or more valid campaign JSON files", &j);
 		}
-
-		v.campaignFiles.push_back(c);
-	}
-	if (v.campaignFiles.empty())
-	{
-		throw nlohmann::json::parse_error::create(302, 0, "\"campaigns\" must list one or more valid campaign JSON files", &j);
 	}
 
 	// difficultyLevels
