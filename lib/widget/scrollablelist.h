@@ -62,12 +62,14 @@ public:
 	void displayRecursive(WidgetGraphicsContext const& context) override;
 	int getScrollbarWidth() const;
 	void setScrollbarWidth(int newWidth);
+	void setExpandWhenScrollbarInvisible(bool expandWidth);
 	uint16_t getScrollPosition() const;
 	void setScrollPosition(uint16_t newPosition);
 	void scrollToItem(size_t itemNum);
 	int32_t getCurrentYPosOfItem(size_t itemNum);
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
+	void setListTransparentToMouse(bool hasMouseTransparency);
 
 protected:
 	void geometryChanged() override;
@@ -82,6 +84,7 @@ private:
 	PIELIGHT backgroundColor;
 	uint32_t itemSpacing = 0;
 	int scrollbarWidth = 0;
+	bool expandWidthWhenScrollbarInvisible = true;
 
 	uint32_t snappedOffset();
 	void updateLayout();
