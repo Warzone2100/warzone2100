@@ -191,6 +191,10 @@ Copyright: 2007-2008 Warzone 2100 Resurrection Project
            2008-2020 Warzone 2100 Project
 License: GPL-2+
 
+Files: images/wz_original_campaign_banner.png
+Copyright: 2007-2008 "B. V. Edwards" <cathuria>
+License: CC-BY-SA-3.0
+
 Files: data/base/images/flags/flag-*.png
 Copyright: 2016 Bowtie AB
 License: Expat

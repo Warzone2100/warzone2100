@@ -37,6 +37,9 @@ using nonstd::nullopt;
 static uint32_t camNumber = 1;
 static optional<std::string> campaignName = nullopt;
 
+/* cam tweak options */
+static std::unordered_map<std::string, nlohmann::json> camTweakOptions;
+
 void setCampaignNumber(uint32_t number)
 {
 	ASSERT(number < 4, "Campaign Number too high!");
@@ -142,4 +145,29 @@ void from_json(const nlohmann::json& j, CAMPAIGN_FILE& v)
 	{
 		v.captions = it.value().get<WzString>();
 	}
+}
+
+void setCamTweakOptions(std::unordered_map<std::string, nlohmann::json> options)
+{
+	camTweakOptions = options;
+}
+
+void clearCamTweakOptions()
+{
+	camTweakOptions.clear();
+}
+
+const std::unordered_map<std::string, nlohmann::json>& getCamTweakOptions()
+{
+	return camTweakOptions;
+}
+
+nlohmann::json getCamTweakOptionsValue(const std::string& identifier, nlohmann::json defaultValue)
+{
+	auto it = camTweakOptions.find(identifier);
+	if (it == camTweakOptions.end())
+	{
+		return defaultValue;
+	}
+	return it->second;
 }

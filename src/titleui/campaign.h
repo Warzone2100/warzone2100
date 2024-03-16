@@ -24,10 +24,13 @@
 #define __INCLUDED_SRC_TITLEUI_CAMPAIGN_H__
 
 #include "titleui.h"
+#include "../modinfo.h"
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
+
+class WzCampaignSelectorForm;
 
 class WzCampaignSelectorTitleUI : public WzTitleUI
 {
@@ -40,8 +43,14 @@ public:
 
 	std::shared_ptr<WzTitleUI> getParentTitleUI();
 
+protected:
+	friend class WzCampaignSelectorForm;
+	void displayStartOptionsForm(optional<WzCampaignModInfo> modInfo);
+
 private:
 	std::shared_ptr<WzTitleUI> parent;
+	std::shared_ptr<WzCampaignSelectorForm> campaignSelector;
+	std::shared_ptr<WIDGET> displayedPanel;
 };
 
 #endif // __INCLUDED_SRC_TITLEUI_CAMPAIGN_H__

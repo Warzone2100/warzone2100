@@ -4208,6 +4208,23 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<n
 		setOverrideMods(saveGameData.modList);
 	}
 
+	if (game.type == LEVEL_TYPE::CAMPAIGN)
+	{
+		// When loading campaign saves, if there are mods loaded (such as campaign mods),
+		// we *must* reload the search paths now (to ensure that levels in campaign mods can be found)
+		debug(LOG_SAVE, "Rebuilding level list with override mods loaded");
+
+		// Clear & reload level list, rebuilding search paths to include the override mods
+		levShutDown();
+		levInitialise();
+		rebuildSearchPath(mod_campaign, true);
+		pal_Init(); // Update palettes.
+		if (!buildMapList(true))
+		{
+			debug(LOG_FATAL, "Failed to build map / level list?");
+		}
+	}
+
 	// All savegames from version 34 or before are little endian so swap them. All
 	// from version 35, and onward, are already swapped to the native byte-order
 	// by the (de)serialization API
@@ -4506,6 +4523,16 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		bMultiPlayer = save.value("multiplayer").toBool();
 	}
+	if (save.contains("tweakOptions"))
+	{
+		auto tweakOptionsJSON = save.value("tweakOptions").jsonValue();
+		std::unordered_map<std::string, nlohmann::json> tweakOptionsJSONMap;
+		for (auto it : tweakOptionsJSON.items())
+		{
+			tweakOptionsJSONMap[it.key()] = it.value();
+		}
+		setCamTweakOptions(tweakOptionsJSONMap);
+	}
 
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
@@ -4734,6 +4761,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("inactivityMinutes", game.inactivityMinutes);
 	save.setValue("gameTimeLimitMinutes", game.gameTimeLimitMinutes);
 	save.setValue("playerLeaveMode", game.playerLeaveMode);
+	save.setValue("tweakOptions", getCamTweakOptions());
 
 	save.beginArray("scriptSetPlayerDataStrings");
 	for (size_t i = 0; i < NetPlay.scriptSetPlayerDataStrings.size(); ++i)
