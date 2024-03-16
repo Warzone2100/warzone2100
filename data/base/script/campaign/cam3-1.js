@@ -197,7 +197,7 @@ function setupNextMission()
 		camPlayVideos([cam_sounds.missile.launch.missileLaunchAborted, {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
-		setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
+		setMissionTime(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 25 : 30)));
 
 		hackRemoveMessage("CM31_TAR_UPLINK", PROX_MSG, CAM_HUMAN_PLAYER);
 		hackAddMessage("CM31_HIDE_LOC", PROX_MSG, CAM_HUMAN_PLAYER);

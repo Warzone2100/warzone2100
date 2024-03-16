@@ -12,7 +12,7 @@
 //;;
 function camNextLevel(nextLevel)
 {
-	if (__camNeedBonusTime)
+	if (tweakOptions.timerPowerBonus && __camNeedBonusTime)
 	{
 		const __POWER_TIME_REMAINING = getMissionTime();
 		if (__POWER_TIME_REMAINING > 0)

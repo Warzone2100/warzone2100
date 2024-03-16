@@ -21,7 +21,7 @@ camAreaEvent("launchScavAttack", function(droid)
 		morale: 50
 	});
 	// Activate mission timer, unlike the original campaign.
-	if (difficulty !== HARD && difficulty !== INSANE)
+	if (!tweakOptions.classicTimers && difficulty !== HARD && difficulty !== INSANE)
 	{
 		setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 	}
@@ -175,17 +175,25 @@ function eventStartLevel()
 
 	// Give player briefing.
 	camPlayVideos({video: "CMB1_MSG", type: CAMP_MSG, immediate: false});
-	if (difficulty === HARD)
+
+	if (tweakOptions.classicTimers)
 	{
-		setMissionTime(camMinutesToSeconds(40));
-	}
-	else if (difficulty === INSANE)
-	{
-		setMissionTime(camMinutesToSeconds(30));
+		setMissionTime(-1);
 	}
 	else
 	{
-		setMissionTime(-1); // will start mission timer later
+		if (difficulty === HARD)
+		{
+			setMissionTime(camMinutesToSeconds(40));
+		}
+		else if (difficulty === INSANE)
+		{
+			setMissionTime(camMinutesToSeconds(30));
+		}
+		else
+		{
+			setMissionTime(-1); // will start mission timer later
+		}
 	}
 
 	// Feed libcampaign.js with data to do the rest.

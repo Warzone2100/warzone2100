@@ -3,6 +3,17 @@
 // Misc useful stuff.
 ////////////////////////////////////////////////////////////////////////////////
 
+//;; ## camClassicMode()
+//;;
+//;; Returns `true` if classic balance mod is enabled.
+//;;
+//;; @returns {boolean}
+//;;
+function camClassicMode()
+{
+	return modList.indexOf("wz2100_camclassic.wz") !== -1;
+}
+
 //;; ## camDef(something)
 //;;
 //;; Returns `false` if something is JavaScript-undefined, `true` otherwise.
