@@ -2703,19 +2703,22 @@ bool IsPlayerDroidLimitReached(int player)
 	return numDroids >= getMaxDroids(player);
 }
 
+// Return codes for the checkHaltOnMaxUnitsReached function
+enum ReasonForProductionHalt : uint8_t {
+	NO_HALT = 0,           // no limit reached and no halt
+	DROID_LIMIT = 1,       // unit limit reached
+	MISSING_RELAY = 2,     // can't build commander without command relay center
+	COMMANDER_LIMIT = 3,   // commander unit limit reached
+	CONSTRUCTION_LIMIT = 4 // construction unit limit reached
+};
+
 // Check for max number of units reached and halt production.
-// Returns a uint8_t representing the reason production was halted:
-//  0 = no limit reached and no halt
-//  1 = unit limit reached
-//  2 = can't build commander without command relay center
-//  3 = commander unit limit reached
-//  4 = construction unit limit reached
-static uint8_t checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
+static ReasonForProductionHalt checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 {
 	CHECK_STRUCTURE(psStructure);
 
 	char limitMsg[300];
-	uint8_t haltReason = 0;
+	uint8_t haltReason = NO_HALT;
 	int player = psStructure->player;
 
 	DROID_TEMPLATE *templ = psStructure->pFunctionality->factory.psSubject;
@@ -2724,7 +2727,7 @@ static uint8_t checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission
 	// then put production on hold & return - we need a message to be displayed here !!!!!!!
 	if (IsPlayerDroidLimitReached(player))
 	{
-		haltReason = 1;
+		haltReason = DROID_LIMIT;
 		sstrcpy(limitMsg, _("Can't build any more units, Unit Limit Reached — Production Halted"));
 	}
 	else switch (droidTemplateType(templ))
@@ -2732,12 +2735,12 @@ static uint8_t checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission
 		case DROID_COMMAND:
 			if (!structureExists(player, REF_COMMAND_CONTROL, true, isMission))
 			{
-				haltReason = 2;
+				haltReason = MISSING_RELAY;
 				ssprintf(limitMsg, _("Can't build \"%s\" without a Command Relay Center — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			else if (getNumCommandDroids(player) >= getMaxCommanders(player))
 			{
-				haltReason = 3;
+				haltReason = COMMANDER_LIMIT;
 				ssprintf(limitMsg, _("Can't build \"%s\", Commander Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			break;
@@ -2745,7 +2748,7 @@ static uint8_t checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission
 		case DROID_CYBORG_CONSTRUCT:
 			if (getNumConstructorDroids(player) >= getMaxConstructors(player))
 			{
-				haltReason = 4;
+				haltReason = CONSTRUCTION_LIMIT;
 				ssprintf(limitMsg, _("Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			break;
