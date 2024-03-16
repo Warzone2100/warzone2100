@@ -131,7 +131,7 @@ void ScrollableListWidget::updateLayout()
 
 	scrollBar->show(scrollableHeight > listViewHeight);
 
-	if (scrollBar->visible())
+	if (scrollBar->visible() || !expandWidthWhenScrollbarInvisible)
 	{
 		listView->setGeometry(padding.left, padding.top, listViewWidthWithScrollBar, listViewHeight);
 	} else {
@@ -240,6 +240,11 @@ void ScrollableListWidget::setScrollbarWidth(int newWidth)
 	updateLayout();
 }
 
+void ScrollableListWidget::setExpandWhenScrollbarInvisible(bool expandWidth)
+{
+	expandWidthWhenScrollbarInvisible = expandWidth;
+}
+
 uint16_t ScrollableListWidget::getScrollPosition() const
 {
 	return scrollBar->position();
@@ -274,4 +279,9 @@ void ScrollableListWidget::scrollToItem(size_t itemNum)
 	updateLayout();
 	scrollBar->setPosition(getScrollPositionForItem(itemNum));
 	listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
+}
+
+void ScrollableListWidget::setListTransparentToMouse(bool hasMouseTransparency)
+{
+	listView->setTransparentToMouse(hasMouseTransparency);
 }
