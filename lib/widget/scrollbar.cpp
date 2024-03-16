@@ -37,7 +37,14 @@ static void displayScrollBar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 	// pie_UniTransBoxFill(x0, y0, x0 + slider->width(), y0 + slider->height(), WZCOL_DBLUE);
 
 	auto sliderY = slider->numStops > 0 ? (slider->height() - slider->barSize) * slider->pos / slider->numStops: 0;
-	pie_UniTransBoxFill(x0+2, y0 + sliderY+2, x0 + slider->width()-2, y0 + sliderY + slider->barSize-2, slider->isEnabled() ? WZCOL_LBLUE : WZCOL_FORM_DISABLE);
+	int sliderDrawY0 = y0 + sliderY+2;
+	int sliderDrawY1 = y0 + sliderY + std::max<int>(slider->barSize,5)-2;
+	if (sliderDrawY1 - sliderDrawY0 <= 2)
+	{
+		--sliderDrawY0;
+		++sliderDrawY1;
+	}
+	pie_UniTransBoxFill(x0+2, sliderDrawY0, x0 + slider->width()-2, sliderDrawY1, slider->isEnabled() ? WZCOL_LBLUE : WZCOL_FORM_DISABLE);
 }
 
 void ScrollBarWidget::initialize()
