@@ -39,6 +39,7 @@ It may also optionally contain a `mod-banner.png` image, which is used as the ba
 - updatesURL: (string) A URL to which a user can browse to obtain a newer version of your mod, if available
   - We recommend hosting your mod on GitHub, and using GitHub releases. ex: `"https://github.com/<USER>/<MODREPO>/releases/latest"`
 - **campaigns**: (array) An array of campaign json file names (which will be loaded from `campaigns/<filename>` in your mod)
+  - Note: Required for alternateCampaigns. Will be ignored for campaignBalanceMods.
 - **universe**: (string) The "universe" in which your campaign's story takes place
   - Options are:
     - `wz2100` (usually used for campaign balance mods that just provide stats modifications to the "official" Warzone 2100 story)
