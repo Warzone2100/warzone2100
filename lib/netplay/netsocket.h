@@ -100,8 +100,6 @@ Socket *socketListen(unsigned int port);                                ///< Cre
 WZ_DECL_NONNULL(1) Socket *socketAccept(Socket *sock);                  ///< Accepts an incoming Socket connection from a listening Socket.
 WZ_DECL_NONNULL(1) void socketClose(Socket *sock);                      ///< Destroys the Socket.
 Socket *socketOpenAny(const SocketAddress *addr, unsigned timeout);     ///< Opens a Socket, using the first address that works in addr.
-size_t socketArrayOpen(Socket **sockets, size_t maxSockets, const SocketAddress *addr, unsigned timeout);  ///< Opens up to maxSockets Sockets, of the types listed in addr.
-void socketArrayClose(Socket **sockets, size_t maxSockets);             ///< Closes all Sockets in the array.
 WZ_DECL_NONNULL(1) bool socketHasIPv4(const Socket *sock);
 WZ_DECL_NONNULL(1) bool socketHasIPv6(const Socket *sock);
 

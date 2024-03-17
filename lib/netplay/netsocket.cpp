@@ -1527,29 +1527,6 @@ Socket *socketOpenAny(const SocketAddress *addr, unsigned timeout)
 	return ret;
 }
 
-size_t socketArrayOpen(Socket **sockets, size_t maxSockets, const SocketAddress *addr, unsigned timeout)
-{
-	size_t i = 0;
-	while (i < maxSockets && addr != nullptr)
-	{
-		if (addr->ai_family == AF_INET || addr->ai_family == AF_INET6)
-		{
-			sockets[i] = socketOpen(addr, timeout);
-			i += sockets[i] != nullptr;
-		}
-
-		addr = addr->ai_next;
-	}
-	std::fill(sockets + i, sockets + maxSockets, (Socket *)nullptr);
-	return i;
-}
-
-void socketArrayClose(Socket **sockets, size_t maxSockets)
-{
-	std::for_each(sockets, sockets + maxSockets, socketClose);     // Close any open sockets.
-	std::fill(sockets, sockets + maxSockets, (Socket *)nullptr);      // Set the pointers to NULL.
-}
-
 WZ_DECL_NONNULL(1) bool socketHasIPv4(const Socket *sock)
 {
 	if (sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
