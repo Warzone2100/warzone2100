@@ -2446,7 +2446,16 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	         -(psFeature->pos.y)
 	     );
 
-	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psFeature->rot.direction), glm::vec3(0.f, 1.f, 0.f));
+	Vector3i rotation;
+	/* Get all the pitch,roll,yaw info */
+	rotation.y = -psFeature->rot.direction;
+	rotation.x = psFeature->rot.pitch;
+	rotation.z = psFeature->rot.roll;
+
+	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) *
+		glm::rotate(UNDEG(rotation.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(rotation.z), glm::vec3(0.f, 0.f, 1.f));
 
 	if (psFeature->psStats->subType == FEAT_SKYSCRAPER)
 	{
