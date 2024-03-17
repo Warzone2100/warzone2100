@@ -180,6 +180,62 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 	return buildFeature(psStats, x, y, FromSave, id);
 }
 
+/* Get pitch and roll from direction and tile data */
+static void updateFeatureOrientation(FEATURE *psFeature)
+{
+	int32_t hx0, hx1, hy0, hy1;
+	int newPitch, deltaPitch; //, pitchLimit;
+	int32_t dzdx, dzdy, dzdv, dzdw;
+	const int d = 20;
+	int32_t vX, vY;
+
+	// Find the height of 4 points around the feature center.
+	//    hy0
+	// hx0 * hx1      (* = feature)
+	//    hy1
+	hx1 = map_Height(psFeature->pos.x + d, psFeature->pos.y);
+	hx0 = map_Height(MAX(0, psFeature->pos.x - d), psFeature->pos.y);
+	hy1 = map_Height(psFeature->pos.x, psFeature->pos.y + d);
+	hy0 = map_Height(psFeature->pos.x, MAX(0, psFeature->pos.y - d));
+
+	//update height in case in the bottom of a trough
+	psFeature->pos.z = MAX(psFeature->pos.z, (hx0 + hx1) / 2);
+	psFeature->pos.z = MAX(psFeature->pos.z, (hy0 + hy1) / 2);
+
+	if (psFeature->psStats->subType == FEAT_TREE)
+	{
+		// Do not rotate or pitch - trees look weird if they aren't pointing up
+		// FUTURE TODO: Ensure that no tree geometry is hovering above the terrain when placed on an aggressive slope, while still ensuring it points up, by burying the base a bit if needed?
+		return;
+	}
+	if (psFeature->psStats->subType == FEAT_SKYSCRAPER)
+	{
+		// Do not rotate or pitch - skyscrapers should also point up
+		// FUTURE TODO: Possibly stretch the base of the skyscraper if needed?
+		return;
+	}
+
+	// Vector of length 65536 pointing in direction feature is facing.
+	vX = iSin(psFeature->rot.direction);
+	vY = iCos(psFeature->rot.direction);
+
+	// Calculate pitch of ground.
+	dzdx = hx1 - hx0;                                    // 2*d*∂z(x, y)/∂x       of ground
+	dzdy = hy1 - hy0;                                    // 2*d*∂z(x, y)/∂y       of ground
+	dzdv = dzdx * vX + dzdy * vY;                        // 2*d*∂z(x, y)/∂v << 16 of ground, where v is the direction the droid is facing.
+	newPitch = iAtan2(dzdv, (2 * d) << 16);              // pitch = atan(∂z(x, y)/∂v)/2π << 16
+
+	deltaPitch = angleDelta(newPitch - psFeature->rot.pitch);
+
+	// Update pitch.
+	psFeature->rot.pitch += deltaPitch;
+
+	// Calculate and update roll of ground (not taking pitch into account, but good enough).
+	dzdw = dzdx * vY - dzdy * vX;				// 2*d*∂z(x, y)/∂w << 16 of ground, where w is at right angles to the direction the droid is facing.
+	psFeature->rot.roll = iAtan2(dzdw, (2 * d) << 16);		// pitch = atan(∂z(x, y)/∂w)/2π << 16
+}
+
+
 /* Create a feature on the map */
 FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
 {
@@ -291,7 +347,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 			}
 		}
 	}
-	psFeature->pos.z = map_TileHeight(b.map.x, b.map.y);//jps 18july97
+	psFeature->pos.z = map_TileHeight(psFeature->pos.x, psFeature->pos.y);//jps 18july97
+	updateFeatureOrientation(psFeature);
 
 	return psFeature;
 }
