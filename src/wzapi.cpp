@@ -3715,14 +3715,14 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			// dozens of buildings one at a time!
 			for (STRUCTURE *psCurr : apsStructLists[player])
 			{
-				if (psStats == psCurr->pStructureType && psStats->upgrade[player].hitpoints < value)
+				if (psStats == psCurr->pStructureType && (!bMultiPlayer || (bMultiPlayer && psStats->upgrade[player].hitpoints < value)))
 				{
 					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
 				}
 			}
 			for (STRUCTURE *psCurr : mission.apsStructLists[player])
 			{
-				if (psStats == psCurr->pStructureType && psStats->upgrade[player].hitpoints < value)
+				if (psStats == psCurr->pStructureType && (!bMultiPlayer || (bMultiPlayer && psStats->upgrade[player].hitpoints < value)))
 				{
 					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
 				}
