@@ -70,6 +70,7 @@ struct FEATURE : public BASE_OBJECT
 	~FEATURE();
 
 	FEATURE_STATS const *psStats;
+	float foundationDepth;           ///< Depth of features's foundation		// DISPLAY-ONLY
 
 	inline Vector2i size() const { return psStats->size(); }
 };

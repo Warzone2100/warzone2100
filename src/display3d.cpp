@@ -2484,12 +2484,24 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 		/* these cast a shadow */
 		pieFlags = pie_SHADOW;
 	}
+
 	iIMDBaseShape *imd = psFeature->sDisplay.imd;
 	if (imd)
 	{
+		iIMDShape *strImd = imd->displayModel();
+
+		float stretchDepth = 0.f;
+		if (!(strImd->flags & iV_IMD_NOSTRETCH))
+		{
+			if (psFeature->psStats->subType == FEAT_TREE) // for now, only do this for trees
+			{
+				stretchDepth = psFeature->pos.z - psFeature->foundationDepth;
+			}
+		}
+
 		/* Translate the feature  - N.B. We can also do rotations here should we require
 		buildings to face different ways - Don't know if this is necessary - should be IMO */
-		pie_Draw3DShape(imd->displayModel(), 0, 0, brightness, pieFlags, 0, modelMatrix, viewMatrix);
+		pie_Draw3DShape(strImd, 0, 0, brightness, pieFlags, 0, modelMatrix, viewMatrix, stretchDepth);
 	}
 
 	setScreenDispWithPerspective(&psFeature->sDisplay, perspectiveViewMatrix * modelMatrix);
