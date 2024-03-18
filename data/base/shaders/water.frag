@@ -65,10 +65,15 @@ void main()
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
-		// Return fragment color
-		fragColor = mix(fragColor, fogColor, fogFactor);
+		if (fogFactor >= 1.f)
+		{
+			discard;
+		}
+
+		fogFactor = 1.0 - clamp(fogFactor, 0.0, 1.0);
+		fragColor.rgb *= fogFactor; // premultiply by fogFactor as alpha
+		fragColor.a = fogFactor;
 	}
 
 	FragColor = fragColor;

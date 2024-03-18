@@ -1269,7 +1269,7 @@ void gl_pipeline_state_object::bind()
 
 		case REND_MULTIPLICATIVE:
 			glEnable(GL_BLEND);
-			glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+			glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 			break;
 
 		case REND_PREMULTIPLIED:
