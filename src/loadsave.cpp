@@ -59,6 +59,7 @@
 #include "clparse.h"
 #include "ingameop.h"
 #include "game.h"
+#include "campaigninfo.h"
 #include "version.h"
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
@@ -1128,7 +1129,7 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 	deleteSaveGame_classic(savefile);
 }
 
-bool autoSave()
+bool autoSave(bool force)
 {
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating/autogames
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
@@ -1138,6 +1139,11 @@ bool autoSave()
 	}
 	// Bail out if we're running a replay
 	if (NETisReplay())
+	{
+		return false;
+	}
+	// Bail out if autosaves only mode and not forced
+	if (getCamTweakOption_AutosavesOnly() && !force)
 	{
 		return false;
 	}

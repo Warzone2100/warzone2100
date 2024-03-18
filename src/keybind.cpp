@@ -77,6 +77,7 @@
 #include "game.h"
 #include "droid.h"
 #include "spectatorwidgets.h"
+#include "campaigninfo.h"
 
 #include "activity.h"
 
@@ -2543,6 +2544,11 @@ void kf_QuickSave()
 	{
 		return;
 	}
+	if (getCamTweakOption_AutosavesOnly())
+	{
+		console(_("QuickSave not allowed in Autosaves-Only mode"));
+		return;
+	}
 
 	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
 	const char *quickSaveFolder = bMultiPlayer ? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
@@ -2570,6 +2576,11 @@ void kf_QuickLoad()
 	}
 	if (InGameOpUp || isInGamePopupUp)
 	{
+		return;
+	}
+	if (getCamTweakOption_AutosavesOnly())
+	{
+		console(_("QuickLoad not allowed in Autosaves-Only mode"));
 		return;
 	}
 
