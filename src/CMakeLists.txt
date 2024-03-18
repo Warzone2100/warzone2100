@@ -299,6 +299,14 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 		target_link_options(warzone2100 PRIVATE "SHELL:--preload-file ${_font_file}@/data/fonts/")
 	endforeach()
 
+	# Bundle built-in mods
+	foreach(_mod_file ${DATA_MODS_FILES})
+		file(RELATIVE_PATH _mods_file_relative_path "${DATA_MODS_BASE_DIR}" "${_mod_file}")
+		get_filename_component(_mods_file_subdir_path "${_mods_file_relative_path}" DIRECTORY)
+		message(STATUS "COPYING MOD FILE: mods/${_mods_file_relative_path}")
+		target_link_options(warzone2100 PRIVATE "SHELL:--preload-file ${_mod_file}@/data/mods/${_mods_file_subdir_path}")
+	endforeach()
+
 	# Bundle the translations
 	if(ENABLE_NLS AND TARGET translations AND DEFINED wz2100_translations_LOCALE_FOLDER)
 		if (NOT WZ_LOCALEDIR_ISABSOLUTE)
@@ -477,12 +485,20 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 			SOURCE ${_music_file}
 			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/music/${_music_file_subdir_path}")
 	endforeach()
+	foreach(_mod_file ${DATA_MODS_FILES})
+		file(RELATIVE_PATH _mods_file_relative_path "${DATA_MODS_BASE_DIR}" "${_mod_file}")
+		get_filename_component(_mods_file_subdir_path "${_mods_file_relative_path}" DIRECTORY)
+		set_property(
+			SOURCE ${_mod_file}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/mods/${_mods_file_subdir_path}")
+	endforeach()
+
 	set_source_files_properties(
-		${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} PROPERTIES
+		${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} ${DATA_MODS_FILES} PROPERTIES
 		GENERATED TRUE
 		XCODE_LAST_KNOWN_FILE_TYPE "file"
 	)
-	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES})
+	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} ${DATA_MODS_FILES})
 
 	# Add the icon
 	set(_macos_app_icon "${CMAKE_CURRENT_SOURCE_DIR}/../macosx/Resources/Warzone.icns")
