@@ -328,9 +328,9 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_nexusResClassic, CAM_NEXUS);
-		camEnableRes(mis_gammaAllyResClassic, MIS_GAMMA_PLAYER);
-		camEnableRes(mis_nexusResClassic, MIS_GAMMA_PLAYER); //They get even more research.
+		camClassicResearch(mis_nexusResClassic, CAM_NEXUS);
+		camClassicResearch(mis_gammaAllyResClassic, MIS_GAMMA_PLAYER);
+		camClassicResearch(mis_nexusResClassic, MIS_GAMMA_PLAYER); //They get even more research.
 	}
 	else
 	{

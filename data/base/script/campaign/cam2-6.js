@@ -140,7 +140,7 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+		camClassicResearch(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
 
 		camSetArtifacts({
 			"COCyborgFactory-Arti": { tech: "R-Wpn-Rocket07-Tank-Killer" },

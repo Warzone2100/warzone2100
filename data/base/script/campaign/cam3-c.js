@@ -197,8 +197,8 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_nexusResClassic, CAM_NEXUS);
-		camEnableRes(mis_gammaAllyResClassic, MIS_GAMMA_PLAYER);
+		camClassicResearch(mis_nexusResClassic, CAM_NEXUS);
+		camClassicResearch(mis_gammaAllyResClassic, MIS_GAMMA_PLAYER);
 
 		camSetArtifacts({
 			"NXbase1HeavyFacArti": { tech: "R-Vehicle-Body07" }, //retribution

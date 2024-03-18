@@ -295,7 +295,7 @@ function cam3Setup()
 
 		if (tweakOptions.camclassic_Balance32)
 		{
-			camEnableRes(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
+			camClassicResearch(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
 			completeResearch("CAM3RESEARCH-UNDO", CAM_HUMAN_PLAYER);
 			//Nexus has no research in 3.2

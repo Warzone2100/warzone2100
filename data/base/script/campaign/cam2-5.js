@@ -119,7 +119,7 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+		camClassicResearch(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
 
 		camSetArtifacts({
 			"NuclearReactor": { tech: "R-Struc-Power-Upgrade01" },

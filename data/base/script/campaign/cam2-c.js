@@ -294,7 +294,7 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+		camClassicResearch(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
 
 		camSetArtifacts({
 			"rippleRocket": { tech: "R-Wpn-Rocket06-IDF" },

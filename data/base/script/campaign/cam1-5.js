@@ -214,8 +214,8 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
-		camEnableRes(mis_scavengerResClassic, CAM_SCAV_7);
+		camClassicResearch(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+		camClassicResearch(mis_scavengerResClassic, CAM_SCAV_7);
 
 		camSetArtifacts({
 			"NPCyborgFactory": { tech: "R-Struc-Factory-Upgrade03" },
