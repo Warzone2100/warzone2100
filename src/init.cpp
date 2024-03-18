@@ -1788,12 +1788,6 @@ bool stageTwoShutDown()
 		return false;
 	}
 
-
-	if (!ShutdownRadar())
-	{
-		return false;
-	}
-
 	interfaceShutDown();
 
 	cmdDroidShutDown();
@@ -1966,6 +1960,11 @@ bool stageThreeShutDown()
 
 	// make sure any button tips are gone.
 	widgReset();
+
+	if (!ShutdownRadar())
+	{
+		debug(LOG_FATAL, "Failed to shutdown radar");
+	}
 
 	audio_StopAll();
 
