@@ -580,6 +580,8 @@ if(WZ_INCLUDE_VIDEOS)
 	endif()
 endif()
 
+add_subdirectory(mods mods_staging)
+
 ADD_CUSTOM_TARGET(data ALL
 	DEPENDS data_base data_mp)
 if(TARGET data_terrain_overrides_classic)
@@ -607,6 +609,23 @@ foreach(font_file ${wz2100_fonts_FILES})
 		TARGET data
 		POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${font_file}" "${CMAKE_CURRENT_BINARY_DIR}/fonts"
+		VERBATIM
+	)
+endforeach()
+
+# Copy mod files to build directory to support IDE build+run (from the build dir) scenarios
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/mods")
+	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/mods")
+endif()
+add_dependencies(data data_mods)
+foreach(mod_file ${wz2100_mods_FILES})
+	file(RELATIVE_PATH _mods_file_relative_path "${CMAKE_CURRENT_BINARY_DIR}/mods_staging" "${mod_file}")
+	get_filename_component(_mods_file_subdir_path "${_mods_file_relative_path}" DIRECTORY)
+	get_filename_component(_mods_file_name "${_mods_file_relative_path}" NAME)
+    add_custom_command(
+		TARGET data
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${mod_file}" "${CMAKE_CURRENT_BINARY_DIR}/mods/${_mods_file_subdir_path}/${_mods_file_name}"
 		VERBATIM
 	)
 endforeach()
@@ -647,6 +666,15 @@ if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 		get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
 		install(FILES ${_music_file}
 			DESTINATION "${WZ_DATADIR}/music/${_music_file_subdir_path}"
+			COMPONENT Data
+		)
+	endforeach()
+
+	foreach(_mod_file ${wz2100_mods_FILES})
+		file(RELATIVE_PATH _mods_file_relative_path "${CMAKE_CURRENT_BINARY_DIR}/mods_staging" "${_mod_file}")
+		get_filename_component(_mods_file_subdir_path "${_mods_file_relative_path}" DIRECTORY)
+		install(FILES ${_mod_file}
+			DESTINATION "${WZ_DATADIR}/mods/${_mods_file_subdir_path}"
 			COMPONENT Data
 		)
 	endforeach()
@@ -703,3 +731,5 @@ set(DATA_TERRAIN_OVERRIDES_FILES ${DATA_TERRAIN_OVERRIDES_FILES} PARENT_SCOPE)
 set(DATA_FONTS ${wz2100_fonts_FILES} PARENT_SCOPE)
 set(DATA_MUSIC_FILES ${DATA_MUSIC_FILES} PARENT_SCOPE)
 set(DATA_MUSIC_BASE_SOURCEDIR "${CMAKE_CURRENT_SOURCE_DIR}/music" PARENT_SCOPE)
+set(DATA_MODS_FILES ${wz2100_mods_FILES} PARENT_SCOPE)
+set(DATA_MODS_BASE_DIR "${CMAKE_CURRENT_BINARY_DIR}/mods_staging" PARENT_SCOPE)
