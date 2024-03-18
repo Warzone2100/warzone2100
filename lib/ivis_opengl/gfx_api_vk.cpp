@@ -1279,9 +1279,9 @@ std::array<vk::PipelineColorBlendAttachmentState, 1> VkPSO::to_vk(const REND_MOD
 				.setBlendEnable(true)
 				.setColorBlendOp(vk::BlendOp::eAdd)
 				.setAlphaBlendOp(vk::BlendOp::eAdd)
-				.setSrcColorBlendFactor(vk::BlendFactor::eZero)
-				.setSrcAlphaBlendFactor(vk::BlendFactor::eZero)
-				.setDstColorBlendFactor(vk::BlendFactor::eSrcColor)
+				.setSrcColorBlendFactor(vk::BlendFactor::eDstColor)
+				.setSrcAlphaBlendFactor(vk::BlendFactor::eDstAlpha)
+				.setDstColorBlendFactor(vk::BlendFactor::eOneMinusSrcAlpha)
 				.setDstAlphaBlendFactor(vk::BlendFactor::eOneMinusSrcAlpha)
 				.setColorWriteMask(vk_color_mask)
 		};
