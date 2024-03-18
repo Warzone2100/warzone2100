@@ -140,9 +140,9 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
-		camEnableRes(mis_alphaResearchNewClassic, MIS_TRANSPORT_TEAM_PLAYER);
-		camEnableRes(mis_playerResBetaClassic, MIS_TRANSPORT_TEAM_PLAYER);
+		camClassicResearch(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+		camClassicResearch(mis_alphaResearchNewClassic, MIS_TRANSPORT_TEAM_PLAYER);
+		camClassicResearch(mis_playerResBetaClassic, MIS_TRANSPORT_TEAM_PLAYER);
 	}
 	else
 	{

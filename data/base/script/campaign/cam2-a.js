@@ -266,7 +266,7 @@ function cam2Setup()
 
 		if (tweakOptions.camclassic_Balance32)
 		{
-			camEnableRes(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
+			camClassicResearch(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
 			//The Collective have no research in 3.2
 		}

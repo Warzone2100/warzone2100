@@ -129,7 +129,7 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
+		camClassicResearch(mis_collectiveResClassic, CAM_THE_COLLECTIVE);
 
 		camSetArtifacts({
 			"COHeavyFac-Arti-b2": { tech: "R-Wpn-Cannon5" },

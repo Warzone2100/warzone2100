@@ -268,7 +268,7 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_nexusResClassic, CAM_NEXUS);
+		camClassicResearch(mis_nexusResClassic, CAM_NEXUS);
 	}
 	else
 	{

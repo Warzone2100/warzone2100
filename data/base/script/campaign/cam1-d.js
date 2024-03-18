@@ -175,7 +175,7 @@ function eventStartLevel()
 
 	if (camClassicMode())
 	{
-		camEnableRes(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
+		camClassicResearch(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
 	}
 	else
 	{

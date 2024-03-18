@@ -60,6 +60,31 @@ function camCompleteRequiredResearch(researchIds, playerId)
 	}
 }
 
+//;; ## camClassicResearch(researchIds, playerId)
+//;;
+//;; Grants research from the given list to player based on the "classic balance" variant.
+//;;
+//;; @param {string[]} researchIds
+//;; @param {number} playerId
+//;; @returns {void}
+//;;
+function camClassicResearch(researchIds, playerId)
+{
+	if (!camClassicMode())
+	{
+		return;
+	}
+	if (tweakOptions.camclassic_Balance32)
+	{
+		camEnableRes(researchIds, playerId);
+	}
+	else
+	{
+		camCompleteRequiredResearch(researchIds, playerId);
+	}
+}
+
+
 //////////// privates
 
 //granted shortly after mission start to give enemy players instant droid production.
