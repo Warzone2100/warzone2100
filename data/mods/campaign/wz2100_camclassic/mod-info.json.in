@@ -1,0 +1,48 @@
+{
+    "name": "Classic Balance",
+    "author": "Warzone 2100",
+    "type": "campaignBalanceMod",
+    "license": "GPL-2.0-or-later",
+    "minVersionSupported": "@MODINFO_LATEST_VERSION@",
+    "maxVersionTested": "@MODINFO_LATEST_VERSION@",
+    "description": {
+        "en": "\"Classic\" campaign balance"
+    },
+    "universe": "wz2100",
+    "difficultyLevels": "default",
+    "camTweakOptions": [
+        {
+            "id": "timerPowerBonus",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "classicTimers",
+            "default": true,
+            "userEditable": true
+        },
+        {
+            "id": "playerUnitCap40",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "autosavesOnly",
+            "default": false,
+            "userEditable": true
+        }
+    ],
+    "customTweakOptions": [
+        {
+            "id": "camclassic_Balance32",
+            "type": "bool",
+            "default": false,
+            "displayName": {
+                "en": "3.2.x Balance"
+            },
+            "description": {
+                "en": "3.2.x series balance by emulating research bugs"
+            }
+        }
+    ]
+}
