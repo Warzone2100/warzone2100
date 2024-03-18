@@ -288,24 +288,25 @@ function cam3Setup()
 
 	if (camClassicMode())
 	{
-		// Research Alpha tree (that is available).
 		camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_HUMAN_PLAYER);
-		camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_NEXUS);
-		// Undo the stats according to the contents within mis_betaStartingResearch.
-		completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
-		completeResearch("CAM2RESEARCH-UNDO", CAM_NEXUS);
-		// Research Beta tree (that is available).
 		camCompleteRequiredResearch(mis_betaResearchNewClassic, CAM_HUMAN_PLAYER);
-		camCompleteRequiredResearch(mis_betaResearchNewClassic, CAM_NEXUS);
-		// Undo the stats according to the contents within mis_betaStartingResearch.
-		completeResearch("CAM3RESEARCH-UNDO", CAM_HUMAN_PLAYER);
-		completeResearch("CAM3RESEARCH-UNDO", CAM_NEXUS);
-		// Give bonus transition to Beta tech to the player.
 		camCompleteRequiredResearch(mis_playerResBetaClassic, CAM_HUMAN_PLAYER);
 		camCompleteRequiredResearch(mis_playerResGammaClassic, CAM_HUMAN_PLAYER);
-		// Research Gamma baseline tech.
-		camEnableRes(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
-		camEnableRes(nexusResClassic, CAM_NEXUS);
+
+		if (tweakOptions.camclassic_Balance32)
+		{
+			camEnableRes(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
+			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
+			completeResearch("CAM3RESEARCH-UNDO", CAM_HUMAN_PLAYER);
+			//Nexus has no research in 3.2
+		}
+		else
+		{
+			camCompleteRequiredResearch(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
+			camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_NEXUS);
+			camCompleteRequiredResearch(mis_betaResearchNewClassic, CAM_NEXUS);
+			camCompleteRequiredResearch(nexusResClassic, CAM_NEXUS);
+		}
 
 		enableResearch("R-Wpn-MG-Damage08", CAM_HUMAN_PLAYER);
 	}
