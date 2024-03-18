@@ -261,17 +261,21 @@ function cam2Setup()
 
 	if (camClassicMode())
 	{
-		// Research Alpha tree (that is available).
 		camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_HUMAN_PLAYER);
-		camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_THE_COLLECTIVE);
-		// Undo the stats according to the contents within mis_betaStartingResearch.
-		completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
-		completeResearch("CAM2RESEARCH-UNDO", CAM_THE_COLLECTIVE);
-		// Give bonus transition to Beta tech to the player.
 		camCompleteRequiredResearch(mis_playerResBetaClassic, CAM_HUMAN_PLAYER);
-		// Research Beta baseline tech.
-		camEnableRes(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
-		camEnableRes(collectiveResClassic, CAM_THE_COLLECTIVE);
+
+		if (tweakOptions.camclassic_Balance32)
+		{
+			camEnableRes(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
+			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
+			//The Collective have no research in 3.2
+		}
+		else
+		{
+			camCompleteRequiredResearch(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
+			camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_THE_COLLECTIVE);
+			camCompleteRequiredResearch(collectiveResClassic, CAM_THE_COLLECTIVE);
+		}
 
 		enableResearch("R-Wpn-Cannon-Accuracy02", CAM_HUMAN_PLAYER);
 	}
