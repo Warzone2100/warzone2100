@@ -109,6 +109,7 @@
 #include "activity.h"
 #include "stdinreader.h"
 #include "gamehistorylogger.h"
+#include "campaigninfo.h"
 #if defined(ENABLE_DISCORD)
 #include "integrations/wzdiscordrpc.h"
 #endif
@@ -185,6 +186,7 @@ char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
 char	FavoriteStructuresPath[PATH_MAX];
+static uint32_t forcedAutosaveTime = 0;
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
@@ -988,6 +990,11 @@ static void startGameLoop()
 	triggerEvent(TRIGGER_START_LEVEL);
 	screen_disableMapPreview();
 
+	if (!bMultiPlayer && getCamTweakOption_AutosavesOnly())
+	{
+		forcedAutosaveTime = gameTime + 1000; //Really just to prevent Intel videos messages from not getting saved if run immediately.
+	}
+
 	GameStoryLogger::instance().logStartGame();
 
 	auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
@@ -1084,6 +1091,7 @@ static void stopGameLoop()
 	GameStoryLogger::instance().reset();
 
 	gameInitialised = false;
+	forcedAutosaveTime = 0;
 }
 
 
@@ -1314,6 +1322,12 @@ void mainLoop()
 				break;
 			}
 		realTimeUpdate(); // Update realTime.
+	}
+
+	if ((forcedAutosaveTime != 0) && (gameTime > forcedAutosaveTime))
+	{
+		forcedAutosaveTime = 0;
+		autoSave(true);
 	}
 
 	wzApplyCursor();

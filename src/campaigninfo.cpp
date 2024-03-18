@@ -171,3 +171,13 @@ nlohmann::json getCamTweakOptionsValue(const std::string& identifier, nlohmann::
 	}
 	return it->second;
 }
+
+bool getCamTweakOption_AutosavesOnly()
+{
+	auto val = getCamTweakOptionsValue("autosavesOnly", false);
+	if (!val.is_boolean())
+	{
+		return false;
+	}
+	return val.get<bool>();
+}

@@ -49,6 +49,7 @@
 #include "qtscript.h"		// for bInTutorial
 #include "radar.h"
 #include "seqdisp.h"
+#include "campaigninfo.h"
 #include "hci/groups.h"
 #include "screens/netpregamescreen.h"
 
@@ -256,9 +257,12 @@ static bool _intAddInGameOptions()
 			// add 'load'
 			addIGTextButton(INTINGAMEOP_LOAD_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
 			row++;
-			// add 'save'
-			addIGTextButton(INTINGAMEOP_SAVE_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
-			row++;
+			if (!getCamTweakOption_AutosavesOnly())
+			{
+				// add 'save'
+				addIGTextButton(INTINGAMEOP_SAVE_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+				row++;
+			}
 		}
 	}
 
