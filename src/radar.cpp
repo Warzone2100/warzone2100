@@ -248,7 +248,10 @@ bool InitRadar()
 	colRadarAlly = WZCOL_YELLOW;
 	colRadarEnemy = WZCOL_RED;
 	colRadarMe = WZCOL_WHITE;
-	pRadarWidget = std::make_shared<RadarWidget>();
+	if (!pRadarWidget)
+	{
+		pRadarWidget = std::make_shared<RadarWidget>();
+	}
 	return true;
 }
 
@@ -287,8 +290,11 @@ bool ShutdownRadar()
 	free(radarOverlayBuffer);
 	radarOverlayBuffer = nullptr;
 	frameSkip = 0;
-	psWScreen->psForm->detach(pRadarWidget);
-	pRadarWidget.reset();
+	if (pRadarWidget)
+	{
+		psWScreen->psForm->detach(pRadarWidget);
+		pRadarWidget.reset();
+	}
 	return true;
 }
 
