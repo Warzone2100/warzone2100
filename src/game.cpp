@@ -4208,7 +4208,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<n
 		setOverrideMods(saveGameData.modList);
 	}
 
-	if (game.type == LEVEL_TYPE::CAMPAIGN)
+	if (game.type == LEVEL_TYPE::CAMPAIGN && hasOverrideMods())
 	{
 		// When loading campaign saves, if there are mods loaded (such as campaign mods),
 		// we *must* reload the search paths now (to ensure that levels in campaign mods can be found)
