@@ -173,7 +173,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: (!camClassicMode()) ? [cTempl.commrp, cTempl.comatt, cTempl.comhpv] : [cTempl.comct, cTempl.comatt, cTempl.comhpv]
+			templates: (!camClassicMode()) ? [cTempl.commrp, cTempl.comatt, cTempl.comhpv] : [cTempl.commc, cTempl.comatt, cTempl.comhpv]
 		},
 		"COCyborgFactoryL": {
 			assembly: "COCyborgFactoryLAssembly",
