@@ -60,6 +60,83 @@ struct LoadCampaingModsRequest
 	LoadCampaignModsCompletion completionHandler;
 };
 
+static bool validateCampaignMod(WzCampaignModInfo& modInfo, const std::string& baseDir, const std::string& realModFilePathAndName)
+{
+	// Verify the name is not empty
+	if (modInfo.name.empty())
+	{
+		debug(LOG_ERROR, "Campaign mod missing valid name field: %s", realModFilePathAndName.c_str());
+		return false;
+	}
+	// Verify the author is not empty
+	if (modInfo.author.empty())
+	{
+		debug(LOG_ERROR, "Campaign mod missing valid author field: %s", realModFilePathAndName.c_str());
+		return false;
+	}
+	// Verify the license is not empty
+	if (modInfo.license.empty())
+	{
+		debug(LOG_ERROR, "Campaign mod missing valid license field: %s", realModFilePathAndName.c_str());
+		return false;
+	}
+	// Warn if the license isn't recognized (from the list of suggested examples)
+	const std::unordered_set<std::string> RecognizedSPDXLicenseExpressions = {
+		"CC-BY-4.0 OR GPL-2.0-or-later",
+		"CC-BY-3.0 OR GPL-2.0-or-later",
+		"GPL-2.0-or-later",
+		"CC0-1.0"
+	};
+	if (RecognizedSPDXLicenseExpressions.count(modInfo.license) == 0)
+	{
+		debug(LOG_INFO, "Campaign mod has license \"%s\", consider one of the recommended options (ex. \"GPL-2.0-or-later\"): %s", modInfo.license.c_str(), realModFilePathAndName.c_str());
+		// not fatal validation failure - continue
+	}
+
+	// Verify original campaign balance mods
+	if (modInfo.type == WzModType::CampaignBalanceMod)
+	{
+		// It is expected that original campaign balance mods only modify the following directories:
+		// - stats/
+		// - script/
+		// Anything else should be packaged as an AlternateCampaign
+
+		bool invalidCampaignBalanceModContents = false;
+		WZ_PHYSFS_enumerateFiles(baseDir.c_str(), [&](const char* file) -> bool {
+			if (file == nullptr) { return true; }
+			if (*file == '\0') { return true; }
+			std::string realFileName_platformIndependent = baseDir + "/" + file;
+			bool isDirectory = WZ_PHYSFS_isDirectory(realFileName_platformIndependent.c_str()) != 0;
+			if (isDirectory)
+			{
+				if (strcmp(file, "stats") == 0)
+				{
+					return true; // allowed - continue enumeration
+				}
+				else if (strcmp(file, "script") == 0)
+				{
+					return true; // allowed - continue enumeration
+				}
+				else
+				{
+					// overriding other directories is not allowed
+					invalidCampaignBalanceModContents = true;
+					return false;
+				}
+			}
+			return true; // continue enumeration
+		});
+
+		if (invalidCampaignBalanceModContents)
+		{
+			debug(LOG_INFO, "Campaign balance mod contains unsupported contents - treating as alternate campaign: %s", realModFilePathAndName.c_str());
+			modInfo.type = WzModType::AlternateCampaign;
+		}
+	}
+
+	return true;
+}
+
 static int loadCampaignModsAsyncImpl(void* data)
 {
 	LoadCampaingModsRequest* pRequestInfo = (LoadCampaingModsRequest*)data;
@@ -112,17 +189,20 @@ static int loadCampaignModsAsyncImpl(void* data)
 			modInfo.value().modFilename = file;
 			modInfo.value().modPath = std::string(pRealDirStr) + basePathFull_PlatformDependent;
 
-			// Verify original campaign balance mods
-			if (modInfo.value().type == WzModType::CampaignBalanceMod)
-			{
-				// TODO: Various checks for permitted files
-			}
-
 			// attempt to load the mod_banner.png data, if it exists
 			std::string modBannerPath = "WZTempProcessCamMod/mod-banner.png";
 			if (PHYSFS_exists(modBannerPath.c_str()) != 0)
 			{
 				loadFileToBufferVectorT<unsigned char>(modBannerPath.c_str(), modInfo.value().modBannerPNGData, false, false);
+			}
+		}
+
+		// Validate the mod info
+		if (modInfo.has_value())
+		{
+			if (!validateCampaignMod(modInfo.value(), "WZTempProcessCamMod", realFilePathAndName))
+			{
+				modInfo.reset(); // not loadable
 			}
 		}
 
