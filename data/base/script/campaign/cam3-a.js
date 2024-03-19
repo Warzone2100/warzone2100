@@ -308,6 +308,7 @@ function cam3Setup()
 			camCompleteRequiredResearch(nexusResClassic, CAM_NEXUS);
 		}
 
+		enableResearch("R-Wpn-Howitzer03-Rot", CAM_HUMAN_PLAYER);
 		enableResearch("R-Wpn-MG-Damage08", CAM_HUMAN_PLAYER);
 	}
 	else
