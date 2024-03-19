@@ -54,7 +54,7 @@ function getDroidsForCOLZ()
 	}
 	else
 	{
-		templates = (!camClassicMode()) ? [cTempl.cohct, cTempl.commrl, cTempl.comorb] : [cTempl.cohct, cTempl.comct, cTempl.comorb];
+		templates = (!camClassicMode()) ? [cTempl.cohct, cTempl.commrl, cTempl.comorb] : [cTempl.cohct, cTempl.commc, cTempl.comorb];
 		usingHeavy = true;
 	}
 
@@ -139,7 +139,7 @@ function sendPlayerTransporter()
 function mapEdgeDroids()
 {
 	const TANK_NUM = 8 + camRand(6);
-	const list = (!camClassicMode()) ? [cTempl.npcybm, cTempl.npcybr, cTempl.commrp, cTempl.cohct] : [cTempl.npcybm, cTempl.npcybr, cTempl.comct, cTempl.cohct];
+	const list = (!camClassicMode()) ? [cTempl.npcybm, cTempl.npcybr, cTempl.commrp, cTempl.cohct] : [cTempl.npcybm, cTempl.npcybr, cTempl.commc, cTempl.cohct];
 
 	const droids = [];
 	for (let i = 0; i < TANK_NUM; ++i)
