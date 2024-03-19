@@ -272,6 +272,7 @@ function cam2Setup()
 		}
 		else
 		{
+			completeResearch("CAM2RESEARCH-UNDO-Rockets", CAM_HUMAN_PLAYER); 
 			camCompleteRequiredResearch(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_THE_COLLECTIVE);
 			camCompleteRequiredResearch(collectiveResClassic, CAM_THE_COLLECTIVE);

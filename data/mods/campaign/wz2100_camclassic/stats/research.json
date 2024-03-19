@@ -382,6 +382,32 @@
 		],
 		"techCode": 1
 	},
+	"CAM2RESEARCH-UNDO-Rockets": {
+		"iconID": "IMAGE_RES_COMPUTERTECH",
+		"id": "CAM2RESEARCH-UNDO-Rockets",
+		"imdName": "MICAPSUL.PIE",
+		"keyTopic": 1,
+		"name": "Undo additional rocket upgrades for true classic",
+		"researchPoints": 1000,
+		"researchPower": 1000,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "ROCKET",
+				"parameter": "Damage",
+				"value": -60
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "ROCKET",
+				"parameter": "RadiusDamage",
+				"value": -60
+			}
+		],
+		"techCode": 1
+	},
 	"CAM3RESEARCH-UNDO": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "CAM3RESEARCH-UNDO",
