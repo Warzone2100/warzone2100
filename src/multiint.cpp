@@ -8912,6 +8912,9 @@ bool WZGameReplayOptionsHandler::saveOptions(nlohmann::json& object) const
 	// Save campaignName
 	object["campaignName"] = getCampaignName();
 
+	// Save tweakOptions
+	object["tweakOptions"] = getCamTweakOptions();
+
 	// ? Do not need to save alliances (?)
 
 	// Save `NetPlay.players` -- possibly recreate NetPlay.playerReferences on load?
@@ -9076,6 +9079,22 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 	else
 	{
 		clearCampaignName();
+	}
+
+	// restore `tweakOptions`
+	if (object.contains("tweakOptions"))
+	{
+		auto tweakOptionsJSON = object.at("tweakOptions");
+		std::unordered_map<std::string, nlohmann::json> tweakOptionsJSONMap;
+		for (auto it : tweakOptionsJSON.items())
+		{
+			tweakOptionsJSONMap[it.key()] = it.value();
+		}
+		setCamTweakOptions(tweakOptionsJSONMap);
+	}
+	else
+	{
+		clearCamTweakOptions();
 	}
 
 	// ? Do not need to restore alliances (?)
