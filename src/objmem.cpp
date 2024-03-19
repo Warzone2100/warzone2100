@@ -86,6 +86,8 @@ bool objmemInitialise()
 /* Release the object heaps */
 void objmemShutdown()
 {
+	auto& droidContainer = GlobalDroidContainer();
+	droidContainer.clear();
 }
 
 // Check that psVictim is not referred to by any other object in the game. We can dump out some extra data in debug builds that help track down sources of dangling pointer errors.
