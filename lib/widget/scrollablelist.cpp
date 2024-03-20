@@ -285,3 +285,59 @@ void ScrollableListWidget::setListTransparentToMouse(bool hasMouseTransparency)
 {
 	listView->setTransparentToMouse(hasMouseTransparency);
 }
+
+// MARK: - ClickableScrollableList
+
+std::shared_ptr<ClickableScrollableList> ClickableScrollableList::make()
+{
+	class make_shared_enabler: public ClickableScrollableList {};
+	auto widget = std::make_shared<make_shared_enabler>();
+	widget->initialize(); // calls ScrollableListWidget::initialize
+	widget->setListTransparentToMouse(true);
+	return widget;
+}
+
+void ClickableScrollableList::setOnClickHandler(const ClickableScrollableList_OnClick_Func& _onClickFunc)
+{
+	onClickFunc = _onClickFunc;
+}
+
+void ClickableScrollableList::setOnHighlightHandler(const ClickableScrollableList_OnHighlight_Func& _onHighlightFunc)
+{
+	onHighlightFunc = _onHighlightFunc;
+}
+
+void ClickableScrollableList::clicked(W_CONTEXT *, WIDGET_KEY)
+{
+	mouseDownOnList = true;
+}
+
+void ClickableScrollableList::released(W_CONTEXT *, WIDGET_KEY)
+{
+	bool wasFullClick = mouseDownOnList;
+	mouseDownOnList = false;
+	if (wasFullClick)
+	{
+		if (onClickFunc)
+		{
+			onClickFunc(*this);
+		}
+	}
+}
+
+void ClickableScrollableList::highlight(W_CONTEXT *)
+{
+	if (onHighlightFunc)
+	{
+		onHighlightFunc(*this, true);
+	}
+}
+
+void ClickableScrollableList::highlightLost()
+{
+	mouseDownOnList = false;
+	if (onHighlightFunc)
+	{
+		onHighlightFunc(*this, false);
+	}
+}

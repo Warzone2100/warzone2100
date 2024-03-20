@@ -92,4 +92,23 @@ private:
 	uint32_t getScrollPositionForItem(size_t itemNum);
 };
 
+class ClickableScrollableList : public ScrollableListWidget
+{
+public:
+	static std::shared_ptr<ClickableScrollableList> make();
+	typedef std::function<void (ClickableScrollableList& list)> ClickableScrollableList_OnClick_Func;
+	void setOnClickHandler(const ClickableScrollableList_OnClick_Func& _onClickFunc);
+	typedef std::function<void (ClickableScrollableList& list, bool isHighlighted)> ClickableScrollableList_OnHighlight_Func;
+	void setOnHighlightHandler(const ClickableScrollableList_OnHighlight_Func& _onHighlightFunc);
+protected:
+	void clicked(W_CONTEXT *, WIDGET_KEY) override;
+	void released(W_CONTEXT *, WIDGET_KEY) override;
+	void highlight(W_CONTEXT *) override;
+	void highlightLost() override;
+private:
+	ClickableScrollableList_OnClick_Func onClickFunc;
+	ClickableScrollableList_OnHighlight_Func onHighlightFunc;
+	bool mouseDownOnList = false;
+};
+
 #endif // __INCLUDED_LIB_WIDGET_SCROLLABLELIST_H__

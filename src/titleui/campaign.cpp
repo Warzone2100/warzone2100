@@ -760,65 +760,6 @@ void WzCampaignOptionButton::display(int xOffset, int yOffset)
 	}
 }
 
-class ClickableScrollableList : public ScrollableListWidget
-{
-public:
-	static std::shared_ptr<ClickableScrollableList> make()
-	{
-		class make_shared_enabler: public ClickableScrollableList {};
-		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize(); // calls ScrollableListWidget::initialize
-		widget->setListTransparentToMouse(true);
-		return widget;
-	}
-	typedef std::function<void (ClickableScrollableList& list)> ClickableScrollableList_OnClick_Func;
-	void setOnClickHandler(const ClickableScrollableList_OnClick_Func& _onClickFunc)
-	{
-		onClickFunc = _onClickFunc;
-	}
-	typedef std::function<void (ClickableScrollableList& list, bool isHighlighted)> ClickableScrollableList_OnHighlight_Func;
-	void setOnHighlightHandler(const ClickableScrollableList_OnHighlight_Func& _onHighlightFunc)
-	{
-		onHighlightFunc = _onHighlightFunc;
-	}
-protected:
-	void clicked(W_CONTEXT *, WIDGET_KEY) override
-	{
-		mouseDownOnList = true;
-	}
-	void released(W_CONTEXT *, WIDGET_KEY) override
-	{
-		bool wasFullClick = mouseDownOnList;
-		mouseDownOnList = false;
-		if (wasFullClick)
-		{
-			if (onClickFunc)
-			{
-				onClickFunc(*this);
-			}
-		}
-	}
-	void highlight(W_CONTEXT *) override
-	{
-		if (onHighlightFunc)
-		{
-			onHighlightFunc(*this, true);
-		}
-	}
-	void highlightLost() override
-	{
-		mouseDownOnList = false;
-		if (onHighlightFunc)
-		{
-			onHighlightFunc(*this, false);
-		}
-	}
-private:
-	ClickableScrollableList_OnClick_Func onClickFunc;
-	ClickableScrollableList_OnHighlight_Func onHighlightFunc;
-	bool mouseDownOnList = false;
-};
-
 class WzCampaignTweakOptionSetting
 {
 public:
