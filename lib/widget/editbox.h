@@ -59,16 +59,31 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void geometryChanged() override;
 
+	void stopEditing();
+	bool isEditing();
+
 	void setState(unsigned state) override;
 	WzString getString() const override;
 	void setString(WzString string) override;
 	void setPlaceholder(WzString value);
+	void setPlaceholderTextColor(optional<PIELIGHT> fixedPlaceholderTextColor);
 	void setMaxStringSize(int size);
+
+	void setTip(std::string string) override;
+	std::string getTip() override
+	{
+		return pTip;
+	}
 
 	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);
 
 	typedef std::function<void (W_EDITBOX&)> OnReturnHandler;
 	void setOnReturnHandler(const OnReturnHandler& func);
+	void setOnEscapeHandler(const OnReturnHandler& func);
+	void setOnEditingStoppedHandler(const OnReturnHandler& func);
+
+	typedef std::function<bool (W_EDITBOX&)> OnTabHandler; // Returns true if the editbox should be done processing the current input
+	void setOnTabHandler(const OnTabHandler& func);
 
 	UDWORD		state;						// The current edit box state
 	WzString	aText;						// The text in the edit box
@@ -97,9 +112,14 @@ private:
 	void setCursorPosPixels(int xPos);
 
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
+	optional<PIELIGHT> fixedPlaceholderTextColor;
 	EditBoxDisplayCache displayCache;
 	bool suppressAudioCallback = false;
 	OnReturnHandler	onRetHandler = nullptr;
+	OnTabHandler onTabHandler = nullptr;
+	OnReturnHandler onEscHandler = nullptr;
+	OnReturnHandler onEditingStoppedHandler = nullptr;
+	std::string pTip;	// The tool tip for the edit box
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

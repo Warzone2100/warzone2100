@@ -39,10 +39,14 @@ public:
 	void run(W_CONTEXT *psContext) override;
 	void display(int xOffset, int yOffset) override;
 	void setTip(std::string string) override;
+	void setHelp(optional<WidgetHelp> help) override;
 	void enable();
 	void disable();
 	bool isHighlighted() const;
 	bool isEnabled() const;
+
+	std::string getTip() override;
+	WidgetHelp const * getHelp() const override;
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
@@ -50,6 +54,8 @@ public:
 	UWORD		pos;				// Current stop position of the slider
 	UWORD		state;				// Slider state
 	std::string pTip;                           // Tool tip
+private:
+	optional<WidgetHelp> help;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_SLIDER_H__

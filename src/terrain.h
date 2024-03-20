@@ -26,16 +26,26 @@
 #include <wzmaplib/terrain_type.h>
 #include "terrain_defs.h"
 
+struct ShadowCascadesInfo;
+struct LightMap;
+
 void loadTerrainTextures(MAP_TILESET mapTileset);
 
 bool initTerrain();
 void shutdownTerrain();
 
-void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos);
+void perFrameTerrainUpdates(const LightMap& lightData);
+void drawTerrainDepthOnly(const glm::mat4 &mvp);
+void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowMVPMatrix);
 void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos);
 
-PIELIGHT getTileColour(int x, int y);
-void setTileColour(int x, int y, PIELIGHT colour);
+namespace gfx_api
+{
+	struct texture; // forward-declare
+}
+
+gfx_api::texture* getTerrainLightmapTexture();
+const glm::mat4& getModelUVLightmapMatrix();
 
 void markTileDirty(int i, int j);
 
@@ -53,6 +63,9 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue);
 std::vector<TerrainShaderQuality> getAllTerrainShaderQualityOptions();
 bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value);
 std::string to_display_string(TerrainShaderQuality value);
+
+bool setTerrainMappingTexturesMaxSize(int texSize);
+int getTerrainMappingTexturesMaxSize();
 
 void initTerrainShaderType(); // must be called after the graphics context is initialized
 

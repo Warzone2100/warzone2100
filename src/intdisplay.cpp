@@ -25,6 +25,7 @@
  */
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/object_list_iteration.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/ivisdef.h"
@@ -663,10 +664,11 @@ IntFormAnimated::IntFormAnimated(bool openAnimate)
 	disableChildren = openAnimate;
 }
 
-void IntFormAnimated::closeAnimateDelete()
+void IntFormAnimated::closeAnimateDelete(const W_ANIMATED_ON_CLOSE_FUNC& _onCloseAnimFinished)
 {
 	currentAction = 3;
 	disableChildren = true;
+	onCloseAnimFinished = _onCloseAnimFinished;
 }
 
 bool IntFormAnimated::isClosing() const
@@ -727,7 +729,13 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 		switch (currentAction)
 		{
 		case 2: disableChildren = false; break;
-		case 5: deleteLater();           break;
+		case 5:
+				deleteLater();
+				if (onCloseAnimFinished)
+				{
+					onCloseAnimFinished(*this);
+				}
+				break;
 		}
 	}
 
@@ -938,14 +946,24 @@ bool intInitialiseGraphics()
 // Clear a button bitmap. ( copy the button background ).
 void IntFancyButton::displayClear(int xOffset, int yOffset)
 {
-	if (isDown())
+	UWORD buttonId = 0;
+	switch (buttonType)
 	{
-		iV_DrawImage(IntImages, IMAGE_BUT0_DOWN + buttonType * 2, xOffset + x(), yOffset + y());
+		case IntFancyButton::ButtonType::TOPBUTTON:
+			if (buttonBackgroundEmpty)
+			{
+				buttonId = (isDown() ? IMAGE_BUT_EMPTY_DOWN : IMAGE_BUT_EMPTY_UP);
+			}
+			else
+			{
+				buttonId = (isDown() ? IMAGE_BUT0_DOWN : IMAGE_BUT0_UP);
+			}
+			break;
+		case IntFancyButton::ButtonType::BTMBUTTON:
+			buttonId = (isDown() ? IMAGE_BUTB0_DOWN : IMAGE_BUTB0_UP);
+			break;
 	}
-	else
-	{
-		iV_DrawImage(IntImages, IMAGE_BUT0_UP + buttonType * 2, xOffset + x(), yOffset + y());
-	}
+	iV_DrawImage(IntImages, buttonId, xOffset + x(), yOffset + y());
 }
 
 // Create a button by rendering an IMD object into it.
@@ -1026,7 +1044,7 @@ void IntFancyButton::displayIMD(AtlasImage image, ImdObject imdObject, int xOffs
 
 		if (IMDType == IMDTYPE_DROID)
 		{
-			if (isTransporter((DROID *)Object))
+			if (((DROID*)Object)->isTransporter())
 			{
 				if (((DROID *)Object)->droidType == DROID_TRANSPORTER)
 				{
@@ -1258,7 +1276,7 @@ void IntFancyButton::displayImage(AtlasImage image, int xOffset, int yOffset)
 }
 
 // Create a blank button.
-void IntFancyButton::displayBlank(int xOffset, int yOffset)
+void IntFancyButton::displayBlank(int xOffset, int yOffset, bool withQuestionMark)
 {
 	UDWORD ox, oy;
 
@@ -1273,8 +1291,11 @@ void IntFancyButton::displayBlank(int xOffset, int yOffset)
 
 	displayClear(xOffset, yOffset);
 
-	// Draw a question mark, bit of quick hack this.
-	iV_DrawImage(IntImages, IMAGE_QUESTION_MARK, xOffset + x() + ox + 10, yOffset + y() + oy + 3);
+	if (withQuestionMark)
+	{
+		// Draw a question mark, bit of quick hack this.
+		iV_DrawImage(IntImages, IMAGE_QUESTION_MARK, xOffset + x() + ox + 10, yOffset + y() + oy + 3);
+	}
 }
 
 // Returns true if the droid is currently building something.
@@ -1352,14 +1373,13 @@ STRUCTURE *DroidGetBuildStructure(DROID *Droid)
 STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 {
 	SDWORD		inc;
-	STRUCTURE	*psCurr;
 
 	for (inc = 0; inc < MAX_FACTORY; inc++)
 	{
 		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
-			for (psCurr = apsStructLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+			for (STRUCTURE* psCurr : apsStructLists[psDroid->player])
 			{
 				if ((psCurr->pStructureType->type == REF_FACTORY) &&
 				    (((FACTORY *)psCurr->pFunctionality)->
@@ -1372,7 +1392,7 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_CYBORG_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
-			for (psCurr = apsStructLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+			for (STRUCTURE* psCurr : apsStructLists[psDroid->player])
 			{
 				if ((psCurr->pStructureType->type == REF_CYBORG_FACTORY) &&
 				    (((FACTORY *)psCurr->pFunctionality)->
@@ -1385,7 +1405,7 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_VTOL_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
-			for (psCurr = apsStructLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
+			for (STRUCTURE* psCurr : apsStructLists[psDroid->player])
 			{
 				if ((psCurr->pStructureType->type == REF_VTOL_FACTORY) &&
 				    (((FACTORY *)psCurr->pFunctionality)->
@@ -1414,7 +1434,7 @@ BASE_STATS *DroidGetBuildStats(DROID *Droid)
 	return nullptr;
 }
 
-iIMDShape *DroidGetIMD(DROID *Droid)
+iIMDBaseShape *DroidGetIMD(DROID *Droid)
 {
 	return Droid->sDisplay.imd;
 }
@@ -1511,7 +1531,7 @@ bool StatIsFeature(BASE_STATS const *Stat)
 	return Stat->hasType(STAT_FEATURE);
 }
 
-iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
+iIMDBaseShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
 {
 	(void)Player;
 	return ((STRUCTURE_STATS *)Stat)->pIMD[0];
@@ -1538,7 +1558,7 @@ COMPONENT_TYPE StatIsComponent(BASE_STATS *Stat)
 	}
 }
 
-bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD)
+bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD) // DISPLAY ONLY
 {
 	WEAPON_STATS		*psWStat;
 
@@ -1548,42 +1568,42 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 	switch (compID)
 	{
 	case COMP_BODY:
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_BRAIN:
 		psWStat = ((BRAIN_STATS *)Stat)->psWeaponStat;
-		*MountIMD = psWStat->pMountGraphic;
-		*CompIMD = psWStat->pIMD;
+		*MountIMD = safeGetDisplayModelFromBase(psWStat->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(psWStat->pIMD);
 		return true;
 
 	case COMP_WEAPON:
-		*MountIMD = ((WEAPON_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = safeGetDisplayModelFromBase(((WEAPON_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_SENSOR:
-		*MountIMD = ((SENSOR_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = safeGetDisplayModelFromBase(((SENSOR_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_ECM:
-		*MountIMD = ((ECM_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = safeGetDisplayModelFromBase(((ECM_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_CONSTRUCT:
-		*MountIMD = ((CONSTRUCT_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = safeGetDisplayModelFromBase(((CONSTRUCT_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_PROPULSION:
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_REPAIRUNIT:
-		*MountIMD = ((REPAIR_STATS *)Stat)->pMountGraphic;
-		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
+		*MountIMD = safeGetDisplayModelFromBase(((REPAIR_STATS *)Stat)->pMountGraphic);
+		*CompIMD = safeGetDisplayModelFromBase(((COMPONENT_STATS *)Stat)->pIMD);
 		return true;
 
 	case COMP_NUMCOMPONENTS:
@@ -1599,7 +1619,7 @@ bool StatIsResearch(BASE_STATS *Stat)
 	return Stat->hasType(STAT_RESEARCH);
 }
 
-static void StatGetResearchImage(BASE_STATS *psStat, AtlasImage *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon)
+static void StatGetResearchImage(BASE_STATS *psStat, AtlasImage *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon) // DISPLAY ONLY
 {
 	if (drawTechIcon && ((RESEARCH *)psStat)->iconID != NO_RESEARCH_ICON)
 	{
@@ -1615,7 +1635,7 @@ static void StatGetResearchImage(BASE_STATS *psStat, AtlasImage *image, iIMDShap
 	else
 	{
 		//no stat so just just the IMD associated with the research
-		*Shape = ((RESEARCH *)psStat)->pIMD;
+		*Shape = safeGetDisplayModelFromBase(((RESEARCH *)psStat)->pIMD);
 		//make sure the stat is initialised
 		*ppGraphicData = nullptr;
 	}
@@ -1672,10 +1692,8 @@ void IntTransportButton::display(int xOffset, int yOffset)
 /* Draws blips on radar to represent Proximity Display and damaged structures */
 void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, const glm::mat4 &modelViewProjection)
 {
-	PROXIMITY_DISPLAY	*psProxDisp;
 	UWORD			imageID;
 	UDWORD			delay = 150;
-	UDWORD			i;
 	SDWORD width, height;
 	int		x = 0, y = 0;
 	static const uint16_t imagesEnemy[] = {IMAGE_RAD_ENMREAD, IMAGE_RAD_ENM1, IMAGE_RAD_ENM2, IMAGE_RAD_ENM3};
@@ -1688,118 +1706,88 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	width = scrollMaxX - scrollMinX;
 	height = scrollMaxY - scrollMinY;
 
-	// Check if it's time to remove beacons
-	bool removedAMessage = false;
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		/* Go through all the proximity Displays*/
-		for (psProxDisp = apsProxDisp[i]; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
-		{
-			if (psProxDisp->psMessage->dataType == MSG_DATA_BEACON)
-			{
-				MESSAGE		*psCurrMsg = psProxDisp->psMessage;
-				VIEWDATA	*pViewData = psCurrMsg->pViewData;
-
-				ASSERT_OR_RETURN(, pViewData != nullptr, "Message without data!");
-
-				if (pViewData->type == VIEW_BEACON)
-				{
-					ASSERT_OR_RETURN(, pViewData->pData != nullptr, "Help message without data!");
-					if (pViewData->pData != nullptr && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
-					{
-						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
-						removeMessage(psCurrMsg, i);	//remove beacon
-						removedAMessage = true;
-						break;	//there can only be 1 beacon per player
-					}
-				}
-			}
-		}
-	}
-	if (removedAMessage)
-	{
-		jsDebugMessageUpdate();
-	}
-
 	/* Go through all the proximity Displays */
-	for (psProxDisp = (selectedPlayer < MAX_PLAYERS) ? apsProxDisp[selectedPlayer] : nullptr; psProxDisp != nullptr; psProxDisp = psProxDisp->psNext)
+	if (selectedPlayer < MAX_PLAYERS)
 	{
-		unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
-		const uint16_t *images;
-
-		if (psProxDisp->psMessage->player != selectedPlayer)
+		for (PROXIMITY_DISPLAY* psProxDisp : apsProxDisp[selectedPlayer])
 		{
-			continue;
-		}
+			unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;  // Same size as imagesResource and imagesArtifact.
+			const uint16_t* images;
 
-		if (psProxDisp->type == POS_PROXDATA)
-		{
-			PROX_TYPE proxType = ((VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData)->proxType;
-			images = imagesProxTypes[proxType];
-		}
-		else
-		{
-			const FEATURE *psFeature = castFeature(psProxDisp->psMessage->psObj);
-
-			ASSERT_OR_RETURN(, psFeature && psFeature->psStats, "Bad feature message");
-			if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+			if (psProxDisp->psMessage->player != selectedPlayer)
 			{
-				images = imagesResource;
-				if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
-				{
-					images = imagesBurningResource;
-					animationLength = ARRAY_SIZE(imagesBurningResource) - 1;  // Longer animation for burning oil wells.
-				}
+				continue;
+			}
+
+			if (psProxDisp->type == POS_PROXDATA)
+			{
+				PROX_TYPE proxType = ((VIEW_PROXIMITY*)psProxDisp->psMessage->pViewData->pData)->proxType;
+				images = imagesProxTypes[proxType];
 			}
 			else
 			{
-				images = imagesArtifact;
-			}
-		}
+				const FEATURE* psFeature = castFeature(psProxDisp->psMessage->psObj);
 
-		// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
-		if (psProxDisp->psMessage->read)
-		{
-			imageID = images[0];
-		}
-		else
-		{
-			// Draw animated
-			if (realTime - psProxDisp->timeLastDrawn > delay)
+				ASSERT_OR_RETURN(, psFeature && psFeature->psStats, "Bad feature message");
+				if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+				{
+					images = imagesResource;
+					if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
+					{
+						images = imagesBurningResource;
+						animationLength = ARRAY_SIZE(imagesBurningResource) - 1;  // Longer animation for burning oil wells.
+					}
+				}
+				else
+				{
+					images = imagesArtifact;
+				}
+			}
+
+			// Draw the 'blips' on the radar - use same timings as radar blips if the message is read - don't animate
+			if (psProxDisp->psMessage->read)
 			{
-				++psProxDisp->strobe;
-				psProxDisp->timeLastDrawn = realTime;
+				imageID = images[0];
 			}
-			psProxDisp->strobe %= animationLength;
-			imageID = images[1 + psProxDisp->strobe];
-		}
+			else
+			{
+				// Draw animated
+				if (realTime - psProxDisp->timeLastDrawn > delay)
+				{
+					++psProxDisp->strobe;
+					psProxDisp->timeLastDrawn = realTime;
+				}
+				psProxDisp->strobe %= animationLength;
+				imageID = images[1 + psProxDisp->strobe];
+			}
 
-		if (psProxDisp->type == POS_PROXDATA)
-		{
-			const VIEW_PROXIMITY *psViewProx = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
+			if (psProxDisp->type == POS_PROXDATA)
+			{
+				const VIEW_PROXIMITY* psViewProx = (VIEW_PROXIMITY*)psProxDisp->psMessage->pViewData->pData;
 
-			x = static_cast<int>((psViewProx->x / TILE_UNITS - scrollMinX) * pixSizeH);
-			y = static_cast<int>((psViewProx->y / TILE_UNITS - scrollMinY) * pixSizeV);
-		}
-		else if (psProxDisp->type == POS_PROXOBJ)
-		{
-			x = static_cast<int>((psProxDisp->psMessage->psObj->pos.x / TILE_UNITS - scrollMinX) * pixSizeH);
-			y = static_cast<int>((psProxDisp->psMessage->psObj->pos.y / TILE_UNITS - scrollMinY) * pixSizeV);
-		}
-		else
-		{
-			ASSERT(false, "Bad message type");
-			continue;
-		}
+				x = static_cast<int>((psViewProx->x / TILE_UNITS - scrollMinX) * pixSizeH);
+				y = static_cast<int>((psViewProx->y / TILE_UNITS - scrollMinY) * pixSizeV);
+			}
+			else if (psProxDisp->type == POS_PROXOBJ)
+			{
+				x = static_cast<int>((psProxDisp->psMessage->psObj->pos.x / TILE_UNITS - scrollMinX) * pixSizeH);
+				y = static_cast<int>((psProxDisp->psMessage->psObj->pos.y / TILE_UNITS - scrollMinY) * pixSizeV);
+			}
+			else
+			{
+				ASSERT(false, "Bad message type");
+				continue;
+			}
 
-		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
-		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
-		// everything outside the box.
-		if ((x + radarX) < width * pixSizeV / 2 && (x + radarX) > -width * pixSizeV / 2
-		    && (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
-		{
-			// Draw the 'blip'
-			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+			// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
+			// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
+			// everything outside the box.
+			if ((x + radarX) < width * pixSizeV / 2 && (x + radarX) > -width * pixSizeV / 2
+				&& (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
+			{
+				// Draw the 'blip'
+				iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
+			}
 		}
 	}
 	if (audio_GetPreviousQueueTrackRadarBlipPos(&x, &y))

@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2021-2023  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
@@ -23,11 +42,15 @@ void ResearchController::updateFacilitiesList()
 {
 	facilities.clear();
 
-	for (auto psStruct = interfaceStructList(); psStruct != nullptr; psStruct = psStruct->psNext)
+	auto* intStrList = interfaceStructList();
+	if (intStrList)
 	{
-		if (psStruct->pStructureType->type == REF_RESEARCH && psStruct->status == SS_BUILT && psStruct->died == 0)
+		for (auto psStruct : *intStrList)
 		{
-			facilities.push_back(psStruct);
+			if (psStruct->pStructureType->type == REF_RESEARCH && psStruct->status == SS_BUILT && psStruct->died == 0)
+			{
+				facilities.push_back(psStruct);
+			}
 		}
 	}
 
@@ -329,7 +352,7 @@ protected:
 	{
 		auto facility = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN("", facility);
-		return getStatsName(facility->pStructureType);
+		return getLocalizedStatsName(facility->pStructureType);
 	}
 
 	ResearchController &getController() const override
@@ -451,7 +474,7 @@ private:
 		controller->refresh();
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto facility = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);

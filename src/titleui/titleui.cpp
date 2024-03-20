@@ -28,7 +28,6 @@
 #include "../hci.h"
 
 std::shared_ptr<WzTitleUI> wzTitleUICurrent;
-char serverName[128];
 
 WzTitleUI::~WzTitleUI()
 {

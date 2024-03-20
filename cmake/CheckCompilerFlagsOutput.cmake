@@ -1,11 +1,11 @@
 #
-# Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors
+# Copyright © 2018-2023 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2018-07-08a
+# Script Version: 2023-09-01a
 #
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.24)
 
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)

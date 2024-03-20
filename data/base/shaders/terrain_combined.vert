@@ -33,6 +33,11 @@ out vec3 groundLightDir;
 out vec3 groundHalfVec;
 out mat2 decal2groundMat2;
 
+out mat3 ModelTangentMatrix;
+// for Shadows
+out vec3 fragPos;
+out vec3 fragNormal;
+
 void main()
 {
 	tile = tileNo;
@@ -52,7 +57,7 @@ void main()
 		vec3 vaxis = vec3(1,0,0); // v ~ vertex.x, see uv_ground
 		vec3 tangent = normalize(cross(vertexNormal, vaxis));
 		vec3 bitangent = cross(vertexNormal, tangent);
-		mat3 ModelTangentMatrix = mat3(tangent, bitangent, vertexNormal); // aka TBN-matrix
+		ModelTangentMatrix = mat3(tangent, bitangent, vertexNormal); // aka TBN-matrix
 		// transform light to TangentSpace:
 		vec3 eyeVec = normalize((cameraPos.xyz - vertex.xyz) * ModelTangentMatrix);
 		groundLightDir = sunPos.xyz * ModelTangentMatrix; // already normalized
@@ -65,6 +70,9 @@ void main()
 			dot(vertexTangent.xyz, bitangent), dot(bitangentDecal, bitangent)
 		);
 	}
+
+	fragPos = vertex.xyz;
+	fragNormal = vertexNormal;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;
 	gl_Position = position;

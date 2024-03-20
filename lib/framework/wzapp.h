@@ -70,9 +70,10 @@ struct screeninfo
 };
 
 void wzMain(int &argc, char **argv);
-bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing = 0, WINDOW_MODE fullscreen = WINDOW_MODE::windowed, int vsync = 1, int lodDistanceBiasPercentage = 0, bool highDPI = true);
+bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing = 0, WINDOW_MODE fullscreen = WINDOW_MODE::windowed, int vsync = 1, int lodDistanceBiasPercentage = 0, uint32_t depthMapResolution = 0, bool highDPI = true);
 video_backend wzGetDefaultGfxBackendForCurrentSystem();
 bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails = "");
+void wzResetGfxSettingsOnFailure();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzGetGameToRendererScaleFactorInt(unsigned int *horizScalePercentage, unsigned int *vertScalePercentage);
 void wzMainEventLoop(std::function<void()> onShutdown);
@@ -86,7 +87,7 @@ WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
 WINDOW_MODE wzAltEnterToggleFullscreen();
 bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode);
 WINDOW_MODE wzGetToggleFullscreenMode();
-bool wzChangeWindowMode(WINDOW_MODE mode);
+bool wzChangeWindowMode(WINDOW_MODE mode, bool silent = false);
 WINDOW_MODE wzGetCurrentWindowMode();
 bool wzIsFullscreen();
 void wzSetWindowIsResizable(bool resizable);
@@ -121,6 +122,7 @@ enum DialogType {
 	Dialog_Information
 };
 WZ_DECL_NONNULL(2, 3) void wzDisplayDialog(DialogType type, const char *title, const char *message);	///< Throw up a modal warning dialog - title & message are UTF-8 text
+WZ_DECL_NONNULL(2, 3) size_t wzDisplayDialogAdvanced(DialogType type, const char *title, const char *message, std::vector<std::string> buttonsText);
 
 WzString wzGetPlatform();
 std::vector<screeninfo> wzAvailableResolutions();
@@ -131,9 +133,17 @@ WzString wzGetSelection();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support
-void StartTextInput(void* pTextInputRequester);
+struct WzTextInputRect
+{
+	int x;
+	int y;
+	int width;
+	int height;
+};
+void StartTextInput(void* pTextInputRequester, const WzTextInputRect& textInputRect);
 void StopTextInput(void* pTextInputResigner);
 bool isInTextInputMode();
+bool wzSeemsLikeNonTouchPlatform();
 
 // NOTE: wzBackendAttemptOpenURL should *not* be called directly - instead, call openURLInBrowser() from urlhelpers.h
 bool wzBackendAttemptOpenURL(const char *url);

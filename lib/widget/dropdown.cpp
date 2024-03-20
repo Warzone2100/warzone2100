@@ -169,7 +169,7 @@ void DropdownWidget::open()
 			widgRegisterOverlayScreenOnTopOfScreen(dropdownWidget->overlayScreen, dropdownWidget->screenPointer.lock());
 			dropdownWidget->itemsList->setGeometry(dropdownWidget->screenPosX(), dropdownWidget->calculateDropdownListScreenPosY(), dropdownWidget->width(), dropdownWidget->itemsList->height());
 			dropdownWidget->overlayScreen->psForm->attach(dropdownWidget->itemsList);
-			dropdownWidget->overlayScreen->psForm->attach(std::make_shared<DropdownOverlay>([pWeakThis]() { if (auto dropdownWidget = pWeakThis.lock()) { dropdownWidget->close(); } }));
+			dropdownWidget->overlayScreen->psForm->attach(std::make_shared<DropdownOverlay>([pWeakThis]() { if (auto dropdownWidget = pWeakThis.lock()) { dropdownWidget->close(); } }), WIDGET::ChildZPos::Back);
 		}
 	});
 }

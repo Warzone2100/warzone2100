@@ -28,8 +28,7 @@
 #include "lib/framework/wzconfig.h"
 
 /* The statistics for the features */
-extern FEATURE_STATS	*asFeatureStats;
-extern UDWORD			numFeatureStats;
+extern std::vector<FEATURE_STATS> asFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
 extern FEATURE_STATS *oilResFeature;
@@ -56,7 +55,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime);
 /* get a feature stat id from its name */
 SDWORD getFeatureStatFromName(const WzString &name);
 
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 void featureInitVars();
 

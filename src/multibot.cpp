@@ -245,7 +245,6 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
 bool recvDroidDisEmbark(NETQUEUE queue)
 {
 	DROID *psFoundDroid = nullptr, *psTransporterDroid = nullptr;
-	DROID *psCheckDroid = nullptr;
 
 	NETbeginDecode(queue, GAME_DROIDDISEMBARK);
 	{
@@ -272,17 +271,18 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 			return false;
 		}
 		// we need to find the droid *in* the transporter
-		psCheckDroid = (psTransporterDroid->psGroup != nullptr) ? psTransporterDroid->psGroup->psList : nullptr;
-		while (psCheckDroid)
+		if (psTransporterDroid->psGroup)
 		{
-			// is this the one we want?
-			if (psCheckDroid->id == droidID)
+			const auto& groupList = psTransporterDroid->psGroup->psList;
+			auto it = std::find_if(groupList.begin(), groupList.end(),
+				[droidID](DROID* d)
+				{
+					return d->id == droidID;
+				});
+			if (it != groupList.end())
 			{
-				psFoundDroid = psCheckDroid;
-				break;
+				psFoundDroid = *it;
 			}
-			// not found, so check next one in *group*
-			psCheckDroid = psCheckDroid->psGrpNext;
 		}
 		// don't continue if we couldn't find it.
 		if (!psFoundDroid)
@@ -601,7 +601,7 @@ void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 	{
 		info.structRef = order.psStats->ref;
 		info.direction = order.direction;
-		if (!isConstructionDroid(psDroid))
+		if (!psDroid->isConstructionDroid())
 		{
 			return;  // No point ordering things to build if they can't build anything.
 		}

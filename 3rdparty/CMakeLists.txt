@@ -1,15 +1,30 @@
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.5...3.24)
 
 SET(UTF8PROC_INSTALL OFF CACHE BOOL "Enable installation of utf8proc" FORCE)
-add_subdirectory(utf8proc)
+add_subdirectory(utf8proc EXCLUDE_FROM_ALL)
 set_property(TARGET utf8proc PROPERTY FOLDER "3rdparty")
 
-add_subdirectory(launchinfo)
+add_subdirectory(launchinfo EXCLUDE_FROM_ALL)
 set_property(TARGET launchinfo PROPERTY FOLDER "3rdparty")
 
-add_subdirectory(fmt)
+add_subdirectory(fmt EXCLUDE_FROM_ALL)
 set_property(TARGET fmt PROPERTY FOLDER "3rdparty")
 
+# inih library
+add_library(inih STATIC "inih/ini.h" "inih/ini.c")
+set_property(TARGET inih PROPERTY FOLDER "3rdparty")
+target_include_directories(inih PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_compile_definitions(inih PRIVATE
+	"-DINI_API="
+	"-DINI_ALLOW_MULTILINE=0"
+	"-DINI_ALLOW_BOM=1"
+	"-DINI_ALLOW_INLINE_COMMENTS=0"
+	"-DINI_MAX_LINE=1024"
+	"-DINI_ALLOW_REALLOC=1"
+	"-DINI_INITIAL_ALLOC=1024"
+)
+
+# re2
 SET(RE2_BUILD_TESTING OFF CACHE BOOL "enable testing for RE2" FORCE)
 add_subdirectory(re2 EXCLUDE_FROM_ALL)
 target_include_directories(re2 PUBLIC
@@ -19,7 +34,7 @@ set_property(TARGET re2 PROPERTY FOLDER "3rdparty")
 set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS NO)	# -Wmissing-field-initializers
 set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-missing-field-initializers")
 
-add_subdirectory(EmbeddedJSONSignature)
+add_subdirectory(EmbeddedJSONSignature EXCLUDE_FROM_ALL)
 set_property(TARGET EmbeddedJSONSignature PROPERTY FOLDER "3rdparty")
 
 if(ENABLE_DISCORD)
@@ -29,7 +44,6 @@ endif()
 
 find_package(SQLite3 3.14 REQUIRED)
 set(SQLITECPP_USE_STATIC_RUNTIME OFF CACHE BOOL "Use static runtime" FORCE)
-set(SQLITE_ENABLE_COLUMN_METADATA OFF CACHE BOOL "Enable Column::getColumnOriginName(). Require support from sqlite3 library." FORCE)
 set(SQLITE_HAS_CODEC OFF CACHE BOOL "Enable database encryption API. Not available in the public release of SQLite." FORCE)
 if(SQLite3_VERSION VERSION_LESS 3.19)
 	set(SQLITE_USE_LEGACY_STRUCT ON CACHE BOOL "Fallback to forward declaration of legacy struct sqlite3_value (pre SQLite 3.19)" FORCE)
@@ -40,6 +54,9 @@ set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "Run cpplint.py tool for Google C++ Sty
 set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "Run cppcheck C++ static analysis tool." FORCE)
 set(SQLITECPP_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
 set(SQLITECPP_BUILD_TESTS OFF CACHE BOOL "Build and run tests." FORCE)
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	set(SQLITECPP_USE_STACK_PROTECTION OFF CACHE BOOL "USE Stack Protection hardening." FORCE)
+endif()
 add_subdirectory(SQLiteCpp EXCLUDE_FROM_ALL)
 set_property(TARGET SQLiteCpp PROPERTY FOLDER "3rdparty")
 
@@ -192,6 +209,14 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 endif(WZ_ENABLE_BASIS_UNIVERSAL)
 
 if (WZ_PROFILING_NVTX)
-	find_package(CUDAToolkit REQUIRED VERSION 5.0)
+	include(FetchContent)
+	FetchContent_Declare(
+	  nvtx
+	  GIT_REPOSITORY https://github.com/NVIDIA/NVTX.git
+	  GIT_TAG        a1ceb0677f67371ed29a2b1c022794f077db5fe7
+	)
+
+	FetchContent_MakeAvailable(nvtx)
 	set(PROFILING_NVTX_INCLUDE ${CUDAToolkit_INCLUDE_DIRS} PARENT_SCOPE)
+
 endif ()

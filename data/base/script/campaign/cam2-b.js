@@ -1,8 +1,8 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const COLLECTIVE_RES = [
-	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+const mis_collectiveRes = [
+	"R-Defense-WallUpgrade05", "R-Struc-Materials05", "R-Sys-Engineering02",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals04", "R-Cyborg-Metals04",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
 	"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF01",
@@ -19,7 +19,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 	{
 		camSafeRemoveObject(droid, false);
 	}
-	resetLabel("vtolRemoveZone", THE_COLLECTIVE);
+	resetLabel("vtolRemoveZone", CAM_THE_COLLECTIVE);
 });
 
 camAreaEvent("factoryTrigger", function(droid)
@@ -34,7 +34,7 @@ function camEnemyBaseDetected_COMiddleBase()
 {
 	hackRemoveMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	var droids = enumArea("base4Cleanup", THE_COLLECTIVE, false).filter((obj) => (
+	const droids = enumArea("base4Cleanup", CAM_THE_COLLECTIVE, false).filter((obj) => (
 		obj.type === DROID && obj.group === null
 	));
 
@@ -82,53 +82,74 @@ function ambushPlayer()
 	});
 }
 
-function vtolAttack()
+function wave2()
 {
-	var list = [cTempl.colcbv, cTempl.colatv];
-	var ext = {
+	const list = [cTempl.colatv, cTempl.colatv];
+	const ext = {
 		limit: [4, 4], //paired with list array
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+}
+
+function wave3()
+{
+	const list = [cTempl.colcbv, cTempl.colcbv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+}
+
+function vtolAttack()
+{
+	const list = [cTempl.colpbv, cTempl.colpbv];
+	const ext = {
+		limit: [4, 4], //paired with list array
+		alternate: true,
+		altIdx: 0
+	};
+	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemove", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
+	queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+	queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 }
 
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
+	if (enumDroid(CAM_THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
 		removeTimer("truckDefense");
 		return;
 	}
 
 	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-WallTower-HvCan", "CO-Tower-LtATRkt"];
-	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
+	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
 function transferPower()
 {
 	//increase player power level and play sound
 	setPower(playerPower(CAM_HUMAN_PLAYER) + 4000);
-	playSound("power-transferred.ogg");
+	playSound(cam_sounds.powerTransferred);
 }
 
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_2S");
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-
-	var enemyLz = getObject("COLandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 	camPlayVideos([{video: "MB2_B_MSG", type: CAMP_MSG}, {video: "MB2_B_MSG2", type: MISS_MSG}]);
 
 	camSetArtifacts({
-		"COResearchLab": { tech: "R-Wpn-Flame2" },
+		"COResearchLab": { tech: ["R-Wpn-Flame2", "R-Defense-WallUpgrade05"] },
 		"COHeavyFac-b4": { tech: "R-Wpn-RocketSlow-ROF01" },
 		"COHeavyFacL-b1": { tech: "R-Wpn-MG-ROF03" },
 		"COCommandCenter": { tech: "R-Vehicle-Body02" }, //Leopard
@@ -136,36 +157,40 @@ function eventStartLevel()
 		"COBombardPit": { tech: "R-Wpn-Mortar-Damage04" },
 	});
 
-	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
+	camCompleteRequiredResearch(mis_collectiveRes, CAM_THE_COLLECTIVE);
 
 	if (difficulty >= MEDIUM)
 	{
-		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
 	}
+	camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
 
 	// New HMG Tiger Tracks units in first attack group
-	addDroid(THE_COLLECTIVE, 92, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
-	addDroid(THE_COLLECTIVE, 96, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
-	addDroid(THE_COLLECTIVE, 97, 59, "Heavy Machinegun Tiger Tracks", "Body9REC", "tracked01", "", "", "MG3Mk1");
+	if (difficulty >= HARD)
+	{
+		addDroid(CAM_THE_COLLECTIVE, 92, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+		addDroid(CAM_THE_COLLECTIVE, 96, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+		addDroid(CAM_THE_COLLECTIVE, 97, 59, "Heavy Machinegun Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyMachinegun);
+	}
 
 	camSetEnemyBases({
 		"CONorthBase": {
 			cleanup: "base1Cleanup",
 			detectMsg: "C2B_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COCentralBase": {
 			cleanup: "base2Cleanup",
 			detectMsg: "C2B_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"COMiddleBase": {
 			cleanup: "base4Cleanup",
 			detectMsg: "C2B_BASE4",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -216,7 +241,7 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.npcybf, cTempl.npcybm]
+			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.cocybth, cTempl.npcybm]
 		},
 		"COHeavyFac-b4": {
 			assembly: "COHeavyFac-b4Assembly",
@@ -240,11 +265,11 @@ function eventStartLevel()
 				repair: 40,
 				count: -1,
 			},
-			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.npcybf]
+			templates: [cTempl.npcybc, cTempl.npcybr, cTempl.cocybth]
 		},
 	});
 
-	camManageTrucks(THE_COLLECTIVE);
+	camManageTrucks(CAM_THE_COLLECTIVE);
 	hackAddMessage("C2B_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	camEnableFactory("COHeavyFac-b4");

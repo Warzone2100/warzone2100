@@ -21,6 +21,28 @@
 			"Requires Cyborg factory to produce"
 		]
 	},
+	"RES_CYW_CN2": {
+		"id": "RES_CYW_CN2",
+		"imdName": "MICAPSUL.pie",
+		"sequenceName": "res_droid.ogg",
+		"text": [
+			"New Cyborg Available",
+			"Armed with Cyborg Hyper Velocity Cannon",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
+	},
+	"RES_CYW_FL2": {
+		"id": "RES_CYW_FL2",
+		"imdName": "MICAPSUL.pie",
+		"sequenceName": "res_droid.ogg",
+		"text": [
+			"New Cyborg Available",
+			"Armed with Cyborg Thermite flamer",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
+	},
 	"RES_CYW_MG4": {
 		"id": "RES_CYW_MG4",
 		"imdName": "MICAPSUL.pie",
@@ -28,6 +50,17 @@
 		"text": [
 			"New Cyborg Available",
 			"Armed with Cyborg Assault Gun",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
+	},
+	"RES_CYW_RK2": {
+		"id": "RES_CYW_RK2",
+		"imdName": "MICAPSUL.pie",
+		"sequenceName": "res_droid.ogg",
+		"text": [
+			"New Cyborg Available",
+			"Armed with Cyborg Tank Killer rocket",
 			"Body Points: Medium",
 			"Requires Cyborg factory to produce"
 		]

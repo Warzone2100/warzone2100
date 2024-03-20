@@ -877,6 +877,9 @@
 		"id": "R-Defense-HeavyLas",
 		"msgName": "RES_EMP_HEAVYLAS",
 		"name": "Heavy Laser Emplacement",
+		"redStructures": [
+			"Emplacement-PrisLas"
+		],
 		"requiredResearch": [
 			"R-Wpn-HvyLaser"
 		],
@@ -954,9 +957,7 @@
 		"msgName": "RES_EMP_HvAM",
 		"name": "Archangel Missile Battery",
 		"redStructures": [
-			"Emplacement-Howitzer105",
-			"Emplacement-Rocket06-IDF",
-			"Emplacement-MortarPit02"
+			"Emplacement-Rocket06-IDF"
 		],
 		"requiredResearch": [
 			"R-Wpn-HvArtMissile"
@@ -991,6 +992,9 @@
 		"id": "R-Defense-HvyHowitzer",
 		"msgName": "RES_EMP_HvHOW",
 		"name": "Ground Shaker Emplacement",
+		"redStructures": [
+			"Emplacement-Howitzer105"
+		],
 		"requiredResearch": [
 			"R-Defense-Howitzer",
 			"R-Wpn-HvyHowitzer"
@@ -1076,6 +1080,9 @@
 		"id": "R-Defense-MassDriver",
 		"msgName": "RES_EMP_MD",
 		"name": "Mass Driver Fortress",
+		"redStructures": [
+			"X-Super-Cannon"
+		],
 		"requiredResearch": [
 			"R-Wpn-RailGun03",
 			"R-Wpn-Rail-ROF03",
@@ -1192,6 +1199,9 @@
 		"id": "R-Defense-Pillbox06",
 		"msgName": "RES_PB_ATR",
 		"name": "Lancer Tower",
+		"redStructures": [
+			"GuardTower6"
+		],
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Rocket01-LtAT"
@@ -1216,7 +1226,7 @@
 		"resultStructures": [
 			"Emplacement-PlasmaCannon"
 		],
-		"statID": "Emplacement-PulseLaser"
+		"statID": "Emplacement-PlasmaCannon"
 	},
 	"R-Defense-PlasmiteFlamer": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -1361,6 +1371,9 @@
 		"id": "R-Defense-SamSite1",
 		"msgName": "RES_EMP_SAM1",
 		"name": "Avenger SAM Site",
+		"redStructures": [
+			"P0-AASite-Sunburst"
+		],
 		"requiredResearch": [
 			"R-Wpn-Missile-LtSAM"
 		],
@@ -1425,6 +1438,9 @@
 		"id": "R-Defense-Super-Missile",
 		"msgName": "RES_EMP_MSL",
 		"name": "Missile Fortress",
+		"redStructures": [
+			"X-Super-Rocket"
+		],
 		"requiredResearch": [
 			"R-Defense-WallUpgrade10",
 			"R-Wpn-Missile-ROF03"
@@ -1544,7 +1560,7 @@
 		"msgName": "RES_WT9_ATM",
 		"name": "Scourge Missile Hardpoint",
 		"redStructures": [
-			"WallTower06"
+			"WallTower-HvATrocket"
 		],
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
@@ -1612,6 +1628,9 @@
 		"id": "R-Defense-WallTower-HvyA-Trocket",
 		"msgName": "RES_WT12_HAT",
 		"name": "Tank Killer Hardpoint",
+		"redStructures": [
+			"WallTower06"
+		],
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
@@ -1657,6 +1676,11 @@
 		"id": "R-Defense-WallTower-Rail2",
 		"msgName": "RES_WT15_RL2",
 		"name": "Rail Gun Hardpoint",
+		"redStructures": [
+			"WallTower04",
+			"WallTower-HPVcannon",
+			"Wall-VulcanCan"
+		],
 		"requiredResearch": [
 			"R-Wpn-RailGun02"
 		],
@@ -1673,7 +1697,10 @@
 		"msgName": "RES_WT15_RL3",
 		"name": "Gauss Cannon Hardpoint",
 		"redStructures": [
-			"WallTower-Rail2"
+			"WallTower-Rail2",
+			"WallTower04",
+			"WallTower-HPVcannon",
+			"Wall-VulcanCan"
 		],
 		"requiredResearch": [
 			"R-Wpn-RailGun03"
@@ -1926,7 +1953,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 45
 			},
 			{
 				"class": "Building",
@@ -1954,7 +1981,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 45
 			},
 			{
 				"class": "Building",
@@ -1983,7 +2010,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 45
 			},
 			{
 				"class": "Building",
@@ -2014,7 +2041,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 55
 			},
 			{
 				"class": "Building",
@@ -2042,7 +2069,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 55
 			},
 			{
 				"class": "Building",
@@ -2071,7 +2098,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 55
 			},
 			{
 				"class": "Building",
@@ -2100,7 +2127,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 65
 			},
 			{
 				"class": "Building",
@@ -2129,7 +2156,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 65
 			},
 			{
 				"class": "Building",
@@ -2158,7 +2185,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 35
+				"value": 65
 			},
 			{
 				"class": "Building",
@@ -2763,6 +2790,27 @@
 				"class": "Building",
 				"parameter": "RepairPoints",
 				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "CyborgRepair",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "HeavyRepair",
+				"parameter": "RepairPoints",
+				"value": 50
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 50
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -2783,7 +2831,28 @@
 			{
 				"class": "Building",
 				"parameter": "RepairPoints",
-				"value": 50
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "CyborgRepair",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "HeavyRepair",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 100
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -2803,7 +2872,28 @@
 			{
 				"class": "Building",
 				"parameter": "RepairPoints",
-				"value": 50
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "CyborgRepair",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "HeavyRepair",
+				"parameter": "RepairPoints",
+				"value": 100
+			},
+			{
+				"class": "Repair",
+				"filterParameter": "Id",
+				"filterValue": "LightRepair1",
+				"parameter": "RepairPoints",
+				"value": 100
 			}
 		],
 		"statID": "A0RepairCentre3",
@@ -3456,6 +3546,13 @@
 				"filterValue": "Droids",
 				"parameter": "Thermal",
 				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Thermal",
+				"value": 40
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3475,6 +3572,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3497,6 +3601,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3523,6 +3634,13 @@
 				"filterValue": "Droids",
 				"parameter": "Thermal",
 				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Thermal",
+				"value": 40
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3542,6 +3660,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3564,6 +3689,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3589,6 +3721,13 @@
 				"filterValue": "Droids",
 				"parameter": "Thermal",
 				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Thermal",
+				"value": 40
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -3608,6 +3747,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -3630,6 +3776,13 @@
 				"class": "Body",
 				"filterParameter": "BodyClass",
 				"filterValue": "Droids",
+				"parameter": "Thermal",
+				"value": 40
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
 				"parameter": "Thermal",
 				"value": 40
 			}
@@ -4086,6 +4239,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -4114,6 +4281,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4143,6 +4324,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4174,6 +4369,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -4202,6 +4411,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4231,6 +4454,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4262,6 +4499,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -4290,6 +4541,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -4319,6 +4584,20 @@
 				"filterValue": "Droids",
 				"parameter": "HitPointPct",
 				"value": 30
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "Armour",
+				"value": 15
+			},
+			{
+				"class": "Body",
+				"filterParameter": "BodyClass",
+				"filterValue": "Transports",
+				"parameter": "HitPointPct",
+				"value": 15
 			}
 		],
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
@@ -8133,7 +8412,7 @@
 			"RailGun2Mk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Rail-Damage03"
+			"R-Wpn-RailGun02"
 		],
 		"researchPoints": 43200,
 		"researchPower": 450,

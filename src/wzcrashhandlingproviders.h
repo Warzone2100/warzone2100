@@ -28,6 +28,7 @@ bool shutdownCrashHandlingProvider();
 
 bool crashHandlingProviderSetTag(const std::string& key, const std::string& value);
 bool crashHandlingProviderSetContext(const std::string& key, const nlohmann::json& contextDictionary);
+bool crashHandlingProviderCaptureException(const std::string& errorMessage, bool captureStackTrace);
 
 bool crashHandlingProviderTestCrash();
 

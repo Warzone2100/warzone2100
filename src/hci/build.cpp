@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2021-2023  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/widget/button.h"
@@ -26,9 +45,9 @@ void BuildController::updateBuildersList()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer = %" PRIu32 "", selectedPlayer);
 
-	for (DROID *droid = apsDroidLists[selectedPlayer]; droid; droid = droid->psNext)
+	for (DROID *droid : apsDroidLists[selectedPlayer])
 	{
-		if (isConstructionDroid(droid) && droid->died == 0)
+		if (droid->isConstructionDroid() && droid->died == 0)
 		{
 			builders.push_back(droid);
 		}
@@ -149,7 +168,7 @@ void BuildController::setHighlightedObject(BASE_OBJECT *object)
 
 	auto builder = castDroid(object);
 	ASSERT_NOT_NULLPTR_OR_RETURN(, builder);
-	ASSERT_OR_RETURN(, isConstructionDroid(builder), "Droid is not a construction droid");
+	ASSERT_OR_RETURN(, builder->isConstructionDroid(), "Droid is not a construction droid");
 	highlightedBuilder = builder;
 }
 
@@ -384,7 +403,7 @@ private:
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
@@ -476,7 +495,7 @@ private:
 		});
 	}
 
-	void clickSecondary() override
+	void clickSecondary(bool synthesizedFromHold) override
 	{
 		auto clickedStats = controller->getStatsAt(buildOptionIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);

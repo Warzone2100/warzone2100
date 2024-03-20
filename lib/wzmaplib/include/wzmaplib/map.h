@@ -128,7 +128,7 @@ std::string to_string(MapType mapType);
 class Map
 {
 private:
-	Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, std::shared_ptr<LoggingProtocol> logger, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
+	Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, std::shared_ptr<LoggingProtocol> logger, std::shared_ptr<IOProvider> mapIO = std::make_shared<StdIOProvider>());
 
 public:
 	// Construct an empty Map, for modification
@@ -138,10 +138,10 @@ public:
 	// - seed (a seed used for random script-based maps generation)
 	// - a logger
 	// - a WzMap::IOProvider
-	static std::shared_ptr<Map> loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
+	static std::shared_ptr<Map> loadFromPath(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, uint32_t seed, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::make_shared<StdIOProvider>());
 
 	// Export a map to a specified folder path in a specified output format (version)
-	static bool exportMapToPath(Map& map, const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, OutputFormat format, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::shared_ptr<IOProvider>(new StdIOProvider()));
+	static bool exportMapToPath(Map& map, const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, OutputFormat format, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::make_shared<StdIOProvider>());
 
 	// High-level data loading functions
 

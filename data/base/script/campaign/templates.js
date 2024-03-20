@@ -1,165 +1,391 @@
-var cTempl = {
+
+const tBody = {
+    scav: {
+        //Human
+        human: "B1BaBaPerson01",
+        //Scavenger vehicle
+        trike: "B4body-sml-trike01",
+        buggy: "B3body-sml-buggy01",
+        jeep: "B2JeepBody",
+        rocketJeep: "B2RKJeepBody",
+        rocketBuggy: "B3bodyRKbuggy01",
+        bus: "BusBody",
+        fireTruck: "FireBody",
+    },
+    tank: {
+        //Light
+        viper: "Body1REC",
+        bug: "Body4ABT",
+        leopard: "Body2SUP",
+        retaliation: "Body3MBT",
+        //Medium
+        cobra: "Body5REC",
+        scorpion: "Body8MBT",
+        panther: "Body6SUPP",
+        retribution: "Body7ABT",
+        //Heavy
+        python: "Body11ABT",
+        mantis: "Body12SUP",
+        tiger: "Body9REC",
+        vengeance: "Body10MBT",
+    },
+    cyborg: {
+        //Light cyborg
+        lightBody: "CyborgLightBody",
+        //Nexus light cyborg
+        nexusRailBody: "CybNXRail1Jmp",
+        nexusScourgeBody: "CybNXMissJmp",
+        nexusLaserBody: "CybNXPulseLasJmp",
+    }
+};
+const tProp = {
+    scav: {
+        //Scavenger Legs
+        legs: "BaBaLegs",
+        //Scavenger Vehicle
+        vehicle: "BaBaProp",
+    },
+    tank: {
+        //Wheels
+        wheels: "wheeled01",
+        wheels2: "wheeled02",
+        wheels3: "wheeled03",
+        //HalfTrack
+        halfTracks: "HalfTrack",
+        halfTracks2: "HalfTrack02",
+        halfTracks3: "HalfTrack03",
+        //Tracks
+        tracks: "tracked01",
+        tracks2: "tracked02",
+        tracks3: "tracked03",
+        //Hover
+        hover: "hover01",
+        hover2: "hover02",
+        hover3: "hover03",
+    },
+    air: {
+        //VTOL
+        vtol: "V-Tol",
+        vtol2: "V-Tol02",
+        vtol3: "V-Tol03",
+    },
+    cyborg: {
+        //Cyborg Legs
+        legs: "CyborgLegs",
+        legs2: "CyborgLegs02",
+        legs3: "CyborgLegs03",
+    }
+};
+const tWeap = {
+    scav: {
+        //MG
+        machinegun: "BabaMG",
+        twinMachinegun: "BabaTwinMG",
+        heavyMachinegun: "BabaHeavyMG",
+        trikeMachinegun: "BabaTrikeMG",
+        trikeTwinMachinegun: "BabaTrikeTwinMG",
+        trikeHeavyMachinegun: "BabaTrikeHeavyMG",
+        buggyMachinegun: "BabaBuggyMG",
+        buggyTwinMachinegun: "BabaBuggyTwinMG",
+        buggyHeavyMachinegun: "BabaBuggyHeavyMG",
+        jeepMachinegun: "BabaJeepMG",
+        jeepTwinMachinegun: "BabaJeepTwinMG",
+        jeepHeavyMachinegun: "BabaJeepHeavyMG",
+        //cannon
+        busCannon: "BabaBusCannon",
+        //rocket
+        miniRocketPod: "BabaRocket",
+        //artillery
+        miniRocketArray: "BabaRocket8",
+    },
+    tank: {
+        //MG
+        machinegun: "MG1Mk1",
+        twinMachinegun: "MG2Mk1",
+        heavyMachinegun: "MG3Mk1",
+        assaultGun: "MG4ROTARYMk1",
+        //Flamer
+        flamer: "Flame1Mk1",
+        inferno: "Flame2",
+        //Cannon
+        lightCannon: "Cannon1Mk1",
+        mediumCannon: "Cannon2A-TMk1",
+        heavyCannon: "Cannon375mmMk1",
+        hyperVelocityCannon: "Cannon4AUTOMk1",
+        assaultCannon: "Cannon5VulcanMk1",
+        //Rocket
+        miniRocketPod: "Rocket-Pod",
+        lancer: "Rocket-LtA-T",
+        tankKiller: "Rocket-HvyA-T",
+        bunkerBuster: "Rocket-BB",
+        //Artillery
+        mortar: "Mortar1Mk1",
+        bombard: "Mortar2Mk1",
+        pepperpot: "Mortar3ROTARYMk1",
+        miniRocketArray: "Rocket-MRL",
+        rippleRocket: "Rocket-IDF",
+        howitzer: "Howitzer105Mk1",
+        groundShaker: "Howitzer150Mk1",
+        hellstorm: "Howitzer03-Rot",
+        angel: "Missile-MdArt",
+        archAngel: "Missile-HvyArt",
+        heavyPlasmaLauncher: "PlasmaHeavy",
+        //Anti-Air
+        hurricane: "QuadMg1AAGun",
+        cyclone: "AAGun2Mk1",
+        whirlwind: "QuadRotAAGun",
+        avenger: "Missile-LtSAM",
+        vindicator: "Missile-HvySAM",
+        //Laser
+        flashlight: "Laser3BEAMMk1",
+        pulseLaser: "Laser2PULSEMk1",
+        //Rail
+        needle: "RailGun1Mk1",
+        railGun: "RailGun2Mk1",
+        gaussCannon: "RailGun3Mk1",
+        //Missile
+        scourgeMissile: "Missile-A-T",
+        //Electronic
+        nexusLink: "NEXUSlink",
+    },
+    cyborg: {
+        //MG
+        heavyMachinegun: "CyborgChaingun",
+        assaultGun: "CyborgRotMG",
+        //Flamer
+        flamer: "CyborgFlamer01",
+        thermite: "CyborgFlamer02",
+        //Cannon
+        lightCannon: "CyborgCannon",
+        sniperCannon: "CyborgCannon02",
+        //Rocket
+        lancer: "CyborgRocket",
+        tankKiller: "CyborgRocket02",
+        //Laser
+        flashlight: "Cyb-Wpn-Laser",
+        nexusFlashlight: "NX-CyborgPulseLas",
+        //Rail
+        needle: "Cyb-Wpn-Rail1",
+        nexusNeedle: "NX-Cyb-Rail1",
+        //Missile
+        scourgeMissile: "Cyb-Wpn-Atmiss",
+        nexusScourgeMissile: "NX-CyborgMiss",
+    },
+    air: {
+        //MG
+        machinegun: "MG1-VTOL",
+        twinMachinegun: "MG2-VTOL",
+        heavyMachinegun: "MG3-VTOL",
+        assaultGun: "MG4ROTARY-VTOL",
+        //Cannon
+        lightCannon: "Cannon1-VTOL",
+        heavyCannon: "Cannon375mm-VTOL",
+        hyperVelocityCannon: "Cannon4AUTO-VTOL",
+        assaultCannon: "Cannon5Vulcan-VTOL",
+        //Rocket
+        miniRocketPod: "Rocket-VTOL-Pod",
+        lancer: "Rocket-VTOL-LtA-T",
+        tankKiller: "Rocket-VTOL-HvyA-T",
+        bunkerBuster: "Rocket-VTOL-BB",
+        //Bomb
+        clusterBomb: "Bomb1-VTOL-LtHE",
+        heapBomb: "Bomb2-VTOL-HvHE",
+        phosphorBomb: "Bomb3-VTOL-LtINC",
+        thermiteBomb: "Bomb4-VTOL-HvyINC",
+        //Laser
+        flashlight: "Laser3BEAM-VTOL",
+        pulseLaser: "Laser2PULSE-VTOL",
+        //Rail
+        needle: "RailGun1-VTOL",
+        railGun: "RailGun2-VTOL",
+        //Missile
+        scourgeMissile: "Missile-VTOL-AT",
+    }
+};
+const tSensor = {
+    sensor: "SensorTurret1Mk1",
+    counterBattery: "Sys-CBTurret01",
+    vtolStrike: "Sys-VstrikeTurret01",
+    vtolCounterBattery: "Sys-VTOLCBTurret01",
+};
+const tRepair = {
+    lightRepair: "LightRepair1",
+};
+const tConstruct = {
+    truck: "Spade1Mk1",
+};
+const tCommand = {
+    commander: "CommandBrain01",
+};
+
+const cTempl = {
 ////////////////////////////////////////////////////////////////////////////////
 
 // CAM_1A
-bloke: { body: "B1BaBaPerson01", prop: "BaBaLegs", weap: "BabaMG" },
-trike: { body: "B4body-sml-trike01", prop: "BaBaProp", weap: "BabaTrikeMG" },
-buggy: { body: "B3body-sml-buggy01", prop: "BaBaProp", weap: "BabaBuggyMG" },
-bjeep: { body: "B2JeepBody", prop: "BaBaProp", weap: "BabaJeepMG" },
+bloke: { body: tBody.scav.human, prop: tProp.scav.legs, weap: tWeap.scav.machinegun },
+trike: { body: tBody.scav.trike, prop: tProp.scav.vehicle, weap: tWeap.scav.trikeMachinegun },
+buggy: { body: tBody.scav.buggy, prop: tProp.scav.vehicle, weap: tWeap.scav.buggyMachinegun },
+bjeep: { body: tBody.scav.jeep, prop: tProp.scav.vehicle, weap: tWeap.scav.jeepMachinegun },
 
 // CAM_1B
-bloketwin: { body: "B1BaBaPerson01", prop: "BaBaLegs", weap: "BabaTwinMG" },
-triketwin: { body: "B4body-sml-trike01", prop: "BaBaProp", weap: "BabaTrikeTwinMG" },
-buggytwin: { body: "B3body-sml-buggy01", prop: "BaBaProp", weap: "BabaBuggyTwinMG" },
-bjeeptwin: { body: "B2JeepBody", prop: "BaBaProp", weap: "BabaJeepTwinMG" },
+bloketwin: { body: tBody.scav.human, prop: tProp.scav.legs, weap: tWeap.scav.twinMachinegun },
+triketwin: { body: tBody.scav.trike, prop: tProp.scav.vehicle, weap: tWeap.scav.trikeTwinMachinegun },
+buggytwin: { body: tBody.scav.buggy, prop: tProp.scav.vehicle, weap: tWeap.scav.buggyTwinMachinegun },
+bjeeptwin: { body: tBody.scav.jeep, prop: tProp.scav.vehicle, weap: tWeap.scav.jeepTwinMachinegun },
 
 // SUB_1_1
-blokeheavy: { body: "B1BaBaPerson01", prop: "BaBaLegs", weap: "BabaHeavyMG" },
-trikeheavy: { body: "B4body-sml-trike01", prop: "BaBaProp", weap: "BabaTrikeHeavyMG" },
-buggyheavy: { body: "B3body-sml-buggy01", prop: "BaBaProp", weap: "BabaBuggyHeavyMG" },
-bjeepheavy: { body: "B2JeepBody", prop: "BaBaProp", weap: "BabaJeepHeavyMG" },
+blokeheavy: { body: tBody.scav.human, prop: tProp.scav.legs, weap: tWeap.scav.heavyMachinegun },
+trikeheavy: { body: tBody.scav.trike, prop: tProp.scav.vehicle, weap: tWeap.scav.trikeHeavyMachinegun },
+buggyheavy: { body: tBody.scav.buggy, prop: tProp.scav.vehicle, weap: tWeap.scav.buggyHeavyMachinegun },
+bjeepheavy: { body: tBody.scav.jeep, prop: tProp.scav.vehicle, weap: tWeap.scav.jeepHeavyMachinegun },
 
 // SUB_1_2
 
 // SUB_1_3
-rbjeep8: { body: "B2RKJeepBody", prop: "BaBaProp", weap: "BabaRocket8" },
-rbjeep: { body: "B2RKJeepBody", prop: "BaBaProp", weap: "BabaRocket" },
-rbuggy: { body: "B3bodyRKbuggy01", prop: "BaBaProp", weap: "BabaRocket" },
-nppod: { body: "Body4ABT", prop: "wheeled01", weap: "Rocket-Pod" },
-npblc: { body: "Body4ABT", prop: "HalfTrack", weap: "Cannon1Mk1" },
-nphmg: { body: "Body4ABT", prop: "HalfTrack", weap: "MG3Mk1" },
-npsmc: { body: "Body8MBT", prop: "HalfTrack", weap: "Cannon2A-TMk1" },
-buscan: { body: "BusBody", prop: "BaBaProp", weap: "BabaBusCannon" },
-firecan: { body: "FireBody", prop: "BaBaProp", weap: "BabaBusCannon" },
+rbjeep8: { body: tBody.scav.rocketJeep, prop: tProp.scav.vehicle, weap: tWeap.scav.miniRocketArray },
+rbjeep: { body: tBody.scav.rocketJeep, prop: tProp.scav.vehicle, weap: tWeap.scav.miniRocketPod },
+rbuggy: { body: tBody.scav.rocketBuggy, prop: tProp.scav.vehicle, weap: tWeap.scav.miniRocketPod },
+nppod: { body: tBody.tank.bug, prop: tProp.tank.wheels, weap: tWeap.tank.miniRocketPod },
+npblc: { body: tBody.tank.bug, prop: tProp.tank.halfTracks, weap: tWeap.tank.lightCannon },
+nphmg: { body: tBody.tank.bug, prop: tProp.tank.halfTracks, weap: tWeap.tank.heavyMachinegun },
+npsmc: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.mediumCannon },
+buscan: { body: tBody.scav.bus, prop: tProp.scav.vehicle, weap: tWeap.scav.busCannon },
+firecan: { body: tBody.scav.fireTruck, prop: tProp.scav.vehicle, weap: tWeap.scav.busCannon },
 
 // CAM_1C
-npsens: { body: "Body4ABT", prop: "wheeled01", weap: "SensorTurret1Mk1" },
-npslc: { body: "Body8MBT", prop: "HalfTrack", weap: "Cannon1Mk1" },
-npmor: { body: "Body8MBT", prop: "HalfTrack", weap: "Mortar1Mk1" },
-npsmct: { body: "Body8MBT", prop: "tracked01", weap: "Cannon2A-TMk1" },
+npsens: { body: tBody.tank.bug, prop: tProp.tank.wheels, weap: tSensor.sensor },
+npslc: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.lightCannon },
+npmor: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.mortar },
+npsmct: { body: tBody.tank.scorpion, prop: tProp.tank.tracks, weap: tWeap.tank.mediumCannon },
 
 // CAM_1CA
-npmrl: { body: "Body4ABT", prop: "HalfTrack", weap: "Rocket-MRL" },
-npmmct: { body: "Body12SUP", prop: "tracked01", weap: "Cannon2A-TMk1" },
-npsbb: { body: "Body8MBT", prop: "HalfTrack", weap: "Rocket-BB" },
-npltat: { body: "Body4ABT", prop: "HalfTrack", weap: "Rocket-LtA-T" },
+npmrl: { body: tBody.tank.bug, prop: tProp.tank.halfTracks, weap: tWeap.tank.miniRocketArray },
+npmmct: { body: tBody.tank.mantis, prop: tProp.tank.tracks, weap: tWeap.tank.mediumCannon },
+npsbb: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.bunkerBuster },
+npltat: { body: tBody.tank.bug, prop: tProp.tank.halfTracks, weap: tWeap.tank.lancer },
 
 // SUB_1_4A
 
 // CAM_1_5
-nphmgt: { body: "Body8MBT", prop: "tracked01", weap: "MG3Mk1" },
-npcybc: { body: "CyborgLightBody", prop: "CyborgLegs", weap: "CyborgCannon" },
-npcybf: { body: "CyborgLightBody", prop: "CyborgLegs", weap: "CyborgFlamer01" },
-npcybm: { body: "CyborgLightBody", prop: "CyborgLegs", weap: "CyborgChaingun" },
+nphmgt: { body: tBody.tank.scorpion, prop: tProp.tank.tracks, weap: tWeap.tank.heavyMachinegun },
+npcybc: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.lightCannon },
+npcybf: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.flamer },
+npcybm: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.heavyMachinegun },
 
 // CAM_1AC
-nphct: { body: "Body12SUP", prop: "tracked01", weap: "Cannon375mmMk1" },
-npmorb: { body: "Body8MBT", prop: "HalfTrack", weap: "Mortar2Mk1" },
-npmsens: { body: "Body8MBT", prop: "HalfTrack", weap: "SensorTurret1Mk1" },
+nphct: { body: tBody.tank.mantis, prop: tProp.tank.tracks, weap: tWeap.tank.heavyCannon },
+npmorb: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.bombard },
+npmsens: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tSensor.sensor },
 
 // SUB_1_7
 
 // CAM_1_D
-npcybr: { body: "CyborgLightBody", prop: "CyborgLegs", weap: "CyborgRocket" },
-nphmgh: { body: "Body8MBT", prop: "hover01", weap: "MG3Mk1" },
-npltath: { body: "Body8MBT", prop: "hover01", weap: "Rocket-LtA-T" },
-nphch: { body: "Body12SUP", prop: "hover01", weap: "Cannon375mmMk1" },
-nphbb: { body: "Body12SUP", prop: "hover01", weap: "Rocket-BB" },
+npcybr: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.lancer },
+nphmgh: { body: tBody.tank.scorpion, prop: tProp.tank.hover, weap: tWeap.tank.heavyMachinegun },
+npltath: { body: tBody.tank.scorpion, prop: tProp.tank.hover, weap: tWeap.tank.lancer },
+nphch: { body: tBody.tank.mantis, prop: tProp.tank.hover, weap: tWeap.tank.heavyCannon },
+nphbb: { body: tBody.tank.mantis, prop: tProp.tank.hover, weap: tWeap.tank.bunkerBuster },
 
 // CAM_2_A
-commgt: { body: "Body6SUPP", prop: "tracked01", weap: "MG3Mk1" },
-comsens: { body: "Body6SUPP", prop: "tracked01", weap: "SensorTurret1Mk1" },
-cohct: { body: "Body9REC", prop: "tracked01", weap: "Cannon375mmMk1" },
-commc: { body: "Body6SUPP", prop: "tracked01", weap: "Cannon2A-TMk1" },
-commrl: { body: "Body6SUPP", prop: "HalfTrack", weap: "Rocket-MRL" },
-commrp: { body: "Body6SUPP", prop: "tracked01", weap: "Rocket-Pod" },
-comorb: { body: "Body6SUPP", prop: "HalfTrack", weap: "Mortar2Mk1" },
-colcbv: { body: "Body2SUP", prop: "V-Tol", weap: "Bomb1-VTOL-LtHE" },
-prhct: { body: "Body11ABT", prop: "tracked01", weap: "Cannon375mmMk1" },
-prltat: { body: "Body5REC", prop: "tracked01", weap: "Rocket-LtA-T" },
-prrept: { body: "Body5REC", prop: "tracked01", weap: "LightRepair1" },
+commgt: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.heavyMachinegun },
+comsens: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tSensor.sensor },
+cohct: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.heavyCannon },
+commc: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.mediumCannon },
+commrl: { body: tBody.tank.panther, prop: tProp.tank.halfTracks, weap: tWeap.tank.miniRocketArray },
+commrp: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.miniRocketPod },
+comorb: { body: tBody.tank.panther, prop: tProp.tank.halfTracks, weap: tWeap.tank.bombard },
+colcbv: { body: tBody.tank.leopard, prop: tProp.air.vtol, weap: tWeap.air.clusterBomb },
+colpbv: { body: tBody.tank.leopard, prop: tProp.air.vtol, weap: tWeap.air.phosphorBomb },
+colatv: { body: tBody.tank.leopard, prop: tProp.air.vtol, weap: tWeap.air.lancer },
+prhct: { body: tBody.tank.python, prop: tProp.tank.tracks, weap: tWeap.tank.heavyCannon },
+prltat: { body: tBody.tank.cobra, prop: tProp.tank.tracks, weap: tWeap.tank.lancer },
+prrept: { body: tBody.tank.cobra, prop: tProp.tank.tracks, weap: tRepair.lightRepair },
 
 // SUB_2_1
 
 // CAM_2_B
-comatt: { body: "Body6SUPP", prop: "tracked01", weap: "Rocket-LtA-T" },
-comit: { body: "Body6SUPP", prop: "tracked01", weap: "Flame2" },
-colatv: { body: "Body2SUP", prop: "V-Tol", weap: "Rocket-VTOL-LtA-T" },
+comatt: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.lancer },
+comit: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.inferno },
+cocybth: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.thermite },
 
 // SUB_2_2
-comtath: { body: "Body6SUPP", prop: "hover01", weap: "Rocket-LtA-T" },
-comtathh: { body: "Body6SUPP", prop: "HalfTrack", weap: "Rocket-LtA-T" },
+comtath: { body: tBody.tank.panther, prop: tProp.tank.hover, weap: tWeap.tank.lancer },
+comtathh: { body: tBody.tank.panther, prop: tProp.tank.halfTracks, weap: tWeap.tank.lancer },
 
 // CAM_2_C
-commorv: { body: "Body6SUPP", prop: "V-Tol", weap: "Bomb2-VTOL-HvHE" },
-colagv: { body: "Body2SUP", prop: "V-Tol", weap: "MG4ROTARY-VTOL" },
-comhpv: { body: "Body6SUPP", prop: "tracked01", weap: "Cannon4AUTOMk1" },
-cohbbt: { body: "Body9REC", prop: "tracked01", weap: "Rocket-BB" },
+cohcv: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.heavyCannon },
+commorv: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.heapBomb },
+colagv: { body: tBody.tank.leopard, prop: tProp.air.vtol, weap: tWeap.air.assaultGun },
+comhpv: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.hyperVelocityCannon },
+cohbbt: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.bunkerBuster },
 
 // SUB_2_5
-cocybag: { body: "CyborgLightBody", prop: "CyborgLegs", weap: "CyborgRotMG" },
+cocybag: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.assaultGun },
 
 // SUB_2_D
-comhltat: { body: "Body6SUPP", prop: "tracked01", weap: "Rocket-HvyA-T" },
-commorvt: { body: "Body6SUPP", prop: "V-Tol", weap: "Bomb4-VTOL-HvyINC" },
-cohhpv: { body: "Body9REC", prop: "tracked01", weap: "Cannon4AUTOMk1" },
-comagt: { body: "Body6SUPP", prop: "tracked01", weap: "MG4ROTARYMk1" },
+comhltat: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.tankKiller },
+commorvt: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.thermiteBomb },
+cohhpv: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.hyperVelocityCannon },
+comagt: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.assaultGun },
+cocybsn: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.sniperCannon },
+cocybtk: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.tankKiller },
+colhvat: { body: tBody.tank.leopard, prop: tProp.air.vtol, weap: tWeap.air.tankKiller },
 
 // SUB_2_6
-cohact: { body: "Body9REC", prop: "tracked01", weap: "Cannon5VulcanMk1" },
-comrotm: { body: "Body6SUPP", prop: "HalfTrack", weap: "Mortar3ROTARYMk1" },
-comsensh: { body: "Body6SUPP", prop: "HalfTrack", weap: "SensorTurret1Mk1" },
+cohact: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.assaultCannon },
+comrotm: { body: tBody.tank.panther, prop: tProp.tank.halfTracks, weap: tWeap.tank.pepperpot },
+comsensh: { body: tBody.tank.panther, prop: tProp.tank.halfTracks, weap: tSensor.sensor },
 
 // SUB_2_7
-comrotmh: { body: "Body6SUPP", prop: "tracked01", weap: "Mortar3ROTARYMk1" },
-comltath: { body: "Body6SUPP", prop: "hover01", weap: "Rocket-HvyA-T" },
+comrotmh: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.pepperpot },
+comltath: { body: tBody.tank.panther, prop: tProp.tank.hover, weap: tWeap.tank.tankKiller },
 
 // SUB_2_8
-comhvat: { body: "Body6SUPP", prop: "V-Tol", weap: "Rocket-VTOL-HvyA-T" },
+comhvat: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.tankKiller },
 
 // CAM_2_END
-cowwt: { body: "Body9REC", prop: "tracked01", weap: "QuadRotAAGun" },
+cowwt: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.whirlwind },
 
 // CAM_3_A
-nxmscouh: { body: "Body7ABT", prop: "hover02", weap: "Missile-A-T" },
-nxcyrail: { body: "CybNXRail1Jmp", prop: "CyborgLegs02", weap: "NX-Cyb-Rail1" },
-nxcyscou: { body: "CybNXMissJmp", prop: "CyborgLegs02", weap: "NX-CyborgMiss" },
-nxlneedv: { body: "Body3MBT", prop: "V-Tol02", weap: "RailGun1-VTOL" },
-nxlscouv: { body: "Body3MBT", prop: "V-Tol02", weap: "Missile-VTOL-AT" },
-nxmtherv: { body: "Body7ABT", prop: "V-Tol02", weap: "Bomb4-VTOL-HvyINC" },
-prhasgnt: { body: "Body11ABT", prop: "tracked01", weap: "MG4ROTARYMk1" },
-prhhpvt: { body: "Body11ABT", prop: "tracked01", weap: "Cannon4AUTOMk1" },
-prhaawwt: { body: "Body11ABT", prop: "tracked01", weap: "QuadRotAAGun" },
-prtruck: { body: "Body5REC", prop: "tracked01", weap: "Spade1Mk1" },
+nxmscouh: { body: tBody.tank.retribution, prop: tProp.tank.hover2, weap: tWeap.tank.scourgeMissile },
+nxcyrail: { body: tBody.cyborg.nexusRailBody, prop: tProp.cyborg.legs2, weap: tWeap.cyborg.nexusNeedle },
+nxcyscou: { body: tBody.cyborg.nexusScourgeBody, prop: tProp.cyborg.legs2, weap: tWeap.cyborg.nexusScourgeMissile },
+nxlneedv: { body: tBody.tank.retaliation, prop: tProp.air.vtol2, weap: tWeap.air.needle },
+nxlscouv: { body: tBody.tank.retaliation, prop: tProp.air.vtol2, weap: tWeap.air.scourgeMissile },
+nxmtherv: { body: tBody.tank.retribution, prop: tProp.air.vtol2, weap: tWeap.air.thermiteBomb },
+prhasgnt: { body: tBody.tank.python, prop: tProp.tank.tracks, weap: tWeap.tank.assaultGun },
+prhhpvt: { body: tBody.tank.python, prop: tProp.tank.tracks, weap: tWeap.tank.hyperVelocityCannon },
+prhaawwt: { body: tBody.tank.python, prop: tProp.tank.tracks, weap: tWeap.tank.whirlwind },
+prtruck: { body: tBody.tank.cobra, prop: tProp.tank.tracks, weap: tConstruct.truck },
 
 // SUB_3_1
-nxcylas: { body: "CybNXPulseLasJmp", prop: "CyborgLegs02", weap: "NX-CyborgPulseLas" },
-nxmrailh: { body: "Body7ABT", prop: "hover02", weap: "RailGun2Mk1" },
+nxcylas: { body: tBody.cyborg.nexusLaserBody, prop: tProp.cyborg.legs2, weap: tWeap.cyborg.nexusFlashlight },
+nxmrailh: { body: tBody.tank.retribution, prop: tProp.tank.hover2, weap: tWeap.tank.railGun },
 
 // CAM_3_B
-nxmlinkh: { body: "Body7ABT", prop: "hover02", weap: "NEXUSlink" },
-nxmsamh: { body: "Body7ABT", prop: "hover02", weap: "Missile-HvySAM" },
-nxmheapv: { body: "Body7ABT", prop: "V-Tol02", weap: "Bomb2-VTOL-HvHE" },
+nxmlinkh: { body: tBody.tank.retribution, prop: tProp.tank.hover2, weap: tWeap.tank.nexusLink },
+nxmsamh: { body: tBody.tank.retribution, prop: tProp.tank.hover2, weap: tWeap.tank.vindicator },
+nxmheapv: { body: tBody.tank.retribution, prop: tProp.air.vtol2, weap: tWeap.air.heapBomb },
 
 // SUB_3_2
-nxlflash: { body: "Body3MBT", prop: "hover02", weap: "Laser3BEAMMk1" },
+nxlflash: { body: tBody.tank.retaliation, prop: tProp.tank.hover2, weap: tWeap.tank.flashlight },
 
 // CAM_3_A_B
-nxmsens: { body: "Body7ABT", prop: "hover02", weap: "SensorTurret1Mk1" },
-nxmangel: { body: "Body7ABT", prop: "hover02", weap: "Missile-MdArt" },
+nxmsens: { body: tBody.tank.retribution, prop: tProp.tank.hover2, weap: tSensor.sensor },
+nxmangel: { body: tBody.tank.retribution, prop: tProp.tank.hover2, weap: tWeap.tank.angel },
 
 // CAM_3_C
 
 // CAM_3_A_D_1
-nxmpulseh: { body: "Body7ABT", prop: "hover02", weap: "Laser2PULSEMk1" },
+nxmpulseh: { body: tBody.tank.retribution, prop: tProp.tank.hover2, weap: tWeap.tank.pulseLaser },
 
 // CAM_3_A_D_2
-nxhgauss: { body: "Body10MBT", prop: "hover02", weap: "RailGun3Mk1" },
-nxlpulsev: { body: "Body3MBT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
+nxhgauss: { body: tBody.tank.vengeance, prop: tProp.tank.hover2, weap: tWeap.tank.gaussCannon },
+nxlpulsev: { body: tBody.tank.retaliation, prop: tProp.air.vtol2, weap: tWeap.air.pulseLaser },
 
 // SUB_3_4
-nxllinkh: { body: "Body3MBT", prop: "hover02", weap: "NEXUSlink" },
-nxmpulsev: { body: "Body7ABT", prop: "V-Tol02", weap: "Laser2PULSE-VTOL" },
+nxllinkh: { body: tBody.tank.retaliation, prop: tProp.tank.hover2, weap: tWeap.tank.nexusLink },
+nxmpulsev: { body: tBody.tank.retribution, prop: tProp.air.vtol2, weap: tWeap.air.pulseLaser },
 
 
 ////////////////////////////////////////////////////////////////////////////////

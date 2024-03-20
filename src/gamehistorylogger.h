@@ -150,7 +150,7 @@ private:
 	nlohmann::json genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const;
 	std::string getLogOutputFilename() const;
 
-	void outputLine(const std::string& line);
+	void outputLine(std::string&& line);
 
 private:
 	OutputModes outputModes;

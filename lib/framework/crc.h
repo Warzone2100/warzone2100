@@ -43,7 +43,7 @@ struct Sha256
 	std::string toString() const;
 	void fromString(std::string const &s);
 
-	uint8_t bytes[Bytes];
+	uint8_t bytes[Bytes] = {0};
 };
 Sha256 sha256Sum(void const *data, size_t dataLen);
 template <>
@@ -93,7 +93,7 @@ public:
 	//
 	// If supplied the exported public key, the EcKey object supports verify.
 	// If supplied the exported private key, the EcKey object supports sign & verify.
-	void fromBytes(Key const &key, Privacy privacy);
+	bool fromBytes(Key const &key, Privacy privacy);
 
 	static EcKey generate();
 
@@ -106,6 +106,25 @@ public:
 private:
 	void *vKey;
 	static const int curveId;
+};
+
+class SessionKeys
+{
+public:
+	static constexpr size_t NonceSize = 24;
+public:
+	SessionKeys(EcKey const &me, uint32_t me_playerIdx, EcKey const &other, uint32_t other_playerIdx);
+
+public:
+	std::vector<uint8_t> encryptMessageForOther(void const *data, size_t dataLen); // not thread-safe
+	bool decryptMessageFromOther(void const *data, size_t dataLen, std::vector<uint8_t>& outputDecrypted);
+
+private:
+	std::vector<unsigned char> receiveKey;
+	std::vector<unsigned char> sendKey;
+private:
+	// to avoid some repeated allocations
+	std::vector<unsigned char> buffer;
 };
 
 std::string base64Encode(std::vector<uint8_t> const &bytes);

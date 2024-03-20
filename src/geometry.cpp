@@ -53,9 +53,9 @@ DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
-		if (!isVtolDroid(psDroid))
+		if (!psDroid->isVtol())
 		{
 			/* Clever (?) bit that reads whether we're interested in droids being selected or not */
 			if (!bSelected || psDroid->selected)
@@ -137,7 +137,7 @@ Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad)
 }
 
 //-----------------------------------------------------------------------------------
-bool objectOnScreen(BASE_OBJECT *object, SDWORD tolerance)
+bool objectOnScreen(const BASE_OBJECT *object, SDWORD tolerance)
 {
 	if (DrawnInLastFrame(object->sDisplay.frameNumber) == true)
 	{

@@ -57,8 +57,11 @@
 	url = https://github.com/Warzone2100/maptools-cli.git
 [submodule "3rdparty/basis_universal"]
 	path = 3rdparty/basis_universal
-	url = https://github.com/past-due/basis_universal.git
+	url = https://github.com/BinomialLLC/basis_universal.git
 	shallow = true
 [submodule "data/terrain_overrides/classic"]
 	path = data/terrain_overrides/classic
 	url = https://github.com/Warzone2100/data-terrain-classic.git
+[submodule "data/terrain_overrides/high"]
+	path = data/terrain_overrides/high
+	url = https://github.com/Warzone2100/data-terrain-high.git

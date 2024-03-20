@@ -141,6 +141,11 @@ bool imageInitBitmaps()
 //
 void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, const glm::mat4 &modelViewProjectionMatrix)
 {
+	if (Width == 0 || Height == 0)
+	{
+		return;
+	}
+
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
 	SWORD WBottomRight = 0;
@@ -249,7 +254,7 @@ void IntListTabWidget::initialize()
 {
 	ListTabWidget::initialize();
 	tabWidget()->setHeight(15);
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2));
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2));
-	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2));
+	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1),    AtlasImage(IntImages, IMAGE_TAB1DOWN),    AtlasImage(IntImages, IMAGE_TABHILIGHT),    AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
+	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), AtlasImage(), 2, tabAlignment));
+	tabWidget()->addStyle(TabSelectionStyle(AtlasImage(IntImages, IMAGE_TAB1_SM), AtlasImage(IntImages, IMAGE_TAB1DOWN_SM), AtlasImage(IntImages, IMAGE_TABHILIGHT_SM), AtlasImage(IntImages, IMAGE_LFTTAB), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_LFTTABD), AtlasImage(IntImages, IMAGE_RGTTAB), AtlasImage(IntImages, IMAGE_RGTTABD), AtlasImage(IntImages, IMAGE_RGTTABD), 2, tabAlignment));
 }

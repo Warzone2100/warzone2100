@@ -29,6 +29,7 @@
 
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/pielighting.h"
 #include "lib/ivis_opengl/pienormalize.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/framework/fixedpoint.h"
@@ -51,6 +52,8 @@ static Vector3f theSun_ForTileIllumination(0.f, 0.f, 0.f);
 /*	Module function Prototypes */
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
 static void calcTileIllum(UDWORD tileX, UDWORD tileY);
+
+
 
 void setTheSun(Vector3f newSun)
 {
@@ -86,9 +89,9 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 		return;
 	}
 
-	for (unsigned i = x1; i < x2; i++)
+	for (unsigned j = y1; j < y2; j++)
 	{
-		for (unsigned j = y1; j < y2; j++)
+		for (unsigned i = x1; i < x2; i++)
 		{
 			MAPTILE	*psTile = mapTile(i, j);
 
@@ -237,55 +240,60 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	tile->ambientOcclusion = static_cast<uint8_t>(clip<float>(254.f*ao, 60.f, 254.f));
 }
 
-static void colourTile(SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)
+static void colourTile(LightMap& lightmap, SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)
 {
-	PIELIGHT colour = getTileColour(xIndex, yIndex);
+	PIELIGHT colour = lightmap(xIndex, yIndex);
 	colour.byte.r = static_cast<uint8_t>(MIN(255, colour.byte.r + light_colour.byte.r * fraction));
 	colour.byte.g = static_cast<uint8_t>(MIN(255, colour.byte.g + light_colour.byte.g * fraction));
 	colour.byte.b = static_cast<uint8_t>(MIN(255, colour.byte.b + light_colour.byte.b * fraction));
-	setTileColour(xIndex, yIndex, colour);
+	lightmap(xIndex, yIndex) = colour;
 }
 
-void processLight(LIGHT *psLight)
+void rendering1999::LightingManager::ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix)
 {
-	/* Firstly - there's no point processing lights that are off the grid */
-	if (clipXY(psLight->position.x, psLight->position.z) == false)
+	for (const auto& light : data.lights)
 	{
-		return;
-	}
-
-	const int tileX = psLight->position.x / TILE_UNITS;
-	const int tileY = psLight->position.z / TILE_UNITS;
-	const int rangeSkip = static_cast<int>(sqrtf(psLight->range * psLight->range * 2) / TILE_UNITS + 1);
-
-	/* Rough guess? */
-	int startX = tileX - rangeSkip;
-	int endX = tileX + rangeSkip;
-	int startY = tileY - rangeSkip;
-	int endY = tileY + rangeSkip;
-
-	/* Clip to grid limits */
-	startX = MAX(startX, 0);
-	endX = MAX(endX, 0);
-	endX = MIN(endX, mapWidth - 1);
-	startX = MIN(startX, endX);
-	startY = MAX(startY, 0);
-	endY = MAX(endY, 0);
-	endY = MIN(endY, mapHeight - 1);
-	startY = MIN(startY, endY);
-
-	for (int i = startX; i <= endX; i++)
-	{
-		for (int j = startY; j <= endY; j++)
+		const auto* psLight = &light;
+		/* Firstly - there's no point processing lights that are off the grid */
+		if (clipXY(psLight->position.x, psLight->position.z) == false)
 		{
-			int distToCorner = calcDistToTile(i, j, &psLight->position);
+			continue;
+		}
 
-			/* If we're inside the range of the light */
-			if (distToCorner < (SDWORD)psLight->range)
+		const int tileX = psLight->position.x / TILE_UNITS;
+		const int tileY = psLight->position.z / TILE_UNITS;
+		const int rangeSkip = static_cast<int>(sqrtf(psLight->range * psLight->range * 2) / TILE_UNITS + 1);
+
+		/* Rough guess? */
+		int startX = tileX - rangeSkip;
+		int endX = tileX + rangeSkip;
+		int startY = tileY - rangeSkip;
+		int endY = tileY + rangeSkip;
+
+		/* Clip to grid limits */
+		startX = MAX(startX, 0);
+		endX = MAX(endX, 0);
+		endX = MIN(endX, mapWidth - 1);
+		startX = MIN(startX, endX);
+		startY = MAX(startY, 0);
+		endY = MAX(endY, 0);
+		endY = MIN(endY, mapHeight - 1);
+		startY = MIN(startY, endY);
+
+		for (int i = startX; i <= endX; i++)
+		{
+			for (int j = startY; j <= endY; j++)
 			{
-				/* Find how close we are to it */
-				double ratio = (100.0 - PERCENT(distToCorner, psLight->range)) / 100.0;
-				colourTile(i, j, psLight->colour, ratio);
+				auto position = psLight->position;
+				int distToCorner = calcDistToTile(i, j, &position);
+
+				/* If we're inside the range of the light */
+				if (distToCorner < (SDWORD)psLight->range)
+				{
+					/* Find how close we are to it */
+					double ratio = (100.0 - PERCENT(distToCorner, psLight->range)) / 100.0;
+					colourTile(lightmap, i, j, psLight->colour, ratio);
+				}
 			}
 		}
 	}
@@ -378,27 +386,6 @@ void calcDroidIllumination(DROID *psDroid)
 		retVal = 255;
 	}
 	psDroid->illumination = retVal;
-}
-
-void doBuildingLights()
-{
-	STRUCTURE	*psStructure;
-	UDWORD	i;
-	LIGHT	light;
-
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		for (psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
-		{
-			light.range = psStructure->pStructureType->baseWidth * TILE_UNITS;
-			light.position.x = psStructure->pos.x;
-			light.position.z = psStructure->pos.y;
-			light.position.y = map_Height(light.position.x, light.position.z);
-			light.range = psStructure->pStructureType->baseWidth * TILE_UNITS;
-			light.colour = pal_Colour(255, 255, 255);
-			processLight(&light);
-		}
-	}
 }
 
 #if 0

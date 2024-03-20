@@ -85,6 +85,15 @@ static std::shared_ptr<SpectatorStatsView> globalStatsForm = nullptr;
 #define SPEC_STATS_BUTTON_X RET_X
 #define SPEC_STATS_BUTTON_Y 20
 
+void intDisplayImageHilightOnceStarted(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	if (bDisplayMultiJoiningStatus)
+	{
+		return;
+	}
+	intDisplayImageHilight(psWidget, xOffset, yOffset);
+}
+
 bool specLayerInit(bool showButton /*= true*/)
 {
 	if (selectedPlayer < NetPlay.players.size() && NetPlay.players[selectedPlayer].isSpectator
@@ -107,13 +116,21 @@ bool specLayerInit(bool showButton /*= true*/)
 			ASSERT_OR_RETURN(true, width > 0 && height > 0, "Possibly missing specstats button image?");
 
 			specStatsButton = std::make_shared<W_BUTTON>();
-			specStatsButton->displayFunction = intDisplayImageHilight;
+			specStatsButton->displayFunction = intDisplayImageHilightOnceStarted;
 			specStatsButton->UserData = PACKDWORD_TRI(0, IMAGE_SPECSTATS_DOWN, IMAGE_SPECSTATS_UP);
 			specStatsButton->pTip = _("Show Player Stats");
 			specStatsButton->addOnClickHandler([](W_BUTTON& button){
 				widgScheduleTask([](){
 					specStatsViewCreate();
 				});
+			});
+			specStatsButton->setCustomHitTest([](const WIDGET *psWidget, int x, int y) -> bool {
+				if (bDisplayMultiJoiningStatus)
+				{
+					// effectively: make this unclickable until the game actually starts
+					return false;
+				}
+				return true; // revert back to default hit-testing behavior
 			});
 			specStatsButton->setGeometry(x, y, width, height);
 			statsOverlay->psForm->attach(specStatsButton);
@@ -273,71 +290,6 @@ static gfx_api::texture* loadImageForArmorCol(bool thermal)
 widgScheduleTask([](){ \
 	specS##id##ewShutdown(); \
 });
-
-static gfx_api::texture* loadImageForWeapSubclass(WEAPON_SUBCLASS subClass)
-{
-	const char* imagePath = nullptr;
-	switch (subClass)
-	{
-		case WSC_MGUN:
-			imagePath = "images/intfac/wsc_mgun.png";
-			break;
-		case WSC_CANNON:
-			imagePath = "images/intfac/wsc_cannon.png";
-			break;
-		case WSC_MORTARS:
-			imagePath = "images/intfac/wsc_mortars.png";
-			break;
-		case WSC_MISSILE:
-			imagePath = "images/intfac/wsc_missile.png";
-			break;
-		case WSC_ROCKET:
-			imagePath = "images/intfac/wsc_rocket.png";
-			break;
-		case WSC_ENERGY:
-			imagePath = "images/intfac/wsc_energy.png";
-			break;
-		case WSC_GAUSS:
-			imagePath = "images/intfac/wsc_gauss.png";
-			break;
-		case WSC_FLAME:
-			imagePath = "images/intfac/wsc_flame.png";
-			break;
-		//case WSC_CLOSECOMBAT:
-		case WSC_HOWITZERS:
-			imagePath = "images/intfac/wsc_howitzers.png";
-			break;
-		case WSC_ELECTRONIC:
-			imagePath = "images/intfac/wsc_electronic.png";
-			break;
-		case WSC_AAGUN:
-			imagePath = "images/intfac/wsc_aagun.png";
-			break;
-		case WSC_SLOWMISSILE:
-			imagePath = "images/intfac/wsc_slowmissile.png";
-			break;
-		case WSC_SLOWROCKET:
-			imagePath = "images/intfac/wsc_slowrocket.png";
-			break;
-		case WSC_LAS_SAT:
-			imagePath = "images/intfac/wsc_las_sat.png";
-			break;
-		case WSC_BOMB:
-			imagePath = "images/intfac/wsc_bomb.png";
-			break;
-		case WSC_COMMAND:
-			imagePath = "images/intfac/wsc_command.png";
-			break;
-		case WSC_EMP:
-			imagePath = "images/intfac/wsc_emp.png";
-			break;
-		case WSC_NUM_WEAPON_SUBCLASSES:	/** The number of enumerators in this enum.	 */
-			break;
-	}
-	ASSERT_OR_RETURN(nullptr, imagePath != nullptr, "No image path");
-	WZ_Notification_Image img(imagePath);
-	return img.loadImageToTexture();
-}
 
 class WzCenteredColumnIcon: public W_BUTTON
 {

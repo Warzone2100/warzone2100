@@ -33,6 +33,11 @@ typedef std::function<void (const int)> playerCallbackFunc; // callback function
 #include "lib/ivis_opengl/pieclip.h"
 
 #include "message.h"
+#include "objmem.h"
+
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 class MultipleChoiceButton;
 class WIDGET;
@@ -79,6 +84,7 @@ enum  				  // Reticule button indecies.
 #define IDOBJ_FORM			3000		// The object back form for build/manufacture/research
 #define IDOBJ_CLOSE 		3001        // The form for the close button
 #define IDOBJ_TABFORM		3500		// The object tab form for build/manufacture/research
+#define IDOBJ_GROUP		3502		// The tab for groups
 
 #define IDSTAT_FORM				14000		// The stats form for structure/droid/research type
 #define IDSTAT_CLOSE			14003		// The stats close box
@@ -104,18 +110,23 @@ enum  				  // Reticule button indecies.
 #define CHAT_GLOB		0x2
 #define CHAT_CONSOLEBOXX	RET_X + RET_FORMWIDTH + D_W
 #define CHAT_CONSOLEBOXY	(1)
-#define CHAT_CONSOLEBOXW	240
-#define CHAT_CONSOLEBOXH	16
+#define CHAT_CONSOLEBOXW	430
+#define CHAT_CONSOLEBOXH	20
 
 /* Option positions */
 #define OPT_GAP			5
 
 // Object screen position. (aka where the factories, research builds show up) [right of command retile]
 #define BASE_GAP		6
-#define OBJ_BACKX		(RET_X + RET_FORMWIDTH + BASE_GAP + D_W)	// X coord of object screen back form.
-#define OBJ_BACKY		RET_Y	// Y coord of object screen back form.
 #define OBJ_BACKWIDTH	320	//316		// Width of object screen back form.
 #define OBJ_BACKHEIGHT	115		// Height of object screen back form.
+#define OBJ_BACKX		(RET_X + RET_FORMWIDTH + BASE_GAP + D_W)	// X coord of object screen back form.
+#define OBJ_BACKY		RET_Y	// Y coord of object screen back form.
+
+#define GROUP_BACKX OBJ_BACKX
+#define GROUP_BACKY OBJ_BACKY + 40
+#define GROUP_BACKWIDTH OBJ_BACKWIDTH
+#define GROUP_BACKHEIGHT OBJ_BACKHEIGHT - 40
 
 /* Build screen positions */
 #define OBJ_TABY		6	// Y coord of object screen tab form.
@@ -134,9 +145,9 @@ enum  				  // Reticule button indecies.
 #define STAT_SLDWIDTH		70	// Slider width.
 
 // Power bar position.
-#define POW_X			OBJ_BACKX + 12
-#define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
+#define POW_X			OBJ_BACKX + ((OBJ_BACKWIDTH - POW_BARWIDTH) / 4)
+#define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 
 /* close button data */
 #define CLOSE_WIDTH		15
@@ -257,6 +268,8 @@ extern iIMDShape	*pNewDesignIMD;
 /* Initialise the in game interface */
 bool intInitialise();
 
+bool intAddRadarWidget();
+
 // Check of coordinate is in the build menu
 bool CoordInBuild(int x, int y);
 
@@ -279,8 +292,12 @@ INT_RETVAL intRunWidgets();
 /* Display the widgets for the in game interface */
 void intDisplayWidgets();
 
+void intShowWidgetHelp();
+bool intHelpOverlayIsUp();
+
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule();
+bool intShowGroupSelectionMenu();
 bool intAddPower();
 void intRemoveReticule();
 void setReticuleStats(int ButId, std::string tip = std::string(), std::string filename = std::string(), std::string filenameDown = std::string(), const playerCallbackFunc& callbackFunc = nullptr);
@@ -296,6 +313,14 @@ void intSetMapPos(UDWORD x, UDWORD y);
 /* Tell the interface a research facility has completed a topic */
 void intResearchFinished(STRUCTURE *psBuilding);
 void intAlliedResearchChanged();
+
+/* Tell the interface that groups have changed */
+void intGroupsChanged(optional<UBYTE> selectedGroup = nullopt);
+void intGroupDamaged(UBYTE group, uint64_t additionalDamage, bool unitKilled);
+
+/* Tell the interface that commander groups have changed */
+void intCommanderGroupChanged(const DROID *psCommander);
+void intCommanderGroupDamaged(const DROID *psCommander, uint64_t additionalDamage, bool unitKilled);
 
 /* Sync the interface to an object */
 void intObjectSelected(BASE_OBJECT *psObj);
@@ -323,7 +348,7 @@ void intRemoveStatsNoAnim();
 void intRemoveObjectNoAnim();
 
 /*sets which list of structures to use for the interface*/
-STRUCTURE *interfaceStructList();
+StructureList *interfaceStructList();
 
 //sets up the Transporter Screen as far as the interface is concerned
 void addTransporterInterface(DROID *psSelected, bool onMission);
@@ -339,6 +364,8 @@ void togglePowerBar();
 void intShowPowerBar();
 void intHidePowerBar();
 
+void intHideGroupSelectionMenu();
+
 void intShowWidget(int buttonID);
 
 //hides the power bar from the display - regardless of what player requested!
@@ -353,7 +380,6 @@ void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
 /* Allows us to fool the widgets with a keypress */
 void	setKeyButtonMapping(UDWORD	val);
 
-STRUCTURE *intFindAStructure();
 DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGroup);
 
 /// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.
@@ -375,7 +401,7 @@ void intDemolishCancel();
 
 void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent);  ///< Makes a button to toggle showing obsolete items.
 
-void chatDialog(int mode);
+void chatDialog(int mode, bool startWithQuickChatFocused);
 bool isChatUp();
 bool isSecondaryWindowUp();
 void setSecondaryWindowUp(bool value);
@@ -391,5 +417,8 @@ void intStartStructPosition(BASE_STATS *psStats);
 
 /* Remove the object widgets from the widget screen */
 void intRemoveObject();
+
+void intShowInterface();
+void intHideInterface(bool forceHidePowerbar = false);
 
 #endif // __INCLUDED_SRC_HCI_H__

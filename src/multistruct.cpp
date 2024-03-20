@@ -228,8 +228,8 @@ bool recvLasSat(NETQUEUE queue)
 	if (psStruct && psObj && psStruct->pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 	{
 		// Lassats have just one weapon
-		unsigned firePause = weaponFirePause(&asWeaponStats[psStruct->asWeaps[0].nStat], player);
-		unsigned damLevel = PERCENT(psStruct->body, structureBody(psStruct));
+		unsigned firePause = weaponFirePause(*psStruct->getWeaponStats(0), player);
+		unsigned damLevel = PERCENT(psStruct->body, psStruct->structureBody());
 
 		if (damLevel < HEAVY_DAMAGE_LEVEL)
 		{
@@ -353,7 +353,7 @@ void recvStructureInfo(NETQUEUE queue)
 		return;
 	}
 
-	if (StructIsFactory(psStruct))
+	if (psStruct->isFactory())
 	{
 		popStatusPending(psStruct->pFunctionality->factory);
 	}

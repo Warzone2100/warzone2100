@@ -81,7 +81,7 @@ int getCurrentTileTextureSize()
 int getMaxTileTextureSize(std::string dir)
 {
 	int res = MIPMAP_MAX;
-	while (res > 0 && !PHYSFS_exists(WzString::fromUtf8(dir + "-" + std::to_string(res) + "/tile-00.png")))
+	while (res > 0 && !PHYSFS_exists(WzString::fromUtf8(dir + "-" + std::to_string(res) + "/tile-00.ktx2")) && !PHYSFS_exists(WzString::fromUtf8(dir + "-" + std::to_string(res) + "/tile-00.png")))
 		res /= 2;
 	return res;
 }
@@ -310,7 +310,7 @@ bool texLoad(const char *fileName)
 				std::vector<WzString> usedFilenames_tmp;
 				for (k = 0; k <= maxTileNo; ++k)
 				{
-					auto fullPath_base = WzString::fromUtf8(astringf("%s/tile-%02d.png", partialPath, k));
+					auto fullPath_base = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d.png", partialPath, k)));
 					tile_base_filepaths.push_back(fullPath_base);
 					usedFilenames_tmp.push_back(fullPath_base);
 
@@ -367,13 +367,17 @@ bool texLoad(const char *fileName)
 					}
 				}
 
-				decalTexArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_base_filepaths, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, nullptr, nullptr, "decalTexArr");
+				decalTexArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_base_filepaths, gfx_api::texture_type::game_texture, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+						std::unique_ptr<iV_Image> pDefaultTexture = std::unique_ptr<iV_Image>(new iV_Image);
+						pDefaultTexture->allocate(width, height, channels, true);
+						return pDefaultTexture;
+					}, nullptr, "decalTexArr");
 				if (has_auxillary_texture_info)
 				{
 					if (has_nm)
 					{
 						decalNormalArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_nm_filepaths, gfx_api::texture_type::normal_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-							std::unique_ptr<iV_Image> pDefaultNormalMap = std::unique_ptr<iV_Image>(new iV_Image);
+							std::unique_ptr<iV_Image> pDefaultNormalMap = std::make_unique<iV_Image>();
 							pDefaultNormalMap->allocate(width, height, channels, true);
 							// default normal map: (0,0,1)
 							unsigned char* pBmpWrite = pDefaultNormalMap->bmp_w();
@@ -393,7 +397,7 @@ bool texLoad(const char *fileName)
 					if (has_sm)
 					{
 						decalSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_sm_filepaths, gfx_api::texture_type::specular_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-							std::unique_ptr<iV_Image> pDefaultSpecularMap = std::unique_ptr<iV_Image>(new iV_Image);
+							std::unique_ptr<iV_Image> pDefaultSpecularMap = std::make_unique<iV_Image>();
 							// default specular map: 0
 							pDefaultSpecularMap->allocate(width, height, channels, true);
 							return pDefaultSpecularMap;
@@ -403,7 +407,7 @@ bool texLoad(const char *fileName)
 					if (has_hm)
 					{
 						decalHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(tile_hm_filepaths, gfx_api::texture_type::height_map, mipmap_max, mipmap_max, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
-							std::unique_ptr<iV_Image> pDefaultHeightMap = std::unique_ptr<iV_Image>(new iV_Image);
+							std::unique_ptr<iV_Image> pDefaultHeightMap = std::make_unique<iV_Image>();
 							// default height map: 0
 							pDefaultHeightMap->allocate(width, height, channels, true);
 							return pDefaultHeightMap;
@@ -412,7 +416,14 @@ bool texLoad(const char *fileName)
 					}
 				}
 				// flush all of the array textures
-				decalTexArr->flush();
+				if (decalTexArr)
+				{
+					decalTexArr->flush();
+				}
+				else
+				{
+					debug(LOG_FATAL, "Failed to load one or more terrain decals");
+				}
 				if (decalNormalArr) { decalNormalArr->flush(); }
 				if (decalSpecularArr) { decalSpecularArr->flush(); }
 				if (decalHeightArr) { decalHeightArr->flush(); }

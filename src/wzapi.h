@@ -230,6 +230,18 @@ namespace wzapi
 		//__
 		virtual bool handle_eventTransporterLanded(const BASE_OBJECT *psTransport) SCRIPTING_EVENT_NON_REQUIRED
 
+		//__ ## eventTransporterEmbarked(transport)
+		//__
+		//__ An event that is run when a unit embarks into a transporter.
+		//__
+		virtual bool handle_eventTransporterEmbarked(const BASE_OBJECT *psTransport) SCRIPTING_EVENT_NON_REQUIRED
+
+		//__ ## eventTransporterDisembarked(transport)
+		//__
+		//__ An event that is run when a unit disembarks from a transporter.
+		//__
+		virtual bool handle_eventTransporterDisembarked(const BASE_OBJECT *psTransport) SCRIPTING_EVENT_NON_REQUIRED
+
 	public:
 		// MARK: UI-related events (intended for the tutorial)
 
@@ -458,6 +470,16 @@ namespace wzapi
 		//__
 		virtual bool handle_eventChat(int from, int to, const char *message) = 0;
 
+		//__ ## eventQuickChat(from, to, messageEnum)
+		//__
+		//__ An event that is run whenever a quick chat message is received. The ```from``` parameter is the
+		//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
+		//__ player. ```messageEnum``` is the WzQuickChatMessage value (see the WzQuickChatMessages global
+		//__ object for constants to match with it). The ```teamSpecific``` parameter is true if this message
+		//__ was sent only to teammates, false otherwise.
+		//__
+		virtual bool handle_eventQuickChat(int from, int to, int messageEnum, bool teamSpecific) = 0;
+
 		//__ ## eventBeacon(x, y, from, to[, message])
 		//__
 		//__ An event that is run whenever a beacon message is received. The ```from``` parameter is the
@@ -524,12 +546,6 @@ namespace wzapi
 		//__ cheating!
 		//__
 		virtual bool handle_eventSyncRequest(int from, int req_id, int x, int y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2) = 0;
-
-		//__ ## eventKeyPressed(meta, key)
-		//__
-		//__ An event that is called whenever user presses a key in the game, not counting chat
-		//__ or other pop-up user interfaces. The key values are currently undocumented.
-		virtual bool handle_eventKeyPressed(int meta, int key) SCRIPTING_EVENT_NON_REQUIRED
 	};
 
 	enum class GlobalVariableFlags
@@ -779,9 +795,9 @@ namespace wzapi
 		, x1(x1), y1(y1), x2(x2), y2(y2)
 		{ }
 	public:
-		inline bool isValid() { return type != Type::Invalid_Request; }
-		inline bool isLabel() { return type == Type::Label_Request; }
-		inline bool isPositionValues() { return type == Type::Position_Values_Request; }
+		inline bool isValid() const { return type != Type::Invalid_Request; }
+		inline bool isLabel() const { return type == Type::Label_Request; }
+		inline bool isPositionValues() const { return type == Type::Position_Values_Request; }
 	public:
 		enum Type
 		{
@@ -1034,6 +1050,7 @@ namespace wzapi
 	bool safeDest(WZAPI_PARAMS(int player, int x, int y));
 	bool activateStructure(WZAPI_PARAMS(STRUCTURE *psStruct, optional<BASE_OBJECT *> _psTarget));
 	bool chat(WZAPI_PARAMS(int playerFilter, std::string message));
+	bool quickChat(WZAPI_PARAMS(int playerFilter, int messageEnum));
 	bool addBeacon(WZAPI_PARAMS(int x, int y, int playerFilter, optional<std::string> _message));
 	bool removeBeacon(WZAPI_PARAMS(int playerFilter));
 	std::unique_ptr<const DROID> getDroidProduction(WZAPI_PARAMS(const STRUCTURE *_psFactory));
@@ -1058,7 +1075,7 @@ namespace wzapi
 	bool applyLimitSet(WZAPI_NO_PARAMS);
 	no_return_value setMissionTime(WZAPI_PARAMS(int _time));
 	int getMissionTime(WZAPI_NO_PARAMS);
-	no_return_value setReinforcementTime(WZAPI_PARAMS(int _time));
+	no_return_value setReinforcementTime(WZAPI_PARAMS(int _time, optional<bool> _removeLaunch));
 	no_return_value completeResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player, optional<bool> _forceResearch));
 	no_return_value completeAllResearch(WZAPI_PARAMS(optional<int> _player));
 	bool enableResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player));
@@ -1084,7 +1101,7 @@ namespace wzapi
 	bool removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx));
 	no_return_value setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x2, int y2));
 	scr_area getScrollLimits(WZAPI_NO_PARAMS);
-	returned_nullable_ptr<const STRUCTURE> addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y));
+	returned_nullable_ptr<const STRUCTURE> addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y, optional<int> _direction));
 	unsigned int getStructureLimit(WZAPI_PARAMS(std::string structureName, optional<int> _player));
 	int countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _playerFilter));
 	int countDroid(WZAPI_PARAMS(optional<int> _droidType, optional<int> _playerFilter));

@@ -62,9 +62,11 @@
 #include "multigifts.h"
 #include "multiint.h"
 #include "multirecv.h"
+#include "multivote.h"
 #include "template.h"
 #include "activity.h"
 #include "warzoneconfig.h"
+#include "screens/netpregamescreen.h"
 
 #define MAX_STRUCTURE_LIMITS 4096 // Set a high (but explicit) maximum for the number of structure limits supported
 
@@ -150,6 +152,9 @@ void sendOptions()
 
 	NETend();
 
+	// also send a NET_HOST_CONFIG msg here
+	sendHostConfig();
+
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
@@ -233,6 +238,7 @@ bool recvOptions(NETQUEUE queue)
 			NETuint8_t(&alliances[i][j]);
 		}
 	}
+
 	netPlayersUpdated = true;
 
 	// Make a copy of old structure limits to see what got changed
@@ -475,7 +481,7 @@ bool recvOptions(NETQUEUE queue)
 		addConsoleMessage(str, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		game.isMapMod = true;
 	}
-	game.isRandom = mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
+	game.isRandom = mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0].c_str());
 
 	if (mapData)
 	{
@@ -518,6 +524,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
+	ingame.PendingDisconnect[selectedPlayer] = false;
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 
@@ -546,6 +553,7 @@ bool sendLeavingMsg()
 		NETbool(&host);
 	}
 	NETend();
+	NETflush();
 
 	return true;
 }
@@ -561,7 +569,7 @@ bool multiShutdown()
 	debug(LOG_MAIN, "free game data (structure limits)");
 	ingame.structureLimits.clear();
 
-	clearDisplayMultiJoiningStatusCache();
+	shutdownGameStartScreen();
 
 	return true;
 }
@@ -626,8 +634,6 @@ static bool gameInit()
 	}
 	debug(LOG_NET, "Player count: %u", playerCount);
 
-	playerResponding();			// say howdy!
-
 	return true;
 }
 
@@ -637,10 +643,10 @@ void playerResponding()
 {
 	ingame.startTime = std::chrono::steady_clock::now();
 	ingame.localJoiningInProgress = false; // No longer joining.
-	ingame.JoiningInProgress[selectedPlayer] = false;
-
-	// Home the camera to the player
-	cameraToHome(selectedPlayer, false);
+	if (selectedPlayer < MAX_CONNECTED_PLAYERS)
+	{
+		ingame.JoiningInProgress[selectedPlayer] = false;
+	}
 
 	// Tell the world we're here
 	NETbeginEncode(NETbroadcastQueue(), NET_PLAYERRESPONDING);
@@ -664,11 +670,29 @@ bool multiGameInit()
 	return true;
 }
 
+bool multiStartScreenInit()
+{
+	bDisplayMultiJoiningStatus = 1; // always display this
+	gameTimeStop();
+	intHideInterface(true);
+	createGameStartScreen([] {
+		// on game start overlay screen close...
+		bDisplayMultiJoiningStatus = 0;
+		intShowInterface();
+		// restart gameTime
+		gameTimeStart();
+	});
+
+	return true;
+}
+
 ////////////////////////////////
 // at the end of every game.
 bool multiGameShutdown()
 {
 	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
+
+	shutdownGameStartScreen();	// make sure the start screen overlay is closed (in case the game shuts down before it fully starts)
 
 	sendLeavingMsg();							// say goodbye
 
@@ -704,6 +728,139 @@ bool multiGameShutdown()
 	bMultiPlayer					= false;	// Back to single player mode
 	bMultiMessages					= false;
 	selectedPlayer					= 0;		// Back to use player 0 (single player friendly)
+
+	NET_InitPlayers();
+
+	resetKickVoteData();
+
+	return true;
+}
+
+static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions)
+{
+	uint32_t numSlotsWithChatPermissionsEnabled = 0;
+	uint32_t numSlotsWithChatPermissionsDisabled = 0;
+	uint32_t numPlayersWithChatPermissionsFreshlyEnabled = 0;
+	uint32_t numPlayersWithChatPermissionsFreshlyDisabled = 0;
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		if (priorHostChatPermissions[i] != ingame.hostChatPermissions[i])
+		{
+			if (isHumanPlayer(i))
+			{
+				if (ingame.hostChatPermissions[i])
+				{
+					++numPlayersWithChatPermissionsFreshlyEnabled;
+				}
+				else
+				{
+					++numPlayersWithChatPermissionsFreshlyDisabled;
+				}
+			}
+		}
+
+		if (ingame.hostChatPermissions[i])
+		{
+			++numSlotsWithChatPermissionsEnabled;
+		}
+		else
+		{
+			++numSlotsWithChatPermissionsDisabled;
+		}
+	}
+
+	if (numPlayersWithChatPermissionsFreshlyEnabled == 0 && numPlayersWithChatPermissionsFreshlyDisabled == 0)
+	{
+		// no changes detected
+		return;
+	}
+
+	if (numSlotsWithChatPermissionsEnabled > 0 && numSlotsWithChatPermissionsDisabled == 0
+		&& numPlayersWithChatPermissionsFreshlyEnabled > 1)
+	{
+		// Enabled for everyone (and more than one person changed)
+		addConsoleMessage(_("The host has enabled free chat for everyone."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		return;
+	}
+
+	if (numSlotsWithChatPermissionsEnabled == 0 && numSlotsWithChatPermissionsDisabled > 0
+		&& numPlayersWithChatPermissionsFreshlyDisabled > 1)
+	{
+		// Disabled for everyone
+		addConsoleMessage(_("The host has muted free chat for everyone."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		return;
+	}
+
+	// Otherwise, output changes for each changed player
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		if (priorHostChatPermissions[i] != ingame.hostChatPermissions[i])
+		{
+			if (!isHumanPlayer(i))
+			{
+				// skip notices for non-human slots
+				continue;
+			}
+			if (i == selectedPlayer)
+			{
+				if (GetGameMode() != GS_NORMAL)
+				{
+					// skip notices for self when in lobby - those are handled elsewhere
+					continue;
+				}
+			}
+			if (ingame.hostChatPermissions[i])
+			{
+				// Host enabled free chat for player
+				auto msg = astringf(_("The host has enabled free chat for player: %s"), getPlayerName(i));
+				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+			else
+			{
+				// Host disabled free chat for player
+				auto msg = astringf(_("The host has muted free chat for player: %s"), getPlayerName(i));
+				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+		}
+	}
+}
+
+void sendHostConfig()
+{
+	ASSERT_HOST_ONLY(return);
+
+	NETbeginEncode(NETbroadcastQueue(), NET_HOST_CONFIG);
+
+	// Send the list of host-set player chat permissions
+	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		NETbool(&ingame.hostChatPermissions[i]);
+	}
+
+	NETend();
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+// host config (options that don't impact gameplay but might impact things like chat). (recvd in both frontend and in-game)
+// returns: false if the host config details should be considered invalid and the client should disconnect
+bool recvHostConfig(NETQUEUE queue)
+{
+	ASSERT_OR_RETURN(true /* silently ignore */, queue.index == NetPlay.hostPlayer, "NET_HOST_CONFIG received from unexpected player: %" PRIu8 " - ignoring", queue.index);
+
+	std::array<bool, MAX_CONNECTED_PLAYERS> priorHostChatPermissions = ingame.hostChatPermissions;
+
+	debug(LOG_NET, "Receiving host_config from host");
+	NETbeginDecode(queue, NET_HOST_CONFIG);
+
+	// Host-set player chat permissions
+	for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		NETbool(&ingame.hostChatPermissions[i]);
+	}
+
+	NETend();
+
+	informOnHostChatPermissionChanges(priorHostChatPermissions);
 
 	return true;
 }

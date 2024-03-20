@@ -35,8 +35,8 @@ function camInNeverGroup(droid)
 	}
 	for (let i = 0, l = __camNeverGroupDroids.length; i < l; ++i)
 	{
-		var neverDroidID = __camNeverGroupDroids[i];
-		if (droid.id === neverDroidID)
+		const __NEVERDROID_ID = __camNeverGroupDroids[i];
+		if (droid.id === __NEVERDROID_ID)
 		{
 			return true;
 		}
@@ -59,8 +59,8 @@ function camNeverGroupDroid(what, playerFilter)
 	{
 		playerFilter = ENEMIES;
 	}
-	var array;
-	var obj;
+	let array;
+	let obj;
 	if (camIsString(what)) // label
 	{
 		obj = getObject(what);
@@ -101,7 +101,7 @@ function camNeverGroupDroid(what, playerFilter)
 	{
 		for (let i = 0, l = array.length; i < l; ++i)
 		{
-			var o = array[i];
+			const o = array[i];
 			if (!camDef(o) || !o)
 			{
 				continue;

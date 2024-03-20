@@ -39,7 +39,7 @@ struct StructureBounds
 		, size(0,0)
 	{}
 	StructureBounds(Vector2i const &map, Vector2i const &size) : map(map), size(size) {}
-	bool valid()
+	bool valid() const
 	{
 		return size.x >= 0;
 	}

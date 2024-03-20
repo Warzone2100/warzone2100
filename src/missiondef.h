@@ -63,12 +63,15 @@ struct MISSION
 	int32_t                         scrollMinY;
 	int32_t                         scrollMaxX;
 	int32_t                         scrollMaxY;
-	STRUCTURE			*apsStructLists[MAX_PLAYERS], *apsExtractorLists[MAX_PLAYERS];	//original object lists
-	DROID						*apsDroidLists[MAX_PLAYERS];
-	FEATURE						*apsFeatureLists[MAX_PLAYERS];
-	BASE_OBJECT			*apsSensorList[1];
-	FEATURE				*apsOilList[1];
-	FLAG_POSITION				*apsFlagPosLists[MAX_PLAYERS];
+	//original object lists
+	PerPlayerStructureLists apsStructLists;
+	PerPlayerExtractorLists apsExtractorLists;
+
+	PerPlayerDroidLists              apsDroidLists;
+	PerPlayerFeatureLists           apsFeatureLists;
+	GlobalSensorList                apsSensorList;
+	GlobalOilList                   apsOilList;
+	PerPlayerFlagPositionLists      apsFlagPosLists;
 	int32_t                         asCurrentPower[MAX_PLAYERS];
 
 	UDWORD				startTime;			//time the mission started

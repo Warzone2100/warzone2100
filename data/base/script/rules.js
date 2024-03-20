@@ -6,20 +6,22 @@ receiveAllEvents(true); //Needed to allow enemy research to apply to them
 include("script/weather.js");
 
 var mainReticule = false;
+var lastHitTime = 0;
+const TICK_TIME = 100;
 const CREATE_LIKE_EVENT = 0;
 const DESTROY_LIKE_EVENT = 1;
 const TRANSFER_LIKE_EVENT = 2;
 
 function reticuleManufactureCheck()
 {
-	var structureComplete = false;
-	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
+	let structureComplete = false;
+	const facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
 	for (let i = 0, len = facs.length; i < len; ++i)
 	{
-		var facType = facs[i];
-		var offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
-		var onMapFacs = enumStruct(selectedPlayer, facType);
+		const facType = facs[i];
+		const offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
+		const onMapFacs = enumStruct(selectedPlayer, facType);
 
 		if (offWorldFacs !== null)
 		{
@@ -62,14 +64,14 @@ function reticuleManufactureCheck()
 
 function reticuleResearchCheck()
 {
-	var structureComplete = false;
-	var labs = [RESEARCH_LAB,];
+	let structureComplete = false;
+	const labs = [RESEARCH_LAB,];
 
 	for (let i = 0, len = labs.length; i < len; ++i)
 	{
-		var resType = labs[i];
-		var offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
-		var onMapLabs = enumStruct(selectedPlayer, resType);
+		const resType = labs[i];
+		const offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
+		const onMapLabs = enumStruct(selectedPlayer, resType);
 
 		if (offWorldLabs !== null)
 		{
@@ -124,14 +126,14 @@ function reticuleBuildCheck()
 
 function reticuleDesignCheck()
 {
-	var structureComplete = false;
-	var hqs = [HQ,];
+	let structureComplete = false;
+	const hqs = [HQ,];
 
 	for (let i = 0, len = hqs.length; i < len; ++i)
 	{
-		var hqType = hqs[i];
-		var offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
-		var onMapHq = enumStruct(selectedPlayer, hqType);
+		const hqType = hqs[i];
+		const offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
+		const onMapHq = enumStruct(selectedPlayer, hqType);
 
 		if (offWorldHq !== null)
 		{
@@ -199,7 +201,7 @@ function setMainReticule()
 
 function reticuleUpdate(obj, eventType)
 {
-	var update_reticule = false;
+	let update_reticule = false;
 
 	if (eventType === TRANSFER_LIKE_EVENT)
 	{
@@ -225,7 +227,6 @@ function reticuleUpdate(obj, eventType)
 	if (mainReticule && update_reticule)
 	{
 		//Wait a tick for the counts to update
-		const TICK_TIME = 100;
 		queue("setMainReticule", TICK_TIME);
 	}
 }
@@ -306,8 +307,8 @@ function setLimits()
 
 function resetPower()
 {
-	var powerLimit = 999999;
-	var powerProductionRate = 100;
+	let powerLimit = 999999;
+	let powerProductionRate = 100;
 
 	// set income modifier/power storage for player 0 (human)
 	if (difficulty <= EASY)
@@ -359,6 +360,12 @@ function eventStartLevel()
 		weatherCycle();
 		setTimer("weatherCycle", 45000);
 	}
+	if (getMissionType() === LDS_EXPAND_LIMBO)
+	{
+		//eventGameInit is too early to notice units placed from eventStartLevel.
+		//Fire off a reticule button update again after all of the eventStartLevel events happen.
+		queue("setMainReticule", TICK_TIME);
+	}
 }
 
 function eventDroidBuilt(droid, structure)
@@ -409,8 +416,26 @@ function eventObjectTransfer(obj, from)
 	}
 }
 
-//Could be the last remaining trucks are on it.
+//Could be the last remaining trucks/commanders are on it.
 function eventTransporterLanded(transport)
+{
+	if (transport.player === selectedPlayer)
+	{
+		reticuleUpdate(transport, TRANSFER_LIKE_EVENT);
+	}
+}
+
+//Maybe no more truck/commanders on the map.
+function eventTransporterEmbarked(transport)
+{
+	if (transport.player === selectedPlayer)
+	{
+		reticuleUpdate(transport, TRANSFER_LIKE_EVENT);
+	}
+}
+
+//Maybe no more truck/commanders on the map.
+function eventTransporterDisembarked(transport)
 {
 	if (transport.player === selectedPlayer)
 	{
@@ -423,7 +448,6 @@ function eventResearched(research, structure, player)
 	// NOTE: Research upgrades are handled by the C++ core game engine since 4.1.0
 }
 
-var lastHitTime = 0;
 function eventAttacked(victim, attacker)
 {
 	if ((victim.player === selectedPlayer) && (attacker.player !== selectedPlayer) && (gameTime > (lastHitTime + 5000)))

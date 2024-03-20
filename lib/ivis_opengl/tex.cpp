@@ -54,7 +54,7 @@
 
 struct iTexPage
 {
-	std::string name;
+	std::string filename;
 	gfx_api::texture* id = nullptr;
 	gfx_api::texture_type textureType = gfx_api::texture_type::user_interface;
 
@@ -62,7 +62,7 @@ struct iTexPage
 
 	iTexPage(iTexPage&& input)
 	{
-		std::swap(name, input.name);
+		std::swap(filename, input.filename);
 		id = input.id;
 		input.id = nullptr;
 		std::swap(textureType, input.textureType);
@@ -94,13 +94,13 @@ size_t pie_NumberOfPages()
 }
 
 // Add a new texture page to the list
-size_t pie_ReserveTexture(const char *name, const size_t& width, const size_t& height)
+size_t pie_ReserveTexture(const char *filename, const size_t& width, const size_t& height)
 {
 	iTexPage tex;
-	tex.name = name;
+	tex.filename = filename;
 	_TEX_PAGE.push_back(std::move(tex));
 	size_t page = _TEX_PAGE.size() - 1;
-	_NAME_TO_TEX_PAGE_MAP[name] = page;
+	_NAME_TO_TEX_PAGE_MAP[filename] = page;
 	return page;
 }
 
@@ -133,7 +133,7 @@ size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api:
 	ASSERT(_NAME_TO_TEX_PAGE_MAP.count(filename) == 0, "tex page %s already exists", filename);
 	iTexPage tex;
 	size_t page = _TEX_PAGE.size();
-	tex.name = filename;
+	tex.filename = filename;
 	_TEX_PAGE.push_back(std::move(tex));
 
 	return pie_AddTexPage_Impl(pTexture, filename, textureType, page);
@@ -144,24 +144,10 @@ size_t pie_AddTexPage(gfx_api::texture *pTexture, const char *filename, gfx_api:
 	ASSERT_OR_RETURN(0, pTexture && filename, "Bad input parameter");
 
 	// replace
-	_NAME_TO_TEX_PAGE_MAP.erase(_TEX_PAGE[page].name);
-	_TEX_PAGE[page].name = filename;
+	_NAME_TO_TEX_PAGE_MAP.erase(_TEX_PAGE[page].filename);
+	_TEX_PAGE[page].filename = filename;
 
 	return pie_AddTexPage_Impl(pTexture, filename, textureType, page);
-}
-
-/*!
- * Turns filename into a pagename if possible
- * \param[in,out] filename Filename to pagify
- */
-std::string pie_MakeTexPageName(const std::string& filename)
-{
-	size_t c = filename.find(iV_TEXNAME_TCSUFFIX);
-	if (c != std::string::npos)
-	{
-		return filename.substr(0, c + 7);
-	}
-	return filename;
 }
 
 /*!
@@ -182,6 +168,22 @@ std::string pie_MakeTexPageTCMaskName(const std::string& filename)
 	return result;
 }
 
+gfx_api::texture* loadTextureHandleGraphicsOverrides(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1)
+{
+	// First, try to load from the current graphics_overrides (if enabled)
+	std::string loadPath = WZ_CURRENT_GRAPHICS_OVERRIDES_PREFIX "/texpages/";
+	loadPath += filename;
+	gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromFile(loadPath.c_str(), textureType, maxWidth, maxHeight, true);
+	if (!pTexture)
+	{
+		// Try to load it from the regular path
+		loadPath = "texpages/";
+		loadPath += filename;
+		pTexture = gfx_api::context::get().loadTextureFromFile(loadPath.c_str(), textureType, maxWidth, maxHeight);
+	}
+	return pTexture;
+}
+
 /** Retrieve the texture number for a given texture resource.
  *
  *  @note We keep textures in a separate data structure _TEX_PAGE apart from the
@@ -200,24 +202,20 @@ optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textu
 	ASSERT(filename != nullptr, "filename must not be null");
 
 	/* Have we already loaded this one then? */
-	std::string path = pie_MakeTexPageName(filename);
-	const auto it = _NAME_TO_TEX_PAGE_MAP.find(path);
+	const auto it = _NAME_TO_TEX_PAGE_MAP.find(filename);
 	if (it != _NAME_TO_TEX_PAGE_MAP.end())
 	{
 		return it->second;
 	}
 
-	// Try to load it
-	std::string loadPath = "texpages/";
-	loadPath += filename;
-	gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromFile(loadPath.c_str(), textureType, maxWidth, maxHeight);
+	gfx_api::texture *pTexture = loadTextureHandleGraphicsOverrides(filename, textureType, maxWidth, maxHeight);
 	if (!pTexture)
 	{
-		debug(LOG_ERROR, "Failed to load %s", loadPath.c_str());
+		debug(LOG_ERROR, "Failed to load %s", filename);
 		return nullopt;
 	}
 
-	size_t page = pie_AddTexPage(pTexture, path.c_str(), textureType);
+	size_t page = pie_AddTexPage(pTexture, filename, textureType);
 	resDoResLoadCallback(); // ensure loading screen doesn't freeze when loading large images
 	return optional<size_t>(page);
 }
@@ -225,7 +223,7 @@ optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textu
 bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 {
 	// Load new one to replace it
-	std::string tmpname = pie_MakeTexPageName(oldfile.toUtf8());
+	std::string tmpname = oldfile.toUtf8();
 	// Have we already loaded this one?
 	const auto it = _NAME_TO_TEX_PAGE_MAP.find(tmpname);
 	if (it != _NAME_TO_TEX_PAGE_MAP.end())
@@ -234,13 +232,35 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 		size_t page = it->second;
 		gfx_api::texture_type existingTextureType = _TEX_PAGE[page].textureType;
 		debug(LOG_TEXTURE, "Replacing texture %s with %s from index %zu (tex id %u)", it->first.c_str(), newfile.toUtf8().c_str(), page, _TEX_PAGE[page].id->id());
-		gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromFile(WzString("texpages/" + newfile).toUtf8().c_str(), existingTextureType);
-		tmpname = pie_MakeTexPageName(newfile.toUtf8());
-		pie_AddTexPage(pTexture, tmpname.c_str(), existingTextureType, page);
-		return true;
+		gfx_api::texture *pTexture = loadTextureHandleGraphicsOverrides(newfile.toUtf8().c_str(), existingTextureType);
+		if (pTexture)
+		{
+			tmpname = newfile.toUtf8();
+			pie_AddTexPage(pTexture, tmpname.c_str(), existingTextureType, page);
+			return true;
+		}
 	}
-	debug(LOG_ERROR, "Nothing to replace!");
+	debug(LOG_TEXTURE, "Nothing to replace - old (not found): %s, new (not used): %s", oldfile.toUtf8().c_str(), newfile.toUtf8().c_str());
 	return false;
+}
+
+bool debugReloadTexturesFromDisk(const std::unordered_set<size_t>& texPages)
+{
+	std::string filename;
+	for (auto page : texPages)
+	{
+		gfx_api::texture_type existingTextureType = _TEX_PAGE[page].textureType;
+		filename = _TEX_PAGE[page].filename;
+		debug(LOG_TEXTURE, "Reloading texture %s from index %zu", filename.c_str(), page);
+		gfx_api::texture *pTexture = loadTextureHandleGraphicsOverrides(filename.c_str(), existingTextureType);
+		if (!pTexture)
+		{
+			debug(LOG_INFO, "Failed to reload texture: %s", filename.c_str());
+			continue;
+		}
+		pie_AddTexPage(pTexture, filename.c_str(), existingTextureType, page);
+	}
+	return true;
 }
 
 void pie_TexShutDown()

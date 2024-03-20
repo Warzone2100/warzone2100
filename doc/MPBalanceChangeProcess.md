@@ -41,20 +41,28 @@ Discussion of the proposed balance change should then occur on Discord.
 >    - Discuss support or opposition to a proposal
 >    - Build towards an understanding of any concerns with a proposal (and ideas to address them)
 >    - Discuss alternatives that might better address the original rationale that led to the proposal
-> - **Name-calling, personal attacks, or other abuse will not be tolerated**, and will result in:
+> - Proposal submitters are expected to:
+>    - Be willing to discuss their proposal in good faith, and entertain dissent / differing opinions
+>    - Be willing and ready to adjust their proposed changes in response to opinions or concerns raised, or to consider completely revising their entire approach
+> - **Name-calling, personal attacks, or other abuse will not be tolerated**, and may result in:
 >    - The agitator's vote **not counting**
->    - Possible removal of the `@multiplayer-balance-tester` role (and thus the ability to vote on future proposals)
->    - Other possible moderator actions
+>    - Removal of the `@multiplayer-balance-tester` role (and thus the ability to vote on future proposals)
+>    - Temporary or permanent loss of proposal submission privileges
+>    - Other possible moderator actions (depending on the severity of the situation)
+>      (Following these rules and paying attention to moderator suggestions / warnings is recommended to avoid disciplinary action)
 
 Once discussion seems to have reached a reasonable point for voting:
 - A pinned post in the Discord thread should be created requesting reaction votes (thumbs up, thumbs down) (pinging `@multiplayer-balance-tester` again).
    - Change the thread tag to `Step 2: Voting`.
 - Every person voting should reply to the call-to-vote message with their reasoning / explanation for their vote.
-   - (To count, votes _must_ be accompanied by a post describing one’s reasoning. If there is any confusion, start your explanation with: **REASONS FOR MY VOTE:**)
+   - (To count, votes should be accompanied by a post describing one’s reasoning. If there is any confusion, start your explanation with: **REASONS FOR MY VOTE:**)
+   - If someone else has largely stated your point / reasoning, it is also acceptable to signify agreement with their stated reasoning via a reaction / thumbs-up on their post - although we still encourage people to post their thinking in their own words (as more insight may come from it).
 
 A period of at least several days should be allowed for voting, to ensure maximum opportunity to engage.
 
 If there is a greater than 75% consensus among qualified voters, and a sufficient number of qualified voters voting, a proposal _may_ proceed to Phase 3. (If not, the results should be posted to GitHub and changes should be requested, taking feedback into account - for example: trying a smaller & more incremental change to allow players to better adjust, or providing a more detailed explanation of the change and its impacts / desirability / need.)
+
+If a proposal is a rollback (in whole or in part) of a prior change, the threshold for consensus may be reduced (especially if the change was semi-recent, and users only got a chance to exhaustively experience the change in a recent release). We anticipate and expect that opinions may be revised as a result of actually experiencing balance changes in a release. Allowing for a slight reduction in threshold in this scenario attempts to adjust for the idea that an original proposal might not have reached its threshold had people had more time with or played more games with it incorporated.
 
 ## Phase 3:
 ### Merging (on GitHub)

@@ -23,6 +23,7 @@
 #include "faction.h"
 #include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
+#include "lib/ivis_opengl/ivisdef.h"
 #include <array>
 
 std::array<FACTION, NUM_FACTIONS> getInitialFactionsMappingTable()
@@ -142,7 +143,7 @@ optional<WzString> getFactionModelName(const FactionID faction, const WzString& 
 	return getFactionModelName(getFactionByID(faction), normalFactionName);
 }
 
-iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd)
+iIMDShape* getFactionDisplayIMD(const FACTION *faction, iIMDShape* imd)
 {
 	auto factionModelName = getFactionModelName(faction, modelName(imd));
 	if (!factionModelName.has_value())
@@ -151,7 +152,8 @@ iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd)
 	}
 	else
 	{
-		return modelGet(factionModelName.value());
+		auto baseModel = modelGet(factionModelName.value());
+		return (baseModel) ? baseModel->displayModel() : imd;
 	}
 }
 
@@ -216,18 +218,4 @@ const char* to_localized_string(FactionID faction)
 			return _("Collective");
 	}
 	return ""; // silence warning - switch above should be complete
-}
-
-void addFactionModelNameMapping(FACTION *faction, const WzString& normalFactionName, const WzString& mappedName)
-{
-	auto result = faction->replaceIMD.insert(FACTION::ReplaceIMDMap::value_type(normalFactionName, mappedName));
-	if (!result.second)
-	{
-		debug(LOG_INFO, "Already inserted this mapping (%s: %s -> %s)", faction->name.toUtf8().c_str(), normalFactionName.toUtf8().c_str(), mappedName.toUtf8().c_str());
-	}
-}
-
-void addFactionModelNameMapping(FactionID faction, const WzString& normalFactionName, const WzString& mappedName)
-{
-	addFactionModelNameMapping(&(factions[(uint8_t)faction]), normalFactionName, mappedName);
 }

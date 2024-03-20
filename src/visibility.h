@@ -24,6 +24,7 @@
 #include "objectdef.h"
 #include "raycast.h"
 #include "stats.h"
+#include "droid.h"
 
 #define LINE_OF_FIRE_MINIMUM 5
 
@@ -67,7 +68,7 @@ void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj);
 void visRemoveVisibility(BASE_OBJECT *psObj);
 
 // fast test for whether obj2 is in range of obj1
-static inline bool visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)
+static inline bool visObjInRange(const BASE_OBJECT *psObj1, const BASE_OBJECT *psObj2, SDWORD range)
 {
 	int32_t xdiff = psObj1->pos.x - psObj2->pos.x, ydiff = psObj1->pos.y - psObj2->pos.y;
 
@@ -76,16 +77,16 @@ static inline bool visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 
 // If we have ECM, use this for range instead. Otherwise, the sensor's range will be used for
 // jamming range, which we do not want. Rather limit ECM unit sensor range to jammer range.
-static inline int objSensorRange(const BASE_OBJECT *psObj)
+inline int objSensorRange(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
-		const int ecmrange = asECMStats[((const DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
+		const int ecmrange = ((const DROID*)psObj)->getECMStats()->upgrade[psObj->player].range;
 		if (ecmrange > 0)
 		{
 			return ecmrange;
 		}
-		return asSensorStats[((const DROID *)psObj)->asBits[COMP_SENSOR]].upgrade[psObj->player].range;
+		return ((const DROID*)psObj)->getSensorStats()->upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
@@ -103,7 +104,7 @@ static inline int objJammerPower(const BASE_OBJECT *psObj)
 {
 	if (psObj->type == OBJ_DROID)
 	{
-		return asECMStats[((const DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
+		return ((const DROID*)psObj)->getECMStats()->upgrade[psObj->player].range;
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{

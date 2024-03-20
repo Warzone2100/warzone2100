@@ -13,6 +13,8 @@
 
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
+uniform mat4 ModelUVLightmapMatrix;
+
 uniform int hasTangents; // whether tangents were calculated for model
 uniform vec4 lightPosition;
 
@@ -45,6 +47,15 @@ VERTEX_OUTPUT mat4 NormalMatrix;
 VERTEX_OUTPUT vec4 colour;
 VERTEX_OUTPUT vec4 teamcolour;
 VERTEX_OUTPUT vec4 packed_ecmState_alphaTest;
+VERTEX_OUTPUT vec3 uvLightmap; // uvLightmap in .xy, heightAboveTerrain in .z
+
+// for Shadows
+VERTEX_OUTPUT vec3 fragPos;
+VERTEX_OUTPUT vec3 fragNormal;
+
+float when_gt(float x, float y) {
+  return max(sign(x - y), 0.0);
+}
 
 void main()
 {
@@ -89,8 +100,18 @@ void main()
 	vec4 position = vertex;
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
-		position.y -= stretch;
+		// NOTE: 'stretch' may be:
+		//	- if positive: building stretching
+		//	- if negative: the height above the terrain of the model intance overall
+		position.y -= (stretch * when_gt(stretch, 0.f));
 	}
+
+	vec4 positionModelSpace = instanceModelMatrix * position;
+	fragPos = positionModelSpace.xyz;
+	fragNormal = vertexNormal;
+
+	float heightAboveTerrain = abs(clamp(sign(stretch), -1.f, 0.f)) * abs(stretch);
+	uvLightmap = vec3((ModelUVLightmapMatrix * positionModelSpace).xy, position.y + heightAboveTerrain);
 
 	// Translate every vertex according to the Model View and Projection Matrix
 	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;

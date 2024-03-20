@@ -21,7 +21,17 @@
 
 #include "gfx_api.h"
 
+#if defined(__EMSCRIPTEN__)
+# define WZ_STATIC_GL_BINDINGS
+#endif
+
+#if !defined(__EMSCRIPTEN__) || !defined(WZ_STATIC_GL_BINDINGS)
 #include <glad/glad.h>
+#else
+// Emscripten uses static linking for performance
+#include <GLES3/gl3.h>
+typedef void* (* GLADloadproc)(const char *name);
+#endif
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -147,6 +157,7 @@ public:
 	void unbind();
 	virtual void upload(const size_t & size, const void * data) override;
 	virtual void update(const size_t & start, const size_t & size, const void * data, const update_flag flag = update_flag::none) override;
+	virtual size_t current_buffer_size() override;
 };
 
 struct gl_pipeline_id final : public gfx_api::pipeline_state_object
@@ -170,6 +181,8 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	std::vector<gfx_api::vertex_buffer> vertex_buffer_desc;
 	std::vector<GLint> locations;
 	std::vector<GLint> duplicateFragmentUniformLocations;
+	bool hasSpecializationConstant_ShadowConstants = false;
+	bool hasSpecializationConstants_PointLights = false;
 
 	std::vector<std::function<void(const void*, size_t)>> uniform_bind_functions;
 
@@ -179,7 +192,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<typename T>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
-	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc, optional<float> mipLodBias);
+	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
@@ -188,7 +201,9 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 
 private:
 	// Read shader into text buffer
-	static char *readShaderBuf(const std::string& name);
+	static std::string readShaderBuf(const std::string& name,  std::vector<std::string> ancestorIncludePaths = {});
+
+	static void patchShaderHandleIncludes(std::string& shaderStr, std::vector<std::string> ancestorIncludePaths);
 
 	// Retrieve shader compilation errors
 	static void printShaderInfoLog(code_part part, GLuint shader);
@@ -204,7 +219,7 @@ private:
 					   const char * fragment_header, const std::string& fragmentPath,
 					   const std::vector<std::string> &uniformNames,
 					   const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-					   optional<float> mipLodBias);
+					   optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
 
 	void fetch_uniforms(const std::vector<std::string>& uniformNames, const std::vector<std::string>& duplicateFragmentUniforms, const std::string& programName);
 
@@ -221,17 +236,31 @@ private:
 	void setUniforms(size_t uniformIdx, const int32_t &v);
 	void setUniforms(size_t uniformIdx, const float &v);
 
+	void setUniforms(size_t uniformIdx, const ::glm::mat4 *m, size_t count);
+	void setUniforms(size_t uniformIdx, const ::glm::vec4* m, size_t count);
+	template<typename T, size_t count>
+	void setUniforms(size_t uniformIdx, const std::array<T, count>& m)
+	{
+		setUniforms(uniformIdx, m.data(), count);
+	}
+	void setUniforms(size_t uniformIdx, const ::glm::ivec4* m, size_t count);
+	void setUniforms(size_t uniformIdx, const float *v, size_t count);
 
 	// Wish there was static reflection in C++...
 	void set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf);
 	void set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf);
 	void set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf);
+	void set_constants(const gfx_api::Draw3DShapeInstancedGlobalUniforms& cbuf);
+	void set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf);
+	void set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf);
 
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf);
 	void set_constants(const gfx_api::TerrainCombinedUniforms& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_HIGH>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXRECT>& cbuf);
@@ -256,6 +285,7 @@ struct gl_context final : public gfx_api::context
 	size_t scratchbuffer_size = 0;
 	bool khr_debug = false;
 	optional<float> mipLodBias;
+	gfx_api::lighting_constants shadowConstants;
 
 	bool gles = false;
 	bool fragmentHighpFloatAvailable = true;
@@ -268,13 +298,7 @@ struct gl_context final : public gfx_api::context
 	virtual gfx_api::texture_array* create_texture_array(const size_t& mipmap_count, const size_t& layer_count, const size_t& width, const size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename) override;
 	virtual gfx_api::buffer * create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint = buffer_storage_hint::static_draw, const std::string& debugName = "") override;
 
-	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-															const gfx_api::state_description &state_desc,
-															const SHADER_MODE& shader_mode,
-															const gfx_api::primitive_type& primitive,
-															const std::vector<std::type_index>& uniform_blocks,
-															const std::vector<gfx_api::texture_input>& texture_desc,
-															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions) override;
+	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo) override;
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
 	virtual void bind_index_buffer(gfx_api::buffer&, const gfx_api::index_type&) override;
 	virtual void unbind_index_buffer(gfx_api::buffer&) override;
@@ -290,8 +314,10 @@ struct gl_context final : public gfx_api::context
 	virtual void set_polygon_offset(const float& offset, const float& slope) override;
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
+	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
 
 	virtual size_t numDepthPasses() override;
+	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual void beginDepthPass(size_t idx) override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual void endCurrentDepthPass() override;
@@ -315,6 +341,7 @@ struct gl_context final : public gfx_api::context
 	virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() override;
+	bool isYAxisInverted() const override { return false; }
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
@@ -325,18 +352,24 @@ struct gl_context final : public gfx_api::context
 	virtual bool supports2DTextureArrays() const override;
 	virtual bool supportsIntVertexAttributes() const override;
 	virtual size_t maxFramesInFlight() const override;
+	virtual gfx_api::lighting_constants getShadowConstants() override;
+	virtual bool setShadowConstants(gfx_api::lighting_constants values) override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;
 	virtual void draw_elements_instanced(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type& primitive, const gfx_api::index_type& index, std::size_t instance_count) override;
+	// debug apis for recompiling pipelines
+	virtual bool debugRecompileAllPipelines() override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	void initPixelFormatsSupport();
 	bool initInstancedFunctions();
 	size_t initDepthPasses(size_t resolution);
-	gl_gpurendered_texture* create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename);
+	gl_gpurendered_texture* create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
+	gl_gpurendered_texture* create_gpurendered_texture_array(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename);
 	gl_gpurendered_texture* create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename);
 	gl_gpurendered_texture* create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
+	bool createDefaultTextures();
 	bool createSceneRenderpass();
 	void deleteSceneRenderpass();
 	void _beginRenderPassImpl();
@@ -346,6 +379,7 @@ private:
 	void disableVertexAttribArray(GLuint index);
 	std::string calculateFormattedRendererInfoString() const;
 	bool isBlocklistedGraphicsDriver() const;
+	uint32_t getSuggestedDefaultDepthBufferResolution() const;
 
 	uint32_t viewportWidth = 0;
 	uint32_t viewportHeight = 0;
@@ -358,15 +392,29 @@ private:
 	int32_t maxArrayTextureLayers = 0;
 	GLfloat maxTextureAnisotropy = 0.f;
 	GLuint vaoId = 0;
-	std::vector<gl_pipeline_state_object *> createdPipelines;
+
+	struct BuiltPipelineRegistry
+	{
+		const gfx_api::pipeline_create_info createInfo;
+		gl_pipeline_state_object * pso = nullptr;
+
+		BuiltPipelineRegistry(const gfx_api::pipeline_create_info& _createInfo)
+		: createInfo(_createInfo)
+		{ }
+	};
+	std::vector<BuiltPipelineRegistry> createdPipelines;
+
 	gl_texture *pDefaultTexture = nullptr;
 	gl_texture_array *pDefaultArrayTexture = nullptr;
+	gl_gpurendered_texture *pDefaultDepthTexture = nullptr;
 
 	gl_gpurendered_texture* depthTexture = nullptr;
 	std::vector<GLuint> depthFBO;
 	size_t depthBufferResolution = 4096;
-	size_t depthPassCount = 1;
+	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
 
+	uint32_t sceneFramebufferWidth = 0;
+	uint32_t sceneFramebufferHeight = 0;
 	GLenum multiSampledBufferInternalFormat = GL_INVALID_ENUM;
 	GLenum multiSampledBufferBaseFormat = GL_INVALID_ENUM;
 	GLint maxMultiSampleBufferFormatSamples = 0;

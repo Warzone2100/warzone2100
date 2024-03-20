@@ -96,12 +96,12 @@ void loadMapPreview(bool hideInterface);
 
 bool changeReadyStatus(UBYTE player, bool bReady);
 WzString formatGameName(WzString name);
-void resetVoteData();
 void sendRoomSystemMessage(char const *text);
 void sendRoomNotifyMessage(char const *text);
-void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver);
+void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver, bool skipLocalDisplay = false);
 void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
+void displayLobbyDisabledNotification();
 
 void handleAutoReadyRequest();
 
@@ -256,7 +256,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 
 #define MULTIOP_CHATEDIT		10279
 #define MULTIOP_CHATEDITX		4
-#define MULTIOP_CHATEDITH		18
+#define MULTIOP_CHATEDITH		20
 #define	MULTIOP_CHATEDITW		(MULTIOP_CHATBOXW - 8)
 
 #define MULTIOP_COLCHOOSER_FORM         10280

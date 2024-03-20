@@ -158,6 +158,11 @@ void null_buffer::update(const size_t & start, const size_t & size, const void *
 	// no-op
 }
 
+size_t null_buffer::current_buffer_size()
+{
+	return buffer_size;
+}
+
 // MARK: null_pipeline_state_object
 
 null_pipeline_state_object::null_pipeline_state_object(const gfx_api::state_description& _desc, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc)
@@ -193,15 +198,9 @@ gfx_api::buffer * null_context::create_buffer_object(const gfx_api::buffer::usag
 	return new null_buffer(usage, hint);
 }
 
-gfx_api::pipeline_state_object * null_context::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-															  const gfx_api::state_description &state_desc,
-															const SHADER_MODE& shader_mode,
-															const gfx_api::primitive_type& primitive,
-															const std::vector<std::type_index>& uniform_blocks,
-															const std::vector<gfx_api::texture_input>& texture_desc,
-															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
+gfx_api::pipeline_state_object * null_context::build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo)
 {
-	return new null_pipeline_state_object(state_desc, attribute_descriptions);
+	return new null_pipeline_state_object(createInfo.state_desc, createInfo.attribute_descriptions);
 }
 
 void null_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
@@ -332,6 +331,11 @@ int32_t null_context::get_context_value(const context_value property)
 	return 0;
 }
 
+uint64_t null_context::get_estimated_vram_mb(bool dedicatedOnly)
+{
+	return 0;
+}
+
 // MARK: null_context - debug
 
 void null_context::debugStringMarker(const char *str)
@@ -382,7 +386,7 @@ uint64_t null_context::debugGetPerfValue(PERF_POINT pp)
 std::map<std::string, std::string> null_context::getBackendGameInfo()
 {
 	std::map<std::string, std::string> backendGameInfo;
-	backendGameInfo["null_gfx_backend"] = true;
+	backendGameInfo["null_gfx_backend"] = "true";
 	return backendGameInfo;
 }
 
@@ -396,7 +400,7 @@ bool null_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)>
 	return false;
 }
 
-bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias)
+bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution)
 {
 	// obtain backend_Null_Impl from impl
 	backend_impl = impl.createNullBackendImpl();
@@ -490,6 +494,21 @@ bool null_context::supportsIntVertexAttributes() const
 size_t null_context::maxFramesInFlight() const
 {
 	return 1;
+}
+
+gfx_api::lighting_constants null_context::getShadowConstants()
+{
+	return gfx_api::lighting_constants();
+}
+
+bool null_context::setShadowConstants(gfx_api::lighting_constants newValues)
+{
+	return true;
+}
+
+bool null_context::debugRecompileAllPipelines()
+{
+	return true;
 }
 
 bool null_context::supportsInstancedRendering()

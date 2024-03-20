@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2022  Warzone 2100 Project
+	Copyright (C) 2022-2023  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 
 namespace WzMap {
 
@@ -180,6 +181,18 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			{
 				incrementPlayerEntityCount(playerStructCounts, structure.player, structure.name);
 			}
+			if (statsConfig.hqStructs.count(structure.name) > 0)
+			{
+				// found an HQ
+				std::pair<int32_t, int32_t> newHQMapPos = { map_coord(structure.position.x), map_coord(structure.position.y) };
+				auto& structPlayerHQPositions = results.playerHQPositions[structure.player];
+				if (std::none_of(structPlayerHQPositions.begin(), structPlayerHQPositions.end(), [newHQMapPos](const std::pair<int32_t, int32_t>& existingHQPos) -> bool {
+					return existingHQPos == newHQMapPos;
+				}))
+				{
+					structPlayerHQPositions.push_back(newHQMapPos);
+				}
+			}
 			if (structure.modules > 0)
 			{
 				if (statsConfig.powerGenerators.count(structure.name) > 0)
@@ -249,7 +262,9 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 			{&statsConfig.cyborgFactories, {&results.playerBalance.cyborgFactories, &results.perPlayerCounts.cyborgFactoriesPerPlayer}},
 			// research centers
 			{&statsConfig.researchCenters, {&results.playerBalance.researchCenters, &results.perPlayerCounts.researchCentersPerPlayer}},
-			{&statsConfig.researchModules, {&results.playerBalance.researchCenters,  &results.perPlayerCounts.researchCenterModulesPerPlayer}}
+			{&statsConfig.researchModules, {&results.playerBalance.researchCenters,  &results.perPlayerCounts.researchCenterModulesPerPlayer}},
+			// defense structures
+			{&statsConfig.defenseStructs, {&results.playerBalance.defenseStructures,  &results.perPlayerCounts.defenseStructuresPerPlayer}}
 		};
 		for (const auto& structureTypeCheck : structureTypeChecks)
 		{
@@ -329,7 +344,7 @@ optional<MapStats> Map::calculateMapStats(uint32_t mapMaxPlayers, MapStatsConfig
 	return results;
 }
 
-MapStatsConfiguration::MapStatsConfiguration()
+MapStatsConfiguration::MapStatsConfiguration(MapType mapType)
 {
 	// Default values extracted from WZ 4.3 stats files:
 
@@ -355,6 +370,29 @@ MapStatsConfiguration::MapStatsConfiguration()
 	// the names (ids) of research structs
 	//	- "type": "RESEARCH"
 	researchCenters = {"A0ResearchFacility"};
+	// the names (ids) of the HQ struct(s)
+	//  - "type": "HQ"
+	if (mapType == MapType::CAMPAIGN)
+	{
+		// There are some campaign-only additional ids (A0CommandCentreNP, A0CommandCentreCO, A0CommandCentreNE)
+		hqStructs = {"A0CommandCentre", "A0CommandCentreNP", "A0CommandCentreCO", "A0CommandCentreNE"};
+	}
+	else
+	{
+		hqStructs = {"A0CommandCentre"};
+	}
+	// the names (ids) of defense structs (i.e. bunkers, towers, hardpoints)
+	//  - "type": "DEFENSE"
+	// extracted from the appropriate base/stats/structure.json or mp/stats/structure.json file using:
+	// cat structure.json | jq '[keys[] as $k | select(.[$k].type=="DEFENSE") | $k ] | join("\", \"") as $j | "{\"" + $j + "\"}"' -r
+	if (mapType == MapType::CAMPAIGN)
+	{
+		defenseStructs = {"A0BaBaBunker", "A0BaBaFlameTower", "A0BaBaGunTower", "A0BaBaGunTowerEND", "A0BaBaMortarPit", "A0BaBaRocketPit", "A0BaBaRocketPitAT", "A0CannonTower", "AASite-QuadBof", "AASite-QuadMg1", "AASite-QuadRotMg", "CO-Tower-HVCan", "CO-Tower-HvATRkt", "CO-Tower-HvFlame", "CO-Tower-LtATRkt", "CO-Tower-MG3", "CO-Tower-MdCan", "CO-Tower-RotMG", "CO-WallTower-HvCan", "CO-WallTower-RotCan", "CoolingTower", "Emplacement-HPVcannon", "Emplacement-Howitzer105", "Emplacement-Howitzer150", "Emplacement-HvART-pit", "Emplacement-HvyATrocket", "Emplacement-MRL-pit", "Emplacement-MdART-pit", "Emplacement-MortarPit01", "Emplacement-MortarPit02", "Emplacement-PrisLas", "Emplacement-PulseLaser", "Emplacement-Rail2", "Emplacement-Rail3", "Emplacement-Rocket06-IDF", "Emplacement-RotHow", "Emplacement-RotMor", "GuardTower-ATMiss", "GuardTower-BeamLas", "GuardTower-Rail1", "GuardTower-RotMg", "GuardTower1", "GuardTower1MG", "GuardTower2", "GuardTower3", "GuardTower3H", "GuardTower4", "GuardTower4H", "GuardTower5", "GuardTower6", "NX-CruiseSite", "NX-Emp-MedArtMiss-Pit", "NX-Emp-MultiArtMiss-Pit", "NX-Emp-Plasma-Pit", "NX-Tower-ATMiss", "NX-Tower-PulseLas", "NX-Tower-Rail1", "NX-WallTower-BeamLas", "NX-WallTower-Rail2", "NX-WallTower-Rail3", "NuclearReactor", "P0-AASite-SAM1", "P0-AASite-SAM2", "PillBox1", "PillBox2", "PillBox3", "PillBox4", "PillBox5", "PillBox6", "Pillbox-RotMG", "Sys-CB-Tower01", "Sys-NEXUSLinkTOW", "Sys-NX-CBTower", "Sys-NX-SensorTower", "Sys-NX-VTOL-CB-Tow", "Sys-NX-VTOL-RadTow", "Sys-SensoTower01", "Sys-SensoTower02", "Sys-VTOL-CB-Tower01", "Sys-VTOL-RadarTower01", "Tower-Projector", "Tower-RotMg", "Tower-VulcanCan", "UplinkCentre", "Wall-RotMg", "Wall-VulcanCan", "WallTower-Atmiss", "WallTower-HPVcannon", "WallTower-HvATrocket", "WallTower-Projector", "WallTower-PulseLas", "WallTower-Rail2", "WallTower-Rail3", "WallTower01", "WallTower02", "WallTower03", "WallTower04", "WallTower05", "WallTower06", "WreckedTransporter"};
+	}
+	else
+	{
+		defenseStructs = {"A0BaBaBunker", "A0BaBaFlameTower", "A0BaBaGunTower", "A0BaBaGunTowerEND", "A0BaBaMortarPit", "A0BaBaRocketPit", "A0BaBaRocketPitAT", "A0CannonTower", "AASite-QuadBof", "AASite-QuadBof02", "AASite-QuadMg1", "AASite-QuadRotMg", "CO-Tower-HVCan", "CO-Tower-HvATRkt", "CO-Tower-HvFlame", "CO-Tower-LtATRkt", "CO-Tower-MG3", "CO-Tower-MdCan", "CO-Tower-RotMG", "CO-WallTower-HvCan", "CO-WallTower-RotCan", "CoolingTower", "ECM1PylonMk1", "Emplacement-HPVcannon", "Emplacement-HeavyLaser", "Emplacement-HeavyPlasmaLauncher", "Emplacement-Howitzer-Incendiary", "Emplacement-Howitzer-Incenediary", "Emplacement-Howitzer105", "Emplacement-Howitzer150", "Emplacement-HvART-pit", "Emplacement-HvyATrocket", "Emplacement-MRL-pit", "Emplacement-MRLHvy-pit", "Emplacement-MdART-pit", "Emplacement-MortarEMP", "Emplacement-MortarPit-Incendiary", "Emplacement-MortarPit-Incenediary", "Emplacement-MortarPit01", "Emplacement-MortarPit02", "Emplacement-PlasmaCannon", "Emplacement-PrisLas", "Emplacement-PulseLaser", "Emplacement-Rail2", "Emplacement-Rail3", "Emplacement-Rocket06-IDF", "Emplacement-RotHow", "Emplacement-RotMor", "GuardTower-ATMiss", "GuardTower-BeamLas", "GuardTower-Rail1", "GuardTower-RotMg", "GuardTower1", "GuardTower2", "GuardTower3", "GuardTower4", "GuardTower5", "GuardTower6", "NX-CruiseSite", "NX-Emp-MedArtMiss-Pit", "NX-Emp-MultiArtMiss-Pit", "NX-Emp-Plasma-Pit", "NX-Tower-ATMiss", "NX-Tower-PulseLas", "NX-Tower-Rail1", "NX-WallTower-BeamLas", "NX-WallTower-Rail2", "NX-WallTower-Rail3", "NuclearReactor", "P0-AASite-Laser", "P0-AASite-SAM1", "P0-AASite-SAM2", "P0-AASite-Sunburst", "PillBox-Cannon6", "PillBox1", "PillBox2", "PillBox3", "PillBox4", "PillBox5", "PillBox6", "Pillbox-RotMG", "Plasmite-flamer-bunker", "Sys-CB-Tower01", "Sys-NEXUSLinkTOW", "Sys-NX-CBTower", "Sys-NX-SensorTower", "Sys-NX-VTOL-CB-Tow", "Sys-NX-VTOL-RadTow", "Sys-RadarDetector01", "Sys-SensoTower01", "Sys-SensoTower02", "Sys-SensoTowerWS", "Sys-SpyTower", "Sys-VTOL-CB-Tower01", "Sys-VTOL-RadarTower01", "Tower-Projector", "Tower-RotMg", "Tower-VulcanCan", "UplinkCentre", "Wall-RotMg", "Wall-VulcanCan", "WallTower-Atmiss", "WallTower-DoubleAAGun", "WallTower-DoubleAAGun02", "WallTower-EMP", "WallTower-HPVcannon", "WallTower-HvATrocket", "WallTower-Projector", "WallTower-PulseLas", "WallTower-QuadRotAAGun", "WallTower-Rail2", "WallTower-Rail3", "WallTower-SamHvy", "WallTower-SamSite", "WallTower-TwinAssaultGun", "WallTower01", "WallTower02", "WallTower03", "WallTower04", "WallTower05", "WallTower06", "WreckedTransporter", "bbaatow"};
+	}
 
 	// [STRUCT MODULES]:
 	//	- "type": "FACTORY MODULE"
@@ -369,6 +407,59 @@ MapStatsConfiguration::MapStatsConfiguration()
 	oilResources = {"OilResource"};
 	//	- "type": "OIL DRUM"
 	oilDrums = {"OilDrum"};
+
+	// [STRUCT SIZES]:
+	// only the data for structures that have a size != 1x1
+	// extracted from the appropriate base/stats/structure.json or mp/stats/structure.json file using:
+	// cat structure.json | jq 'keys[] as $k | select(.[$k].width!=1 or .[$k].breadth!=1) | "{\"" + $k + "\", StructureSize(" + (.[$k].width | tostring) + ", " + (.[$k].breadth | tostring) + ")},"' -r
+	if (mapType == MapType::CAMPAIGN)
+	{
+		structSizes = {
+			{"A0BaBaFactory", StructureSize(2, 1)},
+			{"A0ComDroidControl", StructureSize(2, 2)},
+			{"A0CommandCentre", StructureSize(2, 2)},
+			{"A0CommandCentreCO", StructureSize(2, 2)},
+			{"A0CommandCentreNE", StructureSize(2, 2)},
+			{"A0CommandCentreNP", StructureSize(2, 2)},
+			{"A0CyborgFactory", StructureSize(1, 2)},
+			{"A0FacMod1", StructureSize(3, 3)},
+			{"A0LightFactory", StructureSize(3, 3)},
+			{"A0PowMod1", StructureSize(2, 2)},
+			{"A0PowerGenerator", StructureSize(2, 2)},
+			{"A0ResearchFacility", StructureSize(2, 2)},
+			{"A0ResearchModule1", StructureSize(2, 2)},
+			{"A0VTolFactory1", StructureSize(3, 3)},
+			{"NuclearReactor", StructureSize(2, 2)},
+			{"UplinkCentre", StructureSize(2, 2)},
+			{"WreckedTransporter", StructureSize(3, 3)}
+		};
+	}
+	else
+	{
+		structSizes = {
+			{"A0BaBaFactory", StructureSize(2, 1)},
+			{"A0BaBaVtolFactory", StructureSize(2, 2)},
+			{"A0ComDroidControl", StructureSize(2, 2)},
+			{"A0CommandCentre", StructureSize(2, 2)},
+			{"A0CyborgFactory", StructureSize(1, 2)},
+			{"A0FacMod1", StructureSize(3, 3)},
+			{"A0LasSatCommand", StructureSize(2, 2)},
+			{"A0LightFactory", StructureSize(3, 3)},
+			{"A0PowMod1", StructureSize(2, 2)},
+			{"A0PowerGenerator", StructureSize(2, 2)},
+			{"A0ResearchFacility", StructureSize(2, 2)},
+			{"A0ResearchModule1", StructureSize(2, 2)},
+			{"A0Sat-linkCentre", StructureSize(2, 2)},
+			{"A0VTolFactory1", StructureSize(3, 3)},
+			{"NuclearReactor", StructureSize(2, 2)},
+			{"UplinkCentre", StructureSize(2, 2)},
+			{"WreckedTransporter", StructureSize(3, 3)},
+			{"X-Super-Cannon", StructureSize(2, 2)},
+			{"X-Super-MassDriver", StructureSize(2, 2)},
+			{"X-Super-Missile", StructureSize(2, 2)},
+			{"X-Super-Rocket", StructureSize(2, 2)}
+		};
+	}
 }
 
 // Load stats configuration for droid templates from a `templates.json` file
@@ -436,6 +527,11 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 	std::unordered_set<std::string> vtolFactories_loaded;
 	std::unordered_set<std::string> cyborgFactories_loaded;
 	std::unordered_set<std::string> researchCenters_loaded;
+	std::unordered_set<std::string> hqStructs_loaded;
+	std::unordered_set<std::string> defenseStructs_loaded;
+
+	// [STRUCT SIZES]:
+	std::unordered_map<std::string, StructureSize> structSizes_loaded;
 
 	// [STRUCT MODULES]:
 	std::unordered_set<std::string> factoryModules_loaded;
@@ -450,6 +546,8 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 		{ "VTOL FACTORY", &vtolFactories_loaded },
 		{ "CYBORG FACTORY", &cyborgFactories_loaded },
 		{ "RESEARCH", &researchCenters_loaded },
+		{ "HQ", &hqStructs_loaded },
+		{ "DEFENSE", &defenseStructs_loaded },
 		{ "FACTORY MODULE", &factoryModules_loaded },
 		{ "RESEARCH MODULE", &researchModules_loaded },
 		{ "POWER MODULE", &powerModules_loaded }
@@ -457,31 +555,53 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 
 	for (const auto& it : mRoot.items())
 	{
-		auto type_it = it.value().find("type");
-		if (type_it == it.value().end())
+		const auto& structId = it.key();
+		StructureSize sizeInfo(1, 1);
+		auto width_it = it.value().find("width");
+		if (width_it != it.value().end() && width_it->is_number())
 		{
-			continue;
-		}
-		if (!type_it->is_string())
-		{
-			// Invalid type value - should be a string!
-			continue;
-		}
-		try {
-			auto typeStr = type_it->get<std::string>();
-			auto map_it = typeInsertionMap.find(typeStr);
-			if (map_it != typeInsertionMap.end())
-			{
-				map_it->second->insert(it.key());
+			try {
+				sizeInfo.baseWidth = width_it->get<uint32_t>();
+			} catch (std::exception&) {
+				continue;
 			}
-		} catch (std::exception&) {
-			continue;
+		}
+		auto breadth_it = it.value().find("breadth");
+		if (breadth_it != it.value().end() && breadth_it->is_number())
+		{
+			try {
+				sizeInfo.baseBreadth = breadth_it->get<uint32_t>();
+			} catch (std::exception&) {
+				continue;
+			}
+		}
+		if (sizeInfo.baseWidth > 1 || sizeInfo.baseBreadth > 1)
+		{
+			structSizes_loaded.insert(StructSizesMap::value_type(structId, sizeInfo));
+		}
+
+		auto type_it = it.value().find("type");
+		if (type_it != it.value().end())
+		{
+			if (type_it->is_string())
+			{
+				try {
+					auto typeStr = type_it->get<std::string>();
+					auto map_it = typeInsertionMap.find(typeStr);
+					if (map_it != typeInsertionMap.end())
+					{
+						map_it->second->insert(it.key());
+					}
+				} catch (std::exception&) {
+					continue;
+				}
+			}
 		}
 	}
 
 	if (std::any_of(typeInsertionMap.begin(), typeInsertionMap.end(), [](const decltype(typeInsertionMap)::value_type & kvp) -> bool {
 		return !kvp.second->empty();
-	}))
+	}) || !structSizes_loaded.empty())
 	{
 		resourceExtractors = std::move(resourceExtractors_loaded);
 		powerGenerators = std::move(powerGenerators_loaded);
@@ -489,9 +609,12 @@ bool MapStatsConfiguration::loadFromStructureJSON(const std::string& structureJS
 		vtolFactories = std::move(vtolFactories_loaded);
 		cyborgFactories = std::move(cyborgFactories_loaded);
 		researchCenters = std::move(researchCenters_loaded);
+		hqStructs = std::move(hqStructs_loaded);
+		defenseStructs = std::move(defenseStructs_loaded);
 		factoryModules = std::move(factoryModules_loaded);
 		researchModules = std::move(researchModules_loaded);
 		powerModules = std::move(powerModules_loaded);
+		structSizes = std::move(structSizes_loaded);
 		return true;
 	}
 
@@ -547,6 +670,23 @@ bool MapStatsConfiguration::loadFromFeaturesJSON(const std::string& featuresJSON
 	}
 
 	return false;
+}
+
+optional<MapStatsConfiguration::StructureSize> MapStatsConfiguration::getStructureSize(const std::string& struct_id) const
+{
+	auto it = structSizes.find(struct_id);
+	if (it == structSizes.end())
+	{
+		return nullopt;
+	}
+	return it->second;
+}
+
+bool MapStatsConfiguration::isStructExpansionModule(const std::string& struct_id) const
+{
+	return powerModules.count(struct_id)
+		|| factoryModules.count(struct_id)
+		|| researchModules.count(struct_id);
 }
 
 } // namespace WzMap

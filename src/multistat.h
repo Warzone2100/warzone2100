@@ -75,8 +75,11 @@ struct PLAYERSTATS
 		uint8_t star[3] = {0, 0, 0};
 		uint8_t medal = 0;
 		uint8_t level = 0;
+		uint8_t altNameTextColorOverride[3] = {255, 255, 255}; // rgb
+		uint8_t eloTextColorOverride[3] = {255, 255, 255}; // rgb
 		std::string elo;
 		std::string details;
+		std::string altName;
 	};
 	Autorating autorating;
 	RATING_SOURCE autoratingFrom = RATING_SOURCE_HOST;
@@ -89,7 +92,9 @@ struct RESEARCH;
 bool saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 PLAYERSTATS const &getMultiStats(UDWORD player);									// get from net
-bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // send to net.
+bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // set + send to net.
+bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex = nullopt); // send to net
+bool sendMultiStatsScoreUpdates(uint32_t player);
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames();
 void updateMultiStatsWins();
@@ -99,7 +104,7 @@ void incrementMultiStatsResearchPotential(UDWORD player);
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void updateMultiStatsBuilt(BASE_OBJECT *psBuilt);
 void updateMultiStatsResearchComplete(RESEARCH *psResearch, UDWORD player);
-void recvMultiStats(NETQUEUE queue);
+bool recvMultiStats(NETQUEUE queue);
 void lookupRatingAsync(uint32_t playerIndex);
 
 bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB);

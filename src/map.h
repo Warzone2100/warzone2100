@@ -76,11 +76,12 @@ struct MAPTILE
 	uint8_t         illumination;           // How bright is this tile? = diffuseSunLight * ambientOcclusion
 	uint8_t			ambientOcclusion;		// ambient occlusion. from 1 (max occlusion) to 254 (no occlusion), similar to illumination.
 	float           level;                  ///< The visibility level of the top left of the tile, for this client. for terrain lightmap
-	PIELIGHT        colour;					// color in terrain lightmap, based on tile.level and near light sources
 };
 
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
+
+
 
 extern std::unique_ptr<MAPTILE[]> psMapTiles;
 extern float waterLevel;
@@ -575,7 +576,7 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 void mapInit();
 void mapUpdate();
 
-bool shouldLoadTerrainTypeOverrides(const char* name);
+bool shouldLoadTerrainTypeOverrides(const std::string& name);
 bool loadTerrainTypeMapOverride(MAP_TILESET tileSet);
 
 //For saves to determine if loading the terrain type override should occur

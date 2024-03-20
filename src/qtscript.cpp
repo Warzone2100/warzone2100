@@ -62,6 +62,7 @@
 #include "challenge.h"
 #include "multistat.h"
 #include "gamehistorylogger.h"
+#include "hci/quickchat.h"
 
 #include <set>
 #include <memory>
@@ -1076,6 +1077,12 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 		case TRIGGER_TRANSPORTER_LANDED:
 			instance->handle_eventTransporterLanded(psObj);
 			break;
+		case TRIGGER_TRANSPORTER_EMBARKED:
+			instance->handle_eventTransporterEmbarked(psObj);
+			break;
+		case TRIGGER_TRANSPORTER_DISEMBARKED:
+			instance->handle_eventTransporterDisembarked(psObj);
+			break;
 		case TRIGGER_MISSION_TIMEOUT:
 			instance->handle_eventMissionTimeout();
 			break;
@@ -1489,6 +1496,33 @@ bool triggerEventChat(int from, int to, const char *message)
 	return true;
 }
 
+//__ ## eventQuickChat(from, to, messageEnum)
+//__
+//__ An event that is run whenever a quick chat message is received. The ```from``` parameter is the
+//__ player sending the chat message. For the moment, the ```to``` parameter is always the script
+//__ player. ```messageEnum``` is the WzQuickChatMessage value (see the WzQuickChatMessages global
+//__ object for constants to match with it). The ```teamSpecific``` parameter is true if this message
+//__ was sent only to teammates, false otherwise.
+//__
+bool triggerEventQuickChatMessage(int from, int to, WzQuickChatMessage message, bool teamSpecific)
+{
+	if (!scriptsReady)
+	{
+		// just ignore chat messages before scripts are ready / initialized
+		return false;
+	}
+	for (auto *instance : scripts)
+	{
+		int me = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
+		if (me == to || (receiveAll && to == from))
+		{
+			instance->handle_eventQuickChat(from, to, static_cast<int>(message), teamSpecific);
+		}
+	}
+	return true;
+}
+
 //__ ## eventBeacon(x, y, from, to[, message])
 //__
 //__ An event that is run whenever a beacon message is received. The ```from``` parameter is the
@@ -1661,20 +1695,6 @@ bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *ps
 	return true;
 }
 
-//__ ## eventKeyPressed(meta, key)
-//__
-//__ An event that is called whenever user presses a key in the game, not counting chat
-//__ or other pop-up user interfaces. The key values are currently undocumented.
-bool triggerEventKeyPressed(int meta, int key)
-{
-	ASSERT(scriptsReady, "Scripts not initialized yet");
-	for (auto *instance : scripts)
-	{
-		instance->handle_eventKeyPressed(meta, key);
-	}
-	return true;
-}
-
 // ----
 
 #define ALL_PLAYERS -1
@@ -1740,9 +1760,9 @@ std::vector<scripting_engine::LabelInfo> scripting_engine::debug_GetLabelInfo() 
 
 void clearMarks()
 {
-	for (int x = 0; x < mapWidth; x++) // clear old marks
+	for (int y = 0; y < mapHeight; y++)
 	{
-		for (int y = 0; y < mapHeight; y++)
+		for (int x = 0; x < mapWidth; x++) // clear old marks
 		{
 			MAPTILE *psTile = mapTile(x, y);
 			psTile->tileInfoBits &= ~BITS_MARKED;
@@ -1985,13 +2005,13 @@ bool scripting_engine::saveGroups(nlohmann::json &result, wzapi::scripting_insta
 // Label system (function defined in qtscript.h header)
 //
 
-bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
+bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
 {
-	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId);
+	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
 }
 
 // Load labels
-bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId)
+bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
 {
 	int groupidx = -1;
 
@@ -2003,7 +2023,7 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 	WzConfig ini(filename, WzConfig::ReadOnly);
 	labels.clear();
 	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading %zu labels...", list.size());
+	debug(LOG_SAVE, "Loading %zu labels... (fixedMapToGeneratedId.count = %zu)", list.size(), fixedMapIdToGeneratedId.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
@@ -2056,7 +2076,7 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			{
 				// replace fixed hard-coded map-load id with its new generated (synchronized) id
 				// note: must come *before* the moduleToBuilding call below
-				debug(LOG_NEVER, "replaced fixed map id %d with %d", id, it->second);
+				debug(LOG_MAP, "replaced fixed map id %d with %d", id, it->second);
 				id = it->second;
 			}
 			const auto player = ini.value("player").toInt();
@@ -2064,7 +2084,7 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			if (it_modulemap != moduleToBuilding[player].end())
 			{
 				// replace moduleId with its building id
-				debug(LOG_NEVER, "replaced with %i;%i", id, it_modulemap->second);
+				debug(LOG_MAP, "replaced with %i;%i", id, it_modulemap->second);
 				id = it_modulemap->second;
 			}
 			p.id = id;
@@ -2072,6 +2092,15 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			p.player = player;
 			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			auto checkFoundObject = IdToObject((OBJECT_TYPE)p.type, p.id, p.player);
+			if (!UserSaveGame)
+			{
+				ASSERT(checkFoundObject != nullptr, "Failed to find object that label references: %s", label.c_str());
+			}
+			else if (checkFoundObject == nullptr)
+			{
+				debug(LOG_SAVEGAME, "Failed to find object that label references (probably destroyed before save): %s", label.c_str());
+			}
 			labels[label] = p;
 		}
 		else if (list[i].startsWith("group"))
@@ -2663,7 +2692,7 @@ wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, 
 	int x2 = world_coord(_x2);
 	int y2 = world_coord(_y2);
 
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
 		{

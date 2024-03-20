@@ -46,6 +46,7 @@ class NetMessage
 {
 public:
 	NetMessage(uint8_t type_ = 0xFF) : type(type_) {}
+	static bool tryFromRawData(const uint8_t* buffer, size_t bufferLen, NetMessage& output);
 	uint8_t *rawDataDup() const;  ///< Returns data compatible with NetQueue::writeRawData(). Must be delete[]d.
 	void rawDataAppendToVector(std::vector<uint8_t> &output) const;  ///< Appends data compatible with NetQueue::writeRawData() to the input vector.
 	size_t rawLen() const;        ///< Returns the length of the return value of rawDataDup().
@@ -65,6 +66,14 @@ public:
 	{
 		message->data.push_back(v);
 	}
+	void bytes(uint8_t *pIn, size_t numBytes) const
+	{
+		message->data.insert(message->data.end(), pIn, pIn + numBytes);
+	}
+	void bytesVector(std::vector<uint8_t> &vIn, size_t numBytes) const
+	{
+		message->data.insert(message->data.end(), vIn.begin(), vIn.begin() + std::min(numBytes, vIn.size()));
+	}
 	bool valid() const
 	{
 		return true;
@@ -83,6 +92,30 @@ public:
 	{
 		v = index >= message->data.size() ? 0x00 : message->data[index];
 		++index;
+	}
+	void bytes(uint8_t *pOut, size_t numBytes) const
+	{
+		size_t numCopyBytes = (index >= message->data.size()) ? 0 : std::min<size_t>(message->data.size() - index, numBytes);
+		if (numCopyBytes > 0)
+		{
+			memcpy(pOut, &(message->data[index]), numCopyBytes);
+		}
+		if (numCopyBytes < numBytes)
+		{
+			memset(pOut + numCopyBytes, 0, numBytes - numCopyBytes);
+		}
+		index += numCopyBytes;
+	}
+	void bytesVector(std::vector<uint8_t> &vOut, size_t desiredBytes) const
+	{
+		size_t numCopyBytes = (index >= message->data.size()) ? 0 : std::min<size_t>(message->data.size() - index, desiredBytes);
+		if (numCopyBytes > 0)
+		{
+			size_t startIdx = vOut.size();
+			vOut.resize(vOut.size() + numCopyBytes);
+			memcpy(&(vOut[startIdx]), &(message->data[index]), numCopyBytes);
+		}
+		index += numCopyBytes;
 	}
 	bool valid() const
 	{
@@ -117,7 +150,11 @@ public:
 	void setWillNeverGetMessages();                                    ///< Marks that we will not be reading any of the messages (only sending over the network).
 	bool haveMessage() const;                                          ///< Return true if we have a message ready to return.
 	const NetMessage &getMessage() const;                              ///< Returns a message.
+	bool currentMessageWasDecrypted() const;
+	bool replaceCurrentWithDecrypted(NetMessage &&decryptedMessage);
 	void popMessage();                                                 ///< Pops the last returned message.
+
+	size_t currentIncompleteDataBuffered() const;
 
 	inline size_t numPendingGameTimeUpdateMessages() const
 	{
@@ -138,7 +175,15 @@ private:
 		return *i;
 	};
 
-	inline const NetMessage &internal_getMessage() const
+	inline const NetMessage &internal_getConstMessage() const
+	{
+		// Return the message.
+		List::iterator i = messagePos;
+		--i;
+		return *i;
+	};
+
+	inline NetMessage &internal_getMessage()
 	{
 		// Return the message.
 		List::iterator i = messagePos;
@@ -152,6 +197,7 @@ private:
 	List                          messages;                            ///< List of messages. Messages are added to the front and read from the back.
 	std::vector<uint8_t>          incompleteReceivedMessageData;       ///< Data from network which has not yet formed an entire message.
 	size_t                        pendingGameTimeUpdateMessages;       ///< Pending GAME_GAME_TIME messages added to this queue
+	bool						  bCurrentMessageWasDecrypted;
 };
 
 /// A NetQueuePair is used for talking to a socket. We insert NetMessages in the send NetQueue, which converts the messages into a stream of bytes for the

@@ -28,6 +28,7 @@
 #include <memory>
 #include <unordered_set>
 #include <unordered_map>
+#include <array>
 
 class QString;
 class WzString;
@@ -37,12 +38,15 @@ struct DROID_TEMPLATE;
 struct FEATURE;
 struct RESEARCH;
 struct STRUCTURE;
+enum class WzQuickChatMessage: uint32_t;
 
 enum SCRIPT_TRIGGER_TYPE
 {
 	TRIGGER_GAME_INIT,
 	TRIGGER_START_LEVEL,
 	TRIGGER_TRANSPORTER_ARRIVED,
+	TRIGGER_TRANSPORTER_EMBARKED,
+	TRIGGER_TRANSPORTER_DISEMBARKED,
 	TRIGGER_TRANSPORTER_LANDED,
 	TRIGGER_TRANSPORTER_LAUNCH,
 	TRIGGER_TRANSPORTER_EXIT,
@@ -139,6 +143,7 @@ bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct);
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
+bool triggerEventQuickChatMessage(int from, int to, WzQuickChatMessage message, bool teamSpecific);
 bool triggerEventBeacon(int from, int to, const char *message, int x, int y);
 bool triggerEventBeaconRemoved(int from, int to);
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid);
@@ -150,7 +155,6 @@ bool triggerEventSelected();
 bool triggerEventPlayerLeft(int player);
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate);
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2);
-bool triggerEventKeyPressed(int meta, int key);
 bool triggerEventAllianceOffer(uint8_t from, uint8_t to);
 bool triggerEventAllianceAccepted(uint8_t from, uint8_t to);
 bool triggerEventAllianceBroken(uint8_t from, uint8_t to);
@@ -216,7 +220,7 @@ public:
 };
 
 /// Load map labels
-bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
+bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 
 /// Write map labels to savegame
 bool writeLabels(const char *filename);
@@ -314,7 +318,7 @@ public:
 // MARK: LABELS
 public:
 	/// Load map labels
-	bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
+	bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 
 	/// Write map labels to savegame
 	bool writeLabels(const char *filename);

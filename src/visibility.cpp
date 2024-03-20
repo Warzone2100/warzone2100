@@ -256,9 +256,14 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 /* The terrain revealing ray callback */
 static void doWaveTerrain(BASE_OBJECT *psObj)
 {
+	if (psObj == nullptr)
+	{
+		return;
+	}
+
 	const int sx = psObj->pos.x;
 	const int sy = psObj->pos.y;
-	const int sz = psObj->pos.z + MAX(MIN_VIS_HEIGHT, psObj->sDisplay.imd->max.y);
+	const int sz = psObj->pos.z + ((psObj->sDisplay.imd != nullptr) ? MAX(MIN_VIS_HEIGHT, psObj->sDisplay.imd->max.y) : MIN_VIS_HEIGHT);
 	const unsigned radius = objSensorRange(psObj);
 	const int rayPlayer = psObj->player;
 	size_t size;
@@ -462,9 +467,9 @@ void revealAll(UBYTE player)
 	}
 
 	//reveal all tiles
-	for (i = 0; i < mapWidth; i++)
+	for (j = 0; j < mapHeight; j++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (i = 0; i < mapWidth; i++)
 		{
 			psTile = mapTile(i, j);
 			psTile->tileExploredBits |= alliancebits[player];
@@ -525,8 +530,8 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 				return 0;
 			}
 
-			if (psTarget->type == OBJ_DROID && isVtolDroid((const DROID *)psTarget)
-			    && asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR)
+			if (psTarget->type == OBJ_DROID && ((const DROID*)psTarget)->isVtol()
+			    && psStruct->getWeaponStats(0)->surfaceToAir == SHOOT_IN_AIR)
 			{
 				range = 3 * range / 2;	// increase vision range of AA vs VTOL
 			}
@@ -556,8 +561,8 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	const bool jammed = psTile->jammerBits & ~alliancebits[psViewer->player];
 
 	// Special rule for VTOLs, as they are not affected by ECM
-	if (((psTarget->type == OBJ_DROID && isVtolDroid((const DROID *)psTarget))
-	     || (psViewer->type == OBJ_DROID && isVtolDroid((const DROID *)psViewer)))
+	if (((psTarget->type == OBJ_DROID && ((const DROID*)psTarget)->isVtol())
+	     || (psViewer->type == OBJ_DROID && ((const DROID*)psViewer)->isVtol()))
 	    && dist < range)
 	{
 		return UBYTE_MAX;
@@ -633,9 +638,7 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			STRUCTURE *psWall;
-
-			for (psWall = apsStructLists[player]; psWall; psWall = psWall->psNext)
+			for (STRUCTURE* psWall : apsStructLists[player])
 			{
 				if (map_coord(psWall->pos) == tile)
 				{
@@ -838,33 +841,35 @@ void processVisibility()
 	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};
-		unsigned list;
-		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
+		for (BASE_OBJECT* psObj : apsDroidLists[player])
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
-			{
-				processVisibilitySelf(psObj);
-			}
+			processVisibilitySelf(psObj);
+		}
+		for (BASE_OBJECT* psObj : apsStructLists[player])
+		{
+			processVisibilitySelf(psObj);
+		}
+		for (BASE_OBJECT* psObj : apsFeatureLists[player])
+		{
+			processVisibilitySelf(psObj);
 		}
 	}
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player]};
-		unsigned list;
-		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
+		for (BASE_OBJECT* psObj : apsDroidLists[player])
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
-			{
-				processVisibilityVision(psObj);
-			}
+			processVisibilityVision(psObj);
+		}
+		for (BASE_OBJECT* psObj : apsStructLists[player])
+		{
+			processVisibilityVision(psObj);
 		}
 	}
-	for (BASE_OBJECT *psObj = apsSensorList[0]; psObj != nullptr; psObj = psObj->psNextFunc)
+	for (const BASE_OBJECT *psObj : apsSensorList[0])
 	{
 		if (objRadarDetector(psObj))
 		{
-			for (BASE_OBJECT *psTarget = apsSensorList[0]; psTarget != nullptr; psTarget = psTarget->psNextFunc)
+			for (BASE_OBJECT *psTarget : apsSensorList[0])
 			{
 				if (psObj != psTarget && psTarget->visible[psObj->player] < UBYTE_MAX / 2
 				    && objActiveRadar(psTarget)
@@ -878,14 +883,17 @@ void processVisibility()
 	bool addedMessage = false;
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};
-		unsigned list;
-		for (list = 0; list < sizeof(lists) / sizeof(*lists); ++list)
+		for (BASE_OBJECT* psObj : apsDroidLists[player])
 		{
-			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
-			{
-				processVisibilityLevel(psObj, addedMessage);
-			}
+			processVisibilityLevel(psObj, addedMessage);
+		}
+		for (BASE_OBJECT* psObj : apsStructLists[player])
+		{
+			processVisibilityLevel(psObj, addedMessage);
+		}
+		for (BASE_OBJECT* psObj : apsFeatureLists[player])
+		{
+			processVisibilityLevel(psObj, addedMessage);
 		}
 	}
 	if (addedMessage)
@@ -957,15 +965,15 @@ bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int 
 
 	if (psViewer->type == OBJ_DROID)
 	{
-		psStats = asWeaponStats + ((const DROID *)psViewer)->asWeaps[weapon_slot].nStat;
+		psStats = ((const DROID*)psViewer)->getWeaponStats(weapon_slot);
 	}
 	else if (psViewer->type == OBJ_STRUCTURE)
 	{
-		psStats = asWeaponStats + ((const STRUCTURE *)psViewer)->asWeaps[weapon_slot].nStat;
+		psStats = ((const STRUCTURE*)psViewer)->getWeaponStats(weapon_slot);
 	}
 	// 2d distance
 	int distance = iHypot((psTarget->pos - psViewer->pos).xy());
-	int range = proj_GetLongRange(psStats, psViewer->player);
+	int range = proj_GetLongRange(*psStats, psViewer->player);
 	if (proj_Direct(psStats))
 	{
 		/** direct shots could collide with ground **/

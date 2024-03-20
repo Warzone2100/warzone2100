@@ -252,7 +252,7 @@ static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID)
 		syncDebugStructure(psStruct, '>');
 		if (to == selectedPlayer)
 		{
-			CONPRINTF(_("%s Gives you a %s"), getPlayerName(from), objInfo(psStruct));
+			CONPRINTF(_("%s Gives you a %s"), getPlayerName(from), getLocalizedStatsName(psStruct->pStructureType));
 		}
 	}
 	else
@@ -294,11 +294,11 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 // \param to    :player that should be getting the droid
 static void sendGiftDroids(uint8_t from, uint8_t to)
 {
-	DROID        *psD;
+	DroidList::const_iterator psD;
 	uint8_t      giftType = DROID_GIFT;
 	uint8_t      totalToSend;
 
-	if (apsDroidLists[from] == nullptr)
+	if (apsDroidLists[from].empty())
 	{
 		return;
 	}
@@ -309,11 +309,11 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * over their droid limit.
 	 */
 
-	for (totalToSend = 0, psD = apsDroidLists[from];
-	     psD && getNumDroids(to) + totalToSend < getMaxDroids(to) && totalToSend != UINT8_MAX;
-	     psD = psD->psNext)
+	for (totalToSend = 0, psD = apsDroidLists[from].begin();
+	     psD != apsDroidLists[from].end() && getNumDroids(to) + totalToSend < getMaxDroids(to) && totalToSend != UINT8_MAX;
+	     ++psD)
 	{
-		if (psD->selected)
+		if ((*psD)->selected)
 		{
 			++totalToSend;
 		}
@@ -323,22 +323,22 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * does its own net calls.
 	 */
 
-	for (psD = apsDroidLists[from]; psD && totalToSend != 0; psD = psD->psNext)
+	for (psD = apsDroidLists[from].begin(); psD != apsDroidLists[from].end() && totalToSend != 0; ++psD)
 	{
-		if (isTransporter(psD)
-		    && !transporterIsEmpty(psD))
+		if ((*psD)->isTransporter()
+		    && !transporterIsEmpty(*psD))
 		{
-			CONPRINTF(_("Tried to give away a non-empty %s - but this is not allowed."), psD->aName);
+			CONPRINTF(_("Tried to give away a non-empty %s - but this is not allowed."), (*psD)->aName);
 			continue;
 		}
-		if (psD->selected)
+		if ((*psD)->selected)
 		{
 			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
 			NETuint8_t(&to);
 			// Add the droid to the packet
-			NETuint32_t(&psD->id);
+			NETuint32_t(&(*psD)->id);
 			NETend();
 
 			// Decrement the number of droids left to send
@@ -474,7 +474,6 @@ void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio)
 void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 {
 	char	tm1[128];
-	STRUCTURE* psStructure;
 
 	if (prop && bMultiMessages)
 	{
@@ -502,7 +501,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 
 	// Make sure p1's structures are no longer considered "our buildings" to their former allies
 	// For unit pathing
-	for (psStructure = apsStructLists[p1]; psStructure; psStructure = psStructure->psNext)
+	for (const STRUCTURE* psStructure : apsStructLists[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -516,7 +515,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		}
 	}
 	// Do the same for p2's stuff
-	for (psStructure = apsStructLists[p2]; psStructure; psStructure = psStructure->psNext)
+	for (const STRUCTURE* psStructure : apsStructLists[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -533,8 +532,6 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 
 void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allowNotification)
 {
-	DROID	*psDroid;
-	STRUCTURE	*psStructure;
 	char	tm1[128];
 
 	if (bMultiMessages && prop)
@@ -573,7 +570,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Clear out any attacking orders
-	for (psDroid = apsDroidLists[p1]; psDroid; psDroid = psDroid->psNext)	// from -> to
+	for (DROID* psDroid : apsDroidLists[p1])	// from -> to
 	{
 		if (psDroid->order.type == DORDER_ATTACK
 		    && psDroid->order.psObj
@@ -582,7 +579,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
-	for (psDroid = apsDroidLists[p2]; psDroid; psDroid = psDroid->psNext)	// to -> from
+	for (DROID* psDroid : apsDroidLists[p2])	// to -> from
 	{
 		if (psDroid->order.type == DORDER_ATTACK
 		    && psDroid->order.psObj
@@ -593,7 +590,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Properly mark all of p1's structures as allied buildings for unit pathing
-	for (psStructure = apsStructLists[p1]; psStructure; psStructure = psStructure->psNext)
+	for (const STRUCTURE* psStructure : apsStructLists[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -615,7 +612,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 		}
 	}
 	// Do the same for p2's stuff
-	for (psStructure = apsStructLists[p2]; psStructure; psStructure = psStructure->psNext)
+	for (const STRUCTURE* psStructure : apsStructLists[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -732,8 +729,8 @@ void  technologyGiveAway(const STRUCTURE *pS)
 	}
 
 	int featureIndex;
-	for (featureIndex = 0; featureIndex < numFeatureStats && asFeatureStats[featureIndex].subType != FEAT_GEN_ARTE; ++featureIndex) {}
-	if (featureIndex >= numFeatureStats)
+	for (featureIndex = 0; featureIndex < asFeatureStats.size() && asFeatureStats[featureIndex].subType != FEAT_GEN_ARTE; ++featureIndex) {}
+	if (featureIndex >= asFeatureStats.size())
 	{
 		debug(LOG_WARNING, "No artefact feature!");
 		return;
@@ -777,7 +774,6 @@ void sendMultiPlayerFeature(uint32_t ref, uint32_t x, uint32_t y, uint32_t id)
 void recvMultiPlayerFeature(NETQUEUE queue)
 {
 	uint32_t ref = 0xff, x = 0, y = 0, id = 0;
-	unsigned int i;
 
 	NETbeginDecode(queue, GAME_DEBUG_ADD_FEATURE);
 	{
@@ -796,7 +792,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 	}
 
 	// Find the feature stats list that contains the feature type we want to build
-	for (i = 0; i < numFeatureStats; ++i)
+	for (size_t i = 0, end = asFeatureStats.size(); i < end; ++i)
 	{
 		// If we found the correct feature type
 		if (asFeatureStats[i].ref == ref)
@@ -830,7 +826,7 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 					MakeResearchPossible(&asPlayerResList[toPlayer][topic]);
 					if (toPlayer == selectedPlayer)
 					{
-						CONPRINTF(_("You Discover Blueprints For %s"), getStatsName(&asResearch[topic]));
+						CONPRINTF(_("You Discover Blueprints For %s"), getLocalizedStatsName(&asResearch[topic]));
 					}
 					break;
 				}

@@ -70,7 +70,6 @@ struct FLAG_POSITION : public OBJECT_POSITION
 	Vector3i coords = Vector3i(0, 0, 0); //the world coords of the Position
 	UBYTE    factoryInc;           //indicates whether the first, second etc factory
 	UBYTE    factoryType;          //indicates whether standard, cyborg or vtol factory
-	FLAG_POSITION *psNext;
 };
 
 enum STRUCT_STRENGTH
@@ -114,8 +113,8 @@ struct STRUCTURE_STATS : public BASE_STATS
 	UDWORD buildPoints;             /*The number of build points required to build the structure*/
 	UDWORD height;                  /*The height above/below the terrain - negative values denote below the terrain*/
 	UDWORD powerToBuild;            /*How much power the structure requires to build*/
-	std::vector<iIMDShape *> pIMD;  // The IMDs to draw for this structure, for each possible number of modules.
-	iIMDShape *pBaseIMD;            /*The base IMD to draw for this structure */
+	std::vector<iIMDBaseShape *> pIMD;  // The IMDs to draw for this structure, for each possible number of modules.
+	iIMDBaseShape *pBaseIMD;            /*The base IMD to draw for this structure */
 	struct ECM_STATS *pECM;         /*Which ECM is standard for the structure -if any*/
 	struct SENSOR_STATS *pSensor;   /*Which Sensor is standard for the structure -if any*/
 	UDWORD weaponSlots;             /*Number of weapons that can be attached to the building*/
@@ -281,6 +280,16 @@ struct STRUCTURE : public BASE_OBJECT
 	STRUCTURE(uint32_t id, unsigned player);
 	~STRUCTURE();
 
+	//check to see if the structure is 'doing' anything  - return true if idle
+	bool isIdle() const;
+	// Return true if structure is a factory of any type.
+	bool isFactory() const;
+	uint32_t structureBody() const;
+	// Just returns true if the structure's present body points aren't as high as the original
+	bool isDamaged() const;
+	// is this a blueprint and not a real structure?
+	bool isBlueprint() const;
+
 	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
 	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */
 	uint32_t            currentBuildPts;            /* the build points currently assigned to this structure */
@@ -299,11 +308,11 @@ struct STRUCTURE : public BASE_OBJECT
 	UDWORD expectedDamage;           ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
 	///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 	uint32_t prevTime;               ///< Time of structure's previous tick.
-	float foundationDepth;           ///< Depth of structure's foundation
+	float foundationDepth;           ///< Depth of structure's foundation		// DISPLAY-ONLY
 	uint8_t capacity;                ///< Lame name: current number of module upgrades (*not* maximum nb of upgrades)
 	STRUCT_ANIM_STATES	state;
 	UDWORD lastStateTime;
-	iIMDShape *prebuiltImd;
+	iIMDBaseShape *prebuiltImd;
 
 	inline Vector2i size() const { return pStructureType->size(rot.direction); }
 };

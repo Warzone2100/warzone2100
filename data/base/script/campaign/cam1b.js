@@ -1,16 +1,15 @@
-
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var NPScout; // Sensor scout
-const SCAVENGER_RES = [
+const mis_scavengerRes = [
 	"R-Wpn-Flamer-Damage01", "R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01", "R-Wpn-Flamer-Range01-ScavReduce",
 ];
 
 camAreaEvent("AttackArea1", function(droid)
 {
 	queue("camCallOnce", camSecondsToMilliseconds(2), "doNPRetreat");
-	camManageGroup(camMakeGroup("enemy1Force1", SCAV_6), CAM_ORDER_ATTACK, {
+	camManageGroup(camMakeGroup("enemy1Force1", CAM_SCAV_6), CAM_ORDER_ATTACK, {
 		pos: camMakePos("enemy1Force1Pos"),
 		fallback: camMakePos("enemy1Force1Fallback"),
 		morale: 50
@@ -37,7 +36,7 @@ camAreaEvent("AttackArea2", function(droid)
 
 function doNPRetreat()
 {
-	var pos = camMakePos("NPSensorTurn");
+	const pos = camMakePos("NPSensorTurn");
 	if (NPScout)
 	{
 		camTrace("New Paradigm sensor droid is retreating");
@@ -61,7 +60,7 @@ function eventDestroyed(obj)
 
 camAreaEvent("NPSensorTurn", function(droid)
 {
-	var pos = camMakePos("NPSensorRemove");
+	const pos = camMakePos("NPSensorRemove");
 	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
 });
 
@@ -73,29 +72,29 @@ camAreaEvent("NPSensorRemove", function(droid)
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_1S");
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
-	centreView(startpos.x, startpos.y);
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
-	setAlliance(NEW_PARADIGM, SCAV_6, true);
-	setAlliance(NEW_PARADIGM, SCAV_7, true);
-	setAlliance(SCAV_6, SCAV_7, true);
+	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_6, true);
+	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
+	setAlliance(CAM_SCAV_6, CAM_SCAV_7, true);
 
-	camCompleteRequiredResearch(SCAVENGER_RES, 6);
-	camCompleteRequiredResearch(SCAVENGER_RES, 7);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
+	camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 	if (difficulty === HARD)
 	{
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_6);
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_7);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
 	}
 	else if (difficulty === INSANE)
 	{
-		completeResearch("R-Wpn-Flamer-Range01", SCAV_6);
-		completeResearch("R-Wpn-Flamer-Range01", SCAV_7);
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_6);
-		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", SCAV_7);
+		completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_7);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
+		completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
 	}
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer-Damage02" },
@@ -108,26 +107,26 @@ function eventStartLevel()
 		"base1group": {
 			cleanup: "enemybase1",
 			detectMsg: "C1B_BASE1",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg",
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated,
 		},
 		"base2group": {
 			cleanup: "enemybase2",
 			detectMsg: "C1B_BASE0",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg",
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated,
 		},
 		"base3group": {
 			cleanup: "enemybase3",
 			detectMsg: "C1B_OBJ1",
-			detectSnd: "pcv375.ogg",
-			eliminateSnd: "pcv391.ogg",
+			detectSnd: cam_sounds.baseDetection.scavengerOutpostDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerOutpostEradicated,
 		},
 		"base4group": {
 			cleanup: "enemybase4",
 			detectMsg: "C1B_BASE2",
-			detectSnd: "pcv374.ogg",
-			eliminateSnd: "pcv392.ogg",
+			detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated,
 		},
 	});
 
@@ -175,6 +174,6 @@ function eventStartLevel()
 	// New Paradigm sensor scout. Now comes with the map!
 	NPScout = getObject("npscout");
 	camNeverGroupDroid(NPScout);
-	var pos = getObject("NPSensorWatch");
+	const pos = getObject("NPSensorWatch");
 	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
 }

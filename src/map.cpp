@@ -52,6 +52,7 @@
 #include "fpath.h"
 #include "levels.h"
 #include "lib/framework/wzapp.h"
+#include "lib/ivis_opengl/pielighting.h"
 
 #define GAME_TICKS_FOR_DANGER (GAME_TICKS_PER_SEC * 2)
 
@@ -131,11 +132,48 @@ static int numTile_names;
 static std::unique_ptr<char[]> Tile_names = nullptr;
 
 static std::unique_ptr<int[]> map; // 3D array pointer that holds the texturetype
+static int numTile_types = 0;
+
 static std::unique_ptr<bool[]> mapDecals;           // array that tells us what tile is a decal
 #define MAX_TERRAIN_TILES 0x0200  // max that we support (for now), see TILE_NUMMASK
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
+
+#if 0
+void syncLogDumpAuxMaps()
+{
+	for (int auxIdx = 0; auxIdx < MAX_PLAYERS + AUX_MAX; auxIdx++)
+	{
+		syncDebug("psAuxMap[%d]:", auxIdx);
+		for (int y = 0; y < mapHeight; ++y)
+		{
+			std::string rowDetails;
+			for (int x = 0; x < mapWidth; ++x)
+			{
+				auto val = auxTile(x, y, auxIdx);
+				rowDetails += std::to_string(val) + ",";
+			}
+			syncDebug("psAuxMap[%d] row[%d]: %s", auxIdx, y, rowDetails.c_str());
+		}
+	}
+
+	for (int idx = 0; idx < AUX_MAX; idx++)
+	{
+		syncDebug("psBlockMap[%d]:", idx);
+		for (int y = 0; y < mapHeight; ++y)
+		{
+			std::string rowDetails;
+			for (int x = 0; x < mapWidth; ++x)
+			{
+				auto val = blockTile(x, y, idx);
+				rowDetails += std::to_string(val) + ",";
+			}
+			syncDebug("psBlockMap[%d] row[%d]: %s", idx, y, rowDetails.c_str());
+		}
+	}
+}
+#endif
 
 const GROUND_TYPE& getGroundType(size_t idx)
 {
@@ -224,7 +262,7 @@ static void init_tileNames(MAP_TILESET type)
 	numTile_names = numlines;
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
-	Tile_names = std::unique_ptr<char[]>(new char[numlines * MAX_STR_LENGTH]());
+	Tile_names = std::make_unique<char[]>(numlines * MAX_STR_LENGTH);
 
 	for (i = 0; i < numlines; i++)
 	{
@@ -436,6 +474,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
 
+	numTile_types = numlines;
 	map = std::unique_ptr<int[]> (new int[numlines * 2 * 2]());
 
 	for (i = 0; i < numlines; i++)
@@ -476,6 +515,12 @@ static int getTextureType(const char *textureType)
 //	so map[10][0][1] would be map[10*2*2 + 0*2 + 1] == map[41]
 static int groundFromMapTile(int tile, int j, int k)
 {
+	auto tileNumber = TileNumber_tile(tile);
+	if (tileNumber >= numTile_types)
+	{
+		debug(LOG_INFO, "Invalid ground tile number: %d", (int)tileNumber);
+		return 0;
+	}
 	return map[TileNumber_tile(tile) * 2 * 2 + j * 2 + k];
 }
 
@@ -629,8 +674,8 @@ static void SetDecals(const char *filename, const char *decal_type)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
 	// value initialization sets everything to false.
-	mapDecals = std::unique_ptr<bool[]>(new bool[MAX_TERRAIN_TILES]());
-	
+	mapDecals = std::make_unique<bool[]>(MAX_TERRAIN_TILES);
+
 	for (i = 0; i < numlines; i++)
 	{
 		tiledecal = -1;
@@ -663,11 +708,9 @@ static bool hasDecals(int i, int j)
 // Sets the ground type to be a decal or not
 static bool mapSetGroundTypes()
 {
-	int i, j;
-
-	for (i = 0; i < mapWidth; i++)
+	for (int j = 0; j < mapHeight; j++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (int i = 0; i < mapWidth; i++)
 		{
 			MAPTILE *psTile = mapTile(i, j);
 
@@ -713,16 +756,19 @@ static bool isWaterVertex(int x, int y)
 static void generateRiverbed()
 {
 	MersenneTwister mt(12345);  // 12345 = random seed.
-	int maxIdx = 1, idx[MAP_MAXWIDTH][MAP_MAXHEIGHT];
-	int i, j, l = 0;
+	int maxIdx = 1;
+	ASSERT_OR_RETURN(, mapWidth > 0 && mapHeight > 0, "Invalid map width or height (%d x %d)", mapWidth, mapHeight);
+	std::vector<int> idx(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight), 0);
+	int x, y, l = 0;
 
-	for (i = 0; i < mapWidth; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			// initially set the seabed index to 0 for ground and 100 for water
-			idx[i][j] = 100 * isWaterVertex(i, j);
-			if (idx[i][j] > 0)
+			int val = 100 * isWaterVertex(x, y);
+			idx[x + (y * mapWidth)] = val;
+			if (val > 0)
 			{
 				l++;
 			}
@@ -737,17 +783,18 @@ static void generateRiverbed()
 	do
 	{
 		maxIdx = 1;
-		for (i = 1; i < mapWidth - 2; i++)
+		for (y = 1; y < mapHeight - 2; y++)
 		{
-			for (j = 1; j < mapHeight - 2; j++)
+			for (x = 1; x < mapWidth - 2; x++)
 			{
-
-				if (idx[i][j] > 0)
+				int rowOffset = (y * mapWidth);
+				auto& idxVal = idx[x + rowOffset];
+				if (idxVal > 0)
 				{
-					idx[i][j] = (idx[i - 1][j] + idx[i][j - 1] + idx[i][j + 1] + idx[i + 1][j]) / 4;
-					if (idx[i][j] > maxIdx)
+					idxVal = (idx[(x - 1) + rowOffset] + idx[x + ((y - 1) * mapWidth)] + idx[x + ((y + 1) * mapWidth)] + idx[(x + 1) + rowOffset]) / 4;
+					if (idxVal > maxIdx)
 					{
-						maxIdx = idx[i][j];
+						maxIdx = idxVal;
 					}
 				}
 			}
@@ -757,22 +804,23 @@ static void generateRiverbed()
 	}
 	while (maxIdx > 90 && l < 20);
 
-	for (i = 0; i < mapWidth; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
-			if (idx[i][j] > maxIdx)
+			auto& idxVal = idx[x + (y * mapWidth)];
+			if (idxVal > maxIdx)
 			{
-				idx[i][j] = maxIdx;
+				idxVal = maxIdx;
 			}
-			if (idx[i][j] < 1)
+			if (idxVal < 1)
 			{
-				idx[i][j] = 1;
+				idxVal = 1;
 			}
-			if (isWaterVertex(i, j))
+			if (isWaterVertex(x, y))
 			{
-				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idx[i][j] - mt.u32() % (maxIdx / 6 + 1));
-				mapTile(i, j)->height -= WATER_MIN_DEPTH - (l / maxIdx);
+				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idxVal - mt.u32() % (maxIdx / 6 + 1));
+				mapTile(x, y)->height -= WATER_MIN_DEPTH - (l / maxIdx);
 			}
 		}
 	}
@@ -967,7 +1015,8 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = std::unique_ptr<MAPTILE[]>(new MAPTILE[width * height]());
+	psMapTiles = std::make_unique<MAPTILE[]>(static_cast<size_t>(width) * height);
+	getCurrentLightmapData().reset(width, height);
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
@@ -1060,12 +1109,12 @@ static bool afterMapLoad()
 	/* Allocate aux maps */
 	ASSERT(mapWidth >= 0 && mapHeight >= 0, "Invalid mapWidth or mapHeight (%d x %d)", mapWidth, mapHeight);
 	const size_t mapSize = static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight);
-	psBlockMap[AUX_MAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
-	psBlockMap[AUX_ASTARMAP] =  std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
-	psBlockMap[AUX_DANGERMAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
+	psBlockMap[AUX_MAP] = std::make_unique<uint8_t[]>(mapSize);
+	psBlockMap[AUX_ASTARMAP] =  std::make_unique<uint8_t[]>(mapSize);
+	psBlockMap[AUX_DANGERMAP] = std::make_unique<uint8_t[]>(mapSize);
 	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
 	{
-		psAuxMap[x] = std::unique_ptr<uint8_t[]> (new uint8_t[mapSize]());
+		psAuxMap[x] = std::make_unique<uint8_t[]> (mapSize);
 	}
 
 	// Set our blocking bits
@@ -2030,16 +2079,13 @@ static void threatUpdate(int player)
 	// Step 2: Set threat bits
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		DROID *psDroid;
-		STRUCTURE *psStruct;
-
 		if (aiCheckAlliances(player, i))
 		{
 			// No need to iterate friendly objects
 			continue;
 		}
 
-		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (DROID* psDroid : apsDroidLists[i])
 		{
 			UBYTE mode = 0;
 
@@ -2050,7 +2096,7 @@ static void threatUpdate(int player)
 			}
 			for (weapon = 0; weapon < psDroid->numWeaps; weapon++)
 			{
-				mode |= asWeaponStats[psDroid->asWeaps[weapon].nStat].surfaceToAir;
+				mode |= psDroid->getWeaponStats(weapon)->surfaceToAir;
 			}
 			if (psDroid->droidType == DROID_SENSOR)	// special treatment for sensor turrets, no multiweapon support
 			{
@@ -2062,13 +2108,13 @@ static void threatUpdate(int player)
 			}
 		}
 
-		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		for (STRUCTURE* psStruct : apsStructLists[i])
 		{
 			UBYTE mode = 0;
 
 			for (weapon = 0; weapon < psStruct->numWeaps; weapon++)
 			{
-				mode |= asWeaponStats[psStruct->asWeaps[weapon].nStat].surfaceToAir;
+				mode |= psStruct->getWeaponStats(weapon)->surfaceToAir;
 			}
 			if (psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->location == LOC_TURRET)	// special treatment for sensor turrets
 			{

@@ -51,15 +51,7 @@ void MultibuttonWidget::geometryChanged()
 	{
 		case ButtonAlignment::CENTER_ALIGN:
 		{
-			int width_of_all_buttons = 0;
-			for (size_t i = 0; i < buttons.size(); ++i)
-			{
-				if (i > 0)
-				{
-					width_of_all_buttons += gap_;
-				}
-				width_of_all_buttons += buttons[i].first->width();
-			}
+			int width_of_all_buttons = widthOfAllButtons();
 			if (width_of_all_buttons < width())
 			{
 				s = width() - gap_ - ((width() - width_of_all_buttons) / 2);
@@ -78,6 +70,44 @@ void MultibuttonWidget::geometryChanged()
 	{
 		label->setGeometry(gap_, 0, s - gap_, height());
 	}
+}
+
+int32_t MultibuttonWidget::widthOfAllButtons() const
+{
+	int width_of_all_buttons = 0;
+	for (size_t i = 0; i < buttons.size(); ++i)
+	{
+		if (i > 0)
+		{
+			width_of_all_buttons += gap_;
+		}
+		width_of_all_buttons += buttons[i].first->width();
+	}
+	return width_of_all_buttons;
+}
+
+int32_t MultibuttonWidget::idealWidth()
+{
+	int32_t result = gap_ + widthOfAllButtons() + gap_;
+	if (label)
+	{
+		result += gap_ + label->idealWidth();
+	}
+	return result;
+}
+
+int32_t MultibuttonWidget::idealHeight()
+{
+	int32_t result = 0;
+	for (size_t i = 0; i < buttons.size(); ++i)
+	{
+		result = std::max(result, buttons[i].first->idealHeight());
+	}
+	if (label)
+	{
+		result = std::max(result, label->idealHeight());
+	}
+	return result;
 }
 
 void MultibuttonWidget::setLabel(char const *text)

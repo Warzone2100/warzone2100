@@ -1,13 +1,12 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-const SILO_PLAYER = 1;
-const LASSAT_FIRING = "pcv650.ogg"; // LASER SATELLITE FIRING!!!
-const NEXUS_RES = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade10", "R-Struc-Materials10",
+const MIS_SILO_PLAYER = 1;
+const mis_nexusRes = [
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade12", "R-Struc-Materials10",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
-	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
+	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage10", "R-Wpn-Mortar-ROF04",
 	"R-Vehicle-Engine09", "R-Vehicle-Metals10", "R-Vehicle-Armor-Heat07",
 	"R-Cyborg-Metals10", "R-Cyborg-Armor-Heat07", "R-Wpn-RocketSlow-ROF06",
 	"R-Wpn-AAGun-Damage06", "R-Wpn-AAGun-ROF06", "R-Wpn-Howitzer-Damage09",
@@ -15,7 +14,7 @@ const NEXUS_RES = [
 	"R-Wpn-Missile-Damage03", "R-Wpn-Missile-ROF03", "R-Wpn-Missile-Accuracy02",
 	"R-Wpn-Rail-Damage03", "R-Wpn-Rail-ROF03", "R-Wpn-Rail-Accuracy01",
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
-	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03",
+	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Sys-NEXUSsensor",
 ];
 var capturedSilos; // victory flag letting us know if we captured any silos.
 var mapLimit; //LasSat slowly creeps toward missile silos.
@@ -84,14 +83,14 @@ function enableAllFactories()
 
 function truckDefense()
 {
-	if (enumDroid(NEXUS, DROID_CONSTRUCT).length === 0)
+	if (enumDroid(CAM_NEXUS, DROID_CONSTRUCT).length === 0)
 	{
 		removeTimer("truckDefense");
 		return;
 	}
 
-	var list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit"];
-	var position;
+	const list = ["Emplacement-Howitzer150", "NX-Emp-MedArtMiss-Pit"];
+	let position;
 
 	if (truckLocCounter === 0)
 	{
@@ -104,15 +103,15 @@ function truckDefense()
 		truckLocCounter = 0;
 	}
 
-	camQueueBuilding(NEXUS, list[camRand(list.length)], position);
+	camQueueBuilding(CAM_NEXUS, list[camRand(list.length)], position);
 }
 
 //Choose a target to fire the LasSat at. Automatically increases the limits
 //when no target is found in the area.
 function vaporizeTarget()
 {
-	var target;
-	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
+	let target;
+	const targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID || obj.type === STRUCTURE
 	));
 
@@ -126,9 +125,9 @@ function vaporizeTarget()
 	}
 	else
 	{
-		var dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
-		var vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
-		var st = targets.filter((obj) => (obj.type === STRUCTURE));
+		const dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
+		const vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
+		const st = targets.filter((obj) => (obj.type === STRUCTURE));
 
 		if (dr.length)
 		{
@@ -163,18 +162,18 @@ function vaporizeTarget()
 //A simple way to fire the LasSat with a chance of missing.
 function laserSatFuzzyStrike(obj)
 {
-	const LOC = camMakePos(obj);
+	const loc = camMakePos(obj);
 	//Initially lock onto target
-	var xCoord = LOC.x;
-	var yCoord = LOC.y;
+	let xCoord = loc.x;
+	let yCoord = loc.y;
 
 	//Introduce some randomness
 	if (camRand(101) < 67)
 	{
-		var xRand = camRand(3);
-		var yRand = camRand(3);
-		xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
-		yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
+		const X_RAND = camRand(3);
+		const Y_RAND = camRand(3);
+		xCoord = camRand(2) ? loc.x - X_RAND : loc.x + X_RAND;
+		yCoord = camRand(2) ? loc.y - Y_RAND : loc.y + Y_RAND;
 	}
 
 	if (xCoord < 0)
@@ -197,11 +196,11 @@ function laserSatFuzzyStrike(obj)
 
 	if (camRand(101) < 40)
 	{
-		playSound(LASSAT_FIRING, xCoord, yCoord);
+		playSound(cam_sounds.laserSatelliteFiring, xCoord, yCoord);
 	}
 
 	//Missed it so hit close to target.
-	if (LOC.x !== xCoord || LOC.y !== yCoord || !camDef(obj.id))
+	if (loc.x !== xCoord || loc.y !== yCoord || !camDef(obj.id))
 	{
 		fireWeaponAtLoc("LasSat", xCoord, yCoord, CAM_HUMAN_PLAYER);
 	}
@@ -215,16 +214,16 @@ function laserSatFuzzyStrike(obj)
 //Donate the silos to the player. Allow capturedSilos victory flag to be true.
 function allySiloWithPlayer()
 {
-	playSound("pcv621.ogg"); //Objective captured
+	playSound(cam_sounds.objectiveCaptured);
 	hackRemoveMessage("CM3D1_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
-	camAbsorbPlayer(SILO_PLAYER, CAM_HUMAN_PLAYER);
+	camAbsorbPlayer(MIS_SILO_PLAYER, CAM_HUMAN_PLAYER);
 	capturedSilos = true;
 }
 
 //Check if the silos still exist and only allow winning if the player captured them.
 function checkMissileSilos()
 {
-	if (!countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER) && !countStruct("NX-ANTI-SATSite", SILO_PLAYER))
+	if (!countStruct("NX-ANTI-SATSite", CAM_HUMAN_PLAYER) && !countStruct("NX-ANTI-SATSite", MIS_SILO_PLAYER))
 	{
 		return false;
 	}
@@ -232,7 +231,7 @@ function checkMissileSilos()
 	if (capturedSilos)
 	{
 		const Y_SCROLL_LIMIT = 140; // About the same number as the one in the Gamma 8 script.
-		let safeToWinObjs = enumArea(0, Y_SCROLL_LIMIT, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
+		const safeToWinObjs = enumArea(0, Y_SCROLL_LIMIT, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter((obj) => (
 			((obj.type === DROID && obj.droidType === DROID_CONSTRUCT) || (obj.type === STRUCTURE && obj.stattype === FACTORY && obj.status === BUILT))
 		));
 
@@ -242,10 +241,10 @@ function checkMissileSilos()
 		}
 	}
 
-	var siloArea = camMakePos(getObject("missileSilos"));
-	var safe = enumRange(siloArea.x, siloArea.y, 10, ALL_PLAYERS, false);
-	var enemies = safe.filter((obj) => (obj.player === NEXUS));
-	var player = safe.filter((obj) => (obj.player === CAM_HUMAN_PLAYER));
+	const siloArea = camMakePos(getObject("missileSilos"));
+	const safe = enumRange(siloArea.x, siloArea.y, 10, ALL_PLAYERS, false);
+	const enemies = safe.filter((obj) => (obj.player === CAM_NEXUS));
+	const player = safe.filter((obj) => (obj.player === CAM_HUMAN_PLAYER));
 	if (!enemies.length && player.length)
 	{
 		camCallOnce("allySiloWithPlayer");
@@ -256,31 +255,28 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Build a forward base at the silos"));
 
-	var siloZone = getObject("missileSilos");
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
-	var lz2 = getObject("landingZone2"); //LZ for cam3-4s.
+	const startPos = getObject("startPosition");
+	const lz = getObject("landingZone");
+	const lz2 = getObject("landingZone2"); //LZ for cam3-4s.
 	mapLimit = 1.0;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D2", {
 		callback: "checkMissileSilos"
 	});
 
-	centreView(startpos.x, startpos.y);
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, 5);
-	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEXUS);
-	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
+	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, CAM_NEXUS);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
-	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
+	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 
-	setAlliance(CAM_HUMAN_PLAYER, SILO_PLAYER, true);
-	setAlliance(NEXUS, SILO_PLAYER, true);
+	setAlliance(CAM_HUMAN_PLAYER, MIS_SILO_PLAYER, true);
+	setAlliance(CAM_NEXUS, MIS_SILO_PLAYER, true);
 
 	camSetArtifacts({
 		"NXbase1VtolFacArti": { tech: "R-Wpn-MdArtMissile" },
-		"NXcommandCenter": { tech: "R-Wpn-Laser02" },
+		"NXcommandCenter": { tech: ["R-Wpn-Laser02", "R-Defense-WallUpgrade11"] },
 		"NXcyborgFac2Arti": { tech: "R-Wpn-RailGun02" },
 	});
 
@@ -288,14 +284,14 @@ function eventStartLevel()
 		"NXMainBase": {
 			cleanup: "mainBaseCleanup",
 			detectMsg: "CM3D1_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NXVtolBase": {
 			cleanup: "NXVtolBaseCleanup",
 			detectMsg: "CM3D1_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -316,7 +312,7 @@ function eventStartLevel()
 			assembly: "NxHeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: true,
 				repair: 40,
@@ -328,7 +324,7 @@ function eventStartLevel()
 			assembly: "NXcyborgFac1Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(45)),
 			data: {
 				regroup: true,
 				repair: 45,
@@ -340,7 +336,7 @@ function eventStartLevel()
 			assembly: "NXcyborgFac2Assembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: true,
 				repair: 50,
@@ -352,10 +348,8 @@ function eventStartLevel()
 
 	if (difficulty >= HARD)
 	{
-		addDroid(NEXUS, 15, 234, "Truck Retribution Hover", "Body7ABT", "hover02", "", "", "Spade1Mk1");
-
-		camManageTrucks(NEXUS);
-
+		addDroid(CAM_NEXUS, 15, 234, "Truck Retribution Hover", tBody.tank.retribution, tProp.tank.hover2, "", "", tConstruct.truck);
+		camManageTrucks(CAM_NEXUS);
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}
 

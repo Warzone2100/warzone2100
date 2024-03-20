@@ -64,7 +64,7 @@ static std::tuple<uint32_t, uint32_t> getDroidHPPercentageAndExperience(uint32_t
 	uint64_t totalHP = 0;
 	uint64_t totalExp = 0;
 	uint64_t numDroids = 0;
-	for (const DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (const DROID *psDroid : apsDroidLists[player])
 	{
 		if (psDroid->died)
 		{
@@ -88,7 +88,7 @@ static uint32_t getNumOilRigs(uint32_t player)
 	}
 
 	uint32_t result = 0;
-	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	for (const STRUCTURE *psStruct : apsStructLists[player])
 	{
 		if (!psStruct->died
 			&& (REF_RESOURCE_EXTRACTOR == psStruct->pStructureType->type))
@@ -367,7 +367,7 @@ void GameStoryLogger::logGameFrame()
 		// output frame
 		auto reportJSON = genFrameReport(gameFrames.back(), outputKey, outputNaming);
 		std::string reportJSONStr = std::string("__REPORT__") + reportJSON.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace) + "__ENDREPORT__";
-		outputLine(reportJSONStr);
+		outputLine(std::move(reportJSONStr));
 	}
 }
 
@@ -402,7 +402,7 @@ void GameStoryLogger::logDebugModeChange(bool enabled)
 	if (outputModes.anyEnabled())
 	{
 		std::string reportJSONStr = std::string("__DEBUGMODE__") + ((enabled) ? "true" : "false") + "__ENDDEBUGMODE__";
-		outputLine(reportJSONStr);
+		outputLine(std::move(reportJSONStr));
 	}
 }
 
@@ -421,7 +421,7 @@ void GameStoryLogger::logGameOver()
 		bool hitTimeout = (game.gameTimeLimitMinutes > 0) ? (gameTime >= (game.gameTimeLimitMinutes * 60 * 1000)) : false;
 		auto reportJSON = genEndOfGameReport(outputKey, outputNaming, hitTimeout);
 		std::string reportJSONStr = std::string("__REPORTextended__") + reportJSON.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace) + "__ENDREPORTextended__";
-		outputLine(reportJSONStr);
+		outputLine(std::move(reportJSONStr));
 	}
 
 	if (fileHandle)
@@ -643,11 +643,12 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::DebugModeEvent& 
 	p.gameTime = j.at("gameTime").get<uint32_t>();
 }
 
-void GameStoryLogger::outputLine(const std::string &line)
+void GameStoryLogger::outputLine(std::string &&line)
 {
+	line.append("\n");
 	if (outputModes.cmdInterface)
 	{
-		wz_command_interface_output("%s\n", line.c_str());
+		wz_command_interface_output_str(line.c_str());
 	}
 	if (outputModes.logFile)
 	{
@@ -655,15 +656,8 @@ void GameStoryLogger::outputLine(const std::string &line)
 		{
 			if (WZ_PHYSFS_writeBytes(fileHandle, line.c_str(), line.size()) != line.size())
 			{
-				// Failed to write data to file
+				// Failed to write line to file
 				debug(LOG_ERROR, "Could not write to output file; PHYSFS error: %s", WZ_PHYSFS_getLastError());
-				PHYSFS_close(fileHandle);
-				fileHandle = nullptr;
-			}
-			if (WZ_PHYSFS_writeBytes(fileHandle, "\n", 1) != 1)
-			{
-				// Failed to write newline to file
-				debug(LOG_ERROR, "Could not write newline to output file; PHYSFS error: %s", WZ_PHYSFS_getLastError());
 				PHYSFS_close(fileHandle);
 				fileHandle = nullptr;
 			}

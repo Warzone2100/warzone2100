@@ -24,6 +24,10 @@
 #include "pietypes.h"
 #include <vector>
 
+constexpr uint32_t WZ_PNG_MAX_IMAGE_DIMENSIONS = 4096;
+constexpr size_t WZ_PNG_MAX_DECODED_MEMSIZE = (WZ_PNG_MAX_IMAGE_DIMENSIONS * WZ_PNG_MAX_IMAGE_DIMENSIONS * 4);
+constexpr size_t WZ_PNG_MAX_CHUNKSIZE_LIMIT = (1024 * 1024 * 64);
+
 struct IMGSaveError
 {
 	IMGSaveError()
@@ -51,7 +55,7 @@ struct IMGSaveError
  */
 bool iV_loadImage_PNG(const char *fileName, iV_Image *image);
 
-bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 = false);
+bool iV_loadImage_PNG2(const char *fileName, iV_Image& image, bool forceRGBA8 = false, bool quietOnOpenFail = false);
 
 /*!
  * Load a PNG from a memory buffer into an image
@@ -85,5 +89,8 @@ IMGSaveError iV_saveImage_PNG(const char *fileName, const iV_Image *image);
 IMGSaveError iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image);
 
 void iV_saveImage_JPEG(const char *fileName, const iV_Image *image);
+
+// For loading and outputting multi-channel (ex. RGB) specular maps as WZ-converted single-channel luma grayscale PNGs
+bool iV_LoadAndSavePNG_AsLumaSingleChannel(const std::string &inputFilename, const std::string &outputFilename, bool check = false);
 
 #endif // _LIBIVIS_COMMON_PNG_H_

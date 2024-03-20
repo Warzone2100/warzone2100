@@ -78,12 +78,12 @@ function camDebug(...args)
 //;;
 function camDebugOnce(...args)
 {
-	var str = debugGetCallerFuncName() + ": " + args.join(" ");
-	if (camDef(__camDebuggedOnce[str]))
+	const __STR = debugGetCallerFuncName() + ": " + args.join(" ");
+	if (camDef(__camDebuggedOnce[__STR]))
 	{
 		return;
 	}
-	__camDebuggedOnce[str] = true;
+	__camDebuggedOnce[__STR] = true;
 	__camGenericDebug("DEBUG", debugGetCallerFuncName(), args, true, __camBacktrace());
 }
 
@@ -117,12 +117,12 @@ function camTraceOnce(...args)
 	{
 		return;
 	}
-	var str = debugGetCallerFuncName() + ": " + args.join(" ");
-	if (camDef(__camTracedOnce[str]))
+	const __STR = debugGetCallerFuncName() + ": " + args.join(" ");
+	if (camDef(__camTracedOnce[__STR]))
 	{
 		return;
 	}
-	__camTracedOnce[str] = true;
+	__camTracedOnce[__STR] = true;
 	__camGenericDebug("TRACE", debugGetCallerFuncName(), args);
 }
 
@@ -171,11 +171,11 @@ function __camGenericDebug(flag, functionName, args, err, backtrace)
 	{
 		functionName = "<anonymous>";
 	}
-	var str = flag + ": " + functionName + ": " + Array.prototype.join.call(args, " ");
-	debug(str);
+	const __STR = flag + ": " + functionName + ": " + Array.prototype.join.call(args, " ");
+	debug(__STR);
 	if (camDef(err) && err)
 	{
-		dump(str);
+		dump(__STR);
 	}
 }
 

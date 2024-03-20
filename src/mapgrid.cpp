@@ -57,18 +57,36 @@ void gridReset()
 	// Put all existing objects into the point tree.
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
-		BASE_OBJECT *start[3] = {(BASE_OBJECT *)apsDroidLists[player], (BASE_OBJECT *)apsStructLists[player], (BASE_OBJECT *)apsFeatureLists[player]};
-		for (unsigned type = 0; type != sizeof(start) / sizeof(*start); ++type)
+		for (BASE_OBJECT* psObj : apsDroidLists[player])
 		{
-			for (BASE_OBJECT *psObj = start[type]; psObj != nullptr; psObj = psObj->psNext)
+			if (!psObj->died)
 			{
-				if (!psObj->died)
+				gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+				for (unsigned char& viewer : psObj->seenThisTick)
 				{
-					gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
-					for (unsigned char &viewer : psObj->seenThisTick)
-					{
-						viewer = 0;
-					}
+					viewer = 0;
+				}
+			}
+		}
+		for (BASE_OBJECT* psObj : apsStructLists[player])
+		{
+			if (!psObj->died)
+			{
+				gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+				for (unsigned char& viewer : psObj->seenThisTick)
+				{
+					viewer = 0;
+				}
+			}
+		}
+		for (BASE_OBJECT* psObj : apsFeatureLists[player])
+		{
+			if (!psObj->died)
+			{
+				gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+				for (unsigned char& viewer : psObj->seenThisTick)
+				{
+					viewer = 0;
 				}
 			}
 		}
@@ -196,8 +214,8 @@ struct ConditionDroidCandidateForRepair
 	{
 		if (obj->type != OBJ_DROID) return false;
 		const DROID *psDroid = (const DROID*) obj;
-		const bool isOwnOrAlly = psDroid->player == player && aiCheckAlliances(psDroid->player, player);
-		const bool isVTOL = asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT;
+		const bool isOwnOrAlly = psDroid->player == player || aiCheckAlliances(psDroid->player, player);
+		const bool isVTOL = psDroid->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT;
 		// either it's a ground unit, or it's a VTOL on ground
 		const bool isOnGround = (!isVTOL) || (isVTOL && (psDroid->sMove.Status == MOVEINACTIVE && psDroid->sMove.iVertSpeed == 0));
 		// Note: no check for droidIsDamaged(psDroid) this is intentional

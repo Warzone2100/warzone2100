@@ -42,16 +42,10 @@ struct PROJECTILE : public SIMPLE_OBJECT
 {
 	PROJECTILE(uint32_t id, unsigned player) : SIMPLE_OBJECT(OBJ_PROJECTILE, id, player) {}
 
-	void            update();
-	bool            deleteIfDead()
-	{
-		if (died == 0 || died >= gameTime - deltaGameTime)
-		{
-			return false;
-		}
-		delete this;
-		return true;
-	}
+	// Returns non-empty pointer if `update()` has spawned an additional projectile,
+	// which will be true for penetrating projectiles.
+	// The newly-created projectile needs to be manually added to `psProjectileList`.
+	PROJECTILE* update();
 
 	UBYTE           state;                  ///< current projectile state
 	UBYTE           bVisible;               ///< whether the selected player should see the projectile

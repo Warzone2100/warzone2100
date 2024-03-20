@@ -39,7 +39,7 @@
 
 extern MISSION		mission;
 extern bool			offWorldKeepLists;
-extern DROID       *apsLimboDroids[MAX_PLAYERS];
+extern PerPlayerDroidLists apsLimboDroids;
 
 extern bool Cheated;
 
@@ -53,7 +53,7 @@ void releaseMission();
 /** On the PC - sets the countdown played flag. */
 void setMissionCountDown();
 
-bool startMission(LEVEL_TYPE missionType, char *pGame);
+bool startMission(LEVEL_TYPE missionType, const char *pGame);
 void endMission();
 
 /** Initialise the mission stuff for a save game. */

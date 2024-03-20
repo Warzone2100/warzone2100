@@ -40,9 +40,6 @@ bool intAddMessageView(MESSAGE *psMessage);
 /* Remove the Message View from the Intelligence screen */
 void intRemoveMessageView(bool animated);
 
-/* Process return codes from the Intelligence Map */
-void intProcessIntelMap(UDWORD id);
-
 /* Remove the Intelligence Map widgets from the screen */
 void intRemoveIntelMap();
 

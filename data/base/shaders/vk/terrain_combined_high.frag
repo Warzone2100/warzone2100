@@ -3,6 +3,10 @@
 #include "terrain_combined.glsl"
 
 layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
+layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
+layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
+layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
+layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
 
 layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -18,10 +22,17 @@ layout(set = 1, binding = 6) uniform sampler2DArray decalNormal;
 layout(set = 1, binding = 7) uniform sampler2DArray decalSpecular;
 layout(set = 1, binding = 8) uniform sampler2DArray decalHeight;
 
+// depth map
+layout(set = 1, binding = 9) uniform sampler2DArrayShadow shadowMap;
+
 layout(location = 0) in FragData frag;
-layout(location = 9) flat in FragFlatData fragf;
+layout(location = 11) flat in FragFlatData fragf;
+layout(location = 14) in mat3 ModelTangentMatrix;
 
 layout(location = 0) out vec4 FragColor;
+
+#include "terrain_combined_frag.glsl"
+#include "pointlights.glsl"
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fragf.grounds[i];
@@ -43,13 +54,13 @@ void getGroundBM(int i, inout BumpData res) {
 	float w = frag.groundWeights[i];
 	res.color += texture(groundTex, uv, WZ_MIP_LOAD_BIAS) * w;
 	vec3 N = texture(groundNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
-	if (N == vec3(0)) {
-		N = vec3(0,0,1);
-	} else {
-		N = normalize(N * 2 - 1);
-	}
+	N = mix(normalize(N * 2.f - 1.f), vec3(0.f,0.f,1.f), vec3(float(N == vec3(0.f,0.f,0.f))));
 	res.N += N * w;
 	res.gloss += texture(groundSpecular, uv, WZ_MIP_LOAD_BIAS).r * w;
+}
+
+vec3 blendAddEffectLighting(vec3 a, vec3 b) {
+	return a + b;
 }
 
 vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
@@ -57,16 +68,32 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	float lambertTerm = max(dot(b.N, L), 0.0); // diffuse lighting
 	// Gaussian specular term computation
 	vec3 H = normalize(halfVec);
-	float exponent = acos(dot(H, b.N)) / b.gloss*2 + 0.001;
-	float gaussianTerm = exp(-(exponent * exponent));
+	float blinnTerm = clamp(dot(b.N, H), 0.f, 1.f);
+	blinnTerm = lambertTerm != 0.0 ? blinnTerm : 0.0;
+	blinnTerm = pow(blinnTerm, 16.f);
+	float visibility = getShadowVisibility();
+	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap, 0.f);
 
-	vec4 res = b.color*(ambientLight + diffuseLight*lambertTerm) + b.gloss*specularLight*gaussianTerm;
+	float adjustedTileBrightness = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+
+	vec4 adjustedAmbientLight = ambientLight*lightmap_vec4.a;
+	vec4 light = (ambientLight*0.30f + visibility*(adjustedAmbientLight*0.40f + adjustedAmbientLight*lambertTerm*0.30f + diffuseLight*lambertTerm)) * lightmap_vec4.a;
+	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.4f)); // additive color (from environmental point lights / effects)
+
+	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm) * adjustedTileBrightness;
+	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.5f)); // additive color (from environmental point lights / effects)
+	light_spec *= (b.gloss * b.gloss);
+
+	vec4 res = (b.color*light) + light_spec;
+
+	if (WZ_POINT_LIGHT_ENABLED == 1)
+	{
+		// point lights
+		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+		res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+	}
 
 	return vec4(res.rgb, b.color.a);
-}
-
-vec3 blendAddEffectLighting(vec3 a, vec3 b) {
-	return min(a + b, vec3(1.0));
 }
 
 vec4 main_bumpMapping() {
@@ -86,19 +113,12 @@ vec4 main_bumpMapping() {
 		// blend color, normal and gloss with ground ones based on alpha
 		bump.color = (1-a)*bump.color + a*vec4(decalColor.rgb, 1);
 		vec3 n = texture(decalNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
-		if (n == vec3(0)) {
-			n = vec3(0,0,1);
-		} else {
-			n = normalize(n * 2 - 1);
-			n = vec3(n.xy * frag.decal2groundMat2, n.z);
-		}
+		vec3 n_normalized = normalize(n * 2.f - 1.f);
+		n = mix(vec3(n_normalized.xy * frag.decal2groundMat2, n_normalized.z), vec3(0.f,0.f,1.f), vec3(float(n == vec3(0.f,0.f,0.f))));
 		bump.N = (1-a)*bump.N + a*n;
 		bump.gloss = (1-a)*bump.gloss + a*texture(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
 	}
-	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap);
-	vec4 color = doBumpMapping(bump, frag.groundLightDir, frag.groundHalfVec) * vec4(vec3(lightmap_vec4.a), 1.f); // ... * tile brightness / ambient occlusion (stored in lightmap.a);
-	color.rgb = blendAddEffectLighting(color.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
-	return color;
+	return doBumpMapping(bump, frag.groundLightDir, frag.groundHalfVec);
 }
 
 void main()

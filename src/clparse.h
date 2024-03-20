@@ -26,7 +26,13 @@
 
 // parse the commandline
 bool ParseCommandLine(int argc, const char * const *argv);
-bool ParseCommandLineEarly(int argc, const char * const *argv);
+
+enum class ParseCLIEarlyResult
+{
+	OK_CONTINUE,
+	HANDLED_QUIT_EARLY_COMMAND
+};
+ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv);
 bool ParseCommandLineDebugFlags(int argc, const char * const *argv);
 
 bool autogame_enabled();
@@ -38,13 +44,6 @@ void setAutoratingEnable(bool e);
 bool getAutoratingEnable();
 bool streamer_spectator_mode();
 bool lobby_slashcommands_enabled();
-
-enum class WZ_Command_Interface
-{
-	None,
-	StdIn_Interface,
-};
-WZ_Command_Interface wz_command_interface();
 
 int min_autostart_player_count();
 

@@ -418,6 +418,7 @@ bool iV_Image::convert_channels(const std::vector<unsigned int>& channelMap)
 	ASSERT_OR_RETURN(false, channelMap.size() <= 4, "iV_Image does not support > 4 channel textures (channelMap has %zu entries)", channelMap.size());
 	auto originalChannels = m_channels;
 	ASSERT_OR_RETURN(false, std::all_of(channelMap.begin(), channelMap.end(), [originalChannels](unsigned int srcChannel){ return srcChannel < originalChannels; }), "Channel swizzle contains channel > originalChannels (%u)", m_channels);
+	ASSERT_OR_RETURN(false, m_width > 0 && m_height > 0, "No size");
 
 	unsigned int newChannels = static_cast<unsigned int>(channelMap.size());
 
@@ -440,6 +441,7 @@ bool iV_Image::convert_channels(const std::vector<unsigned int>& channelMap)
 bool iV_Image::convert_to_single_channel(unsigned int channel /*= 0*/)
 {
 	ASSERT_OR_RETURN(false, channel < m_channels, "Cannot extract channel %u from image with %u channels", channel, m_channels);
+	ASSERT_OR_RETURN(false, m_width > 0 && m_height > 0, "No size");
 	if (channel == 0 && m_channels == 1)
 	{
 		// nothing to do
@@ -560,4 +562,23 @@ bool iV_Image::convert_color_order(ColorOrder newOrder)
 	}
 	m_colorOrder = newOrder;
 	return true;
+}
+
+bool iV_Image::compare_equal(const iV_Image& other)
+{
+	if (m_width != other.m_width || m_height != other.m_height || m_channels != other.m_channels)
+	{
+		return false;
+	}
+	if (m_colorOrder != other.m_colorOrder)
+	{
+		return false;
+	}
+	if ((m_bmp == nullptr || other.m_bmp == nullptr) && (m_bmp != other.m_bmp))
+	{
+		return false;
+	}
+
+	const size_t sizeOfBuffers = sizeof(unsigned char) * m_width * m_height * m_channels;
+	return memcmp(m_bmp, other.m_bmp, sizeOfBuffers) == 0;
 }

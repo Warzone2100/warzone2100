@@ -22,6 +22,7 @@
 
 #include "frame.h"
 #include "vector.h"
+#include <algorithm>
 #include <limits>
 
 /**
@@ -170,6 +171,14 @@ public:
 		return {
 			{std::max(_topLeft.x, other._topLeft.x), std::max(_topLeft.y, other._topLeft.y)},
 			{std::min(_bottomRight.x, other._bottomRight.x), std::min(_bottomRight.y, other._bottomRight.y)}
+		};
+	}
+
+	WzRect minimumBoundingRect(const WzRect &other) const
+	{
+		return {
+			{std::min(_topLeft.x, other._topLeft.x), std::min(_topLeft.y, other._topLeft.y)},
+			{std::max(_bottomRight.x, other._bottomRight.x), std::max(_bottomRight.y, other._bottomRight.y)}
 		};
 	}
 

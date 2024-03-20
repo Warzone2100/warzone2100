@@ -26,17 +26,44 @@
 
 #include "objectdef.h"
 
+#include <array>
+#include <list>
+
 /* The lists of objects allocated */
-extern DROID			*apsDroidLists[MAX_PLAYERS];
-extern STRUCTURE		*apsStructLists[MAX_PLAYERS];
-extern FEATURE			*apsFeatureLists[MAX_PLAYERS];
-extern FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
-extern STRUCTURE		*apsExtractorLists[MAX_PLAYERS];
-extern BASE_OBJECT		*apsSensorList[1];
-extern FEATURE			*apsOilList[1];
+template <typename ObjectType, unsigned PlayerCount>
+using PerPlayerObjectLists = std::array<std::list<ObjectType*>, PlayerCount>;
+
+using PerPlayerDroidLists = PerPlayerObjectLists<DROID, MAX_PLAYERS>;
+using DroidList = typename PerPlayerDroidLists::value_type;
+extern PerPlayerDroidLists apsDroidLists;
+
+using PerPlayerStructureLists = PerPlayerObjectLists<STRUCTURE, MAX_PLAYERS>;
+using StructureList = typename PerPlayerStructureLists::value_type;
+extern PerPlayerStructureLists apsStructLists;
+
+using PerPlayerFeatureLists = PerPlayerObjectLists<FEATURE, MAX_PLAYERS>;
+using FeatureList = typename PerPlayerFeatureLists::value_type;
+extern PerPlayerFeatureLists apsFeatureLists;
+
+using PerPlayerFlagPositionLists = PerPlayerObjectLists<FLAG_POSITION, MAX_PLAYERS>;
+using FlagPositionList = typename PerPlayerFlagPositionLists::value_type;
+extern PerPlayerFlagPositionLists apsFlagPosLists;
+
+using PerPlayerExtractorLists = PerPlayerStructureLists;
+using ExtractorList = typename PerPlayerExtractorLists::value_type;
+extern PerPlayerExtractorLists apsExtractorLists;
+
+using GlobalSensorList = PerPlayerObjectLists<BASE_OBJECT, 1>;
+using SensorList = typename GlobalSensorList::value_type;
+extern GlobalSensorList apsSensorList;
+
+using GlobalOilList = PerPlayerObjectLists<FEATURE, 1>;
+using OilList = typename GlobalOilList::value_type;
+extern GlobalOilList apsOilList;
 
 /* The list of destroyed objects */
-extern BASE_OBJECT	*psDestroyedObj;
+using DestroyedObjectsList = std::list<BASE_OBJECT*>;
+extern DestroyedObjectsList psDestroyedObj;
 
 /* Initialise the object heaps */
 bool objmemInitialise();
@@ -53,7 +80,7 @@ uint32_t generateNewObjectId();
 uint32_t generateSynchronisedObjectId();
 
 /* add the droid to the Droid Lists */
-void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS]);
+void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList);
 
 /*destroy a droid */
 void killDroid(DROID *psDel);
@@ -62,7 +89,7 @@ void killDroid(DROID *psDel);
 void freeAllDroids();
 
 /*Remove a single Droid from its list*/
-void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS]);
+void removeDroid(DROID *psDroidToRemove, PerPlayerDroidLists& pList);
 
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids();
@@ -80,7 +107,7 @@ void killStruct(STRUCTURE *psDel);
 void freeAllStructs();
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_PLAYERS]);
+void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList);
 
 /* add the feature to the Feature Lists */
 void addFeature(FEATURE *psFeatureToAdd);
@@ -97,14 +124,28 @@ bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
 void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
 /* Remove a Flag Position from the Lists */
 void removeFlagPosition(FLAG_POSITION *psDel);
+/* Transfer a Flag Position to a new player */
+void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
 // free all flag positions
 void freeAllFlagPositions();
+// used to add flag position to a specific list (ex. from assignFactoryCommandDroid)
+void addFlagPositionToList(FLAG_POSITION* psFlagPosToAdd, PerPlayerFlagPositionLists& list);
 
 // Find a base object from it's id
+template <typename ObjectType>
+BASE_OBJECT* getBaseObjFromId(const std::list<ObjectType*>& list, unsigned id)
+{
+	auto objIt = std::find_if(list.begin(), list.end(), [id](ObjectType* obj)
+	{
+		return obj->id == id;
+	});
+	return objIt != list.end() ? *objIt : nullptr;
+}
+
 BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type);
 BASE_OBJECT *getBaseObjFromId(UDWORD id);
 
-UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag);
+UDWORD getRepairIdFromFlag(const FLAG_POSITION *psFlag);
 
 void objCount(int *droids, int *structures, int *features);
 

@@ -30,6 +30,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/object_list_iteration.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/textdraw.h"
@@ -68,6 +69,7 @@
 #include "multiint.h"
 #include "multistat.h"
 #include "multigifts.h"
+#include "multivote.h"
 #include "qtscript.h"
 #include "clparse.h"
 #include "multilobbycommands.h"
@@ -77,98 +79,6 @@
 // Local Functions
 
 static void resetMultiVisibility(UDWORD player);
-
-// ////////////////////////////////////////////////////////////////////////////
-// Local Variables
-
-struct DisplayMultiJoiningStatusCache {
-	WzText wzMainProgressText;
-	WzText wzPlayerCountText;
-	std::vector<WzText> wzPlayerNameAndStatus;
-};
-
-DisplayMultiJoiningStatusCache textCache;
-
-// ////////////////////////////////////////////////////////////////////////////
-// Clear Local Display Caches
-
-void clearDisplayMultiJoiningStatusCache()
-{
-	textCache = DisplayMultiJoiningStatusCache();
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// Wait For Players
-
-bool intDisplayMultiJoiningStatus(UBYTE joinCount)
-{
-	UDWORD			x, y, w, h;
-	char			sTmp[6];
-
-	w = RET_FORMWIDTH;
-	h = RET_FORMHEIGHT;
-	x = RET_X;
-	y = RET_Y;
-
-	RenderWindowFrame(FRAME_NORMAL, x, y , w, h);		// draw a wee blue box.
-
-	// display how far done..
-	textCache.wzMainProgressText.setText(_("Players Still Joining"), font_regular);
-	textCache.wzMainProgressText.render(x + (w / 2) - (textCache.wzMainProgressText.width() / 2),
-										y + (h / 2) - 8, WZCOL_TEXT_BRIGHT);
-
-	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
-	unsigned numUsedPlayerSlots = 0;
-	for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
-	{
-		if (isHumanPlayer(player))
-		{
-			++playerCount;
-			++numUsedPlayerSlots;
-		}
-		else if (NetPlay.players[player].ai >= 0)
-		{
-			++numUsedPlayerSlots;
-		}
-	}
-	if (!playerCount)
-	{
-		return true;
-	}
-	sprintf(sTmp, "%d%%", PERCENT(playerCount - joinCount, playerCount));
-	textCache.wzPlayerCountText.setText(sTmp, font_large);
-	textCache.wzPlayerCountText.render(x + (w / 2) - 10, y + (h / 2) + 10, WZCOL_TEXT_BRIGHT);
-
-	int yStep = iV_GetTextLineSize(font_small);
-	int yPos = RET_Y - yStep * numUsedPlayerSlots;
-
-	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
-
-	for (unsigned player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
-	{
-		int status = -1;
-		if (isHumanPlayer(player))
-		{
-			status = ingame.JoiningInProgress[player] ? 0 : 1; // Human player, still joining or joined.
-		}
-		else if (NetPlay.players[player].ai >= 0)
-		{
-			status = 2;  // AI player (automatically joined).
-		}
-		if (status >= 0)
-		{
-			if (player >= textCache.wzPlayerNameAndStatus.size())
-			{
-				textCache.wzPlayerNameAndStatus.resize(player + 1);
-			}
-			textCache.wzPlayerNameAndStatus[player].setText((statusStrings[status] + getPlayerName(player)).c_str(), font_small);
-			textCache.wzPlayerNameAndStatus[player].render(x + 5, yPos + yStep * NetPlay.players[player].position, WZCOL_TEXT_BRIGHT);
-		}
-	}
-
-	return true;
-}
-
 void destroyPlayerResources(UDWORD player, bool quietly);
 
 //////////////////////////////////////////////////////////////////////////////
@@ -192,6 +102,7 @@ void clearPlayer(UDWORD player, bool quietly)
 	ingame.DesyncCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
+	ingame.hostChatPermissions[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 
 	if (player >= MAX_PLAYERS)
@@ -205,7 +116,6 @@ void clearPlayer(UDWORD player, bool quietly)
 void destroyPlayerResources(UDWORD player, bool quietly)
 {
 	UDWORD			i;
-	STRUCTURE		*psStruct, *psNext;
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -226,24 +136,24 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 	}
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
-	while (apsDroidLists[player])				// delete all droids
+	// delete all droids
+	mutating_list_iterate(apsDroidLists[player], [quietly](DROID* d)
 	{
 		if (quietly)			// don't show effects
 		{
-			killDroid(apsDroidLists[player]);
+			killDroid(d);
 		}
 		else				// show effects
 		{
-			destroyDroid(apsDroidLists[player], gameTime);
+			destroyDroid(d, gameTime);
 		}
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	debug(LOG_DEATH, "killing off all structures for player %d", player);
-	psStruct = apsStructLists[player];
-	while (psStruct)				// delete all structs
+	// delete all structs
+	mutating_list_iterate(apsStructLists[player], [quietly](STRUCTURE* psStruct)
 	{
-		psNext = psStruct->psNext;
-
 		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
 		if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 		{
@@ -253,11 +163,33 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 		{
 			destroyStruct(psStruct, gameTime);
 		}
-
-		psStruct = psNext;
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	return;
+}
+
+static bool destroyMatchingStructs(UDWORD player, std::function<bool (STRUCTURE *)> cmp, bool quietly)
+{
+	bool destroyedAnyStructs = false;
+	mutating_list_iterate(apsStructLists[player], [quietly, &cmp, &destroyedAnyStructs](STRUCTURE* psStruct)
+	{
+		if (cmp(psStruct))
+		{
+			// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
+			if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+			{
+				removeStruct(psStruct, true);
+			}
+			else			// show effects
+			{
+				destroyStruct(psStruct, gameTime);
+			}
+			destroyedAnyStructs = true;
+		}
+		return IterationResult::CONTINUE_ITERATION;
+	});
+	return destroyedAnyStructs;
 }
 
 bool splitResourcesAmongTeam(UDWORD player)
@@ -323,15 +255,14 @@ bool splitResourcesAmongTeam(UDWORD player)
 			return a.itemsRecv < b.itemsRecv;
 		});
 	};
-	while (apsDroidLists[player])
+	mutating_list_iterate(apsDroidLists[player], [&droidsGiftedPerTarget, &incrRecvItem](DROID* d)
 	{
-		auto psDroid = apsDroidLists[player];
 		bool transferredDroid = false;
-		if (!isDead(psDroid))
+		if (!isDead(d))
 		{
 			for (size_t i = 0; i < droidsGiftedPerTarget.size(); ++i)
 			{
-				if (giftSingleDroid(psDroid, droidsGiftedPerTarget[i].player, false))
+				if (giftSingleDroid(d, droidsGiftedPerTarget[i].player, false))
 				{
 					transferredDroid = true;
 					incrRecvItem(i);
@@ -343,9 +274,10 @@ bool splitResourcesAmongTeam(UDWORD player)
 
 		if (!transferredDroid)
 		{
-			destroyDroid(apsDroidLists[player], gameTime);
+			destroyDroid(d, gameTime);
 		}
-	}
+		return IterationResult::CONTINUE_ITERATION;
+	});
 
 	auto distributeMatchingStructs = [&](std::function<bool (STRUCTURE *)> cmp)
 	{
@@ -361,27 +293,31 @@ bool splitResourcesAmongTeam(UDWORD player)
 			});
 		};
 
-		STRUCTURE *psStruct = apsStructLists[player];
-		while (psStruct)
+		mutating_list_iterate(apsStructLists[player], [&cmp, &structsGiftedPerTarget, &incrRecvStruct](STRUCTURE* psStruct)
 		{
-			STRUCTURE * psNext = psStruct->psNext;
-
-			if (cmp(psStruct))
+			if (psStruct && cmp(psStruct))
 			{
 				giftSingleStructure(psStruct, structsGiftedPerTarget.front().player, false);
 				incrRecvStruct(0);
 			}
-
-			psStruct = psNext;
-		}
+			return IterationResult::CONTINUE_ITERATION;
+		});
 	};
 
 	// Distribute key structures
 	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR; });
 	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_POWER_GEN; });
-	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESEARCH; });
+	if (alliancesSharedResearch(game.alliance))
+	{
+		distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESEARCH; });
+	}
+	else
+	{
+		// destroy the research centers in unshared research mode
+		destroyMatchingStructs(player, [](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_RESEARCH; }, false);
+	}
 	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->pStructureType->type == REF_COMMAND_CONTROL; });
-	distributeMatchingStructs([](STRUCTURE *psStruct) { return StructIsFactory(psStruct); });
+	distributeMatchingStructs([](STRUCTURE *psStruct) { return psStruct->isFactory(); });
 
 	return true;
 }
@@ -399,6 +335,7 @@ void handlePlayerLeftInGame(UDWORD player)
 	ingame.LagCounter[player] = 0;
 	ingame.DesyncCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
+	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 
@@ -428,8 +365,6 @@ void handlePlayerLeftInGame(UDWORD player)
 static void resetMultiVisibility(UDWORD player)
 {
 	UDWORD		owned;
-	DROID		*pDroid;
-	STRUCTURE	*pStruct;
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -441,13 +376,13 @@ static void resetMultiVisibility(UDWORD player)
 		if (owned != player)								// done reset own stuff..
 		{
 			//droids
-			for (pDroid = apsDroidLists[owned]; pDroid; pDroid = pDroid->psNext)
+			for (DROID* pDroid : apsDroidLists[owned])
 			{
 				pDroid->visible[player] = false;
 			}
 
 			//structures
-			for (pStruct = apsStructLists[owned]; pStruct; pStruct = pStruct->psNext)
+			for (STRUCTURE* pStruct : apsStructLists[owned])
 			{
 				pStruct->visible[player] = false;
 			}
@@ -510,6 +445,7 @@ void recvPlayerLeft(NETQUEUE queue)
 	NetPlay.players[playerIndex].allocated = false;
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
+	cancelOrDismissKickVote(playerIndex);
 
 	debug(LOG_INFO, "** player %u has dropped, in-game! (gameTime: %" PRIu32 ")", playerIndex, gameTime);
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -534,6 +470,8 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
 	debug(LOG_NET, "** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
 
+	ingame.muteChat[playerIndex] = false;
+
 	if (wz_command_interface_enabled())
 	{
 		std::string playerPublicKeyB64 = base64Encode(getMultiStats(playerIndex).identity.toBytes(EcKey::Public));
@@ -554,6 +492,17 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
 	{
 		sendPlayerLeft(playerIndex);
+
+		if (bDisplayMultiJoiningStatus) // if still waiting for players to load *or* waiting for game to start...
+		{
+			NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+			NETuint32_t(&playerIndex);
+			NETend();
+			// only set ingame.JoiningInProgress[player_id] to false
+			// when the game starts, it will handle the GAME_PLAYER_LEFT message in their queue properly
+			ingame.JoiningInProgress[playerIndex] = false;
+			ingame.PendingDisconnect[playerIndex] = true; // used as a UI indicator that a disconnect will be processed in the future
+		}
 	}
 
 	if (NetPlay.players[playerIndex].wzFiles && NetPlay.players[playerIndex].fileSendInProgress())
@@ -624,14 +573,14 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 			{
 				if (NetPlay.players[i].allocated)
 				{
-					setMultiStats(i, getMultiStats(i), false);
+					sendMultiStats(i);
 				}
 			}
 		}
 		if (lobby_slashcommands_enabled())
 		{
 			// Inform the new player that this lobby has slash commands enabled.
-			sendRoomSystemMessageToSingleReceiver("Lobby slash commands enabled. Type " LOBBY_COMMAND_PREFIX "help to see details.", playerIndex);
+			sendRoomSystemMessageToSingleReceiver("Lobby slash commands enabled. Type " LOBBY_COMMAND_PREFIX "help to see details.", playerIndex, true);
 		}
 	}
 	addConsolePlayerJoinMessage(playerIndex);
@@ -723,7 +672,9 @@ void setupNewPlayer(UDWORD player)
 	ingame.DesyncCounter[player] = 0;
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
+	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
+	ingame.hostChatPermissions[player] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;
 	multiSyncResetPlayerChallenge(player);

@@ -67,10 +67,6 @@ Files: lib/ivis_opengl/3rdparty/etcpak/*
 Copyright: 2013-2021 Bartosz Taudul <wolf@nereid.pl>
 License: BSD-3-clause-etcpak
 
-Files: lib/ivis_opengl/3rdparty/LRUCache11.hpp
-Copyright: 2012-2022 SAURAV MOHAPATRA
-License: ISC
-
 Files: lib/ivis_opengl/3rdparty/ska_sort.hpp
 Copyright: 2016 Malte Skarupke
 License: BSL-1.0
@@ -109,16 +105,6 @@ License: BSD-3-clause-Xiph-org
 Files: src/3rdparty/gsl_finally.h
 Copyright: 2015 Microsoft Corporation
 License: Expat
-
-Files: src/3rdparty/integer_sequence.hpp
-Copyright: 2017 by Simon Brand
-License: CC0
-
-Files: src/3rdparty/physfs.hpp
-Copyright: 2013 Kevin Howell and others
-           2018 Arthur Brainville (Ybalrid)
-           2021 Warzone 2100 Project
-License: Zlib
 
 Files: src/3rdparty/physfs_memoryio.cpp
        lib/3rdparty/physfs_memoryio.h
@@ -159,9 +145,13 @@ Files: 3rdparty/launchinfo/*
 Copyright: 2020 past-due
 License: Expat
 
-Files: 3rdparty/mINI/*
-Copyright: 2018 Danijel Durakovic
-License: Expat
+Files: 3rdparty/LRUCache11/*
+Copyright: 2012-2022 SAURAV MOHAPATRA
+License: ISC
+
+Files: 3rdparty/inih/*
+Copyright: 2009-2020 Ben Hoyt
+License: BSD-3-clause-inih
 
 Files: 3rdparty/miniupnpc/*
 Copyright: 2005-2019, Thomas BERNARD
@@ -366,6 +356,29 @@ License: BSD-3-clause-etcpak
  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+License: BSD-3-clause-inih
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+     * Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+     * Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the distribution.
+     * Neither the name of Ben Hoyt nor the names of its contributors
+       may be used to endorse or promote products derived from this software
+       without specific prior written permission.
+ .
+ THIS SOFTWARE IS PROVIDED BY BEN HOYT ''AS IS'' AND ANY
+ EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL BEN HOYT BE LIABLE FOR ANY
  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND

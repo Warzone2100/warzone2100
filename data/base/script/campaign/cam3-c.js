@@ -2,12 +2,12 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 include("script/campaign/transitionTech.js");
 
-const GAMMA = 1; //Gamma is player one.
-const NEXUS_RES = [
+const MIS_GAMMA_PLAYER = 1; //Gamma is player one.
+const mis_nexusRes = [
 	"R-Sys-Engineering03", "R-Defense-WallUpgrade09", "R-Struc-Materials09",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
-	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
+	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage10", "R-Wpn-Mortar-ROF04",
 	"R-Vehicle-Engine08", "R-Vehicle-Metals09", "R-Vehicle-Armor-Heat06",
 	"R-Cyborg-Metals09", "R-Cyborg-Armor-Heat06", "R-Wpn-RocketSlow-ROF06",
 	"R-Wpn-AAGun-Damage06", "R-Wpn-AAGun-ROF06", "R-Wpn-Howitzer-Damage09",
@@ -15,7 +15,7 @@ const NEXUS_RES = [
 	"R-Wpn-Missile-Damage02", "R-Wpn-Missile-ROF02", "R-Wpn-Missile-Accuracy02",
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Wpn-Rail-Accuracy01",
 	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
-	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03",
+	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03", "R-Sys-NEXUSsensor",
 ];
 var reunited;
 var betaUnitIds;
@@ -73,14 +73,14 @@ function enableAllFactories()
 
 function truckDefense()
 {
-	if (enumDroid(NEXUS, DROID_CONSTRUCT).length === 0)
+	if (enumDroid(CAM_NEXUS, DROID_CONSTRUCT).length === 0)
 	{
 		removeTimer("truckDefense");
 		return;
 	}
 
-	var list = ["Emplacement-Howitzer150", "Emplacement-MdART-pit"];
-	var position;
+	const list = ["Emplacement-Howitzer150", "NX-Emp-MedArtMiss-Pit"];
+	let position;
 
 	if (truckLocCounter === 0)
 	{
@@ -93,24 +93,24 @@ function truckDefense()
 		truckLocCounter = 0;
 	}
 
-	camQueueBuilding(NEXUS, list[camRand(list.length)], position);
+	camQueueBuilding(CAM_NEXUS, list[camRand(list.length)], position);
 }
 
 function discoverGammaBase()
 {
 	reunited = true;
-	var lz = getObject("landingZone");
+	const lz = getObject("landingZone");
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(90)));
 	setPower(playerPower(CAM_HUMAN_PLAYER) + camChangeOnDiff(10000));
 
-	playSound("power-transferred.ogg");
-	playSound("pcv616.ogg"); //Group rescued.
+	playSound(cam_sounds.powerTransferred);
+	playSound(cam_sounds.rescue.groupRescued);
 
-	camAbsorbPlayer(GAMMA, CAM_HUMAN_PLAYER); //Take everything they got!
-	setAlliance(NEXUS, GAMMA, false);
+	camAbsorbPlayer(MIS_GAMMA_PLAYER, CAM_HUMAN_PLAYER); //Take everything they got!
+	setAlliance(CAM_NEXUS, MIS_GAMMA_PLAYER, false);
 
 	hackRemoveMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 	hackRemoveMessage("CM3C_BETATEAM", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -122,7 +122,7 @@ function discoverGammaBase()
 
 function findBetaUnitIds()
 {
-	var droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter((obj) => (
+	const droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID
 	));
 
@@ -139,8 +139,8 @@ function betaAlive()
 		return true; //Don't need to see if Beta is still alive if reunited with base.
 	}
 
-	var alive = false;
-	var myDroids = enumDroid(CAM_HUMAN_PLAYER);
+	let alive = false;
+	const myDroids = enumDroid(CAM_HUMAN_PLAYER);
 
 	for (let i = 0, l = betaUnitIds.length; i < l; ++i)
 	{
@@ -169,8 +169,8 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Reunite a part of Beta team with a Gamma team outpost"));
 
-	var startpos = getObject("startPosition");
-	var limboLZ = getObject("limboDroidLZ");
+	const startPos = getObject("startPosition");
+	const limboLZ = getObject("limboDroidLZ");
 	reunited = false;
 	betaUnitIds = [];
 	truckLocCounter = 0;
@@ -181,46 +181,43 @@ function eventStartLevel()
 		callback: "betaAlive"
 	});
 
-	centreView(startpos.x, startpos.y);
+	centreView(startPos.x, startPos.y);
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10)));
 
-	var enemyLz = getObject("NXlandingZone");
-	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
-
-	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
-	camCompleteRequiredResearch(GAMMA_ALLY_RES, GAMMA);
+	camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
+	camCompleteRequiredResearch(mis_gammaAllyRes, MIS_GAMMA_PLAYER);
 	hackAddMessage("CM3C_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	hackAddMessage("CM3C_BETATEAM", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
-	setAlliance(CAM_HUMAN_PLAYER, GAMMA, true);
-	setAlliance(NEXUS, GAMMA, true);
+	setAlliance(CAM_HUMAN_PLAYER, MIS_GAMMA_PLAYER, true);
+	setAlliance(CAM_NEXUS, MIS_GAMMA_PLAYER, true);
 
 	camSetArtifacts({
 		"NXbase1HeavyFacArti": { tech: "R-Vehicle-Body07" }, //retribution
 		"NXcybFacArti": { tech: "R-Wpn-RailGun01" },
 		"NXvtolFacArti": { tech: "R-Struc-VTOLPad-Upgrade04" },
-		"NXcommandCenter": { tech: "R-Wpn-Missile-LtSAM" },
+		"NXcommandCenter": { tech: ["R-Wpn-Missile-LtSAM", "R-Defense-WallUpgrade10"] },
 	});
 
 	camSetEnemyBases({
 		"NXNorthBase": {
 			cleanup: "northBaseCleanup",
 			detectMsg: "CM3C_BASE1",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NXVtolBase": {
 			cleanup: "vtolBaseCleanup",
 			detectMsg: "CM3C_BASE2",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NXSouthBase": {
 			cleanup: "southBaseCleanup",
 			detectMsg: "CM3C_BASE3",
-			detectSnd: "pcv379.ogg",
-			eliminateSnd: "pcv394.ogg",
+			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
+			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 	});
 
@@ -229,7 +226,7 @@ function eventStartLevel()
 			assembly: "NXHeavyAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
 			data: {
 				regroup: false,
 				repair: 45,
@@ -241,7 +238,7 @@ function eventStartLevel()
 			assembly: "NXsouthCybFacAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(45)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -253,7 +250,7 @@ function eventStartLevel()
 			assembly: "NXcybFacArtiAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
 			data: {
 				regroup: false,
 				repair: 40,
@@ -277,13 +274,13 @@ function eventStartLevel()
 
 	if (difficulty >= HARD)
 	{
-		addDroid(NEXUS, 31, 185, "Truck Retribution Hover", "Body7ABT", "hover02", "", "", "Spade1Mk1");
-		camManageTrucks(NEXUS);
+		addDroid(CAM_NEXUS, 31, 185, "Truck Retribution Hover", tBody.tank.retribution, tProp.tank.hover2, "", "", tConstruct.truck);
+		camManageTrucks(CAM_NEXUS);
 	}
 
 	camPlayVideos([{video: "MB3_C_MSG", type: CAMP_MSG}, {video: "MB3_C_MSG2", type: MISS_MSG}]);
 	setScrollLimits(0, 137, 64, 192); //Show the middle section of the map.
-	changePlayerColour(GAMMA, 0);
+	changePlayerColour(MIS_GAMMA_PLAYER, 0);
 
 	queue("setupPatrolGroups", camSecondsToMilliseconds(10));
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(3)));

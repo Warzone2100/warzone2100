@@ -174,12 +174,18 @@ set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
 # On CMake configure, clear the build dir "locale" folder (to ensure re-generation)
 file(REMOVE_RECURSE "${wz2100_translations_LOCALE_FOLDER}/")
 
+set(_po_install_config)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	set(_po_install_config
+	INSTALL_DESTINATION "${WZ_LOCALEDIR}"
+	INSTALL_COMPONENT Languages)
+endif()
+
 # Build the *.gmo files from the *.po files (using the .pot file)
 include(GNUInstallDirs)
 file (GLOB POFILES *.po)
 GETTEXT_CREATE_TRANSLATIONS_WZ ("${_potFile}" ALL
-	INSTALL_DESTINATION "${CMAKE_INSTALL_LOCALEDIR}"
-	INSTALL_COMPONENT Languages
+	${_po_install_config}
 	MSGMERGE_OPTIONS --quiet --no-wrap --width=1
 	TARGET_FOLDER "po"
 	POFILES ${POFILES})

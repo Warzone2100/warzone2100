@@ -32,13 +32,13 @@ SDL_gfx_api_Impl_Factory::SDL_gfx_api_Impl_Factory(SDL_Window* _window, SDL_gfx_
 
 std::unique_ptr<gfx_api::backend_Null_Impl> SDL_gfx_api_Impl_Factory::createNullBackendImpl() const
 {
-	return std::unique_ptr<gfx_api::backend_Null_Impl>(new sdl_Null_Impl());
+	return std::make_unique<sdl_Null_Impl>();
 }
 
 std::unique_ptr<gfx_api::backend_OpenGL_Impl> SDL_gfx_api_Impl_Factory::createOpenGLBackendImpl() const
 {
 	ASSERT_OR_RETURN(nullptr, window != nullptr, "Invalid SDL_Window*");
-	return std::unique_ptr<gfx_api::backend_OpenGL_Impl>(new sdl_OpenGL_Impl(window, config.useOpenGLES, config.useOpenGLESLibrary));
+	return std::make_unique<sdl_OpenGL_Impl>(window, config.useOpenGLES, config.useOpenGLESLibrary);
 }
 
 #if defined(WZ_VULKAN_ENABLED)
@@ -46,7 +46,7 @@ std::unique_ptr<gfx_api::backend_Vulkan_Impl> SDL_gfx_api_Impl_Factory::createVu
 {
 	ASSERT_OR_RETURN(nullptr, window != nullptr, "Invalid SDL_Window*");
 #if defined(HAVE_SDL_VULKAN_H)
-	return std::unique_ptr<gfx_api::backend_Vulkan_Impl>(new sdl_Vulkan_Impl(window));
+	return std::make_unique<sdl_Vulkan_Impl>(window, config.allowImplicitLayers);
 #else // !defined(HAVE_SDL_VULKAN_H)
 	SDL_version compiled_version;
 	SDL_VERSION(&compiled_version);

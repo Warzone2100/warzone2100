@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.24)
 
 # Automatically generate a Flatpak manifest from the template file
 #
 # Required input defines:
-# - TEMPLATE_FILE: the full filename + path for the input net.wz2100.warzone2100.appdata.xml.in template file
-# - OUTPUT_FILE: the full filename + path for the output net.wz2100.warzone2100.appdata.xml file
+# - TEMPLATE_FILE: the full filename + path for the input net.wz2100.wz2100.yaml.in template file
+# - OUTPUT_FILE: the full filename + path for the output net.wz2100.wz2100.yaml file
 # - PROJECT_ROOT: the path the project root (${PROJECT_SOURCE_DIR})
 #
 # And also, these input defines:
@@ -113,6 +113,11 @@ if(NOT DEFINED WZ_SENTRY_NATIVE_URL OR NOT DEFINED WZ_SENTRY_NATIVE_SHA512)
 	message(FATAL_ERROR "Failed to load URL and hash from: ${_sentry_dl_data_file}")
 endif()
 unset(_sentry_dl_data_file)
+
+##################################
+# Handle prebuilt-texture-packages
+
+include("${PROJECT_ROOT}/data/WZPrebuiltPackages.cmake")
 
 ##################################
 # Debug output

@@ -34,6 +34,8 @@
 #include "display3d.h"
 #include "effects.h"
 #include "miscimd.h"
+#include "profiling.h"
+#include "droid.h"
 
 #include <algorithm>
 
@@ -108,7 +110,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		{
 
 			//the weapon stats holds the reference to which graphic to use
-			pImd = ((PROJECTILE *)pObject)->psWStats->pInFlightGraphic;
+			pImd = ((PROJECTILE *)pObject)->psWStats->pInFlightGraphic->displayModel();
 
 			psSimpObj = (SIMPLE_OBJECT *) pObject;
 			position.x = psSimpObj->pos.x;
@@ -195,7 +197,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		position.z = -(psSimpObj->pos.y);
 		position.y = psSimpObj->pos.z;
 
-		psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
+		psBStats = psDroid->getBodyStats();
 		droidSize = psBStats->pIMD->radius;
 		z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel) - (droidSize * 2);
 
@@ -239,7 +241,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		if (z > 0)
 		{
 			//particle use the image radius
-			pImd = getImdFromIndex(MI_BLIP_ENEMY);//use MI_BLIP_ENEMY as all are same radius
+			pImd = getDisplayImdFromIndex(MI_BLIP_ENEMY);//use MI_BLIP_ENEMY as all are same radius
 			radius = pImd->radius;
 			radius *= SCALE_DEPTH;
 			radius /= z;
@@ -339,7 +341,7 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 
 		case EFFECT_WAYPOINT:
 			pie = ((EFFECT *)pObject)->imd;
-			z = INT32_MAX - pie->texpage;
+			z = INT32_MAX - pie->getTextures().texpage;
 			break;
 
 		default:
@@ -348,21 +350,21 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 		}
 		break;
 	case RENDER_DROID:
-		pie = BODY_IMD(((DROID *)pObject), 0);
-		z = INT32_MAX - pie->texpage;
+		pie = BODY_IMD(((DROID *)pObject), 0)->displayModel();
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_STRUCTURE:
-		pie = ((STRUCTURE *)pObject)->sDisplay.imd;
-		z = INT32_MAX - pie->texpage;
+		pie = ((STRUCTURE *)pObject)->sDisplay.imd->displayModel();
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_FEATURE:
-		pie = ((FEATURE *)pObject)->sDisplay.imd;
-		z = INT32_MAX - pie->texpage;
+		pie = ((FEATURE *)pObject)->sDisplay.imd->displayModel();
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_DELIVPOINT:
 		pie = pAssemblyPointIMDs[((FLAG_POSITION *)pObject)->
-		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc];
-		z = INT32_MAX - pie->texpage;
+		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc]->displayModel();
+		z = INT32_MAX - pie->getTextures().texpage;
 		break;
 	case RENDER_PARTICLE:
 		z = 0;
@@ -384,6 +386,7 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject, const glm::mat4 
 /* render Objects in list */
 void bucketRenderCurrentList(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
+	WZ_PROFILE_SCOPE(bucketRenderCurrentList);
 	std::sort(bucketArray.begin(), bucketArray.end());
 
 	for (auto thisTag = bucketArray.cbegin(); thisTag != bucketArray.cend(); ++thisTag)

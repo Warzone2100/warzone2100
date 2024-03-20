@@ -26,6 +26,7 @@ using json = nlohmann::json;
 #include <unordered_map>
 #include <unordered_set>
 #include <functional>
+#include <chrono>
 
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/frame.h"
@@ -76,8 +77,9 @@ struct CachePaths {
 
 static std::string configureLinkURL(const std::string& url, BuildPropertyProvider& propProvider);
 static bool isValidExpiry(const json& updateData);
-static void initProcessData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths);
-static void fetchLatestData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths);
+typedef std::function<void ()> ProcessDataCompletionHandler;
+static void initProcessData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths, ProcessDataCompletionHandler completionHandler);
+static void fetchLatestData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths, ProcessDataCompletionHandler completionHandler);
 
 class WzUpdateManager {
 public:
@@ -103,8 +105,45 @@ const std::string WZ_DEFAULT_COMPATINFO_LINK = "https://warzone2100.github.io/up
 static const char updatesCacheDataPath[] = WZ_UPDATES_CACHE_DIR "/wz2100_updates.json";
 static const char cacheInfoPath[] = WZ_UPDATES_CACHE_DIR "/cache_info.json";
 static const char compatDataPath[] = WZ_UPDATES_CACHE_DIR "/wz2100_compat.json";
+static const char compatCacheInfoPath[] = WZ_UPDATES_CACHE_DIR "/cache_info_compat.json";
 static CachePaths updatesCachePaths = CachePaths{updatesCacheDataPath, cacheInfoPath};
-static CachePaths compatCachePaths = CachePaths{compatDataPath, nullptr};
+static CachePaths compatCachePaths = CachePaths{compatDataPath, compatCacheInfoPath};
+
+static std::mutex compatCheckResultsMutex;
+static optional<CompatCheckResults> compatCheckResults = nullopt;
+static std::vector<CompatCheckResultsHandlerFunc> registeredCompatCheckResultsHandlers;
+
+// May be called from any thread
+void setCompatCheckResults(CompatCheckResults results, bool onlyIfUnset = false)
+{
+	std::vector<CompatCheckResultsHandlerFunc> handlersToConsume;
+
+	// lock scope
+	{
+		std::lock_guard<std::mutex> guard(compatCheckResultsMutex);
+		if (compatCheckResults.has_value())
+		{
+			if (onlyIfUnset)
+			{
+				// expected possibility - just silently return
+				return;
+			}
+			else
+			{
+				// not expected possibility - log a warning and proceed
+				wzAsyncExecOnMainThread([]{ debug(LOG_WARNING, "Overwriting already-set results"); });
+			}
+		}
+		compatCheckResults = results;
+		handlersToConsume = std::move(registeredCompatCheckResultsHandlers);
+	}
+
+	for (auto& handler : handlersToConsume)
+	{
+		if (!handler) { continue; }
+		handler(results);
+	}
+}
 
 template<class Duration>
 date::sys_time<Duration> parse_ISO_8601(const std::string& timeStr)
@@ -260,6 +299,89 @@ static void applyBaseNotificationInfo(WZ_Notification& notification, const json&
 	}
 }
 
+inline void from_json(const nlohmann::json& j, TerrainShaderQuality& p) {
+	uint32_t val = j.get<uint32_t>();
+	if (val > static_cast<uint32_t>(TerrainShaderQuality_MAX))
+	{
+		throw nlohmann::json::type_error::create(302, "type must be an valid integer, but is " + std::to_string(val), &j);
+	}
+	p = static_cast<TerrainShaderQuality>(val);
+}
+
+inline void from_json(const nlohmann::json& j, CompatCheckIssue::ConfigFlags& p) {
+	if (j.contains("terrain"))
+	{
+		p.supportedTerrain = j["terrain"].get<std::unordered_set<TerrainShaderQuality>>();
+	}
+	if (j.contains("multilobby"))
+	{
+		p.multilobby = j["multilobby"].get<bool>();
+	}
+}
+
+static CompatCheckResults createCompatCheckResults(const std::string& compatNoticeIdStr, const std::string& infoLink, const json& compatNotice, const json& notificationInfo)
+{
+	CompatCheckIssue issue;
+	issue.identifier = compatNoticeIdStr;
+	issue.infoLink = infoLink;
+
+	if (notificationInfo.is_object())
+	{
+		try
+		{
+			if (notificationInfo.contains("severity"))
+			{
+				auto severityStr = notificationInfo["severity"].get<std::string>();
+				if (severityStr == "warning")
+				{
+					issue.severity = CompatCheckIssue::Severity::Warning;
+				}
+				else if (severityStr == "critical")
+				{
+					issue.severity = CompatCheckIssue::Severity::Critical;
+				}
+			}
+		}
+		catch (const std::exception&)
+		{
+			// Parsing notificationInfo "severity" failed
+			// no-op - just ignore
+		}
+
+		try
+		{
+			if (notificationInfo.contains("unsupported"))
+			{
+				issue.unsupported = notificationInfo["unsupported"].get<bool>();
+			}
+		}
+		catch (const std::exception&)
+		{
+			// Parsing notificationInfo "unsupported" failed
+			// no-op - just ignore
+		}
+	}
+
+	if (compatNotice.contains("config"))
+	{
+		auto& compatConfig = compatNotice["config"];
+		if (compatConfig.is_object())
+		{
+			try
+			{
+				issue.configFlags = compatConfig.get<CompatCheckIssue::ConfigFlags>();
+			}
+			catch (const std::exception&)
+			{
+				// Parsing "config" failed
+				// no-op - just ignore
+			}
+		}
+	}
+
+	return CompatCheckResults(true, issue);
+}
+
 // May be called from a background thread
 ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, bool validSignature, bool validExpiry)
 {
@@ -408,7 +530,12 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 void WzUpdateManager::initUpdateCheck()
 {
 	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100.json", "https://warzone2100.github.io/update-data/wz2100.json"};
-	initProcessData(updateDataUrls, WzUpdateManager::processUpdateJSONFile, updatesCachePaths);
+#if defined(__EMSCRIPTEN__)
+	// Bypass browser cache (if needed) by appending a query string parameter
+	std::string queryStringParam = std::to_string(std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count());
+	updateDataUrls.insert(updateDataUrls.begin() + 1, "https://data.wz2100.net/wz2100.json?v=" + queryStringParam);
+#endif
+	initProcessData(updateDataUrls, WzUpdateManager::processUpdateJSONFile, updatesCachePaths, nullptr);
 }
 
 // May be called from a background thread
@@ -519,6 +646,8 @@ ProcessResult WzCompatCheckManager::processCompatCheckJSONFile(const json& updat
 						}
 						addNotification(notification, WZ_Notification_Trigger::Immediate());
 					});
+
+					setCompatCheckResults(createCompatCheckResults(compatNoticeIdStr, infoLink, compatNotice, notificationInfo));
 					return ProcessResult::UPDATE_FOUND;
 				}
 				catch (const std::exception&)
@@ -527,6 +656,8 @@ ProcessResult WzCompatCheckManager::processCompatCheckJSONFile(const json& updat
 					continue;
 				}
 			}
+
+			setCompatCheckResults(CompatCheckResults(true));
 			return ProcessResult::MATCHED_CHANNEL_NO_UPDATE;
 		}
 		catch (const std::exception&)
@@ -535,6 +666,8 @@ ProcessResult WzCompatCheckManager::processCompatCheckJSONFile(const json& updat
 			continue;
 		}
 	}
+
+	setCompatCheckResults(CompatCheckResults(true));
 	return ProcessResult::NO_MATCHING_CHANNEL;
 }
 
@@ -542,7 +675,15 @@ ProcessResult WzCompatCheckManager::processCompatCheckJSONFile(const json& updat
 void WzCompatCheckManager::initCompatCheck()
 {
 	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100_compat.json", "https://warzone2100.github.io/update-data/wz2100_compat.json"};
-	initProcessData(updateDataUrls, WzCompatCheckManager::processCompatCheckJSONFile, compatCachePaths);
+#if defined(__EMSCRIPTEN__)
+	// Bypass browser cache (if needed) by appending a query string parameter
+	std::string queryStringParam = std::to_string(std::chrono::duration_cast<std::chrono::minutes>(std::chrono::system_clock::now().time_since_epoch()).count());
+	updateDataUrls.insert(updateDataUrls.begin() + 1, "https://data.wz2100.net/wz2100_compat.json?v=" + queryStringParam);
+#endif
+	initProcessData(updateDataUrls, WzCompatCheckManager::processCompatCheckJSONFile, compatCachePaths, []() {
+		// set an unsuccessful result (if no prior result set)
+		setCompatCheckResults(CompatCheckResults(false), true);
+	});
 }
 
 template<typename T>
@@ -627,8 +768,10 @@ static bool cacheInfoIsUsable(CachePaths& paths)
 }
 
 // May be called from a background thread
-static void initProcessData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths)
+static void initProcessData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths, ProcessDataCompletionHandler completionHandler)
 {
+	bool handledWithCachedData = false;
+
 	if (PHYSFS_exists(outputPaths.cache_data_path) && cacheInfoIsUsable(outputPaths))
 	{
 		try {
@@ -680,7 +823,7 @@ static void initProcessData(const std::vector<std::string> &updateDataUrls, Proc
 			}
 
 			// handled with cached data
-			return;
+			handledWithCachedData = true;
 		}
 		catch (const std::exception &e) {
 			std::string errorStr = e.what();
@@ -688,15 +831,25 @@ static void initProcessData(const std::vector<std::string> &updateDataUrls, Proc
 				debug(LOG_WZ, "Cached updates file: %s", errorStr.c_str());
 			});
 			// continue on to fetch a fresh copy
+			handledWithCachedData = false;
+		}
+
+		if (handledWithCachedData)
+		{
+			if (completionHandler)
+			{
+				completionHandler();
+			}
+			return;
 		}
 	}
 
 	// Fall-back to URL request for the latest data
-	fetchLatestData(updateDataUrls, processDataFunc, outputPaths);
+	fetchLatestData(updateDataUrls, processDataFunc, outputPaths, completionHandler);
 }
 
 // May be called from a background thread
-static void fetchLatestData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths)
+static void fetchLatestData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths, ProcessDataCompletionHandler completionHandler)
 {
 	if (updateDataUrls.empty())
 	{
@@ -704,13 +857,17 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 		wzAsyncExecOnMainThread([]{
 			debug(LOG_WARNING, "No more URLs to fetch - failed update check");
 		});
+		if (completionHandler)
+		{
+			completionHandler();
+		}
 		return;
 	}
 
 	URLDataRequest* pRequest = new URLDataRequest();
 	pRequest->url = updateDataUrls.front();
 	std::vector<std::string> additionalUrls(updateDataUrls.begin() + 1, updateDataUrls.end());
-	pRequest->onSuccess = [additionalUrls, processDataFunc, outputPaths](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	pRequest->onSuccess = [additionalUrls, processDataFunc, outputPaths, completionHandler](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
 
 		std::string urlCopy = url;
 		long httpStatusCode = responseDetails.httpStatusCode();
@@ -719,7 +876,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			wzAsyncExecOnMainThread([httpStatusCode]{
 				debug(LOG_WARNING, "Update check returned HTTP status code: %ld", httpStatusCode);
 			});
-			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
 			return;
 		}
 
@@ -734,7 +891,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			wzAsyncExecOnMainThread([urlCopy, errorStr]{
 				debug(LOG_INFO, "Failed to verify signature: %s; %s", errorStr.c_str(), urlCopy.c_str());
 			});
-			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
 			return;
 		}
 
@@ -748,7 +905,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			wzAsyncExecOnMainThread([urlCopy, errorStr]{
 				debug(LOG_INFO, "Failed to parse JSON: %s; %s", errorStr.c_str(), urlCopy.c_str());
 			});
-			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
 			return;
 		}
 
@@ -759,7 +916,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 		{
 			// signature is invalid, or data is expired, and there are further urls to try to fetch
 			// instead of proceeding, try the next url
-			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
 			return;
 		}
 
@@ -773,9 +930,17 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			wzAsyncExecOnMainThread([]{
 				debug(LOG_ERROR, "Missing processDataFunc");
 			});
+			if (completionHandler)
+			{
+				completionHandler();
+			}
 			return;
 		}
 		const auto processResult = processDataFunc(updateData, validSignature, validExpiry);
+		if (completionHandler)
+		{
+			completionHandler();
+		}
 
 		if (validSignature && (processResult != ProcessResult::INVALID_JSON) && isValidExpiry(updateData))
 		{
@@ -825,7 +990,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			}
 		}
 	};
-	pRequest->onFailure = [additionalUrls, processDataFunc, outputPaths](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+	pRequest->onFailure = [additionalUrls, processDataFunc, outputPaths, completionHandler](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		bool tryNextUrl = false;
 		switch (type)
 		{
@@ -836,7 +1001,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				tryNextUrl = true;
 				break;
 			case URLRequestFailureType::TRANSFER_FAILED:
-				if (!transferDetails.has_value())
+				if (!transferDetails)
 				{
 					wzAsyncExecOnMainThread([]{
 						debug(LOG_WARNING, "Update check request failed - but no transfer failure details provided!");
@@ -844,10 +1009,10 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				}
 				else
 				{
-					CURLcode result = transferDetails->curlResult();
+					std::string resultStr = transferDetails->getInternalResultDescription();
 					long httpStatusCode = transferDetails->httpStatusCode();
-					wzAsyncExecOnMainThread([result, httpStatusCode]{
-						debug(LOG_WARNING, "Update check request failed with error %d, and HTTP response code: %ld", result, httpStatusCode);
+					wzAsyncExecOnMainThread([resultStr, httpStatusCode]{
+						debug(LOG_WARNING, "Update check request failed with error \"%s\", and HTTP response code: %ld", resultStr.c_str(), httpStatusCode);
 					});
 				}
 				tryNextUrl = true;
@@ -865,7 +1030,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 		}
 		if (tryNextUrl)
 		{
-			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
 		}
 	};
 	pRequest->maxDownloadSizeLimit = WZ_UPDATES_JSON_MAX_SIZE; // 32 MB (the response should never be this big)
@@ -913,4 +1078,27 @@ void WzInfoManager::initialize()
 void WzInfoManager::shutdown()
 {
 	/* currently, no-op */
+}
+
+// Get the compat check results
+// NOTE: resultClosure may be called on any thread at any time - use wzAsyncExecOnMainThread inside your closure if you need to perform tasks on the main thread
+void asyncGetCompatCheckResults(CompatCheckResultsHandlerFunc resultClosure)
+{
+	CompatCheckResults resultsCopy = CompatCheckResults(false);
+
+	{
+		std::lock_guard<std::mutex> guard(compatCheckResultsMutex);
+		// check if already have results
+		if (!compatCheckResults.has_value())
+		{
+			// do not (yet) have results - add closure to the registry
+			registeredCompatCheckResultsHandlers.push_back(resultClosure);
+			return;
+		}
+
+		// already have results - copy them
+		resultsCopy = compatCheckResults.value();
+	}
+
+	resultClosure(resultsCopy);
 }

@@ -30,7 +30,7 @@ static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
 static gfx_api::context* current_backend_context = nullptr;
 
-bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, gfx_api::backend_type backendType)
+bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backendType)
 {
 	if (current_backend_context != nullptr && backend == backendType)
 	{
@@ -56,13 +56,13 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 #if defined(WZ_VULKAN_ENABLED)
 			current_backend_context = new VkRoot(uses_gfx_debug);
 #else
-			debug(LOG_FATAL, "Warzone was not compiled with the Vulkan backend enabled. Aborting.");
-			abort();
+			debug(LOG_FATAL, "Warzone 2100 was not compiled with support for the Vulkan backend.");
+			return false;
 #endif
 			break;
 	}
 	ASSERT(current_backend_context != nullptr, "Failed to initialize gfx backend context");
-	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias);
+	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias, depthMapResolution);
 	if (!result)
 	{
 		return false;
@@ -82,6 +82,11 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 gfx_api::context& gfx_api::context::get()
 {
 	return *current_backend_context;
+}
+
+bool gfx_api::context::isInitialized()
+{
+	return current_backend_context != nullptr;
 }
 
 // MARK: - Per-texture compression overrides
@@ -216,13 +221,13 @@ optional<gfx_api::max_texture_compression_level> gfx_api::getMaxTextureCompressi
 
 #include "png_util.h"
 
-static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+static gfx_api::texture* loadImageTextureFromFile_PNG(const std::string& filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool quiet)
 {
 	iV_Image loadedUncompressedImage;
 
 	// 1.) Load the PNG into an iV_Image
 	bool forceRGB = (textureType == gfx_api::texture_type::game_texture) || (textureType == gfx_api::texture_type::user_interface);
-	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage, forceRGB))
+	if (!iV_loadImage_PNG2(filename.c_str(), loadedUncompressedImage, forceRGB, quiet))
 	{
 		// Failed to load the image
 		return nullptr;
@@ -296,7 +301,7 @@ bool gfx_api::checkImageFilesWouldLoadFromSameParentMountPath(const std::vector<
 
 // Load a texture from a file
 // (which loads straight to a texture based on the appropriate texture_type, handling mip_maps, compression, etc)
-gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/, bool quiet /*= false*/)
 {
 	auto imageLoadFilename = imageLoadFilenameFromInputFilename(filename);
 
@@ -309,7 +314,7 @@ gfx_api::texture* gfx_api::context::loadTextureFromFile(const char *filename, gf
 #endif
 	if (imageLoadFilename.endsWith(".png"))
 	{
-		return loadImageTextureFromFile_PNG(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight);
+		return loadImageTextureFromFile_PNG(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight, quiet);
 	}
 	else
 	{
@@ -849,7 +854,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadUncompressedImageWithMips(
 #if defined(BASIS_ENABLED)
 	if (strEndsWith(imageLoadFilename, ".ktx2"))
 	{
-		results = gfx_api::loadiVImagesFromFile_Basis(imageLoadFilename, textureType, gfx_api::pixel_format_target::texture_2d_array, WZ_BASIS_UNCOMPRESSED_FORMAT, std::max(0, maxWidth), std::max(0, maxHeight));
+		results = gfx_api::loadiVImagesFromFile_Basis(imageLoadFilename, textureType, gfx_api::pixel_format_target::texture_2d_array, (forceRGBA8) ? WZ_BASIS_UNCOMPRESSED_FORMAT : gfx_api::context::get().bestUncompressedPixelFormat(gfx_api::pixel_format_target::texture_2d_array, textureType), std::max(0, maxWidth), std::max(0, maxHeight));
 
 		if (forceRGBA8)
 		{
@@ -902,6 +907,7 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 
 	bool allFilesAreKTX2 = std::all_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".ktx2"); });
 	bool anyFileIsKTX2 = allFilesAreKTX2 || std::any_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".ktx2"); });
+	bool anyFileIsPNG = !allFilesAreKTX2 && std::any_of(imageLoadFilenames.cbegin(), imageLoadFilenames.cend(), [](const WzString& imageLoadFilename) { return imageLoadFilename.endsWith(".png"); });
 
 #if !defined(BASIS_ENABLED)
 	if (anyFileIsKTX2)
@@ -938,7 +944,7 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 			uploadFormat = bestAvailableCompressedFormat.value();
 			desiredImageExtractionFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8; // must extract to RGBA for run-time compression
 		}
-		if (anyFileIsKTX2)
+		if (anyFileIsKTX2 && anyFileIsPNG)
 		{
 			debug(LOG_INFO, "Performance info: Some files are .ktx2, but others are .png");
 		}
@@ -946,6 +952,33 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 
 	bool uncompressedExtractionFormat = gfx_api::is_uncompressed_format(desiredImageExtractionFormat);
 	std::vector<std::unique_ptr<iV_BaseImage>> defaultTextureMips;
+
+	auto getDefaultTextureMipsP = [&defaultTextureMips, &defaultTextureGenerator, textureType, maxWidth, maxHeight](size_t layer, unsigned int width, unsigned int height, size_t mipmap_levels, gfx_api::pixel_format format) -> std::vector<std::unique_ptr<iV_BaseImage>>* {
+		if (defaultTextureMips.empty())
+		{
+			ASSERT_OR_RETURN(nullptr, defaultTextureGenerator != nullptr, "Failed to generate default texture - no default texture generator provided");
+			ASSERT_OR_RETURN(nullptr, gfx_api::is_uncompressed_format(format), "Expected uncompressed extraction format, but received: %s", gfx_api::format_to_str(format));
+			if (defaultTextureGenerator)
+			{
+				auto pCurrentImage = defaultTextureGenerator((layer > 0) ? width : maxWidth, (layer > 0) ? height : maxHeight, gfx_api::format_channels(format));
+				ASSERT_OR_RETURN(nullptr, pCurrentImage != nullptr, "Failed to generate default texture");
+				if (layer > 0)
+				{
+					ASSERT_OR_RETURN(nullptr, pCurrentImage->width() == width && pCurrentImage->height() == height, "Failed to generate matching default texture");
+				}
+				size_t expectedMipLevels = calcMipmapLevelsForUncompressedImage(*pCurrentImage, textureType);
+				if (layer > 0)
+				{
+					ASSERT_OR_RETURN(nullptr, expectedMipLevels == mipmap_levels, "Failed to generate matching default texture");
+				}
+				auto miplevels = generateMipMapsFromUncompressedImage(*pCurrentImage, expectedMipLevels, textureType);
+				defaultTextureMips.push_back(std::move(pCurrentImage));
+				defaultTextureMips.insert(defaultTextureMips.end(), std::make_move_iterator(miplevels.begin()), std::make_move_iterator(miplevels.end()));
+				miplevels.clear();
+			}
+		}
+		return &defaultTextureMips;
+	};
 
 	std::unique_ptr<gfx_api::texture_array> texture_array = nullptr;
 	unsigned int width = 0;
@@ -962,36 +995,23 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 		std::vector<std::unique_ptr<iV_BaseImage>>* pImagesForLayer = nullptr;
 		if (imageLoadFilename.isEmpty())
 		{
-			if (defaultTextureMips.empty())
-			{
-				ASSERT_OR_RETURN(nullptr, defaultTextureGenerator != nullptr, "Failed to generate default texture - no default texture generator provided");
-				ASSERT_OR_RETURN(nullptr, uncompressedExtractionFormat, "Expected uncompressed extraction format, but received: %s", gfx_api::format_to_str(desiredImageExtractionFormat));
-				if (defaultTextureGenerator)
-				{
-					auto pCurrentImage = defaultTextureGenerator((layer > 0) ? width : maxWidth, (layer > 0) ? height : maxHeight, gfx_api::format_channels(desiredImageExtractionFormat));
-					ASSERT_OR_RETURN(nullptr, pCurrentImage != nullptr, "Failed to generate default texture");
-					if (layer > 0)
-					{
-						ASSERT_OR_RETURN(nullptr, pCurrentImage->width() == width && pCurrentImage->height() == height, "Failed to generate matching default texture");
-					}
-					size_t expectedMipLevels = calcMipmapLevelsForUncompressedImage(*pCurrentImage, textureType);
-					if (layer > 0)
-					{
-						ASSERT_OR_RETURN(nullptr, expectedMipLevels == mipmap_levels, "Failed to generate matching default texture");
-					}
-					auto miplevels = generateMipMapsFromUncompressedImage(*pCurrentImage, expectedMipLevels, textureType);
-					defaultTextureMips.push_back(std::move(pCurrentImage));
-					defaultTextureMips.insert(defaultTextureMips.end(), std::make_move_iterator(miplevels.begin()), std::make_move_iterator(miplevels.end()));
-					miplevels.clear();
-				}
-			}
-			pImagesForLayer = &defaultTextureMips;
+			pImagesForLayer = getDefaultTextureMipsP(layer, width, height, mipmap_levels, desiredImageExtractionFormat);
+			ASSERT_OR_RETURN(nullptr, pImagesForLayer != nullptr, "Failed to generate matching default texture");
 		}
 		else if (uncompressedExtractionFormat || imageLoadFilename.endsWith(".png"))
 		{
 			// load into an uncompressed format
 			loadedImagesForLayer = loadUncompressedImageWithMips(imageLoadFilename.toUtf8(), textureType, maxWidth, maxHeight, desiredImageExtractionFormat == gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
-			pImagesForLayer = &loadedImagesForLayer;
+			if (!loadedImagesForLayer.empty())
+			{
+				pImagesForLayer = &loadedImagesForLayer;
+			}
+			else
+			{
+				// failed to load image
+				debug(LOG_INFO, "Using default texture generator for failed image: %s", imageLoadFilename.toUtf8().c_str());
+				pImagesForLayer = getDefaultTextureMipsP(layer, width, height, mipmap_levels, desiredImageExtractionFormat);
+			}
 		}
 		else
 		{

@@ -22,8 +22,24 @@
 //;;
 
 /*
-	Private vars and functions are prefixed with `__cam'.
+	Private vars and functions are prefixed with `__cam`.
+	Private consts are prefixed with `__CAM_` or `__cam_`.
+	Public vars/functions are prefixed with `cam`, consts with `CAM_` or `cam_`.
 	Please do not use private stuff in scenario code, use only public API.
+
+	It is encouraged to prefix any local consts with `__` in any function in the
+	library if they are not objects/arrays. Mission scripts may use a `_` but
+	only if the name seems like it could clash with a JS API global.
+
+	Please CAPITALIZE const names for consistency for most of everything.
+	The only exception to these rules is when the const is declared in a loop
+	initialization or will be assigned as a global-context callback function,
+	or if it will be a JS object/array as these aren't truly immutable. Follow
+	standard camel case style as usual.
+
+	Also, in the event you want a top level const for a mission script
+	(and any include file) please prefix it with `MIS_` or `mis_` depending on
+	if it's an object/array or not.
 
 	We CANNOT put our private vars into an anonymous namespace, even though
 	it's a common JS trick -
@@ -77,37 +93,146 @@ namespace("cam_");
 //////////global vars start
 //These are campaign player numbers.
 const CAM_HUMAN_PLAYER = 0;
-const NEW_PARADIGM = 1;
-const THE_COLLECTIVE = 2;
-const NEXUS = 3;
-const SCAV_6 = 6;
-const SCAV_7 = 7;
+const CAM_NEW_PARADIGM = 1;
+const CAM_THE_COLLECTIVE = 2;
+const CAM_NEXUS = 3;
+const CAM_SCAV_6 = 6;
+const CAM_SCAV_7 = 7;
 
-const CAM_MAX_PLAYERS = 8;
-const CAM_TICKS_PER_FRAME = 100;
-const AI_POWER = 999999;
-const INCLUDE_PATH = "script/campaign/libcampaign_includes/";
+const __CAM_MAX_PLAYERS = 8;
+const __CAM_TICKS_PER_FRAME = 100;
+const __CAM_AI_POWER = 999999;
+const __CAM_INCLUDE_PATH = "script/campaign/libcampaign_includes/";
+
+//Anything stats related
+const CAM_ARTIFACT_STAT = "Crate";
+const CAM_GENERIC_TRUCK_STAT = "Spade1Mk1";
+const CAM_GENERIC_LAND_STAT = "wheeled01"; //For propulsionCanReach().
+const CAM_OIL_RESOURCE_STAT = "OilResource";
+const cam_base_structures = {
+	commandRelay: "A0ComDroidControl",
+	commandCenter: "A0CommandCentre",
+	powerGenerator: "A0PowerGenerator",
+	researchLab: "A0ResearchFacility",
+	factory: "A0LightFactory",
+	derrick: "A0ResourceExtractor"
+};
+const cam_resistance_circuits = {
+	first: "R-Sys-Resistance-Upgrade01",
+	second: "R-Sys-Resistance-Upgrade02",
+	third: "R-Sys-Resistance-Upgrade03",
+	fourth: "R-Sys-Resistance-Upgrade04"
+};
 
 //level load codes here for reference. Might be useful for later code.
-const ALPHA_CAMPAIGN_NUMBER = 1;
-const BETA_CAMPAIGN_NUMBER = 2;
-const GAMMA_CAMPAIGN_NUMBER = 3;
 const CAM_GAMMA_OUT = "GAMMA_OUT"; //Fake next level for the final Gamma mission.
-const UNKNOWN_CAMPAIGN_NUMBER = 1000;
-const ALPHA_LEVELS = [
+const __CAM_ALPHA_CAMPAIGN_NUMBER = 1;
+const __CAM_BETA_CAMPAIGN_NUMBER = 2;
+const __CAM_GAMMA_CAMPAIGN_NUMBER = 3;
+const __CAM_UNKNOWN_CAMPAIGN_NUMBER = 1000;
+const __cam_alphaLevels = [
 	"CAM_1A", "CAM_1B", "SUB_1_1S", "SUB_1_1", "SUB_1_2S", "SUB_1_2", "SUB_1_3S",
 	"SUB_1_3", "CAM_1C", "CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
 	"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "SUB_1_D", "CAM_1END"
 ];
-const BETA_LEVELS = [
+const __cam_betaLevels = [
 	"CAM_2A", "SUB_2_1S", "SUB_2_1", "CAM_2B", "SUB_2_2S", "SUB_2_2", "CAM_2C",
 	"SUB_2_5S", "SUB_2_5", "SUB_2DS", "SUB_2D", "SUB_2_6S", "SUB_2_6", "SUB_2_7S",
 	"SUB_2_7", "SUB_2_8S", "SUB_2_8", "CAM_2END"
 ];
-const GAMMA_LEVELS = [
+const __cam_gammaLevels = [
 	"CAM_3A", "SUB_3_1S", "SUB_3_1", "CAM_3B", "SUB_3_2S", "SUB_3_2", "CAM3A-B",
 	"CAM3C", "CAM3A-D1", "CAM3A-D2", "CAM_3_4S", "CAM_3_4"
 ];
+
+// Holds all the sounds the campaign uses. Try to name things as they are said.
+const cam_sounds = {
+	baseDetection: {
+		scavengerOutpostDetected: "pcv375.ogg",
+		scavengerBaseDetected: "pcv374.ogg",
+		enemyBaseDetected: "pcv379.ogg",
+	},
+	baseElimination: {
+		scavengerOutpostEradicated: "pcv391.ogg",
+		scavengerBaseEradicated: "pcv392.ogg",
+		enemyBaseEradicated: "pcv394.ogg",
+	},
+	lz: {
+		returnToLZ: "pcv427.ogg",
+		LZCompromised: "pcv445.ogg",
+		LZClear: "lz-clear.ogg",
+	},
+	transport: {
+		transportUnderAttack: "pcv443.ogg",
+		enemyTransportDetected: "pcv381.ogg",
+		incomingEnemyTransport: "pcv395.ogg",
+	},
+	incoming: {
+		incomingIntelligenceReport: "pcv456.ogg",
+		incomingTransmission: "pcv455.ogg",
+	},
+	rescue: {
+		unitsRescued: "pcv615.ogg",
+		groupRescued: "pcv616.ogg",
+		civilianRescued: "pcv612.ogg",
+	},
+	nexus: {
+		defensesAbsorbed: "defabsrd.ogg",
+		defensesNeutralized: "defnut.ogg",
+		laugh1: "laugh1.ogg",
+		laugh2: "laugh2.ogg",
+		laugh3: "laugh3.ogg",
+		productionCompleted: "pordcomp.ogg",
+		researchAbsorbed: "resabsrd.ogg",
+		structureAbsorbed: "strutabs.ogg",
+		structureNeutralized: "strutnut.ogg",
+		synapticLinksActivated: "synplnk.ogg",
+		unitAbsorbed: "untabsrd.ogg",
+		unitNeutralized: "untnut.ogg",
+	},
+	missile: {
+		launch: {
+			missileLaunchAborted: "labort.ogg",
+			missileLaunched: "mlaunch.ogg",
+			finalMissileLaunchSequenceInitiated: "flseq.ogg",
+			missileEnteringFinalLaunchPeriod: "meflp.ogg",
+			missileLaunchIn60Minutes: "60min.ogg",
+			missileLaunchIn50Minutes: "50min.ogg",
+			missileLaunchIn40Minutes: "40min.ogg",
+			missileLaunchIn30Minutes: "30min.ogg",
+			missileLaunchIn20Minutes: "20min.ogg",
+			missileLaunchIn10Minutes: "10min.ogg",
+			missileLaunchIn5Minutes: "5min.ogg",
+			missileLaunchIn4Minutes: "4min.ogg",
+			missileLaunchIn3Minutes: "3min.ogg",
+			missileLaunchIn2Minutes: "2min.ogg",
+			missileLaunchIn1Minute: "1min.ogg",
+		},
+		detonate: {
+			warheadActivatedCountdownBegins: "wactivat.ogg",
+			finalDetonationSequenceInitiated: "fdetseq.ogg",
+			detonationIn60Minutes: "det60min.ogg",
+			detonationIn50Minutes: "det50min.ogg",
+			detonationIn40Minutes: "det40min.ogg",
+			detonationIn30Minutes: "det30min.ogg",
+			detonationIn20Minutes: "det20min.ogg",
+			detonationIn10Minutes: "det10min.ogg",
+			detonationIn5Minutes: "det5min.ogg",
+			detonationIn4Minutes: "det4min.ogg",
+			detonationIn3Minutes: "det3min.ogg",
+			detonationIn2Minutes: "det2min.ogg",
+			detonationIn1Minute: "det1min.ogg",
+		},
+		countdown: "10to1.ogg",
+	},
+	reinforcementsAreAvailable: "pcv440.ogg",
+	objectiveCaptured: "pcv621.ogg",
+	enemyEscaping: "pcv632.ogg",
+	powerTransferred: "power-transferred.ogg",
+	laserSatelliteFiring: "pcv650.ogg",
+	artifactRecovered: "pcv352.ogg",
+	soundIdentifier: ".ogg", //Used by video.js to check for sound before a video.
+};
 
 //artifact
 var __camArtifacts;
@@ -140,20 +265,9 @@ var __camOriginalEvents = {};
 
 //misc
 var __camCalledOnce = {};
+var __camExpLevel;
 
 //nexus
-const DEFENSE_ABSORBED = "defabsrd.ogg";
-const DEFENSE_NEUTRALIZE = "defnut.ogg";
-const LAUGH1 = "laugh1.ogg";
-const LAUGH2 = "laugh2.ogg";
-const LAUGH3 = "laugh3.ogg";
-const PRODUCTION_COMPLETE = "pordcomp.ogg";
-const RES_ABSORBED = "resabsrd.ogg";
-const STRUCTURE_ABSORBED = "strutabs.ogg";
-const STRUCTURE_NEUTRALIZE = "strutnut.ogg";
-const SYNAPTICS_ACTIVATED = "synplnk.ogg";
-const UNIT_ABSORBED = "untabsrd.ogg";
-const UNIT_NEUTRALIZE = "untnut.ogg";
 var __camLastNexusAttack;
 var __camNexusActivated;
 
@@ -161,6 +275,12 @@ var __camNexusActivated;
 var __camFactoryInfo;
 var __camFactoryQueue;
 var __camPropulsionTypeLimit;
+
+//research
+const __CAM_AI_INSTANT_PRODUCTION_RESEARCH = "R-Struc-Factory-Upgrade-AI";
+const __cam_nexusTech = [
+	"R-Sys-NEXUSrepair", "R-Sys-NEXUSsensor"
+];
 
 //tactics
 const CAM_ORDER_ATTACK = 0;
@@ -178,11 +298,17 @@ const __CAM_FALLBACK_TIME_ON_REGROUP = 5000;
 var __camGroupAvgCoord = {x: 0, y: 0};
 
 //time
-const MILLISECONDS_IN_SECOND = 1000;
-const SECONDS_IN_MINUTE = 60;
-const MINUTES_IN_HOUR = 60;
+const CAM_MILLISECONDS_IN_SECOND = 1000;
+const CAM_SECONDS_IN_MINUTE = 60;
+const CAM_MINUTES_IN_HOUR = 60;
 
 //transport
+const cam_trComps = {
+	name: "Transport",
+	body: "TransporterBody",
+	propulsion: "V-Tol",
+	weapon: "MG3-VTOL"
+};
 var __camNumTransporterExits;
 var __camPlayerTransports;
 var __camIncomingTransports;
@@ -223,22 +349,22 @@ var __camVtolDataSystem;
 // yet at the time scripts are loaded. (Yes, function name needs to be quoted.)
 hackDoNotSave("__camOriginalEvents");
 
-include(INCLUDE_PATH + "misc.js");
-include(INCLUDE_PATH + "debug.js");
-include(INCLUDE_PATH + "hook.js");
-include(INCLUDE_PATH + "events.js");
+include(__CAM_INCLUDE_PATH + "misc.js");
+include(__CAM_INCLUDE_PATH + "debug.js");
+include(__CAM_INCLUDE_PATH + "hook.js");
+include(__CAM_INCLUDE_PATH + "events.js");
 
-include(INCLUDE_PATH + "time.js");
-include(INCLUDE_PATH + "research.js");
-include(INCLUDE_PATH + "artifact.js");
-include(INCLUDE_PATH + "base.js");
-include(INCLUDE_PATH + "reinforcements.js");
-include(INCLUDE_PATH + "tactics.js");
-include(INCLUDE_PATH + "production.js");
-include(INCLUDE_PATH + "truck.js");
-include(INCLUDE_PATH + "victory.js");
-include(INCLUDE_PATH + "transport.js");
-include(INCLUDE_PATH + "vtol.js");
-include(INCLUDE_PATH + "nexus.js");
-include(INCLUDE_PATH + "group.js");
-include(INCLUDE_PATH + "video.js");
+include(__CAM_INCLUDE_PATH + "time.js");
+include(__CAM_INCLUDE_PATH + "research.js");
+include(__CAM_INCLUDE_PATH + "artifact.js");
+include(__CAM_INCLUDE_PATH + "base.js");
+include(__CAM_INCLUDE_PATH + "reinforcements.js");
+include(__CAM_INCLUDE_PATH + "tactics.js");
+include(__CAM_INCLUDE_PATH + "production.js");
+include(__CAM_INCLUDE_PATH + "truck.js");
+include(__CAM_INCLUDE_PATH + "victory.js");
+include(__CAM_INCLUDE_PATH + "transport.js");
+include(__CAM_INCLUDE_PATH + "vtol.js");
+include(__CAM_INCLUDE_PATH + "nexus.js");
+include(__CAM_INCLUDE_PATH + "group.js");
+include(__CAM_INCLUDE_PATH + "video.js");

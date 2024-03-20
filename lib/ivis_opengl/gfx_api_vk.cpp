@@ -59,6 +59,12 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
 #endif
 
+#if VK_HEADER_VERSION >= 260
+# define WZ_THROW_VK_RESULT_EXCEPTION(result, message) vk::detail::throwResultException(result, message)
+#else
+# define WZ_THROW_VK_RESULT_EXCEPTION(result, message) vk::throwResultException(result, message)
+#endif
+
 const uint32_t minSupportedVulkanVersion = VK_API_VERSION_1_0;
 #if defined(DEBUG)
 // For debug builds, limit to the minimum that should be supported by this backend (which is Vulkan 1.0, see above)
@@ -138,10 +144,19 @@ void _vk_setenv(const _vkl_env_text_type& name, const _vkl_env_text_type& value)
 }
 #endif
 
-const std::vector<std::pair<_vkl_env_text_type, _vkl_env_text_type>> vulkan_implicit_layer_environment_variables = {
-	{_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_overlay_1"), _vkl_env_text("1")}
-	, {_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_fossilize_1"), _vkl_env_text("1")}
-	, {_vkl_env_text("DISABLE_FPSMON_LAYER"), _vkl_env_text("1")} // avoid crashes caused by this layer
+// <(string) layer environment var name, (string) environment var value (to disable layer), (bool) whether allowable>
+const std::vector<std::tuple<_vkl_env_text_type, _vkl_env_text_type, bool>> vulkan_implicit_layer_environment_variables = {
+	{_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_overlay_1"), _vkl_env_text("1"), false}
+	, {_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_fossilize_1"), _vkl_env_text("1"), false}
+	// avoid crashes / bugs caused by these layers
+	, {_vkl_env_text("DISABLE_FPSMON_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_RTSS_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_VULKAN_OBS_CAPTURE"), _vkl_env_text("1"), true} // OBS
+	, {_vkl_env_text("DISABLE_VULKAN_OW_OBS_CAPTURE"), _vkl_env_text("1"), true} // OverWolf
+	, {_vkl_env_text("VK_LAYER_bandicam_helper_DEBUG_1"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_SAMPLE_LAYER"), _vkl_env_text("1"), true} // AgaueEye
+	, {_vkl_env_text("DISABLE_GAMEPP_LAYER"), _vkl_env_text("1"), true} // Gamepp
 };
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
@@ -159,11 +174,14 @@ enum class VulkanBackendInternalTextureType : size_t
 
 // MARK: General helper functions
 
-void SetVKImplicitLayerEnvironmentVariables()
+void SetVKImplicitLayerEnvironmentVariables(bool allowImplicitLayers = false)
 {
 	for (const auto &it : vulkan_implicit_layer_environment_variables)
 	{
-		_vk_setenv(it.first, it.second);
+		if (!allowImplicitLayers || !std::get<2>(it))
+		{
+			_vk_setenv(std::get<0>(it), std::get<1>(it));
+		}
 	}
 }
 
@@ -222,6 +240,7 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	{
 		// FUTURE TODO: Output a bunch more debugging info to the debug log?
 	}
+	debug(LOG_ERROR, "Vulkan backend encountered error: %s", vk::to_string(reason).c_str());
 	// Display a message and prompt the user to try a different graphics backend next time
 	wzPromptToChangeGfxBackendOnFailure("Failed with error: " + vk::to_string(reason));
 	abort();
@@ -313,7 +332,7 @@ std::vector<const char*> findSupportedDeviceExtensions(const vk::PhysicalDevice 
 	std::unordered_set<std::string> supportedExtensionNames;
 	for (auto & extension : availableExtensions)
 	{
-		supportedExtensionNames.insert(extension.extensionName);
+		supportedExtensionNames.insert(std::string(extension.extensionName.data()));
 	}
 
 	std::vector<const char*> foundExtensions;
@@ -341,7 +360,17 @@ bool checkDeviceExtensionSupport(const vk::PhysicalDevice &device, const std::ve
 
 		for (const auto& extension : availableExtensions)
 		{
-			requiredExtensions.erase(extension.extensionName);
+			auto extensionName = std::string(extension.extensionName.data());
+			if (requiredExtensions.erase(extensionName) > 0)
+			{
+				debug(LOG_3D, "Found extension: \"%s\"", extensionName.c_str());
+			}
+		}
+
+		debug(LOG_3D, "Found %zu extensions / did not find %zu extensions, in the enumerated list of %zu device extensions", desiredExtensions.size() - requiredExtensions.size(), requiredExtensions.size(), availableExtensions.size());
+		for (const auto& extension : requiredExtensions)
+		{
+			debug(LOG_3D, "Did not find extension: \"%s\"", extension.c_str());
 		}
 
 		return requiredExtensions.empty();
@@ -427,6 +456,18 @@ vk::Format findDepthBufferFormat(const vk::PhysicalDevice& physicalDevice, const
 		depthFormats,
 		vk::ImageTiling::eOptimal,
 		vk::FormatFeatureFlags{vk::FormatFeatureFlagBits::eDepthStencilAttachment | vk::FormatFeatureFlagBits::eSampledImage},
+		vkDynLoader
+	);
+}
+
+vk::Format findSceneColorBufferFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	std::vector<vk::Format> sceneColorFormats = { vk::Format::eA2B10G10R10UnormPack32, vk::Format::eR8G8B8A8Unorm };
+	return findSupportedFormat(
+		physicalDevice,
+		sceneColorFormats,
+		vk::ImageTiling::eOptimal,
+		vk::FormatFeatureFlags{vk::FormatFeatureFlagBits::eColorAttachment | vk::FormatFeatureFlagBits::eColorAttachmentBlend | vk::FormatFeatureFlagBits::eSampledImage},
 		vkDynLoader
 	);
 }
@@ -549,7 +590,7 @@ void BlockBufferAllocator::allocateNewBlock(uint32_t minimumSize)
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateBuffer" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateBuffer" );
 	}
 
 	if (autoMap)
@@ -841,6 +882,11 @@ void perFrameResources_t::clean()
 	streamedVertexBufferAllocator.clean();
 	uniformBufferAllocator.clean();
 
+	for (auto fbo : fbo_to_delete)
+	{
+		dev.destroyFramebuffer(fbo, nullptr, *pVkDynLoader);
+	}
+	fbo_to_delete.clear();
 	for (auto buffer : buffer_to_delete)
 	{
 		dev.destroyBuffer(buffer, nullptr, *pVkDynLoader);
@@ -1019,7 +1065,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugReportCallback(
 		logFatal = false;
 	}
 	buf << "[" << pLayerPrefix << "] Code " << msgCode << " : " << pMsg;
-	debug((logFatal) ? LOG_FATAL : LOG_3D, "%s", buf.str().c_str());
+	debugLogFromGfxCallback((logFatal) ? LOG_FATAL : LOG_3D, "%s", buf.str().c_str());
 	return false;
 }
 
@@ -1085,7 +1131,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugUtilsCallback(
 		buf << "< no callback data? >";
 	}
 
-	debug((logFatal) ? LOG_FATAL : part, "%s", buf.str().c_str());
+	debugLogFromGfxCallback((logFatal) ? LOG_FATAL : part, "%s", buf.str().c_str());
 
 	return VK_FALSE;
 }
@@ -1097,22 +1143,28 @@ struct shader_infos
 	std::string vertexSpv;
 	std::string fragmentSpv;
 	bool specializationConstant_0_mipLoadBias = false;
+	bool specializationConstant_1_shadowMode = false;
+	bool specializationConstant_2_shadowFilterSize = false;
+	bool specializationConstant_3_shadowCascadesCount = false;
+	bool specializationConstant_4_pointLightEnabled = false;
 };
 
 static const std::map<SHADER_MODE, shader_infos> spv_files
 {
 	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv", true }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true }),
+	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true, true }),
+	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
 	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN, shader_infos{ "shaders/vk/terrain.vert.spv", "shaders/vk/terrain.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
+	std::make_pair(SHADER_TERRAIN_DEPTHMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
 	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv", true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true, true }),
 	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv", true }),
-	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv", true }),
+	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water_high.vert.spv", "shaders/vk/terrain_water_high.frag.spv", true }),
 	std::make_pair(SHADER_WATER_CLASSIC, shader_infos{ "shaders/vk/terrain_water_classic.vert.spv", "shaders/vk/terrain_water_classic.frag.spv", true }),
 	std::make_pair(SHADER_RECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_RECT_INSTANCED, shader_infos{ "shaders/vk/rect_instanced.vert.spv", "shaders/vk/rect_instanced.frag.spv" }),
@@ -1227,9 +1279,9 @@ std::array<vk::PipelineColorBlendAttachmentState, 1> VkPSO::to_vk(const REND_MOD
 				.setBlendEnable(true)
 				.setColorBlendOp(vk::BlendOp::eAdd)
 				.setAlphaBlendOp(vk::BlendOp::eAdd)
-				.setSrcColorBlendFactor(vk::BlendFactor::eZero)
-				.setSrcAlphaBlendFactor(vk::BlendFactor::eZero)
-				.setDstColorBlendFactor(vk::BlendFactor::eSrcColor)
+				.setSrcColorBlendFactor(vk::BlendFactor::eDstColor)
+				.setSrcAlphaBlendFactor(vk::BlendFactor::eDstAlpha)
+				.setDstColorBlendFactor(vk::BlendFactor::eOneMinusSrcAlpha)
 				.setDstAlphaBlendFactor(vk::BlendFactor::eOneMinusSrcAlpha)
 				.setColorWriteMask(vk_color_mask)
 		};
@@ -1355,6 +1407,7 @@ vk::PipelineRasterizationStateCreateInfo VkPSO::to_vk(const bool& offset, const 
 	}
 	switch (cull)
 	{
+	case gfx_api::cull_mode::shadow_mapping:
 	case gfx_api::cull_mode::back:
 		result = result.setCullMode(vk::CullModeFlagBits::eBack)
 			.setFrontFace(vk::FrontFace::eClockwise);
@@ -1507,6 +1560,30 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 		}
 		return result;
 	}
+	case gfx_api::sampler_type::bilinear_border:
+	{
+		vk::SamplerCreateInfo result = vk::SamplerCreateInfo()
+			.setMinFilter(vk::Filter::eLinear)
+			.setMagFilter(vk::Filter::eLinear)
+			.setMipmapMode(vk::SamplerMipmapMode::eNearest)
+			.setMaxAnisotropy(1.f)
+			.setMinLod(0.f)
+			.setMaxLod(0.f)
+			.setAddressModeU(vk::SamplerAddressMode::eClampToBorder)
+			.setAddressModeV(vk::SamplerAddressMode::eClampToBorder)
+			.setAddressModeW(vk::SamplerAddressMode::eClampToBorder)
+			.setBorderColor(to_vk(border))
+		;
+		switch (target)
+		{
+			case gfx_api::pixel_format_target::depth_map:
+				result.setCompareOp(vk::CompareOp::eLessOrEqual);
+				result.setCompareEnable(true);
+			default:
+				break;
+		}
+		return result;
+	}
 	}
 	debug(LOG_FATAL, "Unsupported sampler_type");
 	return vk::SamplerCreateInfo();
@@ -1534,7 +1611,7 @@ vk::PrimitiveTopology VkPSO::to_vk(const gfx_api::primitive_type& primitive)
 
 VkPSO::VkPSO(vk::Device _dev,
 	const vk::PhysicalDeviceLimits& limits,
-	const gfxapi_PipelineCreateInfo& createInfo,
+	const gfx_api::pipeline_create_info& createInfo,
 	vk::RenderPass rp,
 	const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 	vk::SampleCountFlagBits rasterizationSamples,
@@ -1659,17 +1736,52 @@ VkPSO::VkPSO(vk::Device _dev,
 	fragmentShader = get_module(shaderInfo.fragmentSpv, *pVkDynLoader);
 	auto pipelineStages = get_stages(vertexShader, fragmentShader);
 
-	float cpyMipLodBias = root->mipLodBias.value_or(0.f);
-	vk::SpecializationMapEntry entry ( 0, 0, sizeof(float) );
-	vk::SpecializationInfo spec_info = vk::SpecializationInfo()
-		.setMapEntryCount(1)
-		.setPMapEntries(&entry)
-		.setDataSize(sizeof(float))
-		.setPData(&cpyMipLodBias)
-	;
+	std::vector<char> specializationConstantsDataBuffer;
+	std::vector<vk::SpecializationMapEntry> specializationEntries;
+	vk::SpecializationInfo spec_info = vk::SpecializationInfo();
 	if (root->lodBiasMethod == VkRoot::LodBiasMethod::SpecializationConstant && shaderInfo.specializationConstant_0_mipLoadBias)
 	{
+		size_t copyIdx = specializationConstantsDataBuffer.size();
+		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + (sizeof(char) * sizeof(float)));
+		float cpyMipLodBias = root->mipLodBias.value_or(0.f);
+		memcpy(&specializationConstantsDataBuffer[copyIdx], &cpyMipLodBias, sizeof(float));
+		specializationEntries.emplace_back(0, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(float));
+	}
+	auto appendSpecializationConstant_uint32 = [&specializationConstantsDataBuffer, &specializationEntries](uint32_t constantID, uint32_t value) {
+		size_t copyIdx = specializationConstantsDataBuffer.size();
+		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + sizeof(uint32_t));
+		memcpy(&specializationConstantsDataBuffer[copyIdx], &value, sizeof(uint32_t));
+		specializationEntries.emplace_back(constantID, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(uint32_t));
+	};
+	if (shaderInfo.specializationConstant_1_shadowMode)
+	{
+		appendSpecializationConstant_uint32(1, root->shadowConstants.shadowMode);
+		hasSpecializationConstant_ShadowConstants = true;
+	}
+	if (shaderInfo.specializationConstant_2_shadowFilterSize)
+	{
+		appendSpecializationConstant_uint32(2, root->shadowConstants.shadowFilterSize);
+		hasSpecializationConstant_ShadowConstants = true;
+	}
+	if (shaderInfo.specializationConstant_3_shadowCascadesCount)
+	{
+		appendSpecializationConstant_uint32(3, root->shadowConstants.shadowCascadesCount);
+		hasSpecializationConstant_ShadowConstants = true;
+	}
+	if (shaderInfo.specializationConstant_4_pointLightEnabled)
+	{
+		appendSpecializationConstant_uint32(4, static_cast<uint32_t>(root->shadowConstants.isPointLightPerPixelEnabled));
+		hasSpecializationConstant_PointLightConstants = true;
+	}
+	if (!specializationEntries.empty())
+	{
 		ASSERT(pipelineStages[1].pSpecializationInfo == nullptr, "get_stages unexpectedly set pSpecializationInfo - this will overwrite!");
+		spec_info
+			.setMapEntryCount(static_cast<uint32_t>(specializationEntries.size()))
+			.setPMapEntries(specializationEntries.data())
+			.setDataSize(static_cast<uint32_t>(specializationConstantsDataBuffer.size()))
+			.setPData(specializationConstantsDataBuffer.data())
+		;
 		pipelineStages[1].setPSpecializationInfo(&spec_info);
 	}
 
@@ -1695,7 +1807,7 @@ VkPSO::VkPSO(vk::Device _dev,
 			object = std::move(result.value);
 			break;
 		default:
-			vk::throwResultException(result.result, "createGraphicsPipeline");
+			WZ_THROW_VK_RESULT_EXCEPTION(result.result, "createGraphicsPipeline");
 	}
 }
 
@@ -1759,7 +1871,7 @@ void VkBuf::allocateBufferObject(const std::size_t& size)
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateBuffer" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateBuffer" );
 	}
 
 	if (root->debugUtilsExtEnabled)
@@ -1792,7 +1904,10 @@ void VkBuf::upload(const size_t & size, const void * data)
 {
 	ASSERT(size > 0, "Attempt to upload buffer of size 0");
 	allocateBufferObject(size);
-	update(0, size, data);
+	if (data)
+	{
+		update(0, size, data);
+	}
 }
 
 void VkBuf::update(const size_t & start, const size_t & size, const void * data, const update_flag flag)
@@ -1821,6 +1936,11 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
 	const auto copyRegions = std::array<vk::BufferCopy, 1> { vk::BufferCopy(stagingMemory.offset, start, size) };
 	cmdBuffer->copyBuffer(stagingMemory.buffer, object, copyRegions, root->vkDynLoader);
+}
+
+size_t VkBuf::current_buffer_size()
+{
+	return buffer_size;
 }
 
 void VkBuf::bind() {}
@@ -1901,7 +2021,7 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateImage" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateImage" );
 	}
 
 	if (root.debugUtilsExtEnabled)
@@ -1932,7 +2052,6 @@ VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_c
 {
 	ASSERT(size > 0, "0 width/height textures are unsupported");
 	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", size);
-	ASSERT(layer_count == 1, "Currently only support layer count of 1..."); // TODO: FIXME
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	debugName = filename;
@@ -1956,7 +2075,7 @@ VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_c
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateImage" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateImage" );
 	}
 
 	if (root.debugUtilsExtEnabled)
@@ -1970,7 +2089,7 @@ VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_c
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
-		.setViewType(vk::ImageViewType::e2D) // TODO: Once layer_count > 1, use e2DArray
+		.setViewType(vk::ImageViewType::e2DArray)
 		.setFormat(depthMapFormat)
 		.setComponents(vk::ComponentMapping())
 		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, 0, static_cast<uint32_t>(layer_count)));
@@ -2175,7 +2294,7 @@ VkRenderedImage::VkRenderedImage(const VkRoot& root, size_t width, size_t height
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateImage" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateImage" );
 	}
 
 	if (root.debugUtilsExtEnabled)
@@ -2292,7 +2411,7 @@ VkTextureArray::VkTextureArray(const VkRoot& root, size_t mipmap_count, size_t l
 	if (result != vk::Result::eSuccess)
 	{
 		// Failed to allocate memory!
-		vk::throwResultException( result, "vmaCreateImage" );
+		WZ_THROW_VK_RESULT_EXCEPTION( result, "vmaCreateImage" );
 	}
 
 	if (root.debugUtilsExtEnabled)
@@ -2433,11 +2552,7 @@ const VkRoot::RenderPassDetails& VkRoot::currentRenderPass()
 	return renderPasses[currentRenderPassId];
 }
 
-gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-														const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
-	const std::vector<std::type_index>& uniform_blocks,
-	const std::vector<gfx_api::texture_input>& texture_desc,
-	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
+gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo)
 {
 	optional<size_t> psoID;
 	if (existing_pso)
@@ -2447,10 +2562,9 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	}
 
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
-	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, uniform_blocks, texture_desc, attribute_descriptions);
 	VkPSO* pipeline = nullptr;
 	try {
-		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, currentRenderPass().rp, currentRenderPass().rp_compat_info, msaaSamples, vkDynLoader, *this);
+		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, currentRenderPass().rp, currentRenderPass().rp_compat_info, currentRenderPass().msaaSamples, vkDynLoader, *this);
 	}
 	catch (const std::exception& e)
 	{
@@ -2511,7 +2625,7 @@ void VkRoot::rebuildPipelinesIfNecessary()
 			if (!renderPass.rp_compat_info->isCompatibleWith(*pipeline->renderpass_compat))
 			{
 				delete pipeline;
-				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);
+				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
 			}
 		}
 	}
@@ -2629,13 +2743,13 @@ static bool createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, co
 
 void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat)
 {
-	bool msaaEnabled = (msaaSamples != vk::SampleCountFlagBits::e1);
+	bool msaaEnabled = (msaaSamplesSwapchain != vk::SampleCountFlagBits::e1);
 
 	auto attachments =
 		std::vector<vk::AttachmentDescription>{
 		vk::AttachmentDescription() // colorAttachment
 			.setFormat(swapchainFormat)
-			.setSamples(msaaSamples)
+			.setSamples(msaaSamplesSwapchain)
 			.setInitialLayout(vk::ImageLayout::eUndefined)
 			.setFinalLayout((msaaEnabled) ? vk::ImageLayout::eColorAttachmentOptimal : vk::ImageLayout::ePresentSrcKHR)
 			.setLoadOp(vk::AttachmentLoadOp::eClear)
@@ -2644,7 +2758,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 			.setStencilStoreOp(vk::AttachmentStoreOp::eStore),
 		vk::AttachmentDescription() // depthAttachment
 			.setFormat(depthFormat)
-			.setSamples(msaaSamples)
+			.setSamples(msaaSamplesSwapchain)
 			.setInitialLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal)
 			.setFinalLayout(vk::ImageLayout::eDepthStencilAttachmentOptimal)
 			.setLoadOp(vk::AttachmentLoadOp::eClear)
@@ -2712,6 +2826,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 
 	renderPasses[DEFAULT_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
 	renderPasses[DEFAULT_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+	renderPasses[DEFAULT_RENDER_PASS_ID].msaaSamples = msaaSamplesSwapchain;
 
 	// createFramebuffers for default render pass
 	ASSERT(!swapchainImageView.empty(), "No swapchain image views?");
@@ -2738,6 +2853,97 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 	catch (const vk::OutOfDeviceMemoryError& e) {
 		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfDeviceMemoryError: %s", e.what());
 		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	}
+}
+
+void VkRoot::createDepthPassImagesAndFBOs(vk::Format depthFormat)
+{
+	// destroy depth pass objects
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	for (auto f : renderPasses[DEPTH_RENDER_PASS_ID].fbo)
+	{
+		// Queue for future deletion
+		frameResources.fbo_to_delete.emplace_back(f);
+	}
+	renderPasses[DEPTH_RENDER_PASS_ID].fbo.clear();
+	for (auto& imageView : depthMapCascadeView)
+	{
+		if (buffering_mechanism::isInitialized())
+		{
+			// Queue for future deletion
+			frameResources.image_view_to_delete.emplace_back(std::move(imageView));
+		}
+		else
+		{
+			imageView.reset();
+		}
+	}
+	depthMapCascadeView.clear();
+	if (pDepthMapImage)
+	{
+		// Destructor will automatically queue resources for future deletion once they are unused
+		delete pDepthMapImage;
+		pDepthMapImage = nullptr;
+	}
+
+	if (depthPassCount == 0)
+	{
+		return;
+	}
+
+	// Create depth map image + view
+	size_t numCascadeLayers = depthPassCount;
+	pDepthMapImage = new VkDepthMapImage(*this, numCascadeLayers, depthMapSize, depthFormat, "<depth map>");
+
+	// For each depth pass (cascade)
+	for (size_t i = 0; i < numCascadeLayers; ++i)
+	{
+		// Image view for just this layer
+		const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
+			.setImage(pDepthMapImage->object)
+			.setViewType(vk::ImageViewType::e2DArray)
+			.setFormat(depthFormat)
+			.setComponents(vk::ComponentMapping())
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, static_cast<uint32_t>(i), 1));
+
+		auto cascade_view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, vkDynLoader);
+
+		vk::ImageView non_unique_imageview_ref = cascade_view.get();
+
+		if (debugUtilsExtEnabled)
+		{
+			std::string imageViewName = "<depth cascade image view: " + std::to_string(i) + ">";
+			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+			objectNameInfo.setObjectType(vk::ObjectType::eImageView);
+			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImageView>(non_unique_imageview_ref)));
+			objectNameInfo.setPObjectName(imageViewName.c_str());
+			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+		}
+
+		// FBO for this image view + layer
+		auto cascade_fbo = dev.createFramebuffer(
+			vk::FramebufferCreateInfo()
+			.setAttachmentCount(1)
+			.setPAttachments(&non_unique_imageview_ref)
+			.setLayers(1)
+			.setWidth(depthMapSize)
+			.setHeight(depthMapSize)
+			.setRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp)
+			, nullptr, vkDynLoader);
+
+		depthMapCascadeView.push_back(std::move(cascade_view));
+
+		if (debugUtilsExtEnabled)
+		{
+			std::string framebufferName = "<depth cascade frame buffer: " + std::to_string(i) + ">";
+			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
+			objectNameInfo.setObjectType(vk::ObjectType::eFramebuffer);
+			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkFramebuffer>(cascade_fbo)));
+			objectNameInfo.setPObjectName(framebufferName.c_str());
+			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
+		}
+
+		renderPasses[DEPTH_RENDER_PASS_ID].fbo.push_back(cascade_fbo);
 	}
 }
 
@@ -2797,6 +3003,7 @@ void VkRoot::createDepthPasses(vk::Format depthFormat)
 
 	renderPasses[DEPTH_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
 	renderPasses[DEPTH_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+	renderPasses[DEPTH_RENDER_PASS_ID].msaaSamples = vk::SampleCountFlagBits::e1;
 
 	if (debugUtilsExtEnabled)
 	{
@@ -2808,59 +3015,7 @@ void VkRoot::createDepthPasses(vk::Format depthFormat)
 		dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
 	}
 
-	// Create depth map image + view
-	// For now, this is just a 2d texture (in the future, for cascades, use a 2d array texture)
-	size_t numCascadeLayers = 1;
-	pDepthMapImage = new VkDepthMapImage(*this, numCascadeLayers, depthMapSize, depthBufferFormat, "<depth map>");
-
-	// For each depth pass (cascade)
-	for (size_t i = 0; i < numCascadeLayers; ++i)
-	{
-		// Image view for just this layer
-		const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
-			.setImage(pDepthMapImage->object)
-			.setViewType(vk::ImageViewType::e2D) // TODO: Once layer_count > 1, use e2DArray
-			.setFormat(depthBufferFormat)
-			.setComponents(vk::ComponentMapping())
-			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, static_cast<uint32_t>(i), 1));
-
-		auto cascade_view = dev.createImageView(imageViewCreateInfo, nullptr, vkDynLoader);
-
-		if (debugUtilsExtEnabled)
-		{
-			std::string imageViewName = "<depth cascade image view: " + std::to_string(i) + ">";
-			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
-			objectNameInfo.setObjectType(vk::ObjectType::eImageView);
-			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkImageView>(cascade_view)));
-			objectNameInfo.setPObjectName(imageViewName.c_str());
-			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
-		}
-
-		depthMapCascadeView.push_back(cascade_view);
-
-		// FBO for this image view + layer
-		auto cascade_fbo = dev.createFramebuffer(
-			vk::FramebufferCreateInfo()
-			.setAttachmentCount(1)
-			.setPAttachments(&cascade_view)
-			.setLayers(1)
-			.setWidth(depthMapSize)
-			.setHeight(depthMapSize)
-			.setRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp)
-			, nullptr, vkDynLoader);
-
-		if (debugUtilsExtEnabled)
-		{
-			std::string framebufferName = "<depth cascade frame buffer: " + std::to_string(i) + ">";
-			vk::DebugUtilsObjectNameInfoEXT objectNameInfo;
-			objectNameInfo.setObjectType(vk::ObjectType::eFramebuffer);
-			objectNameInfo.setObjectHandle(uint64_t(static_cast<VkFramebuffer>(cascade_fbo)));
-			objectNameInfo.setPObjectName(framebufferName.c_str());
-			dev.setDebugUtilsObjectNameEXT(objectNameInfo, vkDynLoader);
-		}
-
-		renderPasses[DEPTH_RENDER_PASS_ID].fbo.push_back(cascade_fbo);
-	}
+	createDepthPassImagesAndFBOs(depthFormat);
 }
 
 void VkRoot::destroySceneRenderpass()
@@ -3027,6 +3182,7 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 
 	renderPasses[SCENE_RENDER_PASS_ID].rp_compat_info = std::make_shared<VkhRenderPassCompat>(createInfo);
 	renderPasses[SCENE_RENDER_PASS_ID].rp = dev.createRenderPass(createInfo, nullptr, vkDynLoader);
+	renderPasses[SCENE_RENDER_PASS_ID].msaaSamples = msaaSamples;
 
 	if (debugUtilsExtEnabled)
 	{
@@ -3172,7 +3328,7 @@ bool VkRoot::setupDebugReportCallbacks(const std::vector<const char*>& extension
 	VkDebugReportCallbackCreateInfoEXT dbgCreateInfo = {};
 	dbgCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
 	dbgCreateInfo.pfnCallback = WZDebugReportCallback;
-	dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT |
+	dbgCreateInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_DEBUG_BIT_EXT | VK_DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT |
 	VK_DEBUG_REPORT_WARNING_BIT_EXT; // |
 	//VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
 
@@ -3310,42 +3466,49 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	// Requires: deviceProperties.apiVersion >= minSupportedVulkanVersion
 	if (!VK_VERSION_GREATER_THAN_OR_EQUAL(deviceProperties.apiVersion, minSupportedVulkanVersion))
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient apiVersion (%s)", deviceProperties.deviceID, deviceProperties.deviceName.data(), VkhInfo::vulkan_apiversion_to_string(deviceProperties.apiVersion).c_str());
 		return 0;
 	}
 
 	// Requires: limits.maxDescriptorSetUniformBuffers >= minRequired_DescriptorSetUniformBuffers
 	if (deviceProperties.limits.maxDescriptorSetUniformBuffers < minRequired_DescriptorSetUniformBuffers)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxDescriptorSetUniformBuffers (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxDescriptorSetUniformBuffers);
 		return 0;
 	}
 
 	// Requires: limits.maxDescriptorSetUniformBuffersDynamic >= minRequired_DescriptorSetUniformBuffersDynamic
 	if (deviceProperties.limits.maxDescriptorSetUniformBuffersDynamic < minRequired_DescriptorSetUniformBuffersDynamic)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxDescriptorSetUniformBuffersDynamic (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxDescriptorSetUniformBuffersDynamic);
 		return 0;
 	}
 
 	// Requires: limits.maxBoundDescriptorSets >= minRequired_BoundDescriptorSets
 	if (deviceProperties.limits.maxBoundDescriptorSets < minRequired_BoundDescriptorSets)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxBoundDescriptorSets (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxBoundDescriptorSets);
 		return 0;
 	}
 
 	// Requires: limits.maxViewports >= minRequired_Viewports
 	if (deviceProperties.limits.maxViewports < minRequired_Viewports)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxViewports (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxViewports);
 		return 0;
 	}
 
 	// Requires: limits.maxColorAttachments >= minRequired_ColorAttachments
 	if (deviceProperties.limits.maxColorAttachments < minRequired_ColorAttachments)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Insufficient maxColorAttachments (%" PRIu32 ")", deviceProperties.deviceID, deviceProperties.deviceName.data(), deviceProperties.limits.maxColorAttachments);
 		return 0;
 	}
 
 	// Requires: samplerAnisotropy
 	if (!deviceFeatures.samplerAnisotropy)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: No samplerAnisotropy support", deviceProperties.deviceID, deviceProperties.deviceName.data());
 		return 0;
 	}
 
@@ -3359,6 +3522,7 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	QueueFamilyIndices indices = findQueueFamilies(device, surface, vkDynLoader);
 	if (!indices.isComplete())
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Unable to find graphics + present queue families", deviceProperties.deviceID, deviceProperties.deviceName.data());
 		return 0;
 	}
 	if (indices.graphicsFamily.value() == indices.presentFamily.value())
@@ -3370,6 +3534,7 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	// Check that device supports `deviceExtensions`
 	if (!checkDeviceExtensionSupport(device, deviceExtensions, vkDynLoader))
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Missing required device extension(s)", deviceProperties.deviceID, deviceProperties.deviceName.data());
 		return 0;
 	}
 
@@ -3378,11 +3543,20 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 		SwapChainSupportDetails swapChainSupportDetails = querySwapChainSupport(device, surface, vkDynLoader);
 		if (swapChainSupportDetails.formats.empty() || swapChainSupportDetails.presentModes.empty())
 		{
+			if (swapChainSupportDetails.formats.empty())
+			{
+				debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Empty swapchain formats?", deviceProperties.deviceID, deviceProperties.deviceName.data());
+			}
+			if (swapChainSupportDetails.presentModes.empty())
+			{
+				debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: Empty swapchain presentModes?", deviceProperties.deviceID, deviceProperties.deviceName.data());
+			}
 			return 0;
 		}
 	}
-	catch (const vk::SystemError&)
+	catch (const vk::SystemError& e)
 	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: querySwapChainSupport failed with error: %s", deviceProperties.deviceID, deviceProperties.deviceName.data(), e.what());
 		return 0;
 	}
 
@@ -3477,10 +3651,6 @@ void VkRoot::shutdown()
 		dev.destroyFramebuffer(f, nullptr, vkDynLoader);
 	}
 	renderPasses[DEPTH_RENDER_PASS_ID].fbo.clear();
-	for (auto imageView : depthMapCascadeView)
-	{
-		dev.destroyImageView(imageView, nullptr, vkDynLoader);
-	}
 	depthMapCascadeView.clear();
 	if (pDepthMapImage)
 	{
@@ -3491,6 +3661,12 @@ void VkRoot::shutdown()
 	{
 		dev.destroyRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
 		renderPasses[DEPTH_RENDER_PASS_ID].rp = vk::RenderPass();
+	}
+
+	// destroy default depth map texture
+	if (pDefaultDepthMapTexture)
+	{
+		pDefaultDepthMapTexture->destroy(dev, allocator, vkDynLoader);
 	}
 
 	// destroy allocator
@@ -3545,7 +3721,8 @@ void VkRoot::shutdown()
 	}
 }
 
-void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
+// Generally-speaking, this should only be used in very specific cases where whole chunks of the swapchain etc setup are being torn down / recreated
+void VkRoot::waitForAllIdle()
 {
 	if (!dev)
 	{
@@ -3562,6 +3739,17 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 		presentQueue.waitIdle(vkDynLoader);
 	}
 	dev.waitIdle(vkDynLoader);
+}
+
+void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
+{
+	if (!dev)
+	{
+		// Logical device is null - return
+		return;
+	}
+
+	waitForAllIdle();
 
 	if (pDefaultTexture)
 	{
@@ -3673,7 +3861,7 @@ bool VkRoot::handleSurfaceLost()
 	}
 
 	bool result = false;
-	if (createSwapchain())
+	if (createSwapchain(false))
 	{
 		rebuildPipelinesIfNecessary();
 		result = true;
@@ -3723,7 +3911,9 @@ bool VkRoot::createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reaso
 
 vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
 {
-	const auto desiredFormats = std::array<vk::SurfaceFormatKHR, 2> {
+	const auto desiredFormats = std::array<vk::SurfaceFormatKHR, 4> {
+		vk::SurfaceFormatKHR{ vk::Format::eA2B10G10R10UnormPack32, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
+		vk::SurfaceFormatKHR{ vk::Format::eA2R10G10B10UnormPack32, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
 		vk::SurfaceFormatKHR{ vk::Format::eB8G8R8A8Unorm, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
 		vk::SurfaceFormatKHR{ vk::Format::eR8G8B8A8Unorm, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear }
 	};
@@ -3887,7 +4077,7 @@ T clamp(const T& n, const T& lower, const T& upper) {
 	return std::max(lower, std::min(n, upper));
 }
 
-bool VkRoot::createSwapchain()
+bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 {
 	ASSERT(backend_impl, "Backend implementation is null");
 	ASSERT(physicalDevice, "Physical device is null");
@@ -3904,6 +4094,20 @@ bool VkRoot::createSwapchain()
 	SwapChainSupportDetails swapChainSupport;
 	try {
 		swapChainSupport = querySwapChainSupport(physicalDevice, surface, vkDynLoader);
+	}
+	catch (const vk::SurfaceLostKHRError &e)
+	{
+		if (allowHandleSurfaceLost)
+		{
+			debug(LOG_INFO, "Querying swapchain support failed with ErrorSurfaceLostKHR - must recreate surface + swapchain: %s", e.what());
+			// recreate surface + swapchain
+			return handleSurfaceLost();
+		}
+		else
+		{
+			debug(LOG_ERROR, "Querying swapchain support failed with error: %s", e.what());
+			return false;
+		}
 	}
 	catch (const vk::SystemError &e)
 	{
@@ -3937,7 +4141,10 @@ bool VkRoot::createSwapchain()
 	// see: https://bugzilla.libsdl.org/show_bug.cgi?id=4671
 	swapchainSize.width = clamp(drawableSize.width, swapChainSupport.capabilities.minImageExtent.width, swapChainSupport.capabilities.maxImageExtent.width);
 	swapchainSize.height = clamp(drawableSize.height, swapChainSupport.capabilities.minImageExtent.height, swapChainSupport.capabilities.maxImageExtent.height);
-	ASSERT(swapchainSize.width > 0 && swapchainSize.height > 0, "swapchain dimensions: %" PRIu32" x %" PRIu32"", swapchainSize.width, swapchainSize.height);
+	if (swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
+		debug(LOG_3D, "swapchain dimensions: %" PRIu32" x %" PRIu32"", swapchainSize.width, swapchainSize.height);
+	}
 	// Some drivers may return 0 for swapchain min/maxImageExtent height/width in certain circumstances
 	// (ex. some Nvidia drivers on Windows when minimizing the window)
 	// but attempting to create a swapchain with extents of 0 is invalid
@@ -3970,13 +4177,29 @@ bool VkRoot::createSwapchain()
 	surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
 	debug(LOG_3D, "Using surface format: %s - %s", to_string(surfaceFormat.format).c_str(), to_string(surfaceFormat.colorSpace).c_str());
 
+	// pick compositeAlpha
+	vk::CompositeAlphaFlagBitsKHR compositeAlphaMode = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+	if (swapChainSupport.capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eOpaque)
+	{
+		compositeAlphaMode = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+	}
+	else if (swapChainSupport.capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eInherit)
+	{
+		compositeAlphaMode = vk::CompositeAlphaFlagBitsKHR::eInherit;
+	}
+	else
+	{
+		debug(LOG_INFO, "Unable to find expected supportedCompositeAlpha option (value is: %s) - will attempt opaque", to_string(swapChainSupport.capabilities.supportedCompositeAlpha).c_str());
+	}
+	debug(LOG_3D, "Using supportedCompositeAlpha: %s", to_string(compositeAlphaMode).c_str());
+
 	vk::SwapchainCreateInfoKHR createSwapchainInfo = vk::SwapchainCreateInfoKHR()
 		.setSurface(surface)
 		.setMinImageCount(swapchainDesiredImageCount)
 		.setPresentMode(presentMode)
 		.setImageUsage(vk::ImageUsageFlagBits::eColorAttachment)
 		.setImageArrayLayers(1)
-		.setCompositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque)
+		.setCompositeAlpha(compositeAlphaMode)
 		.setClipped(true)
 		.setImageExtent(swapchainSize)
 		.setImageFormat(surfaceFormat.format)
@@ -4061,7 +4284,7 @@ bool VkRoot::createSwapchain()
 
 	// createColorResources
 	vk::Format colorFormat = surfaceFormat.format;
-	if (!createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, colorFormat,
+	if (!createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamplesSwapchain, colorFormat,
 									colorImage, colorImageMemory, colorImageView, vkDynLoader))
 	{
 		debug(LOG_ERROR, "Failed to create MSAA color attachment image");
@@ -4070,7 +4293,8 @@ bool VkRoot::createSwapchain()
 
 	// createDepthStencilImage
 	vk::Format depthFormat = findDepthStencilFormat(physicalDevice, vkDynLoader);
-	if (!createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, depthFormat,
+	debug(LOG_3D, "Using depth buffer format: %s", to_string(depthFormat).c_str());
+	if (!createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamplesSwapchain, depthFormat,
 							depthStencilImage, depthStencilMemory, depthStencilView, vkDynLoader))
 	{
 		debug(LOG_ERROR, "Failed to create depth stencil image");
@@ -4093,7 +4317,8 @@ bool VkRoot::createSwapchain()
 	}
 
 	// Create scene FBOs + renderpass
-	vk::Format sceneFormat = vk::Format::eR8G8B8A8Unorm; // TODO: Choose an appropriate format
+	vk::Format sceneFormat = findSceneColorBufferFormat(physicalDevice, vkDynLoader);
+	debug(LOG_3D, "Using scene color format: %s", to_string(sceneFormat).c_str());
 	try {
 		createSceneRenderpass(sceneFormat, depthFormat);
 	}
@@ -4146,6 +4371,68 @@ bool VkRoot::createSwapchain()
 	return true;
 }
 
+static optional<uint32_t> getVKLargestDeviceLocalMemoryHeapIndex(const vk::PhysicalDeviceMemoryProperties& memprops)
+{
+	optional<uint32_t> largestDeviceLocalMemoryHeap;
+	for (uint32_t i = 0; i < memprops.memoryTypeCount; ++i)
+	{
+		if ((memprops.memoryTypes[i].propertyFlags & vk::MemoryPropertyFlagBits::eDeviceLocal) == vk::MemoryPropertyFlagBits::eDeviceLocal)
+		{
+			auto currHeapIndex = memprops.memoryTypes[i].heapIndex;
+			if (currHeapIndex >= memprops.memoryHeapCount)
+			{
+				continue;
+			}
+			if (largestDeviceLocalMemoryHeap.has_value())
+			{
+				if (currHeapIndex != largestDeviceLocalMemoryHeap.value()
+					&& (memprops.memoryHeaps[currHeapIndex].size > memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size))
+				{
+					largestDeviceLocalMemoryHeap = currHeapIndex;
+				}
+			}
+			else
+			{
+				largestDeviceLocalMemoryHeap = currHeapIndex;
+			}
+		}
+	}
+	return largestDeviceLocalMemoryHeap;
+}
+
+static uint32_t getVKSuggestedDefaultDepthBufferResolution(const vk::PhysicalDeviceProperties &physicalDeviceProperties, const vk::PhysicalDeviceMemoryProperties& memprops)
+{
+	optional<uint32_t> largestDeviceLocalMemoryHeap = getVKLargestDeviceLocalMemoryHeapIndex(memprops);
+	ASSERT_OR_RETURN(2048, largestDeviceLocalMemoryHeap.has_value(), "Couldn't find the largest device local memory heap?");
+
+	auto largestDeviceLocalMemoryHeapSize = memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size;
+
+	if (physicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
+	{
+		if ((largestDeviceLocalMemoryHeapSize / 1048576) >= 8192) // If >= 8 GiB device-local memory on a discrete GPU
+		{
+			return 4096;
+		}
+		else
+		{
+			return 2048;
+		}
+	}
+	else if (physicalDeviceProperties.vendorID == 4203) // Apple GPU
+	{
+		if ((largestDeviceLocalMemoryHeapSize / 1048576) >= 16384) // If >= 16 GiB device-local memory on an Apple GPU
+		{
+			return 4096;
+		}
+		else
+		{
+			return 2048;
+		}
+	}
+
+	return 2048;
+}
+
 bool VkRoot::canUseVulkanInstanceAPI(uint32_t minVulkanAPICoreVersion) const
 {
 	ASSERT(inst, "Instance is null");
@@ -4158,15 +4445,14 @@ bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const
 	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion) && VK_VERSION_GREATER_THAN_OR_EQUAL(physDeviceProps.apiVersion, minVulkanAPICoreVersion);
 }
 
-bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode, optional<float> _mipLodBias)
+bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
 
 	frameNum = 1;
 	swapMode = requestedSwapMode;
 	mipLodBias = _mipLodBias;
-
-	SetVKImplicitLayerEnvironmentVariables();
+	depthMapSize = _depthMapResolution;
 
 	// obtain backend_Vulkan_Impl from impl
 	backend_impl = impl.createVulkanBackendImpl();
@@ -4175,6 +4461,8 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		debug(LOG_ERROR, "Failed to get Vulkan backend implementation");
 		return false;
 	}
+
+	SetVKImplicitLayerEnvironmentVariables(backend_impl->allowImplicitLayers());
 
 	PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr = backend_impl->getVkGetInstanceProcAddr();
 	if(!_vkGetInstanceProcAddr)
@@ -4460,7 +4748,25 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		return false;
 	}
 
+	if (depthMapSize == 0)
+	{
+		depthMapSize = getVKSuggestedDefaultDepthBufferResolution(physDeviceProps, memprops);
+	}
+
 	createDepthPasses(depthBufferFormat); // TODO: Handle failures?
+
+	pDefaultDepthMapTexture = new VkDepthMapImage(*this, 1, 4, depthBufferFormat, "<default depth map>");
+	const auto imageMemoryBarriers_TransitionDefaultDepthImage = std::array<vk::ImageMemoryBarrier, 1> {
+		vk::ImageMemoryBarrier()
+			.setImage(pDefaultDepthMapTexture->object)
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil, 0, 1, 0, 1))
+			.setOldLayout(vk::ImageLayout::eUndefined)
+			.setNewLayout(vk::ImageLayout::eDepthStencilReadOnlyOptimal)
+			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
+	};
+	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
+	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eAllGraphics,
+		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_TransitionDefaultDepthImage, vkDynLoader);
 
 	return true;
 }
@@ -4689,6 +4995,8 @@ bool VkRoot::createAllocator()
 	ASSERT(dev, "Logical device is null");
 
 	VmaVulkanFunctions vulkanFunctions;
+	vulkanFunctions.vkGetInstanceProcAddr = vkDynLoader.vkGetInstanceProcAddr;
+	vulkanFunctions.vkGetDeviceProcAddr = vkDynLoader.vkGetDeviceProcAddr;
 	vulkanFunctions.vkGetPhysicalDeviceProperties = vkDynLoader.vkGetPhysicalDeviceProperties;
 	vulkanFunctions.vkGetPhysicalDeviceMemoryProperties = vkDynLoader.vkGetPhysicalDeviceMemoryProperties;
 	vulkanFunctions.vkAllocateMemory = vkDynLoader.vkAllocateMemory;
@@ -4716,6 +5024,10 @@ bool VkRoot::createAllocator()
 #endif
 #if VMA_MEMORY_BUDGET || VMA_VULKAN_VERSION >= 1001000
 	vulkanFunctions.vkGetPhysicalDeviceMemoryProperties2KHR = vkDynLoader.vkGetPhysicalDeviceMemoryProperties2KHR;
+#endif
+#if VMA_VULKAN_VERSION >= 1003000
+	vulkanFunctions.vkGetDeviceBufferMemoryRequirements = vkDynLoader.vkGetDeviceBufferMemoryRequirements;
+	vulkanFunctions.vkGetDeviceImageMemoryRequirements = vkDynLoader.vkGetDeviceImageMemoryRequirements;
 #endif
 
 	VmaAllocatorCreateInfo allocatorInfo = {};
@@ -5085,8 +5397,10 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 			switch (attribute_descriptions.at(i).target)
 			{
 				case gfx_api::pixel_format_target::texture_2d:
-				case gfx_api::pixel_format_target::depth_map:
 					imageView = pDefaultTexture->view.get();
+					break;
+				case gfx_api::pixel_format_target::depth_map:
+					imageView = pDefaultDepthMapTexture->view.get();
 					break;
 				case gfx_api::pixel_format_target::texture_2d_array:
 					imageView = pDefaultArrayTexture->view.get();
@@ -5206,7 +5520,7 @@ void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notexture
 	{
 		// Must build this pipeline for a different render pass
 		auto& renderPass = renderPasses[currentRenderPassId];
-		newPSO = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, msaaSamples, vkDynLoader, *this);
+		newPSO = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
 		pipelineInfo.renderPassPSO[currentRenderPassId] = newPSO;
 	}
 	if (currentPSO != newPSO)
@@ -5240,6 +5554,11 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 			return AcquireNextSwapchainImageResult::eRecoveredFromError;
 		}
 		return AcquireNextSwapchainImageResult::eUnhandledFailure;
+	}
+	catch (const vk::DeviceLostError& e)
+	{
+		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: DeviceLostError: %s", e.what());
+		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
 	}
 	catch (const vk::SystemError& e)
 	{
@@ -5561,7 +5880,24 @@ void VkRoot::startRenderPass()
 
 size_t VkRoot::numDepthPasses()
 {
-	return 1;
+	return depthPassCount;
+}
+
+bool VkRoot::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferResolution)
+{
+	if (depthPassCount == _numDepthPasses
+		&& depthMapSize == _depthBufferResolution)
+	{
+		// nothing to do
+		return true;
+	}
+
+	depthPassCount = _numDepthPasses;
+	depthMapSize = static_cast<uint32_t>(_depthBufferResolution);
+
+	createDepthPassImagesAndFBOs(depthBufferFormat);
+
+	return true;
 }
 
 void VkRoot::beginDepthPass(size_t idx)
@@ -5663,6 +5999,34 @@ int32_t VkRoot::get_context_value(const gfx_api::context::context_value property
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;
+}
+
+static bool shouldTreatAsDedicatedGPU(const vk::PhysicalDeviceProperties &physicalDeviceProperties)
+{
+	if (physicalDeviceProperties.deviceType == vk::PhysicalDeviceType::eDiscreteGpu)
+	{
+		return true;
+	}
+	else if (physicalDeviceProperties.vendorID == 4203) // Apple GPU
+	{
+		return true;
+	}
+
+	return false;
+}
+
+uint64_t VkRoot::get_estimated_vram_mb(bool dedicatedOnly)
+{
+	optional<uint32_t> largestDeviceLocalMemoryHeap = getVKLargestDeviceLocalMemoryHeapIndex(memprops);
+	ASSERT_OR_RETURN(0, largestDeviceLocalMemoryHeap.has_value(), "Couldn't find the largest device local memory heap?");
+	auto largestDeviceLocalMemoryHeapSize = memprops.memoryHeaps[largestDeviceLocalMemoryHeap.value()].size;
+
+	if (dedicatedOnly && !shouldTreatAsDedicatedGPU(physDeviceProps))
+	{
+		return 0;
+	}
+
+	return static_cast<uint64_t>(largestDeviceLocalMemoryHeapSize / 1048576);
 }
 
 // DEBUG-handling
@@ -5780,6 +6144,67 @@ bool VkRoot::supportsIntVertexAttributes() const
 size_t VkRoot::maxFramesInFlight() const
 {
 	return MAX_FRAMES_IN_FLIGHT;
+}
+
+gfx_api::lighting_constants VkRoot::getShadowConstants()
+{
+	return shadowConstants;
+}
+
+bool VkRoot::setShadowConstants(gfx_api::lighting_constants newValues)
+{
+	if (shadowConstants == newValues)
+	{
+		return true;
+	}
+
+	shadowConstants = newValues;
+
+	// Must rebuild any shaders that used these values
+	for (auto& pipelineInfo : createdPipelines)
+	{
+		for (size_t renderPassId = 0; renderPassId < pipelineInfo.renderPassPSO.size(); ++renderPassId)
+		{
+			auto pipeline = pipelineInfo.renderPassPSO[renderPassId];
+			if (pipeline == nullptr)
+			{
+				continue;
+			}
+
+			auto& renderPass = renderPasses[renderPassId];
+
+			ASSERT(pipeline->renderpass_compat, "Pipeline has no associated renderpass compat structure");
+			if (pipeline->hasSpecializationConstant_ShadowConstants || pipeline->hasSpecializationConstant_PointLightConstants)
+			{
+				buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(pipeline);
+				pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
+			}
+		}
+	}
+
+	return true;
+}
+
+bool VkRoot::debugRecompileAllPipelines()
+{
+	for (auto& pipelineInfo : createdPipelines)
+	{
+		for (size_t renderPassId = 0; renderPassId < pipelineInfo.renderPassPSO.size(); ++renderPassId)
+		{
+			auto pipeline = pipelineInfo.renderPassPSO[renderPassId];
+			if (pipeline == nullptr)
+			{
+				continue;
+			}
+
+			auto& renderPass = renderPasses[renderPassId];
+
+			ASSERT(pipeline->renderpass_compat, "Pipeline has no associated renderpass compat structure");
+			buffering_mechanism::get_current_resources().pso_to_delete.emplace_back(pipeline);
+			pipelineInfo.renderPassPSO[renderPassId] = new VkPSO(dev, physDeviceProps.limits, pipelineInfo.createInfo, renderPass.rp, renderPass.rp_compat_info, renderPass.msaaSamples, vkDynLoader, *this);
+		}
+	}
+	return true;
 }
 
 #endif // defined(WZ_VULKAN_ENABLED)

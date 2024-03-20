@@ -230,10 +230,24 @@ void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psS
 	else
 	{
 		// priorScreen does not exist in the overlays list, so it is probably the "regular" screen
-		// just insert this overlay at the bottom of the overlay list
+		// so use z-order 0
 		OverlayScreen newOverlay {psScreen, 0};
-		overlays.insert(overlays.end(), newOverlay);
-		overlaySet.insert(psScreen);
+		it = std::find_if(overlays.begin(), overlays.end(), [](const OverlayScreen& overlay) -> bool {
+			return overlay.zOrder == 0;
+		});
+		if (it != overlays.end())
+		{
+			// found existing screen with z-order 0
+			// insert *before* it in the list (i.e. "above" it, since overlays are stored in decreasing z-order)
+			overlays.insert(it, newOverlay);
+			overlaySet.insert(psScreen);
+		}
+		else
+		{
+			// just insert this overlay at the bottom of the overlay list
+			overlays.insert(overlays.end(), newOverlay);
+			overlaySet.insert(psScreen);
+		}
 	}
 }
 
@@ -343,7 +357,7 @@ static inline void forEachOverlayScreenBottomUp(const std::function<bool (const 
 
 void widgOverlaysScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
 {
-	forEachOverlayScreen([oldWidth, oldHeight, newWidth, newHeight](const OverlayScreen& overlay) -> bool
+	forEachOverlayScreenBottomUp([oldWidth, oldHeight, newWidth, newHeight](const OverlayScreen& overlay) -> bool
 	{
 		overlay.psScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 		return true; // keep enumerating
@@ -354,6 +368,11 @@ static bool isScreenARegisteredOverlay(const std::shared_ptr<W_SCREEN> &psScreen
 {
 	if (!psScreen) { return false; }
 	return overlaySet.count(psScreen) > 0;
+}
+
+bool isMouseOverScreen(const std::shared_ptr<W_SCREEN>& psScreen)
+{
+	return psMouseOverWidgetScreen == psScreen;
 }
 
 bool isMouseOverScreenOverlayChild(int mx, int my)
@@ -491,6 +510,16 @@ void WIDGET::setGeometry(WzRect const &r)
 	dirty = true;
 }
 
+void WIDGET::setGeometryFromScreenRect(WzRect const &r)
+{
+	auto strongParent = parent();
+	ASSERT_OR_RETURN(, strongParent != nullptr, "No parent - failed");
+	int xOffset = strongParent->screenPosX();
+	int yOffset = strongParent->screenPosY();
+	WzRect parentRelativeRect = WzRect(r.x() - xOffset, r.y() - yOffset, r.width(), r.height());
+	setGeometry(parentRelativeRect);
+}
+
 void WIDGET::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
 {
 	// Default implementation of screenSizeDidChange calls its own calcLayout callback function (if present)
@@ -537,12 +566,22 @@ void WIDGET::setCustomHitTest(const WIDGET_HITTEST_FUNC& newCustomHitTestFunc)
 	customHitTest = newCustomHitTestFunc;
 }
 
-void WIDGET::attach(const std::shared_ptr<WIDGET> &widget)
+void WIDGET::attach(const std::shared_ptr<WIDGET> &widget, ChildZPos zPos /*= ChildZPos::Front*/)
 {
 	ASSERT_OR_RETURN(, widget != nullptr && widget->parentWidget.expired(), "Bad attach.");
 	widget->parentWidget = shared_from_this();
 	widget->setScreenPointer(screenPointer.lock());
-	childWidgets.push_back(widget);
+	switch (zPos)
+	{
+	case ChildZPos::Front:
+		// insert at the end of the list of children, and thus the top of the z-order (childWidgets order is bottom -> top)
+		childWidgets.push_back(widget);
+		break;
+	case ChildZPos::Back:
+		// insert at the very beginning of the list of children
+		childWidgets.insert(childWidgets.begin(), widget);
+		break;
+	}
 }
 
 void WIDGET::detach(const std::shared_ptr<WIDGET> &widget)
@@ -578,10 +617,12 @@ void WIDGET::setScreenPointer(const std::shared_ptr<W_SCREEN> &screen)
 		if (lockedScreen->hasFocus(*this))
 		{
 			lockedScreen->psFocus.reset();
+			this->focusLost();
 		}
 		if (lockedScreen->isLastHighlight(*this))
 		{
 			lockedScreen->lastHighlight.reset();
+			this->highlightLost();
 		}
 	}
 
@@ -623,7 +664,7 @@ void W_SCREEN::initialize(const std::shared_ptr<W_FORM>& customRootForm)
 			customRootFormParent->detach(customRootForm);
 		}
 		psForm = customRootForm;
-		psForm->screenPointer = shared_from_this();
+		psForm->setScreenPointer(shared_from_this());
 		return;
 	}
 
@@ -924,6 +965,11 @@ void WIDGET::setTip(std::string)
 	ASSERT(false, "Can't set widget type %u's tip.", type);
 }
 
+void WIDGET::setHelp(optional<WidgetHelp> help)
+{
+	ASSERT(false, "Can't set widget type %u's help.", type);
+}
+
 /* Set tip string for a widget */
 void widgSetTip(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, std::string pTip)
 {
@@ -1111,7 +1157,7 @@ void WIDGET::runRecursive(W_CONTEXT *psContext)
 	}
 }
 
-bool WIDGET::hitTest(int x, int y)
+bool WIDGET::hitTest(int x, int y) const
 {
 	// default hit-testing bounding rect (based on the widget's x, y, width, height)
 	bool hitTestResult = dim.contains(x, y);
@@ -1144,8 +1190,10 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 	if (!skipProcessingChildren)
 	{
 		// Process subwidgets.
-		for (auto const &psCurr: childWidgets)
+		// (Enumerate the child widgets in decreasing z-order (i.e. "top-down"))
+		for (auto i = childWidgets.size(); i--;)
 		{
+			auto const &psCurr = childWidgets[i];
 			if (!psCurr->visible() || !psCurr->hitTest(shiftedContext.mx, shiftedContext.my))
 			{
 				continue;  // Skip any hidden widgets, or widgets the click missed.
@@ -1386,6 +1434,9 @@ void WIDGET::displayRecursive(WidgetGraphicsContext const &context)
 	}
 
 	// Display the widgets on this widget.
+	// NOTE: Draw them in the opposite order that clicks are processed, so behavior matches the visual.
+	// i.e. Since processClickRecursive handles processing children in decreasing z-order (i.e. "top-down")
+	//      we want to draw things in list order (bottom-up) so the "top-most" is drawn last
 	for (auto const &child: childWidgets)
 	{
 		if (child->visible())
@@ -1458,12 +1509,20 @@ void W_SCREEN::setFocus(const std::shared_ptr<WIDGET> &widget)
 {
 	if (auto locked = psFocus.lock())
 	{
+		if (locked == widget)
+		{
+			return; // do nothing - no change
+		}
+		psFocus = widget;
 		if (bWidgetsInitialized) // do not call focusLost if widgets have already shutdown / are not initialized
 		{
 			locked->focusLost();
 		}
 	}
-	psFocus = widget;
+	else
+	{
+		psFocus = widget;
+	}
 }
 
 void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID, SWORD ErrorID)
@@ -1539,4 +1598,9 @@ WidgetGraphicsContext WidgetGraphicsContext::clippedBy(WzRect const &newRect) co
 std::weak_ptr<WIDGET> getMouseOverWidget()
 {
 	return psMouseOverWidget;
+}
+
+std::chrono::milliseconds widgGetClickHoldMS()
+{
+	return std::chrono::milliseconds(2000); // TODO: Make this configurable?
 }

@@ -125,6 +125,31 @@ uint8_t *NetMessage::rawDataDup() const
 	return ret;
 }
 
+bool NetMessage::tryFromRawData(const uint8_t* buffer, size_t bufferLen, NetMessage& output)
+{
+	if (bufferLen == 0) { return false; }
+	uint8_t type = buffer[0];
+
+	uint32_t len = 0;
+	bool moreBytes = true;
+	unsigned n;
+	for (n = 0; moreBytes && bufferLen > 1 + n; ++n)
+	{
+		moreBytes = decode_uint32_t(buffer[1 + n], len, n);
+	}
+	unsigned headerLen = 1 + n;
+
+	ASSERT(len < 40000000, "Trying to parse a very large packet (%u bytes)", len);
+	if (bufferLen - headerLen < len)
+	{
+		return false;  // Don't have a whole message ready yet.
+	}
+
+	output = NetMessage(type);
+	output.data.assign(buffer + headerLen, buffer + headerLen + len);
+	return true;
+}
+
 void NetMessage::rawDataAppendToVector(std::vector<uint8_t> &output) const
 {
 #if SIZE_MAX > UINT32_MAX
@@ -155,6 +180,7 @@ NetQueue::NetQueue()
 	: canGetMessagesForNet(true)
 	, canGetMessages(true)
 	, pendingGameTimeUpdateMessages(0)
+	, bCurrentMessageWasDecrypted(false)
 {
 	dataPos = messages.end();
 	messagePos = messages.end();
@@ -199,6 +225,11 @@ void NetQueue::writeRawData(const uint8_t *netData, size_t netLen)
 
 	// Recycle old data.
 	buffer.erase(buffer.begin(), buffer.begin() + used);
+}
+
+size_t NetQueue::currentIncompleteDataBuffered() const
+{
+	return incompleteReceivedMessageData.size();
 }
 
 void NetQueue::setWillNeverGetMessagesForNet()
@@ -275,7 +306,25 @@ const NetMessage &NetQueue::getMessage() const
 	ASSERT(messagePos != messages.begin(), "No message to get!");
 
 	// Return the message.
-	return internal_getMessage();
+	return internal_getConstMessage();
+}
+
+bool NetQueue::currentMessageWasDecrypted() const
+{
+	return bCurrentMessageWasDecrypted;
+}
+
+bool NetQueue::replaceCurrentWithDecrypted(NetMessage &&decryptedMessage)
+{
+	ASSERT_OR_RETURN(false, canGetMessages, "Wrong NetQueue type for getMessage.");
+	ASSERT_OR_RETURN(false, messagePos != messages.begin(), "No message to get!");
+
+	NetMessage& currentMessage = internal_getMessage();
+	ASSERT_OR_RETURN(false, currentMessage.type == NET_SECURED_NET_MESSAGE, "Current message is not a secured message!");
+
+	currentMessage = std::move(decryptedMessage);
+	bCurrentMessageWasDecrypted = true;
+	return true;
 }
 
 void NetQueue::popMessage()
@@ -283,7 +332,7 @@ void NetQueue::popMessage()
 	ASSERT(canGetMessages, "Wrong NetQueue type for popMessage.");
 	ASSERT(messagePos != messages.begin(), "No message to pop!");
 
-	if (messagePos != messages.begin() && internal_getMessage().type == GAME_GAME_TIME)
+	if (messagePos != messages.begin() && internal_getConstMessage().type == GAME_GAME_TIME)
 	{
 		if (pendingGameTimeUpdateMessages > 0)
 		{
@@ -293,6 +342,7 @@ void NetQueue::popMessage()
 
 	// Pop the message.
 	--messagePos;
+	bCurrentMessageWasDecrypted = false;
 
 	// Recycle old data.
 	popOldMessages();

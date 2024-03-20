@@ -31,11 +31,16 @@
 #include <functional>
 #include <algorithm>
 
+enum class TabAlignment
+{
+	LeftAligned,
+	RightAligned
+};
 
 struct TabSelectionStyle
 {
 	TabSelectionStyle() {}
-	TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasImage tabHighlight, AtlasImage prev, AtlasImage prevDown, AtlasImage prevHighlight, AtlasImage next, AtlasImage nextDown, AtlasImage nextHighlight, int gap);
+	TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasImage tabHighlight, AtlasImage prev, AtlasImage prevDown, AtlasImage prevHighlight, AtlasImage next, AtlasImage nextDown, AtlasImage nextHighlight, int gap, TabAlignment tabAlignment = TabAlignment::LeftAligned);
 
 	WzSize tabSize;
 	WzSize scrollTabSize;
@@ -43,7 +48,10 @@ struct TabSelectionStyle
 	AtlasImage prevScrollTabImage, prevScrollTabImageDown, prevScrollTabImageHighlight;
 	AtlasImage nextScrollTabImage, nextScrollTabImageDown, nextScrollTabImageHighlight;
 	int tabGap;
+	TabAlignment tabAlignment = TabAlignment::LeftAligned;
 };
+
+class ListWidget;
 
 class TabSelectionWidget : public WIDGET
 {
@@ -81,8 +89,13 @@ private:
 	void prevTabPage();
 	void nextTabPage();
 
-private:
+protected:
+	void geometryChanged() override;
+
+protected:
+	friend class ListWidget;
 	void doLayoutAll();
+private:
 
 	std::vector<TabSelectionStyle> styles;
 	size_t currentTab;
@@ -120,6 +133,9 @@ public:
 	{
 		return myChildren.size();
 	}
+	size_t firstWidgetShownIndex() const;
+	size_t lastWidgetShownIndex() const;
+	std::shared_ptr<WIDGET> getWidgetAtIndex(size_t index) const;
 
 	/* The optional "onCurrentPageChanged" callback function */
 	typedef std::function<void (ListWidget& psWidget, size_t currentPage)> W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC;
@@ -129,6 +145,9 @@ public:
 
 	void addOnCurrentPageChangedHandler(const W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC& handlerFunc);
 	void addOnNumberOfPagesChangedHandler(const W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC& handlerFunc);
+
+protected:
+	void geometryChanged() override;
 
 public:
 	void setCurrentPage(size_t page);
@@ -181,6 +200,8 @@ public:
 
 	void geometryChanged() override;
 
+	void setTitle(const WzString& string);
+
 	void setChildSize(int width, int height)
 	{
 		widgets->setChildSize(width, height);    ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
@@ -223,6 +244,8 @@ public:
 		return widgets.get();
 	}
 
+	int32_t heightOfTabsLabel() const;
+
 	void goToChildPage(size_t childIndex)
 	{
 		setCurrentPage(childIndex / widgets->widgetsPerPage());
@@ -231,6 +254,7 @@ public:
 private:
 	std::shared_ptr<TabSelectionWidget> tabs;
 	std::shared_ptr<ListWidget> widgets;
+	std::shared_ptr<W_LABEL> label;
 	TabPosition tabPos;
 };
 

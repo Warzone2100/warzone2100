@@ -118,13 +118,12 @@ void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight,
 extern SDWORD mouseTileX, mouseTileY;
 extern Vector2i mousePos;
 
-extern bool bRender3DOnly;
 extern bool showGateways;
 extern bool showPath;
 extern const Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/
-UDWORD  getDroidRankGraphic(DROID *psDroid);
+UDWORD  getDroidRankGraphic(const DROID *psDroid);
 UDWORD  getDroidRankGraphicFromLevel(unsigned int level);
 
 void setSkyBox(const char *page, float mywind, float myscale);
@@ -139,7 +138,7 @@ extern bool CauseCrash;
 extern bool tuiTargetOrigin;
 
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
-bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth = 0.f);
+bool drawShape(iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth = 0.f);
 
 int calculateCameraHeightAt(int tileX, int tileY);
 

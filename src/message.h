@@ -27,17 +27,22 @@
 #include "structure.h"
 #include "messagedef.h"
 #include "lib/framework/wzstring.h"
+#include "objmem.h"
 
 #define NO_AUDIO_MSG		-1
 
 /** The lists of messages allocated. */
-extern MESSAGE		*apsMessages[MAX_PLAYERS];
+using PerPlayerMessageLists = PerPlayerObjectLists<MESSAGE, MAX_PLAYERS>;
+using MessageList = typename PerPlayerMessageLists::value_type;
+extern PerPlayerMessageLists apsMessages;
 
 /** The IMD to use for the proximity messages. */
-extern iIMDShape	*pProximityMsgIMD;
+extern iIMDBaseShape	*pProximityMsgIMD;
 
 /** The list of proximity displays allocated. */
-extern PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
+using PerPlayerProximityDisplayLists = PerPlayerObjectLists<PROXIMITY_DISPLAY, MAX_PLAYERS>;
+using ProximityDisplayList = typename PerPlayerProximityDisplayLists::value_type;
+extern PerPlayerProximityDisplayLists apsProxDisp;
 
 extern bool releaseObjectives;
 
@@ -76,7 +81,7 @@ VIEWDATA *getViewData(const WzString &name);
 std::vector<WzString> getViewDataKeys();
 
 // Get rid of mission objectives
-void releaseAllFlicMessages(MESSAGE *list[]);
+void releaseAllFlicMessages(PerPlayerMessageLists& list);
 
 /** Release the viewdata memory. */
 void viewDataShutDown(const char *fileName);
@@ -90,5 +95,7 @@ MESSAGE *findMessage(const BASE_OBJECT *psObj, MESSAGE_TYPE type, UDWORD player)
 void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
 
 bool messageInitVars();
+
+void cleanupOldBeaconMessages();
 
 #endif // __INCLUDED_SRC_MESSAGE_H__

@@ -57,35 +57,35 @@ struct TagVer
         qualifier[TAGVER_MAX_QUALIF_LEN - 1] = 0;
 	}
 
-    uint16_t get_major()
+    uint16_t get_major() const
     {
         return version[0];
     };
-    uint16_t get_minor()
+    uint16_t get_minor() const
     {
         return version[1];
     };
-    uint16_t revision()
+    uint16_t revision() const
     {
         return version[2];
     };
 
-    bool operator < (const TagVer &other)
+    bool operator < (const TagVer &other) const
     {
         return std::lexicographical_compare(version, version + 3, other.version, other.version + 3);
     }
 
-    bool operator == (const TagVer &other)
+    bool operator == (const TagVer &other) const
     {
         return memcmp(version, other.version, sizeof(uint16_t) * 3) == 0;
     }
 
-	bool operator <= (const TagVer &other)
+	bool operator <= (const TagVer &other) const
 	{
 		return *this < other || *this  == other;
 	}
 
-	std::string major_minor()
+	std::string major_minor() const
     {
         char tmp[8] = {0}; // shall be enough 999.999
         ASSERT(get_major() <= 999, "incorrect major version: %i", get_major());
@@ -94,7 +94,7 @@ struct TagVer
         return std::string(tmp);
     }
 
-	bool hasQualifier()
+	bool hasQualifier() const
 	{
 		return qualifier[0] != 0;
 	}

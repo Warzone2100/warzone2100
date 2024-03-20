@@ -15,12 +15,14 @@ data/base/texpages/page-25-sky-urban.png
 	- MIT, Copyright 2017 Discord, Inc.
 3rdparty/json/*
 	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
+3rdparty/LRUCache11/*
+	- ISC License, Copyright (c) 2012-22 SAURAV MOHAPATRA (https://github.com/mohaps/lrucache11)
 3rdparty/micro-ecc/*
 	- BSD, Copyright (c) 2014, Kenneth MacKay (https://github.com/kmackay/micro-ecc)
 3rdparty/sha/*
 	- BSD, Copyright (c) 1998-2010, Brian Gladman, Worcester, UK. (https://github.com/BrianGladman/sha)
-3rdparty/mINI/*
-	- MIT, Copyright (c) 2018 Danijel Durakovic (https://github.com/pulzed/mINI)
+3rdparty/inih/*
+	- BSD, Copyright (C) 2009-2020, Ben Hoyt (https://github.com/benhoyt/inih)
 3rdparty/miniupnp/*
 	- BSD, Copyright (c) 2005-2017, Thomas BERNARD (http://miniupnp.free.fr)
 3rdparty/optional-lite/*
@@ -73,8 +75,6 @@ lib/exceptionhandler/3rdparty/StackWalker.*
 	- BSD 3-Clause License - Copyright (c) 2005 - 2017, Jochen Kalmbach (https://github.com/JochenKalmbach/StackWalker)
 lib/ivis_opengl/3rdparty/etcpak/*
 	- BSD 3-Clause License, Copyright (c) 2013-2021, Bartosz Taudul <wolf@nereid.pl> (https://github.com/wolfpld/etcpak)
-lib/ivis_opengl/3rdparty/LRUCache11.hpp
-	- ISC License, Copyright (c) 2012-22 SAURAV MOHAPATRA (https://github.com/mohaps/lrucache11)
 lib/ivis_opengl/3rdparty/ska_sort.hpp
 	- Boost Software License 1.0, Copyright Malte Skarupke 2016 (https://github.com/skarupke/ska_sort)
 lib/ivis_opengl/3rdparty/stb_image_resize.h
@@ -87,10 +87,6 @@ lib/sound/3rdparty/opusfile/*
 	- BSD 3-Clause License, Copyright (c) 1994-2020 Xiph.Org Foundation and contributors (https://github.com/xiph/opusfile)
 src/3rdparty/gsl_finally.h
 	- MIT License, Copyright (c) 2015 Microsoft Corporation (https://github.com/microsoft/GSL)
-src/3rdparty/integer_sequence.hpp
-	- CC0, Written in 2017 by Simon Brand (@TartanLlama)
-src/3rdparty/physfs.hpp
-	- Zlib, Copyright (c) 2013 Kevin Howell and others, Copyright (c) 2018 Arthur Brainville (Ybalrid), Copyright (c) 2021 Warzone 2100 Project
 sentry-native
 	- MIT License, Copyright (c) 2019 Sentry (https://sentry.io) and individual contributors. (https://github.com/getsentry/sentry-native)
 ANGLE (libGLESv2, libEGL)

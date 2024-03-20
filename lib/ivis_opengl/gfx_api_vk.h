@@ -28,6 +28,7 @@
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wshadow"
+#pragma clang diagnostic ignored "-Wnewline-eof"
 #endif
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9
 #pragma GCC diagnostic push
@@ -97,6 +98,8 @@ namespace gfx_api
 
 		// Use this function to get the size of the window's underlying drawable dimensions in pixels. This is used for setting viewport sizes, scissor rectangles, and other places where the a VkExtent might show up in relation to the window.
 		virtual void getDrawableSize(int* w, int* h) = 0;
+
+		virtual bool allowImplicitLayers() const = 0;
 	};
 }
 
@@ -236,6 +239,7 @@ struct perFrameResources_t
 	std::vector<WZ_vk::UniqueImageView> image_view_to_delete;
 	std::vector<VmaAllocation> vmamemory_to_free;
 	std::vector<VkPSO*> pso_to_delete;
+	std::vector<vk::Framebuffer> fbo_to_delete;
 
 	BlockBufferAllocator stagingBufferAllocator;
 	BlockBufferAllocator streamedVertexBufferAllocator;
@@ -355,28 +359,6 @@ public:
 	~VkPSOId() {}
 };
 
-struct gfxapi_PipelineCreateInfo
-{
-	gfx_api::state_description state_desc;
-	SHADER_MODE shader_mode;
-	gfx_api::primitive_type primitive;
-	std::vector<std::type_index> uniform_blocks;
-	std::vector<gfx_api::texture_input> texture_desc;
-	std::vector<gfx_api::vertex_buffer> attribute_descriptions;
-
-	gfxapi_PipelineCreateInfo(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
-							  const std::vector<std::type_index>& uniform_blocks,
-							  const std::vector<gfx_api::texture_input>& texture_desc,
-							  const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
-	: state_desc(state_desc)
-	, shader_mode(shader_mode)
-	, primitive(primitive)
-	, uniform_blocks(uniform_blocks)
-	, texture_desc(texture_desc)
-	, attribute_descriptions(attribute_descriptions)
-	{}
-};
-
 struct VkPSO final
 {
 	vk::Pipeline object;
@@ -391,6 +373,8 @@ struct VkPSO final
 	std::vector<vk::Sampler> samplers;
 
 	std::shared_ptr<VkhRenderPassCompat> renderpass_compat;
+	bool hasSpecializationConstant_ShadowConstants = false;
+	bool hasSpecializationConstant_PointLightConstants = false;
 
 private:
 	// Read shader into text buffer
@@ -417,7 +401,7 @@ private:
 public:
 	VkPSO(vk::Device _dev,
 		  const vk::PhysicalDeviceLimits& limits,
-		  const gfxapi_PipelineCreateInfo& createInfo,
+		  const gfx_api::pipeline_create_info& createInfo,
 		  vk::RenderPass rp,
 		  const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 		  vk::SampleCountFlagBits rasterizationSamples,
@@ -454,6 +438,7 @@ struct VkBuf final : public gfx_api::buffer
 
 	virtual void upload(const size_t & size, const void * data) override;
 	virtual void update(const size_t & start, const size_t & size, const void * data, const update_flag flag = update_flag::none) override;
+	virtual size_t current_buffer_size() override;
 
 	virtual void bind() override;
 
@@ -621,6 +606,7 @@ struct VkRoot final : gfx_api::context
 	VkhInfo debugInfo;
 	gfx_api::context::swap_interval_mode swapMode = gfx_api::context::swap_interval_mode::vsync;
 	optional<float> mipLodBias;
+	gfx_api::lighting_constants shadowConstants;
 
 	std::vector<VkExtensionProperties> supportedInstanceExtensionProperties;
 	std::vector<const char*> instanceExtensions;
@@ -667,7 +653,8 @@ struct VkRoot final : gfx_api::context
 	uint32_t currentSwapchainIndex = 0;
 	std::vector<vk::ImageView> swapchainImageView;
 
-	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1;
+	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1; // msaaSamples used for scene
+	vk::SampleCountFlagBits msaaSamplesSwapchain = vk::SampleCountFlagBits::e1; // msaaSamples used for swapchain assets (should generally be 1)
 	vk::Image colorImage;
 	vk::DeviceMemory colorImageMemory;
 	vk::ImageView colorImageView;
@@ -687,6 +674,7 @@ struct VkRoot final : gfx_api::context
 		vk::RenderPass rp;
 		std::shared_ptr<VkhRenderPassCompat> rp_compat_info;
 		std::vector<vk::Framebuffer> fbo;
+		vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1;
 		size_t identifier;
 
 		RenderPassDetails(size_t _identifier)
@@ -701,7 +689,7 @@ struct VkRoot final : gfx_api::context
 	vk::Format depthBufferFormat = vk::Format::eUndefined;
 	uint32_t depthMapSize = 4096;
 	VkDepthMapImage* pDepthMapImage = nullptr;
-	std::vector<vk::ImageView> depthMapCascadeView;
+	std::vector<WZ_vk::UniqueImageView> depthMapCascadeView;
 
 	// scene render pass
 	vk::Format sceneImageFormat = vk::Format::eUndefined;
@@ -716,6 +704,7 @@ struct VkRoot final : gfx_api::context
 	// default textures
 	VkTexture* pDefaultTexture = nullptr;
 	VkTextureArray* pDefaultArrayTexture = nullptr;
+	VkDepthMapImage* pDefaultDepthMapTexture = nullptr;
 
 	// Debug_Utils
 	PFN_vkCreateDebugUtilsMessengerEXT CreateDebugUtilsMessenger = nullptr;
@@ -731,10 +720,10 @@ struct VkRoot final : gfx_api::context
 
 	struct BuiltPipelineRegistry
 	{
-		const gfxapi_PipelineCreateInfo createInfo;
+		const gfx_api::pipeline_create_info createInfo;
 		std::vector<VkPSO *> renderPassPSO;
 
-		BuiltPipelineRegistry(const gfxapi_PipelineCreateInfo& _createInfo, size_t numRenderPasses)
+		BuiltPipelineRegistry(const gfx_api::pipeline_create_info& _createInfo, size_t numRenderPasses)
 		: createInfo(_createInfo)
 		{
 			renderPassPSO.resize(numRenderPasses, nullptr);
@@ -758,11 +747,7 @@ public:
 	VkRoot(bool _debug);
 	~VkRoot();
 
-	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso,
-															const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
-															const std::vector<std::type_index>& uniform_blocks,
-															const std::vector<gfx_api::texture_input>& texture_desc,
-															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions) override;
+	virtual gfx_api::pipeline_state_object * build_pipeline(gfx_api::pipeline_state_object *existing_pso, const gfx_api::pipeline_create_info& createInfo) override;
 
 	virtual void draw(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&) override;
 	virtual void draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&) override;
@@ -797,11 +782,12 @@ private:
 	bool createLogicalDevice();
 	bool createAllocator();
 	void getQueues();
-	bool createSwapchain();
+	bool createSwapchain(bool allowHandleSurfaceLost = true);
 	void rebuildPipelinesIfNecessary();
 
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
 	void createDepthPasses(vk::Format depthFormat);
+	void createDepthPassImagesAndFBOs(vk::Format depthFormat);
 	void createSceneRenderpass(vk::Format sceneFormat, vk::Format depthFormat);
 	void destroySceneRenderpass();
 	void setupSwapchainImages();
@@ -825,6 +811,7 @@ public:
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
 
 	virtual size_t numDepthPasses() override;
+	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual void beginDepthPass(size_t idx) override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual void endCurrentDepthPass() override;
@@ -850,11 +837,13 @@ private:
 	AcquireNextSwapchainImageResult acquireNextSwapchainImage();
 
 	bool handleSurfaceLost();
+	void waitForAllIdle();
 	void destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain);
 	bool createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason);
 
 public:
 	virtual int32_t get_context_value(const gfx_api::context::context_value property) override;
+	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
 	virtual void debugSceneEnd(const char *descr) override;
@@ -869,6 +858,7 @@ public:
 	virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() override;
+	bool isYAxisInverted() const override { return true; }
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
@@ -879,12 +869,16 @@ public:
 	virtual bool supports2DTextureArrays() const override;
 	virtual bool supportsIntVertexAttributes() const override;
 	virtual size_t maxFramesInFlight() const override;
+	virtual gfx_api::lighting_constants getShadowConstants() override;
+	virtual bool setShadowConstants(gfx_api::lighting_constants values) override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;
 	virtual void draw_elements_instanced(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type& primitive, const gfx_api::index_type& index, std::size_t instance_count) override;
+	// debug apis for recompiling pipelines
+	virtual bool debugRecompileAllPipelines() override;
 private:
-	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) override;
+	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	void initPixelFormatsSupport();
 	gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport(gfx_api::pixel_format format) const;
 	std::string calculateFormattedRendererInfoString() const;
@@ -892,6 +886,7 @@ private:
 	const RenderPassDetails& currentRenderPass();
 	RenderPassDetails& defaultRenderpass() { return renderPasses[DEFAULT_RENDER_PASS_ID]; }
 private:
+	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
 	std::string formattedRendererInfoString;
 	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
 	uint32_t lastRenderPassEndTime = 0;

@@ -11,18 +11,18 @@
 //;;
 function camNexusLaugh()
 {
-	const LAUGH_CHANCE = 45;
-	if (camRand(100) < LAUGH_CHANCE)
+	const __LAUGH_CHANCE = 45;
+	if (camRand(100) < __LAUGH_CHANCE)
 	{
-		const LAUGHS = [LAUGH1, LAUGH2, LAUGH3];
-		playSound(LAUGHS[camRand(LAUGHS.length)]);
+		const laughs = [cam_sounds.nexus.laugh1, cam_sounds.nexus.laugh2, cam_sounds.nexus.laugh3];
+		playSound(laughs[camRand(laughs.length)]);
 	}
 }
 
 //;; ## camAbsorbPlayer([who[, to]])
 //;;
 //;; Completely give all of player `who` droids and structures to player `to`.
-//;; Will default to `CAM_HUMAN_PLAYER` and `NEXUS` respectively.
+//;; Will default to `CAM_HUMAN_PLAYER` and `CAM_NEXUS` respectively.
 //;;
 //;; @param {number} [who]
 //;; @param {number} [to]
@@ -36,24 +36,24 @@ function camAbsorbPlayer(who, to)
 	}
 	if (!camDef(to))
 	{
-		to = NEXUS;
+		to = CAM_NEXUS;
 	}
 
-	var units = enumDroid(who);
+	const units = enumDroid(who);
 
 	for (let i = 0, len = units.length; i < len; ++i)
 	{
-		var droid = units[i];
+		const droid = units[i];
 		if (!donateObject(droid, to))
 		{
 			camSafeRemoveObject(droid, false);
 		}
 	}
 
-	var structs = enumStruct(who);
+	const structs = enumStruct(who);
 	for (let i = 0, len = structs.length; i < len; ++i)
 	{
-		var structure = structs[i];
+		const structure = structs[i];
 		if (!donateObject(structure, to))
 		{
 			camSafeRemoveObject(structure, false);
@@ -67,7 +67,7 @@ function camAbsorbPlayer(who, to)
 //;; ## camHackIntoPlayer([player[, to]])
 //;;
 //;; Steal a droid or structure from a player if the NEXUS hack state is active.
-//;; Will default to `CAM_HUMAN_PLAYER` and `NEXUS` respectively.
+//;; Will default to `CAM_HUMAN_PLAYER` and `CAM_NEXUS` respectively.
 //;;
 //;; @param {number} [player]
 //;; @param {number} [to]
@@ -75,14 +75,14 @@ function camAbsorbPlayer(who, to)
 //;;
 function camHackIntoPlayer(player, to)
 {
-	if (__camNexusActivated === false)
+	if (!camGetNexusState())
 	{
 		return;
 	}
 
-	const GIFT_CHANCE = 70; //Else neutralized
-	var target;
-	var objects;
+	const __GIFT_CHANCE = 70; //Else neutralized
+	let target;
+	let objects;
 
 	if (!camDef(player))
 	{
@@ -90,14 +90,14 @@ function camHackIntoPlayer(player, to)
 	}
 	if (!camDef(to))
 	{
-		to = NEXUS;
+		to = CAM_NEXUS;
 	}
 	if (!camDef(__camLastNexusAttack))
 	{
 		__camLastNexusAttack = 0;
 	}
 
-	var objects = __camChooseNexusTarget(player);
+	objects = __camChooseNexusTarget(player);
 	if (objects.length === 0)
 	{
 		return;
@@ -106,7 +106,7 @@ function camHackIntoPlayer(player, to)
 	__camLastNexusAttack = gameTime;
 	target = objects[camRand(objects.length)];
 
-	if ((camRand(100) < GIFT_CHANCE) && !(target.type === STRUCTURE && target.stattype === WALL))
+	if ((camRand(100) < __GIFT_CHANCE) && !(target.type === STRUCTURE && target.stattype === WALL))
 	{
 		camTrace("Hacking " + target.name + " at (x,y): " + target.x + " " + target.y);
 		//Gift sounds are done in eventObjectTransfer.
@@ -120,22 +120,22 @@ function camHackIntoPlayer(player, to)
 		camTrace("Neutralized " + target.name + " at (x,y): " + target.x + " " + target.y);
 		if (target.player === CAM_HUMAN_PLAYER)
 		{
-			var sound;
+			let sound;
 			//Nexus neutralize sounds
 			if (target.type === STRUCTURE)
 			{
 				if (target.stattype === DEFENSE)
 				{
-					sound = DEFENSE_NEUTRALIZE;
+					sound = cam_sounds.nexus.defensesNeutralized;
 				}
 				else
 				{
-					sound = STRUCTURE_NEUTRALIZE;
+					sound = cam_sounds.nexus.structureNeutralized;
 				}
 			}
 			else if (target.type === DROID)
 			{
-				sound = UNIT_NEUTRALIZE;
+				sound = cam_sounds.nexus.unitNeutralized;
 			}
 
 			if (camDef(sound))
@@ -188,14 +188,14 @@ function __camChooseNexusTarget(player)
 		return enumStruct(player, HQ);
 	}
 
-	const TARGET_UNIT_CHANCE = (getResearch("R-Sys-Resistance-Upgrade01").done) ? 40 : 20;
-	var objects = [];
+	const __TARGET_UNIT_CHANCE = (getResearch(cam_resistance_circuits.first).done) ? 40 : 20;
+	let objects = [];
 
-	if (camRand(100) < TARGET_UNIT_CHANCE)
+	if (camRand(100) < __TARGET_UNIT_CHANCE)
 	{
 		objects = enumDroid(player).filter((d) => (!camIsTransporter(d)));
 
-		const EXP = {
+		const exp = {
 			rookie: 0,
 			green: 4,
 			trained: 8,
@@ -214,33 +214,33 @@ function __camChooseNexusTarget(player)
 			{
 				return true; //Final mission has a static fail chance to hack everything.
 			}
-			else if (getResearch("R-Sys-Resistance-Upgrade04").done)
+			else if (getResearch(cam_resistance_circuits.fourth).done)
 			{
 				return false; //Everything is safe
 			}
-			else if (getResearch("R-Sys-Resistance-Upgrade03").done)
+			else if (getResearch(cam_resistance_circuits.third).done)
 			{
 				if (d.droidType === DROID_CONSTRUCT && camRand(100) < 66)
 				{
 					return false;
 				}
-				return d.experience < EXP.regular;
+				return d.experience < exp.regular;
 			}
-			else if (getResearch("R-Sys-Resistance-Upgrade02").done)
+			else if (getResearch(cam_resistance_circuits.second).done)
 			{
 				if (d.droidType === DROID_CONSTRUCT && camRand(100) < 50)
 				{
 					return false;
 				}
-				return d.experience < EXP.veteran;
+				return d.experience < exp.veteran;
 			}
-			else if (getResearch("R-Sys-Resistance-Upgrade01").done)
+			else if (getResearch(cam_resistance_circuits.first).done)
 			{
 				if (d.droidType === DROID_CONSTRUCT && camRand(100) < 20)
 				{
 					return false;
 				}
-				return d.experience < EXP.special;
+				return d.experience < exp.special;
 			}
 			else
 			{
@@ -268,7 +268,7 @@ function __camChooseNexusTarget(player)
 
 		objects = objects.filter((s) => (
 			//cam3-ab is way too annoying if Nexus can still take factories after the second resistance upgrade.
-			!(getResearch("R-Sys-Resistance-Upgrade02").done &&
+			!(getResearch(cam_resistance_circuits.second).done &&
 			(s.stattype === FACTORY || s.stattype === CYBORG_FACTORY || s.stattype === VTOL_FACTORY))
 		));
 	}

@@ -3,7 +3,7 @@ name: warzone2100 # no spaces, all lower-case
 adopt-info: warzone2100 # specify the *part* name
 confinement: strict
 grade: stable
-base: core20
+base: core22
 
 # Enable LZO compression for the snap
 compression: lzo
@@ -18,17 +18,16 @@ architectures:
 layout:
   /usr/share/vulkan:
     symlink: $SNAP/usr/share/vulkan
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_intel.so:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_intel.so
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_radeon.so:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_radeon.so
-#  # Try the following once base is updated to core22
-#  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_broadcom.so:
-#    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_broadcom.so
-#  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_freedreno.so:
-#    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_freedreno.so
-#  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so:
-#    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_intel.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_intel.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_radeon.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_radeon.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_broadcom.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_broadcom.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_freedreno.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_freedreno.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_lvp.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_lvp.so
 
 plugs:
   wz2100-sequences:
@@ -39,13 +38,14 @@ plugs:
 
 apps:
   warzone2100:
-    extensions: [gnome-3-38]
+    extensions: [gnome]
     command: usr/bin/warzone2100-launcher.sh warzone2100
     common-id: net.wz2100.warzone2100 # should match the appdata/metainfo file's <id> field
     desktop: usr/share/applications/net.wz2100.warzone2100.desktop
     environment:
       XDG_DATA_HOME: $SNAP_USER_COMMON
       XDG_CONFIG_HOME: $SNAP_USER_COMMON
+      LIBDECOR_PLUGIN_DIR: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libdecor/plugins-1
     plugs:
       - audio-playback
       - desktop
@@ -60,30 +60,31 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-2.26.4/SDL2-2.26.4.tar.gz
-    source-checksum: sha512/138f52a23d796803c450722c8a4db8226214522e99f1e5ae657e2b28eb45abf0c81c9c3df9ab16f1a07d59722ed9415d64dd04332ff040cdfbbc0329f0d05ce4
-    plugin: autotools
-    autotools-configure-parameters:
-    - --prefix=/usr
-    - --disable-alsa
-    - --disable-arts
-    - --disable-esd
-    - --disable-nas
-    - --disable-oss
+    source: https://github.com/libsdl-org/SDL/releases/download/release-2.28.4/SDL2-2.28.4.tar.gz
+    source-checksum: sha512/16950ccedcfdef42ee6eba1a6bf09ed7231ea0205fe8600388de2aed1aba94da2e5450d16e9732dce9f12569a238730b3727bf64b8699f1fed4cb3c5c94c3eaa
+    plugin: cmake
+    cmake-parameters:
+    - -DCMAKE_INSTALL_PREFIX=/usr
+    - -DSDL_ALSA=OFF
+    - -DSDL_ARTS=OFF
+    - -DSDL_ESD=OFF
+    - -DSDL_NAS=OFF
+    - -DSDL_OSS=OFF
     override-build: |
-      snapcraftctl build
-      sed -i 's|"/usr"|"'"$SNAPCRAFT_STAGE/usr"'"|g' "$SNAPCRAFT_PART_INSTALL/usr/lib/cmake/SDL2/sdl2-config.cmake"
+      craftctl default
     build-packages:
     - git
     - libdbus-1-dev
     - libudev-dev
     - fcitx-libs-dev
+    - libdecor-0-dev
     - libegl1-mesa-dev
     - libgl1-mesa-dev
     - libgles2-mesa-dev
     - libibus-1.0-dev
     - libjack-dev
     - libpulse-dev
+    - libpipewire-0.3-dev
     - libsamplerate0-dev
     - libsndfile1-dev
     - libts-dev
@@ -102,6 +103,8 @@ parts:
     - libxxf86vm-dev
     - libgbm-dev
     stage-packages:
+    - libdecor-0-0
+    - libdecor-0-plugin-1
     - libdbus-1-3
     - libudev1
     - fcitx-libs
@@ -113,6 +116,7 @@ parts:
     - libibus-1.0-5
     - libjack0
     - libpulse0
+    - libpipewire-0.3-0
     - libsamplerate0
     - libts0
     - libsndfile1
@@ -136,8 +140,8 @@ parts:
     plugin: nil
     source: .
     override-build: |
-      mkdir -p "${SNAPCRAFT_PART_INSTALL}/usr/bin"
-      cp -av "${SNAPCRAFT_PART_SRC}/pkg/snap/warzone2100-launcher.sh" "${SNAPCRAFT_PART_INSTALL}/usr/bin/"
+      mkdir -p "${CRAFT_PART_INSTALL}/usr/bin"
+      cp -av "${CRAFT_PART_SRC}/pkg/snap/warzone2100-launcher.sh" "${CRAFT_PART_INSTALL}/usr/bin/"
 
   warzone2100:
     after: [sdl, launcher]
@@ -146,37 +150,40 @@ parts:
     parse-info:
       # Parse this appdata/metainfo file for summary, description,
       # and icon. Use the installed path relative to the Snap's root
-      - usr/share/metainfo/net.wz2100.warzone2100.appdata.xml
+      - usr/share/metainfo/net.wz2100.warzone2100.metainfo.xml
     override-pull: |
-      snapcraftctl pull
+      craftctl default
       SNAP_VERSION_DESC=$(git describe --always | sed 's/[^a-zA-Z0-9\.\:\+\~\-]/~/g')
-      snapcraftctl set-version "${SNAP_VERSION_DESC}"
+      craftctl set version="${SNAP_VERSION_DESC}"
       git submodule update --init
     override-build: |
-      echo "SNAPCRAFT_TARGET_ARCH=${SNAPCRAFT_TARGET_ARCH}"
-      echo "SNAPCRAFT_ARCH_TRIPLET=${SNAPCRAFT_ARCH_TRIPLET}"
+      echo "CRAFT_TARGET_ARCH=${CRAFT_TARGET_ARCH}"
+      echo "CRAFT_ARCH_TRIPLET=${CRAFT_ARCH_TRIPLET}"
       
       # Install Vulkan SDK
-      . "${SNAPCRAFT_PART_SRC}/.ci/snap/install_vulkan_sdk.sh"
+      . "${CRAFT_PART_SRC}/.ci/snap/install_vulkan_sdk.sh"
       
       if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
       set +u
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
-      cmake -S "$SNAPCRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
+      cmake -S "$CRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
       cmake --build . -- -j$SNAPCRAFT_PARALLEL_BUILD_COUNT
-      DESTDIR=$SNAPCRAFT_PART_INSTALL cmake --build . -- install
+      DESTDIR=$CRAFT_PART_INSTALL cmake --build . -- install
       
       # Include the icon's path in the desktop file, not just the name.
       # This needs to happen post-build or the build versioning will show as "modified locally"
-      sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' $SNAPCRAFT_PART_INSTALL/usr/share/applications/net.wz2100.warzone2100.desktop
+      sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' $CRAFT_PART_INSTALL/usr/share/applications/net.wz2100.warzone2100.desktop
+    # Note: Some packages are provided by the gnome extension, and are commented out below
+    # See: https://snapcraft.io/docs/gnome-extension#heading--packages
+    # And: https://github.com/ubuntu/gnome-sdk/blob/gnome-42-2204-sdk/snapcraft.yaml, https://github.com/ubuntu/gnome-sdk/blob/gnome-42-2204/snapcraft.yaml
     build-packages:
       - asciidoctor
-      - g++
+      #- g++
       - gettext
-      - libfontconfig1-dev
+      #- libfontconfig1-dev
       - libfreetype-dev
-      - libfribidi-dev
-      - libharfbuzz-dev
+      #- libfribidi-dev
+      #- libharfbuzz-dev
       - libopenal-dev
       - libphysfs-dev
       - libpng-dev
@@ -193,10 +200,10 @@ parts:
       - wget
       - zip
     stage-packages:
-      - libfontconfig1
+      #- libfontconfig1
       - libfreetype6
-      - libfribidi0
-      - libharfbuzz0b
+      #- libfribidi0
+      #- libharfbuzz0b
       - libogg0
       - libopenal1
       - libopus0
@@ -228,13 +235,13 @@ parts:
       - warzone2100
     plugin: nil
     build-snaps:  # List all content-snaps and base snaps you're using here
-      - core20
+      - core22
       - gtk-common-themes
-      - gnome-3-38-2004
+      - gnome-42-2204
     override-prime: |
       set -eux
-      for snap in "core20" "gtk-common-themes" "gnome-3-38-2004"; do  # List all content-snaps and base snaps you're using here
-          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
       # The following is required while using core18 + gnome-3-34
       # See: https://forum.snapcraft.io/t/undefined-symbol-hb-buffer-set-invisible-glyph-with-gnome-3-34/24287

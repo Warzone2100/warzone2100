@@ -28,13 +28,6 @@ jobs:
       matrix:
         include:
           # Builds with GCC (uploaded as artifacts, and published as release DEBs)
-          - name: "Ubuntu 18.04 [GCC]"
-            docker: "ubuntu-18.04"
-            arch: "amd64"
-            output-suffix: "ubuntu18.04"
-            compiler: gcc
-            publish_artifact: true
-            deploy_release: true
           - name: "Ubuntu 20.04 [GCC]"
             docker: "ubuntu-20.04"
             arch: "amd64"
@@ -42,22 +35,14 @@ jobs:
             output-suffix: "ubuntu20.04"
             publish_artifact: true
             deploy_release: true
-          # Newer builds with GCC (not currently uploaded)
           - name: "Ubuntu 22.04 [GCC]"
             docker: "ubuntu-22.04"
             arch: "amd64"
             output-suffix: "ubuntu22.04"
             compiler: gcc
-            publish_artifact: false
-            deploy_release: false
+            publish_artifact: true
+            deploy_release: true
           # Builds with Clang (not uploaded)
-          - name: "Ubuntu 18.04 [Clang]"
-            docker: "ubuntu-18.04"
-            arch: "amd64"
-            output-suffix: "ubuntu18.04"
-            compiler: clang
-            publish_artifact: false
-            deploy_release: false
           - name: "Ubuntu 20.04 [Clang]"
             docker: "ubuntu-20.04"
             arch: "amd64"
@@ -82,7 +67,7 @@ jobs:
       # Needed by the release + other later jobs - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         path: 'src'
@@ -100,10 +85,6 @@ jobs:
     - name: Init Git Submodules
       working-directory: '${{ github.workspace }}/src'
       run: git submodule update --init --recursive
-    - name: Pull latest base image
-      if: success() && (matrix.docker == 'ubuntu-18.04')
-      run: |
-        docker pull ubuntu:18.04
     - name: Build the Docker image
       working-directory: '${{ github.workspace }}/src'
       run: |
@@ -170,7 +151,7 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/${{ matrix.compiler }}.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build .
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build . -- -k0
         echo "::remove-matcher owner=${{ matrix.compiler }}::"
     - name: Package .DEB
       working-directory: '${{ github.workspace }}/build'
@@ -193,7 +174,7 @@ jobs:
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "WZ_FULL_OUTPUT_DEB_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: success() && (matrix.publish_artifact == true)
       with:
         name: "warzone2100_${{ matrix.output-suffix }}_${{ matrix.arch }}_deb"
@@ -207,7 +188,7 @@ jobs:
         WZ_EXECUTABLE_PATH="${WZ_BUILD_DIR}/src/warzone2100${WZ_OUTPUT_NAME_SUFFIX}"
         objcopy --only-keep-debug "${WZ_EXECUTABLE_PATH}" "warzone2100${WZ_OUTPUT_NAME_SUFFIX}.debug"
     - name: Upload debug info
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: success() && (matrix.publish_artifact == true)
       with:
         name: 'debugsymbols_${{ matrix.output-suffix }}_${{ matrix.arch }}'
@@ -235,7 +216,7 @@ jobs:
       run: |
         echo "GITHUB_REF=${GITHUB_REF}"
         echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         path: 'src'
@@ -292,7 +273,7 @@ jobs:
         echo "Generated warzone2100 tarball: \"warzone2100_src.tar.xz\""
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/warzone2100_src.tar.xz")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/warzone2100_src.tar.xz")"
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: success()
       with:
         name: warzone2100_src
@@ -329,7 +310,7 @@ jobs:
         run: |
           mkdir dl-debug-symbols
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: 'debugsymbols_${{ matrix.output-suffix }}_${{ matrix.arch }}'
           path: ./dl-debug-symbols
@@ -356,7 +337,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
   #   steps:
-  #   - uses: actions/checkout@v3
+  #   - uses: actions/checkout@v4
   #     with:
   #       fetch-depth: 0
   #   - name: Prepare Git Repo for autorevision

@@ -59,6 +59,7 @@ using nonstd::nullopt;
 #define pie_STATIC_SHADOW       0x100
 #define pie_PREMULTIPLIED       0x200
 #define pie_NODEPTHWRITE        0x400
+#define pie_FORCELIGHT          0x800
 
 #define pie_RAISE_SCALE			256
 
@@ -100,10 +101,12 @@ enum SHADER_MODE
 	SHADER_NONE,
 	SHADER_COMPONENT,
 	SHADER_COMPONENT_INSTANCED,
+	SHADER_COMPONENT_DEPTH_INSTANCED,
 	SHADER_NOLIGHT,
 	SHADER_NOLIGHT_INSTANCED,
 	SHADER_TERRAIN,
 	SHADER_TERRAIN_DEPTH,
+	SHADER_TERRAIN_DEPTHMAP,
 	SHADER_DECALS,
 	SHADER_WATER,
 	SHADER_RECT,
@@ -239,6 +242,8 @@ public:
 	bool blit_image(const iV_Image& other, unsigned int xOffset, unsigned int yOffset);
 
 	bool convert_color_order(ColorOrder newOrder);
+
+	bool compare_equal(const iV_Image& other);
 
 private:
 	bool resizeInternal(const iV_Image& source, int output_w, int output_h, optional<int> alphaChannelOverride = nullopt);

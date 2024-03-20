@@ -34,15 +34,9 @@
 #define __STDC_LIMIT_MACROS
 #endif
 
-#if defined(HAVE_CONFIG_H)
-#  undef _XOPEN_SOURCE
-#  include "config.h"
-#elif !defined(HAVE_CONFIG_H)
-#  define PACKAGE "warzone2100"
-#  define PACKAGE_BUGREPORT "http://wz2100.net/"
-#  define PACKAGE_NAME "Warzone 2100"
-#  define PACKAGE_TARNAME "warzone2100"
-#endif
+// Always include generated config.h
+#undef _XOPEN_SOURCE
+#include "wz2100-generated-config.h"
 
 
 /* ---- Platform detection ---- */
@@ -161,6 +155,7 @@
 #elif defined(__INTEGRITY)
 #  define WZ_OS_INTEGRITY
 #elif defined(__MAKEDEPEND__)
+#elif defined(__EMSCRIPTEN__)
 #else
 #  error "Warzone has not been tested on this OS. Please contact warzone2100-project@lists.sourceforge.net"
 #endif /* WZ_OS_x */
@@ -553,6 +548,7 @@
 #  undef NOMINMAX
 #  define NOMINMAX 1		// disable the min / max macros
 #  include <windows.h>
+#  include <algorithm>
 
 #  if defined(WZ_CC_MSVC)
 

@@ -27,6 +27,7 @@
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
+#include <array>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzstring.h"
@@ -35,6 +36,8 @@
 #include "gfx_api_formats_def.h"
 
 #include <glm/glm.hpp>
+
+#include "shadows.h"
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -158,6 +161,8 @@ namespace gfx_api
 		//       (i.e. Don't re-use a buffer instance for different data in the same frame - use separate buffer instances.)
 		virtual void update(const size_t& start, const size_t& size, const void* data, const update_flag flag = update_flag::none) = 0;
 
+		virtual size_t current_buffer_size() = 0;
+
 		virtual void bind() = 0;
 
 		virtual ~buffer() {};
@@ -199,6 +204,7 @@ namespace gfx_api
 	{
 		back,
 		front,
+		shadow_mapping,
 		none,
 	};
 
@@ -259,6 +265,7 @@ namespace gfx_api
 	{
 		bilinear,
 		bilinear_repeat,
+		bilinear_border,
 		anisotropic,
 		nearest_clamped,
 		nearest_border,
@@ -289,6 +296,44 @@ namespace gfx_api
 	{
 		virtual ~pipeline_state_object() {}
 		bool broken = false;
+	};
+
+	struct pipeline_create_info
+	{
+		gfx_api::state_description state_desc;
+		SHADER_MODE shader_mode;
+		gfx_api::primitive_type primitive;
+		std::vector<std::type_index> uniform_blocks;
+		std::vector<gfx_api::texture_input> texture_desc;
+		std::vector<gfx_api::vertex_buffer> attribute_descriptions;
+
+		pipeline_create_info(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+								  const std::vector<std::type_index>& uniform_blocks,
+								  const std::vector<gfx_api::texture_input>& texture_desc,
+								  const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
+		: state_desc(state_desc)
+		, shader_mode(shader_mode)
+		, primitive(primitive)
+		, uniform_blocks(uniform_blocks)
+		, texture_desc(texture_desc)
+		, attribute_descriptions(attribute_descriptions)
+		{}
+	};
+
+	struct lighting_constants
+	{
+		uint32_t shadowMode = 1;
+		uint32_t shadowFilterSize = 5;
+		uint32_t shadowCascadesCount = WZ_MAX_SHADOW_CASCADES;
+		bool isPointLightPerPixelEnabled = false;
+
+		bool operator==(const lighting_constants& rhs) const
+		{
+			return shadowMode == rhs.shadowMode
+			&& shadowFilterSize == rhs.shadowFilterSize
+			&& shadowCascadesCount == rhs.shadowCascadesCount
+			&& isPointLightPerPixelEnabled == rhs.isPointLightPerPixelEnabled;
+		}
 	};
 
 	struct context
@@ -325,12 +370,7 @@ namespace gfx_api
 		virtual texture_array* create_texture_array(const size_t& mipmap_count, const size_t& layer_count, const size_t& width, const size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename = "") = 0;
 		virtual buffer* create_buffer_object(const buffer::usage&, const buffer_storage_hint& = buffer_storage_hint::static_draw, const std::string& debugName = "") = 0;
 		virtual pipeline_state_object* build_pipeline(pipeline_state_object* existing_pso,
-													  const state_description&,
-													  const SHADER_MODE&,
-													  const gfx_api::primitive_type& primitive,
-													  const std::vector<std::type_index>& uniform_blocks,
-													  const std::vector<gfx_api::texture_input>& texture_desc,
-													  const std::vector<vertex_buffer>& attribute_descriptions) = 0;
+													  const pipeline_create_info& createInfo) = 0;
 		virtual void bind_pipeline(pipeline_state_object*, bool notextures) = 0;
 		virtual void bind_index_buffer(buffer&, const index_type&) = 0;
 		virtual void unbind_index_buffer(buffer&) = 0;
@@ -346,9 +386,12 @@ namespace gfx_api
 		virtual void set_polygon_offset(const float& offset, const float& slope) = 0;
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
+		virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) = 0;
 		static context& get();
-		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, gfx_api::backend_type backend);
+		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backend);
+		static bool isInitialized();
 		virtual size_t numDepthPasses() { return 0; }
+		virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) { return false; }
 		virtual void beginDepthPass(size_t idx) { }
 		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
 		virtual void endCurrentDepthPass() { }
@@ -372,6 +415,7 @@ namespace gfx_api
 		virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) = 0;
 		virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) = 0;
 		virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() = 0;
+		virtual bool isYAxisInverted() const = 0;
 		virtual bool shouldDraw() = 0;
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;
@@ -382,13 +426,17 @@ namespace gfx_api
 		virtual bool supports2DTextureArrays() const = 0;
 		virtual bool supportsIntVertexAttributes() const = 0;
 		virtual size_t maxFramesInFlight() const = 0;
+		virtual lighting_constants getShadowConstants() = 0;
+		virtual bool setShadowConstants(lighting_constants values) = 0;
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
 		virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const primitive_type &primitive, std::size_t instance_count) = 0;
 		virtual void draw_elements_instanced(const std::size_t& offset, const std::size_t& count, const primitive_type& primitive, const index_type& index, std::size_t instance_count) = 0;
+		// debug apis for recompiling pipelines
+		virtual bool debugRecompileAllPipelines() = 0;
 	public:
 		// High-level API for getting a texture object from file / uncompressed bitmap
-		gfx_api::texture* loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
+		gfx_api::texture* loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool quiet = false);
 		gfx_api::texture* loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 		typedef std::function<std::unique_ptr<iV_Image> (int width, int height, int channels)> GenerateDefaultTextureFunc;
 		gfx_api::texture_array* loadTextureArrayFromFiles(const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::function<void ()>& progressCallback = nullptr, const std::string& debugName = "");
@@ -402,7 +450,7 @@ namespace gfx_api
 
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 	private:
-		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias) = 0;
+		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
 	// High-level API for getting an uncompressed image (iV_Image) from a file
@@ -546,7 +594,7 @@ namespace gfx_api
 
 		bool recompile()
 		{
-			nextpso = gfx_api::context::get().build_pipeline(pso, rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
+			nextpso = gfx_api::context::get().build_pipeline(pso, pipeline_create_info(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{})));
 			return nextpso != nullptr && !nextpso->broken;
 		}
 
@@ -613,65 +661,12 @@ namespace gfx_api
 	// NOTE: Be very careful changing these constant_buffer_type structs;
 	//		 they must match std140 layout rules (see: the Vulkan shaders)
 
-	template<>
-	struct constant_buffer_type<SHADER_COMPONENT>
-	{
-		glm::vec4 colour;
-		glm::vec4 teamcolour;
-		float shaderStretch;
-		int tcmask;
-		int fogEnabled;
-		int normalMap;
-		int specularMap;
-		int ecmState;
-		int alphaTest;
-		float timeState;
-		glm::mat4 ModelViewMatrix;
-		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 NormalMatrix;
-		glm::vec4 sunPos;
-		glm::vec4 sceneColor;
-		glm::vec4 ambient;
-		glm::vec4 diffuse;
-		glm::vec4 specular;
-		glm::vec4 fogColour;
-		float fogEnd;
-		float fogBegin;
-		int hasTangents;
-	};
-
-	template<>
-	struct constant_buffer_type<SHADER_NOLIGHT>
-	{
-		glm::vec4 colour;
-		glm::vec4 teamcolour;
-		float shaderStretch;
-		int tcmask;
-		int fogEnabled;
-		int normalMap;
-		int specularMap;
-		int ecmState;
-		int alphaTest;
-		float timeState;
-		glm::mat4 ModelViewMatrix;
-		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 NormalMatrix;
-		glm::vec4 sunPos;
-		glm::vec4 sceneColor;
-		glm::vec4 ambient;
-		glm::vec4 diffuse;
-		glm::vec4 specular;
-		glm::vec4 fogColour;
-		float fogEnd;
-		float fogBegin;
-		int hasTangents;
-	};
-
 	// Only change once per frame
 	struct Draw3DShapeGlobalUniforms
 	{
 		glm::mat4 ProjectionMatrix;
 		glm::mat4 ViewMatrix;
+		glm::mat4 ShadowMapMVPMatrix;
 		glm::vec4 sunPos;
 		glm::vec4 sceneColor;
 		glm::vec4 ambient;
@@ -739,6 +734,47 @@ namespace gfx_api
 	using Draw3DShapeAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_COMPONENT, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeNoLightAlphaNoDepthWRT = Draw3DShape<REND_ALPHA, SHADER_NOLIGHT, DEPTH_CMP_LEQ_WRT_OFF>;
 
+	constexpr size_t max_lights = 128;
+	constexpr size_t max_indexed_lights = 512;
+	constexpr size_t bucket_dimension = 8;
+
+	// Only change once per frame
+	struct Draw3DShapeInstancedGlobalUniforms
+	{
+		glm::mat4 ProjectionMatrix;
+		glm::mat4 ViewMatrix;
+		glm::mat4 ModelUVLightmapMatrix;
+		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+		glm::vec4 sunPos;
+		glm::vec4 sceneColor;
+		glm::vec4 ambient;
+		glm::vec4 diffuse;
+		glm::vec4 specular;
+		glm::vec4 fogColour;
+		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
+		int ShadowMapSize;
+		float fogEnd;
+		float fogBegin;
+		float timeState; // graphicsCycle
+		int fogEnabled;
+		int viewportWidth;
+		int viewportheight;
+		float unused2;
+		std::array<glm::vec4, max_lights> PointLightsPosition;
+		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
+		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
+		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
+	};
+
+	// Only change per mesh
+	struct Draw3DShapeInstancedPerMeshUniforms
+	{
+		int tcmask;
+		int normalMap;
+		int specularMap;
+		int hasTangents;
+	};
+
 	// interleaved vertex data
 	struct Draw3DShapePerInstanceInterleavedData
 	{
@@ -758,8 +794,8 @@ namespace gfx_api
 	template<REND_MODE render_mode, SHADER_MODE shader, DEPTH_MODE depth_mode>
 	using Draw3DShapeInstanced = typename gfx_api::pipeline_state_helper<rasterizer_state<render_mode, depth_mode, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
 	std::tuple<
-	Draw3DShapeGlobalUniforms,
-	Draw3DShapePerMeshUniforms
+	Draw3DShapeInstancedGlobalUniforms,
+	Draw3DShapeInstancedPerMeshUniforms
 	>,
 	std::tuple<
 	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
@@ -781,7 +817,9 @@ namespace gfx_api
 	texture_description<0, sampler_type::anisotropic>, // diffuse
 	texture_description<1, sampler_type::bilinear>, // team color mask
 	texture_description<2, sampler_type::anisotropic>, // normal map
-	texture_description<3, sampler_type::anisotropic> // specular map
+	texture_description<3, sampler_type::anisotropic>, // specular map
+	texture_description<4, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
+	texture_description<5, sampler_type::bilinear> // lightmap
 	>, shader>;
 
 	using Draw3DShapeOpaque_Instanced = Draw3DShapeInstanced<REND_OPAQUE, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_ON>;
@@ -797,6 +835,33 @@ namespace gfx_api
 	using Draw3DShapeNoLightAlphaNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ALPHA, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeAdditiveNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ADDITIVE, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeNoLightAdditiveNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ADDITIVE, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
+
+	struct Draw3DShapeInstancedDepthOnlyGlobalUniforms
+	{
+		glm::mat4 ProjectionMatrix;
+		glm::mat4 ViewMatrix;
+	};
+
+	using Draw3DShapeDepthOnly_Instanced = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::shadow_mapping>, primitive_type::triangles, index_type::u16,
+	std::tuple<
+	Draw3DShapeInstancedDepthOnlyGlobalUniforms
+	>,
+	std::tuple<
+	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
+	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>,
+//	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float4, 0>>,
+//	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<tangent, gfx_api::vertex_attribute_type::float4, 0>>,
+	// instance data
+	vertex_buffer_description<sizeof(Draw3DShapePerInstanceInterleavedData), gfx_api::vertex_attribute_input_rate::instance,
+		vertex_attribute_description<instance_modelMatrix, gfx_api::vertex_attribute_type::float4, 0>,
+		vertex_attribute_description<instance_modelMatrix + 1, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)>,
+		vertex_attribute_description<instance_modelMatrix + 2, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*2>,
+		vertex_attribute_description<instance_modelMatrix + 3, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*3>,
+		vertex_attribute_description<instance_packedValues, gfx_api::vertex_attribute_type::float4, offsetof(Draw3DShapePerInstanceInterleavedData, shaderStretch_ecmState_alphaTest_animFrameNumber)>,
+		vertex_attribute_description<instance_Colour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(Draw3DShapePerInstanceInterleavedData, colour)>,
+		vertex_attribute_description<instance_TeamColour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(Draw3DShapePerInstanceInterleavedData, teamcolour)>
+		>
+	>, notexture, SHADER_COMPONENT_DEPTH_INSTANCED>;
 
 	template<>
 	struct constant_buffer_type<SHADER_GENERIC_COLOR>
@@ -845,6 +910,29 @@ namespace gfx_api
 	std::tuple<
 		TerrainVertexVBODescription
 	>, std::tuple<texture_description<0, sampler_type::bilinear_repeat>>, SHADER_TERRAIN_DEPTH>;
+
+	template<>
+	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>
+	{
+		glm::mat4 transform_matrix;
+//		glm::vec4 paramX;
+//		glm::vec4 paramY;
+//		glm::vec4 paramXLight;
+//		glm::vec4 paramYLight;
+//		glm::mat4 unused;
+//		glm::mat4 texture_matrix;
+//		glm::vec4 fog_colour;
+		int fog_enabled;
+		float fog_begin;
+		float fog_end;
+//		int texture0;
+	};
+
+	using TerrainDepthOnlyForDepthMap = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>>,
+	std::tuple<
+		TerrainVertexVBODescription
+	>, std::tuple<texture_description<0, sampler_type::bilinear_repeat>>, SHADER_TERRAIN_DEPTHMAP>;
 
 	template<>
 	struct constant_buffer_type<SHADER_TERRAIN>
@@ -906,10 +994,15 @@ namespace gfx_api
 		PIELIGHT groundWeights; // weights of corresponding ground textures. encoded as rgba floats
 	};
 
+	static_assert(WZ_MAX_SHADOW_CASCADES <= 4, "Packing the ShadowMapCascadeSplits into a vec4 won't work...");
+
+
 	struct TerrainCombinedUniforms
 	{
 		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
+		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 		glm::mat4 groundScale; // array of scales for ground textures, encoded in mat4. scale_i = groundScale[i/4][i%4]
 		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos; // in modelSpace
@@ -918,10 +1011,19 @@ namespace gfx_api
 		glm::vec4 diffuseLight;
 		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
+		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
+		int ShadowMapSize;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
 		int quality;
+		int viewportWidth;
+		int viewportheight;
+		float  unused2;
+		std::array<glm::vec4, max_lights> PointLightsPosition;
+		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
+		std::array<glm::ivec4, 64> bucketOffsetAndSize;
+		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>
@@ -946,7 +1048,8 @@ namespace gfx_api
 	texture_description<5, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal
 	texture_description<6, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal normal
 	texture_description<7, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal specular
-	texture_description<8, sampler_type::anisotropic, pixel_format_target::texture_2d_array>  // decal height
+	texture_description<8, sampler_type::anisotropic, pixel_format_target::texture_2d_array>,  // decal height
+	texture_description<9, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
 	>, shader>;
 
 	using TerrainCombined_Classic = TerrainCombinedTemplate<REND_ALPHA, SHADER_TERRAIN_COMBINED_CLASSIC>;
@@ -971,7 +1074,6 @@ namespace gfx_api
 		float fog_begin;
 		float fog_end;
 		float timeSec;
-		int quality;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -981,32 +1083,46 @@ namespace gfx_api
 	>, std::tuple<
 		texture_description<0, sampler_type::anisotropic_repeat>, // tex1
 		texture_description<1, sampler_type::anisotropic_repeat>, // tex2
-		texture_description<2, sampler_type::anisotropic_repeat>, // normal map1
-		texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
-		texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
-		texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
-		texture_description<6, sampler_type::bilinear> // lightmap
+		texture_description<2, sampler_type::bilinear> // lightmap
 	>, SHADER_WATER>;
 
+	template<>
+	struct constant_buffer_type<SHADER_WATER_HIGH>
+	{
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelUVLightmapMatrix;
+		glm::mat4 ModelUV1Matrix;
+		glm::mat4 ModelUV2Matrix;
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
+		glm::vec4 emissiveLight; // light colors/intensity
+		glm::vec4 ambientLight;
+		glm::vec4 diffuseLight;
+		glm::vec4 specularLight;
+		glm::vec4 fog_colour;
+		int fog_enabled;
+		float fog_begin;
+		float fog_end;
+		float timeSec;
+	};
+
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
-	std::tuple<constant_buffer_type<SHADER_WATER>>,
+	std::tuple<constant_buffer_type<SHADER_WATER_HIGH>>,
 	std::tuple<
 	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
 	>, std::tuple<
-		texture_description<0, sampler_type::anisotropic_repeat>, // tex1
-		texture_description<1, sampler_type::anisotropic_repeat>, // tex2
-		texture_description<2, sampler_type::anisotropic_repeat>, // normal map1
-		texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
-		texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
-		texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
-		texture_description<6, sampler_type::bilinear> // lightmap
-	>, SHADER_WATER>;
+		texture_description<0, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // textures
+		texture_description<1, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // normal maps
+		texture_description<2, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // specular maps
+		texture_description<3, sampler_type::bilinear> // lightmap
+	>, SHADER_WATER_HIGH>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER_CLASSIC>
 	{
 		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
+		glm::mat4 ShadowMapMVPMatrix;
 		glm::mat4 ModelUV1Matrix;
 		glm::mat4 ModelUV2Matrix;
 		glm::vec4 cameraPos; // in modelSpace
@@ -1039,7 +1155,7 @@ namespace gfx_api
 		glm::vec2 offset;
 		glm::vec2 size;
 		glm::vec4 color;
-		int texture;
+		int texture; // IGNORED
 	};
 
 	template<>
@@ -1090,7 +1206,7 @@ namespace gfx_api
 		glm::vec2 offset;
 		glm::vec2 size;
 		glm::vec4 color;
-		int texture;
+		int texture; // IGNORED
 	};
 
 	using DrawImageTextPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_TEXT, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangle_strip, index_type::u16,
@@ -1127,7 +1243,7 @@ namespace gfx_api
 		glm::vec2 offset;
 		glm::vec2 size;
 		glm::vec4 color;
-		int texture;
+		int texture; // IGNORED
 	};
 
 	using DrawImagePSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangle_strip, index_type::u16,

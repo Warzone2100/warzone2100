@@ -45,7 +45,7 @@ struct KeyMapping
 
 	bool hasMeta() const;
 
-	bool toString(char* pOutStr) const;
+	std::string toString() const;
 };
 
 bool operator==(const KeyMapping& lhs, const KeyMapping& rhs);
@@ -58,6 +58,7 @@ public:
 	KeyMapping& add(const KeyCombination keys, const KeyFunctionInfo& info, const KeyMappingSlot slot);
 
 	nonstd::optional<std::reference_wrapper<KeyMapping>> get(const KeyFunctionInfo& info, const KeyMappingSlot slot);
+	nonstd::optional<std::reference_wrapper<KeyMapping>> get(const std::string& name, const KeyMappingSlot slot);
 
 	/* Finds all mappings with matching meta and input */
 	std::vector<std::reference_wrapper<KeyMapping>> find(const KEY_CODE meta, const KeyMappingInput input);

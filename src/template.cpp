@@ -227,7 +227,7 @@ bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
 }
 
 // A way to check if a design is something someone could legitimately have in multiplayer
-bool designableTemplate(DROID_TEMPLATE *psTempl, int player)
+bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 {
 	if (!bMultiPlayer || !isHumanPlayer(player))
 	{
@@ -253,53 +253,53 @@ bool designableTemplate(DROID_TEMPLATE *psTempl, int player)
 		psTempl->droidType == DROID_CYBORG_REPAIR)
 	{
 		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
-						(!designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") && asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]].usageClass == UsageClass::Cyborg) ||
+						(!designablePart(*psTempl->getRepairStats(), "Repair unit") && psTempl->getRepairStats()->usageClass == UsageClass::Cyborg) ||
 						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
-		bool isSuperCyborg = asBodyStats[psTempl->asParts[COMP_BODY]].usageClass == UsageClass::SuperCyborg;
+		bool isSuperCyborg = psTempl->getBodyStats()->usageClass == UsageClass::SuperCyborg;
 
 		designable =
-			   !designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")
-			&& (strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Cyborgs") == 0)
-			&& !designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
-			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LEGGED
-			&& asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].usageClass == UsageClass::Cyborg
+			   !designablePart(*psTempl->getBodyStats(), "Body")
+			&& (strcmp(psTempl->getBodyStats()->bodyClass.toStdString().c_str(), "Cyborgs") == 0)
+			&& !designablePart(*psTempl->getPropulsionStats(), "Propulsion")
+			&& psTempl->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LEGGED
+			&& psTempl->getPropulsionStats()->usageClass == UsageClass::Cyborg
 			&& repair
-			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(asBrainStats[psTempl->asParts[COMP_BRAIN]], "Brain") && asBrainStats[psTempl->asParts[COMP_BRAIN]].usageClass == UsageClass::Cyborg))
-			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(asECMStats[psTempl->asParts[COMP_ECM]], "ECM") && asECMStats[psTempl->asParts[COMP_ECM]].usageClass == UsageClass::Cyborg))
-			&& ((psTempl->asParts[COMP_SENSOR] == 0) || (!designablePart(asSensorStats[psTempl->asParts[COMP_SENSOR]], "Sensor") && asSensorStats[psTempl->asParts[COMP_SENSOR]].usageClass == UsageClass::Cyborg))
-			&& ((psTempl->asParts[COMP_CONSTRUCT] == 0) || (!designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]], "Construction part") && asConstructStats[psTempl->asParts[COMP_CONSTRUCT]].usageClass == UsageClass::Cyborg))
-			&& ((psTempl->numWeaps <= 0) || (asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]])
-				|| (!designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[0]].usageClass == UsageClass::SuperCyborg))))
-			&& ((psTempl->numWeaps <= 1) || (!designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[1]].usageClass == UsageClass::SuperCyborg))))
-			&& ((psTempl->numWeaps <= 2) || (!designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2") && ((!isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::Cyborg) || (isSuperCyborg && asWeaponStats[psTempl->asWeaps[2]].usageClass == UsageClass::SuperCyborg))));
+			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(*psTempl->getBrainStats(), "Brain") && psTempl->getBrainStats()->usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(*psTempl->getECMStats(), "ECM") && psTempl->getECMStats()->usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_SENSOR] == 0) || (!designablePart(*psTempl->getSensorStats(), "Sensor") && psTempl->getSensorStats()->usageClass == UsageClass::Cyborg))
+			&& ((psTempl->asParts[COMP_CONSTRUCT] == 0) || (!designablePart(*psTempl->getConstructStats(), "Construction part") && psTempl->getConstructStats()->usageClass == UsageClass::Cyborg))
+			&& ((psTempl->numWeaps <= 0) || (psTempl->getBrainStats()->psWeaponStat == psTempl->getWeaponStats(0))
+				|| (!designablePart(*psTempl->getWeaponStats(0), "Weapon 0") && ((!isSuperCyborg && psTempl->getWeaponStats(0)->usageClass == UsageClass::Cyborg) || (isSuperCyborg && psTempl->getWeaponStats(0)->usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 1) || (!designablePart(*psTempl->getWeaponStats(1), "Weapon 1") && ((!isSuperCyborg && psTempl->getWeaponStats(1)->usageClass == UsageClass::Cyborg) || (isSuperCyborg && psTempl->getWeaponStats(1)->usageClass == UsageClass::SuperCyborg))))
+			&& ((psTempl->numWeaps <= 2) || (!designablePart(*psTempl->getWeaponStats(2), "Weapon 2") && ((!isSuperCyborg && psTempl->getWeaponStats(2)->usageClass == UsageClass::Cyborg) || (isSuperCyborg && psTempl->getWeaponStats(2)->usageClass == UsageClass::SuperCyborg))));
 	}
 	else
 	{
 		bool repair = ((psTempl->asParts[COMP_REPAIRUNIT] == 0) ||
-						designablePart(asRepairStats[psTempl->asParts[COMP_REPAIRUNIT]], "Repair unit") ||
+						designablePart(*psTempl->getRepairStats(), "Repair unit") ||
 						(psTempl->asParts[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(player)));
 		bool transporter = (psTempl->droidType == DROID_TRANSPORTER) || (psTempl->droidType == DROID_SUPERTRANSPORTER);
 
 		designable =
-			   (transporter || (!transporter && designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body")))
-			&& designablePart(asPropulsionStats[psTempl->asParts[COMP_PROPULSION]], "Propulsion")
-			&& (psTempl->asParts[COMP_BRAIN]      == 0 || designablePart(asBrainStats    [psTempl->asParts[COMP_BRAIN]],      "Brain"))
+			   (transporter || (!transporter && designablePart(*psTempl->getBodyStats(), "Body")))
+			&& designablePart(*psTempl->getPropulsionStats(), "Propulsion")
+			&& (psTempl->asParts[COMP_BRAIN]      == 0 || designablePart(*psTempl->getBrainStats(), "Brain"))
 			&& repair
-			&& (psTempl->asParts[COMP_ECM]        == 0 || designablePart(asECMStats      [psTempl->asParts[COMP_ECM]],        "ECM"))
-			&& (psTempl->asParts[COMP_SENSOR]     == 0 || designablePart(asSensorStats   [psTempl->asParts[COMP_SENSOR]],     "Sensor"))
-			&& (psTempl->asParts[COMP_CONSTRUCT]  == 0 || designablePart(asConstructStats[psTempl->asParts[COMP_CONSTRUCT]],  "Construction part"))
-			&& (psTempl->numWeaps <= 0 || asBrainStats[psTempl->asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[psTempl->asWeaps[0]]
-									 || designablePart(asWeaponStats[psTempl->asWeaps[0]], "Weapon 0"))
-			&& (psTempl->numWeaps <= 1 || designablePart(asWeaponStats[psTempl->asWeaps[1]], "Weapon 1"))
-			&& (psTempl->numWeaps <= 2 || designablePart(asWeaponStats[psTempl->asWeaps[2]], "Weapon 2"));
+			&& (psTempl->asParts[COMP_ECM]        == 0 || designablePart(*psTempl->getECMStats(), "ECM"))
+			&& (psTempl->asParts[COMP_SENSOR]     == 0 || designablePart(*psTempl->getSensorStats(), "Sensor"))
+			&& (psTempl->asParts[COMP_CONSTRUCT]  == 0 || designablePart(*psTempl->getConstructStats(), "Construction part"))
+			&& (psTempl->numWeaps <= 0 || psTempl->getBrainStats()->psWeaponStat == psTempl->getWeaponStats(0)
+									 || designablePart(*psTempl->getWeaponStats(0), "Weapon 0"))
+			&& (psTempl->numWeaps <= 1 || designablePart(*psTempl->getWeaponStats(1), "Weapon 1"))
+			&& (psTempl->numWeaps <= 2 || designablePart(*psTempl->getWeaponStats(2), "Weapon 2"));
 
 		if (transporter && designable)
 		{
-			designable = (asPropulsionStats[psTempl->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) &&
-						!designablePart(asBodyStats[psTempl->asParts[COMP_BODY]], "Body");
+			designable = (psTempl->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT) &&
+						!designablePart(*psTempl->getBodyStats(), "Body");
 			if (designable)
 			{
-				designable = strcmp(asBodyStats[psTempl->asParts[COMP_BODY]].bodyClass.toStdString().c_str(), "Transports") == 0;
+				designable = strcmp(psTempl->getBodyStats()->bodyClass.toStdString().c_str(), "Transports") == 0;
 			}
 		}
 	}
@@ -404,40 +404,40 @@ nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 	case DROID_DEFAULT: templateObj["type"] = "DROID"; break;
 	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().c_str());
 	}
-	ASSERT(psCurr->asParts[COMP_BODY] < numBodyStats, "asParts[COMP_BODY] (%d) exceeds numBodyStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BODY], numBodyStats);
-	templateObj["body"] = (asBodyStats + psCurr->asParts[COMP_BODY])->id;
-	ASSERT(psCurr->asParts[COMP_PROPULSION] < numPropulsionStats, "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_PROPULSION], numPropulsionStats);
-	templateObj["propulsion"] = (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id;
+	ASSERT(psCurr->asParts[COMP_BODY] < asBodyStats.size(), "asParts[COMP_BODY] (%d) exceeds numBodyStats (%zu)", (int)psCurr->asParts[COMP_BODY], asBodyStats.size());
+	templateObj["body"] = psCurr->getBodyStats()->id;
+	ASSERT(psCurr->asParts[COMP_PROPULSION] < asPropulsionStats.size(), "asParts[COMP_PROPULSION] (%d) exceeds numPropulsionStats (%zu)", (int)psCurr->asParts[COMP_PROPULSION], asPropulsionStats.size());
+	templateObj["propulsion"] = psCurr->getPropulsionStats()->id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
 	{
-		ASSERT(psCurr->asParts[COMP_BRAIN] < numBrainStats, "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_BRAIN], numBrainStats);
-		templateObj["brain"] = (asBrainStats + psCurr->asParts[COMP_BRAIN])->id;
+		ASSERT(psCurr->asParts[COMP_BRAIN] < asBrainStats.size(), "asParts[COMP_BRAIN] (%d) exceeds numBrainStats (%zu)", (int)psCurr->asParts[COMP_BRAIN], asBrainStats.size());
+		templateObj["brain"] = psCurr->getBrainStats()->id;
 	}
-	if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
+	if (psCurr->getRepairStats()->location == LOC_TURRET) // avoid auto-repair...
 	{
-		ASSERT(psCurr->asParts[COMP_REPAIRUNIT] < numRepairStats, "asParts[COMP_REPAIRUNIT] (%d) exceeds numRepairStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_REPAIRUNIT], numRepairStats);
-		templateObj["repair"] = (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id;
+		ASSERT(psCurr->asParts[COMP_REPAIRUNIT] < asRepairStats.size(), "asParts[COMP_REPAIRUNIT] (%d) exceeds numRepairStats (%zu)", (int)psCurr->asParts[COMP_REPAIRUNIT], asRepairStats.size());
+		templateObj["repair"] = psCurr->getRepairStats()->id;
 	}
-	if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
+	if (psCurr->getECMStats()->location == LOC_TURRET)
 	{
-		ASSERT(psCurr->asParts[COMP_ECM] < numECMStats, "asParts[COMP_ECM] (%d) exceeds numECMStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_ECM], numECMStats);
-		templateObj["ecm"] = (asECMStats + psCurr->asParts[COMP_ECM])->id;
+		ASSERT(psCurr->asParts[COMP_ECM] < asECMStats.size(), "asParts[COMP_ECM] (%d) exceeds numECMStats (%zu)", (int)psCurr->asParts[COMP_ECM], asECMStats.size());
+		templateObj["ecm"] = psCurr->getECMStats()->id;
 	}
-	if ((asSensorStats + psCurr->asParts[COMP_SENSOR])->location == LOC_TURRET)
+	if (psCurr->getSensorStats()->location == LOC_TURRET)
 	{
-		ASSERT(psCurr->asParts[COMP_SENSOR] < numSensorStats, "asParts[COMP_SENSOR] (%d) exceeds numSensorStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_SENSOR], numSensorStats);
-		templateObj["sensor"] = (asSensorStats + psCurr->asParts[COMP_SENSOR])->id;
+		ASSERT(psCurr->asParts[COMP_SENSOR] < asSensorStats.size(), "asParts[COMP_SENSOR] (%d) exceeds numSensorStats (%zu)", (int)psCurr->asParts[COMP_SENSOR], asSensorStats.size());
+		templateObj["sensor"] = psCurr->getSensorStats()->id;
 	}
 	if (psCurr->asParts[COMP_CONSTRUCT] != 0)
 	{
-		ASSERT(psCurr->asParts[COMP_CONSTRUCT] < numConstructStats, "asParts[COMP_CONSTRUCT] (%d) exceeds numConstructStats (%" PRIu32 ")", (int)psCurr->asParts[COMP_CONSTRUCT], numConstructStats);
-		templateObj["construct"] = (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id;
+		ASSERT(psCurr->asParts[COMP_CONSTRUCT] < asConstructStats.size(), "asParts[COMP_CONSTRUCT] (%d) exceeds numConstructStats (%zu)", (int)psCurr->asParts[COMP_CONSTRUCT], asConstructStats.size());
+		templateObj["construct"] = psCurr->getConstructStats()->id;
 	}
 	nlohmann::json weapons = nlohmann::json::array();
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
-		ASSERT(psCurr->asWeaps[j] < numWeaponStats, "psCurr->asWeaps[%d] (%d) exceeds numWeaponStats (%" PRIu32 ")", j, (int)psCurr->asWeaps[j], numWeaponStats);
-		weapons.push_back((asWeaponStats + psCurr->asWeaps[j])->id);
+		ASSERT(psCurr->asWeaps[j] < asWeaponStats.size(), "psCurr->asWeaps[%d] (%d) exceeds numWeaponStats (%zu)", j, (int)psCurr->asWeaps[j], asWeaponStats.size());
+		weapons.push_back(psCurr->getWeaponStats(j)->id);
 	}
 	if (!weapons.empty())
 	{
@@ -490,6 +490,46 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 {
 	std::fill_n(asParts, DROID_MAXCOMP, static_cast<uint8_t>(0));
 	std::fill_n(asWeaps, MAX_WEAPONS, 0);
+}
+
+BODY_STATS* DROID_TEMPLATE::getBodyStats() const
+{
+	return &asBodyStats[asParts[COMP_BODY]];
+}
+
+BRAIN_STATS* DROID_TEMPLATE::getBrainStats() const
+{
+	return &asBrainStats[asParts[COMP_BRAIN]];
+}
+
+PROPULSION_STATS* DROID_TEMPLATE::getPropulsionStats() const
+{
+	return &asPropulsionStats[asParts[COMP_PROPULSION]];
+}
+
+SENSOR_STATS* DROID_TEMPLATE::getSensorStats() const
+{
+	return &asSensorStats[asParts[COMP_SENSOR]];
+}
+
+ECM_STATS* DROID_TEMPLATE::getECMStats() const
+{
+	return &asECMStats[asParts[COMP_ECM]];
+}
+
+REPAIR_STATS* DROID_TEMPLATE::getRepairStats() const
+{
+	return &asRepairStats[asParts[COMP_REPAIRUNIT]];
+}
+
+CONSTRUCT_STATS* DROID_TEMPLATE::getConstructStats() const
+{
+	return &asConstructStats[asParts[COMP_CONSTRUCT]];
+}
+
+WEAPON_STATS* DROID_TEMPLATE::getWeaponStats(int weaponSlot) const
+{
+	return &asWeaponStats[asWeaps[weaponSlot]];
 }
 
 bool loadDroidTemplates(const char *filename)
@@ -558,7 +598,7 @@ bool loadDroidTemplates(const char *filename)
 
 DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate)
 {
-	auto dup = std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE(*psTemplate));
+	auto dup = std::make_unique<DROID_TEMPLATE>(*psTemplate);
 	return addTemplate(player, std::move(dup));
 }
 
@@ -666,28 +706,29 @@ DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 /*called when a Template is deleted in the Design screen*/
 void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, QUEUE_MODE mode)
 {
-	STRUCTURE   *psStruct;
-	STRUCTURE	*psList;
-
 	ASSERT_OR_RETURN(, psTemplate != nullptr, "Null psTemplate");
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %u", player);
 
 	//see if any factory is currently using the template
 	for (unsigned i = 0; i < 2; ++i)
 	{
-		psList = nullptr;
+		StructureList* psList = nullptr;
 		switch (i)
 		{
 		case 0:
-			psList = apsStructLists[player];
+			psList = &apsStructLists[player];
 			break;
 		case 1:
-			psList = mission.apsStructLists[player];
+			psList = &mission.apsStructLists[player];
 			break;
 		}
-		for (psStruct = psList; psStruct != nullptr; psStruct = psStruct->psNext)
+		if (!psList)
 		{
-			if (StructIsFactory(psStruct))
+			continue;
+		}
+		for (STRUCTURE* psStruct : *psList)
+		{
+			if (psStruct && psStruct->isFactory())
 			{
 				if (psStruct->pFunctionality == nullptr)
 				{
@@ -734,7 +775,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 }
 
 // return whether a template is for an IDF droid
-bool templateIsIDF(DROID_TEMPLATE *psTemplate)
+bool templateIsIDF(const DROID_TEMPLATE *psTemplate)
 {
 	//add Cyborgs
 	if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG || psTemplate->droidType == DROID_CYBORG_SUPER))
@@ -742,7 +783,7 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate)
 		return false;
 	}
 
-	if (proj_Direct(psTemplate->asWeaps[0] + asWeaponStats))
+	if (proj_Direct(psTemplate->getWeaponStats(0)))
 	{
 		return false;
 	}
@@ -798,14 +839,14 @@ std::vector<DROID_TEMPLATE *> fillTemplateList(STRUCTURE *psFactory)
 		}
 
 		//check the factory can cope with this sized body
-		if (((asBodyStats + psCurr->asParts[COMP_BODY])->size <= iCapacity))
+		if (psCurr->getBodyStats()->size <= iCapacity)
 		{
 			pList.push_back(psCurr);
 		}
 		else if (bMultiPlayer && (iCapacity == SIZE_HEAVY))
 		{
 			// Special case for Super heavy bodyies (Super Transporter)
-			if ((asBodyStats + psCurr->asParts[COMP_BODY])->size == SIZE_SUPER_HEAVY)
+			if (psCurr->getBodyStats()->size == SIZE_SUPER_HEAVY)
 			{
 				pList.push_back(psCurr);
 			}

@@ -63,7 +63,12 @@ This sets the texture page for the model. Each file must contain exactly one suc
 In theory you could leave out this line, but in practice that makes your models useless.
 Note that the exact texture page file may be modified by WRF files during level loading, so that the texture matches the tileset.
 
-The first parameter (the zero) is ignored.
+The first parameter (the zero) specifies the tileset:
+* `0` -- default, arizona
+* `1` -- urban
+* `2` -- rockies
+
+In general, you should _always_ specify a TEXTURE for tileset 0, and optionally include additional TEXTURE directives if overrides for the urban or rockies tilesets are desired.
 
 The second gives you the filename of the texture page, which
 * must only contain the characters [a-zA-Z0-9.\_\\-] ([a-z] is not meant to include any lowercase character not found in the English alphabet).
@@ -124,7 +129,8 @@ The following global directives can be specified at the LEVEL scope to override 
 - NORMALMAP
 - SPECULARMAP
 
-They should be specified in the order listed above. All are optional and, if omitted, the associated global directive will be used (if set).
+`TYPE` and `INTERPOLATE` should come first, and be specified in that order. The `TEXTURE`, `TCMASK`, `NORMALMAP`, and `SPECULARMAP` follow, but can be present in any order.
+All are optional and, if omitted, the associated global directive will be used (if set).
 
 ### POINTS
 

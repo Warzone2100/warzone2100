@@ -103,7 +103,9 @@ void kf_ChooseCancel();
 void kf_ToggleWeather();
 void kf_KillSelected();
 void kf_SendGlobalMessage();
+void kf_SendGlobalQuickChat();
 void kf_SendTeamMessage();
+void kf_SendTeamQuickChat();
 void kf_ToggleConsole();
 void kf_ToggleTeamChat();
 MappableFunction kf_SelectUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass = SELECTION_CLASS::DS_BY_TYPE, const bool bOnScreen = false);
@@ -202,4 +204,7 @@ void kf_ToggleSpecOverlays();
 void enableGodMode();
 
 void keybindShutdown();
+
+void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor);
+
 #endif // __INCLUDED_SRC_KEYBIND_H__

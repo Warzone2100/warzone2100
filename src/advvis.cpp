@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 
 #include "advvis.h"
+#include "profiling.h"
 #include "map.h"
 
 // ------------------------------------------------------------------------------------
@@ -53,6 +54,7 @@ inline float getTileIllumination(const MAPTILE *psTile)
 // ------------------------------------------------------------------------------------
 void	avUpdateTiles()
 {
+	WZ_PROFILE_SCOPE(avUpdateTiles);
 	const int len = mapHeight * mapWidth;
 	const int playermask = 1 << selectedPlayer;
 	UDWORD i = 0;
@@ -87,7 +89,7 @@ void	avUpdateTiles()
 }
 
 // ------------------------------------------------------------------------------------
-UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj, UDWORD origLevel)
+UDWORD	avGetObjLightLevel(BASE_OBJECT const *psObj, UDWORD origLevel)
 {
 	float div = (float)psObj->visibleForLocalDisplay() / 255.f;
 	unsigned int lowest = origLevel / START_DIVIDE;

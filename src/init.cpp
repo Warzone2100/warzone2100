@@ -97,6 +97,7 @@
 #include "spectatorwidgets.h"
 #include "seqdisp.h"
 #include "version.h"
+#include "hci/teamstrategy.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -189,7 +190,6 @@ static const char* versionedModsPath(MODS_PATHS type)
 static bool InitialiseGlobals()
 {
 	frontendInitVars();	// Initialise frontend globals and statics.
-	statsInitVars();
 	structureInitVars();
 	if (!messageInitVars())
 	{
@@ -272,7 +272,7 @@ static void cleanSearchPath()
 void registerSearchPath(const std::string& newPath, unsigned int priority)
 {
 	ASSERT_OR_RETURN(, !newPath.empty(), "Calling registerSearchPath with empty path, priority %u", priority);
-	std::unique_ptr<wzSearchPath> tmpSearchPath = std::unique_ptr<wzSearchPath>(new wzSearchPath());
+	std::unique_ptr<wzSearchPath> tmpSearchPath = std::make_unique<wzSearchPath>();
 	tmpSearchPath->path = newPath;
 	if (!strEndsWith(tmpSearchPath->path, PHYSFS_getDirSeparator()))
 	{
@@ -472,6 +472,8 @@ optional<std::string> getTerrainOverrideBaseSourcePath(TerrainShaderQuality qual
 			return nullopt;
 		case TerrainShaderQuality::NORMAL_MAPPING:
 			return "terrain_overrides/high";
+		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
+			return nullopt;
 	}
 	return nullopt; // silence compiler warning
  }
@@ -690,13 +692,17 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// Add plain dir
 				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
-				if (terrainQualityOverrideBasePath.has_value())
+				if (terrainQualityOverrideBasePath.has_value() && !loadedTerrainTextureOverrides)
 				{
 					// Add terrain quality override files
 					tmpstr = curSearchPath->path + terrainQualityOverrideBasePath.value();
 					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
 					tmpstr += ".wz";
 					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					if (loadedTerrainTextureOverrides)
+					{
+						debug(LOG_INFO, "Loaded terrain overrides from: %s", curSearchPath->path.c_str());
+					}
 				}
 
 				// Add base files
@@ -775,13 +781,17 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// Add plain dir
 				WZ_PHYSFS_MountSearchPathWrapper(curSearchPath->path.c_str(), NULL, PHYSFS_APPEND);
 
-				if (terrainQualityOverrideBasePath.has_value())
+				if (terrainQualityOverrideBasePath.has_value() && !loadedTerrainTextureOverrides)
 				{
 					// Add terrain quality override files
 					tmpstr = curSearchPath->path + terrainQualityOverrideBasePath.value();
 					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
 					tmpstr += ".wz";
 					loadedTerrainTextureOverrides = WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND) || loadedTerrainTextureOverrides;
+					if (loadedTerrainTextureOverrides)
+					{
+						debug(LOG_INFO, "Loaded terrain overrides from: %s", curSearchPath->path.c_str());
+					}
 				}
 
 				// Add base files
@@ -1564,6 +1574,8 @@ bool stageOneInitialise()
 	transitionInit();
 	resetScroll();
 
+	strategyPlansInit();
+
 	return true;
 }
 
@@ -1795,6 +1807,17 @@ bool stageThreeInitialise()
 
 	loopMissionState = LMS_NORMAL;
 
+	// preload model textures for current tileset
+	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
+	modelUpdateTilesetIdx(modelTilesetIdx);
+	enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
+		for (iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		{
+			pDisplayShape->getTextures();
+		}
+	});
+	resDoResLoadCallback();		// do callback.
+
 	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
 		return false;
@@ -1811,6 +1834,7 @@ bool stageThreeInitialise()
 	effectResetUpdates();
 	initLighting(0, 0, mapWidth, mapHeight);
 	pie_InitLighting();
+	getCurrentLightmapData().reset(mapWidth, mapHeight);
 
 	if (fromSave)
 	{
@@ -1855,6 +1879,8 @@ bool stageThreeInitialise()
 		challengeActive = true;
 	}
 
+	// add radar to interface screen, and resize
+	intAddRadarWidget();
 	resizeRadar();
 
 	setAllPauseStates(false);
@@ -1867,17 +1893,33 @@ bool stageThreeInitialise()
 	}
 	else
 	{
+		initNoGoAreas();
+
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())
 		{
 			triggerEventCheatMode(true);
 		}
+
 		triggerEvent(TRIGGER_GAME_INIT);
 		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
 	}
 
 	// Start / randomize in-game music
 	cdAudio_PlayTrack(SONG_INGAME);
+
+	// always start off with a refresh of the groups UI data
+	intGroupsChanged();
+
+	if (bMultiPlayer)
+	{
+		cameraToHome(selectedPlayer, false, fromSave);
+		playerResponding(); // say howdy!
+		if (NetPlay.bComms && !NETisReplay())
+		{
+			multiStartScreenInit();
+		}
+	}
 
 	return true;
 }

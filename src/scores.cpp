@@ -53,6 +53,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "intimage.h"
+#include "loop.h" //for prevMissionType
 
 #include "activity.h"
 #include "multistat.h"
@@ -292,8 +293,44 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 	fullStats.numUnits = 0;
 	if (selectedPlayer < MAX_PLAYERS)
 	{
-		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
-		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
+		unsigned int idx = 0;
+		do
+		{
+			DroidList* dList = nullptr;
+			switch (idx)
+			{
+				case 0: dList = &apsDroidLists[selectedPlayer]; break;
+				case 1: dList = &mission.apsDroidLists[selectedPlayer]; break;
+				case 2: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { dList = &apsLimboDroids[selectedPlayer]; } break;
+				default: dList = nullptr;
+			}
+			if (!dList)
+			{
+				continue;
+			}
+			for (const DROID* psDroid : *dList)
+			{
+				if (psDroid == nullptr || isDead(psDroid))
+				{
+					continue;
+				}
+				++fullStats.numUnits;
+				if (psDroid->isTransporter())
+				{
+					if (psDroid->psGroup == nullptr)
+					{
+						continue;
+					}
+					for (DROID *psCurr : psDroid->psGroup->psList)
+					{
+						if (psCurr != psDroid)
+						{
+							++fullStats.numUnits;
+						}
+					}
+				}
+			}
+		} while (++idx < 3);
 	}
 
 	return fullStats;
@@ -587,19 +624,18 @@ void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = tr
 				continue;
 			}
 			uint32_t unitsKilled = getMultiPlayUnitsKilled(n);
-			uint32_t numUnits = 0;
-			for (DROID *psDroid = apsDroidLists[n]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
-			uint32_t numStructs = 0;
+			uint32_t numUnits = apsDroidLists[n].size();
+			uint32_t numStructs = apsStructLists[n].size();
 			uint32_t numFactories = 0;
 			uint32_t numResearch = 0;
 			uint32_t numFactoriesThatCanProduceConstructionUnits = 0;
-			for (STRUCTURE *psStruct = apsStructLists[n]; psStruct; psStruct = psStruct->psNext, numStructs++)
+			for (const STRUCTURE *psStruct : apsStructLists[n])
 			{
 				if (psStruct->status != SS_BUILT || psStruct->died != 0)
 				{
 					continue; // ignore structures that aren't completely built, or are "dead"
 				}
-				if (StructIsFactory(psStruct))
+				if (psStruct->isFactory())
 				{
 					numFactories++;
 					if (psStruct->pStructureType->type == REF_FACTORY ||

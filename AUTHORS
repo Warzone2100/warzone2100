@@ -69,6 +69,7 @@ Current or former contributors to the GPL version
 * (Ginger88895): Typo fix
 * (glogow): Default screen resolution of 800x600 (with fallback 640x480) pixels
 * (Goth Zagog-Thou): Programming, TWZ fork
+* Guangcong Luo (Zarel): Programming, guide, cursors, balance mod
 * Henri Valta: Network variable bug fixes
 * (Hikaru/Hikaru-orly): Repair units bug fix, segfault fix, bug reporting
 * (Hironaru): Consistent naming for scavenger equipment
@@ -291,7 +292,6 @@ Current or former contributors to the GPL version
 ### Documentation
 
 * Ben Latimore (BlueMaxima): Quick Start Guide, challenge descriptions
-* Guangcong Luo (Zarel): Programming, guide, cursors, balance mod
 * Jorge Cardoso Leitão: Doxygen support
 * Kim Metcalfe (lav-coyote25/lav-coyote): Documentation, maps, bug fixes
 * (LordGolias): Doxygen support

@@ -13,7 +13,12 @@
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #define WZ_MIP_LOAD_BIAS 0.f
+#define WZ_SHADOW_MODE 1
+#define WZ_SHADOW_FILTER_SIZE 3
+#define WZ_SHADOW_CASCADES_COUNT 3
 //
+
+#define WZ_MAX_SHADOW_CASCADES 3
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -39,11 +44,21 @@ uniform sampler2DArray decalNormal;
 uniform sampler2DArray decalSpecular;
 uniform sampler2DArray decalHeight;
 
+// shadow map
+uniform sampler2DArrayShadow shadowMap;
+
+uniform mat4 ViewMatrix;
+uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+uniform vec4 ShadowMapCascadeSplits;
+uniform int ShadowMapSize;
+
 // sun light colors/intensity:
 uniform vec4 emissiveLight;
 uniform vec4 ambientLight;
 uniform vec4 diffuseLight;
 uniform vec4 specularLight;
+
+uniform vec4 sunPos; // in modelSpace, normalized
 
 // fog
 uniform int fogEnabled; // whether fog is enabled
@@ -62,12 +77,17 @@ in vec4 fgroundWeights;
 in vec3 groundLightDir;
 in vec3 groundHalfVec;
 in mat2 decal2groundMat2;
+// For Shadows
+in vec3 fragPos;
+in vec3 fragNormal;
 
 #ifdef NEWGL
 out vec4 FragColor;
 #else
 // Uses gl_FragColor
 #endif
+
+#include "terrain_combined_frag.glsl"
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
@@ -85,12 +105,13 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 vec4 main_medium() {
 	vec3 ground = getGround(0) + getGround(1) + getGround(2) + getGround(3);
 	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0.f);
+	float visibility = getShadowVisibility();
 
 	vec3 L = normalize(groundLightDir);
 	vec3 N = vec3(0.f,0.f,1.f);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
-	vec4 light = (diffuseLight*0.75*lambertTerm + ambientLight*0.25) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+	vec4 light = (visibility*diffuseLight*0.8*(lambertTerm*lambertTerm) + ambientLight*0.2) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 

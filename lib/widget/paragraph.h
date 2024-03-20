@@ -72,7 +72,7 @@ public:
 	{
 		if (!cachedText)
 		{
-			cachedText = std::unique_ptr<WzText>(new WzText(text, font));
+			cachedText = std::make_unique<WzText>(text, font);
 		}
 
 		cacheExpireAt = realTime + (cacheDurationMs * GAME_TICKS_PER_SEC) / 1000;
