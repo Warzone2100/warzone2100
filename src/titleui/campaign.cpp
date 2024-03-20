@@ -222,7 +222,7 @@ static int loadCampaignModsAsyncImpl(void* data)
 	{
 		debug(LOG_INFO, "Failed to enumerate available campaign mods?");
 	}
-	pRequestInfo->completionHandler(availableMods);
+	pRequestInfo->completionHandler(std::move(availableMods));
 	delete pRequestInfo;
 	return 0;
 }
@@ -2579,7 +2579,8 @@ void CampaignStartOptionsForm::initialize(const std::shared_ptr<WzCampaignSelect
 	if (modInfo.has_value() && !modInfo.value().difficultyLevels.empty())
 	{
 		std::vector<DIFFICULTY_LEVEL> filtered;
-		std::copy_if(availableDifficultyLevels.begin(), availableDifficultyLevels.end(), std::back_inserter(filtered), [&](DIFFICULTY_LEVEL lvl){ return modInfo.value().difficultyLevels.count(lvl) > 0; } );
+		const auto& modInfoValueRef = modInfo.value();
+		std::copy_if(availableDifficultyLevels.begin(), availableDifficultyLevels.end(), std::back_inserter(filtered), [modInfoValueRef](DIFFICULTY_LEVEL lvl){ return modInfoValueRef.difficultyLevels.count(lvl) > 0; } );
 		availableDifficultyLevels = std::move(filtered);
 	}
 	grid->place({0, 1, false}, row, addCampaignUIMargin(makeCampaignUIOptionTitleLabel(_("Difficulty:"), font_regular_bold)));
