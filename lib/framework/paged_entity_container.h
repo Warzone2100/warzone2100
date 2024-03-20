@@ -182,6 +182,10 @@ class PagedEntityContainer
 	/// as well as the queue for recycled indices.
 	///
 	/// Always allocates storage for exactly `MaxElementsPerPage` elements.
+	///
+	/// If the parent container is instantiated with the `ReuseSlots=false` mode,
+	/// expired pages will deallocate their storage to keep memory consumption
+	/// under control.
 	/// </summary>
 	class Page
 	{
@@ -279,9 +283,21 @@ class PagedEntityContainer
 			++_expiredSlotsCount;
 		}
 
+		// When `ReuseSlots=false`, expired pages will also deallocate
+		// their storage upon reaching "expired" state.
 		bool is_expired() const
 		{
 			return _expiredSlotsCount == MaxElementsPerPage;
+		}
+
+		// This method renders the page unusable!
+		//
+		// The page will then need to call `allocate_storage()` + `reset_metadata()`
+		// to be usable once again.
+		void deallocate_storage()
+		{
+			_storage.reset();
+			_slotMetadata.reset();
 		}
 
 		// Reset generations to least possible valid value for all slots,
@@ -428,6 +444,19 @@ public:
 			// Increase counters for expired slots tracking.
 			_pages[pageIdx.first].increase_expired_slots_count();
 			++_expiredSlotsCount;
+			// Looks like at least GCC is smart enough to optimize the following
+			// instructions away, even when this is not a `constexpr if`, but a regular `if`,
+			// See https://godbolt.org/z/bY8oEYsdz.
+			if (!ReuseSlots)
+			{
+				if (_pages[pageIdx.first].is_expired())
+				{
+					// Free storage pointers for expired pages when not reusing slots,
+					// this should alleviate the problem of excessive memory consumption
+					// in such cases.
+					_pages[pageIdx.first].deallocate_storage();
+				}
+			}
 		}
 		else
 		{
@@ -695,6 +724,18 @@ public:
 		_capacity = MaxElementsPerPage;
 		// No valid items in the container now.
 		_maxIndex = INVALID_SLOT_IDX;
+		if (!ReuseSlots)
+		{
+			// If the first page is in the expired state, then
+			// its storage is deallocated, too. So, reallocate it.
+			//
+			// NOTE: expired pages free their storage only when
+			// the slot recycling mechanism is disabled!
+			if (_pages.front().is_expired())
+			{
+				_pages.front().allocate_storage();
+			}
+		}
 		_pages.front().reset_metadata();
 		_expiredSlotsCount = 0;
 	}
