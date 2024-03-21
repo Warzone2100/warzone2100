@@ -1445,10 +1445,26 @@ void WzCampaignTweakOptionsSummaryWidget::setInfoClickHandler(const InfoClickHan
 	}
 }
 
+class FixedIdealWidthLabel : public W_LABEL
+{
+public:
+	FixedIdealWidthLabel(int32_t fixedIdealWidth = -1)
+	: W_LABEL()
+	, m_fixedIdealWidth(fixedIdealWidth)
+	{ }
+
+	virtual int32_t idealWidth() override
+	{
+		return (m_fixedIdealWidth >= 0) ? m_fixedIdealWidth : W_LABEL::idealWidth();
+	}
+private:
+	int32_t m_fixedIdealWidth = -1;
+};
+
 void WzCampaignTweakOptionsSummaryWidget::update(const std::vector<WzCampaignTweakOptionSetting>& tweakOptionSettings)
 {
-	auto makeTweakOptionSmallLabel = [](const WzString& str) {
-		auto label = std::make_shared<W_LABEL>();
+	auto makeTweakOptionSmallLabel = [](const WzString& str, int32_t fixedIdealWidth = -1) {
+		auto label = std::make_shared<FixedIdealWidthLabel>(fixedIdealWidth);
 		label->setFont(font_small, WZCOL_TEXT_MEDIUM);
 		label->setString(str);
 		label->setCanTruncate(true);
@@ -1463,10 +1479,12 @@ void WzCampaignTweakOptionsSummaryWidget::update(const std::vector<WzCampaignTwe
 	grid_allocation::slot row(0);
 	uint32_t col = 0;
 
+	int32_t statusLabelWidth = std::max<int32_t>(iV_GetTextWidth("✓", font_small), iV_GetTextWidth("x", font_small));
+
 	// Add list of tweak options (2 columns)
 	for (const auto& setting : tweakOptionSettings)
 	{
-		auto newStatusLabel = makeTweakOptionSmallLabel((setting.currentValue) ? "✓" : "x");
+		auto newStatusLabel = makeTweakOptionSmallLabel((setting.currentValue) ? "✓" : "x", statusLabelWidth);
 		auto newTweakLabel = makeTweakOptionSmallLabel(setting.displayName);
 		grid->place({col++, 1, false}, row, Margin(0, 3, 0, 0).wrap(newStatusLabel));
 		grid->place({col++, 1, true}, row, newTweakLabel);
