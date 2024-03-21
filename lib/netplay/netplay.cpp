@@ -130,7 +130,7 @@ SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
 
-std::atomic_int upnp_status;
+static std::atomic_int upnp_status;
 
 struct Statistic
 {
