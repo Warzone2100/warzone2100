@@ -29,10 +29,13 @@
 #include "lib/framework/crc.h"
 #include "src/factionid.h"
 #include "nettypes.h"
+#include "wzfile.h"
+
 #include <physfs.h>
 #include <vector>
 #include <functional>
 #include <memory>
+
 // Lobby Connection errors
 
 enum LOBBY_ERROR_TYPES
@@ -215,40 +218,6 @@ struct SYNC_COUNTER
 	uint16_t	cantjoin;
 	uint16_t	banned;
 	uint16_t	rejected;
-};
-
-void physfs_file_safe_close(PHYSFS_file* f);
-
-struct WZFile
-{
-public:
-//	WZFile() : handle_(nullptr, physfs_file_safe_close), size(0), pos(0) { hash.setZero(); }
-	WZFile(PHYSFS_file *handle, const std::string &filename, Sha256 hash, uint32_t size = 0) : handle_(handle, physfs_file_safe_close), filename(filename), hash(hash), size(size), pos(0) {}
-
-	~WZFile();
-
-	// Prevent copies
-	WZFile(const WZFile&) = delete;
-	void operator=(const WZFile&) = delete;
-
-	// Allow move semantics
-	WZFile(WZFile&& other) = default;
-	WZFile& operator=(WZFile&& other) = default;
-
-public:
-	bool closeFile();
-	inline PHYSFS_file* handle() const
-	{
-		return handle_.get();
-	}
-
-private:
-	std::unique_ptr<PHYSFS_file, void(*)(PHYSFS_file*)> handle_;
-public:
-	std::string filename;
-	Sha256 hash;
-	uint32_t size = 0;
-	uint32_t pos = 0;  // Current position, the range [0; currPos[ has been sent or received already.
 };
 
 enum class AIDifficulty : int8_t

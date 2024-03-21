@@ -353,39 +353,6 @@ static char const *versionString = version_getVersionString();
 
 #include "lib/netplay/netplay_config.h"
 
-static inline bool physfs_file_safe_close_impl(PHYSFS_file* f)
-{
-	if (!f)
-	{
-		return false;
-	}
-	if (!PHYSFS_isInit())
-	{
-		return false;
-	}
-	PHYSFS_close(f);
-	f = nullptr;
-	return true;
-}
-
-void physfs_file_safe_close(PHYSFS_file* f)
-{
-	physfs_file_safe_close_impl(f);
-}
-
-WZFile::~WZFile()
-{ }
-
-bool WZFile::closeFile()
-{
-	if (!handle_)
-	{
-		return false;
-	}
-	PHYSFS_file *file = handle_.release();
-	return physfs_file_safe_close_impl(file);
-}
-
 const std::vector<WZFile>& NET_getDownloadingWzFiles()
 {
 	return DownloadingWzFiles;
