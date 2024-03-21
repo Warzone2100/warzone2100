@@ -444,7 +444,6 @@ bool NETgetJoinPreferenceIPv6();
 void NETsetDefaultMPHostFreeChatPreference(bool enabled);
 bool NETgetDefaultMPHostFreeChatPreference();
 
-bool NETsetupTCPIP(const char *machine);
 void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
@@ -470,7 +469,6 @@ bool NETGameIsLocked();
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
 bool NETregisterServer(int state);
-bool NETprocessQueuedServerUpdates();
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);    ///< Cumulative, except that CONNECTIONSTATUS_NORMAL resets.
 bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
 
