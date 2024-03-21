@@ -304,7 +304,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 		file(RELATIVE_PATH _mods_file_relative_path "${DATA_MODS_BASE_DIR}" "${_mod_file}")
 		get_filename_component(_mods_file_subdir_path "${_mods_file_relative_path}" DIRECTORY)
 		message(STATUS "COPYING MOD FILE: mods/${_mods_file_relative_path}")
-		target_link_options(warzone2100 PRIVATE "SHELL:--preload-file ${_mod_file}@/data/mods/${_mods_file_subdir_path}")
+		target_link_options(warzone2100 PRIVATE "SHELL:--preload-file ${_mod_file}@/data/mods/${_mods_file_subdir_path}/")
 	endforeach()
 
 	# Bundle the translations

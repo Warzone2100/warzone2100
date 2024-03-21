@@ -4,12 +4,8 @@ endif()
 
 OPTION(WZ_BUILTIN_MODS_CAMCLASSIC "Include the classic campaign balance mod" ON)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
-	# "Fake" COMPRESS_ZIP that just stages the needed files in folders
-	include(EmscriptenCompressZip)
-else()
-	find_package(ZIP REQUIRED)
-endif()
+# Note: Always package mods as actual zip files, *even for Emscripten builds*
+find_package(ZIP REQUIRED)
 
 ####################################################
 
