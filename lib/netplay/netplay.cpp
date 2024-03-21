@@ -258,8 +258,6 @@ static Socket *bsocket = nullptr;                  ///< Socket used to talk to t
 static Socket *connected_bsocket[MAX_CONNECTED_PLAYERS] = { nullptr };  ///< Sockets used to talk to clients (host only).
 static SocketSet *socket_set = nullptr;
 
-WZ_THREAD *upnpdiscover;
-
 static struct UPNPUrls urls;
 static struct IGDdatas data;
 
