@@ -30,6 +30,7 @@
 #include "src/factionid.h"
 #include "nettypes.h"
 #include "wzfile.h"
+#include "netlog.h"
 
 #include <physfs.h>
 #include <vector>
@@ -430,8 +431,6 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
                  uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
-
-#include "netlog.h"
 
 void NETsetMasterserverName(const char *hostname);
 const char *NETgetMasterserverName();
