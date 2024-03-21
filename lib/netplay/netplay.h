@@ -31,6 +31,7 @@
 #include "nettypes.h"
 #include "wzfile.h"
 #include "netlog.h"
+#include "sync_debug.h"
 
 #include <physfs.h>
 #include <vector>
@@ -476,34 +477,6 @@ void NETsetAsyncJoinApprovalRequired(bool enabled);
 bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR);
 
 const char *messageTypeToString(unsigned messageType);
-
-/// Sync debugging. Only prints anything, if different players would print different things.
-#define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
-#ifdef WZ_CC_MINGW
-void _syncDebug(const char *function, const char *str, ...) WZ_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 2, 3);
-#else
-void _syncDebug(const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 2, 3);
-#endif
-
-/// Faster than syncDebug. Make sure that str is a format string that takes ints only.
-void _syncDebugIntList(const char *function, const char *str, int *ints, size_t numInts);
-#define syncDebugBacktrace() do { _syncDebugBacktrace(__FUNCTION__); } while(0)
-void _syncDebugBacktrace(const char *function);                  ///< Adds a backtrace to syncDebug, if the platform supports it. Can be a bit slow, don't call way too often, unless desperate.
-uint32_t syncDebugGetCrc();                                      ///< syncDebug() calls between uint32_t crc = syncDebugGetCrc(); and syncDebugSetCrc(crc); appear in synch debug logs, but without triggering a desynch if different.
-void syncDebugSetCrc(uint32_t crc);                              ///< syncDebug() calls between uint32_t crc = syncDebugGetCrc(); and syncDebugSetCrc(crc); appear in synch debug logs, but without triggering a desynch if different.
-
-typedef uint16_t GameCrcType;  // Truncate CRC of game state to 16 bits, to save a bit of bandwidth.
-void resetSyncDebug();                                              ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
-GameCrcType nextDebugSync();                                        ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
-bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
-
-
-// Set whether verbose debug mode - outputting the current player's sync log for every single game tick - is enabled until a specific gameTime value
-// WARNING: This may significantly impact performance *and* will fill up your drive with a lot of logs data!
-// It is only intended to be used for debugging issues such as: replays desyncing when gameplay does not, etc. (And don't let the game run too long / set untilGameTime too high!)
-void NET_setDebuggingModeVerboseOutputAllSyncLogs(uint32_t untilGameTime = 0);
-void debugVerboseLogSyncIfNeeded();
-
 
 /**
  * This structure provides read-only access to a player, and can be used to identify players uniquely.
