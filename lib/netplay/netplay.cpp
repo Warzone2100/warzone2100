@@ -5804,6 +5804,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_PING:                      return "NET_PING";
 	case NET_PLAYER_STATS:              return "NET_PLAYER_STATS";
 	case NET_TEXTMSG:                   return "NET_TEXTMSG";
+	case NET_I18NTEXTMSG:               return "NET_I18NTEXTMSG";
 	case NET_PLAYERRESPONDING:          return "NET_PLAYERRESPONDING";
 	case NET_OPTIONS:                   return "NET_OPTIONS";
 	case NET_KICK:                      return "NET_KICK";

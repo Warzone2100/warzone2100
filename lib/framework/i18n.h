@@ -53,6 +53,9 @@
 // Make xgettext recognize the context
 #define NP_(Context, String) gettext_noop(String)
 
+#define MAX_LOCALE_CODE_LENGTH	(5)
+#define DEFAULT_LOCALE "en"
+
 WZ_DECL_PURE const char *getLanguage();
 WZ_DECL_PURE const char *getLanguageName();
 WZ_DECL_NONNULL(1) bool setLanguage(const char *name);

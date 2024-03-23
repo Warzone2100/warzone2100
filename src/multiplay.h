@@ -28,6 +28,7 @@
 #include "lib/framework/types.h"
 #include "lib/framework/vector.h"
 #include "lib/framework/crc.h"
+#include "lib/framework/wzi18nstring.h"
 #include "lib/netplay/nettypes.h"
 #include "multiplaydefs.h"
 #include "orderdef.h"
@@ -145,6 +146,20 @@ struct NetworkTextMessage
 
 	NetworkTextMessage() {}
 	NetworkTextMessage(int32_t messageSender, char const *messageText);
+	void enqueue(NETQUEUE queue);
+	bool receive(NETQUEUE queue);
+};
+
+struct NetworkI18nTextMessage
+{
+	/**
+	 * Sender can be a player index, SYSTEM_MESSAGE or NOTIFY_MESSAGE.
+	 **/
+	int32_t sender;
+	WzI18nString text;
+
+	NetworkI18nTextMessage() {}
+	NetworkI18nTextMessage(int32_t messageSender, WzI18nString const *messageText);
 	void enqueue(NETQUEUE queue);
 	bool receive(NETQUEUE queue);
 };

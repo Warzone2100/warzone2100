@@ -49,6 +49,22 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 
 The `motd` is displayed in the chat box when a player joins the game. It is optional and will be truncated if it exceeds 256 characters.
 
+It can be a single text entry or an object defining multiple messages in various languages. The default language will be `en` (English) and it must be provided. The default language can be changed by providing a `default` entry.
+
+```
+"motd": "Hello world"
+```
+or
+```
+"motd": {
+    "default": "de",
+    "de": "Hallo Welt",
+    "en": "Hello world",
+    "fr": "Bonjour le monde",
+    "ru": "привет мир"
+}
+```
+
 ## Sample file
 
 ```
