@@ -21,7 +21,7 @@
 		"Legged": 30,
 		"Lift": 80,
 		"Tracked": 120,
-		"Wheeled": 130
+		"Wheeled": 100
 	},
 	"ARTILLERY ROUND": {
 		"Half-Tracked": 65,
