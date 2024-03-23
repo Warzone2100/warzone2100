@@ -35,8 +35,8 @@
 		"weight": 50
 	},
 	"HalfTrack": {
-		"buildPoints": 75,
-		"buildPower": 75,
+		"buildPoints": 100,
+		"buildPower": 100,
 		"designable": 1,
 		"hitpointPctOfBody": 200,
 		"id": "HalfTrack",
