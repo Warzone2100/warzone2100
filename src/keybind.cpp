@@ -449,7 +449,7 @@ void kf_MakeMeHero()
 
 	for (DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
-		if (psDroid->selected && psDroid->droidType == DROID_COMMAND)
+		if (psDroid->selected && (psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_SENSOR))
 		{
 			psDroid->experience = 8 * 65536 * 128;
 		} 
