@@ -561,19 +561,6 @@ void	kf_BifferBaker()
 	          selectedPlayer, _("Hard as nails!!!"));
 	sendInGameSystemMessage(cmsg.c_str());
 }
-// --------------------------------------------------------------------------
-void	kf_SetEasyLevel()
-{
-	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-
-	setDifficultyLevel(DL_EASY);
-	addConsoleMessage(_("Takings thing easy!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-}
 
 // --------------------------------------------------------------------------
 void	kf_UpThePower()
@@ -606,7 +593,7 @@ void	kf_MaxPower()
 }
 
 // --------------------------------------------------------------------------
-void	kf_SetNormalLevel()
+void kf_SetDifficultyLevel(const DIFFICULTY_LEVEL level)
 {
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -615,21 +602,16 @@ void	kf_SetNormalLevel()
 		return;
 	}
 
-	setDifficultyLevel(DL_NORMAL);
-	addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-}
-// --------------------------------------------------------------------------
-void	kf_SetHardLevel()
-{
-	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
-	if (runningMultiplayer())
+	setDifficultyLevel(level);
+	switch (level)
 	{
-		noMPCheatMsg();
-		return;
+		case DL_SUPER_EASY: addConsoleMessage(_("A power fantasy!"), LEFT_JUSTIFY, SYSTEM_MESSAGE); break;
+		case DL_EASY: addConsoleMessage(_("Taking things easy!"), LEFT_JUSTIFY, SYSTEM_MESSAGE); break;
+		case DL_NORMAL: addConsoleMessage(_("Back to normality!"), LEFT_JUSTIFY, SYSTEM_MESSAGE); break;
+		case DL_HARD: addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY, SYSTEM_MESSAGE); break;
+		case DL_INSANE: addConsoleMessage(_("In a nightmare!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);break;
+		default: break;
 	}
-
-	setDifficultyLevel(DL_HARD);
-	addConsoleMessage(_("Getting tricky!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 // --------------------------------------------------------------------------
 void	kf_DoubleUp()
