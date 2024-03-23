@@ -130,7 +130,7 @@
 		"model": "prlwhl1.pie",
 		"name": "Wheels",
 		"skidDeceleration": 350,
-		"speed": 175,
+		"speed": 188,
 		"type": "Wheeled",
 		"weight": 300
 	}
