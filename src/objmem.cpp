@@ -203,7 +203,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
-bool objmemDestroy(BASE_OBJECT *psObj)
+bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 {
 	switch (psObj->type)
 	{
@@ -222,7 +222,7 @@ bool objmemDestroy(BASE_OBJECT *psObj)
 	default:
 		ASSERT(!"unknown object type", "unknown object type in destroyed list at 0x%p", static_cast<void *>(psObj));
 	}
-	if (!checkReferences(psObj))
+	if (checkRefs && !checkReferences(psObj))
 	{
 		return false;
 	}
@@ -259,7 +259,7 @@ void objmemUpdate()
 	{
 		if ((*it)->died <= gameTime - deltaGameTime)
 		{
-			objmemDestroy(*it);
+			objmemDestroy(*it, true);
 			it = psDestroyedObj.erase(it);
 		}
 		else
