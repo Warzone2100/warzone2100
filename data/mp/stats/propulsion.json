@@ -35,15 +35,15 @@
 		"weight": 50
 	},
 	"HalfTrack": {
-		"buildPoints": 75,
-		"buildPower": 75,
+		"buildPoints": 80,
+		"buildPower": 80,
 		"designable": 1,
 		"hitpointPctOfBody": 200,
 		"id": "HalfTrack",
 		"model": "prlhtr1.pie",
 		"name": "Half-tracks",
 		"skidDeceleration": 500,
-		"speed": 150,
+		"speed": 145,
 		"type": "Half-Tracked",
 		"weight": 400
 	},
@@ -122,15 +122,15 @@
 		"weight": 650
 	},
 	"wheeled01": {
-		"buildPoints": 50,
-		"buildPower": 50,
+		"buildPoints": 35,
+		"buildPower": 35,
 		"designable": 1,
 		"hitpointPctOfBody": 100,
 		"id": "wheeled01",
 		"model": "prlwhl1.pie",
 		"name": "Wheels",
 		"skidDeceleration": 350,
-		"speed": 175,
+		"speed": 190,
 		"type": "Wheeled",
 		"weight": 300
 	}

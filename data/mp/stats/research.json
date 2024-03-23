@@ -4609,7 +4609,8 @@
 		"msgName": "RES_HALFT1",
 		"name": "Half-tracked Propulsion",
 		"requiredResearch": [
-			"R-Sys-Engineering01"
+			"R-Sys-Engineering01",
+			"R-Vehicle-Engine01"
 		],
 		"researchPoints": 1200,
 		"researchPower": 37,
