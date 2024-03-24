@@ -32,7 +32,8 @@
 		"turnSpeed": 225,
 		"type": "Legged",
 		"usageClass": "Cyborg",
-		"weight": 50
+		"weight": 50,
+		"repairFactor": 1.25
 	},
 	"HalfTrack": {
 		"buildPoints": 75,
@@ -106,7 +107,8 @@
 		"skidDeceleration": 120,
 		"speed": 300,
 		"type": "Hover",
-		"weight": 200
+		"weight": 200,
+		"repairFactor": 1.5
 	},
 	"tracked01": {
 		"buildPoints": 125,
@@ -132,6 +134,7 @@
 		"skidDeceleration": 350,
 		"speed": 175,
 		"type": "Wheeled",
-		"weight": 300
+		"weight": 300,
+		"repairFactor": 2
 	}
 }
