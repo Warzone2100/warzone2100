@@ -1762,6 +1762,56 @@ void sendInGameSystemMessage(const char *text)
 	}
 }
 
+NetworkI18nTextMessage::NetworkI18nTextMessage(int32_t messageSender, WzI18nString const *messageText)
+{
+	sender = messageSender;
+	text = WzI18nString(*messageText);
+}
+
+void NetworkI18nTextMessage::enqueue(NETQUEUE queue)
+{
+	NETbeginEncode(queue, NET_I18NTEXTMSG);
+	NETint32_t(&sender);
+	NETstring(text.getDefaultLocaleCode().data(), MAX_LOCALE_CODE_LENGTH);
+	std::vector<std::string> locales = text.listLocales();
+	int32_t localeCount = locales.size();
+	NETint32_t(&localeCount);
+	for (const auto &localeCode : locales)
+	{
+		NETstring(localeCode.data(), MAX_LOCALE_CODE_LENGTH);
+		NETstring(text.getLocaleString(localeCode).toUtf8().c_str(), MAX_CONSOLE_STRING_LENGTH);
+	}
+	NETend();
+}
+
+bool NetworkI18nTextMessage::receive(NETQUEUE queue)
+{
+	NETbeginDecode(queue, NET_I18NTEXTMSG);
+	NETint32_t(&sender);
+	char defaultLocale[MAX_LOCALE_CODE_LENGTH];
+	NETstring(defaultLocale, MAX_LOCALE_CODE_LENGTH);
+	std::string defaultLocaleStr(defaultLocale);
+	text.reset(defaultLocaleStr);
+	int32_t count = 0;
+	NETint32_t(&count);
+	for (int32_t i = 0; i < count; ++i)
+	{
+		char locale[MAX_LOCALE_CODE_LENGTH];
+		char message[MAX_CONSOLE_STRING_LENGTH];
+		NETstring(locale, MAX_LOCALE_CODE_LENGTH);
+		NETstring(message, MAX_CONSOLE_STRING_LENGTH);
+		text.setLocaleString(locale, WzString(message));
+	}
+	NETend();
+	if (!text.contains(defaultLocale))
+	{
+		debug(LOG_ERROR, "Received corrupted WzI18nTextMessage: no text matching the default locale %s.", defaultLocale);
+		text.reset();
+		return false;
+	}
+	return true;
+}
+
 void printConsoleNameChange(const char *oldName, const char *newName)
 {
 	char msg[MAX_CONSOLE_STRING_LENGTH];

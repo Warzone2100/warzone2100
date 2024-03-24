@@ -28,7 +28,9 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/wzpaths.h"
+#include "lib/framework/wzi18nstring.h"
 
+#include <locale.h>
 #include <time.h>
 
 #include "lib/framework/frameresource.h"
@@ -284,6 +286,7 @@ static struct
 } locked;
 static bool spectatorHost = false;
 static uint16_t defaultOpenSpectatorSlots = 0;
+static WzI18nString motd = WzI18nString();
 
 struct AIDATA
 {
@@ -6036,6 +6039,18 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 	}
 }
 
+static void loadMapMessageOfTheDay(WzConfig& ini)
+{
+	if (ini.contains("motd"))
+	{
+		motd = WzI18nString(ini, "motd", MAX_CONSOLE_STRING_LENGTH);
+	}
+	else
+	{
+		motd = WzI18nString("");
+	}
+}
+
 /**
  * Loads challenge and player configurations from level/autohost/test .json-files.
  */
@@ -6081,6 +6096,7 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 	WzConfig ini(ininame, WzConfig::ReadOnly);
 
 	loadMapChallengeSettings(ini);
+	loadMapMessageOfTheDay(ini);
 
 	/* Do not load player settings if we are already hosting an online match */
 	if (!bIsOnline || forceLoadPlayers)
@@ -7339,6 +7355,17 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			}
 			break;
 
+		case NET_I18NTEXTMSG:
+			if (ingame.localOptionsReceived)
+			{
+				NetworkI18nTextMessage message;
+				if (message.receive(queue))
+				{
+					displayRoomMessage(buildMessage(message.sender, message.text.getLocaleString(getLanguage()).toUtf8().c_str()));
+				}
+			}
+			break;
+
 		case NET_VOTE:
 			if (NetPlay.isHost && ingame.localOptionsReceived)
 			{
@@ -7665,6 +7692,12 @@ void WzMultiplayerOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, uns
 static void printHostHelpMessagesToConsole()
 {
 	char buf[512] = { '\0' };
+	WzString localeMotd = motd.getLocaleString(getLanguage());
+	if (!localeMotd.isEmpty())
+	{
+		ssprintf(buf, "%s", localeMotd.toUtf8().c_str());
+		displayRoomNotifyMessage(buf);
+	}
 	if (challengeActive)
 	{
 		ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
@@ -8611,6 +8644,17 @@ void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver, 
 	{
 		displayRoomSystemMessage(text);
 	}
+	message.enqueue(NETnetQueue(receiver));
+}
+
+void sendRoomMotdToSingleReceiver(uint32_t receiver)
+{
+	if (motd.isEmpty())
+	{
+		return;
+	}
+	ASSERT_OR_RETURN(, isHumanPlayer(receiver), "Invalid receiver: %" PRIu32 "", receiver);
+	NetworkI18nTextMessage message(NOTIFY_MESSAGE, &motd);
 	message.enqueue(NETnetQueue(receiver));
 }
 

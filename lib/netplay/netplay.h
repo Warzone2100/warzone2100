@@ -66,6 +66,7 @@ enum MESSAGE_TYPES
 	NET_PING,                       ///< ping players.
 	NET_PLAYER_STATS,               ///< player stats
 	NET_TEXTMSG,                    ///< A simple text message between machines.
+	NET_I18NTEXTMSG,                ///< A multilingual text message between machines.
 	NET_PLAYERRESPONDING,           ///< computer that sent this is now playing warzone!
 	NET_OPTIONS,                    ///< welcome a player to a game.
 	NET_KICK,                       ///< kick a player .

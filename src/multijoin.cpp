@@ -575,6 +575,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 				}
 			}
 		}
+		sendRoomMotdToSingleReceiver(playerIndex);
 		if (lobby_slashcommands_enabled())
 		{
 			// Inform the new player that this lobby has slash commands enabled.
