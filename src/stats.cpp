@@ -844,6 +844,7 @@ bool loadPropulsionStats(WzConfig &ini)
 		psStats->acceleration = ini.value("acceleration", 250).toInt();
 		ASSERT(psStats->acceleration != 0, "\"%s\".\"acceleration\" is 0", psStats->id.toUtf8().c_str());
 		psStats->deceleration = ini.value("deceleration", 800).toInt();
+		psStats->repairFactor = ini.value("repairFactor", 100).toInt();
 		psStats->skidDeceleration = ini.value("skidDeceleration", 600).toInt();
 		psStats->pIMD = nullptr;
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
