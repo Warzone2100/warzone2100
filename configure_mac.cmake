@@ -347,22 +347,26 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ vcpkg install finished")
 # 3.) CMake configure (generate Xcode project)
 
 set(_additional_configure_arguments "")
-if(DEFINED WZ_DISTRIBUTOR)
-	set(_additional_configure_arguments "\"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\"")
+if(NOT DEFINED WZ_DISTRIBUTOR)
+    set(WZ_DISTRIBUTOR "UNKNOWN")
 endif()
+list(APPEND _additional_configure_arguments "-DCMAKE_FIND_USE_CMAKE_SYSTEM_PATH=FALSE" "-DCMAKE_FIND_USE_INSTALL_PREFIX=FALSE" "-DCMAKE_FIND_USE_PACKAGE_REGISTRY=FALSE" "-DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=FALSE")
 if(DEFINED ADDITIONAL_CMAKE_ARGUMENTS)
 	list(APPEND _additional_configure_arguments ${ADDITIONAL_CMAKE_ARGUMENTS})
 endif()
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Running CMake configure (to generate Xcode project)...")
+string(REPLACE ";" " " _debug_output_args "${_additional_configure_arguments}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
 execute_process(
 	COMMAND ${CMAKE_COMMAND}
 		"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
-		-DGLEW_USE_STATIC_LIBS=ON
+		"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}"
 		${_additional_configure_arguments}
 		-G Xcode
-		"${_repoBase}"
+		-B .
+		-S "${_repoBase}"
 	RESULT_VARIABLE _exstatus
 )
 
