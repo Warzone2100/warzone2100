@@ -27,19 +27,19 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: "Xcode 13.4 (x64)"
-            image: "macos-12"
+          - name: "Xcode 14.3 (x64)"
+            image: "macos-13"
             osx_target_arch: "x86_64"
             vcpkg_triplet: "x64-osx"
-            xcode_dev_dir: "/Applications/Xcode_13.4.1.app"
+            xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
             include_videos: true
             artifact_suffix: "x64"
             publish_artifact: true
-          - name: "Xcode 13.4 (ARM64)"
-            image: "macos-12"
+          - name: "Xcode 14.3 (ARM64)"
+            image: "macos-13"
             osx_target_arch: "arm64"
             vcpkg_triplet: "arm64-osx"
-            xcode_dev_dir: "/Applications/Xcode_13.4.1.app"
+            xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
             include_videos: false
             artifact_suffix: "arm64"
             publish_artifact: true
