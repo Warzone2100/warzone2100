@@ -1094,22 +1094,27 @@ std::pair<std::vector<size_t>, size_t> WzChatOptionsForm::getMaxTableColumnDataW
 
 std::shared_ptr<TableRow> WzChatOptionsForm::newPlayerMuteRow(uint32_t playerIdx, bool allowGlobalConfig)
 {
+	ASSERT_OR_RETURN(nullptr, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid playerIdx");
+
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 
 	std::shared_ptr<WzChatOptionsForm> sharedSelf = std::dynamic_pointer_cast<WzChatOptionsForm>(shared_from_this());
 
 	// Player Name widget
 	auto playerNameLabel = WzPlayerMuteStatusLabel::make(playerIdx);
+	ASSERT_OR_RETURN(nullptr, playerNameLabel != nullptr, "Failed to make widget");
 	playerNameLabel->setGeometry(0, 0, playerNameLabel->idealWidth(), playerNameLabel->requiredHeight());
 	playerNameLabel->setTransparentToMouse(true);
 	columnWidgets.push_back(playerNameLabel);
 
 	// Global Mute column
 	auto globalMuteButton = WzGlobalChatMuteColButton::make(playerIdx, sharedSelf, !allowGlobalConfig);
+	ASSERT_OR_RETURN(nullptr, globalMuteButton != nullptr, "Failed to make widget");
 	columnWidgets.push_back(globalMuteButton);
 
 	// Local Mute column
 	auto localMuteButton = WzLocalChatMuteColButton::make(playerIdx);
+	ASSERT_OR_RETURN(nullptr, localMuteButton != nullptr, "Failed to make widget");
 	if (playerIdx == selectedPlayer)
 	{
 		localMuteButton->setState(WBUT_DISABLE);
