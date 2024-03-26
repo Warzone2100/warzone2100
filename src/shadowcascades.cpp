@@ -66,7 +66,7 @@ void calculateShadowCascades(const iView *player, float terrainDistance, const g
 
 	float pitch = UNDEG(-player->r.x);
 
-	float adjustedZFar = (pow((1.57f - pitch) / 1.57f, 0.9f) * 4000.f) + 2000.f + terrainDistance;
+	float adjustedZFar = static_cast<float>((pow((1.57f - pitch) / 1.57f, 0.9f) * 4000.f) + 2000.f + terrainDistance);
 
 	std::vector<float> cascadeSplits(SHADOW_MAP_CASCADE_COUNT, 0.f);
 

@@ -272,7 +272,7 @@ public:
 		lastWidgetWidth = width();
 
 		int textX0 = xPos + QuickChatButtonHorizontalPadding;
-		int textY0 = yPos + (h - wzMessageText.lineSize()) / 2 - float(wzMessageText.aboveBase());
+		int textY0 = static_cast<int>(yPos + (h - wzMessageText.lineSize()) / 2 - float(wzMessageText.aboveBase()));
 
 		int maxTextDisplayableWidth = w - (QuickChatButtonHorizontalPadding * 2);
 		isTruncated = maxTextDisplayableWidth < wzMessageText.width();
