@@ -32,7 +32,7 @@ jobs:
             osx_target_arch: "x86_64"
             vcpkg_triplet: "x64-osx"
             xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
-            include_videos: true
+            include_videos: false
             artifact_suffix: "x64"
             publish_artifact: true
           - name: "Xcode 14.3 (ARM64)"
@@ -40,7 +40,7 @@ jobs:
             osx_target_arch: "arm64"
             vcpkg_triplet: "arm64-osx"
             xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
-            include_videos: false
+            include_videos: true
             artifact_suffix: "arm64"
             publish_artifact: true
       fail-fast: false
@@ -244,16 +244,16 @@ jobs:
       - name: Create Universal Binary
         working-directory: ./dl-artifacts
         run: |
-          BASE_APP_BUNDLE="warzone2100_macOS_x64/Warzone 2100.app"
+          BASE_APP_BUNDLE="warzone2100_macOS_arm64/Warzone 2100.app"
           # extract entitlements plist from the "base" app bundle binary
           echo "Extract entitlements.plist"
           codesign -d --entitlements :- "${BASE_APP_BUNDLE}/Contents/MacOS/Warzone 2100" > "entitlements.plist"
           cat "entitlements.plist"
           echo "-----------------------------------"
           echo "Make universal binary + app package"
-          ../src/macosx/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_arm64/Warzone 2100.app"
+          ../src/macosx/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_x64/Warzone 2100.app"
           # Rename the "base" app package directory
-          mv "warzone2100_macOS_x64" "warzone2100_macOS_universal"
+          mv "warzone2100_macOS_arm64" "warzone2100_macOS_universal"
           echo "Re-code-sign"
           codesign --force --options runtime --entitlements "entitlements.plist" -s - "warzone2100_macOS_universal/Warzone 2100.app"
           # Zip and copy to build dir
