@@ -77,13 +77,18 @@ jobs:
       working-directory: ./src
       run: git submodule update --init --recursive
     - name: Install Pre-reqs
+      env:
+        HOMEBREW_NO_AUTO_UPDATE: 1
       run: |
-        brew install gettext
+        echo "::group::brew install"
+        brew install gettext pkg-config
+        echo "::endgroup::"
+        
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
+        echo "::group::gem install asciidoctor"
         gem install asciidoctor -v 2.0.16 --no-document
+        echo "::endgroup::"
 
-        #brew update
-        brew install pkg-config
         #if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
         cmake --version
     - name: Prep Environment
