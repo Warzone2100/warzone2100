@@ -130,7 +130,11 @@ target_link_libraries(wzmaplib PRIVATE quickjs)
 ##################################
 # ZipIOProvider (requires libzip)
 
-find_package(libzip QUIET)
+set(LIBZIP_FIND_ADDITIONAL_PARAMS)
+if (APPLE OR WIN32)
+    list(APPEND LIBZIP_FIND_ADDITIONAL_PARAMS NO_SYSTEM_ENVIRONMENT_PATH)
+endif()
+find_package(libzip QUIET ${LIBZIP_FIND_ADDITIONAL_PARAMS})
 if (libzip_FOUND)
 	# Test linking libzip
 	include(CheckCXXSourceCompiles)
