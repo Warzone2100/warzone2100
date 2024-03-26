@@ -4,24 +4,24 @@
 
 > For convenience, you will probably want either [Homebrew](https://brew.sh) or [Macports](https://www.macports.org/install.php) installed for setting up certain prerequisites. If you don't have either yet, **Homebrew** is recommended.
 
-| Building on macOS 10.12-10.14  | Building on macOS 10.15+  |
-| -------------------------------| ------------------------- |
-| Xcode 8 / 9 / 10               | Xcode 11+                 |
-| CMake 3.14.1+                  | CMake 3.15+               |
-| Gettext                        | Gettext                   |
-| Asciidoctor                    | Asciidoctor               |
-| GCC 7+*                        |                           |
+1. **macOS 13+**
+    - While building may work on prior versions of macOS, CI only tests on macOS 13+.
 
-1. **macOS 10.12+**
-    - While building may work on prior versions of macOS, it is only tested on macOS 10.12+.
+2. **Xcode 14+** (tested w/: Xcode 14.x)
+    - If you do not have Xcode 14.3.1+ you can get it for free at the [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) or [Apple's website](http://developer.apple.com/technology/xcode.html).
+    - Earlier versions of Xcode may work, but are not tested by CI.
 
-2. **Xcode 8+** (tested w/: Xcode 8.3 - Xcode 11.x)
-    - If you do not have Xcode 8.3+ you can get it for free at the [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) or [Apple's website](http://developer.apple.com/technology/xcode.html).
+3. **CMake 3.24+** (required to generate the Xcode project)
+    - If you do not have CMake 3.24+, you can [download the latest stable version for free at CMake.org](https://cmake.org/download/#latest).
 
-3. **CMake 3.14.1+** (required to generate the Xcode project)
-    - If you do not have CMake 3.14+, you can [download the latest stable version for free at CMake.org](https://cmake.org/download/#latest).
+4. **Autoconf** (required to compile some vcpkg ports)
+    - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:
+        ```shell
+        brew install automake
+        ```
+        > See https://github.com/Homebrew/homebrew-core/issues/21125 for why the `automake` package must be installed instead of `autoconf`
 
-4. **Gettext** (required to compile the translations and language files)
+5. **Gettext** (required to compile the translations and language files)
     - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:
         ```shell
         brew install gettext
@@ -32,7 +32,7 @@
         sudo port install gettext
         ```
 
-5. **Asciidoctor** (required to build the documentation / help files)
+6. **Asciidoctor** (required to build the documentation / help files)
     - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:
         ```shell
         brew install asciidoctor
@@ -47,11 +47,16 @@
         ```
         > Depending on system configuration, `sudo gem install` may be required.
 
-6. **GCC** (\*currently required to build vcpkg on macOS < 10.15, and with Xcode < 11)
-    - If you have [Homebrew](https://brew.sh) installed, you can use the following command in Terminal:
-        ```shell
-        brew install gcc
-        ```
+## Tips for Compiling on earlier macOS / Xcode:
+
+> [!NOTE]
+> Since Xcode supports targeting older versions of macOS as a minimum deployment target, we recommend building with versions of macOS + Xcode that match the recommendations above (or newer).
+
+While CI does not test these combinations, WZ's CMake buildsystem previously compiled with:
+- Xcode 11+ on macOS 10.15
+- Xcode 8 / 9 / 10 on macOS 10.12-10.14
+
+> However, this is not tested - just a guideline if you want to try something unsupported.
 
 ## Setup & Configuration:
 
