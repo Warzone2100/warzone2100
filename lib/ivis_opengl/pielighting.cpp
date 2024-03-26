@@ -84,11 +84,11 @@ namespace {
 	BoundingBox getLightBoundingBox(const LIGHT& light)
 	{
 		glm::vec3 center = light.position;
-		center.z *= -1.;
+		center.z *= -1.f;
 		float range = light.range;
-		glm::vec3 horizontal(1.0, 0., 0.);
-		glm::vec3 vertical(0.0, 1.0, 0.);
-		glm::vec3 forward(0.0, 0., 1.0f);
+		glm::vec3 horizontal(1.0f, 0.f, 0.f);
+		glm::vec3 vertical(0.f, 1.0f, 0.f);
+		glm::vec3 forward(0.f, 0.f, 1.0f);
 
 		return BoundingBox{
 			center - horizontal * range - vertical * range - forward * range,
