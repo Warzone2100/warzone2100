@@ -277,6 +277,7 @@ lib/framework/wzstring.cpp
 lib/framework/wztime.cpp
 lib/gamelib/gtime.cpp
 lib/ivis_opengl/bitimage.cpp
+lib/ivis_opengl/culling.cpp
 lib/ivis_opengl/gfx_api.cpp
 lib/ivis_opengl/gfx_api_gl.cpp
 lib/ivis_opengl/gfx_api_image_basis_priv.cpp
@@ -290,11 +291,13 @@ lib/ivis_opengl/pieclip.cpp
 lib/ivis_opengl/piedraw.cpp
 lib/ivis_opengl/piefunc.cpp
 lib/ivis_opengl/pieimage.cpp
+lib/ivis_opengl/pielighting.cpp
 lib/ivis_opengl/piematrix.cpp
 lib/ivis_opengl/piemode.cpp
 lib/ivis_opengl/piepalette.cpp
 lib/ivis_opengl/piestate.cpp
 lib/ivis_opengl/png_util_libpng.cpp
+lib/ivis_opengl/png_util_spng.cpp
 lib/ivis_opengl/screen.cpp
 lib/ivis_opengl/tex.cpp
 lib/ivis_opengl/textdraw.cpp
@@ -306,6 +309,8 @@ lib/netplay/netqueue.cpp
 lib/netplay/netreplay.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
+lib/netplay/sync_debug.cpp
+lib/netplay/wzfile.cpp
 lib/sdl/cursor_sdl_helpers.cpp
 lib/sdl/cursors_sdl.cpp
 lib/sdl/gfx_api_gl_sdl.cpp
@@ -379,6 +384,7 @@ src/atmos.cpp
 src/aud.cpp
 src/baseobject.cpp
 src/bucket3d.cpp
+src/campaigninfo.cpp
 src/challenge.cpp
 src/chat.cpp
 src/cheat.cpp
@@ -396,6 +402,7 @@ src/display3d.cpp
 src/droid.cpp
 src/edit3d.cpp
 src/effects.cpp
+src/emscripten_helpers.cpp
 src/faction.cpp
 src/feature.cpp
 src/fpath.cpp
@@ -442,6 +449,7 @@ src/message.cpp
 src/miscimd.cpp
 src/mission.cpp
 src/modding.cpp
+src/modinfo.cpp
 src/move.cpp
 src/multibot.cpp
 src/multigifts.cpp
@@ -488,6 +496,7 @@ src/template.cpp
 src/terrain.cpp
 src/text.cpp
 src/texture.cpp
+src/titleui/campaign.cpp
 src/titleui/gamefind.cpp
 src/titleui/msgbox.cpp
 src/titleui/old.cpp
@@ -498,6 +507,8 @@ src/transporter.cpp
 src/updatemanager.cpp
 src/urlhelpers.cpp
 src/urlrequest.cpp
+src/urlrequest_curl.cpp
+src/urlrequest_emscripten.cpp
 src/version.cpp
 src/visibility.cpp
 src/warcam.cpp
@@ -506,5 +517,6 @@ src/wavecast.cpp
 src/wrappers.cpp
 src/wzapi.cpp
 src/wzcrashhandlingproviders.cpp
+src/wzjsonhelpers.cpp
 src/wzpropertyproviders.cpp
 src/wzscriptdebug.cpp
