@@ -32,6 +32,8 @@
 #include "visibility.h"
 #include "baseobject.h"
 
+#include <nonstd/optional.hpp>
+
 // how long to wait between CALL_STRUCT_ATTACKED's - plus how long to flash on radar for
 #define ATTACK_CB_PAUSE		5000
 
@@ -105,7 +107,9 @@ STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, U
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
+/// IMPORTANT: Do not save the reference to this instance anywhere, since it's
+/// not heap-allocated and thus doesn't have a stable address!
+nonstd::optional<STRUCTURE> buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool bMission);
 
