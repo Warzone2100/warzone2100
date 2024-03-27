@@ -352,7 +352,7 @@ struct Blueprint
 	{
 		return compare(b) == 0;
 	}
-	STRUCTURE *buildBlueprint() const  ///< Must delete after use.
+	optional<STRUCTURE> buildBlueprint() const
 	{
 		return ::buildBlueprint(stats, pos, dir, index, state, player);
 	}
@@ -360,11 +360,9 @@ struct Blueprint
 	{
 		if (clipXY(pos.x, pos.y))
 		{
-			STRUCTURE *psStruct = buildBlueprint();
-			ASSERT_OR_RETURN(, psStruct != nullptr, "buildBlueprint returned nullptr");
-			renderStructure(psStruct, viewMatrix, perspectiveViewMatrix);
-
-			objmemDestroy(psStruct, false);
+			auto optStruct = buildBlueprint();
+			ASSERT_OR_RETURN(, optStruct.has_value(), "buildBlueprint returned nullopt");
+			renderStructure(&*optStruct, viewMatrix, perspectiveViewMatrix);
 		}
 	}
 
@@ -688,18 +686,28 @@ static Blueprint getTileBlueprint(int mapX, int mapY)
 
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
 {
-	static STRUCTURE *psStruct = nullptr;
+	static optional<STRUCTURE> optStruct;
 
 	Blueprint blueprint = getTileBlueprint(mapX, mapY);
 	if (blueprint.state == SS_BLUEPRINT_PLANNED)
 	{
-		if (psStruct)
+		if (optStruct)
 		{
 			// Delete previously returned structure, if any.
-			objmemDestroy(psStruct, false);
+			optStruct.reset();
 		}
-		psStruct = blueprint.buildBlueprint();
-		return psStruct;  // This blueprint was clicked on.
+		auto b = blueprint.buildBlueprint();
+		// Don't use `operator=(optional&&)` to avoid declaring custom copy/move-assignment operators
+		// for `STRUCTURE` (more specifically, for `SIMPLE_OBJECT`, which has some const-qualified data members).
+		if (b)
+		{
+			optStruct.emplace(*b);
+		}
+		else
+		{
+			optStruct.reset();
+		}
+		return optStruct.has_value() ? &optStruct.value() : nullptr;  // This blueprint was clicked on.
 	}
 
 	return nullptr;

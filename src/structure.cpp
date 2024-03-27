@@ -1829,11 +1829,11 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer)
+optional<STRUCTURE> buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer)
 {
-	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "No blueprint stats");
-	ASSERT_OR_RETURN(nullptr, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getStatsName(psStats));
-	ASSERT_OR_RETURN(nullptr, ownerPlayer < MAX_PLAYERS, "invalid ownerPlayer: %" PRIu8 "", ownerPlayer);
+	ASSERT_OR_RETURN(nullopt, psStats != nullptr, "No blueprint stats");
+	ASSERT_OR_RETURN(nullopt, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getStatsName(psStats));
+	ASSERT_OR_RETURN(nullopt, ownerPlayer < MAX_PLAYERS, "invalid ownerPlayer: %" PRIu8 "", ownerPlayer);
 
 	Rotation rot(direction, 0, 0);
 
@@ -1909,9 +1909,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 		}
 	}
 
-	auto& stableBlueprint = GlobalStructContainer().emplace(std::move(blueprint));
-
-	return &stableBlueprint;
+	return blueprint;
 }
 
 static Vector2i defaultAssemblyPointPos(STRUCTURE *psBuilding)
