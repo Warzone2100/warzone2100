@@ -1303,8 +1303,11 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 		percent = 100;
 	}
 
+	constexpr int fireLightHeightAboveGround = 28;
+
 	light.position = psEffect->position;
-	light.range = (percent * psEffect->radius * 3) / 100;
+	light.position.y += fireLightHeightAboveGround;
+	light.range = (percent * psEffect->radius * 6) / 100;
 	light.colour = pal_Colour(255, 0, 0);
 	lightData.lights.push_back(light);
 
