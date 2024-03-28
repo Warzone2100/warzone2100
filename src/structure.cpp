@@ -5264,10 +5264,6 @@ void buildingComplete(STRUCTURE *psBuilding)
 	{
 	case REF_POWER_GEN:
 		checkForResExtractors(psBuilding);
-		if (selectedPlayer == psBuilding->player)
-		{
-			audio_PlayObjStaticTrack(psBuilding, ID_SOUND_POWER_HUM);
-		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
 		checkForPowerGen(psBuilding);
