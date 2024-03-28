@@ -2299,6 +2299,7 @@ static void effectStructureUpdates()
 					addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, nullptr, 0);
 
 					audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
+					audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_HUM);
 					break;
 				}
 			default:
