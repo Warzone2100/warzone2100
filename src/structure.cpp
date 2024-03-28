@@ -3685,20 +3685,6 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 				psBuilding->timeAnimationStarted = gameTime;  // so start animation
 			}
 		}
-
-		if (psBuilding->player == selectedPlayer)
-		{
-			if (psBuilding->visibleForLocalDisplay() // check for display(audio)-only - does not impact simulation / game state
-				&& psBuilding->pFunctionality->resourceExtractor.psPowerGen
-				&& psBuilding->animationEvent == ANIM_EVENT_ACTIVE)
-			{
-				audio_PlayObjStaticTrack(psBuilding, ID_SOUND_OIL_PUMP_2);
-			}
-			else
-			{
-				audio_StopObjTrack(psBuilding, ID_SOUND_OIL_PUMP_2);
-			}
-		}
 	}
 
 	// Remove invalid targets. This must be done each frame.

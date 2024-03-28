@@ -2302,6 +2302,16 @@ static void effectStructureUpdates()
 					audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_HUM);
 					break;
 				}
+			case REF_RESOURCE_EXTRACTOR:
+				{
+					if (psStructure->pFunctionality &&
+						psStructure->pFunctionality->resourceExtractor.psPowerGen &&
+						psStructure->animationEvent == ANIM_EVENT_ACTIVE)
+					{
+						audio_PlayObjStaticTrack(psStructure, ID_SOUND_OIL_PUMP_2);
+					}
+					break;
+				}
 			default:
 				break;
 			}
