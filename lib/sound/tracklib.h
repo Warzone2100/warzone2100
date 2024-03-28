@@ -63,9 +63,6 @@ void	sound_SetObject(SDWORD iSample, void *pObj);
 
 void	sound_SetCallback(SDWORD iSample, AUDIO_CALLBACK pCallBack);
 
-void	sound_PauseAll();
-void	sound_ResumeAll();
-void	sound_StopAll();
 void	sound_Update();
 unsigned int sound_GetActiveSamplesCount();
 

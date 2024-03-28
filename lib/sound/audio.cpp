@@ -111,7 +111,6 @@ bool audio_Shutdown(void)
 		return true;
 	}
 
-	sound_StopAll();
 	bOK = sound_Shutdown();
 
 	// empty sample list
@@ -885,7 +884,7 @@ void audio_PlayTrack(int iTrack)
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void audio_PauseAll(void)
+void audio_setPause(const bool state)
 {
 	// return if audio not enabled
 	if (g_bAudioEnabled == false)
@@ -893,24 +892,7 @@ void audio_PauseAll(void)
 		return;
 	}
 
-	g_bAudioPaused = true;
-	sound_PauseAll();
-}
-
-//*
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void audio_ResumeAll(void)
-{
-	// return if audio not enabled
-	if (g_bAudioEnabled == false)
-	{
-		return;
-	}
-
-	g_bAudioPaused = false;
-	sound_ResumeAll();
+	g_bAudioPaused = state;
 }
 
 //*
