@@ -694,7 +694,7 @@ bool audio_PlayStaticTrack(SDWORD iMapX, SDWORD iMapY, int iTrack)
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false)
+	if (g_bAudioEnabled == false || g_bAudioPaused == true)
 	{
 		return false;
 	}
@@ -734,7 +734,7 @@ bool audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CA
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false)
+	if (g_bAudioEnabled == false || g_bAudioPaused == true)
 	{
 		return false;
 	}
@@ -836,14 +836,14 @@ void audio_PlayBuildFailedOnce()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void audio_PlayTrack(int iTrack)
+void audio_PlayTrack(int iTrack, const bool playIfPaused/*=true*/)
 {
 	//~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample;
 	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if ((g_bAudioEnabled == false) || (g_bAudioPaused == true && playIfPaused == false))
 	{
 		return;
 	}

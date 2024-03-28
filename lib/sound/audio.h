@@ -37,7 +37,7 @@ bool audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack);
 bool audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);
 bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);
 void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack);
-void audio_PlayTrack(int iTrack);
+void audio_PlayTrack(int iTrack, const bool playIfPaused = true);
 void audio_PlayCallbackTrack(int iTrack, AUDIO_CALLBACK pUserCallback);
 AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished, const void *user_data);
 void audio_QueueTrack(SDWORD iTrack);
