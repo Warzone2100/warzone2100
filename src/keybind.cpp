@@ -1112,7 +1112,7 @@ MappableFunction kf_AssignGrouping_N(const unsigned int n)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		assignDroidsToGroup(selectedPlayer, n, true);
+		assignObjectToGroup(selectedPlayer, n, true);
 	};
 }
 
@@ -1122,7 +1122,7 @@ MappableFunction kf_AddGrouping_N(const unsigned int n)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		assignDroidsToGroup(selectedPlayer, n, false);
+		assignObjectToGroup(selectedPlayer, n, false);
 	};
 }
 
@@ -1132,7 +1132,7 @@ MappableFunction kf_RemoveFromGrouping()
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		removeDroidsFromGroup(selectedPlayer);
+		removeObjectFromGroup(selectedPlayer);
 	};
 }
 

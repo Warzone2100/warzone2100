@@ -2477,7 +2477,18 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			*ppsDroid = nullptr;
 			return false;
 		}
-
+		psFact = &psStructure->pFunctionality->factory;
+		bool hasCommander = psFact->psCommander != nullptr && myResponsibility(psStructure->player);
+		// assign a group to the manufactured droid
+		if (psStructure->productToGroup != UBYTE_MAX)
+		{
+			psNewDroid->group = psStructure->productToGroup;
+			if (!hasCommander || isConstructionDroid(psNewDroid))
+			{
+				intGroupsChanged(psNewDroid->group); // update groups UI
+				SelectGroupDroid(psNewDroid);
+			}
+		}
 		setFactorySecondaryState(psNewDroid, psStructure);
 		const auto mapCoord = map_coord({x, y});
 		const auto psTile = mapTile(mapCoord);
@@ -2510,8 +2521,6 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		// update the droid counts
 		adjustDroidCount(psNewDroid, 1);
 
-		psFact = &psStructure->pFunctionality->factory;
-
 		// if we've built a command droid - make sure that it isn't assigned to another commander
 		assignCommander = false;
 		if ((psNewDroid->droidType == DROID_COMMAND) &&
@@ -2525,7 +2534,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		{
 			moveToRearm(psNewDroid);
 		}
-		if (psFact->psCommander != nullptr && myResponsibility(psStructure->player))
+		if (hasCommander)
 		{
 			// TODO: Should synchronise .psCommander in all cases.
 			//syncDebug("Has commander.");

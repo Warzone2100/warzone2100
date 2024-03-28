@@ -90,11 +90,13 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	ASSERT_OR_RETURN(false, psDroid != nullptr, "psDroid is null?");
 
 	auto initialDroidGroup = psDroid->group;
+	auto initialDroidRepairGroup = psDroid->repairGroup;
 
 	if (psCommander->psGroup == nullptr)
 	{
 		psGroup = grpCreate();
 		psGroup->add(psCommander);
+		psDroid->repairGroup = UBYTE_MAX;
 		psDroid->group = UBYTE_MAX;
 	}
 
@@ -103,6 +105,7 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		addedToGroup = true;
 
 		psCommander->psGroup->add(psDroid);
+		psDroid->repairGroup = UBYTE_MAX;
 		psDroid->group = UBYTE_MAX;
 
 		// set the secondary states for the unit
@@ -121,6 +124,13 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 			addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 			lastMaxCmdLimitMsgTime = gameTime;
 		}
+
+		if (initialDroidGroup != UBYTE_MAX)
+		{
+			psDroid->group = initialDroidGroup;
+			SelectGroupDroid(psDroid);
+		}
+		psDroid->repairGroup = initialDroidRepairGroup;
 	}
 
 	if (initialDroidGroup != psDroid->group)
