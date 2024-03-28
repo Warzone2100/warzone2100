@@ -48,8 +48,7 @@ void audio_QueueTrackPos(SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ);
 void audio_QueueTrackGroupPos(SDWORD iTrack, SDWORD iGroup, SDWORD iX, SDWORD iY, SDWORD iZ);
 bool audio_GetPreviousQueueTrackPos(SDWORD *iX, SDWORD *iY, SDWORD *iZ);
 bool audio_GetPreviousQueueTrackRadarBlipPos(SDWORD *iX, SDWORD *iY);
-void audio_PauseAll();
-void audio_ResumeAll();
+void audio_setPause(const bool state);
 void audio_StopAll();
 
 SDWORD audio_GetTrackID(const char *fileName);
