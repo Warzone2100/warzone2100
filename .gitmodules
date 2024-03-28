@@ -59,6 +59,9 @@
 	path = 3rdparty/basis_universal
 	url = https://github.com/BinomialLLC/basis_universal.git
 	shallow = true
+[submodule "3rdparty/GeoIP"]
+	path = 3rdparty/GeoIP
+	url = https://github.com/maxmind/geoip-api-c
 [submodule "data/terrain_overrides/classic"]
 	path = data/terrain_overrides/classic
 	url = https://github.com/Warzone2100/data-terrain-classic.git

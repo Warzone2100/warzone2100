@@ -59,6 +59,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzpaths.h"
 #include "lib/framework/wztime.h"
+#include "lib/framework/file.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
@@ -116,6 +117,9 @@
 #include "wzcrashhandlingproviders.h"
 #include "wzpropertyproviders.h"
 #include "3rdparty/gsl_finally.h"
+#include "3rdparty/GeoIP/libGeoIP/GeoIP.h"
+
+#include <fstream>
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
@@ -1854,6 +1858,59 @@ void mainShutdown()
 	ActivityManager::instance().shutdown();
 }
 
+// geo ip location
+GeoIP *gi = nullptr;
+
+void initGeoIP(const char *fileName)
+{
+	std::string path = PHYSFS_getWriteDir();
+	path += fileName;
+
+	// Unpacking GeoIP.dat from the archive.
+	// TODO: download the database from the web.
+	std::ifstream check(path.c_str());
+	if (!check.good()) 
+	{
+		debug(LOG_INFO, "Installing default GeoIP database.");
+
+		char *fileData = nullptr;
+		UDWORD fileSize = 0;
+		loadFile(fileName, &fileData, &fileSize);
+
+		if (fileData)
+		{
+			std::ofstream file;
+			file.open(path.c_str(), std::ios_base::binary);
+			if (!file.is_open())
+			{
+				debug(LOG_ERROR, "Failed to open %s for writing.", fileName);
+				free(fileData);
+				return;
+			}
+			file.write(fileData, fileSize);
+			file.close();
+
+			free(fileData);
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to read %s from WZ archive.", fileName);
+			return;
+		}
+	}
+
+	gi = GeoIP_open(path.c_str(), GEOIP_STANDARD | GEOIP_CHECK_CACHE | GEOIP_SILENCE);
+
+	if (gi)
+	{
+		debug(LOG_INFO, "Init GeoIP: %s", GeoIP_database_info(gi));
+	}
+	else
+	{
+		debug(LOG_ERROR, "Failed to open %s file.", fileName);
+	}
+}
+
 int realmain(int argc, char *argv[])
 {
 	utfargc = argc;
@@ -2237,6 +2294,8 @@ int realmain(int argc, char *argv[])
 #endif
 
 	osSpecificPostInit();
+
+	initGeoIP("GeoIP.dat");
 
 	wzMainEventLoop(mainShutdown);
 

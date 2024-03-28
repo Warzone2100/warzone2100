@@ -74,7 +74,7 @@ std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures();
 
 bool loadLevFile(const std::string& filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
-extern IMAGEFILE	*FrontImages;
+extern IMAGEFILE	*FrontImages, *CountryFlagImages;
 
 enum MODS_PATHS: size_t
 {

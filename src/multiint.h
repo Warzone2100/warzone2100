@@ -154,8 +154,8 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 // We can have a max of 4 icons for status, current icon size if 36x25.
 #define GAMES_STATUS_START 378
 #define GAMES_GAMENAME_START 2
-#define GAMES_MAPNAME_START 168
-#define GAMES_MODNAME_START 168 + 6		// indent a bit
+#define GAMES_MAPNAME_START 200
+#define GAMES_MODNAME_START 200 + 6	// indent a bit
 #define GAMES_PLAYERS_START 342
 
 // ////////////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_PLAYERSY		1
 #define MULTIOP_PLAYER_START	102350		//list of players
 #define MULTIOP_PLAYER_END		102381
-#define MULTIOP_PLAYERSW		298
+#define MULTIOP_PLAYERSW		330
 #define MULTIOP_PLAYERS_TABS	10232
 #define MULTIOP_PLAYERS_TABS_H	24
 #define MULTIOP_PLAYERSH		(380 + MULTIOP_PLAYERS_TABS_H + 1)
@@ -195,14 +195,16 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_READY_WIDTH			41
 #define MULTIOP_READY_HEIGHT		38
 
-#define MULTIOP_PLAYERWIDTH		282
+#define MULTIOP_PLAYERWIDTH		314
 #define	MULTIOP_PLAYERHEIGHT	38
 
 #define MULTIOP_OPTIONS			10250
-#define MULTIOP_OPTIONSX		40
+#define MULTIOP_OPTIONSX		8
 #define MULTIOP_OPTIONSY		1
-#define MULTIOP_OPTIONSW		284
+#define MULTIOP_OPTIONSW		316
 #define MULTIOP_OPTIONSH		MULTIOP_PLAYERSH
+
+#define MULTIOP_LOBBYW			((MULTIOP_PLAYERSX + MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX) - 64
 
 #define MULTIOP_EDITBOXW		196
 #define	MULTIOP_EDITBOXH		30
@@ -251,7 +253,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_CONSOLEBOX		0x1A001		// TODO: these should be enums!
 #define MULTIOP_CONSOLEBOXX		MULTIOP_OPTIONSX
 #define MULTIOP_CONSOLEBOXY		422
-#define MULTIOP_CONSOLEBOXW		((MULTIOP_PLAYERSX + MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX)
+#define MULTIOP_CONSOLEBOXW		((MULTIOP_PLAYERSX + MULTIOP_PLAYERSW) - MULTIOP_OPTIONSX) - 64
 #define MULTIOP_CONSOLEBOXH		64
 
 #define MULTIOP_CHATEDIT		10279
@@ -309,6 +311,10 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_FACCHOOSER_END		(MULTIOP_FACCHOOSER + NUM_FACTIONS)
 #define MULTIOP_FACCHOOSER_FORM		(MULTIOP_FACCHOOSER_END+1)
 
+#define MULTIOP_COUNTRY_FLAGX		242
+#define MULTIOP_COUNTRY_FLAGY		6
+#define MULTIOP_COUNTRY_FLAGW		24
+#define MULTIOP_COUNTRY_FLAGH		16
 
 // ///////////////////////////////
 // Many Button Variations..

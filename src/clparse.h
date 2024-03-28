@@ -42,6 +42,8 @@ void setAutoratingUrl(std::string url);
 std::string getAutoratingUrl();
 void setAutoratingEnable(bool e);
 bool getAutoratingEnable();
+void setSendGeoIPDataEnable(bool e);
+bool getSendGeoIPDataEnable();
 bool streamer_spectator_mode();
 bool lobby_slashcommands_enabled();
 

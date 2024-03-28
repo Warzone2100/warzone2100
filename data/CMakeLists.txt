@@ -499,6 +499,7 @@ endif(WZ_INCLUDE_TERRAIN_HIGH)
 COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 	COMPRESSION_LEVEL 0
 	PATHS
+		"GeoIP.dat"
 		"palette.txt"
 		"audio"
 		"campaigns"

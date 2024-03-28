@@ -111,7 +111,7 @@ static const char UserMusicPath[] = "music";
 // FIXME Totally inappropriate place for this.
 char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 
-IMAGEFILE *FrontImages;
+IMAGEFILE *FrontImages, *CountryFlagImages;
 
 static std::vector<std::unique_ptr<wzSearchPath>> searchPathRegistry;
 static std::vector<std::string> searchPathMountErrors;
@@ -1410,6 +1410,19 @@ bool frontendInitialise(const char *ResourceFile)
 	if (FrontImages == nullptr)
 	{
 		std::string errorMessage = astringf(_("Unable to load: %s."), "frontend.img");
+		if (!getLoadedMods().empty())
+		{
+			errorMessage += " ";
+			errorMessage += _("Please remove all incompatible mods.");
+		}
+		debug(LOG_FATAL, "%s", errorMessage.c_str());
+		return false;
+	}
+
+	CountryFlagImages = (IMAGEFILE *)resGetData("IMG", "countryFlags.img");
+	if (CountryFlagImages == nullptr)
+	{
+		std::string errorMessage = astringf(_("Unable to load: %s."), "countryFlags.img");
 		if (!getLoadedMods().empty())
 		{
 			errorMessage += " ";

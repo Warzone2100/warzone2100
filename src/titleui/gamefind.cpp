@@ -75,7 +75,7 @@ void WzGameFindTitleUI::start()
 	parent->attach(botForm);
 	botForm->id = FRONTEND_BOTFORM;
 	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
+		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_LOBBYW, 415);  // FIXME: Add box at bottom for server messages
 	}));
 
 	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX - 3, MULTIOP_OPTIONSY, _("GAMES"));
@@ -85,10 +85,10 @@ void WzGameFindTitleUI::start()
 	            IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	//refresh
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, MULTIOP_REFRESH, MULTIOP_CHATBOXW - MULTIOP_OKW - 5, 5, MULTIOP_OKW, MULTIOP_OKH,
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, MULTIOP_REFRESH, MULTIOP_LOBBYW - MULTIOP_OKW - 5, 5, MULTIOP_OKW, MULTIOP_OKH,
 	            _("Refresh Games List"), IMAGE_RELOAD_HI, IMAGE_RELOAD, IMAGE_RELOAD);
 	//filter toggle
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, MULTIOP_FILTER_TOGGLE, MULTIOP_CHATBOXW - MULTIOP_OKW - 45, 5, MULTIOP_OKW, MULTIOP_OKH,
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, MULTIOP_FILTER_TOGGLE, MULTIOP_LOBBYW - MULTIOP_OKW - 45, 5, MULTIOP_OKW, MULTIOP_OKH,
 	            _("Filter Games List"), IMAGE_FILTER, IMAGE_FILTER_ON, IMAGE_FILTER_ON);
 
 	if (safeSearch || multiintDisableLobbyRefresh)

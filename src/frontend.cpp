@@ -3357,6 +3357,11 @@ void startMultiplayOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_AUTORATING_R, getAutoratingEnable()? _("On") : _("Off"), WBUT_SECONDARY)));
 	row.start++;
 
+	// Enable GeoIP data sending
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SEND_GEOIP_DATA, _("Send player countries"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SEND_GEOIP_DATA_R, getSendGeoIPDataEnable()? _("On") : _("Off"), WBUT_SECONDARY)));
+	row.start++;
+
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
 
 	auto scrollableList = ScrollableListWidget::make();
@@ -3401,6 +3406,12 @@ bool runMultiplayOptionsMenu()
 	case FRONTEND_AUTORATING_R:
 		setAutoratingEnable(!getAutoratingEnable());
 		widgSetString(psWScreen, FRONTEND_AUTORATING_R, getAutoratingEnable()? _("On") : _("Off"));
+		break;
+
+	case FRONTEND_SEND_GEOIP_DATA:
+	case FRONTEND_SEND_GEOIP_DATA_R:
+		setSendGeoIPDataEnable(!getSendGeoIPDataEnable());
+		widgSetString(psWScreen, FRONTEND_SEND_GEOIP_DATA_R, getSendGeoIPDataEnable() ? _("On") : _("Off"));
 		break;
 
 	case FRONTEND_QUIT:

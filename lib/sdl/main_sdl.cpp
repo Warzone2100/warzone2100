@@ -38,6 +38,10 @@
 #include "gfx_api_sdl.h"
 #include "gfx_api_gl_sdl.h"
 
+#include "3rdparty/GeoIP/libGeoIP/GeoIP.h"
+
+extern GeoIP *gi;
+
 #if defined( _MSC_VER )
 	// Silence warning when using MSVC ARM64 compiler
 	//	warning C4121: 'SDL_hid_device_info': alignment of a member was sensitive to packing
@@ -3741,6 +3745,8 @@ void wzPumpEventsWhileLoading()
 
 void wzShutdown()
 {
+	GeoIP_delete(gi);
+
 	// order is important!
 	sdlFreeCursors();
 	if (WZwindow != nullptr)

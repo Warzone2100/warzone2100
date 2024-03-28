@@ -411,6 +411,7 @@ bool loadConfig()
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
 	setAutoratingUrl(iniGetString("autoratingUrlV2", WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL).value());
 	setAutoratingEnable(iniGetBool("autorating", false).value());
+	setSendGeoIPDataEnable(iniGetBool("sendGeoIPData", true).value());
 	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
 	mpSetServerName(iniGetString("server_name", "").value());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
@@ -713,6 +714,7 @@ bool saveConfig()
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	iniSetString("autoratingUrlV2", getAutoratingUrl());
 	iniSetBool("autorating", getAutoratingEnable());
+	iniSetBool("sendGeoIPData", getSendGeoIPDataEnable());
 	iniSetFromCString("masterserver_name", NETgetMasterserverName(), 255);
 	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
 	iniSetString("server_name", mpGetServerName());
