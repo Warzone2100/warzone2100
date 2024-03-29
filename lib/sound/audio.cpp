@@ -554,7 +554,7 @@ unsigned int audio_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 //*
 //
 //
-// * audio_CheckSame3DTracksPlaying Reject samples if too many already playing in
+// * audio_CheckTooManySame3DTracksPlaying Reject samples if too many already playing in
 // * same area
 //
 
@@ -562,11 +562,11 @@ unsigned int audio_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ)
+static bool audio_CheckTooManySame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ)
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	SDWORD			iCount, iDx, iDy, iDz, iDistSq, iMaxDistSq, iRad;
-	bool			bOK = true;
+	SDWORD iCount = 0, iDx = 0, iDy = 0, iDz = 0, iDistSq = 0, iMaxDistSq = 0, iRad = 0;
+	bool isTooMany = false;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -574,8 +574,6 @@ static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, 
 	{
 		return true;
 	}
-
-	iCount = 0;
 
 	// loop through 3D sounds and check whether too many already in earshot
 	for (const AUDIO_SAMPLE* psSample : g_psSampleList)
@@ -590,18 +588,18 @@ static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, 
 			iMaxDistSq = iRad * iRad;
 			if (iDistSq < iMaxDistSq)
 			{
-				iCount++;
+				++iCount;
 			}
 
 			if (iCount > MAX_SAME_SAMPLES)
 			{
-				bOK = false;
+				isTooMany = true;
 				break;
 			}
 		}
 	}
 
-	return bOK;
+	return isTooMany;
 }
 
 //*
@@ -623,7 +621,7 @@ static bool audio_Play3DTrack(SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPL
 		return false;
 	}
 
-	if (audio_CheckSame3DTracksPlaying(iTrack, iX, iY, iZ) == false)
+	if (audio_CheckTooManySame3DTracksPlaying(iTrack, iX, iY, iZ))
 	{
 		return false;
 	}
