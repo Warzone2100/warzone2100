@@ -569,7 +569,7 @@ static void dataImageRelease(void *pData)
 /* Load an audio file */
 static bool dataAudioLoad(const char *fileName, void **ppData)
 {
-	if (audio_Disabled() == true)
+	if (audio_Disabled())
 	{
 		*ppData = nullptr;
 		// No error occurred (sound is just disabled), so we return true

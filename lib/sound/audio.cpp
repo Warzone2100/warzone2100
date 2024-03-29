@@ -67,7 +67,7 @@ unsigned int audio_GetSampleListCount()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-bool audio_Disabled(void)
+bool audio_Disabled()
 {
 	return !g_bAudioEnabled;
 }
@@ -106,7 +106,7 @@ bool audio_Shutdown(void)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return true;
 	}
@@ -227,7 +227,7 @@ static bool audio_CheckSameQueueTracksPlaying(SDWORD iTrack)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return true;
 	}
@@ -263,7 +263,7 @@ static AUDIO_SAMPLE *audio_QueueSample(SDWORD iTrack)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return nullptr;
 	}
@@ -302,7 +302,7 @@ static AUDIO_SAMPLE *audio_QueueSample(SDWORD iTrack)
 void audio_QueueTrack(SDWORD iTrack)
 {
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return;
 	}
@@ -330,7 +330,7 @@ void audio_QueueTrackMinDelay(SDWORD iTrack, UDWORD iMinDelay)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return;
 	}
@@ -365,7 +365,7 @@ void audio_QueueTrackMinDelayPos(SDWORD iTrack, UDWORD iMinDelay, SDWORD iX, SDW
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return;
 	}
@@ -403,7 +403,7 @@ void audio_QueueTrackPos(SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return;
 	}
@@ -431,7 +431,7 @@ static void audio_UpdateQueue(void)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return;
 	}
@@ -481,7 +481,7 @@ void audio_Update()
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return;
 	}
@@ -540,7 +540,7 @@ void audio_Update()
 unsigned int audio_SetTrackVals(const char *fileName, bool loop, unsigned int volume, unsigned int audibleRadius)
 {
 	// if audio not enabled return a random non-zero value to carry on game without audio
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return 1;
 	}
@@ -567,7 +567,7 @@ static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return true;
 	}
@@ -615,7 +615,7 @@ static bool audio_Play3DTrack(SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPL
 	ALenum err;
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return false;
 	}
@@ -694,7 +694,7 @@ bool audio_PlayStaticTrack(SDWORD iMapX, SDWORD iMapY, int iTrack)
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return false;
 	}
@@ -714,7 +714,7 @@ bool audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack)
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return false;
 	}
@@ -734,7 +734,7 @@ bool audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CA
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false || g_bAudioPaused == true)
+	if (audio_Disabled() || g_bAudioPaused == true)
 	{
 		return false;
 	}
@@ -754,7 +754,7 @@ bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK 
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return false;
 	}
@@ -785,7 +785,7 @@ AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, const std::fu
 {
 	// If audio is not enabled return false to indicate that the given callback
 	// will not be invoked.
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return nullptr;
 	}
@@ -800,7 +800,7 @@ AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, const std::fu
 void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack)
 {
 	// return if audio not enabled
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return;
 	}
@@ -843,7 +843,7 @@ void audio_PlayTrack(int iTrack, const bool playIfPaused/*=true*/)
 	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if ((g_bAudioEnabled == false) || (g_bAudioPaused == true && playIfPaused == false))
+	if (audio_Disabled() || (g_bAudioPaused == true && playIfPaused == false))
 	{
 		return;
 	}
@@ -887,7 +887,7 @@ void audio_PlayTrack(int iTrack, const bool playIfPaused/*=true*/)
 void audio_setPause(const bool state)
 {
 	// return if audio not enabled
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return;
 	}
@@ -902,7 +902,7 @@ void audio_setPause(const bool state)
 void audio_StopAll(void)
 {
 	// return if audio not enabled
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return;
 	}
@@ -951,7 +951,7 @@ SDWORD audio_GetTrackID(const char *fileName)
 	//~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (g_bAudioEnabled == false)
+	if (audio_Disabled())
 	{
 		return SAMPLE_NOT_FOUND;
 	}
