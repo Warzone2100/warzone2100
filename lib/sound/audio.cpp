@@ -72,6 +72,11 @@ bool audio_Disabled()
 	return !g_bAudioEnabled;
 }
 
+bool audio_Paused()
+{
+	return g_bAudioPaused;
+}
+
 //*
 // =======================================================================================================================
 // =======================================================================================================================
@@ -227,7 +232,7 @@ static bool audio_CheckSameQueueTracksPlaying(SDWORD iTrack)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return true;
 	}
@@ -263,7 +268,7 @@ static AUDIO_SAMPLE *audio_QueueSample(SDWORD iTrack)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return nullptr;
 	}
@@ -302,7 +307,7 @@ static AUDIO_SAMPLE *audio_QueueSample(SDWORD iTrack)
 void audio_QueueTrack(SDWORD iTrack)
 {
 	// return if audio not enabled
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return;
 	}
@@ -330,7 +335,7 @@ void audio_QueueTrackMinDelay(SDWORD iTrack, UDWORD iMinDelay)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return;
 	}
@@ -365,7 +370,7 @@ void audio_QueueTrackMinDelayPos(SDWORD iTrack, UDWORD iMinDelay, SDWORD iX, SDW
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return;
 	}
@@ -403,7 +408,7 @@ void audio_QueueTrackPos(SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return;
 	}
@@ -431,7 +436,7 @@ static void audio_UpdateQueue(void)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return;
 	}
@@ -567,7 +572,7 @@ static bool audio_CheckSame3DTracksPlaying(SDWORD iTrack, SDWORD iX, SDWORD iY, 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return true;
 	}
@@ -615,7 +620,7 @@ static bool audio_Play3DTrack(SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPL
 	ALenum err;
 
 	// if audio not enabled return true to carry on game without audio
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return false;
 	}
@@ -694,7 +699,7 @@ bool audio_PlayStaticTrack(SDWORD iMapX, SDWORD iMapY, int iTrack)
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return false;
 	}
@@ -734,7 +739,7 @@ bool audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CA
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (audio_Disabled() || g_bAudioPaused == true)
+	if (audio_Disabled() || audio_Paused())
 	{
 		return false;
 	}
@@ -843,7 +848,7 @@ void audio_PlayTrack(int iTrack, const bool playIfPaused/*=true*/)
 	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
-	if (audio_Disabled() || (g_bAudioPaused == true && playIfPaused == false))
+	if (audio_Disabled() || (audio_Paused() && !playIfPaused))
 	{
 		return;
 	}
