@@ -224,11 +224,11 @@ static void audio_RemoveSample(std::list<AUDIO_SAMPLE *>& ppsSampleList, AUDIO_S
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static bool audio_CheckSameQueueTracksPlaying(SDWORD iTrack)
+static bool audio_CheckTooManySameQueueTracksPlaying(SDWORD iTrack)
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	SDWORD			iCount;
-	bool			bOK = true;
+	SDWORD iCount = 0;
+	bool isTooMany = false;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -237,24 +237,22 @@ static bool audio_CheckSameQueueTracksPlaying(SDWORD iTrack)
 		return true;
 	}
 
-	iCount = 0;
-
 	// loop through queue sounds and check whether too many already in it
 	for (const AUDIO_SAMPLE* psSample : g_psSampleQueue)
 	{
 		if (psSample->iTrack == iTrack)
 		{
-			iCount++;
+			++iCount;
 		}
 
 		if (iCount > MAX_SAME_SAMPLES)
 		{
-			bOK = false;
+			isTooMany = true;
 			break;
 		}
 	}
 
-	return bOK;
+	return isTooMany;
 }
 
 //*
@@ -276,7 +274,7 @@ static AUDIO_SAMPLE *audio_QueueSample(SDWORD iTrack)
 	ASSERT(sound_CheckTrack(iTrack) == true, "audio_QueueSample: track %i outside limits\n", iTrack);
 
 	// reject track if too many of same ID already in queue
-	if (audio_CheckSameQueueTracksPlaying(iTrack) == false)
+	if (audio_CheckTooManySameQueueTracksPlaying(iTrack))
 	{
 		return nullptr;
 	}
