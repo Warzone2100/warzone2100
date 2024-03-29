@@ -1340,7 +1340,7 @@ void systemShutdown()
 	debug(LOG_MAIN, "shutting down CD audio");
 	cdAudio_Close();
 
-	if (audio_Disabled() == false && !audio_Shutdown())
+	if (!audio_Disabled() && !audio_Shutdown())
 	{
 		debug(LOG_FATAL, "Unable to audio_Shutdown() cleanly!");
 		abort();
@@ -1584,7 +1584,7 @@ bool stageOneShutDown()
 
 	pie_FreeShaders();
 
-	if (audio_Disabled() == false)
+	if (!audio_Disabled())
 	{
 		sound_CheckAllUnloaded();
 	}
