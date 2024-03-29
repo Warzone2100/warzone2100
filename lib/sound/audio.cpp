@@ -715,7 +715,7 @@ bool audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack)
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (audio_Disabled())
+	if (audio_Disabled() || audio_Paused())
 	{
 		return false;
 	}
@@ -755,7 +755,7 @@ bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK 
 	//~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
-	if (audio_Disabled())
+	if (audio_Disabled() || audio_Paused())
 	{
 		return false;
 	}
