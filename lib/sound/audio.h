@@ -28,6 +28,7 @@ bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, HRTFMode hrtf, bool really_in
 void audio_Update();
 bool audio_Shutdown();
 bool audio_Disabled();
+bool audio_Paused();
 
 bool audio_LoadTrackFromFile(char szFileName[]);
 unsigned int audio_SetTrackVals(const char *fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
