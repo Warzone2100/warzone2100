@@ -56,8 +56,9 @@ jobs:
     steps:
     - name: Install Dependencies
       run: |
-        echo "::group::apt install dependencies"
-        sudo apt install flatpak python3-aiohttp python3-tenacity dbus-daemon curl
+        echo "::group::apt-get install dependencies"
+        sudo apt-get -u update
+        DEBIAN_FRONTEND=noninteractive sudo apt-get -y install flatpak python3-aiohttp python3-tenacity dbus-daemon curl
         echo "::endgroup::"
         
         echo "::group::flatpak remote-add"
