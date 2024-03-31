@@ -1738,7 +1738,7 @@ bool stageTwoInitialise()
 		{
 			NETinitQueue(NETgameQueue(i));
 
-			if (!myResponsibility(i))
+			if (!myResponsibility(i) || !NetPlay.bComms)
 			{
 				NETsetNoSendOverNetwork(NETgameQueue(i));
 			}
