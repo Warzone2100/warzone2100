@@ -23,6 +23,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/framework/object_list_iteration.h"
 
 #include "oggopus.h"
@@ -47,6 +48,28 @@ static bool			g_bAudioEnabled = false;
 static bool			g_bAudioPaused = false;
 static AUDIO_SAMPLE g_sPreviousSample;
 static int			g_iPreviousSampleTime = 0;
+
+bool loadAudioEffectFileData(WzConfig &ini)
+{
+	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
+	std::vector<WzString> list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
+		nlohmann::json array = ini.json("data");
+		ASSERT(array.is_array(), "data is not an array");
+		for(auto &a : array)
+		{
+			std::string fname = a["filename"].get<std::string>();
+			bool loop = a["loop"].get<bool>();
+			unsigned int volume = a["volume"].get<uint32_t>();
+			unsigned int range = a["range"].get<uint32_t>();
+			audio_SetTrackVals(fname.c_str(), loop, volume, range);
+		}
+		ini.endGroup();
+	}
+	return true;
+}
 
 /** Counts the number of samples in the SampleQueue
  *  \return the number of samples in the SampleQueue
@@ -548,6 +571,7 @@ unsigned int audio_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 		return 1;
 	}
 
+	debug(LOG_NEVER, "File: %s, loop: %d, volume: %d, radius: %d", fileName, loop, volume, audibleRadius);
 	return sound_SetTrackVals(fileName, loop, volume, audibleRadius);
 }
 

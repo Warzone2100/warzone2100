@@ -1,0 +1,23 @@
+{
+    "Beeps": {
+        "_comment": "filename: [file.ogg], loop: [false/true], volume: [0-100], range: [world units, 128 = 1 tile]",
+        "_name": "Beep sounds",
+        "data": [
+            { "filename": "beep1.ogg", "loop": false, "volume": 30, "range": 1800 },
+            { "filename": "beep2.ogg", "loop": false, "volume": 30, "range": 1800 },
+            { "filename": "beep3.ogg", "loop": false, "volume": 30, "range": 1800 },
+            { "filename": "beep4.ogg", "loop": false, "volume": 30, "range": 1800 },
+            { "filename": "beep5.ogg", "loop": false, "volume": 30, "range": 1800 },
+            { "filename": "beep6.ogg", "loop": false, "volume": 30, "range": 1800 },
+            { "filename": "beep7.ogg", "loop": false, "volume": 30, "range": 1800 },
+            { "filename": "beep8.ogg", "loop": false, "volume": 30, "range": 1800 },
+            { "filename": "beep9.ogg", "loop": false, "volume": 30, "range": 1800 }
+        ]
+    },
+    "Shutdown": {
+        "_name": "Shutdown sounds",
+        "data": [
+            { "filename": "gmeshtdn.ogg", "loop": false, "volume": 30, "range": 1800 }
+        ]
+    }
+}

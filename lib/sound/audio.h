@@ -21,8 +21,11 @@
 #ifndef __INCLUDED_LIB_SOUND_AUDIO_H__
 #define __INCLUDED_LIB_SOUND_AUDIO_H__
 
+#include "lib/framework/wzconfig.h"
 #include "track.h"
 #include "sounddefs.h"
+
+bool loadAudioEffectFileData(WzConfig &ini);
 
 bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, HRTFMode hrtf, bool really_init);
 void audio_Update();
