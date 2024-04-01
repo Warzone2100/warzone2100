@@ -271,50 +271,6 @@
 		"type": "POWER GENERATOR",
 		"width": 1
 	},
-	"A0BaBaRocketPit": {
-		"armour": 10,
-		"breadth": 1,
-		"buildPoints": 400,
-		"buildPower": 40,
-		"height": 1,
-		"hitpoints": 500,
-		"id": "A0BaBaRocketPit",
-		"name": "Scavenger Rocket Pit",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "SOFT",
-		"structureModel": [
-			"EXROCKET.PIE"
-		],
-		"thermal": 10,
-		"type": "DEFENSE",
-		"weapons": [
-			"BabaPitRocket"
-		],
-		"width": 1
-	},
-	"A0BaBaRocketPitAT": {
-		"armour": 10,
-		"breadth": 1,
-		"buildPoints": 500,
-		"buildPower": 40,
-		"height": 1,
-		"hitpoints": 500,
-		"id": "A0BaBaRocketPitAT",
-		"name": "Scavenger AT-Rocket Pit",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "SOFT",
-		"structureModel": [
-			"EXROCKET.PIE"
-		],
-		"thermal": 10,
-		"type": "DEFENSE",
-		"weapons": [
-			"BabaPitRocketAT"
-		],
-		"width": 1
-	},
 	"A0BabaCornerWall": {
 		"armour": 5,
 		"breadth": 1,
@@ -905,30 +861,6 @@
 		],
 		"width": 1
 	},
-	"CO-Tower-HvATRkt": {
-		"armour": 18,
-		"breadth": 1,
-		"buildPoints": 500,
-		"buildPower": 300,
-		"combinesWithWall": true,
-		"ecmID": "ZNULLECM",
-		"height": 2,
-		"hitpoints": 1400,
-		"id": "CO-Tower-HvATRkt",
-		"name": "*CO-Tower-HvATRkt*",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "HARD",
-		"structureModel": [
-			"BLGUARD2.pie"
-		],
-		"thermal": 18,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-HvyA-T"
-		],
-		"width": 1
-	},
 	"CO-Tower-HvFlame": {
 		"armour": 10,
 		"breadth": 1,
@@ -949,29 +881,6 @@
 		"type": "DEFENSE",
 		"weapons": [
 			"Flame2"
-		],
-		"width": 1
-	},
-	"CO-Tower-LtATRkt": {
-		"armour": 15,
-		"breadth": 1,
-		"buildPoints": 350,
-		"buildPower": 200,
-		"ecmID": "ZNULLECM",
-		"height": 2,
-		"hitpoints": 1000,
-		"id": "CO-Tower-LtATRkt",
-		"name": "*CO-Tower-LtATRkt*",
-		"resistance": 150,
-		"sensorID": "TowerSensor",
-		"strength": "HARD",
-		"structureModel": [
-			"blguardn.pie"
-		],
-		"thermal": 15,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-LtA-T"
 		],
 		"width": 1
 	},
@@ -1300,116 +1209,6 @@
 		],
 		"width": 1
 	},
-	"Emplacement-HvART-pit": {
-		"armour": 12,
-		"breadth": 1,
-		"buildPoints": 675,
-		"buildPower": 525,
-		"height": 1,
-		"hitpoints": 400,
-		"id": "Emplacement-HvART-pit",
-		"name": "Archangel Missile Emplacement",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "MEDIUM",
-		"structureModel": [
-			"BLHARDPT.PIE"
-		],
-		"thermal": 12,
-		"type": "DEFENSE",
-		"weapons": [
-			"Missile-HvyArt"
-		],
-		"width": 1
-	},
-	"Emplacement-HvyATrocket": {
-		"armour": 10,
-		"breadth": 1,
-		"buildPoints": 225,
-		"buildPower": 150,
-		"height": 1,
-		"hitpoints": 700,
-		"id": "Emplacement-HvyATrocket",
-		"name": "Tank Killer Emplacement",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "MEDIUM",
-		"structureModel": [
-			"Blhowmnt.PIE"
-		],
-		"thermal": 10,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-HvyA-T"
-		],
-		"width": 1
-	},
-	"Emplacement-MRL-pit": {
-		"armour": 12,
-		"breadth": 1,
-		"buildPoints": 400,
-		"buildPower": 125,
-		"height": 1,
-		"hitpoints": 300,
-		"id": "Emplacement-MRL-pit",
-		"name": "Mini-Rocket Battery",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "MEDIUM",
-		"structureModel": [
-			"BLHARDPT.PIE"
-		],
-		"thermal": 12,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-MRL"
-		],
-		"width": 1
-	},
-	"Emplacement-MRLHvy-pit": {
-		"armour": 12,
-		"breadth": 1,
-		"buildPoints": 450,
-		"buildPower": 200,
-		"height": 1,
-		"hitpoints": 300,
-		"id": "Emplacement-MRLHvy-pit",
-		"name": "Heavy Rocket Battery",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "MEDIUM",
-		"structureModel": [
-			"BLHARDPT.PIE"
-		],
-		"thermal": 12,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-MRL-Hvy"
-		],
-		"width": 1
-	},
-	"Emplacement-MdART-pit": {
-		"armour": 12,
-		"breadth": 1,
-		"buildPoints": 600,
-		"buildPower": 450,
-		"height": 1,
-		"hitpoints": 400,
-		"id": "Emplacement-MdART-pit",
-		"name": "Seraph Missile Battery",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "MEDIUM",
-		"structureModel": [
-			"BLHARDPT.PIE"
-		],
-		"thermal": 12,
-		"type": "DEFENSE",
-		"weapons": [
-			"Missile-MdArt"
-		],
-		"width": 1
-	},
 	"Emplacement-MortarEMP": {
 		"armour": 12,
 		"breadth": 1,
@@ -1652,28 +1451,6 @@
 		],
 		"width": 1
 	},
-	"Emplacement-Rocket06-IDF": {
-		"armour": 12,
-		"breadth": 1,
-		"buildPoints": 500,
-		"buildPower": 425,
-		"height": 1,
-		"hitpoints": 400,
-		"id": "Emplacement-Rocket06-IDF",
-		"name": "Ripple Rocket Battery",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "MEDIUM",
-		"structureModel": [
-			"Blhowmnt.PIE"
-		],
-		"thermal": 12,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-IDF"
-		],
-		"width": 1
-	},
 	"Emplacement-RotHow": {
 		"armour": 12,
 		"breadth": 1,
@@ -1715,28 +1492,6 @@
 		"type": "DEFENSE",
 		"weapons": [
 			"Mortar3ROTARYMk1"
-		],
-		"width": 1
-	},
-	"GuardTower-ATMiss": {
-		"armour": 15,
-		"breadth": 1,
-		"buildPoints": 450,
-		"buildPower": 250,
-		"height": 2,
-		"hitpoints": 1000,
-		"id": "GuardTower-ATMiss",
-		"name": "Scourge Missile Tower",
-		"resistance": 150,
-		"sensorID": "TowerSensor",
-		"strength": "HARD",
-		"structureModel": [
-			"BLGUARDR.pie"
-		],
-		"thermal": 15,
-		"type": "DEFENSE",
-		"weapons": [
-			"Missile-A-T"
 		],
 		"width": 1
 	},
@@ -1891,50 +1646,6 @@
 		"type": "DEFENSE",
 		"weapons": [
 			"Flame1Mk1"
-		],
-		"width": 1
-	},
-	"GuardTower5": {
-		"armour": 15,
-		"breadth": 1,
-		"buildPoints": 350,
-		"buildPower": 200,
-		"height": 2,
-		"hitpoints": 1000,
-		"id": "GuardTower5",
-		"name": "Lancer Tower",
-		"resistance": 150,
-		"sensorID": "TowerSensor",
-		"strength": "HARD",
-		"structureModel": [
-			"BLGUARDR.pie"
-		],
-		"thermal": 15,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-LtA-T"
-		],
-		"width": 1
-	},
-	"GuardTower6": {
-		"armour": 15,
-		"breadth": 1,
-		"buildPoints": 400,
-		"buildPower": 150,
-		"height": 2,
-		"hitpoints": 1000,
-		"id": "GuardTower6",
-		"name": "Mini-Rocket Tower",
-		"resistance": 150,
-		"sensorID": "TowerSensor",
-		"strength": "HARD",
-		"structureModel": [
-			"BLGUARDR.pie"
-		],
-		"thermal": 15,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-Pod"
 		],
 		"width": 1
 	},
@@ -2326,28 +2037,6 @@
 		],
 		"width": 1
 	},
-	"P0-AASite-Sunburst": {
-		"armour": 12,
-		"breadth": 1,
-		"buildPoints": 300,
-		"buildPower": 175,
-		"height": 2,
-		"hitpoints": 400,
-		"id": "P0-AASite-Sunburst",
-		"name": "Sunburst AA Site",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "MEDIUM",
-		"structureModel": [
-			"Blaamnt1.PIE"
-		],
-		"thermal": 12,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-Sunburst"
-		],
-		"width": 1
-	},
 	"PillBox-Cannon6": {
 		"armour": 24,
 		"breadth": 1,
@@ -2477,28 +2166,6 @@
 		"type": "DEFENSE",
 		"weapons": [
 			"Flame1Mk1"
-		],
-		"width": 1
-	},
-	"PillBox6": {
-		"armour": 24,
-		"breadth": 1,
-		"buildPoints": 600,
-		"buildPower": 330,
-		"height": 1,
-		"hitpoints": 1200,
-		"id": "PillBox6",
-		"name": "Lancer Bunker",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "BUNKER",
-		"structureModel": [
-			"Blcanpil.pie"
-		],
-		"thermal": 24,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-LtA-T"
 		],
 		"width": 1
 	},
@@ -2950,29 +2617,6 @@
 		],
 		"width": 1
 	},
-	"WallTower-Atmiss": {
-		"armour": 18,
-		"breadth": 1,
-		"buildPoints": 500,
-		"buildPower": 350,
-		"combinesWithWall": true,
-		"height": 2,
-		"hitpoints": 1400,
-		"id": "WallTower-Atmiss",
-		"name": "Scourge Missile Hardpoint",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "HARD",
-		"structureModel": [
-			"BLGUARD1.pie"
-		],
-		"thermal": 18,
-		"type": "DEFENSE",
-		"weapons": [
-			"Missile-A-T"
-		],
-		"width": 1
-	},
 	"WallTower-DoubleAAGun": {
 		"armour": 18,
 		"breadth": 1,
@@ -3062,29 +2706,6 @@
 		"type": "DEFENSE",
 		"weapons": [
 			"Cannon4AUTOMk1"
-		],
-		"width": 1
-	},
-	"WallTower-HvATrocket": {
-		"armour": 18,
-		"breadth": 1,
-		"buildPoints": 500,
-		"buildPower": 300,
-		"combinesWithWall": true,
-		"height": 2,
-		"hitpoints": 1400,
-		"id": "WallTower-HvATrocket",
-		"name": "Tank Killer Hardpoint",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "HARD",
-		"structureModel": [
-			"BLGUARD1.pie"
-		],
-		"thermal": 18,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-HvyA-T"
 		],
 		"width": 1
 	},
@@ -3386,29 +3007,6 @@
 		],
 		"width": 1
 	},
-	"WallTower06": {
-		"armour": 18,
-		"breadth": 1,
-		"buildPoints": 500,
-		"buildPower": 225,
-		"combinesWithWall": true,
-		"height": 2,
-		"hitpoints": 1400,
-		"id": "WallTower06",
-		"name": "Lancer Hardpoint",
-		"resistance": 150,
-		"sensorID": "DefaultSensor1Mk1",
-		"strength": "HARD",
-		"structureModel": [
-			"BLGUARD1.pie"
-		],
-		"thermal": 18,
-		"type": "DEFENSE",
-		"weapons": [
-			"Rocket-LtA-T"
-		],
-		"width": 1
-	},
 	"WreckedTransporter": {
 		"armour": 12,
 		"breadth": 3,
@@ -3469,52 +3067,6 @@
 		"type": "GENERIC",
 		"weapons": [
 			"MassDriver"
-		],
-		"width": 2
-	},
-	"X-Super-Missile": {
-		"armour": 18,
-		"breadth": 2,
-		"buildPoints": 2000,
-		"buildPower": 1800,
-		"combinesWithWall": true,
-		"height": 3,
-		"hitpoints": 3200,
-		"id": "X-Super-Missile",
-		"name": "Missile Fortress",
-		"resistance": 100,
-		"sensorID": "FortressSensor",
-		"strength": "HARD",
-		"structureModel": [
-			"STWPFCAN.PIE"
-		],
-		"thermal": 18,
-		"type": "GENERIC",
-		"weapons": [
-			"MissileSuper"
-		],
-		"width": 2
-	},
-	"X-Super-Rocket": {
-		"armour": 18,
-		"breadth": 2,
-		"buildPoints": 2000,
-		"buildPower": 1250,
-		"combinesWithWall": true,
-		"height": 3,
-		"hitpoints": 3200,
-		"id": "X-Super-Rocket",
-		"name": "Heavy Rocket Bastion",
-		"resistance": 100,
-		"sensorID": "FortressSensor",
-		"strength": "HARD",
-		"structureModel": [
-			"STWPFCAN.PIE"
-		],
-		"thermal": 18,
-		"type": "GENERIC",
-		"weapons": [
-			"RocketSuper"
 		],
 		"width": 2
 	}
