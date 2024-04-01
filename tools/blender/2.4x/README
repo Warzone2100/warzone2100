@@ -1,8 +1,0 @@
-You need pie.py accessible somewhere in your Python path. Putting all files in Blender's scripts/ folder (within your home directory or the install path) should be enough to satisfy this requirement.
-
-Files:
- - pie.py : Generic PIE parser
- - pie_common.py : Blender plugin library
- - pie_import.py : Blender import plugin
- - pie_export.py : Blender export plugin 
- - pie_levels_to_layers.py : Assign PIE levels to Blender layers

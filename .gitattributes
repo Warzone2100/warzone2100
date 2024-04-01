@@ -1,6 +1,0 @@
-*.pbxproj -crlf merge=ours
-*.xcworkspacedata -crlf merge=ours
-*.xcscheme -crlf merge=ours
-
-# Exclude external stuff from Github's language statistics.
-3rdparty/* linguist-vendored

@@ -1,4 +1,0 @@
-directory	"messages/strings"
-file		STR_RES	"genstrings.txt"
-file		STR_RES	"resstrings.txt"
-file		STR_RES	"scrstrings.txt"

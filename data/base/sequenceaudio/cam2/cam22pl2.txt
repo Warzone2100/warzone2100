@@ -1,1 +1,0 @@
-20	432	2.08333333333	12.5	_("NASDA Briefing follows...")
