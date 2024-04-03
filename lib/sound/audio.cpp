@@ -57,10 +57,14 @@ bool loadAudioEffectFileData(WzConfig &ini)
 	{
 		ini.beginGroup(list[i]);
 		nlohmann::json array = ini.json("data");
+		if (array.is_null())
+		{
+			continue;
+		}
 		ASSERT(array.is_array(), "data is not an array");
 		for(auto &a : array)
 		{
-			std::string fname = a["filename"].get<std::string>();
+			std::string fname = a["fileName"].get<std::string>();
 			bool loop = a["loop"].get<bool>();
 			unsigned int volume = a["volume"].get<uint32_t>();
 			unsigned int range = a["range"].get<uint32_t>();
