@@ -31,7 +31,6 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/crc.h"
-#include "lib/gamelib/parser.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/png_util.h"
 #include "lib/sound/audio.h"
@@ -585,28 +584,21 @@ static bool dataAudioLoad(const char *fileName, void **ppData)
 /* Load an audio file */
 static bool dataAudioCfgLoad(const char *fileName, void **ppData)
 {
-	bool success;
-	PHYSFS_file *fileHandle;
-
-	*ppData = nullptr;
-
+	std::string strName = fileName;
+	ASSERT_OR_RETURN(false, strName.find(".json") != std::string::npos, "Audio effect file must be JSON format!");
 	if (audio_Disabled())
 	{
 		return true;
 	}
-	debug(LOG_WZ, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(fileName).c_str(), fileName);
-	fileHandle = PHYSFS_openRead(fileName);
 
-	if (fileHandle == nullptr)
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	if (!loadAudioEffectFileData(ini))
 	{
 		return false;
 	}
 
-	success = ParseResourceFile(fileHandle);
-
-	PHYSFS_close(fileHandle);
-
-	return success;
+	*ppData = (void *)1;
+	return true;
 }
 
 /* Load a string resource file */

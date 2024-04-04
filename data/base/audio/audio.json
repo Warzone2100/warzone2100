@@ -1,0 +1,520 @@
+{
+    "_Format": {
+        "_comment": "fileName: [file.ogg], loop: [false/true], range: [world units, 128 = 1 tile], volume: [0-100]"
+    },
+    "Beeps": {
+        "_name": "Beep sounds",
+        "data": [
+            { "fileName": "beep1.ogg", "loop": false, "range": 1800, "volume": 30, "z_comment": "Close Window" },
+            { "fileName": "beep2.ogg", "loop": false, "range": 1800, "volume": 30, "z_comment": "Open New Window" },
+            { "fileName": "beep3.ogg", "loop": false, "range": 1800, "volume": 30 },
+            { "fileName": "beep4.ogg", "loop": false, "range": 1800, "volume": 15, "z_comment": "Select" },
+            { "fileName": "beep5.ogg", "loop": false, "range": 1800, "volume": 30 },
+            { "fileName": "beep6.ogg", "loop": false, "range": 1800, "volume": 30 },
+            { "fileName": "beep7.ogg", "loop": false, "range": 1800, "volume": 30, "z_comment": "Zoom On Radar" },
+            { "fileName": "beep8.ogg", "loop": false, "range": 1800, "volume": 30, "z_comment": "Buzzer" },
+            { "fileName": "beep9.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "gmeshtdn.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Game Shutdown" }
+        ]
+    },
+    "DesignSequences": {
+        "_name": "Design sequence sounds",
+        "data": [
+            { "fileName": "pcv331.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Turret Selected" },
+            { "fileName": "pcv332.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Body Selected" },
+            { "fileName": "pcv333.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Propulsion Selected" },
+            { "fileName": "pcv334.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Design Completed" }
+        ]
+    },
+    "Structures": {
+        "_name": "Structures sounds",
+        "data": [
+            { "fileName": "pcv335.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Construction Started" },
+            { "fileName": "pcv336.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Construction Completed" },
+            { "fileName": "pcv337.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Structure Under Attack" },
+            { "fileName": "pcv339.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Structure Repair In Progress" },
+            { "fileName": "pcv340.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Structure Demolished" }
+        ]
+    },
+    "Power": {
+        "_name": "Power sounds",
+        "data": [
+            { "fileName": "pcv341.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Power Generator Under Attack" },
+            { "fileName": "pcv342.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Power Generator Destroyed" },
+            { "fileName": "pcv343.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Power Low" },
+            { "fileName": "pcv344.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Power Resource" },
+            { "fileName": "pcv345.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Derrick Under Attack" },
+            { "fileName": "pcv346.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Derrick Destroyed" },
+            { "fileName": "pcv347.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Resource Depleted" },
+            { "fileName": "pcv348.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Power Transfer in Progress" },
+            { "fileName": "pcv349.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Power Generator Required" }
+        ]
+    },
+    "Research": {
+        "_name": "Research sounds",
+        "data": [
+            { "fileName": "pcv350.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Research Facility Required" },
+            { "fileName": "pcv351.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Artefact" },
+            { "fileName": "pcv352.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Artefact Recovered" },
+            { "fileName": "pcv353.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "New Research Project Available" },
+            { "fileName": "pcv354.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "New Structure Available" },
+            { "fileName": "pcv355.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "New Component Available" },
+            { "fileName": "pcv356.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "New Cyborg Available" },
+            { "fileName": "pcv357.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Research Completed" },
+            { "fileName": "pcv358.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Major Research Completed" },
+            { "fileName": "pcv359.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Structure Research Completed" },
+            { "fileName": "pcv360.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Power Research Completed" },
+            { "fileName": "pcv361.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Computer Research Completed" },
+            { "fileName": "pcv362.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Vehicle Research Completed" },
+            { "fileName": "pcv363.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Systems Research Completed" },
+            { "fileName": "pcv364.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Weapon Research Completed" },
+            { "fileName": "pcv365.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Cyborg Research Completed" }
+        ]
+    },
+    "Production": {
+        "_name": "Production sounds",
+        "data": [
+            { "fileName": "pcv366.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Production Started" },
+            { "fileName": "pcv367.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Production Completed" },
+            { "fileName": "pcv368.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Production Paused" },
+            { "fileName": "pcv369.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Production Cancelled" },
+            { "fileName": "pcv370.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Delivery Point Assigned" },
+            { "fileName": "pcv371.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Delivery Point Assigned to" }
+        ]
+    },
+    "Repair": {
+        "_name": "Repair sounds",
+        "data": [
+            { "fileName": "pcv372.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Unit Repaired" }
+        ]
+    },
+    "Detection": {
+        "_name": "Detection sounds",
+        "data": [
+            { "fileName": "pcv373.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavengers Detected" },
+            { "fileName": "pcv374.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavenger Base Detected" },
+            { "fileName": "pcv375.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavenger Outpost Detected" },
+            { "fileName": "pcv376.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Resource Detected" },
+            { "fileName": "pcv377.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Artefact Detected" },
+            { "fileName": "pcv378.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Unit Detected" },
+            { "fileName": "pcv379.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Base Detected" },
+            { "fileName": "pcv380.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Ally Detected" },
+            { "fileName": "pcv381.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Transport Detected" },
+            { "fileName": "pcv382.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy LZ Detected" },
+            { "fileName": "pcv383.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Friendly Landing Zone Detected" },
+            { "fileName": "pcv384.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "NEXUS Tower Detected" },
+            { "fileName": "pcv385.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "NEXUS Turret Detected" },
+            { "fileName": "pcv386.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "NEXUS Unit Detected" },
+            { "fileName": "pcv387.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Battery Detected" },
+            { "fileName": "pcv388.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy VTOLs Detected" }
+        ]
+    },
+    "Status": {
+        "_name": "Status sounds",
+        "data": [
+            { "fileName": "pcv389.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavenger Base" },
+            { "fileName": "pcv390.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavenger Outpost" },
+            { "fileName": "pcv391.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavenger Outpost Eradicated" },
+            { "fileName": "pcv392.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavenger Base Eradicated" },
+            { "fileName": "pcv393.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Base" },
+            { "fileName": "pcv394.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Base Eradicated" },
+            { "fileName": "pcv395.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Incoming Enemy Transport" },
+            { "fileName": "pcv396.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Landing Zone" },
+            { "fileName": "pcv397.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "LZ 1" },
+            { "fileName": "pcv398.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "LZ 2" }
+        ]
+    },
+    "Combat": {
+        "_name": "Combat sounds",
+        "data": [
+            { "fileName": "pcv399.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Unit Under Attack" },
+            { "fileName": "pcv400.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Unit Destroyed" },
+            { "fileName": "pcv401.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Unit Retreating" },
+            { "fileName": "pcv402.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Unit Returning for Repair" }
+        ]
+    },
+    "ArtilleryBatteries": {
+        "_name": "Artillery battery sounds",
+        "data": [
+            { "fileName": "pcv403.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Assigned to Sensor" },
+            { "fileName": "pcv404.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Sensor Locked On" },
+            { "fileName": "pcv405.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Assigned to Counter-battery Radar" },
+            { "fileName": "pcv406.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Battery Located" },
+            { "fileName": "pcv407.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Battery Firing Counter Attack" }
+        ]
+    },
+    "VTOLs": {
+        "_name": "VTOL sounds",
+        "data": [
+            { "fileName": "pcv408.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Interceptors Launched" },
+            { "fileName": "pcv409.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Re-arming" },
+            { "fileName": "pcv410.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "VTOLs Engaging" },
+            { "fileName": "pcv411.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Assigned" },
+            { "fileName": "pcv412.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Interceptors Assigned" }
+        ]
+    },
+    "CommandConsole": {
+        "_name": "Command console sounds",
+        "data": [
+            { "fileName": "pcv413.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Command Console Activated" },
+            { "fileName": "pcv414.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Short Range" },
+            { "fileName": "pcv415.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Long Range" },
+            { "fileName": "pcv416.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Optimum Range" },
+            { "fileName": "pcv417.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Retreat at Medium Damage" },
+            { "fileName": "pcv418.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Retreat at Heavy Damage" },
+            { "fileName": "pcv419.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "No Retreat" },
+            { "fileName": "pcv420.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Fire-At-Will" },
+            { "fileName": "pcv421.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Return Fire" },
+            { "fileName": "pcv422.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Cease Fire" },
+            { "fileName": "pcv423.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Hold Position" },
+            { "fileName": "pcv424.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Guard" },
+            { "fileName": "pcv425.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Pursue" },
+            { "fileName": "pcv426.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Patrol" },
+            { "fileName": "pcv427.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Return to LZ" },
+            { "fileName": "pcv428.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Recycling" },
+            { "fileName": "pcv429.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scatter" }
+        ]
+    },
+    "TutorialStuff": {
+        "_name": "Tutorial sounds",
+        "data": [
+            { "fileName": "pcv430.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Not possible. Try again" },
+            { "fileName": "pcv431.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "No" },
+            { "fileName": "pcv432.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "That is incorrect" },
+            { "fileName": "pcv433.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Well done" },
+            { "fileName": "pcv434.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Excellent" }
+        ]
+    },
+    "GroupAndCommanderAssignment": {
+        "_name": "Group and commander assignment sounds",
+        "data": [
+            { "fileName": "pcv435.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Assigned to Commander" },
+            { "fileName": "pcv436.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Group Reporting:" },
+            { "fileName": "pcv437.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Commander Reporting:" }
+        ]
+    },
+    "Routing": {
+        "_name": "Routing sounds",
+        "data": [
+            { "fileName": "pcv438.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Route Obstructed" },
+            { "fileName": "pcv439.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "No Route Available" }
+        ]
+    },
+    "TransportsAndLZs": {
+        "_name": "Transport and LZ sounds",
+        "data": [
+            { "fileName": "pcv440.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Reinforcements are available" },
+            { "fileName": "pcv441.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Reinforcements in Transit" },
+            { "fileName": "pcv442.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Reinforcements Landing" },
+            { "fileName": "pcv443.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Transport Under Attack" },
+            { "fileName": "pcv444.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Transport Repairing" },
+            { "fileName": "pcv445.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "LZ Compromised" },
+            { "fileName": "lz-clear.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "LZ Clear" },
+            { "fileName": "pcv446.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Transport Returning to Base" },
+            { "fileName": "pcv447.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Transport Unable to Land. Aborting drop" }
+        ]
+    },
+    "MissionMessages": {
+        "_name": "Mission message sounds",
+        "data": [
+            { "fileName": "pcv448.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Mission Objective" },
+            { "fileName": "pcv449.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Mission Update" },
+            { "fileName": "pcv450.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Warzone Paused" },
+            { "fileName": "pcv451.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Warzone Active" },
+            { "fileName": "pcv452.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Mission Results" },
+            { "fileName": "pcv453.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Research Stolen" },
+            { "fileName": "pcv454.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Technology Taken" },
+            { "fileName": "pcv455.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Incoming Transmission" },
+            { "fileName": "pcv456.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Incoming Intelligence Report" },
+            { "fileName": "pcv458.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Mission Failed" },
+            { "fileName": "pcv459.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Mission Successful" },
+            { "fileName": "pcv460.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Objective Accomplished" },
+            { "fileName": "pcv461.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Objective Failed" },
+            { "fileName": "pcv462.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Mission Timer Activated" },
+            { "fileName": "pcv463.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "10 Minutes Remaining" },
+            { "fileName": "pcv464.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "5 Minutes Remaining" },
+            { "fileName": "pcv465.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "3 Minutes Remaining" },
+            { "fileName": "pcv466.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "2 Minutes Remaining" },
+            { "fileName": "pcv467.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "1 Minutes Remaining" },
+            { "fileName": "pcv468.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Unit Captured" },
+            { "fileName": "pcv469.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Warning! System Failure Imminent" },
+            { "fileName": "pcv470.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "You are defeated!" },
+            { "fileName": "pcv471.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Missile Codes Deciphered" },
+            { "fileName": "pcv472.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "First Stage Missile Codes Deciphered" },
+            { "fileName": "pcv473.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Second Stage Missile Codes Deciphered" },
+            { "fileName": "pcv474.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Third Stage Missile Codes Deciphered" },
+            { "fileName": "pcv475.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Missile Codes Cracked" },
+            { "fileName": "pcv476.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Entering Warzone" },
+            { "fileName": "pcv477.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Alliance Accepted" },
+            { "fileName": "pcv478.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Alliance Broken" },
+            { "fileName": "pcv479.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Alliance Offered" },
+            { "fileName": "pcv480.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Player Entering Warzone" },
+            { "fileName": "pcv481.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Player Exiting Warzone" },
+            { "fileName": "pcv482.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Gift Received" },
+            { "fileName": "power-transferred.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Power Transferred" },
+            { "fileName": "pcv484.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Sensor Download" },
+            { "fileName": "pcv485.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Technology Transferred" },
+            { "fileName": "pcv486.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Units Transferred" }
+        ]
+    },
+    "GroupAndCommanderVoices-Male": {
+        "_name": "Male group and commander voices sounds",
+        "data": [
+            { "fileName": "group.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "9.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "8.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "7.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "6.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "5.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "4.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "3.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "2.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "1.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "0.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "reprting.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "commnder.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "com021.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavengers Detected" },
+            { "fileName": "com022.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavenger Base Detected" },
+            { "fileName": "com023.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Scavenger Outpost Detected" },
+            { "fileName": "com024.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Resource Detected" },
+            { "fileName": "com025.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Artefact Detected" },
+            { "fileName": "com026.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Detected" },
+            { "fileName": "com027.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Base Detected" },
+            { "fileName": "com028.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Ally Detected" },
+            { "fileName": "com029.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Transport Detected" },
+            { "fileName": "com030.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy LZ Detected" },
+            { "fileName": "com031.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Friendly Landing Zone Detected" },
+            { "fileName": "com032.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "NEXUS Tower Detected" },
+            { "fileName": "com033.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "NEXUS Turret Detected" },
+            { "fileName": "com034.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "NEXUS Detected" },
+            { "fileName": "com035.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Battery Detected" },
+            { "fileName": "com036.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy VTOLs Detected" },
+            { "fileName": "com037.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Route Obstructed" },
+            { "fileName": "com038.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "No Route Available" },
+            { "fileName": "com039.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Unable to Comply" },
+            { "fileName": "com040.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Returning for Repair" },
+            { "fileName": "com041.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Heading for Rally Point" }
+        ]
+    },
+    "RadioClicks": {
+        "_name": "Radio click sounds",
+        "data": [
+            { "fileName": "radclik1.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "radclik2.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "radclik3.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "radclik4.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "radclik5.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "radclik6.ogg", "loop": false, "range": 1800, "volume": 100 }
+        ]
+    },
+    "TransportPilots": {
+        "_name": "Transport pilot sounds",
+        "data": [
+            { "fileName": "t-aprolz.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Approaching LZ" },
+            { "fileName": "t-arboys.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Alright boys" },
+            { "fileName": "t-grnli5.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "You will have a green light in 5" },
+            { "fileName": "t-grnli4.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "4" },
+            { "fileName": "t-grnli3.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "3" },
+            { "fileName": "t-grnli2.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "2" },
+            { "fileName": "t-gogogo.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Go Go Go!" },
+            { "fileName": "t-dustof.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Prepare for dust off" }
+        ]
+    },
+    "VTOLPilots": {
+        "_name": "VTOL Pilot sounds",
+        "data": [
+            { "fileName": "v-eloc1.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy located" },
+            { "fileName": "v-onway1.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "On our way" },
+            { "fileName": "v-retba1.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Returning to base" },
+            { "fileName": "v-locon1.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Locked-on" },
+            { "fileName": "v-atkrn1.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Commencing attack run" },
+            { "fileName": "v-abtrn1.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Aborting attack run" },
+            { "fileName": "v-eloc2.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy located" },
+            { "fileName": "v-onway2.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "On our way" },
+            { "fileName": "v-retba2.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Returning to base" },
+            { "fileName": "v-locon2.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Locked-on" },
+            { "fileName": "v-atkrn2.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Commencing attack run" },
+            { "fileName": "v-abtrn2.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Aborting attack run" },
+            { "fileName": "v-eloc3.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy located" },
+            { "fileName": "v-onway3.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "On our way" },
+            { "fileName": "v-retba3.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Returning to base" },
+            { "fileName": "v-locon3.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Locked-on" },
+            { "fileName": "v-atkrn3.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Commencing attack run" },
+            { "fileName": "v-abtrn3.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Aborting attack run" }
+        ]
+    },
+    "TheCollective": {
+        "_name": "The Collective sounds",
+        "data": [
+            { "fileName": "col011a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Cleanse & Destroy" },
+            { "fileName": "col012a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Affirmative destroying biologicals" },
+            { "fileName": "col013a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Attack" },
+            { "fileName": "col014a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Fire!" },
+            { "fileName": "col015a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Detected" },
+            { "fileName": "col016a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Engaging" },
+            { "fileName": "col017a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Starting Attack Run" },
+            { "fileName": "col018a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Die!" },
+            { "fileName": "col019a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Intercept and Destroy" },
+            { "fileName": "col020a.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Destroyed" }
+        ]
+    },
+    "WeaponWounds": {
+        "_name": "Weapon sounds",
+        "data": [
+            { "fileName": "rocket.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "rotlsr.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Rotary Laser" },
+            { "fileName": "gaussgun.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "lrgcan.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Large Cannon" },
+            { "fileName": "smlcan.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Small Cannon" },
+            { "fileName": "medcan.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Medium Cannon" },
+            { "fileName": "flmthrow.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Flame Thrower" },
+            { "fileName": "plslsr.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Pulse Laser" },
+            { "fileName": "bemlsr.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Beam Laser" },
+            { "fileName": "mortar.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "hwtzflgt.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Howitzer Flight" },
+            { "fileName": "mgbar1.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "mgbar2.ogg", "loop": false, "range": 1800, "volume": 70 },
+            { "fileName": "mgbar3.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "mgheavy.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "mgtower.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "splash.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "asltmg.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "rapdcan.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "hivelcan.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "nxstower.ogg", "loop": false, "range": 1800, "volume": 100 }
+        ]
+    },
+    "ConstructionSounds": {
+        "_name": "Construction sounds",
+        "data": [
+            { "fileName": "weld-1.ogg", "loop": false, "range": 1800, "volume": 20 },
+            { "fileName": "weld-2.ogg", "loop": false, "range": 1800, "volume": 20 },
+            { "fileName": "bldstart.ogg", "loop": false, "range": 1800, "volume": 20 },
+            { "fileName": "bldloop.ogg", "loop": true, "range": 1800, "volume": 20 },
+            { "fileName": "build1.ogg", "loop": false, "range": 1800, "volume": 20 },
+            { "fileName": "build2.ogg", "loop": false, "range": 1800, "volume": 20 },
+            { "fileName": "build3.ogg", "loop": false, "range": 1800, "volume": 20 },
+            { "fileName": "build4.ogg", "loop": false, "range": 1800, "volume": 20 }
+        ]
+    },
+    "Explosions": {
+        "_name": "Explosions sounds",
+        "data": [
+            { "fileName": "smlexpl.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "lsrexpl.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "lrgexpl.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "atnkexpl.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "richet1.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "richet2.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "richet3.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "squish.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "bldfall.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "nxsexpld.ogg", "loop": false, "range": 1800, "volume": 100 }
+        ]
+    },
+    "DroidEngineNoise": {
+        "_name": "Engine sounds",
+        "data": [
+            { "fileName": "con-move-off.ogg", "loop": false, "range": 1800, "volume": 15 },
+            { "fileName": "con-move.ogg", "loop": true, "range": 1800, "volume": 15 },
+            { "fileName": "con-shut-down.ogg", "loop": false, "range": 1800, "volume": 15 },
+            { "fileName": "tflight.ogg", "loop": true, "range": 1800, "volume": 30, "z_comment": "Blimp Flight" },
+            { "fileName": "thover.ogg", "loop": true, "range": 1800, "volume": 30, "z_comment": "Blimp Idle" },
+            { "fileName": "tland.ogg", "loop": false, "range": 1800, "volume": 30, "z_comment": "Blimp Land" },
+            { "fileName": "tstart.ogg", "loop": false, "range": 1800, "volume": 30, "z_comment": "Blimp Take off" },
+            { "fileName": "vtolland.ogg", "loop": false, "range": 1800, "volume": 15 },
+            { "fileName": "vtoloff.ogg", "loop": false, "range": 1800, "volume": 15 },
+            { "fileName": "vtol-move.ogg", "loop": true, "range": 1800, "volume": 15 },
+            { "fileName": "tread.ogg", "loop": true, "range": 1800, "volume": 15 },
+            { "fileName": "hovmove.ogg", "loop": true, "range": 1800, "volume": 15 },
+            { "fileName": "hovstart.ogg", "loop": false, "range": 1800, "volume": 15 },
+            { "fileName": "hovstop.ogg", "loop": false, "range": 1800, "volume": 15 },
+            { "fileName": "cyber-move.ogg", "loop": true, "range": 1800, "volume": 15 }
+        ]
+    },
+    "BuildingFX": {
+        "_name": "Building FX sounds",
+        "data": [
+            { "fileName": "oilpump.ogg", "loop": false, "range": 1800, "volume": 5 },
+            { "fileName": "powerhum.ogg", "loop": false, "range": 1800, "volume": 10 },
+            { "fileName": "powerspk.ogg", "loop": false, "range": 1800, "volume": 10 },
+            { "fileName": "steam.ogg", "loop": false, "range": 1800, "volume": 20 },
+            { "fileName": "ecmtower.ogg", "loop": false, "range": 1800, "volume": 20 },
+            { "fileName": "freroar.ogg", "loop": false, "range": 1800, "volume": 100 }
+        ]
+    },
+    "Miscellaneous": {
+        "_name": "Miscellaneous sounds",
+        "data": [
+            { "fileName": "help.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "scream.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "scream2.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "scream3.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "silence.ogg", "loop": false, "range": 1800, "volume": 100 }
+        ]
+    },
+    "Extra": {
+        "_name": "Extra sounds",
+        "data": [
+            { "fileName": "lndgzne.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Landing Zone" },
+            { "fileName": "pcv652.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Satellite Uplink" },
+            { "fileName": "pcv653.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "NASDA Central" },
+            { "fileName": "pcv654.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Nuclear Reactor" },
+            { "fileName": "pcv655.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "SAM Site" },
+            { "fileName": "pcv656.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Missile Silo" },
+            { "fileName": "nmedeted.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Detected" },
+            { "fileName": "pcv611.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Structure Captured" },
+            { "fileName": "pcv612.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Civilian Rescued" },
+            { "fileName": "pcv613.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Civilians Rescued" },
+            { "fileName": "pcv615.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Units Rescued" },
+            { "fileName": "pcv616.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Group Rescued" },
+            { "fileName": "pcv618.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Group Captured" },
+            { "fileName": "pcv621.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Objective Captured" },
+            { "fileName": "pcv622.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Objective Destroyed" },
+            { "fileName": "pcv623.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Structure Infected" },
+            { "fileName": "pcv625.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Group Infected" },
+            { "fileName": "pcv629.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Out Of Time" },
+            { "fileName": "pcv631.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Escaped" },
+            { "fileName": "pcv632.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Escaping" },
+            { "fileName": "pcv633.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Enemy Transport Landing" },
+            { "fileName": "pcv635.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Team Alpha Eradicated" },
+            { "fileName": "pcv636.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Team Beta Eradicated" },
+            { "fileName": "pcv637.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Team Gamma Eradicated" },
+            { "fileName": "pcv638.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Team Alpha Rescued" },
+            { "fileName": "pcv639.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Team Beta Rescued" },
+            { "fileName": "pcv640.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Team Gamma Rescued" },
+            { "fileName": "pcv650.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Laser Satellite firing" },
+            { "fileName": "pcv657.ogg", "loop": false, "range": 1800, "volume": 100, "z_comment": "Incoming Laser Satellite Strike" }
+        ]
+    },
+    "Nexus": {
+        "_name": "Nexus sounds",
+        "data": [
+            { "fileName": "defabsrd.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "defnut.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "laugh1.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "laugh2.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "laugh3.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "pordcomp.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "resabsrd.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "strutabs.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "strutnut.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "synplnk.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "untabsrd.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "untnut.ogg", "loop": false, "range": 1800, "volume": 100 }
+        ]
+    },
+    "MultiplayerAudio": {
+        "_name": "Multiplayer sounds",
+        "data": [
+            { "fileName": "cybgrnd.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "hvcybmov.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "emp.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "hevlsr.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "plasflm.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "uplink.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "lasstrk.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "beacon.ogg", "loop": false, "range": 1800, "volume": 100 }
+        ]
+    }
+}

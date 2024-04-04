@@ -185,7 +185,7 @@ void sound_CheckAllUnloaded(void)
 {
 	for (auto pTrack : g_apTrack)
 	{
-		ASSERT(pTrack == nullptr, "A track is not unloaded yet (%s); check audio.cfg for duplicate IDs", pTrack->fileName);
+		ASSERT(pTrack == nullptr, "A track is not unloaded yet (%s); check audio.json for duplicate IDs", pTrack->fileName);
 	}
 }
 

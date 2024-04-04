@@ -1,5 +1,5 @@
 /***********************************************************/
-/*  You may have to modify this file for it to be correct! */ 
+/*  You may have to modify this file for it to be correct! */
 /*******************       WRF\audio.wrf      *******************/
 
 
@@ -391,4 +391,4 @@ file		WAV	"uplink.ogg"
 file		WAV	"lasstrk.ogg"
 file		WAV	"beacon.ogg"
 directory	"audio"
-file		AUDIOCFG	"audio.cfg"
+file		AUDIOCFG	"audio.json"

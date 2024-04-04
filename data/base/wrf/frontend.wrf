@@ -1,5 +1,5 @@
 /***********************************************************/
-/*  You may have to modify this file for it to be correct! */ 
+/*  You may have to modify this file for it to be correct! */
 /*******************       WRF\frontend.wrf      *******************/
 
 
@@ -18,6 +18,6 @@ file		WAV	"beep8.ogg"
 file		WAV	"beep9.ogg"
 file		WAV	"gmeshtdn.ogg"
 directory	"audio"
-file		AUDIOCFG	"frontaud.cfg"
+file		AUDIOCFG	"frontaud.json"
 directory	"messages/strings"
 file		STR_RES	"names.txt"
