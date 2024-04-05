@@ -4,6 +4,10 @@ function setupPowerModifier(player)
 	{
 		setPowerModifier(85, player);
 	}
+	else if (powerType === 1)
+	{
+		setPowerModifier(105, player);
+	}
 	else if (powerType === 2)
 	{
 		setPowerModifier(125, player);
@@ -12,15 +16,63 @@ function setupPowerModifier(player)
 	// insane difficulty is meant to be insane...
 	if (playerData[player].difficulty === INSANE)
 	{
-		setPowerModifier(200 + 15 * powerType, player);
+		if (powerType === 0)
+		{
+			setPowerModifier(170, player);
+		}
+		else if (powerType === 1)
+		{
+			setPowerModifier(210, player);
+		}
+		else if (powerType === 2)
+		{
+			setPowerModifier(250, player);
+		}
 	}
 	else if (playerData[player].difficulty === HARD)
 	{
-		setPowerModifier(150 + 10 * powerType, player);
+		if (powerType === 0)
+		{
+			setPowerModifier(128, player);
+		}
+		else if (powerType === 1)
+		{
+			setPowerModifier(158, player);
+		}
+		else if (powerType === 2)
+		{
+			setPowerModifier(188, player);
+		}
+	}
+	else if (playerData[player].difficulty === MEDIUM)
+	{
+		if (powerType === 0)
+		{
+			setPowerModifier(94, player);
+		}
+		else if (powerType === 1)
+		{
+			setPowerModifier(116, player);
+		}
+		else if (powerType === 2)
+		{
+			setPowerModifier(138, player);
+		}
 	}
 	else if (playerData[player].difficulty === EASY)
 	{
-		setPowerModifier(70 + 5 * powerType, player);
+		if (powerType === 0)
+		{
+			setPowerModifier(64, player);
+		}
+		else if (powerType === 1)
+		{
+			setPowerModifier(79, player);
+		}
+		else if (powerType === 2)
+		{
+			setPowerModifier(94, player);
+		}
 	}
 }
 
