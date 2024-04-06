@@ -1,7 +1,20 @@
+/* powerType is as follows:
+powerType = 0 for Low Power
+powerType = 1 for Medium Power
+powerType = 2 for High Power
+
+To change how much power each Power Level setting gives,
+adjust the values 85 and 20. 85 is the base value, while 20 is
+how much it changes between Power Level settings.
+
+To change the difficulty factor of bots,
+adjust the last number in the bot section below.
+*/
 function setupPowerModifier(player)
 {
 	setPowerModifier(85 + 20 * powerType, player);
 
+	// the following sets the power modifier for bots.
 	// insane difficulty is meant to be insane...
 	if (playerData[player].difficulty === INSANE)
 	{
