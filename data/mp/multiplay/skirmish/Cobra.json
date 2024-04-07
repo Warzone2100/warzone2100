@@ -3,9 +3,9 @@
 		"js": "Cobra.js",
 		"name": "Cobra",
 		"tip": "Designed with a focus on research",
-		"easy_tip": "Gets ~ 25% less power from each oil derrick\nBasic decision making is slower",
-		"medium_tip": "Gets ~ 10% more power from each oil derrick\nIntended for fair play",
-		"hard_tip": "Gets ~ 50% more power from each oil derrick",
-		"insane_tip": "Gets ~ 100% more power from each oil derrick\nStarts with defensive structures and oil derricks"
+		"easy_tip": "Gets 25% less power from each oil derrick\nBasic decision making is slower",
+		"medium_tip": "Gets 10% more power from each oil derrick\nIntended for fair play",
+		"hard_tip": "Gets 50% more power from each oil derrick",
+		"insane_tip": "Gets 100% more power from each oil derrick\nStarts with defensive structures and oil derricks"
 	}
 }
