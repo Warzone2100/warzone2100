@@ -2228,7 +2228,11 @@ static bool writeMapFile(const char *fileName);
 
 static bool loadWzMapDroidInit(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 
-static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists);
+// `nextFreeGroupID` acts as the initial offset for assigning new group IDs in `loadSaveGroup()`.
+// This number is passed by reference and is intended to be used a single counter throughout multiple
+// invocations of `loadSaveDroid()` (for each available droid list), so that group mappings stay consistent
+// across all droid lists.
+static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists, int& nextFreeGroupID);
 static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists* ppsCurrentDroidLists);
 static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& ppsCurrentDroidLists);
 
@@ -2508,6 +2512,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
 	                missionScrollMaxX = 0, missionScrollMaxY = 0;
 	uint32_t        mapSeed = 0;
+	// This will be set to the largest group ID found throughout each droid file + 1
+	// on each invocation of `loadSaveDroid()` function.
+	// Acts as the initial offset for assigning new group IDs in `loadSaveGroup()`.
+	//
+	// It helps to allocate non-conflicting group IDs for commanders which
+	// happen to lose their group, e.g. when transitioning from an offworld mission.
+	int nextFreeGroupID = 0;
 
 	/* Stop the game clock */
 	gameTimeStop();
@@ -2898,7 +2909,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		// load in the mission droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mdroid.json");
-		if (loadSaveDroid(aFileName, apsDroidLists))
+		if (loadSaveDroid(aFileName, apsDroidLists, nextFreeGroupID))
 		{
 			droidMap[aFileName] = &mission.apsDroidLists; // need to swap here to read correct list later
 		}
@@ -3047,7 +3058,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 		else
 		{
-			if (loadSaveDroid(aFileName, apsDroidLists))
+			if (loadSaveDroid(aFileName, apsDroidLists, nextFreeGroupID))
 			{
 				debug(LOG_SAVE, "Loaded new style droids");
 				droidMap[aFileName] = &apsDroidLists;	// load pointers later
@@ -3061,7 +3072,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "droid.json");
 
 		//load the data into apsDroidLists
-		if (!loadSaveDroid(aFileName, apsDroidLists))
+		if (!loadSaveDroid(aFileName, apsDroidLists, nextFreeGroupID))
 		{
 			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
@@ -3092,7 +3103,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			strcat(aFileName, "mdroid.json");
 
 			// load the data into mission.apsDroidLists, if any
-			if (loadSaveDroid(aFileName, mission.apsDroidLists))
+			if (loadSaveDroid(aFileName, mission.apsDroidLists, nextFreeGroupID))
 			{
 				droidMap[aFileName] = &mission.apsDroidLists;
 			}
@@ -3104,7 +3115,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		// load in the limbo droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "limbo.json");
-		if (loadSaveDroid(aFileName, apsLimboDroids))
+		if (loadSaveDroid(aFileName, apsLimboDroids, nextFreeGroupID))
 		{
 			droidMap[aFileName] = &apsLimboDroids;
 		}
@@ -5429,7 +5440,7 @@ inline T getCompFromName_NullCompOnFail(COMPONENT_TYPE compType, const WzString 
 	return (index >= 0) ? static_cast<T>(index) : 0; // 0 to reference the null weapon / body / etc
 }
 
-static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists)
+static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists, int& nextFreeGroupID)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
@@ -5442,11 +5453,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 	// Sort list so transports are loaded first, since they must be loaded before the droids they contain.
 	std::vector<std::pair<int, WzString>> sortedList;
 	bool missionList = fName.compare("mdroid");
-	// This will be set to the largest group ID found throughout the droid file + 1.
-	//
-	// This helps to allocate non-conflicting group IDs for commanders which
-	// happen to lose their group, e.g. when transitioning from an offworld mission.
-	int nextFreeGroupID = 0;
+
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
