@@ -4,7 +4,7 @@ adjust the values 85 and 20. 85 is the base value, while 20 is
 how much it changes between Power Level settings.
 
 The math `85 + 20 * powerType`,
-is interpereted in this way:
+is interpreted in this way:
 Low Power = 85,
 Medium Power = 105,
 High Power = 125.
@@ -20,7 +20,7 @@ please do not attempt to modify it.
 To change the difficulty factor of bots,
 adjust the last number in the bot section below.
 
-The difficulty factor is interpereted in this way:
+The difficulty factor is interpreted in this way:
 Easy = -25% power per second (0.75x),
 Medium = +10% power per second (1.1x),
 Hard = +50% power per second (1.5x),
