@@ -777,6 +777,20 @@ void markTileDirty(int i, int j)
 	}
 }
 
+// Mark all tiles dirty
+// (when switching between classic and other modes, recalculating tile heights is required due to water)
+void dirtyAllSectors()
+{
+	if (sectors)
+	{
+		size_t len = static_cast<size_t>(xSectors) * static_cast<size_t>(ySectors);
+		for (size_t i = 0; i < len; ++i)
+		{
+			sectors[i].dirty = true;
+		}
+	}
+}
+
 void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTextureSize = nullopt);
 
 void loadTerrainTextures_Fallback(MAP_TILESET mapTileset)
@@ -2340,15 +2354,7 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force, bool for
 		std::string terrainQualityUintStr = std::to_string(debugQualityUint);
 		crashHandlingProviderSetTag("wz.terrain_quality", terrainQualityUintStr);
 
-		if (sectors)
-		{
-			// mark all tiles dirty
-			// (when switching between classic and other modes, recalculating tile heights is required due to water)
-			for (size_t i = 0; i < xSectors * ySectors; ++i)
-			{
-				sectors[i].dirty = true;
-			}
-		}
+		dirtyAllSectors();
 
 		// re-load terrain textures
 		if (!rebuildExistingSearchPathWithGraphicsOptionChange())
