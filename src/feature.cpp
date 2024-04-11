@@ -46,6 +46,7 @@
 #include "combat.h"
 #include "multiplay.h"
 #include "qtscript.h"
+#include "terrain.h"
 
 #include "mapgrid.h"
 #include "display3d.h"
@@ -555,6 +556,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						if (isUrban)
 						{
 							psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+							markTileDirty(b.map.x + width, b.map.y + breadth);
 						}
 						auxClearBlocking(b.map.x + width, b.map.y + breadth, AUXBITS_ALL);
 					}
@@ -566,6 +568,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						if (isUrban)
 						{
 							psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
+							markTileDirty(b.map.x + width, b.map.y + breadth);
 						}
 					}
 				}
