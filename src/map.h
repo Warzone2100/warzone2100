@@ -524,6 +524,13 @@ WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(Vector2i pos)
 	return worldOnMap(pos.x, pos.y);
 }
 
+static inline void makeTileRubbleTexture(MAPTILE *psTile, const unsigned int x, const unsigned int y, const unsigned int newTexture)
+{
+	psTile->texture = TileNumber_texture(psTile->texture) | newTexture;
+	SET_TILE_DECAL(psTile);
+	markTileDirty(x, y);
+}
+
 
 /* Intersect a line with the map and report tile intersection points */
 bool map_Intersect(int *Cx, int *Cy, int *Vx, int *Vy, int *Sx, int *Sy);
