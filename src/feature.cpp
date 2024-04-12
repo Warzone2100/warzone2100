@@ -556,6 +556,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						if (isUrban)
 						{
 							psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+							SET_TILE_DECAL(psTile);
 							markTileDirty(b.map.x + width, b.map.y + breadth);
 						}
 						auxClearBlocking(b.map.x + width, b.map.y + breadth, AUXBITS_ALL);
@@ -568,6 +569,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						if (isUrban)
 						{
 							psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
+							SET_TILE_DECAL(psTile);
 							markTileDirty(b.map.x + width, b.map.y + breadth);
 						}
 					}
