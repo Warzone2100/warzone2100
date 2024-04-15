@@ -87,6 +87,7 @@
 #include "clparse.h"
 #include "gamehistorylogger.h"
 #include "profiling.h"
+#include "wzapi.h"
 
 #include "warzoneconfig.h"
 
@@ -490,6 +491,14 @@ void countUpdate(bool synch)
 	}
 }
 
+template <typename Fn>
+static void executeFnAndProcessScriptQueuedRemovals(Fn fn)
+{
+	ASSERT(wzapi::scriptQueuedObjectRemovals().empty(), "Leftover script-queued object removals detected!");
+	fn();
+	wzapi::processScriptQueuedObjectRemovals();
+}
+
 static void gameStateUpdate()
 {
 	WZ_PROFILE_SCOPE(gameStateUpdate);
@@ -515,7 +524,7 @@ static void gameStateUpdate()
 
 	if (!paused && !scriptPaused())
 	{
-		updateScripts();
+		executeFnAndProcessScriptQueuedRemovals([]() { updateScripts(); });
 	}
 
 	// Update abandoned structures
@@ -544,27 +553,34 @@ static void gameStateUpdate()
 		//update the current power available for a player
 		updatePlayerPower(i);
 
-		mutating_list_iterate(apsDroidLists[i], [](DROID* d)
-		{
-			droidUpdate(d);
-			return IterationResult::CONTINUE_ITERATION;
+		executeFnAndProcessScriptQueuedRemovals([i]() {
+			mutating_list_iterate(apsDroidLists[i], [](DROID* d)
+			{
+				droidUpdate(d);
+				return IterationResult::CONTINUE_ITERATION;
+			});
 		});
-		mutating_list_iterate(mission.apsDroidLists[i], [](DROID* d)
-		{
-			missionDroidUpdate(d);
-			return IterationResult::CONTINUE_ITERATION;
+		executeFnAndProcessScriptQueuedRemovals([i]() {
+			mutating_list_iterate(mission.apsDroidLists[i], [](DROID* d)
+			{
+				missionDroidUpdate(d);
+				return IterationResult::CONTINUE_ITERATION;
+			});
 		});
-
 		// FIXME: These for-loops are code duplication
-		mutating_list_iterate(apsStructLists[i], [](STRUCTURE* s)
-		{
-			structureUpdate(s, false);
-			return IterationResult::CONTINUE_ITERATION;
+		executeFnAndProcessScriptQueuedRemovals([i]() {
+			mutating_list_iterate(apsStructLists[i], [](STRUCTURE* s)
+			{
+				structureUpdate(s, false);
+				return IterationResult::CONTINUE_ITERATION;
+			});
 		});
-		mutating_list_iterate(mission.apsStructLists[i], [](STRUCTURE* s)
-		{
-			structureUpdate(s, true); // update for mission
-			return IterationResult::CONTINUE_ITERATION;
+		executeFnAndProcessScriptQueuedRemovals([i]() {
+			mutating_list_iterate(mission.apsStructLists[i], [](STRUCTURE* s)
+			{
+				structureUpdate(s, true); // update for mission
+				return IterationResult::CONTINUE_ITERATION;
+			});
 		});
 	}
 
@@ -641,7 +657,7 @@ GAMECODE gameLoop()
 	{
 		// Receive NET_BLAH messages.
 		// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
-		recvMessage();
+		executeFnAndProcessScriptQueuedRemovals([]() { recvMessage(); });
 
 		bool selectedPlayerIsSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
 		bool multiplayerHostDisconnected = bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost; // do not fast-forward after the host has disconnected

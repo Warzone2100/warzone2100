@@ -2930,36 +2930,22 @@ bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 
 //-- ## removeObject(gameObject[, sfx])
 //--
-//-- Remove the given game object with special effects. Returns a boolean that is true on success.
+//-- Queue the given game object for removal with or without special effects. Returns a boolean that is true on success.
 //-- A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
+//--
+//-- BREAKING CHANGE (4.5+): the effect of this function is not immediate anymore, the object will be
+//-- queued for later removal instead of destroying it right away.
+//-- User scripts should not rely on this function having immediate side-effects.
 //--
 bool wzapi::removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx))
 {
 	SCRIPT_ASSERT(false, context, psObj, "No valid object provided");
-	bool sfx = _sfx.value_or(false);
+	SCRIPT_ASSERT(false, context,
+	    psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID || psObj->type == OBJ_FEATURE,
+	    "Wrong game object type");
 
-	bool retval = false;
-	if (sfx)
-	{
-		switch (psObj->type)
-		{
-		case OBJ_STRUCTURE: destroyStruct((STRUCTURE *)psObj, gameTime); break;
-		case OBJ_DROID: retval = destroyDroid((DROID *)psObj, gameTime); break;
-		case OBJ_FEATURE: retval = destroyFeature((FEATURE *)psObj, gameTime); break;
-		default: SCRIPT_ASSERT(false, context, false, "Wrong game object type"); break;
-		}
-	}
-	else
-	{
-		switch (psObj->type)
-		{
-		case OBJ_STRUCTURE: retval = removeStruct((STRUCTURE *)psObj, true); break;
-		case OBJ_DROID: retval = removeDroidBase((DROID *)psObj); break;
-		case OBJ_FEATURE: retval = removeFeature((FEATURE *)psObj); break;
-		default: SCRIPT_ASSERT(false, context, false, "Wrong game object type"); break;
-		}
-	}
-	return retval;
+	scriptQueuedObjectRemovals().emplace_back(psObj, _sfx.value_or(false));
+	return true;
 }
 
 //-- ## setScrollLimits(x1, y1, x2, y2)
@@ -4599,4 +4585,46 @@ nlohmann::json wzapi::constructMapTilesArray()
 		mapTileArray.push_back(std::move(mapRow));
 	}
 	return mapTileArray;
+}
+
+wzapi::QueuedObjectRemovalsVector& wzapi::scriptQueuedObjectRemovals()
+{
+	static QueuedObjectRemovalsVector instance = []()
+	{
+		static constexpr size_t initialCapacity = 16;
+		QueuedObjectRemovalsVector ret;
+		ret.reserve(initialCapacity);
+		return ret;
+	}();
+	return instance;
+}
+
+void wzapi::processScriptQueuedObjectRemovals()
+{
+	auto& queuedObjRemovals = scriptQueuedObjectRemovals();
+	for (auto& objWithSfxFlag : queuedObjRemovals)
+	{
+		BASE_OBJECT* psObj = objWithSfxFlag.first;
+		if (objWithSfxFlag.second)
+		{
+			switch (psObj->type)
+			{
+			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, gameTime); break;
+			case OBJ_DROID: destroyDroid((DROID*)psObj, gameTime); break;
+			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, gameTime); break;
+			default: ASSERT(false, "Wrong game object type"); break;
+			}
+		}
+		else
+		{
+			switch (psObj->type)
+			{
+			case OBJ_STRUCTURE: removeStruct((STRUCTURE*)psObj, true); break;
+			case OBJ_DROID: removeDroidBase((DROID*)psObj); break;
+			case OBJ_FEATURE: removeFeature((FEATURE*)psObj); break;
+			default: ASSERT(false, "Wrong game object type"); break;
+			}
+		}
+	}
+	queuedObjRemovals.clear();
 }
