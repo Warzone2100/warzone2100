@@ -387,49 +387,61 @@ void kf_CloneSelected(int limit)
 		return; // no-op
 	}
 
-	mutating_list_iterate(apsDroidLists[selectedPlayer], [limit, &sTemplate](DROID* d)
+	bool selectedAnything = false;
+	const DROID* droidToClone = nullptr;
+	for (const DROID* d : apsDroidLists[selectedPlayer])
 	{
-		if (d->selected)
+		if (!d->selected)
 		{
-			enumerateTemplates(selectedPlayer, [psDroid = d, &sTemplate](DROID_TEMPLATE* psTempl) {
-				if (psTempl->name.compare(psDroid->aName) == 0)
-				{
-					sTemplate = psTempl;
-					return false; // stop enumerating
-				}
-				return true;
-			});
-
-			if (!sTemplate)
-			{
-				debug(LOG_ERROR, "Cloning vat has been destroyed. We can't find the template for this droid: %s, id:%u, type:%d!", d->aName, d->id, d->droidType);
-				return IterationResult::BREAK_ITERATION;
-			}
-
-			// create a new droid army
-			for (int i = 0; i < limit; i++)
-			{
-				Vector2i pos = d->pos.xy() + iSinCosR(40503 * i, iSqrt(50 * 50 * (i + 1)));  // 40503 = 65536/φ (A bit more than a right angle)
-				DROID* psNewDroid = buildDroid(sTemplate, pos.x, pos.y, d->player, false, nullptr);
-				if (psNewDroid)
-				{
-					addDroid(psNewDroid, apsDroidLists);
-					triggerEventDroidBuilt(psNewDroid, nullptr);
-				}
-				else if (!bMultiMessages)
-				{
-					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", getID(sTemplate), sTemplate->multiPlayerID);
-				}
-			}
-			std::string msg = astringf(_("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, d->aName);
-			sendInGameSystemMessage(msg.c_str());
-			Cheated = true;
-			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
-			return IterationResult::BREAK_ITERATION;
+			continue;
 		}
+		selectedAnything = true;
+		enumerateTemplates(selectedPlayer, [psDroid = d, &sTemplate](DROID_TEMPLATE* psTempl) {
+			if (psTempl->name.compare(psDroid->aName) == 0)
+			{
+				sTemplate = psTempl;
+				return false; // stop enumerating
+			}
+			return true;
+		});
+		if (!sTemplate)
+		{
+			debug(LOG_ERROR, "Cloning vat has been destroyed. We can't find the template for this droid: %s, id:%u, type:%d!", d->aName, d->id, d->droidType);
+			break;
+		}
+		droidToClone = d;
+		// Break out of the loop if we've successfully found the associated droid template.
+		break;
+	}
+	if (!selectedAnything)
+	{
 		debug(LOG_INFO, "Nothing was selected?");
-		return IterationResult::CONTINUE_ITERATION;
-	});
+		return;
+	}
+	if (!sTemplate)
+	{
+		return;
+	}
+	ASSERT(droidToClone != nullptr, "No droid to clone found");
+	// create a new droid army
+	for (int i = 0; i < limit; i++)
+	{
+		Vector2i pos = droidToClone->pos.xy() + iSinCosR(40503 * i, iSqrt(50 * 50 * (i + 1)));  // 40503 = 65536/φ (A bit more than a right angle)
+		DROID* psNewDroid = buildDroid(sTemplate, pos.x, pos.y, droidToClone->player, false, nullptr);
+		if (psNewDroid)
+		{
+			addDroid(psNewDroid, apsDroidLists);
+			triggerEventDroidBuilt(psNewDroid, nullptr);
+		}
+		else if (!bMultiMessages)
+		{
+			debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", getID(sTemplate), sTemplate->multiPlayerID);
+		}
+	}
+	std::string msg = astringf(_("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, droidToClone->aName);
+	sendInGameSystemMessage(msg.c_str());
+	Cheated = true;
+	audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
 }
 
 void kf_MakeMeHero()
