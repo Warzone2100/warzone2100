@@ -22,6 +22,8 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/wztime.h"
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 #include "quickchat.h"
 #include "teamstrategy.h"
 #include "lib/widget/widgint.h"
@@ -3060,10 +3062,12 @@ bool recvQuickChat(NETQUEUE queue)
 		if (isInGame)
 		{
 			addQuickChatMessageToConsole(msgEnumVal, sender, targeting);
+			audio_PlayTrack(ID_SOUND_MESSAGEEND);
 		}
 		else
 		{
 			addLobbyQuickChatMessageToConsole(msgEnumVal, sender, targeting);
+			audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 		}
 	}
 	else

@@ -46,6 +46,7 @@
 #include "combat.h"
 #include "multiplay.h"
 #include "qtscript.h"
+#include "terrain.h"
 
 #include "mapgrid.h"
 #include "display3d.h"
@@ -545,7 +546,9 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		{
 			for (int width = 0; width < b.size.x; ++width)
 			{
-				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
+				const unsigned int x = b.map.x + width;
+				const unsigned int y = b.map.y + breadth;
+				MAPTILE *psTile = mapTile(x, y);
 				// stops water texture changing for underwater features
 				if (terrainType(psTile) != TER_WATER)
 				{
@@ -554,18 +557,18 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						/* Clear feature bits */
 						if (isUrban)
 						{
-							psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+							makeTileRubbleTexture(psTile, x, y, RUBBLE_TILE);
 						}
-						auxClearBlocking(b.map.x + width, b.map.y + breadth, AUXBITS_ALL);
+						auxClearBlocking(x, y, AUXBITS_ALL);
 					}
 					else
 					{
 						/* This remains a blocking tile */
 						psTile->psObject = nullptr;
-						auxClearBlocking(b.map.x + width, b.map.y + breadth, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
+						auxClearBlocking(x, y, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
 						if (isUrban)
 						{
-							psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
+							makeTileRubbleTexture(psTile, x, y, BLOCKING_RUBBLE_TILE);
 						}
 					}
 				}

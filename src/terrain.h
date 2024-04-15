@@ -48,6 +48,7 @@ gfx_api::texture* getTerrainLightmapTexture();
 const glm::mat4& getModelUVLightmapMatrix();
 
 void markTileDirty(int i, int j);
+void dirtyAllSectors();
 
 enum TerrainShaderType
 {
