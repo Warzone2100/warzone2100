@@ -18,7 +18,8 @@ and is set when a Power Level setting is selected by the player,
 please do not attempt to modify it.
 
 To change the difficulty factor of bots,
-adjust the last number in the bot section below.
+adjust the variable diffMod under each difficulty check,
+Do not touch 'let diffMod = 1;'.
 
 The difficulty factor is interpreted in this way:
 Easy = -25% power per second (0.75x),
@@ -33,23 +34,30 @@ function setupPowerModifier(player)
 	// but that is quickly overwritten in the bot section below.
 	setPowerModifier(85 + 20 * powerType, player);
 
+	// Set difficulty factor variable.
+	let diffMod = 1;
+
 	// The following sets the power modifier for bots.
 	// Insane difficulty is meant to be insane...
-	if (playerData[player].difficulty === INSANE)
+	if (playerData[player].isAI)
 	{
-		setPowerModifier((85 + 20 * powerType) * 2, player);
-	}
-	else if (playerData[player].difficulty === HARD)
-	{
-		setPowerModifier((85 + 20 * powerType) * 1.5, player);
-	}
-	else if (playerData[player].difficulty === MEDIUM)
-	{
-		setPowerModifier((85 + 20 * powerType) * 1.1, player);
-	}
-	else if (playerData[player].difficulty === EASY)
-	{
-		setPowerModifier((85 + 20 * powerType) * 0.75, player);
+		if (playerData[player].difficulty === INSANE)
+		{
+			diffMod = 2;
+		}
+		else if (playerData[player].difficulty === HARD)
+		{
+			diffMod = 1.5;
+		}
+		else if (playerData[player].difficulty === MEDIUM)
+		{
+			diffMod = 1.1;
+		}
+		else if (playerData[player].difficulty === EASY)
+		{
+			diffMod = 0.75;
+		}
+		setPowerModifier((85 + 20 * powerType) * diffMod, player);
 	}
 }
 
