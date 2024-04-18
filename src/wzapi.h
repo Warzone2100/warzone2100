@@ -1156,4 +1156,12 @@ namespace wzapi
 	void processScriptQueuedObjectRemovals();
 } // namespace wzapi
 
+template <typename Fn>
+static void executeFnAndProcessScriptQueuedRemovals(Fn fn)
+{
+	ASSERT(wzapi::scriptQueuedObjectRemovals().empty(), "Leftover script-queued object removals detected!");
+	fn();
+	wzapi::processScriptQueuedObjectRemovals();
+}
+
 #endif

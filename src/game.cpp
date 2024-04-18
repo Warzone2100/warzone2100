@@ -95,6 +95,7 @@
 #include "multigifts.h"
 #include "wzscriptdebug.h"
 #include "gamehistorylogger.h"
+#include "wzapi.h"
 #include <array>
 
 #if defined(__clang__)
@@ -3379,7 +3380,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	size_t			fileExtension;
 	char			CurrentFileName[PATH_MAX] = {'\0'};
 
-	triggerEvent(TRIGGER_GAME_SAVING);
+	executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_SAVING); });
 
 	ASSERT_OR_RETURN(false, aFileName && strlen(aFileName) > 4, "Bad savegame filename");
 	sstrcpy(CurrentFileName, aFileName);

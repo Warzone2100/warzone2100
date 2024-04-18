@@ -82,6 +82,7 @@
 #include "lib/framework/wztime.h"
 #include "keybind.h"
 #include "campaigninfo.h"
+#include "wzapi.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -2113,7 +2114,10 @@ void intUpdateTransporterTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 					if (psTransporter->action == DACTION_TRANSPORTWAITTOFLYIN)
 					{
 						missionFlyTransportersIn(selectedPlayer, false);
-						triggerEvent(TRIGGER_TRANSPORTER_ARRIVED, psTransporter);
+						executeFnAndProcessScriptQueuedRemovals([psTransporter]()
+						{
+							triggerEvent(TRIGGER_TRANSPORTER_ARRIVED, psTransporter);
+						});
 					}
 				}
 			}
@@ -2859,7 +2863,7 @@ void missionTimerUpdate()
 			if ((SDWORD)(gameTime - mission.startTime) > mission.time)
 			{
 				//the script can call the end game cos have failed!
-				triggerEvent(TRIGGER_MISSION_TIMEOUT);
+				executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_MISSION_TIMEOUT); });
 			}
 		}
 	}

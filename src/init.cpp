@@ -99,6 +99,7 @@
 #include "seqdisp.h"
 #include "version.h"
 #include "hci/teamstrategy.h"
+#include "wzapi.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -1895,7 +1896,7 @@ bool stageThreeInitialise()
 
 	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START)
 	{
-		triggerEvent(TRIGGER_GAME_LOADED);
+		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
 	}
 	else
 	{
@@ -1909,7 +1910,7 @@ bool stageThreeInitialise()
 			gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::ACTIVE);
 		}
 
-		triggerEvent(TRIGGER_GAME_INIT);
+		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_INIT); });
 		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
 	}
 

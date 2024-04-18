@@ -4591,7 +4591,7 @@ wzapi::QueuedObjectRemovalsVector& wzapi::scriptQueuedObjectRemovals()
 {
 	static QueuedObjectRemovalsVector instance = []()
 	{
-		static constexpr size_t initialCapacity = 16;
+		static constexpr size_t initialCapacity = 32;
 		QueuedObjectRemovalsVector ret;
 		ret.reserve(initialCapacity);
 		return ret;
@@ -4605,6 +4605,11 @@ void wzapi::processScriptQueuedObjectRemovals()
 	for (auto& objWithSfxFlag : queuedObjRemovals)
 	{
 		BASE_OBJECT* psObj = objWithSfxFlag.first;
+		if (psObj->died)
+		{
+			debug(LOG_MSG, "Object %p is already dead, not processing", static_cast<void*>(psObj));
+			continue;
+		}
 		if (objWithSfxFlag.second)
 		{
 			switch (psObj->type)
