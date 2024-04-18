@@ -116,6 +116,7 @@
 #include "wzcrashhandlingproviders.h"
 #include "wzpropertyproviders.h"
 #include "3rdparty/gsl_finally.h"
+#include "wzapi.h"
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
@@ -987,7 +988,7 @@ static void startGameLoop()
 	{
 		addMissionTimerInterface();
 	}
-	triggerEvent(TRIGGER_START_LEVEL);
+	executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_START_LEVEL); });
 	screen_disableMapPreview();
 
 	if (!bMultiPlayer && getCamTweakOption_AutosavesOnly())

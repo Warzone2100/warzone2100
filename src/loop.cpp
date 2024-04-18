@@ -491,14 +491,6 @@ void countUpdate(bool synch)
 	}
 }
 
-template <typename Fn>
-static void executeFnAndProcessScriptQueuedRemovals(Fn fn)
-{
-	ASSERT(wzapi::scriptQueuedObjectRemovals().empty(), "Leftover script-queued object removals detected!");
-	fn();
-	wzapi::processScriptQueuedObjectRemovals();
-}
-
 static void gameStateUpdate()
 {
 	WZ_PROFILE_SCOPE(gameStateUpdate);
@@ -586,7 +578,7 @@ static void gameStateUpdate()
 
 	missionTimerUpdate();
 
-	proj_UpdateAll();
+	executeFnAndProcessScriptQueuedRemovals([]() { proj_UpdateAll(); });
 
 	for (FEATURE *psCFeat : apsFeatureLists[0])
 	{
@@ -710,10 +702,16 @@ GAMECODE gameLoop()
 		NETflush();  // Make sure that we aren't waiting too long to send data.
 	}
 
-	unsigned before = wzGetTicks();
-	GAMECODE renderReturn = renderLoop();
-	pie_ScreenFrameRenderEnd(); // must happen here for proper renderBudget calculation
-	unsigned after = wzGetTicks();
+	unsigned before, after;
+	GAMECODE renderReturn;
+	executeFnAndProcessScriptQueuedRemovals([&before, &after, &renderReturn]()
+	{
+		before = wzGetTicks();
+		renderReturn = renderLoop();
+		pie_ScreenFrameRenderEnd(); // must happen here for proper renderBudget calculation
+		after = wzGetTicks();
+	});
+
 
 #if defined(__EMSCRIPTEN__)
 	lastRenderDelta = (after - before);
@@ -769,7 +767,7 @@ void videoLoop()
 			{
 				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN, false);
 			}
-			triggerEvent(TRIGGER_VIDEO_QUIT);
+			executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_VIDEO_QUIT); });
 		}
 	}
 }
