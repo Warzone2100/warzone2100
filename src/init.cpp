@@ -1904,7 +1904,9 @@ bool stageThreeInitialise()
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			Cheated = true;
 			triggerEventCheatMode(true);
+			gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::ACTIVE);
 		}
 
 		triggerEvent(TRIGGER_GAME_INIT);

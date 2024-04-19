@@ -2970,6 +2970,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	    && gameTime - psStructure->asWeaps[0].lastFired > weaponFirePause(*psStructure->getWeaponStats(0), psStructure->player)
 	    && psStructure->asWeaps[0].ammo > 0)
 	{
+		if (psStructure->player == selectedPlayer)
+		{
+			addConsoleMessage(_("Laser Satellite is ready to fire!"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+			audio_PlayTrack(ID_SOUND_UPLINK); // This is about the best sound available for this.
+		}
 		triggerEventStructureReady(psStructure);
 		psStructure->asWeaps[0].ammo = 0; // do not fire more than once
 	}
