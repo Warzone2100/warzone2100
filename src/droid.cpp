@@ -1125,10 +1125,10 @@ bool droidUpdateBuild(DROID *psDroid)
 
 	unsigned constructPoints = constructorPoints(*psDroid->getConstructStats(), psDroid->player);
 
-	unsigned pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
-				  GAME_TICKS_PER_SEC;
+	unsigned pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) / GAME_TICKS_PER_SEC;
+	int buildPointsToAdd = pointsToAdd - psDroid->actionPoints;
 
-	structureBuild(psStruct, psDroid, pointsToAdd - psDroid->actionPoints, constructPoints);
+	structureBuild(psStruct, psDroid, std::max(1, buildPointsToAdd), constructPoints);
 
 	//store the amount just added
 	psDroid->actionPoints = pointsToAdd;
