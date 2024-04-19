@@ -839,8 +839,9 @@ else()
 			COMPONENT Core
 			DESTINATION "${WZ_APP_INSTALL_DEST}/assets")
 		# Also place assets in build dir so it can be run directly
+		file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/assets")
 		foreach(asset IN LISTS static_assets)
-			configure_file("${asset}" "${CMAKE_CURRENT_BINARY_DIR}/" COPYONLY)
+			configure_file("${asset}" "${CMAKE_CURRENT_BINARY_DIR}/assets/" COPYONLY)
 		endforeach()
 	endif()
 
