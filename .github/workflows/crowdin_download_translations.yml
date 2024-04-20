@@ -45,7 +45,7 @@ jobs:
         id: configbranches
         run: |
           git fetch --prune
-          if [ -n "$(git show-ref refs/heads/l10n_master)" ]; then
+          if [ -n "$(git show-ref origin/l10n_master)" ]; then
             # has l10n_master branch
             git checkout "l10n_master"
             echo "CHECK_EXISTING=true" >> $GITHUB_OUTPUT
@@ -114,6 +114,7 @@ jobs:
             DIFF_RET=$?
             if [ $DIFF_RET -eq 0 ]; then
               # Inputs are the same (ignoring header changes that aren't relevant)
+              echo "No pertinent changes - skipping force-push"
               echo "PROCESS_PR=false" >> $GITHUB_OUTPUT
               exit 0
             fi
