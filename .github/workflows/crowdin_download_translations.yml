@@ -40,6 +40,22 @@ jobs:
           ref: 'master'
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
+          
+      - name: Prep local branches
+        id: configbranches
+        run: |
+          git fetch --prune
+          if [ -n "$(git show-ref refs/heads/l10n_master)" ]; then
+            # has l10n_master branch
+            git checkout "l10n_master"
+            echo "CHECK_EXISTING=true" >> $GITHUB_OUTPUT
+          else
+            # no pre-existing l10n_master branch
+            echo "CHECK_EXISTING=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          # Switch back to master branch
+          git checkout -qf master
 
       - name: Download Translations from Crowdin
         uses: crowdin/github-action@v1
@@ -61,9 +77,12 @@ jobs:
       - name: Publish any changes to translations to l10n_master branch
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         id: pushupdates
+        env:
+          CHECK_EXISTING_TRANSLATION_BRANCH: ${{ steps.configbranches.outputs.CHECK_EXISTING }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
+          
           # Add modified files (ignoring po header modifications):
           echo "::group::Add modified files"
           git difftool --dir-diff --extcmd=.ci/githubactions/crowdin_download_diff.sh | xargs -d '\n' git add
@@ -74,8 +93,34 @@ jobs:
           echo "::endgroup::"
           echo "Debug output:"
           git status
+          
           echo "Commit changes:"
           git commit -m "New Crowdin translations" || { echo "PROCESS_PR=false" >> $GITHUB_OUTPUT && exit 0; }
+          NEW_COMMIT_ID="$(git rev-parse HEAD)"
+          echo "New commit: ${NEW_COMMIT_ID}"
+          
+          # Check if there are actual changes compared to the commit already pushed on the l10n_master branch
+          if [[ "${CHECK_EXISTING_TRANSLATION_BRANCH}" == "true" ]];
+            TRANSLATION_COMMIT_ID="$(git rev-parse l10n_master)"
+            echo "Current translation branch commit: ${TRANSLATION_COMMIT_ID}"
+            git diff --unified=0 ${NEW_COMMIT_ID}~..${NEW_COMMIT_ID} > l10n_temp_1.patch
+            git diff --unified=0 ${TRANSLATION_COMMIT_ID}~..${TRANSLATION_COMMIT_ID} > l10n_temp_2.patch
+            diff --brief --unified=1 \
+              --ignore-matching-lines='^[-+]"POT-Creation-Date: .*"' \
+              --ignore-matching-lines='^[-+]"PO-Revision-Date: .*"' \
+              --ignore-matching-lines='^[-+]"Last-Translator: .*"' \
+              --ignore-matching-lines='^index .*\.\..* .*' \
+              l10n_temp_1.patch l10n_temp_2.patch
+            DIFF_RET=$?
+            if [ $DIFF_RET -eq 0 ]; then
+              # Inputs are the same (ignoring header changes that aren't relevant)
+              echo "PROCESS_PR=false" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            rm l10n_temp_1.patch
+            rm l10n_temp_2.patch
+          fi
+          
           echo "Pushing changes to l10n_master branch"
           git push -f origin master:l10n_master
           echo "PROCESS_PR=true" >> $GITHUB_OUTPUT
