@@ -100,7 +100,7 @@ jobs:
           echo "New commit: ${NEW_COMMIT_ID}"
           
           # Check if there are actual changes compared to the commit already pushed on the l10n_master branch
-          if [[ "${CHECK_EXISTING_TRANSLATION_BRANCH}" == "true" ]];
+          if [[ "${CHECK_EXISTING_TRANSLATION_BRANCH}" == "true" ]]; then
             TRANSLATION_COMMIT_ID="$(git rev-parse l10n_master)"
             echo "Current translation branch commit: ${TRANSLATION_COMMIT_ID}"
             git diff --unified=0 ${NEW_COMMIT_ID}~..${NEW_COMMIT_ID} > l10n_temp_1.patch
