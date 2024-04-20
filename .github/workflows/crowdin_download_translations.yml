@@ -20,7 +20,6 @@ jobs:
   crowdin-download-translations:
     permissions:
       contents: read
-      pull-requests: write
     runs-on: ubuntu-latest
     environment: crowdin_sync
     steps:
@@ -85,7 +84,7 @@ jobs:
         if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
         id: cpr
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           gh pr create --base "master" --head "l10n_master" --title "New Crowdin translations" --body "New Crowdin translations sync (Auto-generated)" --label "automated pr" || echo "Seems like PR already exists?"
