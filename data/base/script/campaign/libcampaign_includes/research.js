@@ -74,7 +74,7 @@ function camClassicResearch(researchIds, playerId)
 	{
 		return;
 	}
-	if (tweakOptions.camclassic_Balance32)
+	if (tweakOptions.camClassic_balance32)
 	{
 		camEnableRes(researchIds, playerId);
 	}

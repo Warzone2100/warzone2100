@@ -293,7 +293,7 @@ function cam3Setup()
 		camCompleteRequiredResearch(mis_playerResBetaClassic, CAM_HUMAN_PLAYER);
 		camCompleteRequiredResearch(mis_playerResGammaClassic, CAM_HUMAN_PLAYER);
 
-		if (tweakOptions.camclassic_Balance32)
+		if (tweakOptions.camClassic_balance32)
 		{
 			camClassicResearch(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
