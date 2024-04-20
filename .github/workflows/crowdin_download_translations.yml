@@ -65,7 +65,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
-          git add -A
+          # Add modified files (ignoring po header modifications):
+          git difftool --dir-diff --extcmd=.ci/githubactions/crowdin_download_diff.sh | xargs -0 git add
+          # Add untracked (new) files:
+          git ls-files --others --exclude-standard | xargs -0 git add
+          echo "Debug output:"
+          git status
+          echo "Commit changes:"
           git commit -m "New Crowdin translations" || { echo "PROCESS_PR=false" >> $GITHUB_OUTPUT && exit 0; }
           echo "Pushing changes to l10n_master branch"
           git push -f origin master:l10n_master
@@ -74,7 +80,6 @@ jobs:
       - name: Create Pull Request to update translations (if needed)
         if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
         id: cpr
-        working-directory: '${{ github.workspace }}/master'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
