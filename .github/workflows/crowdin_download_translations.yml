@@ -66,9 +66,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
           # Add modified files (ignoring po header modifications):
-          git difftool --dir-diff --extcmd=.ci/githubactions/crowdin_download_diff.sh | xargs -0 git add
+          echo "::group::Add modified files"
+          git difftool --dir-diff --extcmd=.ci/githubactions/crowdin_download_diff.sh | xargs -d '\n' git add
+          echo "::endgroup::"
           # Add untracked (new) files:
+          echo "::group::Add untracked files"
           git ls-files --others --exclude-standard | xargs -0 git add
+          echo "::endgroup::"
           echo "Debug output:"
           git status
           echo "Commit changes:"
