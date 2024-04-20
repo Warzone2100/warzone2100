@@ -34,14 +34,25 @@
     ],
     "customTweakOptions": [
         {
-            "id": "camclassic_Balance32",
+            "id": "camClassic_balance32",
             "type": "bool",
             "default": false,
             "displayName": {
                 "en": "3.2.x Balance"
             },
             "description": {
-                "en": "3.2.x series balance by emulating research bugs"
+                "en": "3.2.x series balance by emulating research bugs."
+            }
+        },
+        {
+            "id": "camClassic_slowProduction",
+            "type": "bool",
+            "default": true,
+            "displayName": {
+                "en": "Slow Factory Production"
+            },
+            "description": {
+                "en": "Slower AI factory production times."
             }
         }
     ]
