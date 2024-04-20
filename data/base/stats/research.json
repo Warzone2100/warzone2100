@@ -1151,8 +1151,8 @@
 		"id": "R-Cyborg-Wpn-Cannon02",
 		"msgName": "RES_CYW_CN2",
 		"name": "Sniper Cyborg",
-		"replacedComponents": [
-			"CyborgCannon:CyborgCannon02"
+		"redComponents": [
+			"CyborgCannon"
 		],
 		"requiredResearch": [
 			"R-Wpn-Cannon4AMk1"
@@ -1185,8 +1185,8 @@
 		"id": "R-Cyborg-Wpn-Flamer02",
 		"msgName": "RES_CYW_FL2",
 		"name": "Thermite Cyborg",
-		"replacedComponents": [
-			"CyborgFlamer01:CyborgFlamer02"
+		"redComponents": [
+			"CyborgFlamer01"
 		],
 		"requiredResearch": [
 			"R-Wpn-Flame2"
@@ -1236,8 +1236,8 @@
 		"id": "R-Cyborg-Wpn-Rocket02",
 		"msgName": "RES_CYW_RK2",
 		"name": "Tank Killer Cyborg",
-		"replacedComponents": [
-			"CyborgRocket:CyborgRocket02"
+		"redComponents": [
+			"CyborgRocket"
 		],
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
@@ -1254,8 +1254,8 @@
 		"id": "R-Cyborg-Wpn-RotMG",
 		"msgName": "RES_CYW_MG4",
 		"name": "Assault Gunner Cyborg",
-		"replacedComponents": [
-			"CyborgChaingun:CyborgRotMG"
+		"redComponents": [
+			"CyborgChaingun"
 		],
 		"requiredResearch": [
 			"R-Wpn-MG4"
@@ -1272,8 +1272,8 @@
 		"id": "R-Cyborg-Wpn-ATMiss",
 		"msgName": "RES_CYW_ATM",
 		"name": "Scourge Cyborg",
-		"replacedComponents": [
-			"CyborgRocket02:Cyb-Wpn-Atmiss"
+		"redComponents": [
+			"CyborgRocket02"
 		],
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
@@ -1305,8 +1305,8 @@
 		"id": "R-Cyborg-Wpn-Rail1",
 		"msgName": "RES_CYW_RL1",
 		"name": "Needle Gunner Cyborg",
-		"replacedComponents": [
-			"CyborgCannon02:Cyb-Wpn-Rail1"
+		"redComponents": [
+			"CyborgCannon02"
 		],
 		"requiredResearch": [
 			"R-Wpn-RailGun01"
@@ -3469,7 +3469,8 @@
 		"researchPoints": 1200,
 		"researchPower": 37,
 		"resultComponents": [
-			"Rocket-Pod"
+			"Rocket-Pod",
+			"Rocket-VTOL-Pod"
 		],
 		"statID": "Rocket-Pod"
 	},
@@ -8718,11 +8719,9 @@
 			"Laser3BEAMMk1",
 			"MG4ROTARY-VTOL",
 			"MG4ROTARYMk1",
-			"Flame2"
-		],
-		"replacedComponents": [
-			"CyborgRotMG:Cyb-Wpn-Laser",
-			"CyborgFlamer02:Cyb-Wpn-Laser"
+			"Flame2",
+			"CyborgRotMG",
+			"CyborgFlamer02"
 		],
 		"requiredResearch": [
 			"R-Wpn-Laser01"
