@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:45\n"
+"PO-Revision-Date: 2024-04-16 11:44\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -15310,7 +15310,7 @@ msgstr ""
 
 #: src/clparse.cpp:448
 msgid "number of minutes"
-msgstr ""
+msgstr "número de minutos"
 
 #: src/clparse.cpp:449
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
@@ -15947,7 +15947,7 @@ msgstr "Rastreado"
 #: src/frontend.cpp:1085
 #: src/terrain.cpp:2576
 msgid "High"
-msgstr ""
+msgstr "Alta"
 
 #: src/frontend.cpp:875
 msgid "Default"
@@ -15956,15 +15956,15 @@ msgstr ""
 #: src/frontend.cpp:947
 #: src/frontend.cpp:1000
 msgid "Terrain quality mode not available."
-msgstr ""
+msgstr "O modo de qualidade do terreno não está disponível."
 
 #: src/frontend.cpp:975
 msgid "Medium Quality"
-msgstr ""
+msgstr "Qualidade média"
 
 #: src/frontend.cpp:976
 msgid "High Quality"
-msgstr ""
+msgstr "Alta qualidade"
 
 #: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
@@ -15972,11 +15972,11 @@ msgstr ""
 
 #: src/frontend.cpp:1084
 msgid "Low"
-msgstr ""
+msgstr "Baixa"
 
 #: src/frontend.cpp:1086
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 #: src/frontend.cpp:1116
 msgid "Shadow filtering not available on this system."
@@ -15989,7 +15989,7 @@ msgstr "* Tem efeito quando o jogo for reiniciado"
 
 #: src/frontend.cpp:1165
 msgid "Terrain Quality"
-msgstr ""
+msgstr "Qualidade do terreno"
 
 #: src/frontend.cpp:1170
 msgid "Terrain Shading"
@@ -16002,11 +16002,11 @@ msgstr "Sombras"
 
 #: src/frontend.cpp:1185
 msgid "Shadow Resolution"
-msgstr ""
+msgstr "Resolução das sombras"
 
 #: src/frontend.cpp:1190
 msgid "Shadow Filtering"
-msgstr ""
+msgstr "Filtragem das sombras"
 
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 #: src/frontend.cpp:1197
@@ -16045,7 +16045,7 @@ msgstr "Agitar tela"
 #: src/frontend.cpp:1235
 #: src/ingameop.cpp:659
 msgid "Groups Menu"
-msgstr ""
+msgstr "Menu de grupos"
 
 #: src/frontend.cpp:1247
 msgid "GRAPHICS OPTIONS"
@@ -16242,7 +16242,7 @@ msgstr "Cursores Coloridos"
 
 #: src/frontend.cpp:2527
 msgid "Cursor Size"
-msgstr ""
+msgstr "Tamanho do cursor"
 
 #: src/frontend.cpp:2539
 msgid "MOUSE OPTIONS"
@@ -16251,7 +16251,7 @@ msgstr "OPÇÕES DE RATO"
 #: src/frontend.cpp:2604
 #: src/multiint.cpp:270
 msgid "Super Easy"
-msgstr ""
+msgstr "Super fácil"
 
 #: src/frontend.cpp:2605
 #: src/multiint.cpp:270
@@ -16332,18 +16332,18 @@ msgstr "Esta dificuldade é para jogadores muito experientes!"
 #: src/frontend.cpp:3170
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u minutos"
 
 #: src/frontend.cpp:3166
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s horas"
 
 #: src/frontend.cpp:3227
 #: src/frontend.cpp:3235
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u segundos"
 
 #: src/frontend.cpp:3266
 msgid "None"
@@ -16506,7 +16506,7 @@ msgstr "Mostrar Tecnologia Obsoleta"
 #: src/hci.cpp:2405
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "Custo: %u"
 
 #: src/hci/build.cpp:312
 msgid "Build Progress"
@@ -16530,7 +16530,7 @@ msgstr ""
 
 #: src/hci/chatoptions.cpp:1196
 msgid "Refresh"
-msgstr ""
+msgstr "Atualizar"
 
 #: src/hci/chatoptions.cpp:1214
 msgid "Host Chat Options"
@@ -16615,7 +16615,7 @@ msgstr ""
 
 #: src/hci/groups.cpp:359
 msgid "Unit Groups:"
-msgstr ""
+msgstr "Grupos de unidades:"
 
 #: src/hci/manufacture.cpp:431
 msgid "Construction Progress"
@@ -16635,11 +16635,11 @@ msgstr "Barra de Progresso"
 
 #: src/hci/quickchat.cpp:899
 msgid "To:"
-msgstr ""
+msgstr "Para:"
 
 #: src/hci/quickchat.cpp:998
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: src/hci/quickchat.cpp:1007
 #: src/hci/quickchat.cpp:1017
@@ -16782,77 +16782,77 @@ msgstr ""
 
 #: src/hci/quickchat.cpp:2474
 msgid "Welcome!"
-msgstr ""
+msgstr "Bem-vindo(a)!"
 
 #: src/hci/quickchat.cpp:2476
 msgid "I want to spectate"
-msgstr ""
+msgstr "Quero assistir"
 
 #: src/hci/quickchat.cpp:2478
 msgid "I want to play"
-msgstr ""
+msgstr "Quero jogar"
 
 #: src/hci/quickchat.cpp:2480
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Quero mudar de equipas"
 
 #: src/hci/quickchat.cpp:2482
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "Por favor, carregue em \"Pronto\" para podermos começar"
 
 #: src/hci/quickchat.cpp:2487
 msgid "Please wait"
-msgstr ""
+msgstr "Por favor, aguarde"
 
 #: src/hci/quickchat.cpp:2489
 msgid "Let's go!"
-msgstr ""
+msgstr "Vamos lá!"
 
 #. TRANSLATORS: As in "I am almost ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2493
 msgid "Almost ready"
-msgstr ""
+msgstr "Quase pronto"
 
 #. TRANSLATORS: As in "I am ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2496
 msgid "Ready"
-msgstr ""
+msgstr "Pronto"
 
 #: src/hci/quickchat.cpp:2498
 msgid "Be right back"
-msgstr ""
+msgstr "Volto já"
 
 #: src/hci/quickchat.cpp:2500
 msgid "I'm back"
-msgstr ""
+msgstr "Estou de volta"
 
 #: src/hci/quickchat.cpp:2503
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: src/hci/quickchat.cpp:2505
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #: src/hci/quickchat.cpp:2507
 msgid "Maybe"
-msgstr ""
+msgstr "Talvez"
 
 #: src/hci/quickchat.cpp:2509
 msgid "Not yet"
-msgstr ""
+msgstr "Ainda não"
 
 #: src/hci/quickchat.cpp:2511
 msgid "Soon"
-msgstr ""
+msgstr "Brevemente"
 
 #: src/hci/quickchat.cpp:2513
 msgid "Thank you"
-msgstr ""
+msgstr "Obrigado"
 
 #: src/hci/quickchat.cpp:2515
 msgid "No problem"
-msgstr ""
+msgstr "Sem problemas"
 
 #: src/hci/quickchat.cpp:2519
 msgid "Well-played"
@@ -17049,7 +17049,7 @@ msgstr "Progresso do aliado"
 
 #: src/hci/teamstrategy.cpp:90
 msgid "Tanks"
-msgstr ""
+msgstr "Tanques"
 
 #: src/hci/teamstrategy.cpp:94
 msgid "Cyborgs"
@@ -17069,7 +17069,7 @@ msgstr ""
 
 #: src/hci/teamstrategy.cpp:966
 msgid "Units:"
-msgstr ""
+msgstr "Unidades:"
 
 #: src/ingameop.cpp:114
 #: src/ingameop.cpp:191
