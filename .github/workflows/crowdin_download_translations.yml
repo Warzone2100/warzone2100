@@ -1,0 +1,81 @@
+name: Crowdin - Download Translations
+
+on:
+  # Scheduled run once a day
+  schedule:
+    - cron: '0 2 * * *'
+  # Run after:
+  # - "Upload Base" workflow completes
+  workflow_run:
+    workflows: ["Crowdin - Upload Sources"]
+    types: 
+      - completed
+  # Support running manually
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-master
+
+jobs:
+  crowdin-download-translations:
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    environment: crowdin_sync
+    steps:
+      # Get a token using a GitHub App that has appropriate permissions *and* will trigger subsequent CI workflows
+      # (Since we want to run normal CI passes to catch translation string format errors that break builds)
+      - name: Get GH App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.WZ_CROWDIN_SYNC_GH_APP_ID }}
+          private-key: ${{ secrets.WZ_CROWDIN_SYNC_GH_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: "warzone2100"
+      
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: 'master'
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+
+      - name: Download Translations from Crowdin
+        uses: crowdin/github-action@v1
+        with:
+          upload_sources: false
+          upload_translations: false
+          download_translations: true
+          localization_branch_name: 'l10n_master'
+          crowdin_branch_name: 'master'
+          push_translations: false
+          #commit_message: 'New Crowdin translations'
+          create_pull_request: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+      
+      - name: Publish any changes to translations to l10n_master branch
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        id: pushupdates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
+          git add -A
+          git commit -m "New Crowdin translations" || { echo "PROCESS_PR=false" >> $GITHUB_OUTPUT && exit 0; }
+          echo "Pushing changes to l10n_master branch"
+          git push -f origin master:l10n_master
+          echo "PROCESS_PR=true" >> $GITHUB_OUTPUT
+      
+      - name: Create Pull Request to update translations (if needed)
+        if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
+        id: cpr
+        working-directory: '${{ github.workspace }}/master'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh pr create --base "master" --head "l10n_master" --title "New Crowdin translations" --body "New Crowdin translations sync (Auto-generated)" --label "automated pr" || echo "Seems like PR already exists?"
