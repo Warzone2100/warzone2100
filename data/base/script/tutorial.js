@@ -508,9 +508,6 @@ function eventStartLevel()
 	setStructureLimits(cam_base_structures.powerGenerator, 1, CAM_HUMAN_PLAYER);
 	setStructureLimits(cam_base_structures.researchLab, 1, CAM_HUMAN_PLAYER);
 
-	camSafeRemoveObject("mgArtifact", false);
-	addFeature("OilResource", 24, 26);
-
 	setMiniMap(true);
 	setDesign(false);
 

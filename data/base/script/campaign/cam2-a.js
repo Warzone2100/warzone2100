@@ -264,7 +264,7 @@ function cam2Setup()
 		camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_HUMAN_PLAYER);
 		camCompleteRequiredResearch(mis_playerResBetaClassic, CAM_HUMAN_PLAYER);
 
-		if (tweakOptions.camclassic_Balance32)
+		if (tweakOptions.camClassic_balance32)
 		{
 			camClassicResearch(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
@@ -272,7 +272,7 @@ function cam2Setup()
 		}
 		else
 		{
-			completeResearch("CAM2RESEARCH-UNDO-Rockets", CAM_HUMAN_PLAYER); 
+			completeResearch("CAM2RESEARCH-UNDO-Rockets", CAM_HUMAN_PLAYER);
 			camCompleteRequiredResearch(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_THE_COLLECTIVE);
 			camCompleteRequiredResearch(collectiveResClassic, CAM_THE_COLLECTIVE);

@@ -165,10 +165,9 @@ function missileSilosDestroyed()
 //Nuclear missile destroys everything not in safe zone.
 function nukeAndCountSurvivors()
 {
-	//Avoid destroying the one base if the player opted not to destroy it themselves.
-	const nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter((obj) => (
-		obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null)
-	));
+	// Remove the base in the rare event an auto-explosion triggers as we nuke the base here.
+	camSetEnemyBases({});
+	const nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false);
 	const safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
 	let foundUnit = false;
 
@@ -270,6 +269,11 @@ function enableAllFactories()
 //For now just make sure we have all the droids in the canyon.
 function unitsInValley()
 {
+	if (!camAllArtifactsPickedUp())
+	{
+		return;
+	}
+
 	const safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID
 	));

@@ -165,10 +165,8 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	//Get rid of the already existing crate and replace with another
-	camSafeRemoveObject("artifact1", false);
 	camSetArtifacts({
-		"artifactLocation": { tech: "R-Vehicle-Prop-Hover" }, //SE base
+		"artifact1": { tech: "R-Vehicle-Prop-Hover" }, //SE base
 		"NPFactoryW": { tech: "R-Vehicle-Metals03" }, //West factory
 		"NPFactoryNE": { tech: "R-Vehicle-Body12" }, //Main base factory
 	});

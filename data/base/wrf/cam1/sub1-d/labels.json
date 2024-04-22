@@ -172,14 +172,14 @@
 	"area_13": {
 		"label": "northWayTrigger",
 		"subscriber": 0,
-		"pos1": [3200, 10624],
-		"pos2": [10112, 11520]
+		"pos1": [3200, 6400],
+		"pos2": [10112, 12416]
 	},
 	"area_14": {
 		"label": "causeWayTrig",
 		"subscriber": 0,
 		"pos1": [3200, 6400],
-		"pos2": [10112, 10240]
+		"pos2": [10112, 11008]
 	},
 	"area_15": {
 		"label": "westWayTrigger",
