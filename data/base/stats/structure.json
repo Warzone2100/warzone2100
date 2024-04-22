@@ -836,7 +836,7 @@
 		"thermal": 10,
 		"type": "DEFENSE",
 		"weapons": [
-			"Flame2"
+			"Flame2-Emplacement"
 		],
 		"width": 1
 	},
@@ -2186,7 +2186,7 @@
 		"thermal": 20,
 		"type": "DEFENSE",
 		"weapons": [
-			"Flame1Mk1"
+			"Flame1Mk1-Tower"
 		],
 		"width": 1
 	},
@@ -2476,7 +2476,7 @@
 		"thermal": 10,
 		"type": "DEFENSE",
 		"weapons": [
-			"Flame2"
+			"Flame2-Emplacement"
 		],
 		"width": 1
 	},
@@ -2684,7 +2684,7 @@
 		"thermal": 10,
 		"type": "DEFENSE",
 		"weapons": [
-			"Flame2"
+			"Flame2-Emplacement"
 		],
 		"width": 1
 	},
@@ -2876,7 +2876,7 @@
 		"thermal": 15,
 		"type": "DEFENSE",
 		"weapons": [
-			"Flame1Mk1"
+			"Flame1Mk1-Tower"
 		],
 		"width": 1
 	},
