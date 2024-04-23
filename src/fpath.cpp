@@ -29,7 +29,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/crc.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 
 #include "lib/framework/wzapp.h"
 

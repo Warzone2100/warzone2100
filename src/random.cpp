@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "random.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 
 static MersenneTwister gamePseudorandomNumberGenerator;
 static uint32_t lastSeed = 0;
