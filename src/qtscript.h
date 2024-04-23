@@ -30,7 +30,6 @@
 #include <unordered_map>
 #include <array>
 
-class QString;
 class WzString;
 struct BASE_OBJECT;
 struct DROID;
