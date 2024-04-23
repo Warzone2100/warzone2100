@@ -174,6 +174,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DWZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY=ON
       - -DWZ_APPSTREAM_ID=net.wz2100.wz2100
+      - -DENABLE_DISCORD:BOOL=ON
       - -DWZ_BUILD_SENTRY:BOOL=ON
       - -DWZ_SENTRY_PREDOWNLOADED_SENTRY_ARCHIVE=/app/prestaged-dl/sentry-native.zip
       - -DWZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR=/app/prestaged-dl
