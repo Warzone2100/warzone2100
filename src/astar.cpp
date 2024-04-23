@@ -52,7 +52,7 @@
 #include <algorithm>
 #include <memory>
 
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 
 /// A coordinate.
 struct PathCoord

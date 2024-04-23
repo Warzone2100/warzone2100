@@ -26,7 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 
 #include "action.h"
 #include "combat.h"

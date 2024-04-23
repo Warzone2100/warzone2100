@@ -32,7 +32,6 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/netplay/netplay.h"
 #include "lib/widget/label.h"
 #include "lib/widget/paragraph.h"
 #include "../multiplay.h"

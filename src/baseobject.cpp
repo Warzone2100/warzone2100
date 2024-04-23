@@ -19,7 +19,7 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "lib/sound/audio.h"
 
 #include "baseobject.h"

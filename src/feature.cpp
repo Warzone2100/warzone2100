@@ -27,7 +27,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/ivisdef.h"
 
