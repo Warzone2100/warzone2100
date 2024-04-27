@@ -549,6 +549,10 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 				const unsigned int x = b.map.x + width;
 				const unsigned int y = b.map.y + breadth;
 				MAPTILE *psTile = mapTile(x, y);
+				if (psTile->psObject != psDel)
+				{
+					continue;
+				}
 				// stops water texture changing for underwater features
 				if (terrainType(psTile) != TER_WATER)
 				{

@@ -4393,8 +4393,11 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 		for (int i = 0; i < b.size.x; ++i)
 		{
 			MAPTILE *psTile = mapTile(b.map.x + i, b.map.y + j);
-			psTile->psObject = nullptr;
-			auxClearBlocking(b.map.x + i, b.map.y + j, AIR_BLOCKED);
+			if (psTile->psObject == psStruct)
+			{
+				psTile->psObject = nullptr;
+				auxClearBlocking(b.map.x + i, b.map.y + j, AIR_BLOCKED);
+			}
 		}
 	}
 }
