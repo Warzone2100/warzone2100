@@ -4599,6 +4599,14 @@ wzapi::QueuedObjectRemovalsVector& wzapi::scriptQueuedObjectRemovals()
 	return instance;
 }
 
+bool wzapi::scriptIsObjectQueuedForRemoval(const BASE_OBJECT *psObj)
+{
+	const auto& queuedObjRemovals = scriptQueuedObjectRemovals();
+	return std::any_of(queuedObjRemovals.begin(), queuedObjRemovals.end(), [psObj](const std::pair<BASE_OBJECT*, bool>& p) {
+		return psObj == p.first;
+	});
+}
+
 void wzapi::processScriptQueuedObjectRemovals()
 {
 	auto& queuedObjRemovals = scriptQueuedObjectRemovals();
