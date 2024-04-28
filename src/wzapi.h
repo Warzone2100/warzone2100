@@ -1149,6 +1149,7 @@ namespace wzapi
 	using QueuedObjectRemovalsVector = std::vector<std::pair<BASE_OBJECT*, bool>>;
 
 	QueuedObjectRemovalsVector& scriptQueuedObjectRemovals();
+	bool scriptIsObjectQueuedForRemoval(const BASE_OBJECT *psObj);
 	/// <summary>
 	/// Walks `scriptQueuedObjectRemovals()` list, destroys every object in that list
 	/// and clears the container.

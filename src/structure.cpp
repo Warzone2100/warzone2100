@@ -72,7 +72,7 @@
 #include "game.h"
 #include "qtscript.h"
 #include "multiplay.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "multigifts.h"
 #include "loop.h"
 #include "template.h"
@@ -1466,7 +1466,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				{
 					removeStruct((STRUCTURE *)psTile->psObject, true);
 				}
-				else if (TileHasStructure(psTile))
+				else if (TileHasStructure(psTile) && !wzapi::scriptIsObjectQueuedForRemoval(psTile->psObject))
 				{
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic push
@@ -4393,8 +4393,11 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 		for (int i = 0; i < b.size.x; ++i)
 		{
 			MAPTILE *psTile = mapTile(b.map.x + i, b.map.y + j);
-			psTile->psObject = nullptr;
-			auxClearBlocking(b.map.x + i, b.map.y + j, AIR_BLOCKED);
+			if (psTile->psObject == psStruct)
+			{
+				psTile->psObject = nullptr;
+				auxClearBlocking(b.map.x + i, b.map.y + j, AIR_BLOCKED);
+			}
 		}
 	}
 }

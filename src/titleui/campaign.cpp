@@ -1274,6 +1274,11 @@ void WzCampaignTweakOptionsEditForm::initialize(const std::shared_ptr<std::vecto
 	{
 		const auto& o = (*tweakOptions)[i];
 
+		if (!o.editable)
+		{
+			continue;	// skip non-editable settings
+		}
+
 		auto toggleWidget = WzCampaignTweakOptionToggle::make(o.displayName, o.description);
 		toggleWidget->setIsChecked(o.currentValue);
 		toggleWidget->addOnClickHandler([weakEditForm, i](W_BUTTON& but) {
@@ -1484,6 +1489,10 @@ void WzCampaignTweakOptionsSummaryWidget::update(const std::vector<WzCampaignTwe
 	// Add list of tweak options (2 columns)
 	for (const auto& setting : tweakOptionSettings)
 	{
+		if (!setting.editable)
+		{
+			continue;	// skip non-editable settings
+		}
 		auto newStatusLabel = makeTweakOptionSmallLabel((setting.currentValue) ? "✓" : "x", statusLabelWidth);
 		auto newTweakLabel = makeTweakOptionSmallLabel(setting.displayName);
 		grid->place({col++, 1, false}, row, Margin(0, 3, 0, 0).wrap(newStatusLabel));
@@ -2631,7 +2640,7 @@ void CampaignStartOptionsForm::initialize(const std::shared_ptr<WzCampaignSelect
 
 	// Add Tweak Options widget (optional)
 	*tweakOptionSettings = buildTweakOptionSettings(modInfo);
-	if (!tweakOptionSettings->empty())
+	if (std::any_of(tweakOptionSettings->begin(), tweakOptionSettings->end(), [](const WzCampaignTweakOptionSetting& o) { return o.editable; }))
 	{
 		tweakOptionsSummary = WzCampaignTweakOptionsSummaryWidget::make();
 		tweakOptionsSummary->update(*tweakOptionSettings);

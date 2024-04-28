@@ -34,8 +34,8 @@ endif()
 OPTION(WZ_PROFILING_NVTX "Add NVTX-based profiling instrumentation to the code" OFF)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
-	# Only supported on Windows, macOS, and Linux
-	OPTION(ENABLE_DISCORD "Enable Discord presence / join integration" ON)
+	# Only supported on Windows, macOS, and Linux - requires additional configuration, so off by default
+	OPTION(ENABLE_DISCORD "Enable Discord presence / join integration" OFF)
 endif()
 
 set(WZ_DISTRIBUTOR "UNKNOWN" CACHE STRING "Name of distributor compiling this package")

@@ -28,7 +28,7 @@
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "hci.h"
 #include "map.h"
 #include "power.h"

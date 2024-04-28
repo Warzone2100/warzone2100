@@ -31,7 +31,16 @@
 #include <algorithm>
 #include <unordered_set>
 #include <unordered_map>
-#include <regex>
+// On Fedora 40, GCC 14 produces false-positive warnings for -Walloc-zero
+// when compiling <regex> with optimizations. Silence these warnings.
+#if !defined(__clang__) && !defined(__INTEL_COMPILER) && defined(__GNUC__) && __GNUC__ >= 14 && defined(__OPTIMIZE__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Walloc-zero"
+#endif
+# include <regex>
+#if !defined(__clang__) && !defined(__INTEL_COMPILER) && defined(__GNUC__) && __GNUC__ >= 14 && defined(__OPTIMIZE__)
+# pragma GCC diagnostic pop
+#endif
 #include <limits>
 #include <typeindex>
 #include <sstream>
