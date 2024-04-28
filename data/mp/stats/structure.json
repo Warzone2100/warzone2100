@@ -2901,7 +2901,7 @@
 			"miupbase.pie"
 		],
 		"thermal": 10,
-		"type": "DEFENSE",
+		"type": "GENERAL",
 		"width": 2
 	},
 	"Wall-RotMg": {
