@@ -1145,7 +1145,7 @@
 			"micool.PIE"
 		],
 		"thermal": 20,
-		"type": "DEFENSE",
+		"type": "GENERAL",
 		"width": 1
 	},
 	"ECM1PylonMk1": {
@@ -2257,7 +2257,7 @@
 			"minuke.PIE"
 		],
 		"thermal": 20,
-		"type": "DEFENSE",
+		"type": "GENERAL EXPLOSIVE",
 		"width": 2
 	},
 	"P0-AASite-Laser": {
