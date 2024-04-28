@@ -1035,7 +1035,7 @@
 			"micool.PIE"
 		],
 		"thermal": 20,
-		"type": "DEFENSE",
+		"type": "GENERAL",
 		"width": 1
 	},
 	"Emplacement-HPVcannon": {
@@ -2026,7 +2026,7 @@
 			"minuke.PIE"
 		],
 		"thermal": 20,
-		"type": "DEFENSE",
+		"type": "GENERAL EXPLOSIVE",
 		"width": 2
 	},
 	"P0-AASite-SAM1": {
