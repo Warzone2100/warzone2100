@@ -4502,6 +4502,7 @@ nlohmann::json wzapi::getUsefulConstants()
 	constants["SAT_UPLINK"] = REF_SAT_UPLINK;
 	constants["GATE"] = REF_GATE;
 	constants["LASSAT"] = REF_LASSAT;
+	constants["STRUCT_GENERIC"] = REF_GENERIC;
 	constants["SUPEREASY"] = static_cast<int8_t>(AIDifficulty::SUPEREASY);
 	constants["EASY"] = static_cast<int8_t>(AIDifficulty::EASY);
 	constants["MEDIUM"] = static_cast<int8_t>(AIDifficulty::MEDIUM);
