@@ -4391,7 +4391,7 @@ nlohmann::json wzapi::constructStatsObject()
 			nlohmann::json strct = nlohmann::json::object();
 			strct["Id"] = psStats->id;
 			if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_WALLCORNER
-			    || psStats->type == REF_GENERIC || psStats->type == REF_GATE)
+			    || psStats->type == REF_GENERIC || psStats->type == REF_GATE || psStats->type == REF_FORTRESS)
 			{
 				strct["Type"] = "Wall";
 			}

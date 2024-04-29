@@ -843,6 +843,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 		stattype = (int)REF_WALL;
 		break;
 	case REF_GENERIC:
+	case REF_FORTRESS:
 	case REF_DEFENSE:
 		stattype = (int)REF_DEFENSE;
 		break;

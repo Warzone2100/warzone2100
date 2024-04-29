@@ -384,6 +384,7 @@ static const StringToEnum<STRUCTURE_TYPE> map_STRUCTURE_TYPE[] =
 	{ "SAT UPLINK",         REF_SAT_UPLINK          },
 	{ "GATE",               REF_GATE                },
 	{ "LASSAT",             REF_LASSAT              },
+	{ "FORTRESS",           REF_FORTRESS            },
 };
 
 static const StringToEnum<STRUCT_STRENGTH> map_STRUCT_STRENGTH[] =
@@ -4183,6 +4184,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 		case REF_MISSILE_SILO:
 		case REF_SAT_UPLINK:
 		case REF_LASSAT:
+		case REF_FORTRESS:
 			{
 				/*need to check each tile the structure will sit on is not water*/
 				for (int j = 0; j < b.size.y; ++j)
