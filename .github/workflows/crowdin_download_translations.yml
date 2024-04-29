@@ -110,8 +110,8 @@ jobs:
               --ignore-matching-lines='^[-+]"PO-Revision-Date: .*"' \
               --ignore-matching-lines='^[-+]"Last-Translator: .*"' \
               --ignore-matching-lines='^index .*\.\..* .*' \
-              l10n_temp_1.patch l10n_temp_2.patch
-            DIFF_RET=$?
+              l10n_temp_1.patch l10n_temp_2.patch \
+              && DIFF_RET=$? || DIFF_RET=$?
             if [ $DIFF_RET -eq 0 ]; then
               # Inputs are the same (ignoring header changes that aren't relevant)
               echo "No pertinent changes - skipping force-push"
