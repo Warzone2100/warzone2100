@@ -5,7 +5,7 @@ TARGET_BUILD_ARCH="$("${CRAFT_PART_SRC}/.ci/snap/snapcraft_build_get_target_arch
 echo "[install_vulkan_sdk.sh]"
 echo "Target Arch: $TARGET_BUILD_ARCH"
 
-if [ "$TARGET_BUILD_ARCH" = "amd64" ]; then
+if [[ "$TARGET_BUILD_ARCH" == "amd64" && "$CRAFT_ARCH_BUILD_ON" == "$TARGET_BUILD_ARCH" ]]; then
   # Install Vulkan SDK (binary package)
   echo "Installing Vulkan SDK"
 
