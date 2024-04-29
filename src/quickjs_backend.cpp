@@ -795,7 +795,7 @@ JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
 //;; * ```cost``` What it would cost to build this structure. (3.2+ only)
 //;; * ```stattype``` The stattype defines the type of structure. It will be one of ```HQ```, ```FACTORY```, ```POWER_GEN```,
 //;; ```RESOURCE_EXTRACTOR```, ```LASSAT```, ```DEFENSE```, ```WALL```, ```RESEARCH_LAB```, ```REPAIR_FACILITY```,
-//;; ```CYBORG_FACTORY```, ```VTOL_FACTORY```, ```REARM_PAD```, ```SAT_UPLINK```, ```GATE``` and ```COMMAND_CONTROL```.
+//;; ```CYBORG_FACTORY```, ```VTOL_FACTORY```, ```REARM_PAD```, ```SAT_UPLINK```, ```GATE```, ```STRUCT_GENERIC```, and ```COMMAND_CONTROL```.
 //;; * ```modules``` If the stattype is set to one of the factories, ```POWER_GEN``` or ```RESEARCH_LAB```, then this property is set to the
 //;; number of module upgrades it has.
 //;; * ```canHitAir``` True if the structure has anti-air capabilities. (3.2+ only)
@@ -842,7 +842,6 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 	case REF_GATE:
 		stattype = (int)REF_WALL;
 		break;
-	case REF_GENERIC:
 	case REF_FORTRESS:
 	case REF_DEFENSE:
 		stattype = (int)REF_DEFENSE;
