@@ -18,16 +18,16 @@ architectures:
 layout:
   /usr/share/vulkan:
     symlink: $SNAP/usr/share/vulkan
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_intel.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_intel.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_radeon.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_radeon.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_broadcom.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_broadcom.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_freedreno.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_freedreno.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_lvp.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libvulkan_lvp.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_intel.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_intel.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_radeon.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_radeon.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_broadcom.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_broadcom.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_freedreno.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_freedreno.so
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_lvp.so:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_lvp.so
 
 plugs:
   wz2100-sequences:
@@ -45,7 +45,7 @@ apps:
     environment:
       XDG_DATA_HOME: $SNAP_USER_COMMON
       XDG_CONFIG_HOME: $SNAP_USER_COMMON
-      LIBDECOR_PLUGIN_DIR: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libdecor/plugins-1
+      LIBDECOR_PLUGIN_DIR: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdecor/plugins-1
     plugs:
       - audio-playback
       - desktop
@@ -157,8 +157,8 @@ parts:
       craftctl set version="${SNAP_VERSION_DESC}"
       git submodule update --init
     override-build: |
-      echo "CRAFT_TARGET_ARCH=${CRAFT_TARGET_ARCH}"
-      echo "CRAFT_ARCH_TRIPLET=${CRAFT_ARCH_TRIPLET}"
+      echo "CRAFT_ARCH_BUILD_FOR=${CRAFT_ARCH_BUILD_FOR}"
+      echo "CRAFT_ARCH_TRIPLET_BUILD_FOR=${CRAFT_ARCH_TRIPLET_BUILD_FOR}"
       
       # Install Vulkan SDK
       . "${CRAFT_PART_SRC}/.ci/snap/install_vulkan_sdk.sh"
@@ -167,7 +167,7 @@ parts:
       set +u
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
       cmake -S "$CRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
-      cmake --build . -- -j$SNAPCRAFT_PARALLEL_BUILD_COUNT
+      cmake --build . -- -j$CRAFT_PARALLEL_BUILD_COUNT
       DESTDIR=$CRAFT_PART_INSTALL cmake --build . -- install
       
       # Include the icon's path in the desktop file, not just the name.
@@ -245,6 +245,6 @@ parts:
       done
       # The following is required while using core18 + gnome-3-34
       # See: https://forum.snapcraft.io/t/undefined-symbol-hb-buffer-set-invisible-glyph-with-gnome-3-34/24287
-      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libharfbuzz.so.0*
-      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgio-2.0.so.0*
-      rm -f $SNAPCRAFT_PRIME/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libglib-2.0.so.0*
+      rm -f $CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz.so.0*
+      rm -f $CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libgio-2.0.so.0*
+      rm -f $CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libglib-2.0.so.0*

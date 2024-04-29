@@ -5,12 +5,15 @@
 echoerr() { echo "$@" 1>&2; }
 
 BUILDTIME_TARGET_ARCH=""
-if [ -n "${CRAFT_TARGET_ARCH}" ]; then
+if [ -n "${CRAFT_ARCH_BUILD_FOR}" ]; then
+  # CRAFT_ARCH_BUILD_FOR is available - use it!
+  BUILDTIME_TARGET_ARCH="${CRAFT_ARCH_BUILD_FOR}"
+elif [ -n "${CRAFT_TARGET_ARCH}" ]; then
   # CRAFT_TARGET_ARCH is available - use it!
   BUILDTIME_TARGET_ARCH="${CRAFT_TARGET_ARCH}"
 else
-  # If CRAFT_TARGET_ARCH is not available, parse the CRAFT_ARCH_TRIPLET and convert it
-  case ${CRAFT_ARCH_TRIPLET%%-*} in
+  # If above are not available, parse the CRAFT_ARCH_TRIPLET_BUILD_FOR and convert it
+  case ${CRAFT_ARCH_TRIPLET_BUILD_FOR%%-*} in
   x86_64)
       BUILDTIME_TARGET_ARCH="amd64"
       ;;
