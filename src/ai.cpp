@@ -446,6 +446,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		switch (targetStructure->pStructureType->type)
 		{
 		case REF_DEFENSE:
+		case REF_FORTRESS:
 			targetTypeBonus = WEIGHT_WEAPON_STRUCT;
 			break;
 
