@@ -25,6 +25,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <array>
+#include <vector>
 
 struct LIGHT
 {
@@ -95,6 +96,9 @@ namespace renderingNew
 	struct LightingManager final : ILightingManager
 	{
 		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
+	private:
+		// cached containers to avoid frequent reallocations
+		std::vector<LIGHT> culledLights;
 	};
 }
 
