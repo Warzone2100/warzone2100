@@ -90,15 +90,24 @@ namespace {
 		glm::vec3 vertical(0.f, 1.0f, 0.f);
 		glm::vec3 forward(0.f, 0.f, 1.0f);
 
+		auto horizRange = horizontal * range;
+		auto verticalRange = vertical * range;
+		auto forwardRange = forward * range;
+
+		auto centerMinusHorizRange = center - horizRange;
+		auto centerPlusHorizRange = center + horizRange;
+		auto verticalRangeMinusForwardRange = verticalRange - forwardRange;
+		auto verticalRangePlusForwardRange = verticalRange + forwardRange;
+
 		return BoundingBox{
-			center - horizontal * range - vertical * range - forward * range,
-			center - horizontal * range - vertical * range + forward * range,
-			center - horizontal * range + vertical * range - forward * range,
-			center - horizontal * range + vertical * range + forward * range,
-			center + horizontal * range - vertical * range - forward * range,
-			center + horizontal * range - vertical * range + forward * range,
-			center + horizontal * range + vertical * range - forward * range,
-			center + horizontal * range + vertical * range + forward * range
+			centerMinusHorizRange - verticalRangeMinusForwardRange,
+			centerMinusHorizRange - verticalRangePlusForwardRange,
+			centerMinusHorizRange + verticalRangeMinusForwardRange,
+			centerMinusHorizRange + verticalRangePlusForwardRange,
+			centerPlusHorizRange - verticalRangeMinusForwardRange,
+			centerPlusHorizRange - verticalRangePlusForwardRange,
+			centerPlusHorizRange + verticalRangeMinusForwardRange,
+			centerPlusHorizRange + verticalRangePlusForwardRange
 		};
 	}
 
@@ -107,20 +116,21 @@ namespace {
 void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, LightMap&, const glm::mat4& worldViewProjectionMatrix)
 {
 	PointLightBuckets result;
+	const bool yAxisInverted = gfx_api::context::get().isYAxisInverted();
 
 	// Pick the first lights inside the view frustum
 	auto viewFrustum = IntersectionOfHalfSpace{
 		[](const glm::vec3& in) { return in.x >= -1.f; },
 		[](const glm::vec3& in) { return in.x <= 1.f; },
-		[](const glm::vec3& in) {
-			if (gfx_api::context::get().isYAxisInverted())
+		[yAxisInverted](const glm::vec3& in) {
+			if (yAxisInverted)
 			{
 				return -in.y >= -1.f;
 			}
 			return in.y >= -1.f;
 		},
-		[](const glm::vec3& in) {
-			if (gfx_api::context::get().isYAxisInverted())
+		[yAxisInverted](const glm::vec3& in) {
+			if (yAxisInverted)
 			{
 				return -in.y <= 1.f;
 			}
@@ -168,20 +178,26 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	std::array<size_t, gfx_api::max_indexed_lights * 4> lightList;
 	for (size_t i = 0; i < gfx_api::bucket_dimension; i++)
 	{
+		auto bucketFrustumX0 = -1.f + 2 * static_cast<float>(i) / gfx_api::bucket_dimension;
+		auto bucketFrustumX1 = -1.f + 2 * static_cast<float>(i + 1) / gfx_api::bucket_dimension;
+
 		for (size_t j = 0; j < gfx_api::bucket_dimension; j++)
 		{
+			auto bucketFrustumY0 = -1.f + 2 * static_cast<float>(j) / gfx_api::bucket_dimension;
+			auto bucketFrustumY1 = -1.f + 2 * static_cast<float>(j + 1) / gfx_api::bucket_dimension;
+
 			auto frustum = IntersectionOfHalfSpace{
-				[i](const glm::vec3& in) { return in.x >= -1.f + 2 * static_cast<float>(i) / gfx_api::bucket_dimension; },
-				[i](const glm::vec3& in) { return in.x <= -1.f + 2 * static_cast<float>(i + 1) / gfx_api::bucket_dimension; },
-				[j](const glm::vec3& in) {
-					if (gfx_api::context::get().isYAxisInverted())
-						return -in.y >= -1.f + 2 * static_cast<float>(j) / gfx_api::bucket_dimension;
-					return in.y >= -1.f + 2 * static_cast<float>(j) / gfx_api::bucket_dimension;
+				[bucketFrustumX0](const glm::vec3& in) { return in.x >= bucketFrustumX0; },
+				[bucketFrustumX1](const glm::vec3& in) { return in.x <= bucketFrustumX1; },
+				[bucketFrustumY0, yAxisInverted](const glm::vec3& in) {
+					if (yAxisInverted)
+						return -in.y >= bucketFrustumY0;
+					return in.y >= bucketFrustumY0;
 				},
-				[j](const glm::vec3& in) {
-					if (gfx_api::context::get().isYAxisInverted())
-						return -in.y <= -1.f + 2 * static_cast<float>(j + 1) / gfx_api::bucket_dimension;
-					return in.y <= -1.f + 2 * static_cast<float>(j + 1) / gfx_api::bucket_dimension;
+				[bucketFrustumY1, yAxisInverted](const glm::vec3& in) {
+					if (yAxisInverted)
+						return -in.y <= bucketFrustumY1;
+					return in.y <= bucketFrustumY1;
 				},
 				[](const glm::vec3& in) { return in.z >= 0; },
 				[](const glm::vec3& in) { return in.z <= 1; }
