@@ -1343,7 +1343,7 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
  *
  * @see GAMESTRUCT,NETsendGAMESTRUCT
  */
-static bool NETrecvGAMESTRUCT(Socket *sock, GAMESTRUCT *ourgamestruct)
+static bool NETrecvGAMESTRUCT(Socket& sock, GAMESTRUCT *ourgamestruct)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
@@ -1369,7 +1369,7 @@ static bool NETrecvGAMESTRUCT(Socket *sock, GAMESTRUCT *ourgamestruct)
 	};
 
 	// Read a GAMESTRUCT from the connection
-	result = readAll(*sock, buf, sizeof(buf), NET_TIMEOUT_DELAY);
+	result = readAll(sock, buf, sizeof(buf), NET_TIMEOUT_DELAY);
 	bool failed = false;
 	if (result == SOCKET_ERROR)
 	{
@@ -3358,7 +3358,7 @@ unsigned NETgetDownloadProgress(unsigned player)
 	return static_cast<unsigned>(progress);
 }
 
-static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
+static ssize_t readLobbyResponse(Socket& sock, unsigned int timeout)
 {
 	uint32_t lobbyStatusCode;
 	uint32_t MOTDLength;
@@ -3366,7 +3366,7 @@ static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
 	ssize_t result, received = 0;
 
 	// Get status and message length
-	result = readAll(*sock, &buffer, sizeof(buffer), timeout);
+	result = readAll(sock, &buffer, sizeof(buffer), timeout);
 	if (result != sizeof(buffer))
 	{
 		goto error;
@@ -3381,7 +3381,7 @@ static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
 		free(NetPlay.MOTD);
 	}
 	NetPlay.MOTD = (char *)malloc(MOTDLength + 1);
-	result = readAll(*sock, NetPlay.MOTD, MOTDLength, timeout);
+	result = readAll(sock, NetPlay.MOTD, MOTDLength, timeout);
 	if (result != MOTDLength)
 	{
 		goto error;
@@ -3454,13 +3454,13 @@ error:
 	return SOCKET_ERROR;
 }
 
-bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
+bool readGameStructsList(Socket& sock, unsigned int timeout, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
 {
 	unsigned int gamecount = 0;
 	uint32_t gamesavailable = 0;
 	int result = 0;
 
-	if ((result = readAll(*sock, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
+	if ((result = readAll(sock, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
 	{
 		gamesavailable = ntohl(gamesavailable);
 	}
@@ -3493,7 +3493,7 @@ bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function
 		if (tmpGame.desc.host[0] == '\0')
 		{
 			memset(tmpGame.desc.host, 0, sizeof(tmpGame.desc.host));
-			strncpy(tmpGame.desc.host, getSocketTextAddress(*sock), sizeof(tmpGame.desc.host) - 1);
+			strncpy(tmpGame.desc.host, getSocketTextAddress(sock), sizeof(tmpGame.desc.host) - 1);
 		}
 
 		uint32_t Vmgr = (tmpGame.future4 & 0xFFFF0000) >> 16;
@@ -3692,7 +3692,7 @@ void LobbyServerConnectionHandler::sendUpdateNow()
 	lastServerUpdate = realTime;
 	queuedServerUpdate = false;
 	// newer lobby server will return a lobby response / status after each update call
-	if (rs_socket && readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
+	if (rs_socket && readLobbyResponse(*rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 	{
 		disconnect();
 	}
@@ -3733,7 +3733,7 @@ void LobbyServerConnectionHandler::run()
 			}
 			if (exceededTimeout || (checkSocketRet > 0 && socketReadReady(*rs_socket)))
 			{
-				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
+				if (readLobbyResponse(*rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 				{
 					disconnect();
 					break;
@@ -4677,49 +4677,25 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		return false;
 	}
 
-	if (tcp_socket != nullptr)
-	{
-		debug(LOG_NET, "Deleting tcp_socket %p", static_cast<void *>(tcp_socket));
-		if (client_socket_set)
-		{
-			SocketSet_DelSocket(*client_socket_set, tcp_socket);
-		}
-		socketClose(tcp_socket);
-		tcp_socket = nullptr;
-	}
-
-	tcp_socket = socketOpenAny(hosts, 15000);
+	Socket* sock = socketOpenAny(hosts, 15000);
 
 	deleteSocketAddress(hosts);
 	hosts = nullptr;
 
-	if (tcp_socket == nullptr)
+	if (sock == nullptr)
 	{
 		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
-	debug(LOG_NET, "New tcp_socket = %p", static_cast<void *>(tcp_socket));
-	// client machines only need 1 socket set
-	client_socket_set = allocSocketSet();
-	if (client_socket_set == nullptr)
-	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
-		setLobbyError(ERROR_CONNECTION);
-		return false;
-	}
-	debug(LOG_NET, "Created socket_set %p", static_cast<void *>(client_socket_set));
-
-	SocketSet_AddSocket(*client_socket_set, tcp_socket);
-
+	debug(LOG_NET, "New socket = %p", static_cast<void *>(sock));
 	debug(LOG_NET, "Sending list cmd");
 
-	if (writeAll(*tcp_socket, "list", sizeof("list")) == SOCKET_ERROR)
+	if (writeAll(*sock, "list", sizeof("list")) == SOCKET_ERROR)
 	{
 		debug(LOG_NET, "Server socket encountered error: %s", strSockError(getSockErr()));
-		SocketSet_DelSocket(*client_socket_set, tcp_socket);		// mark it invalid
-		socketClose(tcp_socket);
-		tcp_socket = nullptr;
+		// mark it invalid
+		socketClose(sock);
 
 		// when we fail to receive a game count, bail out
 		setLobbyError(ERROR_CONNECTION);
@@ -4730,24 +4706,23 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	// Earlier versions (and earlier lobby servers) restricted this to no more than 11
 	std::vector<GAMESTRUCT> initialBatchOfGameStructs;
 
-	if (!readGameStructsList(tcp_socket, NET_TIMEOUT_DELAY, [&initialBatchOfGameStructs](const GAMESTRUCT &lobbyGame) -> bool {
+	if (!readGameStructsList(*sock, NET_TIMEOUT_DELAY, [&initialBatchOfGameStructs](const GAMESTRUCT &lobbyGame) -> bool {
 		initialBatchOfGameStructs.push_back(lobbyGame);
 		return true; // continue enumerating
 	}))
 	{
-		SocketSet_DelSocket(*client_socket_set, tcp_socket);		// mark it invalid
-		socketClose(tcp_socket);
-		tcp_socket = nullptr;
+		// mark it invalid
+		socketClose(sock);
 
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 
 	// read the lobby response
-	if (readLobbyResponse(tcp_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
+	if (readLobbyResponse(*sock, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 	{
-		socketClose(tcp_socket);
-		tcp_socket = nullptr;
+		// mark it invalid
+		socketClose(sock);
 		addConsoleMessage(_("Failed to get a lobby response!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 
 		// treat as fatal error
@@ -4761,7 +4736,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	// Hence as long as we don't treat "0" as signifying any change in behavior, this should be safe + backwards-compatible
 	#define IGNORE_FIRST_BATCH 1
 	uint32_t responseParameters = 0;
-	if ((result = readAll(*tcp_socket, &responseParameters, sizeof(responseParameters), NET_TIMEOUT_DELAY)) == sizeof(responseParameters))
+	if ((result = readAll(*sock, &responseParameters, sizeof(responseParameters), NET_TIMEOUT_DELAY)) == sizeof(responseParameters))
 	{
 		responseParameters = ntohl(responseParameters);
 
@@ -4783,7 +4758,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 
 		if (requestSecondBatch)
 		{
-			if (!readGameStructsList(tcp_socket, NET_TIMEOUT_DELAY, handleEnumerateGameFunc))
+			if (!readGameStructsList(*sock, NET_TIMEOUT_DELAY, handleEnumerateGameFunc))
 			{
 				// we failed to read a second list of game structs
 
@@ -4797,9 +4772,8 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 					// if ignoring the first batch, treat this as a fatal error
 					debug(LOG_NET, "Second readGameStructsList call failed");
 
-					SocketSet_DelSocket(*client_socket_set, tcp_socket);		// mark it invalid
-					socketClose(tcp_socket);
-					tcp_socket = nullptr;
+					// mark it invalid
+					socketClose(sock);
 
 					// when we fail to receive a game count, bail out
 					setLobbyError(ERROR_CONNECTION);
@@ -4821,9 +4795,8 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		}
 	}
 
-	SocketSet_DelSocket(*client_socket_set, tcp_socket);		// mark it invalid (we are done with it)
-	socketClose(tcp_socket);
-	tcp_socket = nullptr;
+	// mark it invalid (we are done with it)
+	socketClose(sock);
 
 	return true;
 }
