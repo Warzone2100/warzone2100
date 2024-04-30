@@ -240,14 +240,9 @@ static std::vector<WZFile> DownloadingWzFiles;
 // update flags
 bool netPlayersUpdated;
 
-
-/**
- * Socket used for these purposes:
- *  * Host a game, be a server.
- *  * Connect to the lobby server.
- *  * Join a server for a game.
- */
-static Socket *tcp_socket = nullptr;               ///< Socket used to talk to a lobby server (hosts also seem to temporarily act as lobby servers while the client negotiates joining the game), or to listen for clients (if we're the host, in which case we use rs_socket (declaration hidden somewhere inside a function) to talk to the lobby server).
+// Server-side socket (host-only) which is used to listen for client connections.
+// There's also `rs_socket` held by `LobbyServerConnectionHandler`, which is used to communicate with the lobby server.
+static Socket* server_listen_socket = nullptr;
 
 // Client-side socket used initially to establish connection with a host.
 // If all preliminary checks (e.g. we're able to locate the host and initial
@@ -256,9 +251,12 @@ static Socket *tcp_socket = nullptr;               ///< Socket used to talk to a
 // once again (that's why it's called "transient").
 static Socket* client_transient_socket = nullptr;
 
-static Socket *bsocket = nullptr;                  ///< Socket used to talk to the host (clients only). If bsocket != NULL, then tcp_socket == NULL.
+static Socket *bsocket = nullptr;                  ///< Socket used to talk to the host (clients only). If bsocket != NULL, then client_transient_socket == NULL.
 static Socket *connected_bsocket[MAX_CONNECTED_PLAYERS] = { nullptr };  ///< Sockets used to talk to clients (host only).
+// Client-side socket set. Contains of only 1 socket at most: `bsocket` (which is a stable client connection to the host).
 static SocketSet* client_socket_set = nullptr;
+// Server-side socket set. Contains up to `MAX_CONNECTED_PLAYERS` sockets:
+// `connected_bsocket[i]` - sockets used to communicate with clients during a game session.
 static SocketSet* server_socket_set = nullptr;
 
 static struct UPNPUrls urls;
@@ -579,7 +577,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet *pSocketSet, uint8_t *b
 		}
 		else
 		{
-			debug(LOG_NET, "%s tcp_socket %p is now invalid", strSockError(getSockErr()), static_cast<void *>(socket));
+			debug(LOG_NET, "%s socket %p is now invalid", strSockError(getSockErr()), static_cast<void *>(socket));
 		}
 
 		// an error occurred, or the remote host has closed the connection.
@@ -1742,7 +1740,7 @@ int NETclose()
 
 	if (client_socket_set)
 	{
-		// checking to make sure tcp_socket is still valid
+		// checking to make sure client_transient_socket is still valid
 		if (client_transient_socket)
 		{
 			SocketSet_DelSocket(*client_socket_set, client_transient_socket);
@@ -1767,11 +1765,11 @@ int NETclose()
 		socketClose(client_transient_socket);
 		client_transient_socket = nullptr;
 	}
-	if (tcp_socket)
+	if (server_listen_socket)
 	{
-		debug(LOG_NET, "Closing tcp_socket %p", static_cast<void *>(tcp_socket));
-		socketClose(tcp_socket);
-		tcp_socket = nullptr;
+		debug(LOG_NET, "Closing server_listen_socket %p", static_cast<void *>(server_listen_socket));
+		socketClose(server_listen_socket);
+		server_listen_socket = nullptr;
 	}
 	if (bsocket)
 	{
@@ -3919,14 +3917,14 @@ static void NETallowJoining()
 	{
 		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 		ActivitySink::ListeningInterfaces listeningInterfaces;
-		if (tcp_socket != nullptr)
+		if (server_listen_socket != nullptr)
 		{
-			listeningInterfaces.IPv4 = socketHasIPv4(*tcp_socket);
+			listeningInterfaces.IPv4 = socketHasIPv4(*server_listen_socket);
 			if (listeningInterfaces.IPv4)
 			{
 				listeningInterfaces.ipv4_port = NETgetGameserverPort();
 			}
-			listeningInterfaces.IPv6 = socketHasIPv6(*tcp_socket);
+			listeningInterfaces.IPv6 = socketHasIPv6(*server_listen_socket);
 			if (listeningInterfaces.IPv6)
 			{
 				listeningInterfaces.ipv6_port = NETgetGameserverPort();
@@ -3979,7 +3977,7 @@ static void NETallowJoining()
 
 	// See if there's an incoming connection (if we have space to handle it!)
 	if (i < MAX_TMP_SOCKETS && tmp_socket[i] == nullptr // Make sure that we're not out of sockets
-	    && (tmp_socket[i] = socketAccept(tcp_socket)) != nullptr)
+	    && (tmp_socket[i] = socketAccept(server_listen_socket)) != nullptr)
 	{
 		NETinitQueue(NETnetTmpQueue(i));
 		SocketSet_AddSocket(*tmp_socket_set, tmp_socket[i]);
@@ -4553,17 +4551,20 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		return true;
 	}
 
-	// tcp_socket is the connection to the lobby server (or machine)
-	if (!tcp_socket)
+	// Start listening for client connections on `gameserver_port`.
+	// These will initially be assigned to `tmp_socket[i]` until accepted in the game session,
+	// in which case `tmp_socket[i]` will be assigned to `connected_bsocket[i]` and `tmp_socket[i]`
+	// will become nullptr.
+	if (!server_listen_socket)
 	{
-		tcp_socket = socketListen(gameserver_port);
+		server_listen_socket = socketListen(gameserver_port);
 	}
-	if (tcp_socket == nullptr)
+	if (server_listen_socket == nullptr)
 	{
 		debug(LOG_ERROR, "Cannot connect to master self: %s", strSockError(getSockErr()));
 		return false;
 	}
-	debug(LOG_NET, "New tcp_socket = %p", static_cast<void *>(tcp_socket));
+	debug(LOG_NET, "New server_listen_socket = %p", static_cast<void *>(server_listen_socket));
 	// Host needs to create a socket set for MAX_PLAYERS
 	if (!server_socket_set)
 	{
