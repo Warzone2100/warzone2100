@@ -249,6 +249,13 @@ bool netPlayersUpdated;
  */
 static Socket *tcp_socket = nullptr;               ///< Socket used to talk to a lobby server (hosts also seem to temporarily act as lobby servers while the client negotiates joining the game), or to listen for clients (if we're the host, in which case we use rs_socket (declaration hidden somewhere inside a function) to talk to the lobby server).
 
+// Client-side socket used initially to establish connection with a host.
+// If all preliminary checks (e.g. we're able to locate the host and initial
+// version check succeeded) are passed, it will be promoted to a stable client
+// connection and assigned to `bsocket`, leaving `client_transient_socket == nullptr`
+// once again (that's why it's called "transient").
+static Socket* client_transient_socket = nullptr;
+
 static Socket *bsocket = nullptr;                  ///< Socket used to talk to the host (clients only). If bsocket != NULL, then tcp_socket == NULL.
 static Socket *connected_bsocket[MAX_CONNECTED_PLAYERS] = { nullptr };  ///< Sockets used to talk to clients (host only).
 static SocketSet* client_socket_set = nullptr;
@@ -1736,9 +1743,9 @@ int NETclose()
 	if (client_socket_set)
 	{
 		// checking to make sure tcp_socket is still valid
-		if (tcp_socket)
+		if (client_transient_socket)
 		{
-			SocketSet_DelSocket(*client_socket_set, tcp_socket);
+			SocketSet_DelSocket(*client_socket_set, client_transient_socket);
 		}
 		if (bsocket)
 		{
@@ -1753,6 +1760,12 @@ int NETclose()
 		debug(LOG_NET, "Freeing socket_set %p", static_cast<void*>(server_socket_set));
 		deleteSocketSet(server_socket_set);
 		server_socket_set = nullptr;
+	}
+	if (client_transient_socket)
+	{
+		debug(LOG_NET, "Closing client_transient_socket %p", static_cast<void*>(client_transient_socket));
+		socketClose(client_transient_socket);
+		client_transient_socket = nullptr;
 	}
 	if (tcp_socket)
 	{
@@ -4881,15 +4894,15 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		return false;
 	}
 
-	if (tcp_socket != nullptr)
+	if (client_transient_socket != nullptr)
 	{
-		socketClose(tcp_socket);
+		socketClose(client_transient_socket);
 	}
 
-	tcp_socket = socketOpenAny(hosts, 15000);
+	client_transient_socket = socketOpenAny(hosts, 15000);
 	deleteSocketAddress(hosts);
 
-	if (tcp_socket == nullptr)
+	if (client_transient_socket == nullptr)
 	{
 		debug(LOG_ERROR, "Cannot connect to [%s]:%d, %s", host, port, strSockError(getSockErr()));
 		return false;
@@ -4904,8 +4917,8 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	}
 	debug(LOG_NET, "Created socket_set %p", static_cast<void *>(client_socket_set));
 
-	// tcp_socket is used to talk to host machine
-	SocketSet_AddSocket(*client_socket_set, tcp_socket);
+	// `client_transient_socket` is used to talk to host machine
+	SocketSet_AddSocket(*client_socket_set, client_transient_socket);
 
 	// Send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
 	p_buffer = buffer;
@@ -4917,8 +4930,8 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	pushu32(NETCODE_VERSION_MAJOR);
 	pushu32(NETCODE_VERSION_MINOR);
 
-	if (writeAll(*tcp_socket, buffer, sizeof(buffer)) == SOCKET_ERROR
-	    || readAll(*tcp_socket, &result, sizeof(result), 1500) != sizeof(result))
+	if (writeAll(*client_transient_socket, buffer, sizeof(buffer)) == SOCKET_ERROR
+	    || readAll(*client_transient_socket, &result, sizeof(result), 1500) != sizeof(result))
 	{
 		debug(LOG_ERROR, "Couldn't send my version.");
 		return false;
@@ -4929,9 +4942,9 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	{
 		debug(LOG_ERROR, "Received error %d", result);
 
-		SocketSet_DelSocket(*client_socket_set, tcp_socket);
-		socketClose(tcp_socket);
-		tcp_socket = nullptr;
+		SocketSet_DelSocket(*client_socket_set, client_transient_socket);
+		socketClose(client_transient_socket);
+		client_transient_socket = nullptr;
 		deleteSocketSet(client_socket_set);
 		client_socket_set = nullptr;
 
@@ -4942,9 +4955,10 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	// Allocate memory for a new socket
 	NetPlay.hostPlayer = NET_HOST_ONLY;
 	NETinitQueue(NETnetQueue(NET_HOST_ONLY));
-	// NOTE: tcp_socket = bsocket now!
-	bsocket = tcp_socket;
-	tcp_socket = nullptr;
+	// NOTE: Initial connection attempt is successful. Promote transient socket to stable client connection.
+	// bsocket = client_transient_socket, client_transient_socket = nullptr now!
+	bsocket = client_transient_socket;
+	client_transient_socket = nullptr;
 	socketBeginCompression(*bsocket);
 
 	uint8_t playerType = (!asSpectator) ? NET_JOIN_PLAYER : NET_JOIN_SPECTATOR;
