@@ -130,7 +130,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		[](const glm::vec3& in) { return in.z <= 1; }
 	};
 
-	std::vector<LIGHT> culledLights;
+	culledLights.clear();
 	for (const auto& light : data.lights)
 	{
 		if (culledLights.size() >= gfx_api::max_lights)
