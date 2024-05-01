@@ -488,6 +488,19 @@ bool loadResearch(WzConfig &ini)
 			}
 		}
 
+		//set unavailable structures
+		std::vector<WzString> remStruct = ini.value("removedStructures").toWzStringList();
+		for (size_t j = 0; j < remStruct.size(); j++)
+		{
+			WzString strucID = remStruct[j].trimmed();
+			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of unavailable structures of research '%s' ", strucID.toUtf8().c_str(), getStatsName(&research));
+			if (structIndex >= 0)
+			{
+				research.pRemStructs.push_back(structIndex);
+			}
+		}
+
 		asResearch.push_back(research);
 		ini.endGroup();
 	}
