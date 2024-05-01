@@ -152,13 +152,13 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		{
 			continue;
 		}
-		culledLights.push_back(light);
+		culledLights.push_back({light, clipSpaceBoundingBox});
 	}
 
 
 	for (size_t lightIndex = 0, end = culledLights.size(); lightIndex < end; lightIndex++)
 	{
-		const auto& light = culledLights[lightIndex];
+		const auto& light = culledLights[lightIndex].light;
 		result.positions[lightIndex].x = light.position.x;
 		result.positions[lightIndex].y = light.position.y;
 		result.positions[lightIndex].z = light.position.z;
@@ -210,8 +210,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 				{
 					continue;
 				}
-				const LIGHT& light = culledLights[lightIndex];
-				BoundingBox clipSpaceBoundingBox = transformBoundingBox(worldViewProjectionMatrix, getLightBoundingBox(light));
+				const BoundingBox& clipSpaceBoundingBox = culledLights[lightIndex].clipSpaceBoundingBox;
 
 				if (isBBoxInClipSpace(frustum, clipSpaceBoundingBox))
 				{
