@@ -1017,7 +1017,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	//check for structures to be made unavailable
 	for (unsigned short pRemStruct : pResearch->pRemStructs)
 	{
-		makeComponentUnavailabel(apStructTypeLists[player][pRemStruct]);
+		makeComponentUnavailable(apStructTypeLists[player][pRemStruct]);
 	}
 
 	//check for component replacement
