@@ -3153,6 +3153,7 @@ static JSValue js_removeReticuleButton(JSContext *, JSValueConst, int, JSValueCo
 IMPL_JS_FUNC(applyLimitSet, wzapi::applyLimitSet)
 IMPL_JS_FUNC(enableComponent, wzapi::enableComponent)
 IMPL_JS_FUNC(makeComponentAvailable, wzapi::makeComponentAvailable)
+IMPL_JS_FUNC(makeComponentUnavailable, wzapi::makeComponentUnavailable)
 IMPL_JS_FUNC(allianceExistsBetween, wzapi::allianceExistsBetween)
 IMPL_JS_FUNC(translate, wzapi::translate)
 IMPL_JS_FUNC(playerPower, wzapi::playerPower)
