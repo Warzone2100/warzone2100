@@ -432,6 +432,23 @@ bool loadResearch(WzConfig &ini)
 			}
 		}
 
+		//set unavailable components
+		std::vector<WzString> remComp = ini.value("removedComponents").toWzStringList();
+		for (size_t j = 0; j < remComp.size(); j++)
+		{
+			WzString compID = remComp[j].trimmed();
+			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
+			if (pComp == nullptr)
+			{
+				ASSERT(false, "Invalid item '%s' in list of unavailable components of research '%s' ", compID.toUtf8().c_str(), getStatsName(&research));
+			}
+			else
+			{
+				research.pRemArtefacts.push_back(pComp);
+			}
+		}
+
+
 		//set result structures
 		std::vector<WzString> resStruct = ini.value("resultStructures").toWzStringList();
 		for (size_t j = 0; j < resStruct.size(); j++)
