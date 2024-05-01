@@ -984,6 +984,12 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		makeComponentRedundant(apStructTypeLists[player][pRedStruct]);
 	}
 
+	//check for structures to be made unavailable
+	for (unsigned short pRemStruct : pResearch->pRemStructs)
+	{
+		makeComponentRedundant(apStructTypeLists[player][pRemStruct]);
+	}
+
 	//check for component replacement
 	if (!pResearch->componentReplacement.empty())
 	{
