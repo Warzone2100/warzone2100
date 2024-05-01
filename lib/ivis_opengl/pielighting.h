@@ -97,11 +97,18 @@ namespace renderingNew
 	struct LightingManager final : ILightingManager
 	{
 		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
+
+		struct CalculatedPointLight
+		{
+			glm::vec3 position = glm::vec3(0, 0, 0);
+			glm::vec3 colour;
+			float range;
+		};
 	private:
 		// cached containers to avoid frequent reallocations
 		struct CulledLightInfo
 		{
-			const LIGHT& light;
+			CalculatedPointLight light;
 			BoundingBox clipSpaceBoundingBox;
 		};
 		std::vector<CulledLightInfo> culledLights;
