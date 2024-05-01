@@ -941,6 +941,22 @@ static void makeComponentAvailable(UBYTE &state)
 	}
 }
 
+static void makeComponentUnavailable(UBYTE &state)
+{
+	switch (state)
+	{
+	case AVAILABLE:
+		state = UNAVAILABLE;
+		break;
+	case FOUND:
+		state = UNAVAILABLE;
+		break;
+	case REDUNDANT_FOUND:
+		state = REDUNDANT_UNAVAILABLE;
+		break;
+	}
+}
+
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
