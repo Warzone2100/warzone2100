@@ -57,6 +57,7 @@ struct RESEARCH : public BASE_STATS
 	std::vector<UWORD>	pPRList;		///< List of research pre-requisites
 	std::vector<UWORD>	pStructList;		///< List of structures that when built would enable this research
 	std::vector<UWORD>	pRedStructs;		///< List of Structures that become redundant
+	std::vector<UWORD>	pRemStructs;		///< List of Structures that are made unavailable
 	std::vector<COMPONENT_STATS *> pRedArtefacts;	///< List of Artefacts that become redundant
 	std::vector<UWORD>	pStructureResults;	///< List of Structures that are possible after this research
 	std::vector<COMPONENT_STATS *> componentResults;	///< List of Components that are possible after this research
