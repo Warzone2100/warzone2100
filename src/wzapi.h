@@ -1094,8 +1094,10 @@ namespace wzapi
 	no_return_value showInterface(WZAPI_NO_PARAMS);
 	no_return_value hideInterface(WZAPI_NO_PARAMS);
 	no_return_value enableStructure(WZAPI_PARAMS(std::string structureName, optional<int> _player));
+	no_return_value disableStructure(WZAPI_PARAMS(std::string structureName, optional<int> _player));
 	no_return_value enableComponent(WZAPI_PARAMS(std::string componentName, int player));
 	no_return_value makeComponentAvailable(WZAPI_PARAMS(std::string componentName, int player));
+	no_return_value makeComponentUnavailable(WZAPI_PARAMS(std::string componentName, int player));
 	bool allianceExistsBetween(WZAPI_PARAMS(int player1, int player2));
 	bool removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED;
 	/// <summary>
