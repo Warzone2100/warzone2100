@@ -2876,6 +2876,23 @@ wzapi::no_return_value wzapi::enableStructure(WZAPI_PARAMS(std::string structure
 	return {};
 }
 
+//-- ## disableStructure(structureName[, player])
+//--
+//-- The given structure type is made unavailable to the given player. It will be removed
+//-- from the player's build list.
+//--
+wzapi::no_return_value wzapi::disableStructure(WZAPI_PARAMS(std::string structureName, optional<int> _player))
+{
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
+	int player = _player.value_or(context.player());
+	SCRIPT_ASSERT_PLAYER({}, context, player);
+	SCRIPT_ASSERT({}, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
+	// disable the appropriate structure
+	apStructTypeLists[player][structureIndex] = UNAVAILABLE;
+	return {};
+}
+
+
 static void setComponent(const std::string& componentName, int player, int availability)
 {
 	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(componentName));
@@ -2905,6 +2922,19 @@ wzapi::no_return_value wzapi::makeComponentAvailable(WZAPI_PARAMS(std::string co
 	setComponent(componentName, player, AVAILABLE);
 	return {};
 }
+
+//-- ## makeComponentUnavailable(componentName, player)
+//--
+//-- The given component is made unavailable to the given player. This means the player can
+//-- no longer build designs with it.
+//--
+wzapi::no_return_value wzapi::makeComponentUnavailable(WZAPI_PARAMS(std::string componentName, int player))
+{
+	SCRIPT_ASSERT_PLAYER({}, context, player);
+	setComponent(componentName, player, UNAVAILABLE);
+	return {};
+}
+
 
 //-- ## allianceExistsBetween(player1, player2)
 //--
