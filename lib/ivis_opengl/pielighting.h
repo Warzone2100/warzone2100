@@ -22,6 +22,7 @@
 
 #include "lib/ivis_opengl/pietypes.h"
 #include "gfx_api.h"
+#include "culling.h"
 #include <glm/glm.hpp>
 #include <memory>
 #include <array>
@@ -98,7 +99,12 @@ namespace renderingNew
 		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
 	private:
 		// cached containers to avoid frequent reallocations
-		std::vector<LIGHT> culledLights;
+		struct CulledLightInfo
+		{
+			const LIGHT& light;
+			BoundingBox clipSpaceBoundingBox;
+		};
+		std::vector<CulledLightInfo> culledLights;
 	};
 }
 
