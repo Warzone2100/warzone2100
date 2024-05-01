@@ -987,7 +987,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	//check for structures to be made unavailable
 	for (unsigned short pRemStruct : pResearch->pRemStructs)
 	{
-		makeComponentRedundant(apStructTypeLists[player][pRemStruct]);
+		makeComponentUnavailabel(apStructTypeLists[player][pRemStruct]);
 	}
 
 	//check for component replacement
@@ -1032,6 +1032,13 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	{
 		COMPONENT_TYPE type = pRedArtefact->compType;
 		makeComponentRedundant(apCompLists[player][type][pRedArtefact->index]);
+	}
+
+	//check for artefacts to be made unavailable
+	for (auto &pRemArtefact : pResearch->pRemArtefacts)
+	{
+		COMPONENT_TYPE type = pRemArtefact->compType;
+		makeComponentUnavailable(apCompLists[player][type][pRemArtefact->index]);
 	}
 
 	//Add message to player's list if Major Topic
