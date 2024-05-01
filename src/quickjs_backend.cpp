@@ -3511,7 +3511,9 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC_NAME(addReticuleButton, 1, JS_FUNC_IMPL_NAME(removeReticuleButton)); // deprecated!!
 	JS_REGISTER_FUNC(removeReticuleButton, 1); // deprecated!!
 	JS_REGISTER_FUNC2(enableStructure, 1, 2); // WZAPI
+	JS_REGISTER_FUNC2(disableStructure, 1, 2); // WZAPI
 	JS_REGISTER_FUNC(makeComponentAvailable, 2); // WZAPI
+	JS_REGISTER_FUNC(makeComponentUnavailable, 2); // WZAPI
 	JS_REGISTER_FUNC(enableComponent, 2); // WZAPI
 	JS_REGISTER_FUNC(allianceExistsBetween, 2); // WZAPI
 	JS_REGISTER_FUNC(removeStruct, 1); // WZAPI // deprecated!!
