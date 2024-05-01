@@ -1022,7 +1022,7 @@ namespace gfx_api
 		float  unused2;
 		std::array<glm::vec4, max_lights> PointLightsPosition;
 		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
-		std::array<glm::ivec4, 64> bucketOffsetAndSize;
+		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
 		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
 	};
 
