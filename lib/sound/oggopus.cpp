@@ -249,7 +249,7 @@ optional<size_t> WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
 		}
 		ASSERT(samples_per_chan >= 0, "Unexpected Opus error %i", samples_per_chan);
 		// convert to little endian
-		for (int si = 0; si < m_nchannels * samples_per_chan; si++) 
+		for (int si = 0; si < m_nchannels * samples_per_chan; si++)
 		{
 			buffer[bufferOffset + 0] = (uint8_t)(pcm[si] & 0xFF);
 			buffer[bufferOffset + 1] = (uint8_t)(pcm[si] >> 8 & 0xFF);

@@ -182,7 +182,7 @@ WZVorbisDecoder* WZVorbisDecoder::fromFilename(const char* fileName)
 		PHYSFS_close(fileHandle);
 		return nullptr;
 	}
-	
+
 	long seekable = ov_seekable(ovf.get());
 	if (!seekable)
 	{

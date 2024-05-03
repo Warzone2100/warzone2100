@@ -1169,7 +1169,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		fragmentShaderHeader = shaderVersionStr;
 		// OpenGL ES Shading Language - 4. Variables and Types - pp. 35-36
 		// https://www.khronos.org/registry/gles/specs/2.0/GLSL_ES_Specification_1.0.17.pdf?#page=41
-		// 
+		//
 		// > The fragment language has no default precision qualifier for floating point types.
 		// > Hence for float, floating point vector and matrix variable declarations, either the
 		// > declaration must include a precision qualifier or the default float precision must
@@ -1535,7 +1535,7 @@ void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string,
 			debug(LOG_3D, "Missing expected sampler uniform: %s", std::get<0>(uniformSampler).c_str());
 		}
 	}
-	
+
 }
 
 static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)

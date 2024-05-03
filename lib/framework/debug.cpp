@@ -776,7 +776,7 @@ void _debugBacktrace(code_part part)
 			}
 		}
 	};
-	for (i = 1; i + 2 < num; ++i) 
+	for (i = 1; i + 2 < num; ++i)
 	{
 		int status = -1;
 		char buf[1024];

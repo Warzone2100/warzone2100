@@ -814,7 +814,7 @@ bool gfx_api::context::loadTextureArrayLayerFromUncompressedImage(gfx_api::textu
 		}
 		return true;
 	};
-	
+
 	if (!uploadMipLevel(&rootImage, 0))
 	{
 		return false;

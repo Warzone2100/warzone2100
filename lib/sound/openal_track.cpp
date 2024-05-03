@@ -540,7 +540,7 @@ bool sound_QueueSamplePlaying()
 
 /** Decodes *entirely* an opened OggVorbis file into an OpenAL buffer.
  *  This is used to play sound effects, not "music". Assumes .ogg file.
- *  
+ *
  *  \param psTrack pointer to object which will contain the final buffer
  *  \param PHYSFS_fileHandle file handle given by PhysicsFS to the opened file
  *  \return true on success
@@ -897,10 +897,10 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
  *  \note You must _never_ manually free() the memory used by the returned
  *        pointer.
  */
-AUDIO_STREAM *sound_PlayStream(const char* fileName, 
-																			float volume, 
-																			const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished,
-																			const void *user_data)
+AUDIO_STREAM *sound_PlayStream(const char* fileName,
+	float volume,
+	const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished,
+	const void *user_data)
 {
 	if (!openal_initialized)
 	{
@@ -968,7 +968,7 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 	if (sound_GetError() != AL_NO_ERROR) { goto _error; }
 	// Copy the audio data into one of OpenAL's own buffers
 	ASSERT(bufferSize <= static_cast<size_t>(std::numeric_limits<ALsizei>::max()), "soundBuffer->size (%zu) exceeds ALsizei::max", bufferSize);
-	
+
 	res = sound_fillNBuffers(alBuffersIds, decoder, buffer_count, bufferSize);
 	// Bail out if we didn't fill any buffers
 	if (res <= 0)
