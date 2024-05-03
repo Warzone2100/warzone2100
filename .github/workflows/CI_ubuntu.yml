@@ -19,7 +19,7 @@ on:
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
 
 jobs:
@@ -111,7 +111,7 @@ jobs:
         fi
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
-        
+
         if [ "${{ matrix.compiler }}" == "gcc" ]; then
           WZ_CC="/usr/bin/gcc"
           WZ_CXX="/usr/bin/g++"
@@ -143,7 +143,7 @@ jobs:
           # Pass the configuration to enable it
           ADDITIONAL_CMAKE_PARAMS="-DSENTRY_IO_DSN:STRING=${SENTRY_IO_DSN}"
         fi
-        
+
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
         docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" -DSENTRY_BACKEND="${SENTRY_BACKEND}" ${ADDITIONAL_CMAKE_PARAMS} -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${DISCORD_RPC_APPID}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"

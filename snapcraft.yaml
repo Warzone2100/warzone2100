@@ -159,17 +159,17 @@ parts:
     override-build: |
       echo "CRAFT_ARCH_BUILD_FOR=${CRAFT_ARCH_BUILD_FOR}"
       echo "CRAFT_ARCH_TRIPLET_BUILD_FOR=${CRAFT_ARCH_TRIPLET_BUILD_FOR}"
-      
+
       # Install Vulkan SDK
       . "${CRAFT_PART_SRC}/.ci/snap/install_vulkan_sdk.sh"
-      
+
       if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
       set +u
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
       cmake -S "$CRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
       cmake --build . -- -j$CRAFT_PARALLEL_BUILD_COUNT
       DESTDIR=$CRAFT_PART_INSTALL cmake --build . -- install
-      
+
       # Include the icon's path in the desktop file, not just the name.
       # This needs to happen post-build or the build versioning will show as "modified locally"
       sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' $CRAFT_PART_INSTALL/usr/share/applications/net.wz2100.warzone2100.desktop

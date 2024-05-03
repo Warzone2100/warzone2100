@@ -19,7 +19,7 @@ on:
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
 
 jobs:
@@ -80,7 +80,7 @@ jobs:
           WZ_PACKAGE_VAR_OVERRIDES="-D WZ_DEVELOPMENT_BUILD=ON"
         fi
         WZ_SNAP_PACKAGE_NAME=$(echo "warzone2100${WZ_OUTPUT_NAME_SUFFIX}" | sed 's/[^a-zA-Z0-9\.\+\-]/-/g')
-        
+
         cat > .snapenv <<EOENV
         CI=true
         GITHUB_WORKFLOW="$GITHUB_WORKFLOW"
