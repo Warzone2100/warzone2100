@@ -29,7 +29,7 @@ jobs:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: master
         # .eslintrc.json allows non-standard comments
-        FILTER_REGEX_EXCLUDE: .*(\.eslintrc\.json|3rdparty/|.ci/vcpkg/|platforms/emscripten/).*
+        FILTER_REGEX_EXCLUDE: .*(\.eslintrc\.json|3rdparty/|.ci/vcpkg/|lib/exceptionhandler/include/|platforms/emscripten/).*
         LINTER_RULES_PATH: /
         VALIDATE_YAML: true
         VALIDATE_JSON: true
