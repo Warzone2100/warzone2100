@@ -80,9 +80,9 @@ jobs:
           CLOUDFLARE_CACHEPURGE_TOKEN: ${{ secrets.CLOUDFLARE_WZ2100_CACHEPURGE_TOKEN }}
         run: |
           curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
-               -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
-               -H "Content-Type: application/json" \
-               --data '{"purge_everything":true}'
+            -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}'
   sentry-release-commit-info:
     name: 'Upload Release Commit Info'
     permissions:
@@ -122,7 +122,7 @@ jobs:
           # Get commit of current release tag
           CURRENT_TAG_COMMIT="$(git rev-list -n 1 "${GITHUB_REF}")"
           echo "CURRENT_TAG_COMMIT=${CURRENT_TAG_COMMIT}"
-          
+
           echo "SENTRY_VERSION=${SENTRY_VERSION}" >> $GITHUB_ENV
           echo "PRIOR_TAG_COMMIT=${PRIOR_TAG_COMMIT}" >> $GITHUB_ENV
           echo "CURRENT_TAG_COMMIT=${CURRENT_TAG_COMMIT}" >> $GITHUB_ENV

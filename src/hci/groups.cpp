@@ -43,7 +43,7 @@ public:
 		size_t numberCommandedByGroup = 0; // the number of droids commanded by commanders in this group
 		uint64_t totalGroupMaxHealth = 0;
 		DROID_TEMPLATE displayDroidTemplate;
-		
+
 		uint8_t currAttackGlowAlpha = 0;
 
 		// used for calculating display info
@@ -94,7 +94,7 @@ public:
 
 	void assignSelectedDroidsToGroup(size_t groupNumber)
 	{
-		assignDroidsToGroup(selectedPlayer, groupNumber, true);
+		assignObjectToGroup(selectedPlayer, groupNumber, true);
 	}
 
 private:

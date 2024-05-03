@@ -19,7 +19,7 @@ on:
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
 
 jobs:
@@ -84,7 +84,7 @@ jobs:
         echo "::group::brew install"
         brew install automake gettext pkg-config
         echo "::endgroup::"
-        
+
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
         echo "::group::gem install asciidoctor"
         gem install asciidoctor -v 2.0.22 --no-document
@@ -146,8 +146,8 @@ jobs:
         cmake -DADDITIONAL_VCPKG_FLAGS=--no-binarycaching -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS}" -P ../src/configure_mac.cmake
         result=${?}
         if [ $result -ne 0 ]; then
-        	echo "ERROR: configure_mac.cmake failed"
-        	exit ${result}
+          echo "ERROR: configure_mac.cmake failed"
+          exit ${result}
         fi
     - name: Build Xcode project
       working-directory: ./build
@@ -155,16 +155,16 @@ jobs:
         # Build Xcode project, and package "warzone2100.zip"
         set -o pipefail && \
         xcodebuild  \
-         -project warzone2100.xcodeproj \
-         -target "package" \
-         -configuration "Release" \
-         -destination "platform=macOS" \
-         -PBXBuildsContinueAfterErrors=NO \
+          -project warzone2100.xcodeproj \
+          -target "package" \
+          -configuration "Release" \
+          -destination "platform=macOS" \
+          -PBXBuildsContinueAfterErrors=NO \
         | tee "xcodebuild.log" | xcpretty -c
         result=${?}
         if [ $result -ne 0 ]; then
-        	echo "ERROR: xcodebuild failed"
-        	exit ${result}
+          echo "ERROR: xcodebuild failed"
+          exit ${result}
         fi
     - name: Output Build Info
       shell: sh {0}
@@ -230,7 +230,6 @@ jobs:
           mkdir dl-artifacts
           mkdir build
           mkdir output
-        
           echo "OUTPUT_DIR=output" >> $GITHUB_ENV
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -345,7 +344,7 @@ jobs:
           ZIP_SIZE="$(stat -f '%z' "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
           echo "  -> SHA512: ${ZIP_HASH}"
           echo "  -> Size (bytes): ${ZIP_SIZE}"
-          
+
           echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
 
           exit 0

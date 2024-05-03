@@ -165,8 +165,8 @@ DROID_TYPE droidType(const DROID *psDroid);
 /* Return the type of a droid from it's template */
 DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);
 
-void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
-void removeDroidsFromGroup(UDWORD playerNumber);
+void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
+void removeObjectFromGroup(UDWORD playerNumber);
 
 bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen);
 
@@ -278,7 +278,10 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 bool isSelectable(DROID const *psDroid);
 
 // Select a droid and do any necessary housekeeping.
-void SelectDroid(DROID *psDroid);
+void SelectDroid(DROID *psDroid, bool programmaticSelection = false);
+
+// If all other droids with psGroupDroid's group are selected, add psGroupDroid to the selection after production/repair/etc.
+void SelectGroupDroid(DROID *psGroupDroid);
 
 // De-select a droid and do any necessary housekeeping.
 void DeSelectDroid(DROID *psDroid);

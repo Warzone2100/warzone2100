@@ -464,7 +464,7 @@ void kf_MakeMeHero()
 		if (psDroid->selected && (psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_SENSOR))
 		{
 			psDroid->experience = 8 * 65536 * 128;
-		} 
+		}
 		else if (psDroid->selected)
 		{
 			psDroid->experience = 4 * 65536 * 128;
@@ -741,7 +741,6 @@ void kf_ListDroids()
 			debug(LOG_INFO, "droid %i;%s;%i;%i;%i", i, psDroid->aName, psDroid->droidType, x, y);
 		}
 	}
-	
 }
 
 
@@ -1124,7 +1123,7 @@ MappableFunction kf_AssignGrouping_N(const unsigned int n)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		assignDroidsToGroup(selectedPlayer, n, true);
+		assignObjectToGroup(selectedPlayer, n, true);
 	};
 }
 
@@ -1134,7 +1133,7 @@ MappableFunction kf_AddGrouping_N(const unsigned int n)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		assignDroidsToGroup(selectedPlayer, n, false);
+		assignObjectToGroup(selectedPlayer, n, false);
 	};
 }
 
@@ -1144,7 +1143,7 @@ MappableFunction kf_RemoveFromGrouping()
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		removeDroidsFromGroup(selectedPlayer);
+		removeObjectFromGroup(selectedPlayer);
 	};
 }
 

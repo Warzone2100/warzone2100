@@ -36,11 +36,11 @@ public:
   WZDecoder &operator=(WZDecoder &&)          = delete;
 
   /** Decode all the data into a buffer.
-   * Note that the API is different from oggvorbis: opus takes in, and gives out *samples* not bytes 
+   * Note that the API is different from oggvorbis: opus takes in, and gives out *samples* not bytes
    * and we have to convert to little endian ourselves
-   * 
+   *
    * \param [out] buffer: preallocated buffer to hold decoded data, little-endian. Will *not* be freed, even on error.
-   * \param [in] bufferSize: takes buffer size in *bytes* as input, to be consistent with oggvorbis, 
+   * \param [in] bufferSize: takes buffer size in *bytes* as input, to be consistent with oggvorbis,
    * \returns how much bytes have been placed into buffer, or nullopt  if error */
   virtual optional<size_t> decode(uint8_t*, size_t) = 0;
   virtual int64_t totalTime()       const = 0;

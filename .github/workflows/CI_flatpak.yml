@@ -19,7 +19,7 @@ on:
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
   # Support running on Release "publish" event to build and publish to Flathub
   release:
@@ -60,7 +60,7 @@ jobs:
         sudo apt-get -u update
         DEBIAN_FRONTEND=noninteractive sudo apt-get -y install flatpak python3-aiohttp python3-tenacity dbus-daemon curl
         echo "::endgroup::"
-        
+
         echo "::group::flatpak remote-add"
         flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
@@ -115,7 +115,7 @@ jobs:
         fi
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
-        
+
         WZ_FLATPAK_BRANCH="${WZ_BUILD_DESC_PREFIX}"
         if [ "$WZ_BUILD_DESC_IS_TAG" == "true" ]; then
           SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
@@ -137,7 +137,7 @@ jobs:
             WZ_FLATPAK_BRANCH="stable"
             SOURCE_TAG_IS_PRERELEASE="false"
           fi
-          
+
           echo "publish-to-flathub=true" >> $GITHUB_OUTPUT
           echo "SOURCE_TAG_IS_PRERELEASE=${SOURCE_TAG_IS_PRERELEASE}" >> $GITHUB_OUTPUT
         else
@@ -152,7 +152,7 @@ jobs:
         fi
         echo "WZ_FLATPAK_BRANCH=${WZ_FLATPAK_BRANCH}"
         echo "WZ_FLATPAK_BRANCH=${WZ_FLATPAK_BRANCH}" >> $GITHUB_OUTPUT
-        
+
         WZ_FLATPAK_APPID="net.wz2100.wz2100${WZ_OUTPUT_NAME_SUFFIX}"
         echo "WZ_FLATPAK_APPID=${WZ_FLATPAK_APPID}" >> $GITHUB_ENV
         echo "WZ_FLATPAK_APPID=${WZ_FLATPAK_APPID}" >> $GITHUB_OUTPUT
@@ -169,11 +169,11 @@ jobs:
         if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
           # Cross compilation is needed
           ADDITIONAL_CONFIG_OPTIONS="-DWZ_CROSS_COMPILE_TARGET_ARCH=${WZ_FLATPAK_TARGET_ARCH}"
-        fi 
+        fi
         echo "::group::Generate manifest"
         cmake "-DTEMPLATE_FILE=.ci/flatpak/net.wz2100.wz2100.yaml.in" "-DOUTPUT_FILE=.ci/flatpak/net.wz2100.wz2100.yaml" "-DPROJECT_ROOT=./" "-DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" ${ADDITIONAL_CONFIG_OPTIONS} -P .ci/flatpak/generate_flatpak_config.cmake
         echo "::endgroup::"
-        
+
         echo "::group::Output manifest"
         cat ".ci/flatpak/net.wz2100.wz2100.yaml"
         echo "::endgroup::"
@@ -183,14 +183,14 @@ jobs:
         flatpak install --user -y --noninteractive flathub org.freedesktop.Sdk//${WZ_FREEDESKTOP_RUNTIME_VERSION}
         # Target runtime
         flatpak install --user -y --noninteractive flathub org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FREEDESKTOP_RUNTIME_VERSION}
-        
+
         if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
           # Cross compiler
           flatpak install --user -y --noninteractive flathub org.freedesktop.Sdk.Extension.toolchain-${WZ_FLATPAK_TARGET_ARCH}//${WZ_FREEDESKTOP_RUNTIME_VERSION}
           # SDK For target runtime
           flatpak install --user -y --noninteractive flathub org.freedesktop.Sdk.Compat.${WZ_FLATPAK_TARGET_ARCH}//${WZ_FREEDESKTOP_RUNTIME_VERSION}
         fi
-        
+
         # Builder (which includes flatpak-builder-lint)
         flatpak install --user flathub -y --noninteractive org.flatpak.Builder
     - name: Build Flatpak
@@ -409,20 +409,20 @@ jobs:
       - name: Install Dependencies
         run: |
           cat /etc/fedora-release
-        
+
           echo "::group::dnf update"
           dnf update -y
           echo "::endgroup::"
           echo "::group::dnf install dependencies"
           dnf install -y cmake git git-lfs dbus-daemon flatpak flatpak-builder python3-aiohttp python3-tenacity python3-gobject ccache zstd curl appstream
           echo "::endgroup::"
-        
+
           echo "::group::flatpak remote-add"
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
           flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
           echo "::endgroup::"
-        
+
           echo "::group::fetch flat-manager-client"
           curl -Lf https://raw.githubusercontent.com/flatpak/flat-manager/master/flat-manager-client --output /usr/bin/flat-manager-client
           chmod +x /usr/bin/flat-manager-client
@@ -494,15 +494,15 @@ jobs:
           WZ_FLATPAK_LOCAL_REPO_NAME="${WZ_FLATPAK_TARGET_ARCH}-repo-beta"
           ostree init --mode archive-z2 --repo=${WZ_FLATPAK_LOCAL_REPO_NAME}
           echo "::endgroup::"
-  
+
           echo "::group::Build commit from stable repo"
           for i in app/${WZ_FLATPAK_APPID} \
-                   runtime/${WZ_FLATPAK_APPID}.Debug
+            runtime/${WZ_FLATPAK_APPID}.Debug
           do
-             # Move the commits to the beta repo
-             echo "Processing: --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH}"
-             flatpak build-commit-from --update-appstream --no-update-summary --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH} --src-repo=${SRC_LOCAL_REPO_NAME} \
-                ${WZ_FLATPAK_LOCAL_REPO_NAME} ${i}/${WZ_FLATPAK_TARGET_ARCH}/beta
+            # Move the commits to the beta repo
+            echo "Processing: --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH}"
+            flatpak build-commit-from --update-appstream --no-update-summary --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH} --src-repo=${SRC_LOCAL_REPO_NAME} \
+              ${WZ_FLATPAK_LOCAL_REPO_NAME} ${i}/${WZ_FLATPAK_TARGET_ARCH}/beta
           done
           echo "::endgroup::"
           echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"

@@ -513,7 +513,7 @@ void recycleDroid(DROID *psDroid)
 	{
 		addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, false, gameTime - deltaGameTime + 1);
 	}
-	
+
 	CHECK_DROID(psDroid);
 }
 
@@ -874,7 +874,7 @@ void droidUpdate(DROID *psDroid)
 		droidUpdateDroidSelfRepair(psDroid);
 	}
 
-	
+
 	/* Update the fire damage data */
 	if (psDroid->periodicalDamageStart != 0 && psDroid->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
 	{
@@ -1226,6 +1226,18 @@ int getRecoil(WEAPON const &weapon)
 	return 0;
 }
 
+/* Droid was completely repaired by another droid, auto-repair, or repair facility */
+void droidWasFullyRepairedBase(DROID *psDroid)
+{
+	if (psDroid->repairGroup != UBYTE_MAX)
+	{
+		psDroid->group = psDroid->repairGroup;
+		psDroid->repairGroup = UBYTE_MAX;
+		SelectGroupDroid(psDroid);
+		intGroupsChanged(psDroid->group); // update groups UI
+	}
+}
+
 void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
 {
 	const bool prevWasRTR = psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED;
@@ -1247,7 +1259,9 @@ void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
 		objTrace(psDroid->id, "Repair complete - guarding the place at x=%i y=%i", psDroid->pos.x, psDroid->pos.y);
 		orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y, ModeImmediate);
 	}
-} 
+
+	droidWasFullyRepairedBase(psDroid);
+}
 
 bool droidUpdateRepair(DROID *psDroid)
 {
@@ -1305,7 +1319,12 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 
 	CHECK_DROID(psRepairDroid);
 	/* if not finished repair return true else complete repair and return false */
-	return psDroidToRepair->body < psDroidToRepair->originalBody;
+	bool needMoreRepair = psDroidToRepair->body < psDroidToRepair->originalBody;
+	if (!needMoreRepair)
+	{
+		droidWasFullyRepairedBase(psDroidToRepair);
+	}
+	return needMoreRepair;
 }
 
 bool droidUpdateDroidRepair(DROID *psRepairDroid)
@@ -1829,7 +1848,8 @@ void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 }
 
 /* Make all the droids for a certain player a member of a specific group */
-void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup)
+/* If a structure is selected, set its group to which droids will be automatically assigned */
+void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup)
 {
 	bool	bAtLeastOne = false;
 	size_t  numCleared = 0;
@@ -1838,6 +1858,16 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 
 	if (groupNumber < UBYTE_MAX)
 	{
+		/* Run through all the structures */
+		for (STRUCTURE *psStruct : apsStructLists[playerNumber])
+		{
+			if (psStruct->selected && psStruct->isFactory())
+			{
+				psStruct->productToGroup = (UBYTE)groupNumber;
+				return;
+			}
+		}
+
 		/* Run through all the droids */
 		for (DROID* psDroid : apsDroidLists[playerNumber])
 		{
@@ -1853,6 +1883,7 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 			{
 				/* Set them to the right group - they can only be a member of one group */
 				psDroid->group = (UBYTE)groupNumber;
+				psDroid->repairGroup = UBYTE_MAX;
 				bAtLeastOne = true;
 			}
 		}
@@ -1880,17 +1911,27 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 }
 
 
-void removeDroidsFromGroup(UDWORD playerNumber)
+void removeObjectFromGroup(UDWORD playerNumber)
 {
 	unsigned removedCount = 0;
 
 	ASSERT_OR_RETURN(, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
+
+	for (STRUCTURE *psStruct : apsStructLists[playerNumber])
+	{
+		if (psStruct->selected && psStruct->isFactory())
+		{
+			psStruct->productToGroup = UBYTE_MAX;
+			return;
+		}
+	}
 
 	for (DROID* psDroid : apsDroidLists[playerNumber])
 	{
 		if (psDroid->selected)
 		{
 			psDroid->group = UBYTE_MAX;
+			psDroid->repairGroup = UBYTE_MAX;
 			removedCount++;
 		}
 	}
@@ -3449,7 +3490,7 @@ bool isSelectable(DROID const *psDroid)
 
 // Select a droid and do any necessary housekeeping.
 //
-void SelectDroid(DROID *psDroid)
+void SelectDroid(DROID *psDroid, bool programmaticSelection)
 {
 	if (!isSelectable(psDroid))
 	{
@@ -3458,8 +3499,48 @@ void SelectDroid(DROID *psDroid)
 
 	psDroid->selected = true;
 	intRefreshScreen();
-	triggerEventSelected();
-	jsDebugSelected(psDroid);
+	if (!programmaticSelection)
+	{
+		triggerEventSelected();
+		jsDebugSelected(psDroid);
+	}
+}
+
+// If all other droids with psGroupDroid's group are selected, add psGroupDroid to the selection after production/repair/etc.
+//
+void SelectGroupDroid(DROID *psGroupDroid)
+{
+	std::vector<DROID*> groupDroids;
+	for (DROID *psDroid : apsDroidLists[psGroupDroid->player])
+	{
+		// skip itself because psGroupDroid may already exist in apsDroidLists
+		if (psDroid == psGroupDroid)
+		{
+			continue;
+		}
+		if (psDroid->group == psGroupDroid->group)
+		{
+			groupDroids.push_back(psDroid);
+		}
+	}
+
+	if (!groupDroids.empty())
+	{
+		bool bDoSelection = true;
+		for (DROID *psDroid : groupDroids)
+		{
+			if (!psDroid->selected)
+			{
+				bDoSelection = false;
+				break;
+			}
+		}
+
+		if (bDoSelection)
+		{
+			SelectDroid(psGroupDroid, true);
+		}
+	}
 }
 
 // De-select a droid and do any necessary housekeeping.

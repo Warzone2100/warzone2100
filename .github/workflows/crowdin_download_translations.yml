@@ -8,7 +8,7 @@ on:
   # - "Upload Base" workflow completes
   workflow_run:
     workflows: ["Crowdin - Upload Sources"]
-    types: 
+    types:
       - completed
   # Support running manually
   workflow_dispatch:
@@ -33,14 +33,14 @@ jobs:
           private-key: ${{ secrets.WZ_CROWDIN_SYNC_GH_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
           repositories: "warzone2100"
-      
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: 'master'
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
-          
+
       - name: Prep local branches
         id: configbranches
         run: |
@@ -73,7 +73,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-      
+
       - name: Publish any changes to translations to l10n_master branch
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         id: pushupdates
@@ -82,7 +82,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
-          
+
           # Add modified files (ignoring po header modifications):
           echo "::group::Add modified files"
           git difftool --dir-diff --extcmd=.ci/githubactions/crowdin_download_diff.sh | xargs -d '\n' git add
@@ -93,12 +93,12 @@ jobs:
           echo "::endgroup::"
           echo "Debug output:"
           git status
-          
+
           echo "Commit changes:"
           git commit -m "New Crowdin translations" || { echo "PROCESS_PR=false" >> $GITHUB_OUTPUT && exit 0; }
           NEW_COMMIT_ID="$(git rev-parse HEAD)"
           echo "New commit: ${NEW_COMMIT_ID}"
-          
+
           # Check if there are actual changes compared to the commit already pushed on the l10n_master branch
           if [[ "${CHECK_EXISTING_TRANSLATION_BRANCH}" == "true" ]]; then
             TRANSLATION_COMMIT_ID="$(git rev-parse l10n_master)"
@@ -121,11 +121,11 @@ jobs:
             rm l10n_temp_1.patch
             rm l10n_temp_2.patch
           fi
-          
+
           echo "Pushing changes to l10n_master branch"
           git push -f origin master:l10n_master
           echo "PROCESS_PR=true" >> $GITHUB_OUTPUT
-      
+
       - name: Create Pull Request to update translations (if needed)
         if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
         id: cpr

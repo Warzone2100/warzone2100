@@ -846,7 +846,7 @@ struct TextShaper
 # endif // USE_NEW_FRIBIDI_API
 
 #endif // defined(WZ_FRIBIDI_ENABLED)
-		
+
 		/* Fill the array of scripts with scripts of each character */
 		hb_unicode_funcs_t* funcs = hb_unicode_funcs_get_default();
 		for (int i = 0; i < codePoints_size; ++i)
@@ -986,7 +986,7 @@ struct TextShaper
                             run.endOffset - run.startOffset);
 		hb_buffer_set_flags(run.buffer, (hb_buffer_flags_t)(HB_BUFFER_FLAG_BOT | HB_BUFFER_FLAG_EOT));
 		std::array<hb_feature_t, 3> features = { {HBFeature::KerningOn, HBFeature::LigatureOn, HBFeature::CligOn} };
-        
+
 		hb_shape(face.m_font, run.buffer, features.data(), static_cast<unsigned int>(features.size()));
 
 		run.glyphInfos = hb_buffer_get_glyph_infos(run.buffer, &run.glyphCount);
