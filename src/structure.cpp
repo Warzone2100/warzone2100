@@ -2766,7 +2766,7 @@ void aiUpdateRepair_handleState(STRUCTURE &station)
 	// apply logic for current state
 	switch (psRepairFac->state)
 	{
-	case RepairState::Idle: 
+	case RepairState::Idle:
 	{
 		actionAlignTurret(psStructure, 0);
 		return;
@@ -2805,7 +2805,7 @@ RepairEvents aiUpdateRepair_obtainEvents(const STRUCTURE &station, DROID **psDro
 	switch (psRepairFac->state)
 	{
 	case RepairState::Idle:
-	{	
+	{
 		DROID *psDroid = findSomeoneToRepair(psStructure, (TILE_UNITS * 5 / 2));
 		*psDroidOut = psDroid;
 		return psDroid? RepairEvents::RepairTargetFound : RepairEvents::NoEvents;
@@ -2822,7 +2822,7 @@ RepairEvents aiUpdateRepair_obtainEvents(const STRUCTURE &station, DROID **psDro
 		{
 			return RepairEvents::UnitMovedAway;
 		}
-		if (psDroid->body >= psDroid->originalBody) 
+		if (psDroid->body >= psDroid->originalBody)
 		{
 			return RepairEvents::UnitReachedMaxHP;
 		}
@@ -2854,7 +2854,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	switch (ev)
 	{
 	case RepairEvents::NoEvents:
-	{ 
+	{
 		return psRepairFac->state;
 	};
 	case RepairEvents::RepairTargetFound:
@@ -2903,7 +2903,6 @@ void aiUpdateRepairStation(STRUCTURE &station)
 	ASSERT(nextState != RepairState::Invalid, "Bug! invalid state received.");
 	station.pFunctionality->repairFacility.state = nextState;
 	aiUpdateRepair_handleState(station);
-	
 }
 
 static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
@@ -3947,7 +3946,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 			int8_t *counter;
 			if (asStructureStats[inc].type == REF_RESEARCH)
 			{
-				counter = researchLabCurrMax; 
+				counter = researchLabCurrMax;
 			}
 			else if (asStructureStats[inc].type == REF_FACTORY)
 			{
@@ -4022,7 +4021,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 
 				if (psBuilding->type == REF_RESEARCH_MODULE)
 				{
-					//don't add to list if Research Facility not presently built 
+					//don't add to list if Research Facility not presently built
 					//or if all labs already have a module
 					if (!researchLabCurrMax[0] || researchModules >= researchLabCurrMax[1])
 					{
@@ -4318,7 +4317,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 				if (psStruct && (psStruct->pStructureType->type == REF_FACTORY ||
-				                 psStruct->pStructureType->type == REF_VTOL_FACTORY) 
+				                 psStruct->pStructureType->type == REF_VTOL_FACTORY)
 					&& psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player)
 					&& nextModuleToBuild(psStruct, -1) > 0)
 				{
@@ -4330,8 +4329,8 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			if (TileHasStructure(worldTile(pos)))
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-				if (psStruct && psStruct->pStructureType->type == REF_RESEARCH 
-					&& psStruct->status == SS_BUILT 
+				if (psStruct && psStruct->pStructureType->type == REF_RESEARCH
+					&& psStruct->status == SS_BUILT
 					&& aiCheckAlliances(player, psStruct->player)
 					&& nextModuleToBuild(psStruct, -1) > 0)
 				{
@@ -4343,8 +4342,8 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			if (TileHasStructure(worldTile(pos)))
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-				if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN 
-					&& psStruct->status == SS_BUILT 
+				if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN
+					&& psStruct->status == SS_BUILT
 					&& aiCheckAlliances(player, psStruct->player)
 					&& nextModuleToBuild(psStruct, -1) > 0)
 				{

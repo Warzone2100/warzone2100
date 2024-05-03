@@ -3649,7 +3649,7 @@ enum GROUPNUMBER_TYPE
 	GN_DAMAGED,
 	GN_FACTORY
 };
-/// rendering of the object's group next to the object itself, 
+/// rendering of the object's group next to the object itself,
 /// or the group that will be assigned to the object after production in the factory
 static void	drawGroupNumber(BASE_OBJECT *psObject)
 {
@@ -3671,11 +3671,11 @@ static void	drawGroupNumber(BASE_OBJECT *psObject)
 			groupNumber = psDroid->repairGroup;
 			groupNumberType = GN_DAMAGED;
 		}
-		else 
+		else
 		{
 			groupNumber = psDroid->group;
 		}
-	} 
+	}
 	else if (auto *psStruct = castStructure(psObject))
 	{
 		// same as in queueStructureHealth

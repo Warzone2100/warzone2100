@@ -236,7 +236,7 @@ enum class RepairEvents
 	UnitMovedAway
 };
 
-enum class RepairState 
+enum class RepairState
 {
 	Invalid = -1,
 	Idle,
