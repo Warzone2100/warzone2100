@@ -2102,7 +2102,7 @@ std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(const DROID *psDroid)
 	{
 		const auto& pathCoords = psDroid->sMove.asPath[i];
 		ASSERT(worldOnMap(pathCoords.x, pathCoords.y), "Path off map!");
-		result.emplace_back(map_coord(pathCoords.x),map_coord(pathCoords.y));
+		result.push_back({map_coord(pathCoords.x), map_coord(pathCoords.y)});
 	}
 
 	return result;
