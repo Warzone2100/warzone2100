@@ -4,7 +4,7 @@
 		"name": "Turtle AI",
 		"tip": "Tower wars AI, based on NullBot",
 		"easy_tip": "Gets 25% less power from each oil derrick\nResearch is not focused on a specific weapon branch",
-		"medium_tip": "Gets 10% more power from each oil derrick\nIntended for fair play",
+		"medium_tip": "Gets the same power from each oil derrick as the player\nIntended for fair play",
 		"hard_tip": "Gets 50% more power from each oil derrick",
 		"insane_tip": "Gets 100% more power from each oil derrick\nStarts with defensive structures and oil derricks"
 	}
