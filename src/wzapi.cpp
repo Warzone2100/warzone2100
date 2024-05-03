@@ -4391,9 +4391,13 @@ nlohmann::json wzapi::constructStatsObject()
 			nlohmann::json strct = nlohmann::json::object();
 			strct["Id"] = psStats->id;
 			if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_WALLCORNER
-			    || psStats->type == REF_GENERIC || psStats->type == REF_GATE)
+			    || psStats->type == REF_GATE || psStats->type == REF_FORTRESS)
 			{
 				strct["Type"] = "Wall";
+			}
+			else if (psStats->type == REF_GENERIC)
+			{
+				strct["Type"] = "Generic";
 			}
 			else if (psStats->type != REF_DEMOLISH)
 			{
@@ -4498,6 +4502,7 @@ nlohmann::json wzapi::getUsefulConstants()
 	constants["SAT_UPLINK"] = REF_SAT_UPLINK;
 	constants["GATE"] = REF_GATE;
 	constants["LASSAT"] = REF_LASSAT;
+	constants["STRUCT_GENERIC"] = REF_GENERIC;
 	constants["SUPEREASY"] = static_cast<int8_t>(AIDifficulty::SUPEREASY);
 	constants["EASY"] = static_cast<int8_t>(AIDifficulty::EASY);
 	constants["MEDIUM"] = static_cast<int8_t>(AIDifficulty::MEDIUM);

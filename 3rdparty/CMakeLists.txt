@@ -7,6 +7,8 @@ set_property(TARGET utf8proc PROPERTY FOLDER "3rdparty")
 add_subdirectory(launchinfo EXCLUDE_FROM_ALL)
 set_property(TARGET launchinfo PROPERTY FOLDER "3rdparty")
 
+SET(FMT_INSTALL OFF CACHE BOOL "Generate the install target" FORCE)
+SET(FMT_SYSTEM_HEADERS ON CACHE BOOL "Expose headers with marking them as system." FORCE)
 add_subdirectory(fmt EXCLUDE_FROM_ALL)
 set_property(TARGET fmt PROPERTY FOLDER "3rdparty")
 

@@ -3443,7 +3443,7 @@
 			"STWPFCAN.PIE"
 		],
 		"thermal": 18,
-		"type": "GENERIC",
+		"type": "FORTRESS",
 		"weapons": [
 			"CannonSuper"
 		],
@@ -3466,7 +3466,7 @@
 			"STWPFCAN.PIE"
 		],
 		"thermal": 18,
-		"type": "GENERIC",
+		"type": "FORTRESS",
 		"weapons": [
 			"MassDriver"
 		],
@@ -3489,7 +3489,7 @@
 			"STWPFCAN.PIE"
 		],
 		"thermal": 18,
-		"type": "GENERIC",
+		"type": "FORTRESS",
 		"weapons": [
 			"MissileSuper"
 		],
@@ -3512,7 +3512,7 @@
 			"STWPFCAN.PIE"
 		],
 		"thermal": 18,
-		"type": "GENERIC",
+		"type": "FORTRESS",
 		"weapons": [
 			"RocketSuper"
 		],

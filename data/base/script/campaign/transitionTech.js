@@ -514,7 +514,7 @@ const mis_gammaResearchNewClassic = [
 	"R-Wpn-Missile-Damage02", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-HvSAM", "R-Defense-SamSite2",
 	// 7
 	"R-Wpn-RailGun02", "R-Defense-Rail2", "R-Defense-WallTower-Rail2", "R-Wpn-Rail-Damage02",
-	"R-Wpn-Rail-ROF02", "R-Wpn-Rail-ROF03", "R-Wpn-MdArtMissile", "R-Wpn-Missile-Accuracy02",
+	"R-Wpn-Rail-ROF02", "R-Wpn-Rail-Damage03", "R-Wpn-Rail-ROF03", "R-Wpn-MdArtMissile", "R-Wpn-Missile-Accuracy02",
 	"R-Wpn-Missile-ROF02", "R-Defense-MdArtMissile", "R-Wpn-Laser02", "R-Defense-PulseLas",
 	"R-Wpn-Energy-ROF02", "R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03",
 	// 8
@@ -522,7 +522,7 @@ const mis_gammaResearchNewClassic = [
 	// 9
 	"R-Vehicle-Body10", "R-Vehicle-Metals09", "R-Cyborg-Metals09", "R-Vehicle-Armor-Heat06",
 	"R-Cyborg-Armor-Heat06", "R-Vehicle-Engine09",  "R-Wpn-HvArtMissile", "R-Defense-HvyArtMissile",
-	"R-Wpn-Missile-Damage03", "R-Wpn-Missile-ROF03", "R-Wpn-RailGun03", "R-Wpn-Rail-Damage03",
+	"R-Wpn-Missile-Damage03", "R-Wpn-Missile-ROF03", "R-Wpn-RailGun03",
 	"R-Defense-Rail3", "R-Defense-WallTower-Rail3",
 ];
 
