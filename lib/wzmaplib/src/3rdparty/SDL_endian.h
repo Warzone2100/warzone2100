@@ -1,9 +1,9 @@
 // NOTE: Single-file version of SDL_endian.h (with related include snippets embedded)
-// Modified for WZ's maplib
+// Modified for WZ's maplib - originally based on SDL2 version, but ported some updates from SDL3 version
 
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2021 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -86,9 +86,18 @@ _m_prefetch(void *__P)
 #elif defined(__OpenBSD__)
 #include <endian.h>
 #define SDL_BYTEORDER  BYTE_ORDER
-#elif defined(__FreeBSD__)
+#elif defined(__FreeBSD__) || defined(__NetBSD__)
 #include <sys/endian.h>
 #define SDL_BYTEORDER  BYTE_ORDER
+/* predefs from newer gcc and clang versions: */
+#elif defined(__ORDER_LITTLE_ENDIAN__) && defined(__ORDER_BIG_ENDIAN__) && defined(__BYTE_ORDER__)
+#if (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
+#define SDL_BYTEORDER   SDL_LIL_ENDIAN
+#elif (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+#define SDL_BYTEORDER   SDL_BIG_ENDIAN
+#else
+#error Unsupported endianness
+#endif /**/
 #else
 #if defined(__hppa__) || \
     defined(__m68k__) || defined(mc68000) || defined(_M_M68K) || \
@@ -206,7 +215,7 @@ SDL_Swap16(uint16_t x)
   __asm__("rorw #8,%0": "=d"(x): "0"(x):"cc");
     return x;
 }
-#elif defined(_MSC_VER)
+#elif (defined(_MSC_VER) && (_MSC_VER >= 1400)) && !defined(__ICL)
 #pragma intrinsic(_byteswap_ushort)
 #define SDL_Swap16(x) _byteswap_ushort(x)
 #elif defined(__WATCOMC__) && defined(__386__)
@@ -272,7 +281,7 @@ extern _inline uint32_t SDL_Swap32(uint32_t);
   "bswap eax"  \
   parm   [eax] \
   modify [eax];
-#elif defined(_MSC_VER)
+#elif (defined(_MSC_VER) && (_MSC_VER >= 1400)) && !defined(__ICL)
 #pragma intrinsic(_byteswap_ulong)
 #define SDL_Swap32(x) _byteswap_ulong(x)
 #else
@@ -319,7 +328,7 @@ extern _inline uint64_t SDL_Swap64(uint64_t);
   "xchg eax,edx"  \
   parm [eax edx]  \
   modify [eax edx];
-#elif defined(_MSC_VER)
+#elif (defined(_MSC_VER) && (_MSC_VER >= 1400)) && !defined(__ICL)
 #pragma intrinsic(_byteswap_uint64)
 #define SDL_Swap64(x) _byteswap_uint64(x)
 #else
