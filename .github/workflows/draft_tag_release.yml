@@ -35,13 +35,13 @@ jobs:
           SOURCE_TAG_QUALIFIER="${BASH_REMATCH[2]:1}"
           echo "SOURCE_TAG_VERSION=\"${SOURCE_TAG_VERSION}\""
           echo "SOURCE_TAG_QUALIFIER=\"${SOURCE_TAG_QUALIFIER}\""
-          
+
           if [ ! -z "${SOURCE_TAG_QUALIFIER}" ]; then
             SOURCE_TAG_IS_PRERELEASE="true"
           else
             SOURCE_TAG_IS_PRERELEASE="false"
           fi
-          
+
           echo "SOURCE_TAG=${SOURCE_TAG}" >> $GITHUB_OUTPUT
           echo "SOURCE_TAG_IS_PRERELEASE=${SOURCE_TAG_IS_PRERELEASE}" >> $GITHUB_OUTPUT
       - name: Create Draft Release

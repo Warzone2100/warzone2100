@@ -19,7 +19,7 @@ on:
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
 
 jobs:
@@ -91,7 +91,7 @@ jobs:
     # Workaround for https://github.com/actions/runner-images/issues/8598:
     - name: Remove Strawberry Perl from PATH
       run: |
-        $env:PATH = $env:PATH -replace "C:\\Strawberry\\c\\bin;", "" 
+        $env:PATH = $env:PATH -replace "C:\\Strawberry\\c\\bin;", ""
         "PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Append
     # - name: Output Runner Environment Information
     #   run: |
@@ -161,29 +161,29 @@ jobs:
           }
         }
         $VCPKG_DEFAULT_HOST_TRIPLET = "x64-windows"
-        
+
         $WZ_FULL_POWERSHELL_PATH = (Get-Command powershell.exe).Path
         $WZ_FULL_GIT_PATH = Split-Path -Path ((Get-Command git.exe).Path)
         echo "WZ_FULL_GIT_PATH=${WZ_FULL_GIT_PATH}"
         $WZ_FULL_CMAKE_PATH = Split-Path -Path ((Get-Command cmake.exe).Path)
         echo "WZ_FULL_CMAKE_PATH=${WZ_FULL_CMAKE_PATH}"
-        
+
         # ------------------------------
         # Install Gettext tools
-        
+
         $origPath = $env:PATH
         $env:PATH = "C:\msys64\mingw64\bin;C:\msys64\usr\bin;$origPath"
-        
+
         pacman --noconfirm -S --needed gettext
         if ($LastExitCode -ne 0) {
             throw "Failed to install gettext with exit code: $LastExitCode"
         }
-        
+
         $WZ_FULL_MSGMERGE_PATH = Split-Path -Path ((Get-Command msgmerge.exe).Path)
         echo "WZ_FULL_MSGMERGE_PATH=${WZ_FULL_MSGMERGE_PATH}"
         $WZ_FULL_MSGFMT_PATH = Split-Path -Path ((Get-Command msgfmt.exe).Path)
         echo "WZ_FULL_MSGFMT_PATH=${WZ_FULL_MSGFMT_PATH}"
-        
+
         $env:PATH = $origPath
 
         # ------------------------------
@@ -231,7 +231,7 @@ jobs:
             echo "::warning ::Default to 'latest' MSVC: `"${WZ_VISUAL_STUDIO_INSTALL_PATH}`""
           }
         }
-        
+
         $WZ_VISUAL_STUDIO_INSTALL_VERSION = & "vswhere.exe" -path "${WZ_VISUAL_STUDIO_INSTALL_PATH}" -property installationVersion
         echo "WZ_VISUAL_STUDIO_INSTALL_VERSION = ${WZ_VISUAL_STUDIO_INSTALL_VERSION}"
 
@@ -240,7 +240,7 @@ jobs:
 
         # -------------
         # Sentry crash-handler support
-        
+
         $WZ_ENABLE_SENTRY = "false"
         if ("${env:BUILD_SENTRY_SUPPORT}" -eq "true") {
           # Fully enable for master branch pushes (development builds) and workflow runs (draft tag release builds)
@@ -270,7 +270,7 @@ jobs:
 
         # ----------------
         # Export Variables
-        
+
         $WZ_REPO_PATH = "${{ github.workspace }}\src"
 
         # Export everything important to environment variables (for future steps)
@@ -479,12 +479,12 @@ jobs:
         Write-Host "env:VCPKG_VISUAL_STUDIO_PATH=`"${env:VCPKG_VISUAL_STUDIO_PATH}`""
         Write-Host "env:VCPKG_BINARY_SOURCES=`"${env:VCPKG_BINARY_SOURCES}`""
         Write-Host "env:PATH=`"${env:PATH}`""
-        
+
         if ("${env:WZ_USING_MINGW}" -eq "true") {
           $env:PATH = "${env:WZ_MINGW_ENV_PATH}";
           Write-Host "env:PATH=`"${env:PATH}`""
         }
-        
+
         & "${env:WZ_FULL_POWERSHELL_PATH}" "${env:WZ_REPO_PATH}\get-dependencies_win.ps1" -VCPKG_BUILD_TYPE "release"
     - name: Clean vcpkg temp files
       working-directory: '${{ github.workspace }}\build'

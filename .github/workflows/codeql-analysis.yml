@@ -11,12 +11,12 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    
+
     permissions:
       actions: read
       contents: read
       security-events: write
-    
+
     strategy:
       fail-fast: false
       matrix:
@@ -26,23 +26,22 @@ jobs:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
     name: Analyze (${{ matrix.language }})
-    
     env:
       WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES: ON
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         submodules: recursive
-    
+
     - name: 'Install WZ Build Pre-reqs'
       if: matrix.language == 'cpp'
       run: |
         sudo apt-get -u update
         DEBIAN_FRONTEND=noninteractive sudo apt-get -y install gcc g++ libc-dev dpkg-dev ninja-build pkg-config
         sudo ./get-dependencies_linux.sh ubuntu build-dependencies
-    
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
