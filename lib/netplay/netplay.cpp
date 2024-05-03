@@ -4963,7 +4963,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	socketBeginCompression(*bsocket);
 
 	uint8_t playerType = (!asSpectator) ? NET_JOIN_PLAYER : NET_JOIN_SPECTATOR;
-	
+
 	if (bsocket == nullptr)
 	{
 		NETclose();

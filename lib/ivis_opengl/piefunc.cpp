@@ -136,7 +136,7 @@ void pie_Skybox_Init()
 	float bottom = -1;
 
 	// Skybox looks like this from the side:
-	//          
+	//
 	//             _____      top, slightly narrower to give perspective
 	//            /     .
 	//           /       .
@@ -146,10 +146,10 @@ void pie_Skybox_Init()
 	//           |       |
 	//           +-------+    bottom
 	// bottom cap ---^
-	
+
 	// The skybox is shown from baseline to top. below the baseline, the color fades to black (if fog enabled - otherwise a color of the skybox bottom).
 	// We extended the skybox downwards to be able to paint more of the screen with fog.
-	
+
 	float narrowCoordinate = 1 - narrowingOfTop;
 	const Vector3f
 		northWestBottom = Vector3f(-1, bottom, 1), // nw

@@ -85,7 +85,7 @@ public:
 	virtual bool makeDirectory(const std::string& directoryPath) = 0;
 
 	virtual const char* pathSeparator() const = 0;
-	
+
 	// enumFunc receives each enumerated file, and returns true to continue enumeration, or false to shortcut / stop enumeration
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc);
 

@@ -1418,7 +1418,7 @@ SDL_Cursor *init_system_cursor32(CURSOR cur)
 void wzSetCursor(CURSOR cur)
 {
 	ASSERT(cur < CURSOR_MAX, "Specified cursor(%d) is over our limit of (%d)!", (int)cur, (int)CURSOR_MAX);
-	
+
 	currentCursor = cur;
 }
 

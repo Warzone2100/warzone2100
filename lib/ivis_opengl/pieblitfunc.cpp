@@ -627,7 +627,7 @@ static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& request
 
 	bool didEnableRect = false;
 	gfx_api::DrawImagePSO::get().bind();
-	
+
 	for (auto& request : requests)
 	{
 		// The following is the equivalent of:

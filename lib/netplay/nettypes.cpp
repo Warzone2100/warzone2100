@@ -1084,6 +1084,6 @@ void NETshutdownReplay()
 		delete gameQueues[MAX_CONNECTED_PLAYERS];
 		gameQueues[MAX_CONNECTED_PLAYERS] = nullptr;
 	}
-	
+
 	bIsReplay = false;
 }
