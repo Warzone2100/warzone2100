@@ -2086,6 +2086,26 @@ bool wzapi::quickChat(WZAPI_PARAMS(int playerFilter, int messageEnum))
 	return true;
 }
 
+//-- ## getDroidPath(droid)
+//--
+//-- Get path of a droid.
+//-- Returns an array of positions (world coordinate)
+//--
+std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(DROID *psDroid))
+{
+	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
+	std::vector<scr_position> result;
+
+	const int len = psDroid->sMove.asPath.size();
+	for (int i = std::max(psDroid->sMove.pathIndex - 1, 0); i < len; i++)
+	{
+		ASSERT(worldOnMap(psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
+		result.push_back({psDroid->sMove.asPath[i].x,psDroid->sMove.asPath[i].y});
+	}
+
+	return result;
+}
+
 //-- ## addBeacon(x, y, playerFilter[, message])
 //--
 //-- Send a beacon message to target player. Target may also be ```ALLIES```.
