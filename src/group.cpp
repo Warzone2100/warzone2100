@@ -177,8 +177,14 @@ void DROID_GROUP::remove(DROID *psDroid)
 		if (psDroid->droidType != DROID_COMMAND || type != GT_COMMAND)
 		{
 			auto it = std::find(psList.begin(), psList.end(), psDroid);
-			ASSERT(it != psList.end(), "grpLeave: droid not found");
-			psList.erase(it);
+			if (it != psList.end())
+			{
+				psList.erase(it);
+			}
+			else
+			{
+				ASSERT(false, "grpLeave: droid not found");
+			}
 		}
 
 		psDroid->psGroup = nullptr;

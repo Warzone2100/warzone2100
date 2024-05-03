@@ -214,7 +214,7 @@ function __camChooseNexusTarget(player)
 			{
 				return true; //Final mission has a static fail chance to hack everything.
 			}
-			else if (getResearch(cam_resistance_circuits.fourth).done)
+			else if (!camClassicMode() && getResearch(cam_resistance_circuits.fourth).done)
 			{
 				return false; //Everything is safe
 			}
