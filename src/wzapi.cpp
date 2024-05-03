@@ -2089,7 +2089,7 @@ bool wzapi::quickChat(WZAPI_PARAMS(int playerFilter, int messageEnum))
 //-- ## getDroidPath(droid)
 //--
 //-- Get path of a droid.
-//-- Returns an array of positions (world coordinate)
+//-- Returns an array of positions.
 //--
 std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(DROID *psDroid))
 {
