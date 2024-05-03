@@ -4,7 +4,7 @@
   "IgnoreDefaults": false,
   "SpacesAftertabs": true,
   "NoColor": false,
-  "Exclude": [],
+  "Exclude": ["\\.json$"],
   "AllowedContentTypes": [],
   "PassedFiles": [],
   "Disable": {
