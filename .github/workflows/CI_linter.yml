@@ -24,7 +24,7 @@ jobs:
         # Full git history is needed to get a proper list of changed files within `super-linter`
         fetch-depth: 0
     - name: Lint Code Base
-      uses: super-linter/super-linter@v6.0.0  # x-release-please-version
+      uses: super-linter/super-linter@v6
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: master
@@ -35,5 +35,7 @@ jobs:
         VALIDATE_JSON: true
         VALIDATE_JAVASCRIPT_ES: true
         JAVASCRIPT_ES_CONFIG_FILE: '.eslintrc.json'
+        VALIDATE_EDITORCONFIG: true
+        EDITORCONFIG_FILE_NAME: '.ecrc'
         # To report GitHub Actions status checks
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
