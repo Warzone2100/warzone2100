@@ -23,7 +23,7 @@ Do not touch 'let diffMod = 1;'.
 
 The difficulty factor is interpreted in this way:
 Easy = -25% power per second (0.75x),
-Medium = +10% power per second (1.1x),
+Medium = =0% power per second (1x), no change,
 Hard = +50% power per second (1.5x),
 Insane = +100% power per second (2x).
 */
@@ -51,7 +51,7 @@ function setupPowerModifier(player)
 		}
 		else if (playerData[player].difficulty === MEDIUM)
 		{
-			diffMod = 1.1;
+			diffMod = 0; // No change, but is present here for easy modding.
 		}
 		else if (playerData[player].difficulty === EASY)
 		{
