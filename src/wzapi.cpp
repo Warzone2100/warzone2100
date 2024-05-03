@@ -2091,16 +2091,18 @@ bool wzapi::quickChat(WZAPI_PARAMS(int playerFilter, int messageEnum))
 //-- Get path of a droid.
 //-- Returns an array of positions.
 //--
-std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(DROID *psDroid))
+std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(const DROID *psDroid))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
 	std::vector<scr_position> result;
 
-	const int len = psDroid->sMove.asPath.size();
-	for (int i = std::max(psDroid->sMove.pathIndex - 1, 0); i < len; i++)
+	const size_t startPos = std::max(psDroid->sMove.pathIndex - 1, 0), len = psDroid->sMove.asPath.size();
+	result.reserve(len - startPos);
+	for (size_t i = startPos; i < len; i++)
 	{
-		ASSERT(worldOnMap(psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
-		result.push_back({map_coord(psDroid->sMove.asPath[i].x),map_coord(psDroid->sMove.asPath[i].y)});
+		const auto& pathCoords = psDroid->sMove.asPath[i];
+		ASSERT(worldOnMap(pathCoords.x, pathCoords.y), "Path off map!");
+		result.emplace_back(map_coord(pathCoords.x),map_coord(pathCoords.y));
 	}
 
 	return result;
