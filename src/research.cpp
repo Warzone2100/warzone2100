@@ -978,6 +978,9 @@ static void makeComponentUnavailable(UBYTE &state)
 	case AVAILABLE:
 		state = UNAVAILABLE;
 		break;
+	case REDUNDANT:
+		state = REDUNDANT_UNAVAILABLE;
+		break;
 	case FOUND:
 		state = UNAVAILABLE;
 		break;
