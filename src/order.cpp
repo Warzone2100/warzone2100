@@ -115,7 +115,7 @@ struct RtrBestResult
 	BASE_OBJECT *psObj;
 	RtrBestResult(RTR_DATA_TYPE type, BASE_OBJECT *psObj): type(type), psObj(psObj) {}
 	RtrBestResult(): type(RTR_TYPE_NO_RESULT), psObj(nullptr) {}
-	RtrBestResult(DROID_ORDER_DATA *psOrder): type(psOrder->rtrType), psObj(psOrder->psObj) 
+	RtrBestResult(DROID_ORDER_DATA *psOrder): type(psOrder->rtrType), psObj(psOrder->psObj)
 	{
 		if (psObj->type == OBJ_STRUCTURE && ((STRUCTURE*)psObj)->pStructureType->type == REF_REPAIR_FACILITY) type = RTR_TYPE_REPAIR_FACILITY;
 		else if (psObj->type == OBJ_STRUCTURE) type = RTR_TYPE_HQ;
@@ -175,8 +175,8 @@ struct RSComparator
 	RSComparator(const STRUCTURE *self) : selfPosX(self->pos.x), selfPosY(self->pos.y), selfPlayer(self->player) {}
 	RSComparator(const DROID *self) : selfPosX(self->pos.x), selfPosY(self->pos.y), selfPlayer(self->player) {}
 	// "less" comparator for our priority queue
-	bool operator() (const DROID* l, const DROID* r) const 
-	{ 
+	bool operator() (const DROID* l, const DROID* r) const
+	{
 		// Here, we know that both left and right Droids are:
 		// - either our own, or one of our allies
 		// - already within repair radius
@@ -246,7 +246,7 @@ struct RSComparator
 
 /// @return return top priority droid to repair, or nullptr
 static DROID* _findSomeoneToRepair(REPAIR_FACILITY *psRepairFac,
-				std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue, 
+				std::priority_queue<DROID*, std::vector<DROID*>, RSComparator> queue,
 				int x, int y, int radius, int player)
 {
 	GridList gridList;
@@ -265,7 +265,7 @@ static DROID* _findSomeoneToRepair(REPAIR_FACILITY *psRepairFac,
 			droidWasFullyRepaired(psDroid, psRepairFac);
 		}
 	}
-	if (!queue.empty()) 
+	if (!queue.empty())
 	{
 		debug(LOG_REPAIRS, "top was %i", queue.top()->id);
 		return queue.top();
@@ -991,8 +991,8 @@ void orderUpdateDroid(DROID *psDroid)
 				psDroid->order.psObj = nullptr;
 			}
 		}
-		if ((psDroid->action == DACTION_WAITFORREPAIR || psDroid->action == DACTION_WAITDURINGREPAIR) && 
-				psDroid->order.psObj && 
+		if ((psDroid->action == DACTION_WAITFORREPAIR || psDroid->action == DACTION_WAITDURINGREPAIR) &&
+				psDroid->order.psObj &&
 				objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) > REPAIR_RANGE * REPAIR_RANGE)
 		{ // was being repaired, but somehow got lost. recalculate reparing point
 			psDroid->order.psObj = nullptr;
@@ -1374,7 +1374,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	const Vector3i rPos(psOrder->pos, 0);
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d ordered %s", psDroid->id, getDroidOrderName(psOrder->type));
-	
+
 	objTrace(psDroid->id, "base set order to %s (was %s)", getDroidOrderName(psOrder->type), getDroidOrderName(psDroid->order.type));
 
 	if (psOrder->type != DORDER_TRANSPORTIN         // transporters special
@@ -1573,7 +1573,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		// help to build a structure that is starting to be built
 		ASSERT_OR_RETURN(, psDroid->isConstructionDroid(), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != nullptr, "Help to build a NULL pointer?");
-		if (psDroid->action == DACTION_BUILD && psOrder->psObj == psDroid->psActionTarget[0] 
+		if (psDroid->action == DACTION_BUILD && psOrder->psObj == psDroid->psActionTarget[0]
 			// skip DORDER_LINEBUILD -> we still want to drop pending structure blueprints
 			// this isn't a perfect solution, because ordering a LINEBUILD with negative energy, and then clicking
 			// on first structure being built, will remove it, as we change order from DORDR_LINEBUILD to DORDER_BUILD
@@ -1721,7 +1721,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				objTrace(psDroid->id, "DONE FOR NOW");
 				break;
 			}
-			
+
 			// RTR_SPECIFIED can only ever be given to a repair facility, never a mobile repair turret
 			// move to front of structure
 			psDroid->order = DroidOrder(psOrder->type, psOrder->psObj, RTR_TYPE_REPAIR_FACILITY);
@@ -3391,7 +3391,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		}
 	}
 
-	// If we are repair droid ourselves that accept retreating units, don't consider 
+	// If we are repair droid ourselves that accept retreating units, don't consider
 	// other repairs droids. Since this would cause traffic jams if we are attacked amongst
 	// other accepting repair droids. Thus causing chaos as repair units simply clump up
 	// instead of actually retreating.

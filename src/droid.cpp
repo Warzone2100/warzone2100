@@ -513,7 +513,7 @@ void recycleDroid(DROID *psDroid)
 	{
 		addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, false, gameTime - deltaGameTime + 1);
 	}
-	
+
 	CHECK_DROID(psDroid);
 }
 
@@ -874,7 +874,7 @@ void droidUpdate(DROID *psDroid)
 		droidUpdateDroidSelfRepair(psDroid);
 	}
 
-	
+
 	/* Update the fire damage data */
 	if (psDroid->periodicalDamageStart != 0 && psDroid->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
 	{
@@ -1261,7 +1261,7 @@ void droidWasFullyRepaired(DROID *psDroid, const REPAIR_FACILITY *psRepairFac)
 	}
 
 	droidWasFullyRepairedBase(psDroid);
-} 
+}
 
 bool droidUpdateRepair(DROID *psDroid)
 {
@@ -1859,9 +1859,9 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	if (groupNumber < UBYTE_MAX)
 	{
 		/* Run through all the structures */
-		for (STRUCTURE *psStruct : apsStructLists[playerNumber]) 
+		for (STRUCTURE *psStruct : apsStructLists[playerNumber])
 		{
-			if (psStruct->selected && psStruct->isFactory()) 
+			if (psStruct->selected && psStruct->isFactory())
 			{
 				psStruct->productToGroup = (UBYTE)groupNumber;
 				return;
@@ -1917,9 +1917,9 @@ void removeObjectFromGroup(UDWORD playerNumber)
 
 	ASSERT_OR_RETURN(, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
-	for (STRUCTURE *psStruct : apsStructLists[playerNumber]) 
+	for (STRUCTURE *psStruct : apsStructLists[playerNumber])
 	{
-		if (psStruct->selected && psStruct->isFactory()) 
+		if (psStruct->selected && psStruct->isFactory())
 		{
 			psStruct->productToGroup = UBYTE_MAX;
 			return;
@@ -3499,7 +3499,7 @@ void SelectDroid(DROID *psDroid, bool programmaticSelection)
 
 	psDroid->selected = true;
 	intRefreshScreen();
-	if (!programmaticSelection) 
+	if (!programmaticSelection)
 	{
 		triggerEventSelected();
 		jsDebugSelected(psDroid);

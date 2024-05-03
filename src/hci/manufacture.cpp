@@ -383,7 +383,7 @@ protected:
 		if (expgfx != UDWORD_MAX)
 		{
 			// FIXME: use offsets relative to template positon, not hardcoded values ?
-			iV_DrawImage(IntImages, (UWORD)expgfx, xOffset + 45, yOffset + 4);	
+			iV_DrawImage(IntImages, (UWORD)expgfx, xOffset + 45, yOffset + 4);
 		}
 	}
 
