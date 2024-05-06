@@ -663,6 +663,14 @@ static inline int64_t iDivCeil(int64_t dividend, int64_t divisor)
 	return (dividend / divisor) + static_cast<int64_t>((dividend % divisor != 0 && hasPosQuotient));
 }
 
+static inline int64_t iDivFloor(int64_t dividend, int64_t divisor)
+{
+	ASSERT_OR_RETURN(0, divisor != 0, "Divide by 0");
+	bool hasNegQuotient = (dividend >= 0) != (divisor >= 0);
+	// C++11 defines the behavior of % to be truncated
+	return (dividend / divisor) - static_cast<int64_t>((dividend % divisor != 0 && hasNegQuotient));
+}
+
 static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRUCTURE *psStruct, int player)
 {
 	if (cachedStatsObject.is_null()) { cachedStatsObject = wzapi::constructStatsObject(); }
@@ -789,7 +797,8 @@ static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRU
 						continue;
 					}
 					int64_t currentUpgradesValue = currentUpgradesValue_json.get<int64_t>();
-					int64_t newUpgradesChange = iDivCeil((statsOriginalValueX.get<int64_t>() * value), 100);
+					int64_t scaledChange = (statsOriginalValueX.get<int64_t>() * value);
+					int64_t newUpgradesChange = (value < 0) ? iDivFloor(scaledChange, 100) : iDivCeil(scaledChange, 100);
 					int64_t newUpgradesValue = (currentUpgradesValue + newUpgradesChange);
 					if (currentUpgradesValue_json.is_number_unsigned())
 					{
@@ -820,7 +829,8 @@ static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRU
 					continue;
 				}
 				int64_t currentUpgradesValue = currentUpgradesValue_json.get<int64_t>();
-				int64_t newUpgradesChange = iDivCeil((statsOriginalValue * value), 100);
+				int64_t scaledChange = (statsOriginalValue * value);
+				int64_t newUpgradesChange = (value < 0) ? iDivFloor(scaledChange, 100) : iDivCeil(scaledChange, 100);
 				int64_t newUpgradesValue = (currentUpgradesValue + newUpgradesChange);
 				if (currentUpgradesValue_json.is_number_unsigned())
 				{
