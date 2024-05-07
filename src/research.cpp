@@ -50,8 +50,12 @@
 
 // The stores for the research stats
 std::vector<RESEARCH> asResearch;
+optional<ResearchUpgradeCalculationMode> researchUpgradeCalcMode;
 nlohmann::json cachedStatsObject = nlohmann::json(nullptr);
 std::vector<wzapi::PerPlayerUpgrades> cachedPerPlayerUpgrades;
+
+typedef std::unordered_map<std::string, std::unordered_map<std::string, int64_t>> RawResearchUpgradeChangeValues;
+std::array<RawResearchUpgradeChangeValues, MAX_PLAYERS> cachedPerPlayerRawUpgradeChange;
 
 //used for Callbacks to say which topic was last researched
 RESEARCH                *psCBLastResearch;
@@ -105,6 +109,7 @@ bool researchInitVars()
 	psCBLastResStructure = nullptr;
 	CBResFacilityOwner = -1;
 	asResearch.clear();
+	researchUpgradeCalcMode = nullopt;
 	cachedStatsObject = nlohmann::json(nullptr);
 	cachedPerPlayerUpgrades.clear();
 	playerUpgradeCounts = std::vector<PlayerUpgradeCounts>(MAX_PLAYERS);
@@ -118,6 +123,12 @@ bool researchInitVars()
 	}
 
 	return true;
+}
+
+ResearchUpgradeCalculationMode getResearchUpgradeCalcMode()
+{
+	// Default to ResearchUpgradeCalculationMode::Compat, unless otherwise specified
+	return researchUpgradeCalcMode.value_or(ResearchUpgradeCalculationMode::Compat);
 }
 
 uint32_t PlayerUpgradeCounts::getNumWeaponImpactClassUpgrades(WEAPON_SUBCLASS subClass)
@@ -240,10 +251,41 @@ public:
 	}
 };
 
+static optional<ResearchUpgradeCalculationMode> resCalcModeStringToValue(const WzString& calcModeStr)
+{
+	if (calcModeStr.compare("compat") == 0)
+	{
+		return ResearchUpgradeCalculationMode::Compat;
+	}
+	else if (calcModeStr.compare("improved") == 0)
+	{
+		return ResearchUpgradeCalculationMode::Improved;
+	}
+	else
+	{
+		return nullopt;
+	}
+}
+
+static const char* resCalcModeToString(ResearchUpgradeCalculationMode mode)
+{
+	switch (mode)
+	{
+		case ResearchUpgradeCalculationMode::Compat:
+			return "compat";
+		case ResearchUpgradeCalculationMode::Improved:
+			return "improved";
+	}
+	return "invalid";
+}
+
+#define RESEARCH_JSON_CONFIG_DICT_KEY "_config_"
+
 /** Load the research stats */
 bool loadResearch(WzConfig &ini)
 {
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
+	const WzString CONFIG_DICT_KEY_STR = RESEARCH_JSON_CONFIG_DICT_KEY;
 	std::vector<WzString> list = ini.childGroups();
 	PLAYER_RESEARCH dummy;
 	memset(&dummy, 0, sizeof(dummy));
@@ -251,6 +293,38 @@ bool loadResearch(WzConfig &ini)
 	preResearch.resize(list.size());
 	for (size_t inc = 0; inc < list.size(); ++inc)
 	{
+		if (list[inc] == CONFIG_DICT_KEY_STR)
+		{
+			// handle the special config dict
+			ini.beginGroup(list[inc]);
+
+			// calculationMode
+			auto calcModeStr = ini.value("calculationMode", resCalcModeToString(ResearchUpgradeCalculationMode::Compat)).toWzString();
+			auto calcModeParsed = resCalcModeStringToValue(calcModeStr);
+			if (calcModeParsed.has_value())
+			{
+				if (!researchUpgradeCalcMode.has_value())
+				{
+					researchUpgradeCalcMode = calcModeParsed.value();
+				}
+				else
+				{
+					if (researchUpgradeCalcMode.value() != calcModeParsed.value())
+					{
+						debug(LOG_ERROR, "Non-matching research JSON calculationModes");
+						debug(LOG_INFO, "Research JSON file \"%s\" has specified a calculationMode (\"%s\") that does not match the first loaded research JSON's calculationMode (\"%s\")", ini.fileName().toUtf8().c_str(), calcModeStr.toUtf8().c_str(), resCalcModeToString(researchUpgradeCalcMode.value()));
+					}
+				}
+			}
+			else
+			{
+				ASSERT_OR_RETURN(false, false, "Invalid _config_ \"calculationMode\" value: \"%s\"", calcModeStr.toUtf8().c_str());
+			}
+
+			ini.endGroup();
+			continue;
+		}
+
 		// HACK FIXME: the code assumes we have empty PLAYER_RESEARCH entries to throw around
 		for (auto &j : asPlayerResList)
 		{
@@ -501,6 +575,12 @@ bool loadResearch(WzConfig &ini)
 		return false;
 	}
 
+	// If the first research json file does not explicitly set calculationMode, default to compat
+	if (!researchUpgradeCalcMode.has_value())
+	{
+		researchUpgradeCalcMode = ResearchUpgradeCalculationMode::Compat;
+	}
+
 	return true;
 }
 
@@ -680,6 +760,8 @@ static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRU
 	debug(LOG_RESEARCH, "RESEARCH : %s(%s) for %d", psResearch->name.toUtf8().c_str(), psResearch->id.toUtf8().c_str(), player);
 
 	ASSERT_OR_RETURN(, player >= 0 && player < cachedPerPlayerUpgrades.size(), "Player %d does not exist in per-player upgrades?", player);
+	auto &playerRawUpgradeChangeTotals = cachedPerPlayerRawUpgradeChange[player];
+	const auto upgradeCalcMode = getResearchUpgradeCalcMode();
 
 	PlayerUpgradeCounts tempStats;
 
@@ -830,8 +912,28 @@ static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRU
 				}
 				int64_t currentUpgradesValue = currentUpgradesValue_json.get<int64_t>();
 				int64_t scaledChange = (statsOriginalValue * value);
-				int64_t newUpgradesChange = (value < 0) ? iDivFloor(scaledChange, 100) : iDivCeil(scaledChange, 100);
-				int64_t newUpgradesValue = (currentUpgradesValue + newUpgradesChange);
+				int64_t newUpgradesChange = 0;
+				int64_t newUpgradesValue = 0;
+				switch (upgradeCalcMode)
+				{
+					case ResearchUpgradeCalculationMode::Compat:
+						// Default / compat cumulative upgrade handling (the only option for many years - from at least 3.x/(3.2+?)-4.4.2?)
+						// This can accumulate noticeable error, especially if repeatedly upgrading small values by small percentages (commonly impacted: armour, thermal)
+						// However, research.json created and tested during this long period may be expecting this outcome / behavior
+						newUpgradesChange = (value < 0) ? iDivFloor(scaledChange, 100) : iDivCeil(scaledChange, 100);
+						newUpgradesValue = (currentUpgradesValue + newUpgradesChange);
+						break;
+					case ResearchUpgradeCalculationMode::Improved:
+					{
+						// "Improved" cumulative upgrade handling (significantly reduces accumulated errors)
+						auto& compUpgradeTotals = playerRawUpgradeChangeTotals[cname.first];
+						auto& cumulativeUpgradeScaledChange = compUpgradeTotals[parameter];
+						cumulativeUpgradeScaledChange += scaledChange;
+						newUpgradesValue = statsOriginalValue + ((cumulativeUpgradeScaledChange < 0) ? iDivFloor(cumulativeUpgradeScaledChange, 100) : iDivCeil(cumulativeUpgradeScaledChange, 100));
+						newUpgradesChange = newUpgradesValue - currentUpgradesValue;
+						break;
+					}
+				}
 				if (currentUpgradesValue_json.is_number_unsigned())
 				{
 					// original was unsigned integer - round anything less than 0 up to 0
@@ -1075,12 +1177,17 @@ bool ResearchShutDown()
 void ResearchRelease()
 {
 	asResearch.clear();
+	researchUpgradeCalcMode = nullopt;
 	for (auto &i : asPlayerResList)
 	{
 		i.clear();
 	}
 	cachedStatsObject = nlohmann::json(nullptr);
 	cachedPerPlayerUpgrades.clear();
+	for (auto &p : cachedPerPlayerRawUpgradeChange)
+	{
+		p.clear();
+	}
 	playerUpgradeCounts = std::vector<PlayerUpgradeCounts>(MAX_PLAYERS);
 }
 
