@@ -1,4 +1,7 @@
 {
+	"_config_": {
+		"calculationMode": "improved"
+	},
 	"ADVANCEDRESEARCH": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "ADVANCEDRESEARCH",
