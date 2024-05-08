@@ -1051,6 +1051,7 @@ namespace wzapi
 	bool activateStructure(WZAPI_PARAMS(STRUCTURE *psStruct, optional<BASE_OBJECT *> _psTarget));
 	bool chat(WZAPI_PARAMS(int playerFilter, std::string message));
 	bool quickChat(WZAPI_PARAMS(int playerFilter, int messageEnum));
+	std::vector<scr_position> getDroidPath(WZAPI_PARAMS(const DROID *psDroid));
 	bool addBeacon(WZAPI_PARAMS(int x, int y, int playerFilter, optional<std::string> _message));
 	bool removeBeacon(WZAPI_PARAMS(int playerFilter));
 	std::unique_ptr<const DROID> getDroidProduction(WZAPI_PARAMS(const STRUCTURE *_psFactory));

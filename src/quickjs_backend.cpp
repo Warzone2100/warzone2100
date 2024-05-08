@@ -3198,6 +3198,7 @@ static JSValue js_removeBeacon(JSContext *ctx, JSValueConst this_val, int argc, 
 
 IMPL_JS_FUNC(chat, wzapi::chat)
 IMPL_JS_FUNC(quickChat, wzapi::quickChat)
+IMPL_JS_FUNC(getDroidPath, wzapi::getDroidPath)
 IMPL_JS_FUNC(setAlliance, wzapi::setAlliance)
 IMPL_JS_FUNC(sendAllianceRequest, wzapi::sendAllianceRequest)
 IMPL_JS_FUNC(setAssemblyPoint, wzapi::setAssemblyPoint)
@@ -3469,6 +3470,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC2(activateStructure, 1, 2); // WZAPI
 	JS_REGISTER_FUNC(chat, 2); // WZAPI
 	JS_REGISTER_FUNC(quickChat, 2); // WZAPI
+	JS_REGISTER_FUNC(getDroidPath, 1); // WZAPI
 	JS_REGISTER_FUNC2(addBeacon, 3, 4); // WZAPI
 	JS_REGISTER_FUNC(removeBeacon, 1); // WZAPI
 	JS_REGISTER_FUNC(getDroidProduction, 1); // WZAPI
