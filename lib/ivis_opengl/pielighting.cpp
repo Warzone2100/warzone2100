@@ -171,7 +171,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	size_t lightsCombined = 0;
 	size_t lightsSkipped = 0;
 	size_t tinyLightsSkipped = 0;
-	
+
 	culledLights.clear();
 	for (const auto& light : data.lights)
 	{
@@ -184,7 +184,7 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 		{
 			continue;
 		}
-		
+
 		if (light.range >= minLightRange)
 		{
 			std::pair<int32_t, int32_t> lightTileCoords(pielight_maptile_coord(light.position.x), pielight_maptile_coord(light.position.y));
