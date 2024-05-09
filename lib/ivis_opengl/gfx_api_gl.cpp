@@ -3841,7 +3841,8 @@ bool gl_context::initGLContext()
 			// (if there are duplicate uniform names).
 			//
 			// This is now handled with a workaround when processing shaders, so just log it.
-			debug(LOG_3D, "Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
+			debug(LOG_FATAL, "OpenGL ES: Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
+			// FUTURE TODO: return false;
 		}
 	}
 
