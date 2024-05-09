@@ -756,7 +756,7 @@ static int QuickJS_DefinePropertyValue(JSContext *ctx, JSValueConst this_obj, co
 //;; * ```name``` A string containing the full name of the research.
 //;; * ```id``` A string containing the index name of the research.
 //;; * ```type``` The type will always be ```RESEARCH_DATA```.
-//;; * ```results``` An array of coefficients effected by research upgrades (defined in "research.json").
+//;; * ```results``` An array of objects of research upgrades (defined in "research.json").
 //;;
 JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
 {
