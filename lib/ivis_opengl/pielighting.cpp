@@ -282,65 +282,104 @@ void renderingNew::LightingManager::ComputeFrameData(const LightingData& data, L
 	size_t overallId = 0;
 	size_t bucketId = 0;
 
+	size_t bucketDimension = gfx_api::bucket_dimension; // start off at the maximum number of buckets
+	constexpr size_t minBucketDimension = 4;
+
 	// GLSL std layout 140 force us to store array of int with the same stride as
 	// an array of ivec4, wasting 3/4 of the storage.
 	// To circumvent this, we pack 4 consecutives index in a ivec4 here, and unpack the value in the shader.
 	std::array<size_t, gfx_api::max_indexed_lights * 4> lightList;
-	for (size_t i = 0; i < gfx_api::bucket_dimension; i++)
-	{
-		auto bucketFrustumX0 = -1.f + 2 * static_cast<float>(i) / gfx_api::bucket_dimension;
-		auto bucketFrustumX1 = -1.f + 2 * static_cast<float>(i + 1) / gfx_api::bucket_dimension;
-
-		for (size_t j = 0; j < gfx_api::bucket_dimension; j++)
+	bool reduceNumberOfBucketsNeeded = false;
+	do {
+		overallId = 0;
+		bucketId = 0;
+		reduceNumberOfBucketsNeeded = false;
+		for (size_t i = 0; i < bucketDimension; i++)
 		{
-			auto bucketFrustumY0 = -1.f + 2 * static_cast<float>(j) / gfx_api::bucket_dimension;
-			auto bucketFrustumY1 = -1.f + 2 * static_cast<float>(j + 1) / gfx_api::bucket_dimension;
+			auto bucketFrustumX0 = -1.f + 2 * static_cast<float>(i) / bucketDimension;
+			auto bucketFrustumX1 = -1.f + 2 * static_cast<float>(i + 1) / bucketDimension;
 
-			auto frustum = IntersectionOfHalfSpace{
-				[bucketFrustumX0](const glm::vec3& in) { return in.x >= bucketFrustumX0; },
-				[bucketFrustumX1](const glm::vec3& in) { return in.x <= bucketFrustumX1; },
-				[bucketFrustumY0, yAxisInverted](const glm::vec3& in) {
-					if (yAxisInverted)
-						return -in.y >= bucketFrustumY0;
-					return in.y >= bucketFrustumY0;
-				},
-				[bucketFrustumY1, yAxisInverted](const glm::vec3& in) {
-					if (yAxisInverted)
-						return -in.y <= bucketFrustumY1;
-					return in.y <= bucketFrustumY1;
-				},
-				[](const glm::vec3& in) { return in.z >= 0; },
-				[](const glm::vec3& in) { return in.z <= 1; }
-			};
-
-			size_t bucketSize = 0;
-			for (size_t lightIndex = 0; lightIndex < culledLights.size(); lightIndex++)
+			for (size_t j = 0; j < bucketDimension; j++)
 			{
-				if (overallId + bucketSize >= lightList.size())
+				auto bucketFrustumY0 = -1.f + 2 * static_cast<float>(j) / bucketDimension;
+				auto bucketFrustumY1 = -1.f + 2 * static_cast<float>(j + 1) / bucketDimension;
+
+				auto frustum = IntersectionOfHalfSpace{
+					[bucketFrustumX0](const glm::vec3& in) { return in.x >= bucketFrustumX0; },
+					[bucketFrustumX1](const glm::vec3& in) { return in.x <= bucketFrustumX1; },
+					[bucketFrustumY0, yAxisInverted](const glm::vec3& in) {
+						if (yAxisInverted)
+							return -in.y >= bucketFrustumY0;
+						return in.y >= bucketFrustumY0;
+					},
+					[bucketFrustumY1, yAxisInverted](const glm::vec3& in) {
+						if (yAxisInverted)
+							return -in.y <= bucketFrustumY1;
+						return in.y <= bucketFrustumY1;
+					},
+					[](const glm::vec3& in) { return in.z >= 0; },
+					[](const glm::vec3& in) { return in.z <= 1; }
+				};
+
+				size_t bucketSize = 0;
+				for (size_t lightIndex = 0; lightIndex < culledLights.size(); lightIndex++)
 				{
-					continue;
+					if (overallId + bucketSize >= lightList.size())
+					{
+						// number of indexed lights will exceed max permitted - too many buckets
+						reduceNumberOfBucketsNeeded = true;
+						break;
+					}
+					const BoundingBox& clipSpaceBoundingBox = culledLights[lightIndex].clipSpaceBoundingBox;
+
+					if (isBBoxInClipSpace(frustum, clipSpaceBoundingBox))
+					{
+						lightList[overallId + bucketSize] = lightIndex;
+
+						bucketSize++;
+					}
 				}
-				const BoundingBox& clipSpaceBoundingBox = culledLights[lightIndex].clipSpaceBoundingBox;
 
-				if (isBBoxInClipSpace(frustum, clipSpaceBoundingBox))
+				result.bucketOffsetAndSize[bucketId] = glm::ivec4(overallId, bucketSize, 0, 0);
+				overallId += bucketSize;
+				bucketId++;
+
+				if (reduceNumberOfBucketsNeeded)
 				{
-					lightList[overallId + bucketSize] = lightIndex;
-
-					bucketSize++;
+					break;
 				}
 			}
 
-			result.bucketOffsetAndSize[bucketId] = glm::ivec4(overallId, bucketSize, 0, 0);
-			overallId += bucketSize;
-			bucketId++;
+			if (reduceNumberOfBucketsNeeded)
+			{
+				if (bucketDimension > minBucketDimension)
+				{
+					--bucketDimension;
+				}
+				else
+				{
+					// reached minimum number of buckets, but still hit max indexed point lights
+					reduceNumberOfBucketsNeeded = false;
+
+					// zero out remaining buckets
+					// (note: will mean no point lights for those parts of the screen, but at least we won't have garbage data used)
+					for (size_t z = bucketId; z < result.bucketOffsetAndSize.size(); z++)
+					{
+						result.bucketOffsetAndSize[z] = glm::ivec4(overallId, 0, 0, 0);
+					}
+				}
+				break;
+			}
 		}
-	}
+	} while (reduceNumberOfBucketsNeeded);
 
 	// pack the index
 	for (size_t i = 0; i < lightList.size(); i++)
 	{
 		result.light_index[i / 4][i % 4] = static_cast<int>(lightList[i]);
 	}
+
+	result.bucketDimensionUsed = bucketDimension;
 
 	currentPointLightBuckets = std::move(result);
 }
