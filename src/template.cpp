@@ -634,6 +634,18 @@ void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* ps
 	}
 }
 
+// called when a component is made unavailable
+DROID_TEMPLATE* getTemplateByComponent(int player, UDWORD component)
+{
+	auto it = droidTemplates[player].find(component);
+	if (it != droidTemplates[player].end())
+	{
+		auto templ = it;
+		deleteTemplateFromProduction(templ, player, ModeQueue);
+	}
+	return 0;
+}
+
 DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);

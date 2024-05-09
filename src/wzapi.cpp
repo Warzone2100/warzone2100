@@ -2954,6 +2954,10 @@ wzapi::no_return_value wzapi::makeComponentUnavailable(WZAPI_PARAMS(std::string 
 {
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	setComponent(componentName, player, UNAVAILABLE);
+	COMPONENT_STATS *pComp = getCompStatsFromName(componentName);
+	COMPONENT_TYPE type = pComp->compType;
+	auto component = (apCompLists[player][type][pComp->index]);
+	getTemplateByComponent(player, component);
 	return {};
 }
 
