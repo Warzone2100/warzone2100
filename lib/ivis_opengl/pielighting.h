@@ -70,6 +70,8 @@ struct ILightingManager
 		std::array<glm::ivec4, gfx_api::bucket_dimension * gfx_api::bucket_dimension> bucketOffsetAndSize = {};
 		// Unfortunately due to std140 constraint, we pack indexes in glm::ivec4 and unpack them in shader later
 		std::array<glm::ivec4, gfx_api::max_indexed_lights> light_index = {};
+
+		size_t bucketDimensionUsed = gfx_api::bucket_dimension;
 	};
 
 	virtual ~ILightingManager() = default;
