@@ -40,6 +40,12 @@
 	#pragma clang diagnostic ignored "-Wshorten-64-to-32" // FIXME!!
 #endif
 
+#if defined(WZ_OS_UNIX)
+# include <netinet/tcp.h> // For TCP_NODELAY
+#elif defined(WZ_OS_WIN)
+// Already included Winsock2.h which defines TCP_NODELAY
+#endif
+
 enum
 {
 	SOCK_CONNECTION,
@@ -793,6 +799,19 @@ void socketBeginCompression(Socket& sock)
 
 	sock.isCompressed = true;
 	wzMutexUnlock(socketThreadMutex);
+}
+
+bool socketSetTCPNoDelay(Socket& sock, bool nodelay)
+{
+#if defined(TCP_NODELAY)
+	int value = (nodelay) ? 1 : 0;
+	int result = setsockopt(sock.fd[SOCK_CONNECTION], IPPROTO_TCP, TCP_NODELAY, (char *) &value, sizeof(int));
+	debug(LOG_INFO, "Setting TCP_NODELAY on socket: %s", (result != SOCKET_ERROR) ? "success" : "failure");
+	return result != SOCKET_ERROR;
+#else
+	debug(LOG_INFO, "Unable to set TCP_NODELAY on socket - unsupported");
+	return false;
+#endif
 }
 
 Socket::~Socket()
