@@ -1184,8 +1184,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	{
 		COMPONENT_TYPE type = pRemArtefact->compType;
 		makeComponentUnavailable(apCompLists[player][type][pRemArtefact->index]);
-		auto component = (apCompLists[player][type][pRemArtefact->index]);
-		getTemplateByComponent(player, component);
 	}
 
 	//Add message to player's list if Major Topic
