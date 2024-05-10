@@ -63,10 +63,9 @@ uint32_t	DataHash[DATA_MAXDATA] = {0};
 *	This is almost the same routine that Pumpkin had, minus the ugly bug :)
 *	And minus the old algorithm and debugging trace, replaced with a simple CRC...
 */
-static UDWORD	hashBuffer(const uint8_t *pData, uint32_t size)
+static void hashBuffer(const uint8_t *pData, uint32_t size, uint32_t &crc)
 {
 	char nl = '\n';
-	uint32_t crc = 0;
 	uint32_t i, j;
 	uint32_t lines = 0;
 	uint32_t bytes = 0;
@@ -77,35 +76,26 @@ static UDWORD	hashBuffer(const uint8_t *pData, uint32_t size)
 
 		if (i != j)  // CRC non-empty lines only.
 		{
-			crc = crcSum(crc, pData + i, j - i);  // CRC the line.
-			crc = crcSum(crc, &nl, 1);            // CRC the line ending.
+			crc = wz::crc_update(crc, pData + i, j - i);  // CRC the line.
+			crc = wz::crc_update(crc, &nl, 1);            // CRC the line ending.
 
 			++lines;
 			bytes += j - i + 1;
 		}
 	}
 	debug(LOG_NET, "The size of the old buffer (%u bytes - %d stripped), New buffer size of %u bytes, %u non-empty lines.", size, size - bytes, bytes, lines);
-
-	return ~crc;
 }
 
 // create the hash for that data block.
 // Data should be converted to Network byte order
 void calcDataHash(const uint8_t *pBuffer, uint32_t size, uint32_t index)
 {
-	const uint32_t oldHash = DataHash[index];
-
 	if (!bMultiPlayer)
 	{
 		return;
 	}
 
-	DataHash[index] += hashBuffer(pBuffer, size);
-
-	if (!DataHash[index] && oldHash)
-	{
-		debug(LOG_NET, "The new hash is 0, the old hash was %u. We added the negated value!", oldHash);
-	}
+	hashBuffer(pBuffer, size, DataHash[index]);
 
 	debug(LOG_NET, "DataHash[%2u] = %08x", index, DataHash[index]);
 
@@ -123,7 +113,7 @@ void resetDataHash()
 	UDWORD i;
 	for (i = 0; i < DATA_MAXDATA; i++)
 	{
-		DataHash[i] = 0;
+		DataHash[i] = wz::crc_init();
 	}
 	debug(LOG_NET, "== Hash is reset ==");
 }
