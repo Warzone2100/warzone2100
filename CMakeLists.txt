@@ -866,26 +866,6 @@ CHECK_IS_ABSOLUTE_PATH(WZ_DATADIR WZ_DATADIR_ISABSOLUTE)
 CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h)
 
-# Attempt to find Miniupnpc (minimum supported API version = 9)
-# NOTE: This is not available on every platform / distro
-find_package(Miniupnpc 9)
-if(MINIUPNPC_FOUND)
-	set(WZ_USE_IMPORTED_MINIUPNPC ON)
-else()
-	message(STATUS "Using in-tree Miniupnpc")
-	set(WZ_USE_IMPORTED_MINIUPNPC OFF)
-	SET(UPNPC_BUILD_STATIC ON CACHE BOOL "miniupnpc - Build static library" FORCE)
-	SET(UPNPC_BUILD_SHARED OFF CACHE BOOL "miniupnpc - Build shared library" FORCE)
-	SET(UPNPC_BUILD_TESTS OFF CACHE BOOL "miniupnpc - Build tests" FORCE)
-	SET(UPNPC_BUILD_SAMPLE OFF CACHE BOOL "miniupnpc - Build samples" FORCE)
-	SET(UPNPC_NO_INSTALL TRUE CACHE BOOL "miniupnpc - Disable installation" FORCE)
-	add_subdirectory(3rdparty/miniupnp/miniupnpc)
-	set_property(TARGET libminiupnpc-static PROPERTY FOLDER "3rdparty")
-	if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND (MINGW OR ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND NOT MSVC)))
-		target_compile_options(miniupnpc-private INTERFACE -Wno-macro-redefined)
-	endif()
-endif()
-
 add_subdirectory(3rdparty)
 
 # Determine distribution license

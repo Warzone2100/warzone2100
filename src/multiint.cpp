@@ -7573,28 +7573,28 @@ static void printHostHelpMessagesToConsole()
 	}
 	if (NetPlay.bComms)
 	{
-		if (NetPlay.isUPNP)
+		if (NetPlay.isPortMappingEnabled)
 		{
-			if (NetPlay.isUPNP_CONFIGURED)
+			if (NetPlay.isPORT_MAPPING_CONFIGURED)
 			{
-				ssprintf(buf, "%s", _("UPnP has been enabled."));
+				ssprintf(buf, "%s", _("Port mapping has been enabled."));
 			}
 			else
 			{
-				if (NetPlay.isUPNP_ERROR)
+				if (NetPlay.isPORT_MAPPING_ERROR)
 				{
-					ssprintf(buf, "%s", _("UPnP detection failed. You must manually configure router yourself."));
+					ssprintf(buf, "%s", _("Port mapping creation failed. You must manually configure router yourself."));
 				}
 				else
 				{
-					ssprintf(buf, "%s", _("UPnP detection is in progress..."));
+					ssprintf(buf, "%s", _("Port mapping creation is in progress..."));
 				}
 			}
 			displayRoomNotifyMessage(buf);
 		}
 		else
 		{
-			ssprintf(buf, _("UPnP detection disabled by user. Autoconfig of port %d will not happen."), NETgetGameserverPort());
+			ssprintf(buf, _("Port mapping disabled by user. Autoconfig of port %d will not happen."), NETgetGameserverPort());
 			displayRoomNotifyMessage(buf);
 		}
 	}
