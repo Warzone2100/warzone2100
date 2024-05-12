@@ -61,6 +61,9 @@ jobs:
     name: '${{ matrix.name }}'
     permissions:
       contents: write # Needed to upload to releases
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     outputs:
@@ -195,6 +198,13 @@ jobs:
         path: |
           ${{ github.workspace }}/debug
         if-no-files-found: 'error'
+    - name: Generate artifact attestation
+      # Run on push to master branch (development build), or tag release automation build
+      if: success() && (matrix.publish_artifact == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      uses: actions/attest-build-provenance@v1
+      continue-on-error: true
+      with:
+        subject-path: '${{ env.WZ_FULL_OUTPUT_DEB_PATH }}'
     - name: Upload artifact to release
       if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true)
       run: |
@@ -209,6 +219,9 @@ jobs:
     name: Package Source (Ubuntu 22.04) [GCC]
     permissions:
       contents: write # Needed to upload to releases
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -279,6 +292,13 @@ jobs:
         name: warzone2100_src
         path: ${{ env.OUTPUT_DIR }}
         if-no-files-found: 'error'
+    - name: Generate artifact attestation
+      # Run on push to master branch (development build), or tag release automation build
+      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      uses: actions/attest-build-provenance@v1
+      continue-on-error: true
+      with:
+        subject-path: '${{ env.OUTPUT_DIR }}/warzone2100_src.tar.xz'
     - name: Upload source tarball to release
       if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
       run: |
