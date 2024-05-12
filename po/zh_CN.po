@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-12-25 19:10\n"
+"PO-Revision-Date: 2024-05-10 02:16\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -164,7 +164,7 @@ msgstr "在高原上建立前方基地，并击退 New Paradigm。"
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr "建造防御性建筑，直到绿色目标闪电消失。"
+msgstr "建造防御性建筑，直到目标处的绿色闪烁消失。"
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -676,7 +676,7 @@ msgstr "一旦避难所​​建立起来，回到降落点等待进一步的命
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "BETA基地任务：存活并撤离！带一辆卡车"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -1542,12 +1542,12 @@ msgstr "VTOL反炮兵雷达"
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "VTOL反炮兵雷达升级二型"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:482
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "VTOL反炮兵雷达升级三型"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:483
@@ -4049,15 +4049,15 @@ msgstr "摧毁 Nexus 总部并关闭 Nexus 入侵程序"
 
 #: data/base/script/campaign/cam3-ab.js:241
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "研究阻抗回路并抵御NEXUS的攻击"
 
 #: data/base/script/campaign/cam3-ad1.js:257
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "在发射井旁建立一个前进基地"
 
 #: data/base/script/campaign/cam3-ad2.js:278
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "保护导弹发射井并通过研究获得发射密码"
 
 #: data/base/script/campaign/cam3-c.js:170
 msgid "Reunite a part of Beta team with a Gamma team outpost"
@@ -4069,11 +4069,11 @@ msgstr "回到降落点"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:530
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "困难/疯狂难度提示："
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:531
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "在地图各处建立强大的基地以抵御Collective"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:536
 msgid "Destroy all enemy units and structures"
@@ -4081,11 +4081,11 @@ msgstr "摧毁所有敌方部队和建筑"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:552
 msgid "Artifacts collected"
-msgstr ""
+msgstr "遗留科技已收集"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:553
 msgid "Bases destroyed"
-msgstr ""
+msgstr "基地已摧毁"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:554
 msgid "Enemy units remaining"
@@ -4093,11 +4093,11 @@ msgstr "剩余敌方部队"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:555
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "剩余敌方建筑"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:561
 msgid "Return to LZ required"
-msgstr ""
+msgstr "需要回到降落点"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:571
 msgid "Destroy all enemy units and bases"
@@ -4105,7 +4105,7 @@ msgstr "摧毁敌方所有部队和基地"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:576
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "生存直到计时结束"
 
 #: data/base/script/rules.js:57
 #: data/base/script/tutorial.js:129
@@ -4133,7 +4133,7 @@ msgstr "研发(F2)"
 #: data/mp/multiplay/script/rules/reticule.js:52
 #: data/mp/multiplay/script/rules/reticule.js:115
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "请先建造研发中心"
 
 #: data/base/script/rules.js:119
 #: data/base/script/tutorial.js:148
@@ -4165,7 +4165,7 @@ msgstr "设计(F4)"
 #: data/mp/multiplay/script/rules/reticule.js:92
 #: data/mp/multiplay/script/rules/reticule.js:117
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "请先建造总部"
 
 #: data/base/script/rules.js:183
 #: data/mp/multiplay/script/rules/reticule.js:101
@@ -4229,7 +4229,7 @@ msgstr "要让钻油井开始运作，必须先建造一座发电厂，将石油
 
 #: data/base/script/tutorial.js:35
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "点选闪动中的「建造」图示"
 
 #: data/base/script/tutorial.js:36
 msgid "Now left click the power generator in the build menu on the left"
@@ -4613,7 +4613,7 @@ msgstr "Nexus入侵者系统是一个自变异的计算机寄生虫。这就使�
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "我们无法确定它的最终目的或功能。当处于初始形态时，它寻找内存片段并将其与被侵入系统的其余部分隔离，然后它开始改变自身和数据结构，有效的从内部对系统进行重编程。"
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -5621,23 +5621,23 @@ msgstr "玩家"
 
 #: data/mp/multiplay/script/rules/endconditions.js:233
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "由于不活跃/无操作计为失败"
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "主机配置的游戏时间限制正在接近。如果10分钟内没有赢家，游戏将结束。"
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "超过主机配置的游戏时间限制。游戏已结束。"
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "无操作将导致失败。需要以下行动："
 
 #: data/mp/multiplay/script/rules/endconditions.js:399
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- 生产单位 - 完成研究 - 建造基础建筑(工厂，发电厂，研发中心，模块，钻油井)"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
 #: src/multiint.cpp:1434
@@ -5727,19 +5727,19 @@ msgstr "个性化更改成功。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "没有这种人格！请尝试其中一种："
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "强制研究已清除，将研究我现在想要的任何东西。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "研究被阻止，现在不会进行任何研究。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "研究基本技术。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
@@ -5747,11 +5747,11 @@ msgstr "研究中 "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "没有这种研究路径！请尝试其中一个："
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "对不起，我没有卡车。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
@@ -5759,7 +5759,7 @@ msgstr "你可以使用这个。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "对不起，单位传输失败。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
@@ -5775,7 +5775,7 @@ msgstr "马上到!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "对不起，我没有任何可用于支援的单位！"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
@@ -5795,7 +5795,8 @@ msgstr "无法在(%s) 上打开所需端口 (%s)"
 #, c-format
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
-msgstr ""
+msgstr "您必须手动配置您的路由器和防火墙\n"
+"打开端口 %d 才能主持游戏。"
 
 #: lib/netplay/netplay.cpp:1590
 #, c-format
@@ -5806,12 +5807,12 @@ msgstr "游戏配置端口 (%s) 正常 (%s)\n"
 
 #: lib/netplay/netplay.cpp:2313
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "客户端未应答玩家索引变更"
 
 #: lib/netplay/netplay.cpp:2949
 #, c-format
 msgid "No UPnP device found. Configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "未找到UPnP设备。配置您的路由器/防火墙来打开端口 %d！"
 
 #: lib/netplay/netplay.cpp:3571
 #, c-format
@@ -5878,7 +5879,7 @@ msgstr "音乐菜单"
 
 #: lib/widget/form.cpp:378
 msgid "(untitled)"
-msgstr ""
+msgstr "(无标题)"
 
 #: lib/widget/jsontable.cpp:496
 msgid "Copy Path to Clipboard"
@@ -5977,27 +5978,27 @@ msgstr "防空火炮连锁装填系统一型"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:63
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "暴风级高射炮炮台"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:67
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "暴风级高射炮要塞"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:70
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "履带式蟒蛇坦克（暴风级高射炮）"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:74
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "暴风级高射炮"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6055,7 +6056,7 @@ msgstr "高射炮装填时间 -15%"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
 #: po/custom/fromJson.txt:119
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "装备有兴风者级防空激光之炮台"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
@@ -6080,21 +6081,21 @@ msgstr "防空武器热相感应雷达"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:140
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "龙卷风级高射炮炮台"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:144
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "龙卷风级高射炮要塞"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:148
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "龙卷风级高射炮"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6236,20 +6237,20 @@ msgstr "高级自动化VTOL 生产"
 #. data/base/stats/features.json: $.Advmaterialslab.name
 #: po/custom/fromJson.txt:242
 msgid "Advancedmaterialslab"
-msgstr ""
+msgstr "高级材料实验室"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[1]
 #: po/custom/fromJson.txt:252
 msgid "Aerodynamic Jump Pack"
-msgstr ""
+msgstr "空气动力学喷气背包"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Aerodynamicslab.name
 #: po/custom/fromJson.txt:255
 msgid "Aerodynamicslab"
-msgstr ""
+msgstr "空气动力学实验室"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[3]
@@ -6547,7 +6548,7 @@ msgstr "装备有高速加农炮的生化人步兵"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AC.text[1]
 #: po/custom/fromJson.txt:587
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "装备有高速四管自动加农炮"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
@@ -6561,7 +6562,7 @@ msgstr "装备有枪骑兵反坦克导弹之生化人步兵"
 #. data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:595
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "装备有枪骑兵反坦克火箭"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -7165,7 +7166,7 @@ msgstr "野蛮人推进动力"
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1042
 msgid "Back to Basics"
-msgstr ""
+msgstr "回归根本"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
@@ -7184,7 +7185,7 @@ msgstr "战场修理单位"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1052
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "最佳目标：车辆与生化人步兵"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7222,7 +7223,7 @@ msgstr "最佳目标：基本建筑物"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1088
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "最佳目标：基本建筑物，炮台与生化人步兵"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
@@ -7285,7 +7286,7 @@ msgstr "最佳目标：步兵、轮式和气垫船车辆"
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1148
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "最佳目标：无。对所有类型的目标造成平均伤害"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
@@ -7349,7 +7350,7 @@ msgstr "HP：非常低"
 #: po/custom/fromJson.txt:1215
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "炸弹攻击力 +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7736,7 +7737,7 @@ msgstr "Collective的重量级车身"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1459
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "生化人步兵（工程师）"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -7810,7 +7811,7 @@ msgstr "毒蝎指挥车"
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1500
 msgid "Command Turret Upgrade"
-msgstr ""
+msgstr "指挥官炮塔升级"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -7894,7 +7895,7 @@ msgstr "电脑科技研发完成"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[2]
 #: po/custom/fromJson.txt:1548
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "电脑系统已建立起防火墙抵抗来自NEXUS的入侵"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -7938,7 +7939,7 @@ msgstr "建筑单位"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #: po/custom/fromJson.txt:1574
 msgid "Controls up to ten commanders"
-msgstr ""
+msgstr "可控制多达十名指挥官。"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
@@ -7967,13 +7968,13 @@ msgstr "反炮兵雷达可以侦测到敌军的非直射型炮兵攻击"
 #. data/mp/stats/construction.json: $.scavCrane1.name
 #: po/custom/fromJson.txt:1591
 msgid "Crane1"
-msgstr ""
+msgstr "起重机1"
 
 #. TRANSLATORS:
 #. data/mp/stats/construction.json: $.scavCrane2.name
 #: po/custom/fromJson.txt:1594
 msgid "Crane2"
-msgstr ""
+msgstr "起重机2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -8037,7 +8038,7 @@ msgstr "生化人步兵（火焰喷射）"
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
 #: po/custom/fromJson.txt:1631
 msgid "Cyborg Heavy Body"
-msgstr ""
+msgstr "生化人重型身体"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Armor-Heat05.name
@@ -8065,14 +8066,14 @@ msgstr "生化人高强度热能装甲一型"
 #. data/mp/stats/weapons.json: $.CyborgRocket.name
 #: po/custom/fromJson.txt:1647
 msgid "Cyborg Lancer"
-msgstr ""
+msgstr "生化人步兵（枪骑兵火箭）"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.CyborgLightBody.name
 #. data/mp/stats/body.json: $.CyborgLightBody.name
 #: po/custom/fromJson.txt:1651
 msgid "Cyborg Light Body"
-msgstr ""
+msgstr "生化人轻型身体"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_CY_LG2.text[0]
@@ -8321,14 +8322,14 @@ msgstr "对敌方建筑进行电子攻击及干扰"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU3.text[3]
 #: po/custom/fromJson.txt:1865
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "精英和老兵等级单位和工厂受到保护"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-EMPCannon.name
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1869
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "电磁脉冲加农炮要塞"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8361,7 +8362,7 @@ msgstr "电磁脉冲迫击炮炮台"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[2]
 #: po/custom/fromJson.txt:1887
 msgid "Enables Hardcrete gates"
-msgstr ""
+msgstr "允许建造硬化混凝土大门"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[2]
@@ -8417,7 +8418,7 @@ msgstr "可使单位进行自行修理"
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1919
 msgid "Enemy"
-msgstr ""
+msgstr "敌人"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -8511,7 +8512,7 @@ msgstr "工厂"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
 #: po/custom/fromJson.txt:1986
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "范围比其他传感器远"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
@@ -8862,7 +8863,8 @@ msgstr "产生并集中激光的能量"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "从钻油井中获得的能源多100%\n"
+"开始时带有防御建筑和钻油井"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8872,7 +8874,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2229
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "从钻油井中获得的能源少25%"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8880,7 +8882,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "从钻油井中获得的能源少25%\n"
+"基本决策更慢"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8889,7 +8892,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "从钻油井中获得的能源少25%\n"
+"不持续进行特定武器分支的研究"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
@@ -8923,7 +8927,7 @@ msgstr "优秀的侦查车辆"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2257
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "生化人步兵（榴弹）"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -9009,13 +9013,13 @@ msgstr "强化外壳的机枪子弹"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2319
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "强化火焰喷射防卫塔"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2322
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "强化重机枪防卫塔"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9070,7 +9074,7 @@ msgstr "可建造装备有暴风级高射炮之要塞"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2353
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "可建造装备有龙卷风级高射炮之要塞"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9554,21 +9558,21 @@ msgstr "重装迫击炮"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2662
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "重型等离子发射器炮台"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2666
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "重型等离子发射器能发射等离子束"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2670
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "重型等离子发射器"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9594,7 +9598,7 @@ msgstr "眼镜蛇重型修理气垫船"
 #. data/mp/stats/weapons.json: $.Rocket-MRL-Hvy.name
 #: po/custom/fromJson.txt:2691
 msgid "Heavy Rocket Array"
-msgstr ""
+msgstr "重型火箭阵列"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9609,7 +9613,7 @@ msgstr "重型火箭堡垒"
 #. data/mp/stats/structure.json: $.Emplacement-MRLHvy-pit.name
 #: po/custom/fromJson.txt:2700
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "重型火箭阵列炮台"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -9623,13 +9627,13 @@ msgstr "重型地对空导弹"
 #. data/base/stats/features.json: $.Heavywepslab.name
 #: po/custom/fromJson.txt:2708
 msgid "Heavyweaponslab"
-msgstr ""
+msgstr "重型武器实验室"
 
 #. TRANSLATORS:
 #. data/mp/stats/propulsion.json: $.Helicopter.name
 #: po/custom/fromJson.txt:2711
 msgid "Helicopter"
-msgstr ""
+msgstr "直升机"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer03-Rot.name
@@ -9642,7 +9646,7 @@ msgstr "地狱风暴"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 #: po/custom/fromJson.txt:2724
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "英雄和特种兵等级单位受保护"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -9690,7 +9694,7 @@ msgstr "高能激光发射极一型"
 #. data/mp/challenges/hidebehind.json: $.challenge.name
 #: po/custom/fromJson.txt:2751
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "躲我后面"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT10.text[1]
@@ -9814,20 +9818,20 @@ msgstr "高张力混凝土与黏土复合墙"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2850
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "高压气体容器"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2853
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "高压气体将火焰凝胶喷射得更远。"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:2861
 msgid "HMG Bunker"
-msgstr ""
+msgstr "重机枪碉堡"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
@@ -9970,7 +9974,7 @@ msgstr "HVAPFSDS加农炮一型"
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2959
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "履带式蟒蛇坦克（高速加农炮）"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -10023,7 +10027,7 @@ msgstr "高速加农炮"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2991
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "超高速尾翼稳定脱壳穿甲弹(HVAPFSDS)"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -10198,7 +10202,7 @@ msgstr "改善激光系统的光学结构使之不易发散"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3112
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "燃烧榴弹炮炮台2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
@@ -10230,7 +10234,7 @@ msgstr "燃烧榴弹炮"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3129
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "燃烧迫击炮阵地2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -10293,7 +10297,7 @@ msgstr "增加建筑速度"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3213
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "增加火焰喷射射程"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10403,7 +10407,7 @@ msgstr "增加火箭系武器射速"
 #. data/base/stats/features.json: $.Indirectlab.name
 #: po/custom/fromJson.txt:3344
 msgid "Indirectweaponslab"
-msgstr ""
+msgstr "非直射型武器实验室"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[1]
@@ -10709,7 +10713,7 @@ msgstr "激光升级"
 #. data/base/stats/features.json: $.Laseropticslab.name
 #: po/custom/fromJson.txt:3526
 msgid "Laseropticslab"
-msgstr ""
+msgstr "激光光学实验室"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.LasSat.name
@@ -10888,7 +10892,7 @@ msgstr "机器伤害 +25% "
 #. data/base/stats/structure.json: $.GuardTower1MG.name
 #: po/custom/fromJson.txt:3642
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "机枪防卫塔"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -10976,7 +10980,7 @@ msgstr "工厂模组可以使之升级"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3727
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "生化人步兵（机械师）"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -11382,7 +11386,7 @@ msgstr "迫击炮"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3981
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "固定机枪"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
@@ -11402,13 +11406,13 @@ msgstr "多管高速发射的机枪"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[1]
 #: po/custom/fromJson.txt:3992
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "必须建造以产生指挥官。"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
 #: po/custom/fromJson.txt:3995
 msgid "Nanolab"
-msgstr ""
+msgstr "纳米实验室"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[3]
@@ -11674,7 +11678,7 @@ msgstr "可使用新系统"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4228
 msgid "New Systems Sensor Available"
-msgstr ""
+msgstr "可建造新的传感器"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
@@ -11740,7 +11744,7 @@ msgstr "NEXUS的重量级车身"
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade04.name
 #: po/custom/fromJson.txt:4283
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "NEXUS免疫系统"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
@@ -11788,7 +11792,7 @@ msgstr "NEXUS的中量级车身"
 #. data/mp/stats/structure.json: $.NX-ANTI-SATSite.name
 #: po/custom/fromJson.txt:4310
 msgid "Nexus Missile Silo"
-msgstr ""
+msgstr "Nexus导弹发射井"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
@@ -11819,13 +11823,13 @@ msgstr "NEXUS钛钢筋墙"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4329
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4332
 msgid "No Place To Hide"
-msgstr ""
+msgstr "无处可藏"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
@@ -11843,7 +11847,7 @@ msgstr "炉火纯青"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
 #: po/custom/fromJson.txt:4341
 msgid "Objects become difficult to locate near it"
-msgstr ""
+msgstr "难以定位近处物体"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ResourceExtractor.name
@@ -11906,13 +11910,13 @@ msgstr "命令指定的非直射武装部队攻击敌军的炮兵部队"
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4388
 msgid "Original Campaign"
-msgstr ""
+msgstr "原版战役"
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4391
 msgid "Original Skirmish"
-msgstr ""
+msgstr "原版遭遇战"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -12129,7 +12133,7 @@ msgstr "强力的电磁脉冲武器"
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4512
 msgid "Powerlab"
-msgstr ""
+msgstr "能源实验室"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -12142,21 +12146,21 @@ msgstr "生产生化人步兵"
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 #: po/custom/fromJson.txt:4529
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "专业和正规军单位受到保护"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 #: po/custom/fromJson.txt:4533
 msgid "Project Heavy Body"
-msgstr ""
+msgstr "Project的重量级车身"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[0]
 #: po/custom/fromJson.txt:4537
 msgid "Project Light Body"
-msgstr ""
+msgstr "Project的轻量级车身"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[0]
@@ -12268,7 +12272,7 @@ msgstr "蟒蛇"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4608
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "四管80mm防空炮"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12281,7 +12285,7 @@ msgstr "导弹自动分配器提供了高速的弹药重装载"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[2]
 #: po/custom/fromJson.txt:4619
 msgid "Radar detector detects enemy sensors"
-msgstr ""
+msgstr "雷达检测器能检测到敌方传感器"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
@@ -12427,7 +12431,7 @@ msgstr "快速击发的轨道炮"
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4702
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "快速装载系统增加武器重新装载弹药的速率"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -12441,7 +12445,7 @@ msgstr "装填速度 +30%"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
 #: po/custom/fromJson.txt:4714
 msgid "Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "减少拾荒者喷火器射程"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -12484,7 +12488,7 @@ msgstr "初级强化建材一型"
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4751
 msgid "Repair Center Turret"
-msgstr ""
+msgstr "修理中心炮塔"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12839,19 +12843,19 @@ msgstr "激光火箭导引系统"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4992
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "火箭快速装载系统二型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4995
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "火箭快速装载系统三型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4998
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "火箭快速装载系统一型"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -12893,7 +12897,7 @@ msgstr "旋转迫击炮-Pepperpot（胡椒瓶）"
 #. data/base/stats/features.json: $.Rotarywepslab.name
 #: po/custom/fromJson.txt:5028
 msgid "Rotaryweaponslab"
-msgstr ""
+msgstr "转管武器实验室"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbTechRuin.name
@@ -12933,7 +12937,7 @@ msgstr "拾荒者碉堡"
 #. data/mp/stats/structure.json: $.A0BaBaVtolFactory.name
 #: po/custom/fromJson.txt:5054
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "拾荒者直升机工厂"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BabaCornerWall.name
@@ -12974,13 +12978,13 @@ msgstr "拾荒者横墙"
 #. data/mp/stats/structure.json: $.bbaatow.name
 #: po/custom/fromJson.txt:5077
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "拾荒者机枪塔"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.bbaawep.name
 #: po/custom/fromJson.txt:5080
 msgid "Scavenger Mounted MG"
-msgstr ""
+msgstr "拾荒者固定机枪"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
@@ -13256,13 +13260,13 @@ msgstr "移动速度比蟒蛇慢"
 #. data/base/stats/features.json: $.WallCornerSmashed.name
 #: po/custom/fromJson.txt:5259
 msgid "Smashedcornerwall"
-msgstr ""
+msgstr "倒塌的角墙"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallSmashed.name
 #: po/custom/fromJson.txt:5262
 msgid "Smashedwall"
-msgstr ""
+msgstr "倒塌的墙"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[2]
@@ -13329,19 +13333,19 @@ msgstr "由建筑物偷取对方的科技，并可控制对方武器"
 #. data/base/stats/structure.json: $.GuardTower3.name
 #: po/custom/fromJson.txt:5299
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "钢铁重机枪防卫塔"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5302
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "装备有喷火器的钢塔"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5305
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "装备有重机枪的钢塔"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13354,13 +13358,13 @@ msgstr "装备有机枪的钢塔"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5312
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "装备有双管机枪的钢塔"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU5.text[3]
 #: po/custom/fromJson.txt:5315
 msgid "Stops NEXUS take-over"
-msgstr ""
+msgstr "完全阻止NEXUS感染"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13420,7 +13424,7 @@ msgstr "森伯斯特级防空"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5353
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "超级生化人步兵（中型加农炮）"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-HPV.name
@@ -13428,13 +13432,13 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5362
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "超级生化人步兵（高速加农炮）"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5370
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "超级生化人步兵（轨道炮）"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -13532,19 +13536,19 @@ msgstr "超热火焰凝胶一型"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5443
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "超热等离子凝胶二型"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5446
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "超热等离子凝胶三型"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5449
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "超热等离子凝胶一型"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -13816,7 +13820,7 @@ msgstr "铝热反应炸弹舱"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5622
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "生化人步兵（铝热剂喷火器）"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -13850,7 +13854,7 @@ msgstr "虎式"
 #. data/mp/messages/resmessagesall.json: $.RES_DF_HCW2.text[1]
 #: po/custom/fromJson.txt:5644
 msgid "Titanium-reinforced concrete gate"
-msgstr ""
+msgstr "钛钢筋强化混凝土大门"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -13998,7 +14002,7 @@ msgstr "口径 7.62mm 双管机枪"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5738
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "双管80mm防空炮"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -14049,7 +14053,7 @@ msgstr "双管机枪防卫塔"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5772
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "双管机枪防卫塔"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -14098,13 +14102,13 @@ msgstr "双管多膛快速击发的机枪"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5800
 msgid "Two-faced"
-msgstr ""
+msgstr "两面夹击"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 #: po/custom/fromJson.txt:5803
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "撤销减少拾荒者喷火器射程"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -14343,7 +14347,7 @@ msgstr "VTOL（突击枪）"
 #. data/mp/stats/structure.json: $.A0BaBaVtolPad.name
 #: po/custom/fromJson.txt:5966
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "拾荒者 VTOL 补给站"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14547,7 +14551,7 @@ msgstr "VTOL（枪骑兵）"
 #. data/mp/stats/weapons.json: $.MG1-VTOL-SCAVS.name
 #: po/custom/fromJson.txt:6087
 msgid "VTOL Machinegun Scav"
-msgstr ""
+msgstr "VTOL（拾荒者机枪）"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG1-VTOL.name
@@ -14560,7 +14564,7 @@ msgstr "VTOL（机枪）"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 #: po/custom/fromJson.txt:6094
 msgid "VTOL Mini-Rocket Scav"
-msgstr ""
+msgstr "VTOL（拾荒者迷你火箭）"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -14711,13 +14715,13 @@ msgstr "垂直起降"
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6202
 msgid "Wall"
-msgstr ""
+msgstr "墙"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
 #: po/custom/fromJson.txt:6205
 msgid "Wallcorner"
-msgstr ""
+msgstr "角墙"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbWarehouse1.name
@@ -14842,7 +14846,7 @@ msgstr "中国龙"
 #: po/custom/fromJson.txt:6278
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "精英"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14862,7 +14866,7 @@ msgstr "青涩"
 #: po/custom/fromJson.txt:6290
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "英雄"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14882,7 +14886,7 @@ msgstr "专家"
 #: po/custom/fromJson.txt:6302
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "正规军"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14902,7 +14906,7 @@ msgstr "菜鸟"
 #: po/custom/fromJson.txt:6314
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "特种兵"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14912,7 +14916,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6320
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "受训者"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14922,7 +14926,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6326
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "老兵"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -14972,7 +14976,7 @@ msgstr "战略游戏"
 #: src/hci/quickchat.cpp:2278
 #: src/hci/quickchat.cpp:2716
 msgid "Global"
-msgstr ""
+msgstr "全局"
 
 #: src/chat.cpp:67
 #: src/chat.cpp:73
@@ -14980,17 +14984,17 @@ msgstr ""
 #: src/hci/quickchat.cpp:2736
 #: src/hci/quickchat.cpp:2748
 msgid "Allies"
-msgstr ""
+msgstr "盟友"
 
 #: src/chat.cpp:75
 #: src/hci/quickchat.cpp:2771
 msgid "private to "
-msgstr ""
+msgstr "私聊至 "
 
 #: src/chat.cpp:86
 #: src/hci/quickchat.cpp:2782
 msgid " and "
-msgstr ""
+msgstr " 和 "
 
 #: src/chat.cpp:173
 #: src/multiint.cpp:3641
@@ -15019,7 +15023,7 @@ msgstr "开发模式现在被禁用"
 #: src/clparse.cpp:166
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
-msgstr ""
+msgstr "用法: %s [选项...]\n"
 
 #: src/clparse.cpp:381
 msgid "Set configuration directory"
@@ -15031,7 +15035,7 @@ msgstr "设定资料夹"
 
 #: src/clparse.cpp:382
 msgid "Add data directory"
-msgstr ""
+msgstr "添加数据目录"
 
 #: src/clparse.cpp:382
 msgid "data directory"
@@ -15039,11 +15043,11 @@ msgstr "资料夹"
 
 #: src/clparse.cpp:383
 msgid "Show debug for given level"
-msgstr ""
+msgstr "显示给定级别的调试"
 
 #: src/clparse.cpp:383
 msgid "debug level"
-msgstr ""
+msgstr "debug level"
 
 #: src/clparse.cpp:384
 msgid "Log debug output to file"
@@ -15055,7 +15059,7 @@ msgstr "档案"
 
 #: src/clparse.cpp:385
 msgid "Flush all debug output written to stderr"
-msgstr ""
+msgstr "刷新写到stderr的所有调试输出"
 
 #: src/clparse.cpp:386
 msgid "Play in fullscreen mode"
@@ -15063,11 +15067,11 @@ msgstr "以全萤幕模式运行"
 
 #: src/clparse.cpp:387
 msgid "Load a specific game mode"
-msgstr ""
+msgstr "加载特定游戏模式"
 
 #: src/clparse.cpp:387
 msgid "level name"
-msgstr ""
+msgstr "level name"
 
 #: src/clparse.cpp:388
 msgid "Show options and exit"
@@ -15081,7 +15085,7 @@ msgstr "开启global mod"
 #: src/clparse.cpp:390
 #: src/clparse.cpp:391
 msgid "mod"
-msgstr ""
+msgstr "mod"
 
 #: src/clparse.cpp:390
 msgid "Enable a campaign only mod"
@@ -15154,7 +15158,7 @@ msgstr "关闭声音"
 
 #: src/clparse.cpp:404
 msgid "Connect directly to IP/hostname"
-msgstr ""
+msgstr "直接连接到IP/主机名"
 
 #: src/clparse.cpp:404
 #: src/clparse.cpp:405
@@ -15163,11 +15167,11 @@ msgstr "主机"
 
 #: src/clparse.cpp:405
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "直接连接到 IP /主机名作为旁观者"
 
 #: src/clparse.cpp:406
 msgid "Go directly to host screen"
-msgstr ""
+msgstr "直接转到主屏幕"
 
 #: src/clparse.cpp:407
 msgid "Enable texture compression"
@@ -15179,19 +15183,19 @@ msgstr "禁用纹理压缩"
 
 #: src/clparse.cpp:409
 msgid "Set gfx backend"
-msgstr ""
+msgstr "设置 gfx 后端"
 
 #: src/clparse.cpp:419
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "使用 gfx 后端调试"
 
 #: src/clparse.cpp:420
 msgid "Set JS backend"
-msgstr ""
+msgstr "设置 JS 后端"
 
 #: src/clparse.cpp:425
 msgid "Run games automatically for testing"
-msgstr ""
+msgstr "自动运行游戏用于测试"
 
 #: src/clparse.cpp:426
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
@@ -15203,7 +15207,7 @@ msgstr "立即保存游戏并退出"
 
 #: src/clparse.cpp:427
 msgid "save name"
-msgstr ""
+msgstr "存档名称"
 
 #: src/clparse.cpp:428
 msgid "Start skirmish game with given settings file"
@@ -15211,7 +15215,7 @@ msgstr "使用给定的设置文件启动遭遇战游戏"
 
 #: src/clparse.cpp:428
 msgid "test"
-msgstr ""
+msgstr "测试"
 
 #: src/clparse.cpp:429
 msgid "Continue the last saved game"
@@ -15223,19 +15227,19 @@ msgstr "使用给定的设置文件启动主机游戏"
 
 #: src/clparse.cpp:430
 msgid "autohost"
-msgstr ""
+msgstr "自动主机"
 
 #: src/clparse.cpp:431
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "作为主机时从给定的服务器URL查询评分"
 
 #: src/clparse.cpp:431
 msgid "autorating"
-msgstr ""
+msgstr "autorating"
 
 #: src/clparse.cpp:433
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "附加或创建控制台窗口并显示控制台输出 (仅适用于Windows)"
 
 #: src/clparse.cpp:435
 msgid "Set game server port"
@@ -15247,11 +15251,11 @@ msgstr "端口"
 
 #: src/clparse.cpp:439
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "启用大厅斜杠命令 (对于所连接的客户端)"
 
 #: src/clparse.cpp:440
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "添加一个大厅管理员身份hash (用于斜杠命令)"
 
 #: src/clparse.cpp:440
 msgid "hash string"
@@ -15259,71 +15263,71 @@ msgstr "哈希字符串"
 
 #: src/clparse.cpp:441
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr ""
+msgstr "添加一个大厅管理员公钥 (用于斜杠命令)"
 
 #: src/clparse.cpp:441
 msgid "b64-pub-key"
-msgstr ""
+msgstr "b64-pub-key"
 
 #: src/clparse.cpp:442
 msgid "Enable command interface"
-msgstr ""
+msgstr "启用命令行界面"
 
 #: src/clparse.cpp:442
 msgid "(stdin, unixsocket:path)"
-msgstr ""
+msgstr "(stdin, unixsocket:path)"
 
 #: src/clparse.cpp:443
 msgid "Minimum required players to auto-start game"
-msgstr ""
+msgstr "自动开始游戏所需最少玩家"
 
 #: src/clparse.cpp:443
 msgid "startplayers"
-msgstr ""
+msgstr "开始玩家数"
 
 #: src/clparse.cpp:444
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "游戏历史记录输出模式"
 
 #: src/clparse.cpp:445
 msgid "Game history log output key"
-msgstr ""
+msgstr "游戏历史日志输出索引"
 
 #: src/clparse.cpp:446
 msgid "Game history log output naming"
-msgstr ""
+msgstr "游戏历史日志输出名称"
 
 #: src/clparse.cpp:447
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "游戏历史记录帧间隔"
 
 #: src/clparse.cpp:447
 msgid "interval in seconds"
-msgstr ""
+msgstr "间隔秒数"
 
 #: src/clparse.cpp:448
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "多人游戏时间限制(分钟)"
 
 #: src/clparse.cpp:448
 msgid "number of minutes"
-msgstr ""
+msgstr "分钟数"
 
 #: src/clparse.cpp:449
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "将 镜面贴图 .png 转换为单通道的灰度 亮度贴图 .png (并退出)"
 
 #: src/clparse.cpp:451
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "允许 Vulkan 隐含图层 (可能因潜在崩溃或 bug而被默认禁用)"
 
 #: src/clparse.cpp:452
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "设置默认主机聊天配置/权限"
 
 #: src/clparse.cpp:453
 msgid "Enable async join approval (for connecting clients)"
-msgstr ""
+msgstr "允许异步加入 (for connecting clients)"
 
 #: src/cmddroid.cpp:121
 msgid "Commander needs a higher level to command more units"
@@ -15411,7 +15415,7 @@ msgstr "需要能源"
 
 #: src/design.cpp:1365
 msgid "Hydra "
-msgstr ""
+msgstr "多炮塔 "
 
 #: src/design.cpp:1520
 #: src/design.cpp:1535
@@ -15421,7 +15425,7 @@ msgstr "雷达可视距离"
 #: src/design.cpp:1555
 #: src/design.cpp:1566
 msgid "ECM Power"
-msgstr ""
+msgstr "电子对抗功率"
 
 #: src/design.cpp:1585
 #: src/design.cpp:1597
@@ -15493,12 +15497,12 @@ msgstr "%s - 耐久度 %d/%d - 经验 %.1f, %s, 杀敌 %d"
 #: src/display.cpp:1624
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - HP %d/%d - ID %d - %s"
 
 #: src/display.cpp:1640
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(敌人！) %s - HP %d/%d - ID %d - 经验 %f, %s - 命令 %s - 动作 %s - 传感器范围 %d - 电子对抗 %d - 仰角 %.0f"
 
 #: src/display.cpp:1784
 #, c-format
@@ -15509,7 +15513,7 @@ msgstr "%s - 盟军 - 耐久度 - %d/%d - 经验 %d, %s"
 #: src/display.cpp:1808
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(敌人!) %s, 索引: %d, ID: %d HP: %d/%d"
 
 #: src/display3d.cpp:938
 msgid "Player left"
@@ -15531,13 +15535,13 @@ msgstr "不同步"
 #: src/display3d.cpp:2336
 #, c-format
 msgid "Setting zoom to %.0f"
-msgstr ""
+msgstr "设置缩放为 %.0f"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:329
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "%s 已损失！"
 
 #: src/droid.cpp:1203
 msgid "Structure Restored"
@@ -15566,7 +15570,7 @@ msgstr[0] "共 %u 单位 被指派为 第 %u 队"
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] ""
+msgstr[0] "%u 单位已从其组中移除"
 
 #: src/droid.cpp:2105
 #, c-format
@@ -15582,7 +15586,7 @@ msgstr[0] "Aligning with Group %u - %u 单位"
 
 #: src/droid.cpp:3218
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "单位传输失败 -- 超出单位限制"
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:212
@@ -15595,20 +15599,20 @@ msgstr "普通"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:215
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:218
 msgid "Collective"
-msgstr ""
+msgstr "Collective"
 
 #: src/frontend.cpp:187
 msgid "Campaign videos are missing"
-msgstr ""
+msgstr "缺少战役视频"
 
 #: src/frontend.cpp:188
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "查看我们关于如何安装视频的常见问题"
 
 #: src/frontend.cpp:213
 msgid "Single Player"
@@ -15644,7 +15648,7 @@ msgstr "载入最近存档"
 
 #: src/frontend.cpp:238
 msgid "No last save available"
-msgstr ""
+msgstr "无可用最近存档"
 
 #: src/frontend.cpp:240
 msgid "Quit Game"
@@ -15777,11 +15781,11 @@ msgstr "查看回放"
 #: src/frontend.cpp:632
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP 端口 %d 必须在您的防火墙或路由器中打开才能主持游戏！"
 
 #: src/frontend.cpp:678
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "加载多人游戏回放"
 
 #: src/frontend.cpp:732
 msgid "Game Options"
@@ -15818,7 +15822,7 @@ msgstr "音乐选项"
 
 #: src/frontend.cpp:739
 msgid "Multiplay Options"
-msgstr ""
+msgstr "多人游戏选项"
 
 #: src/frontend.cpp:744
 #: src/multiint.cpp:1353
@@ -15827,35 +15831,35 @@ msgstr "选项"
 
 #: src/frontend.cpp:746
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "打开配置目录"
 
 #: src/frontend.cpp:787
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "使用系统默认文件浏览器打开配置目录失败。"
 
 #: src/frontend.cpp:789
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "配置目录为："
 
 #: src/frontend.cpp:793
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "如果在容器/孤立环境中运行，这可能不同于磁盘上的实际路径。"
 
 #: src/frontend.cpp:795
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "关于如何手动定位的更多信息，请参阅文档。"
 
 #: src/frontend.cpp:796
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "打开配置目录失败"
 
 #: src/frontend.cpp:818
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:819
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:820
 #: src/frontend.cpp:1899
@@ -15894,7 +15898,7 @@ msgstr "关闭"
 
 #: src/frontend.cpp:830
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:831
 #: src/multiplay.cpp:2326
@@ -15927,51 +15931,51 @@ msgstr "已修复"
 
 #: src/frontend.cpp:868
 msgid "Instant"
-msgstr ""
+msgstr "立即"
 
 #: src/frontend.cpp:868
 msgid "Tracked"
-msgstr ""
+msgstr "跟踪"
 
 #: src/frontend.cpp:874
 #: src/frontend.cpp:1025
 #: src/frontend.cpp:1085
 #: src/terrain.cpp:2576
 msgid "High"
-msgstr ""
+msgstr "高"
 
 #: src/frontend.cpp:875
 msgid "Default"
-msgstr ""
+msgstr "默认"
 
 #: src/frontend.cpp:947
 #: src/frontend.cpp:1000
 msgid "Terrain quality mode not available."
-msgstr ""
+msgstr "高质量地形模式不可用。"
 
 #: src/frontend.cpp:975
 msgid "Medium Quality"
-msgstr ""
+msgstr "中等画质"
 
 #: src/frontend.cpp:976
 msgid "High Quality"
-msgstr ""
+msgstr "高画质"
 
 #: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
-msgstr ""
+msgstr "阴影贴图在此系统上不可用。"
 
 #: src/frontend.cpp:1084
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 #: src/frontend.cpp:1086
 msgid "Ultra"
-msgstr ""
+msgstr "最高"
 
 #: src/frontend.cpp:1116
 msgid "Shadow filtering not available on this system."
-msgstr ""
+msgstr "阴影过滤在此系统上不可用。"
 
 #: src/frontend.cpp:1158
 #: src/frontend.cpp:2141
@@ -15980,11 +15984,11 @@ msgstr "*重启游戏后生效"
 
 #: src/frontend.cpp:1165
 msgid "Terrain Quality"
-msgstr ""
+msgstr "地形质量"
 
 #: src/frontend.cpp:1170
 msgid "Terrain Shading"
-msgstr ""
+msgstr "地形阴影"
 
 #: src/frontend.cpp:1176
 #: src/ingameop.cpp:629
@@ -15993,20 +15997,20 @@ msgstr "影子"
 
 #: src/frontend.cpp:1185
 msgid "Shadow Resolution"
-msgstr ""
+msgstr "阴影分辨率"
 
 #: src/frontend.cpp:1190
 msgid "Shadow Filtering"
-msgstr ""
+msgstr "阴影过滤"
 
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 #: src/frontend.cpp:1197
 msgid "LOD Distance"
-msgstr ""
+msgstr "LOD距离"
 
 #: src/frontend.cpp:1204
 msgid "Fog"
-msgstr ""
+msgstr "雾"
 
 #: src/frontend.cpp:1209
 #: src/ingameop.cpp:634
@@ -16017,7 +16021,7 @@ msgstr "雷达"
 #: src/frontend.cpp:1214
 #: src/ingameop.cpp:639
 msgid "Radar Jump"
-msgstr ""
+msgstr "雷达跳转"
 
 #: src/frontend.cpp:1220
 #: src/ingameop.cpp:644
@@ -16031,12 +16035,12 @@ msgstr "扫描线"
 
 #: src/frontend.cpp:1230
 msgid "Screen Shake"
-msgstr ""
+msgstr "屏幕晃动"
 
 #: src/frontend.cpp:1235
 #: src/ingameop.cpp:659
 msgid "Groups Menu"
-msgstr ""
+msgstr "分组菜单"
 
 #: src/frontend.cpp:1247
 msgid "GRAPHICS OPTIONS"
@@ -16044,17 +16048,17 @@ msgstr "图形选项"
 
 #: src/frontend.cpp:1362
 msgid "Disabled"
-msgstr ""
+msgstr "禁用"
 
 #: src/frontend.cpp:1365
 msgid "Enabled"
-msgstr ""
+msgstr "启用"
 
 #: src/frontend.cpp:1369
 #: src/frontend.cpp:1375
 #: src/frontend.cpp:2022
 msgid "Auto"
-msgstr ""
+msgstr "自动"
 
 #: src/frontend.cpp:1420
 #: src/ingameop.cpp:151
@@ -16078,12 +16082,12 @@ msgstr "字幕"
 
 #: src/frontend.cpp:1441
 msgid "HRTF"
-msgstr ""
+msgstr "HRTF"
 
 #: src/frontend.cpp:1447
 #: src/frontend.cpp:1449
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "您的设备 / 系统 / OpenAL 库不支持 HRTF"
 
 #: src/frontend.cpp:1453
 msgid "Map Zoom"
@@ -16091,7 +16095,7 @@ msgstr "地图缩放"
 
 #: src/frontend.cpp:1458
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "地图缩放率"
 
 #: src/frontend.cpp:1463
 msgid "Radar Zoom"
@@ -16108,11 +16112,12 @@ msgstr "音频/缩放选项"
 #: src/frontend.cpp:1594
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "在桌面全屏模式下，分辨率匹配您的桌面大小\n"
+"(或窗口管理器允许的大小)。"
 
 #: src/frontend.cpp:1596
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "您可以通过正常调整窗口大小更改分辨率。(尝试拖动一个角/边)"
 
 #: src/frontend.cpp:1635
 msgid "Graphics Mode"
@@ -16128,7 +16133,7 @@ msgstr "缩放比例"
 
 #: src/frontend.cpp:1673
 msgid "Adaptive"
-msgstr ""
+msgstr "自适应"
 
 #: src/frontend.cpp:1897
 msgid "Windowed"
@@ -16137,11 +16142,11 @@ msgstr "视窗模式"
 #: src/frontend.cpp:1898
 #: src/frontend.cpp:2066
 msgid "Desktop Full"
-msgstr ""
+msgstr "全桌面"
 
 #: src/frontend.cpp:2024
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "开(全屏)"
 
 #: src/frontend.cpp:2174
 msgid "Texture size"
@@ -16158,7 +16163,7 @@ msgstr "抗锯齿*"
 
 #: src/frontend.cpp:2192
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "警告：抗锯齿可能导致崩溃，特别是值>16时"
 
 #: src/frontend.cpp:2205
 msgid "Graphics Backend*"
@@ -16168,11 +16173,11 @@ msgstr "图形后端*"
 #. An option describing when / whether WZ will auto-minimize the window when it loses focus.
 #: src/frontend.cpp:2213
 msgid "Min on Focus Loss"
-msgstr ""
+msgstr "在失去焦点时最小化"
 
 #: src/frontend.cpp:2214
 msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
+msgstr "失去焦点时是否自动最小化窗口"
 
 #. TRANSLATORS: The fullscreen mode used when toggling with keys: Alt + Enter
 #: src/frontend.cpp:2224
@@ -16241,7 +16246,7 @@ msgstr "鼠标选项"
 #: src/frontend.cpp:2604
 #: src/multiint.cpp:270
 msgid "Super Easy"
-msgstr ""
+msgstr "超级简单"
 
 #: src/frontend.cpp:2605
 #: src/multiint.cpp:270
@@ -16304,96 +16309,96 @@ msgstr "镜头速度"
 #: src/frontend.cpp:2983
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "帮助我们改进Warzone 2100的翻译： %s"
 
 #: src/frontend.cpp:2985
 msgid "Click to open webpage."
-msgstr ""
+msgstr "点击打开网页。"
 
 #: src/frontend.cpp:3014
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "疯狂难度"
 
 #: src/frontend.cpp:3015
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "这个难度仅适合经验丰富的玩家！"
 
 #: src/frontend.cpp:3113
 #: src/frontend.cpp:3170
 #, c-format
 msgid "%u minutes"
-msgstr ""
+msgstr "%u 分钟"
 
 #: src/frontend.cpp:3166
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s 小时"
 
 #: src/frontend.cpp:3227
 #: src/frontend.cpp:3235
 #, c-format
 msgid "%u seconds"
-msgstr ""
+msgstr "%u 秒"
 
 #: src/frontend.cpp:3266
 msgid "None"
-msgstr ""
+msgstr "无"
 
 #: src/frontend.cpp:3301
 msgid "Distribute to Team"
-msgstr ""
+msgstr "分给队伍"
 
 #: src/frontend.cpp:3302
 msgid "Destroy (Classic)"
-msgstr ""
+msgstr "摧毁(传统)"
 
 #: src/frontend.cpp:3346
 msgid "Allow All"
-msgstr ""
+msgstr "允许全部"
 
 #: src/frontend.cpp:3346
 msgid "Quick Chat Only"
-msgstr ""
+msgstr "仅快速聊天"
 
 #: src/frontend.cpp:3363
 msgid "Hosting Options:"
-msgstr ""
+msgstr "主机选项:"
 
 #: src/frontend.cpp:3367
 msgid "Game Port"
-msgstr ""
+msgstr "游戏端口"
 
 #: src/frontend.cpp:3372
 msgid "Enable UPnP"
-msgstr ""
+msgstr "启用 UPnP"
 
 #: src/frontend.cpp:3377
 msgid "Chat"
-msgstr ""
+msgstr "聊天"
 
 #: src/frontend.cpp:3382
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "无操作超时"
 
 #: src/frontend.cpp:3387
 msgid "Lag Kick"
-msgstr ""
+msgstr "踢出延迟玩家"
 
 #: src/frontend.cpp:3392
 msgid "Spectator Slots"
-msgstr ""
+msgstr "旁观者槽位"
 
 #: src/frontend.cpp:3397
 msgid "On Player Leave"
-msgstr ""
+msgstr "当玩家离开时"
 
 #: src/frontend.cpp:3402
 msgid "Game Time Limit"
-msgstr ""
+msgstr "游戏时间限制"
 
 #: src/frontend.cpp:3407
 msgid "Enable Rating"
-msgstr ""
+msgstr "启用评分"
 
 #: src/frontend.cpp:3422
 msgid "MULTIPLAY OPTIONS"
@@ -16406,54 +16411,54 @@ msgstr "Mod："
 
 #: src/frontend.cpp:4016
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "增加游戏显示比例？"
 
 #: src/frontend.cpp:4018
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "在当前的分辨率和显示比例设置下，游戏的用户界面可能过小，游戏视图可能会显示失真。"
 
 #: src/frontend.cpp:4020
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "您可以通过增加游戏显示比例设置来修复这个问题。"
 
 #: src/frontend.cpp:4022
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "您想要将游戏的显示比例增加到: %u%% 吗？"
 
 #: src/frontend.cpp:4024
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "增加显示比例？"
 
 #: src/frontend.cpp:4041
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "显示比例增加到: %u%%"
 
 #: src/frontend.cpp:4042
 #: src/frontend.cpp:4058
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "您可以随时在显示选项菜单中调整显示缩放。"
 
 #: src/frontend.cpp:4057
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "提示：调整显示比例"
 
 #: src/hci.cpp:729
 msgid "Replay"
-msgstr ""
+msgstr "回放"
 
 #: src/hci.cpp:744
 msgid "Pause"
-msgstr ""
+msgstr "暂停"
 
 #: src/hci.cpp:759
 msgid "Resume"
-msgstr ""
+msgstr "继续"
 
 #: src/hci.cpp:776
 msgid "Fast-Forward"
-msgstr ""
+msgstr "快进"
 
 #: src/hci.cpp:1355
 #: src/loop.cpp:257
@@ -16496,7 +16501,7 @@ msgstr "显示过时科技"
 #: src/hci.cpp:2405
 #, c-format
 msgid "Cost: %u"
-msgstr ""
+msgstr "成本: %u"
 
 #: src/hci/build.cpp:312
 msgid "Build Progress"
@@ -16505,105 +16510,107 @@ msgstr "建设进展"
 #: src/hci/build.cpp:613
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "显示所有技术\n"
+"右键添加到收藏"
 
 #: src/hci/build.cpp:615
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "只显示已收藏技术\n"
+"右键从收藏中移除"
 
 #: src/hci/chatoptions.cpp:434
 msgid "New Joins"
-msgstr ""
+msgstr "新加入玩家"
 
 #: src/hci/chatoptions.cpp:1196
 msgid "Refresh"
-msgstr ""
+msgstr "刷新"
 
 #: src/hci/chatoptions.cpp:1214
 msgid "Host Chat Options"
-msgstr ""
+msgstr "主机聊天选项"
 
 #: src/hci/chatoptions.cpp:1223
 msgid "Global Options:"
-msgstr ""
+msgstr "全局选项："
 
 #: src/hci/chatoptions.cpp:1229
 msgid "Enable All"
-msgstr ""
+msgstr "全部启用"
 
 #: src/hci/chatoptions.cpp:1237
 msgid "Disable All"
-msgstr ""
+msgstr "全部禁用"
 
 #: src/hci/chatoptions.cpp:1256
 #: src/multiint.cpp:4908
 #: src/screens/chatscreen.cpp:394
 msgid "Chat Options"
-msgstr ""
+msgstr "聊天选项"
 
 #: src/hci/chatoptions.cpp:1264
 msgid "Mute or configure player free chat."
-msgstr ""
+msgstr "禁止或设置玩家自由聊天。"
 
 #: src/hci/chatoptions.cpp:1273
 msgid "The host has globally muted 1+ players."
-msgstr ""
+msgstr "主机已全局禁言了 1+ 玩家。"
 
 #: src/hci/chatoptions.cpp:1286
 msgid "Local"
-msgstr ""
+msgstr "本地"
 
 #: src/hci/groups.cpp:141
 msgid "Select / Assign Group Number: "
-msgstr ""
+msgstr "选择/分配组编号： "
 
 #: src/hci/groups.cpp:144
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "组 %u"
 
 #: src/hci/groups.cpp:145
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "选择组 %u 中的单位"
 
 #: src/hci/groups.cpp:146
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "分配单位至组 %u"
 
 #: src/hci/groups.cpp:147
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "通过点击或双击将相机居中至该组"
 
 #: src/hci/groups.cpp:257
 msgid "View and configure groups of units, which can be quickly selected and ordered."
-msgstr ""
+msgstr "查看和配置单位分组，以便快速选择和下指令。"
 
 #: src/hci/groups.cpp:259
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
-msgstr ""
+msgstr "当单位损失(或严重受损) 时，组按钮将变红"
 
 #: src/hci/groups.cpp:261
 msgid "Unit Groups"
-msgstr ""
+msgstr "单位分组"
 
 #: src/hci/groups.cpp:263
 msgid "Select a Group"
-msgstr ""
+msgstr "选择一个组"
 
 #: src/hci/groups.cpp:264
 msgid "Assign Selected Units to a Group"
-msgstr ""
+msgstr "分配单位至组"
 
 #: src/hci/groups.cpp:265
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
-msgstr ""
+msgstr "通过点击或双击组按钮将相机居中至该组"
 
 #: src/hci/groups.cpp:359
 msgid "Unit Groups:"
-msgstr ""
+msgstr "单位分组:"
 
 #: src/hci/manufacture.cpp:431
 msgid "Construction Progress"
@@ -16623,11 +16630,11 @@ msgstr "进度条"
 
 #: src/hci/quickchat.cpp:899
 msgid "To:"
-msgstr ""
+msgstr "至:"
 
 #: src/hci/quickchat.cpp:998
 msgid "All"
-msgstr ""
+msgstr "所有人"
 
 #: src/hci/quickchat.cpp:1007
 #: src/hci/quickchat.cpp:1017
@@ -16640,372 +16647,372 @@ msgstr "队伍"
 #: src/hci/quickchat.cpp:1021
 #: src/hci/quickchat.cpp:1228
 msgid "Human Teammates"
-msgstr ""
+msgstr "人类队友"
 
 #: src/hci/quickchat.cpp:1036
 #: src/hci/quickchat.cpp:1260
 msgid "Bot Teammates"
-msgstr ""
+msgstr "电脑队友"
 
 #: src/hci/quickchat.cpp:1060
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u 玩家"
 
 #: src/hci/quickchat.cpp:1065
 msgid "Choose a recipient"
-msgstr ""
+msgstr "选择接受者"
 
 #: src/hci/quickchat.cpp:2104
 msgid "Quick Chat:"
-msgstr ""
+msgstr "快速聊天："
 
 #: src/hci/quickchat.cpp:2170
 msgid "Lobby Chat"
-msgstr ""
+msgstr "大厅聊天"
 
 #: src/hci/quickchat.cpp:2172
 #: src/hci/quickchat.cpp:2280
 msgid "Requests"
-msgstr ""
+msgstr "请求"
 
 #: src/hci/quickchat.cpp:2182
 #: src/hci/quickchat.cpp:2286
 #: src/hci/quickchat.cpp:2338
 msgid "Notices"
-msgstr ""
+msgstr "提示"
 
 #: src/hci/quickchat.cpp:2190
 #: src/hci/quickchat.cpp:2301
 #: src/hci/quickchat.cpp:2367
 #: src/hci/quickchat.cpp:2405
 msgid "Reactions"
-msgstr ""
+msgstr "反应"
 
 #: src/hci/quickchat.cpp:2294
 msgid "Taunts"
-msgstr ""
+msgstr "嘲讽"
 
 #: src/hci/quickchat.cpp:2322
 msgid "Coordination"
-msgstr ""
+msgstr "合作"
 
 #: src/hci/quickchat.cpp:2353
 msgid "Suggestions"
-msgstr ""
+msgstr "建议"
 
 #: src/hci/quickchat.cpp:2393
 msgid "Cheats"
-msgstr ""
+msgstr "作弊"
 
 #: src/hci/quickchat.cpp:2402
 msgid "End-Game"
-msgstr ""
+msgstr "结束游戏"
 
 #: src/hci/quickchat.cpp:2423
 msgid "Can someone please transfer me some units?"
-msgstr ""
+msgstr "有人能给我一些单位吗？"
 
 #: src/hci/quickchat.cpp:2425
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr ""
+msgstr "有人能给我卡车吗？"
 
 #: src/hci/quickchat.cpp:2427
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "对不起，我不明白。(请使用快速聊天？)"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2432
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "我建议：造更多单位"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2435
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "我建议：造不同的单位"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2438
 msgid "I suggest: Checking the team strategy view"
-msgstr ""
+msgstr "我建议：检查队伍策略"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2441
 msgid "I suggest: Researching different tech"
-msgstr ""
+msgstr "我建议：研究不同的技术"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2444
 msgid "I suggest: Keeping research centers busy"
-msgstr ""
+msgstr "我建议：保持研发中心使用率"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2447
 msgid "I suggest: Building anti-air"
-msgstr ""
+msgstr "我建议：建造防空"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2450
 msgid "I suggest: Repairing your units"
-msgstr ""
+msgstr "我建议：去维修单位"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2453
 msgid "I suggest: Building repair facilities"
-msgstr ""
+msgstr "我建议：建造修理设施"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2456
 msgid "I suggest: Building power generators"
-msgstr ""
+msgstr "我建议：建造发电厂"
 
 #. TRANSLATORS: A suggestion to other player(s)
 #: src/hci/quickchat.cpp:2459
 msgid "I suggest: Capturing oil resources"
-msgstr ""
+msgstr "我建议：夺取石油资源"
 
 #: src/hci/quickchat.cpp:2472
 msgid "Hey everyone!"
-msgstr ""
+msgstr "大家好！"
 
 #: src/hci/quickchat.cpp:2474
 msgid "Welcome!"
-msgstr ""
+msgstr "欢迎！"
 
 #: src/hci/quickchat.cpp:2476
 msgid "I want to spectate"
-msgstr ""
+msgstr "我想旁观"
 
 #: src/hci/quickchat.cpp:2478
 msgid "I want to play"
-msgstr ""
+msgstr "我想玩"
 
 #: src/hci/quickchat.cpp:2480
 msgid "I want to switch teams"
-msgstr ""
+msgstr "我想换队伍"
 
 #: src/hci/quickchat.cpp:2482
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "请点击准备就绪，开始游戏"
 
 #: src/hci/quickchat.cpp:2487
 msgid "Please wait"
-msgstr ""
+msgstr "请稍等"
 
 #: src/hci/quickchat.cpp:2489
 msgid "Let's go!"
-msgstr ""
+msgstr "让我们开始吧！"
 
 #. TRANSLATORS: As in "I am almost ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2493
 msgid "Almost ready"
-msgstr ""
+msgstr "快好了"
 
 #. TRANSLATORS: As in "I am ready" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2496
 msgid "Ready"
-msgstr ""
+msgstr "准备"
 
 #: src/hci/quickchat.cpp:2498
 msgid "Be right back"
-msgstr ""
+msgstr "马上回来"
 
 #: src/hci/quickchat.cpp:2500
 msgid "I'm back"
-msgstr ""
+msgstr "我回来了"
 
 #: src/hci/quickchat.cpp:2503
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 #: src/hci/quickchat.cpp:2505
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: src/hci/quickchat.cpp:2507
 msgid "Maybe"
-msgstr ""
+msgstr "不确定"
 
 #: src/hci/quickchat.cpp:2509
 msgid "Not yet"
-msgstr ""
+msgstr "还不行"
 
 #: src/hci/quickchat.cpp:2511
 msgid "Soon"
-msgstr ""
+msgstr "快了"
 
 #: src/hci/quickchat.cpp:2513
 msgid "Thank you"
-msgstr ""
+msgstr "谢谢你"
 
 #: src/hci/quickchat.cpp:2515
 msgid "No problem"
-msgstr ""
+msgstr "没问题"
 
 #: src/hci/quickchat.cpp:2519
 msgid "Well-played"
-msgstr ""
+msgstr "干的漂亮"
 
 #. TRANSLATORS: Should probably be left as-is, unless there is a better way of denoting a censored outburst in your language
 #: src/hci/quickchat.cpp:2522
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 #: src/hci/quickchat.cpp:2524
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "对不起，我不明白。(使用快速聊天？)"
 
 #: src/hci/quickchat.cpp:2528
 msgid "Get ready..."
-msgstr ""
+msgstr "看好了..."
 
 #: src/hci/quickchat.cpp:2530
 msgid "You're going to regret that"
-msgstr ""
+msgstr "你会后悔的"
 
 #: src/hci/quickchat.cpp:2532
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "太弱了！"
 
 #: src/hci/quickchat.cpp:2536
 msgid "Attack now?"
-msgstr ""
+msgstr "现在攻击吗？"
 
 #: src/hci/quickchat.cpp:2538
 msgid "Group up"
-msgstr ""
+msgstr "一起上"
 
 #: src/hci/quickchat.cpp:2540
 msgid "Split up"
-msgstr ""
+msgstr "分头行事"
 
 #: src/hci/quickchat.cpp:2542
 msgid "Focus attacks where marked"
-msgstr ""
+msgstr "攻击标记位置"
 
 #: src/hci/quickchat.cpp:2544
 msgid "Retreat!"
-msgstr ""
+msgstr "撤退!"
 
 #: src/hci/quickchat.cpp:2546
 msgid "I need help!"
-msgstr ""
+msgstr "我需要帮助！"
 
 #: src/hci/quickchat.cpp:2548
 msgid "Left side"
-msgstr ""
+msgstr "左边"
 
 #: src/hci/quickchat.cpp:2550
 msgid "Right side"
-msgstr ""
+msgstr "右边"
 
 #: src/hci/quickchat.cpp:2552
 msgid "Transfer Request: Units"
-msgstr ""
+msgstr "传输请求：单位"
 
 #: src/hci/quickchat.cpp:2554
 msgid "Transfer Request: Trucks"
-msgstr ""
+msgstr "传输请求：卡车"
 
 #. TRANSLATORS: As in "I am attacking now!" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2558
 msgid "Attacking now!"
-msgstr ""
+msgstr "现在攻击！"
 
 #. TRANSLATORS: As in "I am on my way!" (but shorter, more informal)
 #: src/hci/quickchat.cpp:2561
 msgid "On my way!"
-msgstr ""
+msgstr "我来了！"
 
 #: src/hci/quickchat.cpp:2563
 msgid "They're coming!"
-msgstr ""
+msgstr "他们过来了！"
 
 #: src/hci/quickchat.cpp:2565
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "我正遭到攻击！"
 
 #: src/hci/quickchat.cpp:2567
 msgid "I'm rushing oils"
-msgstr ""
+msgstr "我去摧毁钻油井"
 
 #: src/hci/quickchat.cpp:2569
 msgid "They're rushing oils!"
-msgstr ""
+msgstr "他们正在摧毁钻油井！"
 
 #: src/hci/quickchat.cpp:2571
 msgid "I don't have enough power"
-msgstr ""
+msgstr "我的能源不够"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2575
 msgid "Build more units"
-msgstr ""
+msgstr "生产更多单位"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2578
 msgid "Build different units"
-msgstr ""
+msgstr "生产不同的单位"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2581
 msgid "Check team strategy view"
-msgstr ""
+msgstr "检查队伍策略"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2584
 msgid "Research different tech"
-msgstr ""
+msgstr "研究不同的技术"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2587
 msgid "Keep research centers busy"
-msgstr ""
+msgstr "保持研究中心使用"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2590
 msgid "Build anti-air"
-msgstr ""
+msgstr "建造防空"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2593
 msgid "Repair your units"
-msgstr ""
+msgstr "维修你的单位"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2596
 msgid "Build repair facilities"
-msgstr ""
+msgstr "建造修理设施"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2599
 msgid "Build power generators"
-msgstr ""
+msgstr "建造发电厂"
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
 #: src/hci/quickchat.cpp:2602
 msgid "Capture oil resources"
-msgstr ""
+msgstr "夺取石油资源"
 
 #: src/hci/quickchat.cpp:2606
 msgid "That didn't go well..."
-msgstr ""
+msgstr "那不太好..."
 
 #: src/hci/quickchat.cpp:2608
 msgid "I have another plan"
-msgstr ""
+msgstr "我有另一个计划"
 
 #: src/hci/quickchat.cpp:2612
 msgid "Good game"
-msgstr ""
+msgstr "好游戏"
 
 #: src/hci/quickchat.cpp:2614
 msgid "I give up"
-msgstr ""
+msgstr "我投降"
 
 #: src/hci/quickchat.cpp:2616
 msgid "Sorry, I have to leave"
-msgstr ""
+msgstr "抱歉，我得走了"
 
 #: src/hci/quickchat.cpp:2620
 msgid "Message delivery failure - try again"
@@ -17013,19 +17020,19 @@ msgstr "消息发送失败 - 请重试"
 
 #: src/hci/quickchat.cpp:2622
 msgid "Map Downloaded"
-msgstr ""
+msgstr "地图已下载"
 
 #: src/hci/quickchat.cpp:2732
 msgid "Bot Allies"
-msgstr ""
+msgstr "电脑盟友"
 
 #: src/hci/quickchat.cpp:2744
 msgid "Human Allies"
-msgstr ""
+msgstr "人类盟友"
 
 #: src/hci/quickchat.cpp:2814
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr ""
+msgstr "您在过去几秒内发送了太多消息。请稍候，然后重试。"
 
 #: src/hci/research.cpp:443
 msgid "Research Progress"
@@ -17037,27 +17044,27 @@ msgstr "盟友进程"
 
 #: src/hci/teamstrategy.cpp:90
 msgid "Tanks"
-msgstr ""
+msgstr "坦克"
 
 #: src/hci/teamstrategy.cpp:94
 msgid "Cyborgs"
-msgstr ""
+msgstr "生化人"
 
 #: src/hci/teamstrategy.cpp:827
 msgid "No teammates."
-msgstr ""
+msgstr "没有队友。"
 
 #: src/hci/teamstrategy.cpp:831
 msgid "Waiting for other teams to finish planning."
-msgstr ""
+msgstr "正在等待其他队伍完成计划。"
 
 #: src/hci/teamstrategy.cpp:949
 msgid "Weapons:"
-msgstr ""
+msgstr "武器："
 
 #: src/hci/teamstrategy.cpp:966
 msgid "Units:"
-msgstr ""
+msgstr "单位："
 
 #: src/ingameop.cpp:114
 #: src/ingameop.cpp:191
@@ -17098,7 +17105,7 @@ msgstr "战术界面（原始目标图标）：隐藏"
 #: src/keyedit.cpp:597
 #: src/musicmanager.cpp:783
 msgid "Go Back"
-msgstr ""
+msgstr "返回"
 
 #: src/ingameop.cpp:248
 #: src/ingameop.cpp:257
@@ -17117,19 +17124,19 @@ msgstr "退出"
 
 #: src/ingameop.cpp:313
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "警告： 您确定吗？"
 
 #: src/ingameop.cpp:317
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "警告：您确定吗？任何未保存的进度都会丢失。"
 
 #: src/ingameop.cpp:325
 msgid "Confirm"
-msgstr ""
+msgstr "确认"
 
 #: src/ingameop.cpp:327
 msgid "Back"
-msgstr ""
+msgstr "返回"
 
 #: src/ingameop.cpp:406
 msgid "Host has quit the game!"
@@ -17149,11 +17156,11 @@ msgstr "音效选项"
 
 #: src/ingameop.cpp:597
 msgid "View Key Mappings"
-msgstr ""
+msgstr "查看键盘配置"
 
 #: src/ingameop.cpp:654
 msgid "Shake"
-msgstr ""
+msgstr "摇晃"
 
 #: src/ingameop.cpp:1050
 msgid "Save Campaign Game"
@@ -17180,19 +17187,19 @@ msgstr "其他热键"
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
-msgstr ""
+msgstr "游戏"
 
 #: src/input/context.cpp:58
 msgid "Debug"
-msgstr ""
+msgstr "调试"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "调试 (关卡编辑器)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "调试 (选择)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -17230,7 +17237,7 @@ msgstr "开启或关闭雷达"
 #: src/input/keyconfig.cpp:47
 #: src/keybind.cpp:2608
 msgid "QuickLoad"
-msgstr ""
+msgstr "快速加载"
 
 #: src/input/keyconfig.cpp:48
 msgid "Toggle Console Display"
@@ -17298,47 +17305,47 @@ msgstr "指定为第队"
 
 #: src/input/keyconfig.cpp:66
 msgid "Add to Group 0"
-msgstr ""
+msgstr "添加到组 0"
 
 #: src/input/keyconfig.cpp:67
 msgid "Add to Group 1"
-msgstr ""
+msgstr "添加到组 1"
 
 #: src/input/keyconfig.cpp:68
 msgid "Add to Group 2"
-msgstr ""
+msgstr "添加到组 2"
 
 #: src/input/keyconfig.cpp:69
 msgid "Add to Group 3"
-msgstr ""
+msgstr "添加到组 3"
 
 #: src/input/keyconfig.cpp:70
 msgid "Add to Group 4"
-msgstr ""
+msgstr "添加到组 4"
 
 #: src/input/keyconfig.cpp:71
 msgid "Add to Group 5"
-msgstr ""
+msgstr "添加到组 5"
 
 #: src/input/keyconfig.cpp:72
 msgid "Add to Group 6"
-msgstr ""
+msgstr "添加到组 6"
 
 #: src/input/keyconfig.cpp:73
 msgid "Add to Group 7"
-msgstr ""
+msgstr "添加到组 7"
 
 #: src/input/keyconfig.cpp:74
 msgid "Add to Group 8"
-msgstr ""
+msgstr "添加到组 8"
 
 #: src/input/keyconfig.cpp:75
 msgid "Add to Group 9"
-msgstr ""
+msgstr "添加到组 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Remove from current Group"
-msgstr ""
+msgstr "从当前组移除"
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 0"
@@ -17442,7 +17449,7 @@ msgstr "镜头左移"
 
 #: src/input/keyconfig.cpp:108
 msgid "Snap View to North"
-msgstr ""
+msgstr "吸附视图到北方"
 
 #: src/input/keyconfig.cpp:109
 msgid "Toggle Tracking Camera"
@@ -17546,19 +17553,19 @@ msgstr "开启或关闭叠层显示"
 
 #: src/input/keyconfig.cpp:134
 msgid "Toggle Console History "
-msgstr ""
+msgstr "切换控制台历史 "
 
 #: src/input/keyconfig.cpp:135
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "切换队伍聊天历史"
 
 #: src/input/keyconfig.cpp:136
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "顺时针旋转建筑"
 
 #: src/input/keyconfig.cpp:137
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "逆时针旋转建筑"
 
 #: src/input/keyconfig.cpp:139
 msgid "Center View on HQ"
@@ -17623,7 +17630,7 @@ msgstr "返回修理"
 
 #: src/input/keyconfig.cpp:152
 msgid "Stop Droid"
-msgstr ""
+msgstr "停止单位"
 
 #: src/input/keyconfig.cpp:153
 #: src/intorder.cpp:183
@@ -17637,19 +17644,19 @@ msgstr "长距离"
 
 #: src/input/keyconfig.cpp:155
 msgid "Send Global Text Message"
-msgstr ""
+msgstr "发送全局文本消息"
 
 #: src/input/keyconfig.cpp:156
 msgid "Send Team Text Message"
-msgstr ""
+msgstr "发送队伍文本消息"
 
 #: src/input/keyconfig.cpp:157
 msgid "Send Global Quick Chat"
-msgstr ""
+msgstr "发送全局快速聊天"
 
 #: src/input/keyconfig.cpp:158
 msgid "Send Team Quick Chat"
-msgstr ""
+msgstr "发送队伍快速聊天"
 
 #: src/input/keyconfig.cpp:159
 msgid "Drop a beacon"
@@ -17673,7 +17680,7 @@ msgstr "切换 盟友-敌人 雷达视图"
 
 #: src/input/keyconfig.cpp:164
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "显示所有按键映射"
 
 #: src/input/keyconfig.cpp:166
 #: src/intorder.cpp:171
@@ -17705,7 +17712,7 @@ msgstr "选择所有重度损伤单位"
 #: src/input/keyconfig.cpp:174
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "选择所有HP>50%且无组的地面战斗单位。"
 
 #: src/input/keyconfig.cpp:175
 msgid "Select all Half-tracks"
@@ -17713,7 +17720,7 @@ msgstr "选择所有半履带单位"
 
 #: src/input/keyconfig.cpp:176
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "选择所有无组的半履带单位"
 
 #: src/input/keyconfig.cpp:177
 msgid "Select all Hovers"
@@ -17734,7 +17741,7 @@ msgstr "选择所有履带单位"
 
 #: src/input/keyconfig.cpp:181
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "选择所有未分组的履带单位"
 
 #: src/input/keyconfig.cpp:182
 msgid "Select EVERY unit"
@@ -17750,7 +17757,7 @@ msgstr "选择所有全副武装的 VTOLs"
 
 #: src/input/keyconfig.cpp:185
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "选择所有全副武装的未分组的VTOL"
 
 #: src/input/keyconfig.cpp:186
 msgid "Select all Wheels"
@@ -17770,7 +17777,7 @@ msgstr "选择所有正在战斗的半机械人"
 
 #: src/input/keyconfig.cpp:191
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "选择所有未分组的战斗生化人"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Engineers"
@@ -17782,7 +17789,7 @@ msgstr "选择所有战斗土地单位"
 
 #: src/input/keyconfig.cpp:194
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "选择所有未分组的地面战斗单位"
 
 #: src/input/keyconfig.cpp:195
 msgid "Select all Mechanics"
@@ -17802,7 +17809,7 @@ msgstr "选择所有传感单位"
 
 #: src/input/keyconfig.cpp:199
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "选择所有未分组的传感器单位"
 
 #: src/input/keyconfig.cpp:200
 msgid "Select all Trucks"
@@ -17830,19 +17837,19 @@ msgstr "选择下一个 VTOL 工厂"
 
 #: src/input/keyconfig.cpp:207
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "跳转到下一个工厂"
 
 #: src/input/keyconfig.cpp:208
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "跳转到下一个研究设施"
 
 #: src/input/keyconfig.cpp:209
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "跳转到下一个发电厂"
 
 #: src/input/keyconfig.cpp:210
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "跳转到下一个生化人工厂"
 
 #: src/input/keyconfig.cpp:211
 msgid "Jump to next VTOL Factory"
@@ -17854,7 +17861,7 @@ msgstr "切换调试映射"
 
 #: src/input/keyconfig.cpp:214
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "优先处理调试用按键映射"
 
 #: src/input/keyconfig.cpp:215
 msgid "Toggle Level Editor"
@@ -17894,7 +17901,7 @@ msgstr "翻转地形三角"
 
 #: src/input/keyconfig.cpp:224
 msgid "Make a performance measurement sample"
-msgstr ""
+msgstr "进行性能测试采样"
 
 #: src/input/keyconfig.cpp:225
 msgid "Make all items available"
@@ -17918,7 +17925,7 @@ msgstr "完成当前调查"
 
 #: src/input/keyconfig.cpp:230
 msgid "Reveal map at mouse position"
-msgstr ""
+msgstr "获得鼠标位置的地图视野"
 
 #: src/input/keyconfig.cpp:231
 msgid "Trace a game object"
@@ -17926,7 +17933,7 @@ msgstr "跟踪一个游戏中的物体"
 
 #: src/input/keyconfig.cpp:235
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "切换全屏"
 
 #: src/intdisplay.cpp:164
 msgid "Waiting for Power"
@@ -17940,12 +17947,12 @@ msgstr "能源"
 
 #: src/intdisplay.cpp:172
 msgid "Power Per Second"
-msgstr ""
+msgstr "每秒能源"
 
 #: src/intdisplay.cpp:286
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d 闲置钻油井"
 
 #: src/intdisplay.cpp:291
 msgid "Need more resources!"
@@ -17953,7 +17960,7 @@ msgstr "需要更多资源！"
 
 #: src/integrations/wzdiscordrpc.cpp:192
 msgid "Discord: Can't Join Game"
-msgstr ""
+msgstr "Discord：无法加入游戏"
 
 #: src/integrations/wzdiscordrpc.cpp:193
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
@@ -17961,80 +17968,80 @@ msgstr "在游戏中不能再加入游戏，请保存/退出当前游戏、退�
 
 #: src/integrations/wzdiscordrpc.cpp:223
 msgid "Discord: Finding & Connecting to Game"
-msgstr ""
+msgstr "Discord：寻找并连接到游戏"
 
 #: src/integrations/wzdiscordrpc.cpp:224
 msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr ""
+msgstr "尝试寻找并连接到 Discord 邀请中指定的游戏。"
 
 #: src/integrations/wzdiscordrpc.cpp:226
 msgid "This may take a moment..."
-msgstr ""
+msgstr "这可能需要一些时间..."
 
 #: src/integrations/wzdiscordrpc.cpp:251
 msgid "Failed to find game in the lobby server: "
-msgstr ""
+msgstr "在大厅服务器中寻找游戏失败： "
 
 #: src/integrations/wzdiscordrpc.cpp:253
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr ""
+msgstr "游戏可能已经开始，或者主机已经解散游戏大厅。"
 
 #: src/integrations/wzdiscordrpc.cpp:256
 msgid "Failed to Find Game"
-msgstr ""
+msgstr "找不到游戏"
 
 #: src/integrations/wzdiscordrpc.cpp:284
 msgid "Failed to join the game from the specified invite link, with error:"
-msgstr ""
+msgstr "从指定的邀请链接加入游戏出错："
 
 #: src/integrations/wzdiscordrpc.cpp:288
 msgid "Failed to Join Game"
-msgstr ""
+msgstr "加入游戏失败"
 
 #: src/integrations/wzdiscordrpc.cpp:355
 msgid "The invite link you have followed specifies a non-default lobby server:"
-msgstr ""
+msgstr "该邀请链接指定了一个非默认大厅服务器："
 
 #: src/integrations/wzdiscordrpc.cpp:358
 msgid "Do you wish to trust this lobby server, and continue?"
-msgstr ""
+msgstr "您是否希望信任这个大厅服务器，并继续？"
 
 #: src/integrations/wzdiscordrpc.cpp:362
 msgid "Discord: Connect to Untrusted Lobby?"
-msgstr ""
+msgstr "Discord: 连接到不信任的大厅？"
 
 #: src/integrations/wzdiscordrpc.cpp:364
 #: src/integrations/wzdiscordrpc.cpp:438
 msgid "Trust & Connect"
-msgstr ""
+msgstr "信任并连接"
 
 #: src/integrations/wzdiscordrpc.cpp:429
 msgid "The invite link you have followed specifies a direct connection."
-msgstr ""
+msgstr "该邀请链接指定了一个直接连接："
 
 #: src/integrations/wzdiscordrpc.cpp:430
 msgid "It has not been vetted / verified by a lobby server."
-msgstr ""
+msgstr "它没有经过大厅服务器的检查/验证。"
 
 #: src/integrations/wzdiscordrpc.cpp:432
 msgid "Do you wish to trust this direct connection invite?"
-msgstr ""
+msgstr "您是否希望信任此直接连接邀请？"
 
 #: src/integrations/wzdiscordrpc.cpp:436
 msgid "Discord: Direct Connection Invite"
-msgstr ""
+msgstr "Discord：直接连接邀请"
 
 #: src/integrations/wzdiscordrpc.cpp:470
 msgid "The invite link you have followed isn't supported by this version of Warzone 2100."
-msgstr ""
+msgstr "此邀请链接不被本版本的 Warzone 2100支持。"
 
 #: src/integrations/wzdiscordrpc.cpp:471
 msgid "A newer version of Warzone 2100 may be required, if available."
-msgstr ""
+msgstr "可能需要新版本的 Warzone 2100。"
 
 #: src/integrations/wzdiscordrpc.cpp:474
 msgid "Discord: Unsupported / Invalid Invite"
-msgstr ""
+msgstr "Discord: 不支持/无效邀请"
 
 #: src/integrations/wzdiscordrpc.cpp:540
 msgid "Playing: Campaign"
@@ -18064,7 +18071,7 @@ msgstr "地图："
 #: src/integrations/wzdiscordrpc.cpp:594
 #: src/integrations/wzdiscordrpc.cpp:828
 msgid "Bots:"
-msgstr ""
+msgstr "电脑:"
 
 #: src/integrations/wzdiscordrpc.cpp:617
 #: src/integrations/wzdiscordrpc.cpp:812
@@ -18078,13 +18085,13 @@ msgstr "在多人游戏中"
 #: src/integrations/wzdiscordrpc.cpp:844
 #, c-format
 msgid "Game Name: \"%s\" by %s"
-msgstr ""
+msgstr "游戏名称: \"%s\", by %s"
 
 #. TRANSLATORS: "No:" to signify limits - example usage: "No: Tanks,VTOLs"
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:891
 msgid "No:"
-msgstr ""
+msgstr "关闭:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:907
@@ -18093,26 +18100,26 @@ msgstr "同盟:"
 
 #: src/integrations/wzdiscordrpc.cpp:923
 msgid "In Menu"
-msgstr ""
+msgstr "菜单内"
 
 #: src/integrations/wzdiscordrpc.cpp:1072
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "Discord 用户 \"%s\" 想要加入您的游戏。"
 
 #: src/integrations/wzdiscordrpc.cpp:1074
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "允许这位玩家加入您的游戏吗？"
 
 #: src/integrations/wzdiscordrpc.cpp:1078
 #, c-format
 msgid "Join Request from %s"
-msgstr ""
+msgstr "来自 %s 的加入请求"
 
 #: src/integrations/wzdiscordrpc.cpp:1080
 #: src/multivote.cpp:285
 msgid "Allow"
-msgstr ""
+msgstr "允许"
 
 #: src/intelmap.cpp:513
 #: src/keybind.cpp:1400
@@ -18129,7 +18136,7 @@ msgstr "研发升级"
 
 #: src/intelmap.cpp:1318
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "任务目标与升级"
 
 #: src/intelmap.cpp:1320
 msgid "Current Objective"
@@ -18169,7 +18176,7 @@ msgstr "圆（循环）"
 
 #: src/intorder.cpp:191
 msgid "Accept Retreating Units"
-msgstr ""
+msgstr "接受撤退单位"
 
 #: src/keybind.cpp:121
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -18181,16 +18188,16 @@ msgstr "警告：这个作弊方式有点小问题。我们建议不要使用。
 
 #: src/keybind.cpp:160
 msgid "Gateways toggled."
-msgstr ""
+msgstr "切换大门显示。"
 
 #: src/keybind.cpp:166
 msgid "Path display toggled."
-msgstr ""
+msgstr "切换路径显示。"
 
 #: src/keybind.cpp:194
 #, c-format
 msgid "Player %d: %d power"
-msgstr ""
+msgstr "玩家 %d： %d 能源"
 
 #: src/keybind.cpp:220
 msgid "Ouch! Droid's health is down 20%!"
@@ -18210,20 +18217,20 @@ msgstr "关闭细节、武器及雷达显示"
 
 #: src/keybind.cpp:333
 msgid "View Aligned to South"
-msgstr ""
+msgstr "视角对准南方"
 
 #: src/keybind.cpp:343
 msgid "View Aligned to East"
-msgstr ""
+msgstr "视角对准东方"
 
 #: src/keybind.cpp:353
 msgid "View Aligned to West"
-msgstr ""
+msgstr "视角对准西方"
 
 #: src/keybind.cpp:427
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr ""
+msgstr "玩家 %u 使用作弊批量建立单位： %d × %s。"
 
 #: src/keybind.cpp:562
 #: src/keybind.cpp:590
@@ -18250,7 +18257,7 @@ msgstr "让事情变简单！"
 
 #: src/keybind.cpp:591
 msgid "1000 big ones!!!"
-msgstr ""
+msgstr "1000块钱！！！"
 
 #: src/keybind.cpp:606
 msgid "Power overwhelming"
@@ -18278,11 +18285,11 @@ msgstr "FPS显示关闭"
 
 #: src/keybind.cpp:672
 msgid "Unit count display is enabled."
-msgstr ""
+msgstr "单位数量显示已启用。"
 
 #: src/keybind.cpp:676
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "单位数量显示已禁用。"
 
 #: src/keybind.cpp:728
 #, c-format
@@ -18299,7 +18306,7 @@ msgstr "无限制能源：开"
 
 #: src/keybind.cpp:798
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "重新计算的所有格子的亮度值"
 
 #: src/keybind.cpp:828
 msgid "All items made available"
@@ -18307,7 +18314,7 @@ msgstr "可使用所有的项目"
 
 #: src/keybind.cpp:853
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "地图区块信息已导出到日志"
 
 #: src/keybind.cpp:868
 msgid "Fog on"
@@ -18320,19 +18327,19 @@ msgstr "战争迷雾关闭"
 #: src/keybind.cpp:974
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "设置雷达缩放为 %u"
 
 #: src/keybind.cpp:1241
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "切换调试按键映射优先级： "
 
 #: src/keybind.cpp:1251
 msgid "Disabling level editor"
-msgstr ""
+msgstr "禁用关卡编辑器"
 
 #: src/keybind.cpp:1256
 msgid "Enabling level editor"
-msgstr ""
+msgstr "启用关卡编辑器"
 
 #: src/keybind.cpp:1340
 msgid "God Mode ON"
@@ -18344,7 +18351,7 @@ msgstr "上帝模式关闭"
 
 #: src/keybind.cpp:1352
 msgid "View Aligned to North"
-msgstr ""
+msgstr "视角对准北方"
 
 #: src/keybind.cpp:1368
 #, c-format
@@ -18365,23 +18372,23 @@ msgstr "遭遇战"
 
 #: src/keybind.cpp:1437
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "难度：超级简单"
 
 #: src/keybind.cpp:1440
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "难度：简单"
 
 #: src/keybind.cpp:1443
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "难度：普通"
 
 #: src/keybind.cpp:1446
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "难度：困难"
 
 #: src/keybind.cpp:1449
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "难度：疯狂"
 
 #: src/keybind.cpp:1458
 msgid "CHEATS: ENABLED"
@@ -18397,7 +18404,7 @@ msgstr "替你研发所有科技！"
 
 #: src/keybind.cpp:1546
 msgid "Selected buildings instantly recharged!"
-msgstr ""
+msgstr "选定的建筑物立即装填完毕！"
 
 #: src/keybind.cpp:1589
 #, c-format
@@ -18454,11 +18461,11 @@ msgstr "摧毁选中的机器人和结构！"
 
 #: src/keybind.cpp:2106
 msgid "Reveal OFF"
-msgstr ""
+msgstr "关闭全图视野"
 
 #: src/keybind.cpp:2111
 msgid "Reveal ON"
-msgstr ""
+msgstr "打开全图视野"
 
 #: src/keybind.cpp:2195
 msgid "Centered on player HQ, direction NORTH"
@@ -18482,11 +18489,11 @@ msgstr "上下垂直方向：快速翻动"
 
 #: src/keybind.cpp:2270
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "物体被摧毁时晃动屏幕：关"
 
 #: src/keybind.cpp:2275
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "物体被摧毁时晃动屏幕：开"
 
 #: src/keybind.cpp:2327
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -18533,31 +18540,31 @@ msgstr "雷达显示高度"
 
 #: src/keybind.cpp:2519
 msgid "Asserts turned off"
-msgstr ""
+msgstr "断言关闭"
 
 #: src/keybind.cpp:2567
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "多人游戏或教程游戏不允许快速保存"
 
 #: src/keybind.cpp:2587
 msgid "QuickSave failed"
-msgstr ""
+msgstr "快速保存失败"
 
 #: src/keybind.cpp:2596
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "多人游戏或教程游戏不允许快速加载"
 
 #: src/keybind.cpp:2623
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "快速存档文件不存在"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
-msgstr ""
+msgstr "<未绑定>"
 
 #: src/keyedit.cpp:170
 msgid "<Fixed Key>"
-msgstr ""
+msgstr "<固定键>"
 
 #: src/keyedit.cpp:549
 msgid "KEY MAPPING"
@@ -18578,15 +18585,15 @@ msgstr "选择预设"
 
 #: src/loadsave.cpp:362
 msgid "Parent directory"
-msgstr ""
+msgstr "上级目录"
 
 #: src/loadsave.cpp:367
 msgid "Autosave directory"
-msgstr ""
+msgstr "自动保存目录"
 
 #: src/loadsave.cpp:367
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "自动保存目录(不允许用于存档)"
 
 #: src/loadsave.cpp:662
 msgid "cheated"
@@ -18595,12 +18602,12 @@ msgstr "作弊"
 #: src/loadsave.cpp:1166
 #, c-format
 msgid "AutoSave %s"
-msgstr ""
+msgstr "自动保存 %s"
 
 #: src/loadsave.cpp:1171
 #, c-format
 msgid "AutoSave %s failed"
-msgstr ""
+msgstr "自动保存 %s 失败"
 
 #: src/loop.cpp:264
 #: src/loop.cpp:280
@@ -18614,11 +18621,11 @@ msgstr "送上运输舰"
 
 #: src/mission.cpp:1933
 msgid "Shows the number of units currently loaded into the mission transporter, and the total capacity."
-msgstr ""
+msgstr "显示目前装入任务运输舰中的单位数量和总容量。"
 
 #: src/mission.cpp:1934
 msgid "Open the Transporter Load Menu"
-msgstr ""
+msgstr "打开运输舰装载菜单"
 
 #: src/mission.cpp:2299
 msgid "OBJECTIVE ACHIEVED by cheating!"
@@ -18684,7 +18691,7 @@ msgstr "%s 给​​你一个技术文件"
 #: src/multigifts.cpp:431
 #, c-format
 msgid "%s Gives You %d Power"
-msgstr ""
+msgstr "%s 给你 %d 能源"
 
 #: src/multigifts.cpp:457
 #, c-format
@@ -18723,11 +18730,11 @@ msgstr "指挥官"
 
 #: src/multiint.cpp:887
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "缺少 AI 名称"
 
 #: src/multiint.cpp:912
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "缺少 AI 描述"
 
 #: src/multiint.cpp:926
 #, c-format
@@ -18736,11 +18743,11 @@ msgstr "AI 评估：胜率 %3.1f%%，负率 %3.1f%%，平局 %3.1f%%"
 
 #: src/multiint.cpp:1119
 msgid "Unable to join:"
-msgstr ""
+msgstr "无法加入："
 
 #: src/multiint.cpp:1119
 msgid "Error while joining."
-msgstr ""
+msgstr "加入时出错。"
 
 #: src/multiint.cpp:1246
 msgid "Tanks disabled!!"
@@ -18764,7 +18771,7 @@ msgstr "激光卫星损坏"
 
 #: src/multiint.cpp:1251
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "执行建筑数量限制。"
 
 #: src/multiint.cpp:1322
 msgid "Not enough votes to randomize or change the map."
@@ -18875,7 +18882,7 @@ msgstr "难度"
 
 #: src/multiint.cpp:1714
 msgid "Starts disadvantaged"
-msgstr ""
+msgstr "开始时劣势"
 
 #: src/multiint.cpp:1715
 msgid "Plays nice"
@@ -18903,7 +18910,7 @@ msgstr "不使用此位置"
 
 #: src/multiint.cpp:1852
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "允许旁观者加入此槽位"
 
 #: src/multiint.cpp:1936
 msgid "Click to change to this slot"
@@ -18912,21 +18919,21 @@ msgstr "切到此处"
 #: src/multiint.cpp:1963
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "点击移动玩家到槽位 %u"
 
 #: src/multiint.cpp:2000
 msgid "Click to swap player to this slot"
-msgstr ""
+msgstr "点击交换玩家到此槽位"
 
 #: src/multiint.cpp:2017
 #: src/multiint.cpp:3123
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr ""
+msgstr "旁观者 %s 移动到玩家"
 
 #: src/multiint.cpp:2023
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "无法与主机交换位置"
 
 #: src/multiint.cpp:2282
 #: src/multiint.cpp:4180
@@ -18934,7 +18941,7 @@ msgstr ""
 #: src/multiint.cpp:8236
 #: src/titleui/protocol.cpp:189
 msgid "Spectator"
-msgstr ""
+msgstr "旁观者"
 
 #: src/multiint.cpp:2294
 #: src/multiint.cpp:4472
@@ -18946,127 +18953,127 @@ msgstr "%s Was the winner of this war times ago,ignore."
 #: src/multiint.cpp:4474
 #: src/multivote.cpp:674
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "主机已将您踢出游戏。"
 
 #: src/multiint.cpp:2314
 #, c-format
 msgid "The host has banned %s from the game!"
-msgstr ""
+msgstr "主机已经禁止 %s 加入游戏！"
 
 #: src/multiint.cpp:2315
 msgid "The host has banned you from the game."
-msgstr ""
+msgstr "主机已经禁止您加入游戏。"
 
 #: src/multiint.cpp:2350
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "无法将 %s 移动到旁观者"
 
 #: src/multiint.cpp:2355
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "主机已将 %s 移动到旁观者！"
 
 #: src/multiint.cpp:2378
 msgid "Move to Spectators"
-msgstr ""
+msgstr "移动到旁观者"
 
 #: src/multiint.cpp:2399
 msgid "Ask Spectator to Play"
-msgstr ""
+msgstr "请求旁观者加入游戏"
 
 #: src/multiint.cpp:2415
 msgid "Ask to Play"
-msgstr ""
+msgstr "请求加入游戏"
 
 #: src/multiint.cpp:3006
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "旁观者 %s 想要继续旁观"
 
 #: src/multiint.cpp:3010
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "玩家 %s 还想作为玩家"
 
 #: src/multiint.cpp:3018
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "主机拒绝将您切换到玩家"
 
 #: src/multiint.cpp:3022
 msgid "Unable to switch to Spectator"
-msgstr ""
+msgstr "无法切换到旁观者"
 
 #: src/multiint.cpp:3050
 msgid "Do you want to spectate?"
-msgstr ""
+msgstr "你想旁观吗?"
 
 #: src/multiint.cpp:3051
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "主机想知道您是否愿意旁观？"
 
 #: src/multiint.cpp:3053
 msgid "You are currently a Player."
-msgstr ""
+msgstr "您目前是玩家。"
 
 #: src/multiint.cpp:3054
 msgid "Yes, I will spectate!"
-msgstr ""
+msgstr "是的，我想旁观！"
 
 #: src/multiint.cpp:3059
 msgid "Do you want to play?"
-msgstr ""
+msgstr "你想玩吗?"
 
 #: src/multiint.cpp:3060
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "主机想知道您是否想玩？"
 
 #: src/multiint.cpp:3062
 msgid "You are currently a Spectator."
-msgstr ""
+msgstr "您目前是旁观者。"
 
 #: src/multiint.cpp:3063
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "是的，我想玩！"
 
 #: src/multiint.cpp:3107
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr ""
+msgstr "玩家 %s 移动到旁观者"
 
 #: src/multiint.cpp:3134
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
-msgstr ""
+msgstr "无法将 %s 移动到玩家 - 没有可用的槽位"
 
 #: src/multiint.cpp:3155
 msgid "Spectator would like to become a Player"
-msgstr ""
+msgstr "旁观者想要成为玩家"
 
 #: src/multiint.cpp:3156
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
-msgstr ""
+msgstr "旁观者 \"%s\" 想成为玩家。"
 
 #: src/multiint.cpp:3158
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "然而，目前还没有开放的玩家槽位。"
 
 #: src/multiint.cpp:3160
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "您想要将此旁观者与玩家交换吗？"
 
 #: src/multiint.cpp:3161
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "是的，选择玩家槽位"
 
 #: src/multiint.cpp:3446
 msgid "Joined:"
-msgstr ""
+msgstr "已加入："
 
 #: src/multiint.cpp:3449
 msgid "Ready:"
-msgstr ""
+msgstr "已准备："
 
 #: src/multiint.cpp:3627
 #: src/titleui/gamefind.cpp:283
@@ -19079,11 +19086,11 @@ msgstr "主机选项"
 
 #: src/multiint.cpp:3938
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "启用旁观者加入"
 
 #: src/multiint.cpp:3948
 msgid "Lock Teams"
-msgstr ""
+msgstr "锁定盟友"
 
 #: src/multiint.cpp:4184
 msgid "Choose Team"
@@ -19107,32 +19114,32 @@ msgstr "调整 AI，分配选择"
 
 #: src/multiint.cpp:4233
 msgid "Click to close spectator slot"
-msgstr ""
+msgstr "点击关闭旁观者槽位"
 
 #: src/multiint.cpp:4252
 msgid "Player ID: "
-msgstr ""
+msgstr "玩家ID: "
 
 #: src/multiint.cpp:4253
 msgid "(none)"
-msgstr ""
+msgstr "(无)"
 
 #: src/multiint.cpp:4274
 msgid "Alt Name:"
-msgstr ""
+msgstr "备选名称:"
 
 #: src/multiint.cpp:4293
 msgid "Player rating:"
-msgstr ""
+msgstr "玩家评分:"
 
 #: src/multiint.cpp:4304
 msgid "Host provided"
-msgstr ""
+msgstr "主机提供"
 
 #: src/multiint.cpp:4308
 #, c-format
 msgid "From: %s"
-msgstr ""
+msgstr "从: %s"
 
 #: src/multiint.cpp:4381
 msgid "Click to change difficulty"
@@ -19148,7 +19155,7 @@ msgstr "玩家已就绪"
 
 #: src/multiint.cpp:4419
 msgid "Player is downloading"
-msgstr ""
+msgstr "玩家正在下载"
 
 #: src/multiint.cpp:4419
 msgid "Click when ready"
@@ -19156,7 +19163,7 @@ msgstr "按一下开始"
 
 #: src/multiint.cpp:4419
 msgid "Waiting for download"
-msgstr ""
+msgstr "等待下载"
 
 #: src/multiint.cpp:4491
 msgid "READY?"
@@ -19164,15 +19171,15 @@ msgstr "准备好了？"
 
 #: src/multiint.cpp:4575
 msgid "For Spectator:"
-msgstr ""
+msgstr "作为旁观者："
 
 #: src/multiint.cpp:4575
 msgid "For Player:"
-msgstr ""
+msgstr "作为玩家："
 
 #: src/multiint.cpp:4593
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "选择玩家槽位"
 
 #: src/multiint.cpp:4664
 msgid "PLAYERS"
@@ -19180,51 +19187,51 @@ msgstr "玩家"
 
 #: src/multiint.cpp:4768
 msgid "Add spectator slot"
-msgstr ""
+msgstr "添加旁观者槽位"
 
 #: src/multiint.cpp:4852
 msgid "Kicked from game"
-msgstr ""
+msgstr "从游戏中踢出"
 
 #: src/multiint.cpp:4943
 #: src/multiint.cpp:5049
 #: src/multiint.cpp:5082
 #: src/screens/chatscreen.cpp:157
 msgid "The host has disabled free chat. Please use Quick Chat."
-msgstr ""
+msgstr "主机已禁用自由聊天。请使用快速聊天功能。"
 
 #: src/multiint.cpp:5033
 #: src/multiint.cpp:5036
 msgid "Quick Chat"
-msgstr ""
+msgstr "快速聊天"
 
 #: src/multiint.cpp:5047
 #: src/multiint.cpp:5053
 msgid "Press the Tab key to open Quick Chat."
-msgstr ""
+msgstr "按下Tab键打开快速聊天。"
 
 #: src/multiint.cpp:5055
 #: src/multiint.cpp:5085
 msgid "The host has disabled free chat. Please use Quick Chat or /hostmsg commands."
-msgstr ""
+msgstr "主机已禁用自由聊天。请使用快速聊天或 /hostmsg 命令。"
 
 #: src/multiint.cpp:5088
 msgid "The host has enabled free chat for you."
-msgstr ""
+msgstr "主机已为您启用了自由聊天。"
 
 #: src/multiint.cpp:5454
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "复制文本到剪贴板"
 
 #: src/multiint.cpp:5469
 #, c-format
 msgid "Mute Player: %s"
-msgstr ""
+msgstr "禁言玩家： %s"
 
 #: src/multiint.cpp:5473
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "取消禁言玩家： %s"
 
 #: src/multiint.cpp:5577
 msgid "CHAT"
@@ -19233,21 +19240,21 @@ msgstr "聊天"
 #: src/multiint.cpp:6239
 #: src/titleui/gamefind.cpp:238
 msgid "Multiplayer Lobby Support Unavailable"
-msgstr ""
+msgstr "多人游戏大厅支持不可用"
 
 #: src/multiint.cpp:6241
 msgid "Your client cannot connect to the mutiplayer lobby."
-msgstr ""
+msgstr "您的客户端无法连接到多人游戏大厅。"
 
 #: src/multiint.cpp:6243
 #: src/updatemanager.cpp:621
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "请点击下面的按钮了解如何修复它。"
 
 #: src/multiint.cpp:6246
 #: src/updatemanager.cpp:627
 msgid "More Information"
-msgstr ""
+msgstr "更多信息"
 
 #: src/multiint.cpp:6278
 msgid "Sorry! Failed to host the game."
@@ -19255,7 +19262,7 @@ msgstr "对不起！本机无法作为游戏主要服务器"
 
 #: src/multiint.cpp:6344
 msgid "Game Name Updated."
-msgstr ""
+msgstr "游戏名称已更新。"
 
 #: src/multiint.cpp:6468
 #, c-format
@@ -19272,7 +19279,7 @@ msgstr "这是一个模式地图，它可能不同于你以前的体验"
 
 #: src/multiint.cpp:6494
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "这是一个随机地图，它可能不同于你以前的体验"
 
 #: src/multiint.cpp:6649
 msgid "Host is Starting Game"
@@ -19282,70 +19289,70 @@ msgstr "/Incoming Message/:Morning,force B,you should get out there,or you will 
 #: src/stdinreader.cpp:568
 #, c-format
 msgid "Host: Free chat enabled for: %s"
-msgstr ""
+msgstr "主机：启用玩家自由聊天： %s"
 
 #: src/multiint.cpp:6830
 #: src/stdinreader.cpp:572
 #, c-format
 msgid "Host: Free chat muted for: %s"
-msgstr ""
+msgstr "主机：禁用玩家自由聊天： %s"
 
 #: src/multiint.cpp:6863
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr ""
+msgstr "移动 %s 到旁观者!"
 
 #: src/multiint.cpp:6890
 #, c-format
 msgid "Asking %s to move to Players..."
-msgstr ""
+msgstr "正在请求 %s 移动到玩家..."
 
 #: src/multiint.cpp:7018
 #: src/multiint.cpp:7047
 #: src/multiint.cpp:7374
 msgid "Disconnected from host:"
-msgstr ""
+msgstr "已断开与主机的连接："
 
 #: src/multiint.cpp:7018
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "主机提供了无效选项"
 
 #: src/multiint.cpp:7047
 msgid "Host supplied invalid host config"
-msgstr ""
+msgstr "主机提供了无效的主机配置"
 
 #: src/multiint.cpp:7280
 msgid "You have been kicked: "
-msgstr ""
+msgstr "你被踢了： "
 
 #: src/multiint.cpp:7294
 #: src/multiint.cpp:7635
 msgid "Connection lost:"
-msgstr ""
+msgstr "连接已丢失："
 
 #: src/multiint.cpp:7294
 msgid "No connection to host."
-msgstr ""
+msgstr "主机退出了游戏。"
 
 #: src/multiint.cpp:7372
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "主机将我移动到玩家，但是我从未允许这种更改。再见！"
 
 #: src/multiint.cpp:7374
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "主机试图将我们移动到玩家，但我们从未给予许可。"
 
 #: src/multiint.cpp:7528
 msgid "Cannot change to a map with too few slots for all players."
-msgstr ""
+msgstr "玩家数量过多，不能更改为玩家数更少的地图。"
 
 #: src/multiint.cpp:7533
 msgid "Cannot change to a map with fewer slots."
-msgstr ""
+msgstr "不能更改为玩家数更少的地图。"
 
 #: src/multiint.cpp:7635
 msgid "The host has quit."
-msgstr ""
+msgstr "主机已退出。"
 
 #: src/multiint.cpp:7669
 msgid "Hit the ready box to begin your challenge!"
@@ -19361,7 +19368,7 @@ msgstr "热插热拔网络设备被启用"
 
 #: src/multiint.cpp:7689
 msgid "UPnP detection failed. You must manually configure router yourself."
-msgstr ""
+msgstr "UPnP 检测失败。您必须手动配置路由器。"
 
 #: src/multiint.cpp:7693
 msgid "UPnP detection is in progress..."
@@ -19370,7 +19377,7 @@ msgstr "热插热拔网络设备检测取得进展..."
 #: src/multiint.cpp:7700
 #, c-format
 msgid "UPnP detection disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "用户已禁用UPnP检测。端口 %d 将不会自动配置。"
 
 #: src/multiint.cpp:7939
 #: src/multiint.cpp:8240
@@ -19399,33 +19406,33 @@ msgstr "主玩家"
 #: src/multiint.cpp:8094
 #: src/multimenu.cpp:812
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: src/multiint.cpp:9031
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "用于保存此回放文件的 Warzone 2100 版本与当前运行的版本不匹配。"
 
 #: src/multiint.cpp:9033
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "回放文件版本:\"%s\""
 
 #: src/multiint.cpp:9037
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "当前版本: \"%s\""
 
 #: src/multiint.cpp:9047
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "通常应使用相同的版本来播放回放。"
 
 #: src/multiint.cpp:9049
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "回放可能无法成功播放，或者在模拟中可能存在差异。"
 
 #: src/multiint.cpp:9050
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "回放版本不匹配"
 
 #: src/multijoin.cpp:384
 #, c-format
@@ -19435,7 +19442,7 @@ msgstr "%s 已离开游戏"
 #: src/multijoin.cpp:393
 #, c-format
 msgid "%s joined the Game"
-msgstr ""
+msgstr "%s 加入了游戏"
 
 #: src/multijoin.cpp:486
 #, c-format
@@ -19444,7 +19451,7 @@ msgstr "由于%d，文件传输中断"
 
 #: src/multijoin.cpp:540
 msgid "The game is already full."
-msgstr ""
+msgstr "游戏已经满了。"
 
 #: src/multijoin.cpp:621
 #: src/multiplay.cpp:791
@@ -19457,7 +19464,7 @@ msgstr "%s(%u)有一个不兼容的mod，已经被踢出"
 #: src/multiplay.cpp:795
 #: src/multiplay.cpp:979
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "您的数据与主机不匹配 ！"
 
 #: src/multijoin.cpp:662
 #, c-format
@@ -19470,7 +19477,7 @@ msgstr "服务器信息："
 
 #: src/multijoin.cpp:687
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "有更新，访问https://wz2100.net以取得新版本"
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
@@ -19500,11 +19507,11 @@ msgstr "重置限制至默认值"
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "重置限制至默认值"
 
 #: src/multilobbycommands.cpp:357
 msgid "Administrator has kicked you from the game."
-msgstr ""
+msgstr "管理员将您踢出游戏。"
 
 #: src/multimenu.cpp:524
 msgid "Any number of players"
@@ -19560,7 +19567,7 @@ msgstr "提供玩家能源"
 
 #: src/multimenu.cpp:1003
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "切换聊天静音"
 
 #: src/multimenu.cpp:1200
 msgid "Sent/Received per sec —"
@@ -19573,62 +19580,62 @@ msgstr "总发送/接收 —"
 #: src/multimenu.cpp:1205
 #, c-format
 msgid "Traf: %lu/%lu"
-msgstr ""
+msgstr "RawBytes: %lu/%lu"
 
 #: src/multimenu.cpp:1209
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "未压缩：%lu/%lu"
 
 #: src/multimenu.cpp:1213
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "包: %lu/%lu"
 
 #: src/multimenu.cpp:1394
 msgid "Players View"
-msgstr ""
+msgstr "玩家视角"
 
 #: src/multimenu.cpp:1395
 msgid "Team Strategy"
-msgstr ""
+msgstr "队伍策略"
 
 #: src/multiopt.cpp:310
 #, c-format
 msgid "Changed structure limits [%d]:"
-msgstr ""
+msgstr "变更建筑数量限制 [%d]:"
 
 #: src/multiopt.cpp:322
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
+msgstr "[%d] 限制 [%s]: %u (默认: %u)"
 
 #: src/multiopt.cpp:326
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
+msgstr "[%d] 限制 [%s]: %u (默认：无限制)"
 
 #: src/multiopt.cpp:334
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%d] 限制大于numStructureStats (%u)： %u"
 
 #: src/multiopt.cpp:341
 msgid "Limits were reset to default."
-msgstr ""
+msgstr "限制被重置为默认值。"
 
 #: src/multiopt.cpp:349
 #, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
-msgstr ""
+msgstr "主机初始化了 %u 个建筑数量限制，由于模组无法显示这些限制。"
 
 #: src/multiopt.cpp:430
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "MAP REQUESTED!"
 
 #: src/multiopt.cpp:455
 msgid "MOD REQUESTED!"
-msgstr ""
+msgstr "MOD REQUESTED!"
 
 #: src/multiopt.cpp:479
 #: src/multiplay.cpp:2120
@@ -19642,21 +19649,21 @@ msgstr "警告，主玩家更改了游戏代码，他不再可信！"
 
 #: src/multiopt.cpp:785
 msgid "The host has enabled free chat for everyone."
-msgstr ""
+msgstr "主机已允许所有人自由聊天。"
 
 #: src/multiopt.cpp:793
 msgid "The host has muted free chat for everyone."
-msgstr ""
+msgstr "主机已禁止所有人自由聊天。"
 
 #: src/multiopt.cpp:818
 #, c-format
 msgid "The host has enabled free chat for player: %s"
-msgstr ""
+msgstr "主机已允许玩家自由聊天：%s"
 
 #: src/multiopt.cpp:824
 #, c-format
 msgid "The host has muted free chat for player: %s"
-msgstr ""
+msgstr "主机已禁止玩家自由聊天：%s"
 
 #: src/multiplay.cpp:355
 #, c-format
@@ -19665,45 +19672,45 @@ msgstr "踢出玩家 %s，因为他们试图绕过数据完整性检查！"
 
 #: src/multiplay.cpp:361
 msgid "Invalid data!"
-msgstr ""
+msgstr "无效数据！"
 
 #: src/multiplay.cpp:1129
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "自动踢出玩家 %s，收到无效的命令： %u"
 
 #: src/multiplay.cpp:1131
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "未授权的网络命令"
 
 #: src/multiplay.cpp:1237
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "回放结束"
 
 #: src/multiplay.cpp:1238
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(按ESC退出)"
 
 #: src/multiplay.cpp:1424
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "自动踢出玩家 %s，收到无效的命令。"
 
 #: src/multiplay.cpp:1989
 msgid "Map was requested: SENDING MAP!"
-msgstr ""
+msgstr "地图被请求：发送地图！"
 
 #: src/multiplay.cpp:2011
 msgid "Mod was requested: SENDING MOD!"
-msgstr ""
+msgstr "Mod 已请求：发送MOD！"
 
 #: src/multiplay.cpp:2081
 msgid "FILE SENT!"
-msgstr ""
+msgstr "文件已发送！"
 
 #: src/multiplay.cpp:2096
 msgid "MAP DOWNLOADED!"
-msgstr ""
+msgstr "地图已下载！"
 
 #: src/multiplay.cpp:2156
 #, c-format
@@ -19777,31 +19784,31 @@ msgstr "棕色"
 
 #: src/multiplay.cpp:2522
 msgid "Spectator Mode"
-msgstr ""
+msgstr "旁观模式"
 
 #: src/multiplay.cpp:2523
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "你是旁观者。享受观看游戏吧！"
 
 #: src/multivote.cpp:165
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr ""
+msgstr "%s (%d) 允许地图更改。总计： %d/%d"
 
 #: src/multivote.cpp:200
 #, c-format
 msgid "A player voted FOR kicking: %s"
-msgstr ""
+msgstr "一个玩家支持踢：%s"
 
 #: src/multivote.cpp:208
 #, c-format
 msgid "A player voted AGAINST kicking: %s"
-msgstr ""
+msgstr "一个玩家反对踢：%s"
 
 #: src/multivote.cpp:214
 #, c-format
 msgid "A player's client ignored your vote to kick request (too frequent): %s"
-msgstr ""
+msgstr "一个玩家的客户端忽略了您的投票来踢出请求 (频率过高): %s"
 
 #: src/multivote.cpp:283
 msgid "Vote"
@@ -19813,56 +19820,56 @@ msgstr "允许主机更改地图或随机？"
 
 #: src/multivote.cpp:334
 msgid "A vote was started to kick you from the game."
-msgstr ""
+msgstr "开始投票把你踢出游戏。"
 
 #: src/multivote.cpp:349
 #, c-format
 msgid "A vote was started to kick %s from the game."
-msgstr ""
+msgstr "开始投票把 %s 踢出游戏。"
 
 #: src/multivote.cpp:357
 #, c-format
 msgid "Vote To Kick: %s"
-msgstr ""
+msgstr "投票踢出: %s"
 
 #: src/multivote.cpp:358
 #, c-format
 msgid "Should player %s be kicked from the game?"
-msgstr ""
+msgstr "玩家 %s 是否应该被踢出游戏？"
 
 #: src/multivote.cpp:359
 msgid "Yes, Kick Them"
-msgstr ""
+msgstr "是的，踢出游戏"
 
 #: src/multivote.cpp:614
 #, c-format
 msgid "The vote to kick player %s succeeded (sufficient votes in favor) - kicking"
-msgstr ""
+msgstr "投票踢出玩家 %s 成功 (赞成多数) - 正在踢出"
 
 #: src/multivote.cpp:624
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes in favor)"
-msgstr ""
+msgstr "投票踢出玩家 %s 失败 (赞成票不足)"
 
 #: src/multivote.cpp:648
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes before timeout)"
-msgstr ""
+msgstr "投票提出玩家 %s 失败 (超时前投票数不足)"
 
 #: src/multivote.cpp:680
 #, c-format
 msgid "The vote to kick player %s failed"
-msgstr ""
+msgstr "踢出玩家 %s 的投票失败"
 
 #: src/multivote.cpp:691
 #, c-format
 msgid "Cannot request vote to kick player %s yet - please wait a bit longer"
-msgstr ""
+msgstr "还不能请求投票踢出 %s - 请等1分钟。"
 
 #: src/multivote.cpp:703
 #, c-format
 msgid "Starting vote to kick player: %s"
-msgstr ""
+msgstr "开始投票踢出玩家： %s"
 
 #: src/musicmanager.cpp:490
 msgid "NOW PLAYING"
@@ -19887,7 +19894,7 @@ msgstr "音乐选项"
 
 #: src/notifications.cpp:700
 msgid "Dismiss"
-msgstr ""
+msgstr "忽略"
 
 #: src/notifications.cpp:785
 msgid "Do not show again"
@@ -19899,12 +19906,12 @@ msgstr "无法进行此项操作！在使用Cyborg运输时必需作为Cyborg单
 
 #: src/qtscript.cpp:907
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "无法加载所选的 AI！请检查您的日志以查看原因。"
 
 #: src/qtscript.cpp:910
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "为当前玩家加载 AI 脚本 %s ！"
 
 #: src/research.cpp:1043
 #, c-format
@@ -20034,71 +20041,71 @@ msgstr "你作弊了"
 
 #: src/screens/chatscreen.cpp:155
 msgid "Use Quick Chat to chat with other players."
-msgstr ""
+msgstr "使用快速聊天与其他玩家交谈。"
 
 #: src/screens/chatscreen.cpp:161
 msgid "The host has disabled free chat."
-msgstr ""
+msgstr "主机已禁用自由聊天。"
 
 #: src/screens/chatscreen.cpp:236
 msgid "Chat: All"
-msgstr ""
+msgstr "聊天：全部"
 
 #: src/screens/chatscreen.cpp:241
 msgid "Chat: Team"
-msgstr ""
+msgstr "聊天： 队伍"
 
 #: src/screens/chatscreen.cpp:342
 msgid "Did not send message - free chat is disabled by host. Please use Quick Chat."
-msgstr ""
+msgstr "无法发送消息 - 自由聊天被主机禁用。请使用快速聊天功能。"
 
 #: src/screens/helpscreen.cpp:123
 msgid "Close Help Mode"
-msgstr ""
+msgstr "关闭帮助模式"
 
 #: src/screens/helpscreen.cpp:218
 msgid "Click/Tap"
-msgstr ""
+msgstr "点击/触摸"
 
 #: src/screens/helpscreen.cpp:220
 msgid "Right-Click"
-msgstr ""
+msgstr "右键单击"
 
 #: src/screens/helpscreen.cpp:222
 msgid "Click/Tap and Hold"
-msgstr ""
+msgstr "点击/触摸并按住"
 
 #: src/screens/helpscreen.cpp:224
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #: src/screens/helpscreen.cpp:277
 msgid "Interactions:"
-msgstr ""
+msgstr "操作:"
 
 #: src/screens/helpscreen.cpp:332
 msgid "Related Keymappings:"
-msgstr ""
+msgstr "相关的按键映射:"
 
 #: src/screens/netpregamescreen.cpp:241
 msgid "Loading Status:"
-msgstr ""
+msgstr "加载状态:"
 
 #: src/screens/netpregamescreen.cpp:622
 msgid "TEAM STRATEGY"
-msgstr ""
+msgstr "队伍策略"
 
 #: src/screens/netpregamescreen.cpp:753
 msgid "Game will start in ..."
-msgstr ""
+msgstr "游戏将开始于..."
 
 #: src/screens/netpregamescreen.cpp:763
 msgid "Waiting for other players ..."
-msgstr ""
+msgstr "等待其他玩家 ..."
 
 #: src/screens/netpregamescreen.cpp:770
 msgid "Team Planning"
-msgstr ""
+msgstr "队伍计划"
 
 #: src/selection.cpp:374
 #: src/selection.cpp:456
@@ -20119,134 +20126,134 @@ msgstr "找不到任何指挥官车！"
 
 #: src/selection.cpp:517
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "找不到所需建筑！"
 
 #: src/seqdisp.cpp:576
 msgid "Loading video"
-msgstr ""
+msgstr "正在加载视频"
 
 #: src/spectatorwidgets.cpp:121
 msgid "Show Player Stats"
-msgstr ""
+msgstr "显示玩家统计数据"
 
 #: src/spectatorwidgets.cpp:546
 msgid "Weapon Grade"
-msgstr ""
+msgstr "武器类型"
 
 #: src/spectatorwidgets.cpp:785
 msgid "Power/Rate"
-msgstr ""
+msgstr "能源/速率"
 
 #: src/spectatorwidgets.cpp:786
 msgid "Current Power / Power Per Second"
-msgstr ""
+msgstr "当前能源/每秒能源"
 
 #: src/spectatorwidgets.cpp:787
 msgid "PwrLost"
-msgstr ""
+msgstr "损"
 
 #: src/spectatorwidgets.cpp:788
 msgid "PwrWon"
-msgstr ""
+msgstr "战"
 
 #: src/spectatorwidgets.cpp:789
 msgid "Lab Use"
-msgstr ""
+msgstr "实验室使用率"
 
 #: src/spectatorwidgets.cpp:793
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "动能装甲"
 
 #: src/spectatorwidgets.cpp:793
 #: src/spectatorwidgets.cpp:795
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(坦克/生化人)"
 
 #: src/stats.cpp:1510
 msgid "Cannons"
-msgstr ""
+msgstr "加农炮"
 
 #: src/stats.cpp:1512
 msgid "Mortars"
-msgstr ""
+msgstr "迫击炮"
 
 #: src/stats.cpp:1514
 msgid "Missiles"
-msgstr ""
+msgstr "导弹"
 
 #: src/stats.cpp:1516
 msgid "Rockets"
-msgstr ""
+msgstr "火箭"
 
 #: src/stats.cpp:1518
 msgid "Energy"
-msgstr ""
+msgstr "能量"
 
 #: src/stats.cpp:1520
 msgid "Gauss"
-msgstr ""
+msgstr "高斯"
 
 #. TRANSLATORS: "Flame" weapons class
 #: src/stats.cpp:1523
 msgid "Flame"
-msgstr ""
+msgstr "喷火器"
 
 #: src/stats.cpp:1525
 msgid "Howitzers"
-msgstr ""
+msgstr "榴弹炮"
 
 #. TRANSLATORS: A short-form for "Machine Guns" (should be shorter than the translated full form - if not, just use the full translation for "Machine Guns")
 #: src/stats.cpp:1530
 msgid "MG"
-msgstr ""
+msgstr "机枪"
 
 #: src/stats.cpp:1534
 msgid "Machine Guns"
-msgstr ""
+msgstr "机关枪"
 
 #. TRANSLATORS: "Electronic" weapon class
 #: src/stats.cpp:1538
 msgid "Electronic"
-msgstr ""
+msgstr "电子"
 
 #. TRANSLATORS: A short-form for "Anti-Air" weapons class (should be shorter than the translated full form - if not, just use the full translation for "Anti-Air")
 #: src/stats.cpp:1543
 msgid "A-A"
-msgstr ""
+msgstr "A-A"
 
 #: src/stats.cpp:1547
 msgid "Anti-Air"
-msgstr ""
+msgstr "防空"
 
 #: src/stats.cpp:1550
 msgid "Slow Missile"
-msgstr ""
+msgstr "低速导弹"
 
 #: src/stats.cpp:1552
 msgid "Slow Rocket"
-msgstr ""
+msgstr "低速火箭"
 
 #. TRANSLATORS: A short-form for "Laser Satellite" weapons class - some just use "Las-Sat" or "LasSat"
 #: src/stats.cpp:1557
 msgid "Las-Sat"
-msgstr ""
+msgstr "激光卫星"
 
 #: src/stats.cpp:1561
 msgid "Laser Satellite"
-msgstr ""
+msgstr "激光卫星"
 
 #: src/stats.cpp:1564
 msgid "Bombs"
-msgstr ""
+msgstr "炸弹"
 
 #: src/stats.cpp:1566
 msgid "Command"
-msgstr ""
+msgstr "指挥官"
 
 #. TRANSLATORS: "EMP" (electromagnetic pulse) weapons class - probably should keep it as "EMP" (or the respective acronym in your language)
 #: src/stats.cpp:1569
 msgid "EMP"
-msgstr ""
+msgstr "EMP"
 
 #: src/structure.cpp:2734
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -20255,17 +20262,17 @@ msgstr "不能再建造任何部队了，已达限制--生产停止了"
 #: src/structure.cpp:2742
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr ""
+msgstr "没有命令中继中心无法制造\"%s\"--生产停止了"
 
 #: src/structure.cpp:2747
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr ""
+msgstr "无法制造\"%s\"，指挥官数量已达限制--生产停止了"
 
 #: src/structure.cpp:2755
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "无法制造\"%s\"，工程单位数量已达限制--生产停止了"
 
 #: src/structure.cpp:5404
 #, c-format
@@ -20277,13 +20284,13 @@ msgstr[0] "%s - %u 已分配单位 - 耐久度 %d/%d"
 #: src/structure.cpp:5409
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %d - 传感器范围 %d - 电子对抗 %d"
 
 #: src/structure.cpp:5424
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
+msgstr[0] "%s - %u 已分配单位 - 耐久度 %d/%d"
 
 #: src/structure.cpp:5429
 #: src/structure.cpp:5442
@@ -20302,19 +20309,19 @@ msgstr "%s - 耐久度 %d/%d"
 #: src/structure.cpp:5436
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
-msgstr ""
+msgstr "ID %d - 装甲 %d|%d - 传感器范围 %d - 电子对抗 %d - 创造时间 %u - 深度 %.02f"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #. "state": The "RepairState" (printed as an integer, Idle = 0, Repairing = 1)
 #: src/structure.cpp:5447
 #, c-format
 msgid "ID %d - State %d"
-msgstr ""
+msgstr "ID %d - 维修状态 %d"
 
 #: src/structure.cpp:5454
 #, c-format
 msgid "ID %d - %s"
-msgstr ""
+msgstr "ID %d - %s"
 
 #: src/structure.cpp:5467
 #, c-format
@@ -20325,31 +20332,31 @@ msgstr "%s - 连接 %u of %u - 耐久度 %d/%d"
 #: src/structure.cpp:5472
 #, c-format
 msgid "ID %u - Multiplier: %u"
-msgstr ""
+msgstr "ID %u - 建筑发电效率: %u"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5482
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr ""
+msgstr "ID %u - 生产输出： %u - 建筑点剩余： %u - 阻抗： %d / %d"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5492
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "ID %u - 研究点： %u"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5500
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "格子 %d,%d - 补给目标 %s"
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #: src/structure.cpp:5509
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
-msgstr ""
+msgstr "ID %u - 传感器范围 %d - 电子对抗 %d"
 
 #: src/structure.cpp:5627
 #: src/structure.cpp:5672
@@ -20387,7 +20394,7 @@ msgstr "修理工厂回馈—无"
 
 #: src/terrain.cpp:2572
 msgid "Classic"
-msgstr ""
+msgstr "经典"
 
 #: src/titleui/gamefind.cpp:81
 msgid "GAMES"
@@ -20403,7 +20410,7 @@ msgstr "过滤游戏清单"
 
 #: src/titleui/gamefind.cpp:170
 msgid "Refreshing..."
-msgstr ""
+msgstr "正在刷新..."
 
 #: src/titleui/gamefind.cpp:178
 msgid "Searching"
@@ -20415,11 +20422,11 @@ msgstr "连接大厅服务器中..."
 
 #: src/titleui/gamefind.cpp:280
 msgid "Map Name"
-msgstr ""
+msgstr "地图名称"
 
 #: src/titleui/gamefind.cpp:286
 msgid "Status"
-msgstr ""
+msgstr "状态"
 
 #: src/titleui/gamefind.cpp:342
 msgid "Can't connect to lobby server!"
@@ -20441,11 +20448,11 @@ msgstr "版本：%s"
 
 #: src/titleui/gamefind.cpp:472
 msgid "Join as spectator"
-msgstr ""
+msgstr "作为旁观者加入"
 
 #: src/titleui/gamefind.cpp:495
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "你的Warzone版本与这个游戏不兼容。"
 
 #: src/titleui/gamefind.cpp:524
 msgid "[Password required]"
@@ -20519,7 +20526,7 @@ msgstr "连接错误"
 
 #: src/titleui/msgbox.cpp:55
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
@@ -20544,7 +20551,7 @@ msgstr "游戏大厅"
 
 #: src/titleui/protocol.cpp:87
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:203
 msgid "IP Address or Machine Name"
@@ -20560,7 +20567,7 @@ msgstr "发射运输舰"
 #: src/transporter.cpp:313
 #: src/transporter.cpp:364
 msgid "Launch the Transporter"
-msgstr ""
+msgstr "发射运输舰"
 
 #: src/transporter.cpp:1024
 msgid "There is not enough room in the Transport!"
@@ -20572,47 +20579,47 @@ msgstr "援军已降落"
 
 #: src/updatemanager.cpp:479
 msgid "Update Available"
-msgstr ""
+msgstr "更新可用"
 
 #: src/updatemanager.cpp:482
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "有一个新版本的 Warzone 2100 (%s) 可用！"
 
 #: src/updatemanager.cpp:486
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "这个新版本包含重要的 bug 修复和更新，建议您立即更新。"
 
 #: src/updatemanager.cpp:491
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "有一个新版本的 Warzone 2100 可用！"
 
 #: src/updatemanager.cpp:493
 msgid "Get Update Now"
-msgstr ""
+msgstr "立即更新"
 
 #: src/updatemanager.cpp:618
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "兼容性警告"
 
 #: src/updatemanager.cpp:619
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "检测到一个可能会影响Warzone 2100的操作/性能的问题。"
 
 #: src/updatemanager.cpp:625
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(通知 ID: %s)"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
 msgid " (modified locally)"
-msgstr ""
+msgstr " (本地修改)"
 
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:262
 msgid " - DEBUG"
-msgstr ""
+msgstr " - DEBUG"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
@@ -20624,11 +20631,11 @@ msgstr "版本: %s,%s 构建 %s%s"
 
 #: src/wrappers.cpp:368
 msgid "GAME OVER"
-msgstr ""
+msgstr "游戏结束"
 
 #: src/wrappers.cpp:369
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "战斗已结束 - 你可以离开房间了。"
 
 #: src/wzapi.cpp:2392
 msgid "YOU ARE VICTORIOUS!"
@@ -20640,5 +20647,5 @@ msgstr "你被打败了！"
 
 #: src/wzscriptdebug.cpp:2445
 msgid "Script Debugger"
-msgstr ""
+msgstr "脚本调试器"
 

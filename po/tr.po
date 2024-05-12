@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-26 19:50\n"
+"PO-Revision-Date: 2024-05-10 02:16\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -4613,7 +4613,7 @@ msgstr "Nexus Davetsiz Misafir Programı mutasyona uğrayabilen bir bilgisayar v
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Nihai amacını ya da işlevini tespit edemedik. İlk haliyle, istila edilen sistemin geri kalanından bellek bölümlerini arar ve izole eder. Daha sonra kendisini ve veri yapılarını mutasyona uğratarak sistemi içeriden etkili bir şekilde yeniden programlamaya başlar."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
@@ -5625,11 +5625,11 @@ msgstr "İnaktif olunduğu / pasif oynandığı nedeniyle kaybedildi."
 
 #: data/mp/multiplay/script/rules/endconditions.js:368
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "Kurucunun koyduğu süre sınırına yaklaşıyoruz. Eğer 10 dakika içinde kazanan olmazsa, oyun sona erecek."
 
 #: data/mp/multiplay/script/rules/endconditions.js:375
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "Kurucunun belirlediği süre doldu. Oyun sona erdi."
 
 #: data/mp/multiplay/script/rules/endconditions.js:396
 msgid "Playing passively will lead to defeat. Actions that are considered:"
@@ -5795,7 +5795,8 @@ msgstr "Gerekli bağlantı noktası (%s), (%s) üzerinde açılamadı"
 #, c-format
 msgid "You must manually configure your router & firewall to\n"
 " open port %d before you can host a game."
-msgstr ""
+msgstr "Yönlendiricinizi ve güvenlik duvarınızı şu şekilde manuel olarak yapılandırmanız gerekir\n"
+" Bir oyun kurmadan önce %d portunu açın."
 
 #: lib/netplay/netplay.cpp:1590
 #, c-format
@@ -5811,7 +5812,7 @@ msgstr "İstemci oyuncu dizin takasını onaylayamadı"
 #: lib/netplay/netplay.cpp:2949
 #, c-format
 msgid "No UPnP device found. Configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "UPnP cihazı bulunamadı. Yönlendiricinizi/güvenlik duvarınızı %d bağlantı noktasını açacak şekilde yapılandırın!"
 
 #: lib/netplay/netplay.cpp:3571
 #, c-format
@@ -9597,7 +9598,7 @@ msgstr "Ağır Tamir Tareti Kobra Hover"
 #. data/mp/stats/weapons.json: $.Rocket-MRL-Hvy.name
 #: po/custom/fromJson.txt:2691
 msgid "Heavy Rocket Array"
-msgstr ""
+msgstr "Ağır Roket Dizisi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9612,7 +9613,7 @@ msgstr "Ağır Roketçi Kale"
 #. data/mp/stats/structure.json: $.Emplacement-MRLHvy-pit.name
 #: po/custom/fromJson.txt:2700
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "Ağır Roket Bataryası"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[1]
@@ -12444,7 +12445,7 @@ msgstr "Silahlandırma hızı +%30"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce.name
 #: po/custom/fromJson.txt:4714
 msgid "Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Çöpçü Alev Atıcı Menzilini Azalt"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[3]
@@ -14107,7 +14108,7 @@ msgstr "İki yüzlü"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 #: po/custom/fromJson.txt:5803
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Geri Al Çöpçü Alev Atıcı Menzilini Azalt"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -15274,7 +15275,7 @@ msgstr "Komut arayüzünü etkinleştir"
 
 #: src/clparse.cpp:442
 msgid "(stdin, unixsocket:path)"
-msgstr ""
+msgstr "(stdin, unixsocket:path)"
 
 #: src/clparse.cpp:443
 msgid "Minimum required players to auto-start game"
@@ -15286,47 +15287,47 @@ msgstr "başlangıçoyuncuları"
 
 #: src/clparse.cpp:444
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "Oyun geçmişi günlüğü çıktı mod(lar)"
 
 #: src/clparse.cpp:445
 msgid "Game history log output key"
-msgstr ""
+msgstr "Oyun geçmişi günlüğü çıktı tuşu"
 
 #: src/clparse.cpp:446
 msgid "Game history log output naming"
-msgstr ""
+msgstr "Oyun geçmişi günlük çıktısı adlandırma"
 
 #: src/clparse.cpp:447
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "Oyun geçmişi günlük çerçeve aralığı"
 
 #: src/clparse.cpp:447
 msgid "interval in seconds"
-msgstr ""
+msgstr "saniye aralığı"
 
 #: src/clparse.cpp:448
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "Çok oyunculu oyun zaman sınırı (dakika cinsinden)"
 
 #: src/clparse.cpp:448
 msgid "number of minutes"
-msgstr ""
+msgstr "dakika"
 
 #: src/clparse.cpp:449
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "Specular-map .png dosyasını luma, tek kanallı, gri tonlamalı .png dosyasına dönüştür (ve çık)"
 
 #: src/clparse.cpp:451
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "Vulkan örtük katmanlarına izin ver (olası çökmeler veya hatalar nedeniyle varsayılan olarak devre dışı bırakılmış olabilir)"
 
 #: src/clparse.cpp:452
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "Varsayılan kurulum sohbeti yapılandırmasını / izinlerini ayarlama"
 
 #: src/clparse.cpp:453
 msgid "Enable async join approval (for connecting clients)"
-msgstr ""
+msgstr "Asenkron birleştirme onayını etkinleştir (istemcileri bağlamak için)"
 
 #: src/cmddroid.cpp:121
 msgid "Commander needs a higher level to command more units"
@@ -15786,7 +15787,7 @@ msgstr "Tekrarı Görüntüle"
 #: src/frontend.cpp:632
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "Oyun kurmak için TCP portu %d güvenlik duvarınızda veya yönlendiricinizde açılmalıdır!"
 
 #: src/frontend.cpp:678
 msgid "Load Multiplayer Replay"
@@ -15956,7 +15957,7 @@ msgstr "Varsayılan"
 #: src/frontend.cpp:947
 #: src/frontend.cpp:1000
 msgid "Terrain quality mode not available."
-msgstr ""
+msgstr "Arazi kalitesi modu mevcut değil."
 
 #: src/frontend.cpp:975
 msgid "Medium Quality"
@@ -15968,19 +15969,19 @@ msgstr "Yüksek Kalite"
 
 #: src/frontend.cpp:1055
 msgid "Shadow mapping not available on this system."
-msgstr ""
+msgstr "Gölge eşleme bu sistemde kullanılamaz."
 
 #: src/frontend.cpp:1084
 msgid "Low"
-msgstr ""
+msgstr "Düşük"
 
 #: src/frontend.cpp:1086
 msgid "Ultra"
-msgstr ""
+msgstr "Çok Yüksek"
 
 #: src/frontend.cpp:1116
 msgid "Shadow filtering not available on this system."
-msgstr ""
+msgstr "Gölge filtreleme bu sistemde kullanılamaz."
 
 #: src/frontend.cpp:1158
 #: src/frontend.cpp:2141
@@ -15989,7 +15990,7 @@ msgstr "* Ayarlar oyun tekrar başlatıldığında etkili olacaktır"
 
 #: src/frontend.cpp:1165
 msgid "Terrain Quality"
-msgstr ""
+msgstr "Arazi Kalitesi"
 
 #: src/frontend.cpp:1170
 msgid "Terrain Shading"
@@ -16002,7 +16003,7 @@ msgstr "Gölgeler"
 
 #: src/frontend.cpp:1185
 msgid "Shadow Resolution"
-msgstr ""
+msgstr "Gölge Çözünürlüğü"
 
 #: src/frontend.cpp:1190
 msgid "Shadow Filtering"

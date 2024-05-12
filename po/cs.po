@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2023-11-19 04:45\n"
+"PO-Revision-Date: 2024-05-03 02:15\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -20,12 +20,12 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "CÍL: Najít a obnovit technologii nervové synapse"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "Založte základnu a poté najděte strukturu z doby před Kolapsem."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -34,28 +34,28 @@ msgstr "Tato budova obsahuje technologii důležitou pro úspěch Projektu."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "MISE SKUPINY ALFA: Bandití nájezdníci"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Banditi se blíží k naší základně."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Braň základnu a poté znič základny banditů."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "MISE SKUPINY ALFA: Detekován prudký výboj energie"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "Jižně od nás jsme detekovali prudký výboj energie."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Prozkoumejte a zabezpečte oblast."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
@@ -67,11 +67,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "Je možné že mají technologii synaptického spojení. Je velmi důležité ji získat."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Najdi a získej artefakty"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
@@ -79,15 +79,15 @@ msgstr "Nalož útočné síly do transportu."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "Po přistání prozkoumej ruiny a získej jakékoli artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Prozkoumej Výzkumné centrum"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "Prozkoumej oblast a získej jakékoli artefakty v oblasti."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
@@ -96,31 +96,31 @@ msgstr "Posily jsou k dispozici."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Detekovány zašifrované signály"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "Pomocí průzkumného oddílu a vyšetři zdroj signálů."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "Použij konstruktérské jednotky k výstavbě obrany okolo přistávací zóny."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Detekováno nepřátelské vysílaní"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "Prozkoumej vyznačenou oblast a najdi nepřátelská výzkumná centra."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "Pokračuj do přistávací zóny #2. Zatím neútoč na nepřítele."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Místo s technologií Synaptického spojení"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
@@ -128,11 +128,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "Sestav útočný oddíl a získej od nepřítele technologii synaptického spojení."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Nové cíle"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -140,23 +140,23 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr ""
+msgstr "Zachyť je. Nenech žádného nepřítele utéct z této oblasti."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Nepřátelská základna ve výstavbě"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "Nepřátelské jednotky na tomto místě staví předsunutou základnu."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "Znič základnu a zajisti oblast."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "MISE SKUPINY ALFA: Postav předsunutou základnu"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
@@ -164,27 +164,27 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Stav v oblasti obranné struktury dokud nepřestane blikat zelený ukazatel."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "MISE SKUPINY ALFA: Protiútok"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "Nepřátelské jednotky se blíží z východu a severu."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "Braň základny a odraz nepřátelské útoky."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "MISE SKUPINY ALFA: Příchozí zpráva"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Detekovali jsme nepřátelské jednotky na těchto místech."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
@@ -192,111 +192,111 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Gratulujeme, Veliteli."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "Máme pro tebe další úkol."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "MISE SKUPINY ALFA: Najdi a získej artefakty"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "První dvě oblasti jsou nyní zabezpečené."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "ZPRÁVY O SKUPINÁCH PROJEKTU"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "SKUPINA BETA"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "Získalli jsme nějaké artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "V této oblasti působí lépe vybavená skupina."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "SKUPINA GAMA"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr ""
+msgstr "Nic k nahlášení."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "Nenašli jsme žádné artefakty ani nepřátele."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "ZPRÁVA ZE ZÁKLADNY ALFA: Nepřátelský útok"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "Detekovali jsme nepřátelské jednotky na těchto místech."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "HLAVNÍ CÍL"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Tato struktura je hlavním cílem."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Najděte a získejte všechny artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "NEPŘÁTELSKÁ PŘISTÁVACÍ ZÓNA"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "Znič tuto Přistávací Zónu, aby se zabránilo přistáním nepřátelských transportů."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "ZPRÁVA ZE ZÁKLADNY ALFA: NEXUS"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "Nový cíl."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "Detekovali a izolovali jsme virový program."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "Doplňkový"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "Technologie synaptického spojení byla na tomto místě, ale byla přesunuta."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "Postav předsunutou základnu a pokračuj v hledání technologie synaptického spojení."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "PŘÍCHOZÍ ZPRÁVA"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "Probíha dešifrování....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "Veliteli."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
@@ -304,59 +304,59 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "Znič nepřátelskou základnu"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "Sestav útočný oddíl a nastup do transportu."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "Znič základnu a získej všechny artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "Získali jsme technologii synaptického spojení!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "Počáteční výzkum potvrdil že bude velmi užitečná pro Projekt."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "Základna Beta je pod těžkým útokem, je možné že budou potřebovat pomoc."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr ""
+msgstr "Pošleme další informace jakmile budou k dispozici."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "Tento přenos byl zachycen před několika minutami."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr ""
+msgstr "Pochází z východu."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "ARTEFAKT MODULU NA GENERÁTOR ENERGIE"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "Vyzkoumej artefakt modulu pro generátor energie."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "Poté použij konstruktérskou jednotku a postav na generátoru modul."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "NALEZENA ZÁKLADNA BANDITŮ"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "Znič bandity a seber všechny artefakty."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -368,305 +368,305 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr ""
+msgstr "Zaznamenali jsme s tím dvě konverzace, výtahy z nich následují..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr ""
+msgstr "Budeme tě informovat o dalším vývoji"
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr ""
+msgstr "Veliteli, musíte pomoct týmu Beta"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "MISE SKUPINY BETA: Východní sektor"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
+msgstr "Po příletu převezmeš velení nad základnou."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr ""
+msgstr "Musiš ji bránit a udržet."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "MISE SKUPINY BETA: Obrana a opevnění"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr ""
+msgstr "Nezapomeň opevnit oblast a zajistit protivzdušnou obranu."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr ""
+msgstr "Jsou k dispozici nové technologie."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr ""
+msgstr "Detekujeme kódované signály."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "Dekódování..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Sestřelený transportér"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
+msgstr "Náš transport přepravující jednotky ze základny týmu Alfa byl sestřelen."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr ""
+msgstr "Na tomto místě odolává útoku Kolektivu."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr ""
+msgstr "Sestav záchranný tým a zajisti transport i s nákladem."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr ""
+msgstr "BRIEFING BĚHEM LETU"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
+msgstr "Tým Beta hledá technologii vertikálního vzletu a přistání (VTOL)."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
+msgstr "Domníváme se že se nachází v této oblasti v letecké základně která fungovala před Kolapsem."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "Tým Beta pod těžkým útokem"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr ""
+msgstr "MISE SKUPINY BETA: Drž pozici za každou cenu"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr ""
+msgstr "Detekujeme kódované signály pocházející od Kolektivu."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr ""
+msgstr "MISE SKUPINY BETA: Drž pozici za každou cenu"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr ""
+msgstr "Detekujeme pozemní a letecké síly ze severu."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr ""
+msgstr "Udrž pozici a odraž tyto útoky, pak znič severní základnu nepřítele."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Zachyť konvoj."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr ""
+msgstr "Data ze základny Kolektivu naznačují přítomnost vetřeleckého programu NEXUS."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
+msgstr "Než se NEXUS vypnul, získali jsme přístup k následujícím informacím."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
+msgstr "Nepřátelský velitel na tomto místě vyzvedává zásilku od NEXUSu."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "Jakmile se dostaneš do přistávací zóny, znič nepřátelského velitele a získej zásilku."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr ""
+msgstr "Poté se vrať do přistávací zóny."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr ""
+msgstr "Znepokojivé zprávy týkající se NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Najdi a znič konvoj"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr ""
+msgstr "Zásilka, kterou jsme zachytili, byla návnada."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
-msgstr ""
+msgstr "Zdetekovali jsme další konvoj směřující podél řeky."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr ""
+msgstr "Zachyť konvoj a získej jeho náklad."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr ""
+msgstr "Nepřátelské vzdušné jednotky budou pravděpodobně poskytovat ochranu."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Zachraň civilisty ze zadržovacího tábora"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "Kolektiv v této základně vyhlazuje civilisty."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "Musíš ty civilisty zachránit."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "Poté znič základnu."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
+msgstr "MISE SKUPINIY BETA: Znič leteckou základnu nepřítele a získej technologii VTOL."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr ""
+msgstr "Analýza letových drah naznačuje, že VTOLy kolektivu vzlétávají odtud."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
+msgstr "MISE SKUPINIY BETA: Znič leteckou základnu nepřítele a získej technologii VTOL"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
+msgstr "Toto je lokace nepřátelské letecké základy. To je hlavní cíl."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr ""
+msgstr "Znič veškeré jednotky Kolektivu a získej veškeré artefakty."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr ""
+msgstr "DRUHOTNÁ MISE: Znič nebo odraž nepřátelské transporty"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr ""
+msgstr "Kolektiv shromažďuje všechny civilisty v oblasti."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr ""
+msgstr "Převážejí je na neznámé místo."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr ""
+msgstr "Zníč nebo odežeň transporty Kolektivu."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
-msgstr ""
+msgstr "Zachraň co nejvíc civilistů."
 
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Znič Reaktor"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "Kolektiv hledá znalosti o jaderných reaktorech."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "Je třeba je zastavit."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "Pokračujte od přistávací zóny k reaktoru a zničte ho."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr ""
+msgstr "Nedovolte, aby Kolektiv reaktor zapnul."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr ""
+msgstr "MISE SKUPINY BETA: Obsaď centrálu NASDA"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
+msgstr "Obsaď centrálu NASDA dřív než ji dokáže využít NEXUS a Kolektiv."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Satelitní terminál"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr ""
+msgstr "NEXUS hledá fungující paměťové banky."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
+msgstr "Část jeho vědomí se přesunula na vzdálené řídící místo NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "Detekujeme přenosy na vysokou oběžnou dráhu které pocházejí z tohoto střediska."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "NEXUS se znovu připojil k satelitům NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr ""
+msgstr "Použij transport k přepravě útočné síly na toto místo."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr ""
+msgstr "Znič středisko a vrať se na základu."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Znič baterie nepřátelských protivzdušných raket SAM"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr ""
+msgstr "Aby ses mohl stáhnout je třeba zničit baterie protivzdušných raket okolo základny."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr ""
+msgstr "Doleť do přistávací zóny a poté pozemním útokem znič bateria SAM."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr ""
+msgstr "MISE S TRANSPORTEM: Vytvoř bezpečné útočiště"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "Můžeme potvrdit, že na základnu Alfa letí raketa s jadernou hlavicí."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr ""
+msgstr "Vytvoř bezpečné útočiště pro evakuaci základny Beta."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
-msgstr ""
+msgstr "Znič veškeré nepřátele a zajisti oblast."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
@@ -4157,7 +4157,7 @@ msgstr ""
 #: data/base/script/tutorial.js:214
 #: data/mp/multiplay/script/rules/reticule.js:87
 msgid "Design (F4)"
-msgstr "Konstrukce (F4)"
+msgstr "Šablony (F4)"
 
 #: data/base/script/rules.js:174
 #: data/base/script/tutorial.js:268
@@ -4217,15 +4217,15 @@ msgstr "Ropné zdroje jsou klíčem k tvému úspěchu"
 
 #: data/base/script/tutorial.js:31
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "Abys mohl postavit ropný vrt, vyber jeden ze svých náklaďáků"
+msgstr "Abys mohl postavit ropný vrt, vyber jednu ze svých konstruktérských jednotek"
 
 #: data/base/script/tutorial.js:32
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Kliknutím levého tlačítka na ropné ložisko označené radarovým pulzem rozkážeš svému náklaďáku stavět"
+msgstr "Kliknutím levého tlačítka na ropné ložisko označené radarovým pulzem rozkážeš své konstrukční jednotce postavit vrt"
 
 #: data/base/script/tutorial.js:33
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "Ropný vrt je v současnosti nevyužitý. Postav generátor energie, který přemění ropu na energii"
+msgstr "Ropný vrt je v momentálně nevyužitý. Postav generátor energie, který přemění ropu na energii"
 
 #: data/base/script/tutorial.js:35
 msgid "Left click the flashing build icon"
@@ -4241,7 +4241,7 @@ msgstr "Umísti čtverec u své základny a kliknutím levého tlačítka zahaj 
 
 #: data/base/script/tutorial.js:38
 msgid "To increase your build rate, select your second truck"
-msgstr "Pro zvýšení rychlosti stavby použij svůj druhý náklaďák"
+msgstr "Pro zvýšení rychlosti stavby použij svou druhou konstruktérskou jednotku"
 
 #: data/base/script/tutorial.js:39
 msgid "Now left click the power generator site"
@@ -4249,7 +4249,7 @@ msgstr "Nyní klikni levým tlačítkem na místo generátoru"
 
 #: data/base/script/tutorial.js:40
 msgid "The other truck will now help to build the power generator"
-msgstr "Další náklaďák bude nyní pomáhat se stavbou generátoru energie"
+msgstr "Další jednotka bude nyní pomáhat se stavbou generátoru energie"
 
 #: data/base/script/tutorial.js:42
 msgid "During missions you need to locate and recover technologies from before the Collapse"
@@ -4257,15 +4257,15 @@ msgstr "Během misí potřebuješ nalézt a získat technologie z doby před Kol
 
 #: data/base/script/tutorial.js:43
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr "Použij náklaďák k hledání artefaktu označeného radarovým pulzem"
+msgstr "Použij konstruktérskou jednotku k hledání artefaktu označeného radarovým pulzem"
 
 #: data/base/script/tutorial.js:44
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr "Přesuň ukazatel nad artefakt a kliknutím levého tlačítka ho získáš"
+msgstr "Přesuň kurzor nad artefakt a kliknutím levého tlačítka ho pošleš jednotku aby ho získala"
 
 #: data/base/script/tutorial.js:46
 msgid "A research facility is required to research artifacts"
-msgstr "Výzkumná laboratoř je potřebná k probádání artefaktů"
+msgstr "Výzkumná laboratoř je potřebná k výzkumu artefaktů"
 
 #: data/base/script/tutorial.js:47
 #: data/base/script/tutorial.js:66
@@ -4278,11 +4278,11 @@ msgstr "Nyní klikni levým tlačítkem na výzkumnou laboratoř a umísti ji u 
 
 #: data/base/script/tutorial.js:49
 msgid "Use your other truck to help build the research facility"
-msgstr "Pomoz svým dalším náklaďákem se stavbou výzkumné laboratoře"
+msgstr "Pomoz svou další konstruktérskou jednotkou se stavbou výzkumné laboratoře"
 
 #: data/base/script/tutorial.js:51
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr "K prozkoumání artefaktu klikni levým tlačítkem na blikající ikonu VÝZKUM"
+msgstr "K výzkumu artefaktu klikni levým tlačítkem na blikající ikonu VÝZKUM"
 
 #: data/base/script/tutorial.js:52
 msgid "Now left click the machinegun artifact"
@@ -4290,19 +4290,19 @@ msgstr "Nyní klikni levým tlačítkem na artefakt kulometu"
 
 #: data/base/script/tutorial.js:53
 msgid "The artifact is now being researched by the facility"
-msgstr "Artefakt je nyní prozkoumáván laboratoří"
+msgstr "Artefakt je nyní zkoumán laboratoří"
 
 #: data/base/script/tutorial.js:54
 msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr "Objevený kulomet nyní může posloužit ke konstrukci nového vozidla"
+msgstr "Vyzkoumaný kulomet nyní může posloužit ke konstrukci nového vozidla"
 
 #: data/base/script/tutorial.js:55
 msgid "Left click the flashing DESIGN icon"
-msgstr "Levým tlačítkem klikni na blikající ikonu KONSTRUKCE"
+msgstr "Levým tlačítkem klikni na blikající ikonu ŠABLONY"
 
 #: data/base/script/tutorial.js:56
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr "Začni novou konstrukci kliknutím levého tlačítka na ikonu NOVÁ KONSTRUKCE"
+msgstr "Vytvoř novou šablonu kliknutím levého tlačítka na ikonu NOVÁ ŠABLONA"
 
 #: data/base/script/tutorial.js:57
 msgid "Now left click the Vehicle Body icon"
@@ -4322,7 +4322,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:63
 msgid "To finalize your design, left click the CLOSE icon"
-msgstr "Konstrukci dokončíš kliknutím levého tlačítka na ikonu ZAVŘÍT"
+msgstr "Šablonu dokončíš kliknutím levého tlačítka na ikonu ZAVŘÍT"
 
 #: data/base/script/tutorial.js:65
 msgid "A factory is now required to manufacture your new vehicle"
@@ -4338,7 +4338,7 @@ msgstr "Vyber místo pro svou továrnu"
 
 #: data/base/script/tutorial.js:69
 msgid "The delivery point is indicated by the number 1"
-msgstr "Místo dodání je označeno číslem 1"
+msgstr "Místo, kam budou jednotky jezdit po vyrobení, je označeno číslem 1"
 
 #: data/base/script/tutorial.js:70
 msgid "All new units will drive to this location once built"
@@ -4346,11 +4346,11 @@ msgstr "Všechny nové jednotky budou jezdit na toto místo, jakmile budou vyrob
 
 #: data/base/script/tutorial.js:71
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr "Kdykoli můžeš přesunout místo dodání, když na něj klikneš levým tlačítkem"
+msgstr "Kdykoli můžeš přesunout místo kam budou jezdit když na něj klikneš levým tlačítkem"
 
 #: data/base/script/tutorial.js:72
 msgid "Now click where you want to position the delivery point"
-msgstr "Nyní klikni tam, kde chceš umístit dodací místo"
+msgstr "Nyní klikni tam, kde chceš umístit cílové místo"
 
 #: data/base/script/tutorial.js:73
 msgid "The factory can now be ordered to build a new unit"
@@ -4362,15 +4362,15 @@ msgstr "Levým tlačítkem klikni na blikající ikonu VÝROBA"
 
 #: data/base/script/tutorial.js:76
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr "Nyní klikni levým tlačítkem na jednotky, které chceš vyrobit z nabídky nalevo"
+msgstr "Nyní klikni levým tlačítkem na jednotky, které chceš vyrobit, z nabídky nalevo"
 
 #: data/base/script/tutorial.js:77
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Počkej prosím, zatímco továrna vyrobí nové jednotky"
+msgstr "Počkej prosím, zatímco továrna vyrobí novou jednotku (nové jednotky)"
 
 #: data/base/script/tutorial.js:79
 msgid "Congratulations commander - you are ready for your first mission"
-msgstr "Blahopřeji veliteli - jsi připraven na svou první misi"
+msgstr "Blahopřejeme, Veliteli - jsi připraven na svou první misi"
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
@@ -5703,7 +5703,7 @@ msgstr "Začni se Základnami"
 #: data/mp/multiplay/script/rules/printsettings.js:34
 #: src/multiint.cpp:1468
 msgid "Start with Advanced Bases"
-msgstr "Začni s Rozvinutými Základnami"
+msgstr "Začni s Pokročilými Základnami"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -5784,7 +5784,7 @@ msgstr ""
 #: lib/framework/i18n.cpp:110
 #: lib/framework/i18n.cpp:177
 msgid "System locale"
-msgstr "Systémové místo"
+msgstr "Jazyk systému"
 
 #: lib/netplay/netplay.cpp:1576
 #, c-format
@@ -14155,7 +14155,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[1]
 #: po/custom/fromJson.txt:5834
 msgid "Uses advanced cannon technology"
-msgstr "Použivá pokročilou technologii kanónu"
+msgstr "Použivá pokročilou kanónovou technologii"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MD.text[1]
@@ -15030,11 +15030,11 @@ msgstr ""
 
 #: src/clparse.cpp:382
 msgid "data directory"
-msgstr "datový adresář"
+msgstr "adresář s daty"
 
 #: src/clparse.cpp:383
 msgid "Show debug for given level"
-msgstr "Ukázat informace pro danou ladící úroveň"
+msgstr "Zobrazit ladícé informace pro danou úroveň"
 
 #: src/clparse.cpp:383
 msgid "debug level"
@@ -15133,19 +15133,19 @@ msgstr "ŠÍŘKAxVÝŠKA"
 
 #: src/clparse.cpp:400
 msgid "Enable shadows"
-msgstr "Povolit stíny"
+msgstr "Zapnout stíny"
 
 #: src/clparse.cpp:401
 msgid "Disable shadows"
-msgstr "Zakázat stíny"
+msgstr "Vypnout stíny"
 
 #: src/clparse.cpp:402
 msgid "Enable sound"
-msgstr "Povolit zvuk"
+msgstr "Zapnout zvuk"
 
 #: src/clparse.cpp:403
 msgid "Disable sound"
-msgstr "Zakázat zvuk"
+msgstr "Vypnout zvuk"
 
 #: src/clparse.cpp:404
 msgid "Connect directly to IP/hostname"
@@ -15349,7 +15349,7 @@ msgstr "Věž vozidla"
 
 #: src/design.cpp:808
 msgid "Delete Design"
-msgstr "Smazat náčrtek"
+msgstr "Smazat šablonu"
 
 #: src/design.cpp:824
 msgid "Store Template"
@@ -15358,7 +15358,7 @@ msgstr ""
 #: src/design.cpp:871
 #: src/design.cpp:900
 msgid "Kinetic Armour"
-msgstr "Pohybové brnění"
+msgstr "Kinetické brnění"
 
 #: src/design.cpp:877
 #: src/design.cpp:910
@@ -15392,7 +15392,7 @@ msgstr "Hmotnost"
 #: src/design.cpp:957
 #: src/design.cpp:971
 msgid "Total Power Required"
-msgstr "Celkem požadovaná energie"
+msgstr "Požadovaná energie celkem"
 
 #: src/design.cpp:981
 #: src/design.cpp:996
@@ -15411,7 +15411,7 @@ msgstr ""
 #: src/design.cpp:1520
 #: src/design.cpp:1535
 msgid "Sensor Range"
-msgstr "Dosah snímačů"
+msgstr "Dosah senzorů"
 
 #: src/design.cpp:1555
 #: src/design.cpp:1566
@@ -15428,7 +15428,7 @@ msgstr ""
 #: src/design.cpp:1651
 #: src/design.cpp:1678
 msgid "Range"
-msgstr "Rozsah"
+msgstr "Dosah"
 
 #: src/design.cpp:1661
 #: src/design.cpp:1686
@@ -16158,7 +16158,7 @@ msgstr ""
 
 #: src/frontend.cpp:2174
 msgid "Texture size"
-msgstr "Velikost textury"
+msgstr "Rozlišení textur"
 
 #: src/frontend.cpp:2179
 #: src/ingameop.cpp:761
@@ -16627,7 +16627,7 @@ msgstr ""
 
 #: src/hci/manufacture.cpp:753
 msgid "Loop Production"
-msgstr "Opakovat výrobu"
+msgstr "Zacyklit výrobu"
 
 #: src/hci/objects_stats.cpp:182
 msgid "Progress Bar"
@@ -17219,7 +17219,7 @@ msgstr "Stavět"
 
 #: src/input/keyconfig.cpp:42
 msgid "Design"
-msgstr "Návrh"
+msgstr "Šablona"
 
 #: src/input/keyconfig.cpp:43
 msgid "Intelligence Display"
@@ -17600,7 +17600,7 @@ msgstr "Braň pozici"
 
 #: src/input/keyconfig.cpp:145
 msgid "Return to HQ"
-msgstr "Zpět na HQ"
+msgstr "Vráť se k velitelství"
 
 #: src/input/keyconfig.cpp:146
 #: src/intorder.cpp:180
@@ -17610,7 +17610,7 @@ msgstr "Drž pozici"
 #: src/input/keyconfig.cpp:147
 #: src/intorder.cpp:170
 msgid "Optimum Range"
-msgstr "optimální dostřel"
+msgstr "Optimální dosah"
 
 #: src/input/keyconfig.cpp:148
 #: src/intorder.cpp:168
@@ -18477,7 +18477,7 @@ msgstr ""
 
 #: src/keybind.cpp:2207
 msgid "Unable to locate HQ!"
-msgstr "Nelze nalézt HQ!"
+msgstr "Nelze nalézt velitelství!"
 
 #: src/keybind.cpp:2214
 msgid "Formation speed limiting has been removed from the game due to bugs."
@@ -18710,7 +18710,7 @@ msgstr ""
 #: src/multigifts.cpp:488
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr "%s přerušil spolek s %s"
+msgstr "%s přerušil spojenectví s %s"
 
 #: src/multigifts.cpp:550
 #, c-format
@@ -18842,7 +18842,7 @@ msgstr ""
 
 #: src/multiint.cpp:1482
 msgid "Set Structure Limits"
-msgstr "Nastavení limitu budov"
+msgstr "Nastavení limitu struktur"
 
 #: src/multiint.cpp:1496
 msgid "Random Game Options"
@@ -19753,7 +19753,7 @@ msgstr "Růžová"
 
 #: src/multiplay.cpp:2330
 msgid "Cyan"
-msgstr "Azurová"
+msgstr "Tyrkysová"
 
 #: src/multiplay.cpp:2331
 msgid "Yellow"
@@ -19940,12 +19940,12 @@ msgstr "Nepřátelské jednotky: %u"
 #: src/scores.cpp:105
 #, c-format
 msgid "Own Structures: %u"
-msgstr "Vlastní Budovy: %u"
+msgstr "Vlastní Struktury: %u"
 
 #: src/scores.cpp:106
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr "Nepřátelské Budovy: %u"
+msgstr "Nepřátelské Struktury: %u"
 
 #: src/scores.cpp:107
 #, c-format
@@ -19960,12 +19960,12 @@ msgstr "Celkem Jednotek: %u"
 #: src/scores.cpp:109
 #, c-format
 msgid "Structures Built: %u"
-msgstr "Postaveno Budov: %u"
+msgstr "Postaveno Struktur: %u"
 
 #: src/scores.cpp:110
 #, c-format
 msgid "Total Structures: %u"
-msgstr "Celkem Budov: %u"
+msgstr "Celkem Struktur: %u"
 
 #: src/scores.cpp:112
 #, c-format
@@ -20115,19 +20115,19 @@ msgstr ""
 #: src/selection.cpp:374
 #: src/selection.cpp:456
 msgid "Unable to locate any repair units!"
-msgstr "Nemohu nalézt žádnou opravárenskou jednotku!"
+msgstr "Nelze nalézt žádnou opravárenskou jednotku!"
 
 #: src/selection.cpp:377
 msgid "Unable to locate any Trucks!"
-msgstr "Nemohu nalézt žádný náklaďák!"
+msgstr "Nelze nalézt žádnou stavitelskou jednotku!"
 
 #: src/selection.cpp:380
 msgid "Unable to locate any Sensor Units!"
-msgstr "Nemohu nalézt žádnou senzorovou jednotku!"
+msgstr "Nelze nalézt žádnou senzorovou jednotku!"
 
 #: src/selection.cpp:383
 msgid "Unable to locate any Commanders!"
-msgstr "Nemohu nalézt žádného velitele!"
+msgstr "Nelze nalézt žádného velitele!"
 
 #: src/selection.cpp:517
 msgid "Cannot find required building!"
@@ -20377,35 +20377,35 @@ msgstr ""
 
 #: src/structure.cpp:5799
 msgid "Electronic Reward - Visibility Report"
-msgstr ""
+msgstr "Elektronická odměna - Viditelnost"
 
 #: src/structure.cpp:5841
 msgid "Factory Reward - Propulsion"
-msgstr ""
+msgstr "Odměna z Továrny - Pohon"
 
 #: src/structure.cpp:5863
 msgid "Factory Reward - Body"
-msgstr ""
+msgstr "Odměna z Továrny - Tělo"
 
 #: src/structure.cpp:5885
 msgid "Factory Reward - Weapon"
-msgstr ""
+msgstr "Odměna z Továrny - Zbraň"
 
 #: src/structure.cpp:5893
 msgid "Factory Reward - Nothing"
-msgstr ""
+msgstr "Odměna z Továrny - Nic"
 
 #: src/structure.cpp:5923
 msgid "Repair Facility Award - Repair"
-msgstr ""
+msgstr "Odměna z Opravovací stanice - Oprava"
 
 #: src/structure.cpp:5929
 msgid "Repair Facility Award - Nothing"
-msgstr ""
+msgstr "Odměna z Opravovací stanice - Nic"
 
 #: src/terrain.cpp:2572
 msgid "Classic"
-msgstr ""
+msgstr "Klasický"
 
 #: src/titleui/gamefind.cpp:81
 msgid "GAMES"
@@ -20417,11 +20417,11 @@ msgstr "Aktualizuj Seznam Her"
 
 #: src/titleui/gamefind.cpp:92
 msgid "Filter Games List"
-msgstr ""
+msgstr "Filtrovat seznam her"
 
 #: src/titleui/gamefind.cpp:170
 msgid "Refreshing..."
-msgstr ""
+msgstr "Obnovování..."
 
 #: src/titleui/gamefind.cpp:178
 msgid "Searching"
@@ -20429,128 +20429,128 @@ msgstr "Hledám"
 
 #: src/titleui/gamefind.cpp:234
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Připojování k lobby serveru..."
 
 #: src/titleui/gamefind.cpp:280
 msgid "Map Name"
-msgstr ""
+msgstr "Název mapy"
 
 #: src/titleui/gamefind.cpp:286
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/titleui/gamefind.cpp:342
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Nelze se připojit k lobby serveru!"
 
 #: src/titleui/gamefind.cpp:435
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Módy: %s"
 
 #: src/titleui/gamefind.cpp:441
 msgid "Mods: None!"
-msgstr ""
+msgstr "Módy: Žádné!"
 
 #: src/titleui/gamefind.cpp:447
 #, c-format
 msgid "Version: %s"
-msgstr ""
+msgstr "Verze: %s"
 
 #: src/titleui/gamefind.cpp:472
 msgid "Join as spectator"
-msgstr ""
+msgstr "Připojit jako pozorovatel"
 
 #: src/titleui/gamefind.cpp:495
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Vaše verze Warzone není kompatibilní s touto hrou."
 
 #: src/titleui/gamefind.cpp:524
 msgid "[Password required]"
-msgstr ""
+msgstr "[Vyžadováno heslo]"
 
 #: src/titleui/gamefind.cpp:528
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Tanky vypnuty]"
 
 #: src/titleui/gamefind.cpp:532
 msgid "[No Cyborgs]"
-msgstr ""
+msgstr "[Kyborgové vypnuti]"
 
 #: src/titleui/gamefind.cpp:536
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[Vzdušné jednotky vypnuty]"
 
 #: src/titleui/gamefind.cpp:540
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Hostitel: %s"
 
 #: src/titleui/gamefind.cpp:544
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Hostitel: %s —%s"
 
 #: src/titleui/gamefind.cpp:676
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Nelze najít žádné hry pro vaši verzi."
 
 #: src/titleui/gamefind.cpp:692
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "Zdá se, že je k dispozici aktualizace hry!"
 
 #: src/titleui/gamefind.cpp:696
 msgid "No games are available for your version"
-msgstr ""
+msgstr "Pro vaši verzi nejsou k dispozici žádné hry"
 
 #: src/titleui/gamefind.cpp:700
 msgid "Game is full"
-msgstr ""
+msgstr "Hra je plná"
 
 #: src/titleui/gamefind.cpp:704
 msgid "You were kicked!"
-msgstr ""
+msgstr "Byl jsi vyhozen!"
 
 #: src/titleui/gamefind.cpp:707
 msgid "Wrong Game Version!"
-msgstr ""
+msgstr "Špatná verze hry!"
 
 #: src/titleui/gamefind.cpp:710
 msgid "You have an incompatible mod."
-msgstr ""
+msgstr "Máte nekompatibilní mód."
 
 #: src/titleui/gamefind.cpp:714
 msgid "Host couldn't send file?"
-msgstr ""
+msgstr "Hostitel nemohl odeslat soubor?"
 
 #: src/titleui/gamefind.cpp:718
 msgid "Incorrect Password!"
-msgstr ""
+msgstr "Nesprávné heslo!"
 
 #: src/titleui/gamefind.cpp:721
 msgid "Host has dropped connection!"
-msgstr ""
+msgstr "Hostitel zrušil připojení!"
 
 #: src/titleui/gamefind.cpp:725
 msgid "Connection Error"
-msgstr ""
+msgstr "Chyba připojení"
 
 #: src/titleui/msgbox.cpp:55
 msgid "Continue"
-msgstr ""
+msgstr "Pokračovat"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
-msgstr ""
+msgstr "Zadejte heslo:"
 
 #: src/titleui/passbox.cpp:91
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:183
 msgid "Cancel"
-msgstr ""
+msgstr "Zrušit"
 
 #: src/titleui/protocol.cpp:81
 msgid "CONNECTION"
@@ -20558,11 +20558,11 @@ msgstr "SPOJENÍ"
 
 #: src/titleui/protocol.cpp:86
 msgid "Lobby"
-msgstr ""
+msgstr "Najít hru"
 
 #: src/titleui/protocol.cpp:87
 msgid "IP"
-msgstr ""
+msgstr "IP adresa"
 
 #: src/titleui/protocol.cpp:203
 msgid "IP Address or Machine Name"
@@ -20573,16 +20573,16 @@ msgstr "IP Adresa nebo Jméno Stroje"
 #: src/transporter.cpp:354
 #: src/transporter.cpp:363
 msgid "Launch Transport"
-msgstr "Spustit transport"
+msgstr "Odeslat transport"
 
 #: src/transporter.cpp:313
 #: src/transporter.cpp:364
 msgid "Launch the Transporter"
-msgstr ""
+msgstr "Odeslat transport"
 
 #: src/transporter.cpp:1024
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "V transportu není dostatek místa!"
 
 #: src/transporter.cpp:1204
 msgid "Reinforcements landing"
@@ -20590,47 +20590,47 @@ msgstr "Posily přistály"
 
 #: src/updatemanager.cpp:479
 msgid "Update Available"
-msgstr ""
+msgstr "Dostupná aktualizace"
 
 #: src/updatemanager.cpp:482
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "Nová verze Warzone 2100 (%s) je k dispozici!"
 
 #: src/updatemanager.cpp:486
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "Tato nová verze obsahuje důležité opravy chyb a aktualizace a je doporučeno aktualizovat nyní."
 
 #: src/updatemanager.cpp:491
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "Nová verze Warzone 2100 je k dispozici!"
 
 #: src/updatemanager.cpp:493
 msgid "Get Update Now"
-msgstr ""
+msgstr "Aktualizovat nyní"
 
 #: src/updatemanager.cpp:618
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Upozornění na kompatibilitu"
 
 #: src/updatemanager.cpp:619
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Byl zjištěn problém, který může mít vliv na fungování nebo výkon Warzone 2100."
 
 #: src/updatemanager.cpp:625
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(ID oznámení: %s)"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:255
 msgid " (modified locally)"
-msgstr ""
+msgstr " (upraveno lokálně)"
 
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:262
 msgid " - DEBUG"
-msgstr ""
+msgstr " - DEBUG"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
@@ -20638,25 +20638,25 @@ msgstr ""
 #: src/version.cpp:271
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Verze: %s,%s Vydání: %s%s"
 
 #: src/wrappers.cpp:368
 msgid "GAME OVER"
-msgstr ""
+msgstr "HRA SKONČILA"
 
 #: src/wrappers.cpp:369
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "Bitva skončila - múžeš opustit místnost."
 
 #: src/wzapi.cpp:2392
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "VYHRÁL JSI!"
 
 #: src/wzapi.cpp:2399
 msgid "YOU WERE DEFEATED!"
-msgstr ""
+msgstr "BYL JSI PORAŽEN!"
 
 #: src/wzscriptdebug.cpp:2445
 msgid "Script Debugger"
-msgstr ""
+msgstr "Debugování scriptů"
 
