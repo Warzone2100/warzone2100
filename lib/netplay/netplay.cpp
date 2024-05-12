@@ -51,21 +51,7 @@
 #include "netpermissions.h"
 #include "sync_debug.h"
 
-#include <miniwget.h>
-#if (defined(__GNUC__) || defined(__clang__)) && !defined(__INTEL_COMPILER)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wpedantic"
-#endif
-#include <miniupnpc.h>
-#if (defined(__GNUC__) || defined(__clang__)) && !defined(__INTEL_COMPILER)
-# pragma GCC diagnostic pop
-#endif
-#include <upnpcommands.h>
-
-// Enforce minimum MINIUPNPC_API_VERSION
-#if !defined(MINIUPNPC_API_VERSION) || (MINIUPNPC_API_VERSION < 9)
-	#error lib/netplay requires MINIUPNPC_API_VERSION >= 9
-#endif
+#include <plum/plum.h>
 
 #include "src/multistat.h"
 #include "src/multijoin.h"
@@ -107,9 +93,11 @@ bool netGameserverPortOverride = false;
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
 
-#define UPNP_SUCCESS 1
-#define UPNP_ERROR_DEVICE_NOT_FOUND -1
-#define UPNP_ERROR_CONTROL_NOT_AVAILABLE -2
+// For NET_JOIN messages
+enum NET_JOIN_PLAYERTYPE : uint8_t {
+	NET_JOIN_PLAYER = 0,
+	NET_JOIN_SPECTATOR = 1,
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
@@ -125,7 +113,10 @@ SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
 
-static std::atomic_int upnp_status;
+static std::atomic_int port_mapping_status;
+static constexpr int PORT_MAPPING_INDETERMINATE = 0;
+static constexpr int PORT_MAPPING_SUCCESS = 1;
+static constexpr int PORT_MAPPING_FAILURE = -1;
 
 struct Statistic
 {
@@ -253,12 +244,12 @@ static SocketSet* client_socket_set = nullptr;
 // `connected_bsocket[i]` - sockets used to communicate with clients during a game session.
 static SocketSet* server_socket_set = nullptr;
 
-static struct UPNPUrls urls;
-static struct IGDdatas data;
+// External IP address as detected by Port Mapping library
+static std::string externalIPAddress;
+static int externalPort = 0;
 
-// local ip address
-static char lanaddr[40];
-static char externalIPAddress[40];
+static int plum_mapping_id = 0;
+
 /**
  * Used for connections with clients.
  */
@@ -1465,166 +1456,84 @@ static bool NETrecvGAMESTRUCT(Socket& sock, GAMESTRUCT *ourgamestruct)
 }
 
 // This function is run in its own thread! Do not call any non-threadsafe functions!
-static void upnp_init(std::atomic_int &retval)
+static void PlumMappingCallback(int mappingId, plum_state_t state, const plum_mapping_t* mapping)
 {
-	struct UPNPDev *devlist;
-	struct UPNPDev *dev;
-	char *descXML;
-	int result = 0;
-	int descXMLsize = 0;
-	memset(&urls, 0, sizeof(struct UPNPUrls));
-	memset(&data, 0, sizeof(struct IGDdatas));
+	debug(LOG_NET, "Port mapping %d: state=%d\n", mappingId, (int)state);
+	switch (state) {
+	case PLUM_STATE_SUCCESS:
+		debug(LOG_NET, "Mapping %d: success, internal=%hu, external=%s:%hu\n", mappingId, mapping->internal_port,
+			mapping->external_host, mapping->external_port);
+		externalIPAddress = mapping->external_host;
+		externalPort = mapping->external_port;
+		port_mapping_status.store(PORT_MAPPING_SUCCESS, std::memory_order_release);
+		break;
 
-	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
-#if defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 14)
-	devlist = upnpDiscover(3000, nullptr, nullptr, 0, 0, 2, &result);
-#else
-	devlist = upnpDiscover(3000, nullptr, nullptr, 0, 0, &result);
-#endif
-	debug(LOG_NET, "UPnP device search finished.");
+	case PLUM_STATE_FAILURE:
+		debug(LOG_NET, "Mapping %d: failed\n", mappingId);
+		port_mapping_status.store(PORT_MAPPING_FAILURE, std::memory_order_release);
+		break;
 
-	if (devlist)
-	{
-		dev = devlist;
-		while (dev)
-		{
-			if (strstr(dev->st, "InternetGatewayDevice"))
-			{
-				break;
-			}
-			dev = dev->pNext;
-		}
-		if (!dev)
-		{
-			dev = devlist; /* defaulting to first device */
-		}
-
-		debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
-
-#if defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 16)
-		int status_code = -1;
-		descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id, &status_code);
-		if (status_code != 200)
-		{
-			if (descXML)
-			{
-				free(descXML);
-				descXML = nullptr;
-			}
-			debug(LOG_NET, "HTTP error %d fetching: %s", status_code, (dev->descURL) ? dev->descURL : "");
-		}
-#else
-		descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id);
-#endif
-		debug(LOG_NET, "LAN address: %s", lanaddr);
-		if (descXML)
-		{
-			parserootdesc(descXML, descXMLsize, &data);
-			free(descXML); descXML = nullptr;
-			GetUPNPUrls(&urls, &data, dev->descURL, dev->scope_id);
-		}
-
-		debug(LOG_NET, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
-		freeUPNPDevlist(devlist);
-
-		if (!urls.controlURL || urls.controlURL[0] == '\0')
-		{
-			retval = UPNP_ERROR_CONTROL_NOT_AVAILABLE;
-		}
-		else
-		{
-			retval = UPNP_SUCCESS;
-		}
+	default:
+		break;
 	}
-	else
-	{
-		retval = UPNP_ERROR_DEVICE_NOT_FOUND;
-	}
-}
-
-static bool upnp_add_redirect(int port)
-{
-	char port_str[16];
-	char buf[512] = {'\0'};
-	int r;
-
-	debug(LOG_NET, "upnp_add_redir(%d)", port);
-	sprintf(port_str, "%d", port);
-	r = UPNP_AddPortMapping(urls.controlURL, data.first.servicetype,
-	                        port_str, port_str, lanaddr, "Warzone 2100", "TCP", nullptr, "0");	// "0" = lease time unlimited
-	if (r != UPNPCOMMAND_SUCCESS)
-	{
-		ssprintf(buf, _("Could not open required port (%s) on  (%s)"), port_str, lanaddr);
-		debug(LOG_NET, "%s", buf);
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		// beware of writing a line too long, it screws up console line count. \n is safe for line split
-		ssprintf(buf, _("You must manually configure your router & firewall to\n open port %d before you can host a game."), NETgetGameserverPort());
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		return false;
-	}
-
-	r = UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, externalIPAddress);
-	if (r != UPNPCOMMAND_SUCCESS)
-	{
-		ssprintf(externalIPAddress, "%s", "???");
-	}
-	ssprintf(buf, _("Game configured port (%s) correctly on (%s)\nYour external IP is %s"), port_str, lanaddr, externalIPAddress);
-	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-
-	return true;
-}
-
-static int upnp_rem_redirect(int port)
-{
-	char port_str[16];
-	debug(LOG_NET, "upnp_rem_redir(%d)", port);
-	sprintf(port_str, "%d", port);
-	return UPNP_DeletePortMapping(urls.controlURL, data.first.servicetype, port_str, "TCP", nullptr);
 }
 
 void NETaddRedirects()
 {
-	if (upnp_add_redirect(gameserver_port))
+	plum_mapping_t m;
+	memset(&m, 0, sizeof(m));
+	m.protocol = PLUM_IP_PROTOCOL_TCP;
+	m.internal_port = gameserver_port;
+
+	plum_mapping_id = plum_create_mapping(&m, PlumMappingCallback);
+	if (plum_mapping_id == PLUM_ERR_FAILED || plum_mapping_id == PLUM_ERR_INVALID)
 	{
-		debug(LOG_NET, "successful!");
-		NetPlay.isUPNP_CONFIGURED = true;
-		NetPlay.isUPNP_ERROR = false;
+		debug(LOG_NET, "Failed to create port mapping!");
+		NetPlay.isPORT_MAPPING_CONFIGURED = false;
+		NetPlay.isPORT_MAPPING_ERROR = true;
+		return;
 	}
-	else
-	{
-		debug(LOG_NET, "failed!");
-		NetPlay.isUPNP_CONFIGURED = false;
-		NetPlay.isUPNP_ERROR = true;
-	}
+	debug(LOG_NET, "Port mapping creation successful!");
+	NetPlay.isPORT_MAPPING_CONFIGURED = true;
+	NetPlay.isPORT_MAPPING_ERROR = false;
 }
 
 void NETremRedirects()
 {
-	debug(LOG_NET, "upnp is %d", NetPlay.isUPNP_CONFIGURED);
-	if (NetPlay.isUPNP_CONFIGURED)
+	debug(LOG_NET, "Port mapping is %d", NetPlay.isPORT_MAPPING_CONFIGURED);
+	if (NetPlay.isPORT_MAPPING_CONFIGURED)
 	{
-		int result = upnp_rem_redirect(gameserver_port);
-		if (!result)
+		int result = plum_destroy_mapping(plum_mapping_id);
+		if (result == PLUM_ERR_SUCCESS)
 		{
-			debug(LOG_NET, "removed UPnP entry.");
+			debug(LOG_NET, "Removed port mapping for port %d.", gameserver_port);
 		}
 		else
 		{
-			debug(LOG_ERROR, "Failed to remove UPnP entry for the game. You must manually remove it from your router. (%d)", result);
+			debug(LOG_ERROR, "Failed to remove port mapping for the game. You must manually remove it from your router. (%d)", result);
 		}
 	}
 }
 
-void NETdiscoverUPnPDevices()
+static void PlumLogCallback(plum_log_level_t /*level*/, const char* message)
 {
-	if (!NetPlay.isUPNP_CONFIGURED && NetPlay.isUPNP)
+	debug(LOG_NET, "LibPlum message: %s", message);
+}
+
+void NETinitPortMapping()
+{
+	if (!NetPlay.isPORT_MAPPING_CONFIGURED && NetPlay.isPortMappingEnabled)
 	{
-		wz::thread t(upnp_init, std::ref(upnp_status));
-		t.detach();
+		plum_config_t config;
+		memset(&config, 0, sizeof(config));
+		config.log_level = PLUM_LOG_LEVEL_INFO;
+		config.log_callback = &PlumLogCallback;
+		plum_init(&config);
+		NETaddRedirects();
 	}
-	else if (!NetPlay.isUPNP)
+	else if (!NetPlay.isPortMappingEnabled)
 	{
-		debug(LOG_INFO, "UPnP detection disabled by user.");
+		debug(LOG_INFO, "Automatic port mapping setup disabled by user.");
 	}
 }
 
@@ -1633,7 +1542,7 @@ void NETdiscoverUPnPDevices()
 int NETinit(bool bFirstCall)
 {
 	debug(LOG_NET, "NETinit");
-	upnp_status = 0;
+	port_mapping_status = PORT_MAPPING_INDETERMINATE;
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
 	NET_InitPlayers(true, true);
 
@@ -1643,7 +1552,7 @@ int NETinit(bool bFirstCall)
 	{
 		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
-		// NOTE NetPlay.isUPNP is already set in configuration.c!
+		// NOTE NetPlay.isPortMappingEnabled is already set in configuration.c!
 		NetPlay.bComms = true;
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
@@ -1672,11 +1581,12 @@ int NETshutdown()
 {
 	debug(LOG_NET, "NETshutdown");
 	NETlogEntry("NETshutdown", SYNC_FLAG, selectedPlayer);
-	if (NetPlay.bComms && NetPlay.isUPNP)
+	if (NetPlay.bComms && NetPlay.isPortMappingEnabled)
 	{
 		NETremRedirects();
-		NetPlay.isUPNP_CONFIGURED = false;
-		NetPlay.isUPNP_ERROR = false;
+		plum_cleanup();
+		NetPlay.isPORT_MAPPING_CONFIGURED = false;
+		NetPlay.isPORT_MAPPING_ERROR = false;
 	}
 	NETstopLogging();
 	NETpermissionsShutdown();
@@ -2913,34 +2823,26 @@ static void NETcheckPlayers()
 // We should not block here.
 bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 {
-	const int status = upnp_status.load(); // hack fix for clang and c++11 - fixed in standard for c++14
+	const int status = port_mapping_status.load(std::memory_order_acquire);
 	char buf[512] = {'\0'};
 	switch (status)
 	{
-	case UPNP_ERROR_CONTROL_NOT_AVAILABLE:
-	case UPNP_ERROR_DEVICE_NOT_FOUND:
-		if (upnp_status == UPNP_ERROR_DEVICE_NOT_FOUND)
-		{
-			debug(LOG_NET, "UPnP device not found");
-		}
-		else if (upnp_status == UPNP_ERROR_CONTROL_NOT_AVAILABLE)
-		{
-			debug(LOG_NET, "controlURL not available, UPnP disabled");
-		}
+	case PORT_MAPPING_FAILURE:
 		// beware of writing a line too long, it screws up console line count. \n is safe for line split
-		ssprintf(buf, _("No UPnP device found. Configure your router/firewall to open port %d!"), NETgetGameserverPort());
+		ssprintf(buf, _("Failed to create port mapping.\nManually configure your router/firewall to open port %d!"), NETgetGameserverPort());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		NetPlay.isUPNP_CONFIGURED = false;
-		NetPlay.isUPNP_ERROR = true;
-		upnp_status = 0;
+		NetPlay.isPORT_MAPPING_CONFIGURED = false;
+		NetPlay.isPORT_MAPPING_ERROR = true;
+		port_mapping_status = PORT_MAPPING_INDETERMINATE;
 		break;
-	case UPNP_SUCCESS:
-		NETaddRedirects();
-		upnp_status = 0;
+	case PORT_MAPPING_SUCCESS:
+		ssprintf(buf, _("Game configured port (%d) correctly on (%d)\nYour external IP is %s"), NETgetGameserverPort(), externalPort, externalIPAddress.c_str());
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		port_mapping_status = PORT_MAPPING_INDETERMINATE;
 		break;
 	default:
-	case 0:
-		ASSERT(upnp_status == 0, "bad value");
+	case PORT_MAPPING_INDETERMINATE:
+		ASSERT(port_mapping_status == PORT_MAPPING_INDETERMINATE, "bad value");
 		break;
 	}
 
@@ -3578,7 +3480,7 @@ bool LobbyServerConnectionHandler::connect()
 	{
 		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(sockOpenErr));
 		free(NetPlay.MOTD);
-		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to use UPnP\n or to forward the port to your system."),
+		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to use Port Mapping (UPnP/NAT-PMP/PCP)\n or to forward the port to your system."),
 					 strSockError(getSockErr()), masterserver_port) == -1)
 		{
 			NetPlay.MOTD = nullptr;

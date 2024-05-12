@@ -309,9 +309,9 @@ struct NETPLAY
 	uint32_t	hostPlayer;		///< Index of host in player array
 	bool		bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
-	bool		isUPNP;				// if we want the UPnP detection routines to run
-	bool		isUPNP_CONFIGURED;	// if UPnP was successful
-	bool		isUPNP_ERROR;		//If we had a error during detection/config process
+	bool		isPortMappingEnabled;				// if we want the automatic Port mapping setup routines to run
+	bool		isPORT_MAPPING_CONFIGURED;	// if Port Mapping was successful
+	bool		isPORT_MAPPING_ERROR;		//If we had a error during detection/config process
 	bool		isHostAlive;	/// if the host is still alive
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
@@ -363,7 +363,10 @@ int NETshutdown();					// leave the game in play.
 
 void NETaddRedirects();
 void NETremRedirects();
-void NETdiscoverUPnPDevices();
+/// Initializes the port mapping infrastructure and spawns a background thread,
+/// which will automatically add a port mapping rule and signal the main thread
+/// (NETrecvNet, in particular) when the operation is complete.
+void NETinitPortMapping();
 
 enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
 size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.

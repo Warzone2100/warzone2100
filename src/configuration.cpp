@@ -472,7 +472,8 @@ bool loadConfig()
 	{
 		setTextureSize(value.value());
 	}
-	NetPlay.isUPNP = iniGetBool("UPnP", true).value();
+	// First try the new setting called "portMapping", otherwise try the legacy "UPnP" option.
+	NetPlay.isPortMappingEnabled = iniGetBool("portMapping", iniGetBool("UPnP", true).value()).value();
 	if (auto value = iniGetIntegerOpt("antialiasing"))
 	{
 		war_setAntialiasing(value.value());
@@ -707,7 +708,7 @@ bool saveConfig()
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());
 	iniSetInteger("textureSize", getTextureSize());
 	iniSetInteger("antialiasing", war_getAntialiasing());
-	iniSetInteger("UPnP", (int)NetPlay.isUPNP);
+	iniSetInteger("portMapping", (int)NetPlay.isPortMappingEnabled);
 	iniSetBool("rotateRadar", rotateRadar);
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);

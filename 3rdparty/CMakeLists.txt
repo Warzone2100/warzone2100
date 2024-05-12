@@ -262,3 +262,6 @@ if (WZ_PROFILING_NVTX)
 	set(PROFILING_NVTX_INCLUDE ${CUDAToolkit_INCLUDE_DIRS} PARENT_SCOPE)
 
 endif ()
+
+add_subdirectory(libplum EXCLUDE_FROM_ALL)
+set_target_properties(plum plum-static PROPERTIES FOLDER "3rdparty")

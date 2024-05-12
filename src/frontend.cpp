@@ -530,7 +530,7 @@ bool runSinglePlayerMenu()
 void startMultiPlayerMenu()
 {
 	closeMissingVideosNotification();
-	
+
 	addBackdrop();
 	addTopForm(false);
 	addBottomForm();
@@ -570,13 +570,13 @@ bool runMultiPlayerMenu()
 		case FRONTEND_HOST:
 			// don't pretend we are running a network game. Really do it!
 			NetPlay.bComms = true; // use network = true
-			NetPlay.isUPNP_CONFIGURED = false;
-			NetPlay.isUPNP_ERROR = false;
+			NetPlay.isPORT_MAPPING_CONFIGURED = false;
+			NetPlay.isPORT_MAPPING_ERROR = false;
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			bMultiPlayer = true;
 			bMultiMessages = true;
 			NETinit(true);
-			NETdiscoverUPnPDevices();
+			NETinitPortMapping();
 			game.type = LEVEL_TYPE::SKIRMISH;		// needed?
 			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 			break;
@@ -3285,9 +3285,9 @@ static std::shared_ptr<WIDGET> makePlayerLeaveModeMPDropdown()
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
-char const *multiplayOptionsUPnPString()
+char const *multiplayOptionsPortMappingString()
 {
-	return NetPlay.isUPNP ? _("On") : _("Off");
+	return NetPlay.isPortMappingEnabled ? _("On") : _("Off");
 }
 
 char const *multiplayOptionsHostingChatDefaultString()
@@ -3317,9 +3317,9 @@ void startMultiplayOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GAME_PORT_R, std::to_string(NETgetGameserverPort()), WBUT_DISABLE))); // FUTURE TODO: Make this an input field or similar and allow editing (although reject ports <= 1024)
 	row.start++;
 
-	// Enable UPnP
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_UPNP, _("Enable UPnP"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_UPNP_R, multiplayOptionsUPnPString(), WBUT_SECONDARY)));
+	// Enable Port Mapping
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_PORT_MAPPING, _("Enable Port Mapping"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_PORT_MAPPING_R, multiplayOptionsPortMappingString(), WBUT_SECONDARY)));
 	row.start++;
 
 	// Chat
@@ -3387,10 +3387,10 @@ bool runMultiplayOptionsMenu()
 
 	switch (id)
 	{
-	case FRONTEND_UPNP:
-	case FRONTEND_UPNP_R:
-		NetPlay.isUPNP = !NetPlay.isUPNP;
-		widgSetString(psWScreen, FRONTEND_UPNP_R, multiplayOptionsUPnPString());
+	case FRONTEND_PORT_MAPPING:
+	case FRONTEND_PORT_MAPPING_R:
+		NetPlay.isPortMappingEnabled = !NetPlay.isPortMappingEnabled;
+		widgSetString(psWScreen, FRONTEND_PORT_MAPPING_R, multiplayOptionsPortMappingString());
 		break;
 	case FRONTEND_HOST_CHATDEFAULT:
 	case FRONTEND_HOST_CHATDEFAULT_R:
