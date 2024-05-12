@@ -210,6 +210,9 @@ jobs:
     name: 'Package Universal Binary'
     permissions:
       contents: write # Needed to upload to releases
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
     needs: macos-build
     runs-on: macos-latest
     steps:
@@ -295,6 +298,13 @@ jobs:
           name: "warzone2100_macOS_universal"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
           if-no-files-found: 'error'
+      - name: 'Generate artifact attestation - (full)'
+        # Run on push to master branch (development build), or tag release automation build
+        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v1
+        continue-on-error: true
+        with:
+          subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
       - name: Upload "universal" to release
         if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
         run: |
@@ -353,6 +363,13 @@ jobs:
           name: "warzone2100_macOS_universal_novideos"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
           if-no-files-found: 'error'
+      - name: 'Generate artifact attestation - (novideos)'
+        # Run on push to master branch (development build), or tag release automation build
+        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v1
+        continue-on-error: true
+        with:
+          subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
       - name: Upload "universal_novideos" to release
         if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
         run: |
