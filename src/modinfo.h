@@ -27,6 +27,7 @@
 #include <nlohmann/json_fwd.hpp>
 #include "difficulty.h"
 #include "campaigninfo.h"
+#include "wzjsonlocalizedstring.h"
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -45,25 +46,12 @@ enum class WzModCompatibilityResult
 	MAYBE_COMPATIBLE
 };
 
-class WzModInfoLocalizedString
-{
-public:
-	struct TranslationMapping
-	{
-		std::string languageCode;
-		std::string str;
-	};
-	std::vector<TranslationMapping> mappings;
-public:
-	optional<std::string> getLocalizedString() const;
-};
-
 class WZModInfo
 {
 public:
 	std::string name;
 	std::string author;
-	WzModInfoLocalizedString description;
+	WzJsonLocalizedString description;
 	WzModType type;
 	std::string license;
 	optional<std::string> version;
@@ -97,8 +85,8 @@ struct WzCampaignTweakOption
 	Type type;
 	bool enabled = false;
 	bool userEditable = true;
-	WzModInfoLocalizedString displayName;
-	WzModInfoLocalizedString description;
+	WzJsonLocalizedString displayName;
+	WzJsonLocalizedString description;
 };
 
 class WzCampaignModInfo : public WZModInfo
