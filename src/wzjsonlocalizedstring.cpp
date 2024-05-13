@@ -31,6 +31,10 @@ void from_json(const nlohmann::json& j, WzJsonLocalizedString& v)
 		{
 			v.mappings.push_back({it.key(), it.value().get<std::string>()});
 		}
+		if (v.mappings.empty())
+		{
+			throw nlohmann::json::type_error::create(302, "type is an empty object", &j);
+		}
 	}
 	else if (j.is_string())
 	{
@@ -44,21 +48,30 @@ void from_json(const nlohmann::json& j, WzJsonLocalizedString& v)
 
 optional<std::string> WzJsonLocalizedString::getLocalizedString() const
 {
-	const char* pLangCode = getLanguage();
-	std::string currentLanguage = (pLangCode) ? pLangCode : "en";
-
 	auto findMapping = [&](const std::string& languageCode) {
 		return std::find_if(mappings.begin(), mappings.end(), [languageCode](const TranslationMapping& m) -> bool {
 			return m.languageCode == languageCode;
 		});
 	};
 
+	const char* pLangCode = getLanguage();
+	std::string currentLanguage = (pLangCode) ? pLangCode : "en";
+
 	auto it = findMapping(currentLanguage);
 	if (it == mappings.end())
 	{
-		// fall back to "en" if available
+		// get "en" value
 		it = findMapping("en");
-		if (it == mappings.end())
+		if (it != mappings.end())
+		{
+			// check gettext message catalog for a built-in translation of the "en" value
+			// if there is no translation, this just returns the input string (the "en" value)
+			if (!it->str.empty())
+			{
+				return gettext(it->str.c_str());
+			}
+		}
+		else
 		{
 			// just use the first entry, if available
 			it = mappings.begin();
