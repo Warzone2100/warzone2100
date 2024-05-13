@@ -73,6 +73,8 @@ private:
 	size_t mip_count = 0;
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
 	bool gles = false;
+	size_t tex_width = 0;
+	size_t tex_height = 0;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	std::string debugName;
 #endif
@@ -86,6 +88,7 @@ public:
 	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
 	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
 	virtual unsigned id() override;
+	virtual gfx_api::texture2dDimensions get_dimensions() const override;
 private:
 	virtual bool upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };

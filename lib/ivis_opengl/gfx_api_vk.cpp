@@ -1988,7 +1988,7 @@ size_t VkTexture::format_size(const vk::Format& format)
 }
 
 VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& _internal_format, const std::string& filename)
-	: dev(root.dev), internal_format(_internal_format), mipmap_levels(mipmap_count), root(&root)
+	: dev(root.dev), internal_format(_internal_format), mipmap_levels(mipmap_count), tex_width(width), tex_height(height), root(&root)
 {
 	ASSERT(width > 0 && height > 0, "0 width/height textures are unsupported");
 	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
@@ -2256,6 +2256,11 @@ bool VkTexture::upload_sub(const size_t& mip_level, const size_t& offset_x, cons
 }
 
 unsigned VkTexture::id() { return 0; }
+
+gfx_api::texture2dDimensions VkTexture::get_dimensions() const
+{
+	return {tex_width, tex_height};
+}
 
 size_t VkTexture::backend_internal_value() const
 {
