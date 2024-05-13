@@ -1863,7 +1863,15 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 		{
 			if (psStruct->selected && psStruct->isFactory())
 			{
-				psStruct->productToGroup = (UBYTE)groupNumber;
+				if (psStruct->productToGroup != (UBYTE)groupNumber)
+				{
+					psStruct->productToGroup = (UBYTE)groupNumber;
+				}
+				else
+				{
+					// To make it possible to clear factory group assignment via "toggle" behavior of assigning a factory to the same group it's already assigned
+					psStruct->productToGroup = UBYTE_MAX;
+				}
 				return;
 			}
 		}
