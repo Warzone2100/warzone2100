@@ -551,6 +551,11 @@ unsigned gl_texture::id()
 	return _id;
 }
 
+gfx_api::texture2dDimensions gl_texture::get_dimensions() const
+{
+	return {tex_width, tex_height};
+}
+
 // MARK: texture_array_mip_level_buffer
 
 struct texture_array_mip_level_buffer
@@ -2447,6 +2452,8 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	new_texture->gles = gles;
 	new_texture->mip_count = mipmap_count;
 	new_texture->internal_format = internal_format;
+	new_texture->tex_width = width;
+	new_texture->tex_height = height;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	new_texture->debugName = filename;
 #endif

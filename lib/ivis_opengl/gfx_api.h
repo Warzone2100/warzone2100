@@ -95,11 +95,18 @@ namespace gfx_api
 		virtual ~abstract_texture() {};
 	};
 
+	struct texture2dDimensions
+	{
+		size_t width = 0;
+		size_t height = 0;
+	};
+
 	struct texture : abstract_texture
 	{
 		virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) = 0;
 		virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) = 0;
 		virtual unsigned id() = 0;
+		virtual texture2dDimensions get_dimensions() const = 0;
 		bool isArray() const { return false; }
 
 		texture( const texture& other ) = delete; // non construction-copyable

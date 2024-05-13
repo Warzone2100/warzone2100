@@ -47,9 +47,12 @@ public:
 	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
 	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
 	virtual unsigned id() override;
+	virtual gfx_api::texture2dDimensions get_dimensions() const override;
 	virtual size_t backend_internal_value() const override;
 protected:
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
+	size_t tex_width = 0;
+	size_t tex_height = 0;
 };
 
 struct null_texture_array final : public gfx_api::texture_array
