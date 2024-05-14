@@ -443,6 +443,8 @@ void NETsetJoinPreferenceIPv6(bool bTryIPv6First);
 bool NETgetJoinPreferenceIPv6();
 void NETsetDefaultMPHostFreeChatPreference(bool enabled);
 bool NETgetDefaultMPHostFreeChatPreference();
+void NETsetEnableTCPNoDelay(bool enabled);
+bool NETgetEnableTCPNoDelay();
 
 void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);

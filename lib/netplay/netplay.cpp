@@ -89,6 +89,7 @@ char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
 static bool bJoinPrefTryIPv6First = true;
 static bool bDefaultHostFreeChatEnabled = true;
+static bool bEnableTCPNoDelay = true;
 
 // This is for command line argument override
 // Disables port saving and reading from/to config
@@ -3993,6 +3994,12 @@ static void NETallowJoining()
 		tmp_connectState[i].ip = rIP;
 		tmp_connectState[i].connectTime = std::chrono::steady_clock::now();
 		tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::PendingInitialConnect;
+
+		if (bEnableTCPNoDelay)
+		{
+			// Enable TCP_NODELAY
+			socketSetTCPNoDelay(*tmp_socket[i], true);
+		}
 	}
 
 	if (checkSockets(*tmp_socket_set, NET_READ_TIMEOUT) > 0)
@@ -4921,6 +4928,12 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	// `client_transient_socket` is used to talk to host machine
 	SocketSet_AddSocket(*client_socket_set, client_transient_socket);
 
+	if (bEnableTCPNoDelay)
+	{
+		// Enable TCP_NODELAY
+		socketSetTCPNoDelay(*client_transient_socket, true);
+	}
+
 	// Send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
 	p_buffer = buffer;
 	auto pushu32 = [&](uint32_t value) {
@@ -5168,6 +5181,16 @@ void NETsetDefaultMPHostFreeChatPreference(bool enabled)
 bool NETgetDefaultMPHostFreeChatPreference()
 {
 	return bDefaultHostFreeChatEnabled;
+}
+
+void NETsetEnableTCPNoDelay(bool enabled)
+{
+	bEnableTCPNoDelay = enabled;
+}
+
+bool NETgetEnableTCPNoDelay()
+{
+	return bEnableTCPNoDelay;
 }
 
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)

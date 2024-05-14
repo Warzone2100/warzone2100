@@ -1431,7 +1431,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 			projectionMatrix, viewMatrix, modelUVLightmapMatrix, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts, depthPass);
 	}
