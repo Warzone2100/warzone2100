@@ -1088,14 +1088,10 @@ static void makeComponentUnavailable(UBYTE &state)
 	switch (state)
 	{
 	case AVAILABLE:
-		state = UNAVAILABLE;
-		break;
-	case REDUNDANT:
-		state = REDUNDANT_UNAVAILABLE;
-		break;
 	case FOUND:
 		state = UNAVAILABLE;
 		break;
+	case REDUNDANT:
 	case REDUNDANT_FOUND:
 		state = REDUNDANT_UNAVAILABLE;
 		break;
