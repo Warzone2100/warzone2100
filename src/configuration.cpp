@@ -423,6 +423,7 @@ bool loadConfig()
 	}
 	NETsetJoinPreferenceIPv6(iniGetBool("prefer_ipv6", true).value());
 	NETsetDefaultMPHostFreeChatPreference(iniGetBool("hostingChatDefault", NETgetDefaultMPHostFreeChatPreference()).value());
+	NETsetEnableTCPNoDelay(iniGetBool("tcp_nodelay", NETgetEnableTCPNoDelay()).value());
 	setPublicIPv4LookupService(iniGetString("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).value());
 	setPublicIPv6LookupService(iniGetString("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).value());
 	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", war_GetFMVmode()).value());
@@ -722,6 +723,8 @@ bool saveConfig()
 	}
 	iniSetBool("prefer_ipv6", NETgetJoinPreferenceIPv6());
 	iniSetInteger("hostingChatDefault", (NETgetDefaultMPHostFreeChatPreference()) ? 1 : 0);
+	iniSetInteger("tcp_nodelay", (NETgetEnableTCPNoDelay()) ? 1 : 0);
+
 	iniSetString("publicIPv4LookupService_Url", getPublicIPv4LookupServiceUrl());
 	iniSetString("publicIPv4LookupService_JSONKey", getPublicIPv4LookupServiceJSONKey());
 	iniSetString("publicIPv6LookupService_Url", getPublicIPv6LookupServiceUrl());

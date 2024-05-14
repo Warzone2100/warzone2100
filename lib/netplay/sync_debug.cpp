@@ -57,8 +57,8 @@ struct SyncDebugString : public SyncDebugEntry
 	void set(uint32_t& crc, char const* f, char const* string)
 	{
 		function = f;
-		crc = crcSum(crc, function, strlen(function) + 1);
-		crc = crcSum(crc, string, strlen(string) + 1);
+		crc = wz::crc_update(crc, function, strlen(function) + 1);
+		crc = wz::crc_update(crc, string, strlen(string) + 1);
 	}
 	int snprint(char* buf, size_t bufSize, char const*& string) const
 	{
@@ -77,9 +77,9 @@ struct SyncDebugValueChange : public SyncDebugEntry
 		newValue = nv;
 		id = i;
 		uint32_t valueBytes = htonl(newValue);
-		crc = crcSum(crc, function, strlen(function) + 1);
-		crc = crcSum(crc, variableName, strlen(variableName) + 1);
-		crc = crcSum(crc, &valueBytes, 4);
+		crc = wz::crc_update(crc, function, strlen(function) + 1);
+		crc = wz::crc_update(crc, variableName, strlen(variableName) + 1);
+		crc = wz::crc_update(crc, &valueBytes, 4);
 	}
 	int snprint(char* buf, size_t bufSize) const
 	{
@@ -107,7 +107,7 @@ struct SyncDebugIntList : public SyncDebugEntry
 		{
 			valueBytes[n] = htonl(ints[n]);
 		}
-		crc = crcSum(crc, valueBytes, 4 * numInts);
+		crc = wz::crc_update(crc, valueBytes, 4 * numInts);
 	}
 	int snprint(char* buf, size_t bufSize, int const*& ints) const
 	{
@@ -183,7 +183,7 @@ struct SyncDebugLog
 	{
 		log.clear();
 		time = 0;
-		crc = 0x00000000;
+		crc = wz::crc_init();
 		//printf("Freeing %d strings, %d valueChanges, %d intLists, %d chars, %d ints\n", (int)strings.size(), (int)valueChanges.size(), (int)intLists.size(), (int)chars.size(), (int)ints.size());
 		strings.clear();
 		valueChanges.clear();
@@ -355,7 +355,7 @@ void _syncDebugBacktrace(const char* function)
 #endif
 
 	// Use CRC of something platform-independent, to avoid false positive desynchs.
-	backupCrc = ~crcSum(~backupCrc, function, strlen(function) + 1);
+	backupCrc = ~wz::crc_update(~backupCrc, function, strlen(function) + 1);
 	syncDebugLog[syncDebugNext].setCrc(backupCrc);
 }
 

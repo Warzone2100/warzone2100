@@ -1928,7 +1928,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index
+		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
 	};
 	PSO::get().set_uniforms(uniforms);
 

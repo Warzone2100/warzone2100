@@ -828,7 +828,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents"
 		},
@@ -853,7 +853,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 		},
@@ -873,21 +873,21 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
@@ -2107,16 +2107,17 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(17, cbuf.PointLightsColorAndEnergy);
 	setUniforms(18, cbuf.bucketOffsetAndSize);
 	setUniforms(19, cbuf.indexed_lights);
-	setUniforms(20, cbuf.viewportWidth);
-	setUniforms(21, cbuf.viewportheight);
+	setUniforms(20, cbuf.bucketDimensionUsed);
+	setUniforms(21, cbuf.viewportWidth);
+	setUniforms(22, cbuf.viewportheight);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
 {
-	setUniforms(22, cbuf.tcmask);
-	setUniforms(23, cbuf.normalMap);
-	setUniforms(24, cbuf.specularMap);
-	setUniforms(25, cbuf.hasTangents);
+	setUniforms(23, cbuf.tcmask);
+	setUniforms(24, cbuf.normalMap);
+	setUniforms(25, cbuf.specularMap);
+	setUniforms(26, cbuf.hasTangents);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
@@ -2207,6 +2208,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 	setUniforms(i++, cbuf.PointLightsColorAndEnergy);
 	setUniforms(i++, cbuf.bucketOffsetAndSize);
 	setUniforms(i++, cbuf.indexed_lights);
+	setUniforms(i++, cbuf.bucketDimensionUsed);
 	setUniforms(i++, cbuf.viewportWidth);
 	setUniforms(i++, cbuf.viewportheight);
 	setUniforms(i++, 0); // lightmap_tex
@@ -3839,7 +3841,8 @@ bool gl_context::initGLContext()
 			// (if there are duplicate uniform names).
 			//
 			// This is now handled with a workaround when processing shaders, so just log it.
-			debug(LOG_3D, "Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
+			debug(LOG_FATAL, "OpenGL ES: Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
+			// FUTURE TODO: return false;
 		}
 	}
 

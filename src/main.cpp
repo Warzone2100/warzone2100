@@ -1671,6 +1671,17 @@ void osSpecificPostInit()
 #else
 	// currently, no-op
 #endif
+
+	// Perform sanity check that CRC functions were built with proper endianness configuration
+	uint32_t crc = wz::crc_init();
+	uint8_t checkByteArray[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
+	constexpr uint32_t expected_crc = 0xcbf43926;
+	crc = wz::crc_update(crc, checkByteArray, 9);
+	uint32_t finalized_crc = ~crc;
+	if (finalized_crc != expected_crc)
+	{
+		debug(LOG_FATAL, "CRC check failed (value: 0x%08x, expected: 0x%08x)", finalized_crc, expected_crc);
+	}
 }
 
 static std::string getDefaultLogFilePath(const char *platformDirSeparator)
