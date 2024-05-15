@@ -1233,7 +1233,7 @@ static void deserializeSaveGameV16Data_json(const nlohmann::json &o, SAVE_GAME_V
 {
 	deserializeSaveGameV15Data_json(o, (SAVE_GAME_V15 *) serializeGame);
 	for (unsigned i = 0; i < MAX_NOGO_AREAS; ++i)
-	{		
+	{
 		deserializeLandingZoneData_json(o.at("landingZones").at(i), &serializeGame->sLandingZone[i]);
 	}
 }
@@ -1545,7 +1545,7 @@ static void deserializeSaveGameV22Data_json(const nlohmann::json &o, SAVE_GAME_V
 		const nlohmann::json runData = o.at("runData");
 		ASSERT_OR_RETURN(, runData.is_array(), "unexpected type, wanted array");
 		deserializeRunData_json(runData.at(i), &serializeGame->asRunData[i]);
-		
+
 	}
 }
 
@@ -1981,7 +1981,7 @@ static bool serializeSaveGameV38Data(PHYSFS_file *fileHandle, const SAVE_GAME_V3
 	{
 		return false;
 	}
-	
+
 	if (WZ_PHYSFS_writeBytes(fileHandle, serializeGame->modList, modlist_string_size) != modlist_string_size)
 	{
 		return false;
@@ -2018,7 +2018,7 @@ static void serializeSaveGameData_json(nlohmann::json &o, nlohmann::json &savein
 	serializeSaveGameV38Data_json(o, (const SAVE_GAME_V38 *) serializeGame);
 	// not sure whether its 38, 39 or 40... different .cpp files are using different numbers
 	o["version"] = VERSION_39;
-	
+
 	// This file lists saved games, and their build info
 	// one per savegame directory
 	const auto tagResult = version_extractVersionNumberFromTag(version_getLatestTag());
@@ -2030,7 +2030,7 @@ static void serializeSaveGameData_json(nlohmann::json &o, nlohmann::json &savein
 	if (saveinfo.contains(saveName))
 	{
 		saveinfo.erase(saveName);
-	}	
+	}
 	char ourtime[20];
 	const time_t curtime = time(nullptr);
 	struct tm timeinfo = getLocalTime(curtime);
@@ -2053,7 +2053,7 @@ static bool deserializeSaveGameData_json(const nlohmann::json &o, SAVE_GAME *ser
 		debug(LOG_ERROR, "%s", e.what());
 		return false;
 	}
-	
+
 }
 static bool deserializeSaveGameData(PHYSFS_file *fileHandle, SAVE_GAME *serializeGame)
 {
@@ -4194,7 +4194,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<n
 				debug(LOG_ERROR, "failed to load gamjson");
 				return false;
 			}
-		} 
+		}
 		else
 		{
 			debug(LOG_SAVEGAME, "no gam json found, falling back to .gam");
@@ -4958,7 +4958,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	const std::string fileNameStr(fileName);
 	const auto len = fileNameStr.size();
 	ASSERT(strcmp(fileName + (len - 4), ".gam") == 0, "hmm... not .gam?");
-	
+
 	const auto lastSep = fileNameStr.rfind("/");
 	// TODO: convert argument "const char* filename" to a manageable struct with path/filename/extension
 	//		 and remove this mess...
@@ -6064,7 +6064,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 			NumberOfSkippedStructures++;
 		}
 		STRUCTURE *psStructure = nullptr;
-		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", (structure.id.has_value()) ? structure.id.value() : -1, player, 
+		debug(LOG_NEVER, "trying to build structure %i;%i;%s;%i;%i", (structure.id.has_value()) ? structure.id.value() : -1, player,
 				structure.name.c_str(), map_coord(structure.position.x), map_coord(structure.position.y));
 
 		uint32_t newID = generateSynchronisedObjectId();
@@ -6100,7 +6100,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 		}
 
 		// Previously, we would override building's ID with module's ID
-		// now, "id" is const, we can't do that. 
+		// now, "id" is const, we can't do that.
 		// this may break some mods which look up structures by theirs module id.
 		if (structure.modules > 0)
 		{
@@ -6239,7 +6239,7 @@ static bool loadSaveStructure2(const char *pFileName)
 				for (int moduleIdx = 0; moduleIdx < capacity; moduleIdx++)
 				{
 					buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
-					
+
 				}
 			}
 			if (ini.contains("Factory/template"))
@@ -7190,9 +7190,9 @@ static bool writeTerrainTypeMapFile(char *pFileName)
 
 bool isComponentStateValid(int state)
 {
-    return state == UNAVAILABLE 
-        || state == AVAILABLE 
-        || state == FOUND 
+    return state == UNAVAILABLE
+        || state == AVAILABLE
+        || state == FOUND
         || state == REDUNDANT
         || state == REDUNDANT_FOUND
         || state == REDUNDANT_UNAVAILABLE;
