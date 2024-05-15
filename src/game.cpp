@@ -6283,6 +6283,7 @@ static bool loadSaveStructure2(const char *pFileName)
 					asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].push_back(currentProd);
 				}
 			}
+			psStructure->productToGroup = ini.value("productToGroup", UBYTE_MAX).toInt();
 			break;
 		case REF_RESEARCH:
 			psResearch = ((RESEARCH_FACILITY *)psStructure->pFunctionality);
@@ -6528,6 +6529,7 @@ bool writeStructFile(const char *pFileName)
 					{
 						ini.setValue("Factory/productionRuns", 0);
 					}
+					ini.setValue("productToGroup", psCurr->productToGroup);
 				}
 				else if (psCurr->pStructureType->type == REF_RESEARCH)
 				{
