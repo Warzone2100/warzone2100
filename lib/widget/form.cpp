@@ -163,14 +163,22 @@ void W_FORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 
 void W_FORM::run(W_CONTEXT *psContext)
 {
-	if (!userMovable || !dragStart.has_value()) { return; }
+	// currently, no-op
+}
 
-	/* If the mouse is released *anywhere*, stop dragging */
-	if (mouseReleased(MOUSE_LMB))
+bool W_FORM::capturesMouseDrag(WIDGET_KEY wkey)
+{
+	return isUserMovable() && (wkey == WKEY_PRIMARY) && dragStart.has_value();
+}
+
+void W_FORM::mouseDragged(WIDGET_KEY wkey, W_CONTEXT *psStartContext, W_CONTEXT *psContext)
+{
+	if (wkey != WKEY_PRIMARY)
 	{
-		dragStart = nullopt;
 		return;
 	}
+
+	if (!userMovable || !dragStart.has_value()) { return; }
 
 	Vector2i currentMousePos(psContext->mx, psContext->my);
 	if (currentMousePos == dragStart.value()) { return; }
