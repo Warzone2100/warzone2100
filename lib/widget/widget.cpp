@@ -1288,10 +1288,17 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 	if (isMouseOverWidget())
 	{
 		auto psClickedWidget = shared_from_this();
+		W_CONTEXT clickedContext(psContext);
 		if (isTransparentToClicks)
 		{
 			do {
 				psClickedWidget = psClickedWidget->parent();
+				int shiftX = psClickedWidget->x();
+				int shiftY = psClickedWidget->y();
+				clickedContext.mx += shiftX;
+				clickedContext.my += shiftY;
+				clickedContext.xOffset -= shiftX;
+				clickedContext.yOffset -= shiftY;
 			} while (psClickedWidget != nullptr && psClickedWidget->isTransparentToClicks);
 			if (psClickedWidget == nullptr)
 			{
@@ -1300,17 +1307,17 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		}
 		if (wasPressed)
 		{
-			psClickedWidget->clicked(psContext, key);
+			psClickedWidget->clicked(&clickedContext, key);
 			psClickDownWidgetScreen = psClickedWidget->screenPointer.lock();
 			if (psClickedWidget->capturesMouseDrag(key))
 			{
 				widgetKeyCurrentState[key].capturedDragWidget = psClickedWidget;
-				widgetKeyCurrentState[key].dragLastPos = widgetKeyCurrentState[key].dragStartPos = psContext->convertToScreenContext();
+				widgetKeyCurrentState[key].dragLastPos = widgetKeyCurrentState[key].dragStartPos = clickedContext.convertToScreenContext();
 			}
 		}
 		else
 		{
-			psClickedWidget->released(psContext, key);
+			psClickedWidget->released(&clickedContext, key);
 			psClickDownWidgetScreen.reset();
 		}
 		didProcessClick = true;
