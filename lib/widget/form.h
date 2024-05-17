@@ -65,6 +65,10 @@ public:
 	bool            disableChildren;        ///< Disable all child widgets if true
 	bool			userMovable = false;	///< Whether the user can drag the form around (NOTE: should only be used with forms on overlay screens, currently)
 
+protected:
+	bool capturesMouseDrag(WIDGET_KEY) override;
+	void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) override;
+
 private:
 	Vector2i calcMinimizedSize() const;
 	const WzRect& minimizedGeometry() const;
