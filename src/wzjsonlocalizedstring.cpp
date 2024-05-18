@@ -46,7 +46,7 @@ void from_json(const nlohmann::json& j, WzJsonLocalizedString& v)
 	}
 }
 
-optional<std::string> WzJsonLocalizedString::getLocalizedString() const
+std::string WzJsonLocalizedString::getLocalizedString() const
 {
 	auto findMapping = [&](const std::string& languageCode) {
 		return std::find_if(mappings.begin(), mappings.end(), [languageCode](const TranslationMapping& m) -> bool {
@@ -76,11 +76,6 @@ optional<std::string> WzJsonLocalizedString::getLocalizedString() const
 			// just use the first entry, if available
 			it = mappings.begin();
 		}
-	}
-
-	if (it == mappings.end())
-	{
-		return nullopt;
 	}
 
 	return it->str;
