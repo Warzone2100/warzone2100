@@ -39,7 +39,7 @@ public:
 	};
 	std::vector<TranslationMapping> mappings;
 public:
-	optional<std::string> getLocalizedString() const;
+	std::string getLocalizedString() const;
 };
 
 void from_json(const nlohmann::json& j, WzJsonLocalizedString& v);
