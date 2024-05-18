@@ -1589,7 +1589,7 @@ protected:
 			// load details from mod
 			displayName = WzString::fromUtf8(modInfo.value().name);
 			author = WzString::fromUtf8(modInfo.value().author);
-			description = WzString::fromUtf8(modInfo.value().description.getLocalizedString().value_or(""));
+			description = WzString::fromUtf8(modInfo.value().description.getLocalizedString());
 			if (!modInfo.value().modBannerPNGData.empty())
 			{
 				iV_Image ivImage;
@@ -1973,7 +1973,7 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		{
 			auto localizedDisplayName = customOpt.displayName.getLocalizedString();
 			auto localizedDescription = customOpt.description.getLocalizedString();
-			if (!localizedDisplayName.has_value())
+			if (localizedDisplayName.empty())
 			{
 				continue;
 			}
@@ -1984,8 +1984,8 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 			}
 			results.emplace_back(
 				customOpt.uniqueIdentifier,
-				WzString::fromUtf8(localizedDisplayName.value()),
-				WzString::fromUtf8(localizedDescription.value_or("")),
+				WzString::fromUtf8(localizedDisplayName),
+				WzString::fromUtf8(localizedDescription),
 				customOpt.enabled, customOpt.userEditable
 			);
 		}
@@ -2281,7 +2281,7 @@ bool CampaignStartOptionsForm::updateCampaignBalanceDropdown(const std::vector<W
 			campaignBalanceChoices[classicModIdx].modInfo = mod;
 			continue;
 		}
-		campaignBalanceChoices.push_back({WzString::fromUtf8(mod.name), WzString::fromUtf8(mod.description.getLocalizedString().value_or(std::string())), mod});
+		campaignBalanceChoices.push_back({WzString::fromUtf8(mod.name), WzString::fromUtf8(mod.description.getLocalizedString()), mod});
 	}
 
 	campaignBalanceDropdown->clear();
