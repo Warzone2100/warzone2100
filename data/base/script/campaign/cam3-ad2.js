@@ -205,11 +205,22 @@ function vaporizeTarget()
 		}
 		if (Math.floor(mapLimit) < mapHeight)
 		{
-			//Need to travel about 119 tiles in ~1 hour so:
-			//119 tiles / 60 minutes = 1.983 tiles per minute
-			//1.983 tile per minute / 60 seconds = 0.03305 tiles per second
-			//0.03305 * 10 sec = ~0.33 tiles per blast at 10 second intervals.
-			mapLimit += 0.33; //sector clear; move closer
+			if (camClassicMode() && tweakOptions.camClassic_balance32)
+			{
+				//Need to travel about 119 tiles in 80 minutes so:
+				//119 tiles / 80 minutes = 1.4875 tiles per minute
+				//1.4875 tile per minute / 60 seconds = 0.02479 tiles per second
+				//0.02479 * 10 sec = ~0.24 tiles per blast at 10 second intervals.
+				mapLimit += 0.24; //sector clear; move closer
+			}
+			else
+			{
+				//Need to travel about 119 tiles in ~1 hour so:
+				//119 tiles / 60 minutes = 1.9833 tiles per minute
+				//1.9833 tile per minute / 60 seconds = 0.03305 tiles per second
+				//0.03305 * 10 sec = ~0.33 tiles per blast at 10 second intervals.
+				mapLimit += 0.33; //sector clear; move closer
+			}
 		}
 		laserSatFuzzyStrike(target);
 	}
@@ -301,7 +312,14 @@ function checkTime()
 	if (getMissionTime() <= 2)
 	{
 		camPlayVideos({video: "MB3_AD2_MSG2", type: CAMP_MSG});
-		setMissionTime(camHoursToSeconds(1));
+		if (camClassicMode() && tweakOptions.camClassic_balance32)
+		{
+			setMissionTime(camMinutesToSeconds(80)); // To accommodate the research bug of 3.2 balance.
+		}
+		else
+		{
+			setMissionTime(camHoursToSeconds(1));
+		}
 
 		phantomFactorySpawn();
 		queue("vaporizeTarget", camSecondsToMilliseconds(2));
