@@ -719,6 +719,7 @@ bool seq_UpdateFullScreenVideo()
 void seqReleaseAll()
 {
 	seq_Shutdown();
+	aVideoProvider.reset();
 	wzCachedSeqText.clear();
 }
 
@@ -733,6 +734,7 @@ bool seq_StopFullScreenVideo()
 
 	seq_Shutdown();
 
+	aVideoProvider.reset();
 	wzCachedSeqText.clear();
 
 	return true;

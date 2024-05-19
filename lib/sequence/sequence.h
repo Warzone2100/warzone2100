@@ -36,7 +36,7 @@ class VideoProvider;
 std::shared_ptr<VideoProvider> makeVideoProvider(PHYSFS_file *in, const WzString& filename);
 std::shared_ptr<VideoProvider> makeVideoProvider(std::shared_ptr<const std::vector<char>> memoryBuffer, const WzString& filename);
 
-bool seq_Play(const std::shared_ptr<VideoProvider>& video);
+bool seq_Play(std::shared_ptr<VideoProvider> video);
 bool seq_Playing();
 bool seq_Update();
 void seq_Shutdown();

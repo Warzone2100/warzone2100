@@ -617,7 +617,7 @@ void update_buffers()
 	videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
 }
 
-bool seq_Play(const std::shared_ptr<VideoProvider> &video)
+bool seq_Play(std::shared_ptr<VideoProvider> video)
 {
 	int pp_level_max = 0;
 	int pp_level = 0;
