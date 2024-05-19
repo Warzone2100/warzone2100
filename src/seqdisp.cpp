@@ -217,13 +217,14 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 
 	// need to request
 
-	if (!baseURLPath.has_value())
-	{
-		return false;
-	}
-
 	auto requestDetails = std::make_shared<RequestDetails>();
 	priorRequests[videoName] = requestDetails;
+
+	if (!baseURLPath.has_value())
+	{
+		requestDetails->status = RequestDetails::RequestStatus::Failure;
+		return false;
+	}
 
 	URLDataRequest urlRequest;
 	urlRequest.url = baseURLPath.value().toUtf8() + urlEncodeVideoPathComponents(videoName).toUtf8();
@@ -484,7 +485,7 @@ static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audio
 	{
 		aVideoProvider = makeVideoProvider(fpInfile, videoName);
 	}
-	else
+	else if (onDemandVideoProvider.hasBaseURLPath())
 	{
 		// Try to download video from on-demand provider
 		auto videoData = onDemandVideoProvider.getVideoData(videoName);
@@ -903,7 +904,10 @@ void seq_AddSeqToList(const WzString &pSeqName, const WzString &audioName, const
 
 	ASSERT_OR_RETURN(, currentSeq < MAX_SEQ_LIST, "too many sequences");
 
-	onDemandVideoProvider.requestVideoData(pSeqName);
+	if (onDemandVideoProvider.hasBaseURLPath())
+	{
+		onDemandVideoProvider.requestVideoData(pSeqName);
+	}
 
 	//OK so add it to the list
 	aSeqList[currentSeq].pSeq = pSeqName;
