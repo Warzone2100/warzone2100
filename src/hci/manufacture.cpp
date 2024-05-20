@@ -184,11 +184,11 @@ void ManufactureController::refresh()
 void ManufactureController::clearData()
 {
 	factories.clear();
-	setHighlightedObject(nullptr);
+	setHighlightedObject(nullptr, false);
 	stats.clear();
 }
 
-void ManufactureController::setHighlightedObject(BASE_OBJECT *object)
+void ManufactureController::setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject)
 {
 	if (object == nullptr)
 	{
@@ -198,6 +198,7 @@ void ManufactureController::setHighlightedObject(BASE_OBJECT *object)
 
 	auto factory = castStructure(object);
 	ASSERT_OR_RETURN(, factory && factory->isFactory(), "Invalid factory pointer");
+	queuedJumpToHighlightedStatsObject = queuedJumpToHighlightedStatsObject || jumpToHighlightedStatsObject;
 	highlightedFactory = factory;
 }
 
@@ -231,7 +232,7 @@ public:
 	void clickPrimary() override
 	{
 		controller->clearStructureSelection();
-		controller->selectObject(controller->getObjectAt(objectIndex));
+		controller->selectObject(controller->getObjectAt(objectIndex), false);
 		jump();
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
@@ -470,7 +471,7 @@ private:
 		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
 		controller->releaseFactoryProduction(factory);
 		controller->clearStructureSelection();
-		controller->selectObject(factory);
+		controller->selectObject(factory, true);
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
@@ -480,7 +481,7 @@ private:
 		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
 		controller->clearStructureSelection();
 		controller->cancelFactoryProduction(factory);
-		controller->setHighlightedObject(factory);
+		controller->setHighlightedObject(factory, true);
 		controller->refresh();
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
