@@ -2822,6 +2822,19 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 	}
 
+	//if user save game then load up the research BEFORE any droids or structures are loaded
+	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
+	{
+		//load in the research list file
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "resstate.json");
+		if (!loadSaveResearch(aFileName))
+		{
+			debug(LOG_ERROR, "Failed to load research data from %s", aFileName);
+			goto error;
+		}
+	}
+
 	if (saveGameOnMission && UserSaveGame)
 	{
 		//the scroll limits for the mission map have already been written
@@ -3021,19 +3034,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	//adjust the scroll range for the new map or the expanded map
 	setMapScroll();
-
-	//if user save game then load up the research BEFORE any droids or structures are loaded
-	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
-	{
-		//load in the research list file
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "resstate.json");
-		if (!loadSaveResearch(aFileName))
-		{
-			debug(LOG_ERROR, "Failed to load research data from %s", aFileName);
-			goto error;
-		}
-	}
 
 	if (IsScenario)
 	{
