@@ -481,11 +481,13 @@ static bool seqPlayOrQueueFetch(const WzString& videoName, const WzString& audio
 	}
 	else
 	{
-		if (!onDemandVideoProvider.hasBaseURLPath())
+		bool isNoVideo = videoName.startsWith("novideo");
+
+		if (!onDemandVideoProvider.hasBaseURLPath() || isNoVideo)
 		{
 			// no on-demand fallback available - log the failure to open local file
 			code_part log_part = LOG_INFO;
-			if (videoName.compare("novideo.ogg") == 0 || videoName.compare("novideo.ogv") == 0)
+			if (isNoVideo)
 			{
 				// in these special cases, don't clutter the logs with LOG_INFO level events
 				log_part = LOG_VIDEO;
