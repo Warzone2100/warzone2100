@@ -7414,6 +7414,7 @@ bool loadSaveResearch(const char *pFileName)
 			int points = json_getValue(pointsList, plr).toInt();
 
 			psPlRes = &asPlayerResList[plr][statInc];
+			bool resAlreadyCompleted = IsResearchCompleted(psPlRes);
 			// Copy the research status
 			psPlRes->ResearchStatus = (researched & RESBITS_ALL);
 			SetResearchPossible(psPlRes, possible);
@@ -7421,7 +7422,14 @@ bool loadSaveResearch(const char *pFileName)
 			//for any research that has been completed - perform so that upgrade values are set up
 			if (researched == RESEARCHED)
 			{
-				researchResult(statInc, plr, false, nullptr, false);
+				if (!resAlreadyCompleted)
+				{
+					researchResult(statInc, plr, false, nullptr, false);
+				}
+				else
+				{
+					debug(LOG_INFO, "Player %d already completed research: %s - skipping re-apply", plr, name.toUtf8().c_str());
+				}
 			}
 		}
 		ini.endGroup();

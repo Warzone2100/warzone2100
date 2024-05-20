@@ -1465,7 +1465,6 @@ static bool recvResearch(NETQUEUE queue)
 
 	if (!IsResearchCompleted(pPlayerRes))
 	{
-		MakeResearchCompleted(pPlayerRes);
 		researchResult(index, player, false, nullptr, true);
 	}
 
@@ -1481,7 +1480,6 @@ static bool recvResearch(NETQUEUE queue)
 				if (!IsResearchCompleted(pPlayerRes))
 				{
 					// Do the research for that player
-					MakeResearchCompleted(pPlayerRes);
 					researchResult(index, i, false, nullptr, true);
 				}
 			}
