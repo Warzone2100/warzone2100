@@ -2436,11 +2436,8 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 		if (gameWon && showOutro)
 		{
 			showBackDrop = false;
-			if (seq_hasVideos())
-			{
-				seq_AddSeqToList("outro.ogg", nullptr, "outro.txa", false);
-				seq_StartNextFullScreenVideo();
-			}
+			seq_AddSeqToList("outro.ogg", nullptr, "outro.txa", false);
+			seq_StartNextFullScreenVideo();
 		}
 		else
 		{
