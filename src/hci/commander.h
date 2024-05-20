@@ -71,7 +71,7 @@ public:
 private:
 	void updateCommandersList();
 	std::vector<DROID *> commanders;
-	bool queuedJumpToHighlightedStatsObject = false;
+	bool queuedJumpToHighlightedStatsObject = true;
 	static DROID *highlightedCommander;
 };
 

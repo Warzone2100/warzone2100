@@ -85,7 +85,7 @@ private:
 	void updateResearchOptionsList();
 	std::vector<RESEARCH *> stats;
 	std::vector<STRUCTURE *> facilities;
-	bool queuedJumpToHighlightedStatsObject = false;
+	bool queuedJumpToHighlightedStatsObject = true;
 	static STRUCTURE *highlightedFacility;
 };
 
