@@ -87,7 +87,7 @@ void seq_SetSubtitles(bool bNewState);
 bool seq_GetSubtitles();
 
 /*returns the next sequence in the list to play*/
-void seq_StartNextFullScreenVideo();
+bool seq_StartNextFullScreenVideo();
 
 void seqReleaseAll();
 
