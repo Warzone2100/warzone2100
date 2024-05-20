@@ -97,7 +97,7 @@ private:
 	void updateManufactureOptionsList();
 	std::vector<DROID_TEMPLATE *> stats;
 	std::vector<STRUCTURE *> factories;
-	bool queuedJumpToHighlightedStatsObject = false;
+	bool queuedJumpToHighlightedStatsObject = true;
 	static STRUCTURE *highlightedFactory;
 };
 

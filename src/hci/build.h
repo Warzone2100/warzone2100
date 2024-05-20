@@ -111,7 +111,7 @@ private:
 	void updateBuildOptionsList();
 	std::vector<STRUCTURE_STATS *> stats;
 	std::vector<DROID *> builders;
-	bool queuedJumpToHighlightedStatsObject = false;
+	bool queuedJumpToHighlightedStatsObject = true;
 
 	static bool showFavorites;
 	static DROID *highlightedBuilder;
