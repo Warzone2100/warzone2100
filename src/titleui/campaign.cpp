@@ -2102,15 +2102,12 @@ void CampaignStartOptionsForm::handleStartGame()
 	sstrcpy(aLevelName, campaignFile.level.toUtf8().c_str());
 	setCampaignName(campaignFile.name.toStdString());
 
-	// show this only when the video sequences are installed
-	if (seq_hasVideos())
+	// show video
+	if (!campaignFile.video.isEmpty())
 	{
-		if (!campaignFile.video.isEmpty())
-		{
-			seq_ClearSeqList();
-			seq_AddSeqToList(campaignFile.video.toUtf8().c_str(), nullptr, campaignFile.captions.toUtf8().c_str(), false);
-			seq_StartNextFullScreenVideo();
-		}
+		seq_ClearSeqList();
+		seq_AddSeqToList(campaignFile.video.toUtf8().c_str(), nullptr, campaignFile.captions.toUtf8().c_str(), false);
+		seq_StartNextFullScreenVideo();
 	}
 
 	// set tweak options
