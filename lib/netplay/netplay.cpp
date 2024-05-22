@@ -245,13 +245,6 @@ bool netPlayersUpdated;
 // There's also `rs_socket` held by `LobbyServerConnectionHandler`, which is used to communicate with the lobby server.
 static Socket* server_listen_socket = nullptr;
 
-// Client-side socket used initially to establish connection with a host.
-// If all preliminary checks (e.g. we're able to locate the host and initial
-// version check succeeded) are passed, it will be promoted to a stable client
-// connection and assigned to `bsocket`, leaving `client_transient_socket == nullptr`
-// once again (that's why it's called "transient").
-static Socket* client_transient_socket = nullptr;
-
 static Socket *bsocket = nullptr;                  ///< Socket used to talk to the host (clients only). If bsocket != NULL, then client_transient_socket == NULL.
 static Socket *connected_bsocket[MAX_CONNECTED_PLAYERS] = { nullptr };  ///< Sockets used to talk to clients (host only).
 // Client-side socket set. Contains of only 1 socket at most: `bsocket` (which is a stable client connection to the host).
@@ -1741,11 +1734,6 @@ int NETclose()
 
 	if (client_socket_set)
 	{
-		// checking to make sure client_transient_socket is still valid
-		if (client_transient_socket)
-		{
-			SocketSet_DelSocket(*client_socket_set, client_transient_socket);
-		}
 		if (bsocket)
 		{
 			SocketSet_DelSocket(*client_socket_set, bsocket);
@@ -1759,12 +1747,6 @@ int NETclose()
 		debug(LOG_NET, "Freeing socket_set %p", static_cast<void*>(server_socket_set));
 		deleteSocketSet(server_socket_set);
 		server_socket_set = nullptr;
-	}
-	if (client_transient_socket)
-	{
-		debug(LOG_NET, "Closing client_transient_socket %p", static_cast<void*>(client_transient_socket));
-		socketClose(client_transient_socket);
-		client_transient_socket = nullptr;
 	}
 	if (server_listen_socket)
 	{
@@ -4902,12 +4884,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		return false;
 	}
 
-	if (client_transient_socket != nullptr)
-	{
-		socketClose(client_transient_socket);
-	}
-
-	client_transient_socket = socketOpenAny(hosts, 15000);
+	Socket* client_transient_socket = socketOpenAny(hosts, 15000);
 	deleteSocketAddress(hosts);
 
 	if (client_transient_socket == nullptr)
@@ -4917,16 +4894,21 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	}
 
 	// client machines only need 1 socket set
-	client_socket_set = allocSocketSet();
-	if (client_socket_set == nullptr)
+	SocketSet* tmp_joining_socket_set = allocSocketSet();
+	if (tmp_joining_socket_set == nullptr)
 	{
 		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
+		if (client_transient_socket)
+		{
+			socketClose(client_transient_socket);
+			client_transient_socket = nullptr;
+		}
 		return false;
 	}
-	debug(LOG_NET, "Created socket_set %p", static_cast<void *>(client_socket_set));
+	debug(LOG_NET, "Created socket_set %p", static_cast<void *>(tmp_joining_socket_set));
 
 	// `client_transient_socket` is used to talk to host machine
-	SocketSet_AddSocket(*client_socket_set, client_transient_socket);
+	SocketSet_AddSocket(*tmp_joining_socket_set, client_transient_socket);
 
 	if (bEnableTCPNoDelay)
 	{
@@ -4956,59 +4938,145 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	{
 		debug(LOG_ERROR, "Received error %d", result);
 
-		SocketSet_DelSocket(*client_socket_set, client_transient_socket);
+		SocketSet_DelSocket(*tmp_joining_socket_set, client_transient_socket);
 		socketClose(client_transient_socket);
 		client_transient_socket = nullptr;
-		deleteSocketSet(client_socket_set);
-		client_socket_set = nullptr;
+		deleteSocketSet(tmp_joining_socket_set);
+		tmp_joining_socket_set = nullptr;
 
 		setLobbyError((LOBBY_ERROR_TYPES)result);
 		return false;
 	}
 
-	// Allocate memory for a new socket
-	NetPlay.hostPlayer = NET_HOST_ONLY;
-	NETinitQueue(NETnetQueue(NET_HOST_ONLY));
-	// NOTE: Initial connection attempt is successful. Promote transient socket to stable client connection.
-	// bsocket = client_transient_socket, client_transient_socket = nullptr now!
-	bsocket = client_transient_socket;
-	client_transient_socket = nullptr;
-	socketBeginCompression(*bsocket);
+	// Create temporary NETQUEUE
+	NetQueuePair *tmpJoiningQueuePair;
+	auto NETnetJoinTmpQueue = [&]()
+	{
+		NETQUEUE ret;
+		NetQueuePair **queue = &tmpJoiningQueuePair;
+		ret.queue = queue;
+		ret.isPair = true;
+		ret.index = NET_HOST_ONLY;
+		ret.queueType = QUEUE_TRANSIENT_JOIN;
+		ret.exclude = NET_NO_EXCLUDE;
+		return ret;
+	};
+	auto tmpJoiningQUEUE = NETnetJoinTmpQueue();
+	// Init temporary NETQUEUE
+	NETinitQueue(tmpJoiningQUEUE);
+	socketBeginCompression(*client_transient_socket);
 
 	uint8_t playerType = (!asSpectator) ? NET_JOIN_PLAYER : NET_JOIN_SPECTATOR;
 
-	if (bsocket == nullptr)
-	{
-		NETclose();
-		return false;  // Connection dropped while sending NET_JOIN.
-	}
-	socketFlush(*bsocket, NetPlay.hostPlayer);  // Make sure the message was completely sent.
+	auto tmpJoiningSocketNETsend = [&]() -> bool {
+		NetQueue *queue = &tmpJoiningQueuePair->send;
+		NetMessage const *message = &queue->getMessageForNet();
+		uint8_t *rawData = message->rawDataDup();
+		ssize_t rawLen   = message->rawLen();
+		size_t compressedRawLen = 0;
+		ssize_t result = writeAll(*client_transient_socket, rawData, rawLen, &compressedRawLen);
+		delete[] rawData;  // Done with the data.
+		queue->popMessageForNet();
+		if (result == rawLen)
+		{
+			// success writing to socket
+			debug(LOG_INFO, "Wrote NET_PING response, length: %zu", compressedRawLen);
+		}
+		else if (result == SOCKET_ERROR)
+		{
+			// Write error, most likely host disconnect.
+			debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", message->type, message->rawLen(), compressedRawLen, strSockError(getSockErr()));
+			return false;
+		}
+		socketFlush(*client_transient_socket, NET_HOST_ONLY, &compressedRawLen);  // Make sure the message was completely sent.
+		ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining).", queue->numMessagesForNet());
+		return true;
+	};
+
+	auto closeConnectionAttempt = [&]() {
+		if (client_transient_socket)
+		{
+			SocketSet_DelSocket(*tmp_joining_socket_set, client_transient_socket);
+			socketClose(client_transient_socket);
+			client_transient_socket = nullptr;
+		}
+		if (tmp_joining_socket_set)
+		{
+			deleteSocketSet(tmp_joining_socket_set);
+			tmp_joining_socket_set = nullptr;
+		}
+		if (tmpJoiningQueuePair)
+		{
+			delete tmpJoiningQueuePair;
+			tmpJoiningQueuePair = nullptr;
+		}
+	};
 
 	i = wzGetTicks();
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
-		NETQUEUE queue;
-		uint8_t type;
-
 		// FIXME: shouldn't there be some sort of rejection message?
 		if ((unsigned)wzGetTicks() > i + 5000)
 		{
 			// timeout
-			NETclose();
+			closeConnectionAttempt();
 			return false;
 		}
 
-		if (bsocket == nullptr)
+		if (client_transient_socket == nullptr)
 		{
-			NETclose();
+			closeConnectionAttempt();
 			return false;  // Connection dropped.
 		}
 
-		if (!NETrecvNet(&queue, &type))
+		// read in data, if we have it
+		if (checkSockets(*tmp_joining_socket_set, NET_READ_TIMEOUT) > 0)
 		{
+			if (!socketReadReady(*client_transient_socket))
+			{
+				continue;
+			}
+
+			uint8_t readBuffer[NET_BUFFER_SIZE];
+			ssize_t size = readNoInt(*client_transient_socket, readBuffer, sizeof(readBuffer));
+
+			if ((size == 0 && socketReadDisconnected(*client_transient_socket)) || size == SOCKET_ERROR)
+			{
+				// disconnect or programmer error
+				if (size == 0)
+				{
+					debug(LOG_NET, "Client socket disconnected.");
+				}
+				else
+				{
+					debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
+				}
+				NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, i);
+				debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
+				closeConnectionAttempt();
+				return false;
+			}
+			else
+			{
+				NETinsertRawData(tmpJoiningQUEUE, readBuffer, size);
+			}
+		}
+
+		if (!NETisMessageReady(tmpJoiningQUEUE))
+		{
+			// need to wait for a full and complete join message
+			// sanity check
+			if (NETincompleteMessageDataBuffered(tmpJoiningQUEUE) > (NET_BUFFER_SIZE * 16))	// something definitely big enough to encompass the expected message(s) at this point
+			{
+				// host is sending data that doesn't appear to be a properly formatted message - cut it off
+				closeConnectionAttempt();
+				return false;
+			}
 			continue;
 		}
+
+		uint8_t type = NETgetMessage(tmpJoiningQUEUE)->type;
 
 		if (type == NET_ACCEPTED)
 		{
@@ -5017,37 +5085,42 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 
 			NetPlay.hostPlayer = MAX_CONNECTED_PLAYERS + 1; // invalid host index
 
-			NETbeginDecode(queue, NET_ACCEPTED);
+			NETbeginDecode(tmpJoiningQUEUE, NET_ACCEPTED);
 			// Retrieve the player ID the game host arranged for us
 			NETuint8_t(&index);
 			NETuint32_t(&NetPlay.hostPlayer); // and the host player idx
 			NETend();
-			NETpop(queue);
+			NETpop(tmpJoiningQUEUE);
 
 			if (NetPlay.hostPlayer >= MAX_CONNECTED_PLAYERS)
 			{
 				debug(LOG_ERROR, "Bad host player number (%" PRIu32 ") received from host!", NetPlay.hostPlayer);
-				NETclose();
+				closeConnectionAttempt();
 				return false;
 			}
 
-			if (NetPlay.hostPlayer != NET_HOST_ONLY)
+			if (index >= MAX_CONNECTED_PLAYERS)
 			{
-				NETswapQueues(NETnetQueue(NET_HOST_ONLY), NETnetQueue(NetPlay.hostPlayer));
+				debug(LOG_ERROR, "Bad player number (%u) received from host!", index);
+				closeConnectionAttempt();
+				return false;
 			}
+
+			// On success, promote the temporary socket / socketset / queuepair to their permanent (stable) locations
+			NETinitQueue(NETnetQueue(NetPlay.hostPlayer));
+			NETmoveQueue(tmpJoiningQUEUE, NETnetQueue(NetPlay.hostPlayer));
+			// Promote transient socket to stable client connection.
+			// bsocket = client_transient_socket, client_transient_socket = nullptr now!
+			bsocket = client_transient_socket;
+			client_transient_socket = nullptr;
+			client_socket_set = tmp_joining_socket_set;
+			tmp_joining_socket_set = nullptr;
 
 			selectedPlayer = index;
 			realSelectedPlayer = selectedPlayer;
 			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p", (unsigned int)index, static_cast<void *>(bsocket));
 			NetPlay.isHost = false;
 			NetPlay.isHostAlive = true;
-
-			if (index >= MAX_CONNECTED_PLAYERS)
-			{
-				debug(LOG_ERROR, "Bad player number (%u) received from host!", index);
-				NETclose();
-				return false;
-			}
 
 			NetPlay.players[index].allocated = true;
 			setPlayerName(index, playername);
@@ -5059,44 +5132,46 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		{
 			uint8_t rejection = 0;
 
-			NETbeginDecode(queue, NET_REJECTED);
+			NETbeginDecode(tmpJoiningQUEUE, NET_REJECTED);
 			NETuint8_t(&rejection);
 			NETend();
-			NETpop(queue);
+			NETpop(tmpJoiningQUEUE);
 
 			debug(LOG_NET, "NET_REJECTED received. Error code: %u", (unsigned int) rejection);
 
 			setLobbyError((LOBBY_ERROR_TYPES)rejection);
-			NETclose();
+			closeConnectionAttempt();
 			return false;
 		}
 		else if (type == NET_PING)
 		{
 			std::vector<uint8_t> challenge(NET_PING_TMP_PING_CHALLENGE_SIZE, 0);
-			NETbeginDecode(NETnetQueue(NET_HOST_ONLY), NET_PING);
+			NETbeginDecode(tmpJoiningQUEUE, NET_PING);
 			NETbytes(&challenge, NET_PING_TMP_PING_CHALLENGE_SIZE * 4);
 			NETend();
-			NETpop(queue);
+			NETpop(tmpJoiningQUEUE);
 
 			EcKey::Sig challengeResponse = playerIdentity.sign(challenge.data(), challenge.size());
 			EcKey::Key identity = playerIdentity.toBytes(EcKey::Public);
 
-			NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
+			NETbeginEncode(tmpJoiningQUEUE, NET_JOIN);
 			NETstring(playername, 64);
 			NETstring(getModList().c_str(), modlist_string_size);
 			NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
 			NETuint8_t(&playerType);
 			NETbytes(&identity);
 			NETbytes(&challengeResponse);
-			NETend();
-			NETflush();
+			NETend(); // because of QUEUE_TRANSIENT_JOIN type, this won't trigger a NETsend() - we must write ourselves
+			tmpJoiningSocketNETsend();
 		}
 		else
 		{
 			debug(LOG_ERROR, "Unexpected %s.", messageTypeToString(type));
-			NETpop(queue);
+			NETpop(tmpJoiningQUEUE);
 		}
 	}
+
+	return false;
 }
 
 /*!
