@@ -551,15 +551,16 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 	proj.state = PROJ_INFLIGHT;
 
 	// If droid or structure, set muzzle pitch.
+	// Don't allow pitching the muzzle above outside the weapon's limits.
 	if (psAttacker != nullptr && weapon_slot >= 0)
 	{
 		if (psAttacker->type == OBJ_DROID)
 		{
-			((DROID *)psAttacker)->asWeaps[weapon_slot].rot.pitch = proj.rot.pitch;
+			((DROID *)psAttacker)->asWeaps[weapon_slot].rot.pitch = (uint16_t)clip(angleDelta(proj.rot.pitch), (int32_t)DEG(psStats->minElevation), (int32_t)DEG(psStats->maxElevation));
 		}
 		else if (psAttacker->type == OBJ_STRUCTURE)
 		{
-			((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].rot.pitch = proj.rot.pitch;
+			((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].rot.pitch = (uint16_t)clip(angleDelta(proj.rot.pitch), (int32_t)DEG(psStats->minElevation), (int32_t)DEG(psStats->maxElevation));
 		}
 	}
 
