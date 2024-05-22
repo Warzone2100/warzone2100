@@ -111,12 +111,6 @@ bool netGameserverPortOverride = false;
 #define UPNP_ERROR_DEVICE_NOT_FOUND -1
 #define UPNP_ERROR_CONTROL_NOT_AVAILABLE -2
 
-// For NET_JOIN messages
-enum NET_JOIN_PLAYERTYPE : uint8_t {
-	NET_JOIN_PLAYER = 0,
-	NET_JOIN_SPECTATOR = 1,
-};
-
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose);
@@ -4067,7 +4061,7 @@ static void NETallowJoining()
 						connectFailed = false;
 
 						// Give client a challenge to solve before connecting
-						tmp_connectState[i].connectChallenge.resize(NET_PING_TMP_PING_CHALLENGE_SIZE);
+						tmp_connectState[i].connectChallenge.resize(NETgetJoinConnectionNETPINGChallengeSize());
 						genSecRandomBytes(tmp_connectState[i].connectChallenge.data(), tmp_connectState[i].connectChallenge.size());
 						NETbeginEncode(NETnetTmpQueue(i), NET_PING);
 						NETbytes(&(tmp_connectState[i].connectChallenge));
@@ -4854,6 +4848,48 @@ bool NETfindGame(uint32_t gameId, GAMESTRUCT& output)
 	return foundMatch;
 }
 
+// "consumes" the sockets and related info
+bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uint8_t index, const char *playername, NETQUEUE joiningQUEUEInfo, Socket **client_joining_socket, SocketSet **client_joining_socket_set)
+{
+	if (hostPlayer >= MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Bad host player number (%" PRIu32 ") received from host!", hostPlayer);
+		return false;
+	}
+
+	if (index >= MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Bad player number (%u) received from host!", index);
+		return false;
+	}
+
+	NetPlay.hostPlayer = hostPlayer;
+
+	// On success, promote the temporary socket / socketset / queuepair to their permanent (stable) locations
+	NETinitQueue(NETnetQueue(NetPlay.hostPlayer));
+	NETmoveQueue(joiningQUEUEInfo, NETnetQueue(NetPlay.hostPlayer));
+
+	// Promote transient socket to stable client connection.
+	// bsocket = client_joining_socket, client_joining_socket = nullptr now!
+	bsocket = *client_joining_socket;
+	*client_joining_socket = nullptr;
+	client_socket_set = *client_joining_socket_set;
+	*client_joining_socket_set = nullptr;
+
+	debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p", (unsigned int)index, static_cast<void *>(bsocket));
+
+	selectedPlayer = index;
+	realSelectedPlayer = selectedPlayer;
+	NetPlay.isHost = false;
+	NetPlay.isHostAlive = true;
+
+	NetPlay.players[index].allocated = true;
+	setPlayerName(index, playername);
+	NetPlay.players[index].heartbeat = true;
+
+	return true;
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Functions used to setup and join games.
@@ -4867,7 +4903,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 
 	if (port == 0)
 	{
-		port = gameserver_port;
+		port = NETgetGameserverPort();
 	}
 
 	debug(LOG_NET, "resetting sockets.");
@@ -4910,7 +4946,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	// `client_transient_socket` is used to talk to host machine
 	SocketSet_AddSocket(*tmp_joining_socket_set, client_transient_socket);
 
-	if (bEnableTCPNoDelay)
+	if (NETgetEnableTCPNoDelay())
 	{
 		// Enable TCP_NODELAY
 		socketSetTCPNoDelay(*client_transient_socket, true);
@@ -4923,8 +4959,8 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		memcpy(p_buffer, &swapped, sizeof(swapped));
 		p_buffer += sizeof(swapped);
 	};
-	pushu32(NETCODE_VERSION_MAJOR);
-	pushu32(NETCODE_VERSION_MINOR);
+	pushu32(NETGetMajorVersion());
+	pushu32(NETGetMinorVersion());
 
 	if (writeAll(*client_transient_socket, buffer, sizeof(buffer)) == SOCKET_ERROR
 	    || readAll(*client_transient_socket, &result, sizeof(result), 1500) != sizeof(result))
@@ -4985,10 +5021,10 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		else if (result == SOCKET_ERROR)
 		{
 			// Write error, most likely host disconnect.
-			debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", message->type, message->rawLen(), compressedRawLen, strSockError(getSockErr()));
+			debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host", message->type, message->rawLen(), compressedRawLen);
 			return false;
 		}
-		socketFlush(*client_transient_socket, NET_HOST_ONLY, &compressedRawLen);  // Make sure the message was completely sent.
+		socketFlush(*client_transient_socket, NET_HOST_ONLY);  // Make sure the message was completely sent.
 		ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining).", queue->numMessagesForNet());
 		return true;
 	};
@@ -5053,7 +5089,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 					debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
 				}
 				NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, i);
-				debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
+				debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(client_transient_socket), __LINE__);
 				closeConnectionAttempt();
 				return false;
 			}
@@ -5082,17 +5118,16 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		{
 			// :)
 			uint8_t index;
-
-			NetPlay.hostPlayer = MAX_CONNECTED_PLAYERS + 1; // invalid host index
+			uint32_t hostPlayer = MAX_CONNECTED_PLAYERS + 1; // invalid host index
 
 			NETbeginDecode(tmpJoiningQUEUE, NET_ACCEPTED);
 			// Retrieve the player ID the game host arranged for us
 			NETuint8_t(&index);
-			NETuint32_t(&NetPlay.hostPlayer); // and the host player idx
+			NETuint32_t(&hostPlayer); // and the host player idx
 			NETend();
 			NETpop(tmpJoiningQUEUE);
 
-			if (NetPlay.hostPlayer >= MAX_CONNECTED_PLAYERS)
+			if (hostPlayer >= MAX_CONNECTED_PLAYERS)
 			{
 				debug(LOG_ERROR, "Bad host player number (%" PRIu32 ") received from host!", NetPlay.hostPlayer);
 				closeConnectionAttempt();
@@ -5107,25 +5142,15 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 			}
 
 			// On success, promote the temporary socket / socketset / queuepair to their permanent (stable) locations
-			NETinitQueue(NETnetQueue(NetPlay.hostPlayer));
-			NETmoveQueue(tmpJoiningQUEUE, NETnetQueue(NetPlay.hostPlayer));
-			// Promote transient socket to stable client connection.
-			// bsocket = client_transient_socket, client_transient_socket = nullptr now!
-			bsocket = client_transient_socket;
-			client_transient_socket = nullptr;
-			client_socket_set = tmp_joining_socket_set;
-			tmp_joining_socket_set = nullptr;
-
-			selectedPlayer = index;
-			realSelectedPlayer = selectedPlayer;
-			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p", (unsigned int)index, static_cast<void *>(bsocket));
-			NetPlay.isHost = false;
-			NetPlay.isHostAlive = true;
-
-			NetPlay.players[index].allocated = true;
-			setPlayerName(index, playername);
-			NetPlay.players[index].heartbeat = true;
-
+			// (Function consumes the socket-related inputs)
+			if (!NETpromoteJoinAttemptToEstablishedConnectionToHost(hostPlayer, index, playername, tmpJoiningQUEUE, &client_transient_socket, &tmp_joining_socket_set))
+			{
+				debug(LOG_ERROR, "Failed to promote to established host connection");
+				closeConnectionAttempt();
+				return false;
+			}
+			// tmpJoiningQueuePair is now "owned" by NetPlay.hostPlayer's netQueue - do not delete it here!
+			tmpJoiningQueuePair = nullptr;
 			return true;
 		}
 		else if (type == NET_REJECTED)
@@ -5145,9 +5170,9 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		}
 		else if (type == NET_PING)
 		{
-			std::vector<uint8_t> challenge(NET_PING_TMP_PING_CHALLENGE_SIZE, 0);
+			std::vector<uint8_t> challenge(NETgetJoinConnectionNETPINGChallengeSize(), 0);
 			NETbeginDecode(tmpJoiningQUEUE, NET_PING);
-			NETbytes(&challenge, NET_PING_TMP_PING_CHALLENGE_SIZE * 4);
+			NETbytes(&challenge, NETgetJoinConnectionNETPINGChallengeSize() * 4);
 			NETend();
 			NETpop(tmpJoiningQUEUE);
 
@@ -5170,8 +5195,6 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 			NETpop(tmpJoiningQUEUE);
 		}
 	}
-
-	return false;
 }
 
 /*!
@@ -5229,6 +5252,14 @@ void NETsetGameserverPort(unsigned int port)
 unsigned int NETgetGameserverPort()
 {
 	return gameserver_port;
+}
+
+/**
+ * @return The size of the join connection challenge (see: NET_PING in NETallowJoining())
+ */
+uint32_t NETgetJoinConnectionNETPINGChallengeSize()
+{
+	return NET_PING_TMP_PING_CHALLENGE_SIZE;
 }
 
 /*!
