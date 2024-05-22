@@ -307,6 +307,7 @@ struct TmpSocketInfo
 	// async join approval
 	std::string uniqueJoinID;
 	optional<LOBBY_ERROR_TYPES> asyncJoinApprovalResult = nullopt;
+	std::string asyncJoinApprovalRejectReason = "";
 
 	void reset()
 	{
@@ -557,7 +558,7 @@ void NETsetAsyncJoinApprovalRequired(bool enabled)
 }
 
 //	NOTE: *MUST* be called from the main thread!
-bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason)
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason, std::string rejectedMessage)
 {
 	if (!approve && rejectedReason == ERROR_NOERROR)
 	{
@@ -571,6 +572,7 @@ bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve
 		{
 			// found a match
 			tmp_info.asyncJoinApprovalResult = (approve) ? ERROR_NOERROR : rejectedReason;
+			tmp_info.asyncJoinApprovalRejectReason = rejectedMessage;
 			return true;
 		}
 	}
@@ -4110,6 +4112,7 @@ static void NETallowJoining()
 						uint8_t rejected = ERROR_FULL;
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
+						NETstring("", 0);
 						NETend();
 						NETflush();
 						connectFailed = true;
@@ -4170,6 +4173,7 @@ static void NETallowJoining()
 						rejected = ERROR_WRONGDATA;
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
+						NETstring("", 0);
 						NETend();
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
@@ -4183,7 +4187,7 @@ static void NETallowJoining()
 
 				if (NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
 				{
-					char name[64];
+					char name[64], lc[32];
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
 					uint8_t playerType = 0;
@@ -4198,6 +4202,7 @@ static void NETallowJoining()
 					NETuint8_t(&playerType);
 					NETbytes(&pkey);
 					NETbytes(&challengeResponse);
+					NETstring(lc, sizeof(lc));
 					NETend();
 
 					// verify signature that player is joining with, reject him if he can not do that
@@ -4208,6 +4213,7 @@ static void NETallowJoining()
 						rejected = ERROR_WRONGDATA;
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
+						NETstring("", 0);
 						NETend();
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
@@ -4269,6 +4275,7 @@ static void NETallowJoining()
 						NETlogEntry(buf, SYNC_FLAG, i);
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
+						NETstring("", 0);
 						NETend();
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
@@ -4292,7 +4299,14 @@ static void NETallowJoining()
 						std::string joinerIdentityHash = joinRequestInfo.identity.publicHashString();
 						std::string joinerName = joinRequestInfo.name;
 						std::string joinerNameB64 = base64Encode(std::vector<unsigned char>(joinerName.begin(), joinerName.end()));
-						wz_command_interface_output("WZEVENT: join approval needed: %s %s %s %s %s %s\n", tmp_connectState[i].uniqueJoinID.c_str(), tmp_connectState[i].ip.c_str(), joinerIdentityHash.c_str(), joinerPublicKeyB64.c_str(), joinerNameB64.c_str(), (joinRequestInfo.playerType == NET_JOIN_SPECTATOR) ? "spec" : "play");
+						wz_command_interface_output("WZEVENT: join approval needed: %s %s %s %s %s %s %s\n",
+							tmp_connectState[i].uniqueJoinID.c_str(),
+							tmp_connectState[i].ip.c_str(),
+							joinerIdentityHash.c_str(),
+							joinerPublicKeyB64.c_str(),
+							joinerNameB64.c_str(),
+							(joinRequestInfo.playerType == NET_JOIN_SPECTATOR) ? "spec" : "play",
+							lc);
 					}
 					else
 					{
@@ -4308,6 +4322,7 @@ static void NETallowJoining()
 					rejected = ERROR_WRONGDATA;
 					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 					NETuint8_t(&rejected);
+					NETstring("", 0);
 					NETend();
 					NETflush();
 					NETpop(NETnetTmpQueue(i));
@@ -4347,11 +4362,16 @@ static void NETallowJoining()
 					// async join rejected
 					uint8_t rejected = static_cast<uint8_t>(tmp_connectState[i].asyncJoinApprovalResult.value());
 					char buf[256] = {'\0'};
-					ssprintf(buf, "**Rejecting player(%s), due to async approval rejection, reason (%u).", tmp_connectState[i].ip.c_str(), static_cast<unsigned int>(rejected));
+					ssprintf(buf, "**Rejecting player(%s), due to async approval rejection, reason [%u] (%u).", tmp_connectState[i].ip.c_str(), strlen(tmp_connectState[i].asyncJoinApprovalRejectReason.c_str()), static_cast<unsigned int>(rejected));
 					debug(LOG_INFO, "%s", buf);
 					NETlogEntry(buf, SYNC_FLAG, i);
 					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 					NETuint8_t(&rejected);
+					uint16_t maxrejectlen = 4000;
+					if (maxrejectlen > strlen(tmp_connectState[i].asyncJoinApprovalRejectReason.c_str())) {
+						maxrejectlen = tmp_connectState[i].asyncJoinApprovalRejectReason.size();
+					}
+					NETstring(tmp_connectState[i].asyncJoinApprovalRejectReason.c_str(), maxrejectlen);
 					NETend();
 					NETflush();
 					auto tmpQueue = NETnetTmpQueue(i);
@@ -4376,6 +4396,7 @@ static void NETallowJoining()
 					uint8_t rejected = ERROR_HOSTDROPPED;
 					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 					NETuint8_t(&rejected);
+					NETstring("", 0);
 					NETend();
 					NETflush();
 					auto tmpQueue = NETnetTmpQueue(i);
@@ -4411,6 +4432,7 @@ static void NETallowJoining()
 				rejected = ERROR_FULL;
 				NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 				NETuint8_t(&rejected);
+				NETstring("", 0);
 				NETend();
 				NETflush();
 
@@ -4512,6 +4534,7 @@ static void NETallowJoining()
 			rejected = ERROR_WRONGDATA;
 			NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 			NETuint8_t(&rejected);
+			NETstring("", 0);
 			NETend();
 			NETflush();
 			auto tmpQueue = NETnetTmpQueue(i);
@@ -5077,14 +5100,18 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		else if (type == NET_REJECTED)
 		{
 			uint8_t rejection = 0;
+			char* rejectionReason = (char*)malloc(4096);
 
 			NETbeginDecode(queue, NET_REJECTED);
 			NETuint8_t(&rejection);
+			NETstring(rejectionReason, 4095);
 			NETend();
 			NETpop(queue);
 
 			debug(LOG_NET, "NET_REJECTED received. Error code: %u", (unsigned int) rejection);
 
+			setNETJoinRejectReason(std::string(rejectionReason));
+			free(rejectionReason);
 			setLobbyError((LOBBY_ERROR_TYPES)rejection);
 			NETclose();
 			return false;
@@ -5100,6 +5127,12 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 			EcKey::Sig challengeResponse = playerIdentity.sign(challenge.data(), challenge.size());
 			EcKey::Key identity = playerIdentity.toBytes(EcKey::Public);
 
+			std::string lc = getLanguage();
+			if (lc.empty())
+			{
+				lc = "unknown";
+			}
+
 			NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
 			NETstring(playername, 64);
 			NETstring(getModList().c_str(), modlist_string_size);
@@ -5107,6 +5140,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 			NETuint8_t(&playerType);
 			NETbytes(&identity);
 			NETbytes(&challengeResponse);
+			NETstring(lc.c_str(), strlen(lc.c_str())+1); // idk why +1 but it cut unknown to unknow without it
 			NETend();
 			NETflush();
 		}
