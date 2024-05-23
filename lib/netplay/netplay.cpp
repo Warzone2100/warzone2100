@@ -1319,7 +1319,7 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 		const int err = getSockErr();
 
 		// If packet could not be sent, we should inform user of the error.
-		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strSockError(err));
 		debug(LOG_ERROR, "Please make sure TCP ports %u & %u are open!", masterserver_port, gameserver_port);
 
 		setSockErr(err);
@@ -3554,12 +3554,13 @@ bool LobbyServerConnectionHandler::connect()
 
 	// try each address from resolveHost until we successfully connect.
 	rs_socket = socketOpenAny(hosts, 1500);
+	int sockOpenErr = getSockErr();
 	deleteSocketAddress(hosts);
 
 	// No address succeeded.
 	if (rs_socket == nullptr)
 	{
-		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
+		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(sockOpenErr));
 		free(NetPlay.MOTD);
 		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to use UPnP\n or to forward the port to your system."),
 					 strSockError(getSockErr()), masterserver_port) == -1)
@@ -4893,13 +4894,51 @@ bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uin
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Functions used to setup and join games.
+
+struct OpenConnectionToHostResult
+{
+public:
+	OpenConnectionToHostResult(int error, std::string errorString)
+	: error(error)
+	, errorString(errorString)
+	{ }
+
+	OpenConnectionToHostResult(Socket* open_socket)
+	: open_socket(open_socket)
+	{ }
+public:
+	bool hasError() const { return error != 0; }
+public:
+	Socket* open_socket = nullptr;
+	int error = 0;
+	std::string errorString;
+};
+
+static OpenConnectionToHostResult NETopenConnectionToHost(const char *host, uint32_t port)
+{
+	SocketAddress *hosts = resolveHost(host, port);
+	if (hosts == nullptr)
+	{
+		int sErr = getSockErr();
+		return OpenConnectionToHostResult(-1, astringf("Cannot resolve hostname \"%s\": %s", host, strSockError(sErr)));
+	}
+
+	Socket* client_transient_socket = socketOpenAny(hosts, 15000);
+	int sockOpenErr = getSockErr();
+	deleteSocketAddress(hosts);
+
+	if (client_transient_socket == nullptr)
+	{
+		return OpenConnectionToHostResult(-1, astringf("Cannot connect to [%s]:%d, %s", host, port, strSockError(sockOpenErr)));
+	}
+
+	return OpenConnectionToHostResult(client_transient_socket);
+}
+
 bool NETjoinGame(const char *host, uint32_t port, const char *playername, const EcKey& playerIdentity, bool asSpectator /*= false*/)
 {
-	SocketAddress *hosts = nullptr;
-	unsigned int i;
 	char buffer[sizeof(int32_t) * 2] = { 0 };
 	char *p_buffer;
-	uint32_t result;
 
 	if (port == 0)
 	{
@@ -4913,19 +4952,19 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 
 	netPlayersUpdated = true;
 
-	hosts = resolveHost(host, port);
-	if (hosts == nullptr)
+	bool shouldEnableTCPNoDelay = NETgetEnableTCPNoDelay();
+	uint32_t netcodeMajorVer = NETGetMajorVersion();
+	uint32_t netcodeMinorVer = NETGetMinorVersion();
+
+	Socket* client_transient_socket = nullptr;
+	auto openConnectionResult = NETopenConnectionToHost(host, port);
+	if (!openConnectionResult.hasError())
 	{
-		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", host, strSockError(getSockErr()));
-		return false;
+		client_transient_socket = openConnectionResult.open_socket;
 	}
-
-	Socket* client_transient_socket = socketOpenAny(hosts, 15000);
-	deleteSocketAddress(hosts);
-
-	if (client_transient_socket == nullptr)
+	else
 	{
-		debug(LOG_ERROR, "Cannot connect to [%s]:%d, %s", host, port, strSockError(getSockErr()));
+		debug(LOG_ERROR, "%s", openConnectionResult.errorString.c_str());
 		return false;
 	}
 
@@ -4933,7 +4972,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	SocketSet* tmp_joining_socket_set = allocSocketSet();
 	if (tmp_joining_socket_set == nullptr)
 	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
+		debug(LOG_ERROR, "Cannot create socket set - out of memory?");
 		if (client_transient_socket)
 		{
 			socketClose(client_transient_socket);
@@ -4946,42 +4985,10 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	// `client_transient_socket` is used to talk to host machine
 	SocketSet_AddSocket(*tmp_joining_socket_set, client_transient_socket);
 
-	if (NETgetEnableTCPNoDelay())
+	if (shouldEnableTCPNoDelay)
 	{
 		// Enable TCP_NODELAY
 		socketSetTCPNoDelay(*client_transient_socket, true);
-	}
-
-	// Send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
-	p_buffer = buffer;
-	auto pushu32 = [&](uint32_t value) {
-		uint32_t swapped = htonl(value);
-		memcpy(p_buffer, &swapped, sizeof(swapped));
-		p_buffer += sizeof(swapped);
-	};
-	pushu32(NETGetMajorVersion());
-	pushu32(NETGetMinorVersion());
-
-	if (writeAll(*client_transient_socket, buffer, sizeof(buffer)) == SOCKET_ERROR
-	    || readAll(*client_transient_socket, &result, sizeof(result), 1500) != sizeof(result))
-	{
-		debug(LOG_ERROR, "Couldn't send my version.");
-		return false;
-	}
-
-	result = ntohl(result);
-	if (result != ERROR_NOERROR)
-	{
-		debug(LOG_ERROR, "Received error %d", result);
-
-		SocketSet_DelSocket(*tmp_joining_socket_set, client_transient_socket);
-		socketClose(client_transient_socket);
-		client_transient_socket = nullptr;
-		deleteSocketSet(tmp_joining_socket_set);
-		tmp_joining_socket_set = nullptr;
-
-		setLobbyError((LOBBY_ERROR_TYPES)result);
-		return false;
 	}
 
 	// Create temporary NETQUEUE
@@ -5000,7 +5007,6 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	auto tmpJoiningQUEUE = NETnetJoinTmpQueue();
 	// Init temporary NETQUEUE
 	NETinitQueue(tmpJoiningQUEUE);
-	socketBeginCompression(*client_transient_socket);
 
 	uint8_t playerType = (!asSpectator) ? NET_JOIN_PLAYER : NET_JOIN_SPECTATOR;
 
@@ -5016,7 +5022,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		if (result == rawLen)
 		{
 			// success writing to socket
-			debug(LOG_INFO, "Wrote NET_PING response, length: %zu", compressedRawLen);
+			debug(LOG_NET, "Wrote initial message to socket to host");
 		}
 		else if (result == SOCKET_ERROR)
 		{
@@ -5032,7 +5038,10 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	auto closeConnectionAttempt = [&]() {
 		if (client_transient_socket)
 		{
-			SocketSet_DelSocket(*tmp_joining_socket_set, client_transient_socket);
+			if (tmp_joining_socket_set)
+			{
+				SocketSet_DelSocket(*tmp_joining_socket_set, client_transient_socket);
+			}
 			socketClose(client_transient_socket);
 			client_transient_socket = nullptr;
 		}
@@ -5048,12 +5057,40 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 		}
 	};
 
-	i = wzGetTicks();
+	enum class JoiningStatus
+	{
+		WaitingForInitialConnectionAck,
+		WaitingForJoinMessages
+	};
+
+	// Send initial connection data: NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
+	p_buffer = buffer;
+	auto pushu32 = [&](uint32_t value) {
+		uint32_t swapped = htonl(value);
+		memcpy(p_buffer, &swapped, sizeof(swapped));
+		p_buffer += sizeof(swapped);
+	};
+	pushu32(netcodeMajorVer);
+	pushu32(netcodeMinorVer);
+
+	if (writeAll(*client_transient_socket, buffer, sizeof(buffer)) == SOCKET_ERROR)
+	{
+		debug(LOG_ERROR, "Couldn't send my version.");
+		closeConnectionAttempt();
+		return false;
+	}
+
+	JoiningStatus currentStatus = JoiningStatus::WaitingForInitialConnectionAck;
+	char initialAckBuffer[10] = {'\0'};
+	size_t usedInitialAckBuffer = 0;
+	size_t expectedInitialAckSize = sizeof(uint32_t);
+
+	unsigned i = wzGetTicks();
 	// Loop until we've been accepted into the game
 	for (;;)
 	{
 		// FIXME: shouldn't there be some sort of rejection message?
-		if ((unsigned)wzGetTicks() > i + 5000)
+		if ((unsigned)wzGetTicks() - i > 5000)
 		{
 			// timeout
 			closeConnectionAttempt();
@@ -5073,6 +5110,42 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 			{
 				continue;
 			}
+
+			// Handling JoiningStatus::WaitingForInitialConnectionAck
+
+			if (currentStatus == JoiningStatus::WaitingForInitialConnectionAck)
+			{
+				p_buffer = initialAckBuffer;
+				ssize_t sizeRead = readNoInt(*client_transient_socket, p_buffer + usedInitialAckBuffer, expectedInitialAckSize - usedInitialAckBuffer);
+				if (sizeRead != SOCKET_ERROR)
+				{
+					usedInitialAckBuffer += sizeRead;
+				}
+
+				if (usedInitialAckBuffer >= expectedInitialAckSize)
+				{
+					uint32_t result = ERROR_CONNECTION;
+					memcpy(&result, initialAckBuffer, sizeof(result));
+					result = ntohl(result);
+					if (result != ERROR_NOERROR)
+					{
+						debug(LOG_ERROR, "Received error %d", result);
+
+						closeConnectionAttempt();
+
+						setLobbyError((LOBBY_ERROR_TYPES)result);
+						return false;
+					}
+					
+					// transition to net message mode (enable compression, wait for messages)
+					socketBeginCompression(*client_transient_socket);
+					currentStatus = JoiningStatus::WaitingForJoinMessages;
+					continue;
+				}
+				continue;
+			}
+
+			// Handling JoiningStatus::WaitingForJoinMessages
 
 			uint8_t readBuffer[NET_BUFFER_SIZE];
 			ssize_t size = readNoInt(*client_transient_socket, readBuffer, sizeof(readBuffer));
