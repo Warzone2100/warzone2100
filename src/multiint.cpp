@@ -2325,7 +2325,7 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 		const int imgheight_ban = iV_GetImageHeight(FrontImages, IMAGE_NOJOIN_FULL);
 		kickImageX = kickImageX - imgwidth - 4;
 		addMultiButWithClickHandler(psInlineChooserForm, MULTIOP_TEAMCHOOSER_BAN, kickImageX, 8, imgwidth_ban, imgheight_ban,
-			("Ban player"), IMAGE_NOJOIN_FULL, IMAGE_NOJOIN_FULL, IMAGE_NOJOIN_FULL, onClickHandler);
+			("Ban player"), IMAGE_NOJOIN_FULL, IMAGE_NOJOIN_FULL, IMAGE_NOJOIN_FULL, banOnClickHandler);
 	}
 
 	if (canChangeSpectatorStatus)
