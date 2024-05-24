@@ -484,6 +484,7 @@ src/research.cpp
 src/scores.cpp
 src/screens/chatscreen.cpp
 src/screens/helpscreen.cpp
+src/screens/joiningscreen.cpp
 src/screens/netpregamescreen.cpp
 src/selection.cpp
 src/seqdisp.cpp

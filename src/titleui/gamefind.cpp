@@ -298,9 +298,9 @@ private:
 	DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
 };
 
-static bool joinLobbyGame(uint32_t gameNumber, bool asSpectator = false)
+static void joinLobbyGame(uint32_t gameNumber, bool asSpectator)
 {
-	ASSERT_OR_RETURN(false, gameNumber < gamesList.size(), "Invalid gameNumber: %" PRIu32, gameNumber);
+	ASSERT_OR_RETURN(, gameNumber < gamesList.size(), "Invalid gameNumber: %" PRIu32, gameNumber);
 
 	std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, gamesList[gameNumber].hostPort)};
 	ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
@@ -310,7 +310,7 @@ static bool joinLobbyGame(uint32_t gameNumber, bool asSpectator = false)
 	// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 	ingame.localOptionsReceived = false;					// note, we are awaiting options
 	sstrcpy(game.name, gamesList[gameNumber].name);			// store name
-	return joinGame(connectionDesc, asSpectator) != JoinGameResult::FAILED;
+	joinGame(connectionDesc, asSpectator);
 }
 
 class WzLobbyGameDetails: public W_BUTTON

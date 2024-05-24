@@ -209,11 +209,8 @@ static void joinGameImpl(const std::vector<JoinConnectionDescription>& joinConne
 	NETinit(true);
 	// Ensure the joinGame has a place to return to
 	changeTitleMode(TITLE);
-	JoinGameResult result = joinGame(joinConnectionDetails);
-	if (result != JoinGameResult::JOINED)
-	{
-		cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
-	}
+	joinGame(joinConnectionDetails);
+	cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
 }
 
 static void findAndJoinLobbyGameImpl(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)

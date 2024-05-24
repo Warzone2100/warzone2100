@@ -108,20 +108,6 @@ private:
 	std::shared_ptr<WzTitleUI> next;
 };
 
-// - passbox.cpp -
-class WzPassBoxTitleUI: public WzTitleUI
-{
-public:
-	// The callback receives nullptr for cancellation, or a widgGetString result otherwise.
-	// The callback is expected to change current UI.
-	WzPassBoxTitleUI(std::function<void(const char *)> next);
-	virtual void start() override;
-	virtual TITLECODE run() override;
-private:
-	// Where to go after the user has acknowledged.
-	std::function<void(const char *)> next;
-};
-
 // - gamefind.cpp -
 class WzGameFindTitleUI: public WzTitleUI
 {
