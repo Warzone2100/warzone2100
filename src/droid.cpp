@@ -86,6 +86,8 @@ static std::priority_queue<int> recycled_experience[MAX_PLAYERS];
 // the structure that was last hit
 DROID	*psLastDroidHit;
 
+void droidWasFullyRepairedBase(DROID *psDroid);
+
 //determines the best IMD to draw for the droid - A TEMP MEASURE!
 static void groupConsoleInformOfSelection(UDWORD groupNumber);
 static void groupConsoleInformOfCreation(UDWORD groupNumber);
@@ -800,6 +802,15 @@ void droidUpdate(DROID *psDroid)
 	else if (psDroid->animationEvent == ANIM_EVENT_DYING)
 	{
 		return; // rest below is irrelevant if dead
+	}
+
+	// Restore group from repairGroup if the droid gets interrupted while retreating.
+	if (psDroid->repairGroup != UBYTE_MAX &&
+		psDroid->order.type != DORDER_RTR &&
+		psDroid->order.type != DORDER_RTR_SPECIFIED &&
+		psDroid->order.type != DORDER_RTB)
+	{
+		droidWasFullyRepairedBase(psDroid);
 	}
 
 	// ai update droid
@@ -1863,7 +1874,15 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 		{
 			if (psStruct->selected && psStruct->isFactory())
 			{
-				psStruct->productToGroup = (UBYTE)groupNumber;
+				if (psStruct->productToGroup != (UBYTE)groupNumber)
+				{
+					psStruct->productToGroup = (UBYTE)groupNumber;
+				}
+				else
+				{
+					// To make it possible to clear factory group assignment via "toggle" behavior of assigning a factory to the same group it's already assigned
+					psStruct->productToGroup = UBYTE_MAX;
+				}
 				return;
 			}
 		}

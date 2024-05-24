@@ -13,7 +13,7 @@ ${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Esta é a versão ARM64 do Warzone
 ${LangFileString} WZ_GPL_NEXT "Próximo"
 
 ${LangFileString} TEXT_SecBase "Arquivos Base"
-${LangFileString} DESC_SecBase "Os arquivos base necessários para executar o Warzone 2100."
+${LangFileString} DESC_SecBase "Os arquivos-base necessários para executar o Warzone 2100."
 
 ${LangFileString} TEXT_SecFMVs "Vídeos"
 ${LangFileString} DESC_SecFMVs "Baixar e instalar as vídeos da campanha do jogo."

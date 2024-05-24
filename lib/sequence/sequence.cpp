@@ -617,7 +617,7 @@ void update_buffers()
 	videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
 }
 
-bool seq_Play(const std::shared_ptr<VideoProvider> &video)
+bool seq_Play(std::shared_ptr<VideoProvider> video)
 {
 	int pp_level_max = 0;
 	int pp_level = 0;
@@ -638,8 +638,7 @@ bool seq_Play(const std::shared_ptr<VideoProvider> &video)
 		return false;
 	}
 
-	inVideoProvider = video;
-	inVideoProvider->seek_begin();
+	video->seek_begin();
 
 	theora_p = 0;
 	vorbis_p = 0;
@@ -648,7 +647,7 @@ bool seq_Play(const std::shared_ptr<VideoProvider> &video)
 	/* Only interested in Vorbis/Theora streams */
 	while (!stateflag)
 	{
-		int ret = inVideoProvider->buffer_data(&videodata.oy);
+		int ret = video->buffer_data(&videodata.oy);
 
 		if (ret == 0)
 		{
@@ -743,7 +742,7 @@ bool seq_Play(const std::shared_ptr<VideoProvider> &video)
 		}
 		else
 		{
-			ret = inVideoProvider->buffer_data(&videodata.oy);   /* someone needs more data */
+			ret = video->buffer_data(&videodata.oy);   /* someone needs more data */
 
 			if (ret == 0)
 			{
@@ -839,6 +838,7 @@ bool seq_Play(const std::shared_ptr<VideoProvider> &video)
 		example_encoder (and most streams) though. */
 	sampletimeOffset = getTimeNow();
 	videoplaying = true;
+	inVideoProvider = video; // only set this here (after videoplaying is set), so that it's always freed in seq_Shutdown()
 	return true;
 }
 

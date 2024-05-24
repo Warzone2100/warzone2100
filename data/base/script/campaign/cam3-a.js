@@ -298,7 +298,8 @@ function cam3Setup()
 			camClassicResearch(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
 			completeResearch("CAM3RESEARCH-UNDO", CAM_HUMAN_PLAYER);
-			//Nexus has no research in 3.2
+			//Nexus only has auto-repair and the NavGunSensor for 3.2
+			camClassicResearch(cam_nexusSpecialResearch, CAM_NEXUS);
 		}
 		else
 		{

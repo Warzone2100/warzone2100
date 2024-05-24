@@ -67,8 +67,8 @@
 	},
 	"area_1": {
 		"label": "landingZone2",
-		"pos1": [6200, 31160],
-		"pos2": [6600, 31560]
+		"pos1": [6272, 31232],
+		"pos2": [6528, 31488]
 	},
 	"area_2": {
 		"label": "mainBaseCleanup",

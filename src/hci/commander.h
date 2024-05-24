@@ -56,11 +56,22 @@ public:
 		return highlightedCommander;
 	}
 
-	void setHighlightedObject(BASE_OBJECT *object) override;
+	void setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject) override;
+
+	bool getQueuedJumpToHighlightedStatsObject() const override
+	{
+		return queuedJumpToHighlightedStatsObject;
+	}
+
+	void clearQueuedJumpToHighlightedStatsObject() override
+	{
+		queuedJumpToHighlightedStatsObject = false;
+	}
 
 private:
 	void updateCommandersList();
 	std::vector<DROID *> commanders;
+	bool queuedJumpToHighlightedStatsObject = true;
 	static DROID *highlightedCommander;
 };
 

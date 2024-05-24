@@ -751,8 +751,9 @@ void videoLoop()
 		seq_StopFullScreenVideo();
 
 		//set the next video off - if any
-		if (videoFinished && seq_AnySeqLeft())
+		if (seq_AnySeqLeft())
 		{
+			skipCounter = 0;
 			seq_StartNextFullScreenVideo();
 		}
 		else

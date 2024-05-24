@@ -80,13 +80,24 @@ public:
 		return highlightedFactory;
 	}
 
-	void setHighlightedObject(BASE_OBJECT *object) override;
+	void setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject) override;
+
+	bool getQueuedJumpToHighlightedStatsObject() const override
+	{
+		return queuedJumpToHighlightedStatsObject;
+	}
+
+	void clearQueuedJumpToHighlightedStatsObject() override
+	{
+		queuedJumpToHighlightedStatsObject = false;
+	}
 
 private:
 	void updateFactoriesList();
 	void updateManufactureOptionsList();
 	std::vector<DROID_TEMPLATE *> stats;
 	std::vector<STRUCTURE *> factories;
+	bool queuedJumpToHighlightedStatsObject = true;
 	static STRUCTURE *highlightedFactory;
 };
 

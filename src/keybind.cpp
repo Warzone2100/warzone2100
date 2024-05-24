@@ -1492,7 +1492,6 @@ void	kf_FinishAllResearch()
 			}
 			else
 			{
-				MakeResearchCompleted(&asPlayerResList[selectedPlayer][j]);
 				researchResult(j, selectedPlayer, false, nullptr, false);
 			}
 		}
@@ -1561,18 +1560,27 @@ void	kf_FinishResearch()
 				if (pSubject)
 				{
 					int rindex = ((RESEARCH*)pSubject)->index;
-					if (bMultiMessages)
+					PLAYER_RESEARCH *plrRes = &asPlayerResList[selectedPlayer][rindex];
+					if (!IsResearchCompleted(plrRes))
 					{
-						SendResearch(selectedPlayer, rindex, true);
-						// Wait for our message before doing anything.
+						if (bMultiMessages)
+						{
+							SendResearch(selectedPlayer, rindex, true);
+							// Wait for our message before doing anything.
+						}
+						else
+						{
+							researchResult(rindex, selectedPlayer, true, psCurr, true);
+						}
+						std::string cmsg = astringf(_("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getLocalizedStatsName(pSubject));
+						sendInGameSystemMessage(cmsg.c_str());
+						intResearchFinished(psCurr);
 					}
 					else
 					{
-						researchResult(rindex, selectedPlayer, true, psCurr, true);
+						debug(LOG_ERROR, "Research already completed for player %" PRIu32 "?: %s", (int)selectedPlayer, getStatsName(pSubject));
+						continue;
 					}
-					std::string cmsg = astringf(_("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getLocalizedStatsName(pSubject));
-					sendInGameSystemMessage(cmsg.c_str());
-					intResearchFinished(psCurr);
 				}
 			}
 		}

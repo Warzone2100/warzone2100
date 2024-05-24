@@ -16,8 +16,9 @@ function camEnableRes(researchIds, playerId)
 	for (let i = 0, l = researchIds.length; i < l; ++i)
 	{
 		const __RESEARCH_ID = researchIds[i];
+		const __FORCE = (cam_nexusSpecialResearch.indexOf(__RESEARCH_ID) !== -1);
 		enableResearch(__RESEARCH_ID, playerId);
-		completeResearch(__RESEARCH_ID, playerId);
+		completeResearch(__RESEARCH_ID, playerId, __FORCE);
 	}
 }
 
@@ -42,7 +43,7 @@ function camCompleteRequiredResearch(researchIds, playerId)
 		if (reqRes.length === 0)
 		{
 			//HACK: autorepair like upgrades don't work after mission transition.
-			if (__cam_nexusTech.indexOf(__RESEARCH_ID) !== -1)
+			if (cam_nexusSpecialResearch.indexOf(__RESEARCH_ID) !== -1)
 			{
 				completeResearch(__RESEARCH_ID, playerId, true);
 			}

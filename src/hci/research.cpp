@@ -134,7 +134,7 @@ void ResearchController::refresh()
 void ResearchController::clearData()
 {
 	facilities.clear();
-	setHighlightedObject(nullptr);
+	setHighlightedObject(nullptr, false);
 	stats.clear();
 }
 
@@ -186,7 +186,7 @@ void ResearchController::startResearch(RESEARCH &research)
 	stopReticuleButtonFlash(IDRET_RESEARCH);
 }
 
-void ResearchController::setHighlightedObject(BASE_OBJECT *object)
+void ResearchController::setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject)
 {
 	if (object == nullptr)
 	{
@@ -197,6 +197,7 @@ void ResearchController::setHighlightedObject(BASE_OBJECT *object)
 	auto facility = castStructure(object);
 	ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 	ASSERT_OR_RETURN(, facility->pStructureType->type == REF_RESEARCH, "Invalid facility pointer");
+	queuedJumpToHighlightedStatsObject = queuedJumpToHighlightedStatsObject || jumpToHighlightedStatsObject;
 	highlightedFacility = facility;
 }
 
@@ -298,7 +299,7 @@ protected:
 	void clickPrimary() override
 	{
 		controller->clearStructureSelection();
-		controller->selectObject(controller->getObjectAt(objectIndex));
+		controller->selectObject(controller->getObjectAt(objectIndex), false);
 		jump();
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
@@ -469,7 +470,7 @@ private:
 		//might need to cancel the hold on research facility
 		releaseResearch(facility, ModeQueue);
 		controller->clearStructureSelection();
-		controller->selectObject(facility);
+		controller->selectObject(facility, true);
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 		controller->refresh();
 	}
@@ -480,7 +481,7 @@ private:
 		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 		controller->clearStructureSelection();
 		controller->requestResearchCancellation(facility);
-		controller->setHighlightedObject(facility);
+		controller->setHighlightedObject(facility, true);
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 		controller->refresh();
 	}

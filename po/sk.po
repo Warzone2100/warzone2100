@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2023-11-18 19:02+0000\n"
-"PO-Revision-Date: 2024-03-14 05:00\n"
+"PO-Revision-Date: 2024-05-07 02:16\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -868,11 +868,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr ""
+msgstr "Nepriateľské jednotky sú ....... od týchto koordinátov."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr ""
+msgstr "Obráň základňu a  ........ "
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
@@ -888,7 +888,7 @@ msgstr "Veliteľ, vaše rozhodné akcie zastavili rozšírenie NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr ""
+msgstr "Pred vyhnaním NEXUS sme zachytili túto správu – Dekódovanie kompletné."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
@@ -908,7 +908,7 @@ msgstr "PREPRAVNÁ MISIA: Výsadkový tím"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
-msgstr ""
+msgstr "Veliteľ, tvoj útok na ...."
 
 #: data/base/messages/strings/cam3strings.txt:98
 msgid "NEXUS exiting system."
@@ -920,7 +920,7 @@ msgstr "Prichádzajúci prenos od výsadkového tímu."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
-msgstr ""
+msgstr "Veliteľ, pokúšame sa vrátiť na základňu."
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
@@ -932,7 +932,7 @@ msgstr "Prevezmi kontrolu nad našimi jednotkami a veď nás."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
-msgstr ""
+msgstr "Odovzdanie ovládania úspešné."
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
@@ -944,15 +944,15 @@ msgstr "Prichádzajúci prenos..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr ""
+msgstr "Kontaktovali nás časti tímu Gama."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr ""
+msgstr "Tvrdia, že sa im podarilo zbaviť NEXUS a ponúkajú svoju základňu ako operačnú oblasť."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr ""
+msgstr "Prebieha sťahovanie koordinátorov základne."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
@@ -964,7 +964,7 @@ msgstr "Detekujeme silné energetické výboje z orbity."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr ""
+msgstr "Laserové satelity sú nabité a pohybujú sa smerom k našej pozícii."
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."

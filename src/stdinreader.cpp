@@ -1023,7 +1023,7 @@ int cmdInputThreadFunc(void *)
 				{
 					approve = false;
 				}
-				if (approve.has_value() || rejectionReason > static_cast<unsigned int>(std::numeric_limits<uint8_t>::max()))
+				if (approve.has_value() && rejectionReason < static_cast<unsigned int>(std::numeric_limits<uint8_t>::max()))
 				{
 					bool approveValue = approve.value();
 					std::string uniqueJoinIDCopy(uniqueJoinID);

@@ -68,13 +68,24 @@ public:
 		return highlightedFacility;
 	}
 
-	void setHighlightedObject(BASE_OBJECT *object) override;
+	void setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject) override;
+
+	bool getQueuedJumpToHighlightedStatsObject() const override
+	{
+		return queuedJumpToHighlightedStatsObject;
+	}
+
+	void clearQueuedJumpToHighlightedStatsObject() override
+	{
+		queuedJumpToHighlightedStatsObject = false;
+	}
 
 private:
 	void updateFacilitiesList();
 	void updateResearchOptionsList();
 	std::vector<RESEARCH *> stats;
 	std::vector<STRUCTURE *> facilities;
+	bool queuedJumpToHighlightedStatsObject = true;
 	static STRUCTURE *highlightedFacility;
 };
 

@@ -1219,6 +1219,7 @@ private:
 	std::shared_ptr<WzFrontendImageButton> resetButton;
 	std::shared_ptr<ScrollableListWidget> tweaksDisplayList;
 	std::vector<std::shared_ptr<WzCampaignTweakOptionToggle>> toggleWidgets;
+	std::unordered_map<size_t, size_t> tweakOptionIdxToToggleWidgetIdxMap;
 	std::shared_ptr<std::vector<WzCampaignTweakOptionSetting>> tweakOptions;
 	int innerPadding = 20;
 	int betweenButtonPadding = 15;
@@ -1292,6 +1293,7 @@ void WzCampaignTweakOptionsEditForm::initialize(const std::shared_ptr<std::vecto
 
 		toggleWidgets.push_back(toggleWidget);
 		tweaksDisplayList->addItem(toggleWidget);
+		tweakOptionIdxToToggleWidgetIdxMap.insert({i, toggleWidgets.size() - 1});
 	}
 
 	int listY0 = formTitle->y() + formTitle->height() + innerPadding;
@@ -1375,7 +1377,12 @@ void WzCampaignTweakOptionsEditForm::resetToDefaults()
 	{
 		auto& o = (*tweakOptions)[i];
 		o.currentValue = o.defaultValue;
-		toggleWidgets[i]->setIsChecked(o.defaultValue);
+		auto it = tweakOptionIdxToToggleWidgetIdxMap.find(i);
+		if (it != tweakOptionIdxToToggleWidgetIdxMap.end())
+		{
+			ASSERT(it->second < toggleWidgets.size(), "Invalid index: %zu", it->second);
+			toggleWidgets[it->second]->setIsChecked(o.defaultValue);
+		}
 	}
 	updateResetButtonStatus();
 }
@@ -2095,15 +2102,12 @@ void CampaignStartOptionsForm::handleStartGame()
 	sstrcpy(aLevelName, campaignFile.level.toUtf8().c_str());
 	setCampaignName(campaignFile.name.toStdString());
 
-	// show this only when the video sequences are installed
-	if (seq_hasVideos())
+	// show video
+	if (!campaignFile.video.isEmpty())
 	{
-		if (!campaignFile.video.isEmpty())
-		{
-			seq_ClearSeqList();
-			seq_AddSeqToList(campaignFile.video.toUtf8().c_str(), nullptr, campaignFile.captions.toUtf8().c_str(), false);
-			seq_StartNextFullScreenVideo();
-		}
+		seq_ClearSeqList();
+		seq_AddSeqToList(campaignFile.video.toUtf8().c_str(), nullptr, campaignFile.captions.toUtf8().c_str(), false);
+		seq_StartNextFullScreenVideo();
 	}
 
 	// set tweak options

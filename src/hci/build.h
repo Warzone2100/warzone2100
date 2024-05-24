@@ -94,13 +94,24 @@ public:
 		return highlightedBuilder;
 	}
 
-	void setHighlightedObject(BASE_OBJECT *object) override;
+	void setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject) override;
+
+	bool getQueuedJumpToHighlightedStatsObject() const override
+	{
+		return queuedJumpToHighlightedStatsObject;
+	}
+
+	void clearQueuedJumpToHighlightedStatsObject() override
+	{
+		queuedJumpToHighlightedStatsObject = false;
+	}
 
 private:
 	void updateBuildersList();
 	void updateBuildOptionsList();
 	std::vector<STRUCTURE_STATS *> stats;
 	std::vector<DROID *> builders;
+	bool queuedJumpToHighlightedStatsObject = true;
 
 	static bool showFavorites;
 	static DROID *highlightedBuilder;
