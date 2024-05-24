@@ -280,24 +280,26 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 struct JoinConnectionDescription
 {
 public:
+	enum class JoinConnectionType
+	{
+		TCP_DIRECT,
+	};
+public:
 	JoinConnectionDescription() { }
 	JoinConnectionDescription(const std::string& host, uint32_t port)
 	: host(host)
 	, port(port)
+	, type(JoinConnectionType::TCP_DIRECT)
 	{ }
 public:
 	std::string host;
 	uint32_t port = 0;
+	JoinConnectionType type = JoinConnectionType::TCP_DIRECT;
 };
 std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId);
-enum class JoinGameResult {
-	FAILED,
-	JOINED,
-	PENDING_PASSWORD
-};
-JoinGameResult joinGame(const char *connectionString, bool asSpectator = false);
-JoinGameResult joinGame(const char *host, uint32_t port, bool asSpectator = false);
-JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator = false);
+void joinGame(const char *connectionString, bool asSpectator = false);
+void joinGame(const char *host, uint32_t port, bool asSpectator = false);
+void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator = false);
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();

@@ -120,6 +120,7 @@
 #include "hci/chatoptions.h"
 #include "multivote.h"
 #include "campaigninfo.h"
+#include "screens/joiningscreen.h"
 
 #include "activity.h"
 #include <algorithm>
@@ -253,7 +254,6 @@ static	void	SendFireUp();
 
 static	void	decideWRF();
 
-static bool		SendColourRequest(UBYTE player, UBYTE col);
 static bool		SendFactionRequest(UBYTE player, UBYTE faction);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
 static bool		SendPlayerSlotTypeRequest(uint32_t player, bool isSpectator);
@@ -1056,10 +1056,7 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 	return {JoinConnectionDescription(host, lobbyGame.hostPort)};
 }
 
-static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI, bool asSpectator = false);
-static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI, bool asSpectator = false);
-
-JoinGameResult joinGame(const char *connectionString, bool asSpectator /*= false*/)
+void joinGame(const char *connectionString, bool asSpectator /*= false*/)
 {
 	if (strchr(connectionString, '[') == NULL || strchr(connectionString, ']') == NULL) // it is not IPv6. For more see rfc3986 section-3.2.2
 	{
@@ -1070,115 +1067,21 @@ JoinGameResult joinGame(const char *connectionString, bool asSpectator /*= false
 			std::string serverIP = "";
 			serverIP.assign(connectionString, ddch - connectionString);
 			debug(LOG_INFO, "Connecting to ip [%s] port %d", serverIP.c_str(), serverPort);
-			return joinGame(serverIP.c_str(), serverPort, asSpectator);
+			joinGame(serverIP.c_str(), serverPort, asSpectator);
+			return;
 		}
 	}
-	return joinGame(connectionString, 0, asSpectator);
+	joinGame(connectionString, 0, asSpectator);
 }
 
-JoinGameResult joinGame(const char *host, uint32_t port, bool asSpectator /*= false*/)
+void joinGame(const char *host, uint32_t port, bool asSpectator /*= false*/)
 {
 	std::string hostStr = (host != nullptr) ? std::string(host) : std::string();
-	return joinGame(std::vector<JoinConnectionDescription>({JoinConnectionDescription(hostStr, port)}), asSpectator);
+	joinGame(std::vector<JoinConnectionDescription>({JoinConnectionDescription(hostStr, port)}), asSpectator);
 }
 
-JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator /*= false*/) {
-	return joinGameInternal(connection_list, wzTitleUICurrent, asSpectator);
-}
-
-static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI, bool asSpectator /*= false*/){
-
-	if (connection_list.size() > 1)
-	{
-		// sort the list, based on NETgetJoinPreferenceIPv6
-		// preserve the original relative order amongst each class of IPv4/IPv6 addresses
-		bool bSortIPv6First = NETgetJoinPreferenceIPv6();
-		std::stable_sort(connection_list.begin(), connection_list.end(), [bSortIPv6First](const JoinConnectionDescription& a, const JoinConnectionDescription& b) -> bool {
-			bool a_isIPv6 = a.host.find(":") != std::string::npos; // this is a very simplistic test - if the host contains ":" we treat it as IPv6
-			bool b_isIPv6 = b.host.find(":") != std::string::npos;
-			return (bSortIPv6First) ? (a_isIPv6 && !b_isIPv6) : (!a_isIPv6 && b_isIPv6);
-		});
-	}
-
-	for (const auto& connDesc : connection_list)
-	{
-		JoinGameResult result = joinGameInternalConnect(connDesc.host.c_str(), connDesc.port, oldUI, asSpectator);
-		switch (result)
-		{
-			case JoinGameResult::FAILED:
-				continue;
-			case JoinGameResult::PENDING_PASSWORD:
-				return result;
-			case JoinGameResult::JOINED:
-				ActivityManager::instance().joinGameSucceeded(connDesc.host.c_str(), connDesc.port);
-				return result;
-		}
-	}
-
-	// Failed to connect to all IPs / options in list
-	// Change to an error display.
-	changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Unable to join:")), WzString(_("Error while joining.")), wzTitleUICurrent));
-	ActivityManager::instance().joinGameFailed(connection_list);
-	return JoinGameResult::FAILED;
-}
-
-/**
- * Try connecting to the given host, show a password screen, the multiplayer screen or an error.
- * The reason for this having a third parameter is so that the password dialog
- *  doesn't turn into the parent of the next connection attempt.
- * Any other barriers/auth methods/whatever would presumably benefit in the same way.
- */
-static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI, bool asSpectator /*= false*/)
-{
-	// oldUI may get captured for use in the password dialog, among other things.
-	PLAYERSTATS	playerStats;
-	loadMultiStats(sPlayer, &playerStats);
-
-	if (ingame.localJoiningInProgress)
-	{
-		return JoinGameResult::FAILED;
-	}
-
-	if (!NETjoinGame(host, port, (char *)sPlayer, playerStats.identity, asSpectator))	// join
-	{
-		switch (getLobbyError())
-		{
-		case ERROR_HOSTDROPPED:
-			setLobbyError(ERROR_NOERROR);
-			break;
-		case ERROR_WRONGPASSWORD:
-			{
-				std::string capturedHost = host;
-				changeTitleUI(std::make_shared<WzPassBoxTitleUI>([=](const char * pass) {
-					if (!pass) {
-						changeTitleUI(oldUI);
-					} else {
-						NETsetGamePassword(pass);
-						JoinConnectionDescription conn(capturedHost, port);
-						joinGameInternal({conn}, oldUI, asSpectator);
-					}
-				}));
-				return JoinGameResult::PENDING_PASSWORD;
-			}
-		default:
-			break;
-		}
-
-		return JoinGameResult::FAILED;
-	}
-	ingame.localJoiningInProgress	= true;
-
-	setMultiStats(selectedPlayer, playerStats, false);
-	setMultiStats(selectedPlayer, playerStats, true);
-
-	changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(oldUI));
-
-	if (selectedPlayer < MAX_PLAYERS && war_getMPcolour() >= 0)
-	{
-		SendColourRequest(selectedPlayer, war_getMPcolour());
-	}
-
-	return JoinGameResult::JOINED;
+void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator /*= false*/) {
+	startJoiningAttempt(sPlayer, connection_list, asSpectator);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -2776,7 +2679,7 @@ bool changeColour(unsigned player, int col, bool isHost)
 	return false;
 }
 
-static bool SendColourRequest(UBYTE player, UBYTE col)
+bool SendColourRequest(UBYTE player, UBYTE col)
 {
 	if (NetPlay.isHost)			// do or request the change
 	{

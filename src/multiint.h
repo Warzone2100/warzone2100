@@ -103,6 +103,8 @@ void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 void displayLobbyDisabledNotification();
 
+bool SendColourRequest(UBYTE player, UBYTE col);
+
 void handleAutoReadyRequest();
 
 void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
