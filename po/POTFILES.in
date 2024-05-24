@@ -501,7 +501,6 @@ src/titleui/campaign.cpp
 src/titleui/gamefind.cpp
 src/titleui/msgbox.cpp
 src/titleui/old.cpp
-src/titleui/passbox.cpp
 src/titleui/protocol.cpp
 src/titleui/titleui.cpp
 src/transporter.cpp
