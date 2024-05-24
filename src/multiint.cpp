@@ -977,6 +977,14 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
 	}
 }
 
+std::string NETJoinRejectReason = "";
+std::string getNETJoinRejectReason() {
+	return NETJoinRejectReason;
+}
+void setNETJoinRejectReason(std::string reason) {
+	NETJoinRejectReason = reason;
+}
+
 // NOTE: Must call NETinit(true); before this will actually work
 std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)
 {
@@ -1118,6 +1126,14 @@ static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> co
 	// Failed to connect to all IPs / options in list
 	// Change to an error display.
 	changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Unable to join:")), WzString(_("Error while joining.")), wzTitleUICurrent));
+	std::string reason = getNETJoinRejectReason();
+	if (reason.empty()) {
+		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Unable to join:")), WzString(_("Error while joining.")), wzTitleUICurrent));
+	}
+	else
+	{
+		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Join attempt rejected:")), WzString::fromUtf8(reason), wzTitleUICurrent));
+	}
 	ActivityManager::instance().joinGameFailed(connection_list);
 	return JoinGameResult::FAILED;
 }

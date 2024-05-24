@@ -69,6 +69,9 @@ int matchAIbyName(const char* name);	///< only run this -after- readAIs() is cal
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
+std::string getNETJoinRejectReason();
+void setNETJoinRejectReason(std::string reason);
+
 /**
  * Updates structure limit flags. Flags indicate which structures are disabled.
  */
