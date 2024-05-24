@@ -2919,6 +2919,15 @@ static void setComponent(const std::string& componentName, int player, int avail
 	apCompLists[player][psComp->compType][psComp->index] = availability;
 }
 
+// called by "makeComponentUnavailable", same as "setComponent", but allows for templates with the component to be removed from production.
+static void setComponentUnavailable(const std::string& componentName, int player, int availability)
+{
+	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(componentName));
+	ASSERT_OR_RETURN(, psComp, "Bad component %s", componentName.c_str());
+	apCompLists[player][psComp->compType][psComp->index] = availability;
+	getTemplateByComponent(psComp, player);
+}
+
 //-- ## enableComponent(componentName, player)
 //--
 //-- The given component is made available for research for the given player.
@@ -2945,12 +2954,12 @@ wzapi::no_return_value wzapi::makeComponentAvailable(WZAPI_PARAMS(std::string co
 //-- ## makeComponentUnavailable(componentName, player)
 //--
 //-- The given component is made unavailable to the given player. This means the player can
-//-- no longer build designs with it.
+//-- no longer build designs with it, and any research topics that give the component are disabled.
 //--
 wzapi::no_return_value wzapi::makeComponentUnavailable(WZAPI_PARAMS(std::string componentName, int player))
 {
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	setComponent(componentName, player, UNAVAILABLE);
+	setComponentUnavailable(componentName, player, UNAVAILABLE);
 	return {};
 }
 

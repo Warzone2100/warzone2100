@@ -519,6 +519,7 @@ bool loadResearch(WzConfig &ini)
 			else
 			{
 				research.pRemArtefacts.push_back(pComp);
+				getTemplateByComponent(pComp, me);
 			}
 		}
 

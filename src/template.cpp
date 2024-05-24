@@ -622,6 +622,22 @@ DROID_TEMPLATE* addTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTempla
 	}
 }
 
+DROID_TEMPLATE* getTemplateByComponent(auto component, auto player)
+{
+	ASSERT_PLAYER_OR_RETURN(nullptr, player);
+	auto it = droidTemplates[player].find(component);
+	if (it != droidTemplates[player].end())
+	{
+		auto templs = it->second.get();
+		for (auto templ : templs)
+		{
+			deleteTemplateFromProduction(templ, player, ModeQueue);
+			deleteTemplateFromProduction(templ, player, ModeImmediate);
+		}
+	}
+	return nullptr;
+}
+
 void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* psTemplate)>& func)
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
