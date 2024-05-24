@@ -107,7 +107,8 @@ bool socketReadReady(const Socket& sock)
 	return sock.ready;
 }
 
-int getSockErr(void)
+// Returns the last error for the calling thread
+int getSockErr()
 {
 #if   defined(WZ_OS_UNIX)
 	return errno;
@@ -1743,4 +1744,68 @@ void SOCKETshutdown()
 		freeaddrinfo_dll_func = NULL;
 	}
 #endif
+}
+
+OpenConnectionResult socketOpenTCPConnectionSync(const char *host, uint32_t port)
+{
+	SocketAddress *hosts = resolveHost(host, port);
+	if (hosts == nullptr)
+	{
+		int sErr = getSockErr();
+		return OpenConnectionResult((sErr != 0) ? sErr : -1, astringf("Cannot resolve host \"%s\": [%d]: %s", host, sErr, strSockError(sErr)));
+	}
+
+	Socket* client_transient_socket = socketOpenAny(hosts, 15000);
+	int sockOpenErr = getSockErr();
+	deleteSocketAddress(hosts);
+
+	if (client_transient_socket == nullptr)
+	{
+		return OpenConnectionResult((sockOpenErr != 0) ? sockOpenErr : -1, astringf("Cannot connect to [%s]:%d, [%d]:%s", host, port, sockOpenErr, strSockError(sockOpenErr)));
+	}
+
+	return OpenConnectionResult(client_transient_socket);
+}
+
+struct OpenConnectionRequest
+{
+	std::string host;
+	uint32_t port = 0;
+	OpenConnectionToHostResultCallback callback;
+};
+
+static int openDirectTCPConnectionAsyncImpl(void* data)
+{
+	OpenConnectionRequest* pRequestInfo = (OpenConnectionRequest*)data;
+	if (!pRequestInfo)
+	{
+		return 1;
+	}
+
+	pRequestInfo->callback(socketOpenTCPConnectionSync(pRequestInfo->host.c_str(), pRequestInfo->port));
+	delete pRequestInfo;
+	return 0;
+}
+
+bool socketOpenTCPConnectionAsync(const std::string& host, uint32_t port, OpenConnectionToHostResultCallback callback)
+{
+	// spawn background thread to handle this
+	auto pRequest = new OpenConnectionRequest();
+	pRequest->host = host;
+	pRequest->port = port;
+	pRequest->callback = callback;
+
+	WZ_THREAD * pOpenConnectionThread = wzThreadCreate(openDirectTCPConnectionAsyncImpl, pRequest);
+	if (pOpenConnectionThread == nullptr)
+	{
+		debug(LOG_ERROR, "Failed to create thread for opening connection");
+		delete pRequest;
+		return false;
+	}
+
+	wzThreadDetach(pOpenConnectionThread);
+	// the thread handles deleting pRequest
+	pOpenConnectionThread = nullptr;
+
+	return true;
 }
