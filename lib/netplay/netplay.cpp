@@ -4895,46 +4895,6 @@ bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uin
 // ////////////////////////////////////////////////////////////////////////
 // Functions used to setup and join games.
 
-struct OpenConnectionToHostResult
-{
-public:
-	OpenConnectionToHostResult(int error, std::string errorString)
-	: error(error)
-	, errorString(errorString)
-	{ }
-
-	OpenConnectionToHostResult(Socket* open_socket)
-	: open_socket(open_socket)
-	{ }
-public:
-	bool hasError() const { return error != 0; }
-public:
-	Socket* open_socket = nullptr;
-	int error = 0;
-	std::string errorString;
-};
-
-static OpenConnectionToHostResult NETopenConnectionToHost(const char *host, uint32_t port)
-{
-	SocketAddress *hosts = resolveHost(host, port);
-	if (hosts == nullptr)
-	{
-		int sErr = getSockErr();
-		return OpenConnectionToHostResult(-1, astringf("Cannot resolve hostname \"%s\": %s", host, strSockError(sErr)));
-	}
-
-	Socket* client_transient_socket = socketOpenAny(hosts, 15000);
-	int sockOpenErr = getSockErr();
-	deleteSocketAddress(hosts);
-
-	if (client_transient_socket == nullptr)
-	{
-		return OpenConnectionToHostResult(-1, astringf("Cannot connect to [%s]:%d, %s", host, port, strSockError(sockOpenErr)));
-	}
-
-	return OpenConnectionToHostResult(client_transient_socket);
-}
-
 bool NETjoinGame(const char *host, uint32_t port, const char *playername, const EcKey& playerIdentity, bool asSpectator /*= false*/)
 {
 	char buffer[sizeof(int32_t) * 2] = { 0 };
@@ -4957,10 +4917,10 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername, const 
 	uint32_t netcodeMinorVer = NETGetMinorVersion();
 
 	Socket* client_transient_socket = nullptr;
-	auto openConnectionResult = NETopenConnectionToHost(host, port);
+	auto openConnectionResult = socketOpenTCPConnectionSync(host, port);
 	if (!openConnectionResult.hasError())
 	{
-		client_transient_socket = openConnectionResult.open_socket;
+		client_transient_socket = openConnectionResult.open_socket.release();
 	}
 	else
 	{

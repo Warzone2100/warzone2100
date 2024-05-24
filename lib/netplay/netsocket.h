@@ -131,4 +131,35 @@ WZ_DECL_NONNULL(2) void SocketSet_AddSocket(SocketSet& set, Socket *socket);  //
 WZ_DECL_NONNULL(2) void SocketSet_DelSocket(SocketSet& set, Socket *socket);  ///< Removes a Socket from a SocketSet.
 int checkSockets(const SocketSet& set, unsigned int timeout); ///< Checks which Sockets are ready for reading. Returns the number of ready Sockets, or returns SOCKET_ERROR on error.
 
+// Higher-level functions for opening a connection / socket
+struct OpenConnectionResult
+{
+public:
+	OpenConnectionResult(int error, std::string errorString)
+	: error(error)
+	, errorString(errorString)
+	{ }
+
+	OpenConnectionResult(Socket* open_socket)
+	: open_socket(open_socket)
+	{ }
+public:
+	bool hasError() const { return error != 0; }
+public:
+	OpenConnectionResult( const OpenConnectionResult& other ) = delete; // non construction-copyable
+	OpenConnectionResult& operator=( const OpenConnectionResult& ) = delete; // non copyable
+	OpenConnectionResult(OpenConnectionResult&&) = default;
+	OpenConnectionResult& operator=(OpenConnectionResult&&) = default;
+public:
+	struct SocketDeleter {
+		void operator()(Socket* b) { if (b) { socketClose(b); } }
+	};
+	std::unique_ptr<Socket, SocketDeleter> open_socket;
+	int error = 0;
+	std::string errorString;
+};
+typedef std::function<void (OpenConnectionResult&& result)> OpenConnectionToHostResultCallback;
+bool socketOpenTCPConnectionAsync(const std::string& host, uint32_t port, OpenConnectionToHostResultCallback callback);
+OpenConnectionResult socketOpenTCPConnectionSync(const char *host, uint32_t port);
+
 #endif //_net_socket_h
