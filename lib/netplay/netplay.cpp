@@ -294,6 +294,7 @@ struct TmpSocketInfo
 	// async join approval
 	std::string uniqueJoinID;
 	optional<LOBBY_ERROR_TYPES> asyncJoinApprovalResult = nullopt;
+	std::string asyncJoinRejectCustomMessage;
 
 	void reset()
 	{
@@ -306,6 +307,7 @@ struct TmpSocketInfo
 		receivedJoinInfo.reset();
 		uniqueJoinID.clear();
 		asyncJoinApprovalResult = nullopt;
+		asyncJoinRejectCustomMessage.clear();
 	}
 };
 
@@ -511,7 +513,7 @@ void NETsetAsyncJoinApprovalRequired(bool enabled)
 }
 
 //	NOTE: *MUST* be called from the main thread!
-bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason)
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason, optional<std::string> customRejectionMessage)
 {
 	if (!approve && rejectedReason == ERROR_NOERROR)
 	{
@@ -525,6 +527,10 @@ bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve
 		{
 			// found a match
 			tmp_info.asyncJoinApprovalResult = (approve) ? ERROR_NOERROR : rejectedReason;
+			if (customRejectionMessage.has_value())
+			{
+				tmp_info.asyncJoinRejectCustomMessage = customRejectionMessage.value();
+			}
 			return true;
 		}
 	}
@@ -4145,6 +4151,7 @@ static void NETallowJoining()
 						rejected = ERROR_WRONGDATA;
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
+						NETstring("", 0);
 						NETend();
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
@@ -4183,6 +4190,7 @@ static void NETallowJoining()
 						rejected = ERROR_WRONGDATA;
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
+						NETstring("", 0);
 						NETend();
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
@@ -4244,6 +4252,7 @@ static void NETallowJoining()
 						NETlogEntry(buf, SYNC_FLAG, i);
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
+						NETstring("", 0);
 						NETend();
 						NETflush();
 						NETpop(NETnetTmpQueue(i));
@@ -4283,6 +4292,7 @@ static void NETallowJoining()
 					rejected = ERROR_WRONGDATA;
 					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 					NETuint8_t(&rejected);
+					NETstring("", 0);
 					NETend();
 					NETflush();
 					NETpop(NETnetTmpQueue(i));
@@ -4327,6 +4337,8 @@ static void NETallowJoining()
 					NETlogEntry(buf, SYNC_FLAG, i);
 					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 					NETuint8_t(&rejected);
+					uint16_t maxrejectlen = std::min<uint16_t>(MAX_JOIN_REJECT_REASON, tmp_connectState[i].asyncJoinRejectCustomMessage.size());
+					NETstring(tmp_connectState[i].asyncJoinRejectCustomMessage.c_str(), maxrejectlen);
 					NETend();
 					NETflush();
 					auto tmpQueue = NETnetTmpQueue(i);
@@ -4351,6 +4363,7 @@ static void NETallowJoining()
 					uint8_t rejected = ERROR_HOSTDROPPED;
 					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 					NETuint8_t(&rejected);
+					NETstring("", 0);
 					NETend();
 					NETflush();
 					auto tmpQueue = NETnetTmpQueue(i);
@@ -4386,6 +4399,7 @@ static void NETallowJoining()
 				rejected = ERROR_FULL;
 				NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 				NETuint8_t(&rejected);
+				NETstring("", 0);
 				NETend();
 				NETflush();
 
@@ -4487,6 +4501,7 @@ static void NETallowJoining()
 			rejected = ERROR_WRONGDATA;
 			NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 			NETuint8_t(&rejected);
+			NETstring("", 0);
 			NETend();
 			NETflush();
 			auto tmpQueue = NETnetTmpQueue(i);

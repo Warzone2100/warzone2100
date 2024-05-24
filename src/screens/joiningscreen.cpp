@@ -561,7 +561,14 @@ void WzJoiningStatusForm::displayDetailsParagraph(const WzString& messageContent
 	detailsParagraph->setFontColour(WZCOL_TEXT_BRIGHT);
 	detailsParagraph->setLineSpacing(5);
 	detailsParagraph->setFont(font_regular);
-	detailsParagraph->addText(messageContents.toUtf8());
+
+	std::string messageContentsStr = messageContents.toUtf8();
+	size_t maxLinePos = nthOccurrenceOfChar(messageContentsStr, '\n', 10);
+	if (maxLinePos != std::string::npos)
+	{
+		messageContentsStr = messageContentsStr.substr(0, maxLinePos);
+	}
+	detailsParagraph->addText(messageContentsStr);
 
 	scrollableParagraphContainer->addItem(detailsParagraph);
 
@@ -1417,9 +1424,11 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		else if (type == NET_REJECTED)
 		{
 			uint8_t rejection = 0;
+			char reason[MAX_JOIN_REJECT_REASON] = {};
 
 			NETbeginDecode(tmpJoiningQUEUE, NET_REJECTED);
 			NETuint8_t(&rejection);
+			NETstring(reason, MAX_JOIN_REJECT_REASON);
 			NETend();
 			NETpop(tmpJoiningQUEUE);
 
@@ -1434,7 +1443,15 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 			else
 			{
-				handleFailure(FailureDetails::makeFromLobbyError((LOBBY_ERROR_TYPES)rejection)); // TODO: Could include an error string
+				size_t reasonStrLength = strnlen(reason, MAX_JOIN_REJECT_REASON);
+				if (reasonStrLength > 0)
+				{
+					handleFailure(FailureDetails::makeFromHostRejectionMessage(reason));
+				}
+				else
+				{
+					handleFailure(FailureDetails::makeFromLobbyError((LOBBY_ERROR_TYPES)rejection));
+				}
 			}
 			return;
 		}
