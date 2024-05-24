@@ -208,6 +208,7 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define TECH_4					4
 
 #define MAX_KICK_REASON			1024		// max array size for the reason your kicking someone
+#define MAX_JOIN_REJECT_REASON	2048		// max array size for the reason a join was rejected (custom host message provided by wzcmd interface)
 
 // functions
 

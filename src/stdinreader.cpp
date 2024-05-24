@@ -1006,11 +1006,12 @@ int cmdInputThreadFunc(void *)
 		{
 			char action[1024] = {0};
 			char uniqueJoinID[1024] = {0};
+			char rejectionMessage[MAX_JOIN_REJECT_REASON] = {0};
 			unsigned int rejectionReason = static_cast<unsigned int>(ERROR_NOERROR);
-			int r = sscanf(line, "join %1023s %1023s %u", action, uniqueJoinID, &rejectionReason);
-			if (r != 2 && r != 3)
+			int r = sscanf(line, "join %1023s %1023s %u %2047[^\n]s", action, uniqueJoinID, &rejectionReason, rejectionMessage);
+			if (r < 2 || r > 4)
 			{
-				wz_command_interface_output_onmainthread("WZCMD error: Failed to get join action or uniqueJoinID!\n");
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to parse join command!\n");
 			}
 			else
 			{
@@ -1027,8 +1028,10 @@ int cmdInputThreadFunc(void *)
 				{
 					bool approveValue = approve.value();
 					std::string uniqueJoinIDCopy(uniqueJoinID);
-					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, rejectionReason] {
-						if (!NETsetAsyncJoinApprovalResult(uniqueJoinIDCopy, approveValue, static_cast<LOBBY_ERROR_TYPES>(rejectionReason)))
+					std::string rejectionMessageCopy(rejectionMessage);
+					convertEscapedNewlines(rejectionMessageCopy);
+					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, rejectionReason, rejectionMessageCopy] {
+						if (!NETsetAsyncJoinApprovalResult(uniqueJoinIDCopy, approveValue, static_cast<LOBBY_ERROR_TYPES>(rejectionReason), rejectionMessageCopy))
 						{
 							wz_command_interface_output("WZCMD info: Could not find currently-waiting join with specified uniqueJoinID\n");
 						}

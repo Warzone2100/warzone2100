@@ -485,7 +485,7 @@ bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player); 
 
 void NETsetAsyncJoinApprovalRequired(bool enabled);
 //	NOTE: *MUST* be called from the main thread!
-bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR);
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR, optional<std::string> customRejectionMessage = nullopt);
 
 const char *messageTypeToString(unsigned messageType);
 
