@@ -1254,7 +1254,7 @@ static void addGameOptions()
 		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_OPTIONSW, MULTIOP_OPTIONSH);
 	}));
 
-	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX - 3 , MULTIOP_OPTIONSY, _("OPTIONS"));
+	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX - 6 , MULTIOP_OPTIONSY, _("OPTIONS"));
 
 	// game name box
 	if (NetPlay.bComms)
@@ -5478,7 +5478,7 @@ static void addChatBox(bool preserveOldChat)
 	chatBox->setSendMode(desiredSendMode);
 	chatBox->initializeMessages(preserveOldChat);
 
-	addSideText(FRONTEND_SIDETEXT4, MULTIOP_CHATBOXX - 3, MULTIOP_CHATBOXY, _("CHAT"));
+	addSideText(FRONTEND_SIDETEXT4, MULTIOP_CHATBOXX - 6, MULTIOP_CHATBOXY, _("CHAT"));
 
 	if (!getModList().empty())
 	{

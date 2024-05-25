@@ -164,7 +164,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 // GAME OPTIONS SCREEN
 
 #define MULTIOP_PLAYERS			10231
-#define MULTIOP_PLAYERSX		323
+#define MULTIOP_PLAYERSX		315
 #define MULTIOP_PLAYERSY		1
 #define MULTIOP_PLAYER_START	102350		//list of players
 #define MULTIOP_PLAYER_END		102381
@@ -201,7 +201,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define	MULTIOP_PLAYERHEIGHT	38
 
 #define MULTIOP_OPTIONS			10250
-#define MULTIOP_OPTIONSX		40
+#define MULTIOP_OPTIONSX		32
 #define MULTIOP_OPTIONSY		1
 #define MULTIOP_OPTIONSW		284
 #define MULTIOP_OPTIONSH		MULTIOP_PLAYERSH
