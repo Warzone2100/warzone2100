@@ -1468,10 +1468,11 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			EcKey::Sig challengeResponse = playerIdentity.sign(challenge.data(), challenge.size());
 			EcKey::Key identity = playerIdentity.toBytes(EcKey::Public);
 			uint8_t playerType = (!asSpectator) ? NET_JOIN_PLAYER : NET_JOIN_SPECTATOR;
+			const auto& modListStr = getModList();
 
 			NETbeginEncode(tmpJoiningQUEUE, NET_JOIN);
-			NETstring(playerName.toUtf8().c_str(), 64);
-			NETstring(getModList().c_str(), modlist_string_size);
+			NETstring(playerName.toUtf8().c_str(), std::min<uint16_t>(StringSize, playerName.toUtf8().size() + 1));
+			NETstring(modListStr.c_str(), std::min<uint16_t>(modlist_string_size, modListStr.size() + 1));
 			NETstring(gamePassword, sizeof(gamePassword));
 			NETuint8_t(&playerType);
 			NETbytes(&identity);
