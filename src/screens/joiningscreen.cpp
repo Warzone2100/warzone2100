@@ -1375,9 +1375,9 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			return; // nothing to do until more data comes in
 		}
 
-		uint8_t type = NETgetMessage(tmpJoiningQUEUE)->type;
+		uint8_t msgType = NETgetMessage(tmpJoiningQUEUE)->type;
 
-		if (type == NET_ACCEPTED)
+		if (msgType == NET_ACCEPTED)
 		{
 			// :)
 			uint8_t index;
@@ -1421,7 +1421,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			handleSuccess();
 			return;
 		}
-		else if (type == NET_REJECTED)
+		else if (msgType == NET_REJECTED)
 		{
 			uint8_t rejection = 0;
 			char reason[MAX_JOIN_REJECT_REASON] = {};
@@ -1455,7 +1455,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 			return;
 		}
-		else if (type == NET_PING)
+		else if (msgType == NET_PING)
 		{
 			updateJoiningStatus(_("Requesting to join game"));
 
@@ -1483,7 +1483,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		}
 		else
 		{
-			debug(LOG_ERROR, "Unexpected %s.", messageTypeToString(type));
+			debug(LOG_ERROR, "Unexpected %s.", messageTypeToString(msgType));
 			NETpop(tmpJoiningQUEUE);
 			// Disconnect and treat as a failure
 			closeConnectionAttempt();
