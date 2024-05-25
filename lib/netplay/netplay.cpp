@@ -201,6 +201,12 @@ public:
 		ipsMovedToSpectatorsByHost.insert(player.IPtextAddress);
 		identitiesMovedToSpectatorsByHost.insert(base64Encode(publicIdentity));
 	}
+	void movedSpectatorToPlayers(const std::string& ipAddress, const EcKey::Key& publicIdentity, bool byHost)
+	{
+		if (!byHost) { return; }
+		ipsMovedToSpectatorsByHost.insert(ipAddress);
+		identitiesMovedToSpectatorsByHost.insert(base64Encode(publicIdentity));
+	}
 	void movedSpectatorToPlayers(const PLAYER& player, const EcKey::Key& publicIdentity, bool byHost)
 	{
 		if (!byHost) { return; }
@@ -293,7 +299,8 @@ struct TmpSocketInfo
 
 	// async join approval
 	std::string uniqueJoinID;
-	optional<LOBBY_ERROR_TYPES> asyncJoinApprovalResult = nullopt;
+	optional<AsyncJoinApprovalAction> asyncJoinApprovalResult = nullopt;
+	LOBBY_ERROR_TYPES asyncJoinRejectCode = ERROR_NOERROR;
 	std::string asyncJoinRejectCustomMessage;
 
 	void reset()
@@ -307,6 +314,7 @@ struct TmpSocketInfo
 		receivedJoinInfo.reset();
 		uniqueJoinID.clear();
 		asyncJoinApprovalResult = nullopt;
+		asyncJoinRejectCode = ERROR_NOERROR;
 		asyncJoinRejectCustomMessage.clear();
 	}
 };
@@ -513,9 +521,9 @@ void NETsetAsyncJoinApprovalRequired(bool enabled)
 }
 
 //	NOTE: *MUST* be called from the main thread!
-bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason, optional<std::string> customRejectionMessage)
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApprovalAction action, LOBBY_ERROR_TYPES rejectedReason, optional<std::string> customRejectionMessage)
 {
-	if (!approve && rejectedReason == ERROR_NOERROR)
+	if (action == AsyncJoinApprovalAction::Reject && rejectedReason == ERROR_NOERROR)
 	{
 		debug(LOG_INFO, "Rejecting join with NOERROR reason changed to ERROR_KICKED");
 		rejectedReason = ERROR_KICKED;
@@ -526,7 +534,8 @@ bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve
 			&& tmp_info.uniqueJoinID == uniqueJoinID)
 		{
 			// found a match
-			tmp_info.asyncJoinApprovalResult = (approve) ? ERROR_NOERROR : rejectedReason;
+			tmp_info.asyncJoinApprovalResult = action;
+			tmp_info.asyncJoinRejectCode = (action != AsyncJoinApprovalAction::Reject) ? ERROR_NOERROR : rejectedReason;
 			if (customRejectionMessage.has_value())
 			{
 				tmp_info.asyncJoinRejectCustomMessage = customRejectionMessage.value();
@@ -4320,17 +4329,24 @@ static void NETallowJoining()
 			// check if async approval result has been set
 			if (tmp_connectState[i].asyncJoinApprovalResult.has_value())
 			{
-				if (tmp_connectState[i].asyncJoinApprovalResult.value() == ERROR_NOERROR)
+				if (tmp_connectState[i].asyncJoinApprovalResult.value() != AsyncJoinApprovalAction::Reject)
 				{
 					// async join approved - process the join
 					tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::ProcessJoin;
 					tmp_connectState[i].connectTime = std::chrono::steady_clock::now(); // reset connect time
+					if (tmp_connectState[i].asyncJoinApprovalResult.value() == AsyncJoinApprovalAction::ApproveSpectators)
+					{
+						// change the player join request to spectators
+						tmp_connectState[i].receivedJoinInfo.playerType = NET_JOIN_SPECTATOR;
+						// enforce spectator state for this player
+						playerManagementRecord.movedSpectatorToPlayers(tmp_connectState[i].ip, tmp_connectState[i].receivedJoinInfo.identity.toBytes(EcKey::Privacy::Public), true);
+					}
 					// deliberately fall-through to the TmpSocketInfo::TmpConnectState::ProcessJoin condition further below
 				}
 				else
 				{
 					// async join rejected
-					uint8_t rejected = static_cast<uint8_t>(tmp_connectState[i].asyncJoinApprovalResult.value());
+					uint8_t rejected = static_cast<uint8_t>(tmp_connectState[i].asyncJoinRejectCode);
 					char buf[256] = {'\0'};
 					ssprintf(buf, "**Rejecting player(%s), due to async approval rejection, reason (%u).", tmp_connectState[i].ip.c_str(), static_cast<unsigned int>(rejected));
 					debug(LOG_INFO, "%s", buf);
