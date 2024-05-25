@@ -1015,18 +1015,22 @@ int cmdInputThreadFunc(void *)
 			}
 			else
 			{
-				optional<bool> approve = nullopt;
+				optional<AsyncJoinApprovalAction> approve = nullopt;
 				if (strcmp(action, "approve") == 0)
 				{
-					approve = true;
+					approve = AsyncJoinApprovalAction::Approve;
 				}
 				else if (strcmp(action, "reject") == 0)
 				{
-					approve = false;
+					approve = AsyncJoinApprovalAction::Reject;
+				}
+				else if (strcmp(action, "approvespec") == 0)
+				{
+					approve = AsyncJoinApprovalAction::ApproveSpectators;
 				}
 				if (approve.has_value() && rejectionReason < static_cast<unsigned int>(std::numeric_limits<uint8_t>::max()))
 				{
-					bool approveValue = approve.value();
+					auto approveValue = approve.value();
 					std::string uniqueJoinIDCopy(uniqueJoinID);
 					std::string rejectionMessageCopy(rejectionMessage);
 					convertEscapedNewlines(rejectionMessageCopy);

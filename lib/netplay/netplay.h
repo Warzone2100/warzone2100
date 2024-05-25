@@ -484,8 +484,15 @@ void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);   
 bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
 
 void NETsetAsyncJoinApprovalRequired(bool enabled);
+
+enum class AsyncJoinApprovalAction
+{
+	Approve,
+	ApproveSpectators,
+	Reject
+};
 //	NOTE: *MUST* be called from the main thread!
-bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, bool approve, LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR, optional<std::string> customRejectionMessage = nullopt);
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApprovalAction action, LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR, optional<std::string> customRejectionMessage = nullopt);
 
 const char *messageTypeToString(unsigned messageType);
 
