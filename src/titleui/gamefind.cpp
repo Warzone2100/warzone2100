@@ -78,7 +78,7 @@ void WzGameFindTitleUI::start()
 		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
 	}));
 
-	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX - 3, MULTIOP_OPTIONSY, _("GAMES"));
+	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX - 6, MULTIOP_OPTIONSY, _("GAMES"));
 
 	// cancel
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, CON_CANCEL, 10, 5, MULTIOP_OKW, MULTIOP_OKH, _("Return To Previous Screen"),
@@ -732,7 +732,7 @@ void WzGameFindTitleUI::addGames()
 		W_BUTINIT sButInit;
 		sButInit.formID = FRONTEND_BOTFORM;
 		sButInit.id = FRONTEND_NOGAMESAVAILABLE;
-		sButInit.x = 70;
+		sButInit.x = 60;
 		sButInit.y = 50;
 		sButInit.style = WBUT_TXTCENTRE;
 		sButInit.width = FRONTEND_BUTWIDTH;
