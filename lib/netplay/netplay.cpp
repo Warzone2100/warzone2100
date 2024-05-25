@@ -4174,7 +4174,7 @@ static void NETallowJoining()
 
 				if (NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
 				{
-					char name[64];
+					char name[StringSize] = { '\0' };
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
 					uint8_t playerType = 0;
@@ -4353,7 +4353,7 @@ static void NETallowJoining()
 					NETlogEntry(buf, SYNC_FLAG, i);
 					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 					NETuint8_t(&rejected);
-					uint16_t maxrejectlen = std::min<uint16_t>(MAX_JOIN_REJECT_REASON, tmp_connectState[i].asyncJoinRejectCustomMessage.size());
+					uint16_t maxrejectlen = std::min<uint16_t>(MAX_JOIN_REJECT_REASON, tmp_connectState[i].asyncJoinRejectCustomMessage.size() + 1);
 					NETstring(tmp_connectState[i].asyncJoinRejectCustomMessage.c_str(), maxrejectlen);
 					NETend();
 					NETflush();
