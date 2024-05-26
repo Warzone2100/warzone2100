@@ -65,3 +65,9 @@
 [submodule "data/terrain_overrides/high"]
 	path = data/terrain_overrides/high
 	url = https://github.com/Warzone2100/data-terrain-high.git
+[submodule "data/mods/campaign/reclamation"]
+	path = data/mods/campaign/reclamation
+	url = https://github.com/Warzone2100/reclamation.git
+[submodule "data/mods/campaign/fractured-kingdom"]
+	path = data/mods/campaign/fractured-kingdom
+	url = https://github.com/Warzone2100/fractured-kingdom.git
