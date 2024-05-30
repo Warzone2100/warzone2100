@@ -372,12 +372,12 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 
 	size_t size() const override
 	{
-		return 1;
+		return 2; // + 1 for "whitespace" at end
 	}
 
 	bool isWhitespace(size_t position) const override
 	{
-		return false;
+		return (position > 0);
 	}
 
 	bool isLineBreak(size_t position) const override
