@@ -284,6 +284,13 @@ void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	}
 }
 
+bool isRegisteredOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
+{
+	return std::any_of(overlays.begin(), overlays.end(), [psScreen](const OverlayScreen& overlay) -> bool {
+		return overlay.psScreen == psScreen;
+	});
+}
+
 static void cleanupDeletedOverlays()
 {
 	if (overlaysToDelete.empty()) { return; }
