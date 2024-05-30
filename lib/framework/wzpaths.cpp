@@ -135,3 +135,9 @@ std::string WzPathInfo::path() const
 	}
 	return file.substr(0, std::max<size_t>(lastSlashPos, (size_t)1));
 }
+
+// Returns the path components as a vector
+std::vector<std::string> WzPathInfo::pathComponents() const
+{
+	return splitAtAnyDelimiter(file, "/");
+}

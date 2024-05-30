@@ -50,6 +50,9 @@ public:
 	// Returns the file's path. Does *not* include the file name.
 	std::string path() const;
 
+	// Returns the path components as a vector
+	std::vector<std::string> pathComponents() const;
+
 private:
 	std::string file;
 };
