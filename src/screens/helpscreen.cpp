@@ -151,8 +151,11 @@ void W_HELP_OVERLAY_SCREEN::closeHelpOverlayScreen()
 
 void W_HELP_OVERLAY_SCREEN::setHelpFromWidgets(const std::shared_ptr<WIDGET>& root)
 {
-	for (const auto& child : root->children())
+	ASSERT_OR_RETURN(, root != nullptr, "Null widget?");
+	// (Enumerate the child widgets in decreasing z-order (i.e. "top-down"))
+	for (auto i = root->children().size(); i--;)
 	{
+		auto const &child = root->children()[i];
 		if (!child->visible())
 		{
 			continue;
@@ -973,7 +976,7 @@ void W_HELPSCREEN_CLICKFORM::setHelpForWidget(const std::shared_ptr<WIDGET>& wid
 	}
 	WidgetInfo info(widgetHelp);
 	info.helpTriggerWidget = HelpTriggerWidget::make(std::dynamic_pointer_cast<W_HELPSCREEN_CLICKFORM>(shared_from_this()), widget);
-	attach(info.helpTriggerWidget);
+	attach(info.helpTriggerWidget, ChildZPos::Back);
 	registeredWidgets[widget] = info;
 }
 
