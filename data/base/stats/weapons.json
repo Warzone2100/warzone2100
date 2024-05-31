@@ -2957,8 +2957,6 @@
 		"lightWorld": 1,
 		"longHit": 80,
 		"longRange": 12032,
-		"maxElevation": 90,
-		"minElevation": -30,
 		"minRange": 512,
 		"minimumDamage": 33,
 		"missGfx": "FXMExp.PIE",
