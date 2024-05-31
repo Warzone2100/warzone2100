@@ -3129,9 +3129,6 @@
 		"name": "Engineering",
 		"researchPoints": 1200,
 		"researchPower": 37,
-		"resultComponents": [
-			"CyborgSpade"
-		],
 		"results": [
 			{
 				"class": "Construct",
@@ -3426,7 +3423,8 @@
 		"name": "Construction Unit",
 		"researchPoints": 10,
 		"resultComponents": [
-			"Spade1Mk1"
+			"Spade1Mk1",
+			"CyborgSpade"
 		],
 		"statID": "Spade1Mk1",
 		"techCode": 1
