@@ -35,6 +35,7 @@
 #include "lib/widget/widget.h"
 #include "lib/widget/multibutform.h"
 #include "lib/widget/paneltabbutton.h"
+#include "lib/widget/editbox.h"
 
 #include "display3d.h"
 #include "intdisplay.h"
@@ -416,6 +417,19 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	requestForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(M_REQUEST_X, M_REQUEST_Y, M_REQUEST_W, M_REQUEST_H);
 	}));
+
+	// Add the search edit box
+	auto searchBox = std::make_shared<W_EDITBOX>();
+	requestForm->attach(searchBox);
+	searchBox->setGeometry(3, requestForm->height() - MULTIOP_SEARCHBOXH - 3, requestForm->width() - 6, MULTIOP_SEARCHBOXH);
+	searchBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
+	searchBox->setPlaceholder(_("Search for map"));
+	searchBox->setString(WzString::fromUtf8(current_searchString));
+
+	searchBox->setOnReturnHandler([searchDir, fileExtension, mode, numPlayers](W_EDITBOX& widg) {
+		closeMultiRequester();
+		addMultiRequest(searchDir, fileExtension, mode, numPlayers, widg.getString().toUtf8());
+	});
 
 	// Add the close button.
 	W_BUTINIT sButInit;
