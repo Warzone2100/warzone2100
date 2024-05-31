@@ -4,7 +4,7 @@ function eventGameInit()
 	setupGame();
 
 	//From script/rules/printsettings.js
-	printGameSettings();
+	queue("printGameSettings", TICK_TIME);
 
 	//From script/rules/oildrum.js
 	oilDrumInit();
