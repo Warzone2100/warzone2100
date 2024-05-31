@@ -171,7 +171,7 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_PLAYERSW		298
 #define MULTIOP_PLAYERS_TABS	10232
 #define MULTIOP_PLAYERS_TABS_H	24
-#define MULTIOP_PLAYERSH		(380 + MULTIOP_PLAYERS_TABS_H + 1)
+#define MULTIOP_PLAYERSH		(384 + MULTIOP_PLAYERS_TABS_H + 1)
 
 #define MULTIOP_ROW_WIDTH		298
 
@@ -208,6 +208,8 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 
 #define MULTIOP_EDITBOXW		196
 #define	MULTIOP_EDITBOXH		30
+
+#define MULTIOP_SEARCHBOXH		15
 
 #define	MULTIOP_BLUEFORMW		226
 

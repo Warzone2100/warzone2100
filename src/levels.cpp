@@ -360,6 +360,7 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 	}
 	psDataSet->players = static_cast<SWORD>(levelDetails.value().players);
 	psDataSet->pName = levelDetails.value().name;
+	psDataSet->pAuthor = levelDetails.value().author;
 	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.value().gamFilePath());
 	psDataSet->apDataFiles[0] = gamFilePath;
 	psDataSet->game = 0;

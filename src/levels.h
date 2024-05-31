@@ -65,6 +65,7 @@ struct LEVEL_DATASET
 	SWORD	players = 0;									// number of players for the map
 	SWORD	game = 0;										// index of WRF/WDG that loads the scenario file
 	std::string	pName;										// title for the level
+	std::string	pAuthor;									// map author
 	searchPathMode	dataDir = mod_clean;					// title for the level
 	std::array<std::string, LEVEL_MAXFILES> apDataFiles;	// the WRF/GAM files for the level
 	// in load order
