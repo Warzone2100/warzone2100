@@ -35,6 +35,6 @@ function setupGame()
 	setDesign(true);
 
 	showInterface(); // init buttons. This MUST come before setting the reticule button data
-	setMainReticule();
+	queue("setMainReticule", TICK_TIME);
 	mainReticule = true;
 }
