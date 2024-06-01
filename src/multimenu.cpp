@@ -483,9 +483,13 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	searchBox->setPlaceholder(_("Search for map"));
 	searchBox->setString(WzString::fromUtf8(current_searchString));
 
-	searchBox->setOnReturnHandler([searchDir, fileExtension, mode, numPlayers](W_EDITBOX& widg) {
+	searchBox->setOnEditingStoppedHandler([searchDir, fileExtension, mode, numPlayers](W_EDITBOX& widg) {
+		const std::string &value = widg.getString().toUtf8();
+		if (value == current_searchString) {
+			return;
+		}
 		closeMultiRequester();
-		addMultiRequest(searchDir, fileExtension, mode, numPlayers, widg.getString().toUtf8());
+		addMultiRequest(searchDir, fileExtension, mode, numPlayers, value);
 	});
 
 	multiRequestUp = true;
