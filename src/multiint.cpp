@@ -6252,18 +6252,6 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		case MULTIOP_GNAME_ICON:
 			break;
 
-		case MULTIOP_MAP:
-			widgDelete(psWScreen, MULTIOP_PLAYERS);
-			widgDelete(psWScreen, FRONTEND_SIDETEXT2);  // del text too,
-
-			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 0, widgGetString(psWScreen, MULTIOP_MAP));
-
-			widgSetString(psWScreen, MULTIOP_MAP + 1 , game.map); //What a horrible hack! FIX ME! (See addBlueForm())
-			widgReveal(psWScreen, MULTIOP_MAP_MOD);
-			widgReveal(psWScreen, MULTIOP_MAP_RANDOM);
-			break;
-
 		case MULTIOP_MAP_ICON:
 			widgDelete(psWScreen, MULTIOP_PLAYERS);
 			widgDelete(psWScreen, FRONTEND_SIDETEXT2);					// del text too,
