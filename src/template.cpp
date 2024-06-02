@@ -52,7 +52,7 @@ bool includeRedundantDesigns = false;
 bool playerBuiltHQ = false;
 
 
-static bool researchedItem(const DROID_TEMPLATE* /*psCurr*/, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
+static bool researchedItem(int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
 	ASSERT_PLAYER_OR_RETURN(false, player);
 	if (allowZero && part <= 0)
@@ -65,7 +65,7 @@ static bool researchedItem(const DROID_TEMPLATE* /*psCurr*/, int player, COMPONE
 
 static bool researchedPart(const DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, bool allowZero, bool allowRedundant)
 {
-	return researchedItem(psCurr, player, partIndex, psCurr->asParts[partIndex], allowZero, allowRedundant);
+	return researchedItem(player, partIndex, psCurr->asParts[partIndex], allowZero, allowRedundant);
 }
 
 static bool researchedWeap(const DROID_TEMPLATE *psCurr, int player, int weapIndex, bool allowRedundant)
@@ -143,9 +143,36 @@ bool droidTemplate_LoadWeapByName(size_t destIndex, const WzString &name, DROID_
 
 bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
 {
+	return loadTemplateCommon(ini.currentJsonValue(), outputTemplate);
+}
+
+WzString jsonGetAsWzString(const nlohmann::json& obj, const WzString &key, const WzString &defaultValue = WzString())
+{
+	auto it = obj.find(key.toUtf8());
+	if (it == obj.end())
+	{
+		return defaultValue;
+	}
+	else
+	{
+		// Use json_variant to support conversion from other value types to string
+		bool ok = false;
+		WzString stringValue = json_variant(it.value()).toWzString(&ok);
+		if (!ok)
+		{
+			ASSERT(false, "Failed to convert value of key \"%s\" to string", key.toUtf8().c_str());
+			return defaultValue;
+		}
+		return stringValue;
+	}
+}
+
+bool loadTemplateCommon(const nlohmann::json& obj, DROID_TEMPLATE &outputTemplate)
+{
+	ASSERT_OR_RETURN(false, obj.is_object(), "Not an object?");
 	DROID_TEMPLATE &design = outputTemplate;
-	design.name = ini.string("name");
-	WzString droidType = ini.value("type").toWzString();
+	design.name = jsonGetAsWzString(obj, "name");
+	WzString droidType = jsonGetAsWzString(obj, "type");
 
 	if (droidType == "ECM")
 	{
@@ -208,15 +235,20 @@ bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate)
 		ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().c_str(), getID(&design));
 	}
 
-	if (!droidTemplate_LoadPartByName(COMP_BODY, ini.value("body").toWzString(), design)) return false;
-	if (!droidTemplate_LoadPartByName(COMP_BRAIN, ini.value("brain", WzString("ZNULLBRAIN")).toWzString(), design)) return false;
-	if (!droidTemplate_LoadPartByName(COMP_PROPULSION, ini.value("propulsion", WzString("ZNULLPROP")).toWzString(), design)) return false;
-	if (!droidTemplate_LoadPartByName(COMP_REPAIRUNIT, ini.value("repair", WzString("ZNULLREPAIR")).toWzString(), design)) return false;
-	if (!droidTemplate_LoadPartByName(COMP_ECM, ini.value("ecm", WzString("ZNULLECM")).toWzString(), design)) return false;
-	if (!droidTemplate_LoadPartByName(COMP_SENSOR, ini.value("sensor", WzString("ZNULLSENSOR")).toWzString(), design)) return false;
-	if (!droidTemplate_LoadPartByName(COMP_CONSTRUCT, ini.value("construct", WzString("ZNULLCONSTRUCT")).toWzString(), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_BODY, jsonGetAsWzString(obj, "body"), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_BRAIN, jsonGetAsWzString(obj, "brain", WzString("ZNULLBRAIN")), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_PROPULSION, jsonGetAsWzString(obj, "propulsion", WzString("ZNULLPROP")), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_REPAIRUNIT, jsonGetAsWzString(obj, "repair", WzString("ZNULLREPAIR")), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_ECM, jsonGetAsWzString(obj, "ecm", WzString("ZNULLECM")), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_SENSOR, jsonGetAsWzString(obj, "sensor", WzString("ZNULLSENSOR")), design)) return false;
+	if (!droidTemplate_LoadPartByName(COMP_CONSTRUCT, jsonGetAsWzString(obj, "construct", WzString("ZNULLCONSTRUCT")), design)) return false;
 
-	std::vector<WzString> weapons = ini.value("weapons").toWzStringList();
+	std::vector<WzString> weapons;
+	auto it = obj.find("weapons");
+	if (it != obj.end())
+	{
+		weapons = json_variant(it.value()).toWzStringList();
+	}
 	ASSERT(weapons.size() <= MAX_WEAPONS, "Number of weapons (%zu) exceeds MAX_WEAPONS (%d)", weapons.size(), MAX_WEAPONS);
 	design.numWeaps = (weapons.size() <= MAX_WEAPONS) ? (int8_t)weapons.size() : MAX_WEAPONS;
 	if (!droidTemplate_LoadWeapByName(0, (weapons.size() >= 1) ? weapons[0] : "ZNULLWEAPON", design)) return false;
