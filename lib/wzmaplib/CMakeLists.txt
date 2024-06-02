@@ -22,7 +22,7 @@ endif()
 ##############################
 # wzmaplib project
 
-cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.18)
+cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.24)
 project (wzmaplib CXX)
 
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
@@ -78,7 +78,7 @@ if(NOT TARGET nlohmann_json)
 	FetchContent_Declare(
 		nlohmannjson
 		GIT_REPOSITORY https://github.com/nlohmann/json.git
-		GIT_TAG        v3.11.2
+		GIT_TAG        v3.11.3
 		GIT_SHALLOW    TRUE
 	)
 	FetchContent_GetProperties(nlohmannjson)
@@ -97,7 +97,7 @@ if(NOT TARGET optional-lite)
 	FetchContent_Declare(
 		optionallite
 		GIT_REPOSITORY https://github.com/martinmoene/optional-lite.git
-		GIT_TAG        v3.5.0
+		GIT_TAG        v3.6.0
 		GIT_SHALLOW    TRUE
 	)
 	FetchContent_GetProperties(optionallite)
