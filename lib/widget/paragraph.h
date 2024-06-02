@@ -54,6 +54,10 @@ struct ParagraphTextStyle
 class WzCachedText
 {
 public:
+	WzCachedText(uint32_t cacheDurationMs = 100):
+		font(font_regular),
+		cacheDurationMs(cacheDurationMs)
+	{}
 	WzCachedText(WzString text, iV_fonts font, uint32_t cacheDurationMs = 100):
 		text(text),
 		font(font),
@@ -65,6 +69,20 @@ public:
 		if (cachedText && cacheExpireAt < realTime)
 		{
 			cachedText = nullptr;
+		}
+	}
+
+	void setText(const WzString &_text, iV_fonts _fontID)
+	{
+		if (text == _text && font == _fontID)
+		{
+			return;
+		}
+		text = _text;
+		font = _fontID;
+		if (cachedText)
+		{
+			cachedText->setText(text, font);
 		}
 	}
 
