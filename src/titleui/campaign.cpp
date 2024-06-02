@@ -1971,9 +1971,9 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		// append any customTweakOptions
 		for (const auto& customOpt : modInfo.value().customTweakOptions)
 		{
-			auto localizedDisplayName = customOpt.displayName.getLocalizedString();
-			auto localizedDescription = customOpt.description.getLocalizedString();
-			if (localizedDisplayName.empty())
+			auto localizedDisplayName = WzString::fromUtf8(customOpt.displayName.getLocalizedString());
+			auto localizedDescription = WzString::fromUtf8(customOpt.description.getLocalizedString());
+			if (localizedDisplayName.isEmpty())
 			{
 				continue;
 			}
@@ -1984,8 +1984,8 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 			}
 			results.emplace_back(
 				customOpt.uniqueIdentifier,
-				WzString::fromUtf8(localizedDisplayName),
-				WzString::fromUtf8(localizedDescription),
+				localizedDisplayName,
+				localizedDescription,
 				customOpt.enabled, customOpt.userEditable
 			);
 		}
