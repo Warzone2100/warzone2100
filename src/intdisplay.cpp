@@ -1186,7 +1186,7 @@ void IntFancyButton::displayIMD(AtlasImage image, ImdObject imdObject, int xOffs
 		}
 		else if (IMDType == IMDTYPE_FEATURE)
 		{
-			int imdRadius = ((iIMDShape *)Object)->radius;
+			int imdRadius = ((iIMDShape *)Object)->sradius;
 
 			if (imdRadius <= 40)
 			{
