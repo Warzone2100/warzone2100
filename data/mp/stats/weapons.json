@@ -1828,7 +1828,7 @@
 		"weight": 120
 	},
 	"CyborgRotMG": {
-		"buildPoints": 270,
+		"buildPoints": 200,
 		"buildPower": 90,
 		"damage": 18,
 		"effectSize": 100,
