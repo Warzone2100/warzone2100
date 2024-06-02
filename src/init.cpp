@@ -1000,22 +1000,19 @@ static inline optional<WZmapInfo> CheckInMap(const char *archive, const std::str
 			lookin.append("/");
 			lookin.append(lookin_subdir);
 		}
-		bool enumResult = WZ_PHYSFS_enumerateFiles(lookin.c_str(), [&](const char *file) -> bool {
+		bool enumResult = WZ_PHYSFS_enumerateFolders(lookin, [&](const char *file) -> bool {
 			std::string checkfile = file;
-			if (WZ_PHYSFS_isDirectory((lookin + "/" + checkfile).c_str()))
+			if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
+				|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
+				|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
+				|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
+				|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
+				|| checkfile.compare("skirmish") == 0 || checkfile.compare("shaders") == 0 || checkfile.compare("fonts") == 0
+				|| checkfile.compare("icons") == 0)
 			{
-				if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
-					|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
-					|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
-					|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
-					|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
-					|| checkfile.compare("skirmish") == 0 || checkfile.compare("shaders") == 0 || checkfile.compare("fonts") == 0
-					|| checkfile.compare("icons") == 0)
-				{
-					debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
-					mapmod = true;
-					return false; // break;
-				}
+				debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
+				mapmod = true;
+				return false; // break;
 			}
 			return true; // continue
 		});
