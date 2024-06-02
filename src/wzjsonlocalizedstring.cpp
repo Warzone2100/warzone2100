@@ -46,16 +46,20 @@ void from_json(const nlohmann::json& j, WzJsonLocalizedString& v)
 	}
 }
 
-std::string WzJsonLocalizedString::getLocalizedString() const
+const char* WzJsonLocalizedString::getLocalizedString() const
 {
 	auto findMapping = [&](const std::string& languageCode) {
+		if (languageCode.empty())
+		{
+			return mappings.end();
+		}
 		return std::find_if(mappings.begin(), mappings.end(), [languageCode](const TranslationMapping& m) -> bool {
 			return m.languageCode == languageCode;
 		});
 	};
 
 	const char* pLangCode = getLanguage();
-	std::string currentLanguage = (pLangCode) ? pLangCode : "en";
+	std::string currentLanguage = (pLangCode) ? pLangCode : std::string();
 
 	auto it = findMapping(currentLanguage);
 	if (it == mappings.end())
@@ -78,5 +82,5 @@ std::string WzJsonLocalizedString::getLocalizedString() const
 		}
 	}
 
-	return it->str;
+	return it->str.c_str();
 }
