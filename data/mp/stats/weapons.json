@@ -1846,7 +1846,7 @@
 		"minElevation": -60,
 		"minimumDamage": 33,
 		"missGfx": "FXDIRTsp.PIE",
-		"model": "cy_gun.pie",
+		"model": "cy_agun.pie",
 		"mountModel": "Cybody.pie",
 		"movement": "DIRECT",
 		"muzzleGfx": "FXLMgun.PIE",
