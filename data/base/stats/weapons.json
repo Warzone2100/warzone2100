@@ -1604,7 +1604,7 @@
 		"minRange": 64,
 		"minimumDamage": 33,
 		"missGfx": "FXMETHIT.PIE",
-		"model": "cy_flame.pie",
+		"model": "cy_therm.pie",
 		"mountModel": "Cybody.pie",
 		"movement": "DIRECT",
 		"muzzleGfx": "FXCan20m.PIE",
