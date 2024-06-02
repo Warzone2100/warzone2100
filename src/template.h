@@ -68,6 +68,7 @@ void listTemplates();
 
 nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr);
 bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate);
+bool loadTemplateCommon(const nlohmann::json& obj, DROID_TEMPLATE &outputTemplate);
 
 void checkPlayerBuiltHQ(const STRUCTURE *psStruct);
 
