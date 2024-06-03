@@ -63,6 +63,8 @@ data/base/images/frontend/image_info_circle.png
 data/base/images/frontend/image_check_square_fill.png
 data/base/images/frontend/image_check_square_empty.png
 data/base/images/frontend/image_arrow_undo.png
+data/base/images/frontend/image_sidebar_list.png
+data/base/images/intfac/image_sidebar_list.png
 	- MIT License - Copyright (c) 2019-2024 The Bootstrap Authors (https://github.com/twbs/icons/blob/main/LICENSE)
 data/base/images/intfac/image_volume_mute.png
 data/base/images/intfac/image_volume_up.png
