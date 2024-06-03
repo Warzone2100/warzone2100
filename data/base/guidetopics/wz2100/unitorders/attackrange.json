@@ -1,0 +1,19 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders::attackrange",
+	"title": "Attack Range",
+	"sort": "01",
+	"visual": {
+		"secondaryUnitOrderButtons": "ATTACK_RANGE"
+	},
+	"contents": [
+		"You can use the Unit Orders menu to configure unit \"Attack Range\".",
+		"",
+		"- Optimum Range: Fires at the most accurate range",
+		"- Short Range: Moves to short range and attacks",
+		"- Long Range: Attacks at long range (default)"
+	],
+	"links": [
+		"wz2100::unitorders"
+	]
+}

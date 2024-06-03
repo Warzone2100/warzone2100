@@ -96,6 +96,7 @@
 #include "wzscriptdebug.h"
 #include "gamehistorylogger.h"
 #include "wzapi.h"
+#include "screens/guidescreen.h"
 #include <array>
 
 #if defined(__clang__)
@@ -2273,6 +2274,9 @@ static bool writeFiresupportDesignators(const char *pFileName);
 
 static bool writeScriptState(const char *pFileName);
 
+static bool writeSaveGuideTopics(const char *pFileName);
+static bool loadSaveGuideTopics(const char *pFileName);
+
 static bool gameLoad(const char *fileName);
 
 /* set the global scroll values to use for the save game */
@@ -3195,6 +3199,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
 		}
+
+		// load in the game guide topics
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "guidetopics.json");
+		if (!loadSaveGuideTopics(aFileName))
+		{
+			debug(LOG_ERROR, "failed to load %s", aFileName);
+			// currently not fatal if this fails
+		}
 	}
 
 	if (saveGameVersion >= VERSION_11)
@@ -3572,6 +3585,11 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 			goto error;
 		}
 	}
+
+	// save the loaded guide topics
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "guidetopics.json");
+	writeSaveGuideTopics(CurrentFileName);
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';
@@ -7824,6 +7842,49 @@ bool loadScriptState(char *pFileName)
 	return true;
 }
 
+// -----------------------------------------------------------------------------------------
+// load / save the game guide topics
+static bool writeSaveGuideTopics(const char *pFileName)
+{
+	auto loadedTopics = saveLoadedGuideTopics();
+	nlohmann::json mRoot = nlohmann::json::object();
+	mRoot["loaded_topics"] = loadedTopics;
+	return saveJSONToFile(mRoot, pFileName);
+}
+
+static bool loadSaveGuideTopics(const char *pFileName)
+{
+	if (!PHYSFS_exists(pFileName))
+	{
+		return true; // older saves will have this file - expected
+	}
+
+	nonstd::optional<nlohmann::json> saveGuideTopicsOpt = parseJsonFile(pFileName);
+
+	if (!saveGuideTopicsOpt.has_value())
+	{
+		ASSERT(saveGuideTopicsOpt.has_value(), "guidetopics.json looks broken");
+		return false;
+	}
+
+	const auto& mRoot = saveGuideTopicsOpt.value();
+	ASSERT_OR_RETURN(false, mRoot.is_object(), "guidetopics.json looks broken - expected object");
+
+	auto it = mRoot.find("loaded_topics");
+	ASSERT_OR_RETURN(false, it != mRoot.end(), "guidetopics.json looks broken - missing expected \"loaded_topics\" key");
+
+	std::vector<std::string> loadedTopics;
+	try {
+		loadedTopics = it.value().get<std::vector<std::string>>();
+	}
+	catch (const std::exception &e) {
+		// Failed to parse the JSON
+		debug(LOG_ERROR, "JSON document from %s is invalid: %s", pFileName, e.what());
+		return false;
+	}
+
+	return restoreLoadedGuideTopics(loadedTopics);
+}
 
 // -----------------------------------------------------------------------------------------
 /* set the global scroll values to use for the save game */

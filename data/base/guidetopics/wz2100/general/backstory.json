@@ -1,0 +1,32 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::general::backstory",
+	"title": "Backstory",
+	"sort": "01",
+	"applicableModes": ["campaign"],
+	"contents": [
+		"In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites.",
+		"",
+		"However, during a routine maintenance check, something went terribly wrong...",
+		"",
+		"The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world.",
+		"",
+		"Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization.",
+		"",
+		"Less than a million people survived the Collapse.",
+		"",
+		"Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes.",
+		"",
+		"## Present Day:",
+		"",
+		"The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains.",
+		"",
+		"They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\".",
+		"",
+		"The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies.",
+		"",
+		"- Team Alpha is sent to an Arizona desert location southeast of Project HQ",
+		"- Beta team is sent to the remains of Chicago",
+		"- Gamma team is sent into the northern Rockies in Colorado"
+	]
+}

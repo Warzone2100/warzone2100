@@ -80,6 +80,7 @@
 #include "data.h"
 #include "gamehistorylogger.h"
 #include "hci/quickchat.h"
+#include "screens/guidescreen.h"
 
 #include <list>
 
@@ -2398,6 +2399,41 @@ bool wzapi::playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional
 	return true;
 }
 
+//-- ## addGuideTopic(guideTopicID[, showFlags[, excludedTopicIDs]])
+//--
+//-- Add a guide topic to the in-game guide.
+//--
+//-- guideTopicID is expected to be a "::"-delimited guide topic id (which corresponds to the .json file containing the guide topic information).
+//-- > For example, ```"wz2100::structures::hq"``` will attempt to load ```"guidetopics/wz2100/structures/hq.json"```, the guide topic file about the hq / command center.
+//--
+//-- guideTopicID also has limited support for trailing wildcards. For example:
+//-- - ```"wz2100::units::*"``` will load all guide topic .json files in the folder ```"guidetopics/wz2100/units/"``` (but not any subfolders)
+//-- - ```"wz2100::**"``` will load all guide topic .json files within the folder ```"guidetopics/wz2100/"``` **and** all subfolders
+//--
+//-- (The wildcard is only supported in the last position.)
+//--
+//-- showFlags can be used to configure automatic display of the guide, and can be set to one or more of:
+//-- - ```SHOWTOPIC_FIRSTADD```: open guide only if this topic is newly-added (this playthrough) - if topic was already added, the guide won't be automatically displayed
+//-- - ```SHOWTOPIC_NEVERVIEWED```: open guide only if this topic has never been viewed by the player before (in any playthrough)
+//-- You can also specify multiple flags (ex. ```SHOWTOPIC_FIRSTADD | SHOWTOPIC_NEVERVIEWED```).
+//-- The default behavior (where showFlags is omitted) merely adds the topic to the guide, but does not automatically display / open the guide.
+//--
+//-- excludedTopicIDs can be a string or a list of string guide topic IDs (non-wildcard) to be excluded, when supplying a wildcard guideTopicID.
+//--
+bool wzapi::addGuideTopic(WZAPI_PARAMS(std::string guideTopicID, optional<int> showFlags, optional<string_or_string_list> excludedTopicIDs))
+{
+	if (excludedTopicIDs.has_value())
+	{
+		std::unordered_set<std::string> excludedTopicIDsSet(excludedTopicIDs.value().strings.begin(), excludedTopicIDs.value().strings.end());
+		::addGuideTopic(guideTopicID, static_cast<ShowTopicFlags>(showFlags.value_or(0)), excludedTopicIDsSet);
+	}
+	else
+	{
+		::addGuideTopic(guideTopicID, static_cast<ShowTopicFlags>(showFlags.value_or(0)));
+	}
+	return true;
+}
+
 //-- ## gameOverMessage(gameWon[, showBackDrop[, showOutro]])
 //--
 //-- End game in victory or defeat.
@@ -4542,6 +4578,9 @@ nlohmann::json wzapi::getUsefulConstants()
 	constants["RADIUS"] = SCRIPT_RADIUS;
 	constants["LZ_COMPROMISED_TIME"] = JS_LZ_COMPROMISED_TIME;
 	constants["OBJECT_FLAG_UNSELECTABLE"] = OBJECT_FLAG_UNSELECTABLE;
+	// ShowTopicFlags constants
+	constants["SHOWTOPIC_FIRSTADD"] = ShowTopicFlags::FirstAdd;
+	constants["SHOWTOPIC_NEVERVIEWED"] = ShowTopicFlags::NeverViewed;
 	// the constants below are subject to change without notice...
 	constants["RES_MSG"] = MSG_RESEARCH;
 	constants["CAMP_MSG"] = MSG_CAMPAIGN;

@@ -1,0 +1,39 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::vtols::designing",
+	"title": "Designing VTOLs",
+	"sort": "02",
+	"visual": [
+		{
+			"stat": {
+				"id": "V-Tol"
+			}
+		},
+		{
+			"droidTemplate": {
+				"body": "Body2SUP",
+				"name": "Cluster Bomb Leopard V-Tol",
+				"propulsion": "V-Tol",
+				"type": "DROID",
+				"weapons": [
+					"Bomb1-VTOL-LtHE"
+				]
+			}
+		}
+	],
+	"contents": [
+		"Designing VTOL units is similar to designing ground units.",
+		"",
+		"When choosing a propulsion, simply pick \"VTOL\" propulsion.",
+		"",
+		"You will then be able to select from the available VTOL Weapons.",
+		"",
+		"Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
+	],
+	"links": [
+		"wz2100::units::designing",
+		"wz2100::units::vtols::weapons",
+		"wz2100::structures::vtolfactory",
+		"wz2100::units::vtols"
+	]
+}
