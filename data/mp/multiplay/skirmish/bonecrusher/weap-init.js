@@ -145,7 +145,8 @@ guns_pts['mg'] = [
 'R-Wpn-MG-Damage06',
 'R-Wpn-MG-Damage07',
 'R-Wpn-MG-Damage08',
-//'R-Wpn-MG-Damage09',
+'R-Wpn-MG-Damage09',
+'R-Wpn-MG-Damage10',
 'R-Wpn-MG-ROF01',
 'R-Wpn-MG-ROF02',
 'R-Wpn-MG-ROF03'

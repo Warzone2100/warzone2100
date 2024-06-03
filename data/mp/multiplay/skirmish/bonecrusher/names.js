@@ -408,6 +408,7 @@ const research_name = {
 	"R-Wpn-MG-Damage07" : "Tungsten-Tipped MG Bullets Mk3",
 	"R-Wpn-MG-Damage08" : "Depleted Uranium MG Bullets",
 	"R-Wpn-MG-Damage09" : "Depleted Uranium MG Bullets Mk2",
+	"R-Wpn-MG-Damage10" : "Depleted Uranium MG Bullets Mk3",
 	"R-Wpn-MG-ROF01" : "Chaingun Upgrade",
 	"R-Wpn-MG-ROF02" : "Rapid Fire Chaingun",
 	"R-Wpn-MG-ROF03" : "Hyper Fire Chaingun Upgrade",

@@ -7044,7 +7044,7 @@
 			"R-Wpn-MG-Damage07",
 			"R-Struc-Research-Upgrade06"
 		],
-		"researchPoints": 10800,
+		"researchPoints": 9800,
 		"researchPower": 450,
 		"results": [
 			{
@@ -7067,6 +7067,80 @@
 				"filterValue": "A-A GUN",
 				"parameter": "RadiusDamage",
 				"value": 25
+			}
+		],
+		"statID": "MG1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"techCode": 1
+	},
+	"R-Wpn-MG-Damage09": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-MG-Damage09",
+		"name": "Depleted Uranium MG Bullets Mk2",
+		"requiredResearch": [
+			"R-Wpn-MG-Damage08",
+			"R-Struc-Research-Upgrade07"
+		],
+		"researchPoints": 10200,
+		"researchPower": 450,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 5
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 5
+			}
+		],
+		"statID": "MG1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"techCode": 1
+	},
+	"R-Wpn-MG-Damage10": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-MG-Damage10",
+		"name": "Depleted Uranium MG Bullets Mk3",
+		"requiredResearch": [
+			"R-Wpn-MG-Damage09",
+			"R-Struc-Research-Upgrade08"
+		],
+		"researchPoints": 11800,
+		"researchPower": 450,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 5
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 5
 			}
 		],
 		"statID": "MG1Mk1",
