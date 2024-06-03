@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # We need to be in the working copy's root directory
-cd "`dirname "$0"`/.."
+cd "`dirname "$0"`/../.."
 
 export LC_ALL=C
 export LC_COLLATE=C
 
 find data -name '*.json' -type f '-!' -path 'data/mp/multiplay/maps/*' -exec \
-	python3 po/parseJson.py '{}' ';' |
-	python3 po/aggregateParsedJson.py > po/custom/fromJson.txt
+	python3 po/scripts/parseJson.py '{}' ';' |
+	python3 po/scripts/aggregateParsedJson.py > po/custom/fromJson.txt
 
 # Add the comment to the top of the file
 cat > po/POTFILES.in << EOF
