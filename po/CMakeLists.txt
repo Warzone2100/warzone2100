@@ -75,7 +75,17 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       get_filename_component(_absFile "${_currentPoFile}" ABSOLUTE)
       get_filename_component(_abs_PATH "${_absFile}" PATH)
       get_filename_component(_lang "${_absFile}" NAME_WE)
-      set(_updatedPoFile "${CMAKE_CURRENT_BINARY_DIR}/${_currentPoFileName}")
+
+      file(RELATIVE_PATH _po_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}" "${_absFile}")
+      get_filename_component(_po_file_subdir_path "${_po_file_relative_path}" DIRECTORY)
+
+      if (_po_file_relative_path AND NOT _po_file_relative_path STREQUAL "")
+         set(_updatedPoFileDirectory "${CMAKE_CURRENT_BINARY_DIR}/${_po_file_subdir_path}")
+      else()
+         set(_updatedPoFileDirectory "${CMAKE_CURRENT_BINARY_DIR}")
+      endif()
+      file(MAKE_DIRECTORY "${_updatedPoFileDirectory}")
+      set(_updatedPoFile "${_updatedPoFileDirectory}/${_potBasename}_${_currentPoFileName}")
       set(_gmoDirectory "${CMAKE_CURRENT_BINARY_DIR}/locale/${_lang}/LC_MESSAGES")
       set(_gmoFile "${_gmoDirectory}/${_potBasename}.mo")
 
@@ -133,7 +143,15 @@ function(BUILD_WZ_TRANSLATIONS textDomain BASE_PO_DIR POTFILES_IN_PATH)
 
 	# Must be set to ${textDomain}.pot, as the filename (without its extension) is used later
 	# to form the install .gmo file name (${textDomain}.gmo) in each locale directory
-	set(_potFile "${CMAKE_CURRENT_BINARY_DIR}/${textDomain}${WZ_OUTPUT_NAME_SUFFIX}.pot")
+
+	file(RELATIVE_PATH _po_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}" "${BASE_PO_DIR}")
+	if (_po_file_relative_path AND NOT _po_file_relative_path STREQUAL "")
+		set(_potFileDir "${CMAKE_CURRENT_BINARY_DIR}/${_po_file_relative_path}")
+	else()
+		set(_potFileDir "${CMAKE_CURRENT_BINARY_DIR}")
+	endif()
+	file(MAKE_DIRECTORY "${_potFileDir}")
+	set(_potFile "${_potFileDir}/${textDomain}.pot")
 
 	# Read in `POTFILES.in` to build a list of dependency paths in the same order.
 	file(STRINGS "${POTFILES_IN_PATH}" potfiles
@@ -193,7 +211,7 @@ endfunction()
 set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
 file(REMOVE_RECURSE "${wz2100_translations_LOCALE_FOLDER}/")
 
-BUILD_WZ_TRANSLATIONS(warzone2100 "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")
+BUILD_WZ_TRANSLATIONS("warzone2100${WZ_OUTPUT_NAME_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")
 
 
 set(wz2100_translations_LOCALE_FOLDER "${wz2100_translations_LOCALE_FOLDER}" PARENT_SCOPE)
