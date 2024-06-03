@@ -54,6 +54,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
 #include "lib/netplay/netpermissions.h"
+#include "lib/netplay/port_mapping_manager.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/button.h"
 #include "lib/widget/scrollablelist.h"
@@ -7575,21 +7576,20 @@ static void printHostHelpMessagesToConsole()
 	{
 		if (NetPlay.isPortMappingEnabled)
 		{
-			if (NetPlay.isPORT_MAPPING_CONFIGURED)
+			switch (PortMappingManager::instance().status())
 			{
+			case PortMappingManager::DiscoveryStatus::SUCCESS:
 				ssprintf(buf, "%s", _("Port mapping has been enabled."));
-			}
-			else
-			{
-				if (NetPlay.isPORT_MAPPING_ERROR)
-				{
-					ssprintf(buf, "%s", _("Port mapping creation failed. You must manually configure router yourself."));
-				}
-				else
-				{
-					ssprintf(buf, "%s", _("Port mapping creation is in progress..."));
-				}
-			}
+				break;
+			case PortMappingManager::DiscoveryStatus::FAILURE:
+				ssprintf(buf, "%s", _("Port mapping creation failed. You must manually configure router yourself."));
+				break;
+			case PortMappingManager::DiscoveryStatus::IN_PROGRESS:
+				ssprintf(buf, "%s", _("Port mapping creation is in progress..."));
+				break;
+			default:
+				ASSERT(false, "Should be unreachable");
+			};
 			displayRoomNotifyMessage(buf);
 		}
 		else

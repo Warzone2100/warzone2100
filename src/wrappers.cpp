@@ -182,8 +182,6 @@ TITLECODE titleLoop()
 			else // single player
 			{
 				NetPlay.bComms = true; // use network = true
-				NetPlay.isPORT_MAPPING_CONFIGURED = false;
-				NetPlay.isPORT_MAPPING_ERROR = false;
 				bMultiMessages = true;
 				NETinit(true);
 				NETinitPortMapping();
