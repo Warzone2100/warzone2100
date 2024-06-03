@@ -27,7 +27,7 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: sudo apt-get -y install gettext
     - name: Generate POTFILES.in
-      working-directory: '${{ github.workspace }}/master/po'
+      working-directory: '${{ github.workspace }}/master/po/scripts'
       run: |
         echo "Generate POTFILES.in"
         ./update-po.sh
