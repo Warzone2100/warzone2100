@@ -1,0 +1,25 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders::movement",
+	"title": "Movement",
+	"sort": "04",
+	"visual": [
+		{
+			"secondaryUnitOrderButtons": "PATROL"
+		},
+		{
+			"secondaryUnitOrderButtons": "HALTTYPE"
+		}
+	],
+	"contents": [
+		"You can use the Unit Orders menu to configure unit \"Movement\".",
+		"",
+		"- Patrol: Moves in a circle on a position. Just click an area after selecting it",
+		"- Pursue: Pursue enemy",
+		"- Guard: Stay near an area or structure. (default)",
+		"- Hold Position: Do not move under any circumstances"
+	],
+	"links": [
+		"wz2100::unitorders"
+	]
+}

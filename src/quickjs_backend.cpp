@@ -3143,6 +3143,7 @@ IMPL_JS_FUNC(showReticuleWidget, wzapi::showReticuleWidget)
 IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
 IMPL_JS_FUNC(showInterface, wzapi::showInterface)
 IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
+IMPL_JS_FUNC(addGuideTopic, wzapi::addGuideTopic)
 
 //-- ## removeReticuleButton(buttonId)
 //--
@@ -3488,6 +3489,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(centreView, 2); // WZAPI
 	JS_REGISTER_FUNC2(playSound, 1, 4); // WZAPI
 	JS_REGISTER_FUNC2(gameOverMessage, 1, 3); // WZAPI
+	JS_REGISTER_FUNC2(addGuideTopic, 1, 2); // WZAPI
 
 	// Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	JS_REGISTER_FUNC2(setStructureLimits, 2, 3); // WZAPI

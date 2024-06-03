@@ -1,0 +1,20 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::experience",
+	"title": "Experience & Ranks",
+	"sort": "03",
+	"contents": [
+		"Units gain experience levels when they successfully dispatch enemies.",
+		"",
+		"A higher experience level means that a unit is more accurate, moves faster, and takes less damage.",
+		"",
+		"An icon displaying a unit’s rank is displayed next to the unit’s health bar.",
+		"",
+		"Units with higher experience levels can make all the difference in a battle!"
+	],
+	"links": [
+		"wz2100::unitorders::recycling",
+		"wz2100::unitorders::retreating",
+		"wz2100::units::repairing"
+	]
+}

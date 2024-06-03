@@ -1,0 +1,18 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::general::artifacts",
+	"title": "Artifacts",
+	"sort": "05",
+	"applicableModes": ["campaign"],
+	"visual": {
+		"stat": "Crate"
+	},
+	"contents": [
+		"In the campaign, you can collect Artifacts from enemies and research them. Artifacts are small white boxes with a wrench above them, and can be collected by any unit by moving close to it.",
+		"",
+		"Collecting artifacts will open up new research topics for your Research Center(s). You'll want to research these!"
+	],
+	"links": [
+		"wz2100::structures::researchcenter"
+	]
+}

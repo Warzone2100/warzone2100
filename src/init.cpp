@@ -99,6 +99,7 @@
 #include "seqdisp.h"
 #include "version.h"
 #include "hci/teamstrategy.h"
+#include "screens/guidescreen.h"
 #include "wzapi.h"
 
 #include <algorithm>
@@ -1465,6 +1466,7 @@ bool frontendShutdown()
 		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
 	}
 	interfaceShutDown();
+	shutdownGameGuide();
 
 	//do this before shutting down the iV library
 	resReleaseAllData();
@@ -1586,6 +1588,8 @@ bool stageOneShutDown()
 	{
 		sound_CheckAllUnloaded();
 	}
+
+	shutdownGameGuide();
 
 	proj_Shutdown();
 

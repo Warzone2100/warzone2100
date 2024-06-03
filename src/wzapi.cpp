@@ -80,6 +80,7 @@
 #include "data.h"
 #include "gamehistorylogger.h"
 #include "hci/quickchat.h"
+#include "screens/guidescreen.h"
 
 #include <list>
 
@@ -2395,6 +2396,28 @@ bool wzapi::playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional
 	{
 		audio_QueueTrack(soundID);
 	}
+	return true;
+}
+
+//-- ## addGuideTopic(guideTopicID[, showImmediately])
+//--
+//-- Add a guide topic to the in-game guide.
+//--
+//-- guideTopicID is expected to be a "::"-delimited guide topic id (which corresponds to the .json file containing the guide topic information).
+//-- > For example, ```"wz2100::structures::hq"``` will attempt to load ```"guidetopics/wz2100/structures/hq.json"```, the guide topic file about the hq / command center.
+//--
+//-- guideTopicID also has limited support for trailing wildcards. For example:
+//-- - ```"wz2100::units::*"``` will load all guide topic .json files in the folder ```"guidetopics/wz2100/units/"``` (but not any subfolders)
+//-- - ```"wz2100::**"``` will load all guide topic .json files within the folder ```"guidetopics/wz2100/"``` **and** all subfolders
+//--
+//-- (The wildcard is only supported in the last position.)
+//--
+//-- showImmediately can be set to ```true``` to immediately show the Game Guide overlay with the topic selected (if specifying a single topic).
+//-- If adding multiple individual topics at once to the game guide, the last topic should be the only one with showImmediately set to ```true```.
+//--
+bool wzapi::addGuideTopic(WZAPI_PARAMS(std::string guideTopicID, optional<bool> showImmediately))
+{
+	::addGuideTopic(guideTopicID, showImmediately.value_or(false));
 	return true;
 }
 

@@ -1070,6 +1070,7 @@ namespace wzapi
 	bool centreView(WZAPI_PARAMS(int x, int y));
 	bool playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional<int> _y, optional<int> _z));
 	bool gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackDrop, optional<bool> _showOutro));
+	bool addGuideTopic(WZAPI_PARAMS(std::string guideTopicID, optional<bool> showImmediately));
 
 	// MARK: - Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	bool setStructureLimits(WZAPI_PARAMS(std::string structureName, int limit, optional<int> _player));
