@@ -1,0 +1,23 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders::retreating",
+	"title": "Retreating",
+	"sort": "02",
+	"visual": {
+		"secondaryUnitOrderButtons": "REPAIR_LEVEL"
+	},
+	"contents": [
+		"Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle.",
+		"",
+		"You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level.",
+		"",
+		"- Do or Die: Your unit will not retreat unless ordered to. (default)",
+		"- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage",
+		"- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage",
+		"",
+		"Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
+	],
+	"links": [
+		"wz2100::unitorders"
+	]
+}

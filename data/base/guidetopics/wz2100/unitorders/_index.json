@@ -1,0 +1,11 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders",
+	"title": "Unit Orders",
+	"sort": "3",
+	"contents": [
+		"Right-click on a unit (or select a unit and hit NUM0 on the numeric keypad), and a unit orders menu will appear above the command panel. This contains options to configure a unit’s behaviour.",
+		"",
+		"Right-clicking on a factory will customize the orders of all future units that that factory produces."
+	]
+}

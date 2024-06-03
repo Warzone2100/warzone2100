@@ -1,0 +1,19 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders::firing",
+	"title": "Firing Mode",
+	"sort": "03",
+	"visual": {
+		"secondaryUnitOrderButtons": "ATTACK_LEVEL"
+	},
+	"contents": [
+		"You can use the Unit Orders menu to configure unit \"Firing Mode\".",
+		"",
+		"- Fire At Will: Fires at any enemy (default)",
+		"- Return Fire: Only fire if fired at",
+		"- Do Not Fire: Units will not fire"
+	],
+	"links": [
+		"wz2100::unitorders"
+	]
+}

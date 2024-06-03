@@ -1,0 +1,19 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders::return",
+	"title": "Return To",
+	"sort": "05",
+	"visual": {
+		"secondaryUnitOrderButtons": "RETURN_TO_LOC"
+	},
+	"contents": [
+		"You can use the Unit Orders menu to quickly order units to return to a specific location.",
+		"",
+		"- Return for Repair: Unit will return to a Repair Facility",
+		"- Return to HQ: Unit will return to Command Center or LZ (campaign)",
+		"- Go To Transport: Unit will go to and board transport"
+	],
+	"links": [
+		"wz2100::unitorders"
+	]
+}

@@ -509,6 +509,30 @@ static UDWORD GetImageHeight(IMAGEFILE *ImageFile, UDWORD ImageID)
 	return iV_GetImageHeight(ImageFile, (UWORD)ImageID);
 }
 
+std::vector<UWORD> intOrderGetButtonImageIDs(SECONDARY_ORDER secondaryOrder)
+{
+	size_t i = 0;
+	for (; i < NUM_ORDERS; ++i)
+	{
+		if (OrderButtons[i].Order == secondaryOrder)
+		{
+			// found it
+			break;
+		}
+	}
+	if (i >= NUM_ORDERS)
+	{
+		return {};
+	}
+	std::vector<UWORD> result;
+	result.reserve(OrderButtons[i].NumButs);
+	for (size_t butNum = 0; butNum < OrderButtons[i].NumButs; ++butNum)
+	{
+		result.push_back(OrderButtons[i].ButImageID[butNum]);
+	}
+	return result;
+}
+
 
 // Add the droid order screen.
 // Returns true if the form was displayed ok.

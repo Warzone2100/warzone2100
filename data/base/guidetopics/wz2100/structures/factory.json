@@ -1,0 +1,21 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::factory",
+	"title": "Factory",
+	"visual": {
+		"stat": {
+			"id": "A0LightFactory"
+		}
+	},
+	"contents": [
+		"A factory is used to build units. Each factory can build one unit at a time, but you can queue multiple units for production.",
+		"",
+		"When a factory is done building a unit, it will order it to proceed to the factory's Rally Point."
+	],
+	"links": [
+		"wz2100::structures::rallypoint",
+		"wz2100::units::designing",
+		"wz2100::units::building",
+		"wz2100::structures::building"
+	]
+}

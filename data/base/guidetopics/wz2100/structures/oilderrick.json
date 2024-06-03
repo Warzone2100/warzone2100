@@ -1,0 +1,21 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::oilderrick",
+	"title": "Oil Derrick",
+	"visual": [
+		{ "stat": "A0ResourceExtractor" },
+		{ "stat": "OilResource" }
+	],
+	"contents": [
+		"Oil Derricks are built automatically if a truck is selected and you click an Oil Resource.",
+		"",
+		"The unit you selected to build the structure will move to build the structure.",
+		"",
+		"Oil Derricks can only be built on Oil Resources which aren’t on fire. Fires on Oil Resources are caused by the destruction of an Oil Derrick - they will burn out over time.",
+		"",
+		"To utilize an oil derrick and generate power requires a Power Generator."
+	],
+	"links": [
+		"wz2100::structures::powergenerator"
+	]
+}

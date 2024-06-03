@@ -1,0 +1,23 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::repairing",
+	"title": "Repairing Units",
+	"sort": "04",
+	"visual": {
+		"stat": {
+			"id": "LightRepair1"
+		}
+	},
+	"contents": [
+		"You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units.",
+		"",
+		"You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level.",
+		"",
+		"Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
+	],
+	"links": [
+		"wz2100::structures::repairfacility",
+		"wz2100::unitorders::retreating",
+		"wz2100::units::designing"
+	]
+}

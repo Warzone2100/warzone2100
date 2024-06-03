@@ -1,0 +1,34 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::sensors::cb",
+	"title": "CB Sensors",
+	"sort": "03",
+	"visual": [
+		{
+			"stat": "Sys-CBTurret01"
+		}, {
+			"stat": {
+				"id": "Sys-VTOLCBTurret01",
+				"onlyIfKnown": "campaign"
+			}
+		}, {
+			"stat": "Sys-CB-Tower01"
+		}, {
+			"stat": {
+				"id": "Sys-VTOL-CB-Tower01",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"CB (Counter-Battery) towers or turrets are used similarly to a standard sensor but serve a specialized purpose: To counter-attack enemy artillery.",
+		"",
+		"Normal sensor towers will direct your artillery to attack whatever is nearby, but CB towers will direct your artillery to attack any artillery attacking you, even if they are further away from you than other targets.",
+		"",
+		"If you have both a CB tower and a normal sensor tower, artillery structures will attack CB targets first, and only other targets once you are no longer being bombarded by enemy artillery."
+	],
+	"links": [
+		"wz2100::units::sensors",
+		"wz2100::units::sensors::using"
+	]
+}

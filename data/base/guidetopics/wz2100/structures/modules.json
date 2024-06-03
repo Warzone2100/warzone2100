@@ -1,0 +1,42 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::modules",
+	"title": "Structure Modules",
+	"visual": [
+		{
+			"stat": { 
+				"id": "A0PowMod1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "A0FacMod1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "A0ResearchModule1",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Power Generators, Factories, and Research Centers all can have modules applied (once you've discovered and researched them).",
+		"",
+		"Modules upgrade the structure, and may:",
+		"- Improve the speed of power generation / building units / research",
+		"- Enable building heavier units (in the case of factories)",
+		"",
+		"To build a module, you can either:",
+		"(a) Find it in the Structures menu and click on an existing building of the appropriate type",
+		"(b) Select a truck and click on an existing building to issue a quick-order to upgrade it with the appropriate module"
+	],
+	"links": [
+		"wz2100::structures::powergenerator",
+		"wz2100::structures::factory",
+		"wz2100::structures::vtolfactory",
+		"wz2100::structures::researchcenter"
+	]
+}

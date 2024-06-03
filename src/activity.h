@@ -166,6 +166,14 @@ public:
 	virtual ~ActivityDBProtocol();
 public:
 	virtual std::string getFirstLaunchDate() const = 0;
+
+	struct GuideTopicPrefs
+	{
+		optional<std::string> lastReadVersion;
+		bool bookmarked = false;
+	};
+	virtual optional<GuideTopicPrefs> getGuideTopicPrefs(const std::string& topicIdentifier) const = 0;
+	virtual bool setGuideTopicPrefs(const std::string& topicIdentifier, const GuideTopicPrefs& prefs) = 0;
 };
 
 // ActivityManager accepts numerous event callbacks from the core game and synthesizes
