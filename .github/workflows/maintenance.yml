@@ -40,6 +40,15 @@ jobs:
         temp_dir="${GITHUB_WORKSPACE}/temp/po"
         mkdir -p "${temp_dir}"
         cmake "-DPOTFILES_IN=${potfiles_in_path}" "-DOUTPUT_FILE=${potFile_inRepo}" "-DPACKAGE_NAME=warzone2100" "-DTEMP_DIR=${temp_dir}" -P "${GITHUB_WORKSPACE}/master/po/WZ_build_po_template.cmake"
+    - name: Generate warzone2100_guide.pot
+      working-directory: '${{ github.workspace }}/master'
+      run: |
+        echo "Generate warzone2100_guide.pot"
+        potfiles_in_path="${GITHUB_WORKSPACE}/master/po/guide/POTFILES.in"
+        potFile_inRepo="${GITHUB_WORKSPACE}/master/po/guide/warzone2100_guide.pot"
+        temp_dir="${GITHUB_WORKSPACE}/temp/po_guide"
+        mkdir -p "${temp_dir}"
+        cmake "-DPOTFILES_IN=${potfiles_in_path}" "-DOUTPUT_FILE=${potFile_inRepo}" "-DPACKAGE_NAME=warzone2100_guide" "-DTEMP_DIR=${temp_dir}" -P "${GITHUB_WORKSPACE}/master/po/WZ_build_po_template.cmake"
     - name: Publish any changes to base translation files
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       id: pushupdates
