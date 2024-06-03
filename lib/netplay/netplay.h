@@ -310,8 +310,6 @@ struct NETPLAY
 	bool		bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
 	bool		isPortMappingEnabled;				// if we want the automatic Port mapping setup routines to run
-	bool		isPORT_MAPPING_CONFIGURED;	// if Port Mapping was successful
-	bool		isPORT_MAPPING_ERROR;		//If we had a error during detection/config process
 	bool		isHostAlive;	/// if the host is still alive
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.

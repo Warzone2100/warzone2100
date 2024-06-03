@@ -570,8 +570,6 @@ bool runMultiPlayerMenu()
 		case FRONTEND_HOST:
 			// don't pretend we are running a network game. Really do it!
 			NetPlay.bComms = true; // use network = true
-			NetPlay.isPORT_MAPPING_CONFIGURED = false;
-			NetPlay.isPORT_MAPPING_ERROR = false;
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			bMultiPlayer = true;
 			bMultiMessages = true;

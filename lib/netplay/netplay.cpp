@@ -50,8 +50,7 @@
 #include "netsocket.h"
 #include "netpermissions.h"
 #include "sync_debug.h"
-
-#include <plum/plum.h>
+#include "port_mapping_manager.h"
 
 #include "src/multistat.h"
 #include "src/multijoin.h"
@@ -93,12 +92,6 @@ bool netGameserverPortOverride = false;
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
 
-// For NET_JOIN messages
-enum NET_JOIN_PLAYERTYPE : uint8_t {
-	NET_JOIN_PLAYER = 0,
-	NET_JOIN_SPECTATOR = 1,
-};
-
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose);
@@ -112,11 +105,6 @@ static void NETfixPlayerCount();
 SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
-
-static std::atomic_int port_mapping_status;
-static constexpr int PORT_MAPPING_INDETERMINATE = 0;
-static constexpr int PORT_MAPPING_SUCCESS = 1;
-static constexpr int PORT_MAPPING_FAILURE = -1;
 
 struct Statistic
 {
@@ -243,12 +231,6 @@ static SocketSet* client_socket_set = nullptr;
 // Server-side socket set. Contains up to `MAX_CONNECTED_PLAYERS` sockets:
 // `connected_bsocket[i]` - sockets used to communicate with clients during a game session.
 static SocketSet* server_socket_set = nullptr;
-
-// External IP address as detected by Port Mapping library
-static std::string externalIPAddress;
-static int externalPort = 0;
-
-static int plum_mapping_id = 0;
 
 /**
  * Used for connections with clients.
@@ -1455,80 +1437,55 @@ static bool NETrecvGAMESTRUCT(Socket& sock, GAMESTRUCT *ourgamestruct)
 	return true;
 }
 
-// This function is run in its own thread! Do not call any non-threadsafe functions!
-static void PlumMappingCallback(int mappingId, plum_state_t state, const plum_mapping_t* mapping)
-{
-	debug(LOG_NET, "Port mapping %d: state=%d\n", mappingId, (int)state);
-	switch (state) {
-	case PLUM_STATE_SUCCESS:
-		debug(LOG_NET, "Mapping %d: success, internal=%hu, external=%s:%hu\n", mappingId, mapping->internal_port,
-			mapping->external_host, mapping->external_port);
-		externalIPAddress = mapping->external_host;
-		externalPort = mapping->external_port;
-		port_mapping_status.store(PORT_MAPPING_SUCCESS, std::memory_order_release);
-		break;
-
-	case PLUM_STATE_FAILURE:
-		debug(LOG_NET, "Mapping %d: failed\n", mappingId);
-		port_mapping_status.store(PORT_MAPPING_FAILURE, std::memory_order_release);
-		break;
-
-	default:
-		break;
-	}
-}
-
 void NETaddRedirects()
 {
-	plum_mapping_t m;
-	memset(&m, 0, sizeof(m));
-	m.protocol = PLUM_IP_PROTOCOL_TCP;
-	m.internal_port = gameserver_port;
-
-	plum_mapping_id = plum_create_mapping(&m, PlumMappingCallback);
-	if (plum_mapping_id == PLUM_ERR_FAILED || plum_mapping_id == PLUM_ERR_INVALID)
+	ASSERT(PortMappingManager::instance().status() == PortMappingManager::DiscoveryStatus::NOT_STARTED,
+		"Port mapping manager has already finished the discovery!");
+	if (!PortMappingManager::instance().create_port_mapping(gameserver_port))
 	{
 		debug(LOG_NET, "Failed to create port mapping!");
-		NetPlay.isPORT_MAPPING_CONFIGURED = false;
-		NetPlay.isPORT_MAPPING_ERROR = true;
 		return;
 	}
-	debug(LOG_NET, "Port mapping creation successful!");
-	NetPlay.isPORT_MAPPING_CONFIGURED = true;
-	NetPlay.isPORT_MAPPING_ERROR = false;
+	debug(LOG_NET, "Port mapping creation is in progress...");
+	// Report the user-visible status once the discovery is finished.
+	PortMappingManager::instance().schedule_callback([](std::string extIp, uint16_t extPort) // success callback
+	{
+		char buf[512] = { '\0' };
+		ssprintf(buf, _("Game configured port (%d) correctly on (%d)\nYour external IP is %s"),
+			NETgetGameserverPort(), extPort, extIp.c_str());
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	}, [](PortMappingManager::DiscoveryStatus status) // failure callback
+	{
+		char buf[512] = { '\0' };
+		if (status == PortMappingManager::DiscoveryStatus::TIMEOUT)
+		{
+			ssprintf(buf, _("Port mapping discovery timed out after %d seconds.\n"
+				"Manually configure your router/firewall to open port %d!"),
+				PortMappingManager::DISCOVERY_TIMEOUT_SECONDS, NETgetGameserverPort());
+			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			return;
+		}
+		ssprintf(buf, _("Failed to create port mapping.\nManually configure your router/firewall to open port %d!"),
+			NETgetGameserverPort());
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	});
 }
 
 void NETremRedirects()
 {
-	debug(LOG_NET, "Port mapping is %d", NetPlay.isPORT_MAPPING_CONFIGURED);
-	if (NetPlay.isPORT_MAPPING_CONFIGURED)
+	if (!PortMappingManager::instance().destroy_active_mapping())
 	{
-		int result = plum_destroy_mapping(plum_mapping_id);
-		if (result == PLUM_ERR_SUCCESS)
-		{
-			debug(LOG_NET, "Removed port mapping for port %d.", gameserver_port);
-		}
-		else
-		{
-			debug(LOG_ERROR, "Failed to remove port mapping for the game. You must manually remove it from your router. (%d)", result);
-		}
+		debug(LOG_ERROR, "Failed to remove port mapping for the game. You must manually remove it from your router.");
+		return;
 	}
-}
-
-static void PlumLogCallback(plum_log_level_t /*level*/, const char* message)
-{
-	debug(LOG_NET, "LibPlum message: %s", message);
+	debug(LOG_NET, "Removed port mapping for port %d.", gameserver_port);
 }
 
 void NETinitPortMapping()
 {
-	if (!NetPlay.isPORT_MAPPING_CONFIGURED && NetPlay.isPortMappingEnabled)
+	if (PortMappingManager::instance().status() == PortMappingManager::DiscoveryStatus::NOT_STARTED && NetPlay.isPortMappingEnabled)
 	{
-		plum_config_t config;
-		memset(&config, 0, sizeof(config));
-		config.log_level = PLUM_LOG_LEVEL_INFO;
-		config.log_callback = &PlumLogCallback;
-		plum_init(&config);
+		PortMappingManager::instance().init();
 		NETaddRedirects();
 	}
 	else if (!NetPlay.isPortMappingEnabled)
@@ -1542,7 +1499,6 @@ void NETinitPortMapping()
 int NETinit(bool bFirstCall)
 {
 	debug(LOG_NET, "NETinit");
-	port_mapping_status = PORT_MAPPING_INDETERMINATE;
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
 	NET_InitPlayers(true, true);
 
@@ -1584,9 +1540,7 @@ int NETshutdown()
 	if (NetPlay.bComms && NetPlay.isPortMappingEnabled)
 	{
 		NETremRedirects();
-		plum_cleanup();
-		NetPlay.isPORT_MAPPING_CONFIGURED = false;
-		NetPlay.isPORT_MAPPING_ERROR = false;
+		PortMappingManager::instance().shutdown();
 	}
 	NETstopLogging();
 	NETpermissionsShutdown();
@@ -2823,29 +2777,6 @@ static void NETcheckPlayers()
 // We should not block here.
 bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 {
-	const int status = port_mapping_status.load(std::memory_order_acquire);
-	char buf[512] = {'\0'};
-	switch (status)
-	{
-	case PORT_MAPPING_FAILURE:
-		// beware of writing a line too long, it screws up console line count. \n is safe for line split
-		ssprintf(buf, _("Failed to create port mapping.\nManually configure your router/firewall to open port %d!"), NETgetGameserverPort());
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		NetPlay.isPORT_MAPPING_CONFIGURED = false;
-		NetPlay.isPORT_MAPPING_ERROR = true;
-		port_mapping_status = PORT_MAPPING_INDETERMINATE;
-		break;
-	case PORT_MAPPING_SUCCESS:
-		ssprintf(buf, _("Game configured port (%d) correctly on (%d)\nYour external IP is %s"), NETgetGameserverPort(), externalPort, externalIPAddress.c_str());
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		port_mapping_status = PORT_MAPPING_INDETERMINATE;
-		break;
-	default:
-	case PORT_MAPPING_INDETERMINATE:
-		ASSERT(port_mapping_status == PORT_MAPPING_INDETERMINATE, "bad value");
-		break;
-	}
-
 	uint32_t current;
 
 	if (!NetPlay.bComms)
@@ -4391,6 +4322,71 @@ static void NETallowJoining()
 	}
 }
 
+namespace
+{
+
+// Set the fields for GAMESTRUCT structure to announce it to the lobby server and other players.
+//
+// `gamestruct.desc.host` will be filled with `externalIp` contents if it's not empty.
+//
+// If `extPort == 0`, then `gamestruct.hostPort` will be filled with the default value from the configuration file,
+// otherwise, it will be set to `extPort`.
+void SetupGameStructInfo(const char* SessionName, const char* PlayerName, const std::string& externalIp, uint16_t extPort, bool spectatorHost, uint32_t plyrs, uint32_t gameType, uint32_t two, uint32_t three, uint32_t four)
+{
+	sstrcpy(gamestruct.name, SessionName);
+	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
+	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
+	//gamestruct.desc.guidApplication = GAME_GUID;
+	if (!externalIp.empty())
+	{
+		sstrcpy(gamestruct.desc.host, externalIp.c_str());
+		gamestruct.desc.host[externalIp.length()] = '\0';
+	}
+	else
+	{
+		memset(gamestruct.desc.host, 0, sizeof(gamestruct.desc.host));
+	}
+	gamestruct.desc.dwCurrentPlayers = (!spectatorHost) ? 1 : 0;
+	gamestruct.desc.dwMaxPlayers = plyrs;
+	gamestruct.desc.dwFlags = 0;
+	gamestruct.desc.dwUserFlags[0] = gameType;
+	gamestruct.desc.dwUserFlags[1] = two;
+	gamestruct.desc.dwUserFlags[2] = three;
+	gamestruct.desc.dwUserFlags[3] = four;
+	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
+	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
+	if (extPort == 0)
+	{
+		gamestruct.hostPort = gameserver_port;
+	}
+	else
+	{
+		gamestruct.hostPort = extPort;
+	}
+	sstrcpy(gamestruct.mapname, game.map);					// map we are hosting
+	sstrcpy(gamestruct.hostname, PlayerName);
+	sstrcpy(gamestruct.versionstring, versionString);		// version (string)
+	sstrcpy(gamestruct.modlist, getModList().c_str());      // List of mods
+	gamestruct.GAMESTRUCT_VERSION = 4;						// version of this structure
+	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
+	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
+	//	gamestruct.privateGame = 0;								// if true, it is a private game
+	gamestruct.pureMap = game.isMapMod;								// If map-mod...
+	gamestruct.Mods = 0;										// number of concatenated mods?
+	gamestruct.gameId = 0;
+	gamestruct.limits = 0x0;									// used for limits
+#if defined(WZ_OS_WIN)
+	gamestruct.future3 = 0x77696e;								// for future use
+#elif defined (WZ_OS_MAC)
+	gamestruct.future3 = 0x6d6163;								// for future use
+#else
+	gamestruct.future3 = 0x6c696e;								// for future use
+#endif
+	gamestruct.future4 = NETCODE_VERSION_MAJOR << 16 | NETCODE_VERSION_MINOR;	// for future use
+}
+
+} // anonymous namespace
+
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost,
                  uint32_t gameType, uint32_t two, uint32_t three, uint32_t four,
                  UDWORD plyrs)	// # of players.
@@ -4457,41 +4453,6 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	NETlogEntry("Hosting game, resetting ban list.", SYNC_FLAG, 0);
 	NETpermissionsInit();
 	playerManagementRecord.clear();
-	sstrcpy(gamestruct.name, SessionName);
-	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
-	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
-	//gamestruct.desc.guidApplication = GAME_GUID;
-	memset(gamestruct.desc.host, 0, sizeof(gamestruct.desc.host));
-	gamestruct.desc.dwCurrentPlayers = (!spectatorHost) ? 1 : 0;
-	gamestruct.desc.dwMaxPlayers = plyrs;
-	gamestruct.desc.dwFlags = 0;
-	gamestruct.desc.dwUserFlags[0] = gameType;
-	gamestruct.desc.dwUserFlags[1] = two;
-	gamestruct.desc.dwUserFlags[2] = three;
-	gamestruct.desc.dwUserFlags[3] = four;
-	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
-	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
-	gamestruct.hostPort = gameserver_port;
-	sstrcpy(gamestruct.mapname, game.map);					// map we are hosting
-	sstrcpy(gamestruct.hostname, PlayerName);
-	sstrcpy(gamestruct.versionstring, versionString);		// version (string)
-	sstrcpy(gamestruct.modlist, getModList().c_str());      // List of mods
-	gamestruct.GAMESTRUCT_VERSION = 4;						// version of this structure
-	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
-	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
-//	gamestruct.privateGame = 0;								// if true, it is a private game
-	gamestruct.pureMap = game.isMapMod;								// If map-mod...
-	gamestruct.Mods = 0;										// number of concatenated mods?
-	gamestruct.gameId  = 0;
-	gamestruct.limits = 0x0;									// used for limits
-#if defined(WZ_OS_WIN)
-	gamestruct.future3 = 0x77696e;								// for future use
-#elif defined (WZ_OS_MAC)
-	gamestruct.future3 = 0x6d6163;								// for future use
-#else
-	gamestruct.future3 = 0x6c696e;								// for future use
-#endif
-	gamestruct.future4 = NETCODE_VERSION_MAJOR << 16 | NETCODE_VERSION_MINOR;	// for future use
 
 	if (spectatorHost)
 	{
@@ -4515,11 +4476,29 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		changeColour(NetPlay.hostPlayer, war_getMPcolour(), true);
 	}
 
-	allow_joining = true;
-
 	NETregisterServer(WZ_SERVER_DISCONNECT);
 
-	debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+	// Do not allow others to join and delay announcing the game session to the lobby server
+	// until we manage to setup (successfully or not) the port mapping rule for the `gameserver_port`.
+	PortMappingManager::instance().schedule_callback(
+		[SessionName, spectatorHost, plyrs, gameType, two, three, four, PlayerName](std::string externalIp, uint16_t extPort) // success callback
+	{
+		// Setup gamestruct with the external ip + port combination received from the LibPlum.
+		SetupGameStructInfo(SessionName, PlayerName, externalIp, extPort, spectatorHost, plyrs, gameType, two, three, four);
+		// Only allow joining the game once the server has successfully discovered it's external IP + port combination.
+		//
+		// Once this is true, we are able to connect to the lobby server and announce to other players that
+		// this game session is available to join to.
+		allow_joining = true;
+		debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+	}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, three, four](PortMappingManager::DiscoveryStatus /*status*/) // failure callback
+	{
+		// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
+		// that others will still be able to connect to us.
+		SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, three, four);
+		allow_joining = true;
+		debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+	});
 
 	return true;
 }
