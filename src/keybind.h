@@ -26,6 +26,7 @@
 #include "orderdef.h"
 #include "difficulty.h"
 #include "lib/framework/fixedpoint.h"
+#include "input/keyconfig.h"
 
 #define	MAP_ZOOM_RATE_MAX	(1000)
 #define	MAP_ZOOM_RATE_MIN	(200)
