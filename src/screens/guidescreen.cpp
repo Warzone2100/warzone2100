@@ -23,6 +23,7 @@
 #include "guidescreen.h"
 #include "../wzjsonlocalizedstring.h"
 
+#include "lib/framework/wzglobal.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/input.h"
 #include "lib/framework/wzpaths.h"
@@ -51,6 +52,8 @@
 #include <locale>
 
 struct WzGameGuideScreen;
+
+#define WZ2100_GUIDE_MESSAGE_CATALOG_DOMAIN PACKAGE "_guide"
 
 // MARK: - Guide Topic / Registry types
 
@@ -152,7 +155,7 @@ optional<std::string> WzGuideTopicsRegistry::getDisplayNameForTopic(const std::s
 	{
 		return nullopt;
 	}
-	return it->second->topic->displayName.getLocalizedString();
+	return it->second->topic->displayName.getLocalizedString(WZ2100_GUIDE_MESSAGE_CATALOG_DOMAIN);
 }
 
 std::shared_ptr<WzWrappedGuideTopic> WzGuideTopicsRegistry::getTopic(const std::string& identifier) const
@@ -436,7 +439,7 @@ public:
 		ASSERT_OR_RETURN(nullptr, topic != nullptr, "Null topic?");
 		class make_shared_enabler: public WzGuideSidebarTopicButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize(topic->identifier, WzString::fromUtf8(topic->displayName.getLocalizedString()), indentLevel);
+		widget->initialize(topic->identifier, WzString::fromUtf8(topic->displayName.getLocalizedString(WZ2100_GUIDE_MESSAGE_CATALOG_DOMAIN)), indentLevel);
 		if (prefs.has_value())
 		{
 			widget->setIsNew(prefs.value().lastReadVersion != topic->version);
@@ -1266,7 +1269,7 @@ std::shared_ptr<W_LABEL> WzGuideTopicDisplayWidget::constructParentNavPathWidget
 	std::vector<std::string> pathComponents;
 	while (psParentTopic != nullptr)
 	{
-		pathComponents.push_back(psParentTopic->topic->displayName.getLocalizedString());
+		pathComponents.push_back(psParentTopic->topic->displayName.getLocalizedString(WZ2100_GUIDE_MESSAGE_CATALOG_DOMAIN));
 		psParentTopic = psParentTopic->parent.lock();
 	}
 
@@ -1310,7 +1313,7 @@ void WzGuideTopicDisplayWidget::initialize(const WzWrappedGuideTopic& psWrappedT
 	m_displayName = std::make_shared<W_LABEL>();
 	attach(m_displayName);
 	m_displayName->setFont(font_medium_bold, WZCOL_TEXT_BRIGHT);
-	m_displayName->setString(WzString::fromUtf8(topic.displayName.getLocalizedString()));
+	m_displayName->setString(WzString::fromUtf8(topic.displayName.getLocalizedString(WZ2100_GUIDE_MESSAGE_CATALOG_DOMAIN)));
 	m_displayName->setCanTruncate(true);
 	m_displayName->setGeometry(0, 0, m_displayName->getMaxLineWidth(), iV_GetTextLineSize(font_medium));
 
@@ -1418,7 +1421,7 @@ void WzGuideTopicDisplayWidget::initialize(const WzWrappedGuideTopic& psWrappedT
 			m_contents->addText("\n");
 		}
 		const auto& localizedStr = topic.contents[idx];
-		auto pDisplayString = localizedStr.getLocalizedString();
+		auto pDisplayString = localizedStr.getLocalizedString(WZ2100_GUIDE_MESSAGE_CATALOG_DOMAIN);
 		std::string displayString = (pDisplayString) ? std::string(pDisplayString) : std::string();
 		addFormattedTextLine(displayString);
 	}
@@ -1961,8 +1964,8 @@ static std::vector<std::shared_ptr<WzWrappedGuideTopic>> makeSortedNestedTopics(
 		}
 		else
 		{
-			const auto pStrA = a->topic->displayName.getLocalizedString();
-			const auto pStrB = b->topic->displayName.getLocalizedString();
+			const auto pStrA = a->topic->displayName.getLocalizedString(WZ2100_GUIDE_MESSAGE_CATALOG_DOMAIN);
+			const auto pStrB = b->topic->displayName.getLocalizedString(WZ2100_GUIDE_MESSAGE_CATALOG_DOMAIN);
 			return f.compare(pStrA, pStrA + strlen(pStrA), pStrB, pStrB + strlen(pStrB)) < 0;
 		}
 	});

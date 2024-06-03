@@ -612,9 +612,32 @@ static std::string getEmscriptenDefaultLanguage()
 }
 #endif
 
+static bool wzBindAllWZTextDomains(const char* resourcePath)
+{
+	// Bind the "main" message catalog ("warzone2100")
+	auto textdomainDirectory = wzBindTextDomain(PACKAGE, resourcePath);
+	(void)bind_textdomain_codeset(PACKAGE, "UTF-8");
+	if (textdomainDirectory.empty())
+	{
+		// Failed to bind main message catalog - treat as critical failure
+		return false;
+	}
+
+	// Bind the guide topics message catalog
+	textdomainDirectory = wzBindTextDomain(PACKAGE "_guide", resourcePath);
+	(void)bind_textdomain_codeset(PACKAGE "_guide", "UTF-8");
+	if (textdomainDirectory.empty())
+	{
+		// Non-fatal failure
+		debug(LOG_INFO, "initI18n: Failed to bind guide message catalog");
+	}
+
+	return true;
+}
+
 void initI18n()
 {
-	std::string textdomainDirectory;
+	bool boundAtLeastMainTextDomain = false;
 	std::string defaultLanguage = ""; // "" is system default (in most cases)
 
 #if defined(__EMSCRIPTEN__)
@@ -635,7 +658,7 @@ void initI18n()
 		if (CFURLGetFileSystemRepresentation(resourceURL, true, (UInt8 *) resourcePath, PATH_MAX))
 		{
 			sstrcat(resourcePath, "/locale");
-			textdomainDirectory = wzBindTextDomain(PACKAGE, resourcePath);
+			boundAtLeastMainTextDomain = wzBindAllWZTextDomains(resourcePath);
 		}
 		else
 		{
@@ -658,22 +681,22 @@ void initI18n()
 	debug(LOG_WZ, "Install prefix: %s", prefixDir.c_str());
 	const std::string dirSeparator(PHYSFS_getDirSeparator());
 	std::string localeDir = prefixDir + dirSeparator + WZ_LOCALEDIR;
-	textdomainDirectory = wzBindTextDomain(PACKAGE, localeDir.c_str());
+	boundAtLeastMainTextDomain = wzBindAllWZTextDomains(localeDir.c_str());
 	#else
 	// Treat WZ_LOCALEDIR as an absolute path, and use directly
-	textdomainDirectory = wzBindTextDomain(PACKAGE, WZ_LOCALEDIR);
+	boundAtLeastMainTextDomain = wzBindAllWZTextDomains(WZ_LOCALEDIR);
 	#endif
 # else
 	// Old locale-dir setup (autotools)
-	textdomainDirectory = wzBindTextDomain(PACKAGE, LOCALEDIR);
+	boundAtLeastMainTextDomain = wzBindAllWZTextDomains(LOCALEDIR);
 # endif
 #endif // ifdef WZ_OS_MAC
-	if (textdomainDirectory.empty())
+	if (!boundAtLeastMainTextDomain)
 	{
 		debug(LOG_ERROR, "initI18n: bindtextdomain failed!");
 	}
 
-	(void)bind_textdomain_codeset(PACKAGE, "UTF-8");
+	// Set default text domain
 	(void)textdomain(PACKAGE);
 	debug(LOG_WZ, "textdomain: %s", PACKAGE);
 
