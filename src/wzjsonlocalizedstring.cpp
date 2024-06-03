@@ -48,6 +48,11 @@ void from_json(const nlohmann::json& j, WzJsonLocalizedString& v)
 
 const char* WzJsonLocalizedString::getLocalizedString() const
 {
+	return getLocalizedString(PACKAGE); // default WZ text domain
+}
+
+const char* WzJsonLocalizedString::getLocalizedString(const char *domainname) const
+{
 	auto findMapping = [&](const std::string& languageCode) {
 		if (languageCode.empty())
 		{
@@ -72,7 +77,7 @@ const char* WzJsonLocalizedString::getLocalizedString() const
 			// if there is no translation, this just returns the input string (the "en" value)
 			if (!it->str.empty())
 			{
-				return gettext(it->str.c_str());
+				return dgettext(domainname, it->str.c_str());
 			}
 		}
 		else
