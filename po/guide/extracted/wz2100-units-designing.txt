@@ -1,0 +1,8 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Designing Units")
+_("You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay.")
+_("To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen.")
+_("To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead.")
+_("Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit.")
+_("Once you have designed a unit, you will need a Factory to build it.")

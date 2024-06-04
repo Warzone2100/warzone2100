@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Firing Mode")
+_("You can use the Unit Orders menu to configure unit \"Firing Mode\".")
+_("- Fire At Will: Fires at any enemy (default)")
+_("- Return Fire: Only fire if fired at")
+_("- Do Not Fire: Units will not fire")
