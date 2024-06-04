@@ -1,0 +1,15 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Researching Technology")
+_("Researching technologies is accomplished using Research Centers.")
+_("When you open the Research menu, a Fast Find menu with two rows will appear at the bottom center of the screen.")
+_("All of your research centers are shown on the second row. Clicking a research center will move the camera to it.")
+_("Clicking the blank icon above a research center will show a set of research topics on the left side of the screen.")
+_("You can hold the mouse over an icon to see its name.")
+_("Click an icon to start researching it. Each research center can research one distinct technology at a time.")
+_("While a facility is researching, it displays a bar in its Fast Find area.")
+_("If the bar is green, the facility is gathering power. If it is yellow, the topic is being researched.")
+_("Completing research of a new technology may:")
+_("- Make available new weapons, structures, unit bodies, propulsion, etc")
+_("- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc")
+_("- Enable the research of additional technologies")

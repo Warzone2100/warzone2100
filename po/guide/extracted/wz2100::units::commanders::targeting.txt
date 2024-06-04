@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Targeting")
+_("When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit.")
+_("The attached units will have greater accuracy when firing.")
