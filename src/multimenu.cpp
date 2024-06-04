@@ -485,9 +485,9 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	authorCheckbox->setIsChecked(current_searchByAuthor);
 	authorCheckbox->setTextColor(WZCOL_TEXT_BRIGHT);
 	Vector2i authorCbDimentions = authorCheckbox->calculateDesiredDimensions();
-	authorCheckbox->setGeometry(requestForm->width() - authorCbDimentions.x - 3, 
-		requestForm->height() - MULTIOP_SEARCHBOXH - 3, 
-		authorCbDimentions.x, 
+	authorCheckbox->setGeometry(requestForm->width() - authorCbDimentions.x - 3,
+		requestForm->height() - MULTIOP_SEARCHBOXH - 3,
+		authorCbDimentions.x,
 		authorCbDimentions.y);
 
 	authorCheckbox->addOnClickHandler([searchDir, fileExtension, mode, numPlayers](W_BUTTON& widg) {
@@ -499,9 +499,9 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	// Add the search edit box
 	auto searchBox = std::make_shared<W_EDITBOX>();
 	requestForm->attach(searchBox);
-	searchBox->setGeometry(3, 
-		requestForm->height() - MULTIOP_SEARCHBOXH - 3, 
-		requestForm->width() - authorCbDimentions.x - 9, 
+	searchBox->setGeometry(3,
+		requestForm->height() - MULTIOP_SEARCHBOXH - 3,
+		requestForm->width() - authorCbDimentions.x - 9,
 		MULTIOP_SEARCHBOXH);
 	searchBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 	searchBox->setPlaceholder(_("Search for map"));
@@ -528,7 +528,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		for (auto mapData : levels)
 		{
 			std::string withoutTechlevel = mapNameWithoutTechlevel(mapData->pName.c_str());
-			std::string tip = withoutTechlevel + 
+			std::string tip = withoutTechlevel +
 				(mapData->pAuthor.empty() ? "" : "\n" + std::string(_("By ")) + mapData->pAuthor);
 			// add number of players to string.
 			auto button = std::make_shared<W_BUTTON>();

@@ -304,7 +304,7 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 		abort();
 		return false;
 	}
-	
+
 	psDataSet->players = 1;
 	psDataSet->game = -1;
 	psDataSet->dataDir = pathMode;
