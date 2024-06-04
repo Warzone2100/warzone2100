@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Unit Orders")
+_("Right-click on a unit (or select a unit and hit NUM0 on the numeric keypad), and a unit orders menu will appear above the command panel. This contains options to configure a unit’s behaviour.")
+_("Right-clicking on a factory will customize the orders of all future units that that factory produces.")

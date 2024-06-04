@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("CB Sensors")
+_("CB (Counter-Battery) towers or turrets are used similarly to a standard sensor but serve a specialized purpose: To counter-attack enemy artillery.")
+_("Normal sensor towers will direct your artillery to attack whatever is nearby, but CB towers will direct your artillery to attack any artillery attacking you, even if they are further away from you than other targets.")
+_("If you have both a CB tower and a normal sensor tower, artillery structures will attack CB targets first, and only other targets once you are no longer being bombarded by enemy artillery.")

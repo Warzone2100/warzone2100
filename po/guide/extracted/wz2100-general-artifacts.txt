@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Artifacts")
+_("In the campaign, you can collect Artifacts from enemies and research them. Artifacts are small white boxes with a green indicator above them, and can be collected by any unit by moving close to it.")
+_("Collecting artifacts will open up new research topics for your Research Center(s). You'll want to research these!")

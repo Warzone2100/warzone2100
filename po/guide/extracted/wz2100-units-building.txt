@@ -1,0 +1,9 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Building Units")
+_("To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing menu on the left side of the screen.")
+_("The Manufacturing menu will display the unit designs which are buildable by the currently-selected factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules).")
+_("To select a different factory, either click on the factory in the game world, or click on the appropriate factory button in the Factories menu on the bottom-center of the screen.")
+_("To manufacture a unit in a factory, click the desired unit design button in the Manufacturing menu. You can queue multiples of the same unit by repeatedly clicking the unit design button.")
+_("While a unit is building, the unit will be shown in the Factories menu above the factory that is building it. If the bar is green, the factory is gathering power to build the unit. If the bar is yellow, the unit is being built.")
+_("When a factory is done building a unit, it will order it to proceed to the factory's Rally Point.")

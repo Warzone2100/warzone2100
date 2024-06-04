@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Recycling")
+_("Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it.")
+_("Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged).")
+_("The unit’s experience level will be placed in the next unit that is manufactured.")
+_("You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind.")

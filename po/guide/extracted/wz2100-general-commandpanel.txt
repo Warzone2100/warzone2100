@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Command Panel")
+_("There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button.")
+_("The middle / central button closes any open command interface.")

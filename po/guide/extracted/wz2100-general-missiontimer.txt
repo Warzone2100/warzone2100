@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Using the Mission Timer")
+_("Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much.")
+_("There are always smart ways to make use of extra time to prepare for battles ahead.")
+_("Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste.")
+_("(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)")

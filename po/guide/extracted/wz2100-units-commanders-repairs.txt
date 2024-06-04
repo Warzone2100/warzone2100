@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Going for repairs, BRB")
+_("A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group.")
+_("When it is done repairing, it will return to its Commander.")

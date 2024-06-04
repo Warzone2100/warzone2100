@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Factory")
+_("A factory is used to build units. Each factory can build one unit at a time, but you can queue multiple units for production.")
+_("When a factory is done building a unit, it will order it to proceed to the factory's Rally Point.")

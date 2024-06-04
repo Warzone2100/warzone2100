@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("VTOLs")
+_("VTOLs are used similarly to ground units. However, they do have a few differences.")
+_("To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\".")
+_("You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo.")
