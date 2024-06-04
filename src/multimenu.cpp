@@ -508,7 +508,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	searchBox->setString(WzString::fromUtf8(current_searchString));
 
 	searchBox->setOnEditingStoppedHandler([searchDir, fileExtension, mode, numPlayers](W_EDITBOX& widg) {
-		const std::string &value = widg.getString().toUtf8();
+		std::string value = widg.getString().toUtf8();
 		if (value == current_searchString) {
 			return;
 		}

@@ -25,6 +25,7 @@ In addition, the following properties are defined:
 * ```status``` The completeness status of the structure. It will be one of ```BEING_BUILT``` and ```BUILT```.
 * ```type``` The type will always be ```STRUCTURE```.
 * ```cost``` What it would cost to build this structure. (3.2+ only)
+* ```direction``` The direction the structure is facing. (4.5+ only)
 * ```stattype``` The stattype defines the type of structure. It will be one of ```HQ```, ```FACTORY```, ```POWER_GEN```,
 ```RESOURCE_EXTRACTOR```, ```LASSAT```, ```DEFENSE```, ```WALL```, ```RESEARCH_LAB```, ```REPAIR_FACILITY```,
 ```CYBORG_FACTORY```, ```VTOL_FACTORY```, ```REARM_PAD```, ```SAT_UPLINK```, ```GATE``` and ```COMMAND_CONTROL```.

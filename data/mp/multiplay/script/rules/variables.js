@@ -7,6 +7,8 @@ var oilDrumData = {
 	maxOilDrums: 0 // maximum amount of random oil drums allowed on the map
 };
 
+const TICK_TIME = 100;
+
 const CREATE_LIKE_EVENT = 0;
 const DESTROY_LIKE_EVENT = 1;
 const TRANSFER_LIKE_EVENT = 2;
