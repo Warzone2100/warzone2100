@@ -4,7 +4,6 @@ In version 4.5.0, a revised process for packaging, distributing, and loading cam
 
 - [Basic Structure](#basic-structure)
 - [mod-info.json](#mod-infojson)
-  - [JSON Localized String](#json-localized-string)
   - [Tweak Options](#tweak-options)
     - [camTweakOptions](#camtweakoptions)
     - [customTweakOptions](#customtweakoptions)
@@ -35,7 +34,7 @@ It may also optionally contain a `mod-banner.png` image, which is used as the ba
 - **license**: (string) An SPDX License Identifier string, specifying the license for the mod (examples: `"CC0-1.0"`, `"GPL-2.0-or-later"`, `"CC-BY-4.0 OR GPL-2.0-or-later"`)
 - **minVersionSupported**: (string) The minimum version of Warzone 2100 the mod supports (example: `"4.5.0"`)
 - **maxVersionTested**: (string) The maximum version of Warzone 2100 that the mod has been tested with
-- **description**: [(JSON Localized String)](#json-localized-string) A description of the mod
+- **description**: [(JSON Localized String)](WZJsonLocalizedString.md) A description of the mod
 - updatesURL: (string) A URL to which a user can browse to obtain a newer version of your mod, if available
   - We recommend hosting your mod on GitHub, and using GitHub releases. ex: `"https://github.com/<USER>/<MODREPO>/releases/latest"`
 - **campaigns**: (array) An array of campaign json file names (which will be loaded from `campaigns/<filename>` in your mod)
@@ -52,29 +51,6 @@ It may also optionally contain a `mod-banner.png` image, which is used as the ba
     - (array) An array containing one or more of the following difficulty options: [`"super easy"`, `"easy"`, `"normal"`, `"hard"`, `"insane"`]
 - camTweakOptions: (object) [See Tweak Options](#tweak-options)
 - customTweakOptions: (object) [See Tweak Options](#tweak-options)
-
-## JSON Localized String
-
-The `mod-info.json` file supports providing translations for certain textual information.
-
-Anything that's listed as `(JSON Localized String)` may either be:
-
-- An (object) with a key for each language code and a (string) value that is the translation
-  - Example:
-  ```json
-  "description": {
-    "en": "A description of the mod in English."
-    "de": "The same description, but in German."
-  }
-  ```
-  - Note:
-    - The base / default language for the game is English (`"en"`). We strongly recommend that you _always_ provide an `en` translation of all localized strings.
-    - The language codes correspond to the ones supported by the game (see the `.po` files in: https://github.com/Warzone2100/warzone2100/tree/master/po)
-- A (string) value (_not recommended, does not provide any translations_)
-  - Example:
-  ```json
-  "description": "A description of the mod in English, and only English."
-  ```
 
 ## Tweak Options
 
@@ -141,8 +117,8 @@ Example:
   - Recommendation: Use a prefix in the "id" value that's related to your mod, to avoid any naming conflicts
 - **type** (string) Must be `"bool"`
 - **default**: The default value for the option
-- **displayName**: [(JSON Localized String)](#json-localized-string) A short name for the tweak
-- **description**: [(JSON Localized String)](#json-localized-string) A more detailed description of what the option controls / does
+- **displayName**: [(JSON Localized String)](WZJsonLocalizedString.md) A short name for the tweak
+- **description**: [(JSON Localized String)](WZJsonLocalizedString.md) A more detailed description of what the option controls / does
 
 ### Accessing Tweak Options from scripts
 
