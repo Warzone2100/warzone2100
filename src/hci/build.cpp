@@ -120,7 +120,15 @@ void BuildController::startBuildPosition(STRUCTURE_STATS *buildOption)
 
 void BuildController::toggleFavorites(STRUCTURE_STATS *buildOption)
 {
-	asStructureStats[buildOption->index].isFavorite = !shouldShowFavorites();
+	bool &isFavorite = asStructureStats[buildOption->index].isFavorite;
+	if (shouldShowFavorites())
+	{
+		isFavorite = false;
+	}
+	else
+	{
+		isFavorite = !isFavorite;
+	}
 	updateBuildOptionsList();
 }
 
@@ -449,6 +457,10 @@ protected:
 
 		displayIMD(AtlasImage(), ImdObject::StructureStat(stat), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
+		if (asStructureStats[stat->index].isFavorite && !controller->shouldShowFavorites())
+		{
+			iV_DrawImage(IntImages, IMAGE_ALLY_RESEARCH_TC, xOffset + x() + 44, yOffset + y() + 3);
+		}
 	}
 
 private:
