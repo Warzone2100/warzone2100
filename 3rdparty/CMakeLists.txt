@@ -146,6 +146,18 @@ if (WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	  message(STATUS "Pre-installed basisu tool found: ${BASIS_UNIVERSAL_CLI}")
 	endif()
 
+	# Test basisu -version
+	execute_process(
+		COMMAND "${BASIS_UNIVERSAL_CLI}" -version
+		OUTPUT_VARIABLE BASISU_VERSION
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+		RESULT_VARIABLE _basisu_result
+	)
+	if(_basisu_result AND NOT _basisu_result EQUAL 0)
+		message(FATAL_ERROR "basisu does not seem to be executable on this host?: ${BASIS_UNIVERSAL_CLI} (exit code: ${_basisu_result})")
+	endif()
+	message(STATUS "Found basisu: ${BASIS_UNIVERSAL_CLI} ${BASISU_VERSION}")
+
 	set(BASIS_UNIVERSAL_CLI "${BASIS_UNIVERSAL_CLI}" PARENT_SCOPE)
 
 endif()
