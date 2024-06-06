@@ -7,9 +7,7 @@ vcpkg_from_github(
 )
 
 set(_additional_options)
-if (NOT VCPKG_TARGET_ARCH MATCHES "^([xX]86|[xX]64)$")
-    list(APPEND _additional_options "-DSSE=OFF")
-endif()
+list(APPEND _additional_options "-DSSE=OFF")
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
