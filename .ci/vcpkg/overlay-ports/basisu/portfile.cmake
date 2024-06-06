@@ -4,6 +4,8 @@ vcpkg_from_github(
     REF ad9386a4a1cf2a248f7bbd45f543a7448db15267 # post-1.16.4, including fixes
     SHA512 4922af3a8d42d8c1ab551853d0ab97c0733a869cd99e95ef7a03620da023da48070a1255dcd68f6a384ee7787b5bd5dffe2cd510b2986e2a0e7181929f6ecc64
     HEAD_REF master
+    PATCHES
+        001-mingw.patch
 )
 
 set(_additional_options)

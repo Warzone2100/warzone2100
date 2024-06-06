@@ -1,0 +1,39 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 492233a..bdd4dac 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -102,8 +102,10 @@ if (NOT MSVC)
+ 	  	set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -DBASISU_SUPPORT_SSE=0")
+ 		set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DBASISU_SUPPORT_SSE=0")
+ 	  endif()
+-	  
+-	  set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_LINK_FLAGS} -Wl,-rpath .")
++
++	  if (NOT MINGW)
++	    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_LINK_FLAGS} -Wl,-rpath .")
++	  endif()
+    endif()
+ 
+    set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} ${GCC_COMPILE_FLAGS}")
+@@ -123,6 +125,21 @@ else()
+ 	endif()
+ endif()
+ 
++# Set BASISU_HAVE_STD_TRIVIALLY_COPYABLE if the target supports std::is_trivially_copyable
++include(CheckCXXSourceCompiles)
++check_cxx_source_compiles("
++	#include <type_traits>
++	const bool val = std::is_trivially_copyable<bool>::value;
++	int main()
++	{
++		return 0;
++	}"
++	HAVE_STD_IS_TRIVIALLY_COPYABLE
++)
++if (HAVE_STD_IS_TRIVIALLY_COPYABLE)
++	set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DBASISU_HAVE_STD_TRIVIALLY_COPYABLE")
++endif()
++
+ set(BASISU_SRC_LIST ${COMMON_SRC_LIST} 
+ 	basisu_tool.cpp
+ 	encoder/basisu_backend.cpp
