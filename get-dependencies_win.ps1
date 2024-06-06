@@ -87,35 +87,47 @@ If (-not ([string]::IsNullOrEmpty($env:VCPKG_DEFAULT_TRIPLET)))
 	$triplet = "$env:VCPKG_DEFAULT_TRIPLET";
 }
 
-If (($triplet.Contains("mingw")) -or (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE))))
+function WZ-Prepare-Vcpkg-Triplet($triplet, $VCPKG_BUILD_TYPE, $tripletOverlayFolder)
 {
-	# Need to create a copy of the triplet and modify it
-	$tripletFile = "triplets\$($triplet).cmake";
-	If (!(Test-Path $tripletFile -PathType Leaf))
+	If (($triplet.Contains("mingw")) -or (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE))))
 	{
-		$tripletFile = "triplets\community\$($triplet).cmake";
+		# Need to create a copy of the triplet and modify it
+		$tripletFile = "triplets\$($triplet).cmake";
 		If (!(Test-Path $tripletFile -PathType Leaf))
 		{
-			Write-Error "Unable to find VCPKG_DEFAULT_TRIPLET: $env:VCPKG_DEFAULT_TRIPLET"
+			$tripletFile = "triplets\community\$($triplet).cmake";
+			If (!(Test-Path $tripletFile -PathType Leaf))
+			{
+				Write-Error "Unable to find VCPKG_DEFAULT_TRIPLET: $env:VCPKG_DEFAULT_TRIPLET";
+			}
 		}
-	}
-	Copy-Item "$tripletFile" -Destination "$tripletOverlayFolder"
-	$tripletFileName = Split-Path -Leaf "$tripletFile"
-	$overlayTripletFile = "$tripletOverlayFolder\$tripletFileName"
-	If ($triplet.Contains("mingw"))
-	{
-		# A fix for libtool issues with mingw-clang
-		Add-Content -Path $overlayTripletFile -Value "`r`nlist(APPEND VCPKG_CONFIGURE_MAKE_OPTIONS `"lt_cv_deplibs_check_method=pass_all`")";
+		Copy-Item "$tripletFile" -Destination "$tripletOverlayFolder"
+		$tripletFileName = Split-Path -Leaf "$tripletFile"
+		$overlayTripletFile = "$tripletOverlayFolder\$tripletFileName"
+		If ($triplet.Contains("mingw"))
+		{
+			# A fix for libtool issues with mingw-clang
+			Add-Content -Path $overlayTripletFile -Value "`r`nlist(APPEND VCPKG_CONFIGURE_MAKE_OPTIONS `"lt_cv_deplibs_check_method=pass_all`")";
 
-		# Build with pdb debug symbols (mingw-clang)
-		Add-Content -Path $overlayTripletFile -Value "`r`nstring(APPEND VCPKG_CXX_FLAGS `" -gcodeview -g `")`r`nstring(APPEND VCPKG_C_FLAGS `" -gcodeview -g `")`r`nstring(APPEND VCPKG_LINKER_FLAGS `" -Wl,-pdb= `")";
+			# Build with pdb debug symbols (mingw-clang)
+			Add-Content -Path $overlayTripletFile -Value "`r`nstring(APPEND VCPKG_CXX_FLAGS `" -gcodeview -g `")`r`nstring(APPEND VCPKG_C_FLAGS `" -gcodeview -g `")`r`nstring(APPEND VCPKG_LINKER_FLAGS `" -Wl,-pdb= `")";
+		}
+		If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
+		{
+			Add-Content -Path $overlayTripletFile -Value "`r`nset(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")";
+		}
+		# Setup environment variable so vcpkg uses the overlay triplets folder
+		$env:VCPKG_OVERLAY_TRIPLETS = "$tripletOverlayFolder";
 	}
-	If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
-	{
-		Add-Content -Path $overlayTripletFile -Value "`r`nset(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")";
-	}
-	# Setup environment variable so vcpkg uses the overlay triplets folder
-	$env:VCPKG_OVERLAY_TRIPLETS = "$tripletOverlayFolder"
+	
+	return $true;
+}
+
+WZ-Prepare-Vcpkg-Triplet "$triplet" "$VCPKG_BUILD_TYPE" "$tripletOverlayFolder";
+
+If (-not ([string]::IsNullOrEmpty($env:VCPKG_DEFAULT_HOST_TRIPLET)))
+{
+	WZ-Prepare-Vcpkg-Triplet "$env:VCPKG_DEFAULT_HOST_TRIPLET" "" "$tripletOverlayFolder";
 }
 
 # Patch vcpkg_copy_pdbs for mingw support
