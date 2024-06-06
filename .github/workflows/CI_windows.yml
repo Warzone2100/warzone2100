@@ -149,6 +149,7 @@ jobs:
             # Will need to use a similar workaround as Chromium's build process
             # and use the armasm64.exe tool from MSVC
           }
+          $VCPKG_DEFAULT_HOST_TRIPLET = "x64-mingw-static"
         }
         else {
           $WZ_USING_MINGW = "false"
@@ -162,8 +163,8 @@ jobs:
           elseif ($env:WZ_TARGET_ARCH -eq "arm64") {
             $VCPKG_DEFAULT_TRIPLET = "arm64-windows"
           }
+          $VCPKG_DEFAULT_HOST_TRIPLET = "x64-windows"
         }
-        $VCPKG_DEFAULT_HOST_TRIPLET = "x64-windows"
 
         $WZ_FULL_POWERSHELL_PATH = (Get-Command powershell.exe).Path
         $WZ_FULL_GIT_PATH = Split-Path -Path ((Get-Command git.exe).Path)
