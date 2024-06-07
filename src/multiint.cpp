@@ -124,6 +124,7 @@
 
 #include "activity.h"
 #include <algorithm>
+#include <set>
 #include "3rdparty/gsl_finally.h"
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
@@ -1959,8 +1960,6 @@ public:
 		return WzPlayerIndexSwapPositionRow::make(switcherPlayerIdx, targetPlayerIdx, parent);
 	}
 };
-
-#include <set>
 
 static std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t player)
 {
@@ -4016,8 +4015,8 @@ public:
 			if (playerIdx == selectedPlayer || NetPlay.isHost)
 			{
 				uint32_t player = playerIdx;
-				// host can move any player, clients can request to move themselves
-				if ((player == selectedPlayer || (NetPlay.players[player].allocated && NetPlay.isHost))
+				// host can move any player, clients can request to move themselves if there are available slots
+				if (((player == selectedPlayer && validPlayerIdxTargetsForPlayerPositionMove(player).size() > 0) || (NetPlay.players[player].allocated && NetPlay.isHost))
 					&& !locked.position
 					&& player < MAX_PLAYERS
 					&& !isSpectatorOnlySlot(player))
