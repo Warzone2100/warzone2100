@@ -403,6 +403,12 @@ namespace wzapi
 		//__
 		virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) = 0;
 
+		//__ ## eventDroidRankGained(droid, rankNum)
+		//__
+		//__ An event that is run whenever a droid gains a rank.
+		//__
+		virtual bool handle_eventDroidRankGained(const DROID *psDroid, int rankNum) = 0;
+
 		//__ ## eventAttacked(victim, attacker)
 		//__
 		//__ An event that is run when an object belonging to the script's controlling player is

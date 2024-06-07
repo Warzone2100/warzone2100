@@ -513,6 +513,12 @@ public:
 	//__
 	virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) override;
 
+	//__ ## eventDroidRankGained(droid, rankNum)
+	//__
+	//__ An event that is run whenever a droid gains a rank.
+	//__
+	virtual bool handle_eventDroidRankGained(const DROID *psDroid, int rankNum) override;
+
 	//__ ## eventAttacked(victim, attacker)
 	//__
 	//__ An event that is run when an object belonging to the script's controlling player is
@@ -3005,6 +3011,7 @@ IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, optional<const DROID 
 IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, optional<const DROID *>)
 IMPL_EVENT_HANDLER(eventStructureReady, const STRUCTURE *)
 IMPL_EVENT_HANDLER(eventStructureUpgradeStarted, const STRUCTURE *)
+IMPL_EVENT_HANDLER(eventDroidRankGained, const DROID *, int)
 IMPL_EVENT_HANDLER(eventAttacked, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, wzapi::event_nullable_ptr<const STRUCTURE>, int)
 IMPL_EVENT_HANDLER(eventDestroyed, const BASE_OBJECT *)

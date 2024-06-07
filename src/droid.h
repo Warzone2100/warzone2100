@@ -185,6 +185,8 @@ unsigned int getDroidLevel(const DROID *psDroid);
 unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent);
 UDWORD getDroidEffectiveLevel(const DROID *psDroid);
 const char *getDroidLevelName(const DROID *psDroid);
+// Increase the experience of a droid (and handle events, if needed).
+void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
 
 // Get a droid's name.
 const char *droidGetName(const DROID *psDroid);
@@ -406,7 +408,6 @@ void cancelBuild(DROID *psDroid);
 
 #define syncDebugDroid(psDroid, ch) _syncDebugDroid(__FUNCTION__, psDroid, ch)
 void _syncDebugDroid(const char *function, DROID const *psDroid, char ch);
-
 
 // True iff object is a droid.
 static inline bool isDroid(SIMPLE_OBJECT const *psObject)
