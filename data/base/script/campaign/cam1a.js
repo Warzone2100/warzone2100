@@ -11,6 +11,36 @@ const mis_scavengerRes = [
 
 // CLASSIC: No research.
 
+// Handlers for guide topics
+
+function __cam1A_doAddHQBuiltTopics()
+{
+	addGuideTopic("wz2100::structures::factory");
+	addGuideTopic("wz2100::units::designing", SHOWTOPIC_FIRSTADD);
+}
+
+function __cam1A_doAddFactoryBuiltTopics()
+{
+	addGuideTopic("wz2100::units::designing");
+	addGuideTopic("wz2100::structures::rallypoint");
+	addGuideTopic("wz2100::structures::factory");
+	addGuideTopic("wz2100::units::building", SHOWTOPIC_FIRSTADD);
+}
+
+function __cam1A_doAddResearchCenterBuiltTopics()
+{
+	addGuideTopic("wz2100::structures::researchcenter", SHOWTOPIC_FIRSTADD);
+}
+
+function __cam1A_doAddOilDerrickBuiltTopics()
+{
+	addGuideTopic("wz2100::general::power");
+	addGuideTopic("wz2100::structures::oilderrick");
+	addGuideTopic("wz2100::structures::powergenerator", SHOWTOPIC_FIRSTADD);
+}
+
+const GUIDE_STRUCT_BUILT_DELAY_TIME = 100;
+
 // Player zero's droid enters area next to first oil patch.
 camAreaEvent("launchScavAttack", function(droid)
 {
@@ -90,20 +120,39 @@ camAreaEvent("raidTrigger", function(droid)
 });
 
 // Or, they built on base two's oil patch instead. Initiate a surprise attack.
+// (Also handles queuing guide topics for structures built)
 function eventStructureBuilt(structure, droid)
 {
-	if (structure.player === CAM_HUMAN_PLAYER && structure.stattype === RESOURCE_EXTRACTOR)
+	if (structure.player === CAM_HUMAN_PLAYER)
 	{
-		// Is it in the base two area?
-		const objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
-		for (let i = 0, l = objs.length; i < l; ++i)
+		if (structure.stattype === FACTORY)
 		{
-			const obj = objs[i];
-			if (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
+			queue("__cam1A_doAddFactoryBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
+		}
+		else if (structure.stattype === RESEARCH_LAB)
+		{
+			queue("__cam1A_doAddResearchCenterBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
+		}
+		else if (structure.stattype === RESOURCE_EXTRACTOR)
+		{
+			// Is it in the base two area?
+			const objs = enumArea("scavBase2Cleanup", CAM_HUMAN_PLAYER);
+			for (let i = 0, l = objs.length; i < l; ++i)
 			{
-				camCallOnce("raidAttack");
-				break;
+				const obj = objs[i];
+				if (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
+				{
+					camCallOnce("raidAttack");
+					break;
+				}
 			}
+
+			// Add the oil derrick topic
+			queue("__cam1A_doAddOilDerrickBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
+		}
+		else if (structure.stattype === HQ)
+		{
+			queue("__cam1A_doAddHQBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
 		}
 	}
 }
@@ -135,6 +184,31 @@ function enableBaseStructures()
 	{
 		enableStructure(structs[i], CAM_HUMAN_PLAYER);
 	}
+}
+
+function __cam1A_doNeedPowerTopics()
+{
+	// inform the user about power (and the need to build an oil derrick)
+	addGuideTopic("wz2100::structures::oilderrick");
+	addGuideTopic("wz2100::general::power", SHOWTOPIC_FIRSTADD);
+}
+
+function eventDroidBuilt(droid, structure)
+{
+	if (!camDef(structure)) // "clone wars" cheat
+	{
+		return;
+	}
+	if (droid.player === CAM_HUMAN_PLAYER)
+	{
+		// inform the user about power (and the need to build an oil derrick)
+		camCallOnce("__cam1A_doNeedPowerTopics");
+	}
+}
+
+function doAddHQGuideTopic()
+{
+	addGuideTopic("wz2100::structures::hq", SHOWTOPIC_FIRSTADD);
 }
 
 function eventStartLevel()
@@ -280,4 +354,6 @@ function eventStartLevel()
 			templates: [ cTempl.bjeep, cTempl.bloke, cTempl.trike, cTempl.bloke ]
 		},
 	});
+
+	queue("doAddHQGuideTopic", camSecondsToMilliseconds(3));
 }
