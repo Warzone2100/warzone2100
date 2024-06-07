@@ -311,7 +311,6 @@ DROID *getDesignatorAttackingObject(int player, BASE_OBJECT *target)
 		: nullptr;
 }
 
-
 // update the source experience after a target is damaged/destroyed
 static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 {
@@ -336,14 +335,15 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		ASSERT_OR_RETURN(, experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
 
-		psDroid->experience += experienceInc;
+		droidIncreaseExperience(psDroid, experienceInc);
+
 		cmdDroidUpdateExperience(psDroid, experienceInc);
 
 		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
 		if (psSensor
 		    && psSensor->type == OBJ_DROID)
 		{
-			((DROID *)psSensor)->experience += experienceInc;
+			droidIncreaseExperience((DROID *)psSensor, experienceInc);
 		}
 	}
 	else if (psObj->psSource->type == OBJ_STRUCTURE)

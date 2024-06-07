@@ -2370,6 +2370,21 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 	return count;
 }
 
+// Increase the experience of a droid (and handle events, if needed).
+void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc)
+{
+	int startingDroidRank = getDroidLevel(psDroid);
+
+	psDroid->experience += experienceInc;
+
+	int finalDroidRank = getDroidLevel(psDroid);
+	if (startingDroidRank != finalDroidRank)
+	{
+		// Trigger new event - unit rank increased
+		triggerEventDroidRankGained(psDroid, finalDroidRank);
+	}
+}
+
 // Get the name of a droid from it's DROID structure.
 //
 const char *droidGetName(const DROID *psDroid)
