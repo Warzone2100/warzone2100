@@ -74,9 +74,20 @@ jobs:
           CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
-      - name: Cleanup untranslated .po files
+      - name: Cleanup .po files
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         run: |
+          # 1.) Use msgmerge (with identical settings to WZ's po/CMakeLists.txt) to fix up some potential .po formatting differences
+          # For warzone2100.pot:
+          find po/ -name '*.po' -type f -maxdepth 1 \
+            -exec \
+            msgmerge '--quiet' '--no-wrap' '--width=1' '--update' '{}' 'po/warzone2100.pot' ';'
+          # For warzone2100_guide.pot:
+          find po/guide -name '*.po' -type f -maxdepth 1 \
+            -exec \
+            msgmerge '--quiet' '--no-wrap' '--width=1' '--update' '{}' 'po/guide/warzone2100_guide.pot' ';'
+
+          # 2.) Cleanup untranslated .po files
           # For warzone2100.pot:
           find po -name '*.po' -type f -maxdepth 1 \
             -exec \
