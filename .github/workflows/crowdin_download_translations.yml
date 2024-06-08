@@ -79,9 +79,10 @@ jobs:
           CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
-      - name: Temporary debug output
+      - name: Fixup ownership
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         run: |
+          sudo chown -R $(whoami) ./po
           cd po
           ls -al
 
