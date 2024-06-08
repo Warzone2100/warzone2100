@@ -84,13 +84,13 @@ jobs:
         run: |
           # 1.) Use msgmerge (with identical settings to WZ's po/CMakeLists.txt) to fix up some potential .po formatting differences
           # For warzone2100.pot:
-          find po/ -name '*.po' -type f -maxdepth 1 \
+          find po -name '*.po' -type f -maxdepth 1 \
             -exec \
-            msgmerge '--quiet' '--no-wrap' '--width=1' '--update' '{}' 'po/warzone2100.pot' ';'
+            msgmerge '--no-wrap' '--width=1' '--output-file={}' '{}' 'po/warzone2100.pot' ';'
           # For warzone2100_guide.pot:
           find po/guide -name '*.po' -type f -maxdepth 1 \
             -exec \
-            msgmerge '--quiet' '--no-wrap' '--width=1' '--update' '{}' 'po/guide/warzone2100_guide.pot' ';'
+            msgmerge '--no-wrap' '--width=1' '--output-file={}' '{}' 'po/guide/warzone2100_guide.pot' ';'
 
           # 2.) Cleanup untranslated .po files
           # For warzone2100.pot:
