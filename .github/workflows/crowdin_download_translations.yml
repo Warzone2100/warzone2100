@@ -74,6 +74,18 @@ jobs:
           CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
+      - name: Cleanup untranslated .po files
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        run: |
+          # For warzone2100.pot:
+          find po -name '*.po' -type f \
+            -exec \
+            .ci/githubactions/check_po_base_unchanged.sh 'po/warzone2100.pot' '{}' ';' | xargs -r0 -I {} rm "{}"
+          # For warzone2100_guide.pot:
+          find po/guide -name '*.po' -type f \
+            -exec \
+            .ci/githubactions/check_po_base_unchanged.sh 'po/guide/warzone2100_guide.pot' '{}' ';' | xargs -r0 -I {} rm "{}"
+
       - name: Publish any changes to translations to l10n_master branch
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         id: pushupdates
