@@ -62,6 +62,7 @@ data/base/script/campaign/libcampaign_includes/base.js
 data/base/script/campaign/libcampaign_includes/debug.js
 data/base/script/campaign/libcampaign_includes/events.js
 data/base/script/campaign/libcampaign_includes/group.js
+data/base/script/campaign/libcampaign_includes/guide.js
 data/base/script/campaign/libcampaign_includes/hook.js
 data/base/script/campaign/libcampaign_includes/misc.js
 data/base/script/campaign/libcampaign_includes/nexus.js
@@ -483,6 +484,7 @@ src/raycast.cpp
 src/research.cpp
 src/scores.cpp
 src/screens/chatscreen.cpp
+src/screens/guidescreen.cpp
 src/screens/helpscreen.cpp
 src/screens/joiningscreen.cpp
 src/screens/netpregamescreen.cpp
@@ -518,5 +520,6 @@ src/wrappers.cpp
 src/wzapi.cpp
 src/wzcrashhandlingproviders.cpp
 src/wzjsonhelpers.cpp
+src/wzjsonlocalizedstring.cpp
 src/wzpropertyproviders.cpp
 src/wzscriptdebug.cpp
