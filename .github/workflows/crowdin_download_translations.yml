@@ -89,7 +89,7 @@ jobs:
           echo "::endgroup::"
           # Add untracked (new) files:
           echo "::group::Add untracked files"
-          git ls-files --others --exclude-standard | xargs -0 git add
+          git ls-files -z --others --exclude-standard | xargs -0 git add
           echo "::endgroup::"
           echo "Debug output:"
           git status
