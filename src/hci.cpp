@@ -1196,6 +1196,8 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 		}
 	}
 
+	auto startingIntMode = intMode;
+
 	switch (intMode)
 	{
 	case INT_DESIGN:
@@ -1236,7 +1238,10 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 	{
 		intRemoveMissionResultNoAnim();
 	}
-	intRemoveDesign();
+	if (startingIntMode == INT_DESIGN)
+	{
+		intRemoveDesign();
+	}
 	intHidePowerBar();
 
 	if (interfaceController)
