@@ -78,11 +78,11 @@ jobs:
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         run: |
           # For warzone2100.pot:
-          find po -name '*.po' -type f \
+          find po -name '*.po' -type f -maxdepth 1 \
             -exec \
             .ci/githubactions/check_po_base_unchanged.sh 'po/warzone2100.pot' '{}' ';' | xargs -r0 -I {} rm "{}"
           # For warzone2100_guide.pot:
-          find po/guide -name '*.po' -type f \
+          find po/guide -name '*.po' -type f -maxdepth 1 \
             -exec \
             .ci/githubactions/check_po_base_unchanged.sh 'po/guide/warzone2100_guide.pot' '{}' ';' | xargs -r0 -I {} rm "{}"
 
