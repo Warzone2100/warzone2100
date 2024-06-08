@@ -475,5 +475,5 @@ function cam_eventResearched(research, structure, player)
 	}
 	// only pass the research in if it was completed by a structure (not if given by an API call, in which structure would be null)
 	//__camProcessResearchGatedGuideTopics((researchedByStruct) ? research : null);
-	_camProcessResearchGatedGuideTopics(research);
+	__camProcessResearchGatedGuideTopics(research);
 }
