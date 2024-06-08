@@ -23,6 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: crowdin_sync
     steps:
+      - name: Install gettext
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: sudo apt-get -y install gettext
+      
       # Get a token using a GitHub App that has appropriate permissions *and* will trigger subsequent CI workflows
       # (Since we want to run normal CI passes to catch translation string format errors that break builds)
       - name: Get GH App Token
