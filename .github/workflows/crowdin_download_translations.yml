@@ -93,11 +93,11 @@ jobs:
           # For warzone2100.pot:
           find po -name '*.po' -type f -maxdepth 1 \
             -exec \
-            msgmerge '--no-wrap' '--width=1' '--update' '{}' 'po/warzone2100.pot' ';'
+            msgmerge '--no-wrap' '--width=1' '--output-file={}' '{}' 'po/warzone2100.pot' ';'
           # For warzone2100_guide.pot:
           find po/guide -name '*.po' -type f -maxdepth 1 \
             -exec \
-            msgmerge '--no-wrap' '--width=1' '--update' '{}' 'po/guide/warzone2100_guide.pot' ';'
+            msgmerge '--no-wrap' '--width=1' '--output-file={}' '{}' 'po/guide/warzone2100_guide.pot' ';'
 
           # 2.) Cleanup untranslated .po files
           # For warzone2100.pot:
