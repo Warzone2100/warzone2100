@@ -488,6 +488,10 @@ jobs:
           $env:PATH = "${env:WZ_MINGW_ENV_PATH}";
           Write-Host "env:PATH=`"${env:PATH}`""
         }
+        else {
+          # Workaround: https://github.com/actions/runner-images/issues/10004
+          $env:CXXFLAGS = "${env:CXXFLAGS} /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+        }
 
         & "${env:WZ_FULL_POWERSHELL_PATH}" "${env:WZ_REPO_PATH}\get-dependencies_win.ps1" -VCPKG_BUILD_TYPE "release"
     - name: Clean vcpkg temp files
@@ -520,6 +524,10 @@ jobs:
           }
         }
         $env:PATH = "${env:PATH};${env:WZ_FULL_MSGMERGE_PATH}";
+
+        # Workaround: https://github.com/actions/runner-images/issues/10004
+        $env:CXXFLAGS = "${env:CXXFLAGS} /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+
         # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" ${ADDITIONAL_CMAKE_PARAMS} -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
@@ -569,6 +577,9 @@ jobs:
       env:
         CXXFLAGS: '/MP'
       run: |
+        # Workaround: https://github.com/actions/runner-images/issues/10004
+        $env:CXXFLAGS = "${env:CXXFLAGS} /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\msvc.json"
         & cmake --build . --config Release --target warzone2100 -- /m
         echo "::remove-matcher owner=msvc::"

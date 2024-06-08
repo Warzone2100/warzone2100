@@ -6,6 +6,7 @@ vcpkg_from_github(
     HEAD_REF master
     PATCHES
         001-mingw.patch
+        002-gha-msvc-workaround.patch
 )
 
 set(_additional_options)
