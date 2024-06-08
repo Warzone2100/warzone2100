@@ -8,6 +8,7 @@ on:
     paths:
       # Should match the source paths in crowdin.yml
       - 'po/warzone2100.pot'
+      - 'po/guide/warzone2100_guide.pot'
       - 'pkg/nsis/i18n/win_installer_base.nsh'
   workflow_dispatch:
 
