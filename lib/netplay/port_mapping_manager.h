@@ -115,6 +115,7 @@ private:
 	// Use `TimePoint::max()` as a special sentinel value to indicate that the discovery isn't started yet.
 	// Once the discovery process commences, this will be set to the value of `now() + 10s`.
 	TimePoint deadline_ = TimePoint::max();
+	bool isInit_ = false;
 	DiscoveryStatus status_ = DiscoveryStatus::NOT_STARTED;
 	std::string discoveredIPaddress_;
 	uint16_t discoveredPort_ = 0;

@@ -71,34 +71,55 @@ PortMappingManager::PortMappingManager()
 
 void PortMappingManager::init()
 {
+	if (isInit_)
+	{
+		return;
+	}
 	plum_config_t config;
 	memset(&config, 0, sizeof(config));
 	config.log_level = PLUM_LOG_LEVEL_INFO;
 	config.log_callback = &PlumLogCallback;
-	plum_init(&config);
+	if (plum_init(&config) == PLUM_ERR_SUCCESS)
+	{
+		isInit_ = true;
+	}
 }
 
 void PortMappingManager::shutdown()
 {
+	if (!isInit_)
+	{
+		return;
+	}
 	plum_cleanup();
-	status_ = DiscoveryStatus::NOT_STARTED;
+	{
+		const std::lock_guard<std::mutex> guard {mtx_};
+		status_ = DiscoveryStatus::NOT_STARTED;
+		callbacks_.clear();
+	}
 	// Request the monitoring thread to stop and wait for it to join.
 	stop_requested_.store(true, std::memory_order_release);
 	if (monitoring_thread_.joinable())
 	{
 		monitoring_thread_.join();
 	}
+	isInit_ = false;
 }
 
 bool PortMappingManager::create_port_mapping(uint16_t port)
 {
+	if (mapping_id_ != PLUM_ERR_INVALID)
+	{
+		// already have a mapping - currently, multiple mappings are not supported
+		return false;
+	}
 	plum_mapping_t m;
 	memset(&m, 0, sizeof(m));
 	m.protocol = PLUM_IP_PROTOCOL_TCP;
 	m.internal_port = port;
 
 	mapping_id_ = plum_create_mapping(&m, PlumMappingCallback);
-	const bool status = mapping_id_ == PLUM_ERR_SUCCESS;
+	const bool status = mapping_id_ >= 0;
 	if (!status)
 	{
 		return false;
@@ -109,7 +130,13 @@ bool PortMappingManager::create_port_mapping(uint16_t port)
 
 bool PortMappingManager::destroy_active_mapping()
 {
-	return plum_destroy_mapping(mapping_id_) == PLUM_ERR_SUCCESS;
+	if (mapping_id_ == PLUM_ERR_INVALID)
+	{
+		return true;
+	}
+	auto result = plum_destroy_mapping(mapping_id_);
+	mapping_id_ = PLUM_ERR_INVALID;
+	return result == PLUM_ERR_SUCCESS;
 }
 
 PortMappingManager::DiscoveryStatus PortMappingManager::status() const
