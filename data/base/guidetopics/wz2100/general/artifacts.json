@@ -8,7 +8,9 @@
 		"stat": "Crate"
 	},
 	"contents": [
-		"In the campaign, you can collect Artifacts from enemies and research them. Artifacts are small white boxes with a green indicator above them, and can be collected by any unit by moving close to it.",
+		"In the campaign, you can collect Artifacts from enemies and research them.",
+		"",
+		"Artifacts are small white boxes with a green indicator above, and can be collected by moving any unit close enough.",
 		"",
 		"Collecting artifacts will open up new research topics for your Research Center(s). You'll want to research these!"
 	],
