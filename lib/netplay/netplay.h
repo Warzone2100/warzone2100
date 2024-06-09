@@ -540,4 +540,6 @@ private:
 	uint32_t index;
 };
 
+void NETacceptIncomingConnections();
+
 #endif
