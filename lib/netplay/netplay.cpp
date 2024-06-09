@@ -3900,6 +3900,8 @@ static void NETcloseTempSocket(unsigned int i)
 // Host a game with a given name and player name. & 4 user game flags
 static void NETallowJoining()
 {
+	ASSERT_HOST_ONLY(return);
+
 	unsigned int i;
 	int32_t result;
 	bool connectFailed = true;
@@ -3909,7 +3911,6 @@ static void NETallowJoining()
 	{
 		return;
 	}
-	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
 
 	bool bFirstTimeConnect = NETregisterServer(WZ_SERVER_CONNECT);
 	if (bFirstTimeConnect)
