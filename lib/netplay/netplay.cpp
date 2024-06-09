@@ -3793,6 +3793,12 @@ bool NETregisterServer(int state)
 //  Check player "slots" & update player count if needed.
 void NETfixPlayerCount()
 {
+	ASSERT_HOST_ONLY(return);
+	if (!allow_joining)
+	{
+		return;
+	}
+
 	int maxPlayers = game.maxPlayers;
 	unsigned playercount = 0;
 	for (int index = 0; index < game.maxPlayers; ++index)
@@ -3813,7 +3819,7 @@ void NETfixPlayerCount()
 
 	SpectatorInfo latestSpecInfo = SpectatorInfo::currentNetPlayState();
 
-	if (allow_joining && NetPlay.isHost && (NetPlay.playercount != playercount || gamestruct.desc.dwMaxPlayers != maxPlayers || SpectatorInfo::fromUint32(gamestruct.desc.dwUserFlags[1]) != latestSpecInfo))
+	if (NetPlay.playercount != playercount || gamestruct.desc.dwMaxPlayers != maxPlayers || SpectatorInfo::fromUint32(gamestruct.desc.dwUserFlags[1]) != latestSpecInfo)
 	{
 		debug(LOG_NET, "Updating player count from %d/%d to %d/%d", (int)NetPlay.playercount, gamestruct.desc.dwMaxPlayers, playercount, maxPlayers);
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount = playercount;
