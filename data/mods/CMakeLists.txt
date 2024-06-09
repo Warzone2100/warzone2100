@@ -125,7 +125,7 @@ function(PACKAGE_ADDON_CAMPAIGN INPUT_PATH OUTPUT_PATH)
 		VERBATIM
 	)
 	_MODINFO_CREATE_BASE_TARGET()
-	_MODINFO_JSON_GET_UNIQUE_TARGET_NAME(modinfo uniqueTargetName)
+	set(uniqueTargetName "staging_mods_campaign_${_input_folder_name}")
 	add_custom_target(${uniqueTargetName} ALL
 		DEPENDS ${_output_files_list}
 	)
