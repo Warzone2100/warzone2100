@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100_guide\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-09 15:34+0000\n"
+"POT-Creation-Date: 2024-06-09 15:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,15 +24,19 @@ msgid "Artifacts"
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-artifacts.txt:4
-msgid "In the campaign, you can collect Artifacts from enemies and research them."
+msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-artifacts.txt:5
-msgid "Artifacts are small white boxes with a green indicator above, and can be collected by moving any unit close enough."
+msgid "These will unlock valuable technologies that you can research in a Research Facility."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-artifacts.txt:6
-msgid "Collecting artifacts will open up new research topics for your Research Facilities. You'll want to research these!"
+msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
+msgstr ""
+
+#: po/guide/extracted/wz2100-general-artifacts.txt:7
+msgid "All artifacts must be picked up as part of each level's victory conditions."
 msgstr ""
 
 #. TRANSLATORS:
@@ -114,7 +118,7 @@ msgid "Intelligence Display"
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-intelmap.txt:4
-msgid "The Intelligence Display contains your mission objective in Campaign missions, and messages describing the technology you have researched."
+msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-intelmap.txt:5
