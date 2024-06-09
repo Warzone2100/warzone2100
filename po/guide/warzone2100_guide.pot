@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100_guide\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-08 14:53+0000\n"
+"POT-Creation-Date: 2024-06-09 02:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,10 +24,14 @@ msgid "Artifacts"
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-artifacts.txt:4
-msgid "In the campaign, you can collect Artifacts from enemies and research them. Artifacts are small white boxes with a green indicator above them, and can be collected by any unit by moving close to it."
+msgid "In the campaign, you can collect Artifacts from enemies and research them."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-artifacts.txt:5
+msgid "Artifacts are small white boxes with a green indicator above, and can be collected by moving any unit close enough."
+msgstr ""
+
+#: po/guide/extracted/wz2100-general-artifacts.txt:6
 msgid "Collecting artifacts will open up new research topics for your Research Center(s). You'll want to research these!"
 msgstr ""
 
@@ -320,7 +324,7 @@ msgid "Command Center"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-hq.txt:4
-msgid "The command center is the headquarters of your base."
+msgid "The Command Center is the headquarters of your base."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-hq.txt:5
@@ -786,7 +790,7 @@ msgid "Experience & Ranks"
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-experience.txt:4
-msgid "Units gain experience levels when they successfully dispatch enemies."
+msgid "Units gain experience when they successfully dispatch enemies."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-experience.txt:5
@@ -798,7 +802,7 @@ msgid "An icon displaying a unit’s rank is displayed next to the unit’s heal
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-experience.txt:7
-msgid "Units with higher experience levels can make all the difference in a battle!"
+msgid "Units with higher experience levels can make all the difference in battle!"
 msgstr ""
 
 #. TRANSLATORS:
