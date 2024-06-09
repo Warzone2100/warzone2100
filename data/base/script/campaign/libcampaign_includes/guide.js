@@ -136,7 +136,7 @@ function __camEnableGuideTopics()
 		addGuideTopic("wz2100::general::power");
 
 		addGuideTopic("wz2100::structures::hq");
-		addGuideTopic("wz2100::structures::researchcenter");
+		addGuideTopic("wz2100::structures::researchfacility");
 		addGuideTopic("wz2100::structures::oilderrick");
 		addGuideTopic("wz2100::structures::powergenerator");
 		addGuideTopic("wz2100::structures::rallypoint");

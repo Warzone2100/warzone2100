@@ -1,16 +1,16 @@
 {
 	"type": "wz2100.guidetopic.v1",
-	"id": "wz2100::structures::researchcenter",
-	"title": "Research Center",
+	"id": "wz2100::structures::researchfacility",
+	"title": "Research Facility",
 	"visual": {
 		"stat": {
 			"id": "A0ResearchFacility"
 		}
 	},
 	"contents": [
-		"A research center is used (and required) to research new technologies.",
+		"A Research Facility is used (and required) to research new technologies.",
 		"",
-		"Each research center can research one technology at a time."
+		"Each Research Facility can research one technology at a time."
 	],
 	"links": [
 		"wz2100::general::researching",

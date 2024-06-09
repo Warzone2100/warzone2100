@@ -27,9 +27,9 @@ function __cam1A_doAddFactoryBuiltTopics()
 	addGuideTopic("wz2100::units::building", SHOWTOPIC_FIRSTADD);
 }
 
-function __cam1A_doAddResearchCenterBuiltTopics()
+function __cam1A_doAddResearchFacilityBuiltTopics()
 {
-	addGuideTopic("wz2100::structures::researchcenter", SHOWTOPIC_FIRSTADD);
+	addGuideTopic("wz2100::structures::researchfacility", SHOWTOPIC_FIRSTADD);
 }
 
 function __cam1A_doAddOilDerrickBuiltTopics()
@@ -131,7 +131,7 @@ function eventStructureBuilt(structure, droid)
 		}
 		else if (structure.stattype === RESEARCH_LAB)
 		{
-			queue("__cam1A_doAddResearchCenterBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
+			queue("__cam1A_doAddResearchFacilityBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
 		}
 		else if (structure.stattype === RESOURCE_EXTRACTOR)
 		{

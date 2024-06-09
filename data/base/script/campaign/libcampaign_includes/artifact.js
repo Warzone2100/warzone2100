@@ -245,7 +245,7 @@ function __camPickupArtifact(artifact)
 		enableResearch(ai.tech);
 	}
 
-	addGuideTopic("wz2100::structures::researchcenter");
+	addGuideTopic("wz2100::structures::researchfacility");
 	addGuideTopic("wz2100::general::researching");
 	addGuideTopic("wz2100::general::artifacts", SHOWTOPIC_FIRSTADD);
 

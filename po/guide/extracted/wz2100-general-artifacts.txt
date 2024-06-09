@@ -3,4 +3,4 @@
 _("Artifacts")
 _("In the campaign, you can collect Artifacts from enemies and research them.")
 _("Artifacts are small white boxes with a green indicator above, and can be collected by moving any unit close enough.")
-_("Collecting artifacts will open up new research topics for your Research Center(s). You'll want to research these!")
+_("Collecting artifacts will open up new research topics for your Research Facilities. You'll want to research these!")
