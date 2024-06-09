@@ -2954,6 +2954,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 	if (NetPlay.isHost)
 	{
 		NETfixPlayerCount();
+		NETacceptIncomingConnections();
 		NETallowJoining();
 		lobbyConnectionHandler.run();
 		NETcheckPlayers();		// make sure players are still alive & well
@@ -3941,64 +3942,6 @@ static void NETallowJoining()
 		free(NetPlay.MOTD);
 		NetPlay.MOTD = nullptr;
 		NetPlay.ShowedMOTD = true;
-	}
-
-	if (tmp_socket_set == nullptr)
-	{
-		// initialize server socket set
-		// FIXME: why is this not done in NETinit()?? - Per
-		tmp_socket_set = allocSocketSet();
-		if (tmp_socket_set == nullptr)
-		{
-			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
-			return;
-		}
-		// FIXME: I guess initialization of allowjoining is here now... - FlexCoral
-		for (auto& tmpState : tmp_connectState)
-		{
-			tmpState.reset();
-		}
-		tmp_pendingIPs.clear();
-		// NOTE: Do *NOT* call tmp_badIPs.clear() here - we want to preserve it until quit
-	}
-
-	// Find the first empty socket slot
-	for (i = 0; i < MAX_TMP_SOCKETS; ++i)
-	{
-		if (tmp_socket[i] == nullptr)
-		{
-			break;
-		}
-	}
-	if (i == MAX_TMP_SOCKETS)
-	{
-		debug(LOG_NET, "all temp sockets are currently used up!");
-	}
-
-	// See if there's an incoming connection (if we have space to handle it!)
-	if (i < MAX_TMP_SOCKETS && tmp_socket[i] == nullptr // Make sure that we're not out of sockets
-	    && (tmp_socket[i] = socketAccept(server_listen_socket)) != nullptr)
-	{
-		NETinitQueue(NETnetTmpQueue(i));
-		SocketSet_AddSocket(*tmp_socket_set, tmp_socket[i]);
-
-		std::string rIP = getSocketTextAddress(*tmp_socket[i]);
-		connectFailed = quickRejectConnection(rIP);
-		tmp_pendingIPs[rIP]++;
-
-		std::string rIPLogEntry = "Incoming connection from:";
-		rIPLogEntry.append(rIP);
-		NETlogEntry(rIPLogEntry.c_str(), SYNC_FLAG, i);
-
-		tmp_connectState[i].ip = rIP;
-		tmp_connectState[i].connectTime = std::chrono::steady_clock::now();
-		tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::PendingInitialConnect;
-
-		if (bEnableTCPNoDelay)
-		{
-			// Enable TCP_NODELAY
-			socketSetTCPNoDelay(*tmp_socket[i], true);
-		}
 	}
 
 	if (checkSockets(*tmp_socket_set, NET_READ_TIMEOUT) > 0)
@@ -5180,4 +5123,82 @@ const char *messageTypeToString(unsigned messageType_)
 	// End of replay messages.
 	}
 	return "(UNUSED)";
+}
+
+
+void NETacceptIncomingConnections()
+{
+	ASSERT_HOST_ONLY(return);
+	if (!allow_joining)
+	{
+		return;
+	}
+
+	size_t i = 0;
+	// Find the first empty socket slot
+	for (; i < MAX_TMP_SOCKETS; ++i)
+	{
+		if (tmp_socket[i] == nullptr)
+		{
+			break;
+		}
+	}
+	if (i == MAX_TMP_SOCKETS)
+	{
+		debug(LOG_NET, "all temp sockets are currently used up!");
+		return;
+	}
+
+	// See if there's an incoming connection
+	tmp_socket[i] = socketAccept(server_listen_socket);
+	if (!tmp_socket[i])
+	{
+		return;
+	}
+	const std::string rIP = getSocketTextAddress(*tmp_socket[i]);
+	if (quickRejectConnection(rIP))
+	{
+		debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void*>(tmp_socket[i]), __LINE__);
+		NETcloseTempSocket(i);
+		return;
+	}
+
+	// First-time initialize `tmp_socket_set` if needed.
+	if (tmp_socket_set == nullptr)
+	{
+		// initialize temporary server socket set
+		// FIXME: why is this not done in NETinit()?? - Per
+		tmp_socket_set = allocSocketSet();
+		if (tmp_socket_set == nullptr)
+		{
+			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
+			return;
+		}
+		// FIXME: I guess initialization of allowjoining is here now... - FlexCoral
+		for (auto& tmpState : tmp_connectState)
+		{
+			tmpState.reset();
+		}
+		tmp_pendingIPs.clear();
+		// NOTE: Do *NOT* call tmp_badIPs.clear() here - we want to preserve it until quit
+	}
+
+	NETinitQueue(NETnetTmpQueue(i));
+	SocketSet_AddSocket(*tmp_socket_set, tmp_socket[i]);
+
+	tmp_pendingIPs[rIP]++;
+
+	std::string rIPLogEntry = "Incoming connection from:";
+	rIPLogEntry.append(rIP);
+	NETlogEntry(rIPLogEntry.c_str(), SYNC_FLAG, i);
+
+	tmp_connectState[i].ip = rIP;
+	tmp_connectState[i].connectTime = std::chrono::steady_clock::now();
+	tmp_connectState[i].connectState = TmpSocketInfo::TmpConnectState::PendingInitialConnect;
+
+	if (bEnableTCPNoDelay)
+	{
+		// Enable TCP_NODELAY
+		socketSetTCPNoDelay(*tmp_socket[i], true);
+	}
 }
