@@ -8,11 +8,13 @@
 		"stat": "Crate"
 	},
 	"contents": [
-		"In the campaign, you can collect Artifacts from enemies and research them.",
+		"As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units).",
 		"",
-		"Artifacts are small white boxes with a green indicator above, and can be collected by moving any unit close enough.",
+		"These will unlock valuable technologies that you can research in a Research Facility.",
 		"",
-		"Collecting artifacts will open up new research topics for your Research Facilities. You'll want to research these!"
+		"Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough.",
+		"",
+		"All artifacts must be picked up as part of each level's victory conditions."
 	],
 	"links": [
 		"wz2100::structures::researchfacility"
