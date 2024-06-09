@@ -23,7 +23,7 @@
 		}
 	],
 	"contents": [
-		"Power Generators, Factories, and Research Centers all can have modules applied (once you've discovered and researched them).",
+		"Power Generators, Factories, and Research Facilities all can have modules applied (once you've discovered and researched them).",
 		"",
 		"Modules upgrade the structure, and may:",
 		"- Improve the speed of power generation / building units / research",
@@ -37,6 +37,6 @@
 		"wz2100::structures::powergenerator",
 		"wz2100::structures::factory",
 		"wz2100::structures::vtolfactory",
-		"wz2100::structures::researchcenter"
+		"wz2100::structures::researchfacility"
 	]
 }

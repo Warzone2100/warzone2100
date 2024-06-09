@@ -7,15 +7,15 @@
 		"retButId": "RESEARCH"
 	},
 	"contents": [
-		"Researching technologies is accomplished using Research Centers.",
+		"Researching technologies is accomplished using Research Facilities.",
 		"",
 		"When you open the Research menu, a Fast Find menu with two rows will appear at the bottom center of the screen.",
-		"All of your research centers are shown on the second row. Clicking a research center will move the camera to it.",
+		"All of your Research Facilities are shown on the second row. Clicking a Research Facility will move the camera to it.",
 		"",
-		"Clicking the blank icon above a research center will show a set of research topics on the left side of the screen.",
+		"Clicking the blank icon above a Research Facility will show a set of research topics on the left side of the screen.",
 		"You can hold the mouse over an icon to see its name.",
 		"",
-		"Click an icon to start researching it. Each research center can research one distinct technology at a time.",
+		"Click an icon to start researching it. Each Research Facility can research one distinct technology at a time.",
 		"",
 		"While a facility is researching, it displays a bar in its Fast Find area.",
 		"",
@@ -27,7 +27,7 @@
 		"- Enable the research of additional technologies"
 	],
 	"links": [
-		"wz2100::structures::researchcenter",
+		"wz2100::structures::researchfacility",
 		"wz2100::general::artifacts",
 		"wz2100::general::commandpanel"
 	]

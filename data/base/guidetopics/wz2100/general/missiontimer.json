@@ -17,7 +17,7 @@
 		"(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
 	],
 	"links": [
-		"wz2100::structures::researchcenter",
+		"wz2100::structures::researchfacility",
 		"wz2100::unitorders::recycling"
 	]
 }

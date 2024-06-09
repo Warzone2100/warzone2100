@@ -1,7 +1,7 @@
 // TRANSLATORS:
 // The guide topic title - please maintain original capitalization
 _("Structure Modules")
-_("Power Generators, Factories, and Research Centers all can have modules applied (once you've discovered and researched them).")
+_("Power Generators, Factories, and Research Facilities all can have modules applied (once you've discovered and researched them).")
 _("Modules upgrade the structure, and may:")
 _("- Improve the speed of power generation / building units / research")
 _("- Enable building heavier units (in the case of factories)")

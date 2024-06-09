@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100_guide\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-09 02:49+0000\n"
+"POT-Creation-Date: 2024-06-09 15:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgid "Artifacts are small white boxes with a green indicator above, and can be 
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-artifacts.txt:6
-msgid "Collecting artifacts will open up new research topics for your Research Center(s). You'll want to research these!"
+msgid "Collecting artifacts will open up new research topics for your Research Facilities. You'll want to research these!"
 msgstr ""
 
 #. TRANSLATORS:
@@ -173,7 +173,7 @@ msgid "Researching Technology"
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:4
-msgid "Researching technologies is accomplished using Research Centers."
+msgid "Researching technologies is accomplished using Research Facilities."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:5
@@ -181,11 +181,11 @@ msgid "When you open the Research menu, a Fast Find menu with two rows will appe
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:6
-msgid "All of your research centers are shown on the second row. Clicking a research center will move the camera to it."
+msgid "All of your Research Facilities are shown on the second row. Clicking a Research Facility will move the camera to it."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:7
-msgid "Clicking the blank icon above a research center will show a set of research topics on the left side of the screen."
+msgid "Clicking the blank icon above a Research Facility will show a set of research topics on the left side of the screen."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:8
@@ -193,7 +193,7 @@ msgid "You can hold the mouse over an icon to see its name."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:9
-msgid "Click an icon to start researching it. Each research center can research one distinct technology at a time."
+msgid "Click an icon to start researching it. Each Research Facility can research one distinct technology at a time."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:10
@@ -346,7 +346,7 @@ msgid "Structure Modules"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:4
-msgid "Power Generators, Factories, and Research Centers all can have modules applied (once you've discovered and researched them)."
+msgid "Power Generators, Factories, and Research Facilities all can have modules applied (once you've discovered and researched them)."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:5
@@ -443,16 +443,16 @@ msgstr ""
 
 #. TRANSLATORS:
 #. The guide topic title - please maintain original capitalization
-#: po/guide/extracted/wz2100-structures-researchcenter.txt:3
-msgid "Research Center"
+#: po/guide/extracted/wz2100-structures-researchfacility.txt:3
+msgid "Research Facility"
 msgstr ""
 
-#: po/guide/extracted/wz2100-structures-researchcenter.txt:4
-msgid "A research center is used (and required) to research new technologies."
+#: po/guide/extracted/wz2100-structures-researchfacility.txt:4
+msgid "A Research Facility is used (and required) to research new technologies."
 msgstr ""
 
-#: po/guide/extracted/wz2100-structures-researchcenter.txt:5
-msgid "Each research center can research one technology at a time."
+#: po/guide/extracted/wz2100-structures-researchfacility.txt:5
+msgid "Each Research Facility can research one technology at a time."
 msgstr ""
 
 #. TRANSLATORS:
@@ -480,7 +480,7 @@ msgid "Structures"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures.txt:4
-msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Centers that research new technologies."
+msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures.txt:5
