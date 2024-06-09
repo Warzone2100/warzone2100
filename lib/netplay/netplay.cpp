@@ -4034,8 +4034,7 @@ static void NETallowJoining()
 					NETaddSessionBanBadIP(tmp_connectState[i].ip);
 					connectFailed = true;
 				}
-
-				if (tmp_connectState[i].usedBuffer >= 8)
+				else if (tmp_connectState[i].usedBuffer >= 8)
 				{
 					// New clients send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
 					// Check these numbers with our own.
