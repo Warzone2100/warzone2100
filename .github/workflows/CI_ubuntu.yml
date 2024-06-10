@@ -352,29 +352,3 @@ jobs:
           fi
           docker pull getsentry/sentry-cli
           docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
-
-  # # NOTE: This uses qemu, and is much slower than a native ARM64 build
-  # ubuntu-20-04-gcc-arm64:
-  #   name: Ubuntu 20.04 (CMake) [GCC] [ARM64]
-  #   runs-on: ubuntu-latest
-  #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #     with:
-  #       fetch-depth: 0
-  #   - name: Prepare Git Repo for autorevision
-  #     run: cmake -P .ci/githubactions/prepare_git_repo.cmake
-  #   - name: Init Git Submodules
-  #     run: git submodule update --init --recursive
-  #   - name: Prep for multi-arch
-  #     run: |
-  #       sudo apt-get -u update && DEBIAN_FRONTEND=noninteractive sudo apt-get -y install qemu qemu-user-static
-  #       docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-  #   - name: Build the Docker image
-  #     run: |
-  #       docker build --build-arg UID=$UID -f docker/ubuntu-20.04/Dockerfile.arm64 -t ubuntu .
-  #   - name: CMake Configure
-  #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
-  #   - name: CMake Build
-  #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
-
