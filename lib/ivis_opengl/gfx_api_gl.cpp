@@ -3742,15 +3742,9 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLAD_GL_VERSION_2_0 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLAD_GL_VERSION_2_1 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLAD_GL_VERSION_3_0 ? "is" : "is NOT");
-	#ifdef GLAD_GL_VERSION_3_1
 		debug(LOG_3D, "  * OpenGL 3.1 %s supported!", GLAD_GL_VERSION_3_1 ? "is" : "is NOT");
-	#endif
-	#ifdef GLAD_GL_VERSION_3_2
 		debug(LOG_3D, "  * OpenGL 3.2 %s supported!", GLAD_GL_VERSION_3_2 ? "is" : "is NOT");
-	#endif
-	#ifdef GLAD_GL_VERSION_3_3
 		debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
-	#endif
 	#ifdef GLAD_GL_VERSION_4_0
 		debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
 	#endif
@@ -3783,6 +3777,15 @@ bool gl_context::initGLContext()
 	{
 		debug(LOG_POPUP, "OpenGL 3.0+ / OpenGL ES 3.0+ not supported! Please upgrade your drivers.");
 		return false;
+	}
+
+	if (!gles)
+	{
+		if (!GLAD_GL_VERSION_3_1)
+		{
+			// non-fatal pop-up, to warn about OpenGL < 3.1 (we may require 3.1+ in the future)
+			debug(LOG_POPUP, "OpenGL 3.1+ is not supported - Please upgrade your drivers or try a different graphics backend.");
+		}
 	}
 
 #else
