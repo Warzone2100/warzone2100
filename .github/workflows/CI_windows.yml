@@ -794,6 +794,10 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: 'src'
       - name: Prep Environment
         id: settings
         run: |
@@ -802,6 +806,7 @@ jobs:
           OUTPUTDIR="wz-${WZ_TARGET_ARCH}"
           echo "OUTPUTDIR=${OUTPUTDIR}" >> $GITHUB_ENV
           echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
+          echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Archive Artifact
         uses: actions/download-artifact@v4
         with:
@@ -846,11 +851,16 @@ jobs:
             echo "No SENTRY_AUTH_TOKEN - skipping"
             exit 0
           fi
-          docker pull getsentry/sentry-cli
-          echo "Uploading debug symbols"
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
-          echo "Uploading source bundles"
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --type sourcebundle -o warzone2100 -p warzone2100 "${WZ_SOURCEBUNDLES_DIR}"
+          # Download sentry-cli
+          echo "::group::Downloading sentry-cli ..."
+          cmake -P "${WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+          echo "Downloading sentry-cli ... Done"
+          echo "::endgroup::"
+          # Upload symbols
+          echo "::group::sentry-cli debug-files upload"
+          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          ./sentry-cli/sentry-cli debug-files upload --type sourcebundle -o warzone2100 -p warzone2100 "${WZ_SOURCEBUNDLES_DIR}"
+          echo "::endgroup::"
   trigger-updates-json:
     name: 'Trigger Info Update'
     permissions:
