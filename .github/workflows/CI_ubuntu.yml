@@ -315,6 +315,8 @@ jobs:
         include:
           - output-suffix: "ubuntu20.04"
             arch: "amd64"
+          - output-suffix: "ubuntu22.04"
+            arch: "amd64"
     name: 'Upload Debug Symbols (${{ matrix.matrix }})'
     permissions:
       contents: read
