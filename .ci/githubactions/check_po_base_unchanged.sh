@@ -3,9 +3,7 @@
 # Expects input of $1 base file and $2 .po file
 
 diff --ignore-trailing-space --ignore-blank-lines \
-     --ignore-matching-lines='^# .*' \
-     --ignore-matching-lines='^#$' \
-     --ignore-matching-lines='^#, fuzzy$' \
+     --ignore-matching-lines='^#' \
      --ignore-matching-lines='^".*\:.*"' \
      "$1" "$2" >/dev/null 2>&1
 
