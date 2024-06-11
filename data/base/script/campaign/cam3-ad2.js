@@ -102,8 +102,13 @@ function vtolAttack()
 {
 	if (camClassicMode())
 	{
-		const list = [cTempl.nxmheapv, cTempl.nxlpulsev];
-		camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined);
+		const list = [cTempl.nxlpulsev, cTempl.nxmheapv, cTempl.nxmheapv, cTempl.nxlpulsev];
+		const ext = {
+			limit: [2, 5, 5, 2], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
 	}
 	else
 	{

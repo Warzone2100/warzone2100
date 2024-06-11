@@ -76,7 +76,7 @@ camAreaEvent("phantomFacTrigger", function(droid)
 
 function setAlphaExp()
 {
-	const DROID_EXP = 512; //Hero rank.
+	const DROID_EXP = 2048; //Hero rank.
 	const alphaDroids = enumArea("alphaPit", MIS_ALPHA_PLAYER, false).filter((obj) => (
 		obj.type === DROID
 	));
@@ -96,7 +96,7 @@ function getAlphaUnitIDs()
 {
 	alphaUnitIDs = [];
 	const alphaDroids = enumArea("alphaPit", CAM_HUMAN_PLAYER, false).filter((obj) => (
-		obj.type === DROID && obj.experience === 512
+		obj.type === DROID && obj.experience > 0
 	));
 
 	for (let i = 0, l = alphaDroids.length; i < l; ++i)
@@ -234,9 +234,9 @@ function vtolAttack()
 {
 	if (camClassicMode())
 	{
-		const list = [cTempl.nxlscouv, cTempl.nxmtherv];
+		const list = [cTempl.nxlscouv, cTempl.nxlscouv, cTempl.nxmtherv];
 		const ext = {
-			limit: [2, 4], //paired with list array
+			limit: [2, 2, 4], //paired with list array
 			alternate: true,
 			altIdx: 0
 		};

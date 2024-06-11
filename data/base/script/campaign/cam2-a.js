@@ -322,8 +322,19 @@ function setUnitRank(transport)
 		const droid = droids[i];
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
-			const MOD = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR) ? 2 : 1;
-			setDroidExperience(droid, MOD * droidExp[mapRun ? 0 : (transporterIndex - 1)]);
+			let mod = 1;
+			if (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR)
+			{
+				if (camClassicMode())
+				{
+					mod = 4;
+				}
+				else
+				{
+					mod = 8;
+				}
+			}
+			setDroidExperience(droid, mod * droidExp[mapRun ? 0 : (transporterIndex - 1)]);
 		}
 	}
 }

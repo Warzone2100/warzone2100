@@ -133,7 +133,12 @@ function vtolAttack()
 	if (camClassicMode())
 	{
 		const list = [cTempl.colatv, cTempl.colatv];
-		camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter");
+		const ext = {
+			limit: [5, 5], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
 	}
 	else
 	{

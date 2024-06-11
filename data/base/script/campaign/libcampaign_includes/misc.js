@@ -681,9 +681,13 @@ function __camAiPowerReset()
 	}
 }
 
-function __camGetExpRangeLevel()
+function __camGetExpRangeLevel(useCommanderRanks)
 {
-	const ranks = {
+	if (!camDef(useCommanderRanks))
+	{
+		useCommanderRanks = false;
+	}
+	const unitRanks = {
 		rookie: 0,
 		green: 4,
 		trained: 8,
@@ -693,7 +697,19 @@ function __camGetExpRangeLevel()
 		elite: 128,
 		special: 256,
 		hero: 512,
-	}; //see brain.json
+	};
+	const commandRanks = {
+		rookie: 0,
+		green: (camClassicMode()) ? 8 : 16,
+		trained: (camClassicMode()) ? 16 : 48,
+		regular: (camClassicMode()) ? 32 : 128,
+		professional: (camClassicMode()) ? 64 : 256,
+		veteran: (camClassicMode()) ? 128 : 512,
+		elite: (camClassicMode()) ? 512 : 1024,
+		special: (camClassicMode()) ? 1024 : 1536,
+		hero: 2048,
+	};
+	const ranks = (useCommanderRanks) ? commandRanks : unitRanks;
 	let exp = [];
 
 	switch (__camExpLevel)
@@ -745,13 +761,9 @@ function camSetDroidExperience(droid)
 		return;
 	}
 
-	const expRange = __camGetExpRangeLevel();
+	const __CMD_RANK = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR);
+	const expRange = __camGetExpRangeLevel(__CMD_RANK);
 	let exp = expRange[camRand(expRange.length)];
-
-	if (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR)
-	{
-		exp = exp * 2;
-	}
 
 	setDroidExperience(droid, exp);
 }

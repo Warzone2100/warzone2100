@@ -55,6 +55,7 @@ function camNextLevel(nextLevel)
 //;;   The following data parameter fields are available:
 //;;   * `area` The landing zone to return to.
 //;;   * `message` The "Return to LZ" message ID. Optional.
+//;;   * `playLzReminder` Play and show the "Return to LZ" message. Optional, enabled by default.
 //;;   * `reinforcements` Reinforcements interval, in seconds.
 //;; For standard and offworld victory, some extra data parameters can be defined:
 //;; * `callback` A function callback to check for extra win/loss conditions. Return values are interpreted as follows:
@@ -434,9 +435,13 @@ function __camVictoryOffworld()
 				}
 				if (__camRTLZTicker % __REMIND_RETURN === 0)
 				{
-					const pos = camMakePos(lz);
-					playSound(cam_sounds.lz.returnToLZ, pos.x, pos.y, 0);
-					console(_("Return to LZ"));
+					const __USED_REMIND = camDef(__camVictoryData.playLzReminder);
+					if (!__USED_REMIND || (__USED_REMIND && __camVictoryData.playLzReminder))
+					{
+						const pos = camMakePos(lz);
+						playSound(cam_sounds.lz.returnToLZ, pos.x, pos.y, 0);
+						console(_("Return to LZ"));
+					}
 				}
 				++__camRTLZTicker;
 			}

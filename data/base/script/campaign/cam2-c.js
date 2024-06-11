@@ -15,7 +15,7 @@ const mis_collectiveRes = [
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF01", "R-Wpn-Howitzer-ROF01",
 	"R-Wpn-Howitzer-Damage07", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
-	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF02",
+	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage02", "R-Wpn-AAGun-ROF02",
 	"R-Wpn-AAGun-Accuracy01", "R-Struc-VTOLPad-Upgrade01"
 ];
 const mis_collectiveResClassic = [

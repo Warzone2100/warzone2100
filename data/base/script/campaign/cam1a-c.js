@@ -87,9 +87,10 @@ function sendTransport()
 	const position = camMakePos(mis_landingZoneList[index]);
 	switchLZ += 1;
 
-	// (2 or 3 or 4) pairs of each droid template.
+	// (2, 3, 4, or 5) pairs of each droid template.
 	// This emulates wzcam's droid count distribution.
-	const COUNT = [ 2, 3, 4, 4, 4, 4, 4, 4, 4 ][camRand(9)];
+	const unitDistribution = ((camClassicMode()) ? [2, 3, 4, 4, 4, 4, 4, 4, 4] : [4, 4, 4, 5, 5]);
+	const COUNT = unitDistribution[camRand(unitDistribution.length)];
 
 	const templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
 
@@ -98,8 +99,8 @@ function sendTransport()
 	{
 		const t = templates[camRand(templates.length)];
 		// two droids of each template
-		droids[droids.length] = t;
-		droids[droids.length] = t;
+		droids.push(t);
+		droids.push(t);
 	}
 
 	camSendReinforcement(CAM_NEW_PARADIGM, position, droids, CAM_REINFORCE_TRANSPORT, {

@@ -20,7 +20,7 @@
 		"weight": 10
 	},
 	"CyborgLegs": {
-		"buildPoints": 50,
+		"buildPoints": 10,
 		"buildPower": 10,
 		"deceleration": 450,
 		"hitpointPctOfBody": 50,
@@ -34,7 +34,7 @@
 		"weight": 100
 	},
 	"CyborgLegs02": {
-		"buildPoints": 50,
+		"buildPoints": 10,
 		"buildPower": 10,
 		"deceleration": 450,
 		"hitpointPctOfBody": 100,
@@ -48,7 +48,7 @@
 		"weight": 100
 	},
 	"CyborgLegs03": {
-		"buildPoints": 50,
+		"buildPoints": 10,
 		"buildPower": 10,
 		"deceleration": 450,
 		"hitpointPctOfBody": 150,
@@ -233,8 +233,8 @@
 		"weight": 550
 	},
 	"wheeled01": {
-		"buildPoints": 50,
-		"buildPower": 50,
+		"buildPoints": 25,
+		"buildPower": 25,
 		"designable": 1,
 		"hitpointPctOfBody": 100,
 		"id": "wheeled01",
@@ -243,11 +243,11 @@
 		"skidDeceleration": 350,
 		"speed": 175,
 		"type": "Wheeled",
-		"weight": 300
+		"weight": 250
 	},
 	"wheeled02": {
-		"buildPoints": 50,
-		"buildPower": 100,
+		"buildPoints": 25,
+		"buildPower": 75,
 		"designable": 1,
 		"hitpointPctOfBody": 200,
 		"id": "wheeled02",
@@ -256,11 +256,11 @@
 		"skidDeceleration": 350,
 		"speed": 175,
 		"type": "Wheeled",
-		"weight": 250
+		"weight": 200
 	},
 	"wheeled03": {
-		"buildPoints": 50,
-		"buildPower": 150,
+		"buildPoints": 25,
+		"buildPower": 125,
 		"designable": 1,
 		"hitpointPctOfBody": 300,
 		"id": "wheeled03",
@@ -269,6 +269,6 @@
 		"skidDeceleration": 350,
 		"speed": 175,
 		"type": "Wheeled",
-		"weight": 200
+		"weight": 150
 	}
 }

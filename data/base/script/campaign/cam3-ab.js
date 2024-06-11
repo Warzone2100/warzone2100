@@ -102,9 +102,9 @@ function vtolAttack()
 {
 	if (camClassicMode())
 	{
-		const list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv, cTempl.nxmheapv];
+		const list = [cTempl.nxmheapv, cTempl.nxmheapv, cTempl.nxmtherv];
 		const ext = {
-			limit: [2, 4, 2, 4], //paired with list array
+			limit: [4, 4, 5], //paired with list array
 			alternate: true,
 			altIdx: 0
 		};
