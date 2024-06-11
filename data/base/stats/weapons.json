@@ -1687,7 +1687,7 @@
 		"minRange": 128,
 		"minimumDamage": 33,
 		"missGfx": "fxmexp.PIE",
-		"model": "cy_rkt.PIE",
+		"model": "cy_tk.PIE",
 		"mountModel": "cybody.PIE",
 		"movement": "DIRECT",
 		"muzzleGfx": "FXLRocPd.PIE",
