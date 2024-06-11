@@ -36,19 +36,19 @@ var useHeavyReinforcement;
 function getDroidsForNPLZ(args)
 {
 	let lightAttackerLimit = 8;
-	let heavyAttackerLimit = 3;
+	let heavyAttackerLimit = (camClassicMode()) ? 3 : 6;
 	let unitTemplates;
 	const list = [];
 
 	if (difficulty === HARD)
 	{
 		lightAttackerLimit = 9;
-		heavyAttackerLimit = 4;
+		heavyAttackerLimit = (camClassicMode()) ? 4 : 7;
 	}
 	else if (difficulty === INSANE)
 	{
 		lightAttackerLimit = 10;
-		heavyAttackerLimit = 5;
+		heavyAttackerLimit = (camClassicMode()) ? 5 : 8;
 	}
 
 	if (useHeavyReinforcement)

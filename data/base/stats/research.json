@@ -1136,7 +1136,7 @@
 		"msgName": "RES_CYW_CN1",
 		"name": "Heavy Gunner Cyborg",
 		"requiredResearch": [
-			"R-Wpn-Cannon1Mk1",
+			"R-Wpn-Cannon3Mk1",
 			"R-Cyborg-Wpn-MG"
 		],
 		"researchPoints": 1500,
@@ -4770,14 +4770,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "Damage",
-				"value": 30
+				"value": 60
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 60
 			}
 		],
 		"statID": "QuadMg1AAGun",
@@ -4788,7 +4788,8 @@
 		"id": "R-Wpn-AAGun-Damage02",
 		"name": "AA HE Flak Mk2",
 		"requiredResearch": [
-			"R-Wpn-AAGun-Damage01"
+			"R-Wpn-AAGun-Damage01",
+			"R-Wpn-AAGun02"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -4798,14 +4799,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "Damage",
-				"value": 30
+				"value": 15
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 15
 			}
 		],
 		"statID": "QuadMg1AAGun",
@@ -4817,7 +4818,8 @@
 		"id": "R-Wpn-AAGun-Damage03",
 		"name": "AA HE Flak Mk3",
 		"requiredResearch": [
-			"R-Wpn-AAGun-Damage02"
+			"R-Wpn-AAGun-Damage02",
+			"R-Wpn-AAGun04"
 		],
 		"researchPoints": 8400,
 		"researchPower": 262,
@@ -4827,14 +4829,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "Damage",
-				"value": 30
+				"value": 15
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "A-A GUN",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 15
 			}
 		],
 		"statID": "QuadMg1AAGun",
@@ -4941,7 +4943,7 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-AAGun03",
-			"R-Wpn-AAGun-Damage02"
+			"R-Wpn-AAGun-Damage01"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,

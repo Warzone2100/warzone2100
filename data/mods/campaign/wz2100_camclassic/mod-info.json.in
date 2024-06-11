@@ -47,7 +47,7 @@
         {
             "id": "camClassic_slowProduction",
             "type": "bool",
-            "default": true,
+            "default": false,
             "displayName": {
                 "en": "Slow Factory Production"
             },
