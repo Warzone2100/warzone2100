@@ -298,13 +298,7 @@ jobs:
         path: '${{ steps.repo-tar.outputs.REPO_TAR_FILE }}'
 
   upload-debug-symbols:
-    strategy:
-      matrix:
-        include:
-          - arch: "x86_64"
-          - arch: "arm64"
-      fail-fast: false
-    name: 'Upload Debug Symbols (${{ matrix.arch }})'
+    name: 'Upload Debug Symbols'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -327,13 +321,15 @@ jobs:
       - name: Download Debug Symbols
         uses: actions/download-artifact@v4
         with:
-          name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
+          pattern: 'debugsymbols_linux_flatpak_*'
           path: ./dl-debug/symbols
+          merge-multiple: false
       - name: Download Additional Debug Files
         uses: actions/download-artifact@v4
         with:
-          name: 'debugdependencylibsnapshot_linux_flatpak_${{ matrix.arch }}'
+          pattern: 'debugdependencylibsnapshot_linux_flatpak_*'
           path: ./dl-debug/additional
+          merge-multiple: false
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: ./dl-debug
