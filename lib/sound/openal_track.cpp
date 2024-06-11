@@ -82,6 +82,10 @@ static ALCdevice *device = nullptr;
 static ALCcontext *context = nullptr;
 
 #if defined(ALC_SOFT_HRTF)
+# if defined(__EMSCRIPTEN__)
+typedef const ALCchar* (*LPALCGETSTRINGISOFT)(ALCdevice *device, ALCenum paramName, ALCsizei index);
+typedef ALCboolean (*LPALCRESETDEVICESOFT)(ALCdevice *device, const ALCint *attribs);
+# endif
 static LPALCGETSTRINGISOFT alcGetStringiSOFT = nullptr;
 static LPALCRESETDEVICESOFT alcResetDeviceSOFT = nullptr;
 #endif
