@@ -463,7 +463,7 @@ void kf_MakeMeHero()
 	{
 		if (psDroid->selected && (psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_SENSOR))
 		{
-			psDroid->experience = 8 * 65536 * 128;
+			psDroid->experience = 16 * 65536 * 128;
 		}
 		else if (psDroid->selected)
 		{
