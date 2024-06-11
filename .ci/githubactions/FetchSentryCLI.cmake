@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14...3.30)
+cmake_minimum_required(VERSION 3.19...3.30)
 
 set(sentry_cli_version "2.32.1") # Note: When updating, must also update all of the sentry_cli_dl_sha512 below!
 
@@ -38,5 +38,10 @@ endif()
 set(_output_fullpath "${CMAKE_CURRENT_BINARY_DIR}/sentry-cli/sentry-cli${_exe_suffix}")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/sentry-cli")
 file(DOWNLOAD "${sentry_cli_dl_url}" "${_output_fullpath}" SHOW_PROGRESS TLS_VERIFY ON EXPECTED_HASH SHA512=${sentry_cli_dl_sha512})
+file(CHMOD "${_output_fullpath}" FILE_PERMISSIONS
+	OWNER_EXECUTE OWNER_WRITE OWNER_READ
+	GROUP_EXECUTE GROUP_READ
+	WORLD_EXECUTE WORLD_READ
+)
 
 message(STATUS "Downloaded sentry-cli (${sentry_cli_version}) to: \"${_output_fullpath}\"")
