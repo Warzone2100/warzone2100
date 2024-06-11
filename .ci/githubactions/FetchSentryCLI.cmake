@@ -1,6 +1,11 @@
-cmake_minimum_required(VERSION 3.14...3.24)
+cmake_minimum_required(VERSION 3.14...3.30)
 
 set(sentry_cli_version "2.32.1") # Note: When updating, must also update all of the sentry_cli_dl_sha512 below!
+
+# Manually query the CMAKE_HOST_SYSTEM_PROCESSOR
+# See: https://gitlab.kitware.com/cmake/cmake/-/issues/25151
+cmake_host_system_information(RESULT CMAKE_HOST_SYSTEM_PROCESSOR QUERY OS_PLATFORM)
+message(STATUS "CMAKE_HOST_SYSTEM_PROCESSOR=${CMAKE_HOST_SYSTEM_PROCESSOR}")
 
 # Construct the appropriate URL based on the current platform
 set(sentry_cli_dl_url "")
@@ -30,14 +35,8 @@ else()
   message(FATAL_ERROR "Script does not currently support platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
-include(FetchContent)
-FetchContent_Populate(
-  sentry-cli
-  URL        "${sentry_cli_dl_url}"
-  URL_HASH   SHA512=${sentry_cli_dl_sha512}
-  DOWNLOAD_NAME "sentry-cli${_exe_suffix}"
-  DOWNLOAD_NO_EXTRACT TRUE
-  SOURCE_DIR sentry-cli
-)
+set(_output_fullpath "${CMAKE_CURRENT_BINARY_DIR}/sentry-cli/sentry-cli${_exe_suffix}")
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/sentry-cli")
+file(DOWNLOAD "${sentry_cli_dl_url}" "${_output_fullpath}" SHOW_PROGRESS TLS_VERIFY ON EXPECTED_HASH SHA512=${sentry_cli_dl_sha512})
 
-message(STATUS "Downloaded sentry-cli (${sentry_cli_version}) to: \"${CMAKE_CURRENT_BINARY_DIR}/sentry-cli/sentry-cli${_exe_suffix}\"")
+message(STATUS "Downloaded sentry-cli (${sentry_cli_version}) to: \"${_output_fullpath}\"")
