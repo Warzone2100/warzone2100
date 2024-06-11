@@ -560,6 +560,18 @@
                       </div>
                       <span class="text-secondary">Configures the memory limit for the game. Not all systems or browsers may support higher limits.</span>
                     </div>
+                    <div class="mb-3 small" id="launchOptionContainer_desktopPWA">
+                      <div class="row mb-1 align-items-center">
+                        <label for="launchOption_desktopPWA" class="col-sm-7">Web App Install Prompt:</label>
+                        <div class="col-sm-5">
+                          <select class="form-select form-select-sm" id="launchOption_desktopPWA" aria-label="Web App Install Prompt select" style="padding-top: 0.1rem;padding-bottom: 0.1rem;">
+                            <option value="hidden" selected>Hidden</option>
+                            <option value="available">Available</option>
+                          </select>
+                        </div>
+                      </div>
+                      <span class="text-secondary">Configures whether the Web App install prompt is available (ex. on desktop systems, where the full download is recommended).</span>
+                    </div>
                     <div class="mb-3 small">
                       <div class="storage-persistence-loading">
                         <div class="mb-5 text-secondary">
@@ -734,6 +746,30 @@
       return result;
     }
     let WZ_BROWSER_PLATFORM = wz_detect_platform();
+    
+    function wz_detect_mobile() {
+      // Modern method, accurate, but only works on Chromium browsers (currently)
+      if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+        return navigator.userAgentData.mobile;
+      }
+      // Deprecated method
+      if (typeof navigator.userAgent !== 'undefined' && navigator.userAgent.indexOf('Mobile') !== -1) {
+        return true;
+      }
+      return false;
+    }
+    function wz_default_pwa_installable() {
+      // Always default-installable on Android and iOS
+      if (/(android|ios)/.test(WZ_BROWSER_PLATFORM)) {
+        return true;
+      }
+      // On Windows, Linux, macOS: only default-installable if "mobile" device
+      if (/(windows|linux|macos)/.test(WZ_BROWSER_PLATFORM)) {
+        return wz_detect_mobile();
+      }
+      // Otherwise, default to installable?
+      return true;
+    }
 
     let WZ_MINIMUM_MAX_MEMORY_MIB = 512;
     let WZ_DEFAULT_MAX_MEMORY_MIB = (() => {
@@ -855,6 +891,8 @@
       })
       // Also save the chosen override for the maximum memory limit
       localStorage.setItem('memoryLimitMiB', document.getElementById('launchOption_wasmMemoryLimit').value);
+      // And other select values
+      localStorage.setItem('desktopPWA', document.getElementById('launchOption_desktopPWA').value);
     }
     
     function loadLocalStorageValueIntoSelect(selectId, key, valueTransformer, valueToOptionTextTransformer) {
@@ -920,6 +958,34 @@
           }
         }
       );
+      // And the desktop PWA install override
+      loadLocalStorageValueIntoSelect('launchOption_desktopPWA', 'desktopPWA', 
+        (val) => {
+          if (val !== null && val === 'available') {
+            return 'available';
+          }
+          return 'hidden';
+        }
+      );
+    }
+
+    function wz_handle_desktop_pwa_installable() {
+      let default_pwa_installable = wz_default_pwa_installable();
+      if (default_pwa_installable || isRunningStandalone()) {
+        document.getElementById('launchOptionContainer_desktopPWA').hidden = true;
+      } else {
+        document.getElementById('launchOptionContainer_desktopPWA').hidden = false;
+        if (LOCALSTORAGE_AVAILABLE) {
+          // always check the override setting
+          let checkedValue = localStorage.getItem('desktopPWA');
+          if (checkedValue !== null && checkedValue === 'available') {
+            // do not disable the PWA install
+            return;
+          }
+        }
+        // disable the PWA install - must happen early in the page load!
+        document.querySelector('link[rel="manifest"]').remove();
+      }
     }
 
     function wz_js_get_config_dir_path()
@@ -1462,8 +1528,12 @@
         wz_display_unsupported_browser_msg(missingFeatures);
       });
     }
-    // Detect when everything - including async scripts - is loaded
+
+    // window.onload:
     window.addEventListener('load', () => {
+      // Disable PWA install prompts on desktop (if needed)
+      wz_handle_desktop_pwa_installable();
+      // Detect when everything - including async scripts - is loaded
       var everythingLoadedTimer = setInterval(function() {
         if (/loaded|complete/.test(document.readyState)) {
           clearInterval(everythingLoadedTimer);
