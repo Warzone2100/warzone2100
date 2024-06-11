@@ -310,14 +310,7 @@ jobs:
         WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
 
   upload-debug-symbols:
-    strategy:
-      matrix:
-        include:
-          - output-suffix: "ubuntu20.04"
-            arch: "amd64"
-          - output-suffix: "ubuntu22.04"
-            arch: "amd64"
-    name: 'Upload Debug Symbols (${{ matrix.matrix }})'
+    name: 'Upload Debug Symbols'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -339,8 +332,9 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: 'debugsymbols_${{ matrix.output-suffix }}_${{ matrix.arch }}'
+          pattern: 'debugsymbols_*'
           path: ./dl-debug-symbols
+          merge-multiple: false
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: ./dl-debug-symbols
