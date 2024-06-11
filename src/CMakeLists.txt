@@ -61,6 +61,26 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 endif()
 
+# On Emscripten, generate the extern-postjs.js file with updated version info at *build-time*
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	set(_extern_postjs_template_file "${PROJECT_SOURCE_DIR}/platforms/emscripten/extern-postjs.js.in")
+	set(_extern_postjs_output_file "${CMAKE_CURRENT_BINARY_DIR}/extern-postjs.js")
+	add_custom_command(
+		OUTPUT "${_extern_postjs_output_file}"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_extern_postjs_template_file} -DOUTPUT_FILE=${_extern_postjs_output_file} -P ${CMAKE_SOURCE_DIR}/platforms/emscripten/cmake/autorevision_externpostjs.cmake
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		DEPENDS "${_extern_postjs_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/platforms/emscripten/cmake/autorevision_externpostjs.cmake"
+		VERBATIM
+	)
+
+	add_custom_target(autorevision_externpostjs ALL
+		DEPENDS
+			"${_extern_postjs_output_file}"
+	)
+	set_property(TARGET autorevision_externpostjs PROPERTY FOLDER "_WZBuildProcessTargets")
+	add_dependencies(autorevision_externpostjs autorevision) # Ensure ordering and non-concurrency
+endif()
+
 ############################
 # Main Executable
 
@@ -279,6 +299,10 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	target_link_options(warzone2100 PRIVATE "SHELL:--shell-file ${PROJECT_SOURCE_DIR}/platforms/emscripten/shell.html")
 	target_link_options(warzone2100 PRIVATE "SHELL:--pre-js ${PROJECT_SOURCE_DIR}/platforms/emscripten/prejs.js")
 	target_link_options(warzone2100 PRIVATE "SHELL:--post-js ${PROJECT_SOURCE_DIR}/platforms/emscripten/postjs.js")
+
+	# Autorevision extern-postjs
+	add_dependencies(warzone2100 autorevision autorevision_externpostjs)
+	target_link_options(warzone2100 PRIVATE "SHELL:--extern-post-js ${CMAKE_CURRENT_BINARY_DIR}/extern-postjs.js")
 
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MODULARIZE")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s EXPORT_NAME=createWZModule")

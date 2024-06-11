@@ -603,6 +603,11 @@
             </div>
           </div>
           <div class="modal-footer">
+            <div id="options_buildinfo" class="me-auto text-break small text-secondary lh-sm opacity-75" style="max-width: 400px">
+                <span class="small">Version: <span id="options_buildinfo_version">n/a</span></span>
+                <br>
+                <span class="small">Git Commit: <a id="options_buildinfo_commit" href="https://github.com/Warzone2100/warzone2100/commits/master" class="link-secondary" target="_blank" rel="noopener">n/a</a></span>
+            </div>
             <button type="button" class="btn btn-primary" onclick="wz_dismiss_options_modal()">OK</button>
           </div>
         </div>
@@ -1507,10 +1512,27 @@
         // ignore
       });
     }
-    
+
+    function wz_set_options_build_info() {
+      if (typeof WZ2100_WASM_CURRENT_BUILD_INFO !== 'undefined') {
+        try {
+          let version_span = document.getElementById('options_buildinfo_version');
+          version_span.textContent = WZ2100_WASM_CURRENT_BUILD_INFO['versionString'];
+          let commit_link = document.getElementById('options_buildinfo_commit');
+          commit_link.href = "https://github.com/Warzone2100/warzone2100/commit/"+WZ2100_WASM_CURRENT_BUILD_INFO['gitCommit'];
+          commit_link.textContent = WZ2100_WASM_CURRENT_BUILD_INFO['gitCommit'].substring(0, 7);
+        } catch (err) {
+          console.error('Getting build info failed:', err);
+        }
+      } else {
+        console.error('Build info not available?');
+      }
+    }
+
     // Initial page startup (once everything is loaded)
     function wz_everything_is_loaded() {
       wz_restore_launch_options();
+      wz_set_options_build_info();
       checkWZBrowserSupport().then((r) => {
         // All required features are available
         wz_display_launch_game_msg();
