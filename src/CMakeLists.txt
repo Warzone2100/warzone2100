@@ -817,11 +817,17 @@ else()
 			RENAME "index.html")
 	install(FILES
 			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.js"
-			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.worker.js"
 			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.wasm"
 			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.data"
 			COMPONENT Core
 			DESTINATION "${WZ_APP_INSTALL_DEST}")
+	if ("${EMSCRIPTEN_VERSION}" VERSION_LESS 3.1.58)
+		# Versions prior to 3.1.58 generated a separate .worker.js file
+		install(FILES
+			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.worker.js"
+			COMPONENT Core
+			DESTINATION "${WZ_APP_INSTALL_DEST}")
+	endif()
 
 	# Install manifest file
 	configure_file("${CMAKE_SOURCE_DIR}/platforms/emscripten/manifest.json" "${CMAKE_CURRENT_BINARY_DIR}/manifest.json" COPYONLY)
