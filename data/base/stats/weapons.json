@@ -1489,7 +1489,7 @@
 		"minElevation": -60,
 		"minimumDamage": 33,
 		"missGfx": "FXGRDexl.PIE",
-		"model": "cy_CAN.pie",
+		"model": "cy_hpvcn.pie",
 		"mountModel": "Cybody.pie",
 		"movement": "DIRECT",
 		"muzzleGfx": "FXCan20A.PIE",
