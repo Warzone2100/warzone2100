@@ -23,15 +23,18 @@
 		}
 	],
 	"contents": [
-		"Power Generators, Factories, and Research Facilities all can have modules applied (once you've discovered and researched them).",
+		"Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules.",
 		"",
-		"Modules upgrade the structure, and may:",
-		"- Improve the speed of power generation / building units / research",
-		"- Enable building heavier units (in the case of factories)",
+		"Once researched, you can access these modules from the Build menu to apply them to the structures in question.",
 		"",
-		"To build a module, you can either:",
-		"(a) Find it in the Structures menu and click on an existing building of the appropriate type",
-		"(b) Select a truck and click on an existing building to issue a quick-order to upgrade it with the appropriate module"
+		"Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction.",
+		"",
+		"Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete.",
+		"",
+		"Upgrade Effects:",
+		"- Power Generator modules increase the rate of power generation",
+		"- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units",
+		"- Research Facility modules decrease the time needed to complete assigned research projects"
 	],
 	"links": [
 		"wz2100::structures::powergenerator",

@@ -8,13 +8,18 @@
 			"secondaryUnitOrderButtons": "PATROL"
 		},
 		{
+			"secondaryUnitOrderButtons": "CIRCLE"
+		},
+		{
 			"secondaryUnitOrderButtons": "HALTTYPE"
 		}
 	],
 	"contents": [
 		"You can use the Unit Orders menu to configure unit \"Movement\".",
 		"",
-		"- Patrol: Moves in a circle on a position. Just click an area after selecting it",
+		"- Patrol: Move between two points. Just click a point on the map after selecting it",
+		"- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it",
+		"",
 		"- Pursue: Pursue enemy",
 		"- Guard: Stay near an area or structure. (default)",
 		"- Hold Position: Do not move under any circumstances"

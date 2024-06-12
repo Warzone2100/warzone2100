@@ -8,11 +8,11 @@
 		}
 	},
 	"contents": [
-		"A VTOL factory is used to build units with VTOL propulsion (i.e. flying units).",
+		"A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units).",
 		"",
-		"Each VTOL factory can build one unit at a time, but you can queue multiple units for production.",
+		"Each VTOL Factory can build one unit at a time, but you can queue multiple units for production.",
 		"",
-		"When a VTOL factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
+		"When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
 	],
 	"links": [
 		"wz2100::units::vtols",
