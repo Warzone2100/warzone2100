@@ -131,7 +131,7 @@ endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	# Enable macOS-specific find scripts
-	list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/macosx/cmake")
+	list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/platforms/macos/cmake")
 
 	# Workaround for framework header conflicts with find_package
 	# - Common issue when Mono.framework is installed, since it contains headers for libpng (etc)

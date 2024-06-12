@@ -73,7 +73,7 @@ if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREAT
 				-DURL=${VULKAN_SDK_DL_URL}
 				-DEXPECTED_SHA256=${VULKAN_SDK_DL_SHA256}
 				-DOUT_DIR=${_vulkan_sdk_out_dir}
-				-P ${_repoBase}/macosx/configs/FetchPrebuilt.cmake
+				-P ${_repoBase}/platforms/macos/cmake/FetchPrebuilt.cmake
 		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 		RESULT_VARIABLE _exstatus
 	)
