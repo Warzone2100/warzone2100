@@ -1,8 +1,21 @@
 cmake_minimum_required (VERSION 3.5...3.24)
 
+include(CheckCompilerFlagsOutput)
+
 SET(UTF8PROC_INSTALL OFF CACHE BOOL "Enable installation of utf8proc" FORCE)
 add_subdirectory(utf8proc EXCLUDE_FROM_ALL)
 set_property(TARGET utf8proc PROPERTY FOLDER "3rdparty")
+if(NOT MSVC)
+	set(_supported_utf8proc_cxx_compiler_flags "")
+
+	# -Wassign-enum
+	check_compiler_flags_output("-Werror -Wno-assign-enum -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-assign-enum" OUTPUT_VARIABLE _supported_utf8proc_cxx_compiler_flags APPEND)
+
+	if (NOT _supported_utf8proc_cxx_compiler_flags STREQUAL "")
+		string(REPLACE " " ";" _supported_utf8proc_cxx_compiler_flags "${_supported_utf8proc_cxx_compiler_flags}")
+		target_compile_options(utf8proc PRIVATE ${_supported_utf8proc_cxx_compiler_flags})
+	endif()
+endif()
 
 add_subdirectory(launchinfo EXCLUDE_FROM_ALL)
 set_property(TARGET launchinfo PROPERTY FOLDER "3rdparty")
@@ -170,12 +183,14 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 	set_property(TARGET basis_transcoder PROPERTY FOLDER "3rdparty")
 	target_include_directories(basis_transcoder PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder")
 
-	include(CheckCompilerFlagsOutput)
 	if(NOT MSVC)
 		set(_supported_basistranscoder_cxx_compiler_flags "")
 
 		# -fno-strict-aliasing		(GCC, Clang)
 		check_compiler_flags_output("-Werror -fno-strict-aliasing -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-fno-strict-aliasing" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
+		# -Wcast-align				(GCC 3.4+, Clang 3.2+)
+		check_compiler_flags_output("-Werror -Wno-cast-align -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-cast-align" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
 
 		if (NOT _supported_basistranscoder_cxx_compiler_flags STREQUAL "")
 			string(REPLACE " " ";" _supported_basistranscoder_cxx_compiler_flags "${_supported_basistranscoder_cxx_compiler_flags}")
