@@ -10,9 +10,6 @@ cmake_minimum_required(VERSION 3.5...3.30)
 
 ########################################################
 
-# To ensure reproducible builds, pin to a specific vcpkg commit
-set(VCPKG_COMMIT_SHA "eb0f108ebd674c6ed79acb1c2e123208c416af0d")
-
 # WZ minimum supported macOS deployment target (< 10.9 is untested)
 set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.9")
 
@@ -177,12 +174,12 @@ else()
 endif()
 
 execute_process(
-	COMMAND ${GIT_EXECUTABLE} reset --hard "${VCPKG_COMMIT_SHA}"
+	COMMAND ${GIT_EXECUTABLE} reset --hard origin/master
 	WORKING_DIRECTORY "vcpkg"
 	RESULT_VARIABLE _exstatus
 )
 if(NOT _exstatus EQUAL 0)
-	message(FATAL_ERROR "Failed to pin vcpkg to specific commit: ${VCPKG_COMMIT_SHA}")
+	message(FATAL_ERROR "Failed reset vcpkg to latest origin/master")
 endif()
 
 ########################################################
