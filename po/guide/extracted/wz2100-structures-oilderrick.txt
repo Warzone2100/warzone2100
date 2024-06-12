@@ -1,7 +1,6 @@
 // TRANSLATORS:
 // The guide topic title - please maintain original capitalization
 _("Oil Derrick")
-_("Oil Derricks are built automatically if a truck is selected and you click an Oil Resource.")
-_("The unit you selected to build the structure will move to build the structure.")
-_("Oil Derricks can only be built on Oil Resources which aren’t on fire. Fires on Oil Resources are caused by the destruction of an Oil Derrick - they will burn out over time.")
-_("To utilize an oil derrick and generate power requires a Power Generator.")
+_("An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource.")
+_("The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides.")
+_("To utilize an Oil Derrick and generate power requires a Power Generator.")

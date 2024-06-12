@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100_guide\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-09 15:47+0000\n"
+"POT-Creation-Date: 2024-06-12 03:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,46 +181,30 @@ msgid "Researching technologies is accomplished using Research Facilities."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:5
-msgid "When you open the Research menu, a Fast Find menu with two rows will appear at the bottom center of the screen."
+msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:6
-msgid "All of your Research Facilities are shown on the second row. Clicking a Research Facility will move the camera to it."
+msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:7
-msgid "Clicking the blank icon above a Research Facility will show a set of research topics on the left side of the screen."
+msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
 msgstr ""
 
 #: po/guide/extracted/wz2100-general-researching.txt:8
-msgid "You can hold the mouse over an icon to see its name."
-msgstr ""
-
-#: po/guide/extracted/wz2100-general-researching.txt:9
-msgid "Click an icon to start researching it. Each Research Facility can research one distinct technology at a time."
-msgstr ""
-
-#: po/guide/extracted/wz2100-general-researching.txt:10
-msgid "While a facility is researching, it displays a bar in its Fast Find area."
-msgstr ""
-
-#: po/guide/extracted/wz2100-general-researching.txt:11
-msgid "If the bar is green, the facility is gathering power. If it is yellow, the topic is being researched."
-msgstr ""
-
-#: po/guide/extracted/wz2100-general-researching.txt:12
 msgid "Completing research of a new technology may:"
 msgstr ""
 
-#: po/guide/extracted/wz2100-general-researching.txt:13
+#: po/guide/extracted/wz2100-general-researching.txt:9
 msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
 msgstr ""
 
-#: po/guide/extracted/wz2100-general-researching.txt:14
+#: po/guide/extracted/wz2100-general-researching.txt:10
 msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
 msgstr ""
 
-#: po/guide/extracted/wz2100-general-researching.txt:15
+#: po/guide/extracted/wz2100-general-researching.txt:11
 msgid "- Enable the research of additional technologies"
 msgstr ""
 
@@ -303,7 +287,7 @@ msgid "A unit will move to the building and destroy it."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-demolishing.txt:7
-msgid "You will be refunded half the power used to originally build the structure."
+msgid "Demolished structures return half the power used to build the structure."
 msgstr ""
 
 #. TRANSLATORS:
@@ -313,12 +297,15 @@ msgid "Factory"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-factory.txt:4
-msgid "A factory is used to build units. Each factory can build one unit at a time, but you can queue multiple units for production."
+msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-factory.txt:5
-#: po/guide/extracted/wz2100-units-building.txt:9
-msgid "When a factory is done building a unit, it will order it to proceed to the factory's Rally Point."
+msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
+msgstr ""
+
+#: po/guide/extracted/wz2100-structures-factory.txt:6
+msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
 msgstr ""
 
 #. TRANSLATORS:
@@ -350,31 +337,35 @@ msgid "Structure Modules"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:4
-msgid "Power Generators, Factories, and Research Facilities all can have modules applied (once you've discovered and researched them)."
+msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:5
-msgid "Modules upgrade the structure, and may:"
+msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:6
-msgid "- Improve the speed of power generation / building units / research"
+msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:7
-msgid "- Enable building heavier units (in the case of factories)"
+msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:8
-msgid "To build a module, you can either:"
+msgid "Upgrade Effects:"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:9
-msgid "(a) Find it in the Structures menu and click on an existing building of the appropriate type"
+msgid "- Power Generator modules increase the rate of power generation"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-modules.txt:10
-msgid "(b) Select a truck and click on an existing building to issue a quick-order to upgrade it with the appropriate module"
+msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
+msgstr ""
+
+#: po/guide/extracted/wz2100-structures-modules.txt:11
+msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
 msgstr ""
 
 #. TRANSLATORS:
@@ -384,19 +375,15 @@ msgid "Oil Derrick"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-oilderrick.txt:4
-msgid "Oil Derricks are built automatically if a truck is selected and you click an Oil Resource."
+msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-oilderrick.txt:5
-msgid "The unit you selected to build the structure will move to build the structure."
+msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-oilderrick.txt:6
-msgid "Oil Derricks can only be built on Oil Resources which aren’t on fire. Fires on Oil Resources are caused by the destruction of an Oil Derrick - they will burn out over time."
-msgstr ""
-
-#: po/guide/extracted/wz2100-structures-oilderrick.txt:7
-msgid "To utilize an oil derrick and generate power requires a Power Generator."
+msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
 msgstr ""
 
 #. TRANSLATORS:
@@ -420,15 +407,15 @@ msgid "Rally Point"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-rallypoint.txt:4
-msgid "When a factory has finished building a unit, the unit will spawn next to the factory, and then proceed to the designated rally point of the factory."
+msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-rallypoint.txt:5
-msgid "By default, the rally point is placed next to the factory. Clicking a rally point will allow you to move it in a similar way to building a structure."
+msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-rallypoint.txt:6
-msgid "Note: moving a rally point while a unit is moving to one will not affect its path."
+msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
 msgstr ""
 
 #. TRANSLATORS:
@@ -452,7 +439,7 @@ msgid "Research Facility"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-researchfacility.txt:4
-msgid "A Research Facility is used (and required) to research new technologies."
+msgid "Research Facilities are required in order to research new technologies."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-researchfacility.txt:5
@@ -466,15 +453,15 @@ msgid "VTOL Factory"
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-vtolfactory.txt:4
-msgid "A VTOL factory is used to build units with VTOL propulsion (i.e. flying units)."
+msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-vtolfactory.txt:5
-msgid "Each VTOL factory can build one unit at a time, but you can queue multiple units for production."
+msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
 msgstr ""
 
 #: po/guide/extracted/wz2100-structures-vtolfactory.txt:6
-msgid "When a VTOL factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
+msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
 msgstr ""
 
 #. TRANSLATORS:
@@ -546,18 +533,22 @@ msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
 msgstr ""
 
 #: po/guide/extracted/wz2100-unitorders-movement.txt:5
-msgid "- Patrol: Moves in a circle on a position. Just click an area after selecting it"
+msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
 msgstr ""
 
 #: po/guide/extracted/wz2100-unitorders-movement.txt:6
-msgid "- Pursue: Pursue enemy"
+msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
 msgstr ""
 
 #: po/guide/extracted/wz2100-unitorders-movement.txt:7
-msgid "- Guard: Stay near an area or structure. (default)"
+msgid "- Pursue: Pursue enemy"
 msgstr ""
 
 #: po/guide/extracted/wz2100-unitorders-movement.txt:8
+msgid "- Guard: Stay near an area or structure. (default)"
+msgstr ""
+
+#: po/guide/extracted/wz2100-unitorders-movement.txt:9
 msgid "- Hold Position: Do not move under any circumstances"
 msgstr ""
 
@@ -642,11 +633,15 @@ msgid "Unit Orders"
 msgstr ""
 
 #: po/guide/extracted/wz2100-unitorders.txt:4
-msgid "Right-click on a unit (or select a unit and hit NUM0 on the numeric keypad), and a unit orders menu will appear above the command panel. This contains options to configure a unit’s behaviour."
+msgid "Right-click a unit or group of units to show their current Unit Orders."
 msgstr ""
 
 #: po/guide/extracted/wz2100-unitorders.txt:5
-msgid "Right-clicking on a factory will customize the orders of all future units that that factory produces."
+msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
+msgstr ""
+
+#: po/guide/extracted/wz2100-unitorders.txt:6
+msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
 msgstr ""
 
 #. TRANSLATORS:
@@ -656,23 +651,27 @@ msgid "Building Units"
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-building.txt:4
-msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing menu on the left side of the screen."
+msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-building.txt:5
-msgid "The Manufacturing menu will display the unit designs which are buildable by the currently-selected factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
+msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-building.txt:6
-msgid "To select a different factory, either click on the factory in the game world, or click on the appropriate factory button in the Factories menu on the bottom-center of the screen."
+msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-building.txt:7
-msgid "To manufacture a unit in a factory, click the desired unit design button in the Manufacturing menu. You can queue multiples of the same unit by repeatedly clicking the unit design button."
+msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-building.txt:8
-msgid "While a unit is building, the unit will be shown in the Factories menu above the factory that is building it. If the bar is green, the factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
+msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-building.txt:9
+msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
 msgstr ""
 
 #. TRANSLATORS:
@@ -834,15 +833,15 @@ msgid "CB Sensors"
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-sensors-cb.txt:4
-msgid "CB (Counter-Battery) towers or turrets are used similarly to a standard sensor but serve a specialized purpose: To counter-attack enemy artillery."
+msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-sensors-cb.txt:5
-msgid "Normal sensor towers will direct your artillery to attack whatever is nearby, but CB towers will direct your artillery to attack any artillery attacking you, even if they are further away from you than other targets."
+msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-sensors-cb.txt:6
-msgid "If you have both a CB tower and a normal sensor tower, artillery structures will attack CB targets first, and only other targets once you are no longer being bombarded by enemy artillery."
+msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
 msgstr ""
 
 #. TRANSLATORS:
@@ -1006,7 +1005,7 @@ msgid "VTOLs"
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-vtols.txt:4
-msgid "VTOLs are used similarly to ground units. However, they do have a few differences."
+msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-vtols.txt:5
@@ -1028,7 +1027,7 @@ msgid "As you discover and research more weapons, you'll also discover that cert
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-weaponselection.txt:5
-msgid "When you complete research on a new weapon, an intelligence screen message will provide some information on its attributes."
+msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-weaponselection.txt:6
@@ -1050,5 +1049,5 @@ msgid "This aspect of the game is what makes Warzone 2100 unique in its own way.
 msgstr ""
 
 #: po/guide/extracted/wz2100-units.txt:6
-msgid "Note that you need a Command Center / HQ to be able to design units!"
+msgid "To be able to design units, a Command Center is required."
 msgstr ""
