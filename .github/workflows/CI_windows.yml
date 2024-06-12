@@ -50,11 +50,12 @@ jobs:
             architecture: "x64"
             deploy_release: true
             support_sentry : true
+            sentry_backend: crashpad
           - compiler: "LLVM_MINGW"
             architecture: "arm64"
             deploy_release: true
             support_sentry : true
-            sentry_backend: breakpad
+            sentry_backend: crashpad
       fail-fast: false
     env:
       WZ_COMPILER_VER: ${{ matrix.compiler }}
@@ -145,9 +146,6 @@ jobs:
           elseif ($env:WZ_TARGET_ARCH -eq "arm64") {
             $VCPKG_DEFAULT_TRIPLET = "arm64-mingw-dynamic"
             $WZ_MINGW_PKG_PREFIX = "aarch64-w64-mingw32"
-            # llvm-ml does not support arm64
-            # Will need to use a similar workaround as Chromium's build process
-            # and use the armasm64.exe tool from MSVC
           }
           $VCPKG_DEFAULT_HOST_TRIPLET = "x64-mingw-static"
         }
@@ -543,6 +541,7 @@ jobs:
         DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
         WZ_FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
         WZ_MINGW_PKG_PREFIX: '${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}'
+        WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE: '${{ steps.settings.outputs.WZ_REPO_PATH }}\.ci\cmake\toolchains\${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}.cmake'
         WZ_ASM_MASM_COMPILER: '${{ steps.settings.outputs.WZ_ASM_MASM_COMPILER }}'
       run: |
         $SENTRY_DSN_PARAM = ""
@@ -559,7 +558,7 @@ jobs:
         }
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         $env:PATH = "${env:WZ_MINGW_ENV_PATH}";
-        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_C_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-gcc" -DCMAKE_CXX_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-g++" -DCMAKE_RC_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-windres" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
+        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="${env:WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: Upload vcpkg logs (on failure)
       uses: actions/upload-artifact@v4
