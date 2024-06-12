@@ -704,7 +704,6 @@ static void initialize_PhysicsFS(const char *argv_0)
 static void check_Physfs()
 {
 	const PHYSFS_ArchiveInfo **i;
-	bool zipfound = false;
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
 
@@ -726,10 +725,37 @@ static void check_Physfs()
 		debug(LOG_ERROR, "Please upgrade/downgrade PhysicsFS to a different version, such as 2.0.3 or 2.0.1.");
 	}
 
+	// Disable support for non-zip archive types
+	std::vector<std::string> archiveExtsToRemove;
 	for (i = PHYSFS_supportedArchiveTypes(); *i != nullptr; i++)
 	{
+		if ((*i)->extension == nullptr)
+		{
+			continue;
+		}
+		if (strcasecmp("zip", (*i)->extension) != 0)
+		{
+			archiveExtsToRemove.push_back((*i)->extension);
+		}
+	}
+	for (const auto& archiveExt : archiveExtsToRemove)
+	{
+		if (PHYSFS_deregisterArchiver(archiveExt.c_str()) == 0)
+		{
+			debug(LOG_WZ, "[**] Failed to unregister archive: [%s]", archiveExt.c_str());
+		}
+	}
+
+	// Check for "zip" archive support
+	bool zipfound = false;
+	for (i = PHYSFS_supportedArchiveTypes(); *i != nullptr; i++)
+	{
+		if ((*i)->extension == nullptr)
+		{
+			continue;
+		}
 		debug(LOG_WZ, "[**] Supported archive(s): [%s], which is [%s].", (*i)->extension, (*i)->description);
-		if (!strncasecmp("zip", (*i)->extension, 3) && !zipfound)
+		if (strcasecmp("zip", (*i)->extension) == 0)
 		{
 			zipfound = true;
 		}
