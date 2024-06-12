@@ -54,6 +54,7 @@ public:
 	void setPadding(Padding const &rect);
 	void setSnapOffset(bool value);
 	void setBackgroundColor(PIELIGHT const &color);
+	void setBorderColor(PIELIGHT const &color);
 	void setItemSpacing(uint32_t value);
 	uint32_t getItemSpacing() const { return itemSpacing; }
 	uint32_t calculateListViewHeight() const;
@@ -84,6 +85,7 @@ private:
 	bool layoutDirty = false;
 	Padding padding = {0, 0, 0, 0};
 	PIELIGHT backgroundColor;
+	PIELIGHT borderColor;
 	uint32_t itemSpacing = 0;
 	int scrollbarWidth = 0;
 	bool expandWidthWhenScrollbarInvisible = true;
