@@ -82,7 +82,7 @@ jobs:
         HOMEBREW_NO_INSTALL_UPGRADE: 1
       run: |
         echo "::group::brew install"
-        brew install automake gettext pkg-config
+        brew install --quiet automake gettext pkg-config xcbeautify
         echo "::endgroup::"
 
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
@@ -160,7 +160,7 @@ jobs:
           -configuration "Release" \
           -destination "platform=macOS" \
           -PBXBuildsContinueAfterErrors=NO \
-        | tee "xcodebuild.log" | xcpretty -c
+        | tee "xcodebuild.log" | xcbeautify --renderer github-actions
         result=${?}
         if [ $result -ne 0 ]; then
           echo "ERROR: xcodebuild failed"
