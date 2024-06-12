@@ -1,4 +1,9 @@
 #########################
+# Appstream
+
+add_subdirectory(appstream)
+
+#########################
 # Generator-specific components
 
 install(FILES
