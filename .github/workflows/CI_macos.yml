@@ -181,7 +181,7 @@ jobs:
 
         # Verify "warzone2100.zip" was created
         BUILT_WARZONE_ZIP="build/warzone2100.zip"
-        src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+        src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
         # Move warzone2100.zip to the output directory, renaming it
         DESIRED_ZIP_NAME="warzone2100_macOS_${{ matrix.artifact_suffix }}.zip"
@@ -259,7 +259,7 @@ jobs:
           cat "entitlements.plist"
           echo "-----------------------------------"
           echo "Make universal binary + app package"
-          ../src/macosx/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_x64/Warzone 2100.app"
+          ../src/platforms/macos/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_x64/Warzone 2100.app"
           # Rename the "base" app package directory
           mv "warzone2100_macOS_arm64" "warzone2100_macOS_universal"
           echo "Re-code-sign"
@@ -275,7 +275,7 @@ jobs:
 
           # Verify "warzone2100.zip" was created
           BUILT_WARZONE_ZIP="build/warzone2100.zip"
-          src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+          src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
           # Move warzone2100.zip to the output directory, renaming it
           DESIRED_ZIP_NAME="warzone2100_macOS_universal.zip"
@@ -339,7 +339,7 @@ jobs:
 
           # Verify "warzone2100_novideos.zip" was created
           BUILT_WARZONE_ZIP="build/warzone2100_novideos.zip"
-          src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+          src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
           # Move warzone2100.zip to the output directory, renaming it
           DESIRED_ZIP_NAME="warzone2100_macOS_universal_novideos.zip"

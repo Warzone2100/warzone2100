@@ -389,7 +389,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
    5. After letting Visual Studio re-run CMake configure with the new settings, you can build using the **CMake** menu.
 
 ### macOS
-See [macosx/README.md](macosx/README.md)
+See [platforms/macos/README.md](platforms/macos/README.md)
 
 Licensing
 -------------------
