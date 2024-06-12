@@ -34,6 +34,7 @@
 #include "lib/widget/scrollablelist.h"
 #include "lib/widget/button.h"
 #include "lib/widget/margin.h"
+#include "lib/widget/checkbox.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/bitimage.h"
 
@@ -142,6 +143,7 @@ private:
 
 static std::shared_ptr<WzGameGuideScreen> psCurrentGameGuideScreen;
 static std::shared_ptr<WzGuideTopicsRegistry> guideTopicsRegistry = std::make_shared<WzGuideTopicsRegistry>();
+static bool disableTopicPopups = false;
 
 // forward-declarations
 std::shared_ptr<WzGuideTopic> loadWZGuideTopicByTopicId(const std::string& guideTopicId);
@@ -390,6 +392,8 @@ protected:
 public:
 	static std::shared_ptr<WzGuideTopicsNavBar> make(int32_t topicDisplayWidth, const OnPopStateFunction& popStateHandler, const OnSidebarToggleFunc& onSidebarToggleHandler, const OnCloseFunc& onCloseHandler);
 
+	~WzGuideTopicsNavBar();
+
 	virtual int32_t idealHeight() override;
 
 	void pushState(const std::string& topicIdentifier);
@@ -401,12 +405,17 @@ private:
 	void updateLayout();
 	void triggerCloseHandler();
 	void triggerSidebarToggleHandler();
+	std::shared_ptr<WIDGET> createOptionsPopoverForm();
+	void displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent);
 private:
 	std::shared_ptr<W_LABEL> m_titleLabel;
 	std::shared_ptr<WzGuideTopicsNavButton> m_backButton;
 	std::shared_ptr<WzGuideTopicsNavButton> m_nextButton;
 	std::shared_ptr<W_BUTTON> m_sidebarButton;
 	std::shared_ptr<W_BUTTON> m_closeButton;
+	std::shared_ptr<W_BUTTON> m_optionsButton;
+
+	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
 
 	std::vector<std::string> m_stateHistory;
 	size_t m_currentStateIndex = 0;
@@ -1518,7 +1527,7 @@ public:
 		{
 			if (isDown)
 			{
-				backColor = WZCOL_FORM_DARK;
+				backColor = WZCOL_MENU_SCORE_BUILT;
 			}
 			else if (isHighlight)
 			{
@@ -1610,6 +1619,14 @@ private:
 	bool isTruncated = false;
 };
 
+WzGuideTopicsNavBar::~WzGuideTopicsNavBar()
+{
+	if (optionsOverlayScreen)
+	{
+		widgRemoveOverlayScreen(optionsOverlayScreen);
+		optionsOverlayScreen.reset();
+	}
+}
 
 int32_t WzGuideTopicsNavBar::idealHeight()
 {
@@ -1641,12 +1658,25 @@ void WzGuideTopicsNavBar::initialize(int32_t topicDisplayWidth, const OnPopState
 	std::weak_ptr<WzGuideTopicsNavBar> psWeakNavBar(std::dynamic_pointer_cast<WzGuideTopicsNavBar>(shared_from_this()));
 
 	// Close button
-	m_closeButton = WzGuideTopicsNavButton::make("x", font_regular);
+	m_closeButton = WzGuideTopicsNavButton::make(WzString::fromUtf8("\u2715"), font_regular); // ✕
+	m_closeButton->setTip(_("Close"));
 	attach(m_closeButton);
 	m_closeButton->addOnClickHandler([psWeakNavBar](W_BUTTON&) {
 		auto psStrongNavbar = psWeakNavBar.lock();
 		ASSERT_OR_RETURN(, psStrongNavbar != nullptr, "No parent?");
 		psStrongNavbar->triggerCloseHandler();
+	});
+
+	// Options button // "⚙"
+	m_optionsButton = WzGuideTopicsNavButton::make(WzString::fromUtf8("\u2699"), font_regular);
+	m_optionsButton->setTip(_("Options"));
+	attach(m_optionsButton);
+	m_optionsButton->addOnClickHandler([psWeakNavBar](W_BUTTON& button) {
+		auto psStrongNavbar = psWeakNavBar.lock();
+		ASSERT_OR_RETURN(, psStrongNavbar != nullptr, "No parent?");
+		// Display a "pop-over" options menu
+		psStrongNavbar->displayOptionsOverlay(psStrongNavbar);
+		psStrongNavbar->m_optionsButton->setState(WBUT_CLICKLOCK);
 	});
 
 	// Sidebar button
@@ -1722,7 +1752,7 @@ void WzGuideTopicsNavBar::updateLayout()
 	int widgetHeight = h - (GuideNavBarButtonHorizontalPadding * 2);
 	int widgetY0 = y0 + ((h - widgetHeight) / 2);
 
-	int buttonWidth = std::max<int>({m_backButton->idealWidth(), m_nextButton->idealWidth(), m_closeButton->idealWidth(), (m_sidebarButton) ? m_sidebarButton->idealWidth() : 0});
+	int buttonWidth = std::max<int>({m_backButton->idealWidth(), m_nextButton->idealWidth(), m_closeButton->idealWidth(), (m_optionsButton) ? m_optionsButton->idealWidth() : 0, (m_sidebarButton) ? m_sidebarButton->idealWidth() : 0});
 
 	// Start by left-aligning the sidebar button with the overall widget
 	int sidebarButtonX1 = 0;
@@ -1745,8 +1775,9 @@ void WzGuideTopicsNavBar::updateLayout()
 	titleX0 = std::max<int32_t>(titleX0, navButtonsX1 + GuideNavBarButtonHorizontalPadding);
 	m_titleLabel->setGeometry(titleX0, widgetY0, m_titleLabel->idealWidth(), widgetHeight);
 
-	// Right-align the close button
+	// Right-align the options and close buttons
 	m_closeButton->setGeometry(w - (buttonWidth + GuideNavBarButtonHorizontalPadding), widgetY0, buttonWidth, widgetHeight);
+	m_optionsButton->setGeometry(m_closeButton->x() - (buttonWidth + GuideNavBarButtonHorizontalPadding), widgetY0, buttonWidth, widgetHeight);
 }
 
 void WzGuideTopicsNavBar::triggerCloseHandler()
@@ -1807,6 +1838,114 @@ bool WzGuideTopicsNavBar::navForward()
 	}
 	updateButtonStates();
 	return true;
+}
+
+std::shared_ptr<WIDGET> WzGuideTopicsNavBar::createOptionsPopoverForm()
+{
+	// create all the buttons / option rows
+	auto createOptionsCheckbox = [](const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzCheckboxButton& button)>& onClickFunc) -> std::shared_ptr<WzCheckboxButton> {
+		auto pCheckbox = std::make_shared<WzCheckboxButton>();
+		pCheckbox->pText = text;
+		pCheckbox->FontID = font_regular;
+		pCheckbox->setIsChecked(isChecked);
+		pCheckbox->setTextColor(WZCOL_TEXT_BRIGHT);
+		if (isDisabled)
+		{
+			pCheckbox->setState(WBUT_DISABLE);
+		}
+		Vector2i minimumDimensions = pCheckbox->calculateDesiredDimensions();
+		pCheckbox->setGeometry(0, 0, minimumDimensions.x, minimumDimensions.y);
+		if (onClickFunc)
+		{
+			pCheckbox->addOnClickHandler([onClickFunc](W_BUTTON& button){
+				auto checkBoxButton = std::dynamic_pointer_cast<WzCheckboxButton>(button.shared_from_this());
+				ASSERT_OR_RETURN(, checkBoxButton != nullptr, "checkBoxButton is null");
+				onClickFunc(*checkBoxButton);
+			});
+		}
+		return pCheckbox;
+	};
+
+	std::vector<std::shared_ptr<WIDGET>> buttons;
+	buttons.push_back(createOptionsCheckbox(_("Disable Topic Pop-ups"), disableTopicPopups, false, [](WzCheckboxButton& button){
+		disableTopicPopups = button.getIsChecked();
+	}));
+
+	// determine required height for all buttons
+	int totalButtonHeight = std::accumulate(buttons.begin(), buttons.end(), 0, [](int a, const std::shared_ptr<WIDGET>& b) {
+		return a + b->height();
+	});
+	int maxButtonWidth = (*(std::max_element(buttons.begin(), buttons.end(), [](const std::shared_ptr<WIDGET>& a, const std::shared_ptr<WIDGET>& b){
+		return a->width() < b->width();
+	})))->width();
+
+	auto itemsList = ScrollableListWidget::make();
+	itemsList->setBackgroundColor(WZCOL_MENU_BACKGROUND);
+	itemsList->setBorderColor(pal_RGBA(152, 151, 154, 255));
+	Padding padding = {8, 8, 8, 8};
+	itemsList->setPadding(padding);
+	const int itemSpacing = 4;
+	itemsList->setItemSpacing(itemSpacing);
+	itemsList->setGeometry(itemsList->x(), itemsList->y(), maxButtonWidth + padding.left + padding.right, totalButtonHeight + ((static_cast<int>(buttons.size()) - 1) * itemSpacing) + padding.top + padding.bottom);
+	for (auto& button : buttons)
+	{
+		itemsList->addItem(button);
+	}
+
+	return itemsList;
+}
+
+void WzGuideTopicsNavBar::displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent)
+{
+	auto lockedScreen = screenPointer.lock();
+	ASSERT(lockedScreen != nullptr, "The WzPlayerBoxTabs does not have an associated screen pointer?");
+
+	// Initialize the options overlay screen
+	optionsOverlayScreen = W_SCREEN::make();
+	auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+	newRootFrm->displayFunction = displayChildDropShadows;
+	std::weak_ptr<W_SCREEN> psWeakOptionsOverlayScreen(optionsOverlayScreen);
+	std::weak_ptr<WzGuideTopicsNavBar> psWeakNavBar = std::dynamic_pointer_cast<WzGuideTopicsNavBar>(shared_from_this());
+	newRootFrm->onClickedFunc = [psWeakOptionsOverlayScreen, psWeakNavBar]() {
+		if (auto psOverlayScreen = psWeakOptionsOverlayScreen.lock())
+		{
+			widgRemoveOverlayScreen(psOverlayScreen);
+		}
+		// Destroy Options overlay / overlay screen, reset options button state
+		if (auto strongNavBar = psWeakNavBar.lock())
+		{
+			strongNavBar->optionsOverlayScreen.reset();
+			strongNavBar->m_optionsButton->setState(0);
+		}
+	};
+	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
+	optionsOverlayScreen->psForm->attach(newRootFrm);
+
+	// Create the pop-over form
+	auto optionsPopOver = createOptionsPopoverForm();
+	newRootFrm->attach(optionsPopOver);
+
+	// Position the pop-over form
+	std::weak_ptr<WIDGET> weakParent = psParent;
+	optionsPopOver->setCalcLayout([weakParent](WIDGET *psWidget) {
+		auto psParent = weakParent.lock();
+		ASSERT_OR_RETURN(, psParent != nullptr, "parent is null");
+		// (Ideally, with its right aligned with the right side of the "parent" widget, but ensure full visibility on-screen)
+		int popOverX0 = (psParent->screenPosX() + psParent->width()) - psWidget->width() - 4;
+		if (popOverX0 + psWidget->width() > screenWidth)
+		{
+			popOverX0 = screenWidth - psWidget->width();
+		}
+		// (Ideally, with its top aligned with the bottom of the "parent" widget, but ensure full visibility on-screen)
+		int popOverY0 = psParent->screenPosY() + psParent->height() - 4;
+		if (popOverY0 + psWidget->height() > screenHeight)
+		{
+			popOverY0 = screenHeight - psWidget->height();
+		}
+		psWidget->move(popOverX0, popOverY0);
+	});
+
+	widgRegisterOverlayScreenOnTopOfScreen(optionsOverlayScreen, lockedScreen);
 }
 
 // MARK: - WzGuideSidebar implementation
@@ -3090,7 +3229,10 @@ bool handleShowFlags(const std::shared_ptr<WzWrappedGuideTopic>& addedTopic, Sho
 
 	if (shouldShow)
 	{
-		showGuideTopicImmediately(addedTopic->topic->identifier, onTopicClose);
+		if (!disableTopicPopups)
+		{
+			showGuideTopicImmediately(addedTopic->topic->identifier, onTopicClose);
+		}
 		return true;
 	}
 	else
@@ -3229,7 +3371,7 @@ static bool loadWildcardTopicIds(const std::string& guideTopicId, ShowTopicFlags
 		return true; // continue
 	}, recurse);
 
-	if (showFlags != ShowTopicFlags::None && !newlyAddedWrappedTopics.empty())
+	if (showFlags != ShowTopicFlags::None && !newlyAddedWrappedTopics.empty() && !disableTopicPopups)
 	{
 		// Just highlight the first new entry added (that matches the showFlags), and show it
 		for (const auto& topic : newlyAddedWrappedTopics)
@@ -3296,6 +3438,7 @@ void shutdownGameGuide()
 	guideTopicsRegistry->clear();
 	closeGuideScreen();
 	psCurrentGameGuideScreen.reset();
+	disableTopicPopups = false;
 }
 
 std::vector<std::string> saveLoadedGuideTopics()
@@ -3308,4 +3451,12 @@ bool restoreLoadedGuideTopics(const std::vector<std::string>& topicIds)
 	return guideTopicsRegistry->restoreLoadedTopics(topicIds);
 }
 
+bool getGameGuideDisableTopicPopups()
+{
+	return disableTopicPopups;
+}
 
+void setGameGuideDisableTopicPopups(bool disablePopups)
+{
+	disableTopicPopups = disablePopups;
+}

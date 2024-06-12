@@ -35,6 +35,9 @@ void shutdownGameGuide();
 std::vector<std::string> saveLoadedGuideTopics();
 bool restoreLoadedGuideTopics(const std::vector<std::string>& topicIds);
 
+bool getGameGuideDisableTopicPopups();
+void setGameGuideDisableTopicPopups(bool disablePopups);
+
 // flags to control whether the topic / guide is automatically & immediately opened (displayed to the user)
 enum class ShowTopicFlags: int {
 	None = 0,
