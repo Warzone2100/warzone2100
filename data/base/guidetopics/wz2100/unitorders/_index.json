@@ -4,8 +4,10 @@
 	"title": "Unit Orders",
 	"sort": "3",
 	"contents": [
-		"Right-click on a unit (or select a unit and hit NUM0 on the numeric keypad), and a unit orders menu will appear above the command panel. This contains options to configure a unit’s behaviour.",
+		"Right-click a unit or group of units to show their current Unit Orders.",
 		"",
-		"Right-clicking on a factory will customize the orders of all future units that that factory produces."
+		"The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health.",
+		"",
+		"Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
 	]
 }

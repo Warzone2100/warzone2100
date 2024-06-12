@@ -3,11 +3,11 @@
 	"id": "wz2100::structures::rallypoint",
 	"title": "Rally Point",
 	"contents": [
-		"When a factory has finished building a unit, the unit will spawn next to the factory, and then proceed to the designated rally point of the factory.",
+		"When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point.",
 		"",
-		"By default, the rally point is placed next to the factory. Clicking a rally point will allow you to move it in a similar way to building a structure.",
+		"By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it.",
 		"",
-		"Note: moving a rally point while a unit is moving to one will not affect its path."
+		"Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
 	],
 	"links": [
 		"wz2100::structures::factory"

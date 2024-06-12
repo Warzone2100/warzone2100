@@ -21,11 +21,11 @@
 		}
 	],
 	"contents": [
-		"CB (Counter-Battery) towers or turrets are used similarly to a standard sensor but serve a specialized purpose: To counter-attack enemy artillery.",
+		"Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range.",
 		"",
-		"Normal sensor towers will direct your artillery to attack whatever is nearby, but CB towers will direct your artillery to attack any artillery attacking you, even if they are further away from you than other targets.",
+		"Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery.",
 		"",
-		"If you have both a CB tower and a normal sensor tower, artillery structures will attack CB targets first, and only other targets once you are no longer being bombarded by enemy artillery."
+		"If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
 	],
 	"links": [
 		"wz2100::units::sensors",
