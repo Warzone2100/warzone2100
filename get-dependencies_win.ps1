@@ -4,9 +4,6 @@ param([string]$VCPKG_BUILD_TYPE = "")
 
 ############################
 
-# To ensure reproducible builds, pin to a specific vcpkg commit
-$VCPKG_COMMIT_SHA = "eb0f108ebd674c6ed79acb1c2e123208c416af0d";
-
 # WZ Windows features (for vcpkg install)
 $VCPKG_INSTALL_FEATURES = @()
 If ((-not ([string]::IsNullOrEmpty($env:VULKAN_SDK))) -and (Test-Path $env:VULKAN_SDK -PathType Container))
@@ -78,7 +75,7 @@ Else
 	popd;
 }
 pushd vcpkg;
-git reset --hard $VCPKG_COMMIT_SHA;
+git reset --hard origin/master;
 .\bootstrap-vcpkg.bat;
 
 $triplet = "x86-windows"; # vcpkg default
