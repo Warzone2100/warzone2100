@@ -7849,6 +7849,11 @@ static bool writeSaveGuideTopics(const char *pFileName)
 	auto loadedTopics = saveLoadedGuideTopics();
 	nlohmann::json mRoot = nlohmann::json::object();
 	mRoot["loaded_topics"] = loadedTopics;
+
+	nlohmann::json options = nlohmann::json::object();
+	options["disable_topic_popups"] = getGameGuideDisableTopicPopups();
+	mRoot["options"] = std::move(options);
+
 	return saveJSONToFile(mRoot, pFileName);
 }
 
@@ -7870,7 +7875,18 @@ static bool loadSaveGuideTopics(const char *pFileName)
 	const auto& mRoot = saveGuideTopicsOpt.value();
 	ASSERT_OR_RETURN(false, mRoot.is_object(), "guidetopics.json looks broken - expected object");
 
-	auto it = mRoot.find("loaded_topics");
+	auto it = mRoot.find("options");
+	if (it != mRoot.end() && it.value().is_object())
+	{
+		auto& options = it.value();
+		auto opt = options.find("disable_topic_popups");
+		if (opt != options.end() && opt.value().is_boolean())
+		{
+			setGameGuideDisableTopicPopups(opt.value().get<bool>());
+		}
+	}
+
+	it = mRoot.find("loaded_topics");
 	ASSERT_OR_RETURN(false, it != mRoot.end(), "guidetopics.json looks broken - missing expected \"loaded_topics\" key");
 
 	std::vector<std::string> loadedTopics;
