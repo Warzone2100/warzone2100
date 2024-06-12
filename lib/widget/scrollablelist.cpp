@@ -34,6 +34,7 @@ void ScrollableListWidget::initialize()
 	scrollBar->show(false);
 	scrollbarWidth = SCROLLBAR_WIDTH;
 	backgroundColor.rgba = 0;
+	borderColor.rgba = 0;
 }
 
 void ScrollableListWidget::geometryChanged()
@@ -196,6 +197,11 @@ void ScrollableListWidget::setBackgroundColor(PIELIGHT const &color)
 	backgroundColor = color;
 }
 
+void ScrollableListWidget::setBorderColor(PIELIGHT const &color)
+{
+	borderColor = color;
+}
+
 void ScrollableListWidget::setSnapOffset(bool value)
 {
 	snapOffset = value;
@@ -213,11 +219,19 @@ void ScrollableListWidget::setItemSpacing(uint32_t value)
 
 void ScrollableListWidget::display(int xOffset, int yOffset)
 {
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+
 	if (backgroundColor.rgba != 0)
 	{
-		int x0 = x() + xOffset;
-		int y0 = y() + yOffset;
 		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+	}
+
+	if (borderColor.rgba != 0)
+	{
+		int x1 = x0 + width();
+		int y1 = y0 + height();
+		iV_Box(x0, y0, x1, y1, borderColor);
 	}
 }
 
