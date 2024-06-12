@@ -45,6 +45,6 @@ endif()
 
 if(VCPKG_TARGET_TRIPLET MATCHES "wasm32-emscripten")
   if(NOT DEFINED VCPKG_CHAINLOAD_TOOLCHAIN_FILE)
-    set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/.ci/emscripten/toolchain/Toolchain-Emscripten.cmake")
+    set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/.ci/cmake/toolchains/wasm32-emscripten.cmake")
   endif()
 endif()
