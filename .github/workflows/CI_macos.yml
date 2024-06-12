@@ -110,6 +110,8 @@ jobs:
         sudo xcode-select -s "${DESIRED_XCODE_DEV_DIR}"
 
         echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
+        echo "VCPKG_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}" >> $GITHUB_ENV
+        echo "VCPKG_KEEP_ENV_VARS=VCPKG_OSX_DEPLOYMENT_TARGET;MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
     - name: configure_mac.cmake
       working-directory: ./build
       env:
