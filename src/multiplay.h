@@ -252,6 +252,8 @@ void printConsoleNameChange(const char *oldName, const char *newName);  ///< Pri
 
 void turnOffMultiMsg(bool bDoit);
 
+void autoLagKickRoutine();
+
 void sendMap();
 bool multiplayerWinSequence(bool firstCall);
 
