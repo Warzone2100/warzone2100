@@ -154,8 +154,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/fribidi/fribidi
-        tag: v1.0.12
-        commit: 6428d8469e536bcbb6e12c7b79ba6659371c435a
+        tag: v1.0.15
+        commit: 2803ff176713a27d7edb57a24bc60c38a02182e9
 
   - name: libsodium
     @WZ_CROSS_BUILD_OPTIONS@
