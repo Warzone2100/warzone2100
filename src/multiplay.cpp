@@ -210,6 +210,12 @@ void autoLagKickRoutine()
 			continue;
 		}
 
+		if (ingame.PendingDisconnect[i])
+		{
+			// player already technically left, but we're still in the "pre-game" phase so the GAME_PLAYER_LEFT hasn't been processed yet
+			continue;
+		}
+
 		ingame.LagCounter[i]++;
 		if (ingame.LagCounter[i] >= LagAutoKickSeconds) {
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
