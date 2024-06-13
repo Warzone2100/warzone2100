@@ -146,8 +146,12 @@ static void autoLagKickRoutine()
 		return;
 	}
 
+	const bool isInitialLoad = !ingame.TimeEveryoneIsInGame.has_value();
+	uint32_t numPlayersLoaded = 0;
+	uint32_t totalNumPlayers = 0;
+
 	ingame.lastLagCheck = now;
-	uint32_t playerCheckLimit = (!ingame.TimeEveryoneIsInGame.has_value()) ? MAX_CONNECTED_PLAYERS : MAX_PLAYERS;
+	uint32_t playerCheckLimit = (isInitialLoad) ? MAX_CONNECTED_PLAYERS : MAX_PLAYERS;
 	for (uint32_t i = 0; i < playerCheckLimit; ++i)
 	{
 		if (!isHumanPlayer(i))
@@ -158,12 +162,43 @@ static void autoLagKickRoutine()
 		{
 			continue;
 		}
-		bool isLagging = (ingame.PingTimes[i] >= PING_LIMIT);
-		bool isWaitingForInitialLoad = !ingame.TimeEveryoneIsInGame.has_value() && ingame.JoiningInProgress[i];
-		if (isWaitingForInitialLoad && (std::chrono::duration_cast<std::chrono::seconds>(now - ingame.startTime) < std::chrono::seconds(LAG_INITIAL_LOAD_GRACEPERIOD)))
+		if (i < MAX_PLAYERS)
 		{
-			isLagging = false;
-			isWaitingForInitialLoad = false;
+			++totalNumPlayers;
+			if (!ingame.JoiningInProgress[i])
+			{
+				++numPlayersLoaded;
+			}
+		}
+		bool isLagging = (ingame.PingTimes[i] >= PING_LIMIT);
+		bool isWaitingForInitialLoad = isInitialLoad && ingame.JoiningInProgress[i];
+		if (isWaitingForInitialLoad)
+		{
+			auto waitingForLoadTime = std::chrono::duration_cast<std::chrono::seconds>(now - ingame.startTime);
+			auto loadGracePeriod = std::chrono::seconds(LAG_INITIAL_LOAD_GRACEPERIOD);
+			if (i > MAX_PLAYERS)
+			{
+				// special handling for spectator slots:
+				// if all actual players are loaded
+				// - reduce the grace period for spectators to load
+				// - reduce the applicable auto lag kick time
+				if (totalNumPlayers > 0 && numPlayersLoaded == totalNumPlayers && i != NetPlay.hostPlayer)
+				{
+					loadGracePeriod = std::chrono::seconds(0);
+					LagAutoKickSeconds = std::min<int>(10, LagAutoKickSeconds); // (fine to set this here because any i after this will all be spectators)
+				}
+			}
+			if (waitingForLoadTime < loadGracePeriod)
+			{
+				// within grace period for initial load (some machines may take longer to load into the match)
+				isLagging = false;
+				isWaitingForInitialLoad = false;
+			}
+			else
+			{
+				// exceeded the grace period for initial load, and still waiting on this player to join
+				// treat them as lagging below
+			}
 		}
 		if (!isLagging && !isWaitingForInitialLoad)
 		{
