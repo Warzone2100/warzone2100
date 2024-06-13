@@ -82,6 +82,19 @@ else()
 	if(OP_HAVE_LRINTF)
 		target_compile_definitions(opusfile PRIVATE OP_HAVE_LRINTF)
 	endif()
+
+	if(NOT MSVC)
+		set(_supported_opusfile_c_compiler_flags "")
+
+		# -Wconditional-uninitialized
+		check_compiler_flags_output("-Werror -Wno-conditional-uninitialized -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-conditional-uninitialized" OUTPUT_VARIABLE _supported_opusfile_c_compiler_flags APPEND)
+
+		if (NOT _supported_opusfile_c_compiler_flags STREQUAL "")
+			string(REPLACE " " ";" _supported_opusfile_c_compiler_flags "${_supported_opusfile_c_compiler_flags}")
+			target_compile_options(opusfile PRIVATE ${_supported_opusfile_c_compiler_flags})
+		endif()
+	endif()
+
 	set_property(TARGET opusfile PROPERTY FOLDER "3rdparty")
 	target_link_libraries(sound PRIVATE opusfile)
 endif()
