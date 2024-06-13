@@ -5,8 +5,8 @@ diff --git a/src/video/emscripten/SDL_emscriptenopengles.c b/src/video/emscripte
  */
  #include "../../SDL_internal.h"
  
--#if SDL_VIDEO_DRIVER_EMSCRIPTEN && SDL_VIDEO_OPENGL_EGL
-+#if SDL_VIDEO_DRIVER_EMSCRIPTEN
+-#if defined(SDL_VIDEO_DRIVER_EMSCRIPTEN) && defined(SDL_VIDEO_OPENGL_EGL)
++#if defined(SDL_VIDEO_DRIVER_EMSCRIPTEN)
  
  #include <emscripten/emscripten.h>
 +#include <emscripten/html5_webgl.h>
@@ -194,8 +194,8 @@ diff --git a/src/video/emscripten/SDL_emscriptenopengles.h b/src/video/emscripte
  #ifndef SDL_emscriptenopengles_h_
  #define SDL_emscriptenopengles_h_
  
--#if SDL_VIDEO_DRIVER_EMSCRIPTEN && SDL_VIDEO_OPENGL_EGL
-+#if SDL_VIDEO_DRIVER_EMSCRIPTEN
+-#if defined(SDL_VIDEO_DRIVER_EMSCRIPTEN) && defined(SDL_VIDEO_OPENGL_EGL)
++#if defined(SDL_VIDEO_DRIVER_EMSCRIPTEN)
  
  #include "../SDL_sysvideo.h"
 -#include "../SDL_egl_c.h"
@@ -239,7 +239,7 @@ diff --git a/src/video/emscripten/SDL_emscriptenvideo.c b/src/video/emscripten/S
      device->UpdateWindowFramebuffer = Emscripten_UpdateWindowFramebuffer;
      device->DestroyWindowFramebuffer = Emscripten_DestroyWindowFramebuffer;
  
--#if SDL_VIDEO_OPENGL_EGL
+-#ifdef SDL_VIDEO_OPENGL_EGL
      device->GL_LoadLibrary = Emscripten_GLES_LoadLibrary;
      device->GL_GetProcAddress = Emscripten_GLES_GetProcAddress;
      device->GL_UnloadLibrary = Emscripten_GLES_UnloadLibrary;
@@ -255,7 +255,7 @@ diff --git a/src/video/emscripten/SDL_emscriptenvideo.c b/src/video/emscripten/S
          }
      }
  
--#if SDL_VIDEO_OPENGL_EGL
+-#ifdef SDL_VIDEO_OPENGL_EGL
 -    if (window->flags & SDL_WINDOW_OPENGL) {
 -        if (!_this->egl_data) {
 -            if (SDL_GL_LoadLibrary(NULL) < 0) {
@@ -277,7 +277,7 @@ diff --git a/src/video/emscripten/SDL_emscriptenvideo.c b/src/video/emscripten/S
          data = (SDL_WindowData *)window->driverdata;
  
          Emscripten_UnregisterEventHandlers(data);
--#if SDL_VIDEO_OPENGL_EGL
+-#ifdef SDL_VIDEO_OPENGL_EGL
 -        if (data->egl_surface != EGL_NO_SURFACE) {
 -            SDL_EGL_DestroySurface(_this, data->egl_surface);
 -            data->egl_surface = EGL_NO_SURFACE;
@@ -286,14 +286,6 @@ diff --git a/src/video/emscripten/SDL_emscriptenvideo.c b/src/video/emscripten/S
  
          /* We can't destroy the canvas, so resize it to zero instead */
          emscripten_set_canvas_element_size(data->canvas_id, 0, 0);
-@@ -341,6 +317,7 @@ static void Emscripten_SetWindowFullscreen(_THIS, SDL_Window *window, SDL_VideoD
-             SDL_bool is_desktop_fullscreen = (window->flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP;
-             int res;
- 
-+            SDL_zero(strategy);
-             strategy.scaleMode = is_desktop_fullscreen ? EMSCRIPTEN_FULLSCREEN_SCALE_STRETCH : EMSCRIPTEN_FULLSCREEN_SCALE_ASPECT;
- 
-             if (!is_desktop_fullscreen) {
 diff --git a/src/video/emscripten/SDL_emscriptenvideo.h b/src/video/emscripten/SDL_emscriptenvideo.h
 --- a/src/video/emscripten/SDL_emscriptenvideo.h
 +++ b/src/video/emscripten/SDL_emscriptenvideo.h
@@ -301,13 +293,13 @@ diff --git a/src/video/emscripten/SDL_emscriptenvideo.h b/src/video/emscripten/S
  #include <emscripten/emscripten.h>
  #include <emscripten/html5.h>
  
--#if SDL_VIDEO_OPENGL_EGL
+-#ifdef SDL_VIDEO_OPENGL_EGL
 -#include <EGL/egl.h>
 -#endif
 -
  typedef struct SDL_WindowData
  {
--#if SDL_VIDEO_OPENGL_EGL
+-#ifdef SDL_VIDEO_OPENGL_EGL
 -    EGLSurface egl_surface;
 -#endif
      SDL_Window *window;
