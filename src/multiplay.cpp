@@ -127,9 +127,9 @@ static void sendTextMessage(const char* msg)
 	message.send();
 }
 
-static void autoLagKickRoutine()
+void autoLagKickRoutine()
 {
-	if (!NetPlay.isHost)
+	if (!bMultiPlayer || !NetPlay.bComms || !NetPlay.isHost)
 	{
 		return;
 	}
@@ -146,7 +146,8 @@ static void autoLagKickRoutine()
 		return;
 	}
 
-	const bool isInitialLoad = !ingame.TimeEveryoneIsInGame.has_value();
+	const bool isLobby = ingame.localJoiningInProgress;
+	const bool isInitialLoad = !isLobby && !ingame.TimeEveryoneIsInGame.has_value();
 	uint32_t numPlayersLoaded = 0;
 	uint32_t totalNumPlayers = 0;
 

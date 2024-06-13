@@ -7285,6 +7285,8 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		NETpop(queue);
 	}
+
+	autoLagKickRoutine();
 }
 
 TITLECODE WzMultiplayerOptionsTitleUI::run()
