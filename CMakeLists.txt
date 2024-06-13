@@ -427,15 +427,15 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 
 		# Apple Clang - Custom Compiler Flags
 		# Custom Warning Flags (for which an Xcode attribute is not available)
-		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith")
+		set(wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith")
 
 		# Custom Disabling Warning Flags (which are required because of warning flags specified above
 		# and by CMake's Xcode project generator)
-		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-sign-compare")
-		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-unused-parameter")
+		set(wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS "${wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-sign-compare")
+		set(wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS "${wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-unused-parameter")
 
 		# Custom Warning Flags - No Error Tweaks
-		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-error=deprecated-declarations")
+		set(wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS "${wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-error=deprecated-declarations")
 
 		set(_supported_cxx_compiler_flags "")
 
@@ -443,7 +443,9 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		check_compiler_flags_output("-Werror -Wno-shadow-field-in-constructor -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-shadow-field-in-constructor" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		message( STATUS "Supported additional CXX compiler_flags=${_supported_cxx_compiler_flags}" )
-		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} ${_supported_cxx_compiler_flags}")
+		set(wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS "${wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS} ${_supported_cxx_compiler_flags}")
+
+		list(APPEND WZ_TARGET_ADDITIONAL_PROPERTIES XCODE_ATTRIBUTE_WARNING_CFLAGS "${wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS}")
 
 		# Apple Clang - Preprocessing
 		set(CMAKE_XCODE_ATTRIBUTE_ENABLE_STRICT_OBJC_MSGSEND YES)
