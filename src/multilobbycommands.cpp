@@ -354,7 +354,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomSystemMessage("Can't kick the host.");
 			return false;
 		}
-		if (!cmdInterface.kickPlayer(playerIdx, _("Administrator has kicked you from the game."), isBan))
+		if (!cmdInterface.kickPlayer(playerIdx, _("Administrator has kicked you from the game."), isBan, message.sender))
 		{
 			std::string msg = astringf("Failed to kick %s: %u", (playerIdx < MAX_PLAYER_SLOTS) ? "player" : "spectator", playerPos);
 			sendRoomSystemMessage(msg.c_str());

@@ -6675,7 +6675,7 @@ public:
 		addGameOptions(); //refresh to see the proper tech level in the map name
 		return true;
 	}
-	virtual bool kickPlayer(uint32_t player, const char *reason, bool ban) override
+	virtual bool kickPlayer(uint32_t player, const char *reason, bool ban, uint32_t requester) override
 	{
 		ASSERT_HOST_ONLY(return false);
 		ASSERT_OR_RETURN(false, player != NetPlay.hostPlayer, "Unable to kick the host");
