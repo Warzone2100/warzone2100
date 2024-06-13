@@ -5635,7 +5635,7 @@
 		"msgName": "RES_LASD1",
 		"name": "Hi-Energy Laser Emitter",
 		"requiredResearch": [
-			"R-Wpn-Energy-Accuracy01"
+			"R-Wpn-Laser01"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -6719,7 +6719,7 @@
 		"msgName": "RES_W_HLAS",
 		"name": "Heavy Laser",
 		"requiredResearch": [
-			"R-Wpn-Energy-Damage01"
+			"R-Wpn-Laser02"
 		],
 		"researchPoints": 36000,
 		"researchPower": 450,
