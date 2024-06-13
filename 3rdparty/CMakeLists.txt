@@ -47,7 +47,8 @@ target_include_directories(re2 PUBLIC
 )
 set_property(TARGET re2 PROPERTY FOLDER "3rdparty")
 set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS NO)	# -Wmissing-field-initializers
-set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-missing-field-initializers")
+set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_GCC_WARN_SHADOW NO)	# -Wshadow
+set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-missing-field-initializers -Wno-shadow")
 
 add_subdirectory(EmbeddedJSONSignature EXCLUDE_FROM_ALL)
 set_property(TARGET EmbeddedJSONSignature PROPERTY FOLDER "3rdparty")
@@ -191,6 +192,18 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 
 		# -Wcast-align				(GCC 3.4+, Clang 3.2+)
 		check_compiler_flags_output("-Werror -Wno-cast-align -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-cast-align" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
+		# -Wdeprecated-declarations
+		check_compiler_flags_output("-Werror -Wno-deprecated-declarations -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-deprecated-declarations" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
+		# -Wunused-but-set-variable
+		check_compiler_flags_output("-Werror -Wno-unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unused-but-set-variable" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
+		# -Wunused-function
+		check_compiler_flags_output("-Werror -Wno-unused-function -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unused-function" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
+		# -Wunused-const-variable
+		check_compiler_flags_output("-Werror -Wno-unused-const-variable -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unused-const-variable" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
 
 		if (NOT _supported_basistranscoder_cxx_compiler_flags STREQUAL "")
 			string(REPLACE " " ";" _supported_basistranscoder_cxx_compiler_flags "${_supported_basistranscoder_cxx_compiler_flags}")

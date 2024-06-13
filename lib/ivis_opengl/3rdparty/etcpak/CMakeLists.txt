@@ -31,6 +31,15 @@ if(NOT MSVC)
 	# -Wunused-const-variable
 	check_compiler_flags_output("-Werror -Wno-unused-const-variable -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unused-const-variable" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
 
+	# -Wshadow
+	check_compiler_flags_output("-Werror -Wno-shadow -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-shadow" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
+	# -Wconditional-uninitialized
+	check_compiler_flags_output("-Werror -Wno-conditional-uninitialized -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-conditional-uninitialized" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
+	# -Wreturn-type
+	check_compiler_flags_output("-Werror -Wno-return-type -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-return-type" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
 	if (NOT _supported_etcpak_cxx_compiler_flags STREQUAL "")
 		string(REPLACE " " ";" _supported_etcpak_cxx_compiler_flags "${_supported_etcpak_cxx_compiler_flags}")
 		target_compile_options(etcpak PRIVATE ${_supported_etcpak_cxx_compiler_flags})
