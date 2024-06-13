@@ -15,10 +15,6 @@ Else {
 	Write-Output "VULKAN_SDK not detected - configuring WZ *without* Vulkan support";
 }
 
-# To ensure the proper dump_syms.exe is downloaded, specify the commit + hash
-$DUMP_SYMS_EXE_COMMIT = "aebee55695eeb40d788f5421bf32eaaa7227aba0";
-$DUMP_SYMS_EXE_SHA512 = "AA88547EC486077623A9026EFBC39D7B51912781FDB2C7C6AF5A38165110579EFF9EC04E528D4FDBA7F492A039D94A735ACCAE47074B6E0242855403B609E63E";
-
 ############################
 
 function Get-ScriptDirectory
@@ -154,28 +150,4 @@ If ($vcpkg_succeeded -ne 0)
 {
 	Write-Error "vcpkg install failed ($vcpkg_attempts attempts)";
 	exit 1
-}
-
-# Download google-breakpad's dump_syms.exe (if necessary)
-$dump_syms_path = $(Join-Path (pwd) dump_syms.exe);
-
-If (!(Test-Path $dump_syms_path -PathType Leaf) -or !((Get-FileHash -Path "$dump_syms_path" -Algorithm SHA512).Hash -eq $DUMP_SYMS_EXE_SHA512))
-{
-	Write-Output "Downloading dump_syms.exe ...";
-
-	# Unfortunately, there does not currently appear to be any way to download the raw file from chromium.googlesource.com
-	# Instead, we have to download the Base64-encoded contents of the file and then decode them
-	$dump_syms_b64_response = Invoke-WebRequest "https://chromium.googlesource.com/breakpad/breakpad/+/$DUMP_SYMS_EXE_COMMIT/src/tools/windows/binaries/dump_syms.exe?format=TEXT"
-	[IO.File]::WriteAllBytes("$dump_syms_path", [Convert]::FromBase64String($dump_syms_b64_response.Content));
-	$dump_syms_hash = Get-FileHash -Path "$dump_syms_path" -Algorithm SHA512;
-	If ($dump_syms_hash.Hash -eq $DUMP_SYMS_EXE_SHA512) {
-		Write-Output "Successfully downloaded dump_syms.exe";
-	}
-	Else {
-		Write-Error "The downloaded dump_syms.exe hash '$($dump_syms_hash.Hash)' does not match the expected hash: '$DUMP_SYMS_EXE_SHA512'";
-	}
-}
-Else
-{
-	Write-Output "dump_syms.exe already exists";
 }

@@ -775,41 +775,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 endif()
 
 #######################
-# Supporting google-breakpad tools for processing minidumps
-
-if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows" AND WZ_WIN_HAS_PDB)
-	get_target_property(_mainexename warzone2100 OUTPUT_NAME)
-	if(_mainexename)
-		# Find dump_syms.exe
-		find_program(DUMP_SYMS dump_syms HINTS "${CMAKE_BINARY_DIR}" "${PROJECT_SOURCE_DIR}")
-		if(DUMP_SYMS)
-			# Generate a Breakpad .sym file
-			install(CODE "
-				set(DUMP_SYMS \"${DUMP_SYMS}\")
-				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Running dump_syms: \${DUMP_SYMS}\")
-
-				# Generate the .sym file from the .pdb
-				set(_outputDirectory \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}\")
-				set(_outputFilepath \"\${_outputDirectory}/${_mainexename}.sym\")
-				execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \"\${_outputDirectory}\")
-				execute_process(COMMAND \"\${DUMP_SYMS}\" \"${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb\"
-								OUTPUT_FILE \"\${_outputFilepath}\"
-								RESULT_VARIABLE _dumpsyms_result)
-				if(_dumpsyms_result EQUAL 0 AND EXISTS \"\${_outputFilepath}\")
-					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Generated a Breakpad .sym file from .pdb\")
-				else()
-					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: WARNING: Failed to generate a Breakpad .sym file from .pdb (exit code: \${_dumpsyms_result})\")
-				endif()
-			" COMPONENT DebugSymbols)
-		else()
-			message( WARNING "Could not find dump_syms.exe. Unable to generate a Breakpad .sym file from .pdb" )
-		endif()
-	else()
-		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )
-	endif()
-endif()
-
 # Support crashpad sentry backend - requires installation of helper binary to handle crashes
+
 if(TARGET crashpad_handler)
 	if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		install(TARGETS crashpad_handler COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
