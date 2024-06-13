@@ -119,7 +119,11 @@ bool scoreInitSystem();
 void scoreUpdateVar(DATA_INDEX var);
 END_GAME_STATS_DATA	collectEndGameStatsData();
 void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache);
-void getAsciiTime(char *psText, unsigned time, bool showMs = false);
+
+void getAsciiTimeN(char *pDest, size_t destSize, unsigned time, bool showMs = false);
+template <unsigned N>
+static inline void getAsciiTime(char (&dest)[N], unsigned time, bool showMs = false) { return getAsciiTimeN(dest, N, time, showMs); }
+
 bool readScoreData(const char *fileName);
 bool writeScoreData(const char *fileName);
 
