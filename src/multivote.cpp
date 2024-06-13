@@ -62,7 +62,10 @@ public:
 	, requester_player_id(requester_player_id)
 	, target_player_id(target_player_id)
 	{
-		votes[requester_player_id] = true;
+		if (requester_player_id < votes.size())
+		{
+			votes[requester_player_id] = true;
+		}
 		votes[target_player_id] = false;
 		start_time = realTime;
 	}
@@ -659,12 +662,12 @@ void processPendingKickVotes()
 	}
 }
 
-bool startKickVote(uint32_t targetPlayer)
+bool startKickVote(uint32_t targetPlayer, optional<uint32_t> requester_player_id /*= nullopt*/)
 {
 	ASSERT_HOST_ONLY(return false);
 	static uint32_t last_vote_id = 0;
 
-	auto pendingVote = PendingVoteKick(last_vote_id++, selectedPlayer, targetPlayer);
+	auto pendingVote = PendingVoteKick(last_vote_id++, requester_player_id.value_or(selectedPlayer), targetPlayer);
 	auto currentStatus = pendingVote.getKickVoteResult();
 	if (currentStatus.has_value())
 	{
