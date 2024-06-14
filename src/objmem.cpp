@@ -198,6 +198,7 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 
 		if (!checkPlrDroidReferences(psVictim, apsDroidLists)) { return false; }
 		if (!checkPlrDroidReferences(psVictim, mission.apsDroidLists)) { return false; }
+		if (!checkPlrDroidReferences(psVictim, apsLimboDroids)) { return false; }
 	}
 	return true;
 }
