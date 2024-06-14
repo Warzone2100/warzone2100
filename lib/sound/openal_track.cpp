@@ -901,7 +901,7 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
  *  \note You must _never_ manually free() the memory used by the returned
  *        pointer.
  */
-AUDIO_STREAM *sound_PlayStream(const char* fileName,
+AUDIO_STREAM *sound_PlayStream(const char* fileName, bool bufferEntireStream,
 	float volume,
 	const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished,
 	const void *user_data)
@@ -921,7 +921,7 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 	}
 	else if (len > 5 && (strncasecmp(fileName + len - 5, ".opus", 5) == 0))
 	{
-		decoder = WZOpusDecoder::fromFilename(fileName);
+		decoder = WZOpusDecoder::fromFilename(fileName, bufferEntireStream);
 	}
 	if (!decoder)
 	{
