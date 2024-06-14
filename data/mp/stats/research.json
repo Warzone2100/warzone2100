@@ -4682,10 +4682,10 @@
 		"msgName": "RES_W_AA1",
 		"name": "AA Cyclone Flak Cannon",
 		"requiredResearch": [
-			"R-Wpn-Cannon4AMk1"
+			"R-Wpn-Cannon-Damage04"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultComponents": [
 			"AAGun2Mk1"
 		],
@@ -4702,7 +4702,7 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-AAGun01",
-			"R-Wpn-Cannon3Mk1",
+			"R-Wpn-Cannon-Damage07",
 			"R-Struc-Research-Upgrade07"
 		],
 		"researchPoints": 10000,
@@ -9090,8 +9090,8 @@
 		"requiredResearch": [
 			"R-Wpn-Rocket01-LtAT"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultComponents": [
 			"Rocket-Sunburst",
 			"Rocket-VTOL-Sunburst"
