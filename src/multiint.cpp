@@ -3173,7 +3173,6 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 			resetLobbyChangePlayerVote(playerIndex);
 		}
 	}
-	swapPlayerMultiStatsLocal(playerIndexA, playerIndexB);
 	std::swap(ingame.hostChatPermissions[playerIndexA], ingame.hostChatPermissions[playerIndexB]);
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
@@ -3195,6 +3194,9 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		selectedPlayer = newPlayerIndex;
 		realSelectedPlayer = selectedPlayer;
 		debug(LOG_NET, "NET_PLAYER_SWAP_INDEX received for me. Switching from player %" PRIu32 " to player %" PRIu32 "", oldPlayerIndex,newPlayerIndex);
+
+		// Must be called *after* we swap the selectedPlayer / realSelectedPlayer
+		swapPlayerMultiStatsLocal(playerIndexA, playerIndexB);
 
 		NetPlay.players[selectedPlayer].allocated = true;
 		setPlayerName(selectedPlayer, sPlayer);
@@ -3238,6 +3240,8 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 	}
 	else
 	{
+		swapPlayerMultiStatsLocal(playerIndexA, playerIndexB);
+
 		// TODO: display a textual description of the move
 		// just wait for the new player info to be broadcast by the host
 	}
