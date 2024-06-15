@@ -89,6 +89,32 @@ std::string ActivitySink::getTeamDescription(const ActivitySink::SkirmishGameInf
 	return teamDescription;
 }
 
+std::string to_string(const ActivitySink::GameMode& mode)
+{
+	switch (mode)
+	{
+		case ActivitySink::GameMode::MENUS:
+			return "Menus";
+		case ActivitySink::GameMode::TUTORIAL:
+			return "Tutorial";
+		case ActivitySink::GameMode::CAMPAIGN:
+			return "Campaign";
+		case ActivitySink::GameMode::CHALLENGE:
+			return "Challenge";
+		case ActivitySink::GameMode::SKIRMISH:
+			return "Skirmish";
+		case ActivitySink::GameMode::HOSTING_IN_LOBBY:
+			return "Hosting::InLobby";
+		case ActivitySink::GameMode::JOINING_IN_PROGRESS:
+			return "Joining::InProgress";
+		case ActivitySink::GameMode::JOINING_IN_LOBBY:
+			return "Joining::InLobby";
+		case ActivitySink::GameMode::MULTIPLAYER:
+			return "Multiplayer";
+	}
+	return ""; // silence warning
+}
+
 std::string to_string(const ActivitySink::GameEndReason& reason)
 {
 	switch (reason)
@@ -770,11 +796,11 @@ void ActivityManager::joinGameSucceeded(const char *host, uint32_t port)
 
 void ActivityManager::joinedLobbyQuit()
 {
-	if (currentMode != ActivitySink::GameMode::JOINING_IN_LOBBY)
+	if (currentMode != ActivitySink::GameMode::JOINING_IN_PROGRESS && currentMode != ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
 		if (currentMode != ActivitySink::GameMode::MENUS)
 		{
-			debug(LOG_ACTIVITY, "Unexpected call to joinedLobbyQuit - currentMode (%u) - ignoring", (unsigned int)currentMode);
+			debug(LOG_ERROR, "Unexpected call to joinedLobbyQuit - currentMode (%u) - ignoring", (unsigned int)currentMode);
 		}
 		return;
 	}

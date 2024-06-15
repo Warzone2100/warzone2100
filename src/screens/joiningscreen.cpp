@@ -1568,7 +1568,7 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 	if (currentGameMode != ActivitySink::GameMode::MENUS)
 	{
 		// Can't join a game while already in a game
-		debug(LOG_ERROR, "Can't join a game while already in a game / lobby.");
+		debug(LOG_ERROR, "Can't join a game while already in a game / lobby. (Current mode: %s)", to_string(currentGameMode).c_str());
 		return false;
 	}
 
