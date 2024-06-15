@@ -156,6 +156,7 @@ public:
 	static std::string getTeamDescription(const ActivitySink::SkirmishGameInfo& info);
 };
 
+std::string to_string(const ActivitySink::GameMode& mode);
 std::string to_string(const ActivitySink::GameEndReason& reason);
 std::string to_string(const END_GAME_STATS_DATA& stats);
 
