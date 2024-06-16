@@ -1,6 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+const GUIDE_STRUCT_BUILT_DELAY_TIME = 100;
 const mis_playerRes = [
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
 ];
@@ -13,13 +14,13 @@ const mis_scavengerRes = [
 
 // Handlers for guide topics
 
-function __cam1A_doAddHQBuiltTopics()
+function cam1A_doAddHQBuiltTopics()
 {
 	addGuideTopic("wz2100::structures::factory");
 	addGuideTopic("wz2100::units::designing", SHOWTOPIC_FIRSTADD);
 }
 
-function __cam1A_doAddFactoryBuiltTopics()
+function cam1A_doAddFactoryBuiltTopics()
 {
 	addGuideTopic("wz2100::units::designing");
 	addGuideTopic("wz2100::structures::rallypoint");
@@ -27,19 +28,17 @@ function __cam1A_doAddFactoryBuiltTopics()
 	addGuideTopic("wz2100::units::building", SHOWTOPIC_FIRSTADD);
 }
 
-function __cam1A_doAddResearchFacilityBuiltTopics()
+function cam1A_doAddResearchFacilityBuiltTopics()
 {
 	addGuideTopic("wz2100::structures::researchfacility", SHOWTOPIC_FIRSTADD);
 }
 
-function __cam1A_doAddOilDerrickBuiltTopics()
+function cam1A_doAddOilDerrickBuiltTopics()
 {
 	addGuideTopic("wz2100::general::power");
 	addGuideTopic("wz2100::structures::oilderrick");
 	addGuideTopic("wz2100::structures::powergenerator", SHOWTOPIC_FIRSTADD);
 }
-
-const GUIDE_STRUCT_BUILT_DELAY_TIME = 100;
 
 // Player zero's droid enters area next to first oil patch.
 camAreaEvent("launchScavAttack", function(droid)
@@ -127,11 +126,11 @@ function eventStructureBuilt(structure, droid)
 	{
 		if (structure.stattype === FACTORY)
 		{
-			queue("__cam1A_doAddFactoryBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
+			queue("cam1A_doAddFactoryBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
 		}
 		else if (structure.stattype === RESEARCH_LAB)
 		{
-			queue("__cam1A_doAddResearchFacilityBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
+			queue("cam1A_doAddResearchFacilityBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
 		}
 		else if (structure.stattype === RESOURCE_EXTRACTOR)
 		{
@@ -148,11 +147,11 @@ function eventStructureBuilt(structure, droid)
 			}
 
 			// Add the oil derrick topic
-			queue("__cam1A_doAddOilDerrickBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
+			queue("cam1A_doAddOilDerrickBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
 		}
 		else if (structure.stattype === HQ)
 		{
-			queue("__cam1A_doAddHQBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
+			queue("cam1A_doAddHQBuiltTopics", GUIDE_STRUCT_BUILT_DELAY_TIME);
 		}
 	}
 }
@@ -186,7 +185,7 @@ function enableBaseStructures()
 	}
 }
 
-function __cam1A_doNeedPowerTopics()
+function cam1A_doNeedPowerTopics()
 {
 	// inform the user about power (and the need to build an oil derrick)
 	addGuideTopic("wz2100::structures::oilderrick");
@@ -202,7 +201,7 @@ function eventDroidBuilt(droid, structure)
 	if (droid.player === CAM_HUMAN_PLAYER)
 	{
 		// inform the user about power (and the need to build an oil derrick)
-		camCallOnce("__cam1A_doNeedPowerTopics");
+		camCallOnce("cam1A_doNeedPowerTopics");
 	}
 }
 
