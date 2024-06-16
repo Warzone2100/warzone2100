@@ -203,7 +203,7 @@ function eventAttacked(victim, attacker)
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C",{
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta5,{
 		area: "RTLZ",
 		message: "C22_LZ",
 		reinforcements: camMinutesToSeconds(3),

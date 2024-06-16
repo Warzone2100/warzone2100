@@ -102,7 +102,7 @@ function enableFactories()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2DS",{
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta7.pre,{
 		area: "RTLZ",
 		message: "C25_LZ",
 		reinforcements: camMinutesToSeconds(3)

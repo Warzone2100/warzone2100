@@ -14,5 +14,5 @@ function eventStartLevel()
 	setNoGoArea(mis_Labels.lz.x, mis_Labels.lz.y, mis_Labels.lz.x2, mis_Labels.lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camMinutesToSeconds((tweakOptions.classicTimers) ? 10 : 15));
 	camPlayVideos([{video: "CAM1_OUT", type: CAMP_MSG}, {video: "CAM1_OUT2", type: CAMP_MSG}, {video: "CAM2_BRIEF", type: CAMP_MSG}]);
-	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "CAM_2A");
+	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, cam_levels.beta1);
 }

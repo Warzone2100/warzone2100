@@ -220,7 +220,7 @@ function __camPlayerDead()
 		dead = false;
 	}
 
-	if (__camNextLevel === "SUB_3_1S")
+	if (__camNextLevel === cam_levels.gamma2.pre)
 	{
 		//Check for any construction units.
 		//NOTE: countDroid() will return the counts of construction units in
@@ -235,7 +235,7 @@ function __camPlayerDead()
 		//A construction unit is currently on the map.
 		dead = false;
 	}
-	else if (__camNextLevel === "CAM3A-D1")
+	else if (__camNextLevel === cam_levels.gamma7)
 	{
 		const __GAMMA_PLAYER = 1;
 
@@ -284,7 +284,7 @@ function __camPlayerDead()
 		dead = droidCount <= 0 && !__HAVE_FACTORIES;
 
 		//Finish Beta-end early if they have no units and factories on Easy/Normal.
-		if (dead && (difficulty <= MEDIUM) && (__camNextLevel === "CAM_3A"))
+		if (dead && (difficulty <= MEDIUM) && (__camNextLevel === cam_levels.gamma1))
 		{
 			cam_eventMissionTimeout(); //Early victory trigger
 			return false;

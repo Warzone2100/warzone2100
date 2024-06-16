@@ -101,7 +101,7 @@ function truckDefense()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2END", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.betaEnd, {
 		area: "RTLZ",
 		reinforcements: camMinutesToSeconds(3),
 		annihilate: true

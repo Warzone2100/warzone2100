@@ -62,7 +62,7 @@ function cam_eventChat(from, to, message)
 		return;
 	}
 	camTrace(from, to, message);
-	if (message === "let me win" && __camNextLevel !== "SUB_1_1")
+	if (message === "let me win" && __camNextLevel !== cam_levels.alpha3.offWorld)
 	{
 		__camLetMeWin();
 	}
@@ -164,7 +164,7 @@ function cam_eventDroidBuilt(droid, structure)
 	{
 		return;
 	}
-	if (camGetNexusState() && droid.player === CAM_NEXUS && __camNextLevel === "CAM3C" && camRand(100) < 7)
+	if (camGetNexusState() && droid.player === CAM_NEXUS && __camNextLevel === cam_levels.gamma6 && camRand(100) < 7)
 	{
 		// Occasionally hint that NEXUS is producing units on Gamma 5.
 		playSound(cam_sounds.nexus.productionCompleted);
@@ -371,8 +371,10 @@ function cam_eventGameLoaded()
 	receiveAllEvents(true);
 	__camSaveLoading = true;
 	const scavKevlarMissions = [
-		"CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
-		"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "CAM_1END", "SUB_2_5S"
+		cam_levels.alpha7, cam_levels.alpha8.pre, cam_levels.alpha8.offWorld,
+		cam_levels.alpha9.pre, cam_levels.alpha9.offWorld, cam_levels.alpha10,
+		cam_levels.alpha11.pre, cam_levels.alpha11.offWorld, cam_levels.alpha12.pre,
+		cam_levels.alphaEnd, cam_levels.beta6.pre
 	];
 
 	//Need to set the scavenger kevlar vests when loading a save from later Alpha

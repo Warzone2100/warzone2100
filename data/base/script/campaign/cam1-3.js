@@ -150,7 +150,7 @@ function eventAttacked(victim, attacker) {
 function enableReinforcements()
 {
 	playSound(cam_sounds.reinforcementsAreAvailable);
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha6, {
 		area: "RTLZ",
 		message: "C1-3_LZ",
 		reinforcements: camMinutesToSeconds(2), // changes!
@@ -229,7 +229,7 @@ function blowupSouthScavengerBase()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha6, {
 		area: "RTLZ",
 		message: "C1-3_LZ",
 		reinforcements: -1, // will override later

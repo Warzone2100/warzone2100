@@ -14,5 +14,5 @@ function eventStartLevel()
 	setNoGoArea(mis_Labels.lz.x, mis_Labels.lz.y, mis_Labels.lz.x2, mis_Labels.lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)));
 	camPlayVideos([{video: "SB1_7_MSG", type: CAMP_MSG}, {video: "SB1_7_MSG2", type: MISS_MSG}]);
-	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_7");
+	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, cam_levels.alpha11.offWorld);
 }

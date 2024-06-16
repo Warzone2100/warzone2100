@@ -123,7 +123,7 @@ function enableTimeBasedFactories()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_7S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta9.pre, {
 		area: "RTLZ",
 		message: "C26_LZ",
 		reinforcements: camMinutesToSeconds(3)

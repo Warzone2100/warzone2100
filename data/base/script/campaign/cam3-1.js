@@ -350,7 +350,7 @@ function eventStartLevel()
 		{sound: cam_sounds.missile.countdown, time: 10},
 	];
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.gamma3, {
 		area: "RTLZ",
 		playLzReminder: false,
 		reinforcements: camMinutesToSeconds(3),

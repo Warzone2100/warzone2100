@@ -61,7 +61,7 @@ function enableWestFactory()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_3S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha5.pre, {
 		area: "RTLZ",
 		message: "C1-2_LZ",
 		reinforcements: 60,

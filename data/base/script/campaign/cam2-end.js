@@ -260,7 +260,7 @@ function eventStartLevel()
 		camSetExtraObjectiveMessage(_("Send off as many transporters as you can and bring at least one truck"));
 	}
 
-	camSetStandardWinLossConditions(CAM_VICTORY_TIMEOUT, "CAM_3A", {
+	camSetStandardWinLossConditions(CAM_VICTORY_TIMEOUT, cam_levels.gamma1, {
 		reinforcements: camMinutesToSeconds(7), //Duration the transport "leaves" map.
 		callback: "checkIfLaunched"
 	});

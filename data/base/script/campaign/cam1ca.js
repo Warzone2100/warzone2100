@@ -162,7 +162,7 @@ function eventStartLevel()
 	totalTransportLoads = 0;
 	blipActive = false;
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_4AS", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.alpha8.pre, {
 		callback: "extraVictoryCondition"
 	});
 	const startPos = getObject("startPosition");

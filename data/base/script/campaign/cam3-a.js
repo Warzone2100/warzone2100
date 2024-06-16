@@ -357,7 +357,7 @@ function eventStartLevel()
 	const tEnt = getObject("transporterEntry");
 	const tExt = getObject("transporterExit");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_1S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma2.pre);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	centreView(startPos.x, startPos.y);

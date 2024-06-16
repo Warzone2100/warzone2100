@@ -320,7 +320,7 @@ function eventStartLevel()
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma4.pre);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
 
 	centreView(startPos.x, startPos.y);

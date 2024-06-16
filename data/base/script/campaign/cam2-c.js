@@ -283,7 +283,7 @@ function extraVictoryCondition()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_5S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.beta6.pre, {
 		callback: "extraVictoryCondition"
 	});
 

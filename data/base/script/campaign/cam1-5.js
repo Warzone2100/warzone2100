@@ -190,7 +190,7 @@ function camEnemyBaseEliminated_NPBaseGroup()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha10, {
 		area: "RTLZ",
 		message: "C1-5_LZ",
 		reinforcements: camMinutesToSeconds(3),

@@ -128,7 +128,7 @@ function __camEnableGuideTopics()
 	addGuideTopic("wz2100::structures::building");
 	addGuideTopic("wz2100::structures::demolishing");
 
-	let isCam1A = (__camNextLevel === 'CAM_1B');
+	let isCam1A = (__camNextLevel === cam_levels.alpha2);
 	if (!isCam1A) // If not very first original campaign level (CAM1A), which displays these in response to events, add them
 	{
 		addGuideTopic("wz2100::general::artifacts");
