@@ -133,19 +133,61 @@ const __CAM_ALPHA_CAMPAIGN_NUMBER = 1;
 const __CAM_BETA_CAMPAIGN_NUMBER = 2;
 const __CAM_GAMMA_CAMPAIGN_NUMBER = 3;
 const __CAM_UNKNOWN_CAMPAIGN_NUMBER = 1000;
+const cam_levels = {
+	alpha1: "CAM_1A",
+	alpha2: "CAM_1B",
+	alpha3: {pre: "SUB_1_1S", offWorld: "SUB_1_1"},
+	alpha4: {pre: "SUB_1_2S", offWorld: "SUB_1_2"},
+	alpha5: {pre: "SUB_1_3S", offWorld: "SUB_1_3"},
+	alpha6: "CAM_1C",
+	alpha7: "CAM_1CA",
+	alpha8: {pre: "SUB_1_4AS", offWorld: "SUB_1_4A"},
+	alpha9: {pre: "SUB_1_5S", offWorld: "SUB_1_5"},
+	alpha10: "CAM_1A-C",
+	alpha11: {pre: "SUB_1_7S", offWorld: "SUB_1_7"},
+	alpha12: {pre: "SUB_1_DS", offWorld: "SUB_1_D"},
+	alphaEnd: "CAM_1END",
+	beta1: "CAM_2A",
+	beta2: {pre: "SUB_2_1S", offWorld: "SUB_2_1"},
+	beta3: "CAM_2B",
+	beta4: {pre: "SUB_2_2S", offWorld: "SUB_2_2"},
+	beta5: "CAM_2C",
+	beta6: {pre: "SUB_2_5S", offWorld: "SUB_2_5"},
+	beta7: {pre: "SUB_2DS", offWorld: "SUB_2D"},
+	beta8: {pre: "SUB_2_6S", offWorld: "SUB_2_6"},
+	beta9: {pre: "SUB_2_7S", offWorld: "SUB_2_7"},
+	beta10: {pre: "SUB_2_8S", offWorld: "SUB_2_8"},
+	betaEnd: "CAM_2END",
+	gamma1: "CAM_3A",
+	gamma2: {pre: "SUB_3_1S", offWorld: "SUB_3_1"},
+	gamma3: "CAM_3B",
+	gamma4: {pre: "SUB_3_2S", offWorld: "SUB_3_2"},
+	gamma5: "CAM3A-B",
+	gamma6: "CAM3C",
+	gamma7: "CAM3A-D1",
+	gamma8: "CAM3A-D2",
+	gammaEnd: {pre: "CAM_3_4S", offWorld: "CAM_3_4"}
+};
 const __cam_alphaLevels = [
-	"CAM_1A", "CAM_1B", "SUB_1_1S", "SUB_1_1", "SUB_1_2S", "SUB_1_2", "SUB_1_3S",
-	"SUB_1_3", "CAM_1C", "CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
-	"CAM_1A-C", "SUB_1_7S", "SUB_1_7", "SUB_1_DS", "SUB_1_D", "CAM_1END"
+	cam_levels.alpha1, cam_levels.alpha2, cam_levels.alpha3.pre, cam_levels.alpha3.offWorld,
+	cam_levels.alpha4.pre, cam_levels.alpha4.offWorld, cam_levels.alpha5.pre,
+	cam_levels.alpha5.offWorld, cam_levels.alpha6, cam_levels.alpha7, cam_levels.alpha8.pre,
+	cam_levels.alpha8.offWorld, cam_levels.alpha9.pre, cam_levels.alpha9.offWorld,
+	cam_levels.alpha10, cam_levels.alpha11.pre, cam_levels.alpha11.offWorld,
+	cam_levels.alpha12.pre, cam_levels.alpha12.offWorld, cam_levels.alphaEnd
 ];
 const __cam_betaLevels = [
-	"CAM_2A", "SUB_2_1S", "SUB_2_1", "CAM_2B", "SUB_2_2S", "SUB_2_2", "CAM_2C",
-	"SUB_2_5S", "SUB_2_5", "SUB_2DS", "SUB_2D", "SUB_2_6S", "SUB_2_6", "SUB_2_7S",
-	"SUB_2_7", "SUB_2_8S", "SUB_2_8", "CAM_2END"
+	cam_levels.beta1, cam_levels.beta2.pre, cam_levels.beta2.offWorld, cam_levels.beta3,
+	cam_levels.beta4.pre, cam_levels.beta4.offWorld, cam_levels.beta5, cam_levels.beta6.pre,
+	cam_levels.beta6.offWorld, cam_levels.beta7.pre, cam_levels.beta7.offWorld,
+	cam_levels.beta8.pre, cam_levels.beta8.offWorld, cam_levels.beta9.pre,
+	cam_levels.beta9.offWorld, cam_levels.beta10.pre, cam_levels.beta10.offWorld,
+	cam_levels.betaEnd
 ];
 const __cam_gammaLevels = [
-	"CAM_3A", "SUB_3_1S", "SUB_3_1", "CAM_3B", "SUB_3_2S", "SUB_3_2", "CAM3A-B",
-	"CAM3C", "CAM3A-D1", "CAM3A-D2", "CAM_3_4S", "CAM_3_4"
+	cam_levels.gamma1, cam_levels.gamma2.pre, cam_levels.gamma2.offWorld, cam_levels.gamma3,
+	cam_levels.gamma4.pre, cam_levels.gamma4.offWorld, cam_levels.gamma5, cam_levels.gamma6,
+	cam_levels.gamma7, cam_levels.gamma8, cam_levels.gammaEnd.pre, cam_levels.gammaEnd.offWorld
 ];
 
 // Holds all the sounds the campaign uses. Try to name things as they are said.

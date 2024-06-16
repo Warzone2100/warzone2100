@@ -364,7 +364,7 @@ function eventStartLevel()
 		{played: false, video: "MB3_AD2_MSG6", type: CAMP_MSG, res: mis_researchTargets.missileCode3},
 	];
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_3_4S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gammaEnd.pre, {
 		callback: "checkMissileSilos"
 	});
 

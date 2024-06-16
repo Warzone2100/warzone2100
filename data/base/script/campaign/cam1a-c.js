@@ -146,7 +146,7 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Destroy all New Paradigm reinforcements"));
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_7S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.alpha11.pre, {
 		callback: "extraVictoryCondition"
 	});
 

@@ -260,7 +260,7 @@ function vtolAttack()
 function enableReinforcements()
 {
 	playSound(cam_sounds.reinforcementsAreAvailable);
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM3A-B", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.gamma5, {
 		area: "RTLZ",
 		message: "C32_LZ",
 		reinforcements: camMinutesToSeconds(3),
@@ -312,7 +312,7 @@ function eventStartLevel()
 	const tExt = getObject("transporterExit");
 	startExtraLoss = false;
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM3A-B", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.gamma5, {
 		area: "RTLZ",
 		message: "C32_LZ",
 		reinforcements: -1,

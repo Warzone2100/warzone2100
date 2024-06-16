@@ -17,5 +17,5 @@ function eventStartLevel()
 	setMissionTime(camMinutesToSeconds(30));
 	setPower(playerPower(CAM_HUMAN_PLAYER) + 50000, CAM_HUMAN_PLAYER);
 	camPlayVideos([{video: "MB3_4_MSG", type: CAMP_MSG}, {video: "MB3_4_MSG2", type: MISS_MSG}]);
-	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "CAM_3_4");
+	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, cam_levels.gammaEnd.offWorld);
 }

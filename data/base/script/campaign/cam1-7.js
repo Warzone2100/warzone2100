@@ -272,7 +272,7 @@ function eventStartLevel()
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_DS", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha12.pre, {
 		area: "RTLZ",
 		message: "C1-7_LZ",
 		reinforcements: camMinutesToSeconds(1),

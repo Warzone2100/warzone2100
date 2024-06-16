@@ -162,7 +162,7 @@ function transferPower()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_2S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.beta4.pre);
 
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone"); //player lz

@@ -65,7 +65,7 @@ function eventStartLevel()
 	centreView(mis_Labels.startPos.x, mis_Labels.startPos.y);
 	setNoGoArea(mis_Labels.lz.x, mis_Labels.lz.y, mis_Labels.lz.x2, mis_Labels.lz.y2, CAM_HUMAN_PLAYER);
 	setMissionTime((tweakOptions.classicTimers) ? -1 : camChangeOnDiff(camMinutesToSeconds(10))); // 10 min for building module.
-	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_1");
+	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, cam_levels.alpha3.offWorld);
 	cheat = false;
 	powModVideoPlayed = false;
 

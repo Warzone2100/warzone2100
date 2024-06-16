@@ -289,7 +289,7 @@ function eventStartLevel()
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma6, {
 		callback: "resistanceResearched"
 	});
 

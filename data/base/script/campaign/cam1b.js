@@ -73,7 +73,7 @@ camAreaEvent("NPSensorRemove", function(droid)
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_1S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.alpha3.pre);
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
 	centreView(startPos.x, startPos.y);

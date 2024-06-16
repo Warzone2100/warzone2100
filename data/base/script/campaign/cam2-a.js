@@ -403,7 +403,7 @@ function eventStartLevel()
 	const tEnt = getObject("transporterEntry");
 	const tExt = getObject("transporterExit");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_1S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.beta2.pre);
 	setReinforcementTime(LZ_COMPROMISED_TIME);
 
 	centreView(startPos.x, startPos.y);

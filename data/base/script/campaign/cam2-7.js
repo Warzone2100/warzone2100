@@ -111,7 +111,7 @@ function truckDefense()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_8S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta10.pre, {
 		eliminateBases: true,
 		area: "RTLZ",
 		message: "C27_LZ",

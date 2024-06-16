@@ -157,7 +157,7 @@ function setupPatrols()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alphaEnd, {
 		area: "RTLZ",
 		message: "C1D_LZ",
 		reinforcements: camMinutesToSeconds(2),

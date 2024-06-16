@@ -115,7 +115,7 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Locate and rescue your units from the shot down transporter"));
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2B", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta3, {
 		area: "RTLZ",
 		message: "C21_LZ",
 		reinforcements: -1,

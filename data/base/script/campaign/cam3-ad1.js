@@ -271,7 +271,7 @@ function eventStartLevel()
 	const lz2 = getObject("landingZone2"); //LZ for cam3-4s.
 	mapLimit = 1.0;
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D2", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma8, {
 		callback: "checkMissileSilos"
 	});
 

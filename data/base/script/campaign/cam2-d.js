@@ -126,7 +126,7 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Secure the Uplink from The Collective"));
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_6S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta8.pre, {
 		area: "RTLZ",
 		message: "C2D_LZ",
 		reinforcements: camMinutesToSeconds(5),
