@@ -630,10 +630,11 @@ struct TextShaper
 	struct HarfbuzzPosition
 	{
 		hb_codepoint_t codepoint;
+		uint32_t cluster;
 		Vector2i penPosition;
 		FTFace& face;
 
-		HarfbuzzPosition(hb_codepoint_t c, Vector2i &&p, FTFace& f) : codepoint(c), penPosition(p), face(f) {}
+		HarfbuzzPosition(hb_codepoint_t c, uint32_t cl, Vector2i &&p, FTFace& f) : codepoint(c), cluster(cl), penPosition(p), face(f) {}
 	};
 
 	struct ShapingResult
@@ -790,15 +791,16 @@ struct TextShaper
 		);
 	}
 
-	ShapingResult shapeText(const WzString& text, iV_fonts fontID)
+	struct SplitTextRunsResult
 	{
-		/* Fribidi assumes that the text is encoded in UTF-32, so we have to
-		   convert from UTF-8 to UTF-32, assuming that the string is indeed in UTF-8.*/
-		std::vector<uint32_t> codePoints = text.toUtf32();
-		if (codePoints.empty())
-		{
-			return ShapingResult();
-		}
+		std::vector<TextRun> textRuns;
+#if defined(WZ_FRIBIDI_ENABLED)
+		FriBidiParType baseDirection;
+#endif
+	};
+
+	SplitTextRunsResult splitTextRuns(const std::vector<uint32_t>& codePoints, iV_fonts fontID)
+	{
 		int codePoints_size = static_cast<int>(codePoints.size());
 #if SIZE_MAX > INT32_MAX
 		if (codePoints.size() > static_cast<size_t>(std::numeric_limits<int>::max()))
@@ -884,9 +886,11 @@ struct TextShaper
 
 		// Step 4: Create the different runs
 
+		SplitTextRunsResult result;
+
 		hb_language_t language = hb_language_get_default(); // Future TODO: We could probably be smarter about this, but this replicates the behavior of hb_buffer_guess_segment_properties()
 
-		std::vector<TextRun> textRuns;
+		std::vector<TextRun>& textRuns = result.textRuns;
 		hb_script_t lastScript = scripts[0];
 		auto lastLevel = levels[0];
 		int lastRunStart = 0; // where the last run started
@@ -928,6 +932,33 @@ struct TextShaper
 			}
 		}
 
+#if defined(WZ_FRIBIDI_ENABLED)
+		result.baseDirection = baseDirection;
+#endif
+		return result;
+	}
+
+	SplitTextRunsResult splitTextRuns(const WzString& text, iV_fonts fontID)
+	{
+		/* Fribidi assumes that the text is encoded in UTF-32, so we have to
+		 convert from UTF-8 to UTF-32, assuming that the string is indeed in UTF-8.*/
+		std::vector<uint32_t> codePoints = text.toUtf32();
+
+		return splitTextRuns(codePoints, fontID);
+	}
+
+	ShapingResult shapeText(const std::vector<uint32_t>& codePoints, iV_fonts fontID)
+	{
+		if (codePoints.empty())
+		{
+			return ShapingResult();
+		}
+
+		auto textRunResult = splitTextRuns(codePoints, fontID);
+		auto& textRuns = textRunResult.textRuns;
+#if defined(WZ_FRIBIDI_ENABLED)
+		FriBidiParType baseDirection = textRunResult.baseDirection;
+#endif
 
 		// Step 6: Shape each run using harfbuzz.
 
@@ -946,7 +977,8 @@ struct TextShaper
 			{
 				hb_glyph_position_t& current_glyphPos = run.glyphPositions[glyphIndex];
 
-				shapingResult.glyphes.emplace_back(run.glyphInfos[glyphIndex].codepoint, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset), *run.fontFace);
+				uint32_t clusterIdx = (run.glyphInfos[glyphIndex].cluster + run.startOffset);
+				shapingResult.glyphes.emplace_back(run.glyphInfos[glyphIndex].codepoint, clusterIdx, Vector2i(x + current_glyphPos.x_offset, y + current_glyphPos.y_offset), *run.fontFace);
 
 				x += run.glyphPositions[glyphIndex].x_advance;
 				y += run.glyphPositions[glyphIndex].y_advance;
@@ -973,6 +1005,15 @@ struct TextShaper
 		// Step 7: Finalize.
 
 		return shapingResult;
+	}
+
+	ShapingResult shapeText(const WzString& text, iV_fonts fontID)
+	{
+		/* Fribidi assumes that the text is encoded in UTF-32, so we have to
+		 convert from UTF-8 to UTF-32, assuming that the string is indeed in UTF-8.*/
+		std::vector<uint32_t> codePoints = text.toUtf32();
+
+		return shapeText(codePoints, fontID);
 	}
 
 	inline void shapeHarfbuzz(TextRun& run, FTFace& face)
@@ -1292,6 +1333,32 @@ unsigned int iV_GetTextHeight(const char* string, iV_fonts fontID)
 {
 	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, fontID);
 	return height_pixelsToPoints(metrics.height);
+}
+
+std::vector<WzTextRun> iV_SplitTextParagraphIntoRuns(const WzString& string, iV_fonts fontID)
+{
+	auto internalResult = getShaper().splitTextRuns(string, fontID);
+	std::vector<WzTextRun> result;
+
+	auto processTextRun = [&](const TextRun& run) {
+		result.push_back({static_cast<size_t>(run.startOffset), static_cast<size_t>(run.endOffset), run.direction == HB_DIRECTION_RTL});
+	};
+
+#if defined(WZ_FRIBIDI_ENABLED)
+	// The direction of the loop must change depending on the base direction
+	if (!(FRIBIDI_IS_RTL(internalResult.baseDirection)))
+	{
+#endif // defined(WZ_FRIBIDI_ENABLED)
+		std::for_each(internalResult.textRuns.cbegin(), internalResult.textRuns.cend(), processTextRun);
+#if defined(WZ_FRIBIDI_ENABLED)
+	}
+	else
+	{
+		std::for_each(internalResult.textRuns.crbegin(), internalResult.textRuns.crend(), processTextRun);
+	}
+#endif // defined(WZ_FRIBIDI_ENABLED)
+
+	return result;
 }
 
 // Returns the character width *in points*
