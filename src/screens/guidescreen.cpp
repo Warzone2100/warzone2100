@@ -1416,7 +1416,7 @@ void WzGuideTopicDisplayWidget::initialize(const WzWrappedGuideTopic& psWrappedT
 		{
 			line = " ";
 		}
-		m_contents->addText(line);
+		m_contents->addText(WzString::fromUtf8(line));
 		if (oldFont.has_value())
 		{
 			m_contents->setFont(oldFont.value());

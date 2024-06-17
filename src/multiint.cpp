@@ -5277,7 +5277,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 	{
 	case RoomMessageSystem:
 		paragraph->setFontColour(WZCOL_CONS_TEXT_SYSTEM);
-		paragraph->addText(message.text);
+		paragraph->addText(WzString::fromUtf8(message.text));
 		break;
 
 	case RoomMessagePlayer:
@@ -5285,7 +5285,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		ASSERT(message.sender.get() != nullptr, "Null message sender?");
 		paragraph->setFont(font_small);
 		paragraph->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
-		paragraph->addText(formatLocalDateTime("%H:%M", message.time));
+		paragraph->addText(WzString::fromUtf8(formatLocalDateTime("%H:%M", message.time)));
 
 		auto playerNameWidget = std::make_shared<ChatBoxPlayerNameWidget>(message.sender);
 		paragraph->addWidget(playerNameWidget, playerNameWidget->aboveBase());
@@ -5294,7 +5294,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		paragraph->setShadeColour({0, 0, 0, 0});
 		bool specSender = (*message.sender)->isSpectator && !message.sender->isHost();
 		paragraph->setFontColour((!specSender) ? WZCOL_WHITE : WZCOL_TEXT_MEDIUM);
-		paragraph->addText(astringf(" %s", message.text.c_str()));
+		paragraph->addText(WzString::fromUtf8(astringf(" %s", message.text.c_str())));
 
 		break;
 	}
@@ -5302,7 +5302,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 	case RoomMessageNotify:
 	default:
 		paragraph->setFontColour(WZCOL_YELLOW);
-		paragraph->addText(message.text);
+		paragraph->addText(WzString::fromUtf8(message.text));
 		break;
 	}
 

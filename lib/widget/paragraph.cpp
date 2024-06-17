@@ -305,9 +305,9 @@ public:
 
 struct ParagraphTextElement: public ParagraphElement
 {
-	ParagraphTextElement(std::string const &newText, ParagraphTextStyle const &style): style(style)
+	ParagraphTextElement(WzString const &newText, ParagraphTextStyle const &style, bool rtl = false): style(style)
 	{
-		text = WzString::fromUtf8(newText);
+		text = newText;
 	}
 
 	void appendTo(FlowLayout &layout) override
@@ -497,10 +497,22 @@ std::vector<std::vector<FlowLayoutFragment>> Paragraph::calculateLinesLayout()
 	return flowLayout.getLines();
 }
 
-void Paragraph::addText(std::string const &text)
+void Paragraph::addText(const WzString &text)
 {
 	layoutDirty = true;
-	elements.push_back(std::make_unique<ParagraphTextElement>(text, textStyle));
+	auto textRuns = iV_SplitTextParagraphIntoRuns(text, textStyle.font);
+	if (textRuns.size() > 1)
+	{
+		for (const auto& run : textRuns)
+		{
+			auto runText = text.substr(run.startOffset, run.endOffset - run.startOffset);
+			elements.push_back(std::make_unique<ParagraphTextElement>(runText, textStyle, run.rightToLeft));
+		}
+	}
+	else
+	{
+		elements.push_back(std::make_unique<ParagraphTextElement>(text, textStyle));
+	}
 }
 
 void Paragraph::addWidget(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase)
