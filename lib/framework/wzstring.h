@@ -64,6 +64,7 @@ public:
 	static WzString fromUtf8(const char *str, int size = -1);
 	static WzString fromUtf8(const std::string &str);
 	static WzString fromUtf16(const std::vector<uint16_t>& utf16);
+	static WzString fromUtf32(const std::vector<uint32_t>& utf32);
 	static WzString fromCodepoint(const WzUniCodepoint& codepoint);
 
 	const std::string& toUtf8() const;
@@ -110,6 +111,7 @@ public:
 
 	std::vector<WzString> split(const WzString &delimiter) const;
 	WzString substr(size_t start, size_t length) const;
+	WzString substr(size_t start) const;
 
 public:
 	// Normalization
