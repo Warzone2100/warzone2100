@@ -265,7 +265,7 @@ protected:
 			description->setFontColour(WZCOL_TEXT_BRIGHT);
 			description->setLineSpacing(2);
 			description->setFont(font_regular);
-			description->addText(help.description.toUtf8());
+			description->addText(help.description);
 			attach(description);
 		}
 
@@ -288,14 +288,14 @@ protected:
 				interaction_type->setFontColour(WZCOL_TEXT_BRIGHT);
 				interaction_type->setLineSpacing(0);
 				interaction_type->setFont(font_regular_bold);
-				interaction_type->addText(to_string(interaction.triggers));
+				interaction_type->addText(WzString::fromUtf8(to_string(interaction.triggers)));
 				interaction_type->setGeometry(0, 0, (MaxWidth / 2) - (5*2), 0);
 
 				auto interaction_effect = std::make_shared<Paragraph>();
 				interaction_effect->setFontColour(WZCOL_TEXT_BRIGHT);
 				interaction_effect->setLineSpacing(0);
 				interaction_effect->setFont(font_regular);
-				interaction_effect->addText(interaction.description.toUtf8());
+				interaction_effect->addText(interaction.description);
 				interaction_effect->setGeometry(0, 0, MaxWidth / 2, 0);
 
 				grid->place({0}, row, Margin(5, 5).wrap(interaction_type));
@@ -371,7 +371,7 @@ protected:
 			interaction_effect->setFontColour(WZCOL_TEXT_MEDIUM);
 			interaction_effect->setLineSpacing(0);
 			interaction_effect->setFont(font_regular);
-			interaction_effect->addText(keybindingsStr.toUtf8());
+			interaction_effect->addText(keybindingsStr);
 			interaction_effect->setGeometry(0, 0, MaxWidth / 2, 0);
 
 			grid->place({0}, row, Margin(2, 5).wrap(interaction_type));

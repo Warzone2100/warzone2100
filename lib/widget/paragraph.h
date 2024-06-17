@@ -119,7 +119,7 @@ class Paragraph : public WIDGET
 public:
 	Paragraph(): WIDGET() {}
 
-	void addText(std::string const &text);
+	void addText(const WzString &text);
 	void addWidget(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase);
 
 	void setFont(iV_fonts font)

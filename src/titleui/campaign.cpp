@@ -1048,7 +1048,7 @@ void WzCampaignTweakOptionToggle::initialize(const WzString& displayName, const 
 	descriptionWidget->setFont(font_small);
 	descriptionWidget->setFontColour(WZCOL_TEXT_MEDIUM);
 	descriptionWidget->setGeometry(0, 0, 400, 40);
-	descriptionWidget->addText(description.toUtf8());
+	descriptionWidget->addText(description);
 	descriptionWidget->setTransparentToMouse(true);
 	attach(descriptionWidget);
 
@@ -1653,7 +1653,7 @@ protected:
 			descriptionWidget->setShadeColour(pal_RGBA(0,0,0,80));
 		}
 		descriptionWidget->setGeometry(leftPadding, nextLineY0, 400, 40);
-		descriptionWidget->addText(description.toUtf8());
+		descriptionWidget->addText(description);
 
 		auto scrollableDescriptionWidget = ScrollableListWidget::make();
 		scrollableDescriptionWidget->addItem(descriptionWidget);

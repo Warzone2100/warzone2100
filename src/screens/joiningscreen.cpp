@@ -568,7 +568,7 @@ void WzJoiningStatusForm::displayDetailsParagraph(const WzString& messageContent
 	{
 		messageContentsStr = messageContentsStr.substr(0, maxLinePos);
 	}
-	detailsParagraph->addText(messageContentsStr);
+	detailsParagraph->addText(WzString::fromUtf8(messageContentsStr));
 
 	scrollableParagraphContainer->addItem(detailsParagraph);
 

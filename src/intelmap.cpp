@@ -285,7 +285,7 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 			{
 				auto message = std::make_shared<Paragraph>();
 				message->setFontColour(WZCOL_TEXT_BRIGHT);
-				message->addText(msg.toUtf8());
+				message->addText(msg);
 				messages->addItem(message);
 			}
 		}
@@ -332,7 +332,7 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 	{
 		auto message = std::make_shared<Paragraph>();
 		message->setFontColour(WZCOL_TEXT_BRIGHT);
-		message->addText(msg.toUtf8());
+		message->addText(msg);
 		messages->addItem(message);
 	}
 
