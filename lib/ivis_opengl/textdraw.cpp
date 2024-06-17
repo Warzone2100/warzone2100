@@ -650,6 +650,75 @@ struct TextShaper
 	~TextShaper()
 	{ }
 
+	// Returns the maximum text run length (in WzString characters) that fits within a max width (supplied *IN PIXELS*)
+	uint32_t getTextMaxLenForWidth(const WzString& text, iV_fonts fontID, uint32_t maxWidthInPixels, bool rightToLeft)
+	{
+		std::vector<uint32_t> codePoints = text.toUtf32();
+		auto shapingResult = shapeText(codePoints, fontID);
+
+		if (shapingResult.glyphes.empty())
+		{
+			return 0;
+		}
+
+		int32_t min_x = std::numeric_limits<int32_t>::max();
+		int32_t max_x = std::numeric_limits<int32_t>::min();
+		int32_t min_y = std::numeric_limits<int32_t>::max();
+		int32_t max_y = std::numeric_limits<int32_t>::min();
+
+		size_t glyphIdx = (!rightToLeft) ? 0 : shapingResult.glyphes.size();
+		size_t glyphIdxEnd = (!rightToLeft) ? shapingResult.glyphes.size() : 0;
+		while (glyphIdx != glyphIdxEnd)
+		{
+			if (rightToLeft) { --glyphIdx; }
+
+			auto& g = shapingResult.glyphes[glyphIdx];
+			GlyphMetrics glyph = glyphCache->getGlyphMetrics(g.face, g.codepoint, g.penPosition % 64);
+			int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
+			int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
+
+			min_x = std::min(x0, min_x);
+			max_x = std::max(static_cast<int32_t>(x0 + glyph.width), max_x);
+			min_y = std::min(y0, min_y);
+			max_y = std::max(static_cast<int32_t>(y0 + glyph.height), max_y);
+
+			uint32_t texture_width = max_x - min_x + 1;
+			if (texture_width > maxWidthInPixels)
+			{
+				break;
+			}
+
+			if (!rightToLeft) { ++glyphIdx; }
+		}
+
+		if (glyphIdx < shapingResult.glyphes.size())
+		{
+			if (glyphIdx == 0)
+			{
+				if (!rightToLeft)
+				{
+					uint32_t texture_width = max_x - min_x + 1;
+					if (texture_width > maxWidthInPixels) // first glyph doesn't even fit
+					{
+						return 0;
+					}
+				}
+				else
+				{
+					// whole thing fits
+					return text.length();
+				}
+			}
+
+			// must truncate to fit
+			// we have a cluster index which does not fit, which is an index into the codepoints
+			auto truncatedCluster = shapingResult.glyphes[glyphIdx].cluster;
+			return truncatedCluster;
+		}
+
+		return text.length();
+	}
+
 	// Returns the text width and height *IN PIXELS*
 	TextLayoutMetrics getTextMetrics(const WzString& text, iV_fonts fontID)
 	{
@@ -1320,6 +1389,16 @@ unsigned int iV_GetTextWidth(const WzString& string, iV_fonts fontID)
 {
 	TextLayoutMetrics metrics = getShaper().getTextMetrics(string, fontID);
 	return width_pixelsToPoints(metrics.width);
+}
+
+static float maxUint32Float = std::nextafterf(static_cast<float>(std::numeric_limits<uint32_t>::max()), 0.0f);
+
+// Note: Is intended to be used *only* with text runs produced by iV_SplitTextParagraphIntoRuns() - rightToLeft must be properly supplied
+size_t iV_GetMaxTextRunLenForWidth(const WzString& textRun, iV_fonts fontID, uint32_t maxWidthInPoints, bool rightToLeft)
+{
+	float scaledWidthInPixels = floorf((float)maxWidthInPoints * _horizScaleFactor);
+	uint32_t maxWidthInPixels = (scaledWidthInPixels <= maxUint32Float) ? static_cast<uint32_t>(scaledWidthInPixels) : std::numeric_limits<uint32_t>::max();
+	return getShaper().getTextMaxLenForWidth(textRun, fontID, maxWidthInPixels, rightToLeft);
 }
 
 // Returns the counted text width *in points*
