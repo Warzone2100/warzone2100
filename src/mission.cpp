@@ -83,6 +83,7 @@
 #include "keybind.h"
 #include "campaigninfo.h"
 #include "wzapi.h"
+#include "screens/guidescreen.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -2240,6 +2241,9 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		}
 		screen_RestartBackDrop();
 	}
+
+	// ensure the guide screen is closed
+	closeGuideScreen();
 
 	// ensure these widgets are deleted before attempting to create
 	intDestroyMissionResultWidgets();
