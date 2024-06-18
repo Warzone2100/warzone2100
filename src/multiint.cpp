@@ -7580,7 +7580,7 @@ static void printHostHelpMessagesToConsole()
 			{
 				return;
 			}
-			switch (ipv4MappingRequest->status())
+			switch (PortMappingManager::instance().get_status(ipv4MappingRequest))
 			{
 			case PortMappingDiscoveryStatus::SUCCESS:
 				ssprintf(buf, "%s", _("Port mapping has been enabled."));

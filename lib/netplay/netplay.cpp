@@ -315,7 +315,7 @@ std::vector<optional<uint32_t>>	NET_waitingForIndexChangeAckSince = std::vector<
 static LobbyServerConnectionHandler lobbyConnectionHandler;
 static PlayerManagementRecord playerManagementRecord;
 
-PortMappingAsyncRequestPtr ipv4MappingRequest;
+PortMappingAsyncRequestHandle ipv4MappingRequest;
 
 // ////////////////////////////////////////////////////////////////////////////
 /************************************************************************************
