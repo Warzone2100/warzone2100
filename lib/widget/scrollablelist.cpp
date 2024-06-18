@@ -125,7 +125,8 @@ void ScrollableListWidget::updateLayout()
 	layoutDirty = false;
 
 	auto listViewWidthWithoutScrollBar = calculateListViewWidth();
-	auto listViewWidthWithScrollBar = listViewWidthWithoutScrollBar - scrollBar->width();
+	auto widthOfScrollbar = scrollBar->width();
+	auto listViewWidthWithScrollBar = (widthOfScrollbar >= 0 && listViewWidthWithoutScrollBar > static_cast<uint32_t>(widthOfScrollbar)) ? listViewWidthWithoutScrollBar - static_cast<uint32_t>(widthOfScrollbar) : 0;
 	auto listViewHeight = calculateListViewHeight();
 
 	resizeChildren(listViewWidthWithScrollBar);
@@ -157,12 +158,14 @@ void ScrollableListWidget::resizeChildren(uint32_t width)
 
 uint32_t ScrollableListWidget::calculateListViewHeight() const
 {
-	return height() - padding.top - padding.bottom;
+	int32_t result = height() - static_cast<int32_t>(padding.top) - static_cast<int32_t>(padding.bottom);
+	return (result > 0) ? static_cast<uint32_t>(result) : 0;
 }
 
 uint32_t ScrollableListWidget::calculateListViewWidth() const
 {
-	return width() - padding.left - padding.right;
+	int32_t result = width() - padding.left - padding.right;
+	return (result > 0) ? static_cast<uint32_t>(result) : 0;
 }
 
 bool ScrollableListWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
