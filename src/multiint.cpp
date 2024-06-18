@@ -7576,15 +7576,20 @@ static void printHostHelpMessagesToConsole()
 	{
 		if (NetPlay.isPortMappingEnabled)
 		{
-			switch (PortMappingManager::instance().status())
+			if (!ipv4MappingRequest)
 			{
-			case PortMappingManager::DiscoveryStatus::SUCCESS:
+				return;
+			}
+			switch (ipv4MappingRequest->status())
+			{
+			case PortMappingDiscoveryStatus::SUCCESS:
 				ssprintf(buf, "%s", _("Port mapping has been enabled."));
 				break;
-			case PortMappingManager::DiscoveryStatus::FAILURE:
+			case PortMappingDiscoveryStatus::FAILURE:
+			case PortMappingDiscoveryStatus::TIMEOUT:
 				ssprintf(buf, "%s", _("Port mapping creation failed. You must manually configure router yourself."));
 				break;
-			case PortMappingManager::DiscoveryStatus::IN_PROGRESS:
+			case PortMappingDiscoveryStatus::IN_PROGRESS:
 				ssprintf(buf, "%s", _("Port mapping creation is in progress..."));
 				break;
 			default:

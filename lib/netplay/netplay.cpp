@@ -315,6 +315,8 @@ std::vector<optional<uint32_t>>	NET_waitingForIndexChangeAckSince = std::vector<
 static LobbyServerConnectionHandler lobbyConnectionHandler;
 static PlayerManagementRecord playerManagementRecord;
 
+PortMappingAsyncRequestPtr ipv4MappingRequest;
+
 // ////////////////////////////////////////////////////////////////////////////
 /************************************************************************************
  **  NOTE (!)  Increment NETCODE_VERSION_MINOR on each release.
@@ -1439,25 +1441,25 @@ static bool NETrecvGAMESTRUCT(Socket& sock, GAMESTRUCT *ourgamestruct)
 
 void NETaddRedirects()
 {
-	ASSERT(PortMappingManager::instance().status() == PortMappingManager::DiscoveryStatus::NOT_STARTED,
-		"Port mapping manager has already finished the discovery!");
-	if (!PortMappingManager::instance().create_port_mapping(gameserver_port))
+	auto& pmm = PortMappingManager::instance();
+	ipv4MappingRequest = pmm.create_port_mapping(gameserver_port, PortMappingInternetProtocol::IPV4);
+	if (!ipv4MappingRequest)
 	{
 		debug(LOG_NET, "Failed to create port mapping!");
 		return;
 	}
 	debug(LOG_NET, "Port mapping creation is in progress...");
 	// Report the user-visible status once the discovery is finished.
-	PortMappingManager::instance().schedule_callback([](std::string extIp, uint16_t extPort) // success callback
+	pmm.attach_callback(ipv4MappingRequest, [](std::string extIp, uint16_t extPort) // success callback
 	{
 		char buf[512] = { '\0' };
 		ssprintf(buf, _("Game configured port (%d) correctly on (%d)\nYour external IP is %s"),
 			NETgetGameserverPort(), extPort, extIp.c_str());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	}, [](PortMappingManager::DiscoveryStatus status) // failure callback
+	}, [](PortMappingDiscoveryStatus status) // failure callback
 	{
 		char buf[512] = { '\0' };
-		if (status == PortMappingManager::DiscoveryStatus::TIMEOUT)
+		if (status == PortMappingDiscoveryStatus::TIMEOUT)
 		{
 			ssprintf(buf, _("Port mapping discovery timed out after %d seconds.\n"
 				"Manually configure your router/firewall to open port %d!"),
@@ -1473,25 +1475,28 @@ void NETaddRedirects()
 
 void NETremRedirects()
 {
-	if (!PortMappingManager::instance().destroy_active_mapping())
+	if (!ipv4MappingRequest)
 	{
-		debug(LOG_ERROR, "Failed to remove port mapping for the game. You must manually remove it from your router.");
 		return;
 	}
-	debug(LOG_NET, "Removed port mapping for port %d.", gameserver_port);
+	if (!PortMappingManager::instance().destroy_port_mapping(ipv4MappingRequest))
+	{
+		debug(LOG_ERROR, "Failed to remove IPv4 port mapping for the game. You must manually remove it from your router.");
+		return;
+	}
+	debug(LOG_NET, "Removed port mapping for port %d (IPv4).", gameserver_port);
+	ipv4MappingRequest = nullptr;
 }
 
 void NETinitPortMapping()
 {
-	if (PortMappingManager::instance().status() == PortMappingManager::DiscoveryStatus::NOT_STARTED && NetPlay.isPortMappingEnabled)
-	{
-		PortMappingManager::instance().init();
-		NETaddRedirects();
-	}
-	else if (!NetPlay.isPortMappingEnabled)
+	if (!NetPlay.isPortMappingEnabled)
 	{
 		debug(LOG_INFO, "Automatic port mapping setup disabled by user.");
+		return;
 	}
+	PortMappingManager::instance().init();
+	NETaddRedirects();
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -4480,7 +4485,8 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 
 	// Do not allow others to join and delay announcing the game session to the lobby server
 	// until we manage to setup (successfully or not) the port mapping rule for the `gameserver_port`.
-	PortMappingManager::instance().schedule_callback(
+	ASSERT(ipv4MappingRequest != nullptr, "Expected to have an in-flight port mapping request to attach to");
+	PortMappingManager::instance().attach_callback(ipv4MappingRequest,
 		[SessionName, spectatorHost, plyrs, gameType, two, three, four, PlayerName](std::string externalIp, uint16_t extPort) // success callback
 	{
 		// Setup gamestruct with the external ip + port combination received from the LibPlum.
@@ -4491,7 +4497,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		// this game session is available to join to.
 		allow_joining = true;
 		debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
-	}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, three, four](PortMappingManager::DiscoveryStatus /*status*/) // failure callback
+	}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, three, four](PortMappingDiscoveryStatus /*status*/) // failure callback
 	{
 		// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
 		// that others will still be able to connect to us.
