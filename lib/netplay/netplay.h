@@ -32,6 +32,7 @@
 #include "wzfile.h"
 #include "netlog.h"
 #include "sync_debug.h"
+#include "port_mapping_manager.h"
 
 #include <physfs.h>
 #include <vector>
@@ -334,6 +335,8 @@ extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 extern bool cliConnectToIpAsSpectator; // = false; (for cli option)
 extern bool netGameserverPortOverride; // = false; (for cli override)
+
+extern PortMappingAsyncRequestPtr ipv4MappingRequest;
 
 #define ASSERT_HOST_ONLY(failAction) \
 	if (!NetPlay.isHost) \
