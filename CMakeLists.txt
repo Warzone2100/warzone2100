@@ -425,6 +425,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Apple LLVM - Code Generation
 		set(CMAKE_XCODE_ATTRIBUTE_GCC_NO_COMMON_BLOCKS YES)							# -fno-common
 
+		# Custom CFLAGS
+		list(APPEND WZ_TARGET_ADDITIONAL_C_BUILD_FLAGS -fno-math-errno -fno-trapping-math)
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS -fno-math-errno -fno-trapping-math)
+
 		# Apple Clang - Custom Compiler Flags
 		# Custom Warning Flags (for which an Xcode attribute is not available)
 		set(wz_target_only_XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith")
@@ -531,8 +535,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 
 	elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 
-		list(APPEND WZ_TARGET_ADDITIONAL_C_BUILD_FLAGS -fno-common -fno-math-errno -fno-rounding-math -ffp-model=precise)
-		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS -fno-common -fno-math-errno -fno-rounding-math -ffp-model=precise)
+		list(APPEND WZ_TARGET_ADDITIONAL_C_BUILD_FLAGS -fno-common -fno-math-errno -fno-trapping-math -fno-rounding-math -ffp-model=precise)
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS -fno-common -fno-math-errno -fno-trapping-math -fno-rounding-math -ffp-model=precise)
 
 	else()
 		# GCC, Clang, etc
@@ -560,6 +564,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Enable -fno-math-errno (if supported)
 		check_compiler_flags_output("-Werror -fno-math-errno -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-fno-math-errno" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -fno-math-errno -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-fno-math-errno" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		# Enable -fno-trapping-math (if supported)
+		check_compiler_flags_output("-Werror -fno-trapping-math -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-fno-trapping-math" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -fno-trapping-math -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-fno-trapping-math" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# -Wcast-align				(GCC 3.4+, Clang 3.2+)
 		check_compiler_flags_output("-Werror -Wcast-align -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wcast-align" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
