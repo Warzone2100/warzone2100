@@ -336,7 +336,7 @@ extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 extern bool cliConnectToIpAsSpectator; // = false; (for cli option)
 extern bool netGameserverPortOverride; // = false; (for cli override)
 
-extern PortMappingAsyncRequestPtr ipv4MappingRequest;
+extern PortMappingAsyncRequestHandle ipv4MappingRequest;
 
 #define ASSERT_HOST_ONLY(failAction) \
 	if (!NetPlay.isHost) \

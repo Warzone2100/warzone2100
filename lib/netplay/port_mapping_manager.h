@@ -55,61 +55,23 @@ enum class PortMappingInternetProtocol
 };
 
 /// <summary>
-/// A simple structure to represent asynchronous port mapping discovery request.
+/// An opaque base class to represent asynchronous port mapping discovery request.
 ///
 /// These are supposed to be created only by `PortMappingManager` instance and used
-/// as opaque handles by the higher-level code.
+/// as opaque handles (PortMappingAsyncRequestHandle) by the higher-level code.
 /// </summary>
-struct PortMappingAsyncRequest
+class PortMappingAsyncRequestOpaqueBase
 {
-	using MappingId = int;
-	using ClockType = std::chrono::steady_clock;
-	using TimePoint = ClockType::time_point;
-	using CallbackVector = std::vector<std::pair<SuccessCallback, FailureCallback>>;
-
-	// `PortMappingAsyncRequest` instances should be synchronized on the same
-	// mutex as the parent `PortMappingManager` instance is.
-	PortMappingAsyncRequest(std::recursive_mutex& mtx);
-
-	// Set discovery status to `SUCCESS`.
-	// The method saves the discovered IP address + port combination inside the
-	// `PortMappingManager` instance so that subsequent `schedule_callback()`
-	// invocations can use this data.
-	//
-	// The method shall only be called from the LibPlum's discovery callback.
-	void resolve_success(std::string externalIp, uint16_t externalPort);
-
-	// Forcefully set discovery status to `status`.
-	// The method may either be called from LibPlum's discovery callback in case the discovery
-	// process has failed for any reason as reported directly by LibPlum, or by
-	// `PortMappingManager` itself (by the monitoring thread), if the discovery process reaches timeout.
-	//
-	// The `status` may only take `FAILURE` or `TIMEOUT` values.
-	void resolve_failure(PortMappingDiscoveryStatus failureStatus);
-
-	PortMappingDiscoveryStatus status() const;
-	bool in_progress() const;
-	bool failed() const;
-	bool succeeded() const;
-	bool timed_out(TimePoint t) const;
-
-	// Use `TimePoint::max()` as a special sentinel value to indicate that the discovery isn't started yet.
-	// Once the discovery process commences, this will be set to the value of `now() + 10s`.
-	TimePoint deadline = TimePoint::max();
-	MappingId mappingId;
-	CallbackVector callbacks;
-	PortMappingDiscoveryStatus s = PortMappingDiscoveryStatus::NOT_STARTED;
-	std::string discoveredIPaddress;
-	uint16_t discoveredPort = 0;
-	uint16_t sourcePort = 0;
-	PortMappingInternetProtocol protocol = PortMappingInternetProtocol::IPV4;
-
-private:
-
-	std::recursive_mutex& mtx_;
+protected:
+	PortMappingAsyncRequestOpaqueBase();
+public:
+	virtual ~PortMappingAsyncRequestOpaqueBase();
+public:
+	PortMappingAsyncRequestOpaqueBase( const PortMappingAsyncRequestOpaqueBase& ) = delete;
+	PortMappingAsyncRequestOpaqueBase& operator=( const PortMappingAsyncRequestOpaqueBase& ) = delete;
 };
 
-using PortMappingAsyncRequestPtr = std::shared_ptr<PortMappingAsyncRequest>;
+using PortMappingAsyncRequestHandle = std::shared_ptr<PortMappingAsyncRequestOpaqueBase>;
 using PortWithProtocol = std::pair<uint16_t, PortMappingInternetProtocol>;
 
 // Specialize `std::hash` for `PortWithProtocol` pair to be able to use it as the key in associative containers.
@@ -145,8 +107,10 @@ public:
 
 	// If previous attempt was successful, returns already-resolved request ptr.
 	// otherwise, creates a new request.
-	PortMappingAsyncRequestPtr create_port_mapping(uint16_t port, PortMappingInternetProtocol protocol);
-	bool destroy_port_mapping(const PortMappingAsyncRequestPtr& h);
+	PortMappingAsyncRequestHandle create_port_mapping(uint16_t port, PortMappingInternetProtocol protocol);
+	bool destroy_port_mapping(const PortMappingAsyncRequestHandle& h);
+
+	PortMappingDiscoveryStatus get_status(const PortMappingAsyncRequestHandle& h) const;
 
 	// In case the discovery is still in progress, add a pair of `<success, failure>` callbacks
 	// to be scheduled later on the main WZ thread.
@@ -154,9 +118,66 @@ public:
 	//
 	// If the method is called when the discovery has already finished, the appropriate callback
 	// is scheduled on the main WZ thread right away.
-	void attach_callback(const PortMappingAsyncRequestPtr& h, SuccessCallback successCb, FailureCallback failureCb);
+	void attach_callback(const PortMappingAsyncRequestHandle& h, SuccessCallback successCb, FailureCallback failureCb);
 
-	PortMappingAsyncRequestPtr activeRequestForId(PortMappingAsyncRequest::MappingId id) const;
+private:
+	/// <summary>
+	/// An internal class to represent asynchronous port mapping discovery request.
+	///
+	/// These are supposed to be created only by `PortMappingManager` instance and used
+	/// as opaque handles by the higher-level code.
+	/// </summary>
+	class PortMappingAsyncRequest : public PortMappingAsyncRequestOpaqueBase
+	{
+	public:
+		using MappingId = int;
+		using ClockType = std::chrono::steady_clock;
+		using TimePoint = ClockType::time_point;
+		using CallbackVector = std::vector<std::pair<SuccessCallback, FailureCallback>>;
+
+		PortMappingAsyncRequest();
+
+		PortMappingAsyncRequest( const PortMappingAsyncRequest& ) = delete;
+		PortMappingAsyncRequest& operator=( const PortMappingAsyncRequest& ) = delete;
+
+		PortMappingDiscoveryStatus status() const;
+		bool in_progress() const;
+		bool failed() const;
+		bool succeeded() const;
+		bool timed_out(TimePoint t) const;
+
+		// Use `TimePoint::max()` as a special sentinel value to indicate that the discovery isn't started yet.
+		// Once the discovery process commences, this will be set to the value of `now() + 10s`.
+		TimePoint deadline = TimePoint::max();
+		MappingId mappingId;
+		CallbackVector callbacks;
+		PortMappingDiscoveryStatus s = PortMappingDiscoveryStatus::NOT_STARTED;
+		std::string discoveredIPaddress;
+		uint16_t discoveredPort = 0;
+		uint16_t sourcePort = 0;
+		PortMappingInternetProtocol protocol = PortMappingInternetProtocol::IPV4;
+	};
+	using PortMappingAsyncRequestPtr = std::shared_ptr<PortMappingAsyncRequest>;
+
+protected:
+	// Only intended to be called by plum callback handlers:
+	friend void PlumMappingCallbackSuccess(int mappingId, const std::string& externalHost, uint16_t externalPort);
+	friend void PlumMappingCallbackFailure(int mappingId);
+
+	// Set discovery status to `SUCCESS`.
+	// The method saves the discovered IP address + port combination inside the
+	// `PortMappingManager` instance so that subsequent `schedule_callback()`
+	// invocations can use this data.
+	//
+	// The method shall only be called from the LibPlum's discovery callback.
+	void resolve_success_fromlibplum(int mappingId, std::string externalIp, uint16_t externalPort);
+
+	// Forcefully set discovery status to `status`.
+	// The method shall only be called from LibPlum's discovery callback in case the discovery
+	// process has failed for any reason as reported directly by LibPlum.
+	//
+	// The `status` may only take `FAILURE` or `TIMEOUT` values.
+	void resolve_failure_fromlibplum(int mappingId, PortMappingDiscoveryStatus failureStatus);
 
 private:
 
@@ -170,12 +191,21 @@ private:
 	//    discovery process finishes by any means (success or failure/timeout).
 	void thread_monitor_function();
 
+	using CallbacksPerRequest = std::unordered_map<PortMappingAsyncRequestPtr, PortMappingAsyncRequest::CallbackVector>;
+	static void scheduleCallbacksOnMainThread(CallbacksPerRequest cbReqMap);
+
+	// Must only be called internally, and if mtx_ lock is held!
+	PortMappingAsyncRequestPtr active_request_for_id_internal(int id) const;
+	static void resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort);
+	static void resolve_failure_internal(PortMappingAsyncRequestPtr req, PortMappingDiscoveryStatus failureStatus);
+
+
 	std::unordered_map<PortMappingAsyncRequest::MappingId, PortMappingAsyncRequestPtr> activeDiscoveries_;
 	std::unordered_map<PortWithProtocol, PortMappingAsyncRequestPtr> successfulRequests_;
 
 	bool isInit_ = false;
 
 	std::thread monitoringThread_;
-	mutable std::recursive_mutex mtx_;
+	mutable std::mutex mtx_;
 	std::atomic_bool stopRequested_;
 };

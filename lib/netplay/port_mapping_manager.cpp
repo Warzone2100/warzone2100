@@ -28,6 +28,16 @@
 
 #include <plum/plum.h>
 
+void PlumMappingCallbackSuccess(int mappingId, const std::string& externalHost, uint16_t externalPort)
+{
+	PortMappingManager::instance().resolve_success_fromlibplum(mappingId, externalHost, externalPort);
+}
+
+void PlumMappingCallbackFailure(int mappingId)
+{
+	PortMappingManager::instance().resolve_failure_fromlibplum(mappingId, PortMappingDiscoveryStatus::FAILURE);
+}
+
 namespace
 {
 
@@ -35,22 +45,16 @@ namespace
 void PlumMappingCallback(int mappingId, plum_state_t state, const plum_mapping_t* mapping)
 {
 	debug(LOG_NET, "LibPlum cb: Port mapping %d: state=%d\n", mappingId, (int)state);
-	const auto req = PortMappingManager::instance().activeRequestForId(mappingId);
-	if (!req)
-	{
-		debug(LOG_NET, "Mapping %d: no active request found in PortMappingManager, probably timed out\n", mappingId);
-		return;
-	}
 	switch (state) {
 	case PLUM_STATE_SUCCESS:
 		debug(LOG_NET, "Mapping %d: success, internal=%hu, external=%s:%hu\n", mappingId, mapping->internal_port,
 			mapping->external_host, mapping->external_port);
-		req->resolve_success(mapping->external_host, mapping->external_port);
+		PlumMappingCallbackSuccess(mappingId, mapping->external_host, mapping->external_port);
 		break;
 
 	case PLUM_STATE_FAILURE:
 		debug(LOG_NET, "Mapping %d: failed\n", mappingId);
-		req->resolve_failure(PortMappingDiscoveryStatus::FAILURE);
+		PlumMappingCallbackFailure(mappingId);
 		break;
 
 	default:
@@ -65,67 +69,38 @@ void PlumLogCallback(plum_log_level_t /*level*/, const char* message)
 
 } // anonymous namespace
 
-PortMappingAsyncRequest::PortMappingAsyncRequest(std::recursive_mutex& mtx)
-	: mappingId(PLUM_ERR_INVALID), mtx_(mtx)
+PortMappingAsyncRequestOpaqueBase::PortMappingAsyncRequestOpaqueBase()
+{ }
+
+PortMappingAsyncRequestOpaqueBase::~PortMappingAsyncRequestOpaqueBase()
+{ }
+
+PortMappingManager::PortMappingAsyncRequest::PortMappingAsyncRequest()
+	: mappingId(PLUM_ERR_INVALID)
 {}
 
-void PortMappingAsyncRequest::resolve_success(std::string externalIp, uint16_t externalPort)
+PortMappingDiscoveryStatus PortMappingManager::PortMappingAsyncRequest::status() const
 {
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
-	if (s != PortMappingDiscoveryStatus::IN_PROGRESS)
-	{
-		// Someone has already gotten ahead of us - nothing to do there.
-		return;
-	}
-	s = PortMappingDiscoveryStatus::SUCCESS;
-	deadline = TimePoint::max();
-	discoveredIPaddress = std::move(externalIp);
-	discoveredPort = externalPort;
-}
-
-void PortMappingAsyncRequest::resolve_failure(PortMappingDiscoveryStatus failureStatus)
-{
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
-	ASSERT(failureStatus == PortMappingDiscoveryStatus::FAILURE || failureStatus == PortMappingDiscoveryStatus::TIMEOUT,
-		"Status should either be failure or timeout");
-	if (s != PortMappingDiscoveryStatus::IN_PROGRESS)
-	{
-		// Someone has already gotten ahead of us - nothing to do there.
-		return;
-	}
-	s = failureStatus;
-	deadline = TimePoint::max();
-	discoveredIPaddress.clear();
-	discoveredPort = 0;
-}
-
-PortMappingDiscoveryStatus PortMappingAsyncRequest::status() const
-{
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
 	return s;
 }
 
-bool PortMappingAsyncRequest::in_progress() const
+bool PortMappingManager::PortMappingAsyncRequest::in_progress() const
 {
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
 	return s == PortMappingDiscoveryStatus::IN_PROGRESS;
 }
 
-bool PortMappingAsyncRequest::failed() const
+bool PortMappingManager::PortMappingAsyncRequest::failed() const
 {
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
 	return s == PortMappingDiscoveryStatus::FAILURE || s == PortMappingDiscoveryStatus::TIMEOUT;
 }
 
-bool PortMappingAsyncRequest::succeeded() const
+bool PortMappingManager::PortMappingAsyncRequest::succeeded() const
 {
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
 	return s == PortMappingDiscoveryStatus::SUCCESS;
 }
 
-bool PortMappingAsyncRequest::timed_out(TimePoint t) const
+bool PortMappingManager::PortMappingAsyncRequest::timed_out(TimePoint t) const
 {
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
 	return t >= deadline;
 }
 
@@ -159,7 +134,7 @@ void PortMappingManager::shutdown()
 	}
 	plum_cleanup();
 	{
-		const std::lock_guard<std::recursive_mutex> guard {mtx_};
+		const std::lock_guard<std::mutex> guard {mtx_};
 		activeDiscoveries_.clear();
 		successfulRequests_.clear();
 	}
@@ -182,12 +157,12 @@ PortMappingManager::~PortMappingManager()
 	{}
 }
 
-PortMappingAsyncRequestPtr PortMappingManager::create_port_mapping(uint16_t port, PortMappingInternetProtocol protocol)
+PortMappingAsyncRequestHandle PortMappingManager::create_port_mapping(uint16_t port, PortMappingInternetProtocol protocol)
 {
 	PortMappingAsyncRequestPtr h = nullptr;
 	bool hasActiveDiscoveries = false;
 	{
-		const std::lock_guard<std::recursive_mutex> guard {mtx_};
+		const std::lock_guard<std::mutex> guard {mtx_};
 		// First, check if there's a request for a given <port, protocol> pair
 		// that has been successfully executed before. If so, just reuse it.
 		auto it = successfulRequests_.find({ port, protocol });
@@ -206,7 +181,7 @@ PortMappingAsyncRequestPtr PortMappingManager::create_port_mapping(uint16_t port
 		{
 			return nullptr;
 		}
-		h = std::make_shared<PortMappingAsyncRequest>(mtx_);
+		h = std::make_shared<PortMappingAsyncRequest>();
 		h->deadline = PortMappingAsyncRequest::ClockType::now() + std::chrono::seconds(DISCOVERY_TIMEOUT_SECONDS);
 		h->s = PortMappingDiscoveryStatus::IN_PROGRESS;
 		h->mappingId = mappingId;
@@ -230,9 +205,11 @@ PortMappingAsyncRequestPtr PortMappingManager::create_port_mapping(uint16_t port
 	return h;
 }
 
-bool PortMappingManager::destroy_port_mapping(const PortMappingAsyncRequestPtr& h)
+bool PortMappingManager::destroy_port_mapping(const PortMappingAsyncRequestHandle& p)
 {
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
+	auto h = std::dynamic_pointer_cast<PortMappingAsyncRequest>(p);
+	ASSERT_OR_RETURN(false, h != nullptr, "Invalid request handle");
+	const std::lock_guard<std::mutex> guard {mtx_};
 	if (h->mappingId == PLUM_ERR_INVALID)
 	{
 		return true;
@@ -261,11 +238,21 @@ bool PortMappingManager::destroy_port_mapping(const PortMappingAsyncRequestPtr& 
 	return result == PLUM_ERR_SUCCESS;
 }
 
-void PortMappingManager::attach_callback(const PortMappingAsyncRequestPtr& h, SuccessCallback successCb, FailureCallback failureCb)
+PortMappingDiscoveryStatus PortMappingManager::get_status(const PortMappingAsyncRequestHandle& p) const
 {
+	auto h = std::dynamic_pointer_cast<PortMappingAsyncRequest>(p);
+	ASSERT_OR_RETURN(PortMappingDiscoveryStatus::FAILURE, h != nullptr, "Invalid request handle");
+	const std::lock_guard<std::mutex> guard {mtx_};
+	return h->status();
+}
+
+void PortMappingManager::attach_callback(const PortMappingAsyncRequestHandle& p, SuccessCallback successCb, FailureCallback failureCb)
+{
+	auto h = std::dynamic_pointer_cast<PortMappingAsyncRequest>(p);
+	ASSERT_OR_RETURN(, h != nullptr, "Invalid request handle");
 	PortMappingDiscoveryStatus s;
 	{
-		const std::lock_guard<std::recursive_mutex> guard {mtx_};
+		const std::lock_guard<std::mutex> guard {mtx_};
 		s = h->s;
 		if (s == PortMappingDiscoveryStatus::IN_PROGRESS)
 		{
@@ -293,12 +280,7 @@ void PortMappingManager::attach_callback(const PortMappingAsyncRequestPtr& h, Su
 	}
 }
 
-namespace
-{
-
-using CallbacksPerRequest = std::unordered_map<PortMappingAsyncRequestPtr, PortMappingAsyncRequest::CallbackVector>;
-
-void scheduleCallbacksOnMainThread(CallbacksPerRequest cbReqMap)
+void PortMappingManager::scheduleCallbacksOnMainThread(CallbacksPerRequest cbReqMap)
 {
 	if (cbReqMap.empty())
 	{
@@ -333,8 +315,6 @@ void scheduleCallbacksOnMainThread(CallbacksPerRequest cbReqMap)
 	}
 }
 
-} // anonymous namespace
-
 void PortMappingManager::thread_monitor_function()
 {
 	using namespace std::chrono_literals;
@@ -343,7 +323,7 @@ void PortMappingManager::thread_monitor_function()
 	while (!stopRequested_.load(std::memory_order_relaxed))
 	{
 		{
-			const std::lock_guard<std::recursive_mutex> lock {mtx_};
+			const std::lock_guard<std::mutex> lock {mtx_};
 			// If all inflight requests have already finished, stop monitoring changes.
 			if (activeDiscoveries_.empty())
 			{
@@ -368,7 +348,7 @@ void PortMappingManager::thread_monitor_function()
 				}
 				else if (req->timed_out(PortMappingAsyncRequest::ClockType::now()))
 				{
-					req->resolve_failure(PortMappingDiscoveryStatus::TIMEOUT);
+					resolve_failure_internal(req, PortMappingDiscoveryStatus::TIMEOUT);
 					takeCallbacksAndRemoveFromActiveList(req);
 				}
 				else if (req->failed())
@@ -391,9 +371,47 @@ void PortMappingManager::thread_monitor_function()
 		std::this_thread::sleep_for(50ms);
 	}
 }
-PortMappingAsyncRequestPtr PortMappingManager::activeRequestForId(PortMappingAsyncRequest::MappingId id) const
+
+// Set discovery status to `SUCCESS`.
+// The method saves the discovered IP address + port combination inside the
+// `PortMappingManager` instance so that subsequent `schedule_callback()`
+// invocations can use this data.
+//
+// The method shall only be called from the LibPlum's discovery callback.
+void PortMappingManager::resolve_success_fromlibplum(int mappingId, std::string externalIp, uint16_t externalPort)
 {
-	const std::lock_guard<std::recursive_mutex> guard {mtx_};
+	const std::lock_guard<std::mutex> guard {mtx_};
+	const auto req = active_request_for_id_internal(mappingId);
+	if (!req)
+	{
+		debug(LOG_NET, "Mapping %d: no active request found in PortMappingManager, probably timed out\n", mappingId);
+		return;
+	}
+	resolve_success_internal(req, externalIp, externalPort);
+}
+
+// Forcefully set discovery status to `status`.
+// The method shall only be called from LibPlum's discovery callback in case the discovery
+// process has failed for any reason as reported directly by LibPlum.
+//
+// The `status` may only take `FAILURE` or `TIMEOUT` values.
+void PortMappingManager::resolve_failure_fromlibplum(int mappingId, PortMappingDiscoveryStatus failureStatus)
+{
+	const std::lock_guard<std::mutex> guard {mtx_};
+	const auto req = active_request_for_id_internal(mappingId);
+	if (!req)
+	{
+		debug(LOG_NET, "Mapping %d: no active request found in PortMappingManager, probably timed out\n", mappingId);
+		return;
+	}
+	resolve_failure_internal(req, failureStatus);
+}
+
+// MARK: - BEGIN: Unsafe functions that must only be called if mtx_ lock is already held!
+
+// Must only be called if lock is held!
+PortMappingManager::PortMappingAsyncRequestPtr PortMappingManager::active_request_for_id_internal(PortMappingAsyncRequest::MappingId id) const
+{
 	auto it = activeDiscoveries_.find(id);
 	if (it != activeDiscoveries_.end())
 	{
@@ -401,5 +419,46 @@ PortMappingAsyncRequestPtr PortMappingManager::activeRequestForId(PortMappingAsy
 	}
 	return nullptr;
 }
+
+// Set discovery status to `SUCCESS`.
+// The method saves the discovered IP address + port combination inside the
+// `PortMappingManager` instance so that subsequent `schedule_callback()`
+// invocations can use this data.
+//
+// The method shall only be called from resolve_success_fromlibplum() (which is called by LibPlum's discovery callback).
+void PortMappingManager::resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort)
+{
+	if (req->s != PortMappingDiscoveryStatus::IN_PROGRESS)
+	{
+		// Someone has already gotten ahead of us - nothing to do there.
+		return;
+	}
+	req->s = PortMappingDiscoveryStatus::SUCCESS;
+	req->deadline = PortMappingAsyncRequest::TimePoint::max();
+	req->discoveredIPaddress = std::move(externalIp);
+	req->discoveredPort = externalPort;
+}
+
+// Forcefully set discovery status to `status`.
+// The method may either be called from resolve_failure_fromlibplum() (i.e. from libPlum callbacks), or by
+// `PortMappingManager` itself (by the monitoring thread), if the discovery process reaches timeout.
+//
+// The `status` may only take `FAILURE` or `TIMEOUT` values.
+void PortMappingManager::resolve_failure_internal(PortMappingAsyncRequestPtr req, PortMappingDiscoveryStatus failureStatus)
+{
+	ASSERT(failureStatus == PortMappingDiscoveryStatus::FAILURE || failureStatus == PortMappingDiscoveryStatus::TIMEOUT,
+		"Status should either be failure or timeout");
+	if (req->s != PortMappingDiscoveryStatus::IN_PROGRESS)
+	{
+		// Someone has already gotten ahead of us - nothing to do there.
+		return;
+	}
+	req->s = failureStatus;
+	req->deadline = PortMappingAsyncRequest::TimePoint::max();
+	req->discoveredIPaddress.clear();
+	req->discoveredPort = 0;
+}
+
+// MARK: - END: Unsafe functions that must only be called if mtx_ lock is already held!
 
 constexpr int PortMappingManager::DISCOVERY_TIMEOUT_SECONDS;
