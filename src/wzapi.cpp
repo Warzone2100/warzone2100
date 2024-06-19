@@ -4300,6 +4300,7 @@ nlohmann::json wzapi::constructStatsObject()
 			body["Size"] = psStats->size;
 			body["WeaponSlots"] = psStats->weaponSlots;
 			body["BodyClass"] = psStats->bodyClass;
+			body["Cost"] = psStats->buildPower;	
 			bodybase[psStats->name.toUtf8()] = std::move(body);
 		}
 		stats["Body"] = std::move(bodybase);
@@ -4311,6 +4312,7 @@ nlohmann::json wzapi::constructStatsObject()
 			SENSOR_STATS *psStats = &asSensorStats[j];
 			nlohmann::json sensor = register_common(psStats);
 			sensor["Range"] = psStats->base.range;
+			sensor["Cost"] = psStats->buildPower;	
 			sensorbase[psStats->name.toUtf8()] = std::move(sensor);
 		}
 		stats["Sensor"] = std::move(sensorbase);
@@ -4322,6 +4324,7 @@ nlohmann::json wzapi::constructStatsObject()
 			ECM_STATS *psStats = &asECMStats[j];
 			nlohmann::json ecm = register_common(psStats);
 			ecm["Range"] = psStats->base.range;
+			ecm["Cost"] = psStats->buildPower;		
 			ecmbase[psStats->name.toUtf8()] = std::move(ecm);
 		}
 		stats["ECM"] = std::move(ecmbase);
@@ -4340,6 +4343,7 @@ nlohmann::json wzapi::constructStatsObject()
 			v["SkidDeceleration"] = psStats->skidDeceleration;
 			v["Acceleration"] = psStats->acceleration;
 			v["Deceleration"] = psStats->deceleration;
+			v["Cost"] = psStats->buildPower;	
 			propbase[psStats->name.toUtf8()] = std::move(v);
 		}
 		stats["Propulsion"] = std::move(propbase);
@@ -4351,6 +4355,7 @@ nlohmann::json wzapi::constructStatsObject()
 			REPAIR_STATS *psStats = &asRepairStats[j];
 			nlohmann::json repair = register_common(psStats);
 			repair["RepairPoints"] = psStats->base.repairPoints;
+			repair["Cost"] = psStats->buildPower;	
 			repairbase[psStats->name.toUtf8()] = std::move(repair);
 		}
 		stats["Repair"] = std::move(repairbase);
@@ -4362,6 +4367,7 @@ nlohmann::json wzapi::constructStatsObject()
 			CONSTRUCT_STATS *psStats = &asConstructStats[j];
 			nlohmann::json con = register_common(psStats);
 			con["ConstructorPoints"] = psStats->base.constructPoints;
+			con["Cost"] = psStats->buildPower;		
 			conbase[psStats->name.toUtf8()] = std::move(con);
 		}
 		stats["Construct"] = std::move(conbase);
@@ -4386,6 +4392,7 @@ nlohmann::json wzapi::constructStatsObject()
 				ranks.push_back(psStats->rankNames.at(x));
 			}
 			br["RankNames"] = ranks;
+			br["Cost"] = psStats->buildPower;	
 			brainbase[psStats->name.toUtf8()] = std::move(br);
 		}
 		stats["Brain"] = std::move(brainbase);
@@ -4427,6 +4434,7 @@ nlohmann::json wzapi::constructStatsObject()
 			weap["MaxElevation"] = psStats->maxElevation;
 			weap["Recoil"] = psStats->recoilValue;
 			weap["Penetrate"] = psStats->penetrate;
+			weap["Cost"] = psStats->buildPower;
 			wbase[psStats->name.toUtf8()] = std::move(weap);
 		}
 		stats["Weapon"] = std::move(wbase);
@@ -4472,6 +4480,16 @@ nlohmann::json wzapi::constructStatsObject()
 			strct["Thermal"] = psStats->base.thermal;
 			strct["HitPoints"] = psStats->base.hitpoints;
 			strct["Resistance"] = psStats->base.resistance;
+			strct["Cost"] = psStats->powerToBuild;
+			nlohmann::json weaps = nlohmann::json::array();
+			for (int k = 0; k < MAX_WEAPONS; k++)
+			{
+				if (psStats->psWeapStat[k]!=nullptr)
+				{
+					weaps.push_back(psStats->psWeapStat[k]->id);
+				}
+			}
+			strct["WeaponsId"] = weaps;		
 			structbase[psStats->name.toUtf8()] = std::move(strct);
 		}
 		stats["Building"] = std::move(structbase);
