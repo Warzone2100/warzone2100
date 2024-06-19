@@ -4602,7 +4602,7 @@ bool gl_context::initCheckBorderClampSupport()
 	else
 	{
 #if !defined(WZ_STATIC_GL_BINDINGS) && !defined(__EMSCRIPTEN__)
-		return GLAD_GL_EXT_texture_border_clamp || GLAD_GL_OES_texture_border_clamp || GLAD_GL_NV_texture_border_clamp;
+		return GLAD_GL_ES_VERSION_3_2 || GLAD_GL_EXT_texture_border_clamp || GLAD_GL_OES_texture_border_clamp || GLAD_GL_NV_texture_border_clamp;
 #else
 		// - WebGL has no support
 		return false;
