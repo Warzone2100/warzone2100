@@ -4484,12 +4484,12 @@ nlohmann::json wzapi::constructStatsObject()
 			nlohmann::json weaps = nlohmann::json::array();
 			for (int k = 0; k < MAX_WEAPONS; k++)
 			{
-				if (psStats->psWeapStat[k]!=nullptr)
+				if (psStats->psWeapStat[k] != nullptr)
 				{
 					weaps.push_back(psStats->psWeapStat[k]->id);
 				}
 			}
-			strct["WeaponsId"] = weaps;		
+			strct["WeaponsId"] = weaps;
 			structbase[psStats->name.toUtf8()] = std::move(strct);
 		}
 		stats["Building"] = std::move(structbase);
