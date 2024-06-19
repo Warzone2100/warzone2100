@@ -2821,9 +2821,13 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 #if !defined(__EMSCRIPTEN__)
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				if (hasBorderClampSupport)
+				{
+					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+					break;
+				}
 #else
 				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
@@ -2844,9 +2848,13 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #if !defined(__EMSCRIPTEN__)
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				if (hasBorderClampSupport)
+				{
+					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+					break;
+				}
 #else
 				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
@@ -3498,6 +3506,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	initPixelFormatsSupport();
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
+	hasBorderClampSupport = initCheckBorderClampSupport();
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -4579,6 +4588,26 @@ bool gl_context::initInstancedFunctions()
 	}
 #endif
 	return true;
+}
+
+bool gl_context::initCheckBorderClampSupport()
+{
+	// GL_CLAMP_TO_BORDER is supported on:
+	// - OpenGL (any version we support)
+	if (!gles)
+	{
+		return true;
+	}
+	// - OpenGL ES (3.2+, or with extensions)
+	else
+	{
+#if !defined(WZ_STATIC_GL_BINDINGS) && !defined(__EMSCRIPTEN__)
+		return GLAD_GL_EXT_texture_border_clamp || GLAD_GL_OES_texture_border_clamp || GLAD_GL_NV_texture_border_clamp;
+#else
+		// - WebGL has no support
+		return false;
+#endif
+	}
 }
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
