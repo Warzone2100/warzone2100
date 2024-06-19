@@ -2225,6 +2225,9 @@ static void intDestroyMissionResultWidgets()
 
 static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 {
+	// ensure the guide screen is closed
+	closeGuideScreen();
+
 	missionResetInGameState();
 	scoreUpdateVar(WD_MISSION_ENDED); //Store completion time for this mission
 
@@ -2241,9 +2244,6 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		}
 		screen_RestartBackDrop();
 	}
-
-	// ensure the guide screen is closed
-	closeGuideScreen();
 
 	// ensure these widgets are deleted before attempting to create
 	intDestroyMissionResultWidgets();
