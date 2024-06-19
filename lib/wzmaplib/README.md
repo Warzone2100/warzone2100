@@ -46,7 +46,7 @@ Warzone 2100 has evolved its map format over time:
    - a `ttypes.ttp` file that maps terrain tile textures to in-game terrain types (which affects game simulation behavior)
    - `dinit.bjo`, `feat.bjo`, `struct.bjo` files that contain the initial droid, feature, and structure information for the map
 - This was followed by an initial JSON format ("JSON_v1"), which used JSON files for the droid / structure / feature files. The `game.map` and `ttypes.ttp` files are unchanged from the prior format.
-- In WZ 4.1+, a new JSON format ("JSON_v2") was added that restructured the droid / structure / feature JSON files, and extended the `game.map` to support full-range (16-bit) tile heights.
+- In WZ 4.1+, a new JSON format ("JSON_v2") was added that restructured the droid / structure / feature JSON files, and extended the `game.map` to support full-precision tile heights (still limited by TILE_MAX_HEIGHT).
 
 Additionally, in WZ 4.0+, a "script-generated" map format was added:
 - This replaces all\* the map data files with a single `game.js` that uses a limited set of APIs to generate and provide map data. (\*The only additional file is the `ttypes.ttp` file.)
