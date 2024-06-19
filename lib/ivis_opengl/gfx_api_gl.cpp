@@ -2823,7 +2823,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 #if !defined(__EMSCRIPTEN__)
 				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
 #else
 				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
@@ -2846,7 +2846,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 #if !defined(__EMSCRIPTEN__)
 				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
 #else
 				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
