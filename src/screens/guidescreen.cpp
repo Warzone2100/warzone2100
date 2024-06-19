@@ -2537,6 +2537,7 @@ private:
 private:
 	OnCloseFunc onCloseFunc;
 	std::chrono::steady_clock::time_point openTime;
+	bool didPause = false;
 
 private:
 	WzGameGuideScreen(WzGameGuideScreen const &) = delete;
@@ -2744,6 +2745,8 @@ void WzGameGuideScreen::pauseGameIfNeeded()
 		addConsoleMessage(_("PAUSED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 
 		psForm->show(); // show the root form, which means it accepts all clicks on the screen and dims the background
+
+		didPause = true;
 	}
 	else
 	{
@@ -2753,6 +2756,11 @@ void WzGameGuideScreen::pauseGameIfNeeded()
 
 void WzGameGuideScreen::unpauseGameIfNeeded()
 {
+	if (!didPause)
+	{
+		return;
+	}
+
 	if (!runningMultiplayer() && gameTimeIsStopped())
 	{
 		clearActiveConsole();
@@ -2762,6 +2770,7 @@ void WzGameGuideScreen::unpauseGameIfNeeded()
 		//put any widgets back on for the missions
 		resetMissionWidgets();
 	}
+	didPause = false;
 }
 
 std::shared_ptr<WzGuideForm>& WzGameGuideScreen::getGuideForm()
@@ -3425,7 +3434,10 @@ bool showGuideScreen(std::function<void ()> onCloseFunc, bool expandedSidebarByD
 
 void closeGuideScreen()
 {
-	widgRemoveOverlayScreen(psCurrentGameGuideScreen);
+	if (psCurrentGameGuideScreen)
+	{
+		psCurrentGameGuideScreen->closeScreen(true);
+	}
 }
 
 void addGuideTopic(const std::string& guideTopicId, ShowTopicFlags showFlags, const std::unordered_set<std::string>& excludedTopicIDs)
