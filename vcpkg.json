@@ -30,7 +30,7 @@
 			"platform": "emscripten"
 		},
 		{
-			"name": "gettext",
+			"name": "gettext-libintl",
 			"platform": "!emscripten"
 		},
 		{
