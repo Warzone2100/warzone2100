@@ -3769,6 +3769,10 @@ static void NETallowJoining()
 				listeningInterfaces.ipv6_port = NETgetGameserverPort();
 			}
 		}
+		if (gamestruct.desc.host[0] != '\0')
+		{
+			listeningInterfaces.knownExternalAddresses = {{gamestruct.desc.host, gamestruct.hostPort, ActivitySink::ListeningInterfaces::IPType::IPv4}};
+		}
 		ActivityManager::instance().hostGame(gamestruct.name, NetPlay.players[0].name, NETgetMasterserverName(), NETgetMasterserverPort(), listeningInterfaces, gamestruct.gameId);
 	}
 

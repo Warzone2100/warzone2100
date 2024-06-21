@@ -739,16 +739,36 @@ void DiscordRPCActivitySink::setJoinInformation(const ActivitySink::MultiplayerG
 				{
 					return;
 				}
+
+				const std::string* pExternalIPv4Address = nullptr;
+				unsigned int externalIPv4Port = 0;
+
+				// Prefer external IP information acquired from port-mapping, if available
+				for (const auto& extAddress : listeningInterfaces.knownExternalAddresses)
+				{
+					if (extAddress.type == ListeningInterfaces::IPType::IPv4 && !pExternalIPv4Address)
+					{
+						pExternalIPv4Address = &extAddress.ipAddress;
+						externalIPv4Port = extAddress.port;
+					}
+				}
+
+				if (pExternalIPv4Address == nullptr)
+				{
+					pExternalIPv4Address = &ipv4Address;
+					externalIPv4Port = listeningInterfaces.ipv4_port;
+				}
+
 				// Convert ip address strings to binary, in network-byte-order format, then base64-encode
 				// Append the port as a separate string component
 				std::string joinSecretDetails;
-				if (!ipv4Address.empty())
+				if (!pExternalIPv4Address->empty())
 				{
-					auto ipv4AddressBinaryForm = ipv4_AddressString_To_NetBinary(ipv4Address);
+					auto ipv4AddressBinaryForm = ipv4_AddressString_To_NetBinary(*pExternalIPv4Address);
 					if (!ipv4AddressBinaryForm.empty())
 					{
 						joinSecretDetails += b64Tob64UrlSafe(EmbeddedJSONSignature::b64Encode(ipv4AddressBinaryForm));
-						joinSecretDetails += std::string(":") + std::to_string(listeningInterfaces.ipv4_port);
+						joinSecretDetails += std::string(":") + std::to_string(externalIPv4Port);
 					}
 				}
 				if (!ipv6Address.empty())
@@ -780,7 +800,7 @@ void DiscordRPCActivitySink::setJoinInformation(const ActivitySink::MultiplayerG
 				std::string joinSecretStr = std::string("v1/i/") + uniqueGameStr + "/" + joinSecretDetails;
 
 				// construct a unique party id from the uniqueGameStr + ip addresses, hashed
-				std::string rawPartyId = std::string("direct_connection:") + uniqueGameStr + ":" + ipv4Address + ":" + std::to_string(listeningInterfaces.ipv4_port) + ":" + ipv6Address + ":" + std::to_string(listeningInterfaces.ipv6_port);
+				std::string rawPartyId = std::string("direct_connection:") + uniqueGameStr + ":" + *pExternalIPv4Address + ":" + std::to_string(externalIPv4Port) + ":" + ipv6Address + ":" + std::to_string(listeningInterfaces.ipv6_port);
 				std::string partyIdStr = hashAndB64EncodePartyId(rawPartyId);
 
 				wzAsyncExecOnMainThread([pSink, joinSecretStr, partyIdStr](){
