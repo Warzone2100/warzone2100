@@ -5581,6 +5581,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 	}
 	debug(LOG_NET, "We have stopped joining.");
 	ActivityManager::instance().joinedLobbyQuit();
+	NETremRedirects();
 	changeTitleUI(parent);
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
