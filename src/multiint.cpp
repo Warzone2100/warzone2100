@@ -7583,20 +7583,14 @@ static void printHostHelpMessagesToConsole()
 			}
 			switch (PortMappingManager::instance().get_status(ipv4MappingRequest))
 			{
-			case PortMappingDiscoveryStatus::SUCCESS:
-				ssprintf(buf, "%s", _("Port mapping has been enabled."));
-				break;
-			case PortMappingDiscoveryStatus::FAILURE:
-			case PortMappingDiscoveryStatus::TIMEOUT:
-				ssprintf(buf, "%s", _("Port mapping creation failed. You must manually configure router yourself."));
-				break;
+			// rely on callbacks / output in NETaddRedirects() for everything except pending
 			case PortMappingDiscoveryStatus::IN_PROGRESS:
 				ssprintf(buf, "%s", _("Port mapping creation is in progress..."));
+				displayRoomNotifyMessage(buf);
 				break;
 			default:
-				ASSERT(false, "Should be unreachable");
+				break;
 			};
-			displayRoomNotifyMessage(buf);
 		}
 		else
 		{
