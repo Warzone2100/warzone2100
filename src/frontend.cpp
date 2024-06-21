@@ -3315,8 +3315,10 @@ void startMultiplayOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GAME_PORT_R, std::to_string(NETgetGameserverPort()), WBUT_DISABLE))); // FUTURE TODO: Make this an input field or similar and allow editing (although reject ports <= 1024)
 	row.start++;
 
-	// Enable Port Mapping
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_PORT_MAPPING, _("Enable Port Mapping"), WBUT_SECONDARY)));
+	// Port Mapping
+	auto portMappingTitle = makeTextButton(FRONTEND_PORT_MAPPING, _("Port Mapping"), WBUT_SECONDARY);
+	portMappingTitle->setTip(_("Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."));
+	grid->place({0}, row, addMargin(portMappingTitle));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_PORT_MAPPING_R, multiplayOptionsPortMappingString(), WBUT_SECONDARY)));
 	row.start++;
 
