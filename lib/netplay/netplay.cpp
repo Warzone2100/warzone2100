@@ -1452,24 +1452,24 @@ void NETaddRedirects()
 	// Report the user-visible status once the discovery is finished.
 	pmm.attach_callback(ipv4MappingRequest, [](std::string extIp, uint16_t extPort) // success callback
 	{
-		char buf[512] = { '\0' };
-		ssprintf(buf, _("Game configured port (%d) correctly on (%d)\nYour external IP is %s"),
-			NETgetGameserverPort(), extPort, extIp.c_str());
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		std::string msg = astringf(_("Port mapping opened external port: %d"), extPort);
+		msg += "\n";
+		msg += astringf(_("Your external IP is: %s"), extIp.c_str());
+		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}, [](PortMappingDiscoveryStatus status) // failure callback
 	{
-		char buf[512] = { '\0' };
+		std::string msg;
 		if (status == PortMappingDiscoveryStatus::TIMEOUT)
 		{
-			ssprintf(buf, _("Port mapping discovery timed out after %d seconds.\n"
-				"Manually configure your router/firewall to open port %d!"),
-				PortMappingManager::DISCOVERY_TIMEOUT_SECONDS, NETgetGameserverPort());
-			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-			return;
+			msg = astringf(_("Failed to create port mapping (timeout after %d seconds)"), PortMappingManager::DISCOVERY_TIMEOUT_SECONDS);
 		}
-		ssprintf(buf, _("Failed to create port mapping.\nManually configure your router/firewall to open port %d!"),
-			NETgetGameserverPort());
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		else
+		{
+			msg = _("Failed to create port mapping");
+		}
+		msg += "\n";
+		msg += astringf(_("Manually configure your router/firewall to open port %d!"), NETgetGameserverPort());
+		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	});
 }
 
@@ -3416,7 +3416,7 @@ bool LobbyServerConnectionHandler::connect()
 	{
 		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(sockOpenErr));
 		free(NetPlay.MOTD);
-		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to use Port Mapping (UPnP/NAT-PMP/PCP)\n or to forward the port to your system."),
+		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to enable UPnP/NAT-PMP/PCP\n or to forward the port to your system."),
 					 strSockError(getSockErr()), masterserver_port) == -1)
 		{
 			NetPlay.MOTD = nullptr;
