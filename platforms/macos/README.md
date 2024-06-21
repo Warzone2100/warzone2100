@@ -116,7 +116,7 @@ You can also simply open the project in Xcode, and build the `warzone2100` schem
 
 ## Deployment:
 
-The macOS port produces a 64-bit [self-contained application bundle](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW13) that requires **macOS 10.9+**\* to run.
+The macOS port produces a 64-bit [self-contained application bundle](https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html#//apple_ref/doc/uid/10000123i-CH101-SW13) that requires **macOS 10.12+**\* to run.
 
 > \* See _Setup & Configuration_ for how to set the minimum deployment target.
 
