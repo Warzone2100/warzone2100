@@ -310,6 +310,7 @@ lib/netplay/netqueue.cpp
 lib/netplay/netreplay.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
+lib/netplay/port_mapping_manager.cpp
 lib/netplay/sync_debug.cpp
 lib/netplay/wzfile.cpp
 lib/sdl/cursor_sdl_helpers.cpp
