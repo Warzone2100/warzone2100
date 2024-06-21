@@ -265,3 +265,15 @@ endif ()
 
 add_subdirectory(libplum EXCLUDE_FROM_ALL)
 set_target_properties(plum plum-static PROPERTIES FOLDER "3rdparty")
+if(NOT MSVC)
+	set(_supported_libplum_c_compiler_flags "")
+
+	# -Wshadow
+	check_compiler_flags_output("-Werror -Wno-shadow -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-shadow" OUTPUT_VARIABLE _supported_libplum_c_compiler_flags APPEND)
+
+	if (NOT _supported_libplum_c_compiler_flags STREQUAL "")
+		string(REPLACE " " ";" _supported_libplum_c_compiler_flags "${_supported_libplum_c_compiler_flags}")
+		target_compile_options(plum PRIVATE ${_supported_libplum_c_compiler_flags})
+		target_compile_options(plum-static PRIVATE ${_supported_libplum_c_compiler_flags})
+	endif()
+endif()
