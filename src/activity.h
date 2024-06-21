@@ -114,6 +114,18 @@ public:
 		bool IPv6 = false;
 		unsigned int ipv4_port;
 		unsigned int ipv6_port;
+		enum class IPType
+		{
+			IPv4,
+			IPv6
+		};
+		struct KnownExternalAddress
+		{
+			std::string ipAddress;
+			unsigned int port;
+			IPType type;
+		};
+		std::vector<KnownExternalAddress> knownExternalAddresses;
 	};
 	struct MultiplayerGameInfo : public SkirmishGameInfo {
 		// host information
