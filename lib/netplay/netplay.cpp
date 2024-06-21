@@ -3782,6 +3782,7 @@ static void NETallowJoining()
 		NetPlay.ShowedMOTD = true;
 	}
 
+	ASSERT(tmp_socket_set != nullptr, "Null tmp_socket_set");
 	if (checkSockets(*tmp_socket_set, NET_READ_TIMEOUT) > 0)
 	{
 		for (i = 0; i < MAX_TMP_SOCKETS; ++i)
@@ -5021,6 +5022,26 @@ void NETacceptIncomingConnections()
 		return;
 	}
 
+	// First-time initialize `tmp_socket_set` if needed.
+	if (tmp_socket_set == nullptr)
+	{
+		// initialize temporary server socket set
+		// FIXME: why is this not done in NETinit()?? - Per
+		tmp_socket_set = allocSocketSet();
+		if (tmp_socket_set == nullptr)
+		{
+			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
+			return;
+		}
+		// FIXME: I guess initialization of allowjoining is here now... - FlexCoral
+		for (auto& tmpState : tmp_connectState)
+		{
+			tmpState.reset();
+		}
+		tmp_pendingIPs.clear();
+		// NOTE: Do *NOT* call tmp_badIPs.clear() here - we want to preserve it until quit
+	}
+
 	size_t i = 0;
 	// Find the first empty socket slot
 	for (; i < MAX_TMP_SOCKETS; ++i)
@@ -5048,26 +5069,6 @@ void NETacceptIncomingConnections()
 		debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void*>(tmp_socket[i]), __LINE__);
 		NETcloseTempSocket(i);
 		return;
-	}
-
-	// First-time initialize `tmp_socket_set` if needed.
-	if (tmp_socket_set == nullptr)
-	{
-		// initialize temporary server socket set
-		// FIXME: why is this not done in NETinit()?? - Per
-		tmp_socket_set = allocSocketSet();
-		if (tmp_socket_set == nullptr)
-		{
-			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
-			return;
-		}
-		// FIXME: I guess initialization of allowjoining is here now... - FlexCoral
-		for (auto& tmpState : tmp_connectState)
-		{
-			tmpState.reset();
-		}
-		tmp_pendingIPs.clear();
-		// NOTE: Do *NOT* call tmp_badIPs.clear() here - we want to preserve it until quit
 	}
 
 	NETinitQueue(NETnetTmpQueue(i));
