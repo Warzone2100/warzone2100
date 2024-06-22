@@ -12,8 +12,8 @@ ${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Aquesta és la versió ARM 64-bits
 
 ${LangFileString} WZ_GPL_NEXT "Següent"
 
-${LangFileString} TEXT_SecBase "Fitxers del nucli"
-${LangFileString} DESC_SecBase "Els fitxers del nucli són necessaris per a executar Warzone 2100."
+${LangFileString} TEXT_SecBase "Fitxers base"
+${LangFileString} DESC_SecBase "Els fitxers base són necessaris per a executar Warzone 2100."
 
 ${LangFileString} TEXT_SecFMVs "Vídeos"
 ${LangFileString} DESC_SecFMVs "Descarregeu-vos i instal·leu cinemàtiques en el joc."
