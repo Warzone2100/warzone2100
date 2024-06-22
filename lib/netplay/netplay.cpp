@@ -4488,28 +4488,40 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 
 	NETregisterServer(WZ_SERVER_DISCONNECT);
 
-	// Do not allow others to join and delay announcing the game session to the lobby server
-	// until we manage to setup (successfully or not) the port mapping rule for the `gameserver_port`.
-	ASSERT(ipv4MappingRequest != nullptr, "Expected to have an in-flight port mapping request to attach to");
-	PortMappingManager::instance().attach_callback(ipv4MappingRequest,
-		[SessionName, spectatorHost, plyrs, gameType, two, three, four, PlayerName](std::string externalIp, uint16_t extPort) // success callback
+	if (ipv4MappingRequest)
 	{
-		// Setup gamestruct with the external ip + port combination received from the LibPlum.
-		SetupGameStructInfo(SessionName, PlayerName, externalIp, extPort, spectatorHost, plyrs, gameType, two, three, four);
-		// Only allow joining the game once the server has successfully discovered it's external IP + port combination.
-		//
-		// Once this is true, we are able to connect to the lobby server and announce to other players that
-		// this game session is available to join to.
-		allow_joining = true;
-		debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
-	}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, three, four](PortMappingDiscoveryStatus /*status*/) // failure callback
+		// Do not allow others to join and delay announcing the game session to the lobby server
+		// until we manage to setup (successfully or not) the port mapping rule for the `gameserver_port`.
+		PortMappingManager::instance().attach_callback(ipv4MappingRequest,
+			[SessionName, spectatorHost, plyrs, gameType, two, three, four, PlayerName](std::string externalIp, uint16_t extPort) // success callback
+		{
+			// Setup gamestruct with the external ip + port combination received from the LibPlum.
+			SetupGameStructInfo(SessionName, PlayerName, externalIp, extPort, spectatorHost, plyrs, gameType, two, three, four);
+			// Only allow joining the game once the server has successfully discovered it's external IP + port combination.
+			//
+			// Once this is true, we are able to connect to the lobby server and announce to other players that
+			// this game session is available to join to.
+			allow_joining = true;
+			debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+		}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, three, four](PortMappingDiscoveryStatus /*status*/) // failure callback
+		{
+			// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
+			// that others will still be able to connect to us.
+			SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, three, four);
+			allow_joining = true;
+			debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+		});
+	}
+	else
 	{
+		ASSERT(!NetPlay.isPortMappingEnabled, "Expected to have an in-flight port mapping request to attach to");
+
 		// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
 		// that others will still be able to connect to us.
 		SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, three, four);
 		allow_joining = true;
 		debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
-	});
+	}
 
 	return true;
 }
