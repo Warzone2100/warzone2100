@@ -101,14 +101,15 @@
 #define EXTRA_BITS                              8
 #define EXTRA_PRECISION                         (1 << EXTRA_BITS)
 
-static std::vector<bool> playerFormationSpeedLimiting = std::vector<bool>(MAX_PLAYERS, true);
+static std::vector<bool> playerFormationSpeedLimiting = std::vector<bool>(MAX_PLAYERS, false);
 
 void moveInit()
 {
+	// Initialize formation speed limiting to off for all players
 	playerFormationSpeedLimiting.resize(MAX_PLAYERS);
 	for (size_t i = 0; i < playerFormationSpeedLimiting.size(); ++i)
 	{
-		playerFormationSpeedLimiting[i] = true;
+		playerFormationSpeedLimiting[i] = false;
 	}
 }
 
