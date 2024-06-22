@@ -54,6 +54,7 @@ void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen);
 
 constexpr int NET_READ_TIMEOUT = 0;
 constexpr size_t NET_BUFFER_SIZE = MaxMsgSize;
+constexpr uint32_t HOST_RESPONSE_TIMEOUT = 10000;
 
 // MARK: - WzJoiningStatusForm
 
@@ -1265,7 +1266,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		return;
 	}
 
-	if ((unsigned)wzGetTicks() - startTime > 5000)
+	if ((unsigned)wzGetTicks() - startTime > HOST_RESPONSE_TIMEOUT)
 	{
 		// exceeded timeout
 		closeConnectionAttempt();
