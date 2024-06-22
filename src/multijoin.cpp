@@ -530,7 +530,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A Remote Player has joined the game.
-bool MultiPlayerJoin(UDWORD playerIndex)
+bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdentity)
 {
 	if (widgGetFromID(psWScreen, IDRET_FORM))	// if ingame.
 	{
@@ -557,6 +557,10 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 
 		// setup data for this player, then broadcast it to the other players.
 		setupNewPlayer(playerIndex);						// setup all the guff for that player.
+		if (verifiedJoinIdentity.has_value())
+		{
+			multiStatsSetVerifiedIdentityFromJoin(playerIndex, verifiedJoinIdentity.value());
+		}
 		sendOptions();
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
