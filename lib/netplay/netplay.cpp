@@ -2607,7 +2607,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			debug(LOG_NET, "Receiving NET_PLAYER_JOINED for player %u using socket %p",
 			      (unsigned int)index, static_cast<void *>(bsocket));
 
-			MultiPlayerJoin(index);
+			MultiPlayerJoin(index, nullopt);
 			netPlayersUpdated = true;
 			break;
 		}
@@ -4250,18 +4250,16 @@ static void NETallowJoining()
 			debug(LOG_INFO, "%s", buf);
 			NETlogEntry(buf, SYNC_FLAG, index);
 
-			std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
-			std::string joinerIdentityHash = joinRequestInfo.identity.publicHashString();
-			wz_command_interface_output("WZEVENT: player join: %u %s %s %s\n", i, joinerPublicKeyB64.c_str(), joinerIdentityHash.c_str(), NetPlay.players[i].IPtextAddress);
-
 			debug(LOG_NET, "%s, %s, with index of %u has joined using socket %p", pPlayerType, NetPlay.players[index].name, (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
 
 			// Increment player count
 			gamestruct.desc.dwCurrentPlayers++;
 
-			MultiPlayerJoin(index);
+			MultiPlayerJoin(index, joinRequestInfo.identity.toBytes(EcKey::Public));
 
-			ingame.VerifiedIdentity[index] = true;
+			std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
+			std::string joinerIdentityHash = joinRequestInfo.identity.publicHashString();
+			wz_command_interface_output("WZEVENT: player join: %u %s %s %s\n", i, joinerPublicKeyB64.c_str(), joinerIdentityHash.c_str(), NetPlay.players[i].IPtextAddress);
 
 			// Narrowcast to new player that everyone has joined.
 			for (uint8_t j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
@@ -4478,7 +4476,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	NetPlay.HaveUpgrade = false;
 	NetPlay.hostPlayer	= selectedPlayer;
 
-	MultiPlayerJoin(selectedPlayer);
+	MultiPlayerJoin(selectedPlayer, nullopt);
 
 	// Now switch player color of the host to what they normally use for SP games
 	if (NetPlay.hostPlayer < MAX_PLAYERS && war_getMPcolour() >= 0)

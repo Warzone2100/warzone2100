@@ -340,6 +340,108 @@ bool sendMultiStatsScoreUpdates(uint32_t playerIndex)
 	return false;
 }
 
+bool multiStatsSetIdentity(uint32_t playerIndex, const EcKey::Key &identity, bool verifiedFromJoin = false)
+{
+	EcKey::Key prevIdentity;
+
+	if (!playerStats[playerIndex].identity.empty())
+	{
+		prevIdentity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+	}
+
+	// If game hasn't actually started, process potential identity changes
+	if (!ingame.TimeEveryoneIsInGame.has_value())
+	{
+		playerStats[playerIndex].identity.clear();
+		if (!identity.empty())
+		{
+			if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
+			{
+				debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+			}
+		}
+		else
+		{
+			debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+		}
+		if ((identity != prevIdentity) || identity.empty())
+		{
+			if (GetGameMode() == GS_NORMAL)
+			{
+				debug(LOG_INFO, "Unexpected identity change after NET_FIREUP for: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+			}
+
+			ingame.PingTimes[playerIndex] = PING_LIMIT;
+
+			if (verifiedFromJoin && !identity.empty())
+			{
+				// Record that the identity has been verified
+				ingame.VerifiedIdentity[playerIndex] = true;
+
+				// Do *not* output to stdinterface here - the join event is still being processed
+			}
+			else
+			{
+				ingame.VerifiedIdentity[playerIndex] = false;
+
+				// Output to stdinterface, if enabled
+				if (!identity.empty())
+				{
+					std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
+					std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
+					std::string sendername = NetPlay.players[playerIndex].name;
+					std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
+					wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
+				}
+				else
+				{
+					wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
+				}
+			}
+
+			if (!ingame.muteChat[playerIndex])
+			{
+				// check if the new identity was previously muted
+				auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
+				if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
+				{
+					ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
+				}
+			}
+
+			if (playerIndex < MAX_PLAYERS || playerIndex == NetPlay.hostPlayer)
+			{
+				if (!playerStats[playerIndex].identity.empty())
+				{
+					// generate session keys
+					try {
+						generateSessionKeysWithPlayer(playerIndex);
+					}
+					catch (const std::invalid_argument& e) {
+						debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
+					}
+				}
+				else
+				{
+					NETclearSessionKeys(playerIndex);
+				}
+			}
+
+			return true;
+		}
+	}
+	else
+	{
+		// Changing an identity should not happen once a game starts
+		if ((identity != prevIdentity) || identity.empty())
+		{
+			ASSERT(false, "Cannot change identity for player %u after game has started", playerIndex);
+		}
+	}
+
+	return false;
+}
+
 bool recvMultiStats(NETQUEUE queue)
 {
 	uint32_t playerIndex;
@@ -381,93 +483,17 @@ bool recvMultiStats(NETQUEUE queue)
 
 		EcKey::Key identity;
 		NETbytes(&identity);
-		EcKey::Key prevIdentity;
-		if (!playerStats[playerIndex].identity.empty())
+		NETend();
+
+		if (multiStatsSetIdentity(playerIndex, identity, false))
 		{
-			prevIdentity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
-		}
-
-		// If game hasn't actually started, process potential identity changes
-		if (!ingame.TimeEveryoneIsInGame.has_value())
-		{
-			playerStats[playerIndex].identity.clear();
-			if (!identity.empty())
-			{
-				if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
-				{
-					debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
-				}
-			}
-			else
-			{
-				debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
-			}
-			if ((identity != prevIdentity) || identity.empty())
-			{
-				if (GetGameMode() == GS_NORMAL)
-				{
-					debug(LOG_INFO, "Unexpected identity change after NET_FIREUP for: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
-				}
-
-				ingame.PingTimes[playerIndex] = PING_LIMIT;
-				ingame.VerifiedIdentity[playerIndex] = false;
-
-				if (!ingame.muteChat[playerIndex])
-				{
-					// check if the new identity was previously muted
-					auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
-					if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
-					{
-						ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
-					}
-				}
-
-				// Output to stdinterface, if enabled
-				if (!identity.empty())
-				{
-					std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
-					std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
-					std::string sendername = NetPlay.players[playerIndex].name;
-					std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
-					wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
-				}
-				else
-				{
-					wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
-				}
-
-				if (playerIndex < MAX_PLAYERS || playerIndex == NetPlay.hostPlayer)
-				{
-					if (!playerStats[playerIndex].identity.empty())
-					{
-						// generate session keys
-						try {
-							generateSessionKeysWithPlayer(playerIndex);
-						}
-						catch (const std::invalid_argument& e) {
-							debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
-						}
-					}
-					else
-					{
-						NETclearSessionKeys(playerIndex);
-					}
-				}
-
-				processAutoratingData = true;
-			}
-		}
-		else
-		{
-			// Changing an identity should not happen once a game starts
-			if ((identity != prevIdentity) || identity.empty())
-			{
-				ASSERT(false, "Cannot change identity for player %u after game has started", playerIndex);
-			}
+			// if identity changed, process autorating data
+			processAutoratingData = true;
 		}
 	}
 	else
 	{
+		NETend();
 		processAutoratingData = true;
 	}
 
@@ -486,8 +512,26 @@ bool recvMultiStats(NETQUEUE queue)
 		}
 	}
 
-	NETend();
 	return true;
+}
+
+void multiStatsSetVerifiedIdentityFromJoin(uint32_t playerIndex, const EcKey::Key &identity)
+{
+	ASSERT_HOST_ONLY(return);
+	ASSERT_OR_RETURN(, playerIndex != NetPlay.hostPlayer, "playerIndex is hostPlayer? (%" PRIu32 ")", NetPlay.hostPlayer);
+	if (multiStatsSetIdentity(playerIndex, identity, true))
+	{
+		if (!playerStats[playerIndex].identity.empty())
+		{
+			// might need to trigger autorating lookup (if enabled)
+			if (getAutoratingEnable())
+			{
+				playerStats[playerIndex].autorating.valid = false;
+				playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
+				lookupRatingAsync(playerIndex);
+			}
+		}
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
