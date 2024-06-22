@@ -3735,6 +3735,36 @@ static void NETcloseTempSocket(unsigned int i)
 	}
 }
 
+static void NEThostPromoteTempSocketToPermanentPlayerConnection(unsigned int tempSocketIdx, uint8_t index)
+{
+	std::string rIP = getSocketTextAddress(*tmp_socket[tempSocketIdx]);
+
+	debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", static_cast<void *>(tmp_socket[tempSocketIdx]), __LINE__);
+	SocketSet_DelSocket(*tmp_socket_set, tmp_socket[tempSocketIdx]);
+	connected_bsocket[index] = tmp_socket[tempSocketIdx];
+	tmp_socket[tempSocketIdx] = nullptr;
+	NET_waitingForIndexChangeAckSince[index] = nullopt;
+	SocketSet_AddSocket(*server_socket_set, connected_bsocket[index]);
+	NETmoveQueue(NETnetTmpQueue(tempSocketIdx), NETnetQueue(index));
+
+	// Copy player's IP address
+	sstrcpy(NetPlay.players[index].IPtextAddress, rIP.c_str());
+
+	// Decrement pending IP counter
+	auto it = tmp_pendingIPs.find(rIP);
+	if (it != tmp_pendingIPs.end())
+	{
+		if (it->second > 1)
+		{
+			it->second--;
+		}
+		else
+		{
+			tmp_pendingIPs.erase(it);
+		}
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 static void NETallowJoining()
@@ -4223,16 +4253,7 @@ static void NETallowJoining()
 
 			uint8_t index = static_cast<uint8_t>(tmp.value());
 
-			debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", static_cast<void *>(tmp_socket[i]), __LINE__);
-			SocketSet_DelSocket(*tmp_socket_set, tmp_socket[i]);
-			connected_bsocket[index] = tmp_socket[i];
-			NET_waitingForIndexChangeAckSince[index] = nullopt;
-			tmp_socket[i] = nullptr;
-			SocketSet_AddSocket(*server_socket_set, connected_bsocket[index]);
-			NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
-
-			// Copy player's IP address.
-			sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(*connected_bsocket[index]));
+			NEThostPromoteTempSocketToPermanentPlayerConnection(i, index);
 
 			NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 			NETuint8_t(&index);
