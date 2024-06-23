@@ -475,28 +475,28 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		return true; // continue
 	});
 
-	// Add the search edit box
-	auto searchBox = std::make_shared<W_EDITBOX>();
-	requestForm->attach(searchBox);
-	searchBox->setGeometry(3, requestForm->height() - MULTIOP_SEARCHBOXH - 3, requestForm->width() - 6, MULTIOP_SEARCHBOXH);
-	searchBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
-	searchBox->setPlaceholder(_("Search for map"));
-	searchBox->setString(WzString::fromUtf8(current_searchString));
-
-	searchBox->setOnEditingStoppedHandler([searchDir, fileExtension, mode, numPlayers](W_EDITBOX& widg) {
-		std::string value = widg.getString().toUtf8();
-		if (value == current_searchString) {
-			return;
-		}
-		closeMultiRequester();
-		addMultiRequest(searchDir, fileExtension, mode, numPlayers, value);
-	});
-
 	multiRequestUp = true;
 	hoverPreviewId = 0;
 
 	if (mode == MULTIOP_MAP)
 	{
+		// Add the search edit box
+		auto searchBox = std::make_shared<W_EDITBOX>();
+		requestForm->attach(searchBox);
+		searchBox->setGeometry(3, requestForm->height() - MULTIOP_SEARCHBOXH - 3, requestForm->width() - 6, MULTIOP_SEARCHBOXH);
+		searchBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
+		searchBox->setPlaceholder(_("Search for map"));
+		searchBox->setString(WzString::fromUtf8(current_searchString));
+
+		searchBox->setOnEditingStoppedHandler([searchDir, fileExtension, mode, numPlayers](W_EDITBOX& widg) {
+			std::string value = widg.getString().toUtf8();
+			if (value == current_searchString) {
+				return;
+			}
+			closeMultiRequester();
+			addMultiRequest(searchDir, fileExtension, mode, numPlayers, value);
+		});
+
 		LEVEL_LIST levels = enumerateMultiMaps(game.techLevel, numPlayers);
 		using Pair = std::pair<int, std::shared_ptr<W_BUTTON>>;
 		std::vector<Pair> buttons;
