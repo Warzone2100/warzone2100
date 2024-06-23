@@ -877,9 +877,6 @@
 		"id": "R-Defense-HeavyLas",
 		"msgName": "RES_EMP_HEAVYLAS",
 		"name": "Heavy Laser Emplacement",
-		"redStructures": [
-			"Emplacement-PrisLas"
-		],
 		"requiredResearch": [
 			"R-Wpn-HvyLaser"
 		],
@@ -957,7 +954,9 @@
 		"msgName": "RES_EMP_HvAM",
 		"name": "Archangel Missile Battery",
 		"redStructures": [
-			"Emplacement-Rocket06-IDF"
+			"Emplacement-Howitzer105",
+			"Emplacement-Rocket06-IDF",
+			"Emplacement-MortarPit02"
 		],
 		"requiredResearch": [
 			"R-Wpn-HvArtMissile"
@@ -992,9 +991,6 @@
 		"id": "R-Defense-HvyHowitzer",
 		"msgName": "RES_EMP_HvHOW",
 		"name": "Ground Shaker Emplacement",
-		"redStructures": [
-			"Emplacement-Howitzer105"
-		],
 		"requiredResearch": [
 			"R-Defense-Howitzer",
 			"R-Wpn-HvyHowitzer"
@@ -1080,9 +1076,6 @@
 		"id": "R-Defense-MassDriver",
 		"msgName": "RES_EMP_MD",
 		"name": "Mass Driver Fortress",
-		"redStructures": [
-			"X-Super-Cannon"
-		],
 		"requiredResearch": [
 			"R-Wpn-RailGun03",
 			"R-Wpn-Rail-ROF03",
@@ -1199,9 +1192,6 @@
 		"id": "R-Defense-Pillbox06",
 		"msgName": "RES_PB_ATR",
 		"name": "Lancer Tower",
-		"redStructures": [
-			"GuardTower6"
-		],
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Rocket01-LtAT"
@@ -1371,9 +1361,6 @@
 		"id": "R-Defense-SamSite1",
 		"msgName": "RES_EMP_SAM1",
 		"name": "Avenger SAM Site",
-		"redStructures": [
-			"P0-AASite-Sunburst"
-		],
 		"requiredResearch": [
 			"R-Wpn-Missile-LtSAM"
 		],
@@ -1438,9 +1425,6 @@
 		"id": "R-Defense-Super-Missile",
 		"msgName": "RES_EMP_MSL",
 		"name": "Missile Fortress",
-		"redStructures": [
-			"X-Super-Rocket"
-		],
 		"requiredResearch": [
 			"R-Defense-WallUpgrade10",
 			"R-Wpn-Missile-ROF03"
@@ -1560,7 +1544,7 @@
 		"msgName": "RES_WT9_ATM",
 		"name": "Scourge Missile Hardpoint",
 		"redStructures": [
-			"WallTower-HvATrocket"
+			"WallTower06"
 		],
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
@@ -1628,9 +1612,6 @@
 		"id": "R-Defense-WallTower-HvyA-Trocket",
 		"msgName": "RES_WT12_HAT",
 		"name": "Tank Killer Hardpoint",
-		"redStructures": [
-			"WallTower06"
-		],
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
@@ -1676,11 +1657,6 @@
 		"id": "R-Defense-WallTower-Rail2",
 		"msgName": "RES_WT15_RL2",
 		"name": "Rail Gun Hardpoint",
-		"redStructures": [
-			"WallTower04",
-			"WallTower-HPVcannon",
-			"Wall-VulcanCan"
-		],
 		"requiredResearch": [
 			"R-Wpn-RailGun02"
 		],
@@ -1697,10 +1673,7 @@
 		"msgName": "RES_WT15_RL3",
 		"name": "Gauss Cannon Hardpoint",
 		"redStructures": [
-			"WallTower-Rail2",
-			"WallTower04",
-			"WallTower-HPVcannon",
-			"Wall-VulcanCan"
+			"WallTower-Rail2"
 		],
 		"requiredResearch": [
 			"R-Wpn-RailGun03"
@@ -1953,7 +1926,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 45
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -1981,7 +1954,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 45
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2010,7 +1983,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 45
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2041,7 +2014,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 55
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2069,7 +2042,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 55
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2098,7 +2071,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 55
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2127,7 +2100,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 65
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2156,7 +2129,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 65
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2185,7 +2158,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 65
+				"value": 35
 			},
 			{
 				"class": "Building",
