@@ -7531,7 +7531,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		cancelOrDismissNotificationIfTag([](const std::string& tag) {
 			return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
 		});
-		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("The host has quit.")), parent));
+		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("The host has quit.")), parent));
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
 
