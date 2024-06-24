@@ -1685,32 +1685,39 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 		auto pStrongPtr = psWeakTitleUI.lock();
 		ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 
-		switch (clickedButton.id)
+		if (!NetPlay.players[player].allocated)
 		{
-		case MULTIOP_AI_CLOSED:
-			NetPlay.players[player].ai = AI_CLOSED;
-			NetPlay.players[player].isSpectator = false;
-			break;
-		case MULTIOP_AI_OPEN:
-			NetPlay.players[player].ai = AI_OPEN;
-			NetPlay.players[player].isSpectator = false;
-			break;
-		case MULTIOP_AI_SPECTATOR:
-			// set slot to open
-			NetPlay.players[player].ai = AI_OPEN;
-			// but also a spectator
-			NetPlay.players[player].isSpectator = true;
-			break;
-		default:
-			debug(LOG_ERROR, "Unexpected button id");
-			return;
-			break;
-		}
+			switch (clickedButton.id)
+			{
+			case MULTIOP_AI_CLOSED:
+				NetPlay.players[player].ai = AI_CLOSED;
+				NetPlay.players[player].isSpectator = false;
+				break;
+			case MULTIOP_AI_OPEN:
+				NetPlay.players[player].ai = AI_OPEN;
+				NetPlay.players[player].isSpectator = false;
+				break;
+			case MULTIOP_AI_SPECTATOR:
+				// set slot to open
+				NetPlay.players[player].ai = AI_OPEN;
+				// but also a spectator
+				NetPlay.players[player].isSpectator = true;
+				break;
+			default:
+				debug(LOG_ERROR, "Unexpected button id");
+				return;
+				break;
+			}
 
-		// common code
-		NetPlay.players[player].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
-		NETBroadcastPlayerInfo(player);
-		resetReadyStatus(false);
+			// common code
+			NetPlay.players[player].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
+			NETBroadcastPlayerInfo(player);
+			resetReadyStatus(false);
+		}
+		else
+		{
+			debug(LOG_INFO, "Player joined slot %d while chooser was open", player);
+		}
 		widgScheduleTask([pStrongPtr] {
 			pStrongPtr->closeAiChooser();
 			pStrongPtr->addPlayerBox(true);
@@ -1798,12 +1805,19 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 			pAIRow->addOnClickHandler([psWeakTitleUI, aiIdx, player](W_BUTTON& clickedButton) {
 				auto pStrongPtr = psWeakTitleUI.lock();
 				ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
-				NetPlay.players[player].isSpectator = false;
-				NetPlay.players[player].ai = aiIdx;
-				setPlayerName(player, getAIName(player));
-				NetPlay.players[player].difficulty = AIDifficulty::MEDIUM;
-				NETBroadcastPlayerInfo(player);
-				resetReadyStatus(false);
+				if (!NetPlay.players[player].allocated)
+				{
+					NetPlay.players[player].isSpectator = false;
+					NetPlay.players[player].ai = aiIdx;
+					setPlayerName(player, getAIName(player));
+					NetPlay.players[player].difficulty = AIDifficulty::MEDIUM;
+					NETBroadcastPlayerInfo(player);
+					resetReadyStatus(false);
+				}
+				else
+				{
+					debug(LOG_INFO, "Player joined slot %d while chooser was open", player);
+				}
 				widgScheduleTask([pStrongPtr] {
 					pStrongPtr->closeAiChooser();
 					pStrongPtr->addPlayerBox(true);
@@ -7313,6 +7327,11 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		lastrefresh = gameTime;
 		if (!multiRequestUp && (NetPlay.isHost || ingame.localJoiningInProgress))
 		{
+			if (aiChooserUp >= 0 && NetPlay.players[aiChooserUp].allocated)
+			{
+				closeAiChooser(); // close ai chooser that's open for a slot which a player just joined into
+			}
+
 			addPlayerBox(true);				// update the player box.
 			loadMapPreview(false);
 		}
