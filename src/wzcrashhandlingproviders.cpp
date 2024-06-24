@@ -33,6 +33,9 @@
 #include "activity.h"
 #include "modding.h"
 
+#include <chrono>
+#include <thread>
+
 /* Crash-handling providers */
 
 #if defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
@@ -515,6 +518,10 @@ bool crashHandlingProviderTestCrash()
 #elif defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
 	// Sentry crash-handling provider
 	if (!enabledSentryProvider) { return false; }
+	// test reporting exceptions
+	crashHandlingProviderCaptureException(__FUNCTION__, "testexception", "Test crash initiated", false, true);
+	std::this_thread::sleep_for(std::chrono::seconds(5)); // (hopefully enough time for the exception to be sent in the background...)
+	// trigger an actual crash
 # if defined(WZ_OS_WIN)
 	RaiseException(0xE000DEAD, EXCEPTION_NONCONTINUABLE, 0, 0);
 	return false;
