@@ -437,7 +437,7 @@ bool crashHandlingProviderSetContext(const std::string& key, const nlohmann::jso
 #endif
 }
 
-bool crashHandlingProviderCaptureException(const std::string& errorMessage, bool captureStackTrace)
+bool crashHandlingProviderCaptureException(const char* type, const char* value, const std::string& description, bool captureStackTrace, bool handled, const nlohmann::json *additionalData)
 {
 #if !defined(WZ_CRASHHANDLING_PROVIDER)
 	return false;
@@ -446,11 +446,32 @@ bool crashHandlingProviderCaptureException(const std::string& errorMessage, bool
 	if (!enabledSentryProvider) { return false; }
 
 	sentry_value_t event = sentry_value_new_event();
-	sentry_value_t exc = sentry_value_new_exception("Exception", errorMessage.c_str());
+	sentry_value_t exc = sentry_value_new_exception(type, value);
 	if (captureStackTrace)
 	{
 		sentry_value_set_stacktrace(exc, NULL, 0);
 	}
+	sentry_value_t mechanism = sentry_value_new_object();
+	sentry_value_set_by_key(mechanism, "type", sentry_value_new_string("generic"));
+	if (!description.empty())
+	{
+		sentry_value_set_by_key(mechanism, "description", sentry_value_new_string_n(description.c_str(), description.size()));
+	}
+	sentry_value_set_by_key(mechanism, "handled", sentry_value_new_bool(handled));
+	if (additionalData != nullptr)
+	{
+		sentry_value_t additionalDataVal = mapJsonObjectToSentryValue(*additionalData);
+		if (sentry_value_get_type(additionalDataVal) == SENTRY_VALUE_TYPE_OBJECT)
+		{
+			sentry_value_set_by_key(mechanism, "data", additionalDataVal);
+		}
+		else
+		{
+			sentry_value_decref(additionalDataVal);
+		}
+	}
+	sentry_value_set_by_key(exc, "mechanism", mechanism);
+
 	sentry_event_add_exception(event, exc);
 	auto event_id = sentry_capture_event(event);
 	return !sentry_uuid_is_nil(&event_id);
