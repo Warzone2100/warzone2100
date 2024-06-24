@@ -864,12 +864,16 @@ struct TextShaper
 	{
 		std::vector<TextRun> textRuns;
 #if defined(WZ_FRIBIDI_ENABLED)
-		FriBidiParType baseDirection;
+		FriBidiParType baseDirection = FRIBIDI_PAR_LTR;
 #endif
 	};
 
 	SplitTextRunsResult splitTextRuns(const std::vector<uint32_t>& codePoints, iV_fonts fontID)
 	{
+		if (codePoints.empty())
+		{
+			return {};
+		}
 		int codePoints_size = static_cast<int>(codePoints.size());
 #if SIZE_MAX > INT32_MAX
 		if (codePoints.size() > static_cast<size_t>(std::numeric_limits<int>::max()))
