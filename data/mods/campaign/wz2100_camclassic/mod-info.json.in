@@ -30,6 +30,11 @@
             "id": "autosavesOnly",
             "default": false,
             "userEditable": true
+        },
+        {
+          "id": "ps1Modifiers",
+          "default": false,
+          "userEditable": true
         }
     ],
     "customTweakOptions": [

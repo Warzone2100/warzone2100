@@ -1945,6 +1945,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"ps1Modifiers",
+		_("PS1 Modifiers"),
+		_("Reduces the damage the enemy deals to a third of the current difficulty modifier."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )

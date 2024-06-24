@@ -31,6 +31,7 @@
 #include "lib/framework/frame.h"
 #include "difficulty.h"
 #include "src/multiplay.h"
+#include "campaigninfo.h"
 
 
 // ------------------------------------------------------------------------------------
@@ -43,7 +44,7 @@ static int fDifEnemyModifier;
 void setDamageModifiers(int playerModifier, int enemyModifier)
 {
 	fDifPlayerModifier = playerModifier;
-	fDifEnemyModifier = enemyModifier;
+	fDifEnemyModifier = (!bMultiPlayer && getCamTweakOption_PS1Modifiers()) ? enemyModifier / 3 : enemyModifier;
 }
 
 // ------------------------------------------------------------------------------------
