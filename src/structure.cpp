@@ -167,7 +167,18 @@ static void auxStructureNonblocking(STRUCTURE *psStructure)
 	{
 		for (int j = 0; j < b.size.y; j++)
 		{
-			auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_BLOCKING | AUXBITS_OUR_BUILDING | AUXBITS_NONPASSABLE);
+			int x = b.map.x + i;
+			int y = b.map.y + j;
+			MAPTILE *psTile = mapTile(x, y);
+			if (psTile->psObject == psStructure)
+			{
+				auxClearAll(x, y, AUXBITS_BLOCKING | AUXBITS_OUR_BUILDING | AUXBITS_NONPASSABLE);
+			}
+			else
+			{
+				// Likely a script-queued object removal for a position where the script immediately replaced the old struct - just log
+				debug(LOG_WZ, "Skipping blocking bit clear - structure %" PRIu32 " is not the recorded tile object at (%d, %d)", psStructure->id, x, y);
+			}
 		}
 	}
 }
