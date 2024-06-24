@@ -41,6 +41,7 @@
 #include "combat.h"
 #include "visibility.h"
 #include "qtscript.h"
+#include "wzcrashhandlingproviders.h"
 
 #include <algorithm>
 
@@ -128,6 +129,16 @@ static const char* getObjDebugDescriptiveName(const BASE_OBJECT *psObj)
 #define BADREF(func, line, obj) "Illegal reference to %s:%d (%s) in %s[%u] (%s:%d - %s)", objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, objTypeToStr(obj->type), obj->id, getObjDebugDescriptiveName(obj)
 #endif
 
+#define ASSERT_OR_RETURN_REPORT(retval, expr, ...) \
+do { \
+	bool _wzeval = debug_likely(expr); \
+	if (!_wzeval) { \
+		ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); \
+		crashHandlingProviderCaptureException(__FUNCTION__, #expr, astringf(__VA_ARGS__), false, true); \
+		return retval; \
+	} \
+} while (0)
+
 static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& psPlayerStructList, unsigned player, const char* listName)
 {
 	for (const STRUCTURE *psStruct : psPlayerStructList)
@@ -139,7 +150,7 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 
 		for (unsigned i = 0; i < psStruct->numWeaps; ++i)
 		{
-			ASSERT_OR_RETURN(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i], psStruct));
+			ASSERT_OR_RETURN_REPORT(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i], psStruct));
 		}
 
 		if (psStruct->pFunctionality && psStruct->pStructureType)
@@ -151,7 +162,7 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 				case REF_VTOL_FACTORY:
 				{
 					FACTORY *psFactory = &psStruct->pFunctionality->factory;
-					ASSERT_OR_RETURN(false, psFactory->psCommander != psVictim, "Illegal reference to %s:%" PRIu32 " in FACTORY.psCommander in %s[%u]", objTypeToStr(psVictim->type), psFactory->psCommander->id, listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psFactory->psCommander != psVictim, "Illegal reference to %s:%" PRIu32 " in FACTORY.psCommander in %s[%u]", objTypeToStr(psVictim->type), psFactory->psCommander->id, listName, player);
 					break;
 				}
 				case REF_POWER_GEN:
@@ -159,26 +170,26 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 					POWER_GEN *powerGen = &psStruct->pFunctionality->powerGenerator;
 					for (int i = 0; i < NUM_POWER_MODULES; ++i)
 					{
-						ASSERT_OR_RETURN(false, powerGen->apResExtractors[i] != psVictim, "Illegal reference to %s:%" PRIu32 " in POWER_GEN.apResExtractors[%d] in %s[%u]", objTypeToStr(psVictim->type), powerGen->apResExtractors[i]->id, i, listName, player);
+						ASSERT_OR_RETURN_REPORT(false, powerGen->apResExtractors[i] != psVictim, "Illegal reference to %s:%" PRIu32 " in POWER_GEN.apResExtractors[%d] in %s[%u]", objTypeToStr(psVictim->type), powerGen->apResExtractors[i]->id, i, listName, player);
 					}
 					break;
 				}
 				case REF_RESOURCE_EXTRACTOR:
 				{
 					RES_EXTRACTOR *psResExtracter = &psStruct->pFunctionality->resourceExtractor;
-					ASSERT_OR_RETURN(false, psResExtracter->psPowerGen != psVictim, "Illegal reference to %s:%" PRIu32 " in RES_EXTRACTOR.psPowerGen in %s[%u]", objTypeToStr(psVictim->type), psResExtracter->psPowerGen->id, listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psResExtracter->psPowerGen != psVictim, "Illegal reference to %s:%" PRIu32 " in RES_EXTRACTOR.psPowerGen in %s[%u]", objTypeToStr(psVictim->type), psResExtracter->psPowerGen->id, listName, player);
 					break;
 				}
 				case REF_REPAIR_FACILITY:
 				{
 					REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
-					ASSERT_OR_RETURN(false, psRepairFac->psObj != psVictim, "Illegal reference to %s:%" PRIu32 " in REPAIR_FACILITY.psObj in %s[%u]", objTypeToStr(psVictim->type), psRepairFac->psObj->id, listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psRepairFac->psObj != psVictim, "Illegal reference to %s:%" PRIu32 " in REPAIR_FACILITY.psObj in %s[%u]", objTypeToStr(psVictim->type), psRepairFac->psObj->id, listName, player);
 					break;
 				}
 				case REF_REARM_PAD:
 				{
 					REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
-					ASSERT_OR_RETURN(false, psReArmPad->psObj != psVictim, "Illegal reference to %s:%" PRIu32 " in REARM_PAD.psObj in %s[%u]", objTypeToStr(psVictim->type), psReArmPad->psObj->id, listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psReArmPad->psObj != psVictim, "Illegal reference to %s:%" PRIu32 " in REARM_PAD.psObj in %s[%u]", objTypeToStr(psVictim->type), psReArmPad->psObj->id, listName, player);
 					break;
 				}
 				default:
@@ -198,15 +209,15 @@ static bool _checkDroidReferences(BASE_OBJECT *psVictim, const DroidList& psPlay
 			continue;  // Don't worry about self references.
 		}
 
-		ASSERT_OR_RETURN(false, psDroid->order.psObj != psVictim, "Illegal reference to %s:%d in order.psObj in %s[%u]", objTypeToStr(psVictim->type), psVictim->id, listName, player);
+		ASSERT_OR_RETURN_REPORT(false, psDroid->order.psObj != psVictim, "Illegal reference to %s:%d in order.psObj in %s[%u]", objTypeToStr(psVictim->type), psVictim->id, listName, player);
 
-		ASSERT_OR_RETURN(false, psDroid->psBaseStruct != psVictim, "Illegal reference to %s:%d in psBaseStruct in %s[%u]", objTypeToStr(psVictim->type), psVictim->id, listName, player);
+		ASSERT_OR_RETURN_REPORT(false, psDroid->psBaseStruct != psVictim, "Illegal reference to %s:%d in psBaseStruct in %s[%u]", objTypeToStr(psVictim->type), psVictim->id, listName, player);
 
 		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 		{
 			if (psDroid->psActionTarget[i] == psVictim)
 			{
-				ASSERT_OR_RETURN(false, psDroid->psActionTarget[i] != psVictim, BADREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i], psDroid));
+				ASSERT_OR_RETURN_REPORT(false, psDroid->psActionTarget[i] != psVictim, BADREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i], psDroid));
 			}
 		}
 	}
