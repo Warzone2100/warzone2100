@@ -292,7 +292,12 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, textureUint32 <= (uint32_t)std::numeric_limits<uint16_t>::max(), "texture value exceeds uint16::max: %" PRIu32 "", textureUint32);
 		mapData->mMapTiles[n].texture = static_cast<uint16_t>(textureUint32);
 		tileHeightUint32 = JSValueToUint32(ctx, heightVal);
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, tileHeightUint32 <= TILE_MAX_HEIGHT, "tile height (%" PRIu32 ") exceeds TILE_MAX_HEIGHT (%" PRIu32 ")", tileHeightUint32, TILE_MAX_HEIGHT);
+		if (tileHeightUint32 > TILE_MAX_HEIGHT)
+		{
+			// treat as non-fatal error (to support older script maps) - log and cap at TILE_MAX_HEIGHT
+			debug(pCustomLogger, LOG_ERROR, "tile height (%" PRIu32 ") exceeds TILE_MAX_HEIGHT (%" PRIu32 ")", tileHeightUint32, TILE_MAX_HEIGHT);
+			tileHeightUint32 = TILE_MAX_HEIGHT;
+		}
 		mapData->mMapTiles[n].height = static_cast<uint16_t>(tileHeightUint32);
 	}
 	bGotArrayLength = QuickJS_GetArrayLength(ctx, structures, arrayLen);
