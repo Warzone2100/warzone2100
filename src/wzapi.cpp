@@ -2565,6 +2565,10 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time))
 //--
 int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 {
+	if (mission.time < 0)
+	{
+		return -1;
+	}
 	return (mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC;
 }
 
