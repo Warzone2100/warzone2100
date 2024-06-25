@@ -43,8 +43,8 @@ static int fDifEnemyModifier;
 
 void setDamageModifiers(int playerModifier, int enemyModifier)
 {
-	fDifPlayerModifier = playerModifier;
-	fDifEnemyModifier = (!bMultiPlayer && getCamTweakOption_PS1Modifiers()) ? enemyModifier / 3 : enemyModifier;
+	fDifPlayerModifier = std::max(1, playerModifier);
+	fDifEnemyModifier = std::max(1, (!bMultiPlayer && getCamTweakOption_PS1Modifiers()) ? enemyModifier / 3 : enemyModifier);
 }
 
 // ------------------------------------------------------------------------------------
