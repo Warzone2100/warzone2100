@@ -236,6 +236,7 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j["team"] = f.team;
 		j["colour"] = f.colour;
 		j["faction"] = f.faction;
+		j["publicKey"] = f.publicKey;
 		// data from the frame
 		j[mapPlayerDataOutputName("droidsLost", naming)] = p.droidsLost;
 		j[mapPlayerDataOutputName("structuresLost", naming)] = p.structuresLost;
@@ -336,6 +337,7 @@ void GameStoryLogger::logStartGame()
 		playerAttrib.team = NetPlay.players[i].team;
 		playerAttrib.colour = NetPlay.players[i].colour;
 		playerAttrib.faction = NetPlay.players[i].faction;
+		playerAttrib.publicKey = base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
 
 		startingPlayerAttributes.push_back(playerAttrib);
 	}
@@ -465,7 +467,7 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 	{
 		GameFrame::PlayerStats playerStats;
 		const PLAYERSTATS& mStats = getMultiStats(i);
-		
+
 		playerStats.droidsLost = mStats.recentDroidsLost;
 		playerStats.structuresLost = mStats.recentStructuresLost;
 		playerStats.kills = mStats.recentDroidsKilled;
@@ -547,6 +549,7 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::FixedPlayerAttribu
 	j["team"] = p.team;
 	j["colour"] = p.colour;
 	j["faction"] = p.faction;
+	j["publicKey"] = p.publicKey;
 }
 
 inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttributes& p) {
@@ -555,6 +558,7 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttri
 	p.team = j.at("team").get<int32_t>();
 	p.colour = j.at("colour").get<int32_t>();
 	p.faction = static_cast<FactionID>(j.at("faction").get<uint8_t>());
+	p.publicKey = j.at("publicKey").get<std::string>();
 }
 
 inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame::PlayerStats& p) {
