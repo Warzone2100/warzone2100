@@ -169,7 +169,7 @@ function genRegions(fields) {
 		var regions = [];
 		for (var i = 0; i < fields.count; ++i) {
 			var textureType = textureTypes[gameRand(textureTypes.length)];
-			var height = textureType.isWater? 0 : gameRand(500) + 12;
+			var height = textureType.isWater? 0 : gameRand(499) + 12;
 			regions.push({texture: textureType, height: height, avg: fields.avg[i], reachable: false});
 		}
 
@@ -522,7 +522,7 @@ function placeStuff(regions, startPos) {
 			features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
 		}
 	}
-	
+
 	// Add additional oils
 	for(var i=0;i<60*(richness-3);i++){
 		var oilPos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true, 20);
