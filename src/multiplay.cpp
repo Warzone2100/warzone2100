@@ -393,12 +393,15 @@ bool multiPlayerLoop()
 				{
 					if (ingame.DataIntegrity[index] == false && isHumanPlayer(index) && index != NetPlay.hostPlayer)
 					{
-						char msg[256] = {'\0'};
+						if (!ingame.PendingDisconnect[index])
+						{
+							char msg[256] = {'\0'};
 
-						snprintf(msg, sizeof(msg), _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
-						sendInGameSystemMessage(msg);
-						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-						NETlogEntry(msg, SYNC_FLAG, index);
+							snprintf(msg, sizeof(msg), _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
+							sendInGameSystemMessage(msg);
+							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+							NETlogEntry(msg, SYNC_FLAG, index);
+						}
 
 #ifndef DEBUG
 						kickPlayer(index, _("Invalid data!"), ERROR_INVALID, false);
@@ -822,9 +825,12 @@ static bool sendDataCheck2()
 				&& (std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastSentPlayerDataCheck2[player].value()) >= maxWaitSeconds))
 			{
 				// If it's after the allowed time, kick the player
-				std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
-				sendInGameSystemMessage(msg.c_str());
-				addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
+				if (!ingame.PendingDisconnect[player])
+				{
+					std::string msg = astringf(_("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
+					sendInGameSystemMessage(msg.c_str());
+					addConsoleMessage(msg.c_str(), LEFT_JUSTIFY, NOTIFY_MESSAGE);
+				}
 
 				kickPlayer(player, _("Your data doesn't match the host's!"), ERROR_WRONGDATA, false);
 				debug(LOG_INFO, "%s (%u) did not respond with a NET_DATA_CHECK2 within the required timeframe (%s seconds), and has been kicked", getPlayerName(player), player, std::to_string(maxWaitSeconds.count()).c_str());
