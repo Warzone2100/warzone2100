@@ -222,45 +222,47 @@ static void findAndJoinLobbyGameImpl(const std::string& lobbyAddress, unsigned i
 	contentStr += "\n\n";
 	contentStr += _("This may take a moment...");
 	notification.contentText = contentStr;
-	notification.onDisplay = [lobbyAddress, lobbyPort, lobbyGameId](const WZ_Notification&) {
+	std::string lobbyAddressCopy = lobbyAddress;
+	notification.onDisplay = [lobbyAddressCopy, lobbyPort, lobbyGameId](const WZ_Notification&) {
 		// once the notification is completely displayed, trigger the lookup & join
+		wzAsyncExecOnMainThread([lobbyAddressCopy, lobbyPort, lobbyGameId]() {
+			const auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
+			if (currentGameMode != ActivitySink::GameMode::MENUS)
+			{
+				// Can't join a game while in a game - abort
+				cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
+				displayCantJoinWhileInGameNotification();
+				return;
+			}
 
-		const auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
-		if (currentGameMode != ActivitySink::GameMode::MENUS)
-		{
-			// Can't join a game while in a game - abort
-			cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
-			displayCantJoinWhileInGameNotification();
-			return;
-		}
+			// For now, it is necessary to call `NETinit(true)` before calling findLobbyGame
+			// Obviously this wouldn't be a good idea to do *during* a game, hence the check above to
+			// ensure we're still in the menus...
+			NETinit(true);
+			ingame.side = InGameSide::MULTIPLAYER_CLIENT;
+			auto joinConnectionDetails = findLobbyGame(lobbyAddressCopy, lobbyPort, lobbyGameId);
 
-		// For now, it is necessary to call `NETinit(true)` before calling findLobbyGame
-		// Obviously this wouldn't be a good idea to do *during* a game, hence the check above to
-		// ensure we're still in the menus...
-		NETinit(true);
-		ingame.side = InGameSide::MULTIPLAYER_CLIENT;
-		auto joinConnectionDetails = findLobbyGame(lobbyAddress, lobbyPort, lobbyGameId);
+			if (joinConnectionDetails.empty())
+			{
+				cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
+				debug(LOG_ERROR, "Join code: Failed to find game in the lobby server: %s:%u", lobbyAddressCopy.c_str(), lobbyPort);
+				std::string contentText = _("Failed to find game in the lobby server: ");
+				contentText += lobbyAddressCopy + ":" + std::to_string(lobbyPort) + "\n\n";
+				contentText += _("The game may have already started, or the host may have disbanded the game lobby.");
+				WZ_Notification notification;
+				notification.duration = 0;
+				notification.contentTitle = _("Failed to Find Game");
+				notification.contentText = contentText;
+				notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
+				notification.tag = std::string(JOIN_NOTIFICATION_TAG_PREFIX "failedtoconnect");
+				addNotification(notification, WZ_Notification_Trigger::Immediate());
+				return;
+			}
 
-		if (joinConnectionDetails.empty())
-		{
-			cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
-			debug(LOG_ERROR, "Join code: Failed to find game in the lobby server: %s:%u", lobbyAddress.c_str(), lobbyPort);
-			std::string contentText = _("Failed to find game in the lobby server: ");
-			contentText += lobbyAddress + ":" + std::to_string(lobbyPort) + "\n\n";
-			contentText += _("The game may have already started, or the host may have disbanded the game lobby.");
-			WZ_Notification notification;
-			notification.duration = 0;
-			notification.contentTitle = _("Failed to Find Game");
-			notification.contentText = contentText;
-			notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
-			notification.tag = std::string(JOIN_NOTIFICATION_TAG_PREFIX "failedtoconnect");
-			addNotification(notification, WZ_Notification_Trigger::Immediate());
-			return;
-		}
+			ActivityManager::instance().willAttemptToJoinLobbyGame(lobbyAddressCopy, lobbyPort, lobbyGameId, joinConnectionDetails);
 
-		ActivityManager::instance().willAttemptToJoinLobbyGame(lobbyAddress, lobbyPort, lobbyGameId, joinConnectionDetails);
-
-		joinGameImpl(joinConnectionDetails);
+			joinGameImpl(joinConnectionDetails);
+		});
 	};
 	notification.largeIcon = WZ_Notification_Image("images/notifications/connect_wait.png");
 	notification.tag = JOIN_FIND_AND_CONNECT_TAG;
