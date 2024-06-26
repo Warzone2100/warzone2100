@@ -84,6 +84,8 @@ bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission
 
 bool IsPlayerDroidLimitReached(int player);
 
+int getStructureDamageBaseExperienceLevel();
+
 bool loadStructureStats(WzConfig &ini);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
 bool loadStructureStrengthModifiers(WzConfig &ini);
