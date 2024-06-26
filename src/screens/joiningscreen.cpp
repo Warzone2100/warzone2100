@@ -1612,7 +1612,10 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 			handleJoinFailure();
 		}
 	);
-	widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
+	// Use widgScheduleTask to ensure we never modify the registered overlays while they are being enumerated
+	widgScheduleTask([screen]() {
+		widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
+	});
 	psCurrentJoiningAttemptScreen = screen;
 	return true;
 }
