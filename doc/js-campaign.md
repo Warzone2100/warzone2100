@@ -26,6 +26,7 @@ Tell `libcampaign.js` to manage a certain set of artifacts.
 The argument is a JavaScript map from object labels to artifact description.
 If the label points to a game object, artifact will be placed when this object
 is destroyed; if the label is a position, the artifact will be placed instantly.
+The label can point to a pre-existing feature artifact on the map too.
 Artifact description is a JavaScript object with the following fields:
 * `tech` The technology to grant when the artifact is recovered.
   Note that this can be made into an array to make artifacts give out
@@ -39,11 +40,32 @@ Artifact description is a JavaScript object with the following fields:
 @param {Object} artifacts
 @returns {void}
 
+## camAddArtifact(artiLabel, artiTech)
+
+Adds another artifact to be managed. Will override existing ones if the names match.
+
+@param {String} artiLabel
+@param {String|Array} artiTech
+@returns {void}
+
+## camDeleteArtifact(artiLabel)
+
+Deletes the artifact from the list of managed artifacts.
+
+@param {String} artiLabel
+@returns {void}
+
 ## camAllArtifactsPickedUp()
 
 Returns `true` if all artifacts managed by `libcampaign.js` were picked up.
 
 @returns {boolean}
+
+## camGetArtifacts()
+
+Returns the labels of all existing artifacts.
+
+@returns {Object[]}
 
 ## camSetEnemyBases([bases])
 
@@ -173,6 +195,12 @@ and traces entering the area in the TRACE log.
 @param {Function} callback
 @returns {void}
 
+## camClassicMode()
+
+Returns `true` if classic balance mod is enabled.
+
+@returns {boolean}
+
 ## camDef(something)
 
 Returns `false` if something is JavaScript-undefined, `true` otherwise.
@@ -253,6 +281,16 @@ Mimics wzscript's `numStructsButNotWallsInArea()`.
 @param {number} [playerFilter]
 @returns {number}
 
+## camCleanTileOfObstructions(x, y | pos)
+
+Obliterates player structures and features near the tile around certain coordinates.
+Can be used for spawn locations or transport reinforcement spots. May not
+delete very large objects like factories or skyscrapers.
+
+@param {number|Object} x
+@param {number} [y]
+@returns {void}
+
 ## camChangeOnDiff(numericValue)
 
 Change a numeric value based on campaign difficulty.
@@ -283,6 +321,63 @@ player index, `ALL_PLAYERS`, `ALLIES` or `ENEMIES`; defaults to `ENEMIES`.
 Break alliances between all players.
 
 @returns {void}
+
+## camGenerateRandomMapEdgeCoordinate(reachPosition)
+
+Returns a random coordinate anywhere on the edge of the map that reachs a position.
+
+@param {Object} reachPosition
+@returns {Object}
+
+## camGenerateRandomMapCoordinate(reachPosition)
+
+Returns a random coordinate anywhere on the map
+
+@param {Object} reachPosition
+@returns {Object}
+
+## camDiscoverCampaign()
+
+Figures out what campaign we are in without reliance on the source at all.
+
+@returns {number}
+
+## camNexusLaugh()
+
+Play a random NEXUS laugh.
+
+@returns {void}
+
+## camAbsorbPlayer([who[, to]])
+
+Completely give all of player `who` droids and structures to player `to`.
+Will default to `CAM_HUMAN_PLAYER` and `CAM_NEXUS` respectively.
+
+@param {number} [who]
+@param {number} [to]
+@returns {void}
+
+## camHackIntoPlayer([player[, to]])
+
+Steal a droid or structure from a player if the NEXUS hack state is active.
+Will default to `CAM_HUMAN_PLAYER` and `CAM_NEXUS` respectively.
+
+@param {number} [player]
+@param {number} [to]
+@returns {void}
+
+## camSetNexusState(flag)
+
+Turn on/off the NEXUS hacking state feature.
+
+@param {boolean} flag
+@returns {void}
+
+## camGetNexusState()
+
+Returns the activation state of the NEXUS hacking feature.
+
+@returns {boolean}
 
 ## camSetFactories(factories)
 
@@ -345,9 +440,8 @@ at the end of its production loop, first queued first served.
 
 ## camSetPropulsionTypeLimit([limit])
 
-On hard and insane the propulsion type can be limited with this.
-For type II pass in `2`, and for type III pass in `3`. Hard defaults to type II and insane defaults to type III.
-If nothing is passed in then the type limit will match what is in templates.json.
+This function can automatically augment units to use Type I/II/III propulsions.
+If nothing or zero is passed in then the type limit will match what is in templates.json.
 
 @param {number} [limit]
 @returns {void}
@@ -414,6 +508,14 @@ Grants research from the given list to player
 ## camCompleteRequiredResearch(researchIds, playerId)
 
 Grants research from the given list to player and also researches the required research for that item.
+
+@param {string[]} researchIds
+@param {number} playerId
+@returns {void}
+
+## camClassicResearch(researchIds, playerId)
+
+Grants research from the given list to player based on the "classic balance" variant.
 
 @param {string[]} researchIds
 @param {number} playerId
@@ -491,6 +593,34 @@ Print campaign order as string, useful for debugging.
 @param {number} order
 @returns {string}
 
+## camSecondsToMilliseconds(seconds)
+
+Returns the amount of milliseconds in `seconds`.
+
+@param {number} seconds
+@returns {number}
+
+## camMinutesToMilliseconds(minutes)
+
+Returns the amount of milliseconds in `minutes`.
+
+@param {number} minutes
+@returns {number}
+
+## camMinutesToSeconds(minutes)
+
+Returns the amount of seconds in `minutes`.
+
+@param {number} minutes
+@returns {number}
+
+## camHoursToSeconds(hours)
+
+Returns the amount of seconds in `hours`.
+
+@param {number} hours
+@returns {number}
+
 ## camIsTransporter(gameObject)
 
 Determine if the object is a transporter.
@@ -557,13 +687,13 @@ The following options are available:
   The following data parameter fields are available:
   * `area` The landing zone to return to.
   * `message` The "Return to LZ" message ID. Optional.
+  * `playLzReminder` Play and show the "Return to LZ" message. Optional, enabled by default.
   * `reinforcements` Reinforcements interval, in seconds.
 For standard and offworld victory, some extra data parameters can be defined:
 * `callback` A function callback to check for extra win/loss conditions. Return values are interpreted as follows:
   * `false` means instant defeat ("objective failed"),
   * `true` means victory as long as other standard victory conditions are met,
   * `undefined` means suppress other victory checks ("clearly not won yet").
-* `victoryVideo` Pass in the name of a video string here and it will be played before attempting to load the next level.
 For offworld victory, some more extra data parameters can be defined:
 * `retlz` Force the player to return to the LZ area:
   * `false` mission does not require a LZ return,
@@ -580,6 +710,27 @@ For offworld victory, some more extra data parameters can be defined:
 @param {Object} data
 @returns {void}
 
+## camCheckExtraObjective()
+
+Checks for extra win conditions defined in level scripts being met, if any.
+
+@returns {boolean|undefined}
+
+## camSetExtraObjectiveMessage(message)
+
+Message(s) the mission script can set to further explain specific victory conditions.
+Allows a single string or an array of strings.
+
+@param {string|Object[]} message
+@returns {void}
+
+## camClearConsoleOnVictoryMessage(clear)
+
+If the script wants to allow `__camSetupConsoleForVictoryConditions()` to clear the console.
+
+@param {boolean} clear
+@returns {void}
+
 ## camPlayVideos(data)
 
 Formats for parameter `data`: `{video: "video string", type: MISS_MSG/CAMP_MSG, immediate: true/false}` OR
@@ -591,5 +742,46 @@ Also, should a sound file be in a string (`pcvX.ogg`) `__camEnqueueVideos()` wil
 as a sound to play before a video. Of which is only supported when parameter `data` is an array.
 
 @param {Object|Object[]} data
+@returns {void}
+
+## camSetVtolData(player, startPos, exitPos, templates, timer, [obj[, extras]])
+
+Setup hit and runner VTOLs. NOTE: Will almost immediately spawn VTOLs upon calling this function.
+`Player`: What player number the VTOLs will belong to.
+`StartPos`: Starting position object where VTOLs will spawn. Can be an array. Use undefined for random map edge location.
+`ExitPos`: Exit position object where VTOLs will despawn at.
+`Templates`: An array of templates that the spawn uses.
+`Timer`: How much time in milliseconds the VTOLs will wait to spawn again.
+`Obj`: A game object that will stop the spawn when it no longer exists. May be undefined for no explicit end condition.
+`Extras`: An object with possible members:
+		`limit`: Numeric limit of a VTOL design in regards to the parameter Templates. May be an array paired to Templates.
+		`alternate`: A boolean to force the spawn to use one of the designs at a time in parameter Templates.
+		`altIdx`: Which design index the spawn will first cycle through the list of templates from.
+		`minVTOLs`: Minimum amount of VTOLs that will spawn.
+		`maxRandomVTOLs`: Random amount of VTOLs that will spawn in addition to minVTOLs.
+
+@param {number} player
+@param {Object|Object[]|undefined} startPos
+@param {Object} exitPos
+@param {Object[]} templates
+@param {number} timer
+@param {Object} obj
+@param {Object} extras
+@returns {void}
+
+## camSetVtolSpawnState(state, identifier)
+
+Sets the active status of a VTOL spawn point. The identifier can either be the
+the index number or the label of the object that stops the spawn naturally.
+
+@param {boolean} state
+@param {number|string} identifier
+@returns {void}
+
+## camSetVtolSpawnStateAll(state)
+
+Sets the active status of all VTOL spawns to `state`.
+
+@param {boolean} state
 @returns {void}
 
