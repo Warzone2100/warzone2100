@@ -190,6 +190,7 @@ jobs:
       run: |
         WZ_EXECUTABLE_PATH="${WZ_BUILD_DIR}/src/warzone2100${WZ_OUTPUT_NAME_SUFFIX}"
         objcopy --only-keep-debug "${WZ_EXECUTABLE_PATH}" "warzone2100${WZ_OUTPUT_NAME_SUFFIX}.debug"
+        cp "${WZ_EXECUTABLE_PATH}" "warzone2100${WZ_OUTPUT_NAME_SUFFIX}"
     - name: Upload debug info
       uses: actions/upload-artifact@v4
       if: success() && (matrix.publish_artifact == true)
