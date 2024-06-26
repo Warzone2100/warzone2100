@@ -104,6 +104,7 @@ UDWORD			researchModuleStat;
 STRUCTURE_STATS		*asStructureStats = nullptr;
 UDWORD				numStructureStats = 0;
 static std::unordered_map<WzString, STRUCTURE_STATS *> lookupStructStatPtr;
+optional<int> structureDamageBaseExperienceLevel;
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
 STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
@@ -269,6 +270,7 @@ void structureInitVars()
 	powerModuleStat = 0;
 	researchModuleStat = 0;
 	lastMaxUnitMessage = 0;
+	structureDamageBaseExperienceLevel = nullopt;
 
 	initStructLimits();
 	for (int i = 0; i < MAX_PLAYERS; i++)
@@ -370,6 +372,22 @@ void resetFactoryNumFlag()
 	}
 }
 
+int getStructureDamageBaseExperienceLevel()
+{
+	// COMPAT NOTES:
+	//
+	// Default / compat structure damage handling (the only option for many years - from at least 2.0.10-4.4.2):
+	//
+	// This causes the game to treat structures at a base experience level of 1 instead of 0 when calculating damage to them,
+	// yielding actualDamage at 94% of the base damage value. Or, in other words, structures are a bit tougher
+	// than the raw numbers in the stats files would suggest, and get a hidden experience level boost.
+	//
+	// However, structure.json created and tested during this long period may be expecting this outcome / behavior,
+	// So unless it's explicitly specified in the special `_config_` dict, it always defaults to `1`.
+
+	return structureDamageBaseExperienceLevel.value_or(1);
+}
+
 static const StringToEnum<STRUCTURE_TYPE> map_STRUCTURE_TYPE[] =
 {
 	{ "HQ",                 REF_HQ                  },
@@ -437,9 +455,13 @@ size_t sizeOfArray(const T(&)[ N ])
 	return N;
 }
 
+#define STRUCTURE_JSON_CONFIG_DICT_KEY "_config_"
+
 /* load the structure stats from the ini file */
 bool loadStructureStats(WzConfig &ini)
 {
+	const WzString CONFIG_DICT_KEY_STR = STRUCTURE_JSON_CONFIG_DICT_KEY;
+
 	std::map<WzString, STRUCTURE_TYPE> structType;
 	for (unsigned i = 0; i < sizeOfArray(map_STRUCTURE_TYPE); ++i)
 	{
@@ -459,6 +481,42 @@ bool loadStructureStats(WzConfig &ini)
 	size_t statWriteIdx = 0;
 	for (size_t readIdx = 0; readIdx < list.size(); ++readIdx)
 	{
+		if (list[readIdx] == CONFIG_DICT_KEY_STR)
+		{
+			// handle the special config dict
+			ini.beginGroup(list[readIdx]);
+
+			// baseStructDamageExpLevel
+			bool convValueSuccess = false;
+			auto baseStructDamageExpLevel = ini.value("baseStructDamageExpLevel", 1).toInt(&convValueSuccess);
+			if (!convValueSuccess)
+			{
+				baseStructDamageExpLevel = 1; // reset to old default
+			}
+			if (baseStructDamageExpLevel >= 0 && baseStructDamageExpLevel < 10)
+			{
+				if (!structureDamageBaseExperienceLevel.has_value())
+				{
+					structureDamageBaseExperienceLevel = baseStructDamageExpLevel;
+				}
+				else
+				{
+					if (structureDamageBaseExperienceLevel.value() != baseStructDamageExpLevel)
+					{
+						debug(LOG_ERROR, "Non-matching structure JSON baseStructDamageExpLevel");
+						debug(LOG_INFO, "Structure JSON file \"%s\" has specified a baseStructDamageExpLevel (\"%d\") that does not match the first loaded structure JSON's baseStructDamageExpLevel (\"%d\")", ini.fileName().toUtf8().c_str(), baseStructDamageExpLevel, structureDamageBaseExperienceLevel.value());
+					}
+				}
+			}
+			else
+			{
+				ASSERT_OR_RETURN(false, false, "Invalid _config_ \"baseStructDamageExpLevel\" value: \"%d\"", baseStructDamageExpLevel);
+			}
+
+			ini.endGroup();
+			continue;
+		}
+
 		ini.beginGroup(list[readIdx]);
 		STRUCTURE_STATS *psStats = &asStructureStats[statWriteIdx];
 		loadStructureStats_BaseStats(ini, psStats, statWriteIdx);

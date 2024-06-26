@@ -1,4 +1,7 @@
 {
+	"_config_": {
+		"baseStructDamageExpLevel": 0
+	},
 	"A0ADemolishStructure": {
 		"armour": 6,
 		"breadth": 1,
