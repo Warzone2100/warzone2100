@@ -2774,6 +2774,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				// draw Weapon/ECM/Sensor for structure
 				if (flashImd[i] != nullptr)
 				{
+					rot = psStructure->asWeaps[i].rot; // Snap rotation so the muzzle graphic appears where it should, see aiUpdateStructure().
 					iIMDShape *pFlashDisplayIMD = flashImd[i]->displayModel();
 					glm::mat4 matrix(1.f);
 					// horrendous hack
