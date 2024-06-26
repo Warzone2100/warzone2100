@@ -41,6 +41,7 @@ enum
 {
 	REQ_LIST,
 	RED_LIST,
+	REM_LIST,
 	RES_LIST
 };
 
