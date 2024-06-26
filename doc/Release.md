@@ -48,6 +48,7 @@ Wait for all CI builds to complete, and verify they have completed successfully.
 [![Flatpak](https://github.com/Warzone2100/warzone2100/workflows/Flatpak/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFlatpak+branch%3Amaster+event%3Apush)
 [![Windows](https://github.com/Warzone2100/warzone2100/workflows/Windows/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
 [![macOS](https://github.com/Warzone2100/warzone2100/workflows/macOS/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush)
+[![Emscripten](https://github.com/Warzone2100/warzone2100/actions/workflows/CI_emscripten.yml/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AEmscripten+branch%3Amaster+event%3Apush)
 
 Can be flakey:
 - FreeBSD builds: [![FreeBSD Build Status](https://api.cirrus-ci.com/github/Warzone2100/warzone2100.svg?branch=master)](https://cirrus-ci.com/github/Warzone2100/warzone2100)
@@ -77,6 +78,17 @@ Then proceed with normal game testing.
 ### Test the Windows portable & regular installers
 
 Verify that each installer works, and the game runs. (Start by testing the portable installer.)
+
+### Test the Web Edition dev builds
+
+Once the latest master branch build completes, the dev Web Edition build will be pushed to:
+
+https://play.wz2100.net/dev/
+
+Test Campaign and Skirmish modes in at least:
+- Google Chrome
+- Mozilla Firefox
+- Safari
 
 ### Test the crash handler
 
