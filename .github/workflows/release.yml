@@ -59,6 +59,8 @@ jobs:
     # Variable: WZ_WEB_BUILD_RELEASE_MANAGEMENT_API_URL
     steps:
       - name: 'Get actual latest release from GH'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           # Get the actual latest release from GitHub directly
           # (which could differ from the release associated with this event, if someone publishes some older versions as GitHub Releases at some point)
