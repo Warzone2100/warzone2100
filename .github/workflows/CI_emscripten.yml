@@ -177,8 +177,8 @@ jobs:
     if: (github.repository == 'Warzone2100/warzone2100') && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
     needs: web-build
     env:
-      WZ_WASM_ARCH: '${{ matrix.arch }}'
-      WZ_BUILD_DESC: 'web_${{ matrix.arch }}'
+      WZ_WASM_ARCH: '${{ matrix.architecture }}'
+      WZ_BUILD_DESC: 'web_${{ matrix.architecture }}'
     steps:
     - name: Prep Environment
       run: mkdir dl-archive
