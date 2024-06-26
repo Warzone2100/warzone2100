@@ -807,10 +807,10 @@ bool socketSetTCPNoDelay(Socket& sock, bool nodelay)
 #if defined(TCP_NODELAY)
 	int value = (nodelay) ? 1 : 0;
 	int result = setsockopt(sock.fd[SOCK_CONNECTION], IPPROTO_TCP, TCP_NODELAY, (char *) &value, sizeof(int));
-	debug(LOG_INFO, "Setting TCP_NODELAY on socket: %s", (result != SOCKET_ERROR) ? "success" : "failure");
+	debug(LOG_NET, "Setting TCP_NODELAY on socket: %s", (result != SOCKET_ERROR) ? "success" : "failure");
 	return result != SOCKET_ERROR;
 #else
-	debug(LOG_INFO, "Unable to set TCP_NODELAY on socket - unsupported");
+	debug(LOG_NET, "Unable to set TCP_NODELAY on socket - unsupported");
 	return false;
 #endif
 }
