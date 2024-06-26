@@ -1983,7 +1983,7 @@ int realmain(int argc, char *argv[])
 	make_dir(MultiCustomMapsPath, "maps", nullptr); // needed to prevent crashes when getting map
 
 	PHYSFS_mkdir(version_getVersionedModsFolderPath("autoload").c_str());	// mods that are automatically loaded
-	PHYSFS_mkdir(version_getVersionedModsFolderPath("campaign").c_str());	// campaign only mods activated with --mod_ca=example.wz
+	PHYSFS_mkdir("mods/campaign");	// campaign only mods - no longer versioned because of new campaign mod packaging and selector
 	PHYSFS_mkdir("mods/downloads");	// mod download directory - NOT currently versioned
 	PHYSFS_mkdir(version_getVersionedModsFolderPath("global").c_str());	// global mods activated with --mod=example.wz
 	PHYSFS_mkdir(version_getVersionedModsFolderPath("multiplay").c_str());	// multiplay only mods activated with --mod_mp=example.wz
