@@ -1363,7 +1363,7 @@ void WzMultiWidget::switchAttachedPanel(const std::shared_ptr<WIDGET> newPanel)
 		detach(currentlyAttachedPanel);
 	}
 	currentlyAttachedPanel = newPanel;
-	attach(newPanel);
+	attach(newPanel, ChildZPos::Back);
 }
 
 void WzMultiWidget::initialize(std::function<void ()> closeButtonHandler)
