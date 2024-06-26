@@ -16,6 +16,7 @@ Describes a research item. The following properties are defined:
 * ```name``` A string containing the full name of the research.
 * ```id``` A string containing the index name of the research.
 * ```type``` The type will always be ```RESEARCH_DATA```.
+* ```results``` An array of objects of research upgrades (defined in "research.json").
 
 ## Structure
 
@@ -28,7 +29,7 @@ In addition, the following properties are defined:
 * ```direction``` The direction the structure is facing. (4.5+ only)
 * ```stattype``` The stattype defines the type of structure. It will be one of ```HQ```, ```FACTORY```, ```POWER_GEN```,
 ```RESOURCE_EXTRACTOR```, ```LASSAT```, ```DEFENSE```, ```WALL```, ```RESEARCH_LAB```, ```REPAIR_FACILITY```,
-```CYBORG_FACTORY```, ```VTOL_FACTORY```, ```REARM_PAD```, ```SAT_UPLINK```, ```GATE``` and ```COMMAND_CONTROL```.
+```CYBORG_FACTORY```, ```VTOL_FACTORY```, ```REARM_PAD```, ```SAT_UPLINK```, ```GATE```, ```STRUCT_GENERIC```, and ```COMMAND_CONTROL```.
 * ```modules``` If the stattype is set to one of the factories, ```POWER_GEN``` or ```RESEARCH_LAB```, then this property is set to the
 number of module upgrades it has.
 * ```canHitAir``` True if the structure has anti-air capabilities. (3.2+ only)
