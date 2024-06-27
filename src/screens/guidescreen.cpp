@@ -2537,7 +2537,8 @@ private:
 private:
 	OnCloseFunc onCloseFunc;
 	std::chrono::steady_clock::time_point openTime;
-	bool didPause = false;
+	bool didStopGameTime = false;
+	bool didSetPauseStates = false;
 
 private:
 	WzGameGuideScreen(WzGameGuideScreen const &) = delete;
@@ -2746,7 +2747,17 @@ void WzGameGuideScreen::pauseGameIfNeeded()
 
 		psForm->show(); // show the root form, which means it accepts all clicks on the screen and dims the background
 
-		didPause = true;
+		didStopGameTime = true;
+
+		if (!gamePaused())
+		{
+			setGamePauseStatus(true);
+			setConsolePause(true);
+			setScriptPause(true);
+			setAudioPause(true);
+			setScrollPause(true);
+			didSetPauseStates = true;
+		}
 	}
 	else
 	{
@@ -2756,21 +2767,29 @@ void WzGameGuideScreen::pauseGameIfNeeded()
 
 void WzGameGuideScreen::unpauseGameIfNeeded()
 {
-	if (!didPause)
+	if (didStopGameTime)
 	{
-		return;
+		if (!runningMultiplayer() && gameTimeIsStopped())
+		{
+			clearActiveConsole();
+			/* Start the clock again */
+			gameTimeStart();
+
+			//put any widgets back on for the missions
+			resetMissionWidgets();
+		}
+		didStopGameTime = false;
 	}
 
-	if (!runningMultiplayer() && gameTimeIsStopped())
+	if (didSetPauseStates)
 	{
-		clearActiveConsole();
-		/* Start the clock again */
-		gameTimeStart();
-
-		//put any widgets back on for the missions
-		resetMissionWidgets();
+		setGamePauseStatus(false);
+		setConsolePause(false);
+		setScriptPause(false);
+		setAudioPause(false);
+		setScrollPause(false);
+		didSetPauseStates = false;
 	}
-	didPause = false;
 }
 
 std::shared_ptr<WzGuideForm>& WzGameGuideScreen::getGuideForm()
