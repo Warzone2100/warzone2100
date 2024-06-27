@@ -901,10 +901,11 @@ void NETstring(char *str, uint16_t maxlen)
 	queueAuto(len);
 
 	// Truncate length if necessary
-	if (len > maxlen - 1)
+	uint16_t maxReadLen = (maxlen > 0) ? static_cast<uint16_t>(maxlen - 1) : 0;
+	if (len > maxReadLen)
 	{
 		debug(LOG_ERROR, "NETstring: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxlen);
-		len = maxlen - 1;
+		len = maxReadLen;
 	}
 
 	for (unsigned i = 0; i < len; ++i)
@@ -912,7 +913,7 @@ void NETstring(char *str, uint16_t maxlen)
 		queueAuto(str[i]);
 	}
 
-	if (NETgetPacketDir() == PACKET_DECODE)
+	if (NETgetPacketDir() == PACKET_DECODE && maxlen > 0)
 	{
 		// NUL-terminate
 		str[len] = '\0';
