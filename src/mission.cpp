@@ -1567,6 +1567,14 @@ static void missionResetDroids()
 			{
 				vanishDroid(d);
 			}
+			else
+			{
+				if (d->pos.x != INVALID_XY && d->pos.y != INVALID_XY)
+				{
+					// update visibility
+					visTilesUpdate(d);
+				}
+			}
 			return IterationResult::CONTINUE_ITERATION;
 		});
 	}
@@ -1663,6 +1671,9 @@ static void missionResetDroids()
 				}
 				// Reset the selected flag
 				psDroid->selected = false;
+
+				// update visibility
+				visTilesUpdate(psDroid);
 			}
 			else
 			{
