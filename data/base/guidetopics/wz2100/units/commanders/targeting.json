@@ -5,9 +5,9 @@
 	"sort": "03",
 	"visual": {
 		"droidTemplate": {
-			"body": "Body11ABT",
+			"body": "Body8MBT",
 			"brain": "CommandBrain01",
-			"name": "Command Turret Python Half-tracks",
+			"name": "Command Turret Scorpion Half-tracks",
 			"propulsion": "HalfTrack",
 			"type": "DROID_COMMAND",
 			"weapons": [

@@ -6,9 +6,9 @@
 	"visual": [
 		{
 			"droidTemplate": {
-				"body": "Body11ABT",
-				"name": "Sensor Turret Python Half-tracks",
-				"propulsion": "HalfTrack",
+				"body": "Body1REC",
+				"name": "Sensor Turret Viper Wheels",
+				"propulsion": "wheeled01",
 				"type": "SENSOR",
 				"sensor": "SensorTurret1Mk1"
 			}
