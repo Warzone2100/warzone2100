@@ -122,12 +122,6 @@ void startMultiplayerGame();
 #define LAG_CHECK_INTERVAL 1000
 const std::chrono::milliseconds LagCheckInterval(LAG_CHECK_INTERVAL);
 
-static void sendTextMessage(const char* msg)
-{
-	auto message = InGameChatMessage(selectedPlayer, msg);
-	message.send();
-}
-
 void autoLagKickRoutine()
 {
 	if (!bMultiPlayer || !NetPlay.bComms || !NetPlay.isHost)
@@ -221,7 +215,7 @@ void autoLagKickRoutine()
 		if (ingame.LagCounter[i] >= LagAutoKickSeconds) {
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
-			sendTextMessage(msg.c_str());
+			sendInGameSystemMessage(msg.c_str());
 			wz_command_interface_output("WZEVENT: lag-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
 			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION, false);
 			ingame.LagCounter[i] = 0;
@@ -229,12 +223,12 @@ void autoLagKickRoutine()
 		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds.", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
-			sendTextMessage(msg.c_str());
+			sendInGameSystemMessage(msg.c_str());
 		}
 		else if (ingame.LagCounter[i] % 15 == 0) { // every 15 seconds
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds.", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
-			sendTextMessage(msg.c_str());
+			sendInGameSystemMessage(msg.c_str());
 		}
 	}
 }
