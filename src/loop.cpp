@@ -224,9 +224,10 @@ static GAMECODE renderLoop()
 			displayRenderLoop();
 		}
 
+		WidgetTriggers const &triggers = widgRunScreen(psWScreen);		// always run the screen, so overlays can process input
+
 		if (InGameOpUp || isInGamePopupUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
 		{
-			WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 			unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
 			intProcessInGameOptions(widgval);
