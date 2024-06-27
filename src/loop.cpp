@@ -219,7 +219,7 @@ static GAMECODE renderLoop()
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		wzSetCursor(CURSOR_DEFAULT);
 
-		if (dragBox3D.status != DRAG_DRAGGING)
+		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING)
 		{
 			displayRenderLoop();
 		}
