@@ -3559,10 +3559,10 @@
 		"flightGfx": "FXLProj.PIE",
 		"flightSpeed": 700,
 		"hitGfx": "FXMETHIT.PIE",
-		"hitpoints": 375,
+		"hitpoints": 205,
 		"id": "PlasmiteFlamer",
 		"lightWorld": 1,
-		"longRange": 512,
+		"longRange": 896,
 		"longHit": 50,
 		"maxElevation": 90,
 		"minElevation": -60,
@@ -3581,13 +3581,13 @@
 		"periodicalDamageTime": 50,
 		"rotate": 180,
 		"shortHit": 75,
-		"shortRange": 384,
+		"shortRange": 768,
 		"waterGfx": "FXMETHIT.PIE",
 		"weaponClass": "HEAT",
 		"weaponEffect": "FLAMER",
 		"weaponSubClass": "FLAME",
 		"weaponWav": "plasflm.ogg",
-		"weight": 1000
+		"weight": 5000
 	},
 	"QuadMg1AAGun": {
 		"buildPoints": 400,
