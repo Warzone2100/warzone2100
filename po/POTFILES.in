@@ -407,6 +407,7 @@ src/effects.cpp
 src/emscripten_helpers.cpp
 src/faction.cpp
 src/feature.cpp
+src/formation.cpp
 src/fpath.cpp
 src/frontend.cpp
 src/game.cpp
