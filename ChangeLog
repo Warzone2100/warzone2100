@@ -1,3 +1,32 @@
+2024-06-28: Version 4.5.0-beta2:
+* General:
+   * Fix: auxStructureNonblocking() for script-queued object removal (commit:14b50356ff4fc61d7bee4b509053c7fc369a65da, #3912)
+   * Fix: Script map max tile height handling (commit:b2865de38bc2067ea98bf310130da7530b81589f, commit:7a74975d0381c8ec13bb7c6e1c582863aec1531a, #3917)
+   * Fix: Improve checkReferences & object destruction logging (too many commits, #3916, #3938)
+   * Fix: Prevent underflow in getMissionTime() calculation (commit:ad280cc7c4dae19c41651490a557229c64b7bf94, commit:893a3b4a6caa70a3c21af7f1f3f9b7bd411e3152, #3918)
+   * Fix: Additional checks for AI chooser handling (commit:3854a97098e368f5051d9d233d75049555535d38, #3913)
+   * Fix: Create un-versioned mods/campaign directory (commit:5a978fcd1843c3e090111ad9ad6f636e50682281, #3924)
+   * Fix: Clip difficulty modifiers to always at least be 1 (commit:0d36fa7a18cea89f74c1b9e545e2388b881c5c37, #3920)
+   * Fix: structure.json: Add support for new "baseStructDamageExpLevel" option (commit:1c46b8980636c786e4a39c06d4e586f2c022d093, #3927)
+   * Fix: Handling pause states, and guide screen pausing (too many commits, #3930)
+   * Fix: Close button on multimenu form (commit:0247d2988f6113ea1bbcd08e8420e7cffc45f6e7, #3923)
+   * Fix: Guide Topics: Use different designs for Sensor/Commander guide units to avoid spoilers (commit:17b5ebf35aa1e4fc9fcb6dd965f412ae074ceea3, #3935)
+   * Fix: Droid map visibility after returning to home base from fresh away mission saveload (commit:aace08b1c96fc86321441d7b624144aaca11d5b4, #3934)
+   * Fix: Check if inside scroll limits before repair/RTB (commit:93a63ced26a9a05e909162264be1d229f4222481, #3936)
+   * Fix: Various potential crashes (too many commits, #3914, #3929)
+* Graphics:
+   * Fix: Snap muzzle graphics rotation for invisible weapons (commit:4aa75471a7872562ebd4397e4e1bdfa39ce9663d, #3926)
+* Campaign:
+   * Add: "PS1 Modifiers" campaign tweak option (commit:2dd38cb06914e4879a6a43d4c02f524a0bc3b157, #3920)
+   * Change: Move level loading codes into library (commit:4c6119ebe83e4a34809e28b8495cc90de4799cc8, commit:8609b3cabc6a1678e714990ba0f13339441cd04e, #3919)
+* Multiplayer:
+   * Fix: Silence certain spectator-related messages (commit:3d3175d9542d09c73df9d85917ee36a6ae72e629, #3922)
+   * Fix: Send auto-kick messages as system messages (commit:8ce7354847ac9b38a23fda164e4ad43cba906fd9, #3932)
+   * Change: GameStoryLogger: Add player identity to FixedPlayerAttributes (commit:a1c4bb8512697436d00b537d4e6bf856cad1155c, #3921)
+* Balance MP:
+   * Change: Revert 4.5.0-beta1 structure update for MP (commit:102e81cb7f63d9b712c97cc3a591b36c5bbd8f40e, #3927)
+   * Change: Decrease HP of Plasmite Flamer (commit:be0e48ac3f95a5e2d9e90fb16cbcbdf9e6b148f4, #3933)
+
 2024-06-23: Version 4.5.0-beta1:
 * General:
    * Add: Emscripten support (too many commits, #3613, #3630, #3643, #3730, #3743)
