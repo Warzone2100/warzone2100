@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-21 23:38+0000\n"
-"PO-Revision-Date: 2024-06-22 19:48\n"
+"POT-Creation-Date: 2024-06-28 01:01+0000\n"
+"PO-Revision-Date: 2024-06-28 14:31\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -9530,8 +9530,11 @@ msgstr "Фокус на штабе, вид на СЕВЕР"
 msgid "Unable to locate HQ!"
 msgstr "Невозможно найти штаб!"
 
-msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr "Лимит скорости формации удалён из игры из-за багов."
+msgid "Formation speed limiting ON"
+msgstr ""
+
+msgid "Formation speed limiting OFF"
+msgstr ""
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Вертикальное вращение: нормальное"
@@ -11106,6 +11109,12 @@ msgstr "Только-Автосохранения"
 
 msgid "Disable the ability to manually save / quick-save, limit autosaves to the beginning of each level."
 msgstr "Отключить ручное и быстрое сохранения, ограничить автосохранения только началом каждого уровня."
+
+msgid "PS1 Modifiers"
+msgstr ""
+
+msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
+msgstr ""
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "Расслабленное прохождение - проще простого"
