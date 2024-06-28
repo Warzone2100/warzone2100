@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-21 23:38+0000\n"
-"PO-Revision-Date: 2024-06-22 04:07\n"
+"POT-Creation-Date: 2024-06-28 01:01+0000\n"
+"PO-Revision-Date: 2024-06-28 14:31\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -9518,8 +9518,11 @@ msgstr "Centrat en el QG del jugador, direcció NORD"
 msgid "Unable to locate HQ!"
 msgstr "No es pot localitzar el QG"
 
-msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr "El límit de velocitat de les formacions ha estat retirat del joc per que té errades."
+msgid "Formation speed limiting ON"
+msgstr ""
+
+msgid "Formation speed limiting OFF"
+msgstr ""
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Direcció de rotació vertical: Normal"
@@ -11088,6 +11091,12 @@ msgstr "Només Autodesades"
 
 msgid "Disable the ability to manually save / quick-save, limit autosaves to the beginning of each level."
 msgstr "Desactiva la desada manual/desada-ràpida, limita les desades al principi de cada nivell."
+
+msgid "PS1 Modifiers"
+msgstr ""
+
+msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
+msgstr ""
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "Una partida més tranquil·la - més fàcil que fàcil"

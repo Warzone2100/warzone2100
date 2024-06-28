@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-21 23:38+0000\n"
-"PO-Revision-Date: 2024-06-22 04:07\n"
+"POT-Creation-Date: 2024-06-28 01:01+0000\n"
+"PO-Revision-Date: 2024-06-28 14:31\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -48,7 +48,7 @@ msgid "ALPHA BASE MISSION: The New Paradigm"
 msgstr "ALFA BÁZIS KÜLDETÉS: Az Új Paradigma"
 
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Az Új Paradigma fejlettebb fegyver technológiával rendelkezik."
+msgstr "Az Új Paradigma fejlettebb fegyvertechnológiával rendelkezik."
 
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
 msgstr "Náluk lehet a szinaptikus kapcsolat technológia, létfontosságú visszaszerezni."
@@ -99,16 +99,16 @@ msgid "Assemble an attack team and recover the synaptic link technology."
 msgstr "Állítson össze egy támadócsapatot, és szerezze vissza a szinaptikus kapcsolat technológiát."
 
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "SZÁLLÍTÁSI FELADAT: Új feladatok"
+msgstr "SZÁLLÍTÁSI KÜLDETÉS: Új feladatok"
 
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr "Új Paradigma leleteket kutat a közelben."
+msgstr "Az Új Paradigma leleteket kutat a közelben."
 
 msgid "Intercept them. Do not let any enemies exit this area."
 msgstr "Fogja el őket. Ne hagyja, hogy bármely ellenség elhagyja ezt a területet."
 
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "SZÁLLÍTÁSI FELADAT: Ellenséges bázis építés alatt"
+msgstr "SZÁLLÍTÁSI KÜLDETÉS: Ellenséges bázis építés alatt"
 
 msgid "Enemy forces are establishing a forward base at this location."
 msgstr "Az ellenséges erők előretolt bázist létesítenek ezen a helyszínen."
@@ -9518,8 +9518,11 @@ msgstr "Főhadiszállása központosítva, észak felé irányítva"
 msgid "Unable to locate HQ!"
 msgstr "Képtelen, hogy lokalizálja főhadiszállást!"
 
-msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr "Hibák miatt el lett távolítva a hadrendi sebességkorlátozás."
+msgid "Formation speed limiting ON"
+msgstr ""
+
+msgid "Formation speed limiting OFF"
+msgstr ""
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Vízszintes forgatás iránya: normál"
@@ -11087,6 +11090,12 @@ msgid "Autosaves-Only"
 msgstr ""
 
 msgid "Disable the ability to manually save / quick-save, limit autosaves to the beginning of each level."
+msgstr ""
+
+msgid "PS1 Modifiers"
+msgstr ""
+
+msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
 
 msgid "A more relaxed playthrough - easier than easy"

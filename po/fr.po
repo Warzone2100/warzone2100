@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-21 23:38+0000\n"
-"PO-Revision-Date: 2024-06-22 04:07\n"
+"POT-Creation-Date: 2024-06-28 01:01+0000\n"
+"PO-Revision-Date: 2024-06-28 14:31\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -2938,22 +2938,22 @@ msgstr "Langage du système"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Mappage de port ouvert port externe : %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Votre IP externe est : %s"
 
 #, c-format
 msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
+msgstr "Échec de la création du mappage de port (délai d'expiration après %d secondes)"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Échec de la création du mappage de port"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Configurez manuellement votre routeur/pare-feu pour ouvrir le port %d !"
 
 msgid "Client failed to ack player index swap"
 msgstr "Le client n'a pas confirmé le changement d'emplacement du joueur"
@@ -2969,6 +2969,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Erreur de connexion au serveur du lobby : %s.\n"
+"Assurez-vous que le port %d peut recevoir les connexions entrantes.\n"
+"Si vous utilisez un routeur, configurez-le pour activer UPnP/NAT-PMP/PCP\n"
+" ou pour transférer le port vers votre système."
 
 msgid "Failed to get a lobby response!"
 msgstr "L'antichambre le répond pas !"
@@ -7235,10 +7239,10 @@ msgid "port"
 msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Activer/désactiver Le mappage de ports lors de l'hébergement"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, vrai, 0, faux]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "Activer les commandes slash du lobby (pour connecter les clients)"
@@ -7992,10 +7996,10 @@ msgid "Game Port"
 msgstr "Port de jeu"
 
 msgid "Port Mapping"
-msgstr ""
+msgstr "Cartographie des ports"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
+msgstr "Utilisez PCP, NAT-PMP ou UPnP pour vous aider à configurer votre routeur/pare-feu afin d'autoriser les connexions pendant l'hébergement."
 
 msgid "Chat"
 msgstr "Chat"
@@ -9518,8 +9522,11 @@ msgstr "Vue centrée sur le quartier général, direction Nord"
 msgid "Unable to locate HQ!"
 msgstr "Impossible de localiser le Quartier Général!"
 
-msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr "La limite de vitesse en formation a été retirée du jeu à cause de bugs."
+msgid "Formation speed limiting ON"
+msgstr ""
+
+msgid "Formation speed limiting OFF"
+msgstr ""
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Sens de rotation vertical : normal"
@@ -10168,11 +10175,11 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr "Appuyez sur le bouton Démarrer la partie pour créer le serveur"
 
 msgid "Port mapping creation is in progress..."
-msgstr ""
+msgstr "La création du mappage des ports est en cours..."
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "Mappage de port désactivé par l'utilisateur. La configuration automatique du port %d n'aura pas lieu."
 
 msgid "Closed"
 msgstr "Fermé"
@@ -10803,10 +10810,10 @@ msgid "Requesting to join game"
 msgstr "Demandant à rejoindre la partie"
 
 msgid "Kick Spectator"
-msgstr ""
+msgstr "Exclure le spectateur"
 
 msgid "Kick Player"
-msgstr ""
+msgstr "Expulser un joueur"
 
 msgid "Loading Status:"
 msgstr "Statut du chargement :"
@@ -11088,6 +11095,12 @@ msgstr "Sauvegarde automatique uniquement"
 
 msgid "Disable the ability to manually save / quick-save, limit autosaves to the beginning of each level."
 msgstr "Désactiver la possibilité d'enregistrer manuellement / d'enregistrer rapidement, limiter les sauvegardes automatiques au début de chaque niveau."
+
+msgid "PS1 Modifiers"
+msgstr ""
+
+msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
+msgstr ""
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "Un jeu plus détendu - plus facile que facile"
