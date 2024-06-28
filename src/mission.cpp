@@ -2969,6 +2969,10 @@ void missionDestroyObjects()
 
 	// FIXME: check that orders do not reference anything bad?
 
+	if (!psDestroyedObj.empty())
+	{
+		debug(LOG_INFO, "%zu destroyed objects", psDestroyedObj.size());
+	}
 	gameTime++;	// Wonderful hack to ensure objects destroyed above get free'ed up by objmemUpdate.
 	objmemUpdate();	// Actually free objects removed above
 }

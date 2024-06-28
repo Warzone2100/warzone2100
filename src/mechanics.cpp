@@ -37,6 +37,10 @@
 /* Shutdown the mechanics system */
 bool mechanicsShutdown()
 {
+	if (!psDestroyedObj.empty())
+	{
+		debug(LOG_INFO, "%zu destroyed objects", psDestroyedObj.size());
+	}
 	for (BASE_OBJECT* psObj : psDestroyedObj)
 	{
 		objmemDestroy(psObj, true);
