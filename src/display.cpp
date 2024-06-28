@@ -1059,10 +1059,26 @@ void resetScroll()
 	scrollDirUpDown = 0;
 }
 
+// Checks if coordinate is inside scroll limits, returns false if not.
+bool CheckInScrollLimits(const int &xPos, const int &yPos)
+{
+	int minX = world_coord(scrollMinX);
+	int maxX = world_coord(scrollMaxX - 1);
+	int minY = world_coord(scrollMinY);
+	int maxY = world_coord(scrollMaxY - 1);
+
+	if ((xPos < minX) || (xPos >= maxX) || (yPos < minY) || (yPos >= maxY))
+	{
+		return false;
+	}
+
+	return true;
+}
+
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns true if edge hit.
 //
-bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos)
+bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos)
 {
 	bool EdgeHit = false;
 	SDWORD	minX, minY, maxX, maxY;
@@ -1105,7 +1121,7 @@ bool CheckScrollLimits()
 {
 	SDWORD xp = playerPos.p.x;
 	SDWORD zp = playerPos.p.z;
-	bool ret = CheckInScrollLimits(&xp, &zp);
+	bool ret = CheckInScrollLimitsCamera(&xp, &zp);
 
 	playerPos.p.x = xp;
 	playerPos.p.z = zp;
@@ -1705,13 +1721,13 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 {
 	bool ownStruct = (psStructure->player == selectedPlayer);
 	const bool isSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
-	
+
 	if (isSpectator)
 	{
 		printStructureInfo(psStructure);
 		return;
 	}
-	
+
 	if (selectedPlayer < MAX_PLAYERS && !aiCheckAlliances(psStructure->player, selectedPlayer))
 	{
 		/* We've clicked on an enemy building */

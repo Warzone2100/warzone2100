@@ -1682,6 +1682,10 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
 				Vector2i pos = psStruct->pos.xy();
+				if (!CheckInScrollLimits(pos.x, pos.y))
+				{
+					continue;
+				}
 
 				psDroid->order = *psOrder;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
@@ -1706,12 +1710,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			int iDY = getLandingY(psDroid->player);
 			Vector2i startPos = getPlayerStartPosition(psDroid->player);
 
-			if (iDX && iDY)
+			if (iDX && iDY && CheckInScrollLimits(iDX, iDY))
 			{
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, iDX, iDY);
 			}
-			else if (bMultiPlayer && (startPos.x != 0 && startPos.y != 0))
+			else if (bMultiPlayer && (startPos.x != 0 && startPos.y != 0) && CheckInScrollLimits(startPos.x, startPos.y))
 			{
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, startPos.x, startPos.y);
@@ -3391,11 +3395,18 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	{
 		if (psStruct->pStructureType->type == REF_HQ)
 		{
-			psHq = psStruct;
+			if (CheckInScrollLimits(psStruct->pos.x, psStruct->pos.y))
+			{
+				psHq = psStruct;
+			}
 			continue;
 		}
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->status == SS_BUILT)
 		{
+			if (!CheckInScrollLimits(psStruct->pos.x, psStruct->pos.y))
+			{
+				continue;
+			}
 			thisDistToRepair = droidSqDist(psDroid, psStruct);
 			if (thisDistToRepair <= 0)
 			{
@@ -3428,6 +3439,10 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 				if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
 					&& secondaryGetState(psCurr, DSO_ACCEPT_RETREP))
 				{
+					if (!CheckInScrollLimits(psCurr->pos.x, psCurr->pos.y))
+					{
+						continue;
+					}
 					thisDistToRepair = droidSqDist(psDroid, psCurr);
 					if (thisDistToRepair <= 0)
 					{
