@@ -1505,8 +1505,9 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	}
 
 	/* adjust speed for formation */
-	if(!psDroid->isVtol() &&
-		moveFormationSpeedLimitingOn(psDroid->player) && psDroid->sMove.psFormation)
+	if(!psDroid->isVtol()
+		&& moveFormationSpeedLimitingOn(psDroid->player) && psDroid->sMove.psFormation
+		&& !psDroid->isRetreatingForRepair() && !psDroid->isReturningToBase())
 	{
 		SDWORD FrmSpeed = (SDWORD)psDroid->sMove.psFormation->iSpeed;
 

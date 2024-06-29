@@ -120,6 +120,10 @@ struct DROID : public BASE_OBJECT
 	bool isAttacking() const;
 	// true if a vtol droid currently returning to be rearmed
 	bool isVtolRearming() const;
+	// true if a droid is retreating for repair
+	bool isRetreatingForRepair() const;
+	// true if a droid is returning to base
+	bool isReturningToBase() const;
 
 	// Helper functions to get various droid stats.
 	BODY_STATS* getBodyStats() const;
