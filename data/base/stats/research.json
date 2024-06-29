@@ -8225,6 +8225,34 @@
 		"subgroupIconID": "IMAGE_RES_GRPROF",
 		"techCode": 1
 	},
+	"R-Wpn-RocketSlow-ROFRR01": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-RocketSlow-ROFRR01",
+		"name": "Ripple Rocket Rapid Loader",
+		"requiredResearch": [
+			"R-Wpn-Howitzer03-Rot"
+		],
+		"researchPoints": 6000,
+		"researchPower": 187,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Rocket-IDF",
+				"parameter": "FirePause",
+				"value": -15
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Rocket-IDF",
+				"parameter": "ReloadTime",
+				"value": -15
+			}
+		],
+		"statID": "Rocket-IDF",
+		"subgroupIconID": "IMAGE_RES_GRPROF"
+	},
 	"R-Wpn-Energy-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Energy-Accuracy01",
