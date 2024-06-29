@@ -1707,7 +1707,7 @@
 	"CyborgRotMG": {
 		"buildPoints": 270,
 		"buildPower": 90,
-		"damage": 22,
+		"damage": 23,
 		"effectSize": 100,
 		"facePlayer": 1,
 		"firePause": 5,
@@ -2662,7 +2662,7 @@
 	"MG4ROTARY-Pillbox": {
 		"buildPoints": 500,
 		"buildPower": 100,
-		"damage": 20,
+		"damage": 21,
 		"effectSize": 100,
 		"facePlayer": 1,
 		"firePause": 5,
@@ -2695,7 +2695,7 @@
 	"MG4ROTARY-VTOL": {
 		"buildPoints": 500,
 		"buildPower": 100,
-		"damage": 60,
+		"damage": 63,
 		"designable": 1,
 		"effectSize": 100,
 		"facePlayer": 1,
@@ -2732,7 +2732,7 @@
 	"MG4ROTARYMk1": {
 		"buildPoints": 500,
 		"buildPower": 100,
-		"damage": 20,
+		"damage": 21,
 		"designable": 1,
 		"effectSize": 100,
 		"facePlayer": 1,
@@ -3224,7 +3224,7 @@
 	"NX-CyborgChaingun": {
 		"buildPoints": 50,
 		"buildPower": 10,
-		"damage": 22,
+		"damage": 23,
 		"effectSize": 100,
 		"facePlayer": 1,
 		"firePause": 5,
