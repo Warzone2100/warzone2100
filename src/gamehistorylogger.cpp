@@ -418,6 +418,9 @@ void GameStoryLogger::logGameOver()
 
 	gameEndRealTime = std::chrono::system_clock::now();
 
+	gameFrames.push_back(genCurrentFrame());
+	lastRecordedGameFrameTime = gameTime;
+
 	if (outputModes.anyEnabled())
 	{
 		bool hitTimeout = (game.gameTimeLimitMinutes > 0) ? (gameTime >= (game.gameTimeLimitMinutes * 60 * 1000)) : false;
