@@ -2900,6 +2900,18 @@ bool DROID::isFlying() const
 		   && (sMove.Status != MOVEINACTIVE || isTransporter());
 }
 
+// true if a droid is retreating for repair
+bool DROID::isRetreatingForRepair() const
+{
+	return order.type == DORDER_RTR || order.type == DORDER_RTR_SPECIFIED;
+}
+
+// true if a droid is returning to base
+bool DROID::isReturningToBase() const
+{
+	return order.type == DORDER_RTB;
+}
+
 /* returns true if it's a VTOL weapon droid which has completed all runs */
 bool vtolEmpty(const DROID *psDroid)
 {
