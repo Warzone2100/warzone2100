@@ -704,6 +704,7 @@
       'debug_3d': 'launchOption_Debug3D'
     }
     
+    var LaunchedModule; // set once createWZModule succeeds
     var statusElement = document.getElementById('status');
     var progressElement = document.getElementById('progress');
     const originalStartButtonContents = document.getElementById('start-button').innerHTML;
@@ -1076,8 +1077,8 @@
       bootstrap.Toast.getOrCreateInstance(document.getElementById('runtimeErrToast')).show();
     }
     function wz_display_update_available_refresh_needed() {
-      if (Module && Module.hasOwnProperty('pauseMainLoop')) {
-        Module.pauseMainLoop(); // a bit of a hack...
+      if (LaunchedModule && LaunchedModule.hasOwnProperty('pauseMainLoop')) {
+        LaunchedModule.pauseMainLoop(); // a bit of a hack...
       }
       console.log('An update is available - please refresh');
       const myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('refreshForUpdate'), {keyboard: false, backdrop: 'static'});
@@ -1186,6 +1187,100 @@
       return { wasmMemory: wasmMemory, maximumMemory: maximumMemory };
     }
 
+    function constructWZModuleConfig(additional_command_line_args) {
+      // Initial Module configuration
+      let Module = {
+        preRun: [],
+        postRun: [],
+        print: (function() {
+          return function(text) {
+          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+          console.log(text);
+          };
+        })(),
+        canvas: (function() {
+          var canvas = document.getElementById('canvas');
+          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+          // application robust, you may want to override this behavior before shipping!
+          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          return canvas;
+        })(),
+        setStatus: function(text) {
+          if (!this.setStatus.last) this.setStatus.last = { time: Date.now(), text: '' };
+          if (text === this.setStatus.last.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - this.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          this.setStatus.last.time = now;
+          this.setStatus.last.text = text;
+          if (m) {
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          this.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+    
+      function wz_pre_run_fixup_canvas(Module) {
+        Module.canvas.style.backgroundColor = "black";
+      }
+    
+      function wz_handle_post_run(Module) {
+        Module.wzEncounteredPostRun = true;
+      }
+  
+      Module['preRun'].push(wz_pre_run_fixup_canvas);
+      Module['postRun'].push(wz_handle_post_run);
+      Module.arguments = ['--configdir='+wz_js_get_config_dir_path()];
+      if (WZ_VIDEO_SEQUENCES_BASE_URL !== null) {
+        Module.arguments.push('--videourl='+WZ_VIDEO_SEQUENCES_BASE_URL);
+      }
+      if (additional_command_line_args) {
+        Module.arguments = Module.arguments.concat(additional_command_line_args);
+      }
+    
+      Module['locateFile'] = function(path, prefix) {
+        // Custom handling for .data files
+        if (path.endsWith(".data")) {
+          // NOTE: Prefix is not guaranteed to be set for these by the preloader, so construct the paths manually
+        
+          // Shared data files
+          // - music
+          if (path === 'warzone2100-music.data') {
+            let musicDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_MUSIC_PKG_SUBDIR + path;
+            console.debug('Loading: ' + musicDataURL);
+            return musicDataURL;
+          }
+          // - terrain_overrides
+          if (path.startsWith('warzone2100-terrain-')) {
+            let terrainDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_TERRAIN_PKG_SUBDIR + path;
+            console.debug('Loading: ' + terrainDataURL);
+            return terrainDataURL;
+          }
+        
+          // Regular build-specific data files
+          var dataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + path;
+          console.debug('Loading: ' + dataURL);
+          return dataURL;
+        }
+        // otherwise, use the default, the prefix (JS file's dir) + the path
+        return prefix + path;
+      }
+      
+      return Module;
+    }
+
     function startGame() {
       // Make canvas visible
       document.getElementById('loading-game').style.display = 'block';
@@ -1203,8 +1298,11 @@
       wz_js_display_loading_indicator(1);
       window.wz_starting_game = true;
       
-      function actuallyStartGame() {
+      function actuallyStartGame(additional_command_line_args) {
         setTimeout( function() {
+          
+          // customize initial Module config
+          let Module = constructWZModuleConfig(additional_command_line_args);
           
           // try to create WebAssembly.Memory
           let {wasmMemory, maximumMemory} = allocateWZWasmMemory();
@@ -1216,8 +1314,12 @@
             localStorage.setItem('lastRun_Details', JSON.stringify({ maxMem: maximumMemory, success: 0, time: (new Date()).getTime() }));
           }
           
-          createWZModule(Module).then(function(Module) {
-            // this is reached when everything is ready, and you can call methods on Module
+          createWZModule(Module).then(function(ResultModule) {
+            // this is reached when everything is ready, and you can call methods on ResultModule
+            
+            // Store the launched module in a global
+            LaunchedModule = ResultModule;
+            
             // Hide the loading-game panel
             document.getElementById('loading-game').style.display = 'none';
             // Since some browsers (i.e. Safari) won't show the spinner animation when WZ's main thread is blocked
@@ -1253,9 +1355,10 @@
       var data_load_promises = [];
       
       // additional debug flags
+      var additional_command_line_args = [];
       Object.entries(WZ_LAUNCH_OPTIONS).forEach(([k,v]) => {
         if (k.startsWith('debug_') && v) {
-          Module.arguments.push('--debug='+k.substring(k.indexOf('_') + 1));
+          additional_command_line_args.push('--debug='+k.substring(k.indexOf('_') + 1));
         }
       })
       
@@ -1285,7 +1388,7 @@
           console.error('Failed to load at least one required data file');
           return;
         }
-        actuallyStartGame();
+        actuallyStartGame(additional_command_line_args);
       });
     }
       
@@ -1630,93 +1733,6 @@
       }
       progressElement.hidden = false;
     });
-
-    // Initial Module configuration
-    var Module = {
-      preRun: [],
-      postRun: [],
-      print: (function() {
-        return function(text) {
-        if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-        console.log(text);
-        };
-      })(),
-      canvas: (function() {
-        var canvas = document.getElementById('canvas');
-        // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-        // application robust, you may want to override this behavior before shipping!
-        // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-        canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
-        return canvas;
-      })(),
-      setStatus: function(text) {
-        if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
-        if (text === Module.setStatus.last.text) return;
-        var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
-        var now = Date.now();
-        if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
-        Module.setStatus.last.time = now;
-        Module.setStatus.last.text = text;
-        if (m) {
-          progressElement.value = parseInt(m[2])*100;
-          progressElement.max = parseInt(m[4])*100;
-          progressElement.hidden = false;
-        } else {
-          progressElement.value = null;
-          progressElement.max = null;
-          progressElement.hidden = true;
-        }
-        statusElement.innerHTML = text;
-      },
-      totalDependencies: 0,
-      monitorRunDependencies: function(left) {
-        this.totalDependencies = Math.max(this.totalDependencies, left);
-        Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
-      }
-    };
-    
-    function wz_pre_run_fixup_canvas() {
-      Module.canvas.style.backgroundColor = "black";
-    }
-    
-    function wz_handle_post_run() {
-      Module.wzEncounteredPostRun = true;
-    }
-  
-    Module['preRun'].push(wz_pre_run_fixup_canvas);
-    Module['postRun'].push(wz_handle_post_run);
-    Module.arguments = ['--configdir='+wz_js_get_config_dir_path()];
-    if (WZ_VIDEO_SEQUENCES_BASE_URL !== null) {
-      Module.arguments.push('--videourl='+WZ_VIDEO_SEQUENCES_BASE_URL);
-    }
-    
-    Module['locateFile'] = function(path, prefix) {
-      // Custom handling for .data files
-      if (path.endsWith(".data")) {
-        // NOTE: Prefix is not guaranteed to be set for these by the preloader, so construct the paths manually
-        
-        // Shared data files
-        // - music
-        if (path === 'warzone2100-music.data') {
-          let musicDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_MUSIC_PKG_SUBDIR + path;
-          console.debug('Loading: ' + musicDataURL);
-          return musicDataURL;
-        }
-        // - terrain_overrides
-        if (path.startsWith('warzone2100-terrain-')) {
-          let terrainDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_TERRAIN_PKG_SUBDIR + path;
-          console.debug('Loading: ' + terrainDataURL);
-          return terrainDataURL;
-        }
-        
-        // Regular build-specific data files
-        var dataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + path;
-        console.debug('Loading: ' + dataURL);
-        return dataURL;
-      }
-      // otherwise, use the default, the prefix (JS file's dir) + the path
-      return prefix + path;
-    }
     
     function wz_js_handle_app_exit() {
       document.getElementById('emscripten_container').style.display = 'none';
@@ -1726,12 +1742,15 @@
     }
     
     window.onerror = function(event) {
-      Module.setStatus('Exception thrown, see JavaScript console');
-      Module.setStatus = function(text) {
-        if (text) console.log('[post-exception status] ' + text);
-      };
-      if (!Module.hasOwnProperty('calledRun') || !Module.calledRun
-          || !Module.hasOwnProperty('wzEncounteredPostRun') || !Module.wzEncounteredPostRun) {
+      progressElement.hidden = true;
+      statusElement.innerHTML = 'Exception thrown, see JavaScript console';
+      if (LaunchedModule) {
+        LaunchedModule.setStatus = function(text) {
+          if (text) console.log('[post-exception status] ' + text);
+        };
+      }
+      if (!LaunchedModule || !LaunchedModule.hasOwnProperty('calledRun') || !LaunchedModule.calledRun
+          || !LaunchedModule.hasOwnProperty('wzEncounteredPostRun') || !LaunchedModule.wzEncounteredPostRun) {
         wz_display_loading_error(event);
       }
       else {
