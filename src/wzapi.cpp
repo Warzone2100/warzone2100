@@ -1237,6 +1237,11 @@ wzapi::researchResults wzapi::enumResearch(WZAPI_NO_PARAMS)
 //--
 std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, int _range, optional<int> _playerFilter, optional<bool> _seen))
 {
+	_x = std::max<int>(_x, 0);
+	_y = std::max<int>(_y, 0);
+	_x = std::min<int>(_x, mapWidth);
+	_y = std::min<int>(_y, mapHeight);
+
 	int player = context.player();
 	int x = world_coord(_x);
 	int y = world_coord(_y);
@@ -2117,6 +2122,11 @@ std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(const DROID *psDroid)
 //--
 bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<std::string> _message))
 {
+	SCRIPT_ASSERT(false, context, _x >= 0, "Beacon x value %d is less than zero", _x);
+	SCRIPT_ASSERT(false, context, _y >= 0, "Beacon y value %d is less than zero", _y);
+	SCRIPT_ASSERT(false, context, _x <= mapWidth, "Beacon x value %d is greater than mapWidth %d", _x, (int)mapWidth);
+	SCRIPT_ASSERT(false, context, _y <= mapHeight, "Beacon y value %d is greater than mapHeight %d", _y, (int)mapHeight);
+
 	int x = world_coord(_x);
 	int y = world_coord(_y);
 
@@ -2345,7 +2355,7 @@ bool wzapi::isSpectator(WZAPI_PARAMS(int player))
 nlohmann::json wzapi::getWeaponInfo(WZAPI_PARAMS(std::string weaponName)) WZAPI_DEPRECATED
 {
 	int weaponIndex = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
-	SCRIPT_ASSERT(nlohmann::json(), context, weaponIndex >= 0, "No such weapon: %s", weaponName.c_str());
+	SCRIPT_ASSERT(nlohmann::json(), context, weaponIndex >= 0 && weaponIndex < asWeaponStats.size(), "No such weapon: %s", weaponName.c_str());
 	WEAPON_STATS *psStats = &asWeaponStats[weaponIndex];
 	nlohmann::json result = nlohmann::json::object();
 	result["id"] = weaponName;
@@ -2365,6 +2375,10 @@ nlohmann::json wzapi::getWeaponInfo(WZAPI_PARAMS(std::string weaponName)) WZAPI_
 //--
 bool wzapi::centreView(WZAPI_PARAMS(int x, int y))
 {
+	SCRIPT_ASSERT(false, context, x >= 0, "x value %d is less than zero", x);
+	SCRIPT_ASSERT(false, context, y >= 0, "y value %d is less than zero", y);
+	SCRIPT_ASSERT(false, context, x <= mapWidth, "x value %d is greater than mapWidth %d", x, (int)mapWidth);
+	SCRIPT_ASSERT(false, context, y <= mapHeight, "y value %d is greater than mapHeight %d", y, (int)mapHeight);
 	setViewPos(x, y, false);
 	return true;
 }
@@ -3168,13 +3182,12 @@ int wzapi::countDroid(WZAPI_PARAMS(optional<int> _droidType, optional<int> _play
 //--
 wzapi::no_return_value wzapi::loadLevel(WZAPI_PARAMS(std::string levelName))
 {
-	sstrcpy(aLevelName, levelName.c_str());
-
 	// Find the level dataset
 	LEVEL_DATASET *psNewLevel = levFindDataSet(levelName.c_str());
 	SCRIPT_ASSERT({}, context, psNewLevel, "Could not find level data for %s", levelName.c_str());
 
 	// Get the mission rolling...
+	sstrcpy(aLevelName, levelName.c_str());
 	prevMissionType = mission.type;
 	nextMissionType = psNewLevel->type;
 	loopMissionState = LMS_CLEAROBJECTS;
@@ -3249,6 +3262,7 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 bool wzapi::donatePower(WZAPI_PARAMS(int amount, int player))
 {
 	int from = context.player();
+	SCRIPT_ASSERT_PLAYER(false, context, player);
 	giftPower(from, player, amount, true);
 	return true;
 }
