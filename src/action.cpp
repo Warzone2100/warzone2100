@@ -1143,6 +1143,14 @@ void actionUpdateDroid(DROID *psDroid)
 					else if (!psWeapStats->rotate ||
 					         actionTargetTurret(psDroid, psActionTarget, &psDroid->asWeaps[i]))
 					{
+						// Prevents artillery units attached to a leader sometimes not stopping.
+						if (!psDroid->isVtol() &&
+							!proj_Direct(psWeapStats) &&
+							psDroid->order.type == DORDER_FIRESUPPORT &&
+							!DROID_STOPPED(psDroid))
+						{
+							moveStopDroid(psDroid);
+						}
 						/* In range - fire !!! */
 						combFire(&psDroid->asWeaps[i], psDroid, psActionTarget, i);
 					}
