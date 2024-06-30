@@ -67,15 +67,19 @@ if(NOT DEFINED EMSCRIPTEN_WZ_VERSIONSTRING)
 endif()
 
 ##################################
-# EMSCRIPTEN_WZ_GITCOMMIT
+# Other variables
 
 set(EMSCRIPTEN_WZ_GITCOMMIT "${VCS_FULL_HASH}")
+set(EMSCRIPTEN_WZ_GITBRANCH "${VCS_BRANCH}")
+set(EMSCRIPTEN_WZ_GITTAG "${VCS_TAG}")
 
 ##################################
 # Debug output
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++EMSCRIPTEN_WZ_VERSIONSTRING: ${EMSCRIPTEN_WZ_VERSIONSTRING}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++EMSCRIPTEN_WZ_GITCOMMIT: ${EMSCRIPTEN_WZ_GITCOMMIT}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++EMSCRIPTEN_WZ_GITBRANCH: ${EMSCRIPTEN_WZ_GITBRANCH}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++EMSCRIPTEN_WZ_GITTAG: ${EMSCRIPTEN_WZ_GITTAG}")
 
 ##################################
 # Output configured file based on the template
