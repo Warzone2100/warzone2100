@@ -1884,7 +1884,7 @@ void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 }
 
 /* Make all the droids for a certain player a member of a specific group */
-/* If a structure is selected, set its group to which droids will be automatically assigned */
+/* If no droids are selected: If a structure is selected, set its group to which droids will be automatically assigned */
 void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup)
 {
 	bool	bAtLeastOne = false;
@@ -1894,24 +1894,6 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 
 	if (groupNumber < UBYTE_MAX)
 	{
-		/* Run through all the structures */
-		for (STRUCTURE *psStruct : apsStructLists[playerNumber])
-		{
-			if (psStruct->selected && psStruct->isFactory())
-			{
-				if (psStruct->productToGroup != (UBYTE)groupNumber)
-				{
-					psStruct->productToGroup = (UBYTE)groupNumber;
-				}
-				else
-				{
-					// To make it possible to clear factory group assignment via "toggle" behavior of assigning a factory to the same group it's already assigned
-					psStruct->productToGroup = UBYTE_MAX;
-				}
-				return;
-			}
-		}
-
 		/* Run through all the droids */
 		for (DROID* psDroid : apsDroidLists[playerNumber])
 		{
@@ -1951,6 +1933,27 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 			newSelectedGroup = groupNumber;
 		}
 		intGroupsChanged(newSelectedGroup);
+	}
+	if (!bAtLeastOne && groupNumber < UBYTE_MAX)
+	{
+		/* If no droids were selected to be added to the group, check if a factory is selected */
+		/* Run through all the structures */
+		for (STRUCTURE *psStruct : apsStructLists[playerNumber])
+		{
+			if (psStruct->selected && psStruct->isFactory())
+			{
+				if (psStruct->productToGroup != (UBYTE)groupNumber)
+				{
+					psStruct->productToGroup = (UBYTE)groupNumber;
+				}
+				else
+				{
+					// To make it possible to clear factory group assignment via "toggle" behavior of assigning a factory to the same group it's already assigned
+					psStruct->productToGroup = UBYTE_MAX;
+				}
+				return;
+			}
+		}
 	}
 }
 
