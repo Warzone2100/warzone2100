@@ -704,6 +704,7 @@
       'debug_3d': 'launchOption_Debug3D'
     }
     
+    var Module; // populated once setting up to start game - must be a global for the additional data package scripts to find it (music, etc)
     var LaunchedModule; // set once createWZModule succeeds
     var statusElement = document.getElementById('status');
     var progressElement = document.getElementById('progress');
@@ -1249,11 +1250,8 @@
       wz_js_display_loading_indicator(1);
       window.wz_starting_game = true;
       
-      function actuallyStartGame(additional_command_line_args) {
+      function actuallyStartGame(Module) {
         setTimeout( function() {
-          
-          // customize initial Module config
-          let Module = constructWZModuleConfig(additional_command_line_args);
           
           // try to create WebAssembly.Memory
           let {wasmMemory, maximumMemory} = allocateWZWasmMemory();
@@ -1298,18 +1296,20 @@
         }, 10);
       }
       
-      var WZ_LAUNCH_OPTIONS = {};
+      // customize initial Module config
+      Module = constructWZModuleConfig();
+      
+      let WZ_LAUNCH_OPTIONS = {};
       Object.entries(WZ_LAUNCH_OPTIONS_MAPPING).forEach(([k,v]) => {
         WZ_LAUNCH_OPTIONS[k] = document.getElementById(v)?.checked;
       })
       wz_save_launch_options();
-      var data_load_promises = [];
+      let data_load_promises = [];
       
       // additional debug flags
-      var additional_command_line_args = [];
       Object.entries(WZ_LAUNCH_OPTIONS).forEach(([k,v]) => {
         if (k.startsWith('debug_') && v) {
-          additional_command_line_args.push('--debug='+k.substring(k.indexOf('_') + 1));
+          Module.arguments.push('--debug='+k.substring(k.indexOf('_') + 1));
         }
       })
       
@@ -1339,7 +1339,7 @@
           console.error('Failed to load at least one required data file');
           return;
         }
-        actuallyStartGame(additional_command_line_args);
+        actuallyStartGame(Module);
       });
     }
       
