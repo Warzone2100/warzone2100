@@ -1,7 +1,7 @@
 {
 	"ALL ROUNDER": {
-		"BUNKER": 70,
-		"HARD": 75,
+		"BUNKER": 75,
+		"HARD": 80,
 		"MEDIUM": 100,
 		"SOFT": 130
 	},
