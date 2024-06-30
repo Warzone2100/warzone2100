@@ -359,7 +359,7 @@
         <a class="nav-link fw-bold py-1 px-0 hide-on-standalone" href="https://wz2100.net" target="_blank" rel="noopener">Get the Full Version</a>
         <a class="nav-link fw-bold py-1 px-0" title="Donate" href="https://donations.wz2100.net" target="_blank" rel="noopener"><svg class="bi me-1"><use href="#bi-heart"></use></svg>Donate</a>
         <a class="nav-link fw-bold py-1 px-0" title="Discord Server" href="https://discord.com/invite/ZvRVQ8g" target="_blank" rel="noopener"><svg class="bi"><use href="#bi-discord"></use></svg></a>
-        <button id="nav-options-button" class="nav-link fw-bold py-1 px-0" title="Options" onclick="wz_open_options_modal()"><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></button>
+        <button id="nav-options-button" class="nav-link fw-bold py-1 px-0" title="Options" onclick="wz_open_options_modal()" disabled><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></button>
       </nav>
     </div>
   </header>
@@ -804,59 +804,7 @@
     })();
     let WZ_MUSIC_PKG_SUBDIR = 'pkg/music/';
     let WZ_TERRAIN_PKG_SUBDIR = 'pkg/terrain_overrides/';
-    
-    // Initialize config dir suffix and the title badge (based on location pathname)
-    var WZ_CONFIG_DIR_SUFFIX = "";
-    (function() {
-      
-      WZ_CONFIG_DIR_SUFFIX = (() => {
-        // Determine default config dir suffix based on window.location, to ensure that separate branches get separate config directories
-        var pathArray = window.location.pathname.split('/').filter(n => n);
-        if (!window.location.pathname.endsWith('/') && pathArray.length > 0) {
-          pathArray.pop();
-        }
-        let dirSuffix = pathArray.join('-');
-        if (dirSuffix.length > 0) {
-          return "-" + dirSuffix;
-        }
-        else {
-          return "";
-        }
-      })();
-      
-      var el = document.getElementById('wz-title-badge');
-      if (/\/(latest|previous)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR) || WZ_DATA_FILES_URL_SUBDIR === '/' || WZ_DATA_FILES_URL_SUBDIR.length === 0) {
-        WZ_CONFIG_DIR_SUFFIX = "";
-        el.innerText = 'Web Edition';
-      }
-      else if (/^\/release\/([^\/]+)/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-        // Release build (but possibly an older one, or a pre-release)
-        WZ_CONFIG_DIR_SUFFIX = "";
-        let tagname = WZ_DATA_FILES_URL_SUBDIR.match(/^\/release\/([^\/]+)/)[1];
-        el.innerText = tagname;
-        if (/[\-\_](beta|rc)[\d]*[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-          document.body.classList.add('prerelease');
-        }
-      }
-      else if (/(preview|prerelease)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-        WZ_CONFIG_DIR_SUFFIX = "";
-        document.body.classList.add('prerelease');
-        el.innerText = 'Pre-release';
-      }
-      else if (/\/(dev|development|master|main)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-        if (/\/(dev|development)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-          WZ_CONFIG_DIR_SUFFIX = "-dev";
-        }
-        document.body.classList.add('dev-preview');
-        el.innerText = 'Dev Preview';
-      }
-      else {
-        document.body.classList.add('branch-build');
-        let displayValue = WZ_DATA_FILES_URL_SUBDIR.replace(/^\/+|\/+$/g, '');
-        el.innerText = displayValue;
-        el.title = displayValue;
-      }
-    })();
+    var WZ_CONFIG_DIR_SUFFIX = null; // initialized after async script load
     
     // Localstorage persistence of launch (and other) options
     function storageAvailable(type) {
@@ -996,6 +944,9 @@
 
     function wz_js_get_config_dir_path()
     {
+      if (WZ_CONFIG_DIR_SUFFIX === null) {
+        console.error('Config dir not initialized yet');
+      }
       return '/warzone2100' + WZ_CONFIG_DIR_SUFFIX;
     }
     
@@ -1616,6 +1567,49 @@
       });
     }
 
+    function wz_initialize_config_build_info() {
+      WZ_CONFIG_DIR_SUFFIX = "";
+      
+      if (!WZ2100_WASM_CURRENT_BUILD_INFO || WZ2100_WASM_CURRENT_BUILD_INFO.constructor != Object) {
+        console.error('Failed to load build info');
+        window.alert('Failed to load build info');
+        return;
+      }
+      
+      var el = document.getElementById('wz-title-badge');
+      try {
+        if (WZ2100_WASM_CURRENT_BUILD_INFO['gitTag'].length > 0) {
+          // On a tag - release build (but possibly an older one, or a pre-release)
+          WZ_CONFIG_DIR_SUFFIX = "";
+          if (/[\-\_](beta|rc)[\d]*[\/]?$/.test(WZ2100_WASM_CURRENT_BUILD_INFO['gitTag'])) {
+            // Is a pre-release
+            el.innerText = WZ2100_WASM_CURRENT_BUILD_INFO['gitTag'];
+            document.body.classList.add('prerelease');
+          } else {
+            // Full release
+            if (/\/(latest|previous)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR) || WZ_DATA_FILES_URL_SUBDIR === '/' || WZ_DATA_FILES_URL_SUBDIR.length === 0) {
+              el.innerText = 'Web Edition';
+            } else {
+              el.innerText = WZ2100_WASM_CURRENT_BUILD_INFO['gitTag'];
+            }
+          }
+        } else if (/^(master|main)$/.test(WZ2100_WASM_CURRENT_BUILD_INFO['gitBranch'])) {
+          // Development preview
+          if (/\/(dev|development)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+            WZ_CONFIG_DIR_SUFFIX = "-dev";
+          }
+          document.body.classList.add('dev-preview');
+          el.innerText = 'Dev Preview';
+        } else if (WZ2100_WASM_CURRENT_BUILD_INFO['gitBranch'].length > 0) {
+          document.body.classList.add('branch-build');
+          el.innerText = WZ2100_WASM_CURRENT_BUILD_INFO['gitBranch'];
+          el.title = WZ2100_WASM_CURRENT_BUILD_INFO['gitBranch'];
+        }
+      } catch (err) {
+        console.error('Processing build info failed:', err);
+      }
+    }
+
     function wz_set_options_build_info() {
       if (typeof WZ2100_WASM_CURRENT_BUILD_INFO !== 'undefined') {
         try {
@@ -1634,8 +1628,10 @@
 
     // Initial page startup (once everything is loaded)
     function wz_everything_is_loaded() {
+      wz_initialize_config_build_info();
       wz_restore_launch_options();
       wz_set_options_build_info();
+      document.getElementById('nav-options-button').disabled = false;
       checkWZBrowserSupport().then((r) => {
         // All required features are available
         wz_display_launch_game_msg();
