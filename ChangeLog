@@ -1,3 +1,15 @@
+2024-07-01: Version 4.5.0:
+ * General:
+   * Fix: Exclude retreating droids from formation speed limiting (commit:962136a52487178fb6085cd3fa1a46028173c1a8, #3943)
+   * Fix: GameStoryLogger: Generate final frame (commit:406aa3737d89bbb31796c1bd4112a158067194da, #3944)
+   * Fix: missionMoveTransporterOffWorld: Clear additional state (commit:976642896b2b6048b33720a496cb93ff8d750936, #3945)
+   * Fix: Only process structure group assignment if no droids are also selected (commit:01f80d8461cbdbabfcc3f4cdc965520e79ba6f98, #3949)
+   * Fix: Prevent artillery units under firesupport trying to ram targets (commit:badbf21afa3b22cf0319ad147b2fb26b21caf8d4, #3950)
+ * Campaign:
+   * Change: Some buffs for campaign weapons (commit:38f8e98902eaad204c4cca52263644f8509ad617, #3946)
+ * Other:
+   * Fix: Emscripten build info (too many commits, #3951)
+
 2024-06-28: Version 4.5.0-beta2:
  * General:
    * Fix: auxStructureNonblocking() for script-queued object removal (commit:14b50356ff4fc61d7bee4b509053c7fc369a65da, #3912)
