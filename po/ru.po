@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"PO-Revision-Date: 2024-07-01 02:21\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2938,22 +2938,22 @@ msgstr "Системный язык"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Назначен внешний порт: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Ваш внеший IP-адрес: %s"
 
 #, c-format
 msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
+msgstr "Не удалось назначить внешний порт (время ожидания %d секунд)"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Не удалось назначить внешний порт"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Настройте ваш маршрутизатор / сетевой экран, чтобы открыть порт %d!"
 
 msgid "Client failed to ack player index swap"
 msgstr "Клиент не подтвердил смену индекса игрока"
@@ -2969,6 +2969,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Ошибка в ходе подключения к лобби серверу: %s.\n"
+"Убедитесь, что порт %d открыт для входящих подключений.\n"
+"Если у вас есть роутер, включите UPnP/NAT-PMP/PVP соединения\n"
+"или перенаправьте порт напрямую на ваш компьютер."
 
 msgid "Failed to get a lobby response!"
 msgstr "Не получилось получить ответ от лобби!"
@@ -7235,10 +7239,10 @@ msgid "port"
 msgstr "порт"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Разрешить / запретить назначение портов"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, true, 0, false]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "Включить слеш-команды в лобби (для подключающихся клиентов)"
@@ -8004,10 +8008,10 @@ msgid "Game Port"
 msgstr "Порт игры"
 
 msgid "Port Mapping"
-msgstr ""
+msgstr "Назначение портов"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
+msgstr "Используйте PCP, NAT-PMP, или UPnP, чтобы разрешить маршрутизатору / сетевому экрану принимать соединения."
 
 msgid "Chat"
 msgstr "Чат"
@@ -9531,10 +9535,10 @@ msgid "Unable to locate HQ!"
 msgstr "Невозможно найти штаб!"
 
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "Ограничение скорости формирования ВКЛ"
 
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "Ограничение скорости формирования ВЫКЛ"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Вертикальное вращение: нормальное"
@@ -10183,11 +10187,11 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr "Нажмите кнопку запуска хостинга, чтобы начать хостинг игры."
 
 msgid "Port mapping creation is in progress..."
-msgstr ""
+msgstr "Назначение внешнего порта..."
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "Назначение порта отключено пользователем. Автоматическая настройка порта %d невозможна."
 
 msgid "Closed"
 msgstr "Закрыто"
@@ -10820,10 +10824,10 @@ msgid "Requesting to join game"
 msgstr "Отправлен запрос на присоединение к игре"
 
 msgid "Kick Spectator"
-msgstr ""
+msgstr "Выгнать зрителя"
 
 msgid "Kick Player"
-msgstr ""
+msgstr "Выгнать игрока"
 
 msgid "Loading Status:"
 msgstr "Статус загрузки:"
@@ -11111,10 +11115,10 @@ msgid "Disable the ability to manually save / quick-save, limit autosaves to the
 msgstr "Отключить ручное и быстрое сохранения, ограничить автосохранения только началом каждого уровня."
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "Модификаторы PS1"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
-msgstr ""
+msgstr "Уменьшает урон противников до одной третьей от текущего модификатора сложности."
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "Расслабленное прохождение - проще простого"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"PO-Revision-Date: 2024-07-01 02:21\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -9517,10 +9517,10 @@ msgid "Unable to locate HQ!"
 msgstr "无法定位至主基地"
 
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "队形速度限制打开"
 
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "队形速度限制关闭"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "上下垂直方向：正常"
@@ -11088,10 +11088,10 @@ msgid "Disable the ability to manually save / quick-save, limit autosaves to the
 msgstr "禁用手动存档/快速存档，仅在每关开始时自动存档。"
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "PS1 属性修正"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
-msgstr ""
+msgstr "将敌人造成的伤害降低到当前难度的三分之一。"
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "更放松的游戏体验 - 不能再简单了"

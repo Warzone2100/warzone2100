@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-12 03:55+0000\n"
-"PO-Revision-Date: 2024-06-22 19:48\n"
+"PO-Revision-Date: 2024-07-01 02:21\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -618,85 +618,85 @@ msgid "However, even the most basic artillery weapon has an 18-tile weapon range
 msgstr "Однако, даже самая ранняя артиллерия имеет дальность 18 клеток. Чтобы использовать ее, вам нужно развернуть радар на поле боя (это может быть как башня, так и танк с радаром)."
 
 msgid "Attacking"
-msgstr ""
+msgstr "Атака"
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
-msgstr ""
+msgstr "Атака с помощью самолетов осуществляется так же, как и остальными юнитами."
 
 msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
 msgstr "Однако вы могли заметить белую шкалу боезапаса под шкалой здоровья, когда вы начинаете атаковать."
 
 msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
-msgstr ""
+msgstr "В отличие от наземных боевых единиц, авиация имеет ограничения по количеству перевозимых боеприпасов. После того как они заканчиваются, самолет не сможет атаковать, пока не перевооружится."
 
 msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
-msgstr ""
+msgstr "Самолет без боеприпасов самостоятельно найдет ближайшую посадочную площадку, где перевооружится и пройдет ремонт (и возобновит атаку). Также перевооружить самолет можно вручную, направив его на нужную площадку."
 
 msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr ""
+msgstr "Также в отличие от других войск, которые обычно атакуют ближайшую цель, самолеты не будут атаковать ничего автоматически. Однако, если выбрать юниты СВВП и отправить их в нужную точку с помощью Alt+клик, они начнут патрулировать зону межу текущим местоположением и выбранной локацией и самостоятельно атаковать всех врагов, которых встретят по пути."
 
 msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
-msgstr ""
+msgstr "Кроме того, СВВП могут быть привязаны к ударной башне СВВП и СВВП КБ башне, в результате чего авиация будет действовать так же как артиллерия, связанная с соответствующими сенсорами."
 
 msgid "Defending Against VTOLs"
-msgstr ""
+msgstr "Защита от авиации"
 
 msgid "What's that in the sky? ... It's a VTOL unit"
-msgstr ""
+msgstr "Что это в небе?.. Это юнит СВВП!"
 
 msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
-msgstr ""
+msgstr "Поскольку авиация не является наземными единицами, большинство обычного оружия не может стрелять по ней."
 
 msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
 msgstr "Они могут быть атакованы либо противовоздушным (ПВО), либо универсальным (может атаковать как наземные, так и воздушные цели) оружием."
 
 msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
-msgstr ""
+msgstr "Есть лишь несколько видов вооружения, которые являются универсальными: пулеметы, лазеры и блок миниракет."
 
 msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr ""
+msgstr "(Ракеты также являются универсальным оружием, но только если они установлены на киборгов или СВВП)"
 
 msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr ""
+msgstr "Помимо этого, универсальное орущие наносит меньший урон СВВП в сравнении со специальным оружием ПВО. Таким образом наличие ПВО рекомендуется для борьбы с самолетами."
 
 msgid "Designing VTOLs"
-msgstr ""
+msgstr "Проектирование авиации"
 
 msgid "Designing VTOL units is similar to designing ground units."
-msgstr ""
+msgstr "Проектирование авиации похоже на проектирование наземных юнитов."
 
 msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr ""
+msgstr "Просто выберите тип подвески \"СВВП\"."
 
 msgid "You will then be able to select from the available VTOL Weapons."
-msgstr ""
+msgstr "После этого выберите один из доступных видов авиационного вооружения."
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
-msgstr ""
+msgstr "Помните: вам понадобится специальный авиационный завод для производства летающих юнитов."
 
 msgid "Weapons"
-msgstr ""
+msgstr "Вооружение"
 
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
-msgstr ""
+msgstr "Большинство видов оружия имеют соответствующий эквивалент для установки на самолеты, который при этом наносит как минимум вдвое больше урона, но имеет ограниченное количество боеприпасов."
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr ""
+msgstr "Авиационные версии таких видов оружия не нужно исследовать отдельно."
 
 msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr ""
+msgstr "Вдобавок к авиационным версиям обычного вооружения, авиация также может использовать бомбы. Это оружие эквивалентно артиллерии и оно очень мощное."
 
 msgid "VTOLs"
-msgstr ""
+msgstr "Авиация"
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
-msgstr ""
+msgstr "СВВП (самолет вертикального взлета-посадки) юниты являются основным видом войск для завоевания господства в воздухе."
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
-msgstr ""
+msgstr "Для производства авиации вам понадобится найти и исследовать технологию \"СВВП движитель\" и \"Авиазавод\"."
 
 msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
-msgstr ""
+msgstr "Вам также понадобится исследовать и построить несколько \"Посадочных площадок\" для того, чтобы ваши самолеты могли пополнить боезапас."
 
 msgid "Weapon Selection"
 msgstr "Выбор Оружия"
