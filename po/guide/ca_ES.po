@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-12 03:55+0000\n"
-"PO-Revision-Date: 2024-06-17 02:19\n"
+"PO-Revision-Date: 2024-06-30 02:19\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -408,7 +408,7 @@ msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which
 msgstr "Podeu escollir al menú d'ordres de la unitat un \"Llindar de Retirada\", que farà que les unitats es retirin de la batalla quan els danys arribin al llindar de dany establert."
 
 msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
-msgstr ""
+msgstr "- Fes o mor: La seva unitat no es retirarà excepte si se li ordena (per defecte)"
 
 msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
 msgstr "- Retira amb desperfectes mitjans: la unitat es retirarà a danys mitjans (groc)"
@@ -471,76 +471,76 @@ msgid "Attaching Units"
 msgstr "Lligar una unitat"
 
 msgid "To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached."
-msgstr ""
+msgstr "Per lligar una unitat a un comandant, seleccioni la unitat i cliqui sobre el comandant a qui la voleu lligar. Un símbol apareixerà vora la unitat per mostrar que és lligada."
 
 msgid "## Limits:"
-msgstr ""
+msgstr "## Límits:"
 
 msgid "Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on."
-msgstr ""
+msgstr "Els comandants tenen un límit al nombre d'unitats de tir directe (com les metralladores) que depèn del seu propi nivell d'experiència. Els nivells es guanyen pel comandant arribant a 2 morts, 4, 8, 16, 32, 64 i segueix."
 
 msgid "Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants."
-msgstr ""
+msgstr "Cada nivell d'experiència permet al comandant controlar 2 unitats més de tir directe. Tanmateix, un comandant pot controlar tantes unitats de tir indirecte com vulgui."
 
 msgid "Detaching Units"
-msgstr ""
+msgstr "Deslligar una unitat"
 
 msgid "To detach a unit from a Commander:"
-msgstr ""
+msgstr "Per deslligar una unitat d'un comandant:"
 
 msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
-msgstr ""
+msgstr "1. Feu clic dret sobre la unitat (o mantingui la tecla \"Shift\" mentre selecciona la unitat) per seleccionar només aquella unitat (en lloc de tot el grup del comandant)"
 
 msgid "2. Give the unit a new order (eg. move)"
-msgstr ""
+msgstr "2. Doni una nova ordre a la unitat (eg. moure's)"
 
 msgid "Going for repairs, BRB"
-msgstr ""
+msgstr "Reparant-se, BRB"
 
 msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
-msgstr ""
+msgstr "Una unitat que es retira de la batalla per reparar-se resta assignada al seu grup de comandant."
 
 msgid "When it is done repairing, it will return to its Commander."
-msgstr ""
+msgstr "Quan la reparació s'ha acabat, torna al seu comandant."
 
 msgid "Targeting"
 msgstr "Objectiu"
 
 msgid "When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit."
-msgstr ""
+msgstr "Quan selecciona un comandant i apunteu una unitat enemiga, qualsevol unitat lligada es mourà per atacar la unitat a la qual s'apunta."
 
 msgid "The attached units will have greater accuracy when firing."
-msgstr ""
+msgstr "Les unitats lligades tindran una millor precisió disparant."
 
 msgid "Commanders"
 msgstr "Comandants"
 
 msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
-msgstr ""
+msgstr "Les torretes de comandament s'utilitzen com sensors, excepte que poden manar qualsevol unitat atacant, i no només l'artilleria."
 
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
-msgstr ""
+msgstr "Els comandants els donen un bonus de precisió, d'armadura i de velocitat de desplaçament, que incrementen segons el ranc del comandant."
 
 msgid "They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
-msgstr ""
+msgstr "Estan limitats a 6 unitats atacants no-artilleres que se'ls assignen al principi, però el límit augmenta de 2 cada cop que el comandant guanya un ranc, cosa que passa bastant ràpidament."
 
 msgid "Designing Units"
 msgstr "Disseny d'unitats"
 
 msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
-msgstr ""
+msgstr "Necessitareu dissenyar unitats noves si voleu superar els vostres enemics i tenir el dolç gust de la victòria. Aquest és un aspecte clau del gameplay de Warzone 2100."
 
 msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
-msgstr ""
+msgstr "Per a dissenyar una unitat, seleccioni el botó de Disseny al Panell de Comandes. Això farà aparèixer dues columnes a l'esquerra de la pantalla."
 
 msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
-msgstr ""
+msgstr "Per crear un disseny, seleccioni el cos verd \"en blanc\" a dalt de tot a l'esquerra. Per editar un disseny existent, seleccioni'l simplement."
 
 msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
-msgstr ""
+msgstr "Dissenyar una nova unitat és un procés simple de tres parts: seleccionar un xassís, un sistema de propulsió i una torreta. Aquestes tres tries crearan una nova unitat."
 
 msgid "Once you have designed a unit, you will need a Factory to build it."
-msgstr ""
+msgstr "Un cop una unitat és dissenyada, necessiteu una fàbrica per construir-la."
 
 msgid "Experience & Ranks"
 msgstr "Experiència i Rancs"
@@ -570,52 +570,52 @@ msgid "Retreating and repairing units is often far preferable to losing experien
 msgstr "Retirar i reparar les unitats és molt més sovint preferible a perdre unitats amb experiència al camp de batalla."
 
 msgid "CB Sensors"
-msgstr ""
+msgstr "Sensors AB"
 
 msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
-msgstr ""
+msgstr "Els sensors anti-bateries (AB) modifiquen dràsticament el camp de batalla permetent a unitats d'artilleria atacar plataformes d'artilleria distants - mentre restin a l'abast."
 
 msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
-msgstr ""
+msgstr "Les estructures o unitats identificades es coloraran en vermell a la boira de guerra un cop un sensor AB detecti el tir d'artilleria de qualsevol enemic."
 
 msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
-msgstr ""
+msgstr "Si estan actives, les unitats d'artilleria donen prioritat als objectius dels sensors AB sobre aquells obtinguts per sensors convencionals."
 
 msgid "Un-Assigning"
-msgstr ""
+msgstr "Deslligar"
 
 msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
-msgstr ""
+msgstr "Per deslligar una unitat d'un sensor, la manera més fàcil és fer clic-dret sobre la unitat i a fer-la moure's on sigui."
 
 msgid "Multiple units can be selected by holding CTRL while clicking."
-msgstr ""
+msgstr "Es poden seleccionar diverses unitats aguantant CTRL mentre es clica."
 
 msgid "Using Sensors"
 msgstr "Ús de Sensors"
 
 msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
-msgstr ""
+msgstr "Les estructures d'artilleria són les més simples. Construïu simplement una torre de sensors, i si la torre apunta quelcom a l'abast de les estructures d'artilleria, aquestes dispararan."
 
 msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
-msgstr ""
+msgstr "Un tanc d'artilleria, tanmateix, ha d'estar específicament assignat a un sensor per funcionar. Seleccioni els tancs d'artilleria i cliqui sobre el sensor per assignar-los-hi."
 
 msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
-msgstr ""
+msgstr "Un cop s'assigna l'artilleria, si s'assigna a una torre sensor, la torre apuntarà els enemics que entrin a l'abast automàticament."
 
 msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
-msgstr ""
+msgstr "Si s'assigna a un tanc sensor, el sensor es pot utilitzar per atacar enemics seleccionant el sensor i apuntant l'enemic. Tota l'artilleria assignada al sensor atacarà l'objectiu."
 
 msgid "Sensors"
 msgstr "Sensors"
 
 msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
-msgstr ""
+msgstr "Els sensors es poden utilitzar per explorar i vigilar, però tenen un ús ben més important: localitzar l'artilleria."
 
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
-msgstr ""
+msgstr "Les armes d'artilleria, per se, no poden disparar més enllà de l'abast de llurs sensors (8 caselles sense millores)."
 
 msgid "However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr ""
+msgstr "Tanmateix, fins i tot l'arma d'artilleria més bàsica té un abast de 18 caselles. Per utilitzar-lo, heu de construir i desplegar sensors al camp de batalla (sia torres de sensors o tancs amb torretes de sensors)."
 
 msgid "Attacking"
 msgstr "Atacar"
@@ -633,10 +633,10 @@ msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm a
 msgstr "Un VTOL sense munició trobarà automàticament una pista de rearmament VTOL i es repararà automàticament (i tornarà a la càrrega un cop plenament rearmat), o es pot rearmar manualment seleccionant-lo i clicant sobre la pista de rearmament."
 
 msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr ""
+msgstr "Al contrari que la resta d'unitats que ataquen l'objectiu més pròxim, els VTOL no ataquen res automàticament. Tanmateix, seleccionant un VTOL i fent alt+clic en una àrea, el VTOL patrullarà l'àrea entre la seva posició actual i el lloc on s'ha fet clic, atacant tot objectiu a proximitat."
 
 msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
-msgstr ""
+msgstr "D'altra banda, els VTOL es poden assignar a torres d'atac VTOL i torres AB VTOL, que els faran funcionar similarment a l'artilleria assignada a torres de sensors."
 
 msgid "Defending Against VTOLs"
 msgstr "Defensar-se dels VTOL"
@@ -654,70 +654,70 @@ msgid "There are only a few weapons that are versatile: machineguns, lasers, and
 msgstr "Només hi ha unes quantes armes versàtils: les metralladores, els làsers i els minicoets."
 
 msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr ""
+msgstr "(Els coets i míssils també són versàtils, però només quan estan muntats en un cíborg o VTOL.)"
 
 msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr ""
+msgstr "A més de ser rares, les armes versàtils no provoquen tants danys als VTOL com els AA, es recomana doncs tenir AA contra els VTOL."
 
 msgid "Designing VTOLs"
-msgstr ""
+msgstr "Dissenyar VTOL"
 
 msgid "Designing VTOL units is similar to designing ground units."
-msgstr ""
+msgstr "Dissenyar unitats VTOL és similar a dissenyar unitats terrestres."
 
 msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr ""
+msgstr "Quan escull la propulsió, només ha d'escollir propulsió \"VTOL\"."
 
 msgid "You will then be able to select from the available VTOL Weapons."
-msgstr ""
+msgstr "Aleshores podrà escollir entre les armes VTOL disponibles."
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
-msgstr ""
+msgstr "N. B.: necessiteu una \"fàbrica VTOL\" per construir els dissenys d'unitat VTOL."
 
 msgid "Weapons"
-msgstr ""
+msgstr "Armes"
 
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
-msgstr ""
+msgstr "La majoria d'armes tenen un equivalent VTOL, que fa com a mínim dos cops més de danys, però té munició limitada."
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr ""
+msgstr "No cal fer recerca separada de les armes ordinàries VTOL."
 
 msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr ""
+msgstr "A més de les versions VTOL de les armes terrestres, els VTOL poden utilitzar també armes de bomba. Aquestes armes són l'equivalent de l'artilleria, i són molt potents."
 
 msgid "VTOLs"
-msgstr ""
+msgstr "Els VTOL"
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
-msgstr ""
+msgstr "Les unitats VTOL (Vertical Take-Off and Landing) són els instruments aeris principals per dominar el cel."
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
-msgstr ""
+msgstr "Per produir unitats VTOL, cal haver descobert i recercat la \"Propulsió VTOL\" i la \"Fàbrica VTOL\"."
 
 msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
-msgstr ""
+msgstr "També hauríeu de recercar i construir uns quants \"Pads de rearmament VTOL\", així, les unitats VTOL podran recarregar municions."
 
 msgid "Weapon Selection"
-msgstr ""
+msgstr "Selecció d'armes"
 
 msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
-msgstr ""
+msgstr "A mesura que descobriu i recerqueu més armes, també descobrireu que hi ha armes que funcionen molt millor en unes ocasions i no en altres (o contra un tipus d'unitat o estructura enemiga)."
 
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Quan completeu una recerca d'una nova arma, un informe d'intel·ligència us proporcionarà informació sobre ella."
 
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
-msgstr ""
+msgstr "Està al vostre avantatge experimentar amb diferents tipus d'armes. Si teniu problemes i no heu reavaluat la composició de les vostres forces des de fa temps, potser caldria considerar canviar les armes per unes de més fortes, o d'un nou tipus!"
 
 msgid "Units"
-msgstr ""
+msgstr "Unitats"
 
 msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
-msgstr ""
+msgstr "Haureu de dissenyar i construir noves unitats si voleu vèncer els vostres enemics i obtenir el dolç gust de la victòria."
 
 msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
-msgstr ""
+msgstr "Aquest aspecte del joc és el que fa únic Warzone 2100 a la seva manera."
 
 msgid "To be able to design units, a Command Center is required."
-msgstr ""
+msgstr "Per dissenyar unitats, es necessita un Centre de Comandament."

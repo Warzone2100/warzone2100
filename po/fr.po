@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"PO-Revision-Date: 2024-06-30 02:19\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -9523,10 +9523,10 @@ msgid "Unable to locate HQ!"
 msgstr "Impossible de localiser le Quartier Général!"
 
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "Limite de vitesse de formation ON"
 
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "Limite de vitesse de formation OFF"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Sens de rotation vertical : normal"
@@ -11097,10 +11097,10 @@ msgid "Disable the ability to manually save / quick-save, limit autosaves to the
 msgstr "Désactiver la possibilité d'enregistrer manuellement / d'enregistrer rapidement, limiter les sauvegardes automatiques au début de chaque niveau."
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "Modificateurs PS1"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
-msgstr ""
+msgstr "Réduit les dégâts infligés par l'ennemi à un tiers du modificateur de difficulté actuel."
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "Un jeu plus détendu - plus facile que facile"

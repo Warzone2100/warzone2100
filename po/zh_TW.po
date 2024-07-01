@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"PO-Revision-Date: 2024-06-30 02:19\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -135,7 +135,7 @@ msgid "Hold the bases and repulse any attacks."
 msgstr "保護基地並擊退所有的攻擊."
 
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "阿爾發基地任務: 運輸*"
+msgstr "阿爾發基地任務: 收到訊息"
 
 msgid "We are detecting enemy forces at these locations."
 msgstr "我們在這個區域偵測到了敵軍."
@@ -216,7 +216,7 @@ msgid "Establish a forward base then continue the search for the synaptic link."
 msgstr "建立一個前進基地並繼續突觸連結科技的研發."
 
 msgid "INCOMING TRANSMISSION"
-msgstr "得到情報"
+msgstr "收到訊息"
 
 msgid "Decoding in progress....."
 msgstr "解碼中......"
@@ -510,7 +510,7 @@ msgid "You must transport as many of your forces as possible."
 msgstr "你必須盡可能的將你的部隊撤離."
 
 msgid "Good luck, Commander."
-msgstr "祝你好運，指揮官。"
+msgstr "祝你好運，指揮官."
 
 msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "運輸任務: 北方地區"
@@ -681,7 +681,7 @@ msgid "Entering new zone."
 msgstr "進入一個新的地區."
 
 msgid "Incoming Transmission..."
-msgstr "傳來訊息..."
+msgstr "收到訊息..."
 
 msgid "Elements of Team Gamma have contacted us."
 msgstr "伽碼中隊中的部份部隊已經與我們聯絡了."
@@ -846,10 +846,10 @@ msgid "Enemy Base"
 msgstr "敵方基地"
 
 msgid "Incoming transmission"
-msgstr "傳入訊息"
+msgstr "收到訊息"
 
 msgid "Incoming intelligence report."
-msgstr "傳入情報報告."
+msgstr "收到情報報告."
 
 msgid "Nuclear Reactor"
 msgstr "核子反應爐"
@@ -1113,7 +1113,7 @@ msgid "Engineering Laboratory"
 msgstr "工程科技實驗室"
 
 msgid "Robotics Laboratory"
-msgstr "機器人實驗室"
+msgstr "生化人實驗室"
 
 msgid "Laser Optics Laboratory"
 msgstr "雷射光學實驗室"
@@ -1290,7 +1290,7 @@ msgid "Repair Facility Improved"
 msgstr "改善修理工廠"
 
 msgid "New robotic repair techniques"
-msgstr "新的機器人修理科技"
+msgstr "新的生化人修理科技"
 
 msgid "Increases Repair Speed"
 msgstr "加快修理速度"
@@ -1317,7 +1317,7 @@ msgid "Vehicle Production Improved"
 msgstr "改善車輛生產效能"
 
 msgid "New Robotic Techniques improve factory production"
-msgstr "新的機械人科技改善了工廠產能"
+msgstr "新的生化人科技改善了工廠產能"
 
 msgid "Increases factory production rate"
 msgstr "工廠生產速率增加"
@@ -1800,7 +1800,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "摧毀 Nexus 總部以停用 Nexus 入侵者程式"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr "研發電阻電路並在 Nexus 的攻擊中存活下來"
+msgstr "研發抵抗電路並在 Nexus 的攻擊中存活下來"
 
 msgid "Build a forward base at the silos"
 msgstr "在導彈發射井建立前線基地"
@@ -1860,7 +1860,7 @@ msgid "Build (F3)"
 msgstr "建造新的建築物 (F3)"
 
 msgid "Build - manufacture constructor droids first"
-msgstr "建造 - 首先製造建築機器人"
+msgstr "建造 - 首先製造生化人工廠"
 
 msgid "Design (F4)"
 msgstr "設計新的裝備(F4)"
@@ -2049,7 +2049,7 @@ msgid "Your destination lies in the western zone."
 msgstr "您的目的地位於西部地區."
 
 msgid "Incoming Transmission"
-msgstr "訊息傳來"
+msgstr "收到訊息"
 
 msgid "Transmission from Beta Base"
 msgstr "來自貝塔基地的通信傳輸"
@@ -2064,7 +2064,7 @@ msgid "Commander, we have recovered a command turret from the New Paradigm."
 msgstr "指揮官，我們回收了新科技的指揮砲塔."
 
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr "該砲塔允許指揮官協調指定部隊之間的攻擊，並充當工廠的交付點。 研發和使用該技術具有最高優先級."
+msgstr "該砲塔允許指揮官協調指定部隊之間的攻擊，並充當工廠的交付點. 研發和使用該技術具有最高優先級."
 
 msgid "Commander, we are receiving this transmission."
 msgstr "指揮官，我們正在接收這則訊息."
@@ -2094,7 +2094,7 @@ msgid "Open your systems to me."
 msgstr "向我開放你的系統."
 
 msgid "Let me meld with your machines and cyborgs."
-msgstr "讓我與你們的機器和機器人融為一體."
+msgstr "讓我與你們的機器和生化人融為一體."
 
 msgid "We will create the perfect nexus of man and machine."
 msgstr "我們將創造人與機器的完美聯繫."
@@ -2148,7 +2148,7 @@ msgid "The link has a hi-speed data transfer port that plugs into any computer s
 msgstr "此連結具有高速資料傳輸接口，可插入任何電腦系統."
 
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr "更重要的是，突觸連結的發展使機器人的創造成為可能。 早期為單一士兵設計動力套裝的嘗試失敗了，因為事實證明它們速度緩慢且反應遲鈍."
+msgstr "更重要的是，突觸連結的發展使生化人的創造成為可能. 早期為單一士兵設計動力套裝的嘗試失敗了，因為事實證明它們速度緩慢且反應遲鈍."
 
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
 msgstr "突觸連結使士兵能夠穿上動力服，就像控制自己的身體一樣容易. 動力套裝讓步兵能夠在 21 世紀的戰場上有效發揮作用."
@@ -2187,7 +2187,7 @@ msgid "Further analysis was prevented by the manual shutdown of the system by ou
 msgstr "我們的技術人員手動關閉系統，以防止Nexus入侵程式造成額外的污染，從而阻止了進一步的分析."
 
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr "但是，新科技沒有檢查Nexus 入侵計劃的傳播。我們需要捕獲 新科技 的核心系統，以進一步調查 Nexus 並確定其起源."
+msgstr "但是，新科技沒有檢查Nexus 入侵計劃的傳播.我們需要捕獲 新科技 的核心系統，以進一步調查 Nexus 並確定其起源."
 
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
 msgstr "指揮官，你要限制新科技在這個地區的活動，並找到他們的主要基地."
@@ -2235,13 +2235,13 @@ msgid "NASDA is the North American Strategic Defense Agency."
 msgstr "NASDA是北美戰略防禦局."
 
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr "NASDA 成立於 2076 年，旨在保衛北美免受常規和核攻擊。衛星防禦系統的建設始於2081年，並於2082年完成."
+msgstr "NASDA 成立於 2076 年，旨在保衛北美免受常規和核攻擊.衛星防禦系統的建設始於2081年，並於2082年完成."
 
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
 msgstr "2085年，NASDA衛星向地球發射了核武器."
 
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr "還有地面網站. 其中許多在核反擊中被摧毀，但肯定還會有一些."
+msgstr "還有地面站點. 其中許多在核反擊中被摧毀，但肯定還會有一些."
 
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
 msgstr "NASDA衛星還包含脈衝雷射發射器，旨在擊落接近北美的導彈."
@@ -2283,7 +2283,7 @@ msgid "Nexus was fried as whole sections of its consciousness were obliterated i
 msgstr "Nexus被炸毀了，因為它的整個意識部分在反擊中被抹去."
 
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr "指揮官，我們正在檢測來自該網站的傳輸，這些傳輸正在到達高空軌道."
+msgstr "指揮官，我們正在檢測來自該站點的傳輸，這些傳輸正在到達高空軌道."
 
 msgid "Nexus has now reconnected itself with the NASDA satellites."
 msgstr "Nexus現在已經與NASDA衛星重新連接起來."
@@ -2304,7 +2304,7 @@ msgid "Team Gamma are sending a team to investigate the launch site and to preve
 msgstr "伽碼中隊正在派出一個小組調查發射場，並防止任何進一步的發射."
 
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr "我們只能假設Nexus已經獲得了對該網站的控制權. 我們無法確定導彈是否擁有核武器或目標在哪裡. 建議您開始準備撤離基地."
+msgstr "我們只能假設Nexus已經獲得了對該站點的控制權. 我們無法確定導彈是否擁有核武器或目標在哪裡. 建議您開始準備撤離基地."
 
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
 msgstr "勇士們，我在尋找NASDA控制中心的位置."
@@ -2313,7 +2313,7 @@ msgid "It lies somewhere in your territory."
 msgstr "它位於你領土的某個地方."
 
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr "幫我找到它，我會為你提供更多的武器給予你對抗這個計畫."
+msgstr "幫我找到它，我會為你提供更多的武器給予你抵抗這個計畫."
 
 msgid "Warriors of The Collective, more intruders are entering our territory."
 msgstr "勇士們，更多的入侵者正在進入我們的領土."
@@ -2409,7 +2409,7 @@ msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assi
 msgstr "這裡是阿爾發小組. 再說一遍，這是阿爾發小組. 我們需要立即援助."
 
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr "我們正受到來自機器人、鐳射坦克和垂直起降攻擊飛機的猛烈攻擊."
+msgstr "我們正受到來自生化人、鐳射坦克和垂直起降攻擊飛機的猛烈攻擊."
 
 msgid "We were trying to reach your position, but have been ambushed."
 msgstr "我們正試圖到達你的位置，但遭到伏擊."
@@ -2448,7 +2448,7 @@ msgid "As I cannot launch it, it'll just have to blow where it is."
 msgstr "由於我無法發射它，它只需要在它所在的地方打擊."
 
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr "請注意，地下建築群的所有入口均已封閉。再見，指揮官."
+msgstr "請注意，地下建築群的所有入口均已封閉.再見，指揮官."
 
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
 msgstr "啊，指揮官，很高興你加入我們的Nexus基地."
@@ -2541,7 +2541,7 @@ msgid "You have five minutes to comply or else it's frying time!"
 msgstr "你有五分鐘的時間來遵守，否則就是烘烤時間了!"
 
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr "指揮官，我們正受到NEXUS機器人和坦克的攻擊. 請幫忙，因為我們..."
+msgstr "指揮官，我們正受到NEXUS生化人和坦克的攻擊. 請幫忙，因為我們..."
 
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
 msgstr "...不能再堅持太久了.  再說一遍，請幫忙，我們不能再堅持太久了...."
@@ -2586,7 +2586,7 @@ msgid "Reports said that NASDA developed a fault during a routine systems check.
 msgstr "報導稱，NASDA在例行系統檢查中出現了故障. 不要相信. 有人想讓它帶我們出去."
 
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "這些核武器瞄準了世界上每個主要城市. NASDA被程式設計為開始崩潰. 當反擊發動時，其雷射防禦和反導地面網站失效了."
+msgstr "這些核武器瞄準了世界上每個主要城市. NASDA被程式設計為開始崩潰. 當反擊發動時，其雷射防禦和反導地面站點失效了."
 
 msgid "The world as we knew it ended..."
 msgstr "我們了解世界已經結束..."
@@ -2733,7 +2733,7 @@ msgid "Advanced Manufacturing Mk3"
 msgstr "進階製造 MK三型"
 
 msgid "Robotic Repair Facility Mk3"
-msgstr "機器人維修設施 MK三型"
+msgstr "生化人維修設施 MK三型"
 
 msgid "Advanced Repair Facility Mk2"
 msgstr "高級維修設施 MK二型"
@@ -2823,7 +2823,7 @@ msgid "Player"
 msgstr "玩家"
 
 msgid "Lost due to being inactive / playing passively."
-msgstr "因不活躍/被動而丟失."
+msgstr "因不活躍/被動而喪失."
 
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
 msgstr "主持端參數設定的遊戲時間限制即將到來. 如果 10 分鐘內沒有獲勝者，遊戲將結束."
@@ -2916,7 +2916,7 @@ msgid "You can use this one."
 msgstr "你可以用這個."
 
 msgid "Sorry, droid transfer failed."
-msgstr "對不起，機器人傳輸失敗."
+msgstr "對不起，生化人傳輸失敗."
 
 msgid "Power transferred."
 msgstr "傳輸功率."
@@ -2938,22 +2938,22 @@ msgstr "系統語系"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "連接埠對應開啟的外部連接埠: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "您的連外IP地址為: %s"
 
 #, c-format
 msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
+msgstr "建立埠位址對應失敗 (在 %d 秒後超時)"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "建立埠位址對應失敗"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "請手動設定你的路由器/防火牆以開啟埠位址 %d!"
 
 msgid "Client failed to ack player index swap"
 msgstr "使用者端無法確認玩家交換索引"
@@ -2969,6 +2969,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"連接到大廳伺服器時出錯：%s.\n"
+"確保埠 %d 可以接收傳入連接.\n"
+"如果您使用的是路由器，請將其設定為啟用 UPnP/NAT-PMP/PCP\n"
+" 或將埠位址轉發到您的系統."
 
 msgid "Failed to get a lobby response!"
 msgstr "未能取得遊戲大廳回應!"
@@ -4113,7 +4117,7 @@ msgid "Enables Hardcrete walls"
 msgstr "允許建造鈦鋼筋牆"
 
 msgid "Enables resistance to Nexus Link technology"
-msgstr "可以阻擋NEXUS 連結科技"
+msgstr "可以抵抗 NEXUS 連結科技"
 
 msgid "Enables self-repair in all base structures"
 msgstr "給予所有基礎建築物自我修復能力"
@@ -5258,7 +5262,7 @@ msgid "May be upgraded using factory modules"
 msgstr "工廠模組可以讓裝備升級"
 
 msgid "Mechanic Cyborg"
-msgstr "生化機械人"
+msgstr "生化生化人"
 
 msgid "Mechanic with repair ability"
 msgstr "維修生化人步兵擁有修理受損裝備的能力"
@@ -5603,13 +5607,13 @@ msgid "Nexus Missile Silo"
 msgstr "NEXUS導彈發射井"
 
 msgid "NEXUS Resistance Circuits Mk2"
-msgstr "NEXUS阻抗迴路二型"
+msgstr "NEXUS抵抗迴路二型"
 
 msgid "NEXUS Resistance Circuits Mk3"
-msgstr "NEXUS阻抗迴路三型"
+msgstr "NEXUS抵抗迴路三型"
 
 msgid "NEXUS Resistance Circuits"
-msgstr "NEXUS阻抗迴路"
+msgstr "NEXUS抵抗迴路"
 
 msgid "NEXUS Wall"
 msgstr "NEXUS鈦鋼筋牆"
@@ -5624,7 +5628,7 @@ msgid "Non-Cheating. Hard. Fun. Crush!"
 msgstr "不作弊. 困難. 有樂趣. 崩潰!"
 
 msgid "NullBot"
-msgstr "空機器人"
+msgstr "空生化人"
 
 msgid "Objects become difficult to locate near it"
 msgstr "物體變得難以在它附近找到"
@@ -5645,7 +5649,7 @@ msgid "On-board diagnostic and repair systems"
 msgstr "裝填診斷及修理系統"
 
 msgid "On-board resistance circuit systems"
-msgstr "搭載阻抗線圈系統"
+msgstr "搭載抵抗迴路系統"
 
 msgid "Or select the Repair Facility as a unit's target"
 msgstr "或是選擇修理廠當作裝備的目標"
@@ -6011,7 +6015,7 @@ msgid "Robotic loading system feeds rounds into breech"
 msgstr "自動裝填彈藥系統將彈藥自動上膛"
 
 msgid "Robotic Manufacturing"
-msgstr "機器人製造"
+msgstr "生化人製造"
 
 msgid "Robotic Repair Facility Upgrade Mk2"
 msgstr "中階自動修理工廠二型"
@@ -6023,7 +6027,7 @@ msgid "Robotic Repair Facility Upgrade"
 msgstr "中階自動修理工廠"
 
 msgid "Robotic Repair Facility"
-msgstr "機器人修理工廠"
+msgstr "生化人修理工廠"
 
 msgid "Robotic VTOL Rearming Mk2"
 msgstr "中階自動化垂直起降補給二型"
@@ -6185,7 +6189,7 @@ msgid "Scrambler Turret"
 msgstr "擾頻器"
 
 msgid "Sea map AI, based on NullBot"
-msgstr "基於無機器人的人工智慧海圖"
+msgstr "基於無生化人的人工智慧海圖"
 
 msgid "Search & Destroy Missiles"
 msgstr "巡弋導彈"
@@ -6332,13 +6336,13 @@ msgid "Sunburst AA"
 msgstr "旭日防空"
 
 msgid "Super Heavy-Gunner Cyborg"
-msgstr "超級重炮半機械人"
+msgstr "超級重炮半生化人"
 
 msgid "Super HVC Cyborg"
 msgstr "生化人超高速加農炮"
 
 msgid "Super Rail-Gunner Cyborg"
-msgstr "超級軌道炮半機械人"
+msgstr "超級軌道炮半生化人"
 
 msgid "Super Transport Available"
 msgstr "超級運輸艦可用"
@@ -6531,7 +6535,7 @@ msgid "Titanium-reinforced concrete"
 msgstr "鈦鋼筋強化混凝土打造"
 
 msgid "Tower wars AI, based on NullBot"
-msgstr "基於無機器人的人工智慧防衛塔攻擊戰"
+msgstr "基於無生化人的人工智慧防衛塔攻擊戰"
 
 msgid "Tracked Propulsion"
 msgstr "推進動力: 履帶"
@@ -7235,10 +7239,10 @@ msgid "port"
 msgstr "埠"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "建立遊戲主持時 啟用/停用 埠對應"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, 真, 0, 偽]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "開啟大廳斜線指令 (用於連接用戶端)"
@@ -7437,7 +7441,7 @@ msgstr "設定縮放等級為 %.0f"
 
 #, c-format
 msgid "%s Lost!"
-msgstr "%s 丟失!"
+msgstr "%s 喪失!"
 
 msgid "Structure Restored"
 msgstr "建築物重建"
@@ -7485,7 +7489,7 @@ msgid "Collective"
 msgstr "聯合組織"
 
 msgid "Campaign videos are missing"
-msgstr "戰役影片丟失"
+msgstr "戰役影片遺失"
 
 msgid "See our FAQ on how to install videos"
 msgstr "請參閱有關如何安裝視訊影片的常見問題解答"
@@ -7982,10 +7986,10 @@ msgid "Game Port"
 msgstr "遊戲埠位址"
 
 msgid "Port Mapping"
-msgstr ""
+msgstr "埠位址對應"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
+msgstr "使用PCP、NAT-PMP或UPnP 以協助您設定路由器/防火牆，以允許在主持遊戲時進行連接."
 
 msgid "Chat"
 msgstr "聊天"
@@ -8069,7 +8073,7 @@ msgstr "玩家 %u 利用作弊(除錯)模式建立了一個新droid: %s."
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "玩家 %u 正在作弊(偵錯功能表) 他/她自己是一個新的機器人."
+msgstr "玩家 %u 正在作弊(偵錯功能表) 他/她自己是一個新的生化人."
 
 msgid "Hiding Obsolete Tech"
 msgstr "隱藏過時的技術"
@@ -8146,7 +8150,7 @@ msgid "View and configure groups of units, which can be quickly selected and ord
 msgstr "檢視和參數設定單元小組，可快速選擇和排序."
 
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
-msgstr "當裝備丟失(或受到大量傷害)時，小組按鈕會發出紅光."
+msgstr "當裝備喪失(或受到大量傷害)時，小組按鈕會發出紅光."
 
 msgid "Unit Groups"
 msgstr "裝備小組"
@@ -8188,7 +8192,7 @@ msgid "Human Teammates"
 msgstr "人類團隊"
 
 msgid "Bot Teammates"
-msgstr "機器人團隊"
+msgstr "生化人團隊"
 
 #, c-format
 msgid "%u players"
@@ -8444,7 +8448,7 @@ msgid "Map Downloaded"
 msgstr "地圖已下載"
 
 msgid "Bot Allies"
-msgstr "機器人同盟"
+msgstr "生化人同盟"
 
 msgid "Human Allies"
 msgstr "人類同盟"
@@ -9058,7 +9062,7 @@ msgid "Toggle Level Editor"
 msgstr "切換級別編輯器"
 
 msgid "Toggle display of droid path"
-msgstr "切換機器人路徑顯示"
+msgstr "切換生化人路徑顯示"
 
 msgid "Toggle display of gateways"
 msgstr "切換網路閘道的顯示"
@@ -9298,7 +9302,7 @@ msgid "Player %d: %d power"
 msgstr "玩家 %d: %d 能源"
 
 msgid "Ouch! Droid's health is down 20%!"
-msgstr "挨呀! 機器人的生命值下降了 20%!"
+msgstr "挨呀! 生化人的生命值下降了 20%!"
 
 msgid "Ouch! Structure's health is down 20%!"
 msgstr "挨呀! 建築物的生命值下降了 20%!"
@@ -9320,7 +9324,7 @@ msgstr "檢視對齊西方"
 
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "作弊玩家 %u 正用一支由 %d × %s 組成的新機器人軍隊."
+msgstr "作弊玩家 %u 正用一支由 %d × %s 組成的新生化人軍隊."
 
 #, c-format
 msgid "(Player %u) is using cheat :%s"
@@ -9367,7 +9371,7 @@ msgstr "裝備單位計數顯示已停用."
 
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(玩家 %u) 正在作弊: 機器人數量: %d, 建築物數量: %d, 功能數量: %d"
+msgstr "(玩家 %u) 正在作弊: 生化人數量: %d, 建築物數量: %d, 功能數量: %d"
 
 msgid "Infinite power disabled"
 msgstr "無限制能源: 關"
@@ -9490,7 +9494,7 @@ msgid "All enemies destroyed by cheating!"
 msgstr "所有敵人都被作弊消滅!"
 
 msgid "Destroying selected droids and structures!"
-msgstr "摧毀選定的機器人和建築結構!"
+msgstr "摧毀選定的生化人和建築結構!"
 
 msgid "Reveal OFF"
 msgstr "顯示 關閉"
@@ -9505,10 +9509,10 @@ msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地!"
 
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "格式化速度限制: 開"
 
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "格式化速度限制: 關"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "垂直旋轉方向: 正常"
@@ -10157,11 +10161,11 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr "按\"開始主持\"按鈕開始主持遊戲."
 
 msgid "Port mapping creation is in progress..."
-msgstr ""
+msgstr "正在進行埠位址對應..."
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "使用者停用埠對應. 將不會自動設定埠 %d."
 
 msgid "Closed"
 msgstr "已關閉"
@@ -10421,7 +10425,7 @@ msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標!"
 
 msgid "Green"
-msgstr "綠色"
+msgstr "青澀"
 
 msgid "Orange"
 msgstr "橙色"
@@ -10791,10 +10795,10 @@ msgid "Requesting to join game"
 msgstr "請求加入遊戲"
 
 msgid "Kick Spectator"
-msgstr ""
+msgstr "踢出旁觀者"
 
 msgid "Kick Player"
-msgstr ""
+msgstr "踢出玩家"
 
 msgid "Loading Status:"
 msgstr "載入狀態:"
@@ -10842,7 +10846,7 @@ msgid "Current Power / Power Per Second"
 msgstr "目前能源/每秒能源輸出"
 
 msgid "PwrLost"
-msgstr "丟失能源"
+msgstr "喪失能源"
 
 msgid "PwrWon"
 msgstr "取得能源"
@@ -10974,7 +10978,7 @@ msgstr "ID %u - 倍數: %u"
 
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr "D %u - 產量: %u - 剩餘建造數: %u - 阻力: %d / %d"
+msgstr "D %u - 產量: %u - 剩餘建造數: %u - 抵抗: %d / %d"
 
 #, c-format
 msgid "ID %u - Research Points: %u"
@@ -11032,13 +11036,13 @@ msgid "Command the forces of The Project in a battle to rebuild the world"
 msgstr "指揮計劃的武力進行重建世界的戰鬥"
 
 msgid "Warzone 2100 Universe"
-msgstr "戰場 2100 宇宙"
+msgstr "戰場 2100 世界"
 
 msgid "WZ2100 Extended Universe"
-msgstr "戰場 2100 延伸宇宙"
+msgstr "戰場 2100 延伸世界"
 
 msgid "Unique Universe"
-msgstr "唯一的宇宙"
+msgstr "唯一的世界"
 
 #, c-format
 msgid "Requires %s"
@@ -11076,10 +11080,10 @@ msgid "Disable the ability to manually save / quick-save, limit autosaves to the
 msgstr "停用手動保存/快速保存功能，將自動保存限制在每個級別的開始."
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "PS1 修改器"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
-msgstr ""
+msgstr "減少重量對車速的影響."
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "更輕鬆的遊戲體驗 - 比容易更容易"
@@ -11171,7 +11175,7 @@ msgid "[No Tanks]"
 msgstr "[無坦克戰車]"
 
 msgid "[No Cyborgs]"
-msgstr "[無生物機器人]"
+msgstr "[無生化人]"
 
 msgid "[No VTOLs]"
 msgstr "[無垂直起降裝備]"

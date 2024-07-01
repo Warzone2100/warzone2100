@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"PO-Revision-Date: 2024-06-29 02:16\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -9519,10 +9519,10 @@ msgid "Unable to locate HQ!"
 msgstr "Képtelen, hogy lokalizálja főhadiszállást!"
 
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "Alakzat sebességkorlátozása BE"
 
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "Alakzat sebességkorlátozása KI"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Vízszintes forgatás iránya: normál"
@@ -11093,10 +11093,10 @@ msgid "Disable the ability to manually save / quick-save, limit autosaves to the
 msgstr ""
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "PS1 módosítók"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
-msgstr ""
+msgstr "Az ellenség sebzését a jelenlegi nehézségi módosító harmadára csökkenti."
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""

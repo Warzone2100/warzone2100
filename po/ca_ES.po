@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"PO-Revision-Date: 2024-06-30 02:19\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -2938,22 +2938,22 @@ msgstr "Llengua del sistema"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Mapatge de ports obert al port extern: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "La seva IP externa és: %s"
 
 #, c-format
 msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
+msgstr "No s'ha pogut crear el mapatge de ports (temps límit de %d segons)"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "No s'ha pogut crear el mapatge dels ports"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Configuri manualment el seu router/tallafocs per obrir el port %d!"
 
 msgid "Client failed to ack player index swap"
 msgstr "El client no ha confirmat el canvi de lloc del jugador"
@@ -2969,6 +2969,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Error connectant-se al lobby del servidor: %s.\n"
+"Assegureu-vos que el port %d pugui rebre connexions entrants.\n"
+"Si utilitzeu un encaminador, configuri'l per activar l'UPnP/NAT-PMP/PCP\n"
+" o per encaminar el port al vostre sistema."
 
 msgid "Failed to get a lobby response!"
 msgstr "No s'ha rebut resposta de la sala!"
@@ -3820,7 +3824,7 @@ msgid "Collapsing Plutonium kinetic energy bullets"
 msgstr "Bales d'energia cinètica d'explosió de plutoni"
 
 msgid "Collective CWall"
-msgstr "CMur de la Col·lectivitat"
+msgstr "Mur de la Col·lectivitat"
 
 msgid "Collective Heavy Body"
 msgstr "Cos pesat de la Col·lectivitat"
@@ -4452,82 +4456,82 @@ msgid "HE Howitzer Shells"
 msgstr "Projectils de Howitzer ME"
 
 msgid "HE Mini-Rockets Mk2"
-msgstr "Mini-míssils ME 2"
+msgstr "Mini-míssils ME Mk2"
 
 msgid "HE Mini-Rockets Mk3"
-msgstr "Mini-míssils ME 3"
+msgstr "Mini-míssils ME Mk3"
 
 msgid "HE Mini-Rockets"
 msgstr "Mini-míssils ME"
 
 msgid "HE Mortar Shells Mk2"
-msgstr "Projectils de morter ME 2"
+msgstr "Projectils de morter ME Mk2"
 
 msgid "HE Mortar Shells Mk3"
-msgstr "Projectils de morter ME 3"
+msgstr "Projectils de morter ME Mk3"
 
 msgid "HE Mortar Shells"
 msgstr "Projectils de morter ME"
 
 msgid "HE Rockets Mk2"
-msgstr "Coets ME 2"
+msgstr "Coets ME Mk2"
 
 msgid "HE Rockets Mk3"
-msgstr "Coets ME 3"
+msgstr "Coets ME Mk3"
 
 msgid "HE Rockets"
 msgstr "Coets ME"
 
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Plataforma de bombes MEPA, Pregadéu i convertiplà"
+msgstr "Plataforma de bombes MEPA Pregadéu VTOL"
 
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Plataforma de bombes MEPA, Retribució i convertiplà"
+msgstr "Plataforma de bombes MEPA, Retribució VTOL"
 
 msgid "HEAP Bomb Bay"
 msgstr "Plataformes de bombes MEPA"
 
 msgid "HEAP Howitzer Shells Mk2"
-msgstr "Projectils de Howitzer MEPA 2"
+msgstr "Projectils de Howitzer MEPA Mk2"
 
 msgid "HEAP Howitzer Shells Mk3"
-msgstr "Projectils de Howitzer MEPA 3"
+msgstr "Projectils de Howitzer MEPA Mk3"
 
 msgid "HEAP Howitzer Shells"
 msgstr "Projectils de Howitzer MEPA"
 
 msgid "HEAP Mini-Rockets Mk2"
-msgstr "Mini-míssils MEPA 2"
+msgstr "Mini-míssils MEPA Mk2"
 
 msgid "HEAP Mini-Rockets Mk3"
-msgstr "Mini-míssils MEPA 3"
+msgstr "Mini-míssils MEPA Mk3"
 
 msgid "HEAP Mini-Rockets"
 msgstr "Mini-míssils MEPA"
 
 msgid "HEAP Mortar Shells Mk2"
-msgstr "Projectils de morter MEPA 2"
+msgstr "Projectils de morter MEPA Mk2"
 
 msgid "HEAP Mortar Shells Mk3"
-msgstr "Projectils de morter MEPA 3"
+msgstr "Projectils de morter MEPA Mk3"
 
 msgid "HEAP Mortar Shells"
 msgstr "Projectils de morter MEPA"
 
 msgid "HEAT Cannon Shells Mk2"
-msgstr "Projectils de canó ATME 2"
+msgstr "Projectils de canó ATME Mk2"
 
 msgid "HEAT Cannon Shells Mk3"
-msgstr "Projectils de canó ATME 3"
+msgstr "Projectils de canó ATME Mk3"
 
 msgid "HEAT Cannon Shells"
 msgstr "Projectils de canó ATME"
 
 msgid "HEAT Rocket Warhead Mk2"
-msgstr "Míssil amb cap nuclear ATME 2"
+msgstr "Míssil amb cap nuclear ATME Mk2"
 
 msgid "HEAT Rocket Warhead Mk3"
-msgstr "Míssil amb cap nuclear ATME 3"
+msgstr "Míssil amb cap nuclear ATME Mk3"
 
 msgid "HEAT Rocket Warhead"
 msgstr "Míssil amb cap nuclear ATME"
@@ -4683,19 +4687,19 @@ msgid "Hero and Special rank units are protected"
 msgstr "Les unitats de rang heroi i especial estan protegides"
 
 msgid "HESH Rocket Warhead Mk2"
-msgstr "Míssil amb cap nuclear MEEX 2"
+msgstr "Míssil amb cap nuclear MEEX Mk2"
 
 msgid "HESH Rocket Warhead Mk3"
-msgstr "Míssil amb cap nuclear MEEX 3"
+msgstr "Míssil amb cap nuclear MEEX Mk3"
 
 msgid "HESH Rocket Warhead"
 msgstr "Míssil amb cap nuclear MEEX"
 
 msgid "Hi-Energy Laser Emitter Mk2"
-msgstr "Emissor làser d'alta energia 2"
+msgstr "Emissor làser d'alta energia Mk2"
 
 msgid "Hi-Energy Laser Emitter Mk3"
-msgstr "Emissor làser d'alta energia 3"
+msgstr "Emissor làser d'alta energia Mk3"
 
 msgid "Hi-Energy Laser Emitter"
 msgstr "Emissor làser d'alta energia"
@@ -4833,7 +4837,7 @@ msgid "Hyper Velocity Cannon Emplacement"
 msgstr "Emplaçament amb canó d'hiper-velocitat"
 
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Fortificació"
+msgstr "Punt defensiu amb canó supersònic"
 
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canó d'híper-velocitat, Pitó i Aerolliscador"
@@ -4842,7 +4846,7 @@ msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Canó d'hiper-velocitat, Pitó i eruga"
 
 msgid "Hyper Velocity Cannon"
-msgstr "Canó d'hiper velocitat"
+msgstr "Canó supersònic"
 
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr "Obús perforador d'alta velocitat amb sabot deslligable estabilitzat"
@@ -5055,7 +5059,7 @@ msgid "Jeep"
 msgstr "Jeep"
 
 msgid "Jump Cyborgs can now be researched"
-msgstr "Ara poder fer recerca sobre ciborgs saltadors"
+msgstr "Ara poder fer recerca sobre cíborgs saltadors"
 
 msgid "Keeps map areas under constant surveillance"
 msgstr "Manté àrees del mapa en vigilància constant"
@@ -5066,11 +5070,11 @@ msgstr "Armadura +30%, punts del cos +30%"
 
 #, no-c-format
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "+25% d'armadura +35%, i +25% de punts de vida"
+msgstr "Armadura cinètica +35%, i punts de vida +35%"
 
 #, no-c-format
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "armadura +35%, punts del cos +35%"
+msgstr "Armadura cinètica +35%, punts del cos +35%"
 
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr "Compost laminat enganxat amb feixos òptics deflectors d'energia adherits"
@@ -5088,7 +5092,7 @@ msgid "Lancer Cobra Tracks"
 msgstr "Llançadora, Cobra i eruga"
 
 msgid "Lancer Cyborg"
-msgstr "Ciborg llançadora"
+msgstr "Cíborg llançadora"
 
 msgid "Lancer Hardpoint"
 msgstr "Fortificació amb llançadora"
@@ -5103,7 +5107,7 @@ msgid "Lancer Scorpion Tracks"
 msgstr "Llançadora, Escorpí i eruga"
 
 msgid "Lancer Scorpion VTOL"
-msgstr "Llançadora, Escorpí i convertiplà"
+msgstr "Llançadora, Escorpí VTOL"
 
 msgid "Lancer Viper Tracks"
 msgstr "Llançadora, Escurçó i eruga"
@@ -5121,7 +5125,7 @@ msgid "Laser - Flashlight"
 msgstr "Làser - Llanterna"
 
 msgid "Laser AA Gun Available"
-msgstr "Està disponible un canó làser AA"
+msgstr "Hi ha un canó làser AA disponible"
 
 #, no-c-format
 msgid "Laser accuracy +10%"
@@ -5324,10 +5328,10 @@ msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Bateria de mini-míssils, Cobra i eruga"
 
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Formació de mini-míssils, Escurçó i semieruga"
+msgstr "Bateria de mini-míssils, Escurçó i semieruga"
 
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Formació de mini-míssils, Escurçó i rodes"
+msgstr "Bateria de mini-míssils, Escurçó i rodes"
 
 msgid "Mini-Rocket Array"
 msgstr "Bateria de mini-míssils"
@@ -5403,10 +5407,10 @@ msgid "Mortar accuracy +10%"
 msgstr "+10% de precisió dels morters"
 
 msgid "Mortar Autoloader Mk2"
-msgstr "Carregador automàtic de morter 2"
+msgstr "Carregador automàtic de morter Mk2"
 
 msgid "Mortar Autoloader Mk3"
-msgstr "Carregador automàtic de morter 3"
+msgstr "Carregador automàtic de morter Mk3"
 
 msgid "Mortar Autoloader"
 msgstr "Carregador automàtic de morter"
@@ -5573,7 +5577,7 @@ msgid "New VTOL Missile Launcher"
 msgstr "Nou llançador de míssils VTOL"
 
 msgid "NEXUS CWall"
-msgstr "MurC de NEXUS"
+msgstr "Mur de NEXUS"
 
 msgid "NEXUS Heavy Body"
 msgstr "Cos pesat de NEXUS"
@@ -5636,19 +5640,19 @@ msgid "Oil Drum"
 msgstr "Bidó de petroli"
 
 msgid "Oil Resource"
-msgstr "Pou de petroli"
+msgstr "Jaciment de petroli"
 
 msgid "On-board computer predicts target movement"
-msgstr "L'ordinador d'abord prediu el moviment dels objectius"
+msgstr "L'ordinador de bord prediu el moviment dels objectius"
 
 msgid "On-board diagnostic and repair systems"
 msgstr "Sistemes de diagnosi i reparació incorporats"
 
 msgid "On-board resistance circuit systems"
-msgstr "Sistemes de circuit d'a bord resistents"
+msgstr "Sistemes de circuit de bord resistents"
 
 msgid "Or select the Repair Facility as a unit's target"
-msgstr "O sel·leccioneu instal·lació de reparació com a objectiu de la unitat"
+msgstr "O seleccioneu la instal·lació de reparació com a objectiu de la unitat"
 
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
 msgstr "Ordena a les unitats assignades que disparin a les bateries enemigues"
@@ -5663,25 +5667,25 @@ msgid "Panther"
 msgstr "Pantera"
 
 msgid "Pepperpot Pit"
-msgstr "Fosa de Pot de pebre"
+msgstr "Fosa Pepperpot"
 
 msgid "Pepperpot"
-msgstr "Pot de pebre"
+msgstr "Pepperpot"
 
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Grups de bombes de fòsfor, Pregadéu i convertiplà"
+msgstr "Grups de bombes de fòsfor, Pregadéu VTOL"
 
 msgid "Phosphor Bomb Bay"
-msgstr "Plataformes de bombes de fosfor"
+msgstr "Plataformes de bombes de fòsfor"
 
 msgid "Pick-Up Truck"
 msgstr "Camió de recollida"
 
 msgid "Plascrete Mk2"
-msgstr "Ciment plàstic 2"
+msgstr "Ciment plàstic Mk2"
 
 msgid "Plascrete Mk3"
-msgstr "Ciment plàstic 3"
+msgstr "Ciment plàstic Mk3"
 
 msgid "Plascrete"
 msgstr "Ciment plàstic"
@@ -5711,13 +5715,13 @@ msgid "Plasmite Flamer"
 msgstr "Llançaflames de plasmit"
 
 msgid "Plasmite Retribution VTOL"
-msgstr "Plasmit, Retribució i convertiplà"
+msgstr "Plasmit, Retribució VTOL"
 
 msgid "Plasteel Mk2"
-msgstr "Acer plàstic 2"
+msgstr "Acer plàstic Mk2"
 
 msgid "Plasteel Mk3"
-msgstr "Acer plàstic 3"
+msgstr "Acer plàstic Mk3"
 
 msgid "Plasteel"
 msgstr "Acer plàstic"
@@ -5735,7 +5739,7 @@ msgid "Power Generator"
 msgstr "Generador"
 
 msgid "Power Module Available"
-msgstr "Està disponible el mòdul del generador"
+msgstr "El mòdul del generador està disponible"
 
 msgid "Power Module"
 msgstr "Mòdul del generador"
@@ -5758,7 +5762,7 @@ msgid "Powerlab"
 msgstr "Laboratori d'energia"
 
 msgid "Produces Cyborgs"
-msgstr "Fabrica ciborgs"
+msgstr "Fabrica cíborgs"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Les unitats de rang professional i regular estan protegides"
@@ -5952,10 +5956,10 @@ msgid "Replaces all machineguns"
 msgstr "Reemplaça totes les metralladores"
 
 msgid "Requires cyborg factory to produce"
-msgstr "Necessiteu una fàbrica de ciborgs per produir"
+msgstr "Necessita una fàbrica cíborg per ser produït"
 
 msgid "Requires heavy VTOL factory to produce"
-msgstr "Necessita una fabrica de convertiplans gran per produir-se"
+msgstr "Necessita una gran fàbrica VTOL per ser produït"
 
 msgid "Research Breakthrough Improves Construction Rates"
 msgstr "La recerca ha millorat la velocitat de construcció"
@@ -5964,10 +5968,10 @@ msgid "Research Facility"
 msgstr "Centre de recerca"
 
 msgid "Research makes additional Cyborgs available"
-msgstr "La investigació permet més ciborgs disponibles"
+msgstr "La investigació desbloqueja cíborgs"
 
 msgid "Research Module Available"
-msgstr "Està disponible el mòdul del centre de recerca"
+msgstr "Mòdul del centre de recerca disponible"
 
 msgid "Research module expands research facilities"
 msgstr "El mòdul de recerca expandeix els centres de recerca"
@@ -5999,25 +6003,25 @@ msgid "Robotic advances make new chaingun upgrade available"
 msgstr "Els avanços en robòtica han permès millorar la metralladora"
 
 msgid "Robotic Factory Production Mk2"
-msgstr "Fàbrica de producció robotitzada 2"
+msgstr "Fàbrica de producció robotitzada Mk2"
 
 msgid "Robotic Factory Production Mk3"
-msgstr "Fàbrica de producció robotitzada 3"
+msgstr "Fàbrica de producció robotitzada Mk3"
 
 msgid "Robotic Factory Production"
 msgstr "Fàbrica de producció robotitzada"
 
 msgid "Robotic loading system feeds rounds into breech"
-msgstr "El sistema robotitzat carrega la munició a la recàmera"
+msgstr "El sistema robotitzat carrega la munició a la recambra"
 
 msgid "Robotic Manufacturing"
 msgstr "Fabricació robotitzada"
 
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr "Millora 2 de la instal·lació de reparació de robots"
+msgstr "Millora Mk2 de la instal·lació de reparació de robots"
 
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr "Millora 3 de la instal·lació de reparació de robots"
+msgstr "Millora Mk3 de la instal·lació de reparació de robots"
 
 msgid "Robotic Repair Facility Upgrade"
 msgstr "Millora de la instal·lació de reparació de robots"
@@ -6026,42 +6030,42 @@ msgid "Robotic Repair Facility"
 msgstr "Instal·lació de reparació robotitzada"
 
 msgid "Robotic VTOL Rearming Mk2"
-msgstr "Robot de rearmament de convertiplans 2"
+msgstr "Robot de rearmament VTOL Mk2"
 
 msgid "Robotic VTOL Rearming Mk3"
-msgstr "Robot de rearmament de convertiplans 3"
+msgstr "Robot de rearmament VTOL Mk3"
 
 msgid "Robotic VTOL Rearming"
-msgstr "Robot de rearmament de convertiplans"
+msgstr "Robot de rearmament VTOL"
 
 #, no-c-format
 msgid "Rocket accuracy +10%"
-msgstr "+10% de precisió dels llançacoets"
+msgstr "+10% de precisió dels coets"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artilleria de míssils: pot ser assignada a un sensor"
 
 msgid "Rocket Autoloader Mk2"
-msgstr "Carregador automàtic de coets 2"
+msgstr "Carregador automàtic de coets Mk2"
 
 msgid "Rocket Autoloader Mk3"
-msgstr "Carregador automàtic de coets 3"
+msgstr "Carregador automàtic de coets Mk3"
 
 msgid "Rocket Autoloader"
 msgstr "Carregador automàtic de coets"
 
 msgid "Rocket Buggy"
-msgstr "Buggy llançacohets"
+msgstr "4x4 llança-coets"
 
 #, no-c-format
 msgid "Rocket damage +25%"
-msgstr "+25% de danys produïts pels llançacoets"
+msgstr "+25% de danys produïts pels coets"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "El coet detecta i es fixa en les emissions dels motors"
 
 msgid "Rocket Jeep"
-msgstr "Jeep llançacohets"
+msgstr "Jeep llança-coets"
 
 msgid "Rocket Laser Designator"
 msgstr "Punter làser per coets"
@@ -6089,13 +6093,13 @@ msgid "Rotary MG Bunker"
 msgstr "Búnquer amb MT rotativa"
 
 msgid "Rotary Mortar - Pepperpot"
-msgstr "Morter rotatori - Pot de pebre"
+msgstr "Morter rotatori - Pepperpot"
 
 msgid "Rotaryweaponslab"
 msgstr "Laboratori d'armes rotatives"
 
 msgid "Ruined Factory"
-msgstr "Fàbrica en ruines"
+msgstr "Fàbrica en ruïnes"
 
 msgid "SAM site with Avenger missiles"
 msgstr "Lloc MTA Venjador"
@@ -6155,7 +6159,7 @@ msgid "Scorpion"
 msgstr "Escorpí"
 
 msgid "Scourge Cyborg"
-msgstr "Ciborg Flagel"
+msgstr "Cíborg Flagell"
 
 msgid "Scourge Mantis Hover"
 msgstr "Flagel, Pregadéu i Aerolliscador"
@@ -6179,7 +6183,7 @@ msgid "Scourge Python Tracks"
 msgstr "Flagel, Pitó i eruga"
 
 msgid "Scourge Retaliation VTOL"
-msgstr "Flagel, Venjança i convertiplà"
+msgstr "Flagel, Venjança VTOL"
 
 msgid "Scrambler Turret"
 msgstr "Torreta d'interferències"
@@ -6188,10 +6192,10 @@ msgid "Sea map AI, based on NullBot"
 msgstr "Mapa marí de l'IA, basat en el NullBot"
 
 msgid "Search & Destroy Missiles"
-msgstr "Míssils de carca i destrucció"
+msgstr "Míssils cerca i destrueix"
 
 msgid "Select new targets to continue the VTOL strikes"
-msgstr "Seleccioneu nous objectius per continuar els atacs dels convertiplans"
+msgstr "Seleccioneu nous objectius per continuar els atacs VTOL"
 
 msgid "Self-guided rocket-powered shells"
 msgstr "Munició amb guiatge automàtic i propulsió per coet"
@@ -6227,10 +6231,10 @@ msgid "Sensor Turret"
 msgstr "Torreta sensor"
 
 msgid "Sensor Upgrade Mk2"
-msgstr "Millora del sensor 2"
+msgstr "Millora del sensor Mk2"
 
 msgid "Sensor Upgrade Mk3"
-msgstr "Millora del sensor 3"
+msgstr "Millora del sensor Mk3"
 
 msgid "Sensor Upgrade"
 msgstr "Millora del sensor"
@@ -6272,10 +6276,10 @@ msgid "Speed: Slow"
 msgstr "Velocitat: Lenta"
 
 msgid "Speed: VTOL"
-msgstr "Velocitat: Convertiplà"
+msgstr "Velocitat: VTOL"
 
 msgid "Stabilized Mini-Rockets Mk2"
-msgstr "Mini-míssils estabilitzats 2"
+msgstr "Mini-míssils estabilitzats Mk2"
 
 msgid "Stabilized Mini-Rockets"
 msgstr "Mini-míssils estabilitzats"
@@ -6287,7 +6291,7 @@ msgid "Steals technology from enemies"
 msgstr "Captura tecnologia dels enemics"
 
 msgid "Steals technology from structures and takes control of weapons"
-msgstr "Roba tecnologia de les estructura i pren el control de les armes"
+msgstr "Roba tecnologia de les estructures i pren el control de les armes"
 
 msgid "Steel Heavy Machinegun Guard Tower"
 msgstr "Torre de guàrdia metralladora reforçada amb acer"
@@ -6317,7 +6321,7 @@ msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "La missió continua fins que l'enemic sigui destruït o es retiri"
 
 msgid "Stronger Commander Turret Available for Design"
-msgstr "Està disponible una nova torreta comandant per dissenyar"
+msgstr "Es pot dissenyar una nova torreta comandant"
 
 msgid "Structure Research Completed"
 msgstr "S'ha completat la recerca de l'estructura"
@@ -6341,40 +6345,40 @@ msgid "Super Rail-Gunner Cyborg"
 msgstr "Súper Ciborg amb canó elèctric pesat"
 
 msgid "Super Transport Available"
-msgstr "Està disponible un Super Transport"
+msgstr "Hi ha un Súper Transport disponible"
 
 msgid "Super Transport Body"
-msgstr "Cos Super Transport"
+msgstr "Cos Súper Transport"
 
 msgid "Super Transport"
 msgstr "Súper transportador"
 
 msgid "Supercrete Mk2"
-msgstr "Ciment super-armat 2"
+msgstr "Superciment Mk2"
 
 msgid "Supercrete Mk3"
-msgstr "Ciment super-armat 3"
+msgstr "Superciment Mk3"
 
 msgid "Supercrete"
-msgstr "Ciment superarmat"
+msgstr "Superciment"
 
 msgid "Superdense composite alloys and energy-absorbing fibres"
 msgstr "Aliatge de compòsit superdens i fibres absorbents d'energia"
 
 msgid "Superdense Composite Alloys Mk2"
-msgstr "Aliatge superdens de compòsit 2"
+msgstr "Aliatge superdens de compòsit Mk2"
 
 msgid "Superdense Composite Alloys Mk3"
-msgstr "Aliatge superdens de compòsit 3"
+msgstr "Aliatge superdens de compòsit Mk3"
 
 msgid "Superdense Composite Alloys"
 msgstr "Aliatge superdens de compòsit"
 
 msgid "Superhot Flamer Gel Mk2"
-msgstr "Gel de llançaflames super-calent 2"
+msgstr "Gel de llançaflames super-calent Mk2"
 
 msgid "Superhot Flamer Gel Mk3"
-msgstr "Gel de llançaflames super-calent 3"
+msgstr "Gel de llançaflames super-calent Mk3"
 
 msgid "Superhot Flamer Gel"
 msgstr "Gel de llançaflames supercalent"
@@ -6389,16 +6393,16 @@ msgid "Superhot Plasmite Gel"
 msgstr "Gel de llançaflames supercalent"
 
 msgid "Surface-to-air missile"
-msgstr "Míssil terra-aire"
+msgstr "Míssil terra-aire (MTA)"
 
 msgid "Synaptic Link allows humans to interface directly with computers"
-msgstr "L'enllaç sinàptic permet als humans interactuar amb computadors"
+msgstr "L'enllaç sinàptic permet als humans interactuar amb ordinadors"
 
 msgid "Synaptic Link Data Analysis Mk2"
-msgstr "Anàlisi de les dades de l'enllaç sinàptic 2"
+msgstr "Anàlisi de les dades de l'enllaç sinàptic Mk2"
 
 msgid "Synaptic Link Data Analysis Mk3"
-msgstr "Anàlisi de les dades de l'enllaç sinàptic 3"
+msgstr "Anàlisi de les dades de l'enllaç sinàptic Mk3"
 
 msgid "Synaptic Link Data Analysis"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic"
@@ -6434,7 +6438,7 @@ msgid "Tank Killer Mantis Tracks"
 msgstr "Destructor de tancs, Pregadéu i eruga"
 
 msgid "Tank Killer Python Tracks"
-msgstr "Destructor, Pitó i eruga"
+msgstr "Destructor de tancs, Pitó i eruga"
 
 msgid "Tank Killer Rocket"
 msgstr "Míssil destructor de tancs"
@@ -6449,13 +6453,13 @@ msgid "Tank Traps"
 msgstr "Trampes per tanc"
 
 msgid "Target Acquisition Artillery Shells Mk2"
-msgstr "Munició d'artilleria seguidora d'objectius 2"
+msgstr "Munició d'artilleria seguidora d'objectius Mk2"
 
 msgid "Target Acquisition Artillery Shells"
 msgstr "Munició d'artilleria seguidora d'objectius"
 
 msgid "Target Acquisition Mortar Shells"
-msgstr "Munició de morter seguidora d'objectius 2"
+msgstr "Munició de morter seguidora d'objectius Mk2"
 
 msgid "Target Prediction Artillery Shells"
 msgstr "Munició d'artilleria amb predicció d'objectiu"
@@ -6470,7 +6474,7 @@ msgid "Targeting systems compensate for distance and weather conditions"
 msgstr "Sistemes d'apuntament que compensen la distància i les condicions atmosfèriques"
 
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr "El convertiplà torna a la plataforma seleccionada a buscar munició"
+msgstr "El VTOL torna a la plataforma seleccionada a buscar munició"
 
 #, no-c-format
 msgid "Thermal Armor +35%"
@@ -6489,10 +6493,10 @@ msgid "Thermal Armor +45%"
 msgstr "+45% d'armadura tèrmica"
 
 msgid "Thermal Armor Mk2"
-msgstr "Armadura tèrmica 2"
+msgstr "Armadura tèrmica Mk2"
 
 msgid "Thermal Armor Mk3"
-msgstr "Armadura tèrmica 3"
+msgstr "Armadura tèrmica Mk3"
 
 msgid "Thermal Armor"
 msgstr "Armadura tèrmica"
@@ -6513,10 +6517,10 @@ msgid "Thermite Flamer Cyborg"
 msgstr "Cíborg llançaflames Tèrmit"
 
 msgid "Thermopole Energizer Mk2"
-msgstr "Energitzador de termopols 2"
+msgstr "Energitzador de termopols Mk2"
 
 msgid "Thermopole Energizer Mk3"
-msgstr "Energitzador de termopols 3"
+msgstr "Energitzador de termopols Mk3"
 
 msgid "Thermopole Energizer"
 msgstr "Energitzador de termopols"
@@ -6570,19 +6574,19 @@ msgid "Truck"
 msgstr "Camió"
 
 msgid "Tungsten-Tipped MG Bullets Mk2"
-msgstr "Bales de metralladora amb punta de tungstè 2"
+msgstr "Bales de metralladora amb punta de tungstè Mk2"
 
 msgid "Tungsten-Tipped MG Bullets Mk3"
-msgstr "Bales de metralladora amb punta de tungstè 3"
+msgstr "Bales de metralladora amb punta de tungstè Mk3"
 
 msgid "Tungsten-Tipped MG Bullets"
 msgstr "Bales de metralladora amb punta de tungstè"
 
 msgid "Turbo-Charged Engine Mk2"
-msgstr "Motor Turbo 2"
+msgstr "Motor Turbo Mk2"
 
 msgid "Turbo-Charged Engine Mk3"
-msgstr "Motor Turbo 3"
+msgstr "Motor Turbo Mk3"
 
 msgid "Turtle AI"
 msgstr "IA Tortuga"
@@ -6621,7 +6625,7 @@ msgid "Twin Machinegun Viper Tracks"
 msgstr "Doble metralladora Escurçó i eruga"
 
 msgid "Twin Machinegun Viper Wheels"
-msgstr "Doble metralladora, Escurçó i semieruga"
+msgstr "Doble metralladora, Escurçó i rodes"
 
 msgid "Twin Machinegun"
 msgstr "Metralladora doble"
@@ -6675,10 +6679,10 @@ msgid "Vapor Turbine boosts power output"
 msgstr "Generador impulsat per turbina de vapor"
 
 msgid "Vapor Turbine Generator Mk2"
-msgstr "Generador de turbina de vapor 2"
+msgstr "Generador de turbina de vapor Mk2"
 
 msgid "Vapor Turbine Generator Mk3"
-msgstr "Generador de turbina de vapor 3"
+msgstr "Generador de turbina de vapor Mk3"
 
 msgid "Vapor Turbine Generator"
 msgstr "Generador de turbina de vapor"
@@ -6688,10 +6692,10 @@ msgid "Vehicle speed +5%"
 msgstr "+5% de velocitat dels vehicles"
 
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr "Armadura tèrmica superdensa 2 per vehicle"
+msgstr "Armadura tèrmica superdensa per vehicle Mk2"
 
 msgid "Vehicle Superdense Thermal Armor Mk3"
-msgstr "Armadura tèrmica superdensa 3 per vehicle"
+msgstr "Armadura tèrmica superdensa per vehicle Mk3"
 
 msgid "Vehicle Superdense Thermal Armor"
 msgstr "Armadura tèrmica superdensa per vehicle"
@@ -6709,7 +6713,7 @@ msgid "Vengeance"
 msgstr "Venjança"
 
 msgid "Vertical Take Off and Landing Propulsion"
-msgstr "Propulsió per enlairar-se i aterrar verticalment"
+msgstr "Avions d'enlairament i aterratge verticals (VTOL)"
 
 msgid "Very expensive to produce"
 msgstr "De producció molt cara"
@@ -6736,25 +6740,25 @@ msgid "Viper"
 msgstr "Escurçó"
 
 msgid "VTOL Assault Cannon"
-msgstr "Canó d'assalt per convertiplà"
+msgstr "Canó d'assalt VTOL"
 
 msgid "VTOL Assault Gun"
-msgstr "Rifle d'assalt per convertiplà"
+msgstr "Rifle d'assalt VTOL"
 
 msgid "VTOL BaBa Rearming Pad"
 msgstr "Plataforma de rearmament VTOL dels carronyaires"
 
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "Anti-búnquer, Insecte, convertiplà"
+msgstr "Anti-búnquer, Insecte, VTOL"
 
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "Anti-búnquer, Escorpí i convertiplà"
+msgstr "Anti-búnquer, Escorpí VTOL"
 
 msgid "VTOL Bunker Buster"
-msgstr "Anti-búnker per convertiplà"
+msgstr "VTOL anti-búnker"
 
 msgid "VTOL Cannon"
-msgstr "Canó per convertiplà"
+msgstr "Canó VTOL"
 
 msgid "VTOL CB Radar Tower"
 msgstr "Torre radar VTOL CB"
@@ -6763,85 +6767,85 @@ msgid "VTOL CB Radar Turret"
 msgstr "Torreta radar VTOL CB"
 
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr "Les torretes AB convertiplans detecten les bateries de foc indirecte"
+msgstr "Les torretes AB VTOL detecten les bateries de foc indirecte"
 
 msgid "VTOL CB Tower"
-msgstr "Torreta AB convertipla"
+msgstr "Torreta AB VTOL"
 
 msgid "VTOL CB Turret"
-msgstr "Torreta de convertiplà CB"
+msgstr "Torreta AB VTOL"
 
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "Grups de bombes de raïm, Insecte, convertiplà"
+msgstr "Grups de bombes de raïm, Insecte, VTOL"
 
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "Grups de bombes de raïm, Escorpí i convertiplà"
+msgstr "Grups de bombes de raïm, Escorpí VTOL"
 
 msgid "VTOL Cluster Bomb Bay"
-msgstr "Grups de bombes de raïm per convertiplà"
+msgstr "Grups de bombes de raïm VTOL"
 
 msgid "VTOL Cluster Bombs Bay"
-msgstr "Plataforma de bombes de raïm per convertiplà"
+msgstr "Plataforma de bombes de raïm VTOL"
 
 msgid "VTOL EMP Missile Launcher"
-msgstr "Llançador de míssils PEM per convertiplà"
+msgstr "Llançador de míssils PEM VTOL"
 
 msgid "VTOL factory enables VTOL production"
-msgstr "La fàbrica de convertiplans permet produir convertiplans"
+msgstr "La fàbrica VTOL permet produir VTOL"
 
 msgid "VTOL Factory"
-msgstr "Fàbrica de convertiplans"
+msgstr "Fàbrica VTOL"
 
 msgid "VTOL Flashlight"
-msgstr "Llanterna per convertiplà"
+msgstr "Llanterna VTOL"
 
 msgid "VTOL Heap Bomb Bay"
-msgstr "Plataforma de bombes MEPA per convertiplà"
+msgstr "Plataforma de bombes MEPA VTOL"
 
 msgid "VTOL Heavy Cannon"
 msgstr "Canó pesat VTOL"
 
 msgid "VTOL Heavy Laser"
-msgstr "Làser pesat per convertiplà"
+msgstr "Làser pesat VTOL"
 
 msgid "VTOL Heavy Machinegun"
-msgstr "Metralladora pesada per convertiplà"
+msgstr "Metralladora pesada VTOL"
 
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "Canó d'hiper-velocitat, Insecte i convertiplà"
+msgstr "Canó d'hiper-velocitat, Insecte VTOL"
 
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "Canó d'hiper-velocitat, Pregadéu i convertiplà"
+msgstr "Canó d'hiper-velocitat, Pregadéu VTOL"
 
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "Canó d'hiper-velocitat, Escorpí i convertiplà"
+msgstr "Canó d'hiper-velocitat, Escorpí VTOL"
 
 msgid "VTOL Hyper Velocity Cannon"
 msgstr "Canó d'hiper-velocitat per convertiplà"
 
 msgid "VTOL II"
-msgstr "Convertiplà II"
+msgstr "VTOL II"
 
 msgid "VTOL III"
-msgstr "Convertiplà III"
+msgstr "VTOL III"
 
 msgid "VTOL Lancer Bug VTOL"
-msgstr "Llançadora, Insecte, convertiplà"
+msgstr "Llançadora, Insecte, VTOL"
 
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "Llançadora, Pregadéu i convertiplà"
+msgstr "Llançadora, Pregadéu VTOL"
 
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "Llançadora, Escorpí i convertiplà"
+msgstr "Llançadora, Escorpí VTOL"
 
 msgid "VTOL Lancer"
-msgstr "Llançadora per convertiplà"
+msgstr "Llançadora VTOL"
 
 msgid "VTOL Machinegun Scav"
 msgstr "Metralladora carronyaire VTOL"
 
 msgid "VTOL Machinegun"
-msgstr "Metralladora per convertiplà"
+msgstr "Metralladora VTOL"
 
 msgid "VTOL Mini-Rocket AA"
 msgstr "Minicoet VTOL AA"
@@ -6850,64 +6854,64 @@ msgid "VTOL Mini-Rocket Scav"
 msgstr "Minicoet VTOL carronyaire"
 
 msgid "VTOL Mini-Rocket"
-msgstr "Mini-míssil per convertiplà"
+msgstr "Mini-míssil VTOL"
 
 msgid "VTOL Needle Gun"
-msgstr "Canó d'agulla per convertiplà"
+msgstr "Canó d'agulla VTOL"
 
 msgid "VTOL Phosphor Bomb Bay"
-msgstr "Plataforma de bombes de fosfor per convertiplà"
+msgstr "Plataforma de bombes de fòsfor VTOL"
 
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "Plataforma de bombes de plasmit per convertiplà"
+msgstr "Plataforma de bombes de plasmit VTOL"
 
 msgid "VTOL Propulsion"
-msgstr "Propulsió per convertiplà"
+msgstr "Propulsió VTOL"
 
 msgid "VTOL Pulse Laser"
-msgstr "Làser d'impulsos per convertiplà"
+msgstr "Làser d'impulsos VTOL"
 
 msgid "VTOL Radar Tower"
 msgstr "Torre radar VTOL"
 
 msgid "VTOL Rail Gun"
-msgstr "Canó de rail per convertiplà"
+msgstr "Canó de rail VTOL"
 
 msgid "VTOL Rearming Pad"
-msgstr "Plataf. de rearm. de convertipl."
+msgstr "Plataforma de rearmament VTOL"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr "Necessiteu plataformes de convertiplans per mantenir-los volant"
+msgstr "Necessiteu plataformes VTOL per mantenir-los volant"
 
 msgid "VTOL Scourge Missile"
-msgstr "Míssil Flagel per convertiplà"
+msgstr "Míssil Flagel VTOL"
 
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr "La torre de detecció de convertiplans detecta l'aproximació d'enemics"
+msgstr "La torre de detecció VTOL detecta l'aproximació d'enemics"
 
 msgid "VTOL Strike Tower"
-msgstr "Torre de detecció de convertiplans"
+msgstr "Torre de detecció VTOL"
 
 msgid "VTOL Strike turret used to spot targets"
-msgstr "Torreta sensor d'atac de convertiplans emprada per localitzar objectius"
+msgstr "Torreta sensor d'atac VTOL emprada per localitzar objectius"
 
 msgid "VTOL Strike Turret"
-msgstr "Torreta sensor d'atac de convertiplà"
+msgstr "Torreta sensor d'atac VTOL"
 
 msgid "VTOL Sunburst AA"
-msgstr "AA Esclat per Convertiplà"
+msgstr "AA Esclat VTOL"
 
 msgid "VTOL Tank Killer"
-msgstr "Destructor de tancs per convertiplà"
+msgstr "Destructor de tancs VTOL"
 
 msgid "VTOL Thermite Bomb Bay"
-msgstr "Plataforma de bombes de termita per convertiplà"
+msgstr "Plataforma de bombes de termita VTOL"
 
 msgid "VTOL Twin Machinegun"
-msgstr "Doble metralladora per convertiplà"
+msgstr "Doble metralladora VTOL"
 
 msgid "VTOL"
-msgstr "Convertiplà"
+msgstr "VTOL"
 
 msgid "Wall"
 msgstr "Mur"
@@ -6972,7 +6976,7 @@ msgstr "Elit"
 
 msgctxt "rank"
 msgid "Green"
-msgstr "Novell"
+msgstr "Iniciat"
 
 msgctxt "rank"
 msgid "Hero"
@@ -6988,7 +6992,7 @@ msgstr "Regular"
 
 msgctxt "rank"
 msgid "Rookie"
-msgstr "Principiant"
+msgstr "Novell"
 
 msgctxt "rank"
 msgid "Special"
@@ -7016,13 +7020,13 @@ msgid "Warzone 2100 Map / Mod File"
 msgstr "Fitxer de mapa/modificador de Warzone 2100"
 
 msgid "Warzone 2100 Campaign Mod File"
-msgstr "Fitxer modificador de campanya de Warzone 2100"
+msgstr "Fitxer de mod campanya de Warzone 2100"
 
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Fitxer modificador de partides multijugador de Warzone 2100"
+msgstr "Fitxer de mod partides multijugador de Warzone 2100"
 
 msgid "Warzone 2100 Global Mod File"
-msgstr "Fitxer modificador global de Warzone 2100"
+msgstr "Fitxer mod global de Warzone 2100"
 
 msgid "Warzone"
 msgstr "Warzone"
@@ -7118,7 +7122,7 @@ msgid "Enable a campaign only mod"
 msgstr "Habilita un mod només per la campanya"
 
 msgid "Enable a multiplay only mod"
-msgstr "Habilita un mod només pel mode multijug."
+msgstr "Habilita un mod només pel mode multijugador"
 
 msgid "Disable asserts"
 msgstr "Deshabilita les assercions"
@@ -7235,10 +7239,10 @@ msgid "port"
 msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Acivar/desactivar el mapatge de ports quan s'hostatja"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, verdader, 0, fals]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "Activar les comandes slash al lobby (per a connectar els clients)"
@@ -7307,7 +7311,7 @@ msgid "Base video URL"
 msgstr "URL base del vídeo"
 
 msgid "Commander needs a higher level to command more units"
-msgstr "El comandant necessita un nivell més gran per controlar més unitats"
+msgstr "El comandant necessita un nivell més alt per controlar més unitats"
 
 msgid "My Game"
 msgstr "La meva partida"
@@ -7325,19 +7329,19 @@ msgid "Vehicle Turret"
 msgstr "Torreta del vehicle"
 
 msgid "Delete Design"
-msgstr "Esborra disseny"
+msgstr "Descarta el disseny"
 
 msgid "Store Template"
-msgstr "Desa la plantila"
+msgstr "Desa la plantilla"
 
 msgid "Kinetic Armour"
-msgstr "Armadura"
+msgstr "Armadura cinètica"
 
 msgid "Thermal Armour"
 msgstr "Protecció tèrmica"
 
 msgid "Engine Output"
-msgstr "Motor"
+msgstr "Potència del motor"
 
 msgid "Weight"
 msgstr "Pes"
@@ -7346,13 +7350,13 @@ msgid "Total Power Required"
 msgstr "Energia total requerida"
 
 msgid "Total Body Points"
-msgstr "Punts totals del cos"
+msgstr "Punts de vida totals"
 
 msgid "Power Usage"
-msgstr "Us d'energia"
+msgstr "Ús d'energia"
 
 msgid "Hydra "
-msgstr "Hidra"
+msgstr "Hidra "
 
 msgid "Sensor Range"
 msgstr "Abast del sensor"
@@ -7367,13 +7371,13 @@ msgid "Range"
 msgstr "Abast"
 
 msgid "Damage"
-msgstr "Desperfece"
+msgstr "Danys"
 
 msgid "Rate-of-Fire"
 msgstr "Velocitat de foc"
 
 msgid "Air Speed"
-msgstr "Velocitat a l'aire"
+msgstr "Velocitat de vol"
 
 msgid "Road Speed"
 msgstr "Velocitat en carretera"
@@ -7420,16 +7424,16 @@ msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
 msgstr "(Enemic!) %s, ref: %d, ID: %d PV: %d/%d"
 
 msgid "Player left"
-msgstr "Ha marxat un jugador"
+msgstr "Ha sortit un jugador"
 
 msgid "Player dropped"
 msgstr "Ha caigut un jugador"
 
 msgid "Waiting for other players"
-msgstr "S'està esperant els altres jugadors"
+msgstr "S'estan esperant els altres jugadors"
 
 msgid "Out of sync"
-msgstr "S'ha perdut el sincronisme"
+msgstr "S'ha perdut la sincronització"
 
 #, c-format
 msgid "Setting zoom to %.0f"
@@ -7457,13 +7461,13 @@ msgstr[1] "S'ha seleccionat el grup %u - %u unitats"
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "S'ha assignat %u unitat al grup %u"
-msgstr[1] "S'ha assignat %u unitats al grup %u"
+msgstr[0] "S'han assignat %u unitat al grup %u"
+msgstr[1] "S'han assignat %u unitats al grup %u"
 
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
-msgstr[0] "%u unitats retirades del grup"
+msgstr[0] "%u unitat retirada del grup"
 msgstr[1] "%u unitats retirades del grup"
 
 #, c-format
@@ -7561,10 +7565,10 @@ msgid "New Campaign"
 msgstr "Campanya nova"
 
 msgid "Start Skirmish Game"
-msgstr "﻿Escaramussa"
+msgstr "Comença una escaramussa"
 
 msgid "Challenges"
-msgstr "Desafiaments"
+msgstr "Reptes"
 
 msgid "Load Campaign Game"
 msgstr "Carrega una campanya"
@@ -7646,7 +7650,7 @@ msgid "Configuration directory is reported as:"
 msgstr "La carpeta de configuració és així:"
 
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "Si executa en un contenidor / medi aïllat, pot diferir del camí real al disc."
+msgstr "Si l'executa en un contenidor / medi aïllat, pot diferir del camí real al disc."
 
 msgid "Please see the documentation for more information on how to locate it manually."
 msgstr "Consulteu la documentació per més informació sobre com localitzar-lo manualment."
@@ -7661,7 +7665,7 @@ msgid "2×"
 msgstr "2x"
 
 msgid "Fullscreen"
-msgstr "Pant. completa"
+msgstr "Pantalla completa"
 
 msgid "Unsupported"
 msgstr "No és compatible"
@@ -7757,7 +7761,7 @@ msgid "Radar Jump"
 msgstr "Salt del radar"
 
 msgid "Video Playback"
-msgstr "Reprod. dels vídeos"
+msgstr "Reproducció dels vídeos"
 
 msgid "Scanlines"
 msgstr "Línies d'escaneig"
@@ -7769,7 +7773,7 @@ msgid "Groups Menu"
 msgstr "Menú dels grups"
 
 msgid "GRAPHICS OPTIONS"
-msgstr "OPCIONS DELS GRÀFICS"
+msgstr "OPCIONS GRÀFIQUES"
 
 msgid "Disabled"
 msgstr "Desactivat"
@@ -7781,16 +7785,16 @@ msgid "Auto"
 msgstr "Auto"
 
 msgid "Voice Volume"
-msgstr "Volum veu"
+msgstr "Volum de la veu"
 
 msgid "FX Volume"
-msgstr "Volum efectes"
+msgstr "Volum dels efectes"
 
 msgid "Music Volume"
-msgstr "Volum música"
+msgstr "Volum de la música"
 
 msgid "Subtitles"
-msgstr "Subtitols"
+msgstr "Subtítols"
 
 msgid "HRTF"
 msgstr "HRTF"
@@ -7869,7 +7873,7 @@ msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
 msgstr "El mode pantalla completa s'utilitza amb les tecles: Alt + Enter"
 
 msgid "VIDEO OPTIONS"
-msgstr "OPCIONS DE VIDEO"
+msgstr "OPCIONS DEL VÍDEO"
 
 msgid "Unable to change Vertical Sync"
 msgstr "No s'ha pogut modificar la sincronització vertical"
@@ -7900,7 +7904,7 @@ msgid "Rotate Screen"
 msgstr "Rota la pantalla"
 
 msgid "Colored Cursors"
-msgstr "Cursos colorats"
+msgstr "Cursors colorits"
 
 msgid "Cursor Size"
 msgstr "Mida del cursor"
@@ -7992,10 +7996,10 @@ msgid "Game Port"
 msgstr "Port del joc"
 
 msgid "Port Mapping"
-msgstr ""
+msgstr "Mapatge dels ports"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
+msgstr "Utilitzi el PCP, NAT-PMP, o l'UPnP per ajudar a configurar el seu encaminador/tallafocs per autoritzar connexions mentre s'hostatja."
 
 msgid "Chat"
 msgstr "Xat"
@@ -8063,23 +8067,23 @@ msgid "Fast-Forward"
 msgstr "Avança"
 
 msgid "GAME SAVED: "
-msgstr "S'HA DESAT LA PARTIDA: "
+msgstr "PARTIDA DESADA: "
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "El jugador %u està fent trampes (mode depuració) amb una nova estructura: %s"
+msgstr "El jugador %u està fent trampes (mode depuració) amb una nova estructura: %s."
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "El jugador %u està fent trampes (mode depuració) amb una nova funció: %s"
+msgstr "El jugador %u està fent trampes (mode depuració) amb una nova funció: %s."
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "El jugador %u està fent trampes (mode depuració) amb un nou ciborg: %s"
+msgstr "El jugador %u està fent trampes (mode depuració) amb un nou cíborg: %s."
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "El jugador %u està fent trampes (mode depuració) amb un nou ciborg."
+msgstr "El jugador %u està fent trampes (mode depuració) amb un nou cíborg."
 
 msgid "Hiding Obsolete Tech"
 msgstr "Amaga les tecnologies obsoletes"
@@ -8178,10 +8182,10 @@ msgid "Unit Groups:"
 msgstr "Grups d'unitats:"
 
 msgid "Construction Progress"
-msgstr "Progres de la construcció"
+msgstr "Progrés de la construcció"
 
 msgid "Factory Delivery Point"
-msgstr "Punt de lliurament de la fàbrica"
+msgstr "Punt d'agrupament de la fàbrica"
 
 msgid "Loop Production"
 msgstr "Producció en bucle"
@@ -8215,7 +8219,7 @@ msgid "Quick Chat:"
 msgstr "Xat ràpid:"
 
 msgid "Lobby Chat"
-msgstr "Xat"
+msgstr "Xat del lobby"
 
 msgid "Requests"
 msgstr "Peticions"
@@ -8458,7 +8462,7 @@ msgid "Map Downloaded"
 msgstr "Mapes baixats"
 
 msgid "Bot Allies"
-msgstr "Aliats del bot"
+msgstr "Aliats bot"
 
 msgid "Human Allies"
 msgstr "Aliats humans"
@@ -8476,7 +8480,7 @@ msgid "Tanks"
 msgstr "Tancs"
 
 msgid "Cyborgs"
-msgstr "Cyborgs"
+msgstr "Cíborgs"
 
 msgid "No teammates."
 msgstr "Sense aliats."
@@ -8539,7 +8543,7 @@ msgid "The game can't continue without the host."
 msgstr "La partida no pot continuar sense l'amfitrió."
 
 msgid "-->  QUIT  <--"
-msgstr "-->  Surt  <--"
+msgstr "-->  SORTIR  <--"
 
 msgid "Audio Options"
 msgstr "Opcions de l'àudio"
@@ -8562,7 +8566,7 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
-"No es pot carregar el modificador requerit: %s\n"
+"No es pot carregar el mod requerit: %s\n"
 "\n"
 "Warzone provarà de carregar la partida sense ell."
 
@@ -8597,7 +8601,7 @@ msgid "Design"
 msgstr "Disseny"
 
 msgid "Intelligence Display"
-msgstr "Pantalla d'intel·ligència"
+msgstr "Informe d'intel·ligència"
 
 msgid "Commanders"
 msgstr "Comandants"
@@ -8630,34 +8634,34 @@ msgid "Toggle Sensor display"
 msgstr "Commuta la visualització dels sensors"
 
 msgid "Assign Group 0"
-msgstr "Assigna el grup 0"
+msgstr "Assigna al grup 0"
 
 msgid "Assign Group 1"
-msgstr "Assigna el grup 1"
+msgstr "Assigna al grup 1"
 
 msgid "Assign Group 2"
-msgstr "Assigna el grup 2"
+msgstr "Assigna al grup 2"
 
 msgid "Assign Group 3"
-msgstr "Assigna el grup 3"
+msgstr "Assigna al grup 3"
 
 msgid "Assign Group 4"
-msgstr "Assigna el grup 4"
+msgstr "Assigna al grup 4"
 
 msgid "Assign Group 5"
-msgstr "Assigna el grup 5"
+msgstr "Assigna al grup 5"
 
 msgid "Assign Group 6"
-msgstr "Assigna el grup 6"
+msgstr "Assigna al grup 6"
 
 msgid "Assign Group 7"
-msgstr "Assigna el grup 7"
+msgstr "Assigna al grup 7"
 
 msgid "Assign Group 8"
-msgstr "Assigna el grup 8"
+msgstr "Assigna al grup 8"
 
 msgid "Assign Group 9"
-msgstr "Assigna el grup 9"
+msgstr "Assigna al grup 9"
 
 msgid "Add to Group 0"
 msgstr "Afegeix al grup 0"
@@ -8843,7 +8847,7 @@ msgid "View next Commander"
 msgstr "Mostra el següent comandant"
 
 msgid "Toggle Overlays"
-msgstr "Commuta les finestres"
+msgstr "Commuta les capes"
 
 msgid "Toggle Console History "
 msgstr "Mostra l'historial de la consola "
@@ -8861,7 +8865,7 @@ msgid "Center View on HQ"
 msgstr "Centra la vista al QG"
 
 msgid "Hold Fire"
-msgstr "No disparis"
+msgstr "No disparar"
 
 msgid "View Unassigned Units"
 msgstr "Mostra les unitats sense assignar"
@@ -8918,7 +8922,7 @@ msgid "Send Team Quick Chat"
 msgstr "Enviar un xat ràpid d'equip"
 
 msgid "Drop a beacon"
-msgstr "Deixa una balissa"
+msgstr "Deixa una balisa"
 
 msgid "Toggles shadows"
 msgstr "Commuta les ombres"
@@ -8948,7 +8952,7 @@ msgid "Select all Combat Units"
 msgstr "Selecciona totes les unitats de combat"
 
 msgid "Select all Cyborgs"
-msgstr "Selecciona tots els ciborgs"
+msgstr "Selecciona tots els cíborgs"
 
 msgid "Select all Heavily Damaged Units"
 msgstr "Selecciona totes les unitats molt malmeses"
@@ -8982,7 +8986,7 @@ msgid "Select EVERY unit"
 msgstr "Selecciona TOTES les unitats"
 
 msgid "Select all VTOLs"
-msgstr "Selecciona totes els vehicles amb convertiplà"
+msgstr "Selecciona tots els VTOL"
 
 msgid "Select all fully-armed VTOLs"
 msgstr "Selecciona tots els VTOL armats"
@@ -9000,13 +9004,13 @@ msgid "Select all units with the same components"
 msgstr "Seleccionar totes les unitats amb els mateixos components"
 
 msgid "Select all Combat Cyborgs"
-msgstr "Selecciona tots els ciborgs de combat"
+msgstr "Selecciona tots els cíborgs de combat"
 
 msgid "Select all Combat Cyborgs without group"
 msgstr "Selecciona tots els Cíborgs de combat sense grup"
 
 msgid "Select all Engineers"
-msgstr "Selecciona tots ens enginyers"
+msgstr "Selecciona tots els enginyers"
 
 msgid "Select all Land Combat Units"
 msgstr "Selecciona totes les unitats terrestres de combat"
@@ -9042,7 +9046,7 @@ msgid "Select next Power Generator"
 msgstr "Selecciona el següent generador"
 
 msgid "Select next Cyborg Factory"
-msgstr "Selecciona la fàbrica de ciborgs "
+msgstr "Selecciona la fàbrica de cíborgs següent"
 
 msgid "Select next VTOL Factory"
 msgstr "Selecciona la fàbrica VTOL següent"
@@ -9066,13 +9070,13 @@ msgid "Toggle Debug Mappings"
 msgstr "Commuta la depuració dels mapes"
 
 msgid "Prioritize Debug Mappings"
-msgstr "Prioritza el mapejat de depuració"
+msgstr "Prioritza el mapatge de depuració"
 
 msgid "Toggle Level Editor"
 msgstr "(Des)Activar l'editor de nivells"
 
 msgid "Toggle display of droid path"
-msgstr "Commuta la mostra del camí dels ciborgs"
+msgstr "Commuta la mostra del camí dels cíborgs"
 
 msgid "Toggle display of gateways"
 msgstr "Commuta la visualització de les portes"
@@ -9275,19 +9279,19 @@ msgid "Return To HQ"
 msgstr "Torna al QG"
 
 msgid "Recycle"
-msgstr "Recicle"
+msgstr "Recicla"
 
 msgid "Assign Factory Production"
-msgstr "Assigna la producció de la fàbrica"
+msgstr "Assignar-li la producció a la fàbrica"
 
 msgid "Assign Cyborg Factory Production"
-msgstr "Assigna la producció de la fàbrica de ciborgs"
+msgstr "Assignar-li la producció a la fàbrica de cíborgs"
 
 msgid "Assign Fire Support"
-msgstr "Assigna el foc de suport"
+msgstr "Assignar-li el foc de suport"
 
 msgid "Assign VTOL Factory Production"
-msgstr "Assigna la producció de la fàbrica de convertiplans"
+msgstr "Assignar-li la producció de la fàbrica VTOL"
 
 msgid "Circle"
 msgstr "Cercle"
@@ -9338,16 +9342,16 @@ msgstr "El jugador %u fa trampes amb un exèrcit de: %d x %s."
 
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr "(El jugador %u) fa servir trampes :%s"
+msgstr "(El jugador %u) fa servir trampes: %s"
 
 msgid "Hard as nails!!!"
-msgstr "Dur com les ungles!!!"
+msgstr "En tota la cara!!!"
 
 msgid "1000 big ones!!!"
 msgstr "1000 dels grossos!!!"
 
 msgid "Power overwhelming"
-msgstr "Energia desbordant"
+msgstr "Sobrecàrrega energètica"
 
 msgid "A power fantasy!"
 msgstr "Un poder increïble!"
@@ -9359,19 +9363,19 @@ msgid "Back to normality!"
 msgstr "Tornada a la normalitat"
 
 msgid "Getting tricky!"
-msgstr "Us esteu tornant trampós!"
+msgstr "S'està complicant!"
 
 msgid "In a nightmare!"
 msgstr "En un malson!"
 
 msgid "Twice as nice!"
-msgstr "El doble de bonic!"
+msgstr "El doble de bé!"
 
 msgid "FPS display is enabled."
-msgstr "S'ha habilitat el visor de FPS"
+msgstr "Es mostren els FPS."
 
 msgid "FPS display is disabled."
-msgstr "S'ha deshabilitat el visor de FPS"
+msgstr "Ja no es mostren els FPS."
 
 msgid "Unit count display is enabled."
 msgstr "La mostra del nombre d'unitats està activada."
@@ -9381,7 +9385,7 @@ msgstr "La mostra del nombre d'unitats està desactivada."
 
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(Jugador %u) fa servir una trampa: Nº ciborgs: %d  Nº estructures: %d  Nº Funcions: %d"
+msgstr "(Jugador %u) fa servir una trampa: Unitats %d  Estructures: %d  Funcions: %d"
 
 msgid "Infinite power disabled"
 msgstr "Energia infinita deshabilitada"
@@ -9461,7 +9465,7 @@ msgid "CHEATS: DISABLED"
 msgstr "TRAMPES: DESACTIVADES"
 
 msgid "Researched EVERYTHING for you!"
-msgstr "TOT investigat per vos!"
+msgstr "Se li ha investigat TOT!"
 
 msgid "Selected buildings instantly recharged!"
 msgstr "Construccions assenyalades recarregades instantàniament!"
@@ -9492,10 +9496,10 @@ msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, el temps fora és glaçat... NEVA"
 
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Cantant sota la pluja, «I'm singing in the rain...» Plou"
+msgstr "Singing in the rain, I'm singing in the rain... PLOU"
 
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr "El temps: Cels clars arreu... SENSE TEMPS"
+msgstr "Previsió: Cels clars arreu... BON TEMPS"
 
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Alerta! Això pot tenir conseqüències dràstiques si es fa servir malament a les missions."
@@ -9504,7 +9508,7 @@ msgid "All enemies destroyed by cheating!"
 msgstr "Tots els enemics han estat destruïts fent trampes!"
 
 msgid "Destroying selected droids and structures!"
-msgstr "Es destrueixen els ciborgs i estructures seleccionats!"
+msgstr "Es destrueixen els cíborgs i estructures seleccionats!"
 
 msgid "Reveal OFF"
 msgstr "Mostrar OFF"
@@ -9519,10 +9523,10 @@ msgid "Unable to locate HQ!"
 msgstr "No es pot localitzar el QG"
 
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "Limitació de la velocitat de formació ON"
 
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "Limitació de la velocitat de formació OFF"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Direcció de rotació vertical: Normal"
@@ -9658,11 +9662,11 @@ msgid "Load Saved Game"
 msgstr "Carrega una partida desada"
 
 msgid "GAME SAVED :"
-msgstr "S'HA DESAT LA PARTIDA:"
+msgstr "PARTIDA DESADA:"
 
 #, c-format
 msgid "You found %u power in an oil drum."
-msgstr "Heu trobat %u energia en un bidó de petroli."
+msgstr "Heu trobat %u punts d'energia en un bidó de petroli."
 
 #, c-format
 msgid "%s Gives You A Visibility Report"
@@ -9670,11 +9674,11 @@ msgstr "%s us dona un informe de visibilitat"
 
 #, c-format
 msgid "%s Gives you a %s"
-msgstr "%s uns dona un %s"
+msgstr "%s us dona un %s"
 
 #, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr "S'ha intentat eliminar un %s que no és buit - però no està permés"
+msgstr "S'ha intentat eliminar un %s que no és buit - però no està permés."
 
 #, c-format
 msgid "%s Gives You Technology Documents"
@@ -9702,7 +9706,7 @@ msgstr "%s S'ha aliat amb %s"
 
 #, c-format
 msgid "You Discover Blueprints For %s"
-msgstr "Heu descobert traces de %s"
+msgstr "Heu descobert els plànols per %s"
 
 msgid "Medium"
 msgstr "Mitjana"
@@ -9724,10 +9728,10 @@ msgid "Tanks disabled!!"
 msgstr "Tancs deshabilitats!!"
 
 msgid "Cyborgs disabled."
-msgstr "Ciborgs deshabilitats"
+msgstr "Cíborgs deshabilitats."
 
 msgid "VTOLs disabled."
-msgstr "Convertiplans deshabilitats."
+msgstr "VTOL deshabilitats."
 
 msgid "Satellite Uplink disabled."
 msgstr "Enllaç per satèl·lit desactivat."
@@ -9748,7 +9752,7 @@ msgid "Game Name"
 msgstr "Nom de la partida"
 
 msgid "One-Player Skirmish"
-msgstr "Batussa d'un jugador"
+msgstr "Escaramussa d'un jugador"
 
 msgid ""
 "Select Map\n"
@@ -9764,10 +9768,10 @@ msgid "Random map!"
 msgstr "Mapa aleatori!"
 
 msgid "Click to set Password"
-msgstr "Clica per posar una contrasenya"
+msgstr "Clica per crear la contrasenya"
 
 msgid "Enter password here"
-msgstr "Fiqueu la contrasenya aquí"
+msgstr "Posi la contrasenya aquí"
 
 msgid "Select Player Name"
 msgstr "Selecciona el nom del jugador"
@@ -9825,16 +9829,16 @@ msgid "Starts disadvantaged"
 msgstr "Comença amb desavantatges"
 
 msgid "Plays nice"
-msgstr "Juga bé"
+msgstr "Juga sent bo"
 
 msgid "No holds barred"
-msgstr "Sense limitacions"
+msgstr "Sense pietat"
 
 msgid "Starts with advantages"
-msgstr "Comença amb avançantatges"
+msgstr "Comença amb avantatges"
 
 msgid "CHOOSE AI"
-msgstr "ESCULL IA"
+msgstr "ESCULL LA IA"
 
 msgid "Allow human players to join in this slot"
 msgstr "Permet a jugadors humans unir-se en aquest espai"
@@ -9874,7 +9878,7 @@ msgstr "L'amfitrió t'ha fet fora de la partida."
 
 #, c-format
 msgid "The host has banned %s from the game!"
-msgstr "L'amfitrió ha fet exiliat %s de la partida!"
+msgstr "L'amfitrió ha exiliat %s de la partida!"
 
 msgid "The host has banned you from the game."
 msgstr "L'amfitrió t'ha exiliat de la partida."
@@ -10101,10 +10105,10 @@ msgstr "Nom de la partida actualitzat."
 
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** ara cal la contrassenya [%s] ***"
+msgstr "*** ara cal una contrasenya [%s] ***"
 
 msgid "*** password is NOT required! ***"
-msgstr "*** ara NO cal contrassenya! ***"
+msgstr "*** ara NO cal contrasenya! ***"
 
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr "Aquest és un mapa-mode, pot canviar l'experiència de joc!"
@@ -10171,11 +10175,11 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr "Premi el botó començar a hostatjar per a començar a hostatjar una partida."
 
 msgid "Port mapping creation is in progress..."
-msgstr ""
+msgstr "Mapatge de ports creant-se..."
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "Mapatge de ports desactivat per l'usuari. L'autoconfiguració del port %d no és possible."
 
 msgid "Closed"
 msgstr "Tancat"
@@ -10292,7 +10296,7 @@ msgid "Score"
 msgstr "Puntuació"
 
 msgid "Kills"
-msgstr "Morts"
+msgstr "Kills"
 
 msgid "Units"
 msgstr "Unitats"
@@ -10393,7 +10397,7 @@ msgstr "L'hoste ha bloquejat el xat lliure al jugador: %s"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr "S'expulsa al jugador %s per que s'ha saltat la comprovació de la integritat de dades!"
+msgstr "S'expulsa al jugador %s perquè s'ha saltat la comprovació de la integritat de dades!"
 
 msgid "Invalid data!"
 msgstr "Dades invàlides!"
@@ -10622,20 +10626,20 @@ msgstr "Estructures totals: %u"
 
 #, c-format
 msgid "Rookie: %u"
-msgstr "Novell: %u"
+msgstr "Novells: %u"
 
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Novell: %u"
+msgstr "Iniciats: %u"
 
 #, c-format
 msgid "Trained: %u"
-msgstr "Entrenat: %u"
+msgstr "Entrenats: %u"
 
 #, c-format
 msgid "Regular: %u"
-msgstr "Regular %u"
+msgstr "Regulars: %u"
 
 #, c-format
 msgid "Professional: %u"
@@ -10643,7 +10647,7 @@ msgstr "Professionals: %u"
 
 #, c-format
 msgid "Veteran: %u"
-msgstr "Veterà: %u"
+msgstr "Veterans: %u"
 
 #, c-format
 msgid "Elite: %u"
@@ -10655,7 +10659,7 @@ msgstr "Especial: %u"
 
 #, c-format
 msgid "Hero: %u"
-msgstr "Heroi: %u"
+msgstr "Herois: %u"
 
 msgid "Unit Losses"
 msgstr "Unitats perdudes"
@@ -10733,7 +10737,7 @@ msgid "Enter password"
 msgstr "Introduïu la contrasenya"
 
 msgid "OK"
-msgstr "D'ACORD"
+msgstr "OK"
 
 msgid "Connecting to Game"
 msgstr "Connectant a la partida"
@@ -10742,7 +10746,7 @@ msgid "Status:"
 msgstr "Estat:"
 
 msgid "Cancel"
-msgstr "Cancela"
+msgstr "Cancel·lar"
 
 msgid "Game requires a password to join"
 msgstr "La partida necessita una contrasenya per unir-s'hi"
@@ -10806,10 +10810,10 @@ msgid "Requesting to join game"
 msgstr "Demanant a unir-se a la partida"
 
 msgid "Kick Spectator"
-msgstr ""
+msgstr "Expulsar espectador"
 
 msgid "Kick Player"
-msgstr ""
+msgstr "Expulsar jugador"
 
 msgid "Loading Status:"
 msgstr "Estatut de la càrrega:"
@@ -10893,7 +10897,7 @@ msgid "Flame"
 msgstr "Flama"
 
 msgid "Howitzers"
-msgstr "Obuseres"
+msgstr "Howitzer"
 
 msgid "MG"
 msgstr "Metralladora"
@@ -11093,10 +11097,10 @@ msgid "Disable the ability to manually save / quick-save, limit autosaves to the
 msgstr "Desactiva la desada manual/desada-ràpida, limita les desades al principi de cada nivell."
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "Modificadors PS1"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
-msgstr ""
+msgstr "Redueix el dany que fa l'enemic a un terç del modificador de dificultat actual."
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "Una partida més tranquil·la - més fàcil que fàcil"
@@ -11111,7 +11115,7 @@ msgid "A challenge for players who have beaten the game"
 msgstr "Un repte pels jugadors que ho han petat tot"
 
 msgid "An unforgiving challenge for experienced players only"
-msgstr "Un repte que no perdona només pels jugadors experimentats"
+msgstr "Un repte que no perdona, només per jugadors experimentats"
 
 msgid "\"Classic\" campaign balance"
 msgstr "Balanç \"Clàssic\" de la campanya"
@@ -11147,13 +11151,13 @@ msgid "Filter Games List"
 msgstr "Filtrar la llista de partides"
 
 msgid "Refreshing..."
-msgstr "Refrescant-se..."
+msgstr "Refrescant..."
 
 msgid "Searching"
 msgstr "Buscant"
 
 msgid "Connecting to the lobby server..."
-msgstr "S'està connectant al servidor de sales..."
+msgstr "S'està connectant al servidor dels lobbys..."
 
 msgid "Map Name"
 msgstr "Nom del mapa"
@@ -11162,14 +11166,14 @@ msgid "Status"
 msgstr "Estat"
 
 msgid "Can't connect to lobby server!"
-msgstr "No s'ha pogut connectar al servidor de sales!"
+msgstr "No s'ha pogut connectar al servidor de lobbys!"
 
 #, c-format
 msgid "Mods: %s"
-msgstr "Modificadors: %s"
+msgstr "Mods: %s"
 
 msgid "Mods: None!"
-msgstr "Modificadors: Cap!"
+msgstr "Mods: Cap!"
 
 #, c-format
 msgid "Version: %s"
@@ -11182,16 +11186,16 @@ msgid "Your version of Warzone is incompatible with this game."
 msgstr "La vostra versió de Warzone 2100 és incompatible amb aquesta partida."
 
 msgid "[Password required]"
-msgstr "[Necessiteu una contrasenya]"
+msgstr "[Contrasenya necessària]"
 
 msgid "[No Tanks]"
-msgstr "[ Sense tancs]"
+msgstr "[Sense tancs]"
 
 msgid "[No Cyborgs]"
-msgstr "[Sense ciborgs]"
+msgstr "[Sense cíborgs]"
 
 msgid "[No VTOLs]"
-msgstr "[Sense convertiplans]"
+msgstr "[Sense VTOL]"
 
 #, c-format
 msgid "Hosted by %s"
@@ -11214,7 +11218,7 @@ msgid "Wrong Game Version!"
 msgstr "Versió del joc equivocada!"
 
 msgid "You have an incompatible mod."
-msgstr "Teniu un modificador incompatible"
+msgstr "Teniu un mod incompatible."
 
 msgid "Host couldn't send file?"
 msgstr "L'amfitrió no us ha pogut enviar el fitxer?"
@@ -11229,7 +11233,7 @@ msgid "CONNECTION"
 msgstr "CONNEXIÓ"
 
 msgid "Lobby"
-msgstr "Sala"
+msgstr "Lobby"
 
 msgid "IP"
 msgstr "IP"
@@ -11276,10 +11280,10 @@ msgid "(Notice ID: %s)"
 msgstr "(Notice ID: %s)"
 
 msgid " (modified locally)"
-msgstr " (modificat de manera local)"
+msgstr " (modificat localment)"
 
 msgid " - DEBUG"
-msgstr " - DEPURACIÓ"
+msgstr " - DEBUG"
 
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
@@ -11295,7 +11299,7 @@ msgid "YOU ARE VICTORIOUS!"
 msgstr "HEU GUANYAT!"
 
 msgid "YOU WERE DEFEATED!"
-msgstr "HEU ESTAT DERROTAT!"
+msgstr "HEU PERDUT!"
 
 msgid "Script Debugger"
 msgstr "Depuradora d'script"
