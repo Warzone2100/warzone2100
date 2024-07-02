@@ -840,8 +840,8 @@ static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowes
 	optional<uint32_t> index = NET_FindOpenSlotForPlayer(forceTakeLowestAvailablePlayerNumber, asSpectator);
 	if (!index.has_value())
 	{
-		debug(LOG_ERROR, "Could not find place for player %s", name);
-		NETlogEntry("Could not find a place for player!", SYNC_FLAG, -1);
+		debug(LOG_INFO, "Could not find place for %s %s", (!asSpectator.value_or(false)) ? "player" : "spectator", name);
+		NETlogEntry((!asSpectator.value_or(false)) ? "Could not find a place for player!" : "Could not find a place for spectator!", SYNC_FLAG, -1);
 		return nullopt;
 	}
 
@@ -3907,7 +3907,7 @@ static void NETallowJoining()
 					}
 					else
 					{
-						debug(LOG_ERROR, "Received an invalid version \"%" PRIu32 ".%" PRIu32 "\".", major, minor);
+						debug(LOG_INFO, "Received an invalid version \"%" PRIu32 ".%" PRIu32 "\".", major, minor);
 						result = htonl(ERROR_WRONGVERSION);
 						memcpy(&tmp_connectState[i].buffer, &result, sizeof(result));
 						writeAll(*tmp_socket[i], &tmp_connectState[i].buffer, sizeof(result));
@@ -4016,7 +4016,9 @@ static void NETallowJoining()
 					// verify signature that player is joining with, reject him if he can not do that
 					if (!identity.fromBytes(pkey, EcKey::Public) || !identity.verify(challengeResponse, tmp_connectState[i].connectChallenge.data(), tmp_connectState[i].connectChallenge.size()))
 					{
-						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
+						auto rejectMsg = astringf("**Rejecting player(%s), failed to verify player identity.", tmp_connectState[i].ip.c_str());
+						debug(LOG_INFO, "%s", rejectMsg.c_str());
+						debug(LOG_NET, "freeing temp socket %p, couldn't verify player identity", static_cast<void *>(tmp_socket[i]));
 
 						rejected = ERROR_WRONGDATA;
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
@@ -4078,7 +4080,7 @@ static void NETallowJoining()
 					if (rejected)
 					{
 						char buf[256] = {'\0'};
-						ssprintf(buf, "**Rejecting player(%s), reason (%u). ", tmp_connectState[i].ip.c_str(), (unsigned int) rejected);
+						ssprintf(buf, "**Rejecting player(%s), reason (%u).", tmp_connectState[i].ip.c_str(), (unsigned int) rejected);
 						debug(LOG_INFO, "%s", buf);
 						NETlogEntry(buf, SYNC_FLAG, i);
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
@@ -4236,7 +4238,7 @@ static void NETallowJoining()
 			if (!tmp.has_value() || tmp.value() > static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()))
 			{
 				ASSERT(tmp.value_or(0) <= static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()), "Currently limited to uint8_t");
-				debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
+				debug(LOG_INFO, "freeing temp socket %p, couldn't create slot", static_cast<void *>(tmp_socket[i]));
 
 				// Tell the player that we are full.
 				rejected = ERROR_FULL;
