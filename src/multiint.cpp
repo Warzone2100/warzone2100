@@ -7300,6 +7300,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 		if (ignoredMessage)
 		{
 			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
+			ignoredMessage = false;
 		}
 
 		NETpop(queue);
