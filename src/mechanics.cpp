@@ -217,8 +217,10 @@ void makeAllAvailable()
 		//make all research availble to be performed
 		for (comp = 0; comp < asResearch.size(); comp++)
 		{
-			enableResearch(&asResearch[comp], i);
+			if (!asResearch[comp].excludeFromCheats)
+			{
+				enableResearch(&asResearch[comp], i);
+			}
 		}
 	}
 }
-

@@ -1486,6 +1486,10 @@ void	kf_FinishAllResearch()
 	{
 		if (!IsResearchCompleted(&asPlayerResList[selectedPlayer][j]))
 		{
+			if (asResearch[j].excludeFromCheats)
+			{
+				continue;
+			}
 			if (bMultiMessages)
 			{
 				SendResearch(selectedPlayer, j, false);

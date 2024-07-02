@@ -53,6 +53,7 @@ struct RESEARCH : public BASE_STATS
 	UDWORD			researchPower;		/* Power cost to research */
 	UBYTE			keyTopic;			/* Flag to indicate whether in single player
 										   this topic must be explicitly enabled*/
+	UBYTE			excludeFromCheats;	/* Flag to prevent this topic from appearing and being researched with cheats */
 	UBYTE			disabledWhen;		/* flags when to disable tech */
 	std::vector<UWORD>	pPRList;		///< List of research pre-requisites
 	std::vector<UWORD>	pStructList;		///< List of structures that when built would enable this research
