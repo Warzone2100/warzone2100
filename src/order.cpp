@@ -409,8 +409,9 @@ static bool tryDoRepairlikeAction(DROID *psDroid)
 }
 
 /** This function updates all the orders status, according with psdroid's current order and state.
+ * Returns false if all further droid processing should be shortcut for this frame (because, for example, the droid is a transporter that was moved to the off-world list)
  */
-void orderUpdateDroid(DROID *psDroid)
+bool orderUpdateDroid(DROID *psDroid)
 {
 	BASE_OBJECT		*psObj = nullptr;
 	STRUCTURE		*psStruct, *psWall;
@@ -420,7 +421,7 @@ void orderUpdateDroid(DROID *psDroid)
 
 	if (psDroid == nullptr || isDead(psDroid))
 	{
-		return;
+		return true;
 	}
 
 	const WEAPON_STATS *psWeapStats = psDroid->getWeaponStats(0);
@@ -481,6 +482,8 @@ void orderUpdateDroid(DROID *psDroid)
 
 			/* clear order */
 			psDroid->order = DroidOrder(DORDER_NONE);
+
+			return false; // signal to caller to skip further processing this frame - droid was moved to a different list!
 		}
 		break;
 	case DORDER_TRANSPORTOUT:
@@ -1250,6 +1253,8 @@ void orderUpdateDroid(DROID *psDroid)
 		        psDroid->order.type, getDroidOrderName(psDroid->order.type), psDroid->action, getDroidActionName(psDroid->action), psDroid->secondaryOrder,
 		        moveDescription(psDroid->sMove.Status));
 	}
+
+	return true;
 }
 
 
