@@ -367,6 +367,18 @@ bool loadResearch(WzConfig &ini)
 			research.keyTopic = 0;
 		}
 
+		//special flag to not reveal research from "give all" and not to research with "research all" cheats
+		unsigned int excludeFromCheats = ini.value("excludeFromCheats", 0).toUInt();
+		ASSERT(excludeFromCheats <= 1, "Invalid excludeFromCheats for research topic - '%s' ", getStatsName(&research));
+		if (excludeFromCheats <= 1)
+		{
+			research.excludeFromCheats = ini.value("excludeFromCheats", 0).toUInt();
+		}
+		else
+		{
+			research.excludeFromCheats = 0;
+		}
+
 		//set tech code
 		UBYTE techCode = ini.value("techCode", 0).toUInt();
 		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getStatsName(&research));
