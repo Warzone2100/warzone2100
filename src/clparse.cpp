@@ -501,10 +501,6 @@ bool ParseCommandLineDebugFlags(int argc, const char * const *argv)
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, debugOptionsTable, 0);
 	int iOption;
 
-#if defined(WZ_OS_MAC) && defined(DEBUG)
-	debug_enable_switch("all");
-#endif /* WZ_OS_MAC && DEBUG */
-
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
 	{
@@ -597,10 +593,6 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
 	int iOption;
-
-#if defined(WZ_OS_MAC) && defined(DEBUG)
-	debug_enable_switch("all");
-#endif /* WZ_OS_MAC && DEBUG */
 
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)

@@ -842,7 +842,10 @@ void droidUpdate(DROID *psDroid)
 	aiUpdateDroid(psDroid);
 
 	// Update the droids order.
-	orderUpdateDroid(psDroid);
+	if (!orderUpdateDroid(psDroid))
+	{
+		return; // skip further processing - droid was moved to a different list!
+	}
 
 	// update the action of the droid
 	actionUpdateDroid(psDroid);

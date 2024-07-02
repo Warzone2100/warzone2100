@@ -31,7 +31,7 @@
 
 /** Find some droid to repair, starting at (x, y) within some radius, given a player, or return nullptr.
  * Droids having full HP with order = DORDER_RTR or RTR_SPECIFIED will automatically
- * be sent to delivery point, or back to commander 
+ * be sent to delivery point, or back to commander
  */
 
 DROID *findSomeoneToRepair(const STRUCTURE *obj, int radius);
@@ -44,7 +44,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 void orderCheckList(DROID *psDroid);
 
 /** \brief Updates a droids order state. */
-void orderUpdateDroid(DROID *psDroid);
+bool orderUpdateDroid(DROID *psDroid);
 
 /** \brief Sends an order to a droid. */
 void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode);

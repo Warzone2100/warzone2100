@@ -1530,7 +1530,10 @@ void missionDroidUpdate(DROID *psDroid)
 	// NO ai update droid
 
 	// update the droids order
-	orderUpdateDroid(psDroid);
+	if (!orderUpdateDroid(psDroid))
+	{
+		ASSERT(false, "orderUpdateDroid returned false?");
+	}
 
 	// update the action of the droid
 	actionUpdateDroid(psDroid);
