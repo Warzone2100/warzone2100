@@ -4290,7 +4290,7 @@ static void NETallowJoining()
 
 			std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
 			std::string joinerIdentityHash = joinRequestInfo.identity.publicHashString();
-			wz_command_interface_output("WZEVENT: player join: %u %s %s %s\n", i, joinerPublicKeyB64.c_str(), joinerIdentityHash.c_str(), NetPlay.players[i].IPtextAddress);
+			wz_command_interface_output("WZEVENT: player join: %u %s %s %s\n", index, joinerPublicKeyB64.c_str(), joinerIdentityHash.c_str(), NetPlay.players[index].IPtextAddress);
 
 			// Narrowcast to new player that everyone has joined.
 			for (uint8_t j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
