@@ -2654,6 +2654,7 @@
 		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Wpn-Flamer-Range01-ScavReduce-Undo": {
+		"excludeFromCheats": 1,
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Range01-ScavReduce-Undo",
 		"keyTopic": 1,
