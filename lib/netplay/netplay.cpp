@@ -174,17 +174,25 @@ public:
 		identitiesMovedToSpectatorsByHost.clear();
 		ipsMovedToSpectatorsByHost.clear();
 	}
+	// player to spectators
+	void movedPlayerToSpectators(const std::string& ipAddress, const EcKey::Key& publicIdentity, bool byHost)
+	{
+		if (!byHost) { return; }
+		ipsMovedToSpectatorsByHost.insert(ipAddress);
+		identitiesMovedToSpectatorsByHost.insert(base64Encode(publicIdentity));
+	}
 	void movedPlayerToSpectators(const PLAYER& player, const EcKey::Key& publicIdentity, bool byHost)
 	{
 		if (!byHost) { return; }
 		ipsMovedToSpectatorsByHost.insert(player.IPtextAddress);
 		identitiesMovedToSpectatorsByHost.insert(base64Encode(publicIdentity));
 	}
+	// spectator to players
 	void movedSpectatorToPlayers(const std::string& ipAddress, const EcKey::Key& publicIdentity, bool byHost)
 	{
 		if (!byHost) { return; }
-		ipsMovedToSpectatorsByHost.insert(ipAddress);
-		identitiesMovedToSpectatorsByHost.insert(base64Encode(publicIdentity));
+		ipsMovedToSpectatorsByHost.erase(ipAddress);
+		identitiesMovedToSpectatorsByHost.erase(base64Encode(publicIdentity));
 	}
 	void movedSpectatorToPlayers(const PLAYER& player, const EcKey::Key& publicIdentity, bool byHost)
 	{
@@ -4163,7 +4171,7 @@ static void NETallowJoining()
 						// change the player join request to spectators
 						tmp_connectState[i].receivedJoinInfo.playerType = NET_JOIN_SPECTATOR;
 						// enforce spectator state for this player
-						playerManagementRecord.movedSpectatorToPlayers(tmp_connectState[i].ip, tmp_connectState[i].receivedJoinInfo.identity.toBytes(EcKey::Privacy::Public), true);
+						playerManagementRecord.movedPlayerToSpectators(tmp_connectState[i].ip, tmp_connectState[i].receivedJoinInfo.identity.toBytes(EcKey::Privacy::Public), true);
 					}
 					else if (tmp_connectState[i].asyncJoinApprovalResult.value() == AsyncJoinApprovalAction::Approve)
 					{
