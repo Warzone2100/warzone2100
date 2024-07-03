@@ -175,6 +175,7 @@ PortMappingAsyncRequestHandle PortMappingManager::create_port_mapping(uint16_t p
 		memset(&m, 0, sizeof(m));
 		m.protocol = PLUM_IP_PROTOCOL_TCP;
 		m.internal_port = port;
+		m.external_port = port; // suggest an external port the same as the internal port (the router may decide otherwise)
 
 		auto mappingId = plum_create_mapping(&m, PlumMappingCallback);
 		if (mappingId < 0)
