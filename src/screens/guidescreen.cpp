@@ -368,7 +368,15 @@ void WzGuideTopicsRegistry::setTopicSeen(const std::shared_ptr<WzWrappedGuideTop
 	if (topic->prefs.value().lastReadVersion != topic->topic->version)
 	{
 		topic->prefs.value().lastReadVersion = topic->topic->version;
-		activityDB->setGuideTopicPrefs(topic->topic->identifier, topic->prefs.value());
+
+		if (!activityDB)
+		{
+			activityDB = ActivityManager::instance().getRecord(); // might return nullptr if database access isn't available
+		}
+		if (activityDB)
+		{
+			activityDB->setGuideTopicPrefs(topic->topic->identifier, topic->prefs.value());
+		}
 	}
 }
 
