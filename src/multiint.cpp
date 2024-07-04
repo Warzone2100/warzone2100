@@ -5667,7 +5667,7 @@ static void updateMapWidgets(LEVEL_DATASET *mapData)
 	widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 }
 
-static void loadMapChallengeSettings(WzConfig& ini)
+static bool loadMapChallengeSettings(WzConfig& ini)
 {
 	ini.beginGroup("locked"); // GUI lockdown
 	{
@@ -5687,19 +5687,23 @@ static void loadMapChallengeSettings(WzConfig& ini)
 	{
 		ini.beginGroup("challenge");
 		{
-			sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
-			game.hash = levGetMapNameHash(game.map);
+			char mapName[256] = {0};
+			sstrcpy(mapName, ini.value("map", game.map).toWzString().toUtf8().c_str());
+			Sha256 mapHash = levGetMapNameHash(mapName);
 
-			LEVEL_DATASET* mapData = levFindDataSet(game.map, &game.hash);
+			LEVEL_DATASET* mapData = levFindDataSet(mapName, &mapHash);
 			if (!mapData)
 			{
 				code_part log_level = (bIsAutoHostOrAutoGame) ? LOG_ERROR : LOG_FATAL;
-				debug(log_level, "Map %s not found!", game.map);
-				if (bIsAutoHostOrAutoGame)
+				debug(log_level, "Map %s not found!", mapName);
+				if (bIsAutoHostOrAutoGame && headlessGameMode())
 				{
 					wzQuit(1);
 				}
+				return false;
 			}
+			sstrcpy(game.map, mapName);
+			game.hash = mapHash;
 			game.maxPlayers = mapData->players;
 
 			uint8_t configuredMaxPlayers = ini.value("maxPlayers", game.maxPlayers).toUInt();
@@ -5746,6 +5750,8 @@ static void loadMapChallengeSettings(WzConfig& ini)
 		}
 		ini.endGroup();
 	}
+
+	return true;
 }
 
 
@@ -5961,13 +5967,13 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 /**
  * Loads challenge and player configurations from level/autohost/test .json-files.
  */
-static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
+static bool loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 {
 	char aFileName[256];
 	LEVEL_DATASET* psLevel = levFindDataSet(game.map, &game.hash);
 
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	ASSERT_OR_RETURN(, psLevel->game >= 0 && psLevel->game < LEVEL_MAXFILES, "Invalid psLevel->game: %" PRIi16 " - may be a corrupt level load (%s; hash: %s)", psLevel->game, game.map, game.hash.toString().c_str());
+	ASSERT_OR_RETURN(false, psLevel, "No level found for %s", game.map);
+	ASSERT_OR_RETURN(false, psLevel->game >= 0 && psLevel->game < LEVEL_MAXFILES, "Invalid psLevel->game: %" PRIi16 " - may be a corrupt level load (%s; hash: %s)", psLevel->game, game.map, game.hash.toString().c_str());
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game].c_str());
 	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
 	sstrcat(aFileName, ".json");
@@ -5998,17 +6004,19 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 			resetPlayerConfiguration();
 		}
 
-		return;
+		return !warnIfMissing; // not treated as fatal failure unless warnIfMissing
 	}
 	WzConfig ini(ininame, WzConfig::ReadOnly);
 
-	loadMapChallengeSettings(ini);
+	bool retVal = loadMapChallengeSettings(ini);
 
 	/* Do not load player settings if we are already hosting an online match */
 	if (!bIsOnline || forceLoadPlayers)
 	{
 		loadMapPlayerSettings(ini);
 	}
+
+	return retVal;
 }
 
 static void randomizeLimit(const char *name)
@@ -7655,32 +7663,6 @@ void WzMultiplayerOptionsTitleUI::start()
 	/* Entering the first time */
 	if (!bReenter)
 	{
-		currentMultiOptionsTitleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
-		playerDisplayView = PlayerDisplayView::Players;
-		bRequestedSelfMoveToPlayers = false;
-		bHostRequestedMoveToPlayers.resize(MAX_CONNECTED_PLAYERS, false);
-		playerRows.clear();
-		initKnownPlayers();
-		resetPlayerConfiguration(true);
-		memset(&locked, 0, sizeof(locked));
-		spectatorHost = false;
-		defaultOpenSpectatorSlots = war_getMPopenSpectatorSlots();
-		loadMapChallengeAndPlayerSettings(true);
-		game.isMapMod = false;
-		game.isRandom = false;
-		game.mapHasScavengers = true; // FIXME, should default to false
-
-		inlineChooserUp = -1;
-		aiChooserUp = -1;
-		difficultyChooserUp = -1;
-		playerSlotSwapChooserUp = nullopt;
-
-		const std::string notificationIdentifierPrefix = SLOTTYPE_NOTIFICATION_ID_PREFIX;
-		removeNotificationPreferencesIf([&notificationIdentifierPrefix](const std::string &uniqueNotificationIdentifier) -> bool {
-			bool hasPrefix = (strncmp(uniqueNotificationIdentifier.c_str(), notificationIdentifierPrefix.c_str(), notificationIdentifierPrefix.size()) == 0);
-			return hasPrefix;
-		});
-
 		// Initialize the inline chooser overlay screen
 		psInlineChooserOverlayScreen = W_SCREEN::make();
 		auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make(MULTIOP_INLINE_OVERLAY_ROOT_FRM);
@@ -7695,6 +7677,46 @@ void WzMultiplayerOptionsTitleUI::start()
 		};
 		newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
 		psInlineChooserOverlayScreen->psForm->attach(newRootFrm);
+
+		currentMultiOptionsTitleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
+		playerDisplayView = PlayerDisplayView::Players;
+		bRequestedSelfMoveToPlayers = false;
+		bHostRequestedMoveToPlayers.resize(MAX_CONNECTED_PLAYERS, false);
+		playerRows.clear();
+		initKnownPlayers();
+		resetPlayerConfiguration(true);
+		memset(&locked, 0, sizeof(locked));
+		spectatorHost = false;
+		defaultOpenSpectatorSlots = war_getMPopenSpectatorSlots();
+		if (!loadMapChallengeAndPlayerSettings(true))
+		{
+			if (challengeActive)
+			{
+				changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Failed to load challenge:")), WzString(_("Failed to load the challenge's map or config")), parent));
+				return;
+			}
+			if (getHostLaunch() == HostLaunch::Autohost)
+			{
+				changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Failed to process autohost config:")), WzString::fromUtf8(astringf(_("Failed to load the autohost map or config from: %s"), wz_skirmish_test().c_str())), parent));
+				setHostLaunch(HostLaunch::Normal); // Don't load the autohost file on subsequent hosts
+				return;
+			}
+			// otherwise, treat as non-fatal...
+		}
+		game.isMapMod = false;
+		game.isRandom = false;
+		game.mapHasScavengers = true; // FIXME, should default to false
+
+		inlineChooserUp = -1;
+		aiChooserUp = -1;
+		difficultyChooserUp = -1;
+		playerSlotSwapChooserUp = nullopt;
+
+		const std::string notificationIdentifierPrefix = SLOTTYPE_NOTIFICATION_ID_PREFIX;
+		removeNotificationPreferencesIf([&notificationIdentifierPrefix](const std::string &uniqueNotificationIdentifier) -> bool {
+			bool hasPrefix = (strncmp(uniqueNotificationIdentifier.c_str(), notificationIdentifierPrefix.c_str(), notificationIdentifierPrefix.size()) == 0);
+			return hasPrefix;
+		});
 
 		ingame.localOptionsReceived = false;
 
