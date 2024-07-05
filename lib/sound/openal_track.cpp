@@ -185,6 +185,13 @@ bool sound_InitLibrary(HRTFMode hrtf)
 	if (!context)
 	{
 		debug(LOG_ERROR, "Couldn't open audio context.");
+
+		debug(LOG_SOUND, "close device");
+		if (alcCloseDevice(device) == ALC_FALSE)
+		{
+			debug(LOG_SOUND, "OpenAl could not close the audio device.");
+		}
+		device = nullptr;
 		return false;
 	}
 
@@ -194,6 +201,21 @@ bool sound_InitLibrary(HRTFMode hrtf)
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
+
+		alcGetError(device);	// clear error codes
+
+		alcMakeContextCurrent(nullptr);
+		sound_GetContextError(device);
+		alcDestroyContext(context); // this gives a long delay on some impl.
+		context = nullptr;
+		sound_GetContextError(device);
+
+		debug(LOG_SOUND, "close device");
+		if (alcCloseDevice(device) == ALC_FALSE)
+		{
+			debug(LOG_SOUND, "OpenAl could not close the audio device.");
+		}
+		device = nullptr;
 		return false;
 	}
 
@@ -364,6 +386,7 @@ void sound_ShutdownLibrary(void)
 
 	debug(LOG_SOUND, "destroy previous context");
 	alcDestroyContext(context); // this gives a long delay on some impl.
+	context = nullptr;
 	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "close device");
