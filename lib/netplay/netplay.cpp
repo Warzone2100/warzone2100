@@ -2086,6 +2086,17 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 
 	playerManagementRecord.movedPlayerToSpectators(NetPlay.players[availableSpectatorIndex.value()], playerPublicKeyIdentity, hostOverride);
 
+	if (wz_command_interface_enabled())
+	{
+		uint32_t newSpecIdx = availableSpectatorIndex.value();
+		std::string playerPublicKeyB64 = base64Encode(getMultiStats(newSpecIdx).identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = getMultiStats(newSpecIdx).identity.publicHashString();
+		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[newSpecIdx]) ? "V" : "?";
+		std::string playerName = NetPlay.players[newSpecIdx].name;
+		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
+		wz_command_interface_output("WZEVENT: movedPlayerToSpec: %" PRIu32 " -> %" PRIu32 " %s %s %s %s %s\n", playerIdx, newSpecIdx, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[newSpecIdx].IPtextAddress);
+	}
+
 	// Broadcast the swapped player info
 	NETBroadcastTwoPlayerInfo(playerIdx, availableSpectatorIndex.value());
 
@@ -2135,6 +2146,16 @@ SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, opt
 	ASSERT(!NetPlay.players[newPlayerIdx.value()].isSpectator, "New slot should not be a spectator??");
 
 	playerManagementRecord.movedSpectatorToPlayers(NetPlay.players[newPlayerIdx.value()], spectatorPublicKeyIdentity, hostOverride);
+
+	if (wz_command_interface_enabled())
+	{
+		std::string playerPublicKeyB64 = base64Encode(getMultiStats(newPlayerIdx.value()).identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = getMultiStats(newPlayerIdx.value()).identity.publicHashString();
+		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[newPlayerIdx.value()]) ? "V" : "?";
+		std::string playerName = NetPlay.players[newPlayerIdx.value()].name;
+		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
+		wz_command_interface_output("WZEVENT: movedSpecToPlayer: %" PRIu32 " -> %" PRIu32 " %s %s %s %s %s\n", playerIdx, newPlayerIdx.value(), playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[newPlayerIdx.value()].IPtextAddress);
+	}
 
 	// Broadcast the swapped player info
 	NETBroadcastTwoPlayerInfo(playerIdx, newPlayerIdx.value());
