@@ -2269,20 +2269,26 @@ TerrainShaderType getTerrainShaderType()
 
 TerrainShaderType determineSupportedTerrainShader()
 {
+	auto result = TerrainShaderType::SINGLE_PASS;
+
 	if (!gfx_api::context::get().supports2DTextureArrays())
 	{
-		return TerrainShaderType::FALLBACK;
+		debug(LOG_INFO, "supports2DTextureArrays: false");
+		result = TerrainShaderType::FALLBACK;
 	}
 	if (!gfx_api::context::get().supportsIntVertexAttributes())
 	{
-		return TerrainShaderType::FALLBACK;
+		debug(LOG_INFO, "supportsIntVertexAttributes: false");
+		result = TerrainShaderType::FALLBACK;
 	}
-	if (gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS) < 256) // "big enough" value
+	auto maxArrayTextureLayers = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS);
+	if (maxArrayTextureLayers < 256) // "big enough" value
 	{
-		return TerrainShaderType::FALLBACK;
+		debug(LOG_INFO, "MAX_ARRAY_TEXTURE_LAYERS is insufficient: %d", maxArrayTextureLayers);
+		result = TerrainShaderType::FALLBACK;
 	}
 
-	return TerrainShaderType::SINGLE_PASS;
+	return result;
 }
 
 TerrainShaderQuality getTerrainShaderQuality()
@@ -2522,6 +2528,12 @@ static int32_t determineDefaultTerrainMappingTextureSize()
 void initTerrainShaderType()
 {
 	terrainShaderType = determineSupportedTerrainShader();
+	if (terrainShaderType == TerrainShaderType::FALLBACK)
+	{
+		debug(LOG_FATAL, "Your system does not support the new terrain renderer. Please check your graphics drivers.");
+		crashHandlingProviderCaptureException(__FUNCTION__, "NewTerrainRendererUnsupported", "", false, true);
+		// for now, still use the fallback renderer (in the future, this will be removed)
+	}
 	initializedTerrainShaderType = true;
 	if (terrainShaderQuality == TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT)
 	{
