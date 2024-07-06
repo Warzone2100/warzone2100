@@ -553,47 +553,11 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomSystemMessage("Autobalance is available only for even player count.");
 			return false;
 		}
-		// NetPlay.players[i]
-		struct es {
-			std::string name;
-			std::string elo;
-			int id;
-		};
-		std::vector<es> pl;
-		for (int i = 0; i < maxp; i++)
+		if (!cmdInterface.autoBalancePlayers())
 		{
-			auto ps = getMultiStats(i);
-			pl.push_back({std::string(NetPlay.players[i].name), std::string(ps.autorating.elo), i});
+			// failure message logged by autoBalancePlayers()
+			return false;
 		}
-		std::sort(pl.begin(), pl.end(), [](struct es a, struct es b) { return a.elo.compare(b.elo) > 0; });
-		int teamsize = maxp/2;
-		for (int i = 0; i < maxp; i++)
-		{
-			int id = pl[i].id;
-			int toslot = i;
-
-			int linepos = i/2;
-			int team = (i+1)/2%2;
-
-			int bounceindex = teamsize - linepos/2 - 1;
-			if (linepos%2 == 0)
-			{
-				bounceindex = linepos/2;
-			}
-
-			if (team == 0)
-			{ // team a
-				toslot = bounceindex;
-			}
-			else
-			{ // team b
-				toslot = bounceindex + teamsize;
-			}
-
-			sendRoomSystemMessage(astringf("Moving [%d]\"%s\" <%s> to pos %d", id, pl[i].name.c_str(), pl[i].elo.c_str(), toslot).c_str());
-			cmdInterface.changePosition(id, toslot);
-		}
-		sendRoomSystemMessage("Autobalance done");
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "mute ", 5) == 0 || strncmp(&message.text[startingCommandPosition], "unmute ", 7) == 0)
 	{
