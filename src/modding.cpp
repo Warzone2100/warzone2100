@@ -45,6 +45,7 @@ static std::vector<Sha256> mod_hash_list;
 
 
 static void addLoadedMod(std::string modname, std::string filename, const std::string& fullRealPath);
+static bool hasLoadedModRealPath(const std::string& fullRealPath);
 
 
 static inline std::vector<std::string> split(std::string const &str, std::string const &sep)
@@ -122,6 +123,11 @@ size_t addSubdirs(const char *basedir, const char *subdir, const bool appendToPa
 #ifdef DEBUG
 			debug(LOG_NEVER, "Adding [%s] to search path", tmpFullModRealPath.c_str());
 #endif // DEBUG
+			if (hasLoadedModRealPath(tmpFullModRealPath))
+			{
+				debug(LOG_INFO, "Already loaded: %s, skipping", tmpFullModRealPath.c_str());
+				return true; // continue
+			}
 			if (PHYSFS_mount(tmpFullModRealPath.c_str(), NULL, appendToPath) != 0) // platform-dependent notation
 			{
 				numAddedMods++;
@@ -216,6 +222,13 @@ static void addLoadedMod(std::string modname, std::string filename, const std::s
 	mod_list.clear();
 	mod_names_list.clear();
 	mod_hash_list.clear();
+}
+
+static bool hasLoadedModRealPath(const std::string& fullRealPath)
+{
+	return std::any_of(loaded_mods.begin(), loaded_mods.end(), [fullRealPath](const WzMods::LoadedMod& loadedMod) -> bool {
+		return loadedMod.fullRealPath == fullRealPath;
+	});
 }
 
 void clearLoadedMods()
