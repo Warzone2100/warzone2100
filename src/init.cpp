@@ -1815,6 +1815,56 @@ bool stageTwoShutDown()
 	return true;
 }
 
+static void displayLoadingErrors()
+{
+	std::vector<std::string> loadingErrors;
+
+	// warn the user if a mod might have corrupted models / files
+	auto modelLoadingErrorCount = getModelLoadingErrorCount();
+	if (modelLoadingErrorCount > 0)
+	{
+		debug(LOG_INFO, "Failure to load %zu game model(s) - please remove any outdated or broken mods", modelLoadingErrorCount);
+		loadingErrors.push_back(astringf(_("Failure to load %zu game model(s)"), modelLoadingErrorCount));
+	}
+	auto modelTextureLoadingFailures = getModelTextureLoadingFailuresCount();
+	if (modelTextureLoadingFailures > 0)
+	{
+		debug(LOG_INFO, "Failed to load textures for %zu models - please remove any outdated or broken mods", modelTextureLoadingFailures);
+		loadingErrors.push_back(astringf(_("Failure to load textures for %zu model(s)"), modelTextureLoadingFailures));
+	}
+	auto statModelLoadingFailures = getStatModelLoadingFailures();
+	if (statModelLoadingFailures > 0)
+	{
+		debug(LOG_INFO, "Failed to load model for %zu stats entries - please remove any outdated or broken mods", statModelLoadingFailures);
+		loadingErrors.push_back(astringf(_("Failure to load model for %zu stat(s)"), statModelLoadingFailures));
+	}
+
+	if (!loadingErrors.empty())
+	{
+		std::string modelErrorDescription = _("Warzone 2100 encountered error(s) loading game data:");
+		for (const auto& error : loadingErrors)
+		{
+			modelErrorDescription += "\n";
+			modelErrorDescription += "- ";
+			modelErrorDescription += error;
+		}
+		modelErrorDescription += "\n\n";
+		if (!getLoadedMods().empty())
+		{
+			modelErrorDescription += _("Please try removing any new mods - they may have issues or be incompatible with this version.");
+			modelErrorDescription += "\n\n";
+			modelErrorDescription += _("Loaded mod(s):");
+			modelErrorDescription += "\n";
+			modelErrorDescription += std::string("- ") + getModList();
+		}
+		else
+		{
+			modelErrorDescription += _("Base game files may be corrupt or outdated - please try reinstalling the game.");
+		}
+		wzDisplayDialog(Dialog_Error, _("Error Loading Game Data"), modelErrorDescription.c_str());
+	}
+}
+
 bool stageThreeInitialise()
 {
 	bool fromSave = (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION);
@@ -1928,6 +1978,9 @@ bool stageThreeInitialise()
 
 	// always start off with a refresh of the groups UI data
 	intGroupsChanged();
+
+	// warn the user if a mod might have corrupted models / files
+	displayLoadingErrors();
 
 	if (bMultiPlayer)
 	{

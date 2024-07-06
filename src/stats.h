@@ -144,6 +144,8 @@ bool loadWeaponModifiers(WzConfig &ini);
 /*calls the STATS_DEALLOC macro for each set of stats*/
 bool statsShutDown();
 
+size_t getStatModelLoadingFailures();
+
 UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
 
 /// Get the component index for a component based on the name, verifying with type.
