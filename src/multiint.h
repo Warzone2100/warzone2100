@@ -109,6 +109,8 @@ void handleAutoReadyRequest();
 
 void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 
+bool autoBalancePlayersCmd();
+
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
 
