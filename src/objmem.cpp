@@ -41,6 +41,7 @@
 #include "combat.h"
 #include "visibility.h"
 #include "qtscript.h"
+#include "order.h"
 #include "wzcrashhandlingproviders.h"
 
 #include <algorithm>
@@ -183,7 +184,7 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 				case REF_REPAIR_FACILITY:
 				{
 					REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
-					ASSERT_OR_RETURN_REPORT(false, psRepairFac->psObj != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in REPAIR_FACILITY.psObj in %s[%u]", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psRepairFac->psObj != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in REPAIR_FACILITY.psObj in %s[%u] (state=%d)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, (int)psRepairFac->state);
 					break;
 				}
 				case REF_REARM_PAD:
@@ -209,9 +210,9 @@ static bool _checkDroidReferences(BASE_OBJECT *psVictim, const DroidList& psPlay
 			continue;  // Don't worry about self references.
 		}
 
-		ASSERT_OR_RETURN_REPORT(false, psDroid->order.psObj != psVictim, "Illegal reference to p%d:%s:%d (%s) in order.psObj in %s[%u]", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player);
+		ASSERT_OR_RETURN_REPORT(false, psDroid->order.psObj != psVictim, "Illegal reference to p%d:%s:%d (%s) in order.psObj in %s[%u] (%s:%d - %s) (order.type: %s)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, objTypeToStr(psDroid->type), psDroid->id, getObjDebugDescriptiveName(psDroid), getDroidOrderName(psDroid->order.type));
 
-		ASSERT_OR_RETURN_REPORT(false, psDroid->psBaseStruct != psVictim, "Illegal reference to p%d:%s:%d (%s) in psBaseStruct in %s[%u]", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player);
+		ASSERT_OR_RETURN_REPORT(false, psDroid->psBaseStruct != psVictim, "Illegal reference to p%d:%s:%d (%s) in psBaseStruct in %s[%u] (%s:%d - %s)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, objTypeToStr(psDroid->type), psDroid->id, getObjDebugDescriptiveName(psDroid));
 
 		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 		{
