@@ -143,7 +143,29 @@ size_t addSubdirs(const char *basedir, const char *subdir, const bool appendToPa
 			else
 			{
 				// failed to mount mod
-				debug(LOG_WZ, "Failed to load mod from path: %s, %s", tmpFullModRealPath.c_str(), WZ_PHYSFS_getLastError());
+				code_part log_level = LOG_WZ;
+#if defined(WZ_PHYSFS_2_1_OR_GREATER)
+				auto errorCode = PHYSFS_getLastErrorCode();
+				switch (errorCode)
+				{
+				case PHYSFS_ERR_CORRUPT:
+					log_level = LOG_ERROR;
+					break;
+				case PHYSFS_ERR_NOT_FOUND:
+				default:
+					log_level = LOG_WZ;
+					break;
+				}
+				const char* pErrStr = PHYSFS_getErrorByCode(errorCode);
+#else
+				const char* pErrStr = WZ_PHYSFS_getLastError();
+#endif
+				if (!pErrStr)
+				{
+					pErrStr = "<unknown error>";
+				}
+				debug(log_level, "Failed to load mod from path: %s, %s", tmpFullModRealPath.c_str(), pErrStr);
+
 			}
 		}
 		return true; // continue
