@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 function check {
   if [ ! $(command -v netstat) ] && [ ! $(command -v ss) ]; then
