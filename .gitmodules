@@ -70,4 +70,4 @@
 	url = https://github.com/Warzone2100/fractured-kingdom.git
 [submodule "3rdparty/libplum"]
 	path = 3rdparty/libplum
-	url = https://github.com/paullouisageneau/libplum.git
+	url = https://github.com/past-due/libplum.git
