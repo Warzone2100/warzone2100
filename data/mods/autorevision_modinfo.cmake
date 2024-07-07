@@ -82,5 +82,31 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++MODINFO_LATEST_VERSION: ${MO
 if(NOT EXISTS "${TEMPLATE_FILE}")
 	message( FATAL_ERROR "Input TEMPLATE_FILE does not exist: \"${TEMPLATE_FILE}\"" )
 endif()
-configure_file("${TEMPLATE_FILE}" "${OUTPUT_FILE}" @ONLY)
+
+file(READ "${TEMPLATE_FILE}" _mod_info_json)
+string(FIND "${_mod_info_json}" "@MODINFO_LATEST_VERSION@" _template_token_pos)
+if (_template_token_pos LESS 0)
+	# Did not find token - might not be a template file - attempt JSON string replacement for just maxVersionTested
+
+	# CMake 3.19+ supports string(JSON ...), but does not preserve json key ordering - so use a regex instead
+	# regex replace "maxVersionTested": "<something>"
+	string(REGEX REPLACE "\"maxVersionTested\"[ \t\]*:[ \t\]*\"[^\"]*\"" "\"maxVersionTested\": \"${MODINFO_LATEST_VERSION}\"" _mod_info_json_updated "${_mod_info_json}")
+
+	if (_mod_info_json_updated STREQUAL _mod_info_json)
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++No update to maxVersionTested applied: ${OUTPUT_FILE}")
+		# Copy original file (only if input file != output file)
+		if (NOT TEMPLATE_FILE STREQUAL OUTPUT_FILE)
+			file(WRITE "${OUTPUT_FILE}" "${_mod_info_json}")
+		endif()
+	else()
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++maxVersionTested updated to \"${MODINFO_LATEST_VERSION}\": ${OUTPUT_FILE}")
+		set(_mod_info_json "${_mod_info_json_updated}")
+		# Write it out
+		file(WRITE "${OUTPUT_FILE}" "${_mod_info_json}")
+	endif()
+else()
+	# This is a template file - just use configure_file @ONLY
+	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++Template @MODINFO_LATEST_VERSION@ updated to \"${MODINFO_LATEST_VERSION}\": ${OUTPUT_FILE}")
+	configure_file("${TEMPLATE_FILE}" "${OUTPUT_FILE}" @ONLY)
+endif()
 
