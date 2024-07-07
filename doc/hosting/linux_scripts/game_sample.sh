@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 ## Game configuration values
 ## One file for each game type
