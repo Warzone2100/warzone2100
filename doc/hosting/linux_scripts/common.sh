@@ -5,8 +5,8 @@ function check {
     echo "[ERROR] netstat or ss is required to check for available ports"
     exit 1
   fi
-  if [ ! "$(command -v $wz2100cmd)" ]; then
-    echo "[ERROR] Cannot execute \"$wz2100cmd\"."
+  if [ ! -v wz2100cmd ]; then
+    echo "[ERROR] wz2100cmd variable is not set."
     exit 1
   fi
   if [ "$players" == "" ] || [ ! $players -gt 0 ]; then
