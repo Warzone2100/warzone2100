@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+set -e
+
 ## Game configuration values
 ## One file for each game type
 
