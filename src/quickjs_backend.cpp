@@ -175,6 +175,8 @@ public:
 	{
 		engineToInstanceMap.erase(ctx);
 
+		debug(LOG_INFO, "Destroying [%d]:%s/%s", player(), scriptPath().c_str(), scriptName().c_str());
+
 		if (!(JS_IsUninitialized(compiledScriptObj)))
 		{
 			JS_FreeValue(ctx, compiledScriptObj);
