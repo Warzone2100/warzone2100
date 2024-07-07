@@ -118,9 +118,9 @@ function(PACKAGE_ADDON_CAMPAIGN INPUT_PATH OUTPUT_PATH)
 
 	# Stage the mod files
 	add_custom_command(
-		COMMAND ${CMAKE_COMMAND} -DINPUT_PATH=${INPUT_PATH} -DSTAGING_FILES_DIRECTORY=${STAGING_FILES_DIRECTORY} -DSTAGING_INFO_DIRECTORY=${STAGING_INFO_DIRECTORY} -P ${CMAKE_CURRENT_SOURCE_DIR}/stage_modfiles.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DINPUT_PATH=${INPUT_PATH} -DSTAGING_FILES_DIRECTORY=${STAGING_FILES_DIRECTORY} -DSTAGING_INFO_DIRECTORY=${STAGING_INFO_DIRECTORY} -P ${CMAKE_CURRENT_SOURCE_DIR}/stage_modfiles.cmake
 		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-		DEPENDS ${_mod_input_files_list} "${wz2100_autorevision_cache_file}" "${CMAKE_CURRENT_SOURCE_DIR}/stage_modfiles.cmake"
+		DEPENDS ${_mod_input_files_list} "${wz2100_autorevision_cache_file}" "${CMAKE_CURRENT_SOURCE_DIR}/stage_modfiles.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/autorevision_modinfo.cmake"
 		OUTPUT ${_output_files_list}
 		VERBATIM
 	)
