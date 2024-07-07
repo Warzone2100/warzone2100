@@ -13,6 +13,8 @@ on:
       - 'data/base/stats/**'
       - 'data/mp/stats/**'
       - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
   # Support running after "Draft Tag Release" workflow completes, as part of automated release process
   workflow_run:
     workflows: ["Draft Tag Release"]
