@@ -76,5 +76,5 @@ function run_host {
     configdir="--configdir=$cfgdir"
   fi
   # Run game
-  $wz2100cmd $configdir --autohost=$hostfile --gameport=$port --startplayers=$players --enablelobbyslashcmd $admcmd --headless --nosound
+  exec $wz2100cmd $configdir --autohost=$hostfile --gameport=$port --startplayers=$players --enablelobbyslashcmd $admcmd --headless --nosound
 }
