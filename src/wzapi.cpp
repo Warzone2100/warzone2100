@@ -83,6 +83,7 @@
 #include "screens/guidescreen.h"
 
 #include <list>
+#include <cmath>
 
 /// Assert for scripts that give useful backtraces and other info.
 #if defined(SCRIPT_ASSERT)
@@ -375,6 +376,10 @@ bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string 
 	SCRIPT_ASSERT(false, context, order == DORDER_BUILD, "Invalid order");
 	SCRIPT_ASSERT(false, context, psStats->id.compare("A0ADemolishStructure") != 0, "Cannot build demolition");
 
+	if (_direction.has_value() && std::isnan(_direction.value()))
+	{
+		_direction = 0.f; // avoid undefined behavior (nan is outside the range of representable values of type 'unsigned short')
+	}
 	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
 
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;
