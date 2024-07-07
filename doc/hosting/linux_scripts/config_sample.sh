@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 ## Common configuration values
 ## This file is shared between all games
