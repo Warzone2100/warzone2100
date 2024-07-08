@@ -644,11 +644,12 @@ void WzGameFindTitleUI::addGames()
 		scrollableGamesList->setGeometry(0, 50, parent->width(), GAMES_GAMEHEIGHT * 12);
 		scrollableGamesList->setScrollbarWidth(12);
 		parent->attach(scrollableGamesList);
-		for (size_t i = gamesList.size() - 1; i >= 0; i--)				// iterate in reverse, so new games appear on top
+		for (size_t i = gamesList.size(); i > 0; i--)				// iterate in reverse, so new games appear on top
 		{
-			if (gamesList[i].desc.dwSize != 0)
+			size_t index = i - 1;
+			if (gamesList[index].desc.dwSize != 0)
 			{
-				auto psRow = WzLobbyGameWidget::make(i);
+				auto psRow = WzLobbyGameWidget::make(index);
 				psRow->setGeometry(0, 0, parent->width(), GAMES_GAMEHEIGHT);
 				scrollableGamesList->addItem(psRow);
 				added++;
