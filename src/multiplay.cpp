@@ -147,10 +147,14 @@ void autoLagKickRoutine()
 	uint32_t totalNumPlayers = 0;
 
 	ingame.lastLagCheck = now;
-	uint32_t playerCheckLimit = (isInitialLoad) ? MAX_CONNECTED_PLAYERS : MAX_PLAYERS;
+	uint32_t playerCheckLimit = (isLobby || isInitialLoad) ? MAX_CONNECTED_PLAYERS : MAX_PLAYERS;
 	for (uint32_t i = 0; i < playerCheckLimit; ++i)
 	{
 		if (!isHumanPlayer(i))
+		{
+			continue;
+		}
+		if (i == NetPlay.hostPlayer)
 		{
 			continue;
 		}
