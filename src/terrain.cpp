@@ -2530,8 +2530,8 @@ void initTerrainShaderType()
 	terrainShaderType = determineSupportedTerrainShader();
 	if (terrainShaderType == TerrainShaderType::FALLBACK)
 	{
-		debug(LOG_FATAL, "Your system does not support the new terrain renderer. Please check your graphics drivers.");
 		crashHandlingProviderCaptureException(__FUNCTION__, "NewTerrainRendererUnsupported", "", false, true);
+		debug(LOG_FATAL, "Your system does not support the new terrain renderer. Please check your graphics drivers.");
 		// for now, still use the fallback renderer (in the future, this will be removed)
 	}
 	initializedTerrainShaderType = true;
