@@ -3662,6 +3662,19 @@ bool gl_context::isBlocklistedGraphicsDriver() const
 		// Does not work with WZ. (No indications that there is a driver version that does not crash.)
 		return true;
 	}
+
+	// Renderer: softpipe
+	// (From the OpenGLOn12 / "OpenGL Compatibility Pack")
+	if (openGL_renderer == "softpipe")
+	{
+		WzString openGL_vendor = (const char*)wzSafeGlGetString(GL_VENDOR);
+		if (openGL_vendor == "Mesa")
+		{
+			// Does not work performantly, can cause crashes (as of "Mesa 24.2.0-devel (git-57f4f8520a)")
+			// Since libANGLE is very likely to work better, reject this (for now)
+			return true;
+		}
+	}
 #endif
 
 	return false;
