@@ -1,3 +1,24 @@
+2024-07-08: Version 4.5.1:
+ * General:
+   * Fix: Various issues with special research topics, "give all" cheat (too many commits, #3961)
+   * Fix: Log failures preventing new terrain renderer use and warn user (commit:90b09a45ac6ecff6be5ffd4eb5c65c38849a3360, #3977)
+   * Fix: Display information for loading errors caused by mods (commit:b2e54ab549cc4fd34560c3d1d933312d42cfe860, #3978)
+   * Fix: Improve handling of mod loading failures (too many commits, #3981)
+   * Fix: wzapi: Avoid undefined behavior handling nan (too many commits, #3986)
+   * Fix: Various potential crashes (too many commits, #3959, #3967, #3971, #3974, #3976)
+ * Campaign:
+   * Fix: Propulsion stats in Classic balance (commit:06d1c93d8e11008492776fb86136bca922294a2c, #3961)
+ * Multiplayer:
+   * Fix: Various netplay log message & state handling issues (too many commits, #3960, #3980)
+   * Fix: UPnP compatibility with certain routers (too many commits, #3964, #3987, #3994)
+   * Fix: Support auto lag kick for spectators in lobby (commit:2d4ce35607a89961340370b0953713c92ec3ffd3, #3997)
+   * Change: GameStoryLogger: Log cheated var (commit:f0f280eaadd314a58aab1f54cc2e3aad9917bbdd, #3975)
+ * Balance MP:
+   * Change: Reduce prices of certain defensive structures and buff some towers and hardpoints (commit:8164d3bbcdc26320c6efb48125f2b4fa19e3fb69, #3952)
+   * Change: Adjust research cost of all defensive structures, except for artillery and bastions (commit:4e2578242c3359ee102669407181f9ad0c752e90, #3965)
+ * Other:
+   * Fix: Update autohost docs & examples (too many commits, #3983, #3984)
+
 2024-07-01: Version 4.5.0:
  * General:
    * Fix: Exclude retreating droids from formation speed limiting (commit:962136a52487178fb6085cd3fa1a46028173c1a8, #3943)
