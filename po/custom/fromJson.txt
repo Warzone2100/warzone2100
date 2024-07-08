@@ -4907,6 +4907,9 @@ _("Retribution")
 // data/mp/stats/structure.json: $.Emplacement-Rocket06-IDF.name
 _("Ripple Rocket Battery")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-RocketSlow-ROFRR01.name
+_("Ripple Rocket Rapid Loader")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket06-IDF.name
 // data/base/stats/weapons.json: $.Rocket-IDF.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket06-IDF.name
