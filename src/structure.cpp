@@ -2774,13 +2774,92 @@ bool IsPlayerDroidLimitReached(int player)
 	return numDroids >= getMaxDroids(player);
 }
 
+/*
+ * Look through a ProductionRun and check if any entry is NOT a construction droid
+ */
+static bool containsNonConstructionDroid(STRUCTURE *psStructure)
+{
+	CHECK_STRUCTURE(psStructure);
+
+	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+
+	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+	{
+		return false;  // Don't even have a production list.
+	}
+
+	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
+
+	for (ProductionRunEntry &entry : productionRun)
+	{
+		DROID_TYPE droidType = entry.psTemplate->droidType;
+
+		if (droidType != DROID_CONSTRUCT && droidType != DROID_CYBORG_CONSTRUCT)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+/*
+ * Look ahead and view the next production run entry, if any.
+ *
+ * If parameter considerLoops is true, then the function will get the next ProductionRunEntry of the subsequent loop
+ */
+static ProductionRunEntry *nextProductionRunEntry(STRUCTURE *psStructure, DROID_TEMPLATE *psCurrTemplate, bool considerLoops)
+{
+	CHECK_STRUCTURE(psStructure);
+
+	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+
+	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+	{
+		return nullptr;  // Don't even have a production list.
+	}
+
+	if (psCurrTemplate != nullptr)
+	{
+		// Find the entry in the array for the current template
+		ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
+		ProductionRun::iterator currEntry = std::find(productionRun.begin(), productionRun.end(), psCurrTemplate);
+
+		if (currEntry != productionRun.end())
+		{
+			// Look ahead
+			ProductionRun::iterator nextEntry = std::next(currEntry);
+
+			if (nextEntry != productionRun.end())
+			{
+				return &(*nextEntry);
+			}
+			else if (considerLoops && psFactory->productionLoops > 0)
+			{
+				// We have reached the end of the ProductionRun
+				// Loop back to the start. Retrieve the template from the beginning
+				return &(*productionRun.begin());
+			}
+		}
+	}
+	return nullptr;
+}
+
+// Return codes for the checkHaltOnMaxUnitsReached function
+enum ProductionHaltReason {
+	NO_HALT,           // no limit reached and no halt
+	DROID_LIMIT,       // unit limit reached
+	MISSING_RELAY,     // can't build commander without command relay center
+	COMMANDER_LIMIT,   // commander unit limit reached
+	CONSTRUCTION_LIMIT // construction unit limit reached
+};
+
 // Check for max number of units reached and halt production.
-static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
+static ProductionHaltReason checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 {
 	CHECK_STRUCTURE(psStructure);
 
 	char limitMsg[300];
-	bool isLimit = false;
+	ProductionHaltReason reason = NO_HALT;
 	int player = psStructure->player;
 
 	DROID_TEMPLATE *templ = psStructure->pFunctionality->factory.psSubject;
@@ -2789,7 +2868,7 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 	// then put production on hold & return - we need a message to be displayed here !!!!!!!
 	if (IsPlayerDroidLimitReached(player))
 	{
-		isLimit = true;
+		reason = DROID_LIMIT;
 		sstrcpy(limitMsg, _("Can't build any more units, Unit Limit Reached — Production Halted"));
 	}
 	else switch (droidTemplateType(templ))
@@ -2797,12 +2876,12 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 		case DROID_COMMAND:
 			if (!structureExists(player, REF_COMMAND_CONTROL, true, isMission))
 			{
-				isLimit = true;
+				reason = MISSING_RELAY;
 				ssprintf(limitMsg, _("Can't build \"%s\" without a Command Relay Center — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			else if (getNumCommandDroids(player) >= getMaxCommanders(player))
 			{
-				isLimit = true;
+				reason = COMMANDER_LIMIT;
 				ssprintf(limitMsg, _("Can't build \"%s\", Commander Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
 			}
 			break;
@@ -2810,21 +2889,21 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 		case DROID_CYBORG_CONSTRUCT:
 			if (getNumConstructorDroids(player) >= getMaxConstructors(player))
 			{
-				isLimit = true;
-				ssprintf(limitMsg, _("Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().c_str());
+				reason = CONSTRUCTION_LIMIT;
+				ssprintf(limitMsg, _("Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted/Skipped"), templ->name.toUtf8().c_str());
 			}
 			break;
 		default:
 			break;
 		}
 
-	if (isLimit && player == selectedPlayer && (lastMaxUnitMessage == 0 || lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE <= gameTime))
+	if (reason && player == selectedPlayer && (lastMaxUnitMessage == 0 || lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE <= gameTime))
 	{
 		addConsoleMessage(limitMsg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		lastMaxUnitMessage = gameTime;
 	}
 
-	return isLimit;
+	return reason;
 }
 
 void aiUpdateRepair_handleState(STRUCTURE &station)
@@ -2982,7 +3061,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	BASE_OBJECT *psChosenObjs[MAX_WEAPONS] = {nullptr};
 	BASE_OBJECT *psChosenObj = nullptr;
 	FACTORY *psFactory;
-	bool bDroidPlaced = false;
 	WEAPON_STATS *psWStats;
 	bool bDirect = false;
 	TARGET_ORIGIN tmpOrigin = ORIGIN_UNKNOWN;
@@ -3410,20 +3488,46 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				return;
 			}
 
+			// CASE 1/3 factory just started production
 			if (psFactory->timeStarted == ACTION_START_TIME)
 			{
 				// also need to check if a command droid's group is full
 
 				// If the factory commanders group is full - return
-				if (IsFactoryCommanderGroupFull(psFactory) || checkHaltOnMaxUnitsReached(psStructure, isMission))
+				if (IsFactoryCommanderGroupFull(psFactory))
 				{
 					return;
 				}
 
-				//set the time started
-				psFactory->timeStarted = gameTime;
+				// Check limits (e.g. max trucks, max units, etc.)
+				ProductionHaltReason reason =  checkHaltOnMaxUnitsReached(psStructure, isMission);
+				if (reason == NO_HALT)
+				{
+					//set the time started
+					psFactory->timeStarted = gameTime;
+				}
+				else if (reason == CONSTRUCTION_LIMIT && containsNonConstructionDroid(psStructure))
+				{
+					// if there are other non construction droid entries in the production run
+					// Skip this entry (which is a construction droid)
+					ProductionRunEntry *nextEntry = nextProductionRunEntry(psStructure, (DROID_TEMPLATE *)pSubject, true);
+					if (nextEntry)
+					{
+						doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
+					}
+					else
+					{
+						return;
+					}
+				}
+				else
+				{
+					return;
+				}
+
 			}
 
+			// CASE 2/3 factory is in the middle of production
 			if (psFactory->buildPointsRemaining > 0)
 			{
 				int progress = gameTimeAdjustedAverage(getBuildingProductionPoints(psStructure));
@@ -3439,40 +3543,58 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psFactory->buildPointsRemaining -= progress;
 			}
 
-			//check for manufacture to be complete
-			if (psFactory->buildPointsRemaining <= 0 && !IsFactoryCommanderGroupFull(psFactory) && !checkHaltOnMaxUnitsReached(psStructure, isMission))
+			// CASE 3/3 factory has completed production
+			if (psFactory->buildPointsRemaining <= 0 && !IsFactoryCommanderGroupFull(psFactory))
 			{
-				if (isMission)
+				ProductionHaltReason reason = checkHaltOnMaxUnitsReached(psStructure, isMission);
+
+				if (reason == NO_HALT)
 				{
-					// put it in the mission list
-					psDroid = buildMissionDroid((DROID_TEMPLATE *)pSubject,
-					                            psStructure->pos.x, psStructure->pos.y,
-					                            psStructure->player);
-					if (psDroid)
+					bool bDroidPlaced = false;
+
+					if (isMission)
 					{
-						psDroid->secondaryOrder = psFactory->secondaryOrder;
-						psDroid->secondaryOrderPending = psDroid->secondaryOrder;
-						setFactorySecondaryState(psDroid, psStructure);
-						setDroidBase(psDroid, psStructure);
-						bDroidPlaced = true;
+						// put it in the mission list
+						psDroid = buildMissionDroid((DROID_TEMPLATE *)pSubject,
+													psStructure->pos.x, psStructure->pos.y,
+													psStructure->player);
+						if (psDroid)
+						{
+							psDroid->secondaryOrder = psFactory->secondaryOrder;
+							psDroid->secondaryOrderPending = psDroid->secondaryOrder;
+							setFactorySecondaryState(psDroid, psStructure);
+							setDroidBase(psDroid, psStructure);
+							bDroidPlaced = true;
+						}
+					}
+					else
+					{
+						// place it on the map
+						bDroidPlaced = structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
+					}
+
+					//script callback, must be called after factory was flagged as idle
+					if (bDroidPlaced)
+					{
+						//reset the start time
+						psFactory->timeStarted = ACTION_START_TIME;
+						psFactory->psSubject = nullptr;
+
+						doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
+
+						cbNewDroid(psStructure, psDroid);
 					}
 				}
-				else
+				else if (reason == CONSTRUCTION_LIMIT && containsNonConstructionDroid(psStructure))
 				{
-					// place it on the map
-					bDroidPlaced = structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
-				}
-
-				//script callback, must be called after factory was flagged as idle
-				if (bDroidPlaced)
-				{
-					//reset the start time
-					psFactory->timeStarted = ACTION_START_TIME;
-					psFactory->psSubject = nullptr;
-
-					doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
-
-					cbNewDroid(psStructure, psDroid);
+					// if there are other non construction droid entries in the production run
+					// Skip this entry (which is a construction droid)
+					ProductionRunEntry *nextEntry = nextProductionRunEntry(psStructure, (DROID_TEMPLATE *)pSubject, true);
+					if (nextEntry)
+					{
+						// TODO fix bug where truck is last one in the productionRun and it loops twice or something weird. smthn to do with pSubject?
+						doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
+					}
 				}
 			}
 		}
