@@ -133,7 +133,7 @@ public:
 		groupNumberLabel->setTransparentToMouse(true);
 
 		attach(groupCountLabel = std::make_shared<W_LABEL>());
-		groupCountLabel->setGeometry(OBJ_TEXTX, OBJ_B1TEXTY + 20, 16, 16);
+		groupCountLabel->setGeometry(OBJ_TEXTX + 40, OBJ_B1TEXTY + 20, 16, 16);
 		groupCountLabel->setString("");
 		groupCountLabel->setTransparentToMouse(true);
 
