@@ -3330,6 +3330,7 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 			if (psDroid->group != UBYTE_MAX)
 			{
 				psDroid->repairGroup = psDroid->group;
+				intGroupsChanged(psDroid->group);
 			}
 			psDroid->group = UBYTE_MAX;
 		}
