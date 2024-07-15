@@ -210,8 +210,14 @@ protected:
 		{
 			displayIMD(AtlasImage(), ImdObject::DroidTemplate(&(groupInfo->displayDroidTemplate)), xOffset, yOffset);
 			groupCountLabel->setString(WzString::fromUtf8(astringf("%u", groupInfo->numberInGroup)));
+			int32_t xOffset = 0;
+			const uint32_t xFitNumberInTheBox = 16;
+			if (groupCountLabel->getMaxLineWidth() > xFitNumberInTheBox)
+			{
+				xOffset -= groupCountLabel->getMaxLineWidth() - xFitNumberInTheBox;
+			}
 			groupCountLabel->move(
-				OBJ_TEXTX + 40 - groupDamagedCountLabel->getMaxLineWidth(),
+				OBJ_TEXTX + 40 + xOffset - groupDamagedCountLabel->getMaxLineWidth(),
 				groupCountLabel->y()
 			);
 		}
