@@ -522,6 +522,14 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 	}
 }
 
+PIELIGHT straightAlphaToPremultiplied(PIELIGHT colour)
+{
+	colour.byte.r = static_cast<uint8_t>((static_cast<uint16_t>(colour.byte.r) * static_cast<uint16_t>(colour.byte.a)) / 255);
+	colour.byte.g = static_cast<uint8_t>((static_cast<uint16_t>(colour.byte.g) * static_cast<uint16_t>(colour.byte.a)) / 255);
+	colour.byte.b = static_cast<uint8_t>((static_cast<uint16_t>(colour.byte.b) * static_cast<uint16_t>(colour.byte.a)) / 255);
+	return colour;
+}
+
 static inline gfx_api::Draw3DShapePerInstanceInterleavedData GenerateInstanceData(int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &modelMatrix, float stretchDepth)
 {
 	int ecmState = (pieFlag & pie_ECM) ? 1 : 0;
@@ -534,6 +542,12 @@ static inline gfx_api::Draw3DShapePerInstanceInterleavedData GenerateInstanceDat
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
 		colour.byte.a = (UBYTE)pieFlagData;
+	}
+
+	if (pieFlag & pie_PREMULTIPLIED)
+	{
+		colour = straightAlphaToPremultiplied(colour);
+		teamcolour = straightAlphaToPremultiplied(teamcolour);
 	}
 
 	return gfx_api::Draw3DShapePerInstanceInterleavedData {
