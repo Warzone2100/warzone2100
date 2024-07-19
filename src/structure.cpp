@@ -990,12 +990,54 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 
 			switch (psStruct->pStructureType->type)
 			{
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+			{
+				if (psStruct->pFunctionality)
+				{
+					FACTORY *psFactory = &psStruct->pFunctionality->factory;
+					if (psFactory->psCommander)
+					{
+						//remove the commander from the factory
+						syncDebugDroid(psFactory->psCommander, '-');
+						assignFactoryCommandDroid(psStruct, nullptr);
+					}
+				}
+				break;
+			}
 			case REF_POWER_GEN:
 				releasePowerGen(psStruct);
 				break;
 			case REF_RESOURCE_EXTRACTOR:
 				releaseResExtractor(psStruct);
 				break;
+			case REF_REPAIR_FACILITY:
+			{
+				if (psStruct->pFunctionality)
+				{
+					REPAIR_FACILITY	*psRepairFac = &psStruct->pFunctionality->repairFacility;
+					if (psRepairFac->psObj)
+					{
+						psRepairFac->psObj = nullptr;
+						psRepairFac->state = RepairState::Idle;
+					}
+				}
+				break;
+			}
+			case REF_REARM_PAD:
+			{
+				if (psStruct->pFunctionality)
+				{
+					REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
+					if (psReArmPad->psObj)
+					{
+						// Possible TODO: Need to do anything with the droid? (order it to find a new place to rearm?)
+						psReArmPad->psObj = nullptr;
+					}
+				}
+				break;
+			}
 			default:
 				break;
 			}
