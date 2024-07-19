@@ -196,7 +196,7 @@ private:
 
 	// Must only be called internally, and if mtx_ lock is held!
 	PortMappingAsyncRequestPtr active_request_for_id_internal(int id) const;
-	static void resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort);
+	static bool resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort);
 	static void resolve_failure_internal(PortMappingAsyncRequestPtr req, PortMappingDiscoveryStatus failureStatus);
 
 

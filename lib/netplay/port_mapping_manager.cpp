@@ -388,7 +388,14 @@ void PortMappingManager::resolve_success_fromlibplum(int mappingId, std::string 
 		debug(LOG_NET, "Mapping %d: no active request found in PortMappingManager, probably timed out\n", mappingId);
 		return;
 	}
-	resolve_success_internal(req, externalIp, externalPort);
+	if (!resolve_success_internal(req, externalIp, externalPort))
+	{
+		if (req->mappingId != PLUM_ERR_INVALID)
+		{
+			plum_destroy_mapping(mappingId);
+			req->mappingId = PLUM_ERR_INVALID;
+		}
+	}
 }
 
 // Forcefully set discovery status to `status`.
@@ -427,17 +434,28 @@ PortMappingManager::PortMappingAsyncRequestPtr PortMappingManager::active_reques
 // invocations can use this data.
 //
 // The method shall only be called from resolve_success_fromlibplum() (which is called by LibPlum's discovery callback).
-void PortMappingManager::resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort)
+bool PortMappingManager::resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort)
 {
 	if (req->s != PortMappingDiscoveryStatus::IN_PROGRESS)
 	{
-		// Someone has already gotten ahead of us - nothing to do there.
-		return;
+		// Someone has already gotten ahead of us
+		if (req->s == PortMappingDiscoveryStatus::SUCCESS)
+		{
+			// already resolved to success ?
+			return true;
+		}
+		else
+		{
+			// failed to resolve to success
+			// parent will handle cleanup as needed
+			return false;
+		}
 	}
 	req->s = PortMappingDiscoveryStatus::SUCCESS;
 	req->deadline = PortMappingAsyncRequest::TimePoint::max();
 	req->discoveredIPaddress = std::move(externalIp);
 	req->discoveredPort = externalPort;
+	return true;
 }
 
 // Forcefully set discovery status to `status`.
