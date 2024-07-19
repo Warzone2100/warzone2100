@@ -184,13 +184,13 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 				case REF_REPAIR_FACILITY:
 				{
 					REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
-					ASSERT_OR_RETURN_REPORT(false, psRepairFac->psObj != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in REPAIR_FACILITY.psObj in %s[%u] (state=%d)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, (int)psRepairFac->state);
+					ASSERT_OR_RETURN_REPORT(false, psRepairFac->psObj != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in REPAIR_FACILITY.psObj in %s[%u] (state=%d) (struct.status: %d)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, (int)psRepairFac->state, (int)psStruct->status);
 					break;
 				}
 				case REF_REARM_PAD:
 				{
 					REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
-					ASSERT_OR_RETURN_REPORT(false, psReArmPad->psObj != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in REARM_PAD.psObj in %s[%u]", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psReArmPad->psObj != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in REARM_PAD.psObj in %s[%u] (struct.status: %d)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, (int)psStruct->status);
 					break;
 				}
 				default:
