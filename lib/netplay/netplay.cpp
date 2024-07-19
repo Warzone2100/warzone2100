@@ -1469,7 +1469,7 @@ void NETaddRedirects()
 		std::string msg;
 		if (status == PortMappingDiscoveryStatus::TIMEOUT)
 		{
-			msg = astringf(_("Failed to create port mapping (timeout after %d seconds)"), PortMappingManager::DISCOVERY_TIMEOUT_SECONDS);
+			msg = _("Failed to create port mapping (timeout)");
 		}
 		else
 		{
