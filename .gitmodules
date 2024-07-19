@@ -71,3 +71,6 @@
 [submodule "3rdparty/libplum"]
 	path = 3rdparty/libplum
 	url = https://github.com/paullouisageneau/libplum.git
+[submodule "lib/netplay/3rdparty/miniupnp"]
+	path = lib/netplay/3rdparty/miniupnp
+	url = https://github.com/miniupnp/miniupnp.git
