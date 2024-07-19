@@ -7696,36 +7696,42 @@ static bool writeMessageFile(const char *pFileName)
 				{
 					return psProx->psMessage == psMessage; //compare the pointers
 				});
-				ASSERT(psProxIt != apsProxDisp[player].end(), "Save message; proximity display not found for message");
-				PROXIMITY_DISPLAY* psProx = *psProxIt;
-				if (psProx && psProx->type == POS_PROXDATA)
+				if (psProxIt != apsProxDisp[player].end())
 				{
-					//message has viewdata so store the name
-					VIEWDATA *pViewData = psMessage->pViewData;
-					ini.setValue("name", pViewData->name);
-
-					// save beacon data
-					if (psMessage->dataType == MSG_DATA_BEACON)
+					PROXIMITY_DISPLAY* psProx = *psProxIt;
+					if (psProx && psProx->type == POS_PROXDATA)
 					{
-						VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)psMessage->pViewData->pData;
-						ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
-						ini.setValue("sender", viewData->sender);
+						//message has viewdata so store the name
+						VIEWDATA *pViewData = psMessage->pViewData;
+						ini.setValue("name", pViewData->name);
+
+						// save beacon data
+						if (psMessage->dataType == MSG_DATA_BEACON)
+						{
+							VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)psMessage->pViewData->pData;
+							ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
+							ini.setValue("sender", viewData->sender);
+						}
+					}
+					else
+					{
+						// message has object so store Object Id
+						const BASE_OBJECT *psObj = psMessage->psObj;
+						if (psObj)
+						{
+							ini.setValue("obj/id", psObj->id);
+							ini.setValue("obj/player", psObj->player);
+							ini.setValue("obj/type", psObj->type);
+						}
+						else
+						{
+							ASSERT(false, "Message type has no object data to save ?");
+						}
 					}
 				}
 				else
 				{
-					// message has object so store Object Id
-					const BASE_OBJECT *psObj = psMessage->psObj;
-					if (psObj)
-					{
-						ini.setValue("obj/id", psObj->id);
-						ini.setValue("obj/player", psObj->player);
-						ini.setValue("obj/type", psObj->type);
-					}
-					else
-					{
-						ASSERT(false, "Message type has no object data to save ?");
-					}
+					ASSERT(psProxIt != apsProxDisp[player].end(), "Save message; proximity display not found for message");
 				}
 			}
 			else
