@@ -808,7 +808,7 @@ static std::shared_ptr<WIDGET> makeLODDistanceDropdown()
 	}
 	else
 	{
-		dropDownChoices.push_back({WzString::fromUtf8(astringf("(%d)", currValue)), currValue});
+		dropDownChoices.push_back({WzString::format("(%d)", currValue), currValue});
 		currentSettingIdx = dropDownChoices.size() - 1;
 	}
 
@@ -958,7 +958,7 @@ static std::shared_ptr<WIDGET> makeShadowMapResolutionDropdown()
 	}
 	else
 	{
-		dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %" PRIu32 ")", currValue)), currValue});
+		dropDownChoices.push_back({WzString::format("(Custom: %" PRIu32 ")", currValue), currValue});
 		currentSettingIdx = dropDownChoices.size() - 1;
 	}
 
@@ -1019,7 +1019,7 @@ static std::shared_ptr<WIDGET> makeShadowFilterSizeDropdown()
 	}
 	else
 	{
-		dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+		dropDownChoices.push_back({WzString::format("(Custom: %u)", currValue), currValue});
 		currentSettingIdx = dropDownChoices.size() - 1;
 	}
 
@@ -2400,7 +2400,7 @@ static std::shared_ptr<WIDGET> makeCursorScaleDropdown()
 	}
 	else
 	{
-		dropDownChoices.push_back({WzString::fromUtf8(astringf("(%u%%)", currValue)), currValue});
+		dropDownChoices.push_back({WzString::format("(%u%%)", currValue), currValue});
 		currentSettingIdx = dropDownChoices.size() - 1;
 	}
 

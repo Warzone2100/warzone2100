@@ -127,7 +127,7 @@ public:
 	{
 		attach(groupNumberLabel = std::make_shared<W_LABEL>());
 		groupNumberLabel->setGeometry(OBJ_TEXTX, OBJ_B1TEXTY - 5, 16, 16);
-		groupNumberLabel->setString(WzString::fromUtf8(astringf("%u", groupNumber)));
+		groupNumberLabel->setString(WzString::format("%u", groupNumber));
 		groupNumberLabel->setTransparentToMouse(true);
 
 		attach(groupCountLabel = std::make_shared<W_LABEL>());
@@ -141,9 +141,9 @@ public:
 		setTip(_("Select / Assign Group Number: ") + groupNumberStr);
 
 		auto helpInfo = WidgetHelp()
-		  .setTitle(WzString::fromUtf8(astringf(_("Group %u"), groupNumber)))
-		  .addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, WzString::fromUtf8(astringf(_("Select the Units in Group %u"), groupNumber)))
-		  .addInteraction({WidgetHelp::InteractionTriggers::SecondaryClick, WidgetHelp::InteractionTriggers::ClickAndHold}, WzString::fromUtf8(astringf(_("Assign Selected Units to Group %u"), groupNumber)))
+		  .setTitle(WzString::format(_("Group %u"), groupNumber))
+		  .addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, WzString::format(_("Select the Units in Group %u"), groupNumber))
+		  .addInteraction({WidgetHelp::InteractionTriggers::SecondaryClick, WidgetHelp::InteractionTriggers::ClickAndHold}, WzString::format(_("Assign Selected Units to Group %u"), groupNumber))
 		  .addInteraction({WidgetHelp::InteractionTriggers::Misc},  _("Center Camera on this Group by clicking or tapping twice"))
 		  .addRelatedKeybinding("SelectGrouping_" + groupNumberStr)
 		  .addRelatedKeybinding("AssignGrouping_" + groupNumberStr)
@@ -201,7 +201,7 @@ protected:
 		else
 		{
 			displayIMD(AtlasImage(), ImdObject::DroidTemplate(&(groupInfo->displayDroidTemplate)), xOffset, yOffset);
-			groupCountLabel->setString(WzString::fromUtf8(astringf("%u", groupInfo->numberInGroup)));
+			groupCountLabel->setString(WzString::format("%u", groupInfo->numberInGroup));
 		}
 
 		if (groupInfo->currAttackGlowAlpha > 0)

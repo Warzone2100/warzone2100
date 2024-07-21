@@ -275,11 +275,11 @@ protected:
 		}
 		else
 		{
-			factoryNumberLabel->setString(WzString::fromUtf8(astringf("%u", factory->psAssemblyPoint->factoryInc + 1)));
+			factoryNumberLabel->setString(WzString::format("%u", factory->psAssemblyPoint->factoryInc + 1));
 		}
 		if (psStruct->productToGroup != UBYTE_MAX)
 		{
-			factoryAssignGroupLabel->setString(WzString::fromUtf8(astringf("%u", psStruct->productToGroup)));
+			factoryAssignGroupLabel->setString(WzString::format("%u", psStruct->productToGroup));
 		}
 		else
 		{
@@ -419,7 +419,7 @@ private:
 		auto productionRemaining = getProduction(factory, droidTemplate).numRemaining();
 		if (productionRemaining > 0 && factory && StructureIsManufacturingPending(factory))
 		{
-			productionRunSizeLabel->setString(WzString::fromUtf8(astringf("%d", productionRemaining)));
+			productionRunSizeLabel->setString(WzString::format("%d", productionRemaining));
 			productionRunSizeLabel->show();
 		}
 		else

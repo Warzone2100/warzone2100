@@ -67,6 +67,12 @@ public:
 	static WzString fromUtf32(const std::vector<uint32_t>& utf32);
 	static WzString fromCodepoint(const WzUniCodepoint& codepoint);
 
+	template <typename... P>
+	static WzString format(char const *format, P &&... params)
+	{
+		return WzString::fromUtf8(astringf(format, params...));
+	}
+
 	const std::string& toUtf8() const;
 
 	// Same as `toUtf8()`

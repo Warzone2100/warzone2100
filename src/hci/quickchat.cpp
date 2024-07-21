@@ -1059,7 +1059,7 @@ void WzQuickChatSendToSelector::updateSelectedPlayersString()
 		{
 			selectedPlayersString += " + ";
 		}
-		selectedPlayersString += WzString::fromUtf8(astringf(_("%u players"), static_cast<unsigned>(additionalPlayers.size())));
+		selectedPlayersString += WzString::format(_("%u players"), static_cast<unsigned>(additionalPlayers.size()));
 	}
 
 	if (selectedPlayersString.isEmpty())
