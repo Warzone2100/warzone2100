@@ -36,6 +36,7 @@
 #include "levels.h"
 #include "console.h"
 #include "multirecv.h"
+#include "objmem.h"
 #include <vector>
 #include <string>
 #include <chrono>
@@ -323,7 +324,8 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 void startMultiplayerGame();
 void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset = false);
 
-STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index);
+STRUCTURE *findResearchingFacilityByResearchIndex(const PerPlayerStructureLists& pList, unsigned player, unsigned index);
+STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index); // checks apsStructLists
 
 void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2);
 
