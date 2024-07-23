@@ -71,9 +71,26 @@ void PlumMappingCallback(int mappingId, plum_state_t state, const plum_mapping_t
 	}
 }
 
-void PlumLogCallback(plum_log_level_t /*level*/, const char* message)
+void PlumLogCallback(plum_log_level_t level, const char* message)
 {
-	debug(LOG_NET, "LibPlum message: %s", message);
+	code_part wz_log_level = LOG_NET;
+	switch (level)
+	{
+	case PLUM_LOG_LEVEL_FATAL:
+	case PLUM_LOG_LEVEL_ERROR:
+	case PLUM_LOG_LEVEL_WARN:
+		wz_log_level = LOG_INFO;
+		break;
+	default:
+		break;
+	}
+	if (enabled_debug[wz_log_level])
+	{
+		std::string msg = (message) ? message : "";
+		wzAsyncExecOnMainThread([wz_log_level, msg]() {
+			_debug(__LINE__, wz_log_level, "PlumLogCallback", "%s", msg.c_str());
+		});
+	}
 }
 
 } // anonymous namespace
