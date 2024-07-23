@@ -7484,7 +7484,7 @@ bool loadSaveResearch(const char *pFileName)
 			psPlRes = &asPlayerResList[plr][statInc];
 			bool resAlreadyCompleted = IsResearchCompleted(psPlRes);
 			// Copy the research status
-			psPlRes->ResearchStatus = (researched & RESBITS_ALL);
+			psPlRes->ResearchStatus = (researched & RESBITS);
 			SetResearchPossible(psPlRes, possible);
 			psPlRes->currentPoints = points;
 			//for any research that has been completed - perform so that upgrade values are set up
