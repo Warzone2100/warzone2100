@@ -589,11 +589,57 @@ function camDiscoverCampaign()
 	return __CAM_UNKNOWN_CAMPAIGN_NUMBER;
 }
 
-function camSetExpLevel(number)
+//;; ## camGetRankThreshold(rank [, command [, player]])
+//;;
+//;; Returns the rank threshold for a given rank.
+//;;
+//;; @param {String|Number} rank
+//;; @param {Boolean} command
+//;; @param {Number} player
+//;; @returns {number}
+//;;
+function camGetRankThreshold(rankName, command, player)
 {
-	__camExpLevel = number;
+	if (!camDef(command))
+	{
+		command = false;
+	}
+	if (!camDef(player))
+	{
+		player = CAM_HUMAN_PLAYER;
+	}
+	const __BRAIN_TYPE = (command) ? "Command Turret" : "Z NULL BRAIN";
+	let rank = 0;
+	if (typeof rankName === "string")
+	{
+		rank = __camRankStringToNumber(rankName);
+	}
+	return Upgrades[player]["Brain"][__BRAIN_TYPE]["RankThresholds"][rank];
 }
 
+//;; ## camSetExpLevel(rank)
+//;;
+//;; Sets what rank will be used for the AI when it creates units. Can be a rank threshold
+//;; index or the name of the rank.
+//;;
+//;; @param {Number|String} rank
+//;; @returns {void}
+//;;
+function camSetExpLevel(rank)
+{
+	if (!camDef(rank))
+	{
+		rank = 0;
+	}
+	__camExpLevel = (typeof rank === "string") ? __camRankStringToNumber(rank) : rank;
+}
+
+//;; ## camSetOnMapEnemyUnitExp()
+//;;
+//;; Sets all non-player units to the chosen rank set through camSetExpLevel().
+//;;
+//;; @returns {void}
+//;;
 function camSetOnMapEnemyUnitExp()
 {
 	enumDroid(CAM_NEW_PARADIGM)
@@ -681,35 +727,52 @@ function __camAiPowerReset()
 	}
 }
 
+function __camRankStringToNumber(rankName)
+{
+	if (!camDef(rankName))
+	{
+		camDebug("Undefined parameter");
+		return 0;
+	}
+	if (typeof rankName !== "string")
+	{
+		camDebug("Please specify rank as a string");
+		return 0;
+	}
+	let rank = 0;
+	switch (rankName.toLowerCase())
+	{
+		case "rookie": rank = 0; break;
+		case "green": rank = 1; break;
+		case "trained": rank = 2; break;
+		case "regular": rank = 3; break;
+		case "professional": rank = 4; break;
+		case "veteran": rank = 5; break;
+		case "elite": rank = 6; break;
+		case "special": rank = 7; break;
+		case "hero": rank = 8; break;
+		default: camDebug("Unknown rank encountered");
+	}
+	return rank;
+}
+
 function __camGetExpRangeLevel(useCommanderRanks)
 {
 	if (!camDef(useCommanderRanks))
 	{
 		useCommanderRanks = false;
 	}
-	const unitRanks = {
-		rookie: 0,
-		green: 4,
-		trained: 8,
-		regular: 16,
-		professional: 32,
-		veteran: 64,
-		elite: 128,
-		special: 256,
-		hero: 512,
+	const ranks = {
+		rookie: camGetRankThreshold("rookie", useCommanderRanks),
+		green: camGetRankThreshold("green", useCommanderRanks),
+		trained: camGetRankThreshold("trained", useCommanderRanks),
+		regular: camGetRankThreshold("regular", useCommanderRanks),
+		professional: camGetRankThreshold("professional", useCommanderRanks),
+		veteran: camGetRankThreshold("veteran", useCommanderRanks),
+		elite: camGetRankThreshold("elite", useCommanderRanks),
+		special: camGetRankThreshold("special", useCommanderRanks),
+		hero: camGetRankThreshold("hero", useCommanderRanks)
 	};
-	const commandRanks = {
-		rookie: 0,
-		green: (camClassicMode()) ? 8 : 16,
-		trained: (camClassicMode()) ? 16 : 48,
-		regular: (camClassicMode()) ? 32 : 128,
-		professional: (camClassicMode()) ? 64 : 256,
-		veteran: (camClassicMode()) ? 128 : 512,
-		elite: (camClassicMode()) ? 512 : 1024,
-		special: (camClassicMode()) ? 1024 : 1536,
-		hero: 2048,
-	};
-	const ranks = (useCommanderRanks) ? commandRanks : unitRanks;
 	let exp = [];
 
 	switch (__camExpLevel)

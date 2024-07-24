@@ -76,7 +76,7 @@ camAreaEvent("phantomFacTrigger", function(droid)
 
 function setAlphaExp()
 {
-	const DROID_EXP = 2048; //Hero rank.
+	const DROID_EXP = camGetRankThreshold("hero", true); //Hero Commander rank.
 	const alphaDroids = enumArea("alphaPit", MIS_ALPHA_PLAYER, false).filter((obj) => (
 		obj.type === DROID
 	));

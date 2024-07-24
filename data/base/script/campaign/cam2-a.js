@@ -302,7 +302,7 @@ function cam2Setup()
 //Get some higher rank droids.
 function setUnitRank(transport)
 {
-	const droidExp = [128, 64, 32, 16];
+	const ranks = ["elite", "veteran", "professional", "regular"];
 	let droids;
 	let mapRun = false;
 
@@ -322,19 +322,8 @@ function setUnitRank(transport)
 		const droid = droids[i];
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
-			let mod = 1;
-			if (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR)
-			{
-				if (camClassicMode())
-				{
-					mod = 4;
-				}
-				else
-				{
-					mod = 8;
-				}
-			}
-			setDroidExperience(droid, mod * droidExp[mapRun ? 0 : (transporterIndex - 1)]);
+			const USE_COMMAND_RANK = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR);
+			setDroidExperience(droid, camGetRankThreshold(ranks[mapRun ? 0 : (transporterIndex - 1)], USE_COMMAND_RANK));
 		}
 	}
 }
