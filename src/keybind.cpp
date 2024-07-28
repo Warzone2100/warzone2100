@@ -1042,7 +1042,7 @@ void	kf_PitchForward()
 /* Resets pitch to default */
 void	kf_ResetPitch()
 {
-	playerPos.r.x = DEG(360 - 20);
+	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH);
 	setViewDistance(STARTDISTANCE);
 }
 

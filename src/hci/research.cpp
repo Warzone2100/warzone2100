@@ -159,27 +159,9 @@ void ResearchController::startResearch(RESEARCH &research)
 		cancelResearch(psLab); //Clear it out of this lab as we are now researching it in another.
 	}
 
-	if (bMultiMessages)
-	{
-		// Say that we want to do research [sic].
-		sendResearchStatus(facility, research.ref - STAT_RESEARCH, selectedPlayer, true);
-		setStatusPendingStart(*psResFacilty, &research);  // Tell UI that we are going to research.
-	}
-	else
-	{
-		//set up the player_research
-		auto count = research.ref - STAT_RESEARCH;
-		//meant to still be in the list but greyed out
-		auto pPlayerRes = &asPlayerResList[selectedPlayer][count];
-
-		//set the subject up
-		psResFacilty->psSubject = &research;
-
-		sendResearchStatus(facility, count, selectedPlayer, true);	// inform others, I'm researching this.
-
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStartHold = 0;
-	}
+	// Say that we want to do research [sic].
+	sendResearchStatus(facility, research.ref - STAT_RESEARCH, selectedPlayer, true);
+	setStatusPendingStart(*psResFacilty, &research);  // Tell UI that we are going to research.
 
 	//stop the button from flashing once a topic has been chosen
 	stopReticuleButtonFlash(IDRET_RESEARCH);

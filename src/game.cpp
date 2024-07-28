@@ -2262,6 +2262,8 @@ static bool writeCompListFile(const char *pFileName);
 static bool loadSaveStructTypeList(const char *pFileName);
 static bool writeStructTypeListFile(const char *pFileName);
 
+static void loadFixupResearchPendingStates();
+
 static bool loadSaveResearch(const char *pFileName);
 static bool writeResearchFile(char *pFileName);
 
@@ -3298,6 +3300,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			PerPlayerStructureLists* pList = it->second;
 			loadSaveStructurePointers(key, pList);
 		}
+	}
+
+	if (UserSaveGame)
+	{
+		loadFixupResearchPendingStates();
 	}
 
 	// Load labels
@@ -7434,6 +7441,61 @@ static bool writeStructTypeListFile(const char *pFileName)
 	return true;
 }
 
+void loadFixupResearchPendingStates()
+{
+	const unsigned int players = static_cast<unsigned int>(game.maxPlayers);
+	for (int statInc = 0; statInc < asResearch.size(); statInc++)
+	{
+		for (unsigned int plr = 0; plr < players; plr++)
+		{
+			PLAYER_RESEARCH *pPlayerRes = &asPlayerResList[plr][statInc];
+
+			// Handle "pending" states
+			// - i.e. starting/cancelling research was queued, but the game tick was not processed before the save occurred
+			// - (Ideally the game would prevent this from happening by ensuring the save is queued to happen after the next tick...)
+			if (pPlayerRes->ResearchStatus & CANCELLED_RESEARCH_PENDING)
+			{
+				STRUCTURE *psLab = findResearchingFacilityByResearchIndex(apsStructLists, plr, statInc);
+				if (psLab == nullptr)
+				{
+					// check the mission list
+					psLab = findResearchingFacilityByResearchIndex(mission.apsStructLists, plr, statInc);
+				}
+
+				if (psLab != nullptr)
+				{
+					// Process the pending cancellation with immediate effect
+					debug(LOG_INFO, "Processing CANCELLED_RESEARCH_PENDING for: %s", asResearch[statInc].id.toUtf8().c_str());
+					::cancelResearch(psLab, ModeImmediate);
+				}
+				else
+				{
+					// did not find in *either* list - log and convert the CANCELLED_RESEARCH_PENDING status appropriately
+					if (pPlayerRes->currentPoints == 0)
+					{
+						// Reset this topic as not having been researched
+						debug(LOG_INFO, "Resetting CANCELLED_RESEARCH_PENDING to 0 for: %s", asResearch[statInc].id.toUtf8().c_str());
+						ResetResearchStatus(pPlayerRes);
+					}
+					else
+					{
+						// Set the cancelled flag
+						debug(LOG_INFO, "Resetting CANCELLED_RESEARCH_PENDING to CANCELLED_RESEARCH for: %s", asResearch[statInc].id.toUtf8().c_str());
+						MakeResearchCancelled(pPlayerRes);
+					}
+				}
+			}
+			else if (pPlayerRes->ResearchStatus & STARTED_RESEARCH_PENDING)
+			{
+				// Possible Future TODO: Could try to "recover", and queue this research item in an available research facility (however, the save doesn't contain which facility the user queued it in)
+				// For now: Just clear the STARTED_RESEARCH_PENDING bit, so that the user can re-start the research after loading the save
+				debug(LOG_INFO, "Resetting STARTED_RESEARCH_PENDING to 0 for: %s", asResearch[statInc].id.toUtf8().c_str());
+				pPlayerRes->ResearchStatus &= ~STARTED_RESEARCH_PENDING;
+			}
+		}
+	}
+}
+
 // -----------------------------------------------------------------------------------------
 // load up saved research file
 bool loadSaveResearch(const char *pFileName)
@@ -7696,36 +7758,42 @@ static bool writeMessageFile(const char *pFileName)
 				{
 					return psProx->psMessage == psMessage; //compare the pointers
 				});
-				ASSERT(psProxIt != apsProxDisp[player].end(), "Save message; proximity display not found for message");
-				PROXIMITY_DISPLAY* psProx = *psProxIt;
-				if (psProx && psProx->type == POS_PROXDATA)
+				if (psProxIt != apsProxDisp[player].end())
 				{
-					//message has viewdata so store the name
-					VIEWDATA *pViewData = psMessage->pViewData;
-					ini.setValue("name", pViewData->name);
-
-					// save beacon data
-					if (psMessage->dataType == MSG_DATA_BEACON)
+					PROXIMITY_DISPLAY* psProx = *psProxIt;
+					if (psProx && psProx->type == POS_PROXDATA)
 					{
-						VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)psMessage->pViewData->pData;
-						ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
-						ini.setValue("sender", viewData->sender);
+						//message has viewdata so store the name
+						VIEWDATA *pViewData = psMessage->pViewData;
+						ini.setValue("name", pViewData->name);
+
+						// save beacon data
+						if (psMessage->dataType == MSG_DATA_BEACON)
+						{
+							VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)psMessage->pViewData->pData;
+							ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
+							ini.setValue("sender", viewData->sender);
+						}
+					}
+					else
+					{
+						// message has object so store Object Id
+						const BASE_OBJECT *psObj = psMessage->psObj;
+						if (psObj)
+						{
+							ini.setValue("obj/id", psObj->id);
+							ini.setValue("obj/player", psObj->player);
+							ini.setValue("obj/type", psObj->type);
+						}
+						else
+						{
+							ASSERT(false, "Message type has no object data to save ?");
+						}
 					}
 				}
 				else
 				{
-					// message has object so store Object Id
-					const BASE_OBJECT *psObj = psMessage->psObj;
-					if (psObj)
-					{
-						ini.setValue("obj/id", psObj->id);
-						ini.setValue("obj/player", psObj->player);
-						ini.setValue("obj/type", psObj->type);
-					}
-					else
-					{
-						ASSERT(false, "Message type has no object data to save ?");
-					}
+					ASSERT(psProxIt != apsProxDisp[player].end(), "Save message; proximity display not found for message");
 				}
 			}
 			else

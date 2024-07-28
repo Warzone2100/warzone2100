@@ -833,7 +833,8 @@ void droidUpdate(DROID *psDroid)
 	if (psDroid->repairGroup != UBYTE_MAX &&
 		psDroid->order.type != DORDER_RTR &&
 		psDroid->order.type != DORDER_RTR_SPECIFIED &&
-		psDroid->order.type != DORDER_RTB)
+		psDroid->order.type != DORDER_RTB &&
+		secondaryGetState(psDroid, DSO_REPAIR_LEVEL) == DSS_REPLEV_NEVER)
 	{
 		droidWasFullyRepairedBase(psDroid);
 	}

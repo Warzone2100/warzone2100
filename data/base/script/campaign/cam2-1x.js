@@ -83,7 +83,7 @@ function setupCyborgGroups()
 
 function setCrashedTeamExp()
 {
-	const DROID_EXP = 32;
+	const DROID_EXP = camGetRankThreshold("professional");
 	const droids = enumDroid(MIS_TRANSPORT_TEAM_PLAYER).filter((dr) => (
 		!camIsSystemDroid(dr) && !camIsTransporter(dr)
 	));

@@ -1576,19 +1576,24 @@ bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t pla
 	return true;
 }
 
-STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index)
+STRUCTURE *findResearchingFacilityByResearchIndex(const PerPlayerStructureLists& pList, unsigned player, unsigned index)
 {
 	// Go through the structs to find the one doing this topic
-	for (STRUCTURE *psBuilding : apsStructLists[player])
+	for (STRUCTURE *psBuilding : pList[player])
 	{
 		if (psBuilding->pStructureType->type == REF_RESEARCH
-		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
-		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - STAT_RESEARCH == index)
+			&& ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
+			&& ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - STAT_RESEARCH == index)
 		{
 			return psBuilding;
 		}
 	}
 	return nullptr;  // Not found.
+}
+
+STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index)
+{
+	return findResearchingFacilityByResearchIndex(apsStructLists, player, index);
 }
 
 bool recvResearchStatus(NETQUEUE queue)

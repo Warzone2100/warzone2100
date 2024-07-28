@@ -40,7 +40,10 @@ void main()
 		}
 
 		// Return fragment color
-		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
+		vec3 fogPremultAlphaFactor = mix(vec3(fragColour.a), vec3(1.f,1.f,1.f), vec3(float(alphaTest)));
+		float fogFactorAdjust = mix(1.f, 0.f, float(alphaTest));
+		fragColour = vec4(mix(fragColour.rgb, fogColor.rgb * fogPremultAlphaFactor, clamp(fogFactor * fogFactorAdjust, 0.0, 1.0)), fragColour.a);
+		fragColour.a = fragColour.a * (1.0 - clamp(fogFactor, 0.0, 1.0));
 	}
 
 	FragColor = fragColour;

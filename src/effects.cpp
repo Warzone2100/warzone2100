@@ -1589,7 +1589,7 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 
 	if (premultiplied)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED, 0, modelMatrix, viewMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED | pie_NODEPTHWRITE, 0, modelMatrix, viewMatrix);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
