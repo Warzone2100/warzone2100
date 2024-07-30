@@ -183,11 +183,8 @@ private:
 
 protected:
 	// Only intended to be called by plum callback handlers:
-	friend void PlumMappingCallbackSuccess(int mappingId, const std::string& externalHost, uint16_t externalPort);
-	friend void PlumMappingCallbackFailure(int mappingId);
-
-	friend void MiniupnpcMappingCallbackSuccess(int mappingId, const std::string& externalHost, uint16_t externalPort);
-	friend void MiniupnpcMappingCallbackFailure(int mappingId);
+	friend void PortMappingImpl_MappingCallbackSuccess(PortMappingImpl::Type type, int mappingId, const std::string& externalHost, uint16_t externalPort);
+	friend void PortMappingImpl_MappingCallbackFailure(PortMappingImpl::Type type, int mappingId);
 
 	// Set discovery status to `SUCCESS`.
 	// The method saves the discovered IP address + port combination inside the
