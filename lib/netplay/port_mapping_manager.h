@@ -247,7 +247,7 @@ private:
 	std::unordered_map<PortWithProtocol, PortMappingAsyncRequestPtr> successfulRequests_;
 
 	bool isInit_ = false;
-	std::vector<std::shared_ptr<PortMappingImpl>> loadedImpls;
+	std::vector<std::shared_ptr<PortMappingImpl>> loadedImpls_;
 	std::shared_ptr<PortMappingImpl> currentImpl_ = nullptr;
 	PortMappingImpl::Type currImplTypeIdx_ = PortMappingImpl::Type::Libplum;
 
