@@ -775,31 +775,39 @@ PortMappingManager& PortMappingManager::instance()
 	return inst;
 }
 
-std::shared_ptr<PortMappingImpl> PortMappingManager::getImpl(size_t idx)
+constexpr PortMappingImpl::Type nextImplType(PortMappingImpl::Type t)
 {
-	switch (idx)
+	ASSERT(static_cast<std::underlying_type_t<PortMappingImpl::Type>>(t) < static_cast<std::underlying_type_t<PortMappingImpl::Type>>(PortMappingImpl::Type::End), "Unexpected PortMappingImpl type");
+	return static_cast<PortMappingImpl::Type>(static_cast<std::underlying_type_t<PortMappingImpl::Type>>(t) + 1);
+}
+
+std::shared_ptr<PortMappingImpl> PortMappingManager::makeImpl(PortMappingImpl::Type t)
+{
+	switch (t)
 	{
-		case 0:
+		case PortMappingImpl::Type::Libplum:
 			return std::make_shared<PortMappingImpl_LibPlum>();
-		case 1:
+		case PortMappingImpl::Type::Miniupnpc:
 			return std::make_shared<PortMappingImpl_Miniupnpc>();
+		case PortMappingImpl::Type::End:
+			return nullptr;
 	}
 	return nullptr;
 }
 
-bool PortMappingManager::getNextImpl(size_t startingIdx)
+bool PortMappingManager::switchToNextWorkingImpl(PortMappingImpl::Type startingTypeIdx)
 {
 	std::shared_ptr<PortMappingImpl> newImpl;
-	while ((newImpl = getImpl(startingIdx)))
+	while ((newImpl = makeImpl(startingTypeIdx)))
 	{
 		if (newImpl->init())
 		{
-			currImplIdx_ = startingIdx;
+			currImplTypeIdx_ = startingTypeIdx;
 			currentImpl_ = newImpl;
 			loadedImpls.push_back(newImpl);
 			return true;
 		}
-		++startingIdx;
+		startingTypeIdx = nextImplType(startingTypeIdx);
 	}
 	return false;
 }
@@ -811,7 +819,7 @@ void PortMappingManager::init()
 		return;
 	}
 
-	if (getNextImpl(currImplIdx_))
+	if (switchToNextWorkingImpl(currImplTypeIdx_))
 	{
 		isInit_ = true;
 	}
@@ -1201,7 +1209,7 @@ bool PortMappingManager::resolve_failure_internal(PortMappingAsyncRequestPtr req
 	bool finalFailure = false;
 
 	// Check for another implementation
-	if (req->impl != currentImpl_ || getNextImpl(currImplIdx_ + 1))
+	if (req->impl != currentImpl_ || switchToNextWorkingImpl(nextImplType(currImplTypeIdx_)))
 	{
 		// Another implementation is available - fallback to it and try again
 		do {
@@ -1212,7 +1220,7 @@ bool PortMappingManager::resolve_failure_internal(PortMappingAsyncRequestPtr req
 				req->set_port_mapping_in_progress(PortMappingAsyncRequest::ClockType::now() + std::chrono::seconds(currentImpl_->get_discovery_timeout_seconds()), newMappingId, currentImpl_);
 				return true; // attempting with different implementation
 			}
-		} while (getNextImpl(currImplIdx_ + 1));
+		} while (switchToNextWorkingImpl(nextImplType(currImplTypeIdx_)));
 
 		// new impl(s) failed
 		finalFailure = true;
