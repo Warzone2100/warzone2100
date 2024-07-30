@@ -88,6 +88,7 @@ bool PortMappingManager::PortMappingAsyncRequest::timed_out(TimePoint t) const
 void PortMappingManager::PortMappingAsyncRequest::set_port_mapping_in_progress(TimePoint deadline_, MappingId mappingId_, const std::shared_ptr<PortMappingImpl>& impl_)
 {
 	ASSERT(s == PortMappingDiscoveryStatus::NOT_STARTED || s == PortMappingDiscoveryStatus::IN_PROGRESS, "Invalid state");
+	ASSERT(impl_ != nullptr, "Missing impl?");
 	deadline = deadline_;
 	s = PortMappingDiscoveryStatus::IN_PROGRESS;
 	mappingId = mappingId_;
@@ -99,6 +100,7 @@ bool PortMappingManager::PortMappingAsyncRequest::destroy_mapping()
 	// Destroy the internal mapping.
 	if (mappingId != WZ_PORT_MAPPING_ID_INVALID)
 	{
+		ASSERT_OR_RETURN(false, impl != nullptr, "Missing impl?");
 		const auto result = impl->destroy_port_mapping(mappingId);
 		mappingId = WZ_PORT_MAPPING_ID_INVALID;
 		s = PortMappingDiscoveryStatus::NOT_STARTED;
@@ -145,7 +147,7 @@ bool PortMappingManager::switchToNextWorkingImpl(PortMappingImpl::Type startingT
 		{
 			currImplTypeIdx_ = startingTypeIdx;
 			currentImpl_ = newImpl;
-			loadedImpls.push_back(newImpl);
+			loadedImpls_.push_back(newImpl);
 			return true;
 		}
 		startingTypeIdx = nextImplType(startingTypeIdx);
@@ -173,12 +175,15 @@ void PortMappingManager::shutdown()
 		return;
 	}
 
-	currentImpl_->shutdown();
-	for (auto impl : loadedImpls)
+	if (currentImpl_)
+	{
+		currentImpl_->shutdown();
+	}
+	for (auto impl : loadedImpls_)
 	{
 		impl->shutdown();
 	}
-	loadedImpls.clear();
+	loadedImpls_.clear();
 	currentImpl_ = nullptr;
 
 	{
