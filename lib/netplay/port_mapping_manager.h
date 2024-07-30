@@ -91,7 +91,9 @@ public:
 	enum class Type
 	{
 		Libplum,
-		Miniupnpc
+		Miniupnpc,
+		//
+		End
 	};
 public:
 	virtual ~PortMappingImpl();
@@ -206,8 +208,8 @@ private:
 
 	~PortMappingManager();
 
-	static std::shared_ptr<PortMappingImpl> getImpl(size_t idx);
-	bool getNextImpl(size_t startingIdx);
+	static std::shared_ptr<PortMappingImpl> makeImpl(PortMappingImpl::Type t);
+	bool switchToNextWorkingImpl(PortMappingImpl::Type startingTypeIdx);
 
 	// Main loop function for the monitoring thread.
 	// It's main purpose is to:
@@ -250,7 +252,7 @@ private:
 	bool isInit_ = false;
 	std::vector<std::shared_ptr<PortMappingImpl>> loadedImpls;
 	std::shared_ptr<PortMappingImpl> currentImpl_ = nullptr;
-	size_t currImplIdx_ = 0;
+	PortMappingImpl::Type currImplTypeIdx_ = PortMappingImpl::Type::Libplum;
 
 	std::thread monitoringThread_;
 	mutable std::mutex mtx_;
