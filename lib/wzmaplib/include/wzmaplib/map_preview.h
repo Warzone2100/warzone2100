@@ -68,6 +68,22 @@ struct MapPreviewColorScheme
 	MapPreviewColor oilResourceColor;
 	MapPreviewColor oilBarrelColor;
 	std::unique_ptr<MapPlayerColorProvider> playerColorProvider;
+
+	struct DrawOptions
+	{
+	public:
+		bool drawTerrain = true;
+		bool drawStructures = true;
+		bool drawOil = true;
+	public:
+		inline void set(bool val)
+		{
+			drawTerrain = val;
+			drawStructures = val;
+			drawOil = val;
+		}
+	};
+	DrawOptions drawOptions;
 };
 
 struct MapPreviewImage
