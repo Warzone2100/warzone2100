@@ -518,6 +518,24 @@ bool loadResearch(WzConfig &ini)
 			}
 		}
 
+		//set unavailable components
+		std::vector<WzString> remComp = ini.value("removedComponents").toWzStringList();
+		for (size_t j = 0; j < remComp.size(); j++)
+		{
+			WzString compID = remComp[j].trimmed();
+			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
+			if (pComp == nullptr)
+			{
+				ASSERT(false, "Invalid item '%s' in list of unavailable components of research '%s' ", compID.toUtf8().c_str(), getStatsName(&research));
+			}
+			else
+			{
+				research.pRemArtefacts.push_back(pComp);
+				getTemplateByComponent(pComp, me);
+			}
+		}
+
+
 		//set result structures
 		std::vector<WzString> resStruct = ini.value("resultStructures").toWzStringList();
 		for (size_t j = 0; j < resStruct.size(); j++)
@@ -554,6 +572,19 @@ bool loadResearch(WzConfig &ini)
 			if (structIndex >= 0)
 			{
 				research.pRedStructs.push_back(structIndex);
+			}
+		}
+
+		//set unavailable structures
+		std::vector<WzString> remStruct = ini.value("removedStructures").toWzStringList();
+		for (size_t j = 0; j < remStruct.size(); j++)
+		{
+			WzString strucID = remStruct[j].trimmed();
+			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of unavailable structures of research '%s' ", strucID.toUtf8().c_str(), getStatsName(&research));
+			if (structIndex >= 0)
+			{
+				research.pRemStructs.push_back(structIndex);
 			}
 		}
 
@@ -1065,6 +1096,21 @@ static void makeComponentAvailable(UBYTE &state)
 	}
 }
 
+static void makeComponentUnavailable(UBYTE &state)
+{
+	switch (state)
+	{
+	case AVAILABLE:
+	case FOUND:
+		state = UNAVAILABLE;
+		break;
+	case REDUNDANT:
+	case REDUNDANT_FOUND:
+		state = REDUNDANT_UNAVAILABLE;
+		break;
+	}
+}
+
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
@@ -1090,6 +1136,12 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	for (unsigned short pRedStruct : pResearch->pRedStructs)
 	{
 		makeComponentRedundant(apStructTypeLists[player][pRedStruct]);
+	}
+
+	//check for structures to be made unavailable
+	for (unsigned short pRemStruct : pResearch->pRemStructs)
+	{
+		makeComponentUnavailable(apStructTypeLists[player][pRemStruct]);
 	}
 
 	//check for component replacement
@@ -1134,6 +1186,13 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	{
 		COMPONENT_TYPE type = pRedArtefact->compType;
 		makeComponentRedundant(apCompLists[player][type][pRedArtefact->index]);
+	}
+
+	//check for artefacts to be made unavailable
+	for (auto &pRemArtefact : pResearch->pRemArtefacts)
+	{
+		COMPONENT_TYPE type = pRemArtefact->compType;
+		makeComponentUnavailable(apCompLists[player][type][pRemArtefact->index]);
 	}
 
 	//Add message to player's list if Major Topic

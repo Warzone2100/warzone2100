@@ -3142,6 +3142,7 @@ IMPL_JS_FUNC(setPower, wzapi::setPower)
 IMPL_JS_FUNC(setPowerModifier, wzapi::setPowerModifier)
 IMPL_JS_FUNC(setPowerStorageMaximum, wzapi::setPowerStorageMaximum)
 IMPL_JS_FUNC(enableStructure, wzapi::enableStructure)
+IMPL_JS_FUNC(disableStructure, wzapi::disableStructure)
 IMPL_JS_FUNC(setTutorialMode, wzapi::setTutorialMode)
 IMPL_JS_FUNC(setMiniMap, wzapi::setMiniMap)
 IMPL_JS_FUNC(setDesign, wzapi::setDesign)
@@ -3166,6 +3167,7 @@ static JSValue js_removeReticuleButton(JSContext *, JSValueConst, int, JSValueCo
 IMPL_JS_FUNC(applyLimitSet, wzapi::applyLimitSet)
 IMPL_JS_FUNC(enableComponent, wzapi::enableComponent)
 IMPL_JS_FUNC(makeComponentAvailable, wzapi::makeComponentAvailable)
+IMPL_JS_FUNC(makeComponentUnavailable, wzapi::makeComponentUnavailable)
 IMPL_JS_FUNC(allianceExistsBetween, wzapi::allianceExistsBetween)
 IMPL_JS_FUNC(translate, wzapi::translate)
 IMPL_JS_FUNC(playerPower, wzapi::playerPower)
@@ -3526,7 +3528,9 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC_NAME(addReticuleButton, 1, JS_FUNC_IMPL_NAME(removeReticuleButton)); // deprecated!!
 	JS_REGISTER_FUNC(removeReticuleButton, 1); // deprecated!!
 	JS_REGISTER_FUNC2(enableStructure, 1, 2); // WZAPI
+	JS_REGISTER_FUNC2(disableStructure, 1, 2); // WZAPI
 	JS_REGISTER_FUNC(makeComponentAvailable, 2); // WZAPI
+	JS_REGISTER_FUNC(makeComponentUnavailable, 2); // WZAPI
 	JS_REGISTER_FUNC(enableComponent, 2); // WZAPI
 	JS_REGISTER_FUNC(allianceExistsBetween, 2); // WZAPI
 	JS_REGISTER_FUNC(removeStruct, 1); // WZAPI // deprecated!!

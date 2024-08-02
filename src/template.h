@@ -39,6 +39,9 @@ DROID_TEMPLATE* addTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTempla
 /// Make a duplicate of template given by pointer and store it. Then return pointer to copy.
 DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate);
 
+// Called when a component is made unavailable.
+DROID_TEMPLATE* getTemplateByComponent(auto component, auto player);
+
 void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* psTemplate)>& func);
 DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId);
 size_t templateCount(int player);
