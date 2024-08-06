@@ -74,6 +74,7 @@ struct WARZONE_GLOBALS
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
+	int autoDesyncKickSeconds = 10;
 	bool disableReplayRecording = false;
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
@@ -484,6 +485,21 @@ void war_setAutoLagKickSeconds(int seconds)
 		seconds = std::max(seconds, 60);
 	}
 	warGlobs.autoLagKickSeconds = seconds;
+}
+
+int war_getAutoDesyncKickSeconds()
+{
+	return warGlobs.autoDesyncKickSeconds;
+}
+
+void war_setAutoDesyncKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 10);
+	}
+	warGlobs.autoDesyncKickSeconds = seconds;
 }
 
 bool war_getDisableReplayRecording()
