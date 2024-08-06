@@ -743,9 +743,8 @@ void actionUpdateDroid(DROID *psDroid)
 					if (psDroid->asWeaps[i].nStat > 0
 					    && psWeapStats->rotate
 						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
-						// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick
-						// (aiUpdateDroid would have set an attack target if one was available)
-						&& psDroid->lastCheckNearestTarget[i] != gameTime
+						// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick and failed
+						&& psDroid->lastCheckNearestTargetFailed[i] != gameTime
 					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
