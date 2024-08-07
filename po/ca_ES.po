@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-30 02:19\n"
+"POT-Creation-Date: 2024-07-08 13:47+0000\n"
+"PO-Revision-Date: 2024-07-09 02:18\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -5996,6 +5996,9 @@ msgstr "Retribució"
 msgid "Ripple Rocket Battery"
 msgstr "Bateria d'onada de coets"
 
+msgid "Ripple Rocket Rapid Loader"
+msgstr "Carregador ràpid de coets d'ones"
+
 msgid "Ripple Rockets"
 msgstr "Onada de coets"
 
@@ -8570,6 +8573,33 @@ msgstr ""
 "\n"
 "Warzone provarà de carregar la partida sense ell."
 
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr "No s'han pogut carregar %zu models del joc"
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr "No s'han pogut carregar %zu models de textures"
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr "No s'han pogut carregar %zu models d'stats"
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr "Warzone 2100 ha tingut errors carregant la informació del joc:"
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr "Intenti treure tot mod nou - poden tenir errors o ser incompatibles amb aquesta versió."
+
+msgid "Loaded mod(s):"
+msgstr "Mods carregats:"
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr "Els fitxers de base del joc poden estar corromputs o antiquats - intenti reinstal·lar el joc."
+
+msgid "Error Loading Game Data"
+msgstr "Error intentant carregar la informació del joc"
+
 msgid "Global Hotkeys"
 msgstr "Dreceres del teclat globals"
 
@@ -10180,6 +10210,19 @@ msgstr "Mapatge de ports creant-se..."
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mapatge de ports desactivat per l'usuari. L'autoconfiguració del port %d no és possible."
+
+msgid "Failed to load challenge:"
+msgstr "No s'ha pogut carregar el repte:"
+
+msgid "Failed to load the challenge's map or config"
+msgstr "No s'ha pogut carregar el mapa o la configuració del repte"
+
+msgid "Failed to process autohost config:"
+msgstr "No s'ha pogut processar la configuració de l'autohost:"
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr "No s'ha pogut carregar el mapa o la configuració autohost provenint de: %s"
 
 msgid "Closed"
 msgstr "Tancat"

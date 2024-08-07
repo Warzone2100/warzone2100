@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-30 02:19\n"
+"POT-Creation-Date: 2024-07-08 13:47+0000\n"
+"PO-Revision-Date: 2024-08-07 02:20\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -5996,6 +5996,9 @@ msgstr "Châtiment"
 msgid "Ripple Rocket Battery"
 msgstr "Batterie de roquettes d'artillerie"
 
+msgid "Ripple Rocket Rapid Loader"
+msgstr "Chargeur rapide de lance-roquettes d'ondes"
+
 msgid "Ripple Rockets"
 msgstr "Roquettes d'artillerie"
 
@@ -8570,6 +8573,33 @@ msgstr ""
 "\n"
 "Warzone va essayer de charger la partie sans lui."
 
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr "Impossible de charger %zu modèle(s) de jeu"
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr "Échec du chargement des textures pour %zu modèle(s)"
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr "Impossible de %zu modèle(s) de stats"
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr "Warzone 2100 a rencontré des erreurs lors du chargement des données de jeu :"
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr "Veuillez essayer de supprimer tout nouveau mod - ils pourraient avoir des problèmes ou être incompatibles avec cette version."
+
+msgid "Loaded mod(s):"
+msgstr "Mod(s) chargé(s) :"
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr "Les fichiers de base du jeu peuvent être corrompus ou périmés - veuillez essayer de réinstaller le jeu."
+
+msgid "Error Loading Game Data"
+msgstr "Erreur lors du chargement des données du jeu"
+
 msgid "Global Hotkeys"
 msgstr "Raccourcis clavier globaux"
 
@@ -10180,6 +10210,19 @@ msgstr "La création du mappage des ports est en cours..."
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mappage de port désactivé par l'utilisateur. La configuration automatique du port %d n'aura pas lieu."
+
+msgid "Failed to load challenge:"
+msgstr "Impossible de charger le défi :"
+
+msgid "Failed to load the challenge's map or config"
+msgstr "Impossible de charger la carte ou la configuration du challenge"
+
+msgid "Failed to process autohost config:"
+msgstr "Impossible de traiter la configuration de l'hôte auto :"
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr "Impossible de charger la carte de l'autohost ou la configuration à partir de : %s"
 
 msgid "Closed"
 msgstr "Fermé"

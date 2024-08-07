@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-07-01 02:21\n"
+"POT-Creation-Date: 2024-07-08 13:47+0000\n"
+"PO-Revision-Date: 2024-07-08 16:12\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -5996,6 +5996,9 @@ msgstr "惩罚者"
 msgid "Ripple Rocket Battery"
 msgstr "多管火箭阵列台"
 
+msgid "Ripple Rocket Rapid Loader"
+msgstr ""
+
 msgid "Ripple Rockets"
 msgstr "多管火箭"
 
@@ -8564,6 +8567,33 @@ msgstr ""
 "\n"
 "Warzone将尝试孤立它并继续运行 "
 
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr ""
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr ""
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr ""
+
+msgid "Loaded mod(s):"
+msgstr ""
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr ""
+
+msgid "Error Loading Game Data"
+msgstr ""
+
 msgid "Global Hotkeys"
 msgstr "全局热键"
 
@@ -10174,6 +10204,19 @@ msgstr "正在创建端口映射..."
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "用户已禁用端口映射。端口 %d 将不会自动配置。"
+
+msgid "Failed to load challenge:"
+msgstr ""
+
+msgid "Failed to load the challenge's map or config"
+msgstr ""
+
+msgid "Failed to process autohost config:"
+msgstr ""
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr ""
 
 msgid "Closed"
 msgstr "关闭"
