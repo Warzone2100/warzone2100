@@ -85,6 +85,26 @@ struct std::hash<PortWithProtocol>
 	}
 };
 
+class PortMappingImpl : public std::enable_shared_from_this<PortMappingImpl>
+{
+public:
+	enum class Type
+	{
+		Libplum,
+		Miniupnpc,
+		//
+		End
+	};
+public:
+	virtual ~PortMappingImpl();
+	virtual bool init() = 0;
+	virtual bool shutdown() = 0;
+	virtual int create_port_mapping(uint16_t port, PortMappingInternetProtocol protocol) = 0;
+	virtual bool destroy_port_mapping(int mappingId) = 0;
+	virtual Type get_impl_type() const = 0;
+	virtual int get_discovery_timeout_seconds() const = 0;
+};
+
 /// <summary>
 /// Singleton object responsible for
 /// 1. Communicating with an underlying Port Mapping library implementation (currently, libplum);
@@ -97,8 +117,6 @@ struct std::hash<PortWithProtocol>
 class PortMappingManager
 {
 public:
-
-	static constexpr int DISCOVERY_TIMEOUT_SECONDS = 10;
 
 	static PortMappingManager& instance();
 
@@ -146,6 +164,9 @@ private:
 		bool succeeded() const;
 		bool timed_out(TimePoint t) const;
 
+		void set_port_mapping_in_progress(TimePoint deadline, MappingId mappingId, const std::shared_ptr<PortMappingImpl>& impl);
+		bool destroy_mapping();
+
 		// Use `TimePoint::max()` as a special sentinel value to indicate that the discovery isn't started yet.
 		// Once the discovery process commences, this will be set to the value of `now() + 10s`.
 		TimePoint deadline = TimePoint::max();
@@ -156,13 +177,14 @@ private:
 		uint16_t discoveredPort = 0;
 		uint16_t sourcePort = 0;
 		PortMappingInternetProtocol protocol = PortMappingInternetProtocol::IPV4;
+		std::shared_ptr<PortMappingImpl> impl = nullptr;
 	};
 	using PortMappingAsyncRequestPtr = std::shared_ptr<PortMappingAsyncRequest>;
 
 protected:
 	// Only intended to be called by plum callback handlers:
-	friend void PlumMappingCallbackSuccess(int mappingId, const std::string& externalHost, uint16_t externalPort);
-	friend void PlumMappingCallbackFailure(int mappingId);
+	friend void PortMappingImpl_MappingCallbackSuccess(PortMappingImpl::Type type, int mappingId, const std::string& externalHost, uint16_t externalPort);
+	friend void PortMappingImpl_MappingCallbackFailure(PortMappingImpl::Type type, int mappingId);
 
 	// Set discovery status to `SUCCESS`.
 	// The method saves the discovered IP address + port combination inside the
@@ -170,18 +192,21 @@ protected:
 	// invocations can use this data.
 	//
 	// The method shall only be called from the LibPlum's discovery callback.
-	void resolve_success_fromlibplum(int mappingId, std::string externalIp, uint16_t externalPort);
+	void resolve_success_fromimpl(PortMappingImpl::Type type, int mappingId, std::string externalIp, uint16_t externalPort);
 
 	// Forcefully set discovery status to `status`.
 	// The method shall only be called from LibPlum's discovery callback in case the discovery
 	// process has failed for any reason as reported directly by LibPlum.
 	//
 	// The `status` may only take `FAILURE` or `TIMEOUT` values.
-	void resolve_failure_fromlibplum(int mappingId, PortMappingDiscoveryStatus failureStatus);
+	void resolve_failure_fromimpl(PortMappingImpl::Type type, int mappingId, PortMappingDiscoveryStatus failureStatus);
 
 private:
 
 	~PortMappingManager();
+
+	static std::shared_ptr<PortMappingImpl> makeImpl(PortMappingImpl::Type t);
+	bool switchToNextWorkingImpl(PortMappingImpl::Type startingTypeIdx);
 
 	// Main loop function for the monitoring thread.
 	// It's main purpose is to:
@@ -195,15 +220,36 @@ private:
 	static void scheduleCallbacksOnMainThread(CallbacksPerRequest cbReqMap);
 
 	// Must only be called internally, and if mtx_ lock is held!
-	PortMappingAsyncRequestPtr active_request_for_id_internal(int id) const;
-	static void resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort);
-	static void resolve_failure_internal(PortMappingAsyncRequestPtr req, PortMappingDiscoveryStatus failureStatus);
+	PortMappingAsyncRequestPtr active_request_for_id_internal(PortMappingImpl::Type type, int id) const;
+	static bool resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort);
+	bool resolve_failure_internal(PortMappingAsyncRequestPtr req, PortMappingDiscoveryStatus failureStatus);
 
+	struct ImplMappingId
+	{
+		PortMappingImpl::Type implType;
+		PortMappingAsyncRequest::MappingId mappingId;
 
-	std::unordered_map<PortMappingAsyncRequest::MappingId, PortMappingAsyncRequestPtr> activeDiscoveries_;
+		bool operator==(const ImplMappingId &other) const
+		{
+			return (implType == other.implType
+				  && mappingId == other.mappingId);
+		}
+	};
+	struct ImplMappingIdHasher
+	{
+		std::size_t operator()(const ImplMappingId& k) const
+		{
+			return std::hash<int>()(static_cast<int>(k.implType)) ^ std::hash<int>()(k.mappingId);
+		}
+	};
+
+	std::unordered_map<ImplMappingId, PortMappingAsyncRequestPtr, ImplMappingIdHasher> activeDiscoveries_;
 	std::unordered_map<PortWithProtocol, PortMappingAsyncRequestPtr> successfulRequests_;
 
 	bool isInit_ = false;
+	std::vector<std::shared_ptr<PortMappingImpl>> loadedImpls_;
+	std::shared_ptr<PortMappingImpl> currentImpl_ = nullptr;
+	PortMappingImpl::Type currImplTypeIdx_ = PortMappingImpl::Type::Libplum;
 
 	std::thread monitoringThread_;
 	mutable std::mutex mtx_;

@@ -1454,6 +1454,13 @@ void NETaddRedirects()
 	if (!ipv4MappingRequest)
 	{
 		debug(LOG_NET, "Failed to create port mapping!");
+		// Workaround: Delay console message until next main loop iteration, to ensure it gets displayed in the chat box
+		wzAsyncExecOnMainThread([](){
+			std::string msg = _("Failed to create port mapping");
+			msg += "\n";
+			msg += astringf(_("Manually configure your router/firewall to open port %d!"), NETgetGameserverPort());
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		});
 		return;
 	}
 	debug(LOG_NET, "Port mapping creation is in progress...");
@@ -1469,7 +1476,7 @@ void NETaddRedirects()
 		std::string msg;
 		if (status == PortMappingDiscoveryStatus::TIMEOUT)
 		{
-			msg = astringf(_("Failed to create port mapping (timeout after %d seconds)"), PortMappingManager::DISCOVERY_TIMEOUT_SECONDS);
+			msg = _("Failed to create port mapping (timeout)");
 		}
 		else
 		{
