@@ -95,6 +95,8 @@ lib/ivis_opengl/3rdparty/vk_mem_alloc.h
 	- MIT License, Copyright (c) 2017-2020 Advanced Micro Devices, Inc. (https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator)
 lib/ivis_opengl/3rdparty/vkh_*.*
 	- MIT License, Copyright (c) 2019-2020 past-due (https://github.com/past-due/vulkan-helpers)
+lib/netplay/3rdparty/miniupnp/*
+	- BSD, Copyright (c) 2005-2024, Thomas BERNARD (https://github.com/miniupnp/miniupnp)
 lib/sound/3rdparty/opusfile/*
 	- BSD 3-Clause License, Copyright (c) 1994-2020 Xiph.Org Foundation and contributors (https://github.com/xiph/opusfile)
 src/3rdparty/gsl_finally.h
