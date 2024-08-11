@@ -38,16 +38,16 @@ function Get-ScriptDirectory
 $ScriptRoot = Get-ScriptDirectory;
 Write-Output "ScriptRoot=$($ScriptRoot)"
 
-# Copy Visual Studio-specific config file templates from "platform\windows" directory to the repo root
+# Copy Visual Studio-specific config file templates from "platforms\windows" directory to the repo root
 If ( -not (Test-Path (Join-Path "$($ScriptRoot)" "CMakeSettings.json") ) )
 {
 	Write-Output "Copying template: CMakeSettings.json"
-	Copy-Item (Join-Path "$($ScriptRoot)" "platform\windows\CMakeSettings.json") -Destination "$($ScriptRoot)"
+	Copy-Item (Join-Path "$($ScriptRoot)" "platforms\windows\CMakeSettings.json") -Destination "$($ScriptRoot)"
 }
 If ( -not (Test-Path (Join-Path "$($ScriptRoot)" "launch.vs.json") ) )
 {
 	Write-Output "Copying template: launch.vs.json"
-	Copy-Item (Join-Path "$($ScriptRoot)" "platform\windows\launch.vs.json") -Destination "$($ScriptRoot)"
+	Copy-Item (Join-Path "$($ScriptRoot)" "platforms\windows\launch.vs.json") -Destination "$($ScriptRoot)"
 }
 
 # Create build-dir vcpkg overlay folders
