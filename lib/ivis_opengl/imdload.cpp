@@ -1482,6 +1482,11 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 		else if (strcmp(buffer, "ANIMOBJECT") == 0)
 		{
 			s.objanimtime = value;
+			if (s.objanimtime == 0)
+			{
+				debug(LOG_ERROR, "%s bad ANIMOBJ time: %" PRIu32, filename.toUtf8().c_str(), value);
+				return nullptr;
+			}
 			const char* pRestOfLine = lineToProcess.lineContents.c_str() + cnt;
 			if (sscanf(pRestOfLine, "%d %d%n", &s.objanimcycles, &s.objanimframes, &cnt) != 2)
 			{
