@@ -2183,7 +2183,7 @@ bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int wea
 
 	CHECK_DROID(psDroid);
 
-	if (psBodyImd && !psBodyImd->connectors.empty())
+	if (psBodyImd && static_cast<size_t>(weapon_slot) < psBodyImd->connectors.size())
 	{
 		Vector3i barrel(0, 0, 0);
 
