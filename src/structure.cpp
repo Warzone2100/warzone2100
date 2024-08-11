@@ -3791,7 +3791,8 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 			psBuilding->animationEvent = ANIM_EVENT_NONE;
 		}
 		else if (psBuilding->pFunctionality->resourceExtractor.psPowerGen
-		         && psBuilding->animationEvent == ANIM_EVENT_NONE) // we have a power generator, but no animation
+		         && psBuilding->animationEvent == ANIM_EVENT_NONE // we have a power generator, but no animation
+		         && psBuilding->sDisplay.imd != nullptr)
 		{
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 
@@ -3935,7 +3936,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 			                                                 aDefaultRepair[psBuilding->player]].time);
 
 			//add the blue flashing effect for multiPlayer
-			if (bMultiPlayer && ONEINTEN && !bMission)
+			if (bMultiPlayer && ONEINTEN && !bMission && psBuilding->sDisplay.imd)
 			{
 				Vector3i position;
 				Vector3f *point;
