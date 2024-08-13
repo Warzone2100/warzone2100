@@ -1,3 +1,20 @@
+2024-08-13: Version 4.5.2:
+ * General:
+   * Fix: Make "Reset Pitch" keybind consistent with initial starting pitch (commit:9dd8289e0dff40c2c61b410c924bb9f118b068cf, #4007)
+   * Fix: Pending research states when loading savegames (too many commits, #4025)
+   * Fix: Units set to hold position don't fire (commit:fa5922fd81af587ed9539240bd382e3e19d3a9ea, #4032)
+   * Fix: Various potential crashes (too many commits, #4020, #4021, #4033, #4036, #4037)
+ * Graphics:
+   * Fix: Improve effects blending when fog is enabled (too many commits, #4017)
+   * Fix: Improvements to groups UI (too many commits, #4016)
+ * Campaign:
+   * Fix: Commander rank thresholds (commit:2db8407581657cf341caf769dddc1f14d5024718, #4026)
+   * Fix: Update Fractured Kingdom addon campaign (commit:2e51e96bebce2c7796705105f3b3862bf9371461, #4038)
+ * Multiplayer:
+   * Fix: UPnP compatibility with certain routers (too many commits, #4023)
+ * AI
+   * Fix: Use eventGameLoaded for Cobra AI group initialization (commit:7801e80174efd8d20d0f0cab4177a185dcba7191, #4040)
+
 2024-07-08: Version 4.5.1:
  * General:
    * Fix: Various issues with special research topics, "give all" cheat (too many commits, #3961)
