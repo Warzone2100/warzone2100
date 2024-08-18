@@ -106,6 +106,7 @@ int getTopExperience(int player)
 	}
 	return recycled_experience[player].top();
 }
+
 void cancelBuild(DROID *psDroid)
 {
 	if (psDroid->order.type == DORDER_NONE || psDroid->order.type == DORDER_PATROL || psDroid->order.type == DORDER_HOLD || psDroid->order.type == DORDER_SCOUT || psDroid->order.type == DORDER_GUARD)
@@ -2410,6 +2411,17 @@ void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc)
 	{
 		// Trigger new event - unit rank increased
 		triggerEventDroidRankGained(psDroid, finalDroidRank);
+	}
+}
+
+// Possibly increase experience when squishing a scavenger.
+void giveExperienceForSquish(DROID *psDroid)
+{
+	if (psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_SENSOR || psDroid->droidType == DROID_COMMAND)
+	{
+		const uint32_t expGain = std::max(65536 / 2, 65536 * getExpGain(psDroid->player) / 100);
+		droidIncreaseExperience(psDroid, expGain);
+		cmdDroidUpdateExperience(psDroid, expGain);
 	}
 }
 
