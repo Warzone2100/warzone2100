@@ -775,6 +775,7 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 				// run over a bloke - kill him
 				destroyDroid((DROID *)psObj, gameTime);
 				scoreUpdateVar(WD_BARBARIANS_MOWED_DOWN);
+				giveExperienceForSquish(psDroid);
 			}
 		}
 	}

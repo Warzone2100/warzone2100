@@ -187,6 +187,7 @@ UDWORD getDroidEffectiveLevel(const DROID *psDroid);
 const char *getDroidLevelName(const DROID *psDroid);
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
+void giveExperienceForSquish(DROID *psDroid);
 
 // Get a droid's name.
 const char *droidGetName(const DROID *psDroid);
