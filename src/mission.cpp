@@ -946,6 +946,8 @@ void placeLimboDroids()
 			initDroidMovement(psDroid);
 			//make sure the died flag is not set
 			psDroid->died = false;
+			//update visibility
+			visTilesUpdate(psDroid);
 		}
 		else
 		{
@@ -973,6 +975,10 @@ void restoreMissionLimboData()
 			//reset droid orders
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			//the location of the droid should be valid!
+			if (psDroid->pos.x != INVALID_XY && psDroid->pos.y != INVALID_XY)
+			{
+				visTilesUpdate(psDroid); //update visibility
+			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
