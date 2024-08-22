@@ -686,8 +686,8 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 /* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
 static void saveMissionData()
 {
-	UDWORD			inc;
-	bool			bRepairExists;
+	bool bRepairExists = false;
+	bool bRearmPadExists = false;
 
 	debug(LOG_SAVE, "called");
 
@@ -696,9 +696,8 @@ static void saveMissionData()
 	//clear out the audio
 	audio_StopAll();
 
-	bRepairExists = false;
 	//set any structures currently being built to completed for the selected player
-	mutating_list_iterate(apsStructLists[selectedPlayer], [&bRepairExists](STRUCTURE* psStruct)
+	mutating_list_iterate(apsStructLists[selectedPlayer], [&bRepairExists, &bRearmPadExists](STRUCTURE* psStruct)
 	{
 		STRUCTURE* psStructBeingBuilt;
 		if (psStruct->status == SS_BEING_BUILT)
@@ -716,22 +715,34 @@ static void saveMissionData()
 				}
 			}
 		}
-		//check if have a completed repair facility on home world
-		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->status == SS_BUILT)
+		//check if have a completed repair facility or rearming pad on home world
+		if (psStruct->status == SS_BUILT && psStruct->pStructureType)
 		{
-			bRepairExists = true;
+			if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+			{
+				bRepairExists = true;
+			}
+			else if (psStruct->pStructureType->type == REF_REARM_PAD)
+			{
+				bRearmPadExists = true;
+			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
 
-	//repair all droids back at home base if have a repair facility
-	if (bRepairExists)
+	//repair and rearm all droids back at home base if have a repair facility or rearming pad
+	if (bRepairExists || bRearmPadExists)
 	{
 		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
-			if (psDroid->isDamaged())
+			bool vtolAndPadsExist = (psDroid->isVtol() && bRearmPadExists);
+			if ((bRepairExists || vtolAndPadsExist) && psDroid->isDamaged())
 			{
 				psDroid->body = psDroid->originalBody;
+			}
+			if (vtolAndPadsExist)
+			{
+				fillVtolDroid(psDroid);
 			}
 		}
 	}
@@ -776,7 +787,7 @@ static void saveMissionData()
 	mission.homeLZ_X = getLandingX(selectedPlayer);
 	mission.homeLZ_Y = getLandingY(selectedPlayer);
 
-	for (inc = 0; inc < MAX_PLAYERS; inc++)
+	for (unsigned int inc = 0; inc < MAX_PLAYERS; ++inc)
 	{
 		mission.apsStructLists[inc] = apsStructLists[inc];
 		mission.apsDroidLists[inc] = apsDroidLists[inc];

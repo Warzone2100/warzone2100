@@ -3555,13 +3555,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (pointsToAdd >= psDroid->weight) // amount required is a factor of the droid weight
 				{
 					// We should be fully loaded by now.
-					for (unsigned i = 0; i < psDroid->numWeaps; i++)
-					{
-						// set rearm value to no runs made
-						psDroid->asWeaps[i].usedAmmo = 0;
-						psDroid->asWeaps[i].ammo = psDroid->getWeaponStats(i)->upgrade[psDroid->player].numRounds;
-						psDroid->asWeaps[i].lastFired = 0;
-					}
+					fillVtolDroid(psDroid);
 					objTrace(psDroid->id, "fully loaded");
 				}
 				else
