@@ -225,3 +225,21 @@ StructureBounds getStructureBounds(BASE_STATS const *stats, Vector2i pos, uint16
 
 	return StructureBounds(map_coord(pos), Vector2i(1, 1));  // Default to a 1×1 tile.
 }
+
+// Reset animation state so some units don't walk in place in the menu sometimes.
+void resetObjectAnimationState(BASE_OBJECT *psObj)
+{
+	if (psObj == nullptr)
+	{
+		return;
+	}
+	if (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE)
+	{
+		psObj->timeAnimationStarted = 0;
+		psObj->animationEvent = ANIM_EVENT_NONE;
+	}
+	else
+	{
+		debug(LOG_WARNING, "Tried resetting animation state on unknown object type");
+	}
+}

@@ -924,6 +924,7 @@ bool orderUpdateDroid(DROID *psDroid)
 					setDroidTarget(psDroid, nullptr);
 					psDroid->order.psObj = nullptr;
 					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+					moveReallyStopDroid(psDroid);
 
 					// Fire off embark event
 					transporterSetScriptCurrent(transporter);
