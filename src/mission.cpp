@@ -150,6 +150,7 @@ static UBYTE   bPlayCountDown;
 
 //FUNCTIONS**************
 static void addLandingLights(UDWORD x, UDWORD y);
+static void resetHomeStructureObjects();
 static bool startMissionOffClear(const char *pGame);
 static bool startMissionOffKeep(const char *pGame);
 static bool startMissionCampaignStart(const char *pGame);
@@ -187,6 +188,38 @@ bool MissionResUp	= false;
 
 static SDWORD		g_iReinforceTime = 0;
 
+
+//Remove soon-to-be illegal references to objects for some structures before going offWorld.
+static void resetHomeStructureObjects()
+{
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (STRUCTURE *psStruct : apsStructLists[i])
+		{
+			if (!psStruct->pFunctionality || !psStruct->pStructureType)
+			{
+				continue;
+			}
+			if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+			{
+				REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
+				if (psRepairFac->psObj)
+				{
+					psRepairFac->psObj = nullptr;
+					psRepairFac->state = RepairState::Idle;
+				}
+			}
+			else if (psStruct->pStructureType->type == REF_REARM_PAD)
+			{
+				REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
+				if (psReArmPad->psObj)
+				{
+					psReArmPad->psObj = nullptr;
+				}
+			}
+		}
+	}
+}
 
 //returns true if on an off world mission
 bool missionIsOffworld()
@@ -719,6 +752,8 @@ static void saveMissionData()
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
+
+	resetHomeStructureObjects(); //get rid of soon-to-be illegal references of droids in repair facilities and rearming pads.
 
 	//save the mission data
 	mission.psMapTiles = std::move(psMapTiles);
