@@ -762,6 +762,7 @@ static void saveMissionData()
 		{
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
+		resetObjectAnimationState(psDroid);
 	}
 
 	resetHomeStructureObjects(); //get rid of soon-to-be illegal references of droids in repair facilities and rearming pads.
