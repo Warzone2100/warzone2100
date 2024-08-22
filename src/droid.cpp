@@ -3005,6 +3005,23 @@ bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct)
 	return true;
 }
 
+// Fills all the weapons on a VTOL droid.
+void fillVtolDroid(DROID *psDroid)
+{
+	CHECK_DROID(psDroid);
+	if (!psDroid->isVtol())
+	{
+		return;
+	}
+	for (unsigned int i = 0; i < psDroid->numWeaps; ++i)
+	{
+		// Set rearm value to no runs made.
+		psDroid->asWeaps[i].usedAmmo = 0;
+		psDroid->asWeaps[i].ammo = psDroid->getWeaponStats(i)->upgrade[psDroid->player].numRounds;
+		psDroid->asWeaps[i].lastFired = 0;
+	}
+}
+
 // true if a vtol droid currently returning to be rearmed
 bool DROID::isVtolRearming() const
 {
