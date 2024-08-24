@@ -222,7 +222,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
-			templates: [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
+			templates: (!camClassicMode()) ? [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmorb ] : [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
 		},
 	});
 
