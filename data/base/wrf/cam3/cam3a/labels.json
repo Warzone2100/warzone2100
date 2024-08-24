@@ -169,14 +169,20 @@
 	"area_13": {
 		"label": "middleTrigger",
 		"subscriber": 0,
-		"pos1": [128, 12672],
+		"pos1": [128, 12224],
 		"pos2": [6272, 13312]
 	},
 	"area_14": {
 		"label": "northFactoryTrigger",
 		"subscriber": 0,
-		"pos1": [6592, 11840],
-		"pos2": [7424, 12224]
+		"pos1": [128, 11840],
+		"pos2": [8064, 12224]
+	},
+	"area_15": {
+		"label": "westFactoryVTOLTrigger",
+		"subscriber": 0,
+		"pos1": [5248, 13312],
+		"pos2": [5504, 16896]
 	},
 
 	"object_0": {

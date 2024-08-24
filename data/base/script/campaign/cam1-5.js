@@ -59,7 +59,7 @@ function getDroidsForNPLZ(args)
 		}
 		else
 		{
-			const artillery = [cTempl.npmor];
+			const artillery = (!camClassicMode()) ? [cTempl.npmorb] : [cTempl.npmor];
 			const other = [cTempl.npmmct];
 			if (camRand(2) > 0)
 			{
@@ -288,7 +288,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
-			templates: (!camClassicMode()) ? [ cTempl.npmor, cTempl.npsens, cTempl.nphmgt ] : [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
+			templates: (!camClassicMode()) ? [ cTempl.npmorb, cTempl.npsens, cTempl.nphmgt ] : [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
 				repair: 40,
