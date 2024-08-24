@@ -1034,9 +1034,9 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName, bool bufferEntireStream,
 		alDeleteBuffers(buffer_count, alBuffersIds);
 
 	_error:
+		alDeleteSources(1, &stream->source);
 		delete stream;
 		delete decoder;
-		alDeleteSources(1, &stream->source);
 		return nullptr;
 }
 
