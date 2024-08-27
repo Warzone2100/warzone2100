@@ -475,6 +475,26 @@ static video_backend wzGetNextFallbackGfxBackendForCurrentSystem(const video_bac
 			// offer Vulkan (which uses Vulkan -> Metal) as a fallback option if OpenGL failed
 			next_backend = video_backend::vulkan;
 			break;
+		case video_backend::vulkan:
+			// offer OpenGL
+			next_backend = video_backend::opengl;
+			break;
+		default:
+			// offer usual default
+			next_backend = wzGetDefaultGfxBackendForCurrentSystem();
+			break;
+	}
+#elif defined(WZ_OS_UNIX)
+	switch (current_failed_backend)
+	{
+		case video_backend::opengl:
+			// offer Vulkan
+			next_backend = video_backend::vulkan;
+			break;
+		case video_backend::vulkan:
+			// offer OpenGL
+			next_backend = video_backend::opengl;
+			break;
 		default:
 			// offer usual default
 			next_backend = wzGetDefaultGfxBackendForCurrentSystem();
