@@ -807,7 +807,7 @@ void droidUpdate(DROID *psDroid)
 
 	if (psDroid->animationEvent != ANIM_EVENT_NONE)
 	{
-		iIMDBaseShape *baseImd = psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent];
+		iIMDBaseShape *baseImd = (psDroid->sDisplay.imd) ? psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent] : nullptr;
 		iIMDShape *imd = (baseImd) ? baseImd->displayModel() : nullptr;
 		if (imd && imd->objanimcycles > 0 && gameTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
 		{
