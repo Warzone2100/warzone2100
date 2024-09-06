@@ -659,6 +659,90 @@ WzString *loadResearchViewData(const char *fileName)
 	return new WzString(fileName); // so that cleanup function will be called on right data
 }
 
+WzString *loadProximityViewData(const char *fileName)
+{
+	ASSERT_OR_RETURN(nullptr, PHYSFS_exists(fileName), "%s not found", fileName);
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	std::vector<WzString> list = ini.childGroups();
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		// Proximity viewdata init
+		VIEWDATA *v = new VIEWDATA;
+		VIEW_PROXIMITY *r = new VIEW_PROXIMITY;
+		v->pData = r;
+		v->name = list[i];
+		v->fileName = fileName;
+		v->type = VIEW_PROX;
+
+		ini.beginGroup(list[i]);
+
+		// Set the message string when this Proximity blip gets clicked on
+		if (ini.contains("message"))
+		{
+			nlohmann::json array = ini.json("message");
+			if (!array.is_null() && array.is_array())
+			{
+				for(auto &a : array)
+				{
+					std::string msg = a.get<std::string>();
+					const char *str = strresGetString(psStringRes, msg.c_str());
+					ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
+					v->textMsg.push_back(WzString::fromUtf8(str));
+				}
+			}
+			else
+			{
+				std::string msg = ini.value("message").toWzString().toUtf8();
+				const char *str = strresGetString(psStringRes, msg.c_str());
+				ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
+				v->textMsg.push_back(WzString::fromUtf8(str));
+			}
+		}
+
+		// Read in the rest of the Proximity data
+		if (ini.contains("x")) { r->x = ini.value("x").toUInt(); }
+		if (ini.contains("y")) { r->y = ini.value("y").toUInt(); }
+		if (ini.contains("z")) { r->z = ini.value("z").toUInt(); }
+		if (ini.contains("type"))
+		{
+			unsigned int proxType = ini.value("type").toUInt();
+			if (proxType > PROX_TYPES)
+			{
+				ASSERT(false, "Invalid proximity message sub type - %s", v->name.toUtf8().c_str());
+				return nullptr;
+			}
+			r->proxType = static_cast<PROX_TYPE>(proxType);
+		}
+		if (ini.contains("audio"))
+		{
+			int audioID = 0;
+			std::string audioName = ini.value("audio").toWzString().toUtf8();
+			if (strcmp(audioName.c_str(), "0") == 0)
+			{
+				audioID = NO_SOUND;
+			}
+			else
+			{
+				if ((audioID = audio_GetIDFromStr(audioName.c_str())) == NO_SOUND)
+				{
+					ASSERT(false, "couldn't get ID %d for weapon sound %s", audioID, audioName.c_str());
+					return nullptr;
+				}
+				if ((audioID < 0 || audioID > ID_MAX_SOUND) && audioID != NO_SOUND)
+				{
+					ASSERT(false, "Invalid Weapon Sound ID - %d for weapon %s", audioID, audioName.c_str());
+					return nullptr;
+				}
+			}
+			r->audioID = audioID;
+		}
+
+		ini.endGroup();
+		apsViewData[v->name] = v;
+	}
+	return new WzString(fileName); // so that cleanup function will be called on right data
+}
+
 /* Get the view data identified by the name */
 VIEWDATA *getViewData(const WzString &name)
 {
@@ -810,7 +894,10 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		//display text - if any
 		if (!psViewData->textMsg.empty() && psViewData->type != VIEW_BEACON)
 		{
-			addConsoleMessage(psViewData->textMsg[0].toUtf8().c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			for (size_t i = 0; i < psViewData->textMsg.size(); ++i)
+			{
+				addConsoleMessage(psViewData->textMsg[i].toUtf8().c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			}
 		}
 
 		//play message - if any

@@ -477,6 +477,19 @@ static bool dataResearchMsgLoad(const char *fileName, void **ppData)
 	return true;
 }
 
+static bool dataProximityMsgLoad(const char *fileName, void **ppData)
+{
+	WzString *ptr = loadProximityViewData(fileName);
+	if (!ptr)
+	{
+		return false;
+	}
+
+	// set the pointer so the release function gets called with it
+	*ppData = (void *)ptr;
+	return true;
+}
+
 // release the message viewdata
 static void dataSMSGRelease(void *pData)
 {
@@ -682,6 +695,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"JAVASCRIPT", jsLoad, nullptr},
 	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},            //structure stats and associated files
 	{"RESCH", bufferRESCHLoad, dataRESCHRelease},                  //research stats files
+	{"PROX", dataProximityMsgLoad, dataSMSGRelease },
 };
 
 /* Pass all the data loading functions to the framework library */
