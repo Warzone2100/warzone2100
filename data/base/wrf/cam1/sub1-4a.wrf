@@ -7,7 +7,7 @@
 directory	"messages"
 
 file		SMSG		"brief1-4a.txt"
-file		SMSG		"prox1-4a.txt"
+file		PROX		"prox1-4a.json"
 
 directory "script"
 file JAVASCRIPT "rules.js"
