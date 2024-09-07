@@ -40,7 +40,7 @@ file		WAV		"fdetseq.ogg"
 directory	"messages"
 file		SMSG		"brief3-1a.txt"
 file		SMSG		"brief3-1b.txt"
-file		SMSG		"prox3-1.txt"
+file		PROX		"prox3-1.json"
 
 directory "script"
 file JAVASCRIPT "rules.js"
