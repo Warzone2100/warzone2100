@@ -6,7 +6,7 @@
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
 file		SMSG		"brief3-c.txt"
-file		SMSG		"prox3c.txt"
+file		PROX		"prox3c.json"
 
 directory "script"
 file JAVASCRIPT "rules.js"
