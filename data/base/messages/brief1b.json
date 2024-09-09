@@ -1,0 +1,9 @@
+{
+    "video0000": {
+        "name": "MB1B_MSG",
+        "sequences": [
+            { "audio": "", "loop": 1, "subtitles": ["P1B_MSG1", "P1B_MSG2", "P1B_MSG3"], "video": "cam1/cam1b_p.ogg" },
+            { "audio": "", "loop": 0, "subtitles": ["CAM1B_MSG1", "CAM1B_MSG2", "CAM1B_MSG3"], "video": "cam1/cam1b.ogg" }
+        ]
+    }
+}
