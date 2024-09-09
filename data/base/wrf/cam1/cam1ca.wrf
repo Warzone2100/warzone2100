@@ -6,7 +6,7 @@
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
 
-file		SMSG		"brief1ca.txt"
+file		FLIC		"brief1ca.json"
 file		PROX		"prox1ca.json"
 
 directory "script"
