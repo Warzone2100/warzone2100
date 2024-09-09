@@ -74,6 +74,7 @@ void releaseAllProxDisp();
 WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize);
 WzString *loadResearchViewData(const char *fileName);
 WzString *loadProximityViewData(const char *fileName);
+WzString *loadFlicViewData(const char *fileName);
 
 /** Get the view data identified by the name */
 VIEWDATA *getViewData(const WzString &name);

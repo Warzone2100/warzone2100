@@ -490,6 +490,19 @@ static bool dataProximityMsgLoad(const char *fileName, void **ppData)
 	return true;
 }
 
+static bool dataFlicMsgLoad(const char *fileName, void **ppData)
+{
+	WzString *ptr = loadFlicViewData(fileName);
+	if (!ptr)
+	{
+		return false;
+	}
+
+	// set the pointer so the release function gets called with it
+	*ppData = (void *)ptr;
+	return true;
+}
+
 // release the message viewdata
 static void dataSMSGRelease(void *pData)
 {
@@ -696,6 +709,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},            //structure stats and associated files
 	{"RESCH", bufferRESCHLoad, dataRESCHRelease},                  //research stats files
 	{"PROX", dataProximityMsgLoad, dataSMSGRelease },
+	{"FLIC", dataFlicMsgLoad, dataSMSGRelease },
 };
 
 /* Pass all the data loading functions to the framework library */
