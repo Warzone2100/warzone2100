@@ -743,6 +743,73 @@ WzString *loadProximityViewData(const char *fileName)
 	return new WzString(fileName); // so that cleanup function will be called on right data
 }
 
+WzString *loadFlicViewData(const char *fileName)
+{
+	ASSERT_OR_RETURN(nullptr, PHYSFS_exists(fileName), "%s not found", fileName);
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+	std::vector<WzString> list = ini.childGroups();
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		// Replay viewdata init
+		unsigned int j = 0;
+		VIEWDATA *v = new VIEWDATA;
+		VIEW_REPLAY *r = new VIEW_REPLAY;
+		v->pData = r;
+		v->fileName = fileName;
+		v->type = VIEW_RPL;
+		debug(LOG_WZ, "Sequence video set: %s", list[i].toUtf8().c_str());
+
+		ini.beginGroup(list[i]);
+		v->name = WzString::fromUtf8(ini.json("name").get<std::string>());
+		debug(LOG_WZ, "Sequence viewdata name: %s", v->name.toUtf8().c_str());
+		nlohmann::json element = ini.json("sequences");
+		r->seqList.resize(element.size());
+		debug(LOG_WZ, "Sequence list size: %d", (int)r->seqList.size());
+
+		for (auto& videoIdx : element)
+		{
+			r->seqList[j].sequenceName = WzString::fromUtf8(videoIdx["video"].get<std::string>());
+			debug(LOG_WZ, "Sequence name: %s", r->seqList[j].sequenceName.toUtf8().c_str());
+			r->seqList[j].audio = WzString::fromUtf8(videoIdx["audio"].get<std::string>());
+			debug(LOG_WZ, "Sequence audio: %s", r->seqList[j].audio.toUtf8().c_str());
+			r->seqList[j].flag = videoIdx["loop"].get<uint32_t>();
+			debug(LOG_WZ, "Sequence loop: %d", r->seqList[j].flag);
+			// Set the subtitle string for the sequence.
+			nlohmann::json array = videoIdx["subtitles"];
+			if (!array.is_null() && array.is_array())
+			{
+				for (auto &a : array)
+				{
+					std::string msg = a.get<std::string>();
+					if (msg.length() != 0)
+					{
+						const char *str = strresGetString(psStringRes, msg.c_str());
+						ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
+						r->seqList[j].textMsg.push_back(WzString::fromUtf8(str));
+						debug(LOG_WZ, "Sequence subtitle array: %s", msg.c_str());
+					}
+				}
+			}
+			else
+			{
+				std::string msg = videoIdx["subtitles"].get<std::string>();
+				if (msg.length() != 0)
+				{
+					const char *str = strresGetString(psStringRes, msg.c_str());
+					ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
+					r->seqList[j].textMsg.push_back(WzString::fromUtf8(str));
+					debug(LOG_WZ, "Sequence subtitle string: %s", msg.c_str());
+				}
+			}
+			++j;
+		}
+
+		ini.endGroup();
+		apsViewData[v->name] = v;
+	}
+	return new WzString(fileName); // so that cleanup function will be called on right data
+}
+
 /* Get the view data identified by the name */
 VIEWDATA *getViewData(const WzString &name)
 {
