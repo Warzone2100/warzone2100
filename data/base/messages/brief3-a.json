@@ -1,0 +1,15 @@
+{
+    "video0000": {
+        "name": "MB3A_MSG",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": ["CAM3_MSG1", "CAM3_MSG2", "CAM3_MSG3"], "video": "cam3/cam3intp.ogg" },
+            { "audio": "", "loop": 0, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" }
+        ]
+    },
+    "video0001": {
+        "name": "MB3A_MSG2",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": ["CAM3A_MSG1", "CAM3A_MSG2", "CAM3A_MSG3"], "video": "cam3/cam3intb.ogg" }
+        ]
+    }
+}
