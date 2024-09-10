@@ -5,17 +5,5 @@
             { "audio": "", "loop": 0, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
             { "audio": "", "loop": 0, "subtitles": ["CAM1A_MSG1", "CAM1A_MSG2", "CAM1A_MSG3"], "video": "fastplay.ogg" }
         ]
-    },
-    "video0001": {
-        "name": "END",
-        "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "END_MSG1", "video": "end.ogg" }
-        ]
-    },
-    "video0002": {
-        "name": "WIN",
-        "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "WIN_MSG1", "video": "victory.ogg" }
-        ]
     }
 }
