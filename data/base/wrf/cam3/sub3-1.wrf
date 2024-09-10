@@ -38,8 +38,8 @@ file		WAV		"fdetseq.ogg"
 
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
-file		SMSG		"brief3-1a.txt"
-file		SMSG		"brief3-1b.txt"
+file		FLIC		"brief3-1a.json"
+file		FLIC		"brief3-1b.json"
 file		PROX		"prox3-1.json"
 
 directory "script"
