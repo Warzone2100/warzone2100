@@ -1,0 +1,24 @@
+{
+    "video0000": {
+        "name": "MB2_DII_MSG",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": "TRANS_MSG1", "video": "brfcom4s.ogg" },
+            { "audio": "", "loop": 0, "subtitles": ["CAM2_DII_MSG1", "CAM2_DII_MSG2", "CAM2_DII_MSG9"], "video": "cam2/cam2diif.ogg" },
+            { "audio": "", "loop": 0, "subtitles": "CAM2_DII_MSG1", "video": "cam2/c2diif2.ogg" }
+        ]
+    },
+    "video0001": {
+        "name": "MB2_DII_MSG2",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": ["CAM2_DII_MSG3", "CAM2_DII_MSG4", "CAM2_DII_MSG5"], "video": "cam2/cam2diib.ogg" },
+            { "audio": "", "loop": 0, "subtitles": "", "video": "cam2/cam2diin.ogg" },
+            { "audio": "", "loop": 0, "subtitles": ["CAM2_DII_MSG6", "CAM2_DII_MSG7", "CAM2_DII_MSG8"], "video": "cam2/cam2diip.ogg" }
+        ]
+    },
+    "video0002": {
+        "name": "CAM2_OUT",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": "", "video": "cam2/cam2out.ogg" }
+        ]
+    }
+}
