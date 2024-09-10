@@ -1,0 +1,15 @@
+{
+    "video0000": {
+        "name": "MB2_5_MSG",
+        "sequences": [
+            { "audio": "", "loop": 1, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
+            { "audio": "", "loop": 1, "subtitles": ["CAM2_5_MSG", "CAM2_5_MSG2", "CAM2_5_MSG3"], "video": "cam2/cam2_5pl.ogg" }
+        ]
+    },
+    "video0001": {
+        "name": "MB2_5_MSG2",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": ["CAM2_5_MSG4", "CAM2_5_MSG5", "CAM2_5_MSG6"], "video": "cam2/cam2_5.ogg" }
+        ]
+    }
+}
