@@ -5,5 +5,11 @@
             { "audio": "", "loop": 1, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
             { "audio": "", "loop": 0, "subtitles": ["CAM1A_MSG1", "CAM1A_MSG2", "CAM1A_MSG3"], "video": "cam1/cam1ascv.ogg" }
         ]
+    },
+    "video0001": {
+        "name": "CMB1_MSG",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": ["CAM1_MSG1", "CAM1_MSG2", "CAM1_MSG3"], "video": "cam1/cam1.ogg" }
+        ]
     }
 }

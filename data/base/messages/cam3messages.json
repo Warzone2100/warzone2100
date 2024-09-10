@@ -1,8 +1,0 @@
-{
-    "video0000": {
-        "name": "END",
-        "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "END_MSG1", "video": "end.ogg" }
-        ]
-    }
-}
