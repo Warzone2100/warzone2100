@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-12 03:55+0000\n"
-"PO-Revision-Date: 2024-06-22 19:48\n"
+"PO-Revision-Date: 2024-08-30 02:22\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File-ID: 360\n"
 
 msgid "Artifacts"
-msgstr ""
+msgstr "Artefatos"
 
 msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
 msgstr "Conforme você progride através da campanha, você irá coletar Artefatos de bases inimigas (e unidades inimigas específicas)."
@@ -33,40 +33,40 @@ msgid "All artifacts must be picked up as part of each level's victory condition
 msgstr "Todos os artefatos devem ser pegos como parte das condições de vitória de cada nível."
 
 msgid "Backstory"
-msgstr ""
+msgstr "Contexto histórico"
 
 msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
-msgstr ""
+msgstr "Ao final do século 21, NASDA (Agência de Defesa Estratégica Norte-Americana) desenvolveu e implantou um sistema de defesa massiva de mísseis, incluindo uma rede de satélites nucleares e bases terrestres de lançamento."
 
 msgid "However, during a routine maintenance check, something went terribly wrong..."
-msgstr ""
+msgstr "Entretanto, no meio de uma manutenção de rotina, as coisas não saíram como planejado..."
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
-msgstr ""
+msgstr "O Colapso veio rápido e com grande impacto. Seguido de um erro técnico no sistema de defesa de satélites, ogivas nucleares foram disparadas em direção a grandes metrópoles ao redor do globo."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr ""
+msgstr "Minutos depois, bases terrestres dispararam em resposta ao ataque. Milhões morreram devido a labaredas que devastaram as cidades ao redor do mundo. E mais bilhões morreram para as epidemias e pragas dizimavam o resto da civilização."
 
 msgid "Less than a million people survived the Collapse."
-msgstr ""
+msgstr "Menos de um milhão de pessoas sobreviveram ao Colapso."
 
 msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
-msgstr ""
+msgstr "A Terra se resumia em centenas de pequenos grupos de escavadores lutando entre si pelas migalhas da última civilização. Poucos tinham a consciência de tentar reconstruir um novo mundo das cinzas."
 
 msgid "## Present Day:"
-msgstr ""
+msgstr "## Dias atuais:"
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
-msgstr ""
+msgstr "O jogador (intitulado como \"o Comandante\") é integrante de um grupo de sobreviventes que buscou por um refúgio em uma base militar nas Montanhas Rochosas."
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
-msgstr ""
+msgstr "Eles saem da base com um objetivo de reconstruir o mundo, atribuindo a esse grupo o nome de \"O Projeto\"."
 
 msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
-msgstr ""
+msgstr "O Projeto envia 3 grupos para recuperar artefatos tecnológicos, permitindo assim a pesquisa e aplicação de tecnologias pré-Colapso."
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr ""
+msgstr "— Time Alpha é enviado para um deserto no Arizona ao sudoeste do QG do Projeto"
 
 msgid "- Beta team is sent to the remains of Chicago"
 msgstr ""

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"POT-Creation-Date: 2024-09-11 19:20+0000\n"
+"PO-Revision-Date: 2024-09-11 19:59\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -120,10 +120,10 @@ msgid "ALPHA BASE MISSION: Establish a Forward Base"
 msgstr "MISJA BAZY ALFA: Przygotuj wysuniętą bazę"
 
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Utwórz bazę wypadową na płaskowyżu i odeprzyj Nowy Paradygmat."
 
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Buduj struktury obronne do momentu wygaśnięcia zielonego punku zadania."
 
 msgid "ALPHA BASE MISSION: Counter Attack"
 msgstr "MISJA BAZY ALFA: Kontratak"
@@ -492,7 +492,7 @@ msgid "Once a safe haven is established, return to the LZ for further orders."
 msgstr "Kiedy bezpieczne schronienie będzie gotowa wróć do SL po dalsze rozkazy."
 
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "MISJA BETA BAZA: Przetrwaj i ewakuuj się! Zdobądź ciężarówkę"
 
 msgid "Commander, we have grave news."
 msgstr "Dowódco, mamy ważne wieści."
@@ -1026,10 +1026,10 @@ msgid "Heavy Mobile Repair Turret"
 msgstr "Ciężka wieżyczka naprawiająca"
 
 msgid "Mobile Repair Upgrade"
-msgstr ""
+msgstr "Ulepszenie mobilnej wieży naprawczej"
 
 msgid "Mobile Repair Upgrade Mk2"
-msgstr ""
+msgstr "Ulepszenie mobilnej wieży naprawczej 2"
 
 msgid "CB Sensor Upgrade"
 msgstr "Ulepszenie radaru CB"
@@ -1128,7 +1128,7 @@ msgid "Advanced Warfare"
 msgstr "Zaawansowana wojna"
 
 msgid "Bunker Blaster"
-msgstr ""
+msgstr "Bunkro-Wyburzacz"
 
 msgid "Cyborg Materials Improved"
 msgstr "Materiały cyborgów ulepszone"
@@ -1782,10 +1782,10 @@ msgid "Secure the Uplink from The Collective"
 msgstr ""
 
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Wyślij co najmniej jeden transporter z ciężarówką i przetrwaj atak Kolektywu do upływu czasu"
 
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Wyślij jak najwięcej transporterów i przywieź co najmniej jedną ciężarówkę"
 
 msgid "Move all units into the valley"
 msgstr "Przenieś wszystkie jednostki do doliny"
@@ -1794,9 +1794,12 @@ msgid "Destroy the missile silos"
 msgstr "Zniszcz silosy rakietowe"
 
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Uratuj zespół Alfa od Nexusa"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
+msgstr "Zniszcz centrum dowodzenia Nexusa, aby wyłączyć Program Intruza Nexusa"
+
+msgid "Warning: HQ shielded against VTOL attacks"
 msgstr ""
 
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -1848,7 +1851,7 @@ msgid "Manufacture (F1)"
 msgstr "Produkcja (F1)"
 
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Produkcja — najpierw zbuduj fabrykę"
 
 msgid "Research (F2)"
 msgstr "Badania (F2)"
@@ -1860,19 +1863,19 @@ msgid "Build (F3)"
 msgstr "Buduj (F3)"
 
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "Budowanie — najpierw zbuduj budynek produkcyjny droidów"
 
 msgid "Design (F4)"
 msgstr "Projekt (F4)"
 
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "Projektowanie — najpierw zbuduj Centrum Dowodzenia"
 
 msgid "Commanders (F6)"
 msgstr "Dowódcy (F6)"
 
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "Dowodzenie — najpierw wyprodukuj dowódcę"
 
 msgid "Close"
 msgstr "Zamknij"
@@ -2823,7 +2826,7 @@ msgid "Player"
 msgstr "Gracz"
 
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "Przegrana z powodu nieaktywności / gry pasywnej."
 
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
 msgstr ""
@@ -2832,7 +2835,7 @@ msgid "Host-configured game time limit exceeded. Game is over."
 msgstr ""
 
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Gra pasywna prowadzi do przegranej. Akcje, które są uważane:"
 
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
 msgstr ""
@@ -2936,23 +2939,22 @@ msgstr "Jak chcesz, szefie!"
 msgid "System locale"
 msgstr "Język systemu"
 
+msgid "Failed to create port mapping"
+msgstr ""
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr "Skonfiguruj swój router/firewall aby otworzyć port %d!"
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Twój zewnętrzny adres IP to:%s"
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
-
-msgid "Failed to create port mapping"
-msgstr ""
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
+msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
 msgid "Client failed to ack player index swap"
@@ -2969,6 +2971,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Błąd połączenia do serwera poczekalni: %s.\n"
+"Upewnij się, że port %d może odbierać połączenia przychodzące.\n"
+"Jeśli używasz routera, włącz UPnP/NAT-PMP/PCP\n"
+"lub przekieruj porty."
 
 msgid "Failed to get a lobby response!"
 msgstr "Brak odpowiedzi z serwera lobby!"
@@ -4240,7 +4246,7 @@ msgid "Flamer damage +25%"
 msgstr "Obrażenia zadawane przez miotacz ognia +25%"
 
 msgid "Flamer Fast Loader"
-msgstr ""
+msgstr "Szybkie przeładowanie miotacza ognia"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
@@ -4647,7 +4653,7 @@ msgid "Heavy Plasma Launcher firing plasma"
 msgstr ""
 
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Ciężka wyrzutnia plazmy"
 
 msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr "Ciężki Railgun strzelający ostrzami z dużą energią kinetyczną"
@@ -4665,7 +4671,7 @@ msgid "Heavy Rocket Bastion"
 msgstr "Bastion z ciężkimi rakietami"
 
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "Bateria ciężkich rakiet"
 
 msgid "Heavy surface-to-air missile"
 msgstr "Ciężka rakieta ziemia-powietrze"
@@ -4959,7 +4965,7 @@ msgid "Increases construction speed"
 msgstr "Zwiększa prędkość budowania"
 
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Zwiększa zasięg miotacza ognia"
 
 msgid "Increases Flamer ROF"
 msgstr "Zwiększa szybkostrzelność miotacza ognia"
@@ -5560,11 +5566,11 @@ msgstr "Nowa struktura specjalna dostępna"
 msgid "New Systems Tower Available"
 msgstr "Nowa wieżyczka systemowa dostępna"
 
-msgid "New Systems Turret Available for Design"
-msgstr "Nowa wieżyczka systemowa dostępna do projektowania"
-
 msgid "New Systems Turret Available For Design"
 msgstr "Nowa wieżyczka systemowa dostępna do projektu"
+
+msgid "New Systems Turret Available for Design"
+msgstr "Nowa wieżyczka systemowa dostępna do projektowania"
 
 msgid "New Thermal Emissions detection"
 msgstr "Wykrywanie emisji termicznych"
@@ -5991,6 +5997,9 @@ msgstr "Odwet"
 
 msgid "Ripple Rocket Battery"
 msgstr "Bateria rakiet kropelkowych"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr ""
 
 msgid "Ripple Rockets"
 msgstr "Rakiety kropelkowe"
@@ -6477,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "Pancerz termiczny +35%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Pancerz termiczny +40%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Pancerz termiczny +40%"
 
 #, no-c-format
@@ -7000,7 +7009,7 @@ msgstr ""
 
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Weteran"
 
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -7106,7 +7115,7 @@ msgid "level name"
 msgstr "nazwa poziomu"
 
 msgid "Show options and exit"
-msgstr ""
+msgstr "Pokaż opcje i wyjdź"
 
 msgid "Enable a global mod"
 msgstr "Włącz mod globalny"
@@ -7136,10 +7145,10 @@ msgid "Load a saved campaign game"
 msgstr "Wczytaj zapisaną kampanię"
 
 msgid "Load a replay"
-msgstr ""
+msgstr "Wczytaj powtórkę"
 
 msgid "replay file"
-msgstr ""
+msgstr "plik powtórki"
 
 msgid "Play in windowed mode"
 msgstr "Graj w oknie"
@@ -7235,7 +7244,7 @@ msgid "port"
 msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Włącz / wyłącz mapowanie portów podczas hostowania"
 
 msgid "[1, true, 0, false]"
 msgstr ""
@@ -7709,19 +7718,19 @@ msgid "Tracked"
 msgstr ""
 
 msgid "High"
-msgstr ""
+msgstr "Wysokie"
 
 msgid "Default"
-msgstr ""
+msgstr "Domyślne"
 
 msgid "Terrain quality mode not available."
-msgstr ""
+msgstr "Tryb jakości terenu niedostępny."
 
 msgid "Medium Quality"
-msgstr ""
+msgstr "Średnia jakość"
 
 msgid "High Quality"
-msgstr ""
+msgstr "Wysoka jakość"
 
 msgid "Shadow mapping not available on this system."
 msgstr ""
@@ -7739,7 +7748,7 @@ msgid "* Takes effect on game restart"
 msgstr "* Wymaga restartu gry"
 
 msgid "Terrain Quality"
-msgstr ""
+msgstr "Jakość terenu"
 
 msgid "Terrain Shading"
 msgstr ""
@@ -7836,7 +7845,7 @@ msgid "Graphics Mode"
 msgstr ""
 
 msgid "Resolution"
-msgstr ""
+msgstr "Rozdzielczość"
 
 msgid "Display Scale"
 msgstr ""
@@ -7910,16 +7919,16 @@ msgid "Rotate Screen"
 msgstr "Obracanie ekranu"
 
 msgid "Colored Cursors"
-msgstr ""
+msgstr "Kolorowy kursor"
 
 msgid "Cursor Size"
-msgstr ""
+msgstr "Rozmiar kursora"
 
 msgid "MOUSE OPTIONS"
 msgstr "USTAWIENIA MYSZKI"
 
 msgid "Super Easy"
-msgstr ""
+msgstr "Bardzo łatwy"
 
 msgid "Easy"
 msgstr "Łatwy"
@@ -8008,7 +8017,7 @@ msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to all
 msgstr ""
 
 msgid "Chat"
-msgstr ""
+msgstr "Czat"
 
 msgid "Inactivity Timeout"
 msgstr ""
@@ -8061,7 +8070,7 @@ msgid "Tip: Adjusting Display Scale"
 msgstr ""
 
 msgid "Replay"
-msgstr ""
+msgstr "Powtórka"
 
 msgid "Pause"
 msgstr ""
@@ -8225,7 +8234,7 @@ msgid "Quick Chat:"
 msgstr ""
 
 msgid "Lobby Chat"
-msgstr ""
+msgstr "Czat poczekalni"
 
 msgid "Requests"
 msgstr ""
@@ -8234,7 +8243,7 @@ msgid "Notices"
 msgstr ""
 
 msgid "Reactions"
-msgstr ""
+msgstr "Reakcje"
 
 msgid "Taunts"
 msgstr ""
@@ -8243,7 +8252,7 @@ msgid "Coordination"
 msgstr ""
 
 msgid "Suggestions"
-msgstr ""
+msgstr "Sugestie"
 
 msgid "Cheats"
 msgstr ""
@@ -8291,16 +8300,16 @@ msgid "I suggest: Capturing oil resources"
 msgstr ""
 
 msgid "Hey everyone!"
-msgstr ""
+msgstr "Cześć wszystkim!"
 
 msgid "Welcome!"
 msgstr ""
 
 msgid "I want to spectate"
-msgstr ""
+msgstr "Chcę oglądać"
 
 msgid "I want to play"
-msgstr ""
+msgstr "Chcę zagrać"
 
 msgid "I want to switch teams"
 msgstr ""
@@ -8309,52 +8318,52 @@ msgid "Please check Ready so we can start"
 msgstr ""
 
 msgid "Please wait"
-msgstr ""
+msgstr "Proszę czekać"
 
 msgid "Let's go!"
 msgstr ""
 
 msgid "Almost ready"
-msgstr ""
+msgstr "Prawie gotów"
 
 msgid "Ready"
-msgstr ""
+msgstr "Gotów"
 
 msgid "Be right back"
-msgstr ""
+msgstr "Zaraz wracam"
 
 msgid "I'm back"
-msgstr ""
+msgstr "Jestem z powrotem"
 
 msgid "Yes"
-msgstr ""
+msgstr "Tak"
 
 msgid "No"
-msgstr ""
+msgstr "Nie"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Może"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Jeszcze nie"
 
 msgid "Soon"
-msgstr ""
+msgstr "Niebawem"
 
 msgid "Thank you"
-msgstr ""
+msgstr "Dziękuję"
 
 msgid "No problem"
-msgstr ""
+msgstr "Nie ma problemu"
 
 msgid "Well-played"
-msgstr ""
+msgstr "Dobrze rozegrane"
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "Przepraszam, ale nie rozumiem. (Użyj szybkiego czatu)"
 
 msgid "Get ready..."
 msgstr ""
@@ -8366,13 +8375,13 @@ msgid "Barely a scratch!"
 msgstr ""
 
 msgid "Attack now?"
-msgstr ""
+msgstr "Atakować teraz?"
 
 msgid "Group up"
-msgstr ""
+msgstr "Zgrupować się"
 
 msgid "Split up"
-msgstr ""
+msgstr "Rozdzielić się"
 
 msgid "Focus attacks where marked"
 msgstr ""
@@ -8456,7 +8465,7 @@ msgid "Good game"
 msgstr ""
 
 msgid "I give up"
-msgstr ""
+msgstr "Poddaję się"
 
 msgid "Sorry, I have to leave"
 msgstr ""
@@ -8465,7 +8474,7 @@ msgid "Message delivery failure - try again"
 msgstr ""
 
 msgid "Map Downloaded"
-msgstr ""
+msgstr "Mapa pobrana"
 
 msgid "Bot Allies"
 msgstr ""
@@ -8575,6 +8584,33 @@ msgstr ""
 "Wymagany mod nie mógł zostać załadowany: %s\n"
 "\n"
 "Warzone spróbuje załadować grę bez niego."
+
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr ""
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr ""
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr ""
+
+msgid "Loaded mod(s):"
+msgstr ""
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr ""
+
+msgid "Error Loading Game Data"
+msgstr ""
 
 msgid "Global Hotkeys"
 msgstr "Globalne skróty klawiszowe"
@@ -9139,7 +9175,7 @@ msgid "Power"
 msgstr "Energia"
 
 msgid "Power Per Second"
-msgstr ""
+msgstr "Energia na sekundę"
 
 #, c-format
 msgid "%d derrick(s) inactive"
@@ -9188,7 +9224,7 @@ msgid "Discord: Connect to Untrusted Lobby?"
 msgstr ""
 
 msgid "Trust & Connect"
-msgstr ""
+msgstr "Zaufaj i połącz"
 
 msgid "The invite link you have followed specifies a direct connection."
 msgstr ""
@@ -9225,16 +9261,16 @@ msgid "Playing: %s Skirmish"
 msgstr ""
 
 msgid "Map:"
-msgstr ""
+msgstr "Mapa:"
 
 msgid "Bots:"
 msgstr ""
 
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "W poczekalni wieloosobowej"
 
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "W grze wieloosobowej"
 
 #, c-format
 msgid "Game Name: \"%s\" by %s"
@@ -9597,7 +9633,7 @@ msgid "QuickLoad not allowed in Autosaves-Only mode"
 msgstr ""
 
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "Nie istnieje jeszcze plik szybkiego zapisu"
 
 msgid "<not bound>"
 msgstr ""
@@ -9871,7 +9907,7 @@ msgid "Cannot swap with host"
 msgstr ""
 
 msgid "Spectator"
-msgstr ""
+msgstr "Obserwator"
 
 #, c-format
 msgid "The host has kicked %s from the game!"
@@ -9902,7 +9938,7 @@ msgid "Ask Spectator to Play"
 msgstr ""
 
 msgid "Ask to Play"
-msgstr ""
+msgstr "Zapytaj o grę"
 
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
@@ -9931,7 +9967,7 @@ msgid "Yes, I will spectate!"
 msgstr ""
 
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Chcesz zagrać?"
 
 msgid "The host of this game wants to know if you'd like to play?"
 msgstr ""
@@ -10003,13 +10039,13 @@ msgid "Click to close spectator slot"
 msgstr ""
 
 msgid "Player ID: "
-msgstr ""
+msgstr "Identyfikator gracza: "
 
 msgid "(none)"
 msgstr ""
 
 msgid "Alt Name:"
-msgstr ""
+msgstr "Alternatywna nazwa:"
 
 msgid "Player rating:"
 msgstr ""
@@ -10087,7 +10123,7 @@ msgid "Unmute Player: %s"
 msgstr ""
 
 msgid "CHAT"
-msgstr ""
+msgstr "CZAT"
 
 msgid "Multiplayer Lobby Support Unavailable"
 msgstr ""
@@ -10099,7 +10135,7 @@ msgid "Please click the button below for more information on how to fix it."
 msgstr ""
 
 msgid "More Information"
-msgstr ""
+msgstr "Więcej informacji"
 
 msgid "Sorry! Failed to host the game."
 msgstr "Przepraszamy! Nie udało się utworzyć serwera gry."
@@ -10149,7 +10185,7 @@ msgid "Host supplied invalid host config"
 msgstr ""
 
 msgid "You have been kicked: "
-msgstr ""
+msgstr "Wyrzucono Cię: "
 
 msgid "Connection lost:"
 msgstr ""
@@ -10183,6 +10219,19 @@ msgstr ""
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
+msgstr ""
+
+msgid "Failed to load challenge:"
+msgstr ""
+
+msgid "Failed to load the challenge's map or config"
+msgstr ""
+
+msgid "Failed to process autohost config:"
+msgstr ""
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
 msgstr ""
 
 msgid "Closed"
@@ -10494,7 +10543,7 @@ msgid "Spectator Mode"
 msgstr ""
 
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Jesteś obserwatorem. Miłego oglądania rozgrywki!"
 
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"POT-Creation-Date: 2024-09-11 19:20+0000\n"
+"PO-Revision-Date: 2024-09-11 19:59\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -1785,7 +1785,7 @@ msgid "Send off at least one transporter with a truck and survive The Collective
 msgstr "Відправте принаймні один транспорт з вантажівкою та переживіть атаку Колективу допоки не сплине таймер"
 
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Відішліть якомога більше транспортників та візьміть із собою принаймні одну вантажівку"
 
 msgid "Move all units into the valley"
 msgstr "Перемістити всі підрозділи у долину"
@@ -1799,11 +1799,14 @@ msgstr "Команда спасения Альфа из Нексуса"
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Знищіть КК НЕКСУСу, щоб вимкнути Вірусну Програму Nexus"
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr ""
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Дослідити схеми опору та пережити напад з Нексуса"
 
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "Розгорніть передову базу навколо пускових шахт"
 
 msgid "Protect the missile silos and research for the missile codes"
 msgstr "Захистити ракетні шахти та дослідження для ракетних кодів"
@@ -1815,10 +1818,10 @@ msgid "Return to LZ"
 msgstr "Повертайтесь до Зони Висадки"
 
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Підказка стосовно Важкого / Божевільного рівня складності:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Зміцніть потужну базу поперек мапи аби захистити себе від Колективу"
 
 msgid "Destroy all enemy units and structures"
 msgstr "Знищити всі ворожі підрозділи та будівлі"
@@ -2183,7 +2186,7 @@ msgid "This Nexus Intruder Program is a self-mutating computer parasite. This ma
 msgstr "Ця програма Nexus Intruder є комп'ютерним паразитом, що самозмінюється. Це ускладнює його видалення із систем після виявлення."
 
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Ми не здатні визначити його головної мети або функції. В його первісній формі, воно вишукує та ізолює частини пам'яті від решти ураженої системи. Тоді, воно починає мутувати себе та структури даних, ефективно перепрограмовуючи систему зсередини."
 
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
 msgstr "Подальший аналіз був обмежений ручним відключенням системи нашими техніками, щоб запобігти додатковому забрудненню Програмою Інтрудер НЕКСУС."
@@ -2828,10 +2831,10 @@ msgid "Lost due to being inactive / playing passively."
 msgstr "Програв через неактивність/пасивну гру."
 
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "Наближається ліміт часу гри, визначений хостом. Якщо ніхто не переможе впродовж 10 хвилин, гру буде завершено."
 
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "Ліміт часу гри, визначений хостом, перевищено. Гру завершено."
 
 msgid "Playing passively will lead to defeat. Actions that are considered:"
 msgstr "Гра пасивно призведе до поразки. Дії, які розглядаються:"
@@ -2938,23 +2941,22 @@ msgstr "Будь-коли, великий бос!"
 msgid "System locale"
 msgstr "Мова локалізації системи"
 
+msgid "Failed to create port mapping"
+msgstr ""
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr ""
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Ваша зовнішня IP-адреса: %s"
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
-
-msgid "Failed to create port mapping"
-msgstr ""
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
+msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
 msgid "Client failed to ack player index swap"
@@ -3097,7 +3099,7 @@ msgid "AA reload time -15%"
 msgstr "Час перезарядки ПП озброєння -15%"
 
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "ПП Установка із Баштою 'Буреносець'"
 
 msgid "AA Target Acquisition Shells"
 msgstr "ПП Самонавідні Заряди"
@@ -3280,7 +3282,7 @@ msgid "Armed with Cyborg Flamer"
 msgstr "Кіборг озброєний Вогнеметом"
 
 msgid "Armed with Cyborg Hyper Velocity Cannon"
-msgstr ""
+msgstr "Кіборг, озброєний Надшвидкісною Гарматою"
 
 msgid "Armed with Cyborg Machinegun"
 msgstr "Кіборг озброєний Кулеметом"
@@ -3295,10 +3297,10 @@ msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr "Кіборг озброєний ПУ 'Батіг'"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr ""
+msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
 
 msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
+msgstr "Кіборг, озброєний Термічним Вогнеметом"
 
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Кіборг озброєний Термітним Вогнеметом"
@@ -3341,7 +3343,7 @@ msgstr "Кіборг озброєний ПУ 'Вбивця Танків'"
 
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Рівень Броні +120%, Міцність Корпусу +90%"
 
 #, no-c-format
 msgid "Armor +35%, Body Points +30%"
@@ -3998,7 +4000,7 @@ msgid "Cyborg Superdense Thermal Armor"
 msgstr "Надщільна Термальна Броня Кіборгів"
 
 msgid "Cyborg Tank Killer"
-msgstr ""
+msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Термальна Броня Кіборгів Мк2"
@@ -4010,7 +4012,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "Термальна Броня Кіборгів"
 
 msgid "Cyborg Thermite"
-msgstr ""
+msgstr "Термічний вогнемет для Кіборгів"
 
 msgid "Cyborg Transport Available"
 msgstr "Доступний Транспорт Кіборгів"
@@ -5562,11 +5564,11 @@ msgstr "Доступна Нова Системна Будівля"
 msgid "New Systems Tower Available"
 msgstr "Доступна Нова Системна Вежа"
 
-msgid "New Systems Turret Available for Design"
-msgstr "Нова Системна Башта Доступна для Проектування"
-
 msgid "New Systems Turret Available For Design"
 msgstr "Нова Системна Башта Доступна для Конструювання"
+
+msgid "New Systems Turret Available for Design"
+msgstr "Нова Системна Башта Доступна для Проектування"
 
 msgid "New Thermal Emissions detection"
 msgstr "Нова Система Виявлення Термальної Емісії"
@@ -5899,7 +5901,7 @@ msgid "Rearming speed +30%"
 msgstr "Швидкість переозброєння +30%"
 
 msgid "Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Зменшити радіус атаки бойових одиниць Звалищників, озброєних Вогнеметами"
 
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Знижується шанс ураження вірусом НЕКСУС"
@@ -5993,6 +5995,9 @@ msgstr "Кара"
 
 msgid "Ripple Rocket Battery"
 msgstr "Ракетна Батарея 'Хвиля'"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr ""
 
 msgid "Ripple Rockets"
 msgstr "ПУ 'Хвиля' "
@@ -6262,7 +6267,7 @@ msgid "Smashedwall"
 msgstr "Круглолиці"
 
 msgid "Sniper Cyborg"
-msgstr ""
+msgstr "Кіборг-Снайпер"
 
 msgid "Speed: Fast"
 msgstr "Швидкість: Висока"
@@ -6421,7 +6426,7 @@ msgid "Systems Research Completed"
 msgstr "Розробка Систем Завершена"
 
 msgid "Tank Killer Cyborg"
-msgstr ""
+msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
 
 msgid "Tank Killer Emplacement"
 msgstr "Вогнева Позиція ПУ 'Вбивця Танків'"
@@ -6479,11 +6484,11 @@ msgid "Thermal Armor +35%"
 msgstr "Термальна Броня +35%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Термальна Броня +40%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Термальна Броня +40%"
 
 #, no-c-format
@@ -6509,7 +6514,7 @@ msgid "Thermite Bomb Bay"
 msgstr "Відсік Термітних Бомб"
 
 msgid "Thermite Cyborg"
-msgstr ""
+msgstr "Кіборг, озброєний Термічним Вогнеметом"
 
 msgid "Thermite Flamer Cyborg"
 msgstr "Кіборг з Термітним Вогнеметом"
@@ -6638,7 +6643,7 @@ msgid "Two-faced"
 msgstr "двовеликий"
 
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Скасувати зменшення радіусу атаки бойових одиниць Звалищників, озброєних Вогнеметами"
 
 msgid "Unit Research Completed"
 msgstr "Розробка Підрозділу Завершена"
@@ -6801,7 +6806,7 @@ msgid "VTOL Heap Bomb Bay"
 msgstr "ВЗІП Відсік Бронебійних Бомб"
 
 msgid "VTOL Heavy Cannon"
-msgstr ""
+msgstr "Важка Гармата для рушія ВЗІП"
 
 msgid "VTOL Heavy Laser"
 msgstr "ВЗІП Важкий Лазер"
@@ -6846,7 +6851,7 @@ msgid "VTOL Machinegun"
 msgstr "ВЗІП Кулемет"
 
 msgid "VTOL Mini-Rocket AA"
-msgstr ""
+msgstr "Установка ПП Мініракет для рушія ВЗІП"
 
 msgid "VTOL Mini-Rocket Scav"
 msgstr "ВЗІП установка Міні-ракет"
@@ -7285,10 +7290,10 @@ msgid "interval in seconds"
 msgstr ""
 
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "Ліміт часу багатокористувацької гри (у хвилинах)"
 
 msgid "number of minutes"
-msgstr ""
+msgstr "кількість хвилин"
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
 msgstr ""
@@ -7714,22 +7719,22 @@ msgid "High"
 msgstr ""
 
 msgid "Default"
-msgstr ""
+msgstr "За умовчанням"
 
 msgid "Terrain quality mode not available."
 msgstr ""
 
 msgid "Medium Quality"
-msgstr ""
+msgstr "Середня якість"
 
 msgid "High Quality"
-msgstr ""
+msgstr "Висока якість"
 
 msgid "Shadow mapping not available on this system."
 msgstr ""
 
 msgid "Low"
-msgstr ""
+msgstr "Низький"
 
 msgid "Ultra"
 msgstr ""
@@ -7741,7 +7746,7 @@ msgid "* Takes effect on game restart"
 msgstr "* Зміни всупають в силу після перезавантаження гри"
 
 msgid "Terrain Quality"
-msgstr ""
+msgstr "Якість Ландшафту"
 
 msgid "Terrain Shading"
 msgstr ""
@@ -7753,7 +7758,7 @@ msgid "Shadow Resolution"
 msgstr ""
 
 msgid "Shadow Filtering"
-msgstr ""
+msgstr "Фільтрація Тіней"
 
 msgid "Per Pixel point lights"
 msgstr ""
@@ -7780,7 +7785,7 @@ msgid "Screen Shake"
 msgstr "Тремтіння екрану"
 
 msgid "Groups Menu"
-msgstr ""
+msgstr "Меню підрозділів"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "ОПЦІЇ ГРАФІКИ"
@@ -7853,7 +7858,7 @@ msgid "Desktop Full"
 msgstr "Повний робочий стіл"
 
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "Ввімкнено (Повний екран)"
 
 msgid "Texture size"
 msgstr "Розмір Текстур"
@@ -7917,13 +7922,13 @@ msgid "Colored Cursors"
 msgstr "Кольорові курсори"
 
 msgid "Cursor Size"
-msgstr ""
+msgstr "Розмір Курсору"
 
 msgid "MOUSE OPTIONS"
 msgstr "ОПЦІЇ МИШКИ"
 
 msgid "Super Easy"
-msgstr ""
+msgstr "Надзвичайно Легко"
 
 msgid "Easy"
 msgstr "Легко"
@@ -7978,7 +7983,7 @@ msgstr "%u хвилин"
 
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s годин(и)"
 
 #, c-format
 msgid "%u seconds"
@@ -7988,16 +7993,16 @@ msgid "None"
 msgstr "Пусто"
 
 msgid "Distribute to Team"
-msgstr ""
+msgstr "Розподілити поміж командою"
 
 msgid "Destroy (Classic)"
-msgstr ""
+msgstr "Зруйнувати (Класичний метод)"
 
 msgid "Allow All"
 msgstr ""
 
 msgid "Quick Chat Only"
-msgstr ""
+msgstr "Тільки Швидкий Чат"
 
 msgid "Hosting Options:"
 msgstr "Опції хостингу:"
@@ -8012,7 +8017,7 @@ msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to all
 msgstr ""
 
 msgid "Chat"
-msgstr ""
+msgstr "Чат"
 
 msgid "Inactivity Timeout"
 msgstr "Час бездіяльності"
@@ -8024,10 +8029,10 @@ msgid "Spectator Slots"
 msgstr "Місця спостерігачів"
 
 msgid "On Player Leave"
-msgstr ""
+msgstr "При виході гравця"
 
 msgid "Game Time Limit"
-msgstr ""
+msgstr "Ліміт часу гри"
 
 msgid "Enable Rating"
 msgstr ""
@@ -8141,7 +8146,7 @@ msgid "Disable All"
 msgstr ""
 
 msgid "Chat Options"
-msgstr ""
+msgstr "Налаштування чату"
 
 msgid "Mute or configure player free chat."
 msgstr ""
@@ -8157,18 +8162,18 @@ msgstr ""
 
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Підрозділ %u"
 
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "Обрати Бойові Одиниці підрозділу %u"
 
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "Призначити обрані Бойові Одиниці до підрозділу %u"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "Сфокусувати камеру на цьому підрозділі при подвійному натисканні або тапанні"
 
 msgid "View and configure groups of units, which can be quickly selected and ordered."
 msgstr ""
@@ -8177,19 +8182,19 @@ msgid "Group buttons will glow red when units are lost (or taking lots of damage
 msgstr ""
 
 msgid "Unit Groups"
-msgstr ""
+msgstr "Підрозділи Бойових Одиниць"
 
 msgid "Select a Group"
-msgstr ""
+msgstr "Обрати підрозділ"
 
 msgid "Assign Selected Units to a Group"
-msgstr ""
+msgstr "Призначити обрані Бойові Одиниці до підрозділу"
 
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
-msgstr ""
+msgstr "Сфокусувати камеру на підрозділі при подвійному натисканні або тапанні на кнопку підрозділу"
 
 msgid "Unit Groups:"
-msgstr ""
+msgstr "Підрозділи Бойових Одиниць:"
 
 msgid "Construction Progress"
 msgstr "Конструкційна робототехніка"
@@ -8204,19 +8209,19 @@ msgid "Progress Bar"
 msgstr "Індикатор Прогресу"
 
 msgid "To:"
-msgstr ""
+msgstr "До:"
 
 msgid "All"
-msgstr ""
+msgstr "Всі"
 
 msgid "Team"
 msgstr "Команда"
 
 msgid "Human Teammates"
-msgstr ""
+msgstr "Союзники-Гравці"
 
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Союзники-Боти"
 
 #, c-format
 msgid "%u players"
@@ -8226,49 +8231,49 @@ msgid "Choose a recipient"
 msgstr ""
 
 msgid "Quick Chat:"
-msgstr ""
+msgstr "Швидкий чат:"
 
 msgid "Lobby Chat"
-msgstr ""
+msgstr "Чат лоббі"
 
 msgid "Requests"
-msgstr ""
+msgstr "Запити"
 
 msgid "Notices"
 msgstr ""
 
 msgid "Reactions"
-msgstr ""
+msgstr "Реакції"
 
 msgid "Taunts"
-msgstr ""
+msgstr "Булінг"
 
 msgid "Coordination"
-msgstr ""
+msgstr "Координація"
 
 msgid "Suggestions"
-msgstr ""
+msgstr "Пропозиції"
 
 msgid "Cheats"
-msgstr ""
+msgstr "Чіти"
 
 msgid "End-Game"
-msgstr ""
+msgstr "Ендшпиль"
 
 msgid "Can someone please transfer me some units?"
-msgstr ""
+msgstr "Чи може хтось, будь ласка, передати мені кілька Бойових Одиниць?"
 
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr ""
+msgstr "Чи може хтось, будь ласка, передати мені Вантажівок, аби я міг відновитися?"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Вибачаюся, та я не розумію. (Будь ласка, використайте Швидкий Чат?)"
 
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "Я пропоную: Виробництво більшої кількості Бойових Одиниць"
 
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "Я пропоную: Виробництво різноманітних Бойових Одиниць"
 
 msgid "I suggest: Checking the team strategy view"
 msgstr ""
@@ -8298,31 +8303,31 @@ msgid "Hey everyone!"
 msgstr ""
 
 msgid "Welcome!"
-msgstr ""
+msgstr "Вітаю!"
 
 msgid "I want to spectate"
-msgstr ""
+msgstr "Я хочу спостерігати"
 
 msgid "I want to play"
-msgstr ""
+msgstr "Я хочу грати"
 
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Я хочу змінити команду"
 
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "Будь ласка, натисніть \"Готові\", аби ми розпочали"
 
 msgid "Please wait"
-msgstr ""
+msgstr "Будь ласка, зачекайте"
 
 msgid "Let's go!"
-msgstr ""
+msgstr "Поїхали!"
 
 msgid "Almost ready"
-msgstr ""
+msgstr "Майже готовий"
 
 msgid "Ready"
-msgstr ""
+msgstr "Готовий"
 
 msgid "Be right back"
 msgstr ""
@@ -8331,67 +8336,67 @@ msgid "I'm back"
 msgstr ""
 
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 msgid "No"
-msgstr ""
+msgstr "Ні"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Можливо"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Ще ні"
 
 msgid "Soon"
-msgstr ""
+msgstr "Незабаром"
 
 msgid "Thank you"
-msgstr ""
+msgstr "Дякую"
 
 msgid "No problem"
-msgstr ""
+msgstr "Без проблем"
 
 msgid "Well-played"
-msgstr ""
+msgstr "Гарно зіграно"
 
 msgid "@#%*!"
-msgstr ""
+msgstr "#@)₴?$0!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
 msgstr ""
 
 msgid "Get ready..."
-msgstr ""
+msgstr "Напоготові..."
 
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Ви пожалкуєте про це"
 
 msgid "Barely a scratch!"
 msgstr ""
 
 msgid "Attack now?"
-msgstr ""
+msgstr "Атакувати зараз?"
 
 msgid "Group up"
-msgstr ""
+msgstr "Згуртуйтеся"
 
 msgid "Split up"
-msgstr ""
+msgstr "Розділіться"
 
 msgid "Focus attacks where marked"
-msgstr ""
+msgstr "Зосередьте атаки на місці позначки"
 
 msgid "Retreat!"
-msgstr ""
+msgstr "Відступаймо!"
 
 msgid "I need help!"
-msgstr ""
+msgstr "Мені необхідна допомога!"
 
 msgid "Left side"
-msgstr ""
+msgstr "Ліворуч"
 
 msgid "Right side"
-msgstr ""
+msgstr "Праворуч"
 
 msgid "Transfer Request: Units"
 msgstr ""
@@ -8418,7 +8423,7 @@ msgid "They're rushing oils!"
 msgstr ""
 
 msgid "I don't have enough power"
-msgstr ""
+msgstr "В мене недостатньо енергії"
 
 msgid "Build more units"
 msgstr ""
@@ -8487,10 +8492,10 @@ msgid "Ally progress"
 msgstr "Прогрес союзників"
 
 msgid "Tanks"
-msgstr ""
+msgstr "Танки"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Кіборги"
 
 msgid "No teammates."
 msgstr ""
@@ -8499,10 +8504,10 @@ msgid "Waiting for other teams to finish planning."
 msgstr ""
 
 msgid "Weapons:"
-msgstr ""
+msgstr "Озброєння:"
 
 msgid "Units:"
-msgstr ""
+msgstr "Бойові Одиниці:"
 
 msgid "Resume Game"
 msgstr "Продовжити Гру"
@@ -8523,7 +8528,7 @@ msgid "Go Back"
 msgstr "Повернутися"
 
 msgid "View Guide"
-msgstr ""
+msgstr "Переглянути Посібник"
 
 msgid "Load Game"
 msgstr "Завнтажити Гру"
@@ -8579,6 +8584,33 @@ msgstr ""
 "Необхідний мод не був завантажений: %s\n"
 "\n"
 "Warzone спробує запустити гру без нього."
+
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr ""
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr ""
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr ""
+
+msgid "Loaded mod(s):"
+msgstr "Завантажений(-і) мод(и):"
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr "Основні ігрові файли можуть бути пошкодженими або застарілими – будь ласка, спробуйте перевстановити гру."
+
+msgid "Error Loading Game Data"
+msgstr "Помилка при завантаженні ігрових даних"
 
 msgid "Global Hotkeys"
 msgstr "Глобальні гарячі клавіші"
@@ -9451,10 +9483,10 @@ msgid "CHALLENGE"
 msgstr ""
 
 msgid "SKIRMISH"
-msgstr ""
+msgstr "СКІРМІШ"
 
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "СКЛАДНІСТЬ: НАДЗВИЧАЙНО ЛЕГКО"
 
 msgid "DIFFICULTY: EASY"
 msgstr "КІЛЬНА СКЛАДНІСТЬ: СЕВА"
@@ -10189,6 +10221,19 @@ msgstr ""
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
+msgstr ""
+
+msgid "Failed to load challenge:"
+msgstr ""
+
+msgid "Failed to load the challenge's map or config"
+msgstr ""
+
+msgid "Failed to process autohost config:"
+msgstr ""
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
 msgstr ""
 
 msgid "Closed"
