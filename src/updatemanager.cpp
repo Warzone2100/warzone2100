@@ -726,6 +726,11 @@ static bool cacheInfoIsUsable(CachePaths& paths)
 		try {
 			// Open the file + read the data
 			PHYSFS_file *fileHandle = PHYSFS_openRead(paths.cache_info_path);
+			if (fileHandle == nullptr)
+			{
+				// Unable to open file
+				throw std::runtime_error("Failed opening file");
+			}
 			PHYSFS_sint64 filesize = PHYSFS_fileLength(fileHandle);
 			if (filesize <= 0)
 			{
@@ -777,6 +782,11 @@ static void initProcessData(const std::vector<std::string> &updateDataUrls, Proc
 		try {
 			// Open the file + read the data
 			PHYSFS_file *fileHandle = PHYSFS_openRead(outputPaths.cache_data_path);
+			if (fileHandle == nullptr)
+			{
+				// Unable to open file
+				throw std::runtime_error("Failed opening file");
+			}
 			PHYSFS_sint64 filesize = PHYSFS_fileLength(fileHandle);
 			if (filesize < 0 || filesize > WZ_UPDATES_JSON_MAX_SIZE)
 			{
