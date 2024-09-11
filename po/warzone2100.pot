@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-07-08 13:47+0000\n"
+"POT-Creation-Date: 2024-09-11 19:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1849,7 +1849,7 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:546
+#: po/custom/fromJson.txt:542
 msgid "Armed with Cyborg Assault Gun"
 msgstr ""
 
@@ -3863,7 +3863,7 @@ msgstr ""
 #. ... + 29 refs
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
-#: po/custom/fromJson.txt:1218
+#: po/custom/fromJson.txt:1213
 msgid "Body Points: Very Low"
 msgstr ""
 
@@ -4046,6 +4046,10 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-4.js:138
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
+msgstr ""
+
+#: data/base/script/campaign/cam3-4.js:139
+msgid "Warning: HQ shielded against VTOL attacks"
 msgstr ""
 
 #: data/base/script/campaign/cam3-ab.js:287
@@ -5792,40 +5796,41 @@ msgstr ""
 msgid "System locale"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1463
-#, c-format
-msgid "Port mapping opened external port: %d"
-msgstr ""
-
-#: lib/netplay/netplay.cpp:1465
-#, c-format
-msgid "Your external IP is: %s"
-msgstr ""
-
-#: lib/netplay/netplay.cpp:1472
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
-
-#: lib/netplay/netplay.cpp:1476
+#: lib/netplay/netplay.cpp:1459
+#: lib/netplay/netplay.cpp:1483
 msgid "Failed to create port mapping"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1479
+#: lib/netplay/netplay.cpp:1461
+#: lib/netplay/netplay.cpp:1486
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2193
+#: lib/netplay/netplay.cpp:1470
+#, c-format
+msgid "Port mapping opened external port: %d"
+msgstr ""
+
+#: lib/netplay/netplay.cpp:1472
+#, c-format
+msgid "Your external IP is: %s"
+msgstr ""
+
+#: lib/netplay/netplay.cpp:1479
+msgid "Failed to create port mapping (timeout)"
+msgstr ""
+
+#: lib/netplay/netplay.cpp:2200
 msgid "Client failed to ack player index swap"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:3422
+#: lib/netplay/netplay.cpp:3429
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:3448
+#: lib/netplay/netplay.cpp:3455
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -5834,7 +5839,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:4663
+#: lib/netplay/netplay.cpp:4670
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -6473,7 +6478,7 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:542
+#: po/custom/fromJson.txt:546
 msgid "Armed with Cyborg assault gun"
 msgstr ""
 
@@ -7361,7 +7366,7 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-#: po/custom/fromJson.txt:1212
+#: po/custom/fromJson.txt:1218
 msgid "Body Points: Very low"
 msgstr ""
 
@@ -11745,19 +11750,19 @@ msgid "New Systems Tower Available"
 msgstr ""
 
 #. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4266
+msgid "New Systems Turret Available For Design"
+msgstr ""
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4268
-msgid "New Systems Turret Available for Design"
-msgstr ""
-
-#. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #: po/custom/fromJson.txt:4272
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr ""
 
 #. TRANSLATORS:
@@ -13826,18 +13831,18 @@ msgid "Thermal Armor +35%"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
-#: po/custom/fromJson.txt:5622
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#: po/custom/fromJson.txt:5621
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 #: po/custom/fromJson.txt:5626
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr ""
 
 #. TRANSLATORS:
@@ -15646,16 +15651,16 @@ msgid "Setting zoom to %.0f"
 msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
-#: src/droid.cpp:336
+#: src/droid.cpp:337
 #, c-format
 msgid "%s Lost!"
 msgstr ""
 
-#: src/droid.cpp:1243
+#: src/droid.cpp:1241
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.cpp:2091
+#: src/droid.cpp:2089
 #: src/selection.cpp:676
 #, c-format
 msgid "%u unit selected"
@@ -15663,42 +15668,42 @@ msgid_plural "%u units selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2142
+#: src/droid.cpp:2140
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2151
+#: src/droid.cpp:2149
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2162
+#: src/droid.cpp:2160
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2172
+#: src/droid.cpp:2170
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2176
+#: src/droid.cpp:2174
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:3317
+#: src/droid.cpp:3343
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -16014,7 +16019,7 @@ msgid "50%"
 msgstr ""
 
 #: src/frontend.cpp:747
-#: src/multiplay.cpp:2361
+#: src/multiplay.cpp:2370
 msgid "Black"
 msgstr ""
 
@@ -16694,54 +16699,54 @@ msgstr ""
 msgid "Local"
 msgstr ""
 
-#: src/hci/groups.cpp:141
+#: src/hci/groups.cpp:149
 msgid "Select / Assign Group Number: "
 msgstr ""
 
-#: src/hci/groups.cpp:144
+#: src/hci/groups.cpp:152
 #, c-format
 msgid "Group %u"
 msgstr ""
 
-#: src/hci/groups.cpp:145
+#: src/hci/groups.cpp:153
 #, c-format
 msgid "Select the Units in Group %u"
 msgstr ""
 
-#: src/hci/groups.cpp:146
+#: src/hci/groups.cpp:154
 #, c-format
 msgid "Assign Selected Units to Group %u"
 msgstr ""
 
-#: src/hci/groups.cpp:147
+#: src/hci/groups.cpp:155
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr ""
 
-#: src/hci/groups.cpp:257
+#: src/hci/groups.cpp:285
 msgid "View and configure groups of units, which can be quickly selected and ordered."
 msgstr ""
 
-#: src/hci/groups.cpp:259
+#: src/hci/groups.cpp:287
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
 msgstr ""
 
-#: src/hci/groups.cpp:261
+#: src/hci/groups.cpp:289
 msgid "Unit Groups"
 msgstr ""
 
-#: src/hci/groups.cpp:263
+#: src/hci/groups.cpp:291
 msgid "Select a Group"
 msgstr ""
 
-#: src/hci/groups.cpp:264
+#: src/hci/groups.cpp:292
 msgid "Assign Selected Units to a Group"
 msgstr ""
 
-#: src/hci/groups.cpp:265
+#: src/hci/groups.cpp:293
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
 msgstr ""
 
-#: src/hci/groups.cpp:359
+#: src/hci/groups.cpp:393
 msgid "Unit Groups:"
 msgstr ""
 
@@ -17167,11 +17172,11 @@ msgstr ""
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
-#: src/hci/research.cpp:447
+#: src/hci/research.cpp:429
 msgid "Research Progress"
 msgstr ""
 
-#: src/hci/research.cpp:525
+#: src/hci/research.cpp:507
 msgid "Ally progress"
 msgstr ""
 
@@ -17251,7 +17256,7 @@ msgstr ""
 
 #: src/ingameop.cpp:260
 #: src/ingameop.cpp:271
-#: src/mission.cpp:2494
+#: src/mission.cpp:2547
 msgid "Save Game"
 msgstr ""
 
@@ -18809,55 +18814,55 @@ msgstr ""
 msgid "Could not save game!"
 msgstr ""
 
-#: src/mission.cpp:1934
-#: src/mission.cpp:1945
+#: src/mission.cpp:1987
+#: src/mission.cpp:1998
 msgid "Load Transport"
 msgstr ""
 
-#: src/mission.cpp:1946
+#: src/mission.cpp:1999
 msgid "Shows the number of units currently loaded into the mission transporter, and the total capacity."
 msgstr ""
 
-#: src/mission.cpp:1947
+#: src/mission.cpp:2000
 msgid "Open the Transporter Load Menu"
 msgstr ""
 
-#: src/mission.cpp:2319
+#: src/mission.cpp:2372
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr ""
 
-#: src/mission.cpp:2319
+#: src/mission.cpp:2372
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.cpp:2325
+#: src/mission.cpp:2378
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr ""
 
-#: src/mission.cpp:2325
+#: src/mission.cpp:2378
 msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.cpp:2354
+#: src/mission.cpp:2407
 msgid "Continue Game"
 msgstr ""
 
-#: src/mission.cpp:2364
-#: src/mission.cpp:2400
-#: src/mission.cpp:2513
+#: src/mission.cpp:2417
+#: src/mission.cpp:2453
+#: src/mission.cpp:2566
 msgid "Quit To Main Menu"
 msgstr ""
 
-#: src/mission.cpp:2394
-#: src/mission.cpp:2491
+#: src/mission.cpp:2447
+#: src/mission.cpp:2544
 msgid "Load Saved Game"
 msgstr ""
 
-#: src/mission.cpp:2459
+#: src/mission.cpp:2512
 msgid "GAME SAVED :"
 msgstr ""
 
-#: src/move.cpp:2175
+#: src/move.cpp:2174
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -18919,7 +18924,7 @@ msgstr ""
 
 #: src/multiint.cpp:449
 #: src/multiint.cpp:454
-#: src/multiplay.cpp:603
+#: src/multiplay.cpp:607
 msgid "Commander"
 msgstr ""
 
@@ -19651,15 +19656,15 @@ msgid "The game is already full."
 msgstr ""
 
 #: src/multijoin.cpp:649
-#: src/multiplay.cpp:824
-#: src/multiplay.cpp:1009
+#: src/multiplay.cpp:828
+#: src/multiplay.cpp:1013
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
 #: src/multijoin.cpp:653
-#: src/multiplay.cpp:829
-#: src/multiplay.cpp:1013
+#: src/multiplay.cpp:833
+#: src/multiplay.cpp:1017
 msgid "Your data doesn't match the host's!"
 msgstr ""
 
@@ -19840,12 +19845,12 @@ msgid "MOD REQUESTED!"
 msgstr ""
 
 #: src/multiopt.cpp:479
-#: src/multiplay.cpp:2155
+#: src/multiplay.cpp:2164
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr ""
 
 #: src/multiopt.cpp:480
-#: src/multiplay.cpp:2159
+#: src/multiplay.cpp:2168
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr ""
 
@@ -19867,128 +19872,128 @@ msgstr ""
 msgid "The host has muted free chat for player: %s"
 msgstr ""
 
-#: src/multiplay.cpp:394
+#: src/multiplay.cpp:398
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.cpp:401
+#: src/multiplay.cpp:405
 msgid "Invalid data!"
 msgstr ""
 
-#: src/multiplay.cpp:1163
+#: src/multiplay.cpp:1167
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
 msgstr ""
 
-#: src/multiplay.cpp:1165
+#: src/multiplay.cpp:1169
 msgid "Unauthorized network command"
 msgstr ""
 
-#: src/multiplay.cpp:1274
+#: src/multiplay.cpp:1278
 msgid "REPLAY HAS ENDED"
 msgstr ""
 
-#: src/multiplay.cpp:1275
+#: src/multiplay.cpp:1279
 msgid "(Press ESC to quit.)"
 msgstr ""
 
-#: src/multiplay.cpp:1461
+#: src/multiplay.cpp:1465
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
 msgstr ""
 
-#: src/multiplay.cpp:2024
+#: src/multiplay.cpp:2033
 msgid "Map was requested: SENDING MAP!"
 msgstr ""
 
-#: src/multiplay.cpp:2046
+#: src/multiplay.cpp:2055
 msgid "Mod was requested: SENDING MOD!"
 msgstr ""
 
-#: src/multiplay.cpp:2116
+#: src/multiplay.cpp:2125
 msgid "FILE SENT!"
 msgstr ""
 
-#: src/multiplay.cpp:2131
+#: src/multiplay.cpp:2140
 msgid "MAP DOWNLOADED!"
 msgstr ""
 
-#: src/multiplay.cpp:2191
+#: src/multiplay.cpp:2200
 #, c-format
 msgid "Beacon %d"
 msgstr ""
 
-#: src/multiplay.cpp:2300
+#: src/multiplay.cpp:2309
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/multiplay.cpp:2358
+#: src/multiplay.cpp:2367
 msgid "Green"
 msgstr ""
 
-#: src/multiplay.cpp:2359
+#: src/multiplay.cpp:2368
 msgid "Orange"
 msgstr ""
 
-#: src/multiplay.cpp:2360
+#: src/multiplay.cpp:2369
 msgid "Grey"
 msgstr ""
 
-#: src/multiplay.cpp:2362
+#: src/multiplay.cpp:2371
 msgid "Red"
 msgstr ""
 
-#: src/multiplay.cpp:2363
+#: src/multiplay.cpp:2372
 msgid "Blue"
 msgstr ""
 
-#: src/multiplay.cpp:2364
+#: src/multiplay.cpp:2373
 msgid "Pink"
 msgstr ""
 
-#: src/multiplay.cpp:2365
+#: src/multiplay.cpp:2374
 msgid "Cyan"
 msgstr ""
 
-#: src/multiplay.cpp:2366
+#: src/multiplay.cpp:2375
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:2367
+#: src/multiplay.cpp:2376
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:2368
+#: src/multiplay.cpp:2377
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:2369
+#: src/multiplay.cpp:2378
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:2370
+#: src/multiplay.cpp:2379
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:2371
+#: src/multiplay.cpp:2380
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:2372
+#: src/multiplay.cpp:2381
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:2373
+#: src/multiplay.cpp:2382
 msgid "Brown"
 msgstr ""
 
-#: src/multiplay.cpp:2554
+#: src/multiplay.cpp:2563
 msgid "Spectator Mode"
 msgstr ""
 
-#: src/multiplay.cpp:2555
+#: src/multiplay.cpp:2564
 msgid "You are a spectator. Enjoy watching the game!"
 msgstr ""
 
@@ -20593,30 +20598,30 @@ msgstr ""
 msgid "EMP"
 msgstr ""
 
-#: src/structure.cpp:2793
+#: src/structure.cpp:2835
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:2801
+#: src/structure.cpp:2843
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:2806
+#: src/structure.cpp:2848
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:2814
+#: src/structure.cpp:2856
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:3051
+#: src/structure.cpp:3093
 msgid "Laser Satellite is ready to fire!"
 msgstr ""
 
-#: src/structure.cpp:5447
+#: src/structure.cpp:5480
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
@@ -20624,25 +20629,25 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5452
+#: src/structure.cpp:5485
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
 msgstr ""
 
-#: src/structure.cpp:5467
+#: src/structure.cpp:5500
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.cpp:5472
-#: src/structure.cpp:5485
-#: src/structure.cpp:5494
-#: src/structure.cpp:5521
-#: src/structure.cpp:5531
-#: src/structure.cpp:5539
-#: src/structure.cpp:5548
+#: src/structure.cpp:5505
+#: src/structure.cpp:5518
+#: src/structure.cpp:5527
+#: src/structure.cpp:5554
+#: src/structure.cpp:5564
+#: src/structure.cpp:5572
+#: src/structure.cpp:5581
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr ""
@@ -20650,89 +20655,89 @@ msgstr ""
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #. "born": Time the game object was born
 #. "depth": Depth of structure's foundation
-#: src/structure.cpp:5479
+#: src/structure.cpp:5512
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
 msgstr ""
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 #. "state": The "RepairState" (printed as an integer, Idle = 0, Repairing = 1)
-#: src/structure.cpp:5490
+#: src/structure.cpp:5523
 #, c-format
 msgid "ID %d - State %d"
 msgstr ""
 
-#: src/structure.cpp:5497
+#: src/structure.cpp:5530
 #, c-format
 msgid "ID %d - %s"
 msgstr ""
 
-#: src/structure.cpp:5510
+#: src/structure.cpp:5543
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr ""
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5515
+#: src/structure.cpp:5548
 #, c-format
 msgid "ID %u - Multiplier: %u"
 msgstr ""
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5525
+#: src/structure.cpp:5558
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
 msgstr ""
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5535
+#: src/structure.cpp:5568
 #, c-format
 msgid "ID %u - Research Points: %u"
 msgstr ""
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5543
+#: src/structure.cpp:5576
 #, c-format
 msgid "tile %d,%d - target %s"
 msgstr ""
 
 #. TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
-#: src/structure.cpp:5552
+#: src/structure.cpp:5585
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
 msgstr ""
 
-#: src/structure.cpp:5670
-#: src/structure.cpp:5715
+#: src/structure.cpp:5703
+#: src/structure.cpp:5748
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.cpp:5842
+#: src/structure.cpp:5875
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.cpp:5884
+#: src/structure.cpp:5917
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.cpp:5906
+#: src/structure.cpp:5939
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.cpp:5928
+#: src/structure.cpp:5961
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.cpp:5936
+#: src/structure.cpp:5969
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.cpp:5966
+#: src/structure.cpp:5999
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.cpp:5972
+#: src/structure.cpp:6005
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -21029,7 +21034,7 @@ msgstr ""
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1226
+#: src/transporter.cpp:1229
 msgid "Reinforcements landing"
 msgstr ""
 
