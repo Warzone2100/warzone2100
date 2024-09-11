@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-30 02:19\n"
+"POT-Creation-Date: 2024-09-11 19:20+0000\n"
+"PO-Revision-Date: 2024-09-11 19:59\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1799,6 +1799,9 @@ msgstr "Secourez l'équipe Alpha face à Nexus"
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Détruire le QG de Nexus pour désactiver le programme d'intrusion Nexus"
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr ""
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Terminez la recherche des circuits de résistance et survivez à l’assaut du Nexus"
 
@@ -2936,6 +2939,13 @@ msgstr "Quand vous voudrez chef !"
 msgid "System locale"
 msgstr "Langage du système"
 
+msgid "Failed to create port mapping"
+msgstr "Échec de la création du mappage de port"
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr "Configurez manuellement votre routeur/pare-feu pour ouvrir le port %d !"
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr "Mappage de port ouvert port externe : %d"
@@ -2944,16 +2954,8 @@ msgstr "Mappage de port ouvert port externe : %d"
 msgid "Your external IP is: %s"
 msgstr "Votre IP externe est : %s"
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr "Échec de la création du mappage de port (délai d'expiration après %d secondes)"
-
-msgid "Failed to create port mapping"
-msgstr "Échec de la création du mappage de port"
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
-msgstr "Configurez manuellement votre routeur/pare-feu pour ouvrir le port %d !"
+msgid "Failed to create port mapping (timeout)"
+msgstr ""
 
 msgid "Client failed to ack player index swap"
 msgstr "Le client n'a pas confirmé le changement d'emplacement du joueur"
@@ -5564,11 +5566,11 @@ msgstr "Nouveau bâtiment système disponible"
 msgid "New Systems Tower Available"
 msgstr "Nouvelle tour système disponible"
 
-msgid "New Systems Turret Available for Design"
-msgstr "Nouveau système de tourelle disponible pour conception"
-
 msgid "New Systems Turret Available For Design"
 msgstr "Nouvelle tourelle système disponible pour assemblage"
+
+msgid "New Systems Turret Available for Design"
+msgstr "Nouveau système de tourelle disponible pour conception"
 
 msgid "New Thermal Emissions detection"
 msgstr "Nouvelle technologie de détection d'émissions thermiques"
@@ -5995,6 +5997,9 @@ msgstr "Châtiment"
 
 msgid "Ripple Rocket Battery"
 msgstr "Batterie de roquettes d'artillerie"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr "Chargeur rapide de lance-roquettes d'ondes"
 
 msgid "Ripple Rockets"
 msgstr "Roquettes d'artillerie"
@@ -6481,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "Blindage thermique : +35%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Blindage thermique : +40%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Blindage thermique : +40%"
 
 #, no-c-format
@@ -8570,6 +8575,33 @@ msgstr ""
 "\n"
 "Warzone va essayer de charger la partie sans lui."
 
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr "Impossible de charger %zu modèle(s) de jeu"
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr "Échec du chargement des textures pour %zu modèle(s)"
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr "Impossible de %zu modèle(s) de stats"
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr "Warzone 2100 a rencontré des erreurs lors du chargement des données de jeu :"
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr "Veuillez essayer de supprimer tout nouveau mod - ils pourraient avoir des problèmes ou être incompatibles avec cette version."
+
+msgid "Loaded mod(s):"
+msgstr "Mod(s) chargé(s) :"
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr "Les fichiers de base du jeu peuvent être corrompus ou périmés - veuillez essayer de réinstaller le jeu."
+
+msgid "Error Loading Game Data"
+msgstr "Erreur lors du chargement des données du jeu"
+
 msgid "Global Hotkeys"
 msgstr "Raccourcis clavier globaux"
 
@@ -10180,6 +10212,19 @@ msgstr "La création du mappage des ports est en cours..."
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mappage de port désactivé par l'utilisateur. La configuration automatique du port %d n'aura pas lieu."
+
+msgid "Failed to load challenge:"
+msgstr "Impossible de charger le défi :"
+
+msgid "Failed to load the challenge's map or config"
+msgstr "Impossible de charger la carte ou la configuration du challenge"
+
+msgid "Failed to process autohost config:"
+msgstr "Impossible de traiter la configuration de l'hôte auto :"
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr "Impossible de charger la carte de l'autohost ou la configuration à partir de : %s"
 
 msgid "Closed"
 msgstr "Fermé"

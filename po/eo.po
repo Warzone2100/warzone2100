@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"POT-Creation-Date: 2024-09-11 19:20+0000\n"
+"PO-Revision-Date: 2024-09-11 19:59\n"
 "Last-Translator: \n"
 "Language-Team: Esperanto\n"
 "Language: eo_UY\n"
@@ -1799,6 +1799,9 @@ msgstr ""
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr ""
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr ""
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr ""
 
@@ -2936,6 +2939,13 @@ msgstr ""
 msgid "System locale"
 msgstr ""
 
+msgid "Failed to create port mapping"
+msgstr ""
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr ""
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr ""
@@ -2944,15 +2954,7 @@ msgstr ""
 msgid "Your external IP is: %s"
 msgstr ""
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
-
-msgid "Failed to create port mapping"
-msgstr ""
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
+msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
 msgid "Client failed to ack player index swap"
@@ -5554,10 +5556,10 @@ msgstr ""
 msgid "New Systems Tower Available"
 msgstr ""
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr ""
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr ""
 
 msgid "New Thermal Emissions detection"
@@ -5984,6 +5986,9 @@ msgid "Retribution"
 msgstr ""
 
 msgid "Ripple Rocket Battery"
+msgstr ""
+
+msgid "Ripple Rocket Rapid Loader"
 msgstr ""
 
 msgid "Ripple Rockets"
@@ -6471,11 +6476,11 @@ msgid "Thermal Armor +35%"
 msgstr ""
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr ""
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr ""
 
 #, no-c-format
@@ -8547,6 +8552,33 @@ msgid ""
 "Warzone will try to load the game without it."
 msgstr ""
 
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr ""
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr ""
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr ""
+
+msgid "Loaded mod(s):"
+msgstr ""
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr ""
+
+msgid "Error Loading Game Data"
+msgstr ""
+
 msgid "Global Hotkeys"
 msgstr ""
 
@@ -10152,6 +10184,19 @@ msgstr ""
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
+msgstr ""
+
+msgid "Failed to load challenge:"
+msgstr ""
+
+msgid "Failed to load the challenge's map or config"
+msgstr ""
+
+msgid "Failed to process autohost config:"
+msgstr ""
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
 msgstr ""
 
 msgid "Closed"

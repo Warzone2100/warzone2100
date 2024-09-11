@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-30 02:19\n"
+"POT-Creation-Date: 2024-09-11 19:20+0000\n"
+"PO-Revision-Date: 2024-09-11 19:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -1799,6 +1799,9 @@ msgstr "從 Nexus 營救阿爾發小組"
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "摧毀 Nexus 總部以停用 Nexus 入侵者程式"
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr ""
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "研發抵抗電路並在 Nexus 的攻擊中存活下來"
 
@@ -2936,6 +2939,13 @@ msgstr "任何時候，大老闆!"
 msgid "System locale"
 msgstr "系統語系"
 
+msgid "Failed to create port mapping"
+msgstr "建立埠位址對應失敗"
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr "請手動設定你的路由器/防火牆以開啟埠位址 %d!"
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr "連接埠對應開啟的外部連接埠: %d"
@@ -2944,16 +2954,8 @@ msgstr "連接埠對應開啟的外部連接埠: %d"
 msgid "Your external IP is: %s"
 msgstr "您的連外IP地址為: %s"
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr "建立埠位址對應失敗 (在 %d 秒後超時)"
-
-msgid "Failed to create port mapping"
-msgstr "建立埠位址對應失敗"
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
-msgstr "請手動設定你的路由器/防火牆以開啟埠位址 %d!"
+msgid "Failed to create port mapping (timeout)"
+msgstr ""
 
 msgid "Client failed to ack player index swap"
 msgstr "使用者端無法確認玩家交換索引"
@@ -5564,11 +5566,11 @@ msgstr "可建造新的系統建築"
 msgid "New Systems Tower Available"
 msgstr "可建造新的系統防禦工事"
 
-msgid "New Systems Turret Available for Design"
-msgstr "可搭載新的系統裝備"
-
 msgid "New Systems Turret Available For Design"
 msgstr "可在設計功能中使用新的系統裝備"
+
+msgid "New Systems Turret Available for Design"
+msgstr "可搭載新的系統裝備"
 
 msgid "New Thermal Emissions detection"
 msgstr "可偵測熱能放射"
@@ -5995,6 +5997,9 @@ msgstr "懲罰者"
 
 msgid "Ripple Rocket Battery"
 msgstr "多管火箭砲台"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr ""
 
 msgid "Ripple Rockets"
 msgstr "多管火箭"
@@ -6481,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "熱能裝甲 +35%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "熱能裝甲 +40%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "熱能裝甲 +40%"
 
 #, no-c-format
@@ -8556,6 +8561,33 @@ msgstr ""
 "\n"
 "Warzone 將嘗試在沒有它的情況下載入遊戲."
 
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr ""
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr ""
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr ""
+
+msgid "Loaded mod(s):"
+msgstr ""
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr ""
+
+msgid "Error Loading Game Data"
+msgstr ""
+
 msgid "Global Hotkeys"
 msgstr "全域熱鍵"
 
@@ -10166,6 +10198,19 @@ msgstr "正在進行埠位址對應..."
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "使用者停用埠對應. 將不會自動設定埠 %d."
+
+msgid "Failed to load challenge:"
+msgstr ""
+
+msgid "Failed to load the challenge's map or config"
+msgstr ""
+
+msgid "Failed to process autohost config:"
+msgstr ""
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr ""
 
 msgid "Closed"
 msgstr "已關閉"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-30 02:19\n"
+"POT-Creation-Date: 2024-09-11 19:20+0000\n"
+"PO-Revision-Date: 2024-09-11 19:59\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -1799,6 +1799,9 @@ msgstr "Rescateu l'equip Alfa del Nexus"
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Destruïu el QG de Nexus per a desactivar el programa d'intrusió Nexus"
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr ""
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Acabeu la recerca dels circuits de resistència i sobreviviu a l'assalt de Nexus"
 
@@ -2936,6 +2939,13 @@ msgstr "Quan vulgui, cap!"
 msgid "System locale"
 msgstr "Llengua del sistema"
 
+msgid "Failed to create port mapping"
+msgstr "No s'ha pogut crear el mapatge dels ports"
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr "Configuri manualment el seu router/tallafocs per obrir el port %d!"
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr "Mapatge de ports obert al port extern: %d"
@@ -2944,16 +2954,8 @@ msgstr "Mapatge de ports obert al port extern: %d"
 msgid "Your external IP is: %s"
 msgstr "La seva IP externa és: %s"
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr "No s'ha pogut crear el mapatge de ports (temps límit de %d segons)"
-
-msgid "Failed to create port mapping"
-msgstr "No s'ha pogut crear el mapatge dels ports"
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
-msgstr "Configuri manualment el seu router/tallafocs per obrir el port %d!"
+msgid "Failed to create port mapping (timeout)"
+msgstr ""
 
 msgid "Client failed to ack player index swap"
 msgstr "El client no ha confirmat el canvi de lloc del jugador"
@@ -5564,10 +5566,10 @@ msgstr "Hi ha un nou sistema d'estructures disponible"
 msgid "New Systems Tower Available"
 msgstr "Hi ha una nova torre de sistemes disponible"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Hi ha una nova torreta de sistemes disponible per dissenyar"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Hi ha una nova torreta de sistemes disponible per dissenyar"
 
 msgid "New Thermal Emissions detection"
@@ -5995,6 +5997,9 @@ msgstr "Retribució"
 
 msgid "Ripple Rocket Battery"
 msgstr "Bateria d'onada de coets"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr "Carregador ràpid de coets d'ones"
 
 msgid "Ripple Rockets"
 msgstr "Onada de coets"
@@ -6481,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "+35% d'armadura tèrmica"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "+40% d'armadura tèrmica"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "+40% d'armadura tèrmica"
 
 #, no-c-format
@@ -8570,6 +8575,33 @@ msgstr ""
 "\n"
 "Warzone provarà de carregar la partida sense ell."
 
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr "No s'han pogut carregar %zu models del joc"
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr "No s'han pogut carregar %zu models de textures"
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr "No s'han pogut carregar %zu models d'stats"
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr "Warzone 2100 ha tingut errors carregant la informació del joc:"
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr "Intenti treure tot mod nou - poden tenir errors o ser incompatibles amb aquesta versió."
+
+msgid "Loaded mod(s):"
+msgstr "Mods carregats:"
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr "Els fitxers de base del joc poden estar corromputs o antiquats - intenti reinstal·lar el joc."
+
+msgid "Error Loading Game Data"
+msgstr "Error intentant carregar la informació del joc"
+
 msgid "Global Hotkeys"
 msgstr "Dreceres del teclat globals"
 
@@ -10180,6 +10212,19 @@ msgstr "Mapatge de ports creant-se..."
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mapatge de ports desactivat per l'usuari. L'autoconfiguració del port %d no és possible."
+
+msgid "Failed to load challenge:"
+msgstr "No s'ha pogut carregar el repte:"
+
+msgid "Failed to load the challenge's map or config"
+msgstr "No s'ha pogut carregar el mapa o la configuració del repte"
+
+msgid "Failed to process autohost config:"
+msgstr "No s'ha pogut processar la configuració de l'autohost:"
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr "No s'ha pogut carregar el mapa o la configuració autohost provenint de: %s"
 
 msgid "Closed"
 msgstr "Tancat"
