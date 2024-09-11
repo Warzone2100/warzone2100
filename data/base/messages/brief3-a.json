@@ -3,7 +3,7 @@
         "name": "MB3A_MSG",
         "sequences": [
             { "audio": "", "loop": 0, "subtitles": ["CAM3_MSG1", "CAM3_MSG2", "CAM3_MSG3"], "video": "cam3/cam3intp.ogg" },
-            { "audio": "", "loop": 0, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" }
+            { "audio": "", "loop": 0, "subtitles": "", "video": "cam3/cam3int.ogg" }
         ]
     },
     "video0001": {
