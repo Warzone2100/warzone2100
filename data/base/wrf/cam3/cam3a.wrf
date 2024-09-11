@@ -6,7 +6,6 @@
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
 file		FLIC		"brief3-a.json"
-file		FLIC		"brief3intro.json"
 file		PROX		"prox3a.json"
 
 directory "script"
