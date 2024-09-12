@@ -1,3 +1,20 @@
+2024-09-12: Version 4.5.3:
+ * General:
+   * Change: Give experience when squishing a scavenger (commit:736fae8e874744a7156de54ad4330cb22ab9ec01, #4046)
+   * Fix: Various potential crashes (too many commits, #4050, #4051, #4053, #4063)
+ * Graphics:
+   * Fix: Reset object animation state in a few places (commit:84b93d9c0b12e924a2aabaf35ce02d5124485df1, #4049)
+   * Fix: Additional graphics backend fallback options for macOS and Linux (commit:347b7d07835afe1ecf91fd4750890c67e6e3c1b4, #4052)
+ * Campaign:
+   * Fix: Visibility of units restored during limbo missions (commit:22fa9439c8515b52fd816323f9f0a2a0fe985b7e, #4045)
+   * Fix: Reset structure functionality references to objects when going offworld (commit:1de0822cdc1c3f1f650b1c531ebce2fe03918bf0, #4047)
+   * Fix: Fill VTOLs when going offworld (commit:87ae96c79799ebe066b5213ea3d49891b3a8a1eb, #4048)
+   * Fix: Update Remastered balance (too many commits, #4056)
+   * Fix: Update Reclamation addon campaign (commit:9f2ca2e418ed8dfdb9488cb0e11d052fdd3aa1b0, #4059)
+   * Fix: Update Fractured Kingdom addon campaign (commit:c980864ed7a920f1419d4027633438276da85d6f, #4059)
+ * Translations:
+   * Change: Numerous translation updates (commit:c0b1156087bc8654cc3d1f90fa588ff79769c7c7, #3996)
+
 2024-08-13: Version 4.5.2:
  * General:
    * Fix: Make "Reset Pitch" keybind consistent with initial starting pitch (commit:9dd8289e0dff40c2c61b410c924bb9f118b068cf, #4007)
