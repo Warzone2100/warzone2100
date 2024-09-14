@@ -589,7 +589,10 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 		for (auto* ent : list)
 		{
 			auto it = entityContainer.find(*ent);
-			ASSERT(it != entityContainer.end(), "%s not found in the global container!", Traits::entityName());
+			if (it == entityContainer.end()) {
+				ASSERT(false, "%s not found in the global container!", Traits::entityName());
+				continue;
+			}
 			entityContainer.erase(it);
 		}
 		list.clear();
