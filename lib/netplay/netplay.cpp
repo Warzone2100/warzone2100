@@ -4504,11 +4504,6 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	{
 		server_socket_set = allocSocketSet();
 	}
-	if (server_socket_set == nullptr)
-	{
-		debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
-		return false;
-	}
 	// allocate socket storage for all possible players
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
@@ -5102,11 +5097,6 @@ void NETacceptIncomingConnections()
 		// initialize temporary server socket set
 		// FIXME: why is this not done in NETinit()?? - Per
 		tmp_socket_set = allocSocketSet();
-		if (tmp_socket_set == nullptr)
-		{
-			debug(LOG_ERROR, "Cannot create socket set: %s", strSockError(getSockErr()));
-			return;
-		}
 		// FIXME: I guess initialization of allowjoining is here now... - FlexCoral
 		for (auto& tmpState : tmp_connectState)
 		{
