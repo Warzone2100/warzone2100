@@ -13,6 +13,8 @@ data/base/texpages/page-25-sky-urban.png
 	- MIT, Various Authors, See: https://github.com/HowardHinnant/date/blob/master/include/date/date.h
 3rdparty/discord-rpc/*
 	- MIT, Copyright 2017 Discord, Inc.
+3rdparty/expected/*
+	- CC0 1.0 Universal, Written in 2017 by Sy Brand (tartanllama@gmail.com, @TartanLlama)
 3rdparty/json/*
 	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
 3rdparty/LRUCache11/*
