@@ -18,6 +18,7 @@ concurrency:
 
 jobs:
   crowdin-download-translations:
+    if: github.repository == 'Warzone2100/warzone2100'
     permissions:
       contents: read
     runs-on: ubuntu-latest
