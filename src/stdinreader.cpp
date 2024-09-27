@@ -1091,7 +1091,7 @@ int cmdInputThreadFunc(void *)
 					statusString += " ";
 					statusString += base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
 				}
-				wz_command_interface_output((statusString + "\n").c_str());
+				wz_command_interface_output("%s\n", statusString.c_str());
 			});
 		}
 		else if(!strncmpl(line, "shutdown now"))
