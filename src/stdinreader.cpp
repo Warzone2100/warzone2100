@@ -1061,6 +1061,39 @@ int cmdInputThreadFunc(void *)
 				}
 			});
 		}
+		else if(!strncmpl(line, "status"))
+		{
+			wzAsyncExecOnMainThread([] {
+				std::string statusString = "WZSTATUS: 0 ";
+				statusString += time(NULL);
+				for (uint32_t i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+				{
+					auto player = NetPlay.players[i];
+					if (!isHumanPlayer(i))
+					{
+						continue;
+					}
+					std::string playerName = NetPlay.players[i].name;
+
+					statusString += " ";
+					if (player.isSpectator)
+					{
+						statusString += "spec";
+					}
+					else
+					{
+						statusString += player.position;
+					}
+					statusString += " ";
+					statusString += base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
+					statusString += " ";
+					statusString += player.IPtextAddress;
+					statusString += " ";
+					statusString += base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
+				}
+				wz_command_interface_output((statusString + "\n").c_str());
+			});
+		}
 		else if(!strncmpl(line, "shutdown now"))
 		{
 			inexit = true;
