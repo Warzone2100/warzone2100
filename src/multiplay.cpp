@@ -1031,6 +1031,7 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 	}
 
 	bool senderIsSpectator = NetPlay.players[queue.index].isSpectator;
+	bool senderIsAdmin = senderHasLobbyCommandAdminPrivs(queue.index);
 
 	if (type > NET_MIN_TYPE && type < NET_MAX_TYPE)
 	{
@@ -1053,7 +1054,7 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 			case NET_BEACONMSG:
 			case NET_TEAMREQUEST: // spectators should not be allowed to request a team / non-spectator slot status
 			case NET_POSITIONREQUEST:
-				if (senderIsSpectator)
+				if (senderIsSpectator && !senderIsAdmin)
 				{
 					return HandleMessageAction::Disallow_And_Kick_Sender;
 				}

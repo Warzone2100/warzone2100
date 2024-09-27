@@ -1388,6 +1388,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			// Retrieve the player ID the game host arranged for us
 			NETuint8_t(&index);
 			NETuint32_t(&hostPlayer); // and the host player idx
+			NETbool(&NetPlay.isAdmin);
 			NETend();
 			NETpop(tmpJoiningQUEUE);
 

@@ -316,6 +316,7 @@ struct NETPLAY
 	uint32_t	hostPlayer;		///< Index of host in player array
 	bool		bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
+	bool		isAdmin;		///< True if we are promoted to admin by the host
 	bool		isPortMappingEnabled;				// if we want the automatic Port mapping setup routines to run
 	bool		isHostAlive;	/// if the host is still alive
 	char gamePassword[password_string_size];		//

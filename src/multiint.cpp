@@ -1982,7 +1982,7 @@ static std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t pl
 	for (uint32_t i = 0; i < game.maxPlayers; i++)
 	{
 		if (player != i
-			&& (NetPlay.isHost || !isHumanPlayer(i)) // host can move a player to any slot, player can only move to empty slots
+			&& (NetPlay.isHost || (!isHumanPlayer(i) || NetPlay.isAdmin)) // host/admin can move a player to any slot, player can only move to empty slots
 			&& !isSpectatorOnlySlot(i)) // target cannot be a spectator only slot (for player position changes)
 		{
 			validTargetPlayerIdx.insert(i);
@@ -2835,7 +2835,7 @@ bool recvPositionRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (whosResponsible(player) != queue.index)
+	if (whosResponsible(player) != queue.index && !senderHasLobbyCommandAdminPrivs(queue.index))
 	{
 		HandleBadParam("NET_POSITIONREQUEST given incorrect params.", player, queue.index);
 		return false;
@@ -3996,7 +3996,7 @@ public:
 		widget->colorButton->addOnClickHandler([playerIdx, titleUI](W_BUTTON& button){
 			auto strongTitleUI = titleUI.lock();
 			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
-			if (playerIdx == selectedPlayer || NetPlay.isHost)
+			if (playerIdx == selectedPlayer || (NetPlay.isHost || NetPlay.isAdmin))
 			{
 				if (!NetPlay.players[playerIdx].isSpectator) // not a spectator
 				{
@@ -4031,11 +4031,13 @@ public:
 		widget->playerInfo->addOnClickHandler([playerIdx, titleUI](W_BUTTON& button){
 			auto strongTitleUI = titleUI.lock();
 			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
-			if (playerIdx == selectedPlayer || NetPlay.isHost)
+			if (playerIdx == selectedPlayer || (NetPlay.isHost || NetPlay.isAdmin))
 			{
 				uint32_t player = playerIdx;
 				// host can move any player, clients can request to move themselves if there are available slots
-				if (((player == selectedPlayer && validPlayerIdxTargetsForPlayerPositionMove(player).size() > 0) || (NetPlay.players[player].allocated && NetPlay.isHost))
+				// admins can move people as if they are host
+				if (((player == selectedPlayer && validPlayerIdxTargetsForPlayerPositionMove(player).size() > 0) ||
+						(NetPlay.players[player].allocated && (NetPlay.isHost || NetPlay.isAdmin)))
 					&& !locked.position
 					&& player < MAX_PLAYERS
 					&& !isSpectatorOnlySlot(player))
