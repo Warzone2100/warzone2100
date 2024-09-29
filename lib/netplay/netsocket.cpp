@@ -1391,12 +1391,6 @@ Socket *socketListen(unsigned int port)
 	unsigned int i;
 
 	Socket *const conn = new Socket;
-	if (conn == nullptr)
-	{
-		debug(LOG_ERROR, "Out of memory!");
-		abort();
-		return nullptr;
-	}
 
 	// Mark all unused socket handles as invalid
 	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
