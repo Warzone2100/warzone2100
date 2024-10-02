@@ -313,7 +313,7 @@ function eventStartLevel()
 			},
 			"ScavBaseGroupSouth": {
 				cleanup: "SouthScavBase",
-				detectMsg: "C1-3_OBJ2",
+				detectMsg: "C1-3_BASE3",
 				detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
 				eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 			},

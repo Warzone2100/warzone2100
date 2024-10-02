@@ -1,5 +1,5 @@
 /***********************************************************/
-/*  You may have to modify this file for it to be correct! */ 
+/*  You may have to modify this file for it to be correct! */
 /*******************       wrf\Cam2.wrf      *******************/
 
 
@@ -10,5 +10,4 @@ file		STR_RES	"cam3strings.txt"
 file		STR_RES	"resstrings.txt"
 file		STR_RES	"scrstrings.txt"
 directory	"messages"
-file		SMSG	"cam2messages.txt"
-file		SMSG	"cam3messages.txt"
+file		FLIC	"genmessages.json"

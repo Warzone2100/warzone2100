@@ -1,0 +1,23 @@
+{
+    "video0000": {
+        "name": "MB2_6_MSG",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": "CAM2_6_MSG", "video": "cam2/cam26pl1.ogg" }
+        ]
+    },
+    "video0001": {
+        "name": "MB2_6_MSG2",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": "", "video": "cam2/cam26afm.ogg" },
+            { "audio": "", "loop": 1, "subtitles": ["CAM2_6_MSG", "CAM2_6_MSG2", "CAM2_6_MSG3"], "video": "cam2/cam26pl2.ogg" },
+            { "audio": "", "loop": 0, "subtitles": ["CAM2_6_MSG4", "CAM2_6_MSG5", "CAM2_6_MSG6"], "video": "cam2/cam2_6a.ogg" },
+            { "audio": "", "loop": 0, "subtitles": "", "video": "cam2/cam26bfm.ogg" }
+        ]
+    },
+    "video0002": {
+        "name": "MB2_6_MSG3",
+        "sequences": [
+            { "audio": "", "loop": 0, "subtitles": ["CAM2_6_MSG7", "CAM2_6_MSG8", "CAM2_6_MSG9"], "video": "cam2/cam2_6b.ogg" }
+        ]
+    }
+}

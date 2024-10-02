@@ -6,7 +6,7 @@
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
 
-file		SMSG		"cam1-outro.txt"
+file		FLIC		"cam1-outro.json"
 
 directory "script"
 file JAVASCRIPT "rules.js"

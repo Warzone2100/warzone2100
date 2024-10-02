@@ -134,7 +134,7 @@ function eventStartLevel()
 		},
 		"base3group": {
 			cleanup: "enemybase3",
-			detectMsg: "C1B_OBJ1",
+			detectMsg: "C1B_BASE3",
 			detectSnd: cam_sounds.baseDetection.scavengerOutpostDetected,
 			eliminateSnd: cam_sounds.baseElimination.scavengerOutpostEradicated,
 		},
