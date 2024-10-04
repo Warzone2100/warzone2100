@@ -40,6 +40,7 @@
 #include "multistat.h"
 #include "urlrequest.h"
 #include "stdinreader.h"
+#include "version.h"
 
 #include <utility>
 #include <memory>
@@ -71,8 +72,10 @@ static void NETauto(PLAYERSTATS::Autorating &ar)
 		NETauto(ar.elo);
 		NETauto(ar.autohoster);
 		NETauto(ar.details);
-		NETauto(ar.altName);
-		NETauto(ar.altNameTextColorOverride);
+		NETauto(ar.tag);
+		NETauto(ar.name);
+		NETauto(ar.tagTextColorOverride);
+		NETauto(ar.nameTextColorOverride);
 		NETauto(ar.eloTextColorOverride);
 	}
 }
@@ -91,13 +94,23 @@ PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
 		details = json["details"].get<std::string>();
 		if (json.contains("name"))
 		{
-			altName = json["name"].get<std::string>();
+			name = json["name"].get<std::string>();
+		}
+		if (json.contains("tag"))
+		{
+			tag = json["tag"].get<std::string>();
 		}
 		if (json.contains("nameTextColorOverride"))
 		{
-			altNameTextColorOverride[0] = json["nameTextColorOverride"][0].get<uint8_t>();
-			altNameTextColorOverride[1] = json["nameTextColorOverride"][1].get<uint8_t>();
-			altNameTextColorOverride[2] = json["nameTextColorOverride"][2].get<uint8_t>();
+			nameTextColorOverride[0] = json["nameTextColorOverride"][0].get<uint8_t>();
+			nameTextColorOverride[1] = json["nameTextColorOverride"][1].get<uint8_t>();
+			nameTextColorOverride[2] = json["nameTextColorOverride"][2].get<uint8_t>();
+		}
+		if (json.contains("tagTextColorOverride"))
+		{
+			tagTextColorOverride[0] = json["tagTextColorOverride"][0].get<uint8_t>();
+			tagTextColorOverride[1] = json["tagTextColorOverride"][1].get<uint8_t>();
+			tagTextColorOverride[2] = json["tagTextColorOverride"][2].get<uint8_t>();
 		}
 		if (json.contains("eloTextColorOverride"))
 		{
@@ -142,6 +155,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 	req.setRequestHeader("WZ-Player-Hash", hash);
 	req.setRequestHeader("WZ-Player-Key", key);
 	req.setRequestHeader("WZ-Locale", getLanguage());
+	req.setRequestHeader("WZ-Version", version_getVersionString());
 	debug(LOG_INFO, "Requesting \"%s\" for player %d (%.32s) (%s)", req.url.c_str(), playerIndex, NetPlay.players[playerIndex].name, hash.c_str());
 	req.onSuccess = [playerIndex, hash](std::string const &url, HTTPResponseDetails const &response, std::shared_ptr<MemoryStruct> const &data) {
 		long httpStatusCode = response.httpStatusCode();
