@@ -2526,13 +2526,17 @@ bool recvTeamRequest(NETQUEUE queue)
 
 	if (senderHasLobbyCommandAdminPrivs(queue.index) && (queue.index != player || locked.teams))
 	{
-		const char* msg = astringf("Admin %s changed team of player [%d] %s to %d",
+		sendRoomSystemMessage(astringf("Admin %s changed team of player [%d] %s to %d",
 			NetPlay.players[queue.index].name,
 			NetPlay.players[player].position,
 			NetPlay.players[player].name,
-			team).c_str();
-		sendRoomSystemMessage(msg);
-		debug(LOG_INFO, "%s", msg);
+			team).c_str());
+		debug(LOG_INFO, "Admin %s (%s) changed team of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			getMultiStats(queue.index).identity.publicKeyHexString().c_str(),
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			team);
 	}
 
 	if (!alliancesSetTeamsBeforeGame(game.alliance))
@@ -2793,13 +2797,17 @@ bool recvFactionRequest(NETQUEUE queue)
 
 	if (senderHasLobbyCommandAdminPrivs(queue.index) && queue.index != player)
 	{
-		const char* msg = astringf("Admin %s changed faction of player [%d] %s to %d",
+		sendRoomSystemMessage(astringf("Admin %s changed faction of player [%d] %s to %d",
 			NetPlay.players[queue.index].name,
 			NetPlay.players[player].position,
 			NetPlay.players[player].name,
-			faction).c_str();
-		sendRoomSystemMessage(msg);
-		debug(LOG_INFO, "%s", msg);
+			faction).c_str());
+		debug(LOG_INFO, "Admin %s (%s) changed faction of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			getMultiStats(queue.index).identity.publicKeyHexString().c_str(),
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			faction);
 	}
 
 	resetReadyStatus(false, true);
@@ -2835,13 +2843,17 @@ bool recvColourRequest(NETQUEUE queue)
 
 	if (senderHasLobbyCommandAdminPrivs(queue.index) && (queue.index != player))
 	{
-		const char* msg = astringf("Admin %s changed color of player [%d] %s to %d",
+		sendRoomSystemMessage(astringf("Admin %s changed color of player [%d] %s to %d",
 			NetPlay.players[queue.index].name,
 			NetPlay.players[player].position,
 			NetPlay.players[player].name,
-			col).c_str();
-		sendRoomSystemMessage(msg);
-		debug(LOG_INFO, "%s", msg);
+			col).c_str());
+		debug(LOG_INFO, "Admin %s (%s) changed color of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			getMultiStats(queue.index).identity.publicKeyHexString().c_str(),
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			col);
 	}
 
 	resetReadyStatus(false, true);
@@ -2881,13 +2893,17 @@ bool recvPositionRequest(NETQUEUE queue)
 
 	if (senderHasLobbyCommandAdminPrivs(queue.index) && (queue.index != player || (locked.position)))
 	{
-		const char* msg = astringf("Admin %s changed position of player [%d] %s to %d",
+		sendRoomSystemMessage(astringf("Admin %s changed position of player [%d] %s to %d",
 			NetPlay.players[queue.index].name,
 			NetPlay.players[player].position,
 			NetPlay.players[player].name,
-			position).c_str();
-		sendRoomSystemMessage(msg);
-		debug(LOG_INFO, "%s", msg);
+			position).c_str());
+		debug(LOG_INFO, "Admin %s (%s) changed position of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			getMultiStats(queue.index).identity.publicKeyHexString().c_str(),
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			position);
 	}
 
 	resetReadyStatus(false);
