@@ -2513,13 +2513,22 @@ bool recvTeamRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (whosResponsible(player) != queue.index)
+	if (whosResponsible(player) != queue.index && !senderHasLobbyCommandAdminPrivs(queue.index))
 	{
 		HandleBadParam("NET_TEAMREQUEST given incorrect params.", player, queue.index);
 		return false;
 	}
 
-	if (locked.teams)
+	if (senderHasLobbyCommandAdminPrivs(queue.index))
+	{
+		sendRoomSystemMessage(astringf("Admin %s changed team of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			team).c_str());
+	}
+
+	if (locked.teams && !senderHasLobbyCommandAdminPrivs(queue.index))
 	{
 		return false;
 	}
@@ -2805,10 +2814,19 @@ bool recvColourRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (whosResponsible(player) != queue.index)
+	if (whosResponsible(player) != queue.index && !senderHasLobbyCommandAdminPrivs(queue.index))
 	{
 		HandleBadParam("NET_COLOURREQUEST given incorrect params.", player, queue.index);
 		return false;
+	}
+
+	if (senderHasLobbyCommandAdminPrivs(queue.index))
+	{
+		sendRoomSystemMessage(astringf("Admin %s changed color of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			col).c_str());
 	}
 
 	resetReadyStatus(false, true);
@@ -2844,6 +2862,15 @@ bool recvPositionRequest(NETQUEUE queue)
 	if (locked.position)
 	{
 		return false;
+	}
+
+	if (senderHasLobbyCommandAdminPrivs(queue.index))
+	{
+		sendRoomSystemMessage(astringf("Admin %s changed position of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			position).c_str());
 	}
 
 	resetReadyStatus(false);
@@ -3269,7 +3296,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 
 static bool canChooseTeamFor(int i)
 {
-	return (i == selectedPlayer || NetPlay.isHost);
+	return (i == selectedPlayer || (NetPlay.isHost || NetPlay.isAdmin));
 }
 
 // ////////////////////////////////////////////////////////////////////////////
