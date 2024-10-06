@@ -1448,8 +1448,8 @@ static void addGameOptions()
 
 static bool safeToUseColour(unsigned player, unsigned otherPlayer)
 {
-	// Player wants to take the colour from otherPlayer. May not take from a human otherPlayer, unless we're the host.
-	return player == otherPlayer || NetPlay.isHost || !isHumanPlayer(otherPlayer);
+	// Player wants to take the colour from otherPlayer. May not take from a human otherPlayer, unless we're the host/admin.
+	return player == otherPlayer || (NetPlay.isHost || NetPlay.isAdmin) || !isHumanPlayer(otherPlayer);
 }
 
 static int getPlayerTeam(int i)
