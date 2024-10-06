@@ -2114,9 +2114,9 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 
 	UDWORD i;
 	int disallow = allPlayersOnSameTeam(player);
-	if (bIsTrueMultiplayerGame && NetPlay.isHost)
+	if (bIsTrueMultiplayerGame && (NetPlay.isHost || NetPlay.isAdmin))
 	{
-		// allow configuration of all teams in true multiplayer mode (by host), even if they would block the game starting
+		// allow configuration of all teams in true multiplayer mode (by host/admin), even if they would block the game starting
 		// (i.e. even if all players would be configured to be on the same team)
 		disallow = -1;
 	}
