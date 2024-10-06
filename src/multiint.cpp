@@ -2858,7 +2858,7 @@ bool recvColourRequest(NETQUEUE queue)
 
 	resetReadyStatus(false, true);
 
-	return changeColour(player, col, false);
+	return changeColour(player, col, senderHasLobbyCommandAdminPrivs(queue.index));
 }
 
 bool recvPositionRequest(NETQUEUE queue)
