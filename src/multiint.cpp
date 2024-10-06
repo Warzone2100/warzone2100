@@ -2519,18 +2519,20 @@ bool recvTeamRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (senderHasLobbyCommandAdminPrivs(queue.index))
-	{
-		sendRoomSystemMessage(astringf("Admin %s changed team of player [%d] %s to %d",
-			NetPlay.players[queue.index].name,
-			NetPlay.players[player].position,
-			NetPlay.players[player].name,
-			team).c_str());
-	}
-
 	if (locked.teams && !senderHasLobbyCommandAdminPrivs(queue.index))
 	{
 		return false;
+	}
+
+	if (senderHasLobbyCommandAdminPrivs(queue.index) && (queue.index != player || locked.teams))
+	{
+		const char* msg = astringf("Admin %s changed team of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			team).c_str();
+		sendRoomSystemMessage(msg);
+		debug(LOG_INFO, "%s", msg);
 	}
 
 	if (!alliancesSetTeamsBeforeGame(game.alliance))
@@ -2776,7 +2778,7 @@ bool recvFactionRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (whosResponsible(player) != queue.index)
+	if (whosResponsible(player) != queue.index && !senderHasLobbyCommandAdminPrivs(queue.index))
 	{
 		HandleBadParam("NET_FACTIONREQUEST given incorrect params.", player, queue.index);
 		return false;
@@ -2787,6 +2789,17 @@ bool recvFactionRequest(NETQUEUE queue)
 	{
 		HandleBadParam("NET_FACTIONREQUEST given incorrect params.", player, queue.index);
 		return false;
+	}
+
+	if (senderHasLobbyCommandAdminPrivs(queue.index) && queue.index != player)
+	{
+		const char* msg = astringf("Admin %s changed faction of player [%d] %s to %d",
+			NetPlay.players[queue.index].name,
+			NetPlay.players[player].position,
+			NetPlay.players[player].name,
+			faction).c_str();
+		sendRoomSystemMessage(msg);
+		debug(LOG_INFO, "%s", msg);
 	}
 
 	resetReadyStatus(false, true);
@@ -2820,13 +2833,15 @@ bool recvColourRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (senderHasLobbyCommandAdminPrivs(queue.index))
+	if (senderHasLobbyCommandAdminPrivs(queue.index) && (queue.index != player))
 	{
-		sendRoomSystemMessage(astringf("Admin %s changed color of player [%d] %s to %d",
+		const char* msg = astringf("Admin %s changed color of player [%d] %s to %d",
 			NetPlay.players[queue.index].name,
 			NetPlay.players[player].position,
 			NetPlay.players[player].name,
-			col).c_str());
+			col).c_str();
+		sendRoomSystemMessage(msg);
+		debug(LOG_INFO, "%s", msg);
 	}
 
 	resetReadyStatus(false, true);
@@ -2859,18 +2874,20 @@ bool recvPositionRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (locked.position)
+	if (locked.position && !senderHasLobbyCommandAdminPrivs(queue.index))
 	{
 		return false;
 	}
 
-	if (senderHasLobbyCommandAdminPrivs(queue.index))
+	if (senderHasLobbyCommandAdminPrivs(queue.index) && (queue.index != player || (locked.position)))
 	{
-		sendRoomSystemMessage(astringf("Admin %s changed position of player [%d] %s to %d",
+		const char* msg = astringf("Admin %s changed position of player [%d] %s to %d",
 			NetPlay.players[queue.index].name,
 			NetPlay.players[player].position,
 			NetPlay.players[player].name,
-			position).c_str());
+			position).c_str();
+		sendRoomSystemMessage(msg);
+		debug(LOG_INFO, "%s", msg);
 	}
 
 	resetReadyStatus(false);
