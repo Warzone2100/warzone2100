@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"PO-Revision-Date: 2024-09-18 02:24\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1800,7 +1800,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Уничтожьте командный центр, чтобы остановить программу вторжения НЕКСУС"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Внимание: Командный центр защищен от воздушных атак"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Исследуйте схемы сопротивления и выживите от нападения НЕКСУС"
@@ -2940,7 +2940,7 @@ msgid "System locale"
 msgstr "Системный язык"
 
 msgid "Failed to create port mapping"
-msgstr "Не удалось назначить внешний порт"
+msgstr "Не удалось создать переадресацию портов"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
@@ -2955,7 +2955,7 @@ msgid "Your external IP is: %s"
 msgstr "Ваш внеший IP-адрес: %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "Не удалось создать переадресацию портов (таймаут)"
 
 msgid "Client failed to ack player index swap"
 msgstr "Клиент не подтвердил смену индекса игрока"

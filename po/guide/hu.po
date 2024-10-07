@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-12 03:55+0000\n"
-"PO-Revision-Date: 2024-06-12 05:00\n"
+"PO-Revision-Date: 2024-09-13 02:24\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -66,7 +66,7 @@ msgid "The Project dispatches three teams with the objective of reclaiming artif
 msgstr ""
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr ""
+msgstr "- Az Alfa csapat egy arizonai sivatagi helyszínre lett küldve, a Terv főhadiszállásától délkeletre"
 
 msgid "- Beta team is sent to the remains of Chicago"
 msgstr ""
@@ -219,19 +219,19 @@ msgid "Note: The base Factory is only able to produce units with Light bodies. F
 msgstr ""
 
 msgid "Command Center"
-msgstr ""
+msgstr "Parancsnoki központ"
 
 msgid "The Command Center is the headquarters of your base."
-msgstr "A Parancsnokság a bázis főhadiszállása."
+msgstr "A Parancsnoki központ a bázis főhadiszállása."
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
-msgstr ""
+msgstr "Hozzáférést biztosít a kistérképhez/radarhoz, és lehetővé teszi az egységek tervezését."
 
 msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
-msgstr ""
+msgstr "Parancsnoki központ építéséhez kattintson az „Építés” gombra a parancsnoki panelen, és válassza a Parancsnoki központ épületet."
 
 msgid "Then, click where you want your builders to construct it."
-msgstr ""
+msgstr "Ezután kattintson oda, ahová az építői megépítsék."
 
 msgid "Structure Modules"
 msgstr ""
@@ -417,7 +417,7 @@ msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
 msgstr ""
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
-msgstr ""
+msgstr "A visszavonuló egységek visszatérnek a legközelebbi javítóműhelybe, javítóegységhez, főhadiszálláshoz vagy LZ-hez."
 
 msgid "Return To"
 msgstr ""
@@ -429,7 +429,7 @@ msgid "- Return for Repair: Unit will return to a Repair Facility"
 msgstr ""
 
 msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
-msgstr ""
+msgstr "- Visszatérés a főhadiszállásra: az egység visszatér a parancsnoki központhoz vagy LZ-hez (hadjárat)"
 
 msgid "- Go To Transport: Unit will go to and board transport"
 msgstr ""
