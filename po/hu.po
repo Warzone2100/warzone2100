@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"PO-Revision-Date: 2024-09-13 02:24\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -51,7 +51,7 @@ msgid "The New Paradigm control superior weapons technology."
 msgstr "Az Új Paradigma fejlettebb fegyvertechnológiával rendelkezik."
 
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Náluk lehet a szinaptikus kapcsolat technológia, létfontosságú visszaszerezni."
+msgstr "Náluk lehet a szinaptikus kapcsolat technológia, visszaszerzése létfontosságú."
 
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
 msgstr "SZÁLLÍTÁSI KÜLDETÉS: Keresse meg és szerezze vissza a leleteket"
@@ -1800,7 +1800,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "A Nexus főhadszállás megsemmisítésével letilthatja a Nexus behatoló programot"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Figyelmeztetés: a főhadiszállás pajzzsal védett a VTOL támadásokkal szemben"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Fejlesszen ki ellenállósági áramköröket és élje túl a Nexus támadásait"
@@ -2016,7 +2016,7 @@ msgid "Dawn, July 4th, 2100"
 msgstr "2100. július 4., pirkadat"
 
 msgid "Project HQ"
-msgstr "Terv Főhadiszállás"
+msgstr "Terv főhadiszállása"
 
 msgid "A New Era"
 msgstr "Egy új korszak"
@@ -2955,7 +2955,7 @@ msgid "Your external IP is: %s"
 msgstr ""
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "A porthozzárendelés létrehozása sikertelen (időtúllépés)"
 
 msgid "Client failed to ack player index swap"
 msgstr "A kliens nem tudta kezelni a játékosindex változását"
@@ -8890,7 +8890,7 @@ msgid "Rotate Building Anticlockwise"
 msgstr "Építmény forgatása balra"
 
 msgid "Center View on HQ"
-msgstr "Középpontba a főhadiszállást"
+msgstr "A nézet ráállítása a főhadiszállásra"
 
 msgid "Hold Fire"
 msgstr "Tüzet szüntess"
@@ -9545,10 +9545,10 @@ msgid "Reveal ON"
 msgstr "Felfedés Be"
 
 msgid "Centered on player HQ, direction NORTH"
-msgstr "Főhadiszállása központosítva, észak felé irányítva"
+msgstr "A nézet ráállítva a főhadiszállásra, északi tájolással"
 
 msgid "Unable to locate HQ!"
-msgstr "Képtelen, hogy lokalizálja főhadiszállást!"
+msgstr "A főhadiszállás nem található!"
 
 msgid "Formation speed limiting ON"
 msgstr "Alakzat sebességkorlátozása BE"
@@ -11250,19 +11250,19 @@ msgid "Can't find any games for your version."
 msgstr "Nem talál játékokat a verziódhoz."
 
 msgid "There appears to be a game update available!"
-msgstr "Mutatod, hogy elérhető e játék frissítés!"
+msgstr "Úgy néz ki, hogy játékfrissítés érhető el!"
 
 msgid "No games are available for your version"
-msgstr "Nincs rendelkezésre álló játék verzió"
+msgstr "Nincs rendelkezésre álló játék a verziójához"
 
 msgid "Wrong Game Version!"
 msgstr "Rossz játékverzió."
 
 msgid "You have an incompatible mod."
-msgstr "Inkompatibilis módban vagy."
+msgstr "Egy nem kompatibilis moddal rendelkezik."
 
 msgid "Host couldn't send file?"
-msgstr "Gazdagép nem tudott fájlt küldeni?"
+msgstr "A házigazda nem tudott fájlt küldeni?"
 
 msgid "Incorrect Password!"
 msgstr "Helytelen Jelszó."
@@ -11274,16 +11274,16 @@ msgid "CONNECTION"
 msgstr "KAPCSOLAT"
 
 msgid "Lobby"
-msgstr "Előcsarnok"
+msgstr "Váró"
 
 msgid "IP"
 msgstr "IP cím alapján"
 
 msgid "IP Address or Machine Name"
-msgstr "IP cím vagy gépnév"
+msgstr "IP-cím vagy gépnév"
 
 msgid "Launch Transport"
-msgstr "Szállítást indítása"
+msgstr "Szállító indítása"
 
 msgid "Launch the Transporter"
 msgstr "Szállítást indítása"
@@ -11292,7 +11292,7 @@ msgid "There is not enough room in the Transport!"
 msgstr "Nincs elegendő férőhely a szállításhoz."
 
 msgid "Reinforcements landing"
-msgstr "Utánpótlás leszállt"
+msgstr "Az utánpótlás leszáll"
 
 msgid "Update Available"
 msgstr "Frissítés érhető el"
