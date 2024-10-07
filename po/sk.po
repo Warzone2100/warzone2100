@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"PO-Revision-Date: 2024-09-26 02:28\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -51,16 +51,16 @@ msgid "The New Paradigm control superior weapons technology."
 msgstr "Nová Paradigma vlastní technológiu špičkových zbraní."
 
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Môžu mať technológiu pre synaptické spojenia, jej získanie je zásadné."
+msgstr "Môžu mať technológiu synaptických spojení, jej získanie je zásadné."
 
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
 msgstr "PREPRAVNÁ MISIA: Nájdi a získaj artefakty"
 
 msgid "Load an attack force into the transport."
-msgstr "Naložte úločné sily do transportu."
+msgstr "Naložte útočné sily do transportu."
 
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "Po pristání skontrolujte ruiny a získajte všetky artefakty."
+msgstr "Po pristátí skontrolujte ruiny a získajte všetky artefakty."
 
 msgid "TRANSPORT MISSION: Investigate Research Center"
 msgstr "PREPRAVNÁ MISIA: Preskúmajte výskumné stredisko"
@@ -645,10 +645,10 @@ msgid "Before NEXUS was expelled, we intercepted this message - Decoding complet
 msgstr "Pred vyhnaním NEXUS sme zachytili túto správu – Dekódovanie kompletné."
 
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr ""
+msgstr "Útočný oddiel NEXUS smeruje na tieto súradnice."
 
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr ""
+msgstr "Máš príležitosť zničiť NEXUS pred tým, než sa tam dostanú."
 
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
 msgstr ""
@@ -729,19 +729,19 @@ msgid "Missile silos captured."
 msgstr "Raketové silá obsadené."
 
 msgid "NORTHERN SECTOR MISSION: Missile Codes"
-msgstr ""
+msgstr "MISIA SEVERNÉHO SEKTORA: Raketové kódy"
 
 msgid "Commander, there are missiles present at the silos."
-msgstr ""
+msgstr "Veliteľ, v silách sa nachádzajú rakety."
 
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr ""
+msgstr "Nexus nám bráni v prístupe ku kontrolnému kódu rakety."
 
 msgid "NEXUS is present in our systems."
 msgstr "NEXUS sa nachádza v našich systémoch."
 
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr ""
+msgstr "Pre porazenie NEXUS musíme vyskúmať program narušiteľ Nexus."
 
 msgid "Assign this task to a research facility."
 msgstr "Priraď túto úlohu výskumnému stredisku."
@@ -750,52 +750,52 @@ msgid "NEXUS forces detected at these locations."
 msgstr "Jednotky NEXUS boli detegované na týchto miestach."
 
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr "NEXUS bol odstránený zo všetkých systémov projeku."
+msgstr "NEXUS bol odstránený zo všetkých systémov projektu."
 
 msgid "We are attempting to access the missile control codes."
 msgstr "Pokúšame sa získať prístup ku kontrolným kódom strely."
 
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr ""
+msgstr "Na prelomenie kódu je vyžadované výskumné stredisko. Okamžite jedno vyhraď."
 
 msgid "Protect the missile silos from NEXUS attacks."
 msgstr "Ochráň raketové silá pred útokmi NEXUS."
 
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr ""
+msgstr "AKTUALIZÁCIA PROJEKTU: Prelomený raketový kód prvej úrovne."
 
 msgid "Missile arming in progress."
-msgstr ""
+msgstr "Aktivovanie rakety prebieha."
 
 msgid "More research is required to proceed further."
-msgstr ""
+msgstr "Pre ďalší postup je potrebný ďalší výskum."
 
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr ""
+msgstr "AKTUALIZÁCIA PROJEKTU: Prelomený raketový kód druhej úrovne."
 
 msgid "Missile target programming in progress."
-msgstr ""
+msgstr "Prebieha programovanie cieľa raketového útoku."
 
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr ""
+msgstr "Po prelomení kódov úrovne 3 zahájime procedúry odpaľovacie procedúry."
 
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr ""
+msgstr "AKTUALIZÁCIA PROJEKTU: Prelomený raketový kód tretej úrovne."
 
 msgid "Missile launch sequence initiated."
-msgstr ""
+msgstr "Zahájená sekvencia odpálenia rakety."
 
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
 msgstr ""
 
 msgid "We have located NEXUS' base at this location."
-msgstr ""
+msgstr "Na tomto mieste sme lokalizovali základňu NEXUS."
 
 msgid "This area contains numerous NEXUS structures."
-msgstr ""
+msgstr "Táto oblasť obsahuje množstvo budov NEXUS."
 
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr ""
+msgstr "Sme si istí, že sa tu nachádzajú hlavné systémy NEXUS."
 
 msgid "Establish an LZ."
 msgstr "Založte MV."
@@ -807,7 +807,7 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr ""
 
 msgid "Briefing Commences:"
-msgstr ""
+msgstr "Brífing začína:"
 
 msgid "Scavenger Outpost"
 msgstr ""
@@ -867,7 +867,7 @@ msgid "Naval"
 msgstr "Námorné"
 
 msgid "Repair Center"
-msgstr ""
+msgstr "Opravárenské centrum"
 
 msgid "Tornado AA Flak Site"
 msgstr ""
@@ -7526,10 +7526,10 @@ msgid "Videos are missing, download them from http://wz2100.net"
 msgstr ""
 
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Pokračovať v poslednej uloženej pozícii"
 
 msgid "No last save available"
-msgstr ""
+msgstr "Nie je dostupná žiadna posledná uložená pozícia"
 
 msgid "Quit Game"
 msgstr "Ukončiť Hru"
@@ -7538,13 +7538,13 @@ msgid "MAIN MENU"
 msgstr "HLAVNÉ MENU"
 
 msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Oficiálna stránka: http://wz2100.net/"
 
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Prídi navštíviť fóra a všetky novinky ohľadom Warzone 2100! Klikni na odkaz."
 
 msgid "Donate: http://donations.wz2100.net/"
-msgstr ""
+msgstr "Prispej: http://donations.wz2100.net/"
 
 msgid "Help support the project with our server costs, Click this link."
 msgstr ""
@@ -7666,22 +7666,22 @@ msgid "Failed to open configuration directory"
 msgstr ""
 
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
 msgid "Unsupported"
-msgstr ""
+msgstr "Nepodporované"
 
 msgid "Off"
 msgstr "Vypnuté"
 
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 msgid "Black"
 msgstr "Čierna"
@@ -7690,7 +7690,7 @@ msgid "On"
 msgstr "Zapnuté"
 
 msgid "Per Pixel"
-msgstr ""
+msgstr "Na pixel"
 
 msgid "Lightmap"
 msgstr ""
@@ -7833,22 +7833,22 @@ msgid "Graphics Mode"
 msgstr ""
 
 msgid "Resolution"
-msgstr ""
+msgstr "Rozlíšenie"
 
 msgid "Display Scale"
-msgstr ""
+msgstr "Škála zobrazenia"
 
 msgid "Adaptive"
-msgstr ""
+msgstr "Adaptívne"
 
 msgid "Windowed"
-msgstr ""
+msgstr "V okne"
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Plný desktop"
 
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "Zapnuté (Celá obrazovka)"
 
 msgid "Texture size"
 msgstr "Veľkosť textúry"
@@ -10507,7 +10507,7 @@ msgid "Bright blue"
 msgstr "Svetlomodrá"
 
 msgid "Neon green"
-msgstr "Neónovo zelená"
+msgstr "Neónová zelená"
 
 msgid "Infrared"
 msgstr "Infračervená"
@@ -10789,10 +10789,10 @@ msgid "Unable to Join Game"
 msgstr ""
 
 msgid "Error:"
-msgstr ""
+msgstr "Chyba:"
 
 msgid "Join Attempt Rejected"
-msgstr ""
+msgstr "Pokus o pripojenie odmietnutý"
 
 msgid "Message from Host:"
 msgstr ""
@@ -10967,7 +10967,7 @@ msgid "Command"
 msgstr ""
 
 msgid "EMP"
-msgstr ""
+msgstr "EMP"
 
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr ""
@@ -10985,7 +10985,7 @@ msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Producti
 msgstr ""
 
 msgid "Laser Satellite is ready to fire!"
-msgstr ""
+msgstr "Laserový satelit je pripravený na paľbu!"
 
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
@@ -11079,7 +11079,7 @@ msgid "Additional Campaigns"
 msgstr ""
 
 msgid "Start Game"
-msgstr ""
+msgstr "Začať hru"
 
 msgid "Tweak Options:"
 msgstr ""
@@ -11289,7 +11289,7 @@ msgid "There is not enough room in the Transport!"
 msgstr ""
 
 msgid "Reinforcements landing"
-msgstr "Pristály posily"
+msgstr "Pristáli posily"
 
 msgid "Update Available"
 msgstr ""
@@ -11321,7 +11321,7 @@ msgid " (modified locally)"
 msgstr ""
 
 msgid " - DEBUG"
-msgstr "- LADENIE"
+msgstr " - LADENIE"
 
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
