@@ -3264,7 +3264,7 @@
 		"hitpoints": 50,
 		"id": "MissileSuper",
 		"lightWorld": 1,
-		"longRange": 3072,
+		"longRange": 2560,
 		"longHit": 90,
 		"maxElevation": 90,
 		"minElevation": -30,
