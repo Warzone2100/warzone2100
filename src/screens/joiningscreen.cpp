@@ -958,10 +958,34 @@ void WzJoiningGameScreen_HandlerRoot::updateJoiningStatus(const WzString& status
 
 void WzJoiningGameScreen_HandlerRoot::handleJoinTimeoutError()
 {
+	std::string reason = "unknown";
+	switch (currentJoiningState) {
+		case JoiningState::NeedsPassword:
+			reason = "NeedsPassword: Waiting for user to enter a password";
+			break;
+		case JoiningState::AwaitingConnection:
+			reason = "AwaitingConnection: Waiting for background thread to (hopefully) yield an open connection (socket)";
+			break;
+		case JoiningState::AwaitingInitialNetcodeHandshakeAck:
+			reason = "AwaitingInitialNetcodeHandshakeAck: Waiting for response to initial netcode version handshake";
+			break;
+		case JoiningState::ProcessingJoinMessages:
+			reason = "ProcessingJoinMessages: Waiting for initial join-related net messages, and responding as needed";
+			break;
+		case JoiningState::Failure:
+			reason = "Failure: Join attempt failed";
+			break;
+		case JoiningState::SuccessPendingClose:
+			reason = "SuccessPendingClose: Join attempt was successful - handed off to onSuccessFunc, but still waiting to close display";
+			break;
+		case JoiningState::Success:
+			reason = "Success";
+			break;
+	}
 	currentJoiningState = JoiningState::Failure;
 
-	debug(LOG_INFO, "Failed to join with timeout");
-	joiningProgressForm->displayUnableToJoinError(_("Host did not respond before timeout"));
+	debug(LOG_INFO, "Failed to join with timeout, state was: %s", reason);
+	joiningProgressForm->displayUnableToJoinError(astringf(_("Host did not respond before timeout, state: %s"), reason.c_str()).c_str());
 	joiningProgressForm->callCalcLayout();
 
 	if (onFailureFunc)
