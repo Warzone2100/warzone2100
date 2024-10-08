@@ -984,7 +984,7 @@ void WzJoiningGameScreen_HandlerRoot::handleJoinTimeoutError()
 	}
 	currentJoiningState = JoiningState::Failure;
 
-	debug(LOG_INFO, "Failed to join with timeout, state was: %s", reason);
+	debug(LOG_INFO, "Failed to join with timeout, state was: %s", reason.c_str());
 	joiningProgressForm->displayUnableToJoinError(astringf(_("Host did not respond before timeout, state: %s"), reason.c_str()).c_str());
 	joiningProgressForm->callCalcLayout();
 
