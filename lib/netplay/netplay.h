@@ -275,6 +275,7 @@ struct PLAYER
 	bool                autoGame;           ///< if we are running a autogame (AI controls us)
 	FactionID			faction;			///< which faction the player has
 	bool				isSpectator;		///< whether this slot is a spectator slot
+	bool				isAdmin;			///< whether this slot has admin privs
 
 	// used on host-ONLY (not transmitted to other clients):
 	std::shared_ptr<std::vector<WZFile>> wzFiles = std::make_shared<std::vector<WZFile>>();            ///< for each player, we keep track of map/mod download progress
@@ -302,6 +303,7 @@ struct PLAYER
 		IPtextAddress[0] = '\0';
 		faction = FACTION_NORMAL;
 		isSpectator = false;
+		isAdmin = false;
 	}
 };
 
@@ -316,7 +318,6 @@ struct NETPLAY
 	uint32_t	hostPlayer;		///< Index of host in player array
 	bool		bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
-	bool		isAdmin;		///< True if we are promoted to admin by the host
 	bool		isPortMappingEnabled;				// if we want the automatic Port mapping setup routines to run
 	bool		isHostAlive;	/// if the host is still alive
 	char gamePassword[password_string_size];		//

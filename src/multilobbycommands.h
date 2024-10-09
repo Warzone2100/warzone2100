@@ -53,7 +53,6 @@ void cmdInterfaceLogChatMsg(const NetworkTextMessage& message, const char* log_p
 bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyOperationsInterface& cmdInterface);
 
 bool identityMatchesAdmin(const EcKey& identity);
-bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx);
 
 bool addLobbyAdminIdentityHash(const std::string& playerIdentityHash);
 bool removeLobbyAdminIdentityHash(const std::string& playerIdentityHash);
