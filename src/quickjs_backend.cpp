@@ -953,6 +953,7 @@ JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 //;; * ```experience``` Amount of experience this droid has, based on damage it has dealt to enemies.
 //;; * ```cost``` What it would cost to build the droid. (3.2+ only)
 //;; * ```isVTOL``` True if the droid is VTOL. (3.2+ only)
+//;; * ```isFlying``` True if the droid is currently flying. (4.5.4+ only)
 //;; * ```canHitAir``` True if the droid has anti-air capabilities. (3.2+ only)
 //;; * ```canHitGround``` True if the droid has anti-ground capabilities. (3.2+ only)
 //;; * ```isSensor``` True if the droid has sensor ability. (3.2+ only)
@@ -1028,6 +1029,7 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "canHitGround", JS_NewBool(ctx, ga), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "isVTOL", JS_NewBool(ctx, psDroid->isVtol()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isFlying", JS_NewBool(ctx, psDroid->isFlying()), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "droidType", JS_NewInt32(ctx, (int)type), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "experience", JS_NewFloat64(ctx, (double)psDroid->experience / 65536.0), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewFloat64(ctx, 100.0 / (double)psDroid->originalBody * (double)psDroid->body), JS_PROP_ENUMERABLE);
