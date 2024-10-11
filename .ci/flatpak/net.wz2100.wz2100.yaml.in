@@ -1,7 +1,7 @@
 app-id: net.wz2100.wz2100@WZ_OUTPUT_NAME_SUFFIX@
 # We need to force the target architecture for the runtime, to support cross-compilation
 runtime: org.freedesktop.Platform@WZ_RUNTIME_SUFFIX@
-runtime-version: '23.08'
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 command: warzone2100
 @WZ_CROSS_COMPILE_SDK_EXTENSIONS@
