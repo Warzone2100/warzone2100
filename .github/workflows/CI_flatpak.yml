@@ -52,7 +52,7 @@ jobs:
       WZ_FLATPAK_BUILD_DIR: flatpak_app
       WZ_FLATPAK_TARGET_ARCH: ${{ matrix.flatpak-arch }}
       WZ_FLATPAK_BUILD_ARCH: x86_64
-      WZ_FREEDESKTOP_RUNTIME_VERSION: 23.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
+      WZ_FREEDESKTOP_RUNTIME_VERSION: 24.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
     outputs:
       # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
