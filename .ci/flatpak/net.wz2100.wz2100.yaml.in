@@ -111,21 +111,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/google/shaderc.git
-        tag: v2024.1
-        commit: 47a9387ef5b3600d30d84c71ec77a59dc7db46fa
+        tag: v2024.3
+        commit: ff84893dd52d28f0b1737d2635733d952013bd9c
       # Replicate the needed functionality of utils/git-sync-deps
       # To avoid having to break the build sandbox to download files
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Headers.git
-        commit: 5e3ad389ee56fca27c9705d093ae5387ce404df4 # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 2a9b6f951c7d6b04b6c21fe1bf3f475b68b84801 # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-headers
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Tools.git
-        commit: dd4b663e13c07fea4fbb3f70c1c91c86731099f7 # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 01c8438ee4ac52c248119b7e03e0b021f853b51a # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-tools
       - type: git
         url: https://github.com/KhronosGroup/glslang.git
-        commit: 142052fa30f9eca191aa9dcf65359fcaed09eeec # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 467ce01c71e38cf01814c48987a5c0dadd914df4 # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/glslang
 
   - name: physfs
@@ -194,7 +194,7 @@ modules:
         path: ../../
       - type: file
         url: https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz
-        sha256: 142ae905be288cca33357a49f42b884c190e828fc0b1b1773ded5dff774f41a3        
+        sha256: 142ae905be288cca33357a49f42b884c190e828fc0b1b1773ded5dff774f41a3
     post-install:
       - mkdir -p /app/share/icons/hicolor/128x128/apps
       - cp /app/share/icons/net.wz2100.wz2100*.png /app/share/icons/hicolor/128x128/apps/
