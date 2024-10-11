@@ -33,6 +33,7 @@
 #include "src/console.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
+#include "src/multilobbycommands.h"
 
 #include <time.h>			// for stats
 #include <physfs.h>
@@ -4293,9 +4294,12 @@ static void NETallowJoining()
 
 			NEThostPromoteTempSocketToPermanentPlayerConnection(i, index);
 
+			bool isAdminJoining = identityMatchesAdmin(joinRequestInfo.identity);
+
 			NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 			NETuint8_t(&index);
 			NETuint32_t(&NetPlay.hostPlayer);
+			NETbool(&isAdminJoining);
 			NETend();
 
 			// First send info about players to newcomer.
