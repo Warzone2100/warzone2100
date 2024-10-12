@@ -5309,7 +5309,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		paragraph->setShadeColour({0, 0, 0, 0});
 		bool specSender = (*message.sender)->isSpectator && !message.sender->isHost();
 		paragraph->setFontColour((!specSender) ? WZCOL_WHITE : WZCOL_TEXT_MEDIUM);
-		paragraph->addText(WzString::fromUtf8(astringf(" %s", message.text.c_str())));
+		paragraph->addText(WzString::format(" %s", message.text.c_str()));
 
 		break;
 	}
@@ -7753,7 +7753,7 @@ void WzMultiplayerOptionsTitleUI::start()
 			}
 			if (getHostLaunch() == HostLaunch::Autohost)
 			{
-				changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Failed to process autohost config:")), WzString::fromUtf8(astringf(_("Failed to load the autohost map or config from: %s"), wz_skirmish_test().c_str())), parent));
+				changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Failed to process autohost config:")), WzString::format(_("Failed to load the autohost map or config from: %s"), wz_skirmish_test().c_str()), parent));
 				setHostLaunch(HostLaunch::Normal); // Don't load the autohost file on subsequent hosts
 				return;
 			}
