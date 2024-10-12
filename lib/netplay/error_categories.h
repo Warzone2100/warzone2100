@@ -47,6 +47,26 @@ public:
 	std::error_condition default_error_condition(int ev) const noexcept override;
 };
 
+/// <summary>
+/// Custom error category which maps error codes from `getaddrinfo()` function to
+/// the appropriate error messages.
+/// </summary>
+class GetaddrinfoErrorCategory : public std::error_category
+{
+public:
+
+	constexpr GetaddrinfoErrorCategory() = default;
+
+	const char* name() const noexcept override
+	{
+		return "getaddrinfo";
+	}
+
+	std::string message(int ev) const override;
+};
+
 const std::error_category& generic_system_error_category();
+const std::error_category& getaddrinfo_error_category();
 
 std::error_code make_network_error_code(int ev);
+std::error_code make_getaddrinfo_error_code(int ev);
