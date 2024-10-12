@@ -65,8 +65,28 @@ public:
 	std::string message(int ev) const override;
 };
 
+/// <summary>
+/// Custom error category which maps some of the error codes from zlib to
+/// the appropriate error messages.
+/// </summary>
+class ZlibErrorCategory : public std::error_category
+{
+public:
+
+	constexpr ZlibErrorCategory() = default;
+
+	const char* name() const noexcept override
+	{
+		return "zlib";
+	}
+
+	std::string message(int ev) const override;
+};
+
 const std::error_category& generic_system_error_category();
 const std::error_category& getaddrinfo_error_category();
+const std::error_category& zlib_error_category();
 
 std::error_code make_network_error_code(int ev);
 std::error_code make_getaddrinfo_error_code(int ev);
+std::error_code make_zlib_error_code(int ev);

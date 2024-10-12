@@ -29,6 +29,8 @@
 # include <netdb.h>
 #endif
 
+#include <zlib.h>
+
 std::string GenericSystemErrorCategory::message(int ev) const
 {
 #if defined(WZ_OS_WIN)
@@ -103,6 +105,23 @@ std::string GetaddrinfoErrorCategory::message(int ev) const
 	return gai_strerror(ev);
 }
 
+std::string ZlibErrorCategory::message(int ev) const
+{
+	switch (ev)
+	{
+	case Z_STREAM_ERROR:
+		return "Z_STREAM_ERROR";
+	case Z_NEED_DICT:
+		return "Z_NEED_DICT";
+	case Z_DATA_ERROR:
+		return "Z_DATA_ERROR";
+	case Z_MEM_ERROR:
+		return "Z_MEM_ERROR";
+	default:
+		return "Unknown zlib error";
+	}
+}
+
 const std::error_category& generic_system_error_category()
 {
 	static GenericSystemErrorCategory instance;
@@ -115,6 +134,12 @@ const std::error_category& getaddrinfo_error_category()
 	return instance;
 }
 
+const std::error_category& zlib_error_category()
+{
+	static ZlibErrorCategory instance;
+	return instance;
+}
+
 std::error_code make_network_error_code(int ev)
 {
 	return { ev, generic_system_error_category() };
@@ -123,4 +148,9 @@ std::error_code make_network_error_code(int ev)
 std::error_code make_getaddrinfo_error_code(int ev)
 {
 	return { ev, getaddrinfo_error_category() };
+}
+
+std::error_code make_zlib_error_code(int ev)
+{
+	return { ev, zlib_error_category() };
 }
