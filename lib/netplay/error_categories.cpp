@@ -98,13 +98,29 @@ std::error_condition GenericSystemErrorCategory::default_error_condition(int ev)
 	return std::system_category().default_error_condition(ev);
 }
 
+std::string GetaddrinfoErrorCategory::message(int ev) const
+{
+	return gai_strerror(ev);
+}
+
 const std::error_category& generic_system_error_category()
 {
 	static GenericSystemErrorCategory instance;
 	return instance;
 }
 
+const std::error_category& getaddrinfo_error_category()
+{
+	static GetaddrinfoErrorCategory instance;
+	return instance;
+}
+
 std::error_code make_network_error_code(int ev)
 {
 	return { ev, generic_system_error_category() };
+}
+
+std::error_code make_getaddrinfo_error_code(int ev)
+{
+	return { ev, getaddrinfo_error_category() };
 }
