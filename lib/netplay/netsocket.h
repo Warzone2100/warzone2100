@@ -23,7 +23,16 @@
 
 #include "lib/framework/types.h"
 #include <string>
+#include <system_error>
 #include <vector>
+
+#include <tl/expected.hpp>
+
+namespace net
+{
+	template <typename T>
+	using result = ::tl::expected<T, std::error_code>;
+} // namespace net
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
