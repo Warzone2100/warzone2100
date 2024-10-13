@@ -64,6 +64,7 @@
 #include "src/stdinreader.h"
 
 #include <LRUCache11/LRUCache11.hpp>
+#include <tl/expected.hpp>
 
 #if defined (WZ_OS_MAC)
 # include "lib/framework/cocoa_wrapper.h"
@@ -536,7 +537,6 @@ bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApp
 static size_t NET_fillBuffer(Socket **pSocket, SocketSet *pSocketSet, uint8_t *bufstart, int bufsize)
 {
 	Socket *socket = *pSocket;
-	ssize_t size;
 
 	if (!socketReadReady(*socket))
 	{
@@ -544,40 +544,35 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet *pSocketSet, uint8_t *b
 	}
 
 	size_t rawBytes;
-	size = readNoInt(*socket, bufstart, bufsize, &rawBytes);
+	const auto readResult = readNoInt(*socket, bufstart, bufsize, &rawBytes);
 
-	if ((size != 0 || !socketReadDisconnected(*socket)) && size != SOCKET_ERROR)
+	if (readResult.has_value())
 	{
+		const auto size = readResult.value();
+
 		nStats.rawBytes.received          += rawBytes;
-		nStats.uncompressedBytes.received += size;
+		nStats.uncompressedBytes.received += static_cast<size_t>(size);
 		nStats.packets.received           += 1;
 
 		return size;
 	}
 	else
 	{
-		if (size == 0)
+		if (readResult.error() == std::errc::timed_out || readResult.error() == std::errc::connection_reset)
 		{
 			debug(LOG_NET, "Connection closed from the other side");
 			NETlogEntry("Connection closed from the other side..", SYNC_FLAG, selectedPlayer);
 		}
 		else
 		{
-			debug(LOG_NET, "%s socket %p is now invalid", strSockError(getSockErr()), static_cast<void *>(socket));
+			const auto readErrMsg = readResult.error().message();
+			debug(LOG_NET, "%s socket %p is now invalid", readErrMsg.c_str(), static_cast<void*>(socket));
 		}
 
 		// an error occurred, or the remote host has closed the connection.
 		if (pSocketSet != nullptr)
 		{
 			SocketSet_DelSocket(*pSocketSet, socket);
-		}
-
-		ASSERT(size <= bufsize, "Socket buffer is too small!");
-
-		if (size > bufsize)
-		{
-			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %ld", bufsize, (long)size);
-			NETlogEntry("Fatal connection error: buffer size was too small!", SYNC_FLAG, selectedPlayer);
 		}
 		if (bsocket == socket)
 		{
@@ -1204,7 +1199,7 @@ static constexpr size_t GAMESTRUCTmessageBufSize()
  *
  * @see GAMESTRUCT,NETrecvGAMESTRUCT
  */
-static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
+static net::result<void> NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).  Initialise
@@ -1213,7 +1208,6 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 	char buf[GAMESTRUCTmessageBufSize()] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
-	ssize_t result;
 
 	auto push32 = [&](uint32_t value) {
 		uint32_t swapped = htonl(value);
@@ -1311,20 +1305,17 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 	debug(LOG_NET, "sending GAMESTRUCT, size: %u", (unsigned int)sizeof(buf));
 
 	// Send over the GAMESTRUCT
-	result = writeAll(*sock, buf, sizeof(buf));
-	if (result == SOCKET_ERROR)
+	const auto writeResult = writeAll(*sock, buf, sizeof(buf));
+	if (!writeResult.has_value())
 	{
-		const int err = getSockErr();
-
+		const auto writeErrMsg = writeResult.error().message();
 		// If packet could not be sent, we should inform user of the error.
-		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", strSockError(err));
+		debug(LOG_ERROR, "Failed to send GAMESTRUCT. Reason: %s", writeErrMsg.c_str());
 		debug(LOG_ERROR, "Please make sure TCP ports %u & %u are open!", masterserver_port, gameserver_port);
 
-		setSockErr(err);
-		return false;
+		return tl::make_unexpected(writeResult.error());
 	}
-
-	return true;
+	return {};
 }
 
 /**
@@ -1341,7 +1332,6 @@ static bool NETrecvGAMESTRUCT(Socket& sock, GAMESTRUCT *ourgamestruct)
 	char buf[GAMESTRUCTmessageBufSize()] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
-	ssize_t result = 0;
 
 	auto pop32 = [&]() -> uint32_t {
 		uint32_t value = 0;
@@ -1360,20 +1350,18 @@ static bool NETrecvGAMESTRUCT(Socket& sock, GAMESTRUCT *ourgamestruct)
 	};
 
 	// Read a GAMESTRUCT from the connection
-	result = readAll(sock, buf, sizeof(buf), NET_TIMEOUT_DELAY);
-	bool failed = false;
-	if (result == SOCKET_ERROR)
+	auto readResult = readAll(sock, buf, sizeof(buf), NET_TIMEOUT_DELAY);
+	if (!readResult.has_value())
 	{
-		debug(LOG_ERROR, "Lobby server connection error: %s", strSockError(getSockErr()));
-		failed = true;
-	}
-	else if ((unsigned)result != sizeof(buf))
-	{
-		debug(LOG_ERROR, "GAMESTRUCT recv timed out; received %d bytes; expecting %d", (int)result, (int)sizeof(buf));
-		failed = true;
-	}
-	if (failed)
-	{
+		if (readResult.error() == std::errc::timed_out || readResult.error() == std::errc::connection_reset)
+		{
+			debug(LOG_ERROR, "GAMESTRUCT recv failed: timed out");
+		}
+		else
+		{
+			const auto readErrMsg = readResult.error().message();
+			debug(LOG_ERROR, "Lobby server connection error: %s", readErrMsg.c_str());
+		}
 		// caller handles invalidating and closing tcp_socket
 		return false;
 	}
@@ -1724,7 +1712,6 @@ void NETsendProcessDelayedActions()
 bool NETsend(NETQUEUE queue, NetMessage const *message)
 {
 	uint8_t player = queue.index;
-	ssize_t result = 0;
 
 	if (!NetPlay.bComms)
 	{
@@ -1768,19 +1755,22 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 				}
 				ssize_t rawLen   = message->rawLen();
 				size_t compressedRawLen;
-				result = writeAll(*sockets[player], rawData, rawLen, &compressedRawLen);
+				const auto writeResult = writeAll(*sockets[player], rawData, rawLen, &compressedRawLen);
+				const auto res = writeResult.value_or(SOCKET_ERROR);
 				delete[] rawData;  // Done with the data.
 
-				if (result == rawLen)
+				if (res == rawLen)
 				{
 					nStats.rawBytes.sent          += compressedRawLen;
 					nStats.uncompressedBytes.sent += rawLen;
 					nStats.packets.sent           += 1;
 				}
-				else if (result == SOCKET_ERROR)
+				else if (res == SOCKET_ERROR)
 				{
+					const auto writeErrMsg = writeResult.error().message();
 					// Write error, most likely client disconnect.
-					debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to %" PRIu8 ": %s", message->type, message->rawLen(), compressedRawLen, player, strSockError(getSockErr()));
+					debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to %" PRIu8 ": %s",
+						message->type, message->rawLen(), compressedRawLen, player, writeErrMsg.c_str());
 					if (!isTmpQueue)
 					{
 						netSendPendingDisconnectPlayerIndexes.insert(player);
@@ -1798,19 +1788,21 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 			uint8_t *rawData = message->rawDataDup();
 			ssize_t rawLen   = message->rawLen();
 			size_t compressedRawLen;
-			result = writeAll(*bsocket, rawData, rawLen, &compressedRawLen);
+			const auto writeResult = writeAll(*bsocket, rawData, rawLen, &compressedRawLen);
+			const auto res = writeResult.value_or(SOCKET_ERROR);
 			delete[] rawData;  // Done with the data.
 
-			if (result == rawLen)
+			if (res == rawLen)
 			{
 				nStats.rawBytes.sent          += compressedRawLen;
 				nStats.uncompressedBytes.sent += rawLen;
 				nStats.packets.sent           += 1;
 			}
-			else if (result == SOCKET_ERROR)
+			else if (res == SOCKET_ERROR)
 			{
+				const auto writeErrMsg = writeResult.error().message();
 				// Write error, most likely host disconnect.
-				debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
+				debug(LOG_ERROR, "Failed to send message: %s", writeErrMsg.c_str());
 				debug(LOG_ERROR, "Host connection was broken, socket %p.", static_cast<void *>(bsocket));
 				NETlogEntry("write error--client disconnect.", SYNC_FLAG, player);
 				SocketSet_DelSocket(*client_socket_set, bsocket);            // mark it invalid
@@ -1821,7 +1813,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 				NetPlay.isHostAlive = false;
 			}
 
-			return result == rawLen;
+			return res == rawLen;
 		}
 	}
 	else
@@ -3241,15 +3233,15 @@ static ssize_t readLobbyResponse(Socket& sock, unsigned int timeout)
 	uint32_t lobbyStatusCode;
 	uint32_t MOTDLength;
 	uint32_t buffer[2];
-	ssize_t result, received = 0;
+	ssize_t received = 0;
 
 	// Get status and message length
-	result = readAll(sock, &buffer, sizeof(buffer), timeout);
-	if (result != sizeof(buffer))
+	auto readResult = readAll(sock, &buffer, sizeof(buffer), timeout);
+	if (!readResult.has_value())
 	{
 		goto error;
 	}
-	received += result;
+	received += readResult.value();
 	lobbyStatusCode = ntohl(buffer[0]);
 	MOTDLength = ntohl(buffer[1]);
 
@@ -3259,12 +3251,12 @@ static ssize_t readLobbyResponse(Socket& sock, unsigned int timeout)
 		free(NetPlay.MOTD);
 	}
 	NetPlay.MOTD = (char *)malloc(MOTDLength + 1);
-	result = readAll(sock, NetPlay.MOTD, MOTDLength, timeout);
-	if (result != MOTDLength)
+	readResult = readAll(sock, NetPlay.MOTD, MOTDLength, timeout);
+	if (!readResult.has_value())
 	{
 		goto error;
 	}
-	received += result;
+	received += readResult.value();
 	// NUL terminate string
 	NetPlay.MOTD[MOTDLength] = '\0';
 
@@ -3293,37 +3285,19 @@ static ssize_t readLobbyResponse(Socket& sock, unsigned int timeout)
 	return received;
 
 error:
-	if (result == SOCKET_ERROR)
+	if (NetPlay.MOTD)
 	{
-		if (NetPlay.MOTD)
-		{
-			free(NetPlay.MOTD);
-		}
-		if (asprintf(&NetPlay.MOTD, "Error while connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", strSockError(getSockErr()), gameserver_port) == -1)
-		{
-			NetPlay.MOTD = nullptr;
-		}
-		else
-		{
-			NetPlay.ShowedMOTD = false;
-			debug(LOG_ERROR, "%s", NetPlay.MOTD);
-		}
+		free(NetPlay.MOTD);
+	}
+	const auto readErrMsg = readResult.error().message();
+	if (asprintf(&NetPlay.MOTD, "Error while connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", readErrMsg.c_str(), gameserver_port) == -1)
+	{
+		NetPlay.MOTD = nullptr;
 	}
 	else
 	{
-		if (NetPlay.MOTD)
-		{
-			free(NetPlay.MOTD);
-		}
-		if (asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.") == -1)
-		{
-			NetPlay.MOTD = nullptr;
-		}
-		else
-		{
-			NetPlay.ShowedMOTD = false;
-			debug(LOG_ERROR, "%s", NetPlay.MOTD);
-		}
+		NetPlay.ShowedMOTD = false;
+		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
 
 	std::string strmotd = (NetPlay.MOTD) ? std::string(NetPlay.MOTD) : std::string();
@@ -3336,21 +3310,22 @@ bool readGameStructsList(Socket& sock, unsigned int timeout, const std::function
 {
 	unsigned int gamecount = 0;
 	uint32_t gamesavailable = 0;
-	int result = 0;
+	const auto readResult = readAll(sock, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY);
 
-	if ((result = readAll(sock, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
+	if (readResult.has_value())
 	{
 		gamesavailable = ntohl(gamesavailable);
 	}
 	else
 	{
-		if (result == SOCKET_ERROR)
+		if (readResult.error() == std::errc::timed_out || readResult.error() == std::errc::connection_reset)
 		{
-			debug(LOG_NET, "Server socket encountered error: %s", strSockError(getSockErr()));
+			debug(LOG_NET, "Server didn't respond (timeout)");
 		}
 		else
 		{
-			debug(LOG_NET, "Server didn't respond (timeout)");
+			const auto readErrMsg = readResult.error().message();
+			debug(LOG_NET, "Server socket encountered error: %s", readErrMsg.c_str());
 		}
 		return false;
 	}
@@ -3398,6 +3373,12 @@ bool readGameStructsList(Socket& sock, unsigned int timeout, const std::function
 	return true;
 }
 
+template <typename T>
+static net::result<void> ignoreExpectedResultValue(const net::result<T>& res)
+{
+	return res.has_value() ? net::result<void>{} : tl::make_unexpected(res.error());
+}
+
 bool LobbyServerConnectionHandler::connect()
 {
 	if (server_not_there)
@@ -3419,18 +3400,19 @@ bool LobbyServerConnectionHandler::connect()
 
 	bool bProcessingConnectOrDisconnectThisCall = true;
 	uint32_t gameId = 0;
-	SocketAddress *const hosts = resolveHost(masterserver_name, masterserver_port);
+	const auto hostsResult = resolveHost(masterserver_name, masterserver_port);
+	const auto hosts = hostsResult.value_or(nullptr);
 
 	if (hosts == nullptr)
 	{
-		int sockErrInt = getSockErr();
-		debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(sockErrInt));
+		const auto hostsErrMsg = hostsResult.error().message();
+		debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, hostsErrMsg.c_str());
 		free(NetPlay.MOTD);
 		if (asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name) == -1)
 		{
 			NetPlay.MOTD = nullptr;
 		}
-		wz_command_interface_output("WZEVENT: lobbyerror (%u): Cannot resolve lobby server: %s\n", 0, strSockError(sockErrInt));
+		wz_command_interface_output("WZEVENT: lobbyerror (%u): Cannot resolve lobby server: %s\n", 0, hostsErrMsg.c_str());
 		server_not_there = true;
 		return bProcessingConnectOrDisconnectThisCall;
 	}
@@ -3443,17 +3425,19 @@ bool LobbyServerConnectionHandler::connect()
 	}
 
 	// try each address from resolveHost until we successfully connect.
-	rs_socket = socketOpenAny(hosts, 1500);
-	int sockOpenErr = getSockErr();
+	auto sockResult = socketOpenAny(hosts, 1500);
 	deleteSocketAddress(hosts);
+
+	rs_socket = sockResult.value_or(nullptr);
 
 	// No address succeeded.
 	if (rs_socket == nullptr)
 	{
-		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(sockOpenErr));
+		const auto errMsg = sockResult.error().message();
+		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, errMsg.c_str());
 		free(NetPlay.MOTD);
 		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to enable UPnP/NAT-PMP/PCP\n or to forward the port to your system."),
-					 strSockError(getSockErr()), masterserver_port) == -1)
+					 errMsg.c_str(), masterserver_port) == -1)
 		{
 			NetPlay.MOTD = nullptr;
 		}
@@ -3462,11 +3446,16 @@ bool LobbyServerConnectionHandler::connect()
 	}
 
 	// Get a game ID
-	if (writeAll(*rs_socket, "gaId", sizeof("gaId")) == SOCKET_ERROR
-		|| readAll(*rs_socket, &gameId, sizeof(gameId), 10000) != sizeof(gameId))
+	auto gameIdResult = writeAll(*rs_socket, "gaId", sizeof("gaId"));
+	if (gameIdResult.has_value())
 	{
+		gameIdResult = readAll(*rs_socket, &gameId, sizeof(gameId), 10000);
+	}
+	if (!gameIdResult.has_value())
+	{
+		const auto gameIdErrMsg = gameIdResult.error().message();
 		free(NetPlay.MOTD);
-		if (asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr())) == -1)
+		if (asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", gameIdErrMsg.c_str()) == -1)
 		{
 			NetPlay.MOTD = nullptr;
 		}
@@ -3486,11 +3475,18 @@ bool LobbyServerConnectionHandler::connect()
 	wz_command_interface_output("WZEVENT: lobbyid: %" PRIu32 "\n", gamestruct.gameId);
 
 	// Register our game with the server
-	if (writeAll(*rs_socket, "addg", sizeof("addg")) == SOCKET_ERROR
-		// and now send what the server wants
-		|| !NETsendGAMESTRUCT(rs_socket, &gamestruct))
+	const auto writeAddGameRes = writeAll(*rs_socket, "addg", sizeof("addg"));
+
+	auto sendGamestructRes = ignoreExpectedResultValue(writeAddGameRes);
+	if (sendGamestructRes.has_value())
 	{
-		debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
+		// and now send what the server wants
+		sendGamestructRes = NETsendGAMESTRUCT(rs_socket, &gamestruct);
+	}
+	if (!sendGamestructRes.has_value())
+	{
+		const auto sendGameErrMsg = sendGamestructRes.error().message();
+		debug(LOG_ERROR, "Failed to register game with server: %s", sendGameErrMsg.c_str());
 		disconnect();
 		return bProcessingConnectOrDisconnectThisCall;
 	}
@@ -3564,7 +3560,7 @@ void LobbyServerConnectionHandler::sendUpdateNow()
 		return;
 	}
 
-	if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
+	if (!NETsendGAMESTRUCT(rs_socket, &gamestruct).has_value())
 	{
 		disconnect();
 	}
@@ -3580,7 +3576,7 @@ void LobbyServerConnectionHandler::sendUpdateNow()
 void LobbyServerConnectionHandler::sendKeepAlive()
 {
 	ASSERT_OR_RETURN(, rs_socket != nullptr, "Null socket");
-	if (writeAll(*rs_socket, "keep", sizeof("keep")) == SOCKET_ERROR)
+	if (!writeAll(*rs_socket, "keep", sizeof("keep")).has_value())
 	{
 		// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
 		disconnect();
@@ -3871,10 +3867,10 @@ static void NETallowJoining()
 			{
 				char *p_buffer = tmp_connectState[i].buffer;
 
-				ssize_t sizeRead = readNoInt(*tmp_socket[i], p_buffer + tmp_connectState[i].usedBuffer, 8 - tmp_connectState[i].usedBuffer);
-				if (sizeRead != SOCKET_ERROR)
+				const auto sizeReadResult = readNoInt(*tmp_socket[i], p_buffer + tmp_connectState[i].usedBuffer, 8 - tmp_connectState[i].usedBuffer);
+				if (sizeReadResult.has_value())
 				{
-					tmp_connectState[i].usedBuffer += sizeRead;
+					tmp_connectState[i].usedBuffer += sizeReadResult.value();
 				}
 
 				// A 2.3.7 client sends a "list" command first, just drop the connection.
@@ -3986,27 +3982,28 @@ static void NETallowJoining()
 			else if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingJoinRequest)
 			{
 				uint8_t buffer[NET_BUFFER_SIZE];
-				ssize_t size = readNoInt(*tmp_socket[i], buffer, sizeof(buffer));
+				const auto readResult = readNoInt(*tmp_socket[i], buffer, sizeof(buffer));
 				uint8_t rejected = 0;
 
-				if ((size == 0 && socketReadDisconnected(*tmp_socket[i])) || size == SOCKET_ERROR)
+				if (!readResult.has_value())
 				{
 					// disconnect or programmer error
-					if (size == 0)
+					if (readResult.error() == std::errc::timed_out || readResult.error() == std::errc::connection_reset)
 					{
 						debug(LOG_NET, "Client socket disconnected.");
 					}
 					else
 					{
-						debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
+						const auto readErrMsg = readResult.error().message();
+						debug(LOG_NET, "Client socket encountered error: %s", readErrMsg.c_str());
 					}
 					NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, i);
 					debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(tmp_socket[i]), __LINE__);
 					NETcloseTempSocket(i);
 					continue;
 				}
-
-				NETinsertRawData(NETnetTmpQueue(i), buffer, size);
+				const auto size = readResult.value();
+				NETinsertRawData(NETnetTmpQueue(i), buffer, static_cast<size_t>(size));
 
 				if (!NETisMessageReady(NETnetTmpQueue(i)))
 				{
@@ -4489,13 +4486,16 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	// These will initially be assigned to `tmp_socket[i]` until accepted in the game session,
 	// in which case `tmp_socket[i]` will be assigned to `connected_bsocket[i]` and `tmp_socket[i]`
 	// will become nullptr.
+	net::result<Socket*> serverListenResult = {};
 	if (!server_listen_socket)
 	{
-		server_listen_socket = socketListen(gameserver_port);
+		serverListenResult = socketListen(gameserver_port);
+		server_listen_socket = serverListenResult.value_or(nullptr);
 	}
 	if (server_listen_socket == nullptr)
 	{
-		debug(LOG_ERROR, "Cannot connect to master self: %s", strSockError(getSockErr()));
+		const auto sockErrMsg = serverListenResult.error().message();
+		debug(LOG_ERROR, "Cannot connect to master self: %s", sockErrMsg.c_str());
 		return false;
 	}
 	debug(LOG_NET, "New server_listen_socket = %p", static_cast<void *>(server_listen_socket));
@@ -4594,8 +4594,6 @@ bool NEThaltJoining()
 // find games on open connection
 bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
 {
-	SocketAddress *hosts;
-	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 
 	if (getLobbyError() == ERROR_INVALID || getLobbyError() == ERROR_KICKED || getLobbyError() == ERROR_HOSTDROPPED)
@@ -4609,30 +4607,36 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		debug(LOG_ERROR, "Likely missing NETinit(true) - this won't return any results");
 		return false;
 	}
-	if ((hosts = resolveHost(masterserver_name, masterserver_port)) == nullptr)
+	const auto hostsResult = resolveHost(masterserver_name, masterserver_port);
+	SocketAddress* hosts = hostsResult.value_or(nullptr);
+	if (!hosts)
 	{
-		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", masterserver_name, strSockError(getSockErr()));
+		const auto hostsErrMsg = hostsResult.error().message();
+		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", masterserver_name, hostsErrMsg.c_str());
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 
-	Socket* sock = socketOpenAny(hosts, 15000);
-
+	auto sockResult = socketOpenAny(hosts, 15000);
 	deleteSocketAddress(hosts);
 	hosts = nullptr;
 
-	if (sock == nullptr)
-	{
-		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
+	if (!sockResult.has_value()) {
+		const auto sockErrMsg = sockResult.error().message();
+		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", masterserver_name, masterserver_port, sockErrMsg.c_str());
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
+	Socket* sock = sockResult.value();
+
 	debug(LOG_NET, "New socket = %p", static_cast<void *>(sock));
 	debug(LOG_NET, "Sending list cmd");
 
-	if (writeAll(*sock, "list", sizeof("list")) == SOCKET_ERROR)
+	const auto writeResult = writeAll(*sock, "list", sizeof("list"));
+	if (!writeResult.has_value())
 	{
-		debug(LOG_NET, "Server socket encountered error: %s", strSockError(getSockErr()));
+		const auto writeErrMsg = writeResult.error().message();
+		debug(LOG_NET, "Server socket encountered error: %s", writeErrMsg.c_str());
 		// mark it invalid
 		socketClose(sock);
 
@@ -4675,7 +4679,8 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	// Hence as long as we don't treat "0" as signifying any change in behavior, this should be safe + backwards-compatible
 	#define IGNORE_FIRST_BATCH 1
 	uint32_t responseParameters = 0;
-	if ((result = readAll(*sock, &responseParameters, sizeof(responseParameters), NET_TIMEOUT_DELAY)) == sizeof(responseParameters))
+	const auto readResult = readAll(*sock, &responseParameters, sizeof(responseParameters), NET_TIMEOUT_DELAY);
+	if (readResult.has_value())
 	{
 		responseParameters = ntohl(responseParameters);
 
