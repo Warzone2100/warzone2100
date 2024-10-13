@@ -1084,8 +1084,8 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 		{
 			debug(LOG_ERROR, "%s", result.errorString.c_str());
 			// Done trying connections - all failed
-			const char* pSocketErrorStr = strSockError(result.error);
-			auto localizedError = astringf(_("Failed to open connection: [%d] %s"), result.error, (pSocketErrorStr) ? pSocketErrorStr : "<unknown>");
+			const auto sockErrorMsg = result.errorCode.message();
+			auto localizedError = astringf(_("Failed to open connection: [%d] %s"), result.errorCode.value(), sockErrorMsg.c_str());
 			handleFailure(FailureDetails::makeFromInternalError(WzString::fromUtf8(localizedError)));
 		}
 		return;
@@ -1111,9 +1111,11 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 	pushu32(NETGetMajorVersion());
 	pushu32(NETGetMinorVersion());
 
-	if (writeAll(*client_transient_socket, buffer, sizeof(buffer)) == SOCKET_ERROR)
+	const auto writeResult = writeAll(*client_transient_socket, buffer, sizeof(buffer));
+	if (!writeResult.has_value())
 	{
-		debug(LOG_ERROR, "Couldn't send my version.");
+		const auto writeErrMsg = writeResult.error().message();
+		debug(LOG_ERROR, "Couldn't send my version: %s", writeErrMsg.c_str());
 		closeConnectionAttempt();
 		return;
 	}
@@ -1186,18 +1188,19 @@ bool WzJoiningGameScreen_HandlerRoot::joiningSocketNETsend()
 	uint8_t *rawData = message->rawDataDup();
 	ssize_t rawLen   = message->rawLen();
 	size_t compressedRawLen = 0;
-	ssize_t result = writeAll(*client_transient_socket, rawData, rawLen, &compressedRawLen);
+	const auto writeResult = writeAll(*client_transient_socket, rawData, rawLen, &compressedRawLen);
 	delete[] rawData;  // Done with the data.
 	queue->popMessageForNet();
-	if (result == rawLen)
+	if (writeResult.has_value())
 	{
 		// success writing to socket
 		debug(LOG_NET, "Wrote initial message to socket to host");
 	}
-	else if (result == SOCKET_ERROR)
+	else
 	{
+		const auto writeErrMsg = writeResult.error().message();
 		// Write error, most likely host disconnect.
-		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host", message->type, message->rawLen(), compressedRawLen);
+		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", message->type, message->rawLen(), compressedRawLen, writeErrMsg.c_str());
 		return false;
 	}
 	socketFlush(*client_transient_socket, NET_HOST_ONLY);  // Make sure the message was completely sent.
@@ -1286,10 +1289,10 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 
 			char *p_buffer = initialAckBuffer;
-			ssize_t sizeRead = readNoInt(*client_transient_socket, p_buffer + usedInitialAckBuffer, expectedInitialAckSize - usedInitialAckBuffer);
-			if (sizeRead != SOCKET_ERROR)
+			const auto readResult = readNoInt(*client_transient_socket, p_buffer + usedInitialAckBuffer, expectedInitialAckSize - usedInitialAckBuffer);
+			if (readResult.has_value())
 			{
-				usedInitialAckBuffer += sizeRead;
+				usedInitialAckBuffer += static_cast<size_t>(readResult.value());
 			}
 
 			if (usedInitialAckBuffer >= expectedInitialAckSize)
@@ -1337,18 +1340,18 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 
 			uint8_t readBuffer[NET_BUFFER_SIZE];
-			ssize_t size = readNoInt(*client_transient_socket, readBuffer, sizeof(readBuffer));
-
-			if ((size == 0 && socketReadDisconnected(*client_transient_socket)) || size == SOCKET_ERROR)
+			const auto readResult = readNoInt(*client_transient_socket, readBuffer, sizeof(readBuffer));
+			if (!readResult.has_value())
 			{
 				// disconnect or programmer error
-				if (size == 0)
+				if (readResult.error() == std::errc::timed_out || readResult.error() == std::errc::connection_reset)
 				{
 					debug(LOG_NET, "Client socket disconnected.");
 				}
 				else
 				{
-					debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
+					const auto readErrMsg = readResult.error().message();
+					debug(LOG_NET, "Client socket encountered error: %s", readErrMsg.c_str());
 				}
 				NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, startTime);
 				debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(client_transient_socket), __LINE__);
@@ -1358,7 +1361,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 			else
 			{
-				NETinsertRawData(tmpJoiningQUEUE, readBuffer, size);
+				NETinsertRawData(tmpJoiningQUEUE, readBuffer, static_cast<size_t>(readResult.value()));
 			}
 		}
 
