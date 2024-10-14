@@ -926,7 +926,8 @@ void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTex
 			return fullName;
 		};
 
-		// check water optional textures.push_back(optTexturenameToPath("page-80-water-1.png"));
+		// check water optional textures
+		waterTextureFilenames.push_back(optTexturenameToPath("page-80-water-1.png"));
 		waterTextureFilenames.push_back(optTexturenameToPath("page-81-water-2.png"));
 		waterTextureFilenames_nm.push_back(optTexturenameToPath("page-80-water-1_nm.png"));
 		waterTextureFilenames_nm.push_back(optTexturenameToPath("page-81-water-2_nm.png"));
