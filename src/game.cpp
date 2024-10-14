@@ -5630,7 +5630,10 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 			if (psGroup->type == GT_TRANSPORTER)
 			{
 				psDroid->selected = false;  // Droid should be visible in the transporter interface.
-				visRemoveVisibility(psDroid); // should not have visibility data when in a transporter
+				if (!psDroid->isTransporter())
+				{
+					visRemoveVisibility(psDroid); // should not have visibility data when in a transporter
+				}
 			}
 		}
 		else
