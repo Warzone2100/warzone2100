@@ -2221,6 +2221,7 @@ void seqVsyncMode()
 	{
 		// succeeded changing vsync mode
 		saveCurrentSwapMode(currentVsyncMode);
+		wzPostChangedSwapInterval();
 	}
 }
 
