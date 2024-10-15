@@ -313,8 +313,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.3.268.0/windows/VulkanSDK-1.3.268.0-Installer.exe?Human=true"
-        $VULKAN_DL_SHA256 = "8459ef49bd06b697115ddd3d97c9aec729e849cd775f5be70897718a9b3b9db5"
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe?Human=true"
+        $VULKAN_DL_SHA256 = "acb4ae0786fd3e558f8b3c36cc3eba91638984217ba8a6795ec64d2f9ffd8c4b"
 
         $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
         $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
