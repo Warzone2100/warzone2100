@@ -33,6 +33,7 @@
 #include "src/console.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
+#include "src/multilobbycommands.h"
 
 #include <time.h>			// for stats
 #include <physfs.h>
@@ -673,6 +674,7 @@ void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpec
 	{
 		NetPlay.players[i].isSpectator = false;
 	}
+	NetPlay.players[i].isAdmin = false;
 }
 
 uint8_t NET_numHumanPlayers(void)
@@ -741,6 +743,11 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 		NETuint8_t(reinterpret_cast<uint8_t *>(&NetPlay.players[index[n]].faction));
 		NETbool(&NetPlay.players[index[n]].isSpectator);
+	}
+	for (unsigned n = 0; n < indexLen; ++n)
+	{
+		NETuint32_t(&index[n]);
+		NETbool(&NetPlay.players[index[n]].isAdmin);
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -2541,6 +2548,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			int8_t difficulty = 0;
 			uint8_t faction = FACTION_NORMAL;
 			bool isSpectator = false;
+			bool isAdmin = false;
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
@@ -2613,6 +2621,29 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 					printConsoleNameChange(oldName.c_str(), NetPlay.players[index].name);
 				}
 			}
+
+			for (n = 0; n < indexLen; ++n)
+			{
+				// Retrieve the player's ID
+				NETuint32_t(&index);
+
+				// Bail out if the given ID number is out of range
+				if (index >= MAX_CONNECTED_PLAYERS || (playerQueue.index != NetPlay.hostPlayer && (playerQueue.index != index || !NetPlay.players[index].allocated)))
+				{
+					debug(LOG_ERROR, "MSG_PLAYER_INFO from %u: Player ID (%u) out of range (max %u)", playerQueue.index, index, (unsigned int)MAX_CONNECTED_PLAYERS);
+					error = true;
+					break;
+				}
+
+				NETbool(&isAdmin);
+
+				// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
+				if (playerQueue.index == NetPlay.hostPlayer)
+				{
+					NetPlay.players[index].isAdmin = isAdmin;
+				}
+			}
+
 			NETend();
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.

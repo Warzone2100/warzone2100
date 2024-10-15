@@ -40,6 +40,7 @@
 #include "multistat.h"
 #include "urlrequest.h"
 #include "stdinreader.h"
+#include "multilobbycommands.h"
 
 #include <utility>
 #include <memory>
@@ -377,12 +378,26 @@ bool multiStatsSetIdentity(uint32_t playerIndex, const EcKey::Key &identity, boo
 			{
 				// Record that the identity has been verified
 				ingame.VerifiedIdentity[playerIndex] = true;
+				if (NetPlay.isHost)
+				{
+					NetPlay.players[playerIndex].isAdmin = identityMatchesAdmin(playerStats[playerIndex].identity);
+					// Do not broadcast player info here, as it's assumed caller will do it
+				}
 
 				// Do *not* output to stdinterface here - the join event is still being processed
 			}
 			else
 			{
 				ingame.VerifiedIdentity[playerIndex] = false;
+				if (NetPlay.isHost)
+				{
+					// when verified identity is cleared, so is admin status (until new identity is verified)
+					if (NetPlay.players[playerIndex].isAdmin)
+					{
+						NetPlay.players[playerIndex].isAdmin = false;
+						NETBroadcastPlayerInfo(playerIndex);
+					}
+				}
 
 				// Output to stdinterface, if enabled
 				if (!identity.empty())

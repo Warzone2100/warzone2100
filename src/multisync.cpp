@@ -38,6 +38,7 @@
 #include "multistat.h"
 #include "multirecv.h"
 #include "stdinreader.h"
+#include "multilobbycommands.h"
 
 #include <array>
 
@@ -329,6 +330,18 @@ bool recvPing(NETQUEUE queue)
 		{
 			// Record that they've verified the identity
 			ingame.VerifiedIdentity[sender] = true;
+
+			if (NetPlay.isHost)
+			{
+				// check if verified identity is an admin, and handle changes to admin status
+				bool oldIsAdminStatus = NetPlay.players[sender].isAdmin;
+				NetPlay.players[sender].isAdmin = identityMatchesAdmin(senderIdentity);
+				if (oldIsAdminStatus != NetPlay.players[sender].isAdmin)
+				{
+					// then send info about admin status changes to all players
+					NETBroadcastPlayerInfo(sender);
+				}
+			}
 
 			// Output to stdinterface, if enabled
 			std::string senderPublicKeyB64 = base64Encode(senderIdentity.toBytes(EcKey::Public));
