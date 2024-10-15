@@ -1687,8 +1687,20 @@ VkPSO::VkPSO(vk::Device _dev,
 		.setScissorCount(1);
 	ASSERT(viewportState.viewportCount <= limits.maxViewports, "viewportCount (%" PRIu32") exceeds limits.maxViewports (%" PRIu32")", viewportState.viewportCount, limits.maxViewports);
 
-	const auto iassembly = vk::PipelineInputAssemblyStateCreateInfo()
+	auto iassembly = vk::PipelineInputAssemblyStateCreateInfo()
 		.setTopology(to_vk(primitive));
+#ifdef WZ_OS_MAC
+	// Silence MoltenVK warning: "Metal does not support disabling primitive restart"
+	switch (primitive)
+	{
+	case gfx_api::primitive_type::line_strip:
+	case gfx_api::primitive_type::triangle_strip:
+		iassembly.setPrimitiveRestartEnable(vk::True);
+		break;
+	default:
+		break;
+	}
+#endif
 
 	uint32_t buffer_id = 0;
 	std::vector<vk::VertexInputBindingDescription> buffers;
