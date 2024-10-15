@@ -79,9 +79,12 @@ const size_t MAX_FRAMES_IN_FLIGHT = 2;
 // Vulkan version where extension is promoted to core; extension name
 #define VK_NOT_PROMOTED_TO_CORE_YET 0
 const std::vector<std::tuple<uint32_t, const char*>> optionalInstanceExtensions = {
-	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME },	// used for Vulkan info output
+	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME }	// used for Vulkan info output
 #if defined(VK_KHR_portability_enumeration)
-	{ VK_NOT_PROMOTED_TO_CORE_YET , VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME}
+	, { VK_NOT_PROMOTED_TO_CORE_YET , VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME}
+#endif
+#if defined(VK_EXT_layer_settings)
+	, { VK_NOT_PROMOTED_TO_CORE_YET , VK_EXT_LAYER_SETTINGS_EXTENSION_NAME}
 #endif
 };
 
@@ -158,6 +161,15 @@ const std::vector<std::tuple<_vkl_env_text_type, _vkl_env_text_type, bool>> vulk
 	, {_vkl_env_text("DISABLE_SAMPLE_LAYER"), _vkl_env_text("1"), true} // AgaueEye
 	, {_vkl_env_text("DISABLE_GAMEPP_LAYER"), _vkl_env_text("1"), true} // Gamepp
 };
+
+#if defined(VK_EXT_layer_settings)
+// layer settings
+// - MoltenVK:
+const VkBool32 setting_mvk_config_use_metal_argument_buffers = VK_FALSE; // Disable MoltenVK Metal argument buffers (currently triggers Metal API Validation asserts)
+const std::vector<vk::LayerSettingEXT> vulkan_mvk_layer_settings = {
+	{"MoltenVK", "MVK_CONFIG_USE_METAL_ARGUMENT_BUFFERS", vk::LayerSettingTypeEXT::eBool32, 1, &setting_mvk_config_use_metal_argument_buffers}
+};
+#endif
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 static std::unordered_set<const VkTexture*> debugLiveTextures;
@@ -3363,6 +3375,30 @@ bool VkRoot::setupDebugReportCallbacks(const std::vector<const char*>& extension
 	return true;
 }
 
+#if defined(VK_EXT_layer_settings)
+std::vector<vk::LayerSettingEXT> VkRoot::initLayerSettings()
+{
+	std::vector<vk::LayerSettingEXT> result;
+#ifdef WZ_OS_MAC
+	// MoltenVK layer settings
+	for (const auto &it : vulkan_mvk_layer_settings)
+	{
+		if (getenv(it.pSettingName) == nullptr)
+		{
+			result.push_back(it);
+			debug(LOG_3D, "Setting [%s]:%s", it.pLayerName, it.pSettingName);
+		}
+		else
+		{
+			// environment variable is already set - log a warning, but allow it to take precedence
+			debug(LOG_INFO, "Warning: Environment variable %s is already set, and will *not* be overridden", it.pSettingName);
+		}
+	}
+#endif
+	return result;
+}
+#endif
+
 // Attempts to create a Vulkan instance (vk::Instance) with the specified extensions and layers
 // If successful, sets the following variable in VkRoot:
 //	- inst (vk::Instance)
@@ -3430,6 +3466,22 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 		instanceExtensionsAsString += std::string(extension) + ",";
 	});
 	debug(LOG_3D, "Using instance extensions: %s", instanceExtensionsAsString.c_str());
+
+#if defined(VK_EXT_layer_settings)
+	std::vector<vk::LayerSettingEXT> layerSettings;
+	vk::LayerSettingsCreateInfoEXT layerSettingsCreateInfo;
+	bool requesting_layer_settings_extension = std::any_of(extensions.begin(), extensions.end(),
+				 [](const char *extensionName) { return (strcmp(extensionName, VK_EXT_LAYER_SETTINGS_EXTENSION_NAME) == 0);});
+	if (requesting_layer_settings_extension)
+	{
+		layerSettings = initLayerSettings();
+		layerSettingsCreateInfo.settingCount = static_cast<uint32_t>(layerSettings.size());
+		layerSettingsCreateInfo.pSettings = layerSettings.data();
+		layerSettingsCreateInfo.pNext = instanceCreateInfo.pNext;
+		instanceCreateInfo.pNext = &layerSettingsCreateInfo;
+		debug(LOG_3D, "Using layer settings, settingCount: %" PRIu32, layerSettingsCreateInfo.settingCount);
+	}
+#endif
 
 	VkResult result = _vkCreateInstance(reinterpret_cast<const VkInstanceCreateInfo*>(&instanceCreateInfo), nullptr, reinterpret_cast<VkInstance*>(&inst));
 	if (result != VK_SUCCESS)
