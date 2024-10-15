@@ -287,13 +287,14 @@ function(ExtractFile filename directory)
 
 	# Analyze what came out of the tar file:
 	#
-	message(STATUS "extracting... [analysis]")
-	file(GLOB contents "${ut_dir}/*")
-	list(REMOVE_ITEM contents "${ut_dir}/.DS_Store")
-	list(LENGTH contents n)
-	if(NOT n EQUAL 1 OR NOT IS_DIRECTORY "${contents}")
-	  set(contents "${ut_dir}")
-	endif()
+	set(contents "${ut_dir}")
+	# message(STATUS "extracting... [analysis]")
+	# file(GLOB contents "${ut_dir}/*")
+	# list(REMOVE_ITEM contents "${ut_dir}/.DS_Store")
+	# list(LENGTH contents n)
+	# if(NOT n EQUAL 1 OR NOT IS_DIRECTORY "${contents}")
+	#   set(contents "${ut_dir}")
+	# endif()
 
 	# Move "the one" directory to the final directory:
 	#
