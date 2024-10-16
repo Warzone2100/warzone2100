@@ -29,11 +29,5 @@
         "sequences": [
             { "audio": "", "loop": 0, "subtitles": "", "video": "cam3/cam34mu2.ogg" }
         ]
-    },
-    "video0005": {
-        "name": "MB3_4_OUTRO",
-        "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "", "video": "outro.ogg" }
-        ]
     }
 }
