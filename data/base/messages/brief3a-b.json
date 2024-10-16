@@ -2,21 +2,21 @@
     "video0000": {
         "name": "MB3_AB_MSG",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": ["CAM3_AB_MSG1", "CAM3_AB_MSG2"], "video": "brfcom4s.ogg" },
-            { "audio": "", "loop": 0, "subtitles": ["CAM3_AB_MSG3", "CAM3_AB_MSG4"], "video": "cam3/cam3aba.ogg" },
-            { "audio": "", "loop": 0, "subtitles": "", "video": "cam3/cam3abf.ogg" }
+            { "loop": 0, "subtitles": ["CAM3_AB_MSG1", "CAM3_AB_MSG2"], "video": "brfcom4s.ogg" },
+            { "loop": 0, "subtitles": ["CAM3_AB_MSG3", "CAM3_AB_MSG4"], "video": "cam3/cam3aba.ogg" },
+            { "loop": 0, "subtitles": "", "video": "cam3/cam3abf.ogg" }
         ]
     },
     "video0001": {
         "name": "MB3_AB_MSG2",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "CAM3_AB_MSG1", "video": "cam3/cam3abpl.ogg" }
+            { "loop": 0, "subtitles": "CAM3_AB_MSG1", "video": "cam3/cam3abpl.ogg" }
         ]
     },
     "video0002": {
         "name": "MB3_AB_MSG3",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": ["CAM3_AB_MSG5", "CAM3_AB_MSG6", "CAM3_AB_MSG7"], "video": "cam3/cam3ab.ogg" }
+            { "loop": 0, "subtitles": ["CAM3_AB_MSG5", "CAM3_AB_MSG6", "CAM3_AB_MSG7"], "video": "cam3/cam3ab.ogg" }
         ]
     }
 }

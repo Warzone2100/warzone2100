@@ -2,21 +2,21 @@
     "video0000": {
         "name": "FLIGHT",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "INFLIGHT_MSG1", "video": "inflight.ogg" }
+            { "loop": 0, "subtitles": "INFLIGHT_MSG1", "video": "inflight.ogg" }
         ]
     },
     "video0001": {
         "name": "SB1_1_MSG",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": ["P1-1_MSG1", "P1-1_MSG2", "P1-1_MSG3"], "video": "cam1/sub1_1p.ogg" },
-            { "audio": "", "loop": 0, "subtitles": ["SUB1_1_MSG1", "SUB1_1_MSG2", "SUB1_1_MSG3"], "video": "cam1/sub1_1.ogg" }
+            { "loop": 0, "subtitles": ["P1-1_MSG1", "P1-1_MSG2", "P1-1_MSG3"], "video": "cam1/sub1_1p.ogg" },
+            { "loop": 0, "subtitles": ["SUB1_1_MSG1", "SUB1_1_MSG2", "SUB1_1_MSG3"], "video": "cam1/sub1_1.ogg" }
         ]
     },
     "video0002": {
         "name": "MB1_B2_MSG",
         "sequences": [
-            { "audio": "", "loop": 1, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
-            { "audio": "", "loop": 0, "subtitles": ["CAM1_B2_MSG", "CAM1_B2_MSG2", "CAM1_B2_MSG3"], "video": "cam1/cam1bpow.ogg" }
+            { "loop": 1, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
+            { "loop": 0, "subtitles": ["CAM1_B2_MSG", "CAM1_B2_MSG2", "CAM1_B2_MSG3"], "video": "cam1/cam1bpow.ogg" }
         ]
     }
 }

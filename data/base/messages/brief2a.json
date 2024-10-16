@@ -2,14 +2,14 @@
     "video0000": {
         "name": "MB2A_MSG",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": ["CAM2A_MSG1", "CAM2A_MSG2", "CAM2A_MSG3"], "video": "cam2/c002.ogg" }
+            { "loop": 0, "subtitles": ["CAM2A_MSG1", "CAM2A_MSG2", "CAM2A_MSG3"], "video": "cam2/c002.ogg" }
         ]
     },
     "video0001": {
         "name": "MB2A_MSG2",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": ["NP_MSG1", "CAM2A_MSG7", "CAM2A_MSG8"], "video": "cam2/cam2ap.ogg" },
-            { "audio": "", "loop": 0, "subtitles": "", "video": "cam2/cam2acol.ogg" }
+            { "loop": 0, "subtitles": ["NP_MSG1", "CAM2A_MSG7", "CAM2A_MSG8"], "video": "cam2/cam2ap.ogg" },
+            { "loop": 0, "subtitles": "", "video": "cam2/cam2acol.ogg" }
         ]
     }
 }
