@@ -2,13 +2,13 @@
     "video0000": {
         "name": "END",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "END_MSG1", "video": "end.ogg" }
+            { "loop": 0, "subtitles": "END_MSG1", "video": "end.ogg" }
         ]
     },
     "video0001": {
         "name": "WIN",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "WIN_MSG1", "video": "victory.ogg" }
+            { "loop": 0, "subtitles": "WIN_MSG1", "video": "victory.ogg" }
         ]
     }
 }

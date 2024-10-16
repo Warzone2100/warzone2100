@@ -770,8 +770,6 @@ WzString *loadFlicViewData(const char *fileName)
 		{
 			r->seqList[j].sequenceName = WzString::fromUtf8(videoIdx["video"].get<std::string>());
 			debug(LOG_WZ, "Sequence name: %s", r->seqList[j].sequenceName.toUtf8().c_str());
-			r->seqList[j].audio = WzString::fromUtf8(videoIdx["audio"].get<std::string>());
-			debug(LOG_WZ, "Sequence audio: %s", r->seqList[j].audio.toUtf8().c_str());
 			r->seqList[j].flag = videoIdx["loop"].get<uint32_t>();
 			debug(LOG_WZ, "Sequence loop: %d", r->seqList[j].flag);
 			// Set the subtitle string for the sequence.

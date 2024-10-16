@@ -2,8 +2,8 @@
     "video0000": {
         "name": "SB1_5_MSG",
         "sequences": [
-            { "audio": "", "loop": 0, "subtitles": "TRANS_MSG1", "video": "cam1/sub1_5pl.ogg" },
-            { "audio": "", "loop": 0, "subtitles": ["SUB1_5_MSG1", "SUB1_5_MSG2", "SUB1_5_MSG3"], "video": "cam1/sub1_5.ogg" }
+            { "loop": 0, "subtitles": "TRANS_MSG1", "video": "cam1/sub1_5pl.ogg" },
+            { "loop": 0, "subtitles": ["SUB1_5_MSG1", "SUB1_5_MSG2", "SUB1_5_MSG3"], "video": "cam1/sub1_5.ogg" }
         ]
     }
 }
