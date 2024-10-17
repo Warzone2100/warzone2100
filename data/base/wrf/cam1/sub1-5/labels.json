@@ -35,6 +35,22 @@
 		"label": "NPTransportPos",
 		"pos": [6144, 2560]
 	},
+	"position_9": {
+		"label": "insaneSpawnPos1",
+		"pos": [128, 6528]
+	},
+	"position_10": {
+		"label": "insaneSpawnPos2",
+		"pos": [7808, 4864]
+	},
+	"position_11": {
+		"label": "insaneSpawnPos3",
+		"pos": [7808, 5888]
+	},
+	"position_12": {
+		"label": "insaneSpawnPos4",
+		"pos": [1280, 128]
+	},
 
 	"area_0": {
 		"label": "RTLZ",
