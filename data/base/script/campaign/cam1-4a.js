@@ -77,7 +77,30 @@ camAreaEvent("LandingZoneTrigger", function()
 	camEnableFactory("HeavyNPFactory");
 	camEnableFactory("MediumNPFactory");
 	buildDefenses();
+
+	if (difficulty >= INSANE)
+	{
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));
+	}
 });
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.nppod, cTempl.npltat, cTempl.npsmct, cTempl.npsmct, cTempl.npmmct];
+	const limits = {minimum: 6, maxRandom: 4};
+	const location = ["insaneSpawnPos1", "insaneSpawnPos2", "insaneSpawnPos3", "insaneSpawnPos4"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const DISTANCE_FROM_POS = 5;
+	const units = [cTempl.npmorb, cTempl.npmorb, cTempl.npmorb, cTempl.npsmct];
+	const limits = {minimum: 6, maxRandom: 4};
+	const location = camGenerateRandomMapCoordinate(getObject("StartPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
+}
 
 function NPBaseDetect()
 {
@@ -153,9 +176,10 @@ function eventStartLevel()
 		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.npmor, cTempl.npmorb, CAM_NEW_PARADIGM);
 
 		camSetArtifacts({
-			"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
+			"NPCommandCenter": { tech: "R-Vehicle-Metals02" },
 			"NPResearchFacility": { tech: "R-Wpn-MG-Damage04" },
 			"MediumNPFactory": { tech: "R-Wpn-Rocket02-MRL" },
 			"HeavyNPFactory": { tech: "R-Wpn-Rocket-Damage02" },

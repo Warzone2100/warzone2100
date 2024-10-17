@@ -18,6 +18,7 @@ const mis_newParadigmResClassic = [
 ];
 const mis_landingZoneList = [ "NPLZ1", "NPLZ2", "NPLZ3", "NPLZ4", "NPLZ5" ];
 const mis_landingZoneMessages = [ "C1CA_LZ1", "C1CA_LZ2", "C1CA_LZ3", "C1CA_LZ4", "C1CA_LZ5" ];
+const MIN_TRANSPORT_RUNS = 10;
 var blipActive;
 var lastLZ, lastHeavy;
 var totalTransportLoads;
@@ -55,7 +56,6 @@ function baseEstablished()
 // a simple extra victory condition callback
 function extraVictoryCondition()
 {
-	const MIN_TRANSPORT_RUNS = 10;
 	const enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 	// No enemies on map and at least eleven New Paradigm transport runs.
 	if (baseEstablished() && (totalTransportLoads > MIN_TRANSPORT_RUNS) && !enemies.length)
@@ -144,6 +144,18 @@ function sendTransport()
 	totalTransportLoads += 1;
 }
 
+function insaneReinforcementSpawn()
+{
+	if (totalTransportLoads > MIN_TRANSPORT_RUNS)
+	{
+		return;
+	}
+	const units = [cTempl.npltat, cTempl.npmrl, cTempl.npmmct, cTempl.nphmg];
+	const limits = {minimum: 10, maxRandom: 4};
+	const location = ["reinforceNorth", "reinforceNorthEast"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
+}
+
 function startTransporterAttack()
 {
 	let attackTime = camMinutesToMilliseconds(2.2);
@@ -184,4 +196,8 @@ function eventStartLevel()
 
 	// first transport after 10 seconds
 	queue("startTransporterAttack", camSecondsToMilliseconds(10));
+	if (difficulty >= INSANE)
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(1.5));
+	}
 }

@@ -110,7 +110,8 @@ const __CAM_INCLUDE_PATH = "script/campaign/libcampaign_includes/";
 //Anything stats related
 const CAM_ARTIFACT_STAT = "Crate";
 const CAM_GENERIC_TRUCK_STAT = "Spade1Mk1";
-const CAM_GENERIC_LAND_STAT = "wheeled01"; //For propulsionCanReach().
+const CAM_GENERIC_LAND_STAT = "wheeled01";
+const CAM_GENERIC_WATER_STAT = "hover01";
 const CAM_OIL_RESOURCE_STAT = "OilResource";
 const cam_base_structures = {
 	commandRelay: "A0ComDroidControl",
@@ -291,6 +292,11 @@ var __camNumEnemyBases;
 const CAM_REINFORCE_NONE = 0;
 const CAM_REINFORCE_GROUND = 1;
 const CAM_REINFORCE_TRANSPORT = 2;
+const CAM_REINFORCE_CONDITION_NONE = 0;
+const CAM_REINFORCE_CONDITION_BASES = 1;
+const CAM_REINFORCE_CONDITION_UNITS = 2;
+const CAM_REINFORCE_CONDITION_OBJECT = 3;
+const CAM_REINFORCE_CONDITION_ARTIFACTS = 4;
 
 //debug
 var __camMarkedTiles = {};
