@@ -4522,6 +4522,35 @@ nlohmann::json wzapi::constructStatsObject()
 			structbase[psStats->name.toUtf8()] = std::move(strct);
 		}
 		stats["Building"] = std::move(structbase);
+
+		//==   * ```Research``` Researches
+		nlohmann::json researchbase = nlohmann::json::object();
+		for (int j = 0; j < asResearch.size(); j++)
+		{
+			RESEARCH *psStats = &asResearch[j];
+			nlohmann::json res = nlohmann::json::object();
+			res["Id"] = psStats->id;
+			nlohmann::json reqs = nlohmann::json::array();
+			for (int k = 0; k < psStats->pPRList.size(); k++)
+			{
+				reqs.push_back(asResearch[psStats->pPRList[k]].id);
+			}
+			res["Requires"] = reqs;
+			nlohmann::json resstrcts = nlohmann::json::array();
+			for (int k = 0; k < psStats->pStructureResults.size(); k++)
+			{
+				resstrcts.push_back(asStructureStats[psStats->pStructureResults[k]].id);
+			}
+			res["ResultStructures"] = resstrcts;
+			nlohmann::json rescomps = nlohmann::json::array();
+			for (int k = 0; k < psStats->componentResults.size(); k++)
+			{
+				rescomps.push_back(psStats->componentResults[k]->id);
+			}
+			res["ResultComponents"] = rescomps;
+			researchbase[psStats->name.toUtf8()] = std::move(res);
+		}
+		stats["Research"] = std::move(researchbase);
 	}
 	return stats;
 }
