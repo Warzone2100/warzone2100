@@ -892,7 +892,7 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 		else if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
 		         (psTempObj->type == OBJ_STRUCTURE ||
 		          psTempObj->type == OBJ_FEATURE ||
-		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlying())
+		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isTransporter() && !((DROID*)psTempObj)->isFlying())
 		         ))
 		{
 			// AA weapons should not hit buildings and non-vtol droids
