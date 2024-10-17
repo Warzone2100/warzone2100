@@ -59,6 +59,22 @@
 		"label": "buildPos2",
 		"pos": [2752, 29888]
 	},
+	"position_15": {
+		"label": "southSpawnPos",
+		"pos": [3328, 32384]
+	},
+	"position_16": {
+		"label": "lzReinforcementPos",
+		"pos": [4352, 25088]
+	},
+	"position_17": {
+		"label": "vtolSpawnPos1",
+		"pos": [384, 32256]
+	},
+	"position_18": {
+		"label": "vtolSpawnPos2",
+		"pos": [7040, 32128]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -137,5 +153,12 @@
 		"label": "NXcyborgFac2Arti",
 		"player": 3,
 		"type": 1
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 3,
+		"pos": [7040, 32384],
+		"radius": 250
 	}
 }

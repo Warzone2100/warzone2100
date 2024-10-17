@@ -52,7 +52,7 @@ camAreaEvent("launchScavAttack", function(droid)
 		morale: 50
 	});
 	// Activate mission timer, unlike the original campaign.
-	if (!tweakOptions.classicTimers && difficulty !== HARD && difficulty !== INSANE)
+	if (!tweakOptions.classicTimers && difficulty <= MEDIUM)
 	{
 		setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
 	}
@@ -243,7 +243,7 @@ function eventStartLevel()
 		{
 			setPower(600, CAM_HUMAN_PLAYER);
 		}
-		else if (difficulty === INSANE)
+		else if (difficulty >= INSANE)
 		{
 			setPower(300, CAM_HUMAN_PLAYER);
 		}
@@ -259,7 +259,7 @@ function eventStartLevel()
 			camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_6);
 			camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
 		}
-		if (difficulty === INSANE)
+		if (difficulty >= INSANE)
 		{
 			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
 			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
@@ -286,7 +286,7 @@ function eventStartLevel()
 		{
 			setMissionTime(camMinutesToSeconds(40));
 		}
-		else if (difficulty === INSANE)
+		else if (difficulty >= INSANE)
 		{
 			setMissionTime(camMinutesToSeconds(30));
 		}

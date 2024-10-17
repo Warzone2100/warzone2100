@@ -34,14 +34,10 @@ const mis_nexusResClassic = [
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if (droid.player !== CAM_HUMAN_PLAYER)
+	if (droid.player !== CAM_HUMAN_PLAYER && camVtolCanDisappear(droid))
 	{
-		if (isVTOL(droid))
-		{
-			camSafeRemoveObject(droid, false);
-		}
+		camSafeRemoveObject(droid, false);
 	}
-
 	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
@@ -68,51 +64,46 @@ function camEnemyBaseEliminated_NXWestBase()
 
 function wave2()
 {
+	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
-	const ext = {
-		limit: [4, 4], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), "NXCommandCenter", ext);
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), CONDITION, ext);
 }
 
 function wave3()
 {
+	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
-	const ext = {
-		limit: [4, 4], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), "NXCommandCenter", ext);
+	const ext = {limit: [4, 4], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), CONDITION, ext);
 }
 
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
+	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxmheapv, cTempl.nxmtherv, cTempl.nxlscouv];
-		const ext = {
-			limit: [2, 5, 5, 2], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXCommandCenter", ext);
+		const ext = {limit: [2, 5, 5, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(2)), CONDITION, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmheapv, cTempl.nxmtherv];
-		const ext = {
-			limit: [4, 4], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), "NXCommandCenter", ext);
+		const ext = {limit: [3, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), CONDITION, ext);
 		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}
+}
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmlinkh, cTempl.nxmrailh];
+	const limits = {minimum: 4, maxRandom: 4};
+	const location = ["westPhantomFactory", "eastPhantomFactory"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
 
 function enableAllFactories()
@@ -288,6 +279,10 @@ function trapSprung()
 	setTimer("sendNXTransporter", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendNXlandReinforcements", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
+	if (difficulty >= INSANE)
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(6));
+	}
 }
 
 function setupCapture()
@@ -409,7 +404,7 @@ function eventStartLevel()
 	if (difficulty >= HARD)
 	{
 		addDroid(MIS_GAMMA_PLAYER, 28, 5, "Truck Python Tracks", tBody.tank.python, tProp.tank.tracks, "", "", tConstruct.truck);
-		camManageTrucks(MIS_GAMMA_PLAYER);
+		camManageTrucks(MIS_GAMMA_PLAYER, false);
 	}
 
 	setAlliance(MIS_GAMMA_PLAYER, CAM_HUMAN_PLAYER, true);

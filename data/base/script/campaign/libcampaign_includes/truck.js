@@ -3,17 +3,22 @@
 // Truck management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; ## camManageTrucks(playerId)
+//;; ## camManageTrucks(playerId [, allowOilCapture])
 //;;
-//;; Manage trucks for an AI player. This assumes recapturing oils and rebuilding destroyed trucks
-//;; in factories, the latter is implemented via `camQueueDroidProduction()` mechanism.
+//;; Manage trucks for an AI player. This assumes rebuilding destroyed trucks
+//;; in factories, which is implemented via the `camQueueDroidProduction()` mechanism.
 //;;
 //;; @param {number} playerId
+//;; @param {boolean} allowOilCapture
 //;; @returns {void}
 //;;
-function camManageTrucks(playerId)
+function camManageTrucks(playerId, allowOilCapture)
 {
-	__camTruckInfo[playerId] = { enabled: 1, queue: [], player: playerId };
+	if (!camDef(allowOilCapture))
+	{
+		allowOilCapture = true;
+	}
+	__camTruckInfo[playerId] = { enabled: 1, queue: [], player: playerId, grabOil: allowOilCapture };
 }
 
 //;; ## camQueueBuilding(playerId, stat[, position])
@@ -59,7 +64,6 @@ function __camGetClosestTruck(player, pos, list)
 	{
 		return undefined;
 	}
-
 	// Find out which one is the closest.
 	let minDroid = droids[0];
 	let minDist = camDist(minDroid, pos);
@@ -88,9 +92,9 @@ function __camTruckTick()
 	{
 		const ti = __camTruckInfo[playerObj];
 		const __PLAYER = ti.player;
+		const __CAPTURE_OIL = ti.grabOil;
 		let freeTrucks = __camEnumFreeTrucks(__PLAYER);
 		let truck;
-
 		// First, build things that were explicitly ordered.
 		while (ti.queue.length > 0)
 		{
@@ -98,7 +102,6 @@ function __camTruckTick()
 			let pos = __QI.pos;
 			let randx = 0;
 			let randy = 0;
-
 			if (camDef(pos))
 			{
 				// Find the truck most suitable for the job.
@@ -120,7 +123,6 @@ function __camTruckTick()
 				randx = (camRand(100) < 50) ? -camRand(2) : camRand(2);
 				randy = (camRand(100) < 50) ? -camRand(2) : camRand(2);
 			}
-
 			enableStructure(__QI.stat, __PLAYER);
 			const loc = pickStructLocation(truck, __QI.stat, pos.x, pos.y);
 			if (camDef(loc) && camDef(truck))
@@ -132,20 +134,21 @@ function __camTruckTick()
 				}
 			}
 		}
-
 		// Then, capture free oils.
-		const oils = enumFeature(ALL_PLAYERS, CAM_OIL_RESOURCE_STAT);
-		if (oils.length === 0)
+		if (__CAPTURE_OIL)
 		{
-			continue;
-		}
-		const oil = oils[0];
-		truck = __camGetClosestTruck(__PLAYER, oil, freeTrucks);
-		if (camDef(truck) && __PLAYER !== CAM_NEXUS)
-		{
-			enableStructure(cam_base_structures.derrick, __PLAYER);
-			orderDroidBuild(truck, DORDER_BUILD, cam_base_structures.derrick, oil.x, oil.y);
-			continue;
+			const oils = enumFeature(ALL_PLAYERS, CAM_OIL_RESOURCE_STAT);
+			if (oils.length === 0)
+			{
+				continue;
+			}
+			const oil = oils[0];
+			truck = __camGetClosestTruck(__PLAYER, oil, freeTrucks);
+			if (camDef(truck))
+			{
+				enableStructure(cam_base_structures.derrick, __PLAYER);
+				orderDroidBuild(truck, DORDER_BUILD, cam_base_structures.derrick, oil.x, oil.y);
+			}
 		}
 	}
 }
