@@ -38,9 +38,7 @@ function camAbsorbPlayer(who, to)
 	{
 		to = CAM_NEXUS;
 	}
-
 	const units = enumDroid(who);
-
 	for (let i = 0, len = units.length; i < len; ++i)
 	{
 		const droid = units[i];
@@ -49,7 +47,6 @@ function camAbsorbPlayer(who, to)
 			camSafeRemoveObject(droid, false);
 		}
 	}
-
 	const structs = enumStruct(who);
 	for (let i = 0, len = structs.length; i < len; ++i)
 	{
@@ -59,7 +56,6 @@ function camAbsorbPlayer(who, to)
 			camSafeRemoveObject(structure, false);
 		}
 	}
-
 	camTrace("Player " + who + " has been absorbed by player" + to);
 	changePlayerColour(who, to);
 }
@@ -79,11 +75,9 @@ function camHackIntoPlayer(player, to)
 	{
 		return;
 	}
-
 	const __GIFT_CHANCE = 70; //Else neutralized
 	let target;
 	let objects;
-
 	if (!camDef(player))
 	{
 		player = CAM_HUMAN_PLAYER;
@@ -96,16 +90,13 @@ function camHackIntoPlayer(player, to)
 	{
 		__camLastNexusAttack = 0;
 	}
-
 	objects = __camChooseNexusTarget(player);
 	if (objects.length === 0)
 	{
 		return;
 	}
-
 	__camLastNexusAttack = gameTime;
 	target = objects[camRand(objects.length)];
-
 	if ((camRand(100) < __GIFT_CHANCE) && !(target.type === STRUCTURE && target.stattype === WALL))
 	{
 		camTrace("Hacking " + target.name + " at (x,y): " + target.x + " " + target.y);
@@ -137,12 +128,10 @@ function camHackIntoPlayer(player, to)
 			{
 				sound = cam_sounds.nexus.unitNeutralized;
 			}
-
 			if (camDef(sound))
 			{
 				playSound(sound);
 			}
-
 			camSafeRemoveObject(target, true);
 			queue("camNexusLaugh", camSecondsToMilliseconds(1.5));
 		}
@@ -180,21 +169,17 @@ function __camChooseNexusTarget(player)
 	{
 		player = CAM_HUMAN_PLAYER;
 	}
-
 	//Try stealing the HQ first.
 	if (__camLastNexusAttack === 0)
 	{
 		__camLastNexusAttack = gameTime;
 		return enumStruct(player, HQ);
 	}
-
 	const __TARGET_UNIT_CHANCE = (getResearch(cam_resistance_circuits.first).done) ? 40 : 20;
 	let objects = [];
-
 	if (camRand(100) < __TARGET_UNIT_CHANCE)
 	{
 		objects = enumDroid(player).filter((d) => (!camIsTransporter(d)));
-
 		const exp = {
 			rookie: 0,
 			green: 4,
@@ -206,7 +191,6 @@ function __camChooseNexusTarget(player)
 			special: 256,
 			hero: 512,
 		};
-
 		//As the player researches more resistance upgrades their higher exp units will become more safe
 		//Trucks get a little more safe with each upgrade also.
 		objects = objects.filter((d) => {
@@ -248,7 +232,6 @@ function __camChooseNexusTarget(player)
 			}
 		});
 	}
-
 	if (objects.length === 0)
 	{
 		//Has explicit chances to target factories or research labs.
@@ -260,18 +243,15 @@ function __camChooseNexusTarget(player)
 			case 3: objects = enumStruct(player, RESEARCH_LAB).filter((r) => (r.status === BUILT)); break;
 			default: //do nothing
 		}
-
 		if (objects.length === 0)
 		{
 			objects = enumStruct(player).filter((s) => (s.status === BUILT));
 		}
-
 		objects = objects.filter((s) => (
 			//cam3-ab is way too annoying if Nexus can still take factories after the second resistance upgrade.
 			!(getResearch(cam_resistance_circuits.second).done &&
 			(s.stattype === FACTORY || s.stattype === CYBORG_FACTORY || s.stattype === VTOL_FACTORY))
 		));
 	}
-
 	return objects;
 }
