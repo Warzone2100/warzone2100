@@ -232,11 +232,9 @@ function cam_eventGroupSeen(viewer, group)
 function cam_eventTransporterExit(transport)
 {
 	camTrace("Transporter for player", transport.player + " has exited");
-
 	if (transport.player === CAM_HUMAN_PLAYER)
 	{
 		__camNumTransporterExits += 1;
-
 		//Audio cue to let the player know they can bring in reinforcements. This
 		//assumes the player can bring in reinforcements immediately after the first
 		//transporter leaves the map. Mission scripts can handle special situations.
@@ -258,7 +256,6 @@ function cam_eventTransporterExit(transport)
 			setReinforcementTime(__camVictoryData.reinforcements);
 		}
 	}
-
 	if (transport.player !== CAM_HUMAN_PLAYER ||
 		(__camWinLossCallback === CAM_VICTORY_STANDARD &&
 		transport.player === CAM_HUMAN_PLAYER))
@@ -339,11 +336,9 @@ function cam_eventAttacked(victim, attacker)
 					repair: 70
 				});
 			}
-
 			if (camDef(__camGroupInfo[victim.group]))
 			{
 				__camGroupInfo[victim.group].lastHit = gameTime;
-
 				//Increased Nexus intelligence if struck on cam3-4
 				if (__camNextLevel === CAM_GAMMA_OUT)
 				{
@@ -354,7 +349,6 @@ function cam_eventAttacked(victim, attacker)
 				}
 			}
 		}
-
 		if (victim.player === CAM_HUMAN_PLAYER && camDef(attacker) && attacker && attacker.player !== CAM_HUMAN_PLAYER)
 		{
 			if (attacker.type === DROID && attacker.isVTOL)
@@ -376,7 +370,6 @@ function cam_eventGameLoaded()
 		cam_levels.alpha11.pre, cam_levels.alpha11.offWorld, cam_levels.alpha12.pre,
 		cam_levels.alphaEnd, cam_levels.beta6.pre
 	];
-
 	//Need to set the scavenger kevlar vests when loading a save from later Alpha
 	//missions or else it reverts to the original texture.
 	for (let i = 0, l = scavKevlarMissions.length; i < l; ++i)
@@ -397,23 +390,18 @@ function cam_eventGameLoaded()
 			break;
 		}
 	}
-
-	if (__camWinLossCallback === CAM_VICTORY_TIMEOUT
-		&& enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER).length === 0)
+	if (__camWinLossCallback === CAM_VICTORY_TIMEOUT &&
+		enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER).length === 0)
 	{
 		// If the transport is gone on Beta End, put a timer up to show when it'll be back
 		setReinforcementTime(__camVictoryData.reinforcements);
 	}
-
 	//Subscribe to eventGroupSeen again.
 	camSetEnemyBases();
-
 	// Ensure appropriate guide topics are displayed
 	__camEnableGuideTopics();
-
 	//Reset any vars
 	__camCheatMode = false;
-
 	__camSaveLoading = false;
 }
 
@@ -442,7 +430,6 @@ function cam_eventObjectTransfer(obj, from)
 		{
 			snd = cam_sounds.nexus.unitAbsorbed;
 		}
-
 		if (camDef(snd))
 		{
 			playSound(snd);
@@ -470,12 +457,12 @@ function cam_eventResearched(research, structure, player)
 	{
 		return;
 	}
-	let researchedByStruct = (camDef(structure) && structure);
-	if (!researchedByStruct)
+	const __RESEARCHED_BY_STRUCT = (camDef(structure) && structure);
+	if (!__RESEARCHED_BY_STRUCT)
 	{
 		return; // for now, return - don't think we need to process if researched by API call here?
 	}
 	// only pass the research in if it was completed by a structure (not if given by an API call, in which structure would be null)
-	//__camProcessResearchGatedGuideTopics((researchedByStruct) ? research : null);
+	//__camProcessResearchGatedGuideTopics((__RESEARCHED_BY_STRUCT) ? research : null);
 	__camProcessResearchGatedGuideTopics(research);
 }

@@ -92,8 +92,20 @@
 		"pos": [10688, 10688]
 	},
 	"position_23": {
-		"label": "vtolRemove",
-		"pos": [128, 128]
+		"label": "insaneSpawnPos1",
+		"pos": [8320, 4992]
+	},
+	"position_24": {
+		"label": "insaneSpawnPos2",
+		"pos": [8448, 768]
+	},
+	"position_25": {
+		"label": "insaneSpawnPos3",
+		"pos": [12160, 256]
+	},
+	"position_26": {
+		"label": "insaneSpawnPos4",
+		"pos": [16000, 2688]
 	},
 
 	"area_0": {

@@ -51,6 +51,15 @@ camAreaEvent("crashSite", function(droid)
 	queue("triggerWin", camSecondsToMilliseconds(2));
 });
 
+function insaneReinforcementSpawn()
+{
+	const DISTANCE_FROM_POS = 25;
+	const units = [cTempl.commc, cTempl.commrl, cTempl.commrp, cTempl.npcybc];
+	const limits = {minimum: 2, maxRandom: 2};
+	const location = camGenerateRandomMapEdgeCoordinate(getObject("startingPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
+}
+
 //function that applies damage to units in the downed transport transport team.
 function preDamageUnits()
 {
@@ -134,6 +143,7 @@ function eventStartLevel()
 	//Add crash site blip and from an alliance with the crashed team.
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, false);
 	setAlliance(CAM_HUMAN_PLAYER, MIS_TRANSPORT_TEAM_PLAYER, true);
+	setAlliance(MIS_TRANSPORT_TEAM_PLAYER, CAM_THE_COLLECTIVE, true);
 
 	//set downed transport team colour to be Project Green.
 	changePlayerColour(MIS_TRANSPORT_TEAM_PLAYER, 0);
@@ -180,4 +190,8 @@ function eventStartLevel()
 	setCrashedTeamExp();
 	victoryFlag = false;
 	queue("setupCyborgGroups", camSecondsToMilliseconds(5));
+	if (difficulty >= INSANE)
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3));
+	}
 }

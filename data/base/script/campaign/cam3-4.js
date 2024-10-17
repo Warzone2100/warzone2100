@@ -277,14 +277,14 @@ function eventStartLevel()
 	{
 		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 
-		if (difficulty === INSANE)
+		if (difficulty >= INSANE)
 		{
 			completeResearch("R-Defense-WallUpgrade13", CAM_NEXUS);
 		}
 	}
 
 	setupNexusPatrols();
-	camManageTrucks(CAM_NEXUS);
+	camManageTrucks(CAM_NEXUS, false);
 
 	camSetArtifacts({
 		"NX-NWCyborgFactory": { tech: "R-Wpn-RailGun03" },
