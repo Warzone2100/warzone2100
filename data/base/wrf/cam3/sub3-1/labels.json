@@ -16,108 +16,112 @@
 		"pos": [192, 192]
 	},
 	"position_4": {
-		"label": "vtolRemovePos",
-		"pos": [1920, 128]
-	},
-	"position_5": {
 		"label": "healthRetreatPos",
 		"pos": [832, 6720]
 	},
-	"position_6": {
+	"position_5": {
 		"label": "playerLZ",
 		"pos": [7296, 7296]
 	},
-	"position_7": {
+	"position_6": {
 		"label": "swRetreat",
 		"pos": [832, 7488]
 	},
-	"position_8": {
+	"position_7": {
 		"label": "hillPos1",
 		"pos": [4160, 2880]
 	},
-	"position_9": {
+	"position_8": {
 		"label": "hillPos2",
 		"pos": [3648, 2368]
 	},
-	"position_10": {
+	"position_9": {
 		"label": "hillPos3",
 		"pos": [4928, 960]
 	},
-	"position_11": {
+	"position_10": {
 		"label": "hillCybPos1",
 		"pos": [4032, 6720]
 	},
-	"position_12": {
+	"position_11": {
 		"label": "hillLzPos",
 		"pos": [7616, 6976]
 	},
-	"position_13": {
+	"position_12": {
 		"label": "hillLzHover",
 		"pos": [4032, 2880]
 	},
-	"position_14": {
+	"position_13": {
 		"label": "hillLzHover2",
 		"pos": [7000, 2880]
 	},
-	"position_15": {
+	"position_14": {
 		"label": "hillRetreat",
 		"pos": [1344, 832]
 	},
-	"position_16": {
+	"position_15": {
 		"label": "defenderPos1",
 		"pos": [2112, 7104]
 	},
-	"position_17": {
+	"position_16": {
 		"label": "defenderPos2",
 		"pos": [1088, 6208]
 	},
-	"position_18": {
+	"position_17": {
 		"label": "defenderPos3",
 		"pos": [960, 7232]
 	},
-	"position_19": {
+	"position_18": {
 		"label": "NXCybFac1Assembly",
 		"pos": [1856, 6848]
 	},
-	"position_20": {
+	"position_19": {
 		"label": "NXCybFac2Assembly",
 		"pos": [1600, 6848]
 	},
-	"position_21": {
+	"position_20": {
 		"label": "NXMediumFacAssembly",
 		"pos": [1600, 7488]
 	},
-	"position_22": {
+	"position_21": {
 		"label": "patrolPos1",
 		"pos": [1280, 4992]
 	},
-	"position_23": {
+	"position_22": {
 		"label": "patrolPos2",
 		"pos": [3072, 5120]
 	},
-	"position_24": {
+	"position_23": {
 		"label": "patrolPos3",
 		"pos": [2944, 7168]
 	},
-	"position_25": {
+	"position_24": {
 		"label": "patrolPos4",
 		"pos": [1024, 7424]
 	},
-	"position_26": {
+	"position_25": {
 		"label": "patrolPos5",
 		"pos": [4864, 4992]
 	},
-	"position_27": {
+	"position_26": {
 		"label": "patrolPos6",
 		"pos": [4864, 7168]
 	},
-	"position_28": {
+	"position_27": {
 		"label": "patrolPos7",
 		"pos": [6784, 6144]
 	},
-	"position_29": {
+	"position_28": {
 		"label": "patrolPos8",
 		"pos": [6272, 7552]
+	},
+	"position_29": {
+		"label": "northWestSpawnPos",
+		"pos": [1280, 256]
+	},
+	"position_30": {
+		"label": "northEastSpawnPos",
+		"pos": [7680, 256]
 	},
 
 	"area_0": {
