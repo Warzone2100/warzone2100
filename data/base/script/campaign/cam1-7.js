@@ -15,7 +15,7 @@ const mis_scavengerRes = [
 	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Wpn-Rocket-Damage03",
 	"R-Wpn-Cannon-Damage03", "R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
-	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-ROF03", "R-Vehicle-Metals02",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-ROF03", "R-Vehicle-Metals03",
 	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Wpn-Cannon-Accuracy01",
 	"R-Wpn-Mortar-Acc01",
 ];
@@ -78,6 +78,14 @@ camAreaEvent("NPTransportTrigger", function(droid)
 		resetLabel("NPTransportTrigger", CAM_NEW_PARADIGM);
 	}
 });
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.npcybr, cTempl.npmrl, cTempl.npcybc];
+	const limits = {minimum: 4, maxRandom: 2};
+	const location = camMakePos("westSpawnPos");
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_UNITS, location, units, limits.minimum, limits.maxRandom);
+}
 
 //Only called once when the New Paradigm takes the artifact for the first time.
 function artifactVideoSetup()
@@ -380,4 +388,8 @@ function eventStartLevel()
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); //Canyon
 	queue("startArtifactCollection", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
+	if (difficulty >= INSANE)
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(4.5));
+	}
 }

@@ -28,7 +28,7 @@ const mis_alphaResearchNew = [
 	"R-Struc-RprFac-Upgrade01", "R-Struc-RprFac-Upgrade02", "R-Defense-MortarPit",
 	"R-Defense-Pillbox01", "R-Defense-Pillbox04", "R-Defense-Pillbox05",
 	"R-Defense-WallTower01", "R-Defense-WallTower02", "R-Defense-WallUpgrade01",
-	"R-Struc-Materials03", "R-Vehicle-Body05", "R-Vehicle-Body04",
+	"R-Struc-Materials03", "R-Vehicle-Body05", "R-Vehicle-Metals01", "R-Vehicle-Body04",
 
 	// 6
 	"R-Wpn-Cannon2Mk1", "R-Defense-WallTower03", "R-Wpn-Rocket05-MiniPod", "R-Struc-Research-Module",
@@ -41,7 +41,7 @@ const mis_alphaResearchNew = [
 	// 7
 
 	// 8
-	"R-Vehicle-Metals01", "R-Vehicle-Metals02", "R-Wpn-MG-Damage04", "R-Wpn-Rocket02-MRL",
+	"R-Vehicle-Metals02", "R-Wpn-MG-Damage04", "R-Wpn-Rocket02-MRL",
 	"R-Wpn-Rocket-Damage03", "R-Wpn-Mortar02Hvy", "R-Wpn-Mortar-Damage03", "R-Wpn-Cannon-Damage03",
 	"R-Wpn-RocketSlow-Damage02", "R-Vehicle-Body11", "R-Defense-MRL", "R-Defense-HvyMor",
 
