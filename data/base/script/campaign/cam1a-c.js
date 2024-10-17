@@ -45,38 +45,54 @@ function extraVictoryCondition()
 //Makes a large group of ground units appear on map
 function checkForGroundForces()
 {
-	if (index < 2 && switchLZ === 3)
+	if (((index < 2) || (difficulty >= INSANE)) && (switchLZ === 3))
 	{
 		//Amounts for the ground force
-		const MAX_TANKS = 16;
-		const FIRST_AMOUNT = 10;
+		const MAX_CANNON_TANKS = 10;
+		const MAX_ARTILLERY_TANKS = 6;
+		const MAX_INSANE_ADDITIONAL_UNITS = 2 + camRand(3);
 
-		const droidGroup1 = []; //Heavy cannon mantis track units
-		const droidGroup2 = []; //Sensor and heavy mortar units
-		const templates = [ cTempl.nphct, cTempl.npmsens, cTempl.npmorb ];
-
-		for (let i = 0; i <= MAX_TANKS; ++i)
+		const droids = [];
+		const insaneTemplates = [ cTempl.npcybr, cTempl.nphct, cTempl.nphmgt ];
+		if (index >= 3)
 		{
-			if (i <= FIRST_AMOUNT)
-			{
-				droidGroup1[i] = templates[0];
-			}
-			if (i === FIRST_AMOUNT + 1)
-			{
-				droidGroup2[i - 1 - FIRST_AMOUNT] = templates[1];
-			}
-			else
-			{
-				droidGroup2[i - 1 - FIRST_AMOUNT] = templates[2];
-			}
+			insaneTemplates.push(cTempl.npsbb); //Bring in BBs
 		}
 
-		//What part of map to appear at
-		const pos = (index === 0) ? camMakePos("reinforceSouthEast") : camMakePos("reinforceNorth");
-		camSendReinforcement(CAM_NEW_PARADIGM, pos, droidGroup1, CAM_REINFORCE_GROUND, {
-			data: {regroup: false, count: -1,},
-		});
-		camSendReinforcement(CAM_NEW_PARADIGM, pos, droidGroup2, CAM_REINFORCE_GROUND);
+		for (let i = 0; i < MAX_CANNON_TANKS; ++i)
+		{
+			droids.push(cTempl.nphct);
+		}
+		for (let i = 0; i < MAX_ARTILLERY_TANKS; ++i)
+		{
+			droids.push(cTempl.npmorb);
+		}
+		if (difficulty >= INSANE)
+		{
+			for (let i = 0; i < MAX_INSANE_ADDITIONAL_UNITS; ++i)
+			{
+				droids.push(insaneTemplates[camRand(insaneTemplates.length)]);
+			}
+		}
+		droids.push(cTempl.npsens);
+
+		//What part of the map to appear at
+		let pos;
+		if (index === 0)
+		{
+			pos = camMakePos("reinforceSouthEast");
+		}
+		else if (index === 1)
+		{
+			pos = camMakePos("reinforceNorth");
+		}
+		else if (difficulty >= INSANE)
+		{
+			const positions = ["reinforceSouthEast", "reinforceNorth", "reinforceNorthEast"];
+			pos = positions[camRand(positions.length)];
+		}
+
+		camSendReinforcement(CAM_NEW_PARADIGM, pos, droids, CAM_REINFORCE_GROUND);
 	}
 }
 
@@ -93,6 +109,10 @@ function sendTransport()
 	const COUNT = unitDistribution[camRand(unitDistribution.length)];
 
 	const templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
+	if (difficulty >= INSANE)
+	{
+		templates.push(cTempl.npcybr);
+	}
 
 	const droids = [];
 	for (let i = 0; i < COUNT; ++i)

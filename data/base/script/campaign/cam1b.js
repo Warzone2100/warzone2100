@@ -103,7 +103,7 @@ function eventStartLevel()
 			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
 			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
 		}
-		else if (difficulty === INSANE)
+		else if (difficulty >= INSANE)
 		{
 			completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_6);
 			completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_7);
