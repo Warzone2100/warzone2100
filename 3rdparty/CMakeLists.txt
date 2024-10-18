@@ -277,3 +277,16 @@ if(NOT MSVC)
 		target_compile_options(plum-static PRIVATE ${_supported_libplum_c_compiler_flags})
 	endif()
 endif()
+
+set(EXPECTED_BUILD_TESTS OFF)
+add_subdirectory(expected EXCLUDE_FROM_ALL)
+# There isn't any release note or established CMake policy about this behavior,
+# but looks like prior to CMake 3.19 only a handful of `INTERFACE_*` properties
+# were allowed for INTERFACE libraries (which is our case). This restriction
+# seems to be lifted in CMake 3.19 and later.
+#
+# See https://discourse.cmake.org/t/how-to-find-current-interface-library-property-whitelist/4784/2
+# for some clarification about this.
+if (CMAKE_VERSION VERSION_GREATER "3.18")
+	set_target_properties(expected PROPERTIES FOLDER "3rdparty")
+endif()

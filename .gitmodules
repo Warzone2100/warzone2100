@@ -74,3 +74,6 @@
 [submodule "lib/netplay/3rdparty/miniupnp"]
 	path = lib/netplay/3rdparty/miniupnp
 	url = https://github.com/miniupnp/miniupnp.git
+[submodule "3rdparty/expected"]
+	path = 3rdparty/expected
+	url = https://github.com/TartanLlama/expected.git
