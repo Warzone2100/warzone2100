@@ -632,11 +632,6 @@ net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t 
 	return received;
 }
 
-bool socketReadDisconnected(const Socket& sock)
-{
-	return sock.readDisconnected;
-}
-
 /**
  * Similar to write(2) with the exception that this function will block until
  * <em>all</em> data has been written or an error occurs.
