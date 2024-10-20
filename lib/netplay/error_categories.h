@@ -25,6 +25,11 @@
 ///
 /// Please see the bug https://github.com/microsoft/STL/issues/3254 for the explanation
 /// as to why we would need to use a custom error category (at least on Windows).
+///
+/// NOTE: Currently, for OSes other than Windows, error messages are obtained via
+/// `strerror()` function, which is influenced by the `LC_MESSAGES` locale category.
+/// This shouldn't be a problem, though, as opposed to Windows, which suffers from the
+/// aforementioned bug in MSVC STL.
 /// </summary.
 class GenericSystemErrorCategory : public std::error_category
 {
