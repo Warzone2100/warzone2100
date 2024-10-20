@@ -394,6 +394,69 @@
 		"type": "HQ",
 		"width": 2
 	},
+	"A0CommandCentreCO": {
+		"armour": 10,
+		"baseModel": "blbhq.pie",
+		"breadth": 2,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 3,
+		"hitpoints": 1000,
+		"id": "A0CommandCentreCO",
+		"name": "Collective Command Center",
+		"resistance": 300,
+		"sensorID": "CCSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"blhq3.pie"
+		],
+		"thermal": 10,
+		"type": "HQ",
+		"width": 2
+	},
+	"A0CommandCentreNE": {
+		"armour": 10,
+		"baseModel": "blbhq.pie",
+		"breadth": 2,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 3,
+		"hitpoints": 1000,
+		"id": "A0CommandCentreNE",
+		"name": "*CommandCenterNE*",
+		"resistance": 300,
+		"sensorID": "CCSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"blhq4.pie"
+		],
+		"thermal": 10,
+		"type": "HQ",
+		"width": 2
+	},
+	"A0CommandCentreNP": {
+		"armour": 10,
+		"baseModel": "blbhq.pie",
+		"breadth": 2,
+		"buildPoints": 500,
+		"buildPower": 100,
+		"ecmID": "ZNULLECM",
+		"height": 3,
+		"hitpoints": 1000,
+		"id": "A0CommandCentreNP",
+		"name": "New Paradigm Command Center",
+		"resistance": 300,
+		"sensorID": "CCSensor",
+		"strength": "HARD",
+		"structureModel": [
+			"blhq2.pie"
+		],
+		"thermal": 10,
+		"type": "HQ",
+		"width": 2
+	},
 	"A0CyborgFactory": {
 		"armour": 10,
 		"baseModel": "blbcfact.pie",
