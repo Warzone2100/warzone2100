@@ -6487,10 +6487,10 @@
 		"name": "Incendiary Howitzer",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Incendiary",
-			"R-Wpn-HowitzerMk1"
+			"R-Wpn-Howitzer-Damage01"
 		],
-		"researchPoints": 10000,
-		"researchPower": 312,
+		"researchPoints": 13000,
+		"researchPower": 406,
 		"resultComponents": [
 			"Howitzer-Incendiary"
 		],
@@ -6621,11 +6621,11 @@
 			"Howitzer105Mk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-HowitzerMk1",
+			"R-Wpn-Howitzer-Damage01",
 			"R-Wpn-Mortar3"
 		],
-		"researchPoints": 10000,
-		"researchPower": 312,
+		"researchPoints": 13000,
+		"researchPower": 406,
 		"resultComponents": [
 			"Howitzer03-Rot"
 		],
