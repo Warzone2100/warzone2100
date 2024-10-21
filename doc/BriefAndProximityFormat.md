@@ -44,5 +44,5 @@ Within each sequence, there will be two values:
 - name: The unique view data name ID. This will be used as a reference for scripts to invoke to start a video subset.
 - sequences: an array of objects (order matters!) containing variables about each sub-video:
   - loop: An integer between 0-1 to loop the entire video until its audio stops playing. Will always display subtitles every frame if set to 1.
-  - subtitles: Either a string or array of string translation references that will be used in this video.
+  - subtitles: String or array of string translation references for the video. These are added to the Intel menu icon text messages.
   - video: The actual video file to display. Note the directory starts at "data/[base|mp]/sequences/".
