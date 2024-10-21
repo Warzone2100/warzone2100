@@ -537,13 +537,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-_("Armed with Cyborg Assault Gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 _("Armed with Cyborg assault gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+_("Armed with Cyborg Assault Gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -1096,17 +1096,17 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
-// data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
-// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-// ... + 7 refs
-_("Best Targets: Base structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
 // data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
 // ... + 4 refs
 _("Best Targets: Base Structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
+// data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
+// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+// ... + 7 refs
+_("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -1311,6 +1311,18 @@ _("Bunker Buster")
 // data/mp/messages/resmessages1.json: $.RES_POWMD1.text[2]
 _("Burns oil more efficiently")  
 // TRANSLATORS: 
+// data/base/messages/cam1-outro.json: $.video0000.name
+_("CAM1_OUT")  
+// TRANSLATORS: 
+// data/base/messages/cam1-outro.json: $.video0001.name
+_("CAM1_OUT2")  
+// TRANSLATORS: 
+// data/base/messages/cam1-outro.json: $.video0002.name
+_("CAM2_BRIEF")  
+// TRANSLATORS: 
+// data/base/messages/brief2-dii.json: $.video0002.name
+_("CAM2_OUT")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text[2]
 // xgettext:no-c-format
@@ -1419,6 +1431,9 @@ _("Cluster Bomb Bay")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Bomb01.name
 _("Cluster Bombs Bay")  
+// TRANSLATORS: 
+// data/base/messages/brief1a.json: $.video0001.name
+_("CMB1_MSG")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0CobraFlameTracks.name
 _("Cobra Flamer Tracks")  
@@ -1932,6 +1947,9 @@ _("Enables self-repair in all vehicles")
 // data/mp/messages/resmessagesall.json: $.RES_SY_AR.text[3]
 _("Enables self-repair")  
 // TRANSLATORS: 
+// data/base/messages/genmessages.json: $.video0000.name
+_("END")  
+// TRANSLATORS: 
 // data/mp/challenges/hidebehind.json: $.player_3.name
 // data/mp/challenges/hidebehind.json: $.player_4.name
 // data/mp/challenges/hidebehind.json: $.player_5.name
@@ -2001,6 +2019,9 @@ _("Factory production rate +60%")
 // data/base/stats/structure.json: $.A0LightFactory.name
 // data/mp/stats/structure.json: $.A0LightFactory.name
 _("Factory")  
+// TRANSLATORS: 
+// data/base/messages/brieftut.json: $.video0000.name
+_("FACTORYVIPER")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
 _("Farther range compared to other sensors")  
@@ -2160,6 +2181,9 @@ _("Flashlight Retribution Hover")
 // data/base/stats/weapons.json: $.Laser3BEAMMk1.name
 // data/mp/stats/weapons.json: $.Laser3BEAMMk1.name
 _("Flashlight")  
+// TRANSLATORS: 
+// data/base/messages/brief1-1.json: $.video0000.name
+_("FLIGHT")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Engine02.name
 // data/mp/stats/research.json: $.R-Vehicle-Engine02.name
@@ -3747,6 +3771,216 @@ _("May be targeted directly or assigned to a sensor turret or tower")
 // data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[3]
 _("May be upgraded using factory modules")  
 // TRANSLATORS: 
+// data/base/messages/brief1-1.json: $.video0002.name
+_("MB1_B2_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1a-c.json: $.video0000.name
+_("MB1A-C_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1a-c.json: $.video0001.name
+_("MB1A-C_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief1a.json: $.video0000.name
+_("MB1A_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1b.json: $.video0000.name
+_("MB1B_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1c.json: $.video0001.name
+_("MB1C2_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1c.json: $.video0002.name
+_("MB1C3_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1c.json: $.video0003.name
+_("MB1C4_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1c.json: $.video0000.name
+_("MB1C_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1ca.json: $.video0000.name
+_("MB1CA_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1d.json: $.video0000.name
+_("MB1D_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1d.json: $.video0001.name
+_("MB1D_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-1.json: $.video0000.name
+_("MB2_1_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-1.json: $.video0001.name
+_("MB2_1_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-2.json: $.video0000.name
+_("MB2_2_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-2.json: $.video0001.name
+_("MB2_2_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-2.json: $.video0002.name
+_("MB2_2_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief2-5.json: $.video0000.name
+_("MB2_5_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-5.json: $.video0001.name
+_("MB2_5_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-6.json: $.video0000.name
+_("MB2_6_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-6.json: $.video0001.name
+_("MB2_6_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-6.json: $.video0002.name
+_("MB2_6_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief2-7.json: $.video0000.name
+_("MB2_7_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-7.json: $.video0001.name
+_("MB2_7_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-8.json: $.video0000.name
+_("MB2_8_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-8.json: $.video0001.name
+_("MB2_8_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2b.json: $.video0000.name
+_("MB2_B_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2b.json: $.video0001.name
+_("MB2_B_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-c.json: $.video0000.name
+_("MB2_C_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-c.json: $.video0001.name
+_("MB2_C_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-di.json: $.video0000.name
+_("MB2_DI_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-di.json: $.video0001.name
+_("MB2_DI_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2-dii.json: $.video0000.name
+_("MB2_DII_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2-dii.json: $.video0001.name
+_("MB2_DII_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief2a.json: $.video0000.name
+_("MB2A_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief2a.json: $.video0001.name
+_("MB2A_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3-1a.json: $.video0000.name
+_("MB3_1A_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3-1a.json: $.video0001.name
+_("MB3_1A_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3-1b.json: $.video0000.name
+_("MB3_1B_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3-1b.json: $.video0001.name
+_("MB3_1B_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3-2.json: $.video0000.name
+_("MB3_2_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3-2.json: $.video0001.name
+_("MB3_2_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3-2.json: $.video0002.name
+_("MB3_2_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief3-2.json: $.video0003.name
+_("MB3_2_MSG4")  
+// TRANSLATORS: 
+// data/base/messages/brief3-4.json: $.video0000.name
+_("MB3_4_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3-4.json: $.video0001.name
+_("MB3_4_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3-4.json: $.video0002.name
+_("MB3_4_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief3-4.json: $.video0003.name
+_("MB3_4_MSG4")  
+// TRANSLATORS: 
+// data/base/messages/brief3-4.json: $.video0004.name
+_("MB3_4_MSG5")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-b.json: $.video0000.name
+_("MB3_AB_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-b.json: $.video0001.name
+_("MB3_AB_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-b.json: $.video0002.name
+_("MB3_AB_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d1.json: $.video0000.name
+_("MB3_AD1_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d1.json: $.video0001.name
+_("MB3_AD1_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d1.json: $.video0002.name
+_("MB3_AD1_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d1.json: $.video0003.name
+_("MB3_AD1_MSG4")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d2.json: $.video0000.name
+_("MB3_AD2_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d2.json: $.video0001.name
+_("MB3_AD2_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d2.json: $.video0002.name
+_("MB3_AD2_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d2.json: $.video0003.name
+_("MB3_AD2_MSG4")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d2.json: $.video0004.name
+_("MB3_AD2_MSG5")  
+// TRANSLATORS: 
+// data/base/messages/brief3a-d2.json: $.video0005.name
+_("MB3_AD2_MSG6")  
+// TRANSLATORS: 
+// data/base/messages/brief3-b.json: $.video0000.name
+_("MB3_B_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3-b.json: $.video0001.name
+_("MB3_B_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3-b.json: $.video0002.name
+_("MB3_B_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief3-c.json: $.video0000.name
+_("MB3_C_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3-c.json: $.video0001.name
+_("MB3_C_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief3-a.json: $.video0000.name
+_("MB3A_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief3-a.json: $.video0001.name
+_("MB3A_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/briefdemo.json: $.video0000.name
+_("MBDEMO_MSG")  
+// TRANSLATORS: 
 // data/mp/stats/templates.json: $.Cyb-Mechanic.name
 _("Mechanic Cyborg")  
 // TRANSLATORS: 
@@ -5072,6 +5306,45 @@ _("SAM site with Vindicator missiles")
 // data/mp/stats/structure.json: $.A0Sat-linkCentre.name
 _("Satellite Uplink Center")  
 // TRANSLATORS: 
+// data/base/messages/brief1-1.json: $.video0001.name
+_("SB1_1_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1-2.json: $.video0000.name
+_("SB1_2_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1-2.json: $.video0001.name
+_("SB1_2_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief1-3.json: $.video0001.name
+_("SB1_3_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1-3.json: $.video0002.name
+_("SB1_3_MSG3")  
+// TRANSLATORS: 
+// data/base/messages/brief1-3.json: $.video0003.name
+_("SB1_3_MSG4")  
+// TRANSLATORS: 
+// data/base/messages/brief1-3.json: $.video0000.name
+_("SB1_3_UPDATE")  
+// TRANSLATORS: 
+// data/base/messages/brief1-4a.json: $.video0001.name
+_("SB1_4_B")  
+// TRANSLATORS: 
+// data/base/messages/brief1-4a.json: $.video0000.name
+_("SB1_4_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1-5.json: $.video0000.name
+_("SB1_5_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1-7.json: $.video0000.name
+_("SB1_7_MSG")  
+// TRANSLATORS: 
+// data/base/messages/brief1-7.json: $.video0001.name
+_("SB1_7_MSG2")  
+// TRANSLATORS: 
+// data/base/messages/brief1-7.json: $.video0002.name
+_("SB1_7_MSG3")  
+// TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaRocketPitAT.name
 // data/mp/stats/structure.json: $.A0BaBaRocketPitAT.name
 _("Scavenger AT-Rocket Pit")  
@@ -5616,14 +5889,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
@@ -6300,6 +6573,9 @@ _("Wide Spectrum Sensor Tower")
 // data/mp/stats/research.json: $.R-Sys-Sensor-WS.name
 // data/mp/stats/sensor.json: $.Sensor-WideSpec.name
 _("Wide Spectrum Sensor")  
+// TRANSLATORS: 
+// data/base/messages/genmessages.json: $.video0001.name
+_("WIN")  
 // TRANSLATORS: 
 // data/base/stats/features.json: $.WreckedDroidHub.name
 _("Wreck")  
