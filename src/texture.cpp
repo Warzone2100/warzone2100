@@ -310,15 +310,15 @@ bool texLoad(const char *fileName)
 				std::vector<WzString> usedFilenames_tmp;
 				for (k = 0; k <= maxTileNo; ++k)
 				{
-					auto fullPath_base = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d.png", partialPath, k)));
+					auto fullPath_base = gfx_api::imageLoadFilenameFromInputFilename(WzString::format("%s/tile-%02d.png", partialPath, k));
 					tile_base_filepaths.push_back(fullPath_base);
 					usedFilenames_tmp.push_back(fullPath_base);
 
 					if (has_auxillary_texture_info)
 					{
-						fullPath_nm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_nm.png", partialPath, k)));
-						fullPath_sm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_sm.png", partialPath, k)));
-						fullPath_hm = gfx_api::imageLoadFilenameFromInputFilename(WzString::fromUtf8(astringf("%s/tile-%02d_hm.png", partialPath, k)));
+						fullPath_nm = gfx_api::imageLoadFilenameFromInputFilename(WzString::format("%s/tile-%02d_nm.png", partialPath, k));
+						fullPath_sm = gfx_api::imageLoadFilenameFromInputFilename(WzString::format("%s/tile-%02d_sm.png", partialPath, k));
+						fullPath_hm = gfx_api::imageLoadFilenameFromInputFilename(WzString::format("%s/tile-%02d_hm.png", partialPath, k));
 
 						if (has_nm)
 						{

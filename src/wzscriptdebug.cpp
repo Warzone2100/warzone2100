@@ -1195,7 +1195,7 @@ private:
 		}
 		else
 		{
-			dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+			dropDownChoices.push_back({WzString::format("(Custom: %u)", currValue), currValue});
 			currentSettingIdx = dropDownChoices.size() - 1;
 		}
 
@@ -1270,7 +1270,7 @@ private:
 		}
 		else
 		{
-			dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+			dropDownChoices.push_back({WzString::format("(Custom: %u)", currValue), currValue});
 			currentSettingIdx = dropDownChoices.size() - 1;
 		}
 
@@ -1343,7 +1343,7 @@ private:
 		}
 		else
 		{
-			dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %" PRIu32 ")", currValue)), currValue});
+			dropDownChoices.push_back({WzString::format("(Custom: %" PRIu32 ")", currValue), currValue});
 			currentSettingIdx = dropDownChoices.size() - 1;
 		}
 
