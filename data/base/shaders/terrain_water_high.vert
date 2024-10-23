@@ -37,8 +37,8 @@ VERTEX_OUTPUT vec3 halfVec;
 void main()
 {
 	uvLightmap = (ModelUVLightmapMatrix * vec4(vertex.xyz, 1.f)).xy;
-	depth = vertex.w;
-	depth2 = length(vertex.y - vertex.w);
+	depth = vertex.w*0.0007;
+	depth2 = length(vertex.y - vertex.w)*0.005;
 
 	vec2 uv1 = vec2(vertex.x/4.f/128.f + timeSec/80.f, -vertex.z/4.f/128.f + timeSec/40.f); // (ModelUV1Matrix * vertex).xy;
 	vec2 uv2 = vec2(vertex.x/4.f/128.f, -vertex.z/4.f/128.f - timeSec/40.f); // (ModelUV2Matrix * vertex).xy;
@@ -46,7 +46,7 @@ void main()
 
 	vec3 eyeVec = normalize(cameraPos.xyz - vertex.xyz);
 	lightDir = sunPos.xyz;
-	halfVec = lightDir + eyeVec;
+	halfVec = normalize(lightDir + eyeVec);
 
 	vec4 position = ModelViewProjectionMatrix * vec4(vertex.xyz, 1.f);
 	vertexDistance = position.z;
