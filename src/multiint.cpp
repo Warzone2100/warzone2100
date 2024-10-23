@@ -6198,6 +6198,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 		ingame.PingTimes[i] = 0;
 		ingame.VerifiedIdentity[i] = false;
 		ingame.LagCounter[i] = 0;
+		ingame.DesyncCounter[i] = 0;
 		ingame.lastSentPlayerDataCheck2[i].reset();
 		ingame.muteChat[i] = false;
 	}
