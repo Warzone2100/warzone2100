@@ -4708,12 +4708,11 @@
 			"QuadMg1AAGun"
 		],
 		"requiredResearch": [
-			"R-Wpn-MG-ROF03",
-			"R-Wpn-AAGun03",
-			"R-Struc-Research-Upgrade06"
+			"R-Wpn-MG5",
+			"R-Wpn-AAGun03"
 		],
-		"researchPoints": 10800,
-		"researchPower": 337,
+		"researchPoints": 8400,
+		"researchPower": 262,
 		"resultComponents": [
 			"QuadRotAAGun"
 		],
@@ -6755,6 +6754,90 @@
 		],
 		"statID": "Laser2PULSEMk1"
 	},
+	"R-Wpn-MG-Accuracy01": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-MG-Accuracy01",
+		"name": "MG Laser Rangefinder",
+		"requiredResearch": [
+			"R-Wpn-MG3Mk1"
+		],
+		"researchPoints": 2400,
+		"researchPower": 75,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "HitChance",
+				"value": 10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "ShortHitChance",
+				"value": 10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "HitChance",
+				"value": 10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "ShortHitChance",
+				"value": 10
+			}
+		],
+		"statID": "MG1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPACC"
+	},
+	"R-Wpn-MG-Accuracy02": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-MG-Accuracy02",
+		"name": "MG Laser Designator",
+		"requiredResearch": [
+			"R-Wpn-MG-Accuracy01"
+		],
+		"researchPoints": 3600,
+		"researchPower": 112,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "HitChance",
+				"value": 10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "ShortHitChance",
+				"value": 10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "HitChance",
+				"value": 10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "ShortHitChance",
+				"value": 10
+			}
+		],
+		"statID": "MG1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPACC"
+	},
 	"R-Wpn-MG-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-Damage01",
@@ -7012,8 +7095,7 @@
 		"id": "R-Wpn-MG-Damage08",
 		"name": "Depleted Uranium MG Bullets",
 		"requiredResearch": [
-			"R-Wpn-MG-Damage07",
-			"R-Struc-Research-Upgrade06"
+			"R-Wpn-MG-Damage07"
 		],
 		"researchPoints": 9800,
 		"researchPower": 450,
@@ -7049,8 +7131,7 @@
 		"id": "R-Wpn-MG-Damage09",
 		"name": "Depleted Uranium MG Bullets Mk2",
 		"requiredResearch": [
-			"R-Wpn-MG-Damage08",
-			"R-Struc-Research-Upgrade07"
+			"R-Wpn-MG-Damage08"
 		],
 		"researchPoints": 10200,
 		"researchPower": 450,
@@ -7086,8 +7167,7 @@
 		"id": "R-Wpn-MG-Damage10",
 		"name": "Depleted Uranium MG Bullets Mk3",
 		"requiredResearch": [
-			"R-Wpn-MG-Damage09",
-			"R-Struc-Research-Upgrade08"
+			"R-Wpn-MG-Damage09"
 		],
 		"researchPoints": 11800,
 		"researchPower": 450,
@@ -7178,14 +7258,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "FirePause",
-				"value": -18
+				"value": -26
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
-				"value": -18
+				"value": -26
 			},
 			{
 				"class": "Weapon",
@@ -7211,7 +7291,8 @@
 		"msgName": "RES_W_MG_ROF3",
 		"name": "Hyper Fire Chaingun Upgrade",
 		"requiredResearch": [
-			"R-Wpn-MG4"
+			"R-Wpn-MG-Damage08",
+			"R-Wpn-MG-ROF02"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
@@ -7221,14 +7302,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "FirePause",
-				"value": -8
+				"value": -10
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
-				"value": -8
+				"value": -10
 			},
 			{
 				"class": "Weapon",
@@ -7334,8 +7415,8 @@
 			"MG4ROTARYMk1"
 		],
 		"requiredResearch": [
-			"R-Struc-Research-Upgrade06",
-			"R-Wpn-MG4"
+			"R-Wpn-MG4",
+			"R-Wpn-MG-Damage06"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
