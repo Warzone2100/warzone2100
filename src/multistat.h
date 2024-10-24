@@ -75,11 +75,13 @@ struct PLAYERSTATS
 		uint8_t star[3] = {0, 0, 0};
 		uint8_t medal = 0;
 		uint8_t level = 0;
-		uint8_t altNameTextColorOverride[3] = {255, 255, 255}; // rgb
+		uint8_t nameTextColorOverride[3] = {255, 255, 255}; // rgb
+		uint8_t tagTextColorOverride[3] = {255, 255, 255}; // rgb
 		uint8_t eloTextColorOverride[3] = {255, 255, 255}; // rgb
 		std::string elo;
 		std::string details;
-		std::string altName;
+		std::string tag;
+		std::string name;
 	};
 	Autorating autorating;
 	RATING_SOURCE autoratingFrom = RATING_SOURCE_HOST;
