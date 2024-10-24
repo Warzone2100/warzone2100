@@ -1775,7 +1775,7 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 	/* Get its absolute dimensions */
 	// NOTE: This only takes into account body, but is "good enough"
 	const BODY_STATS *psBStats = psDroid->getBodyStats();
-	const iIMDShape * pIMD = (psBStats != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
+	const iIMDShape * pIMD = (psBStats != nullptr && psBStats->pIMD != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
 }
