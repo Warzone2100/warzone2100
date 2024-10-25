@@ -1031,6 +1031,7 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 	}
 
 	bool senderIsSpectator = NetPlay.players[queue.index].isSpectator;
+	bool senderIsAdmin = NetPlay.players[queue.index].isAdmin;
 
 	if (type > NET_MIN_TYPE && type < NET_MAX_TYPE)
 	{
@@ -1049,10 +1050,16 @@ HandleMessageAction getMessageHandlingAction(NETQUEUE& queue, uint8_t type)
 				}
 				break;
 			case NET_KICK:
+			case NET_TEAMREQUEST: // spectators should not be allowed to request a team / non-spectator slot status
+			case NET_FACTIONREQUEST:
+			case NET_POSITIONREQUEST:
+				if (senderIsSpectator && !senderIsAdmin)
+				{
+					return HandleMessageAction::Disallow_And_Kick_Sender;
+				}
+				break;
 			case NET_AITEXTMSG:
 			case NET_BEACONMSG:
-			case NET_TEAMREQUEST: // spectators should not be allowed to request a team / non-spectator slot status
-			case NET_POSITIONREQUEST:
 				if (senderIsSpectator)
 				{
 					return HandleMessageAction::Disallow_And_Kick_Sender;

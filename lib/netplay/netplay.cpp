@@ -33,6 +33,7 @@
 #include "src/console.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
+#include "src/multilobbycommands.h"
 
 #include <time.h>			// for stats
 #include <physfs.h>
@@ -668,6 +669,7 @@ void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpec
 	{
 		NetPlay.players[i].isSpectator = false;
 	}
+	NetPlay.players[i].isAdmin = false;
 }
 
 uint8_t NET_numHumanPlayers(void)
@@ -736,6 +738,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 		NETuint8_t(reinterpret_cast<uint8_t *>(&NetPlay.players[index[n]].faction));
 		NETbool(&NetPlay.players[index[n]].isSpectator);
+		NETbool(&NetPlay.players[index[n]].isAdmin);
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -2533,6 +2536,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			int8_t difficulty = 0;
 			uint8_t faction = FACTION_NORMAL;
 			bool isSpectator = false;
+			bool isAdmin = false;
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
@@ -2577,6 +2581,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				NETint8_t(&difficulty);
 				NETuint8_t(&faction);
 				NETbool(&isSpectator);
+				NETbool(&isAdmin);
 
 				auto newFactionId = uintToFactionID(faction);
 				if (!newFactionId.has_value())
@@ -2596,6 +2601,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
 					NetPlay.players[index].faction = newFactionId.value();
 					NetPlay.players[index].isSpectator = isSpectator;
+					NetPlay.players[index].isAdmin = isAdmin;
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
