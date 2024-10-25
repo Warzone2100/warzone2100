@@ -301,7 +301,7 @@ bool recvOptions(NETQUEUE queue)
 	{
 		// Check if those vectors are different
 		bool structurelimitsUpdated = (oldStructureLimits.size() != ingame.structureLimits.size()) || (oldStructureLimits != ingame.structureLimits);
-	
+
 		// Notify if structure limits were changed
 		if (structurelimitsUpdated)
 		{
