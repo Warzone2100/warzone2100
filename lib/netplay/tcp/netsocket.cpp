@@ -26,7 +26,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "netsocket.h"
-#include "error_categories.h"
+#include "lib/netplay/error_categories.h"
 
 #include <vector>
 #include <algorithm>
@@ -46,6 +46,9 @@
 #elif defined(WZ_OS_WIN)
 // Already included Winsock2.h which defines TCP_NODELAY
 #endif
+
+namespace tcp
+{
 
 enum
 {
@@ -126,6 +129,8 @@ static void setSockErr(int error)
 	WSASetLastError(error);
 #endif
 }
+
+} // namespace tcp
 
 #if defined(WZ_OS_WIN)
 typedef int (WINAPI *GETADDRINFO_DLL_FUNC)(const char *node, const char *service,
@@ -215,6 +220,9 @@ static void freeaddrinfo(struct addrinfo *res)
 	freeaddrinfo_dll_func(res);
 }
 #endif
+
+namespace tcp
+{
 
 static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 {
@@ -1749,71 +1757,4 @@ void SOCKETshutdown()
 #endif
 }
 
-OpenConnectionResult socketOpenTCPConnectionSync(const char *host, uint32_t port)
-{
-	const auto hostsResult = resolveHost(host, port);
-	SocketAddress* hosts = hostsResult.value_or(nullptr);
-	if (hosts == nullptr)
-	{
-		const auto hostsErr = hostsResult.error();
-		const auto hostsErrMsg = hostsErr.message();
-		return OpenConnectionResult(hostsErr, astringf("Cannot resolve host \"%s\": [%d]: %s", host, hostsErr.value(), hostsErrMsg.c_str()));
-	}
-
-	auto sockResult = socketOpenAny(hosts, 15000);
-	Socket* client_transient_socket = sockResult.value_or(nullptr);
-	deleteSocketAddress(hosts);
-	hosts = nullptr;
-
-	if (client_transient_socket == nullptr)
-	{
-		const auto errValue = sockResult.error();
-		const auto errMsg = errValue.message();
-		return OpenConnectionResult(errValue, astringf("Cannot connect to [%s]:%d, [%d]:%s", host, port, errValue.value(), errMsg.c_str()));
-	}
-
-	return OpenConnectionResult(client_transient_socket);
-}
-
-struct OpenConnectionRequest
-{
-	std::string host;
-	uint32_t port = 0;
-	OpenConnectionToHostResultCallback callback;
-};
-
-static int openDirectTCPConnectionAsyncImpl(void* data)
-{
-	OpenConnectionRequest* pRequestInfo = (OpenConnectionRequest*)data;
-	if (!pRequestInfo)
-	{
-		return 1;
-	}
-
-	pRequestInfo->callback(socketOpenTCPConnectionSync(pRequestInfo->host.c_str(), pRequestInfo->port));
-	delete pRequestInfo;
-	return 0;
-}
-
-bool socketOpenTCPConnectionAsync(const std::string& host, uint32_t port, OpenConnectionToHostResultCallback callback)
-{
-	// spawn background thread to handle this
-	auto pRequest = new OpenConnectionRequest();
-	pRequest->host = host;
-	pRequest->port = port;
-	pRequest->callback = callback;
-
-	WZ_THREAD * pOpenConnectionThread = wzThreadCreate(openDirectTCPConnectionAsyncImpl, pRequest);
-	if (pOpenConnectionThread == nullptr)
-	{
-		debug(LOG_ERROR, "Failed to create thread for opening connection");
-		delete pRequest;
-		return false;
-	}
-
-	wzThreadDetach(pOpenConnectionThread);
-	// the thread handles deleting pRequest
-	pOpenConnectionThread = nullptr;
-
-	return true;
-}
+} // namespace tcp

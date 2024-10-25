@@ -1,0 +1,75 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2024  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
+#pragma once
+
+#include <stdint.h>
+
+#include <memory>
+#include <string>
+
+#include "lib/netplay/net_result.h"
+
+#if defined WZ_OS_UNIX
+# include <netdb.h>
+#elif defined WZ_OS_WIN
+# include <ws2tcpip.h>
+#endif
+
+typedef struct addrinfo SocketAddress;
+
+/// <summary>
+/// Opaque class representing abstract connection address to use with various
+/// network backend implementations. The internal representation is made
+/// hidden on purpose since we don't want to actually leak internal data layout
+/// to clients.
+///
+/// Instead, we would like to introduce "conversion routines" yielding
+/// various representations for convenient consumption with various network
+/// backends.
+///
+/// NOTE: this class may or may not represent a chain of resolved network addresses
+/// instead of just a single one, much like a `addrinfo` structure.
+///
+/// Currently, only knows how to convert itself to `addrinfo` struct,
+/// which is used with the `TCP_DIRECT` network backend.
+///
+/// New conversion routines should be introduced for other network backends,
+/// if deemed necessary.
+/// </summary>
+class ConnectionAddress
+{
+public:
+
+	ConnectionAddress();
+	ConnectionAddress(ConnectionAddress&&);
+	ConnectionAddress(const ConnectionAddress&) = delete;
+	~ConnectionAddress();
+
+	static net::result<ConnectionAddress> parse(const char* hostname, uint16_t port);
+	static net::result<ConnectionAddress> parse(const std::string& hostname, uint16_t port);
+
+	// NOTE: The lifetime of the returned `addrinfo` struct is bounded by the parent object's lifetime!
+	const SocketAddress* asRawSocketAddress() const;
+
+private:
+
+	struct Impl;
+	std::unique_ptr<Impl> mPimpl_;
+};
