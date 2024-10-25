@@ -2024,10 +2024,12 @@ bool intAddTransporterTimer()
 	sLabInit.height = 16;
 	sLabInit.pText = WzString::fromUtf8("00/10");
 	sLabInit.pCallback = intUpdateTransCapacity;
-	if (!widgAddLabel(psWScreen, &sLabInit))
+	auto psCapacityLabel = widgAddLabel(psWScreen, &sLabInit);
+	if (!psCapacityLabel)
 	{
 		return false;
 	}
+	psCapacityLabel->setTransparentToMouse(true);
 
 	return true;
 }
