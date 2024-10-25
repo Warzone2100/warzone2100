@@ -254,6 +254,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 		forceHidePowerBar();
 		intRemoveReticule();
+		intHideInGameOptionsButton();
 		intHideGroupSelectionMenu();
 	}
 

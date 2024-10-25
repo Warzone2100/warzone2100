@@ -1933,7 +1933,7 @@ bool intAddMissionTimer()
 	sFormInit.x = (SWORD)(RADTLX + RADWIDTH - sFormInit.width);
 	sFormInit.y = (SWORD)TIMER_Y;
 	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->move((SWORD)(RADTLX + RADWIDTH - psWidget->width()), TIMER_Y);
+		psWidget->move((SWORD)(RADTLX + RADWIDTH - psWidget->width() - 18), TIMER_Y);
 	});
 	sFormInit.UserData = PACKDWORD_TRI(0, IMAGE_MISSION_CLOCK, IMAGE_MISSION_CLOCK_UP);
 	sFormInit.pDisplay = intDisplayMissionClock;
@@ -2287,6 +2287,7 @@ static void missionResetInGameState()
 	intRemoveReticule();
 	intRemoveMissionTimer();
 	intRemoveTransporterTimer();
+	intHideInGameOptionsButton();
 	intHideGroupSelectionMenu();
 }
 

@@ -2148,9 +2148,123 @@ bool intShowGroupSelectionMenu()
 	return true;
 }
 
+class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
+{
+protected:
+	W_INGAMEOPTIONS_BUTTON()
+	{ }
+	void initialize();
+public:
+	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
+
+	void display(int xOffset, int yOffset) override;
+	std::string getTip() override;
+};
+
+std::shared_ptr<W_INGAMEOPTIONS_BUTTON> W_INGAMEOPTIONS_BUTTON::make()
+{
+	class make_shared_enabler: public W_INGAMEOPTIONS_BUTTON {};
+	auto widget = std::make_shared<make_shared_enabler>();
+	widget->initialize();
+	return widget;
+}
+
+void W_INGAMEOPTIONS_BUTTON::initialize()
+{
+	id = IDRET_OPTIONS;
+	setGeometry(0, 0, RET_BUTWIDTH, RET_BUTHEIGHT);
+}
+
+void W_INGAMEOPTIONS_BUTTON::display(int xOffset, int yOffset)
+{
+	const int x0 = xOffset + x();
+	const int y0 = yOffset + y();
+	bool butDisabled = getState() & WBUT_DISABLE;
+
+	if (butDisabled)
+	{
+		iV_DrawImage2("image_reticule_grey.png", x0, y0, width(), height());
+		return;
+	}
+
+	bool Down = getState() & (WBUT_DOWN | WBUT_CLICKLOCK);
+	if (Down)
+	{
+		iV_DrawImage2("image_ingameoptions_down.png", x0, y0, width(), height());
+	}
+	else
+	{
+		iV_DrawImage2("image_ingameoptions_up.png", x0, y0, width(), height());
+	}
+
+	bool highlighted = ((getState() & WBUT_HIGHLIGHT) != 0) || InGameOpUp;
+	if (highlighted)
+	{
+		iV_DrawImage2("image_reticule_hilight.png", x0, y0, width(), height());
+	}
+}
+
+std::string W_INGAMEOPTIONS_BUTTON::getTip()
+{
+	if (!InGameOpUp)
+	{
+		return  _("Open In-Game Options");
+	}
+	else
+	{
+		return  _("Close In-Game Options");
+	}
+}
+
+bool intAddInGameOptionsButton()
+{
+	auto psExistingBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
+	if (psExistingBut != nullptr)
+	{
+		psExistingBut->show();
+		return false;
+	}
+
+	auto button = W_INGAMEOPTIONS_BUTTON::make();
+	if (!button)
+	{
+		debug(LOG_ERROR, "Failed to create in game options button");
+	}
+	else
+	{
+		psWScreen->psForm->attach(button);
+		setReticuleButtonDimensions(*button, "image_ingameoptions_up.png");
+		button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			int w = psWidget->width();
+			int h = psWidget->height();
+			int x0 = screenWidth - (w + 16);
+			int y0 = 18;
+			psWidget->setGeometry(x0, y0, w, h);
+		}));
+		button->addOnClickHandler([](W_BUTTON&) {
+			widgScheduleTask([](){
+				kf_addInGameOptions();
+			});
+		});
+	}
+
+	return true;
+}
+
+void intHideInGameOptionsButton()
+{
+	auto psOptionsBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
+	if (psOptionsBut != nullptr)
+	{
+		psOptionsBut->hide();
+	}
+}
+
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule()
 {
+	intAddInGameOptionsButton();
+
 	if (ReticuleUp)
 	{
 		return true; // all fine

@@ -675,6 +675,7 @@ bool multiStartScreenInit()
 	bDisplayMultiJoiningStatus = 1; // always display this
 	gameTimeStop();
 	intHideInterface(true);
+	intHideInGameOptionsButton();
 	createGameStartScreen([] {
 		// on game start overlay screen close...
 		bDisplayMultiJoiningStatus = 0;
