@@ -1443,13 +1443,18 @@ static void addGameOptions()
 	updateLimitIcons();
 }
 
+static bool isHostOrAdmin()
+{
+	return NetPlay.isHost || NetPlay.players[selectedPlayer].isAdmin;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Colour functions
 
 static bool safeToUseColour(unsigned player, unsigned otherPlayer)
 {
-	// Player wants to take the colour from otherPlayer. May not take from a human otherPlayer, unless we're the host.
-	return player == otherPlayer || NetPlay.isHost || !isHumanPlayer(otherPlayer);
+	// Player wants to take the colour from otherPlayer. May not take from a human otherPlayer, unless we're the host/admin.
+	return player == otherPlayer || isHostOrAdmin() || !isHumanPlayer(otherPlayer);
 }
 
 static int getPlayerTeam(int i)
@@ -1982,7 +1987,7 @@ static std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t pl
 	for (uint32_t i = 0; i < game.maxPlayers; i++)
 	{
 		if (player != i
-			&& (NetPlay.isHost || !isHumanPlayer(i)) // host can move a player to any slot, player can only move to empty slots
+			&& (isHostOrAdmin() || !isHumanPlayer(i)) // host/admin can move a player to any slot, player can only move to empty slots
 			&& !isSpectatorOnlySlot(i)) // target cannot be a spectator only slot (for player position changes)
 		{
 			validTargetPlayerIdx.insert(i);
@@ -2114,9 +2119,9 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 
 	UDWORD i;
 	int disallow = allPlayersOnSameTeam(player);
-	if (bIsTrueMultiplayerGame && NetPlay.isHost)
+	if (bIsTrueMultiplayerGame && isHostOrAdmin())
 	{
-		// allow configuration of all teams in true multiplayer mode (by host), even if they would block the game starting
+		// allow configuration of all teams in true multiplayer mode (by host/admin), even if they would block the game starting
 		// (i.e. even if all players would be configured to be on the same team)
 		disallow = -1;
 	}
@@ -2513,7 +2518,7 @@ bool recvTeamRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (whosResponsible(player) != queue.index)
+	if (whosResponsible(player) != queue.index && !NetPlay.players[queue.index].isAdmin)
 	{
 		HandleBadParam("NET_TEAMREQUEST given incorrect params.", player, queue.index);
 		return false;
@@ -2616,6 +2621,7 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 
 static bool changePosition(UBYTE player, UBYTE position)
 {
+	ASSERT_HOST_ONLY(return false);
 	ASSERT(player < MAX_PLAYERS, "Invalid player idx: %" PRIu8, player);
 	int i;
 
@@ -2767,7 +2773,7 @@ bool recvFactionRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (whosResponsible(player) != queue.index)
+	if (whosResponsible(player) != queue.index && !NetPlay.players[queue.index].isAdmin)
 	{
 		HandleBadParam("NET_FACTIONREQUEST given incorrect params.", player, queue.index);
 		return false;
@@ -2805,7 +2811,7 @@ bool recvColourRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (whosResponsible(player) != queue.index)
+	if (whosResponsible(player) != queue.index && !NetPlay.players[queue.index].isAdmin)
 	{
 		HandleBadParam("NET_COLOURREQUEST given incorrect params.", player, queue.index);
 		return false;
@@ -2813,7 +2819,7 @@ bool recvColourRequest(NETQUEUE queue)
 
 	resetReadyStatus(false, true);
 
-	return changeColour(player, col, false);
+	return changeColour(player, col, NetPlay.players[queue.index].isAdmin);
 }
 
 bool recvPositionRequest(NETQUEUE queue)
@@ -2835,7 +2841,7 @@ bool recvPositionRequest(NETQUEUE queue)
 		return false;
 	}
 
-	if (whosResponsible(player) != queue.index)
+	if (whosResponsible(player) != queue.index && !NetPlay.players[queue.index].isAdmin)
 	{
 		HandleBadParam("NET_POSITIONREQUEST given incorrect params.", player, queue.index);
 		return false;
@@ -3269,7 +3275,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 
 static bool canChooseTeamFor(int i)
 {
-	return (i == selectedPlayer || NetPlay.isHost);
+	return (i == selectedPlayer || isHostOrAdmin());
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3996,7 +4002,7 @@ public:
 		widget->colorButton->addOnClickHandler([playerIdx, titleUI](W_BUTTON& button){
 			auto strongTitleUI = titleUI.lock();
 			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
-			if (playerIdx == selectedPlayer || NetPlay.isHost)
+			if (playerIdx == selectedPlayer || isHostOrAdmin())
 			{
 				if (!NetPlay.players[playerIdx].isSpectator) // not a spectator
 				{
@@ -4031,11 +4037,12 @@ public:
 		widget->playerInfo->addOnClickHandler([playerIdx, titleUI](W_BUTTON& button){
 			auto strongTitleUI = titleUI.lock();
 			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
-			if (playerIdx == selectedPlayer || NetPlay.isHost)
+			if (playerIdx == selectedPlayer || isHostOrAdmin())
 			{
 				uint32_t player = playerIdx;
-				// host can move any player, clients can request to move themselves if there are available slots
-				if (((player == selectedPlayer && validPlayerIdxTargetsForPlayerPositionMove(player).size() > 0) || (NetPlay.players[player].allocated && NetPlay.isHost))
+				// host/admin can move any player, clients can request to move themselves if there are available slots
+				if (((player == selectedPlayer && validPlayerIdxTargetsForPlayerPositionMove(player).size() > 0) ||
+						(NetPlay.players[player].allocated && isHostOrAdmin()))
 					&& !locked.position
 					&& player < MAX_PLAYERS
 					&& !isSpectatorOnlySlot(player))
@@ -8827,6 +8834,7 @@ inline void to_json(nlohmann::json& j, const PLAYER& p) {
 	// Do not persist IPtextAddress
 	j["faction"] = static_cast<uint8_t>(p.faction);
 	j["isSpectator"] = p.isSpectator;
+	j["isAdmin"] = p.isAdmin;
 }
 
 inline void from_json(const nlohmann::json& j, PLAYER& p) {
@@ -8857,6 +8865,15 @@ inline void from_json(const nlohmann::json& j, PLAYER& p) {
 	auto factionUint = j.at("faction").get<uint8_t>();
 	p.faction = static_cast<FactionID>(factionUint); // TODO CHECK
 	p.isSpectator = j.at("isSpectator").get<bool>();
+	if (j.contains("isAdmin"))
+	{
+		p.isAdmin = j.at("isAdmin").get<bool>();
+	}
+	else
+	{
+		// default to the old (pre-4.5.4) default value of false
+		p.isAdmin = false;
+	}
 }
 
 static nlohmann::json DataHashToJSON()
