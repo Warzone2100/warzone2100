@@ -1448,6 +1448,34 @@ static bool isHostOrAdmin()
 	return NetPlay.isHost || NetPlay.players[selectedPlayer].isAdmin;
 }
 
+static bool isPlayerHostOrAdmin(uint32_t playerIdx)
+{
+	ASSERT_OR_RETURN(false, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid player idx: %" PRIu32, playerIdx);
+	return (playerIdx == NetPlay.hostPlayer) || NetPlay.players[playerIdx].isAdmin;
+}
+
+static bool shouldInformOfAdminAction(uint32_t targetPlayerIdx, uint32_t responsibleIdx)
+{
+	ASSERT_OR_RETURN(false, targetPlayerIdx < MAX_CONNECTED_PLAYERS, "Invalid targetPlayerIdx: %" PRIu32, targetPlayerIdx);
+	ASSERT_OR_RETURN(false, responsibleIdx < MAX_CONNECTED_PLAYERS, "Invalid responsibleIdx: %" PRIu32, responsibleIdx);
+
+	if (responsibleIdx == targetPlayerIdx)
+	{
+		return false; // do not inform about self-action
+	}
+	if (!isPlayerHostOrAdmin(responsibleIdx))
+	{
+		return false;
+	}
+	if (!NetPlay.players[targetPlayerIdx].allocated)
+	{
+		return false; // do not inform if target isn't a human player
+	}
+
+	return true;
+}
+
+
 // ////////////////////////////////////////////////////////////////////////////
 // Colour functions
 
@@ -2472,19 +2500,51 @@ void WzMultiplayerOptionsTitleUI::closePositionChooser()
 	closeAllChoosers();
 }
 
-static void changeTeam(UBYTE player, UBYTE team)
+static void informIfAdminChangedOtherTeam(uint32_t targetPlayerIdx, uint32_t responsibleIdx)
 {
+	if (!shouldInformOfAdminAction(targetPlayerIdx, responsibleIdx))
+	{
+		return;
+	}
+
+	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::Team, responsibleIdx, targetPlayerIdx));
+
+	std::string senderPublicKeyB64 = base64Encode(getMultiStats(responsibleIdx).identity.toBytes(EcKey::Public));
+	debug(LOG_INFO, "Admin %s (%s) changed team of player ([%u] %s) to: %d", NetPlay.players[responsibleIdx].name, senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, NetPlay.players[targetPlayerIdx].name, NetPlay.players[targetPlayerIdx].team);
+}
+
+static bool changeTeam(UBYTE player, UBYTE team, uint32_t responsibleIdx)
+{
+	if (team >= MAX_CONNECTED_PLAYERS)
+	{
+		return false;
+	}
+
+	if (player >= MAX_CONNECTED_PLAYERS)
+	{
+		return false;
+	}
+
+	if (NetPlay.players[player].team == team)
+	{
+		NETBroadcastPlayerInfo(player); // we do this regardless, in case of sync issues // FUTURE TODO: Doublecheck if this is still needed?
+		return false;  // Nothing to do.
+	}
+
 	NetPlay.players[player].team = team;
 	debug(LOG_WZ, "set %d as new team for player %d", team, player);
 	NETBroadcastPlayerInfo(player);
+	informIfAdminChangedOtherTeam(player, responsibleIdx);
+
 	netPlayersUpdated = true;
+	return true;
 }
 
 static bool SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 {
 	if (NetPlay.isHost)			// do or request the change.
 	{
-		changeTeam(player, chosenTeam);	// do the change, remember only the host can do this to avoid confusion.
+		changeTeam(player, chosenTeam, realSelectedPlayer);	// do the change, remember only the host can do this to avoid confusion.
 	}
 	else
 	{
@@ -2539,9 +2599,7 @@ bool recvTeamRequest(NETQUEUE queue)
 		resetReadyStatus(false);
 	}
 	debug(LOG_NET, "%s is now part of team: %d", NetPlay.players[player].name, (int) team);
-	changeTeam(player, team); // we do this regardless, in case of sync issues
-
-	return true;
+	return changeTeam(player, team, queue.index); // we do this regardless, in case of sync issues
 }
 
 static bool SendReadyRequest(UBYTE player, bool bReady)
@@ -2619,11 +2677,30 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 	return true;
 }
 
-static bool changePosition(UBYTE player, UBYTE position)
+static void informIfAdminChangedOtherPosition(uint32_t targetPlayerIdx, uint32_t responsibleIdx)
+{
+	if (!shouldInformOfAdminAction(targetPlayerIdx, responsibleIdx))
+	{
+		return;
+	}
+
+	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::Position, responsibleIdx, targetPlayerIdx));
+
+	std::string senderPublicKeyB64 = base64Encode(getMultiStats(responsibleIdx).identity.toBytes(EcKey::Public));
+	debug(LOG_INFO, "Admin %s (%s) changed position of player (%s) to: %d", NetPlay.players[responsibleIdx].name, senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].name, NetPlay.players[targetPlayerIdx].position);
+}
+
+static bool changePosition(UBYTE player, UBYTE position, uint32_t responsibleIdx)
 {
 	ASSERT_HOST_ONLY(return false);
-	ASSERT(player < MAX_PLAYERS, "Invalid player idx: %" PRIu8, player);
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player idx: %" PRIu8, player);
 	int i;
+
+	if (NetPlay.players[player].position == position)
+	{
+		// nothing to do
+		return false;
+	}
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -2634,6 +2711,7 @@ static bool changePosition(UBYTE player, UBYTE position)
 			std::swap(NetPlay.players[i].position, NetPlay.players[player].position);
 			std::swap(NetPlay.players[i].team, NetPlay.players[player].team);
 			NETBroadcastTwoPlayerInfo(player, i);
+			informIfAdminChangedOtherPosition(player, responsibleIdx);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -2645,36 +2723,50 @@ static bool changePosition(UBYTE player, UBYTE position)
 		// Positions were corrupted. Attempt to fix.
 		NetPlay.players[player].position = position;
 		NETBroadcastPlayerInfo(player);
+		informIfAdminChangedOtherPosition(player, responsibleIdx);
 		netPlayersUpdated = true;
 		return true;
 	}
 	return false;
 }
 
-bool changeColour(unsigned player, int col, bool isHost)
+static void informIfAdminChangedOtherColor(uint32_t targetPlayerIdx, uint32_t responsibleIdx)
+{
+	if (!shouldInformOfAdminAction(targetPlayerIdx, responsibleIdx))
+	{
+		return;
+	}
+
+	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::Color, responsibleIdx, targetPlayerIdx));
+
+	std::string senderPublicKeyB64 = base64Encode(getMultiStats(responsibleIdx).identity.toBytes(EcKey::Public));
+	debug(LOG_INFO, "Admin %s (%s) changed color of player ([%u] %s) to: [%d] %s", NetPlay.players[responsibleIdx].name, senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, NetPlay.players[targetPlayerIdx].name, NetPlay.players[targetPlayerIdx].colour, getPlayerColourName(targetPlayerIdx));
+}
+
+bool changeColour(unsigned player, int col, uint32_t responsibleIdx)
 {
 	if (col < 0 || col >= MAX_PLAYERS_IN_GUI)
 	{
-		return true;
+		return false;
 	}
 
 	if (player >= MAX_PLAYERS)
 	{
-		return true;
+		return false;
 	}
 
 	if (getPlayerColour(player) == col)
 	{
-		return true;  // Nothing to do.
+		return false;  // Nothing to do.
 	}
 
 	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (getPlayerColour(i) == col)
 		{
-			if (!isHost && NetPlay.players[i].allocated)
+			if (!isPlayerHostOrAdmin(responsibleIdx) && NetPlay.players[i].allocated)
 			{
-				return true;  // May not swap.
+				return false;  // May not swap.
 			}
 
 			debug(LOG_NET, "Swapping colours between players %d(%d) and %d(%d)",
@@ -2682,6 +2774,7 @@ bool changeColour(unsigned player, int col, bool isHost)
 			setPlayerColour(i, getPlayerColour(player));
 			setPlayerColour(player, col);
 			NETBroadcastTwoPlayerInfo(player, i);
+			informIfAdminChangedOtherColor(player, responsibleIdx);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -2693,6 +2786,7 @@ bool changeColour(unsigned player, int col, bool isHost)
 		debug(LOG_NET, "corrupted colours: player (%u) new colour (%u) old colour (%d)", player, col, NetPlay.players[player].colour);
 		setPlayerColour(player, col);
 		NETBroadcastPlayerInfo(player);
+		informIfAdminChangedOtherColor(player, responsibleIdx);
 		netPlayersUpdated = true;
 		return true;
 	}
@@ -2703,7 +2797,7 @@ bool SendColourRequest(UBYTE player, UBYTE col)
 {
 	if (NetPlay.isHost)			// do or request the change
 	{
-		return changeColour(player, col, true);
+		return changeColour(player, col, realSelectedPlayer);
 	}
 	else
 	{
@@ -2716,14 +2810,46 @@ bool SendColourRequest(UBYTE player, UBYTE col)
 	return true;
 }
 
+static void informIfAdminChangedOtherFaction(uint32_t targetPlayerIdx, uint32_t responsibleIdx)
+{
+	if (!shouldInformOfAdminAction(targetPlayerIdx, responsibleIdx))
+	{
+		return;
+	}
+
+	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::Faction, responsibleIdx, targetPlayerIdx));
+
+	std::string senderPublicKeyB64 = base64Encode(getMultiStats(responsibleIdx).identity.toBytes(EcKey::Public));
+	debug(LOG_INFO, "Admin %s (%s) changed faction of player ([%u] %s) to: %s", NetPlay.players[responsibleIdx].name, senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, NetPlay.players[targetPlayerIdx].name, to_localized_string(static_cast<FactionID>(NetPlay.players[targetPlayerIdx].faction)));
+}
+
+bool changeFaction(unsigned player, FactionID faction, uint32_t responsibleIdx)
+{
+	if (player >= MAX_PLAYERS)
+	{
+		return false;
+	}
+
+	if (NetPlay.players[player].faction == faction)
+	{
+		return false;  // Nothing to do.
+	}
+
+	NetPlay.players[player].faction = static_cast<FactionID>(faction);
+	NETBroadcastPlayerInfo(player);
+
+	informIfAdminChangedOtherFaction(player, responsibleIdx);
+
+	return true;
+}
+
 static bool SendFactionRequest(UBYTE player, UBYTE faction)
 {
 	// TODO: needs to be rewritten from scratch
 	ASSERT_OR_RETURN(false, faction <= static_cast<UBYTE>(MAX_FACTION_ID), "Invalid faction: %u", (unsigned int)faction);
 	if (NetPlay.isHost)			// do or request the change
 	{
-		NetPlay.players[player].faction = static_cast<FactionID>(faction);
-		NETBroadcastPlayerInfo(player);
+		changeFaction(player, static_cast<FactionID>(faction), realSelectedPlayer);
 		return true;
 	}
 	else
@@ -2741,7 +2867,7 @@ static bool SendPositionRequest(UBYTE player, UBYTE position)
 {
 	if (NetPlay.isHost)			// do or request the change
 	{
-		return changePosition(player, position);
+		return changePosition(player, position, realSelectedPlayer);
 	}
 	else
 	{
@@ -2788,9 +2914,7 @@ bool recvFactionRequest(NETQUEUE queue)
 
 	resetReadyStatus(false, true);
 
-	NetPlay.players[player].faction = newFactionId.value();
-	NETBroadcastPlayerInfo(player);
-	return true;
+	return changeFaction(player, newFactionId.value(), queue.index);
 }
 
 bool recvColourRequest(NETQUEUE queue)
@@ -2819,7 +2943,7 @@ bool recvColourRequest(NETQUEUE queue)
 
 	resetReadyStatus(false, true);
 
-	return changeColour(player, col, NetPlay.players[queue.index].isAdmin);
+	return changeColour(player, col, queue.index);
 }
 
 bool recvPositionRequest(NETQUEUE queue)
@@ -2854,7 +2978,7 @@ bool recvPositionRequest(NETQUEUE queue)
 
 	resetReadyStatus(false);
 
-	return changePosition(player, position);
+	return changePosition(player, position, queue.index);
 }
 
 static bool SendPlayerSlotTypeRequest(uint32_t player, bool isSpectator)
@@ -6621,7 +6745,7 @@ public:
 	virtual ~WzHostLobbyOperationsInterface() { }
 
 public:
-	virtual bool changeTeam(uint32_t player, uint8_t team) override
+	virtual bool changeTeam(uint32_t player, uint8_t team, uint32_t responsibleIdx) override
 	{
 		ASSERT_HOST_ONLY(return false);
 		ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
@@ -6636,11 +6760,11 @@ public:
 			// no-op - nothing to do
 			return true;
 		}
-		::changeTeam(player, team);
+		::changeTeam(player, team, responsibleIdx);
 		resetReadyStatus(false);
 		return true;
 	}
-	virtual bool changePosition(uint32_t player, uint8_t position) override
+	virtual bool changePosition(uint32_t player, uint8_t position, uint32_t responsibleIdx) override
 	{
 		ASSERT_HOST_ONLY(return false);
 		ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player: %" PRIu32, player);
@@ -6655,7 +6779,7 @@ public:
 			// no-op request - nothing to do
 			return true;
 		}
-		if (!::changePosition(player, position))
+		if (!::changePosition(player, position, responsibleIdx))
 		{
 			return false;
 		}
@@ -6818,7 +6942,7 @@ public:
 		resetReadyStatus(true);		//reset and send notification to all clients
 		return true;
 	}
-	virtual bool autoBalancePlayers() override
+	virtual bool autoBalancePlayers(uint32_t responsibleIdx) override
 	{
 		ASSERT_HOST_ONLY(return false);
 		if (!getAutoratingEnable())
@@ -6869,7 +6993,7 @@ public:
 			}
 
 			sendRoomSystemMessage(astringf("Moving [%d]\"%s\" <%s> to pos %d", id, pl[i].name.c_str(), pl[i].elo.c_str(), toslot).c_str());
-			changePosition(id, toslot);
+			changePosition(id, toslot, responsibleIdx);
 		}
 		sendRoomSystemMessage("Autobalance done");
 		return true;
@@ -7554,7 +7678,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 
 						for (uint8_t slotInc = 0; slotInc < game.maxPlayers && playerInc < humans.size(); ++slotInc)
 						{
-							changePosition(humans[playerInc], slotInc);
+							changePosition(humans[playerInc], slotInc, realSelectedPlayer);
 							++playerInc;
 						}
 					}
@@ -8673,7 +8797,7 @@ static inline bool isSpectatorOnlySlot(UDWORD playerIdx)
 
 bool autoBalancePlayersCmd()
 {
-	return cmdInterface.autoBalancePlayers();
+	return cmdInterface.autoBalancePlayers(realSelectedPlayer);
 }
 
 //// NOTE: Pass in NetPlay.players[i].position
