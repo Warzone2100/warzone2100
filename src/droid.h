@@ -118,6 +118,18 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
 
+/* Update droid shields. */
+void droidUpdateShields(DROID *psDroid);
+
+/* Calculate the droid's shield regeneration step time */
+uint32_t droidCalculateShieldRegenTime(DROID *psDroid);
+
+/* Calculate the droid's shield interruption time */
+uint32_t droidCalculateShieldInterruptRegenTime(DROID *psDroid);
+
+/* Get droid maximum shield points */
+int32_t droidGetMaxShieldPoints(DROID *psDroid);
+
 /* Set up a droid to build a structure - returns true if successful */
 enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
 DroidStartBuild droidStartBuild(DROID *psDroid);

@@ -911,6 +911,9 @@ void droidUpdate(DROID *psDroid)
 		droidUpdateDroidSelfRepair(psDroid);
 	}
 
+	if (bMultiPlayer) {
+		droidUpdateShields(psDroid);
+	}
 
 	/* Update the fire damage data */
 	if (psDroid->periodicalDamageStart != 0 && psDroid->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
@@ -951,6 +954,44 @@ void droidUpdate(DROID *psDroid)
 	syncDebugDroid(psDroid, '>');
 
 	CHECK_DROID(psDroid);
+}
+
+void droidUpdateShields(DROID *psDroid) {
+	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND) {
+		if (psDroid->shieldPoints < 0) {
+			psDroid->shieldPoints = 0;
+			psDroid->shieldRegenTime = gameTime;
+			psDroid->shieldInterruptRegenTime = gameTime;
+
+		} else {
+			if (gameTime - psDroid->shieldInterruptRegenTime >= droidCalculateShieldInterruptRegenTime(psDroid)) {
+				if (gameTime - psDroid->shieldRegenTime >= droidCalculateShieldRegenTime(psDroid)) {
+					for (uint32_t i = 0; i < 4; i++) {
+						if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid)) {
+							psDroid->shieldPoints += 1;
+						}
+					}
+					psDroid->shieldRegenTime = gameTime;
+				}
+			}
+		}
+	} else {
+		// unit has lost commander, shields are down!
+		psDroid->shieldPoints = -1;
+	}
+}
+
+uint32_t droidCalculateShieldRegenTime(DROID *psDroid) {
+	return DROID_INITIAL_SHIELD_REGEN_TIME - (DROID_SHIELD_REGEN_TIME_DEC * getDroidLevel(psDroid));
+}
+
+uint32_t droidCalculateShieldInterruptRegenTime(DROID *psDroid) {
+	return DROID_INITIAL_SHIELD_INTERRUPT_REGEN_TIME - (DROID_SHIELD_INTERRUPT_REGEN_TIME_DEC * getDroidLevel(psDroid));
+}
+
+int32_t droidGetMaxShieldPoints(DROID *psDroid) {
+	double percent = static_cast<double>(psDroid->originalBody) / 100.0f;
+	return std::round(percent * (DROID_INITIAL_SHILED_POINTS_PERCENT + DROID_ADDITVE_SHILED_POINTS_PERCENT * getDroidLevel(psDroid)));
 }
 
 /* See if a droid is next to a structure */
@@ -1723,6 +1764,7 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 		droid.experience = 0;
 	}
 	droid.kills = 0;
+	droid.shieldPoints = -1;
 
 	droidSetBits(pTemplate, &droid);
 

@@ -28,6 +28,11 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/netplay/sync_debug.h"
 
+#include "lib/ivis_opengl/ivisdef.h"
+
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
 #include "action.h"
 #include "combat.h"
 #include "difficulty.h"
@@ -38,6 +43,12 @@
 #include "qtscript.h"
 #include "order.h"
 #include "objmem.h"
+#include "effects.h"
+
+
+
+#define DROID_SHIELD_DAMAGE_SPREAD	(16 - rand()%32)
+#define DROID_SHIELD_PARTICLES		(6 + rand()%8)
 
 /* Fire a weapon at something */
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
@@ -483,6 +494,36 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	if (actualDamage >= psObj->body)
 	{
 		return -(int64_t)65536 * psObj->body / originalhp;
+	}
+
+	// Drain shields first
+	if (psObj->type == OBJ_DROID) {
+		DROID *psDroid = castDroid(psObj);
+
+		if (psDroid->shieldPoints > 0) {
+			if (psDroid->shieldPoints > actualDamage) {
+				psDroid->shieldPoints -= actualDamage;
+				actualDamage = 0;
+			} else {
+				actualDamage -= psDroid->shieldPoints;
+				psDroid->shieldPoints = 0;
+				// shields are interrupted, wait for a while until regeneration starts again
+				psDroid->shieldInterruptRegenTime = psDroid->time;
+				psDroid->shieldRegenTime = psDroid->time;
+			}
+
+			Vector3i dv;
+			dv.y = psDroid->pos.z;
+			dv.y += (psDroid->sDisplay.imd->max.y * 2);
+
+			for (uint32_t i = 0; i < DROID_SHIELD_PARTICLES; i++) {
+				dv.x = psDroid->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
+				dv.z = psDroid->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
+				addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, nullptr, 0, gameTime - deltaGameTime + 1);
+			}
+
+			audio_PlayStaticTrack(psDroid->pos.x, psDroid->pos.y, ID_SOUND_SHIELD_HIT);
+		}
 	}
 
 	// Subtract the dealt damage from the droid's remaining body points
