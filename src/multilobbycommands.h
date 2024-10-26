@@ -35,8 +35,8 @@ public:
 	virtual ~HostLobbyOperationsInterface();
 
 public:
-	virtual bool changeTeam(uint32_t player, uint8_t team) = 0;
-	virtual bool changePosition(uint32_t player, uint8_t position) = 0;
+	virtual bool changeTeam(uint32_t player, uint8_t team, uint32_t responsibleIdx) = 0;
+	virtual bool changePosition(uint32_t player, uint8_t position, uint32_t responsibleIdx) = 0;
 	virtual bool changeBase(uint8_t baseValue) = 0;
 	virtual bool changeAlliances(uint8_t allianceValue) = 0;
 	virtual bool changeScavengers(uint8_t scavsValue) = 0;
@@ -44,7 +44,7 @@ public:
 	virtual bool changeHostChatPermissions(uint32_t player_id, bool freeChatEnabled) = 0;
 	virtual bool movePlayerToSpectators(uint32_t player_id) = 0;
 	virtual bool requestMoveSpectatorToPlayers(uint32_t player_id) = 0;
-	virtual bool autoBalancePlayers() = 0;
+	virtual bool autoBalancePlayers(uint32_t responsibleIdx) = 0;
 	virtual void quitGame(int exitCode) = 0;
 };
 

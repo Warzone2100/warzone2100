@@ -4483,7 +4483,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		// Now switch player color of the host to what they normally use for MP games
 		if (war_getMPcolour() >= 0)
 		{
-			changeColour(NetPlay.hostPlayer, war_getMPcolour(), true);
+			changeColour(NetPlay.hostPlayer, war_getMPcolour(), realSelectedPlayer);
 		}
 		return true;
 	}
@@ -4541,7 +4541,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	// Now switch player color of the host to what they normally use for SP games
 	if (NetPlay.hostPlayer < MAX_PLAYERS && war_getMPcolour() >= 0)
 	{
-		changeColour(NetPlay.hostPlayer, war_getMPcolour(), true);
+		changeColour(NetPlay.hostPlayer, war_getMPcolour(), realSelectedPlayer);
 	}
 
 	NETregisterServer(WZ_SERVER_DISCONNECT);

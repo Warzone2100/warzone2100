@@ -295,7 +295,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "team <slot> <team>");
 			return false;
 		}
-		if (!cmdInterface.changeTeam(posToNetPlayer(s1), s2))
+		if (!cmdInterface.changeTeam(posToNetPlayer(s1), s2, message.sender))
 		{
 			std::string msg = astringf("Unable to change player %u team to %u", s1, s2);
 			sendRoomNotifyMessage(msg.c_str());
@@ -387,7 +387,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			return false;
 		}
 
-		if (!cmdInterface.changePosition(playerIdxA, s2))
+		if (!cmdInterface.changePosition(playerIdxA, s2, message.sender))
 		{
 			std::string msg = astringf("Unable to swap players %" PRIu8 " and %" PRIu8, s1, s2);
 			sendRoomNotifyMessage(msg.c_str());
@@ -554,7 +554,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomSystemMessage("Autobalance is available only for even player count.");
 			return false;
 		}
-		if (!cmdInterface.autoBalancePlayers())
+		if (!cmdInterface.autoBalancePlayers(message.sender))
 		{
 			// failure message logged by autoBalancePlayers()
 			return false;
