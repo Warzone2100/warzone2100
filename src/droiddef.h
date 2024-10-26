@@ -51,6 +51,14 @@
 //defines how many times to perform the iteration on looking for a blank location
 #define LOOK_FOR_EMPTY_TILE		20
 
+#define DROID_INITIAL_SHILED_POINTS_PERCENT						10
+#define DROID_ADDITVE_SHILED_POINTS_PERCENT						5
+#define DROID_INITIAL_SHIELD_REGEN_TIME							32
+#define DROID_SHIELD_REGEN_TIME_DEC								2
+#define DROID_INITIAL_SHIELD_INTERRUPT_REGEN_TIME				2000
+#define DROID_SHIELD_INTERRUPT_REGEN_TIME_DEC					100
+#define DROID_SHIELD_POINTS_STEP								4
+
 typedef std::vector<DROID_ORDER_DATA> OrderList;
 
 struct DROID_TEMPLATE : public BASE_STATS
@@ -150,6 +158,9 @@ struct DROID : public BASE_OBJECT
 	UDWORD          baseSpeed;                      ///< the base speed dependent on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
+	SDWORD          shieldPoints;                   ///< Shield points of droid, which will be drained instead of health
+	UDWORD          shieldRegenTime;                ///< How long should it be before the next regeneration step
+	UDWORD          shieldInterruptRegenTime;       ///< Standby time in case the shield was destroyed to begin regenerating again
 	uint32_t        kills;
 	UDWORD          lastFrustratedTime;             ///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
 	SWORD           resistance;                     ///< used in Electronic Warfare

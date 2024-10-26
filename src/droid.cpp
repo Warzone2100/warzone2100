@@ -999,6 +999,10 @@ void droidUpdate(DROID *psDroid)
 		droidUpdateDroidSelfRepair(psDroid);
 	}
 
+	if (bMultiPlayer)
+	{
+		droidUpdateShields(psDroid);
+	}
 
 	/* Update the fire damage data */
 	if (psDroid->periodicalDamageStart != 0 && psDroid->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
@@ -1039,6 +1043,56 @@ void droidUpdate(DROID *psDroid)
 	syncDebugDroid(psDroid, '>');
 
 	CHECK_DROID(psDroid);
+}
+
+void droidUpdateShields(DROID *psDroid)
+{
+	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND)
+	{
+		if (psDroid->shieldPoints < 0)
+		{
+			psDroid->shieldPoints = 0;
+			psDroid->shieldRegenTime = gameTime;
+			psDroid->shieldInterruptRegenTime = gameTime;
+		}
+		else
+		{
+			if (!((psDroid->lastHitWeapon == WSC_EMP) && ((gameTime - psDroid->timeLastHit) < EMP_DISABLE_TIME)) &&
+				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
+				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid))
+			{
+				for (uint32_t i = 0; i < DROID_SHIELD_POINTS_STEP; i++)
+				{
+					if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid))
+					{
+						psDroid->shieldPoints += 1;
+					}
+				}
+				psDroid->shieldRegenTime = gameTime;
+			}
+		}
+	}
+	else
+	{
+		// unit has lost commander, shields are down!
+		psDroid->shieldPoints = -1;
+	}
+}
+
+UDWORD droidCalculateShieldRegenTime(const DROID *psDroid)
+{
+	return DROID_INITIAL_SHIELD_REGEN_TIME - (DROID_SHIELD_REGEN_TIME_DEC * getDroidLevel(psDroid));
+}
+
+UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid)
+{
+	return DROID_INITIAL_SHIELD_INTERRUPT_REGEN_TIME - (DROID_SHIELD_INTERRUPT_REGEN_TIME_DEC * getDroidLevel(psDroid));
+}
+
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid)
+{
+	UDWORD percent = psDroid->originalBody / 100;
+	return percent * (DROID_INITIAL_SHILED_POINTS_PERCENT + DROID_ADDITVE_SHILED_POINTS_PERCENT * getDroidLevel(psDroid));
 }
 
 /* See if a droid is next to a structure */
@@ -1861,6 +1915,7 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 		droid.experience = 0;
 	}
 	droid.kills = 0;
+	droid.shieldPoints = -1;
 
 	droidSetBits(pTemplate, &droid);
 
