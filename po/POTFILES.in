@@ -302,9 +302,8 @@ lib/ivis_opengl/png_util_spng.cpp
 lib/ivis_opengl/screen.cpp
 lib/ivis_opengl/tex.cpp
 lib/ivis_opengl/textdraw.cpp
-lib/netplay/error_categories.cpp
-lib/netplay/connection_address.cpp
 lib/netplay/connection_provider_registry.cpp
+lib/netplay/error_categories.cpp
 lib/netplay/netjoin_stub.cpp
 lib/netplay/netlog.cpp
 lib/netplay/netpermissions.cpp

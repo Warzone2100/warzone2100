@@ -20,6 +20,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <memory>
 
 #include "lib/netplay/connection_address.h"
 #include "lib/netplay/net_result.h"
@@ -28,6 +29,7 @@
 class IListenSocket;
 class IClientConnection;
 class IConnectionPollGroup;
+struct IConnectionAddress;
 
 /// <summary>
 /// Abstraction layer to facilitate creating client/server connections and
@@ -57,7 +59,7 @@ public:
 	/// Resolve host + port combination and return an opaque `ConnectionAddress` handle
 	/// representing the resolved network address.
 	/// </summary>
-	virtual net::result<ConnectionAddress> resolveHost(const char* host, uint16_t port) = 0;
+	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) = 0;
 	/// <summary>
 	/// Open a listening socket bound to a specified local port.
 	/// </summary>
@@ -68,7 +70,7 @@ public:
 	/// </summary>
 	/// <param name="addr">Connection address to bind the client connection to.</param>
 	/// <param name="timeout">Timeout in milliseconds.</param>
-	virtual net::result<IClientConnection*> openClientConnectionAny(const ConnectionAddress& addr, unsigned timeout) = 0;
+	virtual net::result<IClientConnection*> openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout) = 0;
 	/// <summary>
 	/// Async variant of `openClientConnectionAny()`.
 	/// </summary>
