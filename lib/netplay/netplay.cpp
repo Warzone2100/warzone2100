@@ -3484,7 +3484,7 @@ bool LobbyServerConnectionHandler::connect()
 	}
 
 	// try each address from resolveHost until we successfully connect.
-	auto sockResult = connProvider.openClientConnectionAny(hosts, 1500);
+	auto sockResult = connProvider.openClientConnectionAny(*hosts, 1500);
 
 	rs_socket = sockResult.value_or(nullptr);
 
@@ -4741,7 +4741,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		return false;
 	}
 	const auto& hosts = hostsResult.value();
-	auto sockResult = connProvider.openClientConnectionAny(hosts, 15000);
+	auto sockResult = connProvider.openClientConnectionAny(*hosts, 15000);
 
 	if (!sockResult.has_value()) {
 		const auto sockErrMsg = sockResult.error().message();

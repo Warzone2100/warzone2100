@@ -26,13 +26,7 @@
 
 #include "lib/netplay/net_result.h"
 
-#if defined WZ_OS_UNIX
-# include <netdb.h>
-#elif defined WZ_OS_WIN
-# include <ws2tcpip.h>
-#endif
 
-typedef struct addrinfo SocketAddress;
 
 /// <summary>
 /// Opaque class representing abstract connection address to use with various
@@ -53,23 +47,7 @@ typedef struct addrinfo SocketAddress;
 /// New conversion routines should be introduced for other network backends,
 /// if deemed necessary.
 /// </summary>
-class ConnectionAddress
+struct IConnectionAddress
 {
-public:
-
-	ConnectionAddress();
-	ConnectionAddress(ConnectionAddress&&);
-	ConnectionAddress(const ConnectionAddress&) = delete;
-	~ConnectionAddress();
-
-	static net::result<ConnectionAddress> parse(const char* hostname, uint16_t port);
-	static net::result<ConnectionAddress> parse(const std::string& hostname, uint16_t port);
-
-	// NOTE: The lifetime of the returned `addrinfo` struct is bounded by the parent object's lifetime!
-	const SocketAddress* asRawSocketAddress() const;
-
-private:
-
-	struct Impl;
-	std::unique_ptr<Impl> mPimpl_;
+	virtual ~IConnectionAddress() = default;
 };

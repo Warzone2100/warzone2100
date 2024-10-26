@@ -20,6 +20,7 @@
 #include "tcp_connection_provider.h"
 
 #include "lib/netplay/tcp/netsocket.h"
+#include "lib/netplay/tcp/tcp_connection_address.h"
 #include "lib/netplay/tcp/tcp_connection_poll_group.h"
 #include "lib/netplay/tcp/tcp_client_connection.h"
 #include "lib/netplay/tcp/tcp_listen_socket.h"
@@ -40,9 +41,14 @@ void TCPConnectionProvider::shutdown()
 	SOCKETshutdown();
 }
 
-net::result<ConnectionAddress> TCPConnectionProvider::resolveHost(const char* host, uint16_t port)
+net::result<std::unique_ptr<IConnectionAddress>> TCPConnectionProvider::resolveHost(const char* host, uint16_t port)
 {
-	return ConnectionAddress::parse(host, port);
+	auto resolved = tcp::resolveHost(host, port);
+	if (!resolved.has_value())
+	{
+		return tl::make_unexpected(resolved.error());
+	}
+	return std::make_unique<TCPConnectionAddress>(resolved.value());
 }
 
 net::result<IListenSocket*> TCPConnectionProvider::openListenSocket(uint16_t port)
@@ -55,9 +61,15 @@ net::result<IListenSocket*> TCPConnectionProvider::openListenSocket(uint16_t por
 	return new TCPListenSocket(res.value());
 }
 
-net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(const ConnectionAddress& addr, unsigned timeout)
+net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout)
 {
-	const auto* rawAddr = addr.asRawSocketAddress();
+	const auto* tcpAddr = dynamic_cast<const TCPConnectionAddress*>(&addr);
+	ASSERT(tcpAddr != nullptr, "Expected TCPConnectionAddress instance");
+	if (!tcpAddr)
+	{
+		throw std::runtime_error("Expected TCPConnectionAddress instance");
+	}
+	const auto* rawAddr = tcpAddr->asRawSocketAddress();
 	auto res = socketOpenAny(rawAddr, timeout);
 	if (!res.has_value())
 	{
