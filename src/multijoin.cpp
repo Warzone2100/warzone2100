@@ -517,7 +517,10 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
-		audio_QueueTrack(ID_CLAN_EXIT);
+		if (playerIndex < MAX_PLAYERS) // only play audio when *player* slots drop (ignore spectator slots)
+		{
+			audio_QueueTrack(ID_CLAN_EXIT);
+		}
 	}
 
 	// fire script callback to reassign skirmish players.
