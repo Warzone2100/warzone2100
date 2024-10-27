@@ -51,8 +51,8 @@
 //defines how many times to perform the iteration on looking for a blank location
 #define LOOK_FOR_EMPTY_TILE		20
 
-#define DROID_INITIAL_SHILED_POINTS_PERCENT						5.0f
-#define DROID_ADDITVE_SHILED_POINTS_PERCENT						2.5f
+#define DROID_INITIAL_SHILED_POINTS_PERCENT						10.0f
+#define DROID_ADDITVE_SHILED_POINTS_PERCENT						5.0f
 #define DROID_INITIAL_SHIELD_REGEN_TIME							32
 #define DROID_SHIELD_REGEN_TIME_DEC								2
 #define DROID_INITIAL_SHIELD_INTERRUPT_REGEN_TIME				2000
