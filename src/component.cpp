@@ -427,7 +427,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	SDWORD				iConnector;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				pieFlag, iPieData;
-	SDWORD				shieldPieFlag, iShieldPieData;
+	SDWORD				shieldPieFlag = 0, iShieldPieData = 0;
 	PIELIGHT			brightness;
 	UDWORD				colour;
 	size_t	i = 0;
@@ -435,7 +435,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 
 	if (!bButton && psDroid->shieldPoints > 0) {
 		double factor = static_cast<double>(psDroid->shieldPoints) / droidGetMaxShieldPoints(psDroid);
-		iShieldPieData = std::round(255.0f * factor);
+		iShieldPieData = static_cast<SDWORD>(std::round(255.0f * factor));
 		shieldPieFlag = pie_FORCELIGHT | pie_TRANSLUCENT | pie_SHIELD;
 	}
 
