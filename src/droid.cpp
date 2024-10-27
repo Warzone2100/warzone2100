@@ -966,7 +966,7 @@ void droidUpdateShields(DROID *psDroid) {
 		} else {
 			if (gameTime - psDroid->shieldInterruptRegenTime >= droidCalculateShieldInterruptRegenTime(psDroid)) {
 				if (gameTime - psDroid->shieldRegenTime >= droidCalculateShieldRegenTime(psDroid)) {
-					for (uint32_t i = 0; i < 4; i++) {
+					for (uint32_t i = 0; i < DROID_SHIELD_POINTS_STEP; i++) {
 						if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid)) {
 							psDroid->shieldPoints += 1;
 						}
