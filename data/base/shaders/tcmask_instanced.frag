@@ -26,6 +26,7 @@ uniform int tcmask; // whether a tcmask texture exists for the model
 uniform int normalmap; // whether a normal map exists for the model
 uniform int specularmap; // whether a specular map exists for the model
 uniform int hasTangents; // whether tangents were calculated for model
+uniform int shieldEffect;
 uniform float graphicsCycle; // a periodically cycling value for special effects
 
 uniform vec4 sceneColor; //emissive light
@@ -73,6 +74,10 @@ out vec4 FragColor;
 #if WZ_POINT_LIGHT_ENABLED == 1
 #include "pointlights.frag"
 #endif
+
+float random(vec2 uv) {
+	return fract(sin(dot(uv.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+}
 
 float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeInv, int cascadeIndex, float z)
 {
@@ -418,8 +423,21 @@ void main()
 	}
 
 	#ifdef NEWGL
-	FragColor = fragColour;
+	if (shieldEffect == 1) {
+		float cycle = 0.66 + 0.66 * graphicsCycle;
+		vec3 col = vec3(random(vec2(fragColour.x * cycle, fragColour.y * cycle)));
+		col.b *= 1.5;
+		FragColor = vec4(col, fragColour.a / 6.0);
+	} else {
+		FragColor = fragColour;
+	}
 	#else
-	gl_FragColor = fragColour;
+	if (shieldEffect == 1) {
+		vec3 col = vec3(random(vec2(fragColour.x * cycle, fragColour.y * cycle)));
+		col.b *= 1.5;
+		gl_FragColor = vec4(col, fragColour.a / 6.0);
+	} else {
+		gl_FragColor = fragColour;
+	}
 	#endif
 }

@@ -1115,6 +1115,10 @@ bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT te
 	tshape.stretch = stretchDepth;
 	tshape.modelMatrix = modelMatrix;
 
+	if (pieFlag & pie_SHIELD) {
+		tshape.modelMatrix = glm::scale(tshape.modelMatrix, glm::vec3(pie_SHIELD_FACTOR, pie_SHIELD_FACTOR, pie_SHIELD_FACTOR));
+	}
+
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
 		tshape.modelMatrix = glm::scale(tshape.modelMatrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
@@ -1463,7 +1467,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 }
 
 template<SHADER_MODE shader, typename Draw3DInstancedPSO>
-static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::texture* lightmapTexture)
+static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::texture* lightmapTexture, bool shieldEffect)
 {
 	const auto& textures = shape->getTextures();
 	auto* tcmask = textures.tcmaskpage != iV_TEX_INVALID ? &pie_Texture(textures.tcmaskpage) : nullptr;
@@ -1471,7 +1475,7 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 	auto* specularmap = textures.specularpage != iV_TEX_INVALID ? &pie_Texture(textures.specularpage) : nullptr;
 
 	gfx_api::Draw3DShapeInstancedPerMeshUniforms meshUniforms {
-		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
+		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr, shieldEffect ? 1 : 0
 	};
 
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
@@ -1525,43 +1529,45 @@ static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api
 template<SHADER_MODE shader, typename AdditivePSO, typename AdditiveNoDepthWRTPSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename PremultipliedNoDepthWRTPSO, typename OpaquePSO>
 static void drawInstanced3dShapeTemplated(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::texture* lightmapTexture)
 {
+	bool shieldEffect = pieFlag & pie_SHIELD;
+
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AdditivePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, AdditivePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AdditiveNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, AdditiveNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AlphaPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, AlphaPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AlphaNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, AlphaNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 	}
 	else if (pieFlag & pie_PREMULTIPLIED)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 	}
 	else
 	{
-		return drawInstanced3dShapeTemplated_Inner<shader, OpaquePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+		return drawInstanced3dShapeTemplated_Inner<shader, OpaquePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 	}
 }
 

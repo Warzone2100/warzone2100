@@ -60,8 +60,10 @@ using nonstd::nullopt;
 #define pie_PREMULTIPLIED       0x200
 #define pie_NODEPTHWRITE        0x400
 #define pie_FORCELIGHT          0x800
+#define pie_SHIELD              0x1000
 
 #define pie_RAISE_SCALE			256
+#define pie_SHIELD_FACTOR		1.125f
 
 enum LIGHTING_TYPE
 {
