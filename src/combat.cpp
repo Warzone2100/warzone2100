@@ -45,6 +45,7 @@
 #include "order.h"
 #include "objmem.h"
 #include "effects.h"
+#include "display3ddef.h"
 
 #define DROID_SHIELD_DAMAGE_SPREAD	(16 - rand()%32)
 #define DROID_SHIELD_PARTICLES		(6 + rand()%8)
@@ -405,12 +406,13 @@ int objArmour(const BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
 
 /* Deals damage to an object
  * \param psObj object to deal damage to
+ * \param psProjectile projectile which hit the object (may be nullptr)
  * \param damage amount of damage to deal
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
-int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int level = 0;
 	int armour = objArmour(psObj, weaponClass);
@@ -527,22 +529,23 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 				psDroid->shieldInterruptRegenTime = psDroid->time;
 			}
 
-			if (weaponSubClass != WSC_FLAME &&
+			if (psProjectile != nullptr &&
+				weaponSubClass != WSC_FLAME &&
 				weaponSubClass != WSC_COMMAND &&
-				PERCENT(psDroid->shieldPoints, droidGetMaxShieldPoints(psDroid)) > 25)
+				PERCENT(psDroid->shieldPoints, droidGetMaxShieldPoints(psDroid)) > 25 &&
+				objPosDiffSq(psDroid->pos, psProjectile->pos) < TILE_WIDTH * TILE_WIDTH)
 			{
 				Vector3i dv;
-				dv.y = psDroid->pos.z;
-				dv.y += (psDroid->sDisplay.imd->max.y * 2);
+				dv.y = psProjectile->pos.z;
 
 				for (uint32_t i = 0; i < DROID_SHIELD_PARTICLES; i++)
 				{
-					dv.x = psDroid->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
-					dv.z = psDroid->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
+					dv.x = psProjectile->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
+					dv.z = psProjectile->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
 					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, nullptr, 0, gameTime - deltaGameTime + 1);
 				}
 
-				audio_PlayStaticTrack(psDroid->pos.x, psDroid->pos.y, ID_SOUND_SHIELD_HIT);
+				audio_PlayStaticTrack(psProjectile->pos.x, psProjectile->pos.y, ID_SOUND_SHIELD_HIT);
 			}
 		}
 	}
