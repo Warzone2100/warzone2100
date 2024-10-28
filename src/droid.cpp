@@ -981,17 +981,20 @@ void droidUpdateShields(DROID *psDroid) {
 	}
 }
 
-uint32_t droidCalculateShieldRegenTime(DROID *psDroid) {
+uint32_t droidCalculateShieldRegenTime(DROID *psDroid)
+{
 	return DROID_INITIAL_SHIELD_REGEN_TIME - (DROID_SHIELD_REGEN_TIME_DEC * getDroidLevel(psDroid));
 }
 
-uint32_t droidCalculateShieldInterruptRegenTime(DROID *psDroid) {
+uint32_t droidCalculateShieldInterruptRegenTime(DROID *psDroid)
+{
 	return DROID_INITIAL_SHIELD_INTERRUPT_REGEN_TIME - (DROID_SHIELD_INTERRUPT_REGEN_TIME_DEC * getDroidLevel(psDroid));
 }
 
-int32_t droidGetMaxShieldPoints(DROID *psDroid) {
-	double percent = static_cast<double>(psDroid->originalBody) / 100.0f;
-	return std::round(percent * (DROID_INITIAL_SHILED_POINTS_PERCENT + DROID_ADDITVE_SHILED_POINTS_PERCENT * getDroidLevel(psDroid)));
+int32_t droidGetMaxShieldPoints(DROID *psDroid) 
+{
+	UDWORD percent = psDroid->originalBody / 100;
+	return percent * (DROID_INITIAL_SHILED_POINTS_PERCENT + DROID_ADDITVE_SHILED_POINTS_PERCENT * getDroidLevel(psDroid));
 }
 
 /* See if a droid is next to a structure */
