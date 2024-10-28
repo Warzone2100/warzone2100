@@ -75,7 +75,8 @@ out vec4 FragColor;
 #include "pointlights.frag"
 #endif
 
-float random(vec2 uv) {
+float random(vec2 uv)
+{
 	return fract(sin(dot(uv.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
@@ -423,20 +424,26 @@ void main()
 	}
 
 	#ifdef NEWGL
-	if (shieldEffect == 1) {
+	if (shieldEffect == 1)
+	{
 		float cycle = 0.66 + 0.66 * graphicsCycle;
 		vec3 col = vec3(random(vec2(fragColour.x * cycle, fragColour.y * cycle)));
 		col.b *= 1.5;
 		FragColor = vec4(col, fragColour.a / 6.0);
-	} else {
+	}
+	else
+	{
 		FragColor = fragColour;
 	}
 	#else
-	if (shieldEffect == 1) {
+	if (shieldEffect == 1)
+	{
 		vec3 col = vec3(random(vec2(fragColour.x * cycle, fragColour.y * cycle)));
 		col.b *= 1.5;
 		gl_FragColor = vec4(col, fragColour.a / 6.0);
-	} else {
+	}
+	else
+	{
 		gl_FragColor = fragColour;
 	}
 	#endif

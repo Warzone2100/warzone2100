@@ -911,7 +911,8 @@ void droidUpdate(DROID *psDroid)
 		droidUpdateDroidSelfRepair(psDroid);
 	}
 
-	if (bMultiPlayer) {
+	if (bMultiPlayer)
+	{
 		droidUpdateShields(psDroid);
 	}
 
