@@ -1292,7 +1292,7 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 
 	int iPointsToAdd = gameTimeAdjustedAverage(iRepairRateNumerator, iRepairRateDenominator);
 
-	iPointsToAdd = static_cast<int>(std::round(iPointsToAdd * psDroidToRepair->getPropulsionStats()->repairFactor));
+	iPointsToAdd = idiv_round<int>(iPointsToAdd * psDroidToRepair->getPropulsionStats()->repairFactor, 100);
 
 	psDroidToRepair->body = clip<UDWORD>(psDroidToRepair->body + iPointsToAdd, 0, psDroidToRepair->originalBody);
 
