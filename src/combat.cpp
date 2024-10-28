@@ -432,8 +432,10 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		{
 			DROID *psDroid = castDroid(psObj);
 
-			// EMP weapons kills droid shields completely
-			psDroid->shieldPoints = 0;
+			if (psDroid->shieldPoints != -1) {
+				// EMP weapons kills droid shields completely
+				psDroid->shieldPoints = 0;
+			}
 		}
 		return 0;
 	}
