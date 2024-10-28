@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/math_ext.h"
 #include "lib/netplay/sync_debug.h"
 
 #include "lib/ivis_opengl/ivisdef.h"
@@ -44,8 +45,6 @@
 #include "order.h"
 #include "objmem.h"
 #include "effects.h"
-
-
 
 #define DROID_SHIELD_DAMAGE_SPREAD	(16 - rand()%32)
 #define DROID_SHIELD_PARTICLES		(6 + rand()%8)
@@ -523,18 +522,20 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 				psDroid->shieldInterruptRegenTime = psDroid->time;
 			}
 
-			Vector3i dv;
-			dv.y = psDroid->pos.z;
-			dv.y += (psDroid->sDisplay.imd->max.y * 2);
+			if (PERCENT(psDroid->shieldPoints, droidGetMaxShieldPoints(psDroid)) > 25) {
+				Vector3i dv;
+				dv.y = psDroid->pos.z;
+				dv.y += (psDroid->sDisplay.imd->max.y * 2);
 
-			for (uint32_t i = 0; i < DROID_SHIELD_PARTICLES; i++)
-			{
-				dv.x = psDroid->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
-				dv.z = psDroid->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
-				addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, nullptr, 0, gameTime - deltaGameTime + 1);
+				for (uint32_t i = 0; i < DROID_SHIELD_PARTICLES; i++)
+				{
+					dv.x = psDroid->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
+					dv.z = psDroid->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
+					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, nullptr, 0, gameTime - deltaGameTime + 1);
+				}
+
+				audio_PlayStaticTrack(psDroid->pos.x, psDroid->pos.y, ID_SOUND_SHIELD_HIT);
 			}
-
-			audio_PlayStaticTrack(psDroid->pos.x, psDroid->pos.y, ID_SOUND_SHIELD_HIT);
 		}
 	}
 
