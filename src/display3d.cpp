@@ -3426,7 +3426,8 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	UDWORD damage = PERCENT(psDroid->body, psDroid->originalBody);
 	UDWORD shields = 0;
 
-	if (psDroid->shieldPoints >= 0) {
+	if (psDroid->shieldPoints >= 0)
+	{
 		int maxShieldPoints = droidGetMaxShieldPoints(psDroid);
 		shields = PERCENT(psDroid->shieldPoints, maxShieldPoints);
 		shields = static_cast<UDWORD>((float)psDroid->shieldPoints / (float)maxShieldPoints * (float)psDroid->sDisplay.screenR);

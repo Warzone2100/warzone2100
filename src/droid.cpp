@@ -956,18 +956,26 @@ void droidUpdate(DROID *psDroid)
 	CHECK_DROID(psDroid);
 }
 
-void droidUpdateShields(DROID *psDroid) {
-	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND) {
-		if (psDroid->shieldPoints < 0) {
+void droidUpdateShields(DROID *psDroid)
+{
+	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND) 
+	{
+		if (psDroid->shieldPoints < 0)
+		{
 			psDroid->shieldPoints = 0;
 			psDroid->shieldRegenTime = gameTime;
 			psDroid->shieldInterruptRegenTime = gameTime;
-
-		} else {
-			if (gameTime - psDroid->shieldInterruptRegenTime >= droidCalculateShieldInterruptRegenTime(psDroid)) {
-				if (gameTime - psDroid->shieldRegenTime >= droidCalculateShieldRegenTime(psDroid)) {
-					for (uint32_t i = 0; i < DROID_SHIELD_POINTS_STEP; i++) {
-						if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid)) {
+		}
+		else
+		{
+			if (gameTime - psDroid->shieldInterruptRegenTime >= droidCalculateShieldInterruptRegenTime(psDroid))
+			{
+				if (gameTime - psDroid->shieldRegenTime >= droidCalculateShieldRegenTime(psDroid))
+				{
+					for (uint32_t i = 0; i < DROID_SHIELD_POINTS_STEP; i++)
+					{
+						if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid))
+						{
 							psDroid->shieldPoints += 1;
 						}
 					}
@@ -975,7 +983,8 @@ void droidUpdateShields(DROID *psDroid) {
 				}
 			}
 		}
-	} else {
+	} else
+	{
 		// unit has lost commander, shields are down!
 		psDroid->shieldPoints = -1;
 	}

@@ -433,7 +433,8 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 	size_t	i = 0;
 	bool				didDrawSomething = false;
 
-	if (!bButton && psDroid->shieldPoints > 0) {
+	if (!bButton && psDroid->shieldPoints > 0)
+	{
 		double factor = static_cast<double>(psDroid->shieldPoints) / droidGetMaxShieldPoints(psDroid);
 		iShieldPieData = static_cast<SDWORD>(std::round(255.0f * factor));
 		shieldPieFlag = pie_FORCELIGHT | pie_TRANSLUCENT | pie_SHIELD;
@@ -499,7 +500,8 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 		{
 			didDrawSomething = true;
 		}
-		if (!bButton && psDroid->shieldPoints > 0) {
+		if (!bButton && psDroid->shieldPoints > 0)
+		{
 			if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, shieldPieFlag, iShieldPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 			{
 				didDrawSomething = true;
@@ -539,7 +541,8 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 			{
 				didDrawSomething = true;
 			}
-			if (!bButton && psDroid->shieldPoints > 0) {
+			if (!bButton && psDroid->shieldPoints > 0)
+			{
 				if (drawShape(strImd, psDroid->timeAnimationStarted, colour, brightness, shieldPieFlag, iShieldPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 				{
 					didDrawSomething = true;
@@ -659,7 +662,8 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 						{
 							didDrawSomething = true;
 						}
-						if (!bButton && psDroid->shieldPoints > 0) {
+						if (!bButton && psDroid->shieldPoints > 0)
+						{
 							if (pie_Draw3DShape(psShape, 0, colour, brightness, shieldPieFlag, iShieldPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
 							{
 								didDrawSomething = true;
@@ -698,7 +702,8 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 						{
 							didDrawSomething = true;
 						}
-						if (!bButton && psDroid->shieldPoints > 0) {
+						if (!bButton && psDroid->shieldPoints > 0)
+						{
 							if (pie_Draw3DShape(psShape, 0, colour, brightness, shieldPieFlag, iShieldPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
 							{
 								didDrawSomething = true;
@@ -858,7 +863,8 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4& modelM
 		{
 			didDrawSomething = true;
 		}
-		if (!bButton && psDroid->shieldPoints > 0) {
+		if (!bButton && psDroid->shieldPoints > 0)
+		{
 			if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, shieldPieFlag, iShieldPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 			{
 				didDrawSomething = true;

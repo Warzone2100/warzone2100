@@ -497,14 +497,19 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	}
 
 	// Drain shields first
-	if (psObj->type == OBJ_DROID) {
+	if (psObj->type == OBJ_DROID)
+	{
 		DROID *psDroid = castDroid(psObj);
 
-		if (psDroid->shieldPoints > 0) {
-			if (psDroid->shieldPoints > actualDamage) {
+		if (psDroid->shieldPoints > 0)
+		{
+			if (psDroid->shieldPoints > actualDamage)
+			{
 				psDroid->shieldPoints -= actualDamage;
 				actualDamage = 0;
-			} else {
+			} 
+			else
+			{
 				actualDamage -= psDroid->shieldPoints;
 				psDroid->shieldPoints = 0;
 				// shields are interrupted, wait for a while until regeneration starts again
@@ -516,7 +521,8 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 			dv.y = psDroid->pos.z;
 			dv.y += (psDroid->sDisplay.imd->max.y * 2);
 
-			for (uint32_t i = 0; i < DROID_SHIELD_PARTICLES; i++) {
+			for (uint32_t i = 0; i < DROID_SHIELD_PARTICLES; i++)
+			{
 				dv.x = psDroid->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
 				dv.z = psDroid->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
 				addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, nullptr, 0, gameTime - deltaGameTime + 1);

@@ -1115,7 +1115,8 @@ bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT te
 	tshape.stretch = stretchDepth;
 	tshape.modelMatrix = modelMatrix;
 
-	if (pieFlag & pie_SHIELD) {
+	if (pieFlag & pie_SHIELD)
+	{
 		tshape.modelMatrix = glm::scale(tshape.modelMatrix, glm::vec3(pie_SHIELD_FACTOR, pie_SHIELD_FACTOR, pie_SHIELD_FACTOR));
 	}
 
