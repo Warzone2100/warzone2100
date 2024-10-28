@@ -984,7 +984,8 @@ void droidUpdateShields(DROID *psDroid)
 				}
 			}
 		}
-	} else
+	}
+	else
 	{
 		// unit has lost commander, shields are down!
 		psDroid->shieldPoints = -1;
