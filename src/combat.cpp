@@ -513,7 +513,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 			{
 				psDroid->shieldPoints -= actualDamage;
 				actualDamage = 0;
-			} 
+			}
 			else
 			{
 				actualDamage -= psDroid->shieldPoints;
@@ -527,7 +527,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 
 			if (weaponSubClass != WSC_FLAME &&
 				weaponSubClass != WSC_COMMAND &&
-				PERCENT(psDroid->shieldPoints, droidGetMaxShieldPoints(psDroid)) > 25) 
+				PERCENT(psDroid->shieldPoints, droidGetMaxShieldPoints(psDroid)) > 25)
 			{
 				Vector3i dv;
 				dv.y = psDroid->pos.z;

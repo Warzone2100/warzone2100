@@ -959,7 +959,7 @@ void droidUpdate(DROID *psDroid)
 
 void droidUpdateShields(DROID *psDroid)
 {
-	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND) 
+	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND)
 	{
 		if (psDroid->shieldPoints < 0)
 		{
@@ -1001,7 +1001,7 @@ UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid)
 	return DROID_INITIAL_SHIELD_INTERRUPT_REGEN_TIME - (DROID_SHIELD_INTERRUPT_REGEN_TIME_DEC * getDroidLevel(psDroid));
 }
 
-UDWORD droidGetMaxShieldPoints(const DROID *psDroid) 
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid)
 {
 	UDWORD percent = psDroid->originalBody / 100;
 	return percent * (DROID_INITIAL_SHILED_POINTS_PERCENT + DROID_ADDITVE_SHILED_POINTS_PERCENT * getDroidLevel(psDroid));

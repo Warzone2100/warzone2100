@@ -3473,16 +3473,16 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
-		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 3, 
-		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR, 
-		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, 
-		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_LBLUE), 
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 3,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_LBLUE),
 	rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
-		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 2, 
-		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR, 
-		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, 
-		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_BLACK), 
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 2,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_BLACK),
 	rectGroup);
 }
 
