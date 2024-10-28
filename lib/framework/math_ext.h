@@ -114,8 +114,8 @@ static inline WZ_DECL_CONST T clip(T x, T min, T max)
 template <typename T>
 static inline WZ_DECL_CONST T idiv_round(T numerator, T denominator)
 {
-	return ((numerator < 0) == (denominator < 0)) 
-		? ((numerator + denominator / 2) / denominator) 
+	return ((numerator < 0) == (denominator < 0))
+		? ((numerator + denominator / 2) / denominator)
 		: ((numerator - denominator / 2) / denominator);
 }
 
