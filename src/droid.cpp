@@ -991,17 +991,17 @@ void droidUpdateShields(DROID *psDroid)
 	}
 }
 
-uint32_t droidCalculateShieldRegenTime(DROID *psDroid)
+UDWORD droidCalculateShieldRegenTime(const DROID *psDroid)
 {
 	return DROID_INITIAL_SHIELD_REGEN_TIME - (DROID_SHIELD_REGEN_TIME_DEC * getDroidLevel(psDroid));
 }
 
-uint32_t droidCalculateShieldInterruptRegenTime(DROID *psDroid)
+UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid)
 {
 	return DROID_INITIAL_SHIELD_INTERRUPT_REGEN_TIME - (DROID_SHIELD_INTERRUPT_REGEN_TIME_DEC * getDroidLevel(psDroid));
 }
 
-int32_t droidGetMaxShieldPoints(DROID *psDroid) 
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid) 
 {
 	UDWORD percent = psDroid->originalBody / 100;
 	return percent * (DROID_INITIAL_SHILED_POINTS_PERCENT + DROID_ADDITVE_SHILED_POINTS_PERCENT * getDroidLevel(psDroid));

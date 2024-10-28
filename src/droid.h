@@ -122,13 +122,13 @@ void droidUpdate(DROID *psDroid);
 void droidUpdateShields(DROID *psDroid);
 
 /* Calculate the droid's shield regeneration step time */
-uint32_t droidCalculateShieldRegenTime(DROID *psDroid);
+UDWORD droidCalculateShieldRegenTime(const DROID *psDroid);
 
 /* Calculate the droid's shield interruption time */
-uint32_t droidCalculateShieldInterruptRegenTime(DROID *psDroid);
+UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid);
 
 /* Get droid maximum shield points */
-int32_t droidGetMaxShieldPoints(DROID *psDroid);
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid);
 
 /* Set up a droid to build a structure - returns true if successful */
 enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
