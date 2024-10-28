@@ -892,14 +892,20 @@ void NETstring(char *str, uint16_t maxlen)
 	 * unsigned 16-bit integer, not including \0 termination.
 	 */
 
-	uint16_t len = (NETgetPacketDir() == PACKET_ENCODE) ? ((uint16_t)strnlen1(str, maxlen)) - 1 : 0;
+	uint16_t len = 0;
+	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
+		size_t cappedStrLen = strnlen1(str, maxlen);
+		len = static_cast<uint16_t>((cappedStrLen > 0) ? (cappedStrLen - 1) : 0);
+	}
 	queueAuto(len);
 
 	// Truncate length if necessary
-	if (len > maxlen - 1)
+	uint16_t maxReadLen = (maxlen > 0) ? static_cast<uint16_t>(maxlen - 1) : 0;
+	if (len > maxReadLen)
 	{
 		debug(LOG_ERROR, "NETstring: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxlen);
-		len = maxlen - 1;
+		len = maxReadLen;
 	}
 
 	for (unsigned i = 0; i < len; ++i)
@@ -907,7 +913,7 @@ void NETstring(char *str, uint16_t maxlen)
 		queueAuto(str[i]);
 	}
 
-	if (NETgetPacketDir() == PACKET_DECODE)
+	if (NETgetPacketDir() == PACKET_DECODE && maxlen > 0)
 	{
 		// NUL-terminate
 		str[len] = '\0';
@@ -1084,6 +1090,6 @@ void NETshutdownReplay()
 		delete gameQueues[MAX_CONNECTED_PLAYERS];
 		gameQueues[MAX_CONNECTED_PLAYERS] = nullptr;
 	}
-	
+
 	bIsReplay = false;
 }

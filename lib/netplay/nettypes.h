@@ -29,8 +29,6 @@
 #include "lib/netplay/netqueue.h"
 #include "lib/framework/wzstring.h"
 
-class QString;
-
 enum PACKETDIR
 {
 	PACKET_ENCODE,
@@ -45,6 +43,7 @@ enum QueueType
 	QUEUE_GAME,
 	QUEUE_GAME_FORCED,
 	QUEUE_BROADCAST,
+	QUEUE_TRANSIENT_JOIN,
 };
 
 struct NETQUEUE

@@ -446,6 +446,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		switch (targetStructure->pStructureType->type)
 		{
 		case REF_DEFENSE:
+		case REF_FORTRESS:
 			targetTypeBonus = WEIGHT_WEAPON_STRUCT;
 			break;
 
@@ -574,7 +575,6 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		return failure;
 	}
 
-	psDroid->lastCheckNearestTarget[weapon_slot] = gameTime;
 	if (lastGameTimeCheckedNeartestTargets != gameTime)
 	{
 		lastGameTimeCheckedNeartestTargets = gameTime;
@@ -746,6 +746,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		return bestMod;
 	}
 
+	psDroid->lastCheckNearestTargetFailed[weapon_slot] = gameTime;
 	return failure;
 }
 

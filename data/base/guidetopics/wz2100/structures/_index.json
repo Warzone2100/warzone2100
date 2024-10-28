@@ -1,0 +1,11 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures",
+	"title": "Structures",
+	"sort": "1",
+	"contents": [
+		"Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies.",
+		"",
+		"Building can be done with units with Trucks as turrets and/or Combat Engineers."
+	]
+}

@@ -387,6 +387,7 @@ bool loadConfig()
 	setShakeStatus(iniGetBool("shake", false).value());
 	war_setGroupsMenuEnabled(iniGetBool("groupmenu", true).value());
 	setGroupButtonEnabled(war_getGroupsMenuEnabled());
+	war_setOptionsButtonVisibility(iniGetInteger("optionsButtonVisibility", war_getOptionsButtonVisibility()).value());
 	setCameraAccel(iniGetBool("cameraAccel", true).value());
 	setDrawShadows(iniGetBool("shadows", true).value());
 	war_setSoundEnabled(iniGetBool("sound", true).value());
@@ -423,6 +424,7 @@ bool loadConfig()
 	}
 	NETsetJoinPreferenceIPv6(iniGetBool("prefer_ipv6", true).value());
 	NETsetDefaultMPHostFreeChatPreference(iniGetBool("hostingChatDefault", NETgetDefaultMPHostFreeChatPreference()).value());
+	NETsetEnableTCPNoDelay(iniGetBool("tcp_nodelay", NETgetEnableTCPNoDelay()).value());
 	setPublicIPv4LookupService(iniGetString("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).value());
 	setPublicIPv6LookupService(iniGetString("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).value());
 	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", war_GetFMVmode()).value());
@@ -471,7 +473,8 @@ bool loadConfig()
 	{
 		setTextureSize(value.value());
 	}
-	NetPlay.isUPNP = iniGetBool("UPnP", true).value();
+	// First try the new setting called "portMapping", otherwise try the legacy "UPnP" option.
+	NetPlay.isPortMappingEnabled = iniGetBool("portMapping", iniGetBool("UPnP", true).value()).value();
 	if (auto value = iniGetIntegerOpt("antialiasing"))
 	{
 		war_setAntialiasing(value.value());
@@ -580,6 +583,7 @@ bool loadConfig()
 		pie_EnableFog(false);
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
+	war_setAutoDesyncKickSeconds(iniGetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
 	war_setMaxReplaysSaved(iniGetInteger("maxReplaysSaved", war_getMaxReplaysSaved()).value());
 	war_setOldLogsLimit(iniGetInteger("oldLogsLimit", war_getOldLogsLimit()).value());
@@ -684,6 +688,7 @@ bool saveConfig()
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
 	iniSetInteger("groupmenu", (int)war_getGroupsMenuEnabled());		// groups menu
+	iniSetInteger("optionsButtonVisibility", (int)war_getOptionsButtonVisibility());
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
@@ -706,7 +711,7 @@ bool saveConfig()
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());
 	iniSetInteger("textureSize", getTextureSize());
 	iniSetInteger("antialiasing", war_getAntialiasing());
-	iniSetInteger("UPnP", (int)NetPlay.isUPNP);
+	iniSetInteger("portMapping", (int)NetPlay.isPortMappingEnabled);
 	iniSetBool("rotateRadar", rotateRadar);
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
@@ -722,6 +727,8 @@ bool saveConfig()
 	}
 	iniSetBool("prefer_ipv6", NETgetJoinPreferenceIPv6());
 	iniSetInteger("hostingChatDefault", (NETgetDefaultMPHostFreeChatPreference()) ? 1 : 0);
+	iniSetInteger("tcp_nodelay", (NETgetEnableTCPNoDelay()) ? 1 : 0);
+
 	iniSetString("publicIPv4LookupService_Url", getPublicIPv4LookupServiceUrl());
 	iniSetString("publicIPv4LookupService_JSONKey", getPublicIPv4LookupServiceJSONKey());
 	iniSetString("publicIPv6LookupService_Url", getPublicIPv6LookupServiceUrl());
@@ -769,6 +776,7 @@ bool saveConfig()
 	iniSetBool("autosaveEnabled", autosaveEnabled);
 	iniSetBool("fog", pie_GetFogEnabled());
 	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
+	iniSetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds());
 	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
 	iniSetInteger("maxReplaysSaved", war_getMaxReplaysSaved());
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());

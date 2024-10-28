@@ -1,47 +1,47 @@
-${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nThis wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program\r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText "Vítejte v instalátoru Warzone 2100!\r\n\r\nTento průvodce vás provede instalací Warzone 2100.\r\n\r\nPřed pokračováním v instalaci je doporučeno zavřít všechny ostatní aplikace. To umožní aktualizaci příslušných systémových souborů bez nutnosti restartovat počítač.\r\n\r\nWarzone 2100 je 100% zdarma s plně veřejným zdrojovým kódem.\r\n\r\nKlikněte na tlačítko Další."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "Vítejte v aplikaci Warzone 2100!\r\n\r\nTento průvodce vás provede instalací přenosné verze Warzone 2100.\r\n\r\nTato instalace je plně soběstačná a program můžete kdykoli odinstalovat smazáním adresáře.\r\n\r\nWarzone 2100 je 100% zdarma, s plně veřejným zdrojovým kódem! \r\n\r\nKlikněte na tlačítko Další."
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "Navštivte naši oficiální domovskou stránku https://wz2100.net k stáhnutí nejnovější verze."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "K dispozici je i 64-bitová verze Warzone 2100. $\r$\nPro podrobnosti navštivte https://wz2100.net/ $\r$\nPokračovat s 32-bitovou instalací?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Toto je 64-bitová verze Warzone 2100.$\r$\nStáhněte si 32-bitovou verzi z https://wz2100.net/ $\r$\nKlikněte OK pro ukončení instalace."
 
-${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Toto je verze ARM64 Warzone 2100, a toto zařízení nemá procesor ARM64.$\r$\nProsím navštivte https://wz2100.net/ a stáhněte příslušnou verzi pro váš systém (například: x64).$\r$\nPokračovat s instalací ARM64?"
 
-${LangFileString} WZ_GPL_NEXT "Next"
+${LangFileString} WZ_GPL_NEXT "Další"
 
-${LangFileString} TEXT_SecBase "Core files"
-${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
+${LangFileString} TEXT_SecBase "Základní soubory"
+${LangFileString} DESC_SecBase "Základní soubory potřebné ke spuštění Warzone 2100."
 
-${LangFileString} TEXT_SecFMVs "Videos"
-${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
+${LangFileString} TEXT_SecFMVs "Videa"
+${LangFileString} DESC_SecFMVs "Stáhnout si a nainstalovat cutscény."
 
-${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
-${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngHi "Anglicky (Vysoká kvalita)"
+${LangFileString} DESC_SecFMVs_EngHi "Stáhnout a nainstalovat cutscény v Angličtině ve vyšší kvalitě."
 
-${LangFileString} TEXT_SecFMVs_Eng "English"
-${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Eng "Anglicky"
+${LangFileString} DESC_SecFMVs_Eng "Stáhnout a nainstalovat cutscény v Angličtině."
 
-${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"
-${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version of English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngLo "Anglicky (Nízká kvalita)"
+${LangFileString} DESC_SecFMVs_EngLo "Stáhnout a nainstalovat cutscény v Angličtině v nízké kvalitě."
 
-${LangFileString} TEXT_SecFMVs_Ger "German"
-${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Ger "Německy"
+${LangFileString} DESC_SecFMVs_Ger "Stáhnout a nainstalovat cutscény v Nemčině."
 
-${LangFileString} TEXT_SecNLS "Language files"
-${LangFileString} DESC_SecNLS "Support for languages other than English."
+${LangFileString} TEXT_SecNLS "Jazykové soubory"
+${LangFileString} DESC_SecNLS "Podpora pro jiné jazyky než angličtinu."
 
-${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
-${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+${LangFileString} TEXT_SecNLS_WinFonts "Fonty Windows"
+${LangFileString} DESC_SecNLS_WinFonts "Zahrnout složku Fonty Windows do cesty hledání. Povolte tuto možnost, pokud chcete použít vlastní písma v konfiguračním souboru nebo máte problémy se standardním písmem. Může být pomalý na Windows Vista a starších!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
-${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+${LangFileString} TEXT_SecMSSysLibraries "Důležitá DLLs Microsoftu"
+${LangFileString} DESC_SecMSSysLibraries "Stáhněte a nainstalujte (nebo aktualizujte) Visual C++ systémové knihovny společnosti Microsoft, které mohou být vyžadovány ke spuštění některých komponentů."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "Stahování"
+${LangFileString} DLTEXT_SysLibDLFailed "Nepodařilo se stáhnout systémové knihovny"
+${LangFileString} DLTEXT_VideosDLFailed "Nepodařilo se stáhnout videa"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "Pro dokončení instalace je třeba restartovat. Chcete nyní restartovat?"
+${LangFileString} TEXT_MsgRebootFailed "Restartování se nezdařilo. Restartujte prosím ručně."

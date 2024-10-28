@@ -13,13 +13,15 @@ on:
       - 'data/base/stats/**'
       - 'data/mp/stats/**'
       - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
   # Support running after "Draft Tag Release" workflow completes, as part of automated release process
   workflow_run:
     workflows: ["Draft Tag Release"]
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
 
 jobs:
@@ -27,28 +29,20 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: "Xcode 11.7 (x64)"
-            image: "macos-11"
+          - name: "Xcode 14.3 (x64)"
+            image: "macos-13"
             osx_target_arch: "x86_64"
             vcpkg_triplet: "x64-osx"
-            xcode_dev_dir: "/Applications/Xcode_11.7.app"
+            xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
             include_videos: false
-            artifact_suffix: "x64"
-            publish_artifact: false
-          - name: "Xcode 13.4 (x64)"
-            image: "macos-12"
-            osx_target_arch: "x86_64"
-            vcpkg_triplet: "x64-osx"
-            xcode_dev_dir: "/Applications/Xcode_13.4.1.app"
-            include_videos: true
             artifact_suffix: "x64"
             publish_artifact: true
-          - name: "Xcode 13.4 (ARM64)"
-            image: "macos-12"
+          - name: "Xcode 14.3 (ARM64)"
+            image: "macos-13"
             osx_target_arch: "arm64"
             vcpkg_triplet: "arm64-osx"
-            xcode_dev_dir: "/Applications/Xcode_13.4.1.app"
-            include_videos: false
+            xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
+            include_videos: true
             artifact_suffix: "arm64"
             publish_artifact: true
       fail-fast: false
@@ -58,7 +52,7 @@ jobs:
     runs-on: '${{ matrix.image }}'
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     env:
-      MACOSX_DEPLOYMENT_TARGET: '10.9'
+      MACOSX_DEPLOYMENT_TARGET: '10.13'
       VSCMD_SKIP_SENDTELEMETRY: 1
       DESIRED_XCODE_DEV_DIR: '${{ matrix.xcode_dev_dir }}'
       WZ_INCLUDE_VIDEOS: '${{ matrix.include_videos }}'
@@ -85,13 +79,19 @@ jobs:
       working-directory: ./src
       run: git submodule update --init --recursive
     - name: Install Pre-reqs
+      env:
+        HOMEBREW_NO_AUTO_UPDATE: 1
+        HOMEBREW_NO_INSTALL_UPGRADE: 1
       run: |
-        brew install gettext
-        # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-        gem install asciidoctor -v 2.0.16 --no-document
+        echo "::group::brew install"
+        brew install --quiet automake gettext pkg-config xcbeautify
+        echo "::endgroup::"
 
-        #brew update
-        brew install pkg-config
+        # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
+        echo "::group::gem install asciidoctor"
+        gem install asciidoctor -v 2.0.23 --no-document
+        echo "::endgroup::"
+
         #if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
         cmake --version
     - name: Prep Environment
@@ -112,13 +112,15 @@ jobs:
         sudo xcode-select -s "${DESIRED_XCODE_DEV_DIR}"
 
         echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
+        echo "VCPKG_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}" >> $GITHUB_ENV
+        echo "VCPKG_KEEP_ENV_VARS=VCPKG_OSX_DEPLOYMENT_TARGET;MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
     - name: configure_mac.cmake
       working-directory: ./build
       env:
         SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
         DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
       run: |
-        ADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_OSX_ARCHITECTURES=${WZ_OSX_TARGET_ARCH};-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=-;-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO"
+        ADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_OSX_ARCHITECTURES=${WZ_OSX_TARGET_ARCH};-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=-;-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO;-DENABLE_DISCORD:BOOL=ON"
         echo "WZ_INCLUDE_VIDEOS=${WZ_INCLUDE_VIDEOS}"
         if [ "${WZ_INCLUDE_VIDEOS}" == "true" ]; then
           ADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS};-DWZ_INCLUDE_VIDEOS:BOOL=ON"
@@ -148,8 +150,8 @@ jobs:
         cmake -DADDITIONAL_VCPKG_FLAGS=--no-binarycaching -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS}" -P ../src/configure_mac.cmake
         result=${?}
         if [ $result -ne 0 ]; then
-        	echo "ERROR: configure_mac.cmake failed"
-        	exit ${result}
+          echo "ERROR: configure_mac.cmake failed"
+          exit ${result}
         fi
     - name: Build Xcode project
       working-directory: ./build
@@ -157,16 +159,16 @@ jobs:
         # Build Xcode project, and package "warzone2100.zip"
         set -o pipefail && \
         xcodebuild  \
-         -project warzone2100.xcodeproj \
-         -target "package" \
-         -configuration "Release" \
-         -destination "platform=macOS" \
-         -PBXBuildsContinueAfterErrors=NO \
-        | tee "xcodebuild.log" | xcpretty -c
+          -project warzone2100.xcodeproj \
+          -target "package" \
+          -configuration "Release" \
+          -destination "platform=macOS" \
+          -PBXBuildsContinueAfterErrors=NO \
+        | tee "xcodebuild.log" | xcbeautify --renderer github-actions
         result=${?}
         if [ $result -ne 0 ]; then
-        	echo "ERROR: xcodebuild failed"
-        	exit ${result}
+          echo "ERROR: xcodebuild failed"
+          exit ${result}
         fi
     - name: Output Build Info
       shell: sh {0}
@@ -183,7 +185,7 @@ jobs:
 
         # Verify "warzone2100.zip" was created
         BUILT_WARZONE_ZIP="build/warzone2100.zip"
-        src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+        src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
         # Move warzone2100.zip to the output directory, renaming it
         DESIRED_ZIP_NAME="warzone2100_macOS_${{ matrix.artifact_suffix }}.zip"
@@ -212,6 +214,9 @@ jobs:
     name: 'Package Universal Binary'
     permissions:
       contents: write # Needed to upload to releases
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
     needs: macos-build
     runs-on: macos-latest
     steps:
@@ -232,7 +237,6 @@ jobs:
           mkdir dl-artifacts
           mkdir build
           mkdir output
-        
           echo "OUTPUT_DIR=output" >> $GITHUB_ENV
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -252,16 +256,16 @@ jobs:
       - name: Create Universal Binary
         working-directory: ./dl-artifacts
         run: |
-          BASE_APP_BUNDLE="warzone2100_macOS_x64/Warzone 2100.app"
+          BASE_APP_BUNDLE="warzone2100_macOS_arm64/Warzone 2100.app"
           # extract entitlements plist from the "base" app bundle binary
           echo "Extract entitlements.plist"
           codesign -d --entitlements :- "${BASE_APP_BUNDLE}/Contents/MacOS/Warzone 2100" > "entitlements.plist"
           cat "entitlements.plist"
           echo "-----------------------------------"
           echo "Make universal binary + app package"
-          ../src/macosx/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_arm64/Warzone 2100.app"
+          ../src/platforms/macos/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_x64/Warzone 2100.app"
           # Rename the "base" app package directory
-          mv "warzone2100_macOS_x64" "warzone2100_macOS_universal"
+          mv "warzone2100_macOS_arm64" "warzone2100_macOS_universal"
           echo "Re-code-sign"
           codesign --force --options runtime --entitlements "entitlements.plist" -s - "warzone2100_macOS_universal/Warzone 2100.app"
           # Zip and copy to build dir
@@ -275,7 +279,7 @@ jobs:
 
           # Verify "warzone2100.zip" was created
           BUILT_WARZONE_ZIP="build/warzone2100.zip"
-          src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+          src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
           # Move warzone2100.zip to the output directory, renaming it
           DESIRED_ZIP_NAME="warzone2100_macOS_universal.zip"
@@ -298,6 +302,13 @@ jobs:
           name: "warzone2100_macOS_universal"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
           if-no-files-found: 'error'
+      - name: 'Generate artifact attestation - (full)'
+        # Run on push to master branch (development build), or tag release automation build
+        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v1
+        continue-on-error: true
+        with:
+          subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
       - name: Upload "universal" to release
         if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
         run: |
@@ -332,7 +343,7 @@ jobs:
 
           # Verify "warzone2100_novideos.zip" was created
           BUILT_WARZONE_ZIP="build/warzone2100_novideos.zip"
-          src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+          src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
           # Move warzone2100.zip to the output directory, renaming it
           DESIRED_ZIP_NAME="warzone2100_macOS_universal_novideos.zip"
@@ -347,7 +358,7 @@ jobs:
           ZIP_SIZE="$(stat -f '%z' "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
           echo "  -> SHA512: ${ZIP_HASH}"
           echo "  -> Size (bytes): ${ZIP_SIZE}"
-          
+
           echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
 
           exit 0
@@ -356,6 +367,13 @@ jobs:
           name: "warzone2100_macOS_universal_novideos"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
           if-no-files-found: 'error'
+      - name: 'Generate artifact attestation - (novideos)'
+        # Run on push to master branch (development build), or tag release automation build
+        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v1
+        continue-on-error: true
+        with:
+          subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
       - name: Upload "universal_novideos" to release
         if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
         run: |
@@ -379,9 +397,14 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: 'src'
       - name: Prep Environment
         run: |
           mkdir dl-archive
+          echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -403,5 +426,12 @@ jobs:
             echo "No SENTRY_AUTH_TOKEN - skipping"
             exit 0
           fi
-          docker pull getsentry/sentry-cli
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          # Download sentry-cli
+          echo "::group::Downloading sentry-cli ..."
+          cmake -P "${WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+          echo "Downloading sentry-cli ... Done"
+          echo "::endgroup::"
+          # Upload symbols
+          echo "::group::sentry-cli debug-files upload"
+          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          echo "::endgroup::"

@@ -264,7 +264,7 @@ function cam2Setup()
 		camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_HUMAN_PLAYER);
 		camCompleteRequiredResearch(mis_playerResBetaClassic, CAM_HUMAN_PLAYER);
 
-		if (tweakOptions.camclassic_Balance32)
+		if (tweakOptions.camClassic_balance32)
 		{
 			camClassicResearch(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
@@ -272,7 +272,7 @@ function cam2Setup()
 		}
 		else
 		{
-			completeResearch("CAM2RESEARCH-UNDO-Rockets", CAM_HUMAN_PLAYER); 
+			completeResearch("CAM2RESEARCH-UNDO-Rockets", CAM_HUMAN_PLAYER);
 			camCompleteRequiredResearch(mis_betaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			camCompleteRequiredResearch(mis_alphaResearchNewClassic, CAM_THE_COLLECTIVE);
 			camCompleteRequiredResearch(collectiveResClassic, CAM_THE_COLLECTIVE);
@@ -302,7 +302,7 @@ function cam2Setup()
 //Get some higher rank droids.
 function setUnitRank(transport)
 {
-	const droidExp = [128, 64, 32, 16];
+	const ranks = ["elite", "veteran", "professional", "regular"];
 	let droids;
 	let mapRun = false;
 
@@ -322,8 +322,8 @@ function setUnitRank(transport)
 		const droid = droids[i];
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
-			const MOD = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR) ? 2 : 1;
-			setDroidExperience(droid, MOD * droidExp[mapRun ? 0 : (transporterIndex - 1)]);
+			const USE_COMMAND_RANK = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR);
+			setDroidExperience(droid, camGetRankThreshold(ranks[mapRun ? 0 : (transporterIndex - 1)], USE_COMMAND_RANK));
 		}
 	}
 }
@@ -392,7 +392,7 @@ function eventStartLevel()
 	const tEnt = getObject("transporterEntry");
 	const tExt = getObject("transporterExit");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_1S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.beta2.pre);
 	setReinforcementTime(LZ_COMPROMISED_TIME);
 
 	centreView(startPos.x, startPos.y);

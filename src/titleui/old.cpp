@@ -29,7 +29,6 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/netplay/netplay.h"
 #include "../intdisplay.h"
 #include "../frontend.h"
 #include "../hci.h"

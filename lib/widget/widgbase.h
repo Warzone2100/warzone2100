@@ -234,7 +234,7 @@ protected:
 	virtual void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) {}
 
 public:
-	virtual unsigned getState();
+	virtual unsigned getState() const;
 	virtual void setState(unsigned state);
 	virtual void setFlash(bool enable);
 	virtual WzString getString() const;

@@ -13,13 +13,15 @@ on:
       - 'data/base/stats/**'
       - 'data/mp/stats/**'
       - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
   # Support running after "Draft Tag Release" workflow completes, as part of automated release process
   workflow_run:
     workflows: ["Draft Tag Release"]
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
   # Support running on Release "publish" event to build and publish to Flathub
   release:
@@ -41,13 +43,16 @@ jobs:
     name: '${{ matrix.name }} (${{ matrix.arch }})'
     permissions:
       contents: read
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     env:
       WZ_FLATPAK_BUILD_DIR: flatpak_app
       WZ_FLATPAK_TARGET_ARCH: ${{ matrix.flatpak-arch }}
       WZ_FLATPAK_BUILD_ARCH: x86_64
-      WZ_FREEDESKTOP_RUNTIME_VERSION: 23.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
+      WZ_FREEDESKTOP_RUNTIME_VERSION: 24.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
     outputs:
       # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
@@ -56,10 +61,11 @@ jobs:
     steps:
     - name: Install Dependencies
       run: |
-        echo "::group::apt install dependencies"
-        sudo apt install flatpak python3-aiohttp python3-tenacity dbus-daemon curl
+        echo "::group::apt-get install dependencies"
+        sudo apt-get -u update
+        DEBIAN_FRONTEND=noninteractive sudo apt-get -y install flatpak python3-aiohttp python3-tenacity dbus-daemon curl
         echo "::endgroup::"
-        
+
         echo "::group::flatpak remote-add"
         flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
@@ -114,7 +120,7 @@ jobs:
         fi
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
-        
+
         WZ_FLATPAK_BRANCH="${WZ_BUILD_DESC_PREFIX}"
         if [ "$WZ_BUILD_DESC_IS_TAG" == "true" ]; then
           SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
@@ -136,7 +142,7 @@ jobs:
             WZ_FLATPAK_BRANCH="stable"
             SOURCE_TAG_IS_PRERELEASE="false"
           fi
-          
+
           echo "publish-to-flathub=true" >> $GITHUB_OUTPUT
           echo "SOURCE_TAG_IS_PRERELEASE=${SOURCE_TAG_IS_PRERELEASE}" >> $GITHUB_OUTPUT
         else
@@ -151,7 +157,7 @@ jobs:
         fi
         echo "WZ_FLATPAK_BRANCH=${WZ_FLATPAK_BRANCH}"
         echo "WZ_FLATPAK_BRANCH=${WZ_FLATPAK_BRANCH}" >> $GITHUB_OUTPUT
-        
+
         WZ_FLATPAK_APPID="net.wz2100.wz2100${WZ_OUTPUT_NAME_SUFFIX}"
         echo "WZ_FLATPAK_APPID=${WZ_FLATPAK_APPID}" >> $GITHUB_ENV
         echo "WZ_FLATPAK_APPID=${WZ_FLATPAK_APPID}" >> $GITHUB_OUTPUT
@@ -168,11 +174,11 @@ jobs:
         if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
           # Cross compilation is needed
           ADDITIONAL_CONFIG_OPTIONS="-DWZ_CROSS_COMPILE_TARGET_ARCH=${WZ_FLATPAK_TARGET_ARCH}"
-        fi 
+        fi
         echo "::group::Generate manifest"
         cmake "-DTEMPLATE_FILE=.ci/flatpak/net.wz2100.wz2100.yaml.in" "-DOUTPUT_FILE=.ci/flatpak/net.wz2100.wz2100.yaml" "-DPROJECT_ROOT=./" "-DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" ${ADDITIONAL_CONFIG_OPTIONS} -P .ci/flatpak/generate_flatpak_config.cmake
         echo "::endgroup::"
-        
+
         echo "::group::Output manifest"
         cat ".ci/flatpak/net.wz2100.wz2100.yaml"
         echo "::endgroup::"
@@ -182,14 +188,14 @@ jobs:
         flatpak install --user -y --noninteractive flathub org.freedesktop.Sdk//${WZ_FREEDESKTOP_RUNTIME_VERSION}
         # Target runtime
         flatpak install --user -y --noninteractive flathub org.freedesktop.Platform/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FREEDESKTOP_RUNTIME_VERSION}
-        
+
         if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
           # Cross compiler
           flatpak install --user -y --noninteractive flathub org.freedesktop.Sdk.Extension.toolchain-${WZ_FLATPAK_TARGET_ARCH}//${WZ_FREEDESKTOP_RUNTIME_VERSION}
           # SDK For target runtime
           flatpak install --user -y --noninteractive flathub org.freedesktop.Sdk.Compat.${WZ_FLATPAK_TARGET_ARCH}//${WZ_FREEDESKTOP_RUNTIME_VERSION}
         fi
-        
+
         # Builder (which includes flatpak-builder-lint)
         flatpak install --user flathub -y --noninteractive org.flatpak.Builder
     - name: Build Flatpak
@@ -263,6 +269,13 @@ jobs:
         path: |
           output_debug_dependency_snapshot
         if-no-files-found: 'error'
+    - name: Generate artifact attestation
+      # Run on push to master branch (development build), or tag release automation build
+      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      uses: actions/attest-build-provenance@v1
+      continue-on-error: true
+      with:
+        subject-path: '${{ steps.settings.outputs.WZ_FLATPAK_BUNDLE }}'
     ###############################################################
     # Package the ostree repo (for use in later publish-release-to-flathub job)
     - name: Tar ostree repo
@@ -287,13 +300,7 @@ jobs:
         path: '${{ steps.repo-tar.outputs.REPO_TAR_FILE }}'
 
   upload-debug-symbols:
-    strategy:
-      matrix:
-        include:
-          - arch: "x86_64"
-          - arch: "arm64"
-      fail-fast: false
-    name: 'Upload Debug Symbols (${{ matrix.arch }})'
+    name: 'Upload Debug Symbols'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -304,20 +311,27 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: 'src'
       - name: Prep Environment
         run: |
           mkdir -p dl-debug/symbols
           mkdir -p dl-debug/additional
+          echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Debug Symbols
         uses: actions/download-artifact@v4
         with:
-          name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
+          pattern: 'debugsymbols_linux_flatpak_*'
           path: ./dl-debug/symbols
+          merge-multiple: false
       - name: Download Additional Debug Files
         uses: actions/download-artifact@v4
         with:
-          name: 'debugdependencylibsnapshot_linux_flatpak_${{ matrix.arch }}'
+          pattern: 'debugdependencylibsnapshot_linux_flatpak_*'
           path: ./dl-debug/additional
+          merge-multiple: false
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: ./dl-debug
@@ -332,8 +346,15 @@ jobs:
             echo "No SENTRY_AUTH_TOKEN - skipping"
             exit 0
           fi
-          docker pull getsentry/sentry-cli
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          # Download sentry-cli
+          echo "::group::Downloading sentry-cli ..."
+          cmake -P "${WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+          echo "Downloading sentry-cli ... Done"
+          echo "::endgroup::"
+          # Upload symbols
+          echo "::group::sentry-cli debug-files upload"
+          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          echo "::endgroup::"
 
   upload-release-builds:
     strategy:
@@ -408,20 +429,20 @@ jobs:
       - name: Install Dependencies
         run: |
           cat /etc/fedora-release
-        
+
           echo "::group::dnf update"
           dnf update -y
           echo "::endgroup::"
           echo "::group::dnf install dependencies"
           dnf install -y cmake git git-lfs dbus-daemon flatpak flatpak-builder python3-aiohttp python3-tenacity python3-gobject ccache zstd curl appstream
           echo "::endgroup::"
-        
+
           echo "::group::flatpak remote-add"
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
           flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
           echo "::endgroup::"
-        
+
           echo "::group::fetch flat-manager-client"
           curl -Lf https://raw.githubusercontent.com/flatpak/flat-manager/master/flat-manager-client --output /usr/bin/flat-manager-client
           chmod +x /usr/bin/flat-manager-client
@@ -493,15 +514,15 @@ jobs:
           WZ_FLATPAK_LOCAL_REPO_NAME="${WZ_FLATPAK_TARGET_ARCH}-repo-beta"
           ostree init --mode archive-z2 --repo=${WZ_FLATPAK_LOCAL_REPO_NAME}
           echo "::endgroup::"
-  
+
           echo "::group::Build commit from stable repo"
           for i in app/${WZ_FLATPAK_APPID} \
-                   runtime/${WZ_FLATPAK_APPID}.Debug
+            runtime/${WZ_FLATPAK_APPID}.Debug
           do
-             # Move the commits to the beta repo
-             echo "Processing: --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH}"
-             flatpak build-commit-from --update-appstream --no-update-summary --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH} --src-repo=${SRC_LOCAL_REPO_NAME} \
-                ${WZ_FLATPAK_LOCAL_REPO_NAME} ${i}/${WZ_FLATPAK_TARGET_ARCH}/beta
+            # Move the commits to the beta repo
+            echo "Processing: --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH}"
+            flatpak build-commit-from --update-appstream --no-update-summary --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH} --src-repo=${SRC_LOCAL_REPO_NAME} \
+              ${WZ_FLATPAK_LOCAL_REPO_NAME} ${i}/${WZ_FLATPAK_TARGET_ARCH}/beta
           done
           echo "::endgroup::"
           echo "WZ_FLATPAK_LOCAL_REPO_NAME=${WZ_FLATPAK_LOCAL_REPO_NAME}"

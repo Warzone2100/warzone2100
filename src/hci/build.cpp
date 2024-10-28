@@ -120,7 +120,15 @@ void BuildController::startBuildPosition(STRUCTURE_STATS *buildOption)
 
 void BuildController::toggleFavorites(STRUCTURE_STATS *buildOption)
 {
-	asStructureStats[buildOption->index].isFavorite = !shouldShowFavorites();
+	bool &isFavorite = asStructureStats[buildOption->index].isFavorite;
+	if (shouldShowFavorites())
+	{
+		isFavorite = false;
+	}
+	else
+	{
+		isFavorite = !isFavorite;
+	}
 	updateBuildOptionsList();
 }
 
@@ -137,7 +145,7 @@ void BuildController::refresh()
 void BuildController::clearData()
 {
 	builders.clear();
-	setHighlightedObject(nullptr);
+	setHighlightedObject(nullptr, false);
 	stats.clear();
 }
 
@@ -153,12 +161,12 @@ void BuildController::toggleBuilderSelection(DROID *droid)
 		{
 			highlightedObject->selected = true;
 		}
-		selectObject(droid);
+		selectObject(droid, false);
 	}
 	triggerEventSelected();
 }
 
-void BuildController::setHighlightedObject(BASE_OBJECT *object)
+void BuildController::setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject)
 {
 	if (object == nullptr)
 	{
@@ -169,6 +177,7 @@ void BuildController::setHighlightedObject(BASE_OBJECT *object)
 	auto builder = castDroid(object);
 	ASSERT_NOT_NULLPTR_OR_RETURN(, builder);
 	ASSERT_OR_RETURN(, builder->isConstructionDroid(), "Droid is not a construction droid");
+	queuedJumpToHighlightedStatsObject = queuedJumpToHighlightedStatsObject || jumpToHighlightedStatsObject;
 	highlightedBuilder = builder;
 }
 
@@ -196,7 +205,7 @@ public:
 		}
 
 		controller->clearSelection();
-		controller->selectObject(controller->getObjectAt(objectIndex));
+		controller->selectObject(controller->getObjectAt(objectIndex), false);
 		jump();
 
 		BaseStatsController::scheduleDisplayStatsForm(controller);
@@ -397,7 +406,7 @@ private:
 		else
 		{
 			controller->clearSelection();
-			controller->selectObject(droid);
+			controller->selectObject(droid, true);
 		}
 
 		BaseStatsController::scheduleDisplayStatsForm(controller);
@@ -412,7 +421,7 @@ private:
 		// prevent highlighting a builder when another builder is already selected
 		if (droid == highlighted || !highlighted->selected)
 		{
-			controller->setHighlightedObject(droid);
+			controller->setHighlightedObject(droid, true);
 			BaseStatsController::scheduleDisplayStatsForm(controller);
 		}
 	}
@@ -448,6 +457,10 @@ protected:
 
 		displayIMD(AtlasImage(), ImdObject::StructureStat(stat), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
+		if (asStructureStats[stat->index].isFavorite && !controller->shouldShowFavorites())
+		{
+			iV_DrawImage(IntImages, IMAGE_ALLY_RESEARCH_TC, xOffset + x() + 44, yOffset + y() + 3);
+		}
 	}
 
 private:

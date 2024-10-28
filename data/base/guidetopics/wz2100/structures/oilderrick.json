@@ -1,0 +1,19 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::oilderrick",
+	"title": "Oil Derrick",
+	"visual": [
+		{ "stat": "A0ResourceExtractor" },
+		{ "stat": "OilResource" }
+	],
+	"contents": [
+		"An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource.",
+		"",
+		"The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides.",
+		"",
+		"To utilize an Oil Derrick and generate power requires a Power Generator."
+	],
+	"links": [
+		"wz2100::structures::powergenerator"
+	]
+}

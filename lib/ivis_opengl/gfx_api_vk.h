@@ -459,6 +459,8 @@ struct VkTexture final : public gfx_api::texture
 	VmaAllocation allocation = VK_NULL_HANDLE;
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
 	size_t mipmap_levels = 0;
+	size_t tex_width = 0;
+	size_t tex_height = 0;
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	std::string debugName;
@@ -478,6 +480,7 @@ struct VkTexture final : public gfx_api::texture
 	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
 	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
 	virtual unsigned id() override;
+	virtual gfx_api::texture2dDimensions get_dimensions() const override;
 	virtual size_t backend_internal_value() const override;
 
 	VkTexture( const VkTexture& other ) = delete; // non construction-copyable
@@ -768,6 +771,9 @@ private:
 
 	bool getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	bool findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
+#if defined(VK_EXT_layer_settings)
+	std::vector<vk::LayerSettingEXT> initLayerSettings();
+#endif
 	bool createVulkanInstance(uint32_t apiVersion, const std::vector<const char*>& extensions, const std::vector<const char*>& layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	bool setupDebugUtilsCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	bool setupDebugReportCallbacks(const std::vector<const char*>& extensions, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);

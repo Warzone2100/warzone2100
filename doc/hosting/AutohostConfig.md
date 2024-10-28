@@ -15,7 +15,7 @@ The `challenge` object defines the game parameters for a multiplayer game.
 * `scavengers` sets which scavengers should be in game : `0` for none, `1` for basic scavengers, `2` for ultimate scavengers.
 * `alliances` sets the alliance mode. `0` for free for all, `1` for allow alliances, `2` for fixed teams, `3` for fixed teams without research sharing.
 * `powerLevel` sets the power generation rate. `0` for low, `1` for medium, `2` for high.
-* `bases` sets the starting base. `0` for no base, `1` for small base, `2` for advanced base.
+* `bases` sets the starting base. `1` for no base, `2` for small base, `3` for advanced base.
 * `name` your game name, as it will be shown in the lobby.
 * `techLevel` sets the starting technology level. `1` for level 1 (wheel), `2` for level 2 (water mill), `3` for level 3 (chip), `4` for level 4 (computer).
 * `spectatorHost` when `true` or `1`, the host will spectate the game. When `false` or `0`, the host will play the game.
@@ -43,6 +43,7 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 * `team` holds the team number, starting from 0.
 * `ai` when set, contains the name of the AI to use. This must match the property `js` in the ai `.json` file.
 * `difficulty` sets the difficulty for an AI. It can be one of `Easy`, `Medium`, `Hard` or `Insane`.
+* `faction` sets the faction for an AI. It can be one of `Normal`, `NEXUS` or `Collective`.
 * `name` sets a custom name for the AI.
 
 ## Sample file

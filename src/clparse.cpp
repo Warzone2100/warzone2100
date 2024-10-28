@@ -345,6 +345,7 @@ typedef enum
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
 	CLI_GAMEPORT,
+	CLI_NET_PORTMAPPING,
 	CLI_WZ_CRASH_RPT,
 	CLI_WZ_DEBUG_CRASH_HANDLER,
 	CLI_STREAMER_SPECTATOR,
@@ -437,6 +438,7 @@ static const struct poptOption *getOptionsTable()
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
 		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
+		{ "portmapping", POPT_ARG_STRING, CLI_NET_PORTMAPPING,   N_("Enable / disable port mapping when hosting"), N_("[1, true, 0, false]") },
 		{ "wz-crash-rpt", POPT_ARG_NONE, CLI_WZ_CRASH_RPT, nullptr, nullptr },
 		{ "wz-debug-crash-handler", POPT_ARG_NONE, CLI_WZ_DEBUG_CRASH_HANDLER, nullptr, nullptr },
 		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
@@ -498,10 +500,6 @@ bool ParseCommandLineDebugFlags(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, debugOptionsTable, 0);
 	int iOption;
-
-#if defined(WZ_OS_MAC) && defined(DEBUG)
-	debug_enable_switch("all");
-#endif /* WZ_OS_MAC && DEBUG */
 
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
@@ -595,10 +593,6 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
 	int iOption;
-
-#if defined(WZ_OS_MAC) && defined(DEBUG)
-	debug_enable_switch("all");
-#endif /* WZ_OS_MAC && DEBUG */
 
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
@@ -709,6 +703,24 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 	}
 
 	return ParseCLIEarlyResult::OK_CONTINUE;
+}
+
+optional<bool> cliOptValueToBool(const char *token)
+{
+	if (token == nullptr)
+	{
+		return nullopt;
+	}
+
+	if (strcmp(token, "1") == 0 || strcmp(token, "true") == 0)
+	{
+		return true;
+	}
+	if (strcmp(token, "0") == 0 || strcmp(token, "false") == 0)
+	{
+		return false;
+	}
+	return nullopt;
 }
 
 //! second half of parsing the commandline
@@ -1088,6 +1100,25 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			NETsetGameserverPort(atoi(token));
 			netGameserverPortOverride = true;
 			debug(LOG_INFO, "Games will be hosted on port [%d]", NETgetGameserverPort());
+			break;
+
+		case CLI_NET_PORTMAPPING:
+			{
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("No value for portmapping option");
+				}
+				auto optValue = cliOptValueToBool(token);
+				if (optValue.has_value())
+				{
+					NetPlay.isPortMappingEnabled = optValue.value();
+				}
+				else
+				{
+					qFatal("Invalid value for portmapping option");
+				}
+			}
 			break;
 
 		case CLI_STREAMER_SPECTATOR:

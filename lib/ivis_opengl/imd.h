@@ -69,4 +69,7 @@ iIMDBaseShape *modelGet(const WzString &filename);
 
 void modelReloadAllModelTextures();
 
+size_t getModelLoadingErrorCount();
+size_t getModelTextureLoadingFailuresCount();
+
 #endif

@@ -4,7 +4,7 @@ name: "WZ CodeQL JS config"
 paths:
   - data
 
-paths-ignore: 
+paths-ignore:
   - 3rdparty
   - tests
   - tools

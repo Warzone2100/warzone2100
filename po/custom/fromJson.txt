@@ -553,6 +553,9 @@ _("Armed with Cyborg Cannon")
 // data/mp/messages/resmessages1.json: $.RES_CYW_FL1.text[1]
 _("Armed with Cyborg Flamer")  
 // TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_CN2.text[1]
+_("Armed with Cyborg Hyper Velocity Cannon")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_MG1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_MG1.text[1]
 _("Armed with Cyborg Machinegun")  
@@ -565,6 +568,12 @@ _("Armed with Cyborg Rail Gun")
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_CYW_H_AT.text[1]
 _("Armed with Cyborg Scourge Missile Launcher")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_RK2.text[1]
+_("Armed with Cyborg Tank Killer rocket")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_FL2.text[1]
+_("Armed with Cyborg Thermite flamer")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
 _("Armed with Cyborg Thermite Flamer")  
@@ -1087,26 +1096,26 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
-// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
-// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
-// ... + 4 refs
-_("Best Targets: Base Structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 // ... + 7 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-_("Best Targets: Bunkers and Hardpoints")  
+// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
+// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
+// ... + 4 refs
+_("Best Targets: Base Structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 // ... + 2 refs
 _("Best Targets: Bunkers and hardpoints")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+_("Best Targets: Bunkers and Hardpoints")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 _("Best Targets: Bunkers, defenses, base structures")  
@@ -1194,7 +1203,7 @@ _("Body Points: Low")
 // data/base/messages/resmessages1.json: $.RES_CN1MK1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CN2MK1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[2]
-// ... + 76 refs
+// ... + 79 refs
 _("Body Points: Medium")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
@@ -1701,6 +1710,9 @@ _("Cyborg Superdense Thermal Armor Mk3")
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat07.name
 _("Cyborg Superdense Thermal Armor")  
 // TRANSLATORS: 
+// data/base/stats/weapons.json: $.CyborgRocket02.name
+_("Cyborg Tank Killer")  
+// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CY_AH1.text[0]
 // data/base/messages/resmessages3.json: $.RES_CY_AH4.text[0]
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[0]
@@ -1718,6 +1730,9 @@ _("Cyborg Thermal Armor Mk3")
 // data/base/stats/research.json: $.R-Cyborg-Armor-Heat01.name
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat01.name
 _("Cyborg Thermal Armor")  
+// TRANSLATORS: 
+// data/base/stats/weapons.json: $.CyborgFlamer02.name
+_("Cyborg Thermite")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[0]
 _("Cyborg Transport Available")  
@@ -1806,7 +1821,12 @@ _("Dense Composite Alloys")
 _("Depleted uranium kinetic energy bullets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage09.name
+// data/mp/stats/research.json: $.R-Wpn-MG-Damage09.name
 _("Depleted Uranium MG Bullets Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-MG-Damage10.name
+// data/mp/stats/research.json: $.R-Wpn-MG-Damage10.name
+_("Depleted Uranium MG Bullets Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage08.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage08.name
@@ -2079,6 +2099,9 @@ _("Flamer Cyborg")
 // data/mp/messages/resmessagesall.json: $.RES_W_FL_D7.text[2]
 // xgettext:no-c-format
 _("Flamer damage +25%")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Flamer-ROF04.name
+_("Flamer Fast Loader")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower04.name
 // data/base/stats/structure.json: $.GuardTower4.name
@@ -3363,6 +3386,7 @@ _("Inferno Cobra Hover")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-HvyFlamer.name
 // data/base/stats/structure.json: $.Tower-Projector.name
+// data/base/stats/weapons.json: $.Flame2-Emplacement.name
 _("Inferno Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.WallTower-Projector.name
@@ -4094,7 +4118,7 @@ _("New construction techniques improve tower")
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[0]
 // data/base/messages/resmessages1.json: $.RES_CYW_FL1.text[0]
 // data/base/messages/resmessages1.json: $.RES_CYW_MG1.text[0]
-// ... + 28 refs
+// ... + 31 refs
 _("New Cyborg Available")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CY_JP1.text[0]
@@ -4237,15 +4261,15 @@ _("New Systems Structure Available")
 // ... + 6 refs
 _("New Systems Tower Available")  
 // TRANSLATORS: 
+// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+_("New Systems Turret Available For Design")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 // data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 _("New Systems Turret Available for Design")  
-// TRANSLATORS: 
-// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-_("New Systems Turret Available For Design")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
 // data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[0]
@@ -4315,11 +4339,11 @@ _("NEXUS Resistance Circuits Mk2")
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
 _("NEXUS Resistance Circuits Mk3")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
-_("Nexus Resistance Circuits")  
-// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
 _("NEXUS Resistance Circuits")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
+_("Nexus Resistance Circuits")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NEXUSWall.name
 // data/mp/stats/structure.json: $.NEXUSWall.name
@@ -4459,12 +4483,15 @@ _("Plasmite Flamer")
 // data/mp/stats/templates.json: $.SK-Retre-VTOL-Plasmite.name
 _("Plasmite Retribution VTOL")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-WallUpgrade11.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade11.name
 _("Plasteel Mk2")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-WallUpgrade12.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade12.name
 _("Plasteel Mk3")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-WallUpgrade10.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade10.name
 _("Plasteel")  
 // TRANSLATORS: 
@@ -4811,7 +4838,7 @@ _("Replaces Medium Cannon")
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CYW_FL1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CYW_MG1.text[3]
-// ... + 36 refs
+// ... + 39 refs
 _("Requires Cyborg factory to produce")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_LS1.text[3]
@@ -4879,6 +4906,9 @@ _("Retribution")
 // data/mp/stats/research.json: $.R-Defense-IDFRocket.name
 // data/mp/stats/structure.json: $.Emplacement-Rocket06-IDF.name
 _("Ripple Rocket Battery")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-RocketSlow-ROFRR01.name
+_("Ripple Rocket Rapid Loader")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket06-IDF.name
 // data/base/stats/weapons.json: $.Rocket-IDF.name
@@ -5261,6 +5291,11 @@ _("Smashedcornerwall")
 // data/base/stats/features.json: $.WallSmashed.name
 _("Smashedwall")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Cyborg-Wpn-Cannon02.name
+// data/base/stats/templates.json: $.CyborgCannon02Grd.name
+// data/base/stats/weapons.json: $.CyborgCannon02.name
+_("Sniper Cyborg")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_P_H1.text[2]
 // data/base/messages/resmessages1.json: $.RES_V_P_W1.text[2]
 // data/mp/messages/resmessages1.json: $.RES_V_P_H1.text[2]
@@ -5502,6 +5537,10 @@ _("Synaptic Link")
 // data/base/messages/messages.json: $.MSG5.text[0]
 _("Systems Research Completed")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Cyborg-Wpn-Rocket02.name
+// data/base/stats/templates.json: $.CyborgRkt02Ground.name
+_("Tank Killer Cyborg")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-HvyA-Trocket.name
 // data/base/stats/structure.json: $.Emplacement-HvyATrocket.name
 // data/mp/stats/research.json: $.R-Defense-HvyA-Trocket.name
@@ -5617,6 +5656,10 @@ _("Thermal Imaging Rockets")
 // data/base/stats/research.json: $.R-Wpn-Bomb04.name
 // data/mp/stats/research.json: $.R-Wpn-Bomb04.name
 _("Thermite Bomb Bay")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Cyborg-Wpn-Flamer02.name
+// data/base/stats/templates.json: $.CyborgFlamer02Grd.name
+_("Thermite Cyborg")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.Cyb-Thermite.name
 _("Thermite Flamer Cyborg")  
@@ -6044,6 +6087,9 @@ _("VTOL Flashlight")
 // data/mp/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
 _("VTOL Heap Bomb Bay")  
 // TRANSLATORS: 
+// data/base/stats/weapons.json: $.Cannon375mm-VTOL.name
+_("VTOL Heavy Cannon")  
+// TRANSLATORS: 
 // data/mp/stats/weapons.json: $.HeavyLaser-VTOL.name
 _("VTOL Heavy Laser")  
 // TRANSLATORS: 
@@ -6090,10 +6136,12 @@ _("VTOL Machinegun Scav")
 // data/mp/stats/weapons.json: $.MG1-VTOL.name
 _("VTOL Machinegun")  
 // TRANSLATORS: 
+// data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
+_("VTOL Mini-Rocket AA")  
+// TRANSLATORS: 
 // data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 _("VTOL Mini-Rocket Scav")  
 // TRANSLATORS: 
-// data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
 // data/mp/stats/weapons.json: $.Rocket-VTOL-Pod.name
 _("VTOL Mini-Rocket")  
 // TRANSLATORS: 

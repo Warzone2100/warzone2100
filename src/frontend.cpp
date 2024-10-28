@@ -530,7 +530,7 @@ bool runSinglePlayerMenu()
 void startMultiPlayerMenu()
 {
 	closeMissingVideosNotification();
-	
+
 	addBackdrop();
 	addTopForm(false);
 	addBottomForm();
@@ -570,13 +570,11 @@ bool runMultiPlayerMenu()
 		case FRONTEND_HOST:
 			// don't pretend we are running a network game. Really do it!
 			NetPlay.bComms = true; // use network = true
-			NetPlay.isUPNP_CONFIGURED = false;
-			NetPlay.isUPNP_ERROR = false;
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			bMultiPlayer = true;
 			bMultiMessages = true;
 			NETinit(true);
-			NETdiscoverUPnPDevices();
+			NETinitPortMapping();
 			game.type = LEVEL_TYPE::SKIRMISH;		// needed?
 			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 			break;
@@ -1064,6 +1062,53 @@ static std::shared_ptr<WIDGET> makeShadowFilterSizeDropdown()
 	return Margin(0, 10).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeOptionsButtonDropdown()
+{
+	std::vector<std::tuple<WzString, uint8_t>> dropDownChoices = {
+		{WzString::fromUtf8(_("On")), 100},
+		{WzString::fromUtf8(_("Opacity: 50%")), 50},
+		{WzString::fromUtf8(_("Off")), 0}
+	};
+
+	// If current value (from config) is not one of the presets in dropDownChoices, add a "Custom" entry
+	size_t currentSettingIdx = 0;
+	uint8_t currValue = war_getOptionsButtonVisibility();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, uint8_t>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+	else
+	{
+		dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+		currentSettingIdx = dropDownChoices.size() - 1;
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_INGAMEOPTIONS_BUTTON_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const auto paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+		ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+		auto newValue = std::get<1>(dropDownChoices.at(newIndex));
+		war_setOptionsButtonVisibility(newValue);
+		return true;
+	});
+
+	return Margin(0, 10).wrap(dropdown);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
 void startGraphicsOptionsMenu()
@@ -1163,6 +1208,11 @@ void startGraphicsOptionsMenu()
 	// groups menu
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_GROUPS, _("Groups Menu"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GROUPS_R, graphicsOptionsGroupsMenuEnabled(), WBUT_SECONDARY)));
+	row.start++;
+
+	// In-Game Options button
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_INGAMEOPTIONS_BUTTON, _("Options Button"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, makeOptionsButtonDropdown());
 	row.start++;
 
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
@@ -2223,6 +2273,7 @@ void seqVsyncMode()
 	{
 		// succeeded changing vsync mode
 		saveCurrentSwapMode(currentVsyncMode);
+		wzPostChangedSwapInterval();
 	}
 }
 
@@ -3285,9 +3336,9 @@ static std::shared_ptr<WIDGET> makePlayerLeaveModeMPDropdown()
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
-char const *multiplayOptionsUPnPString()
+char const *multiplayOptionsPortMappingString()
 {
-	return NetPlay.isUPNP ? _("On") : _("Off");
+	return NetPlay.isPortMappingEnabled ? _("On") : _("Off");
 }
 
 char const *multiplayOptionsHostingChatDefaultString()
@@ -3317,9 +3368,11 @@ void startMultiplayOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GAME_PORT_R, std::to_string(NETgetGameserverPort()), WBUT_DISABLE))); // FUTURE TODO: Make this an input field or similar and allow editing (although reject ports <= 1024)
 	row.start++;
 
-	// Enable UPnP
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_UPNP, _("Enable UPnP"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_UPNP_R, multiplayOptionsUPnPString(), WBUT_SECONDARY)));
+	// Port Mapping
+	auto portMappingTitle = makeTextButton(FRONTEND_PORT_MAPPING, _("Port Mapping"), WBUT_SECONDARY);
+	portMappingTitle->setTip(_("Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."));
+	grid->place({0}, row, addMargin(portMappingTitle));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_PORT_MAPPING_R, multiplayOptionsPortMappingString(), WBUT_SECONDARY)));
 	row.start++;
 
 	// Chat
@@ -3387,10 +3440,10 @@ bool runMultiplayOptionsMenu()
 
 	switch (id)
 	{
-	case FRONTEND_UPNP:
-	case FRONTEND_UPNP_R:
-		NetPlay.isUPNP = !NetPlay.isUPNP;
-		widgSetString(psWScreen, FRONTEND_UPNP_R, multiplayOptionsUPnPString());
+	case FRONTEND_PORT_MAPPING:
+	case FRONTEND_PORT_MAPPING_R:
+		NetPlay.isPortMappingEnabled = !NetPlay.isPortMappingEnabled;
+		widgSetString(psWScreen, FRONTEND_PORT_MAPPING_R, multiplayOptionsPortMappingString());
 		break;
 	case FRONTEND_HOST_CHATDEFAULT:
 	case FRONTEND_HOST_CHATDEFAULT_R:

@@ -134,6 +134,16 @@ static bool validateCampaignMod(WzCampaignModInfo& modInfo, const std::string& b
 		}
 	}
 
+	// Verify alternate campaign has at least one campaign file listed
+	if (modInfo.type == WzModType::AlternateCampaign)
+	{
+		if (modInfo.campaignFiles.empty())
+		{
+			debug(LOG_ERROR, "Alternate campaign mod must list one or more valid campaign JSON files in \"campaigns\": %s", realModFilePathAndName.c_str());
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -1048,7 +1058,7 @@ void WzCampaignTweakOptionToggle::initialize(const WzString& displayName, const 
 	descriptionWidget->setFont(font_small);
 	descriptionWidget->setFontColour(WZCOL_TEXT_MEDIUM);
 	descriptionWidget->setGeometry(0, 0, 400, 40);
-	descriptionWidget->addText(description.toUtf8());
+	descriptionWidget->addText(description);
 	descriptionWidget->setTransparentToMouse(true);
 	attach(descriptionWidget);
 
@@ -1219,6 +1229,7 @@ private:
 	std::shared_ptr<WzFrontendImageButton> resetButton;
 	std::shared_ptr<ScrollableListWidget> tweaksDisplayList;
 	std::vector<std::shared_ptr<WzCampaignTweakOptionToggle>> toggleWidgets;
+	std::unordered_map<size_t, size_t> tweakOptionIdxToToggleWidgetIdxMap;
 	std::shared_ptr<std::vector<WzCampaignTweakOptionSetting>> tweakOptions;
 	int innerPadding = 20;
 	int betweenButtonPadding = 15;
@@ -1274,6 +1285,11 @@ void WzCampaignTweakOptionsEditForm::initialize(const std::shared_ptr<std::vecto
 	{
 		const auto& o = (*tweakOptions)[i];
 
+		if (!o.editable)
+		{
+			continue;	// skip non-editable settings
+		}
+
 		auto toggleWidget = WzCampaignTweakOptionToggle::make(o.displayName, o.description);
 		toggleWidget->setIsChecked(o.currentValue);
 		toggleWidget->addOnClickHandler([weakEditForm, i](W_BUTTON& but) {
@@ -1287,6 +1303,7 @@ void WzCampaignTweakOptionsEditForm::initialize(const std::shared_ptr<std::vecto
 
 		toggleWidgets.push_back(toggleWidget);
 		tweaksDisplayList->addItem(toggleWidget);
+		tweakOptionIdxToToggleWidgetIdxMap.insert({i, toggleWidgets.size() - 1});
 	}
 
 	int listY0 = formTitle->y() + formTitle->height() + innerPadding;
@@ -1370,7 +1387,12 @@ void WzCampaignTweakOptionsEditForm::resetToDefaults()
 	{
 		auto& o = (*tweakOptions)[i];
 		o.currentValue = o.defaultValue;
-		toggleWidgets[i]->setIsChecked(o.defaultValue);
+		auto it = tweakOptionIdxToToggleWidgetIdxMap.find(i);
+		if (it != tweakOptionIdxToToggleWidgetIdxMap.end())
+		{
+			ASSERT(it->second < toggleWidgets.size(), "Invalid index: %zu", it->second);
+			toggleWidgets[it->second]->setIsChecked(o.defaultValue);
+		}
 	}
 	updateResetButtonStatus();
 }
@@ -1484,6 +1506,10 @@ void WzCampaignTweakOptionsSummaryWidget::update(const std::vector<WzCampaignTwe
 	// Add list of tweak options (2 columns)
 	for (const auto& setting : tweakOptionSettings)
 	{
+		if (!setting.editable)
+		{
+			continue;	// skip non-editable settings
+		}
 		auto newStatusLabel = makeTweakOptionSmallLabel((setting.currentValue) ? "✓" : "x", statusLabelWidth);
 		auto newTweakLabel = makeTweakOptionSmallLabel(setting.displayName);
 		grid->place({col++, 1, false}, row, Margin(0, 3, 0, 0).wrap(newStatusLabel));
@@ -1573,7 +1599,7 @@ protected:
 			// load details from mod
 			displayName = WzString::fromUtf8(modInfo.value().name);
 			author = WzString::fromUtf8(modInfo.value().author);
-			description = WzString::fromUtf8(modInfo.value().description.getLocalizedString().value_or(""));
+			description = WzString::fromUtf8(modInfo.value().description.getLocalizedString());
 			if (!modInfo.value().modBannerPNGData.empty())
 			{
 				iV_Image ivImage;
@@ -1637,7 +1663,7 @@ protected:
 			descriptionWidget->setShadeColour(pal_RGBA(0,0,0,80));
 		}
 		descriptionWidget->setGeometry(leftPadding, nextLineY0, 400, 40);
-		descriptionWidget->addText(description.toUtf8());
+		descriptionWidget->addText(description);
 
 		auto scrollableDescriptionWidget = ScrollableListWidget::make();
 		scrollableDescriptionWidget->addItem(descriptionWidget);
@@ -1929,6 +1955,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"ps1Modifiers",
+		_("PS1 Modifiers"),
+		_("Reduces the damage the enemy deals to a third of the current difficulty modifier."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
@@ -1955,9 +1988,9 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		// append any customTweakOptions
 		for (const auto& customOpt : modInfo.value().customTweakOptions)
 		{
-			auto localizedDisplayName = customOpt.displayName.getLocalizedString();
-			auto localizedDescription = customOpt.description.getLocalizedString();
-			if (!localizedDisplayName.has_value())
+			auto localizedDisplayName = WzString::fromUtf8(customOpt.displayName.getLocalizedString());
+			auto localizedDescription = WzString::fromUtf8(customOpt.description.getLocalizedString());
+			if (localizedDisplayName.isEmpty())
 			{
 				continue;
 			}
@@ -1968,8 +2001,8 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 			}
 			results.emplace_back(
 				customOpt.uniqueIdentifier,
-				WzString::fromUtf8(localizedDisplayName.value()),
-				WzString::fromUtf8(localizedDescription.value_or("")),
+				localizedDisplayName,
+				localizedDescription,
 				customOpt.enabled, customOpt.userEditable
 			);
 		}
@@ -2086,15 +2119,12 @@ void CampaignStartOptionsForm::handleStartGame()
 	sstrcpy(aLevelName, campaignFile.level.toUtf8().c_str());
 	setCampaignName(campaignFile.name.toStdString());
 
-	// show this only when the video sequences are installed
-	if (seq_hasVideos())
+	// show video
+	if (!campaignFile.video.isEmpty())
 	{
-		if (!campaignFile.video.isEmpty())
-		{
-			seq_ClearSeqList();
-			seq_AddSeqToList(campaignFile.video.toUtf8().c_str(), nullptr, campaignFile.captions.toUtf8().c_str(), false);
-			seq_StartNextFullScreenVideo();
-		}
+		seq_ClearSeqList();
+		seq_AddSeqToList(campaignFile.video.toUtf8().c_str(), nullptr, campaignFile.captions.toUtf8().c_str(), false);
+		seq_StartNextFullScreenVideo();
 	}
 
 	// set tweak options
@@ -2268,7 +2298,7 @@ bool CampaignStartOptionsForm::updateCampaignBalanceDropdown(const std::vector<W
 			campaignBalanceChoices[classicModIdx].modInfo = mod;
 			continue;
 		}
-		campaignBalanceChoices.push_back({WzString::fromUtf8(mod.name), WzString::fromUtf8(mod.description.getLocalizedString().value_or(std::string())), mod});
+		campaignBalanceChoices.push_back({WzString::fromUtf8(mod.name), WzString::fromUtf8(mod.description.getLocalizedString()), mod});
 	}
 
 	campaignBalanceDropdown->clear();
@@ -2631,7 +2661,7 @@ void CampaignStartOptionsForm::initialize(const std::shared_ptr<WzCampaignSelect
 
 	// Add Tweak Options widget (optional)
 	*tweakOptionSettings = buildTweakOptionSettings(modInfo);
-	if (!tweakOptionSettings->empty())
+	if (std::any_of(tweakOptionSettings->begin(), tweakOptionSettings->end(), [](const WzCampaignTweakOptionSetting& o) { return o.editable; }))
 	{
 		tweakOptionsSummary = WzCampaignTweakOptionsSummaryWidget::make();
 		tweakOptionsSummary->update(*tweakOptionSettings);

@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "netsocket.h"
+#include "error_categories.h"
 
 #include <vector>
 #include <algorithm>
@@ -38,6 +39,12 @@
 
 #if defined(__clang__)
 	#pragma clang diagnostic ignored "-Wshorten-64-to-32" // FIXME!!
+#endif
+
+#if defined(WZ_OS_UNIX)
+# include <netinet/tcp.h> // For TCP_NODELAY
+#elif defined(WZ_OS_WIN)
+// Already included Winsock2.h which defines TCP_NODELAY
 #endif
 
 enum
@@ -56,7 +63,7 @@ struct Socket
 	 *
 	 * All non-listening sockets will only use the first socket handle.
 	 */
-	Socket() : ready(false), writeError(false), deleteLater(false), isCompressed(false), readDisconnected(false), zDeflateInSize(0)
+	Socket() : ready(false), deleteLater(false), isCompressed(false), readDisconnected(false), zDeflateInSize(0)
 	{
 		memset(&zDeflate, 0, sizeof(zDeflate));
 		memset(&zInflate, 0, sizeof(zInflate));
@@ -65,7 +72,7 @@ struct Socket
 
 	SOCKET fd[SOCK_COUNT];
 	bool ready;
-	bool writeError;
+	std::error_code writeErrorCode = make_network_error_code(0);
 	bool deleteLater;
 	char textAddress[40] = {};
 
@@ -96,12 +103,13 @@ static SocketThreadWriteMap socketThreadWrites;
 static void socketCloseNow(Socket *sock);
 
 
-bool socketReadReady(Socket const *sock)
+bool socketReadReady(const Socket& sock)
 {
-	return sock->ready;
+	return sock.ready;
 }
 
-int getSockErr(void)
+// Returns the last error for the calling thread
+static int getSockErr()
 {
 #if   defined(WZ_OS_UNIX)
 	return errno;
@@ -110,7 +118,7 @@ int getSockErr(void)
 #endif
 }
 
-void setSockErr(int error)
+static void setSockErr(int error)
 {
 #if   defined(WZ_OS_UNIX)
 	errno = error;
@@ -280,7 +288,7 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 	}
 }
 
-const char *strSockError(int error)
+static const char *strSockError(int error)
 {
 #if   defined(WZ_OS_WIN)
 	switch (error)
@@ -356,7 +364,7 @@ static bool connectionIsOpen(Socket *sock)
 	                 sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
 
 	// Check whether the socket is still connected
-	int ret = checkSockets(&set, 0);
+	int ret = checkSockets(set, 0);
 	if (ret == SOCKET_ERROR)
 	{
 		return false;
@@ -482,7 +490,7 @@ static int socketThreadFunction(void *)
 						if (!connectionIsOpen(sock))
 						{
 							debug(LOG_NET, "Socket error");
-							sock->writeError = true;
+							sock->writeErrorCode = make_network_error_code(getSockErr());
 							socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
 							if (sock->deleteLater)
 							{
@@ -496,7 +504,7 @@ static int socketThreadFunction(void *)
 					case EPIPE:
 #endif
 					default:
-						sock->writeError = true;
+						sock->writeErrorCode = make_network_error_code(getSockErr());
 						socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
 						if (sock->deleteLater)
 						{
@@ -525,56 +533,55 @@ static int socketThreadFunction(void *)
  * Similar to read(2) with the exception that this function won't be
  * interrupted by signals (EINTR).
  */
-ssize_t readNoInt(Socket *sock, void *buf, size_t max_size, size_t *rawByteCount)
+net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t *rawByteCount)
 {
 	size_t ignored;
 	size_t &rawBytes = rawByteCount != nullptr ? *rawByteCount : ignored;
 	rawBytes = 0;
 
-	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	if (sock.fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket");
-		setSockErr(EBADF);
-		return SOCKET_ERROR;
+		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
-	if (sock->isCompressed)
+	if (sock.isCompressed)
 	{
-		if (sock->zInflateNeedInput)
+		if (sock.zInflateNeedInput)
 		{
 			// No input data, read some.
 
-			sock->zInflateInBuf.resize(max_size + 1000);
+			sock.zInflateInBuf.resize(max_size + 1000);
 
 			ssize_t received;
 			do
 			{
 				//                                                  v----- This weird cast is because recv() takes a char * on windows instead of a void *...
-				received = recv(sock->fd[SOCK_CONNECTION], (char *)&sock->zInflateInBuf[0], sock->zInflateInBuf.size(), 0);
+				received = recv(sock.fd[SOCK_CONNECTION], (char *)&sock.zInflateInBuf[0], sock.zInflateInBuf.size(), 0);
 			}
 			while (received == SOCKET_ERROR && getSockErr() == EINTR);
 			if (received < 0)
 			{
-				return received;
+				return tl::make_unexpected(make_network_error_code(getSockErr()));
 			}
 
-			sock->zInflate.next_in = &sock->zInflateInBuf[0];
-			sock->zInflate.avail_in = received;
+			sock.zInflate.next_in = &sock.zInflateInBuf[0];
+			sock.zInflate.avail_in = received;
 			rawBytes = received;
 
 			if (received == 0)
 			{
-				sock->readDisconnected = true;
+				sock.readDisconnected = true;
 			}
 			else
 			{
-				sock->zInflateNeedInput = false;
+				sock.zInflateNeedInput = false;
 			}
 		}
 
-		sock->zInflate.next_out = (Bytef *)buf;
-		sock->zInflate.avail_out = max_size;
-		int ret = inflate(&sock->zInflate, Z_NO_FLUSH);
+		sock.zInflate.next_out = (Bytef *)buf;
+		sock.zInflate.avail_out = max_size;
+		int ret = inflate(&sock.zInflate, Z_NO_FLUSH);
 		ASSERT(ret != Z_STREAM_ERROR, "zlib inflate not working!");
 		char const *err = nullptr;
 		switch (ret)
@@ -586,38 +593,43 @@ ssize_t readNoInt(Socket *sock, void *buf, size_t max_size, size_t *rawByteCount
 		if (err != nullptr)
 		{
 			debug(LOG_ERROR, "Couldn't decompress data from socket. zlib error %s", err);
-			return -1;  // Bad data!
+			// Bad data!
+			return tl::make_unexpected(make_zlib_error_code(ret));
 		}
 
-		if (sock->zInflate.avail_out != 0)
+		if (sock.zInflate.avail_out != 0)
 		{
-			sock->zInflateNeedInput = true;
-			ASSERT(sock->zInflate.avail_in == 0, "zlib not consuming all input!");
+			sock.zInflateNeedInput = true;
+			ASSERT(sock.zInflate.avail_in == 0, "zlib not consuming all input!");
 		}
 
-		return max_size - sock->zInflate.avail_out;  // Got some data, return how much.
+		if (sock.readDisconnected)
+		{
+			return tl::make_unexpected(make_network_error_code(ECONNRESET));
+		}
+
+		return max_size - sock.zInflate.avail_out;  // Got some data, return how much.
 	}
 
 	ssize_t received;
 	do
 	{
-		received = recv(sock->fd[SOCK_CONNECTION], (char *)buf, max_size, 0);
+		received = recv(sock.fd[SOCK_CONNECTION], (char *)buf, max_size, 0);
 		if (received == 0)
 		{
-			sock->readDisconnected = true;
+			sock.readDisconnected = true;
 		}
 	}
 	while (received == SOCKET_ERROR && getSockErr() == EINTR);
 
-	sock->ready = false;
+	sock.ready = false;
+	if (sock.readDisconnected)
+	{
+		return tl::make_unexpected(make_network_error_code(ECONNRESET));
+	}
 
 	rawBytes = received;
 	return received;
-}
-
-bool socketReadDisconnected(Socket *sock)
-{
-	return sock->readDisconnected;
 }
 
 /**
@@ -626,34 +638,33 @@ bool socketReadDisconnected(Socket *sock)
  *
  * @return @c size when successful or @c SOCKET_ERROR if an error occurred.
  */
-ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCount)
+net::result<ssize_t> writeAll(Socket& sock, const void *buf, size_t size, size_t *rawByteCount)
 {
 	size_t ignored;
 	size_t &rawBytes = rawByteCount != nullptr ? *rawByteCount : ignored;
 	rawBytes = 0;
 
-	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	if (sock.fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket (EBADF)");
-		setSockErr(EBADF);
-		return SOCKET_ERROR;
+		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
-	if (sock->writeError)
+	if (sock.writeErrorCode)
 	{
-		return SOCKET_ERROR;
+		return tl::make_unexpected(sock.writeErrorCode);
 	}
 
 	if (size > 0)
 	{
-		if (!sock->isCompressed)
+		if (!sock.isCompressed)
 		{
 			wzMutexLock(socketThreadMutex);
 			if (socketThreadWrites.empty())
 			{
 				wzSemaphorePost(socketThreadSemaphore);
 			}
-			std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
+			std::vector<uint8_t> &writeQueue = socketThreadWrites[&sock];
 			writeQueue.insert(writeQueue.end(), static_cast<char const *>(buf), static_cast<char const *>(buf) + size);
 			wzMutexUnlock(socketThreadMutex);
 			rawBytes = size;
@@ -673,7 +684,7 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 			#endif
 
 			// cast away the const for earlier zlib versions
-			sock->zDeflate.next_in = (Bytef *)buf; // -Wcast-qual
+			sock.zDeflate.next_in = (Bytef *)buf; // -Wcast-qual
 
 			#if defined(__clang__)
 			#  pragma clang diagnostic pop
@@ -682,65 +693,65 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 			#endif
 		#else
 			// zlib >= 1.2.5.2 supports ZLIB_CONST
-			sock->zDeflate.next_in = (const Bytef *)buf;
+			sock.zDeflate.next_in = (const Bytef *)buf;
 		#endif
 
-			sock->zDeflate.avail_in = size;
-			sock->zDeflateInSize += sock->zDeflate.avail_in;
+			sock.zDeflate.avail_in = size;
+			sock.zDeflateInSize += sock.zDeflate.avail_in;
 			do
 			{
-				size_t alreadyHave = sock->zDeflateOutBuf.size();
-				sock->zDeflateOutBuf.resize(alreadyHave + size + 20);  // A bit more than size should be enough to always do everything in one go.
-				sock->zDeflate.next_out = (Bytef *)&sock->zDeflateOutBuf[alreadyHave];
-				sock->zDeflate.avail_out = sock->zDeflateOutBuf.size() - alreadyHave;
+				size_t alreadyHave = sock.zDeflateOutBuf.size();
+				sock.zDeflateOutBuf.resize(alreadyHave + size + 20);  // A bit more than size should be enough to always do everything in one go.
+				sock.zDeflate.next_out = (Bytef *)&sock.zDeflateOutBuf[alreadyHave];
+				sock.zDeflate.avail_out = sock.zDeflateOutBuf.size() - alreadyHave;
 
-				int ret = deflate(&sock->zDeflate, Z_NO_FLUSH);
+				int ret = deflate(&sock.zDeflate, Z_NO_FLUSH);
 				ASSERT(ret != Z_STREAM_ERROR, "zlib compression failed!");
 
 				// Remove unused part of buffer.
-				sock->zDeflateOutBuf.resize(sock->zDeflateOutBuf.size() - sock->zDeflate.avail_out);
+				sock.zDeflateOutBuf.resize(sock.zDeflateOutBuf.size() - sock.zDeflate.avail_out);
 			}
-			while (sock->zDeflate.avail_out == 0);
+			while (sock.zDeflate.avail_out == 0);
 
-			ASSERT(sock->zDeflate.avail_in == 0, "zlib didn't compress everything!");
+			ASSERT(sock.zDeflate.avail_in == 0, "zlib didn't compress everything!");
 		}
 	}
 
 	return size;
 }
 
-void socketFlush(Socket *sock, uint8_t player, size_t *rawByteCount)
+void socketFlush(Socket& sock, uint8_t player, size_t *rawByteCount)
 {
 	size_t ignored;
 	size_t &rawBytes = rawByteCount != nullptr ? *rawByteCount : ignored;
 	rawBytes = 0;
 
-	if (!sock->isCompressed)
+	if (!sock.isCompressed)
 	{
 		return;  // Not compressed, so don't mess with zlib.
 	}
 
-	ASSERT(!sock->writeError, "Socket write error?? (Player: %" PRIu8 "", player);
+	ASSERT(!sock.writeErrorCode, "Socket write error?? (Player: %" PRIu8 "", player);
 
 	// Flush data out of zlib compression state.
 	do
 	{
-		sock->zDeflate.next_in = (Bytef *)nullptr;
-		sock->zDeflate.avail_in = 0;
-		size_t alreadyHave = sock->zDeflateOutBuf.size();
-		sock->zDeflateOutBuf.resize(alreadyHave + 1000);  // 100 bytes would probably be enough to flush the rest in one go.
-		sock->zDeflate.next_out = (Bytef *)&sock->zDeflateOutBuf[alreadyHave];
-		sock->zDeflate.avail_out = sock->zDeflateOutBuf.size() - alreadyHave;
+		sock.zDeflate.next_in = (Bytef *)nullptr;
+		sock.zDeflate.avail_in = 0;
+		size_t alreadyHave = sock.zDeflateOutBuf.size();
+		sock.zDeflateOutBuf.resize(alreadyHave + 1000);  // 100 bytes would probably be enough to flush the rest in one go.
+		sock.zDeflate.next_out = (Bytef *)&sock.zDeflateOutBuf[alreadyHave];
+		sock.zDeflate.avail_out = sock.zDeflateOutBuf.size() - alreadyHave;
 
-		int ret = deflate(&sock->zDeflate, Z_PARTIAL_FLUSH);
+		int ret = deflate(&sock.zDeflate, Z_PARTIAL_FLUSH);
 		ASSERT(ret != Z_STREAM_ERROR, "zlib compression failed!");
 
 		// Remove unused part of buffer.
-		sock->zDeflateOutBuf.resize(sock->zDeflateOutBuf.size() - sock->zDeflate.avail_out);
+		sock.zDeflateOutBuf.resize(sock.zDeflateOutBuf.size() - sock.zDeflate.avail_out);
 	}
-	while (sock->zDeflate.avail_out == 0);
+	while (sock.zDeflate.avail_out == 0);
 
-	if (sock->zDeflateOutBuf.empty())
+	if (sock.zDeflateOutBuf.empty())
 	{
 		return;  // No data to flush out.
 	}
@@ -750,8 +761,8 @@ void socketFlush(Socket *sock, uint8_t player, size_t *rawByteCount)
 	{
 		wzSemaphorePost(socketThreadSemaphore);
 	}
-	std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
-	writeQueue.insert(writeQueue.end(), sock->zDeflateOutBuf.begin(), sock->zDeflateOutBuf.end());
+	std::vector<uint8_t> &writeQueue = socketThreadWrites[&sock];
+	writeQueue.insert(writeQueue.end(), sock.zDeflateOutBuf.begin(), sock.zDeflateOutBuf.end());
 	wzMutexUnlock(socketThreadMutex);
 
 	// Primitive network logging, uncomment to use.
@@ -760,14 +771,14 @@ void socketFlush(Socket *sock, uint8_t player, size_t *rawByteCount)
 	//printf("\n");
 
 	// Data sent, don't send again.
-	rawBytes = sock->zDeflateOutBuf.size();
-	sock->zDeflateInSize = 0;
-	sock->zDeflateOutBuf.clear();
+	rawBytes = sock.zDeflateOutBuf.size();
+	sock.zDeflateInSize = 0;
+	sock.zDeflateOutBuf.clear();
 }
 
-void socketBeginCompression(Socket *sock)
+void socketBeginCompression(Socket& sock)
 {
-	if (sock->isCompressed)
+	if (sock.isCompressed)
 	{
 		return;  // Nothing to do.
 	}
@@ -775,24 +786,37 @@ void socketBeginCompression(Socket *sock)
 	wzMutexLock(socketThreadMutex);
 
 	// Init deflate.
-	sock->zDeflate.zalloc = Z_NULL;
-	sock->zDeflate.zfree = Z_NULL;
-	sock->zDeflate.opaque = Z_NULL;
-	int ret = deflateInit(&sock->zDeflate, 6);
+	sock.zDeflate.zalloc = Z_NULL;
+	sock.zDeflate.zfree = Z_NULL;
+	sock.zDeflate.opaque = Z_NULL;
+	int ret = deflateInit(&sock.zDeflate, 6);
 	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
 
-	sock->zInflate.zalloc = Z_NULL;
-	sock->zInflate.zfree = Z_NULL;
-	sock->zInflate.opaque = Z_NULL;
-	sock->zInflate.avail_in = 0;
-	sock->zInflate.next_in = Z_NULL;
-	ret = inflateInit(&sock->zInflate);
+	sock.zInflate.zalloc = Z_NULL;
+	sock.zInflate.zfree = Z_NULL;
+	sock.zInflate.opaque = Z_NULL;
+	sock.zInflate.avail_in = 0;
+	sock.zInflate.next_in = Z_NULL;
+	ret = inflateInit(&sock.zInflate);
 	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
 
-	sock->zInflateNeedInput = true;
+	sock.zInflateNeedInput = true;
 
-	sock->isCompressed = true;
+	sock.isCompressed = true;
 	wzMutexUnlock(socketThreadMutex);
+}
+
+bool socketSetTCPNoDelay(Socket& sock, bool nodelay)
+{
+#if defined(TCP_NODELAY)
+	int value = (nodelay) ? 1 : 0;
+	int result = setsockopt(sock.fd[SOCK_CONNECTION], IPPROTO_TCP, TCP_NODELAY, (char *) &value, sizeof(int));
+	debug(LOG_NET, "Setting TCP_NODELAY on socket: %s", (result != SOCKET_ERROR) ? "success" : "failure");
+	return result != SOCKET_ERROR;
+#else
+	debug(LOG_NET, "Unable to set TCP_NODELAY on socket - unsupported");
+	return false;
+#endif
 }
 
 Socket::~Socket()
@@ -819,32 +843,32 @@ void deleteSocketSet(SocketSet *set)
  *
  * @return true if @c socket is successfully added to @set.
  */
-void SocketSet_AddSocket(SocketSet *set, Socket *socket)
+void SocketSet_AddSocket(SocketSet& set, Socket *socket)
 {
 	/* Check whether this socket is already present in this set (i.e. it
 	 * shouldn't be added again).
 	 */
-	size_t i = std::find(set->fds.begin(), set->fds.end(), socket) - set->fds.begin();
-	if (i != set->fds.size())
+	size_t i = std::find(set.fds.begin(), set.fds.end(), socket) - set.fds.begin();
+	if (i != set.fds.size())
 	{
 		debug(LOG_NET, "Already found, socket: (set->fds[%lu]) %p", (unsigned long)i, static_cast<void *>(socket));
 		return;
 	}
 
-	set->fds.push_back(socket);
+	set.fds.push_back(socket);
 	debug(LOG_NET, "Socket added: set->fds[%lu] = %p", (unsigned long)i, static_cast<void *>(socket));
 }
 
 /**
  * Remove the given socket from the given socket set.
  */
-void SocketSet_DelSocket(SocketSet *set, Socket *socket)
+void SocketSet_DelSocket(SocketSet& set, Socket *socket)
 {
-	size_t i = std::find(set->fds.begin(), set->fds.end(), socket) - set->fds.begin();
-	if (i != set->fds.size())
+	size_t i = std::find(set.fds.begin(), set.fds.end(), socket) - set.fds.begin();
+	if (i != set.fds.size())
 	{
 		debug(LOG_NET, "Socket %p erased (set->fds[%lu])", static_cast<void *>(socket), (unsigned long)i);
-		set->fds.erase(set->fds.begin() + i);
+		set.fds.erase(set.fds.begin() + i);
 	}
 }
 
@@ -941,9 +965,9 @@ static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
 #endif
 }
 
-int checkSockets(const SocketSet *set, unsigned int timeout)
+int checkSockets(const SocketSet& set, unsigned int timeout)
 {
-	if (set->fds.empty())
+	if (set.fds.empty())
 	{
 		return 0;
 	}
@@ -955,17 +979,17 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
 #endif
 
 	bool compressedReady = false;
-	for (size_t i = 0; i < set->fds.size(); ++i)
+	for (size_t i = 0; i < set.fds.size(); ++i)
 	{
-		ASSERT(set->fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
+		ASSERT(set.fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
 
-		if (set->fds[i]->isCompressed && !set->fds[i]->zInflateNeedInput)
+		if (set.fds[i]->isCompressed && !set.fds[i]->zInflateNeedInput)
 		{
 			compressedReady = true;
 			break;
 		}
 
-		maxfd = std::max(maxfd, set->fds[i]->fd[SOCK_CONNECTION]);
+		maxfd = std::max(maxfd, set.fds[i]->fd[SOCK_CONNECTION]);
 	}
 
 	if (compressedReady)
@@ -973,9 +997,9 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
 		// A socket already has some data ready. Don't really poll the sockets.
 
 		int ret = 0;
-		for (size_t i = 0; i < set->fds.size(); ++i)
+		for (size_t i = 0; i < set.fds.size(); ++i)
 		{
-			set->fds[i]->ready = set->fds[i]->isCompressed && !set->fds[i]->zInflateNeedInput;
+			set.fds[i]->ready = set.fds[i]->isCompressed && !set.fds[i]->zInflateNeedInput;
 			++ret;
 		}
 		return ret;
@@ -988,9 +1012,9 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
 		struct timeval tv = {(int)(timeout / 1000), (int)(timeout % 1000) * 1000};  // Cast to int to avoid narrowing needed for C++11.
 
 		FD_ZERO(&fds);
-		for (size_t i = 0; i < set->fds.size(); ++i)
+		for (size_t i = 0; i < set.fds.size(); ++i)
 		{
-			const SOCKET fd = set->fds[i]->fd[SOCK_CONNECTION];
+			const SOCKET fd = set.fds[i]->fd[SOCK_CONNECTION];
 
 			FD_SET(fd, &fds);
 		}
@@ -1005,9 +1029,9 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
 		return SOCKET_ERROR;
 	}
 
-	for (size_t i = 0; i < set->fds.size(); ++i)
+	for (size_t i = 0; i < set.fds.size(); ++i)
 	{
-		set->fds[i]->ready = FD_ISSET(set->fds[i]->fd[SOCK_CONNECTION], &fds);
+		set.fds[i]->ready = FD_ISSET(set.fds[i]->fd[SOCK_CONNECTION], &fds);
 	}
 
 	return ret;
@@ -1027,19 +1051,18 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
  * when the other end disconnected or a timeout occurred. Or @c SOCKET_ERROR if
  * an error occurred.
  */
-ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
+net::result<ssize_t> readAll(Socket& sock, void *buf, size_t size, unsigned int timeout)
 {
-	ASSERT(!sock->isCompressed, "readAll on compressed sockets not implemented.");
+	ASSERT(!sock.isCompressed, "readAll on compressed sockets not implemented.");
 
-	const SocketSet set = {std::vector<Socket *>(1, sock)};
+	const SocketSet set = {std::vector<Socket *>(1, &sock)};
 
 	size_t received = 0;
 
-	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	if (sock.fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%" PRIuPTR"x  (error: EBADF)", static_cast<void *>(sock), static_cast<uintptr_t>(sock->fd[SOCK_CONNECTION]));
-		setSockErr(EBADF);
-		return SOCKET_ERROR;
+		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%" PRIuPTR"x  (error: EBADF)", static_cast<void *>(&sock), static_cast<uintptr_t>(sock.fd[SOCK_CONNECTION]));
+		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
 	while (received < size)
@@ -1049,33 +1072,33 @@ ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 		// If a timeout is set, wait for that amount of time for data to arrive (or abort)
 		if (timeout)
 		{
-			ret = checkSockets(&set, timeout);
+			ret = checkSockets(set, timeout);
 			if (ret < (ssize_t)set.fds.size()
-			    || !sock->ready)
+			    || !sock.ready)
 			{
 				if (ret == 0)
 				{
-					debug(LOG_NET, "socket (%p) has timed out.", static_cast<void *>(sock));
-					setSockErr(ETIMEDOUT);
+					debug(LOG_NET, "socket (%p) has timed out.", static_cast<void *>(&sock));
+					return tl::make_unexpected(make_network_error_code(ETIMEDOUT));
 				}
-				debug(LOG_NET, "socket (%p) error.", static_cast<void *>(sock));
-				return SOCKET_ERROR;
+				debug(LOG_NET, "socket (%p) error.", static_cast<void *>(&sock));
+				return tl::make_unexpected(make_network_error_code(getSockErr()));
 			}
 		}
 
-		ret = recv(sock->fd[SOCK_CONNECTION], &((char *)buf)[received], size - received, 0);
-		sock->ready = false;
+		ret = recv(sock.fd[SOCK_CONNECTION], &((char *)buf)[received], size - received, 0);
+		sock.ready = false;
 		if (ret == 0)
 		{
-			debug(LOG_NET, "Socket %" PRIuPTR"x disconnected.", static_cast<uintptr_t>(sock->fd[SOCK_CONNECTION]));
-			sock->readDisconnected = true;
-			setSockErr(ECONNRESET);
-			return received;
+			debug(LOG_NET, "Socket %" PRIuPTR"x disconnected.", static_cast<uintptr_t>(sock.fd[SOCK_CONNECTION]));
+			sock.readDisconnected = true;
+			return tl::make_unexpected(make_network_error_code(ECONNRESET));
 		}
 
 		if (ret == SOCKET_ERROR)
 		{
-			switch (getSockErr())
+			const auto sockErr = getSockErr();
+			switch (sockErr)
 			{
 			case EAGAIN:
 #if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
@@ -1085,7 +1108,7 @@ ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 				continue;
 
 			default:
-				return SOCKET_ERROR;
+				return tl::make_unexpected(make_network_error_code(sockErr));
 			}
 		}
 
@@ -1217,18 +1240,12 @@ Socket *socketAccept(Socket *sock)
 	return nullptr;
 }
 
-Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
+net::result<Socket*> socketOpen(const SocketAddress *addr, unsigned timeout)
 {
 	unsigned int i;
 	int ret;
 
 	Socket *const conn = new Socket;
-	if (conn == nullptr)
-	{
-		debug(LOG_ERROR, "Out of memory!");
-		abort();
-		return nullptr;
-	}
 
 	ASSERT(addr != nullptr, "NULL Socket provided");
 
@@ -1256,9 +1273,10 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 
 	if (conn->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create a socket (%p): %s", static_cast<void *>(conn), strSockError(getSockErr()));
+		const auto sockErr = getSockErr();
+		debug(LOG_ERROR, "Failed to create a socket (%p): %s", static_cast<void *>(conn), strSockError(sockErr));
 		socketClose(conn);
-		return nullptr;
+		return tl::make_unexpected(make_network_error_code(sockErr));
 	}
 
 #if !defined(SOCK_CLOEXEC)
@@ -1272,9 +1290,10 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	debug(LOG_NET, "setting socket (%p) blocking status (false).", static_cast<void *>(conn));
 	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], false))
 	{
+		const auto sockErr = getSockErr();
 		debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", static_cast<void *>(conn));
 		socketClose(conn);
-		return nullptr;
+		return tl::make_unexpected(make_network_error_code(sockErr));
 	}
 
 	socketBlockSIGPIPE(conn->fd[SOCK_CONNECTION], true);
@@ -1295,9 +1314,10 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 #endif
 		    || timeout == 0)
 		{
-			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(getSockErr()), static_cast<void *>(conn));
+			const auto sockErr = getSockErr();
+			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(sockErr), static_cast<void *>(conn));
 			socketClose(conn);
-			return nullptr;
+			return tl::make_unexpected(make_network_error_code(sockErr));
 		}
 
 		do
@@ -1321,17 +1341,18 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 
 		if (ret == SOCKET_ERROR)
 		{
-			debug(LOG_NET, "Failed to wait for connection: %s, socket %p.  Closing.", strSockError(getSockErr()), static_cast<void *>(conn));
+			const auto sockErr = getSockErr();
+			debug(LOG_NET, "Failed to wait for connection: %s, socket %p.  Closing.", strSockError(sockErr), static_cast<void *>(conn));
 			socketClose(conn);
-			return nullptr;
+			return tl::make_unexpected(make_network_error_code(sockErr));
 		}
 
 		if (ret == 0)
 		{
-			setSockErr(ETIMEDOUT);
-			debug(LOG_NET, "Timed out while waiting for connection to be established: %s, using socket %p.  Closing.", strSockError(getSockErr()), static_cast<void *>(conn));
+			const auto sockErr = ETIMEDOUT;
+			debug(LOG_NET, "Timed out while waiting for connection to be established: %s, using socket %p.  Closing.", strSockError(sockErr), static_cast<void *>(conn));
 			socketClose(conn);
-			return nullptr;
+			return tl::make_unexpected(make_network_error_code(sockErr));
 		}
 
 #if   defined(WZ_OS_WIN)
@@ -1347,16 +1368,17 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		    && getSockErr() != EISCONN)
 #endif
 		{
-			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(getSockErr()), static_cast<void *>(conn));
+			const auto sockErr = getSockErr();
+			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(sockErr), static_cast<void *>(conn));
 			socketClose(conn);
-			return nullptr;
+			return tl::make_unexpected(make_network_error_code(sockErr));
 		}
 	}
 
 	return conn;
 }
 
-Socket *socketListen(unsigned int port)
+net::result<Socket*> socketListen(unsigned int port)
 {
 	/* Enable the V4 to V6 mapping, but only when available, because it
 	 * isn't available on all platforms.
@@ -1371,12 +1393,6 @@ Socket *socketListen(unsigned int port)
 	unsigned int i;
 
 	Socket *const conn = new Socket;
-	if (conn == nullptr)
-	{
-		debug(LOG_ERROR, "Out of memory!");
-		abort();
-		return nullptr;
-	}
 
 	// Mark all unused socket handles as invalid
 	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
@@ -1407,9 +1423,10 @@ Socket *socketListen(unsigned int port)
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
 	    && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
-		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", static_cast<void *>(conn), strSockError(getSockErr()));
+		const auto errorCode = getSockErr();
+		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", static_cast<void *>(conn), strSockError(errorCode));
 		socketClose(conn);
-		return nullptr;
+		return tl::make_unexpected(make_network_error_code(errorCode));
 	}
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
@@ -1506,64 +1523,45 @@ Socket *socketListen(unsigned int port)
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
 	    && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
+		const auto errorCode = getSockErr();
 		debug(LOG_NET, "No IPv4 or IPv6 sockets created.");
 		socketClose(conn);
-		return nullptr;
+		return tl::make_unexpected(make_network_error_code(errorCode));
 	}
 
 	return conn;
 }
 
-Socket *socketOpenAny(const SocketAddress *addr, unsigned timeout)
+net::result<Socket*> socketOpenAny(const SocketAddress *addr, unsigned timeout)
 {
-	Socket *ret = nullptr;
-	while (addr != nullptr && ret == nullptr)
+	net::result<Socket*> res;
+	while (addr != nullptr)
 	{
-		ret = socketOpen(addr, timeout);
-
-		addr = addr->ai_next;
-	}
-
-	return ret;
-}
-
-size_t socketArrayOpen(Socket **sockets, size_t maxSockets, const SocketAddress *addr, unsigned timeout)
-{
-	size_t i = 0;
-	while (i < maxSockets && addr != nullptr)
-	{
-		if (addr->ai_family == AF_INET || addr->ai_family == AF_INET6)
+		res = socketOpen(addr, timeout);
+		if (res)
 		{
-			sockets[i] = socketOpen(addr, timeout);
-			i += sockets[i] != nullptr;
+			return res;
 		}
-
 		addr = addr->ai_next;
 	}
-	std::fill(sockets + i, sockets + maxSockets, (Socket *)nullptr);
-	return i;
+
+	return res;
 }
 
-void socketArrayClose(Socket **sockets, size_t maxSockets)
+bool socketHasIPv4(const Socket& sock)
 {
-	std::for_each(sockets, sockets + maxSockets, socketClose);     // Close any open sockets.
-	std::fill(sockets, sockets + maxSockets, (Socket *)nullptr);      // Set the pointers to NULL.
-}
-
-WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock)
-{
-	if (sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
+	if (sock.fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
 		return true;
 	}
 	else
 	{
 #if defined(IPV6_V6ONLY)
-		if (sock->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
+		if (sock.fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 		{
 			int ipv6_v6only = 1;
 			socklen_t len = sizeof(ipv6_v6only);
-			if (getsockopt(sock->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6_v6only, &len) == 0)
+			if (getsockopt(sock.fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6_v6only, &len) == 0)
 			{
 				return ipv6_v6only == 0;
 			}
@@ -1573,14 +1571,14 @@ WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock)
 	}
 }
 
-WZ_DECL_NONNULL(1) bool socketHasIPv6(Socket *sock)
+bool socketHasIPv6(const Socket& sock)
 {
-	return sock->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET;
+	return sock.fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET;
 }
 
-char const *getSocketTextAddress(Socket const *sock)
+char const *getSocketTextAddress(const Socket& sock)
 {
-	return sock->textAddress;
+	return sock.textAddress;
 }
 
 std::vector<unsigned char> ipv4_AddressString_To_NetBinary(const std::string& ipv4Address)
@@ -1645,12 +1643,12 @@ std::string ipv6_NetBinary_To_AddressString(const std::vector<unsigned char>& ip
 	return ipv6Address;
 }
 
-SocketAddress *resolveHost(const char *host, unsigned int port)
+net::result<SocketAddress*> resolveHost(const char *host, unsigned int port)
 {
 	struct addrinfo *results;
 	std::string service;
 	struct addrinfo hint;
-	int error, flags = 0;
+	int flags = 0;
 
 	hint.ai_family    = AF_UNSPEC;
 	hint.ai_socktype  = SOCK_STREAM;
@@ -1669,11 +1667,13 @@ SocketAddress *resolveHost(const char *host, unsigned int port)
 
 	service = astringf("%u", port);
 
-	error = getaddrinfo(host, service.c_str(), &hint, &results);
+	auto error = getaddrinfo(host, service.c_str(), &hint, &results);
 	if (error != 0)
 	{
-		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service.c_str(), gai_strerror(error));
-		return nullptr;
+		const auto ec = make_getaddrinfo_error_code(error);
+		const auto errMsg = ec.message();
+		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service.c_str(), errMsg.c_str());
+		return tl::make_unexpected(ec);
 	}
 
 	return results;
@@ -1747,4 +1747,73 @@ void SOCKETshutdown()
 		freeaddrinfo_dll_func = NULL;
 	}
 #endif
+}
+
+OpenConnectionResult socketOpenTCPConnectionSync(const char *host, uint32_t port)
+{
+	const auto hostsResult = resolveHost(host, port);
+	SocketAddress* hosts = hostsResult.value_or(nullptr);
+	if (hosts == nullptr)
+	{
+		const auto hostsErr = hostsResult.error();
+		const auto hostsErrMsg = hostsErr.message();
+		return OpenConnectionResult(hostsErr, astringf("Cannot resolve host \"%s\": [%d]: %s", host, hostsErr.value(), hostsErrMsg.c_str()));
+	}
+
+	auto sockResult = socketOpenAny(hosts, 15000);
+	Socket* client_transient_socket = sockResult.value_or(nullptr);
+	deleteSocketAddress(hosts);
+	hosts = nullptr;
+
+	if (client_transient_socket == nullptr)
+	{
+		const auto errValue = sockResult.error();
+		const auto errMsg = errValue.message();
+		return OpenConnectionResult(errValue, astringf("Cannot connect to [%s]:%d, [%d]:%s", host, port, errValue.value(), errMsg.c_str()));
+	}
+
+	return OpenConnectionResult(client_transient_socket);
+}
+
+struct OpenConnectionRequest
+{
+	std::string host;
+	uint32_t port = 0;
+	OpenConnectionToHostResultCallback callback;
+};
+
+static int openDirectTCPConnectionAsyncImpl(void* data)
+{
+	OpenConnectionRequest* pRequestInfo = (OpenConnectionRequest*)data;
+	if (!pRequestInfo)
+	{
+		return 1;
+	}
+
+	pRequestInfo->callback(socketOpenTCPConnectionSync(pRequestInfo->host.c_str(), pRequestInfo->port));
+	delete pRequestInfo;
+	return 0;
+}
+
+bool socketOpenTCPConnectionAsync(const std::string& host, uint32_t port, OpenConnectionToHostResultCallback callback)
+{
+	// spawn background thread to handle this
+	auto pRequest = new OpenConnectionRequest();
+	pRequest->host = host;
+	pRequest->port = port;
+	pRequest->callback = callback;
+
+	WZ_THREAD * pOpenConnectionThread = wzThreadCreate(openDirectTCPConnectionAsyncImpl, pRequest);
+	if (pOpenConnectionThread == nullptr)
+	{
+		debug(LOG_ERROR, "Failed to create thread for opening connection");
+		delete pRequest;
+		return false;
+	}
+
+	wzThreadDetach(pOpenConnectionThread);
+	// the thread handles deleting pRequest
+	pOpenConnectionThread = nullptr;
+
+	return true;
 }

@@ -256,7 +256,7 @@ function camUpgradeOnMapTemplates(template1, template2, playerId, excluded)
 // Boosts the throttle on factories if classic balance is active.
 function __camFactoryThrottleMultiplier()
 {
-	return ((camClassicMode()) ? 2 : 1);
+	return ((camClassicMode() && tweakOptions.camClassic_slowProduction) ? 2 : 1);
 }
 
 function __camFactoryUpdateTactics(flabel)

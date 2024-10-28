@@ -59,6 +59,8 @@ jobs:
     # Variable: WZ_WEB_BUILD_RELEASE_MANAGEMENT_API_URL
     steps:
       - name: 'Get actual latest release from GH'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           # Get the actual latest release from GitHub directly
           # (which could differ from the release associated with this event, if someone publishes some older versions as GitHub Releases at some point)
@@ -80,9 +82,9 @@ jobs:
           CLOUDFLARE_CACHEPURGE_TOKEN: ${{ secrets.CLOUDFLARE_WZ2100_CACHEPURGE_TOKEN }}
         run: |
           curl -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE}/purge_cache" \
-               -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
-               -H "Content-Type: application/json" \
-               --data '{"purge_everything":true}'
+            -H "Authorization: Bearer ${CLOUDFLARE_CACHEPURGE_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}'
   sentry-release-commit-info:
     name: 'Upload Release Commit Info'
     permissions:
@@ -122,7 +124,8 @@ jobs:
           # Get commit of current release tag
           CURRENT_TAG_COMMIT="$(git rev-list -n 1 "${GITHUB_REF}")"
           echo "CURRENT_TAG_COMMIT=${CURRENT_TAG_COMMIT}"
-          
+
+          echo "WZ_REPO_PATH=$(pwd)" >> $GITHUB_ENV
           echo "SENTRY_VERSION=${SENTRY_VERSION}" >> $GITHUB_ENV
           echo "PRIOR_TAG_COMMIT=${PRIOR_TAG_COMMIT}" >> $GITHUB_ENV
           echo "CURRENT_TAG_COMMIT=${CURRENT_TAG_COMMIT}" >> $GITHUB_ENV
@@ -141,14 +144,18 @@ jobs:
             echo "No SENTRY_VERSION - skipping"
             exit 0
           fi
-          docker pull getsentry/sentry-cli
+          # Download sentry-cli
+          echo "::group::Downloading sentry-cli ..."
+          cmake -P "${WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+          echo "Downloading sentry-cli ... Done"
+          echo "::endgroup::"
           # Check if release already exists
           echo "Checking if release exists: ${SENTRY_VERSION}"
-          if ! docker run --rm -e SENTRY_AUTH_TOKEN -e SENTRY_ORG -v "$(pwd):/work" getsentry/sentry-cli releases info "${SENTRY_VERSION}" -q; then
+          if ! ./sentry-cli/sentry-cli releases info "${SENTRY_VERSION}" -q; then
             # Create the release
             echo "Creating the release: ${SENTRY_VERSION}"
-            docker run --rm -e SENTRY_AUTH_TOKEN -e SENTRY_ORG -v "$(pwd):/work" getsentry/sentry-cli releases new -p warzone2100 "${SENTRY_VERSION}" || echo "Failed to create the release?"
+            ./sentry-cli/sentry-cli releases new -p warzone2100 "${SENTRY_VERSION}" || echo "Failed to create the release?"
           fi
           # Associate commits with the release
           echo "Associate commits with the release: ${SENTRY_VERSION}"
-          docker run --rm -e SENTRY_AUTH_TOKEN -e SENTRY_ORG -v "$(pwd):/work" getsentry/sentry-cli releases set-commits "${SENTRY_VERSION}" --commit "Warzone2100/warzone2100@${PRIOR_TAG_COMMIT}..${CURRENT_TAG_COMMIT}"
+          ./sentry-cli/sentry-cli releases set-commits "${SENTRY_VERSION}" --commit "Warzone2100/warzone2100@${PRIOR_TAG_COMMIT}..${CURRENT_TAG_COMMIT}"

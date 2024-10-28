@@ -229,7 +229,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 		debug(LOG_3D, "Failed to get value for SDL_GL_DEPTH_SIZE (%s)", SDL_GetError());
 	}
 	debug(LOG_3D, "Current value for SDL_GL_DEPTH_SIZE: (%d)", value);
-	
+
 	if (SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &value) != 0)
 	{
 		debug(LOG_3D, "Failed to get value for SDL_GL_STENCIL_SIZE (%s)", SDL_GetError());

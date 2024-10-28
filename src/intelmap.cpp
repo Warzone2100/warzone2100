@@ -137,7 +137,7 @@ static bool				playCurrent;
 
 /* functions declarations ****************/
 static const char* getMessageTitle(const MESSAGE& message);
-static void StartMessageSequences(MESSAGE *psMessage, bool Start);
+static bool StartMessageSequences(MESSAGE *psMessage, bool Start);
 /*Displays the buttons used on the intelligence map */
 class IntMessageButton : public IntFancyButton
 {
@@ -275,6 +275,7 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 	messages->setItemSpacing(3);
 	messages->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
 	messages->setPadding({10, 10, 10, 10});
+	messages->setGeometry(0, 0, grid->width(), 0); // set initial width so that grid calculations can properly calculate required height
 
 	if (psMessage->type != MSG_RESEARCH && psMessage->pViewData->type == VIEW_RPL)
 	{
@@ -285,7 +286,7 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 			{
 				auto message = std::make_shared<Paragraph>();
 				message->setFontColour(WZCOL_TEXT_BRIGHT);
-				message->addText(msg.toUtf8());
+				message->addText(msg);
 				messages->addItem(message);
 			}
 		}
@@ -332,7 +333,7 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 	{
 		auto message = std::make_shared<Paragraph>();
 		message->setFontColour(WZCOL_TEXT_BRIGHT);
-		message->addText(msg.toUtf8());
+		message->addText(msg);
 		messages->addItem(message);
 	}
 
@@ -689,11 +690,8 @@ void W_INTELLIGENCEOVERLAY_FORM::intIntelButtonPressed(const std::shared_ptr<Int
 				{
 					intShowMessageView(psMessage);
 				}
-				// only attempt to show videos if they are installed
-				if (seq_hasVideos())
-				{
-					StartMessageSequences(psMessage, true);
-				}
+				// attempt to show video(s)
+				StartMessageSequences(psMessage, true);
 			}
 			else if (psMessage->pViewData->type == VIEW_RES)
 			{
@@ -835,7 +833,7 @@ bool intAddIntelMap()
 }
 
 // Add all the Video Sequences for a message
-static void StartMessageSequences(MESSAGE *psMessage, bool Start)
+static bool StartMessageSequences(MESSAGE *psMessage, bool Start)
 {
 	bool bLoop = false;
 
@@ -844,10 +842,10 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 	//should never have a proximity message here
 	if (psMessage->type == MSG_PROXIMITY)
 	{
-		return;
+		return false;
 	}
 
-	ASSERT_OR_RETURN(, psMessage->pViewData != nullptr, "Invalid ViewData pointer");
+	ASSERT_OR_RETURN(false, psMessage->pViewData != nullptr, "Invalid ViewData pointer");
 
 	if (psMessage->pViewData->type == VIEW_RPL)
 	{
@@ -878,10 +876,12 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		//play first full screen video
 		if (Start == true)
 		{
-			seq_StartNextFullScreenVideo();
+			if (!seq_StartNextFullScreenVideo())
+			{
+				return false;
+			}
 		}
 	}
-
 	else if (psMessage->pViewData->type == VIEW_RES)
 	{
 		VIEW_RESEARCH		*psViewReplay;
@@ -894,10 +894,18 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		//play first full screen video
 		if (Start == true)
 		{
-			seq_StartNextFullScreenVideo();
+			if (!seq_StartNextFullScreenVideo())
+			{
+				return false;
+			}
 		}
 	}
+	else
+	{
+		return false;
+	}
 
+	return true;
 }
 
 static void intCleanUpIntelMap()
@@ -1264,11 +1272,11 @@ void displayImmediateMessage(MESSAGE *psMessage)
 		This has to be changed to support a script calling a message in the intelligence screen
 	*/
 
-	// only attempt to show videos if they are installed
-	if (seq_hasVideos())
+	// attempt to show video(s)
+	psCurrentMsg = psMessage;
+	if (!StartMessageSequences(psMessage, true))
 	{
-	    psCurrentMsg = psMessage;
-	    StartMessageSequences(psMessage, true);
+		psCurrentMsg = nullptr;
 	}
 	// remind the player that the message can be seen again from
 	// the intelligence screen

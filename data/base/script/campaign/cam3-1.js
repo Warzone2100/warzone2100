@@ -26,6 +26,7 @@ const mis_nexusResClassic = [
 ];
 var launchInfo;
 var detonateInfo;
+var allInValley;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -98,7 +99,12 @@ function vtolAttack()
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxmtherv];
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
+		const ext = {
+			limit: [2, 3], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
 	}
 	else
 	{
@@ -165,10 +171,9 @@ function missileSilosDestroyed()
 //Nuclear missile destroys everything not in safe zone.
 function nukeAndCountSurvivors()
 {
-	//Avoid destroying the one base if the player opted not to destroy it themselves.
-	const nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false).filter((obj) => (
-		obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null)
-	));
+	// Remove the base in the rare event an auto-explosion triggers as we nuke the base here.
+	camSetEnemyBases({});
+	const nuked = enumArea(0, 0, mapWidth, mapHeight, ALL_PLAYERS, false);
 	const safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
 	let foundUnit = false;
 
@@ -270,6 +275,15 @@ function enableAllFactories()
 //For now just make sure we have all the droids in the canyon.
 function unitsInValley()
 {
+	if (!camAllArtifactsPickedUp())
+	{
+		return;
+	}
+	if (allInValley)
+	{
+		return true;
+	}
+
 	const safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID
 	));
@@ -281,6 +295,7 @@ function unitsInValley()
 	{
 		if (nukeAndCountSurvivors())
 		{
+			allInValley = true;
 			return true;
 		}
 		else
@@ -298,6 +313,7 @@ function eventStartLevel()
 	const lz = getObject("landingZone");
 	const tEnt = getObject("transporterEntry");
 	const tExt = getObject("transporterExit");
+	allInValley = false;
 
 	//Time is in seconds.
 	launchInfo = [
@@ -334,8 +350,9 @@ function eventStartLevel()
 		{sound: cam_sounds.missile.countdown, time: 10},
 	];
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.gamma3, {
 		area: "RTLZ",
+		playLzReminder: false,
 		reinforcements: camMinutesToSeconds(3),
 		callback: "unitsInValley"
 	});

@@ -31,7 +31,16 @@
 #include <algorithm>
 #include <unordered_set>
 #include <unordered_map>
-#include <regex>
+// On Fedora 40, GCC 14 produces false-positive warnings for -Walloc-zero
+// when compiling <regex> with optimizations. Silence these warnings.
+#if !defined(__clang__) && !defined(__INTEL_COMPILER) && defined(__GNUC__) && __GNUC__ >= 14 && defined(__OPTIMIZE__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Walloc-zero"
+#endif
+# include <regex>
+#if !defined(__clang__) && !defined(__INTEL_COMPILER) && defined(__GNUC__) && __GNUC__ >= 14 && defined(__OPTIMIZE__)
+# pragma GCC diagnostic pop
+#endif
 #include <limits>
 #include <typeindex>
 #include <sstream>
@@ -542,6 +551,11 @@ unsigned gl_texture::id()
 	return _id;
 }
 
+gfx_api::texture2dDimensions gl_texture::get_dimensions() const
+{
+	return {tex_width, tex_height};
+}
+
 // MARK: texture_array_mip_level_buffer
 
 struct texture_array_mip_level_buffer
@@ -819,7 +833,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents"
 		},
@@ -844,7 +858,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 		},
@@ -864,21 +878,21 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "viewportWidth", "viewportHeight",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
@@ -1160,7 +1174,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		fragmentShaderHeader = shaderVersionStr;
 		// OpenGL ES Shading Language - 4. Variables and Types - pp. 35-36
 		// https://www.khronos.org/registry/gles/specs/2.0/GLSL_ES_Specification_1.0.17.pdf?#page=41
-		// 
+		//
 		// > The fragment language has no default precision qualifier for floating point types.
 		// > Hence for float, floating point vector and matrix variable declarations, either the
 		// > declaration must include a precision qualifier or the default float precision must
@@ -1526,7 +1540,7 @@ void gl_pipeline_state_object::getLocs(const std::vector<std::tuple<std::string,
 			debug(LOG_3D, "Missing expected sampler uniform: %s", std::get<0>(uniformSampler).c_str());
 		}
 	}
-	
+
 }
 
 static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)
@@ -2098,16 +2112,17 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(17, cbuf.PointLightsColorAndEnergy);
 	setUniforms(18, cbuf.bucketOffsetAndSize);
 	setUniforms(19, cbuf.indexed_lights);
-	setUniforms(20, cbuf.viewportWidth);
-	setUniforms(21, cbuf.viewportheight);
+	setUniforms(20, cbuf.bucketDimensionUsed);
+	setUniforms(21, cbuf.viewportWidth);
+	setUniforms(22, cbuf.viewportheight);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
 {
-	setUniforms(22, cbuf.tcmask);
-	setUniforms(23, cbuf.normalMap);
-	setUniforms(24, cbuf.specularMap);
-	setUniforms(25, cbuf.hasTangents);
+	setUniforms(23, cbuf.tcmask);
+	setUniforms(24, cbuf.normalMap);
+	setUniforms(25, cbuf.specularMap);
+	setUniforms(26, cbuf.hasTangents);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
@@ -2198,6 +2213,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 	setUniforms(i++, cbuf.PointLightsColorAndEnergy);
 	setUniforms(i++, cbuf.bucketOffsetAndSize);
 	setUniforms(i++, cbuf.indexed_lights);
+	setUniforms(i++, cbuf.bucketDimensionUsed);
 	setUniforms(i++, cbuf.viewportWidth);
 	setUniforms(i++, cbuf.viewportheight);
 	setUniforms(i++, 0); // lightmap_tex
@@ -2436,6 +2452,8 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	new_texture->gles = gles;
 	new_texture->mip_count = mipmap_count;
 	new_texture->internal_format = internal_format;
+	new_texture->tex_width = width;
+	new_texture->tex_height = height;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	new_texture->debugName = filename;
 #endif
@@ -2803,9 +2821,13 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 #if !defined(__EMSCRIPTEN__)
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				if (hasBorderClampSupport)
+				{
+					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+					break;
+				}
 #else
 				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
@@ -2826,9 +2848,13 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #if !defined(__EMSCRIPTEN__)
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				if (hasBorderClampSupport)
+				{
+					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+					break;
+				}
 #else
 				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
@@ -3480,6 +3506,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	initPixelFormatsSupport();
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
+	hasBorderClampSupport = initCheckBorderClampSupport();
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -3635,6 +3662,19 @@ bool gl_context::isBlocklistedGraphicsDriver() const
 		// Does not work with WZ. (No indications that there is a driver version that does not crash.)
 		return true;
 	}
+
+	// Renderer: softpipe
+	// (From the OpenGLOn12 / "OpenGL Compatibility Pack")
+	if (openGL_renderer == "softpipe")
+	{
+		WzString openGL_vendor = (const char*)wzSafeGlGetString(GL_VENDOR);
+		if (openGL_vendor == "Mesa")
+		{
+			// Does not work performantly, can cause crashes (as of "Mesa 24.2.0-devel (git-57f4f8520a)")
+			// Since libANGLE is very likely to work better, reject this (for now)
+			return true;
+		}
+	}
 #endif
 
 	return false;
@@ -3724,15 +3764,9 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLAD_GL_VERSION_2_0 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLAD_GL_VERSION_2_1 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLAD_GL_VERSION_3_0 ? "is" : "is NOT");
-	#ifdef GLAD_GL_VERSION_3_1
 		debug(LOG_3D, "  * OpenGL 3.1 %s supported!", GLAD_GL_VERSION_3_1 ? "is" : "is NOT");
-	#endif
-	#ifdef GLAD_GL_VERSION_3_2
 		debug(LOG_3D, "  * OpenGL 3.2 %s supported!", GLAD_GL_VERSION_3_2 ? "is" : "is NOT");
-	#endif
-	#ifdef GLAD_GL_VERSION_3_3
 		debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
-	#endif
 	#ifdef GLAD_GL_VERSION_4_0
 		debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
 	#endif
@@ -3765,6 +3799,15 @@ bool gl_context::initGLContext()
 	{
 		debug(LOG_POPUP, "OpenGL 3.0+ / OpenGL ES 3.0+ not supported! Please upgrade your drivers.");
 		return false;
+	}
+
+	if (!gles)
+	{
+		if (!GLAD_GL_VERSION_3_1)
+		{
+			// non-fatal pop-up, to warn about OpenGL < 3.1 (we may require 3.1+ in the future)
+			debug(LOG_POPUP, "OpenGL 3.1+ is not supported - Please upgrade your drivers or try a different graphics backend.");
+		}
 	}
 
 #else
@@ -3830,7 +3873,8 @@ bool gl_context::initGLContext()
 			// (if there are duplicate uniform names).
 			//
 			// This is now handled with a workaround when processing shaders, so just log it.
-			debug(LOG_3D, "Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
+			debug(LOG_FATAL, "OpenGL ES: Fragment shaders do not support high precision: (highpFloat: %d; highpInt: %d)", (int)fragmentHighpFloatAvailable, (int)fragmentHighpIntAvailable);
+			// FUTURE TODO: return false;
 		}
 	}
 
@@ -4557,6 +4601,26 @@ bool gl_context::initInstancedFunctions()
 	}
 #endif
 	return true;
+}
+
+bool gl_context::initCheckBorderClampSupport()
+{
+	// GL_CLAMP_TO_BORDER is supported on:
+	// - OpenGL (any version we support)
+	if (!gles)
+	{
+		return true;
+	}
+	// - OpenGL ES (3.2+, or with extensions)
+	else
+	{
+#if !defined(WZ_STATIC_GL_BINDINGS) && !defined(__EMSCRIPTEN__)
+		return GLAD_GL_ES_VERSION_3_2 || GLAD_GL_EXT_texture_border_clamp || GLAD_GL_OES_texture_border_clamp || GLAD_GL_NV_texture_border_clamp;
+#else
+		// - WebGL has no support
+		return false;
+#endif
+	}
 }
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)

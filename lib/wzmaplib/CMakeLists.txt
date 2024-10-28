@@ -3,7 +3,7 @@
 
 set(WZMAPLIB_VERSION_MAJOR 1)
 set(WZMAPLIB_VERSION_MINOR 2)
-set(WZMAPLIB_VERSION_REV 3)
+set(WZMAPLIB_VERSION_REV 7)
 
 ###################
 # Determine minimum CMake version
@@ -22,7 +22,7 @@ endif()
 ##############################
 # wzmaplib project
 
-cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.18)
+cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.24)
 project (wzmaplib CXX)
 
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
@@ -78,7 +78,7 @@ if(NOT TARGET nlohmann_json)
 	FetchContent_Declare(
 		nlohmannjson
 		GIT_REPOSITORY https://github.com/nlohmann/json.git
-		GIT_TAG        v3.11.2
+		GIT_TAG        v3.11.3
 		GIT_SHALLOW    TRUE
 	)
 	FetchContent_GetProperties(nlohmannjson)
@@ -97,7 +97,7 @@ if(NOT TARGET optional-lite)
 	FetchContent_Declare(
 		optionallite
 		GIT_REPOSITORY https://github.com/martinmoene/optional-lite.git
-		GIT_TAG        v3.5.0
+		GIT_TAG        v3.6.0
 		GIT_SHALLOW    TRUE
 	)
 	FetchContent_GetProperties(optionallite)
@@ -130,7 +130,11 @@ target_link_libraries(wzmaplib PRIVATE quickjs)
 ##################################
 # ZipIOProvider (requires libzip)
 
-find_package(libzip QUIET)
+set(LIBZIP_FIND_ADDITIONAL_PARAMS)
+if (APPLE OR WIN32)
+    list(APPEND LIBZIP_FIND_ADDITIONAL_PARAMS NO_SYSTEM_ENVIRONMENT_PATH)
+endif()
+find_package(libzip QUIET ${LIBZIP_FIND_ADDITIONAL_PARAMS})
 if (libzip_FOUND)
 	# Test linking libzip
 	include(CheckCXXSourceCompiles)
@@ -158,6 +162,8 @@ if (libzip_FOUND)
 	cmake_pop_check_state()
 	if(libzip_LINK_TEST)
 		message( STATUS "Found libzip... (link test successful)" )
+		get_target_property(_libzip_INCLUDE_DIR libzip::zip INTERFACE_INCLUDE_DIRECTORIES)
+		message( STATUS "- libzip include dir: ${_libzip_INCLUDE_DIR}" )
 	else()
 		message( STATUS "Found libzip, but link test NOT successful" )
 	endif()

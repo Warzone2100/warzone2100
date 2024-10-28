@@ -8,6 +8,7 @@ cmake_minimum_required(VERSION 3.5...3.24)
 
 if(ENABLE_DISCORD)
 	if (TARGET discord-rpc)
+		message(STATUS "Building with discord-rpc integration")
 		add_library(wz-discord-integration STATIC "wzdiscordrpc.h" "wzdiscordrpc.cpp")
 		set_property(TARGET wz-discord-integration PROPERTY FOLDER "integrations")
 		include(WZTargetConfiguration)

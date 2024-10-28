@@ -67,7 +67,7 @@ const research_test = [
 "R-Sys-MobileRepairTurretHvy",
 'R-Defense-WallTower-HPVcannon',
 "R-Wpn-MG5",					//Twin Assault Gun
-"R-Wpn-MG-Damage08",			//Depleted Uranium MG Bullets
+"R-Wpn-MG-Damage10",			//Depleted Uranium MG Bullets Mk3
 "R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал)
 "R-Vehicle-Armor-Heat09",		//Vehicle Superdense Thermal Armor Mk3
 "R-Cyborg-Metals09",
@@ -77,18 +77,18 @@ const research_test = [
 ];*/
 
 const research_rich2 = [
-"R-Vehicle-Engine01", 
-"R-Wpn-Cannon1Mk1", 
-"R-Vehicle-Prop-Halftracks", 
-"R-Vehicle-Body05", 
-"R-Vehicle-Body11", 
+"R-Vehicle-Engine01",
+"R-Wpn-Cannon1Mk1",
+"R-Vehicle-Prop-Halftracks",
+"R-Vehicle-Body05",
+"R-Vehicle-Body11",
 "R-Struc-RepairFacility",
 "R-Struc-Research-Upgrade09",
 "R-Wpn-Cannon4AMk1",
-"R-Wpn-RailGun03", 
-"R-Wpn-Cannon6TwinAslt", 
-"R-Vehicle-Metals04", 
-"R-Cyborg-Metals04", 
+"R-Wpn-RailGun03",
+"R-Wpn-Cannon6TwinAslt",
+"R-Vehicle-Metals04",
+"R-Cyborg-Metals04",
 "R-Cyborg-Hvywpn-Mcannon",
 "R-Wpn-MG2Mk1",
 "R-Wpn-Rail-Damage02",
@@ -113,12 +113,12 @@ const research_rockets = [
 "R-Wpn-Rocket-ROF03",
 "R-Struc-RepairFacility",
 "R-Sys-MobileRepairTurret01",   //Паяльник
-"R-Wpn-MG-Damage08",			//Depleted Uranium MG Bullets
+"R-Wpn-MG-Damage10",			//Depleted Uranium MG Bullets Mk3
 "R-Wpn-Rocket01-LtAT",
 "R-Vehicle-Body05",				//Средняя начальная броня
 "R-Struc-Research-Upgrade09",
 "R-Sys-MobileRepairTurretHvy",
-"R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал) 
+"R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал)
 "R-Sys-Autorepair-General",		//Автопочинка
 //"R-Sys-ECM-Upgrade02",	//Глушилка
 "R-Wpn-MG5",					//Twin Assault Gun
@@ -359,6 +359,8 @@ const research_rich = [
 "R-Wpn-Bomb04",		// #124  Thermite Bomb Bay
 "R-Wpn-AAGun01",		// #125  AA Cyclone Flak Cannon
 "R-Defense-WallTower-DoubleAAgun",		// #126  AA Cyclone Flak Cannon Hardpoint
+"R-Wpn-MG-Damage09",		// #127  Depleted Uranium MG Bullets Mk2
+"R-Wpn-MG-Damage10",		// #128  Depleted Uranium MG Bullets Mk3
 ];
 
 const research_cannon = [
@@ -395,7 +397,7 @@ const research_cannon = [
 //"R-Sys-MobileRepairTurretHvy",
 'R-Defense-WallTower-HPVcannon',
 "R-Wpn-MG5",					//Twin Assault Gun
-"R-Wpn-MG-Damage08",			//Depleted Uranium MG Bullets
+"R-Wpn-MG-Damage10",			//Depleted Uranium MG Bullets Mk3
 "R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал)
 "R-Vehicle-Armor-Heat09",		//Vehicle Superdense Thermal Armor Mk3
 "R-Cyborg-Metals09",

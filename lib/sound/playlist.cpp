@@ -513,7 +513,7 @@ bool PlayList_Read(const char *path)
 	char *data = nullptr;
 	std::string albumsPath = astringf("%s/albums", path);
 
-	WZ_PHYSFS_enumerateFiles(albumsPath.c_str(), [&](const char *i) -> bool {
+	WZ_PHYSFS_enumerateFolders(albumsPath.c_str(), [&](const char *i) -> bool {
 		std::string albumDir = albumsPath + "/" + i;
 		std::string str = albumDir + "/album.json";
 		if (!PHYSFS_exists(str.c_str()))

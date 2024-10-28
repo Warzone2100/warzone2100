@@ -26,6 +26,44 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+class WZAudioDataResourceInterface
+{
+public:
+	WZAudioDataResourceInterface();
+	virtual ~WZAudioDataResourceInterface();
+
+	WZAudioDataResourceInterface(const WZAudioDataResourceInterface&)                 = delete;
+	WZAudioDataResourceInterface &operator=(const WZAudioDataResourceInterface &)     = delete;
+};
+
+class WZAudioDataMemoryBuffer : public WZAudioDataResourceInterface
+{
+public:
+	std::vector<char> buffer;
+	size_t currPos = 0;
+	bool error = false;
+};
+
+class WzAudioDataPhysFSHandle : public WZAudioDataResourceInterface
+{
+public:
+	WzAudioDataPhysFSHandle(PHYSFS_file *pFileHandleToOwn, const std::string& fileName)
+	: m_fileHandle(pFileHandleToOwn)
+	, m_fileName(fileName)
+	{ }
+	~WzAudioDataPhysFSHandle();
+
+	WzAudioDataPhysFSHandle(const WzAudioDataPhysFSHandle&)                 = delete;
+	WzAudioDataPhysFSHandle(WzAudioDataPhysFSHandle&&)                      = delete;
+	WzAudioDataPhysFSHandle &operator=(const WzAudioDataPhysFSHandle &)     = delete;
+	WzAudioDataPhysFSHandle &operator=(WzAudioDataPhysFSHandle &&)          = delete;
+
+	PHYSFS_file *fileHandle() const { return m_fileHandle; }
+private:
+	PHYSFS_file *m_fileHandle = nullptr;
+	std::string m_fileName;
+};
+
 class WZDecoder
 {
 public:
@@ -36,11 +74,11 @@ public:
   WZDecoder &operator=(WZDecoder &&)          = delete;
 
   /** Decode all the data into a buffer.
-   * Note that the API is different from oggvorbis: opus takes in, and gives out *samples* not bytes 
+   * Note that the API is different from oggvorbis: opus takes in, and gives out *samples* not bytes
    * and we have to convert to little endian ourselves
-   * 
+   *
    * \param [out] buffer: preallocated buffer to hold decoded data, little-endian. Will *not* be freed, even on error.
-   * \param [in] bufferSize: takes buffer size in *bytes* as input, to be consistent with oggvorbis, 
+   * \param [in] bufferSize: takes buffer size in *bytes* as input, to be consistent with oggvorbis,
    * \returns how much bytes have been placed into buffer, or nullopt  if error */
   virtual optional<size_t> decode(uint8_t*, size_t) = 0;
   virtual int64_t totalTime()       const = 0;

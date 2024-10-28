@@ -1,0 +1,9 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Retreating")
+_("Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle.")
+_("You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level.")
+_("- Do or Die: Your unit will not retreat unless ordered to. (default)")
+_("- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage")
+_("- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage")
+_("Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ.")

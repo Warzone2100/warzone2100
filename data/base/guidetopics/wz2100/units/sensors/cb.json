@@ -1,0 +1,34 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::sensors::cb",
+	"title": "CB Sensors",
+	"sort": "03",
+	"visual": [
+		{
+			"stat": "Sys-CBTurret01"
+		}, {
+			"stat": {
+				"id": "Sys-VTOLCBTurret01",
+				"onlyIfKnown": "campaign"
+			}
+		}, {
+			"stat": "Sys-CB-Tower01"
+		}, {
+			"stat": {
+				"id": "Sys-VTOL-CB-Tower01",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range.",
+		"",
+		"Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery.",
+		"",
+		"If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
+	],
+	"links": [
+		"wz2100::units::sensors",
+		"wz2100::units::sensors::using"
+	]
+}

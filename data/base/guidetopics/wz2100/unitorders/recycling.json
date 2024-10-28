@@ -1,0 +1,22 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders::recycling",
+	"title": "Recycling",
+	"sort": "06",
+	"visual": {
+		"secondaryUnitOrderButtons": "RECYCLE"
+	},
+	"contents": [
+		"Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it.",
+		"",
+		"Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged).",
+		"",
+		"The unit’s experience level will be placed in the next unit that is manufactured.",
+		"",
+		"You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
+	],
+	"links": [
+		"wz2100::units::experience",
+		"wz2100::unitorders"
+	]
+}

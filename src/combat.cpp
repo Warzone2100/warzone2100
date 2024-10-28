@@ -26,7 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 
 #include "action.h"
 #include "combat.h"
@@ -442,6 +442,10 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		// Retrieve highest, applicable, experience level
 		level = getDroidEffectiveLevel(psDroid);
 	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		level = getStructureDamageBaseExperienceLevel();
+	}
 
 	// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
 	int actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
@@ -518,6 +522,10 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 
 		// Retrieve highest, applicable, experience level
 		level = getDroidEffectiveLevel(psDroid);
+	}
+	else if (psTarget->type == OBJ_STRUCTURE)
+	{
+		level = getStructureDamageBaseExperienceLevel();
 	}
 	//debug(LOG_ATTACK, "objGuessFutureDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 

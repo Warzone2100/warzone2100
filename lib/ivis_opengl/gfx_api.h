@@ -95,11 +95,18 @@ namespace gfx_api
 		virtual ~abstract_texture() {};
 	};
 
+	struct texture2dDimensions
+	{
+		size_t width = 0;
+		size_t height = 0;
+	};
+
 	struct texture : abstract_texture
 	{
 		virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) = 0;
 		virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) = 0;
 		virtual unsigned id() = 0;
+		virtual texture2dDimensions get_dimensions() const = 0;
 		bool isArray() const { return false; }
 
 		texture( const texture& other ) = delete; // non construction-copyable
@@ -764,6 +771,7 @@ namespace gfx_api
 		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
 		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
 		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
+		int bucketDimensionUsed;
 	};
 
 	// Only change per mesh
@@ -835,6 +843,8 @@ namespace gfx_api
 	using Draw3DShapeNoLightAlphaNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ALPHA, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeAdditiveNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ADDITIVE, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeNoLightAdditiveNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ADDITIVE, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
+	using Draw3DShapePremulNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_PREMULTIPLIED, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
+	using Draw3DShapeNoLightPremulNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_PREMULTIPLIED, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 
 	struct Draw3DShapeInstancedDepthOnlyGlobalUniforms
 	{
@@ -1022,8 +1032,9 @@ namespace gfx_api
 		float  unused2;
 		std::array<glm::vec4, max_lights> PointLightsPosition;
 		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
-		std::array<glm::ivec4, 64> bucketOffsetAndSize;
+		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
 		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
+		int bucketDimensionUsed;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>

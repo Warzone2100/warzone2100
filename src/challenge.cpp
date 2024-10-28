@@ -98,30 +98,30 @@ const char* currentChallengeName()
 	return nullptr;
 }
 
-// quite the hack, game name is stored in global sRequestResult
 void updateChallenge(bool gameWon)
 {
-	char *fStr;
+	std::string fullName = challengeFileName.toStdString();
 	int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
 	bool victory = false;
 	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
-	ASSERT_OR_RETURN(, strlen(sRequestResult) > 0, "Empty sRequestResult");
+	ASSERT_OR_RETURN(, fullName.length() > 0, "Empty challengeFileName");
 
-	fStr = strrchr(sRequestResult, '/');
-	if (fStr != nullptr)
+	std::string fName;
+	size_t pos = fullName.find("/");
+	if (pos != std::string::npos)
 	{
-		fStr++;	// skip slash
+		fName = fullName.substr(pos + 1);
 	}
 	else
 	{
-		fStr = sRequestResult;
+		fName = fullName; // Likely if challengeFileName no longer has the path included in it.
 	}
-	if (*fStr == '\0')
+	if (fName.empty())
 	{
-		debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
+		debug(LOG_ERROR, "Bad path to challenge file (%s)", fName.c_str());
 		return;
 	}
-	WzString sPath = fStr;
+	WzString sPath = WzString::fromUtf8(fName);
 	// remove .json
 	if (sPath.endsWith(".json"))
 	{

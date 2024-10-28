@@ -209,11 +209,8 @@ static void joinGameImpl(const std::vector<JoinConnectionDescription>& joinConne
 	NETinit(true);
 	// Ensure the joinGame has a place to return to
 	changeTitleMode(TITLE);
-	JoinGameResult result = joinGame(joinConnectionDetails);
-	if (result != JoinGameResult::JOINED)
-	{
-		cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
-	}
+	joinGame(joinConnectionDetails);
+	cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
 }
 
 static void findAndJoinLobbyGameImpl(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)
@@ -225,45 +222,47 @@ static void findAndJoinLobbyGameImpl(const std::string& lobbyAddress, unsigned i
 	contentStr += "\n\n";
 	contentStr += _("This may take a moment...");
 	notification.contentText = contentStr;
-	notification.onDisplay = [lobbyAddress, lobbyPort, lobbyGameId](const WZ_Notification&) {
+	std::string lobbyAddressCopy = lobbyAddress;
+	notification.onDisplay = [lobbyAddressCopy, lobbyPort, lobbyGameId](const WZ_Notification&) {
 		// once the notification is completely displayed, trigger the lookup & join
+		wzAsyncExecOnMainThread([lobbyAddressCopy, lobbyPort, lobbyGameId]() {
+			const auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
+			if (currentGameMode != ActivitySink::GameMode::MENUS)
+			{
+				// Can't join a game while in a game - abort
+				cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
+				displayCantJoinWhileInGameNotification();
+				return;
+			}
 
-		const auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
-		if (currentGameMode != ActivitySink::GameMode::MENUS)
-		{
-			// Can't join a game while in a game - abort
-			cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
-			displayCantJoinWhileInGameNotification();
-			return;
-		}
+			// For now, it is necessary to call `NETinit(true)` before calling findLobbyGame
+			// Obviously this wouldn't be a good idea to do *during* a game, hence the check above to
+			// ensure we're still in the menus...
+			NETinit(true);
+			ingame.side = InGameSide::MULTIPLAYER_CLIENT;
+			auto joinConnectionDetails = findLobbyGame(lobbyAddressCopy, lobbyPort, lobbyGameId);
 
-		// For now, it is necessary to call `NETinit(true)` before calling findLobbyGame
-		// Obviously this wouldn't be a good idea to do *during* a game, hence the check above to
-		// ensure we're still in the menus...
-		NETinit(true);
-		ingame.side = InGameSide::MULTIPLAYER_CLIENT;
-		auto joinConnectionDetails = findLobbyGame(lobbyAddress, lobbyPort, lobbyGameId);
+			if (joinConnectionDetails.empty())
+			{
+				cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
+				debug(LOG_ERROR, "Join code: Failed to find game in the lobby server: %s:%u", lobbyAddressCopy.c_str(), lobbyPort);
+				std::string contentText = _("Failed to find game in the lobby server: ");
+				contentText += lobbyAddressCopy + ":" + std::to_string(lobbyPort) + "\n\n";
+				contentText += _("The game may have already started, or the host may have disbanded the game lobby.");
+				WZ_Notification notification;
+				notification.duration = 0;
+				notification.contentTitle = _("Failed to Find Game");
+				notification.contentText = contentText;
+				notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
+				notification.tag = std::string(JOIN_NOTIFICATION_TAG_PREFIX "failedtoconnect");
+				addNotification(notification, WZ_Notification_Trigger::Immediate());
+				return;
+			}
 
-		if (joinConnectionDetails.empty())
-		{
-			cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
-			debug(LOG_ERROR, "Join code: Failed to find game in the lobby server: %s:%u", lobbyAddress.c_str(), lobbyPort);
-			std::string contentText = _("Failed to find game in the lobby server: ");
-			contentText += lobbyAddress + ":" + std::to_string(lobbyPort) + "\n\n";
-			contentText += _("The game may have already started, or the host may have disbanded the game lobby.");
-			WZ_Notification notification;
-			notification.duration = 0;
-			notification.contentTitle = _("Failed to Find Game");
-			notification.contentText = contentText;
-			notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
-			notification.tag = std::string(JOIN_NOTIFICATION_TAG_PREFIX "failedtoconnect");
-			addNotification(notification, WZ_Notification_Trigger::Immediate());
-			return;
-		}
+			ActivityManager::instance().willAttemptToJoinLobbyGame(lobbyAddressCopy, lobbyPort, lobbyGameId, joinConnectionDetails);
 
-		ActivityManager::instance().willAttemptToJoinLobbyGame(lobbyAddress, lobbyPort, lobbyGameId, joinConnectionDetails);
-
-		joinGameImpl(joinConnectionDetails);
+			joinGameImpl(joinConnectionDetails);
+		});
 	};
 	notification.largeIcon = WZ_Notification_Image("images/notifications/connect_wait.png");
 	notification.tag = JOIN_FIND_AND_CONNECT_TAG;
@@ -742,16 +741,36 @@ void DiscordRPCActivitySink::setJoinInformation(const ActivitySink::MultiplayerG
 				{
 					return;
 				}
+
+				const std::string* pExternalIPv4Address = nullptr;
+				unsigned int externalIPv4Port = 0;
+
+				// Prefer external IP information acquired from port-mapping, if available
+				for (const auto& extAddress : listeningInterfaces.knownExternalAddresses)
+				{
+					if (extAddress.type == ListeningInterfaces::IPType::IPv4 && !pExternalIPv4Address)
+					{
+						pExternalIPv4Address = &extAddress.ipAddress;
+						externalIPv4Port = extAddress.port;
+					}
+				}
+
+				if (pExternalIPv4Address == nullptr)
+				{
+					pExternalIPv4Address = &ipv4Address;
+					externalIPv4Port = listeningInterfaces.ipv4_port;
+				}
+
 				// Convert ip address strings to binary, in network-byte-order format, then base64-encode
 				// Append the port as a separate string component
 				std::string joinSecretDetails;
-				if (!ipv4Address.empty())
+				if (!pExternalIPv4Address->empty())
 				{
-					auto ipv4AddressBinaryForm = ipv4_AddressString_To_NetBinary(ipv4Address);
+					auto ipv4AddressBinaryForm = ipv4_AddressString_To_NetBinary(*pExternalIPv4Address);
 					if (!ipv4AddressBinaryForm.empty())
 					{
 						joinSecretDetails += b64Tob64UrlSafe(EmbeddedJSONSignature::b64Encode(ipv4AddressBinaryForm));
-						joinSecretDetails += std::string(":") + std::to_string(listeningInterfaces.ipv4_port);
+						joinSecretDetails += std::string(":") + std::to_string(externalIPv4Port);
 					}
 				}
 				if (!ipv6Address.empty())
@@ -783,7 +802,7 @@ void DiscordRPCActivitySink::setJoinInformation(const ActivitySink::MultiplayerG
 				std::string joinSecretStr = std::string("v1/i/") + uniqueGameStr + "/" + joinSecretDetails;
 
 				// construct a unique party id from the uniqueGameStr + ip addresses, hashed
-				std::string rawPartyId = std::string("direct_connection:") + uniqueGameStr + ":" + ipv4Address + ":" + std::to_string(listeningInterfaces.ipv4_port) + ":" + ipv6Address + ":" + std::to_string(listeningInterfaces.ipv6_port);
+				std::string rawPartyId = std::string("direct_connection:") + uniqueGameStr + ":" + *pExternalIPv4Address + ":" + std::to_string(externalIPv4Port) + ":" + ipv6Address + ":" + std::to_string(listeningInterfaces.ipv6_port);
 				std::string partyIdStr = hashAndB64EncodePartyId(rawPartyId);
 
 				wzAsyncExecOnMainThread([pSink, joinSecretStr, partyIdStr](){

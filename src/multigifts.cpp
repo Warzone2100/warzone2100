@@ -378,7 +378,6 @@ static void giftResearch(uint8_t from, uint8_t to, bool send)
 			if (IsResearchCompleted(&asPlayerResList[from][i])
 			    && !IsResearchCompleted(&asPlayerResList[to][i]))
 			{
-				MakeResearchCompleted(&asPlayerResList[to][i]);
 				researchResult(i, to, false, nullptr, true);
 			}
 		}

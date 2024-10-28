@@ -42,8 +42,8 @@ vec4 iterateOverAllPointLights(
 	mat3 normalWorldSpaceToLocalSpace
 ) {
 	vec4 light = vec4(0);
-	ivec2 bucket = ivec2(WZ_BUCKET_DIMENSION * clipSpaceCoord);
-	int bucketId = min(bucket.y + bucket.x * WZ_BUCKET_DIMENSION, WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION - 1);
+	ivec2 bucket = ivec2(bucketDimensionUsed * clipSpaceCoord);
+	int bucketId = min(bucket.y + bucket.x * bucketDimensionUsed, bucketDimensionUsed * bucketDimensionUsed - 1);
 
 	for (int i = 0; i < bucketOffsetAndSize[bucketId].y; i++)
 	{

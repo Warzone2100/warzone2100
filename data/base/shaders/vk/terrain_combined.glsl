@@ -31,6 +31,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
 	ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 	ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
+	int bucketDimensionUsed;
 };
 
 // interpolated data. location count = 11

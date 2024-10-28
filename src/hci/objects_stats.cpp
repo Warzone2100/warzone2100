@@ -43,13 +43,13 @@ void BaseObjectsController::clearStructureSelection()
 	}
 }
 
-void BaseObjectsController::selectObject(BASE_OBJECT *object)
+void BaseObjectsController::selectObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject)
 {
 	ASSERT_NOT_NULLPTR_OR_RETURN(, object);
 	object->selected = true;
 	triggerEventSelected();
 	jsDebugSelected(object);
-	setHighlightedObject(object);
+	setHighlightedObject(object, jumpToHighlightedStatsObject);
 	refresh();
 }
 
@@ -69,14 +69,14 @@ void BaseObjectsController::updateHighlighted()
 {
 	if (objectsSize() == 0)
 	{
-		setHighlightedObject(nullptr);
+		setHighlightedObject(nullptr, false);
 		return;
 	}
 
 	auto findAnySelectedObject = [&] (BASE_OBJECT *object) {
 		if (object->died == 0 && object->selected)
 		{
-			setHighlightedObject(object);
+			setHighlightedObject(object, false);
 			return true;
 		}
 
@@ -93,7 +93,7 @@ void BaseObjectsController::updateHighlighted()
 		auto findHighlightedObject = [&] (BASE_OBJECT *object) {
 			if (object->died == 0 && object == highlighted)
 			{
-				setHighlightedObject(object);
+				setHighlightedObject(object, false);
 				return true;
 			}
 
@@ -106,7 +106,7 @@ void BaseObjectsController::updateHighlighted()
 		}
 	}
 
-	setHighlightedObject(getObjectAt(0));
+	setHighlightedObject(getObjectAt(0), false);
 }
 
 void BaseStatsController::displayStatsForm()
@@ -418,11 +418,13 @@ void BaseObjectsStatsController::updateHighlightedObjectStats()
 void ObjectStatsForm::updateLayout()
 {
 	BaseWidget::updateLayout();
-	getController().updateHighlightedObjectStats();
+	auto& controller = getController();
+	controller.updateHighlightedObjectStats();
 	auto highlighted = getController().getHighlightedObjectStats();
-	if (highlighted != nullptr && previousHighlighted != highlighted)
+	if (highlighted != nullptr && controller.getQueuedJumpToHighlightedStatsObject())
 	{
 		goToHighlightedTab();
+		controller.clearQueuedJumpToHighlightedStatsObject();
 	}
 	previousHighlighted = highlighted;
 }

@@ -62,7 +62,6 @@ static size_t currRadarGfx = 0;
  */
 /***************************************************************************/
 
-static bool assertValidImage(IMAGEFILE *imageFile, unsigned id);
 static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = nullptr, int x = 0, int y = 0);
 
 /***************************************************************************/
@@ -548,7 +547,7 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 
 /***************************************************************************/
 
-static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
+bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 {
 	ASSERT_OR_RETURN(false, imageFile != nullptr, "Null imageFile (id: %u)", id);
 	ASSERT_OR_RETURN(false, id < imageFile->imageDefs.size(), "Out of range 1: %u/%d", id, (int)imageFile->imageDefs.size());
@@ -627,7 +626,7 @@ static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& request
 
 	bool didEnableRect = false;
 	gfx_api::DrawImagePSO::get().bind();
-	
+
 	for (auto& request : requests)
 	{
 		// The following is the equivalent of:

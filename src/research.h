@@ -69,6 +69,17 @@ enum
 	RID_MAXRID
 };
 
+enum class ResearchUpgradeCalculationMode
+{
+	// Default / compat cumulative upgrade handling (the only option for many years - from at least 3.x/(3.2+?)-4.4.2?)
+	// This can accumulate noticeable error, especially if repeatedly upgrading small values by small percentages (commonly impacted: armour, thermal)
+	// However, research.json created and tested during this long period may be expecting this outcome / behavior
+	Compat,
+
+	// "Improved" cumulative upgrade handling (significantly reduces accumulated errors)
+	Improved
+};
+
 /* The store for the research stats */
 extern std::vector<RESEARCH> asResearch;
 
@@ -84,6 +95,8 @@ extern SDWORD				CBResFacilityOwner;
 extern UDWORD	aDefaultSensor[MAX_PLAYERS];
 extern UDWORD	aDefaultECM[MAX_PLAYERS];
 extern UDWORD	aDefaultRepair[MAX_PLAYERS];
+
+ResearchUpgradeCalculationMode getResearchUpgradeCalcMode();
 
 bool loadResearch(WzConfig &ini);
 

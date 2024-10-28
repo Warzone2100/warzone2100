@@ -83,9 +83,13 @@ If state of interface buffer is unknown and/or corrupted, interface can send a f
 * `admin remove <pkey|hash>`\
 	Removes admin from room admins list by public key or hash
 
-* `join <approve|reject> <joinid>`\
+* `join <approve|approvespec|reject> <joinid> <code> <rejectmsg [^\n]>`\
 	Approve or reject an attempt to join the game.\
 	Pass in the `<joinid>` received in a `WZEVENT: join approval needed` event.
+  	- `<approve|approvespec|reject>`
+  	  - `approvespec` approves the join but forces the client to spectators, and prevents them from switching back to players
+	- `<code>` is `LOBBY_ERROR_TYPES` enum (use 7 to avoid double-screening client with "you are kicked")
+	- `<rejectmsg [^\n]>` is an (optional) custom rejection message that will be displayed on the client
 
 * `ban ip <ip>`\
 	Find and kick (with adding to ip banlist) player with specified ip

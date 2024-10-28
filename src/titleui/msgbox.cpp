@@ -32,7 +32,6 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/netplay/netplay.h"
 #include "lib/widget/label.h"
 #include "lib/widget/paragraph.h"
 #include "../multiplay.h"
@@ -75,7 +74,7 @@ void WzMsgBoxTitleUI::start()
 		paragraph->setFontColour(WZCOL_TEXT_BRIGHT);
 		paragraph->setLineSpacing(5);
 		paragraph->setFont(font_regular);
-		paragraph->addText(text.toUtf8());
+		paragraph->addText(text);
 		psBotForm->attach(paragraph);
 	}
 	else

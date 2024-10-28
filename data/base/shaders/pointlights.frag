@@ -6,6 +6,7 @@ uniform vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
 uniform vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];
 uniform ivec4 bucketOffsetAndSize[WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION];
 uniform ivec4 PointLightsIndex[WZ_MAX_INDEXED_POINT_LIGHTS];
+uniform int bucketDimensionUsed;
 uniform int viewportWidth;
 uniform int viewportHeight;
 
@@ -53,8 +54,8 @@ vec4 iterateOverAllPointLights(
 	mat3 normalWorldSpaceToLocalSpace
 ) {
 	vec4 light = vec4(0.f);
-	ivec2 bucket = ivec2(float(WZ_BUCKET_DIMENSION) * clipSpaceCoord);
-	int bucketId = min(bucket.y + bucket.x * WZ_BUCKET_DIMENSION, WZ_BUCKET_DIMENSION * WZ_BUCKET_DIMENSION - 1);
+	ivec2 bucket = ivec2(float(bucketDimensionUsed) * clipSpaceCoord);
+	int bucketId = min(bucket.y + bucket.x * bucketDimensionUsed, bucketDimensionUsed * bucketDimensionUsed - 1);
 
 	for (int i = 0; i < bucketOffsetAndSize[bucketId].y; i++)
 	{

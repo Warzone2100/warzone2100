@@ -165,8 +165,8 @@ DROID_TYPE droidType(const DROID *psDroid);
 /* Return the type of a droid from it's template */
 DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);
 
-void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
-void removeDroidsFromGroup(UDWORD playerNumber);
+void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
+void removeObjectFromGroup(UDWORD playerNumber);
 
 bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen);
 
@@ -185,6 +185,9 @@ unsigned int getDroidLevel(const DROID *psDroid);
 unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent);
 UDWORD getDroidEffectiveLevel(const DROID *psDroid);
 const char *getDroidLevelName(const DROID *psDroid);
+// Increase the experience of a droid (and handle events, if needed).
+void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
+void giveExperienceForSquish(DROID *psDroid);
 
 // Get a droid's name.
 const char *droidGetName(const DROID *psDroid);
@@ -249,6 +252,8 @@ UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot);
 void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad);
 // true if a vtol is waiting to be rearmed by a particular rearm pad
 bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct);
+// Fill all the weapons on a VTOL droid.
+void fillVtolDroid(DROID *psDroid);
 
 // see if there are any other vtols attacking the same target
 // but still rearming
@@ -278,7 +283,10 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 bool isSelectable(DROID const *psDroid);
 
 // Select a droid and do any necessary housekeeping.
-void SelectDroid(DROID *psDroid);
+void SelectDroid(DROID *psDroid, bool programmaticSelection = false);
+
+// If all other droids with psGroupDroid's group are selected, add psGroupDroid to the selection after production/repair/etc.
+void SelectGroupDroid(DROID *psGroupDroid);
 
 // De-select a droid and do any necessary housekeeping.
 void DeSelectDroid(DROID *psDroid);
@@ -403,7 +411,6 @@ void cancelBuild(DROID *psDroid);
 
 #define syncDebugDroid(psDroid, ch) _syncDebugDroid(__FUNCTION__, psDroid, ch)
 void _syncDebugDroid(const char *function, DROID const *psDroid, char ch);
-
 
 // True iff object is a droid.
 static inline bool isDroid(SIMPLE_OBJECT const *psObject)

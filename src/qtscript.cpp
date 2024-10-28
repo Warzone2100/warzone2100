@@ -176,7 +176,16 @@ scripting_engine::timerNode::timerNode(timerNode&& rhs)           // move constr
 
 void scripting_engine::timerNode::swap(timerNode& _rhs)
 {
+// On Fedora 40, GCC 14 produces false-positive warnings for -Wuninitialized
+// when compiling this code with optimizations. Silence these warnings.
+#if !defined(__clang__) && !defined(__INTEL_COMPILER) && defined(__GNUC__) && __GNUC__ >= 14 && defined(__OPTIMIZE__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wuninitialized"
+#endif
 	std::swap(timerID, _rhs.timerID);
+#if !defined(__clang__) && !defined(__INTEL_COMPILER) && defined(__GNUC__) && __GNUC__ >= 14 && defined(__OPTIMIZE__)
+# pragma GCC diagnostic pop
+#endif
 	std::swap(function, _rhs.function);
 	std::swap(timerName, _rhs.timerName);
 	std::swap(instance, _rhs.instance);
@@ -1311,6 +1320,26 @@ bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct)
 		if (player == psStruct->player || receiveAll)
 		{
 			instance->handle_eventStructureUpgradeStarted(psStruct);
+		}
+	}
+	return true;
+}
+
+//__ ## eventDroidRankGained(droid, rankNum)
+//__
+//__ An event that is run whenever a droid gains a rank.
+//__
+bool triggerEventDroidRankGained(const DROID *psDroid, int rankNum)
+{
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	if (!psDroid) { return true; }
+	for (auto *instance : scripts)
+	{
+		int player = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
+		if (player == psDroid->player || receiveAll)
+		{
+			instance->handle_eventDroidRankGained(psDroid, rankNum);
 		}
 	}
 	return true;

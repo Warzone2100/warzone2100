@@ -13,13 +13,15 @@ on:
       - 'data/base/stats/**'
       - 'data/mp/stats/**'
       - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
   # Support running after "Draft Tag Release" workflow completes, as part of automated release process
   workflow_run:
     workflows: ["Draft Tag Release"]
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
 
 jobs:
@@ -32,6 +34,9 @@ jobs:
     name: '${{ matrix.name }}'
     permissions:
       contents: write # Needed to upload to releases
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
     runs-on: ubuntu-20.04 # Use instead of ubuntu-latest until https://github.com/snapcore/action-build/issues/42 is resolved
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -80,7 +85,7 @@ jobs:
           WZ_PACKAGE_VAR_OVERRIDES="-D WZ_DEVELOPMENT_BUILD=ON"
         fi
         WZ_SNAP_PACKAGE_NAME=$(echo "warzone2100${WZ_OUTPUT_NAME_SUFFIX}" | sed 's/[^a-zA-Z0-9\.\+\-]/-/g')
-        
+
         cat > .snapenv <<EOENV
         CI=true
         GITHUB_WORKFLOW="$GITHUB_WORKFLOW"
@@ -118,6 +123,13 @@ jobs:
         name: 'warzone2100_linux_${{ matrix.arch }}_snap'
         path: '${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}'
         if-no-files-found: 'error'
+    - name: Generate artifact attestation
+      # Run on push to master branch (development build), or tag release automation build
+      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      uses: actions/attest-build-provenance@v1
+      continue-on-error: true
+      with:
+        subject-path: '${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}'
     - name: Upload artifact to release
       if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
       run: |

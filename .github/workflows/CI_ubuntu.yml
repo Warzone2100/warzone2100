@@ -19,7 +19,7 @@ on:
     push:
       tags:
         - '*'
-    types: 
+    types:
       - completed
 
 jobs:
@@ -43,13 +43,6 @@ jobs:
             publish_artifact: true
             deploy_release: true
           # Builds with Clang (not uploaded)
-          - name: "Ubuntu 20.04 [Clang]"
-            docker: "ubuntu-20.04"
-            arch: "amd64"
-            compiler: clang
-            output-suffix: "ubuntu20.04"
-            publish_artifact: false
-            deploy_release: false
           - name: "Ubuntu 22.04 [Clang]"
             docker: "ubuntu-22.04"
             arch: "amd64"
@@ -57,10 +50,20 @@ jobs:
             output-suffix: "ubuntu22.04"
             publish_artifact: false
             deploy_release: false
+          - name: "Ubuntu 24.04 [Clang]"
+            docker: "ubuntu-24.04"
+            arch: "amd64"
+            compiler: clang
+            output-suffix: "ubuntu24.04"
+            publish_artifact: false
+            deploy_release: false
       fail-fast: false
     name: '${{ matrix.name }}'
     permissions:
       contents: write # Needed to upload to releases
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     outputs:
@@ -111,7 +114,7 @@ jobs:
         fi
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
-        
+
         if [ "${{ matrix.compiler }}" == "gcc" ]; then
           WZ_CC="/usr/bin/gcc"
           WZ_CXX="/usr/bin/g++"
@@ -143,9 +146,9 @@ jobs:
           # Pass the configuration to enable it
           ADDITIONAL_CMAKE_PARAMS="-DSENTRY_IO_DSN:STRING=${SENTRY_IO_DSN}"
         fi
-        
+
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" -DSENTRY_BACKEND="${SENTRY_BACKEND}" ${ADDITIONAL_CMAKE_PARAMS} -DDISCORD_RPC_APPID:STRING="${DISCORD_RPC_APPID}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja" "${{ github.workspace }}/src"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" -DSENTRY_BACKEND="${SENTRY_BACKEND}" ${ADDITIONAL_CMAKE_PARAMS} -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${DISCORD_RPC_APPID}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build
       working-directory: '${{ github.workspace }}/build'
@@ -187,6 +190,7 @@ jobs:
       run: |
         WZ_EXECUTABLE_PATH="${WZ_BUILD_DIR}/src/warzone2100${WZ_OUTPUT_NAME_SUFFIX}"
         objcopy --only-keep-debug "${WZ_EXECUTABLE_PATH}" "warzone2100${WZ_OUTPUT_NAME_SUFFIX}.debug"
+        cp "${WZ_EXECUTABLE_PATH}" "warzone2100${WZ_OUTPUT_NAME_SUFFIX}"
     - name: Upload debug info
       uses: actions/upload-artifact@v4
       if: success() && (matrix.publish_artifact == true)
@@ -195,6 +199,13 @@ jobs:
         path: |
           ${{ github.workspace }}/debug
         if-no-files-found: 'error'
+    - name: Generate artifact attestation
+      # Run on push to master branch (development build), or tag release automation build
+      if: success() && (matrix.publish_artifact == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      uses: actions/attest-build-provenance@v1
+      continue-on-error: true
+      with:
+        subject-path: '${{ env.WZ_FULL_OUTPUT_DEB_PATH }}'
     - name: Upload artifact to release
       if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true)
       run: |
@@ -206,9 +217,12 @@ jobs:
         WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
 
   package-source:
-    name: Package Source (Ubuntu 22.04) [GCC]
+    name: Package Source (Ubuntu 24.04) [GCC]
     permissions:
       contents: write # Needed to upload to releases
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
@@ -237,7 +251,7 @@ jobs:
     - name: Build the Docker image
       working-directory: '${{ github.workspace }}/src'
       run: |
-        docker build --build-arg UID=$UID -f docker/ubuntu-22.04/Dockerfile -t ubuntu .
+        docker build --build-arg UID=$UID -f docker/ubuntu-24.04/Dockerfile -t ubuntu .
     - name: Prep Directories
       run: |
         mkdir -p "${{ github.workspace }}/build"
@@ -279,6 +293,13 @@ jobs:
         name: warzone2100_src
         path: ${{ env.OUTPUT_DIR }}
         if-no-files-found: 'error'
+    - name: Generate artifact attestation
+      # Run on push to master branch (development build), or tag release automation build
+      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      uses: actions/attest-build-provenance@v1
+      continue-on-error: true
+      with:
+        subject-path: '${{ env.OUTPUT_DIR }}/warzone2100_src.tar.xz'
     - name: Upload source tarball to release
       if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
       run: |
@@ -290,12 +311,7 @@ jobs:
         WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
 
   upload-debug-symbols:
-    strategy:
-      matrix:
-        include:
-          - output-suffix: "ubuntu20.04"
-            arch: "amd64"
-    name: 'Upload Debug Symbols (${{ matrix.matrix }})'
+    name: 'Upload Debug Symbols'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -306,14 +322,20 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: 'src'
       - name: Prep Environment
         run: |
           mkdir dl-debug-symbols
+          echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: 'debugsymbols_${{ matrix.output-suffix }}_${{ matrix.arch }}'
+          pattern: 'debugsymbols_*'
           path: ./dl-debug-symbols
+          merge-multiple: false
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: ./dl-debug-symbols
@@ -328,31 +350,12 @@ jobs:
             echo "No SENTRY_AUTH_TOKEN - skipping"
             exit 0
           fi
-          docker pull getsentry/sentry-cli
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
-
-  # # NOTE: This uses qemu, and is much slower than a native ARM64 build
-  # ubuntu-20-04-gcc-arm64:
-  #   name: Ubuntu 20.04 (CMake) [GCC] [ARM64]
-  #   runs-on: ubuntu-latest
-  #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #     with:
-  #       fetch-depth: 0
-  #   - name: Prepare Git Repo for autorevision
-  #     run: cmake -P .ci/githubactions/prepare_git_repo.cmake
-  #   - name: Init Git Submodules
-  #     run: git submodule update --init --recursive
-  #   - name: Prep for multi-arch
-  #     run: |
-  #       sudo apt-get -u update && DEBIAN_FRONTEND=noninteractive sudo apt-get -y install qemu qemu-user-static
-  #       docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-  #   - name: Build the Docker image
-  #     run: |
-  #       docker build --build-arg UID=$UID -f docker/ubuntu-20.04/Dockerfile.arm64 -t ubuntu .
-  #   - name: CMake Configure
-  #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
-  #   - name: CMake Build
-  #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
-
+          # Download sentry-cli
+          echo "::group::Downloading sentry-cli ..."
+          cmake -P "${WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+          echo "Downloading sentry-cli ... Done"
+          echo "::endgroup::"
+          # Upload symbols
+          echo "::group::sentry-cli debug-files upload"
+          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          echo "::endgroup::"

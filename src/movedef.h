@@ -25,6 +25,7 @@
 #define __INCLUDED_MOVEDEF_H__
 
 #include "lib/framework/vector.h"
+#include "formationdef.h"
 
 #include <vector>
 
@@ -60,6 +61,8 @@ struct MOVE_CONTROL
 	Position bumpPos = Position(0, 0, 0); ///< Position of last bump
 
 	unsigned shuffleStart = 0;            ///< When a shuffle started
+
+	FORMATION *psFormation = nullptr;     ///< formation the droid is currently a member of
 
 	int iVertSpeed = 0;                   ///< VTOL movement
 };

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+	<id>@WZ_APPSTREAM_ID@@WZ_OUTPUT_NAME_SUFFIX@</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>GPL-2.0-or-later</project_license>
+	<name>Warzone 2100@WZ_NAME_SUFFIX@</name>
+	<summary>Command the forces of The Project in a battle to rebuild the world</summary>
+	<summary xml:lang="de">Befehlige die Truppen des Projektes in dem Kampf die Welt wieder aufzubauen</summary>
+	<summary xml:lang="fr">Commandez les forces du Projet dans une bataille pour reconstruire le monde</summary>
+	<summary xml:lang="it">Comanda le forze del Progetto in una battaglia per ricostruire il mondo</summary>
+	<summary xml:lang="pl">Przejmij dowództwo nad siłami Projektu w bitwie o odbudowę świata</summary>
+	<summary xml:lang="pt">Comande as forças do Projecto numa batalha para reconstruir o mundo</summary>
+	<summary xml:lang="pt-BR">Comande as forças do Projeto em uma batalha para reconstruir o mundo</summary>
+	<summary xml:lang="ru">Управляйте вооруженными силами Проекта в бою за восстановление мира</summary>
+	<summary xml:lang="uk">Керуйте збройними силами Проєкту в бою за відновлення миру</summary>
+	<launchable type="desktop-id">@WZ_APPSTREAM_ID@@WZ_OUTPUT_NAME_SUFFIX@.desktop</launchable>
+	<description>
+		<p>
+			The classic 3D real-time strategy game from 1999 has been updated, upgraded, and modernized for the very latest platforms!
+		</p>
+		<p>
+			Command the forces of The Project in a battle to rebuild the world after mankind has been nearly destroyed by nuclear missiles.
+		</p>
+		<p>
+			Warzone 2100 offers a story-driven single-player campaign, online multi-player, and single-player skirmish modes. An extensive tech tree with over 400 different technologies, combined with the unit design system, allows for a wide variety of possible units and tactics.
+		</p>
+		<p>Highlights:</p>
+		<ul>
+			<li>Remastered single-player campaign with expanding persistent bases, away missions, and more</li>
+			<li>Online multiplayer with up to 10 players, free-for-all or team-play, for massive battles</li>
+			<li>Local skirmish with AI bots, for endless replayability</li>
+			<li>Extensive tech tree with over 400 different technologies</li>
+			<li>Customizable units with a flexible design system that enables a wide variety of possible tactics</li>
+			<li>Cross-platform multiplayer</li>
+			<li>Support for multiple graphics backends (OpenGL, OpenGL ES, Vulkan)</li>
+			<li>100% free and open source</li>
+		</ul>
+	</description>
+	<url type="homepage">https://wz2100.net/</url>
+	<url type="bugtracker">https://github.com/Warzone2100/warzone2100/issues/new</url>
+	<url type="faq">https://wz2100.net/#faq</url>
+	<url type="translate">https://github.com/Warzone2100/warzone2100/blob/master/doc/Translations.md</url>
+	<url type="help">https://betaguide.wz2100.net/</url>
+	<url type="donation">https://opencollective.com/warzone2100</url>
+	<recommends>
+		<control>keyboard</control>
+		<control>pointing</control>
+		<memory>2048</memory>
+		<display_length compare="ge" side="longest">1024</display_length>
+		<display_length compare="ge" side="shortest">768</display_length>
+	</recommends>
+	<supports>
+		<control>touch</control>
+	</supports>
+	<kudos>
+		<kudo>HiDpiIcon</kudo>
+		<kudo>UserDocs</kudo>
+	</kudos>
+	<translation type="gettext">warzone2100</translation>
+	<screenshots>
+		<screenshot type="default">
+			<caption>Compete in massive battles, with up to 10 players</caption>
+			<image>https://wz2100.net/img/screenshots/multiplayer_massive_battle.png</image>
+		</screenshot>
+		<screenshot>
+			<caption>Seize territory + resources, build extensive bases</caption>
+			<image>https://wz2100.net/img/screenshots/base_build.png</image>
+		</screenshot>
+	</screenshots>
+	<developer_name>Warzone 2100 Project</developer_name>
+	<releases>
+	  <release version="@WZ_METAINFO_RELEASE_VERSION@" type="@WZ_METAINFO_RELEASE_TYPE@" date="@WZ_METAINFO_RELEASE_DATE@">
+			<description>
+				<p>Bug fixes and improvements</p>
+			</description>
+			<url>https://github.com/Warzone2100/warzone2100/blob/master/ChangeLog</url>
+		</release>
+	</releases>
+	<content_rating type="oars-1.1">
+		<content_attribute id="violence-fantasy">moderate</content_attribute>
+		<content_attribute id="violence-bloodshed">mild</content_attribute>
+		<content_attribute id="social-chat">intense</content_attribute>
+	</content_rating>
+	<categories>
+		<category>Game</category>
+		<category>StrategyGame</category>
+	</categories>
+	<keywords>
+		<keyword>game</keyword>
+		<keyword>play</keyword>
+		<keyword>rts</keyword>
+		<keyword>real-time strategy</keyword>
+		<keyword>realtime strategy</keyword>
+		<keyword>strategy</keyword>
+		<keyword translate="no">warzone 2100</keyword>
+		<keyword translate="no">warzone2100</keyword>
+		<keyword translate="no">wz2100</keyword>
+	</keywords>
+	<custom>
+		<value key="flathub::manifest">https://github.com/Warzone2100/warzone2100/blob/master/.github/workflows/CI_flatpak.yml</value>
+	</custom>
+</component>

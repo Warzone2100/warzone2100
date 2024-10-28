@@ -82,10 +82,10 @@ void CommanderController::refresh()
 void CommanderController::clearData()
 {
 	commanders.clear();
-	setHighlightedObject(nullptr);
+	setHighlightedObject(nullptr, false);
 }
 
-void CommanderController::setHighlightedObject(BASE_OBJECT *object)
+void CommanderController::setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject)
 {
 	if (object == nullptr)
 	{
@@ -96,6 +96,7 @@ void CommanderController::setHighlightedObject(BASE_OBJECT *object)
 	auto commander = castDroid(object);
 	ASSERT_NOT_NULLPTR_OR_RETURN(, commander);
 	ASSERT_OR_RETURN(, commander->droidType == DROID_COMMAND, "Droid is not a commander");
+	queuedJumpToHighlightedStatsObject = queuedJumpToHighlightedStatsObject || jumpToHighlightedStatsObject;
 	highlightedCommander = commander;
 }
 
@@ -120,7 +121,7 @@ public:
 	void clickPrimary() override
 	{
 		controller->clearSelection();
-		controller->selectObject(controller->getObjectAt(objectIndex));
+		controller->selectObject(controller->getObjectAt(objectIndex), false);
 		jump();
 		controller->displayOrderForm();
 	}
@@ -293,7 +294,7 @@ private:
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 		controller->clearSelection();
-		controller->selectObject(droid);
+		controller->selectObject(droid, true);
 		controller->displayOrderForm();
 	}
 
@@ -306,7 +307,7 @@ private:
 		// prevent highlighting a commander when another commander is already selected
 		if (droid == highlighted || (highlighted && !highlighted->selected))
 		{
-			controller->setHighlightedObject(droid);
+			controller->setHighlightedObject(droid, true);
 			controller->displayOrderForm();
 		}
 	}

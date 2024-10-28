@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("CB Sensors")
+_("Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range.")
+_("Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery.")
+_("If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors.")

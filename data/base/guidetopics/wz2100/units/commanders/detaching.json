@@ -1,0 +1,27 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::commanders::detaching",
+	"title": "Detaching Units",
+	"sort": "02",
+	"visual": {
+		"droidTemplate": {
+			"body": "Body8MBT",
+			"brain": "CommandBrain01",
+			"name": "Command Turret Scorpion Half-tracks",
+			"propulsion": "HalfTrack",
+			"type": "DROID_COMMAND",
+			"weapons": [
+				"CommandTurret1"
+			]
+		}
+	},
+	"contents": [
+		"To detach a unit from a Commander:",
+		"",
+		"1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)",
+		"2. Give the unit a new order (eg. move)"
+	],
+	"links": [
+		"wz2100::units::commanders::attaching"
+	]
+}

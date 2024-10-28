@@ -59,6 +59,7 @@
 #include "display3d.h"
 #include "edit3d.h"
 #include "effects.h"
+#include "formation.h"
 #include "fpath.h"
 #include "frend.h"
 #include "frontend.h"
@@ -99,6 +100,8 @@
 #include "seqdisp.h"
 #include "version.h"
 #include "hci/teamstrategy.h"
+#include "screens/guidescreen.h"
+#include "wzapi.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -999,22 +1002,19 @@ static inline optional<WZmapInfo> CheckInMap(const char *archive, const std::str
 			lookin.append("/");
 			lookin.append(lookin_subdir);
 		}
-		bool enumResult = WZ_PHYSFS_enumerateFiles(lookin.c_str(), [&](const char *file) -> bool {
+		bool enumResult = WZ_PHYSFS_enumerateFolders(lookin, [&](const char *file) -> bool {
 			std::string checkfile = file;
-			if (WZ_PHYSFS_isDirectory((lookin + "/" + checkfile).c_str()))
+			if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
+				|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
+				|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
+				|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
+				|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
+				|| checkfile.compare("skirmish") == 0 || checkfile.compare("shaders") == 0 || checkfile.compare("fonts") == 0
+				|| checkfile.compare("icons") == 0)
 			{
-				if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
-					|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
-					|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
-					|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
-					|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
-					|| checkfile.compare("skirmish") == 0 || checkfile.compare("shaders") == 0 || checkfile.compare("fonts") == 0
-					|| checkfile.compare("icons") == 0)
-				{
-					debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
-					mapmod = true;
-					return false; // break;
-				}
+				debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
+				mapmod = true;
+				return false; // break;
 			}
 			return true; // continue
 		});
@@ -1340,7 +1340,7 @@ void systemShutdown()
 	debug(LOG_MAIN, "shutting down CD audio");
 	cdAudio_Close();
 
-	if (audio_Disabled() == false && !audio_Shutdown())
+	if (!audio_Disabled() && !audio_Shutdown())
 	{
 		debug(LOG_FATAL, "Unable to audio_Shutdown() cleanly!");
 		abort();
@@ -1467,6 +1467,7 @@ bool frontendShutdown()
 		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
 	}
 	interfaceShutDown();
+	shutdownGameGuide();
 
 	//do this before shutting down the iV library
 	resReleaseAllData();
@@ -1542,6 +1543,11 @@ bool stageOneInitialise()
 		return false;
 	}
 
+	if (!formationInitialise())		// Initialise the formation system
+	{
+		return false;
+	}
+
 	// initialise the visibility stuff
 	if (!visInitialise())
 	{
@@ -1584,10 +1590,12 @@ bool stageOneShutDown()
 
 	pie_FreeShaders();
 
-	if (audio_Disabled() == false)
+	if (!audio_Disabled())
 	{
 		sound_CheckAllUnloaded();
 	}
+
+	shutdownGameGuide();
 
 	proj_Shutdown();
 
@@ -1604,6 +1612,8 @@ bool stageOneShutDown()
 	}
 
 	grpShutDown();
+
+	formationShutDown();
 
 	ResearchRelease();
 
@@ -1738,7 +1748,7 @@ bool stageTwoInitialise()
 		{
 			NETinitQueue(NETgameQueue(i));
 
-			if (!myResponsibility(i))
+			if (!myResponsibility(i) || !NetPlay.bComms)
 			{
 				NETsetNoSendOverNetwork(NETgameQueue(i));
 			}
@@ -1803,6 +1813,56 @@ bool stageTwoShutDown()
 	clearCampaignName();
 
 	return true;
+}
+
+static void displayLoadingErrors()
+{
+	std::vector<std::string> loadingErrors;
+
+	// warn the user if a mod might have corrupted models / files
+	auto modelLoadingErrorCount = getModelLoadingErrorCount();
+	if (modelLoadingErrorCount > 0)
+	{
+		debug(LOG_INFO, "Failure to load %zu game model(s) - please remove any outdated or broken mods", modelLoadingErrorCount);
+		loadingErrors.push_back(astringf(_("Failure to load %zu game model(s)"), modelLoadingErrorCount));
+	}
+	auto modelTextureLoadingFailures = getModelTextureLoadingFailuresCount();
+	if (modelTextureLoadingFailures > 0)
+	{
+		debug(LOG_INFO, "Failed to load textures for %zu models - please remove any outdated or broken mods", modelTextureLoadingFailures);
+		loadingErrors.push_back(astringf(_("Failure to load textures for %zu model(s)"), modelTextureLoadingFailures));
+	}
+	auto statModelLoadingFailures = getStatModelLoadingFailures();
+	if (statModelLoadingFailures > 0)
+	{
+		debug(LOG_INFO, "Failed to load model for %zu stats entries - please remove any outdated or broken mods", statModelLoadingFailures);
+		loadingErrors.push_back(astringf(_("Failure to load model for %zu stat(s)"), statModelLoadingFailures));
+	}
+
+	if (!loadingErrors.empty())
+	{
+		std::string modelErrorDescription = _("Warzone 2100 encountered error(s) loading game data:");
+		for (const auto& error : loadingErrors)
+		{
+			modelErrorDescription += "\n";
+			modelErrorDescription += "- ";
+			modelErrorDescription += error;
+		}
+		modelErrorDescription += "\n\n";
+		if (!getLoadedMods().empty())
+		{
+			modelErrorDescription += _("Please try removing any new mods - they may have issues or be incompatible with this version.");
+			modelErrorDescription += "\n\n";
+			modelErrorDescription += _("Loaded mod(s):");
+			modelErrorDescription += "\n";
+			modelErrorDescription += std::string("- ") + getModList();
+		}
+		else
+		{
+			modelErrorDescription += _("Base game files may be corrupt or outdated - please try reinstalling the game.");
+		}
+		wzDisplayDialog(Dialog_Error, _("Error Loading Game Data"), modelErrorDescription.c_str());
+	}
 }
 
 bool stageThreeInitialise()
@@ -1895,7 +1955,7 @@ bool stageThreeInitialise()
 
 	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START)
 	{
-		triggerEvent(TRIGGER_GAME_LOADED);
+		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
 	}
 	else
 	{
@@ -1904,10 +1964,12 @@ bool stageThreeInitialise()
 		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 		if (dbgInputManager.debugMappingsAllowed())
 		{
+			Cheated = true;
 			triggerEventCheatMode(true);
+			gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::ACTIVE);
 		}
 
-		triggerEvent(TRIGGER_GAME_INIT);
+		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_INIT); });
 		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
 	}
 
@@ -1916,6 +1978,9 @@ bool stageThreeInitialise()
 
 	// always start off with a refresh of the groups UI data
 	intGroupsChanged();
+
+	// warn the user if a mod might have corrupted models / files
+	displayLoadingErrors();
 
 	if (bMultiPlayer)
 	{

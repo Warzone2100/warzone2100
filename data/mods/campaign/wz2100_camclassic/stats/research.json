@@ -1,4 +1,7 @@
 {
+	"_config_": {
+		"calculationMode": "improved"
+	},
 	"ADVANCEDRESEARCH": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "ADVANCEDRESEARCH",
@@ -8,6 +11,7 @@
 		"techCode": 1
 	},
 	"CAM2RESEARCH-UNDO": {
+		"excludeFromCheats": 1,
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "CAM2RESEARCH-UNDO",
 		"imdName": "MICAPSUL.PIE",
@@ -383,6 +387,7 @@
 		"techCode": 1
 	},
 	"CAM2RESEARCH-UNDO-Rockets": {
+		"excludeFromCheats": 1,
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "CAM2RESEARCH-UNDO-Rockets",
 		"imdName": "MICAPSUL.PIE",
@@ -409,6 +414,7 @@
 		"techCode": 1
 	},
 	"CAM3RESEARCH-UNDO": {
+		"excludeFromCheats": 1,
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "CAM3RESEARCH-UNDO",
 		"imdName": "MICAPSUL.PIE",

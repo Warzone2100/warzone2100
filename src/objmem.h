@@ -76,7 +76,7 @@ void objmemUpdate();
 
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
-bool objmemDestroy(BASE_OBJECT* psObj);
+bool objmemDestroy(BASE_OBJECT* psObj, bool checkRefs);
 
 /// Generates a new, (hopefully) unique object id.
 uint32_t generateNewObjectId();

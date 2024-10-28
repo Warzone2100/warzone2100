@@ -23,6 +23,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Order base three groups to do stuff and enable cyborg factories in the north
 camAreaEvent("northFactoryTrigger", function(droid)
 {
+	improveNexusAlloys();
 	camEnableFactory("NXcybFac-b3");
 	camEnableFactory("NXcybFac-b4");
 
@@ -45,20 +46,38 @@ camAreaEvent("northFactoryTrigger", function(droid)
 //Enable factories in the SW base
 camAreaEvent("westFactoryTrigger", function(droid)
 {
-	camEnableFactory("NXcybFac-b2-1");
-	camEnableFactory("NXcybFac-b2-2");
-	camEnableFactory("NXHvyFac-b2");
+	camCallOnce("enableWestFactories");
+});
+
+//Prevents VTOLs from flying over the west trigger
+camAreaEvent("westFactoryVTOLTrigger", function(droid)
+{
+	camCallOnce("enableWestFactories");
 });
 
 //Enable all factories if the player tries to bypass a trigger area
 camAreaEvent ("middleTrigger", function(droid)
 {
+	improveNexusAlloys();
 	enableAllFactories();
 });
 
+function enableWestFactories()
+{
+	improveNexusAlloys();
+	camEnableFactory("NXcybFac-b2-1");
+	camEnableFactory("NXcybFac-b2-2");
+	camEnableFactory("NXHvyFac-b2");
+}
+
 function setUnitRank(transport)
 {
-	const droidExp = [1024, 256, 128, 64]; //Can make Hero Commanders if recycled.
+	const droidExp = [
+		camGetRankThreshold("hero", true), //Can make Hero Commanders if recycled.
+		camGetRankThreshold("special"),
+		camGetRankThreshold("elite"),
+		camGetRankThreshold("veteran")
+	];
 	const droids = enumCargo(transport);
 
 	for (let i = 0, len = droids.length; i < len; ++i)
@@ -90,9 +109,6 @@ function enableAllFactories()
 	{
 		camEnableFactory(factoryNames[j]);
 	}
-
-	//If they go really fast, adapt the alloy research to come sooner
-	queue("improveNexusAlloys", camChangeOnDiff(camMinutesToMilliseconds(10)));
 }
 
 function truckDefense()
@@ -204,8 +220,13 @@ function vtolAttack()
 {
 	if (camClassicMode())
 	{
-		const list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
+		const list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlneedv, cTempl.nxlscouv];
+		const ext = {
+			limit: [2, 4, 2, 2], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
 	}
 	else
 	{
@@ -293,12 +314,13 @@ function cam3Setup()
 		camCompleteRequiredResearch(mis_playerResBetaClassic, CAM_HUMAN_PLAYER);
 		camCompleteRequiredResearch(mis_playerResGammaClassic, CAM_HUMAN_PLAYER);
 
-		if (tweakOptions.camclassic_Balance32)
+		if (tweakOptions.camClassic_balance32)
 		{
 			camClassicResearch(mis_gammaStartingResearchClassic, CAM_HUMAN_PLAYER);
 			completeResearch("CAM2RESEARCH-UNDO", CAM_HUMAN_PLAYER);
 			completeResearch("CAM3RESEARCH-UNDO", CAM_HUMAN_PLAYER);
-			//Nexus has no research in 3.2
+			//Nexus only has auto-repair and the NavGunSensor for 3.2
+			camClassicResearch(cam_nexusSpecialResearch, CAM_NEXUS);
 		}
 		else
 		{
@@ -351,7 +373,7 @@ function eventStartLevel()
 	const tEnt = getObject("transporterEntry");
 	const tExt = getObject("transporterExit");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_1S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma2.pre);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
 	centreView(startPos.x, startPos.y);
@@ -478,7 +500,7 @@ function eventStartLevel()
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}
 
-	camPlayVideos([{video: "CAM3_INT", type: CAMP_MSG}, {video: "MB3A_MSG2", type: MISS_MSG}]);
+	camPlayVideos([{video: "MB3A_MSG", type: CAMP_MSG}, {video: "MB3A_MSG2", type: MISS_MSG}]);
 	startedFromMenu = false;
 	truckLocCounter = 0;
 

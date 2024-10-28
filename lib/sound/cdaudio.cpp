@@ -189,6 +189,8 @@ static bool cdAudio_OpenTrack(std::shared_ptr<const WZ_TRACK> track)
 		return false;
 	}
 
+	bool bufferEntireStream = (currentSongContext == SONG_FRONTEND);
+
 	debug(LOG_SOUND, "called(%s)", filename.c_str());
 	is_opening_new_track = true;
 	cdAudio_Stop_Internal(true);
@@ -196,7 +198,7 @@ static bool cdAudio_OpenTrack(std::shared_ptr<const WZ_TRACK> track)
 
 	PlayList_SetCurrentSong(track);
 
-	cdStream = sound_PlayStream(filename.c_str(), cdAudio_CalculateTrackVolume(track), 
+	cdStream = sound_PlayStream(filename.c_str(), bufferEntireStream, cdAudio_CalculateTrackVolume(track),
 						[track](const AUDIO_STREAM*, const void*) { cdAudio_TrackFinished(track);}, nullptr);
 	if (cdStream == nullptr)
 	{

@@ -95,6 +95,8 @@ private:
 	ImdObject(void *ptr, ImdType type) : ptr(ptr), type(type) {}
 };
 
+ImdObject getResearchObjectImage(RESEARCH *research);
+
 // Set audio IDs for form opening/closing anims.
 void SetFormAudioIDs(int OpenID, int CloseID);
 

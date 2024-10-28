@@ -687,7 +687,6 @@ bool WzMapZipIO::enumerateFoldersInternal(const std::string& basePath, bool recu
 
 			// entries that end with "/" are dedicated directory entries
 
-			size_t directoryDepth = 0;
 			while (!nameStr.empty())
 			{
 				if (nameStr.back() != '/')
@@ -708,7 +707,6 @@ bool WzMapZipIO::enumerateFoldersInternal(const std::string& basePath, bool recu
 				{
 					m_cachedDirectoriesList.push_back(nameStr);
 				}
-				directoryDepth++;
 
 				// remove any trailing "/"
 				size_t numTrailingSlash = 0;

@@ -56,6 +56,7 @@
 #include "visibility.h"
 #include "multiplay.h"
 #include "hci/groups.h"
+#include "wzapi.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_CLOSE			9002	//The close button icon
@@ -1046,6 +1047,9 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		}
 		return;
 	}
+
+	resetObjectAnimationState(psDroidToAdd);
+
 	if (onMission)
 	{
 		// removing from droid mission list
@@ -1280,7 +1284,7 @@ void processLaunchTransporter()
 			//set the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)psCurrTransporter);
 
-			triggerEvent(TRIGGER_TRANSPORTER_LAUNCH, psCurrTransporter);
+			executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_TRANSPORTER_LAUNCH, psCurrTransporter); });
 		}
 	}
 }

@@ -22,9 +22,11 @@
 
 #include "lib/ivis_opengl/pietypes.h"
 #include "gfx_api.h"
+#include "culling.h"
 #include <glm/glm.hpp>
 #include <memory>
 #include <array>
+#include <vector>
 
 struct LIGHT
 {
@@ -68,6 +70,8 @@ struct ILightingManager
 		std::array<glm::ivec4, gfx_api::bucket_dimension * gfx_api::bucket_dimension> bucketOffsetAndSize = {};
 		// Unfortunately due to std140 constraint, we pack indexes in glm::ivec4 and unpack them in shader later
 		std::array<glm::ivec4, gfx_api::max_indexed_lights> light_index = {};
+
+		size_t bucketDimensionUsed = gfx_api::bucket_dimension;
 	};
 
 	virtual ~ILightingManager() = default;
@@ -95,6 +99,21 @@ namespace renderingNew
 	struct LightingManager final : ILightingManager
 	{
 		void ComputeFrameData(const LightingData& data, LightMap& lightmap, const glm::mat4& worldViewProjectionMatrix) override;
+
+		struct CalculatedPointLight
+		{
+			glm::vec3 position = glm::vec3(0, 0, 0);
+			glm::vec3 colour;
+			float range;
+		};
+	private:
+		// cached containers to avoid frequent reallocations
+		struct CulledLightInfo
+		{
+			CalculatedPointLight light;
+			BoundingBox clipSpaceBoundingBox;
+		};
+		std::vector<CulledLightInfo> culledLights;
 	};
 }
 

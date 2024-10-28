@@ -182,11 +182,9 @@ TITLECODE titleLoop()
 			else // single player
 			{
 				NetPlay.bComms = true; // use network = true
-				NetPlay.isUPNP_CONFIGURED = false;
-				NetPlay.isUPNP_ERROR = false;
 				bMultiMessages = true;
 				NETinit(true);
-				NETdiscoverUPnPDevices();
+				NETinitPortMapping();
 			}
 			bMultiPlayer = true;
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;

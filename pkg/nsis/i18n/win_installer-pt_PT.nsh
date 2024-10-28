@@ -6,9 +6,9 @@ ${LangFileString} WZWelcomeHomepageLink "Visite a nossa página oficial https://
 
 ${LangFileString} WZ_64BIT_AVAILABLE "Há uma versão de 64-bit de Warzone 2100 disponível.$\r$ \r\nPara mais detalhes, visite https://wz2100.net/ $\r$\nContinuar com a instalação de 32-bit mesmo assim?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Esta é a versão 64-bit do Warzone 2100.$\r$\nPor favor, baixe a versão 32-bit de https://wz2100.net/ $\r$\nClique em OK para sair da instalação."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Esta é a versão 64-bit do Warzone 2100.$\r$\nPor favor, descarregue a versão 32-bit de https://wz2100.net/ $\r$\nClique em OK para sair da instalação."
 
-${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Esta é a versão ARM64 do Warzone 2100, e este dispositivo não tem um processador ARM64.$\r$\nPor favor, visite https://wz2100.net/ para descarregar a versão apropriada para o seu sistema (exemplo: x64).$\r$\nProsseguir com a instalação ARM64 na mesma?"
 
 ${LangFileString} WZ_GPL_NEXT "Seguinte"
 
@@ -39,9 +39,9 @@ ${LangFileString} DESC_SecNLS_WinFonts "Incluir a pasta de Fontes do Windows no 
 ${LangFileString} TEXT_SecMSSysLibraries "DLLs Importantes do Microsoft Runtime"
 ${LangFileString} DESC_SecMSSysLibraries "Descarregar e instalar (ou actualizar) as bibliotecas redistribuíveis do Microsoft Visual C++, que alguns componentes podem requerir para serem executados."
 
-${LangFileString} DLTEXT_Downloading "A transferir"
-${LangFileString} DLTEXT_SysLibDLFailed "O download da biblioteca do sistema falhou"
-${LangFileString} DLTEXT_VideosDLFailed "O download dos vídeos falhou"
+${LangFileString} DLTEXT_Downloading "A descarregar"
+${LangFileString} DLTEXT_SysLibDLFailed "Falha no descarregamento da biblioteca do sistema"
+${LangFileString} DLTEXT_VideosDLFailed "Falha no descarregamento de vídeos"
 
-${LangFileString} TEXT_PromptRebootNeeded "Uma reinicialização é necessária para finalizar a instalação. Você deseja reiniciar o sistema agora?"
-${LangFileString} TEXT_MsgRebootFailed "Reinicialização falhou. Por favor, reinicie manualmente."
+${LangFileString} TEXT_PromptRebootNeeded "É necessário reiniciar o sistema para concluir a instalação. Deseja reiniciar o sistema agora?"
+${LangFileString} TEXT_MsgRebootFailed "A reinicialização falhou. Reinicie manualmente."

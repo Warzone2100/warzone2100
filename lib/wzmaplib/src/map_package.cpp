@@ -299,7 +299,7 @@ optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProv
 			debug(pCustomLogger, LOG_WARNING, "LEV File Parse Error: `Syntax Error`: Received an unexpected token (prior to a `level` token): %s %s", command.c_str(), arg.c_str());
 			return;
 		}
-		
+
 		if (command.compare("players") == 0)
 		{
 			int playersValue = 0;
@@ -1448,6 +1448,8 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 	}
 
 	// 5.) Output the level info file
+	LevelDetails outputLevelDetails = m_levelDetails;
+	outputLevelDetails.mapFolderPath = mapFolderPath;
 	std::string fullPathToOutputLevelDetailsFolder = exportIO->pathJoin(basePath, levelFileOutputFolder);
 	if (!fullPathToOutputLevelDetailsFolder.empty())
 	{
@@ -1457,7 +1459,7 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 			// for now, treat this as non-fatal...
 		}
 	}
-	if (!exportLevelDetails(m_levelDetails, levelFormat, fullPathToOutputLevelDetailsFolder, *exportIO, pCustomLogger))
+	if (!exportLevelDetails(outputLevelDetails, levelFormat, fullPathToOutputLevelDetailsFolder, *exportIO, pCustomLogger))
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to export level details");
 		return false;

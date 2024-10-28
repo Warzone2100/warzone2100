@@ -1303,8 +1303,11 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 		percent = 100;
 	}
 
+	constexpr int fireLightHeightAboveGround = 28;
+
 	light.position = psEffect->position;
-	light.range = (percent * psEffect->radius * 3) / 100;
+	light.position.y += fireLightHeightAboveGround;
+	light.range = (percent * psEffect->radius * 6) / 100;
 	light.colour = pal_Colour(255, 0, 0);
 	lightData.lights.push_back(light);
 
@@ -1586,7 +1589,7 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 
 	if (premultiplied)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED, 0, modelMatrix, viewMatrix);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED | pie_NODEPTHWRITE, 0, modelMatrix, viewMatrix);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
@@ -2299,6 +2302,17 @@ static void effectStructureUpdates()
 					addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, nullptr, 0);
 
 					audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
+					audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_HUM);
+					break;
+				}
+			case REF_RESOURCE_EXTRACTOR:
+				{
+					if (psStructure->pFunctionality &&
+						psStructure->pFunctionality->resourceExtractor.psPowerGen &&
+						psStructure->animationEvent == ANIM_EVENT_ACTIVE)
+					{
+						audio_PlayObjStaticTrack(psStructure, ID_SOUND_OIL_PUMP_2);
+					}
 					break;
 				}
 			default:

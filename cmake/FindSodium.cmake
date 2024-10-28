@@ -10,12 +10,26 @@
 
 include(FindPackageHandleStandardArgs)
 
+function(GetSodiumVersion sodium_INCLUDE_DIR)
+	if(sodium_INCLUDE_DIR AND EXISTS "${sodium_INCLUDE_DIR}/sodium/version.h")
+		file(STRINGS "${sodium_INCLUDE_DIR}/sodium/version.h" SODIUM_VERSION_STRING_LINE REGEX "^#define[ \t]+SODIUM_VERSION_STRING[ \t]+\"[.0-9]+\"$")
+		string(REGEX REPLACE "^#define[ \t]+SODIUM_VERSION_STRING[ \t]+\"([.0-9]+)\"$" "\\1" sodium_VERSION "${SODIUM_VERSION_STRING_LINE}")
+		unset(SODIUM_VERSION_STRING_LINE)
+	else()
+		if (sodium_INCLUDE_DIR)
+			message ( WARNING "Can't find ${sodium_INCLUDE_DIR}/sodium/version.h" )
+		endif()
+		set(sodium_VERSION "")
+	endif()
+	set(sodium_VERSION "${sodium_VERSION}" PARENT_SCOPE)
+endfunction()
+
 if (VCPKG_TOOLCHAIN)
 	find_package(unofficial-sodium CONFIG)
 	# If we found the vcpkg unofficial-sodium configuration, return with that result
 	if(unofficial-sodium_FOUND AND TARGET unofficial-sodium::sodium)
-		set(sodium_VERSION "${unofficial-sodium_VERSION}")
 		get_target_property(sodium_INCLUDE_DIR unofficial-sodium::sodium INTERFACE_INCLUDE_DIRECTORIES)
+		GetSodiumVersion("${sodium_INCLUDE_DIR}")
 		find_package_handle_standard_args(${CMAKE_FIND_PACKAGE_NAME} REQUIRED_VARS sodium_INCLUDE_DIR VERSION_VAR sodium_VERSION)
 		message(STATUS "Using vcpkg unofficial-sodium configuration (${sodium_VERSION})")
 		return()
@@ -52,16 +66,7 @@ FIND_LIBRARY(
 	HINTS ${PCFG_SODIUM_LIBRARY_DIRS} ${PCFG_SODIUM_LIBDIR}
 )
 
-if(sodium_INCLUDE_DIR AND EXISTS "${sodium_INCLUDE_DIR}/sodium/version.h")
-	file(STRINGS "${sodium_INCLUDE_DIR}/sodium/version.h" SODIUM_VERSION_STRING_LINE REGEX "^#define[ \t]+SODIUM_VERSION_STRING[ \t]+\"[.0-9]+\"$")
-	string(REGEX REPLACE "^#define[ \t]+SODIUM_VERSION_STRING[ \t]+\"([.0-9]+)\"$" "\\1" sodium_VERSION "${SODIUM_VERSION_STRING_LINE}")
-	unset(SODIUM_VERSION_STRING_LINE)
-else()
-	if (sodium_INCLUDE_DIR)
-		message ( WARNING "Can't find ${sodium_INCLUDE_DIR}/sodium/version.h" )
-	endif()
-	set(sodium_VERSION "")
-endif()
+GetSodiumVersion("${sodium_INCLUDE_DIR}")
 
 find_package_handle_standard_args(${CMAKE_FIND_PACKAGE_NAME} REQUIRED_VARS sodium_INCLUDE_DIR sodium_LIBRARIES VERSION_VAR sodium_VERSION)
 

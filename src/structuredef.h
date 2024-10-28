@@ -62,6 +62,7 @@ enum STRUCTURE_TYPE
 	REF_SAT_UPLINK,         //added for updates - AB 8/6/99
 	REF_GATE,
 	REF_LASSAT,
+	REF_FORTRESS,			//added in WZ 4.5.0
 	NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
 };
 
@@ -235,7 +236,7 @@ enum class RepairEvents
 	UnitMovedAway
 };
 
-enum class RepairState 
+enum class RepairState
 {
 	Invalid = -1,
 	Idle,
@@ -313,6 +314,7 @@ struct STRUCTURE : public BASE_OBJECT
 	STRUCT_ANIM_STATES	state;
 	UDWORD lastStateTime;
 	iIMDBaseShape *prebuiltImd;
+	UBYTE productToGroup = UBYTE_MAX;
 
 	inline Vector2i size() const { return pStructureType->size(rot.direction); }
 };

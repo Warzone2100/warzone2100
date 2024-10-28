@@ -30,7 +30,6 @@
 #include <unordered_map>
 #include <array>
 
-class QString;
 class WzString;
 struct BASE_OBJECT;
 struct DROID;
@@ -140,6 +139,7 @@ bool triggerEventDroidIdle(DROID *psDroid);
 bool triggerEventDestroyed(BASE_OBJECT *psVictim);
 bool triggerEventStructureReady(STRUCTURE *psStruct);
 bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct);
+bool triggerEventDroidRankGained(const DROID *psDroid, int rankNum);
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);

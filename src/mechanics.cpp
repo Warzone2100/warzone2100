@@ -37,9 +37,13 @@
 /* Shutdown the mechanics system */
 bool mechanicsShutdown()
 {
+	if (!psDestroyedObj.empty())
+	{
+		debug(LOG_INFO, "%zu destroyed objects", psDestroyedObj.size());
+	}
 	for (BASE_OBJECT* psObj : psDestroyedObj)
 	{
-		objmemDestroy(psObj);
+		objmemDestroy(psObj, true);
 	}
 	psDestroyedObj.clear();
 
@@ -213,8 +217,10 @@ void makeAllAvailable()
 		//make all research availble to be performed
 		for (comp = 0; comp < asResearch.size(); comp++)
 		{
-			enableResearch(&asResearch[comp], i);
+			if (!asResearch[comp].excludeFromCheats)
+			{
+				enableResearch(&asResearch[comp], i);
+			}
 		}
 	}
 }
-

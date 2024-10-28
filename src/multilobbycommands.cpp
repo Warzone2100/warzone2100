@@ -57,6 +57,14 @@ bool removeLobbyAdminPublicKey(const std::string& publicKeyB64Str)
 	return lobbyAdminPublicKeys.erase(publicKeyB64Str) > 0;
 }
 
+// checks for specific identity being an admin
+bool identityMatchesAdmin(const EcKey& identity)
+{
+	std::string senderIdentityHash = identity.publicHashString();
+	std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+	return lobbyAdminPublicKeys.count(senderPublicKeyB64) != 0 || lobbyAdminPublicHashStrings.count(senderIdentityHash) != 0;
+}
+
 // NOTE: **IMPORTANT** this should *NOT* be used for determining whether a sender has permission to execute admin commands
 // (Use senderHasLobbyCommandAdminPrivs instead)
 static bool senderApparentlyMatchesAdmin(uint32_t playerIdx)
@@ -75,14 +83,7 @@ static bool senderApparentlyMatchesAdmin(uint32_t playerIdx)
 	{
 		return false;
 	}
-	std::string senderIdentityHash = identity.publicHashString();
-	std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-	if (lobbyAdminPublicKeys.count(senderPublicKeyB64) == 0 && lobbyAdminPublicHashStrings.count(senderIdentityHash) == 0)
-	{
-		return false; // identity hash is not in permitted lists
-	}
-
-	return true;
+	return identityMatchesAdmin(identity);
 }
 
 // **THIS** is the function that should be used to determine whether a sender currently has permission to execute admin commands
@@ -294,7 +295,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "team <slot> <team>");
 			return false;
 		}
-		if (!cmdInterface.changeTeam(posToNetPlayer(s1), s2))
+		if (!cmdInterface.changeTeam(posToNetPlayer(s1), s2, message.sender))
 		{
 			std::string msg = astringf("Unable to change player %u team to %u", s1, s2);
 			sendRoomNotifyMessage(msg.c_str());
@@ -354,7 +355,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomSystemMessage("Can't kick the host.");
 			return false;
 		}
-		if (!cmdInterface.kickPlayer(playerIdx, _("Administrator has kicked you from the game."), isBan))
+		if (!cmdInterface.kickPlayer(playerIdx, _("Administrator has kicked you from the game."), isBan, message.sender))
 		{
 			std::string msg = astringf("Failed to kick %s: %u", (playerIdx < MAX_PLAYER_SLOTS) ? "player" : "spectator", playerPos);
 			sendRoomSystemMessage(msg.c_str());
@@ -386,7 +387,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			return false;
 		}
 
-		if (!cmdInterface.changePosition(playerIdxA, s2))
+		if (!cmdInterface.changePosition(playerIdxA, s2, message.sender))
 		{
 			std::string msg = astringf("Unable to swap players %" PRIu8 " and %" PRIu8, s1, s2);
 			sendRoomNotifyMessage(msg.c_str());
@@ -553,47 +554,11 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomSystemMessage("Autobalance is available only for even player count.");
 			return false;
 		}
-		// NetPlay.players[i]
-		struct es {
-			std::string name;
-			std::string elo;
-			int id;
-		};
-		std::vector<es> pl;
-		for (int i = 0; i < maxp; i++)
+		if (!cmdInterface.autoBalancePlayers(message.sender))
 		{
-			auto ps = getMultiStats(i);
-			pl.push_back({std::string(NetPlay.players[i].name), std::string(ps.autorating.elo), i});
+			// failure message logged by autoBalancePlayers()
+			return false;
 		}
-		std::sort(pl.begin(), pl.end(), [](struct es a, struct es b) { return a.elo.compare(b.elo) > 0; });
-		int teamsize = maxp/2;
-		for (int i = 0; i < maxp; i++)
-		{
-			int id = pl[i].id;
-			int toslot = i;
-
-			int linepos = i/2;
-			int team = (i+1)/2%2;
-
-			int bounceindex = teamsize - linepos/2 - 1;
-			if (linepos%2 == 0)
-			{
-				bounceindex = linepos/2;
-			}
-
-			if (team == 0)
-			{ // team a
-				toslot = bounceindex;
-			}
-			else
-			{ // team b
-				toslot = bounceindex + teamsize;
-			}
-
-			sendRoomSystemMessage(astringf("Moving [%d]\"%s\" <%s> to pos %d", id, pl[i].name.c_str(), pl[i].elo.c_str(), toslot).c_str());
-			cmdInterface.changePosition(id, toslot);
-		}
-		sendRoomSystemMessage("Autobalance done");
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "mute ", 5) == 0 || strncmp(&message.text[startingCommandPosition], "unmute ", 7) == 0)
 	{

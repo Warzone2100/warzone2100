@@ -403,6 +403,12 @@ namespace wzapi
 		//__
 		virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) = 0;
 
+		//__ ## eventDroidRankGained(droid, rankNum)
+		//__
+		//__ An event that is run whenever a droid gains a rank.
+		//__
+		virtual bool handle_eventDroidRankGained(const DROID *psDroid, int rankNum) = 0;
+
 		//__ ## eventAttacked(victim, attacker)
 		//__
 		//__ An event that is run when an object belonging to the script's controlling player is
@@ -1051,6 +1057,7 @@ namespace wzapi
 	bool activateStructure(WZAPI_PARAMS(STRUCTURE *psStruct, optional<BASE_OBJECT *> _psTarget));
 	bool chat(WZAPI_PARAMS(int playerFilter, std::string message));
 	bool quickChat(WZAPI_PARAMS(int playerFilter, int messageEnum));
+	std::vector<scr_position> getDroidPath(WZAPI_PARAMS(const DROID *psDroid));
 	bool addBeacon(WZAPI_PARAMS(int x, int y, int playerFilter, optional<std::string> _message));
 	bool removeBeacon(WZAPI_PARAMS(int playerFilter));
 	std::unique_ptr<const DROID> getDroidProduction(WZAPI_PARAMS(const STRUCTURE *_psFactory));
@@ -1069,6 +1076,7 @@ namespace wzapi
 	bool centreView(WZAPI_PARAMS(int x, int y));
 	bool playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional<int> _y, optional<int> _z));
 	bool gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackDrop, optional<bool> _showOutro));
+	bool addGuideTopic(WZAPI_PARAMS(std::string guideTopicID, optional<int> showFlags, optional<string_or_string_list> excludedTopicIDs));
 
 	// MARK: - Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	bool setStructureLimits(WZAPI_PARAMS(std::string structureName, int limit, optional<int> _player));
@@ -1098,6 +1106,14 @@ namespace wzapi
 	no_return_value makeComponentAvailable(WZAPI_PARAMS(std::string componentName, int player));
 	bool allianceExistsBetween(WZAPI_PARAMS(int player1, int player2));
 	bool removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED;
+	/// <summary>
+	/// Queues the given game object for removal with or without special effects.
+	///
+	/// The current behavior is in effect since version 4.5+.
+	/// </summary>
+	/// <param name="psObj">Game object to be queued for removal.</param>
+	/// <param name="_sfx">Optional boolean parameter that specifies whether special effects are to be applied.</param>
+	/// <returns>`true` if `psObj` has been successfully queued for destruction.</returns>
 	bool removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx));
 	no_return_value setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x2, int y2));
 	scr_area getScrollLimits(WZAPI_NO_PARAMS);
@@ -1126,6 +1142,35 @@ namespace wzapi
 	nlohmann::json constructStaticPlayerData();
 	std::vector<PerPlayerUpgrades> getUpgradesObject();
 	nlohmann::json constructMapTilesArray();
+
+	// `wzapi::removeObject` API call adds the game objects to this list.
+	// They will eventually be released during calls to `processScriptQueuedObjectRemovals()`
+	// during the following stages of the main game loop:
+	// 1. `recvMessage()` - there are a few functions which distribute
+	//    resources of the defeated players among others and may trigger script events.
+	// 2. `updateScripts()` - processes queued timer functions.
+	// 3. `droidUpdate()`, `missionDroidUpdate()`, `structureUpdate()` - main
+	//    routines for updating the state of in-game objects. These would potentially
+	//    trigger the majority of script events.
+	//
+	// Each pair represents <GameObject, NeedToApplyEffectsOnDestruction> tuple.
+	using QueuedObjectRemovalsVector = std::vector<std::pair<BASE_OBJECT*, bool>>;
+
+	QueuedObjectRemovalsVector& scriptQueuedObjectRemovals();
+	bool scriptIsObjectQueuedForRemoval(const BASE_OBJECT *psObj);
+	/// <summary>
+	/// Walks `scriptQueuedObjectRemovals()` list, destroys every object in that list
+	/// and clears the container.
+	/// </summary>
+	void processScriptQueuedObjectRemovals();
+} // namespace wzapi
+
+template <typename Fn>
+static void executeFnAndProcessScriptQueuedRemovals(Fn fn)
+{
+	ASSERT(wzapi::scriptQueuedObjectRemovals().empty(), "Leftover script-queued object removals detected!");
+	fn();
+	wzapi::processScriptQueuedObjectRemovals();
 }
 
 #endif

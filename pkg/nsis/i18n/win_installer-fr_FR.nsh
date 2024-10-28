@@ -8,7 +8,7 @@ ${LangFileString} WZ_64BIT_AVAILABLE "Une version 64 bits de Warzone 2100 est di
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Ceci est la version 64 bits de Warzone 2100.$\r$\nVeuillez télécharger la version 32 bits de https://wz2100.net/ $\r$\nCliquez sur OK pour quitter la configuration."
 
-${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Ceci est la version ARM 64 bits de Warzone 2100, mais cet appareil ne possède pas de processeur ARM64.$\r$\nVeuillez télécharger la version appropriée pour votre système (par exemple : x64).$\r$\nContinuer avec l'installation ARM64 ?"
 
 ${LangFileString} WZ_GPL_NEXT "Suivant"
 
@@ -39,7 +39,7 @@ ${LangFileString} DESC_SecNLS_WinFonts "Inclure le dossier des polices Windows d
 ${LangFileString} TEXT_SecMSSysLibraries "DLLs Microsoft Runtime importantes"
 ${LangFileString} DESC_SecMSSysLibraries "Téléchargez et installez (ou mettez à jour) les bibliothèques système redistribuables Visual C++ de Microsoft, dont certains composants peuvent avoir besoin pour fonctionner."
 
-${LangFileString} DLTEXT_Downloading "En téléchargement"
+${LangFileString} DLTEXT_Downloading "Téléchargement en cours"
 ${LangFileString} DLTEXT_SysLibDLFailed "Échec du téléchargement de la bibliothèque système"
 ${LangFileString} DLTEXT_VideosDLFailed "Le téléchargement des vidéos a échoué"
 

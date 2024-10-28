@@ -83,7 +83,7 @@ function setupCyborgGroups()
 
 function setCrashedTeamExp()
 {
-	const DROID_EXP = 32;
+	const DROID_EXP = camGetRankThreshold("professional");
 	const droids = enumDroid(MIS_TRANSPORT_TEAM_PLAYER).filter((dr) => (
 		!camIsSystemDroid(dr) && !camIsTransporter(dr)
 	));
@@ -115,7 +115,7 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Locate and rescue your units from the shot down transporter"));
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2B", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta3, {
 		area: "RTLZ",
 		message: "C21_LZ",
 		reinforcements: -1,

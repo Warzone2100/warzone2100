@@ -1,0 +1,8 @@
+{
+    "video0000": {
+        "name": "FACTORYVIPER",
+        "sequences": [
+            { "loop": 0, "subtitles": "", "video": "factory.ogg" }
+        ]
+    }
+}

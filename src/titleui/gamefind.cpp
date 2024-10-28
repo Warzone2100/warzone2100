@@ -78,7 +78,7 @@ void WzGameFindTitleUI::start()
 		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
 	}));
 
-	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX - 3, MULTIOP_OPTIONSY, _("GAMES"));
+	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX - 6, MULTIOP_OPTIONSY, _("GAMES"));
 
 	// cancel
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, CON_CANCEL, 10, 5, MULTIOP_OKW, MULTIOP_OKH, _("Return To Previous Screen"),
@@ -298,9 +298,9 @@ private:
 	DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
 };
 
-static bool joinLobbyGame(uint32_t gameNumber, bool asSpectator = false)
+static void joinLobbyGame(uint32_t gameNumber, bool asSpectator)
 {
-	ASSERT_OR_RETURN(false, gameNumber < gamesList.size(), "Invalid gameNumber: %" PRIu32, gameNumber);
+	ASSERT_OR_RETURN(, gameNumber < gamesList.size(), "Invalid gameNumber: %" PRIu32, gameNumber);
 
 	std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, gamesList[gameNumber].hostPort)};
 	ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
@@ -310,7 +310,7 @@ static bool joinLobbyGame(uint32_t gameNumber, bool asSpectator = false)
 	// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 	ingame.localOptionsReceived = false;					// note, we are awaiting options
 	sstrcpy(game.name, gamesList[gameNumber].name);			// store name
-	return joinGame(connectionDesc, asSpectator) != JoinGameResult::FAILED;
+	joinGame(connectionDesc, asSpectator);
 }
 
 class WzLobbyGameDetails: public W_BUTTON
@@ -732,7 +732,7 @@ void WzGameFindTitleUI::addGames()
 		W_BUTINIT sButInit;
 		sButInit.formID = FRONTEND_BOTFORM;
 		sButInit.id = FRONTEND_NOGAMESAVAILABLE;
-		sButInit.x = 70;
+		sButInit.x = 60;
 		sButInit.y = 50;
 		sButInit.style = WBUT_TXTCENTRE;
 		sButInit.width = FRONTEND_BUTWIDTH;

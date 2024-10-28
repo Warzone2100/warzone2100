@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Weapons")
+_("Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo.")
+_("VTOL versions of regular weapons do not need to be researched separately.")
+_("In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful.")

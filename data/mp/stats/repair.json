@@ -32,7 +32,7 @@
 		"name": "Heavy Repair Turret",
 		"repairPoints": 30,
 		"time": 7,
-		"weight": 3000
+		"weight": 2000
 	},
 	"LightRepair1": {
 		"buildPoints": 125,

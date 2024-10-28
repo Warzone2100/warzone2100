@@ -27,7 +27,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/ivisdef.h"
 
@@ -46,6 +46,7 @@
 #include "combat.h"
 #include "multiplay.h"
 #include "qtscript.h"
+#include "terrain.h"
 
 #include "mapgrid.h"
 #include "display3d.h"
@@ -180,17 +181,63 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 	return buildFeature(psStats, x, y, FromSave, id);
 }
 
+/* Get pitch and roll from direction and tile data */
+static void updateFeatureOrientation(FEATURE *psFeature)
+{
+	int32_t hx0, hx1, hy0, hy1;
+	int newPitch, deltaPitch; //, pitchLimit;
+	int32_t dzdx, dzdy, dzdv, dzdw;
+	const int d = 20; // from updateDroidOrientation() - a magic number distance from the feature position
+	int32_t vX, vY;
+
+	// Find the height of 4 points around the feature center.
+	//    hy0
+	// hx0 * hx1      (* = feature)
+	//    hy1
+	hx1 = map_Height(psFeature->pos.x + d, psFeature->pos.y);
+	hx0 = map_Height(MAX(0, psFeature->pos.x - d), psFeature->pos.y);
+	hy1 = map_Height(psFeature->pos.x, psFeature->pos.y + d);
+	hy0 = map_Height(psFeature->pos.x, MAX(0, psFeature->pos.y - d));
+
+	//update height in case in the bottom of a trough
+	psFeature->pos.z = MAX(psFeature->pos.z, (hx0 + hx1) / 2);
+	psFeature->pos.z = MAX(psFeature->pos.z, (hy0 + hy1) / 2);
+
+	if (psFeature->psStats->subType == FEAT_TREE ||
+		psFeature->psStats->subType == FEAT_SKYSCRAPER ||
+		psFeature->psStats->subType == FEAT_BUILDING)
+	{
+		// Do not rotate or pitch - trees + buildings look weird if they aren't pointing up
+		return;
+	}
+
+	// Vector of length 65536 pointing in direction feature is facing.
+	vX = iSin(psFeature->rot.direction);
+	vY = iCos(psFeature->rot.direction);
+
+	// Calculate pitch of ground.
+	dzdx = hx1 - hx0;                                    // 2*d*∂z(x, y)/∂x       of ground
+	dzdy = hy1 - hy0;                                    // 2*d*∂z(x, y)/∂y       of ground
+	dzdv = dzdx * vX + dzdy * vY;                        // 2*d*∂z(x, y)/∂v << 16 of ground, where v is the direction the droid is facing.
+	newPitch = iAtan2(dzdv, (2 * d) << 16);              // pitch = atan(∂z(x, y)/∂v)/2π << 16
+
+	deltaPitch = angleDelta(newPitch - psFeature->rot.pitch);
+
+	// Update pitch.
+	psFeature->rot.pitch += deltaPitch;
+
+	// Calculate and update roll of ground (not taking pitch into account, but good enough).
+	dzdw = dzdx * vY - dzdy * vX;				// 2*d*∂z(x, y)/∂w << 16 of ground, where w is at right angles to the direction the droid is facing.
+	psFeature->rot.roll = iAtan2(dzdw, (2 * d) << 16);		// pitch = atan(∂z(x, y)/∂w)/2π << 16
+}
+
 /* Create a feature on the map */
 FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
 {
-	//try and create the Feature
-	FEATURE *psFeature = new FEATURE(id, psStats);
+	//try and create the Feature, obtain stable address.
+	FEATURE& feature = GlobalFeatureContainer().emplace(id, psStats);
+	FEATURE* psFeature = &feature;
 
-	if (psFeature == nullptr)
-	{
-		debug(LOG_WARNING, "Feature couldn't be built.");
-		return nullptr;
-	}
 	//add the feature to the list - this enables it to be drawn whilst being built
 	addFeature(psFeature);
 
@@ -240,6 +287,7 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 	psFeature->body = psStats->body;
 	psFeature->periodicalDamageStart = 0;
 	psFeature->periodicalDamage = 0;
+	psFeature->foundationDepth = std::min<float>(foundationMin, TILE_MAX_HEIGHT);
 
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;
@@ -295,7 +343,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 			}
 		}
 	}
-	psFeature->pos.z = map_TileHeight(b.map.x, b.map.y);//jps 18july97
+	psFeature->pos.z = map_TileHeight(psFeature->pos.x, psFeature->pos.y);//jps 18july97
+	updateFeatureOrientation(psFeature);
 
 	return psFeature;
 }
@@ -304,14 +353,12 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 FEATURE::FEATURE(uint32_t id, FEATURE_STATS const *psStats)
 	: BASE_OBJECT(OBJ_FEATURE, id, PLAYER_FEATURE)  // Set the default player out of range to avoid targeting confusions
 	, psStats(psStats)
+	, foundationDepth(0.f)
 {}
 
 /* Release the resources associated with a feature */
 FEATURE::~FEATURE()
-{
-	// Make sure to get rid of some final references in the sound code to this object first
-	audio_RemoveObj(this);
-}
+{}
 
 void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 {
@@ -496,7 +543,13 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		{
 			for (int width = 0; width < b.size.x; ++width)
 			{
-				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
+				const unsigned int x = b.map.x + width;
+				const unsigned int y = b.map.y + breadth;
+				MAPTILE *psTile = mapTile(x, y);
+				if (psTile->psObject != psDel)
+				{
+					continue;
+				}
 				// stops water texture changing for underwater features
 				if (terrainType(psTile) != TER_WATER)
 				{
@@ -505,18 +558,18 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						/* Clear feature bits */
 						if (isUrban)
 						{
-							psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+							makeTileRubbleTexture(psTile, x, y, RUBBLE_TILE);
 						}
-						auxClearBlocking(b.map.x + width, b.map.y + breadth, AUXBITS_ALL);
+						auxClearBlocking(x, y, AUXBITS_ALL);
 					}
 					else
 					{
 						/* This remains a blocking tile */
 						psTile->psObject = nullptr;
-						auxClearBlocking(b.map.x + width, b.map.y + breadth, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
+						auxClearBlocking(x, y, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
 						if (isUrban)
 						{
-							psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
+							makeTileRubbleTexture(psTile, x, y, BLOCKING_RUBBLE_TILE);
 						}
 					}
 				}
@@ -555,4 +608,10 @@ StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos)
 	const Vector2i size = stats->size();
 	const Vector2i map = map_coord(pos) - size / 2;
 	return StructureBounds(map, size);
+}
+
+FeatureContainer& GlobalFeatureContainer()
+{
+	static FeatureContainer instance;
+	return instance;
 }

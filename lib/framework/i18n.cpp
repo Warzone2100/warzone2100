@@ -135,7 +135,7 @@ static const struct
 	{ "ga_IE", LANG_NAME_IRISH, "ga", LANG_IRISH, SUBLANG_IRISH_IRELAND },
 	{ "hr", LANG_NAME_CROATIAN, "hr", LANG_CROATIAN, SUBLANG_DEFAULT },
 	{ "hu", LANG_NAME_HUNGARIAN, "hu", LANG_HUNGARIAN, SUBLANG_DEFAULT },
-	{ "id", LANG_NAME_INDONESIAN, "id_ID", LANG_INDONESIAN, SUBLANG_DEFAULT },
+	{ "id", LANG_NAME_INDONESIAN, "id", LANG_INDONESIAN, SUBLANG_DEFAULT },
 	{ "it", LANG_NAME_ITALIAN, "it", LANG_ITALIAN, SUBLANG_ITALIAN },
 	{ "ko_KR", LANG_NAME_KOREAN, "ko", LANG_KOREAN, SUBLANG_DEFAULT },
 //	{ "la", LANG_NAME_LATIN, "la", LANG_LATIN, SUBLANG_DEFAULT },
@@ -199,7 +199,7 @@ static const struct
 	{ "ga_IE", LANG_NAME_IRISH, "ga", "ga_IE.UTF-8", "ga" },
 	{ "hr", LANG_NAME_CROATIAN, "hr", "hr_HR.UTF-8", "hr_HR" },
 	{ "hu", LANG_NAME_HUNGARIAN, "hu", "hu_HU.UTF-8", "hu_HU" },
-	{ "id", LANG_NAME_INDONESIAN, "id_ID", "id_ID.UTF-8", "id" },
+	{ "id", LANG_NAME_INDONESIAN, "id", "id_ID.UTF-8", "id" },
 	{ "it", LANG_NAME_ITALIAN, "it", "it_IT.UTF-8", "it_IT" },
 	{ "ko_KR", LANG_NAME_KOREAN, "ko", "ko_KR.UTF-8", "ko" },
 	{ "la", LANG_NAME_LATIN, "la", "la.UTF-8", "la" },
@@ -612,9 +612,32 @@ static std::string getEmscriptenDefaultLanguage()
 }
 #endif
 
+static bool wzBindAllWZTextDomains(const char* resourcePath)
+{
+	// Bind the "main" message catalog ("warzone2100")
+	auto textdomainDirectory = wzBindTextDomain(PACKAGE, resourcePath);
+	(void)bind_textdomain_codeset(PACKAGE, "UTF-8");
+	if (textdomainDirectory.empty())
+	{
+		// Failed to bind main message catalog - treat as critical failure
+		return false;
+	}
+
+	// Bind the guide topics message catalog
+	textdomainDirectory = wzBindTextDomain(PACKAGE "_guide", resourcePath);
+	(void)bind_textdomain_codeset(PACKAGE "_guide", "UTF-8");
+	if (textdomainDirectory.empty())
+	{
+		// Non-fatal failure
+		debug(LOG_INFO, "initI18n: Failed to bind guide message catalog");
+	}
+
+	return true;
+}
+
 void initI18n()
 {
-	std::string textdomainDirectory;
+	bool boundAtLeastMainTextDomain = false;
 	std::string defaultLanguage = ""; // "" is system default (in most cases)
 
 #if defined(__EMSCRIPTEN__)
@@ -635,7 +658,7 @@ void initI18n()
 		if (CFURLGetFileSystemRepresentation(resourceURL, true, (UInt8 *) resourcePath, PATH_MAX))
 		{
 			sstrcat(resourcePath, "/locale");
-			textdomainDirectory = wzBindTextDomain(PACKAGE, resourcePath);
+			boundAtLeastMainTextDomain = wzBindAllWZTextDomains(resourcePath);
 		}
 		else
 		{
@@ -658,22 +681,22 @@ void initI18n()
 	debug(LOG_WZ, "Install prefix: %s", prefixDir.c_str());
 	const std::string dirSeparator(PHYSFS_getDirSeparator());
 	std::string localeDir = prefixDir + dirSeparator + WZ_LOCALEDIR;
-	textdomainDirectory = wzBindTextDomain(PACKAGE, localeDir.c_str());
+	boundAtLeastMainTextDomain = wzBindAllWZTextDomains(localeDir.c_str());
 	#else
 	// Treat WZ_LOCALEDIR as an absolute path, and use directly
-	textdomainDirectory = wzBindTextDomain(PACKAGE, WZ_LOCALEDIR);
+	boundAtLeastMainTextDomain = wzBindAllWZTextDomains(WZ_LOCALEDIR);
 	#endif
 # else
 	// Old locale-dir setup (autotools)
-	textdomainDirectory = wzBindTextDomain(PACKAGE, LOCALEDIR);
+	boundAtLeastMainTextDomain = wzBindAllWZTextDomains(LOCALEDIR);
 # endif
 #endif // ifdef WZ_OS_MAC
-	if (textdomainDirectory.empty())
+	if (!boundAtLeastMainTextDomain)
 	{
 		debug(LOG_ERROR, "initI18n: bindtextdomain failed!");
 	}
 
-	(void)bind_textdomain_codeset(PACKAGE, "UTF-8");
+	// Set default text domain
 	(void)textdomain(PACKAGE);
 	debug(LOG_WZ, "textdomain: %s", PACKAGE);
 

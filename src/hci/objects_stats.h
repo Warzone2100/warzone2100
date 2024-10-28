@@ -46,10 +46,12 @@ public:
 	void updateHighlighted();
 	void clearSelection();
 	void clearStructureSelection();
-	void selectObject(BASE_OBJECT *object);
+	void selectObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject);
 
 	virtual BASE_OBJECT *getHighlightedObject() const = 0;
-	virtual void setHighlightedObject(BASE_OBJECT *object) = 0;
+	virtual void setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject) = 0;
+	virtual bool getQueuedJumpToHighlightedStatsObject() const = 0;
+	virtual void clearQueuedJumpToHighlightedStatsObject() = 0;
 
 	void closeInterface()
 	{

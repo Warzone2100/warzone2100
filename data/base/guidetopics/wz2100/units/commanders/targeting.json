@@ -1,0 +1,26 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::commanders::targeting",
+	"title": "Targeting",
+	"sort": "03",
+	"visual": {
+		"droidTemplate": {
+			"body": "Body8MBT",
+			"brain": "CommandBrain01",
+			"name": "Command Turret Scorpion Half-tracks",
+			"propulsion": "HalfTrack",
+			"type": "DROID_COMMAND",
+			"weapons": [
+				"CommandTurret1"
+			]
+		}
+	},
+	"contents": [
+		"When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit.",
+		"",
+		"The attached units will have greater accuracy when firing."
+	],
+	"links": [
+		"wz2100::units::commanders"
+	]
+}

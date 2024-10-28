@@ -614,7 +614,7 @@
 	},
 	"Tree1": {
 		"armour": 10,
-		"breadth": 2,
+		"breadth": 1,
 		"hitpoints": 50,
 		"id": "Tree1",
 		"lineOfSight": 0,
@@ -622,11 +622,11 @@
 		"name": "*Tree1*",
 		"tileDraw": 1,
 		"type": "TREE",
-		"width": 2
+		"width": 1
 	},
 	"Tree2": {
 		"armour": 10,
-		"breadth": 2,
+		"breadth": 1,
 		"hitpoints": 50,
 		"id": "Tree2",
 		"lineOfSight": 0,
@@ -634,7 +634,7 @@
 		"name": "*Tree2*",
 		"tileDraw": 1,
 		"type": "TREE",
-		"width": 2
+		"width": 1
 	},
 	"Tree3": {
 		"armour": 10,
@@ -650,7 +650,7 @@
 	},
 	"TreeSnow1": {
 		"armour": 10,
-		"breadth": 2,
+		"breadth": 1,
 		"hitpoints": 50,
 		"id": "TreeSnow1",
 		"lineOfSight": 0,
@@ -658,11 +658,11 @@
 		"name": "*Snowy Tree1*",
 		"tileDraw": 1,
 		"type": "TREE",
-		"width": 2
+		"width": 1
 	},
 	"TreeSnow2": {
 		"armour": 10,
-		"breadth": 2,
+		"breadth": 1,
 		"hitpoints": 50,
 		"id": "TreeSnow2",
 		"lineOfSight": 0,
@@ -670,7 +670,7 @@
 		"name": "*Snowy Tree2*",
 		"tileDraw": 1,
 		"type": "TREE",
-		"width": 2
+		"width": 1
 	},
 	"TreeSnow3": {
 		"armour": 10,

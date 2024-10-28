@@ -1,0 +1,31 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::vtols",
+	"title": "VTOLs",
+	"sort": "08",
+	"visual": {
+		"droidTemplate": {
+			"body": "Body2SUP",
+			"name": "Cluster Bomb Leopard V-Tol",
+			"propulsion": "V-Tol",
+			"type": "DROID",
+			"weapons": [
+				"Bomb1-VTOL-LtHE"
+			]
+		}
+	},
+	"contents": [
+		"VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies.",
+		"",
+		"To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\".",
+		"",
+		"You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
+	],
+	"links": [
+		"wz2100::units::vtols::designing",
+		"wz2100::structures::vtolfactory",
+		"wz2100::units::vtols::attacking",
+		"wz2100::units::vtols::defending",
+		"wz2100::units::vtols::weapons"
+	]
+}

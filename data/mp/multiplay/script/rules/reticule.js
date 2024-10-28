@@ -154,7 +154,6 @@ function reticuleUpdate(obj, eventType)
 	if (mainReticule && update_reticule)
 	{
 		//Wait a tick for the counts to update
-		const TICK_TIME = 100;
 		queue("setMainReticule", TICK_TIME);
 	}
 }

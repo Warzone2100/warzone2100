@@ -21,13 +21,17 @@
 #ifndef __INCLUDED_LIB_SOUND_AUDIO_H__
 #define __INCLUDED_LIB_SOUND_AUDIO_H__
 
+#include "lib/framework/wzconfig.h"
 #include "track.h"
 #include "sounddefs.h"
+
+bool loadAudioEffectFileData(WzConfig &ini);
 
 bool audio_Init(AUDIO_CALLBACK pStopTrackCallback, HRTFMode hrtf, bool really_init);
 void audio_Update();
 bool audio_Shutdown();
 bool audio_Disabled();
+bool audio_Paused();
 
 bool audio_LoadTrackFromFile(char szFileName[]);
 unsigned int audio_SetTrackVals(const char *fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
@@ -37,7 +41,7 @@ bool audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack);
 bool audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);
 bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);
 void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack);
-void audio_PlayTrack(int iTrack);
+void audio_PlayTrack(int iTrack, const bool playIfPaused = true);
 void audio_PlayCallbackTrack(int iTrack, AUDIO_CALLBACK pUserCallback);
 AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished, const void *user_data);
 void audio_QueueTrack(SDWORD iTrack);
@@ -48,8 +52,7 @@ void audio_QueueTrackPos(SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ);
 void audio_QueueTrackGroupPos(SDWORD iTrack, SDWORD iGroup, SDWORD iX, SDWORD iY, SDWORD iZ);
 bool audio_GetPreviousQueueTrackPos(SDWORD *iX, SDWORD *iY, SDWORD *iZ);
 bool audio_GetPreviousQueueTrackRadarBlipPos(SDWORD *iX, SDWORD *iY);
-void audio_PauseAll();
-void audio_ResumeAll();
+void audio_setPause(const bool state);
 void audio_StopAll();
 
 SDWORD audio_GetTrackID(const char *fileName);

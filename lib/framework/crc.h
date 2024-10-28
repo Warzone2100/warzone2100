@@ -27,7 +27,12 @@
 #include <functional>
 #include <nlohmann/json_fwd.hpp>
 
-uint32_t crcSum(uint32_t crc, const void *data, size_t dataLen);
+namespace wz {
+	uint32_t crc_init();
+	uint32_t crc_update(uint32_t crc, const void *data, size_t dataLen);
+}
+
+// older crc functions - do not combine with the ones above
 uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen);
 uint32_t crcSumI16(uint32_t crc, const int16_t *data, size_t dataLen);
 uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen);

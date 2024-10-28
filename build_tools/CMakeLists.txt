@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.5...3.24)
 
 # Autorevision target that will run *every* build
 add_custom_target(autorevision ALL
-    DEPENDS
-        "${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"
+	DEPENDS
+		"${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"
 )
 set_property(TARGET autorevision PROPERTY FOLDER "_WZBuildProcessTargets")
 
@@ -15,7 +15,7 @@ set(_autorevision_cache_tarball_src_input "${CMAKE_CURRENT_SOURCE_DIR}/autorevis
 set(_autorevision_cache_file "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache")
 set(_autorevision_h_file "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h")
 add_custom_command(
-    OUTPUT
+	OUTPUT
 		"${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"  # fake - ensure we run
 		"${_autorevision_h_file}"
 		"${_autorevision_cache_file}"

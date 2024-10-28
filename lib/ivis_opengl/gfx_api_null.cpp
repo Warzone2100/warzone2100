@@ -65,6 +65,11 @@ unsigned null_texture::id()
 	return 0;
 }
 
+gfx_api::texture2dDimensions null_texture::get_dimensions() const
+{
+	return {tex_width, tex_height};
+}
+
 size_t null_texture::backend_internal_value() const
 {
 	return 0;
@@ -182,6 +187,8 @@ gfx_api::texture* null_context::create_texture(const size_t& mipmap_count, const
 {
 	auto* new_texture = new null_texture();
 	new_texture->internal_format = internal_format;
+	new_texture->tex_width = width;
+	new_texture->tex_height = height;
 	return new_texture;
 }
 

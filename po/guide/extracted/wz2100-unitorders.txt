@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Unit Orders")
+_("Right-click a unit or group of units to show their current Unit Orders.")
+_("The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health.")
+_("Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory.")

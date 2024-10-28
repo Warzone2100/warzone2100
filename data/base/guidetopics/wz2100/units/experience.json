@@ -1,0 +1,46 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::experience",
+	"title": "Experience & Ranks",
+	"sort": "03",
+	"visual": [
+		{ 
+			"imagePath": "../../../images/intfac/image_lev_0.png"
+		},
+		{ 
+			"imagePath": "../../../images/intfac/image_lev_1.png"
+		},
+		{ 
+			"imagePath": "../../../images/intfac/image_lev_2.png"
+		},
+		{ 
+			"imagePath": "../../../images/intfac/image_lev_3.png"
+		},
+		{ 
+			"imagePath": "../../../images/intfac/image_lev_4.png"
+		},
+		{ 
+			"imagePath": "../../../images/intfac/image_lev_5.png"
+		},
+		{
+			"imagePath": "../../../images/intfac/image_lev_6.png"
+		},
+		{
+			"imagePath": "../../../images/intfac/image_lev_7.png"
+		}
+	],
+	"contents": [
+		"Units gain experience when they successfully dispatch enemies.",
+		"",
+		"A higher experience level means that a unit is more accurate, moves faster, and takes less damage.",
+		"",
+		"An icon displaying a unit’s rank is displayed next to the unit’s health bar.",
+		"",
+		"Units with higher experience levels can make all the difference in battle!"
+	],
+	"links": [
+		"wz2100::unitorders::recycling",
+		"wz2100::unitorders::retreating",
+		"wz2100::units::repairing"
+	]
+}

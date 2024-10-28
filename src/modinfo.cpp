@@ -88,37 +88,6 @@ WzModCompatibilityResult WZModInfo::getModCompatibility() const
 	return isWZModVersionCompatible(*this);
 }
 
-optional<std::string> WzModInfoLocalizedString::getLocalizedString() const
-{
-	const char* pLangCode = getLanguage();
-	std::string currentLanguage = (pLangCode) ? pLangCode : "en";
-
-	auto findMapping = [&](const std::string& languageCode) {
-		return std::find_if(mappings.begin(), mappings.end(), [languageCode](const TranslationMapping& m) -> bool {
-			return m.languageCode == languageCode;
-		});
-	};
-
-	auto it = findMapping(currentLanguage);
-	if (it == mappings.end())
-	{
-		// fall back to "en" if available
-		it = findMapping("en");
-		if (it == mappings.end())
-		{
-			// just use the first entry, if available
-			it = mappings.begin();
-		}
-	}
-
-	if (it == mappings.end())
-	{
-		return nullopt;
-	}
-
-	return it->str;
-}
-
 void from_json(const nlohmann::json& j, WzModType& v)
 {
 	auto str = j.get<std::string>();
@@ -135,25 +104,6 @@ void from_json(const nlohmann::json& j, WzModType& v)
 	throw nlohmann::json::type_error::create(302, "type value is unknown: \"" + str + "\"", &j);
 }
 
-void from_json(const nlohmann::json& j, WzModInfoLocalizedString& v)
-{
-	if (j.is_object())
-	{
-		for (auto it : j.items())
-		{
-			v.mappings.push_back({it.key(), it.value().get<std::string>()});
-		}
-	}
-	else if (j.is_string())
-	{
-		v.mappings.push_back({"en", j.get<std::string>()});
-	}
-	else
-	{
-		throw nlohmann::json::type_error::create(302, "type must be an object or string, but is " + std::string(j.type_name()), &j);
-	}
-}
-
 void loadBaseModInfo(const nlohmann::json& j, WZModInfo& v)
 {
 	if (!j.is_object())
@@ -164,7 +114,7 @@ void loadBaseModInfo(const nlohmann::json& j, WZModInfo& v)
 	v.name = j.at("name").get<std::string>();
 	v.author = j.at("author").get<std::string>();
 	v.type = j.at("type").get<WzModType>();
-	v.description = j.at("description").get<WzModInfoLocalizedString>();
+	v.description = j.at("description").get<WzJsonLocalizedString>();
 	v.license = j.at("license").get<std::string>();
 	auto it = j.find("version");
 	if (it != j.end())
@@ -268,8 +218,8 @@ WzCampaignTweakOption customTweakOptionFromJSON(const nlohmann::json& j)
 	v.type = j.at("type").get<WzCampaignTweakOption::Type>();
 	v.enabled = j.at("default").get<bool>();
 	v.userEditable = true;
-	v.displayName = j.at("displayName").get<WzModInfoLocalizedString>();
-	v.description = j.at("description").get<WzModInfoLocalizedString>();
+	v.displayName = j.at("displayName").get<WzJsonLocalizedString>();
+	v.description = j.at("description").get<WzJsonLocalizedString>();
 	return v;
 }
 
@@ -302,7 +252,7 @@ WzCampaignModInfo loadCampaignModInfo(const nlohmann::json& j, const std::string
 				debug(LOG_ERROR, "Failed to find: campaigns/%s", jsonName.c_str());
 				continue;
 			}
-			
+
 			CAMPAIGN_FILE c;
 			try {
 				c = jsonObj.value().get<CAMPAIGN_FILE>();
@@ -312,7 +262,7 @@ WzCampaignModInfo loadCampaignModInfo(const nlohmann::json& j, const std::string
 				debug(LOG_ERROR, "JSON document from %s is invalid: %s", jsonName.c_str(), e.what());
 				continue;
 			}
-			
+
 			v.campaignFiles.push_back(c);
 		}
 		if (v.campaignFiles.empty())

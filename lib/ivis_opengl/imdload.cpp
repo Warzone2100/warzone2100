@@ -46,12 +46,22 @@
 #include <glm/vec4.hpp>
 using Vector4f = glm::vec4;
 
+// The maximum polygons for a model is influenced by several factors:
+// 1. The vertexCount *must* be less than UINT16_MAX (65535), because this special vertex index value is treated as restarting the assembly of primitives in some cases (example: Vulkan on MoltenVK) - NOTE: we currently use index_type::u16 for our model VBO_INDEX buffers
+// 2. Given how the game world and models are displayed, using a very large number of polygons is effectively a waste
+//#define MAX_PIE_POLYGONS 21844 // floor((UINT16_MAX-1) / 3)
+#define MAX_PIE_POLYGONS 8192
+static_assert(MAX_PIE_POLYGONS <= ((UINT16_MAX-1) / 3), "MAX_PIE_POLYGONS must not currently exceed floor((UINT16_MAX-1) / 3)");
+
 // Scale animation numbers from int to float
 #define INT_SCALE       1000
 
 typedef std::unordered_map<std::string, std::unique_ptr<iIMDBaseShape>> ModelMap;
 static ModelMap models;
 static size_t currentTilesetIdx = 0;
+
+static size_t modelLoadingErrors = 0;
+static size_t modelTextureLoadingFailures = 0;
 
 static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd, bool skipGPUData);
 static bool _imd_load_level_textures(const iIMDShape& s, size_t tilesetIdx, iIMDShapeTextures& output);
@@ -70,7 +80,10 @@ const iIMDShapeTextures& iIMDShape::getTextures() const
 	if (!m_textures->initialized)
 	{
 		// Load the textures on-demand
-		_imd_load_level_textures(*this, currentTilesetIdx, *m_textures);
+		if (!_imd_load_level_textures(*this, currentTilesetIdx, *m_textures))
+		{
+			++modelTextureLoadingFailures;
+		}
 		m_textures->initialized = true;
 	}
 
@@ -111,9 +124,21 @@ void iIMDBaseShape::replaceDisplayModel(std::unique_ptr<iIMDShape> newDisplayMod
 	m_displayModel = std::move(newDisplayModel);
 }
 
+size_t getModelLoadingErrorCount()
+{
+	return modelLoadingErrors;
+}
+
+size_t getModelTextureLoadingFailuresCount()
+{
+	return modelTextureLoadingFailures;
+}
+
 void modelShutdown()
 {
 	models.clear();
+	modelLoadingErrors = 0;
+	modelTextureLoadingFailures = 0;
 }
 
 void modelReloadAllModelTextures()
@@ -1434,6 +1459,7 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
  	}
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
+	ASSERT_OR_RETURN(nullptr, npolys <= MAX_PIE_POLYGONS, "'POLYGONS' directive count (%" PRIu32") exceeds maximum supported (%" PRIu32")", npolys, MAX_PIE_POLYGONS);
 	s.polys.resize(npolys);
 
 	if (!_imd_load_polys(filename, &lineToProcess.pNextLineBegin, FileDataEnd, &s, pieVersion, npoints))
@@ -1464,6 +1490,11 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 		else if (strcmp(buffer, "ANIMOBJECT") == 0)
 		{
 			s.objanimtime = value;
+			if (s.objanimtime == 0)
+			{
+				debug(LOG_ERROR, "%s bad ANIMOBJ time: %" PRIu32, filename.toUtf8().c_str(), value);
+				return nullptr;
+			}
 			const char* pRestOfLine = lineToProcess.lineContents.c_str() + cnt;
 			if (sscanf(pRestOfLine, "%d %d%n", &s.objanimcycles, &s.objanimframes, &cnt) != 2)
 			{
@@ -1680,6 +1711,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 	if (!_imd_get_next_line(pFileData, FileDataEnd, lineToProcess) || sscanf(lineToProcess.lineContents.c_str(), "%255s %d", buffer, &imd_version) != 2)
 	{
 		debug(LOG_ERROR, "%s: bad PIE version: (%s)", filename.toUtf8().c_str(), buffer);
+		++modelLoadingErrors;
 		assert(false);
 		return nullptr;
 	}
@@ -1688,6 +1720,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 	if (strcmp(PIE_NAME, buffer) != 0)
 	{
 		debug(LOG_ERROR, "%s: Not an IMD file (%s %d)", filename.toUtf8().c_str(), buffer, imd_version);
+		++modelLoadingErrors;
 		return nullptr;
 	}
 
@@ -1695,6 +1728,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 	if (imd_version < PIE_MIN_VER || imd_version > PIE_MAX_VER)
 	{
 		debug(LOG_ERROR, "%s: Version %d not supported", filename.toUtf8().c_str(), imd_version);
+		++modelLoadingErrors;
 		return nullptr;
 	}
 
@@ -1702,6 +1736,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 	if (!_imd_load_level_settings(filename, &pFileData, FileDataEnd, imd_version, true, globalLevelSettings))
 	{
 		debug(LOG_ERROR, "%s: Failed to load level settings", filename.toUtf8().c_str());
+		++modelLoadingErrors;
 		return nullptr;
 	}
 	// TYPE is required in the global scope
@@ -1728,6 +1763,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 	if (!getNextPossibleCommandLine())
 	{
 		debug(LOG_ERROR, "%s: Expecting EVENT or LEVELS: %s", filename.toUtf8().c_str(), buffer);
+		++modelLoadingErrors;
 		return nullptr;
 	}
 
@@ -1744,6 +1780,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 		if (sscanf(pRestOfLine, "%255s%n", animpie, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "%s animation model corrupt: %s", filename.toUtf8().c_str(), buffer);
+			++modelLoadingErrors;
 			return nullptr;
 		}
 
@@ -1753,6 +1790,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 		if (!getNextPossibleCommandLine())
 		{
 			debug(LOG_ERROR, "%s: Bad levels info: %s", filename.toUtf8().c_str(), buffer);
+			++modelLoadingErrors;
 			return nullptr;
 		}
 	}
@@ -1760,6 +1798,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 	if (strncmp(buffer, "LEVELS", 6) != 0)
 	{
 		debug(LOG_ERROR, "%s: Expecting 'LEVELS' directive (%s)", filename.toUtf8().c_str(), buffer);
+		++modelLoadingErrors;
 		return nullptr;
 	}
 	nlevels = value;
@@ -1772,16 +1811,19 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 		if (!getNextPossibleCommandLine())
 		{
 			debug(LOG_ERROR, "(_load_level) file corrupt -J");
+			++modelLoadingErrors;
 			return nullptr;
 		}
 		if (strncmp(buffer, "LEVEL", 5) != 0)
 		{
 			debug(LOG_ERROR, "%s: Expecting 'LEVEL' directive (%s)", filename.toUtf8().c_str(), buffer);
+			++modelLoadingErrors;
 			return nullptr;
 		}
 		if (value != (level + 1))
 		{
 			debug(LOG_ERROR, "%s: LEVEL %" PRIu32 " is invalid - expecting LEVEL %" PRIu32 " (LEVELS must be sequential, starting at 1)", filename.toUtf8().c_str(), value, level);
+			++modelLoadingErrors;
 			return nullptr;
 		}
 
@@ -1789,6 +1831,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 		if (shape == nullptr)
 		{
 			debug(LOG_ERROR, "%s: Unsuccessful loading level %" PRIu32, filename.toUtf8().c_str(), (level + 1));
+			++modelLoadingErrors;
 			return nullptr;
 		}
 

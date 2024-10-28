@@ -127,8 +127,8 @@ unsigned int sound_SetTrackVals(const char *fileName, bool loop, unsigned int vo
 	ASSERT_OR_RETURN(0, trackID < g_apTrack.size(), "Invalid trackID: %u", trackID);
 	if (g_apTrack[trackID] != nullptr)
 	{
-		debug(LOG_ERROR, "sound_SetTrackVals: track %i already set (filename: \"%s\"\n", trackID, g_apTrack[trackID]->fileName);
-		return 0;
+		debug(LOG_SOUND, "sound_SetTrackVals: track %i already set (filename: \"%s\") - overriding", trackID, g_apTrack[trackID]->fileName);
+		ASSERT_OR_RETURN(0, psTrack == g_apTrack[trackID], "Data pointer not equal?");
 	}
 
 	// set track members
@@ -185,7 +185,7 @@ void sound_CheckAllUnloaded(void)
 {
 	for (auto pTrack : g_apTrack)
 	{
-		ASSERT(pTrack == nullptr, "A track is not unloaded yet (%s); check audio.cfg for duplicate IDs", pTrack->fileName);
+		ASSERT(pTrack == nullptr, "A track is not unloaded yet (%s); check audio.json for duplicate IDs", pTrack->fileName);
 	}
 }
 

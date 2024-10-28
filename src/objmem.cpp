@@ -28,7 +28,8 @@
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
+#include "lib/sound/audio.h"
 #include "hci.h"
 #include "map.h"
 #include "power.h"
@@ -41,6 +42,8 @@
 #include "combat.h"
 #include "visibility.h"
 #include "qtscript.h"
+#include "order.h"
+#include "wzcrashhandlingproviders.h"
 
 #include <algorithm>
 
@@ -83,19 +86,71 @@ bool objmemInitialise()
 	return true;
 }
 
+template<typename T>
+static void objMemShutdownContainerImpl(T& container)
+{
+	for (const auto& entity : container)
+	{
+		// Make sure to get rid of some final references in the sound code to this object first
+		audio_RemoveObj(&entity);
+	}
+	container.clear();
+}
+
 /* Release the object heaps */
 void objmemShutdown()
 {
-	auto& droidContainer = GlobalDroidContainer();
-	droidContainer.clear();
+	objMemShutdownContainerImpl(GlobalDroidContainer());
+	objMemShutdownContainerImpl(GlobalStructContainer());
+	objMemShutdownContainerImpl(GlobalFeatureContainer());
+}
+
+static const char* objTypeToStr(OBJECT_TYPE type)
+{
+	switch (type)
+	{
+		case OBJ_DROID: return "droid";
+		case OBJ_STRUCTURE: return "struct";
+		case OBJ_FEATURE: return "feat";
+		case OBJ_PROJECTILE: return "proj";
+		default: return "object";
+	}
+	return "object";
+}
+
+static const char* getObjDebugDescriptiveName(const BASE_OBJECT *psObj)
+{
+	OBJECT_TYPE type = psObj->type;
+	switch (type)
+	{
+	case OBJ_DROID:
+		return droidGetName(((const DROID *)psObj));
+	case OBJ_STRUCTURE:
+		return getID(((const STRUCTURE *)psObj)->pStructureType);
+	case OBJ_FEATURE:
+		return getID(((const FEATURE *)psObj)->psStats);
+	default:
+		break;
+	}
+	return "n/a";
 }
 
 // Check that psVictim is not referred to by any other object in the game. We can dump out some extra data in debug builds that help track down sources of dangling pointer errors.
 #ifdef DEBUG
-#define BADREF(func, line) "Illegal reference to object %d from %s line %d in %s[%u]", psVictim->id, func, line, listName, player
+#define BADREF(func, line, obj) "Illegal reference to p%d:%s:%d (%s) from %s line %d in %s[%u] (%s:%d - %s)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), func, line, listName, player, objTypeToStr(obj->type), obj->id, getObjDebugDescriptiveName(obj)
 #else
-#define BADREF(func, line) "Illegal reference to object %d in %s[%u]", psVictim->id, listName, player
+#define BADREF(func, line, obj) "Illegal reference to p%d:%s:%d (%s) in %s[%u] (%s:%d - %s)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, objTypeToStr(obj->type), obj->id, getObjDebugDescriptiveName(obj)
 #endif
+
+#define ASSERT_OR_RETURN_REPORT(retval, expr, ...) \
+do { \
+	bool _wzeval = debug_likely(expr); \
+	if (!_wzeval) { \
+		ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); \
+		crashHandlingProviderCaptureException(__FUNCTION__, #expr, astringf(__VA_ARGS__), false, true); \
+		return retval; \
+	} \
+} while (0)
 
 static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& psPlayerStructList, unsigned player, const char* listName)
 {
@@ -108,7 +163,7 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 
 		for (unsigned i = 0; i < psStruct->numWeaps; ++i)
 		{
-			ASSERT_OR_RETURN(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
+			ASSERT_OR_RETURN_REPORT(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i], psStruct));
 		}
 
 		if (psStruct->pFunctionality && psStruct->pStructureType)
@@ -120,7 +175,7 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 				case REF_VTOL_FACTORY:
 				{
 					FACTORY *psFactory = &psStruct->pFunctionality->factory;
-					ASSERT_OR_RETURN(false, psFactory->psCommander != psVictim, "Illegal reference to object %" PRIu32 " in FACTORY.psCommander in %s[%u]", psFactory->psCommander->id, listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psFactory->psCommander != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in FACTORY.psCommander in %s[%u]", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player);
 					break;
 				}
 				case REF_POWER_GEN:
@@ -128,26 +183,26 @@ static bool _checkStructReferences(BASE_OBJECT *psVictim, const StructureList& p
 					POWER_GEN *powerGen = &psStruct->pFunctionality->powerGenerator;
 					for (int i = 0; i < NUM_POWER_MODULES; ++i)
 					{
-						ASSERT_OR_RETURN(false, powerGen->apResExtractors[i] != psVictim, "Illegal reference to object %" PRIu32 " in POWER_GEN.apResExtractors[%d] in %s[%u]", powerGen->apResExtractors[i]->id, i, listName, player);
+						ASSERT_OR_RETURN_REPORT(false, powerGen->apResExtractors[i] != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in POWER_GEN.apResExtractors[%d] in %s[%u]", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), i, listName, player);
 					}
 					break;
 				}
 				case REF_RESOURCE_EXTRACTOR:
 				{
 					RES_EXTRACTOR *psResExtracter = &psStruct->pFunctionality->resourceExtractor;
-					ASSERT_OR_RETURN(false, psResExtracter->psPowerGen != psVictim, "Illegal reference to object %" PRIu32 " in RES_EXTRACTOR.psPowerGen in %s[%u]", psResExtracter->psPowerGen->id, listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psResExtracter->psPowerGen != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in RES_EXTRACTOR.psPowerGen in %s[%u]", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player);
 					break;
 				}
 				case REF_REPAIR_FACILITY:
 				{
 					REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
-					ASSERT_OR_RETURN(false, psRepairFac->psObj != psVictim, "Illegal reference to object %" PRIu32 " in REPAIR_FACILITY.psObj in %s[%u]", psRepairFac->psObj->id, listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psRepairFac->psObj != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in REPAIR_FACILITY.psObj in %s[%u] (state=%d) (struct.status: %d)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, (int)psRepairFac->state, (int)psStruct->status);
 					break;
 				}
 				case REF_REARM_PAD:
 				{
 					REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
-					ASSERT_OR_RETURN(false, psReArmPad->psObj != psVictim, "Illegal reference to object %" PRIu32 " in REARM_PAD.psObj in %s[%u]", psReArmPad->psObj->id, listName, player);
+					ASSERT_OR_RETURN_REPORT(false, psReArmPad->psObj != psVictim, "Illegal reference to p%d:%s:%" PRIu32 " (%s) in REARM_PAD.psObj in %s[%u] (struct.status: %d)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, (int)psStruct->status);
 					break;
 				}
 				default:
@@ -167,15 +222,15 @@ static bool _checkDroidReferences(BASE_OBJECT *psVictim, const DroidList& psPlay
 			continue;  // Don't worry about self references.
 		}
 
-		ASSERT_OR_RETURN(false, psDroid->order.psObj != psVictim, "Illegal reference to object %d in order.psObj in %s[%u]", psVictim->id, listName, player);
+		ASSERT_OR_RETURN_REPORT(false, psDroid->order.psObj != psVictim, "Illegal reference to p%d:%s:%d (%s) in order.psObj in %s[%u] (%s:%d - %s) (order.type: %s)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, objTypeToStr(psDroid->type), psDroid->id, getObjDebugDescriptiveName(psDroid), getDroidOrderName(psDroid->order.type));
 
-		ASSERT_OR_RETURN(false, psDroid->psBaseStruct != psVictim, "Illegal reference to object %d in psBaseStruct in %s[%u]", psVictim->id, listName, player);
+		ASSERT_OR_RETURN_REPORT(false, psDroid->psBaseStruct != psVictim, "Illegal reference to p%d:%s:%d (%s) in psBaseStruct in %s[%u] (%s:%d - %s)", (int)psVictim->player, objTypeToStr(psVictim->type), psVictim->id, getObjDebugDescriptiveName(psVictim), listName, player, objTypeToStr(psDroid->type), psDroid->id, getObjDebugDescriptiveName(psDroid));
 
 		for (unsigned i = 0; i < psDroid->numWeaps; ++i)
 		{
 			if (psDroid->psActionTarget[i] == psVictim)
 			{
-				ASSERT_OR_RETURN(false, psDroid->psActionTarget[i] != psVictim, BADREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]));
+				ASSERT_OR_RETURN_REPORT(false, psDroid->psActionTarget[i] != psVictim, BADREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i], psDroid));
 			}
 		}
 	}
@@ -197,13 +252,14 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 
 		if (!checkPlrDroidReferences(psVictim, apsDroidLists)) { return false; }
 		if (!checkPlrDroidReferences(psVictim, mission.apsDroidLists)) { return false; }
+		if (!checkPlrDroidReferences(psVictim, apsLimboDroids)) { return false; }
 	}
 	return true;
 }
 
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
-bool objmemDestroy(BASE_OBJECT *psObj)
+bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 {
 	switch (psObj->type)
 	{
@@ -222,17 +278,37 @@ bool objmemDestroy(BASE_OBJECT *psObj)
 	default:
 		ASSERT(!"unknown object type", "unknown object type in destroyed list at 0x%p", static_cast<void *>(psObj));
 	}
-	if (!checkReferences(psObj))
+
+	// Make sure to get rid of some final references in the sound code to this object first
+	audio_RemoveObj(psObj);
+
+	if (checkRefs && !checkReferences(psObj))
 	{
 		return false;
 	}
-	// Droids are managed by a separate droid container.
 	if (psObj->type == OBJ_DROID)
 	{
+		// Droids are managed by a separate droid container.
 		auto& droidContainer = GlobalDroidContainer();
 		auto it = droidContainer.find(*static_cast<DROID*>(psObj));
 		ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
 		droidContainer.erase(it);
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		// Structs are managed by a separate struct container.
+		auto& structContainer = GlobalStructContainer();
+		auto it = structContainer.find(*static_cast<STRUCTURE*>(psObj));
+		ASSERT(it != structContainer.end(), "Structure not found in the global container!");
+		structContainer.erase(it);
+	}
+	else if (psObj->type == OBJ_FEATURE)
+	{
+		// Features are managed by a separate feature container.
+		auto& featureContainer = GlobalFeatureContainer();
+		auto it = featureContainer.find(*static_cast<FEATURE*>(psObj));
+		ASSERT(it != featureContainer.end(), "Feature not found in the global container!");
+		featureContainer.erase(it);
 	}
 	else
 	{
@@ -259,7 +335,7 @@ void objmemUpdate()
 	{
 		if ((*it)->died <= gameTime - deltaGameTime)
 		{
-			objmemDestroy(*it);
+			objmemDestroy(*it, true);
 			it = psDestroyedObj.erase(it);
 		}
 		else
@@ -452,16 +528,72 @@ void killDroid(DROID *psDel)
 	destroyObject(apsDroidLists, psDel);
 }
 
-static void freeAllDroidsImpl(PerPlayerDroidLists& droidLists)
+template <typename EntityType>
+struct GlobalEntityContainerTraits;
+
+template <>
+struct GlobalEntityContainerTraits<DROID>
 {
-	auto& droidContainer = GlobalDroidContainer();
-	for (auto& list : droidLists)
+	using StorageType = DroidContainer;
+
+	static DroidContainer& getContainer()
 	{
-		for (DROID* d : list)
+		return GlobalDroidContainer();
+	}
+
+	static const char* entityName()
+	{
+		return "Droid";
+	}
+};
+
+template <>
+struct GlobalEntityContainerTraits<STRUCTURE>
+{
+	using StorageType = StructContainer;
+
+	static StructContainer& getContainer()
+	{
+		return GlobalStructContainer();
+	}
+
+	static const char* entityName()
+	{
+		return "Structure";
+	}
+};
+
+template <>
+struct GlobalEntityContainerTraits<FEATURE>
+{
+	using StorageType = FeatureContainer;
+
+	static FeatureContainer& getContainer()
+	{
+		return GlobalFeatureContainer();
+	}
+
+	static const char* entityName()
+	{
+		return "Feature";
+	}
+};
+
+template <typename Entity, unsigned PlayerCount>
+static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entityLists)
+{
+	using Traits = GlobalEntityContainerTraits<Entity>;
+	auto& entityContainer = Traits::getContainer();
+	for (auto& list : entityLists)
+	{
+		for (auto* ent : list)
 		{
-			auto it = droidContainer.find(*d);
-			ASSERT(it != droidContainer.end(), "Droid not found in the global container!");
-			droidContainer.erase(it);
+			auto it = entityContainer.find(*ent);
+			if (it == entityContainer.end()) {
+				ASSERT(false, "%s not found in the global container!", Traits::entityName());
+				continue;
+			}
+			entityContainer.erase(it);
 		}
 		list.clear();
 	}
@@ -470,7 +602,7 @@ static void freeAllDroidsImpl(PerPlayerDroidLists& droidLists)
 /* Remove all droids */
 void freeAllDroids()
 {
-	freeAllDroidsImpl(apsDroidLists);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsDroidLists);
 }
 
 /*Remove a single Droid from a list*/
@@ -503,13 +635,13 @@ void removeDroid(DROID* psDroidToRemove, PerPlayerDroidLists& pList)
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids()
 {
-	freeAllDroidsImpl(mission.apsDroidLists);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(mission.apsDroidLists);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids()
 {
-	freeAllDroidsImpl(apsLimboDroids);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsLimboDroids);
 }
 
 /**************************  STRUCTURE  *******************************/
@@ -592,7 +724,7 @@ void killStruct(STRUCTURE *psBuilding)
 /* Remove heapall structures */
 void freeAllStructs()
 {
-	releaseAllObjectsInList(apsStructLists);
+	freeAllEntitiesImpl<STRUCTURE, MAX_PLAYERS>(apsStructLists);
 }
 
 /*Remove a single Structure from a list*/
@@ -645,7 +777,7 @@ void killFeature(FEATURE *psDel)
 /* Remove all features */
 void freeAllFeatures()
 {
-	releaseAllObjectsInList(apsFeatureLists);
+	freeAllEntitiesImpl<FEATURE, MAX_PLAYERS>(apsFeatureLists);
 }
 
 /**************************  FLAG_POSITION ********************************/

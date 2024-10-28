@@ -68,4 +68,6 @@ Vector2i getStatsSize(BASE_STATS const *pType, uint16_t direction);
 StructureBounds getStructureBounds(BASE_OBJECT const *object);
 StructureBounds getStructureBounds(BASE_STATS const *stats, Vector2i pos, uint16_t direction);
 
+void resetObjectAnimationState(BASE_OBJECT *psObj);
+
 #endif // __INCLUDED_BASEOBJECT_H__

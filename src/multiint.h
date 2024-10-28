@@ -85,7 +85,7 @@ std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, U
 std::shared_ptr<WzMultiButton> makeMultiBut(UDWORD id, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha = 255);
 
 AtlasImage mpwidgetGetFrontHighlightImage(AtlasImage image);
-bool changeColour(unsigned player, int col, bool isHost);
+bool changeColour(unsigned player, int col, uint32_t responsibleIdx);
 
 extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
@@ -103,9 +103,13 @@ void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 void displayLobbyDisabledNotification();
 
+bool SendColourRequest(UBYTE player, UBYTE col);
+
 void handleAutoReadyRequest();
 
 void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
+
+bool autoBalancePlayersCmd();
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
@@ -162,14 +166,14 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 // GAME OPTIONS SCREEN
 
 #define MULTIOP_PLAYERS			10231
-#define MULTIOP_PLAYERSX		323
+#define MULTIOP_PLAYERSX		315
 #define MULTIOP_PLAYERSY		1
 #define MULTIOP_PLAYER_START	102350		//list of players
 #define MULTIOP_PLAYER_END		102381
 #define MULTIOP_PLAYERSW		298
 #define MULTIOP_PLAYERS_TABS	10232
 #define MULTIOP_PLAYERS_TABS_H	24
-#define MULTIOP_PLAYERSH		(380 + MULTIOP_PLAYERS_TABS_H + 1)
+#define MULTIOP_PLAYERSH		(384 + MULTIOP_PLAYERS_TABS_H + 1)
 
 #define MULTIOP_ROW_WIDTH		298
 
@@ -199,13 +203,15 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define	MULTIOP_PLAYERHEIGHT	38
 
 #define MULTIOP_OPTIONS			10250
-#define MULTIOP_OPTIONSX		40
+#define MULTIOP_OPTIONSX		32
 #define MULTIOP_OPTIONSY		1
 #define MULTIOP_OPTIONSW		284
 #define MULTIOP_OPTIONSH		MULTIOP_PLAYERSH
 
 #define MULTIOP_EDITBOXW		196
 #define	MULTIOP_EDITBOXH		30
+
+#define MULTIOP_SEARCHBOXH		15
 
 #define	MULTIOP_BLUEFORMW		226
 

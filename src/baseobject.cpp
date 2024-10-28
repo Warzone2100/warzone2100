@@ -19,7 +19,7 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "lib/sound/audio.h"
 
 #include "baseobject.h"
@@ -85,9 +85,6 @@ SIMPLE_OBJECT::SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 SIMPLE_OBJECT::~SIMPLE_OBJECT()
 {
-	// Make sure to get rid of some final references in the sound code to this object first
-	audio_RemoveObj(this);
-
 	const_cast<OBJECT_TYPE volatile &>(type) = (OBJECT_TYPE)(type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
 	const_cast<UBYTE volatile &>(player) += 100;                                  // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
 }
@@ -227,4 +224,22 @@ StructureBounds getStructureBounds(BASE_STATS const *stats, Vector2i pos, uint16
 	}
 
 	return StructureBounds(map_coord(pos), Vector2i(1, 1));  // Default to a 1×1 tile.
+}
+
+// Reset animation state so some units don't walk in place in the menu sometimes.
+void resetObjectAnimationState(BASE_OBJECT *psObj)
+{
+	if (psObj == nullptr)
+	{
+		return;
+	}
+	if (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE)
+	{
+		psObj->timeAnimationStarted = 0;
+		psObj->animationEvent = ANIM_EVENT_NONE;
+	}
+	else
+	{
+		debug(LOG_WARNING, "Tried resetting animation state on unknown object type");
+	}
 }

@@ -29,7 +29,6 @@
 #include "../mission.h"
 
 STRUCTURE *ResearchController::highlightedFacility = nullptr;
-static ImdObject getResearchObjectImage(RESEARCH *research);
 
 void ResearchController::updateData()
 {
@@ -134,7 +133,7 @@ void ResearchController::refresh()
 void ResearchController::clearData()
 {
 	facilities.clear();
-	setHighlightedObject(nullptr);
+	setHighlightedObject(nullptr, false);
 	stats.clear();
 }
 
@@ -160,33 +159,15 @@ void ResearchController::startResearch(RESEARCH &research)
 		cancelResearch(psLab); //Clear it out of this lab as we are now researching it in another.
 	}
 
-	if (bMultiMessages)
-	{
-		// Say that we want to do research [sic].
-		sendResearchStatus(facility, research.ref - STAT_RESEARCH, selectedPlayer, true);
-		setStatusPendingStart(*psResFacilty, &research);  // Tell UI that we are going to research.
-	}
-	else
-	{
-		//set up the player_research
-		auto count = research.ref - STAT_RESEARCH;
-		//meant to still be in the list but greyed out
-		auto pPlayerRes = &asPlayerResList[selectedPlayer][count];
-
-		//set the subject up
-		psResFacilty->psSubject = &research;
-
-		sendResearchStatus(facility, count, selectedPlayer, true);	// inform others, I'm researching this.
-
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStartHold = 0;
-	}
+	// Say that we want to do research [sic].
+	sendResearchStatus(facility, research.ref - STAT_RESEARCH, selectedPlayer, true);
+	setStatusPendingStart(*psResFacilty, &research);  // Tell UI that we are going to research.
 
 	//stop the button from flashing once a topic has been chosen
 	stopReticuleButtonFlash(IDRET_RESEARCH);
 }
 
-void ResearchController::setHighlightedObject(BASE_OBJECT *object)
+void ResearchController::setHighlightedObject(BASE_OBJECT *object, bool jumpToHighlightedStatsObject)
 {
 	if (object == nullptr)
 	{
@@ -197,6 +178,7 @@ void ResearchController::setHighlightedObject(BASE_OBJECT *object)
 	auto facility = castStructure(object);
 	ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 	ASSERT_OR_RETURN(, facility->pStructureType->type == REF_RESEARCH, "Invalid facility pointer");
+	queuedJumpToHighlightedStatsObject = queuedJumpToHighlightedStatsObject || jumpToHighlightedStatsObject;
 	highlightedFacility = facility;
 }
 
@@ -298,7 +280,7 @@ protected:
 	void clickPrimary() override
 	{
 		controller->clearStructureSelection();
-		controller->selectObject(controller->getObjectAt(objectIndex));
+		controller->selectObject(controller->getObjectAt(objectIndex), false);
 		jump();
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
@@ -469,7 +451,7 @@ private:
 		//might need to cancel the hold on research facility
 		releaseResearch(facility, ModeQueue);
 		controller->clearStructureSelection();
-		controller->selectObject(facility);
+		controller->selectObject(facility, true);
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 		controller->refresh();
 	}
@@ -480,7 +462,7 @@ private:
 		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 		controller->clearStructureSelection();
 		controller->requestResearchCancellation(facility);
-		controller->setHighlightedObject(facility);
+		controller->setHighlightedObject(facility, true);
 		BaseStatsController::scheduleDisplayStatsForm(controller);
 		controller->refresh();
 	}
@@ -734,7 +716,7 @@ void ResearchController::requestResearchCancellation(STRUCTURE *facility)
 	audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 }
 
-static ImdObject getResearchObjectImage(RESEARCH *research)
+ImdObject getResearchObjectImage(RESEARCH *research)
 {
 	BASE_STATS *psResGraphic = research->psStat;
 

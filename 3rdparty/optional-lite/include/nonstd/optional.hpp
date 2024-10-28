@@ -12,7 +12,7 @@
 #define NONSTD_OPTIONAL_LITE_HPP
 
 #define optional_lite_MAJOR  3
-#define optional_lite_MINOR  5
+#define optional_lite_MINOR  6
 #define optional_lite_PATCH  0
 
 #define optional_lite_VERSION  optional_STRINGIFY(optional_lite_MAJOR) "." optional_STRINGIFY(optional_lite_MINOR) "." optional_STRINGIFY(optional_lite_PATCH)
@@ -63,7 +63,7 @@
 # endif
 #endif
 
-// C++ language version detection (C++20 is speculative):
+// C++ language version detection (C++23 is speculative):
 // Note: VC14.0/1900 (VS2015) lacks too much from C++14.
 
 #ifndef   optional_CPLUSPLUS
@@ -79,7 +79,8 @@
 #define optional_CPP11_OR_GREATER_ ( optional_CPLUSPLUS >= 201103L )
 #define optional_CPP14_OR_GREATER  ( optional_CPLUSPLUS >= 201402L )
 #define optional_CPP17_OR_GREATER  ( optional_CPLUSPLUS >= 201703L )
-#define optional_CPP20_OR_GREATER  ( optional_CPLUSPLUS >= 202000L )
+#define optional_CPP20_OR_GREATER  ( optional_CPLUSPLUS >= 202002L )
+#define optional_CPP23_OR_GREATER  ( optional_CPLUSPLUS >= 202300L )
 
 // C++ language version (represent 98 as 3):
 
@@ -788,7 +789,7 @@ union storage_t
 
     void construct_value( value_type && v )
     {
-        ::new( value_ptr() ) value_type( std::move( v ) );
+        ::new( const_cast<void *>(static_cast<const volatile void *>(value_ptr())) ) value_type( std::move( v ) );
     }
 
     template< class... Args >
@@ -800,13 +801,13 @@ union storage_t
     template< class... Args >
     void emplace( Args&&... args )
     {
-        ::new( value_ptr() ) value_type( std::forward<Args>(args)... );
+        ::new( const_cast<void *>(static_cast<const volatile void *>(value_ptr())) ) value_type( std::forward<Args>(args)... );
     }
 
     template< class U, class... Args >
     void emplace( std::initializer_list<U> il, Args&&... args )
     {
-        ::new( value_ptr() ) value_type( il, std::forward<Args>(args)... );
+        ::new( const_cast<void *>(static_cast<const volatile void *>(value_ptr())) ) value_type( il, std::forward<Args>(args)... );
     }
 
 #endif
@@ -1554,7 +1555,7 @@ private:
     void initialize( V && value )
     {
         assert( ! has_value()  );
-        contained.construct_value( std::move( value ) );
+        contained.construct_value( std::forward<V>( value ) );
         has_value_ = true;
     }
 

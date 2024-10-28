@@ -32,6 +32,8 @@
 #include "visibility.h"
 #include "baseobject.h"
 
+#include <nonstd/optional.hpp>
+
 // how long to wait between CALL_STRUCT_ATTACKED's - plus how long to flash on radar for
 #define ATTACK_CB_PAUSE		5000
 
@@ -82,6 +84,8 @@ bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission
 
 bool IsPlayerDroidLimitReached(int player);
 
+int getStructureDamageBaseExperienceLevel();
+
 bool loadStructureStats(WzConfig &ini);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
 bool loadStructureStrengthModifiers(WzConfig &ini);
@@ -105,7 +109,9 @@ STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, U
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
+/// IMPORTANT: Do not save the reference to this instance anywhere, since it's
+/// not heap-allocated and thus doesn't have a stable address!
+nonstd::optional<STRUCTURE> buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool bMission);
 
@@ -495,5 +501,11 @@ struct LineBuild
 
 LineBuild calcLineBuild(Vector2i size, STRUCTURE_TYPE type, Vector2i pos, Vector2i pos2);
 LineBuild calcLineBuild(STRUCTURE_STATS const *stats, uint16_t direction, Vector2i pos, Vector2i pos2);
+
+// Split the struct storage into pages containing 256 structs, disable slot reuse
+// to guard against memory-related issues when some object pointers won't get
+// updated properly, e.g. when transitioning between the base and offworld missions.
+using StructContainer = PagedEntityContainer<STRUCTURE, 256, false>;
+StructContainer& GlobalStructContainer();
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

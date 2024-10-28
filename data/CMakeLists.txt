@@ -188,6 +188,8 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 
 	# Normal Terrain
 	file(GLOB TEXPAGES_TERRAIN
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-80-water-1.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-81-water-2.png"
 		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-82-yellow-sand-arizona.png"
 		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-83-red-earth-arizona.png"
 		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-84-tiles-arizona.png"
@@ -506,6 +508,7 @@ COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 		"effects"
 		"features"
 		"gamedesc.lev"
+		"guidetopics"
 		"ruleset.json"
 		"images"
 		"messages"
@@ -605,7 +608,7 @@ if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/fonts")
 	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/fonts")
 endif()
 foreach(font_file ${wz2100_fonts_FILES})
-    add_custom_command(
+	add_custom_command(
 		TARGET data
 		POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${font_file}" "${CMAKE_CURRENT_BINARY_DIR}/fonts"
@@ -622,7 +625,7 @@ foreach(mod_file ${wz2100_mods_FILES})
 	file(RELATIVE_PATH _mods_file_relative_path "${CMAKE_CURRENT_BINARY_DIR}/mods_staging" "${mod_file}")
 	get_filename_component(_mods_file_subdir_path "${_mods_file_relative_path}" DIRECTORY)
 	get_filename_component(_mods_file_name "${_mods_file_relative_path}" NAME)
-    add_custom_command(
+	add_custom_command(
 		TARGET data
 		POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${mod_file}" "${CMAKE_CURRENT_BINARY_DIR}/mods/${_mods_file_subdir_path}/${_mods_file_name}"

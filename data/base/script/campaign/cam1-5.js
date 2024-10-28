@@ -36,19 +36,19 @@ var useHeavyReinforcement;
 function getDroidsForNPLZ(args)
 {
 	let lightAttackerLimit = 8;
-	let heavyAttackerLimit = 3;
+	let heavyAttackerLimit = (camClassicMode()) ? 3 : 6;
 	let unitTemplates;
 	const list = [];
 
 	if (difficulty === HARD)
 	{
 		lightAttackerLimit = 9;
-		heavyAttackerLimit = 4;
+		heavyAttackerLimit = (camClassicMode()) ? 4 : 7;
 	}
 	else if (difficulty === INSANE)
 	{
 		lightAttackerLimit = 10;
-		heavyAttackerLimit = 5;
+		heavyAttackerLimit = (camClassicMode()) ? 5 : 8;
 	}
 
 	if (useHeavyReinforcement)
@@ -59,7 +59,7 @@ function getDroidsForNPLZ(args)
 		}
 		else
 		{
-			const artillery = [cTempl.npmor];
+			const artillery = (!camClassicMode()) ? [cTempl.npmorb] : [cTempl.npmor];
 			const other = [cTempl.npmmct];
 			if (camRand(2) > 0)
 			{
@@ -190,7 +190,7 @@ function camEnemyBaseEliminated_NPBaseGroup()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1A-C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha10, {
 		area: "RTLZ",
 		message: "C1-5_LZ",
 		reinforcements: camMinutesToSeconds(3),
@@ -288,7 +288,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
-			templates: (!camClassicMode()) ? [ cTempl.npmor, cTempl.npsens, cTempl.nphmgt ] : [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
+			templates: (!camClassicMode()) ? [ cTempl.npmorb, cTempl.npsens, cTempl.nphmgt ] : [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
 			data: {
 				regroup: false,
 				repair: 40,

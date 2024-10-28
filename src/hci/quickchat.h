@@ -105,11 +105,12 @@
 	/* FROM THIS POINT ON - ONLY INTERNAL MESSAGES! */ \
 	/* WZ-generated internal messages - not for users to deliberately send */ \
 	MSG(INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN) /* This should always be the first internal message! */ \
-	MSG(INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED)
+	MSG(INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED) \
+	MSG(INTERNAL_ADMIN_ACTION_NOTICE)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 
-enum class WzQuickChatMessage : uint32_t 
+enum class WzQuickChatMessage : uint32_t
 {
 	FOREACH_QUICKCHATMSG(GENERATE_ENUM)
 	// Always last
@@ -145,14 +146,42 @@ struct WzQuickChatTargeting
 	std::unordered_set<uint32_t> specificPlayers;
 
 public:
+	static WzQuickChatTargeting targetAll();
+
+public:
 	void reset();
 	bool noTargets() const;
 };
+
+struct WzQuickChatMessageData
+{
+	uint32_t dataContext = 0;
+	uint32_t dataA = 0;
+	uint32_t dataB = 0;
+};
+
+// Begin: DataContext Enums for specific messages
+namespace WzQuickChatDataContexts {
+
+// - INTERNAL_ADMIN_ACTION_NOTICE
+namespace INTERNAL_ADMIN_ACTION_NOTICE {
+	enum class Context : uint32_t
+	{
+		Invalid = 0,
+		Team,
+		Position,
+		Color,
+		Faction
+	};
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdx);
+} // namespace INTERNAL_ADMIN_ACTION_NOTICE
+
+} // namespace WzQuickChatDataContexts
 
 std::shared_ptr<W_FORM> createQuickChatForm(WzQuickChatContext context, const std::function<void ()>& onQuickChatSent, optional<WzQuickChatMode> startingPanel = nullopt);
 
 void quickChatInitInGame();
 
 struct NETQUEUE;
-void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatTargeting targeting);
+void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatTargeting targeting, optional<WzQuickChatMessageData> messageData = nullopt);
 bool recvQuickChat(NETQUEUE queue);

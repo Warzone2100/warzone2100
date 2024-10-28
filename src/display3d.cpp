@@ -100,7 +100,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &
 static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 static UDWORD	getTargettingGfx();
-static void	drawDroidGroupNumber(DROID *psDroid);
+static void	drawGroupNumber(BASE_OBJECT *psObject);
 static void	trackHeight(int desiredHeight);
 static void	renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4 &skyboxViewMatrix);
 static void	locateMouse();
@@ -352,7 +352,7 @@ struct Blueprint
 	{
 		return compare(b) == 0;
 	}
-	STRUCTURE *buildBlueprint() const  ///< Must delete after use.
+	optional<STRUCTURE> buildBlueprint() const
 	{
 		return ::buildBlueprint(stats, pos, dir, index, state, player);
 	}
@@ -360,10 +360,9 @@ struct Blueprint
 	{
 		if (clipXY(pos.x, pos.y))
 		{
-			STRUCTURE *psStruct = buildBlueprint();
-			ASSERT_OR_RETURN(, psStruct != nullptr, "buildBlueprint returned nullptr");
-			renderStructure(psStruct, viewMatrix, perspectiveViewMatrix);
-			delete psStruct;
+			auto optStruct = buildBlueprint();
+			ASSERT_OR_RETURN(, optStruct.has_value(), "buildBlueprint returned nullopt");
+			renderStructure(&*optStruct, viewMatrix, perspectiveViewMatrix);
 		}
 	}
 
@@ -502,7 +501,7 @@ public:
 				drawDroidRank(psDroid);
 				drawDroidSensorLock(psDroid);
 				drawDroidCmndNo(psDroid);
-				drawDroidGroupNumber(psDroid);
+				drawGroupNumber(psDroid);
 			}
 		}
 		// 3. weapon reload bar
@@ -517,6 +516,10 @@ public:
 			for (unsigned i = 0; i < psStruct->numWeaps; i++)
 			{
 				drawStructureTargetOriginIcon(psStruct, i);
+			}
+			if (psStruct->isFactory())
+			{
+				drawGroupNumber(psStruct);
 			}
 		}
 		// 3. structure weapon reload bars
@@ -687,14 +690,28 @@ static Blueprint getTileBlueprint(int mapX, int mapY)
 
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
 {
-	static STRUCTURE *psStruct = nullptr;
+	static optional<STRUCTURE> optStruct;
 
 	Blueprint blueprint = getTileBlueprint(mapX, mapY);
 	if (blueprint.state == SS_BLUEPRINT_PLANNED)
 	{
-		delete psStruct;  // Delete previously returned structure, if any.
-		psStruct = blueprint.buildBlueprint();
-		return psStruct;  // This blueprint was clicked on.
+		if (optStruct)
+		{
+			// Delete previously returned structure, if any.
+			optStruct.reset();
+		}
+		auto b = blueprint.buildBlueprint();
+		// Don't use `operator=(optional&&)` to avoid declaring custom copy/move-assignment operators
+		// for `STRUCTURE` (more specifically, for `SIMPLE_OBJECT`, which has some const-qualified data members).
+		if (b)
+		{
+			optStruct.emplace(*b);
+		}
+		else
+		{
+			optStruct.reset();
+		}
+		return optStruct.has_value() ? &optStruct.value() : nullptr;  // This blueprint was clicked on.
 	}
 
 	return nullptr;
@@ -1758,7 +1775,7 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 	/* Get its absolute dimensions */
 	// NOTE: This only takes into account body, but is "good enough"
 	const BODY_STATS *psBStats = psDroid->getBodyStats();
-	const iIMDShape * pIMD = (psBStats != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
+	const iIMDShape * pIMD = (psBStats != nullptr && psBStats->pIMD != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
 }
@@ -2441,7 +2458,16 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	         -(psFeature->pos.y)
 	     );
 
-	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psFeature->rot.direction), glm::vec3(0.f, 1.f, 0.f));
+	Vector3i rotation;
+	/* Get all the pitch,roll,yaw info */
+	rotation.y = -psFeature->rot.direction;
+	rotation.x = psFeature->rot.pitch;
+	rotation.z = psFeature->rot.roll;
+
+	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) *
+		glm::rotate(UNDEG(rotation.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(rotation.z), glm::vec3(0.f, 0.f, 1.f));
 
 	if (psFeature->psStats->subType == FEAT_SKYSCRAPER)
 	{
@@ -2464,17 +2490,30 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	    || psFeature->psStats->subType == FEAT_GEN_ARTE
 	    || psFeature->psStats->subType == FEAT_BOULDER
 	    || psFeature->psStats->subType == FEAT_VEHICLE
+	    || psFeature->psStats->subType == FEAT_TREE
 	    || psFeature->psStats->subType == FEAT_OIL_DRUM)
 	{
 		/* these cast a shadow */
 		pieFlags = pie_SHADOW;
 	}
+
 	iIMDBaseShape *imd = psFeature->sDisplay.imd;
 	if (imd)
 	{
+		iIMDShape *strImd = imd->displayModel();
+
+		float stretchDepth = 0.f;
+		if (!(strImd->flags & iV_IMD_NOSTRETCH))
+		{
+			if (psFeature->psStats->subType == FEAT_TREE) // for now, only do this for trees
+			{
+				stretchDepth = psFeature->pos.z - psFeature->foundationDepth;
+			}
+		}
+
 		/* Translate the feature  - N.B. We can also do rotations here should we require
 		buildings to face different ways - Don't know if this is necessary - should be IMO */
-		pie_Draw3DShape(imd->displayModel(), 0, 0, brightness, pieFlags, 0, modelMatrix, viewMatrix);
+		pie_Draw3DShape(strImd, 0, 0, brightness, pieFlags, 0, modelMatrix, viewMatrix, stretchDepth);
 	}
 
 	setScreenDispWithPerspective(&psFeature->sDisplay, perspectiveViewMatrix * modelMatrix);
@@ -2735,6 +2774,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				// draw Weapon/ECM/Sensor for structure
 				if (flashImd[i] != nullptr)
 				{
+					rot = psStructure->asWeaps[i].rot; // Snap rotation so the muzzle graphic appears where it should, see aiUpdateStructure().
 					iIMDShape *pFlashDisplayIMD = flashImd[i]->displayModel();
 					glm::mat4 matrix(1.f);
 					// horrendous hack
@@ -3601,14 +3641,59 @@ static void drawDroidAndStructureSelections()
 }
 
 /* ---------------------------------------------------------------------------- */
-/// X offset to display the group number at
+/// X/Y offset to display the group number at
 #define GN_X_OFFSET	(8)
-/// Draw the number of the group the droid is in next to the droid
-static void	drawDroidGroupNumber(DROID *psDroid)
+#define GN_Y_OFFSET	(3)
+enum GROUPNUMBER_TYPE
+{
+	GN_NORMAL,
+	GN_DAMAGED,
+	GN_FACTORY
+};
+/// rendering of the object's group next to the object itself,
+/// or the group that will be assigned to the object after production in the factory
+static void	drawGroupNumber(BASE_OBJECT *psObject)
 {
 	UWORD id = UWORD_MAX;
+	UBYTE groupNumber = UBYTE_MAX;
+	int32_t x = 0, y = 0;
+	GROUPNUMBER_TYPE groupNumberType = GN_NORMAL;
 
-	switch (psDroid->group)
+	if (auto *psDroid = castDroid(psObject))
+	{
+		int32_t xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
+		int32_t yShift = psDroid->sDisplay.screenR;
+
+		x = psDroid->sDisplay.screenX - xShift;
+		y = psDroid->sDisplay.screenY + yShift;
+
+		if (psDroid->repairGroup != UBYTE_MAX)
+		{
+			groupNumber = psDroid->repairGroup;
+			groupNumberType = GN_DAMAGED;
+		}
+		else
+		{
+			groupNumber = psDroid->group;
+		}
+	}
+	else if (auto *psStruct = castStructure(psObject))
+	{
+		// same as in queueStructureHealth
+		int32_t scale = static_cast<int32_t>(MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth));
+		int32_t width = scale * 20;
+		int32_t scrX = psStruct->sDisplay.screenX;
+		int32_t scrY = static_cast<int32_t>(psStruct->sDisplay.screenY) + (scale * 10);
+		int32_t scrR = width;
+
+		x = scrX - scrR - GN_X_OFFSET;
+		y = scrY - GN_Y_OFFSET;
+
+		groupNumber = psStruct->productToGroup;
+		groupNumberType = GN_FACTORY;
+	}
+
+	switch (groupNumber)
 	{
 	case 0:
 		id = IMAGE_GN_0;
@@ -3646,9 +3731,20 @@ static void	drawDroidGroupNumber(DROID *psDroid)
 
 	if (id != UWORD_MAX)
 	{
-		int xShift = psDroid->sDisplay.screenR + GN_X_OFFSET;
-		int yShift = psDroid->sDisplay.screenR;
-		iV_DrawImage(IntImages, id, psDroid->sDisplay.screenX - xShift, psDroid->sDisplay.screenY + yShift);
+		switch (groupNumberType)
+		{
+		case GN_NORMAL:
+			iV_DrawImage(IntImages, id, x, y);
+			break;
+		case GN_DAMAGED:
+			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 0, 0, 255) /* red */);
+			break;
+		case GN_FACTORY:
+			iV_DrawImageTint(IntImages, id, x, y, pal_RGBA(255, 220, 115, 255) /* gold */);
+			break;
+		default:
+			break;
+		}
 	}
 }
 

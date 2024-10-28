@@ -577,8 +577,8 @@ public:
 			const auto pagesCount = _c._pages.size();
 			assert(_pageIdx.first < pagesCount);
 			assert(_pageIdx.second <= current_page().max_valid_index());
-			// Move to the next page if already pointing to the last valid index.
-			if (_pageIdx.second == current_page().max_valid_index())
+			// Move to the next page if already pointing to the last valid index or if the current page is expired.
+			if (_pageIdx.second == current_page().max_valid_index() || current_page().is_expired())
 			{
 				// Skip expired pages when transitioning to the next page.
 				do

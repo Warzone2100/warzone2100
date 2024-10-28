@@ -280,16 +280,25 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == ((uint64_t)mapData->width * (uint64_t)mapData->height)), "texture array length must equal (mapWidth * mapHeight); actual length is: %" PRIu64"", arrayLen);
 	bGotArrayLength = QuickJS_GetArrayLength(ctx, height, arrayLen);
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == ((uint64_t)mapData->width * (uint64_t)mapData->height)), "height array length must equal (mapWidth * mapHeight); actual length is: %" PRIu64"", arrayLen);
+	uint32_t textureUint32 = 0;
+	uint32_t tileHeightUint32 = 0;
 	for (uint32_t n = 0; n < N; ++n)
 	{
 		JSValue textureVal = JS_GetPropertyUint32(ctx, texture, n);
 		auto free_texture_ref = gsl::finally([ctx, textureVal] { JS_FreeValue(ctx, textureVal); });
 		JSValue heightVal = JS_GetPropertyUint32(ctx, height, n);
 		auto free_height_ref = gsl::finally([ctx, heightVal] { JS_FreeValue(ctx, heightVal); });
-		uint32_t textureUint32 = JSValueToUint32(ctx, textureVal);
+		textureUint32 = JSValueToUint32(ctx, textureVal);
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, textureUint32 <= (uint32_t)std::numeric_limits<uint16_t>::max(), "texture value exceeds uint16::max: %" PRIu32 "", textureUint32);
 		mapData->mMapTiles[n].texture = static_cast<uint16_t>(textureUint32);
-		mapData->mMapTiles[n].height = JSValueToUint32(ctx, heightVal);
+		tileHeightUint32 = JSValueToUint32(ctx, heightVal);
+		if (tileHeightUint32 > TILE_MAX_HEIGHT)
+		{
+			// treat as non-fatal error (to support older script maps) - log and cap at TILE_MAX_HEIGHT
+			debug(pCustomLogger, LOG_ERROR, "tile height (%" PRIu32 ") exceeds TILE_MAX_HEIGHT (%" PRIu32 ")", tileHeightUint32, TILE_MAX_HEIGHT);
+			tileHeightUint32 = TILE_MAX_HEIGHT;
+		}
+		mapData->mMapTiles[n].height = static_cast<uint16_t>(tileHeightUint32);
 	}
 	bGotArrayLength = QuickJS_GetArrayLength(ctx, structures, arrayLen);
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen <= (uint64_t)std::numeric_limits<uint16_t>::max()), "structures array length must be <= uint16::max; actual length is: %" PRIu64"", arrayLen);

@@ -24,7 +24,7 @@ parts:
       echo "git submodule update"
       git submodule update --init
       craftctl set version="$TAG_REF"
-      
+
       # Write out important release config environment variables
       cat > .snapenv <<EOENV
       WZ_DISTRIBUTOR="Snapcraft"

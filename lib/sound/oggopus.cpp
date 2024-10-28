@@ -23,16 +23,16 @@
 #include <limits>
 #include <algorithm>
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/file.h"
 
-// MARK: - Opus callbacks
+// MARK: - Opus PHYSFS callbacks
 
-static int wz_opus_read(void *_stream, unsigned char *_ptr, int _nbytes)
+static int wz_opus_physfs_read(void *datasource, unsigned char *_ptr, int _nbytes)
 {
 	PHYSFS_file *fileHandle;
+	ASSERT(datasource != nullptr, "NULL decoder passed!");
 
-	ASSERT(_stream != nullptr, "NULL decoder passed!");
-
-	fileHandle = ((PHYSFS_file *)_stream);
+	fileHandle = ((WzAudioDataPhysFSHandle *)datasource)->fileHandle();
 	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
 
 	ASSERT(_nbytes <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "readLen (%i) exceeds PHYSFS_uint32::max", _nbytes);
@@ -40,12 +40,12 @@ static int wz_opus_read(void *_stream, unsigned char *_ptr, int _nbytes)
 	return didread;
 }
 
-static int wz_opus_seek(void *datasource, opus_int64 offset, int whence)
+static int wz_opus_physfs_seek(void *datasource, opus_int64 offset, int whence)
 {
 	PHYSFS_file *fileHandle;
 	opus_int64 newPos;
 	ASSERT(datasource != nullptr, "NULL decoder passed!");
-	fileHandle = ((PHYSFS_file *)datasource);
+	fileHandle = ((WzAudioDataPhysFSHandle *)datasource)->fileHandle();
 	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
 
 	switch (whence)
@@ -100,42 +100,166 @@ static int wz_opus_seek(void *datasource, opus_int64 offset, int whence)
 	}
 }
 
-static opus_int64 wz_opus_tell(void *datasource)
+static opus_int64 wz_opus_physfs_tell(void *datasource)
 {
 	PHYSFS_file *fileHandle;
 	ASSERT(datasource != nullptr, "NULL decoder passed!");
 
-	fileHandle = ((PHYSFS_file *)datasource);
+	fileHandle = ((WzAudioDataPhysFSHandle *)datasource)->fileHandle();
 	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
+
 	const auto out = PHYSFS_tell(fileHandle);
 	return static_cast<opus_int64>(out);
 }
 
-// MARK: - WzOpusDecoder
-
 // https://github.com/xiph/opusfile
 // https://opus-codec.org/docs/opusfile_api-0.12/index.html
-const OpusFileCallbacks wz_oggOpus_callbacks =
+const OpusFileCallbacks wz_oggOpus_physfs_callbacks =
 {
-	wz_opus_read,
+	wz_opus_physfs_read,
 	// this one must return 0 on success, unlike its libvorbis counterpart
-	wz_opus_seek,
-	wz_opus_tell,
+	wz_opus_physfs_seek,
+	wz_opus_physfs_tell,
 	nullptr,
 };
 
-WZOpusDecoder* WZOpusDecoder::fromFilename(const char* fileName)
+// MARK: - Opus memory buffer callbacks
+
+static int wz_opus_membuf_read(void *datasource, unsigned char *_ptr, int _nbytes)
 {
-	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(fileName).c_str(), fileName);
-	if (fileHandle == nullptr)
+	WZAudioDataMemoryBuffer *pMemBuf;
+	ASSERT(datasource != nullptr, "NULL decoder passed!");
+	pMemBuf = (WZAudioDataMemoryBuffer *)datasource;
+
+	if (_nbytes < 0)
 	{
-		debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return nullptr;
+		return -1;
 	}
+	size_t bytesToRead = std::min<size_t>(static_cast<size_t>(_nbytes), pMemBuf->buffer.size() - pMemBuf->currPos);
+	if (bytesToRead == 0)
+	{
+		return 0;
+	}
+	memcpy(_ptr, &(pMemBuf->buffer[pMemBuf->currPos]), bytesToRead);
+	pMemBuf->currPos += static_cast<size_t>(bytesToRead);
+	return static_cast<int>(bytesToRead);
+}
+
+static int wz_opus_membuf_seek(void *datasource, opus_int64 offset, int whence)
+{
+	WZAudioDataMemoryBuffer *pMemBuf;
+	opus_int64 newPos;
+	ASSERT(datasource != nullptr, "NULL decoder passed!");
+	pMemBuf = ((WZAudioDataMemoryBuffer *)datasource);
+
+	switch (whence)
+	{
+	// Seek to absolute position
+	case SEEK_SET:
+		newPos = offset;
+		break;
+
+	// Seek `offset` ahead
+	case SEEK_CUR:
+		{
+			if (pMemBuf->error)
+			{
+				return -1;
+			}
+			newPos = static_cast<int64_t>(pMemBuf->currPos) + offset;
+			break;
+		}
+
+	// Seek backwards from the end of the file
+	case SEEK_END:
+		{
+			if (pMemBuf->error)
+			{
+				return -1;
+			}
+			newPos = static_cast<int64_t>(pMemBuf->buffer.size()) - 1 - offset;
+			break;
+		}
+
+	// unrecognized seek instruction
+	default:
+		// indicate failure
+		return -1;
+	}
+
+	if (newPos < 0)
+	{
+		return -1; // failure
+	}
+	if (newPos >= static_cast<int64_t>(pMemBuf->buffer.size()))
+	{
+		return -1; // failure
+	}
+
+	pMemBuf->currPos = static_cast<size_t>(newPos);
+	return 0; // success
+}
+
+static opus_int64 wz_opus_membuf_tell(void *datasource)
+{
+	WZAudioDataMemoryBuffer *pMemBuf;
+	ASSERT(datasource != nullptr, "NULL decoder passed!");
+	pMemBuf = ((WZAudioDataMemoryBuffer *)datasource);
+	return static_cast<opus_int64>(pMemBuf->currPos);
+}
+
+// https://github.com/xiph/opusfile
+// https://opus-codec.org/docs/opusfile_api-0.12/index.html
+const OpusFileCallbacks wz_oggOpus_membuf_callbacks =
+{
+	wz_opus_membuf_read,
+	// this one must return 0 on success, unlike its libvorbis counterpart
+	wz_opus_membuf_seek,
+	wz_opus_membuf_tell,
+	nullptr,
+};
+
+// MARK: - WzOpusDecoder
+
+WZOpusDecoder* WZOpusDecoder::fromFilename(const char* fileName, bool bufferEntireStream)
+{
+	WZOpusDecoder* result = nullptr;
+
+	if (!bufferEntireStream)
+	{
+		PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
+		debug(LOG_WZ, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(fileName).c_str(), fileName);
+		if (fileHandle == nullptr)
+		{
+			debug(LOG_ERROR, "sound_LoadTrackFromFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
+			return nullptr;
+		}
+
+		auto data = std::make_unique<WzAudioDataPhysFSHandle>(fileHandle, fileName);
+		result = openOpusInternal(std::move(data), &wz_oggOpus_physfs_callbacks);
+	}
+	else
+	{
+		auto data = std::make_unique<WZAudioDataMemoryBuffer>();
+		if (!loadFileToBufferVector(fileName, data->buffer, false, false))
+		{
+			debug(LOG_ERROR, "sound_LoadTrackFromFile: Failed to open / read file contents: %s\n", fileName);
+			return nullptr;
+		}
+		result = openOpusInternal(std::move(data), &wz_oggOpus_membuf_callbacks);
+	}
+
+	if (!result)
+	{
+		debug(LOG_ERROR, "OP failed to create decoder for %s", fileName);
+	}
+	return result;
+}
+
+WZOpusDecoder* WZOpusDecoder::openOpusInternal(std::unique_ptr<WZAudioDataResourceInterface> data, const OpusFileCallbacks *cb)
+{
 	int error = 0;
-	OggOpusFile *of = op_open_callbacks(fileHandle, &wz_oggOpus_callbacks, nullptr, 0, &error);
+	OggOpusFile *of = op_open_callbacks(data.get(), cb, nullptr, 0, &error);
 	switch (error)
 	{
 	case OP_EREAD:
@@ -175,17 +299,24 @@ WZOpusDecoder* WZOpusDecoder::fromFilename(const char* fileName)
 	{
 		debug(LOG_ERROR, "OP failed to read header");
 		op_free(of);
-		PHYSFS_close(fileHandle);
 		return nullptr;
 	}
-	WZOpusDecoder *decoder = new WZOpusDecoder(fileHandle, of, head);
+	WZOpusDecoder *decoder = new WZOpusDecoder(std::move(data), of, head);
 	// Use a negative number to get the ID header information of the current link
 	if (decoder == nullptr)
 	{
-		debug(LOG_ERROR, "OP failed to create decoder for %s", fileName);
 		op_free(of);
-		PHYSFS_close(fileHandle);
 		return nullptr;
+	}
+	return decoder;
+}
+
+WZOpusDecoder* WZOpusDecoder::fromMemoryBuffer(std::unique_ptr<WZAudioDataMemoryBuffer> data)
+{
+	auto decoder = openOpusInternal(std::move(data), &wz_oggOpus_membuf_callbacks);
+	if (!decoder)
+	{
+		debug(LOG_ERROR, "OP failed to create decoder for memory buffer");
 	}
 	return decoder;
 }
@@ -249,7 +380,7 @@ optional<size_t> WZOpusDecoder::decode(uint8_t* buffer, size_t bufferSize)
 		}
 		ASSERT(samples_per_chan >= 0, "Unexpected Opus error %i", samples_per_chan);
 		// convert to little endian
-		for (int si = 0; si < m_nchannels * samples_per_chan; si++) 
+		for (int si = 0; si < m_nchannels * samples_per_chan; si++)
 		{
 			buffer[bufferOffset + 0] = (uint8_t)(pcm[si] & 0xFF);
 			buffer[bufferOffset + 1] = (uint8_t)(pcm[si] >> 8 & 0xFF);

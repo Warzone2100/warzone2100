@@ -1,9 +1,12 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO BinomialLLC/basis_universal
-    REF 1531cfaf9ed5232248a0a45736686a849ca3befc #tag/1.16.3
-    SHA512 fdb0c4360cb8e0c85a592f6fddbf6f880c5ccbfef65c33c752fb2779b96d1edc8d4992d18321a428599a3649ace2e4843f15efe04f170085d951ddca25f87323
+    REF ad9386a4a1cf2a248f7bbd45f543a7448db15267 # post-1.16.4, including fixes
+    SHA512 4922af3a8d42d8c1ab551853d0ab97c0733a869cd99e95ef7a03620da023da48070a1255dcd68f6a384ee7787b5bd5dffe2cd510b2986e2a0e7181929f6ecc64
     HEAD_REF master
+    PATCHES
+        001-mingw.patch
+        002-gha-msvc-workaround.patch
 )
 
 set(_additional_options)

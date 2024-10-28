@@ -777,6 +777,20 @@ void markTileDirty(int i, int j)
 	}
 }
 
+// Mark all tiles dirty
+// (when switching between classic and other modes, recalculating tile heights is required due to water)
+void dirtyAllSectors()
+{
+	if (sectors)
+	{
+		size_t len = static_cast<size_t>(xSectors) * static_cast<size_t>(ySectors);
+		for (size_t i = 0; i < len; ++i)
+		{
+			sectors[i].dirty = true;
+		}
+	}
+}
+
 void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTextureSize = nullopt);
 
 void loadTerrainTextures_Fallback(MAP_TILESET mapTileset)
@@ -912,7 +926,8 @@ void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTex
 			return fullName;
 		};
 
-		// check water optional textures.push_back(optTexturenameToPath("page-80-water-1.png"));
+		// check water optional textures
+		waterTextureFilenames.push_back(optTexturenameToPath("page-80-water-1.png"));
 		waterTextureFilenames.push_back(optTexturenameToPath("page-81-water-2.png"));
 		waterTextureFilenames_nm.push_back(optTexturenameToPath("page-80-water-1_nm.png"));
 		waterTextureFilenames_nm.push_back(optTexturenameToPath("page-81-water-2_nm.png"));
@@ -1914,7 +1929,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index
+		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
 	};
 	PSO::get().set_uniforms(uniforms);
 
@@ -2255,20 +2270,26 @@ TerrainShaderType getTerrainShaderType()
 
 TerrainShaderType determineSupportedTerrainShader()
 {
+	auto result = TerrainShaderType::SINGLE_PASS;
+
 	if (!gfx_api::context::get().supports2DTextureArrays())
 	{
-		return TerrainShaderType::FALLBACK;
+		debug(LOG_INFO, "supports2DTextureArrays: false");
+		result = TerrainShaderType::FALLBACK;
 	}
 	if (!gfx_api::context::get().supportsIntVertexAttributes())
 	{
-		return TerrainShaderType::FALLBACK;
+		debug(LOG_INFO, "supportsIntVertexAttributes: false");
+		result = TerrainShaderType::FALLBACK;
 	}
-	if (gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS) < 256) // "big enough" value
+	auto maxArrayTextureLayers = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ARRAY_TEXTURE_LAYERS);
+	if (maxArrayTextureLayers < 256) // "big enough" value
 	{
-		return TerrainShaderType::FALLBACK;
+		debug(LOG_INFO, "MAX_ARRAY_TEXTURE_LAYERS is insufficient: %d", maxArrayTextureLayers);
+		result = TerrainShaderType::FALLBACK;
 	}
 
-	return TerrainShaderType::SINGLE_PASS;
+	return result;
 }
 
 TerrainShaderQuality getTerrainShaderQuality()
@@ -2340,15 +2361,7 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force, bool for
 		std::string terrainQualityUintStr = std::to_string(debugQualityUint);
 		crashHandlingProviderSetTag("wz.terrain_quality", terrainQualityUintStr);
 
-		if (sectors)
-		{
-			// mark all tiles dirty
-			// (when switching between classic and other modes, recalculating tile heights is required due to water)
-			for (size_t i = 0; i < xSectors * ySectors; ++i)
-			{
-				sectors[i].dirty = true;
-			}
-		}
+		dirtyAllSectors();
 
 		// re-load terrain textures
 		if (!rebuildExistingSearchPathWithGraphicsOptionChange())
@@ -2516,6 +2529,12 @@ static int32_t determineDefaultTerrainMappingTextureSize()
 void initTerrainShaderType()
 {
 	terrainShaderType = determineSupportedTerrainShader();
+	if (terrainShaderType == TerrainShaderType::FALLBACK)
+	{
+		crashHandlingProviderCaptureException(__FUNCTION__, "NewTerrainRendererUnsupported", "", false, true);
+		debug(LOG_FATAL, "Your system does not support the new terrain renderer. Please check your graphics drivers.");
+		// for now, still use the fallback renderer (in the future, this will be removed)
+	}
 	initializedTerrainShaderType = true;
 	if (terrainShaderQuality == TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT)
 	{

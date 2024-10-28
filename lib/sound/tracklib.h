@@ -44,7 +44,7 @@ void	sound_StopSample(AUDIO_SAMPLE *psSample);
 void	sound_PauseSample(AUDIO_SAMPLE *psSample);
 void	sound_ResumeSample(AUDIO_SAMPLE *psSample);
 
-AUDIO_STREAM *sound_PlayStream(const char*, float volume, const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished, const void *user_data);
+AUDIO_STREAM *sound_PlayStream(const char* fileName, bool bufferEntireStream, float volume, const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished, const void *user_data);
 
 void	sound_SetSampleFreq(AUDIO_SAMPLE *psSample, SDWORD iFreq);
 void	sound_SetSampleVol(AUDIO_SAMPLE *psSample, SDWORD iVol,
@@ -63,9 +63,6 @@ void	sound_SetObject(SDWORD iSample, void *pObj);
 
 void	sound_SetCallback(SDWORD iSample, AUDIO_CALLBACK pCallBack);
 
-void	sound_PauseAll();
-void	sound_ResumeAll();
-void	sound_StopAll();
 void	sound_Update();
 unsigned int sound_GetActiveSamplesCount();
 

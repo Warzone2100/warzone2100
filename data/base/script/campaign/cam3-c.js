@@ -187,7 +187,7 @@ function eventStartLevel()
 
 	findBetaUnitIds();
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D1", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma7, {
 		callback: "betaAlive"
 	});
 

@@ -35,6 +35,8 @@
 #include "../hci.h"
 #include "../multiplay.h"
 #include "../frontend.h"
+#include "../multiint.h"
+#include "../multivote.h"
 
 #include "../hci/teamstrategy.h"
 
@@ -117,6 +119,11 @@ public:
 	, checkmarkText(checkmarkText)
 	{ }
 
+	~WzPlayerStatusCheckboxButton()
+	{
+		closeHostOptionsOverlay();
+	}
+
 	void run(W_CONTEXT *) override
 	{
 		LoadingStatus newStatus = LoadingStatus::Loading;
@@ -145,9 +152,11 @@ public:
 					break;
 				case LoadingStatus::Ready:
 					setProgressBorder(nullopt);
+					closeHostOptionsOverlay();
 					break;
 				case LoadingStatus::Disconnected:
 					setProgressBorder(nullopt);
+					closeHostOptionsOverlay();
 					break;
 			}
 			status = newStatus;
@@ -170,12 +179,38 @@ public:
 
 	void display(int xOffset, int yOffset) override
 	{
+		int x0 = x() + xOffset;
+		int y0 = y() + yOffset;
+
+		bool isClickLock = (state & WBUT_CLICKLOCK) != 0;
+		bool isDown = (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+		bool isHighlight = (state & WBUT_HIGHLIGHT) != 0;
+
+		if (NetPlay.isHost)
+		{
+			// hosts can click on loading players to get options - show hover state
+			if (status == LoadingStatus::Loading && (isHighlight || isDown))
+			{
+				int boxX0 = std::max<int>(x0 - 1, 0);
+				int boxX1 = boxX0 + width() + 2;
+				int boxY0 = y0;
+				pie_UniTransBoxFill(boxX0, boxY0, boxX1, boxY0 + height(), WZCOL_MENU_BACKGROUND);
+				if (isDown)
+				{
+					pie_UniTransBoxFill(boxX0, boxY0, boxX1, boxY0 + height(), pal_RGBA(0,0,0,100));
+				}
+
+				PIELIGHT borderColor = (isHighlight || isClickLock) ? pal_RGBA(255, 255, 255, 180) : pal_RGBA(255, 255, 255, 75);
+				iV_Box(boxX0 - 1, boxY0 - 1, boxX1 + 1, boxY0 + height() + 1, borderColor);
+			}
+		}
+
 		wzText.setText(pText, FontID);
 
 		int indicator_x1 = IndicatorSize + IndicatorRightPadding;
 
-		int fx = (x() + xOffset) + indicator_x1;
-		int fy = yOffset + y() + (height() - wzText.lineSize()) / 2 - wzText.aboveBase();
+		int fx = x0 + indicator_x1;
+		int fy = y0 + (height() - wzText.lineSize()) / 2 - wzText.aboveBase();
 
 		PIELIGHT textColor = WZCOL_TEXT_MEDIUM;
 		switch (status)
@@ -193,8 +228,8 @@ public:
 
 		if (status == LoadingStatus::Ready)
 		{
-			int checkmarkX0 = xOffset + x();
-			int checkmarkY0 = yOffset + y() + (height() - checkmarkText->lineSize()) / 2 - checkmarkText->aboveBase();
+			int checkmarkX0 = x0;
+			int checkmarkY0 = y0 + (height() - checkmarkText->lineSize()) / 2 - checkmarkText->aboveBase();
 			checkmarkText->render(checkmarkX0, checkmarkY0, pal_RGBA(0,255,0,255));
 		}
 
@@ -211,11 +246,181 @@ public:
 		return std::max<int>(iV_GetTextLineSize(FontID), IndicatorSize);
 	}
 
+protected:
+	// override default button click handling
+	void released(W_CONTEXT *context, WIDGET_KEY mouseButton) override
+	{
+		bool clickAndReleaseOnThisButton = ((state & WBUT_DOWN) != 0); // relies on W_BUTTON handling to properly set WBUT_DOWN
+
+		W_BUTTON::released(context, mouseButton);
+
+		if (!clickAndReleaseOnThisButton)
+		{
+			return; // do nothing
+		}
+
+		if (mouseButton == WKEY_PRIMARY)
+		{
+			if (NetPlay.isHost && status == LoadingStatus::Loading)
+			{
+				ASSERT(player != NetPlay.hostPlayer, "Shouldn't be possible for host player?");
+				// Display a pop-up for managing loading players
+				displayHostOptionsOverlay(shared_from_this());
+				setState(WBUT_CLICKLOCK);
+			}
+		}
+	}
+
 private:
 	void enableProgressIndicator()
 	{
 		int yPadding = (height() > IndicatorSize) ? height() - IndicatorSize : 0;
 		setProgressBorder(W_BUTTON::ProgressBorder::indeterminate(W_BUTTON::ProgressBorder::BorderInset(0, yPadding / 2, width() - IndicatorSize, yPadding / 2)), WZCOL_TEXT_MEDIUM);
+	}
+
+	std::shared_ptr<WIDGET> createHostOptionsPopoverForm()
+	{
+		// create all the buttons / option rows
+		std::weak_ptr<WzPlayerStatusCheckboxButton> weakPlayerStatusButton = std::dynamic_pointer_cast<WzPlayerStatusCheckboxButton>(shared_from_this());
+		auto createOptionsButton = [weakPlayerStatusButton](const WzString& text, const std::function<void (W_BUTTON& button)>& onClickFunc) -> std::shared_ptr<W_BUTTON> {
+			auto button = std::make_shared<W_BUTTON>();
+			button->setString(text);
+			button->FontID = font_regular;
+			button->displayFunction = PopoverMenuButtonDisplayFunc;
+			button->pUserData = new PopoverMenuButtonDisplayCache();
+			button->setOnDelete([](WIDGET *psWidget) {
+				assert(psWidget->pUserData != nullptr);
+				delete static_cast<PopoverMenuButtonDisplayCache *>(psWidget->pUserData);
+				psWidget->pUserData = nullptr;
+			});
+			int minButtonWidthForText = iV_GetTextWidth(text, button->FontID);
+			button->setGeometry(0, 0, minButtonWidthForText + 10, iV_GetTextLineSize(button->FontID) + 2);
+
+			// On click, perform the designated onClickHandler and close the popover form / overlay
+			button->addOnClickHandler([weakPlayerStatusButton, onClickFunc](W_BUTTON& button) {
+				if (auto strongParent = weakPlayerStatusButton.lock())
+				{
+					widgRemoveOverlayScreen(strongParent->optionsOverlayScreen);
+					onClickFunc(button);
+					strongParent->optionsOverlayScreen.reset();
+				}
+			});
+			return button;
+		};
+
+		std::vector<std::shared_ptr<WIDGET>> buttons;
+		WzString kickButtonStr = (NetPlay.players[player].isSpectator ? _("Kick Spectator") : _("Kick Player"));
+		buttons.push_back(createOptionsButton(kickButtonStr, [weakPlayerStatusButton](W_BUTTON& button){
+			if (auto strongParent = weakPlayerStatusButton.lock())
+			{
+				auto targetPlayer = strongParent->player;
+				if (isHumanPlayer(targetPlayer) && targetPlayer != NetPlay.hostPlayer && strongParent->status == LoadingStatus::Loading)
+				{
+					uint32_t numHumanPlayers = 0;
+					for (uint32_t i = 0; i < MAX_PLAYERS; i++)
+					{
+						if (isHumanPlayer(i))
+						{
+							++numHumanPlayers;
+						}
+					}
+					if (NetPlay.players[targetPlayer].isSpectator || (numHumanPlayers <= 2 && !NetPlay.players[NetPlay.hostPlayer].isSpectator))
+					{
+						kickPlayer(targetPlayer, _("The host has kicked you from the game."), ERROR_KICKED, false);
+					}
+					else
+					{
+						startKickVote(targetPlayer);
+					}
+				}
+			}
+		}));
+
+		// determine required height for all buttons
+		int totalButtonHeight = std::accumulate(buttons.begin(), buttons.end(), 0, [](int a, const std::shared_ptr<WIDGET>& b) {
+			return a + b->height();
+		});
+		int maxButtonWidth = (*(std::max_element(buttons.begin(), buttons.end(), [](const std::shared_ptr<WIDGET>& a, const std::shared_ptr<WIDGET>& b){
+			return a->width() < b->width();
+		})))->width();
+
+		auto itemsList = ScrollableListWidget::make();
+		itemsList->setBackgroundColor(WZCOL_MENU_BACKGROUND);
+		itemsList->setBorderColor(pal_RGBA(152, 151, 154, 255));
+		Padding padding = {3, 4, 3, 4};
+		itemsList->setPadding(padding);
+		const int itemSpacing = 4;
+		itemsList->setItemSpacing(itemSpacing);
+		itemsList->setGeometry(itemsList->x(), itemsList->y(), maxButtonWidth + padding.left + padding.right, totalButtonHeight + ((static_cast<int>(buttons.size()) - 1) * itemSpacing) + padding.top + padding.bottom);
+		for (auto& button : buttons)
+		{
+			itemsList->addItem(button);
+		}
+
+		return itemsList;
+	}
+
+	void displayHostOptionsOverlay(const std::shared_ptr<WIDGET>& psParent)
+	{
+		auto lockedScreen = screenPointer.lock();
+		ASSERT(lockedScreen != nullptr, "No associated screen pointer?");
+
+		// Initialize the options overlay screen
+		optionsOverlayScreen = W_SCREEN::make();
+		auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+		newRootFrm->displayFunction = displayChildDropShadows;
+		std::weak_ptr<W_SCREEN> psWeakOptionsOverlayScreen(optionsOverlayScreen);
+		std::weak_ptr<WzPlayerStatusCheckboxButton> psWeakPlayerStatusButton = std::dynamic_pointer_cast<WzPlayerStatusCheckboxButton>(shared_from_this());
+		newRootFrm->onClickedFunc = [psWeakOptionsOverlayScreen, psWeakPlayerStatusButton]() {
+			if (auto psOverlayScreen = psWeakOptionsOverlayScreen.lock())
+			{
+				widgRemoveOverlayScreen(psOverlayScreen);
+			}
+			// Destroy Options overlay / overlay screen, reset button state
+			if (auto strongParent = psWeakPlayerStatusButton.lock())
+			{
+				strongParent->optionsOverlayScreen.reset();
+				strongParent->setState(0);
+			}
+		};
+		newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
+		optionsOverlayScreen->psForm->attach(newRootFrm);
+
+		// Create the pop-over form
+		auto optionsPopOver = createHostOptionsPopoverForm();
+		newRootFrm->attach(optionsPopOver);
+
+		// Position the pop-over form
+		std::weak_ptr<WIDGET> weakParent = psParent;
+		optionsPopOver->setCalcLayout([weakParent](WIDGET *psWidget) {
+			auto psParent = weakParent.lock();
+			ASSERT_OR_RETURN(, psParent != nullptr, "parent is null");
+			// (Ideally, with its left aligned with the right side of the "parent" widget, but ensure full visibility on-screen)
+			int popOverX0 = psParent->screenPosX() + psParent->width() + 2;
+			if (popOverX0 + psWidget->width() > screenWidth)
+			{
+				popOverX0 = screenWidth - psWidget->width();
+			}
+			// (Ideally, with its top aligned with the top of the "parent" widget, but ensure full visibility on-screen)
+			int popOverY0 = psParent->screenPosY() - 4;
+			if (popOverY0 + psWidget->height() > screenHeight)
+			{
+				popOverY0 = screenHeight - psWidget->height();
+			}
+			psWidget->move(popOverX0, popOverY0);
+		});
+
+		widgRegisterOverlayScreenOnTopOfScreen(optionsOverlayScreen, lockedScreen);
+	}
+
+	void closeHostOptionsOverlay()
+	{
+		if (optionsOverlayScreen)
+		{
+			widgRemoveOverlayScreen(optionsOverlayScreen);
+			optionsOverlayScreen.reset();
+			state &= ~WBUT_CLICKLOCK;
+		}
 	}
 
 private:
@@ -229,6 +434,7 @@ private:
 	uint32_t player;
 	WzText wzText;
 	std::shared_ptr<WzText> checkmarkText;
+	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
 };
 
 std::shared_ptr<WzLoadingPlayersStatusForm> WzLoadingPlayersStatusForm::make()

@@ -64,6 +64,7 @@ public:
 		int32_t team;
 		int32_t colour;
 		FactionID faction;
+		std::string publicKey;
 	};
 
 	struct GameFrame

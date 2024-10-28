@@ -1,0 +1,41 @@
+name: Crowdin - Upload Sources
+
+on:
+  push:
+    branches:
+      # Only upload base files from the master branch!
+      - 'master'
+    paths:
+      # Should match the source paths in crowdin.yml
+      - 'po/warzone2100.pot'
+      - 'po/guide/warzone2100_guide.pot'
+      - 'pkg/nsis/i18n/win_installer_base.nsh'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-master
+
+jobs:
+  crowdin-upload-sources:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    environment: crowdin_sync
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: 'master'
+
+      - name: Crowdin Action
+        uses: crowdin/github-action@v2
+        with:
+          config: 'crowdin.yml'
+          upload_sources: true
+          upload_translations: false
+          download_translations: false
+          crowdin_branch_name: 'master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
