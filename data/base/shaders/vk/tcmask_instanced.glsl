@@ -40,5 +40,6 @@ layout(std140, set = 1, binding = 0) uniform meshuniforms
 	int normalmap;
 	int specularmap;
 	int hasTangents;
+	int shieldEffect;
 };
 
