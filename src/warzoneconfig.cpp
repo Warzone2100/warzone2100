@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -97,8 +97,9 @@ struct WARZONE_GLOBALS
 	uint32_t shadowFilterSize = 5;
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 	bool pointLightLighting = false;
-	// groups UI
+	// UI config
 	bool groupsMenuEnabled = true;
+	uint8_t optionsButtonVisibility = 100;
 
 	// run-time only settings (not persisted to config!)
 	bool allowVulkanImplicitLayers = false;
@@ -696,6 +697,21 @@ void war_setGroupsMenuEnabled(bool enabled)
 void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed) // not persisted to config
 {
 	warGlobs.allowVulkanImplicitLayers = allowed;
+}
+
+uint8_t war_getOptionsButtonVisibility()
+{
+	return warGlobs.optionsButtonVisibility;
+}
+
+void war_setOptionsButtonVisibility(uint8_t val)
+{
+	val = std::min<uint8_t>(val, 100);
+	if (val > 0)
+	{
+		val = std::max<uint8_t>(val, 50);
+	}
+	warGlobs.optionsButtonVisibility = val;
 }
 
 bool war_getAllowVulkanImplicitLayers()
