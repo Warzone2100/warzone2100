@@ -429,6 +429,13 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	// EMP weapon radius should not do actual damage
 	if (weaponSubClass == WSC_EMP && empRadiusHit)
 	{
+		if (psObj->type == OBJ_DROID)
+		{
+			DROID *psDroid = castDroid(psObj);
+
+			// EMP weapons kills droid shields completely
+			psDroid->shieldPoints = 0;
+		}
 		return 0;
 	}
 
@@ -514,7 +521,6 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 				psDroid->shieldPoints = 0;
 				// shields are interrupted, wait for a while until regeneration starts again
 				psDroid->shieldInterruptRegenTime = psDroid->time;
-				psDroid->shieldRegenTime = psDroid->time;
 			}
 
 			Vector3i dv;

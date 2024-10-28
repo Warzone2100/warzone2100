@@ -969,19 +969,18 @@ void droidUpdateShields(DROID *psDroid)
 		}
 		else
 		{
-			if (gameTime - psDroid->shieldInterruptRegenTime >= droidCalculateShieldInterruptRegenTime(psDroid))
+			if (!((psDroid->lastHitWeapon == WSC_EMP) && ((gameTime - psDroid->timeLastHit) < EMP_DISABLE_TIME)) &&
+				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
+				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid))
 			{
-				if (gameTime - psDroid->shieldRegenTime >= droidCalculateShieldRegenTime(psDroid))
+				for (uint32_t i = 0; i < DROID_SHIELD_POINTS_STEP; i++)
 				{
-					for (uint32_t i = 0; i < DROID_SHIELD_POINTS_STEP; i++)
+					if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid))
 					{
-						if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid))
-						{
-							psDroid->shieldPoints += 1;
-						}
+						psDroid->shieldPoints += 1;
 					}
-					psDroid->shieldRegenTime = gameTime;
 				}
+				psDroid->shieldRegenTime = gameTime;
 			}
 		}
 	}
