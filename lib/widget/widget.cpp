@@ -1024,7 +1024,7 @@ UDWORD widgGetButtonKey_DEPRECATED(const std::shared_ptr<W_SCREEN> &psScreen)
 	return lastReleasedKey_DEPRECATED;
 }
 
-unsigned WIDGET::getState()
+unsigned WIDGET::getState() const
 {
 	ASSERT(false, "Can't get widget type %u's state.", type);
 	return 0;

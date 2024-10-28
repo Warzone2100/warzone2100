@@ -73,7 +73,7 @@ W_CLICKFORM::W_CLICKFORM()
 	, AudioCallback(WidgGetAudioCallback())
 {}
 
-unsigned W_CLICKFORM::getState()
+unsigned W_CLICKFORM::getState() const
 {
 	return state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
 }

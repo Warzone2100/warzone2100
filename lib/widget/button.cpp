@@ -58,7 +58,7 @@ W_BUTTON::W_BUTTON()
 	, FontID(font_regular)
 {}
 
-unsigned W_BUTTON::getState()
+unsigned W_BUTTON::getState() const
 {
 	return state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
 }

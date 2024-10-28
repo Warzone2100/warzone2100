@@ -109,7 +109,7 @@ public:
 		return &(help.value());
 	}
 
-	unsigned getState() override;
+	unsigned getState() const override;
 	void setState(unsigned state) override;
 	void setFlash(bool enable) override;
 	void setTip(std::string string) override;
