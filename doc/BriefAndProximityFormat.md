@@ -7,13 +7,16 @@ In releases beyond the 4.5 series, the campaign brief and Proximity files are no
 Example:
 ```json
 {
-    "C1A_BASE0": {
-        "audio": "pcv390.ogg",
-        "message": "BARBASE_MSG",
-        "type": 0,
-        "x": 3904,
-        "y": 4672,
-        "z": 0
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "C1A_BASE0": {
+            "audio": "pcv390.ogg",
+            "message": "BARBASE_MSG",
+            "type": 0,
+            "x": 3904,
+            "y": 4672,
+            "z": 0
+        }
     }
 }
 ```
