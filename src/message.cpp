@@ -664,6 +664,30 @@ WzString *loadProximityViewData(const char *fileName)
 {
 	ASSERT_OR_RETURN(nullptr, PHYSFS_exists(fileName), "%s not found", fileName);
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
+
+	// "type": "wz2100.proxmsgs.v1"
+	if (!ini.contains("type"))
+	{
+		debug(LOG_ERROR, "Missing required \"type\" key: %s", fileName);
+		return nullptr;
+	}
+	if (ini.value("type").toWzString() != "wz2100.proxmsgs.v1")
+	{
+		debug(LOG_ERROR, "Unexpected \"type\" - expecting \"wz2100.proxmsgs.v1\": %s", fileName);
+		return nullptr;
+	}
+
+	// msgs
+	if (!ini.contains("msgs"))
+	{
+		debug(LOG_ERROR, "Missing required \"msgs\" key: %s", fileName);
+		return nullptr;
+	}
+	if (!ini.beginGroup("msgs"))
+	{
+		debug(LOG_ERROR, "Missing valid \"msgs\" value: %s", fileName);
+		return nullptr;
+	}
 	std::vector<WzString> list = ini.childGroups();
 	for (size_t i = 0; i < list.size(); ++i)
 	{
@@ -685,6 +709,11 @@ WzString *loadProximityViewData(const char *fileName)
 			{
 				for(auto &a : array)
 				{
+					if (!a.is_string())
+					{
+						debug(LOG_ERROR, "\"message\" value is not a string: %s", fileName);
+						continue;
+					}
 					std::string msg = a.get<std::string>();
 					const char *str = strresGetString(psStringRes, msg.c_str());
 					ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
@@ -741,6 +770,8 @@ WzString *loadProximityViewData(const char *fileName)
 		ini.endGroup();
 		apsViewData[v->name] = v;
 	}
+	ini.endGroup(); // "msgs"
+
 	return new WzString(fileName); // so that cleanup function will be called on right data
 }
 
