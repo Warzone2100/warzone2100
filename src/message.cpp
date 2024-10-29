@@ -39,6 +39,7 @@
 #include "stats.h"
 #include "text.h"
 #include "qtscript.h"
+#include "wzjsonhelpers.h"
 
 static std::map<WzString, VIEWDATA *> apsViewData;
 
@@ -743,70 +744,136 @@ WzString *loadProximityViewData(const char *fileName)
 	return new WzString(fileName); // so that cleanup function will be called on right data
 }
 
+inline void from_json(const nlohmann::json& j, SEQ_DISPLAY& v)
+{
+	v.sequenceName = WzString::fromUtf8(j["video"].get<std::string>());
+	debug(LOG_WZ, "Sequence name: %s", v.sequenceName.toUtf8().c_str());
+	v.flag = j["loop"].get<uint32_t>();
+	debug(LOG_WZ, "Sequence loop: %d", v.flag);
+	// Set the subtitle string for the sequence.
+	const nlohmann::json& subtitles = j["subtitles"];
+	if (!subtitles.is_null() && subtitles.is_array())
+	{
+		for (auto &a : subtitles)
+		{
+			std::string msg = a.get<std::string>();
+			if (msg.length() != 0)
+			{
+				const char *str = strresGetString(psStringRes, msg.c_str());
+				ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
+				v.textMsg.push_back(WzString::fromUtf8(str));
+				debug(LOG_WZ, "Sequence subtitle array: %s", msg.c_str());
+			}
+		}
+	}
+	else
+	{
+		std::string msg = subtitles.get<std::string>();
+		if (msg.length() != 0)
+		{
+			const char *str = strresGetString(psStringRes, msg.c_str());
+			ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
+			v.textMsg.push_back(WzString::fromUtf8(str));
+			debug(LOG_WZ, "Sequence subtitle string: %s", msg.c_str());
+		}
+	}
+}
+
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__) && (__GNUC__ < 10)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference" // GCC < 10 warning is buggy
+#endif
+
 WzString *loadFlicViewData(const char *fileName)
 {
 	ASSERT_OR_RETURN(nullptr, PHYSFS_exists(fileName), "%s not found", fileName);
-	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
-	std::vector<WzString> list = ini.childGroups();
-	for (size_t i = 0; i < list.size(); ++i)
+
+	auto jsonObjOpt = wzLoadJsonObjectFromFile(fileName);
+	if (!jsonObjOpt.has_value())
 	{
+		debug(LOG_ERROR, "Failed to load JSON: %s", fileName);
+		return nullptr;
+	}
+	const auto& jsonObj = jsonObjOpt.value();
+
+	// "type": "wz2100.briefs.v1"
+	auto it = jsonObj.find("type");
+	if (it == jsonObj.end())
+	{
+		debug(LOG_ERROR, "Missing required \"type\" key: %s", fileName);
+		return nullptr;
+	}
+	if (!it.value().is_string() || it.value().get<std::string>() != "wz2100.briefs.v1")
+	{
+		debug(LOG_ERROR, "Unexpected \"type\" - expecting \"wz2100.briefs.v1\": %s", fileName);
+		return nullptr;
+	}
+
+	// "briefs"
+	it = jsonObj.find("briefs");
+	if (it == jsonObj.end())
+	{
+		debug(LOG_ERROR, "Missing required \"briefs\" key: %s", fileName);
+		return nullptr;
+	}
+	if (!it.value().is_object())
+	{
+		debug(LOG_ERROR, "\"briefs\" value is not an object: %s", fileName);
+		return nullptr;
+	}
+	const auto& briefsObj = it.value();
+
+	for (auto brief : briefsObj.items())
+	{
+		debug(LOG_WZ, "Sequence video set: %s", brief.key().c_str());
+
+		const auto& briefObj = brief.value();
+		if (!briefObj.is_object())
+		{
+			debug(LOG_ERROR, "\"briefs\"[%s] value is not an object: %s", brief.key().c_str(), fileName);
+			continue;
+		}
+
+		auto briefIt = briefObj.find("sequences");
+		if (briefIt == briefObj.end())
+		{
+			debug(LOG_ERROR, "\"briefs\"[%s] lacks a \"sequences\" property: %s", brief.key().c_str(), fileName);
+			continue;
+		}
+		if (!briefIt.value().is_array())
+		{
+			debug(LOG_ERROR, "\"briefs\"[%s] \"sequences\" property must have an array value: %s", brief.key().c_str(), fileName);
+			continue;
+		}
+		std::vector<SEQ_DISPLAY> seqList;
+		try {
+			seqList = briefObj["sequences"].get<std::vector<SEQ_DISPLAY>>();
+		}
+		catch (const std::exception&)
+		{
+			debug(LOG_ERROR, "Failed to parse \"briefs\"[%s] \"sequences\" property value: %s", brief.key().c_str(), fileName);
+			continue;
+		}
+		debug(LOG_WZ, "Sequence list size: %zu", seqList.size());
+
 		// Replay viewdata init
-		unsigned int j = 0;
 		VIEWDATA *v = new VIEWDATA;
 		VIEW_REPLAY *r = new VIEW_REPLAY;
 		v->pData = r;
 		v->fileName = fileName;
 		v->type = VIEW_RPL;
-		debug(LOG_WZ, "Sequence video set: %s", list[i].toUtf8().c_str());
 
-		ini.beginGroup(list[i]);
-		v->name = WzString::fromUtf8(ini.json("name").get<std::string>());
-		debug(LOG_WZ, "Sequence viewdata name: %s", v->name.toUtf8().c_str());
-		nlohmann::json element = ini.json("sequences");
-		r->seqList.resize(element.size());
-		debug(LOG_WZ, "Sequence list size: %d", (int)r->seqList.size());
+		v->name = WzString::fromUtf8(brief.key());
+		r->seqList = std::move(seqList);
 
-		for (auto& videoIdx : element)
-		{
-			r->seqList[j].sequenceName = WzString::fromUtf8(videoIdx["video"].get<std::string>());
-			debug(LOG_WZ, "Sequence name: %s", r->seqList[j].sequenceName.toUtf8().c_str());
-			r->seqList[j].flag = videoIdx["loop"].get<uint32_t>();
-			debug(LOG_WZ, "Sequence loop: %d", r->seqList[j].flag);
-			// Set the subtitle string for the sequence.
-			nlohmann::json array = videoIdx["subtitles"];
-			if (!array.is_null() && array.is_array())
-			{
-				for (auto &a : array)
-				{
-					std::string msg = a.get<std::string>();
-					if (msg.length() != 0)
-					{
-						const char *str = strresGetString(psStringRes, msg.c_str());
-						ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
-						r->seqList[j].textMsg.push_back(WzString::fromUtf8(str));
-						debug(LOG_WZ, "Sequence subtitle array: %s", msg.c_str());
-					}
-				}
-			}
-			else
-			{
-				std::string msg = videoIdx["subtitles"].get<std::string>();
-				if (msg.length() != 0)
-				{
-					const char *str = strresGetString(psStringRes, msg.c_str());
-					ASSERT(str, "Cannot find the view data string with id \"%s\"", msg.c_str());
-					r->seqList[j].textMsg.push_back(WzString::fromUtf8(str));
-					debug(LOG_WZ, "Sequence subtitle string: %s", msg.c_str());
-				}
-			}
-			++j;
-		}
-
-		ini.endGroup();
 		apsViewData[v->name] = v;
 	}
 	return new WzString(fileName); // so that cleanup function will be called on right data
 }
+
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__) && (__GNUC__ < 10)
+# pragma GCC diagnostic pop
+#endif
 
 /* Get the view data identified by the name */
 VIEWDATA *getViewData(const WzString &name)
