@@ -1,8 +1,10 @@
 {
-    "video0000": {
-        "name": "FACTORYVIPER",
-        "sequences": [
-            { "loop": 0, "subtitles": "", "video": "factory.ogg" }
-        ]
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "FACTORYVIPER": {
+            "sequences": [
+                { "loop": 0, "subtitles": "", "video": "factory.ogg" }
+            ]
+        }
     }
 }
