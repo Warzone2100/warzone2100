@@ -3429,8 +3429,12 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	if (psDroid->shieldPoints >= 0)
 	{
 		int maxShieldPoints = droidGetMaxShieldPoints(psDroid);
-		shields = PERCENT(psDroid->shieldPoints, maxShieldPoints);
-		shields = static_cast<UDWORD>((float)psDroid->shieldPoints / (float)maxShieldPoints * (float)psDroid->sDisplay.screenR);
+
+		if (maxShieldPoints > 0)
+		{
+			shields = PERCENT(psDroid->shieldPoints, maxShieldPoints);
+			shields = static_cast<UDWORD>((float)psDroid->shieldPoints / (float)maxShieldPoints * (float)psDroid->sDisplay.screenR);
+		}
 	}
 
 	PIELIGHT powerCol = WZCOL_BLACK;
