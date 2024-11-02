@@ -1062,7 +1062,7 @@ void droidUpdateShields(DROID *psDroid)
 				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
 				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid))
 			{
-				for (uint32_t i = 0; i < DROID_SHIELD_POINTS_STEP; i++)
+				for (int i = 0; i < psDroid->getBrainStats()->shield.shieldPointsPerStep; i++)
 				{
 					if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid))
 					{
@@ -1082,18 +1082,21 @@ void droidUpdateShields(DROID *psDroid)
 
 UDWORD droidCalculateShieldRegenTime(const DROID *psDroid)
 {
-	return DROID_INITIAL_SHIELD_REGEN_TIME - (DROID_SHIELD_REGEN_TIME_DEC * getDroidLevel(psDroid));
+	const auto &psStats = psDroid->getBrainStats()->shield;
+	return psStats.initialShieldRegenTime - (psStats.shieldRegenTimeDec * getDroidLevel(psDroid));
 }
 
 UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid)
 {
-	return DROID_INITIAL_SHIELD_INTERRUPT_REGEN_TIME - (DROID_SHIELD_INTERRUPT_REGEN_TIME_DEC * getDroidLevel(psDroid));
+	const auto &psStats = psDroid->getBrainStats()->shield;
+	return psStats.initialShieldInterruptRegenTime - (psStats.shieldInterruptRegenTimeDec * getDroidLevel(psDroid));
 }
 
 UDWORD droidGetMaxShieldPoints(const DROID *psDroid)
 {
+	const auto &psStats = psDroid->getBrainStats()->shield;
 	UDWORD percent = psDroid->originalBody / 100;
-	return percent * (DROID_INITIAL_SHILED_POINTS_PERCENT + DROID_ADDITVE_SHILED_POINTS_PERCENT * getDroidLevel(psDroid));
+	return percent * (psStats.initialShieldPointsPercent + psStats.additiveShieldPointsPercent * getDroidLevel(psDroid));
 }
 
 /* See if a droid is next to a structure */

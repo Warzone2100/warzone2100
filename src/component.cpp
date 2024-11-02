@@ -432,7 +432,7 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 	size_t	i = 0;
 	bool				didDrawSomething = false;
 
-	if (!bButton && psDroid->shieldPoints > 0)
+	if (!bButton && psDroid->shieldPoints > 0 && droidGetMaxShieldPoints(psDroid) > 0)
 	{
 		double factor = static_cast<double>(psDroid->shieldPoints) / droidGetMaxShieldPoints(psDroid);
 		iShieldPieData = static_cast<SDWORD>(std::round(255.0f * factor));
