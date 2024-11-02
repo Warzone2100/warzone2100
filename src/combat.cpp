@@ -524,7 +524,8 @@ int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage,
 				psDroid->shieldPoints = 0;
 			}
 
-			if (psDroid->shieldPoints == 0) {
+			if (psDroid->shieldPoints == 0)
+			{
 				// shields are interrupted, wait for a while until regeneration starts again
 				psDroid->shieldInterruptRegenTime = psDroid->time;
 			}
@@ -532,6 +533,7 @@ int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage,
 			if (psProjectile != nullptr &&
 				weaponSubClass != WSC_FLAME &&
 				weaponSubClass != WSC_COMMAND &&
+				droidGetMaxShieldPoints(psDroid) > 0 &&
 				PERCENT(psDroid->shieldPoints, droidGetMaxShieldPoints(psDroid)) > 25 &&
 				objPosDiffSq(psDroid->pos, psProjectile->pos) < TILE_WIDTH * TILE_WIDTH)
 			{
