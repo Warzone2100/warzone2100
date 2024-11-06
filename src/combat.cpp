@@ -540,7 +540,7 @@ int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage,
 				Vector3i dv;
 				dv.y = psProjectile->pos.z;
 
-				for (uint32_t i = 0; i < DROID_SHIELD_PARTICLES; i++)
+				for (int i = 0; i < DROID_SHIELD_PARTICLES; i++)
 				{
 					dv.x = psProjectile->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
 					dv.z = psProjectile->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
