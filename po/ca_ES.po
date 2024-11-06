@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-04 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -1800,7 +1800,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Destruïu el QG de Nexus per a desactivar el programa d'intrusió Nexus"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Atenció: el QG està protegit contra els atacs VTOL"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Acabeu la recerca dels circuits de resistència i sobreviviu a l'assalt de Nexus"
@@ -2955,7 +2955,7 @@ msgid "Your external IP is: %s"
 msgstr "La seva IP externa és: %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "No s'ha pogut crear el mapatge dels ports (timeout)"
 
 msgid "Client failed to ack player index swap"
 msgstr "El client no ha confirmat el canvi de lloc del jugador"
@@ -6486,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "+35% d'armadura tèrmica"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "+40% d'armadura tèrmica"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "+40% d'armadura tèrmica"
 
 #, no-c-format
@@ -7732,6 +7732,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr "El filtratge de les ombres no està disponible en aquest sistema."
 
+msgid "Opacity: 50%"
+msgstr "Opacitat: 50%"
+
 msgid "* Takes effect on game restart"
 msgstr "* Té efecte quan reinicieu"
 
@@ -7776,6 +7779,9 @@ msgstr "Sacsejada de pantalla"
 
 msgid "Groups Menu"
 msgstr "Menú dels grups"
+
+msgid "Options Button"
+msgstr "Botons d'opcions"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONS GRÀFIQUES"
@@ -8090,6 +8096,12 @@ msgstr "El jugador %u està fent trampes (mode depuració) amb un nou cíborg: %
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "El jugador %u està fent trampes (mode depuració) amb un nou cíborg."
 
+msgid "Open In-Game Options"
+msgstr "Obre les opcions del joc"
+
+msgid "Close In-Game Options"
+msgstr "Tanca les opcions del joc"
+
 msgid "Hiding Obsolete Tech"
 msgstr "Amaga les tecnologies obsoletes"
 
@@ -8249,6 +8261,28 @@ msgstr "Trampes"
 
 msgid "End-Game"
 msgstr "Fi del joc"
+
+msgid "Host"
+msgstr "Amfitrió"
+
+msgid "Admin"
+msgstr "Administrador"
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr "%s (%s) ha canviat l'equip del jugador (%s) a: %d"
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr "%s (%s) ha canviat la posició del jugador (%s) a: %d"
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr "%s (%s) ha canviat el color del jugador (%s) a: %s"
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr "%s (%s) ha canviat la facció del jugador (%s) a: %s"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Algú pot transferir-me unitats?"
@@ -8465,6 +8499,9 @@ msgstr "No s'ha pogut enviar el missatge - torna a intentar-ho"
 
 msgid "Map Downloaded"
 msgstr "Mapes baixats"
+
+msgid "Admin modified a setting"
+msgstr "L'administrador ha modificat una opció"
 
 msgid "Bot Allies"
 msgstr "Aliats bot"
@@ -10832,8 +10869,31 @@ msgstr "Cap connexió disponible"
 msgid "Synchronizing data with host ..."
 msgstr "Sincronitzant dades amb l'amfitrió..."
 
+msgid "Waiting for correct join password"
+msgstr "S'espera la contrasenya correcta per unir-se"
+
+msgid "Attempting to connect"
+msgstr "Intentant connectar-se"
+
+msgid "Establishing connection handshake"
+msgstr "Establint una connexió de salutació"
+
+msgid "Coordinating join with host"
+msgstr "Coordinant-se amb l'amfitrió"
+
+msgid "Join attempt failed"
+msgstr "Intent per connectar-se fallit"
+
 msgid "Host did not respond before timeout"
 msgstr "L'amfitrió no ha respost abans no acabi el temps"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr "Fallat a: [%s] - %s"
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr "Fallat a: [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"

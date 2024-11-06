@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-10-07 02:29\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-05 02:26\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -6488,11 +6488,11 @@ msgid "Thermal Armor +35%"
 msgstr "热能装甲 +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "热能装甲 +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "热能装甲 +40%"
 
 #, no-c-format
@@ -7728,6 +7728,9 @@ msgstr "最高"
 msgid "Shadow filtering not available on this system."
 msgstr "阴影过滤在此系统上不可用。"
 
+msgid "Opacity: 50%"
+msgstr "透明度：50%"
+
 msgid "* Takes effect on game restart"
 msgstr "*重启游戏后生效"
 
@@ -7772,6 +7775,9 @@ msgstr "屏幕晃动"
 
 msgid "Groups Menu"
 msgstr "编队菜单"
+
+msgid "Options Button"
+msgstr "选项按钮"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "图形选项"
@@ -8086,6 +8092,12 @@ msgstr "玩家 %u 利用作弊 (调式菜单) 模式建立了一个新单位：%
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "玩家 %u 利用作弊 (调式菜单) 模式建立了一个新机器人"
 
+msgid "Open In-Game Options"
+msgstr "打开游戏内选项"
+
+msgid "Close In-Game Options"
+msgstr "关闭游戏内选项"
+
 msgid "Hiding Obsolete Tech"
 msgstr "隐藏过时技术"
 
@@ -8246,6 +8258,28 @@ msgstr "作弊"
 msgid "End-Game"
 msgstr "结束游戏"
 
+msgid "Host"
+msgstr "主机"
+
+msgid "Admin"
+msgstr "管理员"
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr "%s (%s) 将玩家 (%s) 的团队更改为： %d"
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr "%s (%s) 将玩家 (%s) 的位置更改为： %d"
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr "%s (%s) 将玩家 (%s) 的颜色更改为： %s"
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr "%s (%s) 将玩家 (%s) 的阵营更改为： %s"
+
 msgid "Can someone please transfer me some units?"
 msgstr "有人能给我一些单位吗？"
 
@@ -8358,7 +8392,7 @@ msgid "You're going to regret that"
 msgstr "你会后悔的"
 
 msgid "Barely a scratch!"
-msgstr "太弱了！"
+msgstr "刮痧呢？"
 
 msgid "Attack now?"
 msgstr "现在攻击吗？"
@@ -8461,6 +8495,9 @@ msgstr "消息发送失败 - 请重试"
 
 msgid "Map Downloaded"
 msgstr "地图已下载"
+
+msgid "Admin modified a setting"
+msgstr "管理员修改了一个设置"
 
 msgid "Bot Allies"
 msgstr "电脑盟友"
@@ -10827,8 +10864,31 @@ msgstr "无可用连接"
 msgid "Synchronizing data with host ..."
 msgstr "正在与主机同步数据..."
 
+msgid "Waiting for correct join password"
+msgstr "等待正确的加入密码"
+
+msgid "Attempting to connect"
+msgstr "尝试连接"
+
+msgid "Establishing connection handshake"
+msgstr "建立连接握手"
+
+msgid "Coordinating join with host"
+msgstr "与主机协调加入游戏"
+
+msgid "Join attempt failed"
+msgstr "尝试加入游戏失败"
+
 msgid "Host did not respond before timeout"
 msgstr "主机未在超时前响应"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr "失败原因： [%s] - %s"
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr "失败原因： [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"

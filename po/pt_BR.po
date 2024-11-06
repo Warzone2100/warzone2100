@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-10-07 02:29\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-04 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -6486,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "Armadura Térmica +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Armadura Térmica +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Armadura Térmica +40%"
 
 #, no-c-format
@@ -7732,6 +7732,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr "A filtragem por sombra não está disponível neste sistema."
 
+msgid "Opacity: 50%"
+msgstr "Opacidade: 50%"
+
 msgid "* Takes effect on game restart"
 msgstr "* Precisa reiniciar o jogo"
 
@@ -7776,6 +7779,9 @@ msgstr "Agitar Tela"
 
 msgid "Groups Menu"
 msgstr "Menu de Grupos"
+
+msgid "Options Button"
+msgstr "Botão de Opções"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPÇÕES GRÁFICAS"
@@ -8090,6 +8096,12 @@ msgstr "Jogador %u trapaceou (menu de depuração) dando a ele mesmo um  novo dr
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Jogador %u está trapaceando (menu de depuração)! Ele/ela ganhou um novo droide."
 
+msgid "Open In-Game Options"
+msgstr "Exibir Opções de Jogo"
+
+msgid "Close In-Game Options"
+msgstr "Fechar opções de jogo"
+
 msgid "Hiding Obsolete Tech"
 msgstr "Escondendo Tecn. Obsoletas"
 
@@ -8249,6 +8261,28 @@ msgstr "Trapaças"
 
 msgid "End-Game"
 msgstr "Fim de jogo"
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr "Administrador"
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "Alguém pode me transferir algumas unidades, por favor?"
@@ -8465,6 +8499,9 @@ msgstr "Falha ao enviar mensagem - tente novamente"
 
 msgid "Map Downloaded"
 msgstr "Mapa Baixado"
+
+msgid "Admin modified a setting"
+msgstr ""
 
 msgid "Bot Allies"
 msgstr "Aliados de IA"
@@ -10832,8 +10869,31 @@ msgstr "Nenhuma conexão disponível"
 msgid "Synchronizing data with host ..."
 msgstr "Sincronizando dados com o host ..."
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
 msgstr "O anfitrião não respondeu no tempo limite"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr ""
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"
