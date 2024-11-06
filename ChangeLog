@@ -1,3 +1,28 @@
+2024-11-06: Version 4.5.4:
+ * General:
+   * Add: In-game options button (too many commits, #4106, #4113)
+   * Fix: Transporter timer capacity label area should be clickable (commit:29343d2de5e835c51d08c67c2fbc8a72ccf806e5, #4106)
+   * Fix: Do not remove vision from transporters when loading saves (commit:e8530d5828d488523d09a475f012452cb428e2f9, #4094)
+   * Fix: Various potential crashes (too many commits, #4069, #4103)
+ * Graphics:
+   * Change: Improve high-quality terrain water (commit:adcadc8a5ce709e72fc53997ce5cb56c9540930d, #4101)
+   * Fix: Loading high-quality terrain water diffuse textures (commit:3a0bc57e8429d77a21af06e15a015076c498f4d5, commit:9008a3bf9fb0f2ff7295b44f87941ade1545121d, #4093)
+ * Campaign:
+   * Change: Convert Brief and Proximity files to JSON (too many commits, #4068, #4114)
+ * Multiplayer:
+   * Add: Initial support for admins changing settings via UI (commit:4e7f99ed92e2022f0793372f617511b60147daa8, #4110)
+   * Add: Host auto-kick on sustained desync (commit:f8ec4d844335ac70004861202db217f46f2cfab7, #4112)
+   * Fix: Refactor socket operations error code return (too many commits, #4092, #4097)
+   * Fix: Add campaign HQs to MP stats (commit:b9508a4ba5501d7cee69163807bcacb66c88b108, #4100)
+   * Fix: Display and log connection state on joining screen timeout (commit:cc6a1f30d6625e56d2d67305dbf198990cfd522c, #4112)
+   * Fix: Only play "Player is exiting" audio when player slot drops, ignore spectators (commit:b9c37598bc48ca1eb9017ea2e740a91e09b098dc, #4112)
+ * Scripting:
+   * Add: Research field for Stats object (commit:e09daaa63be94463850d8328cc8ce39cd7c660e9, #4091)
+ * Balance MP:
+   * Change: Plasmite Flamer boost (commit:b0eedf4f57b96a53aecbf8fa3ef0e73d3df816b6, #3989)
+ * Translations:
+   * Change: Numerous translation updates (commit:98f1a4801b60388685c8bd610b9b33048c0eb6e4, commit:7332fc166c40bf5418419a3cac05f25f7dbaeef7, #4066, #4117)
+
 2024-09-12: Version 4.5.3:
  * General:
    * Change: Give experience when squishing a scavenger (commit:736fae8e874744a7156de54ad4330cb22ab9ec01, #4046)
