@@ -974,12 +974,12 @@ void droidUpdateShields(DROID *psDroid)
 				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
 				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid))
 			{
-				for (int i = 0; i < psDroid->getBrainStats()->shield.shieldPointsPerStep; i++)
+				auto availableShieldPoints = droidGetMaxShieldPoints(psDroid) - psDroid->shieldPoints;
+
+				if (availableShieldPoints > 0)
 				{
-					if (psDroid->shieldPoints < droidGetMaxShieldPoints(psDroid))
-					{
-						psDroid->shieldPoints += 1;
-					}
+					auto pointsToAdd = std::min<UDWORD>(psDroid->getBrainStats()->shield.shieldPointsPerStep, availableShieldPoints);
+					psDroid->shieldPoints += pointsToAdd;
 				}
 				psDroid->shieldRegenTime = gameTime;
 			}
