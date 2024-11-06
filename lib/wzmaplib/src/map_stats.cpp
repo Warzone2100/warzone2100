@@ -372,15 +372,9 @@ MapStatsConfiguration::MapStatsConfiguration(MapType mapType)
 	researchCenters = {"A0ResearchFacility"};
 	// the names (ids) of the HQ struct(s)
 	//  - "type": "HQ"
-	if (mapType == MapType::CAMPAIGN)
-	{
-		// There are some campaign-only additional ids (A0CommandCentreNP, A0CommandCentreCO, A0CommandCentreNE)
-		hqStructs = {"A0CommandCentre", "A0CommandCentreNP", "A0CommandCentreCO", "A0CommandCentreNE"};
-	}
-	else
-	{
-		hqStructs = {"A0CommandCentre"};
-	}
+	//  > NOTE: Prior to WZ 4.5.4, only "A0CommandCentre" was available in multiplayer stats
+	//  > With 4.5.4, the remaining campaign-only HQs were also added to MP stats
+	hqStructs = {"A0CommandCentre", "A0CommandCentreNP", "A0CommandCentreCO", "A0CommandCentreNE"};
 	// the names (ids) of defense structs (i.e. bunkers, towers, hardpoints)
 	//  - "type": "DEFENSE"
 	// extracted from the appropriate base/stats/structure.json or mp/stats/structure.json file using:
@@ -441,6 +435,9 @@ MapStatsConfiguration::MapStatsConfiguration(MapType mapType)
 			{"A0BaBaVtolFactory", StructureSize(2, 2)},
 			{"A0ComDroidControl", StructureSize(2, 2)},
 			{"A0CommandCentre", StructureSize(2, 2)},
+			{"A0CommandCentreCO", StructureSize(2, 2)},
+			{"A0CommandCentreNE", StructureSize(2, 2)},
+			{"A0CommandCentreNP", StructureSize(2, 2)},
 			{"A0CyborgFactory", StructureSize(1, 2)},
 			{"A0FacMod1", StructureSize(3, 3)},
 			{"A0LasSatCommand", StructureSize(2, 2)},
