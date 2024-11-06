@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -6482,11 +6482,11 @@ msgid "Thermal Armor +35%"
 msgstr "Armor Termal +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Armor Termal +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Armor Termal +40%"
 
 #, no-c-format
@@ -7722,6 +7722,9 @@ msgstr ""
 msgid "Shadow filtering not available on this system."
 msgstr ""
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Efek dapat terlihat setelah memulai ulang permainan"
 
@@ -7765,6 +7768,9 @@ msgid "Screen Shake"
 msgstr "Getaran Layar"
 
 msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
 msgstr ""
 
 msgid "GRAPHICS OPTIONS"
@@ -8080,6 +8086,12 @@ msgstr "Pemain %u memunculkan unit baru yaitu %s melalui menu debug."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Pemain %u memunculkan unit baru melalui menu debug."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Menyembunyikan Teknologi Lawas"
 
@@ -8238,6 +8250,28 @@ msgid "Cheats"
 msgstr ""
 
 msgid "End-Game"
+msgstr ""
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8454,6 +8488,9 @@ msgid "Message delivery failure - try again"
 msgstr "Pengiriman pesan gagal - coba lagi"
 
 msgid "Map Downloaded"
+msgstr ""
+
+msgid "Admin modified a setting"
 msgstr ""
 
 msgid "Bot Allies"
@@ -10821,7 +10858,30 @@ msgstr ""
 msgid "Synchronizing data with host ..."
 msgstr ""
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
 msgstr ""
 
 #, c-format

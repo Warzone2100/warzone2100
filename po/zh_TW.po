@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:06\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -6486,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "熱能裝甲 +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "熱能裝甲 +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "熱能裝甲 +40%"
 
 #, no-c-format
@@ -7726,6 +7726,9 @@ msgstr "極高"
 msgid "Shadow filtering not available on this system."
 msgstr "陰影過濾在此系統上不可用."
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "*重新啟動遊戲後生效"
 
@@ -7770,6 +7773,9 @@ msgstr "螢幕晃動"
 
 msgid "Groups Menu"
 msgstr "小組功能表"
+
+msgid "Options Button"
+msgstr ""
 
 msgid "GRAPHICS OPTIONS"
 msgstr "圖形選項"
@@ -8080,6 +8086,12 @@ msgstr "玩家 %u 利用作弊(除錯)模式建立了一個新droid: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "玩家 %u 正在作弊(偵錯功能表) 他/她自己是一個新的生化人."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "隱藏過時的技術"
 
@@ -8235,6 +8247,28 @@ msgstr "作弊"
 
 msgid "End-Game"
 msgstr "遊戲結束"
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "有人可以給我轉移一些裝備嗎?"
@@ -8451,6 +8485,9 @@ msgstr "訊息發送失敗 - 重試"
 
 msgid "Map Downloaded"
 msgstr "地圖已下載"
+
+msgid "Admin modified a setting"
+msgstr ""
 
 msgid "Bot Allies"
 msgstr "生化人同盟"
@@ -10817,8 +10854,31 @@ msgstr "無可用的連線"
 msgid "Synchronizing data with host ..."
 msgstr "與主持端同步資料數據 ..."
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
 msgstr "超時前主持端未回應"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr ""
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -6486,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "Blindage thermique : +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Blindage thermique : +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Blindage thermique : +40%"
 
 #, no-c-format
@@ -7732,6 +7732,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr "Le filtrage des ombres n'est pas disponible sur ce système."
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Le jeu doit être redémarré pour que ces modifications s'appliquent"
 
@@ -7776,6 +7779,9 @@ msgstr "Vibrations de l’écran"
 
 msgid "Groups Menu"
 msgstr "Menu des Groupes"
+
+msgid "Options Button"
+msgstr ""
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPTIONS GRAPHIQUES"
@@ -8090,6 +8096,12 @@ msgstr "Le joueur %u Triche (Il se sert du menu debug pour se faire une nouvelle
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle unité)"
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Cacher les technologies obsolètes"
 
@@ -8249,6 +8261,28 @@ msgstr "Triche"
 
 msgid "End-Game"
 msgstr "Fin de partie"
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "Quelqu'un peut-il me transférer des unités ?"
@@ -8465,6 +8499,9 @@ msgstr "Échec d'envoi du message - essayez à nouveau"
 
 msgid "Map Downloaded"
 msgstr "Cartes téléchargées"
+
+msgid "Admin modified a setting"
+msgstr ""
 
 msgid "Bot Allies"
 msgstr "Bot allié"
@@ -10832,8 +10869,31 @@ msgstr "Aucune connexion disponible"
 msgid "Synchronizing data with host ..."
 msgstr "Synchronisation des données avec l'hôte..."
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
 msgstr "L'hôte n'a pas répondu avant le délai d'attente"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr ""
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-13 02:24\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -6482,11 +6482,11 @@ msgid "Thermal Armor +35%"
 msgstr "Hővédelem +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Hővédelem +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Hővédelem +40%"
 
 #, no-c-format
@@ -7728,6 +7728,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr "Az árnyékszűrés nem érhető el ezen a rendszeren."
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Játék újraindításakor effekteket bekapcsolja"
 
@@ -7772,6 +7775,9 @@ msgstr "Képernyő Rázás"
 
 msgid "Groups Menu"
 msgstr "Csoportok menü"
+
+msgid "Options Button"
+msgstr ""
 
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKA BEÁLLÍTÁS"
@@ -8086,6 +8092,12 @@ msgstr "%u csalt (hibakeresés menü), egy új droidja lett: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "%u csalt (hibakeresés menü), egy új droidja lett."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Elavult technika elrejtése"
 
@@ -8245,6 +8257,28 @@ msgstr "Csalások"
 
 msgid "End-Game"
 msgstr "Játék befejezése"
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "Át tudna adni nekem valaki néhány egységet?"
@@ -8461,6 +8495,9 @@ msgstr "Üzenetküldés sikertelen - próbálja újra"
 
 msgid "Map Downloaded"
 msgstr "Térkép letöltve"
+
+msgid "Admin modified a setting"
+msgstr ""
 
 msgid "Bot Allies"
 msgstr "Bot szövetségesek"
@@ -10828,7 +10865,30 @@ msgstr ""
 msgid "Synchronizing data with host ..."
 msgstr ""
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
 msgstr ""
 
 #, c-format

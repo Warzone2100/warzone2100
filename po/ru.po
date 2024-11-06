@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-18 02:24\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-06 02:25\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -6486,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "Термоброня +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Термоброня +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Термоброня +40%"
 
 #, no-c-format
@@ -7744,6 +7744,9 @@ msgstr "Ультра"
 msgid "Shadow filtering not available on this system."
 msgstr "Фильтрация теней недоступна в этой системе."
 
+msgid "Opacity: 50%"
+msgstr "Прозрачность: 50%"
+
 msgid "* Takes effect on game restart"
 msgstr "* Вступит в силу после перезагрузки игры"
 
@@ -7788,6 +7791,9 @@ msgstr "Тряска экрана"
 
 msgid "Groups Menu"
 msgstr "Меню групп"
+
+msgid "Options Button"
+msgstr "Кнопка настроек"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "НАСТРОЙКИ ГРАФИКИ"
@@ -8102,6 +8108,12 @@ msgstr "Игрок %u считерил (меню отладки) себе нов
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Игрок %u считерил (меню отладки) себе нового юнита."
 
+msgid "Open In-Game Options"
+msgstr "Открыть настройки игры"
+
+msgid "Close In-Game Options"
+msgstr "Закрыть настройки игры"
+
 msgid "Hiding Obsolete Tech"
 msgstr "Скрыть устаревшие технологии"
 
@@ -8261,6 +8273,28 @@ msgstr "Читы"
 
 msgid "End-Game"
 msgstr "Окончание игры"
+
+msgid "Host"
+msgstr "Хост"
+
+msgid "Admin"
+msgstr "Администратор"
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr "%s (%s) изменил команду игрока (%s) на: %d"
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr "%s (%s) изменил позицию игрока (%s) на: %d"
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr "%s (%s) изменил цвет игрока (%s) на: %s"
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr "%s (%s) изменил фракцию игрока (%s) на: %s"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Может кто-нибудь передать мне юнитов?"
@@ -8477,6 +8511,9 @@ msgstr "Ошибка доставки сообщения - попробуйте 
 
 msgid "Map Downloaded"
 msgstr "Карта загружена"
+
+msgid "Admin modified a setting"
+msgstr "Администратор изменил настройки"
 
 msgid "Bot Allies"
 msgstr "Боты-союзники"
@@ -10846,8 +10883,31 @@ msgstr "Нет доступных подключений"
 msgid "Synchronizing data with host ..."
 msgstr "Синхронизация данных с хостом..."
 
+msgid "Waiting for correct join password"
+msgstr "Ожидание правильного пароля для входа"
+
+msgid "Attempting to connect"
+msgstr "Попытка подключения"
+
+msgid "Establishing connection handshake"
+msgstr "Установка соединения"
+
+msgid "Coordinating join with host"
+msgstr "Присоединение к хосту"
+
+msgid "Join attempt failed"
+msgstr "Не удалось присоединиться"
+
 msgid "Host did not respond before timeout"
 msgstr "Время ожидания ответа от хоста истекло"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr "Ошибка: [%s] - %s"
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr "Ошибка: [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"
