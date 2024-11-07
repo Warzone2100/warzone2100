@@ -104,11 +104,16 @@ namespace gfx_api
 }
 
 namespace WZ_vk {
-	using UniqueBuffer = vk::UniqueHandle<vk::Buffer, vk::DispatchLoaderDynamic>;
-	using UniqueDeviceMemory = vk::UniqueHandle<vk::DeviceMemory, vk::DispatchLoaderDynamic>;
-	using UniqueImage = vk::UniqueHandle<vk::Image, vk::DispatchLoaderDynamic>;
-	using UniqueImageView = vk::UniqueHandle<vk::ImageView, vk::DispatchLoaderDynamic>;
-	using UniqueSemaphore = vk::UniqueHandle<vk::Semaphore, vk::DispatchLoaderDynamic>;
+#if VK_HEADER_VERSION >= 301
+	using DispatchLoaderDynamic = vk::detail::DispatchLoaderDynamic;
+#else
+	using DispatchLoaderDynamic = vk::DispatchLoaderDynamic;
+#endif
+	using UniqueBuffer = vk::UniqueHandle<vk::Buffer, WZ_vk::DispatchLoaderDynamic>;
+	using UniqueDeviceMemory = vk::UniqueHandle<vk::DeviceMemory, WZ_vk::DispatchLoaderDynamic>;
+	using UniqueImage = vk::UniqueHandle<vk::Image, WZ_vk::DispatchLoaderDynamic>;
+	using UniqueImageView = vk::UniqueHandle<vk::ImageView, WZ_vk::DispatchLoaderDynamic>;
+	using UniqueSemaphore = vk::UniqueHandle<vk::Semaphore, WZ_vk::DispatchLoaderDynamic>;
 }
 
 inline void hash_combine(std::size_t& seed) { }
@@ -222,7 +227,7 @@ struct perFrameResources_t
 		{
 			pools.push_back(pool);
 		}
-		void reset(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader);
+		void reset(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 		inline DescriptorPoolDetails& current() { return pools.at(currPool); }
 		bool nextPool() { if (!pools.empty() && (currPool < (pools.size() - 1))) { ++currPool; return true; } else { return false; } }
 	public:
@@ -252,7 +257,7 @@ struct perFrameResources_t
 	perFrameResources_t( const perFrameResources_t& other ) = delete; // non construction-copyable
 	perFrameResources_t& operator=( const perFrameResources_t& ) = delete; // non copyable
 
-	perFrameResources_t(vk::Device& _dev, const VmaAllocator& allocator, const uint32_t& graphicsQueueIndex, const vk::DispatchLoaderDynamic& vkDynLoader);
+	perFrameResources_t(vk::Device& _dev, const VmaAllocator& allocator, const uint32_t& graphicsQueueIndex, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 	~perFrameResources_t();
 
 public:
@@ -295,7 +300,7 @@ private:
 	DescriptorPoolDetails createNewDescriptorPool(vk::DescriptorType type, uint32_t maxSets, uint32_t descriptorCount);
 
 private:
-	const vk::DispatchLoaderDynamic *pVkDynLoader;
+	const WZ_vk::DispatchLoaderDynamic *pVkDynLoader;
 	vk::CommandBuffer *pCurrentDrawCmdBuffer = nullptr;
 };
 
@@ -308,7 +313,7 @@ struct perSwapchainImageResources_t
 	perSwapchainImageResources_t( const perSwapchainImageResources_t& other ) = delete; // non construction-copyable
 	perSwapchainImageResources_t& operator=( const perSwapchainImageResources_t& ) = delete; // non copyable
 
-	perSwapchainImageResources_t(vk::Device& _dev, const vk::DispatchLoaderDynamic& vkDynLoader);
+	perSwapchainImageResources_t(vk::Device& _dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 	~perSwapchainImageResources_t();
 
 protected:
@@ -316,7 +321,7 @@ protected:
 	void clean();
 
 private:
-	const vk::DispatchLoaderDynamic *pVkDynLoader;
+	const WZ_vk::DispatchLoaderDynamic *pVkDynLoader;
 };
 
 struct buffering_mechanism
@@ -329,9 +334,9 @@ struct buffering_mechanism
 
 	static perFrameResources_t& get_current_resources();
 	static perSwapchainImageResources_t& get_current_swapchain_resources();
-	static void init(vk::Device dev, const VmaAllocator& allocator, size_t swapchainImageCount, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader);
-	static void destroy(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader);
-	static void swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage);
+	static void init(vk::Device dev, const VmaAllocator& allocator, size_t swapchainImageCount, const uint32_t& graphicsQueueFamilyIndex, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
+	static void destroy(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
+	static void swap(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage);
 	static bool isInitialized();
 	static size_t get_current_frame_num();
 	static size_t numFrames();
@@ -369,7 +374,7 @@ struct VkPSO final
 	vk::ShaderModule vertexShader;
 	vk::ShaderModule fragmentShader;
 	vk::Device dev;
-	const vk::DispatchLoaderDynamic* pVkDynLoader;
+	const WZ_vk::DispatchLoaderDynamic* pVkDynLoader;
 	std::vector<vk::Sampler> samplers;
 
 	std::shared_ptr<VkhRenderPassCompat> renderpass_compat;
@@ -380,7 +385,7 @@ private:
 	// Read shader into text buffer
 	static std::vector<uint32_t> readShaderBuf(const std::string& name);
 
-	vk::ShaderModule get_module(const std::string& name, const vk::DispatchLoaderDynamic& vkDynLoader);
+	vk::ShaderModule get_module(const std::string& name, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 
 	static std::array<vk::PipelineShaderStageCreateInfo, 2> get_stages(const vk::ShaderModule& vertexModule, const vk::ShaderModule& fragmentModule);
 
@@ -405,7 +410,7 @@ public:
 		  vk::RenderPass rp,
 		  const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 		  vk::SampleCountFlagBits rasterizationSamples,
-		  const vk::DispatchLoaderDynamic& _vkDynLoader,
+		  const WZ_vk::DispatchLoaderDynamic& _vkDynLoader,
 		  const VkRoot& root
 		  );
 
@@ -552,7 +557,7 @@ struct VkDepthMapImage final : public gfx_api::abstract_texture
 	virtual bool isArray() const override;
 	virtual size_t backend_internal_value() const override;
 
-	void destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader);
+	void destroy(vk::Device dev, const VmaAllocator& allocator, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 
 	VkDepthMapImage( const VkDepthMapImage& other ) = delete; // non construction-copyable
 	VkDepthMapImage& operator=( const VkDepthMapImage& ) = delete; // non copyable
@@ -579,7 +584,7 @@ struct VkRenderedImage final : public gfx_api::abstract_texture
 	virtual bool isArray() const override;
 	virtual size_t backend_internal_value() const override;
 
-	void destroy(vk::Device dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader);
+	void destroy(vk::Device dev, const VmaAllocator& allocator, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 
 	VkRenderedImage( const VkRenderedImage& other ) = delete; // non construction-copyable
 	VkRenderedImage& operator=( const VkRenderedImage& ) = delete; // non copyable
@@ -617,7 +622,7 @@ struct VkRoot final : gfx_api::context
 	vk::InstanceCreateInfo instanceCreateInfo;
 	vk::Instance inst;
 	std::vector<const char*> layers;
-	vk::DispatchLoaderDynamic vkDynLoader;
+	WZ_vk::DispatchLoaderDynamic vkDynLoader;
 
 	// physical device (and info)
 	vk::PhysicalDevice physicalDevice;
