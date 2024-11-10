@@ -991,7 +991,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "CANNON",
 		"weaponWav": "hivelcan.ogg",
-		"weight": 3000
+		"weight": 3500
 	},
 	"Cannon5Vulcan-VTOL": {
 		"buildPoints": 700,
