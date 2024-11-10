@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-05 02:26\n"
+"PO-Revision-Date: 2024-11-09 02:23\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -3840,7 +3840,7 @@ msgid "Combat engineer with construction ability"
 msgstr "战斗工程师拥有建造的能力"
 
 msgid "Combines standard, counter battery and VTOL sensors"
-msgstr "包涵了标准雷达、反炮兵雷达及VTOL侦测雷达的功能"
+msgstr "整合了标准雷达、反炮兵雷达及 VTOL 雷达"
 
 msgid "Command Center"
 msgstr "指挥中心"
@@ -8093,10 +8093,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "玩家 %u 利用作弊 (调式菜单) 模式建立了一个新机器人"
 
 msgid "Open In-Game Options"
-msgstr "打开游戏内选项"
+msgstr "打开游戏菜单"
 
 msgid "Close In-Game Options"
-msgstr "关闭游戏内选项"
+msgstr "关闭游戏菜单"
 
 msgid "Hiding Obsolete Tech"
 msgstr "隐藏过时技术"
@@ -11216,7 +11216,7 @@ msgid "An unforgiving challenge for experienced players only"
 msgstr "仅适合有经验玩家的极限挑战"
 
 msgid "\"Classic\" campaign balance"
-msgstr "“经典“战役平衡"
+msgstr "“经典”战役平衡"
 
 msgid "Remastered"
 msgstr "重制版"
@@ -11316,7 +11316,7 @@ msgid "Wrong Game Version!"
 msgstr "错误的游戏版本"
 
 msgid "You have an incompatible mod."
-msgstr "你有一个不兼容的mod"
+msgstr "您有一个不兼容的模组"
 
 msgid "Host couldn't send file?"
 msgstr "主玩家不能发送文件？"
