@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"PO-Revision-Date: 2024-11-10 02:28\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1020,7 +1020,7 @@ msgid "Automated Vehicle Repair Mk2"
 msgstr "Riparazione automatizzata di veicoli Mk2"
 
 msgid "Automated Vehicle Repair Mk3"
-msgstr "Riparazione automatizzata di veicoli Mk3"
+msgstr "Riparazione automatizzata dei veicoli Mk3"
 
 msgid "Heavy Mobile Repair Turret"
 msgstr "Torretta Riparatrice Mobile Pesante"
@@ -1134,7 +1134,7 @@ msgid "Cyborg Materials Improved"
 msgstr "Materiali dei cyborg migliorati"
 
 msgid "Layered dense composite alloys and energy-absorbing fibres"
-msgstr "Leghe composite dense stratificate e fibre ad assorbimento di energia"
+msgstr "Leghe composite dense e fibre ad assorbimento di energia"
 
 msgid "Increases Kinetic Armor and Body Points"
 msgstr "Aumenta l'armatura cinetica e i punti corazza"
@@ -2793,10 +2793,10 @@ msgid "Super Heavy-Gunner"
 msgstr "Cannoniere super pesante"
 
 msgid "Super Auto-Cannon Cyborg"
-msgstr "Super Cyborg con Cannone Automatico"
+msgstr "Super Cyborg con cannone automatico"
 
 msgid "Super HPV Cyborg"
-msgstr "Super Cyborg con Cannone a Ipervelocità"
+msgstr "Super Cyborg con cannone ad ipervelocità"
 
 msgid "Super Tank-Killer Cyborg"
 msgstr "Super Cyborg con Tank Killer"
@@ -2808,7 +2808,7 @@ msgid "Super Pulse Laser Cyborg"
 msgstr "Super Cyborg con Laser a Impulso"
 
 msgid "Super Rail-Gunner"
-msgstr "Super Cyborg con Cannone a massa"
+msgstr "Super Cyborg con cannone a massa"
 
 msgid "Super Scourge Cyborg"
 msgstr "Super Cyborg con Scourge"
@@ -2940,22 +2940,22 @@ msgid "System locale"
 msgstr "Lingua di sistema"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Impossibile creare la mappatura porte"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Configura manualmente il router/firewall per aprire la porta %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Porta esterna aperta nella mappatura porte: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Il tuo IP esterno è: %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "Impossibile creare la mappatura porte (timeout)"
 
 msgid "Client failed to ack player index swap"
 msgstr "Il client non ha potuto riconoscere il cambio d'indice del giocatore"
@@ -2971,6 +2971,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Errore nella connessione al server della lobby: %s.\n"
+"Fai in modo che la porta %d possa ricevere connessioni in entrata.\n"
+"Se stai usando un router configuralo per usare l'UPnP, o esegui il\n"
+"port forward al tuo sistema."
 
 msgid "Failed to get a lobby response!"
 msgstr "Impossibile avere risposte della lobby!"
@@ -3876,13 +3880,13 @@ msgid "Complete battlefield visibility"
 msgstr "Visibilità completa del campo di battaglia"
 
 msgid "Composite Alloys Mk2"
-msgstr "Leghe Composite Mk2"
+msgstr "Leghe composite Mk2"
 
 msgid "Composite Alloys Mk3"
-msgstr "Leghe Composite Mk3"
+msgstr "Leghe composite Mk3"
 
 msgid "Composite Alloys"
-msgstr "Leghe Composite"
+msgstr "Leghe composite"
 
 msgid "Computer guided shells"
 msgstr "Colpi guidati dal computer"
@@ -3935,22 +3939,22 @@ msgid "Crane2"
 msgstr "Gru2"
 
 msgid "Cyborg Composite Alloys Mk2"
-msgstr "Leghe Composite Cyborg Mk2"
+msgstr "Leghe composite cyborg Mk2"
 
 msgid "Cyborg Composite Alloys Mk3"
-msgstr "Leghe Composite Cyborg Mk3"
+msgstr "Leghe composite cyborg Mk3"
 
 msgid "Cyborg Composite Alloys"
-msgstr "Leghe Composite Cyborg"
+msgstr "Leghe composite cyborg"
 
 msgid "Cyborg Dense Composite Alloys Mk2"
-msgstr "Leghe Composite Dense Mk2"
+msgstr "Leghe composite dense Mk2"
 
 msgid "Cyborg Dense Composite Alloys Mk3"
-msgstr "Leghe Composite Dense Cyborg Mk3"
+msgstr "Leghe composite dense cyborg Mk3"
 
 msgid "Cyborg Dense Composite Alloys"
-msgstr "Leghe Composite Dense Cyborg"
+msgstr "Leghe composite dense cyborg"
 
 msgid "Cyborg Factory"
 msgstr "Fabbrica di cyborg"
@@ -3980,13 +3984,13 @@ msgid "Cyborg Propulsion Improved"
 msgstr "Propulsione Cyborg migliorata"
 
 msgid "Cyborg Superdense Composite Alloys Mk2"
-msgstr "Leghe Composite Superdense Cyborg Mk2"
+msgstr "Leghe composite superdense cyborg Mk2"
 
 msgid "Cyborg Superdense Composite Alloys Mk3"
-msgstr "Leghe Composite Superdense Cyborg Mk3"
+msgstr "Leghe composite superdense cyborg Mk3"
 
 msgid "Cyborg Superdense Composite Alloys"
-msgstr "Leghe composite super dense Cyborg"
+msgstr "Leghe composite superdense cyborg"
 
 msgid "Cyborg Superdense Thermal Armor Mk2"
 msgstr "Cyborg con armatura termica super densa Mk2"
@@ -4043,13 +4047,13 @@ msgid "Demolish Structure"
 msgstr "Demolisci struttura"
 
 msgid "Dense Composite Alloys Mk2"
-msgstr "Leghe Composite Dense Mk2"
+msgstr "Leghe composite dense Mk2"
 
 msgid "Dense Composite Alloys Mk3"
-msgstr "Leghe Composite Dense Mk3"
+msgstr "Leghe composite dense Mk3"
 
 msgid "Dense Composite Alloys"
-msgstr "Leghe Composite Dense"
+msgstr "Leghe composite dense"
 
 msgid "Depleted uranium kinetic energy bullets"
 msgstr "Proiettili ad energia cinetica ad uranio impoverito"
@@ -4157,7 +4161,7 @@ msgid "Factory module enables medium and large bodies"
 msgstr "Il modulo di fabbrica permette di produrre corpi medi e pesanti"
 
 msgid "Factory Module"
-msgstr "Modulo Fabbrica"
+msgstr "Modulo fabbrica"
 
 #, no-c-format
 msgid "Factory output speed +100%% per module"
@@ -4385,7 +4389,7 @@ msgid "Hardcrete Corner Wall"
 msgstr "Muro ad angolo in cemento"
 
 msgid "Hardcrete Gate"
-msgstr "Cancello di Cemento"
+msgstr "Cancello di cemento"
 
 msgid "Hardcrete Wall"
 msgstr "Muro di Cemento"
@@ -4667,7 +4671,7 @@ msgid "Heavy Rocket Bastion"
 msgstr "Bastione con Razzi Pesanti"
 
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "Batteria di razzi pesanti"
 
 msgid "Heavy surface-to-air missile"
 msgstr "Missile terra-aria pesante"
@@ -5632,13 +5636,13 @@ msgid "Objects become difficult to locate near it"
 msgstr "Gli oggetti diventano difficili da trovare vicino ad esso"
 
 msgid "Oil Derrick"
-msgstr "Derrick"
+msgstr "Torre petrolifera"
 
 msgid "Oil Drum"
 msgstr "Barile di petrolio"
 
 msgid "Oil Resource"
-msgstr "Risorsa di Petrolio"
+msgstr "Risorsa petrolifera"
 
 msgid "On-board computer predicts target movement"
 msgstr "Il computer di bordo prevede i movimenti del bersaglio"
@@ -6265,7 +6269,7 @@ msgid "Smashedwall"
 msgstr "Murofracassato"
 
 msgid "Sniper Cyborg"
-msgstr ""
+msgstr "Cyborg cecchino"
 
 msgid "Speed: Fast"
 msgstr "Velocità: Alta"
@@ -6364,16 +6368,16 @@ msgid "Supercrete"
 msgstr "Supertitan"
 
 msgid "Superdense composite alloys and energy-absorbing fibres"
-msgstr "Leghe composite superdense stratificate e fibre ad assorbimento di energia"
+msgstr "Leghe composite superdense e fibre ad assorbimento di energia"
 
 msgid "Superdense Composite Alloys Mk2"
-msgstr "Leghe Composite Superdense Mk2"
+msgstr "Leghe composite superdense Mk2"
 
 msgid "Superdense Composite Alloys Mk3"
-msgstr "Leghe Composite Superdense Mk3"
+msgstr "Leghe composite superdense Mk3"
 
 msgid "Superdense Composite Alloys"
-msgstr "Leghe Composite Superdense"
+msgstr "Leghe composite superdense"
 
 msgid "Superhot Flamer Gel Mk2"
 msgstr "Gel Supercaldo Mk2"
@@ -7240,10 +7244,10 @@ msgid "port"
 msgstr "porta"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Abilita / disabilita la mappatura porte durante l'host"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, vero, 0, falso]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "Abilita i comandi slash della lobby (per connettere i client)"
@@ -7285,13 +7289,13 @@ msgid "Game history log frame interval"
 msgstr ""
 
 msgid "interval in seconds"
-msgstr ""
+msgstr "intervallo in secondi"
 
 msgid "Multiplayer game time limit (in minutes)"
 msgstr ""
 
 msgid "number of minutes"
-msgstr ""
+msgstr "numero di minuti"
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
 msgstr ""
@@ -7402,7 +7406,7 @@ msgid "Store Design"
 msgstr "Salva Progetto"
 
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "Impossibile costruire. Risorsa d'olio in fiamme."
+msgstr "Impossibile costruire. Risorsa petrolifera in fiamme."
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
@@ -7505,7 +7509,7 @@ msgid "Single Player"
 msgstr "Giocatore singolo"
 
 msgid "Multi Player"
-msgstr "Più giocatori"
+msgstr "Multigiocatore"
 
 msgid "Tutorial"
 msgstr "Esercitazione"
@@ -7520,7 +7524,7 @@ msgid "Videos are missing, download them from http://wz2100.net"
 msgstr "I video della campagna non sono presenti, scaricali da http://wz2100.net"
 
 msgid "Continue Last Save"
-msgstr "Continua dall'ultimo salvataggio"
+msgstr "Continua ultimo salvataggio"
 
 msgid "No last save available"
 msgstr "Ultimo salvataggio non disponibile"
@@ -7596,7 +7600,7 @@ msgid "Load Skirmish Replay"
 msgstr "Carica replay della schermaglia"
 
 msgid "MULTI PLAYER"
-msgstr "PIÙ GIOCATORI"
+msgstr "MULTIGIOCATORE"
 
 msgid "Host Game"
 msgstr "Ospita una partita"
@@ -7636,7 +7640,7 @@ msgid "Music Manager"
 msgstr "Gestore della musica"
 
 msgid "Multiplay Options"
-msgstr "Opzioni multigiocatore"
+msgstr "Opzioni multi giocatore"
 
 msgid "OPTIONS"
 msgstr "OPZIONI"
@@ -7684,7 +7688,7 @@ msgid "On"
 msgstr "Acceso"
 
 msgid "Per Pixel"
-msgstr ""
+msgstr "Per pixel"
 
 msgid "Lightmap"
 msgstr ""
@@ -7711,34 +7715,34 @@ msgid "Terrain quality mode not available."
 msgstr ""
 
 msgid "Medium Quality"
-msgstr ""
+msgstr "Media qualità"
 
 msgid "High Quality"
-msgstr ""
+msgstr "Alta qualità"
 
 msgid "Shadow mapping not available on this system."
 msgstr ""
 
 msgid "Low"
-msgstr ""
+msgstr "Basso"
 
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 msgid "Shadow filtering not available on this system."
 msgstr ""
 
 msgid "Opacity: 50%"
-msgstr ""
+msgstr "Opacità: 50%"
 
 msgid "* Takes effect on game restart"
 msgstr "* Ha effetto al riavvio del gioco"
 
 msgid "Terrain Quality"
-msgstr ""
+msgstr "Qualità del terreno"
 
 msgid "Terrain Shading"
-msgstr ""
+msgstr "Ombreggiatura del terreno"
 
 msgid "Shadows"
 msgstr "Ombre"
@@ -7774,10 +7778,10 @@ msgid "Screen Shake"
 msgstr "Scuotimento dello schermo"
 
 msgid "Groups Menu"
-msgstr ""
+msgstr "Menu gruppi"
 
 msgid "Options Button"
-msgstr ""
+msgstr "Pulsante opzioni"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPZIONI GRAFICHE"
@@ -7975,7 +7979,7 @@ msgstr "%u minuti"
 
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s ore"
 
 #, c-format
 msgid "%u seconds"
@@ -7985,7 +7989,7 @@ msgid "None"
 msgstr "Nessuno"
 
 msgid "Distribute to Team"
-msgstr ""
+msgstr "Distribuisci alla squadra"
 
 msgid "Destroy (Classic)"
 msgstr ""
@@ -8003,13 +8007,13 @@ msgid "Game Port"
 msgstr "Porta del gioco"
 
 msgid "Port Mapping"
-msgstr ""
+msgstr "Mappatura porte"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
 msgstr ""
 
 msgid "Chat"
-msgstr ""
+msgstr "Chat"
 
 msgid "Inactivity Timeout"
 msgstr "Timeout d'Inattività"
@@ -8024,7 +8028,7 @@ msgid "On Player Leave"
 msgstr ""
 
 msgid "Game Time Limit"
-msgstr ""
+msgstr "Limite tempo di gioco"
 
 msgid "Enable Rating"
 msgstr "Abilita valutazioni"
@@ -8093,10 +8097,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Il giocatore %u sta ottenendo una nuova unità per mezzo di trucchi (menu di debug)."
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Apri le opzioni in gioco"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Chiudi le opzioni in gioco"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Nascondo Tecnologia Obsoleta"
@@ -8135,16 +8139,16 @@ msgid "Host Chat Options"
 msgstr ""
 
 msgid "Global Options:"
-msgstr ""
+msgstr "Opzioni globali:"
 
 msgid "Enable All"
-msgstr ""
+msgstr "Attiva tutto"
 
 msgid "Disable All"
-msgstr ""
+msgstr "Disabilita tutto"
 
 msgid "Chat Options"
-msgstr ""
+msgstr "Opzioni chat"
 
 msgid "Mute or configure player free chat."
 msgstr ""
@@ -8153,25 +8157,25 @@ msgid "The host has globally muted 1+ players."
 msgstr ""
 
 msgid "Local"
-msgstr ""
+msgstr "Locale"
 
 msgid "Select / Assign Group Number: "
 msgstr ""
 
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Gruppo %u"
 
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "Seleziona le unità nel gruppo %u"
 
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "Assegna unità selezionate al gruppo %u"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "Centra la vista su questo gruppo facendo click o toccando due volte"
 
 msgid "View and configure groups of units, which can be quickly selected and ordered."
 msgstr ""
@@ -8180,10 +8184,10 @@ msgid "Group buttons will glow red when units are lost (or taking lots of damage
 msgstr ""
 
 msgid "Unit Groups"
-msgstr ""
+msgstr "Gruppi di unità"
 
 msgid "Select a Group"
-msgstr ""
+msgstr "Seleziona gruppo"
 
 msgid "Assign Selected Units to a Group"
 msgstr ""
@@ -8192,7 +8196,7 @@ msgid "Center Camera on a Group by clicking or tapping twice on the group button
 msgstr ""
 
 msgid "Unit Groups:"
-msgstr ""
+msgstr "Gruppi di unità:"
 
 msgid "Construction Progress"
 msgstr "Progresso della costruzione"
@@ -8207,35 +8211,35 @@ msgid "Progress Bar"
 msgstr "Barra del Progresso"
 
 msgid "To:"
-msgstr ""
+msgstr "A:"
 
 msgid "All"
-msgstr ""
+msgstr "Tutti"
 
 msgid "Team"
 msgstr "Squadra"
 
 msgid "Human Teammates"
-msgstr ""
+msgstr "Compagni di squadra umani"
 
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Compagni di squadra bot"
 
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u giocatori"
 
 msgid "Choose a recipient"
-msgstr ""
+msgstr "Scegli un destinatario"
 
 msgid "Quick Chat:"
-msgstr ""
+msgstr "Chat rapida:"
 
 msgid "Lobby Chat"
-msgstr ""
+msgstr "Chat lobby"
 
 msgid "Requests"
-msgstr ""
+msgstr "Richieste"
 
 msgid "Notices"
 msgstr ""
@@ -8250,19 +8254,19 @@ msgid "Coordination"
 msgstr ""
 
 msgid "Suggestions"
-msgstr ""
+msgstr "Suggerimenti"
 
 msgid "Cheats"
-msgstr ""
+msgstr "Cheat"
 
 msgid "End-Game"
-msgstr ""
+msgstr "Fine partita"
 
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 msgid "Admin"
-msgstr ""
+msgstr "Amministratore"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
@@ -8287,37 +8291,37 @@ msgid "Can someone please transfer me trucks so I can rebuild?"
 msgstr ""
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Mi dispiace, non capisco. (Puoi usare la chat rapida?)"
 
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "Suggerisco: Costruire più unità"
 
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "Suggerisco: Costruire unità diverse"
 
 msgid "I suggest: Checking the team strategy view"
-msgstr ""
+msgstr "Suggerisco: Controllare la vista della strategia del team"
 
 msgid "I suggest: Researching different tech"
-msgstr ""
+msgstr "Suggerisco: Ricercare tecnologie diverse"
 
 msgid "I suggest: Keeping research centers busy"
-msgstr ""
+msgstr "Suggerisco: Mantenere i centri di ricerca impegnati"
 
 msgid "I suggest: Building anti-air"
-msgstr ""
+msgstr "Suggerisco: Costruire antiaerei"
 
 msgid "I suggest: Repairing your units"
-msgstr ""
+msgstr "Suggerisco: Riparare le unità"
 
 msgid "I suggest: Building repair facilities"
-msgstr ""
+msgstr "Suggerisco: Costruire strutture di riparazione"
 
 msgid "I suggest: Building power generators"
-msgstr ""
+msgstr "Suggerisco: Costruire generatori di energia"
 
 msgid "I suggest: Capturing oil resources"
-msgstr ""
+msgstr "Suggerisco: Catturare le risorse petrolifere"
 
 msgid "Hey everyone!"
 msgstr ""
@@ -8326,73 +8330,73 @@ msgid "Welcome!"
 msgstr ""
 
 msgid "I want to spectate"
-msgstr ""
+msgstr "Vorrei essere uno spettatore"
 
 msgid "I want to play"
-msgstr ""
+msgstr "Vorrei giocare"
 
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Vorrei cambiare squadra"
 
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "Per favore spunta pronto così possiamo iniziare"
 
 msgid "Please wait"
-msgstr ""
+msgstr "Attendere per favore"
 
 msgid "Let's go!"
-msgstr ""
+msgstr "Andiamo!"
 
 msgid "Almost ready"
-msgstr ""
+msgstr "Quasi pronto"
 
 msgid "Ready"
-msgstr ""
+msgstr "Pronto"
 
 msgid "Be right back"
-msgstr ""
+msgstr "Torno subito"
 
 msgid "I'm back"
-msgstr ""
+msgstr "Sono tornato"
 
 msgid "Yes"
-msgstr ""
+msgstr "Sì"
 
 msgid "No"
-msgstr ""
+msgstr "No"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Forse"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Non ancora"
 
 msgid "Soon"
-msgstr ""
+msgstr "Presto"
 
 msgid "Thank you"
-msgstr ""
+msgstr "Grazie"
 
 msgid "No problem"
-msgstr ""
+msgstr "Nessun problema"
 
 msgid "Well-played"
-msgstr ""
+msgstr "Ben fatto"
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "Mi dispiace, non capisco. (Puoi usare la chat rapida?)"
 
 msgid "Get ready..."
-msgstr ""
+msgstr "Preparatevi..."
 
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Te ne pentirai"
 
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "Appena un graffio!"
 
 msgid "Attack now?"
 msgstr ""
@@ -8473,7 +8477,7 @@ msgid "Build power generators"
 msgstr ""
 
 msgid "Capture oil resources"
-msgstr ""
+msgstr "Cattura risorse petrolifere"
 
 msgid "That didn't go well..."
 msgstr ""
@@ -8500,10 +8504,10 @@ msgid "Admin modified a setting"
 msgstr ""
 
 msgid "Bot Allies"
-msgstr ""
+msgstr "Bot alleati"
 
 msgid "Human Allies"
-msgstr ""
+msgstr "Umani alleati"
 
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
@@ -8515,22 +8519,22 @@ msgid "Ally progress"
 msgstr "Progresso degli alleati"
 
 msgid "Tanks"
-msgstr ""
+msgstr "Carri"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cyborg"
 
 msgid "No teammates."
-msgstr ""
+msgstr "Nessun compagno di squadra."
 
 msgid "Waiting for other teams to finish planning."
 msgstr ""
 
 msgid "Weapons:"
-msgstr ""
+msgstr "Armi:"
 
 msgid "Units:"
-msgstr ""
+msgstr "Unità:"
 
 msgid "Resume Game"
 msgstr "Riprendi la partita"
@@ -8551,7 +8555,7 @@ msgid "Go Back"
 msgstr "Indietro"
 
 msgid "View Guide"
-msgstr ""
+msgstr "Visualizza guida"
 
 msgid "Load Game"
 msgstr "Carica Partita"
@@ -8627,13 +8631,13 @@ msgid "Please try removing any new mods - they may have issues or be incompatibl
 msgstr ""
 
 msgid "Loaded mod(s):"
-msgstr ""
+msgstr "Mod caricata/e:"
 
 msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
-msgstr ""
+msgstr "I file di gioco potrebbero essere corrotti od obsoleti - prova a reinstallare il gioco."
 
 msgid "Error Loading Game Data"
-msgstr ""
+msgstr "Errore nel caricamento dei dati di gioco"
 
 msgid "Global Hotkeys"
 msgstr "Scorciatoie globali"
@@ -10073,7 +10077,7 @@ msgid "Alt Name:"
 msgstr ""
 
 msgid "Player rating:"
-msgstr "Valutazione del giocatore:"
+msgstr "Valutazione giocatore:"
 
 msgid "Host provided"
 msgstr "Host fornito"
@@ -10092,7 +10096,7 @@ msgid "Player is ready"
 msgstr "Il giocatore è pronto"
 
 msgid "Player is downloading"
-msgstr "Il giocatore sta eseguendo lo scaricamento"
+msgstr "Il giocatore sta scaricando"
 
 msgid "Click when ready"
 msgstr "Fai clic quando sei pronto"
@@ -10145,7 +10149,7 @@ msgstr "Silenzia il giocatore: %s"
 
 #, c-format
 msgid "Unmute Player: %s"
-msgstr "Riattiva chat con il giocatore: %s"
+msgstr "Smuta giocatore: %s"
 
 msgid "CHAT"
 msgstr "CHAT"
@@ -10213,7 +10217,7 @@ msgid "You have been kicked: "
 msgstr "Sei stato cacciato: "
 
 msgid "Connection lost:"
-msgstr ""
+msgstr "Connessione persa:"
 
 msgid "No connection to host."
 msgstr "Nessuna connessione con l'host."
@@ -10240,11 +10244,11 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr "Premi il pulsante \"Inizia ad ospitare la partita\" per iniziare ad ospitare una partita."
 
 msgid "Port mapping creation is in progress..."
-msgstr ""
+msgstr "Creazione mappatura porta in corso..."
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "Mappatura porte disattivata dall'utente. L'auto configurazione della porta %d non avverrà."
 
 msgid "Failed to load challenge:"
 msgstr ""
@@ -10779,67 +10783,67 @@ msgid "Did not send message - free chat is disabled by host. Please use Quick Ch
 msgstr ""
 
 msgid "See Also:"
-msgstr ""
+msgstr "Vedi anche:"
 
 msgid "Game Guide"
-msgstr ""
+msgstr "Guida del gioco"
 
 msgid "Toggle Sidebar"
-msgstr ""
+msgstr "Commuta barra laterale"
 
 msgid "Disable Topic Pop-ups"
 msgstr ""
 
 msgid "Close Help Mode"
-msgstr ""
+msgstr "Chiudi modalità aiuto"
 
 msgid "Click/Tap"
-msgstr ""
+msgstr "Click/Tap"
 
 msgid "Right-Click"
-msgstr ""
+msgstr "Click destro"
 
 msgid "Click/Tap and Hold"
-msgstr ""
+msgstr "Clicka/tocca e tieni premuto"
 
 msgid "Other"
 msgstr ""
 
 msgid "Interactions:"
-msgstr ""
+msgstr "Interazioni:"
 
 msgid "Related Keymappings:"
 msgstr ""
 
 msgid "Enter password"
-msgstr ""
+msgstr "Inserisci password"
 
 msgid "OK"
 msgstr "OK"
 
 msgid "Connecting to Game"
-msgstr ""
+msgstr "Connessione alla partita"
 
 msgid "Status:"
-msgstr ""
+msgstr "Stato:"
 
 msgid "Cancel"
 msgstr "Cancella"
 
 msgid "Game requires a password to join"
-msgstr ""
+msgstr "La partita richiede una password per entrare"
 
 msgid "Unable to Join Game"
-msgstr ""
+msgstr "Impossibile unirsi alla partita"
 
 msgid "Error:"
-msgstr ""
+msgstr "Errore:"
 
 msgid "Join Attempt Rejected"
-msgstr ""
+msgstr "Tentativo di partecipazione rifiutato"
 
 msgid "Message from Host:"
-msgstr ""
+msgstr "Messaggio dall'host:"
 
 msgid "Game is full"
 msgstr "La partita è piena"
@@ -10848,10 +10852,10 @@ msgid "You were kicked!"
 msgstr "Sei stato kickato!"
 
 msgid "Your game version does not match the host"
-msgstr ""
+msgstr "La tua versione di gioco non corrisponde all'host"
 
 msgid "The host rejected your connection due to invalid data"
-msgstr ""
+msgstr "L'host ha rifiutato la connessione a causa di dati non validi"
 
 msgid "Host has dropped connection!"
 msgstr "L'host ha terminato la connessione!"
@@ -10860,25 +10864,25 @@ msgid "Connection Error"
 msgstr "Errore di connessione"
 
 msgid "No connections available"
-msgstr ""
+msgstr "Nessuna connessione disponibile"
 
 msgid "Synchronizing data with host ..."
-msgstr ""
+msgstr "Sincronizzazione dati con l'host..."
 
 msgid "Waiting for correct join password"
-msgstr ""
+msgstr "In attesa di una password di accesso corretta"
 
 msgid "Attempting to connect"
-msgstr ""
+msgstr "Tentativo di connessione"
 
 msgid "Establishing connection handshake"
 msgstr ""
 
 msgid "Coordinating join with host"
-msgstr ""
+msgstr "Coordinando l'accesso con l'host"
 
 msgid "Join attempt failed"
-msgstr ""
+msgstr "Tentativo di accesso fallito"
 
 msgid "Host did not respond before timeout"
 msgstr ""
@@ -10902,28 +10906,28 @@ msgid "An internal error occurred"
 msgstr ""
 
 msgid "Invalid host - disconnected"
-msgstr ""
+msgstr "Host non valido - disconnesso"
 
 msgid "Invalid host response"
-msgstr ""
+msgstr "Risposta host invalida"
 
 msgid "Requesting to join game"
-msgstr ""
+msgstr "Richiesta di partecipare alla partita"
 
 msgid "Kick Spectator"
-msgstr ""
+msgstr "Rimuovi spettatore"
 
 msgid "Kick Player"
-msgstr ""
+msgstr "Espelli giocatore"
 
 msgid "Loading Status:"
-msgstr ""
+msgstr "Stato caricamento:"
 
 msgid "TEAM STRATEGY"
-msgstr ""
+msgstr "STRATEGIA DI SQUADRA"
 
 msgid "Game will start in ..."
-msgstr ""
+msgstr "La partita inizierà in..."
 
 msgid "Waiting for other players ..."
 msgstr ""
@@ -10977,22 +10981,22 @@ msgid "(Tanks / Cyborgs)"
 msgstr "(Carri Armati / Cyborg)"
 
 msgid "Cannons"
-msgstr ""
+msgstr "Cannoni"
 
 msgid "Mortars"
-msgstr ""
+msgstr "Mortai"
 
 msgid "Missiles"
-msgstr ""
+msgstr "Missili"
 
 msgid "Rockets"
-msgstr ""
+msgstr "Razzi"
 
 msgid "Energy"
-msgstr ""
+msgstr "Energia"
 
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 msgid "Flame"
 msgstr ""
@@ -11001,10 +11005,10 @@ msgid "Howitzers"
 msgstr ""
 
 msgid "MG"
-msgstr ""
+msgstr "MG"
 
 msgid "Machine Guns"
-msgstr ""
+msgstr "Mitragliatrici"
 
 msgid "Electronic"
 msgstr ""
