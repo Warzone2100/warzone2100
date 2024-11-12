@@ -6889,7 +6889,7 @@ public:
 			std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player]) ? "V" : "?";
 			std::string playerName = NetPlay.players[player].name;
 			std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
-			wz_command_interface_output("WZEVENT: hostChatPermissions=%s: %" PRIu32 " %" PRIu32 "%s %s %s %s %s\n", (freeChatEnabled) ? "Y" : "N", player, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
+			wz_command_interface_output("WZEVENT: hostChatPermissions=%s: %" PRIu32 " %" PRIu32 " %s %s %s %s %s\n", (freeChatEnabled) ? "Y" : "N", player, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
 		}
 
 		return true;
