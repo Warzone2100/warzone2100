@@ -72,7 +72,7 @@ struct Socket
 
 	SOCKET fd[SOCK_COUNT];
 	bool ready;
-	nonstd::optional<std::error_code> writeErrorCode;
+	optional<std::error_code> writeErrorCode = nullopt;
 	bool deleteLater;
 	char textAddress[40] = {};
 
