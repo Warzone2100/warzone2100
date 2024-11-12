@@ -225,7 +225,7 @@ bool recvLasSat(NETQUEUE queue)
 		return false;
 	}
 
-	if (psStruct && psObj && psStruct->pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
+	if (psStruct && psObj && isLasSat(psStruct->pStructureType))
 	{
 		// Lassats have just one weapon
 		unsigned firePause = weaponFirePause(*psStruct->getWeaponStats(0), player);
