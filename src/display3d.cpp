@@ -2320,7 +2320,15 @@ static void displayProximityMsgs(const glm::mat4& viewMatrix, const glm::mat4 &p
 			unsigned x, y;
 			if (psProxDisp->type == POS_PROXDATA)
 			{
+				if (!psProxDisp->psMessage->pViewData)
+				{
+					continue;
+				}
 				VIEW_PROXIMITY *pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
+				if (!pViewProximity)
+				{
+					continue;
+				}
 				x = pViewProximity->x;
 				y = pViewProximity->y;
 			}
