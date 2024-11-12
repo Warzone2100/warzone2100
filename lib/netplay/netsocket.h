@@ -27,6 +27,8 @@
 #include <vector>
 
 #include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 #include <tl/expected.hpp>
 
 namespace net
@@ -158,7 +160,7 @@ struct OpenConnectionResult
 		void operator()(Socket* b) { if (b) { socketClose(b); } }
 	};
 	std::unique_ptr<Socket, SocketDeleter> open_socket;
-	nonstd::optional<std::error_code> errorCode;
+	optional<std::error_code> errorCode = nullopt;
 	std::string errorString;
 };
 typedef std::function<void (OpenConnectionResult&& result)> OpenConnectionToHostResultCallback;
