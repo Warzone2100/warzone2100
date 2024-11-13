@@ -1062,6 +1062,12 @@ int cmdInputThreadFunc(void *)
 				}
 			});
 		}
+		else if(!strncmpl(line, "status"))
+		{
+			wzAsyncExecOnMainThread([] {
+				wz_command_interface_output_room_status_json();
+			});
+		}
 		else if(!strncmpl(line, "shutdown now"))
 		{
 			inexit = true;
