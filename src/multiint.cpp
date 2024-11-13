@@ -2606,7 +2606,17 @@ static bool SendReadyRequest(UBYTE player, bool bReady)
 {
 	if (NetPlay.isHost)			// do or request the change.
 	{
-		return changeReadyStatus(player, bReady);
+		bool changedValue = changeReadyStatus(player, bReady);
+		if (changedValue && wz_command_interface_enabled())
+		{
+			std::string playerPublicKeyB64 = base64Encode(getMultiStats(player).identity.toBytes(EcKey::Public));
+			std::string playerIdentityHash = getMultiStats(player).identity.publicHashString();
+			std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player]) ? "V" : "?";
+			std::string playerName = NetPlay.players[player].name;
+			std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
+			wz_command_interface_output("WZEVENT: readyStatus=%d: %" PRIu32 " %s %s %s %s %s\n", bReady ? 1 : 0, player, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
+		}
+		return changedValue;
 	}
 	else
 	{
@@ -2662,11 +2672,22 @@ bool recvReadyRequest(NETQUEUE queue)
 		return false;
 	}
 
-	return changeReadyStatus((UBYTE)player, bReady);
+	bool changedValue = changeReadyStatus((UBYTE)player, bReady);
+	if (changedValue && wz_command_interface_enabled())
+	{
+		std::string playerPublicKeyB64 = base64Encode(stats.identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = stats.identity.publicHashString();
+		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player]) ? "V" : "?";
+		std::string playerName = NetPlay.players[player].name;
+		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
+		wz_command_interface_output("WZEVENT: readyStatus=%d: %" PRIu32 " %s %s %s %s %s\n", bReady ? 1 : 0, player, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
+	}
+	return changedValue;
 }
 
 bool changeReadyStatus(UBYTE player, bool bReady)
 {
+	bool changedValue = NetPlay.players[player].ready != bReady;
 	NetPlay.players[player].ready = bReady;
 	NETBroadcastPlayerInfo(player);
 	netPlayersUpdated = true;
@@ -2674,7 +2695,7 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 	// change PingTime to some value less than PING_LIMIT, so that multiplayPlayersReady
 	// doesnt block
 	ingame.PingTimes[player] = ingame.PingTimes[player] == PING_LIMIT ? 1 : ingame.PingTimes[player];
-	return true;
+	return changedValue;
 }
 
 static void informIfAdminChangedOtherPosition(uint32_t targetPlayerIdx, uint32_t responsibleIdx)
