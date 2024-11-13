@@ -449,6 +449,8 @@ void recvPlayerLeft(NETQUEUE queue)
 
 	debug(LOG_INFO, "** player %u has dropped, in-game! (gameTime: %" PRIu32 ")", playerIndex, gameTime);
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+
+	wz_command_interface_output_room_status_json();
 }
 
 // ////////////////////////////////////////////////////////////////////////////

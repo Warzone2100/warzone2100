@@ -2615,6 +2615,8 @@ static bool SendReadyRequest(UBYTE player, bool bReady)
 			std::string playerName = NetPlay.players[player].name;
 			std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 			wz_command_interface_output("WZEVENT: readyStatus=%d: %" PRIu32 " %s %s %s %s %s\n", bReady ? 1 : 0, player, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
+
+			wz_command_interface_output_room_status_json();
 		}
 		return changedValue;
 	}
@@ -2681,6 +2683,8 @@ bool recvReadyRequest(NETQUEUE queue)
 		std::string playerName = NetPlay.players[player].name;
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 		wz_command_interface_output("WZEVENT: readyStatus=%d: %" PRIu32 " %s %s %s %s %s\n", bReady ? 1 : 0, player, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
+
+		wz_command_interface_output_room_status_json();
 	}
 	return changedValue;
 }
@@ -7317,6 +7321,18 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				// the player that has just responded
 				NETuint32_t(&player_id);
 				NETend();
+
+				if (player_id >= MAX_CONNECTED_PLAYERS)
+				{
+					debug(LOG_ERROR, "Bad NET_PLAYERRESPONDING received, ID is %d", (int)player_id);
+					break;
+				}
+
+				if (whosResponsible(player_id) != queue.index && queue.index != NetPlay.hostPlayer)
+				{
+					HandleBadParam("NET_PLAYERRESPONDING given incorrect params.", player_id, queue.index);
+					break;
+				}
 
 				ingame.JoiningInProgress[player_id] = false;
 				ingame.DataIntegrity[player_id] = false;

@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020-2021  Warzone 2100 Project
+	Copyright (C) 2020-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include "multistat.h"
 #include "multilobbycommands.h"
 #include "clparse.h"
+#include "main.h"
 
 #include <string>
 #include <atomic>
@@ -1450,4 +1451,205 @@ void configSetCmdInterface(WZ_Command_Interface mode, std::string value)
 		value = "./wz2100.cmd.sock";
 	}
 	wz_cmd_interface_param = value;
+}
+
+// MARK: - Output Room Status JSON
+
+static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasFiredUp, nlohmann::ordered_json& j)
+{
+	PLAYER const &p = NetPlay.players[player];
+
+	j["name"] = p.name;
+
+	if (!gameHasFiredUp)
+	{
+		// in lobby, output "ready" status
+		j["ready"] = static_cast<int>(p.ready);
+	}
+	else
+	{
+		// once game has fired up, output loading / connection status
+		if (p.allocated)
+		{
+			if (ingame.JoiningInProgress[player])
+			{
+				j["status"] = "loading";
+			}
+			else
+			{
+				j["status"] = "active";
+			}
+			if (ingame.PendingDisconnect[player])
+			{
+				j["status"] = "pendingleave";
+			}
+		}
+		else
+		{
+			j["status"] = "left";
+		}
+	}
+
+	const auto& identity = getMultiStats(player).identity;
+	if (!identity.empty())
+	{
+		j["pk"] = base64Encode(identity.toBytes(EcKey::Public));
+	}
+	else
+	{
+		j["pk"] = "";
+	}
+	j["ip"] = NetPlay.players[player].IPtextAddress;
+
+	if (ingame.PingTimes[player] != PING_LIMIT)
+	{
+		j["ping"] = ingame.PingTimes[player];
+	}
+	else
+	{
+		j["ping"] = -1; // for "infinite" ping
+	}
+
+	j["admin"] = static_cast<int>(NetPlay.players[player].isAdmin || (player == NetPlay.hostPlayer));
+
+	if (player == NetPlay.hostPlayer)
+	{
+		j["host"] = 1;
+	}
+}
+
+void wz_command_interface_output_room_status_json()
+{
+	if (!wz_command_interface_enabled())
+	{
+		return;
+	}
+
+	bool gameHasFiredUp = (GetGameMode() == GS_NORMAL);
+
+	auto root = nlohmann::ordered_json::object();
+	root["ver"] = 1;
+
+	auto data = nlohmann::ordered_json::object();
+	if (gameHasFiredUp)
+	{
+		if (ingame.TimeEveryoneIsInGame.has_value())
+		{
+			data["state"] = "started";
+		}
+		else
+		{
+			data["state"] = "starting";
+		}
+	}
+	else
+	{
+		data["state"] = "lobby";
+	}
+	if (NetPlay.isHost)
+	{
+		auto lobbyGameId = NET_getCurrentHostedLobbyGameId();
+		if (lobbyGameId != 0)
+		{
+			data["lobbyid"] = lobbyGameId;
+		}
+	}
+	data["map"] = game.map;
+
+	root["data"] = std::move(data);
+
+	if (NetPlay.isHost)
+	{
+		auto players = nlohmann::ordered_json::array();
+		for (uint8_t player = 0; player < game.maxPlayers; ++player)
+		{
+			PLAYER const &p = NetPlay.players[player];
+			auto j = nlohmann::ordered_json::object();
+
+			j["pos"] = p.position;
+			j["team"] = p.team;
+			j["col"] = p.colour;
+			j["fact"] = static_cast<int32_t>(p.faction);
+
+			if (p.ai == AI_CLOSED)
+			{
+				// closed slot
+				j["type"] = "closed";
+			}
+			else if (p.ai == AI_OPEN)
+			{
+				if (!gameHasFiredUp && !p.allocated)
+				{
+					// available / open slot (in lobby)
+					j["type"] = "open";
+				}
+				else
+				{
+					if (!p.allocated)
+					{
+						// if game has fired up and this slot is no longer allocated, skip it entirely if it wasn't initially a human player
+						if (p.difficulty != AIDifficulty::HUMAN)
+						{
+							continue;
+						}
+					}
+
+					// human (or host) slot
+					j["type"] = (p.isSpectator) ? "spec" : "player";
+
+					WzCmdInterfaceDumpHumanPlayerVarsImpl(player, gameHasFiredUp, j);
+				}
+			}
+			else
+			{
+				// bot player
+				j["type"] = "bot";
+
+				j["name"] = getAIName(player);
+				j["difficulty"] = static_cast<int>(NetPlay.players[player].difficulty);
+			}
+
+			players.push_back(std::move(j));
+		}
+		root["players"] = std::move(players);
+
+		auto spectators = nlohmann::ordered_json::array();
+		for (uint32_t i = MAX_PLAYER_SLOTS; i < MAX_CONNECTED_PLAYERS; ++i)
+		{
+			PLAYER const &p = NetPlay.players[i];
+			if (p.ai == AI_CLOSED)
+			{
+				continue;
+			}
+
+			auto j = nlohmann::ordered_json::object();
+			if (!p.allocated)
+			{
+				if (!gameHasFiredUp)
+				{
+					// available / open spectator slot
+					j["type"] = "open";
+				}
+				else
+				{
+					// no spectator connected to this slot - skip
+					continue;
+				}
+			}
+			else
+			{
+				// human (or host) slot
+				j["type"] = (p.isSpectator) ? "spec" : "player";
+
+				WzCmdInterfaceDumpHumanPlayerVarsImpl(i, gameHasFiredUp, j);
+			}
+
+			spectators.push_back(std::move(j));
+		}
+		root["specs"] = std::move(spectators);
+	}
+
+	std::string statusJSONStr = std::string("__WZROOMSTATUS__") + root.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace) + "__ENDWZROOMSTATUS__";
+	statusJSONStr.append("\n");
+	wz_command_interface_output_str(statusJSONStr.c_str());
 }
