@@ -1,3 +1,14 @@
+2024-11-13: Version 4.5.5:
+ * General:
+   * Fix: Various potential crashes (too many commits, #4124, #4127)
+ * Multiplayer:
+   * Fix: Handling certain socket disconnects and error states (commit:845dee0c21bf70cbff540aab2e277ba24999d6be, #4124)
+ * Translations:
+   * Change: Translation updates (commit:5a891f4b7d0bf110a38694514c6bbbfd6e6da95a, #4123)
+ * Other:
+   * Add: cmdinterface: New event output, room status json output (too many commits, #4128)
+   * Fix: Compilation with Vulkan SDK headers >= 301 (commit:7f8bb2772be83f57a41cd7caf05d84be87a57194, #4122)
+
 2024-11-06: Version 4.5.4:
  * General:
    * Add: In-game options button (too many commits, #4106, #4113)
