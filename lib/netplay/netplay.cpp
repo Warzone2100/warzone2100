@@ -412,6 +412,11 @@ void NET_setLobbyDisabled(const std::string& infoLinkURL)
 	lobby_disabled_info_link_url = infoLinkURL;
 }
 
+uint32_t NET_getCurrentHostedLobbyGameId()
+{
+	return gamestruct.gameId;
+}
+
 //	Sets if the game is password protected or not
 void NETGameLocked(bool flag)
 {
@@ -991,12 +996,19 @@ static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
 	sync_counter.left++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(index);		// more cleanup
+	bool resetReadyCalled = false;
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
 		NET_DestroyPlayer(index);       // sets index player's array to false
 		if (!wasSpectator)
 		{
 			resetReadyStatus(false);		// reset ready status for all players
+			resetReadyCalled = true;
+		}
+
+		if (!resetReadyCalled)
+		{
+			wz_command_interface_output_room_status_json();
 		}
 	}
 }
@@ -1020,6 +1032,7 @@ static void NETplayerDropped(UDWORD index)
 	sync_counter.drops++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(id);			// more cleanup
+	bool resetReadyCalled = false;
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
 		// Send message type specifically for dropped / disconnects
@@ -1031,6 +1044,12 @@ static void NETplayerDropped(UDWORD index)
 		if (!wasSpectator)
 		{
 			resetReadyStatus(false);		// reset ready status for all players
+			resetReadyCalled = true;
+		}
+
+		if (!resetReadyCalled)
+		{
+			wz_command_interface_output_room_status_json();
 		}
 	}
 
@@ -4361,6 +4380,9 @@ static void NETallowJoining()
 			{
 				ASSERT(false, "wzFiles is uninitialized?? (Player: %" PRIu8 ")", index);
 			}
+
+			wz_command_interface_output_room_status_json();
+
 			continue; // continue to next tmp_socket
 		}
 

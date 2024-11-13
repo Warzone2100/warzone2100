@@ -487,6 +487,7 @@ void NET_clearDownloadingWZFiles();
 bool NET_getLobbyDisabled();
 const std::string& NET_getLobbyDisabledInfoLinkURL();
 void NET_setLobbyDisabled(const std::string& infoLinkURL);
+uint32_t NET_getCurrentHostedLobbyGameId();
 
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);

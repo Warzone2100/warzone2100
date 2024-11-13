@@ -461,6 +461,7 @@ bool multiPlayerLoop()
 			}
 			ingame.lastPlayerDataCheck2 = std::chrono::steady_clock::now();
 			wz_command_interface_output("WZEVENT: allPlayersJoined\n");
+			wz_command_interface_output_room_status_json();
 		}
 		if (NetPlay.bComms)
 		{
@@ -1460,6 +1461,8 @@ bool recvMessage()
 						std::string playerName = NetPlay.players[player_id].name;
 						std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 						wz_command_interface_output("WZEVENT: playerResponding: %" PRIu32 " %s %s %s %s %s\n", player_id, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player_id].IPtextAddress);
+
+						wz_command_interface_output_room_status_json();
 					}
 				}
 				break;
@@ -2530,6 +2533,8 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 				changeReadyStatus(i, false);
 			}
 		}
+
+		wz_command_interface_output_room_status_json();
 	}
 }
 
