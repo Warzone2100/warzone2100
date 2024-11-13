@@ -1450,8 +1450,18 @@ bool recvMessage()
 				if (ingame.JoiningInProgress[player_id])
 				{
 					addKnownPlayer(NetPlay.players[player_id].name, getMultiStats(player_id).identity);
+					ingame.JoiningInProgress[player_id] = false;
+
+					if (wz_command_interface_enabled())
+					{
+						std::string playerPublicKeyB64 = base64Encode(getMultiStats(player_id).identity.toBytes(EcKey::Public));
+						std::string playerIdentityHash = getMultiStats(player_id).identity.publicHashString();
+						std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player_id]) ? "V" : "?";
+						std::string playerName = NetPlay.players[player_id].name;
+						std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
+						wz_command_interface_output("WZEVENT: playerResponding: %" PRIu32 " %s %s %s %s %s\n", player_id, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player_id].IPtextAddress);
+					}
 				}
-				ingame.JoiningInProgress[player_id] = false;
 				break;
 			}
 		case GAME_ALLIANCE:
@@ -2505,6 +2515,8 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 	//Really reset ready status
 	if (NetPlay.isHost && !ignoreReadyReset)
 	{
+		wz_command_interface_output("WZEVENT: readyStatus=RESET\n");
+
 		for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 		{
 			//Ignore for autohost launch option.
