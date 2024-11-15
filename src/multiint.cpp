@@ -1888,7 +1888,11 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 					NetPlay.players[player].isSpectator = false;
 					NetPlay.players[player].ai = aiIdx;
 					setPlayerName(player, getAIName(player));
-					NetPlay.players[player].difficulty = AIDifficulty::MEDIUM;
+					// Difficulty is preserved when switching open AI slots.
+					if (NetPlay.players[player].difficulty == AIDifficulty::DISABLED)
+					{
+						NetPlay.players[player].difficulty = AIDifficulty::DEFAULT;
+					}
 					NETBroadcastPlayerInfo(player);
 					resetReadyStatus(false);
 				}
