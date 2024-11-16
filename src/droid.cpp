@@ -2911,8 +2911,7 @@ bool DROID::isVtol() const
 /* returns true if the droid has lift propulsion and is moving */
 bool DROID::isFlying() const
 {
-	return getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT
-		   && (sMove.Status != MOVEINACTIVE || isTransporter());
+	return getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT && sMove.Status != MOVEINACTIVE;
 }
 
 // true if a droid is retreating for repair
