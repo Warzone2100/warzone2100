@@ -188,6 +188,8 @@ if(WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 
 	# Normal Terrain
 	file(GLOB TEXPAGES_TERRAIN
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-80-water-1.png"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-81-water-2.png"
 		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-82-yellow-sand-arizona.png"
 		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-83-red-earth-arizona.png"
 		"${CMAKE_CURRENT_SOURCE_DIR}/base/texpages/page-84-tiles-arizona.png"

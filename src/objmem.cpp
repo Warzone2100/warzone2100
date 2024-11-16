@@ -29,6 +29,7 @@
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/sync_debug.h"
+#include "lib/sound/audio.h"
 #include "hci.h"
 #include "map.h"
 #include "power.h"
@@ -85,12 +86,23 @@ bool objmemInitialise()
 	return true;
 }
 
+template<typename T>
+static void objMemShutdownContainerImpl(T& container)
+{
+	for (const auto& entity : container)
+	{
+		// Make sure to get rid of some final references in the sound code to this object first
+		audio_RemoveObj(&entity);
+	}
+	container.clear();
+}
+
 /* Release the object heaps */
 void objmemShutdown()
 {
-	GlobalDroidContainer().clear();
-	GlobalStructContainer().clear();
-	GlobalFeatureContainer().clear();
+	objMemShutdownContainerImpl(GlobalDroidContainer());
+	objMemShutdownContainerImpl(GlobalStructContainer());
+	objMemShutdownContainerImpl(GlobalFeatureContainer());
 }
 
 static const char* objTypeToStr(OBJECT_TYPE type)
@@ -266,6 +278,10 @@ bool objmemDestroy(BASE_OBJECT *psObj, bool checkRefs)
 	default:
 		ASSERT(!"unknown object type", "unknown object type in destroyed list at 0x%p", static_cast<void *>(psObj));
 	}
+
+	// Make sure to get rid of some final references in the sound code to this object first
+	audio_RemoveObj(psObj);
+
 	if (checkRefs && !checkReferences(psObj))
 	{
 		return false;
@@ -573,7 +589,10 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 		for (auto* ent : list)
 		{
 			auto it = entityContainer.find(*ent);
-			ASSERT(it != entityContainer.end(), "%s not found in the global container!", Traits::entityName());
+			if (it == entityContainer.end()) {
+				ASSERT(false, "%s not found in the global container!", Traits::entityName());
+				continue;
+			}
 			entityContainer.erase(it);
 		}
 		list.clear();

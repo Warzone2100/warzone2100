@@ -1,0 +1,31 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB1C_MSG": {
+            "sequences": [
+                { "loop": 1, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
+                { "loop": 0, "subtitles": ["CAM1C_MSG1", "CAM1C_MSG2", "CAM1C_MSG3"], "video": "cam1/map1cexp.ogg" },
+                { "loop": 0, "subtitles": "", "video": "cam1/cam1ccom.ogg" }
+            ]
+        },
+        "MB1C2_MSG": {
+            "sequences": [
+                { "loop": 1, "subtitles": "NP_MSG1", "video": "incomtns.ogg" },
+                { "loop": 0, "subtitles": "NP_MSG2", "video": "cam1/cam1cnp.ogg" },
+                { "loop": 0, "subtitles": ["CAM1C_MSG4", "CAM1C_MSG5", "CAM1C_MSG6"], "video": "cam1/map1c.ogg" }
+            ]
+        },
+        "MB1C3_MSG": {
+            "sequences": [
+                { "loop": 1, "subtitles": "P1-3A_MSG1", "video": "prjupdat.ogg" },
+                { "loop": 0, "subtitles": ["CAM1C_MSG7", "CAM1C_MSG8", "CAM1C_MSG9"], "video": "cam1/cam1ccf.ogg" }
+            ]
+        },
+        "MB1C4_MSG": {
+            "sequences": [
+                { "loop": 1, "subtitles": "P1-3A_MSG1", "video": "prjupdat.ogg" },
+                { "loop": 0, "subtitles": ["CAM1C_MSG10", "CAM1C_MSG11"], "video": "cam1/cam1clz.ogg" }
+            ]
+        }
+    }
+}

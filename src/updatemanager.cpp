@@ -726,16 +726,23 @@ static bool cacheInfoIsUsable(CachePaths& paths)
 		try {
 			// Open the file + read the data
 			PHYSFS_file *fileHandle = PHYSFS_openRead(paths.cache_info_path);
+			if (fileHandle == nullptr)
+			{
+				// Unable to open file
+				throw std::runtime_error("Failed opening file");
+			}
 			PHYSFS_sint64 filesize = PHYSFS_fileLength(fileHandle);
 			if (filesize <= 0)
 			{
 				// Invalid file size
+				PHYSFS_close(fileHandle);
 				throw std::runtime_error("Invalid filesize");
 			}
 			std::vector<char> fileData(static_cast<size_t>(filesize + 1), '\0');
 			if (WZ_PHYSFS_readBytes(fileHandle, fileData.data(), static_cast<PHYSFS_uint32>(filesize)) != filesize)
 			{
 				// Read failed
+				PHYSFS_close(fileHandle);
 				throw std::runtime_error("Read failed");
 			}
 			PHYSFS_close(fileHandle);
@@ -777,16 +784,23 @@ static void initProcessData(const std::vector<std::string> &updateDataUrls, Proc
 		try {
 			// Open the file + read the data
 			PHYSFS_file *fileHandle = PHYSFS_openRead(outputPaths.cache_data_path);
+			if (fileHandle == nullptr)
+			{
+				// Unable to open file
+				throw std::runtime_error("Failed opening file");
+			}
 			PHYSFS_sint64 filesize = PHYSFS_fileLength(fileHandle);
 			if (filesize < 0 || filesize > WZ_UPDATES_JSON_MAX_SIZE)
 			{
 				// Invalid file size
+				PHYSFS_close(fileHandle);
 				throw std::runtime_error("Invalid filesize");
 			}
 			std::vector<char> fileData(static_cast<size_t>(filesize + 1), '\0');
 			if (WZ_PHYSFS_readBytes(fileHandle, fileData.data(), static_cast<PHYSFS_uint32>(filesize)) != filesize)
 			{
 				// Read failed
+				PHYSFS_close(fileHandle);
 				throw std::runtime_error("Read failed");
 			}
 			PHYSFS_close(fileHandle);

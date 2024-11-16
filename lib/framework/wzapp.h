@@ -91,6 +91,7 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent = false);
 WINDOW_MODE wzGetCurrentWindowMode();
 bool wzIsFullscreen();
 void wzSetWindowIsResizable(bool resizable);
+void wzPostChangedSwapInterval();
 bool wzIsWindowResizable();
 bool wzChangeDisplayScale(unsigned int displayScale);
 bool wzChangeCursorScale(unsigned int cursorScale);

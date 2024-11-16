@@ -3555,13 +3555,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (pointsToAdd >= psDroid->weight) // amount required is a factor of the droid weight
 				{
 					// We should be fully loaded by now.
-					for (unsigned i = 0; i < psDroid->numWeaps; i++)
-					{
-						// set rearm value to no runs made
-						psDroid->asWeaps[i].usedAmmo = 0;
-						psDroid->asWeaps[i].ammo = psDroid->getWeaponStats(i)->upgrade[psDroid->player].numRounds;
-						psDroid->asWeaps[i].lastFired = 0;
-					}
+					fillVtolDroid(psDroid);
 					objTrace(psDroid->id, "fully loaded");
 				}
 				else
@@ -3787,11 +3781,11 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 		if (!psBuilding->pFunctionality->resourceExtractor.psPowerGen
 		    && psBuilding->animationEvent == ANIM_EVENT_ACTIVE) // no power generator connected
 		{
-			psBuilding->timeAnimationStarted = 0; // so turn off animation, if any
-			psBuilding->animationEvent = ANIM_EVENT_NONE;
+			resetObjectAnimationState(psBuilding);
 		}
 		else if (psBuilding->pFunctionality->resourceExtractor.psPowerGen
-		         && psBuilding->animationEvent == ANIM_EVENT_NONE) // we have a power generator, but no animation
+		         && psBuilding->animationEvent == ANIM_EVENT_NONE // we have a power generator, but no animation
+		         && psBuilding->sDisplay.imd != nullptr)
 		{
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 
@@ -3935,7 +3929,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 			                                                 aDefaultRepair[psBuilding->player]].time);
 
 			//add the blue flashing effect for multiPlayer
-			if (bMultiPlayer && ONEINTEN && !bMission)
+			if (bMultiPlayer && ONEINTEN && !bMission && psBuilding->sDisplay.imd)
 			{
 				Vector3i position;
 				Vector3f *point;
@@ -3992,9 +3986,6 @@ STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 /* Release all resources associated with a structure */
 STRUCTURE::~STRUCTURE()
 {
-	// Make sure to get rid of some final references in the sound code to this object first
-	audio_RemoveObj(this);
-
 	STRUCTURE *psBuilding = this;
 
 	// free up the space used by the functionality array

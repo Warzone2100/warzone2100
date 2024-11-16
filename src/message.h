@@ -73,6 +73,8 @@ void releaseAllProxDisp();
 /** Load the view data for the messages from the file exported from the world editor. */
 WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize);
 WzString *loadResearchViewData(const char *fileName);
+WzString *loadProximityViewData(const char *fileName);
+WzString *loadFlicViewData(const char *fileName);
 
 /** Get the view data identified by the name */
 VIEWDATA *getViewData(const WzString &name);

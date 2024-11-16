@@ -135,7 +135,10 @@ function destroyPlayerVtols()
 
 function activateNexus()
 {
-	camSetExtraObjectiveMessage(_("Destroy the Nexus HQ to disable the Nexus Intruder Program"));
+	const HINT_TIP = _("Destroy the Nexus HQ to disable the Nexus Intruder Program");
+	const HINT_TIP_WARN = _("Warning: HQ shielded against VTOL attacks");
+	const objectiveMessages = [HINT_TIP, HINT_TIP_WARN];
+	camSetExtraObjectiveMessage(objectiveMessages);
 	playSound(cam_sounds.nexus.synapticLinksActivated);
 	camSetNexusState(true);
 	setTimer("nexusHackFeature", camSecondsToMilliseconds((difficulty <= EASY) ? 20 : 10));

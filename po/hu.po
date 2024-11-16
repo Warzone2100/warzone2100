@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-29 02:16\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -51,7 +51,7 @@ msgid "The New Paradigm control superior weapons technology."
 msgstr "Az Új Paradigma fejlettebb fegyvertechnológiával rendelkezik."
 
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Náluk lehet a szinaptikus kapcsolat technológia, létfontosságú visszaszerezni."
+msgstr "Náluk lehet a szinaptikus kapcsolat technológia, visszaszerzése létfontosságú."
 
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
 msgstr "SZÁLLÍTÁSI KÜLDETÉS: Keresse meg és szerezze vissza a leleteket"
@@ -1799,6 +1799,9 @@ msgstr "Mentse ki az Alfa csapatot a Nexusból"
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "A Nexus főhadszállás megsemmisítésével letilthatja a Nexus behatoló programot"
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr "Figyelmeztetés: a főhadiszállás pajzzsal védett a VTOL támadásokkal szemben"
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Fejlesszen ki ellenállósági áramköröket és élje túl a Nexus támadásait"
 
@@ -2013,7 +2016,7 @@ msgid "Dawn, July 4th, 2100"
 msgstr "2100. július 4., pirkadat"
 
 msgid "Project HQ"
-msgstr "Terv Főhadiszállás"
+msgstr "Terv főhadiszállása"
 
 msgid "A New Era"
 msgstr "Egy új korszak"
@@ -2936,6 +2939,13 @@ msgstr "Bármikor, nagy főnök!"
 msgid "System locale"
 msgstr "Helyi rendszer"
 
+msgid "Failed to create port mapping"
+msgstr ""
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr ""
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr ""
@@ -2944,16 +2954,8 @@ msgstr ""
 msgid "Your external IP is: %s"
 msgstr ""
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
-
-msgid "Failed to create port mapping"
-msgstr ""
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgid "Failed to create port mapping (timeout)"
+msgstr "A porthozzárendelés létrehozása sikertelen (időtúllépés)"
 
 msgid "Client failed to ack player index swap"
 msgstr "A kliens nem tudta kezelni a játékosindex változását"
@@ -5560,11 +5562,11 @@ msgstr "Új építmény szerkezet érhető el"
 msgid "New Systems Tower Available"
 msgstr "Új rendszertorony érhető el"
 
-msgid "New Systems Turret Available for Design"
-msgstr "A tervezéshez új rendszerű lövegtorony érhető el"
-
 msgid "New Systems Turret Available For Design"
 msgstr "A tervezéshez újrendszerű lövegtorony érhető el"
+
+msgid "New Systems Turret Available for Design"
+msgstr "A tervezéshez új rendszerű lövegtorony érhető el"
 
 msgid "New Thermal Emissions detection"
 msgstr "Új hőérzékelés"
@@ -5991,6 +5993,9 @@ msgstr "Megbüntető"
 
 msgid "Ripple Rocket Battery"
 msgstr "Ripple rakéta üteg"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr ""
 
 msgid "Ripple Rockets"
 msgstr "Ripple rakéták"
@@ -7723,6 +7728,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr "Az árnyékszűrés nem érhető el ezen a rendszeren."
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Játék újraindításakor effekteket bekapcsolja"
 
@@ -7767,6 +7775,9 @@ msgstr "Képernyő Rázás"
 
 msgid "Groups Menu"
 msgstr "Csoportok menü"
+
+msgid "Options Button"
+msgstr ""
 
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKA BEÁLLÍTÁS"
@@ -8081,6 +8092,12 @@ msgstr "%u csalt (hibakeresés menü), egy új droidja lett: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "%u csalt (hibakeresés menü), egy új droidja lett."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Elavult technika elrejtése"
 
@@ -8240,6 +8257,28 @@ msgstr "Csalások"
 
 msgid "End-Game"
 msgstr "Játék befejezése"
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "Át tudna adni nekem valaki néhány egységet?"
@@ -8457,6 +8496,9 @@ msgstr "Üzenetküldés sikertelen - próbálja újra"
 msgid "Map Downloaded"
 msgstr "Térkép letöltve"
 
+msgid "Admin modified a setting"
+msgstr ""
+
 msgid "Bot Allies"
 msgstr "Bot szövetségesek"
 
@@ -8565,6 +8607,33 @@ msgstr ""
 "A mod nem tölthető be: %s\n"
 "\n"
 "A Warzone megpróbálja elindítani a játékot nélküle."
+
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr ""
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr ""
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr ""
+
+msgid "Loaded mod(s):"
+msgstr ""
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr ""
+
+msgid "Error Loading Game Data"
+msgstr ""
 
 msgid "Global Hotkeys"
 msgstr "Globális gyorsbillentyű"
@@ -8858,7 +8927,7 @@ msgid "Rotate Building Anticlockwise"
 msgstr "Építmény forgatása balra"
 
 msgid "Center View on HQ"
-msgstr "Középpontba a főhadiszállást"
+msgstr "A nézet ráállítása a főhadiszállásra"
 
 msgid "Hold Fire"
 msgstr "Tüzet szüntess"
@@ -9513,10 +9582,10 @@ msgid "Reveal ON"
 msgstr "Felfedés Be"
 
 msgid "Centered on player HQ, direction NORTH"
-msgstr "Főhadiszállása központosítva, észak felé irányítva"
+msgstr "A nézet ráállítva a főhadiszállásra, északi tájolással"
 
 msgid "Unable to locate HQ!"
-msgstr "Képtelen, hogy lokalizálja főhadiszállást!"
+msgstr "A főhadiszállás nem található!"
 
 msgid "Formation speed limiting ON"
 msgstr "Alakzat sebességkorlátozása BE"
@@ -10177,6 +10246,19 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "Failed to load challenge:"
+msgstr ""
+
+msgid "Failed to load the challenge's map or config"
+msgstr ""
+
+msgid "Failed to process autohost config:"
+msgstr ""
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr ""
+
 msgid "Closed"
 msgstr "Bezárás"
 
@@ -10783,7 +10865,30 @@ msgstr ""
 msgid "Synchronizing data with host ..."
 msgstr ""
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
 msgstr ""
 
 #, c-format
@@ -11205,19 +11310,19 @@ msgid "Can't find any games for your version."
 msgstr "Nem talál játékokat a verziódhoz."
 
 msgid "There appears to be a game update available!"
-msgstr "Mutatod, hogy elérhető e játék frissítés!"
+msgstr "Úgy néz ki, hogy játékfrissítés érhető el!"
 
 msgid "No games are available for your version"
-msgstr "Nincs rendelkezésre álló játék verzió"
+msgstr "Nincs rendelkezésre álló játék a verziójához"
 
 msgid "Wrong Game Version!"
 msgstr "Rossz játékverzió."
 
 msgid "You have an incompatible mod."
-msgstr "Inkompatibilis módban vagy."
+msgstr "Egy nem kompatibilis moddal rendelkezik."
 
 msgid "Host couldn't send file?"
-msgstr "Gazdagép nem tudott fájlt küldeni?"
+msgstr "A házigazda nem tudott fájlt küldeni?"
 
 msgid "Incorrect Password!"
 msgstr "Helytelen Jelszó."
@@ -11229,16 +11334,16 @@ msgid "CONNECTION"
 msgstr "KAPCSOLAT"
 
 msgid "Lobby"
-msgstr "Előcsarnok"
+msgstr "Váró"
 
 msgid "IP"
 msgstr "IP cím alapján"
 
 msgid "IP Address or Machine Name"
-msgstr "IP cím vagy gépnév"
+msgstr "IP-cím vagy gépnév"
 
 msgid "Launch Transport"
-msgstr "Szállítást indítása"
+msgstr "Szállító indítása"
 
 msgid "Launch the Transporter"
 msgstr "Szállítást indítása"
@@ -11247,7 +11352,7 @@ msgid "There is not enough room in the Transport!"
 msgstr "Nincs elegendő férőhely a szállításhoz."
 
 msgid "Reinforcements landing"
-msgstr "Utánpótlás leszállt"
+msgstr "Az utánpótlás leszáll"
 
 msgid "Update Available"
 msgstr "Frissítés érhető el"

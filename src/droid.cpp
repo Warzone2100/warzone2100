@@ -106,6 +106,7 @@ int getTopExperience(int player)
 	}
 	return recycled_experience[player].top();
 }
+
 void cancelBuild(DROID *psDroid)
 {
 	if (psDroid->order.type == DORDER_NONE || psDroid->order.type == DORDER_PATROL || psDroid->order.type == DORDER_HOLD || psDroid->order.type == DORDER_SCOUT || psDroid->order.type == DORDER_GUARD)
@@ -439,10 +440,6 @@ DROID::DROID(uint32_t id, unsigned player)
  */
 DROID::~DROID()
 {
-	// Make sure to get rid of some final references in the sound code to this object first
-	// In BASE_OBJECT::~BASE_OBJECT() is too late for this, since some callbacks require us to still be a DROID.
-	audio_RemoveObj(this);
-
 	DROID *psDroid = this;
 
 	if (psDroid->isTransporter())
@@ -810,7 +807,7 @@ void droidUpdate(DROID *psDroid)
 
 	if (psDroid->animationEvent != ANIM_EVENT_NONE)
 	{
-		iIMDBaseShape *baseImd = psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent];
+		iIMDBaseShape *baseImd = (psDroid->sDisplay.imd) ? psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent] : nullptr;
 		iIMDShape *imd = (baseImd) ? baseImd->displayModel() : nullptr;
 		if (imd && imd->objanimcycles > 0 && gameTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
 		{
@@ -2187,7 +2184,7 @@ bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int wea
 
 	CHECK_DROID(psDroid);
 
-	if (psBodyImd && !psBodyImd->connectors.empty())
+	if (psBodyImd && static_cast<size_t>(weapon_slot) < psBodyImd->connectors.size())
 	{
 		Vector3i barrel(0, 0, 0);
 
@@ -2224,7 +2221,7 @@ bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_
 
 	CHECK_DROID(psDroid);
 
-	if (psBodyImd && !psBodyImd->connectors.empty())
+	if (psBodyImd && static_cast<size_t>(weapon_slot) < psBodyImd->connectors.size())
 	{
 		char debugStr[250], debugLen = 0;  // Each "(%d,%d,%d)" uses up to 34 bytes, for very large values. So 250 isn't exaggerating.
 
@@ -2414,6 +2411,17 @@ void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc)
 	{
 		// Trigger new event - unit rank increased
 		triggerEventDroidRankGained(psDroid, finalDroidRank);
+	}
+}
+
+// Possibly increase experience when squishing a scavenger.
+void giveExperienceForSquish(DROID *psDroid)
+{
+	if (psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_SENSOR || psDroid->droidType == DROID_COMMAND)
+	{
+		const uint32_t expGain = std::max(65536 / 2, 65536 * getExpGain(psDroid->player) / 100);
+		droidIncreaseExperience(psDroid, expGain);
+		cmdDroidUpdateExperience(psDroid, expGain);
 	}
 }
 
@@ -3007,6 +3015,23 @@ bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct)
 	}
 
 	return true;
+}
+
+// Fills all the weapons on a VTOL droid.
+void fillVtolDroid(DROID *psDroid)
+{
+	CHECK_DROID(psDroid);
+	if (!psDroid->isVtol())
+	{
+		return;
+	}
+	for (unsigned int i = 0; i < psDroid->numWeaps; ++i)
+	{
+		// Set rearm value to no runs made.
+		psDroid->asWeaps[i].usedAmmo = 0;
+		psDroid->asWeaps[i].ammo = psDroid->getWeaponStats(i)->upgrade[psDroid->player].numRounds;
+		psDroid->asWeaps[i].lastFired = 0;
+	}
 }
 
 // true if a vtol droid currently returning to be rearmed

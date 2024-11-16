@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-07-01 02:21\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-06 02:25\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1799,6 +1799,9 @@ msgstr "Спасите команду Альфа от НЕКСУС"
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Уничтожьте командный центр, чтобы остановить программу вторжения НЕКСУС"
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr "Внимание: Командный центр защищен от воздушных атак"
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Исследуйте схемы сопротивления и выживите от нападения НЕКСУС"
 
@@ -2274,7 +2277,7 @@ msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "Теперь мы уверены, что НЕКСУС был ответственен за Коллапс."
 
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr "На ранних стадиях Коллапса, техники НАСДА отключили заражённые системы для того, чтобы изолировать распространение НЕКСУС. Это, возможно, не позволило ЛасСат стрелять во время контрударов."
+msgstr "На ранних стадиях Коллапса, техники НАСДА отключили заражённые системы для того, чтобы изолировать распространение НЕКСУС. Вероятно, именно это не позволило спутникам ЛасСат стрелять во время ответных ударов."
 
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
 msgstr "Последовавший за этим ядерно-магнитный импульс стёр множество банков памяти НАСДА, разрушив главный процессор, и поразив НЕКСУС ударной волной."
@@ -2936,6 +2939,13 @@ msgstr "В любое время, босс!"
 msgid "System locale"
 msgstr "Системный язык"
 
+msgid "Failed to create port mapping"
+msgstr "Не удалось создать переадресацию портов"
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr "Настройте ваш роутер/сетевой экран, чтобы открыть порт %d!"
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr "Назначен внешний порт: %d"
@@ -2944,16 +2954,8 @@ msgstr "Назначен внешний порт: %d"
 msgid "Your external IP is: %s"
 msgstr "Ваш внеший IP-адрес: %s"
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr "Не удалось назначить внешний порт (время ожидания %d секунд)"
-
-msgid "Failed to create port mapping"
-msgstr "Не удалось назначить внешний порт"
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
-msgstr "Настройте ваш маршрутизатор / сетевой экран, чтобы открыть порт %d!"
+msgid "Failed to create port mapping (timeout)"
+msgstr "Не удалось создать переадресацию портов (таймаут)"
 
 msgid "Client failed to ack player index swap"
 msgstr "Клиент не подтвердил смену индекса игрока"
@@ -5564,10 +5566,10 @@ msgstr "Доступна новая системная структура"
 msgid "New Systems Tower Available"
 msgstr "Доступна новая системная башня"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Доступна новая системная турель для дизайна"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Доступна новая системная турель для дизайна"
 
 msgid "New Thermal Emissions detection"
@@ -5995,6 +5997,9 @@ msgstr "Кара"
 
 msgid "Ripple Rocket Battery"
 msgstr "Ракетная установка Дрожь"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr "Быстрый загрузчик ракет Дрожь"
 
 msgid "Ripple Rockets"
 msgstr "Батарея Дрожь"
@@ -7239,7 +7244,7 @@ msgid "port"
 msgstr "порт"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr "Разрешить / запретить назначение портов"
+msgstr "Вкл./выкл. переадресацию портов при хостинге"
 
 msgid "[1, true, 0, false]"
 msgstr "[1, true, 0, false]"
@@ -7739,6 +7744,9 @@ msgstr "Ультра"
 msgid "Shadow filtering not available on this system."
 msgstr "Фильтрация теней недоступна в этой системе."
 
+msgid "Opacity: 50%"
+msgstr "Прозрачность: 50%"
+
 msgid "* Takes effect on game restart"
 msgstr "* Вступит в силу после перезагрузки игры"
 
@@ -7783,6 +7791,9 @@ msgstr "Тряска экрана"
 
 msgid "Groups Menu"
 msgstr "Меню групп"
+
+msgid "Options Button"
+msgstr "Кнопка настроек"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "НАСТРОЙКИ ГРАФИКИ"
@@ -8008,10 +8019,10 @@ msgid "Game Port"
 msgstr "Порт игры"
 
 msgid "Port Mapping"
-msgstr "Назначение портов"
+msgstr "Переадресация портов"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr "Используйте PCP, NAT-PMP, или UPnP, чтобы разрешить маршрутизатору / сетевому экрану принимать соединения."
+msgstr "Используйте PCP, NAT-PMP или UPnP, чтобы настроить роутер/сетевой экран на принятие соединений при хостинге."
 
 msgid "Chat"
 msgstr "Чат"
@@ -8096,6 +8107,12 @@ msgstr "Игрок %u считерил (меню отладки) себе нов
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Игрок %u считерил (меню отладки) себе нового юнита."
+
+msgid "Open In-Game Options"
+msgstr "Открыть настройки игры"
+
+msgid "Close In-Game Options"
+msgstr "Закрыть настройки игры"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Скрыть устаревшие технологии"
@@ -8256,6 +8273,28 @@ msgstr "Читы"
 
 msgid "End-Game"
 msgstr "Окончание игры"
+
+msgid "Host"
+msgstr "Хост"
+
+msgid "Admin"
+msgstr "Администратор"
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr "%s (%s) изменил команду игрока (%s) на: %d"
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr "%s (%s) изменил позицию игрока (%s) на: %d"
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr "%s (%s) изменил цвет игрока (%s) на: %s"
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr "%s (%s) изменил фракцию игрока (%s) на: %s"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Может кто-нибудь передать мне юнитов?"
@@ -8473,6 +8512,9 @@ msgstr "Ошибка доставки сообщения - попробуйте 
 msgid "Map Downloaded"
 msgstr "Карта загружена"
 
+msgid "Admin modified a setting"
+msgstr "Администратор изменил настройки"
+
 msgid "Bot Allies"
 msgstr "Боты-союзники"
 
@@ -8581,6 +8623,33 @@ msgstr ""
 "Требуемый мод не может быть загружен: %s\n"
 "\n"
 "Warzone попробует запустить игру без него."
+
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr "Не удалось загрузить игровые модели: %zu"
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr "Не удалось загрузить текстуры для модели: %zu"
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr "Не удалось загрузить модель для состояний: %zu"
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr "Ошибка загрузки данных игры:"
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr "Пожалуйста, попробуйте удалить недавно установленные моды - они могут быть несовместимы с этой версией или иметь проблемы."
+
+msgid "Loaded mod(s):"
+msgstr "Загружены моды:"
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr "Основные файлы игры, вероятно, повреждены или устарели - попробуйте переустановить игру."
+
+msgid "Error Loading Game Data"
+msgstr "Ошибка при загрузке данных игры"
 
 msgid "Global Hotkeys"
 msgstr "Глобальные горячие клавиши"
@@ -10191,7 +10260,20 @@ msgstr "Назначение внешнего порта..."
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
-msgstr "Назначение порта отключено пользователем. Автоматическая настройка порта %d невозможна."
+msgstr "Переадресация портов отключена пользователем. Автонастройка порта %d не будет выполнена."
+
+msgid "Failed to load challenge:"
+msgstr "Не удалось загрузить испытание:"
+
+msgid "Failed to load the challenge's map or config"
+msgstr "Не удалось загрузить карту или конфигурацию испытания"
+
+msgid "Failed to process autohost config:"
+msgstr "Не удалось обработать конфигурацию автохоста:"
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr "Не удалось загрузить карту или конфигурацию автохоста: %s"
 
 msgid "Closed"
 msgstr "Закрыто"
@@ -10721,10 +10803,10 @@ msgid "Game Guide"
 msgstr "Руководство по игре"
 
 msgid "Toggle Sidebar"
-msgstr "Боковая панель"
+msgstr "Переключить боковую панель"
 
 msgid "Disable Topic Pop-ups"
-msgstr "Отключить всплывающие окна"
+msgstr "Отключить всплывающие окна тем"
 
 msgid "Close Help Mode"
 msgstr "Закрыть справку"
@@ -10775,7 +10857,7 @@ msgid "Join Attempt Rejected"
 msgstr "Запрос на подключение отклонен"
 
 msgid "Message from Host:"
-msgstr "Сообщение от Хоста:"
+msgstr "Сообщение от хоста:"
 
 msgid "Game is full"
 msgstr "Игра заполнена"
@@ -10784,7 +10866,7 @@ msgid "You were kicked!"
 msgstr "Вас исключили!"
 
 msgid "Your game version does not match the host"
-msgstr "Ваша версия игры не соответствует версии Хоста"
+msgstr "Ваша версия игры не соответствует версии хоста"
 
 msgid "The host rejected your connection due to invalid data"
 msgstr "Хост отклонил ваше соединение из-за некорректных данных"
@@ -10799,17 +10881,40 @@ msgid "No connections available"
 msgstr "Нет доступных подключений"
 
 msgid "Synchronizing data with host ..."
-msgstr "Синхронизация данных с Хостом ..."
+msgstr "Синхронизация данных с хостом..."
+
+msgid "Waiting for correct join password"
+msgstr "Ожидание правильного пароля для входа"
+
+msgid "Attempting to connect"
+msgstr "Попытка подключения"
+
+msgid "Establishing connection handshake"
+msgstr "Установка соединения"
+
+msgid "Coordinating join with host"
+msgstr "Присоединение к хосту"
+
+msgid "Join attempt failed"
+msgstr "Не удалось присоединиться"
 
 msgid "Host did not respond before timeout"
-msgstr "Время ожидания ответа Хоста истекло"
+msgstr "Время ожидания ответа от хоста истекло"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr "Ошибка: [%s] - %s"
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr "Ошибка: [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"
 msgstr "Не удалось открыть соединение: [%d] %s"
 
 msgid "Establishing connection with host"
-msgstr "Установка соединения с Хостом"
+msgstr "Установка соединения с хостом"
 
 msgid "An internal error occurred"
 msgstr "Произошла внутренняя ошибка"
@@ -10818,7 +10923,7 @@ msgid "Invalid host - disconnected"
 msgstr "Неверный хост - соединение разорвано"
 
 msgid "Invalid host response"
-msgstr "Получен неправильный ответ от Хоста"
+msgstr "Некорретный ответ от хоста"
 
 msgid "Requesting to join game"
 msgstr "Отправлен запрос на присоединение к игре"

@@ -1,0 +1,7 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "TUT_RES1": { "audio": "pcv376.ogg", "message": "POWRES_MSG", "type": 1, "x": 1216, "y": 1472, "z": 0 },
+        "TUT_ART1": { "audio": 0, "message": "ART_MSG", "type": 2, "x": 448, "y": 2752, "z": 0 }
+    }
+}

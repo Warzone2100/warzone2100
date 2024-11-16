@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-30 02:19\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-04 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -1799,6 +1799,9 @@ msgstr "Rescateu l'equip Alfa del Nexus"
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Destruïu el QG de Nexus per a desactivar el programa d'intrusió Nexus"
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr "Atenció: el QG està protegit contra els atacs VTOL"
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Acabeu la recerca dels circuits de resistència i sobreviviu a l'assalt de Nexus"
 
@@ -2936,6 +2939,13 @@ msgstr "Quan vulgui, cap!"
 msgid "System locale"
 msgstr "Llengua del sistema"
 
+msgid "Failed to create port mapping"
+msgstr "No s'ha pogut crear el mapatge dels ports"
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr "Configuri manualment el seu router/tallafocs per obrir el port %d!"
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr "Mapatge de ports obert al port extern: %d"
@@ -2944,16 +2954,8 @@ msgstr "Mapatge de ports obert al port extern: %d"
 msgid "Your external IP is: %s"
 msgstr "La seva IP externa és: %s"
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr "No s'ha pogut crear el mapatge de ports (temps límit de %d segons)"
-
-msgid "Failed to create port mapping"
-msgstr "No s'ha pogut crear el mapatge dels ports"
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
-msgstr "Configuri manualment el seu router/tallafocs per obrir el port %d!"
+msgid "Failed to create port mapping (timeout)"
+msgstr "No s'ha pogut crear el mapatge dels ports (timeout)"
 
 msgid "Client failed to ack player index swap"
 msgstr "El client no ha confirmat el canvi de lloc del jugador"
@@ -5564,10 +5566,10 @@ msgstr "Hi ha un nou sistema d'estructures disponible"
 msgid "New Systems Tower Available"
 msgstr "Hi ha una nova torre de sistemes disponible"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Hi ha una nova torreta de sistemes disponible per dissenyar"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Hi ha una nova torreta de sistemes disponible per dissenyar"
 
 msgid "New Thermal Emissions detection"
@@ -5995,6 +5997,9 @@ msgstr "Retribució"
 
 msgid "Ripple Rocket Battery"
 msgstr "Bateria d'onada de coets"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr "Carregador ràpid de coets d'ones"
 
 msgid "Ripple Rockets"
 msgstr "Onada de coets"
@@ -7727,6 +7732,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr "El filtratge de les ombres no està disponible en aquest sistema."
 
+msgid "Opacity: 50%"
+msgstr "Opacitat: 50%"
+
 msgid "* Takes effect on game restart"
 msgstr "* Té efecte quan reinicieu"
 
@@ -7771,6 +7779,9 @@ msgstr "Sacsejada de pantalla"
 
 msgid "Groups Menu"
 msgstr "Menú dels grups"
+
+msgid "Options Button"
+msgstr "Botons d'opcions"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONS GRÀFIQUES"
@@ -8085,6 +8096,12 @@ msgstr "El jugador %u està fent trampes (mode depuració) amb un nou cíborg: %
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "El jugador %u està fent trampes (mode depuració) amb un nou cíborg."
 
+msgid "Open In-Game Options"
+msgstr "Obre les opcions del joc"
+
+msgid "Close In-Game Options"
+msgstr "Tanca les opcions del joc"
+
 msgid "Hiding Obsolete Tech"
 msgstr "Amaga les tecnologies obsoletes"
 
@@ -8244,6 +8261,28 @@ msgstr "Trampes"
 
 msgid "End-Game"
 msgstr "Fi del joc"
+
+msgid "Host"
+msgstr "Amfitrió"
+
+msgid "Admin"
+msgstr "Administrador"
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr "%s (%s) ha canviat l'equip del jugador (%s) a: %d"
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr "%s (%s) ha canviat la posició del jugador (%s) a: %d"
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr "%s (%s) ha canviat el color del jugador (%s) a: %s"
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr "%s (%s) ha canviat la facció del jugador (%s) a: %s"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Algú pot transferir-me unitats?"
@@ -8461,6 +8500,9 @@ msgstr "No s'ha pogut enviar el missatge - torna a intentar-ho"
 msgid "Map Downloaded"
 msgstr "Mapes baixats"
 
+msgid "Admin modified a setting"
+msgstr "L'administrador ha modificat una opció"
+
 msgid "Bot Allies"
 msgstr "Aliats bot"
 
@@ -8569,6 +8611,33 @@ msgstr ""
 "No es pot carregar el mod requerit: %s\n"
 "\n"
 "Warzone provarà de carregar la partida sense ell."
+
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr "No s'han pogut carregar %zu models del joc"
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr "No s'han pogut carregar %zu models de textures"
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr "No s'han pogut carregar %zu models d'stats"
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr "Warzone 2100 ha tingut errors carregant la informació del joc:"
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr "Intenti treure tot mod nou - poden tenir errors o ser incompatibles amb aquesta versió."
+
+msgid "Loaded mod(s):"
+msgstr "Mods carregats:"
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr "Els fitxers de base del joc poden estar corromputs o antiquats - intenti reinstal·lar el joc."
+
+msgid "Error Loading Game Data"
+msgstr "Error intentant carregar la informació del joc"
 
 msgid "Global Hotkeys"
 msgstr "Dreceres del teclat globals"
@@ -10181,6 +10250,19 @@ msgstr "Mapatge de ports creant-se..."
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mapatge de ports desactivat per l'usuari. L'autoconfiguració del port %d no és possible."
 
+msgid "Failed to load challenge:"
+msgstr "No s'ha pogut carregar el repte:"
+
+msgid "Failed to load the challenge's map or config"
+msgstr "No s'ha pogut carregar el mapa o la configuració del repte"
+
+msgid "Failed to process autohost config:"
+msgstr "No s'ha pogut processar la configuració de l'autohost:"
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr "No s'ha pogut carregar el mapa o la configuració autohost provenint de: %s"
+
 msgid "Closed"
 msgstr "Tancat"
 
@@ -10787,8 +10869,31 @@ msgstr "Cap connexió disponible"
 msgid "Synchronizing data with host ..."
 msgstr "Sincronitzant dades amb l'amfitrió..."
 
+msgid "Waiting for correct join password"
+msgstr "S'espera la contrasenya correcta per unir-se"
+
+msgid "Attempting to connect"
+msgstr "Intentant connectar-se"
+
+msgid "Establishing connection handshake"
+msgstr "Establint una connexió de salutació"
+
+msgid "Coordinating join with host"
+msgstr "Coordinant-se amb l'amfitrió"
+
+msgid "Join attempt failed"
+msgstr "Intent per connectar-se fallit"
+
 msgid "Host did not respond before timeout"
 msgstr "L'amfitrió no ha respost abans no acabi el temps"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr "Fallat a: [%s] - %s"
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr "Fallat a: [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"

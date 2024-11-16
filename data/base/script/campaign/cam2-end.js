@@ -140,7 +140,7 @@ function vtolAttack()
 	}
 	else
 	{
-		list = [ cTempl.commorv, cTempl.commorv, cTempl.comhvat, cTempl.commorvt ];
+		list = [ cTempl.commorv, cTempl.commorv, cTempl.comhvat, cTempl.commorvt, cTempl.comacv ];
 	}
 
 	const extras = {

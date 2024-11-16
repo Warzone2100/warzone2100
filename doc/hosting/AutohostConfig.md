@@ -43,6 +43,7 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 * `team` holds the team number, starting from 0.
 * `ai` when set, contains the name of the AI to use. This must match the property `js` in the ai `.json` file.
 * `difficulty` sets the difficulty for an AI. It can be one of `Easy`, `Medium`, `Hard` or `Insane`.
+* `faction` sets the faction for an AI. It can be one of `Normal`, `NEXUS` or `Collective`.
 * `name` sets a custom name for the AI.
 
 ## Sample file

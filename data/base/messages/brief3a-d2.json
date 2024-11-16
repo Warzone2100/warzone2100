@@ -1,0 +1,39 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB3_AD2_MSG": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM3A_D2_MSG1", "CAM3A_D2_MSG2", "CAM3A_D2_MSG3"], "video": "cam3/c3ad2pl1.ogg" },
+                { "loop": 0, "subtitles": ["CAM3A_D2_MSG4", "CAM3A_D2_MSG5", "CAM3A_D2_MSG6"], "video": "cam3/c3ad2pl2.ogg" },
+                { "loop": 0, "subtitles": "CAM3A_D2_MSG7", "video": "cam3/c3ad2pl3.ogg" },
+                { "loop": 0, "subtitles": "", "video": "cam3/cam3ad2n.ogg" }
+            ]
+        },
+        "MB3_AD2_MSG2": {
+            "sequences": [
+                { "loop": 0, "subtitles": "", "video": "cam3/c3ad2n2.ogg" }
+            ]
+        },
+        "MB3_AD2_MSG3": {
+            "sequences": [
+                { "loop": 1, "subtitles": ["CAM3A_D2_MSG8", "CAM3A_D2_MSG9", "CAM3A_D2_MSG10"], "video": "cam3/c3ad2pl4.ogg" },
+                { "loop": 0, "subtitles": ["CAM3A_D2_MSG11", "CAM3A_D2_MSG12", "CAM3A_D2_MSG13"], "video": "cam3/c3ad2_09.ogg" }
+            ]
+        },
+        "MB3_AD2_MSG4": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM3A_D2_MSG14", "CAM3A_D2_MSG15", "CAM3A_D2_MSG16"], "video": "cam3/c3ad2_12.ogg" }
+            ]
+        },
+        "MB3_AD2_MSG5": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM3A_D2_MSG17", "CAM3A_D2_MSG18", "CAM3A_D2_MSG19"], "video": "cam3/c3ad2_14.ogg" }
+            ]
+        },
+        "MB3_AD2_MSG6": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM3A_D2_MSG20", "CAM3A_D2_MSG21"], "video": "cam3/c3ad2_16.ogg" }
+            ]
+        }
+    }
+}

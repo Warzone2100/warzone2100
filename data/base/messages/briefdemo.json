@@ -1,0 +1,11 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MBDEMO_MSG": {
+            "sequences": [
+                { "loop": 0, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
+                { "loop": 0, "subtitles": ["CAM1A_MSG1", "CAM1A_MSG2", "CAM1A_MSG3"], "video": "fastplay.ogg" }
+            ]
+        }
+    }
+}

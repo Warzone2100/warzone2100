@@ -187,6 +187,7 @@ UDWORD getDroidEffectiveLevel(const DROID *psDroid);
 const char *getDroidLevelName(const DROID *psDroid);
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
+void giveExperienceForSquish(DROID *psDroid);
 
 // Get a droid's name.
 const char *droidGetName(const DROID *psDroid);
@@ -251,6 +252,8 @@ UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot);
 void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad);
 // true if a vtol is waiting to be rearmed by a particular rearm pad
 bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct);
+// Fill all the weapons on a VTOL droid.
+void fillVtolDroid(DROID *psDroid);
 
 // see if there are any other vtols attacking the same target
 // but still rearming

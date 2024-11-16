@@ -233,6 +233,12 @@ void proj_AddActiveProjectile(PROJECTILE* p)
 void
 proj_FreeAllProjectiles()
 {
+	for (const auto* p : psProjectileList)
+	{
+		// Make sure to get rid of some final references in the sound code to this object first
+		audio_RemoveObj(p);
+	}
+
 	psProjectileList.clear();
 	psProjectileNext = psProjectileList.end();
 
@@ -1466,6 +1472,10 @@ void proj_UpdateAll()
 		}
 		auto it = globalProjectileStorage.find(*p);
 		ASSERT(it != globalProjectileStorage.end(), "Invalid projectile, not found in global storage");
+
+		// Make sure to get rid of some final references in the sound code to this object first
+		audio_RemoveObj(p);
+
 		globalProjectileStorage.erase(it);
 		return true;
 	}), psProjectileList.end());

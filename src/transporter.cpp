@@ -1047,6 +1047,9 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		}
 		return;
 	}
+
+	resetObjectAnimationState(psDroidToAdd);
+
 	if (onMission)
 	{
 		// removing from droid mission list

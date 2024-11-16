@@ -265,6 +265,7 @@ npsbb: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tan
 npltat: { body: tBody.tank.bug, prop: tProp.tank.halfTracks, weap: tWeap.tank.lancer },
 
 // SUB_1_4A
+npmorb: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.bombard },
 
 // CAM_1_5
 nphmgt: { body: tBody.tank.scorpion, prop: tProp.tank.tracks, weap: tWeap.tank.heavyMachinegun },
@@ -274,7 +275,6 @@ npcybm: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyb
 
 // CAM_1AC
 nphct: { body: tBody.tank.mantis, prop: tProp.tank.tracks, weap: tWeap.tank.heavyCannon },
-npmorb: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.bombard },
 npmsens: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tSensor.sensor },
 
 // SUB_1_7
@@ -323,9 +323,9 @@ cohbbt: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.bunk
 cocybag: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.assaultGun },
 cocybsn: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.sniperCannon },
 cocybtk: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.tankKiller },
+comhltat: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.tankKiller },
 
 // SUB_2_D
-comhltat: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.tankKiller },
 commorvt: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.thermiteBomb },
 cohhpv: { body: tBody.tank.tiger, prop: tProp.tank.tracks, weap: tWeap.tank.hyperVelocityCannon },
 comagt: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.assaultGun },
@@ -339,6 +339,7 @@ comsensh: { body: tBody.tank.panther, prop: tProp.tank.halfTracks, weap: tSensor
 // SUB_2_7
 comrotmh: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.pepperpot },
 comltath: { body: tBody.tank.panther, prop: tProp.tank.hover, weap: tWeap.tank.tankKiller },
+comacv: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.assaultCannon },
 
 // SUB_2_8
 comhvat: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.tankKiller },

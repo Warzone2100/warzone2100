@@ -743,16 +743,13 @@ void actionUpdateDroid(DROID *psDroid)
 					if (psDroid->asWeaps[i].nStat > 0
 					    && psWeapStats->rotate
 						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
-						// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick
-						// (aiUpdateDroid would have set an attack target if one was available)
-						&& psDroid->lastCheckNearestTarget[i] != gameTime
+						&& (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
+						// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick and failed
+						&& psDroid->lastCheckNearestTargetFailed[i] != gameTime
 					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
-						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
-						{
-							psDroid->action = DACTION_ATTACK;
-							setDroidActionTarget(psDroid, psTemp, i);
-						}
+						psDroid->action = DACTION_ATTACK;
+						setDroidActionTarget(psDroid, psTemp, i);
 					}
 				}
 			}
@@ -851,13 +848,11 @@ void actionUpdateDroid(DROID *psDroid)
 					    && psWeapStats->rotate
 					    && psWeapStats->fireOnMove
 						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
+						&& (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
-						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
-						{
-							psDroid->action = DACTION_MOVEFIRE;
-							setDroidActionTarget(psDroid, psTemp, i);
-						}
+						psDroid->action = DACTION_MOVEFIRE;
+						setDroidActionTarget(psDroid, psTemp, i);
 					}
 				}
 			}

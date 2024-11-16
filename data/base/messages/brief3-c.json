@@ -1,0 +1,21 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB3_C_MSG": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM3_C_MSG1", "CAM3_C_MSG2"], "video": "cam3/cam3cpl1.ogg" },
+                { "loop": 0, "subtitles": "", "video": "cam3/cam3_cn.ogg" },
+                { "loop": 0, "subtitles": "", "video": "cam3/c3c.ogg" },
+                { "loop": 0, "subtitles": ["CAM3_C_MSG3", "CAM3_C_MSG4"], "video": "cam3/cam3cpl2.ogg" }
+            ]
+        },
+        "MB3_C_MSG2": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM3_C_MSG5", "CAM3_C_MSG6", "CAM3_C_MSG7"], "video": "cam3/cam3cbet.ogg" },
+                { "loop": 0, "subtitles": ["CAM3_C_MSG8", "CAM3_C_MSG9"], "video": "cam3/cam3cpl3.ogg" },
+                { "loop": 0, "subtitles": "CAM3_C_MSG10", "video": "incomtns.ogg" },
+                { "loop": 0, "subtitles": ["CAM3_C_MSG11", "CAM3_C_MSG12", "CAM3_C_MSG13"], "video": "cam3/cam3_cg.ogg" }
+            ]
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "CM34_OBJ1": { "audio": "pcv448.ogg", "message": "RUINS_MSG", "type": 0, "x": 1984, "y": 10688, "z": 0 },
+        "CM34_OBJ2": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 3392, "y": 8768, "z": 0 },
+        "CM34_BASEA": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 2000, "y": 2500, "z": 0 },
+        "CM34_BASEB": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 8768, "y": 4032, "z": 0 },
+        "CM34_BASEC": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 8256, "y": 1344, "z": 0 },
+        "CM34_BASED": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 10816, "y": 10816, "z": 0 },
+        "CM34_BASEE": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 6976, "y": 10624, "z": 0 },
+        "CM34_BASEF": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 2880, "y": 9408, "z": 0 },
+        "CM34_BASEG": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 11328, "y": 7360, "z": 0 }
+    }
+}

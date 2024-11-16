@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: Slovenian\n"
 "Language: sl_SI\n"
@@ -1799,6 +1799,9 @@ msgstr ""
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr ""
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr ""
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr ""
 
@@ -2936,6 +2939,13 @@ msgstr "Kadarkoli, veliki šef!"
 msgid "System locale"
 msgstr "Sistemska lokalizacija"
 
+msgid "Failed to create port mapping"
+msgstr ""
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr ""
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr ""
@@ -2944,15 +2954,7 @@ msgstr ""
 msgid "Your external IP is: %s"
 msgstr ""
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
-
-msgid "Failed to create port mapping"
-msgstr ""
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
+msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
 msgid "Client failed to ack player index swap"
@@ -5560,10 +5562,10 @@ msgstr "Nova sistemska zgradba na voljo"
 msgid "New Systems Tower Available"
 msgstr "Nov sistemski stolp na voljo"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Nova sistemska kupola na voljo za načrt"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Nova sistemska kupola na voljo za načrt"
 
 msgid "New Thermal Emissions detection"
@@ -5991,6 +5993,9 @@ msgstr "Kazen"
 
 msgid "Ripple Rocket Battery"
 msgstr "Baterija z valovnimi raketami"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr ""
 
 msgid "Ripple Rockets"
 msgstr "Valovne rakete"
@@ -7735,6 +7740,9 @@ msgstr ""
 msgid "Shadow filtering not available on this system."
 msgstr ""
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Začne delovati po ponovnem zagonu"
 
@@ -7778,6 +7786,9 @@ msgid "Screen Shake"
 msgstr ""
 
 msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
 msgstr ""
 
 msgid "GRAPHICS OPTIONS"
@@ -8089,6 +8100,12 @@ msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novega droida:
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novega droida."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Odvečna tehnologija skrita"
 
@@ -8243,6 +8260,28 @@ msgid "Cheats"
 msgstr ""
 
 msgid "End-Game"
+msgstr ""
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8461,6 +8500,9 @@ msgstr ""
 msgid "Map Downloaded"
 msgstr ""
 
+msgid "Admin modified a setting"
+msgstr ""
+
 msgid "Bot Allies"
 msgstr ""
 
@@ -8569,6 +8611,33 @@ msgstr ""
 "Zahtevane modifikacije ni bilo mogoče naložiti: %s\n"
 "\n"
 "Warzone bo poskušal naložiti igro brez nje."
+
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr ""
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr ""
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr ""
+
+msgid "Loaded mod(s):"
+msgstr ""
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr ""
+
+msgid "Error Loading Game Data"
+msgstr ""
 
 msgid "Global Hotkeys"
 msgstr ""
@@ -10179,6 +10248,19 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "Failed to load challenge:"
+msgstr ""
+
+msgid "Failed to load the challenge's map or config"
+msgstr ""
+
+msgid "Failed to process autohost config:"
+msgstr ""
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr ""
+
 msgid "Closed"
 msgstr "Zaprto"
 
@@ -10787,7 +10869,30 @@ msgstr ""
 msgid "Synchronizing data with host ..."
 msgstr ""
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
 msgstr ""
 
 #, c-format

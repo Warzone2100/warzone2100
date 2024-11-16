@@ -775,6 +775,7 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 				// run over a bloke - kill him
 				destroyDroid((DROID *)psObj, gameTime);
 				scoreUpdateVar(WD_BARBARIANS_MOWED_DOWN);
+				giveExperienceForSquish(psDroid);
 			}
 		}
 	}
@@ -1795,8 +1796,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		}
 		else if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
 		{
-			psDroid->timeAnimationStarted = 0; // turn off movement animation, since we stopped
-			psDroid->animationEvent = ANIM_EVENT_NONE;
+			resetObjectAnimationState(psDroid);
 		}
 		return;
 	}
@@ -1953,8 +1953,7 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 	{
 		if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
 		{
-			psDroid->timeAnimationStarted = 0;
-			psDroid->animationEvent = ANIM_EVENT_NONE;
+			resetObjectAnimationState(psDroid);
 		}
 		return;
 	}
@@ -2270,8 +2269,7 @@ void moveUpdateDroid(DROID *psDroid)
 	case MOVEINACTIVE:
 		if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
 		{
-			psDroid->timeAnimationStarted = 0;
-			psDroid->animationEvent = ANIM_EVENT_NONE;
+			resetObjectAnimationState(psDroid);
 		}
 		if (bStopped)
 		{

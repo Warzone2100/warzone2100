@@ -24,7 +24,7 @@
 // To maintain compatibility with as many systems as possible:
 // 1.) Ensure Vulkan 1.0 compatibility
 // 2.) Avoid *requiring* anything outside of the scope of the "Vulkan Portable Subset"
-// 3.) All calls to Vulkan APIs should use dynamic dispatch (see the uses of vk::DispatchLoaderDynamic in this file)
+// 3.) All calls to Vulkan APIs should use dynamic dispatch (see the uses of WZ_vk::DispatchLoaderDynamic in this file)
 // 4.) Test with the Vulkan validation layers enabled (run WZ with --gfxdebug)
 //
 // #2 means the following things are currently best avoided:
@@ -79,9 +79,12 @@ const size_t MAX_FRAMES_IN_FLIGHT = 2;
 // Vulkan version where extension is promoted to core; extension name
 #define VK_NOT_PROMOTED_TO_CORE_YET 0
 const std::vector<std::tuple<uint32_t, const char*>> optionalInstanceExtensions = {
-	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME },	// used for Vulkan info output
+	{ VK_MAKE_VERSION(1, 1, 0) , VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME }	// used for Vulkan info output
 #if defined(VK_KHR_portability_enumeration)
-	{ VK_NOT_PROMOTED_TO_CORE_YET , VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME}
+	, { VK_NOT_PROMOTED_TO_CORE_YET , VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME}
+#endif
+#if defined(VK_EXT_layer_settings)
+	, { VK_NOT_PROMOTED_TO_CORE_YET , VK_EXT_LAYER_SETTINGS_EXTENSION_NAME}
 #endif
 };
 
@@ -158,6 +161,15 @@ const std::vector<std::tuple<_vkl_env_text_type, _vkl_env_text_type, bool>> vulk
 	, {_vkl_env_text("DISABLE_SAMPLE_LAYER"), _vkl_env_text("1"), true} // AgaueEye
 	, {_vkl_env_text("DISABLE_GAMEPP_LAYER"), _vkl_env_text("1"), true} // Gamepp
 };
+
+#if defined(VK_EXT_layer_settings)
+// layer settings
+// - MoltenVK:
+const VkBool32 setting_mvk_config_use_metal_argument_buffers = VK_FALSE; // Disable MoltenVK Metal argument buffers (currently triggers Metal API Validation asserts)
+const std::vector<vk::LayerSettingEXT> vulkan_mvk_layer_settings = {
+	{"MoltenVK", "MVK_CONFIG_USE_METAL_ARGUMENT_BUFFERS", vk::LayerSettingTypeEXT::eBool32, 1, &setting_mvk_config_use_metal_argument_buffers}
+};
+#endif
 
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 static std::unordered_set<const VkTexture*> debugLiveTextures;
@@ -246,7 +258,7 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	abort();
 }
 
-bool checkFormatSupport(const vk::PhysicalDevice& physicalDevice, vk::Format format, vk::ImageTiling tiling, vk::FormatFeatureFlags features, const vk::DispatchLoaderDynamic& vkDynLoader)
+bool checkFormatSupport(const vk::PhysicalDevice& physicalDevice, vk::Format format, vk::ImageTiling tiling, vk::FormatFeatureFlags features, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	vk::FormatProperties props;
 	physicalDevice.getFormatProperties(format, &props, vkDynLoader);
@@ -262,7 +274,7 @@ bool checkFormatSupport(const vk::PhysicalDevice& physicalDevice, vk::Format for
 	return false;
 }
 
-vk::Format findSupportedFormat(const vk::PhysicalDevice& physicalDevice, const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features, const vk::DispatchLoaderDynamic& vkDynLoader) {
+vk::Format findSupportedFormat(const vk::PhysicalDevice& physicalDevice, const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features, const WZ_vk::DispatchLoaderDynamic& vkDynLoader) {
 	for (vk::Format format : candidates)
 	{
 		if (checkFormatSupport(physicalDevice, format, tiling, features, vkDynLoader))
@@ -274,7 +286,7 @@ vk::Format findSupportedFormat(const vk::PhysicalDevice& physicalDevice, const s
 	throw std::runtime_error("failed to find supported format!");
 }
 
-QueueFamilyIndices findQueueFamilies(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const vk::DispatchLoaderDynamic &vkDynLoader)
+QueueFamilyIndices findQueueFamilies(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const WZ_vk::DispatchLoaderDynamic &vkDynLoader)
 {
 	QueueFamilyIndices indices;
 
@@ -315,7 +327,7 @@ QueueFamilyIndices findQueueFamilies(const vk::PhysicalDevice &device, const vk:
 	return indices;
 }
 
-SwapChainSupportDetails querySwapChainSupport(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const vk::DispatchLoaderDynamic &vkDynLoader)
+SwapChainSupportDetails querySwapChainSupport(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const WZ_vk::DispatchLoaderDynamic &vkDynLoader)
 {
 	SwapChainSupportDetails details;
 
@@ -326,7 +338,7 @@ SwapChainSupportDetails querySwapChainSupport(const vk::PhysicalDevice &device, 
 	return details;
 }
 
-std::vector<const char*> findSupportedDeviceExtensions(const vk::PhysicalDevice &device, const std::vector<const char*> &desiredExtensions, const vk::DispatchLoaderDynamic &vkDynLoader)
+std::vector<const char*> findSupportedDeviceExtensions(const vk::PhysicalDevice &device, const std::vector<const char*> &desiredExtensions, const WZ_vk::DispatchLoaderDynamic &vkDynLoader)
 {
 	const auto availableExtensions = device.enumerateDeviceExtensionProperties(nullptr, vkDynLoader); // TODO: handle thrown error?
 	std::unordered_set<std::string> supportedExtensionNames;
@@ -351,7 +363,7 @@ std::vector<const char*> findSupportedDeviceExtensions(const vk::PhysicalDevice 
 	return foundExtensions;
 }
 
-bool checkDeviceExtensionSupport(const vk::PhysicalDevice &device, const std::vector<const char*> &desiredExtensions, const vk::DispatchLoaderDynamic &vkDynLoader)
+bool checkDeviceExtensionSupport(const vk::PhysicalDevice &device, const std::vector<const char*> &desiredExtensions, const WZ_vk::DispatchLoaderDynamic &vkDynLoader)
 {
 	try {
 		const auto availableExtensions = device.enumerateDeviceExtensionProperties(nullptr, vkDynLoader);
@@ -437,7 +449,7 @@ vk::SampleCountFlagBits getMaxUsableSampleCount(const vk::PhysicalDeviceProperti
 	return vk::SampleCountFlagBits::e1;
 }
 
-vk::Format findDepthStencilFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
+vk::Format findDepthStencilFormat(const vk::PhysicalDevice& physicalDevice, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	return findSupportedFormat(
 		physicalDevice,
@@ -448,7 +460,7 @@ vk::Format findDepthStencilFormat(const vk::PhysicalDevice& physicalDevice, cons
 	);
 }
 
-vk::Format findDepthBufferFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
+vk::Format findDepthBufferFormat(const vk::PhysicalDevice& physicalDevice, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	std::vector<vk::Format> depthFormats = { vk::Format::eD32SfloatS8Uint, vk::Format::eD32Sfloat, vk::Format::eD24UnormS8Uint };
 	return findSupportedFormat(
@@ -460,7 +472,7 @@ vk::Format findDepthBufferFormat(const vk::PhysicalDevice& physicalDevice, const
 	);
 }
 
-vk::Format findSceneColorBufferFormat(const vk::PhysicalDevice& physicalDevice, const vk::DispatchLoaderDynamic& vkDynLoader)
+vk::Format findSceneColorBufferFormat(const vk::PhysicalDevice& physicalDevice, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	std::vector<vk::Format> sceneColorFormats = { vk::Format::eA2B10G10R10UnormPack32, vk::Format::eR8G8B8A8Unorm };
 	return findSupportedFormat(
@@ -738,7 +750,7 @@ void BlockBufferAllocator::clean()
 constexpr uint32_t descriptorPoolMaxSetsDefault = 10000;
 constexpr uint32_t descriptorPoolSizeDescriptorCountDefault = 10000;
 
-perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& allocator, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader)
+perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& allocator, const uint32_t& graphicsQueueFamilyIndex, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 	: dev(_dev)
 	, allocator(allocator)
 	, stagingBufferAllocator(allocator, 1024 * 1024, vk::BufferUsageFlagBits::eTransferSrc, VMA_MEMORY_USAGE_CPU_ONLY)
@@ -927,7 +939,7 @@ perFrameResources_t::~perFrameResources_t()
 	clean();
 }
 
-void perFrameResources_t::DescriptorPoolsContainer::reset(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+void perFrameResources_t::DescriptorPoolsContainer::reset(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	for (auto& descriptorPool : pools)
 	{
@@ -961,7 +973,7 @@ bool buffering_mechanism::isInitialized()
 	return !perFrameResources.empty();
 }
 
-perSwapchainImageResources_t::perSwapchainImageResources_t(vk::Device& _dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+perSwapchainImageResources_t::perSwapchainImageResources_t(vk::Device& _dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 	: dev(_dev)
 	, pVkDynLoader(&vkDynLoader)
 {
@@ -977,7 +989,7 @@ perSwapchainImageResources_t::~perSwapchainImageResources_t()
 
 // MARK: buffering_mechanism
 
-void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, size_t swapChainImageCount, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader)
+void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, size_t swapChainImageCount, const uint32_t& graphicsQueueFamilyIndex, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	currentFrame = 0;
 	currentSwapchainImageResourcesFrame = 0;
@@ -1002,7 +1014,7 @@ size_t buffering_mechanism::numFrames()
 	return perFrameResources.size();
 }
 
-void buffering_mechanism::destroy(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader)
+void buffering_mechanism::destroy(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	perFrameResources.clear();
 	perSwapchainImageResources.clear();
@@ -1010,7 +1022,7 @@ void buffering_mechanism::destroy(vk::Device dev, const vk::DispatchLoaderDynami
 	currentSwapchainImageResourcesFrame = 0;
 }
 
-void buffering_mechanism::swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage)
+void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage)
 {
 	currentFrame = (currentFrame < (perFrameResources.size() - 1)) ? currentFrame + 1 : 0;
 	if (!skipAcquireNewSwapchainImage)
@@ -1197,7 +1209,7 @@ std::vector<uint32_t> VkPSO::readShaderBuf(const std::string& name)
 	return buffer;
 }
 
-vk::ShaderModule VkPSO::get_module(const std::string& name, const vk::DispatchLoaderDynamic& vkDynLoader)
+vk::ShaderModule VkPSO::get_module(const std::string& name, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	const auto tmp = readShaderBuf(name);
 	ASSERT_OR_RETURN(vk::ShaderModule(), tmp.size() > 0, "Failed to read shader: %s", name.c_str());
@@ -1615,7 +1627,7 @@ VkPSO::VkPSO(vk::Device _dev,
 	vk::RenderPass rp,
 	const std::shared_ptr<VkhRenderPassCompat>& renderpass_compat,
 	vk::SampleCountFlagBits rasterizationSamples,
-	const vk::DispatchLoaderDynamic& _vkDynLoader,
+	const WZ_vk::DispatchLoaderDynamic& _vkDynLoader,
 	const VkRoot& _root
 	) : dev(_dev), pVkDynLoader(&_vkDynLoader), renderpass_compat(renderpass_compat), root(&_root)
 {
@@ -1687,8 +1699,20 @@ VkPSO::VkPSO(vk::Device _dev,
 		.setScissorCount(1);
 	ASSERT(viewportState.viewportCount <= limits.maxViewports, "viewportCount (%" PRIu32") exceeds limits.maxViewports (%" PRIu32")", viewportState.viewportCount, limits.maxViewports);
 
-	const auto iassembly = vk::PipelineInputAssemblyStateCreateInfo()
+	auto iassembly = vk::PipelineInputAssemblyStateCreateInfo()
 		.setTopology(to_vk(primitive));
+#ifdef WZ_OS_MAC
+	// Silence MoltenVK warning: "Metal does not support disabling primitive restart"
+	switch (primitive)
+	{
+	case gfx_api::primitive_type::line_strip:
+	case gfx_api::primitive_type::triangle_strip:
+		iassembly.setPrimitiveRestartEnable(vk::True);
+		break;
+	default:
+		break;
+	}
+#endif
 
 	uint32_t buffer_id = 0;
 	std::vector<vk::VertexInputBindingDescription> buffers;
@@ -2123,7 +2147,7 @@ VkDepthMapImage::~VkDepthMapImage()
 	}
 }
 
-void VkDepthMapImage::destroy(vk::Device _dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader)
+void VkDepthMapImage::destroy(vk::Device _dev, const VmaAllocator& allocator, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	if (buffering_mechanism::isInitialized())
 	{
@@ -2348,7 +2372,7 @@ VkRenderedImage::~VkRenderedImage()
 	}
 }
 
-void VkRenderedImage::destroy(vk::Device _dev, const VmaAllocator& allocator, const vk::DispatchLoaderDynamic& vkDynLoader)
+void VkRenderedImage::destroy(vk::Device _dev, const VmaAllocator& allocator, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	if (buffering_mechanism::isInitialized())
 	{
@@ -2640,7 +2664,7 @@ static bool createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevi
 									const vk::Extent2D& extent, vk::SampleCountFlagBits msaaSamples, vk::Format imageFormat,
 									const vk::ImageUsageFlags imageUsageFlags, const vk::ImageAspectFlags& subresourceAspectFlags,
 									vk::Image& outputImage, vk::DeviceMemory& outputMemory, vk::ImageView& outputView,
-									const vk::DispatchLoaderDynamic& vkDynLoader, const char *loggingKey)
+									const WZ_vk::DispatchLoaderDynamic& vkDynLoader, const char *loggingKey)
 {
 	if (loggingKey == nullptr)
 	{
@@ -2722,7 +2746,7 @@ static bool createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevi
 static bool createColorAttachmentImage(const vk::PhysicalDevice& physicalDevice, const vk::PhysicalDeviceMemoryProperties& memprops, const vk::Device& dev,
 									const vk::Extent2D& swapchainSize, vk::SampleCountFlagBits msaaSamples, vk::Format colorFormat,
 									vk::Image& colorImage, vk::DeviceMemory& colorImageMemory, vk::ImageView& colorImageView,
-									const vk::DispatchLoaderDynamic& vkDynLoader, const char *loggingKey = "colorImage")
+									const WZ_vk::DispatchLoaderDynamic& vkDynLoader, const char *loggingKey = "colorImage")
 {
 	return createGPUImageAndViewInternal(physicalDevice, memprops, dev,
 										 swapchainSize, msaaSamples, colorFormat,
@@ -2735,7 +2759,7 @@ static bool createColorAttachmentImage(const vk::PhysicalDevice& physicalDevice,
 static bool createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, const vk::PhysicalDeviceMemoryProperties& memprops, const vk::Device& dev,
 									const vk::Extent2D& swapchainSize, vk::SampleCountFlagBits msaaSamples, vk::Format depthFormat,
 									vk::Image& depthStencilImage, vk::DeviceMemory& depthStencilMemory, vk::ImageView& depthStencilView,
-									const vk::DispatchLoaderDynamic& vkDynLoader, const char *loggingKey = "depthStencilImage")
+									const WZ_vk::DispatchLoaderDynamic& vkDynLoader, const char *loggingKey = "depthStencilImage")
 {
 	return createGPUImageAndViewInternal(physicalDevice, memprops, dev,
 										 swapchainSize, msaaSamples, depthFormat,
@@ -3351,6 +3375,30 @@ bool VkRoot::setupDebugReportCallbacks(const std::vector<const char*>& extension
 	return true;
 }
 
+#if defined(VK_EXT_layer_settings)
+std::vector<vk::LayerSettingEXT> VkRoot::initLayerSettings()
+{
+	std::vector<vk::LayerSettingEXT> result;
+#ifdef WZ_OS_MAC
+	// MoltenVK layer settings
+	for (const auto &it : vulkan_mvk_layer_settings)
+	{
+		if (getenv(it.pSettingName) == nullptr)
+		{
+			result.push_back(it);
+			debug(LOG_3D, "Setting [%s]:%s", it.pLayerName, it.pSettingName);
+		}
+		else
+		{
+			// environment variable is already set - log a warning, but allow it to take precedence
+			debug(LOG_INFO, "Warning: Environment variable %s is already set, and will *not* be overridden", it.pSettingName);
+		}
+	}
+#endif
+	return result;
+}
+#endif
+
 // Attempts to create a Vulkan instance (vk::Instance) with the specified extensions and layers
 // If successful, sets the following variable in VkRoot:
 //	- inst (vk::Instance)
@@ -3419,6 +3467,22 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 	});
 	debug(LOG_3D, "Using instance extensions: %s", instanceExtensionsAsString.c_str());
 
+#if defined(VK_EXT_layer_settings)
+	std::vector<vk::LayerSettingEXT> layerSettings;
+	vk::LayerSettingsCreateInfoEXT layerSettingsCreateInfo;
+	bool requesting_layer_settings_extension = std::any_of(extensions.begin(), extensions.end(),
+				 [](const char *extensionName) { return (strcmp(extensionName, VK_EXT_LAYER_SETTINGS_EXTENSION_NAME) == 0);});
+	if (requesting_layer_settings_extension)
+	{
+		layerSettings = initLayerSettings();
+		layerSettingsCreateInfo.settingCount = static_cast<uint32_t>(layerSettings.size());
+		layerSettingsCreateInfo.pSettings = layerSettings.data();
+		layerSettingsCreateInfo.pNext = instanceCreateInfo.pNext;
+		instanceCreateInfo.pNext = &layerSettingsCreateInfo;
+		debug(LOG_3D, "Using layer settings, settingCount: %" PRIu32, layerSettingsCreateInfo.settingCount);
+	}
+#endif
+
 	VkResult result = _vkCreateInstance(reinterpret_cast<const VkInstanceCreateInfo*>(&instanceCreateInfo), nullptr, reinterpret_cast<VkInstance*>(&inst));
 	if (result != VK_SUCCESS)
 	{
@@ -3446,7 +3510,7 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 }
 
 // WZ-specific functions for rating / determining requirements
-int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const vk::DispatchLoaderDynamic &vkDynLoader)
+int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR &surface, const WZ_vk::DispatchLoaderDynamic &vkDynLoader)
 {
 	const auto deviceProperties = device.getProperties(vkDynLoader);
 	vk::PhysicalDeviceFeatures deviceFeatures = device.getFeatures(vkDynLoader);

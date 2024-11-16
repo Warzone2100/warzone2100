@@ -1,0 +1,16 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB2A_MSG": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM2A_MSG1", "CAM2A_MSG2", "CAM2A_MSG3"], "video": "cam2/c002.ogg" }
+            ]
+        },
+        "MB2A_MSG2": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["NP_MSG1", "CAM2A_MSG7", "CAM2A_MSG8"], "video": "cam2/cam2ap.ogg" },
+                { "loop": 0, "subtitles": "", "video": "cam2/cam2acol.ogg" }
+            ]
+        }
+    }
+}

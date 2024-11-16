@@ -107,6 +107,7 @@ struct MULTIPLAYERINGAME
 {
 	UDWORD				PingTimes[MAX_CONNECTED_PLAYERS];				// store for pings.
 	int 				LagCounter[MAX_CONNECTED_PLAYERS];
+	int 				DesyncCounter[MAX_CONNECTED_PLAYERS];
 	bool				VerifiedIdentity[MAX_CONNECTED_PLAYERS];		// if the multistats identity has been verified.
 	bool				localOptionsReceived;							// used to show if we have game options yet..
 	bool				localJoiningInProgress;							// used before we know our player number.
@@ -120,6 +121,7 @@ struct MULTIPLAYERINGAME
 	std::chrono::steady_clock::time_point startTime;
 	optional<std::chrono::steady_clock::time_point> endTime;
 	std::chrono::steady_clock::time_point lastLagCheck;
+	std::chrono::steady_clock::time_point lastDesyncCheck;
 	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
 	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
 	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};		// the local client-set mute status for this player

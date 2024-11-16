@@ -57,6 +57,14 @@ bool removeLobbyAdminPublicKey(const std::string& publicKeyB64Str)
 	return lobbyAdminPublicKeys.erase(publicKeyB64Str) > 0;
 }
 
+// checks for specific identity being an admin
+bool identityMatchesAdmin(const EcKey& identity)
+{
+	std::string senderIdentityHash = identity.publicHashString();
+	std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+	return lobbyAdminPublicKeys.count(senderPublicKeyB64) != 0 || lobbyAdminPublicHashStrings.count(senderIdentityHash) != 0;
+}
+
 // NOTE: **IMPORTANT** this should *NOT* be used for determining whether a sender has permission to execute admin commands
 // (Use senderHasLobbyCommandAdminPrivs instead)
 static bool senderApparentlyMatchesAdmin(uint32_t playerIdx)
@@ -75,14 +83,7 @@ static bool senderApparentlyMatchesAdmin(uint32_t playerIdx)
 	{
 		return false;
 	}
-	std::string senderIdentityHash = identity.publicHashString();
-	std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-	if (lobbyAdminPublicKeys.count(senderPublicKeyB64) == 0 && lobbyAdminPublicHashStrings.count(senderIdentityHash) == 0)
-	{
-		return false; // identity hash is not in permitted lists
-	}
-
-	return true;
+	return identityMatchesAdmin(identity);
 }
 
 // **THIS** is the function that should be used to determine whether a sender currently has permission to execute admin commands
@@ -294,7 +295,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomNotifyMessage("Usage: " LOBBY_COMMAND_PREFIX "team <slot> <team>");
 			return false;
 		}
-		if (!cmdInterface.changeTeam(posToNetPlayer(s1), s2))
+		if (!cmdInterface.changeTeam(posToNetPlayer(s1), s2, message.sender))
 		{
 			std::string msg = astringf("Unable to change player %u team to %u", s1, s2);
 			sendRoomNotifyMessage(msg.c_str());
@@ -386,7 +387,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			return false;
 		}
 
-		if (!cmdInterface.changePosition(playerIdxA, s2))
+		if (!cmdInterface.changePosition(playerIdxA, s2, message.sender))
 		{
 			std::string msg = astringf("Unable to swap players %" PRIu8 " and %" PRIu8, s1, s2);
 			sendRoomNotifyMessage(msg.c_str());
@@ -553,7 +554,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			sendRoomSystemMessage("Autobalance is available only for even player count.");
 			return false;
 		}
-		if (!cmdInterface.autoBalancePlayers())
+		if (!cmdInterface.autoBalancePlayers(message.sender))
 		{
 			// failure message logged by autoBalancePlayers()
 			return false;

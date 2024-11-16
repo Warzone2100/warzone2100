@@ -134,6 +134,16 @@ static bool validateCampaignMod(WzCampaignModInfo& modInfo, const std::string& b
 		}
 	}
 
+	// Verify alternate campaign has at least one campaign file listed
+	if (modInfo.type == WzModType::AlternateCampaign)
+	{
+		if (modInfo.campaignFiles.empty())
+		{
+			debug(LOG_ERROR, "Alternate campaign mod must list one or more valid campaign JSON files in \"campaigns\": %s", realModFilePathAndName.c_str());
+			return false;
+		}
+	}
+
 	return true;
 }
 

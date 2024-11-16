@@ -302,6 +302,7 @@ lib/ivis_opengl/png_util_spng.cpp
 lib/ivis_opengl/screen.cpp
 lib/ivis_opengl/tex.cpp
 lib/ivis_opengl/textdraw.cpp
+lib/netplay/error_categories.cpp
 lib/netplay/netjoin_stub.cpp
 lib/netplay/netlog.cpp
 lib/netplay/netpermissions.cpp
@@ -311,6 +312,8 @@ lib/netplay/netreplay.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
 lib/netplay/port_mapping_manager.cpp
+lib/netplay/port_mapping_manager_impl_libplum.cpp
+lib/netplay/port_mapping_manager_impl_miniupnpc.cpp
 lib/netplay/sync_debug.cpp
 lib/netplay/wzfile.cpp
 lib/sdl/cursor_sdl_helpers.cpp

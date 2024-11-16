@@ -1,0 +1,11 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB1B_MSG": {
+            "sequences": [
+                { "loop": 1, "subtitles": ["P1B_MSG1", "P1B_MSG2", "P1B_MSG3"], "video": "cam1/cam1b_p.ogg" },
+                { "loop": 0, "subtitles": ["CAM1B_MSG1", "CAM1B_MSG2", "CAM1B_MSG3"], "video": "cam1/cam1b.ogg" }
+            ]
+        }
+    }
+}

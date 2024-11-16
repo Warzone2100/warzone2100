@@ -10,8 +10,8 @@ if [[ "$TARGET_BUILD_ARCH" == "amd64" && "$CRAFT_ARCH_BUILD_ON" == "$TARGET_BUIL
   echo "Installing Vulkan SDK"
 
   # Add Vulkan SDK repo
-  wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | tee /etc/apt/trusted.gpg.d/lunarg.asc
-  wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-jammy.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-jammy.list
+  wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add -
+  wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.3.296-noble.list https://packages.lunarg.com/vulkan/1.3.296/lunarg-vulkan-1.3.296-noble.list
   apt update
   apt install --yes vulkan-sdk
 

@@ -46,6 +46,7 @@
 #include "../stats.h"
 #include "../qtscript.h"
 #include "../main.h"
+#include "../faction.h"
 
 #include <array>
 #include <chrono>
@@ -119,7 +120,7 @@ static bool isInternalMessage(WzQuickChatMessage msg)
 
 // MARK: - Helper functions
 
-const char* to_output_string(WzQuickChatMessage msg);
+std::string to_output_string(WzQuickChatMessage msg, const optional<WzQuickChatMessageData>& messageData);
 
 static optional<size_t> numberButtonPressed()
 {
@@ -764,6 +765,13 @@ void WzQuickChatTargeting::reset()
 bool WzQuickChatTargeting::noTargets() const
 {
 	return !all && !humanTeammates && !aiTeammates && specificPlayers.empty();
+}
+
+WzQuickChatTargeting WzQuickChatTargeting::targetAll()
+{
+	WzQuickChatTargeting targeting;
+	targeting.all = true;
+	return targeting;
 }
 
 // MARK: - WzQuickChatSendToSelector
@@ -2414,9 +2422,95 @@ std::shared_ptr<WzQuickChatPanel> WzQuickChatForm::createInGameEndGamePanel()
 	return panel;
 }
 
+// MARK: -
+
+namespace WzQuickChatDataContexts {
+
+// - INTERNAL_ADMIN_ACTION_NOTICE
+namespace INTERNAL_ADMIN_ACTION_NOTICE {
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdx)
+	{
+		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), responsiblePlayerIdx, targetPlayerIdx };
+	}
+
+	std::string to_output_string(WzQuickChatMessageData messageData)
+	{
+		uint32_t responsiblePlayerIdx = messageData.dataA;
+		uint32_t targetPlayerIdx = messageData.dataB;
+
+		if (responsiblePlayerIdx >= MAX_CONNECTED_PLAYERS)
+		{
+			return std::string();
+		}
+		if (targetPlayerIdx >= MAX_CONNECTED_PLAYERS)
+		{
+			return std::string();
+		}
+
+		const char* responsiblePlayerName = NetPlay.players[responsiblePlayerIdx].name;
+		const char* targetPlayerName = NetPlay.players[targetPlayerIdx].name;
+
+		const char* responsiblePlayerType = _("Player");
+		if (responsiblePlayerIdx == NetPlay.hostPlayer)
+		{
+			responsiblePlayerType = _("Host");
+		}
+		else if (NetPlay.players[responsiblePlayerIdx].isAdmin)
+		{
+			responsiblePlayerType = _("Admin");
+		}
+
+		switch (messageData.dataContext)
+		{
+			case static_cast<uint32_t>(Context::Invalid):
+				return "";
+			case static_cast<uint32_t>(Context::Team):
+				return astringf(_("%s (%s) changed team of player (%s) to: %d"), responsiblePlayerType, responsiblePlayerName, targetPlayerName, NetPlay.players[targetPlayerIdx].team);
+			case static_cast<uint32_t>(Context::Position):
+				return astringf(_("%s (%s) changed position of player (%s) to: %d"), responsiblePlayerType, responsiblePlayerName, targetPlayerName, NetPlay.players[targetPlayerIdx].position);
+			case static_cast<uint32_t>(Context::Color):
+				return astringf(_("%s (%s) changed color of player (%s) to: %s"), responsiblePlayerType, responsiblePlayerName, targetPlayerName, getPlayerColourName(targetPlayerIdx));
+			case static_cast<uint32_t>(Context::Faction):
+				return astringf(_("%s (%s) changed faction of player (%s) to: %s"), responsiblePlayerType, responsiblePlayerName, targetPlayerName, to_localized_string(static_cast<FactionID>(NetPlay.players[targetPlayerIdx].faction)));
+		}
+
+		return ""; // Silence compiler warning
+	}
+} // namespace INTERNAL_ADMIN_ACTION_NOTICE
+
+} // namespace WzQuickChatDataContexts
+
 // MARK: - Public functions
 
-const char* to_output_string(WzQuickChatMessage msg)
+bool quickChatMessageExpectsExtraData(WzQuickChatMessage msg)
+{
+	switch (msg)
+	{
+		// WZ-generated internal messages which require extra data
+		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+			return true;
+
+		default:
+			return false;
+	}
+}
+
+int32_t to_output_sender(WzQuickChatMessage msg, uint32_t sender)
+{
+	// Certain internal messages override the sender for display purposes
+	switch (msg)
+	{
+		// WZ-generated internal messages - not for users to deliberately send
+		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+			// override the "sender" to SYSTEM_MESSAGE type
+			return SYSTEM_MESSAGE;
+
+		default:
+			return sender;
+	}
+}
+
+std::string to_output_string(WzQuickChatMessage msg, const optional<WzQuickChatMessageData>& messageData)
 {
 	switch (msg)
 	{
@@ -2459,6 +2553,11 @@ const char* to_output_string(WzQuickChatMessage msg)
 		case WzQuickChatMessage::TEAM_SUGGESTION_BUILD_CAPTURE_OILS:
 			// TRANSLATORS: A suggestion to other player(s)
 			return _("I suggest: Capturing oil resources");
+
+		// WZ-generated internal messages - not for users to deliberately send
+		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+			return WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::to_output_string(messageData.value());
+
 		default:
 			return to_display_string(msg);
 	}
@@ -2622,6 +2721,8 @@ const char* to_display_string(WzQuickChatMessage msg)
 			return _("Message delivery failure - try again");
 		case WzQuickChatMessage::INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED:
 			return _("Map Downloaded");
+		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+			return _("Admin modified a setting");
 
 		// not a valid message
 		case WzQuickChatMessage::MESSAGE_COUNT:
@@ -2788,23 +2889,43 @@ static std::string formatReceivers(uint32_t senderIdx, const WzQuickChatTargetin
 	return ss.str();
 }
 
-void addQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting)
+void addQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
 {
 	char formatted[MAX_CONSOLE_STRING_LENGTH];
-	ssprintf(formatted, "[%s] %s (%s): %s", formatLocalDateTime("%H:%M").c_str(), getPlayerName(sender), formatReceivers(sender, targeting).c_str(), to_output_string(message));
+	ssprintf(formatted, "[%s] %s (%s): %s", formatLocalDateTime("%H:%M").c_str(), getPlayerName(sender), formatReceivers(sender, targeting).c_str(), to_output_string(message, messageData).c_str());
 	bool teamSpecific = !targeting.all && (targeting.humanTeammates || targeting.aiTeammates);
-	addConsoleMessage(formatted, DEFAULT_JUSTIFY, sender, teamSpecific);
+	addConsoleMessage(formatted, DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
 }
 
-void addLobbyQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting)
+void addLobbyQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
 {
 	bool teamSpecific = !targeting.all && (targeting.humanTeammates || targeting.aiTeammates);
-	addConsoleMessage(to_output_string(message), DEFAULT_JUSTIFY, sender, teamSpecific);
+	addConsoleMessage(to_output_string(message, messageData).c_str(), DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
 }
 
-void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatTargeting targeting)
+bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message)
+{
+	if (!isInternalMessage(message))
+	{
+		return false;
+	}
+	// special cases for internal messages that should be displayed locally
+	switch (message)
+	{
+		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+			return false;
+		default:
+			break;
+	}
+
+	// hide local display of this message
+	return true;
+}
+
+void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatTargeting targeting, optional<WzQuickChatMessageData> messageData /*= nullopt*/)
 {
 	ASSERT_OR_RETURN(, myResponsibility(fromPlayer), "We are not responsible for player: %" PRIu32, fromPlayer);
+	ASSERT_OR_RETURN(, quickChatMessageExpectsExtraData(message) == messageData.has_value(), "Message [%d] unexpectedly %s", static_cast<int>(message), messageData.has_value() ? "has message data" : "lacks message data");
 
 	bool internalMessage = isInternalMessage(message);
 
@@ -2907,7 +3028,7 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 			if (recipient == selectedPlayer)
 			{
 				// Targetted at us - Output to console
-				addQuickChatMessageToConsole(message, fromPlayer, targeting);
+				addQuickChatMessageToConsole(message, fromPlayer, targeting, messageData);
 			}
 			else
 			{
@@ -2951,18 +3072,27 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		{
 			NETuint32_t(&playerIdx);
 		}
+		if (quickChatMessageExpectsExtraData(message))
+		{
+			if (messageData.has_value())
+			{
+				NETuint32_t(&messageData.value().dataContext);
+				NETuint32_t(&messageData.value().dataA);
+				NETuint32_t(&messageData.value().dataB);
+			}
+		}
 		NETend();
 	}
 
-	if (fromPlayer == selectedPlayer && (!recipients.empty() || !isInGame) && !internalMessage)
+	if (fromPlayer == selectedPlayer && (!recipients.empty() || !isInGame) && !shouldHideQuickChatMessageFromLocalDisplay(message))
 	{
 		if (isInGame)
 		{
-			addQuickChatMessageToConsole(message, fromPlayer, targeting);
+			addQuickChatMessageToConsole(message, fromPlayer, targeting, messageData);
 		}
 		else
 		{
-			addLobbyQuickChatMessageToConsole(message, fromPlayer, targeting);
+			addLobbyQuickChatMessageToConsole(message, fromPlayer, targeting, messageData);
 		}
 	}
 
@@ -2970,6 +3100,59 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 	{
 		recordPlayerMessageSent(fromPlayer);
 	}
+}
+
+bool shouldProcessQuickChatMessage(const NETQUEUE& queue, bool isInGame, WzQuickChatMessage message, uint32_t sender, uint32_t recipient, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
+{
+	bool internalMessage = isInternalMessage(message);
+
+	if (sender >= MAX_CONNECTED_PLAYERS || recipient >= MAX_CONNECTED_PLAYERS)
+	{
+		return false;
+	}
+
+	if (whosResponsible(sender) != queue.index)
+	{
+		return false;
+	}
+
+	if (!myResponsibility(recipient))
+	{
+		return false;
+	}
+
+	bool senderIsSpectator = NetPlay.players[sender].isSpectator;
+	if (isInGame && senderIsSpectator && !NetPlay.players[recipient].isSpectator)
+	{
+		// spectators can't talk to players in-game
+		return false;
+	}
+
+	auto senderSpamMute = playerSpamMutedUntil(sender);
+	if (senderSpamMute.has_value() && !internalMessage)
+	{
+		// ignore message sent while player send was throttled
+		return false;
+	}
+
+	// begin: message-specific checks
+	switch (message)
+	{
+		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+			// should only ever be sent by the host
+			if (queue.index != NetPlay.hostPlayer)
+			{
+				return false;
+			}
+			break;
+		default:
+			// no special handling
+			break;
+	}
+	// end: message-specific checks
+
+	// passes checks
+	return true;
 }
 
 bool recvQuickChat(NETQUEUE queue)
@@ -2982,6 +3165,9 @@ bool recvQuickChat(NETQUEUE queue)
 	uint32_t recipient = MAX_CONNECTED_PLAYERS;
 	uint32_t messageValue = static_cast<uint32_t>(WzQuickChatMessage::MESSAGE_COUNT);
 	WzQuickChatTargeting targeting;
+	optional<WzQuickChatMessageData> messageData;
+
+	WzQuickChatMessage msgEnumVal;
 
 	if (expectingSecuredMessage)
 	{
@@ -3012,45 +3198,27 @@ bool recvQuickChat(NETQUEUE queue)
 			targeting.specificPlayers.insert(tmp_playerIdx);
 		}
 	}
+	bool validMessageEnumValue = to_WzQuickChatMessage(messageValue, msgEnumVal);
+	if (validMessageEnumValue && quickChatMessageExpectsExtraData(msgEnumVal))
+	{
+		messageData = WzQuickChatMessageData();
+		NETuint32_t(&messageData.value().dataContext);
+		NETuint32_t(&messageData.value().dataA);
+		NETuint32_t(&messageData.value().dataB);
+	}
 	NETend();
 
-	if (sender >= MAX_CONNECTED_PLAYERS || recipient >= MAX_CONNECTED_PLAYERS)
+	if (!validMessageEnumValue)
 	{
 		return false;
 	}
 
-	if (whosResponsible(sender) != queue.index)
+	if (!shouldProcessQuickChatMessage(queue, isInGame, msgEnumVal, sender, recipient, targeting, messageData))
 	{
 		return false;
 	}
 
-	if (!myResponsibility(recipient))
-	{
-		return false;
-	}
-
-	bool senderIsSpectator = NetPlay.players[sender].isSpectator;
-	if (isInGame && senderIsSpectator && !NetPlay.players[recipient].isSpectator)
-	{
-		// spectators can't talk to players in-game
-		return false;
-	}
-
-	WzQuickChatMessage msgEnumVal;
-	if (!to_WzQuickChatMessage(messageValue, msgEnumVal))
-	{
-		// invalid message enum value
-		return false;
-	}
 	bool internalMessage = isInternalMessage(msgEnumVal);
-
-	auto senderSpamMute = playerSpamMutedUntil(sender);
-	if (senderSpamMute.has_value() && !internalMessage)
-	{
-		// ignore message sent while player send was throttled
-		return false;
-	}
-
 	if (!internalMessage && recipient == selectedPlayer)
 	{
 		recordPlayerMessageSent(sender);
@@ -3061,12 +3229,12 @@ bool recvQuickChat(NETQUEUE queue)
 		// Output to the console
 		if (isInGame)
 		{
-			addQuickChatMessageToConsole(msgEnumVal, sender, targeting);
+			addQuickChatMessageToConsole(msgEnumVal, sender, targeting, messageData);
 			audio_PlayTrack(ID_SOUND_MESSAGEEND);
 		}
 		else
 		{
-			addLobbyQuickChatMessageToConsole(msgEnumVal, sender, targeting);
+			addLobbyQuickChatMessageToConsole(msgEnumVal, sender, targeting, messageData);
 			audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 		}
 	}

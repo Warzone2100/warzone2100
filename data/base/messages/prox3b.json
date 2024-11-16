@@ -1,0 +1,10 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "CM3B_BASE4": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 6592, "y": 6720, "z": 0 },
+        "CM3B_BASE6": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 1024, "y": 6528, "z": 0 },
+        "CM3B_TRANS1": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 6208, "y": 6592, "z": 0 },
+        "CM3B_TRANS2": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 1088, "y": 6848, "z": 0 },
+        "CM3B_GAMMABASE": { "audio": "pcv448.ogg", "message": "RUINS_MSG", "type": 2, "x": 1728, "y": 1728, "z": 200 }
+    }
+}

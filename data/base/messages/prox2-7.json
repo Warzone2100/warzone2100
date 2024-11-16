@@ -1,0 +1,14 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "C27_OBJECTIVE1": { "audio": "pcv655.ogg", "message": "RUINS_MSG", "type": 0, "x": 2624, "y": 6208, "z": 0 },
+        "C27_OBJECTIVE2": { "audio": "pcv655.ogg", "message": "RUINS_MSG", "type": 0, "x": 5568, "y": 5824, "z": 0 },
+        "C27_OBJECTIVE3": { "audio": "pcv655.ogg", "message": "RUINS_MSG", "type": 0, "x": 5184, "y": 1792, "z": 0 },
+        "C27_OBJECTIVE4": { "audio": "pcv655.ogg", "message": "RUINS_MSG", "type": 0, "x": 2368, "y": 1344, "z": 0 },
+        "C27_BASE1": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 3136, "y": 6208, "z": 0 },
+        "C27_BASE2": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 6592, "y": 4928, "z": 0 },
+        "C27_BASE3": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 4928, "y": 1088, "z": 0 },
+        "C27_BASE4": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 1728, "y": 1344, "z": 0 },
+        "C27_LZ": { "audio": "pcv427.ogg", "message": "LZ_MSG", "type": 2, "x": 704, "y": 6592, "z": 0 }
+    }
+}

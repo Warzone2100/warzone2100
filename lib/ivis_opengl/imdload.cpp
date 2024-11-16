@@ -46,6 +46,13 @@
 #include <glm/vec4.hpp>
 using Vector4f = glm::vec4;
 
+// The maximum polygons for a model is influenced by several factors:
+// 1. The vertexCount *must* be less than UINT16_MAX (65535), because this special vertex index value is treated as restarting the assembly of primitives in some cases (example: Vulkan on MoltenVK) - NOTE: we currently use index_type::u16 for our model VBO_INDEX buffers
+// 2. Given how the game world and models are displayed, using a very large number of polygons is effectively a waste
+//#define MAX_PIE_POLYGONS 21844 // floor((UINT16_MAX-1) / 3)
+#define MAX_PIE_POLYGONS 8192
+static_assert(MAX_PIE_POLYGONS <= ((UINT16_MAX-1) / 3), "MAX_PIE_POLYGONS must not currently exceed floor((UINT16_MAX-1) / 3)");
+
 // Scale animation numbers from int to float
 #define INT_SCALE       1000
 
@@ -1452,6 +1459,7 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
  	}
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
+	ASSERT_OR_RETURN(nullptr, npolys <= MAX_PIE_POLYGONS, "'POLYGONS' directive count (%" PRIu32") exceeds maximum supported (%" PRIu32")", npolys, MAX_PIE_POLYGONS);
 	s.polys.resize(npolys);
 
 	if (!_imd_load_polys(filename, &lineToProcess.pNextLineBegin, FileDataEnd, &s, pieVersion, npoints))
@@ -1482,6 +1490,11 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 		else if (strcmp(buffer, "ANIMOBJECT") == 0)
 		{
 			s.objanimtime = value;
+			if (s.objanimtime == 0)
+			{
+				debug(LOG_ERROR, "%s bad ANIMOBJ time: %" PRIu32, filename.toUtf8().c_str(), value);
+				return nullptr;
+			}
 			const char* pRestOfLine = lineToProcess.lineContents.c_str() + cnt;
 			if (sscanf(pRestOfLine, "%d %d%n", &s.objanimcycles, &s.objanimframes, &cnt) != 2)
 			{

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-28 01:01+0000\n"
-"PO-Revision-Date: 2024-06-28 14:31\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -1799,6 +1799,9 @@ msgstr "Rette das Alpha-Team vor Nexus"
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Zerstöre das Nexus Hauptquartier, um das NEXUS Eindringlingsprogramm zu deaktivieren"
 
+msgid "Warning: HQ shielded against VTOL attacks"
+msgstr ""
+
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Erforsche die Resistenzschaltkreise und überlebe den Angriff von Nexus"
 
@@ -2936,6 +2939,13 @@ msgstr "Jederzeit, Chef!"
 msgid "System locale"
 msgstr "Systemsprache"
 
+msgid "Failed to create port mapping"
+msgstr ""
+
+#, c-format
+msgid "Manually configure your router/firewall to open port %d!"
+msgstr ""
+
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr ""
@@ -2944,15 +2954,7 @@ msgstr ""
 msgid "Your external IP is: %s"
 msgstr ""
 
-#, c-format
-msgid "Failed to create port mapping (timeout after %d seconds)"
-msgstr ""
-
-msgid "Failed to create port mapping"
-msgstr ""
-
-#, c-format
-msgid "Manually configure your router/firewall to open port %d!"
+msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
 msgid "Client failed to ack player index swap"
@@ -5560,10 +5562,10 @@ msgstr "Neues Systemgebäude verfügbar"
 msgid "New Systems Tower Available"
 msgstr "Neuer Systemturm verfügbar"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Neuer Systemturm verfügbar"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Neuer Systemturm verfügbar"
 
 msgid "New Thermal Emissions detection"
@@ -5991,6 +5993,9 @@ msgstr "Retribution"
 
 msgid "Ripple Rocket Battery"
 msgstr "Ripple-Raketenbatterie"
+
+msgid "Ripple Rocket Rapid Loader"
+msgstr ""
 
 msgid "Ripple Rockets"
 msgstr "Ripple-Raketen"
@@ -7723,6 +7728,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr "Schattenfilterung ist auf diesem System nicht verfügbar."
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Wirkt sich bei Spielneustart aus"
 
@@ -7767,6 +7775,9 @@ msgstr "Bildschirmerschütterung"
 
 msgid "Groups Menu"
 msgstr "Gruppenmenü"
+
+msgid "Options Button"
+msgstr ""
 
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKEINSTELLUNGEN"
@@ -8083,6 +8094,12 @@ msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Veraltete Technologien ausblenden"
 
@@ -8242,6 +8259,28 @@ msgstr "Cheats"
 
 msgid "End-Game"
 msgstr "Endspiel"
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "Kann mir bitte jemand einige Einheiten geben?"
@@ -8459,6 +8498,9 @@ msgstr "Nachrichtenzustellung fehlgeschlagen - erneut versuchen"
 msgid "Map Downloaded"
 msgstr "Karte heruntergeladen"
 
+msgid "Admin modified a setting"
+msgstr ""
+
 msgid "Bot Allies"
 msgstr "Bot-Verbündete"
 
@@ -8567,6 +8609,33 @@ msgstr ""
 "Die benötigte Mod konnte nicht geladen werden: %s\n"
 "\n"
 "Warzone wird versuchen das Spiel ohne sie zu laden."
+
+#, c-format
+msgid "Failure to load %zu game model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load textures for %zu model(s)"
+msgstr ""
+
+#, c-format
+msgid "Failure to load model for %zu stat(s)"
+msgstr ""
+
+msgid "Warzone 2100 encountered error(s) loading game data:"
+msgstr ""
+
+msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
+msgstr ""
+
+msgid "Loaded mod(s):"
+msgstr ""
+
+msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
+msgstr ""
+
+msgid "Error Loading Game Data"
+msgstr ""
 
 msgid "Global Hotkeys"
 msgstr "Globale Tastenkombinationen"
@@ -10179,6 +10248,19 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "Failed to load challenge:"
+msgstr ""
+
+msgid "Failed to load the challenge's map or config"
+msgstr ""
+
+msgid "Failed to process autohost config:"
+msgstr ""
+
+#, c-format
+msgid "Failed to load the autohost map or config from: %s"
+msgstr ""
+
 msgid "Closed"
 msgstr "Geschlossen"
 
@@ -10785,7 +10867,30 @@ msgstr "Keine Verbindungen verfügbar"
 msgid "Synchronizing data with host ..."
 msgstr ""
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
 msgstr ""
 
 #, c-format

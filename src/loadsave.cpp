@@ -254,6 +254,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 		forceHidePowerBar();
 		intRemoveReticule();
+		intHideInGameOptionsButton();
 		intHideGroupSelectionMenu();
 	}
 
@@ -391,7 +392,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	ASSERT(latestTagResult.has_value(), "No extractable latest tag?? - Please try re-downloading the latest official source bundle");
 	const TagVer buildTagVer = latestTagResult.value_or(TagVer());
 	try
-	{		
+	{
 		WZ_PHYSFS_enumerateFolders(NewSaveGamePath, [NewSaveGamePath, &buildTagVer, &saveGameNamesAndTimes](const char* dirName){
 			if (strcmp(dirName, "auto") == 0)
 			{
@@ -1154,7 +1155,7 @@ bool autoSave(bool force)
 		// no old .gam found: check for new saves
 		freeAutoSaveSlot(bMultiPlayer ? SAVEGAME_LOC_SKI_AUTO : SAVEGAME_LOC_CAM_AUTO);
 	}
-	
+
 	time_t now = time(nullptr);
 	struct tm timeinfo = getLocalTime(now);
 	char savedate[PATH_MAX];

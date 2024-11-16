@@ -1096,17 +1096,17 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
-// data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
-// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-// ... + 7 refs
-_("Best Targets: Base structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
 // data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
 // ... + 4 refs
 _("Best Targets: Base Structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
+// data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
+// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+// ... + 7 refs
+_("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -1206,16 +1206,16 @@ _("Body Points: Low")
 // ... + 79 refs
 _("Body Points: Medium")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
-// data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
-// data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-_("Body Points: Very low")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
 // data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[3]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[3]
 // ... + 29 refs
 _("Body Points: Very Low")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
+// data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
+// data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
+_("Body Points: Very low")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
 // data/base/messages/resmessages23.json: $.RES_W_BDMG2.text[2]
@@ -1442,6 +1442,7 @@ _("Cobra")
 _("Collapsing Plutonium kinetic energy bullets")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0CommandCentreCO.name
+// data/mp/stats/structure.json: $.A0CommandCentreCO.name
 _("Collective Command Center")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.CollectiveCWall.name
@@ -4165,6 +4166,7 @@ _("New Laser Weapon Available")
 _("New Missile Turret Available")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0CommandCentreNP.name
+// data/mp/stats/structure.json: $.A0CommandCentreNP.name
 _("New Paradigm Command Center")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_B12.text[0]
@@ -4261,15 +4263,15 @@ _("New Systems Structure Available")
 // ... + 6 refs
 _("New Systems Tower Available")  
 // TRANSLATORS: 
+// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+_("New Systems Turret Available For Design")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 // data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 _("New Systems Turret Available for Design")  
-// TRANSLATORS: 
-// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-_("New Systems Turret Available For Design")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
 // data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[0]

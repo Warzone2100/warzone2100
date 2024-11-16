@@ -26,48 +26,29 @@
 
 #include "port_mapping_manager.h"
 
-#include <plum/plum.h>
+#include "port_mapping_manager_impl_libplum.h"
+#include "port_mapping_manager_impl_miniupnpc.h"
 
-void PlumMappingCallbackSuccess(int mappingId, const std::string& externalHost, uint16_t externalPort)
+#define WZ_PORT_MAPPING_ID_INVALID -1
+
+PortMappingImpl::~PortMappingImpl()
 {
-	PortMappingManager::instance().resolve_success_fromlibplum(mappingId, externalHost, externalPort);
+	// no-op
 }
 
-void PlumMappingCallbackFailure(int mappingId)
+// MARK: - General callback helpers
+
+void PortMappingImpl_MappingCallbackSuccess(PortMappingImpl::Type type, int mappingId, const std::string& externalHost, uint16_t externalPort)
 {
-	PortMappingManager::instance().resolve_failure_fromlibplum(mappingId, PortMappingDiscoveryStatus::FAILURE);
+	PortMappingManager::instance().resolve_success_fromimpl(type, mappingId, externalHost, externalPort);
 }
 
-namespace
+void PortMappingImpl_MappingCallbackFailure(PortMappingImpl::Type type, int mappingId)
 {
-
-// This function is run in its own thread managed by LibPLum! Do not call any non-threadsafe functions!
-void PlumMappingCallback(int mappingId, plum_state_t state, const plum_mapping_t* mapping)
-{
-	debug(LOG_NET, "LibPlum cb: Port mapping %d: state=%d\n", mappingId, (int)state);
-	switch (state) {
-	case PLUM_STATE_SUCCESS:
-		debug(LOG_NET, "Mapping %d: success, internal=%hu, external=%s:%hu\n", mappingId, mapping->internal_port,
-			mapping->external_host, mapping->external_port);
-		PlumMappingCallbackSuccess(mappingId, mapping->external_host, mapping->external_port);
-		break;
-
-	case PLUM_STATE_FAILURE:
-		debug(LOG_NET, "Mapping %d: failed\n", mappingId);
-		PlumMappingCallbackFailure(mappingId);
-		break;
-
-	default:
-		break;
-	}
+	PortMappingManager::instance().resolve_failure_fromimpl(type, mappingId, PortMappingDiscoveryStatus::FAILURE);
 }
 
-void PlumLogCallback(plum_log_level_t /*level*/, const char* message)
-{
-	debug(LOG_NET, "LibPlum message: %s", message);
-}
-
-} // anonymous namespace
+// MARK: - PortMappingManager
 
 PortMappingAsyncRequestOpaqueBase::PortMappingAsyncRequestOpaqueBase()
 { }
@@ -76,7 +57,7 @@ PortMappingAsyncRequestOpaqueBase::~PortMappingAsyncRequestOpaqueBase()
 { }
 
 PortMappingManager::PortMappingAsyncRequest::PortMappingAsyncRequest()
-	: mappingId(PLUM_ERR_INVALID)
+	: mappingId(WZ_PORT_MAPPING_ID_INVALID)
 {}
 
 PortMappingDiscoveryStatus PortMappingManager::PortMappingAsyncRequest::status() const
@@ -104,10 +85,74 @@ bool PortMappingManager::PortMappingAsyncRequest::timed_out(TimePoint t) const
 	return t >= deadline;
 }
 
+void PortMappingManager::PortMappingAsyncRequest::set_port_mapping_in_progress(TimePoint deadline_, MappingId mappingId_, const std::shared_ptr<PortMappingImpl>& impl_)
+{
+	ASSERT(s == PortMappingDiscoveryStatus::NOT_STARTED || s == PortMappingDiscoveryStatus::IN_PROGRESS, "Invalid state");
+	ASSERT(impl_ != nullptr, "Missing impl?");
+	deadline = deadline_;
+	s = PortMappingDiscoveryStatus::IN_PROGRESS;
+	mappingId = mappingId_;
+	impl = impl_;
+}
+
+bool PortMappingManager::PortMappingAsyncRequest::destroy_mapping()
+{
+	// Destroy the internal mapping.
+	if (mappingId != WZ_PORT_MAPPING_ID_INVALID)
+	{
+		ASSERT_OR_RETURN(false, impl != nullptr, "Missing impl?");
+		const auto result = impl->destroy_port_mapping(mappingId);
+		mappingId = WZ_PORT_MAPPING_ID_INVALID;
+		s = PortMappingDiscoveryStatus::NOT_STARTED;
+		return result;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 PortMappingManager& PortMappingManager::instance()
 {
 	static PortMappingManager inst;
 	return inst;
+}
+
+constexpr PortMappingImpl::Type nextImplType(PortMappingImpl::Type t)
+{
+	ASSERT(static_cast<std::underlying_type_t<PortMappingImpl::Type>>(t) < static_cast<std::underlying_type_t<PortMappingImpl::Type>>(PortMappingImpl::Type::End), "Unexpected PortMappingImpl type");
+	return static_cast<PortMappingImpl::Type>(static_cast<std::underlying_type_t<PortMappingImpl::Type>>(t) + 1);
+}
+
+std::shared_ptr<PortMappingImpl> PortMappingManager::makeImpl(PortMappingImpl::Type t)
+{
+	switch (t)
+	{
+		case PortMappingImpl::Type::Libplum:
+			return std::make_shared<PortMappingImpl_LibPlum>();
+		case PortMappingImpl::Type::Miniupnpc:
+			return std::make_shared<PortMappingImpl_Miniupnpc>();
+		case PortMappingImpl::Type::End:
+			return nullptr;
+	}
+	return nullptr;
+}
+
+bool PortMappingManager::switchToNextWorkingImpl(PortMappingImpl::Type startingTypeIdx)
+{
+	std::shared_ptr<PortMappingImpl> newImpl;
+	while ((newImpl = makeImpl(startingTypeIdx)))
+	{
+		if (newImpl->init())
+		{
+			currImplTypeIdx_ = startingTypeIdx;
+			currentImpl_ = newImpl;
+			loadedImpls_.push_back(newImpl);
+			return true;
+		}
+		startingTypeIdx = nextImplType(startingTypeIdx);
+	}
+	return false;
 }
 
 void PortMappingManager::init()
@@ -116,11 +161,8 @@ void PortMappingManager::init()
 	{
 		return;
 	}
-	plum_config_t config;
-	memset(&config, 0, sizeof(config));
-	config.log_level = PLUM_LOG_LEVEL_INFO;
-	config.log_callback = &PlumLogCallback;
-	if (plum_init(&config) == PLUM_ERR_SUCCESS)
+
+	if (switchToNextWorkingImpl(currImplTypeIdx_))
 	{
 		isInit_ = true;
 	}
@@ -132,12 +174,24 @@ void PortMappingManager::shutdown()
 	{
 		return;
 	}
-	plum_cleanup();
+
+	if (currentImpl_)
+	{
+		currentImpl_->shutdown();
+	}
+	for (auto impl : loadedImpls_)
+	{
+		impl->shutdown();
+	}
+	loadedImpls_.clear();
+	currentImpl_ = nullptr;
+
 	{
 		const std::lock_guard<std::mutex> guard {mtx_};
 		activeDiscoveries_.clear();
 		successfulRequests_.clear();
 	}
+
 	// Request the monitoring thread to stop and wait for it to join.
 	stopRequested_.store(true, std::memory_order_relaxed);
 	if (monitoringThread_.joinable())
@@ -159,6 +213,10 @@ PortMappingManager::~PortMappingManager()
 
 PortMappingAsyncRequestHandle PortMappingManager::create_port_mapping(uint16_t port, PortMappingInternetProtocol protocol)
 {
+	if (!isInit_)
+	{
+		return nullptr;
+	}
 	PortMappingAsyncRequestPtr h = nullptr;
 	bool hasActiveDiscoveries = false;
 	{
@@ -171,26 +229,19 @@ PortMappingAsyncRequestHandle PortMappingManager::create_port_mapping(uint16_t p
 			return it->second;
 		}
 
-		plum_mapping_t m;
-		memset(&m, 0, sizeof(m));
-		m.protocol = PLUM_IP_PROTOCOL_TCP;
-		m.internal_port = port;
-		m.external_port = port; // suggest an external port the same as the internal port (the router may decide otherwise)
-
-		auto mappingId = plum_create_mapping(&m, PlumMappingCallback);
+		auto mappingId = currentImpl_->create_port_mapping(port, protocol);
 		if (mappingId < 0)
 		{
+			// TODO: Could try other backends as well
 			return nullptr;
 		}
 		h = std::make_shared<PortMappingAsyncRequest>();
-		h->deadline = PortMappingAsyncRequest::ClockType::now() + std::chrono::seconds(DISCOVERY_TIMEOUT_SECONDS);
-		h->s = PortMappingDiscoveryStatus::IN_PROGRESS;
-		h->mappingId = mappingId;
 		h->sourcePort = port;
 		h->protocol = protocol;
+		h->set_port_mapping_in_progress(PortMappingAsyncRequest::ClockType::now() + std::chrono::seconds(currentImpl_->get_discovery_timeout_seconds()), mappingId, currentImpl_);
 
 		hasActiveDiscoveries = !activeDiscoveries_.empty();
-		activeDiscoveries_.emplace(mappingId, h);
+		activeDiscoveries_.emplace(ImplMappingId{h->impl->get_impl_type(), mappingId}, h);
 	}
 	if (!hasActiveDiscoveries)
 	{
@@ -208,17 +259,18 @@ PortMappingAsyncRequestHandle PortMappingManager::create_port_mapping(uint16_t p
 
 bool PortMappingManager::destroy_port_mapping(const PortMappingAsyncRequestHandle& p)
 {
+	ASSERT_OR_RETURN(false, isInit_, "PortMappingManager is not initialized");
 	auto h = std::dynamic_pointer_cast<PortMappingAsyncRequest>(p);
 	ASSERT_OR_RETURN(false, h != nullptr, "Invalid request handle");
 	const std::lock_guard<std::mutex> guard {mtx_};
-	if (h->mappingId == PLUM_ERR_INVALID)
+	if (h->mappingId == WZ_PORT_MAPPING_ID_INVALID)
 	{
 		return true;
 	}
 	// Remove this request from active/successful requests.
 	if (h->in_progress())
 	{
-		auto it = activeDiscoveries_.find(h->mappingId);
+		auto it = activeDiscoveries_.find({h->impl->get_impl_type(), h->mappingId});
 		if (it != activeDiscoveries_.end())
 		{
 			activeDiscoveries_.erase(it);
@@ -232,11 +284,11 @@ bool PortMappingManager::destroy_port_mapping(const PortMappingAsyncRequestHandl
 			successfulRequests_.erase(it);
 		}
 	}
+	auto wasFailedMapping = h->failed();
 	// Destroy the internal mapping.
-	const auto result = plum_destroy_mapping(h->mappingId);
-	h->mappingId = PLUM_ERR_INVALID;
-	h->s = PortMappingDiscoveryStatus::NOT_STARTED;
-	return result == PLUM_ERR_SUCCESS;
+	auto result = h->destroy_mapping();
+	h->mappingId = WZ_PORT_MAPPING_ID_INVALID;
+	return (wasFailedMapping) ? true : result;
 }
 
 PortMappingDiscoveryStatus PortMappingManager::get_status(const PortMappingAsyncRequestHandle& p) const
@@ -321,6 +373,7 @@ void PortMappingManager::thread_monitor_function()
 	using namespace std::chrono_literals;
 
 	CallbacksPerRequest callbacksPerRequest;
+	std::vector<PortMappingAsyncRequestPtr> requestsSwitchingImpl;
 	while (!stopRequested_.load(std::memory_order_relaxed))
 	{
 		{
@@ -349,8 +402,18 @@ void PortMappingManager::thread_monitor_function()
 				}
 				else if (req->timed_out(PortMappingAsyncRequest::ClockType::now()))
 				{
-					resolve_failure_internal(req, PortMappingDiscoveryStatus::TIMEOUT);
-					takeCallbacksAndRemoveFromActiveList(req);
+					if (resolve_failure_internal(req, PortMappingDiscoveryStatus::TIMEOUT))
+					{
+						// resolve_failure_internal dispatched to a different implementation and reset timeout - wait to see what it returns
+						// queue updating its key in the active list
+						requestsSwitchingImpl.push_back(req);
+						it = activeDiscoveries_.erase(it);
+					}
+					else
+					{
+						// failure is final
+						takeCallbacksAndRemoveFromActiveList(req);
+					}
 				}
 				else if (req->failed())
 				{
@@ -368,6 +431,13 @@ void PortMappingManager::thread_monitor_function()
 		// transitioned to some terminal (either success or failure) state.
 		scheduleCallbacksOnMainThread(std::move(callbacksPerRequest));
 		callbacksPerRequest.clear();
+		// Move any requestsSwitchingImpl to the appropriate mapping entry in the activeDiscoveriesMap_
+		for (const auto& req : requestsSwitchingImpl)
+		{
+			activeDiscoveries_.emplace(ImplMappingId{req->impl->get_impl_type(), req->mappingId}, req);
+		}
+		requestsSwitchingImpl.clear();
+
 		// Sleep for another 50ms and re-check the status for all active requests.
 		std::this_thread::sleep_for(50ms);
 	}
@@ -378,42 +448,58 @@ void PortMappingManager::thread_monitor_function()
 // `PortMappingManager` instance so that subsequent `schedule_callback()`
 // invocations can use this data.
 //
-// The method shall only be called from the LibPlum's discovery callback.
-void PortMappingManager::resolve_success_fromlibplum(int mappingId, std::string externalIp, uint16_t externalPort)
+// The method shall only be called from the impl's discovery callback.
+void PortMappingManager::resolve_success_fromimpl(PortMappingImpl::Type type, int mappingId, std::string externalIp, uint16_t externalPort)
 {
 	const std::lock_guard<std::mutex> guard {mtx_};
-	const auto req = active_request_for_id_internal(mappingId);
+	const auto req = active_request_for_id_internal(type, mappingId);
 	if (!req)
 	{
 		debug(LOG_NET, "Mapping %d: no active request found in PortMappingManager, probably timed out\n", mappingId);
 		return;
 	}
-	resolve_success_internal(req, externalIp, externalPort);
+	if (!resolve_success_internal(req, externalIp, externalPort))
+	{
+		if (req->mappingId != WZ_PORT_MAPPING_ID_INVALID)
+		{
+			req->destroy_mapping();
+			req->mappingId = WZ_PORT_MAPPING_ID_INVALID;
+		}
+	}
 }
 
 // Forcefully set discovery status to `status`.
-// The method shall only be called from LibPlum's discovery callback in case the discovery
-// process has failed for any reason as reported directly by LibPlum.
+// The method shall only be called from impl's discovery callback in case the discovery
+// process has failed for any reason as reported directly by the impl.
 //
 // The `status` may only take `FAILURE` or `TIMEOUT` values.
-void PortMappingManager::resolve_failure_fromlibplum(int mappingId, PortMappingDiscoveryStatus failureStatus)
+void PortMappingManager::resolve_failure_fromimpl(PortMappingImpl::Type type, int mappingId, PortMappingDiscoveryStatus failureStatus)
 {
 	const std::lock_guard<std::mutex> guard {mtx_};
-	const auto req = active_request_for_id_internal(mappingId);
+	auto req = active_request_for_id_internal(type, mappingId);
 	if (!req)
 	{
 		debug(LOG_NET, "Mapping %d: no active request found in PortMappingManager, probably timed out\n", mappingId);
 		return;
 	}
-	resolve_failure_internal(req, failureStatus);
+	if (resolve_failure_internal(req, failureStatus))
+	{
+		// update its key in the active list
+		auto it = activeDiscoveries_.find({type, mappingId});
+		if (it != activeDiscoveries_.end())
+		{
+			activeDiscoveries_.erase(it);
+		}
+		activeDiscoveries_.emplace(ImplMappingId{req->impl->get_impl_type(), req->mappingId}, req);
+	}
 }
 
 // MARK: - BEGIN: Unsafe functions that must only be called if mtx_ lock is already held!
 
 // Must only be called if lock is held!
-PortMappingManager::PortMappingAsyncRequestPtr PortMappingManager::active_request_for_id_internal(PortMappingAsyncRequest::MappingId id) const
+PortMappingManager::PortMappingAsyncRequestPtr PortMappingManager::active_request_for_id_internal(PortMappingImpl::Type type, PortMappingAsyncRequest::MappingId id) const
 {
-	auto it = activeDiscoveries_.find(id);
+	auto it = activeDiscoveries_.find({type, id});
 	if (it != activeDiscoveries_.end())
 	{
 		return it->second;
@@ -426,40 +512,79 @@ PortMappingManager::PortMappingAsyncRequestPtr PortMappingManager::active_reques
 // `PortMappingManager` instance so that subsequent `schedule_callback()`
 // invocations can use this data.
 //
-// The method shall only be called from resolve_success_fromlibplum() (which is called by LibPlum's discovery callback).
-void PortMappingManager::resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort)
+// The method shall only be called from resolve_success_fromimpl() (which is called by LibPlum's discovery callback).
+bool PortMappingManager::resolve_success_internal(PortMappingAsyncRequestPtr req, std::string externalIp, uint16_t externalPort)
 {
 	if (req->s != PortMappingDiscoveryStatus::IN_PROGRESS)
 	{
-		// Someone has already gotten ahead of us - nothing to do there.
-		return;
+		// Someone has already gotten ahead of us
+		if (req->s == PortMappingDiscoveryStatus::SUCCESS)
+		{
+			// already resolved to success ?
+			return true;
+		}
+		else
+		{
+			// failed to resolve to success
+			// parent will handle cleanup as needed
+			return false;
+		}
 	}
 	req->s = PortMappingDiscoveryStatus::SUCCESS;
 	req->deadline = PortMappingAsyncRequest::TimePoint::max();
 	req->discoveredIPaddress = std::move(externalIp);
 	req->discoveredPort = externalPort;
+	return true;
 }
 
 // Forcefully set discovery status to `status`.
-// The method may either be called from resolve_failure_fromlibplum() (i.e. from libPlum callbacks), or by
+// The method may either be called from resolve_failure_fromimpl() (i.e. from libPlum callbacks), or by
 // `PortMappingManager` itself (by the monitoring thread), if the discovery process reaches timeout.
 //
 // The `status` may only take `FAILURE` or `TIMEOUT` values.
-void PortMappingManager::resolve_failure_internal(PortMappingAsyncRequestPtr req, PortMappingDiscoveryStatus failureStatus)
+bool PortMappingManager::resolve_failure_internal(PortMappingAsyncRequestPtr req, PortMappingDiscoveryStatus failureStatus)
 {
 	ASSERT(failureStatus == PortMappingDiscoveryStatus::FAILURE || failureStatus == PortMappingDiscoveryStatus::TIMEOUT,
 		"Status should either be failure or timeout");
 	if (req->s != PortMappingDiscoveryStatus::IN_PROGRESS)
 	{
 		// Someone has already gotten ahead of us - nothing to do there.
-		return;
+		return false;
 	}
-	req->s = failureStatus;
-	req->deadline = PortMappingAsyncRequest::TimePoint::max();
-	req->discoveredIPaddress.clear();
-	req->discoveredPort = 0;
+
+	bool finalFailure = false;
+
+	// Check for another implementation
+	if (req->impl != currentImpl_ || switchToNextWorkingImpl(nextImplType(currImplTypeIdx_)))
+	{
+		// Another implementation is available - fallback to it and try again
+		do {
+			auto newMappingId = currentImpl_->create_port_mapping(req->sourcePort, req->protocol);
+			if (newMappingId >= 0)
+			{
+				// new impl is attempting request
+				req->set_port_mapping_in_progress(PortMappingAsyncRequest::ClockType::now() + std::chrono::seconds(currentImpl_->get_discovery_timeout_seconds()), newMappingId, currentImpl_);
+				return true; // attempting with different implementation
+			}
+		} while (switchToNextWorkingImpl(nextImplType(currImplTypeIdx_)));
+
+		// new impl(s) failed
+		finalFailure = true;
+	}
+	else
+	{
+		// no additional impl available - fail out
+		finalFailure = true;
+	}
+
+	if (finalFailure)
+	{
+		req->s = failureStatus;
+		req->deadline = PortMappingAsyncRequest::TimePoint::max();
+		req->discoveredIPaddress.clear();
+		req->discoveredPort = 0;
+	}
+	return false;
 }
 
 // MARK: - END: Unsafe functions that must only be called if mtx_ lock is already held!
-
-constexpr int PortMappingManager::DISCOVERY_TIMEOUT_SECONDS;
