@@ -20,7 +20,9 @@
 #pragma once
 
 #include <stdint.h>
+#include <chrono>
 #include <memory>
+#include <string>
 
 #include "lib/netplay/connection_address.h"
 #include "lib/netplay/net_result.h"
@@ -72,9 +74,10 @@ public:
 	/// <param name="timeout">Timeout in milliseconds.</param>
 	virtual net::result<IClientConnection*> openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout) = 0;
 	/// <summary>
-	/// Async variant of `openClientConnectionAny()`.
+	/// Async variant of `openClientConnectionAny()` with the default implementation, which
+	/// spawns a new thread and piggybacks on the `resolveHost()` and `openClientConnectionAny()` combination.
 	/// </summary>
-	virtual bool openClientConnectionAsync(const std::string& host, uint32_t port, OpenConnectionToHostResultCallback callback) = 0;
+	virtual bool openClientConnectionAsync(const std::string& host, uint32_t port, std::chrono::milliseconds timeout, OpenConnectionToHostResultCallback callback);
 	/// <summary>
 	/// Create a group for polling client connections.
 	/// </summary>

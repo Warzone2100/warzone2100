@@ -1242,16 +1242,19 @@ void WzJoiningGameScreen_HandlerRoot::attemptToOpenConnection(size_t connectionI
 			}
 			auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
 
+			constexpr std::chrono::milliseconds CLIENT_OPEN_ASYNC_TIMEOUT{ 15000 }; // Default timeout of 15s
+
 			auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
-			connProvider.openClientConnectionAsync(description.host, description.port, [weakSelf, connectionIdx](OpenConnectionResult&& result) {
-				auto strongSelf = weakSelf.lock();
-				if (!strongSelf)
-				{
-					// background thread ultimately returned after the requester has gone away (join was cancelled?) - just return
-					return;
-				}
-				strongSelf->processOpenConnectionResultOnMainThread(connectionIdx, std::move(result));
-			});
+			connProvider.openClientConnectionAsync(description.host, description.port, CLIENT_OPEN_ASYNC_TIMEOUT,
+				[weakSelf, connectionIdx](OpenConnectionResult&& result) {
+					auto strongSelf = weakSelf.lock();
+					if (!strongSelf)
+					{
+						// background thread ultimately returned after the requester has gone away (join was cancelled?) - just return
+						return;
+					}
+					strongSelf->processOpenConnectionResultOnMainThread(connectionIdx, std::move(result));
+				});
 			break;
 	}
 	updateJoiningStatus(_("Establishing connection with host"));
