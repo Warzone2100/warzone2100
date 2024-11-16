@@ -40,7 +40,6 @@ public:
 	virtual net::result<IListenSocket*> openListenSocket(uint16_t port) override;
 
 	virtual net::result<IClientConnection*> openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout) override;
-	virtual bool openClientConnectionAsync(const std::string& host, uint32_t port, OpenConnectionToHostResultCallback callback) override;
 
 	virtual IConnectionPollGroup* newConnectionPollGroup() override;
 };
