@@ -1082,7 +1082,7 @@ static std::shared_ptr<WIDGET> makeOptionsButtonDropdown()
 	}
 	else
 	{
-		dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+		dropDownChoices.push_back({WzString::format("(Custom: %u)", currValue), currValue});
 		currentSettingIdx = dropDownChoices.size() - 1;
 	}
 
