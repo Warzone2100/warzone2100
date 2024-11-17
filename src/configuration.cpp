@@ -622,6 +622,9 @@ bool loadConfig()
 		war_setPointLightPerPixelLighting(value.value_or(false));
 	}
 
+	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
+	setDefaultSkirmishAI(defAI);
+
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -787,6 +790,7 @@ bool saveConfig()
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
+	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes
