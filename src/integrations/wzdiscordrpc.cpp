@@ -22,7 +22,7 @@
 #include "lib/framework/crc.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
-#include "lib/netplay/netsocket.h"
+#include "lib/netplay/tcp/netsocket.h"
 #include "../activity.h"
 #include "../frontend.h"
 #include "../multiint.h"
@@ -395,10 +395,10 @@ static void joinGameFromSecret_v1(const std::string joinSecretStr)
 				return;
 			}
 			std::vector<unsigned char> ipNetworkBinaryFormat = EmbeddedJSONSignature::b64Decode(b64UrlSafeTob64(connectionDetails[0].toUtf8()));
-			std::string ipAddressStr = ipv6_NetBinary_To_AddressString(ipNetworkBinaryFormat);
+			std::string ipAddressStr = tcp::ipv6_NetBinary_To_AddressString(ipNetworkBinaryFormat);
 			if (ipAddressStr.empty())
 			{
-				ipAddressStr = ipv4_NetBinary_To_AddressString(ipNetworkBinaryFormat);
+				ipAddressStr = tcp::ipv4_NetBinary_To_AddressString(ipNetworkBinaryFormat);
 			}
 			if (ipAddressStr.empty())
 			{
@@ -766,7 +766,7 @@ void DiscordRPCActivitySink::setJoinInformation(const ActivitySink::MultiplayerG
 				std::string joinSecretDetails;
 				if (!pExternalIPv4Address->empty())
 				{
-					auto ipv4AddressBinaryForm = ipv4_AddressString_To_NetBinary(*pExternalIPv4Address);
+					auto ipv4AddressBinaryForm = tcp::ipv4_AddressString_To_NetBinary(*pExternalIPv4Address);
 					if (!ipv4AddressBinaryForm.empty())
 					{
 						joinSecretDetails += b64Tob64UrlSafe(EmbeddedJSONSignature::b64Encode(ipv4AddressBinaryForm));
@@ -775,7 +775,7 @@ void DiscordRPCActivitySink::setJoinInformation(const ActivitySink::MultiplayerG
 				}
 				if (!ipv6Address.empty())
 				{
-					auto ipv6AddressBinaryForm = ipv6_AddressString_To_NetBinary(ipv6Address);
+					auto ipv6AddressBinaryForm = tcp::ipv6_AddressString_To_NetBinary(ipv6Address);
 					if (!ipv6AddressBinaryForm.empty())
 					{
 						if (!joinSecretDetails.empty())

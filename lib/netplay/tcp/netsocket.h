@@ -21,21 +21,14 @@
 #ifndef _net_socket_h
 #define _net_socket_h
 
+#include "lib/framework/wzglobal.h"
 #include "lib/framework/types.h"
 #include <string>
 #include <system_error>
 #include <vector>
+#include <type_traits>
 
-#include <nonstd/optional.hpp>
-using nonstd::optional;
-using nonstd::nullopt;
-#include <tl/expected.hpp>
-
-namespace net
-{
-	template <typename T>
-	using result = ::tl::expected<T, std::error_code>;
-} // namespace net
+#include "lib/netplay/net_result.h"
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
@@ -84,14 +77,22 @@ static const SOCKET INVALID_SOCKET = -1;
 # define MSG_NOSIGNAL 0
 #endif
 
+namespace tcp
+{
+
 struct Socket;
 struct SocketSet;
+
+} // namespace tcp
+
 typedef struct addrinfo SocketAddress;
 
 #ifndef WZ_OS_WIN
 static const int SOCKET_ERROR = -1;
 #endif
 
+namespace tcp
+{
 
 // Init/shutdown.
 void SOCKETinit();
@@ -137,34 +138,6 @@ WZ_DECL_NONNULL(2) void SocketSet_AddSocket(SocketSet& set, Socket *socket);  //
 WZ_DECL_NONNULL(2) void SocketSet_DelSocket(SocketSet& set, Socket *socket);  ///< Removes a Socket from a SocketSet.
 int checkSockets(const SocketSet& set, unsigned int timeout); ///< Checks which Sockets are ready for reading. Returns the number of ready Sockets, or returns SOCKET_ERROR on error.
 
-// Higher-level functions for opening a connection / socket
-struct OpenConnectionResult
-{
-	OpenConnectionResult(std::error_code ec, std::string errorString)
-	: errorCode(ec)
-	, errorString(errorString)
-	{ }
-
-	OpenConnectionResult(Socket* open_socket)
-	: open_socket(open_socket)
-	{ }
-
-	bool hasError() const { return errorCode.has_value(); }
-
-	OpenConnectionResult( const OpenConnectionResult& other ) = delete; // non construction-copyable
-	OpenConnectionResult& operator=( const OpenConnectionResult& ) = delete; // non copyable
-	OpenConnectionResult(OpenConnectionResult&&) = default;
-	OpenConnectionResult& operator=(OpenConnectionResult&&) = default;
-
-	struct SocketDeleter {
-		void operator()(Socket* b) { if (b) { socketClose(b); } }
-	};
-	std::unique_ptr<Socket, SocketDeleter> open_socket;
-	optional<std::error_code> errorCode = nullopt;
-	std::string errorString;
-};
-typedef std::function<void (OpenConnectionResult&& result)> OpenConnectionToHostResultCallback;
-bool socketOpenTCPConnectionAsync(const std::string& host, uint32_t port, OpenConnectionToHostResultCallback callback);
-OpenConnectionResult socketOpenTCPConnectionSync(const char *host, uint32_t port);
+} // namespace tcp
 
 #endif //_net_socket_h
