@@ -70,7 +70,7 @@ public:
 	template <typename... P>
 	static WzString format(char const *format, P &&... params)
 	{
-		return WzString::fromUtf8(astringf(format, params...));
+		return WzString::fromUtf8(astringf(format, std::forward<P>(params)...));
 	}
 
 	const std::string& toUtf8() const;
