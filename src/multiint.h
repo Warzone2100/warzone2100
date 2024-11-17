@@ -138,6 +138,11 @@ bool changeColour(unsigned player, int col, uint32_t responsibleIdx);
 
 extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
+extern std::string defaultSkirmishAI;
+
+void frontendCycleAIs();
+void setDefaultSkirmishAI(const std::string& name);
+std::string getDefaultSkirmishAI(const bool& displayNameOnly=false);
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer = false);
 void displayKickReasonPopup(const std::string &reason);
