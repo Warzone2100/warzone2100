@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-10 02:28\n"
+"PO-Revision-Date: 2024-11-23 02:28\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1023,7 +1023,7 @@ msgid "Automated Vehicle Repair Mk3"
 msgstr "Riparazione automatizzata dei veicoli Mk3"
 
 msgid "Heavy Mobile Repair Turret"
-msgstr "Torretta Riparatrice Mobile Pesante"
+msgstr "Torretta riparatrice pesante mobile"
 
 msgid "Mobile Repair Upgrade"
 msgstr "Miglioramento della Riparazione Mobile"
@@ -2508,7 +2508,7 @@ msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Pr
 msgstr "Supportato nuovamente dai militari, il dottor Reed iniziò a lavorare sul Programma d'intrusione NEXUS. Dopo 3 anni con pochi progressi, i militari abbandonarono il Progetto Nexus e tagliarono i fondi al dottor Reed."
 
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr "Rapporti del tempo dicono che il Dr Reed era furioso e che giurò vendetta a chiunque si fosse messo sulla sua strada."
+msgstr "I rapporti dell'epoca affermano che il dottor Reed era furioso e che giurò di vendicarsi di chiunque si fosse messo sulla sua strada."
 
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
 msgstr "Sembra che il dottor Reed possa essere riuscito nei suoi obiettivi e aver completato il Programma d'intrusione Nexus."
@@ -2745,7 +2745,7 @@ msgid "Advanced Repair Facility Mk3"
 msgstr "Centro di riparazione avanzato Mk3"
 
 msgid "Heavy Repair Turret"
-msgstr "Torretta Riparatrice Pesante"
+msgstr "Torretta riparatrice pesante"
 
 msgid "Nexus Intruder Program"
 msgstr "Programma d'intrusione Nexus"
@@ -2814,13 +2814,13 @@ msgid "Super Scourge Cyborg"
 msgstr "Super Cyborg con Scourge"
 
 msgid "Command Turret II"
-msgstr "Torretta di comando MkII"
+msgstr "Torretta di comando Mk II"
 
 msgid "Command Turret III"
-msgstr "Torretta di comando MkIII"
+msgstr "Torretta di comando Mk III"
 
 msgid "Command Turret IV"
-msgstr "Torretta di comando MkIV"
+msgstr "Torretta di comando Mk IV"
 
 msgid "Player"
 msgstr "Giocatore"
@@ -3370,7 +3370,7 @@ msgid "Armored bunker with Machinegun"
 msgstr "Bunker corazzato con mitragliatrice"
 
 msgid "Armored EMP Mortar battery pit"
-msgstr "Fossa corazzata per batteria di mortaio EMP"
+msgstr "Postazione corazzata con batteria di mortaio EMP"
 
 msgid "Armored guard tower with EMP Cannon"
 msgstr "Torre di guardia corazzata con cannone EMP"
@@ -3430,7 +3430,7 @@ msgid "Armored hardpoint with Scourge AT Missile"
 msgstr "Postazione corazzata con missile anticarro Scourge"
 
 msgid "Armored Incendiary Mortar battery pit"
-msgstr "Fossa per batteria di mortaio incendiario corazzato"
+msgstr "Postazione corazzata con batteria di mortaio incendiario"
 
 msgid "Armored Mortar battery pit"
 msgstr "Postazione corazzata per batteria di Mortaio"
@@ -3676,7 +3676,7 @@ msgid "Bomb Upgrade"
 msgstr "Miglioramento delle bombe"
 
 msgid "Bombard Cobra Half-tracks"
-msgstr "Bombarda Cobra semicingolata"
+msgstr "Cobra con bombarda su semicingoli"
 
 msgid "Bombard Pit"
 msgstr "Mortaio interrato"
@@ -3691,7 +3691,7 @@ msgid "BoneCrusher!"
 msgstr "SpaccaOssa!"
 
 msgid "Bug"
-msgstr "Coleottero"
+msgstr "Bug"
 
 msgid "Buggy"
 msgstr "Buggy"
@@ -3700,10 +3700,10 @@ msgid "Built-in diagnostic and repair systems"
 msgstr "Diagnostica e sistemi di riparazione integrati"
 
 msgid "Bunker Buster Cobra Hover"
-msgstr "Cobra Hover con Bunker Buster"
+msgstr "Cobra con bunker buster su hover"
 
 msgid "Bunker Buster Cobra Tracks"
-msgstr "Bunker buster Cobra cingolato"
+msgstr "Cobra bunker buster su cingoli"
 
 msgid "Bunker Buster Mantis Tracks"
 msgstr "Bunker buster Mantis cingolato"
@@ -3814,7 +3814,7 @@ msgid "Cobra Flamer Tracks"
 msgstr "Cobra Lanciafiamme Cingoli"
 
 msgid "Cobra Medium Cannon Tracks"
-msgstr "Cannone medio Cobra cingolato"
+msgstr "Cobra con cannone medio su cingoli"
 
 msgid "Cobra Truck"
 msgstr "Camion Cobra"
@@ -3829,7 +3829,7 @@ msgid "Collective CWall"
 msgstr "Angolo di Muro del Collective"
 
 msgid "Collective Heavy Body"
-msgstr "Corpo pesante del Collettivo"
+msgstr "Corpo pesante del Collective"
 
 msgid "Combat Engineer Cyborg"
 msgstr "Ingegnere da combattimento Cyborg"
@@ -3841,7 +3841,7 @@ msgid "Combines standard, counter battery and VTOL sensors"
 msgstr "Combina sensori standard, contro-batteria e VTOL"
 
 msgid "Command Center"
-msgstr "Centro di Comando"
+msgstr "Centro di comando"
 
 msgid "Command Relay Center"
 msgstr "Centro Trasmissione Comandi"
@@ -3850,28 +3850,28 @@ msgid "Command Relay Post"
 msgstr "Ripetitore di Comandi"
 
 msgid "Command Turret Cobra Half-tracks"
-msgstr "Torretta di comando Cobra semicingolata"
+msgstr "Cobra con torretta di comando su semicingoli"
 
 msgid "Command Turret Cobra Tracks"
-msgstr "Torretta di comando Cobra cingolata"
+msgstr "Cobra con torretta di comando su cingoli"
 
 msgid "Command Turret Mantis Tracks"
-msgstr "Torretta di comando Mantis cingolata"
+msgstr "Mantis con torretta di comando su cingoli"
 
 msgid "Command Turret Python Tracks"
-msgstr "Torretta di comando Python cingolata"
+msgstr "Python con torretta di comando su cingoli"
 
 msgid "Command Turret Scorpion Tracks"
-msgstr "Torretta di comando Scorpion cingolata"
+msgstr "Scorpion con torretta di comando su cingoli"
 
 msgid "Command Turret Upgrade"
-msgstr "Aggiornamento Torre di Comando"
+msgstr "Aggiornamento torre di comando"
 
 msgid "Command Turret Viper Tracks"
-msgstr "Torretta di comando Viper cingolata"
+msgstr "Viper con torretta di comando su cingoli"
 
 msgid "Command Turret"
-msgstr "Torretta di Comando"
+msgstr "Torretta di comando"
 
 msgid "Commander leads groups acts as factory delivery point"
 msgstr "Il comandante guida gruppi e agisce come punto di consegna di una fabbrica"
@@ -4080,7 +4080,7 @@ msgid "Downed Transport"
 msgstr "Trasporto abbattuto"
 
 msgid "Dragon"
-msgstr "Dragone"
+msgstr "Dragon"
 
 msgid "Drops high intensity Plasmite bombs"
 msgstr "Sgancia bombe alla Plasmite ad alta intensità"
@@ -4107,7 +4107,7 @@ msgid "EMP Missile Launcher"
 msgstr "Lanciamissili EMP"
 
 msgid "EMP Mortar Pit"
-msgstr "Fossa per mortaio EMP"
+msgstr "Postazione con mortaio EMP"
 
 msgid "EMP Mortar"
 msgstr "Mortaio EMP"
@@ -4392,7 +4392,7 @@ msgid "Hardcrete Gate"
 msgstr "Cancello di cemento"
 
 msgid "Hardcrete Wall"
-msgstr "Muro di Cemento"
+msgstr "Muro di cemento"
 
 msgid "Hardcrete"
 msgstr "Cemento"
@@ -4410,7 +4410,7 @@ msgid "Hardened Flamer Guard Tower"
 msgstr "Torre di guardia con lanciafiamme rinforzata"
 
 msgid "Hardened Heavy Machinegun Guard Tower"
-msgstr "Torre di Guardia con Mitragliatrice Pesante Rinforzata"
+msgstr "Torre di guardia rinforzata con mitragliatrice pesante"
 
 msgid "Hardened MG Bullets"
 msgstr "Proiettili Rinforzati"
@@ -4542,19 +4542,19 @@ msgid "Heavy anti-tank rocket"
 msgstr "Razzi anticarro pesanti"
 
 msgid "Heavy Body - Mantis"
-msgstr "Corpo Pesante - Mantis"
+msgstr "Corpo pesante - Mantis"
 
 msgid "Heavy Body - Python"
-msgstr "Corpo Pesante - Python"
+msgstr "Corpo pesante - Python"
 
 msgid "Heavy Body - Tiger"
-msgstr "Corpo Pesante - Tiger"
+msgstr "Corpo pesante - Tiger"
 
 msgid "Heavy Body - Vengeance"
-msgstr "Corpo Pesante - Vengeance"
+msgstr "Corpo pesante - Vengeance"
 
 msgid "Heavy Body - Wyvern"
-msgstr "Corpo Pesante - Wyvern"
+msgstr "Corpo pesante - Wyvern"
 
 msgid "Heavy body increases armor and body points"
 msgstr "Il corpo pesante aumenta i punti corazza e l'armatura"
@@ -4611,37 +4611,37 @@ msgid "Heavy Laser"
 msgstr "Laser Pesante"
 
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr "Mitragliatrice pesante Cobra semicingolata"
+msgstr "Cobra con mitragliatrice pesante su semicingoli"
 
 msgid "Heavy Machinegun Cobra Hover"
-msgstr "Mitragliatrice Pesante Cobra Hover"
+msgstr "Cobra con mitragliatrice pesante su hover"
 
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Mitragliatrice pesante Cobra cingolata"
+msgstr "Cobra con mitragliatrice pesante su cingoli"
 
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Mitragliatrice pesante Cobra su ruote"
+msgstr "Cobra con mitragliatrice pesante su ruote"
 
 msgid "Heavy Machinegun Hardpoint"
 msgstr "Postazione con mitragliatrice pesante"
 
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Mitragliatrice pesante Scorpion semicingolata"
+msgstr "Scorpion con mitragliatrice pesante su semicingoli"
 
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Mitragliatrice pesante Scorpion cingolata"
+msgstr "Scorpion con mitragliatrice pesante su cingoli"
 
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr "Mitragliatrice pesante Viper semicingolata"
+msgstr "Viper con mitragliatrice pesante su semicingoli"
 
 msgid "Heavy Machinegun Viper Tracks"
-msgstr "Mitragliatrice pesante Viper cingolata"
+msgstr "Viper con mitragliatrice pesante su cingoli"
 
 msgid "Heavy Machinegun Viper Wheels"
-msgstr "Mitragliatrice pesante Viper su ruote"
+msgstr "Viper con mitragliatrice pesante su ruote"
 
 msgid "Heavy Machinegun"
-msgstr "Mitragliatrice Pesante"
+msgstr "Mitragliatrice pesante"
 
 msgid "Heavy Mortar - Bombard"
 msgstr "Mortaio Pesante - Bombarda"
@@ -4659,10 +4659,10 @@ msgid "Heavy rail gun firing large kinetic energy darts"
 msgstr "Cannone a rotaia pesante che spara grossi dardi ad energia cinetica"
 
 msgid "Heavy Repair Scorpion Hover"
-msgstr "Torretta Riparatrice Pesante Scorpion Hover"
+msgstr "Scorpion con torretta riparatrice pesante su hover"
 
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Torretta Riparatrice Pesante Cobra Hover"
+msgstr "Cobra con torretta riparatrice pesante su hover"
 
 msgid "Heavy Rocket Array"
 msgstr ""
@@ -5121,7 +5121,7 @@ msgid "Lancer"
 msgstr "Lanciatore"
 
 msgid "Large Super Heavy Body"
-msgstr "Corpo Super Pesante Grande"
+msgstr "Corpo grande super pesante"
 
 msgid "Laser - Flashlight"
 msgstr "Lanciatore - torcia"
@@ -5160,28 +5160,28 @@ msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "Leghe composite stratificate e fibre ad assorbimento di energia"
 
 msgid "Leopard"
-msgstr "Leopardo"
+msgstr "Leopard"
 
 msgid "Less armor and body points than Python"
 msgstr "Minori punti corazza e armatura rispetto al Python"
 
 msgid "Light Body - Bug"
-msgstr "Corpo Leggero - Bug"
+msgstr "Corpo leggero - Bug"
 
 msgid "Light Body - Leopard"
-msgstr "Corpo Leggero - Leopard"
+msgstr "Corpo leggero - Leopard"
 
 msgid "Light Body - Retaliation"
-msgstr "Corpo Leggero - Retaliation"
+msgstr "Corpo leggero - Retaliation"
 
 msgid "Light Body - Viper"
-msgstr "Corpo Leggero - Viper"
+msgstr "Corpo leggero - Viper"
 
 msgid "Light body vulnerable to heavy weapons"
 msgstr "Corpo leggero vulnerabile alle armi pesanti"
 
 msgid "Light Cannon Bunker"
-msgstr "Bunker con Cannone Leggero"
+msgstr "Bunker con cannone leggero"
 
 msgid "Light Cannon Cobra Tracks"
 msgstr "Cannone leggero Cobra cingolato"
@@ -5217,7 +5217,7 @@ msgid "Low yield thermonuclear warhead"
 msgstr "Testata termonucleare a basso potenziale"
 
 msgid "Machinegun Bunker"
-msgstr "Bunker con Mitragliatrice"
+msgstr "Bunker con mitragliatrice"
 
 #, no-c-format
 msgid "Machinegun damage +25%"
@@ -5243,13 +5243,13 @@ msgid "Makes excellent scout vehicle"
 msgstr "Eccellente veicolo da esplorazione"
 
 msgid "Mantis"
-msgstr "Mantide"
+msgstr "Mantis"
 
 msgid "Mass Driver Fortress"
-msgstr "Fortezza con Mass Driver"
+msgstr "Fortezza con conduttore di massa"
 
 msgid "Mass Driver"
-msgstr "Conduttore di Massa"
+msgstr "Conduttore di massa"
 
 msgid "Maximum armor and body points"
 msgstr "Armatura e punti corazza massimi"
@@ -5270,16 +5270,16 @@ msgid "Mechanic with repair ability"
 msgstr "Meccanico con abilità di riparazione"
 
 msgid "Medium Body - Cobra"
-msgstr "Corpo Medio - Cobra"
+msgstr "Corpo medio - Cobra"
 
 msgid "Medium Body - Panther"
-msgstr "Corpo Medio - Panther"
+msgstr "Corpo medio - Panther"
 
 msgid "Medium Body - Retribution"
-msgstr "Corpo Medio - Retribution"
+msgstr "Corpo medio - Retribution"
 
 msgid "Medium Body - Scorpion"
-msgstr "Corpo Medio - Scorpion"
+msgstr "Corpo medio - Scorpion"
 
 msgid "Medium body increases armor and body points"
 msgstr "Il corpo medio aumenta l'armatura e i punti corazza"
@@ -5318,7 +5318,7 @@ msgid "Medium Cannon"
 msgstr "Cannone Medio"
 
 msgid "Medium Super Heavy Body"
-msgstr "Corpo Super Pesante Medio"
+msgstr "Corpo medio super pesante"
 
 msgid "Mini-rocket armored strongpoint"
 msgstr "Posizione corazzata con mini-razzi"
@@ -5383,7 +5383,7 @@ msgid "Missile damage +25%"
 msgstr "Danni dei Missili +25%"
 
 msgid "Missile Fortress"
-msgstr "Fortezza con Lanciamissili"
+msgstr "Fortezza con lanciamissili"
 
 #, no-c-format
 msgid "Missile reload time -15%"
@@ -5396,7 +5396,7 @@ msgid "Missiles detect and lock-on to targets while loading"
 msgstr "I missili rilevano e agganciano il bersaglio durante la ricarica"
 
 msgid "Mobile Repair Turret"
-msgstr "Torretta Riparatrice Mobile"
+msgstr "Torretta riparatrice mobile"
 
 msgid "More armor and body points than Python"
 msgstr "Punti corazza e armatura superiori al Python"
@@ -5516,13 +5516,13 @@ msgid "New Missile Turret Available"
 msgstr "Nuova torretta con missili disponibile"
 
 msgid "New Paradigm Heavy Body"
-msgstr "Corpo pesante del Nuovo Paradigma"
+msgstr "Corpo pesante del New Paradigm"
 
 msgid "New Paradigm Light Body"
-msgstr "Corpo leggero del Nuovo Paradigma"
+msgstr "Corpo leggero del New Paradigm"
 
 msgid "New Paradigm Medium body"
-msgstr "Corpo medio del Nuovo Paradigma"
+msgstr "Corpo medio del New Paradigm"
 
 msgid "New power efficient propulsion"
 msgstr "Nuova propulsione energeticamente efficiente"
@@ -5582,7 +5582,7 @@ msgid "NEXUS CWall"
 msgstr "Angolo di Muro di NEXUS"
 
 msgid "NEXUS Heavy Body"
-msgstr "Corpo pesante di NEXUS"
+msgstr "Corpo pesante del NEXUS"
 
 msgid "NEXUS Immunization System"
 msgstr "Sistema d'Immunizzazione NEXUS"
@@ -5594,7 +5594,7 @@ msgid "NEXUS Intruder Program"
 msgstr "Programma d'Intrusione NEXUS"
 
 msgid "NEXUS Light Body"
-msgstr "Corpo leggero di NEXUS"
+msgstr "Corpo leggero del NEXUS"
 
 msgid "Nexus Link Tower"
 msgstr "Torre Collegamento Nexus"
@@ -5603,7 +5603,7 @@ msgid "Nexus Link Turret"
 msgstr "Torretta collegamento Nexus"
 
 msgid "NEXUS Medium Body"
-msgstr "Corpo medio di NEXUS"
+msgstr "Corpo medio del NEXUS"
 
 msgid "Nexus Missile Silo"
 msgstr "Silo Missile Nexus"
@@ -5666,7 +5666,7 @@ msgid "Original Skirmish"
 msgstr "Schermaglia originale"
 
 msgid "Panther"
-msgstr "Pantera"
+msgstr "Panther"
 
 msgid "Pepperpot Pit"
 msgstr "Fossa per Pepperpot"
@@ -5770,13 +5770,13 @@ msgid "Professional and Regular rank units are protected"
 msgstr "Le unità di rango Professionista e Regolare sono protette"
 
 msgid "Project Heavy Body"
-msgstr "Corpo pesante del Progetto"
+msgstr "Corpo pesante del Project"
 
 msgid "Project Light Body"
-msgstr "Corpo Leggero del Progetto"
+msgstr "Corpo leggero del Project"
 
 msgid "Project Medium Body"
-msgstr "Corpo medio del Progetto"
+msgstr "Corpo medio del Project"
 
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Gel di ossido di propilene trattato in modo che bruci a temperature più elevate"
@@ -5821,7 +5821,7 @@ msgid "Python Heavy Cannon Tracks"
 msgstr "Cannone pesante Python cingolato"
 
 msgid "Python"
-msgstr "Pitone"
+msgstr "Python"
 
 msgid "Quad 80mm Anti-Aircraft cannon"
 msgstr "Quadruplo cannone antiaereo da 80mm"
@@ -5930,29 +5930,29 @@ msgid "Repair Facility"
 msgstr "Centro di riparazione"
 
 msgid "Repair Scorpion Tracks"
-msgstr "Ripara i cingoli Scorpion"
+msgstr "Scorpion con torretta riparatrice su cingoli"
 
 #, no-c-format
 msgid "Repair Speed +100%"
 msgstr "Velocità di riparazione +100%"
 
 msgid "Repair Turret Cobra Tracks"
-msgstr "Ripara i cingoli della torretta Cobra"
+msgstr "Cobra con torretta riparatrice su cingoli"
 
 msgid "Repair Turret Mantis Tracks"
-msgstr "Ripara i cingoli della torretta Mantis"
+msgstr "Mantis con torretta riparatrice su cingoli"
 
 msgid "Repair Turret Viper Half-track"
-msgstr "Torretta riparatrice Viper semicingolata"
+msgstr "Viper con torretta riparatrice su semicingoli"
 
 msgid "Repair Turret Viper Half-tracks"
-msgstr "Torretta riparatrice Viper semicingolata"
+msgstr "Viper con torretta riparatrice su semicingoli"
 
 msgid "Repair Turret Viper Wheels"
-msgstr "Torretta Riparatrice Viper Ruote"
+msgstr "Viper con torretta riparatrice su ruote"
 
 msgid "Repair Turret"
-msgstr "Torretta Riparatrice"
+msgstr "Torretta riparatrice"
 
 msgid "Replaces all machineguns"
 msgstr "Rimpiazza tutte le mitragliatrici"
@@ -5973,13 +5973,13 @@ msgid "Research makes additional Cyborgs available"
 msgstr "La ricerca sblocca altri Cyborg"
 
 msgid "Research Module Available"
-msgstr "Modulo di Ricerca disponibile"
+msgstr "Modulo di ricerca disponibile"
 
 msgid "Research module expands research facilities"
 msgstr "Il modulo di ricerca espande i centri di ricerca"
 
 msgid "Research Module"
-msgstr "Modulo di Ricerca"
+msgstr "Modulo di ricerca"
 
 #, no-c-format
 msgid "Research speed +30%"
@@ -5990,7 +5990,7 @@ msgid "Research speed +85%"
 msgstr "Velocità di ricerca +85%"
 
 msgid "Retaliation"
-msgstr "Ritorsione"
+msgstr "Retaliation"
 
 msgid "Retribution"
 msgstr "Retribuzione"
@@ -6095,7 +6095,7 @@ msgid "Rotary Howitzer - Hellstorm"
 msgstr "Obice Rotante - Hellstorm"
 
 msgid "Rotary MG Bunker"
-msgstr "Bunker con Mitragliatrice d'Assalto"
+msgstr "Bunker con mitragliatrice d'assalto"
 
 msgid "Rotary Mortar - Pepperpot"
 msgstr "Mortaio rotante - Pepperpot"
@@ -6167,7 +6167,7 @@ msgid "Scourge Cyborg"
 msgstr "Cyborg con Scourge"
 
 msgid "Scourge Mantis Hover"
-msgstr "Hover con Calamità Mantide"
+msgstr "Mantis hover con scourge"
 
 msgid "Scourge Mantis Tracks"
 msgstr "Scourge Mantis cingolata"
@@ -6188,7 +6188,7 @@ msgid "Scourge Python Tracks"
 msgstr "Scourge Python cingolato"
 
 msgid "Scourge Retaliation VTOL"
-msgstr "VTOL con Calamità Ritorsione"
+msgstr "Retaliation VTOL con scourge"
 
 msgid "Scrambler Turret"
 msgstr "Torretta di Disturbo"
@@ -6227,13 +6227,13 @@ msgid "Sensor Range +25%"
 msgstr "Raggio dei Sensori +25%"
 
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Torretta sensoria Cobra semicingolata"
+msgstr "Cobra con torretta sensoria su semicingoli"
 
 msgid "Sensor Turret Viper Wheels"
-msgstr "Torretta sensoria Viper su ruote"
+msgstr "Viper con torretta sensoria su ruote"
 
 msgid "Sensor Turret"
-msgstr "Torretta Sensoria"
+msgstr "Torretta sensoria"
 
 msgid "Sensor Upgrade Mk2"
 msgstr "Miglioramento dei Sensori Mk2"
@@ -6299,7 +6299,7 @@ msgid "Steals technology from structures and takes control of weapons"
 msgstr "Ruba tecnologie dalle strutture e prende il controllo delle armi"
 
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr "Torre di Guardia con Mitragliatrice Pesante Rinforzata"
+msgstr "Torre di guardia rinforzata con mitragliatrice pesante"
 
 msgid "Steel tower with flamer"
 msgstr "Torre d'acciaio con lanciafiamme"
@@ -6326,7 +6326,7 @@ msgid "Strike mission continues until enemy destroyed or they retreat"
 msgstr "Le missioni d'attacco continuano fino a quando il nemico è distrutto o si ritira"
 
 msgid "Stronger Commander Turret Available for Design"
-msgstr "Torretta di Comando Migliore Disponibile per la Progettazione"
+msgstr "Torretta di comando migliorata disponibile per la progettazione"
 
 msgid "Structure Research Completed"
 msgstr "Ricerca della struttura completata"
@@ -6615,7 +6615,7 @@ msgid "Twin Assault Gun"
 msgstr "Doppia mitragliatrice d'assalto"
 
 msgid "Twin Machinegun Bunker"
-msgstr "Bunker con Doppia Mitragliatrice"
+msgstr "Bunker con doppia mitragliatrice"
 
 msgid "Twin Machinegun Guard Tower"
 msgstr "Torre di Guardia con Doppia mitragliatrice"
@@ -6715,7 +6715,7 @@ msgid "Vengeance Tracks Rail Gun"
 msgstr "Vengeance Cingoli Cannone a Massa"
 
 msgid "Vengeance"
-msgstr "Vendetta"
+msgstr "Vengeance"
 
 msgid "Vertical Take Off and Landing Propulsion"
 msgstr "Propulsione a decollo ed atterraggio verticale"
@@ -6742,7 +6742,7 @@ msgid "Vindicator SAM"
 msgstr "SAM Vindicator"
 
 msgid "Viper"
-msgstr "Vipera"
+msgstr "Viper"
 
 msgid "VTOL Assault Cannon"
 msgstr "Cannone d'assalto per VTOL"
@@ -6898,10 +6898,10 @@ msgid "VTOL Strike Tower"
 msgstr "Torre d'attacco VTOL"
 
 msgid "VTOL Strike turret used to spot targets"
-msgstr "La Torretta d'Attacco VTOL è usata per individuare i bersagli"
+msgstr "La torretta d'attacco VTOL è usata per individuare i bersagli"
 
 msgid "VTOL Strike Turret"
-msgstr "Torretta d'Attacco VTOL"
+msgstr "Torretta d'attacco VTOL"
 
 msgid "VTOL Sunburst AA"
 msgstr "VTOL con antiaerea Splendente"
@@ -6955,7 +6955,7 @@ msgid "Wide Spectrum Sensor Tower"
 msgstr "Torre sensoria ad ampio spettro"
 
 msgid "Wide Spectrum Sensor"
-msgstr "Sensore ad Ampio Spettro"
+msgstr "Sensore ad ampio spettro"
 
 msgid "Wreck"
 msgstr "Rottame"
@@ -6973,7 +6973,7 @@ msgid "Wrecked Vehicle"
 msgstr "Veicolo distrutto"
 
 msgid "Wyvern"
-msgstr "Viverna"
+msgstr "Wyvern"
 
 msgctxt "rank"
 msgid "Elite"
@@ -7634,7 +7634,7 @@ msgid "Mouse Options"
 msgstr "Opzioni del mouse"
 
 msgid "Key Mappings"
-msgstr "Mappature dei tasti"
+msgstr "Mappature tasti"
 
 msgid "Music Manager"
 msgstr "Gestore della musica"
@@ -8120,7 +8120,7 @@ msgid ""
 "Right-click to add to Favorites"
 msgstr ""
 "Mostro tutta la tecnologia\n"
-"Tasto destro del mouse per aggiungere ai Preferiti"
+"Tasto destro del mouse per aggiungere ai preferiti"
 
 msgid ""
 "Showing Only Favorite Tech\n"
@@ -8537,7 +8537,7 @@ msgid "Units:"
 msgstr "Unità:"
 
 msgid "Resume Game"
-msgstr "Riprendi la partita"
+msgstr "Riprendi partita"
 
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "ATTENZIONE: sei l'ospitante. Se abbandoni, la partita termina per tutti!"
@@ -8558,7 +8558,7 @@ msgid "View Guide"
 msgstr "Visualizza guida"
 
 msgid "Load Game"
-msgstr "Carica Partita"
+msgstr "Carica partita"
 
 msgid "Save Game"
 msgstr "Salva Partita"
@@ -8591,7 +8591,7 @@ msgid "Audio Options"
 msgstr "Opzioni audio"
 
 msgid "View Key Mappings"
-msgstr "Mostra le mappature dei tasti"
+msgstr "Visualizza mappature tasti"
 
 msgid "Shake"
 msgstr "Scuoti"
@@ -9136,10 +9136,10 @@ msgid "Jump to next VTOL Factory"
 msgstr "Vai alla fabbrica di VTOL successiva"
 
 msgid "Toggle Debug Mappings"
-msgstr "Cambia lo stato delle mappature di debug"
+msgstr "Attiva/disattiva mappature di debug"
 
 msgid "Prioritize Debug Mappings"
-msgstr "Priorità alle Mappature di Debug"
+msgstr "Priorità alle mappature di debug"
 
 msgid "Toggle Level Editor"
 msgstr "Attiva/disattiva editor di livelli"
@@ -9728,7 +9728,7 @@ msgid "Quit To Main Menu"
 msgstr "Esci al Menu Principale"
 
 msgid "Load Saved Game"
-msgstr "Carica Partita"
+msgstr "Carica partita salvata"
 
 msgid "GAME SAVED :"
 msgstr "PARTITA SALVATA!"
@@ -11045,7 +11045,7 @@ msgstr "Impossibile costruire altre unità, Limite di Unità Raggiunto — Produ
 
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "Impossibile costruire \"%s\" senza un Centro di Trasmissione Comandi — Produzione Interrotta"
+msgstr "Impossibile costruire \"%s\" senza un centro trasmissione comandi — Produzione interrotta"
 
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
