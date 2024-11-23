@@ -848,6 +848,7 @@ void ReplayControllerWidget::run(W_CONTEXT *psContext)
 }
 
 static std::shared_ptr<W_SCREEN> replayOverlayScreen;
+static std::shared_ptr<ReplayControllerWidget> replayControllerForm = nullptr;
 
 bool createReplayControllerOverlay()
 {
@@ -859,7 +860,7 @@ bool createReplayControllerOverlay()
 	replayOverlayScreen->psForm->hide();
 
 	// Create the Replay Controller form
-	auto replayControllerForm = ReplayControllerWidget::make();
+	replayControllerForm = ReplayControllerWidget::make();
 	replayOverlayScreen->psForm->attach(replayControllerForm);
 
 	// Position the Replay Controller form
@@ -975,6 +976,7 @@ void interfaceShutDown()
 	{
 		widgRemoveOverlayScreen(replayOverlayScreen);
 		replayOverlayScreen = nullptr;
+		replayControllerForm = nullptr;
 	}
 
 	groupsUI = nullptr;
@@ -2283,6 +2285,15 @@ bool intAddInGameOptionsButton()
 		{
 			button->hide();
 		}
+	}
+
+	// Position the Replay Controller form
+	if (replayControllerForm)
+	{
+		replayControllerForm->setCalcLayout([button, hiddenOptionsButton](WIDGET *psWidget) {
+			int y = hiddenOptionsButton ? 0 : button->y() + button->height();
+			psWidget->move(psWidget->x(), y);
+		});
 	}
 
 	return true;
