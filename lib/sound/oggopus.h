@@ -23,11 +23,13 @@
 #include "codecs.h"
 #include <opusfile.h>
 #include <physfs.h>
+#include <memory>
 
 class WZOpusDecoder final: public WZDecoder
 {
 public:
-	static WZOpusDecoder* fromFilename(const char*);
+	static WZOpusDecoder* fromFilename(const char*, bool bufferEntireStream = false);
+	static WZOpusDecoder* fromMemoryBuffer(std::unique_ptr<WZAudioDataMemoryBuffer>);
 	WZOpusDecoder(const WZOpusDecoder&)                 = delete;
 	WZOpusDecoder(WZOpusDecoder&&)                      = delete;
 	WZOpusDecoder &operator=(const WZOpusDecoder &)     = delete;
@@ -40,15 +42,22 @@ public:
 	virtual ~WZOpusDecoder()
 	{
 		op_free(m_of);
-		PHYSFS_close(m_file);
+		m_of = nullptr;
+		m_data.reset();
 	}
 
 private:
-	WZOpusDecoder(PHYSFS_file *f, OggOpusFile* ovf, const OpusHead *head)
-	: m_of(ovf), m_file(f)/*, m_head(head)*/
-	{};
+	WZOpusDecoder(std::unique_ptr<WZAudioDataResourceInterface> data, OggOpusFile* ovf, const OpusHead *head)
+	: m_of(ovf), m_data(std::move(data)) /*, m_head(head)*/
+	{}
+
+	static WZOpusDecoder* openOpusInternal(std::unique_ptr<WZAudioDataResourceInterface> data, const OpusFileCallbacks *_cb);
+
+private:
 	OggOpusFile* m_of = nullptr;
-	PHYSFS_file* m_file = nullptr;
+
+	std::unique_ptr<WZAudioDataResourceInterface> m_data;
+
 	int64_t m_bufferSize = 0;
 	// Because timestamps in Opus are fixed at 48 kHz, there is no need for a separate function to convert this to seconds
 	// nb samples = nb seconds

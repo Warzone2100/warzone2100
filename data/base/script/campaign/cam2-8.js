@@ -101,7 +101,7 @@ function truckDefense()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2END", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.betaEnd, {
 		area: "RTLZ",
 		reinforcements: camMinutesToSeconds(3),
 		annihilate: true
@@ -134,6 +134,7 @@ function eventStartLevel()
 		camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
 		camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
 		camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybm, cTempl.cocybag, CAM_THE_COLLECTIVE);
 
 		//New AC Tiger tracked units for Hard and Insane difficulty
 		if (difficulty >= HARD)

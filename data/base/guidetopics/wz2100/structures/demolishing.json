@@ -1,0 +1,22 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::demolishing",
+	"title": "Demolishing Structures",
+	"visual": {
+		"stat": {
+			"id": "A0ADemolishStructure"
+		}
+	},
+	"contents": [
+		"Demolishing a building is almost as simple as building one.",
+		"Select \"Demolish Structure\" in the Structures menu and click a building to demolish.",
+		"",
+		"A unit will move to the building and destroy it.",
+		"",
+		"Demolished structures return half the power used to build the structure."
+	],
+	"links": [
+		"wz2100::structures::building",
+		"wz2100::general::commandpanel"
+	]
+}

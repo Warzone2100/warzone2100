@@ -175,6 +175,8 @@ public:
 	{
 		engineToInstanceMap.erase(ctx);
 
+		debug(LOG_INFO, "Destroying [%d]:%s/%s", player(), scriptPath().c_str(), scriptName().c_str());
+
 		if (!(JS_IsUninitialized(compiledScriptObj)))
 		{
 			JS_FreeValue(ctx, compiledScriptObj);
@@ -513,6 +515,12 @@ public:
 	//__
 	virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) override;
 
+	//__ ## eventDroidRankGained(droid, rankNum)
+	//__
+	//__ An event that is run whenever a droid gains a rank.
+	//__
+	virtual bool handle_eventDroidRankGained(const DROID *psDroid, int rankNum) override;
+
 	//__ ## eventAttacked(victim, attacker)
 	//__
 	//__ An event that is run when an object belonging to the script's controlling player is
@@ -836,7 +844,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 	QuickJS_DefinePropertyValue(ctx, value, "status", JS_NewInt32(ctx, (int)psStruct->status), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewInt32(ctx, 100 * psStruct->body / MAX(1, psStruct->structureBody())), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewInt32(ctx, psStruct->pStructureType->powerToBuild), JS_PROP_ENUMERABLE);
-	QuickJS_DefinePropertyValue(ctx, value, "direction", JS_NewInt32(ctx, UNDEG(psStruct->rot.direction)), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "direction", JS_NewInt32(ctx, static_cast<int32_t>(UNDEG(psStruct->rot.direction))), JS_PROP_ENUMERABLE);
 	int stattype = 0;
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
@@ -3005,6 +3013,7 @@ IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, optional<const DROID 
 IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, optional<const DROID *>)
 IMPL_EVENT_HANDLER(eventStructureReady, const STRUCTURE *)
 IMPL_EVENT_HANDLER(eventStructureUpgradeStarted, const STRUCTURE *)
+IMPL_EVENT_HANDLER(eventDroidRankGained, const DROID *, int)
 IMPL_EVENT_HANDLER(eventAttacked, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, wzapi::event_nullable_ptr<const STRUCTURE>, int)
 IMPL_EVENT_HANDLER(eventDestroyed, const BASE_OBJECT *)
@@ -3143,6 +3152,7 @@ IMPL_JS_FUNC(showReticuleWidget, wzapi::showReticuleWidget)
 IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
 IMPL_JS_FUNC(showInterface, wzapi::showInterface)
 IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
+IMPL_JS_FUNC(addGuideTopic, wzapi::addGuideTopic)
 
 //-- ## removeReticuleButton(buttonId)
 //--
@@ -3488,6 +3498,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(centreView, 2); // WZAPI
 	JS_REGISTER_FUNC2(playSound, 1, 4); // WZAPI
 	JS_REGISTER_FUNC2(gameOverMessage, 1, 3); // WZAPI
+	JS_REGISTER_FUNC2(addGuideTopic, 1, 3); // WZAPI
 
 	// Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	JS_REGISTER_FUNC2(setStructureLimits, 2, 3); // WZAPI

@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 3.5...3.24)
 # Required input defines:
 # - POTFILES_IN: the path to POTFILES.in
 # - OUTPUT_FILE: the path where the output file (ex. warzone2100.pot) should be written
+# - PACKAGE_NAME: the package name / text domain name (ex. 'warzone2100')
 #
 # Optional input defines:
 # - XGETTEXT_CMD: the command used to execute xgettext
@@ -18,6 +19,10 @@ endif()
 
 if(NOT DEFINED OUTPUT_FILE OR "${OUTPUT_FILE}" STREQUAL "")
 	message( FATAL_ERROR "Missing required input define: OUTPUT_FILE" )
+endif()
+
+if(NOT DEFINED PACKAGE_NAME OR "${PACKAGE_NAME}" STREQUAL "")
+	message( FATAL_ERROR "Missing required input define: PACKAGE_NAME" )
 endif()
 
 if(DEFINED TEMP_DIR)
@@ -66,7 +71,7 @@ set(_xgettext_option_list --language=C++
 	--keyword=N_
 	--keyword=P_:1c,2
 	--keyword=NP_:1c,2
-	--package-name=warzone2100
+	--package-name=${PACKAGE_NAME}
 	--msgid-bugs-address=warzone2100-project@lists.sourceforge.net)
 
 set(_xgettext_COPYRIGHT_HOLDER "Warzone 2100 Project")

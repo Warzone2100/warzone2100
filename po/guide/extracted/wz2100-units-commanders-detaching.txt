@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Detaching Units")
+_("To detach a unit from a Commander:")
+_("1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)")
+_("2. Give the unit a new order (eg. move)")

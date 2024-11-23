@@ -82,6 +82,10 @@ static ALCdevice *device = nullptr;
 static ALCcontext *context = nullptr;
 
 #if defined(ALC_SOFT_HRTF)
+# if defined(__EMSCRIPTEN__)
+typedef const ALCchar* (*LPALCGETSTRINGISOFT)(ALCdevice *device, ALCenum paramName, ALCsizei index);
+typedef ALCboolean (*LPALCRESETDEVICESOFT)(ALCdevice *device, const ALCint *attribs);
+# endif
 static LPALCGETSTRINGISOFT alcGetStringiSOFT = nullptr;
 static LPALCRESETDEVICESOFT alcResetDeviceSOFT = nullptr;
 #endif
@@ -181,6 +185,13 @@ bool sound_InitLibrary(HRTFMode hrtf)
 	if (!context)
 	{
 		debug(LOG_ERROR, "Couldn't open audio context.");
+
+		debug(LOG_SOUND, "close device");
+		if (alcCloseDevice(device) == ALC_FALSE)
+		{
+			debug(LOG_SOUND, "OpenAl could not close the audio device.");
+		}
+		device = nullptr;
 		return false;
 	}
 
@@ -190,6 +201,21 @@ bool sound_InitLibrary(HRTFMode hrtf)
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Couldn't initialize audio context: %s", alcGetString(device, err));
+
+		alcGetError(device);	// clear error codes
+
+		alcMakeContextCurrent(nullptr);
+		sound_GetContextError(device);
+		alcDestroyContext(context); // this gives a long delay on some impl.
+		context = nullptr;
+		sound_GetContextError(device);
+
+		debug(LOG_SOUND, "close device");
+		if (alcCloseDevice(device) == ALC_FALSE)
+		{
+			debug(LOG_SOUND, "OpenAl could not close the audio device.");
+		}
+		device = nullptr;
 		return false;
 	}
 
@@ -360,6 +386,7 @@ void sound_ShutdownLibrary(void)
 
 	debug(LOG_SOUND, "destroy previous context");
 	alcDestroyContext(context); // this gives a long delay on some impl.
+	context = nullptr;
 	sound_GetContextError(device);
 
 	debug(LOG_SOUND, "close device");
@@ -897,7 +924,7 @@ static int sound_fillNBuffers(ALuint* alBuffersIds, WZDecoder* decoder, size_t n
  *  \note You must _never_ manually free() the memory used by the returned
  *        pointer.
  */
-AUDIO_STREAM *sound_PlayStream(const char* fileName,
+AUDIO_STREAM *sound_PlayStream(const char* fileName, bool bufferEntireStream,
 	float volume,
 	const std::function<void (const AUDIO_STREAM *, const void *)>& onFinished,
 	const void *user_data)
@@ -917,7 +944,7 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 	}
 	else if (len > 5 && (strncasecmp(fileName + len - 5, ".opus", 5) == 0))
 	{
-		decoder = WZOpusDecoder::fromFilename(fileName);
+		decoder = WZOpusDecoder::fromFilename(fileName, bufferEntireStream);
 	}
 	if (!decoder)
 	{
@@ -1007,9 +1034,9 @@ AUDIO_STREAM *sound_PlayStream(const char* fileName,
 		alDeleteBuffers(buffer_count, alBuffersIds);
 
 	_error:
+		alDeleteSources(1, &stream->source);
 		delete stream;
 		delete decoder;
-		alDeleteSources(1, &stream->source);
 		return nullptr;
 }
 

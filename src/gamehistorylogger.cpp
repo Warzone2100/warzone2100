@@ -33,6 +33,7 @@
 #include "stdinreader.h"
 #include "modding.h"
 #include "version.h"
+#include "mission.h"
 
 #include <string>
 #include <tuple>
@@ -236,6 +237,7 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j["team"] = f.team;
 		j["colour"] = f.colour;
 		j["faction"] = f.faction;
+		j["publicKey"] = f.publicKey;
 		// data from the frame
 		j[mapPlayerDataOutputName("droidsLost", naming)] = p.droidsLost;
 		j[mapPlayerDataOutputName("structuresLost", naming)] = p.structuresLost;
@@ -336,6 +338,7 @@ void GameStoryLogger::logStartGame()
 		playerAttrib.team = NetPlay.players[i].team;
 		playerAttrib.colour = NetPlay.players[i].colour;
 		playerAttrib.faction = NetPlay.players[i].faction;
+		playerAttrib.publicKey = base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
 
 		startingPlayerAttributes.push_back(playerAttrib);
 	}
@@ -416,6 +419,9 @@ void GameStoryLogger::logGameOver()
 
 	gameEndRealTime = std::chrono::system_clock::now();
 
+	gameFrames.push_back(genCurrentFrame());
+	lastRecordedGameFrameTime = gameTime;
+
 	if (outputModes.anyEnabled())
 	{
 		bool hitTimeout = (game.gameTimeLimitMinutes > 0) ? (gameTime >= (game.gameTimeLimitMinutes * 60 * 1000)) : false;
@@ -465,7 +471,7 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 	{
 		GameFrame::PlayerStats playerStats;
 		const PLAYERSTATS& mStats = getMultiStats(i);
-		
+
 		playerStats.droidsLost = mStats.recentDroidsLost;
 		playerStats.structuresLost = mStats.recentStructuresLost;
 		playerStats.kills = mStats.recentDroidsKilled;
@@ -535,6 +541,7 @@ nlohmann::json GameStoryLogger::genEndOfGameReport(OutputKey key, OutputNaming n
 	report["game"] = buildGameDetailsOutputJSON(gameStartRealTime);
 	report["game"]["timeGameEnd"] = gameTime;
 	report["game"]["timeout"] = timeout;
+	report["game"]["cheated"] = Cheated;
 	report["endDate"] = std::chrono::duration_cast<std::chrono::milliseconds>(gameEndRealTime.time_since_epoch()).count();
 
 	return report;
@@ -547,6 +554,7 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::FixedPlayerAttribu
 	j["team"] = p.team;
 	j["colour"] = p.colour;
 	j["faction"] = p.faction;
+	j["publicKey"] = p.publicKey;
 }
 
 inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttributes& p) {
@@ -555,6 +563,7 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttri
 	p.team = j.at("team").get<int32_t>();
 	p.colour = j.at("colour").get<int32_t>();
 	p.faction = static_cast<FactionID>(j.at("faction").get<uint8_t>());
+	p.publicKey = j.at("publicKey").get<std::string>();
 }
 
 inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame::PlayerStats& p) {

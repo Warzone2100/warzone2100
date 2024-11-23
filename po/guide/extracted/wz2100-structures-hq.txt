@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Command Center")
+_("The Command Center is the headquarters of your base.")
+_("It provides access to the mini-map / radar, and the ability to design units.")
+_("To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure.")
+_("Then, click where you want your builders to construct it.")

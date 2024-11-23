@@ -1,0 +1,11 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Researching Technology")
+_("Researching technologies is accomplished using Research Facilities.")
+_("When a Research Facility is selected, all available options are displayed on the left side of the screen.")
+_("Each research project requires a certain amount of power and time to complete. The power investment is non-refundable.")
+_("But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility.")
+_("Completing research of a new technology may:")
+_("- Make available new weapons, structures, unit bodies, propulsion, etc")
+_("- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc")
+_("- Enable the research of additional technologies")

@@ -202,7 +202,7 @@ void cmdDroidUpdateExperience(DROID *psShooter, uint32_t experienceInc)
 	if (hasCommander(psShooter))
 	{
 		DROID *psCommander = psShooter->psGroup->psCommander;
-		psCommander->experience += MIN(experienceInc, UINT32_MAX - psCommander->experience);
+		droidIncreaseExperience(psCommander, MIN(experienceInc, UINT32_MAX - psCommander->experience));
 	}
 }
 

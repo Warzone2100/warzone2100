@@ -32,6 +32,7 @@
 #include "wzfile.h"
 #include "netlog.h"
 #include "sync_debug.h"
+#include "port_mapping_manager.h"
 
 #include <physfs.h>
 #include <vector>
@@ -136,11 +137,17 @@ enum MESSAGE_TYPES
 	GAME_DEBUG_REMOVE_FEATURE,      ///< Remove feature.
 	GAME_DEBUG_FINISH_RESEARCH,     ///< Research has been completed.
 	// End of debug messages.
+	GAME_SYNC_OPT_CHANGE,			///< Change synchronized options for a player (ex formation options)
 	GAME_MAX_TYPE,                  ///< Maximum+1 valid GAME_ type, *MUST* be last.
 
 	// The following messages are used for playing back replays.
-	REPLAY_ENDED					///< A special message for signifying the end of the replay
+	REPLAY_ENDED = 255				///< A special message for signifying the end of the replay
 	// End of replay messages.
+};
+
+enum SYNC_OPT_TYPES
+{
+	SYNC_OPT_FORMATION_SPEED_LIMITING = 1
 };
 
 #define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)
@@ -268,6 +275,7 @@ struct PLAYER
 	bool                autoGame;           ///< if we are running a autogame (AI controls us)
 	FactionID			faction;			///< which faction the player has
 	bool				isSpectator;		///< whether this slot is a spectator slot
+	bool				isAdmin;			///< whether this slot has admin privs
 
 	// used on host-ONLY (not transmitted to other clients):
 	std::shared_ptr<std::vector<WZFile>> wzFiles = std::make_shared<std::vector<WZFile>>();            ///< for each player, we keep track of map/mod download progress
@@ -295,6 +303,7 @@ struct PLAYER
 		IPtextAddress[0] = '\0';
 		faction = FACTION_NORMAL;
 		isSpectator = false;
+		isAdmin = false;
 	}
 };
 
@@ -309,9 +318,7 @@ struct NETPLAY
 	uint32_t	hostPlayer;		///< Index of host in player array
 	bool		bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
-	bool		isUPNP;				// if we want the UPnP detection routines to run
-	bool		isUPNP_CONFIGURED;	// if UPnP was successful
-	bool		isUPNP_ERROR;		//If we had a error during detection/config process
+	bool		isPortMappingEnabled;				// if we want the automatic Port mapping setup routines to run
 	bool		isHostAlive;	/// if the host is still alive
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
@@ -336,6 +343,8 @@ extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 extern bool cliConnectToIpAsSpectator; // = false; (for cli option)
 extern bool netGameserverPortOverride; // = false; (for cli override)
+
+extern PortMappingAsyncRequestHandle ipv4MappingRequest;
 
 #define ASSERT_HOST_ONLY(failAction) \
 	if (!NetPlay.isHost) \
@@ -363,7 +372,10 @@ int NETshutdown();					// leave the game in play.
 
 void NETaddRedirects();
 void NETremRedirects();
-void NETdiscoverUPnPDevices();
+/// Initializes the port mapping infrastructure and spawns a background thread,
+/// which will automatically add a port mapping rule and signal the main thread
+/// (NETrecvNet, in particular) when the operation is complete.
+void NETinitPortMapping();
 
 enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
 size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
@@ -475,6 +487,7 @@ void NET_clearDownloadingWZFiles();
 bool NET_getLobbyDisabled();
 const std::string& NET_getLobbyDisabledInfoLinkURL();
 void NET_setLobbyDisabled(const std::string& infoLinkURL);
+uint32_t NET_getCurrentHostedLobbyGameId();
 
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);
@@ -539,5 +552,7 @@ private:
 	std::unique_ptr<PLAYER> detached = nullptr;
 	uint32_t index;
 };
+
+void NETacceptIncomingConnections();
 
 #endif

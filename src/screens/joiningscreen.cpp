@@ -54,6 +54,7 @@ void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen);
 
 constexpr int NET_READ_TIMEOUT = 0;
 constexpr size_t NET_BUFFER_SIZE = MaxMsgSize;
+constexpr uint32_t HOST_RESPONSE_TIMEOUT = 10000;
 
 // MARK: - WzJoiningStatusForm
 
@@ -418,7 +419,7 @@ int32_t WzJoiningStatusForm::calculateNeededHeight(bool withDetailsParagraph)
 	}
 	else
 	{
-		result += statusDetails->height();
+		result += statusDetails->idealHeight();
 	}
 	result += InternalPadding;
 	if (passwordPrompt && passwordPrompt->visible())
@@ -520,7 +521,7 @@ void WzJoiningStatusForm::recalcLayout()
 
 	int statusDetailsX0 = InternalPadding;
 	int statusDetailsWidth = usableWidth;
-	statusDetails->setGeometry(statusDetailsX0, lastLineY1 + DetailsLabelParagraphPadding, statusDetailsWidth, statusDetails->height());
+	statusDetails->setGeometry(statusDetailsX0, lastLineY1 + DetailsLabelParagraphPadding, statusDetailsWidth, statusDetails->idealHeight());
 
 	int paragraphHeight = usableHeight - DetailsLabelParagraphPadding;
 	scrollableParagraphContainer->setGeometry(InternalPadding, lastLineY1 + DetailsLabelParagraphPadding, usableWidth, paragraphHeight);
@@ -545,7 +546,7 @@ void WzJoiningStatusForm::displayStatus(const WzString &statusDescription)
 	}
 	scrollableParagraphContainer->hide();
 
-	statusDetails->setString(statusDescription);
+	statusDetails->setFormattedString(statusDescription, std::numeric_limits<uint32_t>::max(), font_regular);
 	statusDetails->show();
 }
 
@@ -568,7 +569,7 @@ void WzJoiningStatusForm::displayDetailsParagraph(const WzString& messageContent
 	{
 		messageContentsStr = messageContentsStr.substr(0, maxLinePos);
 	}
-	detailsParagraph->addText(messageContentsStr);
+	detailsParagraph->addText(WzString::fromUtf8(messageContentsStr));
 
 	scrollableParagraphContainer->addItem(detailsParagraph);
 
@@ -779,6 +780,10 @@ private:
 	};
 	JoiningState currentJoiningState = JoiningState::AwaitingConnection;
 
+	const char* to_string(JoiningState s);
+	const char* to_display_str(JoiningState s);
+	const char* to_localized_state_fail_desc(JoiningState s);
+
 	// state when handling initial connection join
 	uint32_t startTime = 0;
 	Socket* client_transient_socket = nullptr;
@@ -955,12 +960,73 @@ void WzJoiningGameScreen_HandlerRoot::updateJoiningStatus(const WzString& status
 	joiningProgressForm->displayProgressStatus(statusDescription);
 }
 
+const char* WzJoiningGameScreen_HandlerRoot::to_string(JoiningState s)
+{
+	switch (s) {
+		case JoiningState::NeedsPassword: return "NeedsPassword";
+		case JoiningState::AwaitingConnection: return "AwaitingConnection";
+		case JoiningState::AwaitingInitialNetcodeHandshakeAck: return "AwaitingInitialNetcodeHandshakeAck";
+		case JoiningState::ProcessingJoinMessages: return "ProcessingJoinMessages";
+		case JoiningState::Failure: return "Failure";
+		case JoiningState::SuccessPendingClose: return "SuccessPendingClose";
+		case JoiningState::Success: return "Success";
+	}
+	return ""; // silence compiler warning
+}
+
+const char* WzJoiningGameScreen_HandlerRoot::to_display_str(JoiningState s)
+{
+	switch (s) {
+		case JoiningState::NeedsPassword: return "NeedsPassword";
+		case JoiningState::AwaitingConnection: return "PendingConnect";
+		case JoiningState::AwaitingInitialNetcodeHandshakeAck: return "NetcodeHandshake";
+		case JoiningState::ProcessingJoinMessages: return "ProcessingJoin";
+		case JoiningState::Failure: return "Failure";
+		case JoiningState::SuccessPendingClose: return "SuccessPendingClose";
+		case JoiningState::Success: return "Success";
+	}
+	return ""; // silence compiler warning
+}
+
+const char* WzJoiningGameScreen_HandlerRoot::to_localized_state_fail_desc(JoiningState s)
+{
+	switch (s) {
+		case JoiningState::NeedsPassword:
+			return _("Waiting for correct join password");
+		case JoiningState::AwaitingConnection:
+			return _("Attempting to connect");
+		case JoiningState::AwaitingInitialNetcodeHandshakeAck:
+			return _("Establishing connection handshake");
+		case JoiningState::ProcessingJoinMessages:
+			return _("Coordinating join with host");
+		case JoiningState::Failure:
+			return _("Join attempt failed");
+		case JoiningState::SuccessPendingClose:
+		case JoiningState::Success:
+			return "";
+	}
+	return ""; // silence compiler warning
+}
+
 void WzJoiningGameScreen_HandlerRoot::handleJoinTimeoutError()
 {
+	debug(LOG_INFO, "Failed to join with timeout, state: %s", to_string(currentJoiningState));
+
+	WzString timeoutErrorDetails = _("Host did not respond before timeout");
+	timeoutErrorDetails += "\n";
+	WzString localizedJoinStateDesc = to_localized_state_fail_desc(currentJoiningState);
+	if (!localizedJoinStateDesc.isEmpty())
+	{
+		timeoutErrorDetails += WzString::fromUtf8(astringf(_("Failed at: [%s] - %s"), to_display_str(currentJoiningState), localizedJoinStateDesc.toUtf8().c_str()));
+	}
+	else
+	{
+		timeoutErrorDetails += WzString::fromUtf8(astringf(_("Failed at: [%s]"), to_display_str(currentJoiningState)));
+	}
+
 	currentJoiningState = JoiningState::Failure;
 
-	debug(LOG_INFO, "Failed to join with timeout");
-	joiningProgressForm->displayUnableToJoinError(_("Host did not respond before timeout"));
+	joiningProgressForm->displayUnableToJoinError(timeoutErrorDetails);
 	joiningProgressForm->callCalcLayout();
 
 	if (onFailureFunc)
@@ -1083,8 +1149,9 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 		{
 			debug(LOG_ERROR, "%s", result.errorString.c_str());
 			// Done trying connections - all failed
-			const char* pSocketErrorStr = strSockError(result.error);
-			auto localizedError = astringf(_("Failed to open connection: [%d] %s"), result.error, (pSocketErrorStr) ? pSocketErrorStr : "<unknown>");
+			const auto errCode = result.errorCode.value();
+			const auto sockErrorMsg = errCode.message();
+			auto localizedError = astringf(_("Failed to open connection: [%d] %s"), errCode.value(), sockErrorMsg.c_str());
 			handleFailure(FailureDetails::makeFromInternalError(WzString::fromUtf8(localizedError)));
 		}
 		return;
@@ -1110,9 +1177,11 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 	pushu32(NETGetMajorVersion());
 	pushu32(NETGetMinorVersion());
 
-	if (writeAll(*client_transient_socket, buffer, sizeof(buffer)) == SOCKET_ERROR)
+	const auto writeResult = writeAll(*client_transient_socket, buffer, sizeof(buffer));
+	if (!writeResult.has_value())
 	{
-		debug(LOG_ERROR, "Couldn't send my version.");
+		const auto writeErrMsg = writeResult.error().message();
+		debug(LOG_ERROR, "Couldn't send my version: %s", writeErrMsg.c_str());
 		closeConnectionAttempt();
 		return;
 	}
@@ -1185,18 +1254,19 @@ bool WzJoiningGameScreen_HandlerRoot::joiningSocketNETsend()
 	uint8_t *rawData = message->rawDataDup();
 	ssize_t rawLen   = message->rawLen();
 	size_t compressedRawLen = 0;
-	ssize_t result = writeAll(*client_transient_socket, rawData, rawLen, &compressedRawLen);
+	const auto writeResult = writeAll(*client_transient_socket, rawData, rawLen, &compressedRawLen);
 	delete[] rawData;  // Done with the data.
 	queue->popMessageForNet();
-	if (result == rawLen)
+	if (writeResult.has_value())
 	{
 		// success writing to socket
 		debug(LOG_NET, "Wrote initial message to socket to host");
 	}
-	else if (result == SOCKET_ERROR)
+	else
 	{
+		const auto writeErrMsg = writeResult.error().message();
 		// Write error, most likely host disconnect.
-		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host", message->type, message->rawLen(), compressedRawLen);
+		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", message->type, message->rawLen(), compressedRawLen, writeErrMsg.c_str());
 		return false;
 	}
 	socketFlush(*client_transient_socket, NET_HOST_ONLY);  // Make sure the message was completely sent.
@@ -1265,7 +1335,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		return;
 	}
 
-	if ((unsigned)wzGetTicks() - startTime > 5000)
+	if ((unsigned)wzGetTicks() - startTime > HOST_RESPONSE_TIMEOUT)
 	{
 		// exceeded timeout
 		closeConnectionAttempt();
@@ -1285,10 +1355,10 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 
 			char *p_buffer = initialAckBuffer;
-			ssize_t sizeRead = readNoInt(*client_transient_socket, p_buffer + usedInitialAckBuffer, expectedInitialAckSize - usedInitialAckBuffer);
-			if (sizeRead != SOCKET_ERROR)
+			const auto readResult = readNoInt(*client_transient_socket, p_buffer + usedInitialAckBuffer, expectedInitialAckSize - usedInitialAckBuffer);
+			if (readResult.has_value())
 			{
-				usedInitialAckBuffer += sizeRead;
+				usedInitialAckBuffer += static_cast<size_t>(readResult.value());
 			}
 
 			if (usedInitialAckBuffer >= expectedInitialAckSize)
@@ -1336,18 +1406,18 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 
 			uint8_t readBuffer[NET_BUFFER_SIZE];
-			ssize_t size = readNoInt(*client_transient_socket, readBuffer, sizeof(readBuffer));
-
-			if ((size == 0 && socketReadDisconnected(*client_transient_socket)) || size == SOCKET_ERROR)
+			const auto readResult = readNoInt(*client_transient_socket, readBuffer, sizeof(readBuffer));
+			if (!readResult.has_value())
 			{
 				// disconnect or programmer error
-				if (size == 0)
+				if (readResult.error() == std::errc::timed_out || readResult.error() == std::errc::connection_reset)
 				{
 					debug(LOG_NET, "Client socket disconnected.");
 				}
 				else
 				{
-					debug(LOG_NET, "Client socket encountered error: %s", strSockError(getSockErr()));
+					const auto readErrMsg = readResult.error().message();
+					debug(LOG_NET, "Client socket encountered error: %s", readErrMsg.c_str());
 				}
 				NETlogEntry("Client socket disconnected (allowJoining)", SYNC_FLAG, startTime);
 				debug(LOG_NET, "freeing temp socket %p (%d)", static_cast<void *>(client_transient_socket), __LINE__);
@@ -1357,7 +1427,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			}
 			else
 			{
-				NETinsertRawData(tmpJoiningQUEUE, readBuffer, size);
+				NETinsertRawData(tmpJoiningQUEUE, readBuffer, static_cast<size_t>(readResult.value()));
 			}
 		}
 
@@ -1568,7 +1638,7 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 	if (currentGameMode != ActivitySink::GameMode::MENUS)
 	{
 		// Can't join a game while already in a game
-		debug(LOG_ERROR, "Can't join a game while already in a game / lobby.");
+		debug(LOG_ERROR, "Can't join a game while already in a game / lobby. (Current mode: %s)", to_string(currentGameMode).c_str());
 		return false;
 	}
 
@@ -1611,7 +1681,10 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 			handleJoinFailure();
 		}
 	);
-	widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
+	// Use widgScheduleTask to ensure we never modify the registered overlays while they are being enumerated
+	widgScheduleTask([screen]() {
+		widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
+	});
 	psCurrentJoiningAttemptScreen = screen;
 	return true;
 }

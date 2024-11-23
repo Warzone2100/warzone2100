@@ -15,7 +15,7 @@ const mis_collectiveRes = [
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF01", "R-Wpn-Howitzer-ROF01",
 	"R-Wpn-Howitzer-Damage07", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
-	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF02",
+	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage02", "R-Wpn-AAGun-ROF02",
 	"R-Wpn-AAGun-Accuracy01", "R-Struc-VTOLPad-Upgrade01"
 ];
 const mis_collectiveResClassic = [
@@ -283,7 +283,7 @@ function extraVictoryCondition()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_5S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.beta6.pre, {
 		callback: "extraVictoryCondition"
 	});
 
@@ -409,7 +409,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [cTempl.commorv, cTempl.colagv]
+			templates: (!camClassicMode()) ? [cTempl.commorv, cTempl.cohcv, cTempl.commorv, cTempl.colpbv] : [cTempl.commorv, cTempl.colagv]
 		},
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
@@ -419,7 +419,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [cTempl.colagv, cTempl.commorv]
+			templates: (!camClassicMode()) ? [cTempl.colagv, cTempl.commorv, cTempl.colatv, cTempl.commorv] : [cTempl.colagv, cTempl.commorv]
 		},
 	});
 

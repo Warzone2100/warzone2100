@@ -34,6 +34,7 @@ void ScrollableListWidget::initialize()
 	scrollBar->show(false);
 	scrollbarWidth = SCROLLBAR_WIDTH;
 	backgroundColor.rgba = 0;
+	borderColor.rgba = 0;
 }
 
 void ScrollableListWidget::geometryChanged()
@@ -124,7 +125,8 @@ void ScrollableListWidget::updateLayout()
 	layoutDirty = false;
 
 	auto listViewWidthWithoutScrollBar = calculateListViewWidth();
-	auto listViewWidthWithScrollBar = listViewWidthWithoutScrollBar - scrollBar->width();
+	auto widthOfScrollbar = scrollBar->width();
+	auto listViewWidthWithScrollBar = (widthOfScrollbar >= 0 && listViewWidthWithoutScrollBar > static_cast<uint32_t>(widthOfScrollbar)) ? listViewWidthWithoutScrollBar - static_cast<uint32_t>(widthOfScrollbar) : 0;
 	auto listViewHeight = calculateListViewHeight();
 
 	resizeChildren(listViewWidthWithScrollBar);
@@ -156,12 +158,14 @@ void ScrollableListWidget::resizeChildren(uint32_t width)
 
 uint32_t ScrollableListWidget::calculateListViewHeight() const
 {
-	return height() - padding.top - padding.bottom;
+	int32_t result = height() - static_cast<int32_t>(padding.top) - static_cast<int32_t>(padding.bottom);
+	return (result > 0) ? static_cast<uint32_t>(result) : 0;
 }
 
 uint32_t ScrollableListWidget::calculateListViewWidth() const
 {
-	return width() - padding.left - padding.right;
+	int32_t result = width() - padding.left - padding.right;
+	return (result > 0) ? static_cast<uint32_t>(result) : 0;
 }
 
 bool ScrollableListWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
@@ -196,6 +200,11 @@ void ScrollableListWidget::setBackgroundColor(PIELIGHT const &color)
 	backgroundColor = color;
 }
 
+void ScrollableListWidget::setBorderColor(PIELIGHT const &color)
+{
+	borderColor = color;
+}
+
 void ScrollableListWidget::setSnapOffset(bool value)
 {
 	snapOffset = value;
@@ -213,11 +222,19 @@ void ScrollableListWidget::setItemSpacing(uint32_t value)
 
 void ScrollableListWidget::display(int xOffset, int yOffset)
 {
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+
 	if (backgroundColor.rgba != 0)
 	{
-		int x0 = x() + xOffset;
-		int y0 = y() + yOffset;
 		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+	}
+
+	if (borderColor.rgba != 0)
+	{
+		int x1 = x0 + width();
+		int y1 = y0 + height();
+		iV_Box(x0, y0, x1, y1, borderColor);
 	}
 }
 
@@ -279,6 +296,38 @@ void ScrollableListWidget::scrollToItem(size_t itemNum)
 	updateLayout();
 	scrollBar->setPosition(getScrollPositionForItem(itemNum));
 	listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
+}
+
+bool ScrollableListWidget::isItemVisible(size_t itemNum)
+{
+	ASSERT_OR_RETURN(false, itemNum < listView->children().size(), "Invalid itemNum: %zu", itemNum);
+	updateLayout();
+	return listView->isChildVisible(listView->children()[itemNum]);
+}
+
+void ScrollableListWidget::scrollEnsureItemVisible(size_t itemNum)
+{
+	if (!visible() || width() <= 0 || height() <= 0)
+	{
+		// no-op if this isn't visible
+		return;
+	}
+	if (!isItemVisible(itemNum))
+	{
+		auto scrollPosOfItem = getScrollPositionForItem(itemNum);
+		if (scrollPosOfItem < scrollBar->position())
+		{
+			// scroll up the minimum amount
+			scrollBar->setPosition(scrollPosOfItem);
+		}
+		else
+		{
+			// scroll down the minimum amount
+			auto desiredScrollPos = std::max<int32_t>(scrollPosOfItem - listView->height() + listView->children()[itemNum]->height(), 0);
+			scrollBar->setPosition(desiredScrollPos);
+		}
+		listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
+	}
 }
 
 void ScrollableListWidget::setListTransparentToMouse(bool hasMouseTransparency)

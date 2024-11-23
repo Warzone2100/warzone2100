@@ -359,7 +359,7 @@
         <a class="nav-link fw-bold py-1 px-0 hide-on-standalone" href="https://wz2100.net" target="_blank" rel="noopener">Get the Full Version</a>
         <a class="nav-link fw-bold py-1 px-0" title="Donate" href="https://donations.wz2100.net" target="_blank" rel="noopener"><svg class="bi me-1"><use href="#bi-heart"></use></svg>Donate</a>
         <a class="nav-link fw-bold py-1 px-0" title="Discord Server" href="https://discord.com/invite/ZvRVQ8g" target="_blank" rel="noopener"><svg class="bi"><use href="#bi-discord"></use></svg></a>
-        <button id="nav-options-button" class="nav-link fw-bold py-1 px-0" title="Options" onclick="wz_open_options_modal()"><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></button>
+        <button id="nav-options-button" class="nav-link fw-bold py-1 px-0" title="Options" onclick="wz_open_options_modal()" disabled><svg class="bi"><use href="#bi-gear"></use></svg><span class="d-none show-on-standalone-inline ps-1">Options</span></button>
       </nav>
     </div>
   </header>
@@ -437,7 +437,7 @@
       <div id="full-version-footer-notice" class="hide-on-standalone">
         <p class="lead">Or download the Full Version, with:<br /><small><svg class="bi me-1"><use href="#bi-badge-hd-fill"></use></svg>HQ remastered graphics, <svg class="bi me-1"><use href="#bi-globe2"></use></svg>Online multiplayer, <svg class="bi me-1"><use href="#bi-speedometer"></use></svg>Better performance</small></p>
         <p class="lead">
-          <a href="https://wz2100.net" class="btn btn-sm btn-outline-primary">Download Warzone 2100</a>
+          <a href="https://wz2100.net" class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener">Download Warzone 2100</a>
         </p>
       </div>
     </div>
@@ -458,7 +458,7 @@
       <footer class="mt-auto text-white" style="--bs-text-opacity: .5;">
         <p class="hide-on-standalone">Or get the Full Desktop version, with HQ remastered graphics, Online multiplayer, Better performance, and more.</p>
         <p class="hide-on-standalone">
-          <a href="https://wz2100.net" class="btn btn-sm btn-outline-primary">Download Warzone 2100</a>
+          <a href="https://wz2100.net" class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener">Download Warzone 2100</a>
         </p>
       </footer>
     </div>
@@ -560,6 +560,18 @@
                       </div>
                       <span class="text-secondary">Configures the memory limit for the game. Not all systems or browsers may support higher limits.</span>
                     </div>
+                    <div class="mb-3 small" id="launchOptionContainer_desktopPWA">
+                      <div class="row mb-1 align-items-center">
+                        <label for="launchOption_desktopPWA" class="col-sm-7">Web App Install Prompt:</label>
+                        <div class="col-sm-5">
+                          <select class="form-select form-select-sm" id="launchOption_desktopPWA" aria-label="Web App Install Prompt select" style="padding-top: 0.1rem;padding-bottom: 0.1rem;">
+                            <option value="hidden" selected>Hidden</option>
+                            <option value="available">Available</option>
+                          </select>
+                        </div>
+                      </div>
+                      <span class="text-secondary">Configures whether the Web App install prompt is available (ex. on desktop systems, where the full download is recommended).</span>
+                    </div>
                     <div class="mb-3 small">
                       <div class="storage-persistence-loading">
                         <div class="mb-5 text-secondary">
@@ -591,6 +603,11 @@
             </div>
           </div>
           <div class="modal-footer">
+            <div id="options_buildinfo" class="me-auto text-break small text-secondary lh-sm opacity-75" style="max-width: 400px">
+                <span class="small">Version: <span id="options_buildinfo_version">n/a</span></span>
+                <br>
+                <span class="small">Git Commit: <a id="options_buildinfo_commit" href="https://github.com/Warzone2100/warzone2100/commits/master" class="link-secondary" target="_blank" rel="noopener">n/a</a></span>
+            </div>
             <button type="button" class="btn btn-primary" onclick="wz_dismiss_options_modal()">OK</button>
           </div>
         </div>
@@ -687,6 +704,8 @@
       'debug_3d': 'launchOption_Debug3D'
     }
     
+    var Module; // populated once setting up to start game - must be a global for the additional data package scripts to find it (music, etc)
+    var LaunchedModule; // set once createWZModule succeeds
     var statusElement = document.getElementById('status');
     var progressElement = document.getElementById('progress');
     const originalStartButtonContents = document.getElementById('start-button').innerHTML;
@@ -734,6 +753,30 @@
       return result;
     }
     let WZ_BROWSER_PLATFORM = wz_detect_platform();
+    
+    function wz_detect_mobile() {
+      // Modern method, accurate, but only works on Chromium browsers (currently)
+      if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+        return navigator.userAgentData.mobile;
+      }
+      // Deprecated method
+      if (typeof navigator.userAgent !== 'undefined' && navigator.userAgent.indexOf('Mobile') !== -1) {
+        return true;
+      }
+      return false;
+    }
+    function wz_default_pwa_installable() {
+      // Always default-installable on Android and iOS
+      if (/(android|ios)/.test(WZ_BROWSER_PLATFORM)) {
+        return true;
+      }
+      // On Windows, Linux, macOS: only default-installable if "mobile" device
+      if (/(windows|linux|macos)/.test(WZ_BROWSER_PLATFORM)) {
+        return wz_detect_mobile();
+      }
+      // Otherwise, default to installable?
+      return true;
+    }
 
     let WZ_MINIMUM_MAX_MEMORY_MIB = 512;
     let WZ_DEFAULT_MAX_MEMORY_MIB = (() => {
@@ -762,59 +805,7 @@
     })();
     let WZ_MUSIC_PKG_SUBDIR = 'pkg/music/';
     let WZ_TERRAIN_PKG_SUBDIR = 'pkg/terrain_overrides/';
-    
-    // Initialize config dir suffix and the title badge (based on location pathname)
-    var WZ_CONFIG_DIR_SUFFIX = "";
-    (function() {
-      
-      WZ_CONFIG_DIR_SUFFIX = (() => {
-        // Determine default config dir suffix based on window.location, to ensure that separate branches get separate config directories
-        var pathArray = window.location.pathname.split('/').filter(n => n);
-        if (!window.location.pathname.endsWith('/') && pathArray.length > 0) {
-          pathArray.pop();
-        }
-        let dirSuffix = pathArray.join('-');
-        if (dirSuffix.length > 0) {
-          return "-" + dirSuffix;
-        }
-        else {
-          return "";
-        }
-      })();
-      
-      var el = document.getElementById('wz-title-badge');
-      if (/\/(latest|previous)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR) || WZ_DATA_FILES_URL_SUBDIR === '/' || WZ_DATA_FILES_URL_SUBDIR.length === 0) {
-        WZ_CONFIG_DIR_SUFFIX = "";
-        el.innerText = 'Web Edition';
-      }
-      else if (/^\/release\/([^\/]+)/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-        // Release build (but possibly an older one, or a pre-release)
-        WZ_CONFIG_DIR_SUFFIX = "";
-        let tagname = WZ_DATA_FILES_URL_SUBDIR.match(/^\/release\/([^\/]+)/)[1];
-        el.innerText = tagname;
-        if (/[\-\_](beta|rc)[\d]*[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-          document.body.classList.add('prerelease');
-        }
-      }
-      else if (/(preview|prerelease)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-        WZ_CONFIG_DIR_SUFFIX = "";
-        document.body.classList.add('prerelease');
-        el.innerText = 'Pre-release';
-      }
-      else if (/\/(dev|development|master|main)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-        if (/\/(dev|development)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
-          WZ_CONFIG_DIR_SUFFIX = "-dev";
-        }
-        document.body.classList.add('dev-preview');
-        el.innerText = 'Dev Preview';
-      }
-      else {
-        document.body.classList.add('branch-build');
-        let displayValue = WZ_DATA_FILES_URL_SUBDIR.replace(/^\/+|\/+$/g, '');
-        el.innerText = displayValue;
-        el.title = displayValue;
-      }
-    })();
+    var WZ_CONFIG_DIR_SUFFIX = null; // initialized after async script load
     
     // Localstorage persistence of launch (and other) options
     function storageAvailable(type) {
@@ -855,6 +846,8 @@
       })
       // Also save the chosen override for the maximum memory limit
       localStorage.setItem('memoryLimitMiB', document.getElementById('launchOption_wasmMemoryLimit').value);
+      // And other select values
+      localStorage.setItem('desktopPWA', document.getElementById('launchOption_desktopPWA').value);
     }
     
     function loadLocalStorageValueIntoSelect(selectId, key, valueTransformer, valueToOptionTextTransformer) {
@@ -920,10 +913,41 @@
           }
         }
       );
+      // And the desktop PWA install override
+      loadLocalStorageValueIntoSelect('launchOption_desktopPWA', 'desktopPWA', 
+        (val) => {
+          if (val !== null && val === 'available') {
+            return 'available';
+          }
+          return 'hidden';
+        }
+      );
+    }
+
+    function wz_handle_desktop_pwa_installable() {
+      let default_pwa_installable = wz_default_pwa_installable();
+      if (default_pwa_installable || isRunningStandalone()) {
+        document.getElementById('launchOptionContainer_desktopPWA').hidden = true;
+      } else {
+        document.getElementById('launchOptionContainer_desktopPWA').hidden = false;
+        if (LOCALSTORAGE_AVAILABLE) {
+          // always check the override setting
+          let checkedValue = localStorage.getItem('desktopPWA');
+          if (checkedValue !== null && checkedValue === 'available') {
+            // do not disable the PWA install
+            return;
+          }
+        }
+        // disable the PWA install - must happen early in the page load!
+        document.querySelector('link[rel="manifest"]').remove();
+      }
     }
 
     function wz_js_get_config_dir_path()
     {
+      if (WZ_CONFIG_DIR_SUFFIX === null) {
+        console.error('Config dir not initialized yet');
+      }
       return '/warzone2100' + WZ_CONFIG_DIR_SUFFIX;
     }
     
@@ -1005,8 +1029,8 @@
       bootstrap.Toast.getOrCreateInstance(document.getElementById('runtimeErrToast')).show();
     }
     function wz_display_update_available_refresh_needed() {
-      if (Module && Module.hasOwnProperty('pauseMainLoop')) {
-        Module.pauseMainLoop(); // a bit of a hack...
+      if (LaunchedModule && LaunchedModule.hasOwnProperty('pauseMainLoop')) {
+        LaunchedModule.pauseMainLoop(); // a bit of a hack...
       }
       console.log('An update is available - please refresh');
       const myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('refreshForUpdate'), {keyboard: false, backdrop: 'static'});
@@ -1115,6 +1139,100 @@
       return { wasmMemory: wasmMemory, maximumMemory: maximumMemory };
     }
 
+    function constructWZModuleConfig(additional_command_line_args) {
+      // Initial Module configuration
+      let Module = {
+        preRun: [],
+        postRun: [],
+        print: (function() {
+          return function(text) {
+          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+          console.log(text);
+          };
+        })(),
+        canvas: (function() {
+          var canvas = document.getElementById('canvas');
+          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+          // application robust, you may want to override this behavior before shipping!
+          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          return canvas;
+        })(),
+        setStatus: function(text) {
+          if (!this.setStatus.last) this.setStatus.last = { time: Date.now(), text: '' };
+          if (text === this.setStatus.last.text) return;
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - this.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          this.setStatus.last.time = now;
+          this.setStatus.last.text = text;
+          if (m) {
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          this.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+    
+      function wz_pre_run_fixup_canvas(Module) {
+        Module.canvas.style.backgroundColor = "black";
+      }
+    
+      function wz_handle_post_run(Module) {
+        Module.wzEncounteredPostRun = true;
+      }
+  
+      Module['preRun'].push(wz_pre_run_fixup_canvas);
+      Module['postRun'].push(wz_handle_post_run);
+      Module.arguments = ['--configdir='+wz_js_get_config_dir_path()];
+      if (WZ_VIDEO_SEQUENCES_BASE_URL !== null) {
+        Module.arguments.push('--videourl='+WZ_VIDEO_SEQUENCES_BASE_URL);
+      }
+      if (additional_command_line_args) {
+        Module.arguments = Module.arguments.concat(additional_command_line_args);
+      }
+    
+      Module['locateFile'] = function(path, prefix) {
+        // Custom handling for .data files
+        if (path.endsWith(".data")) {
+          // NOTE: Prefix is not guaranteed to be set for these by the preloader, so construct the paths manually
+        
+          // Shared data files
+          // - music
+          if (path === 'warzone2100-music.data') {
+            let musicDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_MUSIC_PKG_SUBDIR + path;
+            console.debug('Loading: ' + musicDataURL);
+            return musicDataURL;
+          }
+          // - terrain_overrides
+          if (path.startsWith('warzone2100-terrain-')) {
+            let terrainDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_TERRAIN_PKG_SUBDIR + path;
+            console.debug('Loading: ' + terrainDataURL);
+            return terrainDataURL;
+          }
+        
+          // Regular build-specific data files
+          var dataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + path;
+          console.debug('Loading: ' + dataURL);
+          return dataURL;
+        }
+        // otherwise, use the default, the prefix (JS file's dir) + the path
+        return prefix + path;
+      }
+      
+      return Module;
+    }
+
     function startGame() {
       // Make canvas visible
       document.getElementById('loading-game').style.display = 'block';
@@ -1132,7 +1250,7 @@
       wz_js_display_loading_indicator(1);
       window.wz_starting_game = true;
       
-      function actuallyStartGame() {
+      function actuallyStartGame(Module) {
         setTimeout( function() {
           
           // try to create WebAssembly.Memory
@@ -1145,8 +1263,12 @@
             localStorage.setItem('lastRun_Details', JSON.stringify({ maxMem: maximumMemory, success: 0, time: (new Date()).getTime() }));
           }
           
-          createWZModule(Module).then(function(Module) {
-            // this is reached when everything is ready, and you can call methods on Module
+          createWZModule(Module).then(function(ResultModule) {
+            // this is reached when everything is ready, and you can call methods on ResultModule
+            
+            // Store the launched module in a global
+            LaunchedModule = ResultModule;
+            
             // Hide the loading-game panel
             document.getElementById('loading-game').style.display = 'none';
             // Since some browsers (i.e. Safari) won't show the spinner animation when WZ's main thread is blocked
@@ -1174,12 +1296,15 @@
         }, 10);
       }
       
-      var WZ_LAUNCH_OPTIONS = {};
+      // customize initial Module config
+      Module = constructWZModuleConfig();
+      
+      let WZ_LAUNCH_OPTIONS = {};
       Object.entries(WZ_LAUNCH_OPTIONS_MAPPING).forEach(([k,v]) => {
         WZ_LAUNCH_OPTIONS[k] = document.getElementById(v)?.checked;
       })
       wz_save_launch_options();
-      var data_load_promises = [];
+      let data_load_promises = [];
       
       // additional debug flags
       Object.entries(WZ_LAUNCH_OPTIONS).forEach(([k,v]) => {
@@ -1214,7 +1339,7 @@
           console.error('Failed to load at least one required data file');
           return;
         }
-        actuallyStartGame();
+        actuallyStartGame(Module);
       });
     }
       
@@ -1441,10 +1566,72 @@
         // ignore
       });
     }
-    
+
+    function wz_initialize_config_build_info() {
+      WZ_CONFIG_DIR_SUFFIX = "";
+      
+      if (!WZ2100_WASM_CURRENT_BUILD_INFO || WZ2100_WASM_CURRENT_BUILD_INFO.constructor != Object) {
+        console.error('Failed to load build info');
+        window.alert('Failed to load build info');
+        return;
+      }
+      
+      var el = document.getElementById('wz-title-badge');
+      try {
+        if (WZ2100_WASM_CURRENT_BUILD_INFO['gitTag'].length > 0) {
+          // On a tag - release build (but possibly an older one, or a pre-release)
+          WZ_CONFIG_DIR_SUFFIX = "";
+          if (/[\-\_](beta|rc)[\d]*[\/]?$/.test(WZ2100_WASM_CURRENT_BUILD_INFO['gitTag'])) {
+            // Is a pre-release
+            el.innerText = WZ2100_WASM_CURRENT_BUILD_INFO['gitTag'];
+            document.body.classList.add('prerelease');
+          } else {
+            // Full release
+            if (/\/(latest|previous)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR) || WZ_DATA_FILES_URL_SUBDIR === '/' || WZ_DATA_FILES_URL_SUBDIR.length === 0) {
+              el.innerText = 'Web Edition';
+            } else {
+              el.innerText = WZ2100_WASM_CURRENT_BUILD_INFO['gitTag'];
+            }
+          }
+        } else if (/^(master|main)$/.test(WZ2100_WASM_CURRENT_BUILD_INFO['gitBranch'])) {
+          // Development preview
+          if (/\/(dev|development)[\/]?$/.test(WZ_DATA_FILES_URL_SUBDIR)) {
+            WZ_CONFIG_DIR_SUFFIX = "-dev";
+          }
+          document.body.classList.add('dev-preview');
+          el.innerText = 'Dev Preview';
+        } else if (WZ2100_WASM_CURRENT_BUILD_INFO['gitBranch'].length > 0) {
+          document.body.classList.add('branch-build');
+          el.innerText = WZ2100_WASM_CURRENT_BUILD_INFO['gitBranch'];
+          el.title = WZ2100_WASM_CURRENT_BUILD_INFO['gitBranch'];
+        }
+      } catch (err) {
+        console.error('Processing build info failed:', err);
+      }
+    }
+
+    function wz_set_options_build_info() {
+      if (typeof WZ2100_WASM_CURRENT_BUILD_INFO !== 'undefined') {
+        try {
+          let version_span = document.getElementById('options_buildinfo_version');
+          version_span.textContent = WZ2100_WASM_CURRENT_BUILD_INFO['versionString'];
+          let commit_link = document.getElementById('options_buildinfo_commit');
+          commit_link.href = "https://github.com/Warzone2100/warzone2100/commit/"+WZ2100_WASM_CURRENT_BUILD_INFO['gitCommit'];
+          commit_link.textContent = WZ2100_WASM_CURRENT_BUILD_INFO['gitCommit'].substring(0, 7);
+        } catch (err) {
+          console.error('Getting build info failed:', err);
+        }
+      } else {
+        console.error('Build info not available?');
+      }
+    }
+
     // Initial page startup (once everything is loaded)
     function wz_everything_is_loaded() {
+      wz_initialize_config_build_info();
       wz_restore_launch_options();
+      wz_set_options_build_info();
+      document.getElementById('nav-options-button').disabled = false;
       checkWZBrowserSupport().then((r) => {
         // All required features are available
         wz_display_launch_game_msg();
@@ -1462,8 +1649,12 @@
         wz_display_unsupported_browser_msg(missingFeatures);
       });
     }
-    // Detect when everything - including async scripts - is loaded
+
+    // window.onload:
     window.addEventListener('load', () => {
+      // Disable PWA install prompts on desktop (if needed)
+      wz_handle_desktop_pwa_installable();
+      // Detect when everything - including async scripts - is loaded
       var everythingLoadedTimer = setInterval(function() {
         if (/loaded|complete/.test(document.readyState)) {
           clearInterval(everythingLoadedTimer);
@@ -1538,93 +1729,6 @@
       }
       progressElement.hidden = false;
     });
-
-    // Initial Module configuration
-    var Module = {
-      preRun: [],
-      postRun: [],
-      print: (function() {
-        return function(text) {
-        if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-        console.log(text);
-        };
-      })(),
-      canvas: (function() {
-        var canvas = document.getElementById('canvas');
-        // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-        // application robust, you may want to override this behavior before shipping!
-        // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-        canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
-        return canvas;
-      })(),
-      setStatus: function(text) {
-        if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
-        if (text === Module.setStatus.last.text) return;
-        var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
-        var now = Date.now();
-        if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
-        Module.setStatus.last.time = now;
-        Module.setStatus.last.text = text;
-        if (m) {
-          progressElement.value = parseInt(m[2])*100;
-          progressElement.max = parseInt(m[4])*100;
-          progressElement.hidden = false;
-        } else {
-          progressElement.value = null;
-          progressElement.max = null;
-          progressElement.hidden = true;
-        }
-        statusElement.innerHTML = text;
-      },
-      totalDependencies: 0,
-      monitorRunDependencies: function(left) {
-        this.totalDependencies = Math.max(this.totalDependencies, left);
-        Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
-      }
-    };
-    
-    function wz_pre_run_fixup_canvas() {
-      Module.canvas.style.backgroundColor = "black";
-    }
-    
-    function wz_handle_post_run() {
-      Module.wzEncounteredPostRun = true;
-    }
-  
-    Module['preRun'].push(wz_pre_run_fixup_canvas);
-    Module['postRun'].push(wz_handle_post_run);
-    Module.arguments = ['--configdir='+wz_js_get_config_dir_path()];
-    if (WZ_VIDEO_SEQUENCES_BASE_URL !== null) {
-      Module.arguments.push('--videourl='+WZ_VIDEO_SEQUENCES_BASE_URL);
-    }
-    
-    Module['locateFile'] = function(path, prefix) {
-      // Custom handling for .data files
-      if (path.endsWith(".data")) {
-        // NOTE: Prefix is not guaranteed to be set for these by the preloader, so construct the paths manually
-        
-        // Shared data files
-        // - music
-        if (path === 'warzone2100-music.data') {
-          let musicDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_MUSIC_PKG_SUBDIR + path;
-          console.debug('Loading: ' + musicDataURL);
-          return musicDataURL;
-        }
-        // - terrain_overrides
-        if (path.startsWith('warzone2100-terrain-')) {
-          let terrainDataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + WZ_TERRAIN_PKG_SUBDIR + path;
-          console.debug('Loading: ' + terrainDataURL);
-          return terrainDataURL;
-        }
-        
-        // Regular build-specific data files
-        var dataURL = WZ_DATA_FILES_URL_HOST + WZ_DATA_FILES_URL_SUBDIR + path;
-        console.debug('Loading: ' + dataURL);
-        return dataURL;
-      }
-      // otherwise, use the default, the prefix (JS file's dir) + the path
-      return prefix + path;
-    }
     
     function wz_js_handle_app_exit() {
       document.getElementById('emscripten_container').style.display = 'none';
@@ -1634,12 +1738,15 @@
     }
     
     window.onerror = function(event) {
-      Module.setStatus('Exception thrown, see JavaScript console');
-      Module.setStatus = function(text) {
-        if (text) console.log('[post-exception status] ' + text);
-      };
-      if (!Module.hasOwnProperty('calledRun') || !Module.calledRun
-          || !Module.hasOwnProperty('wzEncounteredPostRun') || !Module.wzEncounteredPostRun) {
+      progressElement.hidden = true;
+      statusElement.innerHTML = 'Exception thrown, see JavaScript console';
+      if (LaunchedModule) {
+        LaunchedModule.setStatus = function(text) {
+          if (text) console.log('[post-exception status] ' + text);
+        };
+      }
+      if (!LaunchedModule || !LaunchedModule.hasOwnProperty('calledRun') || !LaunchedModule.calledRun
+          || !LaunchedModule.hasOwnProperty('wzEncounteredPostRun') || !LaunchedModule.wzEncounteredPostRun) {
         wz_display_loading_error(event);
       }
       else {

@@ -82,7 +82,7 @@ const weaponStats =
 		],
 		// Extra things to research on this path, even if they don't lead to any new stuff
 		extras: [
-			"R-Wpn-MG-Damage08",
+			"R-Wpn-MG-Damage10",
 			"R-Wpn-MG-ROF03",
 		],
 	},
@@ -661,7 +661,7 @@ const weaponStats =
 		templates: [],
 		extras: [
 			"R-Wpn-MG-ROF03",
-			"R-Wpn-MG-Damage08",
+			"R-Wpn-MG-Damage10",
 		],
 	},
 	nexusTech:

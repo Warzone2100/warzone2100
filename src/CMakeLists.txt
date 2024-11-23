@@ -10,24 +10,24 @@ set_source_files_properties("${wz2100_autorevision_h_file}" PROPERTIES GENERATED
 # On Windows, configure warzone2100.rc and the .manifest with updated version info
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# warzone2100.manifest
-	set(_manifest_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.manifest.in")
+	set(_manifest_template_file "${CMAKE_SOURCE_DIR}/platforms/windows/warzone2100.manifest.in")
 	set(_manifest_output_file "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest")
 	add_custom_command(
 		OUTPUT "${_manifest_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_manifest_template_file} -DOUTPUT_FILE=${_manifest_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_manifest_template_file} -DOUTPUT_FILE=${_manifest_output_file} -P ${CMAKE_SOURCE_DIR}/platforms/windows/autorevision_rc.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_manifest_template_file}" "${wz2100_autorevision_cache_file}"
+		DEPENDS "${_manifest_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/platforms/windows/autorevision_rc.cmake"
 		VERBATIM
 	)
 
 	# warzone2100.rc
-	set(_rc_template_file "${CMAKE_SOURCE_DIR}/win32/warzone2100.rc.in")
+	set(_rc_template_file "${CMAKE_SOURCE_DIR}/platforms/windows/warzone2100.rc.in")
 	set(_rc_output_file "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 	add_custom_command(
 		OUTPUT "${_rc_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_rc_template_file} -DOUTPUT_FILE=${_rc_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_rc_template_file} -DOUTPUT_FILE=${_rc_output_file} -P ${CMAKE_SOURCE_DIR}/platforms/windows/autorevision_rc.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_rc_template_file}" "${wz2100_autorevision_cache_file}" "${_manifest_output_file}"
+		DEPENDS "${_rc_template_file}" "${wz2100_autorevision_cache_file}" "${_manifest_output_file}" "${CMAKE_SOURCE_DIR}/platforms/windows/autorevision_rc.cmake"
 		VERBATIM
 	)
 
@@ -42,13 +42,13 @@ endif()
 
 # On macOS, generate the Info.plist file with updated version info at *build-time*
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-	set(_info_plist_template_file "${PROJECT_SOURCE_DIR}/macosx/Resources/Warzone-Info.plist.in")
+	set(_info_plist_template_file "${PROJECT_SOURCE_DIR}/platforms/macos/Resources/Warzone-Info.plist.in")
 	set(_info_plist_output_file "${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist")
 	add_custom_command(
 		OUTPUT "${_info_plist_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${_info_plist_output_file} -P ${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${_info_plist_output_file} -P ${CMAKE_SOURCE_DIR}/platforms/macos/cmake/autorevision_infoplist.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_info_plist_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake"
+		DEPENDS "${_info_plist_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/platforms/macos/cmake/autorevision_infoplist.cmake"
 		VERBATIM
 	)
 
@@ -59,6 +59,26 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set_property(TARGET autorevision_infoplist PROPERTY FOLDER "_WZBuildProcessTargets")
 	add_dependencies(autorevision_infoplist autorevision) # Ensure ordering and non-concurrency
 
+endif()
+
+# On Emscripten, generate the extern-postjs.js file with updated version info at *build-time*
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	set(_extern_postjs_template_file "${PROJECT_SOURCE_DIR}/platforms/emscripten/extern-postjs.js.in")
+	set(_extern_postjs_output_file "${CMAKE_CURRENT_BINARY_DIR}/extern-postjs.js")
+	add_custom_command(
+		OUTPUT "${_extern_postjs_output_file}"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_extern_postjs_template_file} -DOUTPUT_FILE=${_extern_postjs_output_file} -P ${CMAKE_SOURCE_DIR}/platforms/emscripten/cmake/autorevision_externpostjs.cmake
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		DEPENDS "${_extern_postjs_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/platforms/emscripten/cmake/autorevision_externpostjs.cmake"
+		VERBATIM
+	)
+
+	add_custom_target(autorevision_externpostjs ALL
+		DEPENDS
+			"${_extern_postjs_output_file}"
+	)
+	set_property(TARGET autorevision_externpostjs PROPERTY FOLDER "_WZBuildProcessTargets")
+	add_dependencies(autorevision_externpostjs autorevision) # Ensure ordering and non-concurrency
 endif()
 
 ############################
@@ -280,6 +300,10 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	target_link_options(warzone2100 PRIVATE "SHELL:--pre-js ${PROJECT_SOURCE_DIR}/platforms/emscripten/prejs.js")
 	target_link_options(warzone2100 PRIVATE "SHELL:--post-js ${PROJECT_SOURCE_DIR}/platforms/emscripten/postjs.js")
 
+	# Autorevision extern-postjs
+	add_dependencies(warzone2100 autorevision autorevision_externpostjs)
+	target_link_options(warzone2100 PRIVATE "SHELL:--extern-post-js ${CMAKE_CURRENT_BINARY_DIR}/extern-postjs.js")
+
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MODULARIZE")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s EXPORT_NAME=createWZModule")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s EXIT_RUNTIME")
@@ -438,7 +462,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		# (To verify that the CMake Xcode generator does not stomp on the above attempt to manually set the INFOPLIST_FILE)
 		add_custom_command(TARGET warzone2100
 			PRE_BUILD
-			COMMAND ${CMAKE_COMMAND} -DNAME=INFOPLIST_FILE -DEXPECTED_VALUE=${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist -P ${CMAKE_SOURCE_DIR}/macosx/cmake/check_env.cmake
+			COMMAND ${CMAKE_COMMAND} -DNAME=INFOPLIST_FILE -DEXPECTED_VALUE=${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist -P ${CMAKE_SOURCE_DIR}/platforms/macos/cmake/check_env.cmake
 			VERBATIM
 		)
 	else()
@@ -447,7 +471,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	endif()
 
 	# Add the .entitlements file
-	set(_wz_entitlements_file "${CMAKE_CURRENT_SOURCE_DIR}/../macosx/Resources/Warzone.entitlements")
+	set(_wz_entitlements_file "${CMAKE_CURRENT_SOURCE_DIR}/../platforms/macos/Resources/Warzone.entitlements")
 	set_source_files_properties(
 		${_wz_entitlements_file} PROPERTIES
 		XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
@@ -500,7 +524,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} ${DATA_MODS_FILES})
 
 	# Add the icon
-	set(_macos_app_icon "${CMAKE_CURRENT_SOURCE_DIR}/../macosx/Resources/Warzone.icns")
+	set(_macos_app_icon "${CMAKE_CURRENT_SOURCE_DIR}/../platforms/macos/Resources/Warzone.icns")
 	set_source_files_properties(
 		${_macos_app_icon} PROPERTIES
 		MACOSX_PACKAGE_LOCATION "Resources"
@@ -751,41 +775,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 endif()
 
 #######################
-# Supporting google-breakpad tools for processing minidumps
-
-if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows" AND WZ_WIN_HAS_PDB)
-	get_target_property(_mainexename warzone2100 OUTPUT_NAME)
-	if(_mainexename)
-		# Find dump_syms.exe
-		find_program(DUMP_SYMS dump_syms HINTS "${CMAKE_BINARY_DIR}" "${PROJECT_SOURCE_DIR}")
-		if(DUMP_SYMS)
-			# Generate a Breakpad .sym file
-			install(CODE "
-				set(DUMP_SYMS \"${DUMP_SYMS}\")
-				execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Running dump_syms: \${DUMP_SYMS}\")
-
-				# Generate the .sym file from the .pdb
-				set(_outputDirectory \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}\")
-				set(_outputFilepath \"\${_outputDirectory}/${_mainexename}.sym\")
-				execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \"\${_outputDirectory}\")
-				execute_process(COMMAND \"\${DUMP_SYMS}\" \"${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb\"
-								OUTPUT_FILE \"\${_outputFilepath}\"
-								RESULT_VARIABLE _dumpsyms_result)
-				if(_dumpsyms_result EQUAL 0 AND EXISTS \"\${_outputFilepath}\")
-					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: Generated a Breakpad .sym file from .pdb\")
-				else()
-					execute_process(COMMAND \${CMAKE_COMMAND} -E echo \"++install CODE: WARNING: Failed to generate a Breakpad .sym file from .pdb (exit code: \${_dumpsyms_result})\")
-				endif()
-			" COMPONENT DebugSymbols)
-		else()
-			message( WARNING "Could not find dump_syms.exe. Unable to generate a Breakpad .sym file from .pdb" )
-		endif()
-	else()
-		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )
-	endif()
-endif()
-
 # Support crashpad sentry backend - requires installation of helper binary to handle crashes
+
 if(TARGET crashpad_handler)
 	if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		install(TARGETS crashpad_handler COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
@@ -817,11 +808,17 @@ else()
 			RENAME "index.html")
 	install(FILES
 			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.js"
-			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.worker.js"
 			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.wasm"
 			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.data"
 			COMPONENT Core
 			DESTINATION "${WZ_APP_INSTALL_DEST}")
+	if ("${EMSCRIPTEN_VERSION}" VERSION_LESS 3.1.58)
+		# Versions prior to 3.1.58 generated a separate .worker.js file
+		install(FILES
+			"$<TARGET_FILE_DIR:warzone2100>/warzone2100.worker.js"
+			COMPONENT Core
+			DESTINATION "${WZ_APP_INSTALL_DEST}")
+	endif()
 
 	# Install manifest file
 	configure_file("${CMAKE_SOURCE_DIR}/platforms/emscripten/manifest.json" "${CMAKE_CURRENT_BINARY_DIR}/manifest.json" COPYONLY)

@@ -667,8 +667,8 @@
 		"requiredResearch": [
 			"R-Wpn-AALaser"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"P0-AASite-Laser"
 		],
@@ -682,8 +682,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun01"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1000,
+		"researchPower": 31,
 		"resultStructures": [
 			"AASite-QuadBof"
 		],
@@ -700,8 +700,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun02"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 1300,
+		"researchPower": 40,
 		"resultStructures": [
 			"AASite-QuadBof02"
 		],
@@ -715,8 +715,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun03"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1000,
+		"researchPower": 31,
 		"resultStructures": [
 			"AASite-QuadMg1"
 		],
@@ -734,8 +734,8 @@
 			"R-Wpn-AAGun04",
 			"R-Defense-AASite-QuadMg1"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 1300,
+		"researchPower": 40,
 		"resultStructures": [
 			"AASite-QuadRotMg"
 		],
@@ -750,8 +750,8 @@
 			"R-Defense-WallUpgrade04",
 			"R-Wpn-Cannon6TwinAslt"
 		],
-		"researchPoints": 3200,
-		"researchPower": 100,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"PillBox-Cannon6"
 		],
@@ -765,8 +765,8 @@
 		"requiredResearch": [
 			"R-Wpn-EMPCannon"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"WallTower-EMP"
 		],
@@ -780,8 +780,8 @@
 		"requiredResearch": [
 			"R-Wpn-MortarEMP"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"Emplacement-MortarEMP"
 		],
@@ -798,8 +798,8 @@
 		"requiredResearch": [
 			"R-Wpn-Cannon4AMk1"
 		],
-		"researchPoints": 1600,
-		"researchPower": 50,
+		"researchPoints": 900,
+		"researchPower": 28,
 		"resultStructures": [
 			"Emplacement-HPVcannon"
 		],
@@ -816,8 +816,8 @@
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1400,
+		"researchPower": 43,
 		"resultStructures": [
 			"GuardTower-ATMiss"
 		],
@@ -834,8 +834,8 @@
 		"requiredResearch": [
 			"R-Wpn-RailGun01"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1400,
+		"researchPower": 43,
 		"resultStructures": [
 			"GuardTower-Rail1"
 		],
@@ -849,8 +849,8 @@
 		"requiredResearch": [
 			"R-Defense-HardcreteWall"
 		],
-		"researchPoints": 900,
-		"researchPower": 28,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"A0HardcreteMk1Gate"
 		],
@@ -877,14 +877,11 @@
 		"id": "R-Defense-HeavyLas",
 		"msgName": "RES_EMP_HEAVYLAS",
 		"name": "Heavy Laser Emplacement",
-		"redStructures": [
-			"Emplacement-PrisLas"
-		],
 		"requiredResearch": [
 			"R-Wpn-HvyLaser"
 		],
-		"researchPoints": 10200,
-		"researchPower": 318,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"Emplacement-HeavyLaser"
 		],
@@ -957,7 +954,9 @@
 		"msgName": "RES_EMP_HvAM",
 		"name": "Archangel Missile Battery",
 		"redStructures": [
-			"Emplacement-Rocket06-IDF"
+			"Emplacement-Howitzer105",
+			"Emplacement-Rocket06-IDF",
+			"Emplacement-MortarPit02"
 		],
 		"requiredResearch": [
 			"R-Wpn-HvArtMissile"
@@ -980,8 +979,8 @@
 		"requiredResearch": [
 			"R-Wpn-Flame2"
 		],
-		"researchPoints": 2000,
-		"researchPower": 62,
+		"researchPoints": 1000,
+		"researchPower": 31,
 		"resultStructures": [
 			"Tower-Projector"
 		],
@@ -992,9 +991,6 @@
 		"id": "R-Defense-HvyHowitzer",
 		"msgName": "RES_EMP_HvHOW",
 		"name": "Ground Shaker Emplacement",
-		"redStructures": [
-			"Emplacement-Howitzer105"
-		],
 		"requiredResearch": [
 			"R-Defense-Howitzer",
 			"R-Wpn-HvyHowitzer"
@@ -1018,8 +1014,8 @@
 			"R-Defense-MortarPit",
 			"R-Wpn-Mortar02Hvy"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 1000,
+		"researchPower": 31,
 		"resultStructures": [
 			"Emplacement-MortarPit02"
 		],
@@ -1050,8 +1046,8 @@
 			"R-Wpn-Rocket02-MRL",
 			"R-Defense-HardcreteWall"
 		],
-		"researchPoints": 600,
-		"researchPower": 18,
+		"researchPoints": 800,
+		"researchPower": 25,
 		"resultStructures": [
 			"Emplacement-MRL-pit"
 		],
@@ -1080,9 +1076,6 @@
 		"id": "R-Defense-MassDriver",
 		"msgName": "RES_EMP_MD",
 		"name": "Mass Driver Fortress",
-		"redStructures": [
-			"X-Super-Cannon"
-		],
 		"requiredResearch": [
 			"R-Wpn-RailGun03",
 			"R-Wpn-Rail-ROF03",
@@ -1107,8 +1100,8 @@
 		"requiredResearch": [
 			"R-Wpn-MdArtMissile"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"Emplacement-MdART-pit"
 		],
@@ -1171,8 +1164,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Cannon1Mk1"
 		],
-		"researchPoints": 750,
-		"researchPower": 23,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"PillBox4"
 		],
@@ -1187,8 +1180,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Flamer01Mk1"
 		],
-		"researchPoints": 750,
-		"researchPower": 23,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"PillBox5"
 		],
@@ -1199,15 +1192,12 @@
 		"id": "R-Defense-Pillbox06",
 		"msgName": "RES_PB_ATR",
 		"name": "Lancer Tower",
-		"redStructures": [
-			"GuardTower6"
-		],
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Rocket01-LtAT"
 		],
-		"researchPoints": 750,
-		"researchPower": 23,
+		"researchPoints": 900,
+		"researchPower": 28,
 		"resultStructures": [
 			"GuardTower5"
 		],
@@ -1221,8 +1211,8 @@
 		"requiredResearch": [
 			"R-Wpn-PlasmaCannon"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1300,
+		"researchPower": 40,
 		"resultStructures": [
 			"Emplacement-PlasmaCannon"
 		],
@@ -1240,8 +1230,8 @@
 		"requiredResearch": [
 			"R-Wpn-Plasmite-Flamer"
 		],
-		"researchPoints": 2000,
-		"researchPower": 62,
+		"researchPoints": 1300,
+		"researchPower": 40,
 		"resultStructures": [
 			"Plasmite-flamer-bunker"
 		],
@@ -1255,8 +1245,8 @@
 		"requiredResearch": [
 			"R-Wpn-Laser01"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1400,
+		"researchPower": 43,
 		"resultStructures": [
 			"Emplacement-PrisLas"
 		],
@@ -1270,8 +1260,8 @@
 		"requiredResearch": [
 			"R-Wpn-Laser02"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"GuardTower-BeamLas"
 		],
@@ -1285,8 +1275,8 @@
 		"requiredResearch": [
 			"R-Wpn-RailGun02"
 		],
-		"researchPoints": 5000,
-		"researchPower": 156,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"Emplacement-Rail2"
 		],
@@ -1303,8 +1293,8 @@
 		"requiredResearch": [
 			"R-Wpn-RailGun03"
 		],
-		"researchPoints": 5000,
-		"researchPower": 156,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"Emplacement-Rail3"
 		],
@@ -1340,8 +1330,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 1800,
-		"researchPower": 56,
+		"researchPoints": 1100,
+		"researchPower": 34,
 		"resultStructures": [
 			"Pillbox-RotMG"
 		],
@@ -1359,8 +1349,8 @@
 			"R-Defense-MortarPit",
 			"R-Wpn-Mortar3"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 1000,
+		"researchPower": 31,
 		"resultStructures": [
 			"Emplacement-RotMor"
 		],
@@ -1371,14 +1361,11 @@
 		"id": "R-Defense-SamSite1",
 		"msgName": "RES_EMP_SAM1",
 		"name": "Avenger SAM Site",
-		"redStructures": [
-			"P0-AASite-Sunburst"
-		],
 		"requiredResearch": [
 			"R-Wpn-Missile-LtSAM"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"P0-AASite-SAM1"
 		],
@@ -1395,8 +1382,8 @@
 		"requiredResearch": [
 			"R-Wpn-Missile-HvSAM"
 		],
-		"researchPoints": 14400,
-		"researchPower": 450,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"P0-AASite-SAM2"
 		],
@@ -1409,8 +1396,8 @@
 		"requiredResearch": [
 			"R-Wpn-Sunburst"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1000,
+		"researchPower": 31,
 		"resultStructures": [
 			"P0-AASite-Sunburst"
 		],
@@ -1438,9 +1425,6 @@
 		"id": "R-Defense-Super-Missile",
 		"msgName": "RES_EMP_MSL",
 		"name": "Missile Fortress",
-		"redStructures": [
-			"X-Super-Rocket"
-		],
 		"requiredResearch": [
 			"R-Defense-WallUpgrade10",
 			"R-Wpn-Missile-ROF03"
@@ -1511,8 +1495,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Rocket05-MiniPod"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"GuardTower6"
 		],
@@ -1527,10 +1511,10 @@
 			"WallTower01"
 		],
 		"requiredResearch": [
-			"R-Defense-RotMG"
+			"R-Wpn-MG4"
 		],
-		"researchPoints": 1800,
-		"researchPower": 56,
+		"researchPoints": 1100,
+		"researchPower": 34,
 		"resultStructures": [
 			"Wall-RotMg"
 		],
@@ -1547,8 +1531,8 @@
 		"requiredResearch": [
 			"R-Wpn-Cannon5"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1100,
+		"researchPower": 34,
 		"resultStructures": [
 			"Wall-VulcanCan"
 		],
@@ -1560,13 +1544,13 @@
 		"msgName": "RES_WT9_ATM",
 		"name": "Scourge Missile Hardpoint",
 		"redStructures": [
-			"WallTower-HvATrocket"
+			"WallTower06"
 		],
 		"requiredResearch": [
 			"R-Wpn-Missile2A-T"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1400,
+		"researchPower": 43,
 		"resultStructures": [
 			"WallTower-Atmiss"
 		],
@@ -1580,8 +1564,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun01"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 1000,
+		"researchPower": 31,
 		"resultStructures": [
 			"WallTower-DoubleAAGun"
 		],
@@ -1598,8 +1582,8 @@
 		"requiredResearch": [
 			"R-Wpn-AAGun02"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1300,
+		"researchPower": 40,
 		"resultStructures": [
 			"WallTower-DoubleAAGun02"
 		],
@@ -1616,8 +1600,8 @@
 		"requiredResearch": [
 			"R-Wpn-Cannon4AMk1"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 900,
+		"researchPower": 28,
 		"resultStructures": [
 			"WallTower-HPVcannon"
 		],
@@ -1628,9 +1612,6 @@
 		"id": "R-Defense-WallTower-HvyA-Trocket",
 		"msgName": "RES_WT12_HAT",
 		"name": "Tank Killer Hardpoint",
-		"redStructures": [
-			"WallTower06"
-		],
 		"requiredResearch": [
 			"R-Wpn-Rocket07-Tank-Killer"
 		],
@@ -1649,8 +1630,8 @@
 		"requiredResearch": [
 			"R-Wpn-Laser02"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"WallTower-PulseLas"
 		],
@@ -1662,10 +1643,10 @@
 		"msgName": "RES_WT_QUADAA",
 		"name": "Whirlwind Hardpoint",
 		"requiredResearch": [
-			"R-Defense-AASite-QuadRotMg"
+			"R-Wpn-AAGun04"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1300,
+		"researchPower": 40,
 		"resultStructures": [
 			"WallTower-QuadRotAAGun"
 		],
@@ -1676,16 +1657,11 @@
 		"id": "R-Defense-WallTower-Rail2",
 		"msgName": "RES_WT15_RL2",
 		"name": "Rail Gun Hardpoint",
-		"redStructures": [
-			"WallTower04",
-			"WallTower-HPVcannon",
-			"Wall-VulcanCan"
-		],
 		"requiredResearch": [
 			"R-Wpn-RailGun02"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"WallTower-Rail2"
 		],
@@ -1697,16 +1673,13 @@
 		"msgName": "RES_WT15_RL3",
 		"name": "Gauss Cannon Hardpoint",
 		"redStructures": [
-			"WallTower-Rail2",
-			"WallTower04",
-			"WallTower-HPVcannon",
-			"Wall-VulcanCan"
+			"WallTower-Rail2"
 		],
 		"requiredResearch": [
 			"R-Wpn-RailGun03"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"WallTower-Rail3"
 		],
@@ -1721,11 +1694,10 @@
 			"WallTower-SamSite"
 		],
 		"requiredResearch": [
-			"R-Wpn-Missile-HvSAM",
-			"R-Defense-WallUpgrade07"
+			"R-Wpn-Missile-HvSAM"
 		],
-		"researchPoints": 18000,
-		"researchPower": 450,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"WallTower-SamHvy"
 		],
@@ -1737,11 +1709,10 @@
 		"msgName": "RES_MS_SAM1WT",
 		"name": "Avenger Hardpoint",
 		"requiredResearch": [
-			"R-Defense-WallUpgrade07",
-			"R-Defense-SamSite1"
+			"R-Wpn-Missile-LtSAM"
 		],
-		"researchPoints": 10800,
-		"researchPower": 337,
+		"researchPoints": 1500,
+		"researchPower": 46,
 		"resultStructures": [
 			"WallTower-SamSite"
 		],
@@ -1758,8 +1729,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG5"
 		],
-		"researchPoints": 2400,
-		"researchPower": 75,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"WallTower-TwinAssaultGun"
 		],
@@ -1790,8 +1761,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Wpn-Cannon1Mk1"
 		],
-		"researchPoints": 750,
-		"researchPower": 23,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"WallTower02"
 		],
@@ -1809,8 +1780,8 @@
 			"R-Wpn-Cannon2Mk1",
 			"R-Defense-WallTower02"
 		],
-		"researchPoints": 900,
-		"researchPower": 28,
+		"researchPoints": 800,
+		"researchPower": 25,
 		"resultStructures": [
 			"WallTower03"
 		],
@@ -1841,8 +1812,8 @@
 			"R-Wpn-Rocket01-LtAT",
 			"R-Defense-HardcreteWall"
 		],
-		"researchPoints": 750,
-		"researchPower": 23,
+		"researchPoints": 900,
+		"researchPower": 28,
 		"resultStructures": [
 			"WallTower06"
 		],
@@ -1953,7 +1924,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 45
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -1981,7 +1952,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 45
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2010,7 +1981,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 45
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2041,7 +2012,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 55
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2069,7 +2040,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 55
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2098,7 +2069,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 55
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2127,7 +2098,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 65
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2156,7 +2127,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 65
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -2185,7 +2156,7 @@
 				"filterParameter": "Type",
 				"filterValue": "Wall",
 				"parameter": "Armour",
-				"value": 65
+				"value": 35
 			},
 			{
 				"class": "Building",
@@ -3098,8 +3069,8 @@
 			"R-Sys-CBSensor-Turret01",
 			"R-Sys-Sensor-Tower02"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1100,
+		"researchPower": 34,
 		"resultStructures": [
 			"Sys-CB-Tower01"
 		],
@@ -3287,8 +3258,8 @@
 			"R-Defense-HardcreteWall",
 			"R-Sys-Sensor-Tower01"
 		],
-		"researchPoints": 1200,
-		"researchPower": 37,
+		"researchPoints": 600,
+		"researchPower": 18,
 		"resultStructures": [
 			"Sys-SensoTower02"
 		],
@@ -3410,8 +3381,8 @@
 			"R-Sys-Sensor-WS",
 			"R-Sys-Sensor-Tower02"
 		],
-		"researchPoints": 16400,
-		"researchPower": 450,
+		"researchPoints": 1400,
+		"researchPower": 43,
 		"resultStructures": [
 			"Sys-SensoTowerWS"
 		],
@@ -3437,8 +3408,8 @@
 		"requiredResearch": [
 			"R-Sys-SpyTurret"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 1400,
+		"researchPower": 43,
 		"resultStructures": [
 			"Sys-SpyTower"
 		],
@@ -3470,8 +3441,8 @@
 			"R-Sys-VTOLCBS-Turret01",
 			"R-Sys-Sensor-Tower02"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1300,
+		"researchPower": 40,
 		"resultStructures": [
 			"Sys-VTOL-CB-Tower01"
 		],
@@ -3503,8 +3474,8 @@
 			"R-Sys-VTOLStrike-Turret01",
 			"R-Sys-Sensor-Tower02"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultStructures": [
 			"Sys-VTOL-RadarTower01"
 		],
@@ -5635,7 +5606,7 @@
 		"msgName": "RES_LASD1",
 		"name": "Hi-Energy Laser Emitter",
 		"requiredResearch": [
-			"R-Wpn-Energy-Accuracy01"
+			"R-Wpn-Laser01"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -6719,7 +6690,7 @@
 		"msgName": "RES_W_HLAS",
 		"name": "Heavy Laser",
 		"requiredResearch": [
-			"R-Wpn-Energy-Damage01"
+			"R-Wpn-Laser02"
 		],
 		"researchPoints": 36000,
 		"researchPower": 450,
@@ -7044,7 +7015,7 @@
 			"R-Wpn-MG-Damage07",
 			"R-Struc-Research-Upgrade06"
 		],
-		"researchPoints": 10800,
+		"researchPoints": 9800,
 		"researchPower": 450,
 		"results": [
 			{
@@ -7067,6 +7038,80 @@
 				"filterValue": "A-A GUN",
 				"parameter": "RadiusDamage",
 				"value": 25
+			}
+		],
+		"statID": "MG1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"techCode": 1
+	},
+	"R-Wpn-MG-Damage09": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-MG-Damage09",
+		"name": "Depleted Uranium MG Bullets Mk2",
+		"requiredResearch": [
+			"R-Wpn-MG-Damage08",
+			"R-Struc-Research-Upgrade07"
+		],
+		"researchPoints": 10200,
+		"researchPower": 450,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 5
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 5
+			}
+		],
+		"statID": "MG1Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"techCode": 1
+	},
+	"R-Wpn-MG-Damage10": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-MG-Damage10",
+		"name": "Depleted Uranium MG Bullets Mk3",
+		"requiredResearch": [
+			"R-Wpn-MG-Damage09",
+			"R-Struc-Research-Upgrade08"
+		],
+		"researchPoints": 11800,
+		"researchPower": 450,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MACHINE GUN",
+				"parameter": "Damage",
+				"value": 25
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "Damage",
+				"value": 5
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "A-A GUN",
+				"parameter": "RadiusDamage",
+				"value": 5
 			}
 		],
 		"statID": "MG1Mk1",

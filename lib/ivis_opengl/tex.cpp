@@ -106,6 +106,12 @@ size_t pie_ReserveTexture(const char *filename, const size_t& width, const size_
 
 void pie_AssignTexture(size_t page, gfx_api::texture* texture)
 {
+	if (page >= _TEX_PAGE.size())
+	{
+		debug(LOG_ERROR, "Invalid page (%zu), number of texpages=%zu", page, _TEX_PAGE.size());
+		delete texture;
+		return;
+	}
 	if (_TEX_PAGE[page].id)
 		delete _TEX_PAGE[page].id;
 	_TEX_PAGE[page].id = texture;

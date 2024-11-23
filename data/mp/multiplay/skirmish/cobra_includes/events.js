@@ -1,7 +1,7 @@
 //This file contains generic events. Chat and research events are split into
 //their own seperate files.
 
-function eventGameInit()
+function eventGameLoaded()
 {
 	initCobraGroups();
 }

@@ -19,6 +19,27 @@ if(NOT MSVC)
 	# -Wlogical-not-parentheses		(Clang)
 	check_compiler_flags_output("-Werror -Wno-logical-not-parentheses -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-logical-not-parentheses" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
 
+	# -Wcast-align				(GCC 3.4+, Clang 3.2+)
+	check_compiler_flags_output("-Werror -Wno-cast-align -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-cast-align" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
+	# -Wmacro-redefined
+	check_compiler_flags_output("-Werror -Wno-macro-redefined -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-macro-redefined" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
+	# -Wunused-function
+	check_compiler_flags_output("-Werror -Wno-unused-function -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unused-function" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
+	# -Wunused-const-variable
+	check_compiler_flags_output("-Werror -Wno-unused-const-variable -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unused-const-variable" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
+	# -Wshadow
+	check_compiler_flags_output("-Werror -Wno-shadow -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-shadow" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
+	# -Wconditional-uninitialized
+	check_compiler_flags_output("-Werror -Wno-conditional-uninitialized -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-conditional-uninitialized" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
+	# -Wreturn-type
+	check_compiler_flags_output("-Werror -Wno-return-type -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-return-type" OUTPUT_VARIABLE _supported_etcpak_cxx_compiler_flags APPEND)
+
 	if (NOT _supported_etcpak_cxx_compiler_flags STREQUAL "")
 		string(REPLACE " " ";" _supported_etcpak_cxx_compiler_flags "${_supported_etcpak_cxx_compiler_flags}")
 		target_compile_options(etcpak PRIVATE ${_supported_etcpak_cxx_compiler_flags})

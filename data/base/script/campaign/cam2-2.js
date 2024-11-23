@@ -133,7 +133,12 @@ function vtolAttack()
 	if (camClassicMode())
 	{
 		const list = [cTempl.colatv, cTempl.colatv];
-		camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter");
+		const ext = {
+			limit: [5, 5], //paired with list array
+			alternate: true,
+			altIdx: 0
+		};
+		camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter", ext);
 	}
 	else
 	{
@@ -198,7 +203,7 @@ function eventAttacked(victim, attacker)
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C",{
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta5,{
 		area: "RTLZ",
 		message: "C22_LZ",
 		reinforcements: camMinutesToSeconds(3),

@@ -25,6 +25,7 @@
 		"deceleration": 450,
 		"hitpointPctOfBody": 50,
 		"id": "CyborgLegs",
+		"model": "cybd_std.pie",
 		"name": "Cyborg Propulsion",
 		"speed": 400,
 		"spinAngle": 45,

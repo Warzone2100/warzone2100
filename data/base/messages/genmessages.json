@@ -1,0 +1,15 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "END": {
+            "sequences": [
+                { "loop": 0, "subtitles": "END_MSG1", "video": "end.ogg" }
+            ]
+        },
+        "WIN": {
+            "sequences": [
+                { "loop": 0, "subtitles": "WIN_MSG1", "video": "victory.ogg" }
+            ]
+        }
+    }
+}

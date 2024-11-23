@@ -36,6 +36,7 @@
 #include "levels.h"
 #include "console.h"
 #include "multirecv.h"
+#include "objmem.h"
 #include <vector>
 #include <string>
 #include <chrono>
@@ -106,6 +107,7 @@ struct MULTIPLAYERINGAME
 {
 	UDWORD				PingTimes[MAX_CONNECTED_PLAYERS];				// store for pings.
 	int 				LagCounter[MAX_CONNECTED_PLAYERS];
+	int 				DesyncCounter[MAX_CONNECTED_PLAYERS];
 	bool				VerifiedIdentity[MAX_CONNECTED_PLAYERS];		// if the multistats identity has been verified.
 	bool				localOptionsReceived;							// used to show if we have game options yet..
 	bool				localJoiningInProgress;							// used before we know our player number.
@@ -119,6 +121,7 @@ struct MULTIPLAYERINGAME
 	std::chrono::steady_clock::time_point startTime;
 	optional<std::chrono::steady_clock::time_point> endTime;
 	std::chrono::steady_clock::time_point lastLagCheck;
+	std::chrono::steady_clock::time_point lastDesyncCheck;
 	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
 	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
 	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};		// the local client-set mute status for this player
@@ -252,6 +255,8 @@ void printConsoleNameChange(const char *oldName, const char *newName);  ///< Pri
 
 void turnOffMultiMsg(bool bDoit);
 
+void autoLagKickRoutine();
+
 void sendMap();
 bool multiplayerWinSequence(bool firstCall);
 
@@ -321,7 +326,8 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 void startMultiplayerGame();
 void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset = false);
 
-STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index);
+STRUCTURE *findResearchingFacilityByResearchIndex(const PerPlayerStructureLists& pList, unsigned player, unsigned index);
+STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index); // checks apsStructLists
 
 void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2);
 

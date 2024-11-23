@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Factory")
+_("A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production.")
+_("When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point.")
+_("Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities.")

@@ -121,6 +121,10 @@ static inline T clip(T x, T min, T max)
 
 static void plotBackdropPixel(MapPreviewImage& output, int32_t xx, int32_t yy, const MapPreviewColor &colour)
 {
+	if (colour.a == 0)
+	{
+		return;
+	}
 	xx = clip(xx, 0, static_cast<int32_t>(output.width - 1));
 	yy = clip(yy, 0, static_cast<int32_t>(output.height - 1));
 	uint8_t *pixel = output.imageData.data() + (yy * output.width + xx) * 3;
@@ -198,11 +202,11 @@ static void plotWzMapFeature(Map &wzMap, const MapPreviewColorScheme& colorSchem
 	for (auto &feature : *pFeatures)
 	{
 		MapPreviewColor color;
-		if (isOilResource(feature))
+		if (isOilResource(feature) && colorScheme.drawOptions.drawOil)
 		{
 			color = colorScheme.oilResourceColor;
 		}
-		else if (isOilDrum(feature))
+		else if (isOilDrum(feature) && colorScheme.drawOptions.drawOil)
 		{
 			color = colorScheme.oilBarrelColor;
 		}
@@ -263,8 +267,6 @@ bool plotStructurePreviewWzMap(Map &wzMap, const MapPreviewColorScheme& colorSch
 		plotBackdropStructurePixels(output, structure, statsConfig, color);
 	}
 
-	plotWzMapFeature(wzMap, colorScheme, output, pCustomLogger);
-
 	return true;
 }
 
@@ -307,44 +309,56 @@ std::unique_ptr<MapPreviewImage> generate2DMapPreview(Map& wzMap, const MapPrevi
 	MapData::MapTile *psTile = &(mapData->mMapTiles[0]);
 	MapData::MapTile *WTile = nullptr;
 
-	for (uint32_t y = 0; y < mapData->height; ++y)
+	if (colorScheme.drawOptions.drawTerrain)
 	{
-		WTile = psTile;
-		for (uint32_t x = 0; x < mapData->width; ++x)
+		for (uint32_t y = 0; y < mapData->height; ++y)
 		{
-			uint8_t *const p = imageData.data() + (3 * (y * mapData->width + x));
-			uint32_t col = WTile->height / ELEVATION_SCALE;
-
-			switch (terrainTypeWzMap(*WTile, *mapTerrainTypes))
+			WTile = psTile;
+			for (uint32_t x = 0; x < mapData->width; ++x)
 			{
-			case TER_CLIFFFACE:
-				p[0] = clrSch.plCliffL.r + (clrSch.plCliffH.r - clrSch.plCliffL.r) * col / 256;
-				p[1] = clrSch.plCliffL.g + (clrSch.plCliffH.g - clrSch.plCliffL.g) * col / 256;
-				p[2] = clrSch.plCliffL.b + (clrSch.plCliffH.b - clrSch.plCliffL.b) * col / 256;
-				break;
-			case TER_WATER:
-				p[0] = clrSch.plWater.r;
-				p[1] = clrSch.plWater.g;
-				p[2] = clrSch.plWater.b;
-				break;
-			case TER_ROAD:
-				p[0] = clrSch.plRoadL.r + (clrSch.plRoadH.r - clrSch.plRoadL.r) * col / 256;
-				p[1] = clrSch.plRoadL.g + (clrSch.plRoadH.g - clrSch.plRoadL.g) * col / 256;
-				p[2] = clrSch.plRoadL.b + (clrSch.plRoadH.b - clrSch.plRoadL.b) * col / 256;
-				break;
-			default:
-				p[0] = clrSch.plGroundL.r + (clrSch.plGroundH.r - clrSch.plGroundL.r) * col / 256;
-				p[1] = clrSch.plGroundL.g + (clrSch.plGroundH.g - clrSch.plGroundL.g) * col / 256;
-				p[2] = clrSch.plGroundL.b + (clrSch.plGroundH.b - clrSch.plGroundL.b) * col / 256;
-				break;
+				uint8_t *const p = imageData.data() + (3 * (y * mapData->width + x));
+				uint32_t col = WTile->height / ELEVATION_SCALE;
+
+				switch (terrainTypeWzMap(*WTile, *mapTerrainTypes))
+				{
+				case TER_CLIFFFACE:
+					p[0] = clrSch.plCliffL.r + (clrSch.plCliffH.r - clrSch.plCliffL.r) * col / 256;
+					p[1] = clrSch.plCliffL.g + (clrSch.plCliffH.g - clrSch.plCliffL.g) * col / 256;
+					p[2] = clrSch.plCliffL.b + (clrSch.plCliffH.b - clrSch.plCliffL.b) * col / 256;
+					break;
+				case TER_WATER:
+					p[0] = clrSch.plWater.r;
+					p[1] = clrSch.plWater.g;
+					p[2] = clrSch.plWater.b;
+					break;
+				case TER_ROAD:
+					p[0] = clrSch.plRoadL.r + (clrSch.plRoadH.r - clrSch.plRoadL.r) * col / 256;
+					p[1] = clrSch.plRoadL.g + (clrSch.plRoadH.g - clrSch.plRoadL.g) * col / 256;
+					p[2] = clrSch.plRoadL.b + (clrSch.plRoadH.b - clrSch.plRoadL.b) * col / 256;
+					break;
+				default:
+					p[0] = clrSch.plGroundL.r + (clrSch.plGroundH.r - clrSch.plGroundL.r) * col / 256;
+					p[1] = clrSch.plGroundL.g + (clrSch.plGroundH.g - clrSch.plGroundL.g) * col / 256;
+					p[2] = clrSch.plGroundL.b + (clrSch.plGroundH.b - clrSch.plGroundL.b) * col / 256;
+					break;
+				}
+				WTile += 1;
 			}
-			WTile += 1;
+			psTile += mapData->width;
 		}
-		psTile += mapData->width;
 	}
 
-	// color our texture with clancolors @ correct position
-	plotStructurePreviewWzMap(wzMap, colorScheme, statsConfig, *(result.get()), pCustomLogger);
+	if (colorScheme.drawOptions.drawStructures)
+	{
+		// color our texture with clancolors @ correct position
+		plotStructurePreviewWzMap(wzMap, colorScheme, statsConfig, *(result.get()), pCustomLogger);
+	}
+	else
+	{
+		debug(pCustomLogger, LOG_INFO_VERBOSE, "Skipping structure output (due to drawOptions)");
+	}
+
+	plotWzMapFeature(wzMap, colorScheme, *(result.get()), pCustomLogger);
 
 	return result;
 }

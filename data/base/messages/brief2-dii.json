@@ -1,0 +1,24 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB2_DII_MSG": {
+            "sequences": [
+                { "loop": 0, "subtitles": "TRANS_MSG1", "video": "brfcom4s.ogg" },
+                { "loop": 0, "subtitles": ["CAM2_DII_MSG1", "CAM2_DII_MSG2", "CAM2_DII_MSG9"], "video": "cam2/cam2diif.ogg" },
+                { "loop": 0, "subtitles": "CAM2_DII_MSG1", "video": "cam2/c2diif2.ogg" }
+            ]
+        },
+        "MB2_DII_MSG2": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM2_DII_MSG3", "CAM2_DII_MSG4", "CAM2_DII_MSG5"], "video": "cam2/cam2diib.ogg" },
+                { "loop": 0, "subtitles": "", "video": "cam2/cam2diin.ogg" },
+                { "loop": 0, "subtitles": ["CAM2_DII_MSG6", "CAM2_DII_MSG7", "CAM2_DII_MSG8"], "video": "cam2/cam2diip.ogg" }
+            ]
+        },
+        "CAM2_OUT": {
+            "sequences": [
+                { "loop": 0, "subtitles": "", "video": "cam2/cam2out.ogg" }
+            ]
+        }
+    }
+}

@@ -134,6 +134,16 @@ static bool validateCampaignMod(WzCampaignModInfo& modInfo, const std::string& b
 		}
 	}
 
+	// Verify alternate campaign has at least one campaign file listed
+	if (modInfo.type == WzModType::AlternateCampaign)
+	{
+		if (modInfo.campaignFiles.empty())
+		{
+			debug(LOG_ERROR, "Alternate campaign mod must list one or more valid campaign JSON files in \"campaigns\": %s", realModFilePathAndName.c_str());
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -1048,7 +1058,7 @@ void WzCampaignTweakOptionToggle::initialize(const WzString& displayName, const 
 	descriptionWidget->setFont(font_small);
 	descriptionWidget->setFontColour(WZCOL_TEXT_MEDIUM);
 	descriptionWidget->setGeometry(0, 0, 400, 40);
-	descriptionWidget->addText(description.toUtf8());
+	descriptionWidget->addText(description);
 	descriptionWidget->setTransparentToMouse(true);
 	attach(descriptionWidget);
 
@@ -1589,7 +1599,7 @@ protected:
 			// load details from mod
 			displayName = WzString::fromUtf8(modInfo.value().name);
 			author = WzString::fromUtf8(modInfo.value().author);
-			description = WzString::fromUtf8(modInfo.value().description.getLocalizedString().value_or(""));
+			description = WzString::fromUtf8(modInfo.value().description.getLocalizedString());
 			if (!modInfo.value().modBannerPNGData.empty())
 			{
 				iV_Image ivImage;
@@ -1653,7 +1663,7 @@ protected:
 			descriptionWidget->setShadeColour(pal_RGBA(0,0,0,80));
 		}
 		descriptionWidget->setGeometry(leftPadding, nextLineY0, 400, 40);
-		descriptionWidget->addText(description.toUtf8());
+		descriptionWidget->addText(description);
 
 		auto scrollableDescriptionWidget = ScrollableListWidget::make();
 		scrollableDescriptionWidget->addItem(descriptionWidget);
@@ -1945,6 +1955,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"ps1Modifiers",
+		_("PS1 Modifiers"),
+		_("Reduces the damage the enemy deals to a third of the current difficulty modifier."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
@@ -1971,9 +1988,9 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		// append any customTweakOptions
 		for (const auto& customOpt : modInfo.value().customTweakOptions)
 		{
-			auto localizedDisplayName = customOpt.displayName.getLocalizedString();
-			auto localizedDescription = customOpt.description.getLocalizedString();
-			if (!localizedDisplayName.has_value())
+			auto localizedDisplayName = WzString::fromUtf8(customOpt.displayName.getLocalizedString());
+			auto localizedDescription = WzString::fromUtf8(customOpt.description.getLocalizedString());
+			if (localizedDisplayName.isEmpty())
 			{
 				continue;
 			}
@@ -1984,8 +2001,8 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 			}
 			results.emplace_back(
 				customOpt.uniqueIdentifier,
-				WzString::fromUtf8(localizedDisplayName.value()),
-				WzString::fromUtf8(localizedDescription.value_or("")),
+				localizedDisplayName,
+				localizedDescription,
 				customOpt.enabled, customOpt.userEditable
 			);
 		}
@@ -2281,7 +2298,7 @@ bool CampaignStartOptionsForm::updateCampaignBalanceDropdown(const std::vector<W
 			campaignBalanceChoices[classicModIdx].modInfo = mod;
 			continue;
 		}
-		campaignBalanceChoices.push_back({WzString::fromUtf8(mod.name), WzString::fromUtf8(mod.description.getLocalizedString().value_or(std::string())), mod});
+		campaignBalanceChoices.push_back({WzString::fromUtf8(mod.name), WzString::fromUtf8(mod.description.getLocalizedString()), mod});
 	}
 
 	campaignBalanceDropdown->clear();

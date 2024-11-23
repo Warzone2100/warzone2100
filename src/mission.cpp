@@ -83,6 +83,7 @@
 #include "keybind.h"
 #include "campaigninfo.h"
 #include "wzapi.h"
+#include "screens/guidescreen.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -149,6 +150,7 @@ static UBYTE   bPlayCountDown;
 
 //FUNCTIONS**************
 static void addLandingLights(UDWORD x, UDWORD y);
+static void resetHomeStructureObjects();
 static bool startMissionOffClear(const char *pGame);
 static bool startMissionOffKeep(const char *pGame);
 static bool startMissionCampaignStart(const char *pGame);
@@ -186,6 +188,38 @@ bool MissionResUp	= false;
 
 static SDWORD		g_iReinforceTime = 0;
 
+
+//Remove soon-to-be illegal references to objects for some structures before going offWorld.
+static void resetHomeStructureObjects()
+{
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		for (STRUCTURE *psStruct : apsStructLists[i])
+		{
+			if (!psStruct->pFunctionality || !psStruct->pStructureType)
+			{
+				continue;
+			}
+			if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+			{
+				REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
+				if (psRepairFac->psObj)
+				{
+					psRepairFac->psObj = nullptr;
+					psRepairFac->state = RepairState::Idle;
+				}
+			}
+			else if (psStruct->pStructureType->type == REF_REARM_PAD)
+			{
+				REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
+				if (psReArmPad->psObj)
+				{
+					psReArmPad->psObj = nullptr;
+				}
+			}
+		}
+	}
+}
 
 //returns true if on an off world mission
 bool missionIsOffworld()
@@ -652,8 +686,8 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 /* Saves the necessary data when moving from a home base Mission to an OffWorld mission */
 static void saveMissionData()
 {
-	UDWORD			inc;
-	bool			bRepairExists;
+	bool bRepairExists = false;
+	bool bRearmPadExists = false;
 
 	debug(LOG_SAVE, "called");
 
@@ -662,9 +696,8 @@ static void saveMissionData()
 	//clear out the audio
 	audio_StopAll();
 
-	bRepairExists = false;
 	//set any structures currently being built to completed for the selected player
-	mutating_list_iterate(apsStructLists[selectedPlayer], [&bRepairExists](STRUCTURE* psStruct)
+	mutating_list_iterate(apsStructLists[selectedPlayer], [&bRepairExists, &bRearmPadExists](STRUCTURE* psStruct)
 	{
 		STRUCTURE* psStructBeingBuilt;
 		if (psStruct->status == SS_BEING_BUILT)
@@ -682,22 +715,34 @@ static void saveMissionData()
 				}
 			}
 		}
-		//check if have a completed repair facility on home world
-		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->status == SS_BUILT)
+		//check if have a completed repair facility or rearming pad on home world
+		if (psStruct->status == SS_BUILT && psStruct->pStructureType)
 		{
-			bRepairExists = true;
+			if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+			{
+				bRepairExists = true;
+			}
+			else if (psStruct->pStructureType->type == REF_REARM_PAD)
+			{
+				bRearmPadExists = true;
+			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
 
-	//repair all droids back at home base if have a repair facility
-	if (bRepairExists)
+	//repair and rearm all droids back at home base if have a repair facility or rearming pad
+	if (bRepairExists || bRearmPadExists)
 	{
 		for (DROID* psDroid : apsDroidLists[selectedPlayer])
 		{
-			if (psDroid->isDamaged())
+			bool vtolAndPadsExist = (psDroid->isVtol() && bRearmPadExists);
+			if ((bRepairExists || vtolAndPadsExist) && psDroid->isDamaged())
 			{
 				psDroid->body = psDroid->originalBody;
+			}
+			if (vtolAndPadsExist)
+			{
+				fillVtolDroid(psDroid);
 			}
 		}
 	}
@@ -717,7 +762,10 @@ static void saveMissionData()
 		{
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
+		resetObjectAnimationState(psDroid);
 	}
+
+	resetHomeStructureObjects(); //get rid of soon-to-be illegal references of droids in repair facilities and rearming pads.
 
 	//save the mission data
 	mission.psMapTiles = std::move(psMapTiles);
@@ -740,7 +788,7 @@ static void saveMissionData()
 	mission.homeLZ_X = getLandingX(selectedPlayer);
 	mission.homeLZ_Y = getLandingY(selectedPlayer);
 
-	for (inc = 0; inc < MAX_PLAYERS; inc++)
+	for (unsigned int inc = 0; inc < MAX_PLAYERS; ++inc)
 	{
 		mission.apsStructLists[inc] = apsStructLists[inc];
 		mission.apsDroidLists[inc] = apsDroidLists[inc];
@@ -945,6 +993,8 @@ void placeLimboDroids()
 			initDroidMovement(psDroid);
 			//make sure the died flag is not set
 			psDroid->died = false;
+			//update visibility
+			visTilesUpdate(psDroid);
 		}
 		else
 		{
@@ -972,6 +1022,10 @@ void restoreMissionLimboData()
 			//reset droid orders
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			//the location of the droid should be valid!
+			if (psDroid->pos.x != INVALID_XY && psDroid->pos.y != INVALID_XY)
+			{
+				visTilesUpdate(psDroid); //update visibility
+			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
@@ -1529,7 +1583,10 @@ void missionDroidUpdate(DROID *psDroid)
 	// NO ai update droid
 
 	// update the droids order
-	orderUpdateDroid(psDroid);
+	if (!orderUpdateDroid(psDroid))
+	{
+		ASSERT(false, "orderUpdateDroid returned false?");
+	}
 
 	// update the action of the droid
 	actionUpdateDroid(psDroid);
@@ -1565,6 +1622,14 @@ static void missionResetDroids()
 			if (d->isTransporter())
 			{
 				vanishDroid(d);
+			}
+			else
+			{
+				if (d->pos.x != INVALID_XY && d->pos.y != INVALID_XY)
+				{
+					// update visibility
+					visTilesUpdate(d);
+				}
 			}
 			return IterationResult::CONTINUE_ITERATION;
 		});
@@ -1662,6 +1727,9 @@ static void missionResetDroids()
 				}
 				// Reset the selected flag
 				psDroid->selected = false;
+
+				// update visibility
+				visTilesUpdate(psDroid);
 			}
 			else
 			{
@@ -1801,6 +1869,13 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 		//stop the droid moving - the moveUpdate happens AFTER the orderUpdate and can cause problems if the droid moves from one tile to another
 		moveReallyStopDroid(psTransporter);
 
+		// clear targets / action targets
+		setDroidTarget(psTransporter, nullptr);
+		for (int i = 0; i < MAX_WEAPONS; i++)
+		{
+			setDroidActionTarget(psTransporter, nullptr, i);
+		}
+
 		//if offworld mission, then add the timer
 		//if (mission.type == LDS_MKEEP || mission.type == LDS_MCLEAR)
 		if (missionCanReEnforce() && psTransporter->player == selectedPlayer)
@@ -1858,7 +1933,7 @@ bool intAddMissionTimer()
 	sFormInit.x = (SWORD)(RADTLX + RADWIDTH - sFormInit.width);
 	sFormInit.y = (SWORD)TIMER_Y;
 	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->move((SWORD)(RADTLX + RADWIDTH - psWidget->width()), TIMER_Y);
+		psWidget->move((SWORD)(RADTLX + RADWIDTH - psWidget->width() - 18), TIMER_Y);
 	});
 	sFormInit.UserData = PACKDWORD_TRI(0, IMAGE_MISSION_CLOCK, IMAGE_MISSION_CLOCK_UP);
 	sFormInit.pDisplay = intDisplayMissionClock;
@@ -1949,10 +2024,12 @@ bool intAddTransporterTimer()
 	sLabInit.height = 16;
 	sLabInit.pText = WzString::fromUtf8("00/10");
 	sLabInit.pCallback = intUpdateTransCapacity;
-	if (!widgAddLabel(psWScreen, &sLabInit))
+	auto psCapacityLabel = widgAddLabel(psWScreen, &sLabInit);
+	if (!psCapacityLabel)
 	{
 		return false;
 	}
+	psCapacityLabel->setTransparentToMouse(true);
 
 	return true;
 }
@@ -2212,6 +2289,7 @@ static void missionResetInGameState()
 	intRemoveReticule();
 	intRemoveMissionTimer();
 	intRemoveTransporterTimer();
+	intHideInGameOptionsButton();
 	intHideGroupSelectionMenu();
 }
 
@@ -2224,6 +2302,9 @@ static void intDestroyMissionResultWidgets()
 
 static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 {
+	// ensure the guide screen is closed
+	closeGuideScreen();
+
 	missionResetInGameState();
 	scoreUpdateVar(WD_MISSION_ENDED); //Store completion time for this mission
 
@@ -2954,6 +3035,10 @@ void missionDestroyObjects()
 
 	// FIXME: check that orders do not reference anything bad?
 
+	if (!psDestroyedObj.empty())
+	{
+		debug(LOG_INFO, "%zu destroyed objects", psDestroyedObj.size());
+	}
 	gameTime++;	// Wonderful hack to ensure objects destroyed above get free'ed up by objmemUpdate.
 	objmemUpdate();	// Actually free objects removed above
 }

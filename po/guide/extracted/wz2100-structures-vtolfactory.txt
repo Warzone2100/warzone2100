@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("VTOL Factory")
+_("A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units).")
+_("Each VTOL Factory can build one unit at a time, but you can queue multiple units for production.")
+_("When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point.")

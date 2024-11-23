@@ -45,8 +45,9 @@ struct LoadedMod
 {
 	std::string name;
 	std::string filename;
+	std::string fullRealPath;
 
-	LoadedMod(const std::string& name, const std::string& filename);
+	LoadedMod(const std::string& name, const std::string& filename, const std::string& fullRealPath);
 	Sha256& getHash();
 
 private:

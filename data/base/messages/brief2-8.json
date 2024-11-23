@@ -1,0 +1,16 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB2_8_MSG": {
+            "sequences": [
+                { "loop": 1, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
+                { "loop": 1, "subtitles": ["CAM2_8_MSG", "CAM2_8_MSG2", "CAM2_8_MSG3"], "video": "cam2/cam28apl.ogg" }
+            ]
+        },
+        "MB2_8_MSG2": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM2_8_MSG4", "CAM2_8_MSG5", "CAM2_8_MSG6"], "video": "cam2/cam2_8a.ogg" }
+            ]
+        }
+    }
+}

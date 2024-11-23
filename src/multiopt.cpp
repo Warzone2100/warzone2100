@@ -301,7 +301,7 @@ bool recvOptions(NETQUEUE queue)
 	{
 		// Check if those vectors are different
 		bool structurelimitsUpdated = (oldStructureLimits.size() != ingame.structureLimits.size()) || (oldStructureLimits != ingame.structureLimits);
-	
+
 		// Notify if structure limits were changed
 		if (structurelimitsUpdated)
 		{
@@ -675,6 +675,7 @@ bool multiStartScreenInit()
 	bDisplayMultiJoiningStatus = 1; // always display this
 	gameTimeStop();
 	intHideInterface(true);
+	intHideInGameOptionsButton();
 	createGameStartScreen([] {
 		// on game start overlay screen close...
 		bDisplayMultiJoiningStatus = 0;
@@ -723,6 +724,7 @@ bool multiGameShutdown()
 	ingame.startTime = std::chrono::steady_clock::time_point();
 	ingame.endTime = nullopt;
 	ingame.lastLagCheck = std::chrono::steady_clock::time_point();
+	ingame.lastDesyncCheck = std::chrono::steady_clock::time_point();
 	ingame.lastPlayerDataCheck2 = std::chrono::steady_clock::time_point();
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode

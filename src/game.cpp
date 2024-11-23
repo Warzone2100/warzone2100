@@ -74,6 +74,8 @@
 #include "component.h"
 #include "radar.h"
 #include "cmddroid.h"
+#include "formationdef.h"
+#include "formation.h"
 #include "warzoneconfig.h"
 #include "multiplay.h"
 #include "frontend.h"
@@ -96,6 +98,7 @@
 #include "wzscriptdebug.h"
 #include "gamehistorylogger.h"
 #include "wzapi.h"
+#include "screens/guidescreen.h"
 #include <array>
 
 #if defined(__clang__)
@@ -2259,6 +2262,8 @@ static bool writeCompListFile(const char *pFileName);
 static bool loadSaveStructTypeList(const char *pFileName);
 static bool writeStructTypeListFile(const char *pFileName);
 
+static void loadFixupResearchPendingStates();
+
 static bool loadSaveResearch(const char *pFileName);
 static bool writeResearchFile(char *pFileName);
 
@@ -2272,6 +2277,9 @@ static bool readFiresupportDesignators(const char *pFileName);
 static bool writeFiresupportDesignators(const char *pFileName);
 
 static bool writeScriptState(const char *pFileName);
+
+static bool writeSaveGuideTopics(const char *pFileName);
+static bool loadSaveGuideTopics(const char *pFileName);
 
 static bool gameLoad(const char *fileName);
 
@@ -3195,6 +3203,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
 		}
+
+		// load in the game guide topics
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "guidetopics.json");
+		if (!loadSaveGuideTopics(aFileName))
+		{
+			debug(LOG_ERROR, "failed to load %s", aFileName);
+			// currently not fatal if this fails
+		}
 	}
 
 	if (saveGameVersion >= VERSION_11)
@@ -3283,6 +3300,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			PerPlayerStructureLists* pList = it->second;
 			loadSaveStructurePointers(key, pList);
 		}
+	}
+
+	if (UserSaveGame)
+	{
+		loadFixupResearchPendingStates();
 	}
 
 	// Load labels
@@ -3572,6 +3594,11 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 			goto error;
 		}
 	}
+
+	// save the loaded guide topics
+	CurrentFileName[fileExtension] = '\0';
+	strcat(CurrentFileName, "guidetopics.json");
+	writeSaveGuideTopics(CurrentFileName);
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';
@@ -5603,7 +5630,10 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 			if (psGroup->type == GT_TRANSPORTER)
 			{
 				psDroid->selected = false;  // Droid should be visible in the transporter interface.
-				visRemoveVisibility(psDroid); // should not have visibility data when in a transporter
+				if (!psDroid->isTransporter())
+				{
+					visRemoveVisibility(psDroid); // should not have visibility data when in a transporter
+				}
 			}
 		}
 		else
@@ -5648,6 +5678,43 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		if (psDroid->isVtol() && psDroid->sMove.Status != MOVEINACTIVE)
 		{
 			psDroid->rot.pitch = 0;
+		}
+
+		// recreate formation if present
+		auto formationInfo = ini.value("formation").jsonValue();
+		if (formationInfo.is_object())
+		{
+			auto it_direction = formationInfo.find("direction");
+			auto it_x = formationInfo.find("x");
+			auto it_y = formationInfo.find("y");
+			if (it_direction != formationInfo.end()
+				&& it_x != formationInfo.end()
+				&& it_y != formationInfo.end())
+			{
+				auto formationX = json_variant(it_x.value()).toInt();
+				auto formationY = json_variant(it_y.value()).toInt();
+
+				psDroid->sMove.psFormation = formationFind(psDroid->player, formationX, formationY);
+				// join a formation if it exists at the destination
+				if (psDroid->sMove.psFormation)
+				{
+					formationJoin(psDroid->sMove.psFormation, psDroid);
+				}
+				else
+				{
+					// no formation so create a new one
+					auto formationDirection = json_variant(it_direction.value()).toUInt();
+					if (formationNew(&psDroid->sMove.psFormation, psDroid->player, FT_LINE, formationX, formationY,
+							static_cast<uint16_t>(formationDirection)))
+					{
+						formationJoin(psDroid->sMove.psFormation, psDroid);
+					}
+				}
+			}
+			else
+			{
+				ASSERT(false, "Missing one or more expected formation details");
+			}
 		}
 
 		// Recreate path-finding jobs
@@ -5805,6 +5872,17 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 	droidObj["lastBump"] = psCurr->sMove.lastBump;
 	droidObj["pauseTime"] = psCurr->sMove.pauseTime;
 	droidObj["bumpPosition"] = psCurr->sMove.bumpPos.xy();
+
+	// formation info
+	if (psCurr->sMove.psFormation != nullptr)
+	{
+		auto formationObj = nlohmann::json::object();
+		formationObj["direction"] = psCurr->sMove.psFormation->direction;
+		formationObj["x"] = psCurr->sMove.psFormation->x;
+		formationObj["y"] = psCurr->sMove.psFormation->y;
+		droidObj["formation"] = std::move(formationObj);
+	}
+
 	droidObj["onMission"] = onMission;
 	return droidObj;
 }
@@ -7366,6 +7444,61 @@ static bool writeStructTypeListFile(const char *pFileName)
 	return true;
 }
 
+void loadFixupResearchPendingStates()
+{
+	const unsigned int players = static_cast<unsigned int>(game.maxPlayers);
+	for (int statInc = 0; statInc < asResearch.size(); statInc++)
+	{
+		for (unsigned int plr = 0; plr < players; plr++)
+		{
+			PLAYER_RESEARCH *pPlayerRes = &asPlayerResList[plr][statInc];
+
+			// Handle "pending" states
+			// - i.e. starting/cancelling research was queued, but the game tick was not processed before the save occurred
+			// - (Ideally the game would prevent this from happening by ensuring the save is queued to happen after the next tick...)
+			if (pPlayerRes->ResearchStatus & CANCELLED_RESEARCH_PENDING)
+			{
+				STRUCTURE *psLab = findResearchingFacilityByResearchIndex(apsStructLists, plr, statInc);
+				if (psLab == nullptr)
+				{
+					// check the mission list
+					psLab = findResearchingFacilityByResearchIndex(mission.apsStructLists, plr, statInc);
+				}
+
+				if (psLab != nullptr)
+				{
+					// Process the pending cancellation with immediate effect
+					debug(LOG_INFO, "Processing CANCELLED_RESEARCH_PENDING for: %s", asResearch[statInc].id.toUtf8().c_str());
+					::cancelResearch(psLab, ModeImmediate);
+				}
+				else
+				{
+					// did not find in *either* list - log and convert the CANCELLED_RESEARCH_PENDING status appropriately
+					if (pPlayerRes->currentPoints == 0)
+					{
+						// Reset this topic as not having been researched
+						debug(LOG_INFO, "Resetting CANCELLED_RESEARCH_PENDING to 0 for: %s", asResearch[statInc].id.toUtf8().c_str());
+						ResetResearchStatus(pPlayerRes);
+					}
+					else
+					{
+						// Set the cancelled flag
+						debug(LOG_INFO, "Resetting CANCELLED_RESEARCH_PENDING to CANCELLED_RESEARCH for: %s", asResearch[statInc].id.toUtf8().c_str());
+						MakeResearchCancelled(pPlayerRes);
+					}
+				}
+			}
+			else if (pPlayerRes->ResearchStatus & STARTED_RESEARCH_PENDING)
+			{
+				// Possible Future TODO: Could try to "recover", and queue this research item in an available research facility (however, the save doesn't contain which facility the user queued it in)
+				// For now: Just clear the STARTED_RESEARCH_PENDING bit, so that the user can re-start the research after loading the save
+				debug(LOG_INFO, "Resetting STARTED_RESEARCH_PENDING to 0 for: %s", asResearch[statInc].id.toUtf8().c_str());
+				pPlayerRes->ResearchStatus &= ~STARTED_RESEARCH_PENDING;
+			}
+		}
+	}
+}
+
 // -----------------------------------------------------------------------------------------
 // load up saved research file
 bool loadSaveResearch(const char *pFileName)
@@ -7628,36 +7761,42 @@ static bool writeMessageFile(const char *pFileName)
 				{
 					return psProx->psMessage == psMessage; //compare the pointers
 				});
-				ASSERT(psProxIt != apsProxDisp[player].end(), "Save message; proximity display not found for message");
-				PROXIMITY_DISPLAY* psProx = *psProxIt;
-				if (psProx && psProx->type == POS_PROXDATA)
+				if (psProxIt != apsProxDisp[player].end())
 				{
-					//message has viewdata so store the name
-					VIEWDATA *pViewData = psMessage->pViewData;
-					ini.setValue("name", pViewData->name);
-
-					// save beacon data
-					if (psMessage->dataType == MSG_DATA_BEACON)
+					PROXIMITY_DISPLAY* psProx = *psProxIt;
+					if (psProx && psProx->type == POS_PROXDATA)
 					{
-						VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)psMessage->pViewData->pData;
-						ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
-						ini.setValue("sender", viewData->sender);
+						//message has viewdata so store the name
+						VIEWDATA *pViewData = psMessage->pViewData;
+						ini.setValue("name", pViewData->name);
+
+						// save beacon data
+						if (psMessage->dataType == MSG_DATA_BEACON)
+						{
+							VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)psMessage->pViewData->pData;
+							ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
+							ini.setValue("sender", viewData->sender);
+						}
+					}
+					else
+					{
+						// message has object so store Object Id
+						const BASE_OBJECT *psObj = psMessage->psObj;
+						if (psObj)
+						{
+							ini.setValue("obj/id", psObj->id);
+							ini.setValue("obj/player", psObj->player);
+							ini.setValue("obj/type", psObj->type);
+						}
+						else
+						{
+							ASSERT(false, "Message type has no object data to save ?");
+						}
 					}
 				}
 				else
 				{
-					// message has object so store Object Id
-					const BASE_OBJECT *psObj = psMessage->psObj;
-					if (psObj)
-					{
-						ini.setValue("obj/id", psObj->id);
-						ini.setValue("obj/player", psObj->player);
-						ini.setValue("obj/type", psObj->type);
-					}
-					else
-					{
-						ASSERT(false, "Message type has no object data to save ?");
-					}
+					ASSERT(psProxIt != apsProxDisp[player].end(), "Save message; proximity display not found for message");
 				}
 			}
 			else
@@ -7824,6 +7963,65 @@ bool loadScriptState(char *pFileName)
 	return true;
 }
 
+// -----------------------------------------------------------------------------------------
+// load / save the game guide topics
+static bool writeSaveGuideTopics(const char *pFileName)
+{
+	auto loadedTopics = saveLoadedGuideTopics();
+	nlohmann::json mRoot = nlohmann::json::object();
+	mRoot["loaded_topics"] = loadedTopics;
+
+	nlohmann::json options = nlohmann::json::object();
+	options["disable_topic_popups"] = getGameGuideDisableTopicPopups();
+	mRoot["options"] = std::move(options);
+
+	return saveJSONToFile(mRoot, pFileName);
+}
+
+static bool loadSaveGuideTopics(const char *pFileName)
+{
+	if (!PHYSFS_exists(pFileName))
+	{
+		return true; // older saves will have this file - expected
+	}
+
+	nonstd::optional<nlohmann::json> saveGuideTopicsOpt = parseJsonFile(pFileName);
+
+	if (!saveGuideTopicsOpt.has_value())
+	{
+		ASSERT(saveGuideTopicsOpt.has_value(), "guidetopics.json looks broken");
+		return false;
+	}
+
+	const auto& mRoot = saveGuideTopicsOpt.value();
+	ASSERT_OR_RETURN(false, mRoot.is_object(), "guidetopics.json looks broken - expected object");
+
+	auto it = mRoot.find("options");
+	if (it != mRoot.end() && it.value().is_object())
+	{
+		auto& options = it.value();
+		auto opt = options.find("disable_topic_popups");
+		if (opt != options.end() && opt.value().is_boolean())
+		{
+			setGameGuideDisableTopicPopups(opt.value().get<bool>());
+		}
+	}
+
+	it = mRoot.find("loaded_topics");
+	ASSERT_OR_RETURN(false, it != mRoot.end(), "guidetopics.json looks broken - missing expected \"loaded_topics\" key");
+
+	std::vector<std::string> loadedTopics;
+	try {
+		loadedTopics = it.value().get<std::vector<std::string>>();
+	}
+	catch (const std::exception &e) {
+		// Failed to parse the JSON
+		debug(LOG_ERROR, "JSON document from %s is invalid: %s", pFileName, e.what());
+		return false;
+	}
+
+	return restoreLoadedGuideTopics(loadedTopics);
+}
 
 // -----------------------------------------------------------------------------------------
 /* set the global scroll values to use for the save game */

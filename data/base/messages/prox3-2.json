@@ -1,0 +1,7 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "C3-2_OBJ1": { "audio": "pcv448.ogg", "message": "RUINS_MSG", "type": 2, "x": 4544, "y": 8896, "z": 0 },
+        "C32_LZ": { "audio": "pcv427.ogg", "message": "LZ_MSG", "type": 2, "x": 1728, "y": 832, "z": 0 }
+    }
+}

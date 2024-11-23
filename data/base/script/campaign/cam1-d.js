@@ -68,11 +68,19 @@ function transportBaseSetup()
 
 function getDroidsForNPLZ()
 {
-	const LIM = 8; //Last alpha mission always has 8 transport units
+	let lim = 8;
+	if (difficulty === HARD)
+	{
+		lim = 9;
+	}
+	else if (difficulty >= INSANE)
+	{
+		lim = 10;
+	}
 	const templates = [ cTempl.nphct, cTempl.nphct, cTempl.npmorb, cTempl.npmorb, cTempl.npsbb ];
 
 	const droids = [];
-	for (let i = 0; i < LIM; ++i)
+	for (let i = 0; i < lim; ++i)
 	{
 		droids.push(templates[camRand(templates.length)]);
 	}
@@ -149,7 +157,7 @@ function setupPatrols()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alphaEnd, {
 		area: "RTLZ",
 		message: "C1D_LZ",
 		reinforcements: camMinutesToSeconds(2),

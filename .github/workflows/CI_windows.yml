@@ -13,6 +13,8 @@ on:
       - 'data/base/stats/**'
       - 'data/mp/stats/**'
       - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
   # Support running after "Draft Tag Release" workflow completes, as part of automated release process
   workflow_run:
     workflows: ["Draft Tag Release"]
@@ -50,11 +52,12 @@ jobs:
             architecture: "x64"
             deploy_release: true
             support_sentry : true
+            sentry_backend: crashpad
           - compiler: "LLVM_MINGW"
             architecture: "arm64"
             deploy_release: true
             support_sentry : true
-            sentry_backend: breakpad
+            sentry_backend: crashpad
       fail-fast: false
     env:
       WZ_COMPILER_VER: ${{ matrix.compiler }}
@@ -106,7 +109,7 @@ jobs:
       id: asciidoctor-dl
       run: |
         echo "Installing Asciidoctor"
-        gem install asciidoctor -v 2.0.22 --no-document | Out-Null
+        gem install asciidoctor -v 2.0.23 --no-document | Out-Null
         echo "Installing Asciidoctor... finished"
         $AsciidoctorBat = (Get-Command asciidoctor.bat).Path
         echo "Asciidoctor.bat: ${AsciidoctorBat}"
@@ -145,10 +148,8 @@ jobs:
           elseif ($env:WZ_TARGET_ARCH -eq "arm64") {
             $VCPKG_DEFAULT_TRIPLET = "arm64-mingw-dynamic"
             $WZ_MINGW_PKG_PREFIX = "aarch64-w64-mingw32"
-            # llvm-ml does not support arm64
-            # Will need to use a similar workaround as Chromium's build process
-            # and use the armasm64.exe tool from MSVC
           }
+          $VCPKG_DEFAULT_HOST_TRIPLET = "x64-mingw-static"
         }
         else {
           $WZ_USING_MINGW = "false"
@@ -162,8 +163,8 @@ jobs:
           elseif ($env:WZ_TARGET_ARCH -eq "arm64") {
             $VCPKG_DEFAULT_TRIPLET = "arm64-windows"
           }
+          $VCPKG_DEFAULT_HOST_TRIPLET = "x64-windows"
         }
-        $VCPKG_DEFAULT_HOST_TRIPLET = "x64-windows"
 
         $WZ_FULL_POWERSHELL_PATH = (Get-Command powershell.exe).Path
         $WZ_FULL_GIT_PATH = Split-Path -Path ((Get-Command git.exe).Path)
@@ -312,8 +313,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.3.268.0/windows/VulkanSDK-1.3.268.0-Installer.exe?Human=true"
-        $VULKAN_DL_SHA256 = "8459ef49bd06b697115ddd3d97c9aec729e849cd775f5be70897718a9b3b9db5"
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe?Human=true"
+        $VULKAN_DL_SHA256 = "acb4ae0786fd3e558f8b3c36cc3eba91638984217ba8a6795ec64d2f9ffd8c4b"
 
         $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
         $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
@@ -370,8 +371,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $NINJA_DL_URL = "https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-win.zip"
-        $NINJA_DL_SHA512 = "a700e794c32eb67b9f87040db7f1ba3a8e891636696fc54d416b01661c2421ff46fa517c97fd904adacdf8e621df3e68ea380105b909ae8b6651a78ae7eb3199"
+        $NINJA_DL_URL = "https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip"
+        $NINJA_DL_SHA512 = "d6715c6458d798bcb809f410c0364dabd937b5b7a3ddb4cd5aba42f9fca45139b2a8a3e7fd9fbd88fd75d298ed99123220b33c7bdc8966a9d5f2a1c9c230955f"
 
         $NINJA_DL_BASEDIR = "${{ github.workspace }}\dl"
         $NINJA_DL_PATH = "${NINJA_DL_BASEDIR}\ninja-win.zip"
@@ -402,10 +403,10 @@ jobs:
         $VerbosePreference = "Continue"
         . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
 
-        $LLVM_MINGW_RELEASE = "20231128";
+        $LLVM_MINGW_RELEASE = "20240619";
         $LLVM_MINGW_PKG = "llvm-mingw-${LLVM_MINGW_RELEASE}-ucrt-x86_64"
         $LLVM_MINGW_DL_URL = "https://github.com/mstorsjo/llvm-mingw/releases/download/${LLVM_MINGW_RELEASE}/${LLVM_MINGW_PKG}.zip"
-        $LLVM_MINGW_DL_SHA512 = "86e99cce855bf01d75032fe282986976b53e5a71f52a80b00e92906db462426515fbe2764465afa4f5a67b6abc4325c7a21d0eb59845be615890ef2560f1ec37"
+        $LLVM_MINGW_DL_SHA512 = "d98928107d61e19d27990eb75863f7c34f3d9c23200b5ead7e1ccfd4c6f028a0093d79c06905494329a704b00fab0f10eb7db5d370a342b08154a11988084371"
 
         $LLVM_MINGW_DL_BASEDIR = "${{ github.workspace }}\dl"
         $LLVM_MINGW_DL_PATH = "${LLVM_MINGW_DL_BASEDIR}\llvm-mingw.zip"
@@ -487,6 +488,10 @@ jobs:
           $env:PATH = "${env:WZ_MINGW_ENV_PATH}";
           Write-Host "env:PATH=`"${env:PATH}`""
         }
+        else {
+          # Workaround: https://github.com/actions/runner-images/issues/10004
+          $env:CXXFLAGS = "${env:CXXFLAGS} /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+        }
 
         & "${env:WZ_FULL_POWERSHELL_PATH}" "${env:WZ_REPO_PATH}\get-dependencies_win.ps1" -VCPKG_BUILD_TYPE "release"
     - name: Clean vcpkg temp files
@@ -519,6 +524,10 @@ jobs:
           }
         }
         $env:PATH = "${env:PATH};${env:WZ_FULL_MSGMERGE_PATH}";
+
+        # Workaround: https://github.com/actions/runner-images/issues/10004
+        $env:CXXFLAGS = "${env:CXXFLAGS} /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+
         # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" ${ADDITIONAL_CMAKE_PARAMS} -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
@@ -534,6 +543,7 @@ jobs:
         DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
         WZ_FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
         WZ_MINGW_PKG_PREFIX: '${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}'
+        WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE: '${{ steps.settings.outputs.WZ_REPO_PATH }}\.ci\cmake\toolchains\${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}.cmake'
         WZ_ASM_MASM_COMPILER: '${{ steps.settings.outputs.WZ_ASM_MASM_COMPILER }}'
       run: |
         $SENTRY_DSN_PARAM = ""
@@ -550,7 +560,7 @@ jobs:
         }
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         $env:PATH = "${env:WZ_MINGW_ENV_PATH}";
-        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_C_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-gcc" -DCMAKE_CXX_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-g++" -DCMAKE_RC_COMPILER="${env:WZ_MINGW_PKG_PREFIX}-windres" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
+        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="${env:WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: Upload vcpkg logs (on failure)
       uses: actions/upload-artifact@v4
@@ -568,6 +578,9 @@ jobs:
       env:
         CXXFLAGS: '/MP'
       run: |
+        # Workaround: https://github.com/actions/runner-images/issues/10004
+        $env:CXXFLAGS = "${env:CXXFLAGS} /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
+
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\msvc.json"
         & cmake --build . --config Release --target warzone2100 -- /m
         echo "::remove-matcher owner=msvc::"
@@ -782,6 +795,10 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: 'src'
       - name: Prep Environment
         id: settings
         run: |
@@ -790,6 +807,7 @@ jobs:
           OUTPUTDIR="wz-${WZ_TARGET_ARCH}"
           echo "OUTPUTDIR=${OUTPUTDIR}" >> $GITHUB_ENV
           echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
+          echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Archive Artifact
         uses: actions/download-artifact@v4
         with:
@@ -834,11 +852,16 @@ jobs:
             echo "No SENTRY_AUTH_TOKEN - skipping"
             exit 0
           fi
-          docker pull getsentry/sentry-cli
-          echo "Uploading debug symbols"
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
-          echo "Uploading source bundles"
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --type sourcebundle -o warzone2100 -p warzone2100 "${WZ_SOURCEBUNDLES_DIR}"
+          # Download sentry-cli
+          echo "::group::Downloading sentry-cli ..."
+          cmake -P "${WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+          echo "Downloading sentry-cli ... Done"
+          echo "::endgroup::"
+          # Upload symbols
+          echo "::group::sentry-cli debug-files upload"
+          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          ./sentry-cli/sentry-cli debug-files upload --type sourcebundle -o warzone2100 -p warzone2100 "${WZ_SOURCEBUNDLES_DIR}"
+          echo "::endgroup::"
   trigger-updates-json:
     name: 'Trigger Info Update'
     permissions:

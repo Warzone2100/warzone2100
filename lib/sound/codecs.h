@@ -26,6 +26,44 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+class WZAudioDataResourceInterface
+{
+public:
+	WZAudioDataResourceInterface();
+	virtual ~WZAudioDataResourceInterface();
+
+	WZAudioDataResourceInterface(const WZAudioDataResourceInterface&)                 = delete;
+	WZAudioDataResourceInterface &operator=(const WZAudioDataResourceInterface &)     = delete;
+};
+
+class WZAudioDataMemoryBuffer : public WZAudioDataResourceInterface
+{
+public:
+	std::vector<char> buffer;
+	size_t currPos = 0;
+	bool error = false;
+};
+
+class WzAudioDataPhysFSHandle : public WZAudioDataResourceInterface
+{
+public:
+	WzAudioDataPhysFSHandle(PHYSFS_file *pFileHandleToOwn, const std::string& fileName)
+	: m_fileHandle(pFileHandleToOwn)
+	, m_fileName(fileName)
+	{ }
+	~WzAudioDataPhysFSHandle();
+
+	WzAudioDataPhysFSHandle(const WzAudioDataPhysFSHandle&)                 = delete;
+	WzAudioDataPhysFSHandle(WzAudioDataPhysFSHandle&&)                      = delete;
+	WzAudioDataPhysFSHandle &operator=(const WzAudioDataPhysFSHandle &)     = delete;
+	WzAudioDataPhysFSHandle &operator=(WzAudioDataPhysFSHandle &&)          = delete;
+
+	PHYSFS_file *fileHandle() const { return m_fileHandle; }
+private:
+	PHYSFS_file *m_fileHandle = nullptr;
+	std::string m_fileName;
+};
+
 class WZDecoder
 {
 public:

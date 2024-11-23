@@ -275,6 +275,7 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 	messages->setItemSpacing(3);
 	messages->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
 	messages->setPadding({10, 10, 10, 10});
+	messages->setGeometry(0, 0, grid->width(), 0); // set initial width so that grid calculations can properly calculate required height
 
 	if (psMessage->type != MSG_RESEARCH && psMessage->pViewData->type == VIEW_RPL)
 	{
@@ -285,7 +286,7 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 			{
 				auto message = std::make_shared<Paragraph>();
 				message->setFontColour(WZCOL_TEXT_BRIGHT);
-				message->addText(msg.toUtf8());
+				message->addText(msg);
 				messages->addItem(message);
 			}
 		}
@@ -332,7 +333,7 @@ bool WzMessageView::initialize(MESSAGE *psMessage)
 	{
 		auto message = std::make_shared<Paragraph>();
 		message->setFontColour(WZCOL_TEXT_BRIGHT);
-		message->addText(msg.toUtf8());
+		message->addText(msg);
 		messages->addItem(message);
 	}
 

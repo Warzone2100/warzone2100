@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Demolishing Structures")
+_("Demolishing a building is almost as simple as building one.")
+_("Select \"Demolish Structure\" in the Structures menu and click a building to demolish.")
+_("A unit will move to the building and destroy it.")
+_("Demolished structures return half the power used to build the structure.")

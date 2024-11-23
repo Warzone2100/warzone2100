@@ -1,0 +1,22 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::hq",
+	"title": "Command Center",
+	"visual": {
+		"stat": {
+			"id": "A0CommandCentre"
+		}
+	},
+	"contents": [
+		"The Command Center is the headquarters of your base.",
+		"It provides access to the mini-map / radar, and the ability to design units.",
+		"",
+		"To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure.",
+		"Then, click where you want your builders to construct it."
+	],
+	"links": [
+		"wz2100::general::commandpanel",
+		"wz2100::structures::building",
+		"wz2100::units::designing"
+	]
+}

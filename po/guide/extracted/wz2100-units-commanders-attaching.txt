@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Attaching Units")
+_("To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached.")
+_("## Limits:")
+_("Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on.")
+_("Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants.")

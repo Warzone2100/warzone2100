@@ -284,6 +284,13 @@ void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	}
 }
 
+bool isRegisteredOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
+{
+	return std::any_of(overlays.begin(), overlays.end(), [psScreen](const OverlayScreen& overlay) -> bool {
+		return overlay.psScreen == psScreen;
+	});
+}
+
 static void cleanupDeletedOverlays()
 {
 	if (overlaysToDelete.empty()) { return; }
@@ -1017,7 +1024,7 @@ UDWORD widgGetButtonKey_DEPRECATED(const std::shared_ptr<W_SCREEN> &psScreen)
 	return lastReleasedKey_DEPRECATED;
 }
 
-unsigned WIDGET::getState()
+unsigned WIDGET::getState() const
 {
 	ASSERT(false, "Can't get widget type %u's state.", type);
 	return 0;
@@ -1288,10 +1295,17 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 	if (isMouseOverWidget())
 	{
 		auto psClickedWidget = shared_from_this();
+		W_CONTEXT clickedContext(psContext);
 		if (isTransparentToClicks)
 		{
 			do {
 				psClickedWidget = psClickedWidget->parent();
+				int shiftX = psClickedWidget->x();
+				int shiftY = psClickedWidget->y();
+				clickedContext.mx += shiftX;
+				clickedContext.my += shiftY;
+				clickedContext.xOffset -= shiftX;
+				clickedContext.yOffset -= shiftY;
 			} while (psClickedWidget != nullptr && psClickedWidget->isTransparentToClicks);
 			if (psClickedWidget == nullptr)
 			{
@@ -1300,17 +1314,17 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		}
 		if (wasPressed)
 		{
-			psClickedWidget->clicked(psContext, key);
+			psClickedWidget->clicked(&clickedContext, key);
 			psClickDownWidgetScreen = psClickedWidget->screenPointer.lock();
 			if (psClickedWidget->capturesMouseDrag(key))
 			{
 				widgetKeyCurrentState[key].capturedDragWidget = psClickedWidget;
-				widgetKeyCurrentState[key].dragLastPos = widgetKeyCurrentState[key].dragStartPos = psContext->convertToScreenContext();
+				widgetKeyCurrentState[key].dragLastPos = widgetKeyCurrentState[key].dragStartPos = clickedContext.convertToScreenContext();
 			}
 		}
 		else
 		{
-			psClickedWidget->released(psContext, key);
+			psClickedWidget->released(&clickedContext, key);
 			psClickDownWidgetScreen.reset();
 		}
 		didProcessClick = true;

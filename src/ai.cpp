@@ -575,7 +575,6 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		return failure;
 	}
 
-	psDroid->lastCheckNearestTarget[weapon_slot] = gameTime;
 	if (lastGameTimeCheckedNeartestTargets != gameTime)
 	{
 		lastGameTimeCheckedNeartestTargets = gameTime;
@@ -747,6 +746,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		return bestMod;
 	}
 
+	psDroid->lastCheckNearestTargetFailed[weapon_slot] = gameTime;
 	return failure;
 }
 

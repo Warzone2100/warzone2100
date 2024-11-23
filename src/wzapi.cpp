@@ -80,8 +80,10 @@
 #include "data.h"
 #include "gamehistorylogger.h"
 #include "hci/quickchat.h"
+#include "screens/guidescreen.h"
 
 #include <list>
+#include <cmath>
 
 /// Assert for scripts that give useful backtraces and other info.
 #if defined(SCRIPT_ASSERT)
@@ -374,6 +376,10 @@ bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string 
 	SCRIPT_ASSERT(false, context, order == DORDER_BUILD, "Invalid order");
 	SCRIPT_ASSERT(false, context, psStats->id.compare("A0ADemolishStructure") != 0, "Cannot build demolition");
 
+	if (_direction.has_value() && std::isnan(_direction.value()))
+	{
+		_direction = 0.f; // avoid undefined behavior (nan is outside the range of representable values of type 'unsigned short')
+	}
 	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
 
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;
@@ -405,6 +411,7 @@ bool wzapi::setAssemblyPoint(WZAPI_PARAMS(STRUCTURE *psStruct, int x, int y))
 //--
 bool wzapi::setSunPosition(WZAPI_PARAMS(float x, float y, float z))
 {
+	SCRIPT_ASSERT(false, context, !std::isnan(x) && !std::isnan(y) && !std::isnan(z), "Inputs must not be nan");
 	setTheSun(Vector3f(x, y, z));
 	return true;
 }
@@ -415,6 +422,10 @@ bool wzapi::setSunPosition(WZAPI_PARAMS(float x, float y, float z))
 //--
 bool wzapi::setSunIntensity(WZAPI_PARAMS(float ambient_r, float ambient_g, float ambient_b, float diffuse_r, float diffuse_g, float diffuse_b, float specular_r, float specular_g, float specular_b))
 {
+	SCRIPT_ASSERT(false, context, !std::isnan(ambient_r) && !std::isnan(ambient_g) && !std::isnan(ambient_b), "ambient inputs must not be nan");
+	SCRIPT_ASSERT(false, context, !std::isnan(diffuse_r) && !std::isnan(diffuse_g) && !std::isnan(diffuse_b), "diffuse inputs must not be nan");
+	SCRIPT_ASSERT(false, context, !std::isnan(specular_r) && !std::isnan(specular_g) && !std::isnan(specular_b), "specular inputs must not be nan");
+
 	float ambient[4];
 	float diffuse[4];
 	float specular[4];
@@ -464,6 +475,9 @@ bool wzapi::setWeather(WZAPI_PARAMS(int weatherType))
 //--
 bool wzapi::setSky(WZAPI_PARAMS(std::string textureFilename, float windSpeed, float scale))
 {
+	SCRIPT_ASSERT(false, context, !std::isnan(windSpeed), "windSpeed must not be nan");
+	SCRIPT_ASSERT(false, context, !std::isnan(scale), "scale must not be nan");
+
 	setSkyBox(textureFilename.c_str(), windSpeed, scale);
 	return true; // TODO: modify setSkyBox to return bool, success / failure
 }
@@ -474,6 +488,9 @@ bool wzapi::setSky(WZAPI_PARAMS(std::string textureFilename, float windSpeed, fl
 //--
 bool wzapi::cameraSlide(WZAPI_PARAMS(float x, float y))
 {
+	SCRIPT_ASSERT(false, context, !std::isnan(x), "x must not be nan");
+	SCRIPT_ASSERT(false, context, !std::isnan(y), "y must not be nan");
+
 	requestRadarTrack(static_cast<SDWORD>(x), static_cast<SDWORD>(y));
 	return true;
 }
@@ -484,6 +501,9 @@ bool wzapi::cameraSlide(WZAPI_PARAMS(float x, float y))
 //--
 bool wzapi::cameraZoom(WZAPI_PARAMS(float viewDistance, float speed))
 {
+	SCRIPT_ASSERT(false, context, !std::isnan(viewDistance), "viewDistance must not be nan");
+	SCRIPT_ASSERT(false, context, !std::isnan(speed), "speed must not be nan");
+
 	animateToViewDistance(viewDistance, speed);
 	return true;
 }
@@ -1236,6 +1256,11 @@ wzapi::researchResults wzapi::enumResearch(WZAPI_NO_PARAMS)
 //--
 std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, int _range, optional<int> _playerFilter, optional<bool> _seen))
 {
+	_x = std::max<int>(_x, 0);
+	_y = std::max<int>(_y, 0);
+	_x = std::min<int>(_x, mapWidth);
+	_y = std::min<int>(_y, mapHeight);
+
 	int player = context.player();
 	int x = world_coord(_x);
 	int y = world_coord(_y);
@@ -1965,6 +1990,7 @@ bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporte
 wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::string featureName, int x, int y)) MUTLIPLAY_UNSAFE
 {
 	int feature = getFeatureStatFromName(WzString::fromUtf8(featureName));
+	SCRIPT_ASSERT(nullptr, context, feature >= 0 && feature < asFeatureStats.size(), "Unknown feature name: %s", featureName.c_str());
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
 	for (const FEATURE *psFeat : apsFeatureLists[0])
 	{
@@ -2115,6 +2141,11 @@ std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(const DROID *psDroid)
 //--
 bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<std::string> _message))
 {
+	SCRIPT_ASSERT(false, context, _x >= 0, "Beacon x value %d is less than zero", _x);
+	SCRIPT_ASSERT(false, context, _y >= 0, "Beacon y value %d is less than zero", _y);
+	SCRIPT_ASSERT(false, context, _x <= mapWidth, "Beacon x value %d is greater than mapWidth %d", _x, (int)mapWidth);
+	SCRIPT_ASSERT(false, context, _y <= mapHeight, "Beacon y value %d is greater than mapHeight %d", _y, (int)mapHeight);
+
 	int x = world_coord(_x);
 	int y = world_coord(_y);
 
@@ -2343,7 +2374,7 @@ bool wzapi::isSpectator(WZAPI_PARAMS(int player))
 nlohmann::json wzapi::getWeaponInfo(WZAPI_PARAMS(std::string weaponName)) WZAPI_DEPRECATED
 {
 	int weaponIndex = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
-	SCRIPT_ASSERT(nlohmann::json(), context, weaponIndex >= 0, "No such weapon: %s", weaponName.c_str());
+	SCRIPT_ASSERT(nlohmann::json(), context, weaponIndex >= 0 && weaponIndex < asWeaponStats.size(), "No such weapon: %s", weaponName.c_str());
 	WEAPON_STATS *psStats = &asWeaponStats[weaponIndex];
 	nlohmann::json result = nlohmann::json::object();
 	result["id"] = weaponName;
@@ -2363,6 +2394,10 @@ nlohmann::json wzapi::getWeaponInfo(WZAPI_PARAMS(std::string weaponName)) WZAPI_
 //--
 bool wzapi::centreView(WZAPI_PARAMS(int x, int y))
 {
+	SCRIPT_ASSERT(false, context, x >= 0, "x value %d is less than zero", x);
+	SCRIPT_ASSERT(false, context, y >= 0, "y value %d is less than zero", y);
+	SCRIPT_ASSERT(false, context, x <= mapWidth, "x value %d is greater than mapWidth %d", x, (int)mapWidth);
+	SCRIPT_ASSERT(false, context, y <= mapHeight, "y value %d is greater than mapHeight %d", y, (int)mapHeight);
 	setViewPos(x, y, false);
 	return true;
 }
@@ -2393,6 +2428,41 @@ bool wzapi::playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional
 	else
 	{
 		audio_QueueTrack(soundID);
+	}
+	return true;
+}
+
+//-- ## addGuideTopic(guideTopicID[, showFlags[, excludedTopicIDs]])
+//--
+//-- Add a guide topic to the in-game guide.
+//--
+//-- guideTopicID is expected to be a "::"-delimited guide topic id (which corresponds to the .json file containing the guide topic information).
+//-- > For example, ```"wz2100::structures::hq"``` will attempt to load ```"guidetopics/wz2100/structures/hq.json"```, the guide topic file about the hq / command center.
+//--
+//-- guideTopicID also has limited support for trailing wildcards. For example:
+//-- - ```"wz2100::units::*"``` will load all guide topic .json files in the folder ```"guidetopics/wz2100/units/"``` (but not any subfolders)
+//-- - ```"wz2100::**"``` will load all guide topic .json files within the folder ```"guidetopics/wz2100/"``` **and** all subfolders
+//--
+//-- (The wildcard is only supported in the last position.)
+//--
+//-- showFlags can be used to configure automatic display of the guide, and can be set to one or more of:
+//-- - ```SHOWTOPIC_FIRSTADD```: open guide only if this topic is newly-added (this playthrough) - if topic was already added, the guide won't be automatically displayed
+//-- - ```SHOWTOPIC_NEVERVIEWED```: open guide only if this topic has never been viewed by the player before (in any playthrough)
+//-- You can also specify multiple flags (ex. ```SHOWTOPIC_FIRSTADD | SHOWTOPIC_NEVERVIEWED```).
+//-- The default behavior (where showFlags is omitted) merely adds the topic to the guide, but does not automatically display / open the guide.
+//--
+//-- excludedTopicIDs can be a string or a list of string guide topic IDs (non-wildcard) to be excluded, when supplying a wildcard guideTopicID.
+//--
+bool wzapi::addGuideTopic(WZAPI_PARAMS(std::string guideTopicID, optional<int> showFlags, optional<string_or_string_list> excludedTopicIDs))
+{
+	if (excludedTopicIDs.has_value())
+	{
+		std::unordered_set<std::string> excludedTopicIDsSet(excludedTopicIDs.value().strings.begin(), excludedTopicIDs.value().strings.end());
+		::addGuideTopic(guideTopicID, static_cast<ShowTopicFlags>(showFlags.value_or(0)), excludedTopicIDsSet);
+	}
+	else
+	{
+		::addGuideTopic(guideTopicID, static_cast<ShowTopicFlags>(showFlags.value_or(0)));
 	}
 	return true;
 }
@@ -2528,6 +2598,10 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time))
 //--
 int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 {
+	if (mission.time < 0)
+	{
+		return -1;
+	}
 	return (mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC;
 }
 
@@ -3127,13 +3201,12 @@ int wzapi::countDroid(WZAPI_PARAMS(optional<int> _droidType, optional<int> _play
 //--
 wzapi::no_return_value wzapi::loadLevel(WZAPI_PARAMS(std::string levelName))
 {
-	sstrcpy(aLevelName, levelName.c_str());
-
 	// Find the level dataset
 	LEVEL_DATASET *psNewLevel = levFindDataSet(levelName.c_str());
 	SCRIPT_ASSERT({}, context, psNewLevel, "Could not find level data for %s", levelName.c_str());
 
 	// Get the mission rolling...
+	sstrcpy(aLevelName, levelName.c_str());
 	prevMissionType = mission.type;
 	nextMissionType = psNewLevel->type;
 	loopMissionState = LMS_CLEAROBJECTS;
@@ -3208,6 +3281,7 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 bool wzapi::donatePower(WZAPI_PARAMS(int amount, int player))
 {
 	int from = context.player();
+	SCRIPT_ASSERT_PLAYER(false, context, player);
 	giftPower(from, player, amount, true);
 	return true;
 }
@@ -4435,9 +4509,48 @@ nlohmann::json wzapi::constructStatsObject()
 			strct["Thermal"] = psStats->base.thermal;
 			strct["HitPoints"] = psStats->base.hitpoints;
 			strct["Resistance"] = psStats->base.resistance;
+			strct["BuildPower"] = psStats->powerToBuild;
+			nlohmann::json weaps = nlohmann::json::array();
+			for (int k = 0; k < MAX_WEAPONS; k++)
+			{
+				if (psStats->psWeapStat[k] != nullptr)
+				{
+					weaps.push_back(psStats->psWeapStat[k]->id);
+				}
+			}
+			strct["Weapons"] = weaps;
 			structbase[psStats->name.toUtf8()] = std::move(strct);
 		}
 		stats["Building"] = std::move(structbase);
+
+		//==   * ```Research``` Researches
+		nlohmann::json researchbase = nlohmann::json::object();
+		for (int j = 0; j < asResearch.size(); j++)
+		{
+			RESEARCH *psStats = &asResearch[j];
+			nlohmann::json res = nlohmann::json::object();
+			res["Id"] = psStats->id;
+			nlohmann::json reqs = nlohmann::json::array();
+			for (int k = 0; k < psStats->pPRList.size(); k++)
+			{
+				reqs.push_back(asResearch[psStats->pPRList[k]].id);
+			}
+			res["Requires"] = reqs;
+			nlohmann::json resstrcts = nlohmann::json::array();
+			for (int k = 0; k < psStats->pStructureResults.size(); k++)
+			{
+				resstrcts.push_back(asStructureStats[psStats->pStructureResults[k]].id);
+			}
+			res["ResultStructures"] = resstrcts;
+			nlohmann::json rescomps = nlohmann::json::array();
+			for (int k = 0; k < psStats->componentResults.size(); k++)
+			{
+				rescomps.push_back(psStats->componentResults[k]->id);
+			}
+			res["ResultComponents"] = rescomps;
+			researchbase[psStats->name.toUtf8()] = std::move(res);
+		}
+		stats["Research"] = std::move(researchbase);
 	}
 	return stats;
 }
@@ -4541,6 +4654,9 @@ nlohmann::json wzapi::getUsefulConstants()
 	constants["RADIUS"] = SCRIPT_RADIUS;
 	constants["LZ_COMPROMISED_TIME"] = JS_LZ_COMPROMISED_TIME;
 	constants["OBJECT_FLAG_UNSELECTABLE"] = OBJECT_FLAG_UNSELECTABLE;
+	// ShowTopicFlags constants
+	constants["SHOWTOPIC_FIRSTADD"] = ShowTopicFlags::FirstAdd;
+	constants["SHOWTOPIC_NEVERVIEWED"] = ShowTopicFlags::NeverViewed;
 	// the constants below are subject to change without notice...
 	constants["RES_MSG"] = MSG_RESEARCH;
 	constants["CAMP_MSG"] = MSG_CAMPAIGN;

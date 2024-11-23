@@ -1,0 +1,9 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Attacking")
+_("To attack with a VTOL, select it and click an enemy like normal.")
+_("However, you may noticed the white ammo bar below its health bar as you start attacking.")
+_("Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels.")
+_("A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad.")
+_("Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity.")
+_("Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers.")

@@ -551,6 +551,11 @@ unsigned gl_texture::id()
 	return _id;
 }
 
+gfx_api::texture2dDimensions gl_texture::get_dimensions() const
+{
+	return {tex_width, tex_height};
+}
+
 // MARK: texture_array_mip_level_buffer
 
 struct texture_array_mip_level_buffer
@@ -2447,6 +2452,8 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	new_texture->gles = gles;
 	new_texture->mip_count = mipmap_count;
 	new_texture->internal_format = internal_format;
+	new_texture->tex_width = width;
+	new_texture->tex_height = height;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	new_texture->debugName = filename;
 #endif
@@ -2814,9 +2821,13 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 #if !defined(__EMSCRIPTEN__)
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				if (hasBorderClampSupport)
+				{
+					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+					break;
+				}
 #else
 				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
@@ -2837,9 +2848,13 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 				glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #if !defined(__EMSCRIPTEN__)
-				glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+				if (hasBorderClampSupport)
+				{
+					glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+					glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+					glTexParameterfv(type, GL_TEXTURE_BORDER_COLOR, to_gl(desc.border));
+					break;
+				}
 #else
 				// POSSIBLE FIXME: Emulate GL_CLAMP_TO_BORDER for WebGL?
 #endif
@@ -3491,6 +3506,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	initPixelFormatsSupport();
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
+	hasBorderClampSupport = initCheckBorderClampSupport();
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -3646,6 +3662,19 @@ bool gl_context::isBlocklistedGraphicsDriver() const
 		// Does not work with WZ. (No indications that there is a driver version that does not crash.)
 		return true;
 	}
+
+	// Renderer: softpipe
+	// (From the OpenGLOn12 / "OpenGL Compatibility Pack")
+	if (openGL_renderer == "softpipe")
+	{
+		WzString openGL_vendor = (const char*)wzSafeGlGetString(GL_VENDOR);
+		if (openGL_vendor == "Mesa")
+		{
+			// Does not work performantly, can cause crashes (as of "Mesa 24.2.0-devel (git-57f4f8520a)")
+			// Since libANGLE is very likely to work better, reject this (for now)
+			return true;
+		}
+	}
 #endif
 
 	return false;
@@ -3735,15 +3764,9 @@ bool gl_context::initGLContext()
 		debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLAD_GL_VERSION_2_0 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLAD_GL_VERSION_2_1 ? "is" : "is NOT");
 		debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLAD_GL_VERSION_3_0 ? "is" : "is NOT");
-	#ifdef GLAD_GL_VERSION_3_1
 		debug(LOG_3D, "  * OpenGL 3.1 %s supported!", GLAD_GL_VERSION_3_1 ? "is" : "is NOT");
-	#endif
-	#ifdef GLAD_GL_VERSION_3_2
 		debug(LOG_3D, "  * OpenGL 3.2 %s supported!", GLAD_GL_VERSION_3_2 ? "is" : "is NOT");
-	#endif
-	#ifdef GLAD_GL_VERSION_3_3
 		debug(LOG_3D, "  * OpenGL 3.3 %s supported!", GLAD_GL_VERSION_3_3 ? "is" : "is NOT");
-	#endif
 	#ifdef GLAD_GL_VERSION_4_0
 		debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLAD_GL_VERSION_4_0 ? "is" : "is NOT");
 	#endif
@@ -3776,6 +3799,15 @@ bool gl_context::initGLContext()
 	{
 		debug(LOG_POPUP, "OpenGL 3.0+ / OpenGL ES 3.0+ not supported! Please upgrade your drivers.");
 		return false;
+	}
+
+	if (!gles)
+	{
+		if (!GLAD_GL_VERSION_3_1)
+		{
+			// non-fatal pop-up, to warn about OpenGL < 3.1 (we may require 3.1+ in the future)
+			debug(LOG_POPUP, "OpenGL 3.1+ is not supported - Please upgrade your drivers or try a different graphics backend.");
+		}
 	}
 
 #else
@@ -4569,6 +4601,26 @@ bool gl_context::initInstancedFunctions()
 	}
 #endif
 	return true;
+}
+
+bool gl_context::initCheckBorderClampSupport()
+{
+	// GL_CLAMP_TO_BORDER is supported on:
+	// - OpenGL (any version we support)
+	if (!gles)
+	{
+		return true;
+	}
+	// - OpenGL ES (3.2+, or with extensions)
+	else
+	{
+#if !defined(WZ_STATIC_GL_BINDINGS) && !defined(__EMSCRIPTEN__)
+		return GLAD_GL_ES_VERSION_3_2 || GLAD_GL_EXT_texture_border_clamp || GLAD_GL_OES_texture_border_clamp || GLAD_GL_NV_texture_border_clamp;
+#else
+		// - WebGL has no support
+		return false;
+#endif
+	}
 }
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)

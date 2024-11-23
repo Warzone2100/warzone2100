@@ -20,6 +20,7 @@ module.exports = {
 	globIgnores: [
 		'**\/node_modules\/**\/*',
 		'**/service-worker.js', // do not precache the service-worker file (which shouldn't exist when this is run, but just in case)
+		'**/extern-postjs.js', // do not precache generated extern-postjs.js file (ends up included in build)
 		'**/*.data', // do not precache .data files, which are often huge
 		'**/*.debug.wasm', // do not precache wasm debug symbols
 		'**\/music\/**\/*', // do not precache music (which is optional)

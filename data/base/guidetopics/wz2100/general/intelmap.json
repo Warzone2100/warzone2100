@@ -1,0 +1,19 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::general::intelmap",
+	"title": "Intelligence Display",
+	"sort": "03",
+	"visual": {
+		"retButId": "INTELMAP"
+	},
+	"contents": [
+		"The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects.",
+		"",
+		"When you open the Intelligence Display, two rows of icons appear on the bottom of the screen.",
+		"",
+		"Selecting an icon will display information about that research or mission objective in the middle of the screen."
+	],
+	"links": [
+		"wz2100::general::commandpanel"
+	]
+}

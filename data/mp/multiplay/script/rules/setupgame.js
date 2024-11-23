@@ -34,6 +34,9 @@ function setupGame()
 	// Enable all templates
 	setDesign(true);
 
+	// Enable all guide topics
+	addGuideTopic("wz2100::**");
+
 	showInterface(); // init buttons. This MUST come before setting the reticule button data
 	queue("setMainReticule", TICK_TIME);
 	mainReticule = true;

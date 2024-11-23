@@ -62,6 +62,7 @@ data/base/script/campaign/libcampaign_includes/base.js
 data/base/script/campaign/libcampaign_includes/debug.js
 data/base/script/campaign/libcampaign_includes/events.js
 data/base/script/campaign/libcampaign_includes/group.js
+data/base/script/campaign/libcampaign_includes/guide.js
 data/base/script/campaign/libcampaign_includes/hook.js
 data/base/script/campaign/libcampaign_includes/misc.js
 data/base/script/campaign/libcampaign_includes/nexus.js
@@ -301,6 +302,7 @@ lib/ivis_opengl/png_util_spng.cpp
 lib/ivis_opengl/screen.cpp
 lib/ivis_opengl/tex.cpp
 lib/ivis_opengl/textdraw.cpp
+lib/netplay/error_categories.cpp
 lib/netplay/netjoin_stub.cpp
 lib/netplay/netlog.cpp
 lib/netplay/netpermissions.cpp
@@ -309,6 +311,9 @@ lib/netplay/netqueue.cpp
 lib/netplay/netreplay.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
+lib/netplay/port_mapping_manager.cpp
+lib/netplay/port_mapping_manager_impl_libplum.cpp
+lib/netplay/port_mapping_manager_impl_miniupnpc.cpp
 lib/netplay/sync_debug.cpp
 lib/netplay/wzfile.cpp
 lib/sdl/cursor_sdl_helpers.cpp
@@ -405,6 +410,7 @@ src/effects.cpp
 src/emscripten_helpers.cpp
 src/faction.cpp
 src/feature.cpp
+src/formation.cpp
 src/fpath.cpp
 src/frontend.cpp
 src/game.cpp
@@ -483,6 +489,7 @@ src/raycast.cpp
 src/research.cpp
 src/scores.cpp
 src/screens/chatscreen.cpp
+src/screens/guidescreen.cpp
 src/screens/helpscreen.cpp
 src/screens/joiningscreen.cpp
 src/screens/netpregamescreen.cpp
@@ -518,5 +525,6 @@ src/wrappers.cpp
 src/wzapi.cpp
 src/wzcrashhandlingproviders.cpp
 src/wzjsonhelpers.cpp
+src/wzjsonlocalizedstring.cpp
 src/wzpropertyproviders.cpp
 src/wzscriptdebug.cpp

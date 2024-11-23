@@ -13,6 +13,8 @@ on:
       - 'data/base/stats/**'
       - 'data/mp/stats/**'
       - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
   # Support running after "Draft Tag Release" workflow completes, as part of automated release process
   workflow_run:
     workflows: ["Draft Tag Release"]
@@ -50,7 +52,7 @@ jobs:
       WZ_FLATPAK_BUILD_DIR: flatpak_app
       WZ_FLATPAK_TARGET_ARCH: ${{ matrix.flatpak-arch }}
       WZ_FLATPAK_BUILD_ARCH: x86_64
-      WZ_FREEDESKTOP_RUNTIME_VERSION: 23.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
+      WZ_FREEDESKTOP_RUNTIME_VERSION: 24.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
     outputs:
       # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
@@ -298,13 +300,7 @@ jobs:
         path: '${{ steps.repo-tar.outputs.REPO_TAR_FILE }}'
 
   upload-debug-symbols:
-    strategy:
-      matrix:
-        include:
-          - arch: "x86_64"
-          - arch: "arm64"
-      fail-fast: false
-    name: 'Upload Debug Symbols (${{ matrix.arch }})'
+    name: 'Upload Debug Symbols'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -315,20 +311,27 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: 'src'
       - name: Prep Environment
         run: |
           mkdir -p dl-debug/symbols
           mkdir -p dl-debug/additional
+          echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Debug Symbols
         uses: actions/download-artifact@v4
         with:
-          name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
+          pattern: 'debugsymbols_linux_flatpak_*'
           path: ./dl-debug/symbols
+          merge-multiple: false
       - name: Download Additional Debug Files
         uses: actions/download-artifact@v4
         with:
-          name: 'debugdependencylibsnapshot_linux_flatpak_${{ matrix.arch }}'
+          pattern: 'debugdependencylibsnapshot_linux_flatpak_*'
           path: ./dl-debug/additional
+          merge-multiple: false
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: ./dl-debug
@@ -343,8 +346,15 @@ jobs:
             echo "No SENTRY_AUTH_TOKEN - skipping"
             exit 0
           fi
-          docker pull getsentry/sentry-cli
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          # Download sentry-cli
+          echo "::group::Downloading sentry-cli ..."
+          cmake -P "${WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+          echo "Downloading sentry-cli ... Done"
+          echo "::endgroup::"
+          # Upload symbols
+          echo "::group::sentry-cli debug-files upload"
+          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          echo "::endgroup::"
 
   upload-release-builds:
     strategy:

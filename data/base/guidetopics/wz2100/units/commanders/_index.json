@@ -1,0 +1,28 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::commanders",
+	"title": "Commanders",
+	"sort": "07",
+	"visual": {
+		"droidTemplate": {
+			"body": "Body8MBT",
+			"brain": "CommandBrain01",
+			"name": "Command Turret Scorpion Half-tracks",
+			"propulsion": "HalfTrack",
+			"type": "DROID_COMMAND",
+			"weapons": [
+				"CommandTurret1"
+			]
+		}
+	},
+	"contents": [
+		"Command turrets are used much like sensors, except they can command any attacking unit, not just artillery.",
+		"",
+		"Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases.",
+		"",
+		"They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
+	],
+	"links": [
+		"wz2100::units::sensors"
+	]
+}

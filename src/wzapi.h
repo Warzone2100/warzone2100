@@ -403,6 +403,12 @@ namespace wzapi
 		//__
 		virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) = 0;
 
+		//__ ## eventDroidRankGained(droid, rankNum)
+		//__
+		//__ An event that is run whenever a droid gains a rank.
+		//__
+		virtual bool handle_eventDroidRankGained(const DROID *psDroid, int rankNum) = 0;
+
 		//__ ## eventAttacked(victim, attacker)
 		//__
 		//__ An event that is run when an object belonging to the script's controlling player is
@@ -1070,6 +1076,7 @@ namespace wzapi
 	bool centreView(WZAPI_PARAMS(int x, int y));
 	bool playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional<int> _y, optional<int> _z));
 	bool gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackDrop, optional<bool> _showOutro));
+	bool addGuideTopic(WZAPI_PARAMS(std::string guideTopicID, optional<int> showFlags, optional<string_or_string_list> excludedTopicIDs));
 
 	// MARK: - Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	bool setStructureLimits(WZAPI_PARAMS(std::string structureName, int limit, optional<int> _player));

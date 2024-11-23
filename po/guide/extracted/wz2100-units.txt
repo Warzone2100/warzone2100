@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Units")
+_("You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory.")
+_("This aspect of the game is what makes Warzone 2100 unique in its own way.")
+_("To be able to design units, a Command Center is required.")

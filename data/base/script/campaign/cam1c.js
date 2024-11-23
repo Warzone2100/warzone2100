@@ -186,7 +186,7 @@ camAreaEvent("NPLZ2Trigger", function()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1CA");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.alpha7);
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
 	centreView(startPos.x, startPos.y);

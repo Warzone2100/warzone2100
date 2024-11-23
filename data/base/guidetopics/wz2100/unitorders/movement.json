@@ -1,0 +1,30 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders::movement",
+	"title": "Movement",
+	"sort": "04",
+	"visual": [
+		{
+			"secondaryUnitOrderButtons": "PATROL"
+		},
+		{
+			"secondaryUnitOrderButtons": "CIRCLE"
+		},
+		{
+			"secondaryUnitOrderButtons": "HALTTYPE"
+		}
+	],
+	"contents": [
+		"You can use the Unit Orders menu to configure unit \"Movement\".",
+		"",
+		"- Patrol: Move between two points. Just click a point on the map after selecting it",
+		"- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it",
+		"",
+		"- Pursue: Pursue enemy",
+		"- Guard: Stay near an area or structure. (default)",
+		"- Hold Position: Do not move under any circumstances"
+	],
+	"links": [
+		"wz2100::unitorders"
+	]
+}

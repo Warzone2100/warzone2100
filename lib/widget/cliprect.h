@@ -39,6 +39,7 @@ public:
 	void setTopOffset(uint16_t value);
 	void setLeftOffset(uint16_t value);
 	uint16_t getTopOffset();
+	bool isChildVisible(const std::shared_ptr<WIDGET>& child);
 	int parentRelativeXOffset(int coord) const override;
 	int parentRelativeYOffset(int coord) const override;
 

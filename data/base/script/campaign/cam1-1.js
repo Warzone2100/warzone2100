@@ -124,7 +124,7 @@ function blowupNonOriginalStructures()
 //Mission setup stuff
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_2S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha4.pre, {
 		area: "RTLZ",
 		message: "C1-1_LZ",
 		reinforcements: -1, //No reinforcements

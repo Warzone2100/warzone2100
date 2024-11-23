@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Commanders")
+_("Command turrets are used much like sensors, except they can command any attacking unit, not just artillery.")
+_("Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases.")
+_("They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly.")

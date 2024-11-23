@@ -1325,6 +1325,26 @@ bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct)
 	return true;
 }
 
+//__ ## eventDroidRankGained(droid, rankNum)
+//__
+//__ An event that is run whenever a droid gains a rank.
+//__
+bool triggerEventDroidRankGained(const DROID *psDroid, int rankNum)
+{
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	if (!psDroid) { return true; }
+	for (auto *instance : scripts)
+	{
+		int player = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
+		if (player == psDroid->player || receiveAll)
+		{
+			instance->handle_eventDroidRankGained(psDroid, rankNum);
+		}
+	}
+	return true;
+}
+
 //__ ## eventAttacked(victim, attacker)
 //__
 //__ An event that is run when an object belonging to the script's controlling player is

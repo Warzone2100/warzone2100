@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -83,7 +83,9 @@
 #include "notifications.h"
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
+#include "screens/guidescreen.h"
 #include "hci/quickchat.h"
+#include "warzoneconfig.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -356,6 +358,12 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 			return partX + partY <= 1.f;
 		});
 	}
+}
+
+optional<std::string> getReticuleButtonDisplayFilename(int ButId)
+{
+	ASSERT_OR_RETURN(nullopt, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
+	return retbutstats[ButId].filename.toUtf8();
 }
 
 void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, const playerCallbackFunc& callbackFunc)
@@ -995,6 +1003,7 @@ void interfaceShutDown()
 	}
 
 	shutdownChatScreen();
+	closeGuideScreen();
 	ChatDialogUp = false;
 
 	bAllowOtherKeyPresses = true;
@@ -1188,6 +1197,8 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 		}
 	}
 
+	auto startingIntMode = intMode;
+
 	switch (intMode)
 	{
 	case INT_DESIGN:
@@ -1228,7 +1239,10 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 	{
 		intRemoveMissionResultNoAnim();
 	}
-	intRemoveDesign();
+	if (startingIntMode == INT_DESIGN)
+	{
+		intRemoveDesign();
+	}
 	intHidePowerBar();
 
 	if (interfaceController)
@@ -2135,9 +2149,159 @@ bool intShowGroupSelectionMenu()
 	return true;
 }
 
+class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
+{
+protected:
+	W_INGAMEOPTIONS_BUTTON()
+	{ }
+	void initialize();
+public:
+	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
+
+	void display(int xOffset, int yOffset) override;
+	std::string getTip() override;
+
+private:
+	uint8_t currentAlphaValue() const;
+	bool isHighlighted() const;
+};
+
+std::shared_ptr<W_INGAMEOPTIONS_BUTTON> W_INGAMEOPTIONS_BUTTON::make()
+{
+	class make_shared_enabler: public W_INGAMEOPTIONS_BUTTON {};
+	auto widget = std::make_shared<make_shared_enabler>();
+	widget->initialize();
+	return widget;
+}
+
+void W_INGAMEOPTIONS_BUTTON::initialize()
+{
+	id = IDRET_OPTIONS;
+	setGeometry(0, 0, RET_BUTWIDTH, RET_BUTHEIGHT);
+}
+
+uint8_t W_INGAMEOPTIONS_BUTTON::currentAlphaValue() const
+{
+	uint32_t alphaPercentage = war_getOptionsButtonVisibility();
+
+	if (isHighlighted())
+	{
+		alphaPercentage = 100;
+	}
+
+	return static_cast<uint8_t>((alphaPercentage * 255) / 100);
+}
+
+bool W_INGAMEOPTIONS_BUTTON::isHighlighted() const
+{
+	return ((getState() & WBUT_HIGHLIGHT) != 0) || InGameOpUp;
+}
+
+void W_INGAMEOPTIONS_BUTTON::display(int xOffset, int yOffset)
+{
+	const int x0 = xOffset + x();
+	const int y0 = yOffset + y();
+	bool butDisabled = getState() & WBUT_DISABLE;
+
+	uint8_t alphaValue = currentAlphaValue();
+
+	if (butDisabled)
+	{
+		iV_DrawImageTint(IntImages, IMAGE_RETICULE_GREY, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+		return;
+	}
+
+	bool Down = getState() & (WBUT_DOWN | WBUT_CLICKLOCK);
+	if (Down)
+	{
+		iV_DrawImageTint(IntImages, IMAGE_INGAMEOPTIONS_DOWN, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+	}
+	else
+	{
+		iV_DrawImageTint(IntImages, IMAGE_INGAMEOPTIONS_UP, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+	}
+
+	if (isHighlighted())
+	{
+		iV_DrawImageTint(IntImages, IMAGE_RETICULE_HILIGHT, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+	}
+}
+
+std::string W_INGAMEOPTIONS_BUTTON::getTip()
+{
+	if (!InGameOpUp)
+	{
+		return  _("Open In-Game Options");
+	}
+	else
+	{
+		return  _("Close In-Game Options");
+	}
+}
+
+bool intAddInGameOptionsButton()
+{
+	bool hiddenOptionsButton = war_getOptionsButtonVisibility() == 0;
+
+	auto psExistingBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
+	if (psExistingBut != nullptr)
+	{
+		if (!hiddenOptionsButton)
+		{
+			psExistingBut->show();
+		}
+		else
+		{
+			psExistingBut->hide();
+		}
+		return false;
+	}
+
+	auto button = W_INGAMEOPTIONS_BUTTON::make();
+	if (!button)
+	{
+		debug(LOG_ERROR, "Failed to create in game options button");
+	}
+	else
+	{
+		psWScreen->psForm->attach(button);
+		setReticuleButtonDimensions(*button, "image_ingameoptions_up.png");
+		button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			int w = psWidget->width();
+			int h = psWidget->height();
+			int x0 = screenWidth - (w + 16);
+			int y0 = 18;
+			psWidget->setGeometry(x0, y0, w, h);
+		}));
+		button->addOnClickHandler([](W_BUTTON&) {
+			widgScheduleTask([](){
+				kf_addInGameOptions();
+			});
+		});
+
+		if (hiddenOptionsButton)
+		{
+			button->hide();
+		}
+	}
+
+	return true;
+}
+
+void intHideInGameOptionsButton()
+{
+	auto psOptionsBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
+	if (psOptionsBut != nullptr)
+	{
+		psOptionsBut->hide();
+	}
+}
+
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule()
 {
+	intAddInGameOptionsButton();
+
 	if (ReticuleUp)
 	{
 		return true; // all fine

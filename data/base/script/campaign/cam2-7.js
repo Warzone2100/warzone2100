@@ -111,7 +111,7 @@ function truckDefense()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2_8S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta10.pre, {
 		eliminateBases: true,
 		area: "RTLZ",
 		message: "C27_LZ",
@@ -143,6 +143,7 @@ function eventStartLevel()
 		camUpgradeOnMapTemplates(cTempl.npcybf, cTempl.cocybth, CAM_THE_COLLECTIVE);
 		camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
 		camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.npcybm, cTempl.cocybag, CAM_THE_COLLECTIVE);
 
 		camSetArtifacts({
 			"COHeavyFac-Arti-b2": { tech: ["R-Wpn-Cannon5", "R-Wpn-MG-Damage08"] },
@@ -248,7 +249,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: (!camClassicMode()) ? [cTempl.colagv, cTempl.commorv, cTempl.commorvt, cTempl.colhvat] : [cTempl.colagv, cTempl.commorv]
+			templates: (!camClassicMode()) ? [cTempl.colagv, cTempl.commorv, cTempl.commorvt, cTempl.colhvat, cTempl.comacv] : [cTempl.colagv, cTempl.commorv]
 		},
 	});
 

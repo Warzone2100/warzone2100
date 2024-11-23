@@ -18,9 +18,9 @@ if(NOT EXISTS "${EMSCRIPTEN_ROOT}/cmake/Modules/Platform/Emscripten.cmake")
 endif()
 
 # Get the path to *this* triplet file, and then back up to get the known path to the meta-toolchain in WZ's repo
-get_filename_component(WZ_WASM_META_TOOLCHAIN "${CMAKE_CURRENT_LIST_DIR}/../../emscripten/toolchain/Toolchain-Emscripten.cmake" ABSOLUTE)
+get_filename_component(WZ_WASM_META_TOOLCHAIN "${CMAKE_CURRENT_LIST_DIR}/../../cmake/toolchains/wasm32-emscripten.cmake" ABSOLUTE)
 if(NOT EXISTS "${WZ_WASM_META_TOOLCHAIN}")
-   message(FATAL_ERROR "Failed to find WZ's Toolchain-Emscripten.cmake")
+   message(FATAL_ERROR "Failed to find WZ's toolchains/wasm32-emscripten.cmake")
 endif()
 
 set(VCPKG_TARGET_ARCHITECTURE wasm32)

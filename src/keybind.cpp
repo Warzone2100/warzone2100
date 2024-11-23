@@ -76,6 +76,7 @@
 #include "loadsave.h"
 #include "game.h"
 #include "droid.h"
+#include "move.h"
 #include "spectatorwidgets.h"
 #include "campaigninfo.h"
 
@@ -463,7 +464,7 @@ void kf_MakeMeHero()
 	{
 		if (psDroid->selected && (psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_SENSOR))
 		{
-			psDroid->experience = 8 * 65536 * 128;
+			psDroid->experience = 16 * 65536 * 128;
 		}
 		else if (psDroid->selected)
 		{
@@ -1041,7 +1042,7 @@ void	kf_PitchForward()
 /* Resets pitch to default */
 void	kf_ResetPitch()
 {
-	playerPos.r.x = DEG(360 - 20);
+	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH);
 	setViewDistance(STARTDISTANCE);
 }
 
@@ -1485,6 +1486,10 @@ void	kf_FinishAllResearch()
 	{
 		if (!IsResearchCompleted(&asPlayerResList[selectedPlayer][j]))
 		{
+			if (asResearch[j].excludeFromCheats)
+			{
+				continue;
+			}
 			if (bMultiMessages)
 			{
 				SendResearch(selectedPlayer, j, false);
@@ -2185,7 +2190,18 @@ void	kf_CentreOnBase()
 // --------------------------------------------------------------------------
 void kf_ToggleFormationSpeedLimiting()
 {
-	addConsoleMessage(_("Formation speed limiting has been removed from the game due to bugs."), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+	bool resultingValue = false;
+	if (moveToggleFormationSpeedLimiting(selectedPlayer, &resultingValue))
+	{
+		if (resultingValue)
+		{
+			addConsoleMessage(_("Formation speed limiting ON"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			addConsoleMessage(_("Formation speed limiting OFF"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
 }
 
 // --------------------------------------------------------------------------

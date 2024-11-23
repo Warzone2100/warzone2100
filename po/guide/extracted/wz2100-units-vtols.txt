@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("VTOLs")
+_("VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies.")
+_("To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\".")
+_("You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo.")

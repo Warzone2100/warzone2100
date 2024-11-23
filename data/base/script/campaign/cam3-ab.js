@@ -102,9 +102,9 @@ function vtolAttack()
 {
 	if (camClassicMode())
 	{
-		const list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv, cTempl.nxmheapv];
+		const list = [cTempl.nxmheapv, cTempl.nxmheapv, cTempl.nxmtherv];
 		const ext = {
-			limit: [2, 4, 2, 4], //paired with list array
+			limit: [4, 4, 5], //paired with list array
 			alternate: true,
 			altIdx: 0
 		};
@@ -289,7 +289,7 @@ function eventStartLevel()
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma6, {
 		callback: "resistanceResearched"
 	});
 

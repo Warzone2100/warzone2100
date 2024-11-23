@@ -49,6 +49,22 @@ static bool			g_bAudioPaused = false;
 static AUDIO_SAMPLE g_sPreviousSample;
 static int			g_iPreviousSampleTime = 0;
 
+
+WZAudioDataResourceInterface::WZAudioDataResourceInterface()
+{ }
+WZAudioDataResourceInterface::~WZAudioDataResourceInterface()
+{ }
+
+WzAudioDataPhysFSHandle::~WzAudioDataPhysFSHandle()
+{
+	debug(LOG_WZ, "Closing: %s", m_fileName.c_str());
+	if (m_fileHandle)
+	{
+		PHYSFS_close(m_fileHandle);
+		m_fileHandle = nullptr;
+	}
+}
+
 bool loadAudioEffectFileData(WzConfig &ini)
 {
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
@@ -818,7 +834,7 @@ AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, const std::fu
 	{
 		return nullptr;
 	}
-	AUDIO_STREAM *stream = sound_PlayStream(fileName, volume, onFinished, user_data);
+	AUDIO_STREAM *stream = sound_PlayStream(fileName, false, volume, onFinished, user_data);
 	return stream;
 }
 

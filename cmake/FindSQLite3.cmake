@@ -1,6 +1,8 @@
 # Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
 # file Copyright.txt or https://cmake.org/licensing for details.
 
+# 2024-06-20: Modified by WZ to find vcpkg unofficial-sqlite3 first
+
 #[=======================================================================[.rst:
 FindSQLite3
 -----------
@@ -32,12 +34,61 @@ This module will set the following variables if found:
 
 #]=======================================================================]
 
+cmake_policy(PUSH)
+if(POLICY CMP0159)
+	cmake_policy(SET CMP0159 NEW) # file(STRINGS) with REGEX updates CMAKE_MATCH_<n>
+endif()
+
+if (VCPKG_TOOLCHAIN)
+	find_package(unofficial-sqlite3 CONFIG)
+	# If we found the vcpkg unofficial-sqlite3 configuration, return with that result
+	if(unofficial-sqlite3_FOUND AND TARGET unofficial::sqlite3::sqlite3)
+		get_target_property(SQLite3_INCLUDE_DIR unofficial::sqlite3::sqlite3 INTERFACE_INCLUDE_DIRECTORIES)
+		# Extract version information from the header file
+		if(SQLite3_INCLUDE_DIR)
+			file(STRINGS ${SQLite3_INCLUDE_DIR}/sqlite3.h _ver_line
+				 REGEX "^#define SQLITE_VERSION  *\"[0-9]+\\.[0-9]+\\.[0-9]+\""
+				 LIMIT_COUNT 1)
+			string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+"
+				   SQLite3_VERSION "${_ver_line}")
+			unset(_ver_line)
+		endif()
+		set(SQLite3_LIBRARY unofficial::sqlite3::sqlite3)
+		include(FindPackageHandleStandardArgs)
+		find_package_handle_standard_args(SQLite3
+			REQUIRED_VARS SQLite3_INCLUDE_DIR SQLite3_LIBRARY
+			VERSION_VAR SQLite3_VERSION)
+
+		# Create the imported target
+		set(SQLite3_INCLUDE_DIRS ${SQLite3_INCLUDE_DIR})
+		set(SQLite3_LIBRARIES ${SQLite3_LIBRARY})
+		if(NOT TARGET SQLite::SQLite3)
+			add_library(SQLite::SQLite3 ALIAS unofficial::sqlite3::sqlite3)
+		endif()
+
+		message(STATUS "Using vcpkg unofficial-sqlite3 configuration (${SQLite3_VERSION})")
+		cmake_policy(POP)
+		return()
+	else()
+		message(STATUS "Did not find vcpkg unofficial-sqlite3 configuration, reverting to regular check")
+	endif()
+endif()
+
+find_package(PkgConfig QUIET)
+pkg_check_modules(PC_SQLite3 QUIET sqlite3)
+
 # Look for the necessary header
-find_path(SQLite3_INCLUDE_DIR NAMES sqlite3.h)
+find_path(SQLite3_INCLUDE_DIR NAMES sqlite3.h
+  HINTS
+    ${PC_SQLite3_INCLUDE_DIRS}
+)
 mark_as_advanced(SQLite3_INCLUDE_DIR)
 
 # Look for the necessary library
-find_library(SQLite3_LIBRARY NAMES sqlite3 sqlite)
+find_library(SQLite3_LIBRARY NAMES sqlite3 sqlite
+  HINTS
+    ${PC_SQLite3_LIBRARY_DIRS}
+)
 mark_as_advanced(SQLite3_LIBRARY)
 
 # Extract version information from the header file
@@ -66,3 +117,5 @@ if(SQLite3_FOUND)
             INTERFACE_INCLUDE_DIRECTORIES "${SQLite3_INCLUDE_DIR}")
     endif()
 endif()
+
+cmake_policy(POP)

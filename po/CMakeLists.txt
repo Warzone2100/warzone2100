@@ -75,7 +75,17 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       get_filename_component(_absFile "${_currentPoFile}" ABSOLUTE)
       get_filename_component(_abs_PATH "${_absFile}" PATH)
       get_filename_component(_lang "${_absFile}" NAME_WE)
-      set(_updatedPoFile "${CMAKE_CURRENT_BINARY_DIR}/${_currentPoFileName}")
+
+      file(RELATIVE_PATH _po_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}" "${_absFile}")
+      get_filename_component(_po_file_subdir_path "${_po_file_relative_path}" DIRECTORY)
+
+      if (_po_file_relative_path AND NOT _po_file_relative_path STREQUAL "")
+         set(_updatedPoFileDirectory "${CMAKE_CURRENT_BINARY_DIR}/${_po_file_subdir_path}")
+      else()
+         set(_updatedPoFileDirectory "${CMAKE_CURRENT_BINARY_DIR}")
+      endif()
+      file(MAKE_DIRECTORY "${_updatedPoFileDirectory}")
+      set(_updatedPoFile "${_updatedPoFileDirectory}/${_potBasename}_${_currentPoFileName}")
       set(_gmoDirectory "${CMAKE_CURRENT_BINARY_DIR}/locale/${_lang}/LC_MESSAGES")
       set(_gmoFile "${_gmoDirectory}/${_potBasename}.mo")
 
@@ -128,66 +138,81 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
 
 endfunction()
 
-# Must be set to warzone2100.pot, as the filename (without its extension) is used later
-# to form the install .gmo file name (warzone2100.gmo) in each locale directory
-set(_potFile "${CMAKE_CURRENT_BINARY_DIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}.pot")
+#############################################################
+function(BUILD_WZ_TRANSLATIONS textDomain BASE_PO_DIR POTFILES_IN_PATH)
 
-# Read in `POTFILES.in` to build a list of dependency paths in the same order.
-set(_potfiles_in_path "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")
-file(STRINGS "${_potfiles_in_path}" potfiles
-	REGEX "^[^#].*"
-)
-foreach(potfile ${potfiles})
-	list(APPEND source_translatable_depends
-		"../${potfile}")
-endforeach()
+	# Must be set to ${textDomain}.pot, as the filename (without its extension) is used later
+	# to form the install .gmo file name (${textDomain}.gmo) in each locale directory
 
-# Generate the warzone2100.pot file in the build directory
-ADD_CUSTOM_COMMAND(
-	OUTPUT ${_potFile}
-	COMMAND ${CMAKE_COMMAND} -DPOTFILES_IN=${_potfiles_in_path} -DOUTPUT_FILE=${_potFile} -DXGETTEXT_CMD=${XGETTEXT_CMD} -P ${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake
-	DEPENDS ${_potfiles_in_path} ${source_translatable_depends} "${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake"
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	COMMENT "Extract translatable messages to ${_potFile}"
-	VERBATIM
-)
+	file(RELATIVE_PATH _po_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}" "${BASE_PO_DIR}")
+	if (_po_file_relative_path AND NOT _po_file_relative_path STREQUAL "")
+		set(_potFileDir "${CMAKE_CURRENT_BINARY_DIR}/${_po_file_relative_path}")
+	else()
+		set(_potFileDir "${CMAKE_CURRENT_BINARY_DIR}")
+	endif()
+	file(MAKE_DIRECTORY "${_potFileDir}")
+	set(_potFile "${_potFileDir}/${textDomain}.pot")
 
-# Update the in-source warzone2100.pot (Should only run when explicitly built, ex. by CI)
-set(_potFile_inRepo "${CMAKE_CURRENT_SOURCE_DIR}/warzone2100.pot")
-ADD_CUSTOM_COMMAND(
-	OUTPUT
-		${CMAKE_CURRENT_BINARY_DIR}/__in_repo_po_template__shouldnotexist.pot  # fake - ensure we run
-		${_potFile_inRepo} # actual output file
-	COMMAND ${CMAKE_COMMAND} -DPOTFILES_IN=${_potfiles_in_path} -DOUTPUT_FILE=${_potFile_inRepo} -DTEMP_DIR=${CMAKE_CURRENT_BINARY_DIR} -DXGETTEXT_CMD=${XGETTEXT_CMD} -P ${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake
-#	DEPENDS ${_potfiles_in_path} ${source_translatable_depends} "${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake"
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	COMMENT "Extract translatable messages to in-repo template file: ${_potFile_inRepo}"
-	VERBATIM
-)
-ADD_CUSTOM_TARGET(update_po_template_in_repo
-	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/__in_repo_po_template__shouldnotexist.pot
-)
-set_property(TARGET update_po_template_in_repo PROPERTY FOLDER "po")
+	# Read in `POTFILES.in` to build a list of dependency paths in the same order.
+	file(STRINGS "${POTFILES_IN_PATH}" potfiles
+		REGEX "^[^#].*"
+	)
+	if (NOT potfiles)
+		message(STATUS "${POTFILES_IN_PATH}: No files specified?")
+		return()
+	endif()
+	foreach(potfile ${potfiles})
+		if (potfile AND NOT potfile STREQUAL "")
+			list(APPEND source_translatable_depends
+				"../${potfile}")
+		endif()
+	endforeach()
+	if (NOT source_translatable_depends)
+		message(STATUS "${POTFILES_IN_PATH}: No files specified? [2]")
+		return()
+	endif()
 
-set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
+	# Generate the ${textDomain}.pot file in the build directory
+	ADD_CUSTOM_COMMAND(
+		OUTPUT ${_potFile}
+		COMMAND ${CMAKE_COMMAND} -DPOTFILES_IN=${POTFILES_IN_PATH} -DOUTPUT_FILE=${_potFile} -DPACKAGE_NAME=${textDomain} -DXGETTEXT_CMD=${XGETTEXT_CMD} -P ${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake
+		DEPENDS ${POTFILES_IN_PATH} ${source_translatable_depends} "${CMAKE_CURRENT_SOURCE_DIR}/WZ_build_po_template.cmake"
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		COMMENT "Extract translatable messages to ${_potFile}"
+		VERBATIM
+	)
+
+	set(_po_install_config)
+	if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+		set(_po_install_config
+		INSTALL_DESTINATION "${WZ_LOCALEDIR}"
+		INSTALL_COMPONENT Languages)
+	endif()
+
+	# Build the *.gmo files from the *.po files (using the .pot file)
+	include(GNUInstallDirs)
+	file (GLOB POFILES "${BASE_PO_DIR}/*.po")
+	if (POFILES)
+		GETTEXT_CREATE_TRANSLATIONS_WZ ("${_potFile}" ALL
+			${_po_install_config}
+			MSGMERGE_OPTIONS --quiet --no-wrap --width=1
+			TARGET_FOLDER "po"
+			POFILES ${POFILES})
+	else()
+		message(STATUS "${BASE_PO_DIR}/*.po: No .po files?")
+	endif()
+
+endfunction()
+
+###################################
+###################################
 
 # On CMake configure, clear the build dir "locale" folder (to ensure re-generation)
+set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
 file(REMOVE_RECURSE "${wz2100_translations_LOCALE_FOLDER}/")
 
-set(_po_install_config)
-if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
-	set(_po_install_config
-	INSTALL_DESTINATION "${WZ_LOCALEDIR}"
-	INSTALL_COMPONENT Languages)
-endif()
+BUILD_WZ_TRANSLATIONS("warzone2100${WZ_OUTPUT_NAME_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")
 
-# Build the *.gmo files from the *.po files (using the .pot file)
-include(GNUInstallDirs)
-file (GLOB POFILES *.po)
-GETTEXT_CREATE_TRANSLATIONS_WZ ("${_potFile}" ALL
-	${_po_install_config}
-	MSGMERGE_OPTIONS --quiet --no-wrap --width=1
-	TARGET_FOLDER "po"
-	POFILES ${POFILES})
+BUILD_WZ_TRANSLATIONS("warzone2100${WZ_OUTPUT_NAME_SUFFIX}_guide" "${CMAKE_CURRENT_SOURCE_DIR}/guide" "${CMAKE_CURRENT_SOURCE_DIR}/guide/POTFILES.in")
 
 set(wz2100_translations_LOCALE_FOLDER "${wz2100_translations_LOCALE_FOLDER}" PARENT_SCOPE)

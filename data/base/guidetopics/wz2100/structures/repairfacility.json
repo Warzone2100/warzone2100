@@ -1,0 +1,19 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::repairfacility",
+	"title": "Repair Facility",
+	"visual": {
+		"stat": {
+			"id": "A0RepairCentre3"
+		}
+	},
+	"contents": [
+		"Building a Repair Facility creates a fixed structure to which units can retreat to be repaired.",
+		"",
+		"Repair Facilities can repair units faster than mobile units with repair turrets."
+	],
+	"links": [
+		"wz2100::units::repairing",
+		"wz2100::unitorders::retreating"
+	]
+}

@@ -219,28 +219,31 @@ static GAMECODE renderLoop()
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		wzSetCursor(CURSOR_DEFAULT);
 
-		if (dragBox3D.status != DRAG_DRAGGING)
+		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING)
 		{
 			displayRenderLoop();
 		}
 
-		if (InGameOpUp || isInGamePopupUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
+		if (!bLoadSaveUp)
 		{
-			WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-			unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
+			WidgetTriggers const &triggers = widgRunScreen(psWScreen);		// always run the screen, so overlays can process input
 
-			intProcessInGameOptions(widgval);
-			if (widgval == INTINGAMEOP_QUIT || widgval == INTINGAMEOP_POPUP_QUIT)
+			if (InGameOpUp || isInGamePopupUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
 			{
-				if (gamePaused())
+				unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
+
+				intProcessInGameOptions(widgval);
+				if (widgval == INTINGAMEOP_QUIT || widgval == INTINGAMEOP_POPUP_QUIT)
 				{
-					kf_TogglePauseMode();
+					if (gamePaused())
+					{
+						kf_TogglePauseMode();
+					}
+					intRetVal = INT_QUIT;
 				}
-				intRetVal = INT_QUIT;
 			}
 		}
-
-		if (bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult))
+		else if (runLoadSave(true) && strlen(sRequestResult))
 		{
 			debug(LOG_NEVER, "Returned %s", sRequestResult);
 			if (bRequestLoad)

@@ -297,6 +297,8 @@ static inline void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned id
 void iV_TransBoxFill(float x0, float y0, float x1, float y1);
 void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
 
+bool assertValidImage(IMAGEFILE *imageFile, unsigned id);
+
 bool pie_InitRadar();
 bool pie_ShutdownRadar();
 void pie_DownLoadRadar(const iV_Image& bitmap);

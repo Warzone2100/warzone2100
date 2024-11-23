@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Artifacts")
+_("As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units).")
+_("These will unlock valuable technologies that you can research in a Research Facility.")
+_("Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough.")
+_("All artifacts must be picked up as part of each level's victory conditions.")

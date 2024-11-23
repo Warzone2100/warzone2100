@@ -31,6 +31,7 @@ class FlowLayoutElementDescriptor
 public:
 	virtual ~FlowLayoutElementDescriptor() = default;
 	virtual unsigned int getWidth(size_t position, size_t length) const = 0;
+	virtual size_t getMaxElementLengthForWidth(size_t position, size_t maxWidth) const = 0;
 	virtual size_t size() const = 0;
 	virtual bool isWhitespace(size_t position) const = 0;
 	virtual bool isLineBreak(size_t position) const = 0;
@@ -101,26 +102,12 @@ private:
 
 		while (current < end)
 		{
+			auto spaceUsedForCurrentLine = nextOffset + partialWordWidth;
+			size_t fitWidth = elementDescriptor.getMaxElementLengthForWidth(current, (spaceUsedForCurrentLine <= maxWidth) ? maxWidth - spaceUsedForCurrentLine : 0);
 			size_t fragmentFits = 0;
-
-			if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, end - current) > maxWidth)
-			// fragment doesn't fit completely in the current line
+			if (fitWidth < end - current)
 			{
-				if (current > 0)
-				{
-					fragmentFits = current - 1;
-				}
-				size_t fragmentDoesntFit = end;
-				while (fragmentDoesntFit - fragmentFits > 1)
-				{
-					auto middle = (fragmentFits + fragmentDoesntFit) / 2;
-					if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, middle - current) > maxWidth)
-					{
-						fragmentDoesntFit = middle;
-					} else {
-						fragmentFits = middle;
-					}
-				}
+				fragmentFits = current + fitWidth;
 			}
 			else
 			{
@@ -270,14 +257,22 @@ class FlowLayoutStringDescriptor : public FlowLayoutElementDescriptor
 {
 	WzString text;
 	std::vector<uint32_t> textUtf32;
+	bool rightToLeft = false;
 	iV_fonts font;
 
 public:
-	FlowLayoutStringDescriptor(WzString const &newText, iV_fonts newFont): text(newText), textUtf32(newText.toUtf32()), font(newFont) {}
+	const WzString& getText() const { return text; }
+
+	FlowLayoutStringDescriptor(WzString const &newText, iV_fonts newFont, bool rtl = false): text(newText), textUtf32(newText.toUtf32()), rightToLeft(rtl), font(newFont) {}
 
 	unsigned int getWidth(size_t position, size_t length) const
 	{
 		return iV_GetTextWidth(text.substr(position, length), font);
+	}
+
+	size_t getMaxElementLengthForWidth(size_t position, size_t maxWidth) const
+	{
+		return iV_GetMaxTextRunLenForWidth(text.substr(position), font, static_cast<uint32_t>(maxWidth), rightToLeft);
 	}
 
 	size_t size() const
@@ -305,14 +300,15 @@ public:
 
 struct ParagraphTextElement: public ParagraphElement
 {
-	ParagraphTextElement(std::string const &newText, ParagraphTextStyle const &style): style(style)
+	ParagraphTextElement(WzString const &newText, ParagraphTextStyle const &style, bool rtl = false): style(style)
 	{
-		text = WzString::fromUtf8(newText);
+		text = newText;
+		rightToLeft = rtl;
 	}
 
 	void appendTo(FlowLayout &layout) override
 	{
-		layout.append(FlowLayoutStringDescriptor(text, style.font));
+		layout.append(FlowLayoutStringDescriptor(text, style.font, rightToLeft));
 	}
 
 	std::shared_ptr<WIDGET> createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
@@ -356,6 +352,7 @@ struct ParagraphTextElement: public ParagraphElement
 private:
 	WzString text;
 	ParagraphTextStyle style;
+	bool rightToLeft = false;
 	std::vector<std::shared_ptr<ParagraphTextWidget>> fragments;
 };
 
@@ -370,14 +367,34 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 		return position == 0 ? widget->width() : 0;
 	}
 
+	size_t getMaxElementLengthForWidth(size_t position, size_t maxWidth) const override
+	{
+		if (position == 0)
+		{
+			if (widget->width() <= maxWidth)
+			{
+				return size();
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		if (position > size())
+		{
+			return 0;
+		}
+		return size() - position;
+	}
+
 	size_t size() const override
 	{
-		return 1;
+		return 2; // + 1 for "whitespace" at end
 	}
 
 	bool isWhitespace(size_t position) const override
 	{
-		return false;
+		return (position > 0);
 	}
 
 	bool isLineBreak(size_t position) const override
@@ -497,10 +514,22 @@ std::vector<std::vector<FlowLayoutFragment>> Paragraph::calculateLinesLayout()
 	return flowLayout.getLines();
 }
 
-void Paragraph::addText(std::string const &text)
+void Paragraph::addText(const WzString &text)
 {
 	layoutDirty = true;
-	elements.push_back(std::make_unique<ParagraphTextElement>(text, textStyle));
+	auto textRuns = iV_SplitTextParagraphIntoRuns(text, textStyle.font);
+	if (textRuns.size() > 1)
+	{
+		for (const auto& run : textRuns)
+		{
+			auto runText = text.substr(run.startOffset, run.endOffset - run.startOffset);
+			elements.push_back(std::make_unique<ParagraphTextElement>(runText, textStyle, run.rightToLeft));
+		}
+	}
+	else
+	{
+		elements.push_back(std::make_unique<ParagraphTextElement>(text, textStyle));
+	}
 }
 
 void Paragraph::addWidget(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase)

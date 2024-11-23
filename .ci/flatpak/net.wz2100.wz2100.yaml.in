@@ -1,7 +1,7 @@
 app-id: net.wz2100.wz2100@WZ_OUTPUT_NAME_SUFFIX@
 # We need to force the target architecture for the runtime, to support cross-compilation
 runtime: org.freedesktop.Platform@WZ_RUNTIME_SUFFIX@
-runtime-version: '23.08'
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 command: warzone2100
 @WZ_CROSS_COMPILE_SDK_EXTENSIONS@
@@ -59,11 +59,11 @@ modules:
       - '*'
     buildsystem: simple
     build-commands:
-      - gem install --ignore-dependencies --no-user-install --verbose --local --install-dir /app/lib/ruby/gems/build-dep --bindir /app/bin asciidoctor-2.0.17.gem
+      - gem install --ignore-dependencies --no-user-install --verbose --local --install-dir /app/lib/ruby/gems/build-dep --bindir /app/bin asciidoctor-2.0.23.gem
     sources:
       - type: file
-        url: https://rubygems.org/downloads/asciidoctor-2.0.17.gem
-        sha256: ed5b5e399e8d64994cc16f0983f993d6e33990909a8415b6fc8b786cdeb00f3d
+        url: https://rubygems.org/downloads/asciidoctor-2.0.23.gem
+        sha256: 52208807f237dfa0ca29882f8b13d60b820496116ad191cf197ca56f2b7fddf3
 
   - name: sentry-native
     cleanup:
@@ -111,21 +111,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/google/shaderc.git
-        tag: v2023.7
-        commit: 3882b16417077aa8eaa7b5775920e7ba4b8a224d
+        tag: v2024.3
+        commit: ff84893dd52d28f0b1737d2635733d952013bd9c
       # Replicate the needed functionality of utils/git-sync-deps
       # To avoid having to break the build sandbox to download files
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Headers.git
-        commit: 4183b260f4cccae52a89efdfcdd43c4897989f42 # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 2a9b6f951c7d6b04b6c21fe1bf3f475b68b84801 # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-headers
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Tools.git
-        commit: 360d469b9eac54d6c6e20f609f9ec35e3a5380ad # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 01c8438ee4ac52c248119b7e03e0b021f853b51a # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-tools
       - type: git
         url: https://github.com/KhronosGroup/glslang.git
-        commit: 48f9ed8b08be974f4e463ef38136c8f23513b2cf # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 467ce01c71e38cf01814c48987a5c0dadd914df4 # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/glslang
 
   - name: physfs
@@ -154,8 +154,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/fribidi/fribidi
-        tag: v1.0.12
-        commit: 6428d8469e536bcbb6e12c7b79ba6659371c435a
+        tag: v1.0.15
+        commit: 2803ff176713a27d7edb57a24bc60c38a02182e9
 
   - name: libsodium
     @WZ_CROSS_BUILD_OPTIONS@
@@ -163,8 +163,8 @@ modules:
     @WZ_AUTOTOOLS_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
-        url: https://github.com/jedisct1/libsodium/releases/download/1.0.19-RELEASE/libsodium-1.0.19.tar.gz
-        sha256: 018d79fe0a045cca07331d37bd0cb57b2e838c51bc48fd837a1472e50068bbea
+        url: https://github.com/jedisct1/libsodium/releases/download/1.0.20-RELEASE/libsodium-1.0.20.tar.gz
+        sha256: ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19
 
   - name: warzone2100
     buildsystem: cmake-ninja
@@ -194,7 +194,7 @@ modules:
         path: ../../
       - type: file
         url: https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz
-        sha256: 142ae905be288cca33357a49f42b884c190e828fc0b1b1773ded5dff774f41a3        
+        sha256: 142ae905be288cca33357a49f42b884c190e828fc0b1b1773ded5dff774f41a3
     post-install:
       - mkdir -p /app/share/icons/hicolor/128x128/apps
       - cp /app/share/icons/net.wz2100.wz2100*.png /app/share/icons/hicolor/128x128/apps/

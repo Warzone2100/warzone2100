@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Designing VTOLs")
+_("Designing VTOL units is similar to designing ground units.")
+_("When choosing a propulsion, simply pick \"VTOL\" propulsion.")
+_("You will then be able to select from the available VTOL Weapons.")
+_("Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs.")

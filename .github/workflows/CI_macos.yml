@@ -13,6 +13,8 @@ on:
       - 'data/base/stats/**'
       - 'data/mp/stats/**'
       - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
   # Support running after "Draft Tag Release" workflow completes, as part of automated release process
   workflow_run:
     workflows: ["Draft Tag Release"]
@@ -82,12 +84,12 @@ jobs:
         HOMEBREW_NO_INSTALL_UPGRADE: 1
       run: |
         echo "::group::brew install"
-        brew install automake gettext pkg-config
+        brew install --quiet automake gettext pkg-config xcbeautify
         echo "::endgroup::"
 
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
         echo "::group::gem install asciidoctor"
-        gem install asciidoctor -v 2.0.22 --no-document
+        gem install asciidoctor -v 2.0.23 --no-document
         echo "::endgroup::"
 
         #if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
@@ -110,6 +112,8 @@ jobs:
         sudo xcode-select -s "${DESIRED_XCODE_DEV_DIR}"
 
         echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
+        echo "VCPKG_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}" >> $GITHUB_ENV
+        echo "VCPKG_KEEP_ENV_VARS=VCPKG_OSX_DEPLOYMENT_TARGET;MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
     - name: configure_mac.cmake
       working-directory: ./build
       env:
@@ -160,7 +164,7 @@ jobs:
           -configuration "Release" \
           -destination "platform=macOS" \
           -PBXBuildsContinueAfterErrors=NO \
-        | tee "xcodebuild.log" | xcpretty -c
+        | tee "xcodebuild.log" | xcbeautify --renderer github-actions
         result=${?}
         if [ $result -ne 0 ]; then
           echo "ERROR: xcodebuild failed"
@@ -181,7 +185,7 @@ jobs:
 
         # Verify "warzone2100.zip" was created
         BUILT_WARZONE_ZIP="build/warzone2100.zip"
-        src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+        src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
         # Move warzone2100.zip to the output directory, renaming it
         DESIRED_ZIP_NAME="warzone2100_macOS_${{ matrix.artifact_suffix }}.zip"
@@ -259,7 +263,7 @@ jobs:
           cat "entitlements.plist"
           echo "-----------------------------------"
           echo "Make universal binary + app package"
-          ../src/macosx/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_x64/Warzone 2100.app"
+          ../src/platforms/macos/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_x64/Warzone 2100.app"
           # Rename the "base" app package directory
           mv "warzone2100_macOS_arm64" "warzone2100_macOS_universal"
           echo "Re-code-sign"
@@ -275,7 +279,7 @@ jobs:
 
           # Verify "warzone2100.zip" was created
           BUILT_WARZONE_ZIP="build/warzone2100.zip"
-          src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+          src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
           # Move warzone2100.zip to the output directory, renaming it
           DESIRED_ZIP_NAME="warzone2100_macOS_universal.zip"
@@ -339,7 +343,7 @@ jobs:
 
           # Verify "warzone2100_novideos.zip" was created
           BUILT_WARZONE_ZIP="build/warzone2100_novideos.zip"
-          src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+          src/platforms/macos/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
 
           # Move warzone2100.zip to the output directory, renaming it
           DESIRED_ZIP_NAME="warzone2100_macOS_universal_novideos.zip"
@@ -393,9 +397,14 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: 'src'
       - name: Prep Environment
         run: |
           mkdir dl-archive
+          echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -417,5 +426,12 @@ jobs:
             echo "No SENTRY_AUTH_TOKEN - skipping"
             exit 0
           fi
-          docker pull getsentry/sentry-cli
-          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          # Download sentry-cli
+          echo "::group::Downloading sentry-cli ..."
+          cmake -P "${WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+          echo "Downloading sentry-cli ... Done"
+          echo "::endgroup::"
+          # Upload symbols
+          echo "::group::sentry-cli debug-files upload"
+          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          echo "::endgroup::"

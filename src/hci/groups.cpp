@@ -40,6 +40,7 @@ public:
 	struct GroupDisplayInfo
 	{
 		size_t numberInGroup = 0;
+		size_t numberDamagedInGroup = 0;
 		size_t numberCommandedByGroup = 0; // the number of droids commanded by commanders in this group
 		uint64_t totalGroupMaxHealth = 0;
 		DROID_TEMPLATE displayDroidTemplate;
@@ -108,6 +109,7 @@ private:
 	std::shared_ptr<GroupsUIController> controller;
 	std::shared_ptr<W_LABEL> groupNumberLabel;
 	std::shared_ptr<W_LABEL> groupCountLabel;
+	std::shared_ptr<W_LABEL> groupDamagedCountLabel;
 	size_t groupNumber;
 	uint32_t lastUpdatedGlowAlphaTime = 0;
 protected:
@@ -134,6 +136,12 @@ public:
 		groupCountLabel->setGeometry(OBJ_TEXTX + 40, OBJ_B1TEXTY + 20, 16, 16);
 		groupCountLabel->setString("");
 		groupCountLabel->setTransparentToMouse(true);
+
+		attach(groupDamagedCountLabel = std::make_shared<W_LABEL>());
+		groupDamagedCountLabel->setGeometry(0, 0, 16, 16);
+		groupDamagedCountLabel->setFontColour(pal_RGBA(255, 0, 0, 255) /* red */);
+		groupDamagedCountLabel->setString("");
+		groupDamagedCountLabel->setTransparentToMouse(true);
 
 		buttonBackgroundEmpty = true;
 
@@ -193,7 +201,7 @@ protected:
 			lastUpdatedGlowAlphaTime = realTime;
 		}
 
-		if (!groupInfo->numberInGroup)
+		if (!groupInfo->numberInGroup && !groupInfo->numberDamagedInGroup)
 		{
 			groupCountLabel->setString("");
 			displayBlank(xOffset, yOffset, false);
@@ -202,6 +210,26 @@ protected:
 		{
 			displayIMD(AtlasImage(), ImdObject::DroidTemplate(&(groupInfo->displayDroidTemplate)), xOffset, yOffset);
 			groupCountLabel->setString(WzString::fromUtf8(astringf("%u", groupInfo->numberInGroup)));
+			int32_t xNumberOffset = 0;
+			const uint32_t xFitNumberInTheBox = 16;
+			if (groupCountLabel->getMaxLineWidth() > xFitNumberInTheBox)
+			{
+				xNumberOffset -= groupCountLabel->getMaxLineWidth() - xFitNumberInTheBox;
+			}
+			groupCountLabel->move(
+				OBJ_TEXTX + 40 + xNumberOffset - groupDamagedCountLabel->getMaxLineWidth(),
+				groupCountLabel->y()
+			);
+		}
+
+		if (!groupInfo->numberDamagedInGroup)
+		{
+			groupDamagedCountLabel->setString("");
+		}
+		else
+		{
+			groupDamagedCountLabel->setString(WzString::fromUtf8(astringf("+%u", groupInfo->numberDamagedInGroup)));
+			groupDamagedCountLabel->move(groupCountLabel->x() + groupCountLabel->getMaxLineWidth(), groupCountLabel->y());
 		}
 
 		if (groupInfo->currAttackGlowAlpha > 0)
@@ -270,6 +298,7 @@ void GroupsUIController::updateData()
 	struct AccumulatedGroupInfo
 	{
 		size_t numberInGroup = 0;
+		size_t numberDamagedInGroup = 0;
 		size_t numberCommandedByGroup = 0; // the number of droids commanded by commanders in this group
 		uint64_t totalGroupMaxHealth = 0;
 		DROID *displayDroid = nullptr;
@@ -280,6 +309,10 @@ void GroupsUIController::updateData()
 	std::array<AccumulatedGroupInfo, 10> calculatedGroupInfo;
 	for (DROID *psDroid : apsDroidLists[selectedPlayer])
 	{
+		if (psDroid->repairGroup < calculatedGroupInfo.size()) {
+			calculatedGroupInfo[psDroid->repairGroup].numberDamagedInGroup++;
+		}
+
 		auto groupIdx = psDroid->group;
 		if (psDroid->group >= calculatedGroupInfo.size())
 		{
@@ -313,6 +346,7 @@ void GroupsUIController::updateData()
 		const auto& calculatedInfo = calculatedGroupInfo[idx];
 		auto& storedGroupInfo = groupInfo[idx];
 		storedGroupInfo.numberInGroup = calculatedInfo.numberInGroup;
+		storedGroupInfo.numberDamagedInGroup = calculatedInfo.numberDamagedInGroup;
 		storedGroupInfo.numberCommandedByGroup = calculatedInfo.numberCommandedByGroup;
 		storedGroupInfo.totalGroupMaxHealth = calculatedInfo.totalGroupMaxHealth;
 		if (calculatedInfo.numberInGroup > 0)

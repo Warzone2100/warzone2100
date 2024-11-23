@@ -129,6 +129,19 @@ WzString WzString::fromUtf16(const std::vector<uint16_t>& utf16)
 	return WzString(utf8str);
 }
 
+WzString WzString::fromUtf32(const std::vector<uint32_t>& utf32)
+{
+	std::string utf8str;
+	try {
+		utf8::utf32to8(utf32.begin(), utf32.end(), back_inserter(utf8str));
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Conversion from UTF32 failed with error: %s", e.what());
+		utf8str.clear();
+	}
+	return WzString(utf8str);
+}
+
 bool WzString::isValidUtf8(const char * str, size_t len)
 {
 	return utf8::is_valid(str, str + len);
@@ -201,6 +214,15 @@ WzString WzString::substr(size_t start, size_t length) const
 
 	auto end = begin;
 	_utf8_advance(end, length, _utf8String.end());
+	return WzString(std::string(begin, end));
+}
+
+WzString WzString::substr(size_t start) const
+{
+	auto begin = _utf8String.begin();
+	_utf8_advance(begin, start, _utf8String.end());
+
+	auto end = _utf8String.end();
 	return WzString(std::string(begin, end));
 }
 

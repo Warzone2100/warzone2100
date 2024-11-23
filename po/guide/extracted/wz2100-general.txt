@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("General")
+_("In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles.")
+_("This guide will help walk you through key facets of the game.")
+_("(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)")

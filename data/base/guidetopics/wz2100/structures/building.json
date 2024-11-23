@@ -1,0 +1,28 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::building",
+	"title": "Building Structures",
+	"visual": {
+		"retButId": "BUILD"
+	},
+	"contents": [
+		"Click the \"Build\" button on the Command Panel.",
+		"This will open the Structures menu on the left side of screen, with a button for each structure you can build.",
+		"",
+		"Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm.",
+		"",
+		"Move the silhouette by moving the input device.",
+		"- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location.",
+		"- If a structure is not buildable in a location, the silhouette will be colored red.",
+		"",
+		"Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction.",
+		"",
+		"You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction.",
+		"",
+		"Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
+	],
+	"links": [
+		"wz2100::structures::demolishing",
+		"wz2100::general::commandpanel"
+	]
+}

@@ -1,0 +1,21 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "SB1_7_MSG": {
+            "sequences": [
+                { "loop": 1, "subtitles": ["TRANS_MSG1", "SUB1_7_MSG5", "SUB1_7_MSG6"], "video": "cam1/sub1_7pl.ogg" },
+                { "loop": 0, "subtitles": "SUB1_7_MSG4", "video": "cam1/sub17fmv.ogg" }
+            ]
+        },
+        "SB1_7_MSG2": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["SUB1_7_MSG1", "SUB1_7_MSG2", "SUB1_7_MSG3"], "video": "cam1/sub1_7.ogg" }
+            ]
+        },
+        "SB1_7_MSG3": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["SUB1_7_MSG1", "SUB1_7_MSG2", "SUB1_7_MSG3"], "video": "cam1/sub1_7b.ogg" }
+            ]
+        }
+    }
+}

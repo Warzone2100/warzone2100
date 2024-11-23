@@ -73,6 +73,8 @@ private:
 	size_t mip_count = 0;
 	gfx_api::pixel_format internal_format = gfx_api::pixel_format::invalid;
 	bool gles = false;
+	size_t tex_width = 0;
+	size_t tex_height = 0;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	std::string debugName;
 #endif
@@ -86,6 +88,7 @@ public:
 	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
 	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
 	virtual unsigned id() override;
+	virtual gfx_api::texture2dDimensions get_dimensions() const override;
 private:
 	virtual bool upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
@@ -364,6 +367,7 @@ private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
 	void initPixelFormatsSupport();
 	bool initInstancedFunctions();
+	bool initCheckBorderClampSupport();
 	size_t initDepthPasses(size_t resolution);
 	gl_gpurendered_texture* create_gpurendered_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
 	gl_gpurendered_texture* create_gpurendered_texture_array(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename);
@@ -389,6 +393,7 @@ private:
 	std::array<std::vector<gfx_api::pixel_format_usage::flags>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> textureFormatsSupport;
 	bool has2DTextureArraySupport = false;
 	bool hasInstancedRenderingSupport = false;
+	bool hasBorderClampSupport = false;
 	int32_t maxArrayTextureLayers = 0;
 	GLfloat maxTextureAnisotropy = 0.f;
 	GLuint vaoId = 0;

@@ -104,6 +104,7 @@ UDWORD			researchModuleStat;
 STRUCTURE_STATS		*asStructureStats = nullptr;
 UDWORD				numStructureStats = 0;
 static std::unordered_map<WzString, STRUCTURE_STATS *> lookupStructStatPtr;
+optional<int> structureDamageBaseExperienceLevel;
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
 STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
@@ -167,7 +168,18 @@ static void auxStructureNonblocking(STRUCTURE *psStructure)
 	{
 		for (int j = 0; j < b.size.y; j++)
 		{
-			auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_BLOCKING | AUXBITS_OUR_BUILDING | AUXBITS_NONPASSABLE);
+			int x = b.map.x + i;
+			int y = b.map.y + j;
+			MAPTILE *psTile = mapTile(x, y);
+			if (psTile->psObject == psStructure)
+			{
+				auxClearAll(x, y, AUXBITS_BLOCKING | AUXBITS_OUR_BUILDING | AUXBITS_NONPASSABLE);
+			}
+			else
+			{
+				// Likely a script-queued object removal for a position where the script immediately replaced the old struct - just log
+				debug(LOG_WZ, "Skipping blocking bit clear - structure %" PRIu32 " is not the recorded tile object at (%d, %d)", psStructure->id, x, y);
+			}
 		}
 	}
 }
@@ -258,6 +270,7 @@ void structureInitVars()
 	powerModuleStat = 0;
 	researchModuleStat = 0;
 	lastMaxUnitMessage = 0;
+	structureDamageBaseExperienceLevel = nullopt;
 
 	initStructLimits();
 	for (int i = 0; i < MAX_PLAYERS; i++)
@@ -359,6 +372,22 @@ void resetFactoryNumFlag()
 	}
 }
 
+int getStructureDamageBaseExperienceLevel()
+{
+	// COMPAT NOTES:
+	//
+	// Default / compat structure damage handling (the only option for many years - from at least 2.0.10-4.4.2):
+	//
+	// This causes the game to treat structures at a base experience level of 1 instead of 0 when calculating damage to them,
+	// yielding actualDamage at 94% of the base damage value. Or, in other words, structures are a bit tougher
+	// than the raw numbers in the stats files would suggest, and get a hidden experience level boost.
+	//
+	// However, structure.json created and tested during this long period may be expecting this outcome / behavior,
+	// So unless it's explicitly specified in the special `_config_` dict, it always defaults to `1`.
+
+	return structureDamageBaseExperienceLevel.value_or(1);
+}
+
 static const StringToEnum<STRUCTURE_TYPE> map_STRUCTURE_TYPE[] =
 {
 	{ "HQ",                 REF_HQ                  },
@@ -426,9 +455,13 @@ size_t sizeOfArray(const T(&)[ N ])
 	return N;
 }
 
+#define STRUCTURE_JSON_CONFIG_DICT_KEY "_config_"
+
 /* load the structure stats from the ini file */
 bool loadStructureStats(WzConfig &ini)
 {
+	const WzString CONFIG_DICT_KEY_STR = STRUCTURE_JSON_CONFIG_DICT_KEY;
+
 	std::map<WzString, STRUCTURE_TYPE> structType;
 	for (unsigned i = 0; i < sizeOfArray(map_STRUCTURE_TYPE); ++i)
 	{
@@ -448,6 +481,42 @@ bool loadStructureStats(WzConfig &ini)
 	size_t statWriteIdx = 0;
 	for (size_t readIdx = 0; readIdx < list.size(); ++readIdx)
 	{
+		if (list[readIdx] == CONFIG_DICT_KEY_STR)
+		{
+			// handle the special config dict
+			ini.beginGroup(list[readIdx]);
+
+			// baseStructDamageExpLevel
+			bool convValueSuccess = false;
+			auto baseStructDamageExpLevel = ini.value("baseStructDamageExpLevel", 1).toInt(&convValueSuccess);
+			if (!convValueSuccess)
+			{
+				baseStructDamageExpLevel = 1; // reset to old default
+			}
+			if (baseStructDamageExpLevel >= 0 && baseStructDamageExpLevel < 10)
+			{
+				if (!structureDamageBaseExperienceLevel.has_value())
+				{
+					structureDamageBaseExperienceLevel = baseStructDamageExpLevel;
+				}
+				else
+				{
+					if (structureDamageBaseExperienceLevel.value() != baseStructDamageExpLevel)
+					{
+						debug(LOG_ERROR, "Non-matching structure JSON baseStructDamageExpLevel");
+						debug(LOG_INFO, "Structure JSON file \"%s\" has specified a baseStructDamageExpLevel (\"%d\") that does not match the first loaded structure JSON's baseStructDamageExpLevel (\"%d\")", ini.fileName().toUtf8().c_str(), baseStructDamageExpLevel, structureDamageBaseExperienceLevel.value());
+					}
+				}
+			}
+			else
+			{
+				ASSERT_OR_RETURN(false, false, "Invalid _config_ \"baseStructDamageExpLevel\" value: \"%d\"", baseStructDamageExpLevel);
+			}
+
+			ini.endGroup();
+			continue;
+		}
+
 		ini.beginGroup(list[readIdx]);
 		STRUCTURE_STATS *psStats = &asStructureStats[statWriteIdx];
 		loadStructureStats_BaseStats(ini, psStats, statWriteIdx);
@@ -921,12 +990,54 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 
 			switch (psStruct->pStructureType->type)
 			{
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+			{
+				if (psStruct->pFunctionality)
+				{
+					FACTORY *psFactory = &psStruct->pFunctionality->factory;
+					if (psFactory->psCommander)
+					{
+						//remove the commander from the factory
+						syncDebugDroid(psFactory->psCommander, '-');
+						assignFactoryCommandDroid(psStruct, nullptr);
+					}
+				}
+				break;
+			}
 			case REF_POWER_GEN:
 				releasePowerGen(psStruct);
 				break;
 			case REF_RESOURCE_EXTRACTOR:
 				releaseResExtractor(psStruct);
 				break;
+			case REF_REPAIR_FACILITY:
+			{
+				if (psStruct->pFunctionality)
+				{
+					REPAIR_FACILITY	*psRepairFac = &psStruct->pFunctionality->repairFacility;
+					if (psRepairFac->psObj)
+					{
+						psRepairFac->psObj = nullptr;
+						psRepairFac->state = RepairState::Idle;
+					}
+				}
+				break;
+			}
+			case REF_REARM_PAD:
+			{
+				if (psStruct->pFunctionality)
+				{
+					REARM_PAD *psReArmPad = &psStruct->pFunctionality->rearmPad;
+					if (psReArmPad->psObj)
+					{
+						// Possible TODO: Need to do anything with the droid? (order it to find a new place to rearm?)
+						psReArmPad->psObj = nullptr;
+					}
+				}
+				break;
+			}
 			default:
 				break;
 			}
@@ -2849,6 +2960,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	if (bMultiPlayer && psStructure->resistance < (int)structureResistance(psStructure->pStructureType, psStructure->player))
 	{
 		objTrace(psStructure->id, "Resistance too low for repair");
+		psRepairFac->psObj = nullptr;
 		return RepairState::Idle;
 	}
 	switch (ev)
@@ -3443,13 +3555,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (pointsToAdd >= psDroid->weight) // amount required is a factor of the droid weight
 				{
 					// We should be fully loaded by now.
-					for (unsigned i = 0; i < psDroid->numWeaps; i++)
-					{
-						// set rearm value to no runs made
-						psDroid->asWeaps[i].usedAmmo = 0;
-						psDroid->asWeaps[i].ammo = psDroid->getWeaponStats(i)->upgrade[psDroid->player].numRounds;
-						psDroid->asWeaps[i].lastFired = 0;
-					}
+					fillVtolDroid(psDroid);
 					objTrace(psDroid->id, "fully loaded");
 				}
 				else
@@ -3675,11 +3781,11 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 		if (!psBuilding->pFunctionality->resourceExtractor.psPowerGen
 		    && psBuilding->animationEvent == ANIM_EVENT_ACTIVE) // no power generator connected
 		{
-			psBuilding->timeAnimationStarted = 0; // so turn off animation, if any
-			psBuilding->animationEvent = ANIM_EVENT_NONE;
+			resetObjectAnimationState(psBuilding);
 		}
 		else if (psBuilding->pFunctionality->resourceExtractor.psPowerGen
-		         && psBuilding->animationEvent == ANIM_EVENT_NONE) // we have a power generator, but no animation
+		         && psBuilding->animationEvent == ANIM_EVENT_NONE // we have a power generator, but no animation
+		         && psBuilding->sDisplay.imd != nullptr)
 		{
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 
@@ -3823,7 +3929,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 			                                                 aDefaultRepair[psBuilding->player]].time);
 
 			//add the blue flashing effect for multiPlayer
-			if (bMultiPlayer && ONEINTEN && !bMission)
+			if (bMultiPlayer && ONEINTEN && !bMission && psBuilding->sDisplay.imd)
 			{
 				Vector3i position;
 				Vector3f *point;
@@ -3880,9 +3986,6 @@ STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 /* Release all resources associated with a structure */
 STRUCTURE::~STRUCTURE()
 {
-	// Make sure to get rid of some final references in the sound code to this object first
-	audio_RemoveObj(this);
-
 	STRUCTURE *psBuilding = this;
 
 	// free up the space used by the functionality array

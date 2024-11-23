@@ -65,7 +65,7 @@ camAreaEvent("LandingZoneTrigger", function()
 
 	// Give extra 40 minutes.
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 30 : 40)) + getMissionTime());
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha9.pre, {
 		area: "RTLZ",
 		message: "C1-4_LZ",
 		reinforcements: camMinutesToSeconds(1.5), // changes!
@@ -115,7 +115,7 @@ function buildDefenses()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha9.pre, {
 		area: "RTLZ",
 		message: "C1-4_LZ",
 		reinforcements: -1, // will override later
@@ -222,7 +222,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
-			templates: [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
+			templates: (!camClassicMode()) ? [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmorb ] : [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
 		},
 	});
 
