@@ -889,9 +889,11 @@ bool createReplayControllerOverlay()
 
 	// Position the Replay Controller form
 	replayControllerForm->setCalcLayout([](WIDGET *psWidget) {
-		int x0 = screenWidth - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
+		auto psOptionsButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(widgFormGetFromID(psWScreen->psForm, IDRET_OPTIONS));
+		bool visibleOptionsbutton = (psOptionsButton != nullptr && psOptionsButton->visible());
+		int x0 = screenWidth - (visibleOptionsbutton ? psOptionsButton->getMarginX() + psOptionsButton->width() : 0) - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
 		int y0 = 0;
-		psWidget->move(x0, y0);
+		psWidget->move(std::max<int>(0, x0), y0);
 	});
 
 	widgRegisterOverlayScreenOnTopOfScreen(replayOverlayScreen, psWScreen);
@@ -2256,13 +2258,13 @@ bool intAddInGameOptionsButton()
 	auto psExistingBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
 	if (psExistingBut != nullptr)
 	{
-		if (!hiddenOptionsButton)
+		bool oldButtonHiddenStatus = !psExistingBut->visible();
+		psExistingBut->show(!hiddenOptionsButton);
+
+		// Trigger Re-position of the Replay Controller form
+		if (replayOverlayScreen && (oldButtonHiddenStatus != hiddenOptionsButton))
 		{
-			psExistingBut->show();
-		}
-		else
-		{
-			psExistingBut->hide();
+			replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
 		}
 		return false;
 	}
@@ -2295,6 +2297,12 @@ bool intAddInGameOptionsButton()
 		{
 			button->hide();
 		}
+	}
+
+	// Trigger Re-position of the Replay Controller form
+	if (replayOverlayScreen)
+	{
+		replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
 	}
 
 	return true;
