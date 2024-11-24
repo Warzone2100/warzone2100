@@ -529,7 +529,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		{
 			std::string withoutTechlevel = mapNameWithoutTechlevel(mapData->pName.c_str());
 			std::string tip = withoutTechlevel +
-				(mapData->pAuthor.empty() ? "" : "\n" + std::string(_("By ")) + mapData->pAuthor);
+				(mapData->pAuthor.empty() ? "" : "\n" + astringf(_("By %s"), mapData->pAuthor.c_str()));
 			// add number of players to string.
 			auto button = std::make_shared<W_BUTTON>();
 			requestList->attach(button);
