@@ -504,7 +504,10 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		// Add the search edit box
 		auto searchBox = std::make_shared<W_EDITBOX>();
 		requestForm->attach(searchBox);
-		searchBox->setGeometry(3, requestForm->height() - MULTIOP_SEARCHBOXH - 3, requestForm->width() - 6, MULTIOP_SEARCHBOXH);
+		searchBox->setGeometry(3,
+			requestForm->height() - MULTIOP_SEARCHBOXH - 3,
+			requestForm->width() - authorCbDimentions.x - 9,
+			MULTIOP_SEARCHBOXH);
 		searchBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 		searchBox->setPlaceholder(_("Search for map"));
 		searchBox->setString(WzString::fromUtf8(current_searchString));
