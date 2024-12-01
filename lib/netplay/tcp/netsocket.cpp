@@ -32,10 +32,7 @@
 #include <algorithm>
 #include <map>
 
-#if !defined(ZLIB_CONST)
-#  define ZLIB_CONST
-#endif
-#include <zlib.h>
+#include "lib/netplay/zlib_compression_adapter.h"
 
 #if defined(__clang__)
 	#pragma clang diagnostic ignored "-Wshorten-64-to-32" // FIXME!!
@@ -66,27 +63,16 @@ struct Socket
 	 *
 	 * All non-listening sockets will only use the first socket handle.
 	 */
-	Socket() : ready(false), deleteLater(false), isCompressed(false), readDisconnected(false), zDeflateInSize(0)
-	{
-		memset(&zDeflate, 0, sizeof(zDeflate));
-		memset(&zInflate, 0, sizeof(zInflate));
-	}
-	~Socket();
-
 	SOCKET fd[SOCK_COUNT];
-	bool ready;
+	bool ready = false;
 	optional<std::error_code> writeErrorCode = nullopt;
-	bool deleteLater;
+	bool deleteLater = false;
 	char textAddress[40] = {};
 
-	bool isCompressed;
-	bool readDisconnected;  ///< True iff a call to recv() returned 0.
-	z_stream zDeflate;
-	z_stream zInflate;
-	unsigned zDeflateInSize;
-	bool zInflateNeedInput;
-	std::vector<uint8_t> zDeflateOutBuf;
-	std::vector<uint8_t> zInflateInBuf;
+	bool isCompressed = false;
+	bool readDisconnected = false;  ///< True iff a call to recv() returned 0.
+
+	ZlibCompressionAdapter compressionAdapter;
 };
 
 struct SocketSet
@@ -555,17 +541,19 @@ net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t 
 
 	if (sock.isCompressed)
 	{
-		if (sock.zInflateNeedInput)
+		auto& compressAdapter = sock.compressionAdapter;
+		if (compressAdapter.decompressionNeedInput())
 		{
 			// No input data, read some.
 
-			sock.zInflateInBuf.resize(max_size + 1000);
+			auto& decompressInBuf = compressAdapter.decompressionInBuffer();
+			decompressInBuf.resize(max_size + 1000);
 
 			ssize_t received;
 			do
 			{
 				//                                                  v----- This weird cast is because recv() takes a char * on windows instead of a void *...
-				received = recv(sock.fd[SOCK_CONNECTION], (char *)&sock.zInflateInBuf[0], sock.zInflateInBuf.size(), 0);
+				received = recv(sock.fd[SOCK_CONNECTION], (char *)&decompressInBuf[0], decompressInBuf.size(), 0);
 			}
 			while (received == SOCKET_ERROR && getSockErr() == EINTR);
 			if (received < 0)
@@ -573,8 +561,7 @@ net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t 
 				return tl::make_unexpected(make_network_error_code(getSockErr()));
 			}
 
-			sock.zInflate.next_in = &sock.zInflateInBuf[0];
-			sock.zInflate.avail_in = received;
+			compressAdapter.resetDecompressionStreamInputSize(received);
 			rawBytes = received;
 
 			if (received == 0)
@@ -583,32 +570,20 @@ net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t 
 			}
 			else
 			{
-				sock.zInflateNeedInput = false;
+				compressAdapter.setDecompressionNeedInput(false);
 			}
 		}
 
-		sock.zInflate.next_out = (Bytef *)buf;
-		sock.zInflate.avail_out = max_size;
-		int ret = inflate(&sock.zInflate, Z_NO_FLUSH);
-		ASSERT(ret != Z_STREAM_ERROR, "zlib inflate not working!");
-		char const *err = nullptr;
-		switch (ret)
+		const auto decompressRes = compressAdapter.decompress(buf, max_size);
+		if (!decompressRes.has_value())
 		{
-		case Z_NEED_DICT:  err = "Z_NEED_DICT";  break;
-		case Z_DATA_ERROR: err = "Z_DATA_ERROR"; break;
-		case Z_MEM_ERROR:  err = "Z_MEM_ERROR";  break;
-		}
-		if (err != nullptr)
-		{
-			debug(LOG_ERROR, "Couldn't decompress data from socket. zlib error %s", err);
-			// Bad data!
-			return tl::make_unexpected(make_zlib_error_code(ret));
+			return tl::make_unexpected(decompressRes.error());
 		}
 
-		if (sock.zInflate.avail_out != 0)
+		if (compressAdapter.availableSpaceToDecompress() != 0)
 		{
-			sock.zInflateNeedInput = true;
-			ASSERT(sock.zInflate.avail_in == 0, "zlib not consuming all input!");
+			compressAdapter.setDecompressionNeedInput(true);
+			ASSERT(compressAdapter.decompressionStreamConsumedAllInput(), "zlib not consuming all input!");
 		}
 
 		if (sock.readDisconnected)
@@ -616,7 +591,7 @@ net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t 
 			return tl::make_unexpected(make_network_error_code(ECONNRESET));
 		}
 
-		return max_size - sock.zInflate.avail_out;  // Got some data, return how much.
+		return max_size - compressAdapter.availableSpaceToDecompress();  // Got some data, return how much.
 	}
 
 	ssize_t received;
@@ -679,49 +654,7 @@ net::result<ssize_t> writeAll(Socket& sock, const void *buf, size_t size, size_t
 		}
 		else
 		{
-		#if ZLIB_VERNUM < 0x1252
-			// zlib < 1.2.5.2 does not support `#define ZLIB_CONST`
-			// Unfortunately, some OSes (ex. OpenBSD) ship with zlib < 1.2.5.2
-			// Workaround: cast away the const of the input, and disable the resulting -Wcast-qual warning
-			#if defined(__clang__)
-			#  pragma clang diagnostic push
-			#  pragma clang diagnostic ignored "-Wcast-qual"
-			#elif defined(__GNUC__)
-			#  pragma GCC diagnostic push
-			#  pragma GCC diagnostic ignored "-Wcast-qual"
-			#endif
-
-			// cast away the const for earlier zlib versions
-			sock.zDeflate.next_in = (Bytef *)buf; // -Wcast-qual
-
-			#if defined(__clang__)
-			#  pragma clang diagnostic pop
-			#elif defined(__GNUC__)
-			#  pragma GCC diagnostic pop
-			#endif
-		#else
-			// zlib >= 1.2.5.2 supports ZLIB_CONST
-			sock.zDeflate.next_in = (const Bytef *)buf;
-		#endif
-
-			sock.zDeflate.avail_in = size;
-			sock.zDeflateInSize += sock.zDeflate.avail_in;
-			do
-			{
-				size_t alreadyHave = sock.zDeflateOutBuf.size();
-				sock.zDeflateOutBuf.resize(alreadyHave + size + 20);  // A bit more than size should be enough to always do everything in one go.
-				sock.zDeflate.next_out = (Bytef *)&sock.zDeflateOutBuf[alreadyHave];
-				sock.zDeflate.avail_out = sock.zDeflateOutBuf.size() - alreadyHave;
-
-				int ret = deflate(&sock.zDeflate, Z_NO_FLUSH);
-				ASSERT(ret != Z_STREAM_ERROR, "zlib compression failed!");
-
-				// Remove unused part of buffer.
-				sock.zDeflateOutBuf.resize(sock.zDeflateOutBuf.size() - sock.zDeflate.avail_out);
-			}
-			while (sock.zDeflate.avail_out == 0);
-
-			ASSERT(sock.zDeflate.avail_in == 0, "zlib didn't compress everything!");
+			sock.compressionAdapter.compress(buf, size);
 		}
 	}
 
@@ -741,25 +674,10 @@ void socketFlush(Socket& sock, uint8_t player, size_t *rawByteCount)
 
 	ASSERT(!sock.writeErrorCode.has_value(), "Socket write error?? (Player: %" PRIu8 "", player);
 
-	// Flush data out of zlib compression state.
-	do
-	{
-		sock.zDeflate.next_in = (Bytef *)nullptr;
-		sock.zDeflate.avail_in = 0;
-		size_t alreadyHave = sock.zDeflateOutBuf.size();
-		sock.zDeflateOutBuf.resize(alreadyHave + 1000);  // 100 bytes would probably be enough to flush the rest in one go.
-		sock.zDeflate.next_out = (Bytef *)&sock.zDeflateOutBuf[alreadyHave];
-		sock.zDeflate.avail_out = sock.zDeflateOutBuf.size() - alreadyHave;
+	sock.compressionAdapter.flushCompressionStream();
 
-		int ret = deflate(&sock.zDeflate, Z_PARTIAL_FLUSH);
-		ASSERT(ret != Z_STREAM_ERROR, "zlib compression failed!");
-
-		// Remove unused part of buffer.
-		sock.zDeflateOutBuf.resize(sock.zDeflateOutBuf.size() - sock.zDeflate.avail_out);
-	}
-	while (sock.zDeflate.avail_out == 0);
-
-	if (sock.zDeflateOutBuf.empty())
+	auto& compressionBuf = sock.compressionAdapter.compressionOutBuffer();
+	if (compressionBuf.empty())
 	{
 		return;  // No data to flush out.
 	}
@@ -770,18 +688,12 @@ void socketFlush(Socket& sock, uint8_t player, size_t *rawByteCount)
 		wzSemaphorePost(socketThreadSemaphore);
 	}
 	std::vector<uint8_t> &writeQueue = socketThreadWrites[&sock];
-	writeQueue.insert(writeQueue.end(), sock.zDeflateOutBuf.begin(), sock.zDeflateOutBuf.end());
+	writeQueue.insert(writeQueue.end(), compressionBuf.begin(), compressionBuf.end());
 	wzMutexUnlock(socketThreadMutex);
 
-	// Primitive network logging, uncomment to use.
-	//printf("Size %3u ->%3zu, buf =", sock->zDeflateInSize, sock->zDeflateOutBuf.size());
-	//for (unsigned n = 0; n < std::min<unsigned>(sock->zDeflateOutBuf.size(), 40); ++n) printf(" %02X", sock->zDeflateOutBuf[n]);
-	//printf("\n");
-
 	// Data sent, don't send again.
-	rawBytes = sock.zDeflateOutBuf.size();
-	sock.zDeflateInSize = 0;
-	sock.zDeflateOutBuf.clear();
+	rawBytes = compressionBuf.size();
+	compressionBuf.clear();
 }
 
 void socketBeginCompression(Socket& sock)
@@ -793,23 +705,14 @@ void socketBeginCompression(Socket& sock)
 
 	wzMutexLock(socketThreadMutex);
 
-	// Init deflate.
-	sock.zDeflate.zalloc = Z_NULL;
-	sock.zDeflate.zfree = Z_NULL;
-	sock.zDeflate.opaque = Z_NULL;
-	int ret = deflateInit(&sock.zDeflate, 6);
-	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
-
-	sock.zInflate.zalloc = Z_NULL;
-	sock.zInflate.zfree = Z_NULL;
-	sock.zInflate.opaque = Z_NULL;
-	sock.zInflate.avail_in = 0;
-	sock.zInflate.next_in = Z_NULL;
-	ret = inflateInit(&sock.zInflate);
-	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
-
-	sock.zInflateNeedInput = true;
-
+	const auto initRes = sock.compressionAdapter.initialize();
+	if (!initRes.has_value())
+	{
+		const auto errMsg = initRes.error().message();
+		debug(LOG_NET, "Failed to initialize compression algorithms. Sockets won't work properly! Detailed error message: %s", errMsg.c_str());
+		wzMutexUnlock(socketThreadMutex);
+		return;
+	}
 	sock.isCompressed = true;
 	wzMutexUnlock(socketThreadMutex);
 }
@@ -825,15 +728,6 @@ bool socketSetTCPNoDelay(Socket& sock, bool nodelay)
 	debug(LOG_NET, "Unable to set TCP_NODELAY on socket - unsupported");
 	return false;
 #endif
-}
-
-Socket::~Socket()
-{
-	if (isCompressed)
-	{
-		deflateEnd(&zDeflate);
-		deflateEnd(&zInflate);
-	}
 }
 
 SocketSet *allocSocketSet()
@@ -991,7 +885,7 @@ int checkSockets(const SocketSet& set, unsigned int timeout)
 	{
 		ASSERT(set.fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
 
-		if (set.fds[i]->isCompressed && !set.fds[i]->zInflateNeedInput)
+		if (set.fds[i]->isCompressed && !set.fds[i]->compressionAdapter.decompressionNeedInput())
 		{
 			compressedReady = true;
 			break;
@@ -1007,7 +901,7 @@ int checkSockets(const SocketSet& set, unsigned int timeout)
 		int ret = 0;
 		for (size_t i = 0; i < set.fds.size(); ++i)
 		{
-			set.fds[i]->ready = set.fds[i]->isCompressed && !set.fds[i]->zInflateNeedInput;
+			set.fds[i]->ready = set.fds[i]->isCompressed && !set.fds[i]->compressionAdapter.decompressionNeedInput();
 			++ret;
 		}
 		return ret;
