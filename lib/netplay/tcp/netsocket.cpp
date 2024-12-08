@@ -107,15 +107,6 @@ static int getSockErr()
 #endif
 }
 
-static void setSockErr(int error)
-{
-#if   defined(WZ_OS_UNIX)
-	errno = error;
-#elif defined(WZ_OS_WIN)
-	WSASetLastError(error);
-#endif
-}
-
 } // namespace tcp
 
 #if defined(WZ_OS_WIN)
@@ -347,21 +338,21 @@ static const char *strSockError(int error)
 /**
  * Test whether the given socket still has an open connection.
  *
- * @return true when the connection is open, false when it's closed or in an
- *         error state, check getSockErr() to find out which.
+ * @return Empty result when the connection is open, or contains an appropriate `std::error_code`
+ *         when it's closed or in an error state.
  */
-static bool connectionIsOpen(Socket *sock)
+static net::result<void> connectionStatus(Socket *sock)
 {
 	const SocketSet set = {std::vector<Socket *>(1, sock)};
 
-	ASSERT_OR_RETURN((setSockErr(EBADF), false),
+	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EBADF)),
 	                 sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
 
 	// Check whether the socket is still connected
 	int ret = checkSockets(set, 0);
 	if (ret == SOCKET_ERROR)
 	{
-		return false;
+		return tl::make_unexpected(make_network_error_code(getSockErr()));
 	}
 	else if (ret == (int)set.fds.size() && sock->ready)
 	{
@@ -380,18 +371,17 @@ static bool connectionIsOpen(Socket *sock)
 		if (ret == SOCKET_ERROR)
 		{
 			debug(LOG_NET, "socket error");
-			return false;
+			return tl::make_unexpected(make_network_error_code(getSockErr()));
 		}
 		else if (readQueue == 0)
 		{
 			// Disconnected
-			setSockErr(ECONNRESET);
 			debug(LOG_NET, "Read queue empty - failing (ECONNRESET)");
-			return false;
+			return tl::make_unexpected(make_network_error_code(ECONNRESET));
 		}
 	}
 
-	return true;
+	return {};
 }
 
 static int socketThreadFunction(void *)
@@ -481,17 +471,21 @@ static int socketThreadFunction(void *)
 #if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
 					case EWOULDBLOCK:
 #endif
-						if (!connectionIsOpen(sock))
+					{
+						const auto connStatus = connectionStatus(sock);
+						if (!connStatus.has_value())
 						{
-							debug(LOG_NET, "Socket error");
-							sock->writeErrorCode = make_network_error_code(getSockErr());
+							const auto errMsg = connStatus.error().message();
+							debug(LOG_NET, "Socket error: %s", errMsg.c_str());
+							sock->writeErrorCode = connStatus.error();
 							socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
 							if (sock->deleteLater)
 							{
 								socketCloseNow(sock);
 							}
-							break;
 						}
+						break;
+					}
 					case EINTR:
 						break;
 #if defined(EPIPE)
