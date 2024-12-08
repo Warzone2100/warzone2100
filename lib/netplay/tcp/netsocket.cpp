@@ -70,7 +70,6 @@ struct Socket
 	char textAddress[40] = {};
 
 	bool isCompressed = false;
-	bool readDisconnected = false;  ///< True iff a call to recv() returned 0.
 
 	ZlibCompressionAdapter compressionAdapter;
 };
@@ -560,7 +559,8 @@ net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t 
 
 			if (received == 0)
 			{
-				sock.readDisconnected = true;
+				// Socket got disconnected. No reason to do anything else here.
+				return tl::make_unexpected(make_network_error_code(ECONNRESET));
 			}
 			else
 			{
@@ -580,11 +580,6 @@ net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t 
 			ASSERT(compressAdapter.decompressionStreamConsumedAllInput(), "zlib not consuming all input!");
 		}
 
-		if (sock.readDisconnected)
-		{
-			return tl::make_unexpected(make_network_error_code(ECONNRESET));
-		}
-
 		return max_size - compressAdapter.availableSpaceToDecompress();  // Got some data, return how much.
 	}
 
@@ -594,18 +589,15 @@ net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t 
 		received = recv(sock.fd[SOCK_CONNECTION], (char *)buf, max_size, 0);
 		if (received == 0)
 		{
-			sock.readDisconnected = true;
+			// Socket got disconnected. No reason to do anything else here.
+			return tl::make_unexpected(make_network_error_code(ECONNRESET));
 		}
 	}
 	while (received == SOCKET_ERROR && getSockErr() == EINTR);
 
 	sock.ready = false;
-	if (sock.readDisconnected)
-	{
-		return tl::make_unexpected(make_network_error_code(ECONNRESET));
-	}
-
 	rawBytes = received;
+
 	return received;
 }
 
@@ -987,7 +979,6 @@ net::result<ssize_t> readAll(Socket& sock, void *buf, size_t size, unsigned int 
 		if (ret == 0)
 		{
 			debug(LOG_NET, "Socket %" PRIuPTR"x disconnected.", static_cast<uintptr_t>(sock.fd[SOCK_CONNECTION]));
-			sock.readDisconnected = true;
 			return tl::make_unexpected(make_network_error_code(ECONNRESET));
 		}
 
