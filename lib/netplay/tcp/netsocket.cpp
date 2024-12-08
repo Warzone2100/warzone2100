@@ -674,6 +674,7 @@ void socketFlush(Socket& sock, uint8_t player, size_t *rawByteCount)
 		wzSemaphorePost(socketThreadSemaphore);
 	}
 	std::vector<uint8_t> &writeQueue = socketThreadWrites[&sock];
+	writeQueue.reserve(writeQueue.size() + compressionBuf.size());
 	writeQueue.insert(writeQueue.end(), compressionBuf.begin(), compressionBuf.end());
 	wzMutexUnlock(socketThreadMutex);
 
