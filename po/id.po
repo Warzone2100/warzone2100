@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"PO-Revision-Date: 2024-12-09 02:34\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -1800,7 +1800,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Hancurkan markas Nexus untuk mematikan Program Penyusup Nexus"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Peringatan: Markas terlindungi dari serangan VTOL"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Riset sirkuit resistansi dan terus bertahan dalam serbuan dari Nexus"
@@ -2940,22 +2940,22 @@ msgid "System locale"
 msgstr "Sistem lokal"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Gagal membuat pemetaan port"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Konfigurasikan router/firewall Anda secara manual untuk membuka port %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Pemetaan Port membuka port eksternal: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "IP eksternal Anda adalah: %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "Gagal membuat pemetaan port (waktu habis)"
 
 msgid "Client failed to ack player index swap"
 msgstr "Klien gagal mengenali pergantian indeks pemain"
@@ -7714,10 +7714,10 @@ msgid "Shadow mapping not available on this system."
 msgstr ""
 
 msgid "Low"
-msgstr ""
+msgstr "Rendah"
 
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 msgid "Shadow filtering not available on this system."
 msgstr ""
@@ -8003,7 +8003,7 @@ msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to all
 msgstr ""
 
 msgid "Chat"
-msgstr ""
+msgstr "Obrolan"
 
 msgid "Inactivity Timeout"
 msgstr "Batas Waktu Tidak Aktif"
@@ -8123,7 +8123,7 @@ msgid "New Joins"
 msgstr ""
 
 msgid "Refresh"
-msgstr ""
+msgstr "Refresh"
 
 msgid "Host Chat Options"
 msgstr ""
@@ -8147,7 +8147,7 @@ msgid "The host has globally muted 1+ players."
 msgstr ""
 
 msgid "Local"
-msgstr ""
+msgstr "Lokal"
 
 msgid "Select / Assign Group Number: "
 msgstr ""
@@ -8201,10 +8201,10 @@ msgid "Progress Bar"
 msgstr "Batang Progres"
 
 msgid "To:"
-msgstr ""
+msgstr "Kepada:"
 
 msgid "All"
-msgstr ""
+msgstr "Semua"
 
 msgid "Team"
 msgstr "Tim"
@@ -8232,13 +8232,13 @@ msgid "Requests"
 msgstr ""
 
 msgid "Notices"
-msgstr ""
+msgstr "Pemberitahuan"
 
 msgid "Reactions"
 msgstr ""
 
 msgid "Taunts"
-msgstr ""
+msgstr "Ejek"
 
 msgid "Coordination"
 msgstr ""
@@ -8247,16 +8247,16 @@ msgid "Suggestions"
 msgstr ""
 
 msgid "Cheats"
-msgstr ""
+msgstr "Curang"
 
 msgid "End-Game"
 msgstr ""
 
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
@@ -8341,7 +8341,7 @@ msgid "Almost ready"
 msgstr ""
 
 msgid "Ready"
-msgstr ""
+msgstr "Siap"
 
 msgid "Be right back"
 msgstr ""
@@ -8350,19 +8350,19 @@ msgid "I'm back"
 msgstr ""
 
 msgid "Yes"
-msgstr ""
+msgstr "Ya"
 
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Mungkin"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Belum"
 
 msgid "Soon"
-msgstr ""
+msgstr "Segera"
 
 msgid "Thank you"
 msgstr ""
@@ -8374,7 +8374,7 @@ msgid "Well-played"
 msgstr ""
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
 msgstr ""
@@ -8509,10 +8509,10 @@ msgid "Ally progress"
 msgstr "Progres sekutu"
 
 msgid "Tanks"
-msgstr ""
+msgstr "Tank"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cyborg"
 
 msgid "No teammates."
 msgstr ""
@@ -8524,7 +8524,7 @@ msgid "Weapons:"
 msgstr ""
 
 msgid "Units:"
-msgstr ""
+msgstr "Unit:"
 
 msgid "Resume Game"
 msgstr "Lanjutkan permainan"
@@ -10796,7 +10796,7 @@ msgid "Click/Tap and Hold"
 msgstr ""
 
 msgid "Other"
-msgstr ""
+msgstr "Lainnya"
 
 msgid "Interactions:"
 msgstr ""
@@ -10814,7 +10814,7 @@ msgid "Connecting to Game"
 msgstr ""
 
 msgid "Status:"
-msgstr ""
+msgstr "Status:"
 
 msgid "Cancel"
 msgstr "Batal"
@@ -10826,7 +10826,7 @@ msgid "Unable to Join Game"
 msgstr ""
 
 msgid "Error:"
-msgstr ""
+msgstr "Error:"
 
 msgid "Join Attempt Rejected"
 msgstr ""
@@ -10955,13 +10955,13 @@ msgid "Current Power / Power Per Second"
 msgstr "Daya Sekarang / Daya Per Detik"
 
 msgid "PwrLost"
-msgstr ""
+msgstr "PwrLost"
 
 msgid "PwrWon"
-msgstr ""
+msgstr "PwrWon"
 
 msgid "Lab Use"
-msgstr ""
+msgstr "Penggunaan Lab"
 
 msgid "Kinetic Armor"
 msgstr "Armor Kinetik"
@@ -10970,31 +10970,31 @@ msgid "(Tanks / Cyborgs)"
 msgstr "(Tank / Cyborg)"
 
 msgid "Cannons"
-msgstr ""
+msgstr "Meriam"
 
 msgid "Mortars"
-msgstr ""
+msgstr "Mortar"
 
 msgid "Missiles"
 msgstr ""
 
 msgid "Rockets"
-msgstr ""
+msgstr "Roket"
 
 msgid "Energy"
-msgstr ""
+msgstr "Energi"
 
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 msgid "Flame"
-msgstr ""
+msgstr "Flame"
 
 msgid "Howitzers"
 msgstr ""
 
 msgid "MG"
-msgstr ""
+msgstr "Senapan Mesin"
 
 msgid "Machine Guns"
 msgstr ""
@@ -11003,7 +11003,7 @@ msgid "Electronic"
 msgstr ""
 
 msgid "A-A"
-msgstr ""
+msgstr "Anti Udara"
 
 msgid "Anti-Air"
 msgstr ""
@@ -11015,19 +11015,19 @@ msgid "Slow Rocket"
 msgstr ""
 
 msgid "Las-Sat"
-msgstr ""
+msgstr "Las-Sat"
 
 msgid "Laser Satellite"
 msgstr ""
 
 msgid "Bombs"
-msgstr ""
+msgstr "Bom"
 
 msgid "Command"
-msgstr ""
+msgstr "Perintah"
 
 msgid "EMP"
-msgstr ""
+msgstr "EMP"
 
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr "Tidak dapat membangun unit, Batas Unit Dicapai — Produksi Dihentikan"
