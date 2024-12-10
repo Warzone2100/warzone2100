@@ -27,9 +27,9 @@
 #include "lib/framework/debug.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/netplay/byteorder_funcs_wrapper.h"
 #include "nettypes.h"
 #include "netplay.h"
-#include "netsocket.h" // solely to bring in `htonl` function
 
 #include <physfs.h>
 
@@ -76,7 +76,7 @@ struct SyncDebugValueChange : public SyncDebugEntry
 		variableName = vn;
 		newValue = nv;
 		id = i;
-		uint32_t valueBytes = htonl(newValue);
+		uint32_t valueBytes = wz_htonl(newValue);
 		crc = wz::crc_update(crc, function, strlen(function) + 1);
 		crc = wz::crc_update(crc, variableName, strlen(variableName) + 1);
 		crc = wz::crc_update(crc, &valueBytes, 4);
@@ -105,7 +105,7 @@ struct SyncDebugIntList : public SyncDebugEntry
 		numInts = std::min(num, ARRAY_SIZE(valueBytes));
 		for (unsigned n = 0; n < numInts; ++n)
 		{
-			valueBytes[n] = htonl(ints[n]);
+			valueBytes[n] = wz_htonl(ints[n]);
 		}
 		crc = wz::crc_update(crc, valueBytes, 4 * numInts);
 	}
