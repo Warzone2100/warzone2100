@@ -1135,6 +1135,14 @@ bool droidUpdateBuild(DROID *psDroid)
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 	ASSERT_OR_RETURN(false, psDroid->asBits[COMP_CONSTRUCT] < asConstructStats.size(), "Invalid construct pointer for unit");
 
+	// droid distance sanity check
+	unsigned distanceSq = droidSqDist(psDroid, psStruct);
+	if (distanceSq > REPAIR_MAXDIST * REPAIR_MAXDIST)
+	{
+		psDroid->action = DACTION_NONE;
+		return false;
+	}
+
 	// First check the structure hasn't been completed by another droid
 	if (psStruct->status == SS_BUILT)
 	{
@@ -1183,6 +1191,14 @@ bool droidUpdateDemolishing(DROID *psDroid)
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
+	// droid distance sanity check
+	unsigned distanceSq = droidSqDist(psDroid, psStruct);
+	if (distanceSq > REPAIR_MAXDIST * REPAIR_MAXDIST)
+	{
+		psDroid->action = DACTION_NONE;
+		return false;
+	}
+
 	int constructRate = 5 * constructorPoints(*psDroid->getConstructStats(), psDroid->player);
 	int pointsToAdd = gameTimeAdjustedAverage(constructRate);
 
@@ -1216,6 +1232,14 @@ bool droidUpdateRestore(DROID *psDroid)
 	WEAPON_STATS *psStats = &asWeaponStats[compIndex];
 
 	ASSERT_OR_RETURN(false, psStats->weaponSubClass == WSC_ELECTRONIC, "unit's weapon is not EW");
+
+	// droid distance sanity check
+	unsigned distanceSq = droidSqDist(psDroid, psStruct);
+	if (distanceSq > REPAIR_MAXDIST * REPAIR_MAXDIST)
+	{
+		psDroid->action = DACTION_NONE;
+		return false;
+	}
 
 	unsigned restorePoints = calcDamage(weaponDamage(*psStats, psDroid->player),
 							   psStats->weaponEffect, (BASE_OBJECT *)psStruct);
