@@ -885,6 +885,45 @@ static bool startIGMouseOptionsMenu()
 	return true;
 }
 
+class IntFormAnimatedQuickLoad : public IntFormAnimated {};
+
+void showQuickLoadConfirmation()
+{
+	widgDelete(psWScreen, INTINGAMEOP);
+	auto const& parent = psWScreen->psForm;
+
+	auto ingameOp = std::make_shared<IntFormAnimatedQuickLoad>();
+	parent->attach(ingameOp);
+	ingameOp->id = INTINGAMEOP;
+
+	int row = 1;
+
+	auto label = std::make_shared<W_LABEL>();
+	ingameOp->attach(label);
+	label->setGeometry(INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, 0);
+	label->setString(_("Warning: Are you sure? Any unsaved progress will be lost."));
+	label->setTextAlignment(WLAB_ALIGNCENTRE);
+	label->setFont(font_medium, WZCOL_YELLOW);
+
+	row++;
+
+	auto label2 = std::make_shared<W_LABEL>();
+	ingameOp->attach(label2);
+	label2->setGeometry(INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, 0);
+	label2->setString(_("Press the key again to continue or ESC to cancel."));
+	label2->setTextAlignment(WLAB_ALIGNCENTRE);
+	label2->setFont(font_medium, WZCOL_WHITE);
+
+	ingameOp->setCalcLayout([row](WIDGET* psWidget) {
+		psWidget->setGeometry(INTINGAMEOP4_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP4_W, INTINGAMEOPAUTO_H(row));
+	});
+}
+
+bool isQuickLoadConfirmationFormOpen()
+{
+	return dynamic_cast<IntFormAnimatedQuickLoad*>(widgGetFromID(psWScreen, INTINGAMEOP)) != nullptr;
+}
+
 static bool runIGMouseOptionsMenu(UDWORD id)
 {
 	switch (id)
