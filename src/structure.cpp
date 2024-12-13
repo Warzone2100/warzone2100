@@ -6327,6 +6327,29 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	ASSERT_OR_RETURN(, psTemplate != nullptr, "NULL template");
 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+
+	// the droid template being produced is different from the one we want to make,
+	// cancel the current production instead of increasing the counter
+	if (psFactory->psSubject && *psFactory->psSubject != *psTemplate)
+	{
+		bool bFound = false;
+		for (auto templ : apsTemplateList)
+		{
+			if (*templ == *psFactory->psSubject)
+			{
+				bFound = true;
+				break;
+			}
+		}
+
+		if (!bFound)
+		{
+			cancelProduction(psStructure, ModeImmediate, false);
+			factoryProdAdjust(psStructure, psTemplate, add);
+			return;
+		}
+	}
+
 	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
 	{
 		asProductionRun[psFactory->psAssemblyPoint->factoryType].resize(psFactory->psAssemblyPoint->factoryInc + 1);  // Don't have a production list, create it.

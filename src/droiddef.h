@@ -56,6 +56,8 @@ typedef std::vector<DROID_ORDER_DATA> OrderList;
 struct DROID_TEMPLATE : public BASE_STATS
 {
 	DROID_TEMPLATE();
+	bool operator==(const DROID_TEMPLATE& other) const;
+	bool operator!=(const DROID_TEMPLATE& other) const;
 
 	BODY_STATS* getBodyStats() const;
 	BRAIN_STATS* getBrainStats() const;

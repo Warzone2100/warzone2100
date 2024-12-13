@@ -524,6 +524,22 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	std::fill_n(asWeaps, MAX_WEAPONS, 0);
 }
 
+bool DROID_TEMPLATE::operator==(const DROID_TEMPLATE &other) const
+{
+	return numWeaps == other.numWeaps &&
+		droidType == other.droidType &&
+		multiPlayerID == other.multiPlayerID &&
+		prefab == other.prefab &&
+		enabled == other.enabled &&
+		std::equal(std::begin(asParts), std::end(asParts), std::begin(other.asParts)) &&
+		std::equal(std::begin(asWeaps), std::end(asWeaps), std::begin(other.asWeaps));
+}
+
+bool DROID_TEMPLATE::operator!=(const DROID_TEMPLATE &other) const
+{
+	return !(*this == other);
+}
+
 BODY_STATS* DROID_TEMPLATE::getBodyStats() const
 {
 	return &asBodyStats[asParts[COMP_BODY]];
