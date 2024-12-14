@@ -6397,6 +6397,10 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	//need to check if this was the template that was mid-production
 	if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
 	{
+		if (psFactory->psSubject && psFactory->psSubject->next)
+		{
+			return;
+		}
 		doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 	}
 	else if (!StructureIsManufacturingPending(psStructure))
