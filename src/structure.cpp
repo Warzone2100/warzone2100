@@ -6234,19 +6234,12 @@ void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MOD
 {
 	DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, current);
 
-	if (current)
+	if (current && current->next)
 	{
-		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [current](const auto &templ) {
-			return *templ == *current;
-		});
-
-		if (it == apsTemplateList.end() && current->next)
-		{
-			structSetManufacture(psStructure, current->next, ModeImmediate);
-			// Increase the production counter, because we produced the old template
-			factoryProdAdjust(psStructure, current->next, true);
-			return;
-		}
+		structSetManufacture(psStructure, current->next, ModeQueue);
+		// Increase the production counter, because we produced the old template
+		factoryProdAdjust(psStructure, current->next, true);
+		return;
 	}
 
 	if (psNextTemplate != nullptr)
