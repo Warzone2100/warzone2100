@@ -6232,8 +6232,6 @@ void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 
 void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MODE mode)
 {
-	DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, current);
-
 	if (current && current->next)
 	{
 		structSetManufacture(psStructure, current->next, ModeQueue);
@@ -6241,6 +6239,8 @@ void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MOD
 		factoryProdAdjust(psStructure, current->next, true);
 		return;
 	}
+
+	DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, current);
 
 	if (psNextTemplate != nullptr)
 	{
@@ -6340,7 +6340,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	// save new template into the old one
 	if (psFactory->psSubject && *psFactory->psSubject != *psTemplate)
 	{
-		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [psFactory](const auto &templ) {
+		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [psFactory](const DROID_TEMPLATE *templ) {
 			return *templ == *psFactory->psSubject;
 		});
 
