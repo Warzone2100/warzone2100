@@ -6235,8 +6235,6 @@ void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MOD
 	if (current && current->next)
 	{
 		structSetManufacture(psStructure, current->next, ModeQueue);
-		// Increase the production counter, because we produced the old template
-		factoryProdAdjust(psStructure, current->next, true);
 		return;
 	}
 
