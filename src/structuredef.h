@@ -30,6 +30,7 @@
 #include "weapondef.h"
 
 #include <vector>
+#include <memory>
 
 #define NUM_FACTORY_MODULES 2
 #define NUM_POWER_MODULES 4
