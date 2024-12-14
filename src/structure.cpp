@@ -6234,6 +6234,21 @@ void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MOD
 {
 	DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, current);
 
+	if (current)
+	{
+		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [current](const auto &templ) {
+			return *templ == *current;
+		});
+
+		if (it == apsTemplateList.end() && current->next)
+		{
+			structSetManufacture(psStructure, current->next, ModeImmediate);
+			// Increase the production counter, because we produced the old template
+			factoryProdAdjust(psStructure, current->next, true);
+			return;
+		}
+	}
+
 	if (psNextTemplate != nullptr)
 	{
 		structSetManufacture(psStructure, psNextTemplate, ModeQueue);  // ModeQueue instead of mode, since production lists aren't currently synchronised.
@@ -6329,24 +6344,16 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
 
 	// the droid template being produced is different from the one we want to make,
-	// cancel the current production instead of increasing the counter
+	// save new template into the old one
 	if (psFactory->psSubject && *psFactory->psSubject != *psTemplate)
 	{
-		bool bFound = false;
-		for (auto templ : apsTemplateList)
-		{
-			if (*templ == *psFactory->psSubject)
-			{
-				bFound = true;
-				break;
-			}
-		}
+		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [psFactory](const auto &templ) {
+			return *templ == *psFactory->psSubject;
+		});
 
-		if (!bFound)
+		if (it == apsTemplateList.end())
 		{
-			cancelProduction(psStructure, ModeImmediate, false);
-			factoryProdAdjust(psStructure, psTemplate, add);
-			return;
+			psFactory->psSubject->next = psTemplate;
 		}
 	}
 
