@@ -1099,14 +1099,20 @@ static void refundFactoryBuildPower(STRUCTURE *psBuilding)
 	ASSERT_OR_RETURN(, psBuilding && psBuilding->isFactory(), "structure not a factory");
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
+	// We started building, so give the power back that was used.
+	if (psFactory->psSubjectObsolete)
+	{
+		if (psFactory->buildPointsRemaining < (int)calcTemplateBuild(psFactory->psSubjectObsolete.get()))
+		{
+			addPower(psBuilding->player, calcTemplatePower(psFactory->psSubjectObsolete.get()));
+		}
+	}
 	if (psFactory->psSubject)
 	{
 		if (psFactory->buildPointsRemaining < (int)calcTemplateBuild(psFactory->psSubject))
 		{
-			// We started building, so give the power back that was used.
 			addPower(psBuilding->player, calcTemplatePower(psFactory->psSubject));
 		}
-
 	}
 }
 
@@ -2071,6 +2077,7 @@ static bool setFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType)
 			FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
 			psFactory->psSubject = nullptr;
+			psFactory->psSubjectObsolete = nullptr;
 
 			// Default the secondary order - AB 22/04/99
 			psFactory->secondaryOrder = DSS_ARANGE_LONG | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
@@ -3216,7 +3223,14 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
 		{
-			pSubject = psStructure->pFunctionality->factory.psSubject;
+			if (psStructure->pFunctionality->factory.psSubjectObsolete)
+			{
+				pSubject = psStructure->pFunctionality->factory.psSubjectObsolete.get();
+			}
+			else
+			{
+				pSubject = psStructure->pFunctionality->factory.psSubject;
+			}
 			structureMode = REF_FACTORY;
 			//check here to see if the factory's commander has died
 			if (psStructure->pFunctionality->factory.psCommander &&
@@ -3508,11 +3522,23 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				//script callback, must be called after factory was flagged as idle
 				if (bDroidPlaced)
 				{
+					bool bObsolete = false;
+					if (psFactory->psSubjectObsolete)
+					{
+						pSubject = psFactory->psSubject;
+						bObsolete = true;
+					}
+
 					//reset the start time
 					psFactory->timeStarted = ACTION_START_TIME;
 					psFactory->psSubject = nullptr;
+					psFactory->psSubjectObsolete = nullptr;
 
 					doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
+					if (bObsolete)
+					{
+						factoryProdAdjust(psStructure, (DROID_TEMPLATE *)pSubject, true);
+					}
 
 					cbNewDroid(psStructure, psDroid);
 				}
@@ -6169,6 +6195,7 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProdu
 	//clear the factory's subject
 	refundFactoryBuildPower(psBuilding);
 	psFactory->psSubject = nullptr;
+	psFactory->psSubjectObsolete = nullptr;
 	delPowerRequest(psBuilding);
 }
 
@@ -6329,7 +6356,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
 
 	// the droid template being produced is different from the one we want to make,
-	// cancel the current production instead of increasing the counter
+	// update the current production instead of increasing the counter
 	if (psFactory->psSubject && *psFactory->psSubject != *psTemplate)
 	{
 		bool bFound = false;
@@ -6344,9 +6371,9 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 
 		if (!bFound)
 		{
-			cancelProduction(psStructure, ModeImmediate, false);
-			factoryProdAdjust(psStructure, psTemplate, add);
-			return;
+			psFactory->psSubjectObsolete = std::make_unique<DROID_TEMPLATE>();
+			*psFactory->psSubjectObsolete = *psFactory->psSubject;
+			*psFactory->psSubject = *psTemplate;
 		}
 	}
 

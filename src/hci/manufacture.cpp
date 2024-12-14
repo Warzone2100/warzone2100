@@ -168,7 +168,8 @@ void ManufactureController::updateManufactureOptionsList()
 DROID_TEMPLATE *ManufactureController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto factory = getFactoryOrNullptr(getObjectAt(objectIndex));
-	return factory == nullptr ? nullptr : factory->psSubject;
+	auto subject = factory->psSubjectObsolete ? factory->psSubjectObsolete.get() : factory->psSubject;
+	return factory == nullptr ? nullptr : subject;
 }
 
 void ManufactureController::refresh()
@@ -419,7 +420,10 @@ private:
 		auto productionRemaining = getProduction(factory, droidTemplate).numRemaining();
 		if (productionRemaining > 0 && factory && StructureIsManufacturingPending(factory))
 		{
-			productionRunSizeLabel->setString(WzString::fromUtf8(astringf("%d", productionRemaining)));
+			auto manufacture = StructureGetFactory(factory);
+			productionRunSizeLabel->setString(manufacture->psSubjectObsolete ?
+				WzString::fromUtf8(astringf("1+%d", productionRemaining)) :
+				WzString::fromUtf8(astringf("%d", productionRemaining)));
 			productionRunSizeLabel->show();
 		}
 		else

@@ -205,6 +205,8 @@ struct FACTORY
 	UBYTE loopsPerformed;             /* how many times the loop has been performed*/
 	DROID_TEMPLATE *psSubject;        ///< The subject the structure is working on.
 	DROID_TEMPLATE *psSubjectPending; ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
+	std::unique_ptr<DROID_TEMPLATE>
+				psSubjectObsolete;    ///< Old droid template that will be deleted after production ends.
 	StatusPending statusPending;      ///< Pending = not yet synchronised.
 	unsigned pendingCount;            ///< Number of messages sent but not yet processed.
 	UDWORD timeStarted;               /* The time the building started on the subject*/
