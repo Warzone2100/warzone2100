@@ -1107,7 +1107,7 @@ static void refundFactoryBuildPower(STRUCTURE *psBuilding)
 			addPower(psBuilding->player, calcTemplatePower(psFactory->psSubjectObsolete.get()));
 		}
 	}
-	if (psFactory->psSubject)
+	else if (psFactory->psSubject)
 	{
 		if (psFactory->buildPointsRemaining < (int)calcTemplateBuild(psFactory->psSubject))
 		{
