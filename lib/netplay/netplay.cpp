@@ -33,6 +33,7 @@
 #include "src/console.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
+#include "src/multilobbycommands.h"
 
 #include <time.h>			// for stats
 #include <physfs.h>
@@ -411,6 +412,11 @@ void NET_setLobbyDisabled(const std::string& infoLinkURL)
 	lobby_disabled_info_link_url = infoLinkURL;
 }
 
+uint32_t NET_getCurrentHostedLobbyGameId()
+{
+	return gamestruct.gameId;
+}
+
 //	Sets if the game is password protected or not
 void NETGameLocked(bool flag)
 {
@@ -668,6 +674,7 @@ void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams, bool initSpec
 	{
 		NetPlay.players[i].isSpectator = false;
 	}
+	NetPlay.players[i].isAdmin = false;
 }
 
 uint8_t NET_numHumanPlayers(void)
@@ -736,6 +743,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 		NETuint8_t(reinterpret_cast<uint8_t *>(&NetPlay.players[index[n]].faction));
 		NETbool(&NetPlay.players[index[n]].isSpectator);
+		NETbool(&NetPlay.players[index[n]].isAdmin);
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -988,12 +996,19 @@ static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
 	sync_counter.left++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(index);		// more cleanup
+	bool resetReadyCalled = false;
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
 		NET_DestroyPlayer(index);       // sets index player's array to false
 		if (!wasSpectator)
 		{
 			resetReadyStatus(false);		// reset ready status for all players
+			resetReadyCalled = true;
+		}
+
+		if (!resetReadyCalled)
+		{
+			wz_command_interface_output_room_status_json();
 		}
 	}
 }
@@ -1017,6 +1032,7 @@ static void NETplayerDropped(UDWORD index)
 	sync_counter.drops++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(id);			// more cleanup
+	bool resetReadyCalled = false;
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
 		// Send message type specifically for dropped / disconnects
@@ -1028,6 +1044,12 @@ static void NETplayerDropped(UDWORD index)
 		if (!wasSpectator)
 		{
 			resetReadyStatus(false);		// reset ready status for all players
+			resetReadyCalled = true;
+		}
+
+		if (!resetReadyCalled)
+		{
+			wz_command_interface_output_room_status_json();
 		}
 	}
 
@@ -1930,6 +1952,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 	// Swap certain ingame player-associated entries
 	std::swap(ingame.PingTimes[playerIndexA], ingame.PingTimes[playerIndexB]);
 	std::swap(ingame.LagCounter[playerIndexA], ingame.LagCounter[playerIndexB]);
+	std::swap(ingame.DesyncCounter[playerIndexA], ingame.DesyncCounter[playerIndexB]);
 	std::swap(ingame.VerifiedIdentity[playerIndexA], ingame.VerifiedIdentity[playerIndexB]);
 	std::swap(ingame.JoiningInProgress[playerIndexA], ingame.JoiningInProgress[playerIndexB]);
 	std::swap(ingame.PendingDisconnect[playerIndexA], ingame.PendingDisconnect[playerIndexB]);
@@ -2533,6 +2556,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			int8_t difficulty = 0;
 			uint8_t faction = FACTION_NORMAL;
 			bool isSpectator = false;
+			bool isAdmin = false;
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
@@ -2577,6 +2601,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				NETint8_t(&difficulty);
 				NETuint8_t(&faction);
 				NETbool(&isSpectator);
+				NETbool(&isAdmin);
 
 				auto newFactionId = uintToFactionID(faction);
 				if (!newFactionId.has_value())
@@ -2596,6 +2621,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
 					NetPlay.players[index].faction = newFactionId.value();
 					NetPlay.players[index].isSpectator = isSpectator;
+					NetPlay.players[index].isAdmin = isAdmin;
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
@@ -4354,6 +4380,9 @@ static void NETallowJoining()
 			{
 				ASSERT(false, "wzFiles is uninitialized?? (Player: %" PRIu8 ")", index);
 			}
+
+			wz_command_interface_output_room_status_json();
+
 			continue; // continue to next tmp_socket
 		}
 
@@ -4477,7 +4506,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		// Now switch player color of the host to what they normally use for MP games
 		if (war_getMPcolour() >= 0)
 		{
-			changeColour(NetPlay.hostPlayer, war_getMPcolour(), true);
+			changeColour(NetPlay.hostPlayer, war_getMPcolour(), realSelectedPlayer);
 		}
 		return true;
 	}
@@ -4535,7 +4564,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	// Now switch player color of the host to what they normally use for SP games
 	if (NetPlay.hostPlayer < MAX_PLAYERS && war_getMPcolour() >= 0)
 	{
-		changeColour(NetPlay.hostPlayer, war_getMPcolour(), true);
+		changeColour(NetPlay.hostPlayer, war_getMPcolour(), realSelectedPlayer);
 	}
 
 	NETregisterServer(WZ_SERVER_DISCONNECT);

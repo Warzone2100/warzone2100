@@ -33,8 +33,8 @@ ${LangFileString} DESC_SecFMVs_Ger "Scarica e installa i filmati di gioco in ted
 ${LangFileString} TEXT_SecNLS "File della lingua"
 ${LangFileString} DESC_SecNLS "Supporto per altre lingue diverse dall'inglese."
 
-${LangFileString} TEXT_SecNLS_WinFonts "Caratteri di Windows"
-${LangFileString} DESC_SecNLS_WinFonts "Includi la cartella dei caratteri di Windows nel percorso di ricerca. Abilitalo se vuoi usare dei caratteri personalizzati nel file di configurazione o se hai problemi con il quello standard. Può essere lento su Vista e versioni successive!"
+${LangFileString} TEXT_SecNLS_WinFonts "Font di Windows"
+${LangFileString} DESC_SecNLS_WinFonts "Includi la cartella font di Windows nel percorso di ricerca. Abilitalo se vuoi usare font personalizzati nel file di configurazione o hai problemi con il font standard. Può essere lento su Vista e versioni successive!"
 
 ${LangFileString} TEXT_SecMSSysLibraries "Importanti DLL Runtime di Microsoft"
 ${LangFileString} DESC_SecMSSysLibraries "Scarica e installa (o aggiorna) le librerie di sistema Microsoft Visual C++ redistributable, che alcuni componenti potrebbero richiedere per funzionare."

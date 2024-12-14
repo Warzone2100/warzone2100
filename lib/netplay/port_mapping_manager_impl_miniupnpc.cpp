@@ -132,8 +132,8 @@ static PortMappingImpl_Miniupnpc::DiscoveryStatus upnp_discover(DiscoveryResults
 		return PortMappingImpl_Miniupnpc::DiscoveryStatus::UPNP_ERROR_DEVICE_NOT_FOUND;
 	}
 
-	char wanaddr[64] = {};
 #if defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 18)
+	char wanaddr[64] = {};
 	int validIGDResult = UPNP_GetValidIGD(devlist, &output.urls, &output.data, output.lanaddr, sizeof(output.lanaddr), wanaddr, sizeof(wanaddr));
 #else
 	int validIGDResult = UPNP_GetValidIGD(devlist, &output.urls, &output.data, output.lanaddr, sizeof(output.lanaddr));

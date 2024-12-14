@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -6484,11 +6484,11 @@ msgid "Thermal Armor +35%"
 msgstr "Термальна Броня +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Термальна Броня +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Термальна Броня +40%"
 
 #, no-c-format
@@ -7742,6 +7742,9 @@ msgstr ""
 msgid "Shadow filtering not available on this system."
 msgstr ""
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Зміни всупають в силу після перезавантаження гри"
 
@@ -7786,6 +7789,9 @@ msgstr "Тремтіння екрану"
 
 msgid "Groups Menu"
 msgstr "Меню підрозділів"
+
+msgid "Options Button"
+msgstr ""
 
 msgid "GRAPHICS OPTIONS"
 msgstr "ОПЦІЇ ГРАФІКИ"
@@ -8100,6 +8106,12 @@ msgstr "Гравець %u за допомогою шахрайства (меню
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : ."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Хідінг застаріла технології"
 
@@ -8259,6 +8271,28 @@ msgstr "Чіти"
 
 msgid "End-Game"
 msgstr "Ендшпиль"
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "Чи може хтось, будь ласка, передати мені кілька Бойових Одиниць?"
@@ -8474,6 +8508,9 @@ msgid "Message delivery failure - try again"
 msgstr "Збій доставки повідомлення - повторіть спробу"
 
 msgid "Map Downloaded"
+msgstr ""
+
+msgid "Admin modified a setting"
 msgstr ""
 
 msgid "Bot Allies"
@@ -10844,7 +10881,30 @@ msgstr ""
 msgid "Synchronizing data with host ..."
 msgstr ""
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
 msgstr ""
 
 #, c-format

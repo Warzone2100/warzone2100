@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-06-12 03:55+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"PO-Revision-Date: 2024-10-07 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -66,7 +66,7 @@ msgid "The Project dispatches three teams with the objective of reclaiming artif
 msgstr "“项目”派遣了三个中队，以回收遗留科技为目标，以便研究和使用“大崩溃”前的技术。"
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr "- Alpha 中队被派往位于“项目”总部东南方的亚利桑那沙漠"
+msgstr "- Alpha 中队被派往位于“工程”总部东南方的亚利桑那沙漠"
 
 msgid "- Beta team is sent to the remains of Chicago"
 msgstr "- Beta 中队被派往芝加哥的废墟上"
@@ -429,7 +429,7 @@ msgid "- Return for Repair: Unit will return to a Repair Facility"
 msgstr "- 返回维修：单位将返回到维修设施"
 
 msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
-msgstr "- 返回总部：单位将返回到指挥中心或着陆点 (战役模式)"
+msgstr "- 返回指挥中心：单位将返回到指挥中心或着陆点 (战役模式)"
 
 msgid "- Go To Transport: Unit will go to and board transport"
 msgstr "- 前往运输舰：单位将前往并登陆运输舰"
@@ -450,7 +450,7 @@ msgid "Building Units"
 msgstr "生产单位"
 
 msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
-msgstr "如要生产单位，选择一个工厂， 或点击命令面板上的“制造”按钮 - 这将在屏幕左侧打开制造面板。"
+msgstr "如要生产单位，选择一个工厂， 或点击命令面板上的“生产”按钮 - 这将在屏幕左侧打开制造面板。"
 
 msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
 msgstr "制造面板将显示目前选定的工厂可以生产的单位设计。工厂可能仅限于生产某些类型的单位 (有些单元需要升级模块后才能生产)。"

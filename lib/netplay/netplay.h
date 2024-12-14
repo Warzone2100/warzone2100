@@ -275,6 +275,7 @@ struct PLAYER
 	bool                autoGame;           ///< if we are running a autogame (AI controls us)
 	FactionID			faction;			///< which faction the player has
 	bool				isSpectator;		///< whether this slot is a spectator slot
+	bool				isAdmin;			///< whether this slot has admin privs
 
 	// used on host-ONLY (not transmitted to other clients):
 	std::shared_ptr<std::vector<WZFile>> wzFiles = std::make_shared<std::vector<WZFile>>();            ///< for each player, we keep track of map/mod download progress
@@ -302,6 +303,7 @@ struct PLAYER
 		IPtextAddress[0] = '\0';
 		faction = FACTION_NORMAL;
 		isSpectator = false;
+		isAdmin = false;
 	}
 };
 
@@ -485,6 +487,7 @@ void NET_clearDownloadingWZFiles();
 bool NET_getLobbyDisabled();
 const std::string& NET_getLobbyDisabledInfoLinkURL();
 void NET_setLobbyDisabled(const std::string& infoLinkURL);
+uint32_t NET_getCurrentHostedLobbyGameId();
 
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);

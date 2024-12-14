@@ -26,6 +26,9 @@
 #include <system_error>
 #include <vector>
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 #include <tl/expected.hpp>
 
 namespace net
@@ -137,7 +140,6 @@ int checkSockets(const SocketSet& set, unsigned int timeout); ///< Checks which 
 // Higher-level functions for opening a connection / socket
 struct OpenConnectionResult
 {
-public:
 	OpenConnectionResult(std::error_code ec, std::string errorString)
 	: errorCode(ec)
 	, errorString(errorString)
@@ -146,19 +148,19 @@ public:
 	OpenConnectionResult(Socket* open_socket)
 	: open_socket(open_socket)
 	{ }
-public:
-	bool hasError() const { return static_cast<bool>(errorCode); }
-public:
+
+	bool hasError() const { return errorCode.has_value(); }
+
 	OpenConnectionResult( const OpenConnectionResult& other ) = delete; // non construction-copyable
 	OpenConnectionResult& operator=( const OpenConnectionResult& ) = delete; // non copyable
 	OpenConnectionResult(OpenConnectionResult&&) = default;
 	OpenConnectionResult& operator=(OpenConnectionResult&&) = default;
-public:
+
 	struct SocketDeleter {
 		void operator()(Socket* b) { if (b) { socketClose(b); } }
 	};
 	std::unique_ptr<Socket, SocketDeleter> open_socket;
-	std::error_code errorCode;
+	optional<std::error_code> errorCode = nullopt;
 	std::string errorString;
 };
 typedef std::function<void (OpenConnectionResult&& result)> OpenConnectionToHostResultCallback;

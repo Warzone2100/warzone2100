@@ -61,7 +61,7 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void displayRecursive(WidgetGraphicsContext const &context) override; // for handling progress border overlay
 
-	unsigned getState() override;
+	unsigned getState() const override;
 	void setState(unsigned state) override;
 	void setFlash(bool enable) override;
 	WzString getString() const override;

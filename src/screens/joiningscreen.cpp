@@ -419,7 +419,7 @@ int32_t WzJoiningStatusForm::calculateNeededHeight(bool withDetailsParagraph)
 	}
 	else
 	{
-		result += statusDetails->height();
+		result += statusDetails->idealHeight();
 	}
 	result += InternalPadding;
 	if (passwordPrompt && passwordPrompt->visible())
@@ -521,7 +521,7 @@ void WzJoiningStatusForm::recalcLayout()
 
 	int statusDetailsX0 = InternalPadding;
 	int statusDetailsWidth = usableWidth;
-	statusDetails->setGeometry(statusDetailsX0, lastLineY1 + DetailsLabelParagraphPadding, statusDetailsWidth, statusDetails->height());
+	statusDetails->setGeometry(statusDetailsX0, lastLineY1 + DetailsLabelParagraphPadding, statusDetailsWidth, statusDetails->idealHeight());
 
 	int paragraphHeight = usableHeight - DetailsLabelParagraphPadding;
 	scrollableParagraphContainer->setGeometry(InternalPadding, lastLineY1 + DetailsLabelParagraphPadding, usableWidth, paragraphHeight);
@@ -546,7 +546,7 @@ void WzJoiningStatusForm::displayStatus(const WzString &statusDescription)
 	}
 	scrollableParagraphContainer->hide();
 
-	statusDetails->setString(statusDescription);
+	statusDetails->setFormattedString(statusDescription, std::numeric_limits<uint32_t>::max(), font_regular);
 	statusDetails->show();
 }
 
@@ -780,6 +780,10 @@ private:
 	};
 	JoiningState currentJoiningState = JoiningState::AwaitingConnection;
 
+	const char* to_string(JoiningState s);
+	const char* to_display_str(JoiningState s);
+	const char* to_localized_state_fail_desc(JoiningState s);
+
 	// state when handling initial connection join
 	uint32_t startTime = 0;
 	Socket* client_transient_socket = nullptr;
@@ -956,12 +960,73 @@ void WzJoiningGameScreen_HandlerRoot::updateJoiningStatus(const WzString& status
 	joiningProgressForm->displayProgressStatus(statusDescription);
 }
 
+const char* WzJoiningGameScreen_HandlerRoot::to_string(JoiningState s)
+{
+	switch (s) {
+		case JoiningState::NeedsPassword: return "NeedsPassword";
+		case JoiningState::AwaitingConnection: return "AwaitingConnection";
+		case JoiningState::AwaitingInitialNetcodeHandshakeAck: return "AwaitingInitialNetcodeHandshakeAck";
+		case JoiningState::ProcessingJoinMessages: return "ProcessingJoinMessages";
+		case JoiningState::Failure: return "Failure";
+		case JoiningState::SuccessPendingClose: return "SuccessPendingClose";
+		case JoiningState::Success: return "Success";
+	}
+	return ""; // silence compiler warning
+}
+
+const char* WzJoiningGameScreen_HandlerRoot::to_display_str(JoiningState s)
+{
+	switch (s) {
+		case JoiningState::NeedsPassword: return "NeedsPassword";
+		case JoiningState::AwaitingConnection: return "PendingConnect";
+		case JoiningState::AwaitingInitialNetcodeHandshakeAck: return "NetcodeHandshake";
+		case JoiningState::ProcessingJoinMessages: return "ProcessingJoin";
+		case JoiningState::Failure: return "Failure";
+		case JoiningState::SuccessPendingClose: return "SuccessPendingClose";
+		case JoiningState::Success: return "Success";
+	}
+	return ""; // silence compiler warning
+}
+
+const char* WzJoiningGameScreen_HandlerRoot::to_localized_state_fail_desc(JoiningState s)
+{
+	switch (s) {
+		case JoiningState::NeedsPassword:
+			return _("Waiting for correct join password");
+		case JoiningState::AwaitingConnection:
+			return _("Attempting to connect");
+		case JoiningState::AwaitingInitialNetcodeHandshakeAck:
+			return _("Establishing connection handshake");
+		case JoiningState::ProcessingJoinMessages:
+			return _("Coordinating join with host");
+		case JoiningState::Failure:
+			return _("Join attempt failed");
+		case JoiningState::SuccessPendingClose:
+		case JoiningState::Success:
+			return "";
+	}
+	return ""; // silence compiler warning
+}
+
 void WzJoiningGameScreen_HandlerRoot::handleJoinTimeoutError()
 {
+	debug(LOG_INFO, "Failed to join with timeout, state: %s", to_string(currentJoiningState));
+
+	WzString timeoutErrorDetails = _("Host did not respond before timeout");
+	timeoutErrorDetails += "\n";
+	WzString localizedJoinStateDesc = to_localized_state_fail_desc(currentJoiningState);
+	if (!localizedJoinStateDesc.isEmpty())
+	{
+		timeoutErrorDetails += WzString::fromUtf8(astringf(_("Failed at: [%s] - %s"), to_display_str(currentJoiningState), localizedJoinStateDesc.toUtf8().c_str()));
+	}
+	else
+	{
+		timeoutErrorDetails += WzString::fromUtf8(astringf(_("Failed at: [%s]"), to_display_str(currentJoiningState)));
+	}
+
 	currentJoiningState = JoiningState::Failure;
 
-	debug(LOG_INFO, "Failed to join with timeout");
-	joiningProgressForm->displayUnableToJoinError(_("Host did not respond before timeout"));
+	joiningProgressForm->displayUnableToJoinError(timeoutErrorDetails);
 	joiningProgressForm->callCalcLayout();
 
 	if (onFailureFunc)
@@ -1084,8 +1149,9 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 		{
 			debug(LOG_ERROR, "%s", result.errorString.c_str());
 			// Done trying connections - all failed
-			const auto sockErrorMsg = result.errorCode.message();
-			auto localizedError = astringf(_("Failed to open connection: [%d] %s"), result.errorCode.value(), sockErrorMsg.c_str());
+			const auto errCode = result.errorCode.value();
+			const auto sockErrorMsg = errCode.message();
+			auto localizedError = astringf(_("Failed to open connection: [%d] %s"), errCode.value(), sockErrorMsg.c_str());
 			handleFailure(FailureDetails::makeFromInternalError(WzString::fromUtf8(localizedError)));
 		}
 		return;

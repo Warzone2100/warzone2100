@@ -7,13 +7,16 @@ In releases beyond the 4.5 series, the campaign brief and Proximity files are no
 Example:
 ```json
 {
-    "C1A_BASE0": {
-        "audio": "pcv390.ogg",
-        "message": "BARBASE_MSG",
-        "type": 0,
-        "x": 3904,
-        "y": 4672,
-        "z": 0
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "C1A_BASE0": {
+            "audio": "pcv390.ogg",
+            "message": "BARBASE_MSG",
+            "type": 0,
+            "x": 3904,
+            "y": 4672,
+            "z": 0
+        }
     }
 }
 ```
@@ -29,19 +32,21 @@ Each Proximity message must have a unique ID. This ID will be what can be refere
 Example:
 ```json
 {
-    "video0000": {
-        "name": "MB1A_MSG",
-        "sequences": [
-            { "loop": 1, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
-            { "loop": 0, "subtitles": ["CAM1A_MSG1", "CAM1A_MSG2", "CAM1A_MSG3"], "video": "cam1/cam1ascv.ogg" }
-        ]
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB1A_MSG": {
+            "sequences": [
+                { "loop": 1, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
+                { "loop": 0, "subtitles": ["CAM1A_MSG1", "CAM1A_MSG2", "CAM1A_MSG3"], "video": "cam1/cam1ascv.ogg" }
+            ]
+        }
     }
 }
 ```
 
-Each video sequence should start with something simple like "video..." or something else at your discretion. Order here does not matter.
-Within each sequence, there will be two values:
-- name: The unique view data name ID. This will be used as a reference for scripts to invoke to start a video subset.
+Each briefing must have a unique ID. This will be used as a reference for scripts to invoke to start a video subset.
+
+Within each briefing, there will be:
 - sequences: an array of objects (order matters!) containing variables about each sub-video:
   - loop: An integer between 0-1 to loop the entire video until its audio stops playing. Will always display subtitles every frame if set to 1.
   - subtitles: String or array of string translation references for the video. These are added to the Intel menu icon text messages.

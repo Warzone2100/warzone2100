@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-09 02:23\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -906,7 +906,7 @@ msgid "Bunker Blaster Cyborg"
 msgstr "半机械人 (“碉堡终结者”) "
 
 msgid "Jump Bunker Blaster"
-msgstr "跳跃半机械人 (”碉堡终结者“) "
+msgstr "跳跃半机械人 (“碉堡终结者”)"
 
 msgid "Jump Heavy Gunner"
 msgstr "跳跃半机械人 (重炮手)"
@@ -1800,7 +1800,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "摧毁“枢纽”总部，停止“枢纽”入侵程序"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "警告：总部做足了抵抗 VTOL 攻击的防御措施"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "研究抗干扰电路并抵御“枢纽”的攻击"
@@ -2016,7 +2016,7 @@ msgid "Dawn, July 4th, 2100"
 msgstr "2100 年 7 月 4 日 黎明"
 
 msgid "Project HQ"
-msgstr "项目总部"
+msgstr "“工程”总部"
 
 msgid "A New Era"
 msgstr "新时代"
@@ -2828,7 +2828,7 @@ msgid "Player"
 msgstr "玩家"
 
 msgid "Lost due to being inactive / playing passively."
-msgstr "由于未活跃/采取被动玩法而失败。"
+msgstr "由于挂机/采取被动玩法而失败。"
 
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
 msgstr "主机设定的游戏时间限制即将到达。如果在10分钟内没有决出胜负，游戏将结束。"
@@ -2957,7 +2957,7 @@ msgid "Your external IP is: %s"
 msgstr "您的外部 IP 地址是： %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "创建端口映射失败 (超时)"
 
 msgid "Client failed to ack player index swap"
 msgstr "客户端未能确认玩家索引交换。"
@@ -3840,7 +3840,7 @@ msgid "Combat engineer with construction ability"
 msgstr "战斗工程师拥有建造的能力"
 
 msgid "Combines standard, counter battery and VTOL sensors"
-msgstr "包涵了标准雷达、反炮兵雷达及VTOL侦测雷达的功能"
+msgstr "整合了标准雷达、反炮兵雷达及 VTOL 雷达"
 
 msgid "Command Center"
 msgstr "指挥中心"
@@ -6488,11 +6488,11 @@ msgid "Thermal Armor +35%"
 msgstr "热能装甲 +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "热能装甲 +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "热能装甲 +40%"
 
 #, no-c-format
@@ -6762,7 +6762,7 @@ msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "毒蝎 VTOL (“碉堡终结者”)"
 
 msgid "VTOL Bunker Buster"
-msgstr "VTOL ”碉堡终结者“"
+msgstr "VTOL “碉堡终结者”"
 
 msgid "VTOL Cannon"
 msgstr "VTOL 轻型加农炮"
@@ -6837,16 +6837,16 @@ msgid "VTOL III"
 msgstr "VTOL 三型"
 
 msgid "VTOL Lancer Bug VTOL"
-msgstr "毒虫 VTOL (”枪骑兵“火箭)"
+msgstr "毒虫 VTOL (“枪骑兵”火箭)"
 
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "螳螂VTOL (枪骑兵火箭) "
 
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "毒蝎 VTOL (”枪骑兵“火箭)"
+msgstr "毒蝎 VTOL (“枪骑兵”火箭)"
 
 msgid "VTOL Lancer"
-msgstr "VTOL ”枪骑兵“"
+msgstr "VTOL “枪骑兵”"
 
 msgid "VTOL Machinegun Scav"
 msgstr "VTOL (拾荒者机枪)"
@@ -7728,6 +7728,9 @@ msgstr "最高"
 msgid "Shadow filtering not available on this system."
 msgstr "阴影过滤在此系统上不可用。"
 
+msgid "Opacity: 50%"
+msgstr "透明度：50%"
+
 msgid "* Takes effect on game restart"
 msgstr "*重启游戏后生效"
 
@@ -7772,6 +7775,9 @@ msgstr "屏幕晃动"
 
 msgid "Groups Menu"
 msgstr "编队菜单"
+
+msgid "Options Button"
+msgstr "选项按钮"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "图形选项"
@@ -8086,6 +8092,12 @@ msgstr "玩家 %u 利用作弊 (调式菜单) 模式建立了一个新单位：%
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "玩家 %u 利用作弊 (调式菜单) 模式建立了一个新机器人"
 
+msgid "Open In-Game Options"
+msgstr "打开游戏菜单"
+
+msgid "Close In-Game Options"
+msgstr "关闭游戏菜单"
+
 msgid "Hiding Obsolete Tech"
 msgstr "隐藏过时技术"
 
@@ -8246,6 +8258,28 @@ msgstr "作弊"
 msgid "End-Game"
 msgstr "结束游戏"
 
+msgid "Host"
+msgstr "主机"
+
+msgid "Admin"
+msgstr "管理员"
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr "%s (%s) 将玩家 (%s) 的团队更改为： %d"
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr "%s (%s) 将玩家 (%s) 的位置更改为： %d"
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr "%s (%s) 将玩家 (%s) 的颜色更改为： %s"
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr "%s (%s) 将玩家 (%s) 的阵营更改为： %s"
+
 msgid "Can someone please transfer me some units?"
 msgstr "有人能给我一些单位吗？"
 
@@ -8358,7 +8392,7 @@ msgid "You're going to regret that"
 msgstr "你会后悔的"
 
 msgid "Barely a scratch!"
-msgstr "太弱了！"
+msgstr "刮痧呢？"
 
 msgid "Attack now?"
 msgstr "现在攻击吗？"
@@ -8391,7 +8425,7 @@ msgid "Transfer Request: Trucks"
 msgstr "传输请求：工程车"
 
 msgid "Attacking now!"
-msgstr "现在攻击！"
+msgstr "正在攻击！"
 
 msgid "On my way!"
 msgstr "我来了！"
@@ -8442,7 +8476,7 @@ msgid "Capture oil resources"
 msgstr "夺取石油资源"
 
 msgid "That didn't go well..."
-msgstr "那不太好..."
+msgstr "大事不妙……"
 
 msgid "I have another plan"
 msgstr "我有另一个计划"
@@ -8461,6 +8495,9 @@ msgstr "消息发送失败 - 请重试"
 
 msgid "Map Downloaded"
 msgstr "地图已下载"
+
+msgid "Admin modified a setting"
+msgstr "管理员修改了一个设置"
 
 msgid "Bot Allies"
 msgstr "电脑盟友"
@@ -8890,7 +8927,7 @@ msgid "Rotate Building Anticlockwise"
 msgstr "逆时针旋转建筑"
 
 msgid "Center View on HQ"
-msgstr "视角移至主基地"
+msgstr "视图移至指挥中心"
 
 msgid "Hold Fire"
 msgstr "停火"
@@ -8908,7 +8945,7 @@ msgid "Guard Position"
 msgstr "警戒位置"
 
 msgid "Return to HQ"
-msgstr "返回主基地"
+msgstr "返回指挥中心"
 
 msgid "Hold Position"
 msgstr "保持原位"
@@ -9289,7 +9326,7 @@ msgid "PAUSED"
 msgstr "已暂停"
 
 msgid "New Intelligence Report"
-msgstr "新的智能情报"
+msgstr "新的情报报告"
 
 msgid "Research Update"
 msgstr "研发升级"
@@ -9304,7 +9341,7 @@ msgid "Fire-At-Will"
 msgstr "接触时开火"
 
 msgid "Return To HQ"
-msgstr "回到主基地"
+msgstr "返回指挥中心"
 
 msgid "Recycle"
 msgstr "回收"
@@ -9545,10 +9582,10 @@ msgid "Reveal ON"
 msgstr "打开全图视野"
 
 msgid "Centered on player HQ, direction NORTH"
-msgstr "视角移至主基地，面向北方"
+msgstr "视角移至指挥中心，面向北方"
 
 msgid "Unable to locate HQ!"
-msgstr "无法定位至主基地"
+msgstr "无法定位到指挥中心！"
 
 msgid "Formation speed limiting ON"
 msgstr "队形速度限制打开"
@@ -9787,7 +9824,7 @@ msgid ""
 "Can be blocked by players' votes"
 msgstr ""
 "选择地图\n"
-"可以玩家投票决定"
+"可以通过玩家投票阻止"
 
 msgid "Map-Mod!"
 msgstr "地图模组！"
@@ -10027,16 +10064,16 @@ msgid "Click to close spectator slot"
 msgstr "点击关闭旁观者栏位"
 
 msgid "Player ID: "
-msgstr "玩家ID: "
+msgstr "玩家 ID： "
 
 msgid "(none)"
 msgstr "(无)"
 
 msgid "Alt Name:"
-msgstr "备选名称:"
+msgstr "备选名称："
 
 msgid "Player rating:"
-msgstr "玩家评分:"
+msgstr "玩家评分："
 
 msgid "Host provided"
 msgstr "主机提供"
@@ -10429,11 +10466,11 @@ msgstr "主机已禁止所有人自由聊天。"
 
 #, c-format
 msgid "The host has enabled free chat for player: %s"
-msgstr "主机已允许玩家自由聊天：%s"
+msgstr "主机已允许 %s 玩家自由聊天"
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
-msgstr "主机已禁止玩家自由聊天：%s"
+msgstr "主机已禁止 %s 玩家自由聊天"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10536,11 +10573,11 @@ msgstr "%s (%d) 允许地图更改。总计： %d/%d"
 
 #, c-format
 msgid "A player voted FOR kicking: %s"
-msgstr "一个玩家支持踢：%s"
+msgstr "一个玩家支持踢出：%s"
 
 #, c-format
 msgid "A player voted AGAINST kicking: %s"
-msgstr "一个玩家反对踢：%s"
+msgstr "一个玩家反对踢出：%s"
 
 #, c-format
 msgid "A player's client ignored your vote to kick request (too frequent): %s"
@@ -10561,7 +10598,7 @@ msgstr "开始投票把 %s 踢出游戏。"
 
 #, c-format
 msgid "Vote To Kick: %s"
-msgstr "投票踢出: %s"
+msgstr "投票踢出：%s"
 
 #, c-format
 msgid "Should player %s be kicked from the game?"
@@ -10827,8 +10864,31 @@ msgstr "无可用连接"
 msgid "Synchronizing data with host ..."
 msgstr "正在与主机同步数据..."
 
+msgid "Waiting for correct join password"
+msgstr "等待正确的加入密码"
+
+msgid "Attempting to connect"
+msgstr "尝试连接"
+
+msgid "Establishing connection handshake"
+msgstr "建立连接握手"
+
+msgid "Coordinating join with host"
+msgstr "与主机协调加入游戏"
+
+msgid "Join attempt failed"
+msgstr "尝试加入游戏失败"
+
 msgid "Host did not respond before timeout"
 msgstr "主机未在超时前响应"
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr "失败原因： [%s] - %s"
+
+#, c-format
+msgid "Failed at: [%s]"
+msgstr "失败原因： [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"
@@ -10856,7 +10916,7 @@ msgid "Kick Player"
 msgstr "踢出玩家"
 
 msgid "Loading Status:"
-msgstr "加载状态:"
+msgstr "加载状态："
 
 msgid "TEAM STRATEGY"
 msgstr "队伍策略"
@@ -11156,7 +11216,7 @@ msgid "An unforgiving challenge for experienced players only"
 msgstr "仅适合有经验玩家的极限挑战"
 
 msgid "\"Classic\" campaign balance"
-msgstr "“经典“战役平衡"
+msgstr "“经典”战役平衡"
 
 msgid "Remastered"
 msgstr "重制版"
@@ -11256,7 +11316,7 @@ msgid "Wrong Game Version!"
 msgstr "错误的游戏版本"
 
 msgid "You have an incompatible mod."
-msgstr "你有一个不兼容的mod"
+msgstr "您有一个不兼容的模组"
 
 msgid "Host couldn't send file?"
 msgstr "主玩家不能发送文件？"

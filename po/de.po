@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -6482,11 +6482,11 @@ msgid "Thermal Armor +35%"
 msgstr "Thermalpanzerung +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Thermalpanzerung +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Thermalpanzerung +40%"
 
 #, no-c-format
@@ -7728,6 +7728,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr "Schattenfilterung ist auf diesem System nicht verfügbar."
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Wirkt sich bei Spielneustart aus"
 
@@ -7772,6 +7775,9 @@ msgstr "Bildschirmerschütterung"
 
 msgid "Groups Menu"
 msgstr "Gruppenmenü"
+
+msgid "Options Button"
+msgstr ""
 
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKEINSTELLUNGEN"
@@ -8088,6 +8094,12 @@ msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Veraltete Technologien ausblenden"
 
@@ -8247,6 +8259,28 @@ msgstr "Cheats"
 
 msgid "End-Game"
 msgstr "Endspiel"
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "Kann mir bitte jemand einige Einheiten geben?"
@@ -8463,6 +8497,9 @@ msgstr "Nachrichtenzustellung fehlgeschlagen - erneut versuchen"
 
 msgid "Map Downloaded"
 msgstr "Karte heruntergeladen"
+
+msgid "Admin modified a setting"
+msgstr ""
 
 msgid "Bot Allies"
 msgstr "Bot-Verbündete"
@@ -10830,7 +10867,30 @@ msgstr "Keine Verbindungen verfügbar"
 msgid "Synchronizing data with host ..."
 msgstr ""
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
 msgstr ""
 
 #, c-format

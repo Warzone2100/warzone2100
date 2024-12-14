@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-09-11 19:20+0000\n"
-"PO-Revision-Date: 2024-09-11 19:59\n"
+"POT-Creation-Date: 2024-11-01 21:02+0000\n"
+"PO-Revision-Date: 2024-11-03 18:07\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -1782,10 +1782,10 @@ msgid "Secure the Uplink from The Collective"
 msgstr "Capture o Centro de Ligação Satélite da Colectividade"
 
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Envie pelo menos um transporte com um camião e sobreviver ao ataque coletivo até o tempo terminar"
 
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Mande o maior número possível de transportadores e traga pelo menos um camião"
 
 msgid "Move all units into the valley"
 msgstr "Mova todas as unidades para o vale"
@@ -1800,13 +1800,13 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Destrua o QG Nexus para desativar o Programa de Intrusão Nexus"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Aviso: QG protegido contra ataques VTOL"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Pesquise circuitos de resistência e sobreviva ao ataque do Nexus"
 
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "Construa uma base avançada nos silos"
 
 msgid "Protect the missile silos and research for the missile codes"
 msgstr "Defenda os silos e pesquise os códigos dos mísseis"
@@ -1818,10 +1818,10 @@ msgid "Return to LZ"
 msgstr "Regresse à ZA"
 
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Difícil / Dica de dificuldade insana:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Construa uma base fortificada sobre o mapa para se proteger da Coleção"
 
 msgid "Destroy all enemy units and structures"
 msgstr "Destrua todas as unidades e estruturas inimigas"
@@ -2184,7 +2184,7 @@ msgid "This Nexus Intruder Program is a self-mutating computer parasite. This ma
 msgstr "O Programa de Intrusão Nexus é um vírus de computador auto-mutante. Isso o torna difícil de ser erradicado de sistemas uma vez identificado."
 
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Não pudemos identificar a sua função ou objetivo principal. Na sua forma inicial, ele procura e isola secções da memória do resto do sistema invadido. Então, começa a transformar-se ele próprio e estruturas de dados, praticamente reprogramando o sistema de dentro para fora."
 
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
 msgstr "Análises mais a fundo não foram possíveis devido *a desactivação manual dos sistemas pelos nossos técnicos para impedir contaminação adicional pelo Programa de Intrusão Nexus."
@@ -2829,10 +2829,10 @@ msgid "Lost due to being inactive / playing passively."
 msgstr "Perdeu por estar inactivo / jogando passivamente."
 
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "O limite de tempo de jogo configurado pelo anfitrião está chegando. Se não houver nenhum vencedor dentro de 10 minutos, o jogo será encerrado."
 
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "Limite de tempo de jogo configurado pelo anfitrião excedido. O jogo acabou."
 
 msgid "Playing passively will lead to defeat. Actions that are considered:"
 msgstr "Jogar passivamente levará à derrota. Ações que são consideradas:"
@@ -2940,25 +2940,25 @@ msgid "System locale"
 msgstr "Linguagem do sistema"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Falha ao criar mapeamento de porta"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Configure manualmente o seu roteador/firewall para abrir a porta %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Mapeamento de porta aberto porta externa: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Seu IP externo é: %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "Falha ao criar mapeamento de porta (tempo esgotado)"
 
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "O cliente falhou em usar a troca de índice do jogador"
 
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
@@ -2971,22 +2971,26 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Erro ao conectar-se com o servidor principal: %s.\n"
+"Assegure-se que a porta %d pode receber dados de conexões.\n"
+"Se você estiver usando um roteador, configure-o para utilizar UPnP/NAT-PMP/PCP \n"
+"ou para encaminhar a porta para o seu sistema."
 
 msgid "Failed to get a lobby response!"
 msgstr "Não houve resposta do servidor principal!"
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "O formato do arquivo de repetição é mais recente que esta versão do Warzone 2100 pode suportar."
 
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Versão do Formato de Replay: %u"
 
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Formato de Arquivo de Replay Não Suportado"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "Não foi possível carregar o replay: O arquivo de replay está incompleto ou corrompido."
 
 msgid "Menu"
 msgstr "Menu"
@@ -3097,7 +3101,7 @@ msgid "AA reload time -15%"
 msgstr "Tempo de Recarregamento das AA -15%"
 
 msgid "AA Site with Stormbringer Turret"
-msgstr ""
+msgstr "Site AA com Torre Stormbringer"
 
 msgid "AA Target Acquisition Shells"
 msgstr "Projécteis AA de Aquisição de Alvo"
@@ -3280,7 +3284,7 @@ msgid "Armed with Cyborg Flamer"
 msgstr "Armado com Lança-Chamas Cyborg"
 
 msgid "Armed with Cyborg Hyper Velocity Cannon"
-msgstr ""
+msgstr "Armado com Canhão de Hipervelocidade Ciborgue"
 
 msgid "Armed with Cyborg Machinegun"
 msgstr "Armado com Metralhadora Cyborg"
@@ -3295,10 +3299,10 @@ msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr "Armado com lançador de míssil Scourge para Cyborgs"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr ""
+msgstr "Armado com foguetes destruidores de Tanques Ciborgues"
 
 msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
+msgstr "Armado com Lança-chamas de Termite"
 
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Armado com Lança-chamas de Termite"
@@ -3316,7 +3320,7 @@ msgid "Armed with hyper velocity cannon"
 msgstr "Armado com canhão de alta-velocidade"
 
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Armado com canhão quad-barrel de hiper velocidade"
 
 msgid "Armed with Lancer anti-tank missile"
 msgstr "Armado com míssil Anti-Tanque Lancer"
@@ -3341,7 +3345,7 @@ msgstr "Armado com foguetes tank killer"
 
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Armadura +120%, Integridade +90%"
 
 #, no-c-format
 msgid "Armor +35%, Body Points +30%"
@@ -3897,7 +3901,7 @@ msgid "Computer Research Completed"
 msgstr "Investigação de Computadores Completa"
 
 msgid "Computer systems are now 'ring-fenced' from NEXUS"
-msgstr ""
+msgstr "Os sistemas de computador agora estão 'protegidos' do NEXUS"
 
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
 msgstr "Sistemas de computador podem ser agora isolados de NEXUS"
@@ -3998,7 +4002,7 @@ msgid "Cyborg Superdense Thermal Armor"
 msgstr "Blindagem Térmica Superdensa Cyborg"
 
 msgid "Cyborg Tank Killer"
-msgstr ""
+msgstr "Assassino de Tanque Ciborgue"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Protecção Térmica Cyborg Mk2"
@@ -4010,7 +4014,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "Protecção Térmica Cyborg"
 
 msgid "Cyborg Thermite"
-msgstr ""
+msgstr "Ciborgue Termite"
 
 msgid "Cyborg Transport Available"
 msgstr "Transporte para Cyborgs Disponível"
@@ -4055,7 +4059,7 @@ msgid "Depleted uranium kinetic energy bullets"
 msgstr "Balas de energia cinética com urânio empobrecido"
 
 msgid "Depleted Uranium MG Bullets Mk3"
-msgstr ""
+msgstr "Balas de Metralhadora de Urânio Empobrecido Mk3"
 
 msgid "Depleted Uranium MG Bullets"
 msgstr "Balas de Metralhadora de Urânio Empobrecido"
@@ -4091,7 +4095,7 @@ msgid "Electronically attacks and disrupts enemy structures"
 msgstr "Ataca electrónicamente e perturba estruturas inimigas"
 
 msgid "Elite and Veteran rank units and Factories are protected"
-msgstr ""
+msgstr "Unidades de classificação Elite e Veterano e Fábricas são protegidas"
 
 msgid "EMP Cannon Hardpoint"
 msgstr "Fortificação de Canhão EMP"
@@ -4109,7 +4113,7 @@ msgid "EMP Mortar"
 msgstr "Morteiro EMP"
 
 msgid "Enables Hardcrete gates"
-msgstr ""
+msgstr "Permitir portões de concreto"
 
 msgid "Enables Hardcrete walls"
 msgstr "Possibilita Paredes de Hardcrete"
@@ -4242,7 +4246,7 @@ msgid "Flamer damage +25%"
 msgstr "Dano de Lança-chamas +25%"
 
 msgid "Flamer Fast Loader"
-msgstr ""
+msgstr "Recarregador Rápido de lança-chamas"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
@@ -4661,13 +4665,13 @@ msgid "Heavy Repair Turret Cobra Hover"
 msgstr "Torreão de Reparação Pesado Cobra Hovercraft"
 
 msgid "Heavy Rocket Array"
-msgstr ""
+msgstr "Matriz de Foguetes Pesados"
 
 msgid "Heavy Rocket Bastion"
 msgstr "Bastião de Foguetes"
 
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "Bateria de Foguetes Pesados"
 
 msgid "Heavy surface-to-air missile"
 msgstr "Míssil terra-ar pesado"
@@ -4682,7 +4686,7 @@ msgid "Hellstorm"
 msgstr "Hellstorm"
 
 msgid "Hero and Special rank units are protected"
-msgstr ""
+msgstr "Unidades de classificação de Herói e Especial estão protegidas"
 
 msgid "HESH Rocket Warhead Mk2"
 msgstr "Ogiva HESH para Foguetes Mk2"
@@ -5446,7 +5450,7 @@ msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Metralhadora de vários canos e disparo rápido"
 
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Deve ser construído para produzir comandantes"
 
 msgid "Nanolab"
 msgstr "Laboratório de Nanotecnologia"
@@ -5581,7 +5585,7 @@ msgid "NEXUS Heavy Body"
 msgstr "Chassis Pesado do NEXUS"
 
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "Sistema de Imunização de NEXUS"
 
 msgid "NEXUS Intruder Program analyzed"
 msgstr "Programa de intrusão NEXUS analisado"
@@ -5763,7 +5767,7 @@ msgid "Produces Cyborgs"
 msgstr "Produz Cyborgs"
 
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "Unidades de classificação Profissional e Regular estão protegidas"
 
 msgid "Project Heavy Body"
 msgstr "Chassis Pesado do Projecto"
@@ -6482,11 +6486,11 @@ msgid "Thermal Armor +35%"
 msgstr "Protecção Térmica +35%"
 
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Protecção Térmica +40%"
 
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Protecção Térmica +40%"
 
 #, no-c-format
@@ -7728,6 +7732,9 @@ msgstr "Ultra"
 msgid "Shadow filtering not available on this system."
 msgstr ""
 
+msgid "Opacity: 50%"
+msgstr ""
+
 msgid "* Takes effect on game restart"
 msgstr "* Tem efeito quando o jogo for reiniciado"
 
@@ -7772,6 +7779,9 @@ msgstr "Agitar tela"
 
 msgid "Groups Menu"
 msgstr "Menu de grupos"
+
+msgid "Options Button"
+msgstr ""
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPÇÕES DE GRÁFICOS"
@@ -8086,6 +8096,12 @@ msgstr "Jogador %u está a fazer batota (menu debug) para obter uma nova unidade
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter uma nova unidade."
 
+msgid "Open In-Game Options"
+msgstr ""
+
+msgid "Close In-Game Options"
+msgstr ""
+
 msgid "Hiding Obsolete Tech"
 msgstr "Esconder Tecnologia Obsoleta"
 
@@ -8244,6 +8260,28 @@ msgid "Cheats"
 msgstr ""
 
 msgid "End-Game"
+msgstr ""
+
+msgid "Host"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed team of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed position of player (%s) to: %d"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed color of player (%s) to: %s"
+msgstr ""
+
+#, c-format
+msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8460,6 +8498,9 @@ msgid "Message delivery failure - try again"
 msgstr "Falha ao enviar mensagem - tente novamente"
 
 msgid "Map Downloaded"
+msgstr ""
+
+msgid "Admin modified a setting"
 msgstr ""
 
 msgid "Bot Allies"
@@ -10828,7 +10869,30 @@ msgstr ""
 msgid "Synchronizing data with host ..."
 msgstr ""
 
+msgid "Waiting for correct join password"
+msgstr ""
+
+msgid "Attempting to connect"
+msgstr ""
+
+msgid "Establishing connection handshake"
+msgstr ""
+
+msgid "Coordinating join with host"
+msgstr ""
+
+msgid "Join attempt failed"
+msgstr ""
+
 msgid "Host did not respond before timeout"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s] - %s"
+msgstr ""
+
+#, c-format
+msgid "Failed at: [%s]"
 msgstr ""
 
 #, c-format

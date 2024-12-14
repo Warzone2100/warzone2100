@@ -387,6 +387,7 @@ bool loadConfig()
 	setShakeStatus(iniGetBool("shake", false).value());
 	war_setGroupsMenuEnabled(iniGetBool("groupmenu", true).value());
 	setGroupButtonEnabled(war_getGroupsMenuEnabled());
+	war_setOptionsButtonVisibility(iniGetInteger("optionsButtonVisibility", war_getOptionsButtonVisibility()).value());
 	setCameraAccel(iniGetBool("cameraAccel", true).value());
 	setDrawShadows(iniGetBool("shadows", true).value());
 	war_setSoundEnabled(iniGetBool("sound", true).value());
@@ -582,6 +583,7 @@ bool loadConfig()
 		pie_EnableFog(false);
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
+	war_setAutoDesyncKickSeconds(iniGetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
 	war_setMaxReplaysSaved(iniGetInteger("maxReplaysSaved", war_getMaxReplaysSaved()).value());
 	war_setOldLogsLimit(iniGetInteger("oldLogsLimit", war_getOldLogsLimit()).value());
@@ -686,6 +688,7 @@ bool saveConfig()
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
 	iniSetInteger("groupmenu", (int)war_getGroupsMenuEnabled());		// groups menu
+	iniSetInteger("optionsButtonVisibility", (int)war_getOptionsButtonVisibility());
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
@@ -773,6 +776,7 @@ bool saveConfig()
 	iniSetBool("autosaveEnabled", autosaveEnabled);
 	iniSetBool("fog", pie_GetFogEnabled());
 	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
+	iniSetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds());
 	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
 	iniSetInteger("maxReplaysSaved", war_getMaxReplaysSaved());
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());

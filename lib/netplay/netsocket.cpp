@@ -72,7 +72,7 @@ struct Socket
 
 	SOCKET fd[SOCK_COUNT];
 	bool ready;
-	std::error_code writeErrorCode = make_network_error_code(0);
+	optional<std::error_code> writeErrorCode = nullopt;
 	bool deleteLater;
 	char textAddress[40] = {};
 
@@ -650,9 +650,9 @@ net::result<ssize_t> writeAll(Socket& sock, const void *buf, size_t size, size_t
 		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
-	if (sock.writeErrorCode)
+	if (sock.writeErrorCode.has_value())
 	{
-		return tl::make_unexpected(sock.writeErrorCode);
+		return tl::make_unexpected(sock.writeErrorCode.value());
 	}
 
 	if (size > 0)
@@ -731,7 +731,7 @@ void socketFlush(Socket& sock, uint8_t player, size_t *rawByteCount)
 		return;  // Not compressed, so don't mess with zlib.
 	}
 
-	ASSERT(!sock.writeErrorCode, "Socket write error?? (Player: %" PRIu8 "", player);
+	ASSERT(!sock.writeErrorCode.has_value(), "Socket write error?? (Player: %" PRIu8 "", player);
 
 	// Flush data out of zlib compression state.
 	do
