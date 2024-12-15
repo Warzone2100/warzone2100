@@ -1017,11 +1017,11 @@ void WzJoiningGameScreen_HandlerRoot::handleJoinTimeoutError()
 	WzString localizedJoinStateDesc = to_localized_state_fail_desc(currentJoiningState);
 	if (!localizedJoinStateDesc.isEmpty())
 	{
-		timeoutErrorDetails += WzString::fromUtf8(astringf(_("Failed at: [%s] - %s"), to_display_str(currentJoiningState), localizedJoinStateDesc.toUtf8().c_str()));
+		timeoutErrorDetails += WzString::format(_("Failed at: [%s] - %s"), to_display_str(currentJoiningState), localizedJoinStateDesc.toUtf8().c_str());
 	}
 	else
 	{
-		timeoutErrorDetails += WzString::fromUtf8(astringf(_("Failed at: [%s]"), to_display_str(currentJoiningState)));
+		timeoutErrorDetails += WzString::format(_("Failed at: [%s]"), to_display_str(currentJoiningState));
 	}
 
 	currentJoiningState = JoiningState::Failure;
