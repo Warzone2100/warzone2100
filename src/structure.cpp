@@ -1971,6 +1971,7 @@ optional<STRUCTURE> buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos,
 	}
 
 	STRUCTURE blueprint(0, ownerPlayer);
+	blueprint.state = SAS_NORMAL;
 	// construct the fake structure
 	blueprint.pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
 	if (selectedPlayer < MAX_PLAYERS)

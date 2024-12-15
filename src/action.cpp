@@ -2495,7 +2495,15 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->action = DACTION_MOVETOBUILD;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
-		moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
+		// Move a droid in a tile if it has never been moved before
+		if (psDroid->actionPos == psDroid->pos.xy())
+		{
+			actionRemoveDroidsFromBuildPos(psDroid->player, psDroid->actionPos, order->direction, order->psStats);
+		}
+		else
+		{
+			moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
+		}
 		break;
 	case DACTION_DEMOLISH:
 		ASSERT_OR_RETURN(, order->type == DORDER_DEMOLISH, "cannot start demolish action without a demolish order");
