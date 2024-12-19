@@ -325,7 +325,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 			JS_FreeValue(ctx, yVal);
 		}
 		auto direction = QuickJS_GetInt32(ctx, structure, "direction");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction < static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for structure", direction);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction <= static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for structure", direction);
 		sd.direction = static_cast<uint16_t>(direction);
 		auto modules = QuickJS_GetUint32(ctx, structure, "modules");
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, modules < static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()), "Invalid modules (%" PRIu32 ") for structure", modules);
@@ -360,7 +360,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 			JS_FreeValue(ctx, yVal);
 		}
 		auto direction = QuickJS_GetInt32(ctx, droid, "direction");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction < static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for droid", direction);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction <= static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for droid", direction);
 		sd.direction = static_cast<uint16_t>(direction);
 		auto player = QuickJS_GetInt32(ctx, droid, "player");
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, sd.player >= -1 && sd.player < MAX_PLAYERS, "Invalid player (%d) for droid", (int)sd.player);
@@ -392,7 +392,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 			JS_FreeValue(ctx, yVal);
 		}
 		auto direction = QuickJS_GetInt32(ctx, feature, "direction");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction < static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for feature", direction);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction <= static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for feature", direction);
 		sd.direction = static_cast<uint16_t>(direction);
 		mapFeatures->push_back(std::move(sd));
 	}
