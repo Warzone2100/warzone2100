@@ -2146,8 +2146,8 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 	SCRIPT_ASSERT(false, context, _x <= mapWidth, "Beacon x value %d is greater than mapWidth %d", _x, (int)mapWidth);
 	SCRIPT_ASSERT(false, context, _y <= mapHeight, "Beacon y value %d is greater than mapHeight %d", _y, (int)mapHeight);
 
-	int x = world_coord(_x);
-	int y = world_coord(_y);
+	int x = world_coord(_x) + (TILE_UNITS / 2);
+	int y = world_coord(_y) + (TILE_UNITS / 2);
 
 	std::string message;
 	if (_message.has_value())
