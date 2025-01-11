@@ -2447,8 +2447,8 @@ namespace INTERNAL_ADMIN_ACTION_NOTICE {
 			return std::string();
 		}
 
-		const char* responsiblePlayerName = NetPlay.players[responsiblePlayerIdx].name;
-		const char* targetPlayerName = NetPlay.players[targetPlayerIdx].name;
+		const char* responsiblePlayerName = getPlayerName(responsiblePlayerIdx);
+		const char* targetPlayerName = getPlayerName(targetPlayerIdx);
 
 		const char* responsiblePlayerType = _("Player");
 		if (responsiblePlayerIdx == NetPlay.hostPlayer)

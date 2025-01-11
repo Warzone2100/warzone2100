@@ -479,7 +479,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		std::string playerPublicKeyB64 = base64Encode(getMultiStats(playerIndex).identity.toBytes(EcKey::Public));
 		std::string playerIdentityHash = getMultiStats(playerIndex).identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[playerIndex]) ? "V" : "?";
-		std::string playerName = NetPlay.players[playerIndex].name;
+		std::string playerName = getPlayerName(playerIndex);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 		wz_command_interface_output("WZEVENT: playerLeft: %" PRIu32 " %" PRIu32 " %s %s %s %s %s\n", playerIndex, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
 	}

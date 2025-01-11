@@ -143,7 +143,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 	req.setRequestHeader("WZ-Player-Hash", hash);
 	req.setRequestHeader("WZ-Player-Key", key);
 	req.setRequestHeader("WZ-Locale", getLanguage());
-	debug(LOG_INFO, "Requesting \"%s\" for player %d (%.32s) (%s)", req.url.c_str(), playerIndex, NetPlay.players[playerIndex].name, hash.c_str());
+	debug(LOG_INFO, "Requesting \"%s\" for player %d (%.32s) (%s)", req.url.c_str(), playerIndex, getPlayerName(playerIndex), hash.c_str());
 	req.onSuccess = [playerIndex, hash](std::string const &url, HTTPResponseDetails const &response, std::shared_ptr<MemoryStruct> const &data) {
 		long httpStatusCode = response.httpStatusCode();
 		std::string urlCopy = url;
@@ -225,7 +225,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 			generateSessionKeysWithPlayer(playerIndexA);
 		}
 		catch (const std::invalid_argument& e) {
-			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexA, NetPlay.players[playerIndexA].name, e.what());
+			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexA, getPlayerName(playerIndexA), e.what());
 		}
 	}
 	if (playerIndexB != realSelectedPlayer && (playerIndexB < MAX_PLAYERS || playerIndexB == NetPlay.hostPlayer))
@@ -234,7 +234,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 			generateSessionKeysWithPlayer(playerIndexB);
 		}
 		catch (const std::invalid_argument& e) {
-			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexB, NetPlay.players[playerIndexB].name, e.what());
+			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexB, getPlayerName(playerIndexB), e.what());
 		}
 	}
 	return true;
@@ -358,18 +358,18 @@ bool multiStatsSetIdentity(uint32_t playerIndex, const EcKey::Key &identity, boo
 		{
 			if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
 			{
-				debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+				debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, getPlayerName(playerIndex), NetPlay.players[playerIndex].IPtextAddress);
 			}
 		}
 		else
 		{
-			debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+			debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, getPlayerName(playerIndex), NetPlay.players[playerIndex].IPtextAddress);
 		}
 		if ((identity != prevIdentity) || identity.empty())
 		{
 			if (GetGameMode() == GS_NORMAL)
 			{
-				debug(LOG_INFO, "Unexpected identity change after NET_FIREUP for: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+				debug(LOG_INFO, "Unexpected identity change after NET_FIREUP for: (player: %u, name: \"%s\", IP: %s)", playerIndex, getPlayerName(playerIndex), NetPlay.players[playerIndex].IPtextAddress);
 			}
 
 			ingame.PingTimes[playerIndex] = PING_LIMIT;
@@ -404,7 +404,7 @@ bool multiStatsSetIdentity(uint32_t playerIndex, const EcKey::Key &identity, boo
 				{
 					std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
 					std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
-					std::string sendername = NetPlay.players[playerIndex].name;
+					std::string sendername = getPlayerName(playerIndex);
 					std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
 					wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
 				}
@@ -433,7 +433,7 @@ bool multiStatsSetIdentity(uint32_t playerIndex, const EcKey::Key &identity, boo
 						generateSessionKeysWithPlayer(playerIndex);
 					}
 					catch (const std::invalid_argument& e) {
-						debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
+						debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, getPlayerName(playerIndex), NetPlay.players[playerIndex].IPtextAddress, e.what());
 					}
 				}
 				else

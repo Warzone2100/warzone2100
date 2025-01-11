@@ -1458,7 +1458,7 @@ bool recvMessage()
 						std::string playerPublicKeyB64 = base64Encode(getMultiStats(player_id).identity.toBytes(EcKey::Public));
 						std::string playerIdentityHash = getMultiStats(player_id).identity.publicHashString();
 						std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player_id]) ? "V" : "?";
-						std::string playerName = NetPlay.players[player_id].name;
+						std::string playerName = getPlayerName(player_id);
 						std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 						wz_command_interface_output("WZEVENT: playerResponding: %" PRIu32 " %s %s %s %s %s\n", player_id, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player_id].IPtextAddress);
 
@@ -2466,7 +2466,7 @@ static bool recvBeacon(NETQUEUE queue)
 
 	debug(LOG_WZ, "Received beacon for player: %d, from: %d", receiver, sender);
 
-	sstrcat(msg, NetPlay.players[sender].name);    // name
+	sstrcat(msg, getPlayerName(sender));    // name
 	sstrcpy(beaconReceiveMsg[sender], msg);
 
 	return addBeaconBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);

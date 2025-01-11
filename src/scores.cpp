@@ -653,7 +653,7 @@ void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = tr
 			// NOTE: This duplicates the logic in rules.js - checkEndConditions()
 			const bool playerCantDoAnything = (numFactoriesThatCanProduceConstructionUnits == 0) && (numUnits == 0);
 			const char * deadStatus = playerCantDoAnything ? "x" : "";
-			fprintf(stdout, "%2u | %11.11s | %10" PRIi64 " | %12" PRIi32 " | %13.13s | %11" PRIi32 " | %7" PRIi32 " | %s\n", n, NetPlay.players[n].name, getExtractedPower(n), unitsKilled, structInfoString.c_str(), numUnits, getPower(n), deadStatus);
+			fprintf(stdout, "%2u | %11.11s | %10" PRIi64 " | %12" PRIi32 " | %13.13s | %11" PRIi32 " | %7" PRIi32 " | %s\n", n, getPlayerName(n), getExtractedPower(n), unitsKilled, structInfoString.c_str(), numUnits, getPower(n), deadStatus);
 		}
 	}
 	fprintf(stdout, "--------------------------------------------------------------------------------------\n");

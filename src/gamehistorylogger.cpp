@@ -333,7 +333,7 @@ void GameStoryLogger::logStartGame()
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		FixedPlayerAttributes playerAttrib;
-		playerAttrib.name = NetPlay.players[i].name;
+		playerAttrib.name = (strlen(NetPlay.players[i].name) == 0) ? "" : getPlayerName(i);
 		playerAttrib.position = NetPlay.players[i].position;
 		playerAttrib.team = NetPlay.players[i].team;
 		playerAttrib.colour = NetPlay.players[i].colour;
