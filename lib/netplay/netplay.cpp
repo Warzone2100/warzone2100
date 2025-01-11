@@ -2114,7 +2114,7 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 		std::string playerPublicKeyB64 = base64Encode(getMultiStats(newSpecIdx).identity.toBytes(EcKey::Public));
 		std::string playerIdentityHash = getMultiStats(newSpecIdx).identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[newSpecIdx]) ? "V" : "?";
-		std::string playerName = NetPlay.players[newSpecIdx].name;
+		std::string playerName = getPlayerName(newSpecIdx);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 		wz_command_interface_output("WZEVENT: movedPlayerToSpec: %" PRIu32 " -> %" PRIu32 " %s %s %s %s %s\n", playerIdx, newSpecIdx, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[newSpecIdx].IPtextAddress);
 	}
@@ -2174,7 +2174,7 @@ SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, opt
 		std::string playerPublicKeyB64 = base64Encode(getMultiStats(newPlayerIdx.value()).identity.toBytes(EcKey::Public));
 		std::string playerIdentityHash = getMultiStats(newPlayerIdx.value()).identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[newPlayerIdx.value()]) ? "V" : "?";
-		std::string playerName = NetPlay.players[newPlayerIdx.value()].name;
+		std::string playerName = getPlayerName(newPlayerIdx.value());
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 		wz_command_interface_output("WZEVENT: movedSpecToPlayer: %" PRIu32 " -> %" PRIu32 " %s %s %s %s %s\n", playerIdx, newPlayerIdx.value(), playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[newPlayerIdx.value()].IPtextAddress);
 	}
@@ -4328,11 +4328,11 @@ static void NETallowJoining()
 
 			char buf[250] = {'\0'};
 			const char* pPlayerType = (NetPlay.players[index].isSpectator) ? "Spectator" : "Player";
-			snprintf(buf, sizeof(buf), "%s[%" PRIu8 "] %s has joined, IP is: %s", pPlayerType, index, NetPlay.players[index].name, NetPlay.players[index].IPtextAddress);
+			snprintf(buf, sizeof(buf), "%s[%" PRIu8 "] %s has joined, IP is: %s", pPlayerType, index, getPlayerName(index), NetPlay.players[index].IPtextAddress);
 			debug(LOG_INFO, "%s", buf);
 			NETlogEntry(buf, SYNC_FLAG, index);
 
-			debug(LOG_NET, "%s, %s, with index of %u has joined using socket %p", pPlayerType, NetPlay.players[index].name, (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
+			debug(LOG_NET, "%s, %s, with index of %u has joined using socket %p", pPlayerType, getPlayerName(index), (unsigned int)index, static_cast<void *>(connected_bsocket[index]));
 
 			// Increment player count
 			gamestruct.desc.dwCurrentPlayers++;

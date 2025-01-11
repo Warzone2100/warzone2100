@@ -2510,7 +2510,7 @@ static void informIfAdminChangedOtherTeam(uint32_t targetPlayerIdx, uint32_t res
 	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::Team, responsibleIdx, targetPlayerIdx));
 
 	std::string senderPublicKeyB64 = base64Encode(getMultiStats(responsibleIdx).identity.toBytes(EcKey::Public));
-	debug(LOG_INFO, "Admin %s (%s) changed team of player ([%u] %s) to: %d", NetPlay.players[responsibleIdx].name, senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, NetPlay.players[targetPlayerIdx].name, NetPlay.players[targetPlayerIdx].team);
+	debug(LOG_INFO, "Admin %s (%s) changed team of player ([%u] %s) to: %d", getPlayerName(responsibleIdx), senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, getPlayerName(targetPlayerIdx), NetPlay.players[targetPlayerIdx].team);
 }
 
 static bool changeTeam(UBYTE player, UBYTE team, uint32_t responsibleIdx)
@@ -2598,7 +2598,7 @@ bool recvTeamRequest(NETQUEUE queue)
 	{
 		resetReadyStatus(false);
 	}
-	debug(LOG_NET, "%s is now part of team: %d", NetPlay.players[player].name, (int) team);
+	debug(LOG_NET, "%s is now part of team: %d", getPlayerName(player), (int) team);
 	return changeTeam(player, team, queue.index); // we do this regardless, in case of sync issues
 }
 
@@ -2612,7 +2612,7 @@ static bool SendReadyRequest(UBYTE player, bool bReady)
 			std::string playerPublicKeyB64 = base64Encode(getMultiStats(player).identity.toBytes(EcKey::Public));
 			std::string playerIdentityHash = getMultiStats(player).identity.publicHashString();
 			std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player]) ? "V" : "?";
-			std::string playerName = NetPlay.players[player].name;
+			std::string playerName = getPlayerName(player);
 			std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 			wz_command_interface_output("WZEVENT: readyStatus=%d: %" PRIu32 " %s %s %s %s %s\n", bReady ? 1 : 0, player, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
 
@@ -2667,7 +2667,7 @@ bool recvReadyRequest(NETQUEUE queue)
 	if (stats.identity.empty() && bReady && !NetPlay.players[player].isSpectator)
 	{
 		// log this!
-		debug(LOG_INFO, "Player has empty identity: (player: %u, name: \"%s\", IP: %s)", (unsigned)player, NetPlay.players[player].name, NetPlay.players[player].IPtextAddress);
+		debug(LOG_INFO, "Player has empty identity: (player: %u, name: \"%s\", IP: %s)", (unsigned)player, getPlayerName(player), NetPlay.players[player].IPtextAddress);
 
 		// kick the player
 		HandleBadParam("NET_READY_REQUEST failed due to player empty identity.", player, queue.index);
@@ -2680,7 +2680,7 @@ bool recvReadyRequest(NETQUEUE queue)
 		std::string playerPublicKeyB64 = base64Encode(stats.identity.toBytes(EcKey::Public));
 		std::string playerIdentityHash = stats.identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player]) ? "V" : "?";
-		std::string playerName = NetPlay.players[player].name;
+		std::string playerName = getPlayerName(player);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 		wz_command_interface_output("WZEVENT: readyStatus=%d: %" PRIu32 " %s %s %s %s %s\n", bReady ? 1 : 0, player, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
 
@@ -2712,7 +2712,7 @@ static void informIfAdminChangedOtherPosition(uint32_t targetPlayerIdx, uint32_t
 	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::Position, responsibleIdx, targetPlayerIdx));
 
 	std::string senderPublicKeyB64 = base64Encode(getMultiStats(responsibleIdx).identity.toBytes(EcKey::Public));
-	debug(LOG_INFO, "Admin %s (%s) changed position of player (%s) to: %d", NetPlay.players[responsibleIdx].name, senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].name, NetPlay.players[targetPlayerIdx].position);
+	debug(LOG_INFO, "Admin %s (%s) changed position of player (%s) to: %d", getPlayerName(responsibleIdx), senderPublicKeyB64.c_str(), getPlayerName(targetPlayerIdx), NetPlay.players[targetPlayerIdx].position);
 }
 
 static bool changePosition(UBYTE player, UBYTE position, uint32_t responsibleIdx)
@@ -2765,7 +2765,7 @@ static void informIfAdminChangedOtherColor(uint32_t targetPlayerIdx, uint32_t re
 	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::Color, responsibleIdx, targetPlayerIdx));
 
 	std::string senderPublicKeyB64 = base64Encode(getMultiStats(responsibleIdx).identity.toBytes(EcKey::Public));
-	debug(LOG_INFO, "Admin %s (%s) changed color of player ([%u] %s) to: [%d] %s", NetPlay.players[responsibleIdx].name, senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, NetPlay.players[targetPlayerIdx].name, NetPlay.players[targetPlayerIdx].colour, getPlayerColourName(targetPlayerIdx));
+	debug(LOG_INFO, "Admin %s (%s) changed color of player ([%u] %s) to: [%d] %s", getPlayerName(responsibleIdx), senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, getPlayerName(targetPlayerIdx), NetPlay.players[targetPlayerIdx].colour, getPlayerColourName(targetPlayerIdx));
 }
 
 bool changeColour(unsigned player, int col, uint32_t responsibleIdx)
@@ -2845,7 +2845,7 @@ static void informIfAdminChangedOtherFaction(uint32_t targetPlayerIdx, uint32_t 
 	sendQuickChat(WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::Context::Faction, responsibleIdx, targetPlayerIdx));
 
 	std::string senderPublicKeyB64 = base64Encode(getMultiStats(responsibleIdx).identity.toBytes(EcKey::Public));
-	debug(LOG_INFO, "Admin %s (%s) changed faction of player ([%u] %s) to: %s", NetPlay.players[responsibleIdx].name, senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, NetPlay.players[targetPlayerIdx].name, to_localized_string(static_cast<FactionID>(NetPlay.players[targetPlayerIdx].faction)));
+	debug(LOG_INFO, "Admin %s (%s) changed faction of player ([%u] %s) to: %s", getPlayerName(responsibleIdx), senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, getPlayerName(targetPlayerIdx), to_localized_string(static_cast<FactionID>(NetPlay.players[targetPlayerIdx].faction)));
 }
 
 bool changeFaction(unsigned player, FactionID faction, uint32_t responsibleIdx)
@@ -6912,7 +6912,7 @@ public:
 			std::string playerPublicKeyB64 = base64Encode(getMultiStats(player).identity.toBytes(EcKey::Public));
 			std::string playerIdentityHash = getMultiStats(player).identity.publicHashString();
 			std::string playerVerifiedStatus = (ingame.VerifiedIdentity[player]) ? "V" : "?";
-			std::string playerName = NetPlay.players[player].name;
+			std::string playerName = getPlayerName(player);
 			std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 			wz_command_interface_output("WZEVENT: hostChatPermissions=%s: %" PRIu32 " %" PRIu32 " %s %s %s %s %s\n", (freeChatEnabled) ? "Y" : "N", player, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[player].IPtextAddress);
 		}
@@ -8209,7 +8209,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		const PLAYERSTATS& stat = getMultiStats(j);
 		auto ar = stat.autorating;
 
-		std::string name = NetPlay.players[j].name;
+		std::string name = getPlayerName(j);
 
 		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
 
