@@ -3861,7 +3861,7 @@ static void NETallowJoining()
 		{
 			listeningInterfaces.knownExternalAddresses = {{gamestruct.desc.host, gamestruct.hostPort, ActivitySink::ListeningInterfaces::IPType::IPv4}};
 		}
-		ActivityManager::instance().hostGame(gamestruct.name, NetPlay.players[0].name, NETgetMasterserverName(), NETgetMasterserverPort(), listeningInterfaces, gamestruct.gameId);
+		ActivityManager::instance().hostGame(gamestruct.name, NetPlay.players[NetPlay.hostPlayer].name, NETgetMasterserverName(), NETgetMasterserverPort(), listeningInterfaces, gamestruct.gameId);
 	}
 
 	// This is here since we need to get the status, before we can show the info.
