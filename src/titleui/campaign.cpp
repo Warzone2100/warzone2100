@@ -44,6 +44,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "../modding.h"
 #include "../version.h"
+#include "widgets/infobutton.h"
 
 #define WZ2100_CORE_CLASSIC_BALANCE_MOD_FILENAME "wz2100_camclassic.wz"
 
@@ -789,54 +790,6 @@ public:
 	bool currentValue = false;
 	bool editable = true;
 };
-
-class WzInfoButton : public W_BUTTON
-{
-protected:
-	WzInfoButton() {}
-public:
-	static std::shared_ptr<WzInfoButton> make()
-	{
-		class make_shared_enabler: public WzInfoButton {};
-		auto widget = std::make_shared<make_shared_enabler>();
-		return widget;
-	}
-	void setImageDimensions(int imageSize);
-protected:
-	void display(int xOffset, int yOffset) override;
-private:
-	int imageDimensions = 16;
-};
-
-void WzInfoButton::setImageDimensions(int imageSize)
-{
-	imageDimensions = imageSize;
-}
-
-void WzInfoButton::display(int xOffset, int yOffset)
-{
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-
-	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool isDisabled = (getState() & WBUT_DISABLE) != 0;
-	bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
-
-	if (isHighlight)
-	{
-		// Display highlight rect
-		int highlightRectDimensions = std::max(std::min<int>(width(), height()), imageDimensions + 2);
-		int boxX0 = x0 + (width() - highlightRectDimensions) / 2;
-		int boxY0 = y0 + (height() - highlightRectDimensions) / 2;
-		iV_Box(boxX0, boxY0, boxX0 + highlightRectDimensions + 1, boxY0 + highlightRectDimensions + 1, (isDown) ? pal_RGBA(255,255,255,255) : WZCOL_TEXT_MEDIUM);
-	}
-
-	// Display the info icon, centered
-	int imgPosX0 = x0 + (width() - imageDimensions) / 2;
-	int imgPosY0 = y0 + (height() - imageDimensions) / 2;
-	PIELIGHT imgColor = (isHighlight) ? pal_RGBA(255,255,255,255) : WZCOL_TEXT_MEDIUM;
-	iV_DrawImageFileAnisotropicTint(FrontImages, IMAGE_INFO_CIRCLE, imgPosX0, imgPosY0, Vector2f(imageDimensions, imageDimensions), imgColor);
-}
 
 class WzFrontendImageButton : public W_BUTTON
 {
