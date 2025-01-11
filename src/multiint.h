@@ -31,6 +31,7 @@
 #include "lib/widget/button.h"
 #include <functional>
 #include <vector>
+#include <set>
 #include "lib/framework/wzstring.h"
 #include "titleui/multiplayer.h"
 #include "faction.h"
@@ -65,6 +66,52 @@ void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
 const std::vector<WzString> getAINames();
 int matchAIbyName(const char* name);	///< only run this -after- readAIs() is called
+
+struct AIDATA
+{
+	AIDATA() : name{0}, js{0}, tip{0}, difficultyTips{0}, assigned(0) {}
+	char name[MAX_LEN_AI_NAME];
+	char js[MAX_LEN_AI_NAME];
+	char tip[255 + 128];            ///< may contain optional AI tournament data
+	char difficultyTips[5][255];    ///< optional difficulty level info
+	int assigned;                   ///< How many AIs have we assigned of this type
+};
+const std::vector<AIDATA>& getAIData();
+
+struct MultiplayOptionsLocked
+{
+	bool scavengers;
+	bool alliances;
+	bool teams;
+	bool power;
+	bool difficulty;
+	bool ai;
+	bool position;
+	bool bases;
+	bool spectators;
+};
+const MultiplayOptionsLocked& getLockedOptions();
+
+const char* getDifficultyListStr(size_t idx);
+size_t getDifficultyListCount();
+int difficultyIcon(int difficulty);
+
+std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t player);
+
+bool isHostOrAdmin();
+bool isPlayerHostOrAdmin(uint32_t playerIdx);
+bool isSpectatorOnlySlot(UDWORD playerIdx);
+
+/**
+ * Checks if all players are on the same team. If so, return that team; if not, return -1;
+ * if there are no players, return team MAX_PLAYERS.
+ */
+int allPlayersOnSameTeam(int except);
+
+bool multiplayPlayersReady();
+bool multiplayIsStartingGame();
+
+bool sendReadyRequest(UBYTE player, bool bReady);
 
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
