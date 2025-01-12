@@ -1545,6 +1545,11 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			// tmpJoiningQueuePair is now "owned" by NetPlay.hostPlayer's netQueue - do not delete it here!
 			tmpJoiningQueuePair = nullptr;
 
+			if ((game.blindMode == BLIND_MODE::NONE) || (NetPlay.hostPlayer >= MAX_PLAYER_SLOTS))
+			{
+				multiStatsSetVerifiedHostIdentityFromJoin(hostIdentity.toBytes(EcKey::Public));
+			}
+
 			handleSuccess();
 			return;
 		}
