@@ -952,6 +952,42 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
 	}
 }
 
+void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v)
+{
+	switch (v)
+	{
+	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT:
+		j = "tcp";
+		break;
+	}
+}
+
+void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectionType& v)
+{
+	auto str = j.get<std::string>();
+	if (str == "tcp")
+	{
+		v = JoinConnectionDescription::JoinConnectionType::TCP_DIRECT;
+		return;
+	}
+	throw nlohmann::json::type_error::create(302, "JoinConnectionType value is unknown: \"" + str + "\"", &j);
+}
+
+void to_json(nlohmann::json& j, const JoinConnectionDescription& v)
+{
+	j = nlohmann::json::object();
+	j["h"] = v.host;
+	j["p"] = v.port;
+	j["t"] = v.type;
+}
+
+void from_json(const nlohmann::json& j, JoinConnectionDescription& v)
+{
+	v.host = j.at("h").get<std::string>();
+	v.port = j.at("p").get<int32_t>();
+	v.type = j.at("t").get<JoinConnectionDescription::JoinConnectionType>();
+}
+
 // NOTE: Must call NETinit(true); before this will actually work
 std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)
 {

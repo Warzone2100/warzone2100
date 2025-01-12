@@ -305,6 +305,11 @@ public:
 	uint32_t port = 0;
 	JoinConnectionType type = JoinConnectionType::TCP_DIRECT;
 };
+void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v);
+void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectionType& v);
+void to_json(nlohmann::json& j, const JoinConnectionDescription& v);
+void from_json(const nlohmann::json& j, JoinConnectionDescription& v);
+
 std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId);
 void joinGame(const char *connectionString, bool asSpectator = false);
 void joinGame(const char *host, uint32_t port, bool asSpectator = false);

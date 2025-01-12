@@ -761,6 +761,9 @@ private:
 	std::vector<JoinConnectionDescription> connectionList;
 	WzString playerName;
 	EcKey playerIdentity;
+	EcKey hostIdentity;
+	std::unique_ptr<SessionKeys> connectionAuthSessionKeys;
+	std::vector<uint8_t> challengeForHost;
 	bool asSpectator = false;
 	char gamePassword[password_string_size] = {};
 	size_t currentConnectionIdx = 0;
@@ -1299,6 +1302,13 @@ void WzJoiningGameScreen_HandlerRoot::closeConnectionAttempt()
 	usedInitialAckBuffer = 0;
 }
 
+static std::vector<uint8_t> serializeConnectionDescription(const JoinConnectionDescription& connDesc)
+{
+	nlohmann::json connDescJson = connDesc;
+	std::string connDescJsonStr = connDescJson.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
+	return std::vector<uint8_t>(connDescJsonStr.begin(), connDescJsonStr.end());
+}
+
 void WzJoiningGameScreen_HandlerRoot::processJoining()
 {
 	if (currentJoiningState == JoiningState::Success)
@@ -1453,12 +1463,14 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			uint8_t index;
 			uint32_t hostPlayer = MAX_CONNECTED_PLAYERS + 1; // invalid host index
 			uint8_t blindModeVal = 0;
+			std::vector<uint8_t> encryptedHostChallengeResponse;
 
 			NETbeginDecode(tmpJoiningQUEUE, NET_ACCEPTED);
 			// Retrieve the player ID the game host arranged for us
 			NETuint8_t(&index);
 			NETuint32_t(&hostPlayer); // and the host player idx
 			NETuint8_t(&blindModeVal);
+			NETbytes(&encryptedHostChallengeResponse);
 			NETend();
 			NETpop(tmpJoiningQUEUE);
 
@@ -1473,6 +1485,25 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			if (index >= MAX_CONNECTED_PLAYERS)
 			{
 				debug(LOG_ERROR, "Bad player number (%u) received from host!", index);
+				closeConnectionAttempt();
+				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
+				return;
+			}
+
+			// Decrypt the encryptedHostChallengeResponse
+			std::vector<uint8_t> hostChallengeResponse;
+			if (!connectionAuthSessionKeys->decryptMessageFromOther(&(encryptedHostChallengeResponse[0]), encryptedHostChallengeResponse.size(), hostChallengeResponse))
+			{
+				debug(LOG_ERROR, "Invalid host challenge response data received!");
+				closeConnectionAttempt();
+				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
+				return;
+			}
+
+			// Verify the host identity challenge response
+			if (!hostIdentity.verify(hostChallengeResponse, challengeForHost.data(), challengeForHost.size()))
+			{
+				debug(LOG_ERROR, "Unable to verify host challenge response!");
 				closeConnectionAttempt();
 				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
 				return;
@@ -1555,16 +1586,73 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		{
 			updateJoiningStatus(_("Requesting to join game"));
 
-			std::vector<uint8_t> challenge(NETgetJoinConnectionNETPINGChallengeSize(), 0);
+			std::vector<uint8_t> challengeFromHost(NETgetJoinConnectionNETPINGChallengeFromHostSize(), 0);
+			EcKey::Key hostPublicKey;
 			NETbeginDecode(tmpJoiningQUEUE, NET_PING);
-			NETbytes(&challenge, NETgetJoinConnectionNETPINGChallengeSize() * 4);
+			NETbytes(&challengeFromHost, NETgetJoinConnectionNETPINGChallengeFromHostSize() * 4);
+			NETbytes(&hostPublicKey);
 			NETend();
 			NETpop(tmpJoiningQUEUE);
 
-			EcKey::Sig challengeResponse = playerIdentity.sign(challenge.data(), challenge.size());
+			if (!challengeFromHost.empty() && challengeFromHost.size() < NETgetJoinConnectionNETPINGChallengeFromHostSize())
+			{
+				// Invalid challenge sent by host
+				debug(LOG_ERROR, "Invalid host challenge");
+				// Disconnect and treat as a failure
+				closeConnectionAttempt();
+				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host establishing data")));
+				return;
+			}
+
+			// Load host public key
+			if (!hostIdentity.fromBytes(hostPublicKey, EcKey::Public))
+			{
+				debug(LOG_ERROR, "Invalid host identity");
+				// Disconnect and treat as a failure
+				closeConnectionAttempt();
+				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host identity")));
+				return;
+			}
+
+			try {
+				connectionAuthSessionKeys = std::make_unique<SessionKeys>(playerIdentity, 1, hostIdentity, 0);
+			}
+			catch (const std::invalid_argument& e) {
+				debug(LOG_INFO, "Cannot create initial session key with host, error: %s", e.what());
+				// Disconnect and treat as a failure
+				closeConnectionAttempt();
+				handleFailure(FailureDetails::makeFromInternalError(_("Failed to establish session keys with host")));
+				return;
+			}
+
+			std::vector<uint8_t> connectionDescriptionSerializedBytes = serializeConnectionDescription(connectionList[currentConnectionIdx]);
+			EcKey::Sig challengeResponse;
+			if (!challengeFromHost.empty())
+			{
+				challengeResponse = playerIdentity.sign(challengeFromHost.data(), challengeFromHost.size());
+			}
 			EcKey::Key identity = playerIdentity.toBytes(EcKey::Public);
 			uint8_t playerType = (!asSpectator) ? NET_JOIN_PLAYER : NET_JOIN_SPECTATOR;
 			const auto& modListStr = getModList();
+
+			// generate a challenge for the host to sign
+			challengeForHost.resize(NETgetJoinConnectionNETPINGChallengeFromClientSize());
+			genSecRandomBytes(challengeForHost.data(), challengeForHost.size());
+
+			std::vector<uint8_t> joinChallengeAuthResponse;
+			NETbytesOutputToVector(challengeResponse, joinChallengeAuthResponse);
+			NETbytesOutputToVector(connectionDescriptionSerializedBytes, joinChallengeAuthResponse);
+			NETbytesOutputToVector(challengeForHost, joinChallengeAuthResponse);
+
+			std::vector<uint8_t> encryptedChallengeResponse = connectionAuthSessionKeys->encryptMessageForOther(&joinChallengeAuthResponse[0], joinChallengeAuthResponse.size());
+			if (encryptedChallengeResponse.empty())
+			{
+				debug(LOG_ERROR, "Failed to encrypt response");
+				// Disconnect and treat as a failure
+				closeConnectionAttempt();
+				handleFailure(FailureDetails::makeFromInternalError(_("Failure to generate valid response")));
+				return;
+			}
 
 			NETbeginEncode(tmpJoiningQUEUE, NET_JOIN);
 			NETstring(playerName.toUtf8().c_str(), std::min<uint16_t>(StringSize, playerName.toUtf8().size() + 1));
@@ -1572,7 +1660,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			NETstring(gamePassword, sizeof(gamePassword));
 			NETuint8_t(&playerType);
 			NETbytes(&identity);
-			NETbytes(&challengeResponse);
+			NETbytes(&encryptedChallengeResponse);
 			NETend(); // because of QUEUE_TRANSIENT_JOIN type, this won't trigger a NETsend() - we must write ourselves
 			joiningSocketNETsend();
 			// and now we wait for the host to respond with a further message
