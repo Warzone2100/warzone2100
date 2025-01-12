@@ -912,6 +912,7 @@ bool reloadMPConfig()
 	game.inactivityMinutes = war_getMPInactivityMinutes();
 	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 	game.playerLeaveMode = war_getMPPlayerLeaveMode();
+	game.blindMode = BLIND_MODE::NONE;
 
 	// restore group menus enabled setting (as tutorial may override it)
 	setGroupButtonEnabled(war_getGroupsMenuEnabled());

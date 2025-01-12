@@ -4685,7 +4685,15 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		nlohmann::json vector = nlohmann::json::object();
-		vector["name"] = NetPlay.players[i].name;
+		if (game.blindMode >= BLIND_MODE::BLIND_GAME)
+		{
+			// to ensure the "name" field exposed to api is consistent across blind games _and_ replays of those games, always set it to the generic name if in blind mode
+			vector["name"] = getPlayerGenericName(i);
+		}
+		else
+		{
+			vector["name"] = NetPlay.players[i].name;
+		}
 		vector["difficulty"] = static_cast<int8_t>(NetPlay.players[i].difficulty);
 		vector["faction"] = NetPlay.players[i].faction;
 		vector["colour"] = NetPlay.players[i].colour;

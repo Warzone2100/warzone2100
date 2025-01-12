@@ -102,6 +102,8 @@ bool isHostOrAdmin();
 bool isPlayerHostOrAdmin(uint32_t playerIdx);
 bool isSpectatorOnlySlot(UDWORD playerIdx);
 
+void printBlindModeHelpMessagesToConsole();
+
 /**
  * Checks if all players are on the same team. If so, return that team; if not, return -1;
  * if there are no players, return team MAX_PLAYERS.
@@ -221,6 +223,7 @@ bool autoBalancePlayersCmd();
 #define MULTIOP_PLAYERS_TABS	10232
 #define MULTIOP_PLAYERS_TABS_H	24
 #define MULTIOP_PLAYERSH		(384 + MULTIOP_PLAYERS_TABS_H + 1)
+#define MULTIOP_BLIND_WAITING_ROOM	10233
 
 #define MULTIOP_ROW_WIDTH		298
 

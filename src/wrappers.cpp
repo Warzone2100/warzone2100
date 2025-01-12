@@ -356,6 +356,24 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 		{
 			ingame.endTime = std::chrono::steady_clock::now();
 			debug(LOG_INFO, "Game ended (duration: %lld)", (long long)std::chrono::duration_cast<std::chrono::seconds>(ingame.endTime.value() - ingame.startTime).count());
+
+			// If in blind mode, send data on who the players were
+			if (game.blindMode != BLIND_MODE::NONE)
+			{
+				if (NetPlay.isHost)
+				{
+					// Send updated player info (which will include real names, now that game has ended) to all players
+					NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
+
+					// Send the verified player identity from initial join for each player (now that game has ended)
+					for (uint32_t idx = 0; idx < MAX_CONNECTED_PLAYERS; ++idx)
+					{
+						sendMultiStatsHostVerifiedIdentities(idx);
+					}
+				}
+
+				// Note: Replay player info updating occurs as part of NETreplaySaveStop
+			}
 		}
 	}
 	if (bDidit)

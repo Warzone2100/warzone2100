@@ -338,7 +338,7 @@ void GameStoryLogger::logStartGame()
 		playerAttrib.team = NetPlay.players[i].team;
 		playerAttrib.colour = NetPlay.players[i].colour;
 		playerAttrib.faction = NetPlay.players[i].faction;
-		playerAttrib.publicKey = base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
+		playerAttrib.publicKey = base64Encode(getOutputPlayerIdentity(i).toBytes(EcKey::Public));
 
 		startingPlayerAttributes.push_back(playerAttrib);
 	}

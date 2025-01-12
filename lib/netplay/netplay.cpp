@@ -733,7 +733,19 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETbool(&NetPlay.players[index[n]].allocated);
 		NETbool(&NetPlay.players[index[n]].heartbeat);
 		NETbool(&NetPlay.players[index[n]].kick);
-		NETstring(NetPlay.players[index[n]].name, sizeof(NetPlay.players[index[n]].name));
+		if (game.blindMode != BLIND_MODE::NONE // if in blind mode
+			&& index[n] < MAX_PLAYER_SLOTS // and an actual player slot (not a spectator slot)
+			&& !ingame.endTime.has_value()) // and game has not ended
+		{
+			// send a generic player name
+			const char* genericName = getPlayerGenericName(index[n]);
+			NETstring(genericName, strlen(genericName) + 1);
+		}
+		else
+		{
+			// send the actual player name
+			NETstring(NetPlay.players[index[n]].name, sizeof(NetPlay.players[index[n]].name));
+		}
 		NETuint32_t(&NetPlay.players[index[n]].heartattacktime);
 		NETint32_t(&NetPlay.players[index[n]].colour);
 		NETint32_t(&NetPlay.players[index[n]].position);
@@ -754,7 +766,7 @@ static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 	NETSendNPlayerInfoTo(&index, 1, to);
 }
 
-static void NETSendAllPlayerInfoTo(unsigned to)
+void NETSendAllPlayerInfoTo(unsigned to)
 {
 	static uint32_t indices[MAX_CONNECTED_PLAYERS];
 	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
@@ -1002,7 +1014,7 @@ static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
 		NET_DestroyPlayer(index);       // sets index player's array to false
 		if (!wasSpectator)
 		{
-			resetReadyStatus(false);		// reset ready status for all players
+			resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		// reset ready status for all players
 			resetReadyCalled = true;
 		}
 
@@ -1043,7 +1055,7 @@ static void NETplayerDropped(UDWORD index)
 		NET_DestroyPlayer(id);          // just clears array
 		if (!wasSpectator)
 		{
-			resetReadyStatus(false);		// reset ready status for all players
+			resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		// reset ready status for all players
 			resetReadyCalled = true;
 		}
 
@@ -2096,7 +2108,7 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 	}
 
 	// Backup the player's identity for later recording
-	auto playerPublicKeyIdentity = getMultiStats(playerIdx).identity.toBytes(EcKey::Privacy::Public);
+	auto playerPublicKeyIdentity = getTruePlayerIdentity(playerIdx).identity.toBytes(EcKey::Privacy::Public);
 
 	// Swap the player indexes
 	if (!swapPlayerIndexes(playerIdx, availableSpectatorIndex.value()))
@@ -2111,8 +2123,9 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 	if (wz_command_interface_enabled())
 	{
 		uint32_t newSpecIdx = availableSpectatorIndex.value();
-		std::string playerPublicKeyB64 = base64Encode(getMultiStats(newSpecIdx).identity.toBytes(EcKey::Public));
-		std::string playerIdentityHash = getMultiStats(newSpecIdx).identity.publicHashString();
+		const auto& outputIdentity = getOutputPlayerIdentity(newSpecIdx);
+		std::string playerPublicKeyB64 = base64Encode(outputIdentity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = outputIdentity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[newSpecIdx]) ? "V" : "?";
 		std::string playerName = getPlayerName(newSpecIdx);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
@@ -2128,7 +2141,7 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 static bool wasAlreadyMovedToSpectatorsByHost(uint32_t playerIdx)
 {
 	return playerManagementRecord.hostMovedPlayerToSpectators(NetPlay.players[playerIdx].IPtextAddress)
-		|| playerManagementRecord.hostMovedPlayerToSpectators(getMultiStats(playerIdx).identity.toBytes(EcKey::Privacy::Public));
+		|| playerManagementRecord.hostMovedPlayerToSpectators(getTruePlayerIdentity(playerIdx).identity.toBytes(EcKey::Privacy::Public));
 }
 
 SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, optional<uint32_t> newPlayerIdx, bool hostOverride /*= false*/)
@@ -2157,7 +2170,7 @@ SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, opt
 	}
 
 	// Backup the spectator's identity for later recording
-	auto spectatorPublicKeyIdentity = getMultiStats(playerIdx).identity.toBytes(EcKey::Privacy::Public);
+	auto spectatorPublicKeyIdentity = getTruePlayerIdentity(playerIdx).identity.toBytes(EcKey::Privacy::Public);
 
 	// Swap the player indexes
 	if (!swapPlayerIndexes(playerIdx, newPlayerIdx.value()))
@@ -2171,8 +2184,9 @@ SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, opt
 
 	if (wz_command_interface_enabled())
 	{
-		std::string playerPublicKeyB64 = base64Encode(getMultiStats(newPlayerIdx.value()).identity.toBytes(EcKey::Public));
-		std::string playerIdentityHash = getMultiStats(newPlayerIdx.value()).identity.publicHashString();
+		const auto& identity = getOutputPlayerIdentity(newPlayerIdx.value());
+		std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[newPlayerIdx.value()]) ? "V" : "?";
 		std::string playerName = getPlayerName(newPlayerIdx.value());
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
@@ -4319,6 +4333,8 @@ static void NETallowJoining()
 			NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 			NETuint8_t(&index);
 			NETuint32_t(&NetPlay.hostPlayer);
+			uint8_t blindModeVal = static_cast<uint8_t>(game.blindMode);
+			NETuint8_t(&blindModeVal);
 			NETend();
 
 			// First send info about players to newcomer.

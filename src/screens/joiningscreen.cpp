@@ -1452,11 +1452,13 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			// :)
 			uint8_t index;
 			uint32_t hostPlayer = MAX_CONNECTED_PLAYERS + 1; // invalid host index
+			uint8_t blindModeVal = 0;
 
 			NETbeginDecode(tmpJoiningQUEUE, NET_ACCEPTED);
 			// Retrieve the player ID the game host arranged for us
 			NETuint8_t(&index);
 			NETuint32_t(&hostPlayer); // and the host player idx
+			NETuint8_t(&blindModeVal);
 			NETend();
 			NETpop(tmpJoiningQUEUE);
 
@@ -1474,6 +1476,30 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				closeConnectionAttempt();
 				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
 				return;
+			}
+
+			if (blindModeVal > static_cast<uint8_t>(BLIND_MODE_MAX))
+			{
+				debug(LOG_ERROR, "Bad blind mode (%u) received from host!", blindModeVal);
+				closeConnectionAttempt();
+				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
+				return;
+			}
+
+			game.blindMode = static_cast<BLIND_MODE>(blindModeVal);
+			if (game.blindMode != BLIND_MODE::NONE)
+			{
+				// currently permitted only if hostPlayer is a spectator
+				if (hostPlayer < MAX_PLAYER_SLOTS)
+				{
+					debug(LOG_ERROR, "Bad blind mode (%u) received from host!", blindModeVal);
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
+					return;
+				}
+
+				// generate a fresh "blind identity"
+				generateBlindIdentity();
 			}
 
 			// On success, promote the temporary socket / socketset / queuepair to their permanent (stable) locations, owned by netplay
@@ -1698,4 +1724,11 @@ void shutdownJoiningAttempt()
 		strongJoiningAttemptScreen.reset();
 		psCurrentJoiningAttemptScreen.reset();
 	}
+}
+
+std::shared_ptr<WIDGET> createJoiningIndeterminateProgressWidget(iV_fonts fontID)
+{
+	auto progressIndicator = std::make_shared<WzJoiningIndeterminateIndicatorWidget>(fontID);
+	progressIndicator->setGeometry(0, 0, progressIndicator->idealWidth(), progressIndicator->idealHeight());
+	return progressIndicator;
 }

@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2024  Warzone 2100 Project
+	Copyright (C) 2024-2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,17 +16,15 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/** \file
+ *  Blind lobby waiting room widgets
+ */
 
 #pragma once
 
 #include "lib/widget/widget.h"
-#include "lib/widget/form.h"
 
-#include <functional>
+class WzMultiplayerOptionsTitleUI;
 
-#include "../multiplay.h"	// for JoinConnectionDescription
-
-bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator = false);
-void shutdownJoiningAttempt();
-
-std::shared_ptr<WIDGET> createJoiningIndeterminateProgressWidget(iV_fonts fontID);
+std::shared_ptr<WIDGET> makeWzPlayerBlindWaitingRoom(const std::shared_ptr<WzMultiplayerOptionsTitleUI>& titleUI);
+int getWzPlayerBlindWaitingRoomPlayerRowY0(const std::shared_ptr<WIDGET>& blindWaitingRoomWidget);

@@ -92,8 +92,11 @@ struct RESEARCH;
 bool saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 PLAYERSTATS const &getMultiStats(UDWORD player);									// get from net
+const EcKey& getLocalSharedIdentity();
 bool setMultiStats(uint32_t player, PLAYERSTATS plStats, bool bLocal);  // set + send to net.
+bool clearPlayerMultiStats(uint32_t playerIndex);
 bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex = nullopt); // send to net
+bool sendMultiStatsHostVerifiedIdentities(uint32_t playerIndex);
 bool sendMultiStatsScoreUpdates(uint32_t player);
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames();
@@ -101,6 +104,7 @@ void updateMultiStatsWins();
 void updateMultiStatsLoses();
 void incrementMultiStatsResearchPerformance(UDWORD player);
 void incrementMultiStatsResearchPotential(UDWORD player);
+struct BASE_OBJECT;
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void updateMultiStatsBuilt(BASE_OBJECT *psBuilt);
 void updateMultiStatsResearchComplete(RESEARCH *psResearch, UDWORD player);
@@ -147,5 +151,29 @@ void resetRecentScoreData();
 
 bool saveMultiStatsToJSON(nlohmann::json& json);
 bool loadMultiStatsFromJSON(const nlohmann::json& json);
+bool updateMultiStatsIdentitiesInJSON(nlohmann::json& json, bool useVerifiedJoinIdentity = false);
+
+bool generateBlindIdentity();
+
+// When host, this will return:
+// - The identity verified on initial player join
+// When a client, this will return:
+// - In "regular" lobbies, the current player identity (if it has been verified with this client)
+// - In "blind" lobbies...
+//   - Before game ends, an empty identity
+//   - After game ends, the host-verified join identity
+const EcKey& getVerifiedJoinIdentity(UDWORD player);
+
+// In blind games, it returns the verified join identity (if executed on the host, or on all clients after the game has ended)
+// In regular games, it returns the current player identity
+struct TrueIdentity
+{
+	const EcKey& identity;
+	bool verified;
+};
+TrueIdentity getTruePlayerIdentity(UDWORD player);
+
+// Should be used when a player identity is to be output (in logs, or otherwise accessible to the user)
+const EcKey& getOutputPlayerIdentity(UDWORD player);
 
 #endif // __INCLUDED_SRC_MULTISTATS_H__

@@ -467,6 +467,24 @@ int cmdOutputThreadFunc(void *)
 	return 0;
 }
 
+static bool checkPlayerIdentityMatchesString(const EcKey& identity, const std::string& playerIdentityStrCopy)
+{
+	if (identity.empty())
+	{
+		return (playerIdentityStrCopy == "0"); // special case for empty identity, in case that happens...
+	}
+
+	// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
+	std::string checkIdentityHash = identity.publicHashString();
+	std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+	if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 static bool applyToActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::function<void (uint32_t playerIdx)>& func)
 {
 	bool foundActivePlayer = false;
@@ -477,29 +495,10 @@ static bool applyToActivePlayerWithIdentity(const std::string& playerIdentityStr
 			continue;
 		}
 
-		bool matchingPlayer = false;
-		auto& identity = getMultiStats(i).identity;
-		if (identity.empty())
+		bool matchingPlayer = checkPlayerIdentityMatchesString(getMultiStats(i).identity, playerIdentityStrCopy);
+		if (!matchingPlayer && game.blindMode != BLIND_MODE::NONE)
 		{
-			if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
-			{
-				matchingPlayer = true;
-			}
-			else
-			{
-				continue;
-			}
-		}
-
-		if (!matchingPlayer)
-		{
-			// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
-			std::string checkIdentityHash = identity.publicHashString();
-			std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-			if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
-			{
-				matchingPlayer = true;
-			}
+			matchingPlayer = checkPlayerIdentityMatchesString(getVerifiedJoinIdentity(i), playerIdentityStrCopy);
 		}
 
 		if (matchingPlayer)
@@ -574,10 +573,11 @@ static bool changeHostChatPermissionsForActivePlayerWithIdentity(const std::stri
 		}
 		displayRoomSystemMessage(msg.c_str());
 
-		std::string playerPublicKeyB64 = base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
-		std::string playerIdentityHash = getMultiStats(i).identity.publicHashString();
+		const auto& identity = getOutputPlayerIdentity(i);
+		std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[i]) ? "V" : "?";
-		std::string playerName = NetPlay.players[i].name;
+		std::string playerName = getPlayerName(i);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 		wz_command_interface_output("WZEVENT: hostChatPermissions=%s: %" PRIu32 " %" PRIu32 " %s %s %s %s %s\n", (freeChatEnabled) ? "Y" : "N", i, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[i].IPtextAddress);
 	});
@@ -602,6 +602,19 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 		kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
 		auto KickMessage = astringf("Player %s was kicked by the administrator.", playerNameStr.c_str());
 		sendRoomSystemMessage(KickMessage.c_str());
+	});
+}
+
+static bool chatActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& chatmsgstr)
+{
+	if (!NetPlay.isHostAlive)
+	{
+		// can't send this message when the host isn't alive
+		wz_command_interface_output("WZCMD error: Failed to send chat direct message because host isn't yet hosting!\n");
+	}
+
+	return applyToActivePlayerWithIdentity(playerIdentityStrCopy, [&](uint32_t i) {
+		sendRoomSystemMessageToSingleReceiver(chatmsgstr.c_str(), i);
 	});
 }
 
@@ -951,52 +964,7 @@ int cmdInputThreadFunc(void *)
 				std::string playerIdentityStrCopy(playeridentitystring);
 				std::string chatmsgstr(chatmsg);
 				wzAsyncExecOnMainThread([playerIdentityStrCopy, chatmsgstr] {
-					if (!NetPlay.isHostAlive)
-					{
-						// can't send this message when the host isn't alive
-						wz_command_interface_output("WZCMD error: Failed to send chat direct message because host isn't yet hosting!\n");
-					}
-
-					bool foundActivePlayer = false;
-					for (uint32_t i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-					{
-						auto player = NetPlay.players[i];
-						if (!isHumanPlayer(i))
-						{
-							continue;
-						}
-
-						bool msgThisPlayer = false;
-						auto& identity = getMultiStats(i).identity;
-						if (identity.empty())
-						{
-							if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
-							{
-								msgThisPlayer = true;
-							}
-							else
-							{
-								continue;
-							}
-						}
-
-						if (!msgThisPlayer)
-						{
-							// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
-							std::string checkIdentityHash = identity.publicHashString();
-							std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-							if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
-							{
-								msgThisPlayer = true;
-							}
-						}
-
-						if (msgThisPlayer)
-						{
-							sendRoomSystemMessageToSingleReceiver(chatmsgstr.c_str(), i);
-							foundActivePlayer = true;
-						}
-					}
+					bool foundActivePlayer = chatActivePlayerWithIdentity(playerIdentityStrCopy, chatmsgstr);
 					if (!foundActivePlayer)
 					{
 						wz_command_interface_output("WZCMD info: chat direct %s: failed to find currently-connected player with matching public key or hash\n", playerIdentityStrCopy.c_str());
@@ -1496,7 +1464,7 @@ static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasF
 		}
 	}
 
-	const auto& identity = getMultiStats(player).identity;
+	const auto& identity = (game.blindMode != BLIND_MODE::NONE) ? getVerifiedJoinIdentity(player) : getMultiStats(player).identity;
 	if (!identity.empty())
 	{
 		j["pk"] = base64Encode(identity.toBytes(EcKey::Public));
@@ -1561,6 +1529,7 @@ void wz_command_interface_output_room_status_json()
 		}
 	}
 	data["map"] = game.map;
+	data["blind"] = static_cast<uint8_t>(game.blindMode);
 
 	root["data"] = std::move(data);
 

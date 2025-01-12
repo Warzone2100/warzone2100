@@ -34,4 +34,13 @@ constexpr PLAYER_LEAVE_MODE PLAYER_LEAVE_MODE_MAX = PLAYER_LEAVE_MODE::SPLIT_WIT
 
 constexpr PLAYER_LEAVE_MODE PLAYER_LEAVE_MODE_DEFAULT = PLAYER_LEAVE_MODE::SPLIT_WITH_TEAM;
 
+enum class BLIND_MODE : uint8_t
+{
+	NONE,
+	BLIND_GAME,		// standard blind mode game (players' true identities are hidden from everyone except a spectator host until the game is over)
+	BLIND_GAME_SIMPLE_LOBBY		// BLIND_GAME, but not showing any other players in lobby (players will just be informed that they are waiting for other players)
+};
+
+constexpr BLIND_MODE BLIND_MODE_MAX = BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY;
+
 #endif // __INCLUDED_SRC_MULTIPLAYDEFS_H__
