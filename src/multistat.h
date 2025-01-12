@@ -112,6 +112,7 @@ bool recvMultiStats(NETQUEUE queue);
 void lookupRatingAsync(uint32_t playerIndex);
 
 void multiStatsSetVerifiedIdentityFromJoin(uint32_t playerIndex, const EcKey::Key &identity);
+void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity);
 
 bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB);
 

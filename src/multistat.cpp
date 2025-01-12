@@ -713,6 +713,12 @@ void multiStatsSetVerifiedIdentityFromJoin(uint32_t playerIndex, const EcKey::Ke
 	}
 }
 
+void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity)
+{
+	ASSERT_OR_RETURN(, NetPlay.isHost || NetPlay.isHostAlive, "Unexpected state when called");
+	hostVerifiedJoinIdentities[NetPlay.hostPlayer].fromBytes(identity, EcKey::Public);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Load Player Stats
 

@@ -534,6 +534,8 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	setMultiStats(selectedPlayer, playerStats, true);
 	lookupRatingAsync(selectedPlayer);
 
+	multiStatsSetVerifiedHostIdentityFromJoin(playerStats.identity.toBytes(EcKey::Public));
+
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	return true;
 }
