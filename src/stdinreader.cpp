@@ -1036,6 +1036,43 @@ int cmdInputThreadFunc(void *)
 				wz_command_interface_output_room_status_json();
 			});
 		}
+		else if(!strncmpl(line, "set host ready "))
+		{
+			unsigned hostReadyVal = 0;
+			int r = sscanf(line, "set host ready %u", &hostReadyVal);
+			if (r != 1)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get host ready value!\n");
+			}
+			else
+			{
+				bool hostReady = false;
+				if (hostReadyVal == 1 || hostReadyVal == 0)
+				{
+					hostReady = static_cast<bool>(hostReadyVal);
+				}
+				else
+				{
+					wz_command_interface_output_onmainthread("WZCMD error: Unsupported set host ready value!\n");
+					continue;
+				}
+
+				wzAsyncExecOnMainThread([hostReady] {
+					if (!NetPlay.isHostAlive)
+					{
+						wz_command_interface_output("WZCMD error: Unable to change host ready status because host isn't yet hosting!\n");
+						return;
+					}
+					if (!NetPlay.isHost)
+					{
+						wz_command_interface_output("WZCMD error: Unable to change host ready status when not the host!\n");
+						return;
+					}
+
+					sendReadyRequest(selectedPlayer, hostReady);
+				});
+			}
+		}
 		else if(!strncmpl(line, "shutdown now"))
 		{
 			inexit = true;

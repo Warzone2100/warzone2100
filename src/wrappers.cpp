@@ -44,6 +44,7 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 #include "titleui/titleui.h"
+#include "stdinreader.h"
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
@@ -64,6 +65,7 @@ static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 static HostLaunch hostlaunch = HostLaunch::Normal;  // used to detect if we are hosting a game via command line option.
 static bool bHeadlessAutoGameModeCLIOption = false;
 static bool bActualHeadlessAutoGameMode = false;
+static bool bHostLaunchStartNotReady = false;
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
@@ -125,6 +127,12 @@ void setHostLaunch(HostLaunch value)
 	bActualHeadlessAutoGameMode = recalculateEffectiveHeadlessValue();
 }
 
+void resetHostLaunch()
+{
+	setHostLaunch(HostLaunch::Normal);
+	setHostLaunchStartNotReady(false);
+}
+
 HostLaunch getHostLaunch()
 {
 	return hostlaunch;
@@ -139,6 +147,21 @@ void setHeadlessGameMode(bool enabled)
 bool headlessGameMode()
 {
 	return bActualHeadlessAutoGameMode;
+}
+
+void setHostLaunchStartNotReady(bool value)
+{
+	bHostLaunchStartNotReady = value;
+}
+
+bool getHostLaunchStartNotReady()
+{
+	if (bHostLaunchStartNotReady && headlessGameMode() && !wz_command_interface_enabled())
+	{
+		debug(LOG_ERROR, "--autohost-not-ready specified while in headless mode without --enablecmdinterface specified. No way to start the host. Ignoring.");
+		bHostLaunchStartNotReady = false;
+	}
+	return bHostLaunchStartNotReady;
 }
 
 
