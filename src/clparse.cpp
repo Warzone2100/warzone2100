@@ -364,6 +364,7 @@ typedef enum
 	CLI_ALLOW_VULKAN_IMPLICIT_LAYERS,
 	CLI_HOST_CHAT_CONFIG,
 	CLI_HOST_ASYNC_JOIN_APPROVAL,
+	CLI_AUTOHOST_START_NOT_READY,
 #if defined(__EMSCRIPTEN__)
 	CLI_VIDEOURL,
 #endif
@@ -457,6 +458,7 @@ static const struct poptOption *getOptionsTable()
 		{ "allow-vulkan-implicit-layers", POPT_ARG_NONE, CLI_ALLOW_VULKAN_IMPLICIT_LAYERS, N_("Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"), nullptr },
 		{ "host-chat-config", POPT_ARG_STRING, CLI_HOST_CHAT_CONFIG, N_("Set the default hosting chat configuration / permissions"), "[allow,quickchat]" },
 		{ "async-join-approve", POPT_ARG_NONE, CLI_HOST_ASYNC_JOIN_APPROVAL, N_("Enable async join approval (for connecting clients)"), nullptr },
+		{ "autohost-not-ready", POPT_ARG_NONE, CLI_AUTOHOST_START_NOT_READY, N_("Starts the host (autohost) as not ready, even if it's a spectator host"), nullptr },
 #if defined(__EMSCRIPTEN__)
 		{ "videourl", POPT_ARG_STRING, CLI_VIDEOURL,   N_("Base URL for on-demand video downloads"), N_("Base video URL") },
 #endif
@@ -1343,6 +1345,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 
 		case CLI_HOST_ASYNC_JOIN_APPROVAL:
 			NETsetAsyncJoinApprovalRequired(true);
+			break;
+
+		case CLI_AUTOHOST_START_NOT_READY:
+			setHostLaunchStartNotReady(true);
 			break;
 
 #if defined(__EMSCRIPTEN__)

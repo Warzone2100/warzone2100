@@ -2002,7 +2002,7 @@ bool stageThreeShutDown()
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
-	setHostLaunch(HostLaunch::Normal);
+	resetHostLaunch();
 
 	removeSpotters();
 

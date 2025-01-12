@@ -6245,7 +6245,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 
 	case CON_CANCEL:
 
-		setHostLaunch(HostLaunch::Normal); // Dont load the autohost file on subsequent hosts
+		resetHostLaunch(); // Dont load the autohost file on subsequent hosts
 		performedFirstStart = false; // Reset everything
 		if (!challengeActive)
 		{
@@ -7568,7 +7568,7 @@ void WzMultiplayerOptionsTitleUI::start()
 			if (getHostLaunch() == HostLaunch::Autohost)
 			{
 				changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Failed to process autohost config:")), WzString::fromUtf8(astringf(_("Failed to load the autohost map or config from: %s"), wz_skirmish_test().c_str())), parent));
-				setHostLaunch(HostLaunch::Normal); // Don't load the autohost file on subsequent hosts
+				resetHostLaunch(); // Don't load the autohost file on subsequent hosts
 				return;
 			}
 			// otherwise, treat as non-fatal...
@@ -7642,7 +7642,10 @@ void WzMultiplayerOptionsTitleUI::start()
 		{
 			processMultiopWidgets(MULTIOP_HOST);
 		}
-		sendReadyRequest(selectedPlayer, true);
+		if (!getHostLaunchStartNotReady())
+		{
+			sendReadyRequest(selectedPlayer, true);
+		}
 		if (getHostLaunch() == HostLaunch::Skirmish)
 		{
 			startMultiplayerGame();
