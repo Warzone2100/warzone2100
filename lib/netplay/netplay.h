@@ -465,7 +465,8 @@ void NETsetDefaultMPHostFreeChatPreference(bool enabled);
 bool NETgetDefaultMPHostFreeChatPreference();
 void NETsetEnableTCPNoDelay(bool enabled);
 bool NETgetEnableTCPNoDelay();
-uint32_t NETgetJoinConnectionNETPINGChallengeSize();
+uint32_t NETgetJoinConnectionNETPINGChallengeFromHostSize();
+uint32_t NETgetJoinConnectionNETPINGChallengeFromClientSize();
 
 void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);

@@ -210,6 +210,8 @@ static inline void NETauto(T (&ar)[N])
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 
+void NETbytesOutputToVector(const std::vector<uint8_t> &data, std::vector<uint8_t>& output);
+
 #include <nlohmann/json_fwd.hpp>
 
 class ReplayOptionsHandler

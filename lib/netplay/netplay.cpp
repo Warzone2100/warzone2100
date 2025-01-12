@@ -270,12 +270,16 @@ struct TmpSocketInfo
 		char name[64] = {'\0'};
 		uint8_t playerType = 0;
 		EcKey identity;
+		std::unique_ptr<SessionKeys> connectionAuthSessionKeys;
+		std::vector<uint8_t> challengeForHost;
 
 		void reset()
 		{
 			name[0] = '\0';
 			playerType = 0;
 			identity.clear();
+			connectionAuthSessionKeys.reset();
+			challengeForHost.clear();
 		}
 	};
 	ReceivedJoinInfo receivedJoinInfo;
@@ -3837,6 +3841,22 @@ static void NEThostPromoteTempSocketToPermanentPlayerConnection(unsigned int tem
 	}
 }
 
+static void NETrejectTempSocketClient(unsigned int i, uint8_t rejectedReason, bool sessionBan = false)
+{
+	NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+	NETuint8_t(&rejectedReason);
+	NETstring("", 0);
+	NETend();
+	NETflush();
+
+	if (sessionBan)
+	{
+		NETaddSessionBanBadIP(tmp_connectState[i].ip);
+	}
+	NETcloseTempSocket(i);
+	sync_counter.cantjoin++;
+}
+
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 static void NETallowJoining()
@@ -3971,10 +3991,15 @@ static void NETallowJoining()
 						connectFailed = false;
 
 						// Give client a challenge to solve before connecting
-						tmp_connectState[i].connectChallenge.resize(NETgetJoinConnectionNETPINGChallengeSize());
+						tmp_connectState[i].connectChallenge.resize(NETgetJoinConnectionNETPINGChallengeFromHostSize());
 						genSecRandomBytes(tmp_connectState[i].connectChallenge.data(), tmp_connectState[i].connectChallenge.size());
 						NETbeginEncode(NETnetTmpQueue(i), NET_PING);
 						NETbytes(&(tmp_connectState[i].connectChallenge));
+						// Send the server's public identity
+						// - As long as host is a spectator host, or this is a regular (non-blind) game, this is always the host's actual public identity
+						// - If host is a player-host *and* this is a blind game, it's the blind identity
+						EcKey::Key serverPublicKey = getLocalSharedIdentity().toBytes(EcKey::Public);
+						NETbytes(&serverPublicKey);
 						NETend();
 					}
 					else
@@ -4052,17 +4077,8 @@ static void NETallowJoining()
 					if (NETincompleteMessageDataBuffered(NETnetTmpQueue(i)) > (NET_BUFFER_SIZE * 16))	// something definitely big enough to encompass the expected message(s) at this point
 					{
 						// client is sending data that doesn't appear to be a properly formatted message - cut it off
-						rejected = ERROR_WRONGDATA;
-						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
-						NETuint8_t(&rejected);
-						NETstring("", 0);
-						NETend();
-						NETflush();
 						NETpop(NETnetTmpQueue(i));
-
-						NETaddSessionBanBadIP(tmp_connectState[i].ip);
-						NETcloseTempSocket(i);
-						sync_counter.cantjoin++;
+						NETrejectTempSocketClient(i, ERROR_WRONGDATA, true);
 					}
 					continue;
 				}
@@ -4075,7 +4091,7 @@ static void NETallowJoining()
 					uint8_t playerType = 0;
 					EcKey::Key pkey;
 					EcKey identity;
-					EcKey::Sig challengeResponse;
+					std::vector<uint8_t> encryptedChallengeResponse;
 
 					NETbeginDecode(NETnetTmpQueue(i), NET_JOIN);
 					NETstring(name, sizeof(name));
@@ -4083,40 +4099,24 @@ static void NETallowJoining()
 					NETstring(GamePassword, sizeof(GamePassword));
 					NETuint8_t(&playerType);
 					NETbytes(&pkey);
-					NETbytes(&challengeResponse);
+					NETbytes(&encryptedChallengeResponse);
 					NETend();
+					NETpop(NETnetTmpQueue(i));
 
-					// verify signature that player is joining with, reject him if he can not do that
-					if (!identity.fromBytes(pkey, EcKey::Public) || !identity.verify(challengeResponse, tmp_connectState[i].connectChallenge.data(), tmp_connectState[i].connectChallenge.size()))
+					// Determine if it's a valid public identity
+					if (!identity.fromBytes(pkey, EcKey::Public))
 					{
-						auto rejectMsg = astringf("**Rejecting player(%s), failed to verify player identity.", tmp_connectState[i].ip.c_str());
+						// Invalid public identity provided - just reject
+						auto rejectMsg = astringf("**Rejecting player(%s), invalid player identity.", tmp_connectState[i].ip.c_str());
 						debug(LOG_INFO, "%s", rejectMsg.c_str());
-						debug(LOG_NET, "freeing temp socket %p, couldn't verify player identity", static_cast<void *>(tmp_socket[i]));
+						debug(LOG_NET, "freeing temp socket %p, invalid player identity", static_cast<void *>(tmp_socket[i]));
 
-						rejected = ERROR_WRONGDATA;
-						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
-						NETuint8_t(&rejected);
-						NETstring("", 0);
-						NETend();
-						NETflush();
-						NETpop(NETnetTmpQueue(i));
-
-						NETaddSessionBanBadIP(tmp_connectState[i].ip);
-						NETcloseTempSocket(i);
-						sync_counter.cantjoin++;
+						NETrejectTempSocketClient(i, ERROR_WRONGDATA, true);
 						continue;
 					}
 
-					// save join info in the tmp_connectState
-					sstrcpy(tmp_connectState[i].receivedJoinInfo.name, name);
-					tmp_connectState[i].receivedJoinInfo.playerType = playerType;
-					tmp_connectState[i].receivedJoinInfo.identity = identity;
-
-					auto& joinRequestInfo = tmp_connectState[i].receivedJoinInfo;
-
-					// connection checks
+					// Do an initial pass of blacklist checks (even though we haven't verified the identity yet)
 					auto connectPermissions = netPermissionsCheck_Connect(identity);
-
 					if ((connectPermissions.has_value() && connectPermissions.value() == ConnectPermissions::Blocked)
 						|| (!connectPermissions.has_value() && onBanList(tmp_connectState[i].ip.c_str())))
 					{
@@ -4125,10 +4125,79 @@ static void NETallowJoining()
 						debug(LOG_INFO, "%s", buf);
 						NETlogEntry(buf, SYNC_FLAG, i);
 
-						// Player has been kicked before, kick again.
-						rejected = (uint8_t)ERROR_KICKED;
+						NETrejectTempSocketClient(i, ERROR_KICKED, false);
+						continue;
 					}
-					else if (joinRequestInfo.playerType != NET_JOIN_SPECTATOR && !bAsyncJoinApprovalEnabled && playerManagementRecord.hostMovedPlayerToSpectators(tmp_connectState[i].ip))
+
+					// Save join info in the tmp_connectState
+					sstrcpy(tmp_connectState[i].receivedJoinInfo.name, name);
+					tmp_connectState[i].receivedJoinInfo.playerType = playerType;
+					tmp_connectState[i].receivedJoinInfo.identity = identity;
+
+					auto& joinRequestInfo = tmp_connectState[i].receivedJoinInfo;
+
+					// Construct the auth session keys
+					try {
+						tmp_connectState[i].receivedJoinInfo.connectionAuthSessionKeys = std::make_unique<SessionKeys>(getLocalSharedIdentity(), 0, identity, 1);
+					}
+					catch (const std::invalid_argument& e) {
+						auto rejectMsg = astringf("**Rejecting player(%s), failed to establish session keys, error: %s", tmp_connectState[i].ip.c_str(), e.what());
+						debug(LOG_INFO, "%s", rejectMsg.c_str());
+						debug(LOG_NET, "freeing temp socket %p, couldn't establish session keys", static_cast<void *>(tmp_socket[i]));
+						NETrejectTempSocketClient(i, ERROR_WRONGDATA, false);
+						continue;
+					}
+
+					// Decrypt the encryptedChallengeResponse
+					std::vector<uint8_t> decryptedMessageRawData;
+					if (!tmp_connectState[i].receivedJoinInfo.connectionAuthSessionKeys->decryptMessageFromOther(&(encryptedChallengeResponse[0]), encryptedChallengeResponse.size(), decryptedMessageRawData))
+					{
+						auto rejectMsg = astringf("**Rejecting player(%s), failed to decrypt player auth data", tmp_connectState[i].ip.c_str());
+						debug(LOG_INFO, "%s", rejectMsg.c_str());
+						debug(LOG_NET, "freeing temp socket %p, couldn't verify player identity", static_cast<void *>(tmp_socket[i]));
+						NETrejectTempSocketClient(i, ERROR_WRONGDATA, true);
+						continue;
+					}
+
+					NetMessage tmpMessage(NET_JOIN); // dummy message for parsing
+					tmpMessage.data = std::move(decryptedMessageRawData);
+					NETinsertMessageFromNet(NETnetTmpQueue(i), &tmpMessage); // insert virtual message into temp queue for parsing
+
+					// Parse the decrypted response
+					EcKey::Sig challengeResponse;
+					std::vector<uint8_t> connectionDescriptionSerializedBytes;
+					std::vector<uint8_t> challengeForHost(NETgetJoinConnectionNETPINGChallengeFromClientSize(), 0);
+					NETbeginDecode(NETnetTmpQueue(i), NET_JOIN);
+					NETbytes(&challengeResponse);
+					NETbytes(&connectionDescriptionSerializedBytes);
+					NETbytes(&challengeForHost);
+					NETend();
+					NETpop(NETnetTmpQueue(i));
+
+					// Verify signature that player is joining with - reject on failure
+					if (!identity.verify(challengeResponse, tmp_connectState[i].connectChallenge.data(), tmp_connectState[i].connectChallenge.size()))
+					{
+						auto rejectMsg = astringf("**Rejecting player(%s), failed to verify player identity.", tmp_connectState[i].ip.c_str());
+						debug(LOG_INFO, "%s", rejectMsg.c_str());
+						debug(LOG_NET, "freeing temp socket %p, couldn't verify player identity", static_cast<void *>(tmp_socket[i]));
+						NETrejectTempSocketClient(i, ERROR_WRONGDATA, true);
+						continue;
+					}
+
+					// Verify that the challengeForHost is expected length
+					if (!challengeForHost.empty() && challengeForHost.size() != NETgetJoinConnectionNETPINGChallengeFromClientSize())
+					{
+						auto rejectMsg = astringf("**Rejecting player(%s), invalid host challenge length.", tmp_connectState[i].ip.c_str());
+						debug(LOG_INFO, "%s", rejectMsg.c_str());
+						debug(LOG_NET, "freeing temp socket %p, invalid host challenge length", static_cast<void *>(tmp_socket[i]));
+						NETrejectTempSocketClient(i, ERROR_WRONGDATA, true);
+						continue;
+					}
+					tmp_connectState[i].receivedJoinInfo.challengeForHost = std::move(challengeForHost);
+					challengeForHost.clear();
+
+					// Additional rejection checks
+					if (joinRequestInfo.playerType != NET_JOIN_SPECTATOR && !bAsyncJoinApprovalEnabled && playerManagementRecord.hostMovedPlayerToSpectators(tmp_connectState[i].ip))
 					{
 						// The host previously relegated a player from this IP address to Spectators (this game), and it seems they are trying to rejoin as a Player - deny this
 						char buf[256] = {'\0'};
@@ -4161,14 +4230,11 @@ static void NETallowJoining()
 						NETstring("", 0);
 						NETend();
 						NETflush();
-						NETpop(NETnetTmpQueue(i));
 
 						NETcloseTempSocket(i);
 						sync_counter.cantjoin++;
 						continue;
 					}
-
-					NETpop(NETnetTmpQueue(i));
 
 					// on passing all built-in checks for connect...
 					if (bAsyncJoinApprovalEnabled)
@@ -4195,17 +4261,8 @@ static void NETallowJoining()
 				{
 					// unexpected message type at this time
 					// reject the bad client
-					rejected = ERROR_WRONGDATA;
-					NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
-					NETuint8_t(&rejected);
-					NETstring("", 0);
-					NETend();
-					NETflush();
 					NETpop(NETnetTmpQueue(i));
-
-					NETaddSessionBanBadIP(tmp_connectState[i].ip);
-					NETcloseTempSocket(i);
-					sync_counter.cantjoin++;
+					NETrejectTempSocketClient(i, ERROR_WRONGDATA, true);
 				}
 				continue;
 			}
@@ -4298,9 +4355,8 @@ static void NETallowJoining()
 		if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::ProcessJoin)
 		{
 			optional<uint32_t> tmp = nullopt;
-			uint8_t rejected = 0;
 
-			auto joinRequestInfo = tmp_connectState[i].receivedJoinInfo; // keep a copy
+			TmpSocketInfo::ReceivedJoinInfo joinRequestInfo = std::move(tmp_connectState[i].receivedJoinInfo); // keep the join info
 			tmp_connectState[i].reset();
 
 			if ((joinRequestInfo.playerType == NET_JOIN_SPECTATOR) || (int)NetPlay.playercount <= gamestruct.desc.dwMaxPlayers)
@@ -4314,15 +4370,7 @@ static void NETallowJoining()
 				debug(LOG_INFO, "freeing temp socket %p, couldn't create slot", static_cast<void *>(tmp_socket[i]));
 
 				// Tell the player that we are full.
-				rejected = ERROR_FULL;
-				NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
-				NETuint8_t(&rejected);
-				NETstring("", 0);
-				NETend();
-				NETflush();
-
-				NETcloseTempSocket(i);
-				sync_counter.cantjoin++;
+				NETrejectTempSocketClient(i, ERROR_FULL, false);
 				continue; // continue to next tmp_socket
 			}
 
@@ -4330,11 +4378,25 @@ static void NETallowJoining()
 
 			NEThostPromoteTempSocketToPermanentPlayerConnection(i, index);
 
+			// construct encrypted client challenge response
+			std::vector<uint8_t> encryptedHostChallengeResponse;
+			if (!joinRequestInfo.challengeForHost.empty())
+			{
+				EcKey::Sig hostChallengeResponse = getLocalSharedIdentity().sign(joinRequestInfo.challengeForHost.data(), joinRequestInfo.challengeForHost.size());
+				encryptedHostChallengeResponse = joinRequestInfo.connectionAuthSessionKeys->encryptMessageForOther(&hostChallengeResponse[0], hostChallengeResponse.size());
+				if (encryptedHostChallengeResponse.empty())
+				{
+					debug(LOG_INFO, "Failed to encrypt response?");
+				}
+			}
+
+			// Send NET_ACCEPTED
 			NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 			NETuint8_t(&index);
 			NETuint32_t(&NetPlay.hostPlayer);
 			uint8_t blindModeVal = static_cast<uint8_t>(game.blindMode);
 			NETuint8_t(&blindModeVal);
+			NETbytes(&encryptedHostChallengeResponse);
 			NETend();
 
 			// First send info about players to newcomer.
@@ -4942,9 +5004,14 @@ unsigned int NETgetGameserverPort()
 /**
  * @return The size of the join connection challenge (see: NET_PING in NETallowJoining())
  */
-uint32_t NETgetJoinConnectionNETPINGChallengeSize()
+uint32_t NETgetJoinConnectionNETPINGChallengeFromHostSize()
 {
 	return NET_PING_TMP_PING_CHALLENGE_SIZE;
+}
+
+uint32_t NETgetJoinConnectionNETPINGChallengeFromClientSize()
+{
+	return NET_PING_TMP_PING_CHALLENGE_SIZE / 2;
 }
 
 /*!
