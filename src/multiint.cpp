@@ -1309,6 +1309,7 @@ static void addGameOptions()
 	{
 		auto editBox = addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
 		editBox->setPlaceholder(_("Enter password here"));
+		editBox->setPlaceholderTextColor(WZCOL_TEXT_DARK);
 		auto *pPasswordButton = dynamic_cast<WzMultiButton*>(widgGetFromID(psWScreen, MULTIOP_PASSWORD_BUT));
 		if (pPasswordButton)
 		{
