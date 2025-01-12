@@ -1540,7 +1540,7 @@ int allPlayersOnSameTeam(int except)
 
 int WzMultiplayerOptionsTitleUI::playerRowY0(uint32_t row) const
 {
-	if (game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY && !NetPlay.isHost)
+	if (isBlindSimpleLobby(game.blindMode) && !NetPlay.isHost)
 	{
 		// Get Y position of virtual player row in WzPlayerBlindWaitingRoom widget
 		auto pBlindWaitingRoom = widgFormGetFromID(psWScreen->psForm, MULTIOP_BLIND_WAITING_ROOM);
@@ -1671,7 +1671,7 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 			NetPlay.players[player].difficulty = difficultyValue[difficultyIdx];
 			NETBroadcastPlayerInfo(player);
-			resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
+			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
 			widgScheduleTask([pStrongPtr] {
 				pStrongPtr->closeDifficultyChooser();
 				pStrongPtr->addPlayerBox(true);
@@ -1780,7 +1780,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 			// common code
 			NetPlay.players[player].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
 			NETBroadcastPlayerInfo(player);
-			resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
+			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
 		}
 		else
 		{
@@ -1930,7 +1930,7 @@ public:
 			auto strongTitleUI = titleUI.lock();
 			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
 			// Switch player
-			resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		// will reset only locally if not a host
+			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// will reset only locally if not a host
 			SendPositionRequest(switcherPlayerIdx, NetPlay.players[selectPositionRow->targetPlayerIdx].position);
 			widgScheduleTask([strongTitleUI] {
 				strongTitleUI->closePositionChooser();
@@ -1997,7 +1997,7 @@ public:
 				std::string playerName = getPlayerName(switcherPlayerIdx, true);
 
 				NETmoveSpectatorToPlayerSlot(switcherPlayerIdx, selectPositionRow->targetPlayerIdx, true);
-				resetReadyStatus(true, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		//reset and send notification to all clients
+				resetReadyStatus(true, isBlindSimpleLobby(game.blindMode));		//reset and send notification to all clients
 				widgScheduleTask([strongTitleUI] {
 					strongTitleUI->closePlayerSlotSwapChooser();
 					strongTitleUI->updatePlayers();
@@ -2236,7 +2236,7 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 				ASSERT(id >= MULTIOP_TEAMCHOOSER
 					   && (id - MULTIOP_TEAMCHOOSER) < MAX_PLAYERS, "processMultiopWidgets: wrong id - MULTIOP_TEAMCHOOSER value (%d)", id - MULTIOP_TEAMCHOOSER);
 
-				resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		// will reset only locally if not a host
+				resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// will reset only locally if not a host
 
 				SendTeamRequest(player, (UBYTE)id - MULTIOP_TEAMCHOOSER);
 
@@ -4309,7 +4309,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 
 	auto titleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
 
-	if (game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY && !NetPlay.isHost)
+	if (isBlindSimpleLobby(game.blindMode) && !NetPlay.isHost)
 	{
 		// Display custom "waiting room" that completely blinds the current player
 
@@ -5407,6 +5407,27 @@ static void updateMapWidgets(LEVEL_DATASET *mapData)
 	widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 }
 
+bool blindModeFromStr(const WzString& str, BLIND_MODE& mode_output)
+{
+	const std::unordered_map<WzString, BLIND_MODE> mappings = {
+		{"none", BLIND_MODE::NONE},
+		{"blind_lobby", BLIND_MODE::BLIND_LOBBY},
+		{"blind_lobby_simple_lobby", BLIND_MODE::BLIND_LOBBY_SIMPLE_LOBBY},
+		{"blind_game", BLIND_MODE::BLIND_GAME},
+		{"blind_game_simple_lobby", BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY},
+	};
+
+	auto it = mappings.find(str);
+	if (it != mappings.end())
+	{
+		mode_output = it->second;
+		return true;
+	}
+
+	mode_output = BLIND_MODE::NONE;
+	return false;
+}
+
 static bool loadMapChallengeSettings(WzConfig& ini)
 {
 	ini.beginGroup("locked"); // GUI lockdown
@@ -5474,14 +5495,10 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 			defaultOpenSpectatorSlots = static_cast<uint16_t>(std::min<unsigned int>(openSpectatorSlots_uint, MAX_SPECTATOR_SLOTS));
 
 			// Allow setting "blind mode"
-			unsigned int blindMode_uint = ini.value("blindMode", 0).toUInt();
-			if (blindMode_uint <= static_cast<unsigned int>(BLIND_MODE_MAX))
+			WzString blindMode_str = ini.value("blindMode", "none").toWzString();
+			if (!blindModeFromStr(blindMode_str, game.blindMode))
 			{
-				game.blindMode = static_cast<BLIND_MODE>(blindMode_uint);
-			}
-			else
-			{
-				debug(LOG_ERROR, "Invalid blindMode (%u) specified in config .json - ignoring", blindMode_uint);
+				debug(LOG_ERROR, "Invalid blindMode (%s) specified in config .json - ignoring", blindMode_str.toUtf8().c_str());
 			}
 
 			// DEPRECATED: This seems to have been odd workaround for not having the locked group handled.
@@ -6392,7 +6409,7 @@ public:
 			return true;
 		}
 		::changeTeam(player, team, responsibleIdx);
-		resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
+		resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
 		return true;
 	}
 	virtual bool changePosition(uint32_t player, uint8_t position, uint32_t responsibleIdx) override
@@ -6414,7 +6431,7 @@ public:
 		{
 			return false;
 		}
-		resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
+		resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
 		return true;
 	}
 	virtual bool changeBase(uint8_t baseValue) override
@@ -6477,7 +6494,7 @@ public:
 		std::string slotType = (NetPlay.players[player].isSpectator) ? "spectator" : "player";
 		sendRoomSystemMessage((std::string("Kicking ")+slotType+": "+std::string(getPlayerName(player, true))).c_str());
 		::kickPlayer(player, reason, ERROR_KICKED, ban);
-		resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
+		resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
 		return true;
 	}
 	virtual bool changeHostChatPermissions(uint32_t player, bool freeChatEnabled) override
@@ -6881,7 +6898,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			{
 				uint32_t player_id = MAX_CONNECTED_PLAYERS;
 
-				resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
+				resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
 
 				NETbeginDecode(queue, NET_PLAYER_DROPPED);
 				{

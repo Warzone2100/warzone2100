@@ -737,9 +737,8 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETbool(&NetPlay.players[index[n]].allocated);
 		NETbool(&NetPlay.players[index[n]].heartbeat);
 		NETbool(&NetPlay.players[index[n]].kick);
-		if (game.blindMode != BLIND_MODE::NONE // if in blind mode
-			&& index[n] < MAX_PLAYER_SLOTS // and an actual player slot (not a spectator slot)
-			&& !ingame.endTime.has_value()) // and game has not ended
+		if (isBlindPlayerInfoState() // if in blind player info state
+			&& index[n] < MAX_PLAYER_SLOTS) // and an actual player slot (not a spectator slot)
 		{
 			// send a generic player name
 			const char* genericName = getPlayerGenericName(index[n]);
@@ -1018,7 +1017,7 @@ static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
 		NET_DestroyPlayer(index);       // sets index player's array to false
 		if (!wasSpectator)
 		{
-			resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		// reset ready status for all players
+			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// reset ready status for all players
 			resetReadyCalled = true;
 		}
 
@@ -1059,7 +1058,7 @@ static void NETplayerDropped(UDWORD index)
 		NET_DestroyPlayer(id);          // just clears array
 		if (!wasSpectator)
 		{
-			resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		// reset ready status for all players
+			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// reset ready status for all players
 			resetReadyCalled = true;
 		}
 

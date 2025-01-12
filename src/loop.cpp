@@ -501,7 +501,7 @@ static void gameStateUpdate()
 	          NetPlay.players[0].allocated, NetPlay.players[1].allocated, NetPlay.players[2].allocated, NetPlay.players[3].allocated, NetPlay.players[4].allocated, NetPlay.players[5].allocated, NetPlay.players[6].allocated, NetPlay.players[7].allocated, NetPlay.players[8].allocated, NetPlay.players[9].allocated,
 	          NetPlay.players[0].position, NetPlay.players[1].position, NetPlay.players[2].position, NetPlay.players[3].position, NetPlay.players[4].position, NetPlay.players[5].position, NetPlay.players[6].position, NetPlay.players[7].position, NetPlay.players[8].position, NetPlay.players[9].position
 	         );
-	bool overrideHandleClientBlindNames = (game.blindMode != BLIND_MODE::NONE) && (NetPlay.isHost || NETisReplay()) && !ingame.endTime.has_value();
+	bool overrideHandleClientBlindNames = (game.blindMode >= BLIND_MODE::BLIND_GAME) && (NetPlay.isHost || NETisReplay()) && !ingame.endTime.has_value();
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
 		syncDebug("Player %d = \"%s\"", n, (!overrideHandleClientBlindNames) ? NetPlay.players[n].name : getPlayerGenericName(n));

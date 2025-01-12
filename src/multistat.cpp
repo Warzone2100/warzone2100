@@ -327,7 +327,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 	return true;
 }
 
-bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex /*= nullopt*/)
+static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex = nullopt, bool sendHostVerifiedJoinIdentity = false)
 {
 	ASSERT(NetPlay.isHost || playerIndex == realSelectedPlayer, "Hah");
 
@@ -363,7 +363,7 @@ bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerInde
 	EcKey::Key identityPublicKey;
 	bool isHostVerifiedIdentity = false;
 	// Choose the identity to send
-	if (!ingame.endTime.has_value() || !NetPlay.isHost)
+	if (!sendHostVerifiedJoinIdentity || !NetPlay.isHost)
 	{
 		if (playerIndex == realSelectedPlayer)
 		{
@@ -385,7 +385,8 @@ bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerInde
 	}
 	else
 	{
-		// Once game has ended, if we're the host, send the hostVerifiedJoinIdentity
+		// Once game has begun or ended (depending on settings), if we're the host, send the hostVerifiedJoinIdentity
+		ASSERT(NetPlay.isHost && !isBlindPlayerInfoState(), "Not time to send host verified identity yet?");
 		isHostVerifiedIdentity = true;
 		if (!hostVerifiedJoinIdentities[playerIndex].empty())
 		{
@@ -400,11 +401,16 @@ bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerInde
 	return true;
 }
 
+bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex /*= nullopt*/)
+{
+	return sendMultiStatsInternal(playerIndex, recipientPlayerIndex, false);
+}
+
 bool sendMultiStatsHostVerifiedIdentities(uint32_t playerIndex)
 {
 	ASSERT_HOST_ONLY(return false);
-	ASSERT_OR_RETURN(false, ingame.endTime.has_value(), "Game hasn't ended yet");
-	return sendMultiStats(playerIndex); // rely on sendMultiStats behavior when game has ended and this is the host to send the host-verified join identity
+	ASSERT_OR_RETURN(false, !isBlindPlayerInfoState(), "Not time to send host verified identities yet");
+	return sendMultiStatsInternal(playerIndex, nullopt, true);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
