@@ -243,6 +243,14 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		auto ar = stat.autorating;
 
 		std::string name = getPlayerName(j);
+		if (game.blindMode != BLIND_MODE::NONE)
+		{
+			// Special override: Show our own name if in spectators
+			if (j == selectedPlayer && j > MAX_PLAYER_SLOTS)
+			{
+				name = NetPlay.players[j].name;
+			}
+		}
 
 		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
 
@@ -257,7 +265,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			colour = WZCOL_FORM_PLAYER_NOPING;
 		}
-		else if (isKnownPlayer(serverPlayers, name, getMultiStats(j).identity))
+		else if (isKnownPlayer(serverPlayers, name, getMultiStats(j).identity) || game.blindMode != BLIND_MODE::NONE)
 		{
 			colour = WZCOL_FORM_PLAYER_KNOWN_BY_SERVER;
 		}
@@ -291,6 +299,12 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			subText += _("HOST");
 		}
+		else if ((j < MAX_PLAYERS) && (game.blindMode != BLIND_MODE::NONE) && NetPlay.isHost && (NetPlay.hostPlayer >= MAX_PLAYER_SLOTS))
+		{
+			subText += "\"";
+			subText += getPlayerGenericName(j);
+			subText += "\"";
+		}
 
 		if (NetPlay.bComms && j != selectedPlayer)
 		{
@@ -301,8 +315,27 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			subText += buf;
 			if (ingame.PingTimes[j] < PING_LIMIT)
 			{
+				if (game.blindMode == BLIND_MODE::NONE
+					|| (NetPlay.isHost && (NetPlay.hostPlayer >= MAX_PLAYER_SLOTS))
+					|| (j == NetPlay.hostPlayer))
+				{
 					// show actual ping time
 					ssprintf(buf, "%03d", ingame.PingTimes[j]);
+				}
+				else
+				{
+					// show non-exact ping in blind mode
+					const char* pingQualifierStr = "Ok";
+					if (ingame.PingTimes[j] > 350)
+					{
+						pingQualifierStr = "++";
+					}
+					else if (ingame.PingTimes[j] > 1000)
+					{
+						pingQualifierStr = "+++";
+					}
+					ssprintf(buf, "%s", pingQualifierStr);
+				}
 			}
 			else
 			{
@@ -366,6 +399,10 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		if (ar.autohoster)
 		{
 			iV_DrawImage(FrontImages, IMAGE_PLAYER_PC, x, y + 11);
+		}
+		else if (!ar.valid && (game.blindMode != BLIND_MODE::NONE) && (!NetPlay.isHost || NetPlay.hostPlayer < MAX_PLAYER_SLOTS))
+		{
+			iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 4, y + 13);
 		}
 		else if (ar.dummy)
 		{
@@ -455,6 +492,10 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 static bool canChooseTeamFor(int i)
 {
+	if (game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY && !NetPlay.isHost)
+	{
+		return false;
+	}
 	return (i == selectedPlayer || isHostOrAdmin());
 }
 
@@ -561,7 +602,8 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 					(NetPlay.players[player].allocated && isHostOrAdmin()))
 				&& !locked.position
 				&& player < MAX_PLAYERS
-				&& !isSpectatorOnlySlot(player))
+				&& !isSpectatorOnlySlot(player)
+				&& ((game.blindMode != BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY) || NetPlay.isHost))
 			{
 				widgScheduleTask([strongTitleUI, player] {
 					strongTitleUI->openPositionChooser(player);
@@ -586,7 +628,7 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 					}
 					widgScheduleTask([strongTitleUI] {
 						strongTitleUI->updatePlayers();
-						resetReadyStatus(false);
+						resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
 					});
 				}
 				else
@@ -663,7 +705,11 @@ void WzPlayerRow::updateState()
 
 	// update player info box tooltip
 	std::string playerInfoTooltip;
-	if ((selectedPlayer == playerIdx || NetPlay.isHost) && NetPlay.players[playerIdx].allocated && !locked.position && !isSpectatorOnlySlot(playerIdx))
+	if ((selectedPlayer == playerIdx || NetPlay.isHost)
+		&& NetPlay.players[playerIdx].allocated
+		&& !locked.position
+		&& !isSpectatorOnlySlot(playerIdx)
+		&& ((game.blindMode != BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY) || NetPlay.isHost))
 	{
 		playerInfoTooltip = _("Click to change player position");
 	}
@@ -687,10 +733,10 @@ void WzPlayerRow::updateState()
 			playerInfoTooltip = aidata[NetPlay.players[playerIdx].ai].tip;
 		}
 	}
-	if (NetPlay.players[playerIdx].allocated)
+	if (NetPlay.players[playerIdx].allocated && (game.blindMode == BLIND_MODE::NONE || (NetPlay.isHost && NetPlay.hostPlayer >= MAX_PLAYER_SLOTS)))
 	{
 		const PLAYERSTATS& stats = getMultiStats(playerIdx);
-		const auto& identity = stats.identity;
+		const auto& identity = getOutputPlayerIdentity(playerIdx);
 		if (!identity.empty())
 		{
 			if (!playerInfoTooltip.empty())
@@ -767,7 +813,7 @@ void WzPlayerRow::updateState()
 
 void WzPlayerRow::updateReadyButton()
 {
-	int disallow = allPlayersOnSameTeam(-1);
+	bool disallow = (allPlayersOnSameTeam(-1) != -1) && (game.blindMode != BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
 
 	const auto& aidata = getAIData();
 	const auto& locked = getLockedOptions();
@@ -855,7 +901,7 @@ void WzPlayerRow::updateReadyButton()
 		return;
 	}
 
-	if (disallow != -1)
+	if (disallow)
 	{
 		// remove ready / difficulty button
 		deleteExistingReadyButton();
@@ -920,10 +966,10 @@ void WzPlayerRow::updateReadyButton()
 				{
 					if (mouseDown(MOUSE_RMB) && player != NetPlay.hostPlayer) // both buttons....
 					{
-						std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player));
+						std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player, true));
 						sendRoomSystemMessage(msg.c_str());
 						kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
-						resetReadyStatus(true);		//reset and send notification to all clients
+						resetReadyStatus(true, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		//reset and send notification to all clients
 					}
 				}
 			});
@@ -938,6 +984,6 @@ void WzPlayerRow::updateReadyButton()
 	}
 	readyTextLabel->setGeometry(0, 0, MULTIOP_READY_WIDTH, 17);
 	readyTextLabel->setTextAlignment(WLAB_ALIGNBOTTOM);
-	readyTextLabel->setFont(font_small, WZCOL_TEXT_BRIGHT);
+	readyTextLabel->setFont(font_small, (isMe) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM);
 	readyTextLabel->setString(_("READY?"));
 }

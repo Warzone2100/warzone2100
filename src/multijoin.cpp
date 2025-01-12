@@ -417,6 +417,11 @@ static void addConsolePlayerJoinMessage(unsigned playerIndex)
 	if (selectedPlayer != playerIndex)
 	{
 		std::string msg = astringf(_("%s joined the Game"), getPlayerName(playerIndex));
+		if ((game.blindMode != BLIND_MODE::NONE) && NetPlay.isHost && (NetPlay.hostPlayer >= MAX_PLAYER_SLOTS))
+		{
+			msg += " ";
+			msg += astringf(_("(codename: %s)"), getPlayerGenericName(playerIndex));
+		}
 		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
@@ -440,7 +445,7 @@ void recvPlayerLeft(NETQUEUE queue)
 	turnOffMultiMsg(false);
 	if (!ingame.TimeEveryoneIsInGame.has_value()) // If game hasn't actually started
 	{
-		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+		clearPlayerMultiStats(playerIndex); // local only
 	}
 	NetPlay.players[playerIndex].allocated = false;
 
@@ -476,8 +481,9 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	if (wz_command_interface_enabled())
 	{
-		std::string playerPublicKeyB64 = base64Encode(getMultiStats(playerIndex).identity.toBytes(EcKey::Public));
-		std::string playerIdentityHash = getMultiStats(playerIndex).identity.publicHashString();
+		const auto& identity = getOutputPlayerIdentity(playerIndex);
+		std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[playerIndex]) ? "V" : "?";
 		std::string playerName = getPlayerName(playerIndex);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
@@ -488,7 +494,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	{
 		addConsolePlayerLeftMessage(playerIndex);
 		clearPlayer(playerIndex, false);
-		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+		clearPlayerMultiStats(playerIndex); // local only
 		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 	}
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
@@ -674,6 +680,7 @@ bool recvDataCheck(NETQUEUE queue)
 // Setup Stuff for a new player.
 void setupNewPlayer(UDWORD player)
 {
+	ASSERT_HOST_ONLY(return);
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
 	ingame.PingTimes[player] = 0;					// Reset ping time

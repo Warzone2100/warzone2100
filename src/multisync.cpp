@@ -67,6 +67,11 @@ static std::array<optional<PingChallengeBytes>, MAX_CONNECTED_PLAYERS> pingChall
 // We use setMultiStats() to broadcast the score when needed.
 bool sendScoreCheck()
 {
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		// no-op in blind mode
+		return false;
+	}
 	// Broadcast any changes in other players, but not in FRONTEND!!!
 	// Detection for this no longer uses title mode, but instead game mode, because that makes more sense
 	if (GetGameMode() == GS_NORMAL)
@@ -289,7 +294,7 @@ bool recvPing(NETQUEUE queue)
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
-		challengeResponse = getMultiStats(us).identity.sign(&challenge, PING_CHALLENGE_BYTES);
+		challengeResponse = getLocalSharedIdentity().sign(&challenge, PING_CHALLENGE_BYTES);
 
 		NETbeginEncode(NETnetQueue(sender), NET_PING);
 		// We are responding to a new ping
@@ -331,7 +336,7 @@ bool recvPing(NETQUEUE queue)
 			// Record that they've verified the identity
 			ingame.VerifiedIdentity[sender] = true;
 
-			if (NetPlay.isHost)
+			if (NetPlay.isHost && game.blindMode != BLIND_MODE::NONE)
 			{
 				// check if verified identity is an admin, and handle changes to admin status
 				bool oldIsAdminStatus = NetPlay.players[sender].isAdmin;

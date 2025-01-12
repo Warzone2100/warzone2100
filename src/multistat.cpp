@@ -52,6 +52,11 @@
 // ////////////////////////////////////////////////////////////////////////////
 static PLAYERSTATS playerStats[MAX_CONNECTED_PLAYERS];
 
+static PLAYERSTATS zeroStats;
+static EcKey blindIdentity; // a freshly-generated identity used for the local client in the current blind room
+
+static EcKey hostVerifiedJoinIdentities[MAX_CONNECTED_PLAYERS];
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
@@ -60,8 +65,83 @@ PLAYERSTATS const &getMultiStats(UDWORD player)
 	return playerStats[player];
 }
 
+bool generateBlindIdentity()
+{
+	blindIdentity = EcKey::generate();	// Generate new identity
+	ASSERT(!blindIdentity.empty(), "Failed to generate new blind identity");
+	return !blindIdentity.empty();
+}
+
+const EcKey& getLocalSharedIdentity()
+{
+	if (NetPlay.isHost && realSelectedPlayer >= MAX_PLAYER_SLOTS)
+	{
+		// If spectator host, send real identity
+		return playerStats[realSelectedPlayer].identity;
+	}
+
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		// In blind mode, share the blind identity
+		return blindIdentity;
+	}
+	else
+	{
+		// In regular mode, share the actual identity
+		return playerStats[realSelectedPlayer].identity;
+	}
+}
+
+const EcKey& getVerifiedJoinIdentity(UDWORD player)
+{
+	ASSERT(player < MAX_CONNECTED_PLAYERS, "Invalid player: %u", player);
+	if (NetPlay.isHost)
+	{
+		return hostVerifiedJoinIdentities[player];
+	}
+	else
+	{
+		if (game.blindMode == BLIND_MODE::NONE && ingame.VerifiedIdentity[player])
+		{
+			return playerStats[player].identity;
+		}
+		else
+		{
+			return hostVerifiedJoinIdentities[player];
+		}
+	}
+}
+
+// In blind games, it returns the verified join identity (if executed on the host, or on all clients after the game has ended)
+// In regular games, it returns the current player identity
+TrueIdentity getTruePlayerIdentity(UDWORD player)
+{
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		// In blind games, always output the join identity (since the internal shared identity is a random one)
+		return {hostVerifiedJoinIdentities[player], (!hostVerifiedJoinIdentities[player].empty()) ? true : false};
+	}
+	else
+	{
+		// Otherwise, always return the *current* player identity (which may differ from the identity used to join the game if the player switched to a different profile)
+		return {playerStats[player].identity, ingame.VerifiedIdentity[player]};
+	}
+}
+
+// Should be used when a player identity is to be output (in logs, or otherwise accessible to the user)
+const EcKey& getOutputPlayerIdentity(UDWORD player)
+{
+	return getTruePlayerIdentity(player).identity;
+}
+
 static void NETauto(PLAYERSTATS::Autorating &ar)
 {
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		bool tmp = false; // no valid autorating in blind mode
+		NETauto(tmp); // ar.valid
+		return;
+	}
 	NETauto(ar.valid);
 	if (ar.valid)
 	{
@@ -119,8 +199,14 @@ void lookupRatingAsync(uint32_t playerIndex)
 		return;
 	}
 
-	auto hash = playerStats[playerIndex].identity.publicHashString();
-	auto key = playerStats[playerIndex].identity.publicKeyHexString();
+	if (!NetPlay.isHost && game.blindMode != BLIND_MODE::NONE)
+	{
+		return;
+	}
+
+	auto trueIdentity = getTruePlayerIdentity(playerIndex);
+	auto hash = trueIdentity.identity.publicHashString();
+	auto key = trueIdentity.identity.publicKeyHexString();
 	if (hash.empty() || key.empty())
 	{
 		return;
@@ -198,7 +284,7 @@ static bool generateSessionKeysWithPlayer(uint32_t playerIndex)
 	}
 
 	// generate session keys
-	auto& localIdentity = playerStats[realSelectedPlayer].identity;
+	auto& localIdentity = getLocalSharedIdentity();
 	try {
 		NETsetSessionKeys(playerIndex, SessionKeys(localIdentity, realSelectedPlayer, playerStats[playerIndex].identity, playerIndex));
 	}
@@ -216,6 +302,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 		return false;
 	}
 	std::swap(playerStats[playerIndexA], playerStats[playerIndexB]);
+	std::swap(hostVerifiedJoinIdentities[playerIndexA], hostVerifiedJoinIdentities[playerIndexB]);
 
 	// NOTE: We can't just swap session keys - we have to re-generate to be sure they are correct
 	// (since client / server determinism can also be based on the playerIdx relative to the realSelectedPlayer - see SessionKeys constructor)
@@ -242,6 +329,8 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 
 bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex /*= nullopt*/)
 {
+	ASSERT(NetPlay.isHost || playerIndex == realSelectedPlayer, "Hah");
+
 	NETQUEUE queue;
 	if (!recipientPlayerIndex.has_value())
 	{
@@ -258,24 +347,64 @@ bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerInde
 
 	NETauto(playerStats[playerIndex].autorating);
 
-	// Send over the actual stats
-	NETuint32_t(&playerStats[playerIndex].played);
-	NETuint32_t(&playerStats[playerIndex].wins);
-	NETuint32_t(&playerStats[playerIndex].losses);
-	NETuint32_t(&playerStats[playerIndex].totalKills);
-	NETuint32_t(&playerStats[playerIndex].totalScore);
-	NETuint32_t(&playerStats[playerIndex].recentKills);
-	NETuint32_t(&playerStats[playerIndex].recentScore);
-
-	EcKey::Key identity;
-	if (!playerStats[playerIndex].identity.empty())
+	PLAYERSTATS* pStatsToSend = &playerStats[playerIndex];
+	if (game.blindMode != BLIND_MODE::NONE)
 	{
-		identity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+		// In blind mode, always send zeroed stats
+		pStatsToSend = &zeroStats;
 	}
-	NETbytes(&identity);
+
+	NETuint32_t(&pStatsToSend->played);
+	NETuint32_t(&pStatsToSend->wins);
+	NETuint32_t(&pStatsToSend->losses);
+	NETuint32_t(&pStatsToSend->totalKills);
+	NETuint32_t(&pStatsToSend->totalScore);
+
+	EcKey::Key identityPublicKey;
+	bool isHostVerifiedIdentity = false;
+	// Choose the identity to send
+	if (!ingame.endTime.has_value() || !NetPlay.isHost)
+	{
+		if (playerIndex == realSelectedPlayer)
+		{
+			// Local client sending its own identity
+			const auto& identity = getLocalSharedIdentity();
+			if (!identity.empty())
+			{
+				identityPublicKey = identity.toBytes(EcKey::Public);
+			}
+		}
+		else
+		{
+			// Host sending other player details - relay client provided details
+			if (!playerStats[playerIndex].identity.empty())
+			{
+				identityPublicKey = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+			}
+		}
+	}
+	else
+	{
+		// Once game has ended, if we're the host, send the hostVerifiedJoinIdentity
+		isHostVerifiedIdentity = true;
+		if (!hostVerifiedJoinIdentities[playerIndex].empty())
+		{
+			identityPublicKey = hostVerifiedJoinIdentities[playerIndex].toBytes(EcKey::Public);
+		}
+	}
+
+	NETbool(&isHostVerifiedIdentity);
+	NETbytes(&identityPublicKey);
 	NETend();
 
 	return true;
+}
+
+bool sendMultiStatsHostVerifiedIdentities(uint32_t playerIndex)
+{
+	ASSERT_HOST_ONLY(return false);
+	ASSERT_OR_RETURN(false, ingame.endTime.has_value(), "Game hasn't ended yet");
+	return sendMultiStats(playerIndex); // rely on sendMultiStats behavior when game has ended and this is the host to send the host-verified join identity
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -299,7 +428,7 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		{
 			// need to clear and re-generate any session keys for communication between us and other players
 			NETclearSessionKeys();
-			auto& localIdentity = playerStats[realSelectedPlayer].identity;
+			auto& localIdentity = getLocalSharedIdentity();
 			if (localIdentity.hasPrivate())
 			{
 				for (uint8_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
@@ -332,8 +461,23 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 	return true;
 }
 
+bool clearPlayerMultiStats(uint32_t playerIndex)
+{
+	setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+	if (NetPlay.isHost)
+	{
+		hostVerifiedJoinIdentities[playerIndex].clear();
+	}
+	return true;
+}
+
 bool sendMultiStatsScoreUpdates(uint32_t playerIndex)
 {
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		// No-op if in blind mode
+		return false;
+	}
 	if (NetPlay.isHost || playerIndex == realSelectedPlayer)
 	{
 		return sendMultiStats(playerIndex);
@@ -383,6 +527,9 @@ bool multiStatsSetIdentity(uint32_t playerIndex, const EcKey::Key &identity, boo
 					NetPlay.players[playerIndex].isAdmin = identityMatchesAdmin(playerStats[playerIndex].identity);
 					// Do not broadcast player info here, as it's assumed caller will do it
 				}
+
+				// Store the verified join identity
+				hostVerifiedJoinIdentities[playerIndex].fromBytes(identity, EcKey::Public);
 
 				// Do *not* output to stdinterface here - the join event is still being processed
 			}
@@ -450,7 +597,10 @@ bool multiStatsSetIdentity(uint32_t playerIndex, const EcKey::Key &identity, boo
 		// Changing an identity should not happen once a game starts
 		if ((identity != prevIdentity) || identity.empty())
 		{
-			ASSERT(false, "Cannot change identity for player %u after game has started", playerIndex);
+			if (!ingame.endTime.has_value())
+			{
+				ASSERT(false, "Cannot change identity for player %u after game has started", playerIndex);
+			}
 		}
 	}
 
@@ -493,17 +643,31 @@ bool recvMultiStats(NETQUEUE queue)
 		NETuint32_t(&playerStats[playerIndex].losses);
 		NETuint32_t(&playerStats[playerIndex].totalKills);
 		NETuint32_t(&playerStats[playerIndex].totalScore);
-		NETuint32_t(&playerStats[playerIndex].recentKills);
-		NETuint32_t(&playerStats[playerIndex].recentScore);
 
 		EcKey::Key identity;
+		bool isHostVerifiedIdentity = false;
+		NETbool(&isHostVerifiedIdentity);
 		NETbytes(&identity);
 		NETend();
 
-		if (multiStatsSetIdentity(playerIndex, identity, false))
+		if (!isHostVerifiedIdentity)
 		{
-			// if identity changed, process autorating data
-			processAutoratingData = true;
+			if (multiStatsSetIdentity(playerIndex, identity, false))
+			{
+				// if identity changed, process autorating data
+				processAutoratingData = true;
+			}
+		}
+		else
+		{
+			if (queue.index == NetPlay.hostPlayer)
+			{
+				hostVerifiedJoinIdentities[playerIndex].clear();
+				if (!identity.empty() && !hostVerifiedJoinIdentities[playerIndex].fromBytes(identity, EcKey::Public))
+				{
+					debug(LOG_INFO, "Host sent invalid host-verified join identity for: (player: %u, name: \"%s\")", playerIndex, getPlayerName(playerIndex));
+				}
+			}
 		}
 	}
 	else
@@ -1317,6 +1481,8 @@ void resetRecentScoreData()
 		playerStats[i].recentResearchPotential = 0;
 		playerStats[i].identity.clear();
 		playerStats[i].autorating = PLAYERSTATS::Autorating();
+
+		hostVerifiedJoinIdentities[i].clear();
 	}
 }
 
@@ -1433,6 +1599,29 @@ bool loadMultiStatsFromJSON(const nlohmann::json& json)
 	for (size_t idx = 0; idx < json.size(); idx++)
 	{
 		playerStats[idx] = json.at(idx).get<PLAYERSTATS>();
+	}
+
+	return true;
+}
+
+bool updateMultiStatsIdentitiesInJSON(nlohmann::json& json, bool useVerifiedJoinIdentity)
+{
+	if (!json.is_array())
+	{
+		debug(LOG_ERROR, "Expecting an array");
+		return false;
+	}
+	if (json.size() > MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Array size is too large: %zu", json.size());
+		return false;
+	}
+
+	for (size_t idx = 0; idx < json.size(); idx++)
+	{
+		auto stats = json.at(idx).get<PLAYERSTATS>();
+		stats.identity = (useVerifiedJoinIdentity) ? getVerifiedJoinIdentity(idx) : playerStats[idx].identity;
+		json[idx] = stats;
 	}
 
 	return true;
