@@ -492,7 +492,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 static bool canChooseTeamFor(int i)
 {
-	if (game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY && !NetPlay.isHost)
+	if (isBlindSimpleLobby(game.blindMode) && !NetPlay.isHost)
 	{
 		return false;
 	}
@@ -603,7 +603,7 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 				&& !locked.position
 				&& player < MAX_PLAYERS
 				&& !isSpectatorOnlySlot(player)
-				&& ((game.blindMode != BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY) || NetPlay.isHost))
+				&& (!isBlindSimpleLobby(game.blindMode) || NetPlay.isHost))
 			{
 				widgScheduleTask([strongTitleUI, player] {
 					strongTitleUI->openPositionChooser(player);
@@ -628,7 +628,7 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 					}
 					widgScheduleTask([strongTitleUI] {
 						strongTitleUI->updatePlayers();
-						resetReadyStatus(false, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
+						resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
 					});
 				}
 				else
@@ -709,7 +709,7 @@ void WzPlayerRow::updateState()
 		&& NetPlay.players[playerIdx].allocated
 		&& !locked.position
 		&& !isSpectatorOnlySlot(playerIdx)
-		&& ((game.blindMode != BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY) || NetPlay.isHost))
+		&& (!isBlindSimpleLobby(game.blindMode) || NetPlay.isHost))
 	{
 		playerInfoTooltip = _("Click to change player position");
 	}
@@ -813,7 +813,7 @@ void WzPlayerRow::updateState()
 
 void WzPlayerRow::updateReadyButton()
 {
-	bool disallow = (allPlayersOnSameTeam(-1) != -1) && (game.blindMode != BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);
+	bool disallow = (allPlayersOnSameTeam(-1) != -1) && !isBlindSimpleLobby(game.blindMode);
 
 	const auto& aidata = getAIData();
 	const auto& locked = getLockedOptions();
@@ -969,7 +969,7 @@ void WzPlayerRow::updateReadyButton()
 						std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player, true));
 						sendRoomSystemMessage(msg.c_str());
 						kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
-						resetReadyStatus(true, game.blindMode == BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY);		//reset and send notification to all clients
+						resetReadyStatus(true, isBlindSimpleLobby(game.blindMode));		//reset and send notification to all clients
 					}
 				}
 			});

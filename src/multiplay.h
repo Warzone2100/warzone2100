@@ -238,6 +238,7 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave);
 
 bool multiPlayerLoop();							// for loop.c
 
+bool isBlindPlayerInfoState();
 // return a "generic" player name that is fixed based on the player idx (useful for blind mode games)
 const char *getPlayerGenericName(int player);
 

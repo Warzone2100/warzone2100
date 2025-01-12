@@ -462,6 +462,24 @@ bool multiPlayerLoop()
 			ingame.lastPlayerDataCheck2 = std::chrono::steady_clock::now();
 			wz_command_interface_output("WZEVENT: allPlayersJoined\n");
 			wz_command_interface_output_room_status_json();
+
+			// If in blind *lobby* mode, send data on who the players are
+			if (game.blindMode != BLIND_MODE::NONE && game.blindMode < BLIND_MODE::BLIND_GAME)
+			{
+				if (NetPlay.isHost)
+				{
+					debug(LOG_INFO, "Revealing actual player names and identities to all players");
+
+					// Send updated player info (which will include real player names) to all players
+					NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
+
+					// Send the verified player identity from initial join for each player
+					for (uint32_t idx = 0; idx < MAX_CONNECTED_PLAYERS; ++idx)
+					{
+						sendMultiStatsHostVerifiedIdentities(idx);
+					}
+				}
+			}
 		}
 		if (NetPlay.bComms)
 		{
@@ -674,7 +692,7 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 	return nullptr;
 }
 
-static inline bool isBlindPlayerInfoState()
+bool isBlindPlayerInfoState()
 {
 	if (game.blindMode == BLIND_MODE::NONE)
 	{
