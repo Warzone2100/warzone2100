@@ -8249,6 +8249,11 @@ bool WZGameReplayOptionsHandler::saveOptions(nlohmann::json& object) const
 	return true;
 }
 
+bool WZGameReplayOptionsHandler::optionsUpdatePlayerInfo(nlohmann::json& object) const
+{
+	return true;
+}
+
 constexpr PHYSFS_sint64 MAX_REPLAY_EMBEDDED_MAP_SIZE_LIMIT = 150 * 1024;
 
 size_t WZGameReplayOptionsHandler::maximumEmbeddedMapBufferSize() const
