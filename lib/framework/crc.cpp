@@ -345,7 +345,7 @@ EcKey::Key EcKey::toBytes(Privacy privacy) const
 {
 	if (empty())
 	{
-		debug(LOG_INFO, "No key");
+		debug(LOG_WZ, "No key");
 		return Key();
 	}
 	assert(EC_KEY_CAST(vKey) != nullptr);
