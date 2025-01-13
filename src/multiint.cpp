@@ -1407,6 +1407,19 @@ static void addGameOptions()
 	addMultiButton(mapPreviewButton, 0, AtlasImage(FrontImages, IMAGE_FOG_OFF), AtlasImage(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
 	optionsList->addWidgetToLayout(mapPreviewButton);
 
+	auto addTechLevelMultibuttonWidget = [&](){
+		auto TechnologyChoice = std::make_shared<MultichoiceWidget>(game.techLevel);
+		optionsList->attach(TechnologyChoice);
+		TechnologyChoice->id = MULTIOP_TECHLEVEL;
+		TechnologyChoice->setLabel(_("Tech"));
+		addMultiButton(TechnologyChoice, TECH_1, AtlasImage(FrontImages, IMAGE_TECHLO), AtlasImage(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
+		addMultiButton(TechnologyChoice, TECH_2, AtlasImage(FrontImages, IMAGE_TECHMED), AtlasImage(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
+		addMultiButton(TechnologyChoice, TECH_3, AtlasImage(FrontImages, IMAGE_TECHHI), AtlasImage(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
+		addMultiButton(TechnologyChoice, TECH_4, AtlasImage(FrontImages, IMAGE_COMPUTER_Y), AtlasImage(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
+		optionsList->addWidgetToLayout(TechnologyChoice);
+		return TechnologyChoice;
+	};
+
 	/* Add additional controls if we are (or going to be) hosting the game */
 	if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
@@ -1433,15 +1446,7 @@ static void addGameOptions()
 			   starting the host is due to the fact that there is not enough room before the "Host Game" button is hidden.		*/
 			if (NetPlay.isHost)
 			{
-				auto TechnologyChoice = std::make_shared<MultichoiceWidget>(game.techLevel);
-				optionsList->attach(TechnologyChoice);
-				TechnologyChoice->id = MULTIOP_TECHLEVEL;
-				TechnologyChoice->setLabel(_("Tech"));
-				addMultiButton(TechnologyChoice, TECH_1, AtlasImage(FrontImages, IMAGE_TECHLO), AtlasImage(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
-				addMultiButton(TechnologyChoice, TECH_2, AtlasImage(FrontImages, IMAGE_TECHMED), AtlasImage(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
-				addMultiButton(TechnologyChoice, TECH_3, AtlasImage(FrontImages, IMAGE_TECHHI), AtlasImage(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
-				addMultiButton(TechnologyChoice, TECH_4, AtlasImage(FrontImages, IMAGE_COMPUTER_Y), AtlasImage(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
-				optionsList->addWidgetToLayout(TechnologyChoice);
+				addTechLevelMultibuttonWidget();
 			}
 			/* If not hosting (yet), add the button for starting the host. */
 			else
@@ -1454,6 +1459,11 @@ static void addGameOptions()
 				optionsList->addWidgetToLayout(hostButton);
 			}
 		}
+	}
+	else if (ingame.side == InGameSide::MULTIPLAYER_CLIENT)
+	{
+		// Add tech level widget
+		addTechLevelMultibuttonWidget();
 	}
 
 	// cancel
@@ -5262,6 +5272,11 @@ static void disableMultiButs()
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->disable();  // camapign subtype.
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->disable();  // pow levels
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->disable();
+		auto psTechLevel = widgGetFromID(psWScreen, MULTIOP_TECHLEVEL);
+		if (psTechLevel)
+		{
+			((MultichoiceWidget *)psTechLevel)->disable();
+		}
 	}
 }
 
