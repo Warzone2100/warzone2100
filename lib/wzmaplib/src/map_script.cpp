@@ -35,6 +35,10 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
+#if defined(__clang__) && defined(__clang_major__) && __clang_major__ >= 19
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-mismatch"
+#endif
 #if defined(_MSC_VER)
 __pragma(warning( push ))
 __pragma(warning( disable : 4191 )) // disable "warning C4191: 'type cast': unsafe conversion from 'JSCFunctionMagic (__cdecl *)' to 'JSCFunction (__cdecl *)'"
@@ -43,6 +47,9 @@ __pragma(warning( disable : 4191 )) // disable "warning C4191: 'type cast': unsa
 #include "quickjs-limitedcontext.h"
 #if defined(_MSC_VER)
 __pragma(warning( pop ))
+#endif
+#if defined(__clang__) && defined(__clang_major__) && __clang_major__ >= 19
+#pragma clang diagnostic pop
 #endif
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 8
 #pragma GCC diagnostic pop
