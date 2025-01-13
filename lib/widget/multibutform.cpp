@@ -115,6 +115,7 @@ void MultibuttonWidget::setLabel(char const *text)
 	attach(label = std::make_shared<W_LABEL>());
 	label->setString(text);
 	label->setCacheNeverExpires(true);
+	label->setCanTruncate(true);
 
 	geometryChanged();
 }
