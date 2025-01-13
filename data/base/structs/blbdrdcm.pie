@@ -1,6 +1,8 @@
-PIE 3
+PIE 4
 TYPE 200
-TEXTURE 0 page-8-player-buildings-bases.png 0 0
+TEXTURE 0 page-8-player-buildings-bases.png
+TEXTURE 1 page-8-player-buildings-bases-urban.png
+TEXTURE 2 page-8-player-buildings-bases-rockies.png
 LEVELS 1
 LEVEL 1
 POINTS 4
