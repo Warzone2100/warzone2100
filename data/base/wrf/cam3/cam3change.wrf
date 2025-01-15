@@ -10,8 +10,6 @@ directory	"texpages"
 file		TERTILES	"tertilesc3hw"
 file		TEXPAGE	"page-30-features-rockies.png"
 file		TEXPAGE	"page-7-barbarians-kevlar.png"
-file		TEXPAGE	"page-8-player-buildings-bases-rockies.png"
-file		TEXPAGE	"page-9-player-buildings-bases-rockies.png"
 /* These come from ../vidmem3.wrf */
 file		TEXPAGE	"page-25-sky-urban.png"
 file		TEXPAGE	"page-80-water-1.png"
@@ -26,4 +24,3 @@ file		TEXPAGE	"page-105-snow-rockies.png"
 file		TEXPAGE	"page-106-snowrock-rockies.png"
 file		TEXPAGE	"page-107-brown-earth-rockies.png"
 file		TEXPAGE	"page-108-snowcliff-rockies.png"
-
