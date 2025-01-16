@@ -60,6 +60,7 @@ public:
 		enable(false);
 	}
 	void setGap(int gap);
+	void setOuterPaddingX(int left, int right);
 	int currentValue() const
 	{
 		return currentValue_;
@@ -83,6 +84,8 @@ protected:
 	int currentValue_;
 	bool disabled;
 	int gap_;
+	int outerPaddingLeft_;
+	int outerPaddingRight_;
 	bool lockCurrent;
 	ButtonAlignment butAlign = ButtonAlignment::RIGHT_ALIGN;
 	std::vector<W_ON_CHOOSE_FUNC> onChooseHandlers;

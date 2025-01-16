@@ -35,6 +35,8 @@ MultibuttonWidget::MultibuttonWidget(int value)
 	, currentValue_(value)
 	, disabled(false)
 	, gap_(3)
+	, outerPaddingLeft_(0)
+	, outerPaddingRight_(0)
 	, lockCurrent(false)
 {
 }
@@ -46,7 +48,7 @@ void MultibuttonWidget::display(int xOffset, int yOffset)
 
 void MultibuttonWidget::geometryChanged()
 {
-	int s = width() - gap_;
+	int s = width() - gap_ - outerPaddingRight_;
 	switch (butAlign)
 	{
 		case ButtonAlignment::CENTER_ALIGN:
@@ -68,7 +70,8 @@ void MultibuttonWidget::geometryChanged()
 	}
 	if (label != nullptr)
 	{
-		label->setGeometry(gap_, 0, s - gap_, height());
+		int labelX0 = outerPaddingLeft_ + gap_;
+		label->setGeometry(labelX0, 0, s - labelX0, height());
 	}
 }
 
@@ -175,6 +178,18 @@ void MultibuttonWidget::setGap(int gap)
 	}
 
 	gap_ = gap;
+	geometryChanged();
+}
+
+void MultibuttonWidget::setOuterPaddingX(int left, int right)
+{
+	if (left == outerPaddingLeft_ && right == outerPaddingRight_)
+	{
+		return;
+	}
+
+	outerPaddingLeft_ = left;
+	outerPaddingRight_ = right;
 	geometryChanged();
 }
 
