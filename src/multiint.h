@@ -158,6 +158,8 @@ void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 void displayLobbyDisabledNotification();
 
+void multiLobbyRandomizeOptions();
+
 bool SendColourRequest(UBYTE player, UBYTE col);
 
 void handleAutoReadyRequest();
@@ -264,12 +266,12 @@ bool autoBalancePlayersCmd();
 #define MULTIOP_OPTIONSW		284
 #define MULTIOP_OPTIONSH		MULTIOP_PLAYERSH
 
-#define MULTIOP_EDITBOXW		196
+#define MULTIOP_EDITBOXW		201
 #define	MULTIOP_EDITBOXH		30
 
 #define MULTIOP_SEARCHBOXH		15
 
-#define	MULTIOP_BLUEFORMW		226
+#define	MULTIOP_BLUEFORMW		231
 
 #define	MROW1					4
 #define	MROW2					MROW1+MULTIOP_EDITBOXH
@@ -278,7 +280,7 @@ bool autoBalancePlayersCmd();
 #define MROW5					MROW4+38
 #define	MROW6					MROW5+29
 
-#define MCOL0					50
+#define MCOL0					45
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
 #define MCOL2					(MCOL1+38)
 #define MCOL3					(MCOL2+38)
@@ -290,13 +292,8 @@ bool autoBalancePlayersCmd();
 #define MULTIOP_GNAME			10255
 #define MULTIOP_MAP_ICON		10258
 #define MULTIOP_MAP				10259
-#define MULTIOP_MAP_MOD			21013	// Warning, do not use sequential numbers until code is fixed.
-#define MULTIOP_MAP_RANDOM      21014
 
 #define MULTIOP_REFRESH			10275
-
-#define MULTIOP_HOST			10276
-#define MULTIOP_HOSTX			5
 
 #define MULTIOP_FILTER_TOGGLE   30277
 
@@ -329,20 +326,13 @@ bool autoBalancePlayersCmd();
 #define MULTIOP_GAMETYPE		10294
 #define MULTIOP_POWER			10296
 #define MULTIOP_ALLIANCES		10298
-#define MULTIOP_RANDOM			10299
 #define MULTIOP_BASETYPE		10300
 #define MULTIOP_TECHLEVEL		10301
 
-#define MULTIOP_MAP_PREVIEW 920000
-
-#define MULTIOP_PASSWORD	920010
-#define MULTIOP_PASSWORD_BUT 920012
-#define MULTIOP_PASSWORD_EDIT 920013
-
 #define MULTIOP_NO_SOMETHING            10331
-#define MULTIOP_NO_SOMETHINGX           3
+#define MULTIOP_NO_SOMETHINGX           2
 #define MULTIOP_NO_SOMETHINGY           MROW5
-#define MULTIOP_ICON_LIMITS_X2		41
+#define MULTIOP_ICON_LIMITS_X2		39
 #define MULTIOP_ICON_LIMITS_Y2		182
 
 #define MULTIOP_COLOUR_START		10332

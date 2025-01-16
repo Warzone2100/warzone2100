@@ -2379,12 +2379,10 @@ bool recvMapFileData(NETQUEUE queue)
 			}
 			addConsoleMessage(buf,  DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			game.isMapMod = true;
-			widgReveal(psWScreen, MULTIOP_MAP_MOD);
 		}
 		if (mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0].c_str()))
 		{
 			game.isRandom = true;
-			widgReveal(psWScreen, MULTIOP_MAP_RANDOM);
 		}
 
 		loadMapPreview(false);

@@ -472,6 +472,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	{
 		multiClearHostRequestMoveToPlayer(playerIndex);
 		multiSyncResetPlayerChallenge(playerIndex);
+		resetMultiOptionPrefValues(playerIndex);
 	}
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
