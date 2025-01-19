@@ -612,6 +612,10 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 
 		/* Calculate how much of the string can appear in the box */
 		fitStringEnd();
+		if (printStart > 0)
+		{
+			insPos = aText.length();
+		}
 
 		/* Clear the input buffer */
 		inputClearBuffer();
