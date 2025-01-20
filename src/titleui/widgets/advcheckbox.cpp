@@ -61,7 +61,16 @@ int32_t WzAdvCheckbox::idealWidth()
 
 int32_t WzAdvCheckbox::idealHeight()
 {
-	return verticalPadding + std::max<int32_t>(wzText.lineSize(), imageDimensions) + verticalPadding + descriptionWidget->height() + verticalPadding;
+	int result = verticalPadding + std::max<int32_t>(wzText.lineSize(), imageDimensions);
+
+	int descriptionHeight = descriptionWidget->height();
+	if (descriptionHeight > 0)
+	{
+		result += verticalPadding + descriptionWidget->height();
+	}
+
+	result += verticalPadding;
+	return result;
 }
 
 void WzAdvCheckbox::highlight(W_CONTEXT *psContext)
