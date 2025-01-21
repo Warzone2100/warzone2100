@@ -115,10 +115,31 @@ int32_t MultibuttonWidget::idealHeight()
 
 void MultibuttonWidget::setLabel(char const *text)
 {
-	attach(label = std::make_shared<W_LABEL>());
-	label->setString(text);
-	label->setCacheNeverExpires(true);
-	label->setCanTruncate(true);
+	if (label)
+	{
+		detach(label);
+	}
+	auto newLabel = std::make_shared<W_LABEL>();
+	attach(newLabel);
+	newLabel->setString(text);
+	newLabel->setCacheNeverExpires(true);
+	newLabel->setCanTruncate(true);
+	label = newLabel;
+
+	geometryChanged();
+}
+
+void MultibuttonWidget::setLabel(const std::shared_ptr<WIDGET>& widget)
+{
+	if (label)
+	{
+		detach(label);
+	}
+	if (widget)
+	{
+		attach(widget);
+	}
+	label = widget;
 
 	geometryChanged();
 }
@@ -132,10 +153,38 @@ void MultibuttonWidget::addButton(int value, const std::shared_ptr<W_BUTTON>& bu
 	button->addOnClickHandler([value](W_BUTTON& button) {
 		auto pParent = std::static_pointer_cast<MultibuttonWidget>(button.parent());
 		assert(pParent != nullptr);
-		pParent->choose(value);
+		pParent->internalHandleButtonClick(value);
 	});
 
 	geometryChanged();
+}
+
+void MultibuttonWidget::clearButtons()
+{
+	for (const auto& it : buttons)
+	{
+		detach(it.first);
+	}
+	buttons.clear();
+
+	geometryChanged();
+}
+
+size_t MultibuttonWidget::numButtons() const
+{
+	return buttons.size();
+}
+
+std::shared_ptr<W_BUTTON> MultibuttonWidget::getButtonByValue(int value)
+{
+	auto it = std::find_if(buttons.cbegin(), buttons.cend(), [value](const std::pair<std::shared_ptr<W_BUTTON>, int>& it) -> bool {
+		return it.second == value;
+	});
+	if (it == buttons.cend())
+	{
+		return nullptr;
+	}
+	return it->first;
 }
 
 void MultibuttonWidget::setButtonMinClickInterval(UDWORD interval)
@@ -193,9 +242,33 @@ void MultibuttonWidget::setOuterPaddingX(int left, int right)
 	geometryChanged();
 }
 
+void MultibuttonWidget::setCanChooseHandler(const W_CAN_CHOOSE_FUNC& canChooseFunc)
+{
+	canChooseHandler = canChooseFunc;
+}
+
 void MultibuttonWidget::addOnChooseHandler(const W_ON_CHOOSE_FUNC& onChooseFunc)
 {
 	onChooseHandlers.push_back(onChooseFunc);
+}
+
+void MultibuttonWidget::internalHandleButtonClick(int value)
+{
+	if (value == currentValue_ && lockCurrent)
+	{
+		return;
+	}
+
+	if (canChooseHandler)
+	{
+		if (!canChooseHandler(*this, value))
+		{
+			// abort change
+			return;
+		}
+	}
+
+	choose(value);
 }
 
 void MultibuttonWidget::choose(int value)
