@@ -38,7 +38,7 @@ std::shared_ptr<WzAdvCheckbox> WzAdvCheckbox::make(const WzString& displayName, 
 
 void WzAdvCheckbox::recalcIdealWidth()
 {
-	cachedIdealWidth = horizontalPadding + imageDimensions + (horizontalPadding * 2) + iV_GetTextWidth(pText, FontID) + horizontalPadding;
+	cachedIdealWidth = outerHorizontalPadding + imageDimensions + innerHorizontalPadding + iV_GetTextWidth(pText, FontID) + outerHorizontalPadding;
 }
 
 void WzAdvCheckbox::initialize(const WzString& displayName, const WzString& description)
@@ -61,15 +61,15 @@ int32_t WzAdvCheckbox::idealWidth()
 
 int32_t WzAdvCheckbox::idealHeight()
 {
-	int result = verticalPadding + std::max<int32_t>(wzText.lineSize(), imageDimensions);
+	int result = outerVerticalPadding + std::max<int32_t>(wzText.lineSize(), imageDimensions);
 
 	int descriptionHeight = descriptionWidget->height();
 	if (descriptionHeight > 0)
 	{
-		result += verticalPadding + descriptionWidget->height();
+		result += innerVerticalPadding + descriptionWidget->height();
 	}
 
-	result += verticalPadding;
+	result += outerVerticalPadding;
 	return result;
 }
 
@@ -103,6 +103,30 @@ void WzAdvCheckbox::setIsChecked(bool val)
 	checked = val;
 }
 
+void WzAdvCheckbox::setOuterHorizontalPadding(int padding)
+{
+	outerHorizontalPadding = padding;
+	recalcIdealWidth();
+}
+
+void WzAdvCheckbox::setInnerHorizontalPadding(int padding)
+{
+	innerHorizontalPadding = padding;
+	recalcIdealWidth();
+}
+
+void WzAdvCheckbox::setOuterVerticalPadding(int padding)
+{
+	outerVerticalPadding = padding;
+	recalcIdealWidth();
+}
+
+void WzAdvCheckbox::setInnerVerticalPadding(int padding)
+{
+	innerVerticalPadding = padding;
+	recalcIdealWidth();
+}
+
 /* Respond to a mouse button up */
 void WzAdvCheckbox::released(W_CONTEXT *context, WIDGET_KEY key)
 {
@@ -126,9 +150,9 @@ void WzAdvCheckbox::setString(WzString string)
 void WzAdvCheckbox::geometryChanged()
 {
 	// reposition description paragraph beneath the image and line of text
-	int descX0 = horizontalPadding + imageDimensions + (horizontalPadding * 2);
-	int descY0 = verticalPadding + std::max<int32_t>(wzText.lineSize(), imageDimensions) + verticalPadding;
-	descriptionWidget->setGeometry(descX0, descY0, width() - descX0 - horizontalPadding, height() - descY0 - verticalPadding); // while we specify a height, the paragraph widget will calculate and set its to its needed full height, given the supplied width
+	int descX0 = outerHorizontalPadding + imageDimensions + innerHorizontalPadding;
+	int descY0 = outerVerticalPadding + std::max<int32_t>(wzText.lineSize(), imageDimensions) + innerVerticalPadding;
+	descriptionWidget->setGeometry(descX0, descY0, width() - descX0 - outerHorizontalPadding, height() - descY0 - outerVerticalPadding); // while we specify a height, the paragraph widget will calculate and set its to its needed full height, given the supplied width
 }
 
 void WzAdvCheckbox::display(int xOffset, int yOffset)
@@ -149,7 +173,7 @@ void WzAdvCheckbox::display(int xOffset, int yOffset)
 	}
 	wzText.setText(pText, fontID);
 
-	int availableButtonTextWidth = w - (horizontalPadding * 2) - (imageDimensions + (horizontalPadding * 2));
+	int availableButtonTextWidth = w - (outerHorizontalPadding * 2) - (imageDimensions + innerHorizontalPadding);
 	if (wzText.width() > availableButtonTextWidth)
 	{
 		// text would exceed the bounds of the button area
@@ -179,10 +203,11 @@ void WzAdvCheckbox::display(int xOffset, int yOffset)
 		textColor.byte.a = (textColor.byte.a / 2);
 	}
 
-	int textX0 = x0 + horizontalPadding + imageDimensions + (horizontalPadding * 2);
-	int textY0 = y0 + verticalPadding - wzText.aboveBase();
+	int textXOffset = outerHorizontalPadding + imageDimensions + innerHorizontalPadding;
+	int textX0 = x0 + textXOffset;
+	int textY0 = y0 + outerVerticalPadding - wzText.aboveBase();
 
-	const int maxTextDisplayableWidth = w - (horizontalPadding * 2);
+	const int maxTextDisplayableWidth = w - textXOffset - outerHorizontalPadding;
 	int maxDisplayableMainTextWidth = maxTextDisplayableWidth;
 	bool isTruncated = maxDisplayableMainTextWidth < wzText.width();
 	if (isTruncated)
@@ -197,10 +222,14 @@ void WzAdvCheckbox::display(int xOffset, int yOffset)
 	}
 
 	// Draw the image to the left
-	int imgPosX0 = x0 + horizontalPadding;
-	int imgPosY0 = y0 + verticalPadding + (wzText.lineSize() - imageDimensions) / 2;
+	int imgPosX0 = x0 + outerHorizontalPadding;
+	int imgPosY0 = y0 + outerVerticalPadding + (wzText.lineSize() - imageDimensions) / 2;
 	PIELIGHT imgColor = (isHighlight) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
-	if (isDown)
+	if (isDisabled)
+	{
+		imgColor.byte.a = (imgColor.byte.a / 2);
+	}
+	else if (isDown)
 	{
 		imgColor = WZCOL_TEXT_DARK;
 	}
