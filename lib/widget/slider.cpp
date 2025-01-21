@@ -191,7 +191,10 @@ bool W_SLIDER::capturesMouseDrag(WIDGET_KEY)
 
 void W_SLIDER::mouseDragged(WIDGET_KEY, W_CONTEXT *, W_CONTEXT *psContext)
 {
-	updateSliderFromMousePosition(psContext);
+	if (isEnabled() && DragEnabled)
+	{
+		updateSliderFromMousePosition(psContext);
+	}
 }
 
 void W_SLIDER::updateSliderFromMousePosition(W_CONTEXT* psContext)
