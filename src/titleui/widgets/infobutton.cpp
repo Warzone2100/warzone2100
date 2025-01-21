@@ -21,50 +21,17 @@
  */
 
 #include "infobutton.h"
-#include "src/frontend.h"
 #include "src/frend.h"
-#include "lib/widget/widget.h"
-#include "lib/widget/label.h"
-#include "lib/ivis_opengl/pieblitfunc.h"
+
+WzInfoButton::WzInfoButton()
+{ }
 
 std::shared_ptr<WzInfoButton> WzInfoButton::make()
 {
 	class make_shared_enabler: public WzInfoButton {};
 	auto widget = std::make_shared<make_shared_enabler>();
+	widget->setImage(IMAGE_INFO_CIRCLE);
+	widget->setBorderDrawMode(WzFrontendImageButton::BorderDrawMode::Highlighted);
+	widget->setPadding(0, 0);
 	return widget;
-}
-
-void WzInfoButton::setImageDimensions(int imageSize)
-{
-	imageDimensions = imageSize;
-}
-
-int32_t WzInfoButton::idealHeight()
-{
-	return imageDimensions;
-}
-
-void WzInfoButton::display(int xOffset, int yOffset)
-{
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-
-	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool isDisabled = (getState() & WBUT_DISABLE) != 0;
-	bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
-
-	if (isHighlight)
-	{
-		// Display highlight rect
-		int highlightRectDimensions = std::max(std::min<int>(width(), height()), imageDimensions + 2);
-		int boxX0 = x0 + (width() - highlightRectDimensions) / 2;
-		int boxY0 = y0 + (height() - highlightRectDimensions) / 2;
-		iV_Box(boxX0, boxY0, boxX0 + highlightRectDimensions + 1, boxY0 + highlightRectDimensions + 1, (isDown) ? imageColorHighlighted : imageColor);
-	}
-
-	// Display the info icon, centered
-	int imgPosX0 = x0 + (width() - imageDimensions) / 2;
-	int imgPosY0 = y0 + (height() - imageDimensions) / 2;
-	PIELIGHT imgColor = (isHighlight) ? imageColorHighlighted : imageColor;
-	iV_DrawImageFileAnisotropicTint(FrontImages, IMAGE_INFO_CIRCLE, imgPosX0, imgPosY0, Vector2f(imageDimensions, imageDimensions), imgColor);
 }
