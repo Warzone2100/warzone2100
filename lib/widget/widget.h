@@ -387,9 +387,6 @@ SWORD WidgGetClickedAudioID();
 // error ID
 SWORD WidgGetErrorAudioID();
 
-/** Enable or disable all sliders. */
-void sliderEnableDrag(bool Enable);
-
 void setWidgetsStatus(bool var);
 bool getWidgetsStatus();
 
