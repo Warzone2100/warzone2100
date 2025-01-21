@@ -34,6 +34,10 @@ protected:
 public:
 	static std::shared_ptr<WzAdvCheckbox> make(const WzString& displayName, const WzString& description);
 	void setImageDimensions(int imageSize);
+	void setOuterHorizontalPadding(int padding);
+	void setInnerHorizontalPadding(int padding);
+	void setOuterVerticalPadding(int padding);
+	void setInnerVerticalPadding(int padding);
 	bool isChecked() const;
 	void setIsChecked(bool val);
 public:
@@ -54,7 +58,9 @@ private:
 	int imageDimensions = 16;
 	int cachedIdealWidth = 0;
 	int lastWidgetWidth = 0;
-	int horizontalPadding = 5;
-	int verticalPadding = 5;
+	int outerHorizontalPadding = 5;
+	int innerHorizontalPadding = 10;
+	int outerVerticalPadding = 5;
+	int innerVerticalPadding = 5;
 	bool checked = false;
 };
