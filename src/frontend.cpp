@@ -627,8 +627,6 @@ bool runMultiPlayerMenu()
 // Options Menu
 void startOptionsMenu()
 {
-	sliderEnableDrag(true);
-
 	addBackdrop();
 	addTopForm(false);
 	addBottomForm();
@@ -3989,11 +3987,12 @@ static std::shared_ptr<W_SLIDER> makeFESlider(UDWORD id, UDWORD parent, UDWORD s
 	return slider;
 }
 
-void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
+std::shared_ptr<W_SLIDER> addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
 	auto slider = makeFESlider(id, parent, stops, pos);
 	slider->move(x, y);
 	widgGetFromID(psWScreen, parent)->attach(slider);
+	return slider;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

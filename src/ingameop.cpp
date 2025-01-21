@@ -301,7 +301,6 @@ static bool _intAddInGameOptions()
 
 bool intAddInGameOptions()
 {
-	sliderEnableDrag(true);
 	return _intAddInGameOptions();
 }
 
