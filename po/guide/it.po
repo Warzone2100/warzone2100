@@ -1,0 +1,723 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: warzone2100\n"
+"Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
+"POT-Creation-Date: 2024-06-12 03:55+0000\n"
+"PO-Revision-Date: 2025-01-07 02:28\n"
+"Last-Translator: \n"
+"Language-Team: Italian\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Project-ID: 354665\n"
+"X-Crowdin-Language: it\n"
+"X-Crowdin-File: /master/po/guide/warzone2100_guide.pot\n"
+"X-Crowdin-File-ID: 360\n"
+
+msgid "Artifacts"
+msgstr "Artefatti"
+
+msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
+msgstr "Man mano che progredisci attraverso la campagna, raccoglierai degli Artefatti dalle basi nemiche (e da unità nemici specifiche)."
+
+msgid "These will unlock valuable technologies that you can research in a Research Facility."
+msgstr "Questi sbloccheranno tecnologie preziose che potrai ricercare in un Centro di Ricerca."
+
+msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
+msgstr "Gli artefatti sono piccole scatole bianche con un indicatore verde sopra, e possono essere raccolti muovendo qualsiasi unità abbastanza vicino."
+
+msgid "All artifacts must be picked up as part of each level's victory conditions."
+msgstr "Tutti gli artefatti devono essere raccolti come parte delle condizioni di vittoria di ogni livello."
+
+msgid "Backstory"
+msgstr "Retroscena"
+
+msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
+msgstr "Alla fine del 21° secolo, la NASDA (Agenzia di Difesa Strategica Nord Americana o North American Strategic Defense Agency) ha sviluppato e dispiegato un massiccio sistema di difesa missilistica, compresa una rete di satelliti dotati di armi nucleari e di siti di lancio a terra."
+
+msgid "However, during a routine maintenance check, something went terribly wrong..."
+msgstr "Tuttavia, durante un controllo di manutenzione ordinaria, qualcosa è andato terribilmente storto..."
+
+msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
+msgstr ""
+
+msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
+msgstr ""
+
+msgid "Less than a million people survived the Collapse."
+msgstr "Meno di un milione di persone sopravvissero al Collapse."
+
+msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
+msgstr ""
+
+msgid "## Present Day:"
+msgstr "## Oggi:"
+
+msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
+msgstr ""
+
+msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
+msgstr ""
+
+msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
+msgstr ""
+
+msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
+msgstr ""
+
+msgid "- Beta team is sent to the remains of Chicago"
+msgstr ""
+
+msgid "- Gamma team is sent into the northern Rockies in Colorado"
+msgstr ""
+
+msgid "Command Panel"
+msgstr "Pannello di comando"
+
+msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
+msgstr ""
+
+msgid "The middle / central button closes any open command interface."
+msgstr ""
+
+msgid "Intelligence Display"
+msgstr ""
+
+msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
+msgstr ""
+
+msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
+msgstr ""
+
+msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
+msgstr ""
+
+msgid "Using the Mission Timer"
+msgstr ""
+
+msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
+msgstr ""
+
+msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
+msgstr ""
+
+msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
+msgstr ""
+
+msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
+msgstr ""
+
+msgid "Power"
+msgstr "Energia"
+
+msgid "In Warzone 2100, power is your key resource."
+msgstr "In Warzone 2100, l'energia è la tua risorsa chiave."
+
+msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
+msgstr ""
+
+msgid "Power is generated by Power Generators that are fed by Oil Derricks."
+msgstr ""
+
+msgid "Researching Technology"
+msgstr "Ricerca tecnologia"
+
+msgid "Researching technologies is accomplished using Research Facilities."
+msgstr ""
+
+msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
+msgstr ""
+
+msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
+msgstr ""
+
+msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
+msgstr ""
+
+msgid "Completing research of a new technology may:"
+msgstr ""
+
+msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
+msgstr ""
+
+msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
+msgstr ""
+
+msgid "- Enable the research of additional technologies"
+msgstr ""
+
+msgid "General"
+msgstr "Generale"
+
+msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
+msgstr "In Warzone 2100, comandi le forze di \"The Project\" in una battaglia per ricostruire il mondo dopo che l'umanità è quasi stata distrutta dai missili nucleari."
+
+msgid "This guide will help walk you through key facets of the game."
+msgstr "Questa guida ti illustrerà gli aspetti chiave del gioco."
+
+msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
+msgstr "(Se stai giocando la campagna, nuovi argomenti della guida potrebbero essere sbloccati man mano che avanzi nel gioco.)"
+
+msgid "Building Structures"
+msgstr ""
+
+msgid "Click the \"Build\" button on the Command Panel."
+msgstr ""
+
+msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
+msgstr ""
+
+msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
+msgstr ""
+
+msgid "Move the silhouette by moving the input device."
+msgstr ""
+
+msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
+msgstr ""
+
+msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
+msgstr ""
+
+msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
+msgstr ""
+
+msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
+msgstr ""
+
+msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
+msgstr ""
+
+msgid "Demolishing Structures"
+msgstr ""
+
+msgid "Demolishing a building is almost as simple as building one."
+msgstr ""
+
+msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
+msgstr ""
+
+msgid "A unit will move to the building and destroy it."
+msgstr ""
+
+msgid "Demolished structures return half the power used to build the structure."
+msgstr ""
+
+msgid "Factory"
+msgstr ""
+
+msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr ""
+
+msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
+msgstr ""
+
+msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
+msgstr ""
+
+msgid "Command Center"
+msgstr ""
+
+msgid "The Command Center is the headquarters of your base."
+msgstr ""
+
+msgid "It provides access to the mini-map / radar, and the ability to design units."
+msgstr ""
+
+msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
+msgstr ""
+
+msgid "Then, click where you want your builders to construct it."
+msgstr ""
+
+msgid "Structure Modules"
+msgstr ""
+
+msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
+msgstr ""
+
+msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
+msgstr ""
+
+msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
+msgstr ""
+
+msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
+msgstr ""
+
+msgid "Upgrade Effects:"
+msgstr ""
+
+msgid "- Power Generator modules increase the rate of power generation"
+msgstr ""
+
+msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
+msgstr ""
+
+msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
+msgstr ""
+
+msgid "Oil Derrick"
+msgstr ""
+
+msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
+msgstr ""
+
+msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
+msgstr ""
+
+msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
+msgstr ""
+
+msgid "Power Generator"
+msgstr ""
+
+msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
+msgstr ""
+
+msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
+msgstr ""
+
+msgid "Rally Point"
+msgstr ""
+
+msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
+msgstr ""
+
+msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
+msgstr ""
+
+msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
+msgstr ""
+
+msgid "Repair Facility"
+msgstr ""
+
+msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
+msgstr ""
+
+msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
+msgstr ""
+
+msgid "Research Facility"
+msgstr ""
+
+msgid "Research Facilities are required in order to research new technologies."
+msgstr ""
+
+msgid "Each Research Facility can research one technology at a time."
+msgstr ""
+
+msgid "VTOL Factory"
+msgstr ""
+
+msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
+msgstr ""
+
+msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr ""
+
+msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
+msgstr ""
+
+msgid "Structures"
+msgstr ""
+
+msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
+msgstr ""
+
+msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
+msgstr ""
+
+msgid "Attack Range"
+msgstr ""
+
+msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
+msgstr ""
+
+msgid "- Optimum Range: Fires at the most accurate range"
+msgstr ""
+
+msgid "- Short Range: Moves to short range and attacks"
+msgstr ""
+
+msgid "- Long Range: Attacks at long range (default)"
+msgstr ""
+
+msgid "Firing Mode"
+msgstr ""
+
+msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
+msgstr ""
+
+msgid "- Fire At Will: Fires at any enemy (default)"
+msgstr ""
+
+msgid "- Return Fire: Only fire if fired at"
+msgstr ""
+
+msgid "- Do Not Fire: Units will not fire"
+msgstr ""
+
+msgid "Movement"
+msgstr ""
+
+msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
+msgstr ""
+
+msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
+msgstr ""
+
+msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
+msgstr ""
+
+msgid "- Pursue: Pursue enemy"
+msgstr ""
+
+msgid "- Guard: Stay near an area or structure. (default)"
+msgstr ""
+
+msgid "- Hold Position: Do not move under any circumstances"
+msgstr ""
+
+msgid "Recycling"
+msgstr ""
+
+msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it."
+msgstr ""
+
+msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
+msgstr ""
+
+msgid "The unit’s experience level will be placed in the next unit that is manufactured."
+msgstr ""
+
+msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
+msgstr ""
+
+msgid "Retreating"
+msgstr ""
+
+msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
+msgstr ""
+
+msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
+msgstr ""
+
+msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
+msgstr ""
+
+msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
+msgstr ""
+
+msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
+msgstr ""
+
+msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
+msgstr ""
+
+msgid "Return To"
+msgstr ""
+
+msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
+msgstr ""
+
+msgid "- Return for Repair: Unit will return to a Repair Facility"
+msgstr ""
+
+msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
+msgstr ""
+
+msgid "- Go To Transport: Unit will go to and board transport"
+msgstr ""
+
+msgid "Unit Orders"
+msgstr ""
+
+msgid "Right-click a unit or group of units to show their current Unit Orders."
+msgstr ""
+
+msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
+msgstr ""
+
+msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
+msgstr ""
+
+msgid "Building Units"
+msgstr ""
+
+msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
+msgstr ""
+
+msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
+msgstr ""
+
+msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
+msgstr ""
+
+msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
+msgstr ""
+
+msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
+msgstr ""
+
+msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
+msgstr ""
+
+msgid "Attaching Units"
+msgstr ""
+
+msgid "To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached."
+msgstr ""
+
+msgid "## Limits:"
+msgstr ""
+
+msgid "Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on."
+msgstr ""
+
+msgid "Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants."
+msgstr ""
+
+msgid "Detaching Units"
+msgstr ""
+
+msgid "To detach a unit from a Commander:"
+msgstr ""
+
+msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
+msgstr ""
+
+msgid "2. Give the unit a new order (eg. move)"
+msgstr ""
+
+msgid "Going for repairs, BRB"
+msgstr ""
+
+msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
+msgstr ""
+
+msgid "When it is done repairing, it will return to its Commander."
+msgstr ""
+
+msgid "Targeting"
+msgstr ""
+
+msgid "When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit."
+msgstr ""
+
+msgid "The attached units will have greater accuracy when firing."
+msgstr ""
+
+msgid "Commanders"
+msgstr ""
+
+msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
+msgstr ""
+
+msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
+msgstr ""
+
+msgid "They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
+msgstr ""
+
+msgid "Designing Units"
+msgstr ""
+
+msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
+msgstr ""
+
+msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
+msgstr ""
+
+msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
+msgstr ""
+
+msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
+msgstr ""
+
+msgid "Once you have designed a unit, you will need a Factory to build it."
+msgstr ""
+
+msgid "Experience & Ranks"
+msgstr ""
+
+msgid "Units gain experience when they successfully dispatch enemies."
+msgstr ""
+
+msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
+msgstr ""
+
+msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
+msgstr ""
+
+msgid "Units with higher experience levels can make all the difference in battle!"
+msgstr ""
+
+msgid "Repairing Units"
+msgstr ""
+
+msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
+msgstr ""
+
+msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
+msgstr ""
+
+msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
+msgstr ""
+
+msgid "CB Sensors"
+msgstr ""
+
+msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
+msgstr ""
+
+msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
+msgstr ""
+
+msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
+msgstr ""
+
+msgid "Un-Assigning"
+msgstr ""
+
+msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
+msgstr ""
+
+msgid "Multiple units can be selected by holding CTRL while clicking."
+msgstr ""
+
+msgid "Using Sensors"
+msgstr ""
+
+msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
+msgstr ""
+
+msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
+msgstr ""
+
+msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
+msgstr ""
+
+msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
+msgstr ""
+
+msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
+msgstr ""
+
+msgid "However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+msgstr ""
+
+msgid "Attacking"
+msgstr ""
+
+msgid "To attack with a VTOL, select it and click an enemy like normal."
+msgstr ""
+
+msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
+msgstr ""
+
+msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
+msgstr ""
+
+msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
+msgstr ""
+
+msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
+msgstr ""
+
+msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
+msgstr ""
+
+msgid "Defending Against VTOLs"
+msgstr ""
+
+msgid "What's that in the sky? ... It's a VTOL unit"
+msgstr ""
+
+msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
+msgstr ""
+
+msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
+msgstr ""
+
+msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
+msgstr ""
+
+msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
+msgstr ""
+
+msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+msgstr ""
+
+msgid "Designing VTOLs"
+msgstr ""
+
+msgid "Designing VTOL units is similar to designing ground units."
+msgstr ""
+
+msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
+msgstr ""
+
+msgid "You will then be able to select from the available VTOL Weapons."
+msgstr ""
+
+msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
+msgstr ""
+
+msgid "Weapons"
+msgstr ""
+
+msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
+msgstr ""
+
+msgid "VTOL versions of regular weapons do not need to be researched separately."
+msgstr ""
+
+msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
+msgstr ""
+
+msgid "VTOLs"
+msgstr ""
+
+msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
+msgstr ""
+
+msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
+msgstr ""
+
+msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
+msgstr ""
+
+msgid "Weapon Selection"
+msgstr ""
+
+msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
+msgstr ""
+
+msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
+msgstr ""
+
+msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
+msgstr ""
+
+msgid "Units"
+msgstr ""
+
+msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
+msgstr ""
+
+msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
+msgstr ""
+
+msgid "To be able to design units, a Command Center is required."
+msgstr ""
