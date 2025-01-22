@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"PO-Revision-Date: 2024-12-17 02:32\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -2940,7 +2940,7 @@ msgid "System locale"
 msgstr "Helyi rendszer"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "A porthozzárendelés létrehozása sikertelen"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
@@ -2952,7 +2952,7 @@ msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "A külső IP-címe: %s"
 
 msgid "Failed to create port mapping (timeout)"
 msgstr "A porthozzárendelés létrehozása sikertelen (időtúllépés)"
@@ -3280,7 +3280,7 @@ msgid "Armed with Cyborg Flamer"
 msgstr "Cyborg lángszóróval felszerelt"
 
 msgid "Armed with Cyborg Hyper Velocity Cannon"
-msgstr ""
+msgstr "Kiborg nagysebességű ágyúval felszerelt"
 
 msgid "Armed with Cyborg Machinegun"
 msgstr "Cyborg gépfegyverrel felszerelt"
@@ -3295,10 +3295,10 @@ msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr "Cyborg Scourge rakétakilövővel felszerelt"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr ""
+msgstr "Kiborg tankvadász rakétákkal felszerelt"
 
 msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
+msgstr "Kiborg termit lángszóróval felszerelt"
 
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Cyborg termit lángszóróval felszerelt"
@@ -3998,7 +3998,7 @@ msgid "Cyborg Superdense Thermal Armor"
 msgstr "Cyborg szupersűrű hőpáncél"
 
 msgid "Cyborg Tank Killer"
-msgstr ""
+msgstr "Kiborg tankvadász"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Cyborg hőpajzs Mk2"
@@ -4010,7 +4010,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "Cyborg hőpajzs"
 
 msgid "Cyborg Thermite"
-msgstr ""
+msgstr "Kiborg termit"
 
 msgid "Cyborg Transport Available"
 msgstr "Cyborg szállítóeszköz áll rendelkezésre"
@@ -4055,7 +4055,7 @@ msgid "Depleted uranium kinetic energy bullets"
 msgstr "Szegényített uránmagvas, kinetikus lőszer"
 
 msgid "Depleted Uranium MG Bullets Mk3"
-msgstr ""
+msgstr "Szegényített uránmagvas MG lőszer Mk3"
 
 msgid "Depleted Uranium MG Bullets"
 msgstr "Szegényített uránmagvas MG lőszer"
@@ -4242,7 +4242,7 @@ msgid "Flamer damage +25%"
 msgstr "Lángszóró sebzés +25%"
 
 msgid "Flamer Fast Loader"
-msgstr ""
+msgstr "Lángszóró gyorstöltő"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
@@ -6265,7 +6265,7 @@ msgid "Smashedwall"
 msgstr "Törött fal"
 
 msgid "Sniper Cyborg"
-msgstr ""
+msgstr "Mesterlövész kiborg"
 
 msgid "Speed: Fast"
 msgstr "Sebesség: gyors"
@@ -6512,7 +6512,7 @@ msgid "Thermite Bomb Bay"
 msgstr "Termitbomba szekrény"
 
 msgid "Thermite Cyborg"
-msgstr ""
+msgstr "Termit kiborg"
 
 msgid "Thermite Flamer Cyborg"
 msgstr "Thermitlángszórós Cyborg"
@@ -6804,7 +6804,7 @@ msgid "VTOL Heap Bomb Bay"
 msgstr "VTOL szőnyegbomba szekrény"
 
 msgid "VTOL Heavy Cannon"
-msgstr ""
+msgstr "VTOL nehéz löveg"
 
 msgid "VTOL Heavy Laser"
 msgstr "VTOL nehéz lézer"
@@ -7684,7 +7684,7 @@ msgid "On"
 msgstr "Be"
 
 msgid "Per Pixel"
-msgstr ""
+msgstr "Képpontonként"
 
 msgid "Lightmap"
 msgstr ""
@@ -7729,7 +7729,7 @@ msgid "Shadow filtering not available on this system."
 msgstr "Az árnyékszűrés nem érhető el ezen a rendszeren."
 
 msgid "Opacity: 50%"
-msgstr ""
+msgstr "Átlátszatlanság: 50%"
 
 msgid "* Takes effect on game restart"
 msgstr "* Játék újraindításakor effekteket bekapcsolja"
@@ -7777,7 +7777,7 @@ msgid "Groups Menu"
 msgstr "Csoportok menü"
 
 msgid "Options Button"
-msgstr ""
+msgstr "Beállítások gomb"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKA BEÁLLÍTÁS"
@@ -8093,10 +8093,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "%u csalt (hibakeresés menü), egy új droidja lett."
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Játékon belüli beállítások megnyitása"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Játékon belüli beállítások bezárása"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Elavult technika elrejtése"
@@ -8259,26 +8259,26 @@ msgid "End-Game"
 msgstr "Játék befejezése"
 
 msgid "Host"
-msgstr ""
+msgstr "Házigazda"
 
 msgid "Admin"
-msgstr ""
+msgstr "Adminisztrátor"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
-msgstr ""
+msgstr "%s (%s) erre változtatta %s játékos csapatát: %d"
 
 #, c-format
 msgid "%s (%s) changed position of player (%s) to: %d"
-msgstr ""
+msgstr "%s (%s) erre változtatta %s játékos pozícióját: %d"
 
 #, c-format
 msgid "%s (%s) changed color of player (%s) to: %s"
-msgstr ""
+msgstr "%s (%s) erre változtatta %s játékos színét: %s"
 
 #, c-format
 msgid "%s (%s) changed faction of player (%s) to: %s"
-msgstr ""
+msgstr "%s (%s) erre változtatta %s játékos frakcióját: %s"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Át tudna adni nekem valaki néhány egységet?"
@@ -8497,7 +8497,7 @@ msgid "Map Downloaded"
 msgstr "Térkép letöltve"
 
 msgid "Admin modified a setting"
-msgstr ""
+msgstr "Az adminisztrátor módosított egy beállítást"
 
 msgid "Bot Allies"
 msgstr "Bot szövetségesek"
@@ -8551,7 +8551,7 @@ msgid "Go Back"
 msgstr "Vissza"
 
 msgid "View Guide"
-msgstr ""
+msgstr "Útmutató megtekintése"
 
 msgid "Load Game"
 msgstr "Játék betöltése"
@@ -8610,30 +8610,30 @@ msgstr ""
 
 #, c-format
 msgid "Failure to load %zu game model(s)"
-msgstr ""
+msgstr "%zu játékmodell betöltése sikertelen"
 
 #, c-format
 msgid "Failure to load textures for %zu model(s)"
-msgstr ""
+msgstr "%zu játékmodell textúrájának betöltése sikertelen"
 
 #, c-format
 msgid "Failure to load model for %zu stat(s)"
 msgstr ""
 
 msgid "Warzone 2100 encountered error(s) loading game data:"
-msgstr ""
+msgstr "A Warzone 2100 hibákba ütközött a játékadatok betöltése során:"
 
 msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
 msgstr ""
 
 msgid "Loaded mod(s):"
-msgstr ""
+msgstr "Betöltött modok:"
 
 msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
 msgstr ""
 
 msgid "Error Loading Game Data"
-msgstr ""
+msgstr "Hiba a játékadatok betöltése során"
 
 msgid "Global Hotkeys"
 msgstr "Globális gyorsbillentyű"
@@ -9419,10 +9419,10 @@ msgid "Power overwhelming"
 msgstr "Elsöprő erő"
 
 msgid "A power fantasy!"
-msgstr ""
+msgstr "Hatalmi fantázia!"
 
 msgid "Taking things easy!"
-msgstr ""
+msgstr "Csak könnyedén!"
 
 msgid "Back to normality!"
 msgstr "Térj vissza a szabályokhoz!"
@@ -9431,7 +9431,7 @@ msgid "Getting tricky!"
 msgstr "Trükkös dolog!"
 
 msgid "In a nightmare!"
-msgstr ""
+msgstr "Rémálom!"
 
 msgid "Twice as nice!"
 msgstr "Kétszer jobb!"
@@ -9644,7 +9644,7 @@ msgid "QuickSave not allowed for multiplayer or tutorial games"
 msgstr "A gyors mentés nem engedélyezett a többjátékos vagy oktatójátékokban"
 
 msgid "QuickSave not allowed in Autosaves-Only mode"
-msgstr ""
+msgstr "A gyorsmentés nem engedélyezett a csak automatikus mentési módban"
 
 msgid "QuickSave failed"
 msgstr "Gyors mentés sikertelen"
@@ -9653,7 +9653,7 @@ msgid "QuickLoad not allowed for multiplayer or tutorial games"
 msgstr "A gyors betöltés nem engedélyezett a többjátékos vagy oktatójátékokban"
 
 msgid "QuickLoad not allowed in Autosaves-Only mode"
-msgstr ""
+msgstr "A gyorstöltés nem engedélyezett a csak automatikus mentési módban"
 
 msgid "QuickSave file does not exist yet"
 msgstr "A gyors mentési fájl még nem létezik"
@@ -10356,7 +10356,7 @@ msgid "Administrator has kicked you from the game."
 msgstr "A játékmester kirúgott a játékból."
 
 msgid "Search for map"
-msgstr ""
+msgstr "Pálya keresése"
 
 msgid "Any number of players"
 msgstr "Nincs meghatározott játékos szám"
@@ -10779,10 +10779,10 @@ msgid "Did not send message - free chat is disabled by host. Please use Quick Ch
 msgstr "Az üzenet nem lett elküldve – a házigazda letiltotta a szabad csevegést. Használd a gyors csevegést."
 
 msgid "See Also:"
-msgstr ""
+msgstr "Lásd még:"
 
 msgid "Game Guide"
-msgstr ""
+msgstr "Játékútmutató"
 
 msgid "Toggle Sidebar"
 msgstr ""
@@ -10866,30 +10866,30 @@ msgid "Synchronizing data with host ..."
 msgstr ""
 
 msgid "Waiting for correct join password"
-msgstr ""
+msgstr "Várakozás a helyes csatlakozási jelszóra"
 
 msgid "Attempting to connect"
-msgstr ""
+msgstr "Kapcsolódás megkísérlése"
 
 msgid "Establishing connection handshake"
-msgstr ""
+msgstr "Kapcsolódás kézfogásának elvégzése"
 
 msgid "Coordinating join with host"
-msgstr ""
+msgstr "Koordinálás a házigazdával"
 
 msgid "Join attempt failed"
-msgstr ""
+msgstr "A kapcsolódási kísérlet sikertelen"
 
 msgid "Host did not respond before timeout"
 msgstr ""
 
 #, c-format
 msgid "Failed at: [%s] - %s"
-msgstr ""
+msgstr "Sikertelen: [%s] – %s"
 
 #, c-format
 msgid "Failed at: [%s]"
-msgstr ""
+msgstr "Sikertelen: [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"
@@ -11148,26 +11148,26 @@ msgid "Tweak Options:"
 msgstr ""
 
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "Visszaállítás alapértelmezettre"
 
 msgid "Command the forces of The Project in a battle to rebuild the world"
-msgstr ""
+msgstr "Vezesse a Projekt erőit a csatába a világ újjáépítéséért"
 
 msgid "Warzone 2100 Universe"
-msgstr ""
+msgstr "A Warzone 2100 univerzum"
 
 msgid "WZ2100 Extended Universe"
-msgstr ""
+msgstr "A WZ2100 kibővített univerzum"
 
 msgid "Unique Universe"
-msgstr ""
+msgstr "Egyedi univerzum"
 
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "%s szükséges"
 
 msgid "Compatible"
-msgstr ""
+msgstr "Kompatibilis"
 
 #, c-format
 msgid "Compatible %s"
@@ -11180,13 +11180,13 @@ msgid "Grant power based on the remaining level timer, so there's no need to wai
 msgstr ""
 
 msgid "Classic Timers"
-msgstr ""
+msgstr "Klasszikus időzítők"
 
 msgid "Alter / disable timers on specific levels, like the original release. (Allows power-cheating.)"
 msgstr ""
 
 msgid "40 Unit Limit"
-msgstr ""
+msgstr "40 egységes korlát"
 
 msgid "Lower the player's unit limit to 40, matching the original PS1 release."
 msgstr ""

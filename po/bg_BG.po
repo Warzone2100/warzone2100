@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:06\n"
+"PO-Revision-Date: 2024-11-14 02:27\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -78,7 +78,7 @@ msgid "Take a scout force to investigate these signals."
 msgstr "Вземете разузнавателна сила и изследвайте тези сигнали."
 
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Използвайте камионите си, за да построите защити при ЗП."
+msgstr "Използвайте камионите си, за да построите защити при ЗК."
 
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
 msgstr "ОТДАЛЕЧЕНА МИСИЯ: Засечени вражески сигнали"
@@ -87,7 +87,7 @@ msgid "Scout the designated area for enemy research facilities."
 msgstr "Разузнайте обозначената местност за вражески изследователски съоражения."
 
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Продължете към ЗП №2. Засега не прихващайте врага."
+msgstr "Продължете към ЗК №2. Засега не прихващайте врага."
 
 msgid "TRANSPORT MISSION: Synaptic Link Location"
 msgstr "ОТДАЛЕЧЕНА МИСИЯ: Местоположение на невросвързочна технология"
@@ -156,7 +156,7 @@ msgid "The first two zones are now secure."
 msgstr "Първите две зони са вече подсигурени."
 
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "ДОКЛАДИ ОТ ЕКИПИТЕ НА ПРОЕКТА"
 
 msgid "TEAM BETA UPDATE"
 msgstr "НОВИНИ ОТ ЕКИП БЕТА"
@@ -192,10 +192,10 @@ msgid "Search for and recover any artifacts here."
 msgstr "Потърсете и приберете всякакви артефакти тук."
 
 msgid "ENEMY LZ"
-msgstr "ВРАЖЕСКА ЗП"
+msgstr "ВРАЖЕСКА ЗК"
 
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Разрушете тази ЗП, за да предотвратите вражески кацания."
+msgstr "Разрушете тази ЗК, за да предотвратите вражески кацания."
 
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
 msgstr "РАЗУЗНАВАТЕЛЕН ДОКЛАД НА БАЗА АЛФА: НЕКСУС"
@@ -204,7 +204,7 @@ msgid "New objective."
 msgstr "Нова цел."
 
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "Засякохме и изолирахме програма нашественик."
 
 msgid "Supplemental"
 msgstr "Допълнение"
@@ -273,7 +273,7 @@ msgid "Congratulations on defeating the New Paradigm, this sector is now secure.
 msgstr "Поздравления за разгрома на Новата Парадигма, този сектор вече е безопасен."
 
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr ""
+msgstr "Програмата нашественик на NEXUS бе намерена в системите на Новата Парадигма."
 
 msgid "We recorded two conversations with it, extracts follow..."
 msgstr "Записахме два разговора с нея, следват откъси..."
@@ -324,13 +324,13 @@ msgid "IN-FLIGHT BRIEFING"
 msgstr "ИНСТРУКТАЖ В ПОЛЕТ"
 
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
+msgstr "Група Бета търсят технология за Самолети с Вертикално Излитане и Кацане (СВиК)."
 
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
+msgstr "Смята се, че е в база отпреди Колапса в този район."
 
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "Група Бета под тежко нападение"
 
 msgid "BETA BASE MISSION: Hold at all costs"
 msgstr "МИСИЯ ЗА БАЗА БЕТА: Удръжте на всяка цена"
@@ -342,34 +342,34 @@ msgid "BETA BASE MISSION: Hold At All Costs"
 msgstr "МИСИЯ ЗА БАЗА БЕТА: Удръжте на всяка цена"
 
 msgid "We are detecting ground and aerial forces from the north."
-msgstr ""
+msgstr "Засичаме наземни и въздушни сили от север."
 
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr ""
+msgstr "Удръжте позицията и отблъснете нападенията, след което премахнете вражеската северна база."
 
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "ДЕСАНТНА МИСИЯ: Прехващане на военна колона."
 
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr ""
+msgstr "Данни от базата на Колектива показват присъствие на програмата нашественик на NEXUS."
 
 msgid "Before NEXUS switched itself off-line we accessed the following."
 msgstr "Преду НЕКСУС да се самоизключи ние успяхме да стигнем до следното."
 
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
+msgstr "Вражески командир прибира доставка от NEXUS на това местоположение."
 
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "Щом достигнете ЗК, премахнете командира и приберете пратката."
 
 msgid "Then return to the LZ."
-msgstr "После се върнете към ЗП."
+msgstr "После се върнете към ЗК."
 
 msgid "Disturbing news regarding NASDA."
 msgstr "Смущаващи новини относно НАСДА."
 
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "ДЕСАНТНА МИСИЯ: Потърсете и унищожете военна колона"
 
 msgid "The shipment you recovered was a decoy."
 msgstr "Пратката, която прибрахте, е била примамка."
@@ -384,7 +384,7 @@ msgid "Enemy VTOLs are likely to be flying close escort."
 msgstr "Възможно е да има ескорт от вражески СВиК."
 
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "ДЕСАНТНА МИСИЯ: Спасете цивилни от концлагер"
 
 msgid "The Collective are processing and exterminating civilians at this base."
 msgstr "Колективът обработват и заличават цивилни в тази база."
@@ -408,16 +408,16 @@ msgid "The location of the enemy airbase is here; this is your primary objective
 msgstr "Местоположението на вражеската въздушна база е тук; Това е главната ви цел."
 
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr ""
+msgstr "Унищожете всички сили на Колектива и приберете всички артефакти."
 
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr ""
+msgstr "ВТОРИЧНА МИСИЯ: Унищожете или отклонете вражески транспортьор"
 
 msgid "The Collective are rounding up all civilians in this area."
 msgstr "Колективът събират всички цивилни в тази зона."
 
 msgid "They are then flying them to an unknown location."
-msgstr ""
+msgstr "Пренасят ги по въздух до неизвестно местоположение."
 
 msgid "Destroy or drive off The Collective's transport."
 msgstr "Унищожете или подплашете транспортьора на Колектива."
@@ -426,16 +426,16 @@ msgid "Rescue as many civilians as possible."
 msgstr "Спасете колкото може повече цивилни."
 
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "ДЕСАНТНА МИСИЯ: Унищожете реактор"
 
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "От Колектива търсят данни за ядрени реактори."
 
 msgid "They must be stopped."
 msgstr "Те трябва да бъдат спрени."
 
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "Преминете от ЗК до реактора и го унищожете."
 
 msgid "Do not allow the Collective to bring the reactor on-line."
 msgstr "Не позволявайте на Колектива да задействат реактора."
@@ -447,10 +447,10 @@ msgid "Capture NASDA central before NEXUS and the Collective can use it."
 msgstr "Превземете централата на НАСДА преди НЕКСУС и Колективът да имат възможност да я използват."
 
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr ""
+msgstr "ДЕСАНТНА МИСИЯ: Спътников свързочен център"
 
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr ""
+msgstr "NEXUS търси функциониращи банки памет."
 
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
 msgstr ""
@@ -618,7 +618,7 @@ msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
 msgstr ""
 
 msgid "Team Alpha power transfer in progress."
-msgstr ""
+msgstr "Пренос на мощност от Екип Алфа..."
 
 msgid "Commander, after you left the Western Sector we recovered this artifact."
 msgstr "Командире, след като напуснахте Западния сектор, ние прибрахме този артефакт."
@@ -798,7 +798,7 @@ msgid "We are certain that NEXUS's core systems are located here."
 msgstr ""
 
 msgid "Establish an LZ."
-msgstr ""
+msgstr "Установете ЗК."
 
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
 msgstr ""
@@ -813,7 +813,7 @@ msgid "Scavenger Outpost"
 msgstr ""
 
 msgid "Power Resource"
-msgstr ""
+msgstr "Нефтен източник"
 
 msgid "Unknown Artifact"
 msgstr ""
@@ -903,16 +903,16 @@ msgid "Proximity Superbomb Turret"
 msgstr ""
 
 msgid "Bunker Blaster Cyborg"
-msgstr ""
+msgstr "Бункероунищножител Киборг"
 
 msgid "Jump Bunker Blaster"
-msgstr ""
+msgstr "Скачач Бункероунищожител"
 
 msgid "Jump Heavy Gunner"
 msgstr ""
 
 msgid "Jump Lancer"
-msgstr ""
+msgstr "Скачач Копиеносец"
 
 msgid "Jump Assault Gunner"
 msgstr "Скачач Щурмови картечар"
@@ -951,7 +951,7 @@ msgid "Flamer Guard Tower"
 msgstr ""
 
 msgid "Lancer Guard Tower"
-msgstr ""
+msgstr "Стражева кула с Копиеносец"
 
 msgid "Flamer Hardpoint"
 msgstr "Укрепена точка с огнехвъргачка"
@@ -1128,7 +1128,7 @@ msgid "Advanced Warfare"
 msgstr ""
 
 msgid "Bunker Blaster"
-msgstr ""
+msgstr "Бункероунищожител"
 
 msgid "Cyborg Materials Improved"
 msgstr ""
@@ -1155,7 +1155,7 @@ msgid "New Cyborg Available"
 msgstr "Наличен е нов Киборг"
 
 msgid "Armed with Bunker Buster rocket"
-msgstr ""
+msgstr "Въоражен с ракета Бункероубиец"
 
 msgid "Body Points: Medium"
 msgstr ""
@@ -1263,7 +1263,7 @@ msgid "Armored guard tower with Lancer AT Rocket"
 msgstr "Укрепена кула, въоръжена с противотанкова ракета Копиеносец"
 
 msgid "Armored bunker with Heavy Machinegun"
-msgstr ""
+msgstr "Брониран бункер с Тежка картечница"
 
 msgid "Armored hardpoint with Flamer"
 msgstr "Бронирана укрепена точка с огнехвъргачка"
@@ -1464,7 +1464,7 @@ msgid "Slower than Viper"
 msgstr ""
 
 msgid "High power costs and slower to produce than Viper"
-msgstr ""
+msgstr "Висока цена и по-бавен за производство от Пепелянка"
 
 msgid "Collective Medium Body"
 msgstr "Среден копрус на Колектива"
@@ -1476,7 +1476,7 @@ msgid "Slower than Cobra"
 msgstr ""
 
 msgid "High power costs and slower to produce than Cobra"
-msgstr ""
+msgstr "Висока цена и по-бавен за производство от Кобра"
 
 msgid "Vehicle Engine Upgrade"
 msgstr ""
@@ -1674,7 +1674,7 @@ msgid "Howitzer Upgrade"
 msgstr ""
 
 msgid "Self-guided rocket powered shells"
-msgstr ""
+msgstr "Самонасочващи се ракетни снаряди"
 
 msgid "Increases Howitzer accuracy"
 msgstr "Увеличава точността на гаубиците"
@@ -1815,7 +1815,7 @@ msgid "Reunite a part of Beta team with a Gamma team outpost"
 msgstr ""
 
 msgid "Return to LZ"
-msgstr "Върнете се към ЗП"
+msgstr "Върнете се към ЗК"
 
 msgid "Hard / Insane difficulty hint:"
 msgstr ""
@@ -1839,7 +1839,7 @@ msgid "Enemy structures remaining"
 msgstr "Оставащи противникови съоръжения"
 
 msgid "Return to LZ required"
-msgstr "Изисква се връщане към ЗП"
+msgstr "Изисква се връщане към ЗК"
 
 msgid "Destroy all enemy units and bases"
 msgstr "Унищожете всички противникови бойни единици и бази"
@@ -2088,7 +2088,7 @@ msgid "They must be eradicated."
 msgstr ""
 
 msgid "Secure the LZ and establish a forward base."
-msgstr ""
+msgstr "Подсигурете ЗК и установете база на предна линия."
 
 msgid "Then destroy the New Paradigm's base."
 msgstr "После разрушете базата на Новата Парадигма."
@@ -2106,7 +2106,7 @@ msgid "Together we can create a new world."
 msgstr ""
 
 msgid "I can give you power beyond your wildest dreams."
-msgstr ""
+msgstr "Мога да ти дам повече власт от най-смелите ти мечти."
 
 msgid "Open your systems to me and you will be strong."
 msgstr ""
@@ -2760,7 +2760,7 @@ msgid "Nexus Resistance Circuits Mk3"
 msgstr ""
 
 msgid "Hover Propulsion II"
-msgstr ""
+msgstr "Задвижване с въздушна възглавница (Ховъркрафт) II"
 
 msgid "Half-tracked Propulsion II"
 msgstr ""
@@ -3226,7 +3226,7 @@ msgid "Alpha"
 msgstr "Алфа"
 
 msgid "Amphibious hover propulsion"
-msgstr ""
+msgstr "Амфибийно задвижване на въздушна възглавница"
 
 msgid "Angel Missile Battery"
 msgstr ""
@@ -3613,13 +3613,13 @@ msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Най-добри цели: Базови съоръжения, гнезда и киборги"
 
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr ""
+msgstr "Най-подходящи цели: Бункери и укрепени точки"
 
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Най-подходящи цели: Бункери и укрепени точки"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Най-подходящи цели: Бункери, защитни и базови съоражения"
 
 msgid "Best Targets: Cyborgs"
 msgstr "Най-подходящи цели: Киборги"
@@ -3631,7 +3631,7 @@ msgid "Best Targets: Infantry, base structures, wheeled vehicles"
 msgstr "Най-подходящи цели: Пехота, базови съоръжения, МПС с колела"
 
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Най-подходящи цели: Пехота, колесни и ховъркрафт МПС"
 
 msgid "Best Targets: None. Average damage against all targets"
 msgstr ""
@@ -3696,34 +3696,34 @@ msgid "Built-in diagnostic and repair systems"
 msgstr "Вградени системи за диагностика и поправка"
 
 msgid "Bunker Buster Cobra Hover"
-msgstr ""
+msgstr "Бункероубиец Кобра Ховъркрафт"
 
 msgid "Bunker Buster Cobra Tracks"
-msgstr ""
+msgstr "Бункероубиец Кобра Вериги"
 
 msgid "Bunker Buster Mantis Tracks"
-msgstr ""
+msgstr "Бункероубиец Богомолка Вериги"
 
 msgid "Bunker buster missile"
-msgstr ""
+msgstr "Ракета Бункероубиец"
 
 msgid "Bunker Buster Rocket"
-msgstr ""
+msgstr "Ракета Бункероубиец"
 
 msgid "Bunker Buster Rockets Viper Wheels"
-msgstr ""
+msgstr "Бункероубиец Пепелянка Колела"
 
 msgid "Bunker Buster Scorpion Tracks"
-msgstr ""
+msgstr "Бункероубиец Скорпион Вериги"
 
 msgid "Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "Бункероубиец Скорпион СВиК"
 
 msgid "Bunker Buster Viper Wheels"
-msgstr ""
+msgstr "Бункероубиец Пепелянка Колела"
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Бункероубиец"
 
 msgid "Burns oil more efficiently"
 msgstr ""
@@ -3858,7 +3858,7 @@ msgid "Command Turret Python Tracks"
 msgstr ""
 
 msgid "Command Turret Scorpion Tracks"
-msgstr ""
+msgstr "Команден купол Скорпион Вериги"
 
 msgid "Command Turret Upgrade"
 msgstr ""
@@ -4232,7 +4232,7 @@ msgid "Flamer Autoloader"
 msgstr ""
 
 msgid "Flamer Bunker"
-msgstr ""
+msgstr "Бункер с Огнехвъргачка"
 
 msgid "Flamer Cobra Tracks"
 msgstr "Огнехвъргачка Кобра Вериги"
@@ -4264,7 +4264,7 @@ msgid "Flashlight Hardpoint"
 msgstr ""
 
 msgid "Flashlight Retribution Hover"
-msgstr ""
+msgstr "Фенерче Възмездие Ховъркрафт"
 
 msgid "Flashlight"
 msgstr ""
@@ -4331,7 +4331,7 @@ msgstr ""
 
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "Получава ~25% по-малко мощност от всяка нефтена помпа"
 
 #, no-c-format
 msgid ""
@@ -4592,7 +4592,7 @@ msgid "Heavy Laser Emplacement"
 msgstr ""
 
 msgid "Heavy Laser Tiger Tracks"
-msgstr ""
+msgstr "Тежък лазер Тигър Вериги"
 
 msgid "Heavy Laser Wyvern Tracks"
 msgstr ""
@@ -4604,7 +4604,7 @@ msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr ""
 
 msgid "Heavy Machinegun Cobra Hover"
-msgstr ""
+msgstr "Тежка картечница Кобра Ховъркрафт"
 
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr ""
@@ -4616,10 +4616,10 @@ msgid "Heavy Machinegun Hardpoint"
 msgstr "Укрепена точка с тежка картечница"
 
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr ""
+msgstr "Тежка картечница Скорпион Полувериги"
 
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr ""
+msgstr "Тежка картечница Скорпион Вериги"
 
 msgid "Heavy Machinegun Viper Half-tracks"
 msgstr ""
@@ -4757,22 +4757,22 @@ msgid "High-pressure gas throws the flamer gel further"
 msgstr ""
 
 msgid "HMG Bunker"
-msgstr ""
+msgstr "Бункер с Тежка картечница"
 
 msgid "Hover AI"
-msgstr ""
+msgstr "Ховъркрафт ИИ"
 
 msgid "Hover II"
-msgstr ""
+msgstr "Ховъркрафт II"
 
 msgid "Hover III"
-msgstr ""
+msgstr "Ховъркрафт III"
 
 msgid "Hover Propulsion"
-msgstr ""
+msgstr "Задвижване с въздушна възглавница (Ховъркрафт)"
 
 msgid "Hover"
-msgstr ""
+msgstr "Ховъркрафт"
 
 #, no-c-format
 msgid "Howitzer accuracy +10%"
@@ -5021,7 +5021,7 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr ""
 
 msgid "Inferno Cobra Hover"
-msgstr ""
+msgstr "Пъкъл Кобра Ховъркрафт"
 
 msgid "Inferno Emplacement"
 msgstr ""
@@ -5030,7 +5030,7 @@ msgid "Inferno Hardpoint"
 msgstr ""
 
 msgid "Inferno Python Hover"
-msgstr ""
+msgstr "Пъкъл Питон Ховъркрафт"
 
 msgid "Inferno"
 msgstr ""
@@ -5075,13 +5075,13 @@ msgid "Lancer AT Rocket"
 msgstr "Противотанкова ракета Копиеносец"
 
 msgid "Lancer Bunker"
-msgstr "Бункер Копиеносец"
+msgstr "Копиеносец Бункер"
 
 msgid "Lancer Cobra Half-tracks"
-msgstr ""
+msgstr "Копиеносец Кобра Полувериги"
 
 msgid "Lancer Cobra Tracks"
-msgstr ""
+msgstr "Копиеносец Кобра Вериги"
 
 msgid "Lancer Cyborg"
 msgstr "Копиеносец Киборг"
@@ -5090,19 +5090,19 @@ msgid "Lancer Hardpoint"
 msgstr "Укрепена точка с Копиеносец"
 
 msgid "Lancer Mantis Tracks"
-msgstr ""
+msgstr "Копиеносец Богомолка Вериги"
 
 msgid "Lancer Python Tracks"
-msgstr ""
+msgstr "Копиеносец Питон Вериги"
 
 msgid "Lancer Scorpion Tracks"
-msgstr ""
+msgstr "Копиеносец Скорпион Вериги"
 
 msgid "Lancer Scorpion VTOL"
-msgstr ""
+msgstr "Копиеносец Скорпион СВиК"
 
 msgid "Lancer Viper Tracks"
-msgstr ""
+msgstr "Копиеносец Пепелянка Вериги"
 
 msgid "Lancer Viper Wheels"
 msgstr "Копиеносец Пепелянка Колела"
@@ -5207,7 +5207,7 @@ msgid "Low yield thermonuclear warhead"
 msgstr ""
 
 msgid "Machinegun Bunker"
-msgstr ""
+msgstr "Бункер с картечница"
 
 #, no-c-format
 msgid "Machinegun damage +25%"
@@ -5278,7 +5278,7 @@ msgid "Medium Cannon Cobra Half Track"
 msgstr ""
 
 msgid "Medium Cannon Cobra Hover"
-msgstr ""
+msgstr "Средно оръдие Кобра Ховъркрафт"
 
 msgid "Medium Cannon Cobra Tracks"
 msgstr ""
@@ -5290,16 +5290,16 @@ msgid "Medium Cannon Hardpoint"
 msgstr "Укрепена точка със средно оръдие"
 
 msgid "Medium Cannon Python Hover"
-msgstr ""
+msgstr "Средно оръдие Питон Ховъркрафт"
 
 msgid "Medium Cannon Python Tracks"
 msgstr ""
 
 msgid "Medium Cannon Scorpion Hover"
-msgstr ""
+msgstr "Средно оръдие Скорпион Ховъркрафт"
 
 msgid "Medium Cannon Scorpion Tracks"
-msgstr ""
+msgstr "Средно оръдие Скорпион Вериги"
 
 msgid "Medium Cannon Viper Tracks"
 msgstr ""
@@ -5781,22 +5781,22 @@ msgid "Pulse Laser Hardpoint"
 msgstr ""
 
 msgid "Pulse Laser Leopard Hover"
-msgstr ""
+msgstr "Импулсен лазер Леопард Ховъркрафт"
 
 msgid "Pulse Laser Mantis Tracks"
 msgstr ""
 
 msgid "Pulse Laser Panther Hover"
-msgstr ""
+msgstr "Импулсен лазер Пантера Ховъркрафт"
 
 msgid "Pulse Laser Python Tracks"
 msgstr ""
 
 msgid "Pulse Laser Tiger Hover"
-msgstr ""
+msgstr "Импулсен лазер Тигър Ховъркрафт"
 
 msgid "Pulse Laser Tiger Tracks"
-msgstr ""
+msgstr "Импулсен лазер Тигър Вериги"
 
 msgid "Pulse Laser Tower"
 msgstr ""
@@ -6151,13 +6151,13 @@ msgid "School Bus"
 msgstr ""
 
 msgid "Scorpion"
-msgstr ""
+msgstr "Скорпион"
 
 msgid "Scourge Cyborg"
 msgstr ""
 
 msgid "Scourge Mantis Hover"
-msgstr ""
+msgstr "Бич Богомолка Ховъркрафт"
 
 msgid "Scourge Mantis Tracks"
 msgstr ""
@@ -6184,7 +6184,7 @@ msgid "Scrambler Turret"
 msgstr ""
 
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "ИИ за морски карти, основан на NullBot"
 
 msgid "Search & Destroy Missiles"
 msgstr ""
@@ -6427,7 +6427,7 @@ msgid "Tank Killer Hardpoint"
 msgstr ""
 
 msgid "Tank Killer Mantis Hover"
-msgstr ""
+msgstr "Танкоубиец Богомолка Ховъркрафт"
 
 msgid "Tank Killer Mantis Tracks"
 msgstr ""
@@ -6521,7 +6521,7 @@ msgid "Thermopole Energizer"
 msgstr ""
 
 msgid "Tiger"
-msgstr ""
+msgstr "Тигър"
 
 msgid "Titanium-reinforced concrete gate"
 msgstr ""
@@ -6747,7 +6747,7 @@ msgid "VTOL Bunker Buster Bug VTOL"
 msgstr ""
 
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "СВиК Бункероубиец Скорпион СВиК"
 
 msgid "VTOL Bunker Buster"
 msgstr ""
@@ -6774,7 +6774,7 @@ msgid "VTOL Cluster Bomb Bay Bug VTOL"
 msgstr ""
 
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr ""
+msgstr "СВиК Касетъчни бомби Скорпион СВиК"
 
 msgid "VTOL Cluster Bomb Bay"
 msgstr ""
@@ -6825,13 +6825,13 @@ msgid "VTOL III"
 msgstr "СВиК III"
 
 msgid "VTOL Lancer Bug VTOL"
-msgstr ""
+msgstr "СВиК Копиеносец Буболечка СВиК"
 
 msgid "VTOL Lancer Mantis VTOL"
-msgstr ""
+msgstr "СВиК Копиеносец Богомолка СВиК"
 
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr ""
+msgstr "СВиК Копиеносец Скорпион СВиК"
 
 msgid "VTOL Lancer"
 msgstr "СВиК Копиеносец"
@@ -9018,7 +9018,7 @@ msgid "Select all Half-tracks without group"
 msgstr ""
 
 msgid "Select all Hovers"
-msgstr ""
+msgstr "Изберете всички ховъркрафти"
 
 msgid "Return for Recycling"
 msgstr ""
