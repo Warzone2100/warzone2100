@@ -22,6 +22,10 @@
 #pragma once
 
 #include <wzmaplib/map_io.h>
+#include <memory>
+#include <vector>
+#include <functional>
+#include <cstdint>
 
 class WrappedZipArchive;
 
@@ -36,8 +40,17 @@ public:
 	//	- readOnly: Open the zip archive in read-only mode
 	static std::shared_ptr<WzMapZipIO> openZipArchiveFS(const char* fileSystemPath, bool extraConsistencyChecks = false, bool readOnly = false);
 
+	// Initialize a new WzMapZipIO provider with a uint8_t buffer of the .zip/.wz archive data
+	// Options:
+	//	- extraConsistencyChecks: Enable extra consistency checks in libzip (see: ZIP_CHECKCONS)
+	static std::shared_ptr<WzMapZipIO> openZipArchiveMemory(std::unique_ptr<std::vector<uint8_t>> zipFileContents, bool extraConsistencyChecks = false);
+
 	// Initialize a new WzMapZipIO provider with a fileSystemPath to a new .zip/.wz archive (to be written)
 	static std::shared_ptr<WzMapZipIO> createZipArchiveFS(const char* fileSystemPath, bool fixedLastMod = false);
+
+	// Initialize a new WzMapZipIO provider for writing, which will output the zip contents to a closure when closed
+	typedef std::function<void (std::unique_ptr<std::vector<uint8_t>> zipFileContents)> CreatedMemoryZipOnCloseFunc;
+	static std::shared_ptr<WzMapZipIO> createZipArchiveMemory(CreatedMemoryZipOnCloseFunc onCloseFunc, bool fixedLastMod = false);
 
 	~WzMapZipIO();
 public:
