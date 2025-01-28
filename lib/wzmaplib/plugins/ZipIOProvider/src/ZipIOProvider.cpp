@@ -435,7 +435,7 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::s
 	return pStream;
 }
 
-bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fileData)
+bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter /*= false*/)
 {
 	auto zipLocateResult = wz_zip_name_locate(m_zipArchive->handle(), filename.c_str(), ZIP_FL_ENC_GUESS);
 	if (zipLocateResult < 0)
@@ -469,18 +469,23 @@ bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fi
 	}
 	// read the entire file
 	fileData.clear();
-	fileData.resize(static_cast<size_t>(st.size));
+	size_t expectedFileSize = static_cast<size_t>(st.size);
+	fileData.resize(expectedFileSize + ((appendNullCharacter) ? 1 : 0));
 	auto result = readStream->readBytes(fileData.data(), fileData.size());
 	if (!result.has_value())
 	{
 		// read failed
 		return false;
 	}
-	if (result.value() != fileData.size())
+	if (result.value() != expectedFileSize)
 	{
 		// read was short
 		fileData.clear();
 		return false;
+	}
+	if (appendNullCharacter)
+	{
+		fileData[fileData.size() - 1] = 0;
 	}
 	readStream->close();
 	return true;
@@ -642,7 +647,7 @@ bool WzMapZipIO::enumerateFoldersInternal(const std::string& basePath, bool recu
 	{
 		return false;
 	}
-	
+
 	if (m_cachedDirectoriesList.empty())
 	{
 		// Valid ZIP files may or may not contain dedicated directory entries (which end in "/")
