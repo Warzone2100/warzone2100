@@ -1941,15 +1941,15 @@ bool MapPackage::loadGamInfo()
 }
 
 // Extract various map stats / info
-optional<MapStats> MapPackage::calculateMapStats()
+optional<MapStats> MapPackage::calculateMapStats(uint32_t mapSeed)
 {
-	return calculateMapStats(MapStatsConfiguration(m_mapType));
+	return calculateMapStats(MapStatsConfiguration(m_mapType), mapSeed);
 }
 
-optional<MapStats> MapPackage::calculateMapStats(MapStatsConfiguration statsConfig)
+optional<MapStats> MapPackage::calculateMapStats(MapStatsConfiguration statsConfig, uint32_t mapSeed)
 {
 	LoggingProtocol* pCustomLogger = m_logger.get();
-	auto pLoadedMap = loadMap(0, m_logger);
+	auto pLoadedMap = loadMap(mapSeed, m_logger);
 	if (pLoadedMap == nullptr)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map");
