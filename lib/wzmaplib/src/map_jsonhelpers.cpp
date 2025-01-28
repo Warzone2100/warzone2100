@@ -29,7 +29,7 @@ optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOP
 {
 	const auto &path = filename.c_str();
 	std::vector<char> data;
-	if (!mapIO.loadFullFile(filename, data))
+	if (!mapIO.loadFullFile(filename, data, true))
 	{
 		return nullopt;
 	}
