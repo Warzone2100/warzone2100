@@ -593,6 +593,10 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	{
 		layerScale /= 2;
 		layerRange = layerRange * crispness / 10;
+		if (layerRange == 0)
+		{
+			break;
+		}
 		++layerIdx;
 
 		uint32_t layerWidth = width / layerScale + 1;
