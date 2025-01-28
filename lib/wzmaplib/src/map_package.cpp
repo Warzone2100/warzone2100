@@ -1466,7 +1466,13 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 	}
 
 	// 6.) Load the map data
-	auto pLoadedMap = loadMap(0, logger);
+	uint32_t seed = 0;
+	if (m_loadedMap)
+	{
+		// if already loaded a script map with a seed, use the same seed
+		seed = m_loadedMap->scriptGeneratedMapSeed().value_or(seed);
+	}
+	auto pLoadedMap = loadMap(seed, logger);
 	if (pLoadedMap == nullptr)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map for conversion");
