@@ -2,8 +2,8 @@
 # wzmaplib version
 
 set(WZMAPLIB_VERSION_MAJOR 1)
-set(WZMAPLIB_VERSION_MINOR 2)
-set(WZMAPLIB_VERSION_REV 8)
+set(WZMAPLIB_VERSION_MINOR 3)
+set(WZMAPLIB_VERSION_REV 0)
 
 ###################
 # Determine minimum CMake version
