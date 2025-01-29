@@ -27,6 +27,7 @@
 #include <string.h>
 #include <algorithm>
 #include <chrono>
+#include <array>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -694,24 +695,20 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 
 bool isBlindPlayerInfoState()
 {
-	if (game.blindMode == BLIND_MODE::NONE)
+	switch (game.blindMode)
 	{
+	case BLIND_MODE::NONE:
 		return false;
+	case BLIND_MODE::BLIND_LOBBY:
+	case BLIND_MODE::BLIND_LOBBY_SIMPLE_LOBBY:
+		// blind when game hasn't fully started yet
+		return !ingame.TimeEveryoneIsInGame.has_value();
+	case BLIND_MODE::BLIND_GAME:
+	case BLIND_MODE::BLIND_GAME_SIMPLE_LOBBY:
+		// blind when game hasn't ended yet
+		return !ingame.endTime.has_value();
 	}
-
-	// If blind lobby (only) and game hasn't started yet
-	if (game.blindMode < BLIND_MODE::BLIND_GAME && !ingame.TimeEveryoneIsInGame.has_value())
-	{
-		return true;
-	}
-
-	// If blind game and game hasn't _ended_ yet
-	if (game.blindMode >= BLIND_MODE::BLIND_GAME && !ingame.endTime.has_value())
-	{
-		return true;
-	}
-
-	return false;
+	return false; // silence warning
 }
 
 
@@ -757,7 +754,7 @@ const char *getPlayerName(uint32_t player, bool treatAsNonHost)
 const char *getPlayerGenericName(int player)
 {
 	// genericNames are *not* localized - we want the same display across all systems (just like player-set names)
-	static const char *genericNames[] =
+	static constexpr std::array<const char *, 16> genericNames =
 	{
 		"Alpha",
 		"Beta",
@@ -776,10 +773,10 @@ const char *getPlayerGenericName(int player)
 		"Sigma",
 		"Tau"
 	};
-	STATIC_ASSERT(MAX_PLAYERS <= ARRAY_SIZE(genericNames));
-	ASSERT(player < ARRAY_SIZE(genericNames), "player number (%d) exceeds maximum (%lu)", player, (unsigned long) ARRAY_SIZE(genericNames));
+	static_assert(MAX_PLAYERS <= genericNames.size(), "Insufficient genericNames");
+	ASSERT(player < genericNames.size(), "player number (%d) exceeds maximum (%zu)", player, genericNames.size());
 
-	if (player >= ARRAY_SIZE(genericNames))
+	if (player >= genericNames.size())
 	{
 		return (player < MAX_PLAYERS) ? "Player" : "Spectator";
 	}
@@ -1944,7 +1941,7 @@ void setPlayerMuted(uint32_t playerIdx, bool muted)
 	{
 		auto trueIdentity = getTruePlayerIdentity(playerIdx);
 		if (!trueIdentity.identity.empty()
-			&& (NetPlay.isHost || game.blindMode == BLIND_MODE::NONE || (game.blindMode < BLIND_MODE::BLIND_GAME && ingame.TimeEveryoneIsInGame.has_value())))
+			&& (NetPlay.isHost || !isBlindPlayerInfoState()))
 		{
 			storePlayerMuteOption(NetPlay.players[playerIdx].name, trueIdentity.identity, muted);
 		}

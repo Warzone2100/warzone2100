@@ -329,7 +329,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 
 static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex = nullopt, bool sendHostVerifiedJoinIdentity = false)
 {
-	ASSERT(NetPlay.isHost || playerIndex == realSelectedPlayer, "Hah");
+	ASSERT(NetPlay.isHost || playerIndex == realSelectedPlayer, "Huh?");
 
 	NETQUEUE queue;
 	if (!recipientPlayerIndex.has_value())
