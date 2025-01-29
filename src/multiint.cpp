@@ -3458,8 +3458,8 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 		if ((game.blindMode != BLIND_MODE::NONE) && (selectedPlayer < MAX_PLAYERS))
 		{
 			std::string blindLobbyMessage = _("BLIND LOBBY NOTICE:");
-			blindLobbyMessage += "\n";
-			blindLobbyMessage += astringf(_("- You have been assigned the codename: \"%s\""), getPlayerGenericName(selectedPlayer));
+			blindLobbyMessage += "\n- ";
+			blindLobbyMessage += astringf(_("You have been assigned the codename: \"%s\""), getPlayerGenericName(selectedPlayer));
 			displayRoomNotifyMessage(blindLobbyMessage.c_str());
 		}
 	}
@@ -4174,7 +4174,7 @@ void WzMultiplayerOptionsTitleUI::openPlayerSlotSwapChooser(uint32_t playerIndex
 	auto psParentPlayersForm = (W_FORM *)widgGetFromID(psWScreen, MULTIOP_PLAYERS);
 	ASSERT_OR_RETURN(, psParentPlayersForm != nullptr, "Could not find players form?");
 	chooserParent->setCutoutWidget(psParentPlayersForm->shared_from_this()); // should be cleared on close
-	auto titleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
+	auto titleUI = std::static_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
 
 	int textHeight = iV_GetTextLineSize(font_regular);
 	int swapContextFormMargin = 1;
@@ -4317,7 +4317,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 		return;
 	}
 
-	auto titleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
+	auto titleUI = std::static_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
 
 	if (isBlindSimpleLobby(game.blindMode) && !NetPlay.isHost)
 	{
