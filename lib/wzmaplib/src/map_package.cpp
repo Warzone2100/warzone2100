@@ -1513,7 +1513,12 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 			debug(pCustomLogger, LOG_ERROR, "Failed to script contents from source map");
 			return false;
 		}
-		if (!exportIO->writeFullFile(gameJSOutputPath, pScriptData->data(), static_cast<uint32_t>(pScriptData->size())))
+		size_t gameJSFileSize = pScriptData->size();
+		if (gameJSFileSize > 0 && (pScriptData->back() == 0))
+		{
+			--gameJSFileSize; // do not write out the extra null terminator added when loading the script contents
+		}
+		if (!exportIO->writeFullFile(gameJSOutputPath, pScriptData->data(), static_cast<uint32_t>(gameJSFileSize)))
 		{
 			// Failed writing file
 			debug(pCustomLogger, LOG_ERROR, "Failed writing game.js to destination: %s", gameJSOutputPath.c_str());
