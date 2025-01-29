@@ -278,6 +278,31 @@ static void processProximityButtons(UDWORD id);
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
 
+// In-Game Options button Widget
+
+class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
+{
+protected:
+	W_INGAMEOPTIONS_BUTTON()
+	{ }
+	void initialize();
+public:
+	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
+
+	void display(int xOffset, int yOffset) override;
+	std::string getTip() override;
+
+	int getMarginX() const { return marginX; }
+	int getMarginTop() const { return marginTop; }
+
+private:
+	uint8_t currentAlphaValue() const;
+	bool isHighlighted() const;
+
+private:
+	int marginX = 16;
+	int marginTop = 18;
+};
 
 /***************************GAME CODE ****************************/
 
@@ -2149,22 +2174,7 @@ bool intShowGroupSelectionMenu()
 	return true;
 }
 
-class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
-{
-protected:
-	W_INGAMEOPTIONS_BUTTON()
-	{ }
-	void initialize();
-public:
-	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
-
-	void display(int xOffset, int yOffset) override;
-	std::string getTip() override;
-
-private:
-	uint8_t currentAlphaValue() const;
-	bool isHighlighted() const;
-};
+// MARK: W_INGAMEOPTIONS_BUTTON
 
 std::shared_ptr<W_INGAMEOPTIONS_BUTTON> W_INGAMEOPTIONS_BUTTON::make()
 {
@@ -2267,10 +2277,12 @@ bool intAddInGameOptionsButton()
 		psWScreen->psForm->attach(button);
 		setReticuleButtonDimensions(*button, "image_ingameoptions_up.png");
 		button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			auto psIngameOptButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(psWidget->shared_from_this());
+			ASSERT_OR_RETURN(, psIngameOptButton != nullptr, "Wrong button type?");
 			int w = psWidget->width();
 			int h = psWidget->height();
-			int x0 = screenWidth - (w + 16);
-			int y0 = 18;
+			int x0 = screenWidth - (w + psIngameOptButton->getMarginX());
+			int y0 = psIngameOptButton->getMarginTop();
 			psWidget->setGeometry(x0, y0, w, h);
 		}));
 		button->addOnClickHandler([](W_BUTTON&) {
