@@ -144,7 +144,6 @@ size_t addSubdirs(const char *basedir, const char *subdir, const bool appendToPa
 			{
 				// failed to mount mod
 				code_part log_level = LOG_WZ;
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 				auto errorCode = PHYSFS_getLastErrorCode();
 				switch (errorCode)
 				{
@@ -157,9 +156,6 @@ size_t addSubdirs(const char *basedir, const char *subdir, const bool appendToPa
 					break;
 				}
 				const char* pErrStr = PHYSFS_getErrorByCode(errorCode);
-#else
-				const char* pErrStr = WZ_PHYSFS_getLastError();
-#endif
 				if (!pErrStr)
 				{
 					pErrStr = "<unknown error>";
