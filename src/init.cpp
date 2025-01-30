@@ -416,14 +416,12 @@ static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mou
 	else
 	{
 		// mount failed
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 		auto errorCode = PHYSFS_getLastErrorCode();
 		if (errorCode != PHYSFS_ERR_NOT_FOUND)
 		{
 			const char* errorStr = PHYSFS_getErrorByCode(errorCode);
 			searchPathMountErrors.push_back(astringf("Failed to mount \"%s\" @ \"%s\": %s", newDir, mountPoint, (errorStr) ? errorStr : "<no details available?>"));
 		}
-#endif
 		return false;
 	}
 }

@@ -88,7 +88,6 @@ static inline std::string WZ_PHYSFS_getRealPath(const char *filename)
 
 static inline optional<uint64_t> WZ_PHYSFS_getFileSize(const char *filename)
 {
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	PHYSFS_Stat metaData = {};
 	if (PHYSFS_stat(filename, &metaData) == 0)
 	{
@@ -100,9 +99,6 @@ static inline optional<uint64_t> WZ_PHYSFS_getFileSize(const char *filename)
 		return nullopt;
 	}
 	return static_cast<uint64_t>(metaData.filesize);
-#else
-	return nullopt;
-#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////

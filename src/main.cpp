@@ -334,73 +334,8 @@ static bool isPortableMode()
 	return _isPortableMode;
 }
 
-/*!
- * Retrieves the current working directory and copies it into the provided output buffer
- * \param[out] dest the output buffer to put the current working directory in
- * \param size the size (in bytes) of \c dest
- * \return true on success, false if an error occurred (and dest doesn't contain a valid directory)
- */
-#if !defined(WZ_PHYSFS_2_1_OR_GREATER)
-static bool getCurrentDir(char *const dest, size_t const size)
-{
-#if defined(WZ_OS_UNIX)
-	if (getcwd(dest, size) == nullptr)
-	{
-		if (errno == ERANGE)
-		{
-			debug(LOG_ERROR, "The buffer to contain our current directory is too small (%u bytes and more needed)", (unsigned int)size);
-		}
-		else
-		{
-			debug(LOG_ERROR, "getcwd failed: %s", strerror(errno));
-		}
-
-		return false;
-	}
-#elif defined(WZ_OS_WIN)
-	wchar_t tmpWStr[PATH_MAX];
-	const int len = GetCurrentDirectoryW(PATH_MAX, tmpWStr);
-
-	if (len == 0)
-	{
-		// Retrieve Windows' error number
-		const DWORD err = GetLastError();
-		char *err_string = NULL;
-
-		// Retrieve a string describing the error number (uses LocalAlloc() to allocate memory for err_string)
-		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, (char *)&err_string, 0, NULL);
-
-		// Print an error message with the above description
-		debug(LOG_ERROR, "GetCurrentDirectory failed (error code: %lu): %s", err, err_string);
-
-		// Free our chunk of memory FormatMessageA gave us
-		LocalFree(err_string);
-
-		return false;
-	}
-	else if (len > size)
-	{
-		debug(LOG_ERROR, "The buffer to contain our current directory is too small (%u bytes and %d needed)", (unsigned int)size, len);
-
-		return false;
-	}
-	if (WideCharToMultiByte(CP_UTF8, 0, tmpWStr, -1, dest, size, NULL, NULL) == 0)
-	{
-		dest[0] = '\0';
-		debug(LOG_ERROR, "Encoding conversion error.");
-		return false;
-	}
-#else
-# error "Provide an implementation here to copy the current working directory in 'dest', which is 'size' bytes large."
-#endif
-
-	// If we got here everything went well
-	return true;
-}
-#endif
-
 #if defined(WZ_OS_WIN)
-#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) || !defined(WZ_PHYSFS_2_1_OR_GREATER)
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
 static bool win_wcharConvToUtf8(wchar_t *pwStr, std::string &outputUtf8)
 {
 	std::vector<char> utf8Buffer;
@@ -420,106 +355,6 @@ static bool win_wcharConvToUtf8(wchar_t *pwStr, std::string &outputUtf8)
 	return true;
 }
 #endif
-#endif
-
-
-// Fallback method for earlier PhysFS verions that do not support PHYSFS_getPrefDir
-// Importantly, this creates the folders if they do not exist
-#if !defined(WZ_PHYSFS_2_1_OR_GREATER)
-static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
-{
-	WzString basePath;
-	WzString appendPath;
-	char tmpstr[PATH_MAX] = { '\0' };
-	const size_t size = sizeof(tmpstr);
-#if defined(WZ_OS_WIN)
-	wchar_t tmpWStr[MAX_PATH];
-
-	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr)))
-	{
-		std::string utf8Path;
-		if (!win_wcharConvToUtf8(tmpWStr, utf8Path))
-		{
-			debug(LOG_FATAL, "Config directory encoding conversion error.");
-			exit(1);
-		}
-		basePath = WzString::fromUtf8(utf8Path);
-
-		appendPath = WzString();
-		// Must append org\app to APPDATA path
-		appendPath += org;
-		appendPath += PHYSFS_getDirSeparator();
-		appendPath += app;
-	}
-	else
-#elif defined(WZ_OS_MAC)
-	if (cocoaGetApplicationSupportDir(tmpstr, size))
-	{
-		basePath = WzString::fromUtf8(tmpstr);
-		appendPath = WzString::fromUtf8(app);
-	}
-	else
-#elif defined(WZ_OS_UNIX)
-	// Following PhysFS, use XDG's base directory spec, even if not on Linux.
-	// Reference: https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-	const char *envPath = getenv("XDG_DATA_HOME");
-	if (envPath == nullptr)
-	{
-		// XDG_DATA_HOME isn't defined
-		// Use HOME, and append ".local/share/" to match XDG's base directory spec
-		envPath = getenv("HOME");
-
-		if (envPath == nullptr)
-		{
-			// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() if HOME isn't defined
-			debug(LOG_INFO, "HOME environment variable isn't defined - falling back to PHYSFS_getUserDir()");
-			envPath = PHYSFS_getUserDir();
-		}
-
-		appendPath = WzString(".local") + PHYSFS_getDirSeparator() + "share";
-	}
-
-	if (envPath != nullptr)
-	{
-		basePath = WzString::fromUtf8(envPath);
-
-		if (!appendPath.isEmpty())
-		{
-			appendPath += PHYSFS_getDirSeparator();
-		}
-		appendPath += app;
-	}
-	else
-#else
-	// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() for other OSes
-	if (PHYSFS_getUserDir())
-	{
-		basePath = WzString::fromUtf8(PHYSFS_getUserDir());
-		appendPath = WzString::fromUtf8(app);
-	}
-	else
-#endif
-	if (getCurrentDir(tmpstr, size))
-	{
-		basePath = WzString::fromUtf8(tmpstr);
-		appendPath = WzString::fromUtf8(app);
-	}
-	else
-	{
-		debug(LOG_FATAL, "Can't get home / prefs directory?");
-		abort();
-	}
-
-	// Create the folders within the basePath if they don't exist
-	if (!WZ_PHYSFS_createPlatformPrefDir(basePath, appendPath))
-	{
-		debug(LOG_FATAL, "Failed to create platform config dir: %s/%s",
-			  basePath.toUtf8().c_str(), appendPath.toUtf8().c_str());
-		exit(1);
-	}
-
-	return (basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator()).toUtf8();
-}
 #endif
 
 // Retrieves the appropriate storage directory for application-created files / prefs
@@ -608,7 +443,6 @@ static std::string getPlatformPrefDir(const char * org, const std::string &app)
 #endif // WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
 #endif // defined(WZ_OS_WIN)
 
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	const char * prefsDir = PHYSFS_getPrefDir(org, app.c_str());
 	if (prefsDir == nullptr)
 	{
@@ -616,16 +450,6 @@ static std::string getPlatformPrefDir(const char * org, const std::string &app)
 		exit(1);
 	}
 	return std::string(prefsDir) + PHYSFS_getDirSeparator();
-#else
-	// PHYSFS_getPrefDir is not available - use fallback method (which requires OS-specific code)
-	std::string prefDir = getPlatformPrefDir_Fallback(org, app.c_str());
-	if (prefDir.empty())
-	{
-		debug(LOG_FATAL, "Failed to obtain prefs directory (fallback)");
-		exit(1);
-	}
-	return prefDir;
-#endif // defined(WZ_PHYSFS_2_1_OR_GREATER)
 }
 
 bool endsWith (std::string const &fullString, std::string const &endString) {
@@ -2089,21 +1913,15 @@ int realmain(int argc, char *argv[])
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
 	{
 		std::string modtocheck;
-#if defined WZ_PHYSFS_2_1_OR_GREATER
 		PHYSFS_Stat metaData;
-#endif
 
 		// check whether given global mods are regular files
 		auto globalModsPath = version_getVersionedModsFolderPath("global");
 		for (auto iterator = global_mods.begin(); iterator != global_mods.end();)
 		{
 			modtocheck = globalModsPath + "/" + *iterator;
-#if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
-#elif defined WZ_PHYSFS_2_1_OR_GREATER
 			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
-#endif
 			{
 				debug(LOG_ERROR, "The global mod \"%s\" you have specified doesn't exist!", iterator->c_str());
 				global_mods.erase(iterator);
@@ -2120,12 +1938,8 @@ int realmain(int argc, char *argv[])
 		for (auto iterator = campaign_mods.begin(); iterator != campaign_mods.end();)
 		{
 			modtocheck = campaignModsPath + "/" + *iterator;
-#if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
-#elif defined WZ_PHYSFS_2_1_OR_GREATER
 			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
-#endif
 			{
 				debug(LOG_ERROR, "The campaign mod \"%s\" you have specified doesn't exist!", iterator->c_str());
 				campaign_mods.erase(iterator);
@@ -2142,12 +1956,8 @@ int realmain(int argc, char *argv[])
 		for (auto iterator = multiplay_mods.begin(); iterator != multiplay_mods.end();)
 		{
 			modtocheck = multiplayModsPath + "/" + *iterator;
-#if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
-#elif defined WZ_PHYSFS_2_1_OR_GREATER
 			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
-#endif
 			{
 				debug(LOG_ERROR, "The multiplay mod \"%s\" you have specified doesn't exist!", iterator->c_str());
 				multiplay_mods.erase(iterator);
