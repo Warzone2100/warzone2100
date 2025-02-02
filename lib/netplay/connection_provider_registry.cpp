@@ -53,5 +53,14 @@ void ConnectionProviderRegistry::Register(ConnectionProviderType pt)
 
 void ConnectionProviderRegistry::Deregister(ConnectionProviderType pt)
 {
-	registeredProviders_.erase(pt);
+	const auto it = registeredProviders_.find(pt);
+	if (it == registeredProviders_.end())
+	{
+		return;
+	}
+	if (it->second)
+	{
+		it->second->shutdown();
+	}
+	registeredProviders_.erase(it);
 }
