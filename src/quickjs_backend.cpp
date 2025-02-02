@@ -1719,6 +1719,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 //					UNBOX_SCRIPT_ASSERT(context, type != SCRIPT_POSITION, "Cannot assign a trigger to a position");
 					ASSERT(false, "Not currently handling triggered property - does anything use this?");
 				}
+				JS_FreeValue(ctx, triggered);
 
 				if (type == SCRIPT_RADIUS)
 				{
@@ -2482,8 +2483,8 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 	int player = QuickJS_GetInt32(ctx, global_obj, "me");
 
 	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	auto free_func_obj = gsl::finally([ctx, funcObj] { JS_FreeValue(ctx, funcObj); });  // establish exit action
 	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
-	JS_FreeValue(ctx, funcObj);
 
 	std::string stringArg;
 	BASE_OBJECT *psObj = nullptr;
@@ -2561,8 +2562,8 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 
 	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	auto free_func_obj = gsl::finally([ctx, funcObj] { JS_FreeValue(ctx, funcObj); });  // establish exit action
 	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
-	JS_FreeValue(ctx, funcObj);
 
 	int32_t ms = 0;
 	if (argc > 1)
