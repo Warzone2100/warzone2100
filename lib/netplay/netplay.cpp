@@ -1606,7 +1606,6 @@ int NETshutdown()
 	}
 	NetPlay.MOTD = nullptr;
 	NETdeleteQueue();
-	ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT).shutdown();
 	ConnectionProviderRegistry::Instance().Deregister(ConnectionProviderType::TCP_DIRECT);
 
 	// Reset net usage statistics.
