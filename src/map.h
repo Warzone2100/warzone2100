@@ -409,6 +409,9 @@ public:
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
 	virtual bool makeDirectory(const std::string& directoryPath) override;
 	virtual const char* pathSeparator() const override;
+	virtual bool fileExists(const std::string& filename) override;
+
+	bool folderExists(const std::string& dirPath);
 
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
