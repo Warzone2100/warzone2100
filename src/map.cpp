@@ -938,6 +938,24 @@ const char* WzMapPhysFSIO::pathSeparator() const
 	return "/"; // the platform-independent PhysFS path separator
 }
 
+bool WzMapPhysFSIO::fileExists(const std::string& filename)
+{
+	std::string filenameFull = (m_basePath.empty()) ? filename : pathJoin(m_basePath, filename);
+	PHYSFS_Stat metaData;
+	if (PHYSFS_stat(filenameFull.c_str(), &metaData) == 0)
+	{
+		// PHYSFS_stat failed
+		return false;
+	}
+	return (metaData.filetype == PHYSFS_FILETYPE_REGULAR);
+}
+
+bool WzMapPhysFSIO::folderExists(const std::string& dirPath)
+{
+	std::string dirPathFull = (m_basePath.empty()) ? dirPath : pathJoin(m_basePath, dirPath);
+	return WZ_PHYSFS_isDirectory(dirPathFull.c_str());
+}
+
 bool WzMapPhysFSIO::enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc)
 {
 	std::string basePathFull = (m_basePath.empty()) ? basePath : pathJoin(m_basePath, basePath);
