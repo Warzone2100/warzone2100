@@ -136,6 +136,7 @@ if (APPLE OR WIN32)
 endif()
 find_package(libzip QUIET ${LIBZIP_FIND_ADDITIONAL_PARAMS})
 if (libzip_FOUND)
+	message(STATUS "Found libzip version: ${libzip_VERSION}")
 	# Test linking libzip
 	include(CheckCXXSourceCompiles)
 	include(CMakePushCheckState)
@@ -150,13 +151,15 @@ if (libzip_FOUND)
 	)
 	cmake_push_check_state(RESET)
 	set(CMAKE_REQUIRED_LIBRARIES "libzip::zip")
-	# libzip exported CMake config does not currently include all required support libraries - see: https://github.com/nih-at/libzip/issues/205
-	# So manually find and link them
-	find_package (ZLIB REQUIRED)
-	list(APPEND CMAKE_REQUIRED_LIBRARIES "ZLIB::ZLIB")
-	find_package (BZip2)
-	if (BZip2_FOUND)
-		list(APPEND CMAKE_REQUIRED_LIBRARIES "BZip2::BZip2")
+	if (libzip_VERSION VERSION_LESS 1.10)
+		# libzip < 1.10 exported CMake config does not currently include all required support libraries - see: https://github.com/nih-at/libzip/issues/205
+		# So manually find and link them
+		find_package (ZLIB REQUIRED)
+		list(APPEND CMAKE_REQUIRED_LIBRARIES "ZLIB::ZLIB")
+		find_package (BZip2)
+		if (BZip2_FOUND)
+			list(APPEND CMAKE_REQUIRED_LIBRARIES "BZip2::BZip2")
+		endif()
 	endif()
 	check_cxx_source_compiles("${_test_libzip_source}" libzip_LINK_TEST)
 	cmake_pop_check_state()
@@ -192,13 +195,15 @@ if (libzip_FOUND AND libzip_LINK_TEST)
 	target_link_libraries(ZipIOProvider PUBLIC wzmaplib)
 
 	target_link_libraries(ZipIOProvider PRIVATE libzip::zip)
-	# libzip exported CMake config does not currently include all required support libraries - see: https://github.com/nih-at/libzip/issues/205
-	# So manually find and link them
-	find_package (ZLIB REQUIRED)
-	target_link_libraries(ZipIOProvider PRIVATE ZLIB::ZLIB)
-	find_package (BZip2)
-	if (BZip2_FOUND)
-		target_link_libraries(ZipIOProvider PRIVATE BZip2::BZip2)
+	if (libzip_VERSION VERSION_LESS 1.10)
+		# libzip exported CMake config does not currently include all required support libraries - see: https://github.com/nih-at/libzip/issues/205
+		# So manually find and link them
+		find_package (ZLIB REQUIRED)
+		target_link_libraries(ZipIOProvider PRIVATE ZLIB::ZLIB)
+		find_package (BZip2)
+		if (BZip2_FOUND)
+			target_link_libraries(ZipIOProvider PRIVATE BZip2::BZip2)
+		endif()
 	endif()
 else()
 	message(STATUS "Could NOT find libzip - ZipIOProvider target will not be available")
