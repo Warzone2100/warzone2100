@@ -137,6 +137,9 @@ public:
 	// Note: Returns a value only if the MapPackage was loaded (i.e. via loadPackage)
 	optional<LevelFormat> loadedLevelDetailsFormat() const;
 
+	// Get whether this appears to be a script-generated map (does not load the map, merely checks if there's a game.js that would load)
+	bool isScriptGeneratedMap() const;
+
 	// Get the map data
 	// Returns nullptr if the loading failed
 	std::shared_ptr<Map> loadMap(uint32_t seed, std::shared_ptr<LoggingProtocol> logger = nullptr);
