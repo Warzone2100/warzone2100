@@ -1573,6 +1573,28 @@ optional<LevelFormat> MapPackage::loadedLevelDetailsFormat() const
 	return m_loadedLevelFormat;
 }
 
+bool MapPackage::isScriptGeneratedMap() const
+{
+	if (m_loadedMap)
+	{
+		// get this from the loaded map
+		return m_loadedMap->wasScriptGenerated();
+	}
+
+	// No map is loaded yet - verify this was instantiated with a map IO provider
+	if (!m_mapIO)
+	{
+		// Should not happen
+		debug(m_logger.get(), LOG_ERROR, "Missing IOProvider - no map can be loaded");
+		return false;
+	}
+
+	// Instead of calling Map::loadFromPath (like MapPackage::loadMap does), which would load and run the map script (if present), check for existence of the game.js file
+	std::string fullPathToMapFolder = m_mapIO->pathJoin(m_pathToMapPackage, m_levelDetails.mapFolderPath);
+	std::string gameJSPath = m_mapIO->pathJoin(fullPathToMapFolder, "game.js");
+	return m_mapIO->fileExists(gameJSPath);
+}
+
 // Get the map data
 // Returns nullptr if the loading failed
 std::shared_ptr<Map> MapPackage::loadMap(uint32_t seed, std::shared_ptr<LoggingProtocol> logger /*= nullptr*/)
