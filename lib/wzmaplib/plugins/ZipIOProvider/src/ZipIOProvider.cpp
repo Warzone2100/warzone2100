@@ -41,6 +41,8 @@
 # include <windows.h>
 #endif
 
+constexpr uint64_t WzMapZipDefaultEmbeddedFileMaxFileSize = 104857600; // 100 MiB
+
 class WrappedZipArchive
 {
 public:
@@ -652,6 +654,35 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSyste
 WzMapZipIO::~WzMapZipIO()
 { }
 
+static bool wzMapZipIOSanityCheckStat(const struct zip_stat& st, uint64_t fileSizeLimit = WzMapZipDefaultEmbeddedFileMaxFileSize)
+{
+	if (st.valid & ZIP_STAT_SIZE)
+	{
+		if (fileSizeLimit < st.size)
+		{
+			// size is too big!
+			return false;
+		}
+	}
+
+	bool compressedFile = (st.valid & ZIP_STAT_COMP_METHOD) && (st.comp_method != ZIP_CM_STORE);
+	if (compressedFile)
+	{
+		// Check for permitted compression methods
+		// (This is a subset of all methods that latest libzip itself may support, but we want to ensure consistent support across all WZ target platforms)
+		switch (st.comp_method)
+		{
+			case ZIP_CM_DEFLATE:
+				// supported
+				break;
+			default:
+				return false;
+		}
+	}
+
+	return true;
+}
+
 std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode)
 {
 	std::unique_ptr<WzMap::BinaryIOStream> pStream;
@@ -666,6 +697,17 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::s
 				return nullptr;
 			}
 			zip_uint64_t zipFileIndex = static_cast<zip_uint64_t>(zipLocateResult);
+			// Get file stats
+			struct zip_stat st;
+			if (zip_stat_index(m_zipArchive->handle(), zipFileIndex, 0, &st) != 0)
+			{
+				// Failed to stat file?
+				return nullptr;
+			}
+			if (!wzMapZipIOSanityCheckStat(st))
+			{
+				return nullptr;
+			}
 			pStream = WzMapBinaryZipIOStream::openForReading(zipFileIndex, m_zipArchive);
 			break;
 		}
@@ -687,7 +729,6 @@ bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fi
 	zip_uint64_t zipFileIndex = static_cast<zip_uint64_t>(zipLocateResult);
 	// Get the expected length of the file
 	struct zip_stat st;
-	zip_stat_init(&st);
 	if (zip_stat_index(m_zipArchive->handle(), zipFileIndex, 0, &st) != 0)
 	{
 		// zip_stat failed for file??
@@ -698,9 +739,9 @@ bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fi
 		// couldn't get the file size??
 		return false;
 	}
-	if (std::numeric_limits<uint32_t>::max() < st.size)
+	if (!wzMapZipIOSanityCheckStat(st))
 	{
-		// size is too big!
+		// failed sanity checks
 		return false;
 	}
 	auto readStream = WzMapBinaryZipIOStream::openForReading(zipFileIndex, m_zipArchive);
