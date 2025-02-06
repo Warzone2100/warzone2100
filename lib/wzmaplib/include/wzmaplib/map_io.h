@@ -87,6 +87,9 @@ public:
 
 	virtual const char* pathSeparator() const = 0;
 
+	// Check if a file exists at a path
+	virtual bool fileExists(const std::string& filePath) = 0;
+
 	// enumFunc receives each enumerated file, and returns true to continue enumeration, or false to shortcut / stop enumeration
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc);
 
@@ -113,6 +116,12 @@ public:
 	virtual bool makeDirectory(const std::string& directoryPath) override;
 
 	virtual const char* pathSeparator() const override;
+
+	virtual bool fileExists(const std::string& filePath) override;
+
+	// Check if a folder exists at a path
+	// NOTE: dirPath should *not* contain a trailing pathSeparator (or this may always return false)
+	bool folderExists(const std::string& dirPath);
 
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;

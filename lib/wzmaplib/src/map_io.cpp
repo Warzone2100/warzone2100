@@ -610,6 +610,37 @@ const char* StdIOProvider::pathSeparator() const
 #endif
 }
 
+bool StdIOProvider::fileExists(const std::string& filePath)
+{
+#if defined(_WIN32)
+	std::vector<wchar_t> wFilePath;
+	if (!win_utf8ToUtf16(filePath.c_str(), wFilePath))
+	{
+		return false;
+	}
+	struct _stat buf;
+	int result = _wstat(wFilePath.data(), &buf);
+	if (result != 0)
+	{
+		return false;
+	}
+	return (buf.st_mode & _S_IFREG) == _S_IFREG;
+#else
+	struct stat buf;
+	int result = stat(filePath.c_str(), &buf);
+	if (result != 0)
+	{
+		return false;
+	}
+	return S_ISREG(buf.st_mode);
+#endif
+}
+
+bool StdIOProvider::folderExists(const std::string& dirPath)
+{
+	return stdIOFolderExistsInternal(dirPath);
+}
+
 enum EnumDirFlags
 {
 	ENUM_RECURSE = 0x01,

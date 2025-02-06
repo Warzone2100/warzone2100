@@ -587,6 +587,17 @@ const char* WzMapZipIO::pathSeparator() const
 	return "/";
 }
 
+bool WzMapZipIO::fileExists(const std::string& filename)
+{
+	auto zipLocateResult = wz_zip_name_locate(m_zipArchive->handle(), filename.c_str(), ZIP_FL_ENC_GUESS);
+	if (zipLocateResult < 0)
+	{
+		// Failed to find a file with this name
+		return false;
+	}
+	return true;
+}
+
 static inline bool isUnsafeZipEntryName(const std::string& filename)
 {
 	if (filename.empty())
