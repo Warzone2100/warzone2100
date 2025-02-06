@@ -181,13 +181,13 @@ public:
 	optional<MapStats> calculateMapStats(MapStatsConfiguration statsConfig, uint32_t mapSeed);
 
 private:
-	bool loadGamInfo();
+	const GamInfo& getGamInfo();
 
 private:
 	std::string m_pathToMapPackage;
 	optional<LevelFormat> m_loadedLevelFormat;
 	LevelDetails m_levelDetails;
-	GamInfo	m_gamInfo;
+	optional<GamInfo> m_gamInfo;
 	MapType m_mapType;
 	optional<MapPackageType> m_packageType;
 	bool m_flatMapPackage = false;
