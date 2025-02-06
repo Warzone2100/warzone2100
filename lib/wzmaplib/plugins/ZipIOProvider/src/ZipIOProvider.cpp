@@ -49,7 +49,12 @@ public:
 	WrappedZipArchive(zip_t* pZip, PostCloseFunc postCloseFunc = nullptr)
 	: pZip(pZip)
 	, postCloseFunc(postCloseFunc)
-	{ }
+	{
+		if (pZip)
+		{
+			readOnly = zip_get_archive_flag(pZip, ZIP_AFL_RDONLY, 0) == 1;
+		}
+	}
 	~WrappedZipArchive()
 	{
 		close();
@@ -342,7 +347,7 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveMemory(std::unique_ptr<std
 		zip_error_fini(&error);
 		return nullptr;
 	}
-	int flags = 0;
+	int flags = ZIP_RDONLY;
 	if (extraConsistencyChecks)
 	{
 		flags |= ZIP_CHECKCONS;
