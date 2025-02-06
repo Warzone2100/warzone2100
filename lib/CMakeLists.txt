@@ -1,3 +1,4 @@
+SET(WZMAPLIB_ENABLE_ZIPIOPROVIDER ON CACHE BOOL "wzmaplib: Provide ZipIOProvider (which requires libzip)" FORCE)
 add_subdirectory(wzmaplib)
 add_subdirectory(exceptionhandler)
 add_subdirectory(framework)
