@@ -29,6 +29,26 @@
 
 class WrappedZipArchive;
 
+class WzZipIOSourceReadProvider
+{
+public:
+	WzZipIOSourceReadProvider();
+	virtual ~WzZipIOSourceReadProvider();
+
+	virtual optional<uint64_t> tell() = 0;
+	virtual bool seek(uint64_t pos) = 0;
+	virtual optional<uint64_t> readBytes(void *buffer, uint64_t len) = 0;
+	virtual optional<uint64_t> fileSize() = 0;
+	virtual optional<uint64_t> modTime() = 0;
+
+	void inform_source_keep();
+	void inform_source_free();
+	void* error();
+private:
+	void *error_ = nullptr;
+	size_t retainCount = 0;
+};
+
 class WzMapZipIO : public WzMap::IOProvider
 {
 private:
@@ -44,6 +64,11 @@ public:
 	// Options:
 	//	- extraConsistencyChecks: Enable extra consistency checks in libzip (see: ZIP_CHECKCONS)
 	static std::shared_ptr<WzMapZipIO> openZipArchiveMemory(std::unique_ptr<std::vector<uint8_t>> zipFileContents, bool extraConsistencyChecks = false);
+
+	// Initialize a new WzMapZipIO provider with a WzZipIOSourceReadProvider implementation of the .zip/.wz archive data
+	// Options:
+	//	- extraConsistencyChecks: Enable extra consistency checks in libzip (see: ZIP_CHECKCONS)
+	static std::shared_ptr<WzMapZipIO> openZipArchiveReadIOProvider(std::shared_ptr<WzZipIOSourceReadProvider> zipSourceProvider, bool extraConsistencyChecks = false);
 
 	// Initialize a new WzMapZipIO provider with a fileSystemPath to a new .zip/.wz archive (to be written)
 	static std::shared_ptr<WzMapZipIO> createZipArchiveFS(const char* fileSystemPath, bool fixedLastMod = false);
