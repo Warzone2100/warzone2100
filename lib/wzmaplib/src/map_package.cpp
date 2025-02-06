@@ -1158,7 +1158,6 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 			result->m_mapType = result->m_levelDetails.type;
 			result->m_pathToMapPackage = pathToMapPackage;
 			result->m_mapIO = pMapIO;
-			result->loadGamInfo();
 			return result;
 		}
 	}
@@ -1176,7 +1175,6 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 		result->m_pathToMapPackage = pathToMapPackage;
 		result->m_mapIO = pMapIO;
 		result->m_flatMapPackage = true;
-		result->loadGamInfo();
 		return result;
 	}
 
@@ -1236,7 +1234,6 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 			{
 				result->m_originalGenerator = originalGenerator;
 			}
-			result->loadGamInfo();
 
 			if (idx < rootLevFiles.size() - 1)
 			{
@@ -1498,7 +1495,7 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map data for conversion");
 		return false;
 	}
-	writeGamFileForMapExport(fullPathToOutputMapFolder, levelFormat, m_gamInfo, *(pMapData.get()), *exportIO, pCustomLogger);
+	writeGamFileForMapExport(fullPathToOutputMapFolder, levelFormat, getGamInfo(), *(pMapData.get()), *exportIO, pCustomLogger);
 
 	// 9.) Output the map into the map folder
 	if (pLoadedMap->wasScriptGenerated() && !(mapOutputFormat == WzMap::OutputFormat::VER1_BINARY_OLD || mapOutputFormat == WzMap::OutputFormat::VER2))
@@ -1944,11 +1941,17 @@ std::string MapPackage::to_string(MapPackage::ModTypes modType)
 	return "";	// silence warning
 }
 
-bool MapPackage::loadGamInfo()
+const GamInfo& MapPackage::getGamInfo()
 {
+	if (m_gamInfo.has_value())
+	{
+		return m_gamInfo.value();
+	}
+
 	if (!m_mapIO)
 	{
-		return false;
+		m_gamInfo = GamInfo();
+		return m_gamInfo.value();
 	}
 
 	std::string fullPathToMapFolder = m_mapIO->pathJoin(m_pathToMapPackage, m_levelDetails.mapFolderPath);
@@ -1960,11 +1963,11 @@ bool MapPackage::loadGamInfo()
 	}
 	if (!loadedGamInfo.has_value())
 	{
-		return false;
+		loadedGamInfo = GamInfo();
 	}
 
-	m_gamInfo = loadedGamInfo.value();
-	return true;
+	m_gamInfo = loadedGamInfo;
+	return m_gamInfo.value();
 }
 
 // Extract various map stats / info
