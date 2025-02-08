@@ -240,13 +240,26 @@ static std::string strAsciiToLower(const std::string& str)
 	return result;
 }
 
+constexpr uint32_t MaxBinaryLevFileSize = 2 * 1024 * 1024;
+
 optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	// 1.) Load file
 	std::vector<char> fileData;
-	if (!mapIO.loadFullFile(levelFile, fileData))
+	auto loadFileResult = mapIO.loadFullFile(levelFile, fileData, MaxBinaryLevFileSize, false);
+	switch (loadFileResult)
 	{
-		return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::SUCCESS:
+			break;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN:
+			return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_READ:
+			// file exists but can't be read
+			debug(pCustomLogger, LOG_ERROR, "Failed to read file: %s", levelFile.c_str());
+			return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE:
+			debug(pCustomLogger, LOG_ERROR, "File is too large: %s", levelFile.c_str());
+			return nullopt;
 	}
 	if (fileData.empty())
 	{
@@ -1256,11 +1269,20 @@ MapPackage::MapPackage(const LevelDetails& levelDetails, WzMap::MapType mapType,
 static bool copyFile_IOProviders(const std::string& readPath, const std::string& writePath, std::shared_ptr<IOProvider> readIO, std::shared_ptr<IOProvider> writeIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	std::vector<char> fileContents;
-	if (!readIO->loadFullFile(readPath, fileContents))
+	auto loadFileResult = readIO->loadFullFile(readPath, fileContents, std::numeric_limits<uint32_t>::max(), false);
+	switch (loadFileResult)
 	{
-		// Failed reading file
-		debug(pCustomLogger, LOG_ERROR, "copyFile: Failed reading file from source: %s", readPath.c_str());
-		return false;
+		case WzMap::IOProvider::LoadFullFileResult::SUCCESS:
+			break;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN:
+			debug(pCustomLogger, LOG_ERROR, "copyFile: Failed opening file from source: %s", readPath.c_str());
+			return false;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_READ:
+			debug(pCustomLogger, LOG_ERROR, "copyFile: Failed reading file from source: %s", readPath.c_str());
+			return false;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE:
+			debug(pCustomLogger, LOG_ERROR, "copyFile: Failed reading file from source (too large): %s", readPath.c_str());
+			return false;
 	}
 	// get the directory this file should be in and ensure it is created
 	std::string writePathDirName = writeIO->pathDirName(writePath);
