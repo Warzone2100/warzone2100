@@ -737,7 +737,6 @@ std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	ctxOptions.baseObjects = true;
 	ctxOptions.dateObject = false;
 	ctxOptions.eval = false;
-	ctxOptions.stringNormalize = false;
 	ctxOptions.regExp = false;
 	ctxOptions.json = false;
 	ctxOptions.proxy = false;
@@ -745,6 +744,7 @@ std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	ctxOptions.typedArrays = false;
 	ctxOptions.promise = false;
 	ctxOptions.bigInt = false;
+	ctxOptions.weakRef = false;
 	JSContext *ctx = JS_NewLimitedContext(rt, &ctxOptions);
 	if (ctx == nullptr)
 	{
