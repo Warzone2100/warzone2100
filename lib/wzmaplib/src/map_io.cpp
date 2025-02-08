@@ -482,12 +482,12 @@ std::unique_ptr<BinaryIOStream> StdIOProvider::openBinaryStream(const std::strin
 	return std::unique_ptr<BinaryIOStream>(pStream);
 }
 
-bool StdIOProvider::loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter /*= false*/)
+IOProvider::LoadFullFileResult StdIOProvider::loadFullFile(const std::string& filename, std::vector<char>& fileData, uint32_t maxFileSize /*= 0*/, bool appendNullCharacter /*= false*/)
 {
 	auto pStream = openBinaryStream(filename, BinaryIOStream::OpenMode::READ);
 	if (!pStream)
 	{
-		return false;
+		return IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	size_t chunkSize = 512*1024;
 	std::vector<char> data;
@@ -497,11 +497,16 @@ bool StdIOProvider::loadFullFile(const std::string& filename, std::vector<char>&
 		data.resize(data.size() + chunkSize);
 		bytesRead = pStream->readBytes(&(data[readPos]), chunkSize);
 		readPos += bytesRead.value_or(0);
+		if (maxFileSize && maxFileSize < readPos)
+		{
+			// read bytes exceeds specified maxFileSize
+			return IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE;
+		}
 	} while (bytesRead.has_value() && bytesRead.value() == chunkSize);
 	if (!bytesRead.has_value())
 	{
 		// failed reading
-		return false;
+		return IOProvider::LoadFullFileResult::FAILURE_READ;
 	}
 	data.resize(readPos + ((appendNullCharacter) ? 1 : 0)); // truncate to exact length read (optionally with extra byte for appending null character)
 	if (appendNullCharacter)
@@ -509,7 +514,7 @@ bool StdIOProvider::loadFullFile(const std::string& filename, std::vector<char>&
 		data[data.size() - 1] = 0;
 	}
 	fileData = std::move(data);
-	return true;
+	return IOProvider::LoadFullFileResult::SUCCESS;
 }
 
 bool StdIOProvider::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)
