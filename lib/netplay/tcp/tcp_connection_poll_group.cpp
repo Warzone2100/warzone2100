@@ -38,9 +38,9 @@ TCPConnectionPollGroup::~TCPConnectionPollGroup()
 	}
 }
 
-int TCPConnectionPollGroup::checkSockets(unsigned timeout)
+int TCPConnectionPollGroup::checkSocketsReadable(unsigned timeout)
 {
-	return tcp::checkSockets(*sset_, timeout);
+	return tcp::checkSocketsReadable(*sset_, timeout);
 }
 
 void TCPConnectionPollGroup::add(IClientConnection* conn)

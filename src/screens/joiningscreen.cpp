@@ -1367,7 +1367,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 	if (currentJoiningState == JoiningState::AwaitingInitialNetcodeHandshakeAck)
 	{
 		// read in data, if we have it
-		if (tmp_joining_socket_set->checkSockets(NET_READ_TIMEOUT) > 0)
+		if (tmp_joining_socket_set->checkSocketsReadable(NET_READ_TIMEOUT) > 0)
 		{
 			if (!client_transient_socket->readReady())
 			{
@@ -1420,7 +1420,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 	if (currentJoiningState == JoiningState::ProcessingJoinMessages)
 	{
 		// read in data, if we have it
-		if (tmp_joining_socket_set->checkSockets(NET_READ_TIMEOUT) > 0)
+		if (tmp_joining_socket_set->checkSocketsReadable(NET_READ_TIMEOUT) > 0)
 		{
 			if (!client_transient_socket->readReady())
 			{

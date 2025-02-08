@@ -38,7 +38,7 @@ public:
 	/// <returns>On success, returns the number of connection descriptors in the poll group.
 	/// On failure, `0` can returned if the timeout expired before any connection descriptors
 	/// became ready, or `-1` if there was an error during the internal poll operation.</returns>
-	virtual int checkSockets(unsigned timeout) = 0;
+	virtual int checkSocketsReadable(unsigned timeout) = 0;
 
 	virtual void add(IClientConnection* conn) = 0;
 	virtual void remove(IClientConnection* conn) = 0;

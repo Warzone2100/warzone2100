@@ -348,7 +348,7 @@ static net::result<void> connectionStatus(Socket *sock)
 	                 sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
 
 	// Check whether the socket is still connected
-	int ret = checkSockets(set, 0);
+	int ret = checkSocketsReadable(set, 0);
 	if (ret == SOCKET_ERROR)
 	{
 		return tl::make_unexpected(make_network_error_code(getSockErr()));
@@ -854,7 +854,7 @@ static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
 #endif
 }
 
-int checkSockets(const SocketSet& set, unsigned int timeout)
+int checkSocketsReadable(const SocketSet& set, unsigned int timeout)
 {
 	if (set.fds.empty())
 	{
@@ -961,7 +961,7 @@ net::result<ssize_t> readAll(Socket& sock, void *buf, size_t size, unsigned int 
 		// If a timeout is set, wait for that amount of time for data to arrive (or abort)
 		if (timeout)
 		{
-			ret = checkSockets(set, timeout);
+			ret = checkSocketsReadable(set, timeout);
 			if (ret < (ssize_t)set.fds.size()
 			    || !sock.ready)
 			{

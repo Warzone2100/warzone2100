@@ -33,7 +33,7 @@ public:
 	explicit TCPConnectionPollGroup(SocketSet* sset);
 	virtual ~TCPConnectionPollGroup() override;
 
-	virtual int checkSockets(unsigned timeout) override;
+	virtual int checkSocketsReadable(unsigned timeout) override;
 	virtual void add(IClientConnection* conn) override;
 	virtual void remove(IClientConnection* conn) override;
 
