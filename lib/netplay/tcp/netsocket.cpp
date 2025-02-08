@@ -33,6 +33,11 @@
 #include <map>
 
 #include "lib/netplay/zlib_compression_adapter.h"
+#ifdef WZ_OS_WIN
+# include "lib/netplay/tcp/select_descriptor_set.h"
+#else
+# include "lib/netplay/tcp/poll_descriptor_set.h"
+#endif
 
 #if defined(__clang__)
 	#pragma clang diagnostic ignored "-Wshorten-64-to-32" // FIXME!!
@@ -94,16 +99,6 @@ static void socketCloseNow(Socket *sock);
 bool socketReadReady(const Socket& sock)
 {
 	return sock.ready;
-}
-
-// Returns the last error for the calling thread
-static int getSockErr()
-{
-#if   defined(WZ_OS_UNIX)
-	return errno;
-#elif defined(WZ_OS_WIN)
-	return WSAGetLastError();
-#endif
 }
 
 } // namespace tcp
@@ -861,69 +856,67 @@ int checkSocketsReadable(const SocketSet& set, unsigned int timeout)
 		return 0;
 	}
 
-#if   defined(WZ_OS_UNIX)
-	SOCKET maxfd = INT_MIN;
-#elif defined(WZ_OS_WIN)
-	SOCKET maxfd = 0;
-#endif
-
 	bool compressedReady = false;
-	for (size_t i = 0; i < set.fds.size(); ++i)
+	for (const auto& socket : set.fds)
 	{
-		ASSERT(set.fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
+		ASSERT(socket->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
 
-		if (set.fds[i]->isCompressed && !set.fds[i]->compressionAdapter.decompressionNeedInput())
+		if (socket->isCompressed && !socket->compressionAdapter.decompressionNeedInput())
 		{
 			compressedReady = true;
 			break;
 		}
-
-		maxfd = std::max(maxfd, set.fds[i]->fd[SOCK_CONNECTION]);
 	}
 
 	if (compressedReady)
 	{
 		// A socket already has some data ready. Don't really poll the sockets.
-
-		int ret = 0;
-		for (size_t i = 0; i < set.fds.size(); ++i)
+		for (auto& socket : set.fds)
 		{
-			set.fds[i]->ready = set.fds[i]->isCompressed && !set.fds[i]->compressionAdapter.decompressionNeedInput();
-			++ret;
+			socket->ready = socket->isCompressed && !socket->compressionAdapter.decompressionNeedInput();
 		}
-		return ret;
+		return set.fds.size();
 	}
 
-	int ret;
-	fd_set fds;
-	do
+	// For now, use `select()` on Windows instead of `poll()` because of a bug in
+	// Windows versions prior to "Windows 10 2004", which can lead to `poll()`
+	// function timing out on socket connection errors instead of returning an error early.
+	//
+	// For more information on the bug, see: https://stackoverflow.com/questions/21653003/is-this-wsapoll-bug-for-non-blocking-sockets-fixed
+	// and also https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsapoll#remarks
+#ifdef WZ_OS_WIN
+	SelectDescriptorSet<PollEventType::READABLE> readableSet;
+#else
+	PollDescriptorSet<PollEventType::READABLE> readableSet;
+#endif
+	for (const auto& socket : set.fds)
 	{
-		struct timeval tv = {(int)(timeout / 1000), (int)(timeout % 1000) * 1000};  // Cast to int to avoid narrowing needed for C++11.
-
-		FD_ZERO(&fds);
-		for (size_t i = 0; i < set.fds.size(); ++i)
+		if (!readableSet.add(socket->fd[SOCK_CONNECTION]))
 		{
-			const SOCKET fd = set.fds[i]->fd[SOCK_CONNECTION];
-
-			FD_SET(fd, &fds);
+			debug(LOG_ERROR, "Failed to add fd to descriptor set");
+			return SOCKET_ERROR;
 		}
-
-		ret = select(maxfd + 1, &fds, nullptr, nullptr, &tv);
 	}
-	while (ret == SOCKET_ERROR && getSockErr() == EINTR);
 
-	if (ret == SOCKET_ERROR)
+	const auto pollRes = readableSet.poll(std::chrono::milliseconds(timeout));
+	if (!pollRes.has_value())
 	{
-		debug(LOG_ERROR, "select failed: %s", strSockError(getSockErr()));
+		const auto msg = pollRes.error().message();
+		debug(LOG_ERROR, "poll failed: %s", msg.c_str());
 		return SOCKET_ERROR;
 	}
 
-	for (size_t i = 0; i < set.fds.size(); ++i)
+	if (pollRes.value() == 0)
 	{
-		set.fds[i]->ready = FD_ISSET(set.fds[i]->fd[SOCK_CONNECTION], &fds);
+		debug(LOG_WARNING, "poll timed out after waiting for %d milliseconds", timeout);
+		return 0;
 	}
 
-	return ret;
+	for (auto& socket : set.fds)
+	{
+		socket->ready = readableSet.isSet(socket->fd[SOCK_CONNECTION]);
+	}
+	return pollRes.value();
 }
 
 /**

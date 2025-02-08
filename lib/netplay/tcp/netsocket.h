@@ -48,22 +48,6 @@ static const SOCKET INVALID_SOCKET = -1;
 #ifdef WZ_OS_WIN
 # include <winsock2.h>
 # include <ws2tcpip.h>
-# undef EAGAIN
-# undef EBADF
-# undef ECONNRESET
-# undef EINPROGRESS
-# undef EINTR
-# undef EISCONN
-# undef ETIMEDOUT
-# undef EWOULDBLOCK
-# define EAGAIN      WSAEWOULDBLOCK
-# define EBADF       WSAEBADF
-# define ECONNRESET  WSAECONNRESET
-# define EINPROGRESS WSAEINPROGRESS
-# define EINTR       WSAEINTR
-# define EISCONN     WSAEISCONN
-# define ETIMEDOUT   WSAETIMEDOUT
-# define EWOULDBLOCK WSAEWOULDBLOCK
 # ifndef AI_V4MAPPED
 #  define AI_V4MAPPED	0x0008	/* IPv4 mapped addresses are acceptable.  */
 # endif
@@ -71,6 +55,8 @@ static const SOCKET INVALID_SOCKET = -1;
 #  define AI_ADDRCONFIG	0x0020	/* Use configuration of this host to choose returned address type..  */
 # endif
 #endif
+
+#include "lib/netplay/tcp/sock_error.h"
 
 // Fallback for systems that don't #define this flag
 #ifndef MSG_NOSIGNAL
