@@ -101,7 +101,7 @@ target_compile_definitions(nlohmann_json INTERFACE "NLOHMANN_JSON_NAMESPACE=nloh
 add_subdirectory(optional-lite EXCLUDE_FROM_ALL)
 
 add_subdirectory(quickjs-wz EXCLUDE_FROM_ALL)
-set_property(TARGET quickjs PROPERTY FOLDER "3rdparty")
+set_property(TARGET qjs PROPERTY FOLDER "3rdparty")
 
 
 if (WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
