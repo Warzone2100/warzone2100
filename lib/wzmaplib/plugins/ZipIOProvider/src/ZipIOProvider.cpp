@@ -654,14 +654,21 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSyste
 WzMapZipIO::~WzMapZipIO()
 { }
 
-static bool wzMapZipIOSanityCheckStat(const struct zip_stat& st, uint64_t fileSizeLimit = WzMapZipDefaultEmbeddedFileMaxFileSize)
+enum class ZipSanityCheckResult
+{
+	PASSED,
+	FAILURE_EXCEEDS_MAXFILESIZE,
+	FAILURE_UNSUPPORTED_COMP_METHOD
+};
+
+static ZipSanityCheckResult wzMapZipIOSanityCheckStat(const struct zip_stat& st, uint64_t fileSizeLimit = WzMapZipDefaultEmbeddedFileMaxFileSize)
 {
 	if (st.valid & ZIP_STAT_SIZE)
 	{
 		if (fileSizeLimit < st.size)
 		{
 			// size is too big!
-			return false;
+			return ZipSanityCheckResult::FAILURE_EXCEEDS_MAXFILESIZE;
 		}
 	}
 
@@ -676,11 +683,11 @@ static bool wzMapZipIOSanityCheckStat(const struct zip_stat& st, uint64_t fileSi
 				// supported
 				break;
 			default:
-				return false;
+				return ZipSanityCheckResult::FAILURE_UNSUPPORTED_COMP_METHOD;
 		}
 	}
 
-	return true;
+	return ZipSanityCheckResult::PASSED;
 }
 
 std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode)
@@ -704,7 +711,7 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::s
 				// Failed to stat file?
 				return nullptr;
 			}
-			if (!wzMapZipIOSanityCheckStat(st))
+			if (wzMapZipIOSanityCheckStat(st) != ZipSanityCheckResult::PASSED)
 			{
 				return nullptr;
 			}
@@ -718,13 +725,13 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::s
 	return pStream;
 }
 
-bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter /*= false*/)
+WzMap::IOProvider::LoadFullFileResult WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fileData, uint32_t maxFileSize /*= 0*/, bool appendNullCharacter /*= false*/)
 {
 	auto zipLocateResult = wz_zip_name_locate(m_zipArchive->handle(), filename.c_str(), ZIP_FL_ENC_GUESS);
 	if (zipLocateResult < 0)
 	{
 		// Failed to find a file with this name
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	zip_uint64_t zipFileIndex = static_cast<zip_uint64_t>(zipLocateResult);
 	// Get the expected length of the file
@@ -732,22 +739,27 @@ bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fi
 	if (zip_stat_index(m_zipArchive->handle(), zipFileIndex, 0, &st) != 0)
 	{
 		// zip_stat failed for file??
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	if (!(st.valid & ZIP_STAT_SIZE))
 	{
 		// couldn't get the file size??
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
-	if (!wzMapZipIOSanityCheckStat(st))
+	switch (wzMapZipIOSanityCheckStat(st, (maxFileSize) ? maxFileSize : WzMapZipDefaultEmbeddedFileMaxFileSize))
 	{
-		// failed sanity checks
-		return false;
+		case ZipSanityCheckResult::PASSED:
+			break;
+		case ZipSanityCheckResult::FAILURE_EXCEEDS_MAXFILESIZE:
+			return WzMap::IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE;
+		default:
+			// failed some other sanity check
+			return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	auto readStream = WzMapBinaryZipIOStream::openForReading(zipFileIndex, m_zipArchive);
 	if (!readStream)
 	{
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	// read the entire file
 	fileData.clear();
@@ -757,20 +769,20 @@ bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fi
 	if (!result.has_value())
 	{
 		// read failed
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_READ;
 	}
 	if (result.value() != expectedFileSize)
 	{
 		// read was short
 		fileData.clear();
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_READ;
 	}
 	if (appendNullCharacter)
 	{
 		fileData[fileData.size() - 1] = 0;
 	}
 	readStream->close();
-	return true;
+	return WzMap::IOProvider::LoadFullFileResult::SUCCESS;
 }
 
 bool WzMapZipIO::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)

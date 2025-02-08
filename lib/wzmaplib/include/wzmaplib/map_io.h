@@ -79,7 +79,14 @@ public:
 
 public:
 	virtual std::unique_ptr<BinaryIOStream> openBinaryStream(const std::string& filename, BinaryIOStream::OpenMode mode) = 0;
-	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter = false) = 0;
+	enum class LoadFullFileResult
+	{
+		SUCCESS = 0,
+		FAILURE_OPEN,
+		FAILURE_READ,
+		FAILURE_EXCEEDS_MAXFILESIZE
+	};
+	virtual LoadFullFileResult loadFullFile(const std::string& filename, std::vector<char>& fileData, uint32_t maxFileSize = 0, bool appendNullCharacter = false) = 0;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) = 0;
 
 	// Creates a directory (and any required parent directories) and returns true on success (or if the directory already exists)
@@ -111,7 +118,7 @@ class StdIOProvider : public IOProvider
 {
 public:
 	virtual std::unique_ptr<BinaryIOStream> openBinaryStream(const std::string& filename, BinaryIOStream::OpenMode mode) override;
-	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter = false) override;
+	virtual IOProvider::LoadFullFileResult loadFullFile(const std::string& filename, std::vector<char>& fileData, uint32_t maxFileSize = 0, bool appendNullCharacter = false) override;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
 	virtual bool makeDirectory(const std::string& directoryPath) override;
 

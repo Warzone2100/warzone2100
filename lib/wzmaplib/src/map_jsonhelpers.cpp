@@ -25,13 +25,26 @@ namespace WzMap {
 
 // MARK: - Helper functions for loading / saving JSON files
 
+constexpr uint32_t MaxJsonFileSize = 20 * 1024 * 1024;
+
 optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	const auto &path = filename.c_str();
 	std::vector<char> data;
-	if (!mapIO.loadFullFile(filename, data, true))
+	auto loadFileResult = mapIO.loadFullFile(filename, data, MaxJsonFileSize, true);
+	switch (loadFileResult)
 	{
-		return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::SUCCESS:
+			break;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN:
+			return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_READ:
+			// file exists but can't be read
+			debug(pCustomLogger, LOG_ERROR, "Failed to read file: %s", filename.c_str());
+			return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE:
+			debug(pCustomLogger, LOG_ERROR, "File is too large: %s", filename.c_str());
+			return nullopt;
 	}
 	if (data.empty())
 	{
