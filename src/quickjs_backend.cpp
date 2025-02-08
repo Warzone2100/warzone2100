@@ -163,7 +163,6 @@ public:
 		ctxOptions.baseObjects = true;
 		ctxOptions.dateObject = true;
 		ctxOptions.eval = (game.type == LEVEL_TYPE::CAMPAIGN); // allow "eval" only for campaign (which currently has lots of implicit eval usage)
-		ctxOptions.stringNormalize = true;
 		ctxOptions.regExp = true;
 		ctxOptions.json = true;
 		ctxOptions.proxy = true;
@@ -171,6 +170,7 @@ public:
 		ctxOptions.typedArrays = true;
 		ctxOptions.promise = false; // disable promise, async, await
 		ctxOptions.bigInt = false;
+		ctxOptions.weakRef = false;
 		ctx = JS_NewLimitedContext(rt, &ctxOptions);
 		ASSERT(ctx != nullptr, "JS_NewContext failed?");
 
