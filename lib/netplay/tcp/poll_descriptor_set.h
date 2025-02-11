@@ -74,14 +74,19 @@ public:
 	virtual net::result<int> poll(std::chrono::milliseconds timeout) override
 	{
 		int ret;
+		int sockErr = 0;
 		do
 		{
 			ret = pollImpl(timeout);
-		} while (ret == SOCKET_ERROR && (getSockErr() == EINTR || getSockErr() == EAGAIN));
+			if (ret == SOCKET_ERROR)
+			{
+				sockErr = getSockErr();
+			}
+		} while (ret == SOCKET_ERROR && (sockErr == EINTR || sockErr == EAGAIN));
 
 		if (ret == SOCKET_ERROR)
 		{
-			return tl::make_unexpected(make_network_error_code(getSockErr()));
+			return tl::make_unexpected(make_network_error_code(sockErr));
 		}
 
 		return ret;
