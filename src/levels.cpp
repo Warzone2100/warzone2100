@@ -296,6 +296,19 @@ LEVEL_DATASET* levFindBaseTileset(MAP_TILESET tileset)
 
 bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName)
 {
+	WzMapPhysFSIO mapIO(mountPoint);
+	auto levelDetails = WzMap::loadLevelDetails_JSON(filename, mapIO);
+	if (!levelDetails.has_value())
+	{
+		debug(LOG_ERROR, "Level File JSON load error: Failed to load JSON: %s", filename.c_str());
+		return false;
+	}
+
+	return levAddWzMap(levelDetails.value(), pathMode, realFileName);
+}
+
+bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMode, char const *realFileName)
+{
 	// start a new level data set
 	LEVEL_DATASET *psDataSet = new LEVEL_DATASET();
 	if (!psDataSet)
@@ -304,69 +317,62 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 		abort();
 		return false;
 	}
-	
+
 	psDataSet->players = 1;
 	psDataSet->game = -1;
 	psDataSet->dataDir = pathMode;
 	psDataSet->realFileName = realFileName != nullptr ? strdup(realFileName) : nullptr;
 	psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
 
-	WzMapPhysFSIO mapIO(mountPoint);
-	auto levelDetails = WzMap::loadLevelDetails_JSON(filename, mapIO);
-	if (!levelDetails.has_value())
-	{
-		debug(LOG_ERROR, "Level File JSON load error: Failed to load JSON: %s", filename.c_str());
-		delete psDataSet;
-		return false;
-	}
+	WzMapPhysFSIO mapIO;
 
-	const auto& mapFolderPath = levelDetails.value().mapFolderPath;
+	const auto& mapFolderPath = levelDetails.mapFolderPath;
 	std::string customMountPoint;
 	if (mapFolderPath.empty())
 	{
 		// support "flattened" plain maps
 		// must be mounted within the virtual filesystem at the appropriate location (not at the root)
-		if (levelDetails.value().name.empty())
+		if (levelDetails.name.empty())
 		{
-			debug(LOG_ERROR, "Level File JSON load error: Map has empty name??: %s", filename.c_str());
+			debug(LOG_ERROR, "Level File map load error: Map has empty name??: %s", (realFileName) ? realFileName : "");
 			delete psDataSet;
 			return false;
 		}
-		switch (levelDetails.value().type)
+		switch (levelDetails.type)
 		{
 			case WzMap::MapType::CAMPAIGN:
 			case WzMap::MapType::SAVEGAME:
 				// FUTURE TODO: Support other map types
-				debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
+				debug(LOG_ERROR, "Level File map load error: Unsupported map type: %d", (int)levelDetails.type);
 				delete psDataSet;
 				return false;
 			case WzMap::MapType::SKIRMISH:
-				customMountPoint = std::string("multiplay/maps/") + levelDetails.value().name;
+				customMountPoint = std::string("multiplay/maps/") + levelDetails.name;
 				break;
 		}
 	}
 
-	switch (levelDetails.value().type)
+	switch (levelDetails.type)
 	{
 		case WzMap::MapType::CAMPAIGN:
 		case WzMap::MapType::SAVEGAME:
 			// FUTURE TODO: Support other map types
-			debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
+			debug(LOG_ERROR, "Level File map load error: Unsupported map type: %d", (int)levelDetails.type);
 			delete psDataSet;
 			return false;
 		case WzMap::MapType::SKIRMISH:
 			psDataSet->type = LEVEL_TYPE::SKIRMISH;
 			break;
 	}
-	psDataSet->players = static_cast<SWORD>(levelDetails.value().players);
-	psDataSet->pName = levelDetails.value().name;
-	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.value().gamFilePath());
+	psDataSet->players = static_cast<SWORD>(levelDetails.players);
+	psDataSet->pName = levelDetails.name;
+	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.gamFilePath());
 	psDataSet->apDataFiles[0] = gamFilePath;
 	psDataSet->game = 0;
-	psDataSet->psBaseData = levFindBaseTileset(levelDetails.value().tileset);
+	psDataSet->psBaseData = levFindBaseTileset(levelDetails.tileset);
 	if (psDataSet->psBaseData == nullptr)
 	{
-		debug(LOG_ERROR, "Level File JSON load error: Failed to find base tileset for: %d", (int)levelDetails.value().tileset);
+		debug(LOG_ERROR, "Level File map load error: Failed to find base tileset for: %d", (int)levelDetails.tileset);
 		delete psDataSet;
 		return false;
 	}
