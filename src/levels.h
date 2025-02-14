@@ -88,6 +88,13 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 
 bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName);
 
+
+namespace WzMap {
+struct LevelDetails; // forward-declare
+}
+bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMode, char const *realFileName);
+
+
 // shutdown the level system
 void levShutDown();
 
