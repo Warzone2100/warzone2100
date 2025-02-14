@@ -21,9 +21,10 @@
 
 #pragma once
 
-#include "descriptor_set.h"
-
-#include "lib/netplay/nettypes.h" // for MAX_CONNECTED_PLAYERS, MAX_TMP_SOCKETS
+#include "lib/framework/frame.h" // for ASSERT
+#include "lib/netplay/descriptor_set.h"
+#include "lib/netplay/tcp/netsocket.h"
+#include "lib/netplay/tcp/tcp_client_connection.h"
 
 #ifdef WZ_OS_WIN
 # include <winsock2.h>
@@ -52,23 +53,38 @@ public:
 
 	explicit PollDescriptorSet() = default;
 
-	virtual bool add(SOCKET fd) override
+	virtual bool add(IClientConnection* conn) override
 	{
+		TCPClientConnection* tcpConn = dynamic_cast<TCPClientConnection*>(conn);
+		ASSERT_OR_RETURN(false, tcpConn, "Invalid connection type: expected TCPClientConnection");
+
 		constexpr short evt = EventType == PollEventType::READABLE ? POLLIN : POLLOUT;
 
-		assert(size_ < MAX_FDS_COUNT);
-		if (size_ >= MAX_FDS_COUNT)
+		const auto fd = tcpConn->getRawSocketFd();
+		const auto it = std::find_if(fds_.begin(), fds_.end(), [fd] (const pollfd& pfd) { return fd == pfd.fd; });
+		ASSERT_OR_RETURN(false, it == fds_.end(), "Connection already present in the descriptor set: fd=%d", fd);
+
+		fds_.emplace_back(pollfd{ fd, evt, 0 });
+		return true;
+	}
+
+	virtual bool remove(IClientConnection* conn) override
+	{
+		TCPClientConnection* tcpConn = dynamic_cast<TCPClientConnection*>(conn);
+		ASSERT_OR_RETURN(false, tcpConn, "Invalid connection type: expected TCPClientConnection");
+
+		const auto fd = tcpConn->getRawSocketFd();
+		const auto it = std::find_if(fds_.begin(), fds_.end(), [fd](const pollfd& pfd) { return fd == pfd.fd; });
+		if (it != fds_.end())
 		{
-			return false;
+			fds_.erase(it);
 		}
-		fds_[size_++] = { fd, evt, 0 };
 		return true;
 	}
 
 	virtual void clear() override
 	{
-		fds_.fill({});
-		size_ = 0;
+		fds_.clear();
 	}
 
 	virtual net::result<int> poll(std::chrono::milliseconds timeout) override
@@ -92,12 +108,20 @@ public:
 		return ret;
 	}
 
-	virtual bool isSet(SOCKET fd) const override
+	virtual bool isSet(const IClientConnection* conn) const override
 	{
+		const TCPClientConnection* tcpConn = dynamic_cast<const TCPClientConnection*>(conn);
+		ASSERT_OR_RETURN(false, tcpConn, "Invalid connection type: expected TCPClientConnection");
+
 		constexpr short evt = EventType == PollEventType::READABLE ? POLLIN : POLLOUT;
 
-		const auto it = std::find_if(fds_.begin(), fds_.end(), [fd](const pollfd& pfd) { return pfd.fd == fd; });
+		const auto it = std::find_if(fds_.begin(), fds_.end(), [fd = tcpConn->getRawSocketFd()](const pollfd& pfd) { return pfd.fd == fd; });
 		return it != fds_.end() && (it->revents & evt);
+	}
+
+	virtual bool empty() const override
+	{
+		return fds_.empty();
 	}
 
 private:
@@ -105,21 +129,13 @@ private:
 	int pollImpl(std::chrono::milliseconds timeout)
 	{
 #ifdef WZ_OS_WIN
-		return WSAPoll(fds_.data(), size_, timeout.count());
+		return WSAPoll(fds_.data(), fds_.size(), timeout.count());
 #else
-		return ::poll(fds_.data(), size_, timeout.count());
+		return ::poll(fds_.data(), fds_.size(), timeout.count());
 #endif
 	}
 
-	// The size limit directly corresponds to the theoretical limit on
-	// the number of connections (from the host side) opened at the same time, which is:
-	// `MAX_CONNECTED_PLAYERS` for `connected_bsocket` (in netplay.cpp)
-	// `MAX_TMP_SOCKETS` for `tmp_socket_set` (netplay.cpp)
-	// another 1 for the `rs_socket` (also in netplay.cpp)
-	static constexpr size_t MAX_FDS_COUNT = MAX_CONNECTED_PLAYERS + MAX_TMP_SOCKETS + 1;
-
-	std::array<pollfd, MAX_FDS_COUNT> fds_;
-	size_t size_ = 0;
+	std::vector<pollfd> fds_;
 };
 
 } // namespace tcp

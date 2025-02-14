@@ -80,12 +80,7 @@ net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(c
 
 IConnectionPollGroup* TCPConnectionProvider::newConnectionPollGroup()
 {
-	auto* sset = allocSocketSet();
-	if (!sset)
-	{
-		return nullptr;
-	}
-	return new TCPConnectionPollGroup(sset);
+	return new TCPConnectionPollGroup();
 }
 
 } // namespace tcp

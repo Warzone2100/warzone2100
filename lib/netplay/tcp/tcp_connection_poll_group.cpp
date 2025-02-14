@@ -23,38 +23,39 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/debug.h"
 
+#include <algorithm>
+
 namespace tcp
 {
 
-TCPConnectionPollGroup::TCPConnectionPollGroup(SocketSet* sset)
-	: sset_(sset)
+TCPConnectionPollGroup::TCPConnectionPollGroup()
+	: readableSet_(IDescriptorSet::create(PollEventType::READABLE))
 {}
-
-TCPConnectionPollGroup::~TCPConnectionPollGroup()
-{
-	if (sset_)
-	{
-		deleteSocketSet(sset_);
-	}
-}
 
 int TCPConnectionPollGroup::checkSocketsReadable(unsigned timeout)
 {
-	return tcp::checkSocketsReadable(*sset_, timeout);
+	return tcp::checkSocketsReadable(conns_, *readableSet_, timeout);
 }
 
 void TCPConnectionPollGroup::add(IClientConnection* conn)
 {
 	auto* tcpConn = dynamic_cast<TCPClientConnection*>(conn);
 	ASSERT_OR_RETURN(, tcpConn != nullptr, "Expected to have TCPClientConnection instance");
-	SocketSet_AddSocket(*sset_, tcpConn->socket_);
+
+	conns_.emplace_back(conn);
+	ASSERT(readableSet_->add(conn), "Failed to add connection to internal descriptor set");
 }
 
 void TCPConnectionPollGroup::remove(IClientConnection* conn)
 {
 	auto tcpConn = dynamic_cast<TCPClientConnection*>(conn);
 	ASSERT_OR_RETURN(, tcpConn != nullptr, "Expected to have TCPClientConnection instance");
-	SocketSet_DelSocket(*sset_, tcpConn->socket_);
+	auto it = std::find(conns_.begin(), conns_.end(), conn);
+	if (it != conns_.end())
+	{
+		conns_.erase(it);
+	}
+	ASSERT(readableSet_->remove(conn), "Failed to remove connection from internal descriptor set");
 }
 
 } // namespace tcp

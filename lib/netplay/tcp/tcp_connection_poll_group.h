@@ -21,17 +21,21 @@
 
 #include "lib/netplay/connection_poll_group.h"
 
+#include <vector>
+#include <memory>
+
+class IClientConnection;
+class IDescriptorSet;
+
 namespace tcp
 {
-
-struct SocketSet;
 
 class TCPConnectionPollGroup : public IConnectionPollGroup
 {
 public:
 
-	explicit TCPConnectionPollGroup(SocketSet* sset);
-	virtual ~TCPConnectionPollGroup() override;
+	explicit TCPConnectionPollGroup();
+	virtual ~TCPConnectionPollGroup() override = default;
 
 	virtual int checkSocketsReadable(unsigned timeout) override;
 	virtual void add(IClientConnection* conn) override;
@@ -39,7 +43,10 @@ public:
 
 private:
 
-	SocketSet* sset_;
+	std::vector<IClientConnection*> conns_;
+	// Pre-allocated descriptor set for `checkSocketsReadable` operation
+	// to avoid extra memory allocations.
+	std::unique_ptr<IDescriptorSet> readableSet_;
 };
 
 } // namespace tcp

@@ -53,6 +53,7 @@
 #include "lib/netplay/listen_socket.h"
 #include "lib/netplay/connection_poll_group.h"
 #include "lib/netplay/connection_provider_registry.h"
+#include "lib/netplay/pending_writes_manager.h"
 #include "netpermissions.h"
 #include "sync_debug.h"
 #include "port_mapping_manager.h"
@@ -606,7 +607,7 @@ static size_t NET_fillBuffer(IClientConnection** pSocket, IConnectionPollGroup* 
 			NETclose();
 			return 0;
 		}
-		delete socket;
+		socket->close();
 		*pSocket = nullptr;
 	}
 
@@ -1000,7 +1001,7 @@ static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose)
 
 		// Although we can get a error result from DelSocket, it don't really matter here.
 		server_socket_set->remove(connected_bsocket[index]);
-		delete connected_bsocket[index];
+		connected_bsocket[index]->close();
 		connected_bsocket[index] = nullptr;
 	}
 	else
@@ -1559,6 +1560,7 @@ int NETinit(bool bFirstCall)
 
 	ConnectionProviderRegistry::Instance().Register(ConnectionProviderType::TCP_DIRECT);
 	ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT).initialize();
+	PendingWritesManager::instance().initialize();
 
 	if (bFirstCall)
 	{
@@ -1606,6 +1608,8 @@ int NETshutdown()
 	}
 	NetPlay.MOTD = nullptr;
 	NETdeleteQueue();
+
+	PendingWritesManager::instance().deinitialize();
 	ConnectionProviderRegistry::Instance().Deregister(ConnectionProviderType::TCP_DIRECT);
 
 	// Reset net usage statistics.
@@ -1637,7 +1641,7 @@ int NETclose()
 		if (connected_bsocket[i])
 		{
 			debug(LOG_NET, "Closing connected_bsocket[%u], %p", i, static_cast<void *>(connected_bsocket[i]));
-			delete connected_bsocket[i];
+			connected_bsocket[i]->close();
 			connected_bsocket[i] = nullptr;
 		}
 		NET_DestroyPlayer(i, true);
@@ -1656,7 +1660,7 @@ int NETclose()
 		{
 			// FIXME: need SocketSet_DelSocket() as well, socket_set or tmp_socket_set?
 			debug(LOG_NET, "Closing tmp_socket[%d] %p", i, static_cast<void *>(tmp_socket[i]));
-			delete tmp_socket[i];
+			tmp_socket[i]->close();
 			tmp_socket[i] = nullptr;
 		}
 	}
@@ -1686,7 +1690,7 @@ int NETclose()
 	if (bsocket)
 	{
 		debug(LOG_NET, "Closing bsocket %p", static_cast<void *>(bsocket));
-		delete bsocket;
+		bsocket->close();
 		bsocket = nullptr;
 	}
 
@@ -1854,7 +1858,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 				debug(LOG_ERROR, "Host connection was broken, socket %p.", static_cast<void *>(bsocket));
 				NETlogEntry("write error--client disconnect.", SYNC_FLAG, player);
 				client_socket_set->remove(bsocket);            // mark it invalid
-				delete bsocket;
+				bsocket->close();
 				bsocket = nullptr;
 				NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 				//Game is pretty much over --should just end everything when HOST dies.
@@ -3478,7 +3482,7 @@ bool LobbyServerConnectionHandler::connect()
 	// Close an existing socket.
 	if (rs_socket != nullptr)
 	{
-		delete rs_socket;
+		rs_socket->close();
 		rs_socket = nullptr;
 	}
 
@@ -3569,7 +3573,7 @@ bool LobbyServerConnectionHandler::disconnect()
 	if (rs_socket != nullptr)
 	{
 		// we don't need this anymore, so clean up
-		delete rs_socket;
+		rs_socket->close();
 		rs_socket = nullptr;
 		server_not_there = true;
 	}
@@ -3807,7 +3811,7 @@ static void NETcloseTempSocket(unsigned int i)
 {
 	std::string rIP = tmp_socket[i]->textAddress();
 	tmp_socket_set->remove(tmp_socket[i]);
-	delete tmp_socket[i];
+	tmp_socket[i]->close();
 	tmp_socket[i] = nullptr;
 	tmp_connectState[i].reset();
 	auto it = tmp_pendingIPs.find(rIP);
@@ -4759,7 +4763,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		const auto writeErrMsg = writeResult.error().message();
 		debug(LOG_NET, "Server socket encountered error: %s", writeErrMsg.c_str());
 		// mark it invalid
-		delete sock;
+		sock->close();
 
 		// when we fail to receive a game count, bail out
 		setLobbyError(ERROR_CONNECTION);
@@ -4776,7 +4780,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	}))
 	{
 		// mark it invalid
-		delete sock;
+		sock->close();
 
 		setLobbyError(ERROR_CONNECTION);
 		return false;
@@ -4786,7 +4790,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	if (readLobbyResponse(*sock, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 	{
 		// mark it invalid
-		delete sock;
+		sock->close();
 		addConsoleMessage(_("Failed to get a lobby response!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 
 		// treat as fatal error
@@ -4838,7 +4842,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 					debug(LOG_NET, "Second readGameStructsList call failed");
 
 					// mark it invalid
-					delete sock;
+					sock->close();
 
 					// when we fail to receive a game count, bail out
 					setLobbyError(ERROR_CONNECTION);
@@ -4861,7 +4865,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	}
 
 	// mark it invalid (we are done with it)
-	delete sock;
+	sock->close();
 
 	return true;
 }

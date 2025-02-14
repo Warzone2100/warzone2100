@@ -34,7 +34,7 @@ TCPListenSocket::~TCPListenSocket()
 {
 	if (listenSocket_)
 	{
-		socketClose(listenSocket_);
+		socketCloseNow(listenSocket_);
 	}
 }
 

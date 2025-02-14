@@ -21,19 +21,12 @@
 
 #pragma once
 
-#include "lib/framework/wzglobal.h"
 #include "lib/netplay/net_result.h"
 
-#ifdef WZ_OS_WIN
-# include <winsock2.h>
-#elif defined(WZ_OS_UNIX)
-using SOCKET = int;
-#endif
-
 #include <chrono>
+#include <memory>
 
-namespace tcp
-{
+class IClientConnection;
 
 enum class PollEventType
 {
@@ -43,15 +36,24 @@ enum class PollEventType
 
 /// <summary>
 /// Abstract class for describing polling descriptor sets used by various polling APIs (e.g. `select()` and `poll()`).
+///
+/// This is a low-level utility and it's not intended for direct use in high-level networking code.
 /// </summary>
 class IDescriptorSet
 {
 public:
 
+	/// <summary>
+	/// Factory method to create descriptor sets for a given poll event type (e.g., readable or writable check).
+	/// </summary>
+	static std::unique_ptr<IDescriptorSet> create(PollEventType eventType);
+
 	virtual ~IDescriptorSet() = default;
 
-	virtual bool add(SOCKET fd) = 0;
+	virtual bool add(IClientConnection* conn) = 0;
+	virtual bool remove(IClientConnection* conn) = 0;
 	virtual void clear() = 0;
+	virtual bool empty() const = 0;
 
 	/// <summary>
 	/// Polling algorithm implementation for this descriptor set kind.
@@ -61,13 +63,16 @@ public:
 	/// <param name="timeout">Timeout value in milliseconds</param>
 	/// <returns>
 	/// * Non-negative integer indicating the number of descriptors that have a return event set
-	/// by an internal polling function.
+	/// by the internal polling function.
 	/// * Zero if none of the descriptors have been set (polling function timed out).
 	/// * `std::error_code` containing error condition otherwise.
 	/// </returns>
 	virtual net::result<int> poll(std::chrono::milliseconds timeout) = 0;
 
-	virtual bool isSet(SOCKET fd) const = 0;
+	/// <summary>
+	/// Check if a given connection is marked as `ready`, i.e.: the previous `poll()` operation
+	/// has successfully set a readable/writable flag (depending on the `EventType` template argument)
+	/// on this connection.
+	/// </summary>
+	virtual bool isSet(const IClientConnection* conn) const = 0;
 };
-
-} // namespace tcp
