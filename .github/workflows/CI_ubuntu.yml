@@ -28,17 +28,17 @@ jobs:
       matrix:
         include:
           # Builds with GCC (uploaded as artifacts, and published as release DEBs)
-          - name: "Ubuntu 20.04 [GCC]"
-            docker: "ubuntu-20.04"
-            arch: "amd64"
-            compiler: gcc
-            output-suffix: "ubuntu20.04"
-            publish_artifact: true
-            deploy_release: true
           - name: "Ubuntu 22.04 [GCC]"
             docker: "ubuntu-22.04"
             arch: "amd64"
             output-suffix: "ubuntu22.04"
+            compiler: gcc
+            publish_artifact: true
+            deploy_release: true
+          - name: "Ubuntu 24.04 [GCC]"
+            docker: "ubuntu-24.04"
+            arch: "amd64"
+            output-suffix: "ubuntu24.04"
             compiler: gcc
             publish_artifact: true
             deploy_release: true
