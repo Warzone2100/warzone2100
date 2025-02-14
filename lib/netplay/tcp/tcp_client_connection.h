@@ -20,6 +20,8 @@
 #pragma once
 
 #include "lib/netplay/client_connection.h"
+#include "lib/netplay/descriptor_set.h"
+#include "lib/netplay/tcp/netsocket.h" // for SOCKET
 
 namespace tcp
 {
@@ -34,19 +36,35 @@ public:
 	virtual ~TCPClientConnection() override;
 
 	virtual net::result<ssize_t> readAll(void* buf, size_t size, unsigned timeout) override;
-	virtual net::result<ssize_t> readNoInt(void* buf, size_t maxSize, size_t* rawByteCount) override;
-	virtual net::result<ssize_t> writeAll(const void* buf, size_t size, size_t* rawByteCount) override;
+	virtual net::result<ssize_t> sendImpl(const std::vector<uint8_t>& data) override;
+	virtual net::result<ssize_t> recvImpl(char* dst, size_t maxSize) override;
+
+	virtual void setReadReady(bool ready) override;
 	virtual bool readReady() const override;
-	virtual void flush(size_t* rawByteCount) override;
-	virtual void enableCompression() override;
+
 	virtual void useNagleAlgorithm(bool enable) override;
 	virtual std::string textAddress() const override;
 
+	virtual bool isValid() const override;
+	virtual net::result<void> connectionStatus() const override;
+
+	SOCKET getRawSocketFd() const;
+
 private:
+
+	friend class TCPConnectionPollGroup;
 
 	Socket* socket_;
 
-	friend class TCPConnectionPollGroup;
+	// Pre-allocated (in ctor) connection list and descriptor sets, which
+	// only contain `this`.
+	//
+	// Used for some operations which may use polling internally
+	// (like `readAll()` and `connectionStatus()`) to avoid extra
+	// memory allocations.
+	const std::vector<IClientConnection*> selfConnList_;
+	std::unique_ptr<IDescriptorSet> readAllDescriptorSet_;
+	std::unique_ptr<IDescriptorSet> connStatusDescriptorSet_;
 };
 
 } // namespace tcp

@@ -63,6 +63,9 @@ static const SOCKET INVALID_SOCKET = -1;
 # define MSG_NOSIGNAL 0
 #endif
 
+class IDescriptorSet;
+class IClientConnection;
+
 namespace tcp
 {
 
@@ -84,6 +87,9 @@ namespace tcp
 void SOCKETinit();
 void SOCKETshutdown();
 
+SOCKET getRawSocketFd(const Socket& sock);
+bool isValidSocket(const Socket& sock);
+
 // Socket addresses.
 net::result<SocketAddress*> resolveHost(const char *host, unsigned port);            ///< Looks up a socket address.
 WZ_DECL_NONNULL(1) void deleteSocketAddress(SocketAddress *addr);       ///< Destroys the socket address.
@@ -92,7 +98,7 @@ WZ_DECL_NONNULL(1) void deleteSocketAddress(SocketAddress *addr);       ///< Des
 net::result<Socket*> socketOpen(const SocketAddress *addr, unsigned timeout);        ///< Opens a Socket, using the first address in addr.
 net::result<Socket*> socketListen(unsigned int port);                                ///< Creates a listen-only Socket, which listens for incoming connections.
 WZ_DECL_NONNULL(1) Socket *socketAccept(Socket *sock);                  ///< Accepts an incoming Socket connection from a listening Socket.
-WZ_DECL_NONNULL(1) void socketClose(Socket *sock);                      ///< Destroys the Socket.
+WZ_DECL_NONNULL(1) void socketCloseNow(Socket* sock); ///< Immediately destroys the socket.
 net::result<Socket*> socketOpenAny(const SocketAddress *addr, unsigned timeout);     ///< Opens a Socket, using the first address that works in addr.
 bool socketHasIPv4(const Socket& sock);
 bool socketHasIPv6(const Socket& sock);
@@ -103,18 +109,9 @@ std::vector<unsigned char> ipv6_AddressString_To_NetBinary(const std::string& ip
 std::string ipv4_NetBinary_To_AddressString(const std::vector<unsigned char>& ip4NetBinaryForm);
 std::string ipv6_NetBinary_To_AddressString(const std::vector<unsigned char>& ip6NetBinaryForm);
 bool socketReadReady(const Socket& sock);            ///< Returns if checkSockets found data to read from this Socket.
-WZ_DECL_NONNULL(2)
-net::result<ssize_t> readNoInt(Socket& sock, void *buf, size_t max_size, size_t *rawByteCount = nullptr);  ///< Reads up to max_size bytes from the Socket. Raw count of bytes (after compression) returned in rawByteCount.
-WZ_DECL_NONNULL(2)
-net::result<ssize_t> readAll(Socket& sock, void *buf, size_t size, unsigned timeout);///< Reads exactly size bytes from the Socket, or blocks until the timeout expires.
-WZ_DECL_NONNULL(2)
-net::result<ssize_t> writeAll(Socket& sock, const void *buf, size_t size, size_t *rawByteCount = nullptr);  ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread. Raw count of bytes (after compression) returned in rawByteCount, which will often be 0 until the socket is flushed.
+void socketSetReadReady(Socket& sock, bool ready);
 
 bool socketSetTCPNoDelay(Socket& sock, bool nodelay); ///< nodelay = true disables the Nagle algorithm for TCP socket
-
-// Sockets, compressed.
-void socketBeginCompression(Socket& sock); ///< Makes future data sent compressed, and future data received expected to be compressed.
-void socketFlush(Socket& sock, uint8_t player, size_t *rawByteCount = nullptr); ///< Actually sends the data written with writeAll. Only useful on compressed sockets. Note that flushing too often makes compression less effective. Raw count of bytes (after compression) returned in rawByteCount.
 
 // Socket sets.
 WZ_DECL_ALLOCATION SocketSet *allocSocketSet();                         ///< Constructs a SocketSet.
@@ -122,7 +119,7 @@ WZ_DECL_NONNULL(1) void deleteSocketSet(SocketSet *set);                ///< Des
 
 WZ_DECL_NONNULL(2) void SocketSet_AddSocket(SocketSet& set, Socket *socket);  ///< Adds a Socket to a SocketSet.
 WZ_DECL_NONNULL(2) void SocketSet_DelSocket(SocketSet& set, Socket *socket);  ///< Removes a Socket from a SocketSet.
-int checkSocketsReadable(const SocketSet& set, unsigned int timeout); ///< Checks which Sockets are ready for reading. Returns the number of ready Sockets, or returns SOCKET_ERROR on error.
+int checkSocketsReadable(const std::vector<IClientConnection*>& conns, IDescriptorSet& readableSet, unsigned int timeout); ///< Checks which Sockets are ready for reading. Returns the number of ready Sockets, or returns SOCKET_ERROR on error.
 
 } // namespace tcp
 

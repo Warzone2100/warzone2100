@@ -19,11 +19,20 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
+#include <system_error>
+#include <vector>
 #include <stddef.h>
+#include <stdint.h>
 
 #include "lib/framework/types.h" // bring in `ssize_t` for MSVC
 #include "lib/netplay/net_result.h"
+#include "lib/netplay/compression_adapter.h"
+
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+
 
 /// <summary>
 /// Basic abstraction over client connection sockets.
@@ -49,6 +58,10 @@ public:
 	/// <summary>
 	/// Read exactly `size` bytes into `buf` buffer.
 	/// Supports setting a timeout value in milliseconds.
+	///
+	/// This function won't be interrupted by signals(EINTR) and will only
+	/// return when <em>exactly</em> @c size bytes have been received.
+	/// I.e. this function blocks until all data has been received or a timeout occurred.
 	/// </summary>
 	/// <param name="buf">Destination buffer to read the data into.</param>
 	/// <param name="size">The size of data to be read in bytes.</param>
@@ -67,7 +80,7 @@ public:
 	/// <returns>On success, returns the number of bytes read;
 	/// On failure, returns an `std::error_code` (having `GenericSystemErrorCategory` error category)
 	/// describing the actual error.</returns>
-	virtual net::result<ssize_t> readNoInt(void* buf, size_t max_size, size_t* rawByteCount) = 0;
+	net::result<ssize_t> readNoInt(void* buf, size_t max_size, size_t* rawByteCount);
 	/// <summary>
 	/// Nonblocking write of `size` bytes to the socket. The data will be written to a
 	/// separate write queue in asynchronous manner, possibly by a separate thread.
@@ -85,7 +98,32 @@ public:
 	/// <param name="size">The number of bytes to write to the socket.</param>
 	/// <param name="rawByteCount">Output parameter: raw count of bytes (after compression) written.</param>
 	/// <returns>The total number of bytes written.</returns>
-	virtual net::result<ssize_t> writeAll(const void* buf, size_t size, size_t* rawByteCount) = 0;
+	net::result<ssize_t> writeAll(const void* buf, size_t size, size_t* rawByteCount);
+
+	/// <summary>
+	/// Low-level implementation method to send raw data (stored in `data`)
+	/// via the underlying transport.
+	/// </summary>
+	/// <param name="data">The data to send over the network.</param>
+	/// <returns>Either the number of bytes sent or `std::error_code` describing the error.</returns>
+	virtual net::result<ssize_t> sendImpl(const std::vector<uint8_t>& data) = 0;
+	/// <summary>
+	/// Low-level implementation method to receive the data into `dst` (up to `maxSize` bytes)
+	/// via the underlying transport.
+	/// </summary>
+	/// <param name="dst">Destination buffer to receive the data from the network.</param>
+	/// <param name="maxSize">Maximum byte limit for the underlying `recv` implementation.</param>
+	/// <returns>Either the number of bytes received or `std::error_code` describing the error.</returns>
+	virtual net::result<ssize_t> recvImpl(char* dst, size_t maxSize) = 0;
+
+	/// <summary>
+	/// Set the "read ready" state on the underlying socket, which is used to indicate whether
+	/// the socket has some data to be ready without blocking. Usually used in conjunction
+	/// with polling, e.g.: `checkSocketsReadable` will set this flag for all affected connections
+	/// if they are ready to read anything right away.
+	/// </summary>
+	/// <param name="ready"></param>
+	virtual void setReadReady(bool ready) = 0;
 	/// <summary>
 	/// This method indicates whether the socket has some data ready to be read (i.e.
 	/// whether the next `readAll/readNoInt` operation will execute without blocking or not).
@@ -99,14 +137,30 @@ public:
 	/// </summary>
 	/// <param name="rawByteCount">Raw count of bytes (after compression) as written
 	/// to the submission queue by the flush operation.</param>
-	virtual void flush(size_t* rawByteCount) = 0;
+	void flush(size_t* rawByteCount);
 	/// <summary>
 	/// Enables compression for the current socket.
 	///
 	/// This makes all subsequent write operations asynchronous, plus
 	/// the written data will need to be flushed explicitly at some point.
 	/// </summary>
-	virtual void enableCompression() = 0;
+	void enableCompression();
+
+	bool isCompressed() const
+	{
+		return isCompressed_;
+	}
+
+	ICompressionAdapter& compressionAdapter()
+	{
+		return *compressionAdapter_;
+	}
+
+	const ICompressionAdapter& compressionAdapter() const
+	{
+		return *compressionAdapter_;
+	}
+
 	/// <summary>
 	/// Enables or disables the use of Nagle algorithm for the socket.
 	///
@@ -120,4 +174,51 @@ public:
 	/// Returns textual representation of the socket's connection address.
 	/// </summary>
 	virtual std::string textAddress() const = 0;
+
+	virtual bool isValid() const = 0;
+	/// <summary>
+	/// Test whether the given connection is active (internal socket has the valid and open connection).
+	/// </summary>
+	/// <returns>
+	/// Empty result when the connection is open, or contains an appropriate `std::error_code`
+	/// when it's closed or in an error state.
+	/// </returns>
+	virtual net::result<void> connectionStatus() const = 0;
+
+	/// <summary>
+	/// Close the connection and dispose of it, i.e. schedules the socket
+	/// to be closed and destroyed later (after all the pending data has been sent).
+	///
+	/// WARNING: do not use the connection object after calling this method!
+	/// It will eventually be deleted by `PendingWritesManager` after making sure
+	/// all outstanding data is sent.
+	/// </summary>
+	void close();
+
+	bool deleteLaterRequested() const
+	{
+		return deleteLater_;
+	}
+
+	void requestDeleteLater()
+	{
+		deleteLater_ = true;
+	}
+
+	const optional<std::error_code>& writeErrorCode() const
+	{
+		return writeErrorCode_;
+	}
+
+	void setWriteErrorCode(optional<std::error_code> ec)
+	{
+		writeErrorCode_ = std::move(ec);
+	}
+
+private:
+
+	optional<std::error_code> writeErrorCode_;
+	std::unique_ptr<ICompressionAdapter> compressionAdapter_;
+	bool deleteLater_ = false;
+	bool isCompressed_ = false;
 };

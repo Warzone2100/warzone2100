@@ -21,7 +21,10 @@
 
 #pragma once
 
-#include "descriptor_set.h"
+#include "lib/framework/frame.h" // for ASSERT
+#include "lib/netplay/descriptor_set.h"
+#include "lib/netplay/tcp/tcp_client_connection.h"
+#include "lib/netplay/tcp/netsocket.h"
 
 #ifdef WZ_OS_WIN
 # include <winsock2.h>
@@ -51,10 +54,25 @@ public:
 		FD_ZERO(&fds_);
 	}
 
-	virtual bool add(SOCKET fd) override
+	virtual bool add(IClientConnection* conn) override
 	{
+		TCPClientConnection* tcpConn = dynamic_cast<TCPClientConnection*>(conn);
+		ASSERT_OR_RETURN(false, tcpConn, "Invalid connection type: expected TCPClientConnection");
+		ASSERT_OR_RETURN(false, tcpConn->isValid(), "Connection object is not valid: socket is not opened");
+
+		const SOCKET fd = tcpConn->getRawSocketFd();
 		FD_SET(fd, &fds_);
 		maxfd_ = std::max(maxfd_, fd);
+		return true;
+	}
+
+	virtual bool remove(IClientConnection* conn) override
+	{
+		TCPClientConnection* tcpConn = dynamic_cast<TCPClientConnection*>(conn);
+		ASSERT_OR_RETURN(false, tcpConn, "Invalid connection type: expected TCPClientConnection");
+
+		const SOCKET fd = tcpConn->getRawSocketFd();
+		FD_CLR(fd, &fds_);
 		return true;
 	}
 
@@ -80,11 +98,20 @@ public:
 		return ret;
 	}
 
-	virtual bool isSet(SOCKET fd) const override
+	virtual bool isSet(const IClientConnection* conn) const override
 	{
+		const TCPClientConnection* tcpConn = dynamic_cast<const TCPClientConnection*>(conn);
+		ASSERT_OR_RETURN(false, tcpConn, "Invalid connection type: expected TCPClientConnection");
+
 		// Force conversion to `fd_set*` since `FD_ISSET` expects a pointer to non-const `fd_set`.
-		return FD_ISSET(fd, const_cast<fd_set*>(&fds_));
+		return FD_ISSET(tcpConn->getRawSocketFd(), const_cast<fd_set*>(&fds_));
 	}
+
+	virtual bool empty() const override
+	{
+		return maxfd_ == 0;
+	}
+
 
 private:
 
