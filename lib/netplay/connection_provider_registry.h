@@ -49,6 +49,8 @@ public:
 private:
 
 	ConnectionProviderRegistry() = default;
+	ConnectionProviderRegistry(const ConnectionProviderRegistry&) = delete;
+	ConnectionProviderRegistry(ConnectionProviderRegistry&&) = delete;
 
 	std::unordered_map<ConnectionProviderType, std::unique_ptr<WzConnectionProvider>> registeredProviders_;
 };
