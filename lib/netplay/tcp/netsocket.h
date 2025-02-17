@@ -70,7 +70,6 @@ namespace tcp
 {
 
 struct Socket;
-struct SocketSet;
 
 } // namespace tcp
 
@@ -114,11 +113,6 @@ void socketSetReadReady(Socket& sock, bool ready);
 bool socketSetTCPNoDelay(Socket& sock, bool nodelay); ///< nodelay = true disables the Nagle algorithm for TCP socket
 
 // Socket sets.
-WZ_DECL_ALLOCATION SocketSet *allocSocketSet();                         ///< Constructs a SocketSet.
-WZ_DECL_NONNULL(1) void deleteSocketSet(SocketSet *set);                ///< Destroys the SocketSet.
-
-WZ_DECL_NONNULL(2) void SocketSet_AddSocket(SocketSet& set, Socket *socket);  ///< Adds a Socket to a SocketSet.
-WZ_DECL_NONNULL(2) void SocketSet_DelSocket(SocketSet& set, Socket *socket);  ///< Removes a Socket from a SocketSet.
 int checkSocketsReadable(const std::vector<IClientConnection*>& conns, IDescriptorSet& readableSet, unsigned int timeout); ///< Checks which Sockets are ready for reading. Returns the number of ready Sockets, or returns SOCKET_ERROR on error.
 
 } // namespace tcp
