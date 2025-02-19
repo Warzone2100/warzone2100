@@ -64,6 +64,13 @@ If there is a greater than 75% consensus among qualified voters, and a sufficien
 
 If a proposal is a rollback (in whole or in part) of a prior change, the threshold for consensus may be reduced (especially if the change was semi-recent, and users only got a chance to exhaustively experience the change in a recent release). We anticipate and expect that opinions may be revised as a result of actually experiencing balance changes in a release. Allowing for a slight reduction in threshold in this scenario attempts to adjust for the idea that an original proposal might not have reached its threshold had people had more time with or played more games with it incorporated.
 
+For clarity:
+- Attempts to "game" the voting (such as by encouraging accounts to join the server to vote up your own proposal, using sockpuppet accounts, etc) will result in any or all of:
+   - Votes being disqualified
+   - Closure of the proposal
+   - Potential further loss of privileges
+- To help prevent voting abuse, votes from members who join _after_ the proposal is opened for voting will automatically be disqualified
+
 ## Phase 3:
 ### Merging (on GitHub)
 
