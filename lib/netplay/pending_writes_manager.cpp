@@ -131,6 +131,7 @@ void PendingWritesManager::threadImplFunction()
 		// Check if we can write to some connections.
 		writableSet->clear();
 		populateWritableSet(*writableSet);
+		ASSERT(!writableSet->empty() || pendingWrites_.empty(), "writableSet must not be empty if there are pending writes.");
 
 		const auto checkWritableRes = checkConnectionsWritable(*writableSet, WRITABLE_CHECK_TIMEOUT);
 
