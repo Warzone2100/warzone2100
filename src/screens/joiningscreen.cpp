@@ -1295,7 +1295,7 @@ void WzJoiningGameScreen_HandlerRoot::closeConnectionAttempt()
 		{
 			tmp_joining_socket_set->remove(client_transient_socket);
 		}
-		delete client_transient_socket;
+		client_transient_socket->close();
 		client_transient_socket = nullptr;
 	}
 	if (tmp_joining_socket_set)
