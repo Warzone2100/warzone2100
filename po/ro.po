@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"PO-Revision-Date: 2025-02-17 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -897,10 +897,10 @@ msgid "Tornado Flak Turret"
 msgstr "Turela Anti-Aeriană Tornadă"
 
 msgid "Proximity Bomb Turret"
-msgstr ""
+msgstr "Turelă de Bombă cu Proximitate"
 
 msgid "Proximity Superbomb Turret"
-msgstr ""
+msgstr "Turelă de Super-bombă cu Proximitate"
 
 msgid "Bunker Blaster Cyborg"
 msgstr "Cyborg cu Bunker Buster"
@@ -3723,7 +3723,7 @@ msgid "Bunker Buster Viper Wheels"
 msgstr "Rachete Anti-Buncăr pe şasiu Viperă cu Roți"
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Rachetă Anti-Buncăr"
 
 msgid "Burns oil more efficiently"
 msgstr "Combustibilul este consumat mai eficient"
@@ -8318,7 +8318,7 @@ msgid "I suggest: Capturing oil resources"
 msgstr "Sugerez: Să capturăm resurse de petrol"
 
 msgid "Hey everyone!"
-msgstr "Salut, toată lumea!"
+msgstr "Salutare tuturor!"
 
 msgid "Welcome!"
 msgstr "Bun venit!"
@@ -11135,87 +11135,87 @@ msgid "Repair Facility Award - Nothing"
 msgstr "Răsplată de Reparații - Nimic"
 
 msgid "Classic"
-msgstr ""
+msgstr "Clasic"
 
 msgid "Additional Campaigns"
-msgstr ""
+msgstr "Campanii Adiționale"
 
 msgid "Start Game"
-msgstr ""
+msgstr "Începe jocul"
 
 msgid "Tweak Options:"
-msgstr ""
+msgstr "Modifică Opțiuni:"
 
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "Resetare la Valorile Implicite"
 
 msgid "Command the forces of The Project in a battle to rebuild the world"
-msgstr ""
+msgstr "Comandă forțele Proiectului într-o luptă pentru a reconstrui lumea"
 
 msgid "Warzone 2100 Universe"
-msgstr ""
+msgstr "Universul Warzone 2100"
 
 msgid "WZ2100 Extended Universe"
-msgstr ""
+msgstr "Universul Extins WZ2100"
 
 msgid "Unique Universe"
-msgstr ""
+msgstr "Univers Unic"
 
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Necesită %s"
 
 msgid "Compatible"
-msgstr ""
+msgstr "Compatibil"
 
 #, c-format
 msgid "Compatible %s"
-msgstr ""
+msgstr "Compatibil %s"
 
 msgid "Timer Power Bonus"
-msgstr ""
+msgstr "Bonus Energie Cronometru"
 
 msgid "Grant power based on the remaining level timer, so there's no need to wait out the clock."
-msgstr ""
+msgstr "Acorda energie in funcție de timpul rămas după fiecare nivel, încât sa nu fie nevoie sa aștepți sa se termine timpul."
 
 msgid "Classic Timers"
-msgstr ""
+msgstr "Cronometru Clasic"
 
 msgid "Alter / disable timers on specific levels, like the original release. (Allows power-cheating.)"
-msgstr ""
+msgstr "Alterează / modifica cronometrul in anumite nivele, exact ca in versiunea originala (Permite trișarea energiei)"
 
 msgid "40 Unit Limit"
-msgstr ""
+msgstr "Limită de 40 Unități"
 
 msgid "Lower the player's unit limit to 40, matching the original PS1 release."
-msgstr ""
+msgstr "Redu limita de unități la 40, corespunzător versiunii originale de PS1."
 
 msgid "Autosaves-Only"
-msgstr ""
+msgstr "Doar Auto-Salvări"
 
 msgid "Disable the ability to manually save / quick-save, limit autosaves to the beginning of each level."
-msgstr ""
+msgstr "Dezactivează capabilitatea de a salva manual, limitează auto-salvările la începutul fiecărui nivel."
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "Modificatori PS1"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
-msgstr ""
+msgstr "Reduce daunele pe care inamicul le face pentru o treime din actuala dificultate de modificare."
 
 msgid "A more relaxed playthrough - easier than easy"
-msgstr ""
+msgstr "Un joc mai relaxat - mai ușor decât ușor"
 
 msgid "A slightly easier challenge than Normal"
-msgstr ""
+msgstr "O provocare mai ușoară decât Normală"
 
 msgid "A fun & challenging experience"
-msgstr ""
+msgstr "O experiență distractivă și provocatoare"
 
 msgid "A challenge for players who have beaten the game"
-msgstr ""
+msgstr "O provocare pentru jucătorii care au învins jocul"
 
 msgid "An unforgiving challenge for experienced players only"
-msgstr ""
+msgstr "O provocare care nu iartă, doar pentru jucătorii experimentați"
 
 msgid "\"Classic\" campaign balance"
 msgstr ""

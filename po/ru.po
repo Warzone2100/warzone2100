@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-06 02:25\n"
+"PO-Revision-Date: 2025-02-10 02:27\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -33,7 +33,7 @@ msgid "Scavenger raiders are approaching our base."
 msgstr "Мусорщики приближаются к нашей базе."
 
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Защитите базу, затем уничтожьте лагеря мусорщиков."
+msgstr "Защитите базу, затем уничтожьте лагеря Мусорщиков."
 
 msgid "ALPHA BASE MISSION: Power Surge Detected"
 msgstr "МИССИЯ НА БАЗЕ АЛЬФА: Обнаружен выброс энергии"
@@ -1242,7 +1242,7 @@ msgid "Defensive Strength: High"
 msgstr "Сила защиты: высокая"
 
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Укреплённая установка с огнемётом Инферно"
+msgstr "Усиленная точка с огнемётом Инферно"
 
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Укреплённая установка с роторной пушкой"
@@ -3260,7 +3260,7 @@ msgid "APFSDS Cannon Rounds Mk2"
 msgstr "Стреловидные снаряды Mk2"
 
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Стреловидные снаряды Mk3"
+msgstr "Подкалиберные снаряды для пушки Mk3"
 
 msgid "APFSDS Cannon Rounds"
 msgstr "Стреловидные снаряды"
@@ -3762,13 +3762,13 @@ msgid "Cannon Laser Rangefinder"
 msgstr "Лазерный дальномер пушки"
 
 msgid "Cannon Rapid Loader Mk2"
-msgstr "Быстрая зарядка пушки Мk2"
+msgstr "Автомат заряжания Пушки Мk2"
 
 msgid "Cannon Rapid Loader Mk3"
-msgstr "Быстрая зарядка пушки Мk3"
+msgstr "Автомат заряжания Пушки Мk3"
 
 msgid "Cannon Rapid Loader"
-msgstr "Быстрая зарядка пушки"
+msgstr "Автомат заряжания Пушки"
 
 #, no-c-format
 msgid "Cannon reload time -10%"
@@ -4521,13 +4521,13 @@ msgid "HEAP Mortar Shells"
 msgstr "Бронебойные снаряды миномёта"
 
 msgid "HEAT Cannon Shells Mk2"
-msgstr "Противотанковые снаряды Mk2"
+msgstr "Кумулятивные снаряды Mk2"
 
 msgid "HEAT Cannon Shells Mk3"
-msgstr "Противотанковые снаряды Mk3"
+msgstr "Кумулятивные снаряды Mk3"
 
 msgid "HEAT Cannon Shells"
-msgstr "Противотанковые снаряды"
+msgstr "Кумулятивные снаряды"
 
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "Противотанковая боеголовка Мk2"
@@ -8303,7 +8303,7 @@ msgid "Can someone please transfer me trucks so I can rebuild?"
 msgstr "Может кто-нибудь передать мне грузовики для перестройки?"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрые сообщения)"
+msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрый чат?)"
 
 msgid "I suggest: Building more units"
 msgstr "Я предлагаю: Строить больше юнитов"

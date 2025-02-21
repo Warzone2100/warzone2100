@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"PO-Revision-Date: 2025-02-17 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -21,16 +21,16 @@ msgid "OBJECTIVE: Locate and recover neural synapse technology"
 msgstr "CIEĽ: Nájsť a získať technológiu neurálnych synapsií"
 
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Založte základňu, potom nájdite stavbu spred kolapsu."
+msgstr "Založ základňu, potom vyhľadaj stavbu spred kolapsu."
 
 msgid "This structure contains technology vital for the success of the Project."
 msgstr "Táto budova obsahuje technológie dôležité pre úspech Projektu."
 
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "MISIA ZÁKLADNE ALFA: Nájazdnícki Smetiari"
+msgstr "MISIA ZÁKLADNE ALFA: Nájazdníci"
 
 msgid "Scavenger raiders are approaching our base."
-msgstr "Nájzadníckí smetiari sa približujú k tvojej základni."
+msgstr "Nájazdníci sa blížia k našej základni."
 
 msgid "Defend the base then destroy the Scavenger camps."
 msgstr "Obráň základňu a následne znič tábory nájazdníkov."
@@ -75,7 +75,7 @@ msgid "TRANSPORT MISSION: Encoded Signals Detected"
 msgstr "PREPRAVNÁ MISIA: Zistené zakódované signály"
 
 msgid "Take a scout force to investigate these signals."
-msgstr "Pre kontrolu týchto signálov použi prieskumné jednotky."
+msgstr "Pre prieskum týchto signálov použi prieskumné jednotky."
 
 msgid "Use your trucks to build defenses at your LZ."
 msgstr "Pre výstavbu obrany na svojom MV použi nákladné autá."
@@ -264,10 +264,10 @@ msgid "Then use a truck to upgrade your power generator with the module."
 msgstr "Následne použi kamión pre vylepšenie generátora pomocou modulu."
 
 msgid "SCAVENGER BASE DETECTED"
-msgstr "ZISTENÁ ZÁKLADŇA SMETIAROV"
+msgstr "ZISTENÁ ZÁKLADŇA NÁJAZDNÍKOV"
 
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Poraz smetiarov a získaj artefakty."
+msgstr "Poraz nájazdníkov a získaj artefakty."
 
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
 msgstr "Gratulujeme k porazeniu Novej Paradigmy, táto oblasť je teraz bezpečná."
@@ -393,7 +393,7 @@ msgid "You are to rescue the civilians."
 msgstr "Budeš zachraňovať civilistov."
 
 msgid "Then destroy the camp."
-msgstr "Potom zničte kemp."
+msgstr "Potom znič kemp."
 
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
 msgstr "MISIA ZÁKLADNE BETA: Znič nepriateľskú leteckú základňu a získaj VTOLy."
@@ -519,7 +519,7 @@ msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Gratulujeme k úspešnej evakuácii základne Beta."
 
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr ""
+msgstr "NEXUS získal prístup k nukleárnym zbraniam a je rozhodnutý zničiť Projekt."
 
 msgid "Take your forces to the Northern Sector"
 msgstr "Zober tvoje jednotky do severného sektora"
@@ -561,13 +561,13 @@ msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
 msgstr "MISIA SEVERNÉHO SEKTORA: Nukleárny výbuch"
 
 msgid "All units must escape the area before the warhead detonates."
-msgstr ""
+msgstr "Všetky jednotky musia uniknúť z oblasti pred výbuchom hlavice."
 
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr ""
+msgstr "Transport pomocou vzdušného výťahu nie je možný. Musíš pokračovať po zemi."
 
 msgid "The mountain range to the east should shield you from the blast."
-msgstr ""
+msgstr "Horský masív na východe by ťa mal ochrániť pred výbuchom."
 
 msgid "The valley is your only chance of escape."
 msgstr "Údolie je tvojou jedinou šancou na únik."
@@ -576,7 +576,7 @@ msgid "AWAY TEAM UPDATE"
 msgstr "AKTUALIZÁCIA PRE VÝSADKOVÝ TÍM"
 
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr ""
+msgstr "Všetka komunikácia s výsadkovým tímom bola prerušená po nukleárnych výbuchoch."
 
 msgid "Their last transmission indicated they were heading back to base."
 msgstr "Ich posledné hlásenie naznačovalo, že smerovali späť na základňu."
@@ -2550,13 +2550,13 @@ msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out 
 msgstr ""
 
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "Súmrak, 3. November 2085"
 
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "Zem, vysoká orbita"
 
 msgid "The Collapse"
-msgstr ""
+msgstr "Kolaps"
 
 msgid "January 19th, 2086"
 msgstr "19. Január 2086"
@@ -2568,7 +2568,7 @@ msgid "Nuclear Winter"
 msgstr "Nukleárna zima"
 
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Polnoc, 10. Apríl 2086"
 
 msgid "Rocky Mountains"
 msgstr "Skalnaté vrchy"
@@ -2577,7 +2577,7 @@ msgid "Safety"
 msgstr "Bezpečie"
 
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Úsvit, 4. Apríl 2100"
 
 msgid "A New Beginning"
 msgstr "Nový začiatok"
@@ -2844,10 +2844,10 @@ msgid "Ultimate Scavengers"
 msgstr ""
 
 msgid "Scavengers"
-msgstr ""
+msgstr "Nájazdníci"
 
 msgid "No Scavengers"
-msgstr ""
+msgstr "Žiadni nájazdníci"
 
 msgid "No Alliances"
 msgstr "Bez spojenectiev"
@@ -3652,7 +3652,7 @@ msgid "Beta Campaign"
 msgstr ""
 
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 msgid "Body Points and Speed Increased"
 msgstr ""
@@ -4279,10 +4279,10 @@ msgid "Fuel Injection Engine"
 msgstr ""
 
 msgid "Gamma Campaign"
-msgstr ""
+msgstr "Kampaň Gama"
 
 msgid "Gamma"
-msgstr ""
+msgstr "Gama"
 
 msgid "Gas turbine boosts power output"
 msgstr ""
@@ -4808,7 +4808,7 @@ msgid "Hurricane AA Turret"
 msgstr ""
 
 msgid "Hut"
-msgstr ""
+msgstr "Chatrč"
 
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr ""
@@ -5033,7 +5033,7 @@ msgid "Inferno Python Hover"
 msgstr ""
 
 msgid "Inferno"
-msgstr ""
+msgstr "Inferno"
 
 msgid "Intruder parasite isolated"
 msgstr ""
@@ -5048,7 +5048,7 @@ msgid "Jammer Turret"
 msgstr ""
 
 msgid "Jeep"
-msgstr ""
+msgstr "Jeep"
 
 msgid "Jump Cyborgs can now be researched"
 msgstr ""
@@ -5233,7 +5233,7 @@ msgid "Makes excellent scout vehicle"
 msgstr ""
 
 msgid "Mantis"
-msgstr ""
+msgstr "Modlivka"
 
 msgid "Mass Driver Fortress"
 msgstr ""
@@ -6106,7 +6106,7 @@ msgid "Scavenger AT-Rocket Pit"
 msgstr ""
 
 msgid "Scavenger Bunker"
-msgstr ""
+msgstr "Bunker nájazdníkov"
 
 msgid "Scavenger Chopper Factory"
 msgstr ""
@@ -6142,7 +6142,7 @@ msgid "Scavenger Rocket Pit"
 msgstr ""
 
 msgid "Scavenger"
-msgstr ""
+msgstr "Nájazdník"
 
 msgid "scavengernexuslinkturret"
 msgstr ""
@@ -6442,10 +6442,10 @@ msgid "Tank Killer Vengeance Tracks"
 msgstr ""
 
 msgid "Tank Killer"
-msgstr ""
+msgstr "Zabijak tankov"
 
 msgid "Tank Traps"
-msgstr ""
+msgstr "Protitankové prekážky"
 
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr ""
@@ -6948,19 +6948,19 @@ msgid "Wide Spectrum Sensor"
 msgstr ""
 
 msgid "Wreck"
-msgstr ""
+msgstr "Vrak"
 
 msgid "Wrecked Bridge"
-msgstr ""
+msgstr "Zničený most"
 
 msgid "Wrecked Tanker"
-msgstr ""
+msgstr "Zničená cisterna"
 
 msgid "Wrecked Van"
-msgstr ""
+msgstr "Zničená dodávka"
 
 msgid "Wrecked Vehicle"
-msgstr ""
+msgstr "Zničené vozidlo"
 
 msgid "Wyvern"
 msgstr ""
@@ -7024,13 +7024,13 @@ msgid "Warzone 2100 Global Mod File"
 msgstr ""
 
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 msgid "Warzone 2100 Music Mod File"
 msgstr ""
 
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "Post nukleárna realtime stratégia"
 
 msgid "Strategy Game"
 msgstr "Strategická hra"
@@ -7177,10 +7177,10 @@ msgid "Go directly to host screen"
 msgstr ""
 
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Zapnúť kompresiu textúr"
 
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Vypnúť kompresiu textúr"
 
 msgid "Set gfx backend"
 msgstr ""
@@ -7231,7 +7231,7 @@ msgid "Set game server port"
 msgstr ""
 
 msgid "port"
-msgstr ""
+msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
 msgstr ""
