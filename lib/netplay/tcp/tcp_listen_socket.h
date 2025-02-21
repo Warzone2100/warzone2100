@@ -23,6 +23,8 @@
 
 #include "lib/netplay/listen_socket.h"
 
+class WzConnectionProvider;
+
 namespace tcp
 {
 
@@ -32,7 +34,7 @@ class TCPListenSocket : public IListenSocket
 {
 public:
 
-	explicit TCPListenSocket(tcp::Socket* rawSocket);
+	explicit TCPListenSocket(WzConnectionProvider& connProvider, tcp::Socket* rawSocket);
 	virtual ~TCPListenSocket() override;
 
 	virtual IClientConnection* accept() override;
@@ -41,6 +43,7 @@ public:
 private:
 
 	tcp::Socket* listenSocket_;
+	WzConnectionProvider* connProvider_;
 };
 
 } // namespace tcp

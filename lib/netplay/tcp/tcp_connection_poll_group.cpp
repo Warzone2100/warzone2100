@@ -21,6 +21,7 @@
 #include "lib/netplay/tcp/tcp_client_connection.h"
 #include "lib/netplay/tcp/netsocket.h"
 #include "lib/netplay/polling_util.h"
+#include "lib/netplay/wz_connection_provider.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/debug.h"
 
@@ -29,8 +30,9 @@
 namespace tcp
 {
 
-TCPConnectionPollGroup::TCPConnectionPollGroup()
-	: readableSet_(IDescriptorSet::create(PollEventType::READABLE))
+TCPConnectionPollGroup::TCPConnectionPollGroup(WzConnectionProvider& connProvider)
+	: connProvider_(&connProvider),
+	readableSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
 {}
 
 net::result<int> TCPConnectionPollGroup::checkConnectionsReadable(std::chrono::milliseconds timeout)

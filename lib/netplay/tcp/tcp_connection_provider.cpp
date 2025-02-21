@@ -28,6 +28,12 @@
 #include "lib/netplay/open_connection_result.h"
 #include "lib/framework/wzapp.h"
 
+#ifdef WZ_OS_WIN
+# include "lib/netplay/tcp/select_descriptor_set.h"
+#else
+# include "lib/netplay/tcp/poll_descriptor_set.h"
+#endif
+
 namespace tcp
 {
 
@@ -58,7 +64,7 @@ net::result<IListenSocket*> TCPConnectionProvider::openListenSocket(uint16_t por
 	{
 		return tl::make_unexpected(res.error());
 	}
-	return new TCPListenSocket(res.value());
+	return new TCPListenSocket(*this, res.value());
 }
 
 net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout)
@@ -75,12 +81,48 @@ net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(c
 	{
 		return tl::make_unexpected(res.error());
 	}
-	return new TCPClientConnection(res.value());
+	return new TCPClientConnection(*this, res.value());
 }
 
 IConnectionPollGroup* TCPConnectionProvider::newConnectionPollGroup()
 {
-	return new TCPConnectionPollGroup();
+	return new TCPConnectionPollGroup(*this);
+}
+
+std::unique_ptr<IDescriptorSet> TCPConnectionProvider::newDescriptorSet(PollEventType eventType)
+{
+	// For now, use `select()` on Windows instead of `poll()` because of a bug in
+	// Windows versions prior to "Windows 10 2004", which can lead to `poll()`
+	// function timing out on socket connection errors instead of returning an error early.
+	//
+	// For more information on the bug, see: https://stackoverflow.com/questions/21653003/is-this-wsapoll-bug-for-non-blocking-sockets-fixed
+	// and also https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsapoll#remarks
+	switch (eventType)
+	{
+	case PollEventType::READABLE:
+	{
+#ifdef WZ_OS_WIN
+		IDescriptorSet* rawPtr = new tcp::SelectDescriptorSet<PollEventType::READABLE>();
+		return std::unique_ptr<IDescriptorSet>(rawPtr);
+#else
+		IDescriptorSet* rawPtr = new tcp::PollDescriptorSet<PollEventType::READABLE>();
+		return std::unique_ptr<IDescriptorSet>(rawPtr);
+#endif
+	}
+	case PollEventType::WRITABLE:
+	{
+#ifdef WZ_OS_WIN
+		IDescriptorSet* rawPtr = new tcp::SelectDescriptorSet<PollEventType::WRITABLE>();
+		return std::unique_ptr<IDescriptorSet>(rawPtr);
+#else
+		IDescriptorSet* rawPtr = new tcp::PollDescriptorSet<PollEventType::WRITABLE>();
+		return std::unique_ptr<IDescriptorSet>(rawPtr);
+#endif
+	}
+	default:
+		ASSERT(false, "Unexpected PollEventType value: %d", static_cast<int>(eventType));
+		return nullptr;
+	}
 }
 
 } // namespace tcp

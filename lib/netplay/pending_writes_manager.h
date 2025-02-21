@@ -35,6 +35,7 @@ struct WZ_SEMAPHORE;
 
 class IClientConnection;
 class IDescriptorSet;
+class WzConnectionProvider;
 
 /// This is a wrapper function that acts as a proxy to `PendingWritesManager::threadImplFunction`.
 /// Argument is `PendingWritesManager*` cast to `void*`.
@@ -70,7 +71,7 @@ public:
 
 	static PendingWritesManager& instance();
 
-	void initialize();
+	void initialize(WzConnectionProvider& connProvider);
 	void deinitialize();
 
 	template <typename Fn>
@@ -141,4 +142,5 @@ private:
 	WZ_SEMAPHORE* sema_ = nullptr;
 	WZ_THREAD* thread_ = nullptr;
 	bool stopRequested_ = false;
+	WzConnectionProvider* connProvider_ = nullptr;
 };

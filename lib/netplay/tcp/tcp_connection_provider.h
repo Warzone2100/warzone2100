@@ -42,6 +42,8 @@ public:
 	virtual net::result<IClientConnection*> openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout) override;
 
 	virtual IConnectionPollGroup* newConnectionPollGroup() override;
+
+	virtual std::unique_ptr<IDescriptorSet> newDescriptorSet(PollEventType eventType) override;
 };
 
 } // namespace tcp

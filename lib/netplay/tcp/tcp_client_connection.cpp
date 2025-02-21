@@ -22,6 +22,7 @@
 #include "lib/framework/string_ext.h"
 #include "lib/netplay/error_categories.h"
 #include "lib/netplay/polling_util.h"
+#include "lib/netplay/wz_connection_provider.h"
 #include "lib/netplay/tcp/tcp_client_connection.h"
 #include "lib/netplay/tcp/netsocket.h"
 #include "lib/netplay/tcp/sock_error.h"
@@ -29,11 +30,12 @@
 namespace tcp
 {
 
-TCPClientConnection::TCPClientConnection(Socket* rawSocket)
+TCPClientConnection::TCPClientConnection(WzConnectionProvider& connProvider, Socket* rawSocket)
 	: socket_(rawSocket),
 	selfConnList_({ this }),
-	readAllDescriptorSet_(IDescriptorSet::create(PollEventType::READABLE)),
-	connStatusDescriptorSet_(IDescriptorSet::create(PollEventType::READABLE))
+	connProvider_(&connProvider),
+	readAllDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE)),
+	connStatusDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
 {
 	ASSERT(socket_ != nullptr, "Null socket passed to TCPClientConnection ctor");
 }

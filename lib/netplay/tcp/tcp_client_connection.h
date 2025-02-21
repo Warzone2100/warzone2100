@@ -23,6 +23,8 @@
 #include "lib/netplay/descriptor_set.h"
 #include "lib/netplay/tcp/netsocket.h" // for SOCKET
 
+class WzConnectionProvider;
+
 namespace tcp
 {
 
@@ -32,7 +34,7 @@ class TCPClientConnection : public IClientConnection
 {
 public:
 
-	explicit TCPClientConnection(Socket* rawSocket);
+	explicit TCPClientConnection(WzConnectionProvider& connProvider, Socket* rawSocket);
 	virtual ~TCPClientConnection() override;
 
 	virtual net::result<ssize_t> readAll(void* buf, size_t size, unsigned timeout) override;
@@ -63,6 +65,7 @@ private:
 	// (like `readAll()` and `connectionStatus()`) to avoid extra
 	// memory allocations.
 	const std::vector<IClientConnection*> selfConnList_;
+	WzConnectionProvider* connProvider_;
 	std::unique_ptr<IDescriptorSet> readAllDescriptorSet_;
 	std::unique_ptr<IDescriptorSet> connStatusDescriptorSet_;
 };

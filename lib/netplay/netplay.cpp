@@ -1560,8 +1560,9 @@ int NETinit(bool bFirstCall)
 	NET_InitPlayers(true, true);
 
 	ConnectionProviderRegistry::Instance().Register(ConnectionProviderType::TCP_DIRECT);
-	ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT).initialize();
-	PendingWritesManager::instance().initialize();
+	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
+	connProvider.initialize();
+	PendingWritesManager::instance().initialize(connProvider);
 
 	if (bFirstCall)
 	{

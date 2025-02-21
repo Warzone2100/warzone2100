@@ -24,6 +24,7 @@
 #include "lib/framework/frame.h" // for ASSERT
 #include "lib/netplay/descriptor_set.h"
 #include "lib/netplay/client_connection.h"
+#include "lib/netplay/wz_connection_provider.h"
 
 #include <system_error>
 
@@ -46,6 +47,7 @@ void PendingWritesManager::deinitialize()
 		return;
 	}
 	wzMutexLock(mtx_);
+	connProvider_ = nullptr;
 	stopRequested_ = true;
 	pendingWrites_.clear();
 	wzMutexUnlock(mtx_);
@@ -56,13 +58,14 @@ void PendingWritesManager::deinitialize()
 	thread_ = nullptr;
 }
 
-void PendingWritesManager::initialize()
+void PendingWritesManager::initialize(WzConnectionProvider& connProvider)
 {
 	if (thread_ != nullptr)
 	{
 		// No-op in case of a repeated `initialize()` call
 		return;
 	}
+	connProvider_ = &connProvider;
 	stopRequested_ = false;
 	mtx_ = wzMutexCreate();
 	sema_ = wzSemaphoreCreate(0);
@@ -126,7 +129,7 @@ void PendingWritesManager::threadImplFunction()
 	while (!stopRequested_)
 	{
 		static constexpr std::chrono::milliseconds WRITABLE_CHECK_TIMEOUT{ 50 };
-		static std::unique_ptr<IDescriptorSet> writableSet = IDescriptorSet::create(PollEventType::WRITABLE);
+		static std::unique_ptr<IDescriptorSet> writableSet = connProvider_->newDescriptorSet(PollEventType::WRITABLE);
 
 		// Check if we can write to some connections.
 		writableSet->clear();

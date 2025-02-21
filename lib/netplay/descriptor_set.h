@@ -43,11 +43,6 @@ class IDescriptorSet
 {
 public:
 
-	/// <summary>
-	/// Factory method to create descriptor sets for a given poll event type (e.g., readable or writable check).
-	/// </summary>
-	static std::unique_ptr<IDescriptorSet> create(PollEventType eventType);
-
 	virtual ~IDescriptorSet() = default;
 
 	virtual bool add(IClientConnection* conn) = 0;
