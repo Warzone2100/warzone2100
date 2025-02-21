@@ -56,7 +56,7 @@ static std::weak_ptr<WzJoiningGameScreen> psCurrentJoiningAttemptScreen;
 
 void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen);
 
-constexpr int NET_READ_TIMEOUT = 0;
+constexpr std::chrono::milliseconds NET_READ_TIMEOUT{ 0 };
 constexpr size_t NET_BUFFER_SIZE = MaxMsgSize;
 constexpr uint32_t HOST_RESPONSE_TIMEOUT = 10000;
 
@@ -1367,7 +1367,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 	if (currentJoiningState == JoiningState::AwaitingInitialNetcodeHandshakeAck)
 	{
 		// read in data, if we have it
-		if (tmp_joining_socket_set->checkSocketsReadable(NET_READ_TIMEOUT) > 0)
+		if (tmp_joining_socket_set->checkConnectionsReadable(NET_READ_TIMEOUT).value_or(0) > 0)
 		{
 			if (!client_transient_socket->readReady())
 			{
@@ -1420,7 +1420,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 	if (currentJoiningState == JoiningState::ProcessingJoinMessages)
 	{
 		// read in data, if we have it
-		if (tmp_joining_socket_set->checkSocketsReadable(NET_READ_TIMEOUT) > 0)
+		if (tmp_joining_socket_set->checkConnectionsReadable(NET_READ_TIMEOUT).value_or(0) > 0)
 		{
 			if (!client_transient_socket->readReady())
 			{

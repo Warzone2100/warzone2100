@@ -37,14 +37,14 @@ public:
 	explicit TCPConnectionPollGroup();
 	virtual ~TCPConnectionPollGroup() override = default;
 
-	virtual int checkSocketsReadable(unsigned timeout) override;
+	virtual net::result<int> checkConnectionsReadable(std::chrono::milliseconds timeout) override;
 	virtual void add(IClientConnection* conn) override;
 	virtual void remove(IClientConnection* conn) override;
 
 private:
 
 	std::vector<IClientConnection*> conns_;
-	// Pre-allocated descriptor set for `checkSocketsReadable` operation
+	// Pre-allocated descriptor set for `checkConnectionsReadable` operation
 	// to avoid extra memory allocations.
 	std::unique_ptr<IDescriptorSet> readableSet_;
 };

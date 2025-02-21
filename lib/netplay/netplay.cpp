@@ -44,6 +44,7 @@
 #include <atomic>
 #include <limits>
 #include <sodium.h>
+#include <chrono>
 
 #include "netplay.h"
 #include "netlog.h"
@@ -94,7 +95,7 @@ static bool bEnableTCPNoDelay = true;
 bool netGameserverPortOverride = false;
 
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
-#define NET_READ_TIMEOUT	0
+constexpr std::chrono::milliseconds NET_READ_TIMEOUT{ 0 };
 /*
 *	=== Using new socket code, this might not hold true any longer ===
 *	NOTE /rant:  If the buffer size isn't big enough, it will invalidate the socket.
@@ -2885,7 +2886,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 	}
 
 	IConnectionPollGroup* pollGroup = NetPlay.isHost ? server_socket_set : client_socket_set;
-	if (pollGroup == nullptr || pollGroup->checkSocketsReadable(NET_READ_TIMEOUT) <= 0)
+	if (pollGroup == nullptr || pollGroup->checkConnectionsReadable(NET_READ_TIMEOUT).value_or(0) <= 0)
 	{
 		goto checkMessages;
 	}
@@ -3660,14 +3661,15 @@ void LobbyServerConnectionHandler::run()
 			bool exceededTimeout = (realTime - lastConnectionTime >= 10000);
 			// We use readLobbyResponse to display error messages and handle state changes if there's no response
 			// So if exceededTimeout, just call it with a low timeout
-			int checkSocketRet = waitingForConnectionFinalize->checkSocketsReadable(NET_READ_TIMEOUT);
-			if (checkSocketRet == SOCKET_ERROR)
+			auto checkSocketRet = waitingForConnectionFinalize->checkConnectionsReadable(NET_READ_TIMEOUT);
+			if (!checkSocketRet.has_value())
 			{
-				debug(LOG_ERROR, "Lost connection to lobby server");
+				const auto msg = checkSocketRet.error().message();
+				debug(LOG_ERROR, "Lost connection to lobby server: %s", msg.c_str());
 				disconnect();
 				break;
 			}
-			if (exceededTimeout || (checkSocketRet > 0 && rs_socket->readReady()))
+			if (exceededTimeout || (checkSocketRet.value() > 0 && rs_socket->readReady()))
 			{
 				if (readLobbyResponse(*rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 				{
@@ -3927,7 +3929,7 @@ static void NETallowJoining()
 	}
 
 	ASSERT(tmp_socket_set != nullptr, "Null tmp_socket_set");
-	if (tmp_socket_set->checkSocketsReadable(NET_READ_TIMEOUT) > 0)
+	if (tmp_socket_set->checkConnectionsReadable(NET_READ_TIMEOUT).value_or(0) > 0)
 	{
 		for (i = 0; i < MAX_TMP_SOCKETS; ++i)
 		{
