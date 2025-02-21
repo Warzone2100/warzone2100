@@ -112,9 +112,6 @@ void socketSetReadReady(Socket& sock, bool ready);
 
 bool socketSetTCPNoDelay(Socket& sock, bool nodelay); ///< nodelay = true disables the Nagle algorithm for TCP socket
 
-// Socket sets.
-int checkSocketsReadable(const std::vector<IClientConnection*>& conns, IDescriptorSet& readableSet, unsigned int timeout); ///< Checks which Sockets are ready for reading. Returns the number of ready Sockets, or returns SOCKET_ERROR on error.
-
 } // namespace tcp
 
 #endif //_net_socket_h

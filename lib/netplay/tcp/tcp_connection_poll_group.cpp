@@ -20,6 +20,7 @@
 #include "lib/netplay/tcp/tcp_connection_poll_group.h"
 #include "lib/netplay/tcp/tcp_client_connection.h"
 #include "lib/netplay/tcp/netsocket.h"
+#include "lib/netplay/polling_util.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/debug.h"
 
@@ -32,9 +33,9 @@ TCPConnectionPollGroup::TCPConnectionPollGroup()
 	: readableSet_(IDescriptorSet::create(PollEventType::READABLE))
 {}
 
-int TCPConnectionPollGroup::checkSocketsReadable(unsigned timeout)
+net::result<int> TCPConnectionPollGroup::checkConnectionsReadable(std::chrono::milliseconds timeout)
 {
-	return tcp::checkSocketsReadable(conns_, *readableSet_, timeout);
+	return ::checkConnectionsReadable(conns_, *readableSet_, timeout);
 }
 
 void TCPConnectionPollGroup::add(IClientConnection* conn)
