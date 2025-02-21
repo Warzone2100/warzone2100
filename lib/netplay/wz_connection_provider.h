@@ -25,6 +25,7 @@
 #include <string>
 
 #include "lib/netplay/connection_address.h"
+#include "lib/netplay/descriptor_set.h"
 #include "lib/netplay/net_result.h"
 #include "lib/netplay/open_connection_result.h"
 
@@ -82,4 +83,16 @@ public:
 	/// Create a group for polling client connections.
 	/// </summary>
 	virtual IConnectionPollGroup* newConnectionPollGroup() = 0;
+	/// <summary>
+	/// Create a new descriptor set, suitable for polling a set of client connections for a certain kind of event.
+	///
+	/// NOTE: this is a low-level networking primitive.
+	/// Thus, descriptor sets aren't intended for direct use in high-level networking code.
+	/// </summary>
+	/// <param name="eventType">Event that we're interested in.
+	/// Can be one of the folowing:
+	/// * PollEventType::READABLE
+	/// * PollEventType::WRITABLE
+	/// </param>
+	virtual std::unique_ptr<IDescriptorSet> newDescriptorSet(PollEventType eventType) = 0;
 };

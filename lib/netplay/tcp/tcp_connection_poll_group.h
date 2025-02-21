@@ -26,6 +26,7 @@
 
 class IClientConnection;
 class IDescriptorSet;
+class WzConnectionProvider;
 
 namespace tcp
 {
@@ -34,7 +35,7 @@ class TCPConnectionPollGroup : public IConnectionPollGroup
 {
 public:
 
-	explicit TCPConnectionPollGroup();
+	explicit TCPConnectionPollGroup(WzConnectionProvider& connProvider);
 	virtual ~TCPConnectionPollGroup() override = default;
 
 	virtual net::result<int> checkConnectionsReadable(std::chrono::milliseconds timeout) override;
@@ -44,6 +45,7 @@ public:
 private:
 
 	std::vector<IClientConnection*> conns_;
+	WzConnectionProvider* connProvider_;
 	// Pre-allocated descriptor set for `checkConnectionsReadable` operation
 	// to avoid extra memory allocations.
 	std::unique_ptr<IDescriptorSet> readableSet_;
