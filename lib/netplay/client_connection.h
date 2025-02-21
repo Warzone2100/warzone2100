@@ -119,7 +119,7 @@ public:
 	/// <summary>
 	/// Set the "read ready" state on the underlying socket, which is used to indicate whether
 	/// the socket has some data to be ready without blocking. Usually used in conjunction
-	/// with polling, e.g.: `checkSocketsReadable` will set this flag for all affected connections
+	/// with polling, e.g.: `checkConnectionsReadable` will set this flag for all affected connections
 	/// if they are ready to read anything right away.
 	/// </summary>
 	/// <param name="ready"></param>

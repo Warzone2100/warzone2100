@@ -21,23 +21,13 @@
 #include "lib/framework/debug.h"
 #include "lib/framework/string_ext.h"
 #include "lib/netplay/error_categories.h"
+#include "lib/netplay/polling_util.h"
 #include "lib/netplay/tcp/tcp_client_connection.h"
 #include "lib/netplay/tcp/netsocket.h"
 #include "lib/netplay/tcp/sock_error.h"
 
 namespace tcp
 {
-
-namespace
-{
-
-void resetAuxDescriptorSet(IDescriptorSet& dset, IClientConnection* conn)
-{
-	dset.clear();
-	ASSERT(dset.add(conn), "Failed to add connection to internal descriptor set");
-}
-
-} // anonymous namespace
 
 TCPClientConnection::TCPClientConnection(Socket* rawSocket)
 	: socket_(rawSocket),
@@ -74,22 +64,22 @@ net::result<ssize_t> TCPClientConnection::readAll(void* buf, size_t size, unsign
 
 	while (received < size)
 	{
-		ssize_t ret = 0;
 		// If a timeout is set, wait for that amount of time for data to arrive (or abort)
 		if (timeout)
 		{
-			resetAuxDescriptorSet(*readAllDescriptorSet_, this);
-			ret = tcp::checkSocketsReadable(selfConnList_, *readAllDescriptorSet_, timeout);
-			if (ret < (ssize_t)selfConnList_.size() || !readReady())
+			const auto ret = checkConnectionsReadable(selfConnList_, *readAllDescriptorSet_, std::chrono::milliseconds(timeout));
+			if (!ret.has_value())
 			{
-				if (ret == 0)
-				{
-					debug(LOG_NET, "socket (%p) has timed out.", static_cast<void*>(&sock));
-					return tl::make_unexpected(make_network_error_code(ETIMEDOUT));
-				}
-				debug(LOG_NET, "socket (%p) error.", static_cast<void*>(&sock));
-				return tl::make_unexpected(make_network_error_code(getSockErr()));
+				const auto msg = ret.error().message();
+				debug(LOG_NET, "socket (%p) error: %s.", static_cast<void*>(&sock), msg.c_str());
+				return tl::make_unexpected(ret.error());
 			}
+			else if (ret.value() == 0)
+			{
+				debug(LOG_NET, "socket (%p) has timed out.", static_cast<void*>(&sock));
+				return tl::make_unexpected(make_network_error_code(ETIMEDOUT));
+			}
+			ASSERT(readReady(), "Socket should be ready for reading");
 		}
 		const auto recvRes = recvImpl(&((char*)buf)[received], size - received);
 		setReadReady(false);
@@ -182,14 +172,12 @@ net::result<void> TCPClientConnection::connectionStatus() const
 		isValid(), "Invalid connection object");
 
 	// Check whether the socket is still connected
-	resetAuxDescriptorSet(*connStatusDescriptorSet_,
-		static_cast<IClientConnection*>(const_cast<TCPClientConnection*>(this)));
-	ssize_t ret = tcp::checkSocketsReadable(selfConnList_, *connStatusDescriptorSet_, 0);
-	if (ret == SOCKET_ERROR)
+	const auto checkConnRes = checkConnectionsReadable(selfConnList_, *connStatusDescriptorSet_, std::chrono::milliseconds{ 0 });
+	if (!checkConnRes.has_value())
 	{
-		return tl::make_unexpected(make_network_error_code(tcp::getSockErr()));
+		return tl::make_unexpected(checkConnRes.error());
 	}
-	else if (ret == (int)selfConnList_.size() && readReady())
+	else if (checkConnRes.value() == (int)selfConnList_.size() && readReady())
 	{
 		/* The next recv(2) call won't block, but we're writing. So
 		 * check the read queue to see if the connection is closed.
@@ -198,12 +186,12 @@ net::result<void> TCPClientConnection::connectionStatus() const
 		 */
 #if defined(WZ_OS_WIN)
 		unsigned long readQueue;
-		ret = ioctlsocket(getRawSocketFd(), FIONREAD, &readQueue);
+		const auto ioctlRet = ioctlsocket(getRawSocketFd(), FIONREAD, &readQueue);
 #else
 		int readQueue;
-		ret = ioctl(getRawSocketFd(), FIONREAD, &readQueue);
+		const auto ioctlRet = ioctl(getRawSocketFd(), FIONREAD, &readQueue);
 #endif
-		if (ret == SOCKET_ERROR)
+		if (ioctlRet == SOCKET_ERROR)
 		{
 			debug(LOG_NET, "socket error");
 			return tl::make_unexpected(make_network_error_code(tcp::getSockErr()));

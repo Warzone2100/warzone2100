@@ -421,66 +421,6 @@ static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
 #endif
 }
 
-static void resetDescriptorSet(const std::vector<IClientConnection*>& conns, IDescriptorSet& dset)
-{
-	dset.clear();
-	for (const auto& conn : conns)
-	{
-		ASSERT(dset.add(conn), "Failed to add connection to descriptor set");
-	}
-}
-
-int checkSocketsReadable(const std::vector<IClientConnection*>& conns, IDescriptorSet& readableSet, unsigned int timeout)
-{
-	if (conns.empty())
-	{
-		return 0;
-	}
-
-	bool compressedReady = false;
-	for (const auto& conn : conns)
-	{
-		ASSERT(conn->isValid(), "Invalid connection!");
-
-		if (conn->isCompressed() && !conn->compressionAdapter().decompressionNeedInput())
-		{
-			compressedReady = true;
-			break;
-		}
-	}
-
-	if (compressedReady)
-	{
-		// A socket already has some data ready. Don't really poll the sockets.
-		for (auto& conn : conns)
-		{
-			conn->setReadReady(conn->isCompressed() && !conn->compressionAdapter().decompressionNeedInput());
-		}
-		return conns.size();
-	}
-
-	resetDescriptorSet(conns, readableSet);
-	const auto pollRes = readableSet.poll(std::chrono::milliseconds(timeout));
-	if (!pollRes.has_value())
-	{
-		const auto msg = pollRes.error().message();
-		debug(LOG_ERROR, "poll failed: %s", msg.c_str());
-		return SOCKET_ERROR;
-	}
-
-	if (pollRes.value() == 0)
-	{
-		debug(LOG_WARNING, "poll timed out after waiting for %d milliseconds", timeout);
-		return 0;
-	}
-
-	for (auto& conn : conns)
-	{
-		conn->setReadReady(readableSet.isSet(conn));
-	}
-	return pollRes.value();
-}
-
 void socketCloseNow(Socket *sock)
 {
 	for (unsigned i = 0; i < ARRAY_SIZE(sock->fd); ++i)
