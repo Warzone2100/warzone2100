@@ -31,10 +31,8 @@ namespace tcp
 {
 
 TCPClientConnection::TCPClientConnection(WzConnectionProvider& connProvider, Socket* rawSocket)
-	: socket_(rawSocket),
-	selfConnList_({ this }),
-	connProvider_(&connProvider),
-	readAllDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE)),
+	: IClientConnection(connProvider),
+	socket_(rawSocket),
 	connStatusDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
 {
 	ASSERT(socket_ != nullptr, "Null socket passed to TCPClientConnection ctor");
@@ -48,58 +46,6 @@ TCPClientConnection::~TCPClientConnection()
 	}
 	tcp::socketCloseNow(socket_);
 	socket_ = nullptr;
-}
-
-net::result<ssize_t> TCPClientConnection::readAll(void* buf, size_t size, unsigned timeout)
-{
-	ASSERT(!isCompressed(), "readAll on compressed sockets not implemented.");
-
-	Socket& sock = *socket_;
-	SOCKET sockfd = getRawSocketFd();
-	size_t received = 0;
-
-	if (sockfd == INVALID_SOCKET)
-	{
-		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%" PRIuPTR"x  (error: EBADF)", static_cast<void*>(&sock), static_cast<uintptr_t>(sockfd));
-		return tl::make_unexpected(make_network_error_code(EBADF));
-	}
-
-	while (received < size)
-	{
-		// If a timeout is set, wait for that amount of time for data to arrive (or abort)
-		if (timeout)
-		{
-			const auto ret = checkConnectionsReadable(selfConnList_, *readAllDescriptorSet_, std::chrono::milliseconds(timeout));
-			if (!ret.has_value())
-			{
-				const auto msg = ret.error().message();
-				debug(LOG_NET, "socket (%p) error: %s.", static_cast<void*>(&sock), msg.c_str());
-				return tl::make_unexpected(ret.error());
-			}
-			else if (ret.value() == 0)
-			{
-				debug(LOG_NET, "socket (%p) has timed out.", static_cast<void*>(&sock));
-				return tl::make_unexpected(make_network_error_code(ETIMEDOUT));
-			}
-			ASSERT(readReady(), "Socket should be ready for reading");
-		}
-		const auto recvRes = recvImpl(&((char*)buf)[received], size - received);
-		setReadReady(false);
-		if (!recvRes.has_value())
-		{
-			const auto ec = recvRes.error();
-			if (ec == std::errc::resource_unavailable_try_again || // EWOULDBLOCK
-				ec == std::errc::operation_would_block || // EAGAIN
-				ec == std::errc::interrupted) // EINTR
-			{
-				continue;
-			}
-			return recvRes;
-		}
-		received += recvRes.value();
-	}
-
-	return received;
 }
 
 net::result<ssize_t> TCPClientConnection::sendImpl(const std::vector<uint8_t>& data)

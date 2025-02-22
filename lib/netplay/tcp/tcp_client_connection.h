@@ -37,7 +37,6 @@ public:
 	explicit TCPClientConnection(WzConnectionProvider& connProvider, Socket* rawSocket);
 	virtual ~TCPClientConnection() override;
 
-	virtual net::result<ssize_t> readAll(void* buf, size_t size, unsigned timeout) override;
 	virtual net::result<ssize_t> sendImpl(const std::vector<uint8_t>& data) override;
 	virtual net::result<ssize_t> recvImpl(char* dst, size_t maxSize) override;
 
@@ -58,15 +57,6 @@ private:
 
 	Socket* socket_;
 
-	// Pre-allocated (in ctor) connection list and descriptor sets, which
-	// only contain `this`.
-	//
-	// Used for some operations which may use polling internally
-	// (like `readAll()` and `connectionStatus()`) to avoid extra
-	// memory allocations.
-	const std::vector<IClientConnection*> selfConnList_;
-	WzConnectionProvider* connProvider_;
-	std::unique_ptr<IDescriptorSet> readAllDescriptorSet_;
 	std::unique_ptr<IDescriptorSet> connStatusDescriptorSet_;
 };
 
