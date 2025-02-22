@@ -33,6 +33,8 @@
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 
+class IDescriptorSet;
+class WzConnectionProvider;
 
 /// <summary>
 /// Basic abstraction over client connection sockets.
@@ -69,7 +71,7 @@ public:
 	/// <returns>On success, returns the number of bytes read;
 	/// On failure, returns an `std::error_code` (having `GenericSystemErrorCategory` error category)
 	/// describing the actual error.</returns>
-	virtual net::result<ssize_t> readAll(void* buf, size_t size, unsigned timeout) = 0;
+	net::result<ssize_t> readAll(void* buf, size_t size, unsigned timeout);
 	/// <summary>
 	/// Reads at most `max_size` bytes into `buf` buffer.
 	/// Raw count of bytes (after compression) is returned in `rawByteCount`.
@@ -215,10 +217,25 @@ public:
 		writeErrorCode_ = std::move(ec);
 	}
 
+protected:
+
+	IClientConnection(WzConnectionProvider& connProvider);
+
+	// Pre-allocated (in ctor) connection list and descriptor sets, which
+	// only contain `this`.
+	//
+	// Used for some operations which may use polling internally
+	// (like `readAll()` and `connectionStatus()`) to avoid extra
+	// memory allocations.
+	const std::vector<IClientConnection*> selfConnList_;
+	// Connection provider used to create internal descriptor sets
+	WzConnectionProvider* connProvider_;
+
 private:
 
 	optional<std::error_code> writeErrorCode_;
 	std::unique_ptr<ICompressionAdapter> compressionAdapter_;
+	std::unique_ptr<IDescriptorSet> readAllDescriptorSet_;
 	bool deleteLater_ = false;
 	bool isCompressed_ = false;
 };

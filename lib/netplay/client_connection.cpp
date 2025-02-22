@@ -23,7 +23,65 @@
 
 #include "lib/netplay/error_categories.h"
 #include "lib/netplay/pending_writes_manager.h"
+#include "lib/netplay/polling_util.h"
+#include "lib/netplay/wz_connection_provider.h"
 #include "lib/netplay/zlib_compression_adapter.h"
+
+IClientConnection::IClientConnection(WzConnectionProvider& connProvider)
+	: selfConnList_({ this }),
+	connProvider_(&connProvider),
+	readAllDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
+{}
+
+net::result<ssize_t> IClientConnection::readAll(void* buf, size_t size, unsigned timeout)
+{
+	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)),
+		!isCompressed(), "readAll on compressed sockets not implemented.");
+
+	if (!isValid())
+	{
+		debug(LOG_ERROR, "Invalid socket (%p) (error: EBADF)", static_cast<void*>(this));
+		return tl::make_unexpected(make_network_error_code(EBADF));
+	}
+
+	size_t received = 0;
+	while (received < size)
+	{
+		// If a timeout is set, wait for that amount of time for data to arrive (or abort)
+		if (timeout)
+		{
+			const auto ret = checkConnectionsReadable(selfConnList_, *readAllDescriptorSet_, std::chrono::milliseconds(timeout));
+			if (!ret.has_value())
+			{
+				const auto msg = ret.error().message();
+				debug(LOG_NET, "socket (%p) error: %s.", static_cast<void*>(this), msg.c_str());
+				return tl::make_unexpected(ret.error());
+			}
+			else if (ret.value() == 0)
+			{
+				debug(LOG_NET, "socket (%p) has timed out.", static_cast<void*>(this));
+				return tl::make_unexpected(make_network_error_code(ETIMEDOUT));
+			}
+			ASSERT(readReady(), "Socket should be ready for reading");
+		}
+		const auto recvRes = recvImpl(&((char*)buf)[received], size - received);
+		setReadReady(false);
+		if (!recvRes.has_value())
+		{
+			const auto ec = recvRes.error();
+			if (ec == std::errc::resource_unavailable_try_again || // EWOULDBLOCK
+				ec == std::errc::operation_would_block || // EAGAIN
+				ec == std::errc::interrupted) // EINTR
+			{
+				continue;
+			}
+			return recvRes;
+		}
+		received += recvRes.value();
+	}
+
+	return received;
+}
 
 net::result<ssize_t> IClientConnection::readNoInt(void* buf, size_t max_size, size_t* rawByteCount)
 {
