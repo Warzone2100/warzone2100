@@ -43,16 +43,25 @@ public:
 		: open_socket(open_socket)
 	{ }
 
-public:
 	bool hasError() const { return errorCode.has_value(); }
-public:
+
 	OpenConnectionResult(const OpenConnectionResult& other) = delete; // non construction-copyable
 	OpenConnectionResult& operator=(const OpenConnectionResult&) = delete; // non copyable
 	OpenConnectionResult(OpenConnectionResult&&) = default;
 	OpenConnectionResult& operator=(OpenConnectionResult&&) = default;
-public:
 
-	std::unique_ptr<IClientConnection> open_socket;
+	struct ConnectionCloser
+	{
+		void operator() (IClientConnection* conn)
+		{
+			if (conn)
+			{
+				conn->close();
+			}
+		}
+	};
+
+	std::unique_ptr<IClientConnection, ConnectionCloser> open_socket;
 	optional<std::error_code> errorCode = nullopt;
 	std::string errorString;
 };
