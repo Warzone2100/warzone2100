@@ -55,8 +55,6 @@ class IClientConnection
 {
 public:
 
-	virtual ~IClientConnection() = default;
-
 	/// <summary>
 	/// Read exactly `size` bytes into `buf` buffer.
 	/// Supports setting a timeout value in milliseconds.
@@ -219,7 +217,16 @@ public:
 
 protected:
 
+	// Allow `PendingWritesManager` to access hidden destructor
+	// since this class ultimately does the final cleanup of
+	// disposed connections.
+	friend class PendingWritesManager;
+
 	IClientConnection(WzConnectionProvider& connProvider);
+	// Hide the destructor so that external code cannot accidentally
+	// `delete` the connection directly and has to use `close()` method
+	// to dispose of the connection object.
+	virtual ~IClientConnection() = default;
 
 	// Pre-allocated (in ctor) connection list and descriptor sets, which
 	// only contain `this`.
