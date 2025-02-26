@@ -26,8 +26,9 @@
 namespace tcp
 {
 
-TCPListenSocket::TCPListenSocket(WzConnectionProvider& connProvider, Socket* rawSocket)
-	: listenSocket_(rawSocket),
+TCPListenSocket::TCPListenSocket(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, Socket* rawSocket)
+	: IListenSocket(compressionProvider),
+	listenSocket_(rawSocket),
 	connProvider_(&connProvider)
 {}
 
@@ -51,7 +52,7 @@ IClientConnection* TCPListenSocket::accept()
 	{
 		return nullptr;
 	}
-	return new TCPClientConnection(*connProvider_, s);
+	return new TCPClientConnection(*connProvider_, *compressionProvider_, s);
 }
 
 IListenSocket::IPVersionsMask TCPListenSocket::supportedIpVersions() const

@@ -25,11 +25,12 @@
 #include "lib/netplay/pending_writes_manager.h"
 #include "lib/netplay/polling_util.h"
 #include "lib/netplay/wz_connection_provider.h"
-#include "lib/netplay/zlib_compression_adapter.h"
+#include "lib/netplay/wz_compression_provider.h"
 
-IClientConnection::IClientConnection(WzConnectionProvider& connProvider)
+IClientConnection::IClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider)
 	: selfConnList_({ this }),
 	connProvider_(&connProvider),
+	compressionProvider_(&compressionProvider),
 	readAllDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
 {}
 
@@ -233,9 +234,11 @@ void IClientConnection::enableCompression()
 		return;  // Nothing to do.
 	}
 
+	ASSERT_OR_RETURN(, compressionProvider_ != nullptr, "Invalid compression provider");
+
 	PendingWritesManager::instance().executeUnderLock([this]
 	{
-		compressionAdapter_ = std::make_unique<ZlibCompressionAdapter>();
+		compressionAdapter_ = compressionProvider_->newCompressionAdapter();
 		const auto initRes = compressionAdapter_->initialize();
 		if (!initRes.has_value())
 		{

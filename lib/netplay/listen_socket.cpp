@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2024  Warzone 2100 Project
+	Copyright (C) 2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,34 +19,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#pragma once
+#include "listen_socket.h"
 
-#include <stdint.h>
-
-#include "lib/netplay/listen_socket.h"
-
-class WzCompressionProvider;
-class WzConnectionProvider;
-
-namespace tcp
-{
-
-struct Socket;
-
-class TCPListenSocket : public IListenSocket
-{
-public:
-
-	explicit TCPListenSocket(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, tcp::Socket* rawSocket);
-	virtual ~TCPListenSocket() override;
-
-	virtual IClientConnection* accept() override;
-	virtual IPVersionsMask supportedIpVersions() const override;
-
-private:
-
-	tcp::Socket* listenSocket_ = nullptr;
-	WzConnectionProvider* connProvider_ = nullptr;
-};
-
-} // namespace tcp
+IListenSocket::IListenSocket(WzCompressionProvider& compressionProvider)
+	: compressionProvider_(&compressionProvider)
+{}
