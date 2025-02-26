@@ -3116,7 +3116,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 				else
 				{
-					if (aiChooseTarget(psStructure, &psChosenObjs[0], 0, true, &tmpOrigin))
+					if (i > 0)
 					{
 						if (psChosenObjs[0])
 						{
