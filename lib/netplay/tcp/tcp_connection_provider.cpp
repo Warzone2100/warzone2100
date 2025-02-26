@@ -26,6 +26,8 @@
 #include "lib/netplay/tcp/tcp_listen_socket.h"
 
 #include "lib/netplay/open_connection_result.h"
+#include "lib/netplay/wz_compression_provider.h"
+
 #include "lib/framework/wzapp.h"
 
 #ifdef WZ_OS_WIN
@@ -64,7 +66,7 @@ net::result<IListenSocket*> TCPConnectionProvider::openListenSocket(uint16_t por
 	{
 		return tl::make_unexpected(res.error());
 	}
-	return new TCPListenSocket(*this, res.value());
+	return new TCPListenSocket(*this, WzCompressionProvider::Instance(), res.value());
 }
 
 net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout)
@@ -81,7 +83,7 @@ net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(c
 	{
 		return tl::make_unexpected(res.error());
 	}
-	return new TCPClientConnection(*this, res.value());
+	return new TCPClientConnection(*this, WzCompressionProvider::Instance(), res.value());
 }
 
 IConnectionPollGroup* TCPConnectionProvider::newConnectionPollGroup()

@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2024  Warzone 2100 Project
+	Copyright (C) 2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,37 +21,26 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <type_traits>
+#include <memory>
 
-class IClientConnection;
-class WzCompressionProvider;
+class ICompressionAdapter;
 
 /// <summary>
-/// Server-side listen socket abstraction.
+/// This class provides is responsible for creating `ICompressionAdapter:s`,
+/// which are thin wrappers over some compression algorithm, intended for
+/// use in `IClientConnection` to provide compression over raw net messages.
 /// </summary>
-class IListenSocket
+class WzCompressionProvider
 {
 public:
 
-	virtual ~IListenSocket() = default;
+	static WzCompressionProvider& Instance();
 
-	enum class IPVersions : uint8_t
-	{
-		IPV4 = 0b00000001,
-		IPV6 = 0b00000010
-	};
-	using IPVersionsMask = std::underlying_type_t<IPVersions>;
+	std::unique_ptr<ICompressionAdapter> newCompressionAdapter();
 
-	/// <summary>
-	/// Accept an incoming client connection on the current server-side listen socket.
-	/// </summary>
-	virtual IClientConnection* accept() = 0;
-	virtual IPVersionsMask supportedIpVersions() const = 0;
+private:
 
-protected:
-
-	IListenSocket(WzCompressionProvider& compressionProvider);
-
-	WzCompressionProvider* compressionProvider_ = nullptr;
+	WzCompressionProvider() = default;
+	WzCompressionProvider(const WzCompressionProvider&) = delete;
+	WzCompressionProvider(WzCompressionProvider&&) = delete;
 };

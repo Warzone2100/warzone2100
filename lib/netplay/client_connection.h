@@ -34,6 +34,7 @@
 using nonstd::optional;
 
 class IDescriptorSet;
+class WzCompressionProvider;
 class WzConnectionProvider;
 
 /// <summary>
@@ -222,7 +223,7 @@ protected:
 	// disposed connections.
 	friend class PendingWritesManager;
 
-	IClientConnection(WzConnectionProvider& connProvider);
+	IClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider);
 	// Hide the destructor so that external code cannot accidentally
 	// `delete` the connection directly and has to use `close()` method
 	// to dispose of the connection object.
@@ -235,8 +236,10 @@ protected:
 	// (like `readAll()` and `connectionStatus()`) to avoid extra
 	// memory allocations.
 	const std::vector<IClientConnection*> selfConnList_;
-	// Connection provider used to create internal descriptor sets
-	WzConnectionProvider* connProvider_;
+	// Connection provider used to create internal descriptor sets.
+	WzConnectionProvider* connProvider_ = nullptr;
+	// Compression provider which is used to initialize compression algorithm in `enableCompression()`.
+	WzCompressionProvider* compressionProvider_ = nullptr;
 
 private:
 

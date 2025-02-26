@@ -23,6 +23,7 @@
 #include "lib/netplay/descriptor_set.h"
 #include "lib/netplay/tcp/netsocket.h" // for SOCKET
 
+class WzCompressionProvider;
 class WzConnectionProvider;
 
 namespace tcp
@@ -34,7 +35,7 @@ class TCPClientConnection : public IClientConnection
 {
 public:
 
-	explicit TCPClientConnection(WzConnectionProvider& connProvider, Socket* rawSocket);
+	explicit TCPClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, Socket* rawSocket);
 	virtual ~TCPClientConnection() override;
 
 	virtual net::result<ssize_t> sendImpl(const std::vector<uint8_t>& data) override;
@@ -55,7 +56,7 @@ private:
 
 	friend class TCPConnectionPollGroup;
 
-	Socket* socket_;
+	Socket* socket_ = nullptr;
 
 	std::unique_ptr<IDescriptorSet> connStatusDescriptorSet_;
 };

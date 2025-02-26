@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2024  Warzone 2100 Project
+	Copyright (C) 2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,34 +19,21 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#pragma once
+#include "wz_compression_provider.h"
 
-#include <stdint.h>
+#include "lib/netplay/zlib_compression_adapter.h"
 
-#include "lib/netplay/listen_socket.h"
-
-class WzCompressionProvider;
-class WzConnectionProvider;
-
-namespace tcp
+WzCompressionProvider& WzCompressionProvider::Instance()
 {
+	static WzCompressionProvider instance;
+	return instance;
+}
 
-struct Socket;
-
-class TCPListenSocket : public IListenSocket
+std::unique_ptr<ICompressionAdapter> WzCompressionProvider::newCompressionAdapter()
 {
-public:
-
-	explicit TCPListenSocket(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, tcp::Socket* rawSocket);
-	virtual ~TCPListenSocket() override;
-
-	virtual IClientConnection* accept() override;
-	virtual IPVersionsMask supportedIpVersions() const override;
-
-private:
-
-	tcp::Socket* listenSocket_ = nullptr;
-	WzConnectionProvider* connProvider_ = nullptr;
-};
-
-} // namespace tcp
+	// Only support Zlib for the time being.
+	// TODO: in the future, we might want to support more compression algorithms, e.g. Zstd.
+	// In this case, we would need to somehow configure `WzCompressionAdapter` from
+	// the global WZ config to specify compression algorithm to use.
+	return std::make_unique<ZlibCompressionAdapter>();
+}
