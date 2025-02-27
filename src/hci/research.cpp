@@ -602,6 +602,20 @@ private:
 		});
 	}
 
+	std::string getTip() override
+	{
+		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), getCost()));
+		auto stats = getStats();
+		WzString tipString = (stats == nullptr) ? "" : getLocalizedStatsName(stats);
+		if (stats && !stats->category.isEmpty())
+		{
+			tipString.append(astringf("\n(%s %d/%d)", stats->category.toUtf8().c_str(), stats->categoryProgress, stats->categoryMax).c_str());
+		}
+		tipString.append("\n");
+		tipString.append(costString);
+		return tipString.toUtf8();
+	}
+
 	std::shared_ptr<ResearchController> controller;
 	size_t researchOptionIndex;
 	AllyResearchsIcons allyResearchIcons;
