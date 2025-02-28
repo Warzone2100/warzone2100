@@ -1147,6 +1147,10 @@ static ConnectionProviderType toConnectionProviderType(JoinConnectionDescription
 	{
 	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT:
 		return ConnectionProviderType::TCP_DIRECT;
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case JoinConnectionDescription::JoinConnectionType::GNS_DIRECT:
+		return ConnectionProviderType::GNS_DIRECT;
+#endif
 	}
 	throw std::runtime_error(astringf("Invalid join connection type: %d", static_cast<int>(ct))); // prevent GCC warning
 }

@@ -1019,6 +1019,11 @@ void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionT
 	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT:
 		j = "tcp";
 		break;
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case JoinConnectionDescription::JoinConnectionType::GNS_DIRECT:
+		j = "gns";
+		break;
+#endif
 	}
 }
 
@@ -1030,6 +1035,12 @@ void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectio
 		v = JoinConnectionDescription::JoinConnectionType::TCP_DIRECT;
 		return;
 	}
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	if (str == "gns")
+	{
+		v = JoinConnectionDescription::JoinConnectionType::GNS_DIRECT;
+	}
+#endif
 	throw nlohmann::json::type_error::create(302, "JoinConnectionType value is unknown: \"" + str + "\"", &j);
 }
 
@@ -1124,7 +1135,12 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 		return {};
 	}
 	std::string host = lobbyGame.desc.host;
-	return {JoinConnectionDescription(host, lobbyGame.hostPort)};
+	std::vector<JoinConnectionDescription> connList;
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::GNS_DIRECT, host, lobbyGame.hostPort);
+#endif
+	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, host, lobbyGame.hostPort);
+	return connList;
 }
 
 void joinGame(const char *connectionString, bool asSpectator /*= false*/)
@@ -1148,7 +1164,12 @@ void joinGame(const char *connectionString, bool asSpectator /*= false*/)
 void joinGame(const char *host, uint32_t port, bool asSpectator /*= false*/)
 {
 	std::string hostStr = (host != nullptr) ? std::string(host) : std::string();
-	joinGame(std::vector<JoinConnectionDescription>({JoinConnectionDescription(hostStr, port)}), asSpectator);
+	std::vector<JoinConnectionDescription> connList;
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::GNS_DIRECT, hostStr, port);
+#endif
+	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, hostStr, port);
+	joinGame(connList, asSpectator);
 }
 
 void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator /*= false*/) {

@@ -2894,11 +2894,14 @@ static void NETcheckPlayers()
 // We should not block here.
 bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 {
-	uint32_t current;
-
 	if (!NetPlay.bComms)
 	{
 		return false;
+	}
+
+	if (activeConnProvider)
+	{
+		activeConnProvider->processConnectionStateChanges();
 	}
 
 	if (NetPlay.isHost)
@@ -2915,6 +2918,8 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 	{
 		goto checkMessages;
 	}
+
+	uint32_t current;
 
 	for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current)
 	{
