@@ -311,13 +311,20 @@ public:
 	enum class JoinConnectionType
 	{
 		TCP_DIRECT,
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+		GNS_DIRECT,
+#endif
 	};
 public:
-	JoinConnectionDescription() { }
 	JoinConnectionDescription(const std::string& host, uint32_t port)
 	: host(host)
 	, port(port)
 	, type(JoinConnectionType::TCP_DIRECT)
+	{ }
+	JoinConnectionDescription(JoinConnectionType t, const std::string& host, uint32_t port)
+	: host(host)
+	, port(port)
+	, type(t)
 	{ }
 public:
 	std::string host;

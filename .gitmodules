@@ -77,3 +77,6 @@
 [submodule "3rdparty/expected"]
 	path = 3rdparty/expected
 	url = https://github.com/TartanLlama/expected.git
+[submodule "3rdparty/GameNetworkingSockets"]
+	path = 3rdparty/GameNetworkingSockets
+	url = https://github.com/Warzone2100/GameNetworkingSockets.git

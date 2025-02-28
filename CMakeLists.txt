@@ -870,9 +870,11 @@ function(CHECK_IS_ABSOLUTE_PATH _var _output)
 endfunction()
 CHECK_IS_ABSOLUTE_PATH(WZ_DATADIR WZ_DATADIR_ISABSOLUTE)
 CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h)
 
 add_subdirectory(3rdparty)
+
+# This should come after `add_subdirectory(3rdparty)` to capture submodule-specific vars
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h")
 
 # Determine distribution license
 set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")

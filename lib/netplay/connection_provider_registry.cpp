@@ -20,6 +20,9 @@
 #include <stdexcept>
 
 #include "lib/netplay/connection_provider_registry.h"
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+# include "lib/netplay/gns/gns_connection_provider.h"
+#endif
 #include "lib/netplay/tcp/tcp_connection_provider.h"
 
 ConnectionProviderRegistry& ConnectionProviderRegistry::Instance()
@@ -55,6 +58,11 @@ void ConnectionProviderRegistry::Register(ConnectionProviderType pt)
 	case ConnectionProviderType::TCP_DIRECT:
 		registeredProviders_.emplace(pt, std::make_unique<tcp::TCPConnectionProvider>());
 		break;
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case ConnectionProviderType::GNS_DIRECT:
+		registeredProviders_.emplace(pt, std::make_unique<gns::GNSConnectionProvider>());
+		break;
+#endif
 	default:
 		throw std::runtime_error("Unknown connection provider type");
 	}

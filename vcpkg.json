@@ -73,6 +73,10 @@
 		{
 			"name": "basisu",
 			"host": true
+		},
+		{
+			"name": "protobuf",
+			"platform": "!emscripten"
 		}
 	],
 	"default-features": [

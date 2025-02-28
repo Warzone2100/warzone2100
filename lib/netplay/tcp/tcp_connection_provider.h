@@ -46,6 +46,8 @@ public:
 	virtual IConnectionPollGroup* newConnectionPollGroup() override;
 
 	virtual std::unique_ptr<IDescriptorSet> newDescriptorSet(PollEventType eventType) override;
+
+	virtual void processConnectionStateChanges() override {}
 };
 
 } // namespace tcp
