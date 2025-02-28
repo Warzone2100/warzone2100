@@ -99,4 +99,11 @@ public:
 	/// * PollEventType::WRITABLE
 	/// </param>
 	virtual std::unique_ptr<IDescriptorSet> newDescriptorSet(PollEventType eventType) = 0;
+
+	/// <summary>
+	/// Process any pending connection state change events. This should be called regularly
+	/// at the beginning of each network game loop iteration to ensure that the connections
+	/// remain valid and synced properly with the underlying network backend.
+	/// </summary>
+	virtual void processConnectionStateChanges() = 0;
 };

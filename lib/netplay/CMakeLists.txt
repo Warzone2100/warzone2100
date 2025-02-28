@@ -27,7 +27,47 @@ add_dependencies(autorevision_netcodeversion autorevision) # Ensure ordering and
 # netplay library
 
 file(GLOB_RECURSE HEADERS "*.h")
-file(GLOB_RECURSE SRC "*.cpp")
+
+set (SRC
+	"byteorder_funcs_wrapper.cpp"
+	"client_connection.cpp"
+	"connection_provider_registry.cpp"
+	"error_categories.cpp"
+	"listen_socket.cpp"
+	"netjoin_stub.cpp"
+	"netlog.cpp"
+	"netpermissions.cpp"
+	"netplay.cpp"
+	"netqueue.cpp"
+	"netreplay.cpp"
+	"nettypes.cpp"
+	"pending_writes_manager.cpp"
+	"pending_writes_manager_map.cpp"
+	"polling_util.cpp"
+	"port_mapping_manager_impl_libplum.cpp"
+	"port_mapping_manager_impl_miniupnpc.cpp"
+	"port_mapping_manager.cpp"
+	"sync_debug.cpp"
+	"wz_compression_provider.cpp"
+	"wz_connection_provider.cpp"
+	"wzfile.cpp"
+	"zlib_compression_adapter.cpp"
+	"tcp/netsocket.cpp"
+	"tcp/sock_error.cpp"
+	"tcp/tcp_client_connection.cpp"
+	"tcp/tcp_connection_address.cpp"
+	"tcp/tcp_connection_poll_group.cpp"
+	"tcp/tcp_connection_provider.cpp"
+	"tcp/tcp_listen_socket.cpp")
+
+if (ENABLE_GNS_NETWORK_BACKEND)
+	list(APPEND SRC
+		"gns/gns_client_connection.cpp"
+		"gns/gns_connection_poll_group.cpp"
+		"gns/gns_connection_provider.cpp"
+		"gns/gns_error_categories.cpp"
+		"gns/gns_listen_socket.cpp")
+endif()
 
 if(MSVC AND CMAKE_VERSION VERSION_GREATER 3.7)
 	# Automatic detection of source groups via `source_group(TREE <root>)` syntax
@@ -66,7 +106,7 @@ set_property(TARGET netplay PROPERTY FOLDER "lib")
 include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(netplay)
 target_link_libraries(netplay
-	PRIVATE framework re2::re2 nlohmann_json plum-static Threads::Threads ZLIB::ZLIB
+	PRIVATE framework re2::re2 nlohmann_json plum-static Threads::Threads ZLIB::ZLIB fmt::fmt
 	PUBLIC tl::expected)
 
 if(WZ_USE_IMPORTED_MINIUPNPC)
@@ -80,4 +120,8 @@ endif()
 if(MSVC)
 	# C4267: 'conversion': conversion from 'type1' to 'type2', possible loss of data // FIXME!!
 	target_compile_options(netplay PRIVATE "/wd4267")
+endif()
+
+if(ENABLE_GNS_NETWORK_BACKEND)
+	target_link_libraries(netplay PUBLIC GameNetworkingSockets::static)
 endif()
