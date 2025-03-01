@@ -23,6 +23,8 @@
 #include <type_traits>
 
 class IClientConnection;
+class PendingWritesManager;
+class WzConnectionProvider;
 class WzCompressionProvider;
 
 /// <summary>
@@ -49,7 +51,9 @@ public:
 
 protected:
 
-	IListenSocket(WzCompressionProvider& compressionProvider);
+	IListenSocket(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm);
 
+	WzConnectionProvider* connProvider_ = nullptr;
 	WzCompressionProvider* compressionProvider_ = nullptr;
+	PendingWritesManager* pwm_ = nullptr;
 };

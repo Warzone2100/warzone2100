@@ -34,6 +34,8 @@ class IClientConnection;
 class IConnectionPollGroup;
 struct IConnectionAddress;
 
+enum class ConnectionProviderType : uint8_t;
+
 /// <summary>
 /// Abstraction layer to facilitate creating client/server connections and
 /// provide host resolution routines for a given network backend.
@@ -57,6 +59,8 @@ public:
 
 	virtual void initialize() = 0;
 	virtual void shutdown() = 0;
+
+	virtual ConnectionProviderType type() const noexcept = 0;
 
 	/// <summary>
 	/// Resolve host + port combination and return an opaque `ConnectionAddress` handle

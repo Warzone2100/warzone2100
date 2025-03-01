@@ -35,6 +35,8 @@ public:
 	virtual void initialize() override;
 	virtual void shutdown() override;
 
+	virtual ConnectionProviderType type() const noexcept override;
+
 	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) override;
 
 	virtual net::result<IListenSocket*> openListenSocket(uint16_t port) override;

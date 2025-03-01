@@ -28,12 +28,6 @@
 
 #include <system_error>
 
-PendingWritesManager& PendingWritesManager::instance()
-{
-	static PendingWritesManager instance;
-	return instance;
-}
-
 PendingWritesManager::~PendingWritesManager()
 {
 	deinitialize();
@@ -47,9 +41,9 @@ void PendingWritesManager::deinitialize()
 		return;
 	}
 	wzMutexLock(mtx_);
-	connProvider_ = nullptr;
 	stopRequested_ = true;
 	pendingWrites_.clear();
+	writableSet_.reset();
 	wzMutexUnlock(mtx_);
 	wzSemaphorePost(sema_);  // Wake up the thread, so it can quit.
 	wzThreadJoin(thread_);
@@ -65,7 +59,7 @@ void PendingWritesManager::initialize(WzConnectionProvider& connProvider)
 		// No-op in case of a repeated `initialize()` call
 		return;
 	}
-	connProvider_ = &connProvider;
+	writableSet_ = connProvider.newDescriptorSet(PollEventType::WRITABLE);
 	stopRequested_ = false;
 	mtx_ = wzMutexCreate();
 	sema_ = wzSemaphoreCreate(0);
@@ -129,14 +123,12 @@ void PendingWritesManager::threadImplFunction()
 	while (!stopRequested_)
 	{
 		static constexpr std::chrono::milliseconds WRITABLE_CHECK_TIMEOUT{ 50 };
-		static std::unique_ptr<IDescriptorSet> writableSet = connProvider_->newDescriptorSet(PollEventType::WRITABLE);
-
 		// Check if we can write to some connections.
-		writableSet->clear();
-		populateWritableSet(*writableSet);
-		ASSERT(!writableSet->empty() || pendingWrites_.empty(), "writableSet must not be empty if there are pending writes.");
+		writableSet_->clear();
+		populateWritableSet(*writableSet_);
+		ASSERT(!writableSet_->empty() || pendingWrites_.empty(), "writableSet must not be empty if there are pending writes.");
 
-		const auto checkWritableRes = checkConnectionsWritable(*writableSet, WRITABLE_CHECK_TIMEOUT);
+		const auto checkWritableRes = checkConnectionsWritable(*writableSet_, WRITABLE_CHECK_TIMEOUT);
 
 		if (checkWritableRes.has_value() && checkWritableRes.value() != 0)
 		{
@@ -149,7 +141,7 @@ void PendingWritesManager::threadImplFunction()
 				ConnectionWriteQueue& writeQueue = currentIt->second;
 				ASSERT(!writeQueue.empty(), "writeQueue[sock] must not be empty.");
 
-				if (!writableSet->isSet(conn) || writeQueue.empty())
+				if (!writableSet_->isSet(conn) || writeQueue.empty())
 				{
 					continue;  // This connection is not ready for writing, or we don't have anything to write.
 				}

@@ -30,8 +30,8 @@
 namespace tcp
 {
 
-TCPClientConnection::TCPClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, Socket* rawSocket)
-	: IClientConnection(connProvider, compressionProvider),
+TCPClientConnection::TCPClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm, Socket* rawSocket)
+	: IClientConnection(connProvider, compressionProvider, pwm),
 	socket_(rawSocket),
 	connStatusDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
 {

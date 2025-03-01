@@ -25,7 +25,9 @@
 #include "lib/netplay/tcp/tcp_client_connection.h"
 #include "lib/netplay/tcp/tcp_listen_socket.h"
 
+#include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/open_connection_result.h"
+#include "lib/netplay/pending_writes_manager_map.h"
 #include "lib/netplay/wz_compression_provider.h"
 
 #include "lib/framework/wzapp.h"
@@ -49,6 +51,11 @@ void TCPConnectionProvider::shutdown()
 	SOCKETshutdown();
 }
 
+ConnectionProviderType TCPConnectionProvider::type() const noexcept
+{
+	return ConnectionProviderType::TCP_DIRECT;
+}
+
 net::result<std::unique_ptr<IConnectionAddress>> TCPConnectionProvider::resolveHost(const char* host, uint16_t port)
 {
 	auto resolved = tcp::resolveHost(host, port);
@@ -66,7 +73,7 @@ net::result<IListenSocket*> TCPConnectionProvider::openListenSocket(uint16_t por
 	{
 		return tl::make_unexpected(res.error());
 	}
-	return new TCPListenSocket(*this, WzCompressionProvider::Instance(), res.value());
+	return new TCPListenSocket(*this, WzCompressionProvider::Instance(), PendingWritesManagerMap::instance().get(type()), res.value());
 }
 
 net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout)
@@ -83,7 +90,7 @@ net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(c
 	{
 		return tl::make_unexpected(res.error());
 	}
-	return new TCPClientConnection(*this, WzCompressionProvider::Instance(), res.value());
+	return new TCPClientConnection(*this, WzCompressionProvider::Instance(), PendingWritesManagerMap::instance().get(type()), res.value());
 }
 
 IConnectionPollGroup* TCPConnectionProvider::newConnectionPollGroup()
