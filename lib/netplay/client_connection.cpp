@@ -27,10 +27,11 @@
 #include "lib/netplay/wz_connection_provider.h"
 #include "lib/netplay/wz_compression_provider.h"
 
-IClientConnection::IClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider)
+IClientConnection::IClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm)
 	: selfConnList_({ this }),
 	connProvider_(&connProvider),
 	compressionProvider_(&compressionProvider),
+	pwm_(&pwm),
 	readAllDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
 {}
 
@@ -175,7 +176,7 @@ net::result<ssize_t> IClientConnection::writeAll(const void* buf, size_t size, s
 
 	if (!isCompressed())
 	{
-		PendingWritesManager::instance().append(this, [buf, size](std::vector<uint8_t>& writeQueue)
+		pwm_->append(this, [buf, size](std::vector<uint8_t>& writeQueue)
 		{
 			writeQueue.insert(writeQueue.end(), static_cast<char const*>(buf), static_cast<char const*>(buf) + size);
 		});
@@ -213,8 +214,7 @@ void IClientConnection::flush(size_t* rawByteCount)
 		return;  // No data to flush out.
 	}
 
-	auto& pwm = PendingWritesManager::instance();
-	pwm.append(this, [&compressionBuf] (PendingWritesManager::ConnectionWriteQueue& writeQueue)
+	pwm_->append(this, [&compressionBuf] (PendingWritesManager::ConnectionWriteQueue& writeQueue)
 	{
 		writeQueue.reserve(writeQueue.size() + compressionBuf.size());
 		writeQueue.insert(writeQueue.end(), compressionBuf.begin(), compressionBuf.end());
@@ -236,7 +236,7 @@ void IClientConnection::enableCompression()
 
 	ASSERT_OR_RETURN(, compressionProvider_ != nullptr, "Invalid compression provider");
 
-	PendingWritesManager::instance().executeUnderLock([this]
+	pwm_->executeUnderLock([this]
 	{
 		compressionAdapter_ = compressionProvider_->newCompressionAdapter();
 		const auto initRes = compressionAdapter_->initialize();
@@ -252,5 +252,5 @@ void IClientConnection::enableCompression()
 
 void IClientConnection::close()
 {
-	PendingWritesManager::instance().safeDispose(this);
+	pwm_->safeDispose(this);
 }

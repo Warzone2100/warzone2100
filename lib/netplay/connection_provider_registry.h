@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <stdint.h>
 #include <memory>
 #include <unordered_map>
 
@@ -27,7 +28,7 @@
 /// <summary>
 /// Available types of connection providers (i.e. network backend implementations).
 /// </summary>
-enum class ConnectionProviderType
+enum class ConnectionProviderType : uint8_t
 {
 	TCP_DIRECT
 };
@@ -42,6 +43,7 @@ public:
 	static ConnectionProviderRegistry& Instance();
 
 	WzConnectionProvider& Get(ConnectionProviderType pt);
+	bool IsRegistered(ConnectionProviderType) const;
 
 	void Register(ConnectionProviderType pt);
 	void Deregister(ConnectionProviderType pt);

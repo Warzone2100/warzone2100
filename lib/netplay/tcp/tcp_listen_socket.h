@@ -23,6 +23,7 @@
 
 #include "lib/netplay/listen_socket.h"
 
+class PendingWritesManager;
 class WzCompressionProvider;
 class WzConnectionProvider;
 
@@ -35,7 +36,7 @@ class TCPListenSocket : public IListenSocket
 {
 public:
 
-	explicit TCPListenSocket(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, tcp::Socket* rawSocket);
+	explicit TCPListenSocket(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm, tcp::Socket* rawSocket);
 	virtual ~TCPListenSocket() override;
 
 	virtual IClientConnection* accept() override;
@@ -44,7 +45,6 @@ public:
 private:
 
 	tcp::Socket* listenSocket_ = nullptr;
-	WzConnectionProvider* connProvider_ = nullptr;
 };
 
 } // namespace tcp

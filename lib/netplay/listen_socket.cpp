@@ -21,6 +21,8 @@
 
 #include "listen_socket.h"
 
-IListenSocket::IListenSocket(WzCompressionProvider& compressionProvider)
-	: compressionProvider_(&compressionProvider)
+IListenSocket::IListenSocket(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm)
+	: connProvider_(&connProvider),
+	compressionProvider_(&compressionProvider),
+	pwm_(&pwm)
 {}

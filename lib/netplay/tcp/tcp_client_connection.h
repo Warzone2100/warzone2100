@@ -23,6 +23,7 @@
 #include "lib/netplay/descriptor_set.h"
 #include "lib/netplay/tcp/netsocket.h" // for SOCKET
 
+class PendingWritesManager;
 class WzCompressionProvider;
 class WzConnectionProvider;
 
@@ -35,7 +36,7 @@ class TCPClientConnection : public IClientConnection
 {
 public:
 
-	explicit TCPClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, Socket* rawSocket);
+	explicit TCPClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm, Socket* rawSocket);
 	virtual ~TCPClientConnection() override;
 
 	virtual net::result<ssize_t> sendImpl(const std::vector<uint8_t>& data) override;

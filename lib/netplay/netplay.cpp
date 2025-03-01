@@ -55,6 +55,7 @@
 #include "lib/netplay/connection_poll_group.h"
 #include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/pending_writes_manager.h"
+#include "lib/netplay/pending_writes_manager_map.h"
 #include "netpermissions.h"
 #include "sync_debug.h"
 #include "port_mapping_manager.h"
@@ -1562,7 +1563,7 @@ int NETinit(bool bFirstCall)
 	ConnectionProviderRegistry::Instance().Register(ConnectionProviderType::TCP_DIRECT);
 	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
 	connProvider.initialize();
-	PendingWritesManager::instance().initialize(connProvider);
+	PendingWritesManagerMap::instance().get(connProvider).initialize(connProvider);
 
 	if (bFirstCall)
 	{
@@ -1611,8 +1612,12 @@ int NETshutdown()
 	NetPlay.MOTD = nullptr;
 	NETdeleteQueue();
 
-	PendingWritesManager::instance().deinitialize();
-	ConnectionProviderRegistry::Instance().Deregister(ConnectionProviderType::TCP_DIRECT);
+	auto& cpr = ConnectionProviderRegistry::Instance();
+	if (cpr.IsRegistered(ConnectionProviderType::TCP_DIRECT))
+	{
+		PendingWritesManagerMap::instance().get(ConnectionProviderType::TCP_DIRECT).deinitialize();
+		cpr.Deregister(ConnectionProviderType::TCP_DIRECT);
+	}
 
 	// Reset net usage statistics.
 	nStats = nZeroStats;

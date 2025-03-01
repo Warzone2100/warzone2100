@@ -22,6 +22,7 @@
 #pragma once
 
 #include <chrono>
+#include <memory>
 #include <unordered_map>
 #include <vector>
 #include <stdint.h>
@@ -42,7 +43,8 @@ class WzConnectionProvider;
 int pendingWritesThreadFunction(void*);
 
 /// <summary>
-/// Singleton manager class, that handles all network write operations.
+/// Manager class, that handles all network write operations.
+/// Specific to a particular `WzConnectionProvider`.
 ///
 /// The main reason for its existence is the fact that we would like
 /// to keep all socket write operations asynchronous, which provide the
@@ -69,7 +71,9 @@ public:
 
 	~PendingWritesManager();
 
-	static PendingWritesManager& instance();
+	explicit PendingWritesManager() = default;
+	PendingWritesManager(const PendingWritesManager&) = delete;
+	PendingWritesManager(PendingWritesManager&&) = delete;
 
 	void initialize(WzConnectionProvider& connProvider);
 	void deinitialize();
@@ -129,10 +133,6 @@ private:
 
 	friend int pendingWritesThreadFunction(void*);
 
-	PendingWritesManager() = default;
-	PendingWritesManager(const PendingWritesManager&) = delete;
-	PendingWritesManager(PendingWritesManager&&) = delete;
-
 	void threadImplFunction();
 	net::result<int> checkConnectionsWritable(IDescriptorSet& writableSet, std::chrono::milliseconds timeout);
 	void populateWritableSet(IDescriptorSet& writableSet);
@@ -142,5 +142,5 @@ private:
 	WZ_SEMAPHORE* sema_ = nullptr;
 	WZ_THREAD* thread_ = nullptr;
 	bool stopRequested_ = false;
-	WzConnectionProvider* connProvider_ = nullptr;
+	std::unique_ptr<IDescriptorSet> writableSet_;
 };

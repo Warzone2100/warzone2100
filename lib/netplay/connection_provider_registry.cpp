@@ -38,6 +38,11 @@ WzConnectionProvider& ConnectionProviderRegistry::Get(ConnectionProviderType pt)
 	return *it->second;
 }
 
+bool ConnectionProviderRegistry::IsRegistered(ConnectionProviderType pt) const
+{
+	return registeredProviders_.count(pt) != 0;
+}
+
 void ConnectionProviderRegistry::Register(ConnectionProviderType pt)
 {
 	// No-op in case this provider has been already registered.
