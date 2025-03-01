@@ -3135,12 +3135,12 @@ _("Improves vehicle speed")
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 _("Incendiary Howitzer Emplacement 2")  
 // TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+_("Incendiary howitzer emplacement")  
+// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 _("Incendiary Howitzer Emplacement")  
-// TRANSLATORS: 
-// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-_("Incendiary howitzer emplacement")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 _("Incendiary Howitzer may be assigned to a sensor")  
@@ -5514,13 +5514,13 @@ _("Synaptic Link Data Analysis Mk2")
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 _("Synaptic Link Data Analysis Mk3")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-_("Synaptic Link Data Analysis")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 _("Synaptic link data analysis")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+_("Synaptic Link Data Analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[1]
