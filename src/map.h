@@ -571,7 +571,7 @@ bool fireOnLocation(unsigned int x, unsigned int y);
 
 /**
  * Transitive sensor check for tile. Has to be here rather than
- * visibility.h due to header include order issues.
+ * visibility.h due to header include order issues. -- (For DISPLAY-ONLY purposes - *NOT* game-state calculations!)
  */
 WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
