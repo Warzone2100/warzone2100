@@ -1296,6 +1296,12 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 	pie_InitRadar();
 
 	readAIs();
+	// Reset config and order if default not found (user messed with config or maybe a mod AI is now missing).
+	const std::string configDefaultAI = defaultSkirmishAI;
+	if (configDefaultAI != getDefaultSkirmishAI())
+	{
+		readAIs();
+	}
 
 	initTerrainShaderType();
 

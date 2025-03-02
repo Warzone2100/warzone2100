@@ -3356,8 +3356,20 @@ void startMultiplayOptionsMenu()
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
 
+	auto label = std::make_shared<W_LABEL>();
+	parent->attach(label);
+	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y - 14, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
+	label->setFontColour(WZCOL_TEXT_BRIGHT);
+	label->setString(_("* Takes effect on game restart"));
+	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
+
 	auto grid = std::make_shared<GridLayout>();
 	grid_allocation::slot row(0);
+
+	// Default AI
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_HOST_DEFAULT_AI, _("Default AI*"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_HOST_DEFAULT_AI_R, getDefaultSkirmishAI(true).c_str(), WBUT_SECONDARY)));
+	row.start++;
 
 	// "Hosting Options" title
 	grid->place({0, 2}, row, addMargin(makeTextButton(FRONTEND_FX, _("Hosting Options:"), WBUT_DISABLE)));
@@ -3449,6 +3461,11 @@ bool runMultiplayOptionsMenu()
 	case FRONTEND_HOST_CHATDEFAULT_R:
 		NETsetDefaultMPHostFreeChatPreference(!NETgetDefaultMPHostFreeChatPreference());
 		widgSetString(psWScreen, FRONTEND_HOST_CHATDEFAULT_R, multiplayOptionsHostingChatDefaultString());
+		break;
+	case FRONTEND_HOST_DEFAULT_AI:
+	case FRONTEND_HOST_DEFAULT_AI_R:
+		frontendCycleAIs();
+		widgSetString(psWScreen, FRONTEND_HOST_DEFAULT_AI_R, getDefaultSkirmishAI(true).c_str());
 		break;
 	case FRONTEND_AUTORATING:
 	case FRONTEND_AUTORATING_R:
