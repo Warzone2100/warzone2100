@@ -46,6 +46,7 @@
 
 #include <chrono>
 #include <algorithm>
+#include <fmt/format.h>
 
 class WzJoiningGameScreen_HandlerRoot;
 struct WzJoiningGameScreen;
@@ -1140,6 +1141,17 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResultOnMainThread(si
 	});
 }
 
+static ConnectionProviderType toConnectionProviderType(JoinConnectionDescription::JoinConnectionType ct)
+{
+	switch (ct)
+	{
+	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT:
+		return ConnectionProviderType::TCP_DIRECT;
+	default:
+		throw std::runtime_error(fmt::format("Invalid join connection type: %d", static_cast<int>(ct)));
+	}
+}
+
 void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connectionIdx, OpenConnectionResult&& result)
 {
 	ASSERT_OR_RETURN(, currentJoiningState == JoiningState::AwaitingConnection, "Not awaiting connection? (Ignoring)");
@@ -1147,6 +1159,8 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 
 	if (result.hasError())
 	{
+		NETshutdown();
+
 		if ((connectionIdx+1) < connectionList.size())
 		{
 			// try the next connection
@@ -1193,7 +1207,7 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 		return;
 	}
 
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
+	auto& connProvider = ConnectionProviderRegistry::Instance().Get(toConnectionProviderType(connectionList[connectionIdx].type));
 	tmp_joining_socket_set = connProvider.newConnectionPollGroup();
 	if (tmp_joining_socket_set == nullptr)
 	{
@@ -1233,30 +1247,27 @@ void WzJoiningGameScreen_HandlerRoot::attemptToOpenConnection(size_t connectionI
 	currentJoiningState = JoiningState::AwaitingConnection;
 	currentConnectionIdx = connectionIdx;
 	JoinConnectionDescription& description = connectionList[connectionIdx];
-	switch (description.type)
+	if (description.port == 0)
 	{
-		case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT:
-			if (description.port == 0)
-			{
-				description.port = NETgetGameserverPort(); // use default configured port
-			}
-			auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
-
-			constexpr std::chrono::milliseconds CLIENT_OPEN_ASYNC_TIMEOUT{ 15000 }; // Default timeout of 15s
-
-			auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
-			connProvider.openClientConnectionAsync(description.host, description.port, CLIENT_OPEN_ASYNC_TIMEOUT,
-				[weakSelf, connectionIdx](OpenConnectionResult&& result) {
-					auto strongSelf = weakSelf.lock();
-					if (!strongSelf)
-					{
-						// background thread ultimately returned after the requester has gone away (join was cancelled?) - just return
-						return;
-					}
-					strongSelf->processOpenConnectionResultOnMainThread(connectionIdx, std::move(result));
-				});
-			break;
+		description.port = NETgetGameserverPort(); // use default configured port
 	}
+	auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
+
+	constexpr std::chrono::milliseconds CLIENT_OPEN_ASYNC_TIMEOUT{ 15000 }; // Default timeout of 15s
+
+	const auto ct = toConnectionProviderType(description.type);
+	NETinit(ct);
+	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ct);
+	connProvider.openClientConnectionAsync(description.host, description.port, CLIENT_OPEN_ASYNC_TIMEOUT,
+		[weakSelf, connectionIdx](OpenConnectionResult&& result) {
+		auto strongSelf = weakSelf.lock();
+		if (!strongSelf)
+		{
+			// background thread ultimately returned after the requester has gone away (join was cancelled?) - just return
+			return;
+		}
+		strongSelf->processOpenConnectionResultOnMainThread(connectionIdx, std::move(result));
+	});
 	updateJoiningStatus(_("Establishing connection with host"));
 }
 
@@ -1797,7 +1808,6 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 
 	// network communication preparation
 	NetPlay.bComms = true; // use network = true
-	NETinit();
 
 	PLAYERSTATS	playerStats;
 	loadMultiStats(playerName, &playerStats);

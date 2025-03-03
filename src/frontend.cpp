@@ -32,6 +32,8 @@
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/netplay/connection_provider_registry.h"
+#include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/sound/tracklib.h"
 #include "lib/widget/button.h"
@@ -573,13 +575,14 @@ bool runMultiPlayerMenu()
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			bMultiPlayer = true;
 			bMultiMessages = true;
-			NETinit();
+			NETinit(ConnectionProviderType::TCP_DIRECT);
 			NETinitPortMapping();
 			game.type = LEVEL_TYPE::SKIRMISH;		// needed?
 			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 			break;
 		case FRONTEND_JOIN:
-			NETinit();
+			// Don't call `NETinit()` just yet.
+			// It will be called automatically during join attempts.
 			ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 			if (getLobbyError() != ERROR_INVALID)
 			{

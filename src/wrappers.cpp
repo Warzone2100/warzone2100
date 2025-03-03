@@ -30,6 +30,7 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/netplay.h"	// multiplayer
 #include "lib/sound/audio.h"
 #include "lib/framework/wzapp.h"
@@ -206,7 +207,7 @@ TITLECODE titleLoop()
 			{
 				NetPlay.bComms = true; // use network = true
 				bMultiMessages = true;
-				NETinit();
+				NETinit(ConnectionProviderType::TCP_DIRECT);
 				NETinitPortMapping();
 			}
 			bMultiPlayer = true;
@@ -219,9 +220,11 @@ TITLECODE titleLoop()
 		else if (strlen(iptoconnect))
 		{
 			NetPlay.bComms = true; // use network = true
-			NETinit();
 			// Ensure the joinGame has a place to return to
 			changeTitleMode(TITLE);
+			// Don't call `NETinit()` just yet.
+			// It will be automatically called by `joinGame()` upon connection attempt
+			// with the correct connection provider type corresponding to the connection string.
 			joinGame(iptoconnect, cliConnectToIpAsSpectator);
 		}
 		else
