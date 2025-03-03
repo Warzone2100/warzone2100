@@ -1554,7 +1554,7 @@ void NETinitPortMapping()
 
 // ////////////////////////////////////////////////////////////////////////
 // setup stuff
-int NETinit(bool bFirstCall)
+int NETinit()
 {
 	debug(LOG_NET, "NETinit");
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
@@ -1565,20 +1565,17 @@ int NETinit(bool bFirstCall)
 	connProvider.initialize();
 	PendingWritesManagerMap::instance().get(connProvider).initialize(connProvider);
 
-	if (bFirstCall)
-	{
-		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
+	debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
-		// NOTE NetPlay.isPortMappingEnabled is already set in configuration.c!
-		NetPlay.bComms = true;
-		NetPlay.GamePassworded = false;
-		NetPlay.ShowedMOTD = false;
-		NetPlay.isHostAlive = false;
-		NetPlay.HaveUpgrade = false;
-		NetPlay.gamePassword[0] = '\0';
-		NetPlay.MOTD = nullptr;
-		NETstartLogging();
-	}
+	// NOTE NetPlay.isPortMappingEnabled is already set in configuration.c!
+	NetPlay.bComms = true;
+	NetPlay.GamePassworded = false;
+	NetPlay.ShowedMOTD = false;
+	NetPlay.isHostAlive = false;
+	NetPlay.HaveUpgrade = false;
+	NetPlay.gamePassword[0] = '\0';
+	NetPlay.MOTD = nullptr;
+	NETstartLogging();
 
 	if (NetPlay.MOTD)
 	{
@@ -4739,7 +4736,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 
 	if (!NetPlay.bComms)
 	{
-		debug(LOG_ERROR, "Likely missing NETinit(true) - this won't return any results");
+		debug(LOG_ERROR, "Likely missing NETinit() - this won't return any results");
 		return false;
 	}
 	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);

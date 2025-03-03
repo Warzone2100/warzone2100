@@ -1797,7 +1797,7 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 
 	// network communication preparation
 	NetPlay.bComms = true; // use network = true
-	NETinit(true);
+	NETinit();
 
 	PLAYERSTATS	playerStats;
 	loadMultiStats(playerName, &playerStats);
