@@ -3,6 +3,7 @@
 function eventStartLevel()
 {
 	const LENIENT = (difficulty <= MEDIUM);
+	const OFFSET = (me * 100); //Helps performance with multiple Nexus AIs.
 	debugMode = true;
 	numVtolUnits = 0;
 	rebuildQueue = [];
@@ -13,19 +14,19 @@ function eventStartLevel()
 	initPersonalityData();
 
 	//See also the notes at each * function for how many ticks they span over.
-	setTimer("buildBase", (LENIENT) ? 3600 : 900); //* 9
-	setTimer("buildDerrick", (LENIENT) ? 4000 : 1000);
-	setTimer("protectCloseDerrick", (LENIENT) ? 4800 : 1200);
-	setTimer("doResearch", (LENIENT) ? 5600 : 1400);
-	setTimer("productionMain", (LENIENT) ? 8000 : 1600); //* 3
+	setTimer("buildBase", ((LENIENT) ? 3600 : 900) + OFFSET); //* 9
+	setTimer("buildDerrick", ((LENIENT) ? 4000 : 1000) + OFFSET);
+	setTimer("protectCloseDerrick", ((LENIENT) ? 4800 : 1200) + OFFSET);
+	setTimer("doResearch", ((LENIENT) ? 5600 : 1400) + OFFSET);
+	setTimer("productionMain", ((LENIENT) ? 8000 : 1600) + OFFSET); //* 3
 	if (alliancesType === ALLIANCES)
 	{
-		setTimer("allianceMain", 2000); //* 2
+		setTimer("allianceMain", 2000 + OFFSET); //* 2
 	}
-	setTimer("helpMain", 2400);
-	setTimer("scoutMain", (LENIENT) ? 10800 : 2700); //* 2
-	setTimer("tacticsMain", (LENIENT) ? 18000 : 3000); //* 2
-	setTimer("vtolMain", (LENIENT) ? 10200 : 3400); //* 3
+	setTimer("helpMain", 2400 + OFFSET);
+	setTimer("scoutMain", ((LENIENT) ? 10800 : 2700) + OFFSET); //* 2
+	setTimer("tacticsMain", ((LENIENT) ? 18000 : 3000) + OFFSET); //* 2
+	setTimer("vtolMain", ((LENIENT) ? 10200 : 3400) + OFFSET); //* 3
 }
 
 function eventAttacked(victim, attacker)
