@@ -206,7 +206,6 @@ static void joinGameImpl(const std::vector<JoinConnectionDescription>& joinConne
 	}
 	// join the game!
 	NetPlay.bComms = true; // use network = true
-	NETinit();
 	// Ensure the joinGame has a place to return to
 	changeTitleMode(TITLE);
 	joinGame(joinConnectionDetails);
@@ -235,10 +234,9 @@ static void findAndJoinLobbyGameImpl(const std::string& lobbyAddress, unsigned i
 				return;
 			}
 
-			// For now, it is necessary to call `NETinit()` before calling findLobbyGame
+			// `findLobbyGame()` will automatically call `NETinit()`, if needed.
 			// Obviously this wouldn't be a good idea to do *during* a game, hence the check above to
 			// ensure we're still in the menus...
-			NETinit();
 			ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 			auto joinConnectionDetails = findLobbyGame(lobbyAddressCopy, lobbyPort, lobbyGameId);
 

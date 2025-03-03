@@ -95,6 +95,8 @@ static bool bEnableTCPNoDelay = true;
 // Disables port saving and reading from/to config
 bool netGameserverPortOverride = false;
 
+static WzConnectionProvider* activeConnProvider = nullptr;
+
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 constexpr std::chrono::milliseconds NET_READ_TIMEOUT{ 0 };
 /*
@@ -147,10 +149,14 @@ struct NET_PLAYER_DATA
 class LobbyServerConnectionHandler
 {
 public:
+
+	void ensureInitialized();
 	bool connect();
 	bool disconnect();
 	void sendUpdate();
 	void run();
+	WzConnectionProvider* connectionProvider() const { return connProvider; }
+
 private:
 	void sendUpdateNow();
 	void sendKeepAlive();
@@ -179,6 +185,7 @@ private:
 	uint32_t lastConnectionTime = 0;
 	uint32_t lastServerUpdate = 0;
 	bool queuedServerUpdate = false;
+	WzConnectionProvider* connProvider = nullptr;
 };
 
 class PlayerManagementRecord
@@ -1554,16 +1561,20 @@ void NETinitPortMapping()
 
 // ////////////////////////////////////////////////////////////////////////
 // setup stuff
-int NETinit()
+int NETinit(ConnectionProviderType pt)
 {
 	debug(LOG_NET, "NETinit");
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
 	NET_InitPlayers(true, true);
 
-	ConnectionProviderRegistry::Instance().Register(ConnectionProviderType::TCP_DIRECT);
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
+	ConnectionProviderRegistry::Instance().Register(pt);
+	auto& connProvider = ConnectionProviderRegistry::Instance().Get(pt);
 	connProvider.initialize();
 	PendingWritesManagerMap::instance().get(connProvider).initialize(connProvider);
+
+	ASSERT(activeConnProvider == nullptr || activeConnProvider == &connProvider,
+		"Active connection provider is already set. Call NETshutdown() first!");
+	activeConnProvider = &connProvider;
 
 	debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
@@ -1610,10 +1621,12 @@ int NETshutdown()
 	NETdeleteQueue();
 
 	auto& cpr = ConnectionProviderRegistry::Instance();
-	if (cpr.IsRegistered(ConnectionProviderType::TCP_DIRECT))
+	if (activeConnProvider && cpr.IsRegistered(activeConnProvider->type()))
 	{
-		PendingWritesManagerMap::instance().get(ConnectionProviderType::TCP_DIRECT).deinitialize();
-		cpr.Deregister(ConnectionProviderType::TCP_DIRECT);
+		const auto cpType = activeConnProvider->type();
+		PendingWritesManagerMap::instance().get(cpType).deinitialize();
+		cpr.Deregister(cpType);
+		activeConnProvider = nullptr;
 	}
 
 	// Reset net usage statistics.
@@ -3442,6 +3455,22 @@ static net::result<void> ignoreExpectedResultValue(const net::result<T>& res)
 	return res.has_value() ? net::result<void>{} : tl::make_unexpected(res.error());
 }
 
+void LobbyServerConnectionHandler::ensureInitialized()
+{
+	// The only supported backend type for talking with lobby server at the moment.
+	constexpr auto PROVIDER_TYPE = ConnectionProviderType::TCP_DIRECT;
+
+	auto& cpr = ConnectionProviderRegistry::Instance();
+	if (!cpr.IsRegistered(PROVIDER_TYPE))
+	{
+		cpr.Register(PROVIDER_TYPE);
+	}
+	connProvider = &cpr.Get(ConnectionProviderType::TCP_DIRECT);
+	connProvider->initialize();
+
+	PendingWritesManagerMap::instance().get(*connProvider).initialize(*connProvider);
+}
+
 bool LobbyServerConnectionHandler::connect()
 {
 	if (server_not_there)
@@ -3461,11 +3490,11 @@ bool LobbyServerConnectionHandler::connect()
 		return false; // already connecting or connected
 	}
 
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
+	ensureInitialized();
 
 	bool bProcessingConnectOrDisconnectThisCall = true;
 	uint32_t gameId = 0;
-	const auto hostsResult = connProvider.resolveHost(masterserver_name, masterserver_port);
+	const auto hostsResult = connProvider->resolveHost(masterserver_name, masterserver_port);
 
 	if (!hostsResult.has_value())
 	{
@@ -3491,7 +3520,7 @@ bool LobbyServerConnectionHandler::connect()
 	}
 
 	// try each address from resolveHost until we successfully connect.
-	auto sockResult = connProvider.openClientConnectionAny(*hosts, 1500);
+	auto sockResult = connProvider->openClientConnectionAny(*hosts, 1500);
 
 	rs_socket = sockResult.value_or(nullptr);
 
@@ -3560,7 +3589,7 @@ bool LobbyServerConnectionHandler::connect()
 	queuedServerUpdate = false;
 
 	lastConnectionTime = realTime;
-	waitingForConnectionFinalize = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT).newConnectionPollGroup();
+	waitingForConnectionFinalize = connProvider->newConnectionPollGroup();
 	waitingForConnectionFinalize->add(rs_socket);
 
 	currentState = LobbyConnectionState::Connecting_WaitingForResponse;
@@ -3581,6 +3610,14 @@ bool LobbyServerConnectionHandler::disconnect()
 		rs_socket = nullptr;
 		server_not_there = true;
 	}
+
+	if (waitingForConnectionFinalize != nullptr)
+	{
+		delete waitingForConnectionFinalize;
+		waitingForConnectionFinalize = nullptr;
+	}
+
+	connProvider = nullptr;
 
 	queuedServerUpdate = false;
 
@@ -4612,7 +4649,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		return true;
 	}
 
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
+	ASSERT_OR_RETURN(false, activeConnProvider != nullptr, "Active connection provider is not set!");
 
 	// Start listening for client connections on `gameserver_port`.
 	// These will initially be assigned to `tmp_socket[i]` until accepted in the game session,
@@ -4621,7 +4658,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	net::result<IListenSocket*> serverListenResult = {};
 	if (!server_listen_socket)
 	{
-		serverListenResult = connProvider.openListenSocket(gameserver_port);
+		serverListenResult = activeConnProvider->openListenSocket(gameserver_port);
 		server_listen_socket = serverListenResult.value_or(nullptr);
 	}
 	if (server_listen_socket == nullptr)
@@ -4634,7 +4671,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	// Host needs to create a socket set for MAX_PLAYERS
 	if (!server_socket_set)
 	{
-		server_socket_set = connProvider.newConnectionPollGroup();
+		server_socket_set = activeConnProvider->newConnectionPollGroup();
 	}
 	// allocate socket storage for all possible players
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
@@ -4739,8 +4776,10 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		debug(LOG_ERROR, "Likely missing NETinit() - this won't return any results");
 		return false;
 	}
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
-	const auto hostsResult = connProvider.resolveHost(masterserver_name, masterserver_port);
+	lobbyConnectionHandler.ensureInitialized();
+	auto* connProvider = lobbyConnectionHandler.connectionProvider();
+	ASSERT_OR_RETURN(false, connProvider != nullptr, "Lobby-specific connection provider is null!");
+	const auto hostsResult = connProvider->resolveHost(masterserver_name, masterserver_port);
 	if (!hostsResult.has_value())
 	{
 		const auto hostsErrMsg = hostsResult.error().message();
@@ -4749,7 +4788,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		return false;
 	}
 	const auto& hosts = hostsResult.value();
-	auto sockResult = connProvider.openClientConnectionAny(*hosts, 15000);
+	auto sockResult = connProvider->openClientConnectionAny(*hosts, 15000);
 
 	if (!sockResult.has_value()) {
 		const auto sockErrMsg = sockResult.error().message();
@@ -5236,8 +5275,8 @@ void NETacceptIncomingConnections()
 	{
 		// initialize temporary server socket set
 		// FIXME: why is this not done in NETinit()?? - Per
-		auto& connProvider = ConnectionProviderRegistry::Instance().Get(ConnectionProviderType::TCP_DIRECT);
-		tmp_socket_set = connProvider.newConnectionPollGroup();
+		ASSERT_OR_RETURN(, activeConnProvider != nullptr, "Active connection provider is not set!");
+		tmp_socket_set = activeConnProvider->newConnectionPollGroup();
 		// FIXME: I guess initialization of allowjoining is here now... - FlexCoral
 		for (auto& tmpState : tmp_connectState)
 		{

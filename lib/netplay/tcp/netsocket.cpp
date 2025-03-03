@@ -975,25 +975,24 @@ void deleteSocketAddress(SocketAddress *addr)
 void SOCKETinit()
 {
 #if defined(WZ_OS_WIN)
-	static bool firstCall = true;
-	if (firstCall)
+	if (winsock2_dll)
 	{
-		firstCall = false;
+		return;
+	}
 
-		static WSADATA stuff;
-		WORD ver_required = (2 << 8) + 2;
-		if (WSAStartup(ver_required, &stuff) != 0)
-		{
-			debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));
-			return;
-		}
+	static WSADATA stuff;
+	WORD ver_required = (2 << 8) + 2;
+	if (WSAStartup(ver_required, &stuff) != 0)
+	{
+		debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));
+		return;
+	}
 
-		winsock2_dll = LoadLibraryA("ws2_32.dll");
-		if (winsock2_dll)
-		{
-			getaddrinfo_dll_func = reinterpret_cast<GETADDRINFO_DLL_FUNC>(reinterpret_cast<void*>(GetProcAddress(winsock2_dll, "getaddrinfo")));
-			freeaddrinfo_dll_func = reinterpret_cast<FREEADDRINFO_DLL_FUNC>(reinterpret_cast<void*>(GetProcAddress(winsock2_dll, "freeaddrinfo")));
-		}
+	winsock2_dll = LoadLibraryA("ws2_32.dll");
+	if (winsock2_dll)
+	{
+		getaddrinfo_dll_func = reinterpret_cast<GETADDRINFO_DLL_FUNC>(reinterpret_cast<void*>(GetProcAddress(winsock2_dll, "getaddrinfo")));
+		freeaddrinfo_dll_func = reinterpret_cast<FREEADDRINFO_DLL_FUNC>(reinterpret_cast<void*>(GetProcAddress(winsock2_dll, "freeaddrinfo")));
 	}
 #endif
 }
