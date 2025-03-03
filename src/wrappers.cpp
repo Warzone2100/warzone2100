@@ -206,7 +206,7 @@ TITLECODE titleLoop()
 			{
 				NetPlay.bComms = true; // use network = true
 				bMultiMessages = true;
-				NETinit(true);
+				NETinit();
 				NETinitPortMapping();
 			}
 			bMultiPlayer = true;
@@ -219,7 +219,7 @@ TITLECODE titleLoop()
 		else if (strlen(iptoconnect))
 		{
 			NetPlay.bComms = true; // use network = true
-			NETinit(true);
+			NETinit();
 			// Ensure the joinGame has a place to return to
 			changeTitleMode(TITLE);
 			joinGame(iptoconnect, cliConnectToIpAsSpectator);
