@@ -57,7 +57,7 @@ function defendingLocation()
 //move only ever is DORDER_MOVE when it is 'me' defending my base.
 function defendLocation(x, y, timeout, move)
 {
-	var radius = 7; //was 15
+	const RADIUS = 7; //was 15
 
 	defendInfo.location.x = x;
 	defendInfo.location.y = y;
@@ -67,9 +67,9 @@ function defendLocation(x, y, timeout, move)
 
 	if (enumGroup(groups.attackers).length > 0)
 	{
-		var avg = groupCoordinateAverage(groups.attackers);
+		const avg = groupCoordinateAverage(groups.attackers);
 
-		if (distBetweenTwoPoints(avg.x, avg.y, x, y) > radius)
+		if (distBetweenTwoPoints(avg.x, avg.y, x, y) > RADIUS)
 		{
 			orderGroupLoc(groups.attackers, x, y, defendInfo.moveType);
 		}
@@ -78,13 +78,13 @@ function defendLocation(x, y, timeout, move)
 
 function stopHelpingAlly()
 {
-	var ally = helpInfo.lastHelpPlayer;
+	const ALLY = helpInfo.lastHelpPlayer;
 
-	helpInfo.lastHelpTime[ally] = undefined;
-	helpInfo.lastHelpRequest[ally] = undefined;
-	helpInfo.helpTimeout[ally] = undefined;
-	helpInfo.location[ally].x = undefined;
-	helpInfo.location[ally].y = undefined;
+	helpInfo.lastHelpTime[ALLY] = undefined;
+	helpInfo.lastHelpRequest[ALLY] = undefined;
+	helpInfo.helpTimeout[ALLY] = undefined;
+	helpInfo.location[ALLY].x = undefined;
+	helpInfo.location[ALLY].y = undefined;
 	helpInfo.lastHelpPlayer = undefined;
 
 	stopDefendingLocation();
@@ -92,7 +92,7 @@ function stopHelpingAlly()
 
 function attemptToHelp(player, x, y)
 {
-	var helpingSelf = (player === me);
+	const HELPING_SELF = (player === me);
 
 	if (!defined(player))
 	{
@@ -107,7 +107,7 @@ function attemptToHelp(player, x, y)
 	}
 
 	//if not helping any other ally or it's me who needs help
-	if (helpingSelf || !helpingAlly() || (helpInfo.lastHelpPlayer === player))
+	if (HELPING_SELF || !helpingAlly() || (helpInfo.lastHelpPlayer === player))
 	{
 		if (!haveHelpers())
 		{
@@ -124,8 +124,7 @@ function attemptToHelp(player, x, y)
 
 function helpPlayer(player, x, y)
 {
-	var timeTravel = 0;
-	var attackers = enumGroup(groups.attackers);
+	let timeTravel = 0;
 
 	if (!defined(player))
 	{
@@ -140,13 +139,13 @@ function helpPlayer(player, x, y)
 	}
 
 	//Calculate travel time, assume ~ 150 tiles in 4 minutes
-	if (attackers.length === 0)
+	if (enumGroup(groups.attackers).length === 0)
 	{
 		timeTravel = Math.floor(distBetweenTwoPoints(BASE.x, BASE.y, x, y) * 1.7 * 1000);
 	}
 	else
 	{
-		var avg = groupCoordinateAverage(groups.attackers);
+		const avg = groupCoordinateAverage(groups.attackers);
 		timeTravel = Math.floor(distBetweenTwoPoints(avg.x, avg.y, x, y) * 1.7 * 1000);
 	}
 
@@ -194,21 +193,21 @@ function canStopHelpingAlly()
 
 function requestHelp(x, y)
 {
-	var ally = helpInfo.lastHelpPlayer;
+	const ALLY = helpInfo.lastHelpPlayer;
 
-	if (!defined(ally))
+	if (!defined(ALLY))
 	{
 		return false;
 	}
 
 	// Don't do this too frequently
-	if (helpInfo.lastHelpRequest[ally] + HELP_REQUEST_INTERVAL > gameTime)
+	if (helpInfo.lastHelpRequest[ALLY] + HELP_REQUEST_INTERVAL > gameTime)
 	{
 		return false;
 	}
 
 	// Remember when we requested help last time
-	helpInfo.lastHelpRequest[ally] = gameTime;
+	helpInfo.lastHelpRequest[ALLY] = gameTime;
 
 	chat(ALLIES, REQUESTS.help);
 }

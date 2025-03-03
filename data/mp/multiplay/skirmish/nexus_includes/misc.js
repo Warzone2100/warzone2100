@@ -57,18 +57,18 @@ function getRealPower(player)
 
 function sortByDistToBase(obj1, obj2)
 {
-	var dist1 = distBetweenTwoPoints(BASE.x, BASE.y, obj1.x, obj1.y);
-	var dist2 = distBetweenTwoPoints(BASE.x, BASE.y, obj2.x, obj2.y);
+	const DIST = distBetweenTwoPoints(BASE.x, BASE.y, obj1.x, obj1.y);
+	const DIST2 = distBetweenTwoPoints(BASE.x, BASE.y, obj2.x, obj2.y);
 
-	return (dist1 - dist2);
+	return (DIST - DIST2);
 }
 
 function coordinatesOutOfBounds(x, y)
 {
-	return ((x < DARK_ZONE_TILES)
-		|| (x > mapWidth - DARK_ZONE_TILES)
-		|| (y < DARK_ZONE_TILES)
-		|| (y > mapHeight - DARK_ZONE_TILES));
+	return ((x < DARK_ZONE_TILES) ||
+		(x > mapWidth - DARK_ZONE_TILES) ||
+		(y < DARK_ZONE_TILES) ||
+		(y > mapHeight - DARK_ZONE_TILES));
 }
 
 function arrayContains(what, array)
@@ -115,12 +115,12 @@ function groupNearCoordinate(group, loc, range)
 		range = 4;
 	}
 
-	var count = 0;
-	var members = enumGroup(group);
+	let count = 0;
+	const members = enumGroup(group);
 
 	for (let i = 0, len = members.length; i < len; ++i)
 	{
-		var dr = members[i];
+		const dr = members[i];
 
 		if (distBetweenTwoPoints(dr.x, dr.y, loc.x, loc.y) <= range)
 		{
@@ -146,12 +146,12 @@ function groupCanReach(group, x, y)
 		return false;
 	}
 
-	var members = enumGroup(group);
-	var len = members.length;
+	const members = enumGroup(group);
+	const LEN = members.length;
 
-	for (let i = 0; i < len; ++i)
+	for (let i = 0; i < LEN; ++i)
 	{
-		var dr = members[i];
+		const dr = members[i];
 
 		if (!droidCanReach(dr, x, y))
 		{
@@ -171,16 +171,16 @@ function baseDetails(player)
 		player = me;
 	}
 
-	var baseRadius = 4;
-	var tmpBase = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
+	let baseRadius = 4;
+	const tmpBase = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
 
 	for (let i = 0, len = STANDARD_BASE_STRUCTURES.length; i < len; ++i)
 	{
-		var sObjs = enumStruct(player, STANDARD_BASE_STRUCTURES[i]);
+		const sObjs = enumStruct(player, STANDARD_BASE_STRUCTURES[i]);
 
 		for (let j = 0, len2 = sObjs.length; j < len2; ++j)
 		{
-			var struct = sObjs[j];
+			const struct = sObjs[j];
 
 			if (struct.x < tmpBase.x1)
 			{
@@ -199,11 +199,11 @@ function baseDetails(player)
 				tmpBase.y2 = struct.y;
 			}
 
-			var result = distBetweenTwoPoints(BASE.x, BASE.y, struct.x, struct.y);
+			const DIST = distBetweenTwoPoints(BASE.x, BASE.y, struct.x, struct.y);
 
-			if (result > baseRadius)
+			if (DIST > baseRadius)
 			{
-				baseRadius = result;
+				baseRadius = DIST;
 			}
 		}
 	}
@@ -212,12 +212,12 @@ function baseDetails(player)
 	const DUMMY_X = 4;
 	const DUMMY_Y = 4;
 	// Extend the radius a few tiles for each limit
-	var extraTilesBase = 10; //6
-	var x1 = tmpBase.x1 - extraTilesBase;
-	var y1 = tmpBase.y1 - extraTilesBase;
-	var x2 = tmpBase.x2 + extraTilesBase;
-	var y2 = tmpBase.y2 + extraTilesBase;
-	var rad = baseRadius + extraTilesBase;
+	const EXTRA_TILES_BASE = 10; //6
+	let x1 = tmpBase.x1 - EXTRA_TILES_BASE;
+	let y1 = tmpBase.y1 - EXTRA_TILES_BASE;
+	let x2 = tmpBase.x2 + EXTRA_TILES_BASE;
+	let y2 = tmpBase.y2 + EXTRA_TILES_BASE;
+	const RAD = baseRadius + EXTRA_TILES_BASE;
 
 	if (coordinatesOutOfBounds(x1, DUMMY_Y))
 	{
@@ -242,11 +242,11 @@ function baseDetails(player)
 		baseLimits.x2 = x2;
 		baseLimits.y1 = y1;
 		baseLimits.y2 = y2;
-		baseLimits.radius = rad;
+		baseLimits.radius = RAD;
 	}
 	else
 	{
-		return {x1: x1, y1: y1, x2: x2, y2: y2, radius: rad};
+		return {x1: x1, y1: y1, x2: x2, y2: y2, radius: RAD};
 	}
 
 	return undefined;
@@ -262,7 +262,7 @@ function insideBase(x, y, object)
 		return false;
 	}
 
-	var base = defined(object) ? object : baseLimits;
+	const base = defined(object) ? object : baseLimits;
 
 	if (!defined(base.x1) || !defined(base.y1) || !defined(base.x2) || !defined(base.y2))
 	{
@@ -288,10 +288,10 @@ function gateInBase(gate)
 		return false;
 	}
 
-	var gx = Math.floor((gate.x1 + gate.x2) / 2);
-	var gy = Math.floor((gate.y1 + gate.y2) / 2);
+	const GX = Math.floor((gate.x1 + gate.x2) / 2);
+	const GY = Math.floor((gate.y1 + gate.y2) / 2);
 
-	return insideBase(gx, gy);
+	return insideBase(GX, GY);
 }
 
 // Set the chance of choosing a VTOL personality.
@@ -300,7 +300,7 @@ function setTechBranch()
 	const SMALL_SIDE_LENGTH = 90;
 	const MEDIUM_SIDE_LENGTH = 125;
 	const LARGE_SIDE_LENGTH =  165;
-	var chance = 0;
+	let chance = 0;
 
 	if (mapWidth >= LARGE_SIDE_LENGTH || mapHeight >= LARGE_SIDE_LENGTH)
 	{
@@ -354,11 +354,11 @@ function threatInRange(x, y, player, scanRadius, visible)
 		visible = false;
 	}
 
-	var stuff = enumRange(x, y, scanRadius, player, visible);
+	const stuff = enumRange(x, y, scanRadius, player, visible);
 
 	for (let i = 0, l = stuff.length; i < l; ++i)
 	{
-		var obj = stuff[i];
+		const obj = stuff[i];
 
 		if (obj.type !== FEATURE && obj.player !== me && !allianceExistsBetween(me, obj.player))
 		{
@@ -381,7 +381,7 @@ function threatInRange(x, y, player, scanRadius, visible)
 
 function numDroidsInBase(player)
 {
-	var len = 0;
+	let len = 0;
 
 	if (!defined(player))
 	{
@@ -421,12 +421,12 @@ function numWeapObjectsInRange(x, y, player, scanRadius, visible)
 		visible = false;
 	}
 
-	var stuff = enumRange(x, y, scanRadius, player, visible);
-	var count = {structures: 0, droids: 0, safe: true};
+	const stuff = enumRange(x, y, scanRadius, player, visible);
+	const count = {structures: 0, droids: 0, safe: true};
 
 	for (let i = 0, l = stuff.length; i < l; ++i)
 	{
-		var obj = stuff[i];
+		const obj = stuff[i];
 
 		if (obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.status === BUILT)
 		{
@@ -460,8 +460,8 @@ function numGroupSameOrder(group, order)
 		return Infinity; // Seems to be a good fail-safe.
 	}
 
-	var numSame = 0;
-	var grp = enumGroup(group);
+	let numSame = 0;
+	const grp = enumGroup(group);
 
 	for (let i = 0, len = grp.length; i < len; ++i)
 	{
@@ -536,48 +536,46 @@ function groupCoordinateAverage(group)
 		return {x: 0, y: 0};
 	}
 
-	var droids = enumGroup(group);
-	var len = droids.length;
-	var xTotal = 0;
-	var yTotal = 0;
+	const droids = enumGroup(group);
+	const LEN = droids.length;
+	let xTotal = 0;
+	let yTotal = 0;
 
-	for (let i = 0; i < len; ++i)
+	for (let i = 0; i < LEN; ++i)
 	{
 		xTotal += droids[i].x;
 		yTotal += droids[i].y;
 	}
 
-	return ({x: Math.floor(xTotal / len), y: Math.floor(yTotal / len)});
+	return ({x: Math.floor(xTotal / LEN), y: Math.floor(yTotal / LEN)});
 }
 
 function numAlliesInBase()
 {
-	var counts = numWeapObjectsInRange(BASE.x, BASE.y, ALLIES, BASE_THREAT_RANGE, true);
+	const counts = numWeapObjectsInRange(BASE.x, BASE.y, ALLIES, BASE_THREAT_RANGE, true);
 
 	return (counts.droids + Math.floor(counts.structures / 3));
 }
 
 function numEnemiesInBase()
 {
-	var counts = numWeapObjectsInRange(BASE.x, BASE.y, ENEMIES, BASE_THREAT_RANGE, true);
+	const counts = numWeapObjectsInRange(BASE.x, BASE.y, ENEMIES, BASE_THREAT_RANGE, true);
 
 	return (counts.droids + Math.floor(counts.structures / 4));
 }
 
 function baseInTrouble()
 {
-	var friendlyForce = numAlliesInBase();
-	var enemyForce = numEnemiesInBase();
+	const FRIENDLY_FORCE = numAlliesInBase();
+	const ENEMY_FORCE = numEnemiesInBase();
 
-	return (enemyForce > 0 && enemyForce >= friendlyForce);
+	return (ENEMY_FORCE > 0 && ENEMY_FORCE >= FRIENDLY_FORCE);
 }
 
 function initPersonalityData(personality)
 {
-	var factories = enumStruct(me, FACTORY);
-	var trucks = enumDroid(me, DROID_CONSTRUCT);
-	var i = 0;
-	var len = 0;
+	const factories = enumStruct(me, FACTORY);
+	const trucks = enumDroid(me, DROID_CONSTRUCT);
 
 	helpInfo = {
 		lastHelpTime: [],
@@ -628,13 +626,13 @@ function initPersonalityData(personality)
 		setTechBranch();
 	}
 
-	for (i = 0, len = nexusBranch[branch].numVtolGroups; i < len; ++i)
+	for (let i = 0, len = nexusBranch[branch].numVtolGroups; i < len; ++i)
 	{
 		groups.vtolAttackers.push(newGroup()); // An array of group numbers
 		targetInfo.vtolGroupWhat.push(undefined);
 	}
 
-	for (i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		helpInfo.lastHelpTime.push(undefined);
 		helpInfo.lastHelpRequest.push(undefined);
@@ -645,7 +643,7 @@ function initPersonalityData(personality)
 	//Now set the scout base. Seems pointless but oh well, original.
 	if (factories.length > 0)
 	{
-		var fac = factories[0];
+		const fac = factories[0];
 		scoutInfo.base.x = fac.x;
 		scoutInfo.base.y = fac.y;
 	}
@@ -655,9 +653,9 @@ function initPersonalityData(personality)
 		scoutInfo.base.y = BASE.y;
 	}
 
-	for (i = 0, len = trucks.length; i < len; ++i)
+	for (let i = 0, len = trucks.length; i < len; ++i)
 	{
-		var droid = trucks[i];
+		const droid = trucks[i];
 		groupAdd(groups.baseBuilders, droid);
 	}
 

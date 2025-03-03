@@ -7,25 +7,25 @@ function needsToRearm(droidID)
 		return true;
 	}
 
-	var droid = getObject(DROID, me, droidID);
+	const droid = getObject(DROID, me, droidID);
 
 	if (droid === null)
 	{
 		return true; //Seems like a good fail-safe.
 	}
 
-	var armedPercent1 = Math.floor(droid.weapons[0].armed);
+	const ARMED_PERCENT = Math.floor(droid.weapons[0].armed);
 
 	if (droid.order === DORDER_REARM)
 	{
-		if (armedPercent1 < 100)
+		if (ARMED_PERCENT < 100)
 		{
 			return true;
 		}
 	}
 	else
 	{
-		if (armedPercent1 === 0)
+		if (ARMED_PERCENT === 0)
 		{
 			orderDroid(droid, DORDER_REARM);
 			return true;
@@ -37,12 +37,12 @@ function needsToRearm(droidID)
 
 function getCurrentVtolGroupTarget(groupIdx)
 {
-	var targ = targetInfo.vtolGroupWhat[groupIdx]; //Use current target if any.
+	let targ = targetInfo.vtolGroupWhat[groupIdx]; //Use current target if any.
 
 	if (defined(targ))
 	{
-		var clearIt = false;
-		var obj = getObject(targ.type, targ.player, targ.id);
+		let clearIt = false;
+		const obj = getObject(targ.type, targ.player, targ.id);
 
 		if (obj === null)
 		{
@@ -67,11 +67,11 @@ function getCurrentVtolGroupTarget(groupIdx)
 
 function tryChangingVtolGroupTarget(groupIdx)
 {
-	var newTargetWeight;
-	var currentTarget = targetInfo.vtolGroupWhat[groupIdx];
+	let newTargetWeight;
+	let currentTarget = targetInfo.vtolGroupWhat[groupIdx];
 
 
-	var newTarget = chooseVtolTarget(true);
+	let newTarget = chooseVtolTarget(true);
 
 	//reset the target once in a while.
 	if (random(100) < 7)
@@ -92,11 +92,11 @@ function tryChangingVtolGroupTarget(groupIdx)
 	}
 	else
 	{
-		var currentTargetWeight = getVtolTargetWeight(currentTarget);
+		const CURRENT_TARGET_WEIGHT = getVtolTargetWeight(currentTarget);
 		newTargetWeight = getVtolTargetWeight(newTarget);
 
 		//Or a much better one.
-		if (newTargetWeight >= (currentTargetWeight + 20))
+		if (newTargetWeight >= (CURRENT_TARGET_WEIGHT + 20))
 		{
 			currentTarget = newTarget;
 		}
@@ -109,18 +109,18 @@ function tryAttackingVtolTarget(group, targetData)
 {
 	if (!allianceExistsBetween(me, targetData.player))
 	{
-		var atkTarget = getObject(targetData.type, targetData.player, targetData.id);
+		const atkTarget = getObject(targetData.type, targetData.player, targetData.id);
 
 		if (atkTarget === null)
 		{
 			return false;
 		}
 
-		var attackers = enumGroup(group);
+		const attackers = enumGroup(group);
 
 		for (let i = 0, len = attackers.length; i < len; ++i)
 		{
-			var vtol = attackers[i];
+			const vtol = attackers[i];
 
 			if (!needsToRearm(vtol.id))
 			{
@@ -140,17 +140,17 @@ function vtolAttack()
 {
 	for (let i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
 	{
-		var currGroup = groups.vtolAttackers[i];
-		var amtOfAttackers = enumGroup(currGroup).length;
-		if (amtOfAttackers === 0)
+		const currGroup = groups.vtolAttackers[i];
+		const AMT_ATTACKERS = enumGroup(currGroup).length;
+		if (AMT_ATTACKERS === 0)
 		{
 			continue;
 		}
 
-		var currentTarget = getCurrentVtolGroupTarget(i);
+		let currentTarget = getCurrentVtolGroupTarget(i);
 
 		//attack rules
-		if (amtOfAttackers >= Math.floor(nexusBranch[branch].numVtolsPerGroup * 2 / 3))
+		if (AMT_ATTACKERS >= Math.floor(nexusBranch[branch].numVtolsPerGroup * 2 / 3))
 		{
 			currentTarget = tryChangingVtolGroupTarget(i);
 		}
@@ -174,14 +174,14 @@ function rearrangeAttackVtols()
 {
 	const MAX_VTOLS_PER_GROUP = nexusBranch[branch].numVtolsPerGroup;
 	const NUM_GROUPS = nexusBranch[branch].numVtolGroups;
-	var droids = [];
-	var droidCount = 0;
-	var counter = 0;
+	let droids = [];
+	let droidCount = 0;
+	let counter = 0;
 
 	//Simply add all the VTOLs in a group into an arrray.
 	for (let i = 0; i < NUM_GROUPS; ++i)
 	{
-		var group = enumGroup(groups.vtolAttackers[i]);
+		const group = enumGroup(groups.vtolAttackers[i]);
 
 		if (enumGroup(group).length > 0)
 		{
@@ -198,11 +198,11 @@ function rearrangeAttackVtols()
 
 	for (let i = 0; i < NUM_GROUPS; ++i)
 	{
-		var groupIdx = groups.vtolAttackers[i];
+		const GROUP_IDX = groups.vtolAttackers[i];
 
-		while (droidCount - counter > 0 && enumGroup(groupIdx).length < MAX_VTOLS_PER_GROUP)
+		while (droidCount - counter > 0 && enumGroup(GROUP_IDX).length < MAX_VTOLS_PER_GROUP)
 		{
-			groupAdd(groupIdx, droids[counter]);
+			groupAdd(GROUP_IDX, droids[counter]);
 			counter += 1;
 		}
 	}
@@ -211,9 +211,9 @@ function rearrangeAttackVtols()
 //Returns an object = {type: DROID/STRUCTURE, player: player, id: id}
 function chooseVtolTarget(exclusive)
 {
-	var bestTarget;
-	var bestScore = 0;
-	var currScore;
+	let bestTarget;
+	let bestScore = 0;
+	let currScore;
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
@@ -224,13 +224,13 @@ function chooseVtolTarget(exclusive)
 
 		for (let j = 0, len = nexusBranch[branch].vtolTargets.length; j < len; ++j)
 		{
-			var ttype = nexusBranch[branch].vtolTargets[j].structure;
-			var structs = enumStruct(i, ttype);
+			const TTYPE = nexusBranch[branch].vtolTargets[j].structure;
+			const structs = enumStruct(i, TTYPE);
 
 			for (let c = 0, len2 = structs.length; c < len2; ++c)
 			{
-				var st = structs[c];
-				var obj = {type: st.type, player: st.player, id: st.id};
+				const st = structs[c];
+				const obj = {type: st.type, player: st.player, id: st.id};
 
 				//in case we don't want all groups to attack the same target
 				if (!(exclusive && vtolTargetAssigned(obj)))
@@ -253,9 +253,9 @@ function chooseVtolTarget(exclusive)
 //Expects an object = {type: DROID/STRUCTURE, player: player, id: id}
 function getVtolTargetWeight(what)
 {
-	var targetWeight = 0;
-	var penalty = 9; //NOTE: A bit much? Penality points per nearby AA structure.
-	var target;
+	let targetWeight = 0;
+	let penalty = 9; //NOTE: A bit much? Penality points per nearby AA structure.
+	let target;
 
 	if (!defined(what))
 	{
@@ -282,7 +282,7 @@ function getVtolTargetWeight(what)
 
 	for (let i = 0, len = nexusBranch[branch].vtolTargets.length; i < len; ++i)
 	{
-		var type = nexusBranch[branch].vtolTargets[i];
+		const type = nexusBranch[branch].vtolTargets[i];
 
 		if (target.stattype === type.structure)
 		{
@@ -312,12 +312,12 @@ function numEnemyAAInRange(x, y, range)
 		range = 7;
 	}
 
-	var total = 0;
-	var stuff = enumRange(x, y, range, ENEMIES, false);
+	let total = 0;
+	const stuff = enumRange(x, y, range, ENEMIES, false);
 
 	for (let i = 0, len = stuff.length; i < len; ++i)
 	{
-		var s = stuff[i];
+		const s = stuff[i];
 
 		if (s.type === STRUCTURE && s.status === BUILT && s.canHitAir)
 		{
@@ -332,7 +332,7 @@ function numEnemyAAInRange(x, y, range)
 //Expects an object = {type: DROID/STRUCTURE, player: player, id: id}
 function vtolTargetAssigned(what)
 {
-	var target;
+	let target;
 
 	if (!defined(what))
 	{
@@ -349,7 +349,7 @@ function vtolTargetAssigned(what)
 
 	for (let i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
 	{
-		var obj = targetInfo.vtolGroupWhat[i];
+		const obj = targetInfo.vtolGroupWhat[i];
 
 		if (defined(obj) && obj.type === what.type && obj.player === what.player && obj.id === what.id)
 		{
@@ -366,22 +366,22 @@ function vtolTargetAssigned(what)
 // watch for incoming vtols
 function vtolDefend()
 {
-	var stuff = enumRange(BASE.x, BASE.y, BASE_VTOL_DEFENSE_RANGE, ENEMIES, true);
+	const stuff = enumRange(BASE.x, BASE.y, BASE_VTOL_DEFENSE_RANGE, ENEMIES, true);
 
 	if (stuff.length > 0)
 	{
-		var target = stuff[0];
-		var defenders = enumGroup(groups.vtolDefenders);
-		var len = defenders.length;
+		const target = stuff[0];
+		const defenders = enumGroup(groups.vtolDefenders);
+		const LEN = defenders.length;
 
-		if (len < 2)
+		if (LEN < 2)
 		{
 			return;
 		}
 
-		for (let i = 0; i < len; ++i)
+		for (let i = 0; i < LEN; ++i)
 		{
-			var vtol = defenders[i];
+			const vtol = defenders[i];
 
 			if (!needsToRearm(vtol.id))
 			{
