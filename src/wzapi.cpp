@@ -56,6 +56,7 @@
 #include "multilimit.h"
 #include "multigifts.h"
 #include "multimenu.h"
+#include "multiint.h"
 #include "template.h"
 #include "lighting.h"
 #include "radar.h"
@@ -4706,10 +4707,13 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	//==   * ```isHuman``` whether the player is human (3.2+ only)
 	//==   * ```name``` the name of the player (3.2+ only)
 	//==   * ```team``` the number of the team the player is part of
+	//==   * ```scriptName``` File name of the AI's JS file. (4.6+ only)
 	nlohmann::json playerData = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
+	const auto& aidata = getAIData();
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		nlohmann::json vector = nlohmann::json::object();
+		bool aiPlayer = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
 		if (game.blindMode >= BLIND_MODE::BLIND_GAME)
 		{
 			// to ensure the "name" field exposed to api is consistent across blind games _and_ replays of those games, always set it to the generic name if in blind mode
@@ -4724,9 +4728,14 @@ nlohmann::json wzapi::constructStaticPlayerData()
 		vector["colour"] = NetPlay.players[i].colour;
 		vector["position"] = NetPlay.players[i].position;
 		vector["team"] = NetPlay.players[i].team;
-		vector["isAI"] = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
+		vector["isAI"] = aiPlayer;
 		vector["isHuman"] = NetPlay.players[i].allocated;
 		vector["type"] = SCRIPT_PLAYER;
+		if (aiPlayer)
+		{
+			std::string js = (NetPlay.players[i].ai < aidata.size()) ? aidata[NetPlay.players[i].ai].js : "AI";
+			vector["scriptName"] = js;
+		}
 		playerData.push_back(std::move(vector));
 	}
 	return playerData;
