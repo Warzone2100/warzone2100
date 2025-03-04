@@ -122,15 +122,21 @@ jobs:
       id: settings
       env:
         BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
+        WZ_DEPLOY_TO_RELEASE: ${{ matrix.deploy_release }}
       run: |
         # Basic variable setup
         # --------------------
 
         $WZ_VC_TARGET_PLATFORMNAME = "$env:WZ_TARGET_ARCH"
-        $WZ_BUILD_DESC = "win_${env:WZ_TARGET_ARCH}"
+        $WZ_BUILD_DESC_PREFIX = "win"
+        if ("${env:WZ_DEPLOY_TO_RELEASE}" -ne "true") {
+          # Builds that aren't to be deployed to a release should have a different WZ_BUILD_DESC prefix (not "win_") for easier wildcard selection later
+          $WZ_BUILD_DESC_PREFIX = "ci_only"
+        }
+        $WZ_BUILD_DESC = "${WZ_BUILD_DESC_PREFIX}_${env:WZ_TARGET_ARCH}"
         if (-not ([string]::IsNullOrEmpty("${{ matrix.artifact_description }}")))
         {
-          $WZ_BUILD_DESC = "win_${{ matrix.artifact_description }}"
+          $WZ_BUILD_DESC = "${WZ_BUILD_DESC_PREFIX}_${{ matrix.artifact_description }}"
         }
 
         if ($env:WZ_COMPILER_VER -eq "LLVM_MINGW") {
@@ -565,7 +571,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if: failure()
       with:
-        name: win_${{ matrix.architecture }}_vcpkg_logs
+        name: failure_${{ steps.settings.outputs.WZ_BUILD_DESC }}_${{ matrix.architecture }}_vcpkg_logs
         path: |
           ${{ github.workspace }}\build\vcpkg\buildtrees\*\*.log
           ${{ github.workspace }}\build\vcpkg\buildtrees\*\*.txt
@@ -616,7 +622,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if: failure()
       with:
-        name: win_${{ matrix.architecture }}_error_logs
+        name: failure_${{ steps.settings.outputs.WZ_BUILD_DESC }}_${{ matrix.architecture }}_error_logs
         path: '${{ github.workspace }}\output\error_logs'
         if-no-files-found: 'warn'
     - name: Package Full Installer
@@ -728,11 +734,11 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}
         WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
-    #####################################################
-    # Create Sentry source bundle
-    #####################################################
+    #########################################################
+    # Create Sentry source bundle (for releasable artifacts)
+    #########################################################
     - name: Create Sentry source bundle
-      if: success() && (matrix.support_sentry == true)
+      if: success() && (matrix.support_sentry == true) && (matrix.deploy_release == true)
       id: create-sentry-source-bundle
       continue-on-error: true
       working-directory: '${{ github.workspace }}\sentry_artifacts'
@@ -767,10 +773,10 @@ jobs:
         # List output bundles
         Get-ChildItem -Path "${env:SOURCE_BUNDLE_OUTPUT_DIR}" -Recurse
     - name: Upload Sentry source bundles
-      if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
+      if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (matrix.deploy_release == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
       uses: actions/upload-artifact@v4
       with:
-        name: 'warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_debug_sourcebundles'
+        name: 'debug_sourcebundles_${{ steps.settings.outputs.WZ_BUILD_DESC }}'
         path: '${{ github.workspace }}\output\sentry_source_bundles'
         retention-days: 1
         if-no-files-found: 'warn'
@@ -837,7 +843,7 @@ jobs:
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
-          name: 'warzone2100_win_${{ matrix.architecture }}_debug_sourcebundles'
+          name: 'debug_sourcebundles_win_${{ matrix.architecture }}'
           path: ./dl-sourcebundle
       - name: 'Upload debug symbols'
         env:
