@@ -12,7 +12,7 @@ function haveBeacon(player)
 		return false;
 	}
 
-	return (helpInfo[player].lastHelpTime > 0 && !beaconTimeout(player));
+	return (helpInfo.lastHelpTime[player] > 0 && !beaconTimeout(player));
 }
 
 //See if the last beacon from a player was placed long ago.
@@ -24,12 +24,12 @@ function beaconTimeout(player)
 		return false;
 	}
 
-	if (!defined(helpInfo[player].lastHelpTime))
+	if (!defined(helpInfo.lastHelpTime[player]))
 	{
 		return false;
 	}
 
-	return (helpInfo[player].lastHelpTime > 0 && (helpInfo[player].lastHelpTime + BEACON_TIMEOUT < gameTime));
+	return (helpInfo.lastHelpTime[player] > 0 && (helpInfo.lastHelpTime[player] + BEACON_TIMEOUT < gameTime));
 }
 
 function stopDefendingLocation()
@@ -109,10 +109,11 @@ function attemptToHelp(player, x, y)
 	//if not helping any other ally or it's me who needs help
 	if (HELPING_SELF || !helpingAlly() || (helpInfo.lastHelpPlayer === player))
 	{
-		if (!haveHelpers())
+		if (!HELPING_SELF && !haveHelpers())
 		{
 			chat(ALL_PLAYERS, CHAT_RESPONSE.noHelp);
 		}
+		helpPlayer(player, x, y);
 	}
 	else if (defined(helpInfo.lastHelpPlayer))
 	{
@@ -183,7 +184,7 @@ function canStopHelpingAlly()
 		return true;
 	}
 
-	if (helpInfo.lastHelpTime < gameTime)
+	if (helpInfo.helpTimeout[helpInfo.lastHelpPlayer] < gameTime)
 	{
 		return true;
 	}
