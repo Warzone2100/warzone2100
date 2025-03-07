@@ -1828,15 +1828,14 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
 	}
-
 	CHECK_DROID(psDroid);
 }
 
 #define	VTOL_VERTICAL_SPEED_OLD		(((psDroid->baseSpeed / 4) > 60) ? ((SDWORD)psDroid->baseSpeed / 4) : 60)
-//Slower VTOLs need to increase height faster than the above or else they hover too close to the ground
-//during flight paths that feature increasing terrain height. Resulting in poor attack angles in some cases.
+// Slower VTOLs need to increase height faster than the above or else they hover too close to the ground
+// During flight paths that feature increasing terrain height. Resulting in poor attack angles in some cases.
 #define	VTOL_VERTICAL_SPEED		(((psDroid->baseSpeed / 4) > 160) ? ((SDWORD)psDroid->baseSpeed / 4) : 160)
-
+#define TRANSPORTER_VERTICAL_SPEED_MP   (((psDroid->baseSpeed / 2) > 200) ? ((SDWORD)psDroid->baseSpeed / 2) : 200) // Speed for multiplayer (MP)
 /* primitive 'bang-bang' vtol height controller */
 static void moveAdjustVtolHeight(DROID *psDroid, int32_t iMapHeight)
 {
@@ -1854,31 +1853,50 @@ static void moveAdjustVtolHeight(DROID *psDroid, int32_t iMapHeight)
 		iMaxHeight   = VTOL_HEIGHT_MAX;
 	}
 
-	if (psDroid->pos.z >= (iMapHeight + iMaxHeight))
-	{
-		psDroid->sMove.iVertSpeed = (SWORD) - VTOL_VERTICAL_SPEED_OLD;
-	}
-	else if (psDroid->pos.z < (iMapHeight + iMinHeight))
-	{
-		if (psDroid->isTransporter())
-		{
-			psDroid->sMove.iVertSpeed = (SWORD)VTOL_VERTICAL_SPEED_OLD;
-		}
-		else
-		{
-			psDroid->sMove.iVertSpeed = (SWORD)VTOL_VERTICAL_SPEED;
-		}
-	}
-	else if ((psDroid->pos.z < iLevelHeight) &&
-	         (psDroid->sMove.iVertSpeed < 0))
-	{
-		psDroid->sMove.iVertSpeed = 0;
-	}
-	else if ((psDroid->pos.z > iLevelHeight) &&
-	         (psDroid->sMove.iVertSpeed > 0))
-	{
-		psDroid->sMove.iVertSpeed = 0;
-	}
+    if (psDroid->pos.z >= (iMapHeight + iMaxHeight)) // Descending
+    {
+        if (psDroid->isTransporter())
+        {
+            if (bMultiPlayer)
+            {
+                psDroid->sMove.iVertSpeed = (SWORD) -TRANSPORTER_VERTICAL_SPEED_MP; // Faster in MP
+            }
+            else
+            {
+                psDroid->sMove.iVertSpeed = (SWORD) -VTOL_VERTICAL_SPEED_OLD; // Defaults for Campaign
+            }
+	    }
+    	    else
+    	    {
+                psDroid->sMove.iVertSpeed = (SWORD) -VTOL_VERTICAL_SPEED; // Non-transporter VTOLs
+    	    }
+    }
+    else if (psDroid->pos.z < (iMapHeight + iMinHeight)) // Ascending
+    {
+        if (psDroid->isTransporter())
+        {
+            if (bMultiPlayer)
+            {
+                psDroid->sMove.iVertSpeed = (SWORD) TRANSPORTER_VERTICAL_SPEED_MP; // Faster in MP
+            }
+            else
+            {
+                psDroid->sMove.iVertSpeed = (SWORD) VTOL_VERTICAL_SPEED_OLD; // Defaults for Campaign
+            }
+        }
+        else
+        {
+            psDroid->sMove.iVertSpeed = (SWORD) VTOL_VERTICAL_SPEED; // Non-transporter VTOLs
+        }
+    }
+    else if ((psDroid->pos.z < iLevelHeight) && (psDroid->sMove.iVertSpeed < 0))
+    {
+        psDroid->sMove.iVertSpeed = 0; // Stop descending
+    }
+    else if ((psDroid->pos.z > iLevelHeight) && (psDroid->sMove.iVertSpeed > 0))
+    {
+        psDroid->sMove.iVertSpeed = 0; // Stop ascending
+    }
 }
 
 static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction)
