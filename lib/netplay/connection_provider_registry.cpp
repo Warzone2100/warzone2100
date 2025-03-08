@@ -45,7 +45,11 @@ bool ConnectionProviderRegistry::IsRegistered(ConnectionProviderType pt) const
 
 void ConnectionProviderRegistry::Register(ConnectionProviderType pt)
 {
-	// No-op in case this provider has been already registered.
+	if (IsRegistered(pt))
+	{
+		return;
+	}
+
 	switch (pt)
 	{
 	case ConnectionProviderType::TCP_DIRECT:
