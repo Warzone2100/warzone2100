@@ -364,6 +364,7 @@ static bool localPlayerHasSelection()
 }
 void processInput() /* Process the user input. This just processes the key input and jumping around the radar*/
 {
+	SDWORD mx = mouseX(), my = mouseY(); // Cache mouse coordinates
 	if (InGameOpUp || isInGamePopupUp)
 	{
 	dragBox3D.status = DRAG_INACTIVE;	// Disengage the dragging since it stops menu input
