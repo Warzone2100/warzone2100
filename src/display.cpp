@@ -550,9 +550,9 @@ static void HandleDrag(SDWORD mx, SDWORD my)
 	if (mouseDrag(MOUSE_LMB, &dragX, &dragY) && !isMouseOverRadar() && !mouseDown(MOUSE_RMB))
 	{
 		dragBox3D.x1 = dragX;
-		dragBox3D.x2 = mx();
+		dragBox3D.x2 = mx;
 		dragBox3D.y1 = dragY;
-		dragBox3D.y2 = my();
+		dragBox3D.y2 = my;
 		dragBox3D.status = DRAG_DRAGGING;
 		
 		if (buildState == BUILD3D_VALID && canLineBuild())
