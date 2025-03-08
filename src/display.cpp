@@ -362,29 +362,21 @@ static bool localPlayerHasSelection()
 
 	return false;
 }
-
-/* Process the user input. This just processes the key input and jumping around the radar*/
-void processInput()
+void processInput() /* Process the user input. This just processes the key input and jumping around the radar*/
 {
 	if (InGameOpUp || isInGamePopupUp)
 	{
-		dragBox3D.status = DRAG_INACTIVE;	// disengage the dragging since it stops menu input
+	dragBox3D.status = DRAG_INACTIVE;	// Disengage the dragging since it stops menu input
 	}
-
-
 	StartOfLastFrame = currentFrame;
-	currentFrame = frameGetFrameNumber();
-
-	ignoreRMBC = false;
-
-	const bool mOverConstruction = CoordInBuild(mouseX(), mouseY());
-	const bool mouseIsOverScreenOverlayChild = isMouseOverScreenOverlayChild(mouseX(), mouseY());
+	currentFrame 	 = frameGetFrameNumber();
+	ignoreRMBC 	 = false;
+	const bool mOverConstruction 		 = CoordInBuild(mouseX(), mouseY());
+	const bool mouseIsOverScreenOverlayChild = isMouseOverScreenOverlayChild(mx, my);
 
 	if (!mouseIsOverScreenOverlayChild)
 	{
-		mouseOverConsole = mouseOverHistoryConsoleBox();
-
-		/* Process all of our key mappings */
+		mouseOverConsole = mouseOverHistoryConsoleBox(); /* Process all of our key mappings */
 		if (mOverConstruction)
 		{
 			if (mousePressed(MOUSE_WUP))
@@ -551,37 +543,33 @@ static bool CheckFinishedFindPosition()
 	return false;
 }
 
-static void HandleDrag()
+static void HandleDrag(SDWORD mx, SDWORD my)
 {
 	UDWORD dragX = 0, dragY = 0;
-
 	if (mouseDrag(MOUSE_LMB, &dragX, &dragY) && !isMouseOverRadar() && !mouseDown(MOUSE_RMB))
 	{
 		dragBox3D.x1 = dragX;
-		dragBox3D.x2 = mouseX();
+		dragBox3D.x2 = mx();
 		dragBox3D.y1 = dragY;
-		dragBox3D.y2 = mouseY();
+		dragBox3D.y2 = my();
 		dragBox3D.status = DRAG_DRAGGING;
-
+		
 		if (buildState == BUILD3D_VALID && canLineBuild())
 		{
-			wallDrag.pos2 = mousePos;
+			wallDrag.pos2 	= mousePos; /* ? Vector2i(mx, my); // Can we update wallDrag.pos2 directly, as it is set elsewhere based on mouseX() and mouseY() ? */
 			wallDrag.status = DRAG_DRAGGING;
 		}
 	}
 }
-
-// Mouse X coordinate at start of panning.
-UDWORD panMouseX;
-// Mouse Y coordinate at start of panning.
-UDWORD panMouseY;
+UDWORD panMouseX; // Mouse X coordinate at start of panning.
+UDWORD panMouseY; // Mouse Y coordinate at start of panning.
 std::unique_ptr<ValueTracker> panXTracker = std::make_unique<ValueTracker>();
 std::unique_ptr<ValueTracker> panZTracker = std::make_unique<ValueTracker>();
 bool panActive;
-
-//don't want to do any of these whilst in the Intelligence Screen
+// Don't want to do any of these whilst in the Intelligence Screen
 void processMouseClickInput()
 {
+	SDWORD mx = mouseX(), my = mouseY(); // Cache mouse coordinates
 	UDWORD	i;
 	SELECTION_TYPE	selection;
 	MOUSE_TARGET	item = MT_NOTARGET;
@@ -590,19 +578,14 @@ void processMouseClickInput()
 	ASSERT(selection <= POSSIBLE_SELECTIONS, "Weirdy selection!");
 
 	ignoreOrder = CheckFinishedFindPosition();
-
 	CheckStartWallDrag();
-
-	HandleDrag();
-
+	HandleDrag(mx, my);
 	CheckFinishedDrag(selection);
 
 	if (isMouseOverScreenOverlayChild(mouseX(), mouseY()))
 	{
-		// ignore clicks
-		return;
+		return; // ignore clicks
 	}
-
 	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
 	{
 		if (bRightClickOrders)
@@ -631,8 +614,8 @@ void processMouseClickInput()
 	if (mouseReleased(MOUSE_RMB) && !rotActive && !panActive && !ignoreRMBC)
 	{
 		dragBox3D.status = DRAG_INACTIVE;
-		// Pretty sure we wan't set walldrag status here aswell.
-		wallDrag.status = DRAG_INACTIVE;
+		// Pretty sure we wan't set walldrag status here as well.
+		wallDrag.status  = DRAG_INACTIVE;
 		if (bRightClickOrders)
 		{
 			dealWithLMB();
@@ -647,13 +630,10 @@ void processMouseClickInput()
 			camToggleStatus();
 		}
 	}
-
-	/* Right mouse click kills a building placement */
-	if (!rotActive && mouseReleased(MOUSE_RMB) &&
-	    (buildState == BUILD3D_POS || buildState == BUILD3D_VALID))
+/* Right mouse click kills a building placement */
+	if (!rotActive && mouseReleased(MOUSE_RMB) && (buildState == BUILD3D_POS || buildState == BUILD3D_VALID))
 	{
-		/* Stop the placement */
-		kill3DBuilding();
+		kill3DBuilding(); /* Stop the placement */
 	}
 	if (mouseReleased(MOUSE_RMB))
 	{
@@ -661,17 +641,20 @@ void processMouseClickInput()
 	}
 	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !isRadarDragging() && !getRadarTrackingStatus())
 	{
+	        rotX = mx; // Explicitly set, as mouseDrag might not update on first frame
+		rotY = my;
 		rotationVerticalTracker->startTracking((UWORD)playerPos.r.x);
-		rotationHorizontalTracker->startTracking((UWORD)playerPos.r.y); // negative values caused problems with float conversion
+		rotationHorizontalTracker->startTracking((UWORD)playerPos.r.y); // Negative values caused problems with float conversion
 		rotActive = true;
 	}
 	if (mouseDrag(MOUSE_PAN, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !isRadarDragging() && !getRadarTrackingStatus())
 	{
+	        panMouseX = mx; // Set for consistency and clarity
+		panMouseY = my;
 		panXTracker->startTracking(playerPos.p.x);
 		panZTracker->startTracking(playerPos.p.z);
 		panActive = true;
 	}
-
 
 	if (gamePaused())
 	{
@@ -1074,10 +1057,8 @@ bool CheckInScrollLimits(const int &xPos, const int &yPos)
 
 	return true;
 }
-
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns true if edge hit.
-//
 bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos)
 {
 	bool EdgeHit = false;
@@ -1087,7 +1068,6 @@ bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos)
 	maxX = world_coord(scrollMaxX - 1);
 	minY = world_coord(scrollMinY);
 	maxY = world_coord(scrollMaxY - 1);
-
 	//scroll is limited to what can be seen for current campaign
 	if (*xPos < minX)
 	{
@@ -1113,10 +1093,8 @@ bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos)
 
 	return EdgeHit;
 }
-
 // Check the view is within the scroll limits,
 // Returns true if edge hit.
-//
 bool CheckScrollLimits()
 {
 	SDWORD xp = playerPos.p.x;
@@ -1129,16 +1107,13 @@ bool CheckScrollLimits()
 	return ret;
 }
 
-/* Do the 3D display */
-void displayWorld()
+void displayWorld() /* Do the 3D display */
 {
 	if (headlessGameMode())
 	{
 		return;
 	}
-
 	Vector3i pos;
-
 	shakeUpdate();
 
 	if (panActive)
