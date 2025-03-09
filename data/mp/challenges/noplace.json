@@ -18,30 +18,37 @@
 		"team": 0
 	},
 	"player_1": {
+		"ai": "multiplay/skirmish/nexus.js",
 		"difficulty": "Hard",
 		"team": 1
 	},
 	"player_2": {
+		"ai": "multiplay/skirmish/nexus.js",
 		"difficulty": "Hard",
 		"team": 1
 	},
 	"player_3": {
+		"ai": "multiplay/skirmish/nexus.js",
 		"difficulty": "Hard",
 		"team": 1
 	},
 	"player_4": {
+		"ai": "multiplay/skirmish/nexus.js",
 		"difficulty": "Hard",
 		"team": 1
 	},
 	"player_5": {
+		"ai": "multiplay/skirmish/nexus.js",
 		"difficulty": "Hard",
 		"team": 1
 	},
 	"player_6": {
+		"ai": "multiplay/skirmish/nexus.js",
 		"difficulty": "Hard",
 		"team": 1
 	},
 	"player_7": {
+		"ai": "multiplay/skirmish/nexus.js",
 		"difficulty": "Hard",
 		"team": 1
 	}
