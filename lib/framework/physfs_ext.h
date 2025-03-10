@@ -36,10 +36,8 @@
 // Detect the version of PhysFS
 #if PHYSFS_VER_MAJOR > 2 || (PHYSFS_VER_MAJOR == 2 && PHYSFS_VER_MINOR >= 1)
 	#define WZ_PHYSFS_2_1_OR_GREATER
-#elif (PHYSFS_VER_MAJOR == 2 && PHYSFS_VER_MINOR == 0)
-	#define WZ_PHYSFS_2_0_OR_GREATER
 #else
-	#error WZ requires PhysFS 2.0+
+	#error WZ requires PhysFS 2.1+
 #endif
 
 // WZ PHYSFS wrappers to provide consistent naming (and functionality) on PhysFS 2.0 and 2.1+
