@@ -345,10 +345,10 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       ```
    3. Run CMake configure to generate the build files:
       ```shell
-      cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=~/wz/install -GNinja ../warzone2100
+      cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=~/wz/install -GNinja ../../warzone2100
       ```
       > - [Modify the `CMAKE_INSTALL_PREFIX` parameter value as desired](https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX.html) to configure the base installation path.
-      > - The `../warzone2100` path at the end should point to the warzone2100 source directory.
+      > - The `../../warzone2100` path at the end should point to the warzone2100 source directory.
    4. Run CMake build:
       ```shell
       cmake --build . --target install
