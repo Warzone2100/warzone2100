@@ -1037,7 +1037,7 @@ void from_json(const nlohmann::json& j, JoinConnectionDescription& v)
 	v.type = j.at("t").get<JoinConnectionDescription::JoinConnectionType>();
 }
 
-// NOTE: Must call NETinit(true); before this will actually work
+// NOTE: Must call NETinit(); before this will actually work
 std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)
 {
 	WzString originalLobbyServerName = WzString::fromUtf8(NETgetMasterserverName());

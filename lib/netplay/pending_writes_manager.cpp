@@ -50,6 +50,8 @@ void PendingWritesManager::deinitialize()
 	wzMutexDestroy(mtx_);
 	wzSemaphoreDestroy(sema_);
 	thread_ = nullptr;
+	mtx_ = nullptr;
+	sema_ = nullptr;
 }
 
 void PendingWritesManager::initialize(WzConnectionProvider& connProvider)
