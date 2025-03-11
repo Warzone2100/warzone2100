@@ -46,7 +46,6 @@
 
 #include <chrono>
 #include <algorithm>
-#include <fmt/format.h>
 
 class WzJoiningGameScreen_HandlerRoot;
 struct WzJoiningGameScreen;
@@ -1147,9 +1146,8 @@ static ConnectionProviderType toConnectionProviderType(JoinConnectionDescription
 	{
 	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT:
 		return ConnectionProviderType::TCP_DIRECT;
-	default:
-		throw std::runtime_error(fmt::format("Invalid join connection type: %d", static_cast<int>(ct)));
 	}
+	throw std::runtime_error(astringf("Invalid join connection type: %d", static_cast<int>(ct))); // prevent GCC warning
 }
 
 void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connectionIdx, OpenConnectionResult&& result)
