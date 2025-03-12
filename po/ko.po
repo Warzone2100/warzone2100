@@ -9003,7 +9003,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "심하게 손상된 모든 유닛을 선택하기"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat units >50% HP & no Groups."
 msgstr ""
 
 msgid "Select all Half-tracks"
