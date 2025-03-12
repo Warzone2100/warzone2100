@@ -9013,7 +9013,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "選擇所有重度損傷裝備"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat units >50% HP & no Groups."
 msgstr "選擇所有生命值 >50% 且沒有團體的戰鬥地區裝備."
 
 msgid "Select all Half-tracks"

@@ -17946,7 +17946,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:174
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat units >50% HP & no Groups."
 msgstr ""
 
 #: src/input/keyconfig.cpp:175

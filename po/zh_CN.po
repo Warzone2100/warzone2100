@@ -9023,7 +9023,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "选择所有重度损伤单位"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat units >50% HP & no Groups."
 msgstr "选择所有耐久度 >50% 且未编队的地面战斗单位。"
 
 msgid "Select all Half-tracks"
