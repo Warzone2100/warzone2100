@@ -166,6 +166,31 @@ modules:
         url: https://github.com/jedisct1/libsodium/releases/download/1.0.20-RELEASE/libsodium-1.0.20.tar.gz
         sha256: ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19
 
+  - name: libzip
+    buildsystem: cmake-ninja
+    builddir: true
+    @WZ_CROSS_BUILD_OPTIONS@
+    config-opts:
+    - -DCMAKE_INSTALL_PREFIX=/app
+    - -DCMAKE_BUILD_TYPE=Release
+    - -DENABLE_COMMONCRYPTO=OFF
+    - -DENABLE_GNUTLS=OFF
+    - -DENABLE_MBEDTLS=OFF
+    - -DENABLE_OPENSSL=OFF
+    - -DENABLE_WINDOWS_CRYPTO=OFF
+    - -DENABLE_LZMA=OFF
+    - -DENABLE_ZSTD=OFF
+    - -DBUILD_TOOLS=OFF
+    - -DBUILD_REGRESS=OFF
+    - -DBUILD_OSSFUZZ=OFF
+    - -DBUILD_EXAMPLES=OFF
+    - -DBUILD_DOC=OFF
+    @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
+    sources:
+      - type: archive
+        url: https://github.com/nih-at/libzip/releases/download/v1.11.3/libzip-1.11.3.tar.gz
+        sha512: 476ac845be5ae75cb666076bada9fb00c08d267308623672e9c7685998aeff40378a96d0fb37cde5b6d0f0c61935c84bd0e63900deff1554c9e0208f626ff390
+
   - name: warzone2100
     buildsystem: cmake-ninja
     builddir: true

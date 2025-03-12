@@ -309,7 +309,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
    * Archiving tools (ex. zip, p7zip)
    * Various libraries:
       * [SDL](https://www.libsdl.org) ≥ 2.0.5 _(strongly recommended: ≥ 2.0.20)_
-      * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.0.3-3 _(strongly recommended: ≥ 3.0.2)_
+      * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.1 _(strongly recommended: ≥ 3.0.2)_
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
       * [libtheora](https://theora.org)
       * [libvorbis](https://xiph.org/vorbis)
@@ -322,6 +322,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       * [libcurl](https://curl.haxx.se/libcurl/) _(strongly recommended: ≥ 7.58.0)_
       * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.14
       * [SQLite](https://www.sqlite.org/index.html) ≥ 3.14
+      * [libzip](https://github.com/nih-at/libzip) _(strongly recommended: ≥ 1.10.1)_
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
