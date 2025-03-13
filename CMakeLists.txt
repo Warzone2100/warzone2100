@@ -233,6 +233,9 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 
 	# Default stack size is 1MB - increase to better match other platforms
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:8000000")
+
+	# Enable multithreaded compilation by default
+	add_compile_options("/MP")
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU|Clang" AND NOT APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	# Ensure all builds always have debug info built (Xcode is handled separately below, Emscripten handled above)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
