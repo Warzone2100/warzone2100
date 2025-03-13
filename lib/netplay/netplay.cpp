@@ -1578,6 +1578,12 @@ int NETinit(ConnectionProviderType pt)
 
 	debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
+	wzAsyncExecOnMainThread([pt]() {
+		const auto strPt = to_string(pt);
+		std::string msg = astringf(_("Using %s network backend."), strPt.c_str());
+		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	});
+
 	// NOTE NetPlay.isPortMappingEnabled is already set in configuration.c!
 	NetPlay.bComms = true;
 	NetPlay.GamePassworded = false;
