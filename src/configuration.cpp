@@ -27,6 +27,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/sound/sounddefs.h"
@@ -624,6 +625,20 @@ bool loadConfig()
 
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
+
+	auto hostConnProvider = war_getHostConnectionProvider();
+	if (iniGeneral.has("hostConnectionProvider"))
+	{
+		std::string netBackend = iniGetString("hostConnectionProvider", "tcp").value();
+		if (!net_backend_from_str(netBackend.c_str(), hostConnProvider))
+		{
+			hostConnProvider = ConnectionProviderType::TCP_DIRECT; // fall back to using TCP_DIRECT
+			const auto defConnProviderStr = to_string(hostConnProvider);
+			debug(LOG_WARNING, "Unsupported / invalid network backend: %s; defaulting to: %s",
+				netBackend.c_str(), defConnProviderStr.c_str());
+		}
+		war_setHostConnectionProvider(hostConnProvider);
+	}
 
 	ActivityManager::instance().endLoadingSettings();
 	return true;

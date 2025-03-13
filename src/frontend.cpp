@@ -575,7 +575,7 @@ bool runMultiPlayerMenu()
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			bMultiPlayer = true;
 			bMultiMessages = true;
-			NETinit(ConnectionProviderType::TCP_DIRECT);
+			NETinit(war_getHostConnectionProvider());
 			NETinitPortMapping();
 			game.type = LEVEL_TYPE::SKIRMISH;		// needed?
 			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
