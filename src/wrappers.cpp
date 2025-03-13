@@ -207,7 +207,7 @@ TITLECODE titleLoop()
 			{
 				NetPlay.bComms = true; // use network = true
 				bMultiMessages = true;
-				NETinit(ConnectionProviderType::TCP_DIRECT);
+				NETinit(war_getHostConnectionProvider());
 				NETinitPortMapping();
 			}
 			bMultiPlayer = true;
