@@ -29,6 +29,7 @@
 #include "lib/sound/sounddefs.h"
 #include "multiplaydefs.h"
 #include <string>
+#include <stdint.h>
 
 #define	CAMERASPEED_MAX		(5000)
 #define	CAMERASPEED_MIN		(100)
@@ -174,6 +175,14 @@ void war_setOptionsButtonVisibility(uint8_t val);
 
 void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed); // not persisted to config
 bool war_getAllowVulkanImplicitLayers();
+
+enum class ConnectionProviderType : uint8_t;
+
+void war_setHostConnectionProvider(ConnectionProviderType pt);
+ConnectionProviderType war_getHostConnectionProvider();
+
+bool net_backend_from_str(const char* str, ConnectionProviderType& pt);
+std::string to_string(ConnectionProviderType pt);
 
 /**
  * Enable or disable sound initialization
