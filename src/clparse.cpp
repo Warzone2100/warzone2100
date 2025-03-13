@@ -368,6 +368,7 @@ typedef enum
 #if defined(__EMSCRIPTEN__)
 	CLI_VIDEOURL,
 #endif
+	CLI_HOST_CONNECTION_PROVIDER,
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -462,6 +463,7 @@ static const struct poptOption *getOptionsTable()
 #if defined(__EMSCRIPTEN__)
 		{ "videourl", POPT_ARG_STRING, CLI_VIDEOURL,   N_("Base URL for on-demand video downloads"), N_("Base video URL") },
 #endif
+		{ "host-connection-provider", POPT_ARG_STRING, CLI_HOST_CONNECTION_PROVIDER, N_("Specify connection provider type to use when hosting game sessions"), "[tcp]" },
 
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
@@ -1362,6 +1364,20 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			debug(LOG_INFO, "Using \"%s\" as base video URL.", token);
 			break;
 #endif
+
+		case CLI_HOST_CONNECTION_PROVIDER:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Missing value for the host connection provider argument");
+			}
+			ConnectionProviderType pt;
+			if (!net_backend_from_str(token, pt))
+			{
+				qFatal("Unsupported / invalid network backend");
+			}
+			war_setHostConnectionProvider(pt);
+			break;
 
 		} // switch (option)
 	} // while
