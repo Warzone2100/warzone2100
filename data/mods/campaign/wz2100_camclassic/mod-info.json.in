@@ -40,6 +40,11 @@
           "id": "infiniteTime",
           "default": false,
           "userEditable": true
+        },
+        {
+          "id": "victoryHints",
+          "default": true,
+          "userEditable": true
         }
     ],
     "customTweakOptions": [
