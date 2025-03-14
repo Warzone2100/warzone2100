@@ -1563,6 +1563,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"victoryHints",
+		_("Victory Hints"),
+		_("Displays a console message every few minutes showing victory related information."),
+		true, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
