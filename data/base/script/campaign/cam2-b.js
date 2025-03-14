@@ -173,7 +173,7 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(2)));
 	camPlayVideos([{video: "MB2_B_MSG", type: CAMP_MSG}, {video: "MB2_B_MSG2", type: MISS_MSG}]);
 
 	if (camClassicMode())
