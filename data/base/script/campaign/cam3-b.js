@@ -268,7 +268,7 @@ function trapSprung()
 	camPlayVideos({video: "MB3_B_MSG3", type: CAMP_MSG});
 	hackRemoveMessage("CM3B_GAMMABASE", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(90)));
+	camSetMissionTimer(camChangeOnDiff(camMinutesToSeconds(90)));
 	camCallOnce("activateNexusGroups");
 	enableAllFactories();
 
@@ -316,7 +316,7 @@ function eventStartLevel()
 	const lz = getObject("landingZone");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma4.pre);
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
+	camSetMissionTimer(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
 
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);

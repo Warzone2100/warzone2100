@@ -35,6 +35,11 @@
           "id": "ps1Modifiers",
           "default": false,
           "userEditable": true
+        },
+        {
+          "id": "infiniteTime",
+          "default": false,
+          "userEditable": true
         }
     ],
     "customTweakOptions": [
