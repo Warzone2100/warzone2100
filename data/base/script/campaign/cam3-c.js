@@ -164,7 +164,7 @@ function discoverGammaBase()
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(90)));
+	camSetMissionTimer(camChangeOnDiff(camMinutesToSeconds(90)));
 	setPower(playerPower(CAM_HUMAN_PLAYER) + camChangeOnDiff(10000));
 
 	playSound(cam_sounds.powerTransferred);

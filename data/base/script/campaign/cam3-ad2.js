@@ -327,11 +327,11 @@ function checkTime()
 		camPlayVideos({video: "MB3_AD2_MSG2", type: CAMP_MSG});
 		if (camClassicMode() && tweakOptions.camClassic_balance32)
 		{
-			setMissionTime(camMinutesToSeconds(80)); // To accommodate the research bug of 3.2 balance.
+			camSetMissionTimer(camMinutesToSeconds(80)); // To accommodate the research bug of 3.2 balance.
 		}
 		else
 		{
-			setMissionTime(camHoursToSeconds(1));
+			camSetMissionTimer(camHoursToSeconds(1));
 		}
 
 		phantomFactorySpawn();

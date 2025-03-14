@@ -219,7 +219,7 @@ function setupNextMission()
 		camPlayVideos([cam_sounds.missile.launch.missileLaunchAborted, {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
-		setMissionTime(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 25 : 30)));
+		camSetMissionTimer(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 25 : 30)));
 
 		hackRemoveMessage("CM31_TAR_UPLINK", PROX_MSG, CAM_HUMAN_PLAYER);
 		hackAddMessage("CM31_HIDE_LOC", PROX_MSG, CAM_HUMAN_PLAYER);
@@ -237,6 +237,11 @@ function setupNextMission()
 //Play countdown sounds. Elements are shifted out of the missile launch/detonation arrays as they play.
 function getCountdown()
 {
+	if (camDef(tweakOptions.infiniteTime) && tweakOptions.infiniteTime)
+	{
+		return; //Skip this with infinite time as a little optimization.
+	}
+
 	const ACCEPTABLE_TIME_DIFF = 2;
 	const SILOS_DESTROYED = missileSilosDestroyed();
 	const countdownObject = SILOS_DESTROYED ? detonateInfo : launchInfo;
