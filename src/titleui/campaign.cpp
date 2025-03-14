@@ -1556,6 +1556,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"infiniteTime",
+		_("Infinite Time"),
+		_("Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )

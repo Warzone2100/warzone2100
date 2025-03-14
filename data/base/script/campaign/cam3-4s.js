@@ -14,7 +14,7 @@ function eventStartLevel()
 	centreView(mis_Labels.startPos.x, mis_Labels.startPos.y);
 	setNoGoArea(mis_Labels.lz.x, mis_Labels.lz.y, mis_Labels.lz.x2, mis_Labels.lz.y2, CAM_HUMAN_PLAYER);
 	setScrollLimits(mis_Labels.limits.x, mis_Labels.limits.y, mis_Labels.limits.x2, mis_Labels.limits.y2);
-	setMissionTime(camMinutesToSeconds(30));
+	camSetMissionTimer(camMinutesToSeconds(30));
 	setPower(playerPower(CAM_HUMAN_PLAYER) + 50000, CAM_HUMAN_PLAYER);
 	camPlayVideos([{video: "MB3_4_MSG", type: CAMP_MSG}, {video: "MB3_4_MSG2", type: MISS_MSG}]);
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, cam_levels.gammaEnd.offWorld);

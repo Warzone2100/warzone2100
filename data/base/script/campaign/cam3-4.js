@@ -267,7 +267,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
-	setMissionTime(-1); //Infinite time
+	camSetMissionTimer(-1); //Infinite time
 
 	if (camClassicMode())
 	{

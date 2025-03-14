@@ -14,7 +14,8 @@ function camNextLevel(nextLevel)
 {
 	if (tweakOptions.timerPowerBonus && __camNeedBonusTime)
 	{
-		const __POWER_TIME_REMAINING = getMissionTime();
+		const __POWER_TIME_INFINITE = camMinutesToSeconds(10); // A small and flat reward if using Infinite Time option.
+		const __POWER_TIME_REMAINING = (tweakOptions.infiniteTime) ? __POWER_TIME_INFINITE : getMissionTime();
 		if (__POWER_TIME_REMAINING > 0)
 		{
 			let bonus = 110;
