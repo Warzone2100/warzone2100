@@ -45,6 +45,11 @@
           "id": "victoryHints",
           "default": true,
           "userEditable": true
+        },
+        {
+          "id": "gammaEndBonus",
+          "default": false,
+          "userEditable": true
         }
     ],
     "customTweakOptions": [
