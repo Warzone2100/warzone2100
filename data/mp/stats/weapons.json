@@ -1989,7 +1989,7 @@
 	"HeavyLaser": {
 		"buildPoints": 600,
 		"buildPower": 400,
-		"damage": 380,
+		"damage": 290,
 		"designable": 1,
 		"effectSize": 100,
 		"explosionWav": "lsrexpl.ogg",
@@ -2019,7 +2019,7 @@
 		"shortRange": 2048,
 		"waterGfx": "FXMExp.PIE",
 		"weaponClass": "HEAT",
-		"weaponEffect": "ANTI PERSONNEL",
+		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "ENERGY",
 		"weaponWav": "hevlsr.ogg",
 		"weight": 5000
@@ -2027,7 +2027,7 @@
 	"HeavyLaser-VTOL": {
 		"buildPoints": 1000,
 		"buildPower": 400,
-		"damage": 720,
+		"damage": 550,
 		"designable": 1,
 		"effectSize": 100,
 		"explosionWav": "lsrexpl.ogg",
@@ -2060,7 +2060,7 @@
 		"shortRange": 2304,
 		"waterGfx": "FXMExp.PIE",
 		"weaponClass": "HEAT",
-		"weaponEffect": "ANTI PERSONNEL",
+		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "ENERGY",
 		"weaponWav": "hevlsr.ogg",
 		"weight": 5000
