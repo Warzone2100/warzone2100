@@ -322,7 +322,7 @@ function eventStartLevel()
 		camManageTrucks(CAM_THE_COLLECTIVE);
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(6)));
 	}
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		queue("insaneVtolAttack", camMinutesToMilliseconds(7));
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(4.5));

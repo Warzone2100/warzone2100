@@ -108,7 +108,7 @@ function enableFactories()
 	camEnableFactory("COMediumFactory");
 	camEnableFactory("COCyborgFactoryL");
 	camEnableFactory("COCyborgFactoryR");
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		queue("insaneVtolAttack", camMinutesToMilliseconds(2.5));
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(6));

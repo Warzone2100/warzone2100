@@ -78,7 +78,7 @@ camAreaEvent("LandingZoneTrigger", function()
 	camEnableFactory("MediumNPFactory");
 	buildDefenses();
 
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));

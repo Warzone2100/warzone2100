@@ -179,7 +179,7 @@ function discoverGammaBase()
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	truckDefense();
 	enableAllFactories();
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(6.5));
 		queue("insaneVtolAttack", camMinutesToMilliseconds(10));
