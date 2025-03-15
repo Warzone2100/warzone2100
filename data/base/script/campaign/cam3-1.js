@@ -69,7 +69,7 @@ camAreaEvent("hillTriggerZone", function(droid)
 
 function wave2()
 {
-	const CONDITION = ((difficulty >= INSANE) ? undefined : "NXCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXCommandCenter");
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
 	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
@@ -77,7 +77,7 @@ function wave2()
 
 function wave3()
 {
-	const CONDITION = ((difficulty >= INSANE) ? undefined : "NXCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXCommandCenter");
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
 	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
@@ -86,7 +86,7 @@ function wave3()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	const CONDITION = ((difficulty >= INSANE) ? undefined : "NXCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxmtherv];
@@ -226,7 +226,7 @@ function setupNextMission()
 
 		setReinforcementTime(-1);
 		removeTimer("setupNextMission");
-		if (difficulty >= INSANE)
+		if (camAllowInsaneSpawns())
 		{
 			queue("insaneReinforcementSpawn", camSecondsToMilliseconds(5));
 			setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(2.5));
@@ -457,7 +457,7 @@ function eventStartLevel()
 	queue("hoverAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(5)));
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
 	}
