@@ -98,7 +98,7 @@ function insaneReinforcementSpawn()
 
 function insaneSetupSpawns()
 {
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(2.5));
 	}

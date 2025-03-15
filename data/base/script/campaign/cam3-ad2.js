@@ -116,7 +116,7 @@ function phantomFactorySpawn()
 	}
 	if (difficulty >= INSANE)
 	{
-		if (camRand(100) < 20)
+		if (camAllowInsaneSpawns() && (camRand(100) < 20))
 		{
 			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh], appended: extraUnits};
 			location = "phantomFacSouth";
@@ -339,7 +339,7 @@ function checkTime()
 		setTimer("destroyTrucksInBlastZone", camSecondsToMilliseconds(9));
 		setTimer("vaporizeTarget", camSecondsToMilliseconds(10));
 		setTimer("phantomFactorySpawn", camChangeOnDiff(camMinutesToMilliseconds(5)));
-		if (difficulty >= INSANE)
+		if (camAllowInsaneSpawns())
 		{
 			setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3));
 		}

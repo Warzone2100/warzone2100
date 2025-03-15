@@ -64,7 +64,7 @@ function camEnemyBaseEliminated_NXWestBase()
 
 function wave2()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
 	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), CONDITION, ext);
@@ -72,7 +72,7 @@ function wave2()
 
 function wave3()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
 	const ext = {limit: [4, 4], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), CONDITION, ext);
@@ -81,7 +81,7 @@ function wave3()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxmheapv, cTempl.nxmtherv, cTempl.nxlscouv];
@@ -279,7 +279,7 @@ function trapSprung()
 	setTimer("sendNXTransporter", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendNXlandReinforcements", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(6));
 	}

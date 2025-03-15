@@ -388,7 +388,7 @@ function eventStartLevel()
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); //Canyon
 	queue("startArtifactCollection", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(4.5));
 	}

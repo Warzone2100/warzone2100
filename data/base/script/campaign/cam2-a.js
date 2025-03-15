@@ -158,8 +158,8 @@ function insaneReinforcementSpawn()
 
 function wave2()
 {
-	const APPEAR_POS = ((difficulty >= INSANE) ? undefined : "vtolAppearPos");
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
 	const list = [cTempl.colatv, cTempl.colatv];
 	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_THE_COLLECTIVE, APPEAR_POS, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), CONDITION, ext);
@@ -167,8 +167,8 @@ function wave2()
 
 function wave3()
 {
-	const APPEAR_POS = ((difficulty >= INSANE) ? undefined : "vtolAppearPos");
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
 	const list = [cTempl.colcbv, cTempl.colcbv];
 	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_THE_COLLECTIVE, APPEAR_POS, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), CONDITION, ext);
@@ -176,8 +176,8 @@ function wave3()
 
 function vtolAttack()
 {
-	const APPEAR_POS = ((difficulty >= INSANE) ? undefined : "vtolAppearPos");
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.colcbv, cTempl.colcbv];
@@ -449,7 +449,7 @@ function eventStartLevel()
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(2.5));
 	}

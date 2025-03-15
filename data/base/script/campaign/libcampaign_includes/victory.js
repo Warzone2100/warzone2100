@@ -277,8 +277,8 @@ function __camPlayerDead()
 			}
 		});
 		dead = droidCount <= 0 && !__HAVE_FACTORIES;
-		//Finish Beta-end early if they have no units and factories on Easy/Normal.
-		if (dead && (difficulty <= MEDIUM) && (__camNextLevel === cam_levels.gamma1))
+		//Finish Beta-end early if they have no units and factories on lower difficulties.
+		if (dead && (difficulty <= HARD) && (__camNextLevel === cam_levels.gamma1))
 		{
 			cam_eventMissionTimeout(); //Early victory trigger
 			return false;
@@ -484,7 +484,7 @@ function __camSetupConsoleForVictoryConditions()
 
 function __camShowBetaHint()
 {
-	return ((camDiscoverCampaign() === __CAM_BETA_CAMPAIGN_NUMBER) && (difficulty >= HARD));
+	return ((camDiscoverCampaign() === __CAM_BETA_CAMPAIGN_NUMBER) && (difficulty >= INSANE));
 }
 
 function __camShowBetaHintEarly()
@@ -513,7 +513,7 @@ function __camShowVictoryConditions()
 	{
 		if (__camShowBetaHint())
 		{
-			console(_("Hard / Insane difficulty hint:"));
+			console(_("Insane difficulty hint:"));
 			console(_("Fortify a strong base across the map to protect yourself from the Collective"));
 		}
 		return; // do not need this on these missions.

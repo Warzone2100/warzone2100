@@ -469,7 +469,7 @@ function eventStartLevel()
 
 	setTimer("destroyTrucksInBlastZone", camSecondsToMilliseconds(9));
 	setTimer("vaporizeTarget", camSecondsToMilliseconds(10));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		queue("insaneVtolAttack", camMinutesToMilliseconds(7));
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3));

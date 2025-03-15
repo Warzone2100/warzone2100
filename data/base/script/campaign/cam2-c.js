@@ -453,7 +453,7 @@ function eventStartLevel()
 
 	queue("activateGroups", camChangeOnDiff(camMinutesToMilliseconds(8)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));

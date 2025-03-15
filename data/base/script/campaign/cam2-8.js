@@ -160,7 +160,7 @@ function insaneTransporterAttack()
 
 function insaneSetupSpawns()
 {
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		queue("insaneVtolAttack", camMinutesToMilliseconds(2));
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3.5));
