@@ -1570,6 +1570,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		true, true
 	);
 
+	results.emplace_back(
+		"gammaEndBonus",
+		_("Finale Fun"),
+		_("Activate Final Gamma mission bonus content."),
+		true, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
