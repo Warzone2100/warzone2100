@@ -65,7 +65,7 @@ function enableNP(args)
 		camEnableFactory("ScavFactorySouth");
 	}
 
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		queue("insaneReinforcementSpawn", camSecondsToMilliseconds(10));
 		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(180));

@@ -53,7 +53,7 @@ function truckDefense()
 //Attacks every 3 minutes until HQ is destroyed.
 function wave2()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
 	const list = [cTempl.colhvat, cTempl.colhvat];
 	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), CONDITION, ext);
@@ -61,7 +61,7 @@ function wave2()
 
 function wave3()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
 	const list = [cTempl.commorv, cTempl.commorv];
 	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), CONDITION, ext);
@@ -69,7 +69,7 @@ function wave3()
 
 function vtolAttack()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.colatv, cTempl.colatv];
@@ -230,7 +230,7 @@ function eventStartLevel()
 
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		queue("insaneSetupSpawns", camMinutesToMilliseconds(4));
 	}
