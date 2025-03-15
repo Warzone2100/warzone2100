@@ -147,7 +147,7 @@ function activateNexus()
 
 function camEnemyBaseDetected_NX_SWBase()
 {
-	if (camClassicMode())
+	if (camDef(tweakOptions.gammaEndBonus) && !tweakOptions.gammaEndBonus)
 	{
 		return;
 	}
