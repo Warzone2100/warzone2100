@@ -95,7 +95,7 @@ function ambushPlayer()
 
 function wave2()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
 	const list = [cTempl.colatv, cTempl.colatv];
 	const ext = {limit: [4, 4], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
@@ -103,7 +103,7 @@ function wave2()
 
 function wave3()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
 	const list = [cTempl.colcbv, cTempl.colcbv];
 	const ext = {limit: [4, 4], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
@@ -111,7 +111,7 @@ function wave3()
 
 function vtolAttack()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "COCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.colcbv, cTempl.colatv];
@@ -322,7 +322,7 @@ function eventStartLevel()
 	queue("activateBase1Defenders2", camChangeOnDiff(camMinutesToMilliseconds(20)));
 	queue("activateBase1Defenders", camChangeOnDiff(camMinutesToMilliseconds(30)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3.5));
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4.5));

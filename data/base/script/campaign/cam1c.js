@@ -258,7 +258,7 @@ function eventStartLevel()
 		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
 
-		if (difficulty >= INSANE)
+		if (camAllowInsaneSpawns())
 		{
 			addDroid(CAM_NEW_PARADIGM, 90, 107, "MRP Bug Wheels", tBody.tank.bug, tProp.tank.wheels, "", "", tWeap.tank.miniRocketPod);
 			addDroid(CAM_NEW_PARADIGM, 89, 107, "MRP Bug Wheels", tBody.tank.bug, tProp.tank.wheels, "", "", tWeap.tank.miniRocketPod);
@@ -417,7 +417,7 @@ function eventStartLevel()
 	queue("sendTankForce", camSecondsToMilliseconds(100)); // in wzcam it moves back and then forward
 	queue("enableNPFactory", camMinutesToMilliseconds(5));
 	queue("activateScavBaseDefenders", camSecondsToMilliseconds(3));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(4));
 	}

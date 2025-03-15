@@ -1577,6 +1577,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		true, true
 	);
 
+	results.emplace_back(
+		"insanePlus",
+		_("Insane Spawns"),
+		_("Enables additional enemy spawns and behavior for Insane difficulty (or higher)."),
+		true, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
