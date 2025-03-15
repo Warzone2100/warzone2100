@@ -57,7 +57,7 @@ function sendEdgeMapDroids()
 
 function wave2()
 {
-	const APPEAR_POS = ((difficulty >= INSANE) ? undefined : "vtolAppearPos");
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
 	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_NEXUS, APPEAR_POS, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
@@ -65,7 +65,7 @@ function wave2()
 
 function wave3()
 {
-	const APPEAR_POS = ((difficulty >= INSANE) ? undefined : "vtolAppearPos");
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
 	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_NEXUS, APPEAR_POS, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
@@ -74,7 +74,7 @@ function wave3()
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
 function vtolAttack()
 {
-	const APPEAR_POS = ((difficulty >= INSANE) ? undefined : "vtolAppearPos");
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxmheapv, cTempl.nxmheapv, cTempl.nxmtherv];
@@ -302,7 +302,7 @@ function eventStartLevel()
 	setTimer("hackPlayer", camChangeOnDiff(camSecondsToMilliseconds(8)));
 	setTimer("nexusManufacture", camSecondsToMilliseconds(10));
 	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(4)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(5));
 	}

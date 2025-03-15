@@ -50,6 +50,11 @@
           "id": "gammaEndBonus",
           "default": false,
           "userEditable": true
+        },
+        {
+          "id": "insanePlus",
+          "default": true,
+          "userEditable": true
         }
     ],
     "customTweakOptions": [

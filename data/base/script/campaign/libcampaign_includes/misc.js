@@ -322,6 +322,17 @@ function camChangeOnDiff(numericValue)
 	return Math.floor(numericValue * modifier);
 }
 
+//;; ## camAllowInsaneSpawns()
+//;;
+//;; Allow additional Insane difficulty (or higher) spawns and behavior.
+//;;
+//;; @returns {boolean}
+//;;
+function camAllowInsaneSpawns()
+{
+	return ((difficulty >= INSANE) && camDef(tweakOptions.insanePlus) && tweakOptions.insanePlus);
+}
+
 //;; ## camIsSystemDroid(gameObject)
 //;;
 //;; Determine if the passed in object is a non-weapon based droid.

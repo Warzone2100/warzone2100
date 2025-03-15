@@ -219,7 +219,7 @@ function checkIfLaunched()
 //Everything in this level mostly just requeues itself until the mission ends.
 function eventStartLevel()
 {
-	if (difficulty === HARD || difficulty === INSANE)
+	if (difficulty >= INSANE)
 	{
 		camSetExtraObjectiveMessage(_("Send off at least one transporter with a truck and survive The Collective assault until the timer ends"));
 	}

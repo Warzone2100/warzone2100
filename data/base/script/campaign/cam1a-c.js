@@ -45,7 +45,7 @@ function extraVictoryCondition()
 //Makes a large group of ground units appear on map
 function checkForGroundForces()
 {
-	if (((index < 2) || (difficulty >= INSANE)) && (switchLZ === 3))
+	if (((index < 2) || camAllowInsaneSpawns()) && (switchLZ === 3))
 	{
 		//Amounts for the ground force
 		const MAX_CANNON_TANKS = 10;
@@ -67,7 +67,7 @@ function checkForGroundForces()
 		{
 			droids.push(cTempl.npmorb);
 		}
-		if (difficulty >= INSANE)
+		if (camAllowInsaneSpawns())
 		{
 			for (let i = 0; i < MAX_INSANE_ADDITIONAL_UNITS; ++i)
 			{
@@ -86,7 +86,7 @@ function checkForGroundForces()
 		{
 			pos = camMakePos("reinforceNorth");
 		}
-		else if (difficulty >= INSANE)
+		else if (camAllowInsaneSpawns())
 		{
 			const positions = ["reinforceSouthEast", "reinforceNorth", "reinforceNorthEast"];
 			pos = positions[camRand(positions.length)];
@@ -109,7 +109,7 @@ function sendTransport()
 	const COUNT = unitDistribution[camRand(unitDistribution.length)];
 
 	const templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		templates.push(cTempl.npcybr);
 	}
