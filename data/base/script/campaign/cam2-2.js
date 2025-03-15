@@ -107,7 +107,7 @@ camAreaEvent("failZone", function(droid)
 
 function wave2()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
 	const list = [cTempl.colatv, cTempl.colatv];
 	const ext = {limit: [3, 3], alternate: true, altIdx: 0 };
 	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
@@ -115,7 +115,7 @@ function wave2()
 
 function wave3()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
 	const list = [cTempl.colcbv, cTempl.colcbv];
 	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
 	camSetVtolData(CAM_THE_COLLECTIVE, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
@@ -123,7 +123,7 @@ function wave3()
 
 function vtolAttack()
 {
-	const CONDITION = ((difficulty >= INSANE) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_BASES : "COCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.colatv, cTempl.colatv];
@@ -296,7 +296,7 @@ function eventStartLevel()
 
 	queue("vtolAttack", camMinutesToMilliseconds(3));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds((!camClassicMode()) ? 3.5 : 5));
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds((!camClassicMode()) ? 4 : 5.5));
