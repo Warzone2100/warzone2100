@@ -190,7 +190,7 @@ function eventStartLevel()
 	setCrashedTeamExp();
 	victoryFlag = false;
 	queue("setupCyborgGroups", camSecondsToMilliseconds(5));
-	if (difficulty >= INSANE)
+	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3));
 	}
