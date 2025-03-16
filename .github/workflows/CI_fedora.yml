@@ -46,7 +46,7 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" fedora cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" fedora cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build
       working-directory: '${{ github.workspace }}/build'
@@ -86,7 +86,7 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" fedora cmake -DCMAKE_TOOLCHAIN_FILE=.ci/cmake/toolchains/m32-cross-linux.cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" fedora cmake -DCMAKE_TOOLCHAIN_FILE=.ci/cmake/toolchains/m32-cross-linux.cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build
       working-directory: '${{ github.workspace }}/build'
