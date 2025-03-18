@@ -1578,6 +1578,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 	);
 
 	results.emplace_back(
+		"gammaBonusLevel",
+		_("Gamma Bonus"),
+		_("Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."),
+		false, true
+	);
+
+	results.emplace_back(
 		"insanePlus",
 		_("Insane Spawns"),
 		_("Enables additional enemy spawns and behavior for Insane difficulty (or higher)."),
