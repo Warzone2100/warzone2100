@@ -557,16 +557,40 @@ function __camTacticsTickForGroup(group)
 			{
 				if (gameTime - gi.lastmove > gi.data.interval)
 				{
-					// find random new position to visit
-					const list = [];
-					for (let j = 0, len2 = gi.data.pos.length; j < len2; ++j)
+					if (!camDef(gi.data.patrolType) || (gi.data.patrolType === CAM_PATROL_RANDOM))
 					{
-						if (j !== gi.lastspot)
+						// find random new position to visit
+						const list = [];
+						for (let j = 0, len2 = gi.data.pos.length; j < len2; ++j)
 						{
-							list.push(j);
+							if (j !== gi.lastspot)
+							{
+								list.push(j);
+							}
+						}
+						gi.lastspot = list[camRand(list.length)];
+					}
+					else if (gi.data.patrolType === CAM_PATROL_CYCLE)
+					{
+						// Cycles through the whole patrol list linearly, starting back again at the beginning.
+						if (gi.lastmove === 0)
+						{
+							gi.lastspot = 0;
+						}
+						else
+						{
+							let currPos = 0;
+							for (let j = 0, len2 = gi.data.pos.length; j < len2; ++j)
+							{
+								if (gi.data.pos[j] === gi.data.pos[gi.lastspot])
+								{
+									currPos = j;
+									break;
+								}
+							}
+							gi.lastspot = ((currPos + 1) < gi.data.pos.length) ? (currPos + 1) : 0;
 						}
 					}
-					gi.lastspot = list[camRand(list.length)];
 					gi.lastmove = gameTime;
 				}
 			}
