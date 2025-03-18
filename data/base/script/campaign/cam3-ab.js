@@ -267,8 +267,9 @@ function eventStartLevel()
 
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
+	const nextLev = ((camDef(tweakOptions.gammaBonusLevel) && tweakOptions.gammaBonusLevel) ? cam_levels.gammaBonus.pre : cam_levels.gamma6);
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma6, {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, nextLev, {
 		callback: "resistanceResearched"
 	});
 
