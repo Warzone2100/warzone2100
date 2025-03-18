@@ -52,6 +52,11 @@
             "userEditable": true
         },
         {
+            "id": "gammaBonusLevel",
+            "default": false,
+            "userEditable": true
+        },
+        {
             "id": "insanePlus",
             "default": true,
             "userEditable": true
