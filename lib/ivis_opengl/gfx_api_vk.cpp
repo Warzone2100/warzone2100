@@ -2056,6 +2056,7 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 		objectNameInfo.setPObjectName(filename.c_str());
 		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
+	vmaSetAllocationName(root.allocator, allocation, filename.c_str());
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
@@ -2110,6 +2111,7 @@ VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_c
 		objectNameInfo.setPObjectName(filename.c_str());
 		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
+	vmaSetAllocationName(root.allocator, allocation, filename.c_str());
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
@@ -2334,6 +2336,7 @@ VkRenderedImage::VkRenderedImage(const VkRoot& root, size_t width, size_t height
 		objectNameInfo.setPObjectName(filename.c_str());
 		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
+	vmaSetAllocationName(root.allocator, allocation, filename.c_str());
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
@@ -2451,6 +2454,7 @@ VkTextureArray::VkTextureArray(const VkRoot& root, size_t mipmap_count, size_t l
 		objectNameInfo.setPObjectName(filename.c_str());
 		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
+	vmaSetAllocationName(root.allocator, allocation, filename.c_str());
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
