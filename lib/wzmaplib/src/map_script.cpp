@@ -644,20 +644,31 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		}
 
 
-		for (uint32_t x = 0; x < layerWidth - 1; ++x)
+		for (uint32_t x = 0; x < layerWidth; ++x)
 		{
-			for (uint32_t y = 0; y < layerHeight - 1; ++y)
+			uint32_t mapX = x * layerScale;
+			if (mapX >= width)
 			{
-				uint32_t mapX = x * layerScale, mapY = y * layerScale;
+				continue;
+			}
+			for (uint32_t y = 0; y < layerHeight; ++y)
+			{
+				uint32_t mapY = y * layerScale;
+				if (mapY >= height)
+				{
+					continue;
+				}
 
 				uint32_t tl = layerData[x * layerHeight + y];
 				uint32_t tr = layerData[(x + 1) * layerHeight + y];
 				uint32_t bl = layerData[x * layerHeight + (y + 1)];
 				uint32_t br = layerData[(x + 1) * layerHeight + (y + 1)];
 
-				for (uint32_t innerX = 0; innerX < layerScale; ++innerX)
+				uint32_t innerXEnd = std::min<uint32_t>(layerScale, width - mapX);
+				uint32_t innerYEnd = std::min<uint32_t>(layerScale, height - mapY);
+				for (uint32_t innerX = 0; innerX < innerXEnd; ++innerX)
 				{
-					for (uint32_t innerY = 0; innerY < layerScale; ++innerY)
+					for (uint32_t innerY = 0; innerY < innerYEnd; ++innerY)
 					{
 						// Interpolation.
 						noiseData[(mapX + innerX) * height + (mapY + innerY)] += (
