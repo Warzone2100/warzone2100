@@ -2115,13 +2115,13 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		template<size_t N>
 		struct Apply {
 			template<typename F, typename T, typename... A>
-			static inline auto apply(F && f, T && t, A &&... a)
-				-> decltype(Apply<N-1>::apply(
+			static inline auto applyAndCallF(F && f, T && t, A &&... a)
+				-> decltype(Apply<N-1>::applyAndCallF(
 					::std::forward<F>(f), ::std::forward<T>(t),
 					::std::get<N-1>(::std::forward<T>(t)), ::std::forward<A>(a)...
 				))
 			{
-				return Apply<N-1>::apply(::std::forward<F>(f), ::std::forward<T>(t),
+				return Apply<N-1>::applyAndCallF(::std::forward<F>(f), ::std::forward<T>(t),
 					::std::get<N-1>(::std::forward<T>(t)), ::std::forward<A>(a)...
 				);
 			}
@@ -2130,7 +2130,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		template<>
 		struct Apply<0> {
 			template<typename F, typename T, typename... A>
-			static inline auto apply(F && f, T &&, A &&... a)
+			static inline auto applyAndCallF(F && f, T &&, A &&... a)
 				-> decltype(::std::forward<F>(f)(::std::forward<A>(a)...))
 			{
 				return ::std::forward<F>(f)(::std::forward<A>(a)...);
@@ -2138,14 +2138,14 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		};
 
 		template<typename F, typename T>
-		inline auto apply(F && f, T && t)
+		inline auto applyAndCallF(F && f, T && t)
 			-> decltype(Apply< ::std::tuple_size<
 				typename ::std::decay<T>::type
-			>::value>::apply(::std::forward<F>(f), ::std::forward<T>(t)))
+			>::value>::applyAndCallF(::std::forward<F>(f), ::std::forward<T>(t)))
 		{
 			return Apply< ::std::tuple_size<
 				typename ::std::decay<T>::type
-			>::value>::apply(::std::forward<F>(f), ::std::forward<T>(t));
+			>::value>::applyAndCallF(::std::forward<F>(f), ::std::forward<T>(t));
 		}
 
 		template<typename...T> struct UnboxTupleIndex;
@@ -2198,7 +2198,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		{
 			size_t idx WZ_DECL_UNUSED = 0; // unused when Args... is empty
 			quickjs_execution_context execution_context(context);
-			return box(apply(f, UnboxTuple<Args...>(execution_context, idx, context, argc, argv, wrappedFunctionName)()), context);
+			return box(applyAndCallF(f, UnboxTuple<Args...>(execution_context, idx, context, argc, argv, wrappedFunctionName)()), context);
 		}
 
 		template<typename R, typename...Args>
