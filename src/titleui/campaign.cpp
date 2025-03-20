@@ -1591,6 +1591,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		true, true
 	);
 
+	results.emplace_back(
+		"fastExp",
+		_("Fast EXP gain"),
+		_("Increases unit experience point gain by 2x."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
