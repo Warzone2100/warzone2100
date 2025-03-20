@@ -407,7 +407,8 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 }
 
 //MAP-- ## generateFractalValueNoise(width, height, range, crispness, scale, normalizeToRange = 0,
-//MAP--                              [[x1, y1, x2, y2, (x, y, layerIdx, layerRange) => value], ...] = [])
+//MAP--                              [[x1, y1, x2, y2, (x, y, layerIdx, layerRange) => value], ...] = [],
+//MAP--                              rowMajorOrder = false)
 //MAP--
 //MAP-- A fast (native) fractal value noise generator, a cheaper version of Perlin noise.
 //MAP-- Such noise can aid random map generation in a variety of ways, most prominently
@@ -418,6 +419,10 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 //MAP-- is a sum of white noise layers with exponentially increasing resolution
 //MAP-- and exponentially decreasing range, interpolated linearly when stretched
 //MAP-- to the original (`width` x `height`) rectangle.
+//MAP--
+//MAP-- IMPORTANT: The noise is returned in column-major order by default. If you wish
+//MAP-- to customize this you must supply all arguments including the last optional
+//MAP-- argument (`rowMajorOrder`).
 //MAP--
 //MAP-- `range` is the range of the first layer. In other words, the first layer of noise
 //MAP-- will have values populated via `gameRand(range)`.
@@ -437,7 +442,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 //MAP-- `normalizedRange` is unset or set to 0, normalization is not performed.
 //MAP-- Specifying this parameter yields much better performance than manual normalization.
 //MAP--
-//MAP-- The last optional argument allows finer control over certain areas of the map.
+//MAP-- The second-to-last optional argument allows finer control over certain areas of the map.
 //MAP-- Each element specifies such "rigged" rectangle [x1, x2] x [y1, y2] and the callback
 //MAP-- that determines the value of each noise layer within that rectangle.
 //MAP-- That value has to be within range [0, layerRange).
@@ -450,12 +455,15 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 //MAP-- be flat; an arbitrary function of `x` and `y` can be provided.
 //MAP-- The callback shall not be stored for later use or called after
 //MAP-- `generateFractalValueNoise` returns.
+//MAP--
+//MAP-- `rowMajorOrder` is an optional argument that specifies whether the results should be
+//MAP-- returned in column-major order (`false`, the default) or row-major order (`true`).
 static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	MAPSCRIPT_GET_CONTEXT_DATA()//;
 	auto pCustomLogger = data.pCustomLogger;
 
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, argc >= 5 && argc <= 7, "Must have 5 to 7 parameters");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, argc >= 5 && argc <= 8, "Must have 5 to 8 parameters");
 	JSValue jsVal_width = argv[0];
 	JSValue jsVal_height = argv[1];
 	JSValue jsVal_range = argv[2];
@@ -504,7 +512,7 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	};
 
 	std::vector<RiggedRegion> riggedRegions;
-	if (argc == 7)
+	if (argc >= 7)
 	{
 		// Unwrap JS regions for faster lookup.
 		JSValue jsVal_riggedRegions = argv[6];
@@ -569,6 +577,15 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 				JS_DupValue(ctx, jsVal_callback)
 			});
 		};
+	}
+
+	bool returnRowMajorOrder = false;
+	if (argc >= 8) {
+		JSValue jsVal_rowMajorOrder = argv[7];
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsBool(jsVal_rowMajorOrder), "rowMajorOrder must be bool");
+		int result = JS_ToBool(ctx, jsVal_rowMajorOrder);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, result >= 0, "JS_ToBool failed - rowMajorOrder must be a valid bool");
+		returnRowMajorOrder = result != 0;
 	}
 
 	uint32_t size = width * height;
@@ -696,6 +713,21 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 			{
 				return (val - min) * normalizeToRange / (max - min);
 			});
+	}
+
+	if (returnRowMajorOrder)
+	{
+		// convert noiseData from column-major order to row-major order
+		std::vector<uint32_t> noiseDataRowOrder(size, 0);
+		for (uint32_t x = 0; x < width; ++x)
+		{
+			for (uint32_t y = 0; y < height; ++y)
+			{
+				noiseDataRowOrder[y * width + x] = noiseData[x * height + y];
+			}
+		}
+		noiseData = std::move(noiseDataRowOrder);
+		noiseDataRowOrder.clear();
 	}
 
 	JSValue retVal = JS_NewArray(ctx);
