@@ -1155,7 +1155,7 @@ void draw3DScene()
 		droidText.setText(droidCounts, font_regular);
 		droidText.render(pie_GetVideoBufferWidth() - droidText.width() - 10, droidText.height() + 2, WZCOL_TEXT_BRIGHT);
 	}
-	if (1) 
+	if (1)
 	{
 		for (auto textMarker: textMarkers) {
 			if (textMarker.x < map_coord(playerPos.p.x) - visibleTiles.x / 2) continue;
@@ -1163,7 +1163,7 @@ void draw3DScene()
 			if (textMarker.x > map_coord(playerPos.p.x) + visibleTiles.x / 2) continue;
 			if (textMarker.y > map_coord(playerPos.p.z) + visibleTiles.y / 2) continue;
 			auto idx=visibleTiles.y / 2 + textMarker.y - map_coord(playerPos.p.z);
-			auto jdx=visibleTiles.x / 2 + textMarker.x - map_coord(playerPos.p.x);	
+			auto jdx=visibleTiles.x / 2 + textMarker.x - map_coord(playerPos.p.x);
 
 			iV_SetTextColour(clanColours[textMarker.color]);
 			iV_DrawText(textMarker.message.c_str(), tileScreenInfo[idx][jdx].x, tileScreenInfo[idx][jdx].y, font_regular);
