@@ -730,11 +730,23 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		noiseDataRowOrder.clear();
 	}
 
+#if defined(QUICKJS_NG)
+	std::vector<JSValue> uint_jsvals;
+	uint_jsvals.resize(size);
+	for (uint32_t i = 0; i < size; ++i)
+	{
+		uint_jsvals[i] = JS_NewUint32(ctx, noiseData[i]);
+	}
+	JSValue retVal = JS_NewArrayFrom(ctx, static_cast<int>(size), uint_jsvals.data());
+	// JS_NewArrayFrom takes ownership of the JSValues - just clear the vector
+	uint_jsvals.clear();
+#else
 	JSValue retVal = JS_NewArray(ctx);
 	for (uint32_t i = 0; i < size; ++i)
 	{
 		JS_SetPropertyUint32(ctx, retVal, i, JS_NewUint32(ctx, noiseData[i]));
 	}
+#endif
 	return retVal;
 }
 
