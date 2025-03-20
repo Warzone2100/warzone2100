@@ -60,6 +60,11 @@
             "id": "insanePlus",
             "default": true,
             "userEditable": true
+        },
+        {
+            "id": "fastExp",
+            "default": false,
+            "userEditable": true
         }
     ],
     "customTweakOptions": [

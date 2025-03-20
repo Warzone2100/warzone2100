@@ -74,6 +74,7 @@
 #include "combat.h"
 #include "template.h"
 #include "qtscript.h"
+#include "campaigninfo.h"
 
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
@@ -2599,6 +2600,13 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc)
 {
+	if (!bMultiPlayer && getCamTweakOption_FastExp())
+	{
+		experienceInc = experienceInc * 2;
+	}
+
+	ASSERT_OR_RETURN(, experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
+
 	int startingDroidRank = getDroidLevel(psDroid);
 
 	psDroid->experience += experienceInc;
