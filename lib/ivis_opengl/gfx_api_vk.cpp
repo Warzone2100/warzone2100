@@ -1031,7 +1031,12 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 	}
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
-	dev.waitForFences(fences, true, -1, vkDynLoader);
+	auto waitResult = dev.waitForFences(fences, true, -1, vkDynLoader);
+	if (waitResult == vk::Result::eTimeout)
+	{
+		debug(LOG_ERROR, "buffering swap: waitForFences resulted in vk::Result::eTimeout");
+		handleUnrecoverableError(vk::Result::eTimeout);
+	}
 	dev.resetFences(fences, vkDynLoader);
 	buffering_mechanism::get_current_resources().resetDescriptorPools();
 	dev.resetCommandPool(buffering_mechanism::get_current_resources().pool, vk::CommandPoolResetFlagBits(), vkDynLoader);
