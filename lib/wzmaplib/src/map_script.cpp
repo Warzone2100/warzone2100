@@ -759,6 +759,12 @@ static void QJSRuntimeFree_LeakHandler_Warning(const char* msg)
 	debug(pRuntimeFree_CustomLogger, LOG_WARNING, "QuickJS FreeRuntime leak: %s", msg);
 }
 
+#if defined(__has_feature)
+  #define QUICKJS_HAS_FEATURE(x) __has_feature(x)
+#else
+  #define QUICKJS_HAS_FEATURE(x) 0
+#endif
+
 std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std::string &path, uint32_t seed, bool preview, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	ScriptMapData data;
@@ -839,7 +845,12 @@ std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	JS_SetPropertyFunctionList(ctx, global_obj, js_builtin_mapFuncs, sizeof(js_builtin_mapFuncs) / sizeof(js_builtin_mapFuncs[0]));
 
 	// configure limitations on runtime
+#if defined(__SANITIZE_ADDRESS__) || QUICKJS_HAS_FEATURE(address_sanitizer)
+	#pragma message("wzmaplib: Map script stack size limit disabled due to Address Sanitizer")
+	JS_SetMaxStackSize(rt, 0);
+#else
 	JS_SetMaxStackSize(rt, 512*1024);
+#endif
 	JS_SetMemoryLimit(rt, 100*1024*1024); // 100MiB better be enough...
 
 	// install interrupt handler to prevent endless script execution (due to bugs or otherwise)
