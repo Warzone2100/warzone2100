@@ -14,7 +14,7 @@ freebsd_build_task:
   install_script:
     - pkg update -f
     - pkg clean -a -y
-    - pkg install -y git cmake ninja 7-zip gettext pkgconf png sdl2 openal-soft physfs libvorbis libogg opus libtheora freetype2 fribidi harfbuzz curl libsodium sqlite3 rubygem-asciidoctor
+    - pkg install -y git cmake ninja 7-zip gettext pkgconf png sdl2 openal-soft physfs libvorbis libogg opus libtheora freetype2 fribidi harfbuzz curl libsodium sqlite3 libzip rubygem-asciidoctor
 
   init_git_submodules_script: git submodule update --init --recursive
 
