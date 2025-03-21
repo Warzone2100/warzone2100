@@ -1120,12 +1120,11 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 	}
 }
 
-/*returns the space the droid occupies on a transporter based on the body size*/
-int transporterSpaceRequired(const DROID *psDroid)
+int transporterSpaceRequired(const DROID *psDroid) /*returns the space the droid occupies on a transporter based on the body size*/
 {
-	// all droids are the same weight for campaign games.
+	// All droid body sizes are the same weight.
 	// TODO - move this into a droid flag
-	return bMultiPlayer ? psDroid->getBodyStats()->size + 1 : 1;
+	return bMultiPlayer ? psDroid->getBodyStats()->size 1 : 1;
 }
 
 /*sets which list of droids to use for the transporter interface*/
