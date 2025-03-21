@@ -1854,8 +1854,8 @@ static void moveAdjustVtolHeight(DROID *psDroid, int32_t iMapHeight)
 
     if (psDroid->droidType == DROID_SUPERTRANSPORTER && bMultiPlayer) // Set ascend and descend speeds based on droid type, only in multiplayer (MP)
     {
-         ascendSpeed = SUPERTRANSPORTER_ASCEND_SPEED;
-        descendSpeed = SUPERTRANSPORTER_DESCEND_SPEED;
+         ascendSpeed = SUPERTRANSPORTER_VERTICAL_SPEED_ASCEND_MP;
+        descendSpeed = SUPERTRANSPORTER_VERTICAL_SPEED_DESCEND_MP;
     }
     else if (psDroid->droidType == DROID_SUPERTRANSPORTER || psDroid->droidType == DROID_TRANSPORTER) // Cam unaffected
     {
