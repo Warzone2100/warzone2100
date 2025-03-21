@@ -1830,16 +1830,15 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	}
 	CHECK_DROID(psDroid);
 }
-
-#define	VTOL_VERTICAL_SPEED_OLD		(((psDroid->baseSpeed / 4) > 60) ? ((SDWORD)psDroid->baseSpeed / 4) : 60)
-// Slower VTOLs need to increase height faster than the above or else they hover too close to the ground
-// During flight paths that feature increasing terrain height. Resulting in poor attack angles in some cases.
-#define	VTOL_VERTICAL_SPEED		(((psDroid->baseSpeed / 4) > 160) ? ((SDWORD)psDroid->baseSpeed / 4) : 160)
-#define TRANSPORTER_VERTICAL_SPEED_MP   (((psDroid->baseSpeed / 2) > 200) ? ((SDWORD)psDroid->baseSpeed / 2) : 200) // Speed for multiplayer (MP)
+#define	VTOL_VERTICAL_SPEED_OLD			   (((psDroid->baseSpeed / 4) >  60) ? ((SDWORD)psDroid->baseSpeed / 4) :  60) // Slower VTOLs need to increase height faster than the above or else they hover too close to the ground
+#define	VTOL_VERTICAL_SPEED			   (((psDroid->baseSpeed / 4) > 160) ? ((SDWORD)psDroid->baseSpeed / 4) : 160) // During flight paths that feature increasing terrain height. Resulting in poor attack angles in some cases.
+#define SUPERTRANSPORTER_VERTICAL_SPEED_ASCEND_MP  (((psDroid->baseSpeed / 4) >  80) ? ((SDWORD)psDroid->baseSpeed / 4) :  80) // Ascend  speed for multiplayer (MP)
+#define SUPERTRANSPORTER_VERTICAL_SPEED_DESCEND_MP (((psDroid->baseSpeed / 4) > 200) ? ((SDWORD)psDroid->baseSpeed / 4) : 200) // Descend speed for multiplayer (MP)
 /* primitive 'bang-bang' vtol height controller */
 static void moveAdjustVtolHeight(DROID *psDroid, int32_t iMapHeight)
 {
 	int32_t	iMinHeight, iMaxHeight, iLevelHeight;
+	int32_t ascendSpeed, descendSpeed;
 	if (psDroid->isTransporter() && !bMultiPlayer)
 	{
 		iMinHeight   = 2 * VTOL_HEIGHT_MIN;
@@ -1853,42 +1852,31 @@ static void moveAdjustVtolHeight(DROID *psDroid, int32_t iMapHeight)
 		iMaxHeight   = VTOL_HEIGHT_MAX;
 	}
 
+    if (psDroid->droidType == DROID_SUPERTRANSPORTER && bMultiPlayer) // Set ascend and descend speeds based on droid type, only in multiplayer (MP)
+    {
+         ascendSpeed = SUPERTRANSPORTER_ASCEND_SPEED;
+        descendSpeed = SUPERTRANSPORTER_DESCEND_SPEED;
+    }
+    else if (psDroid->droidType == DROID_SUPERTRANSPORTER || psDroid->droidType == DROID_TRANSPORTER) // Cam unaffected
+    {
+         ascendSpeed = VTOL_VERTICAL_SPEED_OLD;  // Cyborg transports use old for now, either way.
+        descendSpeed = VTOL_VERTICAL_SPEED_OLD;
+    }
+    else
+    {
+         ascendSpeed = VTOL_VERTICAL_SPEED;      // VTOLs use standard speed for both
+        descendSpeed = VTOL_VERTICAL_SPEED;
+    }
+
     if (psDroid->pos.z >= (iMapHeight + iMaxHeight)) // Descending
     {
-        if (psDroid->isTransporter())
-        {
-            if (bMultiPlayer)
-            {
-                psDroid->sMove.iVertSpeed = (SWORD) -TRANSPORTER_VERTICAL_SPEED_MP; // Faster in MP
-            }
-            else
-            {
-                psDroid->sMove.iVertSpeed = (SWORD) -VTOL_VERTICAL_SPEED_OLD; // Defaults for Campaign
-            }
-	    }
-    	    else
-    	    {
-                psDroid->sMove.iVertSpeed = (SWORD) -VTOL_VERTICAL_SPEED; // Non-transporter VTOLs
-    	    }
+	psDroid->sMove.iVertSpeed = (SWORD) -descendSpeed;
     }
     else if (psDroid->pos.z < (iMapHeight + iMinHeight)) // Ascending
     {
-        if (psDroid->isTransporter())
-        {
-            if (bMultiPlayer)
-            {
-                psDroid->sMove.iVertSpeed = (SWORD) TRANSPORTER_VERTICAL_SPEED_MP; // Faster in MP
-            }
-            else
-            {
-                psDroid->sMove.iVertSpeed = (SWORD) VTOL_VERTICAL_SPEED_OLD; // Defaults for Campaign
-            }
-        }
-        else
-        {
-            psDroid->sMove.iVertSpeed = (SWORD) VTOL_VERTICAL_SPEED; // Non-transporter VTOLs
-        }
+        psDroid->sMove.iVertSpeed = (SWORD)ascendSpeed;
     }
+    
     else if ((psDroid->pos.z < iLevelHeight) && (psDroid->sMove.iVertSpeed < 0))
     {
         psDroid->sMove.iVertSpeed = 0; // Stop descending
