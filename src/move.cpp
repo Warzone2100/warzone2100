@@ -1969,10 +1969,8 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
 	}
-
 	/* use baba person movement */
 	moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
-
 	psDroid->rot.pitch = 0;
 	psDroid->rot.roll  = 0;
 }
@@ -1980,28 +1978,26 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 static void moveDescending(DROID *psDroid)
 {
 	int32_t iMapHeight = map_Height(psDroid->pos.x, psDroid->pos.y);
-
 	psDroid->sMove.speed = 0;
-
 	if (psDroid->pos.z > iMapHeight)
 	{
-		/* descending */
+	    if (psDroid->droidType == DROID_SUPERTRANSPORTER && bMultiPlayer)
+    	    {
+        	psDroid->sMove.iVertSpeed = (SWORD) -SUPERTRANSPORTER_VERTICAL_SPEED_DESCEND_MP;
+    	    }
+	    else
+	    {
 		psDroid->sMove.iVertSpeed = (SWORD) - VTOL_VERTICAL_SPEED_OLD;
+	    }
 	}
 	else
 	{
-		/* on floor - stop */
-		psDroid->pos.z = iMapHeight;
-		psDroid->sMove.iVertSpeed = 0;
-
-		/* reset move state */
+		psDroid->pos.z = iMapHeight;     /* on floor - stop */
+		psDroid->sMove.iVertSpeed = 0;   /* reset move state */
 		psDroid->sMove.Status = MOVEINACTIVE;
-
-		/* conform to terrain */
-		updateDroidOrientation(psDroid);
+		updateDroidOrientation(psDroid); /* conform to terrain */
 	}
 }
-
 
 bool moveCheckDroidMovingAndVisible(void *psObj)
 {
