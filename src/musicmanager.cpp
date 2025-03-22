@@ -156,6 +156,7 @@ public:
 	void highlightLost() override;
 	bool getIsChecked() const { return isChecked; }
 	void setCheckboxSize(int size)
+	void setIsChecked(bool value) { isChecked = value; }
 	{
 		cbSize = size;
 	}
@@ -580,7 +581,7 @@ void MusicListHeader::initialize()
     albumSelectAllCheckbox->addOnClickHandler([this](W_BUTTON& button) {
         W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
         musicSelectAllAlbum = !musicSelectAllAlbum;
-    	     self.isChecked =  musicSelectAllAlbum;
+    	     self.setIsChecked(musicSelectAllAlbum);
 
         if (selectedAlbumForToggle.empty()) return; // No album selected... do nothing
         MusicGameMode currentMode = ingame ? PlayList_GetCurrentMusicMode() : MusicGameMode::MENUS;
@@ -634,7 +635,8 @@ void MusicListHeader::initialize()
         modeCheckbox->addOnClickHandler([modeIdx](W_BUTTON& button) {
             W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
             musicSelectAllModes[modeIdx] = !musicSelectAllModes[modeIdx];
-            self.isChecked = musicSelectAllModes[modeIdx];
+//            self.isChecked = musicSelectAllModes[modeIdx];
+            self.setIsChecked(musicSelectAllModes[modeIdx]);
              MusicGameMode mode = static_cast<MusicGameMode>(modeIdx);
              for (const auto& track : trackList)
              {
