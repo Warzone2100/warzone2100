@@ -2103,7 +2103,7 @@
 		"weaponClass": "HEAT",
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "ENERGY",
-		"weaponWav": "hevlsr.ogg",
+		"weaponWav": "partgun.ogg",
 		"weight": 5000
 	},
 	"ParticleGun-VTOL": {
@@ -2144,7 +2144,7 @@
 		"weaponClass": "HEAT",
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "ENERGY",
-		"weaponWav": "hevlsr.ogg",
+		"weaponWav": "partgun.ogg",
 		"weight": 5000
 	},
 	"Howitzer-Incendiary": {
