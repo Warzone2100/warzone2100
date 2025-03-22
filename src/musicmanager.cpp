@@ -649,9 +649,9 @@ void MusicListHeader::initialize()
                 for (size_t i = 0; i < scrollableList->children().size(); i++)
                 {
                     auto trackRow = std::dynamic_pointer_cast<W_TrackRow>(scrollableList->children()[i]);
-                    if (trackRow)
+                    if  (trackRow)
                     {
-                        trackRow->musicModeCheckboxes[modeIdx]->isChecked = musicSelectAllModes[modeIdx];
+                        trackRow->musicModeCheckboxes[modeIdx]->setIsChecked(musicSelectAllModes[modeIdx]);
                     }
                 }
             }
