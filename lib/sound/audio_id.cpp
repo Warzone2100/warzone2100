@@ -491,6 +491,7 @@ static AUDIO_ID_MAP asAudioID[] =
 	{ID_SOUND_EMP,                                 "emp.ogg"},
 	{ID_SOUND_LASER_HEAVY,                         "hevlsr.ogg"},
 	{ID_SOUND_PLASMA_FLAMER,                       "plasflm.ogg"},
+	{ID_SOUND_PARTICLE_GUN,                        "partgun.ogg"},
 	{ID_SOUND_UPLINK,                              "uplink.ogg"},
 	{ID_SOUND_LAS_SAT_COUNTDOWN,                   "lasstrk.ogg"},
 	{ID_SOUND_BEACON,								"beacon.ogg"},

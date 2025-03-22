@@ -512,6 +512,7 @@
             { "fileName": "emp.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "hevlsr.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "plasflm.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "partgun.ogg", "loop": false, "range": 1800, "volume": 100 },          
             { "fileName": "uplink.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "lasstrk.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "beacon.ogg", "loop": false, "range": 1800, "volume": 100 }
