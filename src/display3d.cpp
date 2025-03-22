@@ -376,6 +376,23 @@ struct Blueprint
 
 static std::vector<Blueprint> blueprints;
 
+struct TextMarker
+{
+	TextMarker(uint8_t x, uint8_t y, std::string message, uint8_t color)
+		: x(x)
+		, y(y)
+		, message(message)
+		, color(color)
+	{}
+
+	uint8_t x;
+	uint8_t y;
+	std::string message;
+	uint8_t color;
+};
+
+static std::vector<TextMarker> textMarkers;
+
 #define	TARGET_TO_SENSOR_TIME	((4*(GAME_TICKS_PER_SEC))/5)
 #define	DEST_TARGET_TIME	(GAME_TICKS_PER_SEC/4)
 
@@ -738,6 +755,16 @@ bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t d
 void clearBlueprints()
 {
 	blueprints.clear();
+}
+
+void addTextMarker(uint8_t mapX, uint8_t mapY, std::string message, uint8_t color)
+{
+	textMarkers.emplace_back(TextMarker{mapX, mapY, message, color});
+}
+
+void clearTextMarkers()
+{
+	textMarkers.clear();
 }
 
 static PIELIGHT selectionBrightness()
@@ -1128,6 +1155,21 @@ void draw3DScene()
 		droidText.setText(droidCounts, font_regular);
 		droidText.render(pie_GetVideoBufferWidth() - droidText.width() - 10, droidText.height() + 2, WZCOL_TEXT_BRIGHT);
 	}
+	if (1)
+	{
+		for (auto textMarker: textMarkers) {
+			if (textMarker.x < map_coord(playerPos.p.x) - visibleTiles.x / 2) continue;
+			if (textMarker.y < map_coord(playerPos.p.z) - visibleTiles.y / 2) continue;
+			if (textMarker.x > map_coord(playerPos.p.x) + visibleTiles.x / 2) continue;
+			if (textMarker.y > map_coord(playerPos.p.z) + visibleTiles.y / 2) continue;
+			auto idx=visibleTiles.y / 2 + textMarker.y - map_coord(playerPos.p.z);
+			auto jdx=visibleTiles.x / 2 + textMarker.x - map_coord(playerPos.p.x);
+
+			iV_SetTextColour(clanColours[textMarker.color]);
+			iV_DrawText(textMarker.message.c_str(), tileScreenInfo[idx][jdx].x, tileScreenInfo[idx][jdx].y, font_regular);
+		}
+
+	}
 
 	setupConnectionStatusForm();
 
@@ -1388,8 +1430,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 				Vector2i screen(0, 0);
 				Position pos;
 
-				pos.x = world_coord(j);
-				pos.z = -world_coord(i);
+				pos.x = world_coord(j) - playerPos.p.x % TILE_WIDTH;
+				pos.z = -world_coord(i) + playerPos.p.z % TILE_HEIGHT;
 				pos.y = 0;
 
 				if (tileOnMap(playerXTile + j, playerZTile + i))

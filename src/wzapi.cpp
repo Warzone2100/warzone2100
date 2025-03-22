@@ -929,6 +929,31 @@ wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_o
 	return {};
 }
 
+//-- ## hackTextMarker(x, y, message, colour)
+//--
+//-- Place a text marker given tile on the map.
+//-- See ```changePlayerColour``` for all available colour.
+//-- If both x and y equal to -1, all text marker are cleared. (4.6+ only)
+//--
+wzapi::no_return_value wzapi::hackTextMarker(WZAPI_PARAMS(int _x, int _y, std::string _message, int _colour))
+{
+	if ((_x == -1) && (_y == -1))
+	{
+		clearTextMarkers();
+		return {};
+	}
+
+	SCRIPT_ASSERT({}, context, _x >= 0, "Text x value %d is less than zero", _x);
+	SCRIPT_ASSERT({}, context, _y >= 0, "Text y value %d is less than zero", _y);
+	SCRIPT_ASSERT({}, context, _x <= mapWidth, "Text x value %d is greater than mapWidth %d", _x, (int)mapWidth);
+	SCRIPT_ASSERT({}, context, _y <= mapHeight, "Text y value %d is greater than mapHeight %d", _y, (int)mapHeight);
+	SCRIPT_ASSERT({}, context, _colour >= 0, "Colour value %d is less than zero", _colour);
+	SCRIPT_ASSERT({}, context, _colour <= 15, "Colour value %d is greater than 15", _colour);
+
+	addTextMarker(_x, _y, _message, _colour);
+	return {};
+}
+
 // MARK: - General functions -- geared for use in AI scripts
 
 //-- ## dump(string...)
