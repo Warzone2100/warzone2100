@@ -18,7 +18,6 @@
 */
 /*
  * musicmanager.cpp
- *
  * This is the Music Manager screen.
  */
 
@@ -42,7 +41,6 @@
 #include <chrono>
 #include <memory>
 
-
 #define W_TRACK_ROW_PADDING 5
 #define W_TRACK_COL_PADDING 10
 #define W_TRACK_CHECKBOX_SIZE 12
@@ -53,10 +51,11 @@
 #define W_TRACK_COL_ALBUM_W		130
 #define W_TRACK_CHECKBOX_STARTINGPOS (W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W + W_TRACK_COL_PADDING + W_TRACK_COL_PADDING)
 
-#define W_TRACK_HEADER_Y		20
-#define W_TRACK_HEADER_HEIGHT	(20 + (W_TRACK_ROW_PADDING * 2))
-#define W_TRACK_HEADER_COL_IMAGE_SIZE	16
+#define W_TRACK_HEADER_Y		 20
+#define W_TRACK_HEADER_HEIGHT		(20 + (W_TRACK_ROW_PADDING * 2))
+#define W_TRACK_HEADER_COL_IMAGE_SIZE	 16
 
+//#define TL_W_WITH_CHECKBOX		(TL_W + 100) // Width to accommodate checkboxes for; (Campaign, Challenges, Skirmish, Multiplayer) to block toggle all tracks independently.
 #define TL_W				FRONTEND_BOTFORMW
 #define TL_H				400
 #define TL_X				FRONTEND_BOTFORMX
@@ -122,26 +121,21 @@ public:
 private:
 	bool shouldUnregisterEventSink = false;
 };
-
 // MARK: - Globals
-
-struct TrackRowCache; // forward-declare
-class W_TrackRow; // foward-declare
+struct TrackRowCache; // Forward-declare
+class W_TrackRow;     // Forward-declare
 static std::unordered_map<W_TrackRow*, std::shared_ptr<TrackRowCache>> trackRowsCache;
 static std::vector<std::shared_ptr<const WZ_TRACK>> trackList;
 static std::shared_ptr<const WZ_TRACK> selectedTrack;
 static std::shared_ptr<MusicManager_CDAudioEventSink> musicManagerAudioEventSink;
-
-// now-playing widgets
+// Now-playing widgets
 static std::shared_ptr<W_LABEL> psNowPlaying = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackName = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackAuthorName = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackAlbumName = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackAlbumDate = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackAlbumDescription = nullptr;
-
 // MARK: - W_MusicModeCheckboxButton
-
 struct W_MusicModeCheckboxButton : public W_BUTTON
 {
 public:
@@ -181,15 +175,13 @@ void W_MusicModeCheckboxButton::display(int xOffset, int yOffset)
 {
 	int x0 = xOffset + x();
 	int y0 = yOffset + y();
-
 	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 	bool isDisabled = (getState() & WBUT_DISABLE) != 0;
 
-	// calculate checkbox dimensions
+	// Calculate checkbox dimensions
 	Vector2i checkboxOffset{0, (height() - cbSize) / 2}; // left-align, center vertically
 	Vector2i checkboxPos{x0 + checkboxOffset.x, y0 + checkboxOffset.y};
-
-	// draw checkbox border
+	// Draw checkbox border
 	PIELIGHT notifyBoxAddColor = WZCOL_NOTIFICATION_BOX;
 	notifyBoxAddColor.byte.a = uint8_t(float(notifyBoxAddColor.byte.a) * ((!isDisabled) ? 0.7f : 0.2f));
 	pie_UniTransBoxFill(checkboxPos.x, checkboxPos.y, checkboxPos.x + cbSize, checkboxPos.y + cbSize, notifyBoxAddColor);
@@ -202,7 +194,7 @@ void W_MusicModeCheckboxButton::display(int xOffset, int yOffset)
 
 	if (down || isChecked)
 	{
-		// draw checkbox "checked" inside
+		// Draw checkbox "checked" inside
 		#define CB_INNER_INSET 2
 		PIELIGHT checkBoxInsideColor = WZCOL_TEXT_MEDIUM;
 		checkBoxInsideColor.byte.a = (!isDisabled) ? 200 : 60;
@@ -223,7 +215,6 @@ void W_MusicModeCheckboxButton::highlightLost()
 }
 
 // MARK: - W_TrackRow
-
 struct TrackRowCache {
 	WzText wzText_Title;
 	WzText wzText_Album;
@@ -329,7 +320,6 @@ static WzString truncateTextToMaxWidth(WzString str, iV_fonts fontID, int maxWid
 void W_TrackRow::display(int xOffset, int yOffset)
 {
 	bool isSelectedTrack = (track == selectedTrack);
-
 	// get track cache
 	std::shared_ptr<TrackRowCache> pCache = nullptr;
 	auto it = trackRowsCache.find(this);
@@ -342,7 +332,7 @@ void W_TrackRow::display(int xOffset, int yOffset)
 		pCache = std::make_shared<TrackRowCache>();
 		trackRowsCache[this] = pCache;
 
-		// calculate max displayable length for title and album
+		// Calculate max displayable length for title and album
 		WzString title_truncated = truncateTextToMaxWidth(WzString::fromUtf8(track->title), font_regular, W_TRACK_COL_TITLE_W);
 		WzString album_truncated = truncateTextToMaxWidth(WzString::fromUtf8(album_name), font_regular, W_TRACK_COL_ALBUM_W);
 		pCache->wzText_Title.setText(title_truncated, font_regular);
@@ -380,7 +370,6 @@ void W_TrackRow::display(int xOffset, int yOffset)
 }
 
 // MARK: - "Now Playing" Details Block
-
 static gfx_api::texture* loadImageToTexture(const std::string& imagePath)
 {
 	if (imagePath.empty())
@@ -432,8 +421,7 @@ public:
 
 		if (imagePath == album_cover_path)
 		{
-			// already loaded
-			return true;
+			return true; // Already loaded
 		}
 
 		if (pAlbumCoverTexture)
@@ -463,13 +451,10 @@ private:
 void TrackDetailsForm::display(int xOffset, int yOffset)
 {
 	IntFormAnimated::display(xOffset, yOffset);
-
 	if (disableChildren) { return; }
-
-	// now draw the album cover, if present
+	// Now draw the album cover, if present
 	int imageLeft = x() + xOffset + WZ_TRACKDETAILS_IMAGE_X;
-	int imageTop = y() + yOffset + WZ_TRACKDETAILS_IMAGE_Y;
-
+	int imageTop  = y() + yOffset + WZ_TRACKDETAILS_IMAGE_Y;
 	if (pAlbumCoverTexture)
 	{
 		iV_DrawImageAnisotropic(*pAlbumCoverTexture, Vector2i(imageLeft, imageTop), Vector2f(0,0), Vector2f(WZ_TRACKDETAILS_IMAGE_SIZE, WZ_TRACKDETAILS_IMAGE_SIZE), 0.f, WZCOL_WHITE);
@@ -479,7 +464,6 @@ void TrackDetailsForm::display(int xOffset, int yOffset)
 static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 {
 	ASSERT_OR_RETURN(, pTrackDetailsBox, "pTrackDetailsBox is null");
-
 	// Add "Now Playing" label
 	if (!psNowPlaying)
 	{
@@ -490,7 +474,6 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psNowPlaying->setString((selectedTrack) ? (WzString::fromUtf8(_("NOW PLAYING")) + ":") : "");
 	psNowPlaying->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	psNowPlaying->setTransparentToMouse(true);
-
 	// Add Selected Track name
 	if (!psSelectedTrackName)
 	{
@@ -512,8 +495,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psSelectedTrackAuthorName->setString((selectedTrack) ? WzString::fromUtf8(selectedTrack->author) : "");
 	psSelectedTrackAuthorName->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	psSelectedTrackAuthorName->setTransparentToMouse(true);
-
-	// album info xPosStart
+	// Album info xPosStart
 	int albumInfoXPosStart = psNowPlaying->x() + psNowPlaying->width() + 10 + WZ_TRACKDETAILS_IMAGE_SIZE + 10;
 	int maxWidthOfAlbumLabel = TL_W - albumInfoXPosStart - 20;
 	std::shared_ptr<const WZ_ALBUM> pAlbum = (selectedTrack) ? selectedTrack->album.lock() : nullptr;
@@ -577,9 +559,7 @@ static void addTrackDetailsBox(WIDGET *parent, bool ingame)
 
 	UpdateTrackDetailsBox(pTrackDetailsBox.get());
 }
-
 // MARK: - Track List
-
 class MusicListHeader : public W_FORM
 {
 public:
@@ -599,8 +579,7 @@ void MusicListHeader::display(int xOffset, int yOffset)
 	int y1 = y0 + height() - 1;
 	iV_TransBoxFill(x0, y0, x1, y1);
 	iV_Line(x0, y1, x1, y1, WZCOL_MENU_SEPARATOR);
-
-	// column lines
+	// Column lines
 	iV_Line(x0 + W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W, y0 + 5, x0 + W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W, y1 - 5, WZCOL_MENU_SEPARATOR);
 	iV_Line(x0 + W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W, y0 + 5, x0 + W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W, y1 - 5, WZCOL_MENU_SEPARATOR);
 }
@@ -749,8 +728,7 @@ protected:
 		this->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			psWidget->setGeometry(0, 0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight());
 		}));
-
-		// draws the background of the form
+		// Draws the background of the form
 		auto botForm = std::make_shared<IntFormAnimated>();
 		this->attach(botForm);
 		botForm->id = MM_FORM + 1;
@@ -916,9 +894,7 @@ bool runMusicManager()
 
 	return true;
 }
-
 // MARK: - CD Audio Event Sink Implementation
-
 static void CDAudioEvent_UpdateCurrentTrack(const std::shared_ptr<const WZ_TRACK>& track)
 {
 	if (selectedTrack == track)
@@ -940,7 +916,7 @@ void MusicManager_CDAudioEventSink::startedPlayingTrack(const std::shared_ptr<co
 }
 void MusicManager_CDAudioEventSink::trackEnded(const std::shared_ptr<const WZ_TRACK>& track)
 {
-	// currently a no-op
+	// Currently a no-op
 }
 
 void MusicManager_CDAudioEventSink::musicStopped()
