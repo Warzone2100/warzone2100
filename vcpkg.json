@@ -75,6 +75,9 @@
 			"host": true
 		}
 	],
+	"overrides": [
+		{ "name": "gettext-libintl", "version": "0.22.5", "port-version": 2 }
+	],
 	"default-features": [
 		"vulkan"
 	],
