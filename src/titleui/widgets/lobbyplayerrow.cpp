@@ -729,8 +729,14 @@ void WzPlayerRow::updateState()
 		}
 		else if (NetPlay.players[playerIdx].ai >= 0)
 		{
-			// show AI description. Useful for challenges.
-			playerInfoTooltip = aidata[NetPlay.players[playerIdx].ai].tip;
+			if (NetPlay.isHost || (!trueMultiplayerMode) || (game.blindMode == BLIND_MODE::NONE) || challengeActive)
+			{
+				// show AI description. Useful for challenges.
+				if (NetPlay.players[playerIdx].ai < aidata.size())
+				{
+					playerInfoTooltip = aidata[NetPlay.players[playerIdx].ai].tip;
+				}
+			}
 		}
 	}
 	if (NetPlay.players[playerIdx].allocated && (game.blindMode == BLIND_MODE::NONE || (NetPlay.isHost && NetPlay.hostPlayer >= MAX_PLAYER_SLOTS)))
