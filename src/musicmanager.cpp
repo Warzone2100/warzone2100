@@ -96,7 +96,7 @@ static int GetTrackListStartXPos(int ingame)
 {
 	if (!ingame)
 	{
-		return TL_X;
+	return TL_X;
 	}
 	return TL_X - 10;
 }
@@ -155,12 +155,12 @@ public:
 	void highlight(W_CONTEXT *psContext)   override;
 	void highlightLost() override;
 	bool getIsChecked() const { return isChecked; }
-	void setCheckboxSize(int size)
-	void setIsChecked(bool value) { isChecked = value; }
+	void setIsChecked(bool value) 	 { isChecked = value; }
+	void setCheckboxSize(int size);
+	int     checkboxSize() const { return cbSize; }
 	{
 		cbSize = size;
 	}
-	int checkboxSize() const { return cbSize; }
 	MusicGameMode getMusicMode() { return mode; }
 private:
 	bool isEnabled() { return (getState() & WBUT_DISABLE) == 0; }
@@ -239,7 +239,7 @@ public:
 	std::shared_ptr<const WZ_TRACK> getTrack() const {
 		return std::shared_ptr<const WZ_TRACK>(track);
 	};
-
+	void setCheckboxesForMode(MusicGameMode mode, bool value, bool applyToAllModes = false);
 protected:
 	void geometryChanged() override;
 private:
@@ -288,6 +288,17 @@ void W_TrackRow::geometryChanged()
 		auto pCB = musicModeCheckboxes[i];
 		     pCB->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS + ((W_TRACK_CHECKBOX_SIZE + W_TRACK_COL_PADDING) * i), std::max(W_TRACK_ROW_PADDING, (height() - W_TRACK_CHECKBOX_SIZE) / 2), W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE);
 	}
+}
+
+void W_TrackRow::setCheckboxesForMode(MusicGameMode mode, bool value, bool applyToAllModes)
+{
+    for (auto& checkbox : musicModeCheckboxes)
+    {
+        if (applyToAllModes || checkbox->getMusicMode() == mode)
+        {
+            checkbox->setIsChecked(value);
+        }
+    }
 }
 
 static WzString truncateTextToMaxWidth(WzString str, iV_fonts fontID, int maxWidth)
@@ -612,13 +623,7 @@ void MusicListHeader::initialize()
                     auto album = trackRow->getTrack()->album.lock();
                     if (album && album->title == selectedAlbumForToggle)
                     {
-                        for (auto& checkbox : trackRow->musicModeCheckboxes)
-                        {
-                            if (!ingame || checkbox->getMusicMode() == currentMode)
-                            {
-                                checkbox->isChecked = musicSelectAllAlbum;
-                            }
-                        }
+			trackRow->setCheckboxesForMode(currentMode, musicSelectAllAlbum, !ingame);
                     }
                 }
             }
