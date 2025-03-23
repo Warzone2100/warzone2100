@@ -75,11 +75,18 @@ namespace WzMap {
 			return JS_ThrowReferenceError(context, "%s failed in %s at line %d", #expr, __FUNCTION__, __LINE__); \
 			} } while (0)
 
+// QuickJS-NG / QuickJS compat
+#if defined(QUICKJS_NG)
+# define WZ_QJS_IsArray(ctx, arr) JS_IsArray(arr)
+#else
+# define WZ_QJS_IsArray(ctx, arr) JS_IsArray(ctx, arr)
+#endif
+
 bool QuickJS_GetArrayLength(JSContext* ctx, JSValueConst arr, uint64_t& len)
 {
 	len = 0;
 
-	if (!JS_IsArray(ctx, arr))
+	if (!WZ_QJS_IsArray(ctx, arr))
 		return false;
 
 	JSValue len_val = JS_GetPropertyStr(ctx, arr, "length");
@@ -269,11 +276,11 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 	auto features = argv[6];
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_mapWidth), "mapWidth must be number");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_mapHeight), "mapHeight must be number");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, texture), "texture must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, height), "height must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, structures), "structures must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, droids), "droids must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, features), "features must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, texture), "texture must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, height), "height must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, structures), "structures must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, droids), "droids must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, features), "features must be array");
 	auto mapData = data.map->mapData();
 	mapData->width = JSValueToInt32(ctx, jsVal_mapWidth);
 	mapData->height = JSValueToInt32(ctx, jsVal_mapHeight);
@@ -319,7 +326,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 		sd.name = QuickJS_GetStdString(ctx, structure, "name");
 		JSValue position = JS_GetPropertyStr(ctx, structure, "position");
 		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
+		if (WZ_QJS_IsArray(ctx, position))
 		{
 			// [x, y]
 			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
@@ -354,7 +361,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 		sd.name = QuickJS_GetStdString(ctx, droid, "name");
 		JSValue position = JS_GetPropertyStr(ctx, droid, "position");
 		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
+		if (WZ_QJS_IsArray(ctx, position))
 		{
 			// [x, y]
 			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
@@ -386,7 +393,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 		sd.name = QuickJS_GetStdString(ctx, feature, "name");
 		JSValue position = JS_GetPropertyStr(ctx, feature, "position");
 		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
+		if (WZ_QJS_IsArray(ctx, position))
 		{
 			// [x, y]
 			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
@@ -516,7 +523,7 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	{
 		// Unwrap JS regions for faster lookup.
 		JSValue jsVal_riggedRegions = argv[6];
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, jsVal_riggedRegions), "width must be array");
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, jsVal_riggedRegions), "width must be array");
 
 		uint64_t regionsArrayLength = 0;
 		bool bGotRegionsArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegions, regionsArrayLength);
@@ -539,7 +546,7 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		{
 			JSValue jsVal_riggedRegion = JS_GetPropertyUint32(ctx, jsVal_riggedRegions, i);
 			auto free_riggedRegion_ref = gsl::finally([ctx, jsVal_riggedRegion] { JS_FreeValue(ctx, jsVal_riggedRegion); });
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, jsVal_riggedRegion),
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, jsVal_riggedRegion),
 			                              "riggedRegion %" PRIu32 " must be array", i);
 			uint64_t regionArrayLength = 0;
 			bool bGotRegionArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegion, regionArrayLength);

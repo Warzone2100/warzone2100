@@ -104,6 +104,13 @@ MSVC_PRAGMA(warning( pop ))
 #include "3rdparty/gsl_finally.h"
 #include <utility>
 
+// QuickJS-NG / QuickJS compat
+#if defined(QUICKJS_NG)
+# define WZ_QJS_IsArray(ctx, arr) JS_IsArray(arr)
+#else
+# define WZ_QJS_IsArray(ctx, arr) JS_IsArray(ctx, arr)
+#endif
+
 // Alternatives for C++ - can't use the JS_CFUNC_DEF / JS_CGETSET_DEF / etc defines
 // #define JS_CFUNC_DEF(name, length, func1) { name, JS_PROP_WRITABLE | JS_PROP_CONFIGURABLE, JS_DEF_CFUNC, 0, .u = { .func = { length, JS_CFUNC_generic, { .generic = func1 } } } }
 static inline JSCFunctionListEntry QJS_CFUNC_DEF(const char *name, uint8_t length, JSCFunction *func1)
@@ -1432,7 +1439,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		{
 			len = 0;
 
-			if (!JS_IsArray(ctx, arr))
+			if (!WZ_QJS_IsArray(ctx, arr))
 				return false;
 
 			JSValue len_val = JS_GetPropertyStr(ctx, arr, "length");
@@ -1607,7 +1614,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				wzapi::string_or_string_list strings;
 
 				JSValue list_or_string = argv[idx++];
-				if (JS_IsArray(ctx, list_or_string))
+				if (WZ_QJS_IsArray(ctx, list_or_string))
 				{
 					uint64_t length = 0;
 					if (QuickJS_GetArrayLength(ctx, list_or_string, length))
@@ -3582,7 +3589,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		return;
 	}
 
-	if (JS_IsArray(v.ctx, v.value))
+	if (WZ_QJS_IsArray(v.ctx, v.value))
 	{
 		j = nlohmann::json::array();
 		uint64_t length = 0;
