@@ -44,8 +44,8 @@
 #include <limits>
 #include <typeindex>
 #include <sstream>
-#include "3rdparty/fmt/include/fmt/format.h"
-#include "3rdparty/fmt/include/fmt/xchar.h"
+#include <fmt/format.h>
+#include <fmt/xchar.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
