@@ -156,11 +156,10 @@ public:
 	void highlightLost() override;
 	bool getIsChecked() const { return isChecked; }
 	void setIsChecked(bool value) 	 { isChecked = value; }
-	void setCheckboxSize(int size);
-	int     checkboxSize() const { return cbSize; }
-	{
+	void setCheckboxSize(int size) {
 		cbSize = size;
 	}
+	int     checkboxSize() const { return cbSize; }
 	MusicGameMode getMusicMode() { return mode; }
 private:
 	bool isEnabled() { return (getState() & WBUT_DISABLE) == 0; }
@@ -636,7 +635,8 @@ void MusicListHeader::initialize()
         attach(modeCheckbox);
         modeCheckbox->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS + ((W_TRACK_CHECKBOX_SIZE + 5) * modeIdx), W_TRACK_ROW_PADDING, W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE); // Reduced padding 5, to fit in low res.
         modeCheckbox->setCheckboxSize(W_TRACK_CHECKBOX_SIZE);
-        modeCheckbox->setTip(WzString::fromUtf8(_("Select All/None for ") + to_string(static_cast<MusicGameMode>(modeIdx))));
+//        modeCheckbox->setTip(WzString::fromUtf8(_("Select All/None for ") + to_string(static_cast<MusicGameMode>(modeIdx))));
+	modeCheckbox->setTip(WzString::fromUtf8(_("Select All/None for ") + to_string(static_cast<MusicGameMode>(modeIdx))).toStdString());
         modeCheckbox->addOnClickHandler([modeIdx](W_BUTTON& button) {
             W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
             musicSelectAllModes[modeIdx] = !musicSelectAllModes[modeIdx];
@@ -656,7 +656,8 @@ void MusicListHeader::initialize()
                     auto trackRow = std::dynamic_pointer_cast<W_TrackRow>(scrollableList->children()[i]);
                     if  (trackRow)
                     {
-                        trackRow->musicModeCheckboxes[modeIdx]->setIsChecked(musicSelectAllModes[modeIdx]);
+//                        trackRow->musicModeCheckboxes[modeIdx]->setIsChecked(musicSelectAllModes[modeIdx]);
+                	trackRow->setCheckboxesForMode(static_cast<MusicGameMode>(modeIdx), musicSelectAllModes[modeIdx]);
                     }
                 }
             }
