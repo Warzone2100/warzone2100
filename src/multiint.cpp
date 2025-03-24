@@ -7832,11 +7832,11 @@ int difficultyIcon(int difficulty)
 {
 	switch (difficulty)
 	{
-	case static_cast<int>(AIDifficulty::SUPEREASY): return IMAGE_SUPEREASY;
-	case static_cast<int>(AIDifficulty::EASY): 	return IMAGE_EASY;
-	case static_cast<int>(AIDifficulty::MEDIUM): 	return IMAGE_MEDIUM;
-	case static_cast<int>(AIDifficulty::HARD): 	return IMAGE_HARD;
-	case static_cast<int>(AIDifficulty::INSANE): 	return IMAGE_INSANE;
+	case static_cast<int>(AIDifficulty::SUPEREASY): return IMAGE_AI_DIFFICULTY_SUPEREASY;
+	case static_cast<int>(AIDifficulty::EASY): 	return IMAGE_AI_DIFFICULTY_EASY;
+	case static_cast<int>(AIDifficulty::MEDIUM): 	return IMAGE_AI_DIFFICULTY_MEDIUM;
+	case static_cast<int>(AIDifficulty::HARD): 	return IMAGE_AI_DIFFICULTY_HARD;
+	case static_cast<int>(AIDifficulty::INSANE): 	return IMAGE_AI_DIFFICULTY_INSANE;
 	default: return IMAGE_NO;	// What?
 	}
 }
