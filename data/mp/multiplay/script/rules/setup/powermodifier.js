@@ -8,9 +8,7 @@ function setupPowerModifier(player)
 	{
 		setPowerModifier(125, player);
 	}
-
-	// insane difficulty is meant to be insane...
-	if (playerData[player].difficulty === INSANE)
+	if 	(playerData[player].difficulty === INSANE)
 	{
 		setPowerModifier(200 + 15 * powerType, player);
 	}
@@ -20,10 +18,13 @@ function setupPowerModifier(player)
 	}
 	else if (playerData[player].difficulty === EASY)
 	{
-		setPowerModifier(70 + 5 * powerType, player);
+		setPowerModifier( 70 +  5 * powerType, player);
+	}
+	else if (playerData[player].difficulty === SUPEREASY)
+	{
+		setPowerModifier( 40 +  5 * powerType, player);
 	}
 }
-
 // Power modifier data is currently not saved. Reset it during eventGameLoaded for the moment.
 function setupPowerModifierGameLoaded()
 {

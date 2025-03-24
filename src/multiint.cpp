@@ -914,7 +914,7 @@ void readAIs()
 
 		sstrcpy(ai.js, aiconf.value("js", "").toWzString().toUtf8().c_str());
 
-		const char *difficultyKeys[] = { "supereasy_dummy_tip", "easy_tip", "medium_tip", "hard_tip", "insane_tip" };
+		const char *difficultyKeys[] = { "supereasy_tip", "easy_tip", "medium_tip", "hard_tip", "insane_tip" };
 		for (int i = 0; i < ARRAY_SIZE(difficultyKeys); i++)
 		{
 			if (aiconf.contains(difficultyKeys[i]))
@@ -1744,10 +1744,11 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 		std::string tipStr;
 		switch (difficultyIdx)
 		{
-		case static_cast<int>(AIDifficulty::EASY): tipStr = _("Starts disadvantaged"); break;
-		case static_cast<int>(AIDifficulty::MEDIUM): tipStr = _("Plays nice"); break;
-		case static_cast<int>(AIDifficulty::HARD): tipStr = _("No holds barred"); break;
-		case static_cast<int>(AIDifficulty::INSANE): tipStr = _("Starts with advantages"); break;
+		case static_cast<int>(AIDifficulty::SUPEREASY): tipStr = _("Total cakewalk");         break;
+		case static_cast<int>(AIDifficulty::EASY): 	tipStr = _("Starts disadvantaged");   break;
+		case static_cast<int>(AIDifficulty::MEDIUM): 	tipStr = _("Plays nice"); 	      break;
+		case static_cast<int>(AIDifficulty::HARD): 	tipStr = _("No holds barred"); 	      break;
+		case static_cast<int>(AIDifficulty::INSANE): 	tipStr = _("Starts with advantages"); break;
 		}
 		if (NetPlay.players[player].ai < aidata.size())
 		{
@@ -7831,11 +7832,12 @@ int difficultyIcon(int difficulty)
 {
 	switch (difficulty)
 	{
-	case static_cast<int>(AIDifficulty::EASY): return IMAGE_EASY;
-	case static_cast<int>(AIDifficulty::MEDIUM): return IMAGE_MEDIUM;
-	case static_cast<int>(AIDifficulty::HARD): return IMAGE_HARD;
-	case static_cast<int>(AIDifficulty::INSANE): return IMAGE_INSANE;
-	default: return IMAGE_NO;	/// what??
+	case static_cast<int>(AIDifficulty::SUPEREASY): return IMAGE_SUPEREASY;
+	case static_cast<int>(AIDifficulty::EASY): 	return IMAGE_EASY;
+	case static_cast<int>(AIDifficulty::MEDIUM): 	return IMAGE_MEDIUM;
+	case static_cast<int>(AIDifficulty::HARD): 	return IMAGE_HARD;
+	case static_cast<int>(AIDifficulty::INSANE): 	return IMAGE_INSANE;
+	default: return IMAGE_NO;	// What?
 	}
 }
 
