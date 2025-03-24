@@ -141,30 +141,40 @@ Now repeat the whole bone duplication, alignment, and parenting for the piston o
 
 We will not make a bone for the blderik Level 1, as we do not need to animate the base structure and it will remain static. Now we are prepared for animating.
 
-Switch to Pose mode, switch to view the derik from the side, hold down shift and select both Piston and hammer bone. Now make sure the frame 0 is selected in the timeline, and right-click in the view and select Insert Keyframe.
+The script is exporting animations from frame 0 to the last frame containing a keyframe. This is fine for most animations, that are not circular.
+
+Here however, we want to do a circular animation, that will seamlessly repeat it self. The full animation cycle will have 60 frames. Frame 0 and 60 will be the same Location, Rotation & Scale. We don't want to have two identical frames played, but go from frame 59 to 0, to have a seamless transition. Also we do not want to manually edit the exported PIE file, removing last frame from the file.
+We have two options:
+- Add a key to frame 59 and delete the frame 60 This way the last 59 frame will be exported. However, you may want to change the animation in the future and recreating the frame 60 could be difficult.
+- Start the cycle animation from frame -1. Negative frames are ignored when exporting and you don't have to delete the last frame. This allows you to come back and do adjustments without loosing frame data.
+To enable negative frames in Blender Edit -> Preferences -> Animation -> Allow Negative Frames 
+
+![](./039.png)
+
+Switch to Pose mode, switch to view the derik from the side, hold down shift and select both Piston and hammer bone. Now make sure the frame -1 is selected in the timeline, and right-click in the view and select Insert Keyframe.
 
 ![](./024.png)
 
 Select Location, Rotation & Scale. When you select the bones again, you can see the keyframe data on both of them.
 
-Now let's select the frame 30, rotate the hammer bone, move the piston up on the z-axis, and insert another keyframe.
+Now let's select the frame 29, rotate the hammer bone, move the piston up on the z-axis, and insert another keyframe.
 
 ![](./025.png)
 
-Now go to frame 60, rotate the hammer back and move the piston back into the same position as on frame 0. If you want to be sure, you can copy the frame 0 by right-clicking the points and selected keyframe and Copy. Then right-click frame 60 and paste.
+Now go to frame 59, rotate the hammer back and move the piston back into the same position as on frame -1. If you want to be sure, you can copy the frame -1 by right-clicking the points and selected keyframe and Copy. Then right-click frame 59 and paste.
 
 ![](./026.png)
 ![](./027.png)
 
-Now set the end frame to 59. 
+To check the animation, set the start frame to 0 and end frame to 59. 
 
 ![](./028.png)
 
-Why 59? Because frame 60 is the same location and rotation as frame 0, and we want the animation to be circular. Now you can press space to play the animation and ESC to stop it, or use the play stop buttons.
+Now you can press space to play the animation and ESC to stop it, or use the play stop buttons.
 
 ![](./029.png)
 
-The animation is done, and we can do the export. Switch back to object mode. We need to set the cycles and frame time for both The Level3 “hammer” and the Level2 “piston” objects. Animation Cycles sets the number of repetitions for the animation. In our case, we leave it on 0. That means infinite repetitions. Animation Time is actually the time for one frame in milliseconds. Let's say we want the animation cycle to take two seconds (2000 milliseconds) to play. And we have 60 frames. 2000 / 60 = 33.33 So we can set the value to 33. Set the same value for both Level3 “hammer” and the Level2 “piston.” That way they will be in sync.
+The animation is done, and we can do the export. Switch back to object mode. We need to set the cycles and frame time for both The Level3 “hammer” and the Level2 “piston” objects. Animation Cycles sets the number of repetitions for the animation. In our case, we leave it on 0. That means infinite repetitions. Animation Time is actually the time for one frame in milliseconds. Let's say we want the animation cycle to take two seconds (2000 milliseconds) to play. And we have 60 frames (0-59) . 2000 / 60 = 33.33 So we can set the value to 33. Set the same value for both Level3 “hammer” and the Level2 “piston.” That way they will be in sync.
 
 ![](./030.png)
 
@@ -178,21 +188,11 @@ With the selected root armature, click on File – Export – Warzone 2100 model
 
 ### Postprocessing
 
-Now we have to do some cleanup because the export is causing two small issues. It adds empty lines to the file and adds additional unnecessary frame to the animations. Open the exported blderik_anim.pie in your preferred text editor and remove empty lines – usually on end of level polygons or Animobject frames.
+Now we have to do some cleanup because the export is causing a small issue. It adds empty lines to the file. Open the exported blderik_anim.pie in your preferred text editor and remove empty lines – usually on end of level polygons or Animobject frames.
 
 ![](./033.png)
 
-Now observe the beginning and the end of ANIMOBJECT frames for both level 2 and Level 3:
-
-![](./034.png)
-![](./035.png)
-
-As you can see, the export added an additional frame 60 which is a copy of the frame 0. So let's delete the line with frame 60 and change the ANIMOBJECT 33 0 61 to ANIMOBJECT 33 0 60.
-
-![](./036.png)
-![](./037.png)
-
-Do the same for both level 2 and level 3. Lastly, add INTERPOLATE 0 to a new line below TYPE 10200 and save the file.
+Lastly, add INTERPOLATE 0 to a new line below TYPE 10200 and save the file.
 
 ![](./038.png)
 
