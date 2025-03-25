@@ -324,8 +324,8 @@ function eventStartLevel()
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
 	if (camAllowInsaneSpawns())
 	{
-		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3.5));
-		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4.5));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds((!camClassicMode()) ? 3.5 : 4.5));
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds((!camClassicMode()) ? 4.5 : 5.5));
 	}
 
 	truckDefense();
