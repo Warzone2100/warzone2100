@@ -9039,7 +9039,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Выделить всех сильно повреждённых юнитов"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat units >50% HP & no Groups."
 msgstr "Выделить всеx наземных боевыx юнитов без группы с прочностью >50%."
 
 msgid "Select all Half-tracks"
