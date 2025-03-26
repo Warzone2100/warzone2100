@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-03-01 20:57\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -4921,10 +4921,10 @@ msgstr "レーザー光学系の改良により、光の散乱を低減"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "焼夷弾榴弾砲砲台 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "焼夷弾榴弾砲砲台"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "焼夷弾榴弾砲砲台"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -6405,11 +6405,11 @@ msgstr "シナプスリンク データ解析 Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "シナプスリンク データ解析 Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "シナプスリンク データ解析"
-
 msgid "Synaptic link data analysis"
 msgstr "シナプスリンクのデータ解析"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "シナプスリンク データ解析"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "シナプスリンク スクランブラー技術"
@@ -7303,6 +7303,9 @@ msgid "Set the default hosting chat configuration / permissions"
 msgstr ""
 
 msgid "Enable async join approval (for connecting clients)"
+msgstr ""
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
 msgstr ""
 
 msgid "Base URL for on-demand video downloads"
@@ -9835,6 +9838,18 @@ msgstr "パスワードの入力はこちら"
 msgid "Select Player Name"
 msgstr "プレイヤー名を選択"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "同盟"
 
@@ -9846,6 +9861,21 @@ msgstr "マッププレビュー"
 
 msgid "Click to see Map"
 msgstr "クリックするとマップが表示されます"
+
+msgid "Tech"
+msgstr "技術"
+
+msgid "Technology Level 1"
+msgstr "技術レベル1"
+
+msgid "Technology Level 2"
+msgstr "技術レベル2"
+
+msgid "Technology Level 3"
+msgstr "技術レベル3"
+
+msgid "Technology Level 4"
+msgstr "技術レベル4"
 
 msgid "Show Structure Limits"
 msgstr "ストラクチャーの上限を表示"
@@ -9862,21 +9892,6 @@ msgid ""
 msgstr ""
 "ランダムゲームオプション\n"
 "プレイヤーの投票によってブロックされることがある"
-
-msgid "Tech"
-msgstr "技術"
-
-msgid "Technology Level 1"
-msgstr "技術レベル1"
-
-msgid "Technology Level 2"
-msgstr "技術レベル2"
-
-msgid "Technology Level 3"
-msgstr "技術レベル3"
-
-msgid "Technology Level 4"
-msgstr "技術レベル4"
 
 msgid "Start Hosting Game"
 msgstr "ゲームのホスティングを開始"
@@ -10021,6 +10036,13 @@ msgstr "この観戦者とプレイヤーを交換したいですか？"
 msgid "Yes, select Player slot"
 msgstr "はい、プレイヤースロットを選択します"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "加盟:"
 
@@ -10038,64 +10060,6 @@ msgstr "観戦者の参加を可能にする"
 
 msgid "Lock Teams"
 msgstr "固定チーム"
-
-msgid "Choose Team"
-msgstr "チームを選択"
-
-msgid "Teams locked"
-msgstr "チームを固定"
-
-msgid "Click to change player colour"
-msgstr "クリックでプレイヤーカラーを変更"
-
-msgid "Click to change player position"
-msgstr "クリックするとポジションを変更できます"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "クリックでAIを変更、右クリックで選択肢を配る"
-
-msgid "Click to close spectator slot"
-msgstr "クリックすると観戦席が閉じます"
-
-msgid "Player ID: "
-msgstr "プレイヤーID: "
-
-msgid "(none)"
-msgstr "(none)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr "プレーヤー評価:"
-
-msgid "Host provided"
-msgstr "ホスト提供"
-
-#, c-format
-msgid "From: %s"
-msgstr "From: %s"
-
-msgid "Click to change difficulty"
-msgstr "クリックで難易度変更"
-
-msgid "Waiting for player"
-msgstr "プレイヤー待機中"
-
-msgid "Player is ready"
-msgstr "プレイヤーは準備完了"
-
-msgid "Player is downloading"
-msgstr "プレーヤーはダウンロード中です"
-
-msgid "Click when ready"
-msgstr "準備ができたらクリック"
-
-msgid "Waiting for download"
-msgstr "ダウンロード待ち"
-
-msgid "READY?"
-msgstr "準備はいいか?"
 
 msgid "For Spectator:"
 msgstr "観戦者向け:"
@@ -10240,6 +10204,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10258,20 +10237,6 @@ msgstr "クローズド"
 
 msgid "Open"
 msgstr "オープン"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "マップ送信：%u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "マップ：%u%% ダウンロード完了"
-
-msgid "HOST"
-msgstr "ホスト"
-
-msgid "Ping"
-msgstr "Ping"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "このリプレイファイルの保存に使用したWarzone 2100のバージョンは、現在実行中のバージョンと一致しません。"
@@ -10299,6 +10264,10 @@ msgstr "%sはゲームを終了しました"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10359,6 +10328,9 @@ msgstr "プレイヤー人数"
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d プレイヤー"
+
+msgid "Ping"
+msgstr "Ping"
 
 msgid "Structs"
 msgstr "ストラクチャー"
@@ -10903,6 +10875,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11332,6 +11316,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IPアドレスまたはマシン名"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "プレイヤーID: "
+
+msgid "(none)"
+msgstr "(none)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "マップ送信：%u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "マップ：%u%% ダウンロード完了"
+
+msgid "HOST"
+msgstr "ホスト"
+
+msgid "Choose Team"
+msgstr "チームを選択"
+
+msgid "Teams locked"
+msgstr "チームを固定"
+
+msgid "Click to change player colour"
+msgstr "クリックでプレイヤーカラーを変更"
+
+msgid "Click to change player position"
+msgstr "クリックするとポジションを変更できます"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "クリックでAIを変更、右クリックで選択肢を配る"
+
+msgid "Click to close spectator slot"
+msgstr "クリックすると観戦席が閉じます"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr "プレーヤー評価:"
+
+msgid "Host provided"
+msgstr "ホスト提供"
+
+#, c-format
+msgid "From: %s"
+msgstr "From: %s"
+
+msgid "Click to change difficulty"
+msgstr "クリックで難易度変更"
+
+msgid "Waiting for player"
+msgstr "プレイヤー待機中"
+
+msgid "Player is ready"
+msgstr "プレイヤーは準備完了"
+
+msgid "Player is downloading"
+msgstr "プレーヤーはダウンロード中です"
+
+msgid "Click when ready"
+msgstr "準備ができたらクリック"
+
+msgid "Waiting for download"
+msgstr "ダウンロード待ち"
+
+msgid "READY?"
+msgstr "準備はいいか?"
 
 msgid "Launch Transport"
 msgstr "輸送開始"
