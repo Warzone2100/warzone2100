@@ -169,6 +169,7 @@ function setupNexusPatrols()
 			"SWPatrolPos2",
 			"SWPatrolPos3"
 		],
+		reactToAttack: true,
 		interval: camSecondsToMilliseconds(20),
 		regroup: false,
 		repair: 45,
@@ -180,6 +181,7 @@ function setupNexusPatrols()
 			"NEPatrolPos1",
 			"NEPatrolPos2"
 		],
+		reactToAttack: true,
 		interval: camSecondsToMilliseconds(30),
 		regroup: false,
 		repair: 45,
@@ -191,6 +193,7 @@ function setupNexusPatrols()
 			"SEPatrolPos1",
 			"SEPatrolPos2"
 		],
+		reactToAttack: true,
 		interval: camSecondsToMilliseconds(20),
 		regroup: false,
 		repair: 45,
@@ -203,6 +206,7 @@ function setupNexusPatrols()
 			"NWPatrolPos2",
 			"NWPatrolPos3"
 		],
+		reactToAttack: true,
 		interval: camSecondsToMilliseconds(35),
 		regroup: false,
 		repair: 45,
@@ -391,6 +395,7 @@ function eventStartLevel()
 					camMakePos("NEPatrolPos1"),
 					camMakePos("NEPatrolPos2")
 				],
+				reactToAttack: true,
 				interval: camSecondsToMilliseconds(90),
 				regroup: false,
 				repair: 45,
@@ -432,6 +437,7 @@ function eventStartLevel()
 					camMakePos("SEPatrolPos1"),
 					camMakePos("NEPatrolPos1")
 				],
+				reactToAttack: true,
 				interval: camSecondsToMilliseconds(90),
 				regroup: false,
 				repair: 45,
