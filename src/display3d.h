@@ -114,6 +114,7 @@ bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t d
 void clearBlueprints();
 
 void addTextMarker(uint8_t mapX, uint8_t mapY, std::string message, uint8_t color);
+void addTextMarker(BASE_OBJECT *object, std::string message, uint8_t color);
 void clearTextMarkers();
 
 void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);

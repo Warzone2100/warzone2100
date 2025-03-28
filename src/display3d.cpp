@@ -385,6 +385,13 @@ struct TextMarker
 		, color(color)
 	{}
 
+	TextMarker(BASE_OBJECT *object, std::string message, uint8_t color)
+		: object(object)
+		, message(message)
+		, color(color)
+	{}
+
+	BASE_OBJECT *object = {};
 	uint8_t x;
 	uint8_t y;
 	std::string message;
@@ -760,6 +767,10 @@ void clearBlueprints()
 void addTextMarker(uint8_t mapX, uint8_t mapY, std::string message, uint8_t color)
 {
 	textMarkers.emplace_back(TextMarker{mapX, mapY, message, color});
+}
+void addTextMarker(BASE_OBJECT *object, std::string message, uint8_t color)
+{
+	textMarkers.emplace_back(TextMarker{object, message, color});
 }
 
 void clearTextMarkers()
@@ -1157,18 +1168,34 @@ void draw3DScene()
 	}
 	if (1)
 	{
-		for (auto textMarker: textMarkers) {
-			if (textMarker.x < map_coord(playerPos.p.x) - visibleTiles.x / 2) continue;
-			if (textMarker.y < map_coord(playerPos.p.z) - visibleTiles.y / 2) continue;
-			if (textMarker.x > map_coord(playerPos.p.x) + visibleTiles.x / 2) continue;
-			if (textMarker.y > map_coord(playerPos.p.z) + visibleTiles.y / 2) continue;
-			auto idx=visibleTiles.y / 2 + textMarker.y - map_coord(playerPos.p.z);
-			auto jdx=visibleTiles.x / 2 + textMarker.x - map_coord(playerPos.p.x);
-
+		for (auto textMarker: textMarkers)
+		{
 			iV_SetTextColour(clanColours[textMarker.color]);
-			iV_DrawText(textMarker.message.c_str(), tileScreenInfo[idx][jdx].x, tileScreenInfo[idx][jdx].y, font_regular);
-		}
 
+			/** Convert to tile marker if object is destroyed */
+			if (textMarker.object != nullptr && textMarker.object->died)
+			{
+				textMarker.x = map_coord(textMarker.object->pos.x);
+				textMarker.y = map_coord(textMarker.object->pos.y);
+				textMarker.object = nullptr;
+			}
+
+			if (textMarker.object == nullptr)
+			{
+				if (textMarker.x < map_coord(playerPos.p.x) - visibleTiles.x / 2) continue;
+				if (textMarker.y < map_coord(playerPos.p.z) - visibleTiles.y / 2) continue;
+				if (textMarker.x > map_coord(playerPos.p.x) + visibleTiles.x / 2) continue;
+				if (textMarker.y > map_coord(playerPos.p.z) + visibleTiles.y / 2) continue;
+				auto idx=visibleTiles.y / 2 + textMarker.y - map_coord(playerPos.p.z);
+				auto jdx=visibleTiles.x / 2 + textMarker.x - map_coord(playerPos.p.x);
+				iV_DrawText(textMarker.message.c_str(), tileScreenInfo[idx][jdx].x, tileScreenInfo[idx][jdx].y, font_regular);
+			}
+			else
+			{
+				if (textMarker.object->sDisplay.frameNumber < frameGetFrameNumber()) continue;
+				iV_DrawText(textMarker.message.c_str(), textMarker.object->sDisplay.screenX, textMarker.object->sDisplay.screenY, font_regular);
+			}
+		}
 	}
 
 	setupConnectionStatusForm();
