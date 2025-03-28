@@ -32,7 +32,7 @@ const mis_spawnPatrol = {
 	third: ["spawnPos8", "spawnPos9", "spawnPos10"],
 	fourth: ["spawnPos11", "spawnPos12", "spawnPos13", "spawnPos14"]
 };
-const MIS_ENEMY_WAVES = 20; // Must endure this many before allowed to win.
+const MIS_ENEMY_WAVES = 20; // Must endure this many before being allowed to win.
 var currWave;
 var loseFlag;
 
@@ -76,7 +76,7 @@ function setupConvoy()
 	setTimer("phantomFactory", camChangeOnDiff(camMinutesToMilliseconds(2)));
 	if (camAllowInsaneSpawns())
 	{
-		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3));
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4.5));
 	}
 }
 
@@ -115,7 +115,7 @@ function phantomFactory()
 
 function sendEdgeMapDroids(location, list, cyborgWave)
 {
-	const DROID_COUNT = ((!cyborgWave) ? (currWave + 2) : (Math.floor(currWave / 2) + 1));
+	const DROID_COUNT = ((!cyborgWave) ? (Math.floor(currWave / 2) + 2) : Math.floor(currWave / 3));
 	const droids = [];
 	const positions = [];
 	positions.push(mis_spawnPatrol.first[camRand(mis_spawnPatrol.first.length)]);
@@ -134,7 +134,7 @@ function sendEdgeMapDroids(location, list, cyborgWave)
 		data: {
 			pos: positions,
 			patrolType: CAM_PATROL_CYCLE,
-			interval: camSecondsToMilliseconds(35),
+			interval: camSecondsToMilliseconds(90),
 			regroup: false,
 			count: -1,
 		}
@@ -171,7 +171,7 @@ function wave2()
 	const LOC = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	const list = [cTempl.nxlscouv, cTempl.nxmpulsev];
 	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
-	camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(2.5)), undefined, ext);
+	camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), undefined, ext);
 }
 
 function wave3()
@@ -179,7 +179,7 @@ function wave3()
 	const LOC = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	const list = [cTempl.nxmpulsev, cTempl.nxmtherv];
 	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
-	camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(2.5)), undefined, ext);
+	camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), undefined, ext);
 }
 
 //Setup Nexus VTOL hit and runners.
@@ -190,13 +190,13 @@ function vtolAttack()
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxlscouv, cTempl.nxmheapv];
 		const ext = {limit: [2, 2, 3], alternate: true, altIdx: 0};
-		camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(2.5)), undefined, ext);
+		camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), undefined, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmheapv, cTempl.nxmheapv];
 		const ext = {limit: [2, 2], alternate: true, altIdx: 0};
-		camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(2.5)), undefined, ext);
+		camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), undefined, ext);
 		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}
@@ -206,7 +206,7 @@ function insaneTransporterAttack()
 {
 	const DISTANCE_FROM_POS = 10;
 	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas];
-	const limits = {minimum: 6, maxRandom: 4};
+	const limits = {minimum: 5, maxRandom: 5};
 	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
 	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
