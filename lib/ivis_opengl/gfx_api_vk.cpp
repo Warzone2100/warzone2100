@@ -1031,7 +1031,12 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 	}
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
-	dev.waitForFences(fences, true, -1, vkDynLoader);
+	auto waitResult = dev.waitForFences(fences, true, -1, vkDynLoader);
+	if (waitResult == vk::Result::eTimeout)
+	{
+		debug(LOG_ERROR, "buffering swap: waitForFences resulted in vk::Result::eTimeout");
+		handleUnrecoverableError(vk::Result::eTimeout);
+	}
 	dev.resetFences(fences, vkDynLoader);
 	buffering_mechanism::get_current_resources().resetDescriptorPools();
 	dev.resetCommandPool(buffering_mechanism::get_current_resources().pool, vk::CommandPoolResetFlagBits(), vkDynLoader);
@@ -2056,6 +2061,7 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 		objectNameInfo.setPObjectName(filename.c_str());
 		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
+	vmaSetAllocationName(root.allocator, allocation, filename.c_str());
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
@@ -2110,6 +2116,7 @@ VkDepthMapImage::VkDepthMapImage(const VkRoot& root, const std::size_t& _layer_c
 		objectNameInfo.setPObjectName(filename.c_str());
 		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
+	vmaSetAllocationName(root.allocator, allocation, filename.c_str());
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
@@ -2334,6 +2341,7 @@ VkRenderedImage::VkRenderedImage(const VkRoot& root, size_t width, size_t height
 		objectNameInfo.setPObjectName(filename.c_str());
 		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
+	vmaSetAllocationName(root.allocator, allocation, filename.c_str());
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)
@@ -2451,6 +2459,7 @@ VkTextureArray::VkTextureArray(const VkRoot& root, size_t mipmap_count, size_t l
 		objectNameInfo.setPObjectName(filename.c_str());
 		root.dev.setDebugUtilsObjectNameEXT(objectNameInfo, root.vkDynLoader);
 	}
+	vmaSetAllocationName(root.allocator, allocation, filename.c_str());
 
 	const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 		.setImage(object)

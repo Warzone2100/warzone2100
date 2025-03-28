@@ -335,11 +335,11 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       sudo ./get-dependencies_linux.sh ubuntu build-dependencies
       ```
 * **Building from the command-line:**
-   1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
+   1. Starting from the _parent_ directory of the warzone2100 repository, create an [out-of-source](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html#directory-structure) build directory:
       ```shell
       mkdir build
       ```
-   2. Change directory into the sibling `build` directory:
+   2. Change directory into the `build` directory:
       ```shell
       cd build
       ```
@@ -348,7 +348,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=~/wz/install -GNinja ../warzone2100
       ```
       > - [Modify the `CMAKE_INSTALL_PREFIX` parameter value as desired](https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX.html) to configure the base installation path.
-      > - The `../warzone2100` path at the end should point to the warzone2100 source directory.
+      > - The `../warzone2100` path at the end should point to the warzone2100 repo directory. This example assumes that the repo directory and the build directory are siblings, and that the repo was cloned into a directory named `warzone2100`.
    4. Run CMake build:
       ```shell
       cmake --build . --target install

@@ -10,8 +10,8 @@ cmake_minimum_required(VERSION 3.5...3.30)
 
 ########################################################
 
-# WZ minimum supported macOS deployment target (< 10.12 is untested)
-set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.12")
+# WZ minimum supported macOS deployment target (< 10.14 is untested, and may require earlier vcpkg baseline)
+set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.14")
 
 # Vulkan SDK
 set(VULKAN_SDK_VERSION "1.3.296.0")
