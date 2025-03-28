@@ -37,6 +37,10 @@
 //;;   * `repair` Health percentage to fall back to repair facility, if any.
 //;;   * `regroup` If set to `true`, the group will not move forward unless it has at least `count` droids in its biggest cluster.
 //;;     If `count` is set to `-1`, at least ⅔ of group's droids should be in the biggest cluster.
+//;;   * `patrolType` Type of patrol behavior. Defaults to `CAM_PATROL_RANDOM` where the group randomly chooses a patrol position.
+//;;     `CAM_PATROL_CYCLE` forces the group to loop through the entire list of patrol positions one after the other.
+//;;   * `reactToAttack` Defaults to false and can be used to break the group out of patrol and
+//;;      into a `CAM_ORDER_ATTACK` state, if the group is attacked.
 //;; * `CAM_ORDER_COMPROMISE` Same as `CAM_ORDER_ATTACK`, just stay near the last (or only)
 //;;   attack position instead of looking for the player around the whole map. Useful for offworld missions,
 //;;   with player's LZ as the final position. The following data object fields are available:
