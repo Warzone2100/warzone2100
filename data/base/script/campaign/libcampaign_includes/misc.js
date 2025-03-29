@@ -591,25 +591,28 @@ function camGenerateRandomMapCoordinate(reachPosition, propulsion, distFromReach
 		}
 		pos = randomPos;
 		// Scan for nearby pits/hills so transporters don't put units inside inaccessible areas.
-		for (let x = -2; x <= 2; ++x)
+		if (avoidNearbyCliffs)
 		{
-			for (let y = -2; y <= 2; ++y)
+			for (let x = -2; x <= 2; ++x)
 			{
-				if (!propulsionCanReach(propulsion, reachPosition.x, reachPosition.y, pos.x + x, pos.y + y))
+				for (let y = -2; y <= 2; ++y)
 				{
-					nearPitOrCliff = true;
+					if (!propulsionCanReach(propulsion, reachPosition.x, reachPosition.y, pos.x + x, pos.y + y))
+					{
+						nearPitOrCliff = true;
+						break;
+					}
+				}
+				if (nearPitOrCliff)
+				{
 					break;
 				}
-			}
-			if (nearPitOrCliff)
-			{
-				break;
 			}
 		}
 		if ((attempts > __MAX_ATTEMPTS) ||
 			((camDist(pos, reachPosition) >= distFromReach) &&
 			propulsionCanReach(propulsion, reachPosition.x, reachPosition.y, pos.x, pos.y) &&
-			(!avoidNearbyCliffs || (avoidNearbyCliffs && !nearPitOrCliff)) &&
+			(!avoidNearbyCliffs || !nearPitOrCliff) &&
 			!enumRange(pos.x, pos.y, scanObjectRadius, ALL_PLAYERS, false).length))
 		{
 			breakOut = true;
