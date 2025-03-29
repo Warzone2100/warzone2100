@@ -134,9 +134,10 @@ function sendEdgeMapDroids(droidCount, location, list)
 function insaneTransporterAttack()
 {
 	const DISTANCE_FROM_POS = 30;
+	const OBJ_SCAN_RADIUS = 1;
 	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmscouh, cTempl.nxlflash, cTempl.nxmrailh];
 	const limits = {minimum: 8, maxRandom: 2};
-	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS, OBJ_SCAN_RADIUS, false);
 	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
