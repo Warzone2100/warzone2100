@@ -153,7 +153,6 @@ function insaneVtolAttack()
 
 function insaneReinforcementSpawn()
 {
-	const DISTANCE_FROM_POS = 30;
 	const units = [cTempl.cohhvch, cTempl.comagh, cTempl.cohach, cTempl.comltath];
 	const limits = {minimum: 4, maxRandom: 4};
 	const location = ["insaneSpawnPos1", "insaneSpawnPos2", "insaneSpawnPos3", "insaneSpawnPos4"];
