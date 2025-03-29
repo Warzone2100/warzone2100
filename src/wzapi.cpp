@@ -940,7 +940,8 @@ wzapi::no_return_value wzapi::hackTextMarker(WZAPI_PARAMS(std::string _message, 
 	SCRIPT_ASSERT({}, context, _colour >= 0, "Colour value %d is less than zero", _colour);
 	SCRIPT_ASSERT({}, context, _colour <= 15, "Colour value %d is greater than 15", _colour);
 
-	if (_message.length()==0) {
+	if (_message.length()==0)
+	{
 		clearTextMarkers();
 		return {};
 	}
@@ -960,7 +961,6 @@ wzapi::no_return_value wzapi::hackTextMarker(WZAPI_PARAMS(std::string _message, 
 		OBJECT_TYPE type = std::get<0>(type_player_id);
 		int player = std::get<1>(type_player_id);
 		int id = std::get<2>(type_player_id);
-		SCRIPT_ASSERT_PLAYER({}, context, player);
 		auto object=IdToObject(type, id, player);
 		addTextMarker(object, _message, _colour);
 		return {};

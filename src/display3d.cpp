@@ -378,24 +378,53 @@ static std::vector<Blueprint> blueprints;
 
 struct TextMarker
 {
-	TextMarker(uint8_t x, uint8_t y, std::string message, uint8_t color)
+	TextMarker(int32_t x, int32_t y, std::string message, uint8_t color)
 		: x(x)
 		, y(y)
 		, message(message)
 		, color(color)
 	{}
-
 	TextMarker(BASE_OBJECT *object, std::string message, uint8_t color)
 		: object(object)
 		, message(message)
 		, color(color)
 	{}
 
+	void render()
+	{
+		text.setText(message.c_str(), font_regular);
+
+		/** Convert to tile marker if object is destroyed */
+		if (object != nullptr && object->died)
+		{
+			x = object->pos.x;
+			y = object->pos.y;
+			object = nullptr;
+		}
+
+		if (object == nullptr)
+		{
+			if (map_coord(x) < map_coord(playerPos.p.x) - visibleTiles.x / 2) return;
+			if (map_coord(y) < map_coord(playerPos.p.z) - visibleTiles.y / 2) return;
+			if (map_coord(x) >= map_coord(playerPos.p.x) + visibleTiles.x / 2) return;
+			if (map_coord(y) >= map_coord(playerPos.p.z) + visibleTiles.y / 2) return;
+			auto idx=visibleTiles.y / 2 + map_coord(y) - map_coord(playerPos.p.z);
+			auto jdx=visibleTiles.x / 2 + map_coord(x) - map_coord(playerPos.p.x);
+			text.render(Vector2f{tileScreenInfo[idx][jdx]}, clanColours[color]);
+		}
+		else
+		{
+			if (object->sDisplay.frameNumber < frameGetFrameNumber()) return;
+			text.render(Vector2f{object->sDisplay.screenX, object->sDisplay.screenY}, clanColours[color]);
+		}
+	}
+
 	BASE_OBJECT *object = {};
-	uint8_t x;
-	uint8_t y;
+	int32_t x;
+	int32_t y;
 	std::string message;
 	uint8_t color;
+	WzText text;
 };
 
 static std::vector<TextMarker> textMarkers;
@@ -766,7 +795,7 @@ void clearBlueprints()
 
 void addTextMarker(uint8_t mapX, uint8_t mapY, std::string message, uint8_t color)
 {
-	textMarkers.emplace_back(TextMarker{mapX, mapY, message, color});
+	textMarkers.emplace_back(TextMarker{world_coord(mapX), world_coord(mapY), message, color});
 }
 void addTextMarker(BASE_OBJECT *object, std::string message, uint8_t color)
 {
@@ -1168,33 +1197,9 @@ void draw3DScene()
 	}
 	if (1)
 	{
-		for (auto textMarker: textMarkers)
+		for (auto i=textMarkers.begin(); i!=textMarkers.end(); i++)
 		{
-			iV_SetTextColour(clanColours[textMarker.color]);
-
-			/** Convert to tile marker if object is destroyed */
-			if (textMarker.object != nullptr && textMarker.object->died)
-			{
-				textMarker.x = map_coord(textMarker.object->pos.x);
-				textMarker.y = map_coord(textMarker.object->pos.y);
-				textMarker.object = nullptr;
-			}
-
-			if (textMarker.object == nullptr)
-			{
-				if (textMarker.x < map_coord(playerPos.p.x) - visibleTiles.x / 2) continue;
-				if (textMarker.y < map_coord(playerPos.p.z) - visibleTiles.y / 2) continue;
-				if (textMarker.x > map_coord(playerPos.p.x) + visibleTiles.x / 2) continue;
-				if (textMarker.y > map_coord(playerPos.p.z) + visibleTiles.y / 2) continue;
-				auto idx=visibleTiles.y / 2 + textMarker.y - map_coord(playerPos.p.z);
-				auto jdx=visibleTiles.x / 2 + textMarker.x - map_coord(playerPos.p.x);
-				iV_DrawText(textMarker.message.c_str(), tileScreenInfo[idx][jdx].x, tileScreenInfo[idx][jdx].y, font_regular);
-			}
-			else
-			{
-				if (textMarker.object->sDisplay.frameNumber < frameGetFrameNumber()) continue;
-				iV_DrawText(textMarker.message.c_str(), textMarker.object->sDisplay.screenX, textMarker.object->sDisplay.screenY, font_regular);
-			}
+			i->render();
 		}
 	}
 
