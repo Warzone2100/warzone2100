@@ -331,6 +331,7 @@ var __camPropulsionTypeLimit;
 
 //research
 const __CAM_AI_INSTANT_PRODUCTION_RESEARCH = "R-Struc-Factory-Upgrade-AI";
+const cam_towerWarsResearch = ["R-Defense-WallUpgrade-TweakOption01"];
 const cam_nexusSpecialResearch = [
 	"R-Sys-NEXUSrepair", "R-Sys-NEXUSsensor"
 ];
