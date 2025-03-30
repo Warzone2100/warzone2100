@@ -65,6 +65,11 @@
             "id": "fastExp",
             "default": false,
             "userEditable": true
+        },
+        {
+            "id": "towerWars",
+            "default": false,
+            "userEditable": true
         }
     ],
     "customTweakOptions": [

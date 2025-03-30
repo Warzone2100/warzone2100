@@ -7101,6 +7101,45 @@
 		"subgroupIconID": "IMAGE_RES_GRPUPG",
 		"techCode": 1
 	},
+	"R-Defense-WallUpgrade-TweakOption01": {
+		"iconID": "IMAGE_RES_DEFENCE",
+		"id": "R-Defense-WallUpgrade-TweakOption01",
+		"imdName": "BLWALLH.PIE",
+		"keyTopic": 1,
+		"name": "Tower Wars Buff",
+		"results": [
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Wall",
+				"parameter": "Armour",
+				"value": 150
+			},
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Wall",
+				"parameter": "HitPoints",
+				"value": 150
+			},
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Structure",
+				"parameter": "Armour",
+				"value": 120
+			},
+			{
+				"class": "Building",
+				"filterParameter": "Type",
+				"filterValue": "Structure",
+				"parameter": "HitPoints",
+				"value": 120
+			}
+		],
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"techCode": 1
+	},
 	"R-Struc-Materials07": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Materials07",
