@@ -85,9 +85,16 @@ function camClassicResearch(researchIds, playerId)
 
 //////////// privates
 
-//granted shortly after mission start to give enemy players instant droid production.
+// Automatically complete special research buffs for enemies and the player.
 function __camGrantSpecialResearch()
 {
+	if (camDef(tweakOptions.towerWars) && tweakOptions.towerWars)
+	{
+		for (let i = 0, len = cam_towerWarsResearch.length; i < len; ++i)
+		{
+			completeResearch(cam_towerWarsResearch[i], CAM_HUMAN_PLAYER);
+		}
+	}
 	for (let i = 1; i < __CAM_MAX_PLAYERS; ++i)
 	{
 		if (!allianceExistsBetween(CAM_HUMAN_PLAYER, i) && (countDroid(DROID_ANY, i) > 0 || enumStruct(i).length > 0))

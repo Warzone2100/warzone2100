@@ -1957,6 +1957,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"towerWars",
+		_("Tower Wars"),
+		_("Player gets significantly stronger structures."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
