@@ -32,9 +32,9 @@ const mis_spawnPatrol = {
 	third: ["spawnPos8", "spawnPos9", "spawnPos10"],
 	fourth: ["spawnPos11", "spawnPos12", "spawnPos13", "spawnPos14"]
 };
-const MIS_ENEMY_WAVES = 20; // Must endure this many before being allowed to win.
 var currWave;
 var loseFlag;
+var stopWaves;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
@@ -73,7 +73,7 @@ function removeBlip()
 
 function setupConvoy()
 {
-	setTimer("phantomFactory", camChangeOnDiff(camMinutesToMilliseconds(2)));
+	setTimer("phantomFactory", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4.5));
@@ -90,7 +90,7 @@ function sendCyborgBackup()
 
 function phantomFactory()
 {
-	if (currWave > MIS_ENEMY_WAVES)
+	if (stopWaves)
 	{
 		removeTimer("phantomFactory");
 		return;
@@ -105,7 +105,7 @@ function phantomFactory()
 	const listNW = [cTempl.nxmrailh, cTempl.nxmrailh, cTempl.nxmscouh, cTempl.nxmscouh];
 	sendEdgeMapDroids("NE-PhantomFactory", listNE, false);
 	sendEdgeMapDroids("NW-PhantomFactory", listNW, false);
-	if (MIS_ENEMY_WAVES >= CYB_WAVE_START)
+	if (currWave >= CYB_WAVE_START)
 	{
 		sendCyborgBackup();
 	}
@@ -171,7 +171,7 @@ function wave2()
 	const LOC = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	const list = [cTempl.nxlscouv, cTempl.nxmpulsev];
 	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
-	camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), undefined, ext);
+	camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), CAM_REINFORCE_CONDITION_BASES, ext);
 }
 
 function wave3()
@@ -179,7 +179,7 @@ function wave3()
 	const LOC = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	const list = [cTempl.nxmpulsev, cTempl.nxmtherv];
 	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
-	camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), undefined, ext);
+	camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), CAM_REINFORCE_CONDITION_BASES, ext);
 }
 
 //Setup Nexus VTOL hit and runners.
@@ -189,14 +189,14 @@ function vtolAttack()
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxlscouv, cTempl.nxmheapv];
-		const ext = {limit: [2, 2, 3], alternate: true, altIdx: 0};
-		camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), undefined, ext);
+		const ext = {limit: [2, 2, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), CAM_REINFORCE_CONDITION_BASES, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmheapv, cTempl.nxmheapv];
 		const ext = {limit: [2, 2], alternate: true, altIdx: 0};
-		camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), undefined, ext);
+		camSetVtolData(CAM_NEXUS, LOC, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(4)), CAM_REINFORCE_CONDITION_BASES, ext);
 		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}
@@ -213,11 +213,15 @@ function insaneTransporterAttack()
 
 function defeatedWaves()
 {
+	if (stopWaves)
+	{
+		return true;
+	}
 	if (loseFlag)
 	{
 		return false;
 	}
-	if (currWave > MIS_ENEMY_WAVES)
+	if (camAllEnemyBasesEliminated())
 	{
 		const tanks = enumDroid(CAM_NEXUS).filter((obj) => (
 			obj.player === CAM_NEXUS && !isVTOL(obj) && obj.droidType !== DROID_CYBORG
@@ -225,6 +229,7 @@ function defeatedWaves()
 
 		if (!tanks.length)
 		{
+			stopWaves = true;
 			return true; // You can only win once all tanks are gone.
 		}
 	}
@@ -249,6 +254,7 @@ function eventStartLevel()
 	const tExt = getObject("transporterExit");
 	currWave = 0;
 	loseFlag = false;
+	stopWaves = false;
 
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
@@ -293,6 +299,6 @@ function eventStartLevel()
 	queue("setupPatrolGroups", camChangeOnDiff(camSecondsToMilliseconds(2)));
 	queue("enableCybFactory", camChangeOnDiff(camMinutesToSeconds(3.5)));
 
-	queue("setupConvoy", camChangeOnDiff(camMinutesToMilliseconds(5)));
+	queue("setupConvoy", camChangeOnDiff(camMinutesToMilliseconds(8)));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(10)));
 }
