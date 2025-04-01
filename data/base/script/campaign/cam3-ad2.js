@@ -148,6 +148,13 @@ function insaneTransporterAttack()
 // Explode trucks to significantly reduce chances of gaming the lassat.
 function destroyTrucksInBlastZone()
 {
+	const IGNORE_LIMIT = 240;
+	if (Math.floor(mapLimit) > IGNORE_LIMIT)
+	{
+		// Lassat is only a few tiles away from the silos and player doesn't have much room left.
+		removeTimer("destroyTrucksInBlastZone");
+		return;
+	}
 	const objects = enumArea(0, MIS_Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false);
 	for (let i = 0, len = objects.length; i < len; ++i)
 	{
