@@ -29,3 +29,4 @@
 bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator = false);
 void shutdownJoiningAttempt();
 
+std::shared_ptr<WIDGET> createJoiningIndeterminateProgressWidget(iV_fonts fontID);

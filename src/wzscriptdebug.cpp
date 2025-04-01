@@ -302,7 +302,7 @@ static nlohmann::ordered_json fillPlayerModel(int i)
 	nlohmann::ordered_json result = nlohmann::ordered_json::object();
 	result["playerStats score"] = getMultiPlayRecentScore(i);
 	result["playerStats kills"] = getMultiPlayUnitsKilled(i);
-	result["NetPlay.players.name"] = NetPlay.players[i].name;
+	result["NetPlay.players.name"] = getPlayerName(i, true);;
 	result["NetPlay.players.position"] = NetPlay.players[i].position;
 	result["NetPlay.players.colour"] = NetPlay.players[i].colour;
 	result["NetPlay.players.allocated"] = NetPlay.players[i].allocated;

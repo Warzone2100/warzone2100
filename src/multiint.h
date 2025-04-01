@@ -31,6 +31,7 @@
 #include "lib/widget/button.h"
 #include <functional>
 #include <vector>
+#include <set>
 #include "lib/framework/wzstring.h"
 #include "titleui/multiplayer.h"
 #include "faction.h"
@@ -40,6 +41,7 @@
 #define AI_OPEN           -2
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
+#define DEFAULT_SKIRMISH_AI_SCRIPT_NAME "nexus.js"
 
 // WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
 
@@ -66,6 +68,54 @@ const char *getAIName(int player);	///< only run this -after- readAIs() is calle
 const std::vector<WzString> getAINames();
 int matchAIbyName(const char* name);	///< only run this -after- readAIs() is called
 
+struct AIDATA
+{
+	AIDATA() : name{0}, js{0}, tip{0}, difficultyTips{0}, assigned(0) {}
+	char name[MAX_LEN_AI_NAME];
+	char js[MAX_LEN_AI_NAME];
+	char tip[255 + 128];            ///< may contain optional AI tournament data
+	char difficultyTips[5][255];    ///< optional difficulty level info
+	int assigned;                   ///< How many AIs have we assigned of this type
+};
+const std::vector<AIDATA>& getAIData();
+
+struct MultiplayOptionsLocked
+{
+	bool scavengers;
+	bool alliances;
+	bool teams;
+	bool power;
+	bool difficulty;
+	bool ai;
+	bool position;
+	bool bases;
+	bool spectators;
+};
+const MultiplayOptionsLocked& getLockedOptions();
+
+const char* getDifficultyListStr(size_t idx);
+size_t getDifficultyListCount();
+int difficultyIcon(int difficulty);
+
+std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t player);
+
+bool isHostOrAdmin();
+bool isPlayerHostOrAdmin(uint32_t playerIdx);
+bool isSpectatorOnlySlot(UDWORD playerIdx);
+
+void printBlindModeHelpMessagesToConsole();
+
+/**
+ * Checks if all players are on the same team. If so, return that team; if not, return -1;
+ * if there are no players, return team MAX_PLAYERS.
+ */
+int allPlayersOnSameTeam(int except);
+
+bool multiplayPlayersReady();
+bool multiplayIsStartingGame();
+
+bool sendReadyRequest(UBYTE player, bool bReady);
+
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
@@ -89,6 +139,11 @@ bool changeColour(unsigned player, int col, uint32_t responsibleIdx);
 
 extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
+extern std::string defaultSkirmishAI;
+
+void frontendCycleAIs();
+void setDefaultSkirmishAI(const std::string& name);
+std::string getDefaultSkirmishAI(const bool& displayNameOnly=false);
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer = false);
 void displayKickReasonPopup(const std::string &reason);
@@ -174,6 +229,7 @@ bool autoBalancePlayersCmd();
 #define MULTIOP_PLAYERS_TABS	10232
 #define MULTIOP_PLAYERS_TABS_H	24
 #define MULTIOP_PLAYERSH		(384 + MULTIOP_PLAYERS_TABS_H + 1)
+#define MULTIOP_BLIND_WAITING_ROOM	10233
 
 #define MULTIOP_ROW_WIDTH		298
 

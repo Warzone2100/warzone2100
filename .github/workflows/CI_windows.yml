@@ -507,7 +507,6 @@ jobs:
       if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
       working-directory: '${{ github.workspace }}\build'
       env:
-        CXXFLAGS: '/MP'
         BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
         WZ_ENABLE_SENTRY: ${{ steps.settings.outputs.WZ_ENABLE_SENTRY }}
         SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
@@ -515,12 +514,12 @@ jobs:
         WZ_FULL_MSGMERGE_PATH: ${{ steps.settings.outputs.WZ_FULL_MSGMERGE_PATH }}
         WZ_FULL_MSGFMT_PATH: ${{ steps.settings.outputs.WZ_FULL_MSGFMT_PATH }}
       run: |
-        $ADDITIONAL_CMAKE_PARAMS = ""
+        $ADDITIONAL_CMAKE_PARAMS = "-DWZ_MSVC_MULTITHREADED_COMPILATION:BOOL=ON"
         $WZ_BUILD_SENTRY_VALUE = "OFF"
         if ("${env:BUILD_SENTRY_SUPPORT}" -eq "true") {
           $WZ_BUILD_SENTRY_VALUE = "ON"
           if (("${env:WZ_ENABLE_SENTRY}" -eq "true") -and (-not ([string]::IsNullOrEmpty("${env:SENTRY_IO_DSN}")))) {
-            $ADDITIONAL_CMAKE_PARAMS = "-DSENTRY_IO_DSN:STRING=${env:SENTRY_IO_DSN}"
+            $ADDITIONAL_CMAKE_PARAMS = "$ADDITIONAL_CMAKE_PARAMS -DSENTRY_IO_DSN:STRING=${env:SENTRY_IO_DSN}"
           }
         }
         $env:PATH = "${env:PATH};${env:WZ_FULL_MSGMERGE_PATH}";
@@ -575,8 +574,6 @@ jobs:
     - name: CMake Build (MSVC)
       if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
       working-directory: '${{ github.workspace }}\build'
-      env:
-        CXXFLAGS: '/MP'
       run: |
         # Workaround: https://github.com/actions/runner-images/issues/10004
         $env:CXXFLAGS = "${env:CXXFLAGS} /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"

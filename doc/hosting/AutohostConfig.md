@@ -20,6 +20,12 @@ The `challenge` object defines the game parameters for a multiplayer game.
 * `techLevel` sets the starting technology level. `1` for level 1 (wheel), `2` for level 2 (water mill), `3` for level 3 (chip), `4` for level 4 (computer).
 * `spectatorHost` when `true` or `1`, the host will spectate the game. When `false` or `0`, the host will play the game.
 * `openSpectatorSlots` defines how much spectator slots are opened (one more is opened for the host when spectating).
+* `blindMode` configures blind lobby / game mode. Available values are:
+  * `"none"`: blind modes disabled (the default)
+  * `"blind_lobby"`: Players' true identities are hidden from everyone except the host - **until the game _starts_**
+  * `"blind_lobby_simple_lobby"`: Same as `blind_lobby`, but with the addition of "simple lobby" mode (players will be placed in a waiting room where they can't see the list of players until the game starts)
+  * `"blind_game"`: Players' true identities are hidden from everyone except the host - **until the game _ends_**
+  * `"blind_game_simple_lobby"`: Same as `blind_game`, but with the addition of "simple lobby" mode (players will be placed in a waiting room where they can't see the list of players until the game starts)
 * `allowPositionChange` is deprecated, use the `locked` object instead.
 
 ## the `locked` object
@@ -48,7 +54,7 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 
 ## Sample file
 
-```
+```json
 {
 	"locked": {
 		"power": false,
@@ -71,6 +77,7 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 		"techLevel": 1,
 		"spectatorHost": true,
 		"openSpectatorSlots": 2,
+		"blindMode": "none",
 		"allowPositionChange": true
 	},
 	"player_0": {

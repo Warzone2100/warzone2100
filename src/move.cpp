@@ -1439,18 +1439,42 @@ static uint16_t moveGetDirection(DROID *psDroid)
 static bool moveReachedWayPoint(DROID *psDroid)
 {
 	// Calculate the vector to the droid
-	const Vector2i droid = Vector2i(psDroid->pos.xy()) - psDroid->sMove.target;
+	const Vector2i dist = Vector2i(psDroid->pos.xy()) - psDroid->sMove.target;
+	const unsigned int sqDist = dot(dist, dist);
 	const bool last = psDroid->sMove.pathIndex == (int)psDroid->sMove.asPath.size();
-	int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
+	const unsigned int toleranceDist = 3 * (TILE_UNITS / 4);
+	unsigned int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
+
+	// Start the process of potentially increasing the distance threshold when very close to the waypoint.
+	if (sqDist < (toleranceDist * toleranceDist))
+	{
+		if (psDroid->sMove.Status != MOVEPOINTTOPOINT)
+		{
+			psDroid->sMove.tolerance = 0; // If suddenly shuffling or paused, retry later.
+		}
+		else
+		{
+			psDroid->sMove.tolerance += 1;
+		}
+	}
 
 	if (last && psDroid->sMove.bumpTime != 0)
 	{
 		// Make waypoint tolerance 1 tile after 0 seconds, 2 tiles after 3 seconds, X tiles after (X + 1)² seconds.
 		sqprecision = (gameTime - psDroid->sMove.bumpTime + GAME_TICKS_PER_SEC) * (TILE_UNITS * TILE_UNITS / GAME_TICKS_PER_SEC);
 	}
+	else if (psDroid->sMove.tolerance >= toleranceDist)
+	{
+		sqprecision = psDroid->sMove.tolerance * psDroid->sMove.tolerance;
+	}
 
 	// Else check current waypoint
-	return dot(droid, droid) < sqprecision;
+	if (sqDist < sqprecision)
+	{
+		psDroid->sMove.tolerance = 0; // Reset threshold tolerance counter when successful.
+		return true;
+	}
+	return false;
 }
 
 #define MAX_SPEED_PITCH  60

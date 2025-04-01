@@ -751,6 +751,10 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	{
 		displayCache.wzDisplayedText.setText(displayedText, FontID);
 	}
+	if (state & WEDBS_DISABLE)
+	{
+		displayedTextColor = WZCOL_TEXT_DARK;
+	}
 
 	int lineSize = displayCache.wzDisplayedText.lineSize();
 	int aboveBase = displayCache.wzDisplayedText.aboveBase();

@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/sound/sounddefs.h"
+#include "lib/netplay/connection_provider_registry.h"
 #include "advvis.h"
 #include "component.h"
 #include "display.h"
@@ -103,6 +104,9 @@ struct WARZONE_GLOBALS
 
 	// run-time only settings (not persisted to config!)
 	bool allowVulkanImplicitLayers = false;
+
+	// Connection provider used for hosting games
+	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -717,4 +721,35 @@ void war_setOptionsButtonVisibility(uint8_t val)
 bool war_getAllowVulkanImplicitLayers()
 {
 	return warGlobs.allowVulkanImplicitLayers;
+}
+
+void war_setHostConnectionProvider(ConnectionProviderType pt)
+{
+	warGlobs.hostProviderType = pt;
+}
+
+ConnectionProviderType war_getHostConnectionProvider()
+{
+	return warGlobs.hostProviderType;
+}
+
+bool net_backend_from_str(const char* str, ConnectionProviderType& pt)
+{
+	if (strcasecmp(str, "tcp") == 0)
+	{
+		pt = ConnectionProviderType::TCP_DIRECT;
+		return true;
+	}
+	return false;
+}
+
+std::string to_string(ConnectionProviderType pt)
+{
+	switch (pt)
+	{
+	case ConnectionProviderType::TCP_DIRECT:
+		return "tcp";
+	}
+	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
+	return {};
 }

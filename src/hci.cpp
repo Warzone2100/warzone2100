@@ -278,6 +278,31 @@ static void processProximityButtons(UDWORD id);
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
 
+// In-Game Options button Widget
+
+class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
+{
+protected:
+	W_INGAMEOPTIONS_BUTTON()
+	{ }
+	void initialize();
+public:
+	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
+
+	void display(int xOffset, int yOffset) override;
+	std::string getTip() override;
+
+	int getMarginX() const { return marginX; }
+	int getMarginTop() const { return marginTop; }
+
+private:
+	uint8_t currentAlphaValue() const;
+	bool isHighlighted() const;
+
+private:
+	int marginX = 16;
+	int marginTop = 18;
+};
 
 /***************************GAME CODE ****************************/
 
@@ -864,9 +889,11 @@ bool createReplayControllerOverlay()
 
 	// Position the Replay Controller form
 	replayControllerForm->setCalcLayout([](WIDGET *psWidget) {
-		int x0 = screenWidth - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
+		auto psOptionsButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(widgFormGetFromID(psWScreen->psForm, IDRET_OPTIONS));
+		bool visibleOptionsbutton = (psOptionsButton != nullptr && psOptionsButton->visible());
+		int x0 = screenWidth - (visibleOptionsbutton ? psOptionsButton->getMarginX() + psOptionsButton->width() : 0) - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
 		int y0 = 0;
-		psWidget->move(x0, y0);
+		psWidget->move(std::max<int>(0, x0), y0);
 	});
 
 	widgRegisterOverlayScreenOnTopOfScreen(replayOverlayScreen, psWScreen);
@@ -2149,22 +2176,7 @@ bool intShowGroupSelectionMenu()
 	return true;
 }
 
-class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
-{
-protected:
-	W_INGAMEOPTIONS_BUTTON()
-	{ }
-	void initialize();
-public:
-	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
-
-	void display(int xOffset, int yOffset) override;
-	std::string getTip() override;
-
-private:
-	uint8_t currentAlphaValue() const;
-	bool isHighlighted() const;
-};
+// MARK: W_INGAMEOPTIONS_BUTTON
 
 std::shared_ptr<W_INGAMEOPTIONS_BUTTON> W_INGAMEOPTIONS_BUTTON::make()
 {
@@ -2246,13 +2258,13 @@ bool intAddInGameOptionsButton()
 	auto psExistingBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
 	if (psExistingBut != nullptr)
 	{
-		if (!hiddenOptionsButton)
+		bool oldButtonHiddenStatus = !psExistingBut->visible();
+		psExistingBut->show(!hiddenOptionsButton);
+
+		// Trigger Re-position of the Replay Controller form
+		if (replayOverlayScreen && (oldButtonHiddenStatus != hiddenOptionsButton))
 		{
-			psExistingBut->show();
-		}
-		else
-		{
-			psExistingBut->hide();
+			replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
 		}
 		return false;
 	}
@@ -2267,10 +2279,12 @@ bool intAddInGameOptionsButton()
 		psWScreen->psForm->attach(button);
 		setReticuleButtonDimensions(*button, "image_ingameoptions_up.png");
 		button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			auto psIngameOptButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(psWidget->shared_from_this());
+			ASSERT_OR_RETURN(, psIngameOptButton != nullptr, "Wrong button type?");
 			int w = psWidget->width();
 			int h = psWidget->height();
-			int x0 = screenWidth - (w + 16);
-			int y0 = 18;
+			int x0 = screenWidth - (w + psIngameOptButton->getMarginX());
+			int y0 = psIngameOptButton->getMarginTop();
 			psWidget->setGeometry(x0, y0, w, h);
 		}));
 		button->addOnClickHandler([](W_BUTTON&) {
@@ -2283,6 +2297,12 @@ bool intAddInGameOptionsButton()
 		{
 			button->hide();
 		}
+	}
+
+	// Trigger Re-position of the Replay Controller form
+	if (replayOverlayScreen)
+	{
+		replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
 	}
 
 	return true;

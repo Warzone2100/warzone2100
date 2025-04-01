@@ -88,7 +88,7 @@ set_property(TARGET ivis-opengl PROPERTY FOLDER "lib")
 include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(ivis-opengl)
 
-target_link_libraries(ivis-opengl PRIVATE framework launchinfo)
+target_link_libraries(ivis-opengl PRIVATE framework launchinfo fmt::fmt)
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	# We should be using the Emscripten port linker flags for FreeType & Harfbuzz
 else()

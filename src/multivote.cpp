@@ -158,6 +158,8 @@ uint8_t getLobbyChangeVoteTotal()
 
 static void recvLobbyChangeVote(uint32_t player, uint8_t newVote)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid sender: %" PRIu32, player);
+
 	playerVotes[player] = (newVote == 1) ? 1 : 0;
 
 	debug(LOG_NET, "total votes: %d/%d", static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
@@ -165,7 +167,7 @@ static void recvLobbyChangeVote(uint32_t player, uint8_t newVote)
 	// there is no "votes" that disallows map change so assume they are all allowing
 	if(newVote == 1) {
 		char msg[128] = {0};
-		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), NetPlay.players[player].name, player, static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
+		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), getPlayerName(player), player, static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
 		sendRoomSystemMessage(msg);
 	}
 }

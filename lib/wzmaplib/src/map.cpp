@@ -1114,6 +1114,7 @@ bool writeMapStructureInitJSON(const std::vector<Structure>& structures, MapType
 		{
 			pStructuresRoot->push_back(std::move(structureObj));
 		}
+		++counter;
 	}
 
 	// write out to file
@@ -1459,6 +1460,7 @@ bool writeMapDroidInitJSON(const std::vector<Droid>& droids, MapType mapType, co
 		{
 			pDroidsRoot->push_back(std::move(droidObj));
 		}
+		++counter;
 	}
 
 	// write out to file
@@ -1860,6 +1862,7 @@ bool writeMapFeatureInitJSON(const std::vector<Feature>& features, MapType mapTy
 		{
 			pFeaturesRoot->push_back(std::move(featureObj));
 		}
+		++counter;
 	}
 
 	// write out to file
@@ -1918,7 +1921,7 @@ std::shared_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType
 	std::vector<char> fileData;
 	// First, check for new game.js format
 	std::string gameJSPath = mapIO->pathJoin(mapFolderPath, "game.js");
-	if (mapIO->loadFullFile(gameJSPath, fileData))
+	if (mapIO->loadFullFile(gameJSPath, fileData, true))
 	{
 		debug(logger.get(), LOG_INFO, "Loading: %s", gameJSPath.c_str());
 		// Load script map, which actually loads everything

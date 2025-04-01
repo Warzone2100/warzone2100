@@ -78,6 +78,7 @@ struct MULTIPLAYERGAME
 	uint32_t	inactivityMinutes;			// The number of minutes without active play before a player should be considered "inactive". (0 = disable activity alerts)
 	uint32_t	gameTimeLimitMinutes;		// The number of minutes before the game automatically ends (0 = disable time limit)
 	PLAYER_LEAVE_MODE	playerLeaveMode;	// The behavior used for when players leave a game
+	BLIND_MODE	blindMode = BLIND_MODE::NONE;
 
 	// NOTE: If adding to this struct, a lot of things probably require changing
 	// (send/recvOptions? loadMainFile/writeMainFile? to/from_json in multiint.h.cpp?)
@@ -222,7 +223,7 @@ WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
-const char *getPlayerName(int player);
+const char *getPlayerName(uint32_t player, bool treatAsNonHost = false);
 bool setPlayerName(int player, const char *sName);
 void clearPlayerName(unsigned int player);
 const char *getPlayerColourName(int player);
@@ -237,6 +238,9 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave);
 
 bool multiPlayerLoop();							// for loop.c
 
+bool isBlindPlayerInfoState();
+// return a "generic" player name that is fixed based on the player idx (useful for blind mode games)
+const char *getPlayerGenericName(int player);
 
 enum class HandleMessageAction
 {
@@ -302,6 +306,11 @@ public:
 	uint32_t port = 0;
 	JoinConnectionType type = JoinConnectionType::TCP_DIRECT;
 };
+void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v);
+void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectionType& v);
+void to_json(nlohmann::json& j, const JoinConnectionDescription& v);
+void from_json(const nlohmann::json& j, JoinConnectionDescription& v);
+
 std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId);
 void joinGame(const char *connectionString, bool asSpectator = false);
 void joinGame(const char *host, uint32_t port, bool asSpectator = false);
@@ -345,6 +354,7 @@ bool makePlayerSpectator(uint32_t player_id, bool removeAllStructs = false, bool
 class WZGameReplayOptionsHandler : public ReplayOptionsHandler
 {
 	virtual bool saveOptions(nlohmann::json& object) const override;
+	virtual bool optionsUpdatePlayerInfo(nlohmann::json& object) const override;
 	virtual bool saveMap(EmbeddedMapData& mapData) const override;
 	virtual bool restoreOptions(const nlohmann::json& object, EmbeddedMapData&& embeddedMapData, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor) override;
 	virtual size_t desiredBufferSize() const override;

@@ -26,8 +26,16 @@ add_dependencies(autorevision_netcodeversion autorevision) # Ensure ordering and
 ############################
 # netplay library
 
-file(GLOB HEADERS "*.h")
-file(GLOB SRC "*.cpp")
+file(GLOB_RECURSE HEADERS "*.h")
+file(GLOB_RECURSE SRC "*.cpp")
+
+if(MSVC AND CMAKE_VERSION VERSION_GREATER 3.7)
+	# Automatic detection of source groups via `source_group(TREE <root>)` syntax
+	# has been introduced in CMake 3.8.
+	# Please consult https://cmake.org/cmake/help/latest/command/source_group.html for additional info.
+	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" PREFIX "Sources" FILES ${SRC})
+	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}" PREFIX "Headers" FILES ${HEADERS})
+endif()
 
 find_package (Threads REQUIRED)
 find_package (ZLIB REQUIRED)

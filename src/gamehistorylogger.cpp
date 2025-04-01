@@ -333,12 +333,12 @@ void GameStoryLogger::logStartGame()
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		FixedPlayerAttributes playerAttrib;
-		playerAttrib.name = NetPlay.players[i].name;
+		playerAttrib.name = (strlen(NetPlay.players[i].name) == 0) ? "" : getPlayerName(i);
 		playerAttrib.position = NetPlay.players[i].position;
 		playerAttrib.team = NetPlay.players[i].team;
 		playerAttrib.colour = NetPlay.players[i].colour;
 		playerAttrib.faction = NetPlay.players[i].faction;
-		playerAttrib.publicKey = base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
+		playerAttrib.publicKey = base64Encode(getOutputPlayerIdentity(i).toBytes(EcKey::Public));
 
 		startingPlayerAttributes.push_back(playerAttrib);
 	}

@@ -210,6 +210,8 @@ static inline void NETauto(T (&ar)[N])
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 
+void NETbytesOutputToVector(const std::vector<uint8_t> &data, std::vector<uint8_t>& output);
+
 #include <nlohmann/json_fwd.hpp>
 
 class ReplayOptionsHandler
@@ -225,6 +227,7 @@ public:
 public:
 	virtual bool saveOptions(nlohmann::json& object) const = 0;
 	virtual bool saveMap(EmbeddedMapData& mapData) const = 0;
+	virtual bool optionsUpdatePlayerInfo(nlohmann::json& object) const = 0;
 	virtual bool restoreOptions(const nlohmann::json& object, EmbeddedMapData&& embeddedMapData, uint32_t replay_netcodeMajor, uint32_t replay_netcodeMinor) = 0;
 	virtual size_t desiredBufferSize() const = 0;
 	virtual size_t maximumEmbeddedMapBufferSize() const = 0;
