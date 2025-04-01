@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -847,15 +847,13 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 	return true;
 }
 
-
 static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING textJustification)
 {
 	char aTextName[MAX_STR_LENGTH];
-	char *pTextBuffer, *pCurrentLine, *pText;
+	char *pTextBuffer;
 	UDWORD fileSize;
 	SDWORD xOffset, yOffset;
 	double startTime, endTime;
-	const char *seps = "\n";
 
 	// NOTE: The original game never had a fullscreen mode for FMVs on >640x480 screens.
 	// They would just use double sized videos, and move the text to that area.
@@ -871,12 +869,15 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 	}
 
 	pTextBuffer = fileLoadBuffer;
-	pCurrentLine = strtok(pTextBuffer, seps);
-	while (pCurrentLine != nullptr)
+	std::istringstream stream(pTextBuffer);
+	std::string pCurrentLine;
+
+	while (std::getline(stream, pCurrentLine))
 	{
-		if (*pCurrentLine != '/')
+		if (!pCurrentLine.empty() && pCurrentLine[0] != '/')
 		{
-			if (sscanf(pCurrentLine, "%d %d %lf %lf", &xOffset, &yOffset, &startTime, &endTime) == 4)
+			std::istringstream lineStream(pCurrentLine);
+			if (lineStream >> xOffset >> yOffset >> startTime >> endTime)
 			{
 				// Since all the positioning was hardcoded to specific values, we now calculate the
 				// ratio of our screen, compared to what the game expects and multiply that to x, y.
@@ -884,22 +885,17 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				xOffset = static_cast<SDWORD>((double)pie_GetVideoBufferWidth() / 640. * (double)xOffset);
 				yOffset = static_cast<SDWORD>((double)pie_GetVideoBufferHeight() / 480. * (double)yOffset);
 				//get the text
-				pText = strrchr(pCurrentLine, '"');
-				ASSERT(pText != nullptr, "error parsing text file");
-				if (pText != nullptr)
+				size_t firstQuote = pCurrentLine.find('"');
+				size_t lastQuote = pCurrentLine.rfind('"');
+
+				ASSERT(firstQuote != std::string::npos && lastQuote != std::string::npos && firstQuote < lastQuote, "error parsing text file");
+				if (firstQuote != std::string::npos && lastQuote != std::string::npos && firstQuote < lastQuote)
 				{
-					*pText = (UBYTE)0;
-				}
-				pText = strchr(pCurrentLine, '"');
-				ASSERT(pText != nullptr, "error parsing text file");
-				if (pText != nullptr)
-				{
-					seq_AddTextForVideo(_(&pText[1]), xOffset, yOffset, startTime, endTime, textJustification);
+					std::string text = pCurrentLine.substr(firstQuote + 1, lastQuote - firstQuote - 1);
+					seq_AddTextForVideo(_(text.c_str()), xOffset, yOffset, startTime, endTime, textJustification);
 				}
 			}
 		}
-		//get next line
-		pCurrentLine = strtok(nullptr, seps);
 	}
 	return true;
 }
