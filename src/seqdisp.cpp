@@ -872,7 +872,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 	std::istringstream stream(pTextBuffer);
 	std::string pCurrentLine;
 
-	while (std::getline(stream, pCurrentLine))
+	while (std::getline(stream, pCurrentLine, '\n'))
 	{
 		if (!pCurrentLine.empty() && pCurrentLine[0] != '/')
 		{
