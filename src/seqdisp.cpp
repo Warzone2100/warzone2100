@@ -870,6 +870,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 
 	pTextBuffer = fileLoadBuffer;
 	std::istringstream stream(pTextBuffer);
+	stream.imbue(std::locale::classic());
 	std::string pCurrentLine;
 
 	while (std::getline(stream, pCurrentLine, '\n'))
@@ -877,6 +878,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 		if (!pCurrentLine.empty() && pCurrentLine[0] != '/')
 		{
 			std::istringstream lineStream(pCurrentLine);
+			lineStream.imbue(std::locale::classic());
 			if (lineStream >> xOffset >> yOffset >> startTime >> endTime)
 			{
 				// Since all the positioning was hardcoded to specific values, we now calculate the
