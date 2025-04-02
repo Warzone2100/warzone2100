@@ -19,6 +19,7 @@ vcpkg_cmake_configure(
     OPTIONS
         -DZSTD=ON
         ${_additional_options}
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.31
 )
 
 vcpkg_cmake_install()
