@@ -1,0 +1,109 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.5)
+ project(basisu)
+ option(STATIC "static linking" FALSE)
+ option(SAN "sanitize" FALSE)
++option(EXAMPLES "Build examples" TRUE)
+ 
+ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+ 
+@@ -174,15 +175,23 @@ add_executable(basisu basisu_tool.cpp)
+ target_link_libraries(basisu PRIVATE basisu_encoder)
+ 
+ # Create the new example executable and link against the static library
+-add_executable(examples example/example.cpp)
+-target_link_libraries(examples PRIVATE basisu_encoder)
++if(EXAMPLES)
++    add_executable(examples example/example.cpp)
++    if(EXAMPLES)
++        target_link_libraries(examples PRIVATE basisu_encoder)
++    endif()
++endif()
+ 
+ if (ZSTD)
+     target_compile_definitions(basisu PRIVATE BASISD_SUPPORT_KTX2_ZSTD=1)
+-    target_compile_definitions(examples PRIVATE BASISD_SUPPORT_KTX2_ZSTD=1)
++    if(EXAMPLES)
++        target_compile_definitions(examples PRIVATE BASISD_SUPPORT_KTX2_ZSTD=1)
++    endif()
+ else()
+     target_compile_definitions(basisu PRIVATE BASISD_SUPPORT_KTX2_ZSTD=0)
+-    target_compile_definitions(examples PRIVATE BASISD_SUPPORT_KTX2_ZSTD=0)
++    if(EXAMPLES)
++        target_compile_definitions(examples PRIVATE BASISD_SUPPORT_KTX2_ZSTD=0)
++    endif()
+ endif()
+ 
+ if (NOT MSVC)
+@@ -192,7 +201,9 @@ if (NOT MSVC)
+         set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DBASISU_SUPPORT_OPENCL=1")    
+         
+         target_include_directories(basisu PRIVATE ${OpenCL_INCLUDE_DIRS})
+-        target_include_directories(examples PRIVATE ${OpenCL_INCLUDE_DIRS})
++        if(EXAMPLES)
++            target_include_directories(examples PRIVATE ${OpenCL_INCLUDE_DIRS})
++        endif()
+ 		target_include_directories(basisu_encoder PRIVATE ${OpenCL_INCLUDE_DIRS})
+         set(BASISU_EXTRA_LIBS ${OpenCL_LIBRARIES})
+     endif()
+@@ -203,22 +214,30 @@ else()
+         set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DBASISU_SUPPORT_OPENCL=1")    
+         
+         target_include_directories(basisu PRIVATE "OpenCL")
+-        target_include_directories(examples PRIVATE "OpenCL")
++        if(EXAMPLES)
++            target_include_directories(examples PRIVATE "OpenCL")
++        endif()
+ 		target_include_directories(basisu_encoder PRIVATE "OpenCL")
+ 
+         if (BUILD_X64)
+             target_link_libraries(basisu PRIVATE "${CMAKE_SOURCE_DIR}/OpenCL/lib/OpenCL64.lib")
+-            target_link_libraries(examples PRIVATE "${CMAKE_SOURCE_DIR}/OpenCL/lib/OpenCL64.lib")
++            if(EXAMPLES)
++                target_link_libraries(examples PRIVATE "${CMAKE_SOURCE_DIR}/OpenCL/lib/OpenCL64.lib")
++            endif()
+         else()
+             target_link_libraries(basisu PRIVATE "${CMAKE_SOURCE_DIR}/OpenCL/lib/OpenCL.lib")
+-            target_link_libraries(examples PRIVATE "${CMAKE_SOURCE_DIR}/OpenCL/lib/OpenCL.lib")
++            if(EXAMPLES)
++                target_link_libraries(examples PRIVATE "${CMAKE_SOURCE_DIR}/OpenCL/lib/OpenCL.lib")
++            endif()
+         endif()
+     endif()
+ endif()    
+ 
+ if (NOT MSVC)
+     target_link_libraries(basisu PRIVATE m pthread ${BASISU_EXTRA_LIBS})
+-    target_link_libraries(examples PRIVATE m pthread ${BASISU_EXTRA_LIBS})
++    if(EXAMPLES)
++        target_link_libraries(examples PRIVATE m pthread ${BASISU_EXTRA_LIBS})
++    endif()
+ endif()
+ 
+ if (NOT EMSCRIPTEN)
+@@ -244,11 +263,16 @@ if (MSVC)
+         RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+     )	
+ 	
+-	set_target_properties(examples PROPERTIES 
+-        RUNTIME_OUTPUT_NAME "examples"
+-        RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+-        RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+-        RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+-        RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+-    )	
++    if(EXAMPLES)
++        set_target_properties(examples PROPERTIES
++            RUNTIME_OUTPUT_NAME "examples"
++            RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
++            RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
++            RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
++            RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
++        )
++    endif()
+ endif()
++
++# Target Installation
++install(TARGETS basisu DESTINATION bin)
