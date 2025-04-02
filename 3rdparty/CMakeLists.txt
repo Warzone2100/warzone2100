@@ -182,7 +182,7 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 
 	add_library(basis_transcoder STATIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder/basisu_transcoder.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder/basisu_transcoder.h" "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/zstd/zstddeclib.c")
 	set_property(TARGET basis_transcoder PROPERTY FOLDER "3rdparty")
-	target_include_directories(basis_transcoder PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder")
+	target_include_directories(basis_transcoder SYSTEM PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder")
 
 	if(NOT MSVC)
 		set(_supported_basistranscoder_cxx_compiler_flags "")

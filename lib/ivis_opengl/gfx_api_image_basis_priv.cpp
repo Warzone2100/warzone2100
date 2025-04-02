@@ -367,7 +367,7 @@ static std::vector<std::unique_ptr<iV_BaseImage>> loadiVImagesFromFile_Basis_Dat
 		}
 	}
 
-	if (!basist::basis_is_format_supported(format, transcoder.get_format()))
+	if (!basist::basis_is_format_supported(format, transcoder.get_basis_tex_format()))
 	{
 		const char* formatName = basist::basis_get_format_name(format);
 		debug(LOG_ERROR, "Basis transcoder was not compiled with support for format: %s; failed to transcode file: %s", (formatName) ? formatName : "", filename.c_str());
