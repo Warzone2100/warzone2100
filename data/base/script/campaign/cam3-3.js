@@ -56,9 +56,25 @@ camAreaEvent("nxEscapeTrigger", function(droid)
 	resetLabel("nxEscapeTrigger", CAM_NEXUS);
 });
 
+// Discourage very early assaults on the base as it will likely be futile and cause an early loss.
+function earlyAssault()
+{
+	const units = {units: [cTempl.nxmrailh, cTempl.nxmscouh], appended: cTempl.nxmsens};
+	const limits = {minimum: 10, maxRandom: 5};
+	const location = camMakePos("NE-PhantomFactory");
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
+}
+
 function camEnemyBaseDetected_nxCyborgBase()
 {
+	if (currWave > 0)
+	{
+		return;
+	}
+
 	enableCybFactory();
+	setupConvoy();
+	earlyAssault();
 }
 
 function enableCybFactory()
@@ -73,7 +89,7 @@ function removeBlip()
 
 function setupConvoy()
 {
-	setTimer("phantomFactory", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	setTimer("phantomFactory", camMinutesToMilliseconds(2.8));
 	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4.5));
@@ -296,9 +312,9 @@ function eventStartLevel()
 
 	hackAddMessage("C3-3_OBJ2", PROX_MSG, CAM_HUMAN_PLAYER);
 	camPlayVideos([{video: "MB3_3_MSG2", type: MISS_MSG}]);
-	queue("setupPatrolGroups", camChangeOnDiff(camSecondsToMilliseconds(2)));
-	queue("enableCybFactory", camChangeOnDiff(camMinutesToSeconds(3.5)));
 
-	queue("setupConvoy", camChangeOnDiff(camMinutesToMilliseconds(8)));
-	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(10)));
+	queue("setupPatrolGroups", camSecondsToMilliseconds(2));
+	queue("enableCybFactory", camMinutesToSeconds(3.5));
+	queue("setupConvoy", camMinutesToMilliseconds(5.5));
+	queue("vtolAttack", camMinutesToMilliseconds(7));
 }
