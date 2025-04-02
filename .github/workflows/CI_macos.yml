@@ -33,6 +33,7 @@ jobs:
             image: "macos-13"
             osx_target_arch: "x86_64"
             vcpkg_triplet: "x64-osx"
+            vcpkg_host_triplet: "x64-osx"
             xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
             include_videos: false
             artifact_suffix: "x64"
@@ -41,6 +42,7 @@ jobs:
             image: "macos-13"
             osx_target_arch: "arm64"
             vcpkg_triplet: "arm64-osx"
+            vcpkg_host_triplet: "x64-osx"
             xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
             include_videos: true
             artifact_suffix: "arm64"
@@ -58,6 +60,7 @@ jobs:
       WZ_INCLUDE_VIDEOS: '${{ matrix.include_videos }}'
       WZ_OSX_TARGET_ARCH: '${{ matrix.osx_target_arch }}'
       VCPKG_DEFAULT_TRIPLET: '${{ matrix.vcpkg_triplet }}'
+      VCPKG_DEFAULT_HOST_TRIPLET: '${{ matrix.vcpkg_host_triplet }}'
       ARCHS: '${{ matrix.osx_target_arch }}'
     steps:
     - uses: actions/checkout@v4
