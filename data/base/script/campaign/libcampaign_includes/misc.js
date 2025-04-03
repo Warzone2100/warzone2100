@@ -330,7 +330,13 @@ function camChangeOnDiff(numericValue)
 //;;
 function camAllowInsaneSpawns()
 {
-	return ((difficulty >= INSANE) && camDef(tweakOptions.insanePlus) && tweakOptions.insanePlus);
+	if (!camDef(tweakOptions.insanePlus) || !camDef(tweakOptions.insanePlusLowDiff))
+	{
+		return false;
+	}
+	const __INSANE_SPAWNS = ((difficulty >= INSANE) && tweakOptions.insanePlus);
+	const __LOWER_DIFF_SPAWNS = ((difficulty < INSANE) && tweakOptions.insanePlusLowDiff);
+	return (__INSANE_SPAWNS || __LOWER_DIFF_SPAWNS);
 }
 
 //;; ## camIsSystemDroid(gameObject)
