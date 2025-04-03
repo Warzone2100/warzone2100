@@ -95,6 +95,7 @@ function phantomFactorySpawn()
 	let location;
 	const extraUnits = [cTempl.nxmsens, cTempl.nxmsens, cTempl.nxmsamh, cTempl.nxmsamh];
 	const UNIT_LIMIT_FOR_SPAWN = 40;
+	const ALLOW_INSANE_SPAWNS = camAllowInsaneSpawns();
 
 	switch (camRand(3))
 	{
@@ -114,9 +115,9 @@ function phantomFactorySpawn()
 			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh], appended: extraUnits};
 			location = "phantomFacWest";
 	}
-	if (difficulty >= INSANE)
+	if ((difficulty >= INSANE) || ALLOW_INSANE_SPAWNS)
 	{
-		if (camAllowInsaneSpawns() && (camRand(100) < 20))
+		if (ALLOW_INSANE_SPAWNS && (camRand(100) < 20))
 		{
 			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh], appended: extraUnits};
 			location = "phantomFacSouth";
