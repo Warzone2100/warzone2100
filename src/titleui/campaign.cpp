@@ -1592,6 +1592,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 	);
 
 	results.emplace_back(
+		"insanePlusLowDiff",
+		_("Non-Insane Spawns"),
+		_("Toggles tweak option Insane Spawns for Hard difficulty and below."),
+		false, true
+	);
+
+	results.emplace_back(
 		"fastExp",
 		_("Fast EXP gain"),
 		_("Increases unit experience point gain by 2x."),
