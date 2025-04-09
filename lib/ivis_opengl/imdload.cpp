@@ -151,7 +151,7 @@ void modelReloadAllModelTextures()
 {
 	std::unordered_set<size_t> texPagesToReloadFromDisk;
 	enumerateLoadedModels([&texPagesToReloadFromDisk](const std::string &modelName, iIMDBaseShape &s){
-		for (iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		for (iIMDShape *pDisplayShape = s.mutableDisplayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
 		{
 			const iIMDShapeTextures& textures = pDisplayShape->getTextures();
 			if (!textures.initialized)
@@ -180,7 +180,7 @@ void modelUpdateTilesetIdx(size_t tilesetIdx)
 	currentTilesetIdx = tilesetIdx;
 	// reload all initialized model textures
 	enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
-		for (iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		for (iIMDShape *pDisplayShape = s.mutableDisplayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
 		{
 			pDisplayShape->reloadTexturesIfLoaded();
 		}

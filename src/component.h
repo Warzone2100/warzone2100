@@ -36,12 +36,12 @@ struct iIMDShape;
 bool setPlayerColour(UDWORD player, UDWORD col);
 UBYTE getPlayerColour(UDWORD pl);
 
-UDWORD getComponentDroidRadius(DROID *psDroid);
-UDWORD getComponentDroidTemplateRadius(DROID_TEMPLATE *psDroid);
-UDWORD getComponentRadius(BASE_STATS *psComponent);
-UDWORD getResearchRadius(BASE_STATS *Stat);
-UDWORD getStructureSizeMax(STRUCTURE *psStructure);
-UDWORD getStructureStatSizeMax(STRUCTURE_STATS *Stats);
+UDWORD getComponentDroidRadius(const DROID *psDroid);
+UDWORD getComponentDroidTemplateRadius(const DROID_TEMPLATE *psDroid);
+UDWORD getComponentRadius(const BASE_STATS *psComponent);
+UDWORD getResearchRadius(const BASE_STATS *Stat);
+UDWORD getStructureSizeMax(const STRUCTURE *psStructure);
+UDWORD getStructureStatSizeMax(const STRUCTURE_STATS *Stats);
 
 #define BLIP_ANIM_DURATION			(200)
 #define OBJECT_RADIUS				(128)
@@ -61,15 +61,15 @@ UDWORD getStructureStatSizeMax(STRUCTURE_STATS *Stats);
 #define LARGE_FEATURE_SCALE			(16)
 
 #define TOWER_HEIGHT    100
-UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat);
+UDWORD getStructureStatHeight(const STRUCTURE_STATS *psStat);
 
-void displayIMDButton(iIMDShape *IMDShape, const Vector3i *Rotation, const Vector3i *Position, int scale);
-void displayStructureButton(STRUCTURE *psStructure, const Vector3i *Rotation, const Vector3i *Position, int scale);
-void displayStructureStatButton(STRUCTURE_STATS *Stats, const Vector3i *Rotation, const Vector3i *Position, int scale);
-void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale);
-void displayResearchButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale);
-void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, const Vector3i *Rotation, const Vector3i *Position, int scale);
-void displayComponentButtonObject(DROID *psDroid, const Vector3i *Rotation, const Vector3i *Position, int scale);
+void displayIMDButton(const iIMDShape *IMDShape, const Vector3i *Rotation, const Vector3i *Position, int scale);
+void displayStructureButton(const STRUCTURE *psStructure, const Vector3i *Rotation, const Vector3i *Position, int scale);
+void displayStructureStatButton(const STRUCTURE_STATS *Stats, const Vector3i *Rotation, const Vector3i *Position, int scale);
+void displayComponentButton(const BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale);
+void displayResearchButton(const BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale);
+void displayComponentButtonTemplate(const DROID_TEMPLATE *psTemplate, const Vector3i *Rotation, const Vector3i *Position, int scale);
+void displayComponentButtonObject(const DROID *psDroid, const Vector3i *Rotation, const Vector3i *Position, int scale);
 void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 
 void compPersonToBits(DROID *psDroid);
@@ -77,7 +77,7 @@ void compPersonToBits(DROID *psDroid);
 SDWORD rescaleButtonObject(SDWORD radius, SDWORD baseScale, SDWORD baseRadius);
 void destroyFXDroid(DROID *psDroid, unsigned impactTime);
 
-void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, glm::mat4 modelMatrix, const glm::mat4 &viewMatrix, float heightAboveTerrain, UBYTE colour = 0);
+void drawMuzzleFlash(WEAPON sWeap, const iIMDShape *weaponImd, const iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, glm::mat4 modelMatrix, const glm::mat4 &viewMatrix, float heightAboveTerrain, UBYTE colour = 0);
 
 /* Pass in the stats you're interested in and the COMPONENT - double reference, but works. NOTE: Unused!*/
 #define PART_IMD(STATS,DROID,COMPONENT,PLAYER)	(STATS[DROID->asBits[COMPONENT]].pIMD)

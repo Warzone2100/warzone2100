@@ -139,10 +139,14 @@ struct iIMDBaseShape
 	std::vector<Vector3i> connectors; // used by: muzzle base location, fire line, actionVisibleTarget, etc)
 
 	// the display shape used for rendering (*NOT* for any game state calculations!)
-	inline iIMDShape* displayModel() { return m_displayModel.get(); }
+	inline const iIMDShape* displayModel() const { return m_displayModel.get(); }
 protected:
 	friend bool tryLoad(const WzString &path, const WzString &filename);
+	friend void modelUpdateTilesetIdx(size_t tilesetIdx);
+	friend void modelReloadAllModelTextures();
+
 	void replaceDisplayModel(std::unique_ptr<iIMDShape> newDisplayModel);
+	inline iIMDShape* mutableDisplayModel() { return m_displayModel.get(); }
 private:
 	std::unique_ptr<iIMDShape> m_displayModel = nullptr;  // the display shape used for rendering (*NOT* for any game state calculations!)
 };
@@ -232,7 +236,7 @@ private:
 	std::unique_ptr<iIMDShapeTextures> m_textures = std::make_unique<iIMDShapeTextures>();
 };
 
-inline iIMDShape *safeGetDisplayModelFromBase(iIMDBaseShape* pBaseIMD)
+inline const iIMDShape *safeGetDisplayModelFromBase(iIMDBaseShape* pBaseIMD)
 {
 	return ((pBaseIMD) ? pBaseIMD->displayModel() : nullptr);
 }
