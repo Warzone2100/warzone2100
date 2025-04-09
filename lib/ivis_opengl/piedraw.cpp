@@ -1218,7 +1218,7 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 	bool retVal = false;
 	const bool drawAllLevels = (shape->modelLevel == 0) && !onlySingleLevel;
-	const PIELIGHT teamcolour = pal_GetTeamColour(team);
+	const PIELIGHT teamcolour = shape->getTeamColourForModel(team);
 
 	iIMDShape *pCurrShape = shape;
 	do
