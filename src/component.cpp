@@ -168,10 +168,10 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat) // DISPLAY ONLY
 
 static void draw_player_3d_shape(uint32_t player_index, iIMDShape *shape, const glm::mat4 &modelMatrix)
 {
+	int team = getPlayerColour(player_index);
 	for (iIMDShape *imd = getFactionDisplayIMD(getPlayerFaction(player_index), shape); imd != nullptr; imd = imd->next.get())
 	{
-		int team = getPlayerColour(player_index);
-		const PIELIGHT teamcolour = pal_GetTeamColour(team);
+		const PIELIGHT teamcolour = imd->getTeamColourForModel(team);
 		pie_Draw3DButton(imd, teamcolour, modelMatrix, glm::mat4(1.f));
 	}
 }

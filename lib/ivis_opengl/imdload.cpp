@@ -38,6 +38,7 @@
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/pienormalize.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
 
 #include "ivisdef.h" // for imd structures
 #include "imd.h" // for imd structures
@@ -88,6 +89,11 @@ const iIMDShapeTextures& iIMDShape::getTextures() const
 	}
 
 	return *m_textures.get();
+}
+
+PIELIGHT iIMDShape::getTeamColourForModel(int team) const
+{
+	return pal_GetTeamColour(team);
 }
 
 void iIMDShape::reloadTexturesIfLoaded()

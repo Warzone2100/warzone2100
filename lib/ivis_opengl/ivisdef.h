@@ -221,6 +221,9 @@ struct iIMDShape
 
 	std::unique_ptr<iIMDShape> next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
 
+public:
+	PIELIGHT getTeamColourForModel(int team) const;
+
 protected:
 	friend void modelUpdateTilesetIdx(size_t tilesetIdx);
 	void reloadTexturesIfLoaded();
