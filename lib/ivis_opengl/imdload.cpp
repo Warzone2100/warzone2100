@@ -64,16 +64,81 @@ static size_t currentTilesetIdx = 0;
 static size_t modelLoadingErrors = 0;
 static size_t modelTextureLoadingFailures = 0;
 
-static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd, bool skipGPUData);
+static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd, bool skipGPUData, bool skipDuplicateLoadChecks = false);
 static bool _imd_load_level_textures(const iIMDShape& s, size_t tilesetIdx, iIMDShapeTextures& output);
+static std::unique_ptr<iIMDShape> tryLoadDisplayModelInternal(const WzString &path, const WzString &filename, bool skipGPUupload, bool skipDuplicateLoadChecks = false);
 
 iIMDShape::~iIMDShape()
 {
+	freeInternalResources();
+}
+
+void iIMDShape::freeInternalResources()
+{
 	free(shadowEdgeList);
-	for (auto* buffer : buffers)
+	shadowEdgeList = nullptr;
+	for (auto& buffer : buffers)
 	{
 		delete buffer;
+		buffer = nullptr;
 	}
+}
+
+iIMDShape& iIMDShape::operator=(iIMDShape&& other) noexcept
+{
+	if (this != &other)
+	{
+		// Release existing resources
+		freeInternalResources();
+
+		// Transfer resources from other
+		std::swap(min, other.min);
+		std::swap(max, other.max);
+		std::swap(sradius, other.sradius);
+		std::swap(radius, other.radius);
+		std::swap(ocen, other.ocen);
+		std::swap(connectors, other.connectors);
+		std::swap(flags, other.flags);
+		std::swap(numFrames, other.numFrames);
+		std::swap(animInterval, other.animInterval);
+		std::swap(shadowEdgeList, other.shadowEdgeList);
+		std::swap(nShadowEdges, other.nShadowEdges);
+		std::swap(points, other.points);
+		std::swap(polys, other.polys);
+		std::swap(altShadowPoints, other.altShadowPoints);
+		std::swap(altShadowPolys, other.altShadowPolys);
+		if (!altShadowPoints.empty() && !altShadowPolys.empty())
+		{
+			pShadowPoints = &altShadowPoints;
+			pShadowPolys = &altShadowPolys;
+		}
+		else
+		{
+			pShadowPoints = &points;
+			pShadowPolys = &polys;
+		}
+		std::swap(buffers, other.buffers);
+		std::swap(vertexCount, other.vertexCount);
+		std::swap(objanimdata, other.objanimdata);
+		std::swap(objanimframes, objanimframes);
+		std::swap(objanimtime, other.objanimtime);
+		std::swap(objanimcycles, other.objanimcycles);
+		std::swap(objanimpie, other.objanimpie);
+		std::swap(interpolate, other.interpolate);
+		std::swap(modelName, other.modelName);
+		std::swap(modelLevel, other.modelLevel);
+		std::swap(tilesetTextureFiles, other.tilesetTextureFiles);
+		std::swap(next, other.next);
+		std::swap(m_textures, other.m_textures);
+
+		// Reset other's resources
+		other.shadowEdgeList = nullptr;
+		for (auto& buffer : other.buffers)
+		{
+			buffer = nullptr;
+		}
+	}
+	return *this;
 }
 
 const iIMDShapeTextures& iIMDShape::getTextures() const
@@ -110,13 +175,15 @@ void iIMDShape::reloadTexturesIfLoaded()
 	m_textures->initialized = true;
 }
 
-iIMDBaseShape::iIMDBaseShape(std::unique_ptr<iIMDShape> a)
+iIMDBaseShape::iIMDBaseShape(std::unique_ptr<iIMDShape> a, const WzString &path, const WzString &filename)
 : min(a->min)
 , max(a->max)
 , sradius(a->sradius)
 , radius(a->radius)
 , ocen(a->ocen)
 , connectors(a->connectors)
+, path(path)
+, filename(filename)
 , m_displayModel(std::move(a))
 { }
 
@@ -125,9 +192,74 @@ iIMDBaseShape::~iIMDBaseShape()
 	// currently nothing else to do
 }
 
+static void fixupDisplayModelForBaseModel(const iIMDBaseShape& baseModel, const std::unique_ptr<iIMDShape>& newDisplayModel)
+{
+	// first, some sanity checks
+	const auto& baseModelConnectors = baseModel.connectors;
+	if (newDisplayModel->connectors.size() < baseModelConnectors.size())
+	{
+		// override models should not have fewer connectors than the base model
+		size_t prior_override_model_connectors_count = newDisplayModel->connectors.size();
+		// to avoid crashes later, copy over the extra connectors from the base model
+		for (size_t i = newDisplayModel->connectors.size(); i < baseModelConnectors.size(); ++i)
+		{
+			newDisplayModel->connectors.push_back(baseModelConnectors[i]);
+		}
+		// also output a log entry, so someone can know to fix the graphics override model
+		const WzString& filename = baseModel.filename;
+		debug(LOG_INFO, "Graphics override model %s is missing connectors (override connectors: %zu, base model connectors: %zu)", filename.toUtf8().c_str(), prior_override_model_connectors_count, baseModelConnectors.size());
+	}
+}
+
 void iIMDBaseShape::replaceDisplayModel(std::unique_ptr<iIMDShape> newDisplayModel)
 {
+	fixupDisplayModelForBaseModel(*this, newDisplayModel);
+
 	m_displayModel = std::move(newDisplayModel);
+}
+
+bool iIMDBaseShape::debugReloadDisplayModel()
+{
+	return debugReloadDisplayModelInternal(true);
+}
+
+bool iIMDBaseShape::debugReloadDisplayModelInternal(bool recurseAnimPie)
+{
+	ASSERT_OR_RETURN(false , m_displayModel != nullptr, "No display model??");
+
+	// first, try to load a graphics override - at the same path but with a prefix
+	auto newDisplayModel = tryLoadDisplayModelInternal(WZ_CURRENT_GRAPHICS_OVERRIDES_PREFIX "/" + path, filename, false, true);
+
+	if (!newDisplayModel)
+	{
+		// load model from base path
+		newDisplayModel = tryLoadDisplayModelInternal(path, filename, false, true);
+	}
+
+	if (!newDisplayModel)
+	{
+		debug(LOG_ERROR, "Failed to reload display model?: %s%s", path.toUtf8().c_str(), filename.toUtf8().c_str());
+		return false;
+	}
+
+	fixupDisplayModelForBaseModel(*this, newDisplayModel);
+
+	// swap out the display model - use move assignment to avoid invalidating any cached pointers to the displaymodel iIMDShape* (as this function is likely called at runtime)
+	*m_displayModel = std::move(*newDisplayModel);
+
+	// also reload the display models for any objanimpie in the newDisplayModel (as tryLoadDisplayModelInternal will not force-reload them if their names are equal to a previously-loaded model)
+	if (recurseAnimPie)
+	{
+		for (int i = 0; i < ANIM_EVENT_COUNT; i++)
+		{
+			if (m_displayModel->objanimpie[i] != nullptr)
+			{
+				(m_displayModel->objanimpie[i])->debugReloadDisplayModelInternal(false);
+			}
+		}
+	}
+
+	return true;
 }
 
 size_t getModelLoadingErrorCount()
@@ -171,6 +303,18 @@ void modelReloadAllModelTextures()
 	debugReloadTexturesFromDisk(texPagesToReloadFromDisk);
 }
 
+bool debugReloadDisplayModelsForBaseModel(iIMDBaseShape& baseModel)
+{
+	return baseModel.debugReloadDisplayModel();
+}
+
+void debugReloadAllDisplayModels()
+{
+	enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
+		s.debugReloadDisplayModelInternal(false);
+	});
+}
+
 void modelUpdateTilesetIdx(size_t tilesetIdx)
 {
 	if (tilesetIdx == currentTilesetIdx)
@@ -195,7 +339,7 @@ void enumerateLoadedModels(const std::function<void (const std::string& modelNam
 	}
 }
 
-static std::unique_ptr<iIMDShape> tryLoadDisplayModelInternal(const WzString &path, const WzString &filename, bool skipGPUupload)
+static std::unique_ptr<iIMDShape> tryLoadDisplayModelInternal(const WzString &path, const WzString &filename, bool skipGPUupload, bool skipDuplicateLoadChecks)
 {
 	if (PHYSFS_exists(path + filename))
 	{
@@ -208,7 +352,7 @@ static std::unique_ptr<iIMDShape> tryLoadDisplayModelInternal(const WzString &pa
 		}
 		fileEnd = pFileData + size;
 		const char *pFileDataPt = pFileData;
-		auto result = iV_ProcessIMD(filename, (const char **)&pFileDataPt, fileEnd, skipGPUupload);
+		auto result = iV_ProcessIMD(filename, (const char **)&pFileDataPt, fileEnd, skipGPUupload, skipDuplicateLoadChecks);
 		free(pFileData);
 		return result;
 	}
@@ -236,7 +380,7 @@ bool tryLoad(const WzString &path, const WzString &filename)
 	// create BaseShape from full (base) model (first level)
 	// the iIMDBaseShape then "owns" the display model iIMDShape
 	auto modelName = baseModel->modelName;
-	auto baseInsertResult = models.insert(ModelMap::value_type(modelName.toUtf8(), std::make_unique<iIMDBaseShape>(std::move(baseModel))));
+	auto baseInsertResult = models.insert(ModelMap::value_type(modelName.toUtf8(), std::make_unique<iIMDBaseShape>(std::move(baseModel), path, filename)));
 	ASSERT_OR_RETURN(false, baseInsertResult.second, "%s: Loaded duplicate model? (%s)", filename.toUtf8().c_str(), modelName.toUtf8().c_str());
 	// do NOT use baseModel after this point!
 
@@ -247,22 +391,6 @@ bool tryLoad(const WzString &path, const WzString &filename)
 	}
 
 	// there *is* a graphics override version of this model - swap out the base model's displayModel for the graphics override model
-
-	// first, some sanity checks
-	const auto& baseModelConnectors = baseInsertResult.first->second->connectors;
-	if (graphics_override_model->connectors.size() < baseModelConnectors.size())
-	{
-		// override models should not have fewer connectors than the base model
-		size_t prior_override_model_connectors_count = graphics_override_model->connectors.size();
-		// to avoid crashes later, copy over the extra connectors from the base model
-		for (size_t i = graphics_override_model->connectors.size(); i < baseModelConnectors.size(); ++i)
-		{
-			graphics_override_model->connectors.push_back(baseModelConnectors[i]);
-		}
-		// also output a log entry, so someone can know to fix the graphics override model
-		debug(LOG_INFO, "Graphics override model %s is missing connectors (override connectors: %zu, base model connectors: %zu)", filename.toUtf8().c_str(), prior_override_model_connectors_count, baseModelConnectors.size());
-	}
-
 	baseInsertResult.first->second->replaceDisplayModel(std::move(graphics_override_model));
 	return true;
 }
@@ -1337,7 +1465,7 @@ void finishTangentsGeneration()
  * \post s allocated
  */
 static_assert(PATH_MAX >= 255, "PATH_MAX is insufficient!");
-static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, const char **ppFileData, const char *FileDataEnd, int pieVersion, uint32_t level, const LevelSettings &globalLevelSettings, bool skipGPUData)
+static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, const char **ppFileData, const char *FileDataEnd, int pieVersion, uint32_t level, const LevelSettings &globalLevelSettings, bool skipGPUData, bool skipDuplicateLoadChecks)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'}; uint32_t value = 0;
@@ -1349,7 +1477,10 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 	{
 		key += "_" + std::to_string(level);
 	}
-	ASSERT(models.count(key) == 0, "Duplicate model load for %s!", key.c_str());
+	if (!skipDuplicateLoadChecks)
+	{
+		ASSERT(models.count(key) == 0, "Duplicate model load for %s!", key.c_str());
+	}
 	auto pAllocatedShape = std::make_unique<iIMDShape>();
 	iIMDShape &s = *pAllocatedShape;
 	s.modelName = WzString::fromUtf8(key);
@@ -1703,7 +1834,7 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
  * \return The shape, constructed from the data read
  */
 // ppFileData is incremented to the end of the file on exit!
-static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd, bool skipGPUData)
+static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd, bool skipGPUData, bool skipDuplicateLoadChecks)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {};
@@ -1833,7 +1964,7 @@ static std::unique_ptr<iIMDShape> iV_ProcessIMD(const WzString &filename, const 
 			return nullptr;
 		}
 
-		std::unique_ptr<iIMDShape> shape = _imd_load_level(filename, &lineToProcess.pNextLineBegin, FileDataEnd, imd_version, level, globalLevelSettings, skipGPUData);
+		std::unique_ptr<iIMDShape> shape = _imd_load_level(filename, &lineToProcess.pNextLineBegin, FileDataEnd, imd_version, level, globalLevelSettings, skipGPUData, skipDuplicateLoadChecks);
 		if (shape == nullptr)
 		{
 			debug(LOG_ERROR, "%s: Unsuccessful loading level %" PRIu32, filename.toUtf8().c_str(), (level + 1));
