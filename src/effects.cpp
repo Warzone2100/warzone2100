@@ -254,7 +254,7 @@ void effectSetSize(UDWORD size)
 }
 
 void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
-                    EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime)
+                    EFFECT_TYPE type, bool specified, const iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime)
 {
 	if (number == 0)
 	{
@@ -297,14 +297,14 @@ void SetEffectForPlayer(uint8_t player)
 	EffectForPlayer = getPlayerColour(player);
 }
 
-void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit)
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit)
 {
 	return addEffect(pos, group, type, specified, imd, lit, graphicsTime);
 }
 
 static bool updateDroidDeathAnimationEffect(EFFECT *psEffect)
 {
-	iIMDShape *imd = psEffect->imd;
+	const iIMDShape *imd = psEffect->imd;
 	if (!imd)
 	{
 		return false;
@@ -346,7 +346,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 	SDWORD pieFlag = pie_SHADOW;
 	SDWORD iPieData = 0;
 
-	iIMDShape *strImd = psEffect->imd;
+	const iIMDShape *strImd = psEffect->imd;
 	UDWORD timeAnimationStarted = psEffect->lastFrame;
 	while (strImd)
 	{
@@ -355,7 +355,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 	}
 }
 
-void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/, Vector3f *velocity /*= nullptr*/)
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/, Vector3f *velocity /*= nullptr*/)
 {
 	if (gamePaused())
 	{
@@ -2133,7 +2133,7 @@ static void effectSetupDestruction(EFFECT& effect)
 
 
 #define SMOKE_SHIFT (16 - (rand()%32))
-void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
+void initPerimeterSmoke(const iIMDShape *pImd, Vector3i base)
 {
 	int i;
 	int shift = SMOKE_SHIFT;
@@ -2255,7 +2255,7 @@ static void effectStructureUpdates()
 				continue;
 			}
 
-			iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+			const iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
 
 			/* Factories puff out smoke, power stations puff out tesla stuff */
 			switch (psStructure->pStructureType->type)

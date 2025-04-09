@@ -27,8 +27,8 @@
 
 bool initMiscImds();
 iIMDBaseShape *getImdFromIndex(UDWORD index);
-iIMDShape *getDisplayImdFromIndex(UDWORD index);
-iIMDBaseShape *getRandomDebrisImd();
+const iIMDShape *getDisplayImdFromIndex(UDWORD index);
+const iIMDBaseShape *getRandomDebrisImd();
 
 #define	MAX_DEBRIS		5
 #define	MAX_WRECKAGE	5

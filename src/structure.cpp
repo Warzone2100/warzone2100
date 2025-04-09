@@ -3790,11 +3790,11 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 		{
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 
-			iIMDBaseShape *strFirstBaseImd = psBuilding->sDisplay.imd->displayModel()->objanimpie[psBuilding->animationEvent];
-			iIMDShape *strFirstImd = (strFirstBaseImd) ? strFirstBaseImd->displayModel() : nullptr;
+			const iIMDBaseShape *strFirstBaseImd = psBuilding->sDisplay.imd->displayModel()->objanimpie[psBuilding->animationEvent];
+			const iIMDShape *strFirstImd = (strFirstBaseImd) ? strFirstBaseImd->displayModel() : nullptr;
 			if (strFirstImd != nullptr && strFirstImd->next != nullptr)
 			{
-				iIMDShape *strImd = strFirstImd->next.get(); // first imd isn't animated
+				const iIMDShape *strImd = strFirstImd->next.get(); // first imd isn't animated
 				psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
 			}
 			else
@@ -3933,12 +3933,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 			if (bMultiPlayer && ONEINTEN && !bMission && psBuilding->sDisplay.imd)
 			{
 				Vector3i position;
-				Vector3f *point;
+				const Vector3f *point;
 				SDWORD	realY;
 				UDWORD	pointIndex;
 
 				// since this is a visual effect, it should be based on the *display* model
-				iIMDShape *pDisplayModel = psBuilding->sDisplay.imd->displayModel();
+				const iIMDShape *pDisplayModel = psBuilding->sDisplay.imd->displayModel();
 				pointIndex = rand() % (pDisplayModel->points.size() - 1);
 				point = &(pDisplayModel->points.at(pointIndex));
 				position.x = static_cast<int>(psBuilding->pos.x + point->x);
