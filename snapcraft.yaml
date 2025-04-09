@@ -184,10 +184,16 @@ parts:
       - libgnutls28-dev
       - libsodium-dev
       - libsqlite3-dev
+      - libzip-dev
       - ninja-build
       - unzip
       - wget
       - zip
+      # Required because of broken CMake config files for libzip-dev 1.7.3:
+      - zipcmp
+      - zipmerge
+      - ziptool
+      #
     stage-packages:
       #- libfontconfig1
       - libfreetype6
@@ -206,6 +212,7 @@ parts:
       - libcurl3-gnutls
       - libsodium23
       - libsqlite3-0
+      - libzip4t64
       - libglu1-mesa
       # - mesa-vulkan-drivers # provided by gpu-2404 / mesa-2404
       - unzip

@@ -137,6 +137,9 @@ public:
 	// Note: Returns a value only if the MapPackage was loaded (i.e. via loadPackage)
 	optional<LevelFormat> loadedLevelDetailsFormat() const;
 
+	// Get whether this appears to be a script-generated map (does not load the map, merely checks if there's a game.js that would load)
+	bool isScriptGeneratedMap() const;
+
 	// Get the map data
 	// Returns nullptr if the loading failed
 	std::shared_ptr<Map> loadMap(uint32_t seed, std::shared_ptr<LoggingProtocol> logger = nullptr);
@@ -178,13 +181,13 @@ public:
 	optional<MapStats> calculateMapStats(MapStatsConfiguration statsConfig, uint32_t mapSeed);
 
 private:
-	bool loadGamInfo();
+	const GamInfo& getGamInfo();
 
 private:
 	std::string m_pathToMapPackage;
 	optional<LevelFormat> m_loadedLevelFormat;
 	LevelDetails m_levelDetails;
-	GamInfo	m_gamInfo;
+	optional<GamInfo> m_gamInfo;
 	MapType m_mapType;
 	optional<MapPackageType> m_packageType;
 	bool m_flatMapPackage = false;
