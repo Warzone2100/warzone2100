@@ -205,7 +205,7 @@ std::vector<DROID_TEMPLATE *>   apsTemplateList;
 std::list<DROID_TEMPLATE>       localTemplates;
 
 /* Store a list of Feature pointers for features to be placed on the map */
-static FEATURE_STATS	**apsFeatureList;
+static FEATURE_STATS	**apsFeatureStatsList;
 
 /* Store a list of component stats pointers for the design screen */
 UDWORD			numComponent;
@@ -920,7 +920,7 @@ bool intInitialise()
 	apsTemplateList.clear();
 
 	/* Create storage for the feature list */
-	apsFeatureList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) * MAXFEATURES);
+	apsFeatureStatsList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) * MAXFEATURES);
 
 	/* Create storage for the component list */
 	apsComponentList = (COMPONENT_STATS **)malloc(sizeof(COMPONENT_STATS *) * MAXCOMPONENT);
@@ -1010,14 +1010,14 @@ void interfaceShutDown()
 
 	free(apsStructStatsList);
 	apsTemplateList.clear();
-	free(apsFeatureList);
+	free(apsFeatureStatsList);
 	free(apsComponentList);
 	free(apsExtraSysList);
 	psSelectedBuilder = nullptr;
 
 	psWScreen = nullptr;
 	apsStructStatsList = nullptr;
-	apsFeatureList = nullptr;
+	apsFeatureStatsList = nullptr;
 	apsComponentList = nullptr;
 	apsExtraSysList = nullptr;
 
@@ -1321,9 +1321,9 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 	case OBJ_FEATURE:
 		for (unsigned i = 0, end = std::min<unsigned>(asFeatureStats.size(), MAXFEATURES); i < end; ++i)
 		{
-			apsFeatureList[i] = &asFeatureStats[i];
+			apsFeatureStatsList[i] = &asFeatureStats[i];
 		}
-		ppsStatsList = (BASE_STATS **)apsFeatureList;
+		ppsStatsList = (BASE_STATS **)apsFeatureStatsList;
 		intAddDebugStatsForm(ppsStatsList, std::min<unsigned>(asFeatureStats.size(), MAXFEATURES));
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
