@@ -74,6 +74,9 @@ jobs:
       attestations: write
     runs-on: windows-2022
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    outputs:
+      # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
+      WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -722,18 +725,6 @@ jobs:
       continue-on-error: true
       with:
         subject-path: '${{ github.workspace }}\output\archive\*'
-    #####################################################
-    # Upload Release assets (if a release tag)
-    #####################################################
-    - name: Upload Release Assets
-      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
-      run: |
-        $SOURCE_TAG = "$($env:WZ_GITHUB_REF -replace "refs/tags/")"
-        gh release upload "${SOURCE_TAG}" "${{ github.workspace }}\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" "${{ github.workspace }}\output\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z" "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GH_REPO: ${{ github.repository }}
-        WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     #########################################################
     # Create Sentry source bundle (for releasable artifacts)
     #########################################################
@@ -780,6 +771,41 @@ jobs:
         path: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
         retention-days: 1
         if-no-files-found: 'warn'
+  upload-release-assets:
+    name: 'Upload Release Assets'
+    permissions:
+      contents: write # Needed to upload to releases
+    runs-on: ubuntu-latest
+    # Run on tag release automation build
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    needs: windows-build
+    env:
+      WZ_GITHUB_REF: ${{needs.windows-build.outputs.WZ_GITHUB_REF}}
+    steps:
+      - name: Prep Environment
+        id: settings
+        run: |
+          mkdir upload-assets
+      - name: Download Release Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          # Includes the release artifacts: portable installer, full installer, debug symbols, and archive
+          pattern: 'warzone2100_win_*'
+          path: ./upload-assets
+          merge-multiple: true
+      - name: List Assets
+        run: ls -LR ./upload-assets
+      - name: Upload Release Assets
+        working-directory: '${{ github.workspace }}/upload-assets/'
+        run: |
+          $SOURCE_TAG = "$($env:WZ_GITHUB_REF -replace "refs/tags/")"
+          for file in ./warzone2100_win_*; do
+            echo "Uploading: $file"
+            gh release upload "${SOURCE_TAG}" "$file"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
   upload-debug-symbols:
     strategy:
       matrix:
