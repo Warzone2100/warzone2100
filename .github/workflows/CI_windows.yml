@@ -364,8 +364,8 @@ jobs:
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\installer"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\debugsymbols"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\archive"
-        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\error_logs"
-        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\sentry_source_bundles"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\logs\error_logs"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\sentry_output\sentry_source_bundles"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\sentry_artifacts"
     - name: 'Download & Install Ninja-Build'
       id: ninja-dl
@@ -611,19 +611,19 @@ jobs:
         $NSIS_Log = "build\_CPack_Packages\win32\NSIS\NSISOutput.log"
         if (Test-Path $NSIS_Log -PathType Leaf)
         {
-          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
+          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\logs\error_logs"
         }
         $NSIS_Log = "build\_CPack_Packages\win64\NSIS\NSISOutput.log"
         if (Test-Path $NSIS_Log -PathType Leaf)
         {
-          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
+          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\logs\error_logs"
         }
     - name: Upload Failure Logs Artifact
       uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: failure_${{ steps.settings.outputs.WZ_BUILD_DESC }}_${{ matrix.architecture }}_error_logs
-        path: '${{ github.workspace }}\output\error_logs'
+        path: '${{ github.workspace }}\logs\error_logs'
         if-no-files-found: 'warn'
     - name: Package Full Installer
       working-directory: '${{ github.workspace }}\build'
@@ -746,7 +746,7 @@ jobs:
         WZ_REPO_PATH: ${{ steps.settings.outputs.WZ_REPO_PATH }}
         WZ_ARCHIVE_PATH: '${{ github.workspace }}\output\archive\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive.zip'
         WZ_DEBUGSYMBOLS_PATH: '${{ github.workspace }}\output\debugsymbols\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}.DEBUGSYMBOLS.7z'
-        SOURCE_BUNDLE_OUTPUT_DIR: '${{ github.workspace }}\output\sentry_source_bundles'
+        SOURCE_BUNDLE_OUTPUT_DIR: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
       run: |
         # Download sentry-cli
         echo "::group::Downloading sentry-cli ..."
@@ -777,7 +777,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: 'debug_sourcebundles_${{ steps.settings.outputs.WZ_BUILD_DESC }}'
-        path: '${{ github.workspace }}\output\sentry_source_bundles'
+        path: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
         retention-days: 1
         if-no-files-found: 'warn'
   upload-debug-symbols:
