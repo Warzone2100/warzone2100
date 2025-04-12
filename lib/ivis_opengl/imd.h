@@ -69,6 +69,9 @@ iIMDBaseShape *modelGet(const WzString &filename);
 
 void modelReloadAllModelTextures();
 
+bool debugReloadDisplayModelsForBaseModel(iIMDBaseShape& baseModel);
+void debugReloadAllDisplayModels();
+
 size_t getModelLoadingErrorCount();
 size_t getModelTextureLoadingFailuresCount();
 

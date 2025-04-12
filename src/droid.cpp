@@ -249,10 +249,10 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 		{
 			return;
 		}
-		iIMDShape *psShapeBody = psBaseShapeBody->displayModel();
+		const iIMDShape *psShapeBody = psBaseShapeBody->displayModel();
 		if ((psShapeBody->objanimpie[ANIM_EVENT_DYING]))
 		{
-			iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING]->displayModel();
+			const iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING]->displayModel();
 			/* get propulsion stats */
 			PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
 			if (psPropStats && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
@@ -807,8 +807,8 @@ void droidUpdate(DROID *psDroid)
 
 	if (psDroid->animationEvent != ANIM_EVENT_NONE)
 	{
-		iIMDBaseShape *baseImd = (psDroid->sDisplay.imd) ? psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent] : nullptr;
-		iIMDShape *imd = (baseImd) ? baseImd->displayModel() : nullptr;
+		const iIMDBaseShape *baseImd = (psDroid->sDisplay.imd) ? psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent] : nullptr;
+		const iIMDShape *imd = (baseImd) ? baseImd->displayModel() : nullptr;
 		if (imd && imd->objanimcycles > 0 && gameTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
 		{
 			// Done animating (animation is defined by body - other components should follow suit)

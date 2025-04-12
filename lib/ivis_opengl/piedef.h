@@ -47,7 +47,7 @@ struct iIMDShape;
  *	Global ProtoTypes
  */
 /***************************************************************************/
-bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth = 0.f, bool onlySingleLevel = false);
+bool pie_Draw3DShape(const iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth = 0.f, bool onlySingleLevel = false);
 void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix);
 
 void pie_GetResetCounts(size_t *pPieCount, size_t *pPolyCount);

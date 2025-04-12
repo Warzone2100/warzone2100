@@ -129,7 +129,7 @@ struct EFFECT
 	Vector3f     velocity = { 0.f, 0.f, 0.f };  // movement values per update
 	Vector3i     rotation = { 0, 0, 0 };        // current rotation - only for gravitons
 	Vector3i     spin = { 0, 0, 0 };            // rotation info for spinning things.
-	iIMDShape*   imd = nullptr;               // pointer to the imd the effect uses.
+	const iIMDShape*   imd = nullptr;               // pointer to the imd the effect uses.
 	uint32_t     birthTime = 0;               // what time was it introduced into the world?
 	uint32_t     lastFrame = 0;               // when did we last update the frame?
 	EFFECT_GROUP group = EFFECT_FREED;        // what group is it - explosion, building effect etc....
@@ -153,14 +153,14 @@ void	effectGiveAuxVarSec(UDWORD var);	// and so's this
 void	initEffectsSystem();
 void	shutdownEffectsSystem();
 void	processEffects(const glm::mat4 &perspectiveViewMatrix, struct LightingData& lightData);
-void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit);
-void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot = nullptr, Vector3f *velocity = nullptr);
-void    addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime);
+void 	addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit);
+void    addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot = nullptr, Vector3f *velocity = nullptr);
+void    addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime);
 
 void	renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
 void	effectResetUpdates();
 
-void	initPerimeterSmoke(iIMDShape *pImd, Vector3i base);
+void	initPerimeterSmoke(const iIMDShape *pImd, Vector3i base);
 
 bool	readFXData(const char *fileName);
 bool	writeFXData(const char *fileName);
