@@ -640,9 +640,13 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 		return;
 	}
 
+	auto adiff = psDel->rot.direction - psDel->sMove.moveDir;
+	auto move = iCosR(adiff, psDel->sMove.speed);
+	Vector3f velocity(iSinR(psDel->rot.direction, move), 0.f, iCosR(psDel->rot.direction, move));
+
 	if (psDel->animationEvent != ANIM_EVENT_DYING)
 	{
-		compPersonToBits(psDel);
+		compPersonToBits(psDel, velocity);
 	}
 
 	/* if baba then squish */
@@ -653,7 +657,7 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 	}
 	else
 	{
-		destroyFXDroid(psDel, impactTime);
+		destroyFXDroid(psDel, impactTime, velocity);
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = psDel->pos.z;
