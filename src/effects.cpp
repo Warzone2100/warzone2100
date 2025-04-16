@@ -1047,6 +1047,10 @@ static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 				/* Half it's velocity */
 				psEffect->velocity.y /= (float)(-2); // only y gets flipped
 
+				/* Also decrease other velocities */
+				psEffect->velocity.x *= 0.5f;
+				psEffect->velocity.z *= 0.5f;
+
 				/* Set it at ground level - may have gone through */
 				psEffect->position.y = (float)groundHeight;
 			}
@@ -1878,8 +1882,8 @@ void	effectSetupGraviton(EFFECT& effect)
 	switch (effect.type)
 	{
 	case GRAVITON_TYPE_GIBLET:
-		effect.velocity.x = GIBLET_INIT_VEL_X;
-		effect.velocity.z = GIBLET_INIT_VEL_Z;
+		effect.velocity.x += GIBLET_INIT_VEL_X;
+		effect.velocity.z += GIBLET_INIT_VEL_Z;
 		effect.velocity.y = GIBLET_INIT_VEL_Y;
 		break;
 	case GRAVITON_TYPE_EMITTING_ST:
@@ -1889,8 +1893,8 @@ void	effectSetupGraviton(EFFECT& effect)
 		effect.size = (UWORD)(120 + rand() % 30);
 		break;
 	case GRAVITON_TYPE_EMITTING_DR:
-		effect.velocity.x = GRAVITON_INIT_VEL_X / 2;
-		effect.velocity.z = GRAVITON_INIT_VEL_Z / 2;
+		effect.velocity.x += GRAVITON_INIT_VEL_X / 2;
+		effect.velocity.z += GRAVITON_INIT_VEL_Z / 2;
 		effect.velocity.y = GRAVITON_INIT_VEL_Y;
 		break;
 	default:

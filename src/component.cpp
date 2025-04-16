@@ -949,7 +949,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const g
 }
 
 
-void destroyFXDroid(DROID *psDroid, unsigned impactTime)
+void destroyFXDroid(DROID *psDroid, unsigned impactTime, Vector3f &velocity)
 {
 	for (int i = 0; i < 5; ++i)
 	{
@@ -1011,12 +1011,12 @@ void destroyFXDroid(DROID *psDroid, unsigned impactTime)
 		}
 		// Tell the effect system that it needs to use this player's color for the next effect
 		SetEffectForPlayer(psDroid->player);
-		addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, psImd->displayModel(), getPlayerColour(psDroid->player), impactTime);
+		addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, psImd->displayModel(), getPlayerColour(psDroid->player), impactTime, nullptr, &velocity);
 	}
 }
 
 
-void	compPersonToBits(DROID *psDroid)
+void	compPersonToBits(DROID *psDroid, Vector3f &velocity)
 {
 	Vector3i position;	//,rotation,velocity;
 	iIMDBaseShape	*headImd, *legsImd, *armImd, *bodyImd;
@@ -1052,10 +1052,10 @@ void	compPersonToBits(DROID *psDroid)
 	/* Tell about player colour */
 	col = getPlayerColour(psDroid->player);
 
-	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, headImd->displayModel(), col, gameTime - deltaGameTime + 1);
-	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, legsImd->displayModel(), col, gameTime - deltaGameTime + 1);
-	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, armImd->displayModel(), col, gameTime - deltaGameTime + 1);
-	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, bodyImd->displayModel(), col, gameTime - deltaGameTime + 1);
+	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, headImd->displayModel(), col, gameTime - deltaGameTime + 1, nullptr, &velocity);
+	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, legsImd->displayModel(), col, gameTime - deltaGameTime + 1, nullptr, &velocity);
+	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, armImd->displayModel(), col, gameTime - deltaGameTime + 1, nullptr, &velocity);
+	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, bodyImd->displayModel(), col, gameTime - deltaGameTime + 1, nullptr, &velocity);
 }
 
 
