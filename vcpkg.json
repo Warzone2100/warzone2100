@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "460551b0ec06be1ba6b918448bf3b0f44add813d",
+	"builtin-baseline": "2eb117a2fdc926812229eb7c81fe9f52594ac8a0",
 	"dependencies": [
 		"physfs",
 		"sdl2",
@@ -74,9 +74,6 @@
 			"name": "basisu",
 			"host": true
 		}
-	],
-	"overrides": [
-		{ "name": "gettext-libintl", "version": "0.22.5", "port-version": 2 }
 	],
 	"default-features": [
 		"vulkan"
