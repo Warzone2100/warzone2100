@@ -91,6 +91,10 @@
 		"label": "1aCybPos3",
 		"pos": [1472, 6720]
 	},
+	"position_23": {
+		"label": "reinforceNorthEast",
+		"pos": [15232, 256]
+	},
 
 	"area_0": {
 		"label": "landingZone",

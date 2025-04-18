@@ -43,6 +43,22 @@
 		"label": "COTranportRet",
 		"pos": [14784, 15424]
 	},
+	"position_11": {
+		"label": "insaneSpawnPos1",
+		"pos": [12032, 16000]
+	},
+	"position_12": {
+		"label": "insaneSpawnPos2",
+		"pos": [16000, 12032]
+	},
+	"position_13": {
+		"label": "insaneSpawnPos3",
+		"pos": [14976, 16000]
+	},
+	"position_14": {
+		"label": "insaneSpawnPos4",
+		"pos": [16000, 10496]
+	},
 
 	"area_0": {
 		"label": "landingZone",
