@@ -905,6 +905,21 @@
 		],
 		"statID": "Emplacement-HeavyLaser"
 	},
+	"R-Defense-ParticleGun": {
+		"iconID": "IMAGE_RES_DEFENCE",
+		"id": "R-Defense-ParticleGun",
+		"msgName": "RES_EMP_PG",
+		"name": "Particle Gun Emplacement",
+		"requiredResearch": [
+			"R-Wpn-ParticleGun"
+		],
+		"researchPoints": 1500,
+		"researchPower": 46,
+		"resultStructures": [
+			"Emplacement-ParticleGun"
+		],
+		"statID": "Emplacement-ParticleGun"
+	},
 	"R-Defense-HeavyPlasmaLauncher": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HeavyPlasmaLauncher",
@@ -6842,6 +6857,22 @@
 			"HeavyLaser-VTOL"
 		],
 		"statID": "HeavyLaser"
+	},
+	"R-Wpn-ParticleGun": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-ParticleGun",
+		"msgName": "RES_W_PG",
+		"name": "Particle Gun",
+		"requiredResearch": [
+			"R-Wpn-HvyLaser"
+		],
+		"researchPoints": 43200,
+		"researchPower": 450,
+		"resultComponents": [
+			"ParticleGun",
+			"ParticleGun-VTOL"
+		],
+		"statID": "ParticleGun"
 	},
 	"R-Wpn-LasSat": {
 		"disabledWhen": 16,
