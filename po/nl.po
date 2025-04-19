@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:06\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-04-19 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -120,10 +120,10 @@ msgid "ALPHA BASE MISSION: Establish a Forward Base"
 msgstr "ALFA BASIS MISSIE: Bouw een vooruitgeschoven basis"
 
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Bouw een vooruitgeschoven basis op het plateau en sla de New Paradigm af."
 
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Bouw verdedigingswerken totdat de groene doelstelling blip verdwijnt."
 
 msgid "ALPHA BASE MISSION: Counter Attack"
 msgstr "ALFA BASIS MISSIE: Tegenaanval"
@@ -156,10 +156,10 @@ msgid "The first two zones are now secure."
 msgstr "De eerste twee zones zijn veilig."
 
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "PROJECT TEAM UPDATES"
 
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "TEAM BETA UPDATE"
 
 msgid "We have recovered some artifacts."
 msgstr "We hebben wat artefacten verzameld."
@@ -168,7 +168,7 @@ msgid "There is a better equipped force operating in this area."
 msgstr "Er is een beter gewapende kracht bezig in dit gebied."
 
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "TEAM GAMMA UPDATE"
 
 msgid "Nothing to report."
 msgstr "Niks te melden."
@@ -492,7 +492,7 @@ msgid "Once a safe haven is established, return to the LZ for further orders."
 msgstr "Zo gauw een veilige plek is gebouwd, ga dan terug naar LZ voor verdere orders."
 
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "BETA BASIS MISSIE: Overleef en evacueer! Breng een vrachtwagen"
 
 msgid "Commander, we have grave news."
 msgstr "Commadant, wij hebben slecht nieuws."
@@ -864,7 +864,7 @@ msgid "Demolish"
 msgstr "Slopen"
 
 msgid "Naval"
-msgstr ""
+msgstr "Marine"
 
 msgid "Repair Center"
 msgstr "Reparatiecentrum"
@@ -1764,10 +1764,10 @@ msgid "All rockets upgraded automatically"
 msgstr "Alle raketten automatisch verbeterd"
 
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Vernietig alle New Paradigm eenheden"
 
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Vernietig alle New Paradigm versterkingen"
 
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
 msgstr ""
@@ -1779,22 +1779,22 @@ msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr ""
 
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Stel de Uplink veilig van The Collective"
 
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
 msgstr ""
 
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Verzend zoveel mogelijk transporten als je kunt en breng tenminste één vrachtwagen"
 
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Verplaats alle eenheden naar de vallei"
 
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Vernietig de raket silo's"
 
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Red Alpha team van Nexus"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr ""
@@ -1806,10 +1806,10 @@ msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr ""
 
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "Bouw een vooruitgeschoven basis bij de silo's"
 
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Bescherm de raket silo's en doe onderzoek voor de raket codes"
 
 msgid "Reunite a part of Beta team with a Gamma team outpost"
 msgstr ""
@@ -1824,25 +1824,25 @@ msgid "Fortify a strong base across the map to protect yourself from the Collect
 msgstr ""
 
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Vernietig alle vijandelijke eenheden en gebouwen"
 
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefacten verzameld"
 
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Basis vernietigd"
 
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Resterende vijandelijke eenheden"
 
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Resterende vijandelijke gebouwen"
 
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Keer terug naar de LZ"
 
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Vernietig alle vijandelijke eenheden en basissen"
 
 msgid "Survive until the timer reaches zero"
 msgstr ""
@@ -2571,7 +2571,7 @@ msgid "Midnight, April 10th, 2086"
 msgstr "Middernacht, 10de van April, 2086"
 
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "Rocky Mountains"
 
 msgid "Safety"
 msgstr "Veiligheid"
@@ -3580,7 +3580,7 @@ msgid "Average power costs and production times"
 msgstr "Gemiddelde energiekosten en productietijd"
 
 msgid "BaBaLegs"
-msgstr ""
+msgstr "Rocky Mountains"
 
 msgid "BaBaProp"
 msgstr ""
@@ -4915,10 +4915,10 @@ msgstr "Verbetering in laser optiek reduceert lichtverlies"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Ontbrand Houwitser Emplacement"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Ontbrand Houwitser Emplacement"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -6399,11 +6399,11 @@ msgstr "Synaptische Link Gegevens Analyse Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Synaptische Link Gegevens Analyse Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Synaptische Link Gegevens Analyse"
-
 msgid "Synaptic link data analysis"
 msgstr "Synaptische Link dataverwerking"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Synaptische Link Gegevens Analyse"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Synaptsiche Link Verstoorder technologie"
@@ -7295,6 +7295,9 @@ msgid "Set the default hosting chat configuration / permissions"
 msgstr ""
 
 msgid "Enable async join approval (for connecting clients)"
+msgstr ""
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
 msgstr ""
 
 msgid "Base URL for on-demand video downloads"
@@ -9823,6 +9826,18 @@ msgstr "Vul hier het wachtwoord in "
 msgid "Select Player Name"
 msgstr "Kies spelernaam"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "Bondgenootschappen toestaan"
 
@@ -9834,20 +9849,6 @@ msgstr "Kaartvoorbeeld"
 
 msgid "Click to see Map"
 msgstr "Klik om kaart te zien"
-
-msgid "Show Structure Limits"
-msgstr "Gebouwen limiet laten zien"
-
-msgid "Set Structure Limits"
-msgstr "Gebouwlimiet instellen"
-
-msgid "Random Game Options"
-msgstr ""
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr ""
 
 msgid "Tech"
 msgstr ""
@@ -9862,6 +9863,20 @@ msgid "Technology Level 3"
 msgstr ""
 
 msgid "Technology Level 4"
+msgstr ""
+
+msgid "Show Structure Limits"
+msgstr "Gebouwen limiet laten zien"
+
+msgid "Set Structure Limits"
+msgstr "Gebouwlimiet instellen"
+
+msgid "Random Game Options"
+msgstr ""
+
+msgid ""
+"Random Game Options\n"
+"Can be blocked by players' votes"
 msgstr ""
 
 msgid "Start Hosting Game"
@@ -10007,6 +10022,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10024,64 +10046,6 @@ msgstr ""
 
 msgid "Lock Teams"
 msgstr ""
-
-msgid "Choose Team"
-msgstr "Kies Team"
-
-msgid "Teams locked"
-msgstr ""
-
-msgid "Click to change player colour"
-msgstr "Klik om de speler-kleur te wijzigen"
-
-msgid "Click to change player position"
-msgstr "Klik om de speler positie te wijzigen"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr ""
-
-msgid "Click to close spectator slot"
-msgstr ""
-
-msgid "Player ID: "
-msgstr ""
-
-msgid "(none)"
-msgstr ""
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Klik om de AI moeilijksheidsgraad aan te passen"
-
-msgid "Waiting for player"
-msgstr "Op andere spelers wachten"
-
-msgid "Player is ready"
-msgstr "Speler is klaar"
-
-msgid "Player is downloading"
-msgstr ""
-
-msgid "Click when ready"
-msgstr "Klik zodra klaar"
-
-msgid "Waiting for download"
-msgstr ""
-
-msgid "READY?"
-msgstr "KLAAR?"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10226,6 +10190,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10243,20 +10222,6 @@ msgid "Closed"
 msgstr "Gesloten"
 
 msgid "Open"
-msgstr ""
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Stuurt Kaart: %u%%"
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Kaart: %u%% gedownload"
-
-msgid "HOST"
-msgstr ""
-
-msgid "Ping"
 msgstr ""
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
@@ -10285,6 +10250,10 @@ msgstr "%s heeft het spel verlaten"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10346,6 +10315,9 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Ping"
+msgstr ""
 
 msgid "Structs"
 msgstr "Gebouwen"
@@ -10890,6 +10862,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11321,6 +11305,130 @@ msgstr ""
 
 msgid "IP Address or Machine Name"
 msgstr "IP-adres of computernaam"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr ""
+
+msgid "(none)"
+msgstr ""
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Stuurt Kaart: %u%%"
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Kaart: %u%% gedownload"
+
+msgid "HOST"
+msgstr ""
+
+msgid "Choose Team"
+msgstr "Kies Team"
+
+msgid "Teams locked"
+msgstr ""
+
+msgid "Click to change player colour"
+msgstr "Klik om de speler-kleur te wijzigen"
+
+msgid "Click to change player position"
+msgstr "Klik om de speler positie te wijzigen"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr ""
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Klik om de AI moeilijksheidsgraad aan te passen"
+
+msgid "Waiting for player"
+msgstr "Op andere spelers wachten"
+
+msgid "Player is ready"
+msgstr "Speler is klaar"
+
+msgid "Player is downloading"
+msgstr ""
+
+msgid "Click when ready"
+msgstr "Klik zodra klaar"
+
+msgid "Waiting for download"
+msgstr ""
+
+msgid "READY?"
+msgstr "KLAAR?"
 
 msgid "Launch Transport"
 msgstr "Vervoer wegsturen"
