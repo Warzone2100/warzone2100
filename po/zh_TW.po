@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:06\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-03-01 20:57\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -4925,11 +4925,11 @@ msgstr "改善雷射系統的光學結構使之不易發散"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "燃燒榴彈炮陣地 二型"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "燃燒榴彈炮陣地"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "燃燒榴彈砲砲台"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "燃燒榴彈炮陣地"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "燃燒榴彈砲可以指派給一座雷達"
@@ -6409,10 +6409,10 @@ msgstr "突觸連結資料分析二型"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突觸連結資料分析三型"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "突觸連結資料分析"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "突觸連結資料分析"
 
 msgid "Synaptic Link Scrambler technology"
@@ -7308,6 +7308,9 @@ msgstr "設定預設主持託管聊天參數設定/許可權"
 
 msgid "Enable async join approval (for connecting clients)"
 msgstr "開啟異步聯接批准 (用於連接用戶端)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
 
 msgid "Base URL for on-demand video downloads"
 msgstr "點播影片下載的基礎網址 URL"
@@ -9831,6 +9834,18 @@ msgstr "在此輸入密碼"
 msgid "Select Player Name"
 msgstr "選擇玩家名稱"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "同盟"
 
@@ -9842,6 +9857,21 @@ msgstr "預覽地圖"
 
 msgid "Click to see Map"
 msgstr "按一下看地圖"
+
+msgid "Tech"
+msgstr "科技"
+
+msgid "Technology Level 1"
+msgstr "科技級別 1"
+
+msgid "Technology Level 2"
+msgstr "科技級別 2"
+
+msgid "Technology Level 3"
+msgstr "科技級別 3"
+
+msgid "Technology Level 4"
+msgstr "科技級別 4"
 
 msgid "Show Structure Limits"
 msgstr "顯示建築物數量限制"
@@ -9858,21 +9888,6 @@ msgid ""
 msgstr ""
 "隨機遊戲選項\n"
 "可以透過玩家投票來阻止"
-
-msgid "Tech"
-msgstr "科技"
-
-msgid "Technology Level 1"
-msgstr "科技級別 1"
-
-msgid "Technology Level 2"
-msgstr "科技級別 2"
-
-msgid "Technology Level 3"
-msgstr "科技級別 3"
-
-msgid "Technology Level 4"
-msgstr "科技級別 4"
 
 msgid "Start Hosting Game"
 msgstr "開始遊戲"
@@ -10017,6 +10032,13 @@ msgstr "您想將此旁觀者與玩家交換嗎?"
 msgid "Yes, select Player slot"
 msgstr "是, 選擇玩家位置"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "已加入:"
 
@@ -10034,64 +10056,6 @@ msgstr "允許旁觀者加入"
 
 msgid "Lock Teams"
 msgstr "鎖定同盟"
-
-msgid "Choose Team"
-msgstr "選擇團隊"
-
-msgid "Teams locked"
-msgstr "同盟已鎖定"
-
-msgid "Click to change player colour"
-msgstr "點擊以變更玩家顏色"
-
-msgid "Click to change player position"
-msgstr "點擊以變更玩家位置"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "點選更改AI，右鍵分配選擇"
-
-msgid "Click to close spectator slot"
-msgstr "點擊關閉旁觀者位置"
-
-msgid "Player ID: "
-msgstr "玩家ID: "
-
-msgid "(none)"
-msgstr "(無)"
-
-msgid "Alt Name:"
-msgstr "自動評級提示名稱:"
-
-msgid "Player rating:"
-msgstr "玩家評分:"
-
-msgid "Host provided"
-msgstr "主持端提供"
-
-#, c-format
-msgid "From: %s"
-msgstr "從: %s"
-
-msgid "Click to change difficulty"
-msgstr "點擊更改難度"
-
-msgid "Waiting for player"
-msgstr "等待玩家"
-
-msgid "Player is ready"
-msgstr "玩家已就緒"
-
-msgid "Player is downloading"
-msgstr "玩家正在下載"
-
-msgid "Click when ready"
-msgstr "按一下開始"
-
-msgid "Waiting for download"
-msgstr "等待下載"
-
-msgid "READY?"
-msgstr "準備好了?"
 
 msgid "For Spectator:"
 msgstr "留給旁觀者:"
@@ -10236,6 +10200,21 @@ msgstr "正在進行埠位址對應..."
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "使用者停用埠對應. 將不會自動設定埠 %d."
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10254,20 +10233,6 @@ msgstr "已關閉"
 
 msgid "Open"
 msgstr "開啟"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "地圖傳送: %u %%"
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "地圖: %u%% 已下載"
-
-msgid "HOST"
-msgstr "遊戲主持"
-
-msgid "Ping"
-msgstr "PING網路通信檢測"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "用於儲存此重播檔案的 Warzone 2100 版本與目前執行的版本不相容."
@@ -10296,6 +10261,10 @@ msgstr "%s 已離開遊戲"
 #, c-format
 msgid "%s joined the Game"
 msgstr "%s 已加入遊戲"
+
+#, c-format
+msgid "(codename: %s)"
+msgstr ""
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10355,6 +10324,9 @@ msgstr "任何數量的玩家"
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d 玩家"
+
+msgid "Ping"
+msgstr "PING網路通信檢測"
 
 msgid "Structs"
 msgstr "建築"
@@ -10899,6 +10871,18 @@ msgstr "主持端回應無效"
 msgid "Requesting to join game"
 msgstr "請求加入遊戲"
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr "踢出旁觀者"
 
@@ -11328,6 +11312,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP 位置或電腦名稱"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "玩家ID: "
+
+msgid "(none)"
+msgstr "(無)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "地圖傳送: %u %%"
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "地圖: %u%% 已下載"
+
+msgid "HOST"
+msgstr "遊戲主持"
+
+msgid "Choose Team"
+msgstr "選擇團隊"
+
+msgid "Teams locked"
+msgstr "同盟已鎖定"
+
+msgid "Click to change player colour"
+msgstr "點擊以變更玩家顏色"
+
+msgid "Click to change player position"
+msgstr "點擊以變更玩家位置"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "點選更改AI，右鍵分配選擇"
+
+msgid "Click to close spectator slot"
+msgstr "點擊關閉旁觀者位置"
+
+msgid "Alt Name:"
+msgstr "自動評級提示名稱:"
+
+msgid "Player rating:"
+msgstr "玩家評分:"
+
+msgid "Host provided"
+msgstr "主持端提供"
+
+#, c-format
+msgid "From: %s"
+msgstr "從: %s"
+
+msgid "Click to change difficulty"
+msgstr "點擊更改難度"
+
+msgid "Waiting for player"
+msgstr "等待玩家"
+
+msgid "Player is ready"
+msgstr "玩家已就緒"
+
+msgid "Player is downloading"
+msgstr "玩家正在下載"
+
+msgid "Click when ready"
+msgstr "按一下開始"
+
+msgid "Waiting for download"
+msgstr "等待下載"
+
+msgid "READY?"
+msgstr "準備好了?"
 
 msgid "Launch Transport"
 msgstr "發射運輸艦"
