@@ -1,4 +1,5 @@
-FROM fedora:latest
+#FROM fedora:latest
+FROM fedora:41
 
 RUN cat /etc/fedora-release
 
