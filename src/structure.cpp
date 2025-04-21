@@ -251,6 +251,34 @@ bool isBlueprint(const BASE_OBJECT *psObject)
 	return psObject != nullptr && psObject->type == OBJ_STRUCTURE && ((const STRUCTURE*)psObject)->isBlueprint();
 }
 
+// Add smoke effect to cover the droid's emergence from the factory or when building structures.
+// DISPLAY ONLY - does not affect game state.
+static void displayConstructionCloud(const Vector3i &pos)
+{
+	const Vector2i coordinates = {pos.x, pos.y};
+	const MAPTILE *psTile = mapTile(map_coord(coordinates));
+	if (!tileIsClearlyVisible(psTile))
+	{
+		return;
+	}
+
+	Vector3i iVecEffect;
+
+	iVecEffect.x = pos.x;
+	iVecEffect.y = map_Height(pos.x, pos.y) + DROID_CONSTRUCTION_SMOKE_HEIGHT;
+	iVecEffect.z = pos.y;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	iVecEffect.x = pos.x - DROID_CONSTRUCTION_SMOKE_OFFSET;
+	iVecEffect.z = pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	iVecEffect.z = pos.y + DROID_CONSTRUCTION_SMOKE_OFFSET;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	iVecEffect.x = pos.x + DROID_CONSTRUCTION_SMOKE_OFFSET;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	iVecEffect.z = pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+}
+
 void initStructLimits()
 {
 	for (unsigned i = 0; i < numStructureStats; ++i)
@@ -1797,6 +1825,11 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				}
 			}
 		}
+
+		if (!FromSave)
+		{
+			displayConstructionCloud(psBuilding->pos);
+		}
 	}
 	else //its an upgrade
 	{
@@ -2566,7 +2599,6 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 	bool			placed;//bTemp = false;
 	DROID			*psNewDroid;
 	FACTORY			*psFact;
-	Vector3i iVecEffect;
 	UBYTE			factoryType;
 	bool			assignCommander;
 
@@ -2600,25 +2632,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			}
 		}
 		setFactorySecondaryState(psNewDroid, psStructure);
-		const auto mapCoord = map_coord({x, y});
-		const auto psTile = mapTile(mapCoord);
-		if (tileIsClearlyVisible(psTile)) // display only - does not affect game state
-		{
-			/* add smoke effect to cover the droid's emergence from the factory */
-			iVecEffect.x = psNewDroid->pos.x;
-			iVecEffect.y = map_Height(psNewDroid->pos.x, psNewDroid->pos.y) + DROID_CONSTRUCTION_SMOKE_HEIGHT;
-			iVecEffect.z = psNewDroid->pos.y;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-			iVecEffect.x = psNewDroid->pos.x - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			iVecEffect.z = psNewDroid->pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-			iVecEffect.z = psNewDroid->pos.y + DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-			iVecEffect.x = psNewDroid->pos.x + DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-			iVecEffect.z = psNewDroid->pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-		}
+		displayConstructionCloud(psNewDroid->pos);
 		/* add the droid to the list */
 		addDroid(psNewDroid, apsDroidLists);
 		*ppsDroid = psNewDroid;
