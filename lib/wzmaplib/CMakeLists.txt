@@ -22,7 +22,7 @@ endif()
 ##############################
 # wzmaplib project
 
-cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.24)
+cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.31)
 project (wzmaplib CXX)
 
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
