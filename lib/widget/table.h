@@ -111,6 +111,9 @@ public:
 	void addRow(const std::shared_ptr<TableRow> &row);
 	void clearRows();
 
+	// Show / hide header
+	void setHeaderVisible(bool visible);
+
 	// Disable / enable a row
 	void setRowDisabled(size_t row, bool disabled);
 
