@@ -287,6 +287,8 @@ struct IMAGEFILE
 	~IMAGEFILE(); // Defined in bitimage.cpp.
 	AtlasImageDef* find(WzString const &name);  // Defined in bitimage.cpp.
 
+	inline size_t numImages() const { return imageDefs.size(); }
+
 	std::vector<Page> pages;          /// Texture pages.
 	std::vector<AtlasImageDef> imageDefs;  /// Stored images.
 	std::unordered_map<WzString, AtlasImageDef *> imageNamesMap; // Names of images -> AtlasImageDef
