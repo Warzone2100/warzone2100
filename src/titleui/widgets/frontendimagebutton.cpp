@@ -40,6 +40,17 @@ std::shared_ptr<WzFrontendImageButton> WzFrontendImageButton::make(optional<UWOR
 
 void WzFrontendImageButton::setImage(optional<UWORD> newFrontendImgID)
 {
+	missingImage = false;
+
+	// validate newFrontendImgID value
+	if (newFrontendImgID.has_value() && newFrontendImgID.value() >= FrontImages->numImages())
+	{
+		// out of bounds value (likely a mod has an incomplete / older frontend.img file)
+		debug(LOG_ERROR, "frontend.img missing expected image id \"%u\" (num loaded: %zu) - remove any mods", static_cast<unsigned>(newFrontendImgID.value()), FrontImages->numImages());
+		newFrontendImgID.reset();
+		missingImage = true;
+	}
+
 	frontendImgID = newFrontendImgID;
 	recalcIdealWidth();
 }
@@ -67,10 +78,15 @@ void WzFrontendImageButton::setString(WzString string)
 	recalcIdealWidth();
 }
 
+bool WzFrontendImageButton::shouldDisplayImage() const
+{
+	return (frontendImgID.has_value() || missingImage) && imageDimensions > 0;
+}
+
 void WzFrontendImageButton::recalcIdealWidth()
 {
 	cachedIdealWidth = horizontalPadding;
-	if (frontendImgID.has_value() && imageDimensions > 0)
+	if (shouldDisplayImage())
 	{
 		cachedIdealWidth += imageDimensions + horizontalPadding;
 	}
@@ -105,7 +121,7 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 	bool isDisabled = (getState() & WBUT_DISABLE) != 0;
 	bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
-	bool hasImage = frontendImgID.has_value() && imageDimensions > 0;
+	bool hasImage = shouldDisplayImage();
 
 	PIELIGHT textColor = (isHighlight) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
 	if (isDisabled)
@@ -196,21 +212,26 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 		}
 	}
 
+	int imgPosX0;
+	if (bHasText)
+	{
+		// Display the image to the left
+		imgPosX0 = x0 + horizontalPadding;
+	}
+	else
+	{
+		// Display the image horizontally centered
+		imgPosX0 = x0 + (width() - imageDimensions) / 2;
+	}
+	int imgPosY0 = y0 + (height() - imageDimensions) / 2;
+
 	if (frontendImgID.has_value())
 	{
-		int imgPosX0;
-		if (bHasText)
-		{
-			// Display the image to the left
-			imgPosX0 = x0 + horizontalPadding;
-		}
-		else
-		{
-			// Display the image horizontally centered
-			imgPosX0 = x0 + (width() - imageDimensions) / 2;
-		}
-		int imgPosY0 = y0 + (height() - imageDimensions) / 2;
 		PIELIGHT imgColor = textColor;
 		iV_DrawImageFileAnisotropicTint(FrontImages, frontendImgID.value(), imgPosX0, imgPosY0, Vector2f(imageDimensions, imageDimensions), imgColor);
+	}
+	else if (missingImage)
+	{
+		pie_UniTransBoxFill(imgPosX0, imgPosY0, imgPosX0 + imageDimensions, imgPosY0 + imageDimensions, WZCOL_RED);
 	}
 }

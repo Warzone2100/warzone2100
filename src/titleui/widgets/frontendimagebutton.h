@@ -49,9 +49,11 @@ protected:
 	void display(int xOffset, int yOffset) override;
 private:
 	void recalcIdealWidth();
+	bool shouldDisplayImage() const;
 private:
 	WzText wzText;
 	optional<UWORD> frontendImgID = nullopt;
+	bool missingImage = false;
 	int imageDimensions = 16;
 	int cachedIdealWidth = 0;
 	int lastWidgetWidth = 0;
