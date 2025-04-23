@@ -78,6 +78,7 @@
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
 #define	DROID_REPAIR_SPREAD	(20 - rand()%40)
+#define DROID_EXPLOSION_VELOCITY_FACTOR 0.9f
 
 // store the experience of recently recycled droids
 static std::priority_queue<int> recycled_experience[MAX_PLAYERS];
@@ -643,6 +644,7 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 	auto adiff = psDel->rot.direction - psDel->sMove.moveDir;
 	auto move = iCosR(adiff, psDel->sMove.speed);
 	Vector3f velocity(iSinR(psDel->rot.direction, move), 0.f, iCosR(psDel->rot.direction, move));
+	velocity *= DROID_EXPLOSION_VELOCITY_FACTOR;
 
 	if (psDel->animationEvent != ANIM_EVENT_DYING)
 	{
