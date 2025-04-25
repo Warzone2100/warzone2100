@@ -91,7 +91,6 @@ bool isValidSocket(const Socket& sock);
 
 // Socket addresses.
 net::result<SocketAddress*> resolveHost(const char *host, unsigned port);            ///< Looks up a socket address.
-WZ_DECL_NONNULL(1) void deleteSocketAddress(SocketAddress *addr);       ///< Destroys the socket address.
 
 // Sockets.
 net::result<Socket*> socketOpen(const SocketAddress *addr, unsigned timeout);        ///< Opens a Socket, using the first address in addr.
