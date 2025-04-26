@@ -19,8 +19,24 @@
 
 #include "lib/netplay/tcp/tcp_connection_address.h"
 
+#include "lib/netplay/tcp/sock_error.h"
 #include "lib/netplay/tcp/netsocket.h" // for `freeaddrinfo`
+#include "lib/netplay/error_categories.h"
 #include "lib/framework/frame.h" // for `ASSERT`
+
+#include <fmt/format.h>
+
+#if defined(WZ_OS_WIN)
+# include <winsock2.h>
+# include <ws2ipdef.h>
+# include <ws2tcpip.h>
+#elif defined(WZ_OS_UNIX)
+# include <arpa/inet.h>
+# include <netinet/in.h>
+#endif
+
+namespace tcp
+{
 
 TCPConnectionAddress::TCPConnectionAddress(SocketAddress* addr)
 	: addr_(addr)
@@ -31,3 +47,31 @@ TCPConnectionAddress::~TCPConnectionAddress()
 	ASSERT(addr_ != nullptr, "Invalid addrinfo stored in the connection address");
 	freeaddrinfo(addr_);
 }
+
+net::result<std::string> TCPConnectionAddress::toString() const
+{
+	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)), addr_ != nullptr, "Invalid addrinfo");
+	if (addr_->ai_family == AF_INET)
+	{
+		struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(addr_->ai_addr);
+		char ipStr[INET_ADDRSTRLEN] = {};
+		if (inet_ntop(addr_->ai_family, &sin->sin_addr, ipStr, INET_ADDRSTRLEN))
+		{
+			return fmt::format("{}:{}", ipStr, ntohs(sin->sin_port));
+		}
+		return tl::make_unexpected(make_network_error_code(tcp::getSockErr()));
+	}
+	else if (addr_->ai_family == AF_INET6)
+	{
+		struct sockaddr_in6* sin = reinterpret_cast<struct sockaddr_in6*>(addr_->ai_addr);
+		char ipStr[INET6_ADDRSTRLEN] = {};
+		if (inet_ntop(addr_->ai_family, &sin->sin6_addr, ipStr, INET_ADDRSTRLEN))
+		{
+			return fmt::format("[{}]:{}", ipStr, ntohs(sin->sin6_port));
+		}
+		return tl::make_unexpected(make_network_error_code(tcp::getSockErr()));
+	}
+	return tl::make_unexpected(make_network_error_code(EFAULT)); // Unknown family
+}
+
+} // namespace tcp

@@ -19,39 +19,16 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#pragma once
-
-#include "lib/netplay/connection_address.h"
-
-#include <steam/steamnetworkingtypes.h>
+#include "gns_connection_address.h"
 
 namespace gns
 {
 
-/// <summary>
-/// GNS-specific implementation of the `IConnectionAddress` interface,
-/// suitable for direct consumption by the GNS network backend.
-///
-/// Wraps a `SteamNetworkingIPAddr` object, which is used to represent
-/// a network address (IP address with port) in the GNS library.
-/// </summary>
-class GNSConnectionAddress : public IConnectionAddress
+net::result<std::string> GNSConnectionAddress::toString() const
 {
-public:
-
-	explicit GNSConnectionAddress(SteamNetworkingIPAddr addr)
-		: addr_(addr)
-	{}
-
-	virtual ~GNSConnectionAddress() override = default;
-
-	const SteamNetworkingIPAddr& asSteamNetworkingIPAddr() const { return addr_; }
-
-	virtual net::result<std::string> toString() const override;
-
-private:
-
-	SteamNetworkingIPAddr addr_;
-};
+	char res[SteamNetworkingIPAddr::k_cchMaxString] = {};
+	addr_.ToString(res, SteamNetworkingIPAddr::k_cchMaxString, true);
+	return std::string(res);
+}
 
 } // namespace gns

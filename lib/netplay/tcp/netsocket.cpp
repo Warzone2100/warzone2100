@@ -883,6 +883,11 @@ void SOCKETinit()
 #if defined(WZ_OS_WIN)
 	static WSADATA stuff;
 	constexpr WORD ver_required = (2 << 8) + 2; // Winsock 2.2, should always be available
+
+	// `WSAStartup`/ `WSACleanup` can be called many times, just need to make sure that
+	// for each `WSAStartup` there's a matching `WSACleanup` call.
+	//
+	// For more details, see: https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup#remarks
 	if (WSAStartup(ver_required, &stuff) != 0)
 	{
 		debug(LOG_ERROR, "Failed to initialize Winsock: %s", strSockError(getSockErr()));

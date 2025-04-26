@@ -66,7 +66,7 @@ public:
 	/// Resolve host + port combination and return an opaque `ConnectionAddress` handle
 	/// representing the resolved network address.
 	/// </summary>
-	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) = 0;
+	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) const = 0;
 	/// <summary>
 	/// Open a listening socket bound to a specified local port.
 	/// </summary>
