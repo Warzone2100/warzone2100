@@ -21,37 +21,23 @@
 
 #pragma once
 
-#include "lib/netplay/connection_address.h"
+#include "lib/netplay/net_result.h"
 
-#include <steam/steamnetworkingtypes.h>
+#include <memory>
+#include <stdint.h>
 
-namespace gns
-{
+struct IConnectionAddress;
 
 /// <summary>
-/// GNS-specific implementation of the `IConnectionAddress` interface,
-/// suitable for direct consumption by the GNS network backend.
-///
-/// Wraps a `SteamNetworkingIPAddr` object, which is used to represent
-/// a network address (IP address with port) in the GNS library.
+/// An abstraction over host resolution algorithm, which is used to resolve
+/// hostnames to IP addresses, which are then converted to the `IConnectionAddress`
+/// instances, tailored to a specific network backend.
 /// </summary>
-class GNSConnectionAddress : public IConnectionAddress
+class IAddressResolver
 {
 public:
 
-	explicit GNSConnectionAddress(SteamNetworkingIPAddr addr)
-		: addr_(addr)
-	{}
+	virtual ~IAddressResolver() = default;
 
-	virtual ~GNSConnectionAddress() override = default;
-
-	const SteamNetworkingIPAddr& asSteamNetworkingIPAddr() const { return addr_; }
-
-	virtual net::result<std::string> toString() const override;
-
-private:
-
-	SteamNetworkingIPAddr addr_;
+	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) const = 0;
 };
-
-} // namespace gns

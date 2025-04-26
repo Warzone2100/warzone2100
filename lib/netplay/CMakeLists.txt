@@ -52,6 +52,7 @@ set (SRC
 	"wz_connection_provider.cpp"
 	"wzfile.cpp"
 	"zlib_compression_adapter.cpp"
+	"tcp/tcp_address_resolver.cpp"
 	"tcp/netsocket.cpp"
 	"tcp/sock_error.cpp"
 	"tcp/tcp_client_connection.cpp"
@@ -63,6 +64,7 @@ set (SRC
 if (ENABLE_GNS_NETWORK_BACKEND)
 	list(APPEND SRC
 		"gns/gns_client_connection.cpp"
+		"gns/gns_connection_address.cpp"
 		"gns/gns_connection_poll_group.cpp"
 		"gns/gns_connection_provider.cpp"
 		"gns/gns_error_categories.cpp"

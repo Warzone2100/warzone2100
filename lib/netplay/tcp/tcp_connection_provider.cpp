@@ -24,6 +24,7 @@
 #include "lib/netplay/tcp/tcp_connection_poll_group.h"
 #include "lib/netplay/tcp/tcp_client_connection.h"
 #include "lib/netplay/tcp/tcp_listen_socket.h"
+#include "lib/netplay/tcp/tcp_address_resolver.h"
 
 #include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/open_connection_result.h"
@@ -44,10 +45,12 @@ namespace tcp
 void TCPConnectionProvider::initialize()
 {
 	SOCKETinit();
+	addressResolver_ = std::make_unique<TCPAddressResolver>();
 }
 
 void TCPConnectionProvider::shutdown()
 {
+	addressResolver_.reset();
 	SOCKETshutdown();
 }
 
@@ -56,14 +59,10 @@ ConnectionProviderType TCPConnectionProvider::type() const noexcept
 	return ConnectionProviderType::TCP_DIRECT;
 }
 
-net::result<std::unique_ptr<IConnectionAddress>> TCPConnectionProvider::resolveHost(const char* host, uint16_t port)
+net::result<std::unique_ptr<IConnectionAddress>> TCPConnectionProvider::resolveHost(const char* host, uint16_t port) const
 {
-	auto resolved = tcp::resolveHost(host, port);
-	if (!resolved.has_value())
-	{
-		return tl::make_unexpected(resolved.error());
-	}
-	return std::make_unique<TCPConnectionAddress>(resolved.value());
+	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)), addressResolver_ != nullptr, "Address resolver not initialized");
+	return addressResolver_->resolveHost(host, port);
 }
 
 net::result<IListenSocket*> TCPConnectionProvider::openListenSocket(uint16_t port)
@@ -79,11 +78,7 @@ net::result<IListenSocket*> TCPConnectionProvider::openListenSocket(uint16_t por
 net::result<IClientConnection*> TCPConnectionProvider::openClientConnectionAny(const IConnectionAddress& addr, unsigned timeout)
 {
 	const auto* tcpAddr = dynamic_cast<const TCPConnectionAddress*>(&addr);
-	ASSERT(tcpAddr != nullptr, "Expected TCPConnectionAddress instance");
-	if (!tcpAddr)
-	{
-		throw std::runtime_error("Expected TCPConnectionAddress instance");
-	}
+	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)), tcpAddr != nullptr, "Expected TCPConnectionAddress instance");
 	const auto* rawAddr = tcpAddr->asRawSocketAddress();
 	auto res = socketOpenAny(rawAddr, timeout);
 	if (!res.has_value())

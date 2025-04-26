@@ -32,6 +32,8 @@
 
 #include <steam/steamnetworkingtypes.h>
 
+#include "lib/netplay/address_resolver.h"
+
 class ISteamNetworkingSockets;
 
 namespace gns
@@ -55,7 +57,12 @@ public:
 
 	virtual ConnectionProviderType type() const noexcept override;
 
-	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) override;
+	/// <summary>
+	/// Currently piggy-backs on the `TCPAddressResolver` class
+	/// to perform hostname resolution and transforms the TCP-specific
+	/// addresses to the form which GNS library understands.
+	/// </summary>
+	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) const override;
 
 	virtual net::result<IListenSocket*> openListenSocket(uint16_t port) override;
 
@@ -81,6 +88,7 @@ private:
 	std::pair<HSteamListenSocket, GNSListenSocket*> activeListenSocket_ = { k_HSteamListenSocket_Invalid, nullptr };
 	std::vector<SteamNetworkingConfigValue_t> listenSocketOpts_;
 	std::vector<SteamNetworkingConfigValue_t> clientConnOpts_;
+	std::unique_ptr<IAddressResolver> addressResolver_;
 };
 
 } // namespace tcp

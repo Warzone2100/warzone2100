@@ -33,6 +33,9 @@
 #include "lib/netplay/gns/gns_client_connection.h"
 #include "lib/netplay/gns/gns_connection_poll_group.h"
 
+#include "lib/netplay/tcp/tcp_address_resolver.h"
+#include "lib/netplay/tcp/tcp_connection_address.h"
+
 #include <fmt/format.h>
 #include <steam/steamnetworkingtypes.h>
 #include <steam/isteamnetworkingsockets.h>
@@ -62,6 +65,8 @@ void GNSConnectionProvider::initialize()
 		throw std::runtime_error("Failed to initialize GNS network interface");
 	}
 
+	addressResolver_ = std::make_unique<tcp::TCPAddressResolver>();
+
 	// FIXME: This doesn't work for some reason (the pointer is not set to the correct value
 	// in the connection state change callback), although this would be a better alternative to
 	// having a static `activeServer` variable.
@@ -88,6 +93,7 @@ void GNSConnectionProvider::initialize()
 
 void GNSConnectionProvider::shutdown()
 {
+	addressResolver_.reset();
 	activeServer = nullptr;
 }
 
@@ -96,12 +102,19 @@ ConnectionProviderType GNSConnectionProvider::type() const noexcept
 	return ConnectionProviderType::GNS_DIRECT;
 }
 
-net::result<std::unique_ptr<IConnectionAddress>> GNSConnectionProvider::resolveHost(const char* host, uint16_t port)
+net::result<std::unique_ptr<IConnectionAddress>> GNSConnectionProvider::resolveHost(const char* host, uint16_t port) const
 {
+	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)), addressResolver_ != nullptr, "Address resolver not initialized");
+
+	auto resolvedAddr = addressResolver_->resolveHost(host, port);
+	ASSERT_OR_RETURN(tl::make_unexpected(resolvedAddr.error()), resolvedAddr.has_value(), "Address resolver error");
+
+	auto addrStrRes = resolvedAddr.value()->toString();
+	ASSERT_OR_RETURN(tl::make_unexpected(addrStrRes.error()), addrStrRes.has_value(), "Failed to cast network address to string");
+
 	SteamNetworkingIPAddr addr;
 	addr.Clear();
-	const auto addrString = fmt::format("{}:{}", host, port);
-	if (!addr.ParseString(addrString.c_str()))
+	if (!addr.ParseString(addrStrRes.value().c_str()))
 	{
 		return tl::make_unexpected(make_network_error_code(EFAULT)); // bad address
 	}
