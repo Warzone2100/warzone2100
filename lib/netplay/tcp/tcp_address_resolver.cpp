@@ -19,39 +19,34 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#pragma once
+#include "tcp_address_resolver.h"
 
-#include "lib/netplay/connection_address.h"
+#include "lib/netplay/tcp/netsocket.h"
+#include "lib/netplay/tcp/tcp_connection_address.h"
 
-#include <steam/steamnetworkingtypes.h>
+#include <memory>
 
-namespace gns
+namespace tcp
 {
 
-/// <summary>
-/// GNS-specific implementation of the `IConnectionAddress` interface,
-/// suitable for direct consumption by the GNS network backend.
-///
-/// Wraps a `SteamNetworkingIPAddr` object, which is used to represent
-/// a network address (IP address with port) in the GNS library.
-/// </summary>
-class GNSConnectionAddress : public IConnectionAddress
+TCPAddressResolver::TCPAddressResolver()
 {
-public:
+	SOCKETinit();
+}
 
-	explicit GNSConnectionAddress(SteamNetworkingIPAddr addr)
-		: addr_(addr)
-	{}
+TCPAddressResolver::~TCPAddressResolver()
+{
+	SOCKETshutdown();
+}
 
-	virtual ~GNSConnectionAddress() override = default;
+net::result<std::unique_ptr<IConnectionAddress>> TCPAddressResolver::resolveHost(const char* host, uint16_t port) const
+{
+	auto resolved = tcp::resolveHost(host, port);
+	if (!resolved.has_value())
+	{
+		return tl::make_unexpected(resolved.error());
+	}
+	return std::make_unique<TCPConnectionAddress>(resolved.value());
+}
 
-	const SteamNetworkingIPAddr& asSteamNetworkingIPAddr() const { return addr_; }
-
-	virtual net::result<std::string> toString() const override;
-
-private:
-
-	SteamNetworkingIPAddr addr_;
-};
-
-} // namespace gns
+} // namespace tcp

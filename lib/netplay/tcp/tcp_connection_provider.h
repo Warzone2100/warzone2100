@@ -24,10 +24,21 @@
 #include <string>
 
 #include "lib/netplay/wz_connection_provider.h"
+#include "lib/netplay/address_resolver.h"
 
 namespace tcp
 {
 
+/// TCP-specific implementation of the `WzConnectionProvider` interface.
+///
+/// This class is responsible for managing TCP connections, including
+/// resolving hostnames, opening listen sockets, creating client connections
+/// and managing connection poll groups.
+///
+/// Works on top of the legacy "netsocket" API: a wrapper around the native
+/// socket API with a custom binary protocol built on top of the raw TCP
+/// connections.
+/// </summary>
 class TCPConnectionProvider final : public WzConnectionProvider
 {
 public:
@@ -37,7 +48,7 @@ public:
 
 	virtual ConnectionProviderType type() const noexcept override;
 
-	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) override;
+	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) const override;
 
 	virtual net::result<IListenSocket*> openListenSocket(uint16_t port) override;
 
@@ -48,6 +59,10 @@ public:
 	virtual std::unique_ptr<IDescriptorSet> newDescriptorSet(PollEventType eventType) override;
 
 	virtual void processConnectionStateChanges() override {}
+
+private:
+
+	std::unique_ptr<IAddressResolver> addressResolver_;
 };
 
 } // namespace tcp
