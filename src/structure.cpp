@@ -2396,12 +2396,12 @@ void clearCommandDroidFactory(DROID *psDroid)
 }
 
 /* Check that a tile is vacant for a droid to be placed */
-static bool structClearTile(UWORD x, UWORD y)
+static bool structClearTile(UWORD x, UWORD y, PROPULSION_TYPE propulsion)
 {
 	UDWORD	player;
 
 	/* Check for a structure */
-	if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+	if (fpathBlockingTile(x, y, propulsion))
 	{
 		debug(LOG_NEVER, "failed - blocked");
 		return false;
@@ -2432,7 +2432,7 @@ static bool comparePlacementPoints(Vector2i a, Vector2i b)
 }
 
 /* Find a location near to a structure to start the droid of */
-bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
+bool placeDroid(STRUCTURE *psStructure, const DROID_TEMPLATE * psTempl, UDWORD *droidX, UDWORD *droidY)
 {
 	CHECK_STRUCTURE(psStructure);
 
@@ -2479,7 +2479,7 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 	{
 		for (int x = xmin; x <= xmax; ++x)
 		{
-			if (structClearTile(x, y))
+			if (structClearTile(x, y, psTempl->getPropulsionStats()->propulsionType))
 			{
 				tiles.push_back(Vector2i(12 * x - sx, 12 * y - sy));
 			}
@@ -2572,7 +2572,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 
 	CHECK_STRUCTURE(psStructure);
 
-	placed = placeDroid(psStructure, &x, &y);
+	placed = placeDroid(psStructure, psTempl, &x, &y);
 
 	if (placed)
 	{
