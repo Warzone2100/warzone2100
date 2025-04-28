@@ -1240,7 +1240,7 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 				/* Get a pointer to the tile at this location */
 				MAPTILE *psTile = mapTile(tileX + j, tileZ + i);
 
-				result += psTile->height;
+				result += std::max(psTile->height, psTile->waterLevel);
 				numTilesAveraged++;
 			}
 		}
