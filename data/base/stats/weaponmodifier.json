@@ -11,7 +11,7 @@
 		"Half-Tracked": 65,
 		"Hover": 100,
 		"Legged": 120,
-		"Lift": 25,
+		"Lift": 100,
 		"Tracked": 50,
 		"Wheeled": 100
 	},
@@ -19,7 +19,7 @@
 		"Half-Tracked": 120,
 		"Hover": 115,
 		"Legged": 35,
-		"Lift": 20,
+		"Lift": 100,
 		"Tracked": 110,
 		"Wheeled": 125
 	},
@@ -43,7 +43,7 @@
 		"Half-Tracked": 75,
 		"Hover": 110,
 		"Legged": 130,
-		"Lift": 25,
+		"Lift": 100,
 		"Tracked": 60,
 		"Wheeled": 85
 	}
