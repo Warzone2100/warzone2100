@@ -95,6 +95,7 @@ the action directly, but it may be interesting to look at what it currently is.
 * ```experience``` Amount of experience this droid has, based on damage it has dealt to enemies.
 * ```cost``` What it would cost to build the droid. (3.2+ only)
 * ```isVTOL``` True if the droid is VTOL. (3.2+ only)
+* ```isFlying``` True if the droid is currently flying. (4.5.4+ only)
 * ```canHitAir``` True if the droid has anti-air capabilities. (3.2+ only)
 * ```canHitGround``` True if the droid has anti-ground capabilities. (3.2+ only)
 * ```isSensor``` True if the droid has sensor ability. (3.2+ only)

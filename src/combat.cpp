@@ -262,7 +262,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 
 		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed * flightTime / GAME_TICKS_PER_SEC), 0);
-		if (!psDroid->isFlying())
+		if (!psDroid->isFlying() && !psDroid->isTransporter())
 		{
 			predict.z = map_Height(predict.xy());  // Predict that the object will be on the ground.
 		}
