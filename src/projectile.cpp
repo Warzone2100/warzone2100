@@ -346,8 +346,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 		cmdDroidUpdateExperience(psDroid, experienceInc);
 
 		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
-		if (psSensor
-		    && psSensor->type == OBJ_DROID)
+		if (psSensor && psSensor->type == OBJ_DROID)
 		{
 			droidIncreaseExperience((DROID *)psSensor, experienceInc);
 		}
@@ -360,7 +359,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		if (psDroid != nullptr)
 		{
-			psDroid->experience += experienceInc;
+			droidIncreaseExperience(psDroid, experienceInc);
 		}
 	}
 }

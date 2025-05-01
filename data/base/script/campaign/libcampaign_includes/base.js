@@ -83,12 +83,27 @@ function camSetEnemyBases(bases)
 					for (let idx = 0, len = objs.length; idx < len; ++idx)
 					{
 						const o = objs[idx];
-						if (o.x < a.x) a.x = o.x;
-						if (o.y < a.y) a.y = o.y;
-						if (o.x > a.x2) a.x2 = o.x;
-						if (o.y > a.y2) a.y2 = o.y;
+						if (o.x < a.x)
+						{
+							a.x = o.x;
+						}
+						if (o.y < a.y)
+						{
+							a.y = o.y;
+						}
+						if (o.x > a.x2)
+						{
+							a.x2 = o.x;
+						}
+						if (o.y > a.y2)
+						{
+							a.y2 = o.y;
+						}
 					}
-					a.x -= __OFFSET; a.y -= __OFFSET; a.x2 += __OFFSET; a.y2 += __OFFSET;
+					a.x -= __OFFSET;
+					a.y -= __OFFSET;
+					a.x2 += __OFFSET;
+					a.y2 += __OFFSET;
 					camTrace("Auto-detected cleanup area for", baseLabel, ":", a.x, a.y, a.x2, a.y2);
 					bi.cleanup = "__cam_enemy_base_cleanup__" + baseLabel;
 					addLabel(a, bi.cleanup);
@@ -311,7 +326,6 @@ function __camCheckBaseEliminated(group)
 		{
 			callback();
 		}
-
 		__camSetupConsoleForVictoryConditions();
 	}
 }
@@ -322,6 +336,10 @@ function __camBasesTick()
 	{
 		const bi = __camEnemyBases[baseLabel];
 		if (bi.eliminated || !camDef(bi.reinforce_kind))
+		{
+			continue;
+		}
+		if (bi.reinforce_kind === CAM_REINFORCE_NONE)
 		{
 			continue;
 		}
@@ -341,7 +359,8 @@ function __camBasesTick()
 		}
 		bi.reinforce_last = gameTime;
 		const list = profile(bi.reinforce_callback);
-		const pos = camMakePos(bi.cleanup);
+		const __DEFINED_LZ = (camDef(bi.reinforce_data) && camDef(bi.reinforce_data.posLZ));
+		const pos = (__DEFINED_LZ) ? camMakePos(bi.reinforce_data.posLZ) : camMakePos(bi.cleanup);
 		camSendReinforcement(bi.player, pos, list, bi.reinforce_kind, bi.reinforce_data);
 	}
 }
