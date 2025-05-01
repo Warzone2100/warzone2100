@@ -18,7 +18,6 @@
 */
 /*
  * musicmanager.cpp
- *
  * This is the Music Manager screen.
  */
 
@@ -42,30 +41,29 @@
 #include <chrono>
 #include <memory>
 
-
 #define W_TRACK_ROW_PADDING 5
 #define W_TRACK_COL_PADDING 10
 #define W_TRACK_CHECKBOX_SIZE 12
 
-#define W_TRACK_COL_TITLE_X 	W_TRACK_COL_PADDING
+#define W_TRACK_COL_TITLE_X 		W_TRACK_COL_PADDING
 #define W_TRACK_COL_TITLE_W		180
 #define W_TRACK_COL_ALBUM_X		(W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W + W_TRACK_COL_PADDING)
 #define W_TRACK_COL_ALBUM_W		130
-#define W_TRACK_CHECKBOX_STARTINGPOS (W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W + W_TRACK_COL_PADDING + W_TRACK_COL_PADDING)
+#define W_TRACK_CHECKBOX_STARTINGPOS	(W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W + W_TRACK_COL_PADDING + W_TRACK_COL_PADDING)
 
-#define W_TRACK_HEADER_Y		20
-#define W_TRACK_HEADER_HEIGHT	(20 + (W_TRACK_ROW_PADDING * 2))
-#define W_TRACK_HEADER_COL_IMAGE_SIZE	16
+#define W_TRACK_HEADER_Y		 20
+#define W_TRACK_HEADER_HEIGHT		(20 + (W_TRACK_ROW_PADDING * 2))
+#define W_TRACK_HEADER_COL_IMAGE_SIZE	 16
 
+#define TL_W_WITH_CHECKBOXES		550 // Width to accommodate checkboxes for; (Campaign, Challenges, Skirmish, Multiplayer) to block toggle all tracks independently. Supports 640x480 res.
 #define TL_W				FRONTEND_BOTFORMW
 #define TL_H				400
-#define TL_X				FRONTEND_BOTFORMX
+#define TL_X				FRONTEND_BOTFORMX // Value suspected as 50. (Based on FRONTEND_BOTFORMX -> FRONTEND_TOPFORMX as set via frontend.h ... Ideally may need this at 45.)
 #define TL_Y				(W_TRACK_HEADER_Y + W_TRACK_HEADER_HEIGHT)
 #define TL_SX				FRONTEND_SIDEX
 
 #define TL_ENTRYW			(FRONTEND_BOTFORMW - 80)
 #define TL_ENTRYH			(25)
-
 #define TL_PREVIEWBOX_Y_SPACING 45
 #define TL_PREVIEWBOX_H		80
 
@@ -98,20 +96,19 @@ static int GetTrackListStartXPos(int ingame)
 {
 	if (!ingame)
 	{
-		return TL_X;
+	return TL_X;
 	}
 	return TL_X - 10;
 }
-
 // MARK: - MusicManager_CDAudioEventSink declaration
 class MusicManager_CDAudioEventSink : public CDAudioEventSink
 {
 public:
 	virtual ~MusicManager_CDAudioEventSink() override {};
 	virtual void startedPlayingTrack(const std::shared_ptr<const WZ_TRACK>& track) override;
-	virtual void trackEnded(const std::shared_ptr<const WZ_TRACK>& track) override;
+	virtual void trackEnded  (const std::shared_ptr<const WZ_TRACK>& track) override;
 	virtual void musicStopped() override;
-	virtual void musicPaused(const std::shared_ptr<const WZ_TRACK>& track) override;
+	virtual void musicPaused (const std::shared_ptr<const WZ_TRACK>& track) override;
 	virtual void musicResumed(const std::shared_ptr<const WZ_TRACK>& track) override;
 	virtual bool unregisterEventSink() const override { return shouldUnregisterEventSink; }
 public:
@@ -122,26 +119,24 @@ public:
 private:
 	bool shouldUnregisterEventSink = false;
 };
-
 // MARK: - Globals
-
-struct TrackRowCache; // forward-declare
-class W_TrackRow; // foward-declare
+struct  TrackRowCache; // Forward-declare
+class W_TrackRow;      // Forward-declare
 static std::unordered_map<W_TrackRow*, std::shared_ptr<TrackRowCache>> trackRowsCache;
 static std::vector<std::shared_ptr<const WZ_TRACK>> trackList;
 static std::shared_ptr<const WZ_TRACK> selectedTrack;
 static std::shared_ptr<MusicManager_CDAudioEventSink> musicManagerAudioEventSink;
-
-// now-playing widgets
+// Now-playing widgets
 static std::shared_ptr<W_LABEL> psNowPlaying = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackName = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackAuthorName = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackAlbumName = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackAlbumDate = nullptr;
 static std::shared_ptr<W_LABEL> psSelectedTrackAlbumDescription = nullptr;
-
+static bool musicSelectAllModes[NUM_MUSICGAMEMODES] = {false, false, false, false}; // One for each mode
+static std::string selectedAlbumForToggle; // Selected album for 	"Select All/None"
+static bool musicSelectAllAlbum = false;   // State for album-specific  "Select All/None"
 // MARK: - W_MusicModeCheckboxButton
-
 struct W_MusicModeCheckboxButton : public W_BUTTON
 {
 public:
@@ -157,17 +152,14 @@ public:
 		});
 	}
 	void display(int xOffset, int yOffset) override;
-	void highlight(W_CONTEXT *psContext) override;
+	void highlight(W_CONTEXT *psContext)   override;
 	void highlightLost() override;
-
 	bool getIsChecked() const { return isChecked; }
-
-	void setCheckboxSize(int size)
-	{
+	void setIsChecked(bool value) 	 { isChecked = value; }
+	void setCheckboxSize(int size) {
 		cbSize = size;
 	}
-	int checkboxSize() const { return cbSize; }
-
+	int     checkboxSize() const { return cbSize; }
 	MusicGameMode getMusicMode() { return mode; }
 private:
 	bool isEnabled() { return (getState() & WBUT_DISABLE) == 0; }
@@ -181,15 +173,12 @@ void W_MusicModeCheckboxButton::display(int xOffset, int yOffset)
 {
 	int x0 = xOffset + x();
 	int y0 = yOffset + y();
-
 	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 	bool isDisabled = (getState() & WBUT_DISABLE) != 0;
-
-	// calculate checkbox dimensions
-	Vector2i checkboxOffset{0, (height() - cbSize) / 2}; // left-align, center vertically
+	// Calculate checkbox dimensions
+	Vector2i checkboxOffset{0, (height() - cbSize) / 2}; // Left-align, center vertically
 	Vector2i checkboxPos{x0 + checkboxOffset.x, y0 + checkboxOffset.y};
-
-	// draw checkbox border
+	// Draw checkbox border
 	PIELIGHT notifyBoxAddColor = WZCOL_NOTIFICATION_BOX;
 	notifyBoxAddColor.byte.a = uint8_t(float(notifyBoxAddColor.byte.a) * ((!isDisabled) ? 0.7f : 0.2f));
 	pie_UniTransBoxFill(checkboxPos.x, checkboxPos.y, checkboxPos.x + cbSize, checkboxPos.y + cbSize, notifyBoxAddColor);
@@ -199,11 +188,9 @@ void W_MusicModeCheckboxButton::display(int xOffset, int yOffset)
 		checkBoxOutsideColor.byte.a = 60;
 	}
 	iV_Box2(checkboxPos.x, checkboxPos.y, checkboxPos.x + cbSize, checkboxPos.y + cbSize, checkBoxOutsideColor, checkBoxOutsideColor);
-
 	if (down || isChecked)
 	{
-		// draw checkbox "checked" inside
-		#define CB_INNER_INSET 2
+		#define CB_INNER_INSET 2 // Draw checkbox "checked" inside
 		PIELIGHT checkBoxInsideColor = WZCOL_TEXT_MEDIUM;
 		checkBoxInsideColor.byte.a = (!isDisabled) ? 200 : 60;
 		pie_UniTransBoxFill(checkboxPos.x + CB_INNER_INSET, checkboxPos.y + CB_INNER_INSET, checkboxPos.x + cbSize - (CB_INNER_INSET), checkboxPos.y + cbSize - (CB_INNER_INSET), checkBoxInsideColor);
@@ -221,9 +208,7 @@ void W_MusicModeCheckboxButton::highlightLost()
 	if (!isEnabled()) return;
 	W_BUTTON::highlightLost();
 }
-
 // MARK: - W_TrackRow
-
 struct TrackRowCache {
 	WzText wzText_Title;
 	WzText wzText_Album;
@@ -250,14 +235,12 @@ public:
 	}
 
 	void display(int xOffset, int yOffset) override;
-
 	std::shared_ptr<const WZ_TRACK> getTrack() const {
 		return std::shared_ptr<const WZ_TRACK>(track);
 	};
-
+	void setCheckboxesForMode(MusicGameMode mode, bool value, bool applyToAllModes = false);
 protected:
 	void geometryChanged() override;
-
 private:
 	std::shared_ptr<const WZ_TRACK> track;
 	std::string album_name;
@@ -269,9 +252,7 @@ void W_TrackRow::initialize(bool ingame)
 {
 	auto album = track->album.lock();
 	album_name = album->title;
-
-	// add music mode checkboxes
-	musicMode = MusicGameMode::MENUS;
+	musicMode  = MusicGameMode::MENUS; // Add music mode checkboxes
 	if (ingame)
 	{
 		musicMode = PlayList_GetCurrentMusicMode();
@@ -295,7 +276,6 @@ void W_TrackRow::initialize(bool ingame)
 				pCheckBox->setState(WBUT_DISABLE);
 			}
 		}
-
 		musicModeCheckboxes.push_back(pCheckBox);
 	}
 }
@@ -305,8 +285,19 @@ void W_TrackRow::geometryChanged()
 	for (size_t i = 0; i < musicModeCheckboxes.size(); i++)
 	{
 		auto pCB = musicModeCheckboxes[i];
-		pCB->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS + ((W_TRACK_CHECKBOX_SIZE + W_TRACK_COL_PADDING) * i), std::max(W_TRACK_ROW_PADDING, (height() - W_TRACK_CHECKBOX_SIZE) / 2), W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE);
+		     pCB->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS + ((W_TRACK_CHECKBOX_SIZE + W_TRACK_COL_PADDING) * i), std::max(W_TRACK_ROW_PADDING, (height() - W_TRACK_CHECKBOX_SIZE) / 2), W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE);
 	}
+}
+
+void W_TrackRow::setCheckboxesForMode(MusicGameMode mode, bool value, bool applyToAllModes)
+{
+    for (auto& checkbox : musicModeCheckboxes)
+    {
+        if (applyToAllModes || checkbox->getMusicMode() == mode)
+        {
+            checkbox->setIsChecked(value);
+        }
+    }
 }
 
 static WzString truncateTextToMaxWidth(WzString str, iV_fonts fontID, int maxWidth)
@@ -329,9 +320,7 @@ static WzString truncateTextToMaxWidth(WzString str, iV_fonts fontID, int maxWid
 void W_TrackRow::display(int xOffset, int yOffset)
 {
 	bool isSelectedTrack = (track == selectedTrack);
-
-	// get track cache
-	std::shared_ptr<TrackRowCache> pCache = nullptr;
+	std::shared_ptr<TrackRowCache> pCache = nullptr; // Get track cache
 	auto it = trackRowsCache.find(this);
 	if (it != trackRowsCache.end())
 	{
@@ -341,8 +330,7 @@ void W_TrackRow::display(int xOffset, int yOffset)
 	{
 		pCache = std::make_shared<TrackRowCache>();
 		trackRowsCache[this] = pCache;
-
-		// calculate max displayable length for title and album
+		// Calculate max displayable length for title and album
 		WzString title_truncated = truncateTextToMaxWidth(WzString::fromUtf8(track->title), font_regular, W_TRACK_COL_TITLE_W);
 		WzString album_truncated = truncateTextToMaxWidth(WzString::fromUtf8(album_name), font_regular, W_TRACK_COL_ALBUM_W);
 		pCache->wzText_Title.setText(title_truncated, font_regular);
@@ -352,45 +340,34 @@ void W_TrackRow::display(int xOffset, int yOffset)
 
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
-	int x1 = x0 + width();
-	int y1 = y0 + height();
+	int x1 = x0  + width();
+	int y1 = y0  + height();
 
 	if (isSelectedTrack)
 	{
-		// draw selected background
-		pie_UniTransBoxFill(x0, y0, x1, y1, WZCOL_KEYMAP_ACTIVE);
+		pie_UniTransBoxFill(x0, y0, x1, y1, WZCOL_KEYMAP_ACTIVE); // Draw selected background
 	}
-
 	PIELIGHT textColor = WZCOL_TEXT_BRIGHT;
 	if ((musicMode != MusicGameMode::MENUS) && !PlayList_IsTrackEnabledForMusicMode(track, musicMode))
 	{
 		textColor.byte.a = uint8_t(float(textColor.byte.a) * 0.6f);
 	}
-
-	// draw track title
-	Vector2i textBoundingBoxOffset(0, 0);
+	Vector2i textBoundingBoxOffset(0, 0); // Draw track title
 	textBoundingBoxOffset.y = yOffset + y() + (height() - pCache->wzText_Title.lineSize()) / 2;
 	float fy = float(textBoundingBoxOffset.y) /*+ float(W_TRACK_ROW_PADDING)*/ - float(pCache->wzText_Title.aboveBase());
 	pCache->wzText_Title.render(W_TRACK_COL_TITLE_X + x0, static_cast<int>(fy), textColor);
-
-	// draw album name
-	pCache->wzText_Album.render(W_TRACK_COL_ALBUM_X + x0, static_cast<int>(fy), textColor);
-
+	pCache->wzText_Album.render(W_TRACK_COL_ALBUM_X + x0, static_cast<int>(fy), textColor); // Draw album name
 	// Music mode checkboxes are child widgets
 }
-
 // MARK: - "Now Playing" Details Block
-
 static gfx_api::texture* loadImageToTexture(const std::string& imagePath)
 {
 	if (imagePath.empty())
 	{
 		return nullptr;
 	}
-
 	const std::string& filename = imagePath;
-	const char *extension = strrchr(filename.c_str(), '.'); // determine the filetype
-
+	const char *extension = strrchr(filename.c_str(), '.'); // Determine the filetype
 	if (!extension || strcmp(extension, ".png") != 0)
 	{
 		debug(LOG_ERROR, "Bad image filename: %s", filename.c_str());
@@ -432,8 +409,7 @@ public:
 
 		if (imagePath == album_cover_path)
 		{
-			// already loaded
-			return true;
+			return true; // Already loaded
 		}
 
 		if (pAlbumCoverTexture)
@@ -455,21 +431,16 @@ private:
 	gfx_api::texture* pAlbumCoverTexture = nullptr;
 	std::string album_cover_path;
 };
-
 #define WZ_TRACKDETAILS_IMAGE_X	(20 + 210 + 10)
 #define WZ_TRACKDETAILS_IMAGE_Y 10
 #define WZ_TRACKDETAILS_IMAGE_SIZE 60
-
 void TrackDetailsForm::display(int xOffset, int yOffset)
 {
 	IntFormAnimated::display(xOffset, yOffset);
-
 	if (disableChildren) { return; }
-
-	// now draw the album cover, if present
+	// Now draw the album cover, if present
 	int imageLeft = x() + xOffset + WZ_TRACKDETAILS_IMAGE_X;
-	int imageTop = y() + yOffset + WZ_TRACKDETAILS_IMAGE_Y;
-
+	int imageTop  = y() + yOffset + WZ_TRACKDETAILS_IMAGE_Y;
 	if (pAlbumCoverTexture)
 	{
 		iV_DrawImageAnisotropic(*pAlbumCoverTexture, Vector2i(imageLeft, imageTop), Vector2f(0,0), Vector2f(WZ_TRACKDETAILS_IMAGE_SIZE, WZ_TRACKDETAILS_IMAGE_SIZE), 0.f, WZCOL_WHITE);
@@ -479,9 +450,7 @@ void TrackDetailsForm::display(int xOffset, int yOffset)
 static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 {
 	ASSERT_OR_RETURN(, pTrackDetailsBox, "pTrackDetailsBox is null");
-
-	// Add "Now Playing" label
-	if (!psNowPlaying)
+	if (!psNowPlaying) // Add "Now Playing" label
 	{
 		pTrackDetailsBox->attach(psNowPlaying = std::make_shared<W_LABEL>());
 	}
@@ -490,9 +459,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psNowPlaying->setString((selectedTrack) ? (WzString::fromUtf8(_("NOW PLAYING")) + ":") : "");
 	psNowPlaying->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	psNowPlaying->setTransparentToMouse(true);
-
-	// Add Selected Track name
-	if (!psSelectedTrackName)
+	if (!psSelectedTrackName) // Add Selected Track name
 	{
 		pTrackDetailsBox->attach(psSelectedTrackName = std::make_shared<W_LABEL>());
 	}
@@ -501,9 +468,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psSelectedTrackName->setString((selectedTrack) ? WzString::fromUtf8(selectedTrack->title) : "");
 	psSelectedTrackName->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	psSelectedTrackName->setTransparentToMouse(true);
-
-	// Add Selected Track author details
-	if (!psSelectedTrackAuthorName)
+	if (!psSelectedTrackAuthorName) // Add Selected Track author details
 	{
 		pTrackDetailsBox->attach(psSelectedTrackAuthorName = std::make_shared<W_LABEL>());
 	}
@@ -512,8 +477,7 @@ static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 	psSelectedTrackAuthorName->setString((selectedTrack) ? WzString::fromUtf8(selectedTrack->author) : "");
 	psSelectedTrackAuthorName->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	psSelectedTrackAuthorName->setTransparentToMouse(true);
-
-	// album info xPosStart
+	// Album info xPosStart
 	int albumInfoXPosStart = psNowPlaying->x() + psNowPlaying->width() + 10 + WZ_TRACKDETAILS_IMAGE_SIZE + 10;
 	int maxWidthOfAlbumLabel = TL_W - albumInfoXPosStart - 20;
 	std::shared_ptr<const WZ_ALBUM> pAlbum = (selectedTrack) ? selectedTrack->album.lock() : nullptr;
@@ -577,32 +541,160 @@ static void addTrackDetailsBox(WIDGET *parent, bool ingame)
 
 	UpdateTrackDetailsBox(pTrackDetailsBox.get());
 }
-
 // MARK: - Track List
-
 class MusicListHeader : public W_FORM
 {
+protected:
+    MusicListHeader(bool ingame);
+    void initialize();
+    std::vector<std::string> getUniqueAlbums() const;
 public:
-	MusicListHeader();
-	virtual void display(int xOffset, int yOffset);
+    static std::shared_ptr<MusicListHeader> make(bool ingame)
+    {
+        auto widget = std::make_shared<MusicListHeader>(ingame);
+        widget->initialize();
+        return widget;
+    }
+    virtual void display(int xOffset, int yOffset);
+    void setSelectedAlbum(const std::string& album) { selectedAlbumForToggle = album; }
+private:
+    std::vector<std::shared_ptr<W_MusicModeCheckboxButton>> modeSelectAllCheckboxes; // Checkboxes for each mode
+    std::shared_ptr<W_BUTTON> albumSelectButton; 				     // Button to trigger album selection
+    std::shared_ptr<W_MusicModeCheckboxButton> albumSelectAllCheckbox;  	     // Checkbox for album "Select All/None"
+    bool ingame;
 };
-
-MusicListHeader::MusicListHeader()
-	: W_FORM()
+MusicListHeader::MusicListHeader(bool ingame)
+	: W_FORM(), ingame(ingame)
 { }
+
+void MusicListHeader::initialize()
+{   // Add album selection button beneath Album column
+    albumSelectButton = std::make_shared<W_BUTTON>();
+    attach(albumSelectButton);
+    albumSelectButton->setGeometry(W_TRACK_COL_ALBUM_X, W_TRACK_ROW_PADDING + W_TRACK_CHECKBOX_SIZE + 2, W_TRACK_COL_ALBUM_W - W_TRACK_CHECKBOX_SIZE - W_TRACK_COL_PADDING, W_TRACK_CHECKBOX_SIZE);
+    albumSelectButton->setString(selectedAlbumForToggle.empty() ? _("Select Album") : WzString::fromUtf8(selectedAlbumForToggle));
+    albumSelectButton->setTip(_("Click to select an album"));
+    albumSelectButton->addOnClickHandler([this](W_BUTTON& button) {
+        auto albums = getUniqueAlbums();
+        if (!albums.empty()) {
+            size_t idx = (std::find(albums.begin(), albums.end(), selectedAlbumForToggle) - albums.begin() + 1) % albums.size();
+            setSelectedAlbum(albums[idx]);
+            button.setString(WzString::fromUtf8(selectedAlbumForToggle));
+        }
+});
+    // Add album "Select All/None" checkbox next to the button
+    albumSelectAllCheckbox = std::make_shared<W_MusicModeCheckboxButton>(MusicGameMode::MENUS, musicSelectAllAlbum); // MENUS... placeholder
+    attach(albumSelectAllCheckbox);
+    albumSelectAllCheckbox->setGeometry(W_TRACK_COL_ALBUM_X + albumSelectButton->width() + W_TRACK_COL_PADDING, W_TRACK_ROW_PADDING + W_TRACK_CHECKBOX_SIZE + 2, W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE);
+    albumSelectAllCheckbox->setCheckboxSize(W_TRACK_CHECKBOX_SIZE);
+    albumSelectAllCheckbox->setTip(_("Select All/None for Album"));
+    albumSelectAllCheckbox->addOnClickHandler([this](W_BUTTON& button) {
+        W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
+        musicSelectAllAlbum = !musicSelectAllAlbum;
+    	     self.setIsChecked(musicSelectAllAlbum);
+
+        if (selectedAlbumForToggle.empty()) return; // No album selected... do nothing
+        MusicGameMode currentMode = ingame ? PlayList_GetCurrentMusicMode() : MusicGameMode::MENUS;
+        for (const auto& track : trackList)
+        {
+            auto album = track->album.lock();
+             if (album && album->title == selectedAlbumForToggle)
+             {
+             if (!ingame) {
+                    for (int mode = 0; mode < NUM_MUSICGAMEMODES; mode++) {
+                        PlayList_SetTrackMusicMode(track, static_cast<MusicGameMode>(mode), musicSelectAllAlbum);
+            	    }
+             }
+	     else {
+                    PlayList_SetTrackMusicMode(track, currentMode, musicSelectAllAlbum);
+                  }
+            }
+        }
+         // Update UI for affected track rows
+        auto scrollableList = dynamic_cast<ScrollableListWidget*>(widgGetFromID(psWScreen, 0)); // Adjust ID if needed
+         if (scrollableList)
+         {
+             for (size_t i = 0; i < scrollableList->children().size(); i++)
+             {
+                auto trackRow = std::dynamic_pointer_cast<W_TrackRow>(scrollableList->children()[i]);
+                 if (trackRow)
+                 {
+                    auto album = trackRow->getTrack()->album.lock();
+                    if (album && album->title == selectedAlbumForToggle)
+                    {
+			trackRow->setCheckboxesForMode(currentMode, musicSelectAllAlbum, !ingame);
+                    }
+                }
+            }
+        }
+    });
+    // Add "Select All/None" checkbox for each music mode
+    for (int modeIdx = 0; modeIdx < NUM_MUSICGAMEMODES; modeIdx++)
+    {
+        auto modeCheckbox = std::make_shared<W_MusicModeCheckboxButton>(static_cast<MusicGameMode>(modeIdx), musicSelectAllModes[modeIdx]);
+        attach(modeCheckbox);
+        modeCheckbox->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS + ((W_TRACK_CHECKBOX_SIZE + 5) * modeIdx), W_TRACK_ROW_PADDING, W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE); // Reduced padding 5, to fit in low res.
+        modeCheckbox->setCheckboxSize(W_TRACK_CHECKBOX_SIZE);
+//        modeCheckbox->setTip(WzString::fromUtf8(_("Select All/None for ") + to_string(static_cast<MusicGameMode>(modeIdx))));
+	modeCheckbox->setTip(WzString::fromUtf8(_("Select All/None for ") + to_string(static_cast<MusicGameMode>(modeIdx))).toStdString());
+        modeCheckbox->addOnClickHandler([modeIdx](W_BUTTON& button) {
+            W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
+            musicSelectAllModes[modeIdx] = !musicSelectAllModes[modeIdx];
+//            self.isChecked = musicSelectAllModes[modeIdx];
+            self.setIsChecked(musicSelectAllModes[modeIdx]);
+             MusicGameMode mode = static_cast<MusicGameMode>(modeIdx);
+             for (const auto& track : trackList)
+             {
+                PlayList_SetTrackMusicMode(track, mode, musicSelectAllModes[modeIdx]);
+             }
+            // Update UI for all track rows
+            auto scrollableList = dynamic_cast<ScrollableListWidget*>(widgGetFromID(psWScreen, 0)); // Adjust ID if needed
+             if (scrollableList)
+            {
+                for (size_t i = 0; i < scrollableList->children().size(); i++)
+                {
+                    auto trackRow = std::dynamic_pointer_cast<W_TrackRow>(scrollableList->children()[i]);
+                    if  (trackRow)
+                    {
+//                        trackRow->musicModeCheckboxes[modeIdx]->setIsChecked(musicSelectAllModes[modeIdx]);
+                	trackRow->setCheckboxesForMode(static_cast<MusicGameMode>(modeIdx), musicSelectAllModes[modeIdx]);
+                    }
+                }
+            }
+        });
+        if (ingame && modeIdx != static_cast<int>(PlayList_GetCurrentMusicMode()))
+        {
+            modeCheckbox->setState(WBUT_DISABLE); // Disable non-current mode checkboxes in-game
+        }
+        modeSelectAllCheckboxes.push_back(modeCheckbox);
+    }
+}
+    std::vector<std::string> MusicListHeader::getUniqueAlbums() const
+    {
+    std::set<std::string> uniqueAlbums;
+    for (const auto& track : trackList)
+    {
+        auto album = track->album.lock();
+        if (album) uniqueAlbums.insert(album->title);
+    }
+    return std::vector<std::string>(uniqueAlbums.begin(), uniqueAlbums.end());
+}
 
 void MusicListHeader::display(int xOffset, int yOffset)
 {
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-	int x1 = x0 + width();
-	int y1 = y0 + height() - 1;
-	iV_TransBoxFill(x0, y0, x1, y1);
-	iV_Line(x0, y1, x1, y1, WZCOL_MENU_SEPARATOR);
-
-	// column lines
-	iV_Line(x0 + W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W, y0 + 5, x0 + W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W, y1 - 5, WZCOL_MENU_SEPARATOR);
-	iV_Line(x0 + W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W, y0 + 5, x0 + W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W, y1 - 5, WZCOL_MENU_SEPARATOR);
+    int x0 = x() + xOffset;
+    int y0 = y() + yOffset;
+    int x1 = x0  +  width();
+    int y1 = y0  + height() - 1;
+    iV_TransBoxFill(x0, y0, x1, y1);
+    iV_Line(x0, y1, x1, y1, WZCOL_MENU_SEPARATOR);
+    iV_Line(x0 + W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W, y0 + 5, x0 + W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W, y1 - 5, WZCOL_MENU_SEPARATOR); // Column lines
+    iV_Line(x0 + W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W, y0 + 5, x0 + W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W, y1 - 5, WZCOL_MENU_SEPARATOR);
+    WzText titleLabel(_("Title"), font_regular); // Draw "Title" label
+    titleLabel.render(x0 + W_TRACK_COL_TITLE_X, y0 + W_TRACK_ROW_PADDING + (W_TRACK_CHECKBOX_SIZE - titleLabel.lineSize()) / 2, WZCOL_TEXT_MEDIUM);
+    WzText albumLabel(_("Album"), font_regular); // Draw "Album" label above the selection buttons
+    albumLabel.render(x0 + W_TRACK_COL_ALBUM_X, y0 + W_TRACK_ROW_PADDING + (W_TRACK_CHECKBOX_SIZE - albumLabel.lineSize()) / 2, WZCOL_TEXT_MEDIUM);
+    // Album button and checkbox are child widgets, rendered automatically
 }
 
 class W_MusicListHeaderColImage : public W_BUTTON
@@ -638,7 +730,7 @@ public:
 		if (pAlbumCoverTexture)
 		{
 			int imageLeft = x() + xOffset;
-			int imageTop = y() + yOffset;
+			int imageTop  = y() + yOffset;
 
 			iV_DrawImageAnisotropic(*pAlbumCoverTexture, Vector2i(imageLeft, imageTop), Vector2f(0,0), Vector2f(W_TRACK_HEADER_COL_IMAGE_SIZE, W_TRACK_HEADER_COL_IMAGE_SIZE), 0.f, WZCOL_WHITE);
 		}
@@ -656,10 +748,11 @@ static const std::string music_mode_col_header_images[] = {
 
 static void addTrackList(WIDGET *parent, bool ingame)
 {
-	auto pHeader = std::make_shared<MusicListHeader>();
+//	auto pHeader = std::make_shared<MusicListHeader>(); old
+	auto pHeader = MusicListHeader::make(ingame);
 	parent->attach(pHeader);
-	pHeader->setGeometry(GetTrackListStartXPos(ingame), W_TRACK_HEADER_Y, TL_ENTRYW, W_TRACK_HEADER_HEIGHT);
-
+//	pHeader->setGeometry(GetTrackListStartXPos(ingame), W_TRACK_HEADER_Y, TL_ENTRYW, W_TRACK_HEADER_HEIGHT); old
+        pHeader->setGeometry(GetTrackListStartXPos(ingame), W_TRACK_HEADER_Y, TL_W_WITH_CHECKBOXES, W_TRACK_HEADER_HEIGHT + W_TRACK_CHECKBOX_SIZE + 2); // Increased height, for new album controls!
 	const int headerColY = W_TRACK_ROW_PADDING + (W_TRACK_ROW_PADDING / 2);
 
 	auto title_header = std::make_shared<W_LABEL>();
@@ -693,7 +786,9 @@ static void addTrackList(WIDGET *parent, bool ingame)
 	parent->attach(pTracksScrollableList);
 	pTracksScrollableList->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
 	pTracksScrollableList->setCalcLayout([ingame](WIDGET *psWidget) {
-		psWidget->setGeometry(GetTrackListStartXPos(ingame), TL_Y, TL_ENTRYW, GetNumVisibleTracks() * TL_ENTRYH);
+	//	psWidget->setGeometry(GetTrackListStartXPos(ingame), TL_Y, TL_ENTRYW, GetNumVisibleTracks() * TL_ENTRYH);
+	        psWidget->setGeometry(GetTrackListStartXPos(ingame), TL_Y, TL_W_WITH_CHECKBOXES - 80, GetNumVisibleTracks() * TL_ENTRYH); // Adjusted width instead of using TL_ENTRYW, track list width aligns with the header above.
+
 	});
 
 	size_t tracksCount = trackList.size();
@@ -710,14 +805,15 @@ static void addTrackList(WIDGET *parent, bool ingame)
 		pTracksScrollableList->addItem(pTrackRow);
 	}
 }
-
 // MARK: - "Now Playing" Details Block
-
 static void closeMusicManager(bool ingame)
 {
 	trackList.clear();
 	trackRowsCache.clear();
 	selectedTrack.reset();
+    	    for (int i = 0; i < NUM_MUSICGAMEMODES; i++) musicSelectAllModes[i] = false; // Reset mode-specific states
+	    selectedAlbumForToggle.clear(); // Reset album selection
+	    musicSelectAllAlbum = false;    // Reset album toggle state
 	if (musicManagerAudioEventSink)
 	{
 		musicManagerAudioEventSink->setUnregisterEventSink();
@@ -749,21 +845,16 @@ protected:
 		this->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			psWidget->setGeometry(0, 0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight());
 		}));
-
-		// draws the background of the form
-		auto botForm = std::make_shared<IntFormAnimated>();
+		auto botForm = std::make_shared<IntFormAnimated>(); // Draws the background of the form
 		this->attach(botForm);
 		botForm->id = MM_FORM + 1;
-
 		if (!ingame)
 		{
 			botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 				psWidget->setGeometry(TL_X, 20, TL_W, GetTrackListHeight());
 			}));
-
-			// cancel
-			addMultiBut(*botForm, MM_RETURN, 10, 5, MULTIOP_OKW, MULTIOP_OKH, _("Return To Previous Screen"),
-					IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+			addMultiBut(*botForm, MM_RETURN, 10, 5, MULTIOP_OKW, MULTIOP_OKH, _("Return To Previous Screen"), // Cancel
+			IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 		}
 		else
 		{
@@ -775,15 +866,12 @@ protected:
 			addButton(botForm, _("Go Back"), MM_GO_BACK, GetTrackListHeight() - 20);
 			addButton(botForm, _("Resume Game"), MM_RETURN, GetTrackListHeight());
 		}
-
 		// get track list
 		trackList = PlayList_GetFullTrackList();
 		selectedTrack = cdAudio_GetCurrentTrack();
-
 		// register for cd audio events
 		musicManagerAudioEventSink = std::make_shared<MusicManager_CDAudioEventSink>();
 		cdAudio_RegisterForEvents(std::static_pointer_cast<CDAudioEventSink>(musicManagerAudioEventSink));
-
 		addTrackList(botForm.get(), ingame);
 		addTrackDetailsBox(this, ingame);
 	}
@@ -791,7 +879,6 @@ protected:
 	static void addButton(const std::shared_ptr<IntFormAnimated> &botForm, const char *text, int id, int y)
 	{
 		W_BUTINIT sButInit;
-
 		sButInit.formID		= botForm->id;
 		sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
 		sButInit.width		= TL_W;
@@ -812,7 +899,6 @@ protected:
 		sButInit.calcLayout = [y] (WIDGET *psWidget) {
 			psWidget->move(0, y);
 		};
-
 		botForm->attach(std::make_shared<W_BUTTON>(&sButInit));
 	}
 
@@ -852,7 +938,7 @@ bool startInGameMusicManager(InputManager& inputManager)
 
 bool startMusicManager()
 {
-	addBackdrop();	//background image
+	addBackdrop();	//Background image
 	addSideText(FRONTEND_SIDETEXT, TL_SX, 20, _("MUSIC MANAGER"));
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 	return musicManager(parent, false);
@@ -876,7 +962,7 @@ static void perFrameCleanup()
 
 bool runInGameMusicManager(unsigned id, InputManager& inputManager)
 {
-	if (id == MM_RETURN)			// return
+	if (id == MM_RETURN)			// Return
 	{
 		inputManager.contexts().popState();
 		widgDelete(psWScreen, MM_FORM);
@@ -916,9 +1002,7 @@ bool runMusicManager()
 
 	return true;
 }
-
 // MARK: - CD Audio Event Sink Implementation
-
 static void CDAudioEvent_UpdateCurrentTrack(const std::shared_ptr<const WZ_TRACK>& track)
 {
 	if (selectedTrack == track)
@@ -940,7 +1024,7 @@ void MusicManager_CDAudioEventSink::startedPlayingTrack(const std::shared_ptr<co
 }
 void MusicManager_CDAudioEventSink::trackEnded(const std::shared_ptr<const WZ_TRACK>& track)
 {
-	// currently a no-op
+	// Currently a no-op
 }
 
 void MusicManager_CDAudioEventSink::musicStopped()
