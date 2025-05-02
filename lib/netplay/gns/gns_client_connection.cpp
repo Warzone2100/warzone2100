@@ -45,7 +45,7 @@ GNSClientConnection::GNSClientConnection(WzConnectionProvider& connProvider, WzC
 
 GNSClientConnection::~GNSClientConnection()
 {
-	ASSERT(networkInterface_->CloseConnection(conn_, 0, nullptr, false) == true, "Failed to close client connection properly");
+	ASSERT(networkInterface_->CloseConnection(conn_, 0, nullptr, true) == true, "Failed to close client connection properly");
 }
 
 net::result<ssize_t> GNSClientConnection::sendImpl(const std::vector<uint8_t>& data)
