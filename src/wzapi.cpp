@@ -929,6 +929,51 @@ wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_o
 	return {};
 }
 
+//-- ## hackTextMarker(message, colour, label | x, y | type, player, id)
+//--
+//-- Place a text marker given tile / object on the map.
+//-- See ```changePlayerColour``` for all available colours.
+//-- If message is empty, all text marker are cleared. (4.6+ only)
+//--
+wzapi::no_return_value wzapi::hackTextMarker(WZAPI_PARAMS(std::string _message, int _colour, wzapi::object_request request))
+{
+	SCRIPT_ASSERT({}, context, _colour >= 0, "Colour value %d is less than zero", _colour);
+	SCRIPT_ASSERT({}, context, _colour <= 15, "Colour value %d is greater than 15", _colour);
+
+	if (_message.length()==0)
+	{
+		clearTextMarkers();
+		return {};
+	}
+
+	if (request.requestType == wzapi::object_request::RequestType::MAPPOS_REQUEST)
+	{
+		auto pos = request.getMapPosition();
+		int x = pos.x;
+		int y = pos.y;
+		SCRIPT_ASSERT({}, context, tileOnMap(x, y), "Map position (%d, %d) not on the map!", x, y);
+		addTextMarker(x, y, _message, _colour);
+		return {};
+	}
+	else if (request.requestType == wzapi::object_request::RequestType::OBJECTID_REQUEST)
+	{
+		auto type_player_id = request.getObjectIDRequest();
+		OBJECT_TYPE type = std::get<0>(type_player_id);
+		int player = std::get<1>(type_player_id);
+		int id = std::get<2>(type_player_id);
+		auto object=IdToObject(type, id, player);
+		addTextMarker(object, _message, _colour);
+		return {};
+	}
+	else if (request.requestType == wzapi::object_request::RequestType::LABEL_REQUEST)
+	{
+		auto object=scripting_engine::instance().getObjectFromLabel(context, request.getLabel()).getObject();
+		addTextMarker(object, _message, _colour);
+		return {};
+	}
+	return {};
+}
+
 // MARK: - General functions -- geared for use in AI scripts
 
 //-- ## dump(string...)
