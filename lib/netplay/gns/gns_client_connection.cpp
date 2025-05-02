@@ -45,6 +45,15 @@ GNSClientConnection::GNSClientConnection(WzConnectionProvider& connProvider, WzC
 
 GNSClientConnection::~GNSClientConnection()
 {
+	const auto flushRes = networkInterface_->FlushMessagesOnConnection(conn_);
+	if (flushRes != k_EResultOK && flushRes != k_EResultIgnored)
+	{
+		// This is a best-effort attempt to flush the connection before closing it.
+		// If it fails, we can still close the connection.
+		const auto errCode = make_gns_error_code(flushRes);
+		const auto errMsg = errCode.message();
+		ASSERT(false, "Failed to flush messages on connection: %s", errMsg.c_str());
+	}
 	ASSERT(networkInterface_->CloseConnection(conn_, 0, nullptr, true) == true, "Failed to close client connection properly");
 }
 
