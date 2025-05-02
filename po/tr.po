@@ -9021,7 +9021,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Tüm Ağır Hasarlı Birimleri seç"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat units >50% HP & no Groups."
 msgstr "Sağlığı >%50 olan savaş kara birimlerini seç ve grupları seçme."
 
 msgid "Select all Half-tracks"
