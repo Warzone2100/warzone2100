@@ -63,23 +63,23 @@ net::result<int> GNSConnectionPollGroup::checkConnectionsReadable(std::chrono::m
 	{
 		return connections_.size();
 	}
-	static std::unordered_set<HSteamNetConnection> readyConns;
-	readyConns.clear();
+	readyConns_.clear();
 	// Put each message in the corresponding `GNSClientConnection` object's message queue
 	for (size_t i = 0; i < msgCount; ++i)
 	{
 		SteamNetworkingMessage_t* msg = receivedMsgs[i];
 		connections_.at(msg->m_conn)->enqueueMessage(msg);
-		readyConns.emplace(msg->m_conn);
+		readyConns_.emplace(msg->m_conn);
 	}
-	return readyConns.size();
+	return readyConns_.size();
 }
 
 void GNSConnectionPollGroup::add(IClientConnection* conn)
 {
 	auto* gnsConn = dynamic_cast<GNSClientConnection*>(conn);
 	ASSERT_OR_RETURN(, gnsConn != nullptr, "Expected GNSClientConnection instance");
-	ASSERT_OR_RETURN(, networkInterface_->SetConnectionPollGroup(gnsConn->connectionHandle(), group_), "Failed to set connection poll group");
+	ASSERT_OR_RETURN(, networkInterface_->SetConnectionPollGroup(gnsConn->connectionHandle(), group_),
+		"Failed to assign connection %u to poll group %u", gnsConn->connectionHandle(), group_);
 	connections_.emplace(gnsConn->connectionHandle(), gnsConn);
 }
 
@@ -87,7 +87,8 @@ void GNSConnectionPollGroup::remove(IClientConnection* conn)
 {
 	auto* gnsConn = dynamic_cast<GNSClientConnection*>(conn);
 	ASSERT_OR_RETURN(, gnsConn != nullptr, "Expected GNSClientConnection instance");
-	ASSERT_OR_RETURN(, networkInterface_->SetConnectionPollGroup(gnsConn->connectionHandle(), k_HSteamNetPollGroup_Invalid), "Failed to remove connection poll group");
+	ASSERT(networkInterface_->SetConnectionPollGroup(gnsConn->connectionHandle(), k_HSteamNetPollGroup_Invalid),
+		"Failed to remove connection %u from poll group %u", gnsConn->connectionHandle(), group_);
 	connections_.erase(gnsConn->connectionHandle());
 }
 
