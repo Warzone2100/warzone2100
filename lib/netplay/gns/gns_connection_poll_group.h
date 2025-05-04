@@ -24,6 +24,7 @@
 #include "lib/netplay/connection_poll_group.h"
 
 #include <unordered_map>
+#include <unordered_set>
 
 #include <steam/steamnetworkingtypes.h>
 
@@ -58,6 +59,7 @@ private:
 	ISteamNetworkingSockets* networkInterface_ = nullptr;
 	HSteamNetPollGroup group_ = k_HSteamNetPollGroup_Invalid;
 	std::unordered_map<HSteamNetConnection, GNSClientConnection*> connections_;
+	std::unordered_set<HSteamNetConnection> readyConns_;
 };
 
 } // namespace gns
