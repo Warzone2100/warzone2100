@@ -143,9 +143,16 @@ net::result<IClientConnection*> GNSConnectionProvider::openClientConnectionAny(c
 	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)), gnsAddr != nullptr, "Expected to have GNSConnectionAddress instance");
 
 	std::vector<SteamNetworkingConfigValue_t> connectOpts = clientConnOpts_;
-	SteamNetworkingConfigValue_t timeoutConf;
-	timeoutConf.SetInt32(k_ESteamNetworkingConfig_TimeoutInitial, static_cast<int32_t>(timeout));
-	connectOpts.emplace_back(std::move(timeoutConf));
+	SteamNetworkingConfigValue_t timeoutInitialConf;
+	timeoutInitialConf.SetInt32(k_ESteamNetworkingConfig_TimeoutInitial, static_cast<int32_t>(timeout));
+	connectOpts.emplace_back(std::move(timeoutInitialConf));
+
+	SteamNetworkingConfigValue_t timeoutConnectedConf;
+	// Hardcode the connected timeout to a large enough value (let it be 60 seconds, for now),
+	// so that other built-in measures to close the connection will be able to kick in
+	// and close the connection (e.g., lag auto-kick).
+	timeoutConnectedConf.SetInt32(k_ESteamNetworkingConfig_TimeoutConnected, 60);
+	connectOpts.emplace_back(std::move(timeoutConnectedConf));
 
 	auto h = networkInterface_->ConnectByIPAddress(gnsAddr->asSteamNetworkingIPAddr(), connectOpts.size(), connectOpts.data());
 	if (h == k_HSteamNetConnection_Invalid)
@@ -227,12 +234,12 @@ void GNSConnectionProvider::ClientConnectionStateChanged(SteamNetConnectionStatu
 	case k_ESteamNetworkingConnectionState_Connected:
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
-		debug(LOG_ERROR, "Connection closed by peer: %u", pInfo->m_hConn);
-		connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
+		debug(LOG_WARNING, "Connection closed by peer: %u", pInfo->m_hConn);
+		connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, true);
 		break;
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
 		debug(LOG_ERROR, "Connection closed, problem detected locally: %u", pInfo->m_hConn);
-		connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
+		connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, true);
 		break;
 	default:
 		break;
