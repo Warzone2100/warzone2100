@@ -204,7 +204,11 @@ void IClientConnection::flush(size_t* rawByteCount)
 		return;  // Not compressed, so don't mess with compression.
 	}
 
-	ASSERT(!writeErrorCode().has_value(), "Socket write error encountered in flush");
+	if (writeErrorCode().has_value())
+	{
+		const auto errMsg = writeErrorCode().value().message();
+		ASSERT(false, "Socket write error encountered in flush: %s", errMsg.c_str());
+	}
 
 	compressionAdapter_->flushCompressionStream();
 
