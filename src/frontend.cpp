@@ -570,6 +570,8 @@ bool runMultiPlayerMenu()
 		switch (id)
 		{
 		case FRONTEND_HOST:
+			// First of all, make sure we've reset any prior networking state
+			NETshutdown();
 			// don't pretend we are running a network game. Really do it!
 			NetPlay.bComms = true; // use network = true
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
