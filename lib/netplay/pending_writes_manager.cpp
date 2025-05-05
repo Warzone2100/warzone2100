@@ -25,6 +25,7 @@
 #include "lib/netplay/descriptor_set.h"
 #include "lib/netplay/client_connection.h"
 #include "lib/netplay/wz_connection_provider.h"
+#include "lib/netplay/error_categories.h"
 
 #include <system_error>
 
@@ -173,9 +174,17 @@ void PendingWritesManager::threadImplFunction()
 					const auto connStatus = conn->connectionStatus();
 					if (!conn->isValid() || !connStatus.has_value()) // Check if the connection is still open
 					{
-						const auto errMsg = connStatus.error().message();
-						debug(LOG_NET, "Socket error: %s", errMsg.c_str());
-						conn->setWriteErrorCode(connStatus.error());
+						if (!connStatus.has_value())
+						{
+							const auto errMsg = connStatus.error().message();
+							debug(LOG_NET, "Socket error: %s", errMsg.c_str());
+							conn->setWriteErrorCode(connStatus.error());
+						}
+						else
+						{
+							debug(LOG_NET, "Socket error: connection is not valid");
+							conn->setWriteErrorCode(make_network_error_code(ECONNRESET));
+						}
 						pendingWrites_.erase(currentIt);  // Connection broken, don't try writing to it again.
 						if (conn->deleteLaterRequested())
 						{
