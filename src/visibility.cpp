@@ -49,6 +49,7 @@
 #include "qtscript.h"
 #include "wavecast.h"
 #include "profiling.h"
+#include "feature.h"
 
 // accuracy for the height gradient
 #define GRAD_MUL 10000
@@ -86,7 +87,7 @@ static std::vector<SPOTTER *> apsInvisibleViewers;
 struct VisibleObjectHelp_t
 {
 	bool rayStart; // Whether this is the first point on the ray
-	const bool wallsBlock; // Whether walls block line of sight
+	const bool wallsBlock; // Whether structures/features block line of sight (LOS)
 	const int startHeight; // The height at the view point
 	const Vector2i final; // The final tile of the ray cast
 	int lastHeight, lastDist; // The last height and distance
@@ -1045,6 +1046,31 @@ static inline void angle_check(int64_t *angletan, int positionSq, int height, in
 }
 
 /**
+ * Check if psObject is a feature that can block Line Of Sight (LOS)
+ */
+static bool featureObstructsLOS(const BASE_OBJECT *psObject)
+{
+	if (isFeature(psObject))
+	{
+		const FEATURE *psFeature = castFeature(psObject);
+		return psFeature->psStats->allowLOS == false;
+	}
+	return false;
+}
+
+/**
+ * Check if psTile could block Line Of Sight (LOS) due to a structure/feature on the tile
+ */
+static bool tileObstructsLOS(const MAPTILE *psTile)
+{
+	if (!TileIsOccupied(psTile))
+	{
+		return false; // an empty tile can't obstruct LOS
+	}
+	return TileHasStructure(psTile) || featureObstructsLOS(psTile->psObject);
+}
+
+/**
  * Check fire line from psViewer to psTarget
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  */
@@ -1125,14 +1151,14 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 			}
 		}
 
-		// check for walls and other structures
-		// TODO: if there is a structure on the same tile as the shooter (and the shooter is not that structure) check if LOF is blocked by it.
+		// Check for structures/features that block line of sight
+		// TODO: properly check if LOS is blocked when the shooter is on the same tile as the struct/feat
 		if (wallsBlock && oldPartSq > 0)
 		{
 			const MAPTILE *psTile;
 			halfway = current + (next - current) / 2;
 			psTile = mapTile(map_coord(halfway.x), map_coord(halfway.y));
-			if (TileHasStructure(psTile) && psTile->psObject != psTarget)
+			if (tileObstructsLOS(psTile) && psTile->psObject != psTarget)
 			{
 				// check whether target was reached before tile's "half way" line
 				part = halfway - start;
