@@ -1726,12 +1726,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, startPos.x, startPos.y);
 			}
-			else
-			{
-				// haven't got an LZ set up so don't do anything
-				actionDroid(psDroid, DACTION_NONE);
-				psDroid->order = DroidOrder(DORDER_NONE);
-			}
 		}
 		break;
 	case DORDER_RTR_SPECIFIED:
