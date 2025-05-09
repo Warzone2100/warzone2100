@@ -78,18 +78,25 @@ void GNSConnectionPollGroup::add(IClientConnection* conn)
 {
 	auto* gnsConn = dynamic_cast<GNSClientConnection*>(conn);
 	ASSERT_OR_RETURN(, gnsConn != nullptr, "Expected GNSClientConnection instance");
+	ASSERT_OR_RETURN(, gnsConn->getPollGroup() == nullptr, "Connection belongs to another poll group");
+	ASSERT_OR_RETURN(, gnsConn->isValid(), "Invalid GNS client connection handle");
 	ASSERT_OR_RETURN(, networkInterface_->SetConnectionPollGroup(gnsConn->connectionHandle(), group_),
 		"Failed to assign connection %u to poll group %u", gnsConn->connectionHandle(), group_);
 	connections_.emplace(gnsConn->connectionHandle(), gnsConn);
+	gnsConn->setPollGroup(this);
 }
 
 void GNSConnectionPollGroup::remove(IClientConnection* conn)
 {
 	auto* gnsConn = dynamic_cast<GNSClientConnection*>(conn);
 	ASSERT_OR_RETURN(, gnsConn != nullptr, "Expected GNSClientConnection instance");
-	ASSERT(networkInterface_->SetConnectionPollGroup(gnsConn->connectionHandle(), k_HSteamNetPollGroup_Invalid),
-		"Failed to remove connection %u from poll group %u", gnsConn->connectionHandle(), group_);
-	connections_.erase(gnsConn->connectionHandle());
+	if (gnsConn->isValid())
+	{
+		ASSERT(networkInterface_->SetConnectionPollGroup(gnsConn->connectionHandle(), k_HSteamNetPollGroup_Invalid),
+			"Failed to remove connection %u from poll group %u", gnsConn->connectionHandle(), group_);
+		connections_.erase(gnsConn->connectionHandle());
+	}
+	gnsConn->setPollGroup(nullptr);
 }
 
 } // namespace gns
