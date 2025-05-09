@@ -1165,10 +1165,10 @@ void joinGame(const char *host, uint32_t port, bool asSpectator /*= false*/)
 {
 	std::string hostStr = (host != nullptr) ? std::string(host) : std::string();
 	std::vector<JoinConnectionDescription> connList;
+	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, hostStr, port);
 #ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
 	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::GNS_DIRECT, hostStr, port);
 #endif
-	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, hostStr, port);
 	joinGame(connList, asSpectator);
 }
 
