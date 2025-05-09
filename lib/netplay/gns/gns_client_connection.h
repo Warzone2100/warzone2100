@@ -67,14 +67,24 @@ public:
 
 private:
 
+	friend class GNSConnectionPollGroup;
+	friend class GNSConnectionProvider;
+
 	void enqueueMessage(SteamNetworkingMessage_t* msg);
+	// Flush any outstanding messages, that are waiting to be sent in the internal GNS queue.
+	void flushPendingMessages();
+	// Reset internal GNS connection handle to an invalid state.
+	// Post-effect: `isValid() == false`.
+	void expireConnectionHandle();
+	// Update the reference to the owning poll group. This will be called by `GNSConnectionPollGroup::add/remove()`.
+	void setPollGroup(GNSConnectionPollGroup* pollGroup) { pollGroup_ = pollGroup; }
+	GNSConnectionPollGroup* getPollGroup() const { return pollGroup_; }
 
 	ISteamNetworkingSockets* networkInterface_ = nullptr;
 	HSteamNetConnection conn_ = k_HSteamNetConnection_Invalid;
 	std::queue<SteamNetworkingMessage_t*> pendingMessagesToRead_;
 	bool useNagle_ = true;
-
-	friend class GNSConnectionPollGroup;
+	GNSConnectionPollGroup* pollGroup_ = nullptr;
 };
 
 } // namespace gns

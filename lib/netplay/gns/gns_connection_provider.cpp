@@ -25,6 +25,7 @@
 
 #include "lib/netplay/error_categories.h"
 #include "lib/netplay/pending_writes_manager_map.h"
+#include "lib/netplay/pending_writes_manager.h"
 #include "lib/netplay/wz_compression_provider.h"
 
 #include "lib/netplay/gns/dummy_descriptor_set.h"
@@ -160,7 +161,7 @@ net::result<IClientConnection*> GNSConnectionProvider::openClientConnectionAny(c
 		return tl::make_unexpected(make_network_error_code(EBADF)); // bad file descriptor
 	}
 	auto conn = new GNSClientConnection(*this, WzCompressionProvider::Instance(), PendingWritesManagerMap::instance().get(type()), networkInterface_, h);
-	activeClients_.emplace(h);
+	activeClients_.emplace(h, conn);
 	return conn;
 }
 
@@ -193,7 +194,8 @@ void GNSConnectionProvider::ServerConnectionStateChanged(SteamNetConnectionStatu
 			// FIXME: debug logging
 			break;
 		}
-		connProvider->activeClients_.emplace(pInfo->m_hConn);
+		// We don't yet have a live `IClientConnection` instance for this connection
+		connProvider->activeClients_.emplace(pInfo->m_hConn, nullptr);
 		break;
 	case k_ESteamNetworkingConnectionState_FindingRoute:
 		break;
@@ -234,13 +236,27 @@ void GNSConnectionProvider::ClientConnectionStateChanged(SteamNetConnectionStatu
 	case k_ESteamNetworkingConnectionState_Connected:
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
+	{
 		debug(LOG_WARNING, "Connection closed by peer: %u", pInfo->m_hConn);
-		connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, true);
+
+		const auto connIt = connProvider->activeClients_.find(pInfo->m_hConn);
+		ASSERT_OR_RETURN(, connIt != connProvider->activeClients_.end() && connIt->second != nullptr, "Expected to have a valid client connection");
+		GNSClientConnection* conn = connIt->second;
+		// Perform cleanup for the associated connection object and its internal GNS handle
+		connProvider->disposeConnection(conn);
 		break;
+	}
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
+	{
 		debug(LOG_ERROR, "Connection closed, problem detected locally: %u", pInfo->m_hConn);
-		connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, true);
+
+		const auto connIt = connProvider->activeClients_.find(pInfo->m_hConn);
+		ASSERT_OR_RETURN(, connIt != connProvider->activeClients_.end() && connIt->second != nullptr, "Expected to have a valid client connection");
+		GNSClientConnection* conn = connIt->second;
+		// Perform cleanup for the associated connection object and its internal GNS handle
+		connProvider->disposeConnection(conn);
 		break;
+	}
 	default:
 		break;
 	}
@@ -257,6 +273,29 @@ void GNSConnectionProvider::processConnectionStateChanges()
 	// This will trigger `GNSConnectionProvider::Client/ServerConnectionStateChanged()` for every managed
 	// connection in a blocking manner! DO NOT do any heavy computations in the callbacks!
 	networkInterface_->RunCallbacks();
+}
+
+void GNSConnectionProvider::disposeConnection(GNSClientConnection* conn)
+{
+	if (!conn)
+	{
+		return;
+	}
+	// Remove any pending writes for this connection
+	auto& pwm = PendingWritesManagerMap::instance().get(type());
+	pwm.clearPendingWrites(conn);
+	// Attempt to flush any messages, that are waiting in the internal GNS queue for this connection
+	// and discard any pending messages that weren't yet processed by this connection object
+	conn->flushPendingMessages();
+	// Automatically remove this connection from the poll group, if there's any
+	if (auto* pollGroup = conn->getPollGroup())
+	{
+		pollGroup->remove(conn);
+	}
+	// Close the internal GNS connection handle
+	networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, true);
+	// This call renders the current connection object invalid!
+	conn->expireConnectionHandle();
 }
 
 } // namespace gns
