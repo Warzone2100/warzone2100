@@ -34,6 +34,7 @@
 #include "lib/netplay/connection_poll_group.h"
 #include "lib/netplay/open_connection_result.h"
 #include "lib/netplay/connection_provider_registry.h"
+#include "lib/netplay/error_categories.h"
 
 #include "../hci.h"
 #include "../activity.h"
@@ -738,6 +739,7 @@ private:
 	void closeConnectionAttempt();
 	bool joiningSocketNETsend();
 	void handleSuccess();
+	void tryNextConnectionOption(size_t connectionIdx, std::error_code ec, const std::string& errorString);
 
 	// displaying status info / state
 	void promptForPassword();
@@ -1155,6 +1157,29 @@ static ConnectionProviderType toConnectionProviderType(JoinConnectionDescription
 	throw std::runtime_error(astringf("Invalid join connection type: %d", static_cast<int>(ct))); // prevent GCC warning
 }
 
+void WzJoiningGameScreen_HandlerRoot::tryNextConnectionOption(size_t connectionIdx, std::error_code ec, const std::string& errorString)
+{
+	if ((connectionIdx + 1) < connectionList.size())
+	{
+		// try the next connection
+		closeConnectionAttempt();
+		currentJoiningState = JoiningState::AwaitingConnection;
+		attemptToOpenConnection(++connectionIdx);
+	}
+	else if (ec == std::errc::timed_out)
+	{
+		handleJoinTimeoutError();
+	}
+	else
+	{
+		debug(LOG_ERROR, "%s", errorString.c_str());
+		// Done trying connections - all failed
+		const auto sockErrorMsg = ec.message();
+		auto localizedError = astringf(_("Failed to open connection: [%d] %s"), ec, sockErrorMsg.c_str());
+		handleFailure(FailureDetails::makeFromInternalError(WzString::fromUtf8(localizedError)));
+	}
+}
+
 void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connectionIdx, OpenConnectionResult&& result)
 {
 	ASSERT_OR_RETURN(, currentJoiningState == JoiningState::AwaitingConnection, "Not awaiting connection? (Ignoring)");
@@ -1162,22 +1187,7 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 
 	if (result.hasError())
 	{
-		NETshutdown();
-
-		if ((connectionIdx+1) < connectionList.size())
-		{
-			// try the next connection
-			attemptToOpenConnection(++connectionIdx);
-		}
-		else
-		{
-			debug(LOG_ERROR, "%s", result.errorString.c_str());
-			// Done trying connections - all failed
-			const auto errCode = result.errorCode.value();
-			const auto sockErrorMsg = errCode.message();
-			auto localizedError = astringf(_("Failed to open connection: [%d] %s"), errCode.value(), sockErrorMsg.c_str());
-			handleFailure(FailureDetails::makeFromInternalError(WzString::fromUtf8(localizedError)));
-		}
+		tryNextConnectionOption(connectionIdx, result.errorCode.value(), result.errorString);
 		return;
 	}
 
@@ -1257,6 +1267,9 @@ void WzJoiningGameScreen_HandlerRoot::attemptToOpenConnection(size_t connectionI
 	auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
 
 	constexpr std::chrono::milliseconds CLIENT_OPEN_ASYNC_TIMEOUT{ 15000 }; // Default timeout of 15s
+
+	// Reset any prior networking state before trying to connect
+	NETshutdown();
 
 	const auto ct = toConnectionProviderType(description.type);
 	NETinit(ct);
@@ -1373,7 +1386,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 	{
 		// exceeded timeout
 		closeConnectionAttempt();
-		handleJoinTimeoutError();
+		tryNextConnectionOption(currentConnectionIdx, make_network_error_code(ETIMEDOUT), "Timeout while waiting for host to respond");
 		return;
 	}
 
