@@ -42,6 +42,7 @@ public:
 	void setIsChecked(bool val);
 public:
 	void setString(WzString string) override;
+	void setDescription(const WzString& description);
 	int32_t idealWidth() override;
 	int32_t idealHeight() override;
 protected:

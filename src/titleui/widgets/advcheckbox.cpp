@@ -43,14 +43,7 @@ void WzAdvCheckbox::recalcIdealWidth()
 
 void WzAdvCheckbox::initialize(const WzString& displayName, const WzString& description)
 {
-	descriptionWidget = std::make_shared<Paragraph>();
-	descriptionWidget->setFont(font_small);
-	descriptionWidget->setFontColour(WZCOL_TEXT_MEDIUM);
-	descriptionWidget->setGeometry(0, 0, 400, 40);
-	descriptionWidget->addText(description);
-	descriptionWidget->setTransparentToMouse(true);
-	attach(descriptionWidget);
-
+	setDescription(description);
 	setString(displayName);
 }
 
@@ -145,6 +138,21 @@ void WzAdvCheckbox::setString(WzString string)
 {
 	W_BUTTON::setString(string);
 	recalcIdealWidth();
+}
+
+void WzAdvCheckbox::setDescription(const WzString& description)
+{
+	if (descriptionWidget)
+	{
+		detach(descriptionWidget);
+	}
+	descriptionWidget = std::make_shared<Paragraph>();
+	descriptionWidget->setFont(font_small);
+	descriptionWidget->setFontColour(WZCOL_TEXT_MEDIUM);
+	descriptionWidget->setGeometry(0, 0, 400, 40);
+	descriptionWidget->addText(description);
+	descriptionWidget->setTransparentToMouse(true);
+	attach(descriptionWidget);
 }
 
 void WzAdvCheckbox::geometryChanged()
