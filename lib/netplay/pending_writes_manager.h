@@ -115,6 +115,14 @@ public:
 		});
 	}
 
+	void clearPendingWrites(IClientConnection* conn)
+	{
+		executeUnderLock([this, conn]
+		{
+			pendingWrites_.erase(conn);
+		});
+	}
+
 	/// <summary>
 	/// Safely (in a thread-safe manner) dispose of a connection, which may have a registered pending write attached:
 	///

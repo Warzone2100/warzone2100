@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <memory>
 #include <string>
-#include <unordered_set>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -40,6 +40,7 @@ namespace gns
 {
 
 class GNSListenSocket;
+class GNSClientConnection;
 
 /// <summary>
 /// An implementation of the `WzConnectionProvider` interface
@@ -83,8 +84,20 @@ private:
 	static void ServerConnectionStateChanged(SteamNetConnectionStatusChangedCallback_t* pInfo);
 	static void ClientConnectionStateChanged(SteamNetConnectionStatusChangedCallback_t* pInfo);
 
+	// Generic cleanup routine for failed client connections (i.e., those that
+	// have transitioned into some failure state).
+	//
+	// This will remove any pending writes for this connection, flush any
+	// outstanding messages that are waiting to be sent in the internal GNS queue
+	// and discards any unprocessed (but already received) messages.
+	//
+	// The connection object is automatically removed from its owning poll group (if there's any)
+	// and the internal GNS connection handle is closed, so that the connection object
+	// will be left in an invalid state (that is, `isValid()` will become `false`).
+	void disposeConnection(GNSClientConnection* conn);
+
 	ISteamNetworkingSockets* networkInterface_ = nullptr;
-	std::unordered_set<HSteamNetConnection> activeClients_;
+	std::unordered_map<HSteamNetConnection, GNSClientConnection*> activeClients_;
 	std::pair<HSteamListenSocket, GNSListenSocket*> activeListenSocket_ = { k_HSteamListenSocket_Invalid, nullptr };
 	std::vector<SteamNetworkingConfigValue_t> listenSocketOpts_;
 	std::vector<SteamNetworkingConfigValue_t> clientConnOpts_;

@@ -45,20 +45,21 @@ GNSClientConnection::GNSClientConnection(WzConnectionProvider& connProvider, WzC
 
 GNSClientConnection::~GNSClientConnection()
 {
-	const auto flushRes = networkInterface_->FlushMessagesOnConnection(conn_);
-	if (flushRes != k_EResultOK && flushRes != k_EResultIgnored)
+	if (!isValid())
 	{
-		// This is a best-effort attempt to flush the connection before closing it.
-		// If it fails, we can still close the connection.
-		const auto errCode = make_gns_error_code(flushRes);
-		const auto errMsg = errCode.message();
-		ASSERT(false, "Failed to flush messages on connection: %s", errMsg.c_str());
+		debug(LOG_WARNING, "~GNSClientConnection: expired connection handle");
+		return;
 	}
+	// This is a best-effort attempt to flush the connection before closing it.
+	// If it fails, we can still close the connection.
+	flushPendingMessages();
 	ASSERT(networkInterface_->CloseConnection(conn_, 0, nullptr, true) == true, "Failed to close client connection properly");
 }
 
 net::result<ssize_t> GNSClientConnection::sendImpl(const std::vector<uint8_t>& data)
 {
+	ASSERT_OR_RETURN(tl::make_unexpected(make_gns_error_code(EINVAL)), isValid(), "Invalid GNS client connection handle");
+
 	int sendFlags = k_nSteamNetworkingSend_Reliable;
 	if (!useNagle_)
 	{
@@ -75,6 +76,7 @@ net::result<ssize_t> GNSClientConnection::sendImpl(const std::vector<uint8_t>& d
 
 net::result<ssize_t> GNSClientConnection::recvImpl(char* dst, size_t maxSize)
 {
+	ASSERT_OR_RETURN(tl::make_unexpected(make_gns_error_code(EINVAL)), isValid(), "Invalid GNS client connection handle");
 	ASSERT_OR_RETURN(0, readReady(), "No data to read from the connection");
 
 	size_t currentProcessedSize = 0;
@@ -125,7 +127,7 @@ bool GNSClientConnection::isValid() const
 
 net::result<void> GNSClientConnection::connectionStatus() const
 {
-	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)), networkInterface_ != nullptr, "Invalid GNS network interface pointer");
+	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)), isValid(), "Invalid GNS network interface pointer");
 
 	SteamNetConnectionRealTimeStatus_t status;
 	auto res = networkInterface_->GetConnectionRealTimeStatus(conn_, &status, 0, nullptr);
@@ -144,5 +146,30 @@ void GNSClientConnection::enqueueMessage(SteamNetworkingMessage_t* msg)
 {
 	pendingMessagesToRead_.push(msg);
 }
+
+void GNSClientConnection::flushPendingMessages()
+{
+	ASSERT_OR_RETURN(, isValid(), "Invalid GNS client connection handle");
+
+	const auto flushRes = networkInterface_->FlushMessagesOnConnection(conn_);
+	if (flushRes != k_EResultOK && flushRes != k_EResultIgnored)
+	{
+		const auto errCode = make_gns_error_code(flushRes);
+		const auto errMsg = errCode.message();
+		debug(LOG_WARNING, "Failed to flush messages on connection: %s", errMsg.c_str());
+	}
+
+	// Discard any pending messages, that weren't yet processed by this connection object
+	for (; !pendingMessagesToRead_.empty(); pendingMessagesToRead_.pop())
+	{
+		pendingMessagesToRead_.front()->Release();
+	}
+}
+
+void GNSClientConnection::expireConnectionHandle()
+{
+	conn_ = k_HSteamNetConnection_Invalid;
+}
+
 
 } // namespace gns

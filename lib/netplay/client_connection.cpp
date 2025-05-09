@@ -42,7 +42,7 @@ net::result<ssize_t> IClientConnection::readAll(void* buf, size_t size, unsigned
 
 	if (!isValid())
 	{
-		debug(LOG_ERROR, "Invalid socket (%p) (error: EBADF)", static_cast<void*>(this));
+		debug(LOG_ERROR, "IClientConnection::readAll: Invalid socket (%p) (error: EBADF)", static_cast<void*>(this));
 		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
@@ -94,7 +94,7 @@ net::result<ssize_t> IClientConnection::readNoInt(void* buf, size_t max_size, si
 
 	if (!isValid())
 	{
-		debug(LOG_ERROR, "Invalid socket");
+		debug(LOG_ERROR, "IClientConnection::readNoInt: Invalid socket");
 		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
@@ -155,7 +155,7 @@ net::result<ssize_t> IClientConnection::writeAll(const void* buf, size_t size, s
 {
 	if (!isValid())
 	{
-		debug(LOG_ERROR, "Invalid socket (EBADF)");
+		debug(LOG_ERROR, "IClientConnection::writeAll: Invalid socket (EBADF)");
 		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
@@ -195,6 +195,12 @@ net::result<ssize_t> IClientConnection::writeAll(const void* buf, size_t size, s
 
 void IClientConnection::flush(size_t* rawByteCount)
 {
+	if (!isValid())
+	{
+		debug(LOG_ERROR, "IClientConnection::flush: Invalid socket (EBADF)");
+		return;
+	}
+
 	if (rawByteCount)
 	{
 		*rawByteCount = 0;
