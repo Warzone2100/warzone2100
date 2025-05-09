@@ -62,6 +62,7 @@ public:
 	{
 		enable(false);
 	}
+	bool isDisabled() { return disabled; }
 	void setGap(int gap);
 	int getGap() const { return gap_; }
 	void setOuterPaddingX(int left, int right);
