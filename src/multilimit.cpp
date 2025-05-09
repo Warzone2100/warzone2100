@@ -239,10 +239,13 @@ TITLECODE WzMultiLimitTitleUI::run()
 	// sliders
 	if ((id > IDLIMITS_ENTRIES_START)  && (id < IDLIMITS_ENTRIES_END))
 	{
-		unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
-		if (statid)
+		if (!challengeActive)
 		{
-			asStructureStats[statid].upgrade[0].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
+			unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
+			if (statid)
+			{
+				asStructureStats[statid].upgrade[0].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
+			}
 		}
 	}
 	else
@@ -259,6 +262,11 @@ TITLECODE WzMultiLimitTitleUI::run()
 			widgSetButtonState(psWScreen, IDLIMITS_FORCEOFF, WBUT_DISABLE);
 			break;
 		case IDLIMITS_RETURN:
+			if (challengeActive)
+			{
+				changeTitleUI(parent);
+				break;
+			}
 			// reset the sliders..
 			resetLimits();
 			// free limiter structure
@@ -289,6 +297,11 @@ TITLECODE WzMultiLimitTitleUI::run()
 
 			break;
 		case IDLIMITS_OK:
+			if (challengeActive)
+			{
+				changeTitleUI(parent);
+				break;
+			}
 			if (!challengeActive && widgGetButtonState(psWScreen, IDLIMITS_FORCE))
 			{
 				ingame.flags |= MPFLAGS_FORCELIMITS;
