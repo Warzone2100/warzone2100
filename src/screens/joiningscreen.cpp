@@ -1748,8 +1748,10 @@ static void handleJoinSuccess(const JoinConnectionDescription& connection, const
 		SendColourRequest(selectedPlayer, war_getMPcolour());
 	}
 
-	// switch the TitleUI to the multiplayer options (lobby), which will take over handling messages from the host
-	changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
+	widgScheduleTask([]() {
+		// switch the TitleUI to the multiplayer options (lobby), which will take over handling messages from the host
+		changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
+	});
 
 	ActivityManager::instance().joinGameSucceeded(connection.host.c_str(), connection.port);
 
