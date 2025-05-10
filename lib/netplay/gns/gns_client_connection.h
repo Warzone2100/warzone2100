@@ -32,6 +32,8 @@ class ISteamNetworkingSockets;
 namespace gns
 {
 
+class GNSConnectionPollGroup;
+
 /// <summary>
 /// GNS-specific implementation of the `IClientConnection` interface.
 ///

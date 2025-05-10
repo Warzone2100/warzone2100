@@ -29,6 +29,7 @@
 #include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/open_connection_result.h"
 #include "lib/netplay/pending_writes_manager_map.h"
+#include "lib/netplay/port_mapping_manager.h"
 #include "lib/netplay/wz_compression_provider.h"
 
 #include "lib/framework/wzapp.h"
@@ -127,6 +128,11 @@ std::unique_ptr<IDescriptorSet> TCPConnectionProvider::newDescriptorSet(PollEven
 		ASSERT(false, "Unexpected PollEventType value: %d", static_cast<int>(eventType));
 		return nullptr;
 	}
+}
+
+PortMappingInternetProtocolMask TCPConnectionProvider::portMappingProtocolTypes() const
+{
+	return static_cast<PortMappingInternetProtocolMask>(PortMappingInternetProtocol::TCP_IPV4) | static_cast<PortMappingInternetProtocolMask>(PortMappingInternetProtocol::TCP_IPV6);
 }
 
 } // namespace tcp

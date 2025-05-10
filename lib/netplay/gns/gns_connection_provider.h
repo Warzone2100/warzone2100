@@ -79,6 +79,8 @@ public:
 	// DO NOT do anything heavyweight in the callbacks!
 	virtual void processConnectionStateChanges() override;
 
+	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const override;
+
 private:
 
 	static void ServerConnectionStateChanged(SteamNetConnectionStatusChangedCallback_t* pInfo);

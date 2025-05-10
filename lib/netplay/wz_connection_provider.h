@@ -35,6 +35,9 @@ class IConnectionPollGroup;
 struct IConnectionAddress;
 
 enum class ConnectionProviderType : uint8_t;
+enum class PortMappingInternetProtocol : uint8_t;
+
+using PortMappingInternetProtocolMask = std::underlying_type_t<PortMappingInternetProtocol>;
 
 /// <summary>
 /// Abstraction layer to facilitate creating client/server connections and
@@ -106,4 +109,6 @@ public:
 	/// remain valid and synced properly with the underlying network backend.
 	/// </summary>
 	virtual void processConnectionStateChanges() = 0;
+
+	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const = 0;
 };

@@ -442,7 +442,7 @@ bool PortMappingImpl_Miniupnpc::shutdown()
 
 int PortMappingImpl_Miniupnpc::create_port_mapping(uint16_t port, PortMappingInternetProtocol protocol)
 {
-	if (protocol != PortMappingInternetProtocol::IPV4)
+	if (protocol != PortMappingInternetProtocol::TCP_IPV4)
 	{
 		// currently only supports IPv4
 		return -1;

@@ -60,6 +60,8 @@ public:
 
 	virtual void processConnectionStateChanges() override {}
 
+	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const override;
+
 private:
 
 	std::unique_ptr<IAddressResolver> addressResolver_;
