@@ -72,6 +72,22 @@ void WzFrontendImageButton::setPadding(int newHorizPadding, int newVertPadding)
 	recalcIdealWidth();
 }
 
+void WzFrontendImageButton::setImageHorizontalOffset(int xOffset)
+{
+	imageHorizontalOffset = xOffset;
+}
+
+void WzFrontendImageButton::setCustomTextColors(optional<PIELIGHT> textColor, optional<PIELIGHT> highlightedTextColor)
+{
+	customTextColor = textColor;
+	customTextHighlightColor = highlightedTextColor;
+}
+
+void WzFrontendImageButton::setCustomImageColor(optional<PIELIGHT> color)
+{
+	customImgColor = color;
+}
+
 void WzFrontendImageButton::setString(WzString string)
 {
 	W_BUTTON::setString(string);
@@ -123,7 +139,7 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 	bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
 	bool hasImage = shouldDisplayImage();
 
-	PIELIGHT textColor = (isHighlight) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
+	PIELIGHT textColor = (isHighlight) ? customTextHighlightColor.value_or(WZCOL_TEXT_BRIGHT) : customTextColor.value_or(WZCOL_TEXT_MEDIUM);
 	if (isDisabled)
 	{
 		textColor.byte.a = (textColor.byte.a / 2);
@@ -134,16 +150,22 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 		case BorderDrawMode::Never:
 			break;
 		case BorderDrawMode::Highlighted:
-			if (isHighlight && !isDisabled)
+		{
+			int highlightRectDimensions = std::max(std::min<int>(width(), height()), imageDimensions + 2);
+			int boxX0 = x0 + (width() - highlightRectDimensions) / 2;
+			int boxY0 = y0 + (height() - highlightRectDimensions) / 2;
+			if (isDown)
+			{
+				pie_UniTransBoxFill(boxX0 + 1, boxY0 + 1, boxX0 + highlightRectDimensions, boxY0 + highlightRectDimensions, WZCOL_FORM_DARK);
+			}
+			if ((isHighlight || isDown) && !isDisabled)
 			{
 				// Display highlight rect
 				PIELIGHT borderColor = (isDown) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
-				int highlightRectDimensions = std::max(std::min<int>(width(), height()), imageDimensions + 2);
-				int boxX0 = x0 + (width() - highlightRectDimensions) / 2;
-				int boxY0 = y0 + (height() - highlightRectDimensions) / 2;
-				iV_Box(boxX0, boxY0, boxX0 + highlightRectDimensions + 1, boxY0 + highlightRectDimensions + 1, borderColor);
+				iV_Box(boxX0 + 1, boxY0 + 1, boxX0 + highlightRectDimensions, boxY0 + highlightRectDimensions, borderColor);
 			}
 			break;
+		}
 		case BorderDrawMode::Always:
 		{
 			// Display outer border
@@ -154,9 +176,9 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 			}
 			int boxX0 = x0;
 			int boxY0 = y0;
-			int boxX1 = boxX0 + width() + 1;
-			int boxY1 = boxY0 + height() + 1;
-			iV_Box(boxX0, boxY0, boxX1, boxY1, borderColor);
+			int boxX1 = boxX0 + width();
+			int boxY1 = boxY0 + height();
+			iV_Box(boxX0 + 1, boxY0 + 1, boxX1, boxY1, borderColor);
 			break;
 		}
 	}
@@ -172,7 +194,7 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 		}
 		wzText.setText(pText, fontID);
 
-		int availableButtonTextWidth = w - (horizontalPadding * 2) - ((hasImage) ? (imageDimensions + horizontalPadding) : 0);
+		int availableButtonTextWidth = w - (horizontalPadding * 2) - ((hasImage) ? (imageDimensions + horizontalPadding + imageHorizontalOffset) : 0);
 		if (wzText.width() > availableButtonTextWidth)
 		{
 			// text would exceed the bounds of the button area
@@ -194,7 +216,7 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 		lastWidgetWidth = width();
 
 		// Draw the main text
-		int textX0 = x0 + horizontalPadding + ((hasImage) ? imageDimensions + horizontalPadding : 0);
+		int textX0 = x0 + horizontalPadding + ((hasImage) ? imageDimensions + horizontalPadding + imageHorizontalOffset : 0);
 		int textY0 = static_cast<int>(y0 + (height() - wzText.lineSize()) / 2 - float(wzText.aboveBase()));
 
 		const int maxTextDisplayableWidth = w - (horizontalPadding * 2);
@@ -216,7 +238,7 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 	if (bHasText)
 	{
 		// Display the image to the left
-		imgPosX0 = x0 + horizontalPadding;
+		imgPosX0 = x0 + horizontalPadding + imageHorizontalOffset;
 	}
 	else
 	{
@@ -227,7 +249,7 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 
 	if (frontendImgID.has_value())
 	{
-		PIELIGHT imgColor = textColor;
+		PIELIGHT imgColor = customImgColor.value_or(textColor);
 		iV_DrawImageFileAnisotropicTint(FrontImages, frontendImgID.value(), imgPosX0, imgPosY0, Vector2f(imageDimensions, imageDimensions), imgColor);
 	}
 	else if (missingImage)

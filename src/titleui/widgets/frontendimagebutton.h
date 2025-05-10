@@ -34,6 +34,9 @@ public:
 	void setImage(optional<UWORD> frontendImgID);
 	void setImageDimensions(int imageSize);
 	void setPadding(int horizontalPadding, int verticalPadding);
+	void setImageHorizontalOffset(int xOffset);
+	void setCustomTextColors(optional<PIELIGHT> textColor, optional<PIELIGHT> highlightedTextColor);
+	void setCustomImageColor(optional<PIELIGHT> color);
 	enum class BorderDrawMode
 	{
 		Never,
@@ -53,11 +56,15 @@ private:
 private:
 	WzText wzText;
 	optional<UWORD> frontendImgID = nullopt;
+	optional<PIELIGHT> customTextColor = nullopt;
+	optional<PIELIGHT> customTextHighlightColor = nullopt;
+	optional<PIELIGHT> customImgColor = nullopt;
 	bool missingImage = false;
 	int imageDimensions = 16;
 	int cachedIdealWidth = 0;
 	int lastWidgetWidth = 0;
 	int horizontalPadding = 5;
 	int verticalPadding = 3;
+	int imageHorizontalOffset = 0;
 	BorderDrawMode borderDrawMode = BorderDrawMode::Always;
 };
