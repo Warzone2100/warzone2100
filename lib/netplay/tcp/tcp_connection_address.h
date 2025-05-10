@@ -29,6 +29,15 @@
 
 typedef struct addrinfo SocketAddress;
 
+namespace tcp
+{
+
+/// <summary>
+/// TCP-specific implementation of the `IConnectionAddress` interface.
+///
+/// Internally, stores a pointer to a `struct addrinfo` object, which is used to
+/// represent a network address.
+/// </summary>
 class TCPConnectionAddress : public IConnectionAddress
 {
 public:
@@ -40,7 +49,15 @@ public:
 	// NOTE: The lifetime of the returned `addrinfo` struct is bounded by the parent object's lifetime!
 	const SocketAddress* asRawSocketAddress() const { return addr_; }
 
+	/// <summary>
+	/// Converts the address to a generic string representation, containing
+	/// both the IP address and the port number ("IP:port" in case of IPv4, "[IP]:port" in case of IPv6).
+	/// </summary>
+	virtual net::result<std::string> toString() const override;
+
 private:
 
 	SocketAddress* addr_;
 };
+
+} // namespace tcp

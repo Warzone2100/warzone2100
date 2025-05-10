@@ -284,11 +284,12 @@ endif()
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Running CMake configure (to generate Xcode project)...")
 string(REPLACE ";" " " _debug_output_args "${_additional_configure_arguments}")
-execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
 execute_process(
 	COMMAND ${CMAKE_COMMAND}
 		"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 		"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}"
+		"-DENABLE_GNS_NETWORK_BACKEND:BOOL=ON"
 		${_additional_configure_arguments}
 		-G Xcode
 		-B .

@@ -35,6 +35,9 @@ class IConnectionPollGroup;
 struct IConnectionAddress;
 
 enum class ConnectionProviderType : uint8_t;
+enum class PortMappingInternetProtocol : uint8_t;
+
+using PortMappingInternetProtocolMask = std::underlying_type_t<PortMappingInternetProtocol>;
 
 /// <summary>
 /// Abstraction layer to facilitate creating client/server connections and
@@ -66,7 +69,7 @@ public:
 	/// Resolve host + port combination and return an opaque `ConnectionAddress` handle
 	/// representing the resolved network address.
 	/// </summary>
-	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) = 0;
+	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) const = 0;
 	/// <summary>
 	/// Open a listening socket bound to a specified local port.
 	/// </summary>
@@ -99,4 +102,13 @@ public:
 	/// * PollEventType::WRITABLE
 	/// </param>
 	virtual std::unique_ptr<IDescriptorSet> newDescriptorSet(PollEventType eventType) = 0;
+
+	/// <summary>
+	/// Process any pending connection state change events. This should be called regularly
+	/// at the beginning of each network game loop iteration to ensure that the connections
+	/// remain valid and synced properly with the underlying network backend.
+	/// </summary>
+	virtual void processConnectionStateChanges() = 0;
+
+	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const = 0;
 };

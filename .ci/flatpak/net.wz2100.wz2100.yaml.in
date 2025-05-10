@@ -166,6 +166,75 @@ modules:
         url: https://github.com/jedisct1/libsodium/releases/download/1.0.20-RELEASE/libsodium-1.0.20.tar.gz
         sha256: ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19
 
+  - name: abseil-cpp-host
+    buildsystem: cmake-ninja
+    builddir: true
+    # Always build for the host (prerequisite for protobuf-protoc-host module)
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app/protoc-host
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_CXX_STANDARD=17
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+    sources:
+      - type: archive
+        url: https://github.com/abseil/abseil-cpp/releases/download/20250127.1/abseil-cpp-20250127.1.tar.gz
+        sha256: b396401fd29e2e679cace77867481d388c807671dc2acc602a0259eeb79b7811
+
+  - name: protobuf-protoc-host
+    buildsystem: cmake-ninja
+    builddir: true
+    # Always build for the host
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app/protoc-host
+      - -DCMAKE_BUILD_TYPE=Release
+      - -Dprotobuf_BUILD_TESTS:BOOL=OFF
+      - -Dprotobuf_BUILD_PROTOBUF_BINARIES:BOOL=ON
+      - -Dprotobuf_BUILD_PROTOC_BINARIES:BOOL=ON
+      - -Dprotobuf_BUILD_SHARED_LIBS:BOOL=OFF
+    build-options:
+      - cxxflags:
+        - -I/app/protoc-host/include
+      - ldflags:
+        - -L/app/protoc-host/lib
+    cleanup:
+      - '*'
+    sources:
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v30.1/protobuf-30.1.tar.gz
+        sha256: 1451b03faec83aed17cdc71671d1bbdfd72e54086b827f5f6fd02bf7a4041b68
+
+  - name: abseil-cpp
+    buildsystem: cmake-ninja
+    builddir: true
+    @WZ_CROSS_BUILD_OPTIONS@
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_CXX_STANDARD=17
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
+    sources:
+      - type: archive
+        url: https://github.com/abseil/abseil-cpp/releases/download/20250127.1/abseil-cpp-20250127.1.tar.gz
+        sha256: b396401fd29e2e679cace77867481d388c807671dc2acc602a0259eeb79b7811
+
+  - name: protobuf
+    buildsystem: cmake-ninja
+    builddir: true
+    @WZ_CROSS_BUILD_OPTIONS@
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app
+      - -DCMAKE_BUILD_TYPE=Release
+      - -Dprotobuf_BUILD_TESTS:BOOL=OFF
+      - -Dprotobuf_BUILD_PROTOBUF_BINARIES:BOOL=ON
+      - -Dprotobuf_BUILD_PROTOC_BINARIES:BOOL=OFF
+      - -Dprotobuf_BUILD_SHARED_LIBS:BOOL=ON
+      @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
+    sources:
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v30.1/protobuf-30.1.tar.gz
+        sha256: 1451b03faec83aed17cdc71671d1bbdfd72e54086b827f5f6fd02bf7a4041b68
+
   - name: warzone2100
     buildsystem: cmake-ninja
     builddir: true
@@ -180,6 +249,8 @@ modules:
       - -DWZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR=/app/prestaged-dl
       # Crashpad/breakpad works in the Flatpak sandbox *if* --allow=devel is set above. Otherwise, this must be: inproc
       - -DSENTRY_BACKEND=crashpad
+      - -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON
+      - -DProtobuf_PROTOC_EXECUTABLE=/app/protoc-host/bin/protoc
       @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     secret-opts:
       - -DWZ_DISTRIBUTOR:STRING=$WZ_DISTRIBUTOR

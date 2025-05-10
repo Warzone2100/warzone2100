@@ -740,6 +740,13 @@ bool net_backend_from_str(const char* str, ConnectionProviderType& pt)
 		pt = ConnectionProviderType::TCP_DIRECT;
 		return true;
 	}
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	if (strcasecmp(str, "gns") == 0)
+	{
+		pt = ConnectionProviderType::GNS_DIRECT;
+		return true;
+	}
+#endif
 	return false;
 }
 
@@ -749,6 +756,10 @@ std::string to_string(ConnectionProviderType pt)
 	{
 	case ConnectionProviderType::TCP_DIRECT:
 		return "tcp";
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case ConnectionProviderType::GNS_DIRECT:
+		return "gns";
+#endif
 	}
 	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
 	return {};
