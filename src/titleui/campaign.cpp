@@ -940,16 +940,17 @@ void WzCampaignTweakOptionsEditForm::geometryChanged()
 	// position top buttons
 	int lastButtonX0 = width() - innerPadding;
 	int buttonY0 = innerPadding;
+	int topButtonHeight = std::max<int>(closeButton->idealHeight(), resetButton->idealHeight());
 	if (closeButton)
 	{
 		int buttonX0 = lastButtonX0 - closeButton->idealWidth();
-		closeButton->setGeometry(buttonX0, buttonY0, closeButton->idealWidth(), closeButton->idealHeight());
+		closeButton->setGeometry(buttonX0, buttonY0, closeButton->idealWidth(), topButtonHeight);
 		lastButtonX0 = buttonX0 - betweenButtonPadding;
 	}
 	if (resetButton)
 	{
 		int buttonX0 = lastButtonX0 - resetButton->idealWidth();
-		resetButton->setGeometry(buttonX0, buttonY0, resetButton->idealWidth(), resetButton->idealHeight());
+		resetButton->setGeometry(buttonX0, buttonY0, resetButton->idealWidth(), topButtonHeight);
 		lastButtonX0 = buttonX0;
 	}
 }
