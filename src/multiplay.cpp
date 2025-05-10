@@ -1562,7 +1562,7 @@ bool recvMessage()
 		case NET_VOTE:
 			if (NetPlay.isHost)
 			{
-				recvVote(queue);
+				recvVote(queue, false);
 			}
 			break;
 		case NET_VOTE_REQUEST:
