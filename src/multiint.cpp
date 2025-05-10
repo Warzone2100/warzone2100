@@ -1211,7 +1211,7 @@ WzString formatGameName(WzString name)
 
 static bool canChangeMapOrRandomize()
 {
-	ASSERT_HOST_ONLY(return true);
+	ASSERT_HOST_ONLY(return false);
 
 	if (!ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
