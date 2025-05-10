@@ -1495,10 +1495,22 @@ static bool NETrecvGAMESTRUCT(IClientConnection& sock, GAMESTRUCT *ourgamestruct
 	return true;
 }
 
+static PortMappingInternetProtocol getPreferredPortMappingProtocol(WzConnectionProvider& connProvider)
+{
+	// We currently support creating only IPV4 port mappings.
+	constexpr auto IPV4_PROTOCOL_KINDS = static_cast<PortMappingInternetProtocolMask>(PortMappingInternetProtocol::TCP_IPV4) | static_cast<PortMappingInternetProtocolMask>(PortMappingInternetProtocol::UDP_IPV4);
+
+	const auto supportedProtocolTypes = connProvider.portMappingProtocolTypes();
+	const PortMappingInternetProtocol res = static_cast<PortMappingInternetProtocol>(supportedProtocolTypes & IPV4_PROTOCOL_KINDS);
+	ASSERT(res == PortMappingInternetProtocol::TCP_IPV4 || res == PortMappingInternetProtocol::UDP_IPV4, "Unexpected port mapping protocol");
+	return res;
+}
+
 void NETaddRedirects()
 {
+	ASSERT_OR_RETURN(, activeConnProvider != nullptr, "No active connection provider");
 	auto& pmm = PortMappingManager::instance();
-	ipv4MappingRequest = pmm.create_port_mapping(gameserver_port, PortMappingInternetProtocol::IPV4);
+	ipv4MappingRequest = pmm.create_port_mapping(gameserver_port, getPreferredPortMappingProtocol(*activeConnProvider));
 	if (!ipv4MappingRequest)
 	{
 		debug(LOG_NET, "Failed to create port mapping!");

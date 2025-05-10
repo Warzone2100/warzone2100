@@ -26,6 +26,7 @@
 #include "lib/netplay/error_categories.h"
 #include "lib/netplay/pending_writes_manager_map.h"
 #include "lib/netplay/pending_writes_manager.h"
+#include "lib/netplay/port_mapping_manager.h"
 #include "lib/netplay/wz_compression_provider.h"
 
 #include "lib/netplay/gns/dummy_descriptor_set.h"
@@ -275,6 +276,11 @@ void GNSConnectionProvider::processConnectionStateChanges()
 	networkInterface_->RunCallbacks();
 }
 
+PortMappingInternetProtocolMask GNSConnectionProvider::portMappingProtocolTypes() const
+{
+	return static_cast<PortMappingInternetProtocolMask>(PortMappingInternetProtocol::UDP_IPV4) | static_cast<PortMappingInternetProtocolMask>(PortMappingInternetProtocol::UDP_IPV6);
+}
+
 void GNSConnectionProvider::disposeConnection(GNSClientConnection* conn)
 {
 	if (!conn)
@@ -293,7 +299,7 @@ void GNSConnectionProvider::disposeConnection(GNSClientConnection* conn)
 		pollGroup->remove(conn);
 	}
 	// Close the internal GNS connection handle
-	networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, true);
+	networkInterface_->CloseConnection(conn->connectionHandle(), 0, nullptr, true);
 	// This call renders the current connection object invalid!
 	conn->expireConnectionHandle();
 }
