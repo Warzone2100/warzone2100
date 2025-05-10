@@ -192,24 +192,42 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define ANYPLAYER				99
 
-#define NO_SCAVENGERS			0
-#define SCAVENGERS				1
-#define ULTIMATE_SCAVENGERS		2
+enum ScavType
+{
+	NO_SCAVENGERS = 0,
+	SCAVENGERS = 1,
+	ULTIMATE_SCAVENGERS = 2
+};
+constexpr ScavType SCAV_TYPE_MAX = ScavType::ULTIMATE_SCAVENGERS;
 
-#define CAMP_CLEAN				0			// campaign subtypes
-#define CAMP_BASE				1
-#define CAMP_WALLS				2
+// campaign subtypes
+enum CampType
+{
+	CAMP_CLEAN = 0,
+	CAMP_BASE = 1,
+	CAMP_WALLS = 2
+};
+constexpr CampType CAMP_TYPE_MAX = CampType::CAMP_WALLS;
 
 #define PING_LIMIT				4000		// If ping is bigger than this, then worry and panic, and don't even try showing the ping.
 
-#define LEV_LOW					0
-#define LEV_MED					1
-#define LEV_HI					2
+enum PowerSetting
+{
+	LEV_LOW = 0,
+	LEV_MED = 1,
+	LEV_HI = 2
+};
+constexpr PowerSetting POWER_SETTING_MAX = PowerSetting::LEV_HI;
 
-#define TECH_1					1
-#define TECH_2					2
-#define TECH_3					3
-#define TECH_4					4
+enum TechLevel
+{
+	TECH_1 = 1,
+	TECH_2 = 2,
+	TECH_3 = 3,
+	TECH_4 = 4
+};
+constexpr TechLevel TECH_LEVEL_MIN = TechLevel::TECH_1;
+constexpr TechLevel TECH_LEVEL_MAX = TechLevel::TECH_4;
 
 #define MAX_KICK_REASON			1024		// max array size for the reason your kicking someone
 #define MAX_JOIN_REJECT_REASON	2048		// max array size for the reason a join was rejected (custom host message provided by wzcmd interface)
