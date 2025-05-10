@@ -5764,7 +5764,6 @@ void multiLobbyRandomizeOptions()
 		ingame.flags &= ~MPFLAGS_FORCELIMITS;
 	}
 	createLimitSet();
-	applyLimitSet();
 	updateStructureDisabledFlags();
 
 	// Game options
@@ -7363,7 +7362,10 @@ void WzMultiplayerOptionsTitleUI::start()
 	if (!bReenter || challengeActive)
 	{
 		resetLimits();
+		ingame.flags &= ~MPFLAGS_FORCELIMITS;
+		createLimitSet(); // should effectively just free it
 		updateStructureDisabledFlags();
+		updateGameOptions();
 	}
 
 	if (autogame_enabled() || getHostLaunch() == HostLaunch::Autohost)
