@@ -973,6 +973,13 @@ static void setCDAudioForCurrentGameMode()
  */
 static void startGameLoop()
 {
+	if (runningMultiplayer())
+	{
+		// Adjust connected timeouts for clients (which is typically larger than the value of timeout when
+		// waiting in a lobby room).
+		NETadjustConnectedTimeoutForClients();
+	}
+
 	SetGameMode(GS_NORMAL);
 	initLoadingScreen(true);
 

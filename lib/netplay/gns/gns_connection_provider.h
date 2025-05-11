@@ -81,6 +81,8 @@ public:
 
 	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const override;
 
+	void registerAcceptedConnection(GNSClientConnection* conn);
+
 private:
 
 	static void ServerConnectionStateChanged(SteamNetConnectionStatusChangedCallback_t* pInfo);
@@ -89,14 +91,18 @@ private:
 	// Generic cleanup routine for failed client connections (i.e., those that
 	// have transitioned into some failure state).
 	//
-	// This will remove any pending writes for this connection, flush any
-	// outstanding messages that are waiting to be sent in the internal GNS queue
-	// and discards any unprocessed (but already received) messages.
+	// Used by the server/client connection state change callbacks.
+	// It is responsible for performing various cleanup actions:
+	// * Remove any pending writes for this connection
+	// * Flush any outstanding messages that are waiting to be sent in the internal GNS queue
+	// * Discard any unprocessed (but already received) messages
+	// * Remove the connection from the poll group (if there's any)
+	// * Close and reset the internal GNS connection handle and mark the connection object as invalid
 	//
 	// The connection object is automatically removed from its owning poll group (if there's any)
 	// and the internal GNS connection handle is closed, so that the connection object
 	// will be left in an invalid state (that is, `isValid()` will become `false`).
-	void disposeConnection(GNSClientConnection* conn);
+	void disposeConnection(HSteamNetConnection hConn);
 
 	ISteamNetworkingSockets* networkInterface_ = nullptr;
 	std::unordered_map<HSteamNetConnection, GNSClientConnection*> activeClients_;

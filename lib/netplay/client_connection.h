@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <chrono>
 #include <memory>
 #include <string>
 #include <system_error>
@@ -216,6 +217,8 @@ public:
 	{
 		writeErrorCode_ = std::move(ec);
 	}
+
+	virtual void setConnectedTimeout(std::chrono::milliseconds timeout) = 0;
 
 protected:
 

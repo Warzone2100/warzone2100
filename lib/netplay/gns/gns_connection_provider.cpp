@@ -82,6 +82,22 @@ void GNSConnectionProvider::initialize()
 		SteamNetworkingConfigValue_t connStatusCb;
 		connStatusCb.SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, reinterpret_cast<void*>(GNSConnectionProvider::ServerConnectionStateChanged));
 		listenSocketOpts_.emplace_back(std::move(connStatusCb));
+
+		SteamNetworkingConfigValue_t initialTimeoutMs;
+		// Initial connection timeout is hardcoded to be 15 seconds
+		initialTimeoutMs.SetInt32(k_ESteamNetworkingConfig_TimeoutInitial, 15000);
+		listenSocketOpts_.emplace_back(std::move(initialTimeoutMs));
+
+		SteamNetworkingConfigValue_t connectedTimeoutMs;
+		// Connected timeout is hardcoded to be 10 seconds
+		//
+		// Fresh connections will emerge into existence waiting in the lobby room, so will
+		// need a smaller timeout value, compared to the moment when the game transitions to
+		// the main game loop. In this particular case, the timeout will be increased to 60
+		// seconds, so that auto lag-kick mechanism will handle timed out connections, instead.
+		constexpr int32_t CONNECTED_TIMEOUT_MS = 10000;
+		connectedTimeoutMs.SetInt32(k_ESteamNetworkingConfig_TimeoutConnected, CONNECTED_TIMEOUT_MS);
+		listenSocketOpts_.emplace_back(std::move(connectedTimeoutMs));
 	}
 	{
 		// Initialize base client-side options for client connections
@@ -149,11 +165,15 @@ net::result<IClientConnection*> GNSConnectionProvider::openClientConnectionAny(c
 	timeoutInitialConf.SetInt32(k_ESteamNetworkingConfig_TimeoutInitial, static_cast<int32_t>(timeout));
 	connectOpts.emplace_back(std::move(timeoutInitialConf));
 
+	// Connected timeout is hardcoded to be 10 seconds
+	//
+	// Fresh connections will emerge into existence waiting in the lobby room, so will
+	// need a smaller timeout value, compared to the moment when the game transitions to
+	// the main game loop. In this particular case, the timeout will be increased to 60
+	// seconds, so that auto lag-kick mechanism will handle timed out connections, instead.
 	SteamNetworkingConfigValue_t timeoutConnectedConf;
-	// Hardcode the connected timeout to a large enough value (let it be 60 seconds, for now),
-	// so that other built-in measures to close the connection will be able to kick in
-	// and close the connection (e.g., lag auto-kick).
-	timeoutConnectedConf.SetInt32(k_ESteamNetworkingConfig_TimeoutConnected, 60);
+	constexpr int32_t CONNECTED_TIMEOUT_MS = 10000;
+	timeoutConnectedConf.SetInt32(k_ESteamNetworkingConfig_TimeoutConnected, CONNECTED_TIMEOUT_MS);
 	connectOpts.emplace_back(std::move(timeoutConnectedConf));
 
 	auto h = networkInterface_->ConnectByIPAddress(gnsAddr->asSteamNetworkingIPAddr(), connectOpts.size(), connectOpts.data());
@@ -191,8 +211,8 @@ void GNSConnectionProvider::ServerConnectionStateChanged(SteamNetConnectionStatu
 		ASSERT(pInfo->m_info.m_hListenSocket == connProvider->activeListenSocket_.first, "Unexpected listen socket handle");
 		if (connProvider->networkInterface_->AcceptConnection(pInfo->m_hConn) != k_EResultOK)
 		{
+			debug(LOG_WARNING, "ServerConnectionStateChanged: Failed to accept connection %u", pInfo->m_hConn);
 			connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
-			// FIXME: debug logging
 			break;
 		}
 		// We don't yet have a live `IClientConnection` instance for this connection
@@ -207,13 +227,11 @@ void GNSConnectionProvider::ServerConnectionStateChanged(SteamNetConnectionStatu
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
 		debug(LOG_ERROR, "Connection closed by peer: %u", pInfo->m_hConn);
-		connProvider->activeClients_.erase(pInfo->m_hConn);
-		connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
+		connProvider->disposeConnection(pInfo->m_hConn);
 		break;
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
 		debug(LOG_ERROR, "Connection closed, problem detected locally: %u", pInfo->m_hConn);
-		connProvider->activeClients_.erase(pInfo->m_hConn);
-		connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
+		connProvider->disposeConnection(pInfo->m_hConn);
 		break;
 	default:
 		break;
@@ -237,27 +255,13 @@ void GNSConnectionProvider::ClientConnectionStateChanged(SteamNetConnectionStatu
 	case k_ESteamNetworkingConnectionState_Connected:
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
-	{
 		debug(LOG_WARNING, "Connection closed by peer: %u", pInfo->m_hConn);
-
-		const auto connIt = connProvider->activeClients_.find(pInfo->m_hConn);
-		ASSERT_OR_RETURN(, connIt != connProvider->activeClients_.end() && connIt->second != nullptr, "Expected to have a valid client connection");
-		GNSClientConnection* conn = connIt->second;
-		// Perform cleanup for the associated connection object and its internal GNS handle
-		connProvider->disposeConnection(conn);
+		connProvider->disposeConnection(pInfo->m_hConn);
 		break;
-	}
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
-	{
 		debug(LOG_ERROR, "Connection closed, problem detected locally: %u", pInfo->m_hConn);
-
-		const auto connIt = connProvider->activeClients_.find(pInfo->m_hConn);
-		ASSERT_OR_RETURN(, connIt != connProvider->activeClients_.end() && connIt->second != nullptr, "Expected to have a valid client connection");
-		GNSClientConnection* conn = connIt->second;
-		// Perform cleanup for the associated connection object and its internal GNS handle
-		connProvider->disposeConnection(conn);
+		connProvider->disposeConnection(pInfo->m_hConn);
 		break;
-	}
 	default:
 		break;
 	}
@@ -281,27 +285,41 @@ PortMappingInternetProtocolMask GNSConnectionProvider::portMappingProtocolTypes(
 	return static_cast<PortMappingInternetProtocolMask>(PortMappingInternetProtocol::UDP_IPV4) | static_cast<PortMappingInternetProtocolMask>(PortMappingInternetProtocol::UDP_IPV6);
 }
 
-void GNSConnectionProvider::disposeConnection(GNSClientConnection* conn)
+void GNSConnectionProvider::registerAcceptedConnection(GNSClientConnection* conn)
 {
-	if (!conn)
+	ASSERT_OR_RETURN(, conn->isValid(), "Invalid GNS client connection handle");
+	activeClients_[conn->connectionHandle()] = conn;
+}
+
+void GNSConnectionProvider::disposeConnection(HSteamNetConnection hConn)
+{
+	if (hConn == k_HSteamNetConnection_Invalid)
 	{
 		return;
 	}
-	// Remove any pending writes for this connection
-	auto& pwm = PendingWritesManagerMap::instance().get(type());
-	pwm.clearPendingWrites(conn);
-	// Attempt to flush any messages, that are waiting in the internal GNS queue for this connection
-	// and discard any pending messages that weren't yet processed by this connection object
-	conn->flushPendingMessages();
-	// Automatically remove this connection from the poll group, if there's any
-	if (auto* pollGroup = conn->getPollGroup())
+	const auto connIt = activeClients_.find(hConn);
+	ASSERT_OR_RETURN(, connIt != activeClients_.end(), "Expected to have a valid client connection");
+	GNSClientConnection* conn = connIt->second;
+	if (conn)
 	{
-		pollGroup->remove(conn);
+		// Remove any pending writes for this connection
+		auto& pwm = PendingWritesManagerMap::instance().get(type());
+		pwm.clearPendingWrites(conn);
+		// Attempt to flush any messages, that are waiting in the internal GNS queue for this connection
+		// and discard any pending messages that weren't yet processed by this connection object
+		conn->flushPendingMessages();
+		// Automatically remove this connection from the poll group, if there's any
+		if (auto* pollGroup = conn->getPollGroup())
+		{
+			pollGroup->remove(conn);
+		}
+		// This call renders the current connection object invalid!
+		conn->expireConnectionHandle();
 	}
 	// Close the internal GNS connection handle
-	networkInterface_->CloseConnection(conn->connectionHandle(), 0, nullptr, true);
-	// This call renders the current connection object invalid!
-	conn->expireConnectionHandle();
+	networkInterface_->CloseConnection(hConn, 0, nullptr, true);
+	// Remove this connection handle from active clients list
+	activeClients_.erase(hConn);
 }
 
 } // namespace gns

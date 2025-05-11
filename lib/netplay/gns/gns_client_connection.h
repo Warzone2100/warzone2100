@@ -65,6 +65,8 @@ public:
 	virtual bool isValid() const override;
 	virtual net::result<void> connectionStatus() const override;
 
+	virtual void setConnectedTimeout(std::chrono::milliseconds timeout) override;
+
 	HSteamNetConnection connectionHandle() const { return conn_; }
 
 private:
