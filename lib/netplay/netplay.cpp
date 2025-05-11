@@ -5360,3 +5360,25 @@ void NETacceptIncomingConnections()
 		tmp_socket[i]->useNagleAlgorithm(false);
 	}
 }
+
+void NETadjustConnectedTimeoutForClients()
+{
+	constexpr std::chrono::milliseconds IN_GAME_CONNECTED_TIMEOUT{ 60000 };
+
+	if (NetPlay.isHost)
+	{
+		for (size_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+		{
+			if (connected_bsocket[i] != nullptr)
+			{
+				connected_bsocket[i]->setConnectedTimeout(IN_GAME_CONNECTED_TIMEOUT);
+			}
+		}
+		return;
+	}
+	if (bsocket)
+	{
+		bsocket->setConnectedTimeout(IN_GAME_CONNECTED_TIMEOUT);
+	}
+}
+

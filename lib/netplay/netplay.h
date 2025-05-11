@@ -559,5 +559,13 @@ private:
 };
 
 void NETacceptIncomingConnections();
+/// <summary>
+/// Increase the connected timeout for all player connection objects when transitioning
+/// from the lobby room to the main game loop.
+///
+/// Currently, this will set timeout value to 60 seconds, so that automatic lag-kick mechanism
+/// would be able to close stalled connections.
+/// </summary>
+void NETadjustConnectedTimeoutForClients();
 
 #endif

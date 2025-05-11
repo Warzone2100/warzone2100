@@ -23,6 +23,7 @@
 
 #include "lib/netplay/gns/gns_listen_socket.h"
 #include "lib/netplay/gns/gns_client_connection.h"
+#include "lib/netplay/gns/gns_connection_provider.h"
 
 #include "lib/framework/frame.h" // for `ASSERT`
 
@@ -59,7 +60,12 @@ IClientConnection* GNSListenSocket::accept()
 	}
 	const auto clientConnHandle = pendingAcceptedConnections_.front();
 	pendingAcceptedConnections_.pop();
-	return new GNSClientConnection(*connProvider_, *compressionProvider_, *pwm_, networkInterface_, clientConnHandle);
+	auto res = new GNSClientConnection(*connProvider_, *compressionProvider_, *pwm_, networkInterface_, clientConnHandle);
+	// Make the connection provider to update its internal mapping, so that it knows `clientConnHandle`
+	// has been used to create a new client connection object (so it can properly dispose of it, if something
+	// bad happens).
+	static_cast<GNSConnectionProvider*>(connProvider_)->registerAcceptedConnection(res);
+	return res;
 }
 
 void GNSListenSocket::addPendingAcceptedConnection(HSteamNetConnection conn)

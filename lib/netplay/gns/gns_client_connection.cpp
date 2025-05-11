@@ -27,6 +27,7 @@
 #include "lib/netplay/gns/gns_error_categories.h"
 
 #include <steam/isteamnetworkingsockets.h>
+#include <steam/isteamnetworkingutils.h>
 #include <steam/steamnetworkingtypes.h>
 
 #include <cstring>
@@ -140,6 +141,13 @@ net::result<void> GNSClientConnection::connectionStatus() const
 		return tl::make_unexpected(make_gns_error_code(k_EResultNoConnection));
 	}
 	return {};
+}
+
+void GNSClientConnection::setConnectedTimeout(std::chrono::milliseconds timeout)
+{
+	ASSERT_OR_RETURN(, isValid(), "Invalid GNS client connection handle");
+	ASSERT(SteamNetworkingUtils()->SetConnectionConfigValueInt32(conn_, k_ESteamNetworkingConfig_TimeoutConnected, static_cast<int32_t>(timeout.count())),
+		"Failed to set connected timeout for connection %u", conn_);
 }
 
 void GNSClientConnection::enqueueMessage(SteamNetworkingMessage_t* msg)

@@ -154,6 +154,11 @@ net::result<void> TCPClientConnection::connectionStatus() const
 	return {};
 }
 
+void TCPClientConnection::setConnectedTimeout(std::chrono::milliseconds timeout)
+{
+	// NO-OP
+}
+
 SOCKET TCPClientConnection::getRawSocketFd() const
 {
 	return tcp::getRawSocketFd(*socket_);
