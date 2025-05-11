@@ -1360,6 +1360,7 @@ void mainLoop()
 
 	wzApplyCursor();
 	runNotifications();
+	wz_command_interface_process_queued_status_output();
 #if defined(ENABLE_DISCORD)
 	discordRPCPerFrame();
 #endif
