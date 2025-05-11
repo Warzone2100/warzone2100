@@ -127,6 +127,8 @@
 #include "titleui/widgets/blindwaitingroom.h"
 #include "titleui/widgets/multilobbyoptions.h"
 #include "titleui/widgets/starthostingbutton.h"
+#include "lib/widget/popovermenu.h"
+#include "titleui/widgets/advcheckbox.h"
 
 #include "activity.h"
 #include <algorithm>
@@ -3619,7 +3621,7 @@ public:
 
 		// draw box
 		PIELIGHT boxBorder = (!selected) ? WZCOL_MENU_BACKGROUND : WZCOL_MENU_BORDER;
-		if (highlight)
+		if (highlight || down)
 		{
 			boxBorder = pal_RGBA(255, 255, 255, 255);
 		}
@@ -3649,9 +3651,9 @@ protected:
 
 	~WzPlayerBoxTabs()
 	{
-		if (optionsOverlayScreen)
+		if (currentPopoverMenu)
 		{
-			widgRemoveOverlayScreen(optionsOverlayScreen);
+			currentPopoverMenu->closeMenu();
 		}
 	}
 
@@ -3838,13 +3840,13 @@ private:
 	}
 
 	void displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent);
-	std::shared_ptr<WIDGET> createOptionsPopoverForm();
+	std::shared_ptr<PopoverMenuWidget> createOptionsPopoverForm();
 
 private:
 	std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUI;
 	std::vector<std::shared_ptr<WzPlayerBoxTabButton>> tabButtons;
 	std::shared_ptr<WzPlayerBoxOptionsButton> optionsButton;
-	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
+	std::shared_ptr<PopoverMenuWidget> currentPopoverMenu;
 };
 
 static bool hasOpenSpectatorOnlySlots()
@@ -3944,125 +3946,86 @@ static void enableSpectatorJoin(bool enabled)
 	netPlayersUpdated = true;
 }
 
-std::shared_ptr<WIDGET> WzPlayerBoxTabs::createOptionsPopoverForm()
+std::shared_ptr<PopoverMenuWidget> WzPlayerBoxTabs::createOptionsPopoverForm()
 {
+	auto popoverMenu = PopoverMenuWidget::make();
+
 	// create all the buttons / option rows
-	auto createOptionsSpacer = []() -> std::shared_ptr<WIDGET> {
+	auto addOptionsSpacer = [&popoverMenu]() -> std::shared_ptr<WIDGET> {
 		auto spacerWidget = std::make_shared<WIDGET>();
 		spacerWidget->setGeometry(0, 0, 1, 5);
+		popoverMenu->addMenuItem(spacerWidget, false);
 		return spacerWidget;
 	};
-	auto createOptionsCheckbox = [](const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzCheckboxButton& button)>& onClickFunc) -> std::shared_ptr<WzCheckboxButton> {
-		auto pCheckbox = std::make_shared<WzCheckboxButton>();
-		pCheckbox->pText = text;
+	auto addOptionsCheckbox = [&popoverMenu](const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzAdvCheckbox& button)>& onClickFunc) -> std::shared_ptr<WzAdvCheckbox> {
+		auto pCheckbox = WzAdvCheckbox::make(text, "");
 		pCheckbox->FontID = font_regular;
+		pCheckbox->setOuterVerticalPadding(4);
+		pCheckbox->setInnerHorizontalPadding(5);
 		pCheckbox->setIsChecked(isChecked);
-		pCheckbox->setTextColor(WZCOL_TEXT_BRIGHT);
 		if (isDisabled)
 		{
 			pCheckbox->setState(WBUT_DISABLE);
 		}
-		Vector2i minimumDimensions = pCheckbox->calculateDesiredDimensions();
-		pCheckbox->setGeometry(0, 0, minimumDimensions.x, minimumDimensions.y);
+		pCheckbox->setGeometry(0, 0, pCheckbox->idealWidth(), pCheckbox->idealHeight());
 		if (onClickFunc)
 		{
 			pCheckbox->addOnClickHandler([onClickFunc](W_BUTTON& button){
-				auto checkBoxButton = std::dynamic_pointer_cast<WzCheckboxButton>(button.shared_from_this());
+				auto checkBoxButton = std::dynamic_pointer_cast<WzAdvCheckbox>(button.shared_from_this());
 				ASSERT_OR_RETURN(, checkBoxButton != nullptr, "checkBoxButton is null");
 				onClickFunc(*checkBoxButton);
 			});
 		}
+		popoverMenu->addMenuItem(pCheckbox, false);
 		return pCheckbox;
 	};
 
-	std::vector<std::shared_ptr<WIDGET>> buttons;
 	bool hasOpenSpectatorSlots = hasOpenSpectatorOnlySlots();
 	std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUICopy = weakTitleUI;
-	buttons.push_back(createOptionsCheckbox(_("Enable Spectator Join"), hasOpenSpectatorSlots, !hasOpenSpectatorSlots && !canAddSpectatorOnlySlots(), [weakTitleUICopy](WzCheckboxButton& button){
-		bool enableValue = button.getIsChecked();
+	addOptionsCheckbox(_("Enable Spectator Join"), hasOpenSpectatorSlots, !hasOpenSpectatorSlots && !canAddSpectatorOnlySlots(), [weakTitleUICopy](WzAdvCheckbox& button){
+		bool enableValue = button.isChecked();
 		widgScheduleTask([enableValue, weakTitleUICopy]{
 			auto strongTitleUI = weakTitleUICopy.lock();
 			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "No Title UI?");
 			enableSpectatorJoin(enableValue);
 			strongTitleUI->updatePlayers();
 		});
-	}));
-	buttons.push_back(createOptionsSpacer());
-	buttons.push_back(createOptionsCheckbox(_("Lock Teams"), locked.teams, false, [](WzCheckboxButton& button){
-		locked.teams = button.getIsChecked();
-	}));
-
-	// determine required height for all buttons
-	int totalButtonHeight = std::accumulate(buttons.begin(), buttons.end(), 0, [](int a, const std::shared_ptr<WIDGET>& b) {
-		return a + b->height();
 	});
-	int maxButtonWidth = (*(std::max_element(buttons.begin(), buttons.end(), [](const std::shared_ptr<WIDGET>& a, const std::shared_ptr<WIDGET>& b){
-		return a->width() < b->width();
-	})))->width();
+	addOptionsSpacer();
+	addOptionsCheckbox(_("Lock Teams"), locked.teams, false, [](WzAdvCheckbox& button){
+		locked.teams = button.isChecked();
+	});
+	addOptionsCheckbox(_("Lock Position"), locked.position, false, [](WzAdvCheckbox& button){
+		locked.position = button.isChecked();
+	});
 
-	auto itemsList = ScrollableListWidget::make();
-	itemsList->setBackgroundColor(WZCOL_MENU_BACKGROUND);
-	itemsList->setPadding({3, 4, 3, 4});
-	const int itemSpacing = 4;
-	itemsList->setItemSpacing(itemSpacing);
-	itemsList->setGeometry(itemsList->x(), itemsList->y(), maxButtonWidth + 8, totalButtonHeight + (static_cast<int>(buttons.size()) * itemSpacing) + 6);
-	for (auto& button : buttons)
+	int32_t idealMenuHeight = popoverMenu->idealHeight();
+	int32_t menuHeight = idealMenuHeight;
+	if (menuHeight > screenHeight)
 	{
-		itemsList->addItem(button);
+		menuHeight = screenHeight;
 	}
+	popoverMenu->setGeometry(popoverMenu->x(), popoverMenu->y(), popoverMenu->idealWidth(), menuHeight);
 
-	return itemsList;
+	return popoverMenu;
 }
 
 void WzPlayerBoxTabs::displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent)
 {
-	auto lockedScreen = screenPointer.lock();
-	ASSERT(lockedScreen != nullptr, "The WzPlayerBoxTabs does not have an associated screen pointer?");
+	if (currentPopoverMenu)
+	{
+		currentPopoverMenu->closeMenu();
+	}
 
-	// Initialize the options overlay screen
-	optionsOverlayScreen = W_SCREEN::make();
-	auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
-	std::weak_ptr<W_SCREEN> psWeakOptionsOverlayScreen(optionsOverlayScreen);
-	std::weak_ptr<WzPlayerBoxTabs> psWeakPlayerBoxTabs = std::dynamic_pointer_cast<WzPlayerBoxTabs>(shared_from_this());
-	newRootFrm->onClickedFunc = [psWeakOptionsOverlayScreen, psWeakPlayerBoxTabs]() {
-		if (auto psOverlayScreen = psWeakOptionsOverlayScreen.lock())
+	optionsButton->setState(WBUT_CLICKLOCK);
+	currentPopoverMenu = createOptionsPopoverForm();
+	auto psWeakSelf = std::weak_ptr<WzPlayerBoxTabs>(std::static_pointer_cast<WzPlayerBoxTabs>(shared_from_this()));
+	currentPopoverMenu->openMenu(psParent, PopoverWidget::Alignment::LeftOfParent, Vector2i(0, 1), [psWeakSelf](){
+		if (auto strongSelf = psWeakSelf.lock())
 		{
-			widgRemoveOverlayScreen(psOverlayScreen);
+			strongSelf->optionsButton->setState(0);
 		}
-		// Destroy Options overlay / overlay screen
-		if (auto strongPlayerBoxTabs = psWeakPlayerBoxTabs.lock())
-		{
-			strongPlayerBoxTabs->optionsOverlayScreen.reset();
-		}
-	};
-	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
-	optionsOverlayScreen->psForm->attach(newRootFrm);
-
-	// Create the pop-over form
-	auto optionsPopOver = createOptionsPopoverForm();
-	newRootFrm->attach(optionsPopOver);
-
-	// Position the pop-over form
-	std::weak_ptr<WIDGET> weakParent = psParent;
-	optionsPopOver->setCalcLayout([weakParent](WIDGET *psWidget) {
-		auto psParent = weakParent.lock();
-		ASSERT_OR_RETURN(, psParent != nullptr, "parent is null");
-		// (Ideally, with its left aligned with the left side of the "parent" widget, but ensure full visibility on-screen)
-		int popOverX0 = psParent->screenPosX();
-		if (popOverX0 + psWidget->width() > screenWidth)
-		{
-			popOverX0 = screenWidth - psWidget->width();
-		}
-		// (Ideally, with its top aligned with the bottom of the "parent" widget, but ensure full visibility on-screen)
-		int popOverY0 = psParent->screenPosY() + psParent->height();
-		if (popOverY0 + psWidget->height() > screenHeight)
-		{
-			popOverY0 = screenHeight - psWidget->height();
-		}
-		psWidget->move(popOverX0, popOverY0);
 	});
-
-	widgRegisterOverlayScreenOnTopOfScreen(optionsOverlayScreen, lockedScreen);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
