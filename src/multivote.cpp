@@ -31,6 +31,7 @@
 #include "ai.h"
 #include "wzjsonhelpers.h"
 #include "main.h"
+#include "stdinreader.h"
 
 #include <array>
 #include <unordered_map>
@@ -879,6 +880,10 @@ bool recvPlayerMultiOptPreferencesBuiltin(int32_t sender, PlayerPreferences::Bui
 {
 	ASSERT_OR_RETURN(false, sender < MAX_CONNECTED_PLAYERS, "Invalid sender: %" PRIu32, sender);
 	auto prefsChanged = playerPreferences[sender].setBuiltinPreferences(std::move(builtinPreferences));
+	if (prefsChanged)
+	{
+		wz_command_interface_output_room_status_json(true);
+	}
 	return prefsChanged;
 }
 

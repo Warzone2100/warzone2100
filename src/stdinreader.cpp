@@ -27,6 +27,7 @@
 #include "multilobbycommands.h"
 #include "clparse.h"
 #include "main.h"
+#include "multivote.h"
 
 #include <string>
 #include <atomic>
@@ -89,8 +90,9 @@ wzAsyncExecOnMainThread([]{ \
 
 static WZ_Command_Interface wz_cmd_interface = WZ_Command_Interface::None;
 static std::string wz_cmd_interface_param;
+static bool hasQueuedRoomStatusJSONOutput = false;
 
-WZ_Command_Interface wz_command_interface()
+inline WZ_Command_Interface wz_command_interface()
 {
 	return wz_cmd_interface;
 }
@@ -1527,12 +1529,24 @@ static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasF
 	{
 		j["host"] = 1;
 	}
+
+	if (!gameHasFiredUp)
+	{
+		// in lobby, output player multiopt prefs
+		j["prefs"] = getMultiOptionPrefValuesJSON(player);
+	}
 }
 
-void wz_command_interface_output_room_status_json()
+void wz_command_interface_output_room_status_json(bool queued)
 {
 	if (!wz_command_interface_enabled())
 	{
+		return;
+	}
+
+	if (queued)
+	{
+		hasQueuedRoomStatusJSONOutput = true;
 		return;
 	}
 
@@ -1664,4 +1678,20 @@ void wz_command_interface_output_room_status_json()
 	std::string statusJSONStr = std::string("__WZROOMSTATUS__") + root.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace) + "__ENDWZROOMSTATUS__";
 	statusJSONStr.append("\n");
 	wz_command_interface_output_str(statusJSONStr.c_str());
+
+	hasQueuedRoomStatusJSONOutput = false;
+}
+
+void wz_command_interface_process_queued_status_output()
+{
+	if (!wz_command_interface_enabled())
+	{
+		return;
+	}
+
+	if (hasQueuedRoomStatusJSONOutput)
+	{
+		wz_command_interface_output_room_status_json(false);
+		hasQueuedRoomStatusJSONOutput = false;
+	}
 }
