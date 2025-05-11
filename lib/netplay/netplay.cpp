@@ -810,7 +810,10 @@ void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2)
 
 void NETBroadcastPlayerInfo(uint32_t index)
 {
-	ASSERT_HOST_ONLY(return);
+	if (!NetPlay.isHost)
+	{
+		return;
+	}
 	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
