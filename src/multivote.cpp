@@ -891,6 +891,7 @@ bool recvVote(NETQUEUE queue, bool inLobby)
 	uint8_t voteType = 0;
 	uint8_t newVote = 0;
 	PlayerPreferences::BuiltinPreferences builtinPreferences;
+	bool senderIsSpectator = (queue.index < NetPlay.players.size()) ? NetPlay.players[queue.index].isSpectator : true;
 	bool validPrefs = false;
 
 	NETbeginDecode(queue, NET_VOTE);
@@ -920,6 +921,11 @@ bool recvVote(NETQUEUE queue, bool inLobby)
 	{
 		case NetVoteType::LOBBY_SETTING_CHANGE:
 		case NetVoteType::KICK_PLAYER:
+			if (senderIsSpectator)
+			{
+				// Silently ignore LOBBY_SETTING_CHANGE and KICK_PLAYER votes from spectators
+				return false;
+			}
 			if (player >= MAX_PLAYERS)
 			{
 				debug(LOG_NET, "Invalid NET_VOTE from player %d: player id = %d", queue.index, static_cast<int>(player));
