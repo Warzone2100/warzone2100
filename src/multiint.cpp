@@ -5732,23 +5732,23 @@ void multiLobbyRandomizeOptions()
 	// Game options
 	if (!locked.scavengers && game.mapHasScavengers)
 	{
-		game.scavengers = rand() % 3;
+		game.scavengers = static_cast<uint8_t>(static_cast<uint32_t>(rand()) % (static_cast<uint32_t>(SCAV_TYPE_MAX) + 1));
 	}
 
 	if (!locked.alliances)
 	{
-		game.alliance = rand() % 4;
+		game.alliance = static_cast<uint8_t>(static_cast<uint32_t>(rand()) % (static_cast<uint32_t>(ALLIANCE_TYPE_MAX) + 1));
 	}
 	if (!locked.power)
 	{
-		game.power = rand() % 3;
+		game.power = static_cast<uint32_t>(rand()) % (static_cast<uint32_t>(POWER_SETTING_MAX) + 1);
 	}
 	if (!locked.bases)
 	{
-		game.base = rand() % 3;
+		game.base = static_cast<uint8_t>(static_cast<uint32_t>(rand()) % (static_cast<uint32_t>(CAMP_TYPE_MAX) + 1));
 	}
 
-	game.techLevel = rand() % 4;
+	game.techLevel = (static_cast<uint32_t>(rand()) % static_cast<uint32_t>(TECH_LEVEL_MAX)) + TECH_LEVEL_MIN;
 
 	if (NetPlay.isHost)
 	{
