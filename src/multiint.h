@@ -273,12 +273,12 @@ bool autoBalancePlayersCmd();
 
 #define	MULTIOP_BLUEFORMW		231
 
-#define	MROW1					4
 #define	MROW2					MROW1+MULTIOP_EDITBOXH
 #define	MROW3					MROW2+MULTIOP_EDITBOXH
 #define	MROW4					MROW3+MULTIOP_EDITBOXH
 #define MROW5					MROW4+38
 #define	MROW6					MROW5+29
+#define	MROW1					6
 
 #define MCOL0					45
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
