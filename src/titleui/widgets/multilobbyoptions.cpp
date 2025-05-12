@@ -1040,7 +1040,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 
 	// Power
 	powerChoice = std::make_shared<LobbyMultiOptionsChoiceWidget>(matchOptionsEditMode);
-	powerChoice->id = MULTIOP_POWER;
 	powerChoice->setLabel(_("Power"));
 	addMultiOptButtonT<PowerSetting>(powerChoice, LEV_LOW, AtlasImage(FrontImages, IMAGE_POWLO), AtlasImage(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
 	addMultiOptButtonT<PowerSetting>(powerChoice, LEV_MED, AtlasImage(FrontImages, IMAGE_POWMED), AtlasImage(FrontImages, IMAGE_POWMED_HI), _("Medium Power Levels"));
@@ -1066,7 +1065,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 
 	// Bases
 	baseTypeChoice = std::make_shared<LobbyMultiOptionsChoiceWidget>(matchOptionsEditMode);
-	baseTypeChoice->id = MULTIOP_BASETYPE;
 	baseTypeChoice->setLabel(_("Base"));
 	addMultiOptButtonT<CampType>(baseTypeChoice, CAMP_CLEAN, AtlasImage(FrontImages, IMAGE_NOBASE), AtlasImage(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
 	addMultiOptButtonT<CampType>(baseTypeChoice, CAMP_BASE, AtlasImage(FrontImages, IMAGE_SBASE), AtlasImage(FrontImages, IMAGE_SBASE_HI), _("Start with Bases"));
