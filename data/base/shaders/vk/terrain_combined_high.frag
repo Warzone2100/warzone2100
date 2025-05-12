@@ -63,11 +63,11 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return a + b;
 }
 
-vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
-	vec3 L = normalize(lightDir);
+vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
+	vec3 L = normalize(groundLightDir);
 	float lambertTerm = max(dot(b.N, L), 0.0); // diffuse lighting
 	// Gaussian specular term computation
-	vec3 H = normalize(halfVec);
+	vec3 H = normalize(groundHalfVec);
 	float blinnTerm = clamp(dot(b.N, H), 0.f, 1.f);
 	blinnTerm = lambertTerm != 0.0 ? blinnTerm : 0.0;
 	blinnTerm = pow(blinnTerm, 16.f);
@@ -90,8 +90,19 @@ vec4 doBumpMapping(BumpData b, vec3 lightDir, vec3 halfVec) {
 	{
 		// point lights
 		vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
-		res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(halfVec - lightDir), b.color, b.gloss, ModelTangentMatrix);
+		res += iterateOverAllPointLights(clipSpaceCoord, frag.fragPos, b.N, normalize(groundHalfVec - groundLightDir), b.color, b.gloss, ModelTangentMatrix);
 	}
+
+	// Calculate water murkiness based on non-constant-density-fog, see https://iquilezles.org/articles/fog/
+	vec3 c2p = normalize(frag.fragPos - cameraPos.xyz); // camera to point vector
+	vec3 c = normalize(cameraPos.xyz);
+	float inscatter = 0.007; // in-scattering
+	float extinction = 0.001; // extinction
+	float murkiness = inscatter * exp(-c.y * extinction) * (1.0 - exp( -(frag.fragPos.y+40.0) * c2p.y * extinction)) / (-c2p.y * extinction);
+	float waterDeep = 0.003 * exp(-c.y * extinction) * (1.0 - exp( -(frag.fragPos.y+40.0) * c2p.y * extinction)) / (-c2p.y * extinction);
+	murkiness = clamp(murkiness, 0.0, 1.0);
+	waterDeep = clamp(waterDeep, 0.0, 1.0);
+	res.rgb = mix(res.rgb, (vec3(0.315,0.425,0.475)*vec3(1.0-waterDeep)) * lightmap_vec4.a, murkiness);
 
 	return vec4(res.rgb, b.color.a);
 }
@@ -132,7 +143,7 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), fogFactor);
+		fragColor = mix(fragColor, vec4(fogColor.rgb, fragColor.a), fogFactor);
 	}
 	FragColor = fragColor;
 }
