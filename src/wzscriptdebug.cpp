@@ -2785,7 +2785,6 @@ std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<s
 	// Add tabs
 	result->pageTabs = std::make_shared<NoBackgroundTabWidget>(0);
 	result->attach(result->pageTabs);
-	result->pageTabs->id = MULTIOP_TECHLEVEL;
 	result->pageTabs->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Main, "Main");
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Selected, "Selected");

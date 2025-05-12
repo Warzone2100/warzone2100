@@ -2413,7 +2413,7 @@ void WzMultiplayerOptionsTitleUI::openMapChooser()
 	widgDelete(psWScreen, MULTIOP_PLAYERS);
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);					// del text too,
 
-	debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
+	debug(LOG_WZ, "openMapChooser: %s.wrf", MultiCustomMapsPath);
 	addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_numplayers);
 
 	if (NetPlay.isHost && NetPlay.bComms)
