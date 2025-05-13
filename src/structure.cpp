@@ -2975,6 +2975,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	if (bMultiPlayer && psStructure->resistance < (int)structureResistance(psStructure->pStructureType, psStructure->player))
 	{
 		objTrace(psStructure->id, "Resistance too low for repair");
+		droidRepairStopped(castDroid(psRepairFac->psObj), &station);
 		psRepairFac->psObj = nullptr;
 		return RepairState::Idle;
 	}
@@ -2988,6 +2989,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	{
 		ASSERT(found != nullptr, "Bug! found droid, but it was null?");
 		psRepairFac->psObj = found;
+		droidRepairStarted(found, &station);
 		return RepairState::Repairing;
 	};
 	case RepairEvents::UnitReachedMaxHP:
@@ -2998,6 +3000,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 		psDroid->body = psDroid->originalBody;
 		// if completely repaired reset order
 		objTrace(psDroid->id, "was fully repaired by RF");
+		droidRepairStopped(psDroid, &station);
 		droidWasFullyRepaired(psDroid, psRepairFac);
 		// only call "secondarySetState" *after* triggering "droidWasFullyRepaired"
 		// because in some cases calling it would modify primary order
@@ -3009,11 +3012,13 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	{
 		DROID *psDroid = (DROID*) psRepairFac->psObj;
 		syncDebugDroid(psDroid, '-');
+		droidRepairStopped(psDroid, &station);
 		psRepairFac->psObj = nullptr;
 		return RepairState::Idle;
 	};
 	case RepairEvents::UnitMovedAway:
 	{
+		droidRepairStopped(castDroid(psRepairFac->psObj), &station);
 		psRepairFac->psObj = nullptr;
 		return RepairState::Idle;
 	};
@@ -4581,6 +4586,17 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 		{
 			//cancel the topic
 			cancelResearch(psDel, ModeImmediate);
+		}
+	}
+
+	if (psDel->pStructureType->type == REF_REPAIR_FACILITY)
+	{
+		if (psDel->pFunctionality && psDel->pFunctionality->repairFacility.state == RepairState::Repairing)
+		{
+			if (psDel->pFunctionality->repairFacility.psObj != nullptr)
+			{
+				droidRepairStopped(castDroid(psDel->pFunctionality->repairFacility.psObj), psDel);
+			}
 		}
 	}
 

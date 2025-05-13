@@ -5685,6 +5685,14 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 			psDroid->rot.pitch = 0;
 		}
 
+		auto tmpUnderRepair = ini.value("underRepair").toUInt();
+		if (tmpUnderRepair > std::numeric_limits<decltype(psDroid->underRepair)>::max())
+		{
+			debug(LOG_INFO, "Out of bounds underRepair value: %u", tmpUnderRepair);
+			tmpUnderRepair = std::numeric_limits<decltype(psDroid->underRepair)>::max();
+		}
+		psDroid->underRepair = static_cast<uint16_t>(tmpUnderRepair);
+
 		// recreate formation if present
 		auto formationInfo = ini.value("formation").jsonValue();
 		if (formationInfo.is_object())
@@ -5887,6 +5895,8 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 		formationObj["y"] = psCurr->sMove.psFormation->y;
 		droidObj["formation"] = std::move(formationObj);
 	}
+
+	droidObj["underRepair"] = psCurr->underRepair;
 
 	droidObj["onMission"] = onMission;
 	return droidObj;

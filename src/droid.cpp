@@ -401,6 +401,7 @@ DROID::DROID(uint32_t id, unsigned player)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
 	, heightAboveMap(0)
+	, underRepair(0)
 {
 	memset(aName, 0, sizeof(aName));
 	memset(asBits, 0, sizeof(asBits));
@@ -546,6 +547,11 @@ bool removeDroidBase(DROID *psDel)
 	{
 		formationLeave(psDel->sMove.psFormation, psDel);
 		psDel->sMove.psFormation = nullptr;
+	}
+
+	if (psDel->action == DACTION_DROIDREPAIR)
+	{
+		droidRepairStopped(castDroid(psDel->psActionTarget[0]), psDel);
 	}
 
 	//kill all the droids inside the transporter
@@ -1285,6 +1291,32 @@ int getRecoil(WEAPON const &weapon)
 		// Recoil effect is over.
 	}
 	return 0;
+}
+
+void droidRepairStarted(DROID *psDroid, BASE_OBJECT const *psRepairer)
+{
+	ASSERT_OR_RETURN(, psDroid != nullptr, "Null droid");
+	ASSERT_OR_RETURN(, psDroid->underRepair < std::numeric_limits<decltype(psDroid->underRepair)>::max(), "underRepair hit max for droid: [%d] %s", psDroid->id, objInfo(psDroid));
+#if defined(DEBUG)
+	debug(LOG_NEVER, "Object (%d: %s) starting repair of droid: %" PRIu32, int(psRepairer->type), objInfo(psRepairer), psDroid->id);
+#endif
+	++psDroid->underRepair;
+}
+
+void droidRepairStopped(DROID *psDroid, BASE_OBJECT const *psFormerRepairer)
+{
+	ASSERT_OR_RETURN(, psDroid != nullptr, "Null droid");
+#if defined(DEBUG)
+	 debug(LOG_NEVER, "Object (%d: %s) stopping repair of droid: %" PRIu32, int(psFormerRepairer->type), objInfo(psFormerRepairer), psDroid->id);
+#endif
+	if (psDroid->underRepair == 0)
+	{
+		// This is expected after initially loading pre-4.6.0 saves (WZ did not calculate underRepair until version 4.6)
+		// But should not happen when playing new games
+		debug(LOG_WARNING, "underRepair count already 0 for droid: [%d] %s", psDroid->id, objInfo(psDroid));
+		return;
+	}
+	--psDroid->underRepair;
 }
 
 /* Droid was completely repaired by another droid, auto-repair, or repair facility */
@@ -2864,7 +2896,7 @@ bool electronicDroid(const DROID *psDroid)
 	return false;
 }
 
-/*checks to see if the droid is currently being repaired by another*/
+/*checks to see if the droid is currently being repaired by another droid or structure*/
 bool droidUnderRepair(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
@@ -2872,25 +2904,7 @@ bool droidUnderRepair(const DROID *psDroid)
 	//droid must be damaged
 	if (psDroid->isDamaged())
 	{
-		//look thru the list of players droids to see if any are repairing this droid
-		for (const DROID *psCurr : apsDroidLists[psDroid->player])
-		{
-			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
-				 DROID_CYBORG_REPAIR) && psCurr->action ==
-				DACTION_DROIDREPAIR && psCurr->order.psObj == psDroid)
-			{
-				BASE_OBJECT *psLeader = nullptr;
-				if (hasCommander(psCurr))
-				{
-					psLeader = (BASE_OBJECT *)psCurr->psGroup->psCommander;
-				}
-				if (psLeader && psLeader->id == psDroid->id)
-				{
-					continue;
-				}
-				return true;
-			}
-		}
+		return psDroid->underRepair != 0;
 	}
 	return false;
 }
