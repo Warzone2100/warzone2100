@@ -104,10 +104,10 @@ constexpr std::chrono::milliseconds NET_READ_TIMEOUT{ 0 };
 *	NOTE /rant:  If the buffer size isn't big enough, it will invalidate the socket.
 *	Which means that we need to allocate a buffer big enough to handle worst case
 *	situations.
-*	reference: MaxMsgSize in netplay.h  (currently set to 16K)
+*	reference: MaxMsgSize in netplay.h  (currently set to 32K)
 *
 */
-#define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
+#define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 32K
 
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
@@ -3001,12 +3001,10 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 	}
 
 	uint32_t current;
-
+	uint8_t buffer[NET_BUFFER_SIZE];
 	for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current)
 	{
 		IClientConnection** pSocket = NetPlay.isHost ? &connected_bsocket[current] : &bsocket;
-		uint8_t buffer[NET_BUFFER_SIZE];
-		size_t dataLen;
 
 		if (!NetPlay.isHost && current != NetPlay.hostPlayer)
 		{
@@ -3018,7 +3016,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 			continue;
 		}
 
-		dataLen = NET_fillBuffer(pSocket, pollGroup, buffer, sizeof(buffer));
+		size_t dataLen = NET_fillBuffer(pSocket, pollGroup, buffer, sizeof(buffer));
 		if (dataLen > 0)
 		{
 			// we received some data, add to buffer
@@ -3100,11 +3098,11 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 *  @TODO: more error checking (?) different file types (?)
 *          Maybe should close file handle, and seek each time?
 *
-*  @NOTE: MAX_FILE_TRANSFER_PACKET is set to 2k per packet since 7*2 = 14K which is pretty
+*  @NOTE: MAX_FILE_TRANSFER_PACKET is set to 4k per packet since 7*4 = 28K which is pretty
 *         much our limit.  Don't screw with that without having a bigger buffer!
-*         NET_BUFFER_SIZE is at 16k.  (also remember text chat, plus all the other cruff)
+*         NET_BUFFER_SIZE is at 32k.  (also remember text chat, plus all the other cruff)
 */
-#define MAX_FILE_TRANSFER_PACKET 2048
+#define MAX_FILE_TRANSFER_PACKET 4096
 int NETsendFile(WZFile &file, unsigned player)
 {
 	ASSERT_OR_RETURN(100, NetPlay.isHost, "Trying to send a file and we are not the host!");
@@ -4180,7 +4178,7 @@ static void NETallowJoining()
 			}
 			else if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingJoinRequest)
 			{
-				uint8_t buffer[NET_BUFFER_SIZE];
+				uint8_t buffer[MaxMsgSize];
 				const auto readResult = tmp_socket[i]->readNoInt(buffer, sizeof(buffer), nullptr);
 				uint8_t rejected = 0;
 
@@ -4208,7 +4206,7 @@ static void NETallowJoining()
 				{
 					// need to wait for a full and complete join message
 					// sanity check
-					if (NETincompleteMessageDataBuffered(NETnetTmpQueue(i)) > (NET_BUFFER_SIZE * 16))	// something definitely big enough to encompass the expected message(s) at this point
+					if (NETincompleteMessageDataBuffered(NETnetTmpQueue(i)) > (MaxMsgSize * 8))	// something definitely big enough to encompass the expected message(s) at this point
 					{
 						// client is sending data that doesn't appear to be a properly formatted message - cut it off
 						NETpop(NETnetTmpQueue(i));

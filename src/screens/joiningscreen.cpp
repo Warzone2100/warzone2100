@@ -59,7 +59,6 @@ static std::weak_ptr<WzJoiningGameScreen> psCurrentJoiningAttemptScreen;
 void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen);
 
 constexpr std::chrono::milliseconds NET_READ_TIMEOUT{ 0 };
-constexpr size_t NET_BUFFER_SIZE = MaxMsgSize;
 constexpr uint32_t HOST_RESPONSE_TIMEOUT = 10000;
 
 // MARK: - WzJoiningStatusForm
@@ -1458,7 +1457,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				return; // wait for next check
 			}
 
-			uint8_t readBuffer[NET_BUFFER_SIZE];
+			uint8_t readBuffer[MaxMsgSize];
 			const auto readResult = client_transient_socket->readNoInt(readBuffer, sizeof(readBuffer), nullptr);
 			if (!readResult.has_value())
 			{
@@ -1488,7 +1487,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		{
 			// need to wait for a full and complete join message
 			// sanity check
-			if (NETincompleteMessageDataBuffered(tmpJoiningQUEUE) > (NET_BUFFER_SIZE * 16))	// something definitely big enough to encompass the expected message(s) at this point
+			if (NETincompleteMessageDataBuffered(tmpJoiningQUEUE) > (MaxMsgSize * 8))	// something definitely big enough to encompass the expected message(s) at this point
 			{
 				// host is sending data that doesn't appear to be a properly formatted message - cut it off
 				closeConnectionAttempt();
