@@ -428,6 +428,9 @@ static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
 	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)nullptr;
 }
 
+void droidRepairStarted(DROID *psDroid, BASE_OBJECT const *psRepairer);
+void droidRepairStopped(DROID *psDroid, BASE_OBJECT const *psFormerRepairer);
+
 /** \brief sends droid to delivery point, or back to commander. psRepairFac maybe nullptr when
  * repairs were made by a mobile repair turret
  */
