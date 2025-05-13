@@ -2880,13 +2880,26 @@ bool droidUnderRepair(const DROID *psDroid)
 		//look thru the list of players droids to mark repairing ones
 		for (const DROID *psCurr : apsDroidLists[psDroid->player])
 		{
-			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
-				 DROID_CYBORG_REPAIR) && psCurr->action ==
-				DACTION_DROIDREPAIR && psCurr->order.psObj != nullptr &&
-				psCurr->order.psObj->type == OBJ_DROID)
+			if ((psCurr->droidType == DROID_REPAIR ||
+				psCurr->droidType == DROID_CYBORG_REPAIR) &&
+				psCurr->action == DACTION_DROIDREPAIR)
 			{
-				//droid must be damaged
-				DROID *psDroid2 = (DROID *)(psCurr->order.psObj);
+				for (int i = 0; i < MAX_WEAPONS; i++)
+				{
+					if (psCurr->psActionTarget[i] == nullptr ||
+						psCurr->psActionTarget[i]->type != OBJ_DROID) continue;
+					DROID *psDroid2 = (DROID *)(psCurr->psActionTarget[i]);
+					psDroid2->underRepair = psDroid2->isDamaged();
+				}
+			}
+		}
+		for (const STRUCTURE *psCurr : apsStructLists[psDroid->player])
+		{
+			if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
+			{
+				if (psCurr->pFunctionality->repairFacility.psObj == nullptr ||
+					psCurr->pFunctionality->repairFacility.psObj->type != OBJ_DROID) continue;
+				DROID *psDroid2 = (DROID *)(psCurr->pFunctionality->repairFacility.psObj);
 				psDroid2->underRepair = psDroid2->isDamaged();
 			}
 		}
