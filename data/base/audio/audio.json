@@ -409,7 +409,8 @@
             { "fileName": "richet3.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "squish.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "bldfall.ogg", "loop": false, "range": 1800, "volume": 100 },
-            { "fileName": "nxsexpld.ogg", "loop": false, "range": 1800, "volume": 100 }
+            { "fileName": "nxsexpld.ogg", "loop": false, "range": 1800, "volume": 100 },
+            { "fileName": "partexpl.ogg", "loop": false, "range": 1800, "volume": 100 }
         ]
     },
     "DroidEngineNoise": {
@@ -512,7 +513,7 @@
             { "fileName": "emp.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "hevlsr.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "plasflm.ogg", "loop": false, "range": 1800, "volume": 100 },
-            { "fileName": "partgun.ogg", "loop": false, "range": 1800, "volume": 100 },          
+            { "fileName": "partgun.ogg", "loop": false, "range": 1800, "volume": 70 },
             { "fileName": "uplink.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "lasstrk.ogg", "loop": false, "range": 1800, "volume": 100 },
             { "fileName": "beacon.ogg", "loop": false, "range": 1800, "volume": 100 }

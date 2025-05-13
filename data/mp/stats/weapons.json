@@ -2071,7 +2071,7 @@
 		"damage": 290,
 		"designable": 1,
 		"effectSize": 100,
-		"explosionWav": "lsrexpl.ogg",
+		"explosionWav": "partexpl.ogg",
 		"facePlayer": 1,
 		"firePause": 60,
 		"flightGfx": "FXPLAmmo2.PIE",

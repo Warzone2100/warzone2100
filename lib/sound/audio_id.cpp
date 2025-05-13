@@ -396,6 +396,7 @@ static AUDIO_ID_MAP asAudioID[] =
 	{ID_SOUND_BARB_SQUISH,                         "squish.ogg"},
 	{ID_SOUND_BUILDING_FALL,                       "bldfall.ogg"},
 	{ID_SOUND_NEXUS_EXPLOSION,                     "nxsexpld.ogg"},
+	{ID_SOUND_PARTICLE_GUN_EXPLOSION,              "partexpl.ogg"},
 
 	/* Droid Engine Noises */
 	{ID_SOUND_CONSTRUCTOR_MOVEOFF,                 "con-move-off.ogg"},
