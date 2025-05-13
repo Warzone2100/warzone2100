@@ -196,6 +196,7 @@ struct DROID : public BASE_OBJECT
 	/* anim data */
 	SDWORD          iAudioID;
 	int32_t			heightAboveMap;					///< Current calculated height above the terrain (set for VTOL-propulsion units)
+	uint8_t         underRepair;
 };
 
 #endif // __INCLUDED_DROIDDEF_H__

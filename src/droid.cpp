@@ -2867,32 +2867,31 @@ bool electronicDroid(const DROID *psDroid)
 /*checks to see if the droid is currently being repaired by another*/
 bool droidUnderRepair(const DROID *psDroid)
 {
+	static UDWORD lastCall = 0;
 	CHECK_DROID(psDroid);
 
-	//droid must be damaged
-	if (psDroid->isDamaged())
+	if (lastCall != gameTime)
 	{
-		//look thru the list of players droids to see if any are repairing this droid
+		lastCall = gameTime;
+		for (DROID *psCurr : apsDroidLists[psDroid->player])
+		{
+			psCurr->underRepair = 0;
+		}
+		//look thru the list of players droids to mark repairing ones
 		for (const DROID *psCurr : apsDroidLists[psDroid->player])
 		{
 			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
 				 DROID_CYBORG_REPAIR) && psCurr->action ==
-				DACTION_DROIDREPAIR && psCurr->order.psObj == psDroid)
+				DACTION_DROIDREPAIR && psCurr->order.psObj != nullptr &&
+				psCurr->order.psObj->type == OBJ_DROID)
 			{
-				BASE_OBJECT *psLeader = nullptr;
-				if (hasCommander(psCurr))
-				{
-					psLeader = (BASE_OBJECT *)psCurr->psGroup->psCommander;
-				}
-				if (psLeader && psLeader->id == psDroid->id)
-				{
-					continue;
-				}
-				return true;
+				//droid must be damaged
+				DROID *psDroid2 = (DROID *)(psCurr->order.psObj);
+				psDroid2->underRepair = psDroid2->isDamaged();
 			}
 		}
 	}
-	return false;
+	return psDroid->underRepair;
 }
 
 //count how many Command Droids exist in the world at any one moment
