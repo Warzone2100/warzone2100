@@ -298,28 +298,30 @@ void GNSConnectionProvider::disposeConnection(HSteamNetConnection hConn)
 		return;
 	}
 	const auto connIt = activeClients_.find(hConn);
-	ASSERT_OR_RETURN(, connIt != activeClients_.end(), "Expected to have a valid client connection");
-	GNSClientConnection* conn = connIt->second;
-	if (conn)
+	if (connIt != activeClients_.end())
 	{
-		// Remove any pending writes for this connection
-		auto& pwm = PendingWritesManagerMap::instance().get(type());
-		pwm.clearPendingWrites(conn);
-		// Attempt to flush any messages, that are waiting in the internal GNS queue for this connection
-		// and discard any pending messages that weren't yet processed by this connection object
-		conn->flushPendingMessages();
-		// Automatically remove this connection from the poll group, if there's any
-		if (auto* pollGroup = conn->getPollGroup())
+		GNSClientConnection* conn = connIt->second;
+		if (conn)
 		{
-			pollGroup->remove(conn);
+			// Remove any pending writes for this connection
+			auto& pwm = PendingWritesManagerMap::instance().get(type());
+			pwm.clearPendingWrites(conn);
+			// Attempt to flush any messages, that are waiting in the internal GNS queue for this connection
+			// and discard any pending messages that weren't yet processed by this connection object
+			conn->flushPendingMessages();
+			// Automatically remove this connection from the poll group, if there's any
+			if (auto* pollGroup = conn->getPollGroup())
+			{
+				pollGroup->remove(conn);
+			}
+			// This call renders the current connection object invalid!
+			conn->expireConnectionHandle();
 		}
-		// This call renders the current connection object invalid!
-		conn->expireConnectionHandle();
+		// Remove this connection handle from active clients list
+		activeClients_.erase(connIt);
 	}
 	// Close the internal GNS connection handle
 	networkInterface_->CloseConnection(hConn, 0, nullptr, true);
-	// Remove this connection handle from active clients list
-	activeClients_.erase(hConn);
 }
 
 } // namespace gns
