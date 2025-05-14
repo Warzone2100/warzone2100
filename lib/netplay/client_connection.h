@@ -140,7 +140,7 @@ public:
 	/// </summary>
 	/// <param name="rawByteCount">Raw count of bytes (after compression) as written
 	/// to the submission queue by the flush operation.</param>
-	void flush(size_t* rawByteCount);
+	net::result<void> flush(size_t* rawByteCount);
 	/// <summary>
 	/// Enables compression for the current socket.
 	///

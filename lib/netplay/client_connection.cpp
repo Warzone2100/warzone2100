@@ -193,12 +193,12 @@ net::result<ssize_t> IClientConnection::writeAll(const void* buf, size_t size, s
 	return size;
 }
 
-void IClientConnection::flush(size_t* rawByteCount)
+net::result<void> IClientConnection::flush(size_t* rawByteCount)
 {
 	if (!isValid())
 	{
 		debug(LOG_ERROR, "IClientConnection::flush: Invalid socket (EBADF)");
-		return;
+		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
 	if (rawByteCount)
@@ -207,13 +207,14 @@ void IClientConnection::flush(size_t* rawByteCount)
 	}
 	if (!isCompressed())
 	{
-		return;  // Not compressed, so don't mess with compression.
+		return {};  // Not compressed, so don't mess with compression.
 	}
 
 	if (writeErrorCode().has_value())
 	{
 		const auto errMsg = writeErrorCode().value().message();
-		ASSERT(false, "Socket write error encountered in flush: %s", errMsg.c_str());
+		debug(LOG_ERROR, "Socket write error encountered in flush: %s", errMsg.c_str());
+		return tl::make_unexpected(writeErrorCode().value());
 	}
 
 	compressionAdapter_->flushCompressionStream();
@@ -221,7 +222,7 @@ void IClientConnection::flush(size_t* rawByteCount)
 	auto& compressionBuf = compressionAdapter_->compressionOutBuffer();
 	if (compressionBuf.empty())
 	{
-		return;  // No data to flush out.
+		return {};  // No data to flush out.
 	}
 
 	pwm_->append(this, [&compressionBuf] (PendingWritesManager::ConnectionWriteQueue& writeQueue)
@@ -235,6 +236,7 @@ void IClientConnection::flush(size_t* rawByteCount)
 		*rawByteCount = compressionBuf.size();
 	}
 	compressionBuf.clear();
+	return {};
 }
 
 void IClientConnection::enableCompression()
