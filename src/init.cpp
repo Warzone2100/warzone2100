@@ -1319,6 +1319,8 @@ void systemShutdown()
 		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
 	}
 
+	NETclose();
+
 	seqReleaseAll();
 
 	pie_ShutdownRadar();
