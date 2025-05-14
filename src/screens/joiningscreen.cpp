@@ -1309,12 +1309,12 @@ bool WzJoiningGameScreen_HandlerRoot::joiningSocketNETsend()
 		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", message->type, message->rawLen(), compressedRawLen, writeErrMsg.c_str());
 		return false;
 	}
+	ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining).", queue->numMessagesForNet());
 	// Make sure the message was completely sent.
 	if (!client_transient_socket->flush(nullptr).has_value())
 	{
 		return false;
 	}
-	ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining).", queue->numMessagesForNet());
 	return true;
 }
 
