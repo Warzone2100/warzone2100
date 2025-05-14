@@ -31,6 +31,7 @@
 #include <steam/steamnetworkingtypes.h>
 
 #include <cstring>
+#include <algorithm>
 
 namespace gns
 {
@@ -66,7 +67,9 @@ net::result<ssize_t> GNSClientConnection::sendImpl(const std::vector<uint8_t>& d
 	{
 		sendFlags |= k_nSteamNetworkingSend_NoNagle;
 	}
-	const auto size = data.size();
+	// Limit the size of the message to the maximum size allowed by the GNS library.
+	// Higher-level code will automatically handle this case and split the payload into several messages if needed.
+	const auto size = std::min(data.size(), static_cast<size_t>(k_cbMaxSteamNetworkingSocketsMessageSizeSend));
 	auto res = networkInterface_->SendMessageToConnection(conn_, data.data(), static_cast<uint32_t>(size), sendFlags, nullptr);
 	if (res != k_EResultOK)
 	{
