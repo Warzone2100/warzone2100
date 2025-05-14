@@ -950,11 +950,16 @@ bool NETplayerHasConnection(uint32_t index)
  * @note Connection dropped. Handle it gracefully.
  * \param index
  */
-static void NETplayerClientsDisconnect(std::set<uint32_t> indexes)
+static void NETplayerClientsDisconnect(const std::set<uint32_t>& indexes)
 {
 	if (!NetPlay.isHost)
 	{
 		ASSERT(false, "Host only routine detected for client!");
+		return;
+	}
+
+	if (indexes.empty())
+	{
 		return;
 	}
 
@@ -1920,6 +1925,27 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 	return false;
 }
 
+static void NETcloseTempSocket(unsigned int i)
+{
+	std::string rIP = tmp_socket[i]->textAddress();
+	tmp_socket_set->remove(tmp_socket[i]);
+	tmp_socket[i]->close();
+	tmp_socket[i] = nullptr;
+	tmp_connectState[i].reset();
+	auto it = tmp_pendingIPs.find(rIP);
+	if (it != tmp_pendingIPs.end())
+	{
+		if (it->second > 1)
+		{
+			it->second--;
+		}
+		else
+		{
+			tmp_pendingIPs.erase(it);
+		}
+	}
+}
+
 void NETflush()
 {
 	if (!NetPlay.bComms)
@@ -1929,24 +1955,49 @@ void NETflush()
 
 	NETflushGameQueues();
 
-	size_t compressedRawLen;
+	size_t compressedRawLen = 0;
 	if (NetPlay.isHost)
 	{
+		// Preliminary check to see if any player sockets are still valid.
+		std::set<uint32_t> invalidPlayerIndices;
+		for (int player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
+		{
+			if (connected_bsocket[player] != nullptr && !connected_bsocket[player]->isValid())
+			{
+				invalidPlayerIndices.emplace(player);
+			}
+		}
+		// Gracefully handle disconnected players.
+		NETplayerClientsDisconnect(invalidPlayerIndices);
+
 		for (int player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 		{
 			// We are the host, send directly to player.
-			if (connected_bsocket[player] != nullptr)
+			if (!invalidPlayerIndices.count(player) && connected_bsocket[player] != nullptr)
 			{
-				connected_bsocket[player]->flush(&compressedRawLen);
+				if (!connected_bsocket[player]->flush(&compressedRawLen).has_value())
+				{
+					invalidPlayerIndices.emplace(player);
+					continue;
+				}
 				nStats.rawBytes.sent += compressedRawLen;
 			}
 		}
+
+		// Once again, if any connected client sockets had problems during flush(), consider them disconnected and handle appropriately.
+		NETplayerClientsDisconnect(invalidPlayerIndices);
+
 		for (int player = 0; player < MAX_TMP_SOCKETS; ++player)
 		{
 			// We are the host, send directly to player.
 			if (tmp_socket[player] != nullptr)
 			{
-				tmp_socket[player]->flush(&compressedRawLen);
+				if (!tmp_socket[player]->isValid() || !tmp_socket[player]->flush(&compressedRawLen).has_value())
+				{
+					debug(LOG_ERROR, "Failed to flush temporary socket for player slot %d", player);
+					NETcloseTempSocket(player);
+					continue;
+				}
 				nStats.rawBytes.sent += compressedRawLen;
 			}
 		}
@@ -1955,7 +2006,17 @@ void NETflush()
 	{
 		if (bsocket != nullptr)
 		{
-			bsocket->flush(&compressedRawLen);
+			if (!bsocket->isValid() || !bsocket->flush(&compressedRawLen).has_value())
+			{
+				debug(LOG_ERROR, "Failed to flush socket for host. Closing connection.");
+				if (client_socket_set)
+				{
+					client_socket_set->remove(bsocket);
+				}
+				bsocket->close();
+				bsocket = nullptr;
+				return;
+			}
 			nStats.rawBytes.sent += compressedRawLen;
 		}
 	}
@@ -3873,27 +3934,6 @@ static bool quickRejectConnection(const std::string& ip)
 	}
 
 	return false;
-}
-
-static void NETcloseTempSocket(unsigned int i)
-{
-	std::string rIP = tmp_socket[i]->textAddress();
-	tmp_socket_set->remove(tmp_socket[i]);
-	tmp_socket[i]->close();
-	tmp_socket[i] = nullptr;
-	tmp_connectState[i].reset();
-	auto it = tmp_pendingIPs.find(rIP);
-	if (it != tmp_pendingIPs.end())
-	{
-		if (it->second > 1)
-		{
-			it->second--;
-		}
-		else
-		{
-			tmp_pendingIPs.erase(it);
-		}
-	}
 }
 
 static void NEThostPromoteTempSocketToPermanentPlayerConnection(unsigned int tempSocketIdx, uint8_t index)
