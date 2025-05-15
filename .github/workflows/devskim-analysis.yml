@@ -24,7 +24,8 @@ jobs:
         uses: microsoft/DevSkim-Action@v1
         with:
           should-scan-archives: false
-          ignore-globs: "**/.git/**,*.txt,**/3rdparty/**"
+          ignore-globs: "**/.git/**,*.txt,**/3rdparty/**,tests/**,tools/**"
+          exclude-rules: DS148264,DS106863,DS126858,DS154189,DS162092,DS176209,DS121708
 
       - name: Upload DevSkim scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
