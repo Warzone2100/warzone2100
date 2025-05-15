@@ -116,6 +116,7 @@ static void NETplayerLeaving(UDWORD player, bool quietSocketClose = false);		// 
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETallowJoining();
 static void NETfixPlayerCount();
+static void NETclientHandleHostDisconnected();
 /*
  * Network globals, these are part of the new network API
  */
@@ -1899,13 +1900,8 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 				// Write error, most likely host disconnect.
 				debug(LOG_ERROR, "Failed to send message: %s", writeErrMsg.c_str());
 				debug(LOG_ERROR, "Host connection was broken, socket %p.", static_cast<void *>(bsocket));
-				NETlogEntry("write error--client disconnect.", SYNC_FLAG, player);
-				client_socket_set->remove(bsocket);            // mark it invalid
-				bsocket->close();
-				bsocket = nullptr;
-				NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
-				//Game is pretty much over --should just end everything when HOST dies.
-				NetPlay.isHostAlive = false;
+				NETlogEntry("write error--client disconnect.", SYNC_FLAG, NetPlay.hostPlayer);
+				NETclientHandleHostDisconnected();
 			}
 
 			return res == rawLen;
@@ -1944,6 +1940,22 @@ static void NETcloseTempSocket(unsigned int i)
 			tmp_pendingIPs.erase(it);
 		}
 	}
+}
+
+static void NETclientHandleHostDisconnected()
+{
+	ASSERT_OR_RETURN(, !NetPlay.isHost, "Should only be called by clients!");
+	ASSERT_OR_RETURN(, bsocket != nullptr, "bsocket is already null?");
+	if (client_socket_set)
+	{
+		client_socket_set->remove(bsocket); // mark it invalid
+	}
+	bsocket->close();
+	bsocket = nullptr;
+	ASSERT(NetPlay.hostPlayer < NetPlay.players.size(), "Invalid NetPlay.hostPlayer: %" PRIu32, NetPlay.hostPlayer);
+	NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
+	//Game is pretty much over --should just end everything when HOST dies.
+	NetPlay.isHostAlive = false;
 }
 
 void NETflush()
@@ -2009,12 +2021,8 @@ void NETflush()
 			if (!bsocket->isValid() || !bsocket->flush(&compressedRawLen).has_value())
 			{
 				debug(LOG_ERROR, "Failed to flush socket for host. Closing connection.");
-				if (client_socket_set)
-				{
-					client_socket_set->remove(bsocket);
-				}
-				bsocket->close();
-				bsocket = nullptr;
+				NETlogEntry("flush error--client disconnect.", SYNC_FLAG, NetPlay.hostPlayer);
+				NETclientHandleHostDisconnected();
 				return;
 			}
 			nStats.rawBytes.sent += compressedRawLen;
