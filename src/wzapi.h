@@ -1016,6 +1016,7 @@ namespace wzapi
 	no_return_value hackPlayIngameAudio(WZAPI_NO_PARAMS);
 	no_return_value hackStopIngameAudio(WZAPI_NO_PARAMS);
 	no_return_value hackMarkTiles(WZAPI_PARAMS(optional<label_or_position_values> _tilePosOrArea));
+	no_return_value hackTextMarker(WZAPI_PARAMS(std::string _message, int _colour, wzapi::object_request request));
 
 	// General functions -- geared for use in AI scripts
 	no_return_value dump(WZAPI_PARAMS(va_list_treat_as_strings strings));
