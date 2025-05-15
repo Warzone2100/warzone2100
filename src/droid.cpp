@@ -705,6 +705,74 @@ void vanishDroid(DROID *psDel)
 	removeDroidBase(psDel);
 }
 
+static size_t droidCancelRepairers(DROID *psDroid, PerPlayerDroidLists& pList)
+{
+	ASSERT_OR_RETURN(0, psDroid != nullptr, "Null droid");
+
+	size_t numRepairersRemoved = 0;
+
+	for (uint32_t player = 0; player < pList.size(); ++player)
+	{
+		const bool isUsOrAlly = psDroid->player == player || aiCheckAlliances(psDroid->player, player);
+		if (!isUsOrAlly)
+		{
+			continue; // skip non-self and non-allied players
+		}
+
+		// search the list it's being removed from for fellow droids that are repairing it, and instruct them that they are done repairing
+		for (DROID* psCurr : pList[player])
+		{
+			if (psCurr->action == DACTION_DROIDREPAIR)
+			{
+				bool wasRepairingDroid = false;
+				for (int i = 0; i < MAX_WEAPONS; i++)
+				{
+					if (psCurr->psActionTarget[i] == psDroid)
+					{
+						// found a droid repairing this droid
+						wasRepairingDroid = true;
+						setDroidActionTarget(psDroid, nullptr, i);
+						// actionUpdateDroid will handle when DACTION_DROIDREPAIR and the action target is null
+
+						if (i != 0)
+						{
+							debug(LOG_INFO, "Found actionTarget[%d] that matches droid", i);
+						}
+					}
+				}
+				if (wasRepairingDroid)
+				{
+					droidRepairStopped(psDroid, psCurr);
+					++numRepairersRemoved;
+				}
+			}
+		}
+
+		// search the main (current) list of active structures to see if any point to this
+		StructureList* pStructList = &apsStructLists[player];
+		for (STRUCTURE *psCurr : *pStructList)
+		{
+			if (psCurr->pStructureType->type == REF_REPAIR_FACILITY && psCurr->pFunctionality)
+			{
+				REPAIR_FACILITY	*psRepairFac = &psCurr->pFunctionality->repairFacility;
+				if (psRepairFac->state == RepairState::Repairing && psRepairFac->psObj == psDroid)
+				{
+					// reproduce logic from aiUpdateRepair_handleEvents - RepairEvents::UnitMovedAway
+					droidRepairStopped(psDroid, psCurr);
+					psRepairFac->psObj = nullptr;
+					psRepairFac->state = RepairState::Idle;
+					++numRepairersRemoved;
+				}
+			}
+		}
+	}
+
+	syncDebugObject(psDroid, 'r');
+
+	ASSERT(psDroid->underRepair == 0, "DROID.underRepair = %" PRIu16, psDroid->underRepair);
+	return numRepairersRemoved;
+}
+
 /* Remove a droid from the List so doesn't update or get drawn etc
 TAKE CARE with removeDroid() - usually want droidRemove since it deal with grid code*/
 //returns false if the droid wasn't removed - because it died!
@@ -730,6 +798,12 @@ bool droidRemove(DROID *psDroid, PerPlayerDroidLists& pList)
 	{
 		psDroid->psGroup->remove(psDroid);
 		psDroid->psGroup = nullptr;
+	}
+
+	// instruct other droids / structures that are repairing this droid to stop
+	if (psDroid->underRepair > 0)
+	{
+		droidCancelRepairers(psDroid, pList);
 	}
 
 	// reset the baseStruct
