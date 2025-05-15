@@ -3656,7 +3656,7 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	int ref = 0;
 	int refChr = ' ';
 
-	// Print what the structure is producing, too.
+	// Print what the structure is producing (or repairing), too.
 	switch (psStruct->pStructureType->type)
 	{
 	case REF_RESEARCH:
@@ -3673,6 +3673,13 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 		{
 			ref = psStruct->pFunctionality->factory.psSubject->multiPlayerID;
 			refChr = 'p';
+		}
+		break;
+	case REF_REPAIR_FACILITY:
+		if (psStruct->pFunctionality->repairFacility.psObj != nullptr)
+		{
+			ref = (int)psStruct->pFunctionality->repairFacility.psObj->id;
+			refChr = '+';
 		}
 		break;
 	default:
