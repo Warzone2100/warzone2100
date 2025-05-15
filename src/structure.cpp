@@ -3660,7 +3660,7 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	switch (psStruct->pStructureType->type)
 	{
 	case REF_RESEARCH:
-		if (psStruct->pFunctionality->researchFacility.psSubject != nullptr)
+		if (psStruct->pFunctionality && psStruct->pFunctionality->researchFacility.psSubject != nullptr)
 		{
 			ref = psStruct->pFunctionality->researchFacility.psSubject->ref;
 			refChr = 'r';
@@ -3669,14 +3669,14 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	case REF_FACTORY:
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
-		if (psStruct->pFunctionality->factory.psSubject != nullptr)
+		if (psStruct->pFunctionality && psStruct->pFunctionality->factory.psSubject != nullptr)
 		{
 			ref = psStruct->pFunctionality->factory.psSubject->multiPlayerID;
 			refChr = 'p';
 		}
 		break;
 	case REF_REPAIR_FACILITY:
-		if (psStruct->pFunctionality->repairFacility.psObj != nullptr)
+		if (psStruct->pFunctionality && psStruct->pFunctionality->repairFacility.psObj != nullptr)
 		{
 			ref = (int)psStruct->pFunctionality->repairFacility.psObj->id;
 			refChr = '+';
