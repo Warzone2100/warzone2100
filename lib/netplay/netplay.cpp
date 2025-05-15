@@ -2006,7 +2006,7 @@ void NETflush()
 			{
 				if (!tmp_socket[player]->isValid() || !tmp_socket[player]->flush(&compressedRawLen).has_value())
 				{
-					debug(LOG_ERROR, "Failed to flush temporary socket for player slot %d", player);
+					debug(LOG_NET, "Failed to flush temporary socket for player slot %d", player);
 					NETcloseTempSocket(player);
 					continue;
 				}
@@ -2020,7 +2020,7 @@ void NETflush()
 		{
 			if (!bsocket->isValid() || !bsocket->flush(&compressedRawLen).has_value())
 			{
-				debug(LOG_ERROR, "Failed to flush socket for host. Closing connection.");
+				debug(LOG_INFO, "Failed to flush socket for host. Closing connection.");
 				NETlogEntry("flush error--client disconnect.", SYNC_FLAG, NetPlay.hostPlayer);
 				NETclientHandleHostDisconnected();
 				return;
