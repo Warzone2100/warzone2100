@@ -419,7 +419,10 @@ private:
 		auto productionRemaining = getProduction(factory, droidTemplate).numRemaining();
 		if (productionRemaining > 0 && factory && StructureIsManufacturingPending(factory))
 		{
-			productionRunSizeLabel->setString(WzString::fromUtf8(astringf("%d", productionRemaining)));
+			auto manufacture = StructureGetFactory(factory);
+			productionRunSizeLabel->setString((manufacture->psSubject && manufacture->psSubject->next) ?
+				WzString::fromUtf8(astringf("1+%d", productionRemaining)) :
+				WzString::fromUtf8(astringf("%d", productionRemaining)));
 			productionRunSizeLabel->show();
 		}
 		else
