@@ -8,88 +8,88 @@
 		"pos": [832, 6464]
 	},
 	"position_2": {
-		"label": "vtolRemovePos",
-		"pos": [128, 10240]
-	},
-	"position_3": {
 		"label": "healthRetreatPos",
 		"pos": [704, 6592]
 	},
-	"position_4": {
+	"position_3": {
 		"label": "healthRetreatPosGamma",
 		"pos": [1728, 1472]
 	},
-	"position_5": {
+	"position_4": {
 		"label": "playerLZ",
 		"pos": [7232, 14656]
 	},
-	"position_6": {
+	"position_5": {
 		"label": "nexusEastTransportPos",
 		"pos": [6144, 6528]
 	},
-	"position_7": {
+	"position_6": {
 		"label": "nexusWestTransportPos",
 		"pos": [1024, 6784]
 	},
-	"position_8": {
+	"position_7": {
 		"label": "eastRetreat",
 		"pos": [6464, 7104]
 	},
-	"position_9": {
+	"position_8": {
 		"label": "westRetreat",
 		"pos": [704, 6592]
 	},
-	"position_10": {
+	"position_9": {
 		"label": "westPhantomFactory",
 		"pos": [256, 3072]
 	},
-	"position_11": {
+	"position_10": {
 		"label": "northEastOfLake",
 		"pos": [5952, 1856]
 	},
-	"position_12": {
+	"position_11": {
 		"label": "gammaBase",
 		"pos": [1728, 1472]
 	},
-	"position_13": {
+	"position_12": {
 		"label": "northEndOfPass",
 		"pos": [2496, 6080]
 	},
-	"position_14": {
+	"position_13": {
 		"label": "southOfRidge",
 		"pos": [4416, 9152]
 	},
-	"position_15": {
+	"position_14": {
 		"label": "westRidge",
 		"pos": [3520, 6336]
 	},
-	"position_16": {
+	"position_15": {
 		"label": "eastRidge",
 		"pos": [5696, 7488]
 	},
-	"position_17": {
+	"position_16": {
 		"label": "westDoorOfBase",
 		"pos": [6080, 14144]
 	},
-	"position_18": {
+	"position_17": {
 		"label": "eastDoorOfBase",
 		"pos": [6592, 11456]
 	},
-	"position_19": {
+	"position_18": {
 		"label": "gammaFactoryAssembly",
 		"pos": [1472, 2112]
 	},
-	"position_20": {
+	"position_19": {
 		"label": "gammaCyborgFactoryAssembly",
 		"pos": [2112, 2112]
 	},
-	"position_21": {
+	"position_20": {
 		"label": "buildPos1",
 		"pos": [3200, 896]
 	},
-	"position_22": {
+	"position_21": {
 		"label": "buildPos2",
 		"pos": [4864, 640]
+	},
+	"position_22": {
+		"label": "eastPhantomFactory",
+		"pos": [7680, 6528]
 	},
 
 	"area_0": {

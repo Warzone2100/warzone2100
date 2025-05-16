@@ -75,7 +75,8 @@ function camNeverGroupDroid(what, playerFilter)
 	}
 	if (camDef(obj))
 	{
-		switch (obj.type) {
+		switch (obj.type)
+		{
 			case POSITION:
 				obj = getObject(obj.x, obj.y);
 				// fall-through
