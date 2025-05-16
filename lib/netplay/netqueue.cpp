@@ -37,7 +37,7 @@
 // ASSERT(0xFFFFFFFF == 255*(1 + a[0]*(1 + a[1]*(1 + a[2]*(1 + a[3]*(1 + a[4]))))), "Maximum encodable value not 0xFFFFFFFF.");
 
 //static const unsigned table_uint32_t_a[5] = {14, 127, 74, 127, 0}, table_uint32_t_m[5] = {1, 14, 1778, 131572, 16709644};  // <242: 1 byte, <2048: 2 bytes, <325644: 3 bytes, <17298432: 4 bytes, <4294967296: 5 bytes
-static const unsigned table_uint32_t_a[5] = {78, 95, 32, 70, 0}, table_uint32_t_m[5] = {1, 78, 7410, 237120, 16598400};  // <178: 1 byte, <12736: 2 bytes, <1672576: 3 bytes, <45776896: 4 bytes, <4294967296: 5 bytes
+constexpr unsigned table_uint32_t_a[5] = {78, 95, 32, 70, 0}, table_uint32_t_m[5] = {1, 78, 7410, 237120, 16598400};  // <178: 1 byte, <12736: 2 bytes, <1672576: 3 bytes, <45776896: 4 bytes, <4294967296: 5 bytes
 //static const unsigned table_uint32_t_a[5] = {78, 95, 71, 31, 0}, table_uint32_t_m[5] = {1, 78, 7410, 526110, 16309410};  // <178: 1 byte, <12736: 2 bytes, <1383586: 3 bytes, <119758336: 4 bytes, <4294967296: 5 bytes
 //static const unsigned table_uint32_t_a[5] = {104, 71, 19, 119, 0}, table_uint32_t_m[5] = {1, 104, 7384, 140296, 16695224};  // <152: 1 byte, <19392: 2 bytes, <1769400: 3 bytes, <20989952: 4 bytes, <4294967296: 5 bytes
 //static const unsigned table_uint32_t_a[5] = {104, 71, 20, 113, 0}, table_uint32_t_m[5] = {1, 104, 7384, 147680, 16687840};  // <152: 1 byte, <19392: 2 bytes, <1762016: 3 bytes, <22880256: 4 bytes, <4294967296: 5 bytes
@@ -53,6 +53,8 @@ static const unsigned table_uint32_t_a[5] = {78, 95, 32, 70, 0}, table_uint32_t_
 //static const unsigned table_uint32_t_a[5] = {104, 71, 120, 18, 0}, table_uint32_t_m[5] = {1, 104, 7384, 886080, 15949440};  // <152: 1 byte, <19392: 2 bytes, <1023616: 3 bytes, <211910656: 4 bytes, <4294967296: 5 bytes
 
 //static const unsigned table_uint32_t_m[5] = {1, a[0], a[0]*a[1], a[0]*a[1]*a[2], a[0]*a[1]*a[2]*a[3]};
+
+static_assert(0xFFFFFFFF == 255*(1 + table_uint32_t_a[0]*(1 + table_uint32_t_a[1]*(1 + table_uint32_t_a[2]*(1 + table_uint32_t_a[3]*(1 + table_uint32_t_a[4]))))), "Maximum encodable value not 0xFFFFFFFF.");
 
 unsigned encodedlength_uint32_t(uint32_t v)
 {
