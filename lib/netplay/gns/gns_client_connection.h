@@ -87,6 +87,7 @@ private:
 	ISteamNetworkingSockets* networkInterface_ = nullptr;
 	HSteamNetConnection conn_ = k_HSteamNetConnection_Invalid;
 	std::queue<SteamNetworkingMessage_t*> pendingMessagesToRead_;
+	size_t currentMsgReadPos_ = 0;
 	bool useNagle_ = true;
 	GNSConnectionPollGroup* pollGroup_ = nullptr;
 };
