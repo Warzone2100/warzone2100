@@ -87,20 +87,23 @@ net::result<ssize_t> GNSClientConnection::recvImpl(char* dst, size_t maxSize)
 	while (!pendingMessagesToRead_.empty() && currentProcessedSize < maxSize)
 	{
 		SteamNetworkingMessage_t* msg = pendingMessagesToRead_.front();
-		// Message payloads exceeding `maxSize` bytes are illegal and shouldn't happen.
-		if (msg->m_cbSize > maxSize)
+
+		// Determine how much bytes left to read from the top of the queue.
+		size_t bytesToRead = static_cast<size_t>(msg->m_cbSize) - currentMsgReadPos_;
+		if (bytesToRead > maxSize)
 		{
-			return tl::make_unexpected(make_gns_error_code(k_EResultLimitExceeded));
+			// If there's more than `maxSize`, just copy the max size bytes and adjust the offset accordingly.
+			std::memcpy(dst, reinterpret_cast<const char*>(msg->m_pData) + currentMsgReadPos_, maxSize);
+			currentMsgReadPos_ += maxSize;
+			return maxSize;
 		}
-		// Peek into the next message to see if it will fit into our buffer.
-		if ((currentProcessedSize + msg->m_cbSize) > maxSize)
-		{
-			break;
-		}
+		// Consume the current message and dispose of it.
 		pendingMessagesToRead_.pop();
-		std::memcpy(dst, msg->m_pData, static_cast<size_t>(msg->m_cbSize));
-		dst += msg->m_cbSize;
-		currentProcessedSize += msg->m_cbSize;
+		std::memcpy(dst, reinterpret_cast<const char*>(msg->m_pData) + currentMsgReadPos_, bytesToRead);
+		dst += bytesToRead;
+		currentProcessedSize += bytesToRead;
+		// Reset the read position for the next message.
+		currentMsgReadPos_ = 0;
 
 		msg->Release();
 	}
