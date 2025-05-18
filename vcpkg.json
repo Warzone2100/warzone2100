@@ -97,6 +97,10 @@
 		{
 			"name": "protobuf",
 			"platform": "!emscripten"
+		},
+		{
+			"name": "zstd",
+			"version>=": "1.4.0"
 		}
 	],
 	"overrides": [
