@@ -29,6 +29,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/sound/sounddefs.h"
 #include "lib/netplay/connection_provider_registry.h"
+#include "lib/netplay/wz_compression_provider.h"
 #include "advvis.h"
 #include "component.h"
 #include "display.h"
@@ -119,6 +120,9 @@ struct WARZONE_GLOBALS
 
 	// audio cues
 	bool playAudioCue_GroupReporting = true;
+
+	// Compression provider type used for network messages compression
+	CompressionAdapterType compressionAdapterType = CompressionAdapterType::Zlib;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -862,4 +866,46 @@ bool war_getPlayAudioCue_GroupReporting()
 void war_setPlayAudioCue_GroupReporting(bool val)
 {
 	warGlobs.playAudioCue_GroupReporting = val;
+}
+
+void war_setCompressionAdapterType(CompressionAdapterType pt)
+{
+	warGlobs.compressionAdapterType = pt;
+}
+
+CompressionAdapterType war_getCompressionAdapterType()
+{
+	return warGlobs.compressionAdapterType;
+}
+
+bool net_compression_adapter_from_str(const char* str, CompressionAdapterType& t)
+{
+	if (strcasecmp(str, "zlib") == 0)
+	{
+		t = CompressionAdapterType::Zlib;
+		return true;
+	}
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+	if (strcasecmp(str, "zstd") == 0)
+	{
+		t = CompressionAdapterType::Zstd;
+		return true;
+	}
+#endif
+	return false;
+}
+
+std::string to_string(CompressionAdapterType t)
+{
+	switch (t)
+	{
+	case CompressionAdapterType::Zlib:
+		return "zlib";
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+	case CompressionAdapterType::Zstd:
+		return "zstd";
+#endif
+	}
+	ASSERT(false, "Invalid compression adapter type enumeration value: %d", static_cast<int>(t)); // silence GCC warning
+	return {};
 }

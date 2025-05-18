@@ -27,6 +27,8 @@
 #include "lib/netplay/wz_connection_provider.h"
 #include "lib/netplay/wz_compression_provider.h"
 
+#include "src/warzoneconfig.h"
+
 IClientConnection::IClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm)
 	: selfConnList_({ this }),
 	connProvider_(connProvider.shared_from_this()),
@@ -264,7 +266,7 @@ void IClientConnection::enableCompression()
 
 	pwm_->executeUnderLock([this]
 	{
-		compressionAdapter_ = compressionProvider_->newCompressionAdapter();
+		compressionAdapter_ = compressionProvider_->newCompressionAdapter(war_getCompressionAdapterType());
 		const auto initRes = compressionAdapter_->initialize();
 		if (!initRes.has_value())
 		{
