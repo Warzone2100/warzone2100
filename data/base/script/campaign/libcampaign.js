@@ -110,7 +110,8 @@ const __CAM_INCLUDE_PATH = "script/campaign/libcampaign_includes/";
 //Anything stats related
 const CAM_ARTIFACT_STAT = "Crate";
 const CAM_GENERIC_TRUCK_STAT = "Spade1Mk1";
-const CAM_GENERIC_LAND_STAT = "wheeled01"; //For propulsionCanReach().
+const CAM_GENERIC_LAND_STAT = "wheeled01";
+const CAM_GENERIC_WATER_STAT = "hover01";
 const CAM_OIL_RESOURCE_STAT = "OilResource";
 const cam_base_structures = {
 	commandRelay: "A0ComDroidControl",
@@ -164,6 +165,7 @@ const cam_levels = {
 	gamma4: {pre: "SUB_3_2S", offWorld: "SUB_3_2"},
 	gamma5: "CAM3A-B",
 	gamma6: "CAM3C",
+	gammaBonus: {pre: "SUB_3_3S", offWorld: "SUB_3_3"},
 	gamma7: "CAM3A-D1",
 	gamma8: "CAM3A-D2",
 	gammaEnd: {pre: "CAM_3_4S", offWorld: "CAM_3_4"}
@@ -186,8 +188,9 @@ const __cam_betaLevels = [
 ];
 const __cam_gammaLevels = [
 	cam_levels.gamma1, cam_levels.gamma2.pre, cam_levels.gamma2.offWorld, cam_levels.gamma3,
-	cam_levels.gamma4.pre, cam_levels.gamma4.offWorld, cam_levels.gamma5, cam_levels.gamma6,
-	cam_levels.gamma7, cam_levels.gamma8, cam_levels.gammaEnd.pre, cam_levels.gammaEnd.offWorld
+	cam_levels.gamma4.pre, cam_levels.gamma4.offWorld, cam_levels.gamma5, cam_levels.gammaBonus,
+	cam_levels.gamma6, cam_levels.gamma7, cam_levels.gamma8, cam_levels.gammaEnd.pre,
+	cam_levels.gammaEnd.offWorld
 ];
 
 // Holds all the sounds the campaign uses. Try to name things as they are said.
@@ -291,6 +294,11 @@ var __camNumEnemyBases;
 const CAM_REINFORCE_NONE = 0;
 const CAM_REINFORCE_GROUND = 1;
 const CAM_REINFORCE_TRANSPORT = 2;
+const CAM_REINFORCE_CONDITION_NONE = 0;
+const CAM_REINFORCE_CONDITION_BASES = 1;
+const CAM_REINFORCE_CONDITION_UNITS = 2;
+const CAM_REINFORCE_CONDITION_OBJECT = 3;
+const CAM_REINFORCE_CONDITION_ARTIFACTS = 4;
 
 //debug
 var __camMarkedTiles = {};
@@ -323,6 +331,7 @@ var __camPropulsionTypeLimit;
 
 //research
 const __CAM_AI_INSTANT_PRODUCTION_RESEARCH = "R-Struc-Factory-Upgrade-AI";
+const cam_towerWarsResearch = ["R-Defense-WallUpgrade-TweakOption01"];
 const cam_nexusSpecialResearch = [
 	"R-Sys-NEXUSrepair", "R-Sys-NEXUSsensor"
 ];
@@ -333,6 +342,8 @@ const CAM_ORDER_DEFEND = 1;
 const CAM_ORDER_PATROL = 2;
 const CAM_ORDER_COMPROMISE = 3;
 const CAM_ORDER_FOLLOW = 4;
+const CAM_PATROL_RANDOM = 0;
+const CAM_PATROL_CYCLE = 1;
 var __camGroupInfo;
 const __CAM_TARGET_TRACKING_RADIUS = 7;
 const __CAM_PLAYER_BASE_RADIUS = 20;

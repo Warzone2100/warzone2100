@@ -1556,6 +1556,62 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"infiniteTime",
+		_("Infinite Time"),
+		_("Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."),
+		false, true
+	);
+
+	results.emplace_back(
+		"victoryHints",
+		_("Victory Hints"),
+		_("Displays a console message every few minutes showing victory related information."),
+		true, true
+	);
+
+	results.emplace_back(
+		"gammaEndBonus",
+		_("Finale Fun"),
+		_("Activate Final Gamma mission bonus content."),
+		true, true
+	);
+
+	results.emplace_back(
+		"gammaBonusLevel",
+		_("Gamma Bonus"),
+		_("Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."),
+		false, true
+	);
+
+	results.emplace_back(
+		"insanePlus",
+		_("Insane Spawns"),
+		_("Enables additional enemy spawns and behavior for Insane difficulty (or higher)."),
+		true, true
+	);
+
+	results.emplace_back(
+		"insanePlusLowDiff",
+		_("Non-Insane Spawns"),
+		_("Toggles tweak option Insane Spawns for Hard difficulty and below."),
+		false, true
+	);
+
+	results.emplace_back(
+		"fastExp",
+		_("Fast EXP gain"),
+		_("Increases unit experience point gain by 2x."),
+		false, true
+	);
+
+	results.emplace_back(
+		"towerWars",
+		_("Tower Wars"),
+		_("Player gets significantly stronger structures."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
