@@ -80,3 +80,9 @@
 [submodule "3rdparty/GameNetworkingSockets"]
 	path = 3rdparty/GameNetworkingSockets
 	url = https://github.com/Warzone2100/GameNetworkingSockets.git
+[submodule "pkg/win_installer/innohelperscripts"]
+	path = pkg/win_installer/innohelperscripts
+	url = https://github.com/past-due/innohelperscripts.git
+[submodule "pkg/win_installer/resources"]
+	path = pkg/win_installer/resources
+	url = https://github.com/Warzone2100/win_installer_resources.git
