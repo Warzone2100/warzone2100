@@ -387,14 +387,7 @@ jobs:
         $NINJA_DL_PATH = "${NINJA_DL_BASEDIR}\ninja-win.zip"
         if (!(Test-Path -Path "$NINJA_DL_BASEDIR")) { New-Item -ItemType Directory -Force -Path "$NINJA_DL_BASEDIR" }
 
-        $req = Req -Params @{ 'Method'='GET';'Uri'="$NINJA_DL_URL";'OutFile'="${NINJA_DL_PATH}" } -Retries 3 -SecondsDelay 10
-
-        $ninja_zip_hash = Get-FileHash -LiteralPath "${NINJA_DL_PATH}" -Algorithm SHA512
-        if ($ninja_zip_hash.Hash -eq $NINJA_DL_SHA512) {
-          Write-Host "Successfully downloaded Ninja-Build .zip"
-        } Else {
-          Write-Error "The downloaded Ninja-build zip hash '$($ninja_zip_hash.Hash)' does not match the expected hash: '$NINJA_DL_SHA512'"
-        }
+        $req = Req -Params @{ 'Method'='GET';'Uri'="$NINJA_DL_URL";'OutFile'="${NINJA_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${NINJA_DL_SHA512}" -Algorithm SHA512
 
         Write-Host "Extracting Ninja-Build..."
         $NINJA_INSTALL_PATH = "${{ github.workspace }}\buildtools\ninja"
@@ -421,14 +414,7 @@ jobs:
         $LLVM_MINGW_DL_PATH = "${LLVM_MINGW_DL_BASEDIR}\llvm-mingw.zip"
         if (!(Test-Path -Path "$LLVM_MINGW_DL_BASEDIR")) { New-Item -ItemType Directory -Force -Path "$LLVM_MINGW_DL_BASEDIR" }
 
-        $req = Req -Params @{ 'Method'='GET';'Uri'="$LLVM_MINGW_DL_URL";'OutFile'="${LLVM_MINGW_DL_PATH}" } -Retries 3 -SecondsDelay 10
-
-        $dl_zip_hash = Get-FileHash -LiteralPath "${LLVM_MINGW_DL_PATH}" -Algorithm SHA512
-        if ($dl_zip_hash.Hash -eq $LLVM_MINGW_DL_SHA512) {
-          Write-Host "Successfully downloaded LLVM-mingw .zip"
-        } Else {
-          Write-Error "The downloaded LLVM-mingw zip hash '$($dl_zip_hash.Hash)' does not match the expected hash: '$LLVM_MINGW_DL_SHA512'"
-        }
+        $req = Req -Params @{ 'Method'='GET';'Uri'="$LLVM_MINGW_DL_URL";'OutFile'="${LLVM_MINGW_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${LLVM_MINGW_DL_SHA512}" -Algorithm SHA512
 
         Write-Host "Extracting LLVM-mingw..."
         $LLVM_MINGW_INSTALL_PATH = "${{ github.workspace }}\buildtools\llvm-mingw"
