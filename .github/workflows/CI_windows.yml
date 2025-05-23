@@ -214,28 +214,6 @@ jobs:
             $WZ_VISUAL_STUDIO_INSTALL_PATH = ""
           }
         }
-        elseif ($env:WZ_COMPILER_VER -eq "MSVC_2019") {
-          $WZ_VC_GENERATOR = "Visual Studio 16 2019"
-          #$env:WZ_VC_TOOLCHAIN = "v142"
-          # Get the installation path for a specific version of MSVC (2019)
-          $WZ_VISUAL_STUDIO_INSTALL_PATH = & "vswhere.exe" -latest -property installationPath -version "[16.0,17.0)"
-          if ($LastExitCode -ne 0)
-          {
-            echo "::warning ::Could not find MSVC 2019"
-            $WZ_VISUAL_STUDIO_INSTALL_PATH = ""
-          }
-        }
-        elseif ($env:WZ_COMPILER_VER -eq "MSVC_2017") {
-          $WZ_VC_GENERATOR = "Visual Studio 15 2017"
-          #$env:WZ_VC_TOOLCHAIN = "v141"
-          # Get the installation path for a specific version of MSVC (2017)
-          $WZ_VISUAL_STUDIO_INSTALL_PATH = & "vswhere.exe" -latest -property installationPath -version "[15.0,16.0)"
-          if ($LastExitCode -ne 0)
-          {
-            echo "::warning ::Could not find MSVC 2017"
-            $WZ_VISUAL_STUDIO_INSTALL_PATH = ""
-          }
-        }
 
         if ([string]::IsNullOrWhitespace(${WZ_VISUAL_STUDIO_INSTALL_PATH}))
         {
