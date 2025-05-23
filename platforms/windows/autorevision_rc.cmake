@@ -137,6 +137,21 @@ set(RC_FILEVERSION "1,${_file_version_minor},${_file_version_patch},${_file_vers
 set(MANIFEST_assemblyIdentityVersion "1.${_file_version_minor}.${_file_version_patch}.${_file_version_build}")
 
 ##################################
+# Determine the Comments field
+# (a parsable string of revision info)
+#
+# [Format]
+# Revision :<Tag>:<Branch>:<Commit>:<Extra>:
+#
+# So a tag build will be:
+# Revision :4.6.0:master:<commit>:<extra>:
+#
+# And a master branch build will be:
+# Revision ::master:<commit>:<extra>:
+
+set(RC_StringFileInfo_Comments "Revision :${VCS_TAG}:${VCS_BRANCH}:${VCS_FULL_HASH}:${VCS_EXTRA}:")
+
+##################################
 # Determine the other .rc settings
 
 set(RC_StringFileInfo_LegalCopyright "Copyright (C) 2005-${VCS_MOST_RECENT_COMMIT_YEAR} Warzone 2100 Project, Copyright (C) 1999-2004 Eidos Interactive")
@@ -154,6 +169,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++PRODUCTVERSION: ${RC_PRODUCT
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++(StringInfo) FileVersion: ${RC_StringFileInfo_FileVersion}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++(StringInfo) ProductVersion: ${RC_StringFileInfo_ProductVersion}")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++(StringInfo) LegalCopyright: ${RC_StringFileInfo_LegalCopyright}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++(StringInfo) Comments: ${RC_StringFileInfo_Comments}")
 
 ##################################
 # Output configured file based on the template
