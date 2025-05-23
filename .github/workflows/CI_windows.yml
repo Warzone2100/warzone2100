@@ -119,8 +119,6 @@ jobs:
         $AsciidoctorBatPath = Split-Path -Path "${AsciidoctorBat}"
         echo "Asciidoctor.bat path: ${AsciidoctorBatPath}"
         echo "ASCIIDOCTOR_PATH=${AsciidoctorBatPath}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-    - name: Install NSIS
-      run: choco install nsis -y
     - name: Generate Settings for Run [${{ matrix.compiler }}:${{ matrix.architecture }}]
       id: settings
       env:
