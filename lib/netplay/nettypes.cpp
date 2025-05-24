@@ -293,6 +293,25 @@ static void queue(const Q &q, std::vector<uint8_t> &v)
 	}
 }
 
+struct NetBytes {
+	uint8_t *buf = nullptr;
+	uint32_t len = 0;
+};
+
+template<class Q>
+static void queue(const Q &q, NetBytes &v)
+{
+	switch (Q::Direction)
+	{
+	case Q::Write:
+		q.bytes(v.buf, v.len);
+		break;
+	case Q::Read:
+		q.bytes(v.buf, v.len);
+		break;
+	}
+}
+
 template<class Q>
 static void queue(const Q &q, NetMessage &v)
 {
@@ -998,10 +1017,8 @@ void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen)
 
 void NETbin(uint8_t *str, uint32_t len)
 {
-	for (unsigned i = 0; i < len; ++i)
-	{
-		queueAuto(str[i]);
-	}
+	NetBytes nb{str, len};
+	queueAuto(nb);
 }
 
 void NETPosition(Position *vp)
