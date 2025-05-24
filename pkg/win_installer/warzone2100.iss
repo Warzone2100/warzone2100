@@ -668,10 +668,11 @@ var
 begin
   if CurStep = ssPostInstall then
   begin
-    if isPortableMode then
+    if isPortableMode then begin
       // Create the portable config file
       PortableConfigFilePath := AddBackslash(ExpandConstant('{app}')) + '{#WZ_BINDIR}\{#WZ_PORTABLEMODE_CONFIG_FILE_NAME}';
       Log('Creating portable config file: ' + PortableConfigFilePath);
       SaveStringToFile(PortableConfigFilePath, '# A {#WZ_PORTABLEMODE_CONFIG_FILE_NAME} file in the same directory as the warzone2100 executable enables Portable mode.' + #13#10 + '#' + #13#10 + '# All Warzone 2100 user data will be saved in a subfolder of the directory that contains the warzone2100 executable.' + #13#10, False);
+    end;
   end;
 end;
