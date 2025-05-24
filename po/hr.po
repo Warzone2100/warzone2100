@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:06\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-03-01 20:57\n"
 "Last-Translator: \n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
@@ -4915,11 +4915,11 @@ msgstr ""
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Zapaljiva Haubica Uporište"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Zapaljiva Haubica sa Uporištem"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Zapaljiva Haubica Uporište"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Zapaljiva Haubica može biti zadana senzorima"
@@ -6399,11 +6399,11 @@ msgstr ""
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr ""
 
-msgid "Synaptic Link Data Analysis"
-msgstr ""
-
 msgid "Synaptic link data analysis"
 msgstr "Analiza podataka sinaptičke veze"
+
+msgid "Synaptic Link Data Analysis"
+msgstr ""
 
 msgid "Synaptic Link Scrambler technology"
 msgstr ""
@@ -7295,6 +7295,9 @@ msgid "Set the default hosting chat configuration / permissions"
 msgstr ""
 
 msgid "Enable async join approval (for connecting clients)"
+msgstr ""
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
 msgstr ""
 
 msgid "Base URL for on-demand video downloads"
@@ -9826,6 +9829,18 @@ msgstr "Upišite sišfru ovdje"
 msgid "Select Player Name"
 msgstr "Odaberi ime igrača"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "Savezi"
 
@@ -9837,20 +9852,6 @@ msgstr "Predprikaz karte"
 
 msgid "Click to see Map"
 msgstr "Klikni za predprikaz karte"
-
-msgid "Show Structure Limits"
-msgstr "Pokaži limite"
-
-msgid "Set Structure Limits"
-msgstr "Postavi limite"
-
-msgid "Random Game Options"
-msgstr ""
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr ""
 
 msgid "Tech"
 msgstr ""
@@ -9865,6 +9866,20 @@ msgid "Technology Level 3"
 msgstr ""
 
 msgid "Technology Level 4"
+msgstr ""
+
+msgid "Show Structure Limits"
+msgstr "Pokaži limite"
+
+msgid "Set Structure Limits"
+msgstr "Postavi limite"
+
+msgid "Random Game Options"
+msgstr ""
+
+msgid ""
+"Random Game Options\n"
+"Can be blocked by players' votes"
 msgstr ""
 
 msgid "Start Hosting Game"
@@ -10010,6 +10025,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10027,64 +10049,6 @@ msgstr ""
 
 msgid "Lock Teams"
 msgstr ""
-
-msgid "Choose Team"
-msgstr ""
-
-msgid "Teams locked"
-msgstr ""
-
-msgid "Click to change player colour"
-msgstr ""
-
-msgid "Click to change player position"
-msgstr ""
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr ""
-
-msgid "Click to close spectator slot"
-msgstr ""
-
-msgid "Player ID: "
-msgstr ""
-
-msgid "(none)"
-msgstr ""
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr ""
-
-msgid "Waiting for player"
-msgstr ""
-
-msgid "Player is ready"
-msgstr ""
-
-msgid "Player is downloading"
-msgstr ""
-
-msgid "Click when ready"
-msgstr "Označi kada si spreman"
-
-msgid "Waiting for download"
-msgstr ""
-
-msgid "READY?"
-msgstr "SPREMAN?"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10229,6 +10193,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10246,20 +10225,6 @@ msgid "Closed"
 msgstr ""
 
 msgid "Open"
-msgstr ""
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Slanje karte: %u%%"
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Karta: %u%% downloadana"
-
-msgid "HOST"
-msgstr ""
-
-msgid "Ping"
 msgstr ""
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
@@ -10288,6 +10253,10 @@ msgstr "%s je izašao iz igre"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10350,6 +10319,9 @@ msgid_plural "%d players"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+msgid "Ping"
+msgstr ""
 
 msgid "Structs"
 msgstr "Strukture"
@@ -10894,6 +10866,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11327,6 +11311,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr ""
+
+msgid "(none)"
+msgstr ""
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Slanje karte: %u%%"
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Karta: %u%% downloadana"
+
+msgid "HOST"
+msgstr ""
+
+msgid "Choose Team"
+msgstr ""
+
+msgid "Teams locked"
+msgstr ""
+
+msgid "Click to change player colour"
+msgstr ""
+
+msgid "Click to change player position"
+msgstr ""
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr ""
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr ""
+
+msgid "Waiting for player"
+msgstr ""
+
+msgid "Player is ready"
+msgstr ""
+
+msgid "Player is downloading"
+msgstr ""
+
+msgid "Click when ready"
+msgstr "Označi kada si spreman"
+
+msgid "Waiting for download"
+msgstr ""
+
+msgid "READY?"
+msgstr "SPREMAN?"
 
 msgid "Launch Transport"
 msgstr "Pošalji transport"
