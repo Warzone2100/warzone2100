@@ -8,7 +8,7 @@ ${LangFileString} WZ_64BIT_AVAILABLE "Налична е 64-битова верс
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Това е 64-битовата версия на Warzone 2100.$\r$\nМоля, изтеглете 32-битовата версия от https://wz2100.net/ $\r$\nНатиснете „ОК“, за да излезете от инсталатора."
 
-${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "This is the ARM64 version of Warzone 2100, and this device does not have an ARM64 processor.$\r$\nPlease visit https://wz2100.net/ to download the appropriate version for your system (example: x64).$\r$\nProceed with ARM64 installation anyway?"
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Това е версията на Warzone 2100 за ARM64, а това устройство няма ARM64 процесор. $\r$\nМоля, посетете https://wz2100.net/ за да изгеглите правилната версия за Вашата система (напр. x64). $\r$\nЖелаете ли да продължите с инсталацията?"
 
 ${LangFileString} WZ_GPL_NEXT "Напред"
 
