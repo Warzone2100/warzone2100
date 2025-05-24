@@ -150,7 +150,7 @@ struct DROID : public BASE_OBJECT
 	UDWORD          baseSpeed;                      ///< the base speed dependent on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
-	SDWORD          shieldPoints;                   ///< Shield points of droid, which will be drained instead of health
+	SDWORD          shieldPoints;                   ///< Shield points of droid, which will be drained instead of health (default: -1 if no shields)
 	UDWORD          shieldRegenTime;                ///< How long should it be before the next regeneration step
 	UDWORD          shieldInterruptRegenTime;       ///< Standby time in case the shield was destroyed to begin regenerating again
 	uint32_t        kills;
