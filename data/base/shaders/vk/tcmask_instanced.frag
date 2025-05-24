@@ -393,12 +393,10 @@ void main()
 		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), fogFactor);
 	}
 
-	if (shieldEffect == 1)
+	if (shieldEffect != 0)
 	{
-		FragColor = applyShieldFuzzEffect(fragColour);
+		fragColour = applyShieldFuzzEffect(fragColour);
 	}
-	else
-	{
-		FragColor = fragColour;
-	}
+
+	FragColor = fragColour;
 }
