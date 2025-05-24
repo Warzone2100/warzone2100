@@ -275,9 +275,10 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 
 vec4 applyShieldFuzzEffect(vec4 color) {
 	float cycle = 0.66 + 0.66 * graphicsCycle;
-	vec3 col = vec3(random(vec2(color.x * cycle, color.y * cycle)));
-	col.b *= 1.5;
-	return vec4(col, color.a / 6.0);
+	float r = random(vec2(fragPos.x * cycle, fragPos.y * cycle));
+	vec3 col = vec3(color.r, color.g, 0.5 + (0.5 * r));
+	col.b *= 2.0;
+	return vec4(col, (color.a * r) / 3.0);
 }
 
 void main()
