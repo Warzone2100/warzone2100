@@ -430,23 +430,14 @@ void main()
 		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
 	}
 
+	if (shieldEffect != 0)
+	{
+		fragColour = applyShieldFuzzEffect(fragColour);
+	}
+
 	#ifdef NEWGL
-	if (shieldEffect == 1)
-	{
-		FragColor = applyShieldFuzzEffect(fragColour);
-	}
-	else
-	{
-		FragColor = fragColour;
-	}
+	FragColor = fragColour;
 	#else
-	if (shieldEffect == 1)
-	{
-		gl_FragColor = applyShieldFuzzEffect(fragColour);
-	}
-	else
-	{
-		gl_FragColor = fragColour;
-	}
+	gl_FragColor = fragColour;
 	#endif
 }
