@@ -107,7 +107,7 @@ constexpr std::chrono::milliseconds NET_READ_TIMEOUT{ 0 };
 *	reference: MaxMsgSize in netplay.h  (currently set to 32K)
 *
 */
-#define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 32K
+constexpr size_t NET_BUFFER_SIZE = (MaxMsgSize * 8);	// Would be 256K
 
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
@@ -3100,7 +3100,7 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 *
 *  @NOTE: MAX_FILE_TRANSFER_PACKET is set to 4k per packet since 7*4 = 28K which is pretty
 *         much our limit.  Don't screw with that without having a bigger buffer!
-*         NET_BUFFER_SIZE is at 32k.  (also remember text chat, plus all the other cruff)
+*         NET_BUFFER_SIZE is at 256k.  (also remember text chat, plus all the other cruff)
 */
 #define MAX_FILE_TRANSFER_PACKET 4096
 int NETsendFile(WZFile &file, unsigned player)
