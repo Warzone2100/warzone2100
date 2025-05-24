@@ -2603,7 +2603,13 @@ void kf_QuickLoad()
 
 	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
 	// check for .json version, because that's what going to be loaded anyway
-	if (PHYSFS_exists(filename) || PHYSFS_exists(bMultiPlayer ? QUICKSAVE_SKI_JSON_FILENAME : QUICKSAVE_CAM_JSON_FILENAME))
+	if (!(PHYSFS_exists(filename) || PHYSFS_exists(bMultiPlayer ? QUICKSAVE_SKI_JSON_FILENAME : QUICKSAVE_CAM_JSON_FILENAME)))
+	{
+		console(_("QuickSave file does not exist yet"));
+		return;
+	}
+
+	if (isQuickLoadConfirmationFormOpen())
 	{
 		console(_("QuickLoad"));
 		audio_StopAll();
@@ -2618,7 +2624,7 @@ void kf_QuickLoad()
 	}
 	else
 	{
-		console(_("QuickSave file does not exist yet"));
+		showQuickLoadConfirmation();
 	}
 }
 
