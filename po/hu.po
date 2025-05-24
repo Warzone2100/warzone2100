@@ -9023,7 +9023,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Kiválaszt minden erősen sérült egységet"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat units >50% HP & no Groups."
 msgstr "Az összes olyan szárazföldi harci egység kiválasztása, melyek életereje >50%, és nem tagjai csoportnak."
 
 msgid "Select all Half-tracks"

@@ -9017,7 +9017,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "損傷の激しいユニットをすべて選択"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat units >50% HP & no Groups."
 msgstr "ヘルスが50％以上で、グループを持っていないすべての戦闘地上ユニットを選択する。"
 
 msgid "Select all Half-tracks"
