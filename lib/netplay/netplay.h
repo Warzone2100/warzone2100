@@ -158,7 +158,7 @@ enum SYNC_OPT_TYPES
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
-#define MaxMsgSize		16384		// max size of a message in bytes.
+#define MaxMsgSize		32768		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define extra_string_size	157		// extra 199 char for future use
 #define map_string_size		40

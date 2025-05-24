@@ -53,6 +53,7 @@ public:
 	uint8_t type;
 	std::vector<uint8_t> data;
 };
+constexpr uint32_t NetMessageHeaderMaxBytes = 1 + 5; // 1 byte for type, 5 bytes max for length (see: encode_uint32_t)
 
 /// MessageWriter is used for serialising, using the same interface as MessageReader.
 class MessageWriter
