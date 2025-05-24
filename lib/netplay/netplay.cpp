@@ -2254,7 +2254,7 @@ bool NETmovePlayerToSpectatorOnlySlot(uint32_t playerIdx, bool hostOverride /*= 
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[newSpecIdx]) ? "V" : "?";
 		std::string playerName = getPlayerName(newSpecIdx);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
-		wz_command_interface_output("WZEVENT: movedPlayerToSpec: %" PRIu32 " -> %" PRIu32 " %s %s %s %s %s\n", playerIdx, newSpecIdx, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[newSpecIdx].IPtextAddress);
+		wz_command_interface_output("WZEVENT: movedPlayerToSpec: %" PRIu32 " -> %" PRIu32 " %s %s %s %s %s %s\n", playerIdx, newSpecIdx, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[newSpecIdx].IPtextAddress, hostOverride?"host":"user");
 	}
 
 	// Broadcast the swapped player info
