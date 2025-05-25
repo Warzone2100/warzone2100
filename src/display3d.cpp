@@ -1784,10 +1784,18 @@ bool clipStructureOnScreen(STRUCTURE *psStructure)
 {
 	StructureBounds b = getStructureBounds(psStructure);
 	assert(b.size.x != 0 && b.size.y != 0);
-	for (int breadth = 0; breadth < b.size.y + 2; ++breadth) // +2 to make room for shadows on the terrain
+	// +4 to make room for shadows on the terrain
+	int start = -2;
+	int endB = (b.size.y + 2) - 1;
+	int endW = (b.size.x + 2) - 1;
+	for (int breadth = start; breadth <= endB; ++breadth)
 	{
-		for (int width = 0; width < b.size.x + 2; ++width)
+		for (int width = start; width <= endW; ++width)
 		{
+			if (width != start && width != endW && breadth != start && breadth != endB)
+			{
+				continue; // skip interior
+			}
 			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
 			{
 				return true;
