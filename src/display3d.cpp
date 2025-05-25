@@ -2282,6 +2282,32 @@ static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &per
 	}
 }
 
+bool clipFeatureOnScreen(FEATURE *psFeature)
+{
+	StructureBounds b = getStructureBounds(psFeature);
+	assert(b.size.x != 0 && b.size.y != 0);
+	int overdrawTiles = (b.size.x < 2 && b.size.y < 2) ? 1 : 2; // make room for shadows on the terrain
+	int start = -overdrawTiles;
+	int endB = (b.size.y + overdrawTiles) - 1;
+	int endW = (b.size.x + overdrawTiles) - 1;
+	for (int breadth = start; breadth <= endB; ++breadth)
+	{
+		for (int width = start; width <= endW; ++width)
+		{
+			if (width != start && width != endW && breadth != start && breadth != endB)
+			{
+				continue; // skip interior
+			}
+			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 /// Draw the features
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
@@ -2292,11 +2318,13 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 	for (BASE_OBJECT* obj : apsFeatureLists[0])
 	{
 		if (obj->type == OBJ_FEATURE
-			&& (obj->died == 0 || obj->died > graphicsTime)
-			&& clipXY(obj->pos.x, obj->pos.y))
+			&& (obj->died == 0 || obj->died > graphicsTime))
 		{
 			FEATURE* psFeature = castFeature(obj);
-			renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+			if (clipFeatureOnScreen(psFeature))
+			{
+				renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+			}
 		}
 	}
 
