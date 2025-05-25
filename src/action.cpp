@@ -638,6 +638,10 @@ void actionSanity(DROID *psDroid)
 		bDirect = proj_Direct(psDroid->getWeaponStats(i));
 		if (psDroid->psActionTarget[i] && (avoidOverkill ? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i], bDirect) : psDroid->psActionTarget[i]->died))
 		{
+			if (psDroid->action == DACTION_DROIDREPAIR)
+			{
+				droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
+			}
 			syncDebugObject(psDroid->psActionTarget[i], '-');
 			setDroidActionTarget(psDroid, nullptr, i);
 			if (i == 0)
@@ -2082,6 +2086,7 @@ void actionUpdateDroid(DROID *psDroid)
 				actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 				droidStartAction(psDroid);
 				psDroid->action = DACTION_DROIDREPAIR;
+				droidRepairStarted((DROID *)psDroid->psActionTarget[0], psDroid);
 			}
 			if (DROID_STOPPED(psDroid))
 			{
@@ -2123,6 +2128,7 @@ void actionUpdateDroid(DROID *psDroid)
 							&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
 						    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0 && psTemp)
 						{
+							droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 							psDroid->action = DACTION_ATTACK;
 							setDroidActionTarget(psDroid, psTemp, 0);
 							break;
@@ -2140,6 +2146,7 @@ void actionUpdateDroid(DROID *psDroid)
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
 			if (xdiff * xdiff + ydiff * ydiff > REPAIR_RANGE * REPAIR_RANGE)
 			{
+				droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 				if (order->type == DORDER_DROIDREPAIR)
 				{
 					// damaged droid has moved off - follow if we're not holding position!
@@ -2156,6 +2163,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				if (!droidUpdateDroidRepair(psDroid))
 				{
+					droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 					psDroid->action = DACTION_NONE;
 					moveStopDroid(psDroid);
 					//if the order is RTR then resubmit order so that the unit will go to repair facility point
@@ -2591,6 +2599,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 	case DACTION_DROIDREPAIR:
 		{
+			auto priorDroidAction = psDroid->action;
 			psDroid->action = psAction->action;
 			psDroid->actionPos.x = psAction->x;
 			psDroid->actionPos.y = psAction->y;
@@ -2610,6 +2619,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			{
 				psDroid->action = DACTION_MOVETODROIDREPAIR;
 				moveDroidTo(psDroid, psAction->x, psAction->y);
+			}
+			if (psDroid->action == DACTION_DROIDREPAIR && priorDroidAction != DACTION_DROIDREPAIR)
+			{
+				droidRepairStarted(castDroid(psDroid->psActionTarget[0]), psDroid);
 			}
 			break;
 		}

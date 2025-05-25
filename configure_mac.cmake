@@ -10,8 +10,8 @@ cmake_minimum_required(VERSION 3.5...3.30)
 
 ########################################################
 
-# WZ minimum supported macOS deployment target (< 10.12 is untested)
-set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.12")
+# WZ minimum supported macOS deployment target (< 10.14 is untested, and may require earlier vcpkg baseline)
+set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.14")
 
 # Vulkan SDK
 set(VULKAN_SDK_VERSION "1.3.296.0")
@@ -284,11 +284,12 @@ endif()
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Running CMake configure (to generate Xcode project)...")
 string(REPLACE ";" " " _debug_output_args "${_additional_configure_arguments}")
-execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
 execute_process(
 	COMMAND ${CMAKE_COMMAND}
 		"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 		"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}"
+		"-DENABLE_GNS_NETWORK_BACKEND:BOOL=ON"
 		${_additional_configure_arguments}
 		-G Xcode
 		-B .

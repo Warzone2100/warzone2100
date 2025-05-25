@@ -127,7 +127,14 @@ int PortMappingImpl_LibPlum::create_port_mapping(uint16_t port, PortMappingInter
 {
 	plum_mapping_t m;
 	memset(&m, 0, sizeof(m));
-	m.protocol = PLUM_IP_PROTOCOL_TCP;
+	if (protocol == PortMappingInternetProtocol::TCP_IPV4 || protocol == PortMappingInternetProtocol::TCP_IPV6)
+	{
+		m.protocol = PLUM_IP_PROTOCOL_TCP;
+	}
+	else // UDP_IPV4 / UDP_IPV6
+	{
+		m.protocol = PLUM_IP_PROTOCOL_UDP;
+	}
 	m.internal_port = port;
 	m.external_port = port; // suggest an external port the same as the internal port (the router may decide otherwise)
 

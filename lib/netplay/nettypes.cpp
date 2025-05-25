@@ -1035,6 +1035,25 @@ void NETnetMessage(NetMessage const **msg)
 	}
 }
 
+void NETbytesOutputToVector(const std::vector<uint8_t> &data, std::vector<uint8_t>& output)
+{
+	// same logic as using NETbytes() for a write, except written to the `output` vector
+
+	// same as queueAuto(uint32_t) - write the length
+	uint32_t dataSizeU32 = static_cast<uint32_t>(data.size());
+	uint32_t v = dataSizeU32;
+	bool moreBytes = true;
+	for (int n = 0; moreBytes; ++n)
+	{
+		uint8_t b;
+		moreBytes = encode_uint32_t(b, v, n);
+		output.push_back(b);
+	}
+
+	// write all the data bytes
+	output.insert(output.end(), data.begin(), data.end());
+}
+
 ReplayOptionsHandler::~ReplayOptionsHandler() { }
 
 // TODO Call this function somewhere.

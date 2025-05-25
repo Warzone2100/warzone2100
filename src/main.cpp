@@ -973,6 +973,13 @@ static void setCDAudioForCurrentGameMode()
  */
 static void startGameLoop()
 {
+	if (runningMultiplayer())
+	{
+		// Adjust connected timeouts for clients (which is typically larger than the value of timeout when
+		// waiting in a lobby room).
+		NETadjustConnectedTimeoutForClients();
+	}
+
 	SetGameMode(GS_NORMAL);
 	initLoadingScreen(true);
 
@@ -1074,7 +1081,8 @@ static void stopGameLoop()
 {
 	clearInfoMessages(); // clear CONPRINTF messages before each new game/mission
 
-	NETreplaySaveStop();
+	WZGameReplayOptionsHandler replayOptions;
+	NETreplaySaveStop(replayOptions);
 	NETshutdownReplay();
 
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
@@ -1359,6 +1367,7 @@ void mainLoop()
 
 	wzApplyCursor();
 	runNotifications();
+	wz_command_interface_process_queued_status_output();
 #if defined(ENABLE_DISCORD)
 	discordRPCPerFrame();
 #endif

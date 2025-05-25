@@ -911,14 +911,14 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapPhysFSIO::openBinaryStream(const std
 	return std::unique_ptr<WzMap::BinaryIOStream>(pStream);
 }
 
-bool WzMapPhysFSIO::loadFullFile(const std::string& filename, std::vector<char>& fileData)
+bool WzMapPhysFSIO::loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter /*= false*/)
 {
 	std::string filenameFull = (m_basePath.empty()) ? filename : pathJoin(m_basePath, filename);
 	if (!PHYSFS_exists(filenameFull.c_str()))
 	{
 		return false;
 	}
-	return loadFileToBufferVector(filenameFull.c_str(), fileData, true, true);
+	return loadFileToBufferVector(filenameFull.c_str(), fileData, true, appendNullCharacter);
 }
 
 bool WzMapPhysFSIO::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)

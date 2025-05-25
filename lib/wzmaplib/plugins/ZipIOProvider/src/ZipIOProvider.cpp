@@ -328,10 +328,50 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveFS(const char* fileSystemP
 	return result;
 }
 
-std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSystemPath, bool fixedLastMod /*= false*/)
+std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveMemory(std::unique_ptr<std::vector<uint8_t>> zipFileContents, bool extraConsistencyChecks /*= false*/)
 {
-	if (fileSystemPath == nullptr) { return nullptr; }
-	if (*fileSystemPath == '\0') { return nullptr; }
+	if (zipFileContents == nullptr) { return nullptr; }
+	struct zip_error error;
+	zip_error_init(&error);
+
+	// Create new (empty) in-memory source buffer
+	zip_source_t *pMemSource = zip_source_buffer_create(zipFileContents->data(), zipFileContents->size(), 0, &error);
+	if (pMemSource == NULL)
+	{
+		// Failed to create source
+		zip_error_fini(&error);
+		return nullptr;
+	}
+	int flags = 0;
+	if (extraConsistencyChecks)
+	{
+		flags |= ZIP_CHECKCONS;
+	}
+	zip_t* pZip = zip_open_from_source(pMemSource, flags, &error);
+	if (pZip == NULL)
+	{
+		// Failed to open from source
+		zip_source_free(pMemSource);
+		zip_error_fini(&error);
+		return nullptr;
+	}
+	zip_error_fini(&error);
+	zip_source_keep(pMemSource); // explicitly keep the zip source buffer around after the in-memory zip file is "closed"
+
+	auto result = std::shared_ptr<WzMapZipIO>(new WzMapZipIO());
+	auto retainedZipFileContents = std::make_shared<std::unique_ptr<std::vector<uint8_t>>>(std::move(zipFileContents));
+	result->m_zipArchive = std::make_shared<WrappedZipArchive>(pZip, [pMemSource, retainedZipFileContents]() { // effectively, retain ownership of zipFileContents to ensure it sticks around
+		// This closure is run after the zip file is "closed"
+		zip_source_free(pMemSource);
+		// retainedZipFileContents will stick around until *after* this call to zip_source_free, which is required
+		retainedZipFileContents->reset();
+	});
+	return result;
+}
+
+std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveMemory(CreatedMemoryZipOnCloseFunc onCloseFunc, bool fixedLastMod /*= false*/)
+{
+	if (!onCloseFunc) { return nullptr; }
 
 	struct zip_error error;
 	zip_error_init(&error);
@@ -359,14 +399,14 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSyste
 	zip_source_keep(pMemSource); // explicitly keep the buffer around after the in-memory zip file is "closed"
 
 	auto result = std::shared_ptr<WzMapZipIO>(new WzMapZipIO());
-	std::string writeNewZipOutputPath = fileSystemPath;
-	result->m_zipArchive = std::make_shared<WrappedZipArchive>(pZip, [pMemSource, writeNewZipOutputPath]() {
+	result->m_zipArchive = std::make_shared<WrappedZipArchive>(pZip, [pMemSource, onCloseFunc]() {
 		// This closure is run after the zip file is "closed"
 
 		if (zip_source_is_deleted(pMemSource))
 		{
 			// the zip is empty, so do nothing
 			zip_source_free(pMemSource);
+			onCloseFunc(nullptr);
 			return;
 		}
 
@@ -374,37 +414,57 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSyste
 		if (zip_source_stat(pMemSource, &zst) < 0)
 		{
 			zip_source_free(pMemSource);
+			onCloseFunc(nullptr);
 			return;
 		}
 
 		if (zip_source_open(pMemSource) < 0)
 		{
 			zip_source_free(pMemSource);
+			onCloseFunc(nullptr);
 			return;
 		}
 
-		std::vector<char> zipDataBuffer(zst.size, 0);
+		auto zipDataBuffer = std::make_unique<std::vector<uint8_t>>(zst.size, 0);
 
-		auto readResult = zip_source_read(pMemSource, zipDataBuffer.data(), zst.size);
+		auto readResult = zip_source_read(pMemSource, zipDataBuffer->data(), zst.size);
 		if (readResult < 0 || static_cast<zip_uint64_t>(readResult) < zst.size)
 		{
 			zip_source_close(pMemSource);
 			zip_source_free(pMemSource);
+			onCloseFunc(nullptr);
 			return;
 		}
 
 		zip_source_close(pMemSource);
 		zip_source_free(pMemSource);
 
+		onCloseFunc(std::move(zipDataBuffer));
+	});
+	result->m_fixedLastMod = fixedLastMod;
+	return result;
+}
+
+std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSystemPath, bool fixedLastMod /*= false*/)
+{
+	if (fileSystemPath == nullptr) { return nullptr; }
+	if (*fileSystemPath == '\0') { return nullptr; }
+
+	std::string writeNewZipOutputPath = fileSystemPath;
+	auto result = createZipArchiveMemory([writeNewZipOutputPath](std::unique_ptr<std::vector<uint8_t>> zipDataBuffer) {
+		if (!zipDataBuffer)
+		{
+			return;
+		}
+
 		//  Write out the zipDataBuffer to a file at the writeNewZipOutputPath
 		WzMap::StdIOProvider stdIOProvider;
-		if (!stdIOProvider.writeFullFile(writeNewZipOutputPath, zipDataBuffer.data(), static_cast<uint32_t>(zipDataBuffer.size())))
+		if (!stdIOProvider.writeFullFile(writeNewZipOutputPath, (const char*)zipDataBuffer->data(), static_cast<uint32_t>(zipDataBuffer->size())))
 		{
 			// Failed to write out zip buffer data
 			return;
 		}
-	});
-	result->m_fixedLastMod = fixedLastMod;
+	}, fixedLastMod);
 	return result;
 }
 
@@ -435,7 +495,7 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::s
 	return pStream;
 }
 
-bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fileData)
+bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter /*= false*/)
 {
 	auto zipLocateResult = wz_zip_name_locate(m_zipArchive->handle(), filename.c_str(), ZIP_FL_ENC_GUESS);
 	if (zipLocateResult < 0)
@@ -469,18 +529,23 @@ bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fi
 	}
 	// read the entire file
 	fileData.clear();
-	fileData.resize(static_cast<size_t>(st.size));
+	size_t expectedFileSize = static_cast<size_t>(st.size);
+	fileData.resize(expectedFileSize + ((appendNullCharacter) ? 1 : 0));
 	auto result = readStream->readBytes(fileData.data(), fileData.size());
 	if (!result.has_value())
 	{
 		// read failed
 		return false;
 	}
-	if (result.value() != fileData.size())
+	if (result.value() != expectedFileSize)
 	{
 		// read was short
 		fileData.clear();
 		return false;
+	}
+	if (appendNullCharacter)
+	{
+		fileData[fileData.size() - 1] = 0;
 	}
 	readStream->close();
 	return true;
@@ -642,7 +707,7 @@ bool WzMapZipIO::enumerateFoldersInternal(const std::string& basePath, bool recu
 	{
 		return false;
 	}
-	
+
 	if (m_cachedDirectoriesList.empty())
 	{
 		// Valid ZIP files may or may not contain dedicated directory entries (which end in "/")

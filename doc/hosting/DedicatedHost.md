@@ -34,6 +34,12 @@ You can provide more arguments to fine-tune your environment.
 * `--autorating=<host>` overrides the autorating url. See `AutoratingServer.md` for details about the autorating server.
 
 
+#### Advanced usage
+
+* `--enablecmdinterface=<stdin|unixsocket:path>` enables the command interface. See [/doc/CmdInterface.md](/doc/CmdInterface.md)
+* `--autohost-not-ready` starts the host (autohost) as not ready, even if it's a spectator host. Should usually be combined with usage of the cmdinterface to trigger host ready via the `set host ready 1` command (or the game will never start!)
+
+
 ### Checking your firewall
 
 If your server starts but nobody can join, check that your firewall is accepting incoming TCP connections on the given port.

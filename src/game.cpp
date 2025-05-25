@@ -4558,6 +4558,10 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(save.value("playerLeaveMode").toInt());
 	}
+	if (save.contains("blindMode"))
+	{
+		game.blindMode = static_cast<BLIND_MODE>(save.value("blindMode").toInt());
+	}
 	if (save.contains("multiplayer"))
 	{
 		bMultiPlayer = save.value("multiplayer").toBool();
@@ -4800,6 +4804,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("inactivityMinutes", game.inactivityMinutes);
 	save.setValue("gameTimeLimitMinutes", game.gameTimeLimitMinutes);
 	save.setValue("playerLeaveMode", game.playerLeaveMode);
+	save.setValue("blindMode", game.blindMode);
 	save.setValue("tweakOptions", getCamTweakOptions());
 
 	save.beginArray("scriptSetPlayerDataStrings");
@@ -5680,6 +5685,14 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 			psDroid->rot.pitch = 0;
 		}
 
+		auto tmpUnderRepair = ini.value("underRepair").toUInt();
+		if (tmpUnderRepair > std::numeric_limits<decltype(psDroid->underRepair)>::max())
+		{
+			debug(LOG_INFO, "Out of bounds underRepair value: %u", tmpUnderRepair);
+			tmpUnderRepair = std::numeric_limits<decltype(psDroid->underRepair)>::max();
+		}
+		psDroid->underRepair = static_cast<uint16_t>(tmpUnderRepair);
+
 		// recreate formation if present
 		auto formationInfo = ini.value("formation").jsonValue();
 		if (formationInfo.is_object())
@@ -5882,6 +5895,8 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 		formationObj["y"] = psCurr->sMove.psFormation->y;
 		droidObj["formation"] = std::move(formationObj);
 	}
+
+	droidObj["underRepair"] = psCurr->underRepair;
 
 	droidObj["onMission"] = onMission;
 	return droidObj;

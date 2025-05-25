@@ -1275,6 +1275,28 @@
 		],
 		"width": 1
 	},
+	"Emplacement-ParticleGun": {
+		"armour": 10,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 175,
+		"height": 1,
+		"hitpoints": 400,
+		"id": "Emplacement-HeavyLaser",
+		"name": "Particle Gun Emplacement",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "HARD",
+		"structureModel": [
+			"BLHARDPT.PIE"
+		],
+		"thermal": 10,
+		"type": "DEFENSE",
+		"weapons": [
+			"ParticleGun"
+		],
+		"width": 1
+	},
 	"Emplacement-Howitzer-Incendiary": {
 		"armour": 10,
 		"breadth": 1,
@@ -1586,8 +1608,8 @@
 	"Emplacement-PlasmaCannon": {
 		"armour": 10,
 		"breadth": 1,
-		"buildPoints": 400,
-		"buildPower": 200,
+		"buildPoints": 500,
+		"buildPower": 350,
 		"height": 1,
 		"hitpoints": 400,
 		"id": "Emplacement-PlasmaCannon",

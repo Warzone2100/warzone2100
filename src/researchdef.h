@@ -68,6 +68,9 @@ struct RESEARCH : public BASE_STATS
 	BASE_STATS      *psStat;   /* A stat used to define which graphic is drawn instead of the two fields below */
 	iIMDBaseShape		*pIMD;		/* the IMD to draw for this research topic */
 	iIMDBaseShape		*pIMD2;		/* the 2nd IMD for base plates/turrets*/
+	WzString category;			/* Category name as in json (for progression numbering) */
+	uint16_t categoryProgress; /* Category this/max (gets filled on load) */
+	uint16_t categoryMax; /* Category progress/this (gets filled on load) */
 	int index;		///< Unique index for this research, set incrementally
 
 	RESEARCH() : pViewData(nullptr), iconID(0), psStat(nullptr), pIMD(nullptr), pIMD2(nullptr) {}

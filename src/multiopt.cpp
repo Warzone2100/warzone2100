@@ -278,19 +278,10 @@ bool recvOptions(NETQUEUE queue)
 		}
 	}
 
-	int nondefaultlimitsize = 0;
 	for (i = 0; i < numStructureLimits; i++)
 	{
 		NETuint32_t(&ingame.structureLimits[i].id);
 		NETuint32_t(&ingame.structureLimits[i].limit);
-		if (bLimiterLoaded && ingame.structureLimits[i].id < numStructureStats)
-		{
-			ASSERT(asStructureStats != nullptr, "numStructureStats > 0, but asStructureStats is null??");
-			if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
-			{
-				nondefaultlimitsize++;
-			}
-		}
 	}
 	NETuint8_t(&ingame.flags);
 
@@ -305,41 +296,9 @@ bool recvOptions(NETQUEUE queue)
 		// Notify if structure limits were changed
 		if (structurelimitsUpdated)
 		{
-			if (nondefaultlimitsize)
-			{
-				addConsoleMessage(astringf(_("Changed structure limits [%d]:"), nondefaultlimitsize).c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-				int changedNum = 1;
-				for (i = 0; i < numStructureLimits; i++)
-				{
-					if (ingame.structureLimits[i].id < numStructureStats)
-					{
-						if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != ingame.structureLimits[i].limit)
-						{
-							WzString structname = asStructureStats[ingame.structureLimits[i].id].name;
-							std::string tmpConsoleMsgStr;
-							if (asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit != LOTS_OF)
-							{
-								tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: %u)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit, asStructureStats[ingame.structureLimits[i].id].upgrade[0].limit);
-							}
-							else
-							{
-								tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: no limit)"), changedNum, structname.toUtf8().c_str(), ingame.structureLimits[i].limit);
-							}
-							addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-							changedNum++;
-						}
-					}
-					else
-					{
-						std::string tmpConsoleMsgStr = astringf(_("[%d] Limit that is bigger than numStructureStats (%u): %u"), i, ingame.structureLimits[i].id, ingame.structureLimits[i].limit);
-						addConsoleMessage(tmpConsoleMsgStr.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-					}
-				}
-			}
-			else
-			{
-				addConsoleMessage(_("Limits were reset to default."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-			}
+			printStructureLimitsInfo(ingame.structureLimits, [](const std::string& line) {
+				addConsoleMessage(line.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			});
 		}
 	}
 	else
@@ -533,6 +492,8 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 	lookupRatingAsync(selectedPlayer);
+
+	multiStatsSetVerifiedHostIdentityFromJoin(playerStats.identity.toBytes(EcKey::Public));
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	return true;
@@ -734,6 +695,7 @@ bool multiGameShutdown()
 	NET_InitPlayers();
 
 	resetKickVoteData();
+	resetAllMultiOptionPrefValues();
 
 	return true;
 }
@@ -866,3 +828,69 @@ bool recvHostConfig(NETQUEUE queue)
 
 	return true;
 }
+
+void printStructureLimitsInfo(std::vector<MULTISTRUCTLIMITS>& structureLimits, const PrintStructureLimitsLineFunc& printLineFunc)
+{
+	if (!bLimiterLoaded)
+	{
+		// Can't print full limits information if we don't have them loaded
+		if (!structureLimits.empty())
+		{
+			printLineFunc(astringf(_("Host initialized %u limits, unable to show them due to mods"), static_cast<unsigned>(structureLimits.size())));
+		}
+		else
+		{
+			printLineFunc(_("Limits set to default."));
+		}
+		return;
+	}
+
+	// need to calculate nondefaultlimitsize
+	size_t nondefaultlimitsize = 0;
+	for (size_t i = 0; i < structureLimits.size(); ++i)
+	{
+		if (structureLimits[i].id < numStructureStats)
+		{
+			ASSERT(asStructureStats != nullptr, "numStructureStats > 0, but asStructureStats is null??");
+			if (asStructureStats[structureLimits[i].id].base.limit != structureLimits[i].limit)
+			{
+				nondefaultlimitsize++;
+			}
+		}
+	}
+
+	if (nondefaultlimitsize == 0)
+	{
+		printLineFunc(_("Limits set to default."));
+		return;
+	}
+
+	printLineFunc(astringf(_("Changed structure limits [%u]:"), static_cast<unsigned>(nondefaultlimitsize)));
+	int changedNum = 1;
+	for (size_t i = 0; i < structureLimits.size(); i++)
+	{
+		if (structureLimits[i].id < numStructureStats)
+		{
+			if (asStructureStats[structureLimits[i].id].base.limit != structureLimits[i].limit)
+			{
+				WzString structname = asStructureStats[structureLimits[i].id].name;
+				std::string tmpConsoleMsgStr;
+				if (asStructureStats[structureLimits[i].id].base.limit != LOTS_OF)
+				{
+					tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: %u)"), changedNum, structname.toUtf8().c_str(), structureLimits[i].limit, asStructureStats[structureLimits[i].id].base.limit);
+				}
+				else
+				{
+					tmpConsoleMsgStr = astringf(_("[%d] Limit [%s]: %u (default: no limit)"), changedNum, structname.toUtf8().c_str(), structureLimits[i].limit);
+				}
+				printLineFunc(tmpConsoleMsgStr);
+				changedNum++;
+			}
+		}
+		else
+		{
+			std::string tmpConsoleMsgStr = astringf(_("[%d] Limit that is bigger than numStructureStats (%u): %u"), i, structureLimits[i].id, structureLimits[i].limit);
+			printLineFunc(tmpConsoleMsgStr);
+		}
+	}
+};

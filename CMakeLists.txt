@@ -233,6 +233,12 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 
 	# Default stack size is 1MB - increase to better match other platforms
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:8000000")
+
+	# Enable multithreaded compilation by default
+	option(WZ_MSVC_MULTITHREADED_COMPILATION "Controls multithreaded compilation for MSVC builds" ON)
+	if(WZ_MSVC_MULTITHREADED_COMPILATION)
+		add_compile_options("/MP")
+	endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU|Clang" AND NOT APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	# Ensure all builds always have debug info built (Xcode is handled separately below, Emscripten handled above)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
@@ -864,9 +870,11 @@ function(CHECK_IS_ABSOLUTE_PATH _var _output)
 endfunction()
 CHECK_IS_ABSOLUTE_PATH(WZ_DATADIR WZ_DATADIR_ISABSOLUTE)
 CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h)
 
 add_subdirectory(3rdparty)
+
+# This should come after `add_subdirectory(3rdparty)` to capture submodule-specific vars
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h")
 
 # Determine distribution license
 set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")

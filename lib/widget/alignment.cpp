@@ -37,36 +37,42 @@ void AlignmentWidget::geometryChanged()
 	}
 
 	auto &child = children().front();
-	WzRect childRect(0, 0, 0, 0);
+	int targetWidth = 0;
+	int targetHeight = 0;
 	if (alignment.resizing == Alignment::Resizing::Shrink)
 	{
-		childRect.setWidth(std::min(width(), child->idealWidth()));
-		childRect.setHeight(std::min(height(), child->idealHeight()));
+		targetWidth = std::min(width(), child->idealWidth());
+		targetHeight = std::min(height(), child->idealHeight());
 	}
 	else if (alignment.resizing == Alignment::Resizing::Fit)
 	{
 		auto fitRatio = std::min(width() / (float)child->idealWidth(), height() / (float)child->idealHeight());
-		childRect.setWidth(static_cast<int>(child->idealWidth() * fitRatio));
-		childRect.setHeight(static_cast<int>(child->idealHeight() * fitRatio));
+		targetWidth = static_cast<int>(child->idealWidth() * fitRatio);
+		targetHeight = static_cast<int>(child->idealHeight() * fitRatio);
 	}
 
+	WzRect childRect(0, 0, 0, 0);
 	if (alignment.horizontal == Alignment::Horizontal::Center)
 	{
-		childRect.setX(std::max(0, width() - childRect.width()) / 2);
+		childRect.setX(std::max(0, width() - targetWidth) / 2);
 	}
 	else if (alignment.horizontal == Alignment::Horizontal::Right)
 	{
-		childRect.setX(std::max(0, width() - childRect.width()));
+		childRect.setX(std::max(0, width() - targetWidth));
 	}
 
 	if (alignment.vertical == Alignment::Vertical::Center)
 	{
-		childRect.setY(std::max(0, height() - childRect.height()) / 2);
+		childRect.setY(std::max(0, height() - targetHeight) / 2);
 	}
 	else if (alignment.vertical == Alignment::Vertical::Bottom)
 	{
-		childRect.setY(std::max(0, height() - childRect.height()));
+		childRect.setY(std::max(0, height() - targetHeight));
 	}
+
+	// must set width/height **after** setX/setY
+	childRect.setWidth(targetWidth);
+	childRect.setHeight(targetHeight);
 
 	child->setGeometry(childRect);
 }

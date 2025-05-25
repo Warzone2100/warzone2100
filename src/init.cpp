@@ -1296,6 +1296,12 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 	pie_InitRadar();
 
 	readAIs();
+	// Reset config and order if default not found (user messed with config or maybe a mod AI is now missing).
+	const std::string configDefaultAI = defaultSkirmishAI;
+	if (configDefaultAI != getDefaultSkirmishAI())
+	{
+		readAIs();
+	}
 
 	initTerrainShaderType();
 
@@ -1312,6 +1318,8 @@ void systemShutdown()
 	{
 		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
 	}
+
+	NETclose();
 
 	seqReleaseAll();
 
@@ -1877,7 +1885,7 @@ bool stageThreeInitialise()
 	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
 	modelUpdateTilesetIdx(modelTilesetIdx);
 	enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
-		for (iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		for (const iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
 		{
 			pDisplayShape->getTextures();
 		}
@@ -2002,7 +2010,7 @@ bool stageThreeShutDown()
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
-	setHostLaunch(HostLaunch::Normal);
+	resetHostLaunch();
 
 	removeSpotters();
 

@@ -445,7 +445,11 @@ std::shared_ptr<ScrollableTableWidget> ScrollableTableWidget::make(const std::ve
 	result->scrollableList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		if (auto psParent = std::dynamic_pointer_cast<ScrollableTableWidget>(psWidget->parent()))
 		{
-			int y0 = psParent->header->y() + psParent->header->height() + psParent->scrollableList->getItemSpacing();
+			int y0 = 0;
+			if (psParent->header->visible())
+			{
+				y0 = psParent->header->y() + psParent->header->height() + psParent->scrollableList->getItemSpacing();
+			}
 			psWidget->setGeometry(0, y0, psParent->width(), psParent->height() - y0);
 		}
 	}));
@@ -495,6 +499,16 @@ void ScrollableTableWidget::clearRows()
 {
 	scrollableList->clear();
 	rows.clear();
+}
+
+void ScrollableTableWidget::setHeaderVisible(bool visible)
+{
+	if (visible == header->visible())
+	{
+		return;
+	}
+	header->show(visible);
+	geometryChanged();
 }
 
 void ScrollableTableWidget::setRowDisabled(size_t row, bool disabled)

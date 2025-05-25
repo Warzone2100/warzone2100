@@ -1466,7 +1466,13 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 	}
 
 	// 6.) Load the map data
-	auto pLoadedMap = loadMap(0, logger);
+	uint32_t seed = 0;
+	if (m_loadedMap)
+	{
+		// if already loaded a script map with a seed, use the same seed
+		seed = m_loadedMap->scriptGeneratedMapSeed().value_or(seed);
+	}
+	auto pLoadedMap = loadMap(seed, logger);
 	if (pLoadedMap == nullptr)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map for conversion");
@@ -1507,7 +1513,12 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 			debug(pCustomLogger, LOG_ERROR, "Failed to script contents from source map");
 			return false;
 		}
-		if (!exportIO->writeFullFile(gameJSOutputPath, pScriptData->data(), static_cast<uint32_t>(pScriptData->size())))
+		size_t gameJSFileSize = pScriptData->size();
+		if (gameJSFileSize > 0 && (pScriptData->back() == 0))
+		{
+			--gameJSFileSize; // do not write out the extra null terminator added when loading the script contents
+		}
+		if (!exportIO->writeFullFile(gameJSOutputPath, pScriptData->data(), static_cast<uint32_t>(gameJSFileSize)))
 		{
 			// Failed writing file
 			debug(pCustomLogger, LOG_ERROR, "Failed writing game.js to destination: %s", gameJSOutputPath.c_str());
@@ -1935,15 +1946,15 @@ bool MapPackage::loadGamInfo()
 }
 
 // Extract various map stats / info
-optional<MapStats> MapPackage::calculateMapStats()
+optional<MapStats> MapPackage::calculateMapStats(uint32_t mapSeed)
 {
-	return calculateMapStats(MapStatsConfiguration(m_mapType));
+	return calculateMapStats(MapStatsConfiguration(m_mapType), mapSeed);
 }
 
-optional<MapStats> MapPackage::calculateMapStats(MapStatsConfiguration statsConfig)
+optional<MapStats> MapPackage::calculateMapStats(MapStatsConfiguration statsConfig, uint32_t mapSeed)
 {
 	LoggingProtocol* pCustomLogger = m_logger.get();
-	auto pLoadedMap = loadMap(0, m_logger);
+	auto pLoadedMap = loadMap(mapSeed, m_logger);
 	if (pLoadedMap == nullptr)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map");

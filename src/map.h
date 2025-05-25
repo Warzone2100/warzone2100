@@ -405,7 +405,7 @@ public:
 	{ }
 public:
 	virtual std::unique_ptr<WzMap::BinaryIOStream> openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode) override;
-	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) override;
+	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter = false) override;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
 	virtual bool makeDirectory(const std::string& directoryPath) override;
 	virtual const char* pathSeparator() const override;
@@ -571,7 +571,7 @@ bool fireOnLocation(unsigned int x, unsigned int y);
 
 /**
  * Transitive sensor check for tile. Has to be here rather than
- * visibility.h due to header include order issues.
+ * visibility.h due to header include order issues. -- (For DISPLAY-ONLY purposes - *NOT* game-state calculations!)
  */
 WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {

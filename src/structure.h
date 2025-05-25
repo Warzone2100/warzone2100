@@ -155,7 +155,7 @@ void resetFactoryNumFlag();
 STRUCTURE_STATS *structGetDemolishStat();
 
 /*find a location near to the factory to start the droid of*/
-bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY);
+bool placeDroid(STRUCTURE *psStructure, const DROID_TEMPLATE * psTempl, UDWORD *droidX, UDWORD *droidY);
 
 //Set the factory secondary orders to a droid
 void setFactorySecondaryState(DROID *psDroid, STRUCTURE *psStructure);

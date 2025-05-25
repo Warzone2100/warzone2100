@@ -78,6 +78,7 @@
 #define DEFAULT_RECOIL_TIME	(GAME_TICKS_PER_SEC/4)
 #define	DROID_DAMAGE_SPREAD	(16 - rand()%32)
 #define	DROID_REPAIR_SPREAD	(20 - rand()%40)
+#define DROID_EXPLOSION_VELOCITY_FACTOR 0.9f
 
 // store the experience of recently recycled droids
 static std::priority_queue<int> recycled_experience[MAX_PLAYERS];
@@ -249,10 +250,10 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 		{
 			return;
 		}
-		iIMDShape *psShapeBody = psBaseShapeBody->displayModel();
+		const iIMDShape *psShapeBody = psBaseShapeBody->displayModel();
 		if ((psShapeBody->objanimpie[ANIM_EVENT_DYING]))
 		{
-			iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING]->displayModel();
+			const iIMDShape *strImd = psShapeBody->objanimpie[ANIM_EVENT_DYING]->displayModel();
 			/* get propulsion stats */
 			PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
 			if (psPropStats && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
@@ -401,6 +402,7 @@ DROID::DROID(uint32_t id, unsigned player)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
 	, heightAboveMap(0)
+	, underRepair(0)
 {
 	memset(aName, 0, sizeof(aName));
 	memset(asBits, 0, sizeof(asBits));
@@ -548,6 +550,11 @@ bool removeDroidBase(DROID *psDel)
 		psDel->sMove.psFormation = nullptr;
 	}
 
+	if (psDel->action == DACTION_DROIDREPAIR)
+	{
+		droidRepairStopped(castDroid(psDel->psActionTarget[0]), psDel);
+	}
+
 	//kill all the droids inside the transporter
 	if (psDel->isTransporter())
 	{
@@ -634,9 +641,14 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 		return;
 	}
 
+	auto adiff = psDel->rot.direction - psDel->sMove.moveDir;
+	auto move = iCosR(adiff, psDel->sMove.speed);
+	Vector3f velocity(iSinR(psDel->rot.direction, move), 0.f, iCosR(psDel->rot.direction, move));
+	velocity *= DROID_EXPLOSION_VELOCITY_FACTOR;
+
 	if (psDel->animationEvent != ANIM_EVENT_DYING)
 	{
-		compPersonToBits(psDel);
+		compPersonToBits(psDel, velocity);
 	}
 
 	/* if baba then squish */
@@ -647,7 +659,7 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 	}
 	else
 	{
-		destroyFXDroid(psDel, impactTime);
+		destroyFXDroid(psDel, impactTime, velocity);
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = psDel->pos.z;
@@ -699,6 +711,74 @@ void vanishDroid(DROID *psDel)
 	removeDroidBase(psDel);
 }
 
+static size_t droidCancelRepairers(DROID *psDroid, PerPlayerDroidLists& pList)
+{
+	ASSERT_OR_RETURN(0, psDroid != nullptr, "Null droid");
+
+	size_t numRepairersRemoved = 0;
+
+	for (uint32_t player = 0; player < pList.size(); ++player)
+	{
+		const bool isUsOrAlly = psDroid->player == player || aiCheckAlliances(psDroid->player, player);
+		if (!isUsOrAlly)
+		{
+			continue; // skip non-self and non-allied players
+		}
+
+		// search the list it's being removed from for fellow droids that are repairing it, and instruct them that they are done repairing
+		for (DROID* psCurr : pList[player])
+		{
+			if (psCurr->action == DACTION_DROIDREPAIR)
+			{
+				bool wasRepairingDroid = false;
+				for (int i = 0; i < MAX_WEAPONS; i++)
+				{
+					if (psCurr->psActionTarget[i] == psDroid)
+					{
+						// found a droid repairing this droid
+						wasRepairingDroid = true;
+						setDroidActionTarget(psDroid, nullptr, i);
+						// actionUpdateDroid will handle when DACTION_DROIDREPAIR and the action target is null
+
+						if (i != 0)
+						{
+							debug(LOG_INFO, "Found actionTarget[%d] that matches droid", i);
+						}
+					}
+				}
+				if (wasRepairingDroid)
+				{
+					droidRepairStopped(psDroid, psCurr);
+					++numRepairersRemoved;
+				}
+			}
+		}
+
+		// search the main (current) list of active structures to see if any point to this
+		StructureList* pStructList = &apsStructLists[player];
+		for (STRUCTURE *psCurr : *pStructList)
+		{
+			if (psCurr->pStructureType->type == REF_REPAIR_FACILITY && psCurr->pFunctionality)
+			{
+				REPAIR_FACILITY	*psRepairFac = &psCurr->pFunctionality->repairFacility;
+				if (psRepairFac->state == RepairState::Repairing && psRepairFac->psObj == psDroid)
+				{
+					// reproduce logic from aiUpdateRepair_handleEvents - RepairEvents::UnitMovedAway
+					droidRepairStopped(psDroid, psCurr);
+					psRepairFac->psObj = nullptr;
+					psRepairFac->state = RepairState::Idle;
+					++numRepairersRemoved;
+				}
+			}
+		}
+	}
+
+	syncDebugObject(psDroid, 'r');
+
+	ASSERT(psDroid->underRepair == 0, "DROID.underRepair = %" PRIu16, psDroid->underRepair);
+	return numRepairersRemoved;
+}
+
 /* Remove a droid from the List so doesn't update or get drawn etc
 TAKE CARE with removeDroid() - usually want droidRemove since it deal with grid code*/
 //returns false if the droid wasn't removed - because it died!
@@ -724,6 +804,12 @@ bool droidRemove(DROID *psDroid, PerPlayerDroidLists& pList)
 	{
 		psDroid->psGroup->remove(psDroid);
 		psDroid->psGroup = nullptr;
+	}
+
+	// instruct other droids / structures that are repairing this droid to stop
+	if (psDroid->underRepair > 0)
+	{
+		droidCancelRepairers(psDroid, pList);
 	}
 
 	// reset the baseStruct
@@ -807,8 +893,8 @@ void droidUpdate(DROID *psDroid)
 
 	if (psDroid->animationEvent != ANIM_EVENT_NONE)
 	{
-		iIMDBaseShape *baseImd = (psDroid->sDisplay.imd) ? psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent] : nullptr;
-		iIMDShape *imd = (baseImd) ? baseImd->displayModel() : nullptr;
+		const iIMDBaseShape *baseImd = (psDroid->sDisplay.imd) ? psDroid->sDisplay.imd->displayModel()->objanimpie[psDroid->animationEvent] : nullptr;
+		const iIMDShape *imd = (baseImd) ? baseImd->displayModel() : nullptr;
 		if (imd && imd->objanimcycles > 0 && gameTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
 		{
 			// Done animating (animation is defined by body - other components should follow suit)
@@ -1285,6 +1371,32 @@ int getRecoil(WEAPON const &weapon)
 		// Recoil effect is over.
 	}
 	return 0;
+}
+
+void droidRepairStarted(DROID *psDroid, BASE_OBJECT const *psRepairer)
+{
+	ASSERT_OR_RETURN(, psDroid != nullptr, "Null droid");
+	ASSERT_OR_RETURN(, psDroid->underRepair < std::numeric_limits<decltype(psDroid->underRepair)>::max(), "underRepair hit max for droid: [%d] %s", psDroid->id, objInfo(psDroid));
+#if defined(DEBUG)
+	debug(LOG_NEVER, "Object (%d: %s) starting repair of droid: %" PRIu32, int(psRepairer->type), objInfo(psRepairer), psDroid->id);
+#endif
+	++psDroid->underRepair;
+}
+
+void droidRepairStopped(DROID *psDroid, BASE_OBJECT const *psFormerRepairer)
+{
+	ASSERT_OR_RETURN(, psDroid != nullptr, "Null droid");
+#if defined(DEBUG)
+	 debug(LOG_NEVER, "Object (%d: %s) stopping repair of droid: %" PRIu32, int(psFormerRepairer->type), objInfo(psFormerRepairer), psDroid->id);
+#endif
+	if (psDroid->underRepair == 0)
+	{
+		// This is expected after initially loading pre-4.6.0 saves (WZ did not calculate underRepair until version 4.6)
+		// But should not happen when playing new games
+		debug(LOG_WARNING, "underRepair count already 0 for droid: [%d] %s", psDroid->id, objInfo(psDroid));
+		return;
+	}
+	--psDroid->underRepair;
 }
 
 /* Droid was completely repaired by another droid, auto-repair, or repair facility */
@@ -2864,7 +2976,7 @@ bool electronicDroid(const DROID *psDroid)
 	return false;
 }
 
-/*checks to see if the droid is currently being repaired by another*/
+/*checks to see if the droid is currently being repaired by another droid or structure*/
 bool droidUnderRepair(const DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
@@ -2872,25 +2984,7 @@ bool droidUnderRepair(const DROID *psDroid)
 	//droid must be damaged
 	if (psDroid->isDamaged())
 	{
-		//look thru the list of players droids to see if any are repairing this droid
-		for (const DROID *psCurr : apsDroidLists[psDroid->player])
-		{
-			if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType ==
-				 DROID_CYBORG_REPAIR) && psCurr->action ==
-				DACTION_DROIDREPAIR && psCurr->order.psObj == psDroid)
-			{
-				BASE_OBJECT *psLeader = nullptr;
-				if (hasCommander(psCurr))
-				{
-					psLeader = (BASE_OBJECT *)psCurr->psGroup->psCommander;
-				}
-				if (psLeader && psLeader->id == psDroid->id)
-				{
-					continue;
-				}
-				return true;
-			}
-		}
+		return psDroid->underRepair != 0;
 	}
 	return false;
 }

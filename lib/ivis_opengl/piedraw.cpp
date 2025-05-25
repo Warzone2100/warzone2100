@@ -247,7 +247,7 @@ void pie_BeginLighting(const Vector3f &light)
 struct ShadowcastingShape
 {
 	glm::mat4	modelViewMatrix;
-	iIMDShape	*shape;
+	const iIMDShape	*shape;
 	int		flag;
 	int		flag_data;
 	glm::vec4	light;
@@ -256,7 +256,7 @@ struct ShadowcastingShape
 struct SHAPE
 {
 	glm::mat4	modelMatrix;
-	iIMDShape	*shape;
+	const iIMDShape	*shape;
 	int		frame;
 	PIELIGHT	colour;
 	PIELIGHT	teamcolour;
@@ -961,7 +961,7 @@ class InstancedMeshRenderer
 {
 public:
 	// Queues a mesh for drawing
-	bool Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth);
+	bool Draw3DShape(const iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth);
 
 	// Finalizes queued meshes, ready for one or more DrawAll calls
 	// (After this is called, Draw3DShape should not be called until the InstancedMeshRenderer is clear()-ed)
@@ -1074,7 +1074,7 @@ void InstancedMeshRenderer::reset()
 	instanceDataBuffers.clear();
 }
 
-bool InstancedMeshRenderer::Draw3DShape(iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth)
+bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth)
 {
 	bool light = true;
 
@@ -1209,7 +1209,7 @@ void pie_CleanUp()
 	}
 }
 
-bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth, bool onlySingleLevel)
+bool pie_Draw3DShape(const iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth, bool onlySingleLevel)
 {
 	pieCount++;
 
@@ -1218,9 +1218,9 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 	bool retVal = false;
 	const bool drawAllLevels = (shape->modelLevel == 0) && !onlySingleLevel;
-	const PIELIGHT teamcolour = pal_GetTeamColour(team);
+	const PIELIGHT teamcolour = shape->getTeamColourForModel(team);
 
-	iIMDShape *pCurrShape = shape;
+	const iIMDShape *pCurrShape = shape;
 	do
 	{
 		if (pieFlag & pie_BUTTON)
@@ -1246,7 +1246,7 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache, const glm::mat4& projec
 //	size_t uncachedShadowDraws = 0;
 	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
-		/*DrawShadowResult result =*/ pie_DrawShadow(shadowCache, scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].modelViewMatrix);
+		/*DrawShadowResult result =*/ pie_DrawShadow(shadowCache, const_cast<iIMDShape*>(scshapes[i].shape), scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].modelViewMatrix);
 //		if (result == DRAW_SUCCESS_CACHED)
 //		{
 //			++cachedShadowDraws;

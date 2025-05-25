@@ -27,6 +27,7 @@
 #include <nonstd/optional.hpp>
 #include "widget.h"
 #include "scrollablelist.h"
+#include "lib/ivis_opengl/ivisdef.h"
 
 class DropdownItemWrapper;
 typedef std::function<void(std::shared_ptr<DropdownItemWrapper> item)> DropdownOnSelectHandler;
@@ -98,12 +99,15 @@ public:
 	void run(W_CONTEXT *) override;
 	void geometryChanged() override;
 	void open();
+	bool isOpen() const;
 	void close();
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void setListHeight(uint32_t value)
 	{
 		itemsList->setGeometry(itemsList->x(), itemsList->y(), itemsList->width(), value);
 	}
+	void setListBackgroundColor(const PIELIGHT& color);
+	const Padding& getDropdownMenuOuterPadding() const;
 	bool setSelectedIndex(size_t index)
 	{
 		ASSERT_OR_RETURN(false, index < items.size(), "Invalid dropdown item index");
@@ -116,6 +120,10 @@ public:
 	void setOnChange(std::function<void(DropdownWidget&)> value)
 	{
 		onChange = value;
+	}
+	void setOnOpen(std::function<void(DropdownWidget&)> value)
+	{
+		onOpen = value;
 	}
 	std::shared_ptr<WIDGET> getItem(size_t idx) const
 	{
@@ -156,25 +164,37 @@ public:
 		return itemsList->getScrollbarWidth();
 	}
 
-	int32_t idealWidth() override
-	{
-		return itemsList->idealWidth();
-	}
+	// Show a dropdown caret image on the right side of the widget
+	void setDropdownCaretImage(optional<AtlasImage> image, const WzSize& displaySize, const Padding& padding = {});
 
-	int32_t idealHeight() override
-	{
-		auto max = 0;
-		for (auto const &item: items)
-		{
-			max = std::max(max, item->idealHeight());
-		}
+	void setDisabled(bool isDisabled);
+	bool getIsDisabled() const;
 
-		return max;
-	}
+	enum class DropdownMenuStyle
+	{
+		InPlace,	// dropdown menu appears *overtop* of the currently-selected item (i.e. in-place)
+		Separate	// dropdown menu appears below (or above if not enough room) the parent DropdownWidget
+	};
+	void setStyle(DropdownMenuStyle menuStyle);
+
+	virtual int32_t idealWidth() override;
+	virtual int32_t idealHeight() override;
+
+	int32_t getItemDisplayWidth() const;
+	int32_t getCaretImageUsedWidth() const;
 
 protected:
 	friend class DropdownItemWrapper;
 	void setMouseClickOnItem(std::shared_ptr<DropdownItemWrapper> item, WIDGET_KEY key, bool wasPressed);
+
+	void drawDropdownCaretImage(int xOffset, int yOffset, PIELIGHT color);
+	virtual void drawOpenedHighlight(int xOffset, int yOffset);
+	virtual void drawSelectedItem(const std::shared_ptr<WIDGET>& item, const WzRect& screenDisplayArea);
+
+	virtual void onSelectedItemChanged();
+
+	virtual int calculateDropdownListScreenPosX() const;
+	virtual int calculateDropdownListDisplayWidth() const;
 
 private:
 	std::vector<std::shared_ptr<DropdownItemWrapper>> items;
@@ -183,41 +203,17 @@ private:
 	std::shared_ptr<DropdownItemWrapper> selectedItem;
 	std::function<bool(DropdownWidget&, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget)> canChange;
 	std::function<void(DropdownWidget&)> onChange;
+	std::function<void(DropdownWidget&)> onOpen;
 	std::shared_ptr<DropdownItemWrapper> mouseOverItem;
 	std::shared_ptr<DropdownItemWrapper> mouseDownItem;
 	int32_t overlayYPosOffset = 0;
+	optional<AtlasImage> dropdownCaretImage;
+	WzSize dropdownCaretImageSize;
+	Padding dropdownCaretImagePadding = {};
+	DropdownMenuStyle menuStyle = DropdownMenuStyle::InPlace;
+	bool isDisabled = false;
 
-	bool select(const std::shared_ptr<DropdownItemWrapper> &selected, size_t selectedIndex)
-	{
-		if (selectedItem == selected)
-		{
-			return true;
-		}
-
-		if (canChange)
-		{
-			if (!canChange(*this, selectedIndex, (selected) ? selected->getItem() : nullptr))
-			{
-				// abort change
-				return false;
-			}
-		}
-
-		if (selectedItem)
-		{
-			selectedItem->setSelected(false);
-		}
-		selectedItem = selected;
-		selectedItem->setSelected(true);
-
-		if (onChange)
-		{
-			onChange(*this);
-		}
-
-		return true;
-	}
-
+	bool select(const std::shared_ptr<DropdownItemWrapper> &selected, size_t selectedIndex);
 	int calculateDropdownListScreenPosY() const;
 };
 

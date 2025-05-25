@@ -33,6 +33,7 @@ BEGIN
 	BEGIN
 		BLOCK "040904b0"
 		BEGIN
+			VALUE "Comments", "@RC_StringFileInfo_Comments@"
 			VALUE "CompanyName", "Warzone 2100 Project"
 			VALUE "FileDescription", "@RC_StringFileInfo_FileDescription@"
 			VALUE "FileVersion", "@RC_StringFileInfo_FileVersion@"
@@ -41,6 +42,11 @@ BEGIN
 			VALUE "OriginalFilename", "@RC_StringFileInfo_OriginalFilename@"
 			VALUE "ProductName", "@RC_StringFileInfo_ProductName@"
 			VALUE "ProductVersion", "@RC_StringFileInfo_ProductVersion@"
+			VALUE "WZ_BRANCH", "@VCS_BRANCH@"
+			VALUE "WZ_COMMIT", "@VCS_FULL_HASH@"
+			VALUE "WZ_EXTRA", "@VCS_EXTRA@"
+			VALUE "WZ_SHORT_HASH", "@VCS_SHORT_HASH@"
+			VALUE "WZ_TAG", "@VCS_TAG@"
 		END
 	END
 	BLOCK "VarFileInfo"

@@ -593,7 +593,7 @@ float interpolateAngleDegrees(int a, int b, float t)
 	return a + d * t;
 }
 
-bool drawShape(iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth)
+bool drawShape(const iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth)
 {
 	glm::mat4 modifiedModelMatrix = modelMatrix;
 	int animFrame = 0; // for texture animation
@@ -1240,7 +1240,7 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 				/* Get a pointer to the tile at this location */
 				MAPTILE *psTile = mapTile(tileX + j, tileZ + i);
 
-				result += psTile->height;
+				result += std::max(psTile->height, psTile->waterLevel);
 				numTilesAveraged++;
 			}
 		}
@@ -1859,7 +1859,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 {
 	WEAPON_STATS	*psStats;
 	Vector3i			dv;
-	iIMDShape		*pIMD;
+	const iIMDShape	*pIMD;
 	Spacetime       st;
 
 	psStats = psCurr->psWStats;
@@ -2508,7 +2508,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	iIMDBaseShape *imd = psFeature->sDisplay.imd;
 	if (imd)
 	{
-		iIMDShape *strImd = imd->displayModel();
+		const iIMDShape *strImd = imd->displayModel();
 
 		float stretchDepth = 0.f;
 		if (!(strImd->flags & iV_IMD_NOSTRETCH))
@@ -2533,7 +2533,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	Vector3i                dv(0, 0, 0);
 	VIEW_PROXIMITY	*pViewProximity = nullptr;
 	SDWORD			x, y, r;
-	iIMDShape		*proxImd = nullptr;
+	const iIMDShape	*proxImd = nullptr;
 
 	//store the frame number for when deciding what has been clicked on
 	psProxDisp->frameNumber = currentGameFrame;
@@ -2654,7 +2654,7 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 	}
 }
 
-static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag,
+static void renderStructureTurrets(STRUCTURE *psStructure, const iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag,
 	const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix)
 {
 	iIMDBaseShape *mountImd[MAX_WEAPONS] = { nullptr };
@@ -2719,7 +2719,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			int recoilValue = noRecoil ? 0 : getRecoil(psStructure->asWeaps[i]);
 			if (mountImd[i] != nullptr)
 			{
-				iIMDShape *pMountDisplayIMD = mountImd[i]->displayModel();
+				const iIMDShape *pMountDisplayIMD = mountImd[i]->displayModel();
 				matrix *= glm::translate(glm::vec3(0.f, 0.f, recoilValue / 3.f));
 				int animFrame = 0;
 				if (pMountDisplayIMD->numFrames > 0)	// Calculate an animation frame
@@ -2735,7 +2735,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			matrix *= glm::rotate(UNDEG(rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 			matrix *= glm::translate(glm::vec3(0, 0, recoilValue));
 
-			iIMDShape *pWeaponDisplayIMD = weaponImd[i]->displayModel();
+			const iIMDShape *pWeaponDisplayIMD = weaponImd[i]->displayModel();
 			pie_Draw3DShape(pWeaponDisplayIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, -heightAboveTerrain);
 			if (psStructure->status == SS_BUILT && psStructure->visibleForLocalDisplay() > (UBYTE_MAX / 2))
 			{
@@ -2752,7 +2752,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
 						if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2))
 						{
-							iIMDShape	*pRepImd = getDisplayImdFromIndex(MI_FLAME);
+							const iIMDShape	*pRepImd = getDisplayImdFromIndex(MI_FLAME);
 
 							matrix *= glm::translate(glm::vec3(pWeaponDisplayIMD->connectors[0].x, pWeaponDisplayIMD->connectors[0].z - 12, pWeaponDisplayIMD->connectors[0].y)) *
 								glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
@@ -2764,7 +2764,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				}
 				else // we have a weapon so we draw a muzzle flash
 				{
-					iIMDShape *pFlashDisplayIMD = (flashImd[i]) ? flashImd[i]->displayModel() : nullptr;
+					const iIMDShape *pFlashDisplayIMD = (flashImd[i]) ? flashImd[i]->displayModel() : nullptr;
 					drawMuzzleFlash(psStructure->asWeaps[i], pWeaponDisplayIMD, pFlashDisplayIMD, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, heightAboveTerrain, colour);
 				}
 			}
@@ -2783,7 +2783,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				if (flashImd[i] != nullptr)
 				{
 					rot = psStructure->asWeaps[i].rot; // Snap rotation so the muzzle graphic appears where it should, see aiUpdateStructure().
-					iIMDShape *pFlashDisplayIMD = flashImd[i]->displayModel();
+					const iIMDShape *pFlashDisplayIMD = flashImd[i]->displayModel();
 					glm::mat4 matrix(1.f);
 					// horrendous hack
 					if (strImd->max.y > 80) // babatower
@@ -2834,7 +2834,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			default:
 				for (size_t cIdx = 1; cIdx < psStructure->sDisplay.imd->displayModel()->connectors.size(); cIdx++)
 				{
-					iIMDShape *lImd = getDisplayImdFromIndex(MI_LANDING);
+					const iIMDShape *lImd = getDisplayImdFromIndex(MI_LANDING);
 					pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0,
 									modelMatrix * glm::translate(glm::vec3(psStructure->sDisplay.imd->displayModel()->connectors[cIdx].xzy())), viewMatrix);
 				}
@@ -2853,7 +2853,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	bool bHitByElectronic = false;
 	bool defensive = false;
 	const FACTION *faction = getPlayerFaction(psStructure->player);
-	iIMDShape *strImd = getFactionDisplayIMD(faction, psStructure->sDisplay.imd->displayModel());
+	const iIMDShape *strImd = getFactionDisplayIMD(faction, psStructure->sDisplay.imd->displayModel());
 	MAPTILE *psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
@@ -2939,7 +2939,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		if (psStructure->prebuiltImd != nullptr)
 		{
 			// strImd is a module, so render the already-built part at full height.
-			iIMDBaseShape *imd = psStructure->prebuiltImd;
+			const iIMDBaseShape *imd = psStructure->prebuiltImd;
 			if (imd)
 			{
 				pie_Draw3DShape(getFactionDisplayIMD(faction, imd->displayModel()), 0, colour, buildingBrightness, pie_SHADOW, 0,
@@ -4221,7 +4221,7 @@ static void structureEffectsPlayer(UDWORD player)
 					bFXSize = 30;
 				}
 				/* Then it's repairing...? */
-				iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+				const iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
 				radius = pDisplayModel->radius;
 				xDif = iSinSR(effectTime, 720, radius);
 				yDif = iCosSR(effectTime, 720, radius);
@@ -4497,7 +4497,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	{
 		return;
 	}
-	iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+	const iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
 
 	auto deltaPlayer = Vector3f(0,0,0);
 	auto pt0 = Vector3f(psDroid->pos.x, psDroid->pos.z + 24, -psDroid->pos.y) + deltaPlayer;

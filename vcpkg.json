@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "3207386cc93121b907a8c5498a43b7a312f4f55d",
+	"builtin-baseline": "2eb117a2fdc926812229eb7c81fe9f52594ac8a0",
 	"dependencies": [
 		"physfs",
 		"sdl2",
@@ -73,6 +73,10 @@
 		{
 			"name": "basisu",
 			"host": true
+		},
+		{
+			"name": "protobuf",
+			"platform": "!emscripten"
 		}
 	],
 	"default-features": [

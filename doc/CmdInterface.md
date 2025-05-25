@@ -112,5 +112,8 @@ If state of interface buffer is unknown and/or corrupted, interface can send a f
 * `chat bcast <message [^\n]>`\
 	Send system level message to the room from stdin.
 
+* `set host ready <0|1>`\
+	Sets the host ready state to either not-ready (0) or ready (1).
+
 * `shutdown now`\
 	Trigger graceful shutdown of the game regardless of state.

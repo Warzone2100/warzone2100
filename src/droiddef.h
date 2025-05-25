@@ -196,6 +196,8 @@ struct DROID : public BASE_OBJECT
 	/* anim data */
 	SDWORD          iAudioID;
 	int32_t			heightAboveMap;					///< Current calculated height above the terrain (set for VTOL-propulsion units)
+	/* repair data */
+	uint16_t		underRepair;					///< Number of other droids / structures currently repairing this unit (does not include self-repair tech)
 };
 
 #endif // __INCLUDED_DROIDDEF_H__

@@ -86,6 +86,9 @@ public:
 		}
 	}
 
+	inline const WzString& getText() const { return text; }
+	inline iV_fonts getFontID() const { return font; }
+
 	WzText *operator ->()
 	{
 		if (!cachedText)

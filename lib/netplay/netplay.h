@@ -353,10 +353,11 @@ extern PortMappingAsyncRequestHandle ipv4MappingRequest;
 		failAction; \
 	}
 
+enum class ConnectionProviderType : uint8_t;
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
-int NETinit(bool bFirstCall);
+int NETinit(ConnectionProviderType pt);
 WZ_DECL_NONNULL(2) bool NETsend(NETQUEUE queue, NetMessage const *message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 void NETsendProcessDelayedActions();
 WZ_DECL_NONNULL(1, 2) bool NETrecvNet(NETQUEUE *queue, uint8_t *type);        ///< recv a message from the net queues if possible.
@@ -445,9 +446,11 @@ bool NEThaltJoining();				// stop new players joining this game
 bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
 bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
-struct Socket;
-struct SocketSet;
-bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uint8_t index, const char *playername, NETQUEUE joiningQUEUEInfo, Socket **client_joining_socket, SocketSet **client_joining_socket_set);
+
+class IClientConnection;
+class IConnectionPollGroup;
+
+bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uint8_t index, const char* playername, NETQUEUE joiningQUEUEInfo, IClientConnection** client_joining_socket, IConnectionPollGroup** client_joining_socket_set);
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost, // host a game
                  uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
@@ -465,11 +468,13 @@ void NETsetDefaultMPHostFreeChatPreference(bool enabled);
 bool NETgetDefaultMPHostFreeChatPreference();
 void NETsetEnableTCPNoDelay(bool enabled);
 bool NETgetEnableTCPNoDelay();
-uint32_t NETgetJoinConnectionNETPINGChallengeSize();
+uint32_t NETgetJoinConnectionNETPINGChallengeFromHostSize();
+uint32_t NETgetJoinConnectionNETPINGChallengeFromClientSize();
 
 void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
+void NETSendAllPlayerInfoTo(unsigned to);
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
 uint32_t NETGetMajorVersion();
 uint32_t NETGetMinorVersion();
@@ -554,5 +559,13 @@ private:
 };
 
 void NETacceptIncomingConnections();
+/// <summary>
+/// Increase the connected timeout for all player connection objects when transitioning
+/// from the lobby room to the main game loop.
+///
+/// Currently, this will set timeout value to 60 seconds, so that automatic lag-kick mechanism
+/// would be able to close stalled connections.
+/// </summary>
+void NETadjustConnectedTimeoutForClients();
 
 #endif
