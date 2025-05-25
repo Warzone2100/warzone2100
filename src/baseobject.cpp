@@ -45,6 +45,15 @@ static Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t
 
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
+	if (t1 == t2)
+	{
+		// spacetime overlap
+#ifdef DEBUG
+		ASSERT(t1 != t2, "Spacetime overlap!");
+#endif
+		// just return v2 (the current rotation)
+		return v2;
+	}
 	//return v1 + (v2 - v1) * (t - t1) / (t2 - t1);
 	return Rotation(interpolateAngle(v1.direction, v2.direction, t1, t2, t),
 	                interpolateAngle(v1.pitch,     v2.pitch,     t1, t2, t),
@@ -55,7 +64,7 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 static Spacetime interpolateSpacetime(Spacetime st1, Spacetime st2, uint32_t t)
 {
 	// Cyp says this should never happen, #3037 and #3238 say it does though.
-	ASSERT_OR_RETURN(st1, st1.time != st2.time, "Spacetime overlap!");
+	ASSERT_OR_RETURN(st2, st1.time != st2.time, "Spacetime overlap!");
 	return Spacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 
