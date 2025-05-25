@@ -503,6 +503,7 @@ void ActivityManager::shutdown()
 
 void ActivityManager::addActivitySink(std::shared_ptr<ActivitySink> sink)
 {
+	ASSERT_OR_RETURN(, sink != nullptr, "sink is null?");
 	activitySinks.push_back(sink);
 }
 
