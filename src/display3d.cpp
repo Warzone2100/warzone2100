@@ -183,6 +183,7 @@ iView	playerPos;
 
 /// How far away are we from the terrain
 static float distance;
+static bool bIsCloseDistance = false;
 
 /// Stores the screen coordinates of the transformed terrain tiles
 static Vector3i tileScreenInfo[VISIBLE_YTILES + 1][VISIBLE_XTILES + 1];
@@ -2468,10 +2469,16 @@ float getViewDistance()
 	return distance;
 }
 
+bool getIsCloseDistance()
+{
+	return bIsCloseDistance;
+}
+
 /// Set the distance at which the player views the world
 void setViewDistance(float dist)
 {
 	distance = dist;
+	bIsCloseDistance = (distance < 500.f);
 	debug(LOG_WZ, _("Setting zoom to %.0f"), distance);
 }
 
