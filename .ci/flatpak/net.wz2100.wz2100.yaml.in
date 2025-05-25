@@ -175,6 +175,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_CXX_STANDARD=17
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS:BOOL=OFF
     sources:
       - type: archive
         url: https://github.com/abseil/abseil-cpp/releases/download/20250127.1/abseil-cpp-20250127.1.tar.gz
@@ -212,6 +213,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_CXX_STANDARD=17
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS:BOOL=OFF
       @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
