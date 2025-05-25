@@ -2233,7 +2233,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(stagingBufferSize), static_cast<uint32_t>(dynamicAlignment));
 
 	auto* mappedMem = reinterpret_cast<uint8_t*>(frameResources.stagingBufferAllocator.mapMemory(stagingMemory));
-	ASSERT(mappedMem != nullptr, "Failed to map memory");
+	ASSERT_OR_RETURN(false, mappedMem != nullptr, "Failed to map memory");
 
 	memcpy(mappedMem, image.data(), image.data_size());
 
@@ -2507,7 +2507,7 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(stagingBufferSize), static_cast<uint32_t>(dynamicAlignment));
 
 	auto* mappedMem = reinterpret_cast<uint8_t*>(frameResources.stagingBufferAllocator.mapMemory(stagingMemory));
-	ASSERT(mappedMem != nullptr, "Failed to map memory");
+	ASSERT_OR_RETURN(false, mappedMem != nullptr, "Failed to map memory");
 
 	memcpy(mappedMem, image.data(), image.data_size());
 
