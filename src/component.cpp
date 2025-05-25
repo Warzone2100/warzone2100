@@ -908,7 +908,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const g
 	}
 
 	// now check if the projected circle is within the screen boundaries
-	if(!clipDroidOnScreen(psDroid, perspectiveViewMatrix * modelMatrix))
+	if(!clipDroidOnScreen(psDroid, perspectiveViewMatrix * modelMatrix, (getIsCloseDistance()) ? 150 : 25))
 	{
 		return;
 	}
