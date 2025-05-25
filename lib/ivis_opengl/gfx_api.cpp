@@ -434,7 +434,8 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	}
 
 	// 2.) If maxWidth / maxHeight exceed current image dimensions, resize()
-	image.scale_image_max_size(maxWidth, maxHeight);
+	bool imgScaleResult = image.scale_image_max_size(maxWidth, maxHeight);
+	ASSERT_OR_RETURN(nullptr, imgScaleResult, "Failed to scale image to max size (%d x %d): %s", maxWidth, maxHeight, filename.c_str());
 
 	// 3.) Determine mipmap levels (if needed / desired, based on textureType)
 	size_t mipmap_levels = calcMipmapLevelsForUncompressedImage(image, textureType);
@@ -446,7 +447,8 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	ASSERT_OR_RETURN(nullptr, closestSupportedChannels.has_value(), "Exhausted all possible uncompressed formats??");
 	for (auto i = image.channels(); i < closestSupportedChannels; ++i)
 	{
-		image.expand_channels_towards_rgba();
+		bool expandResult = image.expand_channels_towards_rgba();
+		ASSERT_OR_RETURN(nullptr, expandResult, "Failed to expand channels: %s", filename.c_str());
 	}
 
 	auto uploadFormat = image.pixel_format();
@@ -493,7 +495,8 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 		unsigned int output_w = std::max<unsigned int>(1, image.width() >> 1);
 		unsigned int output_h = std::max<unsigned int>(1, image.height() >> 1);
 
-		image.resize(output_w, output_h, alphaChannelOverride);
+		bool resizeResult = image.resize(output_w, output_h, alphaChannelOverride);
+		ASSERT_OR_RETURN(nullptr, resizeResult, "Failed to resize image mipmap [%zu] to output size (%u x %u): %s", i, output_w, output_h, filename.c_str());
 
 		if (uploadFormat == image.pixel_format())
 		{
