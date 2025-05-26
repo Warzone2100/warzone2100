@@ -2321,7 +2321,8 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 	for (BASE_OBJECT* obj : apsFeatureLists[0])
 	{
 		if (obj->type == OBJ_FEATURE
-			&& (obj->died == 0 || obj->died > graphicsTime))
+			&& (obj->died == 0 || obj->died > graphicsTime)
+			&& quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 		{
 			FEATURE* psFeature = castFeature(obj);
 			if (clipFeatureOnScreen(psFeature))
