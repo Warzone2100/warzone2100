@@ -24,6 +24,10 @@ on:
     types:
       - completed
 
+env:
+  # Controls whether release builds are signed
+  WZ_CI_SIGN_RELEASE_BUILDS: true
+
 jobs:
   windows-build:
     strategy:
@@ -670,6 +674,8 @@ jobs:
       attestations: write
     runs-on: windows-latest
     needs: windows-build
+    outputs:
+      combined-installer-artifact-id: ${{ steps.upload-combined-installer-artifact.outputs.artifact-id }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -790,6 +796,7 @@ jobs:
         run: |
           Get-Content "${env:INSTALLER_OUTPUT_DIR}\setup-manifest.txt"
       - name: 'Upload Artifact - (Combined Installer)'
+        id: upload-combined-installer-artifact
         uses: actions/upload-artifact@v4
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         with:
@@ -803,6 +810,108 @@ jobs:
         continue-on-error: true
         with:
           subject-path: '${{ steps.build-installer.outputs.INSTALLER_EXE }}'
+  sign-release-installers:
+    # Sign the Windows installer binaries using our Signpath certificate.  Note that this involves sending the binary to the
+    # remote SignPath service where the signing actually happens.  We need to have an account and credentials with
+    # that service to use it, so this step can't be done in forked repositories.
+    #
+    # Various settings here have to align with the "warzone2100" project in the "Warzone 2100 [OSS]" organization
+    # registered at https://app.signpath.io/.
+    #
+    # In particular, the repository needs to have a "sign_release" environment configured with the following secret:
+    #
+    #    SIGNPATH_API_TOKEN - As generated in app.signpath.io from the user profile page for the CI user
+    #
+    # We also add the following GitHub Actions variable (see
+    # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables):
+    #
+    #    SIGNPATH_ORGANIZATION_ID - Set to the organization ID (a UUID) for "Warzone 2100 [OSS]" in app.signpath.io
+    #
+    # One reason not to hard code SIGNPATH_ORGANIZATION_ID is that we use its existence to signal that the above
+    # secrets are available - i.e. that we can do the build signing.
+    name: 'Sign Release Installers'
+    permissions:
+      contents: read
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
+    runs-on: windows-latest
+    needs: [combined-installer-build]
+    environment: sign_release
+    if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')) && (github.repository == 'Warzone2100/warzone2100')
+    outputs:
+      signedfiles: ${{ steps.output-result.outputs.signedfiles }}
+    steps:
+      # Download all releasable artifacts that need signing
+      - name: Prep Environment
+        id: settings
+        shell: bash
+        run: mkdir unsigned-installers && mkdir signed-installers
+      - name: Download Release Installer
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: '${{ needs.combined-installer-build.outputs.combined-installer-artifact-id }}'
+          path: .\unsigned-installers
+          merge-multiple: true
+      - name: Log Unsigned Installer Details
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        working-directory: '${{ github.workspace }}\unsigned-installers'
+        run: |
+          Write-Host "SHA512 Hashes:"
+          $files = Get-ChildItem -Path . -File
+          foreach ($file in $files) {
+            Write-Host "`n$($file.Name)`n`t-> SHA512: $((Get-FileHash -Path "$file" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -Path "$file").Length)"
+          }
+          Write-Host ""
+      - name: SignPath - Request Signing of Installer EXE
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        id: signpath-sign
+        uses: signpath/github-action-submit-signing-request@v1.2
+        env:
+          SIGNPATH_SIGNING_POLICY_SLUG: ${{ (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && 'release-signing' || 'test-signing' }}
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'warzone2100' # Has to match slug in https://app.signpath.io/ "warzone2100" project
+          signing-policy-slug: '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
+          github-artifact-id: '${{ needs.combined-installer-build.outputs.combined-installer-artifact-id }}'
+          wait-for-completion: true
+          # 4h to manually approve the request
+          wait-for-completion-timeout-in-seconds: 14400
+          output-artifact-directory: '${{ github.workspace }}\signed-installers\'
+      - name: Log Signed Build Outputs
+        if: (steps.signpath-sign.outcome == 'success')
+        working-directory: '${{ github.workspace }}\signed-installers\'
+        run: |
+          # Log hashes of the signed setup EXEs
+          Write-Host "SHA512 Hashes:"
+          $files = Get-ChildItem -Path . -File
+          foreach ($file in $files) {
+            Write-Host "`n$($file.Name)`n`t-> SHA512: $((Get-FileHash -Path "$file" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -Path "$file").Length)"
+          }
+          Write-Host ""
+      - name: 'Generate artifact attestations - (Signed Installers)'
+        if: (steps.signpath-sign.outcome == 'success') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v2
+        continue-on-error: true
+        with:
+          subject-path: '${{ github.workspace }}\signed-installers\*'
+      - name: 'Upload Artifact - All Signed Installer EXEs'
+        if: (steps.signpath-sign.outcome == 'success')
+        uses: actions/upload-artifact@v4
+        with:
+          name: warzone2100_installers_signed
+          path: '${{ github.workspace }}\signed-installers\*'
+          if-no-files-found: 'error'
+      - name: Output Result
+        id: output-result
+        env:
+          SIGN_STEP_OUTCOME: ${{ steps.signpath-sign.outcome }}
+        run: |
+          $signedfiles=false; if ("${env:SIGN_STEP_OUTCOME}" -eq "success") { $signedfiles=true; }
+          echo "signedfiles=${signedfiles}"
+          echo "signedfiles=${signedfiles}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
   upload-release-assets:
     name: 'Upload Release Assets'
     permissions:
@@ -810,14 +919,13 @@ jobs:
     runs-on: ubuntu-latest
     # Run on tag release automation build
     if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
-    needs: [windows-build, combined-installer-build]
+    needs: [windows-build, combined-installer-build, sign-release-installers]
     env:
       WZ_GITHUB_REF: ${{needs.windows-build.outputs.WZ_GITHUB_REF}}
     steps:
       - name: Prep Environment
         id: settings
-        run: |
-          mkdir upload-assets
+        run: mkdir upload-assets && mkdir upload-assets-signed
       - name: Download Release Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -826,7 +934,27 @@ jobs:
           path: ./upload-assets
           merge-multiple: true
       - name: List Assets
-        run: ls -LR ./upload-assets
+        run: ls -LRl ./upload-assets
+      - name: Download Signed Release Artifacts
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
+        uses: actions/download-artifact@v4
+        with:
+          name: 'warzone2100_installers_signed'
+          path: ./upload-assets-signed
+          merge-multiple: true
+      - name: Replace Unsigned with Signed Release Artifacts
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
+        run: |
+          for file in ./upload-assets-signed/*; do
+            filename="${file##*/}"
+            dest="./upload-assets/${filename}"
+            if [ ! -f "${dest}" ]; then
+              echo "::warning ::Missing original (unsigned) file - ${filename} ?"
+            fi
+            echo "Replacing with signed: ${filename}"
+            mv -f "${file}" "${dest}"
+          done
+          ls -LRl ./upload-assets
       - name: Upload Release Assets
         working-directory: '${{ github.workspace }}/upload-assets/'
         run: |
