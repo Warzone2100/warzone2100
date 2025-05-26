@@ -408,9 +408,22 @@ struct TextMarker
 			if (map_coord(y) < map_coord(playerPos.p.z) - visibleTiles.y / 2) return;
 			if (map_coord(x) >= map_coord(playerPos.p.x) + visibleTiles.x / 2) return;
 			if (map_coord(y) >= map_coord(playerPos.p.z) + visibleTiles.y / 2) return;
-			auto idx=visibleTiles.y / 2 + map_coord(y) - map_coord(playerPos.p.z);
-			auto jdx=visibleTiles.x / 2 + map_coord(x) - map_coord(playerPos.p.x);
-			text.render(Vector2f{tileScreenInfo[idx][jdx]}, clanColours[color]);
+
+			auto idx = visibleTiles.y / 2 + map_coord(y) - map_coord(playerPos.p.z);
+			auto jdx = visibleTiles.x / 2 + map_coord(x) - map_coord(playerPos.p.x);
+			// Perspective interpolation
+			auto o = Vector2f{tileScreenInfo[idx][jdx]};
+			auto oi = Vector2f{tileScreenInfo[idx+1][jdx]};
+			auto oj = Vector2f{tileScreenInfo[idx][jdx+1]};
+			auto oij = Vector2f{tileScreenInfo[idx+1][jdx+1]};
+
+			auto di = map_coordf(y)-map_coord(y);
+			auto dj = map_coordf(x)-map_coord(x);
+
+			auto xy = o+(oij-o)*glm::min(di,dj);
+			if (di>dj) xy += (oi-o)*(di-dj);
+			if (dj>di) xy += (oj-o)*(dj-di);
+			text.render(xy, clanColours[color]);
 		}
 		else
 		{
