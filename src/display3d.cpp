@@ -2015,7 +2015,8 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 		for (BASE_OBJECT* obj : apsStructLists[aPlayer])
 		{
 			/* Worth rendering the structure? */
-			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
+				|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 			{
 				continue;
 			}
@@ -2036,7 +2037,8 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	for (BASE_OBJECT* obj : psDestroyedObj)
 	{
 		/* Worth rendering the structure? */
-		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
+			|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 		{
 			continue;
 		}
