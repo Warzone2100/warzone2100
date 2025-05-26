@@ -423,7 +423,7 @@ struct TextMarker
 			auto xy = o+(oij-o)*glm::min(di,dj);
 			if (di>dj) xy += (oi-o)*(di-dj);
 			if (dj>di) xy += (oj-o)*(dj-di);
-			text.render(xy, clanColours[color]);
+			text.render(Vector2i(xy), clanColours[color]);
 		}
 		else
 		{
