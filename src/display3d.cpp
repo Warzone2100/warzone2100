@@ -1778,6 +1778,12 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 	const BODY_STATS *psBStats = psDroid->getBodyStats();
 	const iIMDShape * pIMD = (psBStats != nullptr && psBStats->pIMD != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
+	if (psDroid->heightAboveMap > 0)
+	{
+		// clipShapeOnScreen is noticeably insufficient if it's a flying unit - we have to care about both shadows and the unit itself...
+		// HACK: boost the overdrawScreenPoints by a factor based on the heightAboveMap
+		overdrawScreenPoints *= std::max<int>(1, (psDroid->heightAboveMap / 20));
+	}
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
 }
 
@@ -2481,7 +2487,7 @@ bool getIsCloseDistance()
 void setViewDistance(float dist)
 {
 	distance = dist;
-	bIsCloseDistance = (distance < 500.f);
+	bIsCloseDistance = (distance < 750.f);
 	debug(LOG_WZ, _("Setting zoom to %.0f"), distance);
 }
 
