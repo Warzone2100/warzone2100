@@ -1333,12 +1333,14 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 		}
 
 		// vtol droids only avoid each other and don't affect ground droids
-		if (psDroid->isVtol() != psObstacle->isVtol())
+		if (psDroid->isVtol() != psObstacle->isVtol() ||
+			(psDroid->isTransporter() && psDroid->sMove.speed < TILE_UNITS))
 		{
 			continue;
 		}
 
-		if (psObstacle->isTransporter() ||
+		if ((psObstacle->isTransporter() &&
+			!psDroid->isTransporter()) ||
 		    (psObstacle->droidType == DROID_PERSON &&
 		     psObstacle->player != psDroid->player))
 		{
@@ -1427,7 +1429,7 @@ static uint16_t moveGetDirection(DROID *psDroid)
 	Vector2i dest = target - src;
 
 	// Transporters don't need to avoid obstacles, but everyone else should
-	if (!psDroid->isTransporter())
+	if (!psDroid->isTransporter() || psDroid->order.type!=DORDER_DISEMBARK)
 	{
 		dest = moveGetObstacleVector(psDroid, dest);
 	}
