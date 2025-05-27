@@ -3516,6 +3516,12 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 		return psNewDroid;
 	}
 
+	if (psD->isTransporter() && !transporterIsEmpty(psD))
+	{
+		// Cannot gift non-empty transporters
+		return nullptr;
+	}
+
 	int oldPlayer = psD->player;
 
 	// reset the assigned state of units attached to a leader
