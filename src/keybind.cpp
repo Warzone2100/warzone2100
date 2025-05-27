@@ -2566,6 +2566,10 @@ void kf_QuickSave()
 		console(_("QuickSave not allowed in Autosaves-Only mode"));
 		return;
 	}
+	if (NETisReplay())
+	{
+		return; // Bail out if we're running a replay
+	}
 
 	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
 	const char *quickSaveFolder = bMultiPlayer ? QUICKSAVE_SKI_FOLDER : QUICKSAVE_CAM_FOLDER;
