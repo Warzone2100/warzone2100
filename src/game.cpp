@@ -125,15 +125,14 @@
 
 bool saveJSONToFile(const nlohmann::json& obj, const char* pFileName)
 {
-	std::ostringstream stream;
+	std::string jsonString;
 	try {
-		stream << obj.dump(4) << std::endl;
+		jsonString = obj.dump(4);
 	}
 	catch (const std::exception &e) {
 		ASSERT(false, "Failed to save JSON to %s with error: %s", pFileName, e.what());
 		return false;
 	}
-	std::string jsonString = stream.str();
 	debug(LOG_SAVE, "%s %s", "Saving", pFileName);
 	return saveFile(pFileName, jsonString.c_str(), jsonString.size());
 }
