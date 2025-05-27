@@ -274,9 +274,9 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 	if (psDroid)
 	{
 		syncDebugDroid(psDroid, '<');
-		giftSingleDroid(psDroid, to, false);
+		bool successfulTransfer = giftSingleDroid(psDroid, to, false) != nullptr;
 		syncDebugDroid(psDroid, '>');
-		if (to == selectedPlayer)
+		if (successfulTransfer && (to == selectedPlayer))
 		{
 			CONPRINTF(_("%s Gives you a %s"), getPlayerName(from), psDroid->aName);
 		}
