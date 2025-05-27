@@ -34,6 +34,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/wztime.h"
+#include "lib/framework/wzapp.h"
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/widget.h"
@@ -1130,24 +1131,8 @@ static void freeAutoSaveSlot(SAVEGAME_LOC loc)
 	deleteSaveGame_classic(savefile);
 }
 
-bool autoSave(bool force)
+static bool doAutoSave()
 {
-	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating/autogames
-	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	if (!autosaveEnabled || runningMultiplayer() || bInTutorial || dbgInputManager.debugMappingsAllowed() || Cheated || autogame_enabled())
-	{
-		return false;
-	}
-	// Bail out if we're running a replay
-	if (NETisReplay())
-	{
-		return false;
-	}
-	// Bail out if autosaves only mode and not forced
-	if (getCamTweakOption_AutosavesOnly() && !force)
-	{
-		return false;
-	}
 	const char *dir = bMultiPlayer ? SAVEGAME_SKI_AUTO : SAVEGAME_CAM_AUTO;
 	// Backward compatibility: remove later
 	if (!freeAutoSaveSlot_old(dir))
@@ -1174,4 +1159,33 @@ bool autoSave(bool force)
 		console(_("AutoSave %s failed"), savegameWithoutExtension(savefile));
 		return false;
 	}
+}
+
+bool autoSave(bool force)
+{
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating/autogames
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (!autosaveEnabled || runningMultiplayer() || bInTutorial || dbgInputManager.debugMappingsAllowed() || Cheated || autogame_enabled())
+	{
+		return false;
+	}
+	// Bail out if we're running a replay
+	if (NETisReplay())
+	{
+		return false;
+	}
+	// Bail out if autosaves only mode and not forced
+	if (getCamTweakOption_AutosavesOnly() && !force)
+	{
+		return false;
+	}
+
+	console(_("AutoSaving..."));
+	// queue for next main loop run, so we have a chance to render the "AutoSaving..." message before a potential delay while autosaving
+	wzAsyncExecOnMainThread([]() {
+		ASSERT_OR_RETURN(, gameInitialised, "Skipping autosave - game no longer initialized");
+		doAutoSave();
+	});
+
+	return true; // autosave queued
 }
