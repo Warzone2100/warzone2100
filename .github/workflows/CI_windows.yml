@@ -831,6 +831,7 @@ jobs:
     # secrets are available - i.e. that we can do the build signing.
     name: 'Sign Release Installers'
     permissions:
+      actions: read
       contents: read
       # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
       id-token: write
