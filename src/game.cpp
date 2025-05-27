@@ -7591,18 +7591,22 @@ bool loadSaveResearch(const char *pFileName)
 // Write out the current state of the Research per player
 static bool writeResearchFile(char *pFileName)
 {
-	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
-
+	nlohmann::json mRoot = nlohmann::json::object();
+	std::vector<int> possibles;
+	std::vector<UBYTE> researched;
+	std::vector<UDWORD> points;
 	for (size_t i = 0; i < asResearch.size(); ++i)
 	{
 		RESEARCH *psStats = &asResearch[i];
 		bool valid = false;
-		std::vector<WzString> possibles, researched, points;
+		possibles.clear();
+		researched.clear();
+		points.clear();
 		for (int player = 0; player < game.maxPlayers; player++)
 		{
-			possibles.push_back(WzString::number(GetResearchPossible(&asPlayerResList[player][i])));
-			researched.push_back(WzString::number(asPlayerResList[player][i].ResearchStatus & RESBITS_ALL));
-			points.push_back(WzString::number(asPlayerResList[player][i].currentPoints));
+			possibles.push_back(GetResearchPossible(&asPlayerResList[player][i]));
+			researched.push_back(asPlayerResList[player][i].ResearchStatus & RESBITS_ALL);
+			points.push_back(asPlayerResList[player][i].currentPoints);
 			if (IsResearchPossible(&asPlayerResList[player][i]) || (asPlayerResList[player][i].ResearchStatus & RESBITS_ALL) || asPlayerResList[player][i].currentPoints)
 			{
 				valid = true;	// write this entry
@@ -7610,15 +7614,17 @@ static bool writeResearchFile(char *pFileName)
 		}
 		if (valid)
 		{
-			ini.beginGroup("research_" + WzString::number(i));
-			ini.setValue("name", psStats->id);
-			ini.setValue("possible", possibles);
-			ini.setValue("researched", researched);
-			ini.setValue("currentPoints", points);
-			ini.endGroup();
+			auto resObj = nlohmann::json::object();
+			resObj["name"] = psStats->id;
+			resObj["possible"] = possibles;
+			resObj["researched"] = researched;
+			resObj["currentPoints"] = points;
+
+			auto resKey = "research_" + WzString::number(i);
+			mRoot[resKey.toStdString()] = std::move(resObj);
 		}
 	}
-	return true;
+	return saveJSONToFile(mRoot, pFileName);
 }
 
 
