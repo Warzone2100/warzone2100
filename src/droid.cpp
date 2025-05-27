@@ -281,6 +281,7 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 #define UNIT_LOST_DELAY	(5*GAME_TICKS_PER_SEC)
 /* Deals damage to a droid
  * \param psDroid droid to deal damage to
+ * \param psProjectile projectile which hit the object (may be nullptr)
  * \param damage amount of damage to deal
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
@@ -288,7 +289,7 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
  * \return > 0 when the dealt damage destroys the droid, < 0 when the droid survives
  *
  */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int32_t relativeDamage;
 
@@ -300,7 +301,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		damage *= 3;
 	}
 
-	relativeDamage = objDamage(psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
+	relativeDamage = objDamage(psDroid, psProjectile, damage, psDroid->originalBody, weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
 	if (relativeDamage != 0 && psDroid->player == selectedPlayer && psDroid->timeLastHit == gameTime)
 	{
@@ -997,6 +998,10 @@ void droidUpdate(DROID *psDroid)
 		droidUpdateDroidSelfRepair(psDroid);
 	}
 
+	if (bMultiPlayer)
+	{
+		droidUpdateShields(psDroid);
+	}
 
 	/* Update the fire damage data */
 	if (psDroid->periodicalDamageStart != 0 && psDroid->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after droids.
@@ -1011,7 +1016,7 @@ void droidUpdate(DROID *psDroid)
 		else
 		{
 			// do hardcoded burn damage (this damage automatically applied after periodical damage finished)
-			droidDamage(psDroid, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime / 2 + 1, true, BURN_MIN_DAMAGE, false);
+			droidDamage(psDroid, nullptr, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime / 2 + 1, true, BURN_MIN_DAMAGE, false);
 		}
 	}
 
@@ -1037,6 +1042,59 @@ void droidUpdate(DROID *psDroid)
 	syncDebugDroid(psDroid, '>');
 
 	CHECK_DROID(psDroid);
+}
+
+void droidUpdateShields(DROID *psDroid)
+{
+	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND)
+	{
+		if (psDroid->shieldPoints < 0)
+		{
+			psDroid->shieldPoints = 0;
+			psDroid->shieldRegenTime = gameTime;
+			psDroid->shieldInterruptRegenTime = gameTime;
+		}
+		else
+		{
+			if (!((psDroid->lastHitWeapon == WSC_EMP) && ((gameTime - psDroid->timeLastHit) < EMP_DISABLE_TIME)) &&
+				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
+				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid))
+			{
+				auto availableShieldPoints = droidGetMaxShieldPoints(psDroid) - psDroid->shieldPoints;
+
+				if (availableShieldPoints > 0)
+				{
+					auto pointsToAdd = std::min<UDWORD>(psDroid->getBrainStats()->shield.shieldPointsPerStep, availableShieldPoints);
+					psDroid->shieldPoints += pointsToAdd;
+				}
+				psDroid->shieldRegenTime = gameTime;
+			}
+		}
+	}
+	else
+	{
+		// unit has lost commander, shields are down!
+		psDroid->shieldPoints = -1;
+	}
+}
+
+UDWORD droidCalculateShieldRegenTime(const DROID *psDroid)
+{
+	const auto &psStats = psDroid->getBrainStats()->shield;
+	return psStats.initialShieldRegenTime - (psStats.shieldRegenTimeDec * getDroidLevel(psDroid));
+}
+
+UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid)
+{
+	const auto &psStats = psDroid->getBrainStats()->shield;
+	return psStats.initialShieldInterruptRegenTime - (psStats.shieldInterruptRegenTimeDec * getDroidLevel(psDroid));
+}
+
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid)
+{
+	const auto &psStats = psDroid->getBrainStats()->shield;
+	UDWORD percent = psDroid->originalBody / 100;
+	return percent * (psStats.initialShieldPointsPercent + psStats.additiveShieldPointsPercent * getDroidLevel(psDroid));
 }
 
 /* See if a droid is next to a structure */
@@ -1859,6 +1917,7 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 		droid.experience = 0;
 	}
 	droid.kills = 0;
+	droid.shieldPoints = -1;
 
 	droidSetBits(pTemplate, &droid);
 
