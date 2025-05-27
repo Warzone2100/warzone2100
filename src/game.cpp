@@ -3614,15 +3614,18 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	//clear the list
 	if (saveGameVersion < VERSION_25)
 	{
-		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
-		for (DROID* psDroid : apsLimboDroids[selectedPlayer])
+		ASSERT(selectedPlayer < apsLimboDroids.size(), "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
+		if (selectedPlayer < apsLimboDroids.size())
 		{
-			//limbo list invalidate XY
-			psDroid->pos.x = INVALID_XY;
-			psDroid->pos.y = INVALID_XY;
-			//this is mainly for VTOLs
-			setSaveDroidBase(psDroid, nullptr);
-			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+			for (DROID* psDroid : apsLimboDroids[selectedPlayer])
+			{
+				//limbo list invalidate XY
+				psDroid->pos.x = INVALID_XY;
+				psDroid->pos.y = INVALID_XY;
+				//this is mainly for VTOLs
+				setSaveDroidBase(psDroid, nullptr);
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+			}
 		}
 	}
 
