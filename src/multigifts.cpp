@@ -296,7 +296,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 {
 	DroidList::const_iterator psD;
 	uint8_t      giftType = DROID_GIFT;
-	uint8_t      totalToSend;
+	uint8_t      totalToSend = 0;
 
 	if (apsDroidLists[from].empty())
 	{
@@ -309,12 +309,17 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * over their droid limit.
 	 */
 
-	for (totalToSend = 0, psD = apsDroidLists[from].begin();
-	     psD != apsDroidLists[from].end() && getNumDroids(to) + totalToSend < getMaxDroids(to) && totalToSend != UINT8_MAX;
+	for (psD = apsDroidLists[from].begin();
+	     psD != apsDroidLists[from].end() && (getNumDroids(to) + totalToSend < getMaxDroids(to)) && totalToSend != UINT8_MAX;
 	     ++psD)
 	{
 		if ((*psD)->selected)
 		{
+			if ((*psD)->isTransporter() && !transporterIsEmpty(*psD))
+			{
+				CONPRINTF(_("Tried to give away a non-empty %s - but this is not allowed."), (*psD)->aName);
+				continue;
+			}
 			++totalToSend;
 		}
 	}
@@ -325,14 +330,13 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 
 	for (psD = apsDroidLists[from].begin(); psD != apsDroidLists[from].end() && totalToSend != 0; ++psD)
 	{
-		if ((*psD)->isTransporter()
-		    && !transporterIsEmpty(*psD))
-		{
-			CONPRINTF(_("Tried to give away a non-empty %s - but this is not allowed."), (*psD)->aName);
-			continue;
-		}
 		if ((*psD)->selected)
 		{
+			if ((*psD)->isTransporter() && !transporterIsEmpty(*psD))
+			{
+				continue;
+			}
+
 			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
 			NETuint8_t(&giftType);
 			NETuint8_t(&from);
