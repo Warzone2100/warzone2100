@@ -268,6 +268,8 @@ extern iIMDShape	*pNewDesignIMD;
 /* Initialise the in game interface */
 bool intInitialise();
 
+void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj);
+
 bool intAddRadarWidget();
 
 // Check of coordinate is in the build menu

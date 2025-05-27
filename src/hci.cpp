@@ -1056,6 +1056,16 @@ void intRefreshGroupsUI()
 	IntGroupsRefreshPending = true;
 }
 
+void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj)
+{
+	if (psSelectedBuilder == psObj)
+	{
+		debug(LOG_INFO, "Selected builder removed");
+		psSelectedBuilder = nullptr;
+	}
+	// intDoScreenRefresh handles refreshing the backing stores for any open interfaceController
+}
+
 bool intAddRadarWidget()
 {
 	auto radarWidget = getRadarWidget();

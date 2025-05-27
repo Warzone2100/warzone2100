@@ -622,6 +622,7 @@ bool removeDroidBase(DROID *psDel)
 
 	if (psDel->player == selectedPlayer)
 	{
+		intInformInterfaceObjectRemoved(psDel);
 		intRefreshScreen();
 	}
 
@@ -819,6 +820,7 @@ bool droidRemove(DROID *psDroid, PerPlayerDroidLists& pList)
 
 	if (psDroid->player == selectedPlayer)
 	{
+		intInformInterfaceObjectRemoved(psDroid);
 		intRefreshScreen();
 	}
 
