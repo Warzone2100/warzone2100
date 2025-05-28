@@ -248,11 +248,24 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 
 [[noreturn]] static void handleUnrecoverableError(const vk::Result& reason)
 {
-	if (reason == vk::Result::eErrorDeviceLost)
-	{
-		// FUTURE TODO: Output a bunch more debugging info to the debug log?
-	}
 	debug(LOG_ERROR, "Vulkan backend encountered error: %s", vk::to_string(reason).c_str());
+
+	switch (reason)
+	{
+		case vk::Result::eErrorDeviceLost:
+			// FUTURE TODO: Output a bunch more debugging info to the debug log?
+			break;
+		case vk::Result::eErrorMemoryMapFailed:
+		case vk::Result::eErrorOutOfHostMemory:
+		case vk::Result::eErrorOutOfDeviceMemory:
+		case vk::Result::eErrorOutOfPoolMemory:
+			// reset gfx settngs on failure (resets antialiasing, etc)
+			wzResetGfxSettingsOnFailure();
+			break;
+		default:
+			break;
+	}
+
 	// Display a message and prompt the user to try a different graphics backend next time
 	wzPromptToChangeGfxBackendOnFailure("Failed with error: " + vk::to_string(reason));
 	abort();
