@@ -30,6 +30,17 @@ static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
 static gfx_api::context* current_backend_context = nullptr;
 
+static const char* to_string(gfx_api::backend_type backendType)
+{
+	switch (backendType)
+	{
+		case gfx_api::backend_type::null_backend: return "Null backend";
+		case gfx_api::backend_type::opengl_backend: return "GL backend";
+		case gfx_api::backend_type::vulkan_backend: return "Vulkan backend";
+	}
+	return "";
+}
+
 bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backendType)
 {
 	if (current_backend_context != nullptr && backend == backendType)
@@ -41,7 +52,7 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 	backend = backendType;
 	if (current_backend_context)
 	{
-		debug(LOG_FATAL, "Attempt to reinitialize gfx_api::context for a new backend type - currently unsupported");
+		debug(LOG_FATAL, "Attempt to reinitialize gfx_api::context for a new backend type once initialized - currently unsupported");
 		return false;
 	}
 	switch (backend)
@@ -61,10 +72,14 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 #endif
 			break;
 	}
-	ASSERT(current_backend_context != nullptr, "Failed to initialize gfx backend context");
+	ASSERT_OR_RETURN(false, current_backend_context != nullptr, "Failed to initialize gfx backend context");
 	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias, depthMapResolution);
 	if (!result)
 	{
+		debug(LOG_INFO, "Failed to initialize gfx_api::context for: %s", to_string(backend));
+		current_backend_context->shutdown();
+		delete current_backend_context;
+		current_backend_context = nullptr;
 		return false;
 	}
 
