@@ -2617,9 +2617,9 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 	try {
 		pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, currentRenderPass().rp, currentRenderPass().rp_compat_info, currentRenderPass().msaaSamples, vkDynLoader, *this);
 	}
-	catch (const std::exception& e)
+	catch (const vk::SystemError& e)
 	{
-		// Failed to build pipeline!
+		// Failed to build pipeline! (Some sort of generic exception?)
 		code_part part = LOG_ERROR;
 		if (!psoID.has_value())
 		{
@@ -2629,7 +2629,27 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 		debug(part, "Failed to build pipeline, with error: %s", e.what());
 		if (!psoID.has_value())
 		{
-			abort();
+			handleUnrecoverableError(static_cast<vk::Result>(e.code().value()));
+		}
+		else
+		{
+			// fall back to prior pipeline (construct a new indirect reference, but don't delete the old VkPSO)
+			return new VkPSOId(psoID.value(), true);
+		}
+	}
+	catch (const std::exception& e)
+	{
+		// Failed to build pipeline! (Some sort of generic exception?)
+		code_part part = LOG_ERROR;
+		if (!psoID.has_value())
+		{
+			// trying to build the pipeline for the first time - no prior build to fall back to!
+			part = LOG_FATAL;
+		}
+		debug(part, "Failed to build pipeline, with error: %s", e.what());
+		if (!psoID.has_value())
+		{
+			handleUnrecoverableError(vk::Result::eErrorUnknown);
 		}
 		else
 		{
