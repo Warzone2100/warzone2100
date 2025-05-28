@@ -2414,9 +2414,9 @@ static TerrainShaderQuality determineDefaultTerrainQuality()
 	// Based on system properties, determine a reasonable default (for performance reasons)
 	// (Uses a heuristic based on system RAM, graphics renderer, and estimated VRAM)
 
-	// If <= 4 GiB system RAM, default to medium ("normal")
+	// If <= 8 GiB system RAM, default to medium ("normal")
 	auto systemRAMinMiB = wzGetCurrentSystemRAM();
-	if (systemRAMinMiB <= 4096)
+	if (systemRAMinMiB <= 8192)
 	{
 		debug(LOG_INFO, "Due to system RAM (%" PRIu64 " MiB), defaulting to terrain quality: Normal", systemRAMinMiB);
 		return TerrainShaderQuality::MEDIUM;
