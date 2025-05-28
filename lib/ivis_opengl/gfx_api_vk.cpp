@@ -4791,7 +4791,11 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		lodBiasMethod = LodBiasMethod::SpecializationConstant;
 	}
 
-	initPixelFormatsSupport();
+	if (!initPixelFormatsSupport())
+	{
+		debug(LOG_ERROR, "initPixelFormatsSupport failed");
+		return false;
+	}
 	debug(LOG_3D, "Using depth buffer / shadow map format: %s", to_string(depthBufferFormat).c_str());
 
 	// convert antialiasing to vk::SampleCountFlagBits
@@ -4934,11 +4938,11 @@ gfx_api::pixel_format_usage::flags VkRoot::getPixelFormatUsageSupport(gfx_api::p
 	return retVal;
 }
 
-void VkRoot::initPixelFormatsSupport()
+bool VkRoot::initPixelFormatsSupport()
 {
-	ASSERT(backend_impl, "Backend implementation is null");
-	ASSERT(inst, "Instance is null");
-	ASSERT(physicalDevice, "Physical device is null");
+	ASSERT_OR_RETURN(false, backend_impl != nullptr, "Backend implementation is null");
+	ASSERT_OR_RETURN(false, inst, "Instance is null");
+	ASSERT_OR_RETURN(false, physicalDevice, "Physical device is null");
 
 	// set any existing entries to false
 	for (size_t i = 0; i < texture2DFormatsSupport.size(); i++)
@@ -4986,7 +4990,10 @@ void VkRoot::initPixelFormatsSupport()
 	catch (const std::exception& e)
 	{
 		debug(LOG_ERROR, "Failed to get a supported depth buffer format: %s", e.what());
+		return false;
 	}
+
+	return true;
 }
 
 bool VkRoot::createSurface()
