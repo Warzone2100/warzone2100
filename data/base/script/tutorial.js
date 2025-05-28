@@ -498,7 +498,7 @@ function eventStartLevel()
 	setUpConsoleAndAudioVar();
 
 	centreView(startPos.x, startPos.y);
-	setMissionTime(-1);
+	camSetMissionTimer(-1);
 	setPower(500, CAM_HUMAN_PLAYER);
 	hackStopIngameAudio();
 

@@ -8,32 +8,32 @@
 		"pos": [4928, 16704]
 	},
 	"position_2": {
-		"label": "vtolRemovePos",
-		"pos": [2816, 32384]
-	},
-	"position_3": {
 		"label": "vtolAppearPosW",
 		"pos": [576, 32320]
 	},
-	"position_4": {
+	"position_3": {
 		"label": "vtolAppearPosE",
 		"pos": [8000, 28864]
 	},
-	"position_5": {
+	"position_4": {
 		"label": "phantomFacNorth",
 		"pos": [320, 3136]
 	},
-	"position_6": {
+	"position_5": {
 		"label": "phantomFacWest",
 		"pos": [64, 17728]
 	},
-	"position_7": {
+	"position_6": {
 		"label": "phantomFacEast",
 		"pos": [8000, 21440]
 	},
-	"position_8": {
+	"position_7": {
 		"label": "phantomFacMiddle",
 		"pos": [8000, 18880]
+	},
+	"position_8": {
+		"label": "phantomFacSouth",
+		"pos": [3328, 32384]
 	},
 
 	"area_0": {

@@ -1,0 +1,168 @@
+{
+	"position_0": {
+		"label": "NE-PhantomFactory",
+		"pos": [3970, 279]
+	},
+	"position_1": {
+		"label": "NW-PhantomFactory",
+		"pos": [2428, 274]
+	},
+	"position_2": {
+		"label": "nxCybAssembly",
+		"pos": [4645, 695]
+	},
+	"position_3": {
+		"label": "vtolAppearPos",
+		"pos": [2944, 512]
+	},
+	"position_4": {
+		"label": "centralPatrolPos1",
+		"pos": [1070, 4329]
+	},
+	"position_5": {
+		"label": "centralPatrolPos2",
+		"pos": [2154, 5392]
+	},
+	"position_6": {
+		"label": "centralPatrolPos3",
+		"pos": [2986, 4465]
+	},
+	"position_7": {
+		"label": "eastPatrolPos1",
+		"pos": [2630, 2473]
+	},
+	"position_8": {
+		"label": "eastPatrolPos2",
+		"pos": [4664, 2004]
+	},
+	"position_9": {
+		"label": "eastPatrolPos3",
+		"pos": [4436, 3875]
+	},
+	"position_10": {
+		"label": "transporterEntry",
+		"pos": [5463, 9277]
+	},
+	"position_11": {
+		"label": "transporterExit",
+		"pos": [5160, 10581]
+	},
+	"position_12": {
+		"label": "healthRetreatPos",
+		"pos": [4018, 648]
+	},
+	"position_13": {
+		"label": "startPosition",
+		"pos": [4697, 10199]
+	},
+	"position_14": {
+		"label": "spawnPos1",
+		"pos": [640, 3072]
+	},
+	"position_15": {
+		"label": "spawnPos2",
+		"pos": [2560, 2688]
+	},
+	"position_16": {
+		"label": "spawnPos3",
+		"pos": [3840, 2304]
+	},
+
+	"position_17": {
+		"label": "spawnPos4",
+		"pos": [2048, 4480]
+	},
+	"position_18": {
+		"label": "spawnPos5",
+		"pos": [3456, 5504]
+	},
+	"position_19": {
+		"label": "spawnPos6",
+		"pos": [4608, 4480]
+	},
+	"position_20": {
+		"label": "spawnPos7",
+		"pos": [1536, 7040]
+	},
+
+	"position_21": {
+		"label": "spawnPos8",
+		"pos": [2816, 8064]
+	},
+	"position_22": {
+		"label": "spawnPos9",
+		"pos": [4224, 6016]
+	},
+	"position_23": {
+		"label": "spawnPos10",
+		"pos": [4864, 6912]
+	},
+
+	"position_24": {
+		"label": "spawnPos11",
+		"pos": [1280, 9472]
+	},
+	"position_25": {
+		"label": "spawnPos12",
+		"pos": [1536, 11008]
+	},
+	"position_26": {
+		"label": "spawnPos13",
+		"pos": [3840, 9088]
+	},
+	"position_27": {
+		"label": "spawnPos14",
+		"pos": [4992, 9728]
+	},
+
+	"position_28": {
+		"label": "spawnPosFinal",
+		"pos": [4096, 11392]
+	},
+
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [4736, 9728],
+		"pos2": [4992, 9984]
+	},
+	"area_1": {
+		"label": "nxEscapeTrigger",
+		"subscriber": 3,
+		"pos1": [3840, 11136],
+		"pos2": [4608, 11648]
+	},
+	"area_2": {
+		"label": "nxNorthBase",
+		"pos1": [1408, 384],
+		"pos2": [5248, 2304]
+	},
+	"area_3": {
+		"label": "RTLZ",
+		"pos1": [4480, 8960],
+		"pos2": [5504, 10752]
+	},
+	"area_4": {
+		"label": "eastCyborgGroup",
+		"pos1": [4096, 2816],
+		"pos2": [4352, 3200]
+	},
+	"area_5": {
+		"label": "centralCyborgGroup",
+		"pos1": [2432, 3712],
+		"pos2": [2688, 3968]
+	},
+
+	"object_0": {
+		"label": "nxCybFactory",
+		"id": 239,
+		"player": 3,
+		"type": 1
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"pos": [5495, 2883],
+		"subscriber": 3,
+		"radius": 250
+	}
+}

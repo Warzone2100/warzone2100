@@ -16,7 +16,7 @@
 		"pos": [5632, 7296]
 	},
 	"position_4": {
-		"label": "vtolAppearPoint",
+		"label": "vtolAppearPos",
 		"pos": [3904, 320]
 	},
 	"position_5": {
@@ -60,12 +60,12 @@
 		"pos": [5696, 6976]
 	},
 	"position_15": {
-		"label": "vtolRemovePoint",
-		"pos": [3604, 320]
-	},
-	"position_16": {
 		"label": "defensePos",
 		"pos": [1664, 7040]
+	},
+	"position_16": {
+		"label": "westSpawnPos",
+		"pos": [256, 6912]
 	},
 
 	"area_0": {
