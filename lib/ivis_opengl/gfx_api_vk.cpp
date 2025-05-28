@@ -2719,11 +2719,16 @@ static bool createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevi
 	const auto memreq = dev.getImageMemoryRequirements(outputImage, vkDynLoader);
 	ASSERT(memreq.size > 0, "Attempting to allocate memory of size 0 will fail");
 
-	bool lazyMemTypePresent = false;
-	uint32_t memoryTypeIndex = findProperties(memprops, memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eLazilyAllocated, &lazyMemTypePresent);
-	if (!lazyMemTypePresent || !(imageUsageFlags & vk::ImageUsageFlagBits::eTransientAttachment))
+	bool foundMemTypeIndex = false;
+	uint32_t memoryTypeIndex = findProperties(memprops, memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eLazilyAllocated, &foundMemTypeIndex);
+	if (!foundMemTypeIndex || !(imageUsageFlags & vk::ImageUsageFlagBits::eTransientAttachment))
 	{
-		memoryTypeIndex = findProperties(memprops, memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eDeviceLocal);
+		memoryTypeIndex = findProperties(memprops, memreq.memoryTypeBits, vk::MemoryPropertyFlagBits::eDeviceLocal, &foundMemTypeIndex);
+	}
+	if (!foundMemTypeIndex)
+	{
+		debug(LOG_ERROR, "Unable to find memory type index that matches: (memoryTypeBits: %" PRIu32 ")", memreq.memoryTypeBits);
+		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
 	}
 
 	try {
