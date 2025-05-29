@@ -793,7 +793,7 @@ private:
 	bool createLogicalDevice();
 	bool createAllocator();
 	void getQueues();
-	bool createSwapchain(bool allowHandleSurfaceLost = true);
+	void createSwapchain(bool allowHandleSurfaceLost = true); // Throws on failure
 	void rebuildPipelinesIfNecessary();
 
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
@@ -842,15 +842,14 @@ private:
 	enum AcquireNextSwapchainImageResult
 	{
 		eSuccess,
-		eRecoveredFromError,
-		eUnhandledFailure
+		eRecoveredFromError
 	};
-	AcquireNextSwapchainImageResult acquireNextSwapchainImage();
+	AcquireNextSwapchainImageResult acquireNextSwapchainImage(bool allowHandleSurfaceLost);
 
-	bool handleSurfaceLost();
-	void waitForAllIdle();
+	void handleSurfaceLost(); // Throws on failure
+	void waitForAllIdle(); // Throws on failure
 	void destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain);
-	bool createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason);
+	void createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason); // Throws on failure
 
 public:
 	virtual int32_t get_context_value(const gfx_api::context::context_value property) override;
