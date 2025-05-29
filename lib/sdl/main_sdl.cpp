@@ -436,12 +436,15 @@ std::vector<video_backend> wzAvailableGfxBackends()
 	availableBackends.push_back(video_backend::opengl);
 #elif defined(WZ_OS_UNIX)
 // LINUX / UNIX:
-	// - Order is: Vulkan, OpenGL, OpenGL ES
+	// We'd *like* to default to Vulkan first here,
+	// But an SDL2 bug (fixed in SDL3) may cause attempts to show a message box (which can happen when Vulkan fails) on X11 to crash.
+	// So for now, the order is still: OpenGL, OpenGL ES, Vulkan
+	// FUTURE TODO: Once ported to SDL3, switch this to: Vulkan, OpenGL, OpenGL ES (?)
+	availableBackends.push_back(video_backend::opengl);
+	availableBackends.push_back(video_backend::opengles);
 #   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
 	availableBackends.push_back(video_backend::vulkan);
 #   endif
-	availableBackends.push_back(video_backend::opengl);
-	availableBackends.push_back(video_backend::opengles);
 #else
 // Anything else:
 	// Default to offering Vulkan, OpenGL, OpenGL ES
