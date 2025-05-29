@@ -3523,7 +3523,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		}
 	} while (backend.has_value());
 
-	if ((requestedBackend != backend) && backend.has_value())
+	if (requestedBackend.has_value() && backend.has_value() && (requestedBackend.value() != backend.value()))
 	{
 		// ended up choosing a different backend at runtime - persist the new setting
 		resetGfxBackend(backend.value(), false);
