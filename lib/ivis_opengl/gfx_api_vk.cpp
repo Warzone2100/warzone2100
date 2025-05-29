@@ -3100,11 +3100,14 @@ void VkRoot::createDepthPasses(vk::Format depthFormat)
 void VkRoot::destroySceneRenderpass()
 {
 	// destroy scene pass objects
-	for (auto f : renderPasses[SCENE_RENDER_PASS_ID].fbo)
+	if (SCENE_RENDER_PASS_ID < renderPasses.size())
 	{
-		dev.destroyFramebuffer(f, nullptr, vkDynLoader);
+		for (auto f : renderPasses[SCENE_RENDER_PASS_ID].fbo)
+		{
+			dev.destroyFramebuffer(f, nullptr, vkDynLoader);
+		}
+		renderPasses[SCENE_RENDER_PASS_ID].fbo.clear();
 	}
-	renderPasses[SCENE_RENDER_PASS_ID].fbo.clear();
 
 	if (sceneDepthStencilView)
 	{
@@ -3142,8 +3145,9 @@ void VkRoot::destroySceneRenderpass()
 	{
 		pSceneImage->destroy(dev, allocator, vkDynLoader); // because the buffering_mechanism may be gone by the time this is called...
 		delete pSceneImage;
+		pSceneImage = nullptr;
 	}
-	if (renderPasses[SCENE_RENDER_PASS_ID].rp)
+	if ((SCENE_RENDER_PASS_ID < renderPasses.size()) && renderPasses[SCENE_RENDER_PASS_ID].rp)
 	{
 		dev.destroyRenderPass(renderPasses[SCENE_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
 		renderPasses[SCENE_RENDER_PASS_ID].rp = vk::RenderPass();
@@ -3759,46 +3763,60 @@ void VkRoot::shutdown()
 {
 	destroySwapchainAndSwapchainSpecificStuff(true);
 
-	for (auto& pipelineInfo : createdPipelines)
+	if (dev)
 	{
-		for (auto& pipeline : pipelineInfo.renderPassPSO)
+		for (auto& pipelineInfo : createdPipelines)
 		{
-			if (pipeline)
+			for (auto& pipeline : pipelineInfo.renderPassPSO)
 			{
-				delete pipeline;
+				if (pipeline)
+				{
+					delete pipeline;
+				}
 			}
 		}
-	}
-	createdPipelines.clear();
+		createdPipelines.clear();
 
-	// destroy depth pass objects
-	for (auto f : renderPasses[DEPTH_RENDER_PASS_ID].fbo)
-	{
-		dev.destroyFramebuffer(f, nullptr, vkDynLoader);
-	}
-	renderPasses[DEPTH_RENDER_PASS_ID].fbo.clear();
-	depthMapCascadeView.clear();
-	if (pDepthMapImage)
-	{
-		pDepthMapImage->destroy(dev, allocator, vkDynLoader); // because the buffering_mechanism is gone at this point...
-		delete pDepthMapImage;
-	}
-	if (renderPasses[DEPTH_RENDER_PASS_ID].rp)
-	{
-		dev.destroyRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
-		renderPasses[DEPTH_RENDER_PASS_ID].rp = vk::RenderPass();
-	}
+		// destroy depth pass objects
+		if (DEPTH_RENDER_PASS_ID < renderPasses.size())
+		{
+			for (auto f : renderPasses[DEPTH_RENDER_PASS_ID].fbo)
+			{
+				dev.destroyFramebuffer(f, nullptr, vkDynLoader);
+			}
+			renderPasses[DEPTH_RENDER_PASS_ID].fbo.clear();
+		}
+		depthMapCascadeView.clear();
+		if (pDepthMapImage)
+		{
+			pDepthMapImage->destroy(dev, allocator, vkDynLoader); // because the buffering_mechanism is gone at this point...
+			delete pDepthMapImage;
+			pDepthMapImage = nullptr;
+		}
+		if ((DEPTH_RENDER_PASS_ID < renderPasses.size()) && renderPasses[DEPTH_RENDER_PASS_ID].rp)
+		{
+			dev.destroyRenderPass(renderPasses[DEPTH_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
+			renderPasses[DEPTH_RENDER_PASS_ID].rp = vk::RenderPass();
+		}
 
-	// destroy default depth map texture
-	if (pDefaultDepthMapTexture)
+		// destroy default depth map texture
+		if (pDefaultDepthMapTexture)
+		{
+			pDefaultDepthMapTexture->destroy(dev, allocator, vkDynLoader);
+			delete pDefaultDepthMapTexture;
+			pDefaultDepthMapTexture = nullptr;
+		}
+	}
+	else
 	{
-		pDefaultDepthMapTexture->destroy(dev, allocator, vkDynLoader);
+		ASSERT(createdPipelines.empty(), "No device, but createdPipelines is not empty??");
 	}
 
 	// destroy allocator
 	if (allocator != VK_NULL_HANDLE)
 	{
 		vmaDestroyAllocator(allocator);
+		allocator = VK_NULL_HANDLE;
 	}
 
 	// destroy logical device
@@ -3892,11 +3910,14 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 
 	buffering_mechanism::destroy(dev, vkDynLoader);
 
-	for (auto f : renderPasses[DEFAULT_RENDER_PASS_ID].fbo)
+	if (DEFAULT_RENDER_PASS_ID < renderPasses.size())
 	{
-		dev.destroyFramebuffer(f, nullptr, vkDynLoader);
+		for (auto f : renderPasses[DEFAULT_RENDER_PASS_ID].fbo)
+		{
+			dev.destroyFramebuffer(f, nullptr, vkDynLoader);
+		}
+		renderPasses[DEFAULT_RENDER_PASS_ID].fbo.clear();
 	}
-	renderPasses[DEFAULT_RENDER_PASS_ID].fbo.clear();
 
 	if (depthStencilView)
 	{
@@ -3930,7 +3951,7 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 		colorImage = vk::Image();
 	}
 
-	if (renderPasses[DEFAULT_RENDER_PASS_ID].rp)
+	if ((DEFAULT_RENDER_PASS_ID < renderPasses.size()) && renderPasses[DEFAULT_RENDER_PASS_ID].rp)
 	{
 		dev.destroyRenderPass(renderPasses[DEFAULT_RENDER_PASS_ID].rp, nullptr, vkDynLoader);
 		renderPasses[DEFAULT_RENDER_PASS_ID].rp = vk::RenderPass();
