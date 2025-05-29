@@ -246,7 +246,7 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	return -1;
 }
 
-[[noreturn]] static void handleUnrecoverableError(const vk::Result& reason)
+[[noreturn]] static void handleUnrecoverableError(vk::Result reason)
 {
 	debug(LOG_ERROR, "Vulkan backend encountered error: %s", vk::to_string(reason).c_str());
 
@@ -2626,10 +2626,11 @@ gfx_api::pipeline_state_object * VkRoot::build_pipeline(gfx_api::pipeline_state_
 			// trying to build the pipeline for the first time - no prior build to fall back to!
 			part = LOG_FATAL;
 		}
-		debug(part, "Failed to build pipeline, with error: %s", e.what());
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(part, "Failed to build pipeline, with error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
 		if (!psoID.has_value())
 		{
-			handleUnrecoverableError(static_cast<vk::Result>(e.code().value()));
+			handleUnrecoverableError(resultErr);
 		}
 		else
 		{
@@ -2702,7 +2703,8 @@ void VkRoot::rebuildPipelinesIfNecessary()
 	}
 }
 
-static bool createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevice, const vk::PhysicalDeviceMemoryProperties& memprops, const vk::Device& dev,
+// throws a vk::SystemError on an unrecoverable error (like OOM)
+static void createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevice, const vk::PhysicalDeviceMemoryProperties& memprops, const vk::Device& dev,
 									const vk::Extent2D& extent, vk::SampleCountFlagBits msaaSamples, vk::Format imageFormat,
 									const vk::ImageUsageFlags imageUsageFlags, const vk::ImageAspectFlags& subresourceAspectFlags,
 									vk::Image& outputImage, vk::DeviceMemory& outputMemory, vk::ImageView& outputView,
@@ -2729,11 +2731,11 @@ static bool createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevi
 	}
 	catch (const vk::OutOfHostMemoryError& e) {
 		debug(LOG_ERROR, "vkCreateImage (%s): OutOfHostMemoryError: %s", loggingKey, e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		throw;
 	}
 	catch (const vk::OutOfDeviceMemoryError& e) {
 		debug(LOG_ERROR, "vkCreateImage (%s): OutOfDeviceMemoryError: %s", loggingKey, e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+		throw;
 	}
 
 	const auto memreq = dev.getImageMemoryRequirements(outputImage, vkDynLoader);
@@ -2748,7 +2750,7 @@ static bool createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevi
 	if (!foundMemTypeIndex)
 	{
 		debug(LOG_ERROR, "Unable to find memory type index that matches: (memoryTypeBits: %" PRIu32 ")", memreq.memoryTypeBits);
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+		WZ_THROW_VK_RESULT_EXCEPTION(vk::Result::eErrorOutOfDeviceMemory, "Unable to find memory type index that matches");
 	}
 
 	try {
@@ -2761,11 +2763,11 @@ static bool createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevi
 	}
 	catch (const vk::OutOfHostMemoryError& e) {
 		debug(LOG_ERROR, "vkAllocateMemory / vkBindImageMemory (%s): OutOfHostMemoryError: %s", loggingKey, e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		throw;
 	}
 	catch (const vk::OutOfDeviceMemoryError& e) {
 		debug(LOG_ERROR, "vkAllocateMemory / vkBindImageMemory (%s): OutOfDeviceMemoryError: %s", loggingKey, e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+		throw;
 	}
 
 	try {
@@ -2780,22 +2782,21 @@ static bool createGPUImageAndViewInternal(const vk::PhysicalDevice& physicalDevi
 	}
 	catch (const vk::OutOfHostMemoryError& e) {
 		debug(LOG_ERROR, "vkCreateImageView (%s): OutOfHostMemoryError: %s", loggingKey, e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		throw;
 	}
 	catch (const vk::OutOfDeviceMemoryError& e) {
 		debug(LOG_ERROR, "vkCreateImageView (%s): OutOfDeviceMemoryError: %s", loggingKey, e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+		throw;
 	}
-
-	return true;
 }
 
-static bool createColorAttachmentImage(const vk::PhysicalDevice& physicalDevice, const vk::PhysicalDeviceMemoryProperties& memprops, const vk::Device& dev,
+// throws a vk::SystemError on an unrecoverable error (like OOM)
+static void createColorAttachmentImage(const vk::PhysicalDevice& physicalDevice, const vk::PhysicalDeviceMemoryProperties& memprops, const vk::Device& dev,
 									const vk::Extent2D& swapchainSize, vk::SampleCountFlagBits msaaSamples, vk::Format colorFormat,
 									vk::Image& colorImage, vk::DeviceMemory& colorImageMemory, vk::ImageView& colorImageView,
 									const WZ_vk::DispatchLoaderDynamic& vkDynLoader, const char *loggingKey = "colorImage")
 {
-	return createGPUImageAndViewInternal(physicalDevice, memprops, dev,
+	createGPUImageAndViewInternal(physicalDevice, memprops, dev,
 										 swapchainSize, msaaSamples, colorFormat,
 										 vk::ImageUsageFlagBits::eTransientAttachment | vk::ImageUsageFlagBits::eColorAttachment,
 										 vk::ImageAspectFlagBits::eColor,
@@ -2803,12 +2804,13 @@ static bool createColorAttachmentImage(const vk::PhysicalDevice& physicalDevice,
 										 vkDynLoader, loggingKey);
 }
 
-static bool createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, const vk::PhysicalDeviceMemoryProperties& memprops, const vk::Device& dev,
+// throws a vk::SystemError on an unrecoverable error (like OOM)
+static void createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, const vk::PhysicalDeviceMemoryProperties& memprops, const vk::Device& dev,
 									const vk::Extent2D& swapchainSize, vk::SampleCountFlagBits msaaSamples, vk::Format depthFormat,
 									vk::Image& depthStencilImage, vk::DeviceMemory& depthStencilMemory, vk::ImageView& depthStencilView,
 									const WZ_vk::DispatchLoaderDynamic& vkDynLoader, const char *loggingKey = "depthStencilImage")
 {
-	return createGPUImageAndViewInternal(physicalDevice, memprops, dev,
+	createGPUImageAndViewInternal(physicalDevice, memprops, dev,
 										 swapchainSize, msaaSamples, depthFormat,
 										 // FUTURE TODO: Add vk::ImageUsageFlagBits::eTransientAttachment once we get rid of stencil shadows entirely
 										 vk::ImageUsageFlagBits::eDepthStencilAttachment,
@@ -2817,6 +2819,7 @@ static bool createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, co
 										 vkDynLoader, loggingKey);
 }
 
+// throws a vk::SystemError on an unrecoverable error (like OOM)
 void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat)
 {
 	bool msaaEnabled = (msaaSamplesSwapchain != vk::SampleCountFlagBits::e1);
@@ -2924,11 +2927,11 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 	}
 	catch (const vk::OutOfHostMemoryError& e) {
 		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		throw;
 	}
 	catch (const vk::OutOfDeviceMemoryError& e) {
 		debug(LOG_ERROR, "vkCreateFramebuffer: OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+		throw;
 	}
 }
 
@@ -3147,6 +3150,7 @@ void VkRoot::destroySceneRenderpass()
 	}
 }
 
+// throws a vk::SystemError on an unrecoverable error (like OOM)
 void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthFormat)
 {
 	bool msaaEnabled = (msaaSamples != vk::SampleCountFlagBits::e1);
@@ -3276,20 +3280,26 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 	if (msaaEnabled)
 	{
 		// create sceneMSAAImage / sceneMSAAView / etc
-		if (!createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, sceneFormat,
-										sceneMSAAImage, sceneMSAAMemory, sceneMSAAView, vkDynLoader, "sceneMSAAColorImage"))
+		try {
+			createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, sceneFormat,
+									   sceneMSAAImage, sceneMSAAMemory, sceneMSAAView, vkDynLoader, "sceneMSAAColorImage");
+		}
+		catch (const vk::SystemError& e)
 		{
-			debug(LOG_ERROR, "Failed to create scene MSAA color image");
-			handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+			debug(LOG_ERROR, "Failed to create scene MSAA color image: %s", e.what());
+			throw;
 		}
 	}
 
 	// create depth/stencil image
-	if (!createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, depthFormat,
-							sceneDepthStencilImage, sceneDepthStencilMemory, sceneDepthStencilView, vkDynLoader, "sceneDepthStencilImage"))
+	try {
+		createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamples, depthFormat,
+								sceneDepthStencilImage, sceneDepthStencilMemory, sceneDepthStencilView, vkDynLoader, "sceneDepthStencilImage");
+	}
+	catch (const vk::SystemError& e)
 	{
-		debug(LOG_ERROR, "Failed to create scene depth stencil image");
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		debug(LOG_ERROR, "Failed to create scene depth stencil image: %s", e.what());
+		throw;
 	}
 
 	// Create an FBO for each frame in flight
@@ -3940,7 +3950,7 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 }
 
 // recreate surface + swapchain
-bool VkRoot::handleSurfaceLost()
+void VkRoot::handleSurfaceLost()
 {
 	debug(LOG_3D, "handleSurfaceLost()");
 
@@ -3956,7 +3966,7 @@ bool VkRoot::handleSurfaceLost()
 	if (!createSurface())
 	{
 		debug(LOG_FATAL, "createSurface() failed");
-		return false;
+		WZ_THROW_VK_RESULT_EXCEPTION(vk::Result::eErrorInitializationFailed, "createSurface() failed");
 	}
 
 	debugInfo.Output_SurfaceInformation(physicalDevice, surface, vkDynLoader);
@@ -3965,7 +3975,7 @@ bool VkRoot::handleSurfaceLost()
 	if (!newSurfaceQueueFamilyIndices.isComplete())
 	{
 		debug(LOG_FATAL, "Failed to get new graphics and presentation queue indices");
-		return false;
+		WZ_THROW_VK_RESULT_EXCEPTION(vk::Result::eIncomplete, "Failed to get new graphics and presentation queue indices");
 	}
 	if ((newSurfaceQueueFamilyIndices.graphicsFamily.value() != queueFamilyIndices.graphicsFamily.value())
 		|| (newSurfaceQueueFamilyIndices.presentFamily.value() != queueFamilyIndices.presentFamily.value()))
@@ -3973,28 +3983,40 @@ bool VkRoot::handleSurfaceLost()
 		// If the graphicsFamily or presentFamily queue indicies do not match what was previously used
 		// to create the current logical device, we probably(?) can't reuse it - fail out for now
 		debug(LOG_FATAL, "New graphics and presentation queue indices do not match those used to create the logical device");
-		return false;
+		WZ_THROW_VK_RESULT_EXCEPTION(vk::Result::eErrorUnknown, "New graphics and presentation queue indices do not match those used to create the logical device");
 	}
 
-	bool result = false;
-	if (createSwapchain(false))
-	{
+	try {
+		createSwapchain(false);
+	}
+	catch (const vk::SystemError &e) {
+		// Encountered an unrecoverable error trying to create the swapchain
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "createSwapchain() failed - unrecoverable Vulkan error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
+	}
+	catch (const std::exception &e) {
+		// Encountered some other exception (possibly bad_alloc, etc)
+		debug(LOG_ERROR, "createSwapchain() failed with an exception: %s", e.what());
+		throw;
+	}
+
+	try {
 		rebuildPipelinesIfNecessary();
-		result = true;
 	}
-	else
+	catch (const vk::SystemError &e)
 	{
-		debug(LOG_ERROR, "createSwapchain() failed");
-		result = false;
+		// Encountered an unrecoverable error trying to rebuild pipelines
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "rebuildPipelinesIfNecessary() failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		errorHandlingDepth.pop_back();
+		throw;
 	}
-
-	return result;
 }
 
-bool VkRoot::createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason)
+// throws a vk::SystemError on an unrecoverable error (like OOM)
+void VkRoot::createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason)
 {
-	bool result = false;
-
 	// ensure we don't end up in endless recursion because of failures
 	if (errorHandlingDepth.size() > maxErrorHandlingDepth)
 	{
@@ -4004,25 +4026,54 @@ bool VkRoot::createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reaso
 			reasonsStr << to_string(_reason) << ";";
 		}
 		debug(LOG_FATAL, "createNewSwapchainAndSwapchainSpecificStuff failed with recursive depth: %zu; [%s]", errorHandlingDepth.size(), reasonsStr.str().c_str());
-		return false;
+		WZ_THROW_VK_RESULT_EXCEPTION(vk::Result::eErrorUnknown, "Recursion limit");
 	}
 	errorHandlingDepth.push_back(reason);
 
-	destroySwapchainAndSwapchainSpecificStuff(false);
-
-	if (createSwapchain())
-	{
-		rebuildPipelinesIfNecessary();
-		result = true;
+	try {
+		destroySwapchainAndSwapchainSpecificStuff(false);
 	}
-	else
+	catch (const vk::SystemError &e)
 	{
-		debug(LOG_ERROR, "createSwapchain() failed");
-		result = false;
+		// Encountered an unrecoverable error trying to destroy swapchain resources
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "destroySwapchainAndSwapchainSpecificStuff() failed - unrecoverable Vulkan error: %s - %s", vk::to_string(resultErr).c_str(), e.what());
+		errorHandlingDepth.pop_back();
+		throw;
+	}
+
+	try {
+		createSwapchain(true);
+	}
+	catch (const vk::SystemError &e)
+	{
+		// Encountered an unrecoverable error trying to create the swapchain
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "createSwapchain() failed - unrecoverable Vulkan error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		errorHandlingDepth.pop_back();
+		throw;
+	}
+	catch (const std::exception &e)
+	{
+		// Encountered some other exception (possibly bad_alloc, etc)
+		debug(LOG_ERROR, "createSwapchain() failed with an exception: %s", e.what());
+		errorHandlingDepth.pop_back();
+		throw;
+	}
+
+	try {
+		rebuildPipelinesIfNecessary();
+	}
+	catch (const vk::SystemError &e)
+	{
+		// Encountered an unrecoverable error trying to rebuild pipelines
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "rebuildPipelinesIfNecessary() failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		errorHandlingDepth.pop_back();
+		throw;
 	}
 
 	errorHandlingDepth.pop_back();
-	return result;
 }
 
 vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
@@ -4170,17 +4221,34 @@ bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode)
 
 	// Destroy + recreate swapchain
 	destroySwapchainAndSwapchainSpecificStuff(false);
-	if (createSwapchain())
-	{
-		rebuildPipelinesIfNecessary();
-		return true;
+	try {
+		createSwapchain();
 	}
-	else
+	catch (const vk::SystemError &e)
 	{
-		debug(LOG_ERROR, "createSwapchain() failed");
+		// Encountered an unrecoverable error trying to create the swapchain
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "createSwapchain() failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		handleUnrecoverableError(resultErr);
+	}
+	catch (const std::exception &e)
+	{
+		// Encountered some other exception (possibly bad_alloc, etc)
+		debug(LOG_FATAL, "createSwapchain() failed with an exception: %s", e.what());
 		return false;
 	}
-	return false;
+
+	try {
+		rebuildPipelinesIfNecessary();
+	}
+	catch (const vk::SystemError &e)
+	{
+		// Encountered an unrecoverable error trying to rebuild pipelines
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "rebuildPipelinesIfNecessary() failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		handleUnrecoverableError(resultErr);
+	}
+	return true;
 }
 
 gfx_api::context::swap_interval_mode VkRoot::getSwapInterval() const
@@ -4193,7 +4261,8 @@ T clamp(const T& n, const T& lower, const T& upper) {
 	return std::max(lower, std::min(n, upper));
 }
 
-bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
+// throws a vk::SystemError on an unrecoverable error (like OOM)
+void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 {
 	ASSERT(backend_impl, "Backend implementation is null");
 	ASSERT(physicalDevice, "Physical device is null");
@@ -4217,18 +4286,19 @@ bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 		{
 			debug(LOG_INFO, "Querying swapchain support failed with ErrorSurfaceLostKHR - must recreate surface + swapchain: %s", e.what());
 			// recreate surface + swapchain
-			return handleSurfaceLost();
+			handleSurfaceLost(); // will throw if unsuccessful
 		}
 		else
 		{
 			debug(LOG_ERROR, "Querying swapchain support failed with error: %s", e.what());
-			return false;
+			throw;
 		}
 	}
 	catch (const vk::SystemError &e)
 	{
-		debug(LOG_ERROR, "Querying swapchain support failed with error: %s", e.what());
-		return false;
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "Querying swapchain support failed with error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
 	}
 
 	if (!findBestAvailablePresentModeForSwapMode(swapChainSupport.presentModes, swapMode, presentMode))
@@ -4240,7 +4310,7 @@ bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 		{
 			// vk::PresentModeKHR::eFifo is unsupported??
 			debug(LOG_FATAL, "vk::PresentModeKHR::eFifo does not appear to be supported?? Aborting.");
-			return false;
+			WZ_THROW_VK_RESULT_EXCEPTION(vk::Result::eErrorUnknown, "vk::PresentModeKHR::eFifo does not appear to be supported??");
 		}
 		presentMode = vk::PresentModeKHR::eFifo;
 		swapMode = from_vk_presentmode(presentMode);
@@ -4336,23 +4406,12 @@ bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	try {
 		swapchain = dev.createSwapchainKHR(createSwapchainInfo, nullptr, vkDynLoader);
 	}
-	catch (const vk::OutOfHostMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
-	}
-	catch (const vk::OutOfDeviceMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
-	}
-	catch (const vk::InitializationFailedError& e)
-	{
-		debug(LOG_ERROR, "vk::Device::createSwapchainKHR: InitializationFailedError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorInitializationFailed);
-	}
-	catch (const vk::SystemError &e)
-	{
-		debug(LOG_ERROR, "vk::Device::createSwapchainKHR: failed with error: %s", e.what());
-		return false;
+	// Potential future TODO: Handle surface lost?
+	catch (const vk::SystemError &e) {
+		// Expected possibilities: vk::OutOfHostMemoryError, vk::OutOfDeviceMemoryError, vk::InitializationFailedError, surface lost, device lost, etc
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "vk::Device::createSwapchainKHR: failed with error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
 	}
 
 	if (createSwapchainInfo.oldSwapchain)
@@ -4376,60 +4435,67 @@ bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 												  , nullptr, vkDynLoader);
 				   });
 	}
-	catch (const vk::OutOfHostMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
-	}
-	catch (const vk::OutOfDeviceMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	catch (const vk::SystemError &e) {
+		// Documented possibilities: vk::OutOfHostMemoryError, vk::OutOfDeviceMemoryError, vk::InvalidOpaqueCaptureAddressError
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "vkCreateImageView(swapchainImages): %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
 	}
 	//
 
 	try {
 		buffering_mechanism::init(dev, allocator, MAX_FRAMES_IN_FLIGHT, queueFamilyIndices.graphicsFamily.value(), vkDynLoader);
 	}
-	catch (const vk::OutOfHostMemoryError& e) {
-		debug(LOG_ERROR, "buffering_mechanism init: OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
-	}
-	catch (const vk::OutOfDeviceMemoryError& e) {
-		debug(LOG_ERROR, "buffering_mechanism init: OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	catch (const vk::SystemError &e) {
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "buffering_mechanism init: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
 	}
 
 	// createColorResources
 	vk::Format colorFormat = surfaceFormat.format;
-	if (!createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamplesSwapchain, colorFormat,
-									colorImage, colorImageMemory, colorImageView, vkDynLoader))
-	{
-		debug(LOG_ERROR, "Failed to create MSAA color attachment image");
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	try {
+		createColorAttachmentImage(physicalDevice, memprops, dev, swapchainSize, msaaSamplesSwapchain, colorFormat,
+								   colorImage, colorImageMemory, colorImageView, vkDynLoader, "colorImage");
+	}
+	catch (const vk::SystemError& e) {
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "Failed to create MSAA color attachment image: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
 	}
 
 	// createDepthStencilImage
 	vk::Format depthFormat = findDepthStencilFormat(physicalDevice, vkDynLoader);
 	debug(LOG_3D, "Using depth buffer format: %s", to_string(depthFormat).c_str());
-	if (!createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamplesSwapchain, depthFormat,
-							depthStencilImage, depthStencilMemory, depthStencilView, vkDynLoader))
-	{
-		debug(LOG_ERROR, "Failed to create depth stencil image");
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+	try {
+		createDepthStencilImage(physicalDevice, memprops, dev, swapchainSize, msaaSamplesSwapchain, depthFormat,
+								depthStencilImage, depthStencilMemory, depthStencilView, vkDynLoader, "depthStencilImage");
+	}
+	catch (const vk::SystemError& e) {
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "Failed to create depth stencil image: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
 	}
 
-	setupSwapchainImages();
+	try {
+		setupSwapchainImages();
+	}
+	catch (const vk::SystemError& e)
+	{
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "Failed to setup swapchain images: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
+	}
 
 	// create default render pass
 	try {
 		createDefaultRenderpass(surfaceFormat.format, depthFormat);
 	}
-	catch (const vk::OutOfHostMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateRenderPass (default): OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
-	}
-	catch (const vk::OutOfDeviceMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateRenderPass (default): OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	catch (const vk::SystemError &e) {
+		// Likely(?) possibilities: vk::OutOfHostMemoryError, vk::OutOfDeviceMemoryError
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "vkCreateRenderPass (default): %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
 	}
 
 	// Create scene FBOs + renderpass
@@ -4438,30 +4504,31 @@ bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	try {
 		createSceneRenderpass(sceneFormat, depthFormat);
 	}
-	catch (const vk::OutOfHostMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateRenderPass (scene): OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
-	}
-	catch (const vk::OutOfDeviceMemoryError& e) {
-		debug(LOG_ERROR, "vkCreateRenderPass (scene): OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+	catch (const vk::SystemError &e) {
+		// Likely(?) possibilities: vk::OutOfHostMemoryError, vk::OutOfDeviceMemoryError
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "vkCreateRenderPass (scene): %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		throw;
 	}
 
-	auto acquireNextResult = acquireNextSwapchainImage();
-	switch (acquireNextResult)
-	{
-		case AcquireNextSwapchainImageResult::eSuccess:
-			// continue on with processing
-			break;
-		case AcquireNextSwapchainImageResult::eRecoveredFromError:
-			// acquireNextSwapchainImage recovered from an error - that means it succeeded at re-setting things up
-			// return true immediately (this iteration is no longer responsible for creating the swapchain)
-			return true;
-			break;
-		case AcquireNextSwapchainImageResult::eUnhandledFailure:
-			// acquireNextSwapchainImage failed, and couldn't recover
-			return false;
-			break;
+	try {
+		auto acquireNextResult = acquireNextSwapchainImage(allowHandleSurfaceLost);
+		switch (acquireNextResult)
+		{
+			case AcquireNextSwapchainImageResult::eSuccess:
+				// continue on with processing
+				break;
+			case AcquireNextSwapchainImageResult::eRecoveredFromError:
+				// acquireNextSwapchainImage recovered from an error - that means it succeeded at re-setting things up
+				// return immediately (this iteration is no longer responsible for creating the swapchain)
+				return;
+		}
+	}
+	catch (const vk::SystemError& e) {
+		// acquireNextSwapchainImage failed, and couldn't recover
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "acquireNextSwapchainImage failed: %s", vk::to_string(resultErr).c_str());
+		throw;
 	}
 
 	// create defaultTexture (2x2, all initialized to 0)
@@ -4483,8 +4550,6 @@ bool VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	pDefaultArrayTexture->flush();
 
 	startRenderPass();
-
-	return true;
 }
 
 static optional<uint32_t> getVKLargestDeviceLocalMemoryHeapIndex(const vk::PhysicalDeviceMemoryProperties& memprops)
@@ -4618,7 +4683,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	catch (const vk::SystemError& e)
 	{
 		// catch any weird errors that debugInfo didn't handle
-		debug(LOG_ERROR, "Output_GlobalInstanceExtensions failed: %s", e.what());
+		debug(LOG_INFO, "Output_GlobalInstanceExtensions failed: %s", e.what());
 	}
 
 	try {
@@ -4627,7 +4692,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	catch (const vk::SystemError& e)
 	{
 		// catch any weird errors that debugInfo didn't handle
-		debug(LOG_ERROR, "Output_InstanceLayerProperties failed: %s", e.what());
+		debug(LOG_INFO, "Output_InstanceLayerProperties failed: %s", e.what());
 	}
 
 	instanceExtensions.clear();
@@ -4730,7 +4795,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	catch (const vk::SystemError& e)
 	{
 		// catch any weird errors that debugInfo didn't handle
-		debug(LOG_ERROR, "Output_PhysicalDevices failed: %s", e.what());
+		debug(LOG_INFO, "Output_PhysicalDevices failed: %s", e.what());
 	}
 
 	if (!createSurface())
@@ -4840,7 +4905,7 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	catch (const vk::SystemError& e)
 	{
 		// catch any weird errors that debugInfo didn't handle
-		debug(LOG_ERROR, "Output_SurfaceInformation failed: %s", e.what());
+		debug(LOG_INFO, "Output_SurfaceInformation failed: %s", e.what());
 	}
 
 	getQueueFamiliesInfo();
@@ -4862,9 +4927,18 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	ASSERT(renderPasses.empty(), "Non-empty renderPasses vector?");
 	renderPasses = { RenderPassDetails(DEFAULT_RENDER_PASS_ID), RenderPassDetails(DEPTH_RENDER_PASS_ID), RenderPassDetails(SCENE_RENDER_PASS_ID) };
 
-	if (!createSwapchain())
-	{
-		debug(LOG_ERROR, "createSwapchain() failed");
+	try {
+		createSwapchain(true);
+	}
+	catch (const vk::SystemError &e) {
+		// Encountered an unrecoverable error trying to create the swapchain
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_ERROR, "createSwapchain() failed - unrecoverable Vulkan error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		return false;
+	}
+	catch (const std::exception &e) {
+		// Encountered some other exception (possibly bad_alloc, etc)
+		debug(LOG_ERROR, "createSwapchain() failed with an exception: %s", e.what());
 		return false;
 	}
 
@@ -5288,6 +5362,7 @@ void VkRoot::bind_streamed_vertex_buffers(const void* data, const std::size_t si
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindVertexBuffers(0, buffers, offsets, vkDynLoader);
 }
 
+// throws a vk::SystemError on an unrecoverable error (like OOM)
 void VkRoot::setupSwapchainImages()
 {
 	const auto buffers = dev.allocateCommandBuffers(
@@ -5341,21 +5416,22 @@ void VkRoot::setupSwapchainImages()
 	catch (const vk::OutOfHostMemoryError& e)
 	{
 		debug(LOG_ERROR, "vk::Queue::submit: OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		throw;
 	}
 	catch (const vk::OutOfDeviceMemoryError& e)
 	{
 		debug(LOG_ERROR, "vk::Queue::submit: OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+		throw;
 	}
 	catch (const vk::DeviceLostError& e)
 	{
 		debug(LOG_ERROR, "vk::Queue::submit: DeviceLostError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+		throw;
 	}
 	catch (const vk::SystemError& e)
 	{
 		debug(LOG_FATAL, "vk::Queue::submit: unhandled error: %s", e.what());
+		throw;
 	}
 
 	try {
@@ -5364,21 +5440,22 @@ void VkRoot::setupSwapchainImages()
 	catch (const vk::OutOfHostMemoryError& e)
 	{
 		debug(LOG_ERROR, "vk::Queue::waitIdle: OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		throw;
 	}
 	catch (const vk::OutOfDeviceMemoryError& e)
 	{
 		debug(LOG_ERROR, "vk::Queue::waitIdle: OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
+		throw;
 	}
 	catch (const vk::DeviceLostError& e)
 	{
 		debug(LOG_ERROR, "vk::Queue::waitIdle: DeviceLostError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+		throw;
 	}
 	catch (const vk::SystemError& e)
 	{
 		debug(LOG_FATAL, "vk::Queue::waitIdle: unhandled error: %s", e.what());
+		throw;
 	}
 }
 
@@ -5683,7 +5760,8 @@ void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notexture
 	}
 }
 
-VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
+// throws a vk::SystemError on an unrecoverable error (like OOM)
+VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool allowHandleSurfaceLost)
 {
 	vk::ResultValue<uint32_t> acquireNextImageResult = vk::ResultValue<uint32_t>(vk::Result::eNotReady, 0);
 	try {
@@ -5692,31 +5770,43 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 	catch (const vk::OutOfDateKHRError&)
 	{
 		debug(LOG_3D, "vk::Device::acquireNextImageKHR: ErrorOutOfDateKHR - must recreate swapchain");
-		if (createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR))
-		{
+		try {
+			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR); // throws on failure
 			return AcquireNextSwapchainImageResult::eRecoveredFromError;
 		}
-		return AcquireNextSwapchainImageResult::eUnhandledFailure;
+		catch (const vk::SystemError& e) {
+			auto resultErr = static_cast<vk::Result>(e.code().value());
+			debug(LOG_ERROR, "Failed to recreate out-of-date swapchain: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+			throw;
+		}
 	}
 	catch (const vk::SurfaceLostKHRError&)
 	{
 		debug(LOG_3D, "vk::Device::acquireNextImageKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
 		// recreate surface + swapchain
-		if (handleSurfaceLost())
+		if (allowHandleSurfaceLost)
 		{
-			return AcquireNextSwapchainImageResult::eRecoveredFromError;
+			try {
+				handleSurfaceLost();
+				return AcquireNextSwapchainImageResult::eRecoveredFromError;
+			}
+			catch (const vk::SystemError& e) {
+				auto resultErr = static_cast<vk::Result>(e.code().value());
+				debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+				throw;
+			}
 		}
-		return AcquireNextSwapchainImageResult::eUnhandledFailure;
+		throw;
 	}
 	catch (const vk::DeviceLostError& e)
 	{
 		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: DeviceLostError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
+		throw;
 	}
 	catch (const vk::SystemError& e)
 	{
 		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: unhandled error: %s", e.what());
-		return AcquireNextSwapchainImageResult::eUnhandledFailure;
+		throw;
 	}
 	if(acquireNextImageResult.result == vk::Result::eSuboptimalKHR)
 	{
@@ -5895,14 +5985,22 @@ void VkRoot::endRenderPass()
 	}
 	catch (const vk::SystemError& e)
 	{
-		debug(LOG_FATAL, "vk::Queue::submit: unhandled error: %s", e.what());
 		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug(LOG_FATAL, "vk::Queue::submit: %s: %s", vk::to_string(resultErr).c_str(), e.what());
 		handleUnrecoverableError(resultErr);
 	}
 
 	if (mustRecreateSwapchain)
 	{
-		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+		try {
+			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+		}
+		catch (const vk::SystemError& e)
+		{
+			auto resultErr = static_cast<vk::Result>(e.code().value());
+			debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+			handleUnrecoverableError(resultErr);
+		}
 		return; // end processing this flip
 	}
 
@@ -5922,15 +6020,22 @@ void VkRoot::endRenderPass()
 		{
 			debug(LOG_3D, "vk::Queue::presentKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
 			// recreate surface + swapchain
-			handleSurfaceLost();
-			return; // end processing this flip
+			try {
+				handleSurfaceLost();
+			}
+			catch (const vk::SystemError& e) {
+				auto resultErr = static_cast<vk::Result>(e.code().value());
+				debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+				handleUnrecoverableError(resultErr);
+			}
+			return; // end processing this flip (assuming handleSurfaceLost didn't throw - handleUnrecoverableError will abort, if so)
 		}
 		catch (const vk::SystemError& e)
 		{
 			debug(LOG_FATAL, "vk::Queue::presentKHR: unhandled error: %s", e.what());
 			presentResult = vk::Result::eErrorUnknown;
 		}
-		if(presentResult == vk::Result::eSuboptimalKHR)
+		if (presentResult == vk::Result::eSuboptimalKHR)
 		{
 			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - should probably recreate swapchain (in the future)", (int)presentResult);
 		}
@@ -5963,9 +6068,17 @@ void VkRoot::endRenderPass()
 
 	if (!mustSkipDrawing)
 	{
-		if (acquireNextSwapchainImage() != AcquireNextSwapchainImageResult::eSuccess)
-		{
-			return; // end processing this flip
+		try {
+			if (acquireNextSwapchainImage(true) != AcquireNextSwapchainImageResult::eSuccess)
+			{
+				return; // end processing this flip
+			}
+		}
+		catch (const vk::SystemError& e) {
+			// acquireNextSwapchainImage failed, and couldn't recover
+			auto resultErr = static_cast<vk::Result>(e.code().value());
+			debug(LOG_ERROR, "acquireNextSwapchainImage failed: %s", vk::to_string(resultErr).c_str());
+			handleUnrecoverableError(resultErr);
 		}
 
 		backend_impl->getDrawableSize(&w, &h);
