@@ -1078,24 +1078,21 @@ VKAPI_ATTR VkBool32 VKAPI_CALL WZDebugReportCallback(
 	void* pUserData)
 {
 	std::stringstream buf;
-	bool logFatal = false;
+	code_part part = LOG_3D;
 	if (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) {
 		buf << "ERROR: ";
-		logFatal = true;
+		part = LOG_ERROR;
 	}
 	else if (flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) {
 		buf << "WARNING: ";
-		logFatal = true;
+		part = LOG_INFO; // make sure these are logged for now (since neither LOG_3D nor LOG_WARN are enabled by default)
 	}
 	else if (flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) {
 		buf << "PERF: ";
-		logFatal = false;
 	}
-	else {
-		logFatal = false;
-	}
+
 	buf << "[" << pLayerPrefix << "] Code " << msgCode << " : " << pMsg;
-	debugLogFromGfxCallback((logFatal) ? LOG_FATAL : LOG_3D, "%s", buf.str().c_str());
+	debugLogFromGfxCallback(part, "%s", buf.str().c_str());
 	return false;
 }
 
