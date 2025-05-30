@@ -1545,12 +1545,6 @@ bool initTerrain()
 /// free all memory and opengl buffers used by the terrain renderer
 void shutdownTerrain()
 {
-	if (!sectors)
-	{
-		// This happens in some cases when loading a savegame from level init
-		debug(LOG_ERROR, "Trying to shutdown terrain when we did not need to!");
-		return;
-	}
 	delete geometryVBO;
 	geometryVBO = nullptr;
 	delete geometryIndexVBO;
@@ -1568,17 +1562,20 @@ void shutdownTerrain()
 	delete terrainDecalVBO;
 	terrainDecalVBO = nullptr;
 
-	for (int x = 0; x < xSectors; x++)
+	if (sectors)
 	{
-		for (int y = 0; y < ySectors; y++)
+		for (int x = 0; x < xSectors; x++)
 		{
-			sectors[x * ySectors + y].textureOffset = nullptr;
-			sectors[x * ySectors + y].textureSize = nullptr;
-			sectors[x * ySectors + y].textureIndexOffset = nullptr;
-			sectors[x * ySectors + y].textureIndexSize = nullptr;
+			for (int y = 0; y < ySectors; y++)
+			{
+				sectors[x * ySectors + y].textureOffset = nullptr;
+				sectors[x * ySectors + y].textureSize = nullptr;
+				sectors[x * ySectors + y].textureIndexOffset = nullptr;
+				sectors[x * ySectors + y].textureIndexSize = nullptr;
+			}
 		}
+		sectors = nullptr;
 	}
-	sectors = nullptr;
 	delete lightmap_texture;
 	lightmap_texture = nullptr;
 	lightmapPixmap = nullptr;
