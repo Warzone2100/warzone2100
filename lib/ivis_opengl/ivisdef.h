@@ -83,7 +83,7 @@ struct ANIMFRAME
 
 struct iIMDPoly
 {
-	std::vector<Vector2f> texCoord;
+	std::array<Vector2f, 3> texCoord;
 	Vector2f texAnim = Vector2f(0.f, 0.f);
 	uint32_t flags = 0;
 	int32_t zcentre = 0;
