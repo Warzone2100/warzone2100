@@ -512,7 +512,7 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveMemory(std::unique_ptr<std
 	return result;
 }
 
-std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveReadIOProvider(std::shared_ptr<WzZipIOSourceReadProvider> zipSourceProvider, bool extraConsistencyChecks /*= false*/)
+std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveReadIOProvider(std::shared_ptr<WzZipIOSourceReadProvider> zipSourceProvider, WzMap::LoggingProtocol* pCustomLogger /*= nullptr*/, bool extraConsistencyChecks /*= false*/)
 {
 	if (zipSourceProvider == nullptr) { return nullptr; }
 	struct zip_error error;
@@ -534,6 +534,12 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveReadIOProvider(std::shared
 	if (pZip == NULL)
 	{
 		// Failed to open from source
+		if (pCustomLogger)
+		{
+			const char* pErrorStr = zip_error_strerror(&error);
+			pCustomLogger->printLog(WzMap::LoggingProtocol::LogLevel::Error, __FUNCTION__, __LINE__, (pErrorStr) ? pErrorStr : "<n/a>");
+			pErrorStr = nullptr;
+		}
 		zip_source_free(pProviderSource);
 		zip_error_fini(&error);
 		return nullptr;
