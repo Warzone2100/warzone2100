@@ -115,7 +115,7 @@ bool levRemoveDataSetByRealFileName(char const *realFileName, Sha256 const *hash
 bool levSetFileHashByRealFileName(char const *realFileName, Sha256 const &hash);
 
 // free the currently loaded dataset
-bool levReleaseAll();
+bool levReleaseAll(bool forceOnError = false);
 
 // free the data for the current mission
 bool levReleaseMissionData();

@@ -738,13 +738,16 @@ bool levReleaseMissionData()
 
 
 // free the currently loaded dataset
-bool levReleaseAll()
+bool levReleaseAll(bool forceOnError)
 {
 	// clear out old effect data first
 	initEffectsSystem();
 
 	// release old data if any was loaded
-	if (psCurrLevel != nullptr)
+	bool didLoadLevel = (psCurrLevel != nullptr);
+	bool didLoadBaseLevel = (psBaseData != nullptr);
+
+	if (didLoadLevel)
 	{
 		resDoResLoadCallback();		// do callback.
 
@@ -753,11 +756,14 @@ bool levReleaseAll()
 			debug(LOG_ERROR, "Failed to unload mission data");
 			return false;
 		}
+	}
 
+	if (didLoadLevel || didLoadBaseLevel || forceOnError)
+	{
 		resDoResLoadCallback();		// do callback.
 
-		// release the game data
-		if (psCurrLevel->psBaseData != nullptr)
+		// release the base game data
+		if (psBaseData != nullptr || (psCurrLevel != nullptr && psCurrLevel->psBaseData != nullptr))
 		{
 			if (!stageTwoShutDown())
 			{
@@ -766,9 +772,20 @@ bool levReleaseAll()
 			}
 		}
 
-
-		if (psCurrLevel->psBaseData)
+		if (psBaseData)
 		{
+			for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
+			{
+				if (!psBaseData->apDataFiles[i].empty())
+				{
+					resReleaseBlockData(i);
+				}
+			}
+		}
+
+		if (psCurrLevel && psCurrLevel->psBaseData && psCurrLevel->psBaseData != psBaseData) // can this even happen?
+		{
+			debug(LOG_INFO, "psCurrLevel->psBaseData != psBaseData");
 			for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
 			{
 				if (!psCurrLevel->psBaseData->apDataFiles[i].empty())
@@ -778,8 +795,12 @@ bool levReleaseAll()
 			}
 		}
 
+		psBaseData = nullptr;
 		psCurrLevel = nullptr;
+	}
 
+	if (didLoadLevel || didLoadBaseLevel || forceOnError)
+	{
 		if (!stageOneShutDown())
 		{
 			debug(LOG_ERROR, "Failed stage one shutdown");
