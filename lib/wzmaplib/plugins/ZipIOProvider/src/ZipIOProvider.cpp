@@ -683,13 +683,9 @@ static ZipSanityCheckResult wzMapZipIOSanityCheckStat(const struct zip_stat& st,
 	{
 		// Check for permitted compression methods
 		// (This is a subset of all methods that latest libzip itself may support, but we want to ensure consistent support across all WZ target platforms)
-		switch (st.comp_method)
+		if (st.comp_method != ZIP_CM_DEFLATE)
 		{
-			case ZIP_CM_DEFLATE:
-				// supported
-				break;
-			default:
-				return ZipSanityCheckResult::FAILURE_UNSUPPORTED_COMP_METHOD;
+			return ZipSanityCheckResult::FAILURE_UNSUPPORTED_COMP_METHOD;
 		}
 	}
 
