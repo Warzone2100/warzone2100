@@ -3265,12 +3265,12 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 	{
 		return false;
 	}
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-	NETuint8_t(&giftType);
-	NETuint8_t(&from);
-	NETuint8_t(&to);
-	NETuint32_t(&object_id);
-	NETend();
+	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+	NETuint8_t(w, giftType);
+	NETuint8_t(w, from);
+	NETuint8_t(w, to);
+	NETuint32_t(w, object_id);
+	NETend(w);
 	return true;
 }
 

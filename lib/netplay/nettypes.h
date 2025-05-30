@@ -29,6 +29,12 @@
 #include "lib/netplay/netqueue.h"
 #include "lib/framework/wzstring.h"
 
+#include <type_traits>
+
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 enum PACKETDIR
 {
 	PACKET_ENCODE,
@@ -44,15 +50,6 @@ enum QueueType
 	QUEUE_GAME_FORCED,
 	QUEUE_BROADCAST,
 	QUEUE_TRANSIENT_JOIN,
-};
-
-struct NETQUEUE
-{
-	void *queue;  ///< Is either a (NetQueuePair **) or a (NetQueue *). (Note different numbers of *.)
-	bool isPair;
-	uint8_t index;
-	uint8_t queueType;
-	uint8_t exclude;
 };
 
 #define NET_NO_EXCLUDE 255
@@ -79,9 +76,8 @@ void NETsetNoSendOverNetwork(NETQUEUE queue);  ///< Used to mark that a game que
 void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue to a netQueue, once a newly-connected client is assigned a player number.
 void NETswapQueues(NETQUEUE src, NETQUEUE dst); ///< Used for swapping two netQueues, when swapping a player index (i.e. player <-> spectator-only slot). Dangerous and rare.
 void NETdeleteQueue();					///< Delete queues for cleanup
-void NETbeginEncode(NETQUEUE queue, uint8_t type);
-void NETbeginDecode(NETQUEUE queue, uint8_t type);
-bool NETend();
+MessageWriter NETbeginEncode(NETQUEUE queue, uint8_t type);
+MessageReader NETbeginDecode(NETQUEUE queue, uint8_t type);
 void NETflushGameQueues();
 void NETpop(NETQUEUE queue);
 
@@ -89,126 +85,71 @@ class SessionKeys;
 void NETsetSessionKeys(uint8_t player, SessionKeys&& keys);
 void NETclearSessionKeys();
 void NETclearSessionKeys(uint8_t player);
-bool NETbeginEncodeSecured(NETQUEUE queue, uint8_t type); ///< For encoding a secured net message, for a *specific player* - see .cpp file for more details
-bool NETbeginDecodeSecured(NETQUEUE queue, uint8_t type);
+optional<MessageWriter> NETbeginEncodeSecured(NETQUEUE queue, uint8_t type); ///< For encoding a secured net message, for a *specific player* - see .cpp file for more details
+optional<MessageReader> NETbeginDecodeSecured(NETQUEUE queue, uint8_t type);
 bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type);
 
-void NETint8_t(int8_t *ip);
-void NETuint8_t(uint8_t *ip);
-void NETint16_t(int16_t *ip);
-void NETuint16_t(uint16_t *ip);
-void NETint32_t(int32_t *ip);         ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
-void NETuint32_t(uint32_t *ip);       ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
-void NETuint32_t(const uint32_t *ip);
-void NETint64_t(int64_t *ip);
-void NETuint64_t(uint64_t *ip);
-void NETbool(bool *bp);
-void NETbool(bool *bp);
-void NETwzstring(WzString &str);
-void NETstring(char *str, uint16_t maxlen);
-void NETstring(char const *str, uint16_t maxlen);  ///< Encode-only version of NETstring.
-void NETbin(uint8_t *str, uint32_t len);
-void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen = 10000);
-
-PACKETDIR NETgetPacketDir();
+// New overloads that accept MessageReader:
+void NETuint8_t(MessageReader& r, uint8_t& val);
+void NETint8_t(MessageReader &r, int8_t& val);
+void NETuint16_t(MessageReader& r, uint16_t& val);
+void NETint16_t(MessageReader &r, int16_t& val);
+void NETuint32_t(MessageReader& r, uint32_t& val);
+void NETint32_t(MessageReader &r, int32_t& val);
+void NETuint64_t(MessageReader& r, uint64_t& val);
+void NETint64_t(MessageReader &r, int64_t& val);
+void NETbool(MessageReader &r, bool& val);
+void NETwzstring(MessageReader &r, WzString &str);
+void NETstring(MessageReader &r, char *str, uint16_t maxlen);
+void NETstring(MessageReader &r, std::string& s, uint32_t maxLen = 65536);
+void NETbin(MessageReader &r, uint8_t *str, uint32_t len);
+void NETbytes(MessageReader &r, std::vector<uint8_t>& vec, unsigned maxLen = 10000);
+void NETPosition(MessageReader& r, Position& pos);
+void NETRotation(MessageReader& r, Rotation& rot);
+void NETVector2i(MessageReader& r, Vector2i& vec);
+void NETnetMessage(MessageReader& r, NetMessage const** msg);  ///< Must delete the NETMESSAGE.
 
 template <typename EnumT>
-static void NETenum(EnumT *enumPtr)
+void NETenum(MessageReader& r, EnumT& enumRef)
 {
-	uint32_t val;
+	static_assert(std::is_enum<EnumT>::value, "Expected enumeration type as the argument");
 
-	if (NETgetPacketDir() == PACKET_ENCODE)
-	{
-		val = *enumPtr;
-	}
-
-	NETuint32_t(&val);
-
-	if (NETgetPacketDir() == PACKET_DECODE)
-	{
-		*enumPtr = static_cast<EnumT>(val);
-	}
+	uint32_t val = 0;
+	NETuint32_t(r, val);
+	enumRef = static_cast<EnumT>(val);
 }
 
-void NETPosition(Position *vp);
-void NETRotation(Rotation *vp);
-void NETVector2i(Vector2i *vp);
+bool NETend(MessageReader& r);
 
-static inline void NETauto(char &ch)
+// New overloads that accept MessageWriter:
+void NETuint8_t(MessageWriter& w, uint8_t val);
+void NETint8_t(MessageWriter& w, int8_t val);
+void NETuint16_t(MessageWriter& w, uint16_t val);
+void NETint16_t(MessageWriter& w, int16_t val);
+void NETuint32_t(MessageWriter& w, uint32_t val);       ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
+void NETint32_t(MessageWriter& w, int32_t val);         ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
+void NETuint64_t(MessageWriter& w, uint64_t val);
+void NETint64_t(MessageWriter& w, int64_t val);
+void NETbool(MessageWriter& w, bool val);
+void NETwzstring(MessageWriter& w, const WzString& str);
+void NETstring(MessageWriter& w, const char* str, uint16_t maxlen);
+void NETstring(MessageWriter& w, const std::string& s, uint32_t maxLen = 65536);
+void NETbin(MessageWriter& w, const uint8_t* str, uint32_t len);
+void NETbytes(MessageWriter& w, const std::vector<uint8_t>& vec, unsigned maxLen = 10000);
+void NETPosition(MessageWriter& w, const Position& pos);
+void NETRotation(MessageWriter& w, const Rotation& rot);
+void NETVector2i(MessageWriter& w, const Vector2i& vec);
+void NETnetMessage(MessageWriter& w, const NetMessage& msg);
+
+template <typename EnumT>
+static void NETenum(MessageWriter& w, EnumT val)
 {
-	uint8_t u = ch;
-	NETuint8_t(&u);
-	ch = u;
-}
-static inline void NETauto(int8_t &ip)
-{
-	NETint8_t(&ip);
-}
-static inline void NETauto(uint8_t &ip)
-{
-	NETuint8_t(&ip);
-}
-static inline void NETauto(int16_t &ip)
-{
-	NETint16_t(&ip);
-}
-static inline void NETauto(uint16_t &ip)
-{
-	NETuint16_t(&ip);
-}
-static inline void NETauto(int32_t &ip)
-{
-	NETint32_t(&ip);
-}
-static inline void NETauto(uint32_t &ip)
-{
-	NETuint32_t(&ip);
-}
-static inline void NETauto(int64_t &ip)
-{
-	NETint64_t(&ip);
-}
-static inline void NETauto(uint64_t &ip)
-{
-	NETuint64_t(&ip);
-}
-static inline void NETauto(bool &bp)
-{
-	NETbool(&bp);
-}
-static inline void NETauto(Position &vp)
-{
-	NETPosition(&vp);
-}
-static inline void NETauto(Rotation &vp)
-{
-	NETRotation(&vp);
-}
-static inline void NETauto(Vector2i &vp)
-{
-	NETVector2i(&vp);
-}
-static inline void NETauto(std::string &s, uint32_t maxLen = 65536)
-{
-	uint32_t len = static_cast<uint32_t>(std::min<size_t>(s.size(), maxLen));
-	NETauto(len);
-	len = std::min(len, maxLen);
-	s.resize(len);
-	for (uint32_t i = 0; i < len; ++i)
-	{
-		NETauto(s[i]);
-	}
-}
-template <typename T, int N>
-static inline void NETauto(T (&ar)[N])
-{
-	for (int i = 0; i < N; ++i)
-	{
-		NETauto(ar[i]);
-	}
+	static_assert(std::is_enum<EnumT>::value, "Expected enumeration type as the argument");
+
+	NETuint32_t(w, static_cast<uint32_t>(val));
 }
 
-void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
+bool NETend(MessageWriter& w);
 
 void NETbytesOutputToVector(const std::vector<uint8_t> &data, std::vector<uint8_t>& output);
 

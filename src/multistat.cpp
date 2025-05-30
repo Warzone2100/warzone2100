@@ -134,27 +134,40 @@ const EcKey& getOutputPlayerIdentity(UDWORD player)
 	return getTruePlayerIdentity(player).identity;
 }
 
-static void NETauto(PLAYERSTATS::Autorating &ar)
+template <typename SerdeContext>
+static void NETAutorating(SerdeContext& c, PLAYERSTATS::Autorating &ar)
 {
+	static_assert(std::is_same<SerdeContext, MessageReader>::value || std::is_same<SerdeContext, MessageWriter>::value,
+		"SerdeContext is expected to be either MessageReader or MessageWriter");
+
 	if (game.blindMode != BLIND_MODE::NONE)
 	{
 		bool tmp = false; // no valid autorating in blind mode
-		NETauto(tmp); // ar.valid
+		NETbool(c, tmp); // ar.valid
 		return;
 	}
-	NETauto(ar.valid);
+	NETbool(c, ar.valid);
 	if (ar.valid)
 	{
-		NETauto(ar.dummy);
-		NETauto(ar.star);
-		NETauto(ar.medal);
-		NETauto(ar.level);
-		NETauto(ar.elo);
-		NETauto(ar.autohoster);
-		NETauto(ar.details);
-		NETauto(ar.altName);
-		NETauto(ar.altNameTextColorOverride);
-		NETauto(ar.eloTextColorOverride);
+		NETbool(c, ar.dummy);
+		for (int i = 0; i < ARRAY_SIZE(ar.star); ++i)
+		{
+			NETuint8_t(c, ar.star[i]);
+		}
+		NETuint8_t(c, ar.medal);
+		NETuint8_t(c, ar.level);
+		NETstring(c, ar.elo);
+		NETbool(c, ar.autohoster);
+		NETstring(c, ar.details);
+		NETstring(c, ar.altName);
+		for (int i = 0; i < ARRAY_SIZE(ar.altNameTextColorOverride); ++i)
+		{
+			NETuint8_t(c, ar.altNameTextColorOverride[i]);
+		}
+		for (int i = 0; i < ARRAY_SIZE(ar.eloTextColorOverride); ++i)
+		{
+			NETuint8_t(c, ar.eloTextColorOverride[i]);
+		}
 	}
 }
 
@@ -341,11 +354,11 @@ static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> reci
 		queue = NETnetQueue(recipientPlayerIndex.value());
 	}
 	// Now send it to all other players
-	NETbeginEncode(queue, NET_PLAYER_STATS);
+	auto w = NETbeginEncode(queue, NET_PLAYER_STATS);
 	// Send the ID of the player's stats we're updating
-	NETuint32_t(&playerIndex);
+	NETuint32_t(w, playerIndex);
 
-	NETauto(playerStats[playerIndex].autorating);
+	NETAutorating(w, playerStats[playerIndex].autorating);
 
 	PLAYERSTATS* pStatsToSend = &playerStats[playerIndex];
 	if (game.blindMode != BLIND_MODE::NONE)
@@ -354,11 +367,11 @@ static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> reci
 		pStatsToSend = &zeroStats;
 	}
 
-	NETuint32_t(&pStatsToSend->played);
-	NETuint32_t(&pStatsToSend->wins);
-	NETuint32_t(&pStatsToSend->losses);
-	NETuint32_t(&pStatsToSend->totalKills);
-	NETuint32_t(&pStatsToSend->totalScore);
+	NETuint32_t(w, pStatsToSend->played);
+	NETuint32_t(w, pStatsToSend->wins);
+	NETuint32_t(w, pStatsToSend->losses);
+	NETuint32_t(w, pStatsToSend->totalKills);
+	NETuint32_t(w, pStatsToSend->totalScore);
 
 	EcKey::Key identityPublicKey;
 	bool isHostVerifiedIdentity = false;
@@ -394,9 +407,9 @@ static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> reci
 		}
 	}
 
-	NETbool(&isHostVerifiedIdentity);
-	NETbytes(&identityPublicKey);
-	NETend();
+	NETbool(w, isHostVerifiedIdentity);
+	NETbytes(w, identityPublicKey);
+	NETend(w);
 
 	return true;
 }
@@ -617,14 +630,14 @@ bool recvMultiStats(NETQUEUE queue)
 {
 	uint32_t playerIndex;
 
-	NETbeginDecode(queue, NET_PLAYER_STATS);
+	auto r = NETbeginDecode(queue, NET_PLAYER_STATS);
 	// Retrieve the ID number of the player for which we need to
 	// update the stats
-	NETuint32_t(&playerIndex);
+	NETuint32_t(r, playerIndex);
 
 	if (playerIndex >= MAX_CONNECTED_PLAYERS)
 	{
-		NETend();
+		NETend(r);
 		return false;
 	}
 
@@ -632,29 +645,29 @@ bool recvMultiStats(NETQUEUE queue)
 	if (playerIndex != queue.index && queue.index != NetPlay.hostPlayer)
 	{
 		HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
-		NETend();
+		NETend(r);
 		return false;
 	}
 
 	PLAYERSTATS::Autorating receivedAutorating;
-	NETauto(receivedAutorating);
+	NETAutorating(r, receivedAutorating);
 	bool processAutoratingData = false;
 
 	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 	if (!myResponsibility(playerIndex))
 	{
 		// Retrieve the actual stats
-		NETuint32_t(&playerStats[playerIndex].played);
-		NETuint32_t(&playerStats[playerIndex].wins);
-		NETuint32_t(&playerStats[playerIndex].losses);
-		NETuint32_t(&playerStats[playerIndex].totalKills);
-		NETuint32_t(&playerStats[playerIndex].totalScore);
+		NETuint32_t(r, playerStats[playerIndex].played);
+		NETuint32_t(r, playerStats[playerIndex].wins);
+		NETuint32_t(r, playerStats[playerIndex].losses);
+		NETuint32_t(r, playerStats[playerIndex].totalKills);
+		NETuint32_t(r, playerStats[playerIndex].totalScore);
 
 		EcKey::Key identity;
 		bool isHostVerifiedIdentity = false;
-		NETbool(&isHostVerifiedIdentity);
-		NETbytes(&identity);
-		NETend();
+		NETbool(r, isHostVerifiedIdentity);
+		NETbytes(r, identity);
+		NETend(r);
 
 		if (!isHostVerifiedIdentity)
 		{
@@ -678,7 +691,7 @@ bool recvMultiStats(NETQUEUE queue)
 	}
 	else
 	{
-		NETend();
+		NETend(r);
 		processAutoratingData = true;
 	}
 
