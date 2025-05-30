@@ -22,6 +22,7 @@
 #pragma once
 
 #include <wzmaplib/map_io.h>
+#include <wzmaplib/map_debug.h>
 #include <memory>
 #include <vector>
 #include <functional>
@@ -68,7 +69,7 @@ public:
 	// Initialize a new WzMapZipIO provider with a WzZipIOSourceReadProvider implementation of the .zip/.wz archive data
 	// Options:
 	//	- extraConsistencyChecks: Enable extra consistency checks in libzip (see: ZIP_CHECKCONS)
-	static std::shared_ptr<WzMapZipIO> openZipArchiveReadIOProvider(std::shared_ptr<WzZipIOSourceReadProvider> zipSourceProvider, bool extraConsistencyChecks = false);
+	static std::shared_ptr<WzMapZipIO> openZipArchiveReadIOProvider(std::shared_ptr<WzZipIOSourceReadProvider> zipSourceProvider, WzMap::LoggingProtocol* pCustomLogger = nullptr, bool extraConsistencyChecks = false);
 
 	// Initialize a new WzMapZipIO provider with a fileSystemPath to a new .zip/.wz archive (to be written)
 	static std::shared_ptr<WzMapZipIO> createZipArchiveFS(const char* fileSystemPath, bool fixedLastMod = false);
