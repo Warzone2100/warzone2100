@@ -1024,6 +1024,36 @@ bool mapLoad(char const *filename)
 
 }
 
+// -----------------------------------------------------------------------------------------
+// load up a terrain tile type map file
+bool loadTerrainTypeMap(const std::shared_ptr<WzMap::TerrainTypeData>& ttypeData)
+{
+	ASSERT_OR_RETURN(false, ttypeData != nullptr, "No terrain type data");
+
+	// reset the terrain table
+	memset(terrainTypes, 0, sizeof(terrainTypes));
+
+	size_t quantity = ttypeData->terrainTypes.size();
+	if (quantity >= MAX_TILE_TEXTURES)
+	{
+		// Workaround for fugly map editor bug, since we can't fix the map editor
+		quantity = MAX_TILE_TEXTURES - 1;
+	}
+	for (size_t i = 0; i < quantity; i++)
+	{
+		auto& type = ttypeData->terrainTypes[i];
+		if (type > TER_MAX)
+		{
+			debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
+			return false;
+		}
+
+		terrainTypes[i] = static_cast<UBYTE>(type);
+	}
+
+	return true;
+}
+
 ///* Initialise the map structure */
 bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 {
