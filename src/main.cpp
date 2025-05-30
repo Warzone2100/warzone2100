@@ -198,6 +198,7 @@ static FOCUS_STATE focusState = FOCUS_IN;
 static bool ignoredSIGPIPE = false;
 #endif
 
+static void stopGameLoop();
 
 #if defined(WZ_OS_WIN)
 
@@ -790,7 +791,7 @@ static void setCDAudioForCurrentGameMode()
  * Preparations before entering the game loop
  * Would start the timer in an event based mainloop
  */
-static void startGameLoop()
+static bool startGameLoop()
 {
 	if (runningMultiplayer())
 	{
@@ -810,9 +811,19 @@ static void startGameLoop()
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
 	if (!levLoadData(aLevelName, &game.hash, nullptr, GTYPE_SCENARIO_START))
 	{
-		debug(LOG_FATAL, "Shutting down after failure");
-		wzQuit(EXIT_FAILURE);
-		return;
+		debug(LOG_ERROR, "Failed to load level data / map: %s %s", aLevelName, (!game.hash.isZero()) ? game.hash.toString().c_str() : "");
+		if (bMultiPlayer)
+		{
+			multiGameShutdown();
+		}
+		levReleaseAll();
+		closeLoadingScreen();
+		cdAudio_SetGameMode(MusicGameMode::MENUS);
+		stopGameLoop();
+		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+		startTitleLoop(); // Restart into titleloop
+		gameLoopStatus = GAMECODE_CONTINUE;
+		return false;
 	}
 
 	screen_StopBackDrop();
@@ -889,6 +900,8 @@ static void startGameLoop()
 			setMaxFastForwardTicks(10, false);
 		}
 	}
+
+	return true;
 }
 
 
@@ -1023,8 +1036,14 @@ static void runGameLoop()
 	case GAMECODE_NEWLEVEL:
 		debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
 		stopGameLoop();
-		startGameLoop(); // Restart gameloop
-		gameLoopStatus = GAMECODE_CONTINUE;
+		if (startGameLoop()) // Restart gameloop
+		{
+			gameLoopStatus = GAMECODE_CONTINUE;
+		}
+		else
+		{
+			debug(LOG_POPUP, _("Failed to load level data or map. Exiting to main menu."));
+		}
 		return;
 	default:
 		// ignore other values, and proceed with gameLoop
@@ -1093,8 +1112,14 @@ static void runTitleLoop()
 		case TITLECODE_STARTGAME:
 			debug(LOG_MAIN, "TITLECODE_STARTGAME");
 			stopTitleLoop();
-			startGameLoop(); // Restart into gameloop
-			closeLoadingScreen();
+			if (startGameLoop()) // Restart into gameloop
+			{
+				closeLoadingScreen();
+			}
+			else
+			{
+				debug(LOG_POPUP, _("Failed to load level data or map. Exiting to main menu."));
+			}
 			return;
 		default:
 			// ignore unexpected value
@@ -2053,6 +2078,7 @@ int realmain(int argc, char *argv[])
 	switch (GetGameMode())
 	{
 	case GS_TITLE_SCREEN:
+		// The usual case (unless command-line flags specify otherwise): Load into the title menu
 		startTitleLoop(true);
 		break;
 	case GS_SAVEGAMELOAD:
@@ -2063,7 +2089,12 @@ int realmain(int argc, char *argv[])
 		initSaveGameLoad();
 		break;
 	case GS_NORMAL:
-		startGameLoop();
+		if (!startGameLoop())
+		{
+			// Attempted to load straight into a game from the command-line, but starting the game loop (loading the map, etc) failed
+			// Treat this as a failure and queue an exit
+			wzQuit(EXIT_FAILURE);
+		}
 		break;
 	default:
 		debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");
