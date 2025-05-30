@@ -306,6 +306,12 @@ lib/netplay/byteorder_funcs_wrapper.cpp
 lib/netplay/client_connection.cpp
 lib/netplay/connection_provider_registry.cpp
 lib/netplay/error_categories.cpp
+lib/netplay/gns/gns_client_connection.cpp
+lib/netplay/gns/gns_connection_address.cpp
+lib/netplay/gns/gns_connection_poll_group.cpp
+lib/netplay/gns/gns_connection_provider.cpp
+lib/netplay/gns/gns_error_categories.cpp
+lib/netplay/gns/gns_listen_socket.cpp
 lib/netplay/listen_socket.cpp
 lib/netplay/netjoin_stub.cpp
 lib/netplay/netlog.cpp
@@ -323,6 +329,7 @@ lib/netplay/port_mapping_manager_impl_miniupnpc.cpp
 lib/netplay/sync_debug.cpp
 lib/netplay/tcp/netsocket.cpp
 lib/netplay/tcp/sock_error.cpp
+lib/netplay/tcp/tcp_address_resolver.cpp
 lib/netplay/tcp/tcp_client_connection.cpp
 lib/netplay/tcp/tcp_connection_address.cpp
 lib/netplay/tcp/tcp_connection_poll_group.cpp
@@ -368,6 +375,8 @@ lib/widget/margin.cpp
 lib/widget/multibutform.cpp
 lib/widget/paneltabbutton.cpp
 lib/widget/paragraph.cpp
+lib/widget/popover.cpp
+lib/widget/popovermenu.cpp
 lib/widget/resize.cpp
 lib/widget/scrollablelist.cpp
 lib/widget/scrollbar.cpp
@@ -526,9 +535,14 @@ src/titleui/msgbox.cpp
 src/titleui/old.cpp
 src/titleui/protocol.cpp
 src/titleui/titleui.cpp
+src/titleui/widgets/advcheckbox.cpp
 src/titleui/widgets/blindwaitingroom.cpp
+src/titleui/widgets/frontendimagebutton.cpp
 src/titleui/widgets/infobutton.cpp
 src/titleui/widgets/lobbyplayerrow.cpp
+src/titleui/widgets/multilobbyoptions.cpp
+src/titleui/widgets/optionsform.cpp
+src/titleui/widgets/starthostingbutton.cpp
 src/transporter.cpp
 src/updatemanager.cpp
 src/urlhelpers.cpp
