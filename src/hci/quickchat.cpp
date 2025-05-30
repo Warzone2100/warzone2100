@@ -3046,9 +3046,11 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 
 		NETQUEUE queue = NETnetQueue((recipient < MAX_PLAYERS) ? whosResponsible(recipient) : recipient);
 		bool sendSecured = isInGame && (queue.index == NetPlay.hostPlayer || queue.index < MAX_PLAYERS) && senderCanUseSecuredMessages;
+		optional<MessageWriter> w;
 		if (sendSecured)
 		{
-			if (!NETbeginEncodeSecured(queue, NET_QUICK_CHAT_MSG))
+			w = NETbeginEncodeSecured(queue, NET_QUICK_CHAT_MSG);
+			if (!w)
 			{
 				debug(LOG_NET, "Failed to encode secured message for queue.index: %" PRIu32, static_cast<uint32_t>(queue.index));
 				continue;
@@ -3056,32 +3058,33 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		}
 		else
 		{
-			NETbeginEncode(queue, NET_QUICK_CHAT_MSG);
+			w = NETbeginEncode(queue, NET_QUICK_CHAT_MSG);
 		}
+		auto& wref = *w;
 
-		NETuint32_t(&fromPlayer);
-		NETuint32_t(&recipient);
-		NETuint32_t(&messageValue);
+		NETuint32_t(wref, fromPlayer);
+		NETuint32_t(wref, recipient);
+		NETuint32_t(wref, messageValue);
 		// send targeting structure
-		NETbool(&targeting.all);
-		NETbool(&targeting.humanTeammates);
-		NETbool(&targeting.aiTeammates);
+		NETbool(wref, targeting.all);
+		NETbool(wref, targeting.humanTeammates);
+		NETbool(wref, targeting.aiTeammates);
 		uint32_t numSpecificRecipients = static_cast<uint32_t>(targeting.specificPlayers.size());
-		NETuint32_t(&numSpecificRecipients);
+		NETuint32_t(wref, numSpecificRecipients);
 		for (auto playerIdx : targeting.specificPlayers)
 		{
-			NETuint32_t(&playerIdx);
+			NETuint32_t(wref, playerIdx);
 		}
 		if (quickChatMessageExpectsExtraData(message))
 		{
 			if (messageData.has_value())
 			{
-				NETuint32_t(&messageData.value().dataContext);
-				NETuint32_t(&messageData.value().dataA);
-				NETuint32_t(&messageData.value().dataB);
+				NETuint32_t(wref, messageData.value().dataContext);
+				NETuint32_t(wref, messageData.value().dataA);
+				NETuint32_t(wref, messageData.value().dataB);
 			}
 		}
-		NETend();
+		NETend(wref);
 	}
 
 	if (fromPlayer == selectedPlayer && (!recipients.empty() || !isInGame) && !shouldHideQuickChatMessageFromLocalDisplay(message))
@@ -3169,30 +3172,33 @@ bool recvQuickChat(NETQUEUE queue)
 
 	WzQuickChatMessage msgEnumVal;
 
+	optional<MessageReader> r;
 	if (expectingSecuredMessage)
 	{
-		if (!NETbeginDecodeSecured(queue, NET_QUICK_CHAT_MSG))
+		r = NETbeginDecodeSecured(queue, NET_QUICK_CHAT_MSG);
+		if (!r)
 		{
 			return false;
 		}
 	}
 	else
 	{
-		NETbeginDecode(queue, NET_QUICK_CHAT_MSG);
+		r = NETbeginDecode(queue, NET_QUICK_CHAT_MSG);
 	}
-	NETuint32_t(&sender);
-	NETuint32_t(&recipient);
-	NETuint32_t(&messageValue);
+	auto& rref = *r;
+	NETuint32_t(rref, sender);
+	NETuint32_t(rref, recipient);
+	NETuint32_t(rref, messageValue);
 	// receive targeting structure
-	NETbool(&targeting.all);
-	NETbool(&targeting.humanTeammates);
-	NETbool(&targeting.aiTeammates);
+	NETbool(rref, targeting.all);
+	NETbool(rref, targeting.humanTeammates);
+	NETbool(rref, targeting.aiTeammates);
 	uint32_t numSpecificRecipients = 0;
-	NETuint32_t(&numSpecificRecipients);
+	NETuint32_t(rref, numSpecificRecipients);
 	for (uint32_t i = 0; i < numSpecificRecipients; ++i)
 	{
 		uint32_t tmp_playerIdx = std::numeric_limits<uint32_t>::max();
-		NETuint32_t(&tmp_playerIdx);
+		NETuint32_t(rref, tmp_playerIdx);
 		if (tmp_playerIdx < MAX_CONNECTED_PLAYERS)
 		{
 			targeting.specificPlayers.insert(tmp_playerIdx);
@@ -3202,11 +3208,11 @@ bool recvQuickChat(NETQUEUE queue)
 	if (validMessageEnumValue && quickChatMessageExpectsExtraData(msgEnumVal))
 	{
 		messageData = WzQuickChatMessageData();
-		NETuint32_t(&messageData.value().dataContext);
-		NETuint32_t(&messageData.value().dataA);
-		NETuint32_t(&messageData.value().dataB);
+		NETuint32_t(rref, messageData.value().dataContext);
+		NETuint32_t(rref, messageData.value().dataA);
+		NETuint32_t(rref, messageData.value().dataB);
 	}
-	NETend();
+	NETend(rref);
 
 	if (!validMessageEnumValue)
 	{

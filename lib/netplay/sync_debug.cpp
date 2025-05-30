@@ -659,20 +659,20 @@ static void sendDebugSync(uint8_t* buf, uint32_t bufLen, uint32_t time)
 	while (bytesWritten < bufLen)
 	{
 		bytesToWrite = std::min<uint32_t>(MAX_DESYNC_LOG_TRANSFER_PACKET, bufLen - bytesWritten);
-		NETbeginEncode(NETbroadcastQueue(), NET_DEBUG_SYNC);
-		NETuint32_t(&time);
-		NETuint32_t(&bytesToWrite);
-		NETbin(buf + bytesWritten, bytesToWrite);
-		NETend();
+		auto w = NETbeginEncode(NETbroadcastQueue(), NET_DEBUG_SYNC);
+		NETuint32_t(w, time);
+		NETuint32_t(w, bytesToWrite);
+		NETbin(w, buf + bytesWritten, bytesToWrite);
+		NETend(w);
 		bytesWritten += bytesToWrite;
 		numMessages++;
 	}
 	// plus one 0-length buffer packet to signify EOF
 	bytesToWrite = 0;
-	NETbeginEncode(NETbroadcastQueue(), NET_DEBUG_SYNC);
-	NETuint32_t(&time);
-	NETuint32_t(&bytesToWrite);
-	NETend();
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_DEBUG_SYNC);
+	NETuint32_t(w, time);
+	NETuint32_t(w, bytesToWrite);
+	NETend(w);
 	numMessages++;
 
 	debug(LOG_INFO, "Broadcast sync log (time: %" PRIu32 ", size: %" PRIu32 ") in %zu messages", time, bufLen, numMessages);
@@ -738,12 +738,12 @@ void recvDebugSync(NETQUEUE queue)
 	uint8_t recvBuff[MAX_DESYNC_LOG_TRANSFER_PACKET] = {};
 
 	// Receive a message of desync data (the next chunk of a desync log)
-	NETbeginDecode(queue, NET_DEBUG_SYNC);
-	NETuint32_t(&time);
-	NETuint32_t(&bufLen);
+	auto r = NETbeginDecode(queue, NET_DEBUG_SYNC);
+	NETuint32_t(r, time);
+	NETuint32_t(r, bufLen);
 	if (!playerDesyncLogOutput.canWriteLogFor(time, player))
 	{
-		NETend();
+		NETend(r);
 		return;
 	}
 	if (bufLen > MAX_DESYNC_LOG_TRANSFER_PACKET)
@@ -753,11 +753,11 @@ void recvDebugSync(NETQUEUE queue)
 		{
 			dbgOutputDumpedSyncLog(time, player, true);
 		}
-		NETend();
+		NETend(r);
 		return;
 	}
-	NETbin(recvBuff, bufLen);
-	NETend();
+	NETbin(r, recvBuff, bufLen);
+	NETend(r);
 
 	if (bufLen > 0)
 	{

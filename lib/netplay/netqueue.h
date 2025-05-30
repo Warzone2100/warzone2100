@@ -55,40 +55,68 @@ public:
 };
 constexpr uint32_t NetMessageHeaderMaxBytes = 1 + 5; // 1 byte for type, 5 bytes max for length (see: encode_uint32_t)
 
+struct NETQUEUE
+{
+	void* queue;  ///< Is either a (NetQueuePair **) or a (NetQueue *). (Note different numbers of *.)
+	bool isPair;
+	uint8_t index;
+	uint8_t queueType;
+	uint8_t exclude;
+};
+
 /// MessageWriter is used for serialising, using the same interface as MessageReader.
 class MessageWriter
 {
 public:
-	enum { Read, Write, Direction = Write };
 
-	MessageWriter(NetMessage *m = nullptr) : message(m) {}
-	MessageWriter(NetMessage &m) : message(&m) {}
-	void byte(uint8_t v) const
+	// This should allocate a message owned by this instance
+	explicit MessageWriter(NETQUEUE queue, uint8_t messageType)
+		: queueInfo(queue), message(messageType)
+	{}
+
+	MessageWriter(MessageWriter&&) = default;
+	MessageWriter(const MessageWriter&) = default;
+	MessageWriter& operator=(const MessageWriter&) = default;
+
+	void byte(uint8_t v)
 	{
-		message->data.push_back(v);
+		message.data.push_back(v);
 	}
-	void bytes(uint8_t *pIn, size_t numBytes) const
+	void bytes(uint8_t *pIn, size_t numBytes)
 	{
-		message->data.insert(message->data.end(), pIn, pIn + numBytes);
+		message.data.insert(message.data.end(), pIn, pIn + numBytes);
 	}
-	void bytesVector(std::vector<uint8_t> &vIn, size_t numBytes) const
+	void bytes(const uint8_t* pIn, size_t numBytes)
 	{
-		message->data.insert(message->data.end(), vIn.begin(), vIn.begin() + std::min(numBytes, vIn.size()));
+		message.data.insert(message.data.end(), pIn, pIn + numBytes);
+	}
+	void bytesVector(std::vector<uint8_t> &vIn, size_t numBytes)
+	{
+		message.data.insert(message.data.end(), vIn.begin(), vIn.begin() + std::min(numBytes, vIn.size()));
 	}
 	bool valid() const
 	{
 		return true;
 	}
-	NetMessage *message;
+
+	NETQUEUE queueInfo;
+	bool bSecretMessageWrap = false;
+	NetMessage message;
 };
+
 /// MessageReader is used for deserialising, using the same interface as MessageWriter.
 class MessageReader
 {
 public:
-	enum { Read, Write, Direction = Read };
 
-	MessageReader(const NetMessage *m = nullptr) : message(m), index(0) {}
-	MessageReader(const NetMessage &m) : message(&m), index(0) {}
+	explicit MessageReader(NETQUEUE queue, const NetMessage& m)
+		: queueInfo(queue), message(&m), index(0)
+	{}
+
+	MessageReader(MessageReader&&) = default;
+	MessageReader(const MessageReader&) = default;
+	MessageReader& operator=(const MessageReader&) = default;
+
 	void byte(uint8_t &v) const
 	{
 		v = index >= message->data.size() ? 0x00 : message->data[index];
@@ -122,7 +150,9 @@ public:
 	{
 		return index <= message->data.size();
 	}
-	const NetMessage *message;
+
+	NETQUEUE queueInfo;
+	const NetMessage* message;
 	mutable size_t index;
 };
 
