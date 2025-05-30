@@ -232,6 +232,20 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 		if ((memoryTypeBits & (1 << i)) &&
 			((memprops.memoryTypes[i].propertyFlags & properties) == properties))
 		{
+			// Sanity checks: check that the heap exists and has a size > 0
+			auto currHeapIndex = memprops.memoryTypes[i].heapIndex;
+			if (currHeapIndex >= memprops.memoryHeapCount)
+			{
+				continue;
+			}
+			if (memprops.memoryHeaps[currHeapIndex].size == 0)
+			{
+				// A memoryHeap with size 0 is obviously useless
+				// Don't know why this would be advertised (but the "OpenCL, OpenGL, and Vulkan Compatibility Pack" has been detected doing this in certain cases, so best to check and ignore)
+				debug(LOG_INFO, "Ignoring memoryType[%" PRIu32 "] pointing to memoryHeap[%" PRIu32 "] with size 0", i, currHeapIndex);
+				continue;
+			}
+
 			if (memTypeFound)
 			{
 				*memTypeFound = true;
