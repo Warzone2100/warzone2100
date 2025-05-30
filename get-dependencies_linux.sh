@@ -9,6 +9,8 @@
 #  get-dependencies_linux.sh ubuntu build-all
 #
 
+set -e
+
 if [ -z "$1" ]; then
   echo "get-dependencies_linux.sh requires an argument specifying a linux distro: (\"ubuntu\", \"fedora\", \"alpine\", \"archlinux\", \"opensuse-tumbleweed\")"
   exit 1
