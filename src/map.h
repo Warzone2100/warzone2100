@@ -391,6 +391,7 @@ bool mapShutdown();
 /* Load the map data */
 bool mapLoad(char const *filename);
 struct ScriptMapData;
+bool loadTerrainTypeMap(const std::shared_ptr<WzMap::TerrainTypeData>& ttypeData);
 bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData);
 
 // used to reload decal + ground types types when switching terrain overrides

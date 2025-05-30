@@ -2749,16 +2749,29 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	aFileName[fileExten - 1] = '\0';
 	strcat(aFileName, "/");
 
+	// construct the WzMap object for loading map data
+	aFileName[fileExten] = '\0';
+	mapSeed = gameRandU32();
+	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
+
+	if (data && data->wasScriptGenerated())
+	{
+		// Log the random seed used to generate this instance of the map
+		debug(LOG_INFO, "Loaded script-generated map \"%s\" with random seed: %" PRIu32, aFileName, mapSeed);
+	}
+
 	//the terrain type WILL only change with Campaign changes (well at the moment!)
 	if (gameType != GTYPE_SCENARIO_EXPAND || UserSaveGame)
 	{
-		//load in the terrain type map
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "ttypes.ttp");
-		//load the terrain type data
-		if (!loadTerrainTypeMap(aFileName))
+		if (!data)
 		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
+			debug(LOG_ERROR, "Failed to load map from path: %s", aFileName);
+			return false;
+		}
+		//load the terrain type data
+		if (!loadTerrainTypeMap(data->mapTerrainTypes()))
+		{
+			debug(LOG_ERROR, "Failed loading terrain types: %s/ttypes.ttp", aFileName);
 			goto error;
 		}
 	}
@@ -2964,17 +2977,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			mission.scrollMaxX = missionScrollMaxX;
 			mission.scrollMaxY = missionScrollMaxY;
 		}
-	}
-
-	// construct the WzMap object for loading map data
-	aFileName[fileExten] = '\0';
-	mapSeed = gameRandU32();
-	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
-
-	if (data && data->wasScriptGenerated())
-	{
-		// Log the random seed used to generate this instance of the map
-		debug(LOG_INFO, "Loaded script-generated map \"%s\" with random seed: %" PRIu32, aFileName, mapSeed);
 	}
 
 	//if Campaign Expand then don't load in another map
@@ -7136,44 +7138,6 @@ bool writeTemplateFile(const char *pFileName)
 	mRoot["localTemplates"] = std::move(localtemplates_array);
 
 	return saveJSONToFile(mRoot, pFileName);
-}
-
-// -----------------------------------------------------------------------------------------
-// load up a terrain tile type map file
-bool loadTerrainTypeMap(const char *pFilePath)
-{
-	ASSERT_OR_RETURN(false, pFilePath, "Null pFilePath");
-	WzMapDebugLogger logger;
-	WzMapPhysFSIO mapIO;
-	auto result = WzMap::loadTerrainTypes(pFilePath, mapIO, &logger);
-	if (!result)
-	{
-		// Failed to load terrain type map data
-		return false;
-	}
-
-	// reset the terrain table
-	memset(terrainTypes, 0, sizeof(terrainTypes));
-
-	size_t quantity = result->terrainTypes.size();
-	if (quantity >= MAX_TILE_TEXTURES)
-	{
-		// Workaround for fugly map editor bug, since we can't fix the map editor
-		quantity = MAX_TILE_TEXTURES - 1;
-	}
-	for (size_t i = 0; i < quantity; i++)
-	{
-		auto& type = result->terrainTypes[i];
-		if (type > TER_MAX)
-		{
-			debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
-			return false;
-		}
-
-		terrainTypes[i] = static_cast<UBYTE>(type);
-	}
-
-	return true;
 }
 
 // Maps built into the game with custom tile types need to be excluded for overrides.
