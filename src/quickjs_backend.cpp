@@ -3246,6 +3246,7 @@ IMPL_JS_FUNC(setWeather, wzapi::setWeather)
 IMPL_JS_FUNC(setSky, wzapi::setSky)
 IMPL_JS_FUNC(hackDoNotSave, wzapi::hackDoNotSave)
 IMPL_JS_FUNC(hackMarkTiles, wzapi::hackMarkTiles)
+IMPL_JS_FUNC(hackTextMarker, wzapi::hackTextMarker)
 IMPL_JS_FUNC(cameraSlide, wzapi::cameraSlide)
 IMPL_JS_FUNC(cameraZoom, wzapi::cameraZoom)
 IMPL_JS_FUNC(cameraTrack, wzapi::cameraTrack)
@@ -3445,6 +3446,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(hackGetObj, 3); // WZAPI
 	JS_REGISTER_FUNC2(hackAssert, 2, 2 + MAX_JS_VARARGS); // WZAPI
 	JS_REGISTER_FUNC2(hackMarkTiles, 1, 4); // WZAPI
+	JS_REGISTER_FUNC2(hackTextMarker, 3, 5); // WZAPI
 	JS_REGISTER_FUNC2(receiveAllEvents, 0, 1); // WZAPI
 	JS_REGISTER_FUNC(hackDoNotSave, 1); // WZAPI
 	JS_REGISTER_FUNC(hackPlayIngameAudio, 0); // WZAPI
