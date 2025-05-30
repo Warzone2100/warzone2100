@@ -103,6 +103,9 @@
 #include "screens/guidescreen.h"
 #include "wzapi.h"
 
+#include "wzphysfszipioprovider.h"
+#include <wzmaplib/map_package.h>
+
 #include <algorithm>
 #include <unordered_map>
 #include <array>
@@ -861,85 +864,7 @@ static MapFileList listMapFiles()
 		return true; // continue
 	});
 
-	// save our current search path(s)
-	debug(LOG_WZ, "Map search paths:");
-	char **searchPath = PHYSFS_getSearchPath();
-	for (char **i = searchPath; *i != nullptr; i++)
-	{
-		debug(LOG_WZ, "    [%s]", *i);
-		oldSearchPath.push_back(*i);
-		WZ_PHYSFS_unmount(*i);
-	}
-	PHYSFS_freeList(searchPath);
-
-	for (const auto &realFileName : ret)
-	{
-		std::string realFilePathAndName = PHYSFS_getWriteDir() + realFileName.platformDependent;
-		if (PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND))
-		{
-			size_t numMapGamFiles = 0;
-			size_t numMapFolders = 0;
-			const std::string baseMapsPath("multiplay/maps/");
-			bool enumSuccess = WZ_PHYSFS_enumerateFiles("multiplay/maps", [&numMapGamFiles, &numMapFolders, &baseMapsPath, &realFilePathAndName](const char *file) -> bool {
-				if (!file)
-				{
-					return true; // continue
-				}
-				std::string isDir = baseMapsPath + file;
-				if (WZ_PHYSFS_isDirectory(isDir.c_str()))
-				{
-					if (baseMapsPath.size() == isDir.size())
-					{
-						// for some reason, file is an empty string - just skip
-						return true; // continue;
-					}
-					if (++numMapFolders > 1)
-					{
-						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
-						return false; // break;
-					}
-					return true; // continue;
-				}
-				std::string checkfile = file;
-				debug(LOG_WZ, "checking ... %s", file);
-				if (checkfile.substr(checkfile.find_last_of('.') + 1) == "gam")
-				{
-					if (++numMapGamFiles > 1)
-					{
-						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
-						return false; // break;
-					}
-				}
-				return true; // continue
-			});
-			if (!enumSuccess)
-			{
-				// Failed to enumerate contents - corrupt map archive (ignore it)
-				debug(LOG_ERROR, "Failed to enumerate - ignoring corrupt map file: %s", realFilePathAndName.c_str());
-				numMapGamFiles = std::numeric_limits<size_t>::max() - 1;
-				numMapFolders = std::numeric_limits<size_t>::max() - 1;
-			}
-			if (numMapGamFiles < 2 && numMapFolders < 2)
-			{
-				filtered.push_back(realFileName);
-			}
-			WZ_PHYSFS_unmount(realFilePathAndName.c_str());
-		}
-		else
-		{
-			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
-		}
-	}
-
-	// restore our search path(s) again
-	for (const auto &restorePaths : oldSearchPath)
-	{
-		PHYSFS_mount(restorePaths.c_str(), NULL, PHYSFS_APPEND);
-	}
-	debug(LOG_WZ, "Search paths restored");
-	printSearchPath();
-
-	return filtered;
+	return ret;
 }
 
 // Map processing
@@ -1038,6 +963,13 @@ static inline optional<WZmapInfo> CheckInMap(const char *archive, const std::str
 		}
 	}
 
+	return WZmapInfo(mapmod, isRandom);
+}
+
+static inline WZmapInfo CheckInMap(WzMap::MapPackage& mapPackage)
+{
+	bool mapmod = mapPackage.packageType() == WzMap::MapPackage::MapPackageType::Map_Mod;
+	bool isRandom = mapPackage.isScriptGeneratedMap();
 	return WZmapInfo(mapmod, isRandom);
 }
 
@@ -1192,6 +1124,41 @@ bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
 }
 #endif
 
+class WzMapLoadDebugLogger : public WzMap::LoggingProtocol
+{
+public:
+	virtual ~WzMapLoadDebugLogger() { }
+	virtual void printLog(WzMap::LoggingProtocol::LogLevel level, const char *function, int line, const char *str) override
+	{
+		code_part logPart = LOG_MAP;
+		switch (level)
+		{
+			case WzMap::LoggingProtocol::LogLevel::Info_Verbose:
+				logPart = LOG_NEVER;
+				break;
+			case WzMap::LoggingProtocol::LogLevel::Info:
+				logPart = LOG_NEVER;
+				break;
+			case WzMap::LoggingProtocol::LogLevel::Warning:
+				logPart = LOG_MAP;
+				break;
+			case WzMap::LoggingProtocol::LogLevel::Error:
+				logPart = (m_logErrors) ? LOG_ERROR : LOG_MAP;
+				break;
+		}
+		if (enabled_debug[logPart])
+		{
+			_debug(line, logPart, function, "%s", str);
+		}
+	}
+	void setLogErrors(bool enabled)
+	{
+		m_logErrors = enabled;
+	}
+private:
+	bool m_logErrors = false;
+};
+
 bool buildMapList(bool campaignOnly)
 {
 	if (!loadLevFile("gamedesc.lev", mod_campaign, false, nullptr))
@@ -1213,6 +1180,7 @@ bool buildMapList(bool campaignOnly)
 		return true;
 	}
 	MapFileList realFileNames = listMapFiles();
+	auto debugLoggerInstance = std::make_shared<WzMapLoadDebugLogger>();
 	for (auto &realFileName : realFileNames)
 	{
 		const char * pRealDirStr = PHYSFS_getRealDir(realFileName.platformIndependent.c_str());
@@ -1223,22 +1191,36 @@ bool buildMapList(bool campaignOnly)
 		}
 		std::string realFilePathAndName = pRealDirStr + realFileName.platformDependent;
 
-		if (PHYSFS_mount(realFilePathAndName.c_str(), "WZMap", PHYSFS_APPEND) == 0)
+		auto zipReadSource = WzZipIOPHYSFSSourceReadProvider::make(realFileName.platformIndependent);
+		if (!zipReadSource)
 		{
-			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
-			continue; // skip
+			debug(LOG_ERROR, "Failed to open: %s", realFileName.platformIndependent.c_str());
+			continue;
 		}
 
-		if (!processMap(realFilePathAndName.c_str(), realFileName.platformIndependent.c_str(), "WZMap"))
+		debugLoggerInstance->setLogErrors(true);
+		auto mapZipIO = WzMapZipIO::openZipArchiveReadIOProvider(zipReadSource, debugLoggerInstance.get());
+		if (!mapZipIO)
 		{
-			// Failed to enumerate contents - corrupt map archive
-			debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", realFilePathAndName.c_str());
+			debug(LOG_POPUP, "Failed to open archive: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
+			continue;
+		}
+		debugLoggerInstance->setLogErrors(false);
+		auto mapPackage = WzMap::MapPackage::loadPackage("", debugLoggerInstance, mapZipIO);
+		if (!mapPackage)
+		{
+			debug(LOG_POPUP, "Failed to load %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
+			continue;
 		}
 
-		if (WZ_PHYSFS_unmount(realFilePathAndName.c_str()) == 0)
+		if (!levAddWzMap(mapPackage->levelDetails(), mod_multiplay, realFileName.platformIndependent.c_str()))
 		{
-			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
+			debug(LOG_ERROR, "Corrupt / invalid map file: %s", realFilePathAndName.c_str());
+			continue;
 		}
+
+		auto WZmapInfoResult = CheckInMap(*mapPackage);
+		WZ_Maps.insert(WZMapInfo_Map::value_type(realFileName.platformIndependent, WZmapInfoResult));
 	}
 
 	return true;
