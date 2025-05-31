@@ -28,6 +28,7 @@
 #include "terrain_defs.h"
 
 struct IMAGEFILE;
+class WzMapZipIO;
 
 // the size of the file loading buffer
 // FIXME Totally inappropriate place for this.
@@ -62,13 +63,15 @@ void registerSearchPath(const std::string& path, unsigned int priority);
 void unregisterSearchPath(const std::string& path);
 void debugOutputSearchPaths();
 void debugOutputSearchPathMountErrors();
-bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL, const char* current_map_mount_point = NULL);
+bool rebuildSearchPath(searchPathMode mode, bool force);
 bool rebuildExistingSearchPathWithGraphicsOptionChange();
 
 bool buildMapList(bool campaignOnly = false);
 bool CheckForMod(char const *mapFile);
 bool CheckForRandom(char const *mapFile, char const *mapDataFile0);
 bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData);
+std::shared_ptr<WzMapZipIO> getSpecialInMemoryMapArchive(const std::string& mapName);
+bool clearSpecialInMemoryMap();
 
 std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures();
 

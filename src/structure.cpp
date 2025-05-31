@@ -7166,7 +7166,6 @@ bool loadFavoriteStructsFile(const char* path)
 	favoriteStructs.clear();
 
 	// file size sanity check
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	PHYSFS_Stat metaData;
 	if (PHYSFS_stat(path, &metaData) != 0)
 	{
@@ -7176,7 +7175,6 @@ bool loadFavoriteStructsFile(const char* path)
 			return false;
 		}
 	}
-#endif
 
 	auto jsonObj = parseJsonFile(path);
 	if (!jsonObj.has_value())
