@@ -852,6 +852,15 @@ const char *getLevelName()
 	return currentLevelName;
 }
 
+static GameLoadDetails levConstructGameLoadDetails(LEVEL_DATASET* psNewLevel, SWORD scenarioIndex)
+{
+	if (psNewLevel->realFileName != nullptr)
+	{
+		return GameLoadDetails::makeMapPackageLoad(psNewLevel->realFileName);
+	}
+	return GameLoadDetails::makeLevelFileLoad(psNewLevel->apDataFiles[scenarioIndex]);
+}
+
 // load up the data for a level
 bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType)
 {
@@ -943,7 +952,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
-	if (!rebuildSearchPath(psNewLevel->dataDir, true, psNewLevel->realFileName, psNewLevel->customMountPoint))
+	if (!rebuildSearchPath(psNewLevel->dataDir, true))
 	{
 		debug(LOG_ERROR, "Failed to rebuild search path");
 		return false;
@@ -1067,7 +1076,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			debug(LOG_NEVER, "Loading savegame: %s", pSaveName);
-			if (!loadGame(pSaveName, false, true, true))
+			if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
 			{
 				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 				return false;
@@ -1077,7 +1086,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		if (pSaveName == nullptr || saveType == GTYPE_SAVE_START)
 		{
 			debug(LOG_NEVER, "Start mission - no .gam");
-			if (!startMission((LEVEL_TYPE)psNewLevel->type, nullptr))
+			if (!startMission((LEVEL_TYPE)psNewLevel->type, GameLoadDetails::makeLevelFileLoad("")))
 			{
 				debug(LOG_ERROR, "Failed startMission(%d)!", static_cast<int8_t>(psNewLevel->type));
 				return false;
@@ -1100,7 +1109,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			debug(LOG_NEVER, "loading savegame: %s", pSaveName);
-			if (!loadGame(pSaveName, false, true, true))
+			if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
 			{
 				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 				return false;
@@ -1145,7 +1154,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				}
 
 				debug(LOG_NEVER, "Loading save game %s", pSaveName);
-				if (!loadGame(pSaveName, false, true, true))
+				if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
 				{
 					debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 					return false;
@@ -1161,7 +1170,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				case LEVEL_TYPE::LDS_COMPLETE:
 				case LEVEL_TYPE::LDS_CAMSTART:
 					debug(LOG_WZ, "LDS_COMPLETE / LDS_CAMSTART");
-					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1169,7 +1178,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					break;
 				case LEVEL_TYPE::LDS_BETWEEN:
 					debug(LOG_WZ, "LDS_BETWEEN");
-					if (!startMission(LEVEL_TYPE::LDS_BETWEEN, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_BETWEEN, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_BETWEEN), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1178,7 +1187,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 				case LEVEL_TYPE::LDS_MKEEP:
 					debug(LOG_WZ, "LDS_MKEEP");
-					if (!startMission(LEVEL_TYPE::LDS_MKEEP, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_MKEEP, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1186,7 +1195,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					break;
 				case LEVEL_TYPE::LDS_CAMCHANGE:
 					debug(LOG_WZ, "LDS_CAMCHANGE");
-					if (!startMission(LEVEL_TYPE::LDS_CAMCHANGE, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_CAMCHANGE, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMCHANGE), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1195,7 +1204,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 				case LEVEL_TYPE::LDS_EXPAND:
 					debug(LOG_WZ, "LDS_EXPAND");
-					if (!startMission(LEVEL_TYPE::LDS_EXPAND, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_EXPAND, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1203,7 +1212,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					break;
 				case LEVEL_TYPE::LDS_EXPAND_LIMBO:
 					debug(LOG_WZ, "LDS_LIMBO");
-					if (!startMission(LEVEL_TYPE::LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_EXPAND_LIMBO, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1212,7 +1221,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 				case LEVEL_TYPE::LDS_MCLEAR:
 					debug(LOG_WZ, "LDS_MCLEAR");
-					if (!startMission(LEVEL_TYPE::LDS_MCLEAR, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_MCLEAR, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MCLEAR), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1220,7 +1229,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					break;
 				case LEVEL_TYPE::LDS_MKEEP_LIMBO:
 					debug(LOG_WZ, "LDS_MKEEP_LIMBO");
-					if (!startMission(LEVEL_TYPE::LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_MKEEP_LIMBO, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP_LIMBO), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1229,7 +1238,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				default:
 					ASSERT(psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START, "Unexpected mission type");
 					debug(LOG_WZ, "default (MULTIPLAYER)");
-					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s) (default)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 						return false;

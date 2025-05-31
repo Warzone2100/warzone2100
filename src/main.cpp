@@ -973,7 +973,7 @@ static bool initSaveGameLoad()
 	initLoadingScreen(true);
 
 	// load up a save game
-	if (!loadGameInit(saveGameName))
+	if (!loadGameInit(GameLoadDetails::makeUserSaveGameLoad(saveGameName)))
 	{
 		// FIXME: we really should throw up a error window, but we can't (easily) so I won't.
 		debug(LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
