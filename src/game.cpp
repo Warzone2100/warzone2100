@@ -101,6 +101,9 @@
 #include "screens/guidescreen.h"
 #include <array>
 
+#include "wzphysfszipioprovider.h"
+#include <wzmaplib/map_package.h>
+
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
 #elif defined(__GNUC__)
@@ -2280,6 +2283,8 @@ static bool writeScriptState(const char *pFileName);
 static bool writeSaveGuideTopics(const char *pFileName);
 static bool loadSaveGuideTopics(const char *pFileName);
 
+static bool loadRulesetJson();
+
 static bool gameLoad(const char *fileName);
 
 /* set the global scroll values to use for the save game */
@@ -2294,17 +2299,48 @@ static char *getSaveStructNameV19(SAVE_STRUCTURE_V17 *psSaveStructure)
 so can be called in levLoadData when starting a game from a load save game*/
 
 // -----------------------------------------------------------------------------------------
-bool loadGameInit(const char *fileName)
+bool loadGameInit(const GameLoadDetails& gameToLoad)
 {
-	ASSERT_OR_RETURN(false, fileName != nullptr, "fileName is null??");
+	ASSERT_OR_RETURN(false, !gameToLoad.filePath.empty(), "filePath is empty??");
 
-	if (strEndsWith(fileName, ".wzrp"))
+	if (gameToLoad.loadType == GameLoadDetails::GameLoadType::MapPackage)
 	{
+		auto pGamInfo = gameToLoad.getGamInfoFromPackage();
+		if (!pGamInfo)
+		{
+			// Failed to load map package
+			debug(LOG_ERROR, "Failed to load map package: %s", gameToLoad.filePath.c_str());
+			return false;
+		}
+
+		loadRulesetJson();
+
+		savedGameTime = pGamInfo->gameTime;
+		startX = pGamInfo->ScrollMinX;
+		startY = pGamInfo->ScrollMinY;
+		width = pGamInfo->ScrollMaxX - pGamInfo->ScrollMinX;
+		height = pGamInfo->ScrollMaxY - pGamInfo->ScrollMinY;
+		gameType = static_cast<GAME_TYPE>(pGamInfo->GameType);
+		//set IsScenario to true if not a user saved game
+		if (gameType == GTYPE_SAVE_START)
+		{
+			debug(LOG_FATAL, "Should not be called with gameType GTYPE_SAVE_START");
+		}
+		IsScenario = true;
+		return true;
+	}
+
+	// Otherwise, for level load or savegame load cases:
+
+	if (strEndsWith(gameToLoad.filePath, ".wzrp"))
+	{
+		ASSERT_OR_RETURN(false, (gameToLoad.loadType == GameLoadDetails::GameLoadType::UserSaveGame), "Invalid load type");
+
 		SetGameMode(GS_TITLE_SCREEN); // hack - the caller sets this to GS_NORMAL but we actually want to proceed with normal startGameLoop
 
 		// if it ends in .wzrp, try to load the replay!
 		WZGameReplayOptionsHandler optionsHandler;
-		if (!NETloadReplay(fileName, optionsHandler))
+		if (!NETloadReplay(gameToLoad.filePath, optionsHandler))
 		{
 			return false;
 		}
@@ -2313,9 +2349,9 @@ bool loadGameInit(const char *fileName)
 		bMultiMessages = true;
 		changeTitleMode(STARTGAME);
 	}
-	else if (!gameLoad(fileName))
+	else if (!gameLoad(gameToLoad.filePath.c_str()))
 	{
-		debug(LOG_ERROR, "Corrupted / unsupported savegame file %s, Unable to load!", fileName);
+		debug(LOG_ERROR, "Corrupted / unsupported savegame file %s, Unable to load!", gameToLoad.filePath.c_str());
 		// NOTE: why do we start the game clock on a *failed* load?
 		// Start the game clock
 		gameTimeStart();
@@ -2496,9 +2532,121 @@ static WzMap::MapType getWzMapType(bool UserSaveGame)
 	}
 }
 
+GameLoadDetails::GameLoadDetails(GameLoadDetails::GameLoadType loadType, const std::string& filePath)
+: loadType(loadType)
+, filePath(filePath)
+{
+	m_logger = std::make_shared<WzMapDebugLogger>();
+}
+
+GameLoadDetails GameLoadDetails::makeUserSaveGameLoad(const std::string& saveGame)
+{
+	return GameLoadDetails(GameLoadType::UserSaveGame, saveGame);
+}
+GameLoadDetails GameLoadDetails::makeMapPackageLoad(const std::string& mapPackageFilePath)
+{
+	return GameLoadDetails(GameLoadType::MapPackage, mapPackageFilePath);
+}
+GameLoadDetails GameLoadDetails::makeLevelFileLoad(const std::string& levelFileName)
+{
+	return GameLoadDetails(GameLoadType::Level, levelFileName);
+}
+GameLoadDetails& GameLoadDetails::setLogger(const std::shared_ptr<WzMap::LoggingProtocol>& logger)
+{
+	m_logger = logger;
+	return *this;
+}
+
+std::string GameLoadDetails::getMapFolderPath() const
+{
+	std::string result = filePath;
+	if (strEndsWith(result, ".gam"))
+	{
+		result = result.substr(0, result.size() - 4);
+	}
+	if (result.empty() || result.back() != '/')
+	{
+		result.append("/");
+	}
+	return result;
+}
+
+std::shared_ptr<WzMap::Map> GameLoadDetails::getMap() const
+{
+	if (m_loadedMap)
+	{
+		return m_loadedMap;
+	}
+
+	uint32_t mapSeed = gameRandU32();
+	switch (loadType)
+	{
+		case GameLoadType::UserSaveGame:
+			m_loadedMap = WzMap::Map::loadFromPath(getMapFolderPath(), getWzMapType(true), game.maxPlayers, mapSeed, m_logger, std::make_shared<WzMapPhysFSIO>());
+			break;
+		case GameLoadType::MapPackage:
+		{
+			auto package = getMapPackage();
+			if (package)
+			{
+				m_loadedMap = m_loadedPackage->loadMap(mapSeed);
+			}
+			break;
+		}
+		case GameLoadType::Level:
+			m_loadedMap = WzMap::Map::loadFromPath(getMapFolderPath(), getWzMapType(false), game.maxPlayers, mapSeed, m_logger, std::make_shared<WzMapPhysFSIO>());
+			break;
+	}
+
+	return m_loadedMap;
+}
+
+std::shared_ptr<WzMap::MapPackage> GameLoadDetails::getMapPackage() const
+{
+	ASSERT_OR_RETURN(nullptr, loadType == GameLoadType::MapPackage, "Not a map package");
+	if (m_loadedPackage)
+	{
+		return m_loadedPackage;
+	}
+	std::shared_ptr<WzMapZipIO> mapZipIO = getSpecialInMemoryMapArchive(filePath);
+	if (!mapZipIO)
+	{
+		auto zipReadSource = WzZipIOPHYSFSSourceReadProvider::make(filePath);
+		mapZipIO = WzMapZipIO::openZipArchiveReadIOProvider(zipReadSource);
+	}
+	if (!mapZipIO)
+	{
+		debug(LOG_ERROR, "Failed to open map package: %s", filePath.c_str());
+		return nullptr;
+	}
+	m_loadedPackage = WzMap::MapPackage::loadPackage("", m_logger, mapZipIO);
+	return m_loadedPackage;
+}
+
+const WzMap::GamInfo* GameLoadDetails::getGamInfoFromPackage() const
+{
+	switch (loadType)
+	{
+		case GameLoadType::UserSaveGame:
+			return nullptr;
+		case GameLoadType::MapPackage:
+		{
+			auto package = getMapPackage();
+			if (!package)
+			{
+				return nullptr;
+			}
+			return &package->getGamInfo();
+		}
+		case GameLoadType::Level:
+			return nullptr;
+	}
+	return nullptr; // silence compiler warning
+}
+
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
-bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
+bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 {
 	std::shared_ptr<WzMap::Map> data;
 	std::map<WzString, PerPlayerDroidLists *> droidMap;
@@ -2512,6 +2660,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	//   I don't what's the reason but we definitely need to handle more than MAX_PLAYERS
 	std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS> moduleToBuilding;
 
+	const bool		UserSaveGame = (gameToLoad.loadType == GameLoadDetails::GameLoadType::UserSaveGame);
 	char			aFileName[256];
 	size_t			fileExten;
 	UDWORD			fileSize;
@@ -2519,7 +2668,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	UDWORD			player, inc, i, j;
 	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
 	                missionScrollMaxX = 0, missionScrollMaxY = 0;
-	uint32_t        mapSeed = 0;
 	// This will be set to the largest group ID found throughout each droid file + 1
 	// on each invocation of `loadSaveDroid()` function.
 	// Acts as the initial offset for assigning new group IDs in `loadSaveGroup()`.
@@ -2744,20 +2892,17 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	powerCalculated = false;
 
 	/* Load in the chosen file data */
-	sstrcpy(aFileName, pGameToLoad);
-	fileExten = strlen(aFileName) - 3;			// hack - !
-	aFileName[fileExten - 1] = '\0';
-	strcat(aFileName, "/");
+	sstrcpy(aFileName, gameToLoad.getMapFolderPath().c_str());
+	fileExten = strlen(aFileName);
 
 	// construct the WzMap object for loading map data
 	aFileName[fileExten] = '\0';
-	mapSeed = gameRandU32();
-	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, mapSeed, std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
+	data = gameToLoad.getMap();
 
 	if (data && data->wasScriptGenerated())
 	{
 		// Log the random seed used to generate this instance of the map
-		debug(LOG_INFO, "Loaded script-generated map \"%s\" with random seed: %" PRIu32, aFileName, mapSeed);
+		debug(LOG_INFO, "Loaded script-generated map \"%s\" with random seed: %" PRIu32, aFileName, data->scriptGeneratedMapSeed().value_or(0));
 	}
 
 	//the terrain type WILL only change with Campaign changes (well at the moment!)
@@ -3381,7 +3526,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	return true;
 
 error:
-	debug(LOG_ERROR, "Game load failed for %s, FS:%s, params=%s,%s,%s", pGameToLoad, WZ_PHYSFS_getRealDir_String(pGameToLoad).c_str(),
+	debug(LOG_ERROR, "Game load failed for %s, FS:%s, params=%s,%s,%s", gameToLoad.filePath.c_str(), WZ_PHYSFS_getRealDir_String(gameToLoad.filePath.c_str()).c_str(),
 	      keepObjects ? "true" : "false", freeMem ? "true" : "false", UserSaveGame ? "true" : "false");
 
 	/* Clear all the objects off the map and free up the map memory */
@@ -3729,6 +3874,36 @@ static bool writeMapFile(const char *fileName)
 	return status;
 }
 
+static bool loadRulesetJson()
+{
+	// Prior to getting here, the directory structure has been set to wherever the
+	// map or savegame is loaded from, so we will get the right ruleset file.
+	if (!PHYSFS_exists("ruleset.json"))
+	{
+		debug(LOG_ERROR, "ruleset.json not found! User generated data will not work.");
+		memset(rulesettag, 0, sizeof(rulesettag));
+		return false;
+	}
+	else
+	{
+		WzConfig ruleset(WzString::fromUtf8("ruleset.json"), WzConfig::ReadOnly);
+		if (!ruleset.contains("tag"))
+		{
+			debug(LOG_ERROR, "ruleset tag not found in ruleset.json!"); // fall-through
+		}
+		WzString tag = ruleset.value("tag", "[]").toWzString();
+		sstrcpy(rulesettag, tag.toUtf8().c_str());
+		if (strspn(rulesettag, "abcdefghijklmnopqrstuvwxyz") != strlen(rulesettag)) // for safety
+		{
+			debug(LOG_ERROR, "ruleset.json userdata tag contains invalid characters!");
+			debug(LOG_ERROR, "User generated data will not work.");
+			memset(rulesettag, 0, sizeof(rulesettag));
+		}
+	}
+
+	return true;
+}
+
 // -----------------------------------------------------------------------------------------
 static bool gameLoad(const char *fileName)
 {
@@ -3784,27 +3959,7 @@ static bool gameLoad(const char *fileName)
 
 	// Prior to getting here, the directory structure has been set to wherever the
 	// map or savegame is loaded from, so we will get the right ruleset file.
-	if (!PHYSFS_exists("ruleset.json"))
-	{
-		debug(LOG_ERROR, "ruleset.json not found! User generated data will not work.");
-		memset(rulesettag, 0, sizeof(rulesettag));
-	}
-	else
-	{
-		WzConfig ruleset(WzString::fromUtf8("ruleset.json"), WzConfig::ReadOnly);
-		if (!ruleset.contains("tag"))
-		{
-			debug(LOG_ERROR, "ruleset tag not found in ruleset.json!"); // fall-through
-		}
-		WzString tag = ruleset.value("tag", "[]").toWzString();
-		sstrcpy(rulesettag, tag.toUtf8().c_str());
-		if (strspn(rulesettag, "abcdefghijklmnopqrstuvwxyz") != strlen(rulesettag)) // for safety
-		{
-			debug(LOG_ERROR, "ruleset.json userdata tag contains invalid characters!");
-			debug(LOG_ERROR, "User generated data will not work.");
-			memset(rulesettag, 0, sizeof(rulesettag));
-		}
-	}
+	loadRulesetJson();
 
 	//set main version Id from game file
 	saveGameVersion = fileHeader.version;

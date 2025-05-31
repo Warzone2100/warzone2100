@@ -752,7 +752,7 @@ void loadMapPreview(bool hideInterface)
 		useTerrainOverrides = false;
 		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName.c_str(), WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
-	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName, psLevel->customMountPoint);
+	rebuildSearchPath(psLevel->dataDir, false);
 	if (psLevel->apDataFiles[psLevel->game].empty())
 	{
 		debug(LOG_ERROR, "No path for level \"%s\"? (%s)", psLevel->pName.c_str(), (psLevel->realFileName) ? psLevel->realFileName : "null");
@@ -760,16 +760,11 @@ void loadMapPreview(bool hideInterface)
 		return;
 	}
 	aFileName = psLevel->apDataFiles[psLevel->game];
-	// Remove the file extension (ex. ".gam")
-	auto lastPeriodPos = aFileName.rfind('.');
-	if (std::string::npos != lastPeriodPos)
-	{
-		aFileName = aFileName.substr(0, std::max<size_t>(lastPeriodPos, (size_t)1));
-	}
+
+	auto gameLoadDetails = (psLevel->realFileName) ? GameLoadDetails::makeMapPackageLoad(psLevel->realFileName) : GameLoadDetails::makeLevelFileLoad(aFileName);
 
 	// load the map data
-	aFileName += "/";
-	auto data = WzMap::Map::loadFromPath(aFileName, WzMap::MapType::SKIRMISH, psLevel->players, rand(), std::make_shared<WzMapDebugLogger>(), std::make_shared<WzMapPhysFSIO>());
+	auto data = gameLoadDetails.getMap();
 	if (!data)
 	{
 		debug(LOG_ERROR, "Failed to load map from path: %s", aFileName.c_str());
