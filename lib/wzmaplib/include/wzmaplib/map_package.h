@@ -103,7 +103,7 @@ bool exportLevelDetails(const LevelDetails& details, LevelFormat format, const s
 
 class MapPackage
 {
-private:
+protected:
 	// Construct an empty Map Package, for modification
 	MapPackage();
 
@@ -115,7 +115,7 @@ public:
 	// The default StdIOProvider will assume pathToMapPackage is a path to an extracted map package (i.e. standard filesystem I/O)
 	//
 	// To load from an archive (.zip/.wz), create a custom implementation of WzMap::IOProvider that supports compressed archive files that you initialize with the path to the zip. An example of this (which uses libzip) is available in `plugins/ZipIOProvider`. You would then set `pathToMapPackage` to be the root path inside the zip. (In the case of plugins\ZipIOProvider, literally "/" or "").
-	static std::unique_ptr<MapPackage> loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::make_shared<StdIOProvider>());
+	static std::shared_ptr<MapPackage> loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::make_shared<StdIOProvider>());
 
 	// Construct a new MapPackage object (which can then be exported)
 	MapPackage(const LevelDetails& levelDetails, MapType mapType, std::shared_ptr<Map> map);
@@ -180,7 +180,6 @@ public:
 	optional<MapStats> calculateMapStats(uint32_t mapSeed);
 	optional<MapStats> calculateMapStats(MapStatsConfiguration statsConfig, uint32_t mapSeed);
 
-private:
 	const GamInfo& getGamInfo();
 
 private:
