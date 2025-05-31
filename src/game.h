@@ -35,17 +35,56 @@
 #include <nlohmann/json_fwd.hpp>
 #include <nonstd/optional.hpp>
 #include <sstream>
+
+namespace WzMap {
+	class Map;
+	class MapPackage;
+	class LoggingProtocol;
+	struct GamInfo;
+}
+
 /***************************************************************************/
 /*
  *	Global ProtoTypes
  */
 /***************************************************************************/
 
-bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame);	// UserSaveGame is true when the save game is not a new level (User Save Game)
+struct GameLoadDetails
+{
+public:
+	enum class GameLoadType
+	{
+		UserSaveGame,
+		Level,
+		MapPackage
+	};
+protected:
+	GameLoadDetails(GameLoadType loadType, const std::string& filePath);
+public:
+	static GameLoadDetails makeUserSaveGameLoad(const std::string& saveGame);
+	static GameLoadDetails makeMapPackageLoad(const std::string& mapPackageFilePath);
+	static GameLoadDetails makeLevelFileLoad(const std::string& levelFileName);
+	GameLoadDetails& setLogger(const std::shared_ptr<WzMap::LoggingProtocol>& logger);
+public:
+	std::string getMapFolderPath() const;
+	std::shared_ptr<WzMap::Map> getMap() const;
+	const WzMap::GamInfo* getGamInfoFromPackage() const;
+private:
+	std::shared_ptr<WzMap::MapPackage> getMapPackage() const;
+public:
+	GameLoadType loadType;
+	std::string filePath;
+private:
+	std::shared_ptr<WzMap::LoggingProtocol> m_logger;
+	mutable std::shared_ptr<WzMap::MapPackage> m_loadedPackage;
+	mutable std::shared_ptr<WzMap::Map> m_loadedMap;
+};
+
+bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem);
 
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-bool loadGameInit(const char *fileName);
+bool loadGameInit(const GameLoadDetails& gameToLoad);
 
 bool loadMissionExtras(const char* pGameToLoad, LEVEL_TYPE levelType);
 
