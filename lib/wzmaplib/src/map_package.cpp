@@ -1128,7 +1128,7 @@ MapPackage::MapPackage()
 // The default StdIOProvider will assume pathToMapPackage is a path to an extracted map package (i.e. standard filesystem I/O)
 //
 // To load from an archive (.zip/.wz), create a custom implementation of WzMap::IOProvider that supports compressed archive files that you initialize with the path to the zip. An example of this (which uses libzip) is available in `plugins/ZipIOProvider`. You would then set `pathToMapPackage` to be the root path inside the zip. (In the case of plugins\ZipIOProvider, literally `/`).
-std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger /*= nullptr*/, std::shared_ptr<IOProvider> pMapIO /*= std::make_shared<StdIOProvider>()*/)
+std::shared_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger /*= nullptr*/, std::shared_ptr<IOProvider> pMapIO /*= std::make_shared<StdIOProvider>()*/)
 {
 	LoggingProtocol* pCustomLogger = logger.get();
 	if (!pMapIO)
@@ -1136,6 +1136,8 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 		debug(pCustomLogger, LOG_ERROR, "Null IOProvider");
 		return nullptr;
 	}
+
+	class make_shared_enabler: public MapPackage {};
 
 	IOProvider& mapIO = *pMapIO;
 
@@ -1165,7 +1167,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 		if (loadedLevelDetails.has_value())
 		{
 			// Successfully found a level.json file inside the enumerated map folder
-			std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
+			std::shared_ptr<MapPackage> result = std::make_shared<make_shared_enabler>();
 			result->m_levelDetails = loadedLevelDetails.value();
 			result->m_loadedLevelFormat = LevelFormat::JSON;
 			result->m_mapType = result->m_levelDetails.type;
@@ -1180,7 +1182,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 	if (loadedFlatLevelDetails.has_value())
 	{
 		// Successfully found a level.json file inside the root folder
-		std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
+		std::shared_ptr<MapPackage> result = std::make_shared<make_shared_enabler>();
 		result->m_levelDetails = loadedFlatLevelDetails.value();
 		result->m_levelDetails.mapFolderPath.clear();
 		result->m_loadedLevelFormat = LevelFormat::JSON;
@@ -1237,7 +1239,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 			});
 
 			// Successfully loaded level details from a .lev file in the root
-			std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
+			std::shared_ptr<MapPackage> result = std::make_shared<make_shared_enabler>();
 			result->m_levelDetails = loadedLevelDetails.value();
 			result->m_loadedLevelFormat = LevelFormat::LEV;
 			result->m_mapType = result->m_levelDetails.type;
