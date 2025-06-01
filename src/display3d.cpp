@@ -4005,8 +4005,8 @@ void screenCoordToWorld(Vector2i screenCoord, Vector2i &worldCoord, SDWORD &tile
 				/* We've got a match for our mouse coords */
 				if (inQuad(&screenCoord, &quad))
 				{
-					outMousePos.x = playerPos.p.x + world_coord(j);
-					outMousePos.y = playerPos.p.z + world_coord(i);
+					outMousePos.x = playerPos.p.x + (world_coord(j) - (playerPos.p.x % TILE_WIDTH));
+					outMousePos.y = playerPos.p.z + (world_coord(i) - (playerPos.p.z % TILE_HEIGHT));
 					outMousePos += positionInQuad(screenCoord, quad);
 					if (outMousePos.x < 0)
 					{
