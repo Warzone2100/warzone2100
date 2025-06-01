@@ -407,6 +407,7 @@ static void clearInMemoryMapFile(void *pData)
 
 static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mountPoint, int appendToPath)
 {
+	ASSERT_OR_RETURN(false, newDir != nullptr, "Null newDir");
 	if (PHYSFS_mount(newDir, mountPoint, appendToPath) != 0)
 	{
 		return true;
@@ -418,7 +419,7 @@ static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mou
 		if (errorCode != PHYSFS_ERR_NOT_FOUND)
 		{
 			const char* errorStr = PHYSFS_getErrorByCode(errorCode);
-			searchPathMountErrors.push_back(astringf("Failed to mount \"%s\" @ \"%s\": %s", newDir, mountPoint, (errorStr) ? errorStr : "<no details available?>"));
+			searchPathMountErrors.push_back(astringf("Failed to mount \"%s\" @ \"%s\": %s", newDir, (mountPoint) ? mountPoint : "/", (errorStr) ? errorStr : "<no details available?>"));
 		}
 		return false;
 	}
