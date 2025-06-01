@@ -691,7 +691,7 @@ protected:
 	}
 
 public:
-	static std::shared_ptr<WzJoiningGameScreen> make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
+	static std::shared_ptr<WzJoiningGameScreen> make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
 
 public:
 	void closeScreen();
@@ -713,7 +713,7 @@ protected:
 	void initialize();
 	void recalcLayout();
 public:
-	static std::shared_ptr<WzJoiningGameScreen_HandlerRoot> make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
+	static std::shared_ptr<WzJoiningGameScreen_HandlerRoot> make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void display(int xOffset, int yOffset) override;
 	void run(W_CONTEXT *psContext) override;
@@ -767,6 +767,7 @@ private:
 	std::vector<JoinConnectionDescription> connectionList;
 	WzString playerName;
 	EcKey playerIdentity;
+	ExpectedHostProperties expectedHostProps;
 	EcKey hostIdentity;
 	std::unique_ptr<SessionKeys> connectionAuthSessionKeys;
 	std::vector<uint8_t> challengeForHost;
@@ -874,7 +875,7 @@ WzJoiningGameScreen_HandlerRoot::~WzJoiningGameScreen_HandlerRoot()
 	currentJoiningState = JoiningState::Failure;
 }
 
-std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot::make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
+std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot::make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
 {
 	W_FORMINIT sInit;
 	sInit.id = 0;
@@ -897,6 +898,7 @@ std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot
 	widget->playerName = playerName;
 	widget->playerIdentity = playerIdentity;
 	widget->asSpectator = asSpectator;
+	widget->expectedHostProps = expectedHostProps;
 	widget->onSuccessFunc = onSuccessFunc;
 	widget->onFailureFunc = onFailureFunc;
 
@@ -907,6 +909,11 @@ std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot
 void WzJoiningGameScreen_HandlerRoot::initialize()
 {
 	timeStarted = std::chrono::steady_clock::now();
+
+	if (expectedHostProps.gamePassword.has_value())
+	{
+		sstrcpy(gamePassword, expectedHostProps.gamePassword.value().c_str());
+	}
 
 	auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
 
@@ -1612,8 +1619,16 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 
 			if (rejection == ERROR_WRONGPASSWORD)
 			{
-				currentJoiningState = JoiningState::NeedsPassword;
-				promptForPassword();
+				if (!expectedHostProps.gamePassword.has_value())
+				{
+					currentJoiningState = JoiningState::NeedsPassword;
+					promptForPassword();
+				}
+				else
+				{
+					// started join with expected game password, but the host rejected the password - treat as a failure
+					handleFailure(FailureDetails::makeFromLobbyError(ERROR_WRONGDATA));
+				}
 			}
 			else
 			{
@@ -1659,6 +1674,20 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				closeConnectionAttempt();
 				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host identity")));
 				return;
+			}
+
+			if (expectedHostProps.hostPublicKey.has_value())
+			{
+				// Verify that the sent host public key matches the expected
+				// (Note: Actual verification of the key itself comes later with a challenge/response)
+				if (hostPublicKey != expectedHostProps.hostPublicKey.value())
+				{
+					debug(LOG_ERROR, "Unexpected host identity");
+					// Disconnect and treat as a failure
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Invalid host identity")));
+					return;
+				}
 			}
 
 			try {
@@ -1727,10 +1756,10 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 
 // MARK: - WzJoiningGameScreen
 
-std::shared_ptr<WzJoiningGameScreen> WzJoiningGameScreen::make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
+std::shared_ptr<WzJoiningGameScreen> WzJoiningGameScreen::make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
 {
 	class make_shared_enabler: public WzJoiningGameScreen {};
-	auto newRootFrm = WzJoiningGameScreen_HandlerRoot::make(connectionList, playerName, playerIdentity, asSpectator, onSuccessFunc, onFailureFunc);
+	auto newRootFrm = WzJoiningGameScreen_HandlerRoot::make(connectionList, playerName, playerIdentity, asSpectator, expectedHostProps, onSuccessFunc, onFailureFunc);
 	auto screen = std::make_shared<make_shared_enabler>();
 	screen->initialize(newRootFrm);
 	std::weak_ptr<WzJoiningGameScreen> psWeakHelpOverlayScreen(screen);
@@ -1794,9 +1823,7 @@ void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen)
 	}
 }
 
-// MARK: - Public API
-
-bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/)
+static bool startJoiningAttemptInternal(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, ExpectedHostProperties expectedHostProps /*= ExpectedHostProperties()*/)
 {
 	ASSERT_OR_RETURN(false, !connection_list.empty(), "Empty connection_list?");
 
@@ -1836,7 +1863,7 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 	PLAYERSTATS	playerStats;
 	loadMultiStats(playerName, &playerStats);
 
-	auto screen = WzJoiningGameScreen::make(connection_list, playerName, playerStats.identity, asSpectator,
+	auto screen = WzJoiningGameScreen::make(connection_list, playerName, playerStats.identity, asSpectator, expectedHostProps,
 		// onSuccessFunc
 		[playerStats](const JoinConnectionDescription& connection) {
 			handleJoinSuccess(connection, playerStats);
@@ -1854,9 +1881,16 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 	return true;
 }
 
+// MARK: - Public API
+
+bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, ExpectedHostProperties expectedHostProps /*= ExpectedHostProperties()*/)
+{
+	return startJoiningAttemptInternal(playerName, connection_list, asSpectator, expectedHostProps);
+}
+
 void shutdownJoiningAttempt()
 {
-	// Closes the overlay screen, cancelling whater join attempt is in progress (if one is in progress)
+	// Closes the overlay screen, cancelling whatever join attempt is in progress (if one is in progress)
 	if (auto strongJoiningAttemptScreen = psCurrentJoiningAttemptScreen.lock())
 	{
 		widgRemoveOverlayScreen(strongJoiningAttemptScreen);
