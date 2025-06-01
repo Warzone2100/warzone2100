@@ -123,8 +123,27 @@ std::string GNSClientConnection::textAddress() const
 		return {};
 	}
 	char buf[SteamNetworkingIdentity::k_cchMaxString] = {};
-	connInfo.m_identityRemote.ToString(buf, SteamNetworkingIdentity::k_cchMaxString);
-	return std::string(buf);
+
+	switch (connInfo.m_identityRemote.m_eType)
+	{
+		case k_ESteamNetworkingIdentityType_IPAddress:
+		{
+			// Special handling of the ip address case
+			// Return the ip address (without the "ip:" prefix that SteamNetworkingIdentity::ToString would add, and without the port), to match TCP backend behavior
+			auto pIPAddr = connInfo.m_identityRemote.GetIPAddr();
+			ASSERT_OR_RETURN({}, pIPAddr != nullptr, "Unable to get ip address?");
+			pIPAddr->ToString(buf, SteamNetworkingIdentity::k_cchMaxString, false);
+			break;
+		}
+		case k_ESteamNetworkingIdentityType_Invalid:
+			ASSERT(false, "Connection identity type is invalid?");
+			return {};
+		default:
+			// Other cases - use SteamNetworkingIdentity::ToString, which returns a string with a "prefix:" indicating what type of identity it is
+			connInfo.m_identityRemote.ToString(buf, SteamNetworkingIdentity::k_cchMaxString);
+			return std::string(buf);
+	}
+	return {}; // silence compiler warning
 }
 
 bool GNSClientConnection::isValid() const
