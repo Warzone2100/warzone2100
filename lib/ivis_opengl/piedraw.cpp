@@ -998,6 +998,7 @@ private:
 	typedef templatedState MeshInstanceKey;
 	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceMeshes;
 	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshes;
+	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshesNoDepthWrite;
 	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceAdditiveMeshes;
 	size_t instancesCount = 0;
 	size_t translucentInstancesCount = 0;
@@ -1028,6 +1029,7 @@ private:
 	};
 	std::vector<InstancedDrawCall> finalizedDrawCalls;
 	size_t startIdxTranslucentDrawCalls = 0;
+	size_t startIdxTranslucentNoDepthWriteDrawCalls = 0;
 	size_t startIdxAdditiveDrawCalls = 0;
 };
 
@@ -1054,6 +1056,7 @@ void InstancedMeshRenderer::clear()
 {
 	instanceMeshes.clear();
 	instanceTranslucentMeshes.clear();
+	instanceTranslucentMeshesNoDepthWrite.clear();
 	instanceAdditiveMeshes.clear();
 	instancesCount = 0;
 	translucentInstancesCount = 0;
@@ -1140,7 +1143,14 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 	{
 		if (useInstancedRendering)
 		{
-			instanceTranslucentMeshes[currentState].push_back(tshape);
+			if (pieFlag & pie_NODEPTHWRITE)
+			{
+				instanceTranslucentMeshesNoDepthWrite[currentState].push_back(tshape);
+			}
+			else
+			{
+				instanceTranslucentMeshes[currentState].push_back(tshape);
+			}
 		}
 		else
 		{
@@ -1381,6 +1391,19 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	startIdxTranslucentDrawCalls = finalizedDrawCalls.size();
 
 	for (const auto& mesh : instanceTranslucentMeshes)
+	{
+		const auto& meshInstances = mesh.second;
+		size_t startingIdxInInstancesBuffer = instancesData.size();
+		for (const auto& instance : meshInstances)
+		{
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
+		}
+		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
+	}
+
+	startIdxTranslucentNoDepthWriteDrawCalls = finalizedDrawCalls.size();
+
+	for (const auto& mesh : instanceTranslucentMeshesNoDepthWrite)
 	{
 		const auto& meshInstances = mesh.second;
 		size_t startingIdxInInstancesBuffer = instancesData.size();
@@ -1667,17 +1690,32 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 	{
 		// Draw translucent models next
 		gfx_api::context::get().debugStringMarker("Remaining passes - translucent models");
-		for (size_t i = startIdxTranslucentDrawCalls; i < startIdxAdditiveDrawCalls; ++i)
+		for (size_t i = startIdxTranslucentDrawCalls; i < startIdxTranslucentNoDepthWriteDrawCalls; ++i)
 		{
 			const auto& call = finalizedDrawCalls[i];
 			const iIMDShape * shape = call.state.shape;
 			size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
 			pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count, depthPass, lightmapTexture);
 		}
-		if (startIdxTranslucentDrawCalls < finalizedDrawCalls.size())
+		if (startIdxTranslucentDrawCalls < startIdxTranslucentNoDepthWriteDrawCalls)
 		{
 			// unbind last index buffer bound inside pie_Draw3DShape2
-			gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls.back().state.shape)->buffers[VBO_INDEX]));
+			gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls[startIdxTranslucentNoDepthWriteDrawCalls-1].state.shape)->buffers[VBO_INDEX]));
+		}
+
+		// Draw translucent (no depth write) models after
+		gfx_api::context::get().debugStringMarker("Remaining passes - translucent (no depth write) models");
+		for (size_t i = startIdxTranslucentNoDepthWriteDrawCalls; i < startIdxAdditiveDrawCalls; ++i)
+		{
+			const auto& call = finalizedDrawCalls[i];
+			const iIMDShape * shape = call.state.shape;
+			size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
+			pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count, depthPass, lightmapTexture);
+		}
+		if (startIdxTranslucentNoDepthWriteDrawCalls < startIdxAdditiveDrawCalls)
+		{
+			// unbind last index buffer bound inside pie_Draw3DShape2
+			gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls[startIdxAdditiveDrawCalls-1].state.shape)->buffers[VBO_INDEX]));
 		}
 	}
 
