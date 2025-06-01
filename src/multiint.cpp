@@ -1007,36 +1007,50 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
 	}
 }
 
-void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v)
+std::string JoinConnectionDescription::connectiontype_to_string(JoinConnectionDescription::JoinConnectionType type)
 {
-	switch (v)
+	switch (type)
 	{
-	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT:
-		j = "tcp";
-		break;
+	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT: return "tcp";
 #ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-	case JoinConnectionDescription::JoinConnectionType::GNS_DIRECT:
-		j = "gns";
-		break;
+	case JoinConnectionDescription::JoinConnectionType::GNS_DIRECT: return "gns";
 #endif
 	}
+	return {}; // silence compiler warning
+}
+
+optional<JoinConnectionDescription::JoinConnectionType> JoinConnectionDescription::connectiontype_from_string(const std::string& str)
+{
+	if (str == "tcp")
+	{
+		return JoinConnectionDescription::JoinConnectionType::TCP_DIRECT;
+	}
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	if (str == "gns")
+	{
+		return JoinConnectionDescription::JoinConnectionType::GNS_DIRECT;
+	}
+#endif
+	return nullopt;
+}
+
+void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v)
+{
+	j = JoinConnectionDescription::connectiontype_to_string(v);
 }
 
 void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectionType& v)
 {
 	auto str = j.get<std::string>();
-	if (str == "tcp")
+	auto result = JoinConnectionDescription::connectiontype_from_string(str);
+	if (result.has_value())
 	{
-		v = JoinConnectionDescription::JoinConnectionType::TCP_DIRECT;
-		return;
+		v = result.value();
 	}
-#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-	if (str == "gns")
+	else
 	{
-		v = JoinConnectionDescription::JoinConnectionType::GNS_DIRECT;
+		throw nlohmann::json::type_error::create(302, "JoinConnectionType value is unknown: \"" + str + "\"", &j);
 	}
-#endif
-	throw nlohmann::json::type_error::create(302, "JoinConnectionType value is unknown: \"" + str + "\"", &j);
 }
 
 void to_json(nlohmann::json& j, const JoinConnectionDescription& v)
@@ -4419,6 +4433,34 @@ static void SendFireUp()
 	gameSRand(randomSeed);  // Set the seed for the synchronised random number generator. The clients will use the same seed.
 }
 
+void to_json(nlohmann::json& j, const KickRedirectInfo& v)
+{
+	j = nlohmann::json::object();
+	j["c"] = v.connList;
+	if (v.gamePassword.has_value())
+	{
+		j["p"] = v.gamePassword.value();
+	}
+	j["s"] = (v.asSpectator) ? 1 : 0;
+}
+
+void from_json(const nlohmann::json& j, KickRedirectInfo& v)
+{
+	v.connList = j.at("c").get<std::vector<JoinConnectionDescription>>();
+	v.gamePassword = nullopt;
+	auto it = j.find("p");
+	if (it != j.end())
+	{
+		v.gamePassword = it.value().get<std::string>();
+	}
+	v.asSpectator = false;
+	it = j.find("s");
+	if (it != j.end())
+	{
+		v.asSpectator = it.value().get<uint32_t>() != 0;
+	}
+}
+
 // host kicks a player from a game.
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer)
 {
@@ -4443,6 +4485,64 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, 
 	}
 
 	NETplayerKicked(player_id);
+}
+
+bool kickRedirectPlayer(uint32_t player_id, const KickRedirectInfo& redirectInfo)
+{
+	ASSERT_HOST_ONLY(return false);
+	ASSERT_OR_RETURN(false, player_id < NetPlay.players.size(), "Invalid player_id: %" PRIu32, player_id);
+	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress, "Only if the game hasn't started yet");
+
+	std::string redirectStr;
+	try {
+		nlohmann::json obj = redirectInfo;
+		redirectStr = obj.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
+	}
+	catch (const std::exception& e) {
+		debug(LOG_ERROR, "Failed to encode redirect string with error: %s", e.what());
+		return false;
+	}
+
+	if (redirectStr.size() > MAX_KICK_REASON)
+	{
+		debug(LOG_ERROR, "Encoded redirect string length (%zu) exceeds maximum supported - redirect failed", redirectStr.size());
+		return false;
+	}
+
+	// send a kick msg, with redirect info, to the player
+	LOBBY_ERROR_TYPES type = ERROR_REDIRECT;
+	auto w = NETbeginEncode(NETnetQueue(player_id), NET_KICK);
+	NETuint32_t(w, player_id);
+	NETstring(w, redirectStr.c_str(), MAX_KICK_REASON);
+	NETenum(w, type);
+	NETend(w);
+
+	// send a kick about this player to everyone else (without the redirect string)
+	w = NETbeginEncode(NETbroadcastQueue(player_id), NET_KICK);
+	NETuint32_t(w, player_id);
+	char emptyReason[1] = {};
+	NETstring(w, emptyReason, 0);
+	NETenum(w, type);
+	NETend(w);
+
+	// flush
+	NETflush();
+
+	ActivityManager::instance().hostKickPlayer(NetPlay.players[player_id], type, redirectStr);
+	NETplayerKicked(player_id);
+	return true;
+}
+
+bool kickRedirectPlayer(uint32_t player_id, JoinConnectionDescription::JoinConnectionType connectionType, uint16_t newPort, bool asSpectator, optional<std::string> gamePassword)
+{
+	ASSERT_HOST_ONLY(return false);
+
+	KickRedirectInfo redirectInfo;
+	redirectInfo.connList.push_back(JoinConnectionDescription(connectionType, "=", newPort)); // special "=" value is treated as "same address" on the client side
+	redirectInfo.gamePassword = gamePassword;
+	redirectInfo.asSpectator = asSpectator;
+
+	return kickRedirectPlayer(player_id, redirectInfo);
 }
 
 void displayKickReasonPopup(const std::string &reason)
@@ -6415,7 +6515,74 @@ static int getBoundedMinAutostartPlayerCount()
 	return minAutoStartPlayerCount;
 }
 
-void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
+void WzMultiplayerOptionsTitleUI::handleKickRedirect(uint8_t kickerPlayerIdx, const std::string& redirectString)
+{
+	ASSERT_OR_RETURN(, !NetPlay.isHost, "Host shouldn't be processing kick redirect");
+	ASSERT_OR_RETURN(, (GetGameMode() != GS_NORMAL), "Game must not be started");
+
+	if (kickerPlayerIdx < NetPlay.players.size())
+	{
+		ActivityManager::instance().wasKickedByPlayer(NetPlay.players[kickerPlayerIdx], ERROR_REDIRECT, redirectString);
+	}
+
+	// Get the info for the host we're currently connected to
+	auto optCurrHostAddress = NET_getCurrentHostTextAddress();
+	EcKey::Key hostPublicKey = getVerifiedJoinIdentity(NetPlay.hostPlayer).toBytes(EcKey::Public);
+
+	if (!optCurrHostAddress.has_value())
+	{
+		debug(LOG_ERROR, "Unable to get current host's address?");
+		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to handle host redirect")), parent));
+		return;
+	}
+
+	// Parse the redirect string (should be a valid json object containing an array of connection descriptions and other connection options)
+	KickRedirectInfo redirectInfo;
+	try {
+		auto obj = nlohmann::json::parse(redirectString);
+		redirectInfo = obj.get<KickRedirectInfo>();
+	}
+	catch (const std::exception&) {
+		debug(LOG_ERROR, "Invalid redirect string - could not be processed: %s", redirectString.c_str());
+		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process redirect")), parent));
+		return;
+	}
+
+	// Process & verify the connection descriptions
+	for (auto& conn : redirectInfo.connList)
+	{
+		if (conn.host.empty() || conn.host == "=")
+		{
+			// replace with the same host's address
+			conn.host = optCurrHostAddress.value();
+		}
+	}
+	redirectInfo.connList.erase(std::remove_if(redirectInfo.connList.begin(), redirectInfo.connList.end(), [&optCurrHostAddress](const JoinConnectionDescription& desc) {
+		return desc.host != optCurrHostAddress.value() || desc.port <= 1024;
+	}), redirectInfo.connList.end());
+	if (redirectInfo.connList.empty())
+	{
+		// No valid connection descriptions!
+		debug(LOG_ERROR, "No valid connection descriptions in redirect: %s", redirectString.c_str());
+		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process redirect")), parent));
+		return;
+	}
+
+	// Stop current joining
+	stopJoining(parent);
+
+	// Attempt a redirect join
+	ExpectedHostProperties expectedHostProps;
+	expectedHostProps.hostPublicKey = hostPublicKey;
+	expectedHostProps.gamePassword = redirectInfo.gamePassword;
+	if (!startJoinRedirectAttempt(sPlayer, redirectInfo.connList, redirectInfo.asSpectator, expectedHostProps))
+	{
+		// Display a message box about being kicked, and unable to rejoin
+		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process repeated or invalid redirects")), parent));
+	}
+}
+
+WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 {
 	NETQUEUE queue;
 	uint8_t type;
@@ -6491,7 +6658,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				// supplied NET_OPTIONS are not valid
 				setLobbyError(ERROR_INVALID);
 				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Host supplied invalid options")), parent));
-				break;
+				return MultiMessagesResult::StoppedJoining;
 			}
 			updateInActualHostedLobby(true);
 			ingame.localOptionsReceived = true;
@@ -6717,7 +6884,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 				// Start the game before processing more messages.
 				NETpop(queue);
-				return;
+				return MultiMessagesResult::StoppedJoining;
 			}
 			ASSERT(false, "NET_FIREUP was received, but !ingame.localOptionsReceived.");
 			break;
@@ -6762,15 +6929,27 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				if (selectedPlayer == player_id)	// we've been told to leave.
 				{
 					std::string kickReasonStr = reason;
-					size_t maxLinePos = nthOccurrenceOfChar(kickReasonStr, '\n', 10);
-					if (maxLinePos != std::string::npos)
+					if (KICK_TYPE != ERROR_REDIRECT)
 					{
-						kickReasonStr = kickReasonStr.substr(0, maxLinePos);
+						// normal kick
+						size_t maxLinePos = nthOccurrenceOfChar(kickReasonStr, '\n', 10);
+						if (maxLinePos != std::string::npos)
+						{
+							kickReasonStr = kickReasonStr.substr(0, maxLinePos);
+						}
+						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")), WzString::fromUtf8(kickReasonStr), parent));
+						debug(LOG_INFO, "You have been kicked, because %s ", kickReasonStr.c_str());
+						displayKickReasonPopup(kickReasonStr.c_str());
+						ActivityManager::instance().wasKickedByPlayer(NetPlay.players[queue.index], KICK_TYPE, reason);
 					}
-					stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")), WzString::fromUtf8(kickReasonStr), parent));
-					debug(LOG_INFO, "You have been kicked, because %s ", kickReasonStr.c_str());
-					displayKickReasonPopup(kickReasonStr.c_str());
-					ActivityManager::instance().wasKickedByPlayer(NetPlay.players[queue.index], KICK_TYPE, reason);
+					else
+					{
+						// kick_redirect
+						// (the kickReasonStr is expected to be a formatted string)
+						NETpop(queue);
+						handleKickRedirect(queue.index, kickReasonStr);
+						return MultiMessagesResult::StoppedJoining;
+					}
 				}
 				else
 				{
@@ -6867,7 +7046,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 						debug(LOG_INFO, "Leaving game because host moved us to Players, but we never gave permission.");
 						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("The host tried to move us to Players, but we never gave permission.")), parent));
 						setLobbyError(ERROR_HOSTDROPPED);
-						return;
+						return MultiMessagesResult::StoppedJoining;
 					}
 				}
 				break;
@@ -6890,6 +7069,8 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 	}
 
 	autoLagKickRoutine();
+
+	return MultiMessagesResult::Continue;
 }
 
 TITLECODE WzMultiplayerOptionsTitleUI::run()
@@ -6897,7 +7078,11 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	static UDWORD	lastrefresh = 0;
 	PLAYERSTATS		playerStats;
 
-	frontendMultiMessages(true);
+	if (frontendMultiMessages(true) == MultiMessagesResult::StoppedJoining)
+	{
+		// shortcut any further processing - stopped joining, this title UI is about to go away
+		return TITLECODE_CONTINUE;
+	}
 	if (NetPlay.isHost)
 	{
 		// send it for each player that needs it

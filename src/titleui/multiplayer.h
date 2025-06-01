@@ -40,7 +40,13 @@ public:
 	virtual ~WzMultiplayerOptionsTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
-	void frontendMultiMessages(bool running);
+
+	enum class MultiMessagesResult
+	{
+		Continue,
+		StoppedJoining
+	};
+	MultiMessagesResult frontendMultiMessages(bool running);
 
 	void openDifficultyChooser(uint32_t playerIndex);
 	void closeDifficultyChooser();
@@ -108,6 +114,8 @@ private:
 	bool startHost();
 
 	void processMultiopWidgets(UDWORD button);
+
+	void handleKickRedirect(uint8_t kickerPlayerIdx, const std::string& redirectString);
 
 	std::shared_ptr<W_SCREEN> psInlineChooserOverlayScreen = nullptr;
 	std::shared_ptr<WzTitleUI> parent;

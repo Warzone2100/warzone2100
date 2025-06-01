@@ -308,6 +308,9 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 struct JoinConnectionDescription
 {
 public:
+	JoinConnectionDescription()
+	{ }
+public:
 	enum class JoinConnectionType
 	{
 		TCP_DIRECT,
@@ -327,6 +330,9 @@ public:
 	, type(t)
 	{ }
 public:
+	static std::string connectiontype_to_string(JoinConnectionType type);
+	static optional<JoinConnectionType> connectiontype_from_string(const std::string& str);
+public:
 	std::string host;
 	uint32_t port = 0;
 	JoinConnectionType type = JoinConnectionType::TCP_DIRECT;
@@ -344,6 +350,16 @@ void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();
 bool multiStartScreenInit();
+
+// kick-redirect
+struct KickRedirectInfo
+{
+	std::vector<JoinConnectionDescription> connList; // a list of connection options - probably just one with a different port and an empty or "=" host (which reuses the current host address)
+	optional<std::string> gamePassword = nullopt;
+	bool asSpectator = false;
+};
+bool kickRedirectPlayer(uint32_t player_id, const KickRedirectInfo& redirectInfo);
+bool kickRedirectPlayer(uint32_t player_id, JoinConnectionDescription::JoinConnectionType connectionType, uint16_t newPort, bool asSpectator, optional<std::string> gamePassword);
 
 // syncing.
 bool sendScoreCheck();							//score check only(frontend)

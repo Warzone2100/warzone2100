@@ -55,6 +55,7 @@ struct WzJoiningGameScreen;
 // MARK: - Globals
 
 static std::weak_ptr<WzJoiningGameScreen> psCurrentJoiningAttemptScreen;
+static size_t currentNumRedirectAttempts = 0;
 
 void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen);
 
@@ -1823,7 +1824,7 @@ void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen)
 	}
 }
 
-static bool startJoiningAttemptInternal(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, ExpectedHostProperties expectedHostProps /*= ExpectedHostProperties()*/)
+static bool startJoiningAttemptInternal(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, const ExpectedHostProperties& expectedHostProps /*= ExpectedHostProperties()*/)
 {
 	ASSERT_OR_RETURN(false, !connection_list.empty(), "Empty connection_list?");
 
@@ -1883,8 +1884,9 @@ static bool startJoiningAttemptInternal(char* playerName, std::vector<JoinConnec
 
 // MARK: - Public API
 
-bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, ExpectedHostProperties expectedHostProps /*= ExpectedHostProperties()*/)
+bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, const ExpectedHostProperties& expectedHostProps /*= ExpectedHostProperties()*/)
 {
+	resetJoinRedirectTracking();
 	return startJoiningAttemptInternal(playerName, connection_list, asSpectator, expectedHostProps);
 }
 
@@ -1897,6 +1899,32 @@ void shutdownJoiningAttempt()
 		strongJoiningAttemptScreen.reset();
 		psCurrentJoiningAttemptScreen.reset();
 	}
+}
+
+bool startJoinRedirectAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, const ExpectedHostProperties& expectedHostProps /*= ExpectedHostProperties()*/)
+{
+	if (currentNumRedirectAttempts < std::numeric_limits<size_t>::max())
+	{
+		++currentNumRedirectAttempts;
+	}
+	// The intent is that this allows a host match-making lobby (joined by a client) to pair players and redirect them to another hosted instance
+	// We do not want to allow repeated redirects
+	if (currentNumRedirectAttempts > 1)
+	{
+		// POSSIBLE FUTURE TODO: Could prompt before additional redirects (if we wanted to support such a thing)
+		// For now, deny it
+		return false;
+	}
+	else
+	{
+		return startJoiningAttemptInternal(playerName, connection_list, asSpectator, expectedHostProps);
+	}
+}
+
+void resetJoinRedirectTracking()
+{
+	// Reset the internal counter that track redirects
+	currentNumRedirectAttempts = 0;
 }
 
 std::shared_ptr<WIDGET> createJoiningIndeterminateProgressWidget(iV_fonts fontID)
