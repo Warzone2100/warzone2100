@@ -1174,7 +1174,7 @@ void WzJoiningGameScreen_HandlerRoot::tryNextConnectionOption(size_t connectionI
 		debug(LOG_ERROR, "%s", errorString.c_str());
 		// Done trying connections - all failed
 		const auto sockErrorMsg = ec.message();
-		auto localizedError = astringf(_("Failed to open connection: [%d] %s"), ec, sockErrorMsg.c_str());
+		auto localizedError = astringf(_("Failed to open connection: [%d] %s"), ec.value(), sockErrorMsg.c_str());
 		handleFailure(FailureDetails::makeFromInternalError(WzString::fromUtf8(localizedError)));
 	}
 }
