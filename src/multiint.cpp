@@ -1256,6 +1256,61 @@ static bool canChangeMapOrRandomize()
 	return allowed;
 }
 
+static bool updatePlayerNameBox()
+{
+	auto pNameEditBox = widgGetFromID(psWScreen, MULTIOP_PNAME);
+	auto pNameMultiBut = widgGetFromID(psWScreen, MULTIOP_PNAME_ICON);
+
+	ASSERT_OR_RETURN(false, pNameEditBox != nullptr, "No player name edit box?");
+	ASSERT_OR_RETURN(false, pNameMultiBut != nullptr, "No player name edit button?");
+
+	const bool isInBlindMode = (game.blindMode != BLIND_MODE::NONE);
+	const bool changesAllowed = ingame.hostChatPermissions[selectedPlayer] && !isInBlindMode;
+
+	WzString playerNameTip;
+	if (!isInBlindMode)
+	{
+		if (changesAllowed)
+		{
+			playerNameTip = _("Select Player Name");
+		}
+		else if (!ingame.hostChatPermissions[selectedPlayer])
+		{
+			playerNameTip = _("Player Name changes are not allowed when you are muted");
+		}
+	}
+	else
+	{
+		if (game.blindMode >= BLIND_MODE::BLIND_GAME)
+		{
+			playerNameTip = _("Blind Game:");
+			playerNameTip += "\n";
+			playerNameTip += _("- Player names will not be visible to other players (until the game is over)");
+		}
+		else
+		{
+			playerNameTip = _("Blind Lobby:");
+			playerNameTip += "\n";
+			playerNameTip += _("- Player names will not be visible to other players (until the game has started)");
+		}
+	}
+
+	pNameEditBox->setTip(playerNameTip.toUtf8());
+
+	pNameEditBox->setState((changesAllowed) ? 0 : WEDBS_DISABLE);
+	pNameMultiBut->setState((changesAllowed) ? 0 : WBUT_DISABLE);
+
+	return true;
+}
+
+void multiLobbyHandleHostOptionsChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions)
+{
+	if (priorHostChatPermissions[selectedPlayer] != ingame.hostChatPermissions[selectedPlayer])
+	{
+		updatePlayerNameBox();
+	}
+}
+
 // need to check for side effects.
 void WzMultiplayerOptionsTitleUI::addGameOptions()
 {
@@ -1283,30 +1338,10 @@ void WzMultiplayerOptionsTitleUI::addGameOptions()
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX - 6 , MULTIOP_OPTIONSY, _("OPTIONS"));
 
 	bool isInBlindMode = (game.blindMode != BLIND_MODE::NONE);
-	WzString playerNameTip;
-	if (!isInBlindMode)
+	auto pNameEditBox = addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, "", (char *) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON, isInBlindMode);
+	if (pNameEditBox)
 	{
-		playerNameTip = _("Select Player Name");
-	}
-	else
-	{
-		if (game.blindMode >= BLIND_MODE::BLIND_GAME)
-		{
-			playerNameTip = _("Blind Game:");
-			playerNameTip += "\n";
-			playerNameTip += _("- Player names will not be visible to other players (until the game is over)");
-		}
-		else
-		{
-			playerNameTip = _("Blind Lobby:");
-			playerNameTip += "\n";
-			playerNameTip += _("- Player names will not be visible to other players (until the game has started)");
-		}
-	}
-	auto pNameEditBox = addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, playerNameTip.toUtf8().c_str(), (char *) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON, isInBlindMode);
-	if (pNameEditBox && isInBlindMode)
-	{
-		pNameEditBox->setTip(playerNameTip.toUtf8());
+		updatePlayerNameBox();
 	}
 
 	// Create the Start Hosting button
@@ -2071,6 +2106,8 @@ void WzMultiplayerOptionsTitleUI::updatePlayers()
 
 void WzMultiplayerOptionsTitleUI::updateGameOptions()
 {
+	updatePlayerNameBox();
+
 	auto psMultiLobbyOptionsForm = std::dynamic_pointer_cast<WzMultiLobbyOptionsWidgetBase>(multiLobbyOptionsForm);
 	if (psMultiLobbyOptionsForm)
 	{

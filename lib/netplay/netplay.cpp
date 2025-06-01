@@ -2664,6 +2664,17 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				break;
 			}
 
+			if (NetPlay.isHost && !ingame.hostChatPermissions[player])
+			{
+				// Name changes are denied when the host has muted a player
+				// Inform the player that their name is still what it was (resets their local display)
+				if (NetPlay.players[player].allocated)
+				{
+					NETSendPlayerInfoTo(player, player);
+				}
+				break;
+			}
+
 			oldName = NetPlay.players[player].name;
 			setPlayerName(player, newName.toUtf8().c_str());
 

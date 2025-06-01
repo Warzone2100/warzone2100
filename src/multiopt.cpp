@@ -824,6 +824,7 @@ bool recvHostConfig(NETQUEUE queue)
 	NETend(r);
 
 	informOnHostChatPermissionChanges(priorHostChatPermissions);
+	multiLobbyHandleHostOptionsChanges(priorHostChatPermissions);
 
 	return true;
 }

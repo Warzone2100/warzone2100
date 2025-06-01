@@ -158,6 +158,8 @@ void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 void displayLobbyDisabledNotification();
 
+void multiLobbyHandleHostOptionsChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions);
+
 void multiLobbyRandomizeOptions();
 
 bool SendColourRequest(UBYTE player, UBYTE col);
