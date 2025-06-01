@@ -32,7 +32,9 @@ struct ExpectedHostProperties
 	optional<std::string> gamePassword;
 };
 
-bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator = false, ExpectedHostProperties expectedHostProps = ExpectedHostProperties());
+bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator = false, const ExpectedHostProperties& expectedHostProps = ExpectedHostProperties());
+bool startJoinRedirectAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator = false, const ExpectedHostProperties& expectedHostProps = ExpectedHostProperties());
+void resetJoinRedirectTracking();
 void shutdownJoiningAttempt();
 
 std::shared_ptr<WIDGET> createJoiningIndeterminateProgressWidget(iV_fonts fontID);

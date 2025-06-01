@@ -21,6 +21,9 @@
 #define _LIB_FRAMEWORK_WZPATHS_H
 
 #include <string>
+#include <vector>
+
+std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const std::string& delimiters);
 
 std::string getWZInstallPrefix();
 

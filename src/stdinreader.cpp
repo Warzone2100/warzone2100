@@ -21,9 +21,11 @@
 
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/wzapp.h"
+#include "lib/framework/wzpaths.h"
 #include "lib/netplay/netpermissions.h"
 #include "multiint.h"
 #include "multistat.h"
+#include "multiplay.h"
 #include "multilobbycommands.h"
 #include "clparse.h"
 #include "main.h"
@@ -607,6 +609,63 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 	});
 }
 
+static bool redirectActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& redirectStrCopy)
+{
+	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress && !ingame.TimeEveryoneIsInGame.has_value(), "Game must not have started yet!");
+
+	// Parse the redirect string:
+	// <tcp/gns>:<new_port>:<0/1=spectator>:<optional:gamepassword>
+
+	JoinConnectionDescription::JoinConnectionType connectionType;
+	uint16_t newPort = 0;
+	bool asSpectator = false;
+
+	auto redirectComponents = splitAtAnyDelimiter(redirectStrCopy, ":");
+	ASSERT_OR_RETURN(false, redirectComponents.size() >= 3, "Invalid redirect string");
+
+	auto optConnectionType = JoinConnectionDescription::connectiontype_from_string(redirectComponents[0]);
+	ASSERT_OR_RETURN(false, optConnectionType.has_value(), "Unrecognized / unsupported connection type: \"%s\"", redirectComponents[0].c_str());
+	connectionType = optConnectionType.value();
+
+	try {
+		auto portNumber = std::stoul(redirectComponents[1], nullptr, 10);
+		ASSERT_OR_RETURN(false, newPort < std::numeric_limits<uint16_t>::max(), "Invalid port: %ul", newPort);
+		newPort = static_cast<uint16_t>(portNumber);
+	}
+	catch (const std::exception& e) {
+		ASSERT_OR_RETURN(false, false, "Invalid port specified: \"%s\"", redirectComponents[1].c_str());
+	}
+
+	ASSERT_OR_RETURN(false, newPort > 1024, "Invalid port (%ul) - cannot redirect to privileged port <= 1024", static_cast<unsigned int>(newPort));
+
+	try {
+		auto specValue = std::stoul(redirectComponents[2], nullptr, 10);
+		asSpectator = specValue != 0;
+	}
+	catch (const std::exception& e) {
+		ASSERT_OR_RETURN(false, false, "Invalid spec value specified: \"%s\"", redirectComponents[2].c_str());
+	}
+
+	std::string gamePassword;
+	for (size_t i = 3; i < redirectComponents.size(); ++i)
+	{
+		if (!gamePassword.empty())
+		{
+			gamePassword.push_back(':');
+		}
+		gamePassword += redirectComponents[i];
+	}
+
+	return applyToActivePlayerWithIdentity(playerIdentityStrCopy, [&](uint32_t i) {
+		if (i == NetPlay.hostPlayer)
+		{
+			wz_command_interface_output("WZCMD error: Can't redirect host!\n");
+			return;
+		}
+		kickRedirectPlayer(i, connectionType, newPort, asSpectator, gamePassword);
+	});
+}
+
 static bool chatActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& chatmsgstr)
 {
 	if (!NetPlay.isHostAlive)
@@ -772,6 +831,35 @@ int cmdInputThreadFunc(void *)
 					if (!foundActivePlayer)
 					{
 						wz_command_interface_output("WZCMD info: kick identity %s: failed to find currently-connected player with matching public key or hash\n", playerIdentityStrCopy.c_str());
+					}
+				});
+			}
+		}
+		else if(!strncmpl(line, "redirect identity "))
+		{
+			// redirect identity <identity> <tcp/gns>:<new_port>:<0/1=spectator>:<optional:gamepassword>
+			char playeridentitystring[1024] = {0};
+			char redirectstr[1024] = {0};
+			int r = sscanf(line, "redirect identity %1023s %1023[^\n]s", playeridentitystring, redirectstr);
+			if (r != 2)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get player public key or hash, and/or redirect str!\n");
+			}
+			else
+			{
+				std::string playerIdentityStrCopy(playeridentitystring);
+				std::string redirectStrCopy = redirectstr;
+				wzAsyncExecOnMainThread([playerIdentityStrCopy, redirectStrCopy] {
+					if (!ingame.localJoiningInProgress || ingame.TimeEveryoneIsInGame.has_value())
+					{
+						// can't redirect once game has fired up - only in lobby
+						wz_command_interface_output("WZCMD error: Failed to execute redirect command - must be in lobby\n");
+						return;
+					}
+					bool foundActivePlayer = redirectActivePlayerWithIdentity(playerIdentityStrCopy, redirectStrCopy);
+					if (!foundActivePlayer)
+					{
+						wz_command_interface_output("WZCMD info: redirect identity %s: failed to find currently-connected player with matching public key or hash\n", playerIdentityStrCopy.c_str());
 					}
 				});
 			}

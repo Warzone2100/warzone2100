@@ -52,7 +52,8 @@ enum LOBBY_ERROR_TYPES
 	ERROR_WRONGPASSWORD,
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
-	ERROR_UNKNOWNFILEISSUE
+	ERROR_UNKNOWNFILEISSUE,
+	ERROR_REDIRECT
 };
 
 enum CONNECTION_STATUS
@@ -493,6 +494,9 @@ bool NET_getLobbyDisabled();
 const std::string& NET_getLobbyDisabledInfoLinkURL();
 void NET_setLobbyDisabled(const std::string& infoLinkURL);
 uint32_t NET_getCurrentHostedLobbyGameId();
+
+// If a client, retrieve the current host's address
+optional<std::string> NET_getCurrentHostTextAddress();
 
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);

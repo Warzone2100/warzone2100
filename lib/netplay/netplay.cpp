@@ -5447,3 +5447,11 @@ void NETadjustConnectedTimeoutForClients()
 	}
 }
 
+optional<std::string> NET_getCurrentHostTextAddress()
+{
+	if (!bsocket)
+	{
+		return nullopt;
+	}
+	return bsocket->textAddress();
+}
