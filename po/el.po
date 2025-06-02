@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-03-01 20:57\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -4921,11 +4921,11 @@ msgstr "Βελτίωση στους οπτικούς φακούς, μειώνε�
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Ένθεση Εμπρηστικού Οβιδοβόλου"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Ένθεση εμπρηστικού οβιδοβόλου"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Ένθεση Εμπρηστικού Οβιδοβόλου"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Εμπρηστικό οβιδοβόλο, μπορεί να ανατεθεί σε αισθητήρα"
@@ -6405,11 +6405,11 @@ msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού Τύ
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού Τύπος3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού"
-
 msgid "Synaptic link data analysis"
 msgstr "Ανάλυση δεδομένων Συναπτικού Δεσμού"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Τεχνολογία Αποκωδικοποίησης Συναπτικού Δεσμού"
@@ -7303,6 +7303,9 @@ msgid "Set the default hosting chat configuration / permissions"
 msgstr ""
 
 msgid "Enable async join approval (for connecting clients)"
+msgstr ""
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
 msgstr ""
 
 msgid "Base URL for on-demand video downloads"
@@ -9837,6 +9840,18 @@ msgstr "Εισήγαγε εδώ τον κωδικό"
 msgid "Select Player Name"
 msgstr "Επέλεξε το Όνομα του Παίχτη"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "Συμμαχίες"
 
@@ -9848,6 +9863,21 @@ msgstr "Προεπισκόπηση"
 
 msgid "Click to see Map"
 msgstr "Κάνε κλικ για να δεις το Χάρτη"
+
+msgid "Tech"
+msgstr ""
+
+msgid "Technology Level 1"
+msgstr ""
+
+msgid "Technology Level 2"
+msgstr ""
+
+msgid "Technology Level 3"
+msgstr ""
+
+msgid "Technology Level 4"
+msgstr ""
 
 msgid "Show Structure Limits"
 msgstr "Εμφάνιση των Περιορισμών Δόμησης"
@@ -9864,21 +9894,6 @@ msgid ""
 msgstr ""
 "Επιλογές Τυχαίου Παιχνιδιού\n"
 "Μπορεί να μπλοκαριστεί με τις ψήφους των παικτών"
-
-msgid "Tech"
-msgstr ""
-
-msgid "Technology Level 1"
-msgstr ""
-
-msgid "Technology Level 2"
-msgstr ""
-
-msgid "Technology Level 3"
-msgstr ""
-
-msgid "Technology Level 4"
-msgstr ""
 
 msgid "Start Hosting Game"
 msgstr "Φιλοξενία του Παιχνιδιού"
@@ -10023,6 +10038,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10040,64 +10062,6 @@ msgstr ""
 
 msgid "Lock Teams"
 msgstr ""
-
-msgid "Choose Team"
-msgstr "Διάλεξε Ομάδα"
-
-msgid "Teams locked"
-msgstr "Κλειδωμένες οι Ομάδες"
-
-msgid "Click to change player colour"
-msgstr "Κλίκαρε για να αλλάξεις το χρώμα του παίχτη"
-
-msgid "Click to change player position"
-msgstr "Κλίκαρε για να αλλάξεις τη θέση του παίχτη"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Κλίκαρε για να επιλέξεις Τεχνητή Νοημοσύνη· δεξί κλικάρισμα για να διανείμεις την επιλογή"
-
-msgid "Click to close spectator slot"
-msgstr ""
-
-msgid "Player ID: "
-msgstr "Ταυτότητα Παίκτη: "
-
-msgid "(none)"
-msgstr "(κανένα)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Κλίκαρε για να αλλάξεις την δυσκολία"
-
-msgid "Waiting for player"
-msgstr "Αναμονή για ένα παίχτη"
-
-msgid "Player is ready"
-msgstr "Ο παίχτης είναι έτοιμος"
-
-msgid "Player is downloading"
-msgstr "Ο παίχτης λαμβάνει αρχεία"
-
-msgid "Click when ready"
-msgstr "Όταν είσαι έτοιμος, κλίκαρε εδώ"
-
-msgid "Waiting for download"
-msgstr "Αναμονή για κατέβασμα αρχείων"
-
-msgid "READY?"
-msgstr "ΕΤΟΙΜΟΣ;"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10242,6 +10206,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10260,20 +10239,6 @@ msgstr "Κλεισμένο"
 
 msgid "Open"
 msgstr "Ανοιχτό"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Αποστέλνεται ο Χάρτης: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Χάρτης: λήφθηκαν %u%%"
-
-msgid "HOST"
-msgstr "ΟΙΚΟΔΕΣΠΟΤΗΣ"
-
-msgid "Ping"
-msgstr "Ανάκρουση"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
@@ -10301,6 +10266,10 @@ msgstr "Ο %s Έφυγε από το Παιχνίδι"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10362,6 +10331,9 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d παίχτης"
 msgstr[1] "%d παίχτες"
+
+msgid "Ping"
+msgstr "Ανάκρουση"
 
 msgid "Structs"
 msgstr "Χτίσματα"
@@ -10906,6 +10878,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11337,6 +11321,130 @@ msgstr "διεύθυνση IP"
 
 msgid "IP Address or Machine Name"
 msgstr "Διεύθυνση IP ή Όνομα Μηχανής"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "Ταυτότητα Παίκτη: "
+
+msgid "(none)"
+msgstr "(κανένα)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Αποστέλνεται ο Χάρτης: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Χάρτης: λήφθηκαν %u%%"
+
+msgid "HOST"
+msgstr "ΟΙΚΟΔΕΣΠΟΤΗΣ"
+
+msgid "Choose Team"
+msgstr "Διάλεξε Ομάδα"
+
+msgid "Teams locked"
+msgstr "Κλειδωμένες οι Ομάδες"
+
+msgid "Click to change player colour"
+msgstr "Κλίκαρε για να αλλάξεις το χρώμα του παίχτη"
+
+msgid "Click to change player position"
+msgstr "Κλίκαρε για να αλλάξεις τη θέση του παίχτη"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Κλίκαρε για να επιλέξεις Τεχνητή Νοημοσύνη· δεξί κλικάρισμα για να διανείμεις την επιλογή"
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Κλίκαρε για να αλλάξεις την δυσκολία"
+
+msgid "Waiting for player"
+msgstr "Αναμονή για ένα παίχτη"
+
+msgid "Player is ready"
+msgstr "Ο παίχτης είναι έτοιμος"
+
+msgid "Player is downloading"
+msgstr "Ο παίχτης λαμβάνει αρχεία"
+
+msgid "Click when ready"
+msgstr "Όταν είσαι έτοιμος, κλίκαρε εδώ"
+
+msgid "Waiting for download"
+msgstr "Αναμονή για κατέβασμα αρχείων"
+
+msgid "READY?"
+msgstr "ΕΤΟΙΜΟΣ;"
 
 msgid "Launch Transport"
 msgstr "Απογείωση Μεταφορέα"

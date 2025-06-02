@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-03-01 20:58\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -4921,11 +4921,11 @@ msgstr "Lazer optiklerindeki gelişmeler sayesinde ışınlardaki hafif dağılm
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Kundakçı Havan Mevzisi 2"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Kundakçı Havan Mevzi"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Kundakçı obüs mevzisi"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Kundakçı Havan Mevzi"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Kundakçı Obüs bir algılayıcıya bağlanabilir"
@@ -6405,11 +6405,11 @@ msgstr "Sinaptik Bağlantı Veri Analizi Kdm2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Sinaptik Bağlantı Veri Analizi Kdm3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Sinaptik Bağlantı Veri Analizi"
-
 msgid "Synaptic link data analysis"
 msgstr "Sinaptik bağlantı veri analizi"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Sinaptik Bağlantı Veri Analizi"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Sinaptik Bağlantı Sinyal Bozucu teknolojisi"
@@ -7304,6 +7304,9 @@ msgstr "Varsayılan kurulum sohbeti yapılandırmasını / izinlerini ayarlama"
 
 msgid "Enable async join approval (for connecting clients)"
 msgstr "Asenkron birleştirme onayını etkinleştir (istemcileri bağlamak için)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
 
 msgid "Base URL for on-demand video downloads"
 msgstr ""
@@ -9839,6 +9842,18 @@ msgstr "Parolayı buraya girin"
 msgid "Select Player Name"
 msgstr "Oyuncu İsmi Seç"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "İttifaklar"
 
@@ -9850,6 +9865,21 @@ msgstr "Harita Önizlemesi"
 
 msgid "Click to see Map"
 msgstr "Haritayı görmek için tıkla"
+
+msgid "Tech"
+msgstr "Tekn."
+
+msgid "Technology Level 1"
+msgstr "Teknoloji Seviyesi 1"
+
+msgid "Technology Level 2"
+msgstr "Teknoloji Seviyesi 2"
+
+msgid "Technology Level 3"
+msgstr "Teknoloji Seviyesi 3"
+
+msgid "Technology Level 4"
+msgstr "Teknoloji Seviyesi 4"
 
 msgid "Show Structure Limits"
 msgstr "Bina Limitlerini Göster"
@@ -9866,21 +9896,6 @@ msgid ""
 msgstr ""
 "Rastgele Oyun Seçenekleri\n"
 "Oyuncuların oyları ile engellenebilir"
-
-msgid "Tech"
-msgstr "Tekn."
-
-msgid "Technology Level 1"
-msgstr "Teknoloji Seviyesi 1"
-
-msgid "Technology Level 2"
-msgstr "Teknoloji Seviyesi 2"
-
-msgid "Technology Level 3"
-msgstr "Teknoloji Seviyesi 3"
-
-msgid "Technology Level 4"
-msgstr "Teknoloji Seviyesi 4"
 
 msgid "Start Hosting Game"
 msgstr "Oyun Kurmayı Başlat"
@@ -10025,6 +10040,13 @@ msgstr "Bu gözlemciyi, bir oyuncu ile değiştirmek ister misiniz?"
 msgid "Yes, select Player slot"
 msgstr "Evet, oyuncu slotunu seç"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "Katılanlar:"
 
@@ -10042,64 +10064,6 @@ msgstr "Gözlemci katılımını etkinleştir"
 
 msgid "Lock Teams"
 msgstr "Takımları Kilitle"
-
-msgid "Choose Team"
-msgstr "Takım Seç"
-
-msgid "Teams locked"
-msgstr "Takımlar kilitli"
-
-msgid "Click to change player colour"
-msgstr "Oyuncu renklerini değiştirmek için tıkla"
-
-msgid "Click to change player position"
-msgstr "Oyun konumunu değiştirmek için tıkla"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "YZ değiştirmek için tıklayın, seçimi dağıtmak için sağ tıklayın"
-
-msgid "Click to close spectator slot"
-msgstr "Gözlemci yuvasını kapatmak için tıkla"
-
-msgid "Player ID: "
-msgstr "Oyuncu Kimliği: "
-
-msgid "(none)"
-msgstr "(hiçbiri)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr "Oyuncu puanı:"
-
-msgid "Host provided"
-msgstr "Sağlanan sunucu"
-
-#, c-format
-msgid "From: %s"
-msgstr "Kimden: %s"
-
-msgid "Click to change difficulty"
-msgstr "Zorluğu değiştirmek için tıkla"
-
-msgid "Waiting for player"
-msgstr "Diğer oyuncular bekleniyor"
-
-msgid "Player is ready"
-msgstr "Oyuncu hazır"
-
-msgid "Player is downloading"
-msgstr "Oyuncu indiriyor"
-
-msgid "Click when ready"
-msgstr "Hazırsan tıkla"
-
-msgid "Waiting for download"
-msgstr "İndirmek için bekliyor"
-
-msgid "READY?"
-msgstr "HAZIR MISIN?"
 
 msgid "For Spectator:"
 msgstr "Gözlemci için:"
@@ -10244,6 +10208,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10262,20 +10241,6 @@ msgstr "Kapalı"
 
 msgid "Open"
 msgstr "Açık"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Harita Gönderiliyor: %%%u "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Harita: %%%u indirildi"
-
-msgid "HOST"
-msgstr "KURUCU"
-
-msgid "Ping"
-msgstr "Gecikme"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Bu tekrar dosyasını kaydetmek için kullanılan Warzone 2100 sürümü, mevcut çalışan sürüm ile eşleşmiyor."
@@ -10303,6 +10268,10 @@ msgstr "%s Oyundan çıktı"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10364,6 +10333,9 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d oyuncu"
 msgstr[1] "%d oyuncu"
+
+msgid "Ping"
+msgstr "Gecikme"
 
 msgid "Structs"
 msgstr "Binlr"
@@ -10908,6 +10880,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11339,6 +11323,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP Adresi veya Makine İsmi"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "Oyuncu Kimliği: "
+
+msgid "(none)"
+msgstr "(hiçbiri)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Harita Gönderiliyor: %%%u "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Harita: %%%u indirildi"
+
+msgid "HOST"
+msgstr "KURUCU"
+
+msgid "Choose Team"
+msgstr "Takım Seç"
+
+msgid "Teams locked"
+msgstr "Takımlar kilitli"
+
+msgid "Click to change player colour"
+msgstr "Oyuncu renklerini değiştirmek için tıkla"
+
+msgid "Click to change player position"
+msgstr "Oyun konumunu değiştirmek için tıkla"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "YZ değiştirmek için tıklayın, seçimi dağıtmak için sağ tıklayın"
+
+msgid "Click to close spectator slot"
+msgstr "Gözlemci yuvasını kapatmak için tıkla"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr "Oyuncu puanı:"
+
+msgid "Host provided"
+msgstr "Sağlanan sunucu"
+
+#, c-format
+msgid "From: %s"
+msgstr "Kimden: %s"
+
+msgid "Click to change difficulty"
+msgstr "Zorluğu değiştirmek için tıkla"
+
+msgid "Waiting for player"
+msgstr "Diğer oyuncular bekleniyor"
+
+msgid "Player is ready"
+msgstr "Oyuncu hazır"
+
+msgid "Player is downloading"
+msgstr "Oyuncu indiriyor"
+
+msgid "Click when ready"
+msgstr "Hazırsan tıkla"
+
+msgid "Waiting for download"
+msgstr "İndirmek için bekliyor"
+
+msgid "READY?"
+msgstr "HAZIR MISIN?"
 
 msgid "Launch Transport"
 msgstr "Taşımayı Başlat"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-05-24 02:33\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Language: sk_SK\n"
@@ -21,16 +21,16 @@ msgid "OBJECTIVE: Locate and recover neural synapse technology"
 msgstr "CIEĽ: Nájsť a získať technológiu neurálnych synapsií"
 
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Založte základňu, potom nájdite stavbu spred kolapsu."
+msgstr "Založ základňu, potom vyhľadaj stavbu spred kolapsu."
 
 msgid "This structure contains technology vital for the success of the Project."
 msgstr "Táto budova obsahuje technológie dôležité pre úspech Projektu."
 
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "MISIA ZÁKLADNE ALFA: Nájazdnícki Smetiari"
+msgstr "MISIA ZÁKLADNE ALFA: Nájazdníci"
 
 msgid "Scavenger raiders are approaching our base."
-msgstr "Nájzadníckí smetiari sa približujú k tvojej základni."
+msgstr "Nájazdníci sa blížia k našej základni."
 
 msgid "Defend the base then destroy the Scavenger camps."
 msgstr "Obráň základňu a následne znič tábory nájazdníkov."
@@ -75,7 +75,7 @@ msgid "TRANSPORT MISSION: Encoded Signals Detected"
 msgstr "PREPRAVNÁ MISIA: Zistené zakódované signály"
 
 msgid "Take a scout force to investigate these signals."
-msgstr "Pre kontrolu týchto signálov použi prieskumné jednotky."
+msgstr "Pre prieskum týchto signálov použi prieskumné jednotky."
 
 msgid "Use your trucks to build defenses at your LZ."
 msgstr "Pre výstavbu obrany na svojom MV použi nákladné autá."
@@ -87,7 +87,7 @@ msgid "Scout the designated area for enemy research facilities."
 msgstr "Prehľadaj oblasť kvôli nepriateľským výskumným zariadeniam."
 
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Pokračuj k MV#2. Tentokrát neútoč na nepriateľské jednotky."
+msgstr "Pokračuj k MV#2. Zatiaľ neútoč na nepriateľské jednotky."
 
 msgid "TRANSPORT MISSION: Synaptic Link Location"
 msgstr "PREPRAVNÁ MISIA: Nájdenie synaptického spojenia"
@@ -159,16 +159,16 @@ msgid "PROJECT TEAM UPDATES"
 msgstr "AKTUALIZÁCIE PROJEKTOVÉHO TÍMU"
 
 msgid "TEAM BETA UPDATE"
-msgstr "AKTUALIZÁCIA PRE TÍM BETA"
+msgstr "AKTUALIZÁCIA TÍMU BETA"
 
 msgid "We have recovered some artifacts."
-msgstr "Našli sme nejaké artefakty."
+msgstr "Získali sme nejaké artefakty."
 
 msgid "There is a better equipped force operating in this area."
 msgstr "V oblasti operuje lepšie vyzbrojená jednotka."
 
 msgid "TEAM GAMMA UPDATE"
-msgstr "AKTUALIZÁCIA PRE TÍM GAMA"
+msgstr "AKTUALIZÁCIA TÍMU GAMA"
 
 msgid "Nothing to report."
 msgstr "Nič pre nahlásenie."
@@ -186,7 +186,7 @@ msgid "PRIMARY OBJECTIVE"
 msgstr "HLAVNÝ CIEĽ"
 
 msgid "This structure is your primary objective."
-msgstr "Táto budova je Váš hlavný cieľ."
+msgstr "Táto budova je tvoj hlavný cieľ."
 
 msgid "Search for and recover any artifacts here."
 msgstr "Vyhľadaj a získaj všetky artefakty."
@@ -195,7 +195,7 @@ msgid "ENEMY LZ"
 msgstr "NEPRIATEĽSKÉ MV"
 
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Zničte toto MV pre to, aby ste zabránili nepriateľom pristáť."
+msgstr "Znič toto MV pre zabránenie nepriateľským výsadkom."
 
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
 msgstr "SPRÁVA ROZVIEDKY ZÁKLADNE ALFA: NEXUS"
@@ -225,13 +225,13 @@ msgid "Commander."
 msgstr "Veliteľ."
 
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr "Dekódovali sme novú správu pre Novú Paradigmu..."
+msgstr "Dekódovali sme prichádzajúcu správu pre Novú Paradigmu..."
 
 msgid "Destroy Enemy Base"
 msgstr "Znič nepriateľskú základňu"
 
 msgid "Assemble an attack force and board the transport."
-msgstr "Zostavte útočnú jednotku a nastúpte na transportér."
+msgstr "Zostav útočnú jednotku a nastúp na transportér."
 
 msgid "Destroy the base and recover any artifacts present."
 msgstr "Zničte základňu a získajte všetky artefakty, ktoré sa v nej nachádzajú."
@@ -261,19 +261,19 @@ msgid "Research the power module artifact."
 msgstr "Vyskúmaj artefakt napájacieho modulu."
 
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr "Následne použi kamión pre vylepšenie generátora pomocou modulu."
+msgstr "Následne použi konšruktérsku jednotku pre vylepšenie generátora pomocou modulu."
 
 msgid "SCAVENGER BASE DETECTED"
-msgstr "ZISTENÁ ZÁKLADŇA SMETIAROV"
+msgstr "ZISTENÁ ZÁKLADŇA NÁJAZDNÍKOV"
 
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Poraz smetiarov a získaj artefakty."
+msgstr "Poraz nájazdníkov a získaj artefakty."
 
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
 msgstr "Gratulujeme k porazeniu Novej Paradigmy, táto oblasť je teraz bezpečná."
 
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "Program pre neoprávnené vniknutie bol v systéme Novej paradigmy."
+msgstr "Program Nexus pre neoprávnené vniknutie bol v systéme Novej paradigmy."
 
 msgid "We recorded two conversations with it, extracts follow..."
 msgstr "Nahrali sme s ním dve konverzácie, nasledujú výpisky..."
@@ -303,7 +303,7 @@ msgid "New technologies are available."
 msgstr "Sú dostupné nové technológie."
 
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Momentálne detegujeme šifrované bitové signály."
+msgstr "Momentálne detegujeme kódované bitové signály."
 
 msgid "Decoding..."
 msgstr "Dekódujem..."
@@ -363,7 +363,7 @@ msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
 msgstr "Až budete na MV, odstráňte nepriateľského veliteľa a získajte náklad."
 
 msgid "Then return to the LZ."
-msgstr "Potom sa váťte na MV."
+msgstr "Potom sa vráť na MV."
 
 msgid "Disturbing news regarding NASDA."
 msgstr "Znepokojujúce správy týkajúce sa NASDA."
@@ -393,7 +393,7 @@ msgid "You are to rescue the civilians."
 msgstr "Budeš zachraňovať civilistov."
 
 msgid "Then destroy the camp."
-msgstr "Potom zničte kemp."
+msgstr "Potom znič kemp."
 
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
 msgstr "MISIA ZÁKLADNE BETA: Znič nepriateľskú leteckú základňu a získaj VTOLy."
@@ -519,7 +519,7 @@ msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Gratulujeme k úspešnej evakuácii základne Beta."
 
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr ""
+msgstr "NEXUS získal prístup k nukleárnym zbraniam a je rozhodnutý zničiť Projekt."
 
 msgid "Take your forces to the Northern Sector"
 msgstr "Zober tvoje jednotky do severného sektora"
@@ -561,13 +561,13 @@ msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
 msgstr "MISIA SEVERNÉHO SEKTORA: Nukleárny výbuch"
 
 msgid "All units must escape the area before the warhead detonates."
-msgstr ""
+msgstr "Všetky jednotky musia uniknúť z oblasti pred výbuchom hlavice."
 
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr ""
+msgstr "Transport pomocou vzdušného výťahu nie je možný. Musíš pokračovať po zemi."
 
 msgid "The mountain range to the east should shield you from the blast."
-msgstr ""
+msgstr "Horský masív na východe by ťa mal ochrániť pred výbuchom."
 
 msgid "The valley is your only chance of escape."
 msgstr "Údolie je tvojou jedinou šancou na únik."
@@ -576,7 +576,7 @@ msgid "AWAY TEAM UPDATE"
 msgstr "AKTUALIZÁCIA PRE VÝSADKOVÝ TÍM"
 
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr ""
+msgstr "Všetka komunikácia s výsadkovým tímom bola prerušená po nukleárnych výbuchoch."
 
 msgid "Their last transmission indicated they were heading back to base."
 msgstr "Ich posledné hlásenie naznačovalo, že smerovali späť na základňu."
@@ -585,7 +585,7 @@ msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
 msgstr "MISIA SEVERNÉHO SEKTORU: Asistujte tímu Gama"
 
 msgid "You are to assist Team Gamma."
-msgstr "Budete asistovať tímu Gama."
+msgstr "Budeš asistovať tímu Gama."
 
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
 msgstr ""
@@ -621,10 +621,10 @@ msgid "Team Alpha power transfer in progress."
 msgstr ""
 
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr ""
+msgstr "Veliteľ, po tom čo si opustil západný sektor, sme získali tento artefakt."
 
 msgid "The benefits from researching it could be vast."
-msgstr ""
+msgstr "Výhody z jeho skúmania by mohli byť obrovské."
 
 msgid "Enemy forces are ....... from these coordinates."
 msgstr "Nepriateľské jednotky sú ....... od týchto koordinátov."
@@ -810,7 +810,7 @@ msgid "Briefing Commences:"
 msgstr "Brífing začína:"
 
 msgid "Scavenger Outpost"
-msgstr ""
+msgstr "Tábor nájazdníkov"
 
 msgid "Power Resource"
 msgstr "Zdroj energie"
@@ -819,7 +819,7 @@ msgid "Unknown Artifact"
 msgstr "Neznámy artefakt"
 
 msgid "Source of Power Surge"
-msgstr ""
+msgstr "Zdroj prepätia"
 
 msgid "Landing Zone"
 msgstr "Miesto pristátia"
@@ -996,7 +996,7 @@ msgid "Automated Cyborg Repair Mk3"
 msgstr ""
 
 msgid "Defenses Self-Repair"
-msgstr ""
+msgstr "Samooprava obrany"
 
 msgid "Automated Defenses Repair Mk2"
 msgstr ""
@@ -1152,7 +1152,7 @@ msgid "Thermal Armor increased"
 msgstr ""
 
 msgid "New Cyborg Available"
-msgstr "Dostupný novy kyborg"
+msgstr "Dostupný nový kyborg"
 
 msgid "Armed with Bunker Buster rocket"
 msgstr ""
@@ -1623,7 +1623,7 @@ msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr ""
 
 msgid "Best Targets: Vehicles"
-msgstr "Najlepší cieľ : vozidlá"
+msgstr "Najlepšie ciele: vozidlá"
 
 msgid "Replaces Medium Cannon"
 msgstr ""
@@ -1854,7 +1854,7 @@ msgid "Manufacture - build factory first"
 msgstr ""
 
 msgid "Research (F2)"
-msgstr "Výzkum (F2)"
+msgstr "Výskum (F2)"
 
 msgid "Research - build research facility first"
 msgstr ""
@@ -2001,7 +2001,7 @@ msgid "Now left click the units you want to build from the menu at the left"
 msgstr "Teraz kliknite ľavým tlačidlom na jednotku, ktorú chcete postaviť z menu naľavo"
 
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Počkajte prosím, zatiaľ čo továreň vyrába nové jednotky"
+msgstr "Počkaj prosím, kým továreň vyrobí nové jednotky"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Blahoželám veliteľ - ste pripravený na Vašu prvú misiu"
@@ -2013,7 +2013,7 @@ msgid "WESTERN SECTOR"
 msgstr "ZÁPADNÝ SEKTOR"
 
 msgid "Dawn, July 4th, 2100"
-msgstr "Svitanie, 4. Júl 2100"
+msgstr "Úsvit, 4. Júl 2100"
 
 msgid "Project HQ"
 msgstr "HQ projektu"
@@ -2376,7 +2376,7 @@ msgid "NORTHERN SECTOR"
 msgstr "SEVERNÝ SEKTOR"
 
 msgid "Dusk, December 3rd, 2100"
-msgstr "Podvečer, 3. December, 2100"
+msgstr "Súmrak, 3. December, 2100"
 
 msgid "In-flight to Northern Sector"
 msgstr ""
@@ -2550,13 +2550,13 @@ msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out 
 msgstr ""
 
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "Súmrak, 3. November 2085"
 
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "Zem, vysoká orbita"
 
 msgid "The Collapse"
-msgstr ""
+msgstr "Kolaps"
 
 msgid "January 19th, 2086"
 msgstr "19. Január 2086"
@@ -2568,7 +2568,7 @@ msgid "Nuclear Winter"
 msgstr "Nukleárna zima"
 
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Polnoc, 10. Apríl 2086"
 
 msgid "Rocky Mountains"
 msgstr "Skalnaté vrchy"
@@ -2577,7 +2577,7 @@ msgid "Safety"
 msgstr "Bezpečie"
 
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Úsvit, 4. Apríl 2100"
 
 msgid "A New Beginning"
 msgstr "Nový začiatok"
@@ -2844,10 +2844,10 @@ msgid "Ultimate Scavengers"
 msgstr ""
 
 msgid "Scavengers"
-msgstr ""
+msgstr "Nájazdníci"
 
 msgid "No Scavengers"
-msgstr ""
+msgstr "Žiadni nájazdníci"
 
 msgid "No Alliances"
 msgstr "Bez spojenectiev"
@@ -3211,7 +3211,7 @@ msgid "All sensors upgraded automatically"
 msgstr ""
 
 msgid "All trucks upgraded automatically"
-msgstr "Všetky vozidlá upgradované automaticky"
+msgstr "Všetky nákladné autá boli automaticky vylepšené"
 
 msgid "All VTOLs upgraded automatically"
 msgstr ""
@@ -3652,7 +3652,7 @@ msgid "Beta Campaign"
 msgstr ""
 
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 msgid "Body Points and Speed Increased"
 msgstr ""
@@ -4279,10 +4279,10 @@ msgid "Fuel Injection Engine"
 msgstr ""
 
 msgid "Gamma Campaign"
-msgstr ""
+msgstr "Kampaň Gama"
 
 msgid "Gamma"
-msgstr ""
+msgstr "Gama"
 
 msgid "Gas turbine boosts power output"
 msgstr ""
@@ -4808,7 +4808,7 @@ msgid "Hurricane AA Turret"
 msgstr ""
 
 msgid "Hut"
-msgstr ""
+msgstr "Chatrč"
 
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr ""
@@ -4915,10 +4915,10 @@ msgstr ""
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr ""
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr ""
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5033,7 +5033,7 @@ msgid "Inferno Python Hover"
 msgstr ""
 
 msgid "Inferno"
-msgstr ""
+msgstr "Inferno"
 
 msgid "Intruder parasite isolated"
 msgstr ""
@@ -5048,7 +5048,7 @@ msgid "Jammer Turret"
 msgstr ""
 
 msgid "Jeep"
-msgstr ""
+msgstr "Jeep"
 
 msgid "Jump Cyborgs can now be researched"
 msgstr ""
@@ -5233,7 +5233,7 @@ msgid "Makes excellent scout vehicle"
 msgstr ""
 
 msgid "Mantis"
-msgstr ""
+msgstr "Modlivka"
 
 msgid "Mass Driver Fortress"
 msgstr ""
@@ -6106,7 +6106,7 @@ msgid "Scavenger AT-Rocket Pit"
 msgstr ""
 
 msgid "Scavenger Bunker"
-msgstr ""
+msgstr "Bunker nájazdníkov"
 
 msgid "Scavenger Chopper Factory"
 msgstr ""
@@ -6142,7 +6142,7 @@ msgid "Scavenger Rocket Pit"
 msgstr ""
 
 msgid "Scavenger"
-msgstr ""
+msgstr "Nájazdník"
 
 msgid "scavengernexuslinkturret"
 msgstr ""
@@ -6399,10 +6399,10 @@ msgstr ""
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr ""
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr ""
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr ""
 
 msgid "Synaptic Link Scrambler technology"
@@ -6442,10 +6442,10 @@ msgid "Tank Killer Vengeance Tracks"
 msgstr ""
 
 msgid "Tank Killer"
-msgstr ""
+msgstr "Zabijak tankov"
 
 msgid "Tank Traps"
-msgstr ""
+msgstr "Protitankové prekážky"
 
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr ""
@@ -6659,7 +6659,7 @@ msgid "Use the Command Console to send units back for repair"
 msgstr ""
 
 msgid "Uses advanced cannon technology"
-msgstr "Použivá pokročilú technológiu kanónov"
+msgstr "Používa pokročilú technológiu kanónov"
 
 msgid "Uses advanced mass driver railgun technology"
 msgstr ""
@@ -6948,19 +6948,19 @@ msgid "Wide Spectrum Sensor"
 msgstr ""
 
 msgid "Wreck"
-msgstr ""
+msgstr "Vrak"
 
 msgid "Wrecked Bridge"
-msgstr ""
+msgstr "Zničený most"
 
 msgid "Wrecked Tanker"
-msgstr ""
+msgstr "Zničená cisterna"
 
 msgid "Wrecked Van"
-msgstr ""
+msgstr "Zničená dodávka"
 
 msgid "Wrecked Vehicle"
-msgstr ""
+msgstr "Zničené vozidlo"
 
 msgid "Wyvern"
 msgstr ""
@@ -6983,7 +6983,7 @@ msgstr "Profesionál"
 
 msgctxt "rank"
 msgid "Regular"
-msgstr "Základné"
+msgstr "Štandardný"
 
 msgctxt "rank"
 msgid "Rookie"
@@ -6991,11 +6991,11 @@ msgstr "Nováčik"
 
 msgctxt "rank"
 msgid "Special"
-msgstr "Špeciálne"
+msgstr "Špeciálny"
 
 msgctxt "rank"
 msgid "Trained"
-msgstr "Trénované"
+msgstr "Trénovaný"
 
 msgctxt "rank"
 msgid "Veteran"
@@ -7024,13 +7024,13 @@ msgid "Warzone 2100 Global Mod File"
 msgstr ""
 
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 msgid "Warzone 2100 Music Mod File"
 msgstr ""
 
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "Postnukleárna realtime stratégia"
 
 msgid "Strategy Game"
 msgstr "Strategická hra"
@@ -7096,7 +7096,7 @@ msgid "Flush all debug output written to stderr"
 msgstr ""
 
 msgid "Play in fullscreen mode"
-msgstr "Hrať v celoobrazovkovom režime"
+msgstr "Hrať v režime celej obrazovky"
 
 msgid "Load a specific game mode"
 msgstr ""
@@ -7120,7 +7120,7 @@ msgid "Enable a multiplay only mod"
 msgstr ""
 
 msgid "Disable asserts"
-msgstr "Vypnút hlásenia"
+msgstr "Zakázať asserty"
 
 msgid "Causes a crash to test the crash handler"
 msgstr ""
@@ -7177,10 +7177,10 @@ msgid "Go directly to host screen"
 msgstr ""
 
 msgid "Enable texture compression"
-msgstr ""
+msgstr "Zapnúť kompresiu textúr"
 
 msgid "Disable texture compression"
-msgstr ""
+msgstr "Vypnúť kompresiu textúr"
 
 msgid "Set gfx backend"
 msgstr ""
@@ -7231,7 +7231,7 @@ msgid "Set game server port"
 msgstr ""
 
 msgid "port"
-msgstr ""
+msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
 msgstr ""
@@ -7297,6 +7297,9 @@ msgid "Set the default hosting chat configuration / permissions"
 msgstr ""
 
 msgid "Enable async join approval (for connecting clients)"
+msgstr ""
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
 msgstr ""
 
 msgid "Base URL for on-demand video downloads"
@@ -7444,8 +7447,8 @@ msgstr "Budova obnovená"
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%u vybraná jednotka"
-msgstr[1] "%u jednotky vybrány"
+msgstr[0] "jednotka %u vybraná"
+msgstr[1] "%u vybraná jednotka"
 msgstr[2] "%u jednotek vybráno"
 msgstr[3] "%u jednotek vybráno"
 
@@ -8582,7 +8585,7 @@ msgid "-->  QUIT  <--"
 msgstr "--> KONIEC <--"
 
 msgid "Audio Options"
-msgstr "Zvukové nastavanie"
+msgstr "Nastavenia zvuku"
 
 msgid "View Key Mappings"
 msgstr ""
@@ -8652,7 +8655,7 @@ msgid "Manufacture"
 msgstr ""
 
 msgid "Research"
-msgstr "Výzkum"
+msgstr "Výskum"
 
 msgid "Build"
 msgstr "Stavať"
@@ -8682,7 +8685,7 @@ msgid "Toggle Damage Bars On/Off"
 msgstr ""
 
 msgid "Take Screen Shot"
-msgstr "Odfotiť obrazovku"
+msgstr "Spraviť snímku obrazovky"
 
 msgid "Toggle Formation Speed Limiting"
 msgstr ""
@@ -8877,7 +8880,7 @@ msgid "Increase Game Speed"
 msgstr "Zvýšiť rýchlosť hry"
 
 msgid "Reset Game Speed"
-msgstr "Resetovat rýchlosť hry"
+msgstr "Resetovať rýchlosť hry"
 
 msgid "View North"
 msgstr "Pohľad na sever"
@@ -8928,7 +8931,7 @@ msgid "Hold Fire"
 msgstr "Nestrieľaj"
 
 msgid "View Unassigned Units"
-msgstr "Zobraz nezačlenené jednotky"
+msgstr "Zobraz nepriradené jednotky"
 
 msgid "Return Fire"
 msgstr "Opätuj paľbu"
@@ -8940,13 +8943,13 @@ msgid "Guard Position"
 msgstr "Bráň pozíciu"
 
 msgid "Return to HQ"
-msgstr "Zpäť na HQ"
+msgstr "Späť na veliteľstvo"
 
 msgid "Hold Position"
 msgstr "Drž pozíciu"
 
 msgid "Optimum Range"
-msgstr "Oprimálny dostrel"
+msgstr "Oprimálny dosah"
 
 msgid "Short Range"
 msgstr "Krátky dostrel"
@@ -9097,7 +9100,7 @@ msgid "Select all Trucks"
 msgstr ""
 
 msgid "Select next Factory"
-msgstr "Vybrať dalšiu továrňu"
+msgstr "Vybrať dalšiu továreň"
 
 msgid "Select next Research Facility"
 msgstr "Vybrať dalšie výskumné zariadenie"
@@ -9360,7 +9363,7 @@ msgid "Accept Retreating Units"
 msgstr ""
 
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Ospravedlňujeme sa, ale cheaty sú vypnuté pre hru viacerých hráčov."
+msgstr "Ospravedlňujeme sa, ale tento cheat je vypnutý pre hru viacerých hráčov."
 
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
@@ -9405,7 +9408,7 @@ msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
 msgid "Hard as nails!!!"
-msgstr "Tvrdo ako kladivo!!!"
+msgstr "Tvrdý ako kameň!!!"
 
 msgid "1000 big ones!!!"
 msgstr ""
@@ -9692,7 +9695,7 @@ msgid "Could not save game!"
 msgstr "Nemožno uložiť hru!"
 
 msgid "Load Transport"
-msgstr "Naložit transport"
+msgstr "Naložiť transport"
 
 msgid "Shows the number of units currently loaded into the mission transporter, and the total capacity."
 msgstr ""
@@ -9722,7 +9725,7 @@ msgid "Load Saved Game"
 msgstr "Nahrať uloženú hru"
 
 msgid "GAME SAVED :"
-msgstr "HRA ULOŽENÁ!"
+msgstr "HRA ULOŽENÁ :"
 
 #, c-format
 msgid "You found %u power in an oil drum."
@@ -9834,6 +9837,18 @@ msgstr ""
 msgid "Select Player Name"
 msgstr "Vyber meno hráča"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "Spojenectvá"
 
@@ -9844,20 +9859,6 @@ msgid "Map Preview"
 msgstr ""
 
 msgid "Click to see Map"
-msgstr ""
-
-msgid "Show Structure Limits"
-msgstr "Zobraz limity budovy"
-
-msgid "Set Structure Limits"
-msgstr "Nastavenie limitu budov"
-
-msgid "Random Game Options"
-msgstr ""
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
 msgstr ""
 
 msgid "Tech"
@@ -9873,6 +9874,20 @@ msgid "Technology Level 3"
 msgstr ""
 
 msgid "Technology Level 4"
+msgstr ""
+
+msgid "Show Structure Limits"
+msgstr "Zobraz limity budovy"
+
+msgid "Set Structure Limits"
+msgstr "Nastavenie limitu budov"
+
+msgid "Random Game Options"
+msgstr ""
+
+msgid ""
+"Random Game Options\n"
+"Can be blocked by players' votes"
 msgstr ""
 
 msgid "Start Hosting Game"
@@ -10018,6 +10033,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10034,64 +10056,6 @@ msgid "Enable Spectator Join"
 msgstr ""
 
 msgid "Lock Teams"
-msgstr ""
-
-msgid "Choose Team"
-msgstr ""
-
-msgid "Teams locked"
-msgstr ""
-
-msgid "Click to change player colour"
-msgstr ""
-
-msgid "Click to change player position"
-msgstr ""
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr ""
-
-msgid "Click to close spectator slot"
-msgstr ""
-
-msgid "Player ID: "
-msgstr ""
-
-msgid "(none)"
-msgstr ""
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr ""
-
-msgid "Waiting for player"
-msgstr ""
-
-msgid "Player is ready"
-msgstr ""
-
-msgid "Player is downloading"
-msgstr ""
-
-msgid "Click when ready"
-msgstr ""
-
-msgid "Waiting for download"
-msgstr ""
-
-msgid "READY?"
 msgstr ""
 
 msgid "For Spectator:"
@@ -10173,7 +10137,7 @@ msgid "This is a random map, it can vary your playing experience!"
 msgstr ""
 
 msgid "Host is Starting Game"
-msgstr "Hostiteľ začíná hru"
+msgstr "Hostiteľ začína hru"
 
 #, c-format
 msgid "Host: Free chat enabled for: %s"
@@ -10237,6 +10201,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10254,20 +10233,6 @@ msgid "Closed"
 msgstr ""
 
 msgid "Open"
-msgstr ""
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr ""
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr ""
-
-msgid "HOST"
-msgstr ""
-
-msgid "Ping"
 msgstr ""
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
@@ -10296,6 +10261,10 @@ msgstr ""
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10359,6 +10328,9 @@ msgstr[0] "%d hráč"
 msgstr[1] "%d hráči"
 msgstr[2] "%d hráčov"
 msgstr[3] "%d hráčov"
+
+msgid "Ping"
+msgstr ""
 
 msgid "Structs"
 msgstr "Stavby"
@@ -10544,7 +10516,7 @@ msgid "Bright blue"
 msgstr "Svetlomodrá"
 
 msgid "Neon green"
-msgstr "Neónová zelená"
+msgstr "Neónovo zelená"
 
 msgid "Infrared"
 msgstr "Infračervená"
@@ -10901,6 +10873,18 @@ msgid "Invalid host response"
 msgstr ""
 
 msgid "Requesting to join game"
+msgstr ""
+
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
 msgstr ""
 
 msgid "Kick Spectator"
@@ -11338,6 +11322,130 @@ msgstr ""
 
 msgid "IP Address or Machine Name"
 msgstr "IP adresa alebo meno stroja"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr ""
+
+msgid "(none)"
+msgstr ""
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr ""
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr ""
+
+msgid "HOST"
+msgstr ""
+
+msgid "Choose Team"
+msgstr ""
+
+msgid "Teams locked"
+msgstr ""
+
+msgid "Click to change player colour"
+msgstr ""
+
+msgid "Click to change player position"
+msgstr ""
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr ""
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr ""
+
+msgid "Waiting for player"
+msgstr ""
+
+msgid "Player is ready"
+msgstr ""
+
+msgid "Player is downloading"
+msgstr ""
+
+msgid "Click when ready"
+msgstr ""
+
+msgid "Waiting for download"
+msgstr ""
+
+msgid "READY?"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Spustiť transport"

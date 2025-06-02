@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-06-01 03:17\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -1800,7 +1800,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "NEXUS本部を破壊し、NEXUS侵入プログラムを無効化する"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "警告: 本部がVTOL攻撃に対してシールドされています"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "抵抗回路を研究し、NEXUSからの襲撃を生き延びろ"
@@ -2940,22 +2940,22 @@ msgid "System locale"
 msgstr "システム言語設定"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "ポートマッピングの作成に失敗しました"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "ポート %dを開くようにルーター/ファイアウォールを手動で設定してください！"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "ポートマッピングが外部ポートを開きました: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "あなたの外部IPは: %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "ポートマッピングの作成に失敗しました (タイムアウト)"
 
 msgid "Client failed to ack player index swap"
 msgstr "クライアントがプレーヤーのインデックス交換に失敗した"
@@ -2971,6 +2971,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"ロビー サーバへの接続エラーです：%s.\n"
+"ポート %d が着信接続を受信できることを確認してください。\n"
+"ルータを使用している場合は、UPnP/NAT-PMP/PCPを使用するように設定するか、\n"
+"システムにポートを転送するように設定してください。"
 
 msgid "Failed to get a lobby response!"
 msgstr "ロビー応答に失敗！"
@@ -3280,7 +3284,7 @@ msgid "Armed with Cyborg Flamer"
 msgstr "サイボーグ フレイマー装備"
 
 msgid "Armed with Cyborg Hyper Velocity Cannon"
-msgstr ""
+msgstr "サイボーグ超高速キャノン砲装備"
 
 msgid "Armed with Cyborg Machinegun"
 msgstr "サイボーグ マシンガン装備"
@@ -3295,10 +3299,10 @@ msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr "サイボーグ スカージ ミサイルランチャー装備"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr ""
+msgstr "サイボーグタンクキラーロケット装備"
 
 msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
+msgstr "サイボーグテルミットフレイマー装備"
 
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "サイボーグ サーミットフレイマー装備"
@@ -3998,7 +4002,7 @@ msgid "Cyborg Superdense Thermal Armor"
 msgstr "サイボーグ 超高密度サーマルアーマー"
 
 msgid "Cyborg Tank Killer"
-msgstr ""
+msgstr "サイボーグ戦車キラー"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "サイボーグ サーマルアーマー Mk2"
@@ -4010,7 +4014,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "サイボーグ サーマルアーマー"
 
 msgid "Cyborg Thermite"
-msgstr ""
+msgstr "サイボーグテルミット"
 
 msgid "Cyborg Transport Available"
 msgstr "サイボーグを輸送可能です"
@@ -4055,7 +4059,7 @@ msgid "Depleted uranium kinetic energy bullets"
 msgstr "劣化ウラン運動エネルギー弾"
 
 msgid "Depleted Uranium MG Bullets Mk3"
-msgstr ""
+msgstr "劣化Uranium MG弾丸MK 3"
 
 msgid "Depleted Uranium MG Bullets"
 msgstr "劣化ウラン弾 MG弾"
@@ -4242,7 +4246,7 @@ msgid "Flamer damage +25%"
 msgstr "フレイマーダメージ +25%"
 
 msgid "Flamer Fast Loader"
-msgstr ""
+msgstr "フレイマーファストローダー"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
@@ -4661,13 +4665,13 @@ msgid "Heavy Repair Turret Cobra Hover"
 msgstr "ヘビーリペア タレット コブラ ホバー"
 
 msgid "Heavy Rocket Array"
-msgstr ""
+msgstr "ヘビーロケット配列"
 
 msgid "Heavy Rocket Bastion"
 msgstr "ヘビーロケット バスティオン"
 
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "ヘビーロケットバッテリー"
 
 msgid "Heavy surface-to-air missile"
 msgstr "重地対空ミサイル"
@@ -4921,10 +4925,10 @@ msgstr "レーザー光学系の改良により、光の散乱を低減"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "焼夷弾榴弾砲砲台 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "焼夷弾榴弾砲砲台"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "焼夷弾榴弾砲砲台"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5899,7 +5903,7 @@ msgid "Rearming speed +30%"
 msgstr "再武装スピード +30%"
 
 msgid "Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "スカベンジャーフレーマー範囲を減らす"
 
 msgid "Reduced chance of NEXUS take-over"
 msgstr "NEXUSの乗っ取り可能性を低減する"
@@ -5995,7 +5999,7 @@ msgid "Ripple Rocket Battery"
 msgstr "リップルロケット バッテリー"
 
 msgid "Ripple Rocket Rapid Loader"
-msgstr ""
+msgstr "リップルロケットラピッドローダー"
 
 msgid "Ripple Rockets"
 msgstr "リップルロケット"
@@ -6265,7 +6269,7 @@ msgid "Smashedwall"
 msgstr "スマッシュ ウォール"
 
 msgid "Sniper Cyborg"
-msgstr ""
+msgstr "スナイパーサイボーグ"
 
 msgid "Speed: Fast"
 msgstr "スピード：高速"
@@ -6405,11 +6409,11 @@ msgstr "シナプスリンク データ解析 Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "シナプスリンク データ解析 Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "シナプスリンク データ解析"
-
 msgid "Synaptic link data analysis"
 msgstr "シナプスリンクのデータ解析"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "シナプスリンク データ解析"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "シナプスリンク スクランブラー技術"
@@ -6424,7 +6428,7 @@ msgid "Systems Research Completed"
 msgstr "システム研究終了"
 
 msgid "Tank Killer Cyborg"
-msgstr ""
+msgstr "戦車キラーサイボーグ"
 
 msgid "Tank Killer Emplacement"
 msgstr "タンクキラー砲台"
@@ -6512,7 +6516,7 @@ msgid "Thermite Bomb Bay"
 msgstr "テルミット爆弾庫"
 
 msgid "Thermite Cyborg"
-msgstr ""
+msgstr " テルミットサイボーグ"
 
 msgid "Thermite Flamer Cyborg"
 msgstr "サーマイト フレイマー サイボーグ"
@@ -6641,7 +6645,7 @@ msgid "Two-faced"
 msgstr "二面性"
 
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "元に戻すスカベンジャーフレーマー範囲の減少"
 
 msgid "Unit Research Completed"
 msgstr "ユニット研究終了"
@@ -6804,7 +6808,7 @@ msgid "VTOL Heap Bomb Bay"
 msgstr "VTOL ヒープボムベイ"
 
 msgid "VTOL Heavy Cannon"
-msgstr ""
+msgstr "VTOLヘビーキャノン"
 
 msgid "VTOL Heavy Laser"
 msgstr "VTOL ヘビーレーザー"
@@ -6849,7 +6853,7 @@ msgid "VTOL Machinegun"
 msgstr "VTOL マシンガン"
 
 msgid "VTOL Mini-Rocket AA"
-msgstr ""
+msgstr "VTOLミニロケットAA"
 
 msgid "VTOL Mini-Rocket Scav"
 msgstr "VTOL ミニロケット スカベンジャー"
@@ -7240,10 +7244,10 @@ msgid "port"
 msgstr "ポート"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "ホスト時のポートマッピングを有効/無効にする"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, true, 0, false]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "ロビースラッシュコマンドを有効にする（クライアント接続用）"
@@ -7273,16 +7277,16 @@ msgid "startplayers"
 msgstr "スタートプレイヤー"
 
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "ゲーム履歴ログ出力モード"
 
 msgid "Game history log output key"
-msgstr ""
+msgstr "ゲーム履歴ログ出力キー"
 
 msgid "Game history log output naming"
-msgstr ""
+msgstr "ゲーム履歴ログ出力名"
 
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "ゲーム履歴ログのフレーム間隔"
 
 msgid "interval in seconds"
 msgstr "秒間隔"
@@ -7294,22 +7298,25 @@ msgid "number of minutes"
 msgstr "分数"
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "スペックマップ.png をルーマ、シングルチャンネル、グレースケール.png (および終了) に変換します。"
 
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "Vulkan暗黙のレイヤーを許可する（クラッシュやバグの可能性があるためデフォルトで無効になる可能性があります）"
 
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "既定のホスティングチャットの設定/権限を設定する"
 
 msgid "Enable async join approval (for connecting clients)"
-msgstr ""
+msgstr "非同期参加承認を有効にする (クライアントを接続するため)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "ホスト(オートホスト)を、観戦者のホストであっても、準備ができていない状態で起動します。"
 
 msgid "Base URL for on-demand video downloads"
-msgstr ""
+msgstr "オンデマンド動画ダウンロードのベースURL"
 
 msgid "Base video URL"
-msgstr ""
+msgstr "ベースの動画URL"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "より多くのユニットを指揮するためには、より高いレベルが必要です"
@@ -7603,7 +7610,7 @@ msgstr "リプレイを見る"
 
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP ポート%dは、ファイアウォールまたはルーターでゲームをホストするために開く必要があります。"
 
 msgid "Load Multiplayer Replay"
 msgstr "マルチプレイヤーリプレイをロード"
@@ -7678,10 +7685,10 @@ msgid "On"
 msgstr "オン"
 
 msgid "Per Pixel"
-msgstr ""
+msgstr "Per Pixel"
 
 msgid "Lightmap"
-msgstr ""
+msgstr "ライトマップ"
 
 msgid "Rotating"
 msgstr "回転式"
@@ -7723,7 +7730,7 @@ msgid "Shadow filtering not available on this system."
 msgstr "このシステムではシャドウフィルタリングは利用できません。"
 
 msgid "Opacity: 50%"
-msgstr ""
+msgstr "不透明度: 50%"
 
 msgid "* Takes effect on game restart"
 msgstr "* ゲーム再開時に反映されます"
@@ -7744,7 +7751,7 @@ msgid "Shadow Filtering"
 msgstr "シャドウフィルタリング"
 
 msgid "Per Pixel point lights"
-msgstr ""
+msgstr "Per Pixel ポイント・ライトごと"
 
 msgid "LOD Distance"
 msgstr "LOD距離"
@@ -7771,7 +7778,7 @@ msgid "Groups Menu"
 msgstr "グループメニュー"
 
 msgid "Options Button"
-msgstr ""
+msgstr "オプションボタン"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "グラフィックス オプション"
@@ -7979,10 +7986,10 @@ msgid "None"
 msgstr "なし"
 
 msgid "Distribute to Team"
-msgstr ""
+msgstr "チームに配布"
 
 msgid "Destroy (Classic)"
-msgstr ""
+msgstr "破壊（クラシック）"
 
 msgid "Allow All"
 msgstr "すべて許可"
@@ -7997,10 +8004,10 @@ msgid "Game Port"
 msgstr "ゲームポート"
 
 msgid "Port Mapping"
-msgstr ""
+msgstr "ポートマッピング"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
+msgstr "PCP、NAT-PMP、または UPnP を使用して、ホスティング中にルーター/ファイアウォールを接続できるように設定します。"
 
 msgid "Chat"
 msgstr "チャット"
@@ -8015,7 +8022,7 @@ msgid "Spectator Slots"
 msgstr "観戦者スロット"
 
 msgid "On Player Leave"
-msgstr ""
+msgstr "プレイヤーの退席時"
 
 msgid "Game Time Limit"
 msgstr "ゲーム制限時間"
@@ -8087,10 +8094,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "プレイヤー %u は新しいドロイドのチート（デバッグ・メニュー）を使用しています。"
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "ゲーム内オプションを開く"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "ゲーム内オプションを閉じる"
 
 msgid "Hiding Obsolete Tech"
 msgstr "旧型の技術を隠す"
@@ -8141,52 +8148,52 @@ msgid "Chat Options"
 msgstr "チャットオプション"
 
 msgid "Mute or configure player free chat."
-msgstr ""
+msgstr "プレイヤーの無料チャットをミュートまたは設定します。"
 
 msgid "The host has globally muted 1+ players."
-msgstr ""
+msgstr "ホストはグローバルに1人以上のプレイヤーをミュートしています。"
 
 msgid "Local"
 msgstr "ローカル"
 
 msgid "Select / Assign Group Number: "
-msgstr ""
+msgstr "グループ番号を選択 / 割り当てる: "
 
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "グループ %u"
 
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "グループ %u で単位を選択"
 
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "選択したユニットをグループ %u に割り当てる"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "このグループのカメラをクリックまたは2回タップして中央に表示"
 
 msgid "View and configure groups of units, which can be quickly selected and ordered."
-msgstr ""
+msgstr "ユニットのグループを表示および設定し、迅速に選択し、注文することができます。"
 
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
-msgstr ""
+msgstr "グループボタンは、ユニットが失われた時(または多くのダメージを受けた時)に赤く点灯します。"
 
 msgid "Unit Groups"
-msgstr ""
+msgstr "ユニットグループ"
 
 msgid "Select a Group"
-msgstr ""
+msgstr "グループを選択"
 
 msgid "Assign Selected Units to a Group"
-msgstr ""
+msgstr "選択した兵士をグループに割り当てる"
 
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
-msgstr ""
+msgstr "グループボタンをクリックまたはタップしてカメラを中央に置く"
 
 msgid "Unit Groups:"
-msgstr ""
+msgstr "ユニットグループ:"
 
 msgid "Construction Progress"
 msgstr "工事進捗状況"
@@ -8201,59 +8208,59 @@ msgid "Progress Bar"
 msgstr "プログレスバー"
 
 msgid "To:"
-msgstr ""
+msgstr "宛先:"
 
 msgid "All"
-msgstr ""
+msgstr "すべて"
 
 msgid "Team"
 msgstr "チーム"
 
 msgid "Human Teammates"
-msgstr ""
+msgstr "人間チーム"
 
 msgid "Bot Teammates"
 msgstr ""
 
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u プレイヤー"
 
 msgid "Choose a recipient"
-msgstr ""
+msgstr "受信者を選択"
 
 msgid "Quick Chat:"
-msgstr ""
+msgstr "クイック・チャット"
 
 msgid "Lobby Chat"
-msgstr ""
+msgstr "ロビー・チャット"
 
 msgid "Requests"
-msgstr ""
+msgstr "リクエスト"
 
 msgid "Notices"
-msgstr ""
+msgstr "お知らせ"
 
 msgid "Reactions"
-msgstr ""
+msgstr "反応"
 
 msgid "Taunts"
-msgstr ""
+msgstr "挑発"
 
 msgid "Coordination"
-msgstr ""
+msgstr "調整"
 
 msgid "Suggestions"
-msgstr ""
+msgstr "候補"
 
 msgid "Cheats"
-msgstr ""
+msgstr "チート"
 
 msgid "End-Game"
-msgstr ""
+msgstr "究極"
 
 msgid "Host"
-msgstr ""
+msgstr "ホスト"
 
 msgid "Admin"
 msgstr ""
@@ -8314,166 +8321,166 @@ msgid "I suggest: Capturing oil resources"
 msgstr ""
 
 msgid "Hey everyone!"
-msgstr ""
+msgstr "皆さん、こんにちは！"
 
 msgid "Welcome!"
 msgstr ""
 
 msgid "I want to spectate"
-msgstr ""
+msgstr "観戦したい"
 
 msgid "I want to play"
-msgstr ""
+msgstr "プレイしたい"
 
 msgid "I want to switch teams"
-msgstr ""
+msgstr "チームを切り替えたい"
 
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "「準備完了」ができているかどうかを確認してください"
 
 msgid "Please wait"
-msgstr ""
+msgstr "お待ちください"
 
 msgid "Let's go!"
-msgstr ""
+msgstr "はじめる！"
 
 msgid "Almost ready"
-msgstr ""
+msgstr "ほぼ準備完了"
 
 msgid "Ready"
-msgstr ""
+msgstr "準備完了"
 
 msgid "Be right back"
-msgstr ""
+msgstr "すぐに戻る"
 
 msgid "I'm back"
-msgstr ""
+msgstr "戻ってきた"
 
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 msgid "Maybe"
-msgstr ""
+msgstr "多分"
 
 msgid "Not yet"
-msgstr ""
+msgstr "まだです"
 
 msgid "Soon"
-msgstr ""
+msgstr "まもなく"
 
 msgid "Thank you"
-msgstr ""
+msgstr "ありがとうございます"
 
 msgid "No problem"
-msgstr ""
+msgstr "大丈夫です"
 
 msgid "Well-played"
-msgstr ""
+msgstr "よくやった"
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "すみません、理解できません。（クイックチャットを使用しますか？）"
 
 msgid "Get ready..."
-msgstr ""
+msgstr "行くよ…"
 
 msgid "You're going to regret that"
-msgstr ""
+msgstr "あなたはそれを後悔します。"
 
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "傷だらけだ！"
 
 msgid "Attack now?"
-msgstr ""
+msgstr "攻撃しますか？"
 
 msgid "Group up"
-msgstr ""
+msgstr "固まって行動しよう"
 
 msgid "Split up"
-msgstr ""
+msgstr "分割する"
 
 msgid "Focus attacks where marked"
-msgstr ""
+msgstr "標識された場所で攻撃に焦点を合わせる"
 
 msgid "Retreat!"
-msgstr ""
+msgstr "撤退！"
 
 msgid "I need help!"
-msgstr ""
+msgstr "助けが必要だ！"
 
 msgid "Left side"
-msgstr ""
+msgstr "左側"
 
 msgid "Right side"
-msgstr ""
+msgstr "右側"
 
 msgid "Transfer Request: Units"
-msgstr ""
+msgstr "転送要求: 単位"
 
 msgid "Transfer Request: Trucks"
-msgstr ""
+msgstr "転送要求: トラック"
 
 msgid "Attacking now!"
-msgstr ""
+msgstr "今攻撃中！"
 
 msgid "On my way!"
-msgstr ""
+msgstr "さあ始めよう！"
 
 msgid "They're coming!"
-msgstr ""
+msgstr "彼らはやって来る！"
 
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "攻撃されています！"
 
 msgid "I'm rushing oils"
-msgstr ""
+msgstr "私は油を急いでいます"
 
 msgid "They're rushing oils!"
-msgstr ""
+msgstr "彼らは油を急いでいる!"
 
 msgid "I don't have enough power"
-msgstr ""
+msgstr "パワーが足りません"
 
 msgid "Build more units"
-msgstr ""
+msgstr "兵士を増やしてください"
 
 msgid "Build different units"
-msgstr ""
+msgstr "別のユニットを建設する"
 
 msgid "Check team strategy view"
-msgstr ""
+msgstr "チーム戦略を確認する"
 
 msgid "Research different tech"
-msgstr ""
+msgstr "さまざまな技術を研究する"
 
 msgid "Keep research centers busy"
-msgstr ""
+msgstr "研究センターを忙しくしてください"
 
 msgid "Build anti-air"
-msgstr ""
+msgstr "アンチエアを構築"
 
 msgid "Repair your units"
-msgstr ""
+msgstr "ユニットを修理する"
 
 msgid "Build repair facilities"
-msgstr ""
+msgstr "修理施設を建設する"
 
 msgid "Build power generators"
-msgstr ""
+msgstr "発電機を構築"
 
 msgid "Capture oil resources"
-msgstr ""
+msgstr "石油資源を占領する"
 
 msgid "That didn't go well..."
-msgstr ""
+msgstr "うまくいきませんでした..."
 
 msgid "I have another plan"
-msgstr ""
+msgstr "私は別の計画を持っています"
 
 msgid "Good game"
 msgstr ""
@@ -9600,7 +9607,7 @@ msgid "Screen shake when things die: On"
 msgstr "ユニットが死ぬと画面が揺れる：オン"
 
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "申し訳ございませんが、マルチプレイではゲームスピードを変更することはできません。"
+msgstr "申し訳ないが、マルチプレイではゲームスピードを変更することはできません。"
 
 msgid "Game Speed Reset"
 msgstr "ゲーム速度のリセット"
@@ -9653,10 +9660,10 @@ msgid "QuickSave file does not exist yet"
 msgstr "クイックロード ファイルがまだ存在しない"
 
 msgid "<not bound>"
-msgstr "<バインドなし>"
+msgstr "<not bound>"
 
 msgid "<Fixed Key>"
-msgstr "<固定キー>"
+msgstr "<Fixed Key>"
 
 msgid "KEY MAPPING"
 msgstr "キーマッピング"
@@ -9835,6 +9842,18 @@ msgstr "パスワードの入力はこちら"
 msgid "Select Player Name"
 msgstr "プレイヤー名を選択"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "同盟"
 
@@ -9846,6 +9865,21 @@ msgstr "マッププレビュー"
 
 msgid "Click to see Map"
 msgstr "クリックするとマップが表示されます"
+
+msgid "Tech"
+msgstr "技術"
+
+msgid "Technology Level 1"
+msgstr "技術レベル1"
+
+msgid "Technology Level 2"
+msgstr "技術レベル2"
+
+msgid "Technology Level 3"
+msgstr "技術レベル3"
+
+msgid "Technology Level 4"
+msgstr "技術レベル4"
 
 msgid "Show Structure Limits"
 msgstr "ストラクチャーの上限を表示"
@@ -9862,21 +9896,6 @@ msgid ""
 msgstr ""
 "ランダムゲームオプション\n"
 "プレイヤーの投票によってブロックされることがある"
-
-msgid "Tech"
-msgstr "技術"
-
-msgid "Technology Level 1"
-msgstr "技術レベル1"
-
-msgid "Technology Level 2"
-msgstr "技術レベル2"
-
-msgid "Technology Level 3"
-msgstr "技術レベル3"
-
-msgid "Technology Level 4"
-msgstr "技術レベル4"
 
 msgid "Start Hosting Game"
 msgstr "ゲームのホスティングを開始"
@@ -10021,6 +10040,13 @@ msgstr "この観戦者とプレイヤーを交換したいですか？"
 msgid "Yes, select Player slot"
 msgstr "はい、プレイヤースロットを選択します"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "加盟:"
 
@@ -10038,64 +10064,6 @@ msgstr "観戦者の参加を可能にする"
 
 msgid "Lock Teams"
 msgstr "固定チーム"
-
-msgid "Choose Team"
-msgstr "チームを選択"
-
-msgid "Teams locked"
-msgstr "チームを固定"
-
-msgid "Click to change player colour"
-msgstr "クリックでプレイヤーカラーを変更"
-
-msgid "Click to change player position"
-msgstr "クリックするとポジションを変更できます"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "クリックでAIを変更、右クリックで選択肢を配る"
-
-msgid "Click to close spectator slot"
-msgstr "クリックすると観戦席が閉じます"
-
-msgid "Player ID: "
-msgstr "プレイヤーID: "
-
-msgid "(none)"
-msgstr "(none)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr "プレーヤー評価:"
-
-msgid "Host provided"
-msgstr "ホスト提供"
-
-#, c-format
-msgid "From: %s"
-msgstr "From: %s"
-
-msgid "Click to change difficulty"
-msgstr "クリックで難易度変更"
-
-msgid "Waiting for player"
-msgstr "プレイヤー待機中"
-
-msgid "Player is ready"
-msgstr "プレイヤーは準備完了"
-
-msgid "Player is downloading"
-msgstr "プレーヤーはダウンロード中です"
-
-msgid "Click when ready"
-msgstr "準備ができたらクリック"
-
-msgid "Waiting for download"
-msgstr "ダウンロード待ち"
-
-msgid "READY?"
-msgstr "準備はいいか?"
 
 msgid "For Spectator:"
 msgstr "観戦者向け:"
@@ -10157,7 +10125,7 @@ msgid "More Information"
 msgstr "その他の情報"
 
 msgid "Sorry! Failed to host the game."
-msgstr "申し訳ございません！ゲームのホストに失敗しました。"
+msgstr "申し訳ない！ゲームのホストに失敗しました。"
 
 msgid "Game Name Updated."
 msgstr "ゲーム名を更新しました。"
@@ -10240,6 +10208,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10258,20 +10241,6 @@ msgstr "クローズド"
 
 msgid "Open"
 msgstr "オープン"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "マップ送信：%u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "マップ：%u%% ダウンロード完了"
-
-msgid "HOST"
-msgstr "ホスト"
-
-msgid "Ping"
-msgstr "Ping"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "このリプレイファイルの保存に使用したWarzone 2100のバージョンは、現在実行中のバージョンと一致しません。"
@@ -10299,6 +10268,10 @@ msgstr "%sはゲームを終了しました"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10359,6 +10332,9 @@ msgstr "プレイヤー人数"
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d プレイヤー"
+
+msgid "Ping"
+msgstr "Ping"
 
 msgid "Structs"
 msgstr "ストラクチャー"
@@ -10903,6 +10879,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -10967,7 +10955,7 @@ msgid "Kinetic Armor"
 msgstr "キネティックアーマー"
 
 msgid "(Tanks / Cyborgs)"
-msgstr "（戦車／サイボーグ）"
+msgstr "(戦車／サイボーグ）"
 
 msgid "Cannons"
 msgstr "キャノン"
@@ -11231,7 +11219,7 @@ msgid "Tweaks:"
 msgstr ""
 
 msgid "CAMPAIGNS"
-msgstr "CAMPAIGNS"
+msgstr "キャンペーン"
 
 msgid "GAMES"
 msgstr "ゲーム"
@@ -11332,6 +11320,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IPアドレスまたはマシン名"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "プレイヤーID: "
+
+msgid "(none)"
+msgstr "(none)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "マップ送信：%u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "マップ：%u%% ダウンロード完了"
+
+msgid "HOST"
+msgstr "ホスト"
+
+msgid "Choose Team"
+msgstr "チームを選択"
+
+msgid "Teams locked"
+msgstr "チームを固定"
+
+msgid "Click to change player colour"
+msgstr "クリックでプレイヤーカラーを変更"
+
+msgid "Click to change player position"
+msgstr "クリックするとポジションを変更できます"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "クリックでAIを変更、右クリックで選択肢を配る"
+
+msgid "Click to close spectator slot"
+msgstr "クリックすると観戦席が閉じます"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr "プレーヤー評価:"
+
+msgid "Host provided"
+msgstr "ホスト提供"
+
+#, c-format
+msgid "From: %s"
+msgstr "From: %s"
+
+msgid "Click to change difficulty"
+msgstr "クリックで難易度変更"
+
+msgid "Waiting for player"
+msgstr "プレイヤー待機中"
+
+msgid "Player is ready"
+msgstr "プレイヤーは準備完了"
+
+msgid "Player is downloading"
+msgstr "プレーヤーはダウンロード中です"
+
+msgid "Click when ready"
+msgstr "準備ができたらクリック"
+
+msgid "Waiting for download"
+msgstr "ダウンロード待ち"
+
+msgid "READY?"
+msgstr "準備はいいか?"
 
 msgid "Launch Transport"
 msgstr "輸送開始"

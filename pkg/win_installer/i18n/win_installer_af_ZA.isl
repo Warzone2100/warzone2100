@@ -49,3 +49,4 @@ VideoDownloadFailedText=Install will proceed anyway, but you may want to manuall
 VCRuntimeInstalling=Installing Visual C++ Runtime Redistributable
 VCRuntimeWaiting=Waiting for installation to complete...
 VCRuntimeVerifying=Verifying Download
+
