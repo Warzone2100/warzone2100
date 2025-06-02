@@ -51,7 +51,7 @@ How to get the latest Windows development builds:
 1. View the **[latest successful Windows builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush+is%3Asuccess)**.
 2. Select the latest workflow run in the table / list.
    This should display a list of **Artifacts** from the run.
-3. Download the `warzone2100_win_x86_portable` or `warzone2100_win_x86_installer` artifact (depending on whether you want the portable build or the full / regular installer).
+3. Download the `warzone2100_win_installer` artifact.
 > Note: A free GitHub account is currently required to download the artifacts.
 
 ### macOS
@@ -70,8 +70,8 @@ How to get the latest Ubuntu development builds:
 2. Select the latest workflow run in the table / list.
    This should display a list of **Artifacts** from the run.
 3. Download the appropriate `warzone2100_ubuntu<version>_amd64_deb` artifact.
-   - If you are running Ubuntu 20.04: `warzone2100_ubuntu20.04_amd64_deb`
    - If you are running Ubuntu 22.04: `warzone2100_ubuntu22.04_amd64_deb`
+   - If you are running Ubuntu 24.04: `warzone2100_ubuntu24.04_amd64_deb`
 > Note: A free GitHub account is currently required to download the artifacts.
 4. Extract the contents of the downloaded .zip (`warzone2100_ubuntu<version>_amd64.deb`) to your Desktop.
 5. Execute the following commands in Terminal:
@@ -113,9 +113,9 @@ those bugs more quickly, we require that you follow these rules:
       occurred.
    3. Try to reproduce the bug and add a description of the process to your bug
       report.
-   4. You may even upload save files. These consist of one or two file(s) and
-      one folder. All two/three are named after your savegame (e.g.
-      MySaveGame.es, MySaveGame.gam and the folder MySaveGame).
+   4. You may even upload save files. These consist of one file and
+      one folder. Both are named after your savegame (e.g. MySaveGame.gam and
+      the folder MySaveGame).
    5. Bug reports are not submit-and-forget. It may be that you forgot some
       information or forgot to upload a file. So it is also in your interest to
       watch the bug-report after it has been submitted. Additionally, you can enable
