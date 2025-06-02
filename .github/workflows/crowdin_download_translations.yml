@@ -110,6 +110,14 @@ jobs:
             -exec \
             .ci/githubactions/check_po_base_unchanged.sh 'po/guide/warzone2100_guide.pot' '{}' ';' | xargs -r0 -I {} rm -v "{}"
 
+      - name: Cleanup .isl files
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        run: |
+          # Cleanup untranslated .isl files
+          find pkg/win_installer/i18n -name '*.isl' -type f -maxdepth 1 \
+            -exec \
+            .ci/githubactions/check_isl_base_unchanged.sh 'pkg/win_installer/i18n/win_installer_base.isl' '{}' ';' | xargs -r0 -I {} rm -v "{}"
+
       - name: Publish any changes to translations to l10n_master branch
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         id: pushupdates
