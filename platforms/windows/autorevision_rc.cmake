@@ -70,6 +70,9 @@ if(DID_EXTRACT_VERSION)
 
 else()
 	message( WARNING "The VCS_MOST_RECENT_TAGGED_VERSION tag does not seem to include a version #; defaulting to 0.0.0" )
+	set(EXTRACTED_VERSION_MAJOR "0")
+	set(EXTRACTED_VERSION_MINOR "0")
+	set(EXTRACTED_VERSION_PATCH "0")
 endif()
 
 # Determine the build-number component of the version info
