@@ -2,6 +2,9 @@ FROM ubuntu:24.04
 
 RUN cat /etc/lsb-release
 
+# Default to Azure mirror (what GitHub Actions ubuntu runners use)
+RUN sed -i -e 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/azure.archive.ubuntu.com\/ubuntu\//' /etc/apt/sources.list.d/ubuntu.sources
+
 RUN mkdir -p /scripts
 COPY get-dependencies_linux.sh /scripts
 RUN chmod +x /scripts/get-dependencies_linux.sh
