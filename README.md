@@ -358,10 +358,10 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
 ### Windows using MSVC
 
 * Prerequisites
-   * **Visual Studio 2022** (Visual Studio 2017-2019 may work, but 2022+ is strongly encouraged)
+   * **Visual Studio 2022** (Visual Studio 2019 may work, but 2022+ is strongly encouraged)
       - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
-   * **CMake 3.20+** (https://cmake.org/)
+   * **CMake 3.24+** (https://cmake.org/)
    * **Git** (if not building from a release source archive)
    * **7-Zip** (https://www.7-zip.org)
    * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
@@ -374,7 +374,6 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
    * Configure
       * Visual Studio 2022: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 17 2022"`
       * Visual Studio 2019: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 16 2019"`
-      * Visual Studio 2017: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 15 2017"`
    * Build
       * Release: `cmake --build build --config Release`
       * Debug: `cmake --build build --config Debug`
