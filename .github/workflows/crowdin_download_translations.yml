@@ -114,7 +114,7 @@ jobs:
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         run: |
           # Cleanup untranslated .isl files
-          find pkg/win_installer/i18n -name '*.isl' -type f -maxdepth 1 \
+          find pkg/win_installer/i18n -name '*.isl' ! -name 'win_installer_base.isl' -type f -maxdepth 1 \
             -exec \
             .ci/githubactions/check_isl_base_unchanged.sh 'pkg/win_installer/i18n/win_installer_base.isl' '{}' ';' | xargs -r0 -I {} rm -v "{}"
 
