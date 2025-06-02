@@ -1,6 +1,10 @@
 #!/bin/sh
 
-# Expects input of $1 base file and $2 .po file
+# Expects input of $1 base .isl file and $2 translated .isl file
+
+if [ "$1" == "$2" ]; then
+  exit 0
+fi
 
 diff --ignore-trailing-space --ignore-blank-lines \
      --ignore-matching-lines='^;' \
