@@ -129,6 +129,12 @@ configuration data, save files and certain other things. Additionally you can
 use this directory to place custom maps and mods so the game can find them. The
 location of this directory depends on the operating system.
 
+> [!TIP]
+> The easy way to find the configuration directory is to:
+> 1. Launch Warzone 2100
+> 2. Click "Options"
+> 3. Click the small "Open Configuration Directory" link in the bottom-left
+
 ### Warzone 2100 directory under GNU/Linux
 
 Under GNU/Linux, Warzone 2100 conforms to the [XDG base directory spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
@@ -147,8 +153,7 @@ However, you can still access it by typing the path into your address bar.
 The directory `Warzone 2100 Project\Warzone 2100 <version>` is located under the
 `%APPDATA%` folder.
 
-Typical `%APPDATA%` paths:
-- Windows XP: `\Documents and Settings\$USER$\Application Data`
+Typical `%APPDATA%` path:
 - Windows Vista+: `\Users\$USER$\AppData\Roaming`
 
 Hence, the default path for the Warzone 2100 configuration data on Windows Vista+ would be:
