@@ -1,22 +1,6 @@
 #version 450
 
-layout(std140, set = 0, binding = 0) uniform cbuffer {
-	mat4 ModelViewProjectionMatrix;
-	mat4 ModelUVLightmapMatrix;
-	mat4 ModelUV1Matrix;
-	mat4 ModelUV2Matrix;
-	vec4 cameraPos; // in modelSpace
-	vec4 sunPos; // in modelSpace, normalized
-	vec4 emissiveLight; // light colors/intensity
-	vec4 ambientLight;
-	vec4 diffuseLight;
-	vec4 specularLight;
-	vec4 fogColor;
-	int fogEnabled; // whether fog is enabled
-	float fogEnd;
-	float fogStart;
-	float timeSec;
-};
+#include "terrain_water_high.glsl"
 
 layout(location = 0) in vec4 vertex; // .w is depth
 
@@ -29,6 +13,7 @@ layout(location = 6) out float depth;
 layout(location = 7) out vec3 eyeVec;
 layout(location = 8) out float fresnel;
 layout(location = 9) out float fresnel_alpha;
+layout(location = 10) out FragData frag;
 
 void main()
 {
@@ -51,6 +36,8 @@ void main()
 	fresnel_alpha = 1.0-fresnel_alpha;
 	fresnel_alpha = pow(fresnel_alpha,0.8);
 	fresnel_alpha = clamp(fresnel_alpha,0.15, 0.5);
+
+	frag.fragPos = vertex.xyz;
 
 	vec4 position = ModelViewProjectionMatrix * vec4(vertex.xyz, 1.f);
 	vertexDistance = position.z;
