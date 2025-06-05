@@ -101,10 +101,6 @@ vec3 getGroundUv(int i) {
 	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], groundNo);
 }
 
-vec3 getGround(int i) {
-	return texture2DArray(groundTex, getGroundUv(i), WZ_MIP_LOAD_BIAS).rgb * fgroundWeights[i];
-}
-
 struct BumpData {
 	vec4 color;
 	vec3 N;

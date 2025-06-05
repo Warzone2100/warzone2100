@@ -39,10 +39,6 @@ vec3 getGroundUv(int i) {
 	return vec3(frag.uvGround * groundScale[groundNo/4u][groundNo%4u], groundNo);
 }
 
-vec3 getGround(int i) {
-	return texture(groundTex, getGroundUv(i), WZ_MIP_LOAD_BIAS).rgb * frag.groundWeights[i];
-}
-
 struct BumpData {
 	vec4 color;
 	vec3 N;
