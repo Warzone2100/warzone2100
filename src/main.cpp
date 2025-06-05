@@ -920,6 +920,7 @@ static void stopGameLoop()
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
 		clearBlueprints();
+		clearTextMarkers();
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{

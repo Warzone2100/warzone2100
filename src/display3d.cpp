@@ -377,6 +377,72 @@ struct Blueprint
 
 static std::vector<Blueprint> blueprints;
 
+struct TextMarker
+{
+	TextMarker(int32_t x, int32_t y, std::string message, uint8_t color)
+		: x(x)
+		, y(y)
+		, message(message)
+		, color(color)
+	{}
+	TextMarker(BASE_OBJECT *object, std::string message, uint8_t color)
+		: object(object)
+		, message(message)
+		, color(color)
+	{}
+
+	void render()
+	{
+		text.setText(message.c_str(), font_regular);
+
+		/** Convert to tile marker if object is destroyed */
+		if (object != nullptr && object->died)
+		{
+			x = object->pos.x;
+			y = object->pos.y;
+			object = nullptr;
+		}
+
+		if (object == nullptr)
+		{
+			if (map_coord(x) < map_coord(playerPos.p.x) - visibleTiles.x / 2) return;
+			if (map_coord(y) < map_coord(playerPos.p.z) - visibleTiles.y / 2) return;
+			if (map_coord(x) >= map_coord(playerPos.p.x) + visibleTiles.x / 2) return;
+			if (map_coord(y) >= map_coord(playerPos.p.z) + visibleTiles.y / 2) return;
+
+			auto idx = visibleTiles.y / 2 + map_coord(y) - map_coord(playerPos.p.z);
+			auto jdx = visibleTiles.x / 2 + map_coord(x) - map_coord(playerPos.p.x);
+			// Perspective interpolation
+			auto o = Vector2f{tileScreenInfo[idx][jdx]};
+			auto oi = Vector2f{tileScreenInfo[idx+1][jdx]};
+			auto oj = Vector2f{tileScreenInfo[idx][jdx+1]};
+			auto oij = Vector2f{tileScreenInfo[idx+1][jdx+1]};
+
+			auto di = map_coordf(y)-map_coord(y);
+			auto dj = map_coordf(x)-map_coord(x);
+
+			auto xy = o+(oij-o)*glm::min(di,dj);
+			if (di>dj) xy += (oi-o)*(di-dj);
+			if (dj>di) xy += (oj-o)*(dj-di);
+			text.render(Vector2i(xy), clanColours[color]);
+		}
+		else
+		{
+			if (object->sDisplay.frameNumber < frameGetFrameNumber()) return;
+			text.render(Vector2f{object->sDisplay.screenX, object->sDisplay.screenY}, clanColours[color]);
+		}
+	}
+
+	BASE_OBJECT *object = {};
+	int32_t x;
+	int32_t y;
+	std::string message;
+	uint8_t color;
+	WzText text;
+};
+
+static std::vector<TextMarker> textMarkers;
+
 #define	TARGET_TO_SENSOR_TIME	((4*(GAME_TICKS_PER_SEC))/5)
 #define	DEST_TARGET_TIME	(GAME_TICKS_PER_SEC/4)
 
@@ -739,6 +805,20 @@ bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t d
 void clearBlueprints()
 {
 	blueprints.clear();
+}
+
+void addTextMarker(uint8_t mapX, uint8_t mapY, std::string message, uint8_t color)
+{
+	textMarkers.emplace_back(TextMarker{world_coord(mapX), world_coord(mapY), message, color});
+}
+void addTextMarker(BASE_OBJECT *object, std::string message, uint8_t color)
+{
+	textMarkers.emplace_back(TextMarker{object, message, color});
+}
+
+void clearTextMarkers()
+{
+	textMarkers.clear();
 }
 
 static PIELIGHT selectionBrightness()
@@ -1129,6 +1209,13 @@ void draw3DScene()
 		droidText.setText(droidCounts, font_regular);
 		droidText.render(pie_GetVideoBufferWidth() - droidText.width() - 10, droidText.height() + 2, WZCOL_TEXT_BRIGHT);
 	}
+	if (1)
+	{
+		for (auto i=textMarkers.begin(); i!=textMarkers.end(); i++)
+		{
+			i->render();
+		}
+	}
 
 	setupConnectionStatusForm();
 
@@ -1389,8 +1476,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 				Vector2i screen(0, 0);
 				Position pos;
 
-				pos.x = world_coord(j);
-				pos.z = -world_coord(i);
+				pos.x = world_coord(j) - playerPos.p.x % TILE_WIDTH;
+				pos.z = -world_coord(i) + playerPos.p.z % TILE_HEIGHT;
 				pos.y = 0;
 
 				if (tileOnMap(playerXTile + j, playerZTile + i))
@@ -3970,8 +4057,8 @@ void screenCoordToWorld(Vector2i screenCoord, Vector2i &worldCoord, SDWORD &tile
 				/* We've got a match for our mouse coords */
 				if (inQuad(&screenCoord, &quad))
 				{
-					outMousePos.x = playerPos.p.x + world_coord(j);
-					outMousePos.y = playerPos.p.z + world_coord(i);
+					outMousePos.x = playerPos.p.x + (world_coord(j) - (playerPos.p.x % TILE_WIDTH));
+					outMousePos.y = playerPos.p.z + (world_coord(i) - (playerPos.p.z % TILE_HEIGHT));
 					outMousePos += positionInQuad(screenCoord, quad);
 					if (outMousePos.x < 0)
 					{
