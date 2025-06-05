@@ -1,29 +1,18 @@
 #version 450
 
+#include "terrain_water_high.glsl"
+
 layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
+layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
+layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
+layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 
 layout(set = 1, binding = 0) uniform sampler2DArray tex;
 layout(set = 1, binding = 1) uniform sampler2DArray tex_nm;
 layout(set = 1, binding = 2) uniform sampler2DArray tex_sm;
 layout(set = 1, binding = 3) uniform sampler2D lightmap_tex;
-
-layout(std140, set = 0, binding = 0) uniform cbuffer {
-	mat4 ModelViewProjectionMatrix;
-	mat4 ModelUVLightmapMatrix;
-	mat4 ModelUV1Matrix;
-	mat4 ModelUV2Matrix;
-	vec4 cameraPos; // in modelSpace
-	vec4 sunPos; // in modelSpace, normalized
-	vec4 emissiveLight; // light colors/intensity
-	vec4 ambientLight;
-	vec4 diffuseLight;
-	vec4 specularLight;
-	vec4 fogColor;
-	int fogEnabled; // whether fog is enabled
-	float fogEnd;
-	float fogStart;
-	float timeSec;
-};
+// depth map
+layout(set = 1, binding = 4) uniform sampler2DArrayShadow shadowMap;
 
 layout(location = 1) in vec4 uv1_uv2;
 layout(location = 2) in vec2 uvLightmap;
@@ -34,8 +23,11 @@ layout(location = 6) in float depth;
 layout(location = 7) in vec3 eyeVec;
 layout(location = 8) in float fresnel;
 layout(location = 9) in float fresnel_alpha;
+layout(location = 10) in FragData frag;
 
 layout(location = 0) out vec4 FragColor;
+
+#include "terrain_combined_frag.glsl"
 
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
@@ -67,6 +59,7 @@ vec4 main_bumpMapping()
 	vec3 waterColor = vec3(0.18,0.33,0.42);
 
 	// Light
+	float visibility = getShadowVisibility();
 	float lambertTerm = max(dot(N, lightDir), 0.0);
 	float blinnTerm = pow(max(dot(N, halfVec), 0.0), 128.0);
 	vec3 reflectLight = reflect(-lightDir, N);
@@ -78,7 +71,7 @@ vec4 main_bumpMapping()
 	vec4 specColor = vec4(specularLight.rgb * blinnTerm*0.35, fresnel_alpha);
 
 	vec4 finalColor = vec4(0.0);
-	finalColor.rgb = ambientColor.rgb + diffuseColor.rgb + specColor.rgb;
+	finalColor.rgb = ambientColor.rgb + ((diffuseColor.rgb + specColor.rgb) * visibility);
 	finalColor.rgb = mix(finalColor.rgb, (finalColor.rgb+vec3(1.0,0.8,0.63))*0.5, fresnel);
 	finalColor.a = (ambientColor.a + diffuseColor.a + specColor.a) * (1.0-depth);
 

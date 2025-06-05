@@ -36,6 +36,10 @@ VERTEX_OUTPUT vec3 halfVec;
 VERTEX_OUTPUT float fresnel;
 VERTEX_OUTPUT float fresnel_alpha;
 
+// for Shadows
+VERTEX_OUTPUT vec3 fragPos;
+//VERTEX_OUTPUT vec3 fragNormal;
+
 void main()
 {
 	depth = (vertex.w)/96.0;
@@ -57,6 +61,9 @@ void main()
 	fresnel_alpha = 1.0-fresnel_alpha;
 	fresnel_alpha = pow(fresnel_alpha,0.8);
 	fresnel_alpha = clamp(fresnel_alpha,0.15, 0.5);
+
+	fragPos = vertex.xyz;
+//	fragNormal = vertexNormal;
 
 	vec4 position = ModelViewProjectionMatrix * vec4(vertex.xyz, 1.f);
 	vertexDistance = position.z;

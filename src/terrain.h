@@ -37,7 +37,7 @@ void shutdownTerrain();
 void perFrameTerrainUpdates(const LightMap& lightData);
 void drawTerrainDepthOnly(const glm::mat4 &mvp);
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowMVPMatrix);
-void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos);
+void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades);
 
 namespace gfx_api
 {

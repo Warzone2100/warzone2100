@@ -2122,7 +2122,7 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 }
 
 template<typename PSO>
-void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
+void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
 	if (!waterIndexVBO)
 	{
@@ -2144,13 +2144,14 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cam
 		waterTexturesHigh.tex,
 		waterTexturesHigh.tex_nm,
 		waterTexturesHigh.tex_sm,
-		lightmap_texture);
+		lightmap_texture,
+		gfx_api::context::get().getDepthTexture());
 	PSO::get().bind_vertex_buffers(waterVBO);
 	PSO::get().bind_constants({
-		ModelViewProjection, lightmapValues.ModelUVLightmap, ModelUV1, ModelUV2,
+		ModelViewProjection, viewMatrix, lightmapValues.ModelUVLightmap, ModelUV1, ModelUV2, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
+		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
 		waterOffset*10
 	});
 
@@ -2239,7 +2240,7 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 
 #include <lib/ivis_opengl/pieblitfunc.h>
 
-void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
+void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
 	switch (terrainShaderQuality)
 	{
@@ -2250,7 +2251,7 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 			drawWaterNormalImpl<gfx_api::WaterPSO>(ModelViewProjection, cameraPos, sunPos);
 			return;
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			drawWaterHighImpl<gfx_api::WaterHighPSO>(ModelViewProjection, cameraPos, sunPos);
+			drawWaterHighImpl<gfx_api::WaterHighPSO>(ModelViewProjection, viewMatrix, cameraPos, sunPos, shadowCascades);
 			return;
 		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
 			// should not happen
