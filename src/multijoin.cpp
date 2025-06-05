@@ -453,6 +453,13 @@ void recvPlayerLeft(NETQUEUE queue)
 	cancelOrDismissKickVote(playerIndex);
 
 	debug(LOG_INFO, "** player %u has dropped, in-game! (gameTime: %" PRIu32 ")", playerIndex, gameTime);
+
+	// fire script callback to reassign skirmish players.
+	if (GetGameMode() == GS_NORMAL)
+	{
+		triggerEventPlayerLeft(playerIndex);
+	}
+
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 
 	wz_command_interface_output_room_status_json();
@@ -530,12 +537,6 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		{
 			audio_QueueTrack(ID_CLAN_EXIT);
 		}
-	}
-
-	// fire script callback to reassign skirmish players.
-	if (GetGameMode() == GS_NORMAL)
-	{
-		triggerEventPlayerLeft(playerIndex);
 	}
 
 	netPlayersUpdated = true;
