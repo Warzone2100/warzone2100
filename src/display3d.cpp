@@ -1529,7 +1529,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	// prepare for the water and the lightmap
 	pie_SetFogStatus(true);
 	// also, make sure we can use world coordinates directly
-	drawWater(perspectiveViewMatrix, cameraPos, -getTheSun());
+	drawWater(perspectiveViewMatrix, viewMatrix, cameraPos, -getTheSun(), shadowCascadesInfo);
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");

@@ -1101,9 +1101,11 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_WATER_HIGH>
 	{
 		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
 		glm::mat4 ModelUV1Matrix;
 		glm::mat4 ModelUV2Matrix;
+		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos; // in modelSpace
 		glm::vec4 emissiveLight; // light colors/intensity
@@ -1111,6 +1113,8 @@ namespace gfx_api
 		glm::vec4 diffuseLight;
 		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
+		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
+		int ShadowMapSize;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
@@ -1125,7 +1129,8 @@ namespace gfx_api
 		texture_description<0, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // textures
 		texture_description<1, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // normal maps
 		texture_description<2, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // specular maps
-		texture_description<3, sampler_type::bilinear> // lightmap
+		texture_description<3, sampler_type::bilinear>, // lightmap
+		texture_description<4, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
 	>, SHADER_WATER_HIGH>;
 
 	template<>
