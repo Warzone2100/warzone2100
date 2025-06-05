@@ -7,8 +7,6 @@
 
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUVLightmapMatrix;
-uniform mat4 ModelUV1Matrix;
-uniform mat4 ModelUV2Matrix;
 
 uniform float timeSec;
 

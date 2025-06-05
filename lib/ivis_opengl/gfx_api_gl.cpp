@@ -904,7 +904,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
 			"tex1", "tex2", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER_HIGH, program_data{ "high water program", "shaders/terrain_water_high.vert", "shaders/terrain_water_high.frag",
-		{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix", "ShadowMapMVPMatrix",
+		{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix",
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "timeSec",
@@ -2263,8 +2263,6 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
 	setUniforms(i++, cbuf.ViewMatrix);
 	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
 	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
 	setUniforms(i++, cbuf.cameraPos);
 	setUniforms(i++, cbuf.sunPos);
