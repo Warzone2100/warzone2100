@@ -1852,19 +1852,17 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
 	}
-
 	CHECK_DROID(psDroid);
 }
-
-#define	VTOL_VERTICAL_SPEED_OLD		(((psDroid->baseSpeed / 4) > 60) ? ((SDWORD)psDroid->baseSpeed / 4) : 60)
-//Slower VTOLs need to increase height faster than the above or else they hover too close to the ground
-//during flight paths that feature increasing terrain height. Resulting in poor attack angles in some cases.
-#define	VTOL_VERTICAL_SPEED		(((psDroid->baseSpeed / 4) > 160) ? ((SDWORD)psDroid->baseSpeed / 4) : 160)
-
+#define	VTOL_VERTICAL_SPEED_OLD			   (((psDroid->baseSpeed / 4) >  60) ? ((SDWORD)psDroid->baseSpeed / 4) :  60) // Slower VTOLs need to increase height faster than the above or else they hover too close to the ground
+#define	VTOL_VERTICAL_SPEED			   (((psDroid->baseSpeed / 4) > 160) ? ((SDWORD)psDroid->baseSpeed / 4) : 160) // During flight paths that feature increasing terrain height. Resulting in poor attack angles in some cases.
+#define SUPERTRANSPORTER_VERTICAL_SPEED_ASCEND_MP  (((psDroid->baseSpeed / 4) >  80) ? ((SDWORD)psDroid->baseSpeed / 4) :  80) // Ascend  speed for multiplayer (MP)
+#define SUPERTRANSPORTER_VERTICAL_SPEED_DESCEND_MP (((psDroid->baseSpeed / 4) > 200) ? ((SDWORD)psDroid->baseSpeed / 4) : 200) // Descend speed for multiplayer (MP)
 /* primitive 'bang-bang' vtol height controller */
 static void moveAdjustVtolHeight(DROID *psDroid, int32_t iMapHeight)
 {
 	int32_t	iMinHeight, iMaxHeight, iLevelHeight;
+	int32_t ascendSpeed, descendSpeed;
 	if (psDroid->isTransporter() && !bMultiPlayer)
 	{
 		iMinHeight   = 2 * VTOL_HEIGHT_MIN;
@@ -1878,31 +1876,39 @@ static void moveAdjustVtolHeight(DROID *psDroid, int32_t iMapHeight)
 		iMaxHeight   = VTOL_HEIGHT_MAX;
 	}
 
-	if (psDroid->pos.z >= (iMapHeight + iMaxHeight))
-	{
-		psDroid->sMove.iVertSpeed = (SWORD) - VTOL_VERTICAL_SPEED_OLD;
-	}
-	else if (psDroid->pos.z < (iMapHeight + iMinHeight))
-	{
-		if (psDroid->isTransporter())
-		{
-			psDroid->sMove.iVertSpeed = (SWORD)VTOL_VERTICAL_SPEED_OLD;
-		}
-		else
-		{
-			psDroid->sMove.iVertSpeed = (SWORD)VTOL_VERTICAL_SPEED;
-		}
-	}
-	else if ((psDroid->pos.z < iLevelHeight) &&
-	         (psDroid->sMove.iVertSpeed < 0))
-	{
-		psDroid->sMove.iVertSpeed = 0;
-	}
-	else if ((psDroid->pos.z > iLevelHeight) &&
-	         (psDroid->sMove.iVertSpeed > 0))
-	{
-		psDroid->sMove.iVertSpeed = 0;
-	}
+    if (psDroid->droidType == DROID_SUPERTRANSPORTER && bMultiPlayer) // Set ascend and descend speeds based on droid type, only in multiplayer (MP)
+    {
+         ascendSpeed = SUPERTRANSPORTER_VERTICAL_SPEED_ASCEND_MP;
+        descendSpeed = SUPERTRANSPORTER_VERTICAL_SPEED_DESCEND_MP;
+    }
+    else if (psDroid->droidType == DROID_SUPERTRANSPORTER || psDroid->droidType == DROID_TRANSPORTER) // Cam unaffected
+    {
+         ascendSpeed = VTOL_VERTICAL_SPEED_OLD;  // Cyborg transports use old for now, either way.
+        descendSpeed = VTOL_VERTICAL_SPEED_OLD;
+    }
+    else
+    {
+         ascendSpeed = VTOL_VERTICAL_SPEED;      // VTOLs use standard speed for both
+        descendSpeed = VTOL_VERTICAL_SPEED;
+    }
+
+    if (psDroid->pos.z >= (iMapHeight + iMaxHeight)) // Descending
+    {
+	psDroid->sMove.iVertSpeed = (SWORD) -descendSpeed;
+    }
+    else if (psDroid->pos.z < (iMapHeight + iMinHeight)) // Ascending
+    {
+        psDroid->sMove.iVertSpeed = (SWORD)ascendSpeed;
+    }
+    
+    else if ((psDroid->pos.z < iLevelHeight) && (psDroid->sMove.iVertSpeed < 0))
+    {
+        psDroid->sMove.iVertSpeed = 0; // Stop descending
+    }
+    else if ((psDroid->pos.z > iLevelHeight) && (psDroid->sMove.iVertSpeed > 0))
+    {
+        psDroid->sMove.iVertSpeed = 0; // Stop ascending
+    }
 }
 
 static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction)
@@ -1987,10 +1993,8 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
 	}
-
 	/* use baba person movement */
 	moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
-
 	psDroid->rot.pitch = 0;
 	psDroid->rot.roll  = 0;
 }
@@ -1998,28 +2002,26 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 static void moveDescending(DROID *psDroid)
 {
 	int32_t iMapHeight = map_Height(psDroid->pos.x, psDroid->pos.y);
-
 	psDroid->sMove.speed = 0;
-
 	if (psDroid->pos.z > iMapHeight)
 	{
-		/* descending */
+	    if (psDroid->droidType == DROID_SUPERTRANSPORTER && bMultiPlayer)
+    	    {
+        	psDroid->sMove.iVertSpeed = (SWORD) -SUPERTRANSPORTER_VERTICAL_SPEED_DESCEND_MP;
+    	    }
+	    else
+	    {
 		psDroid->sMove.iVertSpeed = (SWORD) - VTOL_VERTICAL_SPEED_OLD;
+	    }
 	}
 	else
 	{
-		/* on floor - stop */
-		psDroid->pos.z = iMapHeight;
-		psDroid->sMove.iVertSpeed = 0;
-
-		/* reset move state */
+		psDroid->pos.z = iMapHeight;     /* on floor - stop */
+		psDroid->sMove.iVertSpeed = 0;   /* reset move state */
 		psDroid->sMove.Status = MOVEINACTIVE;
-
-		/* conform to terrain */
-		updateDroidOrientation(psDroid);
+		updateDroidOrientation(psDroid); /* conform to terrain */
 	}
 }
-
 
 bool moveCheckDroidMovingAndVisible(void *psObj)
 {
