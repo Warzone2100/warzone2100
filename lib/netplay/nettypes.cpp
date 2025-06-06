@@ -65,6 +65,8 @@ static std::array<std::unique_ptr<SessionKeys>, MAX_CONNECTED_PLAYERS> netSessio
 
 static bool bIsReplay = false;
 
+static size_t numInvalidMessageReads = 0;
+
 // Queue selection functions
 
 /// Gets the &NetQueuePair::send or NetQueue *, corresponding to queue.
@@ -257,6 +259,12 @@ void NETdeleteQueue(void)
 	broadcastQueue = nullptr;
 
 	bIsReplay = false;
+
+	if (numInvalidMessageReads != 0)
+	{
+		debug(LOG_NET, "Experienced %zu invalid message reads", numInvalidMessageReads);
+	}
+	numInvalidMessageReads = 0;
 }
 
 void NETsetNoSendOverNetwork(NETQUEUE queue)
@@ -408,7 +416,12 @@ bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type)
 
 bool NETend(MessageReader& r)
 {
-	return r.valid();
+	bool result = r.valid();
+	if (!result)
+	{
+		++numInvalidMessageReads;
+	}
+	return result;
 }
 
 static std::vector<uint8_t> tmpMessageRawDataBuffer;
