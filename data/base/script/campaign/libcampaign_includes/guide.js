@@ -56,65 +56,56 @@ function __camGuideTopicCheckResearchComplete(targetResearchName, justResearched
 
 function __camProcessResearchGatedGuideTopics(research = null)
 {
-	let showFlags = (research == null) ? 0 : SHOWTOPIC_FIRSTADD;
-
-	// first "different" weapon type'
+	const __SHOW_FLAGS = (research == null) ? 0 : SHOWTOPIC_FIRSTADD;
+	// first "different" weapon type
 	if (__camGuideTopicCheckResearchComplete('R-Wpn-Flamer01Mk1', research))
 	{
-		addGuideTopic("wz2100::units::weaponselection", showFlags);
+		addGuideTopic("wz2100::units::weaponselection", __SHOW_FLAGS);
 	}
-
 	// repair turret researched
 	if (__camGuideTopicCheckResearchComplete('R-Sys-MobileRepairTurret01', research))
 	{
-		addGuideTopic("wz2100::units::repairing", showFlags);
+		addGuideTopic("wz2100::units::repairing", __SHOW_FLAGS);
 	}
-
 	// first module researched
 	if (__camGuideTopicCheckResearchComplete('R-Struc-PowerModuleMk1', research))
 	{
-		addGuideTopic("wz2100::structures::modules", showFlags);
+		addGuideTopic("wz2100::structures::modules", __SHOW_FLAGS);
 	}
-
 	// sensor turret researched
 	if (__camGuideTopicCheckResearchComplete('R-Sys-Sensor-Turret01', research))
 	{
 		// in this case, the category topic must come first (as adding the child topics will also add it, but we want the category topic to be what's displayed)
-		addGuideTopic("wz2100::units::sensors", showFlags);
+		addGuideTopic("wz2100::units::sensors", __SHOW_FLAGS);
 		addGuideTopic("wz2100::units::sensors::unassigning");
 		addGuideTopic("wz2100::units::sensors::using");
 	}
-
 	// command turret researched
 	if (__camGuideTopicCheckResearchComplete('R-Comp-CommandTurret01', research))
 	{
 		// in this case, the category topic must come first (as adding the child topics will also add it, but we want the category topic to be what's displayed)
-		addGuideTopic("wz2100::units::commanders", showFlags);
+		addGuideTopic("wz2100::units::commanders", __SHOW_FLAGS);
 	}
-
 	// repair facility researched
 	if (__camGuideTopicCheckResearchComplete('R-Struc-RepairFacility', research))
 	{
-		addGuideTopic("wz2100::structures::repairfacility", showFlags);
+		addGuideTopic("wz2100::structures::repairfacility", __SHOW_FLAGS);
 	}
-
 	// vtol factory researched
 	if (__camGuideTopicCheckResearchComplete('R-Struc-VTOLFactory', research))
 	{
-		addGuideTopic("wz2100::structures::vtolfactory", showFlags);
+		addGuideTopic("wz2100::structures::vtolfactory", __SHOW_FLAGS);
 	}
-
 	// vtol propulsion researched
 	if (__camGuideTopicCheckResearchComplete('R-Vehicle-Prop-VTOL', research))
 	{
 		addGuideTopic("wz2100::units::vtols::weapons");
-		addGuideTopic("wz2100::units::vtols::designing", showFlags);
+		addGuideTopic("wz2100::units::vtols::designing", __SHOW_FLAGS);
 	}
-
 	// cb turret researched
 	if (__camGuideTopicCheckResearchComplete('R-Sys-CBSensor-Turret01', research))
 	{
-		addGuideTopic("wz2100::units::sensors::cb", showFlags);
+		addGuideTopic("wz2100::units::sensors::cb", __SHOW_FLAGS);
 	}
 }
 
@@ -123,33 +114,28 @@ function __camEnableGuideTopics()
 	// Always enable (most) general topics & unit orders
 	addGuideTopic("wz2100::general::**", 0, ["wz2100::general::artifacts", "wz2100::general::researching", "wz2100::general::power"]);
 	addGuideTopic("wz2100::unitorders::**");
-
 	// Basic base / structure topics
 	addGuideTopic("wz2100::structures::building");
 	addGuideTopic("wz2100::structures::demolishing");
-
-	let isCam1A = (__camNextLevel === cam_levels.alpha2);
-	if (!isCam1A) // If not very first original campaign level (CAM1A), which displays these in response to events, add them
+	const __IS_ALPHA_ONE = (__camNextLevel === cam_levels.alpha2);
+	if (!__IS_ALPHA_ONE) // If not very first original campaign level (CAM1A), which displays these in response to events, add them
 	{
 		addGuideTopic("wz2100::general::artifacts");
 		addGuideTopic("wz2100::general::researching");
 		addGuideTopic("wz2100::general::power");
-
+		// Basic structure topics
 		addGuideTopic("wz2100::structures::hq");
 		addGuideTopic("wz2100::structures::researchfacility");
 		addGuideTopic("wz2100::structures::oilderrick");
 		addGuideTopic("wz2100::structures::powergenerator");
 		addGuideTopic("wz2100::structures::rallypoint");
 		addGuideTopic("wz2100::structures::factory");
-
 		// Basic units topics
 		addGuideTopic("wz2100::units::building");
 		addGuideTopic("wz2100::units::designing");
 	}
-
 	// Handle research-driven topics (for things already researched - i.e. on savegame load or starting a later campaign)
 	__camProcessResearchGatedGuideTopics();
-
 	// Handle built-unit triggered topics
 	if (countDroid(DROID_COMMAND, CAM_HUMAN_PLAYER) > 0)
 	{
@@ -157,7 +143,7 @@ function __camEnableGuideTopics()
 	}
 	let foundDroids_VTOL = false;
 	const droids = enumDroid(CAM_HUMAN_PLAYER);
-	for (let x = 0; x < droids.length; ++x)
+	for (let x = 0, len = droids.length; x < len; ++x)
 	{
 		const droid = droids[x];
 		if (droid.isVTOL)

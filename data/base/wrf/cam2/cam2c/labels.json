@@ -95,6 +95,10 @@
 		"label": "COCyborgFactoryRAssembly",
 		"pos": [7616, 7744]
 	},
+	"position_24": {
+		"label": "southWestSpawnPos",
+		"pos": [384, 14336]
+	},
 
 	"area_0": {
 		"label": "landingZone",

@@ -201,9 +201,7 @@ function camUpgradeOnMapTemplates(template1, template2, playerId, excluded)
 		camDebug("Not enough parameters specified for upgrading on map templates");
 		return;
 	}
-
 	const droidsOnMap = enumDroid(playerId);
-
 	for (let i = 0, l = droidsOnMap.length; i < l; ++i)
 	{
 		const dr = droidsOnMap[i];
@@ -240,7 +238,6 @@ function camUpgradeOnMapTemplates(template1, template2, playerId, excluded)
 					continue;
 				}
 			}
-
 			//Replace it
 			const droidInfo = {x: dr.x, y: dr.y, name: dr.name};
 			camSafeRemoveObject(dr, false);
@@ -275,12 +272,13 @@ function __camFactoryUpdateTactics(flabel)
 	}
 	else
 	{
+		const __RADIUS = 6;
 		let pos = camMakePos(fi.assembly);
 		if (!camDef(pos))
 		{
 			pos = camMakePos(flabel);
 		}
-		camManageGroup(fi.group, CAM_ORDER_DEFEND, { pos: pos });
+		camManageGroup(fi.group, CAM_ORDER_DEFEND, { pos: pos, radius: __RADIUS });
 	}
 }
 
@@ -316,17 +314,14 @@ function __camChangePropulsion(propulsion, playerId)
 	{
 		return propulsion;
 	}
-
 	let name = propulsion;
 	const validProp = ["CyborgLegs", "HalfTrack", "V-Tol", "hover", "tracked", "wheeled"];
 	const specProps = ["CyborgLegs", "HalfTrack", "V-Tol"]; //Some have "01" at the end and others don't for the base ones.
-
 	const __LAST_TWO = name.substring(name.length - 2);
 	if (__LAST_TWO === "01" || __LAST_TWO === "02" || __LAST_TWO === "03")
 	{
 		name = name.substring(0, name.length - 2);
 	}
-
 	for (let i = 0, l = validProp.length; i < l; ++i)
 	{
 		const __CURRENT_PROP = validProp[i];
@@ -339,7 +334,6 @@ function __camChangePropulsion(propulsion, playerId)
 			return __CURRENT_PROP.concat(__camPropulsionTypeLimit);
 		}
 	}
-
 	//If all else fails then return the propulsion that came with the template
 	return propulsion;
 }
@@ -372,9 +366,22 @@ function __checkEnemyFactoryProductionTick()
 {
 	for (const flabel in __camFactoryInfo)
 	{
-		if (getObject(flabel) !== null && __camFactoryInfo[flabel].enabled === true)
+		if (!__camFactoryInfo[flabel].enabled)
+		{
+			continue;
+		}
+		if (getObject(flabel) !== null)
 		{
 			__camContinueProduction(flabel);
+		}
+		else
+		{
+			const droids = enumGroup(__camFactoryInfo[flabel].group);
+			if (droids.length > 0)
+			{
+				camManageGroup(__camFactoryInfo[flabel].group, CAM_ORDER_ATTACK);
+			}
+			__camFactoryInfo[flabel].enabled = false;
 		}
 	}
 }
