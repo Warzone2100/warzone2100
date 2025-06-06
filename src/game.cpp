@@ -2571,34 +2571,26 @@ std::string GameLoadDetails::getMapFolderPath() const
 	return result;
 }
 
-std::shared_ptr<WzMap::Map> GameLoadDetails::getMap() const
+std::shared_ptr<WzMap::Map> GameLoadDetails::getMap(uint32_t mapSeed) const
 {
-	if (m_loadedMap)
-	{
-		return m_loadedMap;
-	}
-
-	uint32_t mapSeed = gameRandU32();
 	switch (loadType)
 	{
 		case GameLoadType::UserSaveGame:
-			m_loadedMap = WzMap::Map::loadFromPath(getMapFolderPath(), getWzMapType(true), game.maxPlayers, mapSeed, m_logger, std::make_shared<WzMapPhysFSIO>());
-			break;
+			return WzMap::Map::loadFromPath(getMapFolderPath(), getWzMapType(true), game.maxPlayers, mapSeed, m_logger, std::make_shared<WzMapPhysFSIO>());
 		case GameLoadType::MapPackage:
 		{
 			auto package = getMapPackage();
-			if (package)
+			if (!package)
 			{
-				m_loadedMap = m_loadedPackage->loadMap(mapSeed);
+				return nullptr;
 			}
-			break;
+			return m_loadedPackage->loadMap(mapSeed);
 		}
 		case GameLoadType::Level:
-			m_loadedMap = WzMap::Map::loadFromPath(getMapFolderPath(), getWzMapType(false), game.maxPlayers, mapSeed, m_logger, std::make_shared<WzMapPhysFSIO>());
-			break;
+			return WzMap::Map::loadFromPath(getMapFolderPath(), getWzMapType(false), game.maxPlayers, mapSeed, m_logger, std::make_shared<WzMapPhysFSIO>());
 	}
 
-	return m_loadedMap;
+	return nullptr; // silence compiler warning
 }
 
 std::shared_ptr<WzMap::MapPackage> GameLoadDetails::getMapPackage() const
@@ -2897,7 +2889,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 
 	// construct the WzMap object for loading map data
 	aFileName[fileExten] = '\0';
-	data = gameToLoad.getMap();
+	data = gameToLoad.getMap(gameRandU32());
 
 	if (data && data->wasScriptGenerated())
 	{

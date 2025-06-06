@@ -764,7 +764,7 @@ void loadMapPreview(bool hideInterface)
 	auto gameLoadDetails = (psLevel->realFileName) ? GameLoadDetails::makeMapPackageLoad(psLevel->realFileName) : GameLoadDetails::makeLevelFileLoad(aFileName);
 
 	// load the map data
-	auto data = gameLoadDetails.getMap();
+	auto data = gameLoadDetails.getMap(rand());
 	if (!data)
 	{
 		debug(LOG_ERROR, "Failed to load map from path: %s", aFileName.c_str());
