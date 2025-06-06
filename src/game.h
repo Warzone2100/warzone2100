@@ -67,7 +67,7 @@ public:
 	GameLoadDetails& setLogger(const std::shared_ptr<WzMap::LoggingProtocol>& logger);
 public:
 	std::string getMapFolderPath() const;
-	std::shared_ptr<WzMap::Map> getMap() const;
+	std::shared_ptr<WzMap::Map> getMap(uint32_t mapSeed) const;
 	const WzMap::GamInfo* getGamInfoFromPackage() const;
 private:
 	std::shared_ptr<WzMap::MapPackage> getMapPackage() const;
@@ -77,7 +77,6 @@ public:
 private:
 	std::shared_ptr<WzMap::LoggingProtocol> m_logger;
 	mutable std::shared_ptr<WzMap::MapPackage> m_loadedPackage;
-	mutable std::shared_ptr<WzMap::Map> m_loadedMap;
 };
 
 bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem);
