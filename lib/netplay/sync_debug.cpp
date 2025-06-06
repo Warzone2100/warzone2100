@@ -350,7 +350,7 @@ private:
 		typedef std::unordered_map<uint32_t, LogOutputter> DesyncOutputs;
 		DesyncOutputs outputs;
 	};
-	std::array<PlayerDesyncLogOutput, MAX_CONNECTED_PLAYERS> players;
+	std::array<PlayerDesyncLogOutput, MAX_GAMEQUEUE_SLOTS> players;
 };
 
 static DesyncLogOutputter playerDesyncLogOutput;
@@ -389,16 +389,19 @@ void DesyncLogOutputter::willLogLocalDesyncLog(uint32_t time)
 
 bool DesyncLogOutputter::canWriteLogFor(uint32_t time, unsigned player)
 {
+	ASSERT_OR_RETURN(false, player < players.size(), "Invalid player idx: %u", player);
 	return players[player].canWriteLogFor(time);
 }
 
 bool DesyncLogOutputter::alreadyWroteLogFor(uint32_t time, unsigned player)
 {
+	ASSERT_OR_RETURN(false, player < players.size(), "Invalid player idx: %u", player);
 	return players[player].alreadyWroteLogFor(time);
 }
 
 bool DesyncLogOutputter::write(uint32_t time, unsigned player, const uint8_t* buf, size_t bufLen)
 {
+	ASSERT_OR_RETURN(false, player < players.size(), "Invalid player idx: %u", player);
 	return players[player].write(time, player, buf, bufLen);
 }
 
