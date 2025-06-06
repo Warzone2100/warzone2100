@@ -155,8 +155,9 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	vec3 c = normalize(cameraPos.xyz);
 	float inscatter = 0.007; // in-scattering
 	float extinction = 0.001; // extinction
-	float murkiness = inscatter * exp(-c.y * extinction) * (1.0 - exp( -(fragPos.y+40.0) * c2p.y * extinction)) / (-c2p.y * extinction);
-	float waterDeep = 0.003 * exp(-c.y * extinction) * (1.0 - exp( -(fragPos.y+40.0) * c2p.y * extinction)) / (-c2p.y * extinction);
+	float murkyFactor = exp(-c.y * extinction) * (1.0 - exp( -(fragPos.y+40.0) * c2p.y * extinction)) / (-c2p.y * extinction);
+	float murkiness = inscatter * murkyFactor;
+	float waterDeep = 0.003 * murkyFactor;
 	murkiness = clamp(murkiness, 0.0, 1.0);
 	waterDeep = clamp(waterDeep, 0.0, 1.0);
 	res.rgb = mix(res.rgb, (vec3(0.315,0.425,0.475)*vec3(1.0-waterDeep)) * lightmap_vec4.a, murkiness);
