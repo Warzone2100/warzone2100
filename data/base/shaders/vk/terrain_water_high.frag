@@ -50,7 +50,7 @@ vec4 main_bumpMapping()
 	N = normalize(vec3(N.x,N.y*5,N.z)); // 5 is a strength
 
 	// Textures
-	float d = mix((depth)*0.1, depth, 0.5);
+	float d = mix(depth * 0.1, depth, 0.5);
 	float noise = texture(tex, vec3(uv1, 0.f), WZ_MIP_LOAD_BIAS).r * texture(tex, vec3(uv2, 1.f), WZ_MIP_LOAD_BIAS).r;
 	float foam = texture(tex_sm, vec3(vec2(uv1.x, uv1.y), 0.f), WZ_MIP_LOAD_BIAS).r;
 	foam *= texture(tex_sm, vec3(vec2(uv2.x, uv2.y), 1.f), WZ_MIP_LOAD_BIAS).r;
