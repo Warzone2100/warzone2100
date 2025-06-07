@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "2eb117a2fdc926812229eb7c81fe9f52594ac8a0",
+	"builtin-baseline": "984f9232b2fe0eb94f5e9f161d6c632c581fff0c",
 	"dependencies": [
 		"physfs",
 		"sdl2",
@@ -45,7 +45,7 @@
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"winssl",
+				"schannel",
 				"ssl"
 			],
 			"platform": "windows | mingw"
