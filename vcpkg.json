@@ -80,6 +80,9 @@
 			"platform": "!emscripten"
 		}
 	],
+	"overrides": [
+		{ "name": "openal-soft", "version": "1.24.3" }
+	],
 	"default-features": [
 		"vulkan"
 	],
