@@ -260,6 +260,7 @@ if (WZ_PROFILING_NVTX)
 
 endif ()
 
+set(PLUM_NO_EXAMPLE ON CACHE BOOL "Disable example build" FORCE)
 add_subdirectory(libplum EXCLUDE_FROM_ALL)
 set_target_properties(plum plum-static PROPERTIES FOLDER "3rdparty")
 if(NOT MSVC)
