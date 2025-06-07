@@ -49,6 +49,9 @@
 # pragma GCC diagnostic ignored "-Wcast-align"
 # pragma GCC diagnostic ignored "-Wunused-function"
 # pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+# if 7 <= __GNUC__
+#  pragma GCC diagnostic ignored "-Wnull-dereference"
+# endif
 #elif defined(_MSC_VER)
 # pragma warning( push )
 # pragma warning( disable : 4189 ) // warning C4189: 'identifier' : local variable is initialized but not referenced
