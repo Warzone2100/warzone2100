@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.19...3.30)
+cmake_minimum_required(VERSION 3.19...3.31)
 
-set(sentry_cli_version "2.42.4") # Note: When updating, must also update all of the sentry_cli_dl_sha512 below!
+set(sentry_cli_version "2.46.0") # Note: When updating, must also update all of the sentry_cli_dl_sha512 below!
 
 # Manually query the CMAKE_HOST_SYSTEM_PROCESSOR
 # See: https://gitlab.kitware.com/cmake/cmake/-/issues/25151
@@ -17,16 +17,16 @@ if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
   else()
     # just default to x64 otherwise
     set(sentry_cli_dl_url "https://github.com/getsentry/sentry-cli/releases/download/${sentry_cli_version}/sentry-cli-Windows-x86_64.exe")
-    set(sentry_cli_dl_sha512 "3ca02be7c6ddfe624a694b28f82034bbc0aed204416f09b48401af0cea7b76bc7ca58612ec88963393f56b03bd1695c0094317ddea1da1ece1c17b126b0fef0d")
+    set(sentry_cli_dl_sha512 "1bd5039f1c18c08425a0d001e32f7cad514705c591becd7ab55e0d526f96f6208cde8c0a70a7cf796d2864ce2276255218d5598c9f7c72d4474947cbacd80efc")
   endif()
   set(_exe_suffix ".exe")
 elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
   set(sentry_cli_dl_url "https://github.com/getsentry/sentry-cli/releases/download/${sentry_cli_version}/sentry-cli-Darwin-universal")
-  set(sentry_cli_dl_sha512 "05b862dd013bdcc50c277e24081490992206234ca651ce4ee67368fcf48f20be3818897e291105169c893650370ebf107e7f74e929335de18efb7329f1be3c58")
+  set(sentry_cli_dl_sha512 "ca8a0910431ca666c01ba6f3915443aece7b0c4f446e0884600d8beaf809509ff97463b95924651bb259e78f65f9fb656c9b2bc5a7c567fea815c44275f0650f")
 elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
   if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^x86_64$")
     set(sentry_cli_dl_url "https://github.com/getsentry/sentry-cli/releases/download/${sentry_cli_version}/sentry-cli-Linux-x86_64")
-    set(sentry_cli_dl_sha512 "f346313189674c19897f22ca381f93545968cb002f10d6d88c4693f2f1f8133ebdcf86b82a83924c6086086009095a81ef47bb89fb309f9317295813f1f0f01f")
+    set(sentry_cli_dl_sha512 "459f3233038dfdc0f833325e287f9ee156c8a801b486449ad49cc4b71379aafec399da395df7eb3da71a9a0c8e450bc693a8a05256c286bc622496697bd04d9e")
   else()
     message(FATAL_ERROR "Script does not currently support platform: ${CMAKE_HOST_SYSTEM_NAME} and ARCH: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
   endif()
