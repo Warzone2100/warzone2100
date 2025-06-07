@@ -5751,6 +5751,9 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		psDroid->body = healthValue(ini, psDroid->originalBody);
 		ASSERT(psDroid->body != 0, "%s : %d has zero hp!", pFileName, i);
 		psDroid->experience = ini.value("experience", 0).toInt();
+		psDroid->shieldPoints = ini.value("shieldPoints", -1).toInt();
+		psDroid->shieldRegenTime = ini.value("shieldRegenTime", 0).toUInt();
+		psDroid->shieldInterruptRegenTime = ini.value("shieldInterruptRegenTime", 0).toUInt();
 		psDroid->kills = ini.value("kills", 0).toInt();
 		psDroid->secondaryOrder = ini.value("secondaryOrder", psDroid->secondaryOrder).toInt();
 		psDroid->secondaryOrderPending = psDroid->secondaryOrder;
@@ -5959,6 +5962,19 @@ static nlohmann::json writeDroid(const DROID *psCurr, bool onMission, int &count
 	if (psCurr->kills > 0)
 	{
 		droidObj["kills"] = psCurr->kills;
+	}
+
+	if (psCurr->shieldPoints > -1) // -1 is the default
+	{
+		droidObj["shieldPoints"] = psCurr->shieldPoints;
+	}
+	if (psCurr->shieldRegenTime > 0)
+	{
+		droidObj["shieldRegenTime"] = psCurr->shieldRegenTime;
+	}
+	if (psCurr->shieldInterruptRegenTime > 0)
+	{
+		droidObj["shieldInterruptRegenTime"] = psCurr->shieldInterruptRegenTime;
 	}
 
 	setIniDroidOrder(droidObj, "order", psCurr->order);

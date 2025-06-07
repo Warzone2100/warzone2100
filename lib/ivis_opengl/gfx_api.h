@@ -781,6 +781,7 @@ namespace gfx_api
 		int normalMap;
 		int specularMap;
 		int hasTangents;
+		int shieldEffect;
 	};
 
 	// interleaved vertex data

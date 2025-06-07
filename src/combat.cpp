@@ -26,7 +26,13 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/math_ext.h"
 #include "lib/netplay/sync_debug.h"
+
+#include "lib/ivis_opengl/ivisdef.h"
+
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 
 #include "action.h"
 #include "combat.h"
@@ -38,6 +44,11 @@
 #include "qtscript.h"
 #include "order.h"
 #include "objmem.h"
+#include "effects.h"
+#include "display3ddef.h"
+
+#define DROID_SHIELD_DAMAGE_SPREAD	(16 - rand()%32)
+#define DROID_SHIELD_PARTICLES		(6 + rand()%8)
 
 /* Fire a weapon at something */
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
@@ -395,12 +406,13 @@ int objArmour(const BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
 
 /* Deals damage to an object
  * \param psObj object to deal damage to
+ * \param psProjectile projectile which hit the object (may be nullptr)
  * \param damage amount of damage to deal
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
-int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int level = 0;
 	int armour = objArmour(psObj, weaponClass);
@@ -418,6 +430,15 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	// EMP weapon radius should not do actual damage
 	if (weaponSubClass == WSC_EMP && empRadiusHit)
 	{
+		if (psObj->type == OBJ_DROID)
+		{
+			DROID *psDroid = castDroid(psObj);
+
+			if (psDroid->shieldPoints > 0) {
+				// EMP weapons kills droid shields completely
+				psDroid->shieldPoints = 0;
+			}
+		}
 		return 0;
 	}
 
@@ -483,6 +504,52 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	if (actualDamage >= psObj->body)
 	{
 		return -(int64_t)65536 * psObj->body / originalhp;
+	}
+
+	// Drain shields first
+	if (psObj->type == OBJ_DROID)
+	{
+		DROID *psDroid = castDroid(psObj);
+
+		if (psDroid->shieldPoints > 0)
+		{
+			if (psDroid->shieldPoints > actualDamage)
+			{
+				psDroid->shieldPoints -= actualDamage;
+				actualDamage = 0;
+			}
+			else
+			{
+				actualDamage -= psDroid->shieldPoints;
+				psDroid->shieldPoints = 0;
+			}
+
+			if (psDroid->shieldPoints == 0)
+			{
+				// shields are interrupted, wait for a while until regeneration starts again
+				psDroid->shieldInterruptRegenTime = psDroid->time;
+			}
+
+			if (psProjectile != nullptr &&
+				weaponSubClass != WSC_FLAME &&
+				weaponSubClass != WSC_COMMAND &&
+				droidGetMaxShieldPoints(psDroid) > 0 &&
+				PERCENT(psDroid->shieldPoints, droidGetMaxShieldPoints(psDroid)) > 25 &&
+				objPosDiffSq(psDroid->pos, psProjectile->pos) < TILE_WIDTH * TILE_WIDTH)
+			{
+				Vector3i dv;
+				dv.y = psProjectile->pos.z;
+
+				for (int i = 0; i < DROID_SHIELD_PARTICLES; i++)
+				{
+					dv.x = psProjectile->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
+					dv.z = psProjectile->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
+					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, nullptr, 0, gameTime - deltaGameTime + 1);
+				}
+
+				audio_PlayStaticTrack(psProjectile->pos.x, psProjectile->pos.y, ID_SOUND_SHIELD_HIT);
+			}
+		}
 	}
 
 	// Subtract the dealt damage from the droid's remaining body points

@@ -33,6 +33,11 @@ layout(location = 0) out vec4 FragColor;
 
 #include "pointlights.glsl"
 
+float random(vec2 uv)
+{
+	return fract(sin(dot(uv.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+}
+
 float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeInv, int cascadeIndex, float z)
 {
 	vec2 uv = base_uv + vec2(u, v) * shadowMapSizeInv;
@@ -268,6 +273,14 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
 }
 
+vec4 applyShieldFuzzEffect(vec4 color) {
+	float cycle = 0.66 + 0.66 * graphicsCycle;
+	float r = random(vec2(fragPos.x * cycle, fragPos.y * cycle));
+	vec3 col = vec3(color.r, color.g, 0.5 + (0.5 * r));
+	col.b *= 2.0;
+	return vec4(col, (color.a * r) / 3.0);
+}
+
 void main()
 {
 	// unpack inputs
@@ -379,6 +392,11 @@ void main()
 
 		// Return fragment color
 		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), fogFactor);
+	}
+
+	if (shieldEffect != 0)
+	{
+		fragColour = applyShieldFuzzEffect(fragColour);
 	}
 
 	FragColor = fragColour;
