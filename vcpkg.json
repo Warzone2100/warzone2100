@@ -40,7 +40,13 @@
 		"zlib",
 		"sqlite3",
 		"libsodium",
-		"libzip",
+		{
+			"name": "libzip",
+			"default-features": false,
+			"features": [
+				"bzip2"
+			]
+		},
 		{
 			"name": "curl",
 			"default-features": false,
