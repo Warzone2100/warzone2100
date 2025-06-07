@@ -43,6 +43,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
+#include <utility>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -957,6 +958,41 @@ static bool canInstancedMeshRendererUseInstancedRendering(bool quiet /*= false*/
 	return true;
 }
 
+template <typename Key, typename Value>
+class InsertionOrderMap
+{
+public:
+	typedef std::pair<Key, Value> Pair;
+	typedef std::vector<Pair> PairVector;
+	typedef typename PairVector::iterator iterator;
+	typedef typename PairVector::const_iterator const_iterator;
+public:
+	Value& operator[](const Key& k)
+	{
+		auto it = keyToValuesIdxMap.find(k);
+		if (it != keyToValuesIdxMap.end())
+		{
+			return values[it->second].second;
+		}
+		auto idx = values.size();
+		values.push_back(Pair(k, {}));
+		keyToValuesIdxMap[k] = idx;
+		return values[idx].second;
+	}
+	void clear() noexcept
+	{
+		values.clear();
+		keyToValuesIdxMap.clear();
+	}
+	iterator begin() noexcept { return values.begin(); }
+	iterator end() noexcept { return values.end(); }
+	const_iterator cbegin() const noexcept { return values.cbegin(); }
+	const_iterator cend() const noexcept { return values.cend(); }
+private:
+	PairVector values;
+	std::unordered_map<Key, size_t> keyToValuesIdxMap;
+};
+
 class InstancedMeshRenderer
 {
 public:
@@ -997,9 +1033,9 @@ private:
 
 	typedef templatedState MeshInstanceKey;
 	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceMeshes;
-	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshes;
-	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshesNoDepthWrite;
-	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceAdditiveMeshes;
+	InsertionOrderMap<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshes;
+	InsertionOrderMap<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshesNoDepthWrite;
+	InsertionOrderMap<MeshInstanceKey, std::vector<SHAPE>> instanceAdditiveMeshes;
 	size_t instancesCount = 0;
 	size_t translucentInstancesCount = 0;
 	size_t additiveInstancesCount = 0;
