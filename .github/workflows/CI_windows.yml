@@ -705,6 +705,7 @@ jobs:
           mkdir dependency-dl
           mkdir innosetup
           mkdir innosetup-deps
+          mkdir innosetup-unofficial-translations
           mkdir built-archives
           mkdir tmp
           mkdir combined-staging
@@ -749,6 +750,29 @@ jobs:
           Move-Item -Path "${FILECHECK_DL_PATH}" -Destination "$installLocation" -Force -ErrorAction Stop
 
           echo "WZ_INNOSETUP_SCRIPT_DEPENDENCIES_PATH=${env:SCRIPT_DEP_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Fetch Unofficial Base Setup Translations
+        id: unofficial-base-translations
+        env:
+          UNOFFICIAL_TRANSLATIONS_INSTALL_PATH: '${{ github.workspace }}\innosetup-unofficial-translations'
+        run: |
+          Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
+          $VerbosePreference = "Continue"
+          . "src\.ci\powershell\request.ps1"
+
+          $TRANSLATIONS_COMMIT_DL_URL = "https://github.com/jrsoftware/issrc/archive/47df9c75754f1433acf624c7b94a96911f866532.zip"
+          $TRANSLATIONS_COMMIT_DL_SHA512 = "75bece013b2393f8c5536afee82ef93f830fbb05b6264000b6449a57f969b959369f8bb54e2ed13972eca6ed0e825ebaf6dc5a6525903ce9d072cf5d5b5c093a"
+
+          $TRANSLATIONS_COMMIT_DL_PATH = ".\dependency-dl\translations_commit.zip"
+          $req = Req -Params @{ 'Method'='GET';'Uri'="$TRANSLATIONS_COMMIT_DL_URL";'OutFile'="${TRANSLATIONS_COMMIT_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${TRANSLATIONS_COMMIT_DL_SHA512}" -Algorithm SHA512
+
+          echo "::group::Expanding archive ..."
+          $TRANSLATIONS_EXTRACTED_PATH = "$(pwd)\dependency-dl\translations_commit_extracted"
+          Expand-Archive -LiteralPath "${TRANSLATIONS_COMMIT_DL_PATH}" -DestinationPath "${TRANSLATIONS_EXTRACTED_PATH}"
+          echo "Expanding archive ... Done"
+
+          Copy-Item -Path "${TRANSLATIONS_EXTRACTED_PATH}\*\Files\Languages\Unofficial\*.isl" -Destination "${env:UNOFFICIAL_TRANSLATIONS_INSTALL_PATH}" -ErrorAction Stop
+
+          echo "WZ_INNOSETUP_UNOFFICIAL_TRANSLATIONS_PATH=${env:UNOFFICIAL_TRANSLATIONS_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Download Architecture Archives
         uses: actions/download-artifact@v4
         with:
@@ -779,8 +803,9 @@ jobs:
           INSTALLER_SOURCE_DIR: '${{ github.workspace }}\combined-staging'
           INSTALLER_OUTPUT_DIR: '${{ github.workspace }}\output'
           INNOFILECHECK_DLL_DIR: '${{ steps.script-dependencies.outputs.WZ_INNOSETUP_SCRIPT_DEPENDENCIES_PATH }}'
+          UNOFFICIAL_TRANSLATIONS_DIR: '${{ steps.unofficial-base-translations.outputs.WZ_INNOSETUP_UNOFFICIAL_TRANSLATIONS_PATH }}'
         run: |
-          & "${env:WZ_INNOSETUP_PATH}\ISCC.exe" "/O${env:INSTALLER_OUTPUT_DIR}" "/DSOURCE_DIR=${env:INSTALLER_SOURCE_DIR}" "/DINNOFILECHECK_DLL_DIR=${env:INNOFILECHECK_DLL_DIR}" "src\pkg\win_installer\warzone2100.iss"
+          & "${env:WZ_INNOSETUP_PATH}\ISCC.exe" "/O${env:INSTALLER_OUTPUT_DIR}" "/DSOURCE_DIR=${env:INSTALLER_SOURCE_DIR}" "/DINNOFILECHECK_DLL_DIR=${env:INNOFILECHECK_DLL_DIR}" "/DUNOFFICIAL_TRANSLATIONS_DIR=${env:UNOFFICIAL_TRANSLATIONS_DIR}" "src\pkg\win_installer\warzone2100.iss"
           if ($? -eq $false) {
             Write-Error "Failed building installer"
             Exit 1
