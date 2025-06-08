@@ -35,13 +35,6 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
-enum PACKETDIR
-{
-	PACKET_ENCODE,
-	PACKET_DECODE,
-	PACKET_INVALID
-};
-
 enum QueueType
 {
 	QUEUE_TMP,
