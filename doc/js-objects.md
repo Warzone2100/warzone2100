@@ -80,7 +80,7 @@ In addition, the following properties are defined:
 C++ code may change the action frequently as it tries to carry out its order. You never want to set
 the action directly, but it may be interesting to look at what it currently is.
 * ```droidType``` The droid's type. The following types are defined:
-  * ```DROID_CONSTRUCT``` Trucks and cyborg constructors.
+  * ```DROID_CONSTRUCT``` Truck constructors.
   * ```DROID_WEAPON``` Droids with weapon turrets, except cyborgs.
   * ```DROID_PERSON``` Non-cyborg two-legged units, like scavengers.
   * ```DROID_REPAIR``` Units with repair turret, including repair cyborgs.
