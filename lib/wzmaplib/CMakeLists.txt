@@ -47,7 +47,7 @@ set_target_properties(wzmaplib PROPERTIES VERSION "${WZMAPLIB_VERSION_STRING}")
 
 set_target_properties(wzmaplib
 	PROPERTIES
-		CXX_STANDARD 14
+		CXX_STANDARD 17
 		CXX_STANDARD_REQUIRED YES
 		CXX_EXTENSIONS NO
 )
@@ -217,7 +217,7 @@ if (libzip_FOUND AND libzip_LINK_TEST)
 	set_property(TARGET ZipIOProvider PROPERTY FOLDER "lib")
 	set_target_properties(ZipIOProvider
 		PROPERTIES
-			CXX_STANDARD 14
+			CXX_STANDARD 17
 			CXX_STANDARD_REQUIRED YES
 			CXX_EXTENSIONS NO
 	)
