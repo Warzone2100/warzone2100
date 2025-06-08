@@ -24,6 +24,10 @@ SET(FMT_INSTALL OFF CACHE BOOL "Generate the install target" FORCE)
 SET(FMT_SYSTEM_HEADERS ON CACHE BOOL "Expose headers with marking them as system." FORCE)
 add_subdirectory(fmt EXCLUDE_FROM_ALL)
 set_property(TARGET fmt PROPERTY FOLDER "3rdparty")
+# Define a custom inline namespace for the fmt used by WZ, to prevent ODR violations if static linking to any libraries that themselves embed (a different version of) fmt
+target_compile_definitions(fmt PUBLIC "FMT_BEGIN_NAMESPACE=namespace fmt { inline namespace v11_wz2100 {")
+target_compile_definitions(fmt PUBLIC "FMT_END_NAMESPACE=}}")
+
 
 # inih library
 add_library(inih STATIC "inih/ini.h" "inih/ini.c")
