@@ -461,47 +461,53 @@ bool recvDroid(NETQUEUE queue)
 	return true;
 }
 
+template <typename SerdeContext, typename T>
+struct SerdeFnArgT
+{
+	using reference_type = std::conditional_t<std::is_same<SerdeContext, MessageReader>::value, T&, const T&>;
+};
+
 /// Does not read/write info->droidId!
 template <typename SerdeContext>
-static void NETQueuedDroidInfo(SerdeContext& c, QueuedDroidInfo* info)
+static void NETQueuedDroidInfo(SerdeContext& c, typename SerdeFnArgT<SerdeContext, QueuedDroidInfo>::reference_type info)
 {
 	static_assert(std::is_same<SerdeContext, MessageReader>::value || std::is_same<SerdeContext, MessageWriter>::value,
 		"SerdeContext is expected to be either MessageReader or MessageWriter");
 
-	NETuint8_t(c, info->player);
-	NETenum(c, info->subType);
-	switch (info->subType)
+	NETuint8_t(c, info.player);
+	NETenum(c, info.subType);
+	switch (info.subType)
 	{
 	case ObjOrder:
 	case LocOrder:
-		NETenum(c, info->order);
-		if (info->subType == ObjOrder)
+		NETenum(c, info.order);
+		if (info.subType == ObjOrder)
 		{
-			NETuint32_t(c, info->destId);
-			NETenum(c, info->destType);
+			NETuint32_t(c, info.destId);
+			NETenum(c, info.destType);
 		}
 		else
 		{
-			NETVector2i(c, info->pos);
+			NETVector2i(c, info.pos);
 		}
-		if (info->order == DORDER_BUILD || info->order == DORDER_LINEBUILD)
+		if (info.order == DORDER_BUILD || info.order == DORDER_LINEBUILD)
 		{
-			NETuint32_t(c, info->structRef);
-			NETuint16_t(c, info->direction);
+			NETuint32_t(c, info.structRef);
+			NETuint16_t(c, info.direction);
 		}
-		if (info->order == DORDER_LINEBUILD)
+		if (info.order == DORDER_LINEBUILD)
 		{
-			NETVector2i(c, info->pos2);
+			NETVector2i(c, info.pos2);
 		}
-		if (info->order == DORDER_BUILDMODULE)
+		if (info.order == DORDER_BUILDMODULE)
 		{
-			NETuint32_t(c, info->index);
+			NETuint32_t(c, info.index);
 		}
-		NETbool(c, info->add);
+		NETbool(c, info.add);
 		break;
 	case SecondaryOrder:
-		NETenum(c, info->secOrder);
-		NETenum(c, info->secState);
+		NETenum(c, info.secOrder);
+		NETenum(c, info.secState);
 		break;
 	}
 }
@@ -520,10 +526,10 @@ void sendQueuedDroidInfo()
 	{
 		orderedMap[info.order].push_back(info);
 	}
-	std::vector<QueuedDroidInfo>::iterator eqBegin, eqEnd;
+	std::vector<QueuedDroidInfo>::const_iterator eqBegin, eqEnd;
 	for (auto &pair: orderedMap)
 	{
-		auto qOrders = pair.second;
+		const auto& qOrders = pair.second;
 		for (eqBegin = qOrders.begin(); eqBegin != qOrders.end(); eqBegin = eqEnd)
 		{
 			// Find end of range of orders which differ only by the droid ID.
@@ -531,7 +537,7 @@ void sendQueuedDroidInfo()
 			{}
 
 			auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
-			NETQueuedDroidInfo(w, &*eqBegin);
+			NETQueuedDroidInfo(w, *eqBegin);
 
 			uint32_t num = eqEnd - eqBegin;
 			NETuint32_t(w, num);
@@ -549,7 +555,6 @@ void sendQueuedDroidInfo()
 			}
 			NETend(w);
 		}
-		qOrders.clear();
 	}
 	// Sent the orders. Don't send them again.
 	queuedOrders.clear();
@@ -636,7 +641,7 @@ bool recvDroidInfo(NETQUEUE queue)
 	auto r = NETbeginDecode(queue, GAME_DROIDINFO);
 	{
 		QueuedDroidInfo info;
-		NETQueuedDroidInfo(r, &info);
+		NETQueuedDroidInfo(r, info);
 
 		STRUCTURE_STATS *psStats = nullptr;
 		if (info.subType == LocOrder && (info.order == DORDER_BUILD || info.order == DORDER_LINEBUILD))
