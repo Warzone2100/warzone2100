@@ -2,7 +2,7 @@
 
 # Expects input of $1 base .isl file and $2 translated .isl file
 
-if [ "$1" == "$2" ]; then
+if [ "$1" = "$2" ]; then
   exit 0
 fi
 
