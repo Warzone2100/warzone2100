@@ -33,6 +33,11 @@
 #define SOURCE_DIR "files"
 #endif
 
+// Points to a directory into which unofficial Inno Setup base translations have been downloaded
+#ifndef UNOFFICIAL_TRANSLATIONS_DIR
+#define UNOFFICIAL_TRANSLATIONS_DIR SOURCE_DIR
+#endif
+
 #define WZ_BINDIR "bin"
 #ifndef WZ_DATADIR
 #define WZ_DATADIR "data"
@@ -292,6 +297,10 @@ Name: "en"; MessagesFile: "compiler:Default.isl,{#SourcePath}\i18n\win_installer
 	: (Warning('Cannot find language file (' + LangName + '): ' + MessagesFile), ''), \
 	Local[0]
 
+#define AddUnofficialTranslation(str LangName, MessagesFileName) \
+	Local[0] = AddTranslation(LangName, AddBackslash(UNOFFICIAL_TRANSLATIONS_DIR) + MessagesFileName), \
+	Local[0]
+
 // Additional languages with "official" base Inno Setup translations
 #emit AddTranslation("ar_SA", "compiler:Languages\Arabic.isl")
 #emit AddTranslation("bg_BG", "compiler:Languages\Bulgarian.isl")
@@ -322,6 +331,11 @@ Name: "en"; MessagesFile: "compiler:Default.isl,{#SourcePath}\i18n\win_installer
 #emit AddTranslation("ta_IN", "compiler:Languages\Tamil.isl")
 #emit AddTranslation("tr_TR", "compiler:Languages\Turkish.isl")
 #emit AddTranslation("uk_UA", "compiler:Languages\Ukrainian.isl")
+
+// Additional languages with "unofficial" base Inno Setup translations
+#emit AddUnofficialTranslation("id_ID", "Indonesian.isl")
+#emit AddUnofficialTranslation("ro_RO", "Romanian.isl")
+#emit AddUnofficialTranslation("zh_CN", "ChineseSimplified.isl")
 
 [LangOptions]
 // Future TODO: 
