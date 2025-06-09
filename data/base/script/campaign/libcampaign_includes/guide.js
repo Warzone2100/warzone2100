@@ -5,7 +5,8 @@
 
 function __camDoAddVTOLUseTopicsImpl()
 {
-	addGuideTopic("wz2100::units::vtols::attacking", SHOWTOPIC_FIRSTADD);
+	addGuideTopic("wz2100::units::propulsions::vtols::defending");
+	addGuideTopic("wz2100::units::propulsions::vtols::attacking", SHOWTOPIC_FIRSTADD);
 }
 
 function __camDoAddCommanderUseTopicsImpl()
@@ -18,7 +19,7 @@ function __camDoAddCommanderUseTopicsImpl()
 
 function __camDoAddVTOLDefenseTopicsImpl()
 {
-	addGuideTopic("wz2100::units::vtols::defending", SHOWTOPIC_FIRSTADD);
+	addGuideTopic("wz2100::units::propulsions::vtols::defendingagainst", SHOWTOPIC_FIRSTADD);
 }
 
 function __camDoAddVTOLDefenseTopics()
@@ -58,25 +59,29 @@ function __camProcessResearchGatedGuideTopics(research = null)
 {
 	let showFlags = (research == null) ? 0 : SHOWTOPIC_FIRSTADD;
 
-	// first "different" weapon type'
+	// First "different" weapon type
 	if (__camGuideTopicCheckResearchComplete('R-Wpn-Flamer01Mk1', research))
 	{
-		addGuideTopic("wz2100::units::weaponselection", showFlags);
+		// in this case, the category topic must come first (as adding the child topics will also add it, but we want the category topic to be what's displayed)
+		addGuideTopic("wz2100::weapons", showFlags);
+		addGuideTopic("wz2100::weapons::antipersonnel");
+		addGuideTopic("wz2100::weapons::flamer");
+		addGuideTopic("wz2100::units::thermaldamage");
 	}
 
-	// repair turret researched
+	// Repair Turret researched
 	if (__camGuideTopicCheckResearchComplete('R-Sys-MobileRepairTurret01', research))
 	{
 		addGuideTopic("wz2100::units::repairing", showFlags);
 	}
 
-	// first module researched
+	// First Module researched
 	if (__camGuideTopicCheckResearchComplete('R-Struc-PowerModuleMk1', research))
 	{
 		addGuideTopic("wz2100::structures::modules", showFlags);
 	}
 
-	// sensor turret researched
+	// Sensor Turret researched
 	if (__camGuideTopicCheckResearchComplete('R-Sys-Sensor-Turret01', research))
 	{
 		// in this case, the category topic must come first (as adding the child topics will also add it, but we want the category topic to be what's displayed)
@@ -85,36 +90,104 @@ function __camProcessResearchGatedGuideTopics(research = null)
 		addGuideTopic("wz2100::units::sensors::using");
 	}
 
-	// command turret researched
+	// First "All-Rounder" weapon researched
+	if (__camGuideTopicCheckResearchComplete('R-Wpn-Cannon1Mk1', research))
+	{
+		addGuideTopic("wz2100::weapons::allrounder", showFlags);
+	}
+
+	// First "Artillery" weapon researched
+	if (__camGuideTopicCheckResearchComplete('R-Wpn-Mortar01Lt', research))
+	{
+		addGuideTopic("wz2100::weapons::artillery", showFlags);
+	}
+
+	// Half-Track Propulsion researched
+	if (__camGuideTopicCheckResearchComplete('R-Vehicle-Prop-Halftracks', research))
+	{
+		addGuideTopic("wz2100::units::propulsions::wheels");
+		addGuideTopic("wz2100::units::propulsions::halftracks", showFlags);
+	}
+
+	// First "Anti-Tank" weapon researched
+	if (__camGuideTopicCheckResearchComplete('R-Wpn-Rocket05-MiniPod', research))
+	{
+		addGuideTopic("wz2100::weapons::antitank", showFlags);
+	}
+
+	// Tracked Propulsion researched
+	if (__camGuideTopicCheckResearchComplete('R-Vehicle-Prop-Tracks', research))
+	{
+		addGuideTopic("wz2100::units::propulsions::tracks", showFlags);
+	}
+
+	// First (and only) Bunker Buster weapon researched
+	if (__camGuideTopicCheckResearchComplete('R-Wpn-Rocket03-HvAT', research))
+	{
+		addGuideTopic("wz2100::weapons::bunkerbuster", showFlags);
+	}
+
+	// First "Anti-Air" weapon type
+	if (__camGuideTopicCheckResearchComplete('R-Wpn-AAGun03', research))
+	{
+		addGuideTopic("wz2100::weapons::antiair", showFlags);
+	}
+
+	// Command Turret researched
 	if (__camGuideTopicCheckResearchComplete('R-Comp-CommandTurret01', research))
 	{
 		// in this case, the category topic must come first (as adding the child topics will also add it, but we want the category topic to be what's displayed)
 		addGuideTopic("wz2100::units::commanders", showFlags);
 	}
 
-	// repair facility researched
+	// Repair Facility researched
 	if (__camGuideTopicCheckResearchComplete('R-Struc-RepairFacility', research))
 	{
 		addGuideTopic("wz2100::structures::repairfacility", showFlags);
 	}
 
-	// vtol factory researched
+	// VTOL Factory researched
 	if (__camGuideTopicCheckResearchComplete('R-Struc-VTOLFactory', research))
 	{
 		addGuideTopic("wz2100::structures::vtolfactory", showFlags);
 	}
 
-	// vtol propulsion researched
-	if (__camGuideTopicCheckResearchComplete('R-Vehicle-Prop-VTOL', research))
+	// Cyborgs
+	if (__camGuideTopicCheckResearchComplete('R-Struc-Factory-Cyborg', research))
 	{
-		addGuideTopic("wz2100::units::vtols::weapons");
-		addGuideTopic("wz2100::units::vtols::designing", showFlags);
+		addGuideTopic("wz2100::units::propulsions::cyborg");
+		addGuideTopic("wz2100::structures::cyborgfactory", showFlags);
 	}
 
-	// cb turret researched
+	// Hover Propulsion researched
+	if (__camGuideTopicCheckResearchComplete('R-Vehicle-Prop-Hover', research))
+	{
+		addGuideTopic("wz2100::units::propulsions::hover", showFlags);
+	}
+
+	// VTOL Propulsion researched
+	if (__camGuideTopicCheckResearchComplete('R-Vehicle-Prop-VTOL', research))
+	{
+		addGuideTopic("wz2100::units::propulsions::vtols::weapons");
+		addGuideTopic("wz2100::units::propulsions::vtols::using", showFlags);
+	}
+
+	// CB Turret researched
 	if (__camGuideTopicCheckResearchComplete('R-Sys-CBSensor-Turret01', research))
 	{
 		addGuideTopic("wz2100::units::sensors::cb", showFlags);
+	}
+
+	// First (explosive) bomb researched
+	if (__camGuideTopicCheckResearchComplete("R-Wpn-Bomb01", research))
+	{
+		addGuideTopic("wz2100::weapons::bombs::explosive", showFlags);
+	}
+
+	// First incendiary bomb researched
+	if (__camGuideTopicCheckResearchComplete("R-Wpn-Bomb03", research))
+	{
+		addGuideTopic("wz2100::weapons::bombs::incendiary", showFlags);
 	}
 }
 
@@ -168,7 +241,7 @@ function __camEnableGuideTopics()
 	}
 	if (foundDroids_VTOL)
 	{
-		addGuideTopic("wz2100::units::vtols::**");
+		addGuideTopic("wz2100::units::propulsions::vtols::**");
 	}
 }
 
