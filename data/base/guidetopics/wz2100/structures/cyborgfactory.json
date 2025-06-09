@@ -1,0 +1,24 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::cyborgfactory",
+	"title": "Cyborg Factory",
+	"visual": {
+		"stat": {
+			"id": "A0CyborgFactory"
+		}
+	},
+	"contents": [
+		"A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs.",
+		"",
+		"Each Factory can build one unit at a time, but you can queue multiple units for production.",
+		"",
+		"When a unit is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
+	],
+	"links": [
+		"wz2100::unitorders",
+		"wz2100::structures::rallypoint",
+		"wz2100::units::propulsions::cyborg",
+		"wz2100::structures::factory",
+		"wz2100::structures::vtolfactory"
+	]
+}

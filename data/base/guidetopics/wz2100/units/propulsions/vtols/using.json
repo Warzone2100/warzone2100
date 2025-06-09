@@ -1,0 +1,37 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::vtols::using",
+	"title": "Using VTOLs",
+	"sort": "01",
+	"visual": [
+		{
+			"stat": {
+				"id": "A0VTolFactory1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "A0VtolPad",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Designing VTOL units is similar to designing ground units.",
+		"",
+		"When choosing a propulsion, simply pick \"VTOL\" propulsion.",
+		"",
+		"You will then be able to select from the available VTOL Weapons.",
+		"",
+		"To produce your VTOL designs, you will need to construct a VTOL Factory.",
+		"",
+		"In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
+	],
+	"links": [
+		"wz2100::units::designing",
+		"wz2100::units::propulsions::vtols::weapons",
+		"wz2100::structures::vtolfactory",
+		"wz2100::units::propulsions::vtols"
+	]
+}

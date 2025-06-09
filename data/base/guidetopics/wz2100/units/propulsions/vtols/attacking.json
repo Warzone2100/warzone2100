@@ -1,8 +1,8 @@
 {
 	"type": "wz2100.guidetopic.v1",
-	"id": "wz2100::units::vtols::attacking",
-	"title": "Attacking",
-	"sort": "04",
+	"id": "wz2100::units::propulsions::vtols::attacking",
+	"title": "Attacking with VTOLs",
+	"sort": "03",
 	"contents": [
 		"To attack with a VTOL, select it and click an enemy like normal.",
 		"",
@@ -17,7 +17,7 @@
 		"Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
 	],
 	"links": [
-		"wz2100::units::vtols::weapons",
-		"wz2100::units::vtols"
+		"wz2100::units::propulsions::vtols::weapons",
+		"wz2100::units::propulsions::vtols"
 	]
 }

@@ -1,0 +1,54 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::antipersonnel",
+	"title": "Anti-Personnel",
+	"sort": "01",
+	"visual": [
+		{
+			"stat": {
+				"id": "MG1Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "MG2Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "MG3Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "MG4ROTARYMk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "MG5TWINROTARY",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Laser3BEAMMk1",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles.",
+		"",
+		"However, these weapons are less effective against structures and heavily armored targets."
+	],
+	"links": [
+		"wz2100::weapons",
+		"wz2100::units::propulsions::cyborg",
+		"wz2100::units::propulsions::tracks"
+	]
+}

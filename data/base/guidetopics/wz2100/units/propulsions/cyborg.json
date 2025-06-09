@@ -1,0 +1,38 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::cyborg",
+	"title": "Cyborgs",
+	"sort": "01",
+	"visual": [
+		{
+			"droidTemplate": {
+				"body": "CyborgLightBody",
+				"name": "Machinegunner Cyborg",
+				"propulsion": "CyborgLegs",
+				"type": "CYBORG",
+				"weapons": [
+					"CyborgChaingun"
+				]
+			}
+		},
+		{
+			"stat": "A0CyborgFactory"
+		}
+	],
+	"contents": [
+		"Cyborgs are your main infantry units.",
+		"",
+		"They are fast and reliable units, and are extremely resistant to Anti-Tank weapons.",
+		"",
+		"However, they are more vulnerable to Anti-Personnel and Artillery weapons.",
+		"",
+		"Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
+		],
+	"links": [
+		"wz2100::structures::cyborgfactory",
+		"wz2100::units::propulsions",
+		"wz2100::weapons::antitank",
+		"wz2100::weapons::antipersonnel",
+		"wz2100::weapons::artillery"
+	]
+}

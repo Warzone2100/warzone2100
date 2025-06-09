@@ -1,8 +1,8 @@
 {
 	"type": "wz2100.guidetopic.v1",
-	"id": "wz2100::units::weaponselection",
-	"title": "Weapon Selection",
-	"sort": "05",
+	"id": "wz2100::weapons",
+	"title": "Weapons",
+	"sort": "4",
 	"visual": {
 		"stat": {
 			"id": "ZNULLWEAPON"
@@ -17,7 +17,8 @@
 	],
 	"links": [
 		"wz2100::general::intelmap",
+		"wz2100::units::designing",
 		"wz2100::unitorders::recycling",
-		"wz2100::units::designing"
+		"wz2100::units::propulsions"
 	]
 }

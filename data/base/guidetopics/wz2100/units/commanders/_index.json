@@ -2,7 +2,7 @@
 	"type": "wz2100.guidetopic.v1",
 	"id": "wz2100::units::commanders",
 	"title": "Commanders",
-	"sort": "07",
+	"sort": "08",
 	"visual": {
 		"droidTemplate": {
 			"body": "Body8MBT",
