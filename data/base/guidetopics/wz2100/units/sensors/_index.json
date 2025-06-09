@@ -2,7 +2,7 @@
 	"type": "wz2100.guidetopic.v1",
 	"id": "wz2100::units::sensors",
 	"title": "Sensors",
-	"sort": "06",
+	"sort": "07",
 	"visual": [
 		{
 			"droidTemplate": {
