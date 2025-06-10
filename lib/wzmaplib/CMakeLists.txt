@@ -81,6 +81,7 @@ function(WZMAPLIB_ADD_3RDPARTY_DIR PATH BUILD_DIR INIT_SUBMODULE_IF_NEEDED)
 		# Dir contents already initialized - just use add_subdirectory
 		message(STATUS "wzmaplib: Using ${PATH}")
 		add_subdirectory("${PATH}" "${BUILD_DIR}" EXCLUDE_FROM_ALL)
+		return()
 	endif()
 	if(NOT INIT_SUBMODULE_IF_NEEDED)
 		message(FATAL_ERROR "\"${PATH}/CMakeLists.txt\" does not exist, and is not expected to be a submodule that might need init.")
