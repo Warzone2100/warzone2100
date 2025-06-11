@@ -67,8 +67,8 @@
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
       canvas.emscripten { border: 0px none; padding: 0px; outline: none!important; }
       canvas.emscripten:focus { border-color: inherit; -webkit-box-shadow: none; box-shadow: none; }
-      /* prevent selection highlight of the canvas */
-      canvas.emscripten { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; user-select: none; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); }
+      /* prevent selection highlight */
+      .unselectable { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; user-select: none; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); }
       .bi {
         display: inline-block;
         vertical-align: -.125em;
@@ -285,7 +285,7 @@
       }
     </style>
   </head>
-  <body class="d-flex text-center text-bg-dark">
+  <body class="d-flex text-center text-bg-dark unselectable">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="bi-heart" viewBox="0 0 16 16">
         <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
@@ -447,8 +447,8 @@
   </footer>
 </div>
 </div> <!-- content_container -->
-  <div class="emscripten_container" id="emscripten_container" style="display:none;">
-    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+  <div class="emscripten_container unselectable" id="emscripten_container" style="display:none;">
+    <canvas class="emscripten unselectable" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <div class="small-screen-blocker px-3">
