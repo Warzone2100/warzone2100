@@ -1011,7 +1011,7 @@ static void handleCameraScrolling()
 			scrollDirUpDown++;
 			wzSetCursor(CURSOR_UARROW);
 		}
-		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
+		if (mouseY() >= (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
 			scrollDirUpDown--;
 			wzSetCursor(CURSOR_DARROW);
@@ -1021,7 +1021,7 @@ static void handleCameraScrolling()
 			wzSetCursor(CURSOR_LARROW);
 			scrollDirLeftRight--;
 		}
-		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
+		if (mouseX() >= (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			wzSetCursor(CURSOR_RARROW);
 			scrollDirLeftRight++;
