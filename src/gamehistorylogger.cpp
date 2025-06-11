@@ -482,7 +482,7 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 		playerStats.structs = countAllStructures(i);
 		playerStats.researchComplete = mStats.recentResearchComplete;
 		playerStats.power = getPower(i);
-		playerStats.score = mStats.recentScore;
+		playerStats.score = static_cast<int32_t>(mStats.recentScore);
 		auto hpAndSummExp = getDroidHPPercentageAndExperience(i);
 		playerStats.hp = std::get<0>(hpAndSummExp);
 		playerStats.summExp = std::get<1>(hpAndSummExp);
@@ -602,7 +602,7 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame::Playe
 	p.structs = j.at("structs").get<uint32_t>();
 	p.researchComplete = j.at("researchComplete").get<uint32_t>();
 	p.power = j.at("power").get<uint32_t>();
-	p.score = j.at("score").get<uint32_t>();
+	p.score = j.at("score").get<int32_t>();
 	p.hp = j.at("hp").get<uint32_t>();
 	p.summExp = j.at("summExp").get<uint32_t>();
 	p.oilRigs = j.at("oilRigs").get<uint32_t>();
