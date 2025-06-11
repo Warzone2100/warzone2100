@@ -393,6 +393,7 @@ bool loadConfig()
 	setInvertMouseStatus(iniGetBool("mouseflip", true).value());
 	setRightClickOrders(iniGetBool("RightClickOrders", false).value());
 	setMiddleClickRotate(iniGetBool("MiddleClickRotate", false).value());
+	setEdgeScrollOutsideWindowBounds(iniGetBool("edgeScrollOutsideWindow", getEdgeScrollOutsideWindowBounds()).value());
 	if (auto value = iniGetIntegerOpt("cursorScale"))
 	{
 		war_setCursorScale(value.value());
@@ -725,6 +726,7 @@ bool saveConfig()
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
 	iniSetInteger("MiddleClickRotate", (int)(getMiddleClickRotate()));
+	iniSetInteger("edgeScrollOutsideWindow", (int)(getEdgeScrollOutsideWindowBounds()));
 	iniSetInteger("cursorScale", (int)war_getCursorScale());
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
 	iniSetInteger("showFPS", (int)showFPS);
