@@ -169,6 +169,7 @@ static Uint16 mouseXPos = 0;
 static Uint16 mouseYPos = 0;
 static Vector2i mouseWheelSpeed;
 static bool mouseInWindow = true;
+static bool windowHasFocus = true;
 
 /* How far the mouse has to move to start a drag */
 #define DRAG_THRESHOLD	5
@@ -945,6 +946,11 @@ bool wzIsMaximized()
 		return true;
 	}
 	return false;
+}
+
+bool wzWindowHasFocus()
+{
+	return windowHasFocus;
 }
 
 void wzQuit(int exitCode)
@@ -3775,19 +3781,21 @@ static void handleActiveEvent(SDL_Event *event)
 			}
 			break;
 		case SDL_WINDOWEVENT_ENTER:
+			mouseInWindow = true;
 			debug(LOG_WZ, "Mouse entered window %d", event->window.windowID);
 			wzQueueRefreshCursor();
 			break;
 		case SDL_WINDOWEVENT_LEAVE:
+			mouseInWindow = false;
 			debug(LOG_WZ, "Mouse left window %d", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
-			mouseInWindow = SDL_TRUE;
+			windowHasFocus = true;
 			wzQueueRefreshCursor();
 			debug(LOG_WZ, "Window %d gained keyboard focus", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_LOST:
-			mouseInWindow = SDL_FALSE;
+			windowHasFocus = false;
 			debug(LOG_WZ, "Window %d lost keyboard focus", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_CLOSE:
