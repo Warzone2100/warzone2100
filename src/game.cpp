@@ -98,6 +98,8 @@
 #include "wzscriptdebug.h"
 #include "gamehistorylogger.h"
 #include "wzapi.h"
+#include "keybind.h"
+#include "loop.h"
 #include "screens/guidescreen.h"
 #include <array>
 
@@ -142,6 +144,18 @@ bool saveJSONToFile(const nlohmann::json& obj, const char* pFileName)
 
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
+	if (GetGameMode() == GS_NORMAL && !gamePaused()) // if in match / game and not paused (i.e. no in-game menus open, etc)
+	{
+		// update mouse trap status if window properties changed
+		if (shouldTrapCursor())
+		{
+			wzGrabMouse();
+		}
+		else
+		{
+			wzReleaseMouse();
+		}
+	}
 	intScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	loadSaveScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	challengesScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);

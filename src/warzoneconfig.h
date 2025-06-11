@@ -63,6 +63,13 @@ enum class JS_BACKEND
 bool js_backend_from_str(const char *str, JS_BACKEND &output_backend);
 std::string to_string(JS_BACKEND backend);
 
+enum class TrapCursorMode : uint8_t
+{
+	Disabled = 0,
+	Enabled,
+	Automatic
+};
+
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -77,8 +84,8 @@ void war_setWindowMode(WINDOW_MODE);
 WINDOW_MODE war_getWindowMode();
 void war_setAntialiasing(int);
 int war_getAntialiasing();
-void war_SetTrapCursor(bool b);
-bool war_GetTrapCursor();
+void war_SetTrapCursor(TrapCursorMode v);
+TrapCursorMode war_GetTrapCursor();
 bool war_GetColouredCursor();
 void war_SetColouredCursor(bool enabled);
 void war_SetVsync(int value);

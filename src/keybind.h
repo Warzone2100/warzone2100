@@ -185,6 +185,8 @@ void kf_RevealMapAtPos();
 
 bool runningMultiplayer();
 
+bool shouldTrapCursor();
+
 void kf_ForceDesync();
 void kf_PowerInfo();
 void kf_BuildNextPage();
