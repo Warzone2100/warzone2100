@@ -69,7 +69,7 @@
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 #define BASECONFVERSION		1
-#define CURRCONFVERSION		2
+#define CURRCONFVERSION		3
 
 static const char *fileName = "config";
 
@@ -326,6 +326,8 @@ bool loadConfig()
 
 	ActivityManager::instance().beginLoadingSettings();
 
+	auto configVersion = iniGetInteger("configVersion", BASECONFVERSION).value();
+
 	if (auto value = iniGetIntegerOpt("voicevol"))
 	{
 		sound_SetUIVolume(static_cast<float>(value.value()) / 100.0f);
@@ -428,7 +430,7 @@ bool loadConfig()
 	war_setScanlineMode((SCANLINE_MODE)iniGetInteger("scanlines", SCANLINES_OFF).value());
 	seq_SetSubtitles(iniGetBool("subtitles", true).value());
 	setDifficultyLevel((DIFFICULTY_LEVEL)iniGetInteger("difficulty", DL_NORMAL).value());
-	if (!createdConfigFile && iniGetInteger("configVersion", BASECONFVERSION).value() < CURRCONFVERSION)
+	if (!createdConfigFile && configVersion < 2)
 	{
 		int level = (int)getDifficultyLevel() + 1;
 		if (level > static_cast<int>(AIDifficulty::INSANE))
@@ -484,7 +486,22 @@ bool loadConfig()
 			war_setWindowMode(static_cast<WINDOW_MODE>(fullscreenmode_int));
 		}
 	}
-	war_SetTrapCursor(iniGetBool("trapCursor", false).value());
+	if (!createdConfigFile && configVersion < 3)
+	{
+		// Upgrade old bool value to TrapCursorMode
+		// - map true -> Enabled and upgrade false -> Automatic
+		auto oldBoolValue = iniGetBool("trapCursor", false).value();
+		war_SetTrapCursor((oldBoolValue) ? TrapCursorMode::Enabled : TrapCursorMode::Automatic);
+	}
+	else
+	{
+		auto intTrapCursorValue = iniGetInteger("trapCursor", static_cast<int>(TrapCursorMode::Automatic)).value();
+		if (intTrapCursorValue < static_cast<int>(TrapCursorMode::Disabled) || intTrapCursorValue > static_cast<int>(TrapCursorMode::Automatic))
+		{
+			intTrapCursorValue = static_cast<int>(TrapCursorMode::Automatic);
+		}
+		war_SetTrapCursor(static_cast<TrapCursorMode>(intTrapCursorValue));
+	}
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
@@ -719,7 +736,7 @@ bool saveConfig()
 	iniSetInteger("subtitles", (int)(seq_GetSubtitles()));		// subtitles
 	iniSetInteger("radarObjectMode", (int)bEnemyAllyRadarColor);   // enemy/allies radar view
 	iniSetInteger("radarTerrainMode", (int)radarDrawMode);
-	iniSetBool("trapCursor", war_GetTrapCursor());
+	iniSetInteger("trapCursor", (int)war_GetTrapCursor());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());

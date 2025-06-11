@@ -2417,7 +2417,13 @@ char const *mouseOptionsMflipString()
 
 char const *mouseOptionsTrapString()
 {
-	return war_GetTrapCursor() ? _("On") : _("Off");
+	switch (war_GetTrapCursor())
+	{
+		case TrapCursorMode::Disabled: return _("Off");
+		case TrapCursorMode::Enabled: return _("On");
+		case TrapCursorMode::Automatic: return _("Auto");
+	}
+	return "n/a"; // silence compiler warning
 }
 
 char const *mouseOptionsMbuttonsString()
@@ -2559,7 +2565,7 @@ bool runMouseOptionsMenu()
 		break;
 	case FRONTEND_TRAP:
 	case FRONTEND_TRAP_R:
-		war_SetTrapCursor(!war_GetTrapCursor());
+		war_SetTrapCursor(static_cast<TrapCursorMode>(seqCycle(static_cast<int>(war_GetTrapCursor()), static_cast<int>(TrapCursorMode::Disabled), 1, static_cast<int>(TrapCursorMode::Automatic))));
 		widgSetString(psWScreen, FRONTEND_TRAP_R, mouseOptionsTrapString());
 		break;
 

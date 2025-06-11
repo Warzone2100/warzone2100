@@ -830,7 +830,7 @@ static bool startGameLoop()
 	closeLoadingScreen();
 
 	// Trap the cursor if cursor snapping is enabled
-	if (war_GetTrapCursor())
+	if (shouldTrapCursor())
 	{
 		wzGrabMouse();
 	}
@@ -943,7 +943,7 @@ static void stopGameLoop()
 	}
 
 	// Disable cursor trapping
-	if (war_GetTrapCursor())
+	if (shouldTrapCursor())
 	{
 		wzReleaseMouse();
 	}
@@ -997,7 +997,7 @@ static bool initSaveGameLoad()
 	closeLoadingScreen();
 
 	// Trap the cursor if cursor snapping is enabled
-	if (war_GetTrapCursor())
+	if (shouldTrapCursor())
 	{
 		wzGrabMouse();
 	}

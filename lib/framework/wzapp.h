@@ -89,6 +89,7 @@ bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode);
 WINDOW_MODE wzGetToggleFullscreenMode();
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent = false);
 WINDOW_MODE wzGetCurrentWindowMode();
+bool wzIsMaximized();
 bool wzIsFullscreen();
 bool wzWindowHasFocus();
 void wzSetWindowIsResizable(bool resizable);
