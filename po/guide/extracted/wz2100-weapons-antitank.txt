@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Anti-Tank")
+_("Anti-Tank weapons are specialized against all types of enemy vehicles.")
+_("However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry.")
+_("Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types.")
