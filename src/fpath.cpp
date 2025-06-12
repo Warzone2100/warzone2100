@@ -64,10 +64,6 @@ using packagedPathJob = wz::packaged_task<PATHRESULT(const std::shared_ptr<FPath
 static std::list<packagedPathJob>    pathJobs;
 static std::unordered_map<uint32_t, wz::future<PATHRESULT>> pathResults;
 
-static bool             waitingForResult = false;
-static uint32_t         waitingForResultId;
-static WZ_SEMAPHORE     *waitingForResultSemaphore = nullptr;
-
 static PATHRESULT fpathExecute(const std::shared_ptr<FPathExecuteContext>& ctx, PATHJOB psJob);
 
 
@@ -77,17 +73,24 @@ static int fpathThreadFunc(void *)
 	// create an fpath astar job context
 	auto ctx = makeFPathExecuteContext();
 
-	wzMutexLock(fpathMutex);
-
-	while (!fpathQuit)
+	while (true)
 	{
+		wzSemaphoreWait(fpathSemaphore);  // Wait until needed.
+		wzMutexLock(fpathMutex);
+
+		if (fpathQuit)
+		{
+			wzMutexUnlock(fpathMutex);
+			break;
+		}
+
 		if (pathJobs.empty())
 		{
-			ASSERT(!waitingForResult, "Waiting for a result (id %u) that doesn't exist.", waitingForResultId);
+			// should not happen - semaphore was signaled!
+			ASSERT(!pathJobs.empty(), "Received a signal but no job to consume!");
 			wzMutexUnlock(fpathMutex);
-			wzSemaphoreWait(fpathSemaphore);  // Go to sleep until needed.
-			wzMutexLock(fpathMutex);
 			continue;
+
 		}
 
 		WZ_PROFILE_SCOPE(fpathJob);
@@ -96,14 +99,9 @@ static int fpathThreadFunc(void *)
 		pathJobs.pop_front();
 
 		wzMutexUnlock(fpathMutex);
-		job(ctx);
-		wzMutexLock(fpathMutex);
 
-		waitingForResult = false;
-		objTrace(waitingForResultId, "These are the droids you are looking for.");
-		wzSemaphorePost(waitingForResultSemaphore);
+		job(ctx);
 	}
-	wzMutexUnlock(fpathMutex);
 	return 0;
 }
 
@@ -118,7 +116,6 @@ bool fpathInitialise()
 	{
 		fpathMutex = wzMutexCreate();
 		fpathSemaphore = wzSemaphoreCreate(0);
-		waitingForResultSemaphore = wzSemaphoreCreate(0);
 		fpathThread = wzThreadCreate(fpathThreadFunc, nullptr, "wzPath");
 		wzThreadStart(fpathThread);
 	}
@@ -141,8 +138,6 @@ void fpathShutdown()
 		fpathMutex = nullptr;
 		wzSemaphoreDestroy(fpathSemaphore);
 		fpathSemaphore = nullptr;
-		wzSemaphoreDestroy(waitingForResultSemaphore);
-		waitingForResultSemaphore = nullptr;
 	}
 	fpathHardTableReset();
 }
@@ -402,10 +397,7 @@ queuePathfinding:
 	pathJobs.push_back(std::move(task));
 	wzMutexUnlock(fpathMutex);
 
-	if (isFirstJob)
-	{
-		wzSemaphorePost(fpathSemaphore);  // Wake up processing thread.
-	}
+	wzSemaphorePost(fpathSemaphore);  // Increment semaphore
 
 	objTrace(id, "Queued up a path-finding request to (%d, %d), at least %d items earlier in queue", tX, tY, isFirstJob);
 	syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = FPR_WAIT", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner);
