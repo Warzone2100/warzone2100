@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Half-tracks")
+_("Half-tracks are a hybrid propulsion between Wheels and Tracks.")
+_("They have a moderate cost and speed, and provide a moderate amount of hitpoints.")
+_("They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons.")
+_("Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels.")
