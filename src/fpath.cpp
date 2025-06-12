@@ -60,7 +60,7 @@ struct PATHRESULT
 static WZ_THREAD        *fpathThread = nullptr;
 static WZ_MUTEX         *fpathMutex = nullptr;
 static WZ_SEMAPHORE     *fpathSemaphore = nullptr;
-using packagedPathJob = wz::packaged_task<PATHRESULT()>;
+using packagedPathJob = wz::packaged_task<PATHRESULT(const std::shared_ptr<FPathExecuteContext>& ctx)>;
 static std::list<packagedPathJob>    pathJobs;
 static std::unordered_map<uint32_t, wz::future<PATHRESULT>> pathResults;
 
@@ -68,12 +68,15 @@ static bool             waitingForResult = false;
 static uint32_t         waitingForResultId;
 static WZ_SEMAPHORE     *waitingForResultSemaphore = nullptr;
 
-static PATHRESULT fpathExecute(PATHJOB psJob);
+static PATHRESULT fpathExecute(const std::shared_ptr<FPathExecuteContext>& ctx, PATHJOB psJob);
 
 
 /** This runs in a separate thread */
 static int fpathThreadFunc(void *)
 {
+	// create an fpath astar job context
+	auto ctx = makeFPathExecuteContext();
+
 	wzMutexLock(fpathMutex);
 
 	while (!fpathQuit)
@@ -93,7 +96,7 @@ static int fpathThreadFunc(void *)
 		pathJobs.pop_front();
 
 		wzMutexUnlock(fpathMutex);
-		job();
+		job(ctx);
 		wzMutexLock(fpathMutex);
 
 		waitingForResult = false;
@@ -390,7 +393,7 @@ queuePathfinding:
 	// job or result for each droid in the system at any time.
 	fpathRemoveDroidData(id);
 
-	packagedPathJob task([job]() { return fpathExecute(job); });
+	packagedPathJob task([job](const std::shared_ptr<FPathExecuteContext>& ctx) { return fpathExecute(ctx, job); });
 	pathResults[id] = task.get_future();
 
 	// Add to end of list
@@ -456,14 +459,14 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 }
 
 // Run only from path thread
-PATHRESULT fpathExecute(PATHJOB job)
+PATHRESULT fpathExecute(const std::shared_ptr<FPathExecuteContext>& ctx, PATHJOB job)
 {
 	PATHRESULT result;
 	result.droidID = job.droidID;
 	result.retval = FPR_FAILED;
 	result.originalDest = Vector2i(job.destX, job.destY);
 
-	ASR_RETVAL retval = fpathAStarRoute(&result.sMove, &job);
+	ASR_RETVAL retval = fpathAStarRoute(ctx, &result.sMove, &job);
 
 	ASSERT(retval != ASR_OK || result.sMove.asPath.size() > 0, "Ok result but no path in result");
 	switch (retval)

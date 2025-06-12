@@ -210,9 +210,6 @@ struct PathfindContext
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
 
-/// Last recently used list of contexts.
-static std::list<PathfindContext> fpathContexts;
-
 /// Lists of blocking maps from current tick.
 static std::vector<std::shared_ptr<PathBlockingMap>> fpathBlockingMaps;
 /// Game time for all blocking maps in fpathBlockingMaps.
@@ -234,7 +231,6 @@ static const Vector2i aDirOffset[] =
 
 void fpathHardTableReset()
 {
-	fpathContexts.clear();
 	fpathBlockingMaps.clear();
 }
 
@@ -441,12 +437,37 @@ static void fpathInitContext(PathfindContext &context, const std::shared_ptr<con
 	ASSERT(!context.nodes.empty(), "fpathNewNode failed to add node.");
 }
 
-ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
+class FPathExecuteContextImpl : public FPathExecuteContext
+{
+public:
+	virtual ~FPathExecuteContextImpl();
+public:
+	/// Last recently used list of contexts.
+	std::list<PathfindContext> fpathContexts;
+	/// Used to avoid extra allocations in fpathAStarRoute
+	std::vector<Vector2i> pathBuffer;
+};
+
+FPathExecuteContext::~FPathExecuteContext()
+{ }
+
+FPathExecuteContextImpl::~FPathExecuteContextImpl()
+{ }
+
+std::shared_ptr<FPathExecuteContext> makeFPathExecuteContext()
+{
+	return std::make_shared<FPathExecuteContextImpl>();
+}
+
+ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
 	ASR_RETVAL      retval = ASR_OK;
 
 	bool            mustReverse = true;
 
+	auto ctxImpl = std::static_pointer_cast<FPathExecuteContextImpl>(ctx);
+
+	std::list<PathfindContext>& fpathContexts = ctxImpl->fpathContexts;
 	const PathCoord tileOrig(map_coord(psJob->origX), map_coord(psJob->origY));
 	const PathCoord tileDest(map_coord(psJob->destX), map_coord(psJob->destY));
 	const PathNonblockingArea dstIgnore(psJob->dstStructure);
@@ -513,7 +534,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	}
 
 	// Get route, in reverse order.
-	static std::vector<Vector2i> path;  // Declared static to save allocations.
+	std::vector<Vector2i>& path = ctxImpl->pathBuffer;
 	path.clear();
 
 	Vector2i newP(0, 0);
