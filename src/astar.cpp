@@ -621,8 +621,8 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 	if (i == fpathBlockingMaps.end())
 	{
 		// Didn't find the map, so i does not point to a map.
-		PathBlockingMap *blockMap = new PathBlockingMap();
-		fpathBlockingMaps.emplace_back(blockMap);
+		auto blockMap = std::make_shared<PathBlockingMap>();
+		fpathBlockingMaps.push_back(blockMap);
 
 		// blockMap now points to an empty map with no data. Fill the map.
 		blockMap->type = type;
@@ -648,7 +648,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 		}
 		syncDebug("blockingMap(%d,%d,%d,%d) = %08X %08X", gameTime, psJob->propulsion, psJob->owner, psJob->moveType, checksumMap, checksumDangerMap);
 
-		psJob->blockingMap = fpathBlockingMaps.back();
+		psJob->blockingMap = blockMap;
 	}
 	else
 	{
