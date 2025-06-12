@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="h-100" data-bs-theme="auto">
+<html lang="en" class="h-100" data-bs-theme="dark">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,6 +62,7 @@
       }
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
       textarea.emscripten { font-family: monospace; width: 80%; }
+      textarea.error-logs { font-family: monospace; font-size: 0.75em; }
       div.emscripten { text-align: center; color: rgb(148 163 184); }
       div.emscripten_container { border: 0px none; outline: none; position: absolute; top: 0;}
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
@@ -432,6 +433,8 @@
     </p>
     <p class="lead">Or help support by donating:</p>
     <a class="btn btn-sm btn-outline-secondary btn-block" title="Donate" href="https://donations.wz2100.net" target="_blank" rel="noopener"><svg class="bi me-1"><use href="#bi-heart"></use></svg>Donate</a>
+    <div class="alert alert-dark opacity-75 mt-4 small" role="alert" id="viewLogsLink">Troubleshooting: If requested, you can <a onclick="wz_open_logs_modal();" href="#">view logs</a> from this last run.
+    </div>
   </main>
 
   <footer class="mt-auto text-white" style="--bs-text-opacity: .5;">
@@ -644,6 +647,25 @@
         </div>
       </div>
     </div>
+    <!-- Display Error Logs Modal -->
+    <div class="modal fade" id="displayErrorLogs" data-bs-backdrop="static" data-bs-keyboard="false" data-bs-theme="dark" aria-hidden="true" aria-labelledby="errorLogsLabel" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="errorLogsLabel">View Logs</h1>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-primary small" role="alert">
+              The following logs were generated from the most recent run of Warzone 2100:
+            </div>
+            <textarea class="form-control error-logs" id="errorLogsTextArea" rows="8" onclick="this.focus();this.select();document.execCommand('copy')" readonly></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="wz_dismiss_logs_modal();">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   <script type='text/javascript'>
       // JS APIs called from WZ code
       function wz_js_display_loading_indicator(enabled) {
@@ -708,6 +730,8 @@
     
     var Module; // populated once setting up to start game - must be a global for the additional data package scripts to find it (music, etc)
     var LaunchedModule; // set once createWZModule succeeds
+    var errorLog = [];
+    var shouldSaveErrors = true; // whether to store error output in errorLog for later easy viewing
     var statusElement = document.getElementById('status');
     var progressElement = document.getElementById('progress');
     const originalStartButtonContents = document.getElementById('start-button').innerHTML;
@@ -1010,6 +1034,18 @@
       const modal = bootstrap.Modal.getInstance(launchoptions_modal);
       modal.hide();
     }
+    function wz_open_logs_modal() {
+      const displaylogs_modal = document.querySelector('#displayErrorLogs');
+      let logsTextarea = document.getElementById('errorLogsTextArea');
+      logsTextarea.value = errorLog.join('\n');
+      const modal = bootstrap.Modal.getOrCreateInstance(displaylogs_modal);
+      modal.show();
+    }
+    function wz_dismiss_logs_modal() {
+      const displaylogs_modal = document.querySelector('#displayErrorLogs');
+      const modal = bootstrap.Modal.getInstance(displaylogs_modal);
+      modal.hide();
+    }
     function wz_dismiss_reset_data_prompt_modal() {
       const resetdataprompt_modal = document.querySelector('#resetDataPrompt');
       const modal = bootstrap.Modal.getInstance(resetdataprompt_modal);
@@ -1150,6 +1186,14 @@
           return function(text) {
           if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
           console.log(text);
+          };
+        })(),
+        printErr: (function() {
+          errorLog = [];
+          return (...args) => {
+            if (shouldSaveErrors) {
+              errorLog.push(args.join(' '));
+            }
           };
         })(),
         canvas: (function() {
@@ -1734,6 +1778,7 @@
     
     function wz_js_handle_app_exit() {
       document.getElementById('emscripten_container').style.display = 'none';
+      document.getElementById('viewLogsLink').style.display = (shouldSaveErrors && errorLog.length > 0) ? 'block' : 'none';
       document.getElementById('post-exit').style.display = 'block';
       document.getElementById('footer').style.display = 'block';
       document.getElementById('nav-options-button').disabled = false;
