@@ -153,6 +153,7 @@ bool wzBackendAttemptOpenURL(const char *url);
 
 // System information related
 uint64_t wzGetCurrentSystemRAM(); // gets the system RAM in MiB
+uint32_t wzGetLogicalCPUCount();
 
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data, const char* name = nullptr);
