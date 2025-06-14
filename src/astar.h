@@ -22,6 +22,7 @@
 #define __INCLUDED_SRC_ASTART_H__
 
 #include "fpath.h"
+#include <memory>
 
 /** return codes for astar
  *
@@ -34,11 +35,20 @@ enum ASR_RETVAL
 	ASR_NEAREST,    ///< found a partial route to a nearby position
 };
 
+class FPathExecuteContext
+{
+protected:
+	FPathExecuteContext() { }
+public:
+	virtual ~FPathExecuteContext();
+};
+std::shared_ptr<FPathExecuteContext> makeFPathExecuteContext();
+
 /** Use the A* algorithm to find a path
  *
  *  @ingroup pathfinding
  */
-ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
+ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE_CONTROL *psMove, PATHJOB *psJob);
 
 /// Call from main thread.
 /// Sets psJob->blockingMap for later use by pathfinding thread, generating the required map if not already generated.
