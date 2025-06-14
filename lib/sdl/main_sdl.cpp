@@ -3980,6 +3980,17 @@ uint64_t wzGetCurrentSystemRAM()
 	return (value > 0) ? static_cast<uint64_t>(value) : 0;
 }
 
+uint32_t wzGetLogicalCPUCount()
+{
+	auto result = SDL_GetCPUCount();
+	if (result <= 0)
+	{
+		debug(LOG_ERROR, "Failed to get logical CPU count - defaulting to 1");
+		result = 1;
+	}
+	return static_cast<uint32_t>(result);
+}
+
 // MARK: - Emscripten-specific functions
 
 #if defined(__EMSCRIPTEN__)
