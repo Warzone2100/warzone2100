@@ -496,6 +496,10 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				{
 				case KEY_V:
 					aText = wzGetSelection();
+					// remove any \r, \n chars
+					aText.replace(WzUniCodepoint::fromASCII('\r'), "");
+					aText.replace(WzUniCodepoint::fromASCII('\n'), "");
+					// truncate if too long
 					if (aText.length() >= maxStringSize)
 					{
 						aText.truncate(maxStringSize);
