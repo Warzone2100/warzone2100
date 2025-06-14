@@ -441,6 +441,8 @@ class FPathExecuteContextImpl : public FPathExecuteContext
 {
 public:
 	virtual ~FPathExecuteContextImpl();
+
+	void resetForNewGameTimeIfNeeded(const PATHJOB& job);
 public:
 	/// Last recently used list of contexts.
 	std::list<PathfindContext> fpathContexts;
@@ -454,6 +456,14 @@ FPathExecuteContext::~FPathExecuteContext()
 FPathExecuteContextImpl::~FPathExecuteContextImpl()
 { }
 
+void FPathExecuteContextImpl::resetForNewGameTimeIfNeeded(const PATHJOB& job)
+{
+	if (!fpathContexts.empty() && job.blockingMap->type.gameTime != fpathContexts.front().myGameTime)
+	{
+		fpathContexts.clear();
+	}
+}
+
 std::shared_ptr<FPathExecuteContext> makeFPathExecuteContext()
 {
 	return std::make_shared<FPathExecuteContextImpl>();
@@ -466,6 +476,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	bool            mustReverse = true;
 
 	auto ctxImpl = std::static_pointer_cast<FPathExecuteContextImpl>(ctx);
+	ctxImpl->resetForNewGameTimeIfNeeded(*psJob);
 
 	std::list<PathfindContext>& fpathContexts = ctxImpl->fpathContexts;
 	const PathCoord tileOrig(map_coord(psJob->origX), map_coord(psJob->origY));
