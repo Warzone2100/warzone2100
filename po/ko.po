@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-03-01 20:57\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -4915,11 +4915,11 @@ msgstr "레이저 광학의 개선이 빛의 분산을 줄입니다"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "방화용 곡사포 발사시설"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "방화용 곡사포 포대"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "방화용 곡사포 발사시설"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "방화용 곡사포는 센서에 할당될 수 있습니다"
@@ -6399,10 +6399,10 @@ msgstr "시냅스 연결 데이터 분석 Mk 2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "시냅스 연결 데이터 분석 Mk 3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "시냅스 연결 데이터 분석"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "시냅스 연결 데이터 분석"
 
 msgid "Synaptic Link Scrambler technology"
@@ -7298,6 +7298,9 @@ msgstr "기본 호스팅 채팅 환경 / 권한 들을 세팅해주세요."
 
 msgid "Enable async join approval (for connecting clients)"
 msgstr "비동기 join approval을 활성화시켜주세요.(클라이언트들의 연결을 위해서입니다.)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
 
 msgid "Base URL for on-demand video downloads"
 msgstr ""
@@ -9819,6 +9822,18 @@ msgstr "여기에 비밀번호를 입력하십시오"
 msgid "Select Player Name"
 msgstr "플레이어 이름 선택"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "동맹"
 
@@ -9830,20 +9845,6 @@ msgstr "맵 미리보기"
 
 msgid "Click to see Map"
 msgstr "맵을 보려면 클릭하십시오"
-
-msgid "Show Structure Limits"
-msgstr "구조물 제한 보기"
-
-msgid "Set Structure Limits"
-msgstr "구조물 제한 설정하기"
-
-msgid "Random Game Options"
-msgstr ""
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr ""
 
 msgid "Tech"
 msgstr ""
@@ -9859,6 +9860,20 @@ msgstr "기술 수준 3"
 
 msgid "Technology Level 4"
 msgstr "기술 수준 4"
+
+msgid "Show Structure Limits"
+msgstr "구조물 제한 보기"
+
+msgid "Set Structure Limits"
+msgstr "구조물 제한 설정하기"
+
+msgid "Random Game Options"
+msgstr ""
+
+msgid ""
+"Random Game Options\n"
+"Can be blocked by players' votes"
+msgstr ""
 
 msgid "Start Hosting Game"
 msgstr "게임 호스팅을 시작하기"
@@ -10003,6 +10018,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr "예, 플레이어 슬롯을 선택합니다"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "참여함:"
 
@@ -10020,64 +10042,6 @@ msgstr "관전자 참여 활성화"
 
 msgid "Lock Teams"
 msgstr "팀 잠금"
-
-msgid "Choose Team"
-msgstr "팀 선택"
-
-msgid "Teams locked"
-msgstr "팀 잠김"
-
-msgid "Click to change player colour"
-msgstr "플레이어의 색을 바꾸려면 클릭하십시오"
-
-msgid "Click to change player position"
-msgstr "플레이어 포지션을 변경하려면 클릭하십시오"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr ""
-
-msgid "Click to close spectator slot"
-msgstr "관전자 슬롯을 닫으려면 클릭하십시오"
-
-msgid "Player ID: "
-msgstr "플레이어 ID: "
-
-msgid "(none)"
-msgstr "(없음)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "난이도를 변경하려면 클릭하십시오"
-
-msgid "Waiting for player"
-msgstr "플레이어를 기다리고 있습니다"
-
-msgid "Player is ready"
-msgstr "플레이어 준비 완료"
-
-msgid "Player is downloading"
-msgstr "플레이어 다운로드 중"
-
-msgid "Click when ready"
-msgstr "준비되었을 때 클릭하십시오"
-
-msgid "Waiting for download"
-msgstr "다운로드 대기 중"
-
-msgid "READY?"
-msgstr "시작"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10222,6 +10186,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10240,20 +10219,6 @@ msgstr "닫기"
 
 msgid "Open"
 msgstr "열기"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr ""
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr ""
-
-msgid "HOST"
-msgstr "호스트"
-
-msgid "Ping"
-msgstr "핑(Ping)"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
@@ -10281,6 +10246,10 @@ msgstr "%s가 게임을 퇴장하였습니다"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10341,6 +10310,9 @@ msgstr "플레이어 수 무제한"
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d 플레이어"
+
+msgid "Ping"
+msgstr "핑(Ping)"
 
 msgid "Structs"
 msgstr "구조물"
@@ -10885,6 +10857,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11314,6 +11298,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP 주소 또는 컴퓨터 이름"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "플레이어 ID: "
+
+msgid "(none)"
+msgstr "(없음)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr ""
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr ""
+
+msgid "HOST"
+msgstr "호스트"
+
+msgid "Choose Team"
+msgstr "팀 선택"
+
+msgid "Teams locked"
+msgstr "팀 잠김"
+
+msgid "Click to change player colour"
+msgstr "플레이어의 색을 바꾸려면 클릭하십시오"
+
+msgid "Click to change player position"
+msgstr "플레이어 포지션을 변경하려면 클릭하십시오"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr ""
+
+msgid "Click to close spectator slot"
+msgstr "관전자 슬롯을 닫으려면 클릭하십시오"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "난이도를 변경하려면 클릭하십시오"
+
+msgid "Waiting for player"
+msgstr "플레이어를 기다리고 있습니다"
+
+msgid "Player is ready"
+msgstr "플레이어 준비 완료"
+
+msgid "Player is downloading"
+msgstr "플레이어 다운로드 중"
+
+msgid "Click when ready"
+msgstr "준비되었을 때 클릭하십시오"
+
+msgid "Waiting for download"
+msgstr "다운로드 대기 중"
+
+msgid "READY?"
+msgstr "시작"
 
 msgid "Launch Transport"
 msgstr "수송선 출발"

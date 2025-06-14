@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-05-31 02:34\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -120,10 +120,10 @@ msgid "ALPHA BASE MISSION: Establish a Forward Base"
 msgstr "MISIÓN BASE ALFA: Establece una Base Avanzada"
 
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Establece una nueva base de avanzada en la meseta y repele al Nuevo Paradigma."
 
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Construye estructuras defensivas hasta desaparecer el objetivo parpadeante."
 
 msgid "ALPHA BASE MISSION: Counter Attack"
 msgstr "MISIÓN BASE ALFA: Contraataque"
@@ -492,7 +492,7 @@ msgid "Once a safe haven is established, return to the LZ for further orders."
 msgstr "Una vez que el refugio está establecido, vuelve al ZA para nuevas órdenes."
 
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "MISIÓN BASE BETA: ¡Sobrevive y evacúa! Trae un camión"
 
 msgid "Commander, we have grave news."
 msgstr "Comandante, tenemos graves noticias."
@@ -1059,7 +1059,7 @@ msgid "VTOL Strike Upgrade Mk3"
 msgstr "Mejora de Golpe ADV Mk3"
 
 msgid "Improved Scrambler"
-msgstr "Gerador de Interferencia Mejorado"
+msgstr "Generador de Interferencia Mejorado"
 
 msgid "Scrambler Turret Mk2"
 msgstr "Torreta de Interferencia Mk2"
@@ -1770,7 +1770,7 @@ msgid "Destroy all New Paradigm reinforcements"
 msgstr "Destruye todos los refuerzos del nuevo Paradigma"
 
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Construye al menos 7 estructuras que no sean muros en la meseta y destruye todos los refuerzos de Nuevo Paradigma"
 
 msgid "Locate and rescue your units from the shot down transporter"
 msgstr "Localiza y rescata tus unidades del transportador derribado"
@@ -1782,10 +1782,10 @@ msgid "Secure the Uplink from The Collective"
 msgstr "Asegure el enlace desde el Colectivo"
 
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Envía al menos un transportista con un camión y sobrevive al asalto del Colectivo hasta que finalice el conteo"
 
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Envía tantos transportistas como puedas y trae al menos un camión"
 
 msgid "Move all units into the valley"
 msgstr "Mueve todas las unidades al valle"
@@ -1797,31 +1797,31 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "Rescata al equipo Alfa de Nexus"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "Destruye el cuartel general de Nexo para desactivar el programa de intrusos Nexo"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Advertencia: Cuartel General blindado contra ataques ADV"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Investiga circuitos de resistencia y sobrevive al asalto de Nexus"
 
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "Construye una base de avanzada en los silos"
 
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Protege los silos de misiles y la investigación de códigos de misiles"
 
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "Reúne a una parte del equipo Beta con una avanzada del equipo Gamma"
 
 msgid "Return to LZ"
 msgstr "Vuelve a la ZA"
 
 msgid "Hard / Insane difficulty hint:"
-msgstr ""
+msgstr "Sugerencia de dificultad Difícil / Loca:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr ""
+msgstr "Construye una base robusta a lo largo del mapa para protegerte del Colectivo"
 
 msgid "Destroy all enemy units and structures"
 msgstr "Destruir todas las unidades y estructuras enemigas"
@@ -1839,7 +1839,7 @@ msgid "Enemy structures remaining"
 msgstr "Estructuras enemigas restantes"
 
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Se requiere volver a LZ"
 
 msgid "Destroy all enemy units and bases"
 msgstr "Destruir todas las unidades y bases enemigas"
@@ -2184,7 +2184,7 @@ msgid "This Nexus Intruder Program is a self-mutating computer parasite. This ma
 msgstr "Este Programa de Intrusión Nexus, es un parásito informático auto-mutante. Lo hace difícil de erradicar de los sistemas una vez ha sido indentificado."
 
 msgid "We have been unable to ascertain its ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Hemos sido incapaces de determinar su objetivo o función definitivos. En su forma inicial busca y aísla partes de la memoria del resto del sistema invadido. Luego comienza a mutarse a sí mismo y a las estructuras de datos, reprogramando efectivamente el sistema desde el interior."
 
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
 msgstr "El posterior análisis fué prevenido mediante el apagado manual del sistema por nuestros técnicos, para prevenir la contaminación adiciónal del Programa de Intrusión Nexus."
@@ -2826,22 +2826,22 @@ msgid "Player"
 msgstr "Jugador"
 
 msgid "Lost due to being inactive / playing passively."
-msgstr ""
+msgstr "Perdiste por estar inactivo / jugando pasivamente."
 
 msgid "Host-configured game time limit is approaching. If there is no winner within 10 minutes, the game will end."
-msgstr ""
+msgstr "Se acerca el límite de tiempo del juego configurado por el organizador. Si no hay ganadores en menos de 10 minutos, la partida terminará."
 
 msgid "Host-configured game time limit exceeded. Game is over."
-msgstr ""
+msgstr "Se ha superado el límite de tiempo del juego configurado por el organizador. El juego ha terminado."
 
 msgid "Playing passively will lead to defeat. Actions that are considered:"
-msgstr ""
+msgstr "Jugar pasivamente llevará a la derrota. Acciones consideradas:"
 
 msgid "- unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
-msgstr ""
+msgstr "- creación de unidades - finalización de investigaciones - construcción de estructuras base (fábricas, generadores de energía, laboratorios, módulos y pozos de petróleo) - causando daños"
 
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Carroñeros Extremos"
 
 msgid "Scavengers"
 msgstr "Carroñeros"
@@ -2940,25 +2940,25 @@ msgid "System locale"
 msgstr "Idioma del sistema"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Error al crear mapeo de puertos"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "¡Configura manualmente el router/firewall para abrir el puerto %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Mapeo de puerto abriendo el puerto externo: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Tu IP externa es: %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "Error al crear mapeo de puerto (tiempo máximo alcanzado)"
 
 msgid "Client failed to ack player index swap"
-msgstr ""
+msgstr "El cliente falló al confirmar el intercambio de índice de jugadores"
 
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
@@ -2971,22 +2971,26 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Error al conectarse al vestíbulo: %s.\n"
+"Asegúrate de que el puerto %d pueda recibir conexiones entrantes.\n"
+"Si estás usando un router, configúralo para que use UPnP/NAT-PMP/PCP,\n"
+" o redirige el puerto a tu sistema."
 
 msgid "Failed to get a lobby response!"
 msgstr "Fallo al obtener respuesta del vestíbulo!"
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "El formato de archivo de repetición es más reciente de lo que esta versión de Warzone 2100 puede soportar."
 
 #, c-format
 msgid "Replay Format Version: %u"
-msgstr ""
+msgstr "Versión de Formato de Repetición: %u"
 
 msgid "Replay File Format Unsupported"
-msgstr ""
+msgstr "Formato de archivo de repetición no soportado"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
-msgstr ""
+msgstr "No se puede cargar la repetición: el archivo de repetición está incompleto o está corrupto."
 
 msgid "Menu"
 msgstr "Menú"
@@ -3016,7 +3020,7 @@ msgid "Copy JSON to Clipboard"
 msgstr "Copiar JSON al Portapapeles"
 
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Mostrar JSON en la salida estándar"
 
 msgid "Tab Scroll left"
 msgstr "Tab Desplazamiento Izquierda"
@@ -4921,11 +4925,11 @@ msgstr "Mejora las ópticas láser y reduce la dispersión de luz"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Emplazamiento de Obús Incendiario"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Emplazamiento de Obuses Incendiarios"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Emplazamiento de Obús Incendiario"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "El Obús Incendiario puede ser asignado a un sensor"
@@ -5446,7 +5450,7 @@ msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Multi-cañón, ametralladora de fuego rápido"
 
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Requerido para producir comandantes"
 
 msgid "Nanolab"
 msgstr "Nanolaboratorio"
@@ -5581,7 +5585,7 @@ msgid "NEXUS Heavy Body"
 msgstr "Carrocería Pesada NEXUS"
 
 msgid "NEXUS Immunization System"
-msgstr ""
+msgstr "Sistema de Inmunización de NEXO"
 
 msgid "NEXUS Intruder Program analyzed"
 msgstr "Analizado Programa Intruso NEXUS"
@@ -5763,7 +5767,7 @@ msgid "Produces Cyborgs"
 msgstr "Produce Cyborgs"
 
 msgid "Professional and Regular rank units are protected"
-msgstr ""
+msgstr "Las unidades de rango Profesional y Normal están protegidas"
 
 msgid "Project Heavy Body"
 msgstr "Proyecto de Cuerpo Pesado"
@@ -5892,7 +5896,7 @@ msgid "Rapid fire rail gun firing needle darts"
 msgstr "Fuego rápido de pistola de raíles dispara dardos agujas"
 
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "El Cargador Rápido incrementa la tasa de recarga"
 
 #, no-c-format
 msgid "Rearming speed +30%"
@@ -6405,11 +6409,11 @@ msgstr "Enlace Sináptico de Analísis de Datos Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Enlace Sináptico de Analísis de Datos Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Enlace Sináptico de Analísis de Datos"
-
 msgid "Synaptic link data analysis"
 msgstr "Enlace Sináptico de análisis de datos"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Enlace Sináptico de Analísis de Datos"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Tecnologia de Interferencia de Conexión Sináptica"
@@ -7141,7 +7145,7 @@ msgid "Load a saved campaign game"
 msgstr "Cargar una partida de campaña"
 
 msgid "Load a replay"
-msgstr ""
+msgstr "Cargar una repetición"
 
 msgid "replay file"
 msgstr ""
@@ -7177,7 +7181,7 @@ msgid "host"
 msgstr "anfitrión"
 
 msgid "Connect directly to IP/hostname as a spectator"
-msgstr ""
+msgstr "Conectarse como espectador a IP/nombre de máquina directamente"
 
 msgid "Go directly to host screen"
 msgstr "Ir directamente a pantalla de anfitrión"
@@ -7189,13 +7193,13 @@ msgid "Disable texture compression"
 msgstr "Desactivar compresión de texturas"
 
 msgid "Set gfx backend"
-msgstr ""
+msgstr "Establecer backend gfx"
 
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "Usar backend gfx en modo depuración"
 
 msgid "Set JS backend"
-msgstr ""
+msgstr "Establecer backend JS"
 
 msgid "Run games automatically for testing"
 msgstr "Ejecutar partidas automáticas para testear"
@@ -7231,28 +7235,28 @@ msgid "autorating"
 msgstr ""
 
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Adjuntar o crear una ventana de consola y mostrar salida de la consola (solo Windows)"
 
 msgid "Set game server port"
-msgstr ""
+msgstr "Establecer puerto de servidor del juego"
 
 msgid "port"
 msgstr "puerto"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Activar / desactivar mapeo de puertos al alojar"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, verdadero, 0, falso]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr ""
+msgstr "Habilitar comandos slash en sala de espera (para los clientes que se conectan)"
 
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr ""
+msgstr "Añadir una clave de identidad de administración (para comandos slash)"
 
 msgid "hash string"
-msgstr ""
+msgstr "clave"
 
 msgid "Add a lobby admin public key (for slash commands)"
 msgstr "Agrega una clave pública de administrador en el lobby (para comandos de barras)"
@@ -7264,7 +7268,7 @@ msgid "Enable command interface"
 msgstr "Activa la interfaz de comandos"
 
 msgid "(stdin, unixsocket:path)"
-msgstr ""
+msgstr "(entrada estándar, unixsocket:ruta)"
 
 msgid "Minimum required players to auto-start game"
 msgstr "Mínimo de jugadores requeridos para iniciar la partida automáticamente"
@@ -7273,28 +7277,28 @@ msgid "startplayers"
 msgstr "jugadores de inicio"
 
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "Modo(s) de salida del historial de juegos"
 
 msgid "Game history log output key"
-msgstr ""
+msgstr "Clave de salida del historial de juegos"
 
 msgid "Game history log output naming"
-msgstr ""
+msgstr "Nombre de salida del historial de juegos"
 
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "Intervalo de registro del historial de juegos"
 
 msgid "interval in seconds"
-msgstr ""
+msgstr "intervalo en segundos"
 
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "Límite de tiempo de partida con varios jugadores (en minutos)"
 
 msgid "number of minutes"
-msgstr ""
+msgstr "cantidad de minutos"
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "Convierte un mapa especular .png a un .png de luma, un solo canal y escala de gris (y sale)"
 
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
 msgstr "Permitir capas implícitas de Vulkan (pueden estar desactivadas por defecto debido a posibles crasheos o bugs)"
@@ -7305,11 +7309,14 @@ msgstr "Establece las configuraciones / permisos predeterminados del chat del ho
 msgid "Enable async join approval (for connecting clients)"
 msgstr "Habilitar la aprobación de unión asíncrona (para clientes que se están conectando)"
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "Inicia el host (autohost) como no listo, incluso si es un host espectador"
+
 msgid "Base URL for on-demand video downloads"
-msgstr ""
+msgstr "URL base para descargas de vídeo bajo demanda"
 
 msgid "Base video URL"
-msgstr ""
+msgstr "URL base de vídeo"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "El comandante requiere un mayor nivel para comandar más unidades"
@@ -7406,15 +7413,15 @@ msgstr "No se puede construir. Yacimiento de petróleo ardiendo."
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - Puntos de impacto %d/%d - Experiencia %.1f, %s, Muertes %d"
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - Puntos de impacto %d/%d - ID %d - %s"
 
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr ""
+msgstr "(¡Enemigo!) %s - Puntos de impacto %d/%d - ID %d - experiencia %f, %s - orden %s - acción %s - rango de sensores %d - ECM %d - tono %.0f"
 
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
@@ -7422,7 +7429,7 @@ msgstr "%s - Allied - Salud %d/%d - Experiencia %d, %s"
 
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr ""
+msgstr "(¡Enemigo!) %s, ref: %d, ID: %d Puntos de impacto: %d/%d"
 
 msgid "Player left"
 msgstr "Jugador Salió"
@@ -7490,7 +7497,7 @@ msgid "Normal"
 msgstr "Normal"
 
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXO"
 
 msgid "Collective"
 msgstr "Colectivo"
@@ -7499,7 +7506,7 @@ msgid "Campaign videos are missing"
 msgstr "Faltan vídeos de la campaña"
 
 msgid "See our FAQ on how to install videos"
-msgstr ""
+msgstr "Vea nuestras preguntas frecuentes sobre cómo instalar vídeos"
 
 msgid "Single Player"
 msgstr "Un Jugador"
@@ -7578,7 +7585,7 @@ msgid "Load Skirmish Game"
 msgstr "Cargar Escaramuza"
 
 msgid "View Skirmish Replay"
-msgstr ""
+msgstr "Ver Repetición de Escaramuza"
 
 msgid "SINGLE PLAYER"
 msgstr "UN JUGADOR"
@@ -7593,7 +7600,7 @@ msgid "Load Skirmish Saved Game"
 msgstr "Cargar Escaramuza Guardada"
 
 msgid "Load Skirmish Replay"
-msgstr ""
+msgstr "Cargar Repetición de Escaramuza"
 
 msgid "MULTI PLAYER"
 msgstr "MULTIJUGADOR"
@@ -7605,14 +7612,14 @@ msgid "Join Game"
 msgstr "Unirse a una Partida"
 
 msgid "View Replay"
-msgstr ""
+msgstr "Ver Repetición"
 
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "¡El puerto TCP %d debe estar abierto en tu cortafuegos o enrutador para alojar juegos!"
 
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Cargar repetición multijugador"
 
 msgid "Game Options"
 msgstr "Opciones de Juego"
@@ -7636,7 +7643,7 @@ msgid "Music Manager"
 msgstr "Gestor de Música"
 
 msgid "Multiplay Options"
-msgstr ""
+msgstr "Opciones de múltiples jugadores"
 
 msgid "OPTIONS"
 msgstr "OPCIONES"
@@ -7648,16 +7655,16 @@ msgid "Failed to open configuration directory in system default file browser."
 msgstr "Error al abrir el directorio de configuración en el navegador de archivos por defecto del sistema."
 
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "El directorio de configuración se reporta como:"
 
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Si se ejecuta dentro de un contenedor / entorno aislado, esto puede diferir de la ruta actual en el disco."
 
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Consulte la documentación para obtener más información sobre cómo localizarla manualmente."
 
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Error al abrir el directorio de configuración"
 
 msgid "1×"
 msgstr "1x"
@@ -7684,7 +7691,7 @@ msgid "On"
 msgstr "Activado"
 
 msgid "Per Pixel"
-msgstr ""
+msgstr "Por Pixel"
 
 msgid "Lightmap"
 msgstr ""
@@ -7705,49 +7712,49 @@ msgid "High"
 msgstr ""
 
 msgid "Default"
-msgstr ""
+msgstr "Predeterminado"
 
 msgid "Terrain quality mode not available."
-msgstr ""
+msgstr "Modo de calidad del terreno no disponible."
 
 msgid "Medium Quality"
-msgstr ""
+msgstr "Calidad Media"
 
 msgid "High Quality"
-msgstr ""
+msgstr "Calidad Alta"
 
 msgid "Shadow mapping not available on this system."
-msgstr ""
+msgstr "El mapeo de sombras no está disponible en este sistema."
 
 msgid "Low"
-msgstr ""
+msgstr "Baja"
 
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 msgid "Shadow filtering not available on this system."
-msgstr ""
+msgstr "Filtrado de sombras no disponible en este sistema."
 
 msgid "Opacity: 50%"
-msgstr ""
+msgstr "Opacidad: 50%"
 
 msgid "* Takes effect on game restart"
 msgstr "* Tendrá efecto al reiniciar el juego"
 
 msgid "Terrain Quality"
-msgstr ""
+msgstr "Calidad del Terreno"
 
 msgid "Terrain Shading"
-msgstr ""
+msgstr "Sombreado del Terreno"
 
 msgid "Shadows"
 msgstr "Sombras"
 
 msgid "Shadow Resolution"
-msgstr ""
+msgstr "Resolución de Sombra"
 
 msgid "Shadow Filtering"
-msgstr ""
+msgstr "Filtrado de Sombra"
 
 msgid "Per Pixel point lights"
 msgstr ""
@@ -7774,10 +7781,10 @@ msgid "Screen Shake"
 msgstr "Agitación de Pantalla"
 
 msgid "Groups Menu"
-msgstr ""
+msgstr "Menú de Grupos"
 
 msgid "Options Button"
-msgstr ""
+msgstr "Botón de Opciones"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONES GRÁFICAS"
@@ -7825,6 +7832,8 @@ msgid ""
 "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr ""
+"En el modo Pantalla Completa de Escritorio, la resolución coincide con la de tu escritorio \n"
+"(o lo que el gestor de ventanas permite)."
 
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr "Puedes cambiar la resolución redimensionando la ventana. (Prueba arrastrar una esquina / borde.)"
@@ -7848,7 +7857,7 @@ msgid "Desktop Full"
 msgstr "Escritorio Completo"
 
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "Elegida (Pantalla Completa)"
 
 msgid "Texture size"
 msgstr "Tamaño de las texturas"
@@ -7863,30 +7872,32 @@ msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr "Atención: El antialias puede causar crashes, especialmente con valores > 16"
 
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Backend de Gráficos*"
 
 msgid "Min on Focus Loss"
-msgstr ""
+msgstr "Minimizar al Perder Foco"
 
 msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
+msgstr "Si la ventana debe minimizarse automáticamente al perder el foco"
 
 msgid "Alt+Enter Toggle"
-msgstr ""
+msgstr "Alternar con Alt+Enter"
 
 msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
+msgstr "Modo de pantalla completa al alternar con las teclas: Alt+ Intro"
 
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONES DE VIDEO"
 
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "No se puede cambiar la Sincronización Vertical"
 
 msgid ""
 "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr ""
+"Warzone no pudo cambiar el modo Sincronización Vertical.\n"
+"Tu sistema / controladores pueden no ser compatibles con otros modos."
 
 msgid "Middle Mouse"
 msgstr "Botón central"
@@ -7910,7 +7921,7 @@ msgid "Colored Cursors"
 msgstr "Cursores Coloreados"
 
 msgid "Cursor Size"
-msgstr ""
+msgstr "Tamaño del Cursor"
 
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONES DE RATÓN"
@@ -7954,7 +7965,7 @@ msgstr "Velocidad de Cámara"
 
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Ayúdanos a mejorar las traducciones de Warzone 2100: %s"
 
 msgid "Click to open webpage."
 msgstr "Clic para abrir la página."
@@ -7963,7 +7974,7 @@ msgid "Insane Difficulty"
 msgstr "Dificultad Loca"
 
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "¡Esta dificultad es para jugadores muy experimentados!"
 
 #, c-format
 msgid "%u minutes"
@@ -7971,7 +7982,7 @@ msgstr "%u minutos"
 
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s horas"
 
 #, c-format
 msgid "%u seconds"
@@ -7981,10 +7992,10 @@ msgid "None"
 msgstr "Ninguno"
 
 msgid "Distribute to Team"
-msgstr ""
+msgstr "Distribuir al equipo"
 
 msgid "Destroy (Classic)"
-msgstr ""
+msgstr "Destruir (Clásico)"
 
 msgid "Allow All"
 msgstr "Permitir todos"
@@ -7999,31 +8010,31 @@ msgid "Game Port"
 msgstr "Puerto de Juego"
 
 msgid "Port Mapping"
-msgstr ""
+msgstr "Mapeo de Puertos"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
+msgstr "Usa PCP, NAT-PMP o UPnP para ayudar a configurar tu enrutador / cortafuegos y permitir conexiones mientras se aloja."
 
 msgid "Chat"
 msgstr "Chat"
 
 msgid "Inactivity Timeout"
-msgstr ""
+msgstr "Tiempo de espera de inactividad"
 
 msgid "Lag Kick"
-msgstr ""
+msgstr "Sacar por tardanza"
 
 msgid "Spectator Slots"
-msgstr ""
+msgstr "Espacios para Espectadores"
 
 msgid "On Player Leave"
-msgstr ""
+msgstr "Cuando se Vaya un Jugador"
 
 msgid "Game Time Limit"
-msgstr ""
+msgstr "Tiempo Límite de Partida"
 
 msgid "Enable Rating"
-msgstr ""
+msgstr "Habilitar Puntuación"
 
 msgid "MULTIPLAY OPTIONS"
 msgstr "OPCIONES DE MULTIJUGADOR"
@@ -8032,33 +8043,33 @@ msgid "Mod: "
 msgstr "Mod: "
 
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "¿Aumentar escala de visualización del juego?"
 
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "Con tus ajustes de resolución y escala de pantalla actuales, la interfaz de usuario del juego puede parecer pequeña y la perspectiva del juego puede aparecer distorsionada."
 
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Puedes arreglar esto aumentando la configuración de la Escala de Visualización del juego."
 
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "¿Quieres aumentar la Escala de Visualización del juego a: %u%%?"
 
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Aumentar Escala de Visualización"
 
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Escala de Visualización Incrementada a: %u%%"
 
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Puedes ajustar la Escala de Visualización en cualquier momento en el menú Opciones de Vídeo."
 
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Consejo: Ajusta la Escala de Visualización"
 
 msgid "Replay"
-msgstr ""
+msgstr "Repetición"
 
 msgid "Pause"
 msgstr "Pausa"
@@ -8067,7 +8078,7 @@ msgid "Resume"
 msgstr "Reanudar"
 
 msgid "Fast-Forward"
-msgstr ""
+msgstr "Avance Rápido"
 
 msgid "GAME SAVED: "
 msgstr "PARTIDA GUARDADA: "
@@ -8089,10 +8100,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide."
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Abrir Opciones de Partida"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Cerrar Opciones de Partida"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Ocultando Tecnología Obsoleta"
@@ -8152,43 +8163,43 @@ msgid "Local"
 msgstr "Local"
 
 msgid "Select / Assign Group Number: "
-msgstr ""
+msgstr "Seleccionar / Asignar Número de Grupo: "
 
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Grupo %u"
 
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "Seleccionar las unidades del grupo %u"
 
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "Asignar Unidades Seleccionadas al Grupo %u"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "Centrar la Cámara en este Grupo al hacer clic o tocar dos veces"
 
 msgid "View and configure groups of units, which can be quickly selected and ordered."
-msgstr ""
+msgstr "Ver y configurar grupos de unidades, que pueden ser rápidamente seleccionadas y ordenadas."
 
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
-msgstr ""
+msgstr "Los botones de grupo brillarán en rojo cuando se pierdan unidades (o sufran muchos daños)."
 
 msgid "Unit Groups"
-msgstr ""
+msgstr "Grupos de Unidades"
 
 msgid "Select a Group"
-msgstr ""
+msgstr "Seleccionar un Grupo"
 
 msgid "Assign Selected Units to a Group"
-msgstr ""
+msgstr "Asignar Unidades Seleccionadas a un Grupo"
 
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
-msgstr ""
+msgstr "Centrar la Cámara en un Grupo al hacer clic o tocar dos veces en el botón de grupo"
 
 msgid "Unit Groups:"
-msgstr ""
+msgstr "Grupos de Unidades:"
 
 msgid "Construction Progress"
 msgstr "Progreso de construcción"
@@ -8203,306 +8214,306 @@ msgid "Progress Bar"
 msgstr "Barra de progreso"
 
 msgid "To:"
-msgstr ""
+msgstr "A:"
 
 msgid "All"
-msgstr ""
+msgstr "Todas"
 
 msgid "Team"
 msgstr "Equipo"
 
 msgid "Human Teammates"
-msgstr ""
+msgstr "Compañeros Humanos"
 
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Compañeros Robots"
 
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u jugadores"
 
 msgid "Choose a recipient"
-msgstr ""
+msgstr "Elige un destinatario"
 
 msgid "Quick Chat:"
-msgstr ""
+msgstr "Conversación Rápida:"
 
 msgid "Lobby Chat"
-msgstr ""
+msgstr "Chat de Sala de Espera"
 
 msgid "Requests"
-msgstr ""
+msgstr "Solicitudes"
 
 msgid "Notices"
-msgstr ""
+msgstr "Avisos"
 
 msgid "Reactions"
-msgstr ""
+msgstr "Reacciones"
 
 msgid "Taunts"
-msgstr ""
+msgstr "Burlas"
 
 msgid "Coordination"
-msgstr ""
+msgstr "Coordinación"
 
 msgid "Suggestions"
-msgstr ""
+msgstr "Sugerencias"
 
 msgid "Cheats"
-msgstr ""
+msgstr "Trampas"
 
 msgid "End-Game"
-msgstr ""
+msgstr "Final del Juego"
 
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 msgid "Admin"
-msgstr ""
+msgstr "Administrador"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
-msgstr ""
+msgstr "%s (%s) cambió el equipo del jugador (%s) a: %d"
 
 #, c-format
 msgid "%s (%s) changed position of player (%s) to: %d"
-msgstr ""
+msgstr "%s (%s) cambió la posición del jugador (%s) a: %d"
 
 #, c-format
 msgid "%s (%s) changed color of player (%s) to: %s"
-msgstr ""
+msgstr "%s (%s) cambió el color del jugador (%s) a: %s"
 
 #, c-format
 msgid "%s (%s) changed faction of player (%s) to: %s"
-msgstr ""
+msgstr "%s (%s) cambió la facción del jugador (%s) a: %s"
 
 msgid "Can someone please transfer me some units?"
-msgstr ""
+msgstr "¿Puede alguien por favor enviarme algunas unidades?"
 
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr ""
+msgstr "¿Puede alguien por favor transferirme camiones para poder reconstruir?"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Lo siento, no lo entiendo. (¿Usamos Conversación Rápida?)"
 
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "Sugiero: Construir más unidades"
 
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "Sugiero: Construir unidades diferentes"
 
 msgid "I suggest: Checking the team strategy view"
-msgstr ""
+msgstr "Sugiero: Comprobar la estrategia de equipo"
 
 msgid "I suggest: Researching different tech"
-msgstr ""
+msgstr "Sugiero: Investigar tecnología diferente"
 
 msgid "I suggest: Keeping research centers busy"
-msgstr ""
+msgstr "Sugiero: Mantener ocupados los centros de investigación"
 
 msgid "I suggest: Building anti-air"
-msgstr ""
+msgstr "Sugiero: Construir antiaéreo"
 
 msgid "I suggest: Repairing your units"
-msgstr ""
+msgstr "Sugiero: Reparar sus unidades"
 
 msgid "I suggest: Building repair facilities"
-msgstr ""
+msgstr "Sugiero: Construir instalaciones de reparación"
 
 msgid "I suggest: Building power generators"
-msgstr ""
+msgstr "Sugiero: Construir generadores de energía"
 
 msgid "I suggest: Capturing oil resources"
-msgstr ""
+msgstr "Sugiero: Capturar recursos petroleros"
 
 msgid "Hey everyone!"
-msgstr ""
+msgstr "¡Hola a todos!"
 
 msgid "Welcome!"
-msgstr ""
+msgstr "¡Bienvenida!"
 
 msgid "I want to spectate"
-msgstr ""
+msgstr "Quiero observar"
 
 msgid "I want to play"
-msgstr ""
+msgstr "Quiero jugar"
 
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Quiero cambiar de equipo"
 
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "Por favor marca Listo para que podamos empezar"
 
 msgid "Please wait"
-msgstr ""
+msgstr "Por favor espera"
 
 msgid "Let's go!"
-msgstr ""
+msgstr "¡Vamos!"
 
 msgid "Almost ready"
-msgstr ""
+msgstr "Casi listo"
 
 msgid "Ready"
-msgstr ""
+msgstr "Listo"
 
 msgid "Be right back"
-msgstr ""
+msgstr "Enseguida vuelvo"
 
 msgid "I'm back"
-msgstr ""
+msgstr "He vuelto"
 
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 msgid "No"
-msgstr ""
+msgstr "No"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Tal vez"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Aún no"
 
 msgid "Soon"
-msgstr ""
+msgstr "Pronto"
 
 msgid "Thank you"
-msgstr ""
+msgstr "Gracias"
 
 msgid "No problem"
-msgstr ""
+msgstr "Sin problema"
 
 msgid "Well-played"
-msgstr ""
+msgstr "Bien-jugado"
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "Lo siento, no entiendo. (¿Usaamos Conversación Rápida?)"
 
 msgid "Get ready..."
-msgstr ""
+msgstr "Prepárate..."
 
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Lo lamentarás"
 
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "¡Apenas un rasguño!"
 
 msgid "Attack now?"
-msgstr ""
+msgstr "¿Atacar ahora?"
 
 msgid "Group up"
-msgstr ""
+msgstr "Agrupar"
 
 msgid "Split up"
-msgstr ""
+msgstr "Separar"
 
 msgid "Focus attacks where marked"
-msgstr ""
+msgstr "Enfocar ataques donde se marca"
 
 msgid "Retreat!"
-msgstr ""
+msgstr "¡Retirada!"
 
 msgid "I need help!"
-msgstr ""
+msgstr "¡Necesito ayuda!"
 
 msgid "Left side"
-msgstr ""
+msgstr "Lado izquierdo"
 
 msgid "Right side"
-msgstr ""
+msgstr "Lado derecho"
 
 msgid "Transfer Request: Units"
-msgstr ""
+msgstr "Solicitud de Transferencia: Unidades"
 
 msgid "Transfer Request: Trucks"
-msgstr ""
+msgstr "Solicitud de Transferencia: Camiones"
 
 msgid "Attacking now!"
-msgstr ""
+msgstr "¡Atacando ahora!"
 
 msgid "On my way!"
-msgstr ""
+msgstr "¡Voy para allá!"
 
 msgid "They're coming!"
-msgstr ""
+msgstr "¡Ahí vienen!"
 
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "¡Estoy siendo atacado!"
 
 msgid "I'm rushing oils"
-msgstr ""
+msgstr "Estoy atacando petroleras"
 
 msgid "They're rushing oils!"
-msgstr ""
+msgstr "¡Están arruinando petroleras!"
 
 msgid "I don't have enough power"
-msgstr ""
+msgstr "No tengo suficiente energía"
 
 msgid "Build more units"
-msgstr ""
+msgstr "Construir más unidades"
 
 msgid "Build different units"
-msgstr ""
+msgstr "Construye unidades diferentes"
 
 msgid "Check team strategy view"
-msgstr ""
+msgstr "Comprueba la estrategia del equipo"
 
 msgid "Research different tech"
-msgstr ""
+msgstr "Investigar diferentes tecnologías"
 
 msgid "Keep research centers busy"
-msgstr ""
+msgstr "Mantén los centros de investigación ocupados"
 
 msgid "Build anti-air"
-msgstr ""
+msgstr "Construye antiaéreo"
 
 msgid "Repair your units"
-msgstr ""
+msgstr "Repara tus unidades"
 
 msgid "Build repair facilities"
-msgstr ""
+msgstr "Construye instalaciones de reparación"
 
 msgid "Build power generators"
-msgstr ""
+msgstr "Construye generadores de energía"
 
 msgid "Capture oil resources"
-msgstr ""
+msgstr "Captura recursos petroleros"
 
 msgid "That didn't go well..."
-msgstr ""
+msgstr "Eso no salió bien..."
 
 msgid "I have another plan"
-msgstr ""
+msgstr "Tengo otro plan"
 
 msgid "Good game"
-msgstr ""
+msgstr "Buena partida"
 
 msgid "I give up"
-msgstr ""
+msgstr "Me rindo"
 
 msgid "Sorry, I have to leave"
-msgstr ""
+msgstr "Lo siento, tengo que salir"
 
 msgid "Message delivery failure - try again"
-msgstr ""
+msgstr "Falla al entregar el mensaje - inténtalo de nuevo"
 
 msgid "Map Downloaded"
-msgstr ""
+msgstr "Mapa Descargado"
 
 msgid "Admin modified a setting"
-msgstr ""
+msgstr "Administrador modificó un ajuste"
 
 msgid "Bot Allies"
-msgstr ""
+msgstr "Robots Aliados"
 
 msgid "Human Allies"
-msgstr ""
+msgstr "Humanos Aliados"
 
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr ""
+msgstr "Has enviado demasiados mensajes en los últimos segundos. Por favor, espera e inténtalo de nuevo."
 
 msgid "Research Progress"
 msgstr "Progreso de Investigación"
@@ -8511,22 +8522,22 @@ msgid "Ally progress"
 msgstr "Progreso aliado"
 
 msgid "Tanks"
-msgstr ""
+msgstr "Tanques"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cíborgs"
 
 msgid "No teammates."
-msgstr ""
+msgstr "No hay compañeros."
 
 msgid "Waiting for other teams to finish planning."
-msgstr ""
+msgstr "Esperando a que otros equipos terminen de planificar."
 
 msgid "Weapons:"
-msgstr ""
+msgstr "Armas:"
 
 msgid "Units:"
-msgstr ""
+msgstr "Unidades:"
 
 msgid "Resume Game"
 msgstr "Continuar Partida"
@@ -8547,7 +8558,7 @@ msgid "Go Back"
 msgstr "Ir Atrás"
 
 msgid "View Guide"
-msgstr ""
+msgstr "Ver Guía"
 
 msgid "Load Game"
 msgstr "Cargar Partida"
@@ -8606,48 +8617,48 @@ msgstr ""
 
 #, c-format
 msgid "Failure to load %zu game model(s)"
-msgstr ""
+msgstr "Error al cargar modelo(s) de la partida %zu"
 
 #, c-format
 msgid "Failure to load textures for %zu model(s)"
-msgstr ""
+msgstr "Error al cargar texturas para modelo(s) %zu"
 
 #, c-format
 msgid "Failure to load model for %zu stat(s)"
-msgstr ""
+msgstr "Error al cargar el modelo para estadística(s) %zu"
 
 msgid "Warzone 2100 encountered error(s) loading game data:"
-msgstr ""
+msgstr "Warzone 2100 encontró error(es) al cargar datos de la partida:"
 
 msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
-msgstr ""
+msgstr "Por favor, intenta eliminar cualquier nuevo mod - pueden tener problemas o ser incompatibles con esta versión."
 
 msgid "Loaded mod(s):"
-msgstr ""
+msgstr "Mod(s) cargado(s):"
 
 msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
-msgstr ""
+msgstr "Los archivos del juego base pueden estar corruptos o desactualizados - por favor intenta reinstalar el juego."
 
 msgid "Error Loading Game Data"
-msgstr ""
+msgstr "Error al cargar datos del juego"
 
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Atajos de Teclado Globales"
 
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Otros Atajos de Teclado"
 
 msgid "Gameplay"
 msgstr "Juego"
 
 msgid "Debug"
-msgstr ""
+msgstr "Depurar"
 
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Depurar (editor de niveles)"
 
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Depurar (selección)"
 
 msgid "Manufacture"
 msgstr "Fabricación"
@@ -8917,10 +8928,10 @@ msgid "Toggle Team Chat History"
 msgstr "Mostrar Historial de Chat de Equipo"
 
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Rotar edificio en sentido horario"
 
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Rotar edificio en sentido antihorario"
 
 msgid "Center View on HQ"
 msgstr "Centrar Vista en CG"
@@ -8977,10 +8988,10 @@ msgid "Send Team Text Message"
 msgstr "Enviar Mensaje de Texto de Equipo"
 
 msgid "Send Global Quick Chat"
-msgstr ""
+msgstr "Enviar Mensaje Global Rápido"
 
 msgid "Send Team Quick Chat"
-msgstr ""
+msgstr "Enviar Mensaje Rápido de Equipo"
 
 msgid "Drop a beacon"
 msgstr "Poner una baliza"
@@ -9020,7 +9031,7 @@ msgstr "Seleccionar todas las Unidades Gravemente Dañadas"
 
 #, no-c-format
 msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr ""
+msgstr "Seleccionar todas las Unidades de Combate en Tierra con salud >50% y que no están en Grupos."
 
 msgid "Select all Half-tracks"
 msgstr "Selecionar todos los Semi-oruga"
@@ -9068,7 +9079,7 @@ msgid "Select all Combat Cyborgs"
 msgstr "Seleccionar todos los Cyborgs de Combate"
 
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "Seleccionar todos los Cíborgs de Combate sin grupo"
 
 msgid "Select all Engineers"
 msgstr "Seleccionar todos los Ingenieros"
@@ -9077,7 +9088,7 @@ msgid "Select all Land Combat Units"
 msgstr "Seleccionar todas las Unidades de Combate Terrestre"
 
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "Seleccionar todas las Unidades de Combate de Tierra sin grupo"
 
 msgid "Select all Mechanics"
 msgstr "Seleccionar todas los Mecánicos"
@@ -9092,7 +9103,7 @@ msgid "Select all Sensor Units"
 msgstr "Seleccionar todas las unidades de Sensor"
 
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "Seleccionar todas las Unidades de Sensor sin grupo"
 
 msgid "Select all Trucks"
 msgstr "Seleccionar todos los Camiones"
@@ -9122,7 +9133,7 @@ msgid "Jump to next Power Generator"
 msgstr "Saltar al próximo generador de energía"
 
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Saltar a la próxima Fábrica de Cíborg"
 
 msgid "Jump to next VTOL Factory"
 msgstr ""
@@ -9131,10 +9142,10 @@ msgid "Toggle Debug Mappings"
 msgstr "Alternar Mapeos de Depuración"
 
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "Priorizar Mapeos de Depuración"
 
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Alternar Editor de Nivel"
 
 msgid "Toggle display of droid path"
 msgstr "Mostrar ruta de droide"
@@ -9185,7 +9196,7 @@ msgid "Trace a game object"
 msgstr "Rastrear un objeto del juego"
 
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Alternar pantalla completa"
 
 msgid "Waiting for Power"
 msgstr "Esperando por la energía"
@@ -9198,7 +9209,7 @@ msgstr "Poder Por Segundo"
 
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d torre(s) de perforación inactivas"
 
 msgid "Need more resources!"
 msgstr "¡Recursos escasos!"
@@ -9328,7 +9339,7 @@ msgid "Research Update"
 msgstr "Actualización de Investigación"
 
 msgid "Project Goals and Updates"
-msgstr ""
+msgstr "Metas y actualizaciones del proyecto"
 
 msgid "Current Objective"
 msgstr "Objetivo Actual"
@@ -9358,7 +9369,7 @@ msgid "Circle"
 msgstr "Círculo"
 
 msgid "Accept Retreating Units"
-msgstr ""
+msgstr "Aceptar poner unidades en retirada"
 
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Lo siento, ese truco está deshabilitado en partidas multijugador."
@@ -9367,10 +9378,10 @@ msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "¡Atención! Esta trampa tiene bugs. Recomendamos NO usarla."
 
 msgid "Gateways toggled."
-msgstr ""
+msgstr "Entradas alternadas."
 
 msgid "Path display toggled."
-msgstr ""
+msgstr "Mostrar ruta alternada."
 
 #, c-format
 msgid "Player %d: %d power"
@@ -9415,10 +9426,10 @@ msgid "Power overwhelming"
 msgstr "Poder aplastante"
 
 msgid "A power fantasy!"
-msgstr ""
+msgstr "¡Una fantasía de poder!"
 
 msgid "Taking things easy!"
-msgstr ""
+msgstr "¡Cógela suave!"
 
 msgid "Back to normality!"
 msgstr "¡De vuelta a la rutina!"
@@ -9427,7 +9438,7 @@ msgid "Getting tricky!"
 msgstr "¡Haciéndolo difícil!"
 
 msgid "In a nightmare!"
-msgstr ""
+msgstr "¡En una pesadilla!"
 
 msgid "Twice as nice!"
 msgstr "¡Dos veces bueno!"
@@ -9455,13 +9466,13 @@ msgid "Infinite power enabled"
 msgstr "Energía ilimitada activada"
 
 msgid "Lighting values for all tiles recalculated"
-msgstr ""
+msgstr "Valores de iluminación recalculados para todas las teselas"
 
 msgid "All items made available"
 msgstr "Todos los artículos disponibles"
 
 msgid "Tile info dumped into log"
-msgstr ""
+msgstr "Información de mosaico volcada en el registro"
 
 msgid "Fog on"
 msgstr "Niebla activada"
@@ -9474,7 +9485,7 @@ msgid "Setting radar zoom to %u"
 msgstr "Fijado zoom de radar a %u"
 
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Alternando prioridad de mapeo de depuración: "
 
 msgid "Disabling level editor"
 msgstr "Deshabilitando editor de nivel"
@@ -9505,7 +9516,7 @@ msgid "SKIRMISH"
 msgstr "ESCARAMUZA"
 
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "DIFICULTAD: SÚPER SENCILLA"
 
 msgid "DIFFICULTY: EASY"
 msgstr "DIFICULTAD: FÁCIL"
@@ -9520,10 +9531,10 @@ msgid "DIFFICULTY: INSANE"
 msgstr "DIFICULTAD: LOCA"
 
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "TRAMPAS: ACTIVADAS"
 
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "TRAMPAS: DESACTIVADAS"
 
 msgid "Researched EVERYTHING for you!"
 msgstr "¡Investigado TODO para ti!"
@@ -9584,10 +9595,10 @@ msgid "Unable to locate HQ!"
 msgstr "¡Incapaz de encontrar el CG!"
 
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "Límite de velocidad de formación ACTIVADO"
 
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "Límite de velocidad de formación APAGADO"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Dirección de Rotación Vertical: Normal"
@@ -9596,7 +9607,7 @@ msgid "Vertical rotation direction: Flipped"
 msgstr "Dirección de Rotación Vertical: Invertida"
 
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Pantalla sacudida cuando las cosas mueren: Apagado"
 
 msgid "Screen shake when things die: On"
 msgstr "Sacudida de pantalla cuando cosas mueren: Activado"
@@ -9634,25 +9645,25 @@ msgid "Radar showing height"
 msgstr "Radar mostrando alturas"
 
 msgid "Asserts turned off"
-msgstr ""
+msgstr "Aserciones desactivadas"
 
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Guardar rápido no está permitido para partidas con múltiples jugadores o tutoriales"
 
 msgid "QuickSave not allowed in Autosaves-Only mode"
-msgstr ""
+msgstr "Guardar rápido no está permitido en modo Autoguardar-únicamente"
 
 msgid "QuickSave failed"
 msgstr "GuardadoRápido falló"
 
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Cargar rápido no está permitido para partidas con múltiples jugadores o tutoriales"
 
 msgid "QuickLoad not allowed in Autosaves-Only mode"
-msgstr ""
+msgstr "Cargar rápido no está permitido en modo Autoguardar-únicamente"
 
 msgid "QuickSave file does not exist yet"
-msgstr ""
+msgstr "El archivo de guardar rápido aún no existe"
 
 msgid "<not bound>"
 msgstr "<not bound>"
@@ -9679,7 +9690,7 @@ msgid "Autosave directory (not allowed for saving)"
 msgstr "Directorio de Guardado Rápida (no permitido para guardado)"
 
 msgid "cheated"
-msgstr ""
+msgstr "se hizo trampa"
 
 #, c-format
 msgid "AutoSave %s"
@@ -9696,10 +9707,10 @@ msgid "Load Transport"
 msgstr "Cargar Transporte"
 
 msgid "Shows the number of units currently loaded into the mission transporter, and the total capacity."
-msgstr ""
+msgstr "Muestra el número de unidades actualmente cargadas en el transporte de misiones, y la capacidad total."
 
 msgid "Open the Transporter Load Menu"
-msgstr ""
+msgstr "Abrir el menú del Transportador de Carga"
 
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "¡OBJETIVO CUMPLIDO con trampas!"
@@ -9837,6 +9848,18 @@ msgstr "Introducir contraseña aquí"
 msgid "Select Player Name"
 msgstr "Elegir Nombre del Jugador"
 
+msgid "Blind Game:"
+msgstr "Juego a Ciegas:"
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr "- Los nombres de los jugadores no serán visibles para otros jugadores (hasta que el juego haya terminado)"
+
+msgid "Blind Lobby:"
+msgstr "Sala de Espera a Ciegas:"
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr "- Los nombres de los jugadores no serán visibles para otros jugadores (hasta que la partida haya comenzado)"
+
 msgid "Alliances"
 msgstr "Alianzas"
 
@@ -9848,6 +9871,21 @@ msgstr "Previsualizar Mapa"
 
 msgid "Click to see Map"
 msgstr "Click para ver Mapa"
+
+msgid "Tech"
+msgstr "Tecnología"
+
+msgid "Technology Level 1"
+msgstr "Nivel Tecnológico 1"
+
+msgid "Technology Level 2"
+msgstr "Nivel Tecnológico 2"
+
+msgid "Technology Level 3"
+msgstr "Nivel Tecnológico 3"
+
+msgid "Technology Level 4"
+msgstr "Nivel Tecnológico 4"
 
 msgid "Show Structure Limits"
 msgstr "Fijar Límites de Estructuras"
@@ -9864,21 +9902,6 @@ msgid ""
 msgstr ""
 "Opciones de Juego Aleatorias\n"
 "Puede ser bloqueado por votación de los jugadores"
-
-msgid "Tech"
-msgstr "Tecnología"
-
-msgid "Technology Level 1"
-msgstr "Nivel Tecnológico 1"
-
-msgid "Technology Level 2"
-msgstr "Nivel Tecnológico 2"
-
-msgid "Technology Level 3"
-msgstr "Nivel Tecnológico 3"
-
-msgid "Technology Level 4"
-msgstr "Nivel Tecnológico 4"
 
 msgid "Start Hosting Game"
 msgstr "Comenzar Hospedando un Juego"
@@ -9908,24 +9931,24 @@ msgid "Leave this slot unused"
 msgstr "Dejar esta ranura sin utilizar"
 
 msgid "Allow spectators to join in this slot"
-msgstr ""
+msgstr "Permitir a los espectadores unirse a esta casilla"
 
 msgid "Click to change to this slot"
 msgstr "Click para cambiar a esta ranura"
 
 #, c-format
 msgid "Click to take player slot %u"
-msgstr ""
+msgstr "Haz clic para tomar la casilla de jugador %u"
 
 msgid "Click to swap player to this slot"
-msgstr ""
+msgstr "Haz clic para cambiar con el jugador de esta casilla"
 
 #, c-format
 msgid "Spectator %s has moved to Players"
-msgstr ""
+msgstr "El Espectador %s se ha movido a Jugadores"
 
 msgid "Cannot swap with host"
-msgstr ""
+msgstr "No se puede intercambiar con el anfitrión"
 
 msgid "Spectator"
 msgstr "Espectador"
@@ -9935,22 +9958,22 @@ msgid "The host has kicked %s from the game!"
 msgstr "¡El anfitrión ha expulsado a %s de la partida!"
 
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "El anfitrión te ha expulsado del juego."
 
 #, c-format
 msgid "The host has banned %s from the game!"
-msgstr ""
+msgstr "¡El anfitrión ha baneado a %s del juego!"
 
 msgid "The host has banned you from the game."
-msgstr ""
+msgstr "El host te ha baneado del juego."
 
 #, c-format
 msgid "Failed to move %s to Spectators"
-msgstr ""
+msgstr "Error al mover %s a los Espectadores"
 
 #, c-format
 msgid "The host has moved %s to Spectators!"
-msgstr ""
+msgstr "¡El anfitrión ha movido a %s como Espectador!"
 
 msgid "Move to Spectators"
 msgstr "Mover a Espectadores"
@@ -9963,14 +9986,14 @@ msgstr "Preguntar a Jugar"
 
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr ""
+msgstr "El Espectador %s quiere seguir siendo un Espectador"
 
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr ""
+msgstr "El Jugador %s quiere seguir siendo un Jugador"
 
 msgid "Host has declined to switch you to a Player"
-msgstr ""
+msgstr "El anfitrión ha rechazado cambiarte a Jugador"
 
 msgid "Unable to switch to Spectator"
 msgstr "Incapaz de cambiar a Espectador"
@@ -9979,7 +10002,7 @@ msgid "Do you want to spectate?"
 msgstr "¿Quieres espectar?"
 
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr ""
+msgstr "El anfitrión de este juego quiere saber si estás dispuesto a ser espectador?"
 
 msgid "You are currently a Player."
 msgstr "Ahora mismo eres un Jugador."
@@ -9991,7 +10014,7 @@ msgid "Do you want to play?"
 msgstr "¿Quieres jugar?"
 
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr ""
+msgstr "El anfitrión de este juego quiere saber si desearías jugar?"
 
 msgid "You are currently a Spectator."
 msgstr "Ahora mismo eres un Espectador."
@@ -10005,7 +10028,7 @@ msgstr "Jugador %s ha sido movido a Espectadores"
 
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
-msgstr ""
+msgstr "No se puede mover %s a Jugadores, no hay casillas disponibles"
 
 msgid "Spectator would like to become a Player"
 msgstr "Al Espectador le gustaría volverse un Jugador"
@@ -10015,13 +10038,20 @@ msgid "Spectator \"%s\" would like to become a player."
 msgstr "Al Espectador \"%s\" le gustaría volverse un jugador."
 
 msgid "However, there are currently no open Player slots."
-msgstr ""
+msgstr "Sin embargo, actualmente no hay casillas abiertas para Jugadores."
 
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "¿Quieres intercambiar este Espectador con un Jugador?"
 
 msgid "Yes, select Player slot"
-msgstr ""
+msgstr "Sí, seleccionar casilla de Jugador"
+
+msgid "BLIND LOBBY NOTICE:"
+msgstr "MENSAJE DE SALA DE ESPERA A CIEGAS:"
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr "Se te ha asignado el sobrenombre: \"%s\""
 
 msgid "Joined:"
 msgstr "Unido:"
@@ -10033,71 +10063,13 @@ msgid "Players"
 msgstr "Jugadores"
 
 msgid "Host Options"
-msgstr ""
+msgstr "Opciones de Host"
 
 msgid "Enable Spectator Join"
 msgstr "Activar la Unión del Espectador"
 
 msgid "Lock Teams"
-msgstr ""
-
-msgid "Choose Team"
-msgstr "Elegir equipo"
-
-msgid "Teams locked"
-msgstr "Equipos bloqueados"
-
-msgid "Click to change player colour"
-msgstr "Click para cambiar el color de jugador"
-
-msgid "Click to change player position"
-msgstr "Click para cambiar la posición de jugador"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Clic para cambiar IA, clic derecho para distribuír la elección"
-
-msgid "Click to close spectator slot"
-msgstr ""
-
-msgid "Player ID: "
-msgstr "ID Jugador: "
-
-msgid "(none)"
-msgstr "(ninguno)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr "De: %s"
-
-msgid "Click to change difficulty"
-msgstr "Click para ajustar dificultad de la IA"
-
-msgid "Waiting for player"
-msgstr "Esperando por jugador"
-
-msgid "Player is ready"
-msgstr "El Jugador está listo"
-
-msgid "Player is downloading"
-msgstr "El Jugador está descargando"
-
-msgid "Click when ready"
-msgstr "Click cuando esté listo"
-
-msgid "Waiting for download"
-msgstr "Esperando descarga"
-
-msgid "READY?"
-msgstr "¿LISTO?"
+msgstr "Bloquear Equipos"
 
 msgid "For Spectator:"
 msgstr "Para Espectador:"
@@ -10106,31 +10078,31 @@ msgid "For Player:"
 msgstr "Para Jugador:"
 
 msgid "Choose Player Slot"
-msgstr ""
+msgstr "Elegir Casilla del Jugador"
 
 msgid "PLAYERS"
 msgstr "JUGADORES"
 
 msgid "Add spectator slot"
-msgstr ""
+msgstr "Añadir Casilla de Espectador"
 
 msgid "Kicked from game"
 msgstr "Expulsado del juego"
 
 msgid "The host has disabled free chat. Please use Quick Chat."
-msgstr ""
+msgstr "El anfitrión ha deshabilitado la conversación. Por favor usa conversación rápida."
 
 msgid "Quick Chat"
-msgstr ""
+msgstr "Conversación Rápida"
 
 msgid "Press the Tab key to open Quick Chat."
-msgstr ""
+msgstr "Pulsa la tecla Tab para abrir Conversación Rápida."
 
 msgid "The host has disabled free chat. Please use Quick Chat or /hostmsg commands."
-msgstr ""
+msgstr "El anfitrión ha deshabilitado la conversación. Por favor usa comandos de Conversación Rápida o /hostmsg."
 
 msgid "The host has enabled free chat for you."
-msgstr ""
+msgstr "El host te ha concedido voz en la conversación."
 
 msgid "Copy Text to Clipboard"
 msgstr "Copiar texto al portapapeles"
@@ -10147,13 +10119,13 @@ msgid "CHAT"
 msgstr "CHAT"
 
 msgid "Multiplayer Lobby Support Unavailable"
-msgstr ""
+msgstr "Soporte de Sala de Espera para Varios Jugadores No Disponible"
 
 msgid "Your client cannot connect to the mutiplayer lobby."
-msgstr ""
+msgstr "Tu cliente no puede conectarse a la sala de espera de varios jugadores."
 
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Por favor, haz clic en el botón de abajo para más información sobre cómo arreglarlo."
 
 msgid "More Information"
 msgstr "Más Información"
@@ -10182,11 +10154,11 @@ msgstr "Anfitrión Comenzando Partida"
 
 #, c-format
 msgid "Host: Free chat enabled for: %s"
-msgstr ""
+msgstr "Anfitrión: Se concedió voz a: %s"
 
 #, c-format
 msgid "Host: Free chat muted for: %s"
-msgstr ""
+msgstr "Anfitrión: Se silenció a: %s"
 
 #, c-format
 msgid "Moving %s to Spectators!"
@@ -10194,37 +10166,37 @@ msgstr "¡Moviendo %s a espectadores!"
 
 #, c-format
 msgid "Asking %s to move to Players..."
-msgstr ""
+msgstr "Pidiendo a %s que se mueva a Jugadores..."
 
 msgid "Disconnected from host:"
-msgstr ""
+msgstr "Desconectado del anfitrión:"
 
 msgid "Host supplied invalid options"
-msgstr ""
+msgstr "El anfitrión suministró opciones no válidas"
 
 msgid "Host supplied invalid host config"
-msgstr ""
+msgstr "El anfitrión suministró configuración de host inválida"
 
 msgid "You have been kicked: "
 msgstr "Has sido expulsado: "
 
 msgid "Connection lost:"
-msgstr ""
+msgstr "Conexión perdida:"
 
 msgid "No connection to host."
 msgstr "Sin conexión al anfitrión."
 
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr ""
+msgstr "El anfitrión me trasladó a Jugadores, pero nunca he dado permiso para este cambio. ¡Adiós!"
 
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr ""
+msgstr "El anfitrión trató de trasladarnos a Jugadores, pero nunca dimos permiso."
 
 msgid "Cannot change to a map with too few slots for all players."
 msgstr "No se puede cambiar a un mapa con espacios insuficientes para todos los jugadores."
 
 msgid "Cannot change to a map with fewer slots."
-msgstr ""
+msgstr "No se puede cambiar a un mapa con menos casillas."
 
 msgid "The host has quit."
 msgstr "El Anfitrión abandonó."
@@ -10236,24 +10208,39 @@ msgid "Press the start hosting button to begin hosting a game."
 msgstr "Pulsa el botón de hospedar para hospedar una partida."
 
 msgid "Port mapping creation is in progress..."
-msgstr ""
+msgstr "La creación del mapeo de puertos está en curso..."
 
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
-msgstr ""
+msgstr "El mapeo de puertos fue deshabilitado por el usuario. La configuración automática del puerto %d no sucederá."
+
+msgid "BLIND GAME NOTICE:"
+msgstr "MENSAJE DE SALA DE ESPERA A CIEGAS:"
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr "Los nombres de los jugadores no serán visibles para otros jugadores (hasta que el juego haya terminado)"
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr "Los nombres de los jugadores no serán visibles para otros jugadores (hasta que la partida haya comenzado)"
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr "IMPORTANTE: El anfitrión es un jugador, y puede ver y configurar otros jugadores (!)"
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr "El anfitrión es un espectador, y puede ver las identidades del jugador y configurar jugadores / equipos"
 
 msgid "Failed to load challenge:"
-msgstr ""
+msgstr "Error al cargar el desafío:"
 
 msgid "Failed to load the challenge's map or config"
-msgstr ""
+msgstr "Error al cargar el mapa o la configuración del desafío"
 
 msgid "Failed to process autohost config:"
-msgstr ""
+msgstr "Error al procesar la configuración automática de anfitrión:"
 
 #, c-format
 msgid "Failed to load the autohost map or config from: %s"
-msgstr ""
+msgstr "Error al cargar el mapa automático de anfitrión o la configuración desde: %s"
 
 msgid "Closed"
 msgstr "Cerrado"
@@ -10261,39 +10248,25 @@ msgstr "Cerrado"
 msgid "Open"
 msgstr "Abrir"
 
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Enviando Mapa: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Mapa: %u%% descargado"
-
-msgid "HOST"
-msgstr "ANFITRIÓN"
-
-msgid "Ping"
-msgstr "Ping"
-
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr ""
+msgstr "La versión de Warzone 2100 usada para guardar este archivo de repetición no coincide con la versión en ejecución actual."
 
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr ""
+msgstr "Archivo Repetición guardado con: \"%s\""
 
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
-msgstr ""
+msgstr "La Versión actual de Warzone 2100: \"%s\""
 
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr ""
+msgstr "Las repeticiones generalmente deben reproducirse con la misma versión utilizada al guardar la repetición."
 
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr ""
+msgstr "La repetición puede no realizarse con éxito, o puede haber diferencias en la simulación."
 
 msgid "Replay Version Mismatch"
-msgstr ""
+msgstr "Incongruencia en la Versión de Repetición"
 
 #, c-format
 msgid "%s has Left the Game"
@@ -10301,21 +10274,25 @@ msgstr "%s abandonó la partida"
 
 #, c-format
 msgid "%s joined the Game"
-msgstr ""
+msgstr "%s se ha unido a la Partida"
+
+#, c-format
+msgid "(codename: %s)"
+msgstr "(sobrenombre: %s)"
 
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "La transferencia de archivos ha sido abortada para %d."
 
 msgid "The game is already full."
-msgstr ""
+msgstr "La partida ya está llena."
 
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) tiene un mod incompatible, y ha sido expulsado."
 
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "¡Tus datos no coinciden con los del anfitrión!"
 
 #, c-format
 msgid "%s is joining the game"
@@ -10346,13 +10323,13 @@ msgid "Limits reset to default values"
 msgstr "Límites reiniciados a valores por defecto"
 
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Restablecer límites a valores predeterminados"
 
 msgid "Administrator has kicked you from the game."
 msgstr "El administrador te ha expulsado del juego."
 
 msgid "Search for map"
-msgstr ""
+msgstr "Buscar mapa"
 
 msgid "Any number of players"
 msgstr "Cualquier número de jugadores"
@@ -10362,6 +10339,9 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d jugador"
 msgstr[1] "%d jugadores"
+
+msgid "Ping"
+msgstr "Ping"
 
 msgid "Structs"
 msgstr "Estructuras"
@@ -10394,7 +10374,7 @@ msgid "Give Power To Player"
 msgstr "Dar Energía al Jugador"
 
 msgid "Toggle Chat Mute"
-msgstr ""
+msgstr "Alternar silenciar conversación"
 
 msgid "Sent/Received per sec —"
 msgstr "Enviado/Recibido por segundo —"
@@ -10415,36 +10395,36 @@ msgid "Pack: %lu/%lu"
 msgstr "Paquete: %lu/%lu"
 
 msgid "Players View"
-msgstr ""
+msgstr "Vista de Jugadores"
 
 msgid "Team Strategy"
-msgstr ""
+msgstr "Estrategia de Equipo"
 
 #, c-format
 msgid "Changed structure limits [%d]:"
-msgstr ""
+msgstr "Límites de estructura cambiados [%d]:"
 
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
+msgstr "[%d] Límite [%s]: %u (predeterminado: %u)"
 
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
+msgstr "[%d] Límite [%s]: %u (predeterminado: sin límite)"
 
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 msgid "Limits were reset to default."
-msgstr ""
+msgstr "Los límites se restablecieron a los predeterminados."
 
 #, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
 msgid "MAP REQUESTED!"
-msgstr ""
+msgstr "¡MAP SOLICITADO!"
 
 msgid "MOD REQUESTED!"
 msgstr ""
@@ -10456,18 +10436,18 @@ msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr "Atención, ¡el ANFITRIÓN alteró el código del juego, y puede no ser fiable!"
 
 msgid "The host has enabled free chat for everyone."
-msgstr ""
+msgstr "El anfitrión ha habilitado la conversación para todos."
 
 msgid "The host has muted free chat for everyone."
-msgstr ""
+msgstr "El anfitrión ha silenciado la conversación para todos."
 
 #, c-format
 msgid "The host has enabled free chat for player: %s"
-msgstr ""
+msgstr "El anfitrión otorgó voz al jugador: %s"
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
-msgstr ""
+msgstr "El anfitrión silenció al jugador: %s"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10478,10 +10458,10 @@ msgstr "¡Datos no válidos!"
 
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr ""
+msgstr "Expulsión automática del jugador %s, orden inválida recibida: %u"
 
 msgid "Unauthorized network command"
-msgstr ""
+msgstr "Comando de red no autorizado"
 
 msgid "REPLAY HAS ENDED"
 msgstr "REPRODUJO HA TERMINADO"
@@ -10491,7 +10471,7 @@ msgstr "Oprime ESC para salir."
 
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "Expulsión automática del jugador %s, orden inválida recibida."
 
 msgid "Map was requested: SENDING MAP!"
 msgstr "Mapa solicitado: ¡ENVIANDO MAPA!"
@@ -10566,67 +10546,67 @@ msgstr "Eres un espectador. ¡Disfruta viendo el juego!"
 
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr ""
+msgstr "%s (%d) permitió el cambio de mapa. Total: %d/%d"
 
 #, c-format
 msgid "A player voted FOR kicking: %s"
-msgstr ""
+msgstr "Un jugador votó a favor de EXPULSAR: %s"
 
 #, c-format
 msgid "A player voted AGAINST kicking: %s"
-msgstr ""
+msgstr "Un jugador votó EN CONTRA de expulsar: %s"
 
 #, c-format
 msgid "A player's client ignored your vote to kick request (too frequent): %s"
-msgstr ""
+msgstr "El cliente de un jugador ignoró tu solicitud de votación para expulsar (demasiado frecuente): %s"
 
 msgid "Vote"
 msgstr "Votar"
 
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "¿Permitir que el anfitrión cambie mapa o aleatorio?"
 
 msgid "A vote was started to kick you from the game."
-msgstr ""
+msgstr "Comenzó una votación para expulsarte del juego."
 
 #, c-format
 msgid "A vote was started to kick %s from the game."
-msgstr ""
+msgstr "Comenzó una votación para expulsar a %s del juego."
 
 #, c-format
 msgid "Vote To Kick: %s"
-msgstr ""
+msgstr "Votación Para Expulsar: %s"
 
 #, c-format
 msgid "Should player %s be kicked from the game?"
-msgstr ""
+msgstr "¿Se debe expulsar al jugador %s del juego?"
 
 msgid "Yes, Kick Them"
-msgstr ""
+msgstr "Sí, expulsarlos"
 
 #, c-format
 msgid "The vote to kick player %s succeeded (sufficient votes in favor) - kicking"
-msgstr ""
+msgstr "La votación para expulsar al jugador %s tuvo éxito (suficientes votos a favor) - expulsando"
 
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes in favor)"
-msgstr ""
+msgstr "La votación para expulsar al jugador %s falló (votos insuficientes a favor)"
 
 #, c-format
 msgid "The vote to kick player %s failed (insufficient votes before timeout)"
-msgstr ""
+msgstr "La votación para expulsar al jugador %s falló (votos insuficientes antes del tiempo de espera)"
 
 #, c-format
 msgid "The vote to kick player %s failed"
-msgstr ""
+msgstr "La votación para expulsar al jugador %s falló"
 
 #, c-format
 msgid "Cannot request vote to kick player %s yet - please wait a bit longer"
-msgstr ""
+msgstr "No se puede solicitar votación para expulsar al jugador %s aún - por favor espera un poco más"
 
 #, c-format
 msgid "Starting vote to kick player: %s"
-msgstr ""
+msgstr "Iniciando votación para expulsar al jugador: %s"
 
 msgid "NOW PLAYING"
 msgstr "JUGANDO AHORA"
@@ -10641,7 +10621,7 @@ msgid "Title"
 msgstr "Título"
 
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "ADMINISTRADOR DE MÚSICA"
 
 msgid "Dismiss"
 msgstr "Denegar"
@@ -10653,11 +10633,11 @@ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "¡No podemos hacer eso! ¡Debemos ser una unidad cyborg para usar el transporte Cyborg!"
 
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr ""
+msgstr "¡Error al cargar la IA seleccionada! Comprueba tus registros para ver por qué."
 
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr ""
+msgstr "¡Se ha cargado el script de IA %s para el jugador actual!"
 
 #, c-format
 msgid "Research completed: %s"
@@ -10760,10 +10740,10 @@ msgid "You cheated!"
 msgstr "¡Hiciste trampa!"
 
 msgid "Use Quick Chat to chat with other players."
-msgstr ""
+msgstr "Usa la Conversación Rápida para comunicarte con otros jugadores."
 
 msgid "The host has disabled free chat."
-msgstr ""
+msgstr "El host ha silenciado la conversación."
 
 msgid "Chat: All"
 msgstr "Chat: Todos"
@@ -10772,70 +10752,70 @@ msgid "Chat: Team"
 msgstr "Chat: Equipo"
 
 msgid "Did not send message - free chat is disabled by host. Please use Quick Chat."
-msgstr ""
+msgstr "No se envió el mensaje - la conversación está silenciada por el anfitrión. Por favor, utilice la Conversación Rápida."
 
 msgid "See Also:"
-msgstr ""
+msgstr "Ver también:"
 
 msgid "Game Guide"
-msgstr ""
+msgstr "Guía de Juego"
 
 msgid "Toggle Sidebar"
-msgstr ""
+msgstr "Ocultar/Mostrar la barra lateral"
 
 msgid "Disable Topic Pop-ups"
-msgstr ""
+msgstr "Desactivar Notificaciones de Temas"
 
 msgid "Close Help Mode"
-msgstr ""
+msgstr "Cerrar Modo de Ayuda"
 
 msgid "Click/Tap"
-msgstr ""
+msgstr "Clic/Tocar"
 
 msgid "Right-Click"
-msgstr ""
+msgstr "Clic derecho"
 
 msgid "Click/Tap and Hold"
-msgstr ""
+msgstr "Clic/Toque y Mantener pulsado"
 
 msgid "Other"
-msgstr ""
+msgstr "Otro"
 
 msgid "Interactions:"
-msgstr ""
+msgstr "Interacciones:"
 
 msgid "Related Keymappings:"
-msgstr ""
+msgstr "Mapeo de teclas relacionadas:"
 
 msgid "Enter password"
-msgstr ""
+msgstr "Introducir Contraseña"
 
 msgid "OK"
 msgstr "OK"
 
 msgid "Connecting to Game"
-msgstr ""
+msgstr "Conectando al Juego"
 
 msgid "Status:"
-msgstr ""
+msgstr "Estado:"
 
 msgid "Cancel"
 msgstr "Cancelar"
 
 msgid "Game requires a password to join"
-msgstr ""
+msgstr "El juego requiere una contraseña para unirse"
 
 msgid "Unable to Join Game"
-msgstr ""
+msgstr "No se pudo unir al juego"
 
 msgid "Error:"
-msgstr ""
+msgstr "Error:"
 
 msgid "Join Attempt Rejected"
-msgstr ""
+msgstr "Intento de unión rechazado"
 
 msgid "Message from Host:"
-msgstr ""
+msgstr "Mensaje de Anfitrión:"
 
 msgid "Game is full"
 msgstr "Partida llena"
@@ -10844,10 +10824,10 @@ msgid "You were kicked!"
 msgstr "¡Has sido expulsado!"
 
 msgid "Your game version does not match the host"
-msgstr ""
+msgstr "Tu versión del juego no coincide con el anfitrión"
 
 msgid "The host rejected your connection due to invalid data"
-msgstr ""
+msgstr "El anfitrión rechazó tu conexión debido a datos no válidos"
 
 msgid "Host has dropped connection!"
 msgstr "¡El Host cerró la conexión!"
@@ -10856,76 +10836,88 @@ msgid "Connection Error"
 msgstr "Error de conexión"
 
 msgid "No connections available"
-msgstr ""
+msgstr "No hay conexiones disponibles"
 
 msgid "Synchronizing data with host ..."
-msgstr ""
+msgstr "Sincronizando datos con el anfitrión ..."
 
 msgid "Waiting for correct join password"
-msgstr ""
+msgstr "Esperando la contraseña correcta para unirse"
 
 msgid "Attempting to connect"
-msgstr ""
+msgstr "Intentando conexión"
 
 msgid "Establishing connection handshake"
-msgstr ""
+msgstr "Estableciendo la sincronización de conexión"
 
 msgid "Coordinating join with host"
-msgstr ""
+msgstr "Coordinando unirse con el anfitrión"
 
 msgid "Join attempt failed"
-msgstr ""
+msgstr "El intento de unión falló"
 
 msgid "Host did not respond before timeout"
-msgstr ""
+msgstr "El anfitrión no respondió antes del tiempo de espera"
 
 #, c-format
 msgid "Failed at: [%s] - %s"
-msgstr ""
+msgstr "Fallo en: [%s] - %s"
 
 #, c-format
 msgid "Failed at: [%s]"
-msgstr ""
+msgstr "Fallo en: [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"
-msgstr ""
+msgstr "Error al abrir la conexión: [%d] %s"
 
 msgid "Establishing connection with host"
-msgstr ""
+msgstr "Estableciendo conexión con el anfitrión"
 
 msgid "An internal error occurred"
-msgstr ""
+msgstr "Se ha producido un error interno"
 
 msgid "Invalid host - disconnected"
-msgstr ""
+msgstr "Anfitrión inválido - desconectado"
 
 msgid "Invalid host response"
-msgstr ""
+msgstr "Respuesta inválida del anfitrión"
 
 msgid "Requesting to join game"
-msgstr ""
+msgstr "Solicitando unirse al juego"
+
+msgid "Invalid host establishing data"
+msgstr "Datos inválidos de establecimiento del anfitrión"
+
+msgid "Invalid host identity"
+msgstr "Identidad de anfitrión inválida"
+
+msgid "Failed to establish session keys with host"
+msgstr "Error al establecer las claves de sesión con el anfitrión"
+
+msgid "Failure to generate valid response"
+msgstr "Error al generar una respuesta válida"
 
 msgid "Kick Spectator"
-msgstr ""
+msgstr "Expulsar Espectador"
 
 msgid "Kick Player"
-msgstr ""
+msgstr "Expulsar Jugador"
 
 msgid "Loading Status:"
-msgstr ""
+msgstr "Cargando Estado:"
 
 msgid "TEAM STRATEGY"
-msgstr ""
+msgstr "ESTRATEGÍA DE EQUIPO"
 
 msgid "Game will start in ..."
-msgstr ""
+msgstr "El juego comenzará en ..."
 
 msgid "Waiting for other players ..."
-msgstr ""
+msgstr "Esperando a otros jugadores..."
 
 msgid "Team Planning"
-msgstr ""
+msgstr "Planificación de Equipo"
 
 msgid "Unable to locate any repair units!"
 msgstr "¡Imposible localizar ninguna unidad de reparación!"
@@ -10940,7 +10932,7 @@ msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
 msgid "Cannot find required building!"
-msgstr ""
+msgstr "¡No se encuentra la construcción necesaria!"
 
 msgid "Loading video"
 msgstr "Cargando vídeo"
@@ -11048,7 +11040,7 @@ msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Producti
 msgstr "No se puede construir \"%s\" Límite de Unidades Constructoras Alcanzado — Producción Detenida"
 
 msgid "Laser Satellite is ready to fire!"
-msgstr ""
+msgstr "¡El Láser Satelital está listo para disparar!"
 
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
@@ -11092,15 +11084,15 @@ msgstr "ID %u - Multiplicador: %u"
 
 #, c-format
 msgid "ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d"
-msgstr ""
+msgstr "ID %u - Producción: %u - Puntos de construcción restantes: %u - Resistencia: %d / %d"
 
 #, c-format
 msgid "ID %u - Research Points: %u"
-msgstr ""
+msgstr "ID %u - Puntos de Investigación: %u"
 
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr ""
+msgstr "tesela %d,%d - objetivo %s"
 
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
@@ -11132,108 +11124,108 @@ msgid "Repair Facility Award - Nothing"
 msgstr "Premio de Instalación de Reparación - Nada"
 
 msgid "Classic"
-msgstr ""
+msgstr "Clásico"
 
 msgid "Additional Campaigns"
-msgstr ""
+msgstr "Campañas Adicionales"
 
 msgid "Start Game"
-msgstr ""
+msgstr "Iniciar partida"
 
 msgid "Tweak Options:"
-msgstr ""
+msgstr "Opciones de Ajuste:"
 
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "Restablecer valores Predeterminados"
 
 msgid "Command the forces of The Project in a battle to rebuild the world"
-msgstr ""
+msgstr "Comanda las fuerzas de El Proyecto en una batalla por reconstruir el mundo"
 
 msgid "Warzone 2100 Universe"
-msgstr ""
+msgstr "Universo Warzone 2100"
 
 msgid "WZ2100 Extended Universe"
-msgstr ""
+msgstr "Universo Extendido de Warzone 2100"
 
 msgid "Unique Universe"
-msgstr ""
+msgstr "Universo Único"
 
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Requiere %s"
 
 msgid "Compatible"
-msgstr ""
+msgstr "Compatible"
 
 #, c-format
 msgid "Compatible %s"
-msgstr ""
+msgstr "%s Compatible"
 
 msgid "Timer Power Bonus"
-msgstr ""
+msgstr "Bono de Energía por Temporizador"
 
 msgid "Grant power based on the remaining level timer, so there's no need to wait out the clock."
-msgstr ""
+msgstr "Conceder energía basada en el temporizador restante del nivel, por lo que no hay necesidad de esperar a agotar el tiempo."
 
 msgid "Classic Timers"
-msgstr ""
+msgstr "Temporizadores Clásicos"
 
 msgid "Alter / disable timers on specific levels, like the original release. (Allows power-cheating.)"
-msgstr ""
+msgstr "Alterar / desactivar temporizadores en niveles específicos, como la versión original. (Permite hacer trampa de energía.)"
 
 msgid "40 Unit Limit"
-msgstr ""
+msgstr "Límite de 40 Unidades"
 
 msgid "Lower the player's unit limit to 40, matching the original PS1 release."
-msgstr ""
+msgstr "Bajar el límite de unidades del jugador a 40, coincidiendo con la versión PS1 original."
 
 msgid "Autosaves-Only"
-msgstr ""
+msgstr "Solamente Guardado Automático"
 
 msgid "Disable the ability to manually save / quick-save, limit autosaves to the beginning of each level."
-msgstr ""
+msgstr "Deshabilita la capacidad de guardar manualmente / guardar rápido, limitar guardar automático únicamente al principio de cada nivel."
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "Modificadores PS1"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
-msgstr ""
+msgstr "Reduce el daño que el enemigo inflige a un tercio del modificador de dificultad actual."
 
 msgid "A more relaxed playthrough - easier than easy"
-msgstr ""
+msgstr "Un juego más relajado - más fácil que fácil"
 
 msgid "A slightly easier challenge than Normal"
-msgstr ""
+msgstr "Un desafío ligeramente más fácil que el normal"
 
 msgid "A fun & challenging experience"
-msgstr ""
+msgstr "Una experiencia divertida y desafiante"
 
 msgid "A challenge for players who have beaten the game"
-msgstr ""
+msgstr "Un desafío para los jugadores que han derrotado al juego"
 
 msgid "An unforgiving challenge for experienced players only"
-msgstr ""
+msgstr "Un desafío inolvidable sólo para jugadores experimentados"
 
 msgid "\"Classic\" campaign balance"
-msgstr ""
+msgstr "Balance de campaña \"Clásico\""
 
 msgid "Remastered"
-msgstr ""
+msgstr "Remasterizado"
 
 msgid "The remastered campaign experience"
-msgstr ""
+msgstr "La experiencia de campaña remasterizada"
 
 msgid "Difficulty:"
-msgstr ""
+msgstr "Dificultad:"
 
 msgid "Balance:"
-msgstr ""
+msgstr "Balance:"
 
 msgid "Start at:"
-msgstr ""
+msgstr "Comenzar en:"
 
 msgid "Tweaks:"
-msgstr ""
+msgstr "Ajustes:"
 
 msgid "CAMPAIGNS"
 msgstr "CAMPAÑAS"
@@ -11338,11 +11330,135 @@ msgstr "IP"
 msgid "IP Address or Machine Name"
 msgstr "Dirección IP o Nombre de la Máquina"
 
+msgid "Host:"
+msgstr "Anfitrión:"
+
+msgid "NOTE: Host is also a player."
+msgstr "NOTA: El anfitrión también es un jugador."
+
+msgid "Player ID: "
+msgstr "ID Jugador: "
+
+msgid "(none)"
+msgstr "(ninguno)"
+
+msgid "You:"
+msgstr "Tú:"
+
+msgid "Waiting for host to configure teams"
+msgstr "Esperando a que el anfitrión configure los equipos"
+
+msgid "Waiting for players"
+msgstr "Esperando jugadores"
+
+msgid "Downloading map / mods"
+msgstr "Descargando mapa / mods"
+
+msgid "Waiting for you to check ready"
+msgstr "Esperando a que marques listo"
+
+msgid "Waiting for host to start game"
+msgstr "Esperando a que el anfitrión inicie el juego"
+
+msgid "Waiting for spectators"
+msgstr "Esperando a los espectadores"
+
+msgid "Players ready & waiting for match:"
+msgstr "Jugadores listos y esperando la partida:"
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr "Jugadores: (%zu listos, %zu pendientes)"
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr "Jugadores IA: %zu"
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr "Espectadores: (%zu listos, %zu pendientes)"
+
+#, c-format
+msgid "Host: %s"
+msgstr "Anfitrión: %s"
+
+msgid "ready"
+msgstr "listo"
+
+msgid "not ready"
+msgstr "pendiente"
+
+msgid "Blind Waiting Room"
+msgstr "Sala de Espera a Ciegas"
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Enviando Mapa: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Mapa: %u%% descargado"
+
+msgid "HOST"
+msgstr "ANFITRIÓN"
+
+msgid "Choose Team"
+msgstr "Elegir equipo"
+
+msgid "Teams locked"
+msgstr "Equipos bloqueados"
+
+msgid "Click to change player colour"
+msgstr "Click para cambiar el color de jugador"
+
+msgid "Click to change player position"
+msgstr "Click para cambiar la posición de jugador"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Clic para cambiar IA, clic derecho para distribuír la elección"
+
+msgid "Click to close spectator slot"
+msgstr "Clic para cerrar la casilla de espectador"
+
+msgid "Alt Name:"
+msgstr "Nombre Alternativo:"
+
+msgid "Player rating:"
+msgstr "Puntuación del jugador:"
+
+msgid "Host provided"
+msgstr "Proporcionado por Anfitrión"
+
+#, c-format
+msgid "From: %s"
+msgstr "De: %s"
+
+msgid "Click to change difficulty"
+msgstr "Click para ajustar dificultad de la IA"
+
+msgid "Waiting for player"
+msgstr "Esperando por jugador"
+
+msgid "Player is ready"
+msgstr "El Jugador está listo"
+
+msgid "Player is downloading"
+msgstr "El Jugador está descargando"
+
+msgid "Click when ready"
+msgstr "Click cuando esté listo"
+
+msgid "Waiting for download"
+msgstr "Esperando descarga"
+
+msgid "READY?"
+msgstr "¿LISTO?"
+
 msgid "Launch Transport"
 msgstr "Lanzar Transporte"
 
 msgid "Launch the Transporter"
-msgstr ""
+msgstr "Lanzar el Transporte"
 
 msgid "There is not enough room in the Transport!"
 msgstr "¡No hay espacio suficiente en el transporte!"
@@ -11358,7 +11474,7 @@ msgid "A new build of Warzone 2100 (%s) is available!"
 msgstr "¡Una nueva versión de Warzone 2100 (%s) está disponible!"
 
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr ""
+msgstr "Esta nueva versión incluye importantes correcciones de errores y actualizaciones y se recomienda que actualice ahora."
 
 msgid "A new build of Warzone 2100 is available!"
 msgstr "¡Una nueva versión de Warzone 2100 está disponible!"
@@ -11370,11 +11486,11 @@ msgid "Compatibility Warning"
 msgstr "Aviso de Compatibilidad"
 
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Se ha detectado un problema que puede afectar al funcionamiento / rendimiento de Warzone 2100."
 
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(ID del Aviso: %s)"
 
 msgid " (modified locally)"
 msgstr " (modificado localmente)"
@@ -11390,7 +11506,7 @@ msgid "GAME OVER"
 msgstr "FIN DEL JUEGO"
 
 msgid "The battle is over - you can leave the room."
-msgstr ""
+msgstr "La batalla ha terminado - puedes salir de la habitación."
 
 msgid "YOU ARE VICTORIOUS!"
 msgstr "¡ERES EL GANADOR!"
@@ -11399,4 +11515,4 @@ msgid "YOU WERE DEFEATED!"
 msgstr "¡HAS SIDO DERROTADO!"
 
 msgid "Script Debugger"
-msgstr ""
+msgstr "Depurador de Scripts"
