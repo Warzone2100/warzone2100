@@ -152,32 +152,30 @@ void fpathUpdate()
 	// Nothing now
 }
 
+static constexpr size_t fpathPropulsionDomain(PROPULSION_TYPE propulsion)
+{
+	switch (propulsion)
+	{
+	default:                        return 0;  // Land
+	case PROPULSION_TYPE_LIFT:      return 1;  // Air
+	case PROPULSION_TYPE_PROPELLOR: return 2;  // Water
+	case PROPULSION_TYPE_HOVER:     return 3;  // Land and water
+	}
+	return 0; // silence compiler warning
+}
 
 bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
                                PROPULSION_TYPE propulsion2, int player2, FPATH_MOVETYPE moveType2)
 {
-	int domain1, domain2;
-	switch (propulsion1)
-	{
-	default:                        domain1 = 0; break;  // Land
-	case PROPULSION_TYPE_LIFT:      domain1 = 1; break;  // Air
-	case PROPULSION_TYPE_PROPELLOR: domain1 = 2; break;  // Water
-	case PROPULSION_TYPE_HOVER:     domain1 = 3; break;  // Land and water
-	}
-	switch (propulsion2)
-	{
-	default:                        domain2 = 0; break;  // Land
-	case PROPULSION_TYPE_LIFT:      domain2 = 1; break;  // Air
-	case PROPULSION_TYPE_PROPELLOR: domain2 = 2; break;  // Water
-	case PROPULSION_TYPE_HOVER:     domain2 = 3; break;  // Land and water
-	}
+	auto domain1 = fpathPropulsionDomain(propulsion1);
+	auto domain2 = fpathPropulsionDomain(propulsion2);
 
 	if (domain1 != domain2)
 	{
 		return false;
 	}
 
-	if (domain1 == 1)
+	if (domain1 == fpathPropulsionDomain(PROPULSION_TYPE_LIFT))
 	{
 		return true;  // Air units ignore move type and player.
 	}
