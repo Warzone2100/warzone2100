@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-03-03 02:30\n"
 "Last-Translator: \n"
 "Language-Team: Norwegian Bokmal\n"
 "Language: nb_NO\n"
@@ -492,7 +492,7 @@ msgid "Once a safe haven is established, return to the LZ for further orders."
 msgstr "Når en trygg havn er etablert, returner til LS for videre ordre."
 
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "BETA BASE OPPDRAG: Overlev og evakuer! Ta med en lastebil"
 
 msgid "Commander, we have grave news."
 msgstr "Kommandør, vi har dårlige nyheter."
@@ -4915,10 +4915,10 @@ msgstr ""
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr ""
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr ""
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -6399,10 +6399,10 @@ msgstr ""
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr ""
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr ""
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr ""
 
 msgid "Synaptic Link Scrambler technology"
@@ -7296,6 +7296,9 @@ msgstr ""
 
 msgid "Enable async join approval (for connecting clients)"
 msgstr ""
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "Starter verten (autohost) som ikke klar, selv om det er en tilskuer"
 
 msgid "Base URL for on-demand video downloads"
 msgstr ""
@@ -9820,6 +9823,18 @@ msgstr ""
 msgid "Select Player Name"
 msgstr "Velg spillernavn"
 
+msgid "Blind Game:"
+msgstr "Spillen i blinde:"
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr "- Spillernavnene vil ikke være synlige for andre spillere (til spillet er over)"
+
+msgid "Blind Lobby:"
+msgstr "Blinde Lobbyen:"
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr "- Spillernavnene vil ikke være synlige for andre spillere (til spillet har startet)"
+
 msgid "Alliances"
 msgstr "Allianser"
 
@@ -9831,20 +9846,6 @@ msgstr "Forhåndsvisning av kart"
 
 msgid "Click to see Map"
 msgstr "Trykk for å se kartet"
-
-msgid "Show Structure Limits"
-msgstr ""
-
-msgid "Set Structure Limits"
-msgstr "Sett strukturbegrensninger"
-
-msgid "Random Game Options"
-msgstr ""
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr ""
 
 msgid "Tech"
 msgstr ""
@@ -9859,6 +9860,20 @@ msgid "Technology Level 3"
 msgstr ""
 
 msgid "Technology Level 4"
+msgstr ""
+
+msgid "Show Structure Limits"
+msgstr ""
+
+msgid "Set Structure Limits"
+msgstr "Sett strukturbegrensninger"
+
+msgid "Random Game Options"
+msgstr ""
+
+msgid ""
+"Random Game Options\n"
+"Can be blocked by players' votes"
 msgstr ""
 
 msgid "Start Hosting Game"
@@ -10004,6 +10019,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr "MEDDELSE OM BLINDE LOBBYEN:"
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr "Du har fått tildelt kodenavnet: \"%s\""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10020,64 +10042,6 @@ msgid "Enable Spectator Join"
 msgstr ""
 
 msgid "Lock Teams"
-msgstr ""
-
-msgid "Choose Team"
-msgstr ""
-
-msgid "Teams locked"
-msgstr ""
-
-msgid "Click to change player colour"
-msgstr ""
-
-msgid "Click to change player position"
-msgstr ""
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr ""
-
-msgid "Click to close spectator slot"
-msgstr ""
-
-msgid "Player ID: "
-msgstr ""
-
-msgid "(none)"
-msgstr ""
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr ""
-
-msgid "Waiting for player"
-msgstr ""
-
-msgid "Player is ready"
-msgstr ""
-
-msgid "Player is downloading"
-msgstr ""
-
-msgid "Click when ready"
-msgstr ""
-
-msgid "Waiting for download"
-msgstr ""
-
-msgid "READY?"
 msgstr ""
 
 msgid "For Spectator:"
@@ -10223,6 +10187,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr "MEDDELSE OM SPILLEN I BLINDE:"
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr "Spillernavnene vil ikke være synlige for andre spillere (til spillet er over)"
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr "Spillernavnene vil ikke være synlige for andre spillere (til spillet har startet)"
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr "TA HENSYN TIL: Verten er en spiller, og kan se og konfigurere andre spillere (!)"
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr "Verten er tilskuer, og kan se spilleridentiteter og stemme spillere / mannskaper"
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10240,20 +10219,6 @@ msgid "Closed"
 msgstr ""
 
 msgid "Open"
-msgstr ""
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr ""
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr ""
-
-msgid "HOST"
-msgstr ""
-
-msgid "Ping"
 msgstr ""
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
@@ -10283,6 +10248,10 @@ msgstr "%s har forlatt spillet"
 #, c-format
 msgid "%s joined the Game"
 msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
+msgstr "(kodenavnet: %s)"
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10343,6 +10312,9 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Ping"
+msgstr ""
 
 msgid "Structs"
 msgstr ""
@@ -10887,6 +10859,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr "Galt vertsetableringsdata"
+
+msgid "Invalid host identity"
+msgstr "Galt vertsidentitet"
+
+msgid "Failed to establish session keys with host"
+msgstr "Opprettelse av sesjonsnøkler med verten mislyktes"
+
+msgid "Failure to generate valid response"
+msgstr "Ikke helles med gyldig svar generasjon"
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11318,6 +11302,130 @@ msgstr ""
 
 msgid "IP Address or Machine Name"
 msgstr "IP-adresse eller maskinnavn"
+
+msgid "Host:"
+msgstr "Vert:"
+
+msgid "NOTE: Host is also a player."
+msgstr "MERKE: Vert er også en spiller."
+
+msgid "Player ID: "
+msgstr ""
+
+msgid "(none)"
+msgstr ""
+
+msgid "You:"
+msgstr "Du:"
+
+msgid "Waiting for host to configure teams"
+msgstr "Venter om verten å konfigurere mannskaper"
+
+msgid "Waiting for players"
+msgstr "Venter om spillere"
+
+msgid "Downloading map / mods"
+msgstr "Lasten ned kart / mods"
+
+msgid "Waiting for you to check ready"
+msgstr "Venter på at du skal sjekke klar"
+
+msgid "Waiting for host to start game"
+msgstr "Venter om verten å starte spillet"
+
+msgid "Waiting for spectators"
+msgstr "Venter om tilskuere"
+
+msgid "Players ready & waiting for match:"
+msgstr "Spillere er klare åg venter på å spille:"
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr "Spillere: (klare: %zu, ikke klare: %zu)"
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr "KI Boter: %zu"
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr "Tilskuere: (klare: %zu, ikke klare: %zu)"
+
+#, c-format
+msgid "Host: %s"
+msgstr "Vert: %s"
+
+msgid "ready"
+msgstr "klar"
+
+msgid "not ready"
+msgstr "ikke klar"
+
+msgid "Blind Waiting Room"
+msgstr "Blinde Venteværelset"
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr ""
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr ""
+
+msgid "HOST"
+msgstr ""
+
+msgid "Choose Team"
+msgstr ""
+
+msgid "Teams locked"
+msgstr ""
+
+msgid "Click to change player colour"
+msgstr ""
+
+msgid "Click to change player position"
+msgstr ""
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr ""
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr ""
+
+msgid "Waiting for player"
+msgstr ""
+
+msgid "Player is ready"
+msgstr ""
+
+msgid "Player is downloading"
+msgstr ""
+
+msgid "Click when ready"
+msgstr ""
+
+msgid "Waiting for download"
+msgstr ""
+
+msgid "READY?"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Send transport"

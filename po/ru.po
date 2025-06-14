@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-06 02:25\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-06-13 02:36\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -33,7 +33,7 @@ msgid "Scavenger raiders are approaching our base."
 msgstr "Мусорщики приближаются к нашей базе."
 
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Защитите базу, затем уничтожьте лагеря мусорщиков."
+msgstr "Защитите базу, затем уничтожьте лагеря Мусорщиков."
 
 msgid "ALPHA BASE MISSION: Power Surge Detected"
 msgstr "МИССИЯ НА БАЗЕ АЛЬФА: Обнаружен выброс энергии"
@@ -1242,7 +1242,7 @@ msgid "Defensive Strength: High"
 msgstr "Сила защиты: высокая"
 
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Укреплённая установка с огнемётом Инферно"
+msgstr "Усиленная точка с огнемётом Инферно"
 
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Укреплённая установка с роторной пушкой"
@@ -3260,7 +3260,7 @@ msgid "APFSDS Cannon Rounds Mk2"
 msgstr "Стреловидные снаряды Mk2"
 
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Стреловидные снаряды Mk3"
+msgstr "Подкалиберные снаряды для пушки Mk3"
 
 msgid "APFSDS Cannon Rounds"
 msgstr "Стреловидные снаряды"
@@ -3762,13 +3762,13 @@ msgid "Cannon Laser Rangefinder"
 msgstr "Лазерный дальномер пушки"
 
 msgid "Cannon Rapid Loader Mk2"
-msgstr "Быстрая зарядка пушки Мk2"
+msgstr "Автомат заряжания Пушки Мk2"
 
 msgid "Cannon Rapid Loader Mk3"
-msgstr "Быстрая зарядка пушки Мk3"
+msgstr "Автомат заряжания Пушки Мk3"
 
 msgid "Cannon Rapid Loader"
-msgstr "Быстрая зарядка пушки"
+msgstr "Автомат заряжания Пушки"
 
 #, no-c-format
 msgid "Cannon reload time -10%"
@@ -4521,13 +4521,13 @@ msgid "HEAP Mortar Shells"
 msgstr "Бронебойные снаряды миномёта"
 
 msgid "HEAT Cannon Shells Mk2"
-msgstr "Противотанковые снаряды Mk2"
+msgstr "Кумулятивные снаряды Mk2"
 
 msgid "HEAT Cannon Shells Mk3"
-msgstr "Противотанковые снаряды Mk3"
+msgstr "Кумулятивные снаряды Mk3"
 
 msgid "HEAT Cannon Shells"
-msgstr "Противотанковые снаряды"
+msgstr "Кумулятивные снаряды"
 
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "Противотанковая боеголовка Мk2"
@@ -4925,10 +4925,10 @@ msgstr "Улучшение в лазерной оптики снижает ра�
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Установка зажигательной гаубицы 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Установка зажигательной гаубицы"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Установка зажигательной гаубицы"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -6409,11 +6409,11 @@ msgstr "Анализ нейросвязи Мk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Анализ нейросвязи Мk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Анализ нейросвязи"
-
 msgid "Synaptic link data analysis"
 msgstr "Анализ данных о нейросвязи"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Анализ нейросвязи"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Технология шифратора с помощью нейросвязи"
@@ -7308,6 +7308,9 @@ msgstr "Установить настройки/разрешения чата д
 
 msgid "Enable async join approval (for connecting clients)"
 msgstr "Включить асинхронное одобрение подключения (для подключающихся клиентов)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "Запускает хост (автохост), как не готовый, даже если это хост-зритель"
 
 msgid "Base URL for on-demand video downloads"
 msgstr "URL-адрес для загрузки видео"
@@ -8303,7 +8306,7 @@ msgid "Can someone please transfer me trucks so I can rebuild?"
 msgstr "Может кто-нибудь передать мне грузовики для перестройки?"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрые сообщения)"
+msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрый чат?)"
 
 msgid "I suggest: Building more units"
 msgstr "Я предлагаю: Строить больше юнитов"
@@ -9857,6 +9860,18 @@ msgstr "Введите пароль"
 msgid "Select Player Name"
 msgstr "Выберите имя игрока"
 
+msgid "Blind Game:"
+msgstr "Игра вслепую:"
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr "- Имена игроков не будут видны другим игрокам (пока игра не закончится)"
+
+msgid "Blind Lobby:"
+msgstr "Лобби вслепую:"
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr "- Имена игроков не будут видны другим игрокам (пока игра не начнётся)"
+
 msgid "Alliances"
 msgstr "Союзы"
 
@@ -9868,6 +9883,21 @@ msgstr "Предпросмотр карты"
 
 msgid "Click to see Map"
 msgstr "Нажмите для просмотра карты"
+
+msgid "Tech"
+msgstr "Прогресс"
+
+msgid "Technology Level 1"
+msgstr "Уровень технологий 1"
+
+msgid "Technology Level 2"
+msgstr "Уровень технологий 2"
+
+msgid "Technology Level 3"
+msgstr "Уровень технологий 3"
+
+msgid "Technology Level 4"
+msgstr "Уровень технологий 4"
 
 msgid "Show Structure Limits"
 msgstr "Показать лимиты построек"
@@ -9884,21 +9914,6 @@ msgid ""
 msgstr ""
 "Случайные настройки игры\n"
 "Может быть запрещено голосованием"
-
-msgid "Tech"
-msgstr "Прогресс"
-
-msgid "Technology Level 1"
-msgstr "Уровень технологий 1"
-
-msgid "Technology Level 2"
-msgstr "Уровень технологий 2"
-
-msgid "Technology Level 3"
-msgstr "Уровень технологий 3"
-
-msgid "Technology Level 4"
-msgstr "Уровень технологий 4"
 
 msgid "Start Hosting Game"
 msgstr "Начать хостинг игры"
@@ -10043,6 +10058,13 @@ msgstr "Хотите поменять этого зрителя на игрок�
 msgid "Yes, select Player slot"
 msgstr "Да, выбрать слот игрока"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr "УВЕДОМЛЕНИЕ ОТ ЛОББИ ВСЛЕПУЮ:"
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr "Вам назначено кодовое имя: \"%s\""
+
 msgid "Joined:"
 msgstr "Присоединился:"
 
@@ -10060,64 +10082,6 @@ msgstr "Разрешить зрителям присоединяться"
 
 msgid "Lock Teams"
 msgstr "Закрыть команды"
-
-msgid "Choose Team"
-msgstr "Выбрать команду"
-
-msgid "Teams locked"
-msgstr "Команды зафиксированы"
-
-msgid "Click to change player colour"
-msgstr "Нажмите, чтобы изменить цвет игрока"
-
-msgid "Click to change player position"
-msgstr "Нажмите, чтобы изменить позицию игрока"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Нажмите, чтобы изменить ИИ, ПКМ для копирования выбора"
-
-msgid "Click to close spectator slot"
-msgstr "Нажмите, чтобы закрыть слот зрителя"
-
-msgid "Player ID: "
-msgstr "ID игрока: "
-
-msgid "(none)"
-msgstr "(нет)"
-
-msgid "Alt Name:"
-msgstr "Альт. имя:"
-
-msgid "Player rating:"
-msgstr "Рейтинг игрока:"
-
-msgid "Host provided"
-msgstr "Хост предоставлен"
-
-#, c-format
-msgid "From: %s"
-msgstr "От: %s"
-
-msgid "Click to change difficulty"
-msgstr "Нажмите для изменения сложности"
-
-msgid "Waiting for player"
-msgstr "Ожидание игрока"
-
-msgid "Player is ready"
-msgstr "Игрок готов"
-
-msgid "Player is downloading"
-msgstr "Игрок загружает"
-
-msgid "Click when ready"
-msgstr "Нажмите, когда будете готовы"
-
-msgid "Waiting for download"
-msgstr "Ожидание загрузки"
-
-msgid "READY?"
-msgstr "ГОТОВ?"
 
 msgid "For Spectator:"
 msgstr "Для зрителя:"
@@ -10262,6 +10226,21 @@ msgstr "Назначение внешнего порта..."
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Переадресация портов отключена пользователем. Автонастройка порта %d не будет выполнена."
 
+msgid "BLIND GAME NOTICE:"
+msgstr "УВЕДОМЛЕНИЕ ОТ ИГРЫ ВСЛЕПУЮ:"
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr "Имена игроков не будут видны другим игрокам (пока игра не закончится)"
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr "Имена игроков не будут видны другим игрокам (пока игра не начнётся)"
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr "ВАЖНО: Хост также является игроком, и может видеть и настраивать других игроков (!)"
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr "Хост также является зрителем, и может видеть личности и настраивать других игроков / команды"
+
 msgid "Failed to load challenge:"
 msgstr "Не удалось загрузить испытание:"
 
@@ -10280,20 +10259,6 @@ msgstr "Закрыто"
 
 msgid "Open"
 msgstr "Открыть"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Отправка карты: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Карта: %u%% загружена"
-
-msgid "HOST"
-msgstr "ХОСТ"
-
-msgid "Ping"
-msgstr "Пинг"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Версия Warzone 2100 в которой был записан этот файл реплея не совпадает с текущей версией Warzone 2100."
@@ -10322,6 +10287,10 @@ msgstr "%s покинул игру"
 #, c-format
 msgid "%s joined the Game"
 msgstr "%s присоединился к игре"
+
+#, c-format
+msgid "(codename: %s)"
+msgstr "(кодовое имя: %s)"
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10384,6 +10353,9 @@ msgstr[0] "%d игрок"
 msgstr[1] "%d игрока"
 msgstr[2] "%d игроков"
 msgstr[3] "%d игроков"
+
+msgid "Ping"
+msgstr "Пинг"
 
 msgid "Structs"
 msgstr "Построек"
@@ -10928,6 +10900,18 @@ msgstr "Некорретный ответ от хоста"
 msgid "Requesting to join game"
 msgstr "Отправлен запрос на присоединение к игре"
 
+msgid "Invalid host establishing data"
+msgstr "Неверные данные установки хоста"
+
+msgid "Invalid host identity"
+msgstr "Неверная личность хоста"
+
+msgid "Failed to establish session keys with host"
+msgstr "Не удалось установить ключи сессии с хостом"
+
+msgid "Failure to generate valid response"
+msgstr "Не удалось сгенерировать корректный ответ"
+
 msgid "Kick Spectator"
 msgstr "Выгнать зрителя"
 
@@ -11363,6 +11347,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP-адрес или имя компьютера"
+
+msgid "Host:"
+msgstr "Хост:"
+
+msgid "NOTE: Host is also a player."
+msgstr "ПРИМЕЧАНИЕ: Хост также является игроком."
+
+msgid "Player ID: "
+msgstr "ID игрока: "
+
+msgid "(none)"
+msgstr "(нет)"
+
+msgid "You:"
+msgstr "Вы:"
+
+msgid "Waiting for host to configure teams"
+msgstr "Ждём пока хост настраивает команды"
+
+msgid "Waiting for players"
+msgstr "Ждём игроков"
+
+msgid "Downloading map / mods"
+msgstr "Загрузка карты / модов"
+
+msgid "Waiting for you to check ready"
+msgstr "Ждём вас, когда вы отметите готовность"
+
+msgid "Waiting for host to start game"
+msgstr "Ждём пока хост запустит игру"
+
+msgid "Waiting for spectators"
+msgstr "Ждём зрителей"
+
+msgid "Players ready & waiting for match:"
+msgstr "Игроки готовы и ждут матча:"
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr "Игроков: (%zu готово, %zu не готово)"
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr "ИИ ботов: %zu"
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr "Зрителей: (%zu готово, %zu не готово)"
+
+#, c-format
+msgid "Host: %s"
+msgstr "Хост: %s"
+
+msgid "ready"
+msgstr "готов"
+
+msgid "not ready"
+msgstr "не готов"
+
+msgid "Blind Waiting Room"
+msgstr "Комната ожидания матча вслепую"
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Отправка карты: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Карта: %u%% загружена"
+
+msgid "HOST"
+msgstr "ХОСТ"
+
+msgid "Choose Team"
+msgstr "Выбрать команду"
+
+msgid "Teams locked"
+msgstr "Команды зафиксированы"
+
+msgid "Click to change player colour"
+msgstr "Нажмите, чтобы изменить цвет игрока"
+
+msgid "Click to change player position"
+msgstr "Нажмите, чтобы изменить позицию игрока"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Нажмите, чтобы изменить ИИ, ПКМ для копирования выбора"
+
+msgid "Click to close spectator slot"
+msgstr "Нажмите, чтобы закрыть слот зрителя"
+
+msgid "Alt Name:"
+msgstr "Альт. имя:"
+
+msgid "Player rating:"
+msgstr "Рейтинг игрока:"
+
+msgid "Host provided"
+msgstr "Хост предоставлен"
+
+#, c-format
+msgid "From: %s"
+msgstr "От: %s"
+
+msgid "Click to change difficulty"
+msgstr "Нажмите для изменения сложности"
+
+msgid "Waiting for player"
+msgstr "Ожидание игрока"
+
+msgid "Player is ready"
+msgstr "Игрок готов"
+
+msgid "Player is downloading"
+msgstr "Игрок загружает"
+
+msgid "Click when ready"
+msgstr "Нажмите, когда будете готовы"
+
+msgid "Waiting for download"
+msgstr "Ожидание загрузки"
+
+msgid "READY?"
+msgstr "ГОТОВ?"
 
 msgid "Launch Transport"
 msgstr "Запустить транспорт"

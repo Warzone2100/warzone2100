@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-05-03 02:32\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -1800,7 +1800,7 @@ msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Hancurkan markas Nexus untuk mematikan Program Penyusup Nexus"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Peringatan: Markas terlindungi dari serangan VTOL"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Riset sirkuit resistansi dan terus bertahan dalam serbuan dari Nexus"
@@ -2940,22 +2940,22 @@ msgid "System locale"
 msgstr "Sistem lokal"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Gagal membuat pemetaan port"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Konfigurasikan router/firewall Anda secara manual untuk membuka port %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Pemetaan Port membuka port eksternal: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "IP eksternal Anda adalah: %s"
 
 msgid "Failed to create port mapping (timeout)"
-msgstr ""
+msgstr "Gagal membuat pemetaan port (waktu habis)"
 
 msgid "Client failed to ack player index swap"
 msgstr "Klien gagal mengenali pergantian indeks pemain"
@@ -2971,6 +2971,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Kesalahan dalam menyambungkan ke lobby server: %s.\n"
+"Pastikan port %d dapat menerima sambungan masuk.\n"
+"Jika Anda menggunakan sebuah router harap disetel untuk menggunakan UPnP\n"
+" atau untuk mem-forward port ke sistem Anda."
 
 msgid "Failed to get a lobby response!"
 msgstr "Gagal mendapatkan respons dari lobi!"
@@ -3280,7 +3284,7 @@ msgid "Armed with Cyborg Flamer"
 msgstr "Dipersenjatai dengan Penyembur Api Cyborg"
 
 msgid "Armed with Cyborg Hyper Velocity Cannon"
-msgstr ""
+msgstr "Dipersenjatai dengan meriam velositas hiper"
 
 msgid "Armed with Cyborg Machinegun"
 msgstr "Dipersenjatai dengan Senapan Mesin Cyborg"
@@ -3295,10 +3299,10 @@ msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr "Dipersenjatai dengan Peluncur Rudal \"Scourge\" Cyborg"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr ""
+msgstr "Dipersenjatai dengan Roket Pembunuh Tank"
 
 msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
+msgstr "Dipersenjatai dengan Penyembur Api Termit Cyborg"
 
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Dipersenjatai dengan Penyembur Api Termit Cyborg"
@@ -3998,7 +4002,7 @@ msgid "Cyborg Superdense Thermal Armor"
 msgstr "Armor Termal Superpadat Cyborg"
 
 msgid "Cyborg Tank Killer"
-msgstr ""
+msgstr "Cyborg Pembunuh Tank"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Armor Termal Cyborg Mk2"
@@ -4010,7 +4014,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "Armor Termal Cyborg"
 
 msgid "Cyborg Thermite"
-msgstr ""
+msgstr "Cyborg Termit"
 
 msgid "Cyborg Transport Available"
 msgstr "Transporter Cyborg Tersedia"
@@ -4055,7 +4059,7 @@ msgid "Depleted uranium kinetic energy bullets"
 msgstr "Peluru Energi Kinetik Uranium Terdeplesi"
 
 msgid "Depleted Uranium MG Bullets Mk3"
-msgstr ""
+msgstr "Peluru Senapan Mesin Uranium Terdeplesi"
 
 msgid "Depleted Uranium MG Bullets"
 msgstr "Peluru Senapan Mesin Uranium Terdeplesi"
@@ -4242,7 +4246,7 @@ msgid "Flamer damage +25%"
 msgstr "Daya rusak penyembur api +25%"
 
 msgid "Flamer Fast Loader"
-msgstr ""
+msgstr "Penyembur Api Cepat"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
@@ -4921,10 +4925,10 @@ msgstr "Peningkatan dalam bidang optik laser mengurangi pembiasan cahaya"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Emplasemen Howitzer Pembakar 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Emplasemen Howitzer Pembakar"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Emplasemen Howitzer Pembakar"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5995,7 +5999,7 @@ msgid "Ripple Rocket Battery"
 msgstr "Baterai Roket \"Ripple\""
 
 msgid "Ripple Rocket Rapid Loader"
-msgstr ""
+msgstr "Pengisi Cepat Roket Riak"
 
 msgid "Ripple Rockets"
 msgstr "Roket \"Ripple\""
@@ -6265,7 +6269,7 @@ msgid "Smashedwall"
 msgstr "Dinding rusak"
 
 msgid "Sniper Cyborg"
-msgstr ""
+msgstr "Cyborg Penembak Jitu"
 
 msgid "Speed: Fast"
 msgstr "Kecepatan: Cepat"
@@ -6405,10 +6409,10 @@ msgstr "Analisis Data Tautan Sinapsis Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analisis Data Tautan Sinapsis Mk3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Analisis Data Tautan Sinapsis"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Analisis Data Tautan Sinapsis"
 
 msgid "Synaptic Link Scrambler technology"
@@ -6424,7 +6428,7 @@ msgid "Systems Research Completed"
 msgstr "Riset Sistem Selesai"
 
 msgid "Tank Killer Cyborg"
-msgstr ""
+msgstr "Cyborg Pembunuh Tank"
 
 msgid "Tank Killer Emplacement"
 msgstr "Emplasemen Roket Pembunuh Tank"
@@ -6512,7 +6516,7 @@ msgid "Thermite Bomb Bay"
 msgstr "Bom Termit"
 
 msgid "Thermite Cyborg"
-msgstr ""
+msgstr "Cybord Termit"
 
 msgid "Thermite Flamer Cyborg"
 msgstr "Cyborg Penyembur Api Termit"
@@ -6804,7 +6808,7 @@ msgid "VTOL Heap Bomb Bay"
 msgstr "Bom HEAP VTOL"
 
 msgid "VTOL Heavy Cannon"
-msgstr ""
+msgstr "VTOL Meriam Berat"
 
 msgid "VTOL Heavy Laser"
 msgstr "Laser Berat VTOL"
@@ -6849,7 +6853,7 @@ msgid "VTOL Machinegun"
 msgstr "Senapan Mesin VTOL"
 
 msgid "VTOL Mini-Rocket AA"
-msgstr ""
+msgstr "VTOL Roket Mini"
 
 msgid "VTOL Mini-Rocket Scav"
 msgstr "VTOL Mini-Rocket Scav"
@@ -7240,10 +7244,10 @@ msgid "port"
 msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Aktifkan / nonaktifkan pemetaan port saat hosting"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, benar, 0, salah]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "Nyalakan perintah garis miring lobi (untuk menyambungkan klien)"
@@ -7294,22 +7298,25 @@ msgid "number of minutes"
 msgstr "jumlah menit"
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "Ubah peta spekular .png menjadi luma, saluran tunggal, skala abu-abu .png (dan keluar)"
 
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "Izinkan lapisan implisit Vulkan (yang mungkin dinonaktifkan secara default karena potensi kerusakan atau bug)"
 
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "Tetapkan konfigurasi / izin obrolan hosting default"
 
 msgid "Enable async join approval (for connecting clients)"
-msgstr ""
+msgstr "Aktifkan persetujuan penggabungan asinkron (untuk menghubungkan klien)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "Memulai host (autohost) sebagai tidak siap, meskipun itu host penonton"
 
 msgid "Base URL for on-demand video downloads"
-msgstr ""
+msgstr "URL dasar untuk unduhan video sesuai permintaan"
 
 msgid "Base video URL"
-msgstr ""
+msgstr "URL video dasar"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "Komandan memerlukan level yang lebih tinggi untuk memimpin lebih banyak unit"
@@ -7603,7 +7610,7 @@ msgstr "Tonton Tayangan Ulang"
 
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "Port TCP %d harus dibuka di firewall atau router Anda untuk meng-hosting permainan!"
 
 msgid "Load Multiplayer Replay"
 msgstr "Muat Tayangan Ulang Multipemain"
@@ -7678,10 +7685,10 @@ msgid "On"
 msgstr "Nyala"
 
 msgid "Per Pixel"
-msgstr ""
+msgstr "Per Piksel"
 
 msgid "Lightmap"
-msgstr ""
+msgstr "Peta Cahaya"
 
 msgid "Rotating"
 msgstr "Berotasi"
@@ -7702,49 +7709,49 @@ msgid "Default"
 msgstr "Default"
 
 msgid "Terrain quality mode not available."
-msgstr ""
+msgstr "Mode kualitas medan tidak tersedia."
 
 msgid "Medium Quality"
-msgstr ""
+msgstr "Kualitas sedang"
 
 msgid "High Quality"
-msgstr ""
+msgstr "Kualitas Tinggi"
 
 msgid "Shadow mapping not available on this system."
-msgstr ""
+msgstr "Pemetaan bayangan tidak tersedia pada sistem ini."
 
 msgid "Low"
-msgstr ""
+msgstr "Rendah"
 
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 msgid "Shadow filtering not available on this system."
-msgstr ""
+msgstr "Penyaringan bayangan tidak tersedia pada sistem ini."
 
 msgid "Opacity: 50%"
-msgstr ""
+msgstr "Opasitas: 50%"
 
 msgid "* Takes effect on game restart"
 msgstr "* Efek dapat terlihat setelah memulai ulang permainan"
 
 msgid "Terrain Quality"
-msgstr ""
+msgstr "Kualitas Medan"
 
 msgid "Terrain Shading"
-msgstr ""
+msgstr "Peneduh Medan"
 
 msgid "Shadows"
 msgstr "Bayangan"
 
 msgid "Shadow Resolution"
-msgstr ""
+msgstr "Resolusi Bayangan"
 
 msgid "Shadow Filtering"
-msgstr ""
+msgstr "Penyaringan Bayangan"
 
 msgid "Per Pixel point lights"
-msgstr ""
+msgstr "Titik lampu per piksel"
 
 msgid "LOD Distance"
 msgstr "Jarak tingkat detail (LOD)"
@@ -7768,10 +7775,10 @@ msgid "Screen Shake"
 msgstr "Getaran Layar"
 
 msgid "Groups Menu"
-msgstr ""
+msgstr "Menu Grup"
 
 msgid "Options Button"
-msgstr ""
+msgstr "Tombol Opsi"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPSI GRAFIK"
@@ -7844,7 +7851,7 @@ msgid "Desktop Full"
 msgstr "Desktop Penuh"
 
 msgid "On (Fullscreen)"
-msgstr ""
+msgstr "Aktif (Layar Penuh)"
 
 msgid "Texture size"
 msgstr "Ukuran Tekstur"
@@ -7862,16 +7869,16 @@ msgid "Graphics Backend*"
 msgstr "Back-end Grafis*"
 
 msgid "Min on Focus Loss"
-msgstr ""
+msgstr "Min pada Kehilangan Fokus"
 
 msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
+msgstr "Apakah jendela harus diminimalkan secara otomatis saat fokus hilang"
 
 msgid "Alt+Enter Toggle"
-msgstr ""
+msgstr "Tombol Alt+Enter"
 
 msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
+msgstr "Mode layar penuh digunakan saat beralih dengan tombol: Alt + Enter"
 
 msgid "VIDEO OPTIONS"
 msgstr "OPSI VIDEO"
@@ -7969,7 +7976,7 @@ msgstr "%u menit"
 
 #, c-format
 msgid "%s hours"
-msgstr ""
+msgstr "%s Jam"
 
 #, c-format
 msgid "%u seconds"
@@ -7979,16 +7986,16 @@ msgid "None"
 msgstr "Tidak ada"
 
 msgid "Distribute to Team"
-msgstr ""
+msgstr "Bagikan ke Tim"
 
 msgid "Destroy (Classic)"
-msgstr ""
+msgstr "Destroy (Klasik)"
 
 msgid "Allow All"
-msgstr ""
+msgstr "Izinkan Semua"
 
 msgid "Quick Chat Only"
-msgstr ""
+msgstr "Obrolan Cepat Saja"
 
 msgid "Hosting Options:"
 msgstr "Pengaturan Penyelenggaraan:"
@@ -7997,28 +8004,28 @@ msgid "Game Port"
 msgstr "Port Permainan"
 
 msgid "Port Mapping"
-msgstr ""
+msgstr "Pemetaan Port"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
+msgstr "Gunakan PCP, NAT-PMP, atau UPnP untuk membantu mengonfigurasi router/firewallmu dan izinkan koneksi saat melakukan hosting."
 
 msgid "Chat"
-msgstr ""
+msgstr "Obrolan"
 
 msgid "Inactivity Timeout"
 msgstr "Batas Waktu Tidak Aktif"
 
 msgid "Lag Kick"
-msgstr ""
+msgstr "Lag Kick"
 
 msgid "Spectator Slots"
 msgstr "Slot Penonton"
 
 msgid "On Player Leave"
-msgstr ""
+msgstr "Saat Pemain Pergi"
 
 msgid "Game Time Limit"
-msgstr ""
+msgstr "Batas Waktu Game"
 
 msgid "Enable Rating"
 msgstr "Aktifkan Rating"
@@ -8087,10 +8094,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Pemain %u memunculkan unit baru melalui menu debug."
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Buka Opsi Dalam Permainan"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Tutup Opsi Dalam Permainan"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Menyembunyikan Teknologi Lawas"
@@ -8120,52 +8127,52 @@ msgstr ""
 "Klik Kanan untuk mencopot status Favorit"
 
 msgid "New Joins"
-msgstr ""
+msgstr "Baru Bergabung"
 
 msgid "Refresh"
-msgstr ""
+msgstr "Refresh"
 
 msgid "Host Chat Options"
-msgstr ""
+msgstr "Opsi Obrolan Penyelenggara"
 
 msgid "Global Options:"
-msgstr ""
+msgstr "Opsi Global:"
 
 msgid "Enable All"
-msgstr ""
+msgstr "Aktifkan Semua"
 
 msgid "Disable All"
-msgstr ""
+msgstr "Nonaktifkan Semua"
 
 msgid "Chat Options"
-msgstr ""
+msgstr "Opsi Chat"
 
 msgid "Mute or configure player free chat."
-msgstr ""
+msgstr "Bisukan atau konfigurasi obrolan bebas pemain."
 
 msgid "The host has globally muted 1+ players."
-msgstr ""
+msgstr "Penyelenggara telah membisukan secara global 1+ pemain."
 
 msgid "Local"
-msgstr ""
+msgstr "Lokal"
 
 msgid "Select / Assign Group Number: "
-msgstr ""
+msgstr "Pilih / Tunjuk Jumlah Grup "
 
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Grup %u"
 
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "Pilih Unit dalam Grup %u"
 
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "Tunjuk Unit Terpilih di Grup %u"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "Pusatkan Kamera di Grup ini dengan mengeklik atau mengetuk dua kali"
 
 msgid "View and configure groups of units, which can be quickly selected and ordered."
 msgstr ""
@@ -8201,10 +8208,10 @@ msgid "Progress Bar"
 msgstr "Batang Progres"
 
 msgid "To:"
-msgstr ""
+msgstr "Kepada:"
 
 msgid "All"
-msgstr ""
+msgstr "Semua"
 
 msgid "Team"
 msgstr "Tim"
@@ -8232,13 +8239,13 @@ msgid "Requests"
 msgstr ""
 
 msgid "Notices"
-msgstr ""
+msgstr "Pemberitahuan"
 
 msgid "Reactions"
 msgstr ""
 
 msgid "Taunts"
-msgstr ""
+msgstr "Ejek"
 
 msgid "Coordination"
 msgstr ""
@@ -8247,16 +8254,16 @@ msgid "Suggestions"
 msgstr ""
 
 msgid "Cheats"
-msgstr ""
+msgstr "Curang"
 
 msgid "End-Game"
 msgstr ""
 
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
@@ -8341,7 +8348,7 @@ msgid "Almost ready"
 msgstr ""
 
 msgid "Ready"
-msgstr ""
+msgstr "Siap"
 
 msgid "Be right back"
 msgstr ""
@@ -8350,19 +8357,19 @@ msgid "I'm back"
 msgstr ""
 
 msgid "Yes"
-msgstr ""
+msgstr "Ya"
 
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Mungkin"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Belum"
 
 msgid "Soon"
-msgstr ""
+msgstr "Segera"
 
 msgid "Thank you"
 msgstr ""
@@ -8374,7 +8381,7 @@ msgid "Well-played"
 msgstr ""
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
 msgstr ""
@@ -8509,10 +8516,10 @@ msgid "Ally progress"
 msgstr "Progres sekutu"
 
 msgid "Tanks"
-msgstr ""
+msgstr "Tank"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cyborg"
 
 msgid "No teammates."
 msgstr ""
@@ -8524,7 +8531,7 @@ msgid "Weapons:"
 msgstr ""
 
 msgid "Units:"
-msgstr ""
+msgstr "Unit:"
 
 msgid "Resume Game"
 msgstr "Lanjutkan permainan"
@@ -9835,6 +9842,18 @@ msgstr "Masukkan kata sandi disini"
 msgid "Select Player Name"
 msgstr "Pilih Nama Pemain"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "Aliansi"
 
@@ -9846,6 +9865,21 @@ msgstr "Pratinjau Peta"
 
 msgid "Click to see Map"
 msgstr "Klik untuk melihat Peta"
+
+msgid "Tech"
+msgstr "Teknologi"
+
+msgid "Technology Level 1"
+msgstr "Teknologi tingkat 1"
+
+msgid "Technology Level 2"
+msgstr "Teknologi tingkat 2"
+
+msgid "Technology Level 3"
+msgstr "Teknologi tingkat 3"
+
+msgid "Technology Level 4"
+msgstr "Teknologi tingkat 4"
 
 msgid "Show Structure Limits"
 msgstr "Tunjukkan Batas Jumlah Struktur"
@@ -9862,21 +9896,6 @@ msgid ""
 msgstr ""
 "Pengaturan Permainan Acak\n"
 "Dapat diblokir oleh pemilihan dari pemain"
-
-msgid "Tech"
-msgstr "Teknologi"
-
-msgid "Technology Level 1"
-msgstr "Teknologi tingkat 1"
-
-msgid "Technology Level 2"
-msgstr "Teknologi tingkat 2"
-
-msgid "Technology Level 3"
-msgstr "Teknologi tingkat 3"
-
-msgid "Technology Level 4"
-msgstr "Teknologi tingkat 4"
 
 msgid "Start Hosting Game"
 msgstr "Mulai Menyelenggarakan Permainan"
@@ -10021,6 +10040,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr "Ya, pilih slot Pemain"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "Tergabung:"
 
@@ -10038,64 +10064,6 @@ msgstr ""
 
 msgid "Lock Teams"
 msgstr "Kunci Tim"
-
-msgid "Choose Team"
-msgstr "Pilih Tim"
-
-msgid "Teams locked"
-msgstr "Tim terkunci"
-
-msgid "Click to change player colour"
-msgstr "Klik untuk mengganti warna pemain"
-
-msgid "Click to change player position"
-msgstr "Klik untuk mengganti posisi pemain"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Klik untuk mengganti kecerdasan buatan, klik kanan untuk mengaplikasikan ke semua slot"
-
-msgid "Click to close spectator slot"
-msgstr "Klik untuk menutup slot penonton"
-
-msgid "Player ID: "
-msgstr "ID pemain: "
-
-msgid "(none)"
-msgstr "(tidak ada)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr "Rating pemain:"
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Klik untuk mengubah tingkat kesulitan"
-
-msgid "Waiting for player"
-msgstr "Menunggu pemain"
-
-msgid "Player is ready"
-msgstr "Pemain Siap"
-
-msgid "Player is downloading"
-msgstr "Pemain sedang mengunduh"
-
-msgid "Click when ready"
-msgstr "Klik saat sudah siap"
-
-msgid "Waiting for download"
-msgstr "Menunggu untuk mengunduh"
-
-msgid "READY?"
-msgstr "SIAP?"
 
 msgid "For Spectator:"
 msgstr "Untuk Penonton:"
@@ -10240,6 +10208,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10258,20 +10241,6 @@ msgstr "Ditutup"
 
 msgid "Open"
 msgstr "Buka"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Mengirim Peta: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Peta: %u%% diunduh"
-
-msgid "HOST"
-msgstr "PENYELENGGARA"
-
-msgid "Ping"
-msgstr "Ping"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Versi Warzone 2100 yang digunakan untuk menyimpan file tayangan ulang ini tidak sama dengan versi yang berjalan saat ini."
@@ -10299,6 +10268,10 @@ msgstr "%s meninggalkan permainan"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10359,6 +10332,9 @@ msgstr "Segala jumlah pemain"
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d pemain"
+
+msgid "Ping"
+msgstr "Ping"
 
 msgid "Structs"
 msgstr "Struktur"
@@ -10796,7 +10772,7 @@ msgid "Click/Tap and Hold"
 msgstr ""
 
 msgid "Other"
-msgstr ""
+msgstr "Lainnya"
 
 msgid "Interactions:"
 msgstr ""
@@ -10814,7 +10790,7 @@ msgid "Connecting to Game"
 msgstr ""
 
 msgid "Status:"
-msgstr ""
+msgstr "Status:"
 
 msgid "Cancel"
 msgstr "Batal"
@@ -10826,7 +10802,7 @@ msgid "Unable to Join Game"
 msgstr ""
 
 msgid "Error:"
-msgstr ""
+msgstr "Error:"
 
 msgid "Join Attempt Rejected"
 msgstr ""
@@ -10903,6 +10879,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -10955,13 +10943,13 @@ msgid "Current Power / Power Per Second"
 msgstr "Daya Sekarang / Daya Per Detik"
 
 msgid "PwrLost"
-msgstr ""
+msgstr "PwrLost"
 
 msgid "PwrWon"
-msgstr ""
+msgstr "PwrWon"
 
 msgid "Lab Use"
-msgstr ""
+msgstr "Penggunaan Lab"
 
 msgid "Kinetic Armor"
 msgstr "Armor Kinetik"
@@ -10970,31 +10958,31 @@ msgid "(Tanks / Cyborgs)"
 msgstr "(Tank / Cyborg)"
 
 msgid "Cannons"
-msgstr ""
+msgstr "Meriam"
 
 msgid "Mortars"
-msgstr ""
+msgstr "Mortar"
 
 msgid "Missiles"
 msgstr ""
 
 msgid "Rockets"
-msgstr ""
+msgstr "Roket"
 
 msgid "Energy"
-msgstr ""
+msgstr "Energi"
 
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 msgid "Flame"
-msgstr ""
+msgstr "Flame"
 
 msgid "Howitzers"
 msgstr ""
 
 msgid "MG"
-msgstr ""
+msgstr "Senapan Mesin"
 
 msgid "Machine Guns"
 msgstr ""
@@ -11003,7 +10991,7 @@ msgid "Electronic"
 msgstr ""
 
 msgid "A-A"
-msgstr ""
+msgstr "Anti Udara"
 
 msgid "Anti-Air"
 msgstr ""
@@ -11015,19 +11003,19 @@ msgid "Slow Rocket"
 msgstr ""
 
 msgid "Las-Sat"
-msgstr ""
+msgstr "Las-Sat"
 
 msgid "Laser Satellite"
 msgstr ""
 
 msgid "Bombs"
-msgstr ""
+msgstr "Bom"
 
 msgid "Command"
-msgstr ""
+msgstr "Perintah"
 
 msgid "EMP"
-msgstr ""
+msgstr "EMP"
 
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr "Tidak dapat membangun unit, Batas Unit Dicapai — Produksi Dihentikan"
@@ -11332,6 +11320,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "Alamat IP atau Nama Perangkat"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "ID pemain: "
+
+msgid "(none)"
+msgstr "(tidak ada)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Mengirim Peta: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Peta: %u%% diunduh"
+
+msgid "HOST"
+msgstr "PENYELENGGARA"
+
+msgid "Choose Team"
+msgstr "Pilih Tim"
+
+msgid "Teams locked"
+msgstr "Tim terkunci"
+
+msgid "Click to change player colour"
+msgstr "Klik untuk mengganti warna pemain"
+
+msgid "Click to change player position"
+msgstr "Klik untuk mengganti posisi pemain"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Klik untuk mengganti kecerdasan buatan, klik kanan untuk mengaplikasikan ke semua slot"
+
+msgid "Click to close spectator slot"
+msgstr "Klik untuk menutup slot penonton"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr "Rating pemain:"
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Klik untuk mengubah tingkat kesulitan"
+
+msgid "Waiting for player"
+msgstr "Menunggu pemain"
+
+msgid "Player is ready"
+msgstr "Pemain Siap"
+
+msgid "Player is downloading"
+msgstr "Pemain sedang mengunduh"
+
+msgid "Click when ready"
+msgstr "Klik saat sudah siap"
+
+msgid "Waiting for download"
+msgstr "Menunggu untuk mengunduh"
+
+msgid "READY?"
+msgstr "SIAP?"
 
 msgid "Launch Transport"
 msgstr "Luncurkan Transporter"
