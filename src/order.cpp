@@ -3345,24 +3345,24 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 				if (result.type == RTR_TYPE_REPAIR_FACILITY)
 				{
 					ASSERT(result.psObj != nullptr, "RTR_FACILITY but target is null");
-					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeImmediate);
+					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeQueue);
 					return;
 				}
 				else if (result.type == RTR_TYPE_HQ)
 				{
 					ASSERT(result.psObj != nullptr, "RTR_TYPE_HQ but target is null");
-					orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+					orderDroid(psDroid, DORDER_RTB, ModeQueue);
 					return;
 				}
 				else if (result.type == RTR_TYPE_NO_RESULT)
 				{
-					orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+					orderDroid(psDroid, DORDER_RTB, ModeQueue);
 					return;
 				}
 				else if (result.type == RTR_TYPE_DROID)
 				{
 					ASSERT(result.psObj != nullptr, "RTR_DROID but target is null");
-					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeImmediate);
+					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeQueue);
 				}
 
 			}
