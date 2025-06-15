@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Anti-Air")
+_("Anti-Air (or AA) weapons are specialized againt all types of flying units.")
+_("However, AA weapons are incapable of attacking structures or units on the ground.")
+_("While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground.")
