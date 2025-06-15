@@ -34,7 +34,8 @@
 #include <winsock2.h>
 #endif
 
-#include "../framework/frame.h"
+#include "lib/framework/frame.h"
+#include "lib/netplay/byteorder_funcs_wrapper.h"
 #include "netplay.h"
 #include "netreplay.h"
 #include "nettypes.h"
@@ -296,7 +297,7 @@ MessageWriter NETbeginEncode(NETQUEUE queue, uint8_t type)
 MessageReader NETbeginDecode(NETQUEUE queue, uint8_t type)
 {
 	auto res = MessageReader(queue, receiveQueue(queue)->getMessage());
-	assert(type == res.message->type);
+	assert(type == res.msgType);
 	return res;
 }
 
@@ -378,39 +379,39 @@ bool NETdecryptSecuredNetMessage(NETQUEUE queue, uint8_t& type)
 	auto pReceiveQueue = receiveQueue(queue);
 
 	// Get & decrypt message raw data
-	auto encryptedMessage = pReceiveQueue->getMessage();
-	ASSERT_OR_RETURN(false, encryptedMessage.type == NET_SECURED_NET_MESSAGE, "Not a secured message?");
+	const auto& encryptedMessage = pReceiveQueue->getMessage();
+	ASSERT_OR_RETURN(false, encryptedMessage.type() == NET_SECURED_NET_MESSAGE, "Not a secured message?");
 	std::vector<uint8_t> decryptedMessageRawData;
-	if (!netSessionKeys[queue.index]->decryptMessageFromOther(&(encryptedMessage.data[0]), encryptedMessage.data.size(), decryptedMessageRawData))
+	if (!netSessionKeys[queue.index]->decryptMessageFromOther(encryptedMessage.payload(), encryptedMessage.payloadSize(), decryptedMessageRawData))
 	{
 		debug(LOG_INFO, "Invalid encrypted message from player: %u", static_cast<unsigned>(queue.index));
 		return false;
 	}
 
-	NetMessage decryptedMessage;
-	if (!NetMessage::tryFromRawData(decryptedMessageRawData.data(), decryptedMessageRawData.size(), decryptedMessage))
+	auto decryptedMessage = NetMessage::tryFromRawData(decryptedMessageRawData.data(), decryptedMessageRawData.size());
+	if (!decryptedMessage)
 	{
 		debug(LOG_INFO, "Failed to parse decrypted data from player: %u", static_cast<unsigned>(queue.index));
 		return false;
 	}
 
-	if (!(decryptedMessage.type > NET_MIN_TYPE && decryptedMessage.type < NET_MAX_TYPE))
+	if (!(decryptedMessage->type() > NET_MIN_TYPE && decryptedMessage->type() < NET_MAX_TYPE))
 	{
-		debug(LOG_NET, "Not a secured NET_* message? (type: %s) - ignoring", messageTypeToString(decryptedMessage.type));
+		debug(LOG_NET, "Not a secured NET_* message? (type: %s) - ignoring", messageTypeToString(decryptedMessage->type()));
 		return false;
 	}
 
-	if (!NETisExpectedSecuredMessageType(decryptedMessage.type))
+	if (!NETisExpectedSecuredMessageType(decryptedMessage->type()))
 	{
 		// Ignore message types that aren't expected to be secured
-		debug(LOG_NET, "Not a message type that's expected to be secured: (type: %s) - ignoring", messageTypeToString(decryptedMessage.type));
+		debug(LOG_NET, "Not a message type that's expected to be secured: (type: %s) - ignoring", messageTypeToString(decryptedMessage->type()));
 		return false;
 	}
 
-	NETlogPacket(NET_SECURED_NET_MESSAGE, static_cast<uint32_t>(encryptedMessage.rawLen()), true);
+	NETlogPacket(NET_SECURED_NET_MESSAGE, static_cast<uint32_t>(encryptedMessage.rawData().size()), true);
 
-	type = decryptedMessage.type; // must update type!
-	pReceiveQueue->replaceCurrentWithDecrypted(std::move(decryptedMessage));
+	type = decryptedMessage->type(); // must update type!
+	pReceiveQueue->replaceCurrentWithDecrypted(std::move(*decryptedMessage));
 	return true;
 }
 
@@ -439,45 +440,54 @@ bool NETend(MessageWriter& w)
 
 	// Push the message onto the list.
 	NetQueue* queue = sendQueue(w.queueInfo);
-	if (queue == nullptr) {
-		debug(LOG_WARNING, "Sending %s to null queue, type %d.", messageTypeToString(w.message.type), w.queueInfo.queueType);
+	if (queue == nullptr)
+	{
+		debug(LOG_WARNING, "Sending %s to null queue, type %d.", messageTypeToString(w.msgBuilder.type()), w.queueInfo.queueType);
 		return true;
 	}
 
+	auto msg = w.msgBuilder.build();
 	if (shouldWrapSecretMessage)
 	{
 		// Need to actually encrypt and wrap the current net message in a NET_SECURED_NET_MESSAGE message
-		ASSERT(w.message.type < NET_MAX_TYPE, "Message type %u is >= NET_MAX_TYPE", static_cast<unsigned>(w.message.type));
+		ASSERT(msg.type() < NET_MAX_TYPE, "Message type %u is >= NET_MAX_TYPE", static_cast<unsigned>(msg.type()));
 		ASSERT(w.queueInfo.index < MAX_PLAYERS || w.queueInfo.index == NetPlay.hostPlayer, "Invalid recipient (queue.index == %u)", static_cast<unsigned>(w.queueInfo.index));
 		ASSERT(netSessionKeys[w.queueInfo.index] != nullptr, "Lacking session key for recipient: %u", static_cast<unsigned>(w.queueInfo.index));
 
 		// Decoded in NETprocessSystemMessage in netplay.cpp.
 		// Encrypt the serialized message (including type and size)
-		NetMessage encryptedNetMessage(NET_SECURED_NET_MESSAGE);
 		tmpMessageRawDataBuffer.clear();
-		w.message.rawDataAppendToVector(tmpMessageRawDataBuffer);
-		encryptedNetMessage.data = netSessionKeys[w.queueInfo.index]->encryptMessageForOther(&tmpMessageRawDataBuffer[0], tmpMessageRawDataBuffer.size());
+		msg.rawDataAppendToVector(tmpMessageRawDataBuffer);
 
-		w.message = std::move(encryptedNetMessage);
+		auto encryptedData = netSessionKeys[w.queueInfo.index]->encryptMessageForOther(&tmpMessageRawDataBuffer[0], tmpMessageRawDataBuffer.size());
+		NetMessageBuilder encryptedNetMessage(NET_SECURED_NET_MESSAGE, encryptedData.size());
+		encryptedNetMessage.append(encryptedData.data(), encryptedData.size());
+		msg = encryptedNetMessage.build();
 	}
 
-	queue->pushMessage(w.message);
-	NETlogPacket(w.message.type, static_cast<uint32_t>(w.message.data.size()), false);
+	optional<NetMessage> shareGameQueueMsg;
+	if (w.queueInfo.queueType == QUEUE_GAME_FORCED)
+	{
+		shareGameQueueMsg = msg;
+	}
+
+	queue->pushMessage(msg);
+	NETlogPacket(msg.type(), static_cast<uint32_t>(msg.rawData().size()), false);
 
 	if (w.queueInfo.queueType == QUEUE_GAME || w.queueInfo.queueType == QUEUE_GAME_FORCED)
 	{
-		ASSERT(w.message.type > GAME_MIN_TYPE && w.message.type < GAME_MAX_TYPE, "Inserting %s into game queue.", messageTypeToString(w.message.type));
+		ASSERT(msg.type() > GAME_MIN_TYPE && msg.type() < GAME_MAX_TYPE, "Inserting %s into game queue.", messageTypeToString(msg.type()));
 	}
 	else
 	{
-		ASSERT(w.message.type > NET_MIN_TYPE && w.message.type < NET_MAX_TYPE, "Inserting %s into net queue.", messageTypeToString(w.message.type));
+		ASSERT(msg.type() > NET_MIN_TYPE && msg.type() < NET_MAX_TYPE, "Inserting %s into net queue.", messageTypeToString(msg.type()));
 	}
 
 	if (w.queueInfo.queueType == QUEUE_NET || w.queueInfo.queueType == QUEUE_BROADCAST || w.queueInfo.queueType == QUEUE_TMP)
 	{
-		NETsend(w.queueInfo, &queue->getMessageForNet());
+		NETsend(w.queueInfo, queue->getMessageForNet());
 		queue->popMessageForNet();
-		ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining). (message = type: %" PRIu8 ", size: %zu), (queue = index: %" PRIu8 "; queueType: %" PRIu8 "; exclude: %" PRIu8 "; isPair: %d)", queue->numMessagesForNet(), w.message.type, w.message.data.size(), w.queueInfo.index, w.queueInfo.queueType, w.queueInfo.exclude, (int)w.queueInfo.isPair);
+		ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining). (message = type: %" PRIu8 ", size: %zu), (queue = index: %" PRIu8 "; queueType: %" PRIu8 "; exclude: %" PRIu8 "; isPair: %d)", queue->numMessagesForNet(), msg.type(), msg.rawData().size(), w.queueInfo.index, w.queueInfo.queueType, w.queueInfo.exclude, (int)w.queueInfo.isPair);
 	}
 
 	// Process any delayed actions from the NETsend call
@@ -500,13 +510,13 @@ bool NETend(MessageWriter& w)
 		auto shareQueueWriter = NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
 		NETuint8_t(shareQueueWriter, player);
 		NETuint32_t(shareQueueWriter, 1);
-		NETnetMessage(shareQueueWriter, w.message);
+		NETnetMessage(shareQueueWriter, *shareGameQueueMsg);
 
 		uint8_t allPlayers = NET_ALL_PLAYERS;
 		auto sendToPlayerWriter = NETbeginEncode(NETbroadcastQueue(), NET_SEND_TO_PLAYER);
 		NETuint8_t(sendToPlayerWriter, player);
 		NETuint8_t(sendToPlayerWriter, allPlayers);
-		NETnetMessage(sendToPlayerWriter, shareQueueWriter.message);
+		NETnetMessage(sendToPlayerWriter, shareQueueWriter.msgBuilder.build());
 		NETend(sendToPlayerWriter);  // This time we actually send it.
 	}
 
@@ -587,10 +597,10 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 	{
 		if ((player >= MAX_PLAYERS && player != NetPlay.hostPlayer) || gameQueues[player] == nullptr)
 		{
-			debug((newMessage->type != GAME_GAME_TIME) ? LOG_ERROR : LOG_INFO, "Skipping message to player %d in replay.", player);
+			debug((newMessage->type() != GAME_GAME_TIME) ? LOG_ERROR : LOG_INFO, "Skipping message to player %d in replay.", player);
 			continue;
 		}
-		if (newMessage->type == REPLAY_ENDED)
+		if (newMessage->type() == REPLAY_ENDED)
 		{
 			gotReplayEnded = true;
 			break;
@@ -605,7 +615,7 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 		return false;
 	}
 	// Add special REPLAY_ENDED message to the end of the host's gameQueue
-	newMessage = std::make_unique<NetMessage>(REPLAY_ENDED);
+	newMessage = std::make_unique<NetMessage>(NetMessageBuilder(REPLAY_ENDED, 0).build());
 	gameQueues[NetPlay.hostPlayer]->pushMessage(*newMessage);
 	NETreplayLoadStop();
 	bIsReplay = true;
@@ -645,7 +655,7 @@ void NETuint16_t(MessageReader& r, uint16_t& val)
 	uint8_t b[2];
 	r.byte(b[0]);
 	r.byte(b[1]);
-	val = (b[0] << 8) | b[1];
+	wz_ntohs_load_unaligned(val, b);
 }
 
 void NETint16_t(MessageReader &r, int16_t& val)
@@ -802,14 +812,11 @@ void NETVector2i(MessageReader& r, Vector2i& vec)
 	NETint32_t(r, vec.y);
 }
 
-void NETnetMessage(MessageReader& r, NetMessage const** msg)
+void NETnetMessage(MessageReader& r, NetMessage** msg)
 {
-	NetMessage* m = new NetMessage();
-
-	NETuint8_t(r, m->type);
-	NETbytes(r, m->data, std::numeric_limits<uint32_t>::max());
-
-	*msg = m;
+	std::vector<uint8_t> rawData;
+	NETbytes(r, rawData, std::numeric_limits<uint32_t>::max());
+	*msg = new NetMessage(NetMessageBuilder(std::move(rawData)).build());
 }
 
 // MessageWriter overloads for encoding
@@ -825,7 +832,9 @@ void NETint8_t(MessageWriter& w, int8_t val)
 
 void NETuint16_t(MessageWriter& w, uint16_t val)
 {
-	uint8_t b[2] = { uint8_t(val >> 8), uint8_t(val) };
+	uint8_t b[2];
+	wz_htons_store_unaligned(b, val);
+
 	NETuint8_t(w, b[0]);
 	NETuint8_t(w, b[1]);
 }
@@ -975,6 +984,5 @@ void NETVector2i(MessageWriter& w, const Vector2i& vec)
 
 void NETnetMessage(MessageWriter& w, const NetMessage& msg)
 {
-	NETuint8_t(w, msg.type);
-	NETbytes(w, msg.data, std::numeric_limits<uint32_t>::max());
+	NETbytes(w, msg.rawData(), std::numeric_limits<uint32_t>::max());
 }

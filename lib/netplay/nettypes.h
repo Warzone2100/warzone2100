@@ -100,7 +100,7 @@ void NETbytes(MessageReader &r, std::vector<uint8_t>& vec, unsigned maxLen = 100
 void NETPosition(MessageReader& r, Position& pos);
 void NETRotation(MessageReader& r, Rotation& rot);
 void NETVector2i(MessageReader& r, Vector2i& vec);
-void NETnetMessage(MessageReader& r, NetMessage const** msg);  ///< Must delete the NETMESSAGE.
+void NETnetMessage(MessageReader& r, NetMessage** msg);  ///< Must delete the NETMESSAGE.
 
 template <typename EnumT>
 void NETenum(MessageReader& r, EnumT& enumRef)

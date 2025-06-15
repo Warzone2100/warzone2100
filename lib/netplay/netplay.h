@@ -169,6 +169,8 @@ enum SYNC_OPT_TYPES
 
 #define MAX_NET_TRANSFERRABLE_FILE_SIZE	0x8000000
 
+static_assert(MaxMsgSize <= UINT16_MAX, "NetMessage/NetMessageBuilder encodes message length as a uint16_t");
+
 struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 {
 	int32_t dwSize;
@@ -359,7 +361,7 @@ enum class ConnectionProviderType : uint8_t;
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 int NETinit(ConnectionProviderType pt);
-WZ_DECL_NONNULL(2) bool NETsend(NETQUEUE queue, NetMessage const *message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+bool NETsend(NETQUEUE queue, NetMessage const& message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 void NETsendProcessDelayedActions();
 WZ_DECL_NONNULL(1, 2) bool NETrecvNet(NETQUEUE *queue, uint8_t *type);        ///< recv a message from the net queues if possible.
 WZ_DECL_NONNULL(1, 2) bool NETrecvGame(NETQUEUE *queue, uint8_t *type);       ///< recv a message from the game queues which is sceduled to execute by time, if possible.
