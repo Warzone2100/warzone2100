@@ -1297,12 +1297,13 @@ void WzJoiningGameScreen_HandlerRoot::attemptToOpenConnection(size_t connectionI
 bool WzJoiningGameScreen_HandlerRoot::joiningSocketNETsend()
 {
 	NetQueue *queue = &tmpJoiningQueuePair->send;
-	NetMessage const *message = &queue->getMessageForNet();
-	uint8_t *rawData = message->rawDataDup();
-	ssize_t rawLen   = message->rawLen();
+	const NetMessage& message = queue->getMessageForNet();
+	const auto& rawData = message.rawData();
+	ssize_t rawLen = rawData.size();
+	uint8_t msgType = message.type();
+
 	size_t compressedRawLen = 0;
-	const auto writeResult = client_transient_socket->writeAll(rawData, rawLen, &compressedRawLen);
-	delete[] rawData;  // Done with the data.
+	const auto writeResult = client_transient_socket->writeAll(rawData.data(), rawLen, &compressedRawLen);
 	queue->popMessageForNet();
 	if (writeResult.has_value())
 	{
@@ -1313,7 +1314,7 @@ bool WzJoiningGameScreen_HandlerRoot::joiningSocketNETsend()
 	{
 		const auto writeErrMsg = writeResult.error().message();
 		// Write error, most likely host disconnect.
-		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", message->type, message->rawLen(), compressedRawLen, writeErrMsg.c_str());
+		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", msgType, rawLen, compressedRawLen, writeErrMsg.c_str());
 		return false;
 	}
 	ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining).", queue->numMessagesForNet());
@@ -1505,7 +1506,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			return; // nothing to do until more data comes in
 		}
 
-		uint8_t msgType = NETgetMessage(tmpJoiningQUEUE)->type;
+		uint8_t msgType = NETgetMessage(tmpJoiningQUEUE)->type();
 
 		if (msgType == NET_ACCEPTED)
 		{

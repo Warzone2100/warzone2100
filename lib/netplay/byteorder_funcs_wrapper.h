@@ -31,3 +31,26 @@ uint32_t wz_htonl(uint32_t hostlong);
 uint16_t wz_htons(uint16_t hostshort);
 uint32_t wz_ntohl(uint32_t netlong);
 uint16_t wz_ntohs(uint16_t netshort);
+
+/// <summary>
+/// Utility function to store a 16-bit value (host byte order) into a (possibly unaligned) destination
+/// using network byte order (i.e., big endian).
+/// </summary>
+/// <param name="dst">Destination byte buffer. Does not need to be properly aligned to uint16_t type requirements.</param>
+/// <param name="src">Source 16-bit value (host byte order).</param>
+inline void wz_htons_store_unaligned(uint8_t* dst, uint16_t src)
+{
+	dst[0] = static_cast<uint8_t>(src >> 8);
+	dst[1] = static_cast<uint8_t>(src);
+}
+
+/// <summary>
+/// Utility function to load a 16-bit value (network byte order) from a (possibly unaligned) source
+/// into a destination (host byte order).
+/// </summary>
+/// <param name="dst">Destination 16-bit value (host byte order).</param>
+/// <param name="src">Source byte buffer. Does not need to be properly aligned to uint16_t type requirements.</param>
+inline void wz_ntohs_load_unaligned(uint16_t& dst, const uint8_t* src)
+{
+	dst = (src[0] << 8) | src[1];
+}

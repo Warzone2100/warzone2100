@@ -1805,7 +1805,7 @@ void NETsendProcessDelayedActions()
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
-bool NETsend(NETQUEUE queue, NetMessage const *message)
+bool NETsend(NETQUEUE queue, NetMessage const& message)
 {
 	uint8_t player = queue.index;
 
@@ -1843,17 +1843,17 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 			// We are the host, send directly to player.
 			if (sockets[player] != nullptr && player != queue.exclude)
 			{
-				uint8_t *rawData = message->rawDataDup();
-				if (!rawData)
+				const auto& rawData = message.rawData();
+				if (rawData.empty())
 				{
-					debug(LOG_FATAL, "Failed to allocate raw data (message type: %" PRIu8 ", player: %d)", message->type, player);
+					debug(LOG_FATAL, "Failed to allocate raw data (message type: %" PRIu8 ", player: %d)", message.type(), player);
 					abort();
 				}
-				ssize_t rawLen   = message->rawLen();
+				uint8_t msgType = message.type();
+				ssize_t rawLen = rawData.size();
 				size_t compressedRawLen;
-				const auto writeResult = sockets[player]->writeAll(rawData, rawLen, &compressedRawLen);
+				const auto writeResult = sockets[player]->writeAll(rawData.data(), rawLen, &compressedRawLen);
 				const auto res = writeResult.value_or(SOCKET_ERROR);
-				delete[] rawData;  // Done with the data.
 
 				if (res == rawLen)
 				{
@@ -1866,7 +1866,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 					const auto writeErrMsg = writeResult.error().message();
 					// Write error, most likely client disconnect.
 					debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to %" PRIu8 ": %s",
-						message->type, message->rawLen(), compressedRawLen, player, writeErrMsg.c_str());
+						msgType, rawLen, compressedRawLen, player, writeErrMsg.c_str());
 					if (!isTmpQueue)
 					{
 						netSendPendingDisconnectPlayerIndexes.insert(player);
@@ -1881,12 +1881,11 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 		// We are a client, send directly to player, who happens to be the host.
 		if (bsocket)
 		{
-			uint8_t *rawData = message->rawDataDup();
-			ssize_t rawLen   = message->rawLen();
+			const auto& rawData = message.rawData();
+			ssize_t rawLen = rawData.size();
 			size_t compressedRawLen;
-			const auto writeResult = bsocket->writeAll(rawData, rawLen, &compressedRawLen);
+			const auto writeResult = bsocket->writeAll(rawData.data(), rawLen, &compressedRawLen);
 			const auto res = writeResult.value_or(SOCKET_ERROR);
-			delete[] rawData;  // Done with the data.
 
 			if (res == rawLen)
 			{
@@ -1914,7 +1913,7 @@ bool NETsend(NETQUEUE queue, NetMessage const *message)
 		auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_SEND_TO_PLAYER);
 		NETuint8_t(w, sender);
 		NETuint8_t(w, player);
-		NETnetMessage(w, *message);
+		NETnetMessage(w, message);
 		NETend(w);
 	}
 
@@ -2478,7 +2477,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 		{
 			uint8_t sender;
 			uint8_t receiver;
-			NetMessage const *message = nullptr;
+			NetMessage* message = nullptr;
 			auto r = NETbeginDecode(playerQueue, NET_SEND_TO_PLAYER);
 			NETuint8_t(r, sender);
 			NETuint8_t(r, receiver);
@@ -2500,43 +2499,44 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				if (sender != selectedPlayer)  // Make sure host didn't send us our own broadcast messages, which shouldn't happen anyway.
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);
-					NETlogPacket(message->type, static_cast<uint32_t>(message->rawLen()), true);
+					NETlogPacket(message->type(), static_cast<uint32_t>(message->rawData().size()), true);
 				}
 			}
 			else if (NetPlay.isHost && sender == playerQueue.index)
 			{
-				if (((message->type == NET_OPTIONS
-					  || message->type == NET_FIREUP
-				      || message->type == NET_KICK
-				      || message->type == NET_PLAYER_LEAVING
-				      || message->type == NET_PLAYER_DROPPED
-				      || message->type == NET_REJECTED
-					  || message->type == NET_GAME_FLAGS
-				      || message->type == NET_PLAYER_JOINED
-					  || message->type == NET_PLAYER_INFO
-					  || message->type == NET_FILE_PAYLOAD
-					  || message->type == NET_PLAYER_SWAP_INDEX
-					  || message->type == NET_HOST_CONFIG) && sender != NetPlay.hostPlayer)
+				const auto msgType = message->type();
+				if (((msgType == NET_OPTIONS
+					  || msgType == NET_FIREUP
+				      || msgType == NET_KICK
+				      || msgType == NET_PLAYER_LEAVING
+				      || msgType == NET_PLAYER_DROPPED
+				      || msgType == NET_REJECTED
+					  || msgType == NET_GAME_FLAGS
+				      || msgType == NET_PLAYER_JOINED
+					  || msgType == NET_PLAYER_INFO
+					  || msgType == NET_FILE_PAYLOAD
+					  || msgType == NET_PLAYER_SWAP_INDEX
+					  || msgType == NET_HOST_CONFIG) && sender != NetPlay.hostPlayer)
 				    ||
-				    ((message->type == NET_HOST_DROPPED
-				      || message->type == NET_FILE_REQUESTED
-				      || message->type == NET_READY_REQUEST
-				      || message->type == NET_TEAMREQUEST
-				      || message->type == NET_COLOURREQUEST
-				      || message->type == NET_POSITIONREQUEST
-					  || message->type == NET_FACTIONREQUEST
-				      || message->type == NET_FILE_CANCELLED
-					  || message->type == NET_DATA_CHECK
-				      || message->type == NET_JOIN
-				      || message->type == NET_PLAYERNAME_CHANGEREQUEST
-					  || message->type == NET_PLAYER_SWAP_INDEX_ACK) && receiver != NetPlay.hostPlayer)
+				    ((msgType == NET_HOST_DROPPED
+				      || msgType == NET_FILE_REQUESTED
+				      || msgType == NET_READY_REQUEST
+				      || msgType == NET_TEAMREQUEST
+				      || msgType == NET_COLOURREQUEST
+				      || msgType == NET_POSITIONREQUEST
+					  || msgType == NET_FACTIONREQUEST
+				      || msgType == NET_FILE_CANCELLED
+					  || msgType == NET_DATA_CHECK
+				      || msgType == NET_JOIN
+				      || msgType == NET_PLAYERNAME_CHANGEREQUEST
+					  || msgType == NET_PLAYER_SWAP_INDEX_ACK) && receiver != NetPlay.hostPlayer)
 					||
-					((message->type == NET_PLAYER_SLOTTYPE_REQUEST
-					  || message->type == NET_DATA_CHECK2) && (sender != NetPlay.hostPlayer && receiver != NetPlay.hostPlayer)))
+					((msgType == NET_PLAYER_SLOTTYPE_REQUEST
+					  || msgType == NET_DATA_CHECK2) && (sender != NetPlay.hostPlayer && receiver != NetPlay.hostPlayer)))
 				{
 					char msg[256] = {'\0'};
 
-					ssprintf(msg, "Auto-kicking player %u, lacked the required access level for command(%d).", (unsigned int)sender, (int)message->type);
+					ssprintf(msg, "Auto-kicking player %u, lacked the required access level for command(%d).", (unsigned int)sender, (int)message->type());
 					sendRoomSystemMessage(msg);
 					NETlogEntry(msg, SYNC_FLAG, sender);
 					addIPToBanList(NetPlay.players[sender].IPtextAddress, NetPlay.players[sender].name);
@@ -2547,13 +2547,13 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				}
 
 				// Certain messages should be filtered while we're waiting for the ack of a player index switch
-				if (NETFilterMessageWhileSwappingPlayer(sender, message->type))
+				if (NETFilterMessageWhileSwappingPlayer(sender, msgType))
 				{
 					break;
 				}
 
 				// Certain messages should be filtered due to hostChatPermissions
-				if ((message->type == NET_TEXTMSG || message->type == NET_SPECTEXTMSG || message->type == NET_AITEXTMSG)
+				if ((msgType == NET_TEXTMSG || msgType == NET_SPECTEXTMSG || msgType == NET_AITEXTMSG)
 					&& !ingame.hostChatPermissions[sender])
 				{
 					// Only allow messages direct to host in this case! (Carve-out to allow /hostmsg commands...)
@@ -2562,6 +2562,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 						break;
 					}
 				}
+
+				size_t rawLen = message->rawData().size();
 
 				// We are the host, and player is asking us to send the message to receiver.
 				auto w = NETbeginEncode(NETnetQueue(receiver, sender), NET_SEND_TO_PLAYER);
@@ -2573,20 +2575,20 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				if (receiver == NET_ALL_PLAYERS)
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);  // Message is also for the host.
-					NETlogPacket(message->type, static_cast<uint32_t>(message->rawLen()), true);
+					NETlogPacket(msgType, static_cast<uint32_t>(rawLen), true);
 					// Not sure if flushing here can make a difference, maybe it can:
 					//NETflush();  // Send the message to everyone as fast as possible.
 				}
 			}
 			else
 			{
-				if (NetPlay.isHost && NETFilterMessageWhileSwappingPlayer(playerQueue.index, message->type))
+				if (NetPlay.isHost && NETFilterMessageWhileSwappingPlayer(playerQueue.index, message->type()))
 				{
-					debug(LOG_NET, "Ignoring message type (%d) from Player %d while swapping player index", (int)message->type, (int)playerQueue.index);
+					debug(LOG_NET, "Ignoring message type (%d) from Player %d while swapping player index", (int)message->type(), (int)playerQueue.index);
 					break;
 				}
 
-				debug(LOG_INFO, "Report this: Player %d sent us message type (%d) addressed to %d from %d. We are %d.", (int)playerQueue.index, (int)message->type, (int)receiver, (int)sender, selectedPlayer);
+				debug(LOG_INFO, "Report this: Player %d sent us message type (%d) addressed to %d from %d. We are %d.", (int)playerQueue.index, (int)message->type(), (int)receiver, (int)sender, selectedPlayer);
 			}
 
 			break;
@@ -2602,7 +2604,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 
 			uint8_t player = 0;
 			uint32_t num = 0, n;
-			NetMessage const *message = nullptr;
+			NetMessage* message = nullptr;
 
 			// Encoded in NETprocessSystemMessage in nettypes.cpp.
 			auto r = NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
@@ -2620,7 +2622,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				NETnetMessage(r, &message);
 
 				NETinsertMessageFromNet(NETgameQueue(player), message);
-				NETlogPacket(message->type, static_cast<uint32_t>(message->rawLen()), true);
+				NETlogPacket(message->type(), static_cast<uint32_t>(message->rawData().size()), true);
 
 				delete message;
 				message = nullptr;
@@ -3059,7 +3061,7 @@ checkMessages:
 		*queue = NETnetQueue(current);
 		while (NETisMessageReady(*queue))
 		{
-			*type = NETgetMessage(*queue)->type;
+			*type = NETgetMessage(*queue)->type();
 			if (!NETprocessSystemMessage(*queue, type))
 			{
 				return true;  // We couldn't process the message, let the caller deal with it..
@@ -3087,7 +3089,7 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 			}
 
 			NETreplaySaveNetMessage(NETgetMessage(*queue), queue->index);
-			*type = NETgetMessage(*queue)->type;
+			*type = NETgetMessage(*queue)->type();
 
 			if (*type == GAME_GAME_TIME)
 			{
@@ -4226,7 +4228,7 @@ static void NETallowJoining()
 					continue;
 				}
 
-				if (NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
+				if (NETgetMessage(NETnetTmpQueue(i))->type() == NET_JOIN)
 				{
 					char name[StringSize] = { '\0' };
 					char ModList[modlist_string_size] = { '\0' };
@@ -4303,10 +4305,10 @@ static void NETallowJoining()
 						NETrejectTempSocketClient(i, ERROR_WRONGDATA, true);
 						continue;
 					}
-
-					NetMessage tmpMessage(NET_JOIN); // dummy message for parsing
-					tmpMessage.data = std::move(decryptedMessageRawData);
-					NETinsertMessageFromNet(NETnetTmpQueue(i), &tmpMessage); // insert virtual message into temp queue for parsing
+					NetMessageBuilder tmpMessageBuilder(NET_JOIN, decryptedMessageRawData.size()); // dummy message for parsing
+					tmpMessageBuilder.append(decryptedMessageRawData.data(), decryptedMessageRawData.size());
+					auto tmpMessage = tmpMessageBuilder.build();
+					NETinsertMessageFromNet(NETnetTmpQueue(i),  &tmpMessage); // insert virtual message into temp queue for parsing
 
 					// Parse the decrypted response
 					EcKey::Sig challengeResponse;
