@@ -270,13 +270,13 @@ void NetQueue::popMessageForNet()
 	popOldMessages();
 }
 
-void NetQueue::pushMessage(const NetMessage &message)
+void NetQueue::pushMessage(NetMessage&& message)
 {
 	if (message.type() == GAME_GAME_TIME)
 	{
 		++pendingGameTimeUpdateMessages;
 	}
-	messages.push_front(message);
+	messages.emplace_front(std::move(message));
 }
 
 void NetQueue::setWillNeverGetMessages()

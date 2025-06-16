@@ -265,7 +265,7 @@ public:
 
 	// All game clients should check game messages from all queues, including their own, and only the net messages sent to them.
 	// Message related, storing.
-	void pushMessage(const NetMessage &message);                       ///< Adds a message to the queue.
+	void pushMessage(NetMessage&& message);                       ///< Adds a message to the queue.
 	// Message related, extracting.
 	void setWillNeverGetMessages();                                    ///< Marks that we will not be reading any of the messages (only sending over the network).
 	bool haveMessage() const;                                          ///< Return true if we have a message ready to return.

@@ -2482,7 +2482,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			NETuint8_t(r, sender);
 			NETuint8_t(r, receiver);
 			NETnetMessage(r, &message);  // Must delete message later.
-			std::unique_ptr<NetMessage const> deleteLater(message);
+			std::unique_ptr<NetMessage> deleteLater(message);
 			if (!NETend(r))
 			{
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
@@ -2498,8 +2498,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				// Message was sent to us via the host.
 				if (sender != selectedPlayer)  // Make sure host didn't send us our own broadcast messages, which shouldn't happen anyway.
 				{
-					NETinsertMessageFromNet(NETnetQueue(sender), message);
 					NETlogPacket(message->type(), static_cast<uint32_t>(message->rawData().size()), true);
+					NETinsertMessageFromNet(NETnetQueue(sender), std::move(*message));
 				}
 			}
 			else if (NetPlay.isHost && sender == playerQueue.index)
@@ -2574,8 +2574,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 
 				if (receiver == NET_ALL_PLAYERS)
 				{
-					NETinsertMessageFromNet(NETnetQueue(sender), message);  // Message is also for the host.
 					NETlogPacket(msgType, static_cast<uint32_t>(rawLen), true);
+					NETinsertMessageFromNet(NETnetQueue(sender), std::move(*message));  // Message is also for the host.
 					// Not sure if flushing here can make a difference, maybe it can:
 					//NETflush();  // Send the message to everyone as fast as possible.
 				}
@@ -2621,8 +2621,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 			{
 				NETnetMessage(r, &message);
 
-				NETinsertMessageFromNet(NETgameQueue(player), message);
 				NETlogPacket(message->type(), static_cast<uint32_t>(message->rawData().size()), true);
+				NETinsertMessageFromNet(NETgameQueue(player), std::move(*message));
 
 				delete message;
 				message = nullptr;
@@ -4307,8 +4307,7 @@ static void NETallowJoining()
 					}
 					NetMessageBuilder tmpMessageBuilder(NET_JOIN, decryptedMessageRawData.size()); // dummy message for parsing
 					tmpMessageBuilder.append(decryptedMessageRawData.data(), decryptedMessageRawData.size());
-					auto tmpMessage = tmpMessageBuilder.build();
-					NETinsertMessageFromNet(NETnetTmpQueue(i),  &tmpMessage); // insert virtual message into temp queue for parsing
+					NETinsertMessageFromNet(NETnetTmpQueue(i), tmpMessageBuilder.build()); // insert virtual message into temp queue for parsing
 
 					// Parse the decrypted response
 					EcKey::Sig challengeResponse;
