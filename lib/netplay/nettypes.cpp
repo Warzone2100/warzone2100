@@ -196,9 +196,9 @@ void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen)
 	receiveQueue(queue)->writeRawData(data, dataLen);
 }
 
-void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *newMessage)
+void NETinsertMessageFromNet(NETQUEUE queue, NetMessage&& newMessage)
 {
-	receiveQueue(queue)->pushMessage(*newMessage);
+	receiveQueue(queue)->pushMessage(std::move(newMessage));
 }
 
 bool NETisMessageReady(NETQUEUE queue)
@@ -471,23 +471,26 @@ bool NETend(MessageWriter& w)
 		shareGameQueueMsg = msg;
 	}
 
-	queue->pushMessage(msg);
-	NETlogPacket(msg.type(), static_cast<uint32_t>(msg.rawData().size()), false);
+	auto msgType = msg.type();
+	auto msgRawDataSize = msg.rawData().size();
+
+	NETlogPacket(msgType, static_cast<uint32_t>(msgRawDataSize), false);
+	queue->pushMessage(std::move(msg));
 
 	if (w.queueInfo.queueType == QUEUE_GAME || w.queueInfo.queueType == QUEUE_GAME_FORCED)
 	{
-		ASSERT(msg.type() > GAME_MIN_TYPE && msg.type() < GAME_MAX_TYPE, "Inserting %s into game queue.", messageTypeToString(msg.type()));
+		ASSERT(msgType > GAME_MIN_TYPE && msgType < GAME_MAX_TYPE, "Inserting %s into game queue.", messageTypeToString(msgType));
 	}
 	else
 	{
-		ASSERT(msg.type() > NET_MIN_TYPE && msg.type() < NET_MAX_TYPE, "Inserting %s into net queue.", messageTypeToString(msg.type()));
+		ASSERT(msgType > NET_MIN_TYPE && msgType < NET_MAX_TYPE, "Inserting %s into net queue.", messageTypeToString(msgType));
 	}
 
 	if (w.queueInfo.queueType == QUEUE_NET || w.queueInfo.queueType == QUEUE_BROADCAST || w.queueInfo.queueType == QUEUE_TMP)
 	{
 		NETsend(w.queueInfo, queue->getMessageForNet());
 		queue->popMessageForNet();
-		ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining). (message = type: %" PRIu8 ", size: %zu), (queue = index: %" PRIu8 "; queueType: %" PRIu8 "; exclude: %" PRIu8 "; isPair: %d)", queue->numMessagesForNet(), msg.type(), msg.rawData().size(), w.queueInfo.index, w.queueInfo.queueType, w.queueInfo.exclude, (int)w.queueInfo.isPair);
+		ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining). (message = type: %" PRIu8 ", size: %zu), (queue = index: %" PRIu8 "; queueType: %" PRIu8 "; exclude: %" PRIu8 "; isPair: %d)", queue->numMessagesForNet(), msgType, msgRawDataSize, w.queueInfo.index, w.queueInfo.queueType, w.queueInfo.exclude, (int)w.queueInfo.isPair);
 	}
 
 	// Process any delayed actions from the NETsend call
@@ -605,7 +608,7 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 			gotReplayEnded = true;
 			break;
 		}
-		gameQueues[player]->pushMessage(*newMessage);
+		gameQueues[player]->pushMessage(std::move(*newMessage));
 	}
 	if (!gotReplayEnded && replayFormatVer >= 2)
 	{
@@ -615,8 +618,7 @@ bool NETloadReplay(std::string const &filename, ReplayOptionsHandler& optionsHan
 		return false;
 	}
 	// Add special REPLAY_ENDED message to the end of the host's gameQueue
-	newMessage = std::make_unique<NetMessage>(NetMessageBuilder(REPLAY_ENDED, 0).build());
-	gameQueues[NetPlay.hostPlayer]->pushMessage(*newMessage);
+	gameQueues[NetPlay.hostPlayer]->pushMessage(NetMessageBuilder(REPLAY_ENDED, 0).build());
 	NETreplayLoadStop();
 	bIsReplay = true;
 	return true;
