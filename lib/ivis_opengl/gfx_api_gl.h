@@ -348,7 +348,7 @@ struct gl_context final : public gfx_api::context
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
-	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 	virtual bool supportsMipLodBias() const override;
@@ -384,6 +384,7 @@ private:
 	std::string calculateFormattedRendererInfoString() const;
 	bool isBlocklistedGraphicsDriver() const;
 	uint32_t getSuggestedDefaultDepthBufferResolution() const;
+	bool setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode);
 
 	uint32_t viewportWidth = 0;
 	uint32_t viewportHeight = 0;

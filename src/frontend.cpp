@@ -2263,7 +2263,7 @@ void seqVsyncMode()
 	{
 		currentVsyncMode = static_cast<gfx_api::context::swap_interval_mode>(seqCycle(static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(currentVsyncMode), static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(gfx_api::context::min_swap_interval_mode), 1, static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(gfx_api::context::max_swap_interval_mode)));
 
-		success = gfx_api::context::get().setSwapInterval(currentVsyncMode);
+		success = gfx_api::context::get().setSwapInterval(currentVsyncMode, []() { wzPostChangedSwapInterval();} );
 
 	} while ((!success) && (currentVsyncMode != startingVsyncMode));
 
@@ -2276,7 +2276,6 @@ void seqVsyncMode()
 	{
 		// succeeded changing vsync mode
 		saveCurrentSwapMode(currentVsyncMode);
-		wzPostChangedSwapInterval();
 	}
 }
 
