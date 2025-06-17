@@ -426,7 +426,8 @@ namespace gfx_api
 		virtual bool shouldDraw() = 0;
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;
-		virtual bool setSwapInterval(swap_interval_mode mode) = 0;
+		typedef std::function<void()> SetSwapIntervalCompletionHandler;
+		virtual bool setSwapInterval(swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) = 0;
 		virtual swap_interval_mode getSwapInterval() const = 0;
 		virtual bool textureFormatIsSupported(pixel_format_target target, pixel_format format, pixel_format_usage::flags usage) = 0;
 		virtual bool supportsMipLodBias() const = 0;

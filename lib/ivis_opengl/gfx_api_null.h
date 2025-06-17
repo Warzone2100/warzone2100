@@ -149,7 +149,7 @@ public:
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
-	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 	virtual bool supportsMipLodBias() const override;
@@ -166,6 +166,7 @@ public:
 	virtual bool debugRecompileAllPipelines() override;
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
+	bool setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode);
 private:
 
 	size_t frameNum = 0;

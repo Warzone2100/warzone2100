@@ -872,7 +872,7 @@ public:
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
-	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 	virtual bool supportsMipLodBias() const override;
@@ -901,6 +901,13 @@ private:
 	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
 	uint32_t lastRenderPassEndTime = 0;
 	size_t currentRenderPassId = DEFAULT_RENDER_PASS_ID;
+
+	struct QueuedSwapModeChange
+	{
+		gfx_api::context::swap_interval_mode newMode;
+		SetSwapIntervalCompletionHandler completionHandler;
+	};
+	optional<QueuedSwapModeChange> queuedSwapModeChange = nullopt;
 };
 
 #endif // defined(WZ_VULKAN_ENABLED)

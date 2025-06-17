@@ -3544,11 +3544,11 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		return false;
 	}
 
-	if (!setSwapInterval(mode))
+	if (!setSwapIntervalInternal(mode))
 	{
 		// default to vsync on
 		debug(LOG_3D, "Failed to set swap interval: %d; defaulting to vsync on", to_int(mode));
-		setSwapInterval(gfx_api::context::swap_interval_mode::vsync);
+		setSwapIntervalInternal(gfx_api::context::swap_interval_mode::vsync);
 	}
 
 	mipLodBias = _mipLodBias;
@@ -4787,9 +4787,19 @@ const size_t& gl_context::current_FrameNum() const
 	return frameNum;
 }
 
-bool gl_context::setSwapInterval(gfx_api::context::swap_interval_mode mode)
+bool gl_context::setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode)
 {
 	return backend_impl->setSwapInterval(mode);
+}
+
+bool gl_context::setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler)
+{
+	auto success = setSwapIntervalInternal(mode);
+	if (success && completionHandler)
+	{
+		completionHandler();
+	}
+	return success;
 }
 
 gfx_api::context::swap_interval_mode gl_context::getSwapInterval() const

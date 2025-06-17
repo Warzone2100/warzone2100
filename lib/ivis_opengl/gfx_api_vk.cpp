@@ -4227,7 +4227,7 @@ gfx_api::context::swap_interval_mode from_vk_presentmode(vk::PresentModeKHR pres
 	return gfx_api::context::swap_interval_mode::vsync; // prevent warning
 }
 
-bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode)
+bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode, const SetSwapIntervalCompletionHandler& completionHandler)
 {
 	ASSERT(physicalDevice, "Physical device is null");
 	ASSERT(surface, "Surface is null");
@@ -4248,38 +4248,8 @@ bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode)
 		return true;
 	}
 
-	// set swapMode
-	swapMode = newSwapMode;
-
-	// Destroy + recreate swapchain
-	destroySwapchainAndSwapchainSpecificStuff(false);
-	try {
-		createSwapchain();
-	}
-	catch (const vk::SystemError &e)
-	{
-		// Encountered an unrecoverable error trying to create the swapchain
-		auto resultErr = static_cast<vk::Result>(e.code().value());
-		debug(LOG_ERROR, "createSwapchain() failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-		handleUnrecoverableError(resultErr);
-	}
-	catch (const std::exception &e)
-	{
-		// Encountered some other exception (possibly bad_alloc, etc)
-		debug(LOG_FATAL, "createSwapchain() failed with an exception: %s", e.what());
-		return false;
-	}
-
-	try {
-		rebuildPipelinesIfNecessary();
-	}
-	catch (const vk::SystemError &e)
-	{
-		// Encountered an unrecoverable error trying to rebuild pipelines
-		auto resultErr = static_cast<vk::Result>(e.code().value());
-		debug(LOG_ERROR, "rebuildPipelinesIfNecessary() failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-		handleUnrecoverableError(resultErr);
-	}
+	// queue swap-mode change
+	queuedSwapModeChange = { newSwapMode, completionHandler };
 	return true;
 }
 
@@ -6022,6 +5992,12 @@ void VkRoot::endRenderPass()
 		handleUnrecoverableError(resultErr);
 	}
 
+	if (queuedSwapModeChange.has_value())
+	{
+		swapMode = queuedSwapModeChange.value().newMode;
+		mustRecreateSwapchain = true;
+	}
+
 	if (mustRecreateSwapchain)
 	{
 		try {
@@ -6031,7 +6007,16 @@ void VkRoot::endRenderPass()
 		{
 			auto resultErr = static_cast<vk::Result>(e.code().value());
 			debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+			queuedSwapModeChange.reset();
 			handleUnrecoverableError(resultErr);
+		}
+		if (queuedSwapModeChange.has_value())
+		{
+			if (queuedSwapModeChange.value().completionHandler)
+			{
+				queuedSwapModeChange.value().completionHandler();
+			}
+			queuedSwapModeChange.reset();
 		}
 		return; // end processing this flip
 	}
