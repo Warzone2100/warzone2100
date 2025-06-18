@@ -1670,9 +1670,9 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 
 	case SDL_KEYUP:
 	{
-		unsigned currentKey = keyEvent->keysym.scancode;
-		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetKeyName(currentKey));
-		KEY_CODE code = sdlScancodeToKeyCode(keyEvent->keysym.scancode);
+		SDL_Scancode currentKey = keyEvent->keysym.scancode;
+		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
+		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
 		if (code >= KEY_MAXSCAN)
 		{
 			break;
