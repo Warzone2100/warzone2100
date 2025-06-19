@@ -1718,7 +1718,7 @@ WidgetGraphicsContext WidgetGraphicsContext::setAllowChildDisplayRecursiveIfSelf
 {
 	WidgetGraphicsContext newContext(*this);
 
-	newContext.allowChildDisplayIfSelfClipped = true;
+	newContext.allowChildDisplayIfSelfClipped = val;
 	return newContext;
 }
 
