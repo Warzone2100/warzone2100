@@ -125,7 +125,7 @@ public:
 	WzOptionsDropdownWidget();
 	void setTextAlignment(WzTextAlignment align);
 
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void display(int xOffset, int yOffset) override;
 	void geometryChanged() override;
 protected:
@@ -410,7 +410,7 @@ public:
 protected:
 	void run(W_CONTEXT *psContext) override;
 	void geometryChanged() override;
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void display(int xOffset, int yOffset) override;
 
 private:

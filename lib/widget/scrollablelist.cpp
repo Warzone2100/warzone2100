@@ -191,10 +191,10 @@ uint32_t ScrollableListWidget::calculateListViewWidth() const
 	return (result > 0) ? static_cast<uint32_t>(result) : 0;
 }
 
-bool ScrollableListWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> ScrollableListWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	scrollBar->incrementPosition(-getMouseWheelSpeed().y * 20);
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 void ScrollableListWidget::enableScroll()

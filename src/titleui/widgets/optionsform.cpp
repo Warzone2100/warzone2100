@@ -52,10 +52,10 @@ void WzOptionsDropdownWidget::setTextAlignment(WzTextAlignment align)
 	style |= align;
 }
 
-bool WzOptionsDropdownWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> WzOptionsDropdownWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	// deliberately skip the default DropdownWidget::processClickRecursive behavior (which forwards highlighting events to the selected item)
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	// deliberately skip the default DropdownWidget::findMouseTargetRecursive behavior (which forwards highlighting events to the selected item)
+	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 void WzOptionsDropdownWidget::display(int xOffset, int yOffset)
@@ -626,7 +626,7 @@ void OptionsValueChangerWidgetWrapper::displayRecursive(WidgetGraphicsContext co
 		auto childrenContext = context.translatedBy(x(), y()).setAllowChildDisplayRecursiveIfSelfClipped(false);
 		// Display the widgets on this widget.
 		// NOTE: Draw them in the opposite order that clicks are processed, so behavior matches the visual.
-		// i.e. Since processClickRecursive handles processing children in decreasing z-order (i.e. "top-down")
+		// i.e. Since findMouseTargetRecursive handles processing children in decreasing z-order (i.e. "top-down")
 		//      we want to draw things in list order (bottom-up) so the "top-most" is drawn last
 		for (auto const &child: children())
 		{
@@ -1075,9 +1075,9 @@ void OptionsForm::addOptionInternal(const OptionInfo& optionInfo, const std::sha
 	insertResult.first->second.idxInOptionsList = itemListIdx;
 }
 
-bool OptionsForm::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> OptionsForm::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	if (key == WKEY_NONE) // called this way for highlight processing by WIDGET::processClickRecursive, only if the mouse is actually over this widget (i.e. if hit-testing passes)
+	if (key == WKEY_NONE) // called this way for highlight processing by WIDGET::findMouseTargetRecursive, only if the mouse is actually over this widget (i.e. if hit-testing passes)
 	{
 		// mouse is over the options form this frame
 		W_CONTEXT shiftedContext(psContext);
@@ -1089,7 +1089,7 @@ bool OptionsForm::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bo
 	}
 
 	// forward to parent
-	return W_FORM::processClickRecursive(psContext, key, wasPressed);
+	return W_FORM::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 void OptionsForm::run(W_CONTEXT *psContext)

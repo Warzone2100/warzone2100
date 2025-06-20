@@ -37,14 +37,20 @@ void ClipRectWidget::runRecursive(W_CONTEXT *psContext)
 	WIDGET::runRecursive(&newContext);
 }
 
-bool ClipRectWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> ClipRectWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	W_CONTEXT newContext(psContext);
 	newContext.xOffset = psContext->xOffset - offset.x;
 	newContext.yOffset = psContext->yOffset - offset.y;
 	newContext.mx = psContext->mx + offset.x;
 	newContext.my = psContext->my + offset.y;
-	return WIDGET::processClickRecursive(&newContext, key, wasPressed);
+
+	auto result = WIDGET::findMouseTargetRecursive(&newContext, key, wasPressed);
+	if (result != nullptr)
+	{
+		*psContext = newContext; // bubble-up the matching hit's context
+	}
+	return result;
 }
 
 void ClipRectWidget::displayRecursive(const WidgetGraphicsContext &context)

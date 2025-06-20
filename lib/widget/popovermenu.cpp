@@ -57,11 +57,12 @@ bool MenuItemWrapper::getCloseMenuOnClick() const
 	return closeMenuOnClick;
 }
 
-bool MenuItemWrapper::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> MenuItemWrapper::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	auto result = WIDGET::processClickRecursive(psContext, key, wasPressed);
+	W_CONTEXT inputContext(psContext);
+	auto result = WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 
-	if (result && key != WKEY_NONE && this->hitTest(psContext->mx, psContext->my))
+	if (result && key != WKEY_NONE && this->hitTest(inputContext.mx, inputContext.my))
 	{
 		if (auto psStrongParent = parent.lock())
 		{

@@ -62,7 +62,7 @@ protected:
 	virtual void displayRecursive(WidgetGraphicsContext const& context) override;
 	virtual bool hitTest(int x, int y) const override;
 public:
-	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	virtual std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 protected:
 	friend class ScrollableTableWidget;
 	virtual void resizeColumns(const std::vector<size_t>& columnWidths, int columnPadding);
