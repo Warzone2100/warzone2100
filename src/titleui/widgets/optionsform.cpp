@@ -25,6 +25,7 @@
 #include "optionsform.h"
 #include "src/frend.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "lib/widget/form.h"
 #include "lib/widget/label.h"
 #include "lib/widget/scrollablelist.h"
@@ -36,6 +37,232 @@
 #include "lib/netplay/netplay.h"
 #include "src/multiplay.h"
 #include "src/main.h"
+#include "src/intimage.h"
+
+// MARK: OptionsSlider
+
+static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	W_SLIDER *Slider = (W_SLIDER *)psWidget;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+
+	iV_DrawImage(IntImages, IMAGE_SLIDER_BIG, x, y);			// draw bdrop
+
+	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / std::max<int>(Slider->numStops, 1);  // determine pos.
+	iV_DrawImage(IntImages, IMAGE_SLIDER_BIGBUT, x + 3 + sx, y + 3);								//draw amount
+}
+
+OptionsSlider::OptionsSlider()
+{ }
+
+std::shared_ptr<OptionsSlider> OptionsSlider::make(int32_t minValue, int32_t maxValue, int32_t stepValue, CurrentValueFunc currentValFunc, OnChangeValueFunc onChange, bool needsStateUpdates)
+{
+	ASSERT_OR_RETURN(nullptr, minValue < maxValue, "minValue is not < maxValue");
+	ASSERT_OR_RETURN(nullptr, currentValFunc != nullptr, "Invalid currentVal func");
+
+	uint32_t totalRange = static_cast<uint32_t>(maxValue - minValue);
+	UWORD numStops = (maxValue - minValue) / stepValue;
+	UWORD currPos = (currentValFunc() - minValue) / stepValue;
+
+	W_SLDINIT sSldInit;
+	sSldInit.formID		= 0;
+	sSldInit.id			= 0;
+	sSldInit.width		= iV_GetImageWidth(IntImages, IMAGE_SLIDER_BIG);
+	sSldInit.height		= iV_GetImageHeight(IntImages, IMAGE_SLIDER_BIG);
+	sSldInit.numStops	= numStops;
+	sSldInit.barSize	= iV_GetImageHeight(IntImages, IMAGE_SLIDER_BIG);
+	sSldInit.pos		= currPos;
+	sSldInit.pDisplay	= displayBigSlider;
+
+	auto sliderWidget = std::make_shared<W_SLIDER>(&sSldInit);
+
+	class make_shared_enabler : public OptionsSlider { };
+	auto result = std::make_shared<make_shared_enabler>();
+	result->sliderWidget = sliderWidget;
+	result->minValue = minValue;
+	result->maxValue = maxValue;
+	result->totalRange = totalRange;
+	result->stepValue = stepValue;
+	result->currentValFunc = currentValFunc;
+	result->onChangeValueFunc = onChange;
+	result->needsStateUpdates = needsStateUpdates;
+
+	auto weakParent = std::weak_ptr<OptionsSlider>(result);
+	result->sliderWidget->addOnChange([weakParent](W_SLIDER& s) {
+		auto strongParent = weakParent.lock();
+		ASSERT_OR_RETURN(, strongParent != nullptr, "Null parent");
+		strongParent->handleSliderPosChanged();
+	});
+
+	result->attach(result->sliderWidget);
+
+	result->cachedIdealSliderWidth = iV_GetImageWidth(IntImages, IMAGE_SLIDER_BIG);
+
+	result->updateSliderValueText();
+
+	return result;
+}
+
+int32_t OptionsSlider::currentValue() const
+{
+	return (static_cast<int32_t>(sliderWidget->pos) * stepValue) + minValue;
+}
+
+void OptionsSlider::handleSliderPosChanged()
+{
+	auto newValue = currentValue();
+	if (onChangeValueFunc)
+	{
+		onChangeValueFunc(newValue);
+	}
+	updateSliderValueText();
+}
+
+void OptionsSlider::updateSliderValueText()
+{
+	text = WzString::number(currentValue());
+	cacheIdealTextSize();
+}
+
+size_t OptionsSlider::maxNumValueCharacters()
+{
+	WzString minValueStr = WzString::number(minValue);
+	WzString maxValueStr = WzString::number(maxValue);
+	return std::max<size_t>(minValueStr.length(), maxValueStr.length());
+}
+
+void OptionsSlider::cacheIdealTextSize()
+{
+	auto tmpStr = WzString("444444");
+	tmpStr.truncate(maxNumValueCharacters());
+	cachedIdealTextWidth = iV_GetTextWidth(tmpStr.toUtf8().c_str(), FontID) + 2;
+	cachedIdealTextLineSize = iV_GetTextLineSize(FontID);
+}
+
+void OptionsSlider::display(int xOffset, int yOffset)
+{
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int w = width();
+	int h = height();
+
+	bool isHighlight = false; //!isDisabled && (isHighlighted || forceDisplayHighlight);
+
+	iV_fonts fontID = wzText.getFontID();
+	if (fontID == font_count || lastWidgetWidth != width() || wzText.getText() != text)
+	{
+		fontID = FontID;
+		wzText.setText(text, fontID);
+	}
+
+	const int maxTextDisplayableWidth  = w - cachedIdealSliderWidth - (horizontalPadding * 3);
+	if (wzText->width() > maxTextDisplayableWidth)
+	{
+		// text would exceed the bounds of the button area
+		// try to shrink font so it fits
+		do {
+			if (fontID == font_small || fontID == font_bar)
+			{
+				break;
+			}
+			auto result = iV_ShrinkFont(fontID);
+			if (!result.has_value())
+			{
+				break;
+			}
+			fontID = result.value();
+			wzText.setText(text, fontID);
+		} while (wzText->width() > maxTextDisplayableWidth);
+	}
+	lastWidgetWidth = width();
+
+	// Draw the main text
+	PIELIGHT textColor = (isHighlight) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
+	if (isDisabled)
+	{
+		textColor.byte.a = (textColor.byte.a / 2);
+	}
+
+	int maxDisplayableMainTextWidth = maxTextDisplayableWidth;
+
+	int textX0 = x0 + w - horizontalPadding - std::min(maxDisplayableMainTextWidth, wzText->width());
+	int textY0 = y0 + (h - wzText->lineSize()) / 2 - wzText->aboveBase();
+
+	isTruncated = maxDisplayableMainTextWidth < wzText->width();
+	if (isTruncated)
+	{
+		maxDisplayableMainTextWidth -= (iV_GetEllipsisWidth(wzText.getFontID()) + 2);
+	}
+	wzText->render(textX0, textY0, textColor, 0.0f, maxDisplayableMainTextWidth);
+	if (isTruncated)
+	{
+		// Render ellipsis
+		iV_DrawEllipsis(wzText.getFontID(), Vector2f(textX0 + maxDisplayableMainTextWidth + 2, textY0), textColor);
+	}
+}
+
+void OptionsSlider::geometryChanged()
+{
+	int w = width();
+	int h = height();
+
+	if (w == 0 || h == 0)
+	{
+		return;
+	}
+
+	int sliderX0 = horizontalPadding;
+	int sliderY0 = (h - sliderWidget->height()) / 2;
+	int maxSliderWidth = w - (horizontalPadding * 2);
+	int sliderWidth = std::min<int>(maxSliderWidth, cachedIdealSliderWidth);
+	sliderWidget->setGeometry(sliderX0, sliderY0, sliderWidth, sliderWidget->height());
+}
+
+int32_t OptionsSlider::idealWidth()
+{
+	return horizontalPadding + cachedIdealSliderWidth + horizontalPadding + cachedIdealTextWidth + horizontalPadding;
+}
+
+int32_t OptionsSlider::idealHeight()
+{
+	return (outerPaddingY * 2) + iV_GetTextLineSize(font_regular);
+}
+
+void OptionsSlider::update(bool force)
+{
+	if (!force && !needsStateUpdates)
+	{
+		return;
+	}
+
+	sliderWidget->pos = (currentValFunc() - minValue) / stepValue;
+}
+
+void OptionsSlider::informAvailable(bool isAvailable)
+{
+	// TODO: Set disabled flag so display can disable the slider appearance!
+}
+
+void OptionsSlider::addOnChangeHandler(std::function<void(WIDGET&)> handler)
+{
+	sliderWidget->addOnChange(handler);
+}
+
+void OptionsSlider::addCloseFormManagedPopoversHandler(std::function<void(WIDGET&)> handler)
+{
+	// no-op
+}
+
+optional<OptionChoiceHelpDescription> OptionsSlider::getHelpDescriptionForCurrentValue()
+{
+	return nullopt;
+}
+
+optional<std::vector<OptionChoiceHelpDescription>> OptionsSlider::getHelpDescriptions()
+{
+	return nullopt;
+}
 
 // MARK: -
 
