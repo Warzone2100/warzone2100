@@ -166,6 +166,22 @@ public:
 	void setX(int x) { _topLeft.x = x; }
 	void setY(int y) { _topLeft.y = y; }
 
+	void translateBy(int x, int y)
+	{
+		_topLeft.x += x;
+		_topLeft.y += y;
+		_bottomRight.x += x;
+		_bottomRight.y += y;
+	}
+
+	bool intersects(const WzRect& other) const
+	{
+		return (left() < other.right())
+			&& (right() > other.left())
+			&& (top() < other.bottom())
+			&& (bottom() > other.top());
+	}
+
 	WzRect intersectionWith(const WzRect &other) const
 	{
 		return {
