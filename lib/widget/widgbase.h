@@ -136,6 +136,8 @@ public:
 
 	bool clipContains(WzRect const& rect) const;
 
+	bool clipIntersects(WzRect const& rect, WzRect* output_intersection) const;
+
 	WidgetGraphicsContext translatedBy(int32_t x, int32_t y) const;
 
 	WidgetGraphicsContext clippedBy(WzRect const &newRect) const;

@@ -1687,6 +1687,28 @@ bool WidgetGraphicsContext::clipContains(WzRect const& rect) const
 	return !clipped || clipRect.contains({offset.x + rect.x(), offset.y + rect.y(), rect.width(), rect.height()});
 }
 
+bool WidgetGraphicsContext::clipIntersects(WzRect const& rect, WzRect* output_intersection) const
+{
+	if (!clipped)
+	{
+		if (output_intersection != nullptr)
+		{
+			*output_intersection = WzRect{offset.x + rect.x(), offset.y + rect.y(), rect.width(), rect.height()};
+		}
+		return true;
+	}
+	WzRect comparisonRect {offset.x + rect.x(), offset.y + rect.y(), rect.width(), rect.height()};
+	if (clipRect.intersects(comparisonRect))
+	{
+		if (output_intersection != nullptr)
+		{
+			*output_intersection = clipRect.intersectionWith(comparisonRect);
+		}
+		return true;
+	}
+	return false;
+}
+
 WidgetGraphicsContext WidgetGraphicsContext::translatedBy(int32_t x, int32_t y) const
 {
 	WidgetGraphicsContext newContext(*this);
