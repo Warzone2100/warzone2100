@@ -56,6 +56,59 @@ public:
 	virtual optional<std::vector<OptionChoiceHelpDescription>> getHelpDescriptions() { return nullopt; }
 };
 
+// OptionsSlider
+class OptionsSlider : public WIDGET, public OptionValueChangerInterface
+{
+protected:
+	OptionsSlider();
+public:
+	typedef std::function<int32_t(void)> CurrentValueFunc;
+	typedef std::function<void (int32_t newValue)> OnChangeValueFunc;
+public:
+	static std::shared_ptr<OptionsSlider> make(int32_t minValue, int32_t maxValue, int32_t stepValue, CurrentValueFunc currentValFunc, OnChangeValueFunc onChange, bool needsStateUpdates);
+
+	void display(int xOffset, int yOffset) override;
+	void geometryChanged() override;
+	int32_t idealWidth() override;
+	int32_t idealHeight() override;
+
+	void update(bool force) override;
+	void informAvailable(bool isAvailable) override;
+	void addOnChangeHandler(std::function<void(WIDGET&)> handler) override;
+	void addCloseFormManagedPopoversHandler(std::function<void(WIDGET&)> handler) override;
+	optional<OptionChoiceHelpDescription> getHelpDescriptionForCurrentValue() override;
+	optional<std::vector<OptionChoiceHelpDescription>> getHelpDescriptions() override;
+
+	int32_t currentValue() const;
+
+private:
+	void handleSliderPosChanged();
+	void updateSliderValueText();
+	void cacheIdealTextSize();
+	size_t maxNumValueCharacters();
+
+private:
+	std::shared_ptr<W_SLIDER> sliderWidget;
+	int32_t cachedIdealSliderWidth = 0;
+	WzString text;
+	WzCachedText wzText;
+	iV_fonts FontID = font_regular;
+	int32_t cachedIdealTextWidth = 0;
+	int32_t cachedIdealTextLineSize = 0;
+	int lastWidgetWidth = 0;
+	int outerPaddingY = 8;
+	int horizontalPadding = 10;
+	bool isDisabled = false;
+	bool isTruncated = false;
+	CurrentValueFunc currentValFunc;
+	OnChangeValueFunc onChangeValueFunc;
+	int32_t minValue = 0;
+	int32_t maxValue = 0;
+	uint32_t totalRange = 0;
+	int32_t stepValue = 1;
+	bool needsStateUpdates;
+};
+
 class WzOptionsChoiceWidget : public WIDGET
 {
 protected:
