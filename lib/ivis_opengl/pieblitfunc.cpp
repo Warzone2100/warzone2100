@@ -593,8 +593,8 @@ void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, 
 	gfx_api::gfxFloat invTextureSizeY = 1.f / textureSize.y;
 	float tu = (float)(clippingRect.x()) * invTextureSizeX;
 	float tv = (float)(clippingRect.y()) * invTextureSizeY;
-	float su = (float)(clippingRect.x() + clippingRect.width()) * invTextureSizeX;
-	float sv = (float)(clippingRect.y() + clippingRect.height()) * invTextureSizeY;
+	float su = (float)(clippingRect.width()) * invTextureSizeX;
+	float sv = (float)(clippingRect.height()) * invTextureSizeY;
 
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(tu, tv), Vector2f(su, sv), colour, mvp, SHADER_TEXT);
 }
