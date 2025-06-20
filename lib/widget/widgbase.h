@@ -392,6 +392,8 @@ public:
 	virtual int32_t idealWidth();
 	virtual int32_t idealHeight();
 
+	void manuallyCallRun(W_CONTEXT *);
+
 	virtual nonstd::optional<std::vector<uint32_t>> getScrollSnapOffsets()
 	{
 		return nonstd::nullopt;

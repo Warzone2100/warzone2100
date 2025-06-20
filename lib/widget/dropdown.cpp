@@ -132,6 +132,21 @@ void DropdownWidget::run(W_CONTEXT *psContext)
 			close();
 		}
 	}
+	else
+	{
+		callRunOnItems();
+	}
+}
+
+void DropdownWidget::callRunOnItems()
+{
+	// Some child widgets might use run() to clear cached textures (etc), so call run regularly to allow them
+	for (const auto& item : items)
+	{
+		auto ctx = W_CONTEXT::ZeroContext();
+		item->item->runRecursive(&ctx);
+		item->item->manuallyCallRun(&ctx);
+	}
 }
 
 void DropdownWidget::geometryChanged()

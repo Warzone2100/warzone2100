@@ -1186,6 +1186,11 @@ void WIDGET::runRecursive(W_CONTEXT *psContext)
 	}
 }
 
+void WIDGET::manuallyCallRun(W_CONTEXT *psContext)
+{
+	run(psContext);
+}
+
 bool WIDGET::hitTest(int x, int y) const
 {
 	// default hit-testing bounding rect (based on the widget's x, y, width, height)

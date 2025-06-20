@@ -196,6 +196,8 @@ protected:
 	virtual int calculateDropdownListScreenPosX() const;
 	virtual int calculateDropdownListDisplayWidth() const;
 
+	void callRunOnItems();
+
 private:
 	std::vector<std::shared_ptr<DropdownItemWrapper>> items;
 	std::shared_ptr<ScrollableListWidget> itemsList;
