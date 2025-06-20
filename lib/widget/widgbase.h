@@ -221,10 +221,13 @@ public:
 		return nullptr;
 	}
 
-protected:
+	virtual bool capturesMouseDrag(WIDGET_KEY) { return false; }
+
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
 	virtual void highlight(W_CONTEXT *) {}
 	virtual void highlightLost() {}
+
+protected:
 	virtual void run(W_CONTEXT *) {}
 	virtual void display(int, int) {}
 	virtual void geometryChanged() {}
@@ -232,7 +235,6 @@ protected:
 	virtual bool hitTest(int x, int y) const;
 
 	// handling mouse drag
-	virtual bool capturesMouseDrag(WIDGET_KEY) { return false; }
 	virtual void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) {}
 
 public:
@@ -385,6 +387,7 @@ public:
 	void setTransparentToClicks(bool hasClickTransparency);
 	void setTransparentToMouse(bool hasMouseTransparency);
 	bool transparentToClicks() const;
+	bool transparentToMouse() const { return isTransparentToMouse; }
 
 	virtual int32_t idealWidth();
 	virtual int32_t idealHeight();
@@ -415,7 +418,15 @@ protected:
 	friend struct W_SCREEN;
 	void setScreenPointer(const std::shared_ptr<W_SCREEN> &screen); ///< Set screen pointer for us and all children.
 public:
-	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
+	// Recursively find the target widget for this context + mouse event
+	// Updates psContext with the context for the return (mouse over) widget
+	// NOTE: Does not actually trigger events (that's handled by higher-level code, like widgRunScreen)
+	//       but passes in the `key` & `wasPressed` info anyway because some special widgets like to know
+	//		 if an event will impact a descendant widget.
+	virtual std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
+
+	std::shared_ptr<WIDGET> processClick(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
+
 	virtual void runRecursive(W_CONTEXT *psContext);
 	void processCallbacksRecursive(W_CONTEXT *psContext);
 	virtual void displayRecursive(WidgetGraphicsContext const &context);  ///< Display this widget, and all visible children.

@@ -49,7 +49,7 @@ public:
 		return widget;
 	}
 
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void geometryChanged() override;
 
 	const std::shared_ptr<WIDGET>& getItem() const
@@ -101,7 +101,7 @@ public:
 	void open();
 	bool isOpen() const;
 	void close();
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void setListHeight(uint32_t value)
 	{
 		itemsList->setGeometry(itemsList->x(), itemsList->y(), itemsList->width(), value);

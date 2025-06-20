@@ -50,7 +50,7 @@ public:
 	std::shared_ptr<WIDGET> getItemAtIdx(size_t itemNum) const;
 	const std::vector<std::shared_ptr<WIDGET>>& getItems() const;
 	void clear();
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void enableScroll();
 	void disableScroll();
 	void setStickToBottom(bool value);

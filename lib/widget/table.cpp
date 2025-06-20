@@ -162,13 +162,13 @@ bool TableRow::hitTest(int x, int y) const
 	return W_BUTTON::hitTest(x, y);
 }
 
-bool TableRow::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> TableRow::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	// if processClickRecursive was called for this row, it means the mouse is over it
-	// (see WIDGET::processClickRecursive)
+	// if findMouseTargetRecursive was called for this row, it means the mouse is over it
+	// (see WIDGET::findMouseTargetRecursive)
 	lastFrameMouseIsOverRowOrChildren = frameGetFrameNumber();
 
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 bool TableRow::isMouseOverRowOrChildren() const

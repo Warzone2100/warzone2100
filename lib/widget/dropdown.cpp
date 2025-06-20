@@ -63,11 +63,12 @@ void DropdownItemWrapper::initialize(const std::shared_ptr<DropdownWidget>& newP
 	parent = newParent;
 }
 
-bool DropdownItemWrapper::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> DropdownItemWrapper::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	auto result = WIDGET::processClickRecursive(psContext, key, wasPressed);
+	W_CONTEXT inputContext(psContext);
+	auto result = WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 
-	if (key != WKEY_NONE && this->hitTest(psContext->mx, psContext->my))
+	if (key != WKEY_NONE && this->hitTest(inputContext.mx, inputContext.my))
 	{
 		if (auto psStrongParent = parent.lock())
 		{
@@ -394,7 +395,7 @@ void DropdownWidget::clear()
 	mouseDownItem.reset();
 }
 
-bool DropdownWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> DropdownWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	if (!overlayScreen && selectedItem && !isDisabled && key == WKEY_NONE) // only forward highlighting events
 	{
@@ -405,10 +406,15 @@ bool DropdownWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key,
 		shiftedContext.my = psContext->my - deltaY;
 		shiftedContext.xOffset = psContext->xOffset + deltaX;
 		shiftedContext.yOffset = psContext->yOffset + deltaY;
-		selectedItem->processClickRecursive(&shiftedContext, key, wasPressed);
+		auto highlightedSelectedItemChildWidget = selectedItem->findMouseTargetRecursive(&shiftedContext, key, wasPressed);
+		if (highlightedSelectedItemChildWidget)
+		{
+			*psContext = shiftedContext; // bubble-up the matching hit's context
+			return highlightedSelectedItemChildWidget;
+		}
 	}
 
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 void DropdownWidget::setMouseClickOnItem(std::shared_ptr<DropdownItemWrapper> item, WIDGET_KEY key, bool wasPressed)

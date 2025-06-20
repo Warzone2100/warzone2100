@@ -52,7 +52,7 @@ public:
 
 	void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
 	bool hitTest(int x, int y) const override;
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 	using WIDGET::displayRecursive;
 
