@@ -85,7 +85,18 @@ std::shared_ptr<WIDGET> DropdownItemWrapper::findMouseTargetRecursive(W_CONTEXT 
 			if (mouseDownOnWrapper)
 			{
 				mouseDownOnWrapper = false;
-				onSelect(std::static_pointer_cast<DropdownItemWrapper>(shared_from_this()));
+
+				// Instead of calling the onSelect handler immediately, schedule a task.
+				//
+				// (The onSelect handler may call close(), and we want that to be delayed by an event processing cycle
+				// so the mouse event gets properly attributed to the overlay screen by other code - such as the game
+				// event processing loop, which currently usese isMouseOverScreenOverlayChild)
+				auto weakSelf = std::weak_ptr<DropdownItemWrapper>(std::static_pointer_cast<DropdownItemWrapper>(shared_from_this()));
+				widgScheduleTask([weakSelf]() {
+					auto strongSelf = weakSelf.lock();
+					ASSERT_OR_RETURN(, strongSelf != nullptr, "DropdownItemWrapper disappeared?");
+					strongSelf->onSelect(strongSelf);
+				});
 			}
 		}
 	}
