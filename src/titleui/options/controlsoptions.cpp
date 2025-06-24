@@ -31,7 +31,74 @@
 #include "lib/sound/audio.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
+static inline WzString keyFunctionInfoToOptionId(const KeyFunctionInfo& info)
+{
+	return WzString::fromUtf8("keybinding.") + WzString::fromUtf8(info.name);
+}
+
+// MARK: - KeyOptionsForm
+
+class KeyOptionsForm : public OptionsForm
+{
+protected:
+	KeyOptionsForm()
+	: OptionsForm()
+	{ }
+public:
+	static std::shared_ptr<KeyOptionsForm> make();
+
+	~KeyOptionsForm();
+
+	void run(W_CONTEXT *psContext) override;
+	void runRecursive(W_CONTEXT *psContext) override;
+
+	void informDidEditKeybinding();
+private:
+	bool didEditKeybinding = false;
+};
+
+std::shared_ptr<KeyOptionsForm> KeyOptionsForm::make()
+{
+	class make_shared_enabler : public KeyOptionsForm { };
+	auto result = std::make_shared<make_shared_enabler>();
+	result->initialize();
+	return result;
+}
+
+KeyOptionsForm::~KeyOptionsForm()
+{
+	if (didEditKeybinding)
+	{
+		gInputManager.saveMappings();
+	}
+}
+
+void KeyOptionsForm::runRecursive(W_CONTEXT *psContext)
+{
+	inputRestoreMetaKeyState(); // HACK: to ensure meta keys are set to down if physically down (regardless of prior calls to clear logical input state)
+	OptionsForm::runRecursive(psContext);
+}
+
+void KeyOptionsForm::run(W_CONTEXT *psContext)
+{
+	auto currMapping = gInputManager.findCurrentMapping(false, true);
+	if (currMapping)
+	{
+		const auto& info = currMapping->get().info;
+		auto keyOptionId = keyFunctionInfoToOptionId(info);
+		jumpToOptionId(keyOptionId);
+	}
+
+	OptionsForm::run(psContext);
+}
+
+void KeyOptionsForm::informDidEditKeybinding()
+{
+	didEditKeybinding = true;
+}
+
 // MARK: -
+
 class OptionsKeyBindingsEdit;
 
 class OptionsKeyBindingWidget : public W_BUTTON
@@ -80,10 +147,10 @@ private:
 class OptionsKeyBindingsEdit : public WIDGET, public OptionValueChangerInterface
 {
 protected:
-	OptionsKeyBindingsEdit(InputManager& inputManager, const KeyFunctionInfo& info);
+	OptionsKeyBindingsEdit(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info);
 	void initialize();
 public:
-	static std::shared_ptr<OptionsKeyBindingsEdit> make(InputManager& inputManager, const KeyFunctionInfo& info);
+	static std::shared_ptr<OptionsKeyBindingsEdit> make(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info);
 
 	void display(int xOffset, int yOffset) override;
 	void geometryChanged() override;
@@ -108,6 +175,7 @@ private:
 private:
 	friend class OptionsKeyBindingWidget;
 
+	std::weak_ptr<KeyOptionsForm> parentOptionsForm;
 	InputManager& inputManager;
 	const KeyFunctionInfo& info;
 	std::array<nonstd::optional<std::reference_wrapper<KeyMapping>>, static_cast<size_t>(KeyMappingSlot::LAST)> mappings;
@@ -298,21 +366,21 @@ void OptionsKeyBindingWidget::highlightLost()
 
 // MARK: - OptionsKeyBindingsEdit
 
-std::shared_ptr<OptionsKeyBindingsEdit> OptionsKeyBindingsEdit::make(InputManager& inputManager, const KeyFunctionInfo& info)
+std::shared_ptr<OptionsKeyBindingsEdit> OptionsKeyBindingsEdit::make(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info)
 {
 	class make_shared_enabler : public OptionsKeyBindingsEdit {
 	public:
-		make_shared_enabler(InputManager& inputManager, const KeyFunctionInfo& info)
-		: OptionsKeyBindingsEdit(inputManager, info)
+		make_shared_enabler(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info)
+		: OptionsKeyBindingsEdit(parentForm, inputManager, info)
 		{ }
 	};
-	auto result = std::make_shared<make_shared_enabler>(inputManager, info);
+	auto result = std::make_shared<make_shared_enabler>(parentForm, inputManager, info);
 	result->initialize();
 	return result;
 }
 
-OptionsKeyBindingsEdit::OptionsKeyBindingsEdit(InputManager& inputManager, const KeyFunctionInfo& info)
-: inputManager(inputManager), info(info)
+OptionsKeyBindingsEdit::OptionsKeyBindingsEdit(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info)
+: parentOptionsForm(parentForm), inputManager(inputManager), info(info)
 { }
 
 void OptionsKeyBindingsEdit::initialize()
@@ -700,7 +768,17 @@ bool OptionsKeyBindingsEdit::triggerEditModeForSlot(KeyMappingSlot slot)
 	newRootFrm->onPushedKeyCombo = [weakSelf, slot](const KeyMappingInput input, optional<KEY_CODE> metaKey) {
 		auto strongSelf = weakSelf.lock();
 		ASSERT_OR_RETURN(, strongSelf != nullptr, "Widget already gone");
-		strongSelf->onPushedKeyCombo(slot, input, metaKey);
+		if (strongSelf->onPushedKeyCombo(slot, input, metaKey))
+		{
+			if (auto strongParentOptionsForm = strongSelf->parentOptionsForm.lock())
+			{
+				strongParentOptionsForm->informDidEditKeybinding();
+			}
+			else
+			{
+				ASSERT(false, "Unable to inform parent options form?");
+			}
+		}
 		strongSelf->closeEditModeOverlay();
 	};
 	newRootFrm->onCancelPressed = [weakSelf]() {
@@ -823,12 +901,7 @@ KeyFunctionEntries getVisibleKeyFunctionEntries(const KeyFunctionConfiguration& 
 	return visible;
 }
 
-static inline WzString keyFunctionInfoToOptionId(const KeyFunctionInfo& info)
-{
-	return WzString::fromUtf8("keybinding.") + WzString::fromUtf8(info.name);
-}
-
-size_t addKeyBindingsToOptionsForm(const std::shared_ptr<OptionsForm>& result, InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig)
+size_t addKeyBindingsToOptionsForm(const std::shared_ptr<KeyOptionsForm>& result, InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig)
 {
 	auto infos = getVisibleKeyFunctionEntries(keyFuncConfig);
 	std::sort(infos.begin(), infos.end(), [&](const KeyFunctionInfo& a, const KeyFunctionInfo& b) {
@@ -852,53 +925,11 @@ size_t addKeyBindingsToOptionsForm(const std::shared_ptr<OptionsForm>& result, I
 		}
 
 		auto optionInfo = OptionInfo(keyFunctionInfoToOptionId(info), WzString::fromUtf8(info.displayName), "");
-		auto valueChanger = OptionsKeyBindingsEdit::make(inputManager, info);
+		auto valueChanger = OptionsKeyBindingsEdit::make(result, inputManager, info);
 		result->addOption(optionInfo, valueChanger, true);
 	}
 
 	return infos.size();
-}
-
-// MARK: -
-
-class KeyOptionsForm : public OptionsForm
-{
-protected:
-	KeyOptionsForm()
-	: OptionsForm()
-	{ }
-public:
-	static std::shared_ptr<KeyOptionsForm> make();
-
-	void run(W_CONTEXT *psContext) override;
-	void runRecursive(W_CONTEXT *psContext) override;
-};
-
-std::shared_ptr<KeyOptionsForm> KeyOptionsForm::make()
-{
-	class make_shared_enabler : public KeyOptionsForm { };
-	auto result = std::make_shared<make_shared_enabler>();
-	result->initialize();
-	return result;
-}
-
-void KeyOptionsForm::runRecursive(W_CONTEXT *psContext)
-{
-	inputRestoreMetaKeyState(); // HACK: to ensure meta keys are set to down if physically down (regardless of prior calls to clear logical input state)
-	OptionsForm::runRecursive(psContext);
-}
-
-void KeyOptionsForm::run(W_CONTEXT *psContext)
-{
-	auto currMapping = gInputManager.findCurrentMapping(false, true);
-	if (currMapping)
-	{
-		const auto& info = currMapping->get().info;
-		auto keyOptionId = keyFunctionInfoToOptionId(info);
-		jumpToOptionId(keyOptionId);
-	}
-
-	OptionsForm::run(psContext);
 }
 
 static WzString mouseKeyCodeToWzString(MOUSE_KEY_CODE code)

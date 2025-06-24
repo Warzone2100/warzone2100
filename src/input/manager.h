@@ -39,6 +39,8 @@ public:
 	/* (Re-)Initializes mappings to their default values. If `bForceDefaults` is true, any existing mappings will be overwritten with the defaults */
 	void resetMappings(const bool bForceDefaults, const KeyFunctionConfiguration& keyFuncConfig);
 
+	void saveMappings();
+
 	void processMappings(const bool bAllowMouseWheelEvents);
 
 	nonstd::optional<std::reference_wrapper<const KeyMapping>> findCurrentMapping(const bool bAllowMouseWheelEvents, bool filterHidden);
@@ -51,6 +53,8 @@ public:
 	ContextManager& contexts();
 
 	DebugInputManager& debugManager();
+
+	void setKeyMapJsonPath(const std::string& path);
 
 	void shutdown();
 
@@ -80,6 +84,7 @@ private:
 	KeyMappings keyMappings;
 	std::unordered_map<KEY_CODE, KeyFunctionInfo, KeyCodeHash> markerKeyFunctions;
 	bool bMappingsSortOrderDirty = true;
+	std::string currentKeyMapJsonPath;
 
 	DebugInputManager dbgInputManager = DebugInputManager(MAX_PLAYERS);
 };
