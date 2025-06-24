@@ -1280,6 +1280,7 @@ bool frontendShutdown()
 
 	//do this before shutting down the iV library
 	resReleaseAllData();
+	FrontImages = nullptr;
 	frontendIsShuttingDown();
 
 	if (!objShutdown())
