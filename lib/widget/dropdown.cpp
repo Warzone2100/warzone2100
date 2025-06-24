@@ -302,6 +302,7 @@ bool DropdownWidget::isOpen() const
 
 void DropdownWidget::close()
 {
+	ASSERT_OR_RETURN(, isOpen(), "Dropdown isn't open");
 	mouseDownItem.reset();
 	std::weak_ptr<DropdownWidget> pWeakThis(std::dynamic_pointer_cast<DropdownWidget>(shared_from_this()));
 	widgScheduleTask([pWeakThis]() {
@@ -309,6 +310,11 @@ void DropdownWidget::close()
 		{
 			if (dropdownWidget->overlayScreen != nullptr)
 			{
+				if (dropdownWidget->onClose)
+				{
+					dropdownWidget->onClose(*dropdownWidget);
+				}
+
 				widgRemoveOverlayScreen(dropdownWidget->overlayScreen);
 				if (dropdownWidget->overlayScreen->psForm)
 				{
