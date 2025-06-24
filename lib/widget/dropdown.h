@@ -125,6 +125,10 @@ public:
 	{
 		onOpen = value;
 	}
+	void setOnClose(std::function<void(DropdownWidget&)> value)
+	{
+		onClose = value;
+	}
 	std::shared_ptr<WIDGET> getItem(size_t idx) const
 	{
 		if (idx >= items.size())
@@ -206,6 +210,7 @@ private:
 	std::function<bool(DropdownWidget&, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget)> canChange;
 	std::function<void(DropdownWidget&)> onChange;
 	std::function<void(DropdownWidget&)> onOpen;
+	std::function<void(DropdownWidget&)> onClose;
 	std::shared_ptr<DropdownItemWrapper> mouseOverItem;
 	std::shared_ptr<DropdownItemWrapper> mouseDownItem;
 	int32_t overlayYPosOffset = 0;
