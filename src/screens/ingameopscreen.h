@@ -2,7 +2,7 @@
 
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020-2025  Warzone 2100 Project
+	Copyright (C) 2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,12 +19,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_SRC_MUSICMANAGER_H__
-#define __INCLUDED_SRC_MUSICMANAGER_H__
+#pragma once
 
-#include <memory>
-class WIDGET;
+#include "lib/widget/widget.h"
+#include "lib/widget/form.h"
 
-std::shared_ptr<WIDGET> makeMusicManagerForm(bool ingame);
+#include <functional>
 
-#endif // __INCLUDED_SRC_MUSICMANAGER_H__
+void showInGameOptionsScreen(const std::shared_ptr<W_SCREEN>& onTopOfScreen, const std::shared_ptr<WIDGET>& displayForm, const std::function<void ()>& onCloseFunc);

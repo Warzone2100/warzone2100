@@ -41,6 +41,8 @@ public:
 
 	void processMappings(const bool bAllowMouseWheelEvents);
 
+	nonstd::optional<std::reference_wrapper<const KeyMapping>> findCurrentMapping(const bool bAllowMouseWheelEvents, bool filterHidden);
+
 	// Subsystems/General
 public:
 	KeyMappings& mappings();

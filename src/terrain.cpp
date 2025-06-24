@@ -2584,7 +2584,7 @@ std::string to_display_string(TerrainShaderQuality value)
 		case TerrainShaderQuality::MEDIUM:
 			return _("Normal");
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			return _("High");
+			return _("Remastered (HQ)");
 	}
 	return ""; // silence warning
 }

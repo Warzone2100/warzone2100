@@ -299,6 +299,7 @@ bool intHelpOverlayIsUp();
 
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule();
+bool intAddInGameOptionsButton();
 bool intShowGroupSelectionMenu();
 bool intAddPower();
 void intRemoveReticule();

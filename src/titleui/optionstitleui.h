@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2024  Warzone 2100 Project
+	Copyright (C) 2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,43 +19,32 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** \file
- *  Campaign Selector / Configuration / Startup Title UI.
+ *  Options Title UI.
  */
 
-#ifndef __INCLUDED_SRC_TITLEUI_CAMPAIGN_H__
-#define __INCLUDED_SRC_TITLEUI_CAMPAIGN_H__
+#pragma once
 
 #include "titleui.h"
-#include "../modinfo.h"
+#include "options/optionsforms.h"
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
 
-class WzCampaignSelectorForm;
-
-class WzCampaignSelectorTitleUI : public WzTitleUI
+class WzOptionsTitleUI : public WzTitleUI
 {
 public:
-	WzCampaignSelectorTitleUI(std::shared_ptr<WzTitleUI> parent);
-	virtual ~WzCampaignSelectorTitleUI();
+	WzOptionsTitleUI(std::shared_ptr<WzTitleUI> parent);
+	virtual ~WzOptionsTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
 	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 
 	std::shared_ptr<WzTitleUI> getParentTitleUI();
 
-protected:
-	friend class WzCampaignSelectorForm;
-	void displayStartOptionsForm(optional<WzCampaignModInfo> modInfo);
-
 private:
+	std::shared_ptr<W_SCREEN> screen;
 	std::shared_ptr<WzTitleUI> parent;
-	std::shared_ptr<WzCampaignSelectorForm> campaignSelector;
-	std::shared_ptr<WIDGET> displayedPanel;
+	std::shared_ptr<OptionsBrowserForm> optionsBrowserForm;
+	bool bAlreadyStarted = false;
 };
-
-const char* difficultyLevelToString(DIFFICULTY_LEVEL difficulty);
-const char* getCampaignDifficultyDescriptionString(DIFFICULTY_LEVEL difficulty);
-
-#endif // __INCLUDED_SRC_TITLEUI_CAMPAIGN_H__

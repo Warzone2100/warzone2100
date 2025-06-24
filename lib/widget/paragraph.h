@@ -87,6 +87,11 @@ public:
 		}
 	}
 
+	void resetCachedDimensions()
+	{
+		cachedTextWidth.reset();
+	}
+
 	inline const WzString& getText() const { return text; }
 	inline iV_fonts getFontID() const { return font; }
 	inline int32_t getTextWidth()

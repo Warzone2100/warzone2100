@@ -82,6 +82,9 @@
 
 #include "activity.h"
 
+#include "screens/ingameopscreen.h"
+#include "titleui/options/optionsforms.h"
+
 /*
 	KeyBind.c
 	Holds all the functions that can be mapped to a key.
@@ -1068,9 +1071,17 @@ void kf_ShowMappings()
 {
 	if (!InGameOpUp && !isInGamePopupUp)
 	{
-		kf_addInGameOptions();
-		intProcessInGameOptions(INTINGAMEOP_OPTIONS);
-		intProcessInGameOptions(INTINGAMEOP_KEYMAP);
+		// Open new Options screen and jump to Controls section
+		auto optionsBrowser = createOptionsBrowser(true);
+		if (!optionsBrowser->switchToOptionsForm(OptionsBrowserForm::Modes::Controls))
+		{
+			debug(LOG_INFO, "Failed to open Controls options form?");
+			return;
+		}
+		showInGameOptionsScreen(psWScreen, optionsBrowser, []() {
+			// the setting for group menu display may have been modified
+			intShowGroupSelectionMenu();
+		});
 	}
 }
 
@@ -1408,11 +1419,8 @@ void	kf_TogglePauseMode()
 		setAudioPause(true);
 		setScrollPause(true);
 
-		// If cursor trapping is enabled allow the cursor to leave the window
-		if (shouldTrapCursor())
-		{
-			wzReleaseMouse();
-		}
+		// If cursor trapping is enabled, allow the cursor to leave the window when paused
+		wzReleaseMouse();
 
 		/* And stop the clock */
 		gameTimeStop();
