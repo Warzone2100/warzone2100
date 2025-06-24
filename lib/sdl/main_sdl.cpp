@@ -3829,6 +3829,11 @@ static void handleActiveEvent(SDL_Event *event)
 		case SDL_WINDOWEVENT_FOCUS_LOST:
 			windowHasFocus = false;
 			debug(LOG_WZ, "Window %d lost keyboard focus", event->window.windowID);
+			for (unsigned int i = 0; i < KEY_MAXSCAN; i++)
+			{
+				aKeyState[i].state = KEY_UP;
+				actualKeyState[i].state = KEY_UP;
+			}
 			break;
 		case SDL_WINDOWEVENT_CLOSE:
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);
